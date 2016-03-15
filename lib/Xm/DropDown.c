@@ -2027,6 +2027,9 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
     Arg *new_list, largs[10];
     Cardinal num_largs;
     Widget sb;
+#ifdef FIX_1565
+    XmGrabShellWidget grabsh;
+#endif
 
     num_largs = 0;
     XtSetArg(largs[num_largs], XmNoverrideRedirect, True); num_largs++;
@@ -2040,6 +2043,10 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 						xmGrabShellWidgetClass, w,
 						new_list,
 						num_largs + num_args);
+#ifdef FIX_1565
+    grabsh = (XmGrabShellWidget) XmDropDown_popup_shell(cbw);
+    grabsh->grab_shell.set_input_focus = False;
+#endif
     XtFree((char *) new_list);
 
 #ifdef FIX_1446

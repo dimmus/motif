@@ -85,6 +85,9 @@ static char *rcsid = "$TOG: RCMenu.c /main/25 1999/05/24 18:06:57 samborn $";
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
 #include "VendorSI.h"
+#ifdef FIX_1565
+#include <Xm/GrabShell.h>
+#endif
 
 #define FIX_1535
 
@@ -943,6 +946,13 @@ _XmMenuFocus(
    XmMenuState mst = _XmGetMenuState((Widget)w);
    Window tmpWindow;
    int tmpRevert;
+#ifdef FIX_1565
+   Widget shell;
+
+   shell = w;
+   while (! XtIsSubclass(shell, shellWidgetClass))
+     shell = XtParent(shell);
+#endif
  
    if (_time == CurrentTime) 
      _time = XtLastTimestampProcessed(XtDisplay(w));
@@ -983,6 +993,11 @@ _XmMenuFocus(
 			  shell.popped_up))
 **/
 		     {
+#ifdef FIX_1565
+               if (XtIsSubclass(shell, xmGrabShellWidgetClass) || XtIsSubclass(shell, xmMenuShellWidgetClass))
+                 XmForceGrabKeyboard(w, _time);
+               else
+#endif
 		       SetInputFocus(XtDisplay(w), mst->RC_menuFocus.oldFocus,
 				     mst->RC_menuFocus.oldRevert,
 				     mst->RC_menuFocus.oldTime);
@@ -996,6 +1011,11 @@ _XmMenuFocus(
  	      */
  	     else
  	       {
+#ifdef FIX_1565
+               if (XtIsSubclass(shell, xmGrabShellWidgetClass) || XtIsSubclass(shell, xmMenuShellWidgetClass))
+                 XmForceGrabKeyboard(w, _time);
+               else
+#endif
  		  SetInputFocus(XtDisplay(w), mst->RC_menuFocus.oldFocus,
 				mst->RC_menuFocus.oldRevert,
 				mst->RC_menuFocus.oldTime);
@@ -1014,6 +1034,11 @@ _XmMenuFocus(
 	     RC_menuFocus.oldFocus);
 	  mst->RC_menuFocus.oldTime = _time - 1;
 
+#ifdef FIX_1565
+      if (XtIsSubclass(shell, xmGrabShellWidgetClass) || XtIsSubclass(shell, xmMenuShellWidgetClass))
+        XmForceGrabKeyboard(w, _time);
+      else
+#endif
 	  SetInputFocus(XtDisplay(w), XtWindow(w), mst->RC_menuFocus.oldRevert,
 			mst->RC_menuFocus.oldTime);
 
@@ -1027,6 +1052,11 @@ _XmMenuFocus(
 	  XGetInputFocus(XtDisplay(w), &tmpWindow, &tmpRevert);
 	  if (tmpWindow != XtWindow(w))
 	  {
+#ifdef FIX_1565
+        if (XtIsSubclass(shell, xmGrabShellWidgetClass) || XtIsSubclass(shell, xmMenuShellWidgetClass))
+          XmForceGrabKeyboard(w, _time);
+        else
+#endif
 	    SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time);
 
 	    mst->RC_menuFocus.oldRevert = tmpRevert;
@@ -1048,6 +1078,11 @@ _XmMenuFocus(
 
 	  break;
 	case XmMENU_MIDDLE:
+#ifdef FIX_1565
+      if (XtIsSubclass(shell, xmGrabShellWidgetClass) || XtIsSubclass(shell, xmMenuShellWidgetClass))
+        XmForceGrabKeyboard(w, _time);
+      else
+#endif
 	  SetInputFocus(XtDisplay(w), XtWindow(w),
 			mst->RC_menuFocus.oldRevert,
 			mst->RC_menuFocus.oldTime);
@@ -1062,6 +1097,11 @@ _XmMenuFocus(
 	  if ((tmpWindow != XtWindow(w)) &&
 	      (_time > mst->RC_menuFocus.oldTime))
 	  {
+#ifdef FIX_1565
+        if (XtIsSubclass(shell, xmGrabShellWidgetClass) || XtIsSubclass(shell, xmMenuShellWidgetClass))
+          XmForceGrabKeyboard(w, _time);
+        else
+#endif
 	    SetInputFocus(XtDisplay(w), XtWindow(w), tmpRevert, _time);
 
 	    mst->RC_menuFocus.oldRevert = tmpRevert;

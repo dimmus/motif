@@ -1514,9 +1514,7 @@ ChangeManaged(
 
 	       /** the real grab ***/
          _XmMenuGrabKeyboardAndPointer((Widget)rowcol, _time);
-#ifndef FIX_1565
 	 _XmMenuFocus(XtParent(rowcol), XmMENU_BEGIN, _time);
-#endif
 
 	 /* To support menu replay, keep the pointer in sync mode */
 	 XAllowEvents(XtDisplay(rowcol), SyncPointer, CurrentTime);

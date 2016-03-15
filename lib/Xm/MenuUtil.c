@@ -1053,11 +1053,7 @@ _XmMenuGrabKeyboardAndPointer(
 
    register int status =
            (_XmGrabKeyboard(widget,
-#ifdef FIX_1565
-                            False,
-#else
                             True,
-#endif
                             GrabModeSync,
                             GrabModeAsync,
                             time) != GrabSuccess);

@@ -40,6 +40,10 @@
 #ifdef FIX_345
 #include <X11/keysym.h>
 #endif
+#ifdef FIX_1565
+#include <Xm/GrabShell.h>
+#include <Xm/MenuShell.h>
+#endif
 
 
 /**************************************************************************
@@ -530,3 +534,173 @@ _XmAssignInsensitiveColor(Widget w)
 	return p;
 }
 #endif
+
+#ifdef FIX_1565
+
+typedef struct _GrabData GrabData;
+struct _GrabData {
+  Widget w;
+  GrabData *next;
+};
+
+static void _XmSendFocusEvent(Widget child, int type);
+static void _XmStartDispatcher(Display *display);
+static Boolean _XmEventDispatcher(XEvent *event);
+static void UnmapHandler(Widget w, XtPointer client_data, XEvent *event, Boolean *cont);
+static Boolean _UngrabKeyboard(Widget w);
+
+static GrabData *grabw_top = NULL;
+static int xm_dispatcher_on = 0;
+static XtEventDispatchProc saved_dispatcher_proc = NULL;
+static XtEventDispatchProc xt_dispatcher_proc = NULL;
+
+/*
+   XmForceGrabKeyboard function is defined to be a substitutor of XSetInputFocus calls
+   for popup and pulldown menus that should grab keyboard focus yet main window at the
+   same time should visually stay in focus for window manager. This resolves focus flip
+   issue when popup or pulldown menu is raised. ~ochern
+ */
+void XmForceGrabKeyboard(Widget w, Time time)
+{
+  GrabData *grabw;
+
+  if (!w)
+    return;
+
+  while (! XtIsSubclass(w, shellWidgetClass))
+    w = XtParent(w);
+
+  if (! (XtIsSubclass(w, xmGrabShellWidgetClass) || XtIsSubclass(w, xmMenuShellWidgetClass)))
+    return;
+
+  _XmStartDispatcher(XtDisplay(w));
+
+  _UngrabKeyboard(w);
+
+  grabw = (GrabData *) XtMalloc(sizeof(GrabData));
+  grabw->w = w;
+  _XmProcessLock();
+  grabw->next = grabw_top;
+  grabw_top = grabw;
+  _XmProcessUnlock();
+
+  XtInsertEventHandler(w, StructureNotifyMask, False, UnmapHandler, NULL, XtListHead);
+
+  _XmSendFocusEvent(w, FocusIn);
+
+  /* Following the XSetInputFocus behaviour we force sending FocusOut (see XGrabKeyboard(3))
+     event to a previous keyboard holder */
+  XtGrabKeyboard(w, True, GrabModeAsync, GrabModeAsync, time);
+}
+
+static void _XmStartDispatcher(Display *display)
+{
+  if (!display)
+    return;
+
+  _XmProcessLock();
+
+  if (xm_dispatcher_on) {
+    _XmProcessUnlock();
+    return;
+  }
+
+  saved_dispatcher_proc = XtSetEventDispatcher(display, KeyPress, _XmEventDispatcher);
+  if (! xt_dispatcher_proc)
+    xt_dispatcher_proc = saved_dispatcher_proc;
+  XtSetEventDispatcher(display, KeyRelease, _XmEventDispatcher);
+  xm_dispatcher_on = 1;
+
+  _XmProcessUnlock();
+}
+
+static Boolean _XmEventDispatcher(XEvent *event)
+{
+  _XmProcessLock();
+  if (grabw_top) {
+    if (event->type == KeyPress || event->type == KeyRelease)
+      event->xany.window = XtWindow(grabw_top->w);
+  }
+  _XmProcessUnlock();
+
+  if (saved_dispatcher_proc) {
+    return (*saved_dispatcher_proc)(event);
+  } else if (xt_dispatcher_proc) {
+    return (*xt_dispatcher_proc)(event);
+  } else {
+    if (grabw_top)
+      XtSetEventDispatcher(XtDisplay(grabw_top->w), event->type, NULL);
+    return XtDispatchEvent(event);
+  }
+}
+
+static void UnmapHandler(Widget w, XtPointer client_data, XEvent *event, Boolean *cont)
+{
+  if (event->type == UnmapNotify)
+    _UngrabKeyboard(w);
+  if (! grabw_top) {
+    XtSetEventDispatcher(XtDisplay(w), KeyPress, saved_dispatcher_proc);
+    XtSetEventDispatcher(XtDisplay(w), KeyRelease, saved_dispatcher_proc);
+    xm_dispatcher_on = 0;
+  }
+
+  /* we do not call XtUngrabKeyboard since X server automatically performs an
+     UngrabKeyboard request if the event window for an active keyboard grab becomes
+     not viewable. ~ochern */
+}
+
+static Boolean _UngrabKeyboard(Widget w)
+{
+  GrabData *grabw, *grabw_prev;
+
+  _XmProcessLock();
+  if (! grabw_top) {
+    _XmProcessUnlock();
+    return False;
+  }
+
+  grabw = grabw_top;
+  grabw_prev = NULL;
+  while(grabw && grabw->w != w) {
+    grabw_prev = grabw;
+    grabw = grabw->next;
+  }
+  if (grabw) {
+    if (grabw_prev)
+      grabw_prev->next = grabw->next;
+    else
+      grabw_top = grabw->next;
+    XtFree((char*) grabw);
+
+    _XmProcessUnlock();
+    return True;
+  }
+
+  _XmProcessUnlock();
+  return False;
+}
+
+static void _XmSendFocusEvent(Widget child, int type)
+{
+  child = XtIsWidget(child) ? child : _XtWindowedAncestor(child);
+  if (XtIsSensitive(child) && !child->core.being_destroyed
+      && XtIsRealized(child) && (XtBuildEventMask(child) & FocusChangeMask))
+  {
+    XFocusChangeEvent event;
+    Display* dpy = XtDisplay (child);
+
+    event.type = type;
+    event.serial = LastKnownRequestProcessed(dpy);
+    event.send_event = True;
+    event.display = dpy;
+    event.window = XtWindow(child);
+    event.mode = NotifyNormal;
+    event.detail = NotifyAncestor;
+    if (XFilterEvent((XEvent*)&event, XtWindow(child)))
+      return;
+    XtDispatchEventToWidget(child, (XEvent*)&event);
+  }
+}
+
+#endif
+
