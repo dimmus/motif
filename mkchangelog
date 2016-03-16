@@ -1,0 +1,4 @@
+#!/bin/sh
+
+git log --format="%ai %aN %n%n%x09* %s%d%n" > ChangeLog
+
