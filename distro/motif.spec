@@ -3,7 +3,7 @@
 
 Summary: Motif runtime libraries and executables.
 Name: motif
-Version: 2.3.4
+Version: 2.3.5
 Release: 1
 License: LGPL
 Group: System Environment/Libraries
@@ -117,6 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/share/Xm/*
 
 %changelog
+
+* Thu Mar 17 2016 Oleksiy Chernyavskyy <ochern@ics.com>
+- updated for Motif 2.3.5
 
 * Mon Aug 22 2011 Ihor Hayvuk <ihayvuk@ics.com>
 - updated for Motif 2.3.4

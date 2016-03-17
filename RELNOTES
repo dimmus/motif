@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 
 
-                               Motif 2.3.4
+                               Motif 2.3.5
 
                               Release Notes
 
@@ -10,9 +10,9 @@
                      Integrated Computer Solutions
 
 
-This document provides Release Notes for the release of Motif 2.3.4.
+This document provides Release Notes for the release of Motif 2.3.5.
 
-This contains information on what is new in Motif 2.3.4. 
+This contains information on what is new in Motif 2.3.5. 
 Please see the COPYING file included with this release.
 
 
@@ -34,7 +34,7 @@ using the autoconf tools. This method is now fully supported and
 is the recommended build method.
 
 
-1. What is Motif 2.3.4
+1. What is Motif 2.3.5
 
 Motif is a freely available source code distribution for the 
 Motif user interface component toolkit. Motif is built on top of the 
@@ -42,7 +42,7 @@ standard X Toolkit(Xt) and X11 libraries.
 
 1.1. Overview of Motif
 
-Motif 2.3.4 is an updated version of Motif 2.3. 
+Motif 2.3.5 is an updated version of Motif 2.3. 
 Any applications built against a previous 2.x release of Motif will be 
 binary compatible with this release.
 
@@ -59,10 +59,70 @@ and compiled. The distribution contains the following items:
 * Demo programs
 
 
-2. What is new in Motif 2.3.4
+2. What is new in Motif 2.3.5
 
 This is a bug fix release.
 
+* Reimplemented bugfix 1565 (The active window changes to inactive when the drop down list is clicked)
+* Fixed bug 1636 (XmList segfault when left-shift left-button click on list item)
+* Fixed bug #1612 (Label size computed wrong within a Form)
+* Fixed bug #1611 (Using deprecated X functions)
+* Fixed bug #1604 (Using deprecated X functions)
+* Fixed bug #1581 (Buffer overrun in FontS.c)
+* Fixed many compile-time bugs
+
+
+3. Build Systems
+
+Motif 2.3.x was built and tested on the following systems:
+* Fedora 15 x86_64
+* Solaris 10 sparc
+
+In all cases, the compiler originally provided with the OS was used.
+
+3.1. OS Support
+
+The following platforms are supported operating systems:
+
+* Linux 2.6
+* Solaris 10
+
+4. Filing Bug Reports
+
+If you find a reproducible bug in any of the Motif libraries or code, 
+or an error in the documentation, please reference the BUGREPORT file 
+and/or submit a bug report online at:
+
+http://bugs.motifzone.org
+
+The status of submitted bugs is maintained there.
+
+
+5. Documentation
+
+For postscript and PDF documentation (users guides and reference 
+manuals), see the URL:
+
+http://www.opengroup.org/openmotif/docs/
+
+
+6. Compatibility Notice
+
+Motif 2.3.x is binary compatible with Motif 2.2.x. 
+Applications built against Motif 2.2 should work with Motif 2.3.x 
+without having to recompile it.
+
+Motif 2.3.x is not binary compatible with Motif 2.1.30.
+Applications built against Motif 2.1.30 will need to be recompiled 
+with the Motif 2.2+ header files.
+
+
+7. Change Log
+
+2.3.5 March 2016
+Current release
+
+2.3.4 October 2012
 * Fixed bug #1565 (The active window changes to inactive when the drop down
   list is clicked)
 * Implemented feature request #1300 (Keypad arrows don't work)
@@ -126,56 +186,6 @@ This is a bug fix release.
 * Removed xmPanedWindowWidgetClass definition
 * Fixed bug #1474 (Incrementation of XmNvisibleItemCount value does not work
   properly in XmComboBox)
-
-3. Build Systems
-
-Motif 2.3.4 was built and tested on the following systems:
-* Fedora 15 x86_64
-* Solaris 10 sparc
-
-In all cases, the compiler originally provided with the OS was used.
-
-3.1. OS Support
-
-The following platforms are supported operating systems:
-
-* Linux 2.6
-* Solaris 10
-
-4. Filing Bug Reports
-
-If you find a reproducible bug in any of the Motif libraries or code, 
-or an error in the documentation, please reference the BUGREPORT file 
-and/or submit a bug report online at:
-
-http://bugs.motifzone.org
-
-The status of submitted bugs is maintained there.
-
-
-5. Documentation
-
-For postscript and PDF documentation (users guides and reference 
-manuals), see the URL:
-
-http://www.opengroup.org/openmotif/docs/
-
-
-6. Compatibility Notice
-
-Motif 2.3.x is binary compatible with Motif 2.2.x. 
-Applications built against Motif 2.2 should work with Motif 2.3.x 
-without having to recompile it.
-
-Motif 2.3.x is not binary compatible with Motif 2.1.30.
-Applications built against Motif 2.1.30 will need to be recompiled 
-with the Motif 2.2+ header files.
-
-
-7. Change Log
-
-2.3.4 October 2012
-This Release
 
 2.3.3 March 2010 
 * Fixed bug #1195 (Making on FreeBSD with non GNU make)   
