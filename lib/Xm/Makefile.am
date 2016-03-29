@@ -164,7 +164,6 @@ XmStringI.h \
 XmTabListI.h \
 XmosI.h \
 XpmI.h \
-regexpI.h \
 EditresComI.h \
 $(JPEG_HDRS) \
 $(PNG_HDRS) \

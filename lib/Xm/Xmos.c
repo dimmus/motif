@@ -66,8 +66,6 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 # ifdef __sgi
 extern char *regcmp();
 extern int regex();
-# elif defined(USE_LOCAL_REGEX)
-#  include "regexpI.h"
 # elif defined(SVR4)
 #  include <libgen.h>
 # elif defined(SYSV)
@@ -670,11 +668,7 @@ void
   regex_t         preg;
   int             comp_status = 0;
 #elif !defined(NO_REGEX)
-# ifdef USE_LOCAL_REGEX
-  XmRegexpRec *   compiledRE = NULL;
-# else
   char *          compiledRE = NULL;
-# endif
 #endif /* NO_REGCOMP */
 /****************/
 
@@ -701,11 +695,7 @@ void
 	  comp_status = regcomp(&preg, fixedMatchPattern, REG_NOSUB);
 	  if (comp_status)
 #elif !defined(NO_REGEX)
-# ifdef USE_LOCAL_REGEX
-            compiledRE = _XmRegcomp(fixedMatchPattern);
-# else
             compiledRE = (char *)regcmp(fixedMatchPattern, (char *) NULL);
-# endif
 	  if (!compiledRE)
 #else
           if (re_comp(fixedMatchPattern))
@@ -830,11 +820,7 @@ void
 	      if (regexec(&preg, dirName, 0, NULL, 0))
 #else /* NO_REGCOMP */
 #  ifndef NO_REGEX
-#    ifdef USE_LOCAL_REGEX
-              if (!_XmRegexec(compiledRE, dirName))
-#    else
               if (!regex(compiledRE, dirName))
-#    endif
 #  else
               if (!re_exec(dirName))
 #  endif
