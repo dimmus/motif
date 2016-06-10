@@ -35,6 +35,7 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #include <config.h>
 #endif
 #define FIX_1517
+#define FIX_1654
 
 #include <string.h>
 #include <stdio.h>
@@ -2352,12 +2353,20 @@ LRectangle *background_box)
     if (LabG_StringRect(lw).width < availW - marginal_width)
     	width = LabG_StringRect(lw).width;
     else
+#ifdef FIX_1654
+    	width = availW - marginal_width;
+#else
     	width = availW - marginal_width - x;
+#endif
 
     if (LabG_StringRect(lw).height < availH - marginal_height)
     	height = LabG_StringRect(lw).height;
     else
+#ifdef FIX_1654
+    	height = availH - marginal_height;
+#else
     	height = availH - marginal_height - y;
+#endif
     
     XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_BackgroundGC(lw),
 		x, y, width, height);
