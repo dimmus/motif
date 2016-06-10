@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 
 
-                               Motif 2.3.5
+                               Motif 2.3.6
 
                               Release Notes
 
@@ -10,9 +10,9 @@
                      Integrated Computer Solutions
 
 
-This document provides Release Notes for the release of Motif 2.3.5.
+This document provides Release Notes for the release of Motif 2.3.6.
 
-This contains information on what is new in Motif 2.3.5. 
+This contains information on what is new in Motif 2.3.6. 
 Please see the COPYING file included with this release.
 
 
@@ -34,7 +34,7 @@ using the autoconf tools. This method is now fully supported and
 is the recommended build method.
 
 
-1. What is Motif 2.3.5
+1. What is Motif 2.3.6
 
 Motif is a freely available source code distribution for the 
 Motif user interface component toolkit. Motif is built on top of the 
@@ -42,7 +42,7 @@ standard X Toolkit(Xt) and X11 libraries.
 
 1.1. Overview of Motif
 
-Motif 2.3.5 is an updated version of Motif 2.3. 
+Motif 2.3.6 is an updated version of Motif 2.3. 
 Any applications built against a previous 2.x release of Motif will be 
 binary compatible with this release.
 
@@ -59,17 +59,11 @@ and compiled. The distribution contains the following items:
 * Demo programs
 
 
-2. What is new in Motif 2.3.5
+2. What is new in Motif 2.3.6
 
 This is a bug fix release.
 
-* Reimplemented bugfix 1565 (The active window changes to inactive when the drop down list is clicked)
-* Fixed bug 1636 (XmList segfault when left-shift left-button click on list item)
-* Fixed bug #1612 (Label size computed wrong within a Form)
-* Fixed bug #1611 (Using deprecated X functions)
-* Fixed bug #1604 (Using deprecated X functions)
-* Fixed bug #1581 (Buffer overrun in FontS.c)
-* Fixed many compile-time bugs
+* Fixed bug 1654 (Rendering issues seen while scrolling window)
 
 
 3. Build Systems
@@ -119,8 +113,17 @@ with the Motif 2.2+ header files.
 
 7. Change Log
 
-2.3.5 March 2016
+2.3.6 June 2016
 Current release
+
+2.3.5 March 2016
+* Reimplemented bugfix 1565 (The active window changes to inactive when the drop down list is clicked)
+* Fixed bug 1636 (XmList segfault when left-shift left-button click on list item)
+* Fixed bug #1612 (Label size computed wrong within a Form)
+* Fixed bug #1611 (Using deprecated X functions)
+* Fixed bug #1604 (Using deprecated X functions)
+* Fixed bug #1581 (Buffer overrun in FontS.c)
+* Fixed many compile-time bugs
 
 2.3.4 October 2012
 * Fixed bug #1565 (The active window changes to inactive when the drop down
