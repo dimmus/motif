@@ -1,6 +1,38 @@
+2016-06-11 05:02:55 +0300 Oleksiy Chernyavskyy 
+
+	* updated release 2.3.6 information (HEAD -> master)
+
+2016-06-11 04:57:54 +0300 Oleksiy Chernyavskyy 
+
+	* fixid parallel building (make -j) error (origin/master, origin/HEAD)
+
+2016-06-11 04:57:20 +0300 Oleksiy Chernyavskyy 
+
+	* removed automatic configure start from autogen.sh
+
+2016-06-11 04:26:48 +0300 Oleksiy Chernyavskyy 
+
+	* minor fix
+
+2016-06-11 04:21:53 +0300 Oleksiy Chernyavskyy 
+
+	* removed extra dist Imakefile from all Makefile.am files
+
+2016-06-11 04:06:37 +0300 Oleksiy Chernyavskyy 
+
+	* Purified copyright headers (Motif is LGPL covered). Removed many Imakefile's and Imake-related stuff
+
+2016-06-10 23:40:43 +0300 Oleksiy Chernyavskyy 
+
+	* updated release notes and version 2.3.5 -> 2.3.6
+
+2016-06-10 23:27:56 +0300 Oleksiy Chernyavskyy 
+
+	* updated ChangeLog
+
 2016-06-10 23:15:00 +0300 Oleksiy Chernyavskyy 
 
-	* bug 1654 fix (HEAD -> master, origin/master, origin/HEAD)
+	* bug 1654 fix
 
 2016-06-10 21:58:16 +0300 Oleksiy Chernyavskyy 
 
