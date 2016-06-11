@@ -89,3 +89,6 @@ $(TARGETS):	$(TABLE) $(WMLDIR)/motif.wml
 # DependTarget()
 # 
 # includes:: $(TARGETS)  UilDBDef.h
+
+.NOTPARALLEL:
+
