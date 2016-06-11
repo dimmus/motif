@@ -64,6 +64,7 @@ and compiled. The distribution contains the following items:
 This is a bug fix release.
 
 * Fixed bug 1654 (Rendering issues seen while scrolling window)
+* Fixed parallel building error
 
 
 3. Build Systems
