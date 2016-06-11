@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: SelectBox2.c /main/9 1995/07/13 19:19:40 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /* 
  * Create a selection box with menu bar and button children, as detailed in

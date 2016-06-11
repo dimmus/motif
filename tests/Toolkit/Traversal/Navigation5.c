@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Navigation5.c /main/7 1995/07/13 19:43:39 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  This test tests the XmNtraverseObsuredCallback and the XmScrollVisible

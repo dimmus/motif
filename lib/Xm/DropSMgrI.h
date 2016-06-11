@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/* $XConsortium: DropSMgrI.h /main/11 1995/07/14 10:30:57 drk $ */
-/* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifndef _XmDropSMgrI_h
 #define _XmDropSMgrI_h

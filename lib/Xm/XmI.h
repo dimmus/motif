@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $TOG: XmI.h /main/19 1997/06/18 17:47:55 samborn $ */
-/* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmI_h
 #define _XmI_h
 

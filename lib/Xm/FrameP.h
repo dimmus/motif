@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: FrameP.h /main/13 1995/09/19 23:03:22 cde-sun $ */
-/*
-*  (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmFrameP_h
 #define _XmFrameP_h
 

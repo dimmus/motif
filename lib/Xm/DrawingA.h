@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: DrawingA.h /main/12 1995/07/14 10:28:21 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmDrawingArea_h
 #define _XmDrawingArea_h
 

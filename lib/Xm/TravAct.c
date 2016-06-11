@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,8 +30,6 @@
 static char rcsid[] = "$TOG: TravAct.c /main/14 1999/05/27 13:58:09 mgreess $"
 #endif
 #endif
-
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include "TraversalI.h"
 #include "TravActI.h"

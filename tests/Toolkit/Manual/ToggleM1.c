@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: ToggleM1.c /main/8 1997/04/10 13:26:12 dbl $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 #include <X11/Xlib.h>
 #include <X11/StringDefs.h>

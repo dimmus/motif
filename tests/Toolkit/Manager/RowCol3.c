@@ -29,10 +29,7 @@ static char rcsid[] = "$XConsortium: RowCol3.c /main/8 1995/07/13 18:33:28 drk $
 #endif
 #endif
 
-/******************************************************************************
- *
- *
- *  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 

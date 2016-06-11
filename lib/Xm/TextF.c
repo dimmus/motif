@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,7 +30,6 @@
 static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #endif
 #endif
-/* (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <stdio.h>
 #include <limits.h>		/* required for MB_LEN_MAX definition */

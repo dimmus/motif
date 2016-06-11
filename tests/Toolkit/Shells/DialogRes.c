@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: DialogRes.c /main/8 1995/07/13 19:20:22 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 /*
  *	File:	DialogRes.c
  *

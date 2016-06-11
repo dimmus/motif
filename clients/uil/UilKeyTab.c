@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UilKeyTab.c /main/11 1995/07/14 09:34:29 drk $"
@@ -33,9 +30,6 @@ static char rcsid[] = "$XConsortium: UilKeyTab.c /main/11 1995/07/14 09:34:29 dr
 #include <config.h>
 #endif
 
-
-/*
-*  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 
 /*
 **++

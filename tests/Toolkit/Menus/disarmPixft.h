@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: disarmPixft.h /main/7 1995/07/13 18:56:34 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define disarmPix_width 32
 #define disarmPix_height 32
 static char disarmPix_bits[] = {

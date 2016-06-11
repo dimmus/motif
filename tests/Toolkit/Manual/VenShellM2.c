@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: VenShellM2.c /main/6 1999/01/29 16:34:55 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 #include <testlib.h>

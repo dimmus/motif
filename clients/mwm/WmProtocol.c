@@ -33,8 +33,6 @@
 static char rcsid[] = "$TOG: WmProtocol.c /main/8 1997/06/18 17:31:34 samborn $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
 
 /*
  * Included Files:

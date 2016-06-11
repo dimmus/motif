@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,8 +30,6 @@
 static char rcsid[] = "$TOG: Messages.c /main/23 1997/03/19 11:49:58 dbl $"
 #endif
 #endif
-/* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 /* Define _XmConst before including MessagesI.h, so that the
  * declarations will be in agreement with the definitions.

@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ResPartOffM1.c /main/6 1995/07/13 18:37:26 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *  Create a foo widget in a form.  Foo uses XmResolvePartOffsets.
  */

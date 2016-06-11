@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Scale5.c /main/7 1995/07/13 19:11:58 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  *  Create a scale with one label in it.  Reverse the processing

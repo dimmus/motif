@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: DropTrans.h /main/11 1995/07/14 10:31:45 drk $ */
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifndef _XmDropTrans_h
 #define _XmDropTrans_h

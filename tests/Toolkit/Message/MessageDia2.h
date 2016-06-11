@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: MessageDia2.h /main/7 1995/07/13 19:02:48 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 /*  Private Functions  */

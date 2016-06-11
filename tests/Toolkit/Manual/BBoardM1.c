@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: BBoardM1.c /main/5 1997/11/14 17:31:58 csn $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /**************************************************************************
  *

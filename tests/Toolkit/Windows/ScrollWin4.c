@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ScrollWin4.c /main/10 1995/07/13 19:49:47 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 Widget DrawingArea1;

@@ -20,20 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/* $XConsortium: VendorSEP.h /main/14 1996/05/21 12:11:50 pascale $ */
-/* (c) Copyright 1989, 1990  DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
-/* (c) Copyright 1988 MICROSOFT CORPORATION */
-/*
- *  (c) Copyright 1995 FUJITSU LIMITED
- *  This is source code modified by FUJITSU LIMITED under the Joint
- *  Development Agreement for the CDEnext PST.
- *  This is unpublished proprietary source code of FUJITSU LIMITED
- */
 #ifndef _XmVendorSEP_h
 #define _XmVendorSEP_h
 

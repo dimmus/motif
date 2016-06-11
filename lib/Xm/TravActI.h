@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: TravActI.h /main/9 1995/07/13 18:15:46 drk $ */
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmTravActI_h
 #define _XmTravActI_h
 

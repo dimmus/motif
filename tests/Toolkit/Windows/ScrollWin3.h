@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ScrollWin3.h /main/7 1995/07/13 19:49:31 drk $ */
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 #include <X11/IntrinsicP.h>
 #include <X11/CoreP.h>

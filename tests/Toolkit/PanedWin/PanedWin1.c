@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: PanedWin1.c /main/5 1999/08/04 13:17:23 mgreess $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 /****************************************
 *   Automatic test program generation   *

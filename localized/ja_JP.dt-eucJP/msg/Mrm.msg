@@ -21,14 +21,6 @@ $ License along with these librararies and programs; if not, write
 $ to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 $ Floor, Boston, MA 02110-1301 USA
 $ 
-$ (c) Copyright 1996 Digital Equipment Corporation.
-$ (c) Copyright 1996 Hewlett-Packard Company.
-$ (c) Copyright 1996 International Business Machines Corp.
-$ (c) Copyright 1996 Sun Microsystems, Inc.
-$ (c) Copyright 1996 Novell, Inc. 
-$ (c) Copyright 1996 FUJITSU LIMITED.
-$ (c) Copyright 1996 Hitachi.
-$
 
 $ This message catalog contains messages issued by Motif Mrm library.
 $ Consult X-Window systems, OSF/MOTIF Programmer's Guide and OSF/MOTIF

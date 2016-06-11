@@ -33,8 +33,6 @@
 static char rcsid[] = "$XConsortium: WmColormap.c /main/5 1996/10/30 11:14:44 drk $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
 
 /*
  * Included Files:

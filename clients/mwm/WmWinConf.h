@@ -23,9 +23,6 @@
 /* 
  * Motif Release 1.2
 */ 
-/*   $XConsortium: WmWinConf.h /main/5 1996/06/11 16:01:31 rswiston $ */
-/*
- * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
 
 
 extern void AdjustPos (int *pX, int *pY, unsigned int oWidth, 

@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: Screen.h /main/9 1995/07/13 17:53:35 drk $ */
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifndef _XmScreen_h
 #define _XmScreen_h

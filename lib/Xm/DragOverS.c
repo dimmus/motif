@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: DragOverS.c /main/18 1999/08/11 15:53:11 mgreess $"
@@ -34,7 +31,6 @@ static char rcsid[] = "$TOG: DragOverS.c /main/18 1999/08/11 15:53:11 mgreess $"
 #endif
 
 
-/* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 /************************************************************************
  *
  *  This module dynamically blends and manages the dragover visual using

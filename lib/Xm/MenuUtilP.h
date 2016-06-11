@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/* $XConsortium: MenuUtilP.h /main/9 1995/07/13 17:37:16 drk $ */
-/* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 #ifndef _XmMenuUtilP_h
 #define _XmMenuUtilP_h
 

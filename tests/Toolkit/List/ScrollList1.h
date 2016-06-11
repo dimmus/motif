@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ScrollList1.h /main/9 1995/07/13 18:23:13 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define NITEMS 62
 #define VITEMS 20
 

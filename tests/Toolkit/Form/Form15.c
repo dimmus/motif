@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Form15.c /main/4 1995/07/13 18:02:35 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *  Create 2 push buttons in a form.  SetValues on the constraints to
  *  try out the difference attachment types.  Also type some invalid

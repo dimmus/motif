@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Form12.c /main/4 1995/07/13 18:01:39 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  Create a scrollbar in a form.  Set the constraints such that the

@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: armPixft.h /main/7 1995/07/13 18:56:13 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define armPix_width 32
 #define armPix_height 32
 static char armPix_bits[] = {

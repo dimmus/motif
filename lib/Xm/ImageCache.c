@@ -20,18 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/*
- * (c) Copyright 1996 Digital Equipment Corporation.
- * (c) Copyright 1996 Hewlett-Packard Company.
- * (c) Copyright 1996 International Business Machines Corp.
- * (c) Copyright 1996 Sun Microsystems, Inc.
- * (c) Copyright 1996 Novell, Inc. 
- * (c) Copyright 1996 FUJITSU LIMITED.
- * (c) Copyright 1996 Hitachi.
- */
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $"
@@ -42,8 +30,6 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #endif
 
 
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-
 #include "XmI.h"
 #include "XmosI.h"              /* for mask name API and stuff */
 #include "BitmapsI.h"		/* for built-in images */

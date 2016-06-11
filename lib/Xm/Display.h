@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: Display.h /main/10 1995/07/14 10:20:21 drk $ */
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifndef _XmDisplay_h
 #define _XmDisplay_h

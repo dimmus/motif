@@ -20,15 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* $TOG: TransltnsP.h /main/14 1999/04/29 13:05:42 samborn $ */
-/* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/*
- *  (c) Copyright 1995 FUJITSU LIMITED
- *  This is source code modified by FUJITSU LIMITED under the Joint
- *  Development Agreement for the CDEnext PST.
- *  This is unpublished proprietary source code of FUJITSU LIMITED
- */
 #ifndef _XmTransltnsP_h
 #define _XmTransltnsP_h
 

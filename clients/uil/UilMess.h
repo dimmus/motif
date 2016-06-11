@@ -20,13 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: UilMess.h /main/10 1995/07/14 09:35:51 drk $ */
-
-/*
-*  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 #define d_add_source 2
 #define d_arg_count 23
 #define d_arg_type 24

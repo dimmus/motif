@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: RepType2.c /main/9 1995/07/13 17:54:07 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  This test tests the Representation Type Management facility in terms

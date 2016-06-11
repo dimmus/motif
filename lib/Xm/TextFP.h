@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
-*/ 
-/* $TOG: TextFP.h /main/17 1997/03/04 17:00:01 dbl $ */
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmTextFP_h
 #define _XmTextFP_h
 

@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ArrowBtn2.c /main/9 1995/07/13 17:28:29 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /****************************************
 *   Automatic test program generation   *

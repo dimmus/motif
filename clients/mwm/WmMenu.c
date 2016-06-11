@@ -33,12 +33,6 @@
 static char rcsid[] = "$XConsortium: WmMenu.c /main/15 1996/11/20 15:20:17 rswiston $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
-/*
- * (c) Copyright 1987, 1988 DIGITAL EQUIPMENT CORPORATION */
-/*
- * (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY */
 
 /*
  * Included Files:

@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $TOG: AtomMgr.h /main/12 1997/09/10 11:15:15 mgreess $ */
-/*
-*  (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmAtomMgr_h
 #define _XmAtomMgr_h
 

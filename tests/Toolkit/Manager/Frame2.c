@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Frame2.c /main/7 1995/07/13 18:31:24 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define REALIZE_AFTER 1
 
 #include <testlib.h>

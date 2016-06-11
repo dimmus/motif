@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Conversion1.c /main/8 1995/07/13 17:52:50 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  Test the resource converters contained in ResConvert.c

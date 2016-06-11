@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
- */ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,8 +30,6 @@
 static char rcsid[] = "$XConsortium: Mrmlwrite.c /main/11 1996/11/13 14:02:48 drk $"
 #endif
 #endif
-
-/* (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 
 /*
  *++

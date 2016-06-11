@@ -20,11 +20,6 @@
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
 ! 
-! 
-! HISTORY
-! 
-!   $XConsortium: ProcDef.uil /main/6 1995/07/13 20:41:13 drk $
-!*  (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS.
 !******************************************************************************
 module lab18
   version = 'v1.0'

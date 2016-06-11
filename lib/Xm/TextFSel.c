@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,7 +30,6 @@
 static char rcsid[] = "$TOG: TextFSel.c /main/22 1997/10/14 15:38:30 cshi $"
 #endif
 #endif
-/* (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>

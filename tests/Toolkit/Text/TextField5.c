@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: TextField5.c /main/9 1995/07/13 19:36:18 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 #include "TextField5.h"
 

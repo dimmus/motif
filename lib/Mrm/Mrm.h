@@ -20,19 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $TOG: Mrm.h /main/23 1999/05/25 16:55:58 mgreess $ */
-/*                                                                      *
- * (c) Copyright 1996 Hewlett-Packard Company                           *
- * (c) Copyright 1996 International Business Machines Corp.             *
- * (c) Copyright 1996 Sun Microsystems, Inc.                            *
- * (c) Copyright 1996 Novell, Inc.                                      *
- * (c) Copyright 1989, 1990, 1996 Digital Equipment Corporation.	*
- * (c) Copyright 1996 FUJITSU LIMITED.					*
- * (c) Copyright 1996 Hitachi.						*
- */
 #ifndef Mrm_H
 #define Mrm_H
 

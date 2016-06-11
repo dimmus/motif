@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: RowCol3.h /main/7 1995/07/13 18:33:49 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 /*  Private Functions  */

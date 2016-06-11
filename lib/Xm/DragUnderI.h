@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/* $XConsortium: DragUnderI.h /main/11 1995/07/14 10:27:08 drk $ */
-/* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifndef _XmDragUnderI_h
 #define _XmDragUnderI_h

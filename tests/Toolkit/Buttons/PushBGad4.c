@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: PushBGad4.c /main/8 1995/07/13 17:29:58 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
    Test was written for PIR629
    PIR748,

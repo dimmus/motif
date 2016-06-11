@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: Label4.c /main/8 1999/03/18 11:39:27 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <X11/StringDefs.h>
 #include <testlib.h>
 

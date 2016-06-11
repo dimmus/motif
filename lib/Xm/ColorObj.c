@@ -22,18 +22,6 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-/*
- * (c) Copyright 1996 Digital Equipment Corporation.
- * (c) Copyright 1996 Hewlett-Packard Company.
- * (c) Copyright 1996 International Business Machines Corp.
- * (c) Copyright 1996 Sun Microsystems, Inc.
- * (c) Copyright 1996 Novell, Inc. 
- * (c) Copyright 1996 FUJITSU LIMITED.
- * (c) Copyright 1996 Hitachi.
- */
-/*
- * HISTORY
- */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

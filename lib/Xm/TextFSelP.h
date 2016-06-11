@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/* $XConsortium: TextFSelP.h /main/8 1995/07/13 18:06:15 drk $ */
-/* (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifndef _XmTextFSelP_h
 #define _XmTextFSelP_h

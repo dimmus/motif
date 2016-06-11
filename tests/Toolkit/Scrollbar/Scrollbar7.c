@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: Scrollbar7.c /main/9 1999/11/30 17:48:04 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  *  Create a horizontal scrollbar with reverse processing direction

@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: List10.h /main/8 1995/07/13 18:15:17 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #define NITEMS 28
 

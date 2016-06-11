@@ -20,15 +20,11 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: DragC.c /main/29 1997/10/07 12:19:52 cshi $"
 #endif
 #endif
-/* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

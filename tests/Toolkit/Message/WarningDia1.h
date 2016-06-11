@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: WarningDia1.h /main/7 1995/07/13 19:03:45 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 /*  Private Functions  */

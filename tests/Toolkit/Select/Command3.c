@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Command3.c /main/8 1995/07/13 19:17:02 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 static XmString	stringList[15];

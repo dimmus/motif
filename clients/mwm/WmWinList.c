@@ -33,12 +33,6 @@
 static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990, 1993, 1994 Hewlett-Packard Company
- * (c) Copyright 1993, 1994 International Business Machines Corp.
- * (c) Copyright 1993, 1994 Sun Microsystems, Inc.
- * (c) Copyright 1993, 1994 Novell, Inc.
- */
 
 /*
  * Included Files:

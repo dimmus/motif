@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: Scale3.h /main/6 1995/07/13 19:11:35 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 Boolean   wait;
 Widget    ContinuePopup = NULL;
 

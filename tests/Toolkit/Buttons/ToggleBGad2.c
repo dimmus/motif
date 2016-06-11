@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ToggleBGad2.c /main/8 1995/07/13 17:31:11 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 /****************************************************************************
  *
  * This program tests  a toggle pixmap, and the XmNindicatorOn resource.\

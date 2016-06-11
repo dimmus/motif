@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,8 +30,6 @@
 static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #endif
 #endif
-/* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/* (c) Copyright 1990 MOTOROLA, INC. */
 
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>

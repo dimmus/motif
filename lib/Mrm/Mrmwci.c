@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
- */ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,16 +30,6 @@
 static char rcsid[] = "$TOG: Mrmwci.c /main/16 1999/05/19 15:25:58 mgreess $"
 #endif
 #endif
-
-/*                                                                      *
- * (c) Copyright 1996 Hewlett-Packard Company                           *
- * (c) Copyright 1996 International Business Machines Corp.             *
- * (c) Copyright 1996 Sun Microsystems, Inc.                            *
- * (c) Copyright 1996 Novell, Inc.                                      *
- * (c) Copyright 1989, 1990, 1996 Digital Equipment Corporation.	*
- * (c) Copyright 1996 FUJITSU LIMITED.					*
- * (c) Copyright 1996 Hitachi.						*
- */
 
 /*
  *++

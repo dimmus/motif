@@ -33,12 +33,6 @@
 static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990, 1993, 1994 HEWLETT-PACKARD COMPANY 
- * (c) Copyright 1993, 1994 International Business Machines Corp.
- * (c) Copyright 1993, 1994 Sun Microsystems, Inc.
- * (c) Copyright 1993, 1994 Novell, Inc.
- */
 
 #define FIX_1350    1
 

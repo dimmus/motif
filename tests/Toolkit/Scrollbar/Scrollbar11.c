@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Scrollbar11.c /main/7 1995/07/13 19:13:56 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  * Create 2 scroll bars. One with MAX_ON_LEFT, the other with MAX_ON_RIGHT

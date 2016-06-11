@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ScrollList3.h /main/9 1995/07/13 18:24:18 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define NITEMS 10
 
 /* Global Varaibles */

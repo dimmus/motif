@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: WMShellGeom.c /main/8 1995/07/13 19:21:19 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *    file: WMShellGeom.c
  *

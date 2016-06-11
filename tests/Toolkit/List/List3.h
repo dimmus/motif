@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: List3.h /main/9 1995/07/13 18:17:51 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define NITEMS 6
 
 /*  Global Variables  */

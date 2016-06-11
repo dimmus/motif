@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ScrollWin4.h /main/7 1995/07/13 19:50:16 drk $ */
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 #include <X11/Intrinsic.h>
 

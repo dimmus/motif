@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Form4.c /main/4 1995/07/13 18:11:20 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  Create three PushButton in a form.  The first being attached to the right

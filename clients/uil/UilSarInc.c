@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilSarInc.c /main/12 1997/03/12 15:21:31 dbl $"
@@ -33,9 +30,6 @@ static char rcsid[] = "$TOG: UilSarInc.c /main/12 1997/03/12 15:21:31 dbl $"
 #include <config.h>
 #endif
 
-
-/*
-*  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 
 /*
 **++

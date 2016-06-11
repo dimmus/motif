@@ -21,16 +21,6 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-/*
- *  (c) Copyright 1995 FUJITSU LIMITED
- *  This is source code modified by FUJITSU LIMITED under the Joint
- *  Development Agreement for the CDEnext PST.
- *  This is unpublished proprietary source code of FUJITSU LIMITED
- */
-/*
- * HISTORY
- */
-/* $XConsortium: TextOutI.h /main/7 1995/11/02 12:05:38 cde-fuj $ */
 #ifndef _XmTextOutI_h
 #define _XmTextOutI_h
 

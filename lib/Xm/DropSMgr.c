@@ -20,15 +20,11 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
 #endif
 #endif
-/* (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

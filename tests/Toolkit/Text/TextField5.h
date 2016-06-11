@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: TextField5.h /main/9 1995/07/13 19:36:56 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 static char starting_string_text[] = "This is the starting string";
 

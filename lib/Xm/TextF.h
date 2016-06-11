@@ -20,12 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: TextF.h /main/11 1995/07/13 18:05:20 drk $ */
-/*
-*  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmTextF_h
 #define _XmTextF_h
 

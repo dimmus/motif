@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Form11.c /main/4 1995/07/13 18:01:11 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  Create two scrollbars in a form.  The first being attached to the right

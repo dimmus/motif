@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Region.c /main/10 1995/07/13 17:46:45 drk $"
@@ -32,15 +29,6 @@ static char rcsid[] = "$XConsortium: Region.c /main/10 1995/07/13 17:46:45 drk $
 #include <config.h>
 #endif
 
-
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/*
-*  (c) Copyright 1987, 1989, 1990 DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-/*
-*  (c) Copyright 1987, 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
-/*
-*  (c) Copyright 1988 MICROSOFT CORPORATION */
 
 /*
  * The functions in this file implement the XmRegion abstraction

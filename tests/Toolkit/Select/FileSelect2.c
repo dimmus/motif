@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: FileSelect2.c /main/10 1999/05/28 15:45:55 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 #include <unistd.h>
 

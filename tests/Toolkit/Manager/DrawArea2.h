@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: DrawArea2.h /main/7 1995/07/13 18:30:19 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*  Standard C headers  */
 #include <signal.h>
 

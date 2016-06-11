@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Scrollbar2.c /main/6 1995/07/13 19:14:15 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /****************************************
 *   Automatic test program generation   *

@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ErrorDia1.h /main/7 1995/07/13 18:57:12 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 /*  Private Functions  */

@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ToggleBGad4.c /main/9 1995/07/13 17:31:50 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <testlib.h>

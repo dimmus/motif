@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: PanedWin10.c /main/4 1995/07/13 19:05:52 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 static void DoXY ();
 

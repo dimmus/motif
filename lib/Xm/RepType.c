@@ -20,15 +20,11 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
 #endif
 #endif
-/* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

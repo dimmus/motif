@@ -20,16 +20,11 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: hellomotif.c /main/6 1995/07/14 09:42:12 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 #include <stdlib.h>
 #include <Xm/XmAll.h>       /* Motif Toolkit */
 #include <Mrm/MrmPublic.h>  /* Mrm Toolkit */

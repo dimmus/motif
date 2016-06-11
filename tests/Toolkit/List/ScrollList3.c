@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ScrollList3.c /main/9 1995/07/13 18:23:50 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /*	
 	This file contains test code for the following PIRS:

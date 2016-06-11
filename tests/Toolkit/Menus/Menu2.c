@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Menu2.c /main/10 1995/07/13 18:43:48 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <signal.h>
 
 #include <X11/Xlib.h>

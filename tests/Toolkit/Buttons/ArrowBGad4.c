@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ArrowBGad4.c /main/8 1995/07/13 17:27:56 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *  Create a drawing area with a set of arrow gadgets within it.
  *  Move and resize the last gadget repetitively.

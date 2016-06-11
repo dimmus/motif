@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: TextWcs1.h /main/8 1995/07/13 19:38:06 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #ifndef MOTIF1_1
 

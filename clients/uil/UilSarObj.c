@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UilSarObj.c /main/14 1995/07/14 09:37:30 drk $"
@@ -32,10 +29,6 @@ static char rcsid[] = "$XConsortium: UilSarObj.c /main/14 1995/07/14 09:37:30 dr
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-/*
-*  (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
 
 /*
 **++

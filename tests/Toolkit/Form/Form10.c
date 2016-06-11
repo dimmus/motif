@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Form10.c /main/4 1995/07/13 18:00:48 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /****************************************
 *   Automatic test program generation   *

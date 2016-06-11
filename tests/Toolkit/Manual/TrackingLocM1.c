@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: TrackingLocM1.c /main/9 1999/11/22 18:16:36 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 #include <X11/cursorfont.h>
 

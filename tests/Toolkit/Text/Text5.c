@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Text5.c /main/9 1995/07/13 19:29:25 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 

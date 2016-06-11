@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $TOG: Text12.h /main/10 1997/09/18 11:00:08 csn $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 static char starting_string_text[] = "This is the starting string";
 

@@ -32,8 +32,7 @@ static char rcsid[] = "$XConsortium: OptionMenu4.c /main/10 1995/07/13 18:50:16 
 >>>>>>> 1.6.7.2
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 

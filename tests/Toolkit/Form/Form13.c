@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Form13.c /main/4 1995/07/13 18:02:05 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  Create three arrows in a form such that they horizontally span

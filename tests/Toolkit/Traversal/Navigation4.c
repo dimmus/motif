@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Navigation4.c /main/6 1995/07/13 19:43:22 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 	/* test for PIR 1304 */
 
 #include <X11/Xlib.h>

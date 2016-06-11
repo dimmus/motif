@@ -20,16 +20,11 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: xmfonts.c /main/5 1995/07/14 10:08:26 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989 HEWLETT-PACKARD COMPANY. */
 
 /**---------------------------------------------------------------------
 ***	

@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: WMShellGeom.h /main/8 1995/07/13 19:21:38 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *	file: WMShellGeometry.h
  */

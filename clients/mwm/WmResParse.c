@@ -33,16 +33,6 @@
 static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 drk $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990, 1993, 1994 Hewlett-Packard Company
- * (c) Copyright 1993, 1994 International Business Machines Corp.
- * (c) Copyright 1993, 1994 Sun Microsystems, Inc.
- * (c) Copyright 1993, 1994 Novell, Inc.
- */
-/*
- * (c) Copyright 1987, 1988 DIGITAL EQUIPMENT CORPORATION */
-/*
- * (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY */
 
 /*
  * Included Files:

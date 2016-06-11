@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: OptionMenu3.c /main/8 1995/07/13 18:49:46 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 #define NUM_RC_CHILDREN 9

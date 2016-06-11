@@ -22,28 +22,6 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-/*
- * HISTORY
- */
-/*
- * COMPONENT_NAME: (CMDMSG) Message Catalogue Facilities
- *
- * FUNCTIONS: main, mkcatdefs, incl, chkcontin, insert, nsearch, hash
- *
- * ORIGINS: 27, 18
- *
- * IBM CONFIDENTIAL -- (IBM Confidential Restricted when
- * combined with the aggregated modules for this product)
- * OBJECT CODE ONLY SOURCE MATERIALS
- * (C) COPYRIGHT International Business Machines Corp. 1988, 1989, 1991
- * All Rights Reserved
- *
- * US Government Users Restricted Rights - Use, duplication or
- * disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
- */
-/*
- * @OPENGROUP_COPYRIGHT@
- */
 
 #include <stdio.h>
 #include <stdlib.h>

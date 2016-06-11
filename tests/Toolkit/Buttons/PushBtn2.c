@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: PushBtn2.c /main/9 1995/07/13 17:30:29 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 #include <signal.h>
 #include <X11/Xlib.h>
 #include <X11/StringDefs.h>

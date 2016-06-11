@@ -23,9 +23,6 @@
 /* 
  * Motif Release 1.2.3
 */ 
-/*   $XConsortium: WmFunction.h /main/5 1996/06/11 15:59:42 rswiston $ */
-/*
- * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
 
 
 #ifdef WSM

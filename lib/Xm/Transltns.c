@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,18 +30,11 @@
 static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
 #endif
 #endif
-/* (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 /* Define _XmConst before including TransltnsP.h or XmP.h, so that the
  * declarations will be in agreement with the definitions.
  */
-/*
- *  (c) Copyright 1995 FUJITSU LIMITED
- *  This is source code modified by FUJITSU LIMITED under the Joint
- *  Development Agreement for the CDEnext PST.
- *  This is unpublished proprietary source code of FUJITSU LIMITED
- */
+
 #ifndef _XmConst
 #if defined(__STDC__) || !defined( NO_CONST )
 #define _XmConst const

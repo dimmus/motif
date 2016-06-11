@@ -20,13 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $TOG: DragC.h /main/13 1998/02/03 14:56:15 csn $ */
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/* $TOG: DragC.h /main/13 1998/02/03 14:56:15 csn $ */
 
 #ifndef _XmDragController_h
 #define _XmDragController_h

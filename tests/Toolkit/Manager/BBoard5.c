@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: BBoard5.c /main/8 1995/07/13 18:26:24 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /**************************************************************************
  *

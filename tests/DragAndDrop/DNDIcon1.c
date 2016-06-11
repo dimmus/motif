@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: DNDIcon1.c /main/10 1996/10/07 14:52:58 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *	file: DNDIcon1.c
  *

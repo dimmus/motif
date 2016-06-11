@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Label3.c /main/7 1995/07/13 19:08:41 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *  Use XmGetPixmap to get a set of pixmaps created from images read from
  *  a file.  Put the images into labels for display.

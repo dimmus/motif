@@ -288,10 +288,7 @@ clients/mwm/WmWsmLib/Makefile \
 clients/uil/Makefile \
 clients/xmbind/Makefile \
 config/Makefile \
-config/cf/Makefile \
-config/imake/Makefile \
 config/util/Makefile \
-config/makedepend/Makefile \
 include/Makefile \
 include/Dt/Makefile \
 lib/Makefile \

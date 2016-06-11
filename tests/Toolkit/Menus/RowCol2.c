@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: RowCol2.c /main/9 1995/07/13 18:54:34 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 /*************Some Globals***********************/

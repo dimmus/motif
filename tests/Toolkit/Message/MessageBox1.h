@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: MessageBox1.h /main/7 1995/07/13 18:58:50 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 

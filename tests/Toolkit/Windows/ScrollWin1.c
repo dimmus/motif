@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ScrollWin1.c /main/8 1995/07/13 19:47:41 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 

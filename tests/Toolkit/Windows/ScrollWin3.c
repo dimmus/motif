@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ScrollWin3.c /main/8 1995/07/13 19:49:07 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 #include <X11/IntrinsicP.h>

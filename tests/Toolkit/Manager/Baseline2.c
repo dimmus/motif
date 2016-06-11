@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Baseline2.c /main/5 1995/07/13 18:28:48 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 #include "gnu.bmp"
 

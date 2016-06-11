@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: RepType1.c /main/8 1999/02/12 17:15:05 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 /*
  *  This test tests the Representation Type Management facility in terms

@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Scale10.c /main/8 1995/07/13 19:11:04 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /* 
 	The problems: (Pirs 865, 902)
 

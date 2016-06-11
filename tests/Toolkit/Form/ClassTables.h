@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ClassTables.h /main/4 1995/07/13 18:00:10 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 

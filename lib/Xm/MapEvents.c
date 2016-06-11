@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,8 +30,6 @@
 static char rcsid[] = "$XConsortium: MapEvents.c /main/12 1995/09/19 23:05:22 cde-sun $"
 #endif
 #endif
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/* (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
 
 #include <X11/Intrinsic.h>
 #include <X11/IntrinsicP.h>

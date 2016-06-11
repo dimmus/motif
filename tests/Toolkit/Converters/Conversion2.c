@@ -26,8 +26,7 @@
 #ifdef REV_INFO
 static char rcsid[] = "$TOG: Conversion2.c /main/10 1999/12/03 18:40:25 jff $"
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 /*
 *  Test the resource converters contained in Converters.c
  *

@@ -33,13 +33,6 @@
 static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 #endif
 #endif
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/*
- *  (c) Copyright 1995 FUJITSU LIMITED
- *  This is source code modified by FUJITSU LIMITED under the Joint
- *  Development Agreement for the CDEnext PST.
- *  This is unpublished proprietary source code of FUJITSU LIMITED
- */
   
 #include <stdio.h>
 #include <Xm/DisplayP.h>

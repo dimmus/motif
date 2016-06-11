@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: TrackingLocM2.c /main/6 1995/07/13 18:42:17 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 #include <X11/cursorfont.h>
 

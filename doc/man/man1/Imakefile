@@ -1,7 +1,0 @@
-XCOMM Imakefile
-
-all::
-
-InstallMotifManPage(mwm,1)
-InstallMotifManPage(uil,1)
-InstallMotifManPage(xmbind,1)

@@ -22,12 +22,6 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-/*
- *  (c) Copyright 1995 FUJITSU LIMITED
- *  This is source code modified by FUJITSU LIMITED under the Joint
- *  Development Agreement for the CDEnext PST.
- *  This is unpublished proprietary source code of FUJITSU LIMITED
- */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

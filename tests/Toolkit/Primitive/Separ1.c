@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Separ1.c /main/8 1995/07/13 19:09:44 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /****************************************
 *   Automatic test program generation   *

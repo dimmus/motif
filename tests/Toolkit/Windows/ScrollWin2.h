@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: ScrollWin2.h /main/7 1995/07/13 19:48:50 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 Boolean   wait;
 Widget    ContinuePopup = NULL;
 

@@ -33,8 +33,6 @@
 static char rcsid[] = "$XConsortium: WmCDecor.c /main/7 1996/06/20 09:38:16 rswiston $"
 #endif
 #endif
-/*
- * (c) Copyright 1987,1988,1989,1990,1991,1993 HEWLETT-PACKARD COMPANY */
 
 /*
  * Included Files:

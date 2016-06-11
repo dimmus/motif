@@ -33,12 +33,6 @@
 static char rcsid[] = "$TOG: WmInitWs.c /main/18 1999/09/20 15:18:22 mgreess $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990, 1993, 1994 HEWLETT-PACKARD COMPANY 
- * (c) Copyright 1993, 1994 International Business Machines Corp.
- * (c) Copyright 1993, 1994 Sun Microsystems, Inc.
- * (c) Copyright 1993, 1994 Novell, Inc.
- */
 
 /*
  * Included Files:

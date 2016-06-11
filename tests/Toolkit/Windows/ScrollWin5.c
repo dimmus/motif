@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ScrollWin5.c /main/8 1995/07/13 19:50:28 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 static XtCallbackProc  ResizeDrawAreaCB();

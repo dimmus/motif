@@ -31,8 +31,6 @@
 static char rcsid[] = "$XConsortium: TrackLoc.c /main/12 1995/10/25 20:24:41 cde-sun $"
 #endif
 #endif
-/*
-*  (c) Copyright 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <Xm/XmP.h>
 #include "XmI.h"

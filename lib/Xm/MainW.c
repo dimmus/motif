@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,7 +30,6 @@
 static char rcsid[] = "$XConsortium: MainW.c /main/20 1996/10/17 15:21:07 cde-osf $"
 #endif
 #endif
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include "XmI.h"
 #include <Xm/SeparatoGP.h>  /* just access the position/dimension fields,*/

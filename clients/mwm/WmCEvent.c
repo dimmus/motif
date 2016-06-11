@@ -34,9 +34,6 @@ static char rcsid[] = "$XConsortium: WmCEvent.c /main/10 1996/08/09 15:05:39 rsw
 
 
 /*
- * (c) Copyright 1987, 1988, 1989, 1990 HEWLETT-PACKARD COMPANY */
-
-/*
  * Included Files:
  */
 

@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: MainWin2.h /main/7 1995/07/13 19:47:23 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define MAX_ARGS 	100
 
 Boolean   wait;

@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: DiaShell1.c /main/9 1999/03/26 14:47:46 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 #include <testlib.h>

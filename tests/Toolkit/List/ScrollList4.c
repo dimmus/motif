@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: ScrollList4.c /main/10 1995/07/13 18:24:32 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 #include "ScrollList4.h"
 

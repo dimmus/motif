@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: Label5.c /main/8 1999/01/29 13:48:09 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *  Read a set of pixmaps using XmGetPixmap, then create a drawing area
  *  with a set of labels containing the pixmaps.

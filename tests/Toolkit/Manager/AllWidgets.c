@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: AllWidgets.c /main/8 1995/07/13 18:25:04 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *	file:	AllWidgets.c
  *

@@ -21,12 +21,6 @@
  * Floor, Boston, MA 02110-1301 USA
  * 
  */
-/* 
- * HISTORY
-*/ 
-/*   $TOG: DNDDemo.h /main/7 1997/03/31 13:33:51 dbl $ */
-/*
-*  (c) C o pyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
 /*
  *    file: DNDDemo.h
  *

@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */ 
-/* 
- * HISTORY
- */ 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,9 +30,6 @@
 static char rcsid[] = "$XConsortium: MrmIheader.c /main/16 1996/11/13 13:56:56 drk $"
 #endif
 #endif
-
-/* (c) Copyright 1989, 1990, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-
 
 
 /*

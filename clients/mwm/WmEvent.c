@@ -33,12 +33,6 @@
 static char rcsid[] = "$XConsortium: WmEvent.c /main/7 1996/11/20 15:27:47 rswiston $"
 #endif
 #endif
-/*
- * (c) Copyright 1987, 1988, 1989, 1990, 1993, 1994 HEWLETT-PACKARD COMPANY 
- * (c) Copyright 1993, 1994 International Business Machines Corp.
- * (c) Copyright 1993, 1994 Sun Microsystems, Inc.
- * (c) Copyright 1993, 1994 Novell, Inc.
- */
 
 /*
  * Included Files:

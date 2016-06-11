@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: PanedWin6.c /main/4 1995/07/13 19:07:23 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 
 #include <testlib.h>
 

@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DialogSE.c /main/10 1995/07/14 10:19:03 drk $"
@@ -32,13 +29,6 @@ static char rcsid[] = "$XConsortium: DialogSE.c /main/10 1995/07/14 10:19:03 drk
 #include <config.h>
 #endif
 
-
-/*
-*  (c) Copyright 1989, DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASS. */
-/*
-*  (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
-/*
-*  (c) Copyright 1988 MASSACHUSETTS INSTITUTE OF TECHNOLOGY  */
 
 #include <Xm/Xm.h>		/* To make cpp on Sun happy. CR 5943 */
 #include <Xm/DialogSEP.h>

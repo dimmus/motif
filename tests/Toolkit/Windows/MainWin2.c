@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: MainWin2.c /main/9 1995/07/13 19:46:45 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  * Create a MainWindow, with a RowColumn button box as the command window

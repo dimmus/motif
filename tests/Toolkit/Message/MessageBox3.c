@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: MessageBox3.c /main/9 1995/07/13 18:59:27 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*  include files  */
 
 #include <X11/IntrinsicP.h>

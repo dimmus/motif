@@ -26,8 +26,6 @@
 static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.6 $ $Date: 2003/10/06 10:10:23 $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <Xm/Ext.h>
 #include <Xm/DataFSelP.h>

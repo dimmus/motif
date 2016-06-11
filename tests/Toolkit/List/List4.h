@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: List4.h /main/9 1995/07/13 18:18:45 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #ifndef MOTIF1_1
 #define NITEMS	 4
 #else

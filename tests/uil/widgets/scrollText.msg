@@ -20,33 +20,6 @@
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
 ! 
-! 
-! HISTORY
-! 
-!   $XConsortium: scrollText.msg /main/8 1995/07/13 20:53:30 drk $
-!OSF/Motif: @(#)scrollText.msg	3.2  92/01/31
-!
-!  
-!  	THIS SOFTWARE IS FURNISHED UNDER A LICENSE AND MAY BE USED
-!  AND COPIED ONLY IN ACCORDANCE WITH THE TERMS OF SUCH LICENSE AND
-!  WITH THE INCLUSION OF THE ABOVE COPYRIGHT NOTICE.  THIS SOFTWARE OR
-!  ANY OTHER COPIES THEREOF MAY NOT BE PROVIDED OR OTHERWISE MADE
-!  AVAILABLE TO ANY OTHER PERSON.  NO TITLE TO AND OWNERSHIP OF THE
-!  SOFTWARE IS HEREBY TRANSFERRED.
-!  
-!  	THE INFORMATION IN THIS SOFTWARE IS SUBJECT TO CHANGE WITHOUT
-!  NOTICE AND SHOULD NOT BE CONSTRUED AS A COMMITMENT BY OPEN SOFTWARE
-!  
-!  
-!  
-!  
-!  
-!  
-!  
-!  
-!  
-! DEC is a registered trademark of Digital Equipment Corporation
-! DIGITAL is a registered trademark of Digital Equipment Corporation
 !
  value
         message : "This is a scrolled text widget with the\nfollowing characteristics:\n\n   - background is fo" &

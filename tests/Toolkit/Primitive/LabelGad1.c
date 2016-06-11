@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: LabelGad1.c /main/7 1995/07/13 19:09:32 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 

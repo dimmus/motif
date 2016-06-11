@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: MessageBM1.c /main/5 1995/07/13 18:36:42 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /* 
  * Create a message box with menu bar and button children, as detailed in

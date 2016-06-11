@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: DrawArea2.c /main/11 1999/12/01 17:53:00 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 
 

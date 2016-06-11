@@ -20,10 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/*   $XConsortium: main.h /main/6 1995/07/14 10:03:29 drk $ */
 
 #include <stdio.h>
 #include <stdlib.h>

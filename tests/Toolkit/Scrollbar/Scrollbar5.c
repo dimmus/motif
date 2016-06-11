@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: Scrollbar5.c /main/6 1995/07/13 19:15:09 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1989, HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  *  Create a scrollbar with a full set of callbacks.

@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: FileSelect3.c /main/11 1999/05/28 15:46:09 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 
 /* 
  * Create a file selection box with menu bar and button children, as 

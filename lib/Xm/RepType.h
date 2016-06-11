@@ -20,11 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
-/* $XConsortium: RepType.h /main/9 1995/07/13 17:47:50 drk $ */
-/* (c) Copyright 1991, 1992 HEWLETT-PACKARD COMPANY */
 #ifndef _XmRepType_h
 #define _XmRepType_h
 

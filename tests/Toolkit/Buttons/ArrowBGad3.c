@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: ArrowBGad3.c /main/8 1997/11/12 14:07:46 csn $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /*
  *  Create a drawing area with a set of arrow gadgets within it.
  *  Turn the highlight_thickness and highlight_on_enter resources on.

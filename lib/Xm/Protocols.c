@@ -20,9 +20,6 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */ 
-/* 
- * HISTORY
-*/ 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Protocols.c /main/15 1996/10/17 12:00:24 cde-osf $"
@@ -32,8 +29,6 @@ static char rcsid[] = "$XConsortium: Protocols.c /main/15 1996/10/17 12:00:24 cd
 #include <config.h>
 #endif
 
-
-/* (c) Copyright 1987, 1988, 1989, 1990, 1991, 1992 HEWLETT-PACKARD COMPANY */
 
 #include <Xm/XmosP.h>           /* for bzero et al */
 #include <Xm/ProtocolsP.h>

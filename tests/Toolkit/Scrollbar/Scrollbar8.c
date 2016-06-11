@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: Scrollbar8.c /main/7 1999/01/15 12:36:34 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  *  Create a vertical scrollbar and test out the XmGetScrollBarValues

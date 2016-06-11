@@ -28,8 +28,7 @@
 static char rcsid[] = "$TOG: Scrollbar10.c /main/8 1999/01/15 12:37:25 jff $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 /************************************************************************
  *
  *  Create a vertical scrollbar and test SetValue for some invalid

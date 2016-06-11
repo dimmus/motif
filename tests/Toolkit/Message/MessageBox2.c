@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: MessageBox2.c /main/9 1995/07/13 18:59:03 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 Widget 		mbox;                        /*  MessageBox widget   */

@@ -24,8 +24,7 @@
  * HISTORY
 */ 
 /*   $XConsortium: Protocol.h /main/6 1995/07/13 19:20:52 drk $ */
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #define MAX_ARGS	100
 
 Boolean   wait;

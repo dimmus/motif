@@ -31,13 +31,6 @@
 /* 
  * Motif Release 1.2.4
 */ 
-/*   $XConsortium: WmGlobal.h /main/16 1996/10/30 11:55:23 drk $ */
-/*
- * (c) Copyright 1987,1988,1989,1990,1992,1993,1994 HEWLETT-PACKARD COMPANY 
- * (c) Copyright 1993, 1994 International Business Machines Corp.
- * (c) Copyright 1993, 1994 Sun Microsystems, Inc.
- * (c) Copyright 1993, 1994 Novell, Inc.
- */
 
 /* ANSI C definitions,  This should be the first thing in WmGlobal.h */
 #ifdef __STDC__

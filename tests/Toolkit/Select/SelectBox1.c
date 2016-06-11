@@ -28,8 +28,7 @@
 static char rcsid[] = "$XConsortium: SelectBox1.c /main/9 1995/07/13 19:19:18 drk $"
 #endif
 #endif
-/*
-*  (c) Copyright 1987, 1988, 1989 HEWLETT-PACKARD COMPANY */
+
 #include <testlib.h>
 
 #define NITEMS 62
