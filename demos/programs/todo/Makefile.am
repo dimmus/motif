@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 bindir = ${prefix}/share/Xm/todo
 datadir = ${prefix}/share/Xm/todo
 
-EXTRA_DIST = README XmdTodo.ad example.todo todo.man todo.help Imakefile
+EXTRA_DIST = README XmdTodo.ad example.todo todo.man todo.help
 bin_PROGRAMS = todo
 todo_SOURCES = todo.c io.c actions.c page.h
 data_DATA = $(EXTRA_DIST) $(todo_SOURCES)

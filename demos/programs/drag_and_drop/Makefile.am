@@ -4,7 +4,7 @@ bindir = ${prefix}/share/Xm/drag_and_drop
 datadir = ${prefix}/share/Xm/drag_and_drop
 
 bin_PROGRAMS = DNDDemo simpledrop
-EXTRA_DIST = Imakefile simpledrop.man DNDDemo.man README
+EXTRA_DIST = simpledrop.man DNDDemo.man README
 
 DNDDemo_SOURCES = DNDDemo.c DNDDraw.c
 simpledrop_SOURCES = simpledrop.c

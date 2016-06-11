@@ -1,7 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = dogs.uil Dog.uil Square.uil bark.bm  down.bm  up.bm \
-   Imakefile
+EXTRA_DIST = dogs.uil Dog.uil Square.uil bark.bm  down.bm  up.bm
 
 noinst_HEADERS = Dog.h \
 DogP.h \

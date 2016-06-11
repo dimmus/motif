@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README notebook.man
+EXTRA_DIST = README notebook.man
 
 noinst_PROGRAMS = notebook
 

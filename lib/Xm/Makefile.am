@@ -2,7 +2,7 @@ XMSTRING_LIST = xmstring.list
 
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = xmstring.list Xm.msg Imakefile \
+EXTRA_DIST = xmstring.list Xm.msg \
              XmStrDefs.ct
 
 INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \

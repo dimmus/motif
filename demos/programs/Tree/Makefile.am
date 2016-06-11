@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 bindir = ${prefix}/share/Xm/Tree
 datadir = ${prefix}/share/Xm/Tree
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 bin_PROGRAMS = tree
 tree_SOURCES = bxutil-c.c  tree.c
 data_DATA = $(EXTRA_DIST) $(tree_SOURCES)

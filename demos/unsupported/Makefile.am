@@ -12,5 +12,5 @@ SUBDIRS =   dainput \
             uilsymdump \
             motifshell 
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 

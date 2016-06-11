@@ -19,5 +19,5 @@ noinst_HEADERS	= CommandB.h	CommandBP.h	ExmMrm.h	Grid.h \
                   ExmStringP.h	StringTrans.h	StringTransP.h	TabB.h \
                   TabBP.h	
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 

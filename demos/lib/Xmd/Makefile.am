@@ -16,5 +16,5 @@ LDADD = libXmd.a ../../../lib/Xm/libXm.la
 
 INCLUDES = -I$(top_builddir)/lib -I$(srcdir)/../../../lib ${X_CFLAGS} 
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 

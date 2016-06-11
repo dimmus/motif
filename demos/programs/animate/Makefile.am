@@ -5,7 +5,7 @@ datadir = ${prefix}/share/Xm/animate
 
 EXTRA_DIST = dog.uil plane.uil superman.uil xmanimate.uil \
     superman1.xbm superman2.xbm superman3.xbm superman4.xbm \
-    superman5.xbm superman6.xbm Imakefile XmdAnimate.ad \
+    superman5.xbm superman6.xbm XmdAnimate.ad \
     README animate.help animate.man xmanimate.man
 
 xmanimate_SOURCES = xmanimate.c

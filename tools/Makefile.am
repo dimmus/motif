@@ -1,4 +1,4 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 SUBDIRS = wml

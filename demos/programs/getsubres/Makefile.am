@@ -4,7 +4,7 @@ bindir = ${prefix}/share/Xm/getsubres
 datadir = ${prefix}/share/Xm/getsubres
 
 bin_PROGRAMS = getsubres
-EXTRA_DIST = getsubres.help getsubres.man README Imakefile
+EXTRA_DIST = getsubres.help getsubres.man README
 getsubres_SOURCES = getsubres.c
 data_DATA = $(EXTRA_DIST) $(getsubres_SOURCES)
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la

@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = $(bind_DATA) Imakefile README
+EXTRA_DIST = $(bind_DATA) README
 
 binddir = @XMBINDDIR_FALLBACK@
 

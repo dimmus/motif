@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README container.man
+EXTRA_DIST = README container.man
 
 noinst_PROGRAMS = container
 

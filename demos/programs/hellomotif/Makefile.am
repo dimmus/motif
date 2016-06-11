@@ -4,7 +4,7 @@ bindir = ${prefix}/share/Xm/hellomotif
 datadir = ${prefix}/share/Xm/hellomotif
 
 bin_PROGRAMS = hellomotif
-EXTRA_DIST = hellomotif.uil Imakefile README
+EXTRA_DIST = hellomotif.uil README
 hellomotif_SOURCES = hellomotif.c
 data_DATA = $(EXTRA_DIST) $(hellomotif_SOURCES) hellomotif.uid
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la

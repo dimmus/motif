@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 bindir = ${prefix}/share/Xm/wsm
 datadir = ${prefix}/share/Xm/wsm
 
-EXTRA_DIST = Imakefile README wsm.man
+EXTRA_DIST = README wsm.man
 bin_PROGRAMS = wsm
 wsm_SOURCES = client_win.c command_ui.c wsm.c wsmData.c wsmDebug.c \
               wsmSend.c wsmStruct.c wsm_cb.c wsm_create.c xrmLib.c \

@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README UTMXmText.man
+EXTRA_DIST = README UTMXmText.man
 
 noinst_PROGRAMS = UTMXmText
 

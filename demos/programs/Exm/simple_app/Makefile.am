@@ -8,7 +8,7 @@ man_MANS = simpleDemo.man
 bin_PROGRAMS = simpleDemo
 simpleDemo_SOURCES = simpleDemo.c
 
-EXTRA_DIST = simpleDemo.man README Imakefile
+EXTRA_DIST = simpleDemo.man README
 
 INCLUDES = -I$(srcdir)/../../../../lib \
            -I$(srcdir)/../../../lib \

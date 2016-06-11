@@ -6,6 +6,6 @@ SOURCES = motifshell.c
 
 LDADD = ../../../lib/Xm/libXm.la
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 
 INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 

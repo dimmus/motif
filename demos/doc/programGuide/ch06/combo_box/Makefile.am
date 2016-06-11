@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README combo_box.man
+EXTRA_DIST = README combo_box.man
 
 noinst_PROGRAMS = combo_box
 

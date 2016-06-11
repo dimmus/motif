@@ -5,7 +5,7 @@ datadir = ${prefix}/share/Xm/autopopups
 
 bin_PROGRAMS = autopopups
 autopopups_SOURCES = autopopups.c
-EXTRA_DIST = README autopopups.man Imakefile
+EXTRA_DIST = README autopopups.man
 data_DATA = $(EXTRA_DIST) $(autopopups_SOURCES)
 LDADD = ../../../lib/Xm/libXm.la
 

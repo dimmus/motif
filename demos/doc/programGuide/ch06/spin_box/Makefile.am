@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README spin_box.man
+EXTRA_DIST = README spin_box.man
 
 noinst_PROGRAMS = spin_box
 

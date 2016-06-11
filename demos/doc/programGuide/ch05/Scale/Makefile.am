@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README tic_mark.man
+EXTRA_DIST = README tic_mark.man
 
 noinst_PROGRAMS = tic_mark
 

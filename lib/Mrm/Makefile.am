@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
-EXTRA_DIST = Mrm.msg Imakefile
+EXTRA_DIST = Mrm.msg
 
 INCLUDES = -I$(srcdir)/.. -I.. -I../Xm ${X_CFLAGS}
 

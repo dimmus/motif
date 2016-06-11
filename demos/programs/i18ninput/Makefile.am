@@ -5,8 +5,7 @@ datadir = ${prefix}/share/Xm/i18ninput
 
 bin_PROGRAMS = i18ninput
 i18ninput_SOURCES = i18ninput.c input.c 
-EXTRA_DIST = XmdI18nInput.ad README i18ninput.man i18ninput.help \
-             Imakefile
+EXTRA_DIST = XmdI18nInput.ad README i18ninput.man i18ninput.help
 data_DATA = $(EXTRA_DIST) $(i18ninput_SOURCES)
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la
 

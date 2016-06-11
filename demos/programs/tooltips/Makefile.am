@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES = Makefile.in
 bindir = ${prefix}/share/Xm/tooltips
 datadir = ${prefix}/share/Xm/tooltips
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 bin_PROGRAMS = tooltips
 tooltips_SOURCES = tooltips.c
 data_DATA = $(tooltips_SOURCES) $(EXTRA_DIST)

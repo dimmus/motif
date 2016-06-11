@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = exm_in_uil.uil Imakefile
+EXTRA_DIST = exm_in_uil.uil
 
 CLEANFILES = exm_in_uil.uid
 

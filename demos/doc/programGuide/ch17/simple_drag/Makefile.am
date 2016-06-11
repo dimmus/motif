@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = Imakefile README simple_drag.man
+EXTRA_DIST = README simple_drag.man
 
 noinst_PROGRAMS = simple_drag
 

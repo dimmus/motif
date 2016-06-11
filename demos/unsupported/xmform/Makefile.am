@@ -4,7 +4,7 @@ noinst_PROGRAMS = xmform
 
 SOURCES = xmform.c
 
-EXTRA_DIST = Imakefile
+EXTRA_DIST =
 
 LDADD = ../../../lib/Xm/libXm.la
 
