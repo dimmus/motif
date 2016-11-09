@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: xrmLib.c /main/6 1995/07/14 10:01:41 drk $"
 #endif
 
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <Xm/Xm.h>
 #include "wsm.h"
 #include "wsmDebug.h"
