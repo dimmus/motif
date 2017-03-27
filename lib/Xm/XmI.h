@@ -237,9 +237,6 @@ extern Boolean _XmIsISO10646(Display *dpy,
 extern XChar2b* _XmUtf8ToUcs2(char *draw_text,
                               size_t seg_len,
 			      size_t *ret_str_len);
-#ifdef FIX_1565
-extern void XmForceGrabKeyboard(Widget w, Time time);
-#endif
 
 /********    End Private Function Declarations    ********/
 
@@ -294,7 +291,6 @@ extern Pixel _XmAssignInsensitiveColor(Widget w);
 #define FIX_1501
 #define FIX_1521
 #define FIX_1505
-#define FIX_1565
 
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

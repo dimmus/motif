@@ -284,9 +284,6 @@ Initialize(Widget req,		/* unused */
   /* CR 9920:  Popdown may be requested before MapNotify. */
   grabsh->grab_shell.mapped = False;
 
-#ifdef FIX_1565
-  grabsh->grab_shell.set_input_focus = True;
-#endif
 }
 
 /*
@@ -399,16 +396,8 @@ MapNotifyHandler(Widget shell, XtPointer client_data,
   XGetInputFocus(XtDisplay(shell), &grabshell->grab_shell.old_focus,
 		 &grabshell->grab_shell.old_revert_to);
   old_handler = XSetErrorHandler(IgnoreXErrors);
-#ifdef FIX_1565
-  if (! grabshell->grab_shell.set_input_focus) {
-    XmForceGrabKeyboard(shell, time);
-  } else {
-#endif
-    XSetInputFocus(XtDisplay(shell), XtWindow(shell), RevertToParent, time);
-    XSync(XtDisplay(shell), False);
-#ifdef FIX_1565
-  }
-#endif
+  XSetInputFocus(XtDisplay(shell), XtWindow(shell), RevertToParent, time);
+  XSync(XtDisplay(shell), False);
   XSetErrorHandler(old_handler);
 }
 

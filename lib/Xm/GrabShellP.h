@@ -56,9 +56,6 @@ typedef struct
   Boolean	mapped;
   Window	old_focus;
   int		old_revert_to;
-#ifdef FIX_1565
-  Boolean	set_input_focus;
-#endif
 } XmGrabShellPart;
 
 

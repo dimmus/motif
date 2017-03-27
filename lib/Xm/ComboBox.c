@@ -3164,9 +3164,6 @@ CreatePulldown(Widget    parent,
   Arg      args[4];
   ArgList  merged_args;
   Cardinal n;
-#ifdef FIX_1565
-  XmGrabShellWidget grabsh;
-#endif
 
   n = 0;
   XtSetArg(args[n], XmNlayoutDirection, LayoutM(parent)), n++;
@@ -3177,11 +3174,6 @@ CreatePulldown(Widget    parent,
   shell = XtCreatePopupShell(name, xmGrabShellWidgetClass, parent,
 			     merged_args, n + *num_args);
   XtFree((char*)merged_args);
-
-#ifdef FIX_1565
-  grabsh = (XmGrabShellWidget) shell;
-  grabsh->grab_shell.set_input_focus = False;
-#endif
 
   return shell;
 }
