@@ -22,7 +22,7 @@ AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(motif,2.3.6,no-define)
+AM_INIT_AUTOMAKE(motif,2.3.7,no-define)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 

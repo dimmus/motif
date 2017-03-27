@@ -1,10 +1,26 @@
+2017-03-28 01:32:30 +0300 Oleksiy Chernyavskyy 
+
+	* removed redundant includes (HEAD, origin/master, origin/HEAD, master)
+
+2017-03-28 01:11:59 +0300 Oleksiy Chernyavskyy 
+
+	* removed bugfix 1565. See details on http://bugs.motifzone.net/show_bug.cgi?id=1565
+
+2016-11-09 07:19:53 +0200 Alex 
+
+	* obsolete malloc.h changed on stdlib.h
+
+2016-06-11 05:03:21 +0300 Oleksiy Chernyavskyy 
+
+	* updated ChangeLog
+
 2016-06-11 05:02:55 +0300 Oleksiy Chernyavskyy 
 
-	* updated release 2.3.6 information (HEAD -> master)
+	* updated release 2.3.6 information
 
 2016-06-11 04:57:54 +0300 Oleksiy Chernyavskyy 
 
-	* fixid parallel building (make -j) error (origin/master, origin/HEAD)
+	* fixid parallel building (make -j) error
 
 2016-06-11 04:57:20 +0300 Oleksiy Chernyavskyy 
 
