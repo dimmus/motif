@@ -30,7 +30,6 @@
 #include <Xm/GrabShell.h>
 #include <Xm/XmP.h>
 #include <X11/ShellP.h>
-#include "XmI.h"
 
 #ifdef __cplusplus
 extern "C" {
