@@ -1768,8 +1768,8 @@ PaintCursor(XmTextFieldWidget tf)
         }
            if (cursor_width > 0 && cursor_height > 0)
   	  	XCopyArea(XtDisplay(tf), tf->text.ibeam_off, XtWindow(tf), 
-		      tf->text.save_gc, 0, 0, cursor_width, 
-		      cursor_height, x, y);
+          tf->text.save_gc, src_x, 0, cursor_width, 
+          cursor_height, x, y);
   	}
   }
 }
