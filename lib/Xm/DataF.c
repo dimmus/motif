@@ -7890,7 +7890,7 @@ df_ProcessBDragRelease(
        if (XmTextF_has_secondary(tf) &&
 	       XmTextF_sec_pos_left(tf) != XmTextF_sec_pos_right(tf)) {
           if (ev->x > (int)tf->core.width || ev->x < 0 ||
-	      ev->y > (int)tf->core.height || ev->x < 0) {
+	      ev->y > (int)tf->core.height || ev->y < 0) {
              _XmDataFieldSetSel2(w, 0, 0, False, event->xkey.time);
              XmTextF_has_secondary(tf) = False;
           } else {

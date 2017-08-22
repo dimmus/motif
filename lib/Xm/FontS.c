@@ -944,11 +944,11 @@ SetNonStringData(FontData *current)
      */
     
     if (current->point_size == 0) {
-	if ((current->resolution_x == 75) && (current->resolution_x == 75))
+	if ((current->resolution_x == 75) && (current->resolution_y == 75))
 	    SetFlag(&(current->state), SCALED_75, True);
-	else if((current->resolution_x == 100)&&(current->resolution_x == 100))
+	else if((current->resolution_x == 100)&&(current->resolution_y == 100))
 	    SetFlag(&(current->state), SCALED_100, True);
-	else if ((current->resolution_x == 0)&& (current->resolution_x == 0)) {
+	else if ((current->resolution_x == 0)&& (current->resolution_y == 0)) {
 	    /*
 	     * Sun sets all scaled fonts to have a resolution of 0x0
 	     */
@@ -959,11 +959,11 @@ SetNonStringData(FontData *current)
      * Check to see if resolution matches 75 or 100 dpi.
      */
 
-    if ((current->resolution_x == 75) && (current->resolution_x == 75))
+    if ((current->resolution_x == 75) && (current->resolution_y == 75))
 	SetFlag(&(current->state), DPI_75, True);
-    else if ((current->resolution_x == 100) && (current->resolution_x == 100))
+    else if ((current->resolution_x == 100) && (current->resolution_y == 100))
 	SetFlag(&(current->state), DPI_100, True);
-    else if ((current->resolution_x == 0) && (current->resolution_x == 0)) {
+    else if ((current->resolution_x == 0) && (current->resolution_y == 0)) {
 	/*
 	 * Sun sets all scaled fonts to have a resolution of 0x0
 	 */
@@ -1103,9 +1103,9 @@ UpdateExistingFamily(FamilyInfo *fam, FontData *font)
 	strcpy(fam->fixed_spacing, font->spacing);
 
     if (font->point_size != 0) {
-	if ((font->resolution_x == 75) && (font->resolution_x == 75))
+	if ((font->resolution_x == 75) && (font->resolution_y == 75))
 	    SetLongFlag(&(fam->sizes_75), SizeMapping(font->point_size), True);
-	else if ((font->resolution_x == 100) && (font->resolution_x == 100))
+	else if ((font->resolution_x == 100) && (font->resolution_y == 100))
 	    SetLongFlag(&(fam->sizes_100),SizeMapping(font->point_size), True);
     }
 
@@ -1173,9 +1173,9 @@ FillNewFamily(FamilyInfo *fam, FontData *font)
     fam->state = font->state;
 
     if (font->point_size != 0) {
-	if ((font->resolution_x == 75) && (font->resolution_x == 75))
+	if ((font->resolution_x == 75) && (font->resolution_y == 75))
 	    SetLongFlag(&(fam->sizes_75), SizeMapping(font->point_size), True);
-	else if ((font->resolution_x == 100) && (font->resolution_x == 100))
+	else if ((font->resolution_x == 100) && (font->resolution_y == 100))
 	    SetLongFlag(&(fam->sizes_100),SizeMapping(font->point_size), True);
     }
 

@@ -1445,7 +1445,7 @@ GetEventLocation(XmPanedWidget pw, XEvent *event)
     case MotionNotify:  
 	return((IsVert(pw)) ? event->xmotion.y_root : event->xmotion.x_root);
     default:	    
-	return((IsVert(pw)) ? XmPaned_start_loc(pw) : XmPaned_start_loc(pw));
+	return XmPaned_start_loc(pw);
     }
 }
 

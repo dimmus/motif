@@ -687,7 +687,7 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
      */
     if ((w == XmMultiList_frame(elist)) &&
 	((request->request_mode & CWWidth) ||
-	 (request->request_mode & CWWidth)))
+	 (request->request_mode & CWHeight)))
     {
 	Widget			parent = XtParent(XtParent(w));
 	XtWidgetGeometry	ext_request, ext_reply;

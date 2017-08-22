@@ -2853,7 +2853,7 @@ XtWidgetGeometry *reply )
         return(XtGeometryNo);
 
     /* always deny borderwidth changes, too much work for nothing */
-    if (((w  == (Widget) hsb) || (w  == (Widget) hsb)) &&
+    if (((w  == (Widget) hsb) || (w  == (Widget) vsb)) &&
         (request->request_mode & CWBorderWidth))
         return(XtGeometryNo);                     /* border apply to both dimensions */
 
