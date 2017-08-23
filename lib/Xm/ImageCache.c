@@ -922,7 +922,6 @@ GetImage(
 
 #if defined (JPEG_SUPPORTED) || defined (PNG_SUPPORTED)
     if (!(infile = fopen(file_name, "rb"))) {
-        fclose(infile);
         return FALSE;
     }
 
