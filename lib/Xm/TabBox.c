@@ -6094,11 +6094,7 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	if( !ValidPixmap(XmTabBox__bitmap(tab)) )
 	{
 	    XmTabBox__bitmap(tab) = XCreatePixmap(XtDisplay(tab), XiCanvas(tab),
-#ifndef FIX_1381
 						 label_width, label_height, 1);
-#else
-					 label_width, label_height, XmTabBox__canvas(tab)->core.depth);
-#endif
 
 	    XmTabBox__bitmap_width(tab) = label_width;
 	    XmTabBox__bitmap_height(tab) = label_height;
@@ -6181,11 +6177,7 @@ DrawRightToLeftTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	 * into an XImage so that we can rotate it.
 	 */
 	src_ximage = XGetImage(XtDisplay(tab), bitmap, 0, 0, label_width, 
-#ifndef FIX_1381
 			       label_height, 1, XYPixmap);
-#else
-				label_height, AllPlanes, XYPixmap);
-#endif
 	dst_ximage = XiRotateImage(tab, src_ximage,
 				   XiTabDegree(XmTabBox_tab_orientation(tab)));
 
@@ -6707,11 +6699,7 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	if( !ValidPixmap(XmTabBox__bitmap(tab)) )
 	{
 	    XmTabBox__bitmap(tab) = XCreatePixmap(XtDisplay(tab), XiCanvas(tab),
-#ifndef FIX_1381
 						 label_width, label_height, 1);
-#else
-						 label_width, label_height, XmTabBox__canvas(tab)->core.depth);
-#endif
 	    XmTabBox__bitmap_width(tab) = label_width;
 	    XmTabBox__bitmap_height(tab) = label_height;
 	}
@@ -6802,11 +6790,7 @@ DrawVerticalTab(XmTabBoxWidget tab, XmTabAttributes info, GC gc,
 	 * into an XImage so that we can rotate it.
 	 */
 	src_ximage = XGetImage(XtDisplay(tab), bitmap, 0, 0, label_width, 
-#ifndef FIX_1381
 			       label_height, 1, XYPixmap);
-#else
-			       label_height, AllPlanes, XYPixmap);
-#endif
 	dst_ximage = XiRotateImage(tab, src_ximage,
 				   XiTabDegree(XmTabBox_tab_orientation(tab)));
 
