@@ -1439,7 +1439,11 @@ extern void _XmDestroyParentCallback(
 
 #if __GNUC__
 #  define XM_DEPRECATED  __attribute__((__deprecated__))
-#  define XM_ALIAS(sym)  __attribute__((__weak__,alias(#sym)))
+#  ifdef NO_WEAK_ALIASES
+#    define XM_ALIAS(sym)
+#  else
+#    define XM_ALIAS(sym)  __attribute__((__weak__,alias(#sym)))
+#  endif
 #else
 #  define XM_DEPRECATED
 #  define XM_ALIAS(sym)
