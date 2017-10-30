@@ -190,7 +190,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         SeparatorP.h    TextF.h         TextFP.h        TextFSelP.h \
         TextSelP.h      Text.h          TextInP.h       TextOutP.h \
         TextP.h         TextStrSoP.h    ToggleB.h       ToggleBG.h \
-        ToggleBGP.h     ToggleBP.h      Xm.h            XmP.h \
+        ToggleBGP.h     ToggleBP.h      XmP.h \
         BaseClassP.h    ManagerP.h      PrimitiveP.h    GadgetP.h \
         XmStrDefs.h     XmStrDefs22.h   XmStrDefs23.h \
         VaSimpleP.h     VirtKeys.h      VirtKeysP.h \
@@ -217,6 +217,8 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
         ${SLIDE_HDRS}	${EXTRA_HDRS}
+
+nodist_xm_HEADERS = Xm.h
 
 SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c \
         CascadeB.c      CascadeBG.c     Command.c       CutPaste.c \
