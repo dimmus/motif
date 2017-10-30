@@ -93,7 +93,8 @@ CharacterSet
           Alias = "ISOLatin5";
           Alias = "88595"; };
     iso_cyrillic
-        { XmStringCharsetName = "ISO8859-5"; };
+        { XmStringCharsetName = "ISO8859-5";
+          Alias = "ISO-8859-5"; };
     iso_arabic
         { XmStringCharsetName = "ISO8859-6";
           Alias = "iso_latin6";
@@ -161,6 +162,17 @@ CharacterSet
                   Alias = "KOI8R";
                   Alias = "KOI8U";
                   Alias = "KOI8RU"; };
+    ansi_cyrillic
+                { XmStringCharsetName = "CP1251";
+                  Alias = "WINDOWS-1251";
+                  Alias = "ANSI-1251";
+                  ! The name of CP1251 in Solaris
+                  Alias = "ANSI1251"; };
+    dos_cyrillic
+                { XmStringCharsetName = "IBM866";
+                  Alias = "IBM-866";
+                  Alias = "CP866";
+                  Alias = "866"; };
     XmFONTLIST_DEFAULT_TAG
         { FontListElementTag = XmFONTLIST_DEFAULT_TAG; };
 
