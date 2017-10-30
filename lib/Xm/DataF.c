@@ -9626,6 +9626,7 @@ df_MakeAddModeCursor(
 
         XFreePixmap(dpy, stipple);
         XFreeGC(dpy, fillGC);
+        XDestroyImage(image);
      }
   }
 }
