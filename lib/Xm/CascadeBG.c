@@ -75,6 +75,7 @@ static char rcsid[] = "$TOG: CascadeBG.c /main/28 1999/02/01 18:47:11 mgreess $"
 #define WRONGSUBMENU	_XmMMsgCascadeB_0001
 #define WRONGMAPDELAY	_XmMMsgCascadeB_0002
 
+#define FIX_1665
 
 /********    Static Function Declarations    ********/
 
@@ -1146,6 +1147,10 @@ InputDispatch(
 
           else if (event->type == KeyPress)
              KeySelect (cb, event);
+
+#ifdef FIX_1665
+          CBG_SetWasPosted(cb, FALSE);
+#endif
       }
       /* else option menu - do nothing if menu was not posted on btndown */
    }
