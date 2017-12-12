@@ -33,7 +33,7 @@ libMrm_la_SOURCES = $(SRCS)
 
 BUILT_SOURCES = $(CAT_FILES)
 
-Makefile: $(BUILT_SOURCES)
+##Makefile: $(BUILT_SOURCES)
 
 if MessageCatalog
 
