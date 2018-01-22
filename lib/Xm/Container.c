@@ -4610,7 +4610,7 @@ ContainerEndSelect(
     {
       DrawMarquee(wid);
       cw->container.marquee_drawn = False;
-      if XtIsRealized(wid)
+      if (XtIsRealized(wid))
 	XClearArea(XtDisplay(wid),XtWindow(wid),
 		   cw->container.marquee_smallest.x,
 		   cw->container.marquee_smallest.y,
