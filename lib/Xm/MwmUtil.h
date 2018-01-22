@@ -217,6 +217,19 @@ typedef PropMotifWmInfo	PropMwmInfo;
 
 
 /*
+ * Definitions for the _MWM_CLIENT_LIST property.
+ */
+
+/* potential number of elements in _MWM_CLIENT_LIST */
+#define PROP_MOTIF_WM_CLIENT_LIST_ELEMENTS	0x7fffffff
+#define PROP_MWM_CLIENT_LIST_ELEMENTS		PROP_MOTIF_WM_CLIENT_LIST_ELEMENTS
+
+/* atom name for _MWM_CLIENT_LIST property */
+#define _XA_MOTIF_WM_CLIENT_LIST		"_NET_CLIENT_LIST"
+#define _XA_MWM_CLIENT_LIST			_XA_MOTIF_WM_CLIENT_LIST
+
+
+/*
  * Miscellaneous atom definitions
  */
 

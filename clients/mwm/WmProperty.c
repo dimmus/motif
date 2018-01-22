@@ -1965,5 +1965,39 @@ HasProperty (
 } /* END OF FUNCTION HasProperty */
 #endif /* WSM */
 
+/*************************************<->*************************************
+ *
+ *  SetMwmClientList (propWindow, wmWindowList, wmWindowCount)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  This function sets up the _MWM_CLIENT_LIST property on the specified
+ *  (usually the root) window.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  propWindow = window on which the _MWM_CLIENT_LIST property is to be set
+ *
+ *  wmWindowList = array of windows
+ *
+ *  count = number of windows
+ *
+ * 
+ *  Outputs:
+ *  -------
+ *  _MWM_CLIENT_LIST = this property is set on the specified window
+ *
+ *************************************<->***********************************/
+
+void SetMwmClientList (Window propWindow, Window *wmWindowList, unsigned int wmWindowCount)
+{
+    XChangeProperty (DISPLAY, propWindow, wmGD.xa_MWM_CLIENT_LIST, XA_WINDOW,
+    32, PropModeReplace, (unsigned char *)wmWindowList,
+    wmWindowCount);
+
+} /* END OF FUNCTION SetMwmClientList */
+
 
 

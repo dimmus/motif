@@ -212,6 +212,12 @@ void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, Boolean onTop)
 	}
     }
 
+    /*
+     * Update the screen window client list. This will let external
+     * desktop widgets (such as taskbars) know the window exists
+     */
+    UpdateScreenClientList (pSD);
+
 } /* END OF FUNCTION AddClientToList */
 
 
@@ -514,6 +520,12 @@ void DeleteClientFromList (WmWorkspaceData *pWS, ClientData *pCD)
 	    pSD->lastClient = pCD->clientEntry.prevSibling;
 	}
     }
+
+    /*
+     * Update the screen window client list. This will let external
+     * desktop widgets (such as taskbars) know the window exists
+     */
+    UpdateScreenClientList (pSD);
 
 } /* END OF FUNCTION DeleteClientFromList */
 
@@ -2821,3 +2833,57 @@ LeaderOnTop (
 }
 
 #endif /* WSM */
+
+/*************************************<->*************************************
+ *
+ *  UpdateScreenClientList (pSD)
+ *
+ *
+ *  Description:
+ *  -----------
+ *  This function updates the global client window list for notification
+ *  to desktop widgets.
+ *
+ *
+ *  Inputs:
+ *  ------
+ *  pSD	= pointer to screen data
+ *
+ * 
+ *  Outputs:
+ *  -------
+ *  The _MWM_CLIENT_LIST property of the root window is modified
+ * 
+ *************************************<->***********************************/
+
+void UpdateScreenClientList (
+    WmScreenData *pSD)
+{
+    Window *windows;
+    int count = 0;
+    ClientListEntry *pEntry;
+
+    windows = malloc (sizeof (Window));
+    pEntry = pSD->clientList;
+
+    while (pEntry)
+    {
+        /*
+         * Filter out entries for icons
+         */
+        if (pEntry->type != MINIMIZED_STATE)
+        {
+            windows = realloc (windows, (count + 1) * sizeof (Window));
+            windows[count] = (XID) pEntry->pCD->client;
+            count++;
+        }
+        pEntry = pEntry->nextSibling;
+    }
+
+    SetMwmClientList (pSD->rootWindow, windows, count);
+
+    free (windows);
+
+}  /* END OF FUNCTION UpdateScreenClientList */
+
+

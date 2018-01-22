@@ -82,4 +82,5 @@ extern void StackWindow (WmWorkspaceData *pWS, ClientListEntry *pEntry,
 extern void UnMarkModalTransient (ClientData *pcdModee, int modalCount, 
 				  ClientData *pcdModal);
 extern void UndoSystemModalState (void);
+extern void UpdateScreenClientList (WmScreenData *pSD);
 

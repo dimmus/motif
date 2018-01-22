@@ -53,4 +53,5 @@ extern void SetCurrentWorkspaceProperty (WmScreenData *pSD);
 extern void SetWorkspaceInfoProperty (WmWorkspaceData *pWS);
 extern void DeleteWorkspaceInfoProperty (WmWorkspaceData *pWS);
 extern char *WorkspacePropertyName (WmWorkspaceData *pWS);
+extern void SetMwmClientList (Window propWindow, Window *wmWindowList, unsigned int wmWindowCount);
 #endif /* WSM */

@@ -3185,6 +3185,12 @@ ProcessWmResources (void)
        Warning (((char *)GETMESSAGE(62, 66, "Out of range autoRaiseDelay resource value. Must be non-negative")));
     }
 
+    /*
+     * Prepare the client window list for desktop widgets such as taskbars
+     */
+
+    wmGD.xa_MWM_CLIENT_LIST = XInternAtom (DISPLAY, _XA_MWM_CLIENT_LIST, False);
+
 } /* END OF FUNCTION ProcessWmResources */
 
 
