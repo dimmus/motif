@@ -836,7 +836,6 @@ SetValues(
     }
     if (old->command.error)
     {
-	XmString new_xms, old_xms;
         int new_count = new_w->selection_box.list_item_count;
         int old_count = old->selection_box.list_item_count;
 
