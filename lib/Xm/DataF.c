@@ -1070,7 +1070,7 @@ static void CheckSetRenderTable(Widget wid,
 static Boolean DataFieldRemove(Widget w,
 			       XEvent *event);
 static void PictureVerifyCallback(Widget w,
-    XtPointer call_d, XtPointer client_d);
+    XtPointer client_d, XtPointer call_d);
 static void ClassInit(void);
 
 
