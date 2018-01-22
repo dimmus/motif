@@ -2087,7 +2087,7 @@ DataFieldSetHighlight(
     if (XmTextF_cursor_position(tf) > left && XmTextF_cursor_position(tf) < right){
        if (mode == XmHIGHLIGHT_SELECTED){
           df_InvertImageGC(tf);
-       } else if (mode != XmHIGHLIGHT_SELECTED){
+       } else {
           df_ResetImageGC(tf);
        }
     }
