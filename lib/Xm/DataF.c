@@ -11385,7 +11385,6 @@ XmDataFieldSetString(
     int length;
     int free_insert = False;
     int ret_val = 0;
-    char * tmp_ptr;
     char * mod_value = NULL;
 
     _XmWidgetToAppContext(w);    
