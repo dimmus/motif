@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-void _XmEditResCheckMessages(Widget w, XtPointer data, XEvent event, Boolean cont);
+void _XmEditResCheckMessages(Widget w, XtPointer data, XEvent *event, Boolean *cont);
 
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */

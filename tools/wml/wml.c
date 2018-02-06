@@ -153,7 +153,7 @@ void wmlInit ();
 /*
  * External variables
  */
-extern	int	yyleng;
+extern size_t yyleng;
 extern  int yyparse();
 
 

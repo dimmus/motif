@@ -252,7 +252,7 @@ unsigned long length;
      */
 
     if (length < HEADER_SIZE) {
-	SendFailure(w, sel, ident, Failure, ERROR_MESSAGE);
+	SendFailure(w, sel, ident, ERROR_MESSAGE);
 	return(NULL);
     }
 

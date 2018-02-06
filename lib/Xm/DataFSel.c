@@ -790,8 +790,13 @@ _XmDataFieldLoseSelection(
 /* Losing Primary Selection */
     if (*selection == XA_PRIMARY && XmTextF_has_primary(tf)) {
         XmAnyCallbackStruct cb;
+#ifdef _NO_PROTO
+        _XmDataFieldDeselectSelection(w, False,
+				      XtLastTimestampProcessed(XtDisplay(w)));
+#else
         _XmDataFieldDeselectSelection(w, False, 0, 
 				      XtLastTimestampProcessed(XtDisplay(w)));
+#endif
 
         cb.reason = XmCR_LOSE_PRIMARY;
         cb.event = NULL;
