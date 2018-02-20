@@ -83,6 +83,10 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #define FIX_1484
 #define FIX_1504
 
+#ifdef FIX_1504
+#define FIX_1639
+#endif
+
 #define Pix(w)			((w)->label.pixmap)
 #define Pix_insen(w)		((w)->label.pixmap_insen)
 
@@ -2018,7 +2022,18 @@ SetValues(Widget cw,
       Call_Resize = True;
 
       flag = True;
+    } 
+#ifdef FIX_1639
+    /* Consider a case when new Pixmap has same size */
+    else if ((Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w)) &&
+             ((newlp->pixmap != curlp->pixmap) ||
+	          (newlp->pixmap_insen  != curlp->pixmap_insen) ||
+	          (XtIsSensitive(nw) != XtIsSensitive(cw))))
+    {
+      flag = True;
     }
+#endif
+
   
   if ((newlp->alignment != curlp->alignment) ||
       (XmPrim_layout_direction(new_w) != 
