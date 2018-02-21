@@ -333,7 +333,6 @@ _XmWarningMsg(Widget w,
 	      char **params,
 	      Cardinal num_params)
 {
-  Display * dpy;
   char *new_params[11];
   Cardinal num_new_params = num_params + 1;
   int i;
@@ -437,7 +436,6 @@ XmeWarning(Widget w,
 {
   char *params[1];
   Cardinal num_params = 0;
-  Display * dpy;
   
   if (w != NULL) {
     /* the MotifWarningHandler installed in VendorS.c knows about

@@ -484,7 +484,6 @@ Initialize(
     int event_base_return, error_base_return ;
     XmPrintShellWidget print_shell = (XmPrintShellWidget) new_widget ;
     XPContext pcontext ;
-    Screen * pscreen ;
 
     _XmProcessLock();
     /* mark the screen of this print shell in this context */

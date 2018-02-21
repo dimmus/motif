@@ -3808,7 +3808,7 @@ _XmTextResetIC(Widget widget)
   int escapement, n, size;
   char *mb, *tmp_mb;
   XRectangle overall_ink;
-  XmTextPosition cursorPos, beginPos, nextPos, lastPos;
+  XmTextPosition beginPos, nextPos, lastPos;
   XmTextWidget tw = (XmTextWidget) widget;
   InputData data = tw->text.input->data;
   OutputData o_data = tw->text.output->data;

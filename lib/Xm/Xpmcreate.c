@@ -1675,7 +1675,6 @@ PutPixel1(ximage, x, y, pixel)
     register char *src;
     register char *dst;
     register int i;
-    register char *data;
     Pixel px;
     int nbytes;
 
@@ -1711,7 +1710,6 @@ PutPixel(ximage, x, y, pixel)
     register char *src;
     register char *dst;
     register int i;
-    register char *data;
     Pixel px;
     unsigned int nbytes, ibpp;
 

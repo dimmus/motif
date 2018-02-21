@@ -8694,7 +8694,6 @@ _XmTextFieldReplaceTextForPreedit(XmTextFieldWidget tf,
   int replace_length, i;
   char *src, *dst;
   wchar_t *wc_src, *wc_dst;
-  XmAnyCallbackStruct cb;
   int delta = 0;
   XmTextPosition cursorPos, newInsert;
   XmTextPosition old_pos = replace_prev;
@@ -9142,7 +9141,7 @@ PreeditDraw(XIC xic,
     int escapement, insert_length = 0;
     char *mb = NULL, *over_mb = NULL;
     wchar_t *wc = NULL, *over_wc = NULL, *tab_wc = NULL , *recover_wc = NULL;
-    XmTextPosition startPos, endPos, cursorPos, rest_len =0 , tmp_end;
+    XmTextPosition startPos, endPos, rest_len =0 , tmp_end;
     Boolean replace_res;
     XRectangle overall_ink;
     int i;
