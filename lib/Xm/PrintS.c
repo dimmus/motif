@@ -826,6 +826,7 @@ XtEnum XmPrintToFile(Display *pdpy,
     }
 
     if ((pipe(filedes)) == -1) {
+      fclose(file);
       return False;
     }
 
@@ -845,6 +846,7 @@ XtEnum XmPrintToFile(Display *pdpy,
 		       application_name, application_class);
     }
     else if (pid < 0) {
+      fclose(file);
       return False;
     }
 
