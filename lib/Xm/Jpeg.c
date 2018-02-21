@@ -119,7 +119,7 @@ _XmJpegGetImage(Screen * screen, FILE * infile, XImage ** ximage)
     unsigned long image_width, image_height;
     unsigned char *xdata;
     int pad;
-    CTable *image_data;
+    CTable *image_data = NULL;
     int rc;
 
     if ((rc = load_jpeg(infile, &image_width, &image_height, &image_data)))
@@ -135,8 +135,11 @@ _XmJpegGetImage(Screen * screen, FILE * infile, XImage ** ximage)
         pad = 8;
     }
 
-    if (!xdata) 
-        return 4;
+    if (!xdata) {
+      if (image_data)
+        free(image_data);
+      return 4;
+    }
 
     *ximage =
         XCreateImage(screen->display, screen->root_visual,
@@ -144,6 +147,8 @@ _XmJpegGetImage(Screen * screen, FILE * infile, XImage ** ximage)
                      image_width, image_height, pad, 0);
     if (!*ximage) {
         free(xdata);
+        if (image_data)
+          free(image_data);
         return 4;
     }
 
@@ -158,9 +163,8 @@ _XmJpegGetImage(Screen * screen, FILE * infile, XImage ** ximage)
         }
     }
 
-    if (image_data) {
+    if (image_data)
         free(image_data);
-        image_data = NULL;
-    }
+
     return 0;
 }
