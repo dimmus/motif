@@ -2687,16 +2687,21 @@ Widget XmDropDownGetChild(Widget w, int num)
 
     switch (num) 
     {
-        XmDROPDOWN_LABEL:
-	    child = XmDropDown_label(w);
-        XmDROPDOWN_TEXT:
-	    child = XmDropDown_text(w);
-        XmDROPDOWN_ARROW_BUTTON:
-	    child = XmDropDown_arrow(w);
-        XmDROPDOWN_LIST:
-	    child = XmDropDown_list(w);
-        default:
-	    child = NULL;
+      case XmDROPDOWN_LABEL:
+        child = XmDropDown_label(w);
+        break;
+      case XmDROPDOWN_TEXT:
+        child = XmDropDown_text(w);
+        break;
+      case XmDROPDOWN_ARROW_BUTTON:
+        child = XmDropDown_arrow(w);
+        break;
+      case XmDROPDOWN_LIST:
+        child = XmDropDown_list(w);
+        break;
+      default:
+        child = NULL;
+        break;
     }
 
     _XmAppUnlock(app);    
