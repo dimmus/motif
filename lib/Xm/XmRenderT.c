@@ -2771,19 +2771,10 @@ typedef struct _TokenRec {
 } TokenRec, *Token;
 
 
-#ifndef XTHREADS
-static TokenRec reusetoken;
-#endif
-
 static Token
-ReadToken(char *string, int *position)
+ReadToken(char *string, int *position, Token reusetoken)
 {
-#ifdef XTHREADS
-  TokenRec reusetoken;
-  Token new_token = &reusetoken;
-#else
-  Token new_token = &reusetoken;
-#endif
+  Token new_token = reusetoken;
   int pos = *position;
   int count;
 
@@ -3210,6 +3201,7 @@ XmRenderTableCvtFromProp(Widget w,
 			 char *prop,
 			 unsigned int len) /* unused */
 {
+  TokenRec reusetoken;
   XmRenderTable new_rt;
   XmRendition rendition;
   XmRendition *rarray;
@@ -3236,7 +3228,7 @@ XmRenderTableCvtFromProp(Widget w,
   for(j = 0; j < 20; j++) items[j] = NULL;
   /* Read the list of items */
   for(j = 0; j < 20; ) {
-    token = ReadToken(prop, &scanpointer);
+    token = ReadToken(prop, &scanpointer, &reusetoken);
     if (token -> type == T_NL) break;
     if (token -> type == T_STR) {
       items[j] = token -> string;
@@ -3248,11 +3240,11 @@ XmRenderTableCvtFromProp(Widget w,
   count = 0;
   freecount = 0;
   while(True) {
-    token = ReadToken(prop, &scanpointer);
+    token = ReadToken(prop, &scanpointer, &reusetoken);
     /* We skip the separators */
     while(token -> type == T_SEP &&
 	  token -> type != T_EOF)
-      token = ReadToken(prop, &scanpointer);
+      token = ReadToken(prop, &scanpointer, &reusetoken);
     if (token -> type == T_EOF) goto finish;
 
     j++; /* Go to next item in items array */
@@ -3261,7 +3253,7 @@ XmRenderTableCvtFromProp(Widget w,
       /* End of line processing.  Scan for NewLine */
       while(token -> type != T_NL &&
 	    token -> type != T_EOF)
-	token = ReadToken(prop, &scanpointer);
+        token = ReadToken(prop, &scanpointer, &reusetoken);
       /* Store rendition */
       rendition = XmRenditionCreate(w, name, args, count);
       name = "";
@@ -3296,11 +3288,11 @@ XmRenderTableCvtFromProp(Widget w,
       if (token -> type != T_INT) goto error;
       if (token -> integer != -1) { /* AS IS */ 
 	XtSetArg(args[count], XmNfontType, token -> integer); count++;
-	token = ReadToken(prop, &scanpointer);
+    token = ReadToken(prop, &scanpointer, &reusetoken);
 	if (token -> type != T_STR) goto error;
 	XtSetArg(args[count], XmNfontName, token -> string); count++;
 	freelater[freecount] = token -> string; freecount++;
-	token = ReadToken(prop, &scanpointer);
+    token = ReadToken(prop, &scanpointer, &reusetoken);
 	if (token -> type != T_INT) goto error;
 	XtSetArg(args[count], XmNloadModel, token -> integer); count++;
       }
@@ -3317,7 +3309,7 @@ XmRenderTableCvtFromProp(Widget w,
 	XmTab tabs[1];
 
 	tablist = NULL;
-	token = ReadToken(prop, &scanpointer);
+    token = ReadToken(prop, &scanpointer, &reusetoken);
 	while(token -> type != T_CLOSE) {
 	  if (token -> type != T_FLOAT &&
 	      token -> type != T_INT) goto error;
@@ -3325,13 +3317,13 @@ XmRenderTableCvtFromProp(Widget w,
 	    value = token -> real;
 	  else
 	    value = (float) token -> integer;
-	  token = ReadToken(prop, &scanpointer);
+      token = ReadToken(prop, &scanpointer, &reusetoken);
 	  if (token -> type != T_INT) goto error;
 	  units = token -> integer;
-	  token = ReadToken(prop, &scanpointer);
+      token = ReadToken(prop, &scanpointer, &reusetoken);
 	  if (token -> type != T_INT) goto error;
 	  align = token -> integer;
-	  token = ReadToken(prop, &scanpointer);
+      token = ReadToken(prop, &scanpointer, &reusetoken);
 	  if (token -> type != T_INT) goto error;
 	  model = (XmOffsetModel) token -> integer;
 	  tabs[0] = XmTabCreate(value, units, model, align, NULL);
@@ -3339,9 +3331,9 @@ XmRenderTableCvtFromProp(Widget w,
 	  XtFree((char*) tabs[0]);
 	  /* Go to next separator to skip unknown future values */
 	  while(token -> type != T_SEP) 
-	    token = ReadToken(prop, &scanpointer);
+        token = ReadToken(prop, &scanpointer, &reusetoken);
 	  if (token -> type == T_SEP)
-	    token = ReadToken(prop, &scanpointer);
+        token = ReadToken(prop, &scanpointer, &reusetoken);
 	}
 	XtSetArg(args[count], XmNtabList, tablist); count++;
       } else 
