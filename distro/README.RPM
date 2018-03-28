@@ -42,7 +42,7 @@ Initial Release: 03/17/2004
    updates.
    Note: If you are building Mandrake RPMS you should append mdk to the end of
          the Release variable.
-   Note 2: to generate chengelog run `git log --pretty="format:* %ad %an %ae%n- %s%n" --date=short`
+   Note 2: to generate chengelog run `git log --pretty="format:* %ad %an %ae%n- %s%n" --date="format:%a %b %d %Y"`
 
 8. As root, run the following command in $RPMROOT/SPECS:
    rpmbuild -ba motif.spec
