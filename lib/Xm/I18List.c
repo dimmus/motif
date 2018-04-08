@@ -3836,7 +3836,6 @@ ListPreDestProc(Widget w,
 {
   XmDropProcCallbackStruct *ds;
   Atom XA_MOTIF_DROP = XInternAtom(XtDisplay(w), XmS_MOTIF_DROP, False);
-  int index;
   short row, col;
 
   if (cs->selection != XA_MOTIF_DROP) return;
@@ -3907,9 +3906,6 @@ ProcessDrag(Widget wid,
     Arg args[10];
     int n, location_data;
     XmI18ListDragConvertStruct *ListDragConv; 
-    XmString temp_string = NULL;
-    XmString temp_string2 = NULL;
-    XmString tab;
 
     /* Don't allow multi-button drags. */
     if (event->xbutton.state &

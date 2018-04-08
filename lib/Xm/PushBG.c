@@ -63,11 +63,6 @@ static char rcsid[] = "$TOG: PushBG.c /main/29 1999/05/27 14:18:33 mgreess $"
 #define DELAY_DEFAULT		100
 #define XmINVALID_MULTICLICK	255
 
-struct PBTimeOutEvent {
-  XmPushButtonGadget  pushbutton;
-  XEvent              *xevent;
-};
-
 
 /********    Static Function Declarations    ********/
 

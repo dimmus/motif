@@ -248,8 +248,6 @@ WidgetClass xmButtonBoxWidgetClass = (WidgetClass)&xmButtonBoxClassRec;
 static void 
 ClassInitialize()
 {
-    XmButtonBoxClassRec *wc = &xmButtonBoxClassRec;
-
     XtSetTypeConverter(XmRString, XmRXmFillOption, 
 		       (XtTypeConverter) CvtStringToFillOption,
                        NULL, (Cardinal)0, XtCacheAll, (XtDestructor)NULL);

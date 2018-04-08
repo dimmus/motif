@@ -687,7 +687,6 @@ ColorCachePropertyExists(
     int format = 0 ;
     Atom target; 
     int result = False ;
-    Colors   colors;
 
     if (!SelOwner)
 	return False ; 

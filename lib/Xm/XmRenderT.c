@@ -2402,8 +2402,6 @@ FreeRendition(XmRendition rendition)
 void
 XmRenditionFree(XmRendition rendition)
 {
-  XtAppContext app;
-
   if (rendition == NULL) return;
 
   _XmProcessLock();

@@ -589,7 +589,7 @@ XmCvtTextPropertyToXmStringTable(Display *display,
 	};
 
     char **text_list;
-    int i, result, elements = 0;
+    int i, elements = 0;
     XmStringTable string_table;
     XmStringTag tag;
     XmTextType type;

@@ -6022,16 +6022,10 @@ _XmTextInputCreate(Widget wid,
 		   ArgList args,
 		   Cardinal num_args)
 {
-  
-  Arg im_args[17];  /* To set initial values to input method */
-  Cardinal n = 0;
   XmTextWidget tw = (XmTextWidget) wid;
   Input input;
   InputData data;
   XtPointer temp_ptr;
-  OutputData o_data = tw->text.output->data;
-  XRectangle xmim_area;
-  XPoint xmim_point;
   
   tw->text.input = input = (Input) XtMalloc((unsigned) sizeof(InputRec));
   input->data = data = (InputData) XtMalloc((unsigned) sizeof(InputDataRec));

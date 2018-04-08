@@ -438,9 +438,6 @@ SetValues(Widget	current,
     XmSimpleSpinBoxPart	*cur_ssbp = SSB_SIMPLE_SPIN_BOX_PART(current);
     XmSimpleSpinBoxPart	*new_ssbp = SSB_SIMPLE_SPIN_BOX_PART(new);
     XmSpinBoxConstraint	textf_c;
-    Boolean		display_flag;
-    Arg			changed_args[XtNumber(resources)];
-    int			nchanged_args = 0;
   
     /*
      * These resources have CG permissions only:
@@ -511,7 +508,6 @@ static void
 InsertChild(Widget newChild)
 {
     XmSimpleSpinBoxWidget	ssb_w;
-    WidgetClass			super;
     XtWidgetProc 		insert_child;
   
     ssb_w = (XmSimpleSpinBoxWidget) XtParent(newChild);
@@ -533,7 +529,6 @@ static Widget
 GetCallbackWidget(Widget widget)
 {
     XmSimpleSpinBoxWidget	ssb_w;
-    WidgetClass			super;
   
     ssb_w = (XmSimpleSpinBoxWidget) widget;
     return((Widget) ssb_w->simpleSpinBox.text_field);
