@@ -2426,7 +2426,7 @@ ResizeSliders(Widget w)
             i = (0 - XmI18List_left_loc(ilist)) + ilist->core.width;
             if (i >= max_width)
                 slide_pos = max_width - slide_size;
-            else if (i < max_width)
+            else
                 slide_pos = i - slide_size;
         }
 
