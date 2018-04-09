@@ -1327,9 +1327,8 @@ GeometryManager(
    * dynamically resizing the visible pulldown.
    */
   if ((wid != shell->composite.children[0])
-      || ((wid == shell->composite.children[0])
-	  &&  (XtMakeGeometryRequest((Widget)shell, &my_request, NULL)
-	       == XtGeometryYes))) {
+      || (XtMakeGeometryRequest((Widget)shell, &my_request, NULL)
+	       == XtGeometryYes)) {
     if (request->request_mode & CWX) {
       wid->core.x = 0;
     }
