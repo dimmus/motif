@@ -3243,8 +3243,7 @@ XmRenderTableCvtFromProp(Widget w,
   while(True) {
     token = ReadToken(prop, &scanpointer, &reusetoken);
     /* We skip the separators */
-    while(token -> type == T_SEP &&
-	  token -> type != T_EOF)
+    while(token -> type == T_SEP)
       token = ReadToken(prop, &scanpointer, &reusetoken);
     if (token -> type == T_EOF) goto finish;
 
