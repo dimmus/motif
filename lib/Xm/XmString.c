@@ -2661,14 +2661,13 @@ static XFontStruct *
 GetFont(XmRenderTable rt,
 	_XmStringEntry entry)
 {
-  XmRendition rend = NULL;
+  XmRendition rend = _XmEntryRenditionGet(entry, rt);
   short	 indx = -1;
   Cardinal	n;
   Arg		args[2]; 
   XmFontType	type;
   XtPointer	font;
 
-  rend = _XmEntryRenditionGet(entry, rt);
   if (rend == NULL)
     (void)_XmRenderTableFindFallback(rt, _XmEntryTag(entry), TRUE, &indx, &rend);
 
