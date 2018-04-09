@@ -2697,7 +2697,6 @@ BtnUp(
 		   etched_in ? XmSHADOW_IN : XmSHADOW_OUT);
 	      
 	      XFlush (XtDisplay (pb));
-	      flushDone = True;
 
 	      if (pb->core.being_destroyed == False)
 		{
@@ -2712,8 +2711,6 @@ BtnUp(
 	      pb->pushbutton.armed = TRUE;
 	      if (pb->pushbutton.arm_callback)
 		{
-		  if (!flushDone)
-		    XFlush (XtDisplay (pb));
 		  call_value.reason = XmCR_ARM;
 		  call_value.event = event;
 		  XtCallCallbackList ((Widget) pb, pb->pushbutton.arm_callback,

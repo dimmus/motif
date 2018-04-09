@@ -1197,7 +1197,6 @@ BtnUp(
 		   etched_in ? XmSHADOW_IN : XmSHADOW_OUT);
 	      
 	      XFlush (XtDisplay (pb));
-	      flushDone = True;
 	      
 	      /* set timer to redraw the shadow out again */
 	      if (pb->object.being_destroyed == False)
@@ -1215,8 +1214,6 @@ BtnUp(
 	      PBG_Armed(pb) = TRUE;
 	      if (PBG_ArmCallback(pb))
 		{	
-		  if (!flushDone)
-		    XFlush (XtDisplay (pb));
 		  call_value.reason = XmCR_ARM;
 		  call_value.event = event;
 		  XtCallCallbackList((Widget)pb, PBG_ArmCallback(pb),
