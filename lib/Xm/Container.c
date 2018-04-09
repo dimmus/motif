@@ -5001,8 +5001,8 @@ ContainerToggleMode(
     XmContainerWidget	cw = (XmContainerWidget)wid;
     Widget		focus_cwid = XmGetFocusWidget(wid);
 
-    if CtrPolicyIsEXTENDED(cw)
-	cw->container.kaddmode = !cw->container.kaddmode;
+    if (CtrPolicyIsEXTENDED(cw))
+      cw->container.kaddmode = !cw->container.kaddmode;
     if (XtIsRealized(wid) && focus_cwid && (focus_cwid != wid))
         XClearArea(XtDisplay(wid),XtWindow(wid),
                         focus_cwid->core.x,
