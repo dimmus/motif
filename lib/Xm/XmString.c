@@ -1214,9 +1214,8 @@ static Boolean
 RenditionsCompatible(_XmStringEntry seg1,
 		     _XmStringEntry seg2)
 {
-  int		i;
   XmStringTag	*begin1, *begin2, *end1, *end2;
-  short		bcnt1, bcnt2, ecnt1, ecnt2, diff;
+  short		bcnt1, bcnt2, ecnt1, ecnt2;
 
   _XmProcessLock();
   bcnt1 = _XmEntryRendBeginCountGet(seg1);
