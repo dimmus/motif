@@ -1814,8 +1814,6 @@ GetShapeInfo(
 	if (n == 8) {
 	    /* uses the points already  computed for the polygon shadow case */
 	    if (IG_ViewType(wid) == XmLARGE_ICON) {
-		points[0].x = points[0].x ;
-		points[0].y = points[0].y ;
 		points[1].x = points[6].x ;
 		points[1].y = points[6].y ;
 	    } else {
