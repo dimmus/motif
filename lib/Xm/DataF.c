@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <wctype.h>
 #include <limits.h>
 #include <Xm/XmosP.h>
 #include <X11/Xatom.h>
@@ -208,7 +209,6 @@ static Boolean df_SetDestination() ;
 static Boolean df_VerifyLeave() ;
 static Boolean _XmDataFieldIsWordBoundary() ;
 static int _XmGetImage(Screen *, char *, XImage **);
-static Boolean _XmDataFieldIsWSpace() ;
 static void df_FindWord() ;
 static void df_FindPrevWord() ;
 static void df_FindNextWord() ;
@@ -549,10 +549,6 @@ static Boolean _XmDataFieldIsWordBoundary(
                         XmDataFieldWidget tf,
                         XmTextPosition pos1,
                         XmTextPosition pos2) ;
-static Boolean _XmDataFieldIsWSpace( 
-                        wchar_t wide_char,
-                        wchar_t *white_space,
-                        int num_entries) ;
 static void df_FindWord( 
                         XmDataFieldWidget tf,
                         XmTextPosition begin,
@@ -4549,40 +4545,6 @@ _XmDataFieldIsWordBoundary(
    return False;
 }
 
-/* This routine accepts an array of wchar_t's containing wchar encodings
- * of whitespace characters (and the number of array elements), comparing
- * the wide character passed to each element of the array.  If a match
- * is found, we got a white space.  This routine exists only because
- * iswspace(3c) is not yet standard.  If a system has isw* available,
- * calls to this routine should be changed to iswspace(3c) (and callers
- * should delete initialization of the array), and this routine should
- * be deleted.  Its a stop gap measure to avoid allocating an instance
- * variable for the white_space array and/or declaring a widget wide
- * global for the data and using a macro.  Its ugly, but it works and 
- * in the long run will be replaced by standard functionality. */
-
-/* ARGSUSED */
-static Boolean
-#ifdef _NO_PROTO
-_XmDataFieldIsWSpace( wide_char, white_space, num_entries )
-	wchar_t wide_char ;
-	wchar_t * white_space ;
-	int num_entries ;
-#else
-_XmDataFieldIsWSpace(
-	wchar_t wide_char,
-	wchar_t * white_space ,
-	int num_entries )
-#endif /* _NO_PROTO */
-{
-   int i;
-
-   for (i=num_entries; i > 0; i--){
-      if (wide_char == white_space[i]) return True;
-   }
-   return False;
-}
-
 static void 
 #ifdef _NO_PROTO
 df_FindWord( tf, begin, left, right )
@@ -4599,7 +4561,6 @@ df_FindWord(
 #endif /* _NO_PROTO */
 {
     XmTextPosition start, end;
-    wchar_t white_space[3];
 
     if (XmTextF_max_char_size(tf) == 1) {
        for (start = begin; start > 0; start--) {
@@ -4617,11 +4578,8 @@ df_FindWord(
        }
        *right = end - 1;
     } else { /* check for iswspace and iswordboundary in each direction */
-       (void)mbtowc(&white_space[0], " ", 1);
-       (void)mbtowc(&white_space[1], "\n", 1);
-       (void)mbtowc(&white_space[2], "\t", 1);
        for (start = begin; start > 0; start --) {
-          if (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[start-1],white_space, 3)
+          if (iswspace(XmTextF_wc_value(tf)[start-1])
 	      || _XmDataFieldIsWordBoundary(tf, (XmTextPosition) start - 1, 
 					    start)) {
 		 break;
@@ -4630,7 +4588,7 @@ df_FindWord(
        *left = start;
 
        for (end = begin; end <= XmTextF_string_length(tf); end++) {
-	   if (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[end], white_space, 3)){
+	   if (iswspace(XmTextF_wc_value(tf)[end])){
 	      end++;
 	      break;
 	   } else if (end < XmTextF_string_length(tf)) {
@@ -4659,14 +4617,6 @@ df_FindPrevWord(
 {
 
     XmTextPosition start = XmTextF_cursor_position(tf);
-    wchar_t white_space[3];
-
-    if (XmTextF_max_char_size(tf) != 1) {
-       (void)mbtowc(&white_space[0], " ", 1);
-       (void)mbtowc(&white_space[1], "\n", 1);
-       (void)mbtowc(&white_space[2], "\t", 1);
-    }
-
 
     if (XmTextF_max_char_size(tf) == 1) {
        if ((start > 0) && 
@@ -4680,11 +4630,9 @@ df_FindPrevWord(
        }
        df_FindWord(tf, start, left, right);
     } else { 
-       if ((start > 0) && (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[start - 1],
-						white_space, 3))) {
+       if ((start > 0) && (iswspace(XmTextF_wc_value(tf)[start - 1]))) {
           for (; start > 0; start--) {
-	     if (!_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[start -1], 
-				       white_space, 3)){
+	     if (!iswspace(XmTextF_wc_value(tf)[start -1])){
 		start--;
 		break;
              }
@@ -4713,14 +4661,6 @@ df_FindNextWord(
 {
 
     XmTextPosition end = XmTextF_cursor_position(tf);
-    wchar_t white_space[3];
-
-    if (XmTextF_max_char_size(tf) != 1) {
-       (void)mbtowc(&white_space[0], " ", 1);
-       (void)mbtowc(&white_space[1], "\n", 1);
-       (void)mbtowc(&white_space[2], "\t", 1);
-    }
-
 
     if(XmTextF_max_char_size(tf) == 1) {
        if (isspace((int)(unsigned char)XmTextF_value(tf)[end])) {
@@ -4742,9 +4682,9 @@ df_FindNextWord(
        if (*right < XmTextF_string_length(tf))
           *right = *right - 1;
    } else {
-      if (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[end], white_space, 3)) {
+      if (iswspace(XmTextF_wc_value(tf)[end])) {
 	 for ( ; end < XmTextF_string_length(tf); end ++) {
-	   if (!_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[end], white_space, 3)) {
+	   if (!iswspace(XmTextF_wc_value(tf)[end])) {
 	       break;
            }
          }
@@ -4758,10 +4698,9 @@ df_FindNextWord(
        * If word boundary caused by whitespace, set right to the last 
        * whitespace following the end of the current word.
        */
-      if (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[(int)*right], white_space, 3))      {
+      if (iswspace(XmTextF_wc_value(tf)[(int)*right]))      {
          while (*right < XmTextF_string_length(tf) &&
-               _XmDataFieldIsWSpace(XmTextF_wc_value(tf)[(int)*right], 
-				    white_space, 3)) {
+               iswspace(XmTextF_wc_value(tf)[(int)*right])) {
             *right = *right + 1;
 	 }
 	 if (*right < XmTextF_string_length(tf))
@@ -5872,13 +5811,6 @@ df_ForwardWord(
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     XmTextPosition cursorPos, position, dummy;
-    wchar_t white_space[3];
-
-    if (XmTextF_max_char_size(tf) != 1) {
-       (void)mbtowc(&white_space[0], " ", 1);
-       (void)mbtowc(&white_space[1], "\n", 1);
-       (void)mbtowc(&white_space[2], "\t", 1);
-    }
 
     cursorPos = XmTextF_cursor_position(tf);
 
@@ -5896,16 +5828,13 @@ df_ForwardWord(
              }
           }
        } else {
-	  if (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[cursorPos],
-				   white_space, 3))
+	  if (iswspace(XmTextF_wc_value(tf)[cursorPos]))
 	     df_FindWord(tf, cursorPos, &dummy, &position);
 	  else
 	     df_FindNextWord(tf, &dummy, &position);
-          if (_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[position],
-				   white_space, 3)){
+          if (iswspace(XmTextF_wc_value(tf)[position])){
 	     for (; position < XmTextF_string_length(tf); position++) {
-		if (!_XmDataFieldIsWSpace(XmTextF_wc_value(tf)[position], 
-					  white_space, 3))
+		if (!iswspace(XmTextF_wc_value(tf)[position]))
 		   break;
 	     }
 	  }

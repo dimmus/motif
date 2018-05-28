@@ -35,6 +35,7 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include <limits.h>		/* required for MB_LEN_MAX definition */
 #include <string.h>
 #include <ctype.h>
+#include <wctype.h>
 #include "XmI.h"
 #include <X11/ShellP.h>
 #include <X11/VendorP.h>
@@ -355,10 +356,6 @@ static Boolean VerifyLeave(XmTextFieldWidget tf,
 static Boolean _XmTextFieldIsWordBoundary(XmTextFieldWidget tf,
 					  XmTextPosition pos1,
 					  XmTextPosition pos2);
-
-static Boolean _XmTextFieldIsWSpace(wchar_t wide_char,
-				    wchar_t *white_space,
-				    int num_entries);
 
 static void FindWord(XmTextFieldWidget tf,
 		     XmTextPosition begin,
@@ -3513,32 +3510,6 @@ _XmTextFieldIsWordBoundary(XmTextFieldWidget tf,
   return False;
 }
 
-/* This routine accepts an array of wchar_t's containing wchar encodings
- * of whitespace characters (and the number of array elements), comparing
- * the wide character passed to each element of the array.  If a match
- * is found, we got a white space.  This routine exists only because
- * iswspace(3c) is not yet standard.  If a system has isw* available,
- * calls to this routine should be changed to iswspace(3c) (and callers
- * should delete initialization of the array), and this routine should
- * be deleted.  Its a stop gap measure to avoid allocating an instance
- * variable for the white_space array and/or declaring a widget wide
- * global for the data and using a macro.  Its ugly, but it works and 
- * in the long run will be replaced by standard functionality. */
-
-/* ARGSUSED */
-static Boolean
-_XmTextFieldIsWSpace(wchar_t wide_char,
-		     wchar_t * white_space ,
-		     int num_entries)
-{
-  int i;
-  
-  for (i=0; i < num_entries; i++) {
-    if (wide_char == white_space[i]) return True;
-  }
-  return False;
-}
-
 static void 
 FindWord(XmTextFieldWidget tf,
 	 XmTextPosition begin,
@@ -3546,7 +3517,6 @@ FindWord(XmTextFieldWidget tf,
 	 XmTextPosition *right)
 {
   XmTextPosition start, end;
-  wchar_t white_space[3];
   
   if (tf->text.max_char_size == 1) {
     for (start = begin; start > 0; start--) {
@@ -3564,11 +3534,8 @@ FindWord(XmTextFieldWidget tf,
     }
     *right = end - 1;
   } else { /* check for iswspace and iswordboundary in each direction */
-    (void)mbtowc(&white_space[0], " ", 1);
-    (void)mbtowc(&white_space[1], "\n", 1);
-    (void)mbtowc(&white_space[2], "\t", 1);
     for (start = begin; start > 0; start --) {
-      if (_XmTextFieldIsWSpace(TextF_WcValue(tf)[start-1],white_space, 3)
+      if (iswspace(TextF_WcValue(tf)[start-1])
 	  || _XmTextFieldIsWordBoundary(tf, (XmTextPosition) start - 1, 
 					start)) {
 	break;
@@ -3577,7 +3544,7 @@ FindWord(XmTextFieldWidget tf,
     *left = start;
     
     for (end = begin; end <= tf->text.string_length; end++) {
-      if (_XmTextFieldIsWSpace(TextF_WcValue(tf)[end], white_space, 3)) {
+      if (iswspace(TextF_WcValue(tf)[end])) {
 	end++;
 	break;
       } else if (end < tf->text.string_length) {
@@ -3598,14 +3565,6 @@ FindPrevWord(XmTextFieldWidget tf,
 {
   
   XmTextPosition start = TextF_CursorPosition(tf);
-  wchar_t white_space[3];
-  
-  if (tf->text.max_char_size != 1) {
-    (void)mbtowc(&white_space[0], " ", 1);
-    (void)mbtowc(&white_space[1], "\n", 1);
-    (void)mbtowc(&white_space[2], "\t", 1);
-  }
-  
   
   if (tf->text.max_char_size == 1) {
     if ((start > 0) && 
@@ -3619,11 +3578,9 @@ FindPrevWord(XmTextFieldWidget tf,
     }
     FindWord(tf, start, left, right);
   } else { 
-    if ((start > 0) && (_XmTextFieldIsWSpace(TextF_WcValue(tf)[start - 1],
-					     white_space, 3))) {
+    if ((start > 0) && (iswspace(TextF_WcValue(tf)[start - 1]))) {
       for (; start > 0; start--) {
-	if (!_XmTextFieldIsWSpace(TextF_WcValue(tf)[start -1], 
-				  white_space, 3)) {
+	if (!iswspace(TextF_WcValue(tf)[start -1])) {
 	  start--;
 	  break;
 	}
@@ -3644,14 +3601,6 @@ FindNextWord(XmTextFieldWidget tf,
 {
   
   XmTextPosition end = TextF_CursorPosition(tf);
-  wchar_t white_space[3];
-  
-  if (tf->text.max_char_size != 1) {
-    (void)mbtowc(&white_space[0], " ", 1);
-    (void)mbtowc(&white_space[1], "\n", 1);
-    (void)mbtowc(&white_space[2], "\t", 1);
-  }
-  
   
   if(tf->text.max_char_size == 1) {
     if (isspace((unsigned char)TextF_Value(tf)[end])) {
@@ -3673,9 +3622,9 @@ FindNextWord(XmTextFieldWidget tf,
     if (*right < tf->text.string_length)
       *right = *right - 1;
   } else {
-    if (_XmTextFieldIsWSpace(TextF_WcValue(tf)[end], white_space, 3)) {
+    if (iswspace(TextF_WcValue(tf)[end])) {
       for (; end < tf->text.string_length; end ++) {
-	if (!_XmTextFieldIsWSpace(TextF_WcValue(tf)[end], white_space, 3)) {
+	if (!iswspace(TextF_WcValue(tf)[end])) {
 	  break;
 	}
       }
@@ -3689,10 +3638,9 @@ FindNextWord(XmTextFieldWidget tf,
      * If word boundary caused by whitespace, set right to the last 
      * whitespace following the end of the current word.
      */
-    if (_XmTextFieldIsWSpace(TextF_WcValue(tf)[(int)*right], white_space, 3)) {
+    if (iswspace(TextF_WcValue(tf)[(int)*right])) {
       while (*right < tf->text.string_length &&
-	     _XmTextFieldIsWSpace(TextF_WcValue(tf)[(int)*right], 
-				  white_space, 3)) {
+	     iswspace(TextF_WcValue(tf)[(int)*right])) {
 	*right = *right + 1;
       }
       if (*right < tf->text.string_length)
@@ -4545,13 +4493,6 @@ ForwardWord(Widget w,
 {
   XmTextFieldWidget tf = (XmTextFieldWidget) w;
   XmTextPosition cursorPos, position, dummy;
-  wchar_t white_space[3];
-  
-  if (tf->text.max_char_size != 1) {
-    (void)mbtowc(&white_space[0], " ", 1);
-    (void)mbtowc(&white_space[1], "\n", 1);
-    (void)mbtowc(&white_space[2], "\t", 1);
-  }
   
   cursorPos = TextF_CursorPosition(tf);
   
@@ -4569,16 +4510,13 @@ ForwardWord(Widget w,
 	}
       }
     } else {
-      if (_XmTextFieldIsWSpace(TextF_WcValue(tf)[cursorPos],
-			       white_space, 3))
+      if (iswspace(TextF_WcValue(tf)[cursorPos]))
 	FindWord(tf, cursorPos, &dummy, &position);
       else
 	FindNextWord(tf, &dummy, &position);
-      if (_XmTextFieldIsWSpace(TextF_WcValue(tf)[position],
-			       white_space, 3)) {
+      if (iswspace(TextF_WcValue(tf)[position])) {
 	for (; position < tf->text.string_length; position++) {
-	  if (!_XmTextFieldIsWSpace(TextF_WcValue(tf)[position], 
-				    white_space, 3))
+	  if (!iswspace(TextF_WcValue(tf)[position]))
 	    break;
 	}
       }
