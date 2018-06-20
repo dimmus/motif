@@ -4989,7 +4989,7 @@ CalcCornerSize(tab)
 	    AssignMax(size, tmp);
 	}
 #ifdef USE_XFT
-        else if (1/*font_type == XmFONT_IS_XFT*/)
+        else if (font_type == XmFONT_IS_XFT)
 	{
 	    tmp = ((XftFont*)value)->ascent + ((XftFont*)value)->descent;
 	    AssignMax(size, tmp);
