@@ -2047,7 +2047,6 @@ void _XmPutScaledImage (
     Pixel pixel;
     double ratio_x, ratio_y;
     Bool fast8;
-    int xp_event, xp_error;
 
     if (dest_width == src_width && dest_height == src_height) {
 	/* same for x and y, just send it out */
@@ -2060,6 +2059,7 @@ void _XmPutScaledImage (
     ratio_y = (double)dest_height / (double)src_height;
  
 #ifdef PRINTING_SUPPORTED
+    int xp_event, xp_error;
     /*
      * Check that we have uniform scaling, and that the print extension
      * exists.  We can't call XpGetContext first, because if the print
