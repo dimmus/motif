@@ -4459,9 +4459,6 @@ HandleExtendedItem(XmListWidget lw,
   if (item < 0 || item >= lw->list.itemCount)
     return;
 
-  if (item < 0 || item >= lw->list.itemCount)
-    return;
-
   /* First the non-addmode case */
   if (lw->list.SelectionMode == XmNORMAL_MODE)
     {
