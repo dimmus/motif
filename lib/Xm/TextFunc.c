@@ -740,7 +740,7 @@ XmTextGetBaseline(Widget widget)
   } else {
     Dimension *baselines;
     int temp_bl;
-    int line_count;
+    int line_count = 0;
     XmPrimitiveClassExt           *wcePtr;
     XmTextWidget tw = (XmTextWidget) widget;
 
@@ -771,7 +771,7 @@ XmTextGetCenterline(Widget widget)
 {
   Dimension *baselines;
   int temp_bl;
-  int line_count;
+  int line_count = 0;
   XmPrimitiveClassExt           *wcePtr;
   XmTextWidget tw = (XmTextWidget) widget;
 
