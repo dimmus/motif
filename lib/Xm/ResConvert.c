@@ -993,7 +993,7 @@ GetNextFontListEntry (
     char *delim )
 {
     char *fontName;
-    char *fontTag;
+    char *fontTag = XmFONTLIST_DEFAULT_TAG;
     char *fontPtr;
     String params[2];
     Cardinal num_params;
