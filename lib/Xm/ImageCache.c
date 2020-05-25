@@ -405,7 +405,7 @@ SymbolicColorUsed(String color_name,
 		  XpmColor * xpm_colors,
 		  unsigned int ncolors)
 {
-    Cardinal i, j, data_size ;
+    Cardinal i;
 
     /* first look if the color is present as a symbolic in the 
        colorTable */
