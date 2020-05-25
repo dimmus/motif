@@ -252,7 +252,6 @@ png_load_file(FILE *infile, unsigned long *pWidth,
      * post-IDAT text/time/etc. is desired) */
 
     free(row_pointers);
-    row_pointers = NULL;
 
     png_read_end(png_ptr, NULL);
 
