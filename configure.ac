@@ -48,6 +48,10 @@ dnl AC_PROG_SPLINT
 AC_CHECK_PROGS(SPLINT, splint)
 
 AM_PROG_LEX
+if test "x$LEX" == xflex; then
+  AC_SUBST([LEXLIB], ['-lfl'])
+fi
+
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
