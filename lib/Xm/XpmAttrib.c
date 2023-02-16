@@ -1,4 +1,3 @@
-/* $XConsortium: XpmAttrib.c /main/3 1996/09/20 07:58:11 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -33,13 +32,11 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
- 
 #include "XpmI.h"
 
 /* 3.2 backward compatibility code */
@@ -52,15 +49,15 @@ LFUNC(FreeOldColorTable, void, (XpmColor **colorTable, unsigned int ncolors));
  * Create a colortable compatible with the old style colortable
  */
 static int
-CreateOldColorTable(ct, ncolors, oldct)
-    XpmColor *ct;
-    unsigned int ncolors;
-    XpmColor ***oldct;
+CreateOldColorTable(
+    XpmColor	  *ct,
+    unsigned int   ncolors,
+    XpmColor	***oldct)
 {
     XpmColor **colorTable, **color;
     unsigned int a;
 
-    if (ncolors >= UINT_MAX / sizeof(XpmColor *)) 
+    if (ncolors >= UINT_MAX / sizeof(XpmColor *))
 	return XpmNoMemory;
 
     colorTable = (XpmColor **) XpmMalloc(ncolors * sizeof(XpmColor *));
@@ -75,9 +72,9 @@ CreateOldColorTable(ct, ncolors, oldct)
 }
 
 static void
-FreeOldColorTable(colorTable, ncolors)
-    XpmColor **colorTable;
-    unsigned int ncolors;
+FreeOldColorTable(
+    XpmColor	**colorTable,
+    unsigned int  ncolors)
 {
     unsigned int a, b;
     XpmColor **color;
@@ -100,9 +97,9 @@ FreeOldColorTable(colorTable, ncolors)
  * Free the computed color table
  */
 void
-xpmFreeColorTable(colorTable, ncolors)
-    XpmColor *colorTable;
-    int ncolors;
+xpmFreeColorTable(
+    XpmColor	*colorTable,
+    int		 ncolors)
 {
     int a, b;
     XpmColor *color;
@@ -122,9 +119,9 @@ xpmFreeColorTable(colorTable, ncolors)
  * Free array of extensions
  */
 void
-XpmFreeExtensions(extensions, nextensions)
-    XpmExtension *extensions;
-    int nextensions;
+XpmFreeExtensions(
+    XpmExtension	*extensions,
+    int			 nextensions)
 {
     unsigned int i, j, nlines;
     XpmExtension *ext;
@@ -136,7 +133,7 @@ XpmFreeExtensions(extensions, nextensions)
 		XpmFree(ext->name);
 	    nlines = ext->nlines;
 	    for (j = 0, sptr = ext->lines; j < nlines; j++, sptr++)
-		if (*sptr)
+		if (sptr && *sptr)
 		    XpmFree(*sptr);
 	    if (ext->lines)
 		XpmFree(ext->lines);
@@ -150,7 +147,7 @@ XpmFreeExtensions(extensions, nextensions)
  */
 
 int
-XpmAttributesSize()
+XpmAttributesSize(void)
 {
     return sizeof(XpmAttributes);
 }
@@ -159,8 +156,7 @@ XpmAttributesSize()
  * Init returned data to free safely later on
  */
 void
-xpmInitAttributes(attributes)
-    XpmAttributes *attributes;
+xpmInitAttributes(XpmAttributes *attributes)
 {
     if (attributes) {
 	attributes->pixels = NULL;
@@ -187,10 +183,10 @@ xpmInitAttributes(attributes)
  * Fill in the XpmAttributes with the XpmImage and the XpmInfo
  */
 void
-xpmSetAttributes(attributes, image, info)
-    XpmAttributes *attributes;
-    XpmImage *image;
-    XpmInfo *info;
+xpmSetAttributes(
+    XpmAttributes	*attributes,
+    XpmImage		*image,
+    XpmInfo		*info)
 {
     if (attributes->valuemask & XpmReturnColorTable) {
 	attributes->colorTable = image->colorTable;
@@ -257,8 +253,7 @@ xpmSetAttributes(attributes, image, info)
  * but the structure itself
  */
 void
-XpmFreeAttributes(attributes)
-    XpmAttributes *attributes;
+XpmFreeAttributes(XpmAttributes *attributes)
 {
     if (attributes->valuemask & XpmReturnPixels && attributes->npixels) {
 	XpmFree(attributes->pixels);

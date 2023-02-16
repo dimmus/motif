@@ -1,4 +1,3 @@
-/* $XConsortium: XpmCrIFrP.c /main/2 1996/09/20 08:03:45 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,17 +35,15 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 void
-xpmCreateImageFromPixmap(display, pixmap, ximage_return, width, height)
-    Display *display;
-    Pixmap pixmap;
-    XImage **ximage_return;
-    unsigned int *width;
-    unsigned int *height;
+xpmCreateImageFromPixmap(
+    Display		 *display,
+    Pixmap		  pixmap,
+    XImage		**ximage_return,
+    unsigned int	 *width,
+    unsigned int	 *height)
 {
     unsigned int dum;
     int dummy;

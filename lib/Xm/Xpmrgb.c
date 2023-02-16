@@ -1,4 +1,3 @@
-/* $XConsortium: Xpmrgb.c /main/6 1996/09/20 08:16:01 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -46,8 +45,6 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 #include <ctype.h>
 
@@ -59,10 +56,9 @@
  * number of entries stored.
  */
 int
-xpmReadRgbNames(rgb_fname, rgbn)
-    char *rgb_fname;
-    xpmRgbName rgbn[];
-
+xpmReadRgbNames(
+    char	*rgb_fname,
+    xpmRgbName	 rgbn[])
 {
     FILE *rgbf;
     int n, items, red, green, blue;
@@ -75,7 +71,7 @@ xpmReadRgbNames(rgb_fname, rgbn)
 
     /* Loop reading each line in the file. */
     n = 0;
-    rgb = rgbn; 
+    rgb = rgbn;
     /* Quit if rgb text file has too many entries. */
     while (fgets(line, sizeof(line), rgbf) && n < MAX_RGBNAMES) {
 
@@ -121,11 +117,12 @@ xpmReadRgbNames(rgb_fname, rgbn)
  * Return the color name corresponding to the given rgb values
  */
 char *
-xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
-    xpmRgbName rgbn[];			/* rgb mnemonics from rgb text file */
-    int rgbn_max;			/* number of rgb mnemonics in table */
-    int red, green, blue;		/* rgb values */
-
+xpmGetRgbName(
+    xpmRgbName	rgbn[],		/* rgb mnemonics from rgb text file */
+    int		rgbn_max,	/* number of rgb mnemonics in table */
+    int		red,		/* rgb values */
+    int		green,
+    int		blue)
 {
     int i;
     xpmRgbName *rgb;
@@ -147,10 +144,9 @@ xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
  * Free the strings which have been malloc'ed in xpmReadRgbNames
  */
 void
-xpmFreeRgbNames(rgbn, rgbn_max)
-    xpmRgbName rgbn[];
-    int rgbn_max;
-
+xpmFreeRgbNames(
+    xpmRgbName	rgbn[],
+    int		rgbn_max)
 {
     int i;
     xpmRgbName *rgb;
@@ -162,12 +158,12 @@ xpmFreeRgbNames(rgbn, rgbn_max)
 #else					/* here comes the MSW part, the
 					 * second part of the  huge ifdef */
 
-#include "rgbtab.h"			/* hard coded rgb.txt table */
+#include "Xpmrgbtab.h"			/* hard coded rgb.txt table */
 
 int
-xpmReadRgbNames(rgb_fname, rgbn)
-    char *rgb_fname;
-    xpmRgbName rgbn[];
+xpmReadRgbNames(
+    char	*rgb_fname,
+    xpmRgbName	 rgbn[])
 {
     /*
      * check for consistency???
@@ -181,11 +177,13 @@ xpmReadRgbNames(rgb_fname, rgbn)
  * which has something like #0303 for one color
  */
 char *
-xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
-    xpmRgbName rgbn[];			/* rgb mnemonics from rgb text file
-					 * not used */
-    int rgbn_max;			/* not used */
-    int red, green, blue;		/* rgb values */
+xpmGetRgbName(
+    xpmRgbName rgbn[],		/* rgb mnemonics from rgb text file
+				 * not used */
+    int		rgbn_max,	/* not used */
+    int		red, 		/* rgb values */
+    int		green,
+    int		blue)
 
 {
     int i;
@@ -205,9 +203,11 @@ xpmGetRgbName(rgbn, rgbn_max, red, green, blue)
 
 /* used in XParseColor in simx.c */
 int
-xpmGetRGBfromName(inname, r, g, b)
-    char *inname;
-    int *r, *g, *b;
+xpmGetRGBfromName(
+    char	*inname,
+    int		*r,
+    int		*g,
+    int		*b)
 {
     int left, right, middle;
     int cmp;
@@ -277,10 +277,9 @@ xpmGetRGBfromName(inname, r, g, b)
 }
 
 void
-xpmFreeRgbNames(rgbn, rgbn_max)
-    xpmRgbName rgbn[];
-    int rgbn_max;
-
+xpmFreeRgbNames(
+    xpmRgbName	rgbn[],
+    int		rgbn_max)
 {
     /* nothing to do */
 }

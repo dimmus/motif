@@ -1,4 +1,3 @@
-/* $XConsortium: XpmWrFFrBuf.c /main/2 1996/09/20 08:14:07 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -33,21 +32,19 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #include "XpmI.h"
 
 int
-XpmWriteFileFromBuffer(filename, buffer)
-    char *filename;
-    char *buffer;
+XpmWriteFileFromBuffer(
+    const char	*filename,
+    char	*buffer)
 {
-    int fcheck, len;
+    size_t fcheck, len;
     FILE *fp = fopen(filename, "w");
 
     if (!fp)

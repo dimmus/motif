@@ -1,4 +1,3 @@
-/* $XConsortium: XpmImage.c /main/2 1996/09/20 08:12:28 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,16 +35,13 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 /*
  * Init returned data to free safely later on
  */
 void
-xpmInitXpmImage(image)
-    XpmImage *image;
+xpmInitXpmImage(XpmImage *image)
 {
     image->ncolors = 0;
     image->colorTable = NULL;
@@ -56,8 +52,7 @@ xpmInitXpmImage(image)
  * Free the XpmImage data which have been allocated
  */
 void
-XpmFreeXpmImage(image)
-    XpmImage *image;
+XpmFreeXpmImage(XpmImage *image)
 {
     if (image->colorTable)
 	xpmFreeColorTable(image->colorTable, image->ncolors);

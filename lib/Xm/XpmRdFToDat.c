@@ -1,4 +1,3 @@
-/* $XConsortium: XpmRdFToDat.c /main/2 1996/09/20 08:13:31 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,14 +35,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 int
-XpmReadFileToData(filename, data_return)
-    char *filename;
-    char ***data_return;
+XpmReadFileToData(
+    const char	  *filename,
+    char	***data_return)
 {
     XpmImage image;
     XpmInfo info;

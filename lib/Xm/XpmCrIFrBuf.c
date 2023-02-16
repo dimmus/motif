@@ -1,4 +1,3 @@
-/* $XConsortium: XpmCrIFrBuf.c /main/2 1996/09/20 08:03:23 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,20 +35,17 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 LFUNC(OpenBuffer, void, (char *buffer, xpmData *mdata));
 
 int
-XpmCreateImageFromBuffer(display, buffer, image_return,
-			 shapeimage_return, attributes)
-    Display *display;
-    char *buffer;
-    XImage **image_return;
-    XImage **shapeimage_return;
-    XpmAttributes *attributes;
+XpmCreateImageFromBuffer(
+    Display		 *display,
+    char		 *buffer,
+    XImage		**image_return,
+    XImage		**shapeimage_return,
+    XpmAttributes	 *attributes)
 {
     XpmImage image;
     XpmInfo info;
@@ -86,10 +82,10 @@ XpmCreateImageFromBuffer(display, buffer, image_return,
 }
 
 int
-XpmCreateXpmImageFromBuffer(buffer, image, info)
-    char *buffer;
-    XpmImage *image;
-    XpmInfo *info;
+XpmCreateXpmImageFromBuffer(
+    char	*buffer,
+    XpmImage	*image,
+    XpmInfo	*info)
 {
     xpmData mdata;
     int ErrorStatus;
@@ -111,9 +107,9 @@ XpmCreateXpmImageFromBuffer(buffer, image, info)
  * open the given buffer to be read or written as an xpmData which is returned
  */
 static void
-OpenBuffer(buffer, mdata)
-    char *buffer;
-    xpmData *mdata;
+OpenBuffer(
+    char	*buffer,
+    xpmData	*mdata)
 {
     mdata->type = XPMBUFFER;
     mdata->cptr = buffer;

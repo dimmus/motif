@@ -1,4 +1,3 @@
-/* $XConsortium: XpmCrPFrI.c /main/2 1996/09/20 08:12:09 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,16 +35,14 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 void
-xpmCreatePixmapFromImage(display, d, ximage, pixmap_return)
-    Display *display;
-    Drawable d;
-    XImage *ximage;
-    Pixmap *pixmap_return;
+xpmCreatePixmapFromImage(
+    Display	*display,
+    Drawable	 d,
+    XImage	*ximage,
+    Pixmap	*pixmap_return)
 {
     GC gc;
     XGCValues values;

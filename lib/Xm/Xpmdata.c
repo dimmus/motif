@@ -1,4 +1,3 @@
-/* $XConsortium: Xpmdata.c /main/6 1996/09/20 08:15:15 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -35,40 +34,43 @@
 
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
 
+#ifndef CXPMPROG
+#if 0
 /* Official version number */
-static char *RCS_Version = "$XpmVersion: 3.4i $";
+static char *RCS_Version = "$XpmVersion: 3.4k $";
 
 /* Internal version number */
-static char *RCS_Id = "$XpmId: xpm.shar,v 3.62 96/09/14 02:33:07 lehors Exp $";
-
+static char *RCS_Id = "Id: xpm.shar,v 3.71 1998/03/19 19:47:14 lehors Exp $";
+#endif
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
+#endif
 #include <ctype.h>
 
-
-LFUNC(ParseComment, int, (xpmData * mdata));
+#ifndef CXPMPROG
+#define Getc(data, file) getc(file)
+#define Ungetc(data, c, file) ungetc(c, file)
+#endif
 
 static int
-ParseComment(mdata)
-    xpmData *mdata;
+ParseComment(xpmData *data)
 {
-    if (mdata->type == XPMBUFFER) {
+    if (data->type == XPMBUFFER) {
 	register char c;
 	register unsigned int n = 0;
 	unsigned int notend;
-	char *s, *s2;
+	char *s;
+	const char *s2;
 
-	s = mdata->Comment;
-	*s = mdata->Bcmt[0];
+	s = data->Comment;
+	*s = data->Bcmt[0];
 
 	/* skip the string beginning comment */
-	s2 = mdata->Bcmt;
+	s2 = data->Bcmt;
 	do {
-	    c = *mdata->cptr++;
+	    c = *data->cptr++;
 	    *++s = c;
 	    n++;
 	    s2++;
@@ -76,30 +78,30 @@ ParseComment(mdata)
 
 	if (*s2 != '\0') {
 	    /* this wasn't the beginning of a comment */
-	    mdata->cptr -= n;
+	    data->cptr -= n;
 	    return 0;
 	}
 	/* store comment */
-	mdata->Comment[0] = *s;
-	s = mdata->Comment;
+	data->Comment[0] = *s;
+	s = data->Comment;
 	notend = 1;
 	n = 0;
 	while (notend) {
-	    s2 = mdata->Ecmt;
+	    s2 = data->Ecmt;
 	    while (*s != *s2 && c) {
-		c = *mdata->cptr++;
+		c = *data->cptr++;
 		if (n == XPMMAXCMTLEN - 1)  { /* forget it */
-		    s = mdata->Comment;
+		    s = data->Comment;
 		    n = 0;
 		}
 		*++s = c;
 		n++;
 	    }
-	    mdata->CommentLength = n;
+	    data->CommentLength = n;
 	    do {
-		c = *mdata->cptr++;
+		c = *data->cptr++;
 		if (n == XPMMAXCMTLEN - 1)  { /* forget it */
-		    s = mdata->Comment;
+		    s = data->Comment;
 		    n = 0;
 		}
 		*++s = c;
@@ -109,24 +111,25 @@ ParseComment(mdata)
 	    if (*s2 == '\0') {
 		/* this is the end of the comment */
 		notend = 0;
-		mdata->cptr--;
+		data->cptr--;
 	    }
 	}
 	return 0;
     } else {
-	FILE *file = mdata->stream.file;
+	FILE *file = data->stream.file;
 	register int c;
 	register unsigned int n = 0, a;
 	unsigned int notend;
-	char *s, *s2;
+	char *s;
+	const char *s2;
 
-	s = mdata->Comment;
-	*s = mdata->Bcmt[0];
+	s = data->Comment;
+	*s = data->Bcmt[0];
 
 	/* skip the string beginning comment */
-	s2 = mdata->Bcmt;
+	s2 = data->Bcmt;
 	do {
-	    c = getc(file);
+	    c = Getc(data, file);
 	    *++s = c;
 	    n++;
 	    s2++;
@@ -136,30 +139,30 @@ ParseComment(mdata)
 	    /* this wasn't the beginning of a comment */
 	    /* put characters back in the order that we got them */
 	    for (a = n; a > 0; a--, s--)
-		ungetc(*s, file);
+		Ungetc(data, *s, file);
 	    return 0;
 	}
 	/* store comment */
-	mdata->Comment[0] = *s;
-	s = mdata->Comment;
+	data->Comment[0] = *s;
+	s = data->Comment;
 	notend = 1;
 	n = 0;
 	while (notend) {
-	    s2 = mdata->Ecmt;
+	    s2 = data->Ecmt;
 	    while (*s != *s2 && c != EOF) {
-		c = getc(file);
+		c = Getc(data, file);
 		if (n == XPMMAXCMTLEN - 1)  { /* forget it */
-		    s = mdata->Comment;
+		    s = data->Comment;
 		    n = 0;
 		}
 		*++s = c;
 		n++;
 	    }
-	    mdata->CommentLength = n;
+	    data->CommentLength = n;
 	    do {
-		c = getc(file);
+		c = Getc(data, file);
 		if (n == XPMMAXCMTLEN - 1)  { /* forget it */
-		    s = mdata->Comment;
+		    s = data->Comment;
 		    n = 0;
 		}
 		*++s = c;
@@ -169,7 +172,7 @@ ParseComment(mdata)
 	    if (*s2 == '\0') {
 		/* this is the end of the comment */
 		notend = 0;
-		ungetc(*s, file);
+		Ungetc(data, *s, file);
 	    }
 	}
 	return 0;
@@ -180,52 +183,51 @@ ParseComment(mdata)
  * skip to the end of the current string and the beginning of the next one
  */
 int
-xpmNextString(mdata)
-    xpmData *mdata;
+xpmNextString(xpmData *data)
 {
-    if (!mdata->type)
-	mdata->cptr = (mdata->stream.data)[++mdata->line];
-    else if (mdata->type == XPMBUFFER) {
+    if (!data->type)
+	data->cptr = (data->stream.data)[++data->line];
+    else if (data->type == XPMBUFFER) {
 	register char c;
 
 	/* get to the end of the current string */
-	if (mdata->Eos)
-	    while ((c = *mdata->cptr++) && c != mdata->Eos);
+	if (data->Eos)
+	    while ((c = *data->cptr++) && c != data->Eos);
 
 	/*
 	 * then get to the beginning of the next string looking for possible
 	 * comment
 	 */
-	if (mdata->Bos) {
-	    while ((c = *mdata->cptr++) && c != mdata->Bos)
-		if (mdata->Bcmt && c == mdata->Bcmt[0])
-		    ParseComment(mdata);
-	} else if (mdata->Bcmt) {	/* XPM2 natural */
-	    while ((c = *mdata->cptr++) == mdata->Bcmt[0])
-		ParseComment(mdata);
-	    mdata->cptr--;
+	if (data->Bos) {
+	    while ((c = *data->cptr++) && c != data->Bos)
+		if (data->Bcmt && c == data->Bcmt[0])
+		    ParseComment(data);
+	} else if (data->Bcmt) {	/* XPM2 natural */
+	    while ((c = *data->cptr++) == data->Bcmt[0])
+		ParseComment(data);
+	    data->cptr--;
 	}
     } else {
 	register int c;
-	FILE *file = mdata->stream.file;
+	FILE *file = data->stream.file;
 
 	/* get to the end of the current string */
-	if (mdata->Eos)
-	    while ((c = getc(file)) != mdata->Eos && c != EOF);
+	if (data->Eos)
+	    while ((c = Getc(data, file)) != data->Eos && c != EOF);
 
 	/*
 	 * then get to the beginning of the next string looking for possible
 	 * comment
 	 */
-	if (mdata->Bos) {
-	    while ((c = getc(file)) != mdata->Bos && c != EOF)
-		if (mdata->Bcmt && c == mdata->Bcmt[0])
-		    ParseComment(mdata);
+	if (data->Bos) {
+	    while ((c = Getc(data, file)) != data->Bos && c != EOF)
+		if (data->Bcmt && c == data->Bcmt[0])
+		    ParseComment(data);
 
-	} else if (mdata->Bcmt) {	/* XPM2 natural */
-	    while ((c = getc(file)) == mdata->Bcmt[0])
-		ParseComment(mdata);
-	    ungetc(c, file);
+	} else if (data->Bcmt) {	/* XPM2 natural */
+	    while ((c = Getc(data, file)) == data->Bcmt[0])
+		ParseComment(data);
+	    Ungetc(data, c, file);
 	}
     }
     return 0;
@@ -233,93 +235,93 @@ xpmNextString(mdata)
 
 
 /*
- * skip whitespace and compute the following unsigned int,
- * returns 1 if one is found and 0 if not
- */
-int
-xpmNextUI(mdata, ui_return)
-    xpmData *mdata;
-    unsigned int *ui_return;
-{
-    char buf[BUFSIZ];
-    int l;
-
-    l = xpmNextWord(mdata, buf, BUFSIZ);
-    return xpmatoui(buf, l, ui_return);
-}
-
-/*
  * skip whitespace and return the following word
  */
 unsigned int
-xpmNextWord(mdata, buf, buflen)
-    xpmData *mdata;
-    char *buf;
-    unsigned int buflen;
+xpmNextWord(
+    xpmData		*data,
+    char		*buf,
+    unsigned int	 buflen)
 {
     register unsigned int n = 0;
     int c;
 
-    if (!mdata->type || mdata->type == XPMBUFFER) {
-	while (isspace(c = *mdata->cptr) && c != mdata->Eos)
-	    mdata->cptr++;
+    if (!data->type || data->type == XPMBUFFER) {
+	while (isspace(c = *data->cptr) && c != data->Eos)
+	    data->cptr++;
 	do {
-	    c = *mdata->cptr++;
+	    c = *data->cptr++;
 	    *buf++ = c;
 	    n++;
-	} while (!isspace(c) && c != mdata->Eos && n < buflen);
+	} while (!isspace(c) && c != data->Eos && n < buflen);
 	n--;
-	mdata->cptr--;
+	data->cptr--;
     } else {
-	FILE *file = mdata->stream.file;
+	FILE *file = data->stream.file;
 
-	while ((c = getc(file)) != EOF && isspace(c) && c != mdata->Eos);
-	while (!isspace(c) && c != mdata->Eos && c != EOF && n < buflen) {
+	while ((c = Getc(data, file)) != EOF && isspace(c) && c != data->Eos);
+	while (!isspace(c) && c != data->Eos && c != EOF && n < buflen) {
 	    *buf++ = c;
 	    n++;
-	    c = getc(file);
+	    c = Getc(data, file);
 	}
-	ungetc(c, file);
+	Ungetc(data, c, file);
     }
     return (n); /* this returns bytes read + 1 */
+}
+
+/*
+ * skip whitespace and compute the following unsigned int,
+ * returns 1 if one is found and 0 if not
+ */
+int
+xpmNextUI(
+    xpmData		*data,
+    unsigned int	*ui_return)
+{
+    char buf[BUFSIZ];
+    int l;
+
+    l = xpmNextWord(data, buf, BUFSIZ);
+    return xpmatoui(buf, l, ui_return);
 }
 
 /*
  * return end of string - WARNING: malloc!
  */
 int
-xpmGetString(mdata, sptr, l)
-    xpmData *mdata;
-    char **sptr;
-    unsigned int *l;
+xpmGetString(
+    xpmData		 *data,
+    char		**sptr,
+    unsigned int	 *l)
 {
     unsigned int i, n = 0;
     int c;
     char *p = NULL, *q, buf[BUFSIZ];
 
-    if (!mdata->type || mdata->type == XPMBUFFER) {
-	if (mdata->cptr) {
-	    char *start = mdata->cptr;
-	    while ((c = *mdata->cptr) && c != mdata->Eos)
-		mdata->cptr++;
-	    n = mdata->cptr - start + 1;
+    if (!data->type || data->type == XPMBUFFER) {
+	if (data->cptr) {
+	    char *start = data->cptr;
+	    while ((c = *data->cptr) && c != data->Eos)
+		data->cptr++;
+	    n = data->cptr - start + 1;
 	    p = (char *) XpmMalloc(n);
 	    if (!p)
 		return (XpmNoMemory);
 	    strncpy(p, start, n);
-	    if (mdata->type)		/* XPMBUFFER */
+	    if (data->type)		/* XPMBUFFER */
 		p[n - 1] = '\0';
 	}
     } else {
-	FILE *file = mdata->stream.file;
+	FILE *file = data->stream.file;
 
-	if ((c = getc(file)) == EOF)
+	if ((c = Getc(data, file)) == EOF)
 	    return (XpmFileInvalid);
 
 	i = 0;
 	q = buf;
 	p = (char *) XpmMalloc(1);
-	while (c != mdata->Eos && c != EOF) {
+	while (c != data->Eos && c != EOF) {
 	    if (i == BUFSIZ) {
 		/* get to the end of the buffer */
 		/* malloc needed memory */
@@ -338,7 +340,7 @@ xpmGetString(mdata, sptr, l)
 	    }
 	    *q++ = c;
 	    i++;
-	    c = getc(file);
+	    c = Getc(data, file);
 	}
 	if (c == EOF) {
 	    XpmFree(p);
@@ -361,7 +363,7 @@ xpmGetString(mdata, sptr, l)
 	    *p = '\0';
 	    n = 1;
 	}
-	ungetc(c, file);
+	Ungetc(data, c, file);
     }
     *sptr = p;
     *l = n;
@@ -372,18 +374,18 @@ xpmGetString(mdata, sptr, l)
  * get the current comment line
  */
 int
-xpmGetCmt(mdata, cmt)
-    xpmData *mdata;
-    char **cmt;
+xpmGetCmt(
+    xpmData	 *data,
+    char	**cmt)
 {
-    if (!mdata->type)
+    if (!data->type)
 	*cmt = NULL;
-    else if (mdata->CommentLength != 0 && mdata->CommentLength < UINT_MAX - 1) {
-        if( (*cmt = (char *) XpmMalloc(mdata->CommentLength + 1)) == NULL)
-	    return XpmNoMemory;
-	strncpy(*cmt, mdata->Comment, mdata->CommentLength);
-	(*cmt)[mdata->CommentLength] = '\0';
-	mdata->CommentLength = 0;
+    else if (data->CommentLength != 0 && data->CommentLength < UINT_MAX - 1) {
+	if( (*cmt = (char *) XpmMalloc(data->CommentLength + 1)) == NULL)
+		return XpmNoMemory;
+	strncpy(*cmt, data->Comment, data->CommentLength);
+	(*cmt)[data->CommentLength] = '\0';
+	data->CommentLength = 0;
     } else
 	*cmt = NULL;
     return 0;
@@ -394,41 +396,36 @@ xpmDataType xpmDataTypes[] =
     {"", "!", "\n", '\0', '\n', "", "", "", ""},	/* Natural type */
     {"C", "/*", "*/", '"', '"', ",\n", "static char *", "[] = {\n", "};\n"},
     {"Lisp", ";", "\n", '"', '"', "\n", "(setq ", " '(\n", "))\n"},
-#ifdef VMS
-    {NULL}
-#else
     {NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL}
-#endif
 };
 
 /*
  * parse xpm header
  */
 int
-xpmParseHeader(mdata)
-    xpmData *mdata;
+xpmParseHeader(xpmData *data)
 {
     char buf[BUFSIZ+1] = {0};
     int l, n = 0;
 
-    if (mdata->type) {
-	mdata->Bos = '\0';
-	mdata->Eos = '\n';
-	mdata->Bcmt = mdata->Ecmt = NULL;
-	l = xpmNextWord(mdata, buf, BUFSIZ);
+    if (data->type) {
+	data->Bos = '\0';
+	data->Eos = '\n';
+	data->Bcmt = data->Ecmt = NULL;
+	l = xpmNextWord(data, buf, BUFSIZ);
 	if (l == 7 && !strncmp("#define", buf, 7)) {
 	    /* this maybe an XPM 1 file */
 	    char *ptr;
 
-	    l = xpmNextWord(mdata, buf, BUFSIZ);
+	    l = xpmNextWord(data, buf, BUFSIZ);
 	    if (!l)
 		return (XpmFileInvalid);
 	    buf[l] = '\0';
-	    ptr = rindex(buf, '_');
+	    ptr = strrchr(buf, '_');
 	    if (!ptr || strncmp("_format", ptr, l - (ptr - buf)))
 		return XpmFileInvalid;
 	    /* this is definitely an XPM 1 file */
-	    mdata->format = 1;
+	    data->format = 1;
 	    n = 1;			/* handle XPM1 as mainly XPM2 C */
 	} else {
 
@@ -436,14 +433,14 @@ xpmParseHeader(mdata)
 	     * skip the first word, get the second one, and see if this is
 	     * XPM 2 or 3
 	     */
-	    l = xpmNextWord(mdata, buf, BUFSIZ);
+	    l = xpmNextWord(data, buf, BUFSIZ);
 	    if ((l == 3 && !strncmp("XPM", buf, 3)) ||
 		(l == 4 && !strncmp("XPM2", buf, 4))) {
 		if (l == 3)
 		    n = 1;		/* handle XPM as XPM2 C */
 		else {
 		    /* get the type key word */
-		    l = xpmNextWord(mdata, buf, BUFSIZ);
+		    l = xpmNextWord(data, buf, BUFSIZ);
 
 		    /*
 		     * get infos about this type
@@ -452,29 +449,29 @@ xpmParseHeader(mdata)
 			   && strncmp(xpmDataTypes[n].type, buf, l))
 			n++;
 		}
-		mdata->format = 0;
+		data->format = 0;
 	    } else
 		/* nope this is not an XPM file */
 		return XpmFileInvalid;
 	}
 	if (xpmDataTypes[n].type) {
 	    if (n == 0) {		/* natural type */
-		mdata->Bcmt = xpmDataTypes[n].Bcmt;
-		mdata->Ecmt = xpmDataTypes[n].Ecmt;
-		xpmNextString(mdata);	/* skip the end of the headerline */
-		mdata->Bos = xpmDataTypes[n].Bos;
-		mdata->Eos = xpmDataTypes[n].Eos;
+		data->Bcmt = xpmDataTypes[n].Bcmt;
+		data->Ecmt = xpmDataTypes[n].Ecmt;
+		xpmNextString(data);	/* skip the end of the headerline */
+		data->Bos = xpmDataTypes[n].Bos;
+		data->Eos = xpmDataTypes[n].Eos;
 	    } else {
-		mdata->Bcmt = xpmDataTypes[n].Bcmt;
-		mdata->Ecmt = xpmDataTypes[n].Ecmt;
-		if (!mdata->format) {	/* XPM 2 or 3 */
-		    mdata->Bos = xpmDataTypes[n].Bos;
-		    mdata->Eos = '\0';
+		data->Bcmt = xpmDataTypes[n].Bcmt;
+		data->Ecmt = xpmDataTypes[n].Ecmt;
+		if (!data->format) {	/* XPM 2 or 3 */
+		    data->Bos = xpmDataTypes[n].Bos;
+		    data->Eos = '\0';
 		    /* get to the beginning of the first string */
-		    xpmNextString(mdata);
-		    mdata->Eos = xpmDataTypes[n].Eos;
+		    xpmNextString(data);
+		    data->Eos = xpmDataTypes[n].Eos;
 		} else			/* XPM 1 skip end of line */
-		    xpmNextString(mdata);
+		    xpmNextString(data);
 	    }
 	} else
 	    /* we don't know about that type of XPM file... */

@@ -1,4 +1,3 @@
-/* $XConsortium: XpmCrDatFrI.c /main/2 1996/09/20 08:01:45 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -33,13 +32,11 @@
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #include "XpmI.h"
 
 LFUNC(CreateColors, int, (char **dataptr, unsigned int *data_size,
@@ -51,7 +48,7 @@ LFUNC(CreatePixels, void, (char **dataptr, unsigned int data_size,
 			   unsigned int height, unsigned int cpp,
 			   unsigned int *pixels, XpmColor *colors));
 
-LFUNC(CountExtensions, void, (XpmExtension *ext, unsigned int num,
+LFUNC(CountExtensions, int, (XpmExtension *ext, unsigned int num,
 			      unsigned int *ext_size,
 			      unsigned int *ext_nlines));
 
@@ -61,12 +58,12 @@ LFUNC(CreateExtensions, void, (char **dataptr, unsigned int data_size,
 			       unsigned int ext_nlines));
 
 int
-XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
-    Display *display;
-    char ***data_return;
-    XImage *image;
-    XImage *shapeimage;
-    XpmAttributes *attributes;
+XpmCreateDataFromImage(
+    Display		  *display,
+    char		***data_return,
+    XImage		  *image,
+    XImage		  *shapeimage,
+    XpmAttributes	  *attributes)
 {
     XpmImage xpmimage;
     XpmInfo info;
@@ -97,21 +94,17 @@ XpmCreateDataFromImage(display, data_return, image, shapeimage, attributes)
 
 #undef RETURN
 #define RETURN(status) \
-do { \
-    if (header) { \
-	for (l = 0; l < header_nlines; l++) \
-	    if (header[l]) \
-		XpmFree(header[l]); \
-		XpmFree(header); \
-    } \
-    return(status); \
+do \
+{ \
+      ErrorStatus = status; \
+      goto exit; \
 } while(0)
 
 int
-XpmCreateDataFromXpmImage(data_return, image, info)
-    char ***data_return;
-    XpmImage *image;
-    XpmInfo *info;
+XpmCreateDataFromXpmImage(
+    char	***data_return,
+    XpmImage	  *image,
+    XpmInfo	  *info)
 {
     /* calculation variables */
     int ErrorStatus;
@@ -129,21 +122,25 @@ XpmCreateDataFromXpmImage(data_return, image, info)
 
     /* compute the number of extensions lines and size */
     if (extensions)
-	CountExtensions(info->extensions, info->nextensions,
-			&ext_size, &ext_nlines);
+	if (CountExtensions(info->extensions, info->nextensions,
+			&ext_size, &ext_nlines))
+	    return(XpmNoMemory);
 
     /*
      * alloc a temporary array of char pointer for the header section which
      * is the hints line + the color table lines
      */
-    header_nlines = 1 + image->ncolors;
+    header_nlines = 1 + image->ncolors; /* this may wrap and/or become 0 */
+
+    /* 2nd check superfluous if we do not need header_nlines any further */
     if(header_nlines <= image->ncolors ||
        header_nlines >= UINT_MAX / sizeof(char *))
-      return(XpmNoMemory);
+    	return(XpmNoMemory);
+
     header_size = sizeof(char *) * header_nlines;
     if (header_size >= UINT_MAX / sizeof(char *))
 	return (XpmNoMemory);
-    header = (char **) XpmCalloc(header_size, sizeof(char *));
+    header = (char **) XpmCalloc(header_size, sizeof(char *)); /* can we trust image->ncolors */
     if (!header)
 	return (XpmNoMemory);
 
@@ -191,7 +188,8 @@ XpmCreateDataFromXpmImage(data_return, image, info)
     if(offset <= image->width || offset <= image->cpp)
 	RETURN(XpmNoMemory);
 
-    if( (image->height + ext_nlines) >= UINT_MAX / sizeof(char *))
+    if (image->height > UINT_MAX - ext_nlines ||
+	image->height + ext_nlines >= UINT_MAX / sizeof(char *))
 	RETURN(XpmNoMemory);
     data_size = (image->height + ext_nlines) * sizeof(char *);
 
@@ -200,7 +198,8 @@ XpmCreateDataFromXpmImage(data_return, image, info)
 	RETURN(XpmNoMemory);
     data_size += image->height * offset;
 
-    if( (header_size + ext_size) >= (UINT_MAX - data_size) )
+    if (header_size > UINT_MAX - ext_size ||
+	header_size + ext_size >= (UINT_MAX - data_size) )
 	RETURN(XpmNoMemory);
     data_size += header_size + ext_size;
 
@@ -233,17 +232,26 @@ XpmCreateDataFromXpmImage(data_return, image, info)
 			 ext_nlines);
 
     *data_return = data;
+    ErrorStatus = XpmSuccess;
 
-    RETURN(XpmSuccess);
+/* exit point, free only locally allocated variables */
+exit:
+    if (header) {
+	for (l = 0; l < header_nlines; l++)
+	    if (header[l])
+		XpmFree(header[l]);
+		XpmFree(header);
+    }
+    return(ErrorStatus);
 }
 
 static int
-CreateColors(dataptr, data_size, colors, ncolors, cpp)
-    char **dataptr;
-    unsigned int *data_size;
-    XpmColor *colors;
-    unsigned int ncolors;
-    unsigned int cpp;
+CreateColors(
+    char		**dataptr,
+    unsigned int	 *data_size,
+    XpmColor		 *colors,
+    unsigned int	  ncolors,
+    unsigned int	  cpp)
 {
     char buf[BUFSIZ];
     unsigned int a, key, l;
@@ -254,27 +262,30 @@ CreateColors(dataptr, data_size, colors, ncolors, cpp)
     for (a = 0; a < ncolors; a++, colors++, dataptr++) {
 
 	defaults = (char **) colors;
- 	if(sizeof(buf) <= cpp)
+	if(sizeof(buf) <= cpp)
 	    return(XpmNoMemory);
 	strncpy(buf, *defaults++, cpp);
 	s = buf + cpp;
 
- 	if(sizeof(buf) <= (s-buf))
-	    return XpmNoMemory;
- 
+	if(sizeof(buf) <= (s-buf))
+		return XpmNoMemory;
+
 	for (key = 1; key <= NKEYS; key++, defaults++) {
 	    if ((s2 = *defaults)) {
 #ifndef VOID_SPRINTF
 		s +=
 #endif
 		/* assume C99 compliance */
-		snprintf(s, sizeof(buf)-(s-buf), "\t%s %s", xpmColorKeys[key - 1], s2);
+			snprintf(s, sizeof(buf)-(s-buf), "\t%s %s", xpmColorKeys[key - 1], s2);
 #ifdef VOID_SPRINTF
 		s += strlen(s);
 #endif
+		/* does s point out-of-bounds? */
+		if(sizeof(buf) < (s-buf))
+			return XpmNoMemory;
 	    }
 	}
- 	/* what about using strdup()? */
+	/* what about using strdup()? */
 	l = s - buf + 1;
 	s = (char *) XpmMalloc(l);
 	if (!s)
@@ -286,14 +297,14 @@ CreateColors(dataptr, data_size, colors, ncolors, cpp)
 }
 
 static void
-CreatePixels(dataptr, data_size, width, height, cpp, pixels, colors)
-    char **dataptr;
-    unsigned int data_size;
-    unsigned int width;
-    unsigned int height;
-    unsigned int cpp;
-    unsigned int *pixels;
-    XpmColor *colors;
+CreatePixels(
+    char		**dataptr,
+    unsigned int	  data_size,
+    unsigned int	  width,
+    unsigned int	  height,
+    unsigned int	  cpp,
+    unsigned int	 *pixels,
+    XpmColor		 *colors)
 {
     char *s;
     unsigned int x, y, h, offset;
@@ -335,13 +346,14 @@ CreatePixels(dataptr, data_size, width, height, cpp, pixels, colors)
     *s = '\0';
 }
 
-static void
-CountExtensions(ext, num, ext_size, ext_nlines)
-    XpmExtension *ext;
-    unsigned int num;
-    unsigned int *ext_size;
-    unsigned int *ext_nlines;
+static int
+CountExtensions(
+    XpmExtension	*ext,
+    unsigned int	 num,
+    unsigned int	*ext_size,
+    unsigned int	*ext_nlines)
 {
+    size_t len;
     unsigned int x, y, a, size, nlines;
     char **line;
 
@@ -349,26 +361,38 @@ CountExtensions(ext, num, ext_size, ext_nlines)
     nlines = 0;
     for (x = 0; x < num; x++, ext++) {
 	/* 1 for the name */
+	if (ext->nlines == UINT_MAX || nlines > UINT_MAX - ext->nlines - 1)
+	    return (1);
 	nlines += ext->nlines + 1;
 	/* 8 = 7 (for "XPMEXT ") + 1 (for 0) */
-	size += strlen(ext->name) + 8;
+	len = strlen(ext->name) + 8;
+	if (len > UINT_MAX - size)
+	    return (1);
+	size += len;
 	a = ext->nlines;
-	for (y = 0, line = ext->lines; y < a; y++, line++)
-	    size += strlen(*line) + 1;
+	for (y = 0, line = ext->lines; y < a; y++, line++) {
+	    len = strlen(*line) + 1;
+	    if (len > UINT_MAX - size)
+		return (1);
+	    size += len;
+	}
     }
+    if (size > UINT_MAX - 10 || nlines > UINT_MAX - 1)
+	return (1);
     /* 10 and 1 are for the ending "XPMENDEXT" */
     *ext_size = size + 10;
     *ext_nlines = nlines + 1;
+    return (0);
 }
 
 static void
-CreateExtensions(dataptr, data_size, offset, ext, num, ext_nlines)
-    char **dataptr;
-    unsigned int data_size;
-    unsigned int offset;
-    XpmExtension *ext;
-    unsigned int num;
-    unsigned int ext_nlines;
+CreateExtensions(
+    char		**dataptr,
+    unsigned int	  data_size,
+    unsigned int	  offset,
+    XpmExtension	 *ext,
+    unsigned int	  num,
+    unsigned int	  ext_nlines)
 {
     unsigned int x, y, a, b;
     char **line;

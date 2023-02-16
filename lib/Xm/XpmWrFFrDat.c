@@ -1,4 +1,3 @@
-/* $XConsortium: XpmWrFFrDat.c /main/2 1996/09/20 08:14:23 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,14 +35,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 int
-XpmWriteFileFromData(filename, data)
-    char *filename;
-    char **data;
+XpmWriteFileFromData(
+    const char	 *filename,
+    char	**data)
 {
     XpmImage image;
     XpmInfo info;

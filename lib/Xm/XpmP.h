@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 
 #ifndef _XpmP_h
 #define _XpmP_h
@@ -102,6 +102,11 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
+/*
+ * The code related to AMIGA has been added by
+ * Lorens Younes (d93-hyo@nada.kth.se) 4/96
+ */
+
 #ifndef XPM_h
 #define XPM_h
 
@@ -119,7 +124,7 @@
  */
 #define XpmFormat 3
 #define XpmVersion 4
-#define XpmRevision 9
+#define XpmRevision 11
 #define XpmIncludeVersion ((XpmFormat * 100 + XpmVersion) * 100 + XpmRevision)
 
 #ifndef XPM_NUMBERS
@@ -130,8 +135,12 @@
 # include "simx.h"		/* defines some X stuff using MSW types */
 #define NEED_STRCASECMP		/* at least for MSVC++ */
 #else /* FOR_MSW */
-# include <X11/Xlib.h>
-# include <X11/Xutil.h>
+# ifdef AMIGA
+#  include "amigax.h"
+# else /* not AMIGA */
+#  include <X11/Xlib.h>
+#  include <X11/Xutil.h>
+# endif /* not AMIGA */
 #endif /* FOR_MSW */
 
 /* let's define Pixel if it is not done yet */
@@ -139,16 +148,6 @@
 typedef unsigned long Pixel;	/* Index into colormap */
 # define PIXEL_ALREADY_TYPEDEFED
 #endif
-
-/* make sure we know whether function prototypes are needed or not */
-#ifndef NeedFunctionPrototypes
-# if defined(__STDC__) || defined(__cplusplus) || defined(c_plusplus)
-#  define NeedFunctionPrototypes 1
-# else
-#  define NeedFunctionPrototypes 0
-# endif
-#endif
-
 
 /* Return ErrorStatus codes:
  * null     if full success
@@ -205,23 +204,19 @@ typedef struct {
 }      XpmInfo;
 
 typedef int (*XpmAllocColorFunc)(
-#if NeedFunctionPrototypes
     Display*			/* display */,
     Colormap			/* colormap */,
     char*			/* colorname */,
     XColor*			/* xcolor */,
     void*			/* closure */
-#endif
 );
 
 typedef int (*XpmFreeColorsFunc)(
-#if NeedFunctionPrototypes
     Display*			/* display */,
     Colormap			/* colormap */,
     Pixel*			/* pixels */,
     int				/* npixels */,
     void*			/* closure */
-#endif
 );
 
 typedef struct {
@@ -269,7 +264,7 @@ typedef struct {
 
     Pixel *alloc_pixels;		/* Returns the list of alloc'ed color
 					   pixels */
-    Bool nalloc_pixels;			/* Returns the number of alloc'ed
+    int nalloc_pixels;			/* Returns the number of alloc'ed
 					   color pixels */
 
     Bool alloc_close_colors;    	/* Specify whether close colors should
@@ -345,13 +340,8 @@ typedef struct {
 
 
 /* macros for forward declarations of functions with prototypes */
-#if NeedFunctionPrototypes
 #define FUNC(f, t, p) extern t f p
 #define LFUNC(f, t, p) static t f p
-#else
-#define FUNC(f, t, p) extern t f()
-#define LFUNC(f, t, p) static t f()
-#endif
 
 
 /*
@@ -363,8 +353,9 @@ extern "C" {
 #endif
 
 /* FOR_MSW, all ..Pixmap.. are excluded, only the ..XImage.. are used */
+/* Same for Amiga! */
 
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreatePixmapFromData, int, (Display *display,
 					Drawable d,
 					char **data,
@@ -380,17 +371,17 @@ extern "C" {
 
     FUNC(XpmReadFileToPixmap, int, (Display *display,
 				    Drawable d,
-				    char *filename,
+				    const char *filename,
 				    Pixmap *pixmap_return,
 				    Pixmap *shapemask_return,
 				    XpmAttributes *attributes));
 
     FUNC(XpmWriteFileFromPixmap, int, (Display *display,
-				       char *filename,
+				       const char *filename,
 				       Pixmap pixmap,
 				       Pixmap shapemask,
 				       XpmAttributes *attributes));
-#endif  /* ndef FOR_MSW */
+#endif
 
     FUNC(XpmCreateImageFromData, int, (Display *display,
 				       char **data,
@@ -405,13 +396,13 @@ extern "C" {
 				       XpmAttributes *attributes));
 
     FUNC(XpmReadFileToImage, int, (Display *display,
-				   char *filename,
+				   const char *filename,
 				   XImage **image_return,
 				   XImage **shapeimage_return,
 				   XpmAttributes *attributes));
 
     FUNC(XpmWriteFileFromImage, int, (Display *display,
-				      char *filename,
+				      const char *filename,
 				      XImage *image,
 				      XImage *shapeimage,
 				      XpmAttributes *attributes));
@@ -421,7 +412,7 @@ extern "C" {
 					 XImage **image_return,
 					 XImage **shapemask_return,
 					 XpmAttributes *attributes));
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreatePixmapFromBuffer, int, (Display *display,
 					  Drawable d,
 					  char *buffer,
@@ -440,14 +431,14 @@ extern "C" {
 					  Pixmap pixmap,
 					  Pixmap shapemask,
 					  XpmAttributes *attributes));
-#endif  /* ndef FOR_MSW */
-    FUNC(XpmReadFileToBuffer, int, (char *filename, char **buffer_return));
-    FUNC(XpmWriteFileFromBuffer, int, (char *filename, char *buffer));
+#endif
+    FUNC(XpmReadFileToBuffer, int, (const char *filename, char **buffer_return));
+    FUNC(XpmWriteFileFromBuffer, int, (const char *filename, char *buffer));
 
-    FUNC(XpmReadFileToData, int, (char *filename, char ***data_return));
-    FUNC(XpmWriteFileFromData, int, (char *filename, char **data));
+    FUNC(XpmReadFileToData, int, (const char *filename, char ***data_return));
+    FUNC(XpmWriteFileFromData, int, (const char *filename, char **data));
 
-    FUNC(XpmAttributesSize, int, ());
+    FUNC(XpmAttributesSize, int, (void));
     FUNC(XpmFreeAttributes, void, (XpmAttributes *attributes));
     FUNC(XpmFreeExtensions, void, (XpmExtension *extensions,
 				   int nextensions));
@@ -455,17 +446,17 @@ extern "C" {
     FUNC(XpmFreeXpmImage, void, (XpmImage *image));
     FUNC(XpmFreeXpmInfo, void, (XpmInfo *info));
     FUNC(XpmGetErrorString, char *, (int errcode));
-    FUNC(XpmLibraryVersion, int, ());
+    FUNC(XpmLibraryVersion, int, (void));
 
     /* XpmImage functions */
-    FUNC(XpmReadFileToXpmImage, int, (char *filename,
+    FUNC(XpmReadFileToXpmImage, int, (const char *filename,
 				      XpmImage *image,
 				      XpmInfo *info));
 
-    FUNC(XpmWriteFileFromXpmImage, int, (char *filename,
+    FUNC(XpmWriteFileFromXpmImage, int, (const char *filename,
 					 XpmImage *image,
 					 XpmInfo *info));
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreatePixmapFromXpmImage, int, (Display *display,
 					    Drawable d,
 					    XpmImage *image,
@@ -484,7 +475,7 @@ extern "C" {
 					   XImage *shapeimage,
 					   XpmImage *xpmimage,
 					   XpmAttributes *attributes));
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreateXpmImageFromPixmap, int, (Display *display,
 					    Pixmap pixmap,
 					    Pixmap shapemask,
@@ -506,6 +497,10 @@ extern "C" {
     FUNC(XpmCreateBufferFromXpmImage, int, (char **buffer_return,
 					    XpmImage *image,
 					    XpmInfo *info));
+
+    FUNC(XpmGetParseError, int, (char *filename,
+				 int *linenum_return,
+				 int *charnum_return));
 
     FUNC(XpmFree, void, (void *ptr));
 
@@ -551,4 +546,4 @@ extern "C" {
 #endif /* XPM_NUMBERS */
 #endif
 
-#endif /* _XpmP_h */ 
+#endif /* _XpmP_h */

@@ -1,4 +1,3 @@
-/* $XConsortium: XpmRdFToP.c /main/2 1996/09/20 08:13:56 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,19 +35,16 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 int
-XpmReadFileToPixmap(display, d, filename, pixmap_return,
-		    shapemask_return, attributes)
-    Display *display;
-    Drawable d;
-    char *filename;
-    Pixmap *pixmap_return;
-    Pixmap *shapemask_return;
-    XpmAttributes *attributes;
+XpmReadFileToPixmap(
+    Display		*display,
+    Drawable		 d,
+    const char		*filename,
+    Pixmap		*pixmap_return,
+    Pixmap		*shapemask_return,
+    XpmAttributes	*attributes)
 {
     XImage *ximage, *shapeimage;
     int ErrorStatus;

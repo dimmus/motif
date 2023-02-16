@@ -1,4 +1,3 @@
-/* $XConsortium: XpmWrFFrP.c /main/2 1996/09/20 08:14:53 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,17 +35,15 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 int
-XpmWriteFileFromPixmap(display, filename, pixmap, shapemask, attributes)
-    Display *display;
-    char *filename;
-    Pixmap pixmap;
-    Pixmap shapemask;
-    XpmAttributes *attributes;
+XpmWriteFileFromPixmap(
+    Display		*display,
+    const char		*filename,
+    Pixmap		 pixmap,
+    Pixmap		 shapemask,
+    XpmAttributes	*attributes)
 {
     XImage *ximage = NULL;
     XImage *shapeimage = NULL;

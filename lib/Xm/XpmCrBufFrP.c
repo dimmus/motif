@@ -1,4 +1,3 @@
-/* $XConsortium: XpmCrBufFrP.c /main/2 1996/09/20 08:01:38 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,18 +35,15 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 int
-XpmCreateBufferFromPixmap(display, buffer_return, pixmap, shapemask,
-			  attributes)
-    Display *display;
-    char **buffer_return;
-    Pixmap pixmap;
-    Pixmap shapemask;
-    XpmAttributes *attributes;
+XpmCreateBufferFromPixmap(
+    Display		 *display,
+    char		**buffer_return,
+    Pixmap		  pixmap,
+    Pixmap		  shapemask,
+    XpmAttributes	 *attributes)
 {
     XImage *ximage = NULL;
     XImage *shapeimage = NULL;

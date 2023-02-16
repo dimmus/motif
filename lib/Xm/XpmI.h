@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 
 #ifndef _XpmI_h
 #define _XpmI_h
@@ -129,37 +129,12 @@ extern "C" {
 extern FILE *popen();
 #endif
 
-#if defined(SYSV) || defined(SVR4) || defined(VMS) || defined(WIN32) || defined (_SVID_SOURCE)
-#include <string.h>
-
-#ifndef index
-#define index strchr
-#endif
-
-#ifndef rindex
-#define rindex strrchr
-#endif
-
-#else  /* defined(SYSV) || defined(SVR4) || defined(VMS) */
-#include <strings.h>
-#endif
-
-
-
-#if defined(SYSV) || defined(SVR4) || defined(VMS) || defined(WIN32)
-#ifndef bcopy
-#define bcopy(source, dest, count) memcpy(dest, source, count)
-#endif
-#ifndef bzero
-#define bzero(b, len) memset(b, 0, len)
-#endif
-#endif
-
-/* the following is defined in X11R6 but not in previous versions */
-#ifdef __alpha
-#ifndef LONG64
-#define LONG64
-#endif
+#ifdef FOR_MSW
+#include "simx.h"
+#else
+#include <X11/Xos.h>
+#include <X11/Xfuncs.h>
+#include <X11/Xmd.h>
 #endif
 
 #ifdef VMS
@@ -193,6 +168,18 @@ extern FILE *popen();
 		boundCheckingCalloc((long)(nelem),(long) (elsize))
 #endif
 
+#if defined(SCO) || defined(__USLC__)
+#include <stdint.h>	/* For SIZE_MAX */
+#endif
+#include <limits.h>
+#ifndef SIZE_MAX
+# ifdef ULONG_MAX
+#  define SIZE_MAX ULONG_MAX
+# else
+#  define SIZE_MAX UINT_MAX
+# endif
+#endif
+
 #define XPMMAXCMTLEN BUFSIZ
 typedef struct {
     unsigned int type;
@@ -204,8 +191,13 @@ typedef struct {
     unsigned int line;
     int CommentLength;
     char Comment[XPMMAXCMTLEN];
-    char *Bcmt, *Ecmt, Bos, Eos;
+    const char *Bcmt, *Ecmt;
+    char Bos, Eos;
     int format;			/* 1 if XPM1, 0 otherwise */
+#ifdef CXPMPROG
+    int lineNum;
+    int charNum;
+#endif
 }      xpmData;
 
 #define XPMARRAY 0
@@ -218,15 +210,15 @@ typedef struct {
 #define SPC ' '
 
 typedef struct {
-    char *type;			/* key word */
-    char *Bcmt;			/* string beginning comments */
-    char *Ecmt;			/* string ending comments */
+    const char *type;		/* key word */
+    const char *Bcmt;		/* string beginning comments */
+    const char *Ecmt;		/* string ending comments */
     char Bos;			/* character beginning strings */
     char Eos;			/* character ending strings */
-    char *Strs;			/* strings separator */
-    char *Dec;			/* data declaration string */
-    char *Boa;			/* string beginning assignment */
-    char *Eoa;			/* string ending assignment */
+    const char *Strs;		/* strings separator */
+    const char *Dec;		/* data declaration string */
+    const char *Boa;		/* string beginning assignment */
+    const char *Eoa;		/* string ending assignment */
 }      xpmDataType;
 
 extern xpmDataType xpmDataTypes[];
@@ -243,7 +235,7 @@ typedef struct {
 /* Maximum number of rgb mnemonics allowed in rgb text file. */
 #define MAX_RGBNAMES 1024
 
-extern char *xpmColorKeys[];
+extern const char *xpmColorKeys[];
 
 #define TRANSPARENT_COLOR "None"	/* this must be a string! */
 
@@ -272,7 +264,7 @@ FUNC(xpmSetInfo, void, (XpmInfo *info, XpmAttributes *attributes));
 FUNC(xpmSetAttributes, void, (XpmAttributes *attributes, XpmImage *image,
 			      XpmInfo *info));
 
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
 FUNC(xpmCreatePixmapFromImage, void, (Display *display, Drawable d,
 				      XImage *ximage, Pixmap *pixmap_return));
 
@@ -301,8 +293,8 @@ FUNC(xpmHashTableFree, void, (xpmHashTable *table));
 FUNC(xpmHashSlot, xpmHashAtom *, (xpmHashTable *table, char *s));
 FUNC(xpmHashIntern, int, (xpmHashTable *table, char *tag, void *data));
 
-#define HashAtomData(i) ((void *)i)
-#define HashColorIndex(slot) ((unsigned int)((*slot)->data))
+#define HashAtomData(i) ((void *)(long)i)
+#define HashColorIndex(slot) ((unsigned long)((*slot)->data))
 #define USE_HASHTABLE (cpp > 2 && ncolors > 4)
 
 /* I/O utility */
@@ -342,6 +334,7 @@ FUNC(xpmFreeRgbNames, void, (xpmRgbName *rgbn, int rgbn_max));
 FUNC(xpmGetRGBfromName,int, (char *name, int *r, int *g, int *b));
 #endif
 
+#ifndef AMIGA
 FUNC(xpm_xynormalizeimagebits, void, (register unsigned char *bp,
 				      register XImage *img));
 FUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp,
@@ -389,25 +382,22 @@ FUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp,
 #define ZINDEX8(x, y, img) ((y) * img->bytes_per_line) + (x)
 
 #define ZINDEX1(x, y, img) ((y) * img->bytes_per_line) + ((x) >> 3)
-
-#ifdef __STDC__
-#define Const const
-#else
-#define Const /**/
-#endif
+#endif /* not AMIGA */
 
 #ifdef NEED_STRDUP
 FUNC(xpmstrdup, char *, (char *s1));
 #else
 #undef xpmstrdup
 #define xpmstrdup strdup
+#include <string.h>
 #endif
 
-#ifdef NEED_STRCASECMP                   
+#ifdef NEED_STRCASECMP
 FUNC(xpmstrcasecmp, int, (char *s1, char *s2));
 #else
 #undef xpmstrcasecmp
 #define xpmstrcasecmp strcasecmp
+#include <strings.h>
 #endif
 
 FUNC(xpmatoui, unsigned int,

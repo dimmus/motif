@@ -1,4 +1,3 @@
-/* $XConsortium: XpmRdFToBuf.c /main/2 1996/09/20 08:13:12 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -38,13 +37,11 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
+/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-/* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #include "XpmI.h"
 #include <sys/stat.h>
 #if !defined(FOR_MSW) && !defined(WIN32)
@@ -62,9 +59,9 @@
 #endif
 
 int
-XpmReadFileToBuffer(filename, buffer_return)
-    char *filename;
-    char **buffer_return;
+XpmReadFileToBuffer(
+    const char	 *filename,
+    char	**buffer_return)
 {
     int fd, fcheck;
     off_t len;
@@ -92,6 +89,10 @@ XpmReadFileToBuffer(filename, buffer_return)
 	return XpmOpenFailed;
     }
     len = stats.st_size;
+    if (len < 0 || len >= SIZE_MAX) {
+	close(fd);
+	return XpmOpenFailed;
+    }
     ptr = (char *) XpmMalloc(len + 1);
     if (!ptr) {
 	fclose(fp);
@@ -101,12 +102,12 @@ XpmReadFileToBuffer(filename, buffer_return)
     fclose(fp);
 #ifdef VMS
     /* VMS often stores text files in a variable-length record format,
-       where there are two bytes of size followed by the record.  fread	
-       converts this so it looks like a record followed by a newline.	
-       Unfortunately, the size reported by fstat() (and fseek/ftell)	
-       counts the two bytes for the record terminator, while fread()	
-       counts only one.  So, fread() sees fewer bytes in the file (size	
-       minus # of records) and thus when asked to read the amount	
+       where there are two bytes of size followed by the record.  fread
+       converts this so it looks like a record followed by a newline.
+       Unfortunately, the size reported by fstat() (and fseek/ftell)
+       counts the two bytes for the record terminator, while fread()
+       counts only one.  So, fread() sees fewer bytes in the file (size
+       minus # of records) and thus when asked to read the amount
        returned by stat(), it fails.
        The best solution, suggested by DEC, seems to consider the length
        returned from fstat() as an upper bound and call fread() with

@@ -1,4 +1,3 @@
-/* $XConsortium: XpmCrDatFrP.c /main/2 1996/09/20 08:03:10 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -36,17 +35,15 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XpmI.h"
 
 int
-XpmCreateDataFromPixmap(display, data_return, pixmap, shapemask, attributes)
-    Display *display;
-    char ***data_return;
-    Pixmap pixmap;
-    Pixmap shapemask;
-    XpmAttributes *attributes;
+XpmCreateDataFromPixmap(
+    Display		  *display,
+    char		***data_return,
+    Pixmap		   pixmap,
+    Pixmap		   shapemask,
+    XpmAttributes	  *attributes)
 {
     XImage *ximage = NULL;
     XImage *shapeimage = NULL;

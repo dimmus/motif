@@ -265,7 +265,7 @@ XPM_SRCS = \
         XpmCrBufFrI.c  XpmCrIFrP.c    XpmRdFToBuf.c  XpmWrFFrI.c    Xpmparse.c\
         XpmCrBufFrP.c  XpmCrPFrBuf.c  XpmRdFToDat.c  XpmWrFFrP.c    Xpmrgb.c \
         XpmCrDatFrI.c  XpmCrPFrDat.c  XpmRdFToI.c    Xpmcreate.c    Xpmscan.c \
-        Xpms_popen.c   XpmCrDatFrP.c  XpmCrPFrI.c    XpmRdFToP.c    Xpmdata.c \
+	XpmCrDatFrP.c  XpmCrPFrI.c    XpmRdFToP.c    Xpmdata.c \
         XpmCrIFrBuf.c  XpmImage.c     XpmWrFFrBuf.c  Xpmhashtab.c
 
 NEW_WID_SRCS =         IconH.c        Container.c     IconG.c  \

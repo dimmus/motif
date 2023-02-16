@@ -1,4 +1,3 @@
-/* $XConsortium: Xpmcreate.c /main/8 1996/09/20 08:15:02 pascale $ */
 /*
  * Copyright (C) 1989-95 GROUPE BULL
  *
@@ -39,13 +38,16 @@
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
+/*
+ * The code related to AMIGA has been added by
+ * Lorens Younes (d93-hyo@nada.kth.se) 4/96
+ */
 
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include "XpmI.h"
 #include <ctype.h>
 
@@ -104,6 +106,7 @@ LFUNC(ParseAndPutPixels, int, (Display *dc, xpmData *data, unsigned int width,
 #endif
 
 #ifndef FOR_MSW
+# ifndef AMIGA
 /* XImage pixel routines */
 LFUNC(PutImagePixels, void, (XImage *image, unsigned int width,
 			     unsigned int height, unsigned int *pixelindex,
@@ -127,7 +130,9 @@ LFUNC(PutImagePixels1, void, (XImage *image, unsigned int width,
 
 LFUNC(PutPixel1, int, (XImage *ximage, int x, int y, unsigned long pixel));
 LFUNC(PutPixel, int, (XImage *ximage, int x, int y, unsigned long pixel));
+#if !defined(WORD64) && !defined(LONG64)
 LFUNC(PutPixel32, int, (XImage *ximage, int x, int y, unsigned long pixel));
+#endif
 LFUNC(PutPixel32MSB, int, (XImage *ximage, int x, int y, unsigned long pixel));
 LFUNC(PutPixel32LSB, int, (XImage *ximage, int x, int y, unsigned long pixel));
 LFUNC(PutPixel16MSB, int, (XImage *ximage, int x, int y, unsigned long pixel));
@@ -136,12 +141,17 @@ LFUNC(PutPixel8, int, (XImage *ximage, int x, int y, unsigned long pixel));
 LFUNC(PutPixel1MSB, int, (XImage *ximage, int x, int y, unsigned long pixel));
 LFUNC(PutPixel1LSB, int, (XImage *ximage, int x, int y, unsigned long pixel));
 
-#else  /* ndef FOR_MSW */
+# else /* AMIGA */
+LFUNC(APutImagePixels, void, (XImage *ximage, unsigned int width,
+			      unsigned int height, unsigned int *pixelindex,
+			      Pixel *pixels));
+# endif/* AMIGA */
+#else  /* FOR_MSW */
 /* FOR_MSW pixel routine */
 LFUNC(MSWPutImagePixels, void, (Display *dc, XImage *image,
 				unsigned int width, unsigned int height,
 				unsigned int *pixelindex, Pixel *pixels));
-#endif /* ndef FOR_MSW */
+#endif /* FOR_MSW */
 
 #ifdef NEED_STRCASECMP
 FUNC(xpmstrcasecmp, int, (char *s1, char *s2));
@@ -151,8 +161,9 @@ FUNC(xpmstrcasecmp, int, (char *s1, char *s2));
  * which does the trick
  */
 int
-xpmstrcasecmp(s1, s2)
-    register char *s1, *s2;
+xpmstrcasecmp(
+    register char	*s1,
+    register char	*s2)
 {
     register int c1, c2;
 
@@ -173,10 +184,10 @@ xpmstrcasecmp(s1, s2)
  * return the default color key related to the given visual
  */
 static int
-xpmVisualType(visual)
-    Visual *visual;
+xpmVisualType(Visual *visual)
 {
 #ifndef FOR_MSW
+# ifndef AMIGA
     switch (visual->class) {
     case StaticGray:
     case GrayScale:
@@ -191,6 +202,10 @@ xpmVisualType(visual)
     default:
 	return (XPM_COLOR);
     }
+# else
+    /* set the key explicitly in the XpmAttributes to override this */
+    return (XPM_COLOR);
+# endif
 #else
     /* there should be a similar switch for MSW */
     return (XPM_COLOR);
@@ -204,10 +219,9 @@ typedef struct {
 }      CloseColor;
 
 static int
-closeness_cmp(a, b)
-    Const void *a, *b;
+closeness_cmp(const void *a, const void *b)
 {
-    CloseColor *x = (CloseColor *) a, *y = (CloseColor *) b;
+    const CloseColor *x = (const CloseColor *) a, *y = (const CloseColor *) b;
 
     /* cast to int as qsort requires */
     return (int) (x->closeness - y->closeness);
@@ -219,12 +233,12 @@ closeness_cmp(a, b)
  *   call XAllocColor and return 0 if failure, positive otherwise
  */
 static int
-AllocColor(display, colormap, colorname, xcolor, closure)
-    Display *display;
-    Colormap colormap;
-    char *colorname;
-    XColor *xcolor;
-    void *closure;		/* not used */
+AllocColor(
+    Display	*display,
+    Colormap	 colormap,
+    char	*colorname,
+    XColor	*xcolor,
+    void	*closure)		/* not used */
 {
     int status;
     if (colorname)
@@ -242,21 +256,20 @@ AllocColor(display, colormap, colorname, xcolor, closure)
  */
 
 static int
-SetCloseColor(display, colormap, visual, col, image_pixel, mask_pixel,
-	      alloc_pixels, nalloc_pixels, attributes, cols, ncols,
-	      allocColor, closure)
-    Display *display;
-    Colormap colormap;
-    Visual *visual;
-    XColor *col;
-    Pixel *image_pixel, *mask_pixel;
-    Pixel *alloc_pixels;
-    unsigned int *nalloc_pixels;
-    XpmAttributes *attributes;
-    XColor *cols;
-    int ncols;
-    XpmAllocColorFunc allocColor;
-    void *closure;
+SetCloseColor(
+    Display		*display,
+    Colormap		 colormap,
+    Visual		*visual,
+    XColor		*col,
+    Pixel		*image_pixel,
+    Pixel		*mask_pixel,
+    Pixel		*alloc_pixels,
+    unsigned int	*nalloc_pixels,
+    XpmAttributes	*attributes,
+    XColor		*cols,
+    int			 ncols,
+    XpmAllocColorFunc	 allocColor,
+    void		*closure)
 {
 
     /*
@@ -296,17 +309,17 @@ SetCloseColor(display, colormap, visual, col, image_pixel, mask_pixel,
      * occurred, so we try the next closest color, and so on, until no more
      * colors are within closeness of the target. If we knew that the
      * colormap had changed, we could skip this sequence.
-     * 
+     *
      * If _none_ of the colors within closeness of the target can be allocated,
      * then we can finally be pretty sure that the colormap has actually
      * changed. In this case we try to allocate the original color (again),
      * then try the closecolor stuff (again)...
-     * 
+     *
      * In theory it would be possible for an infinite loop to occur if another
      * process kept changing the colormap every time we sorted it, so we set
      * a maximum on the number of iterations. After this many tries, we use
      * XGrabServer() to ensure that the colormap remains unchanged.
-     * 
+     *
      * This approach gives particularly bad worst case performance - as many as
      * <MaximumIterations> colormap reads and sorts may be needed, and as
      * many as <MaximumIterations> * <ColormapSize> attempted allocations
@@ -334,10 +347,10 @@ SetCloseColor(display, colormap, visual, col, image_pixel, mask_pixel,
 
 	    closenesses[i].cols_index = i;
 	    closenesses[i].closeness =
-		COLOR_FACTOR * (abs((long) col->red - (long) cols[i].red)
-				+ abs((long) col->green - (long) cols[i].green)
-				+ abs((long) col->blue - (long) cols[i].blue))
-		+ BRIGHTNESS_FACTOR * abs(((long) col->red +
+		COLOR_FACTOR * (labs((long) col->red - (long) cols[i].red)
+				+ labs((long) col->green - (long) cols[i].green)
+				+ labs((long) col->blue - (long) cols[i].blue))
+		+ BRIGHTNESS_FACTOR * labs(((long) col->red +
 					   (long) col->green +
 					   (long) col->blue)
 					   - ((long) cols[i].red +
@@ -427,26 +440,24 @@ SetCloseColor(display, colormap, visual, col, image_pixel, mask_pixel,
  */
 
 static int
-SetColor(display, colormap, visual, colorname, color_index,
-	 image_pixel, mask_pixel, mask_pixel_index,
-	 alloc_pixels, nalloc_pixels, used_pixels, nused_pixels,
-	 attributes, cols, ncols, allocColor, closure)
-    Display *display;
-    Colormap colormap;
-    Visual *visual;
-    char *colorname;
-    unsigned int color_index;
-    Pixel *image_pixel, *mask_pixel;
-    unsigned int *mask_pixel_index;
-    Pixel *alloc_pixels;
-    unsigned int *nalloc_pixels;
-    Pixel *used_pixels;
-    unsigned int *nused_pixels;
-    XpmAttributes *attributes;
-    XColor *cols;
-    int ncols;
-    XpmAllocColorFunc allocColor;
-    void *closure;
+SetColor(
+    Display		*display,
+    Colormap		 colormap,
+    Visual		*visual,
+    char		*colorname,
+    unsigned int	 color_index,
+    Pixel		*image_pixel,
+    Pixel		*mask_pixel,
+    unsigned int	*mask_pixel_index,
+    Pixel		*alloc_pixels,
+    unsigned int	*nalloc_pixels,
+    Pixel		*used_pixels,
+    unsigned int	*nused_pixels,
+    XpmAttributes	*attributes,
+    XColor		*cols,
+    int			 ncols,
+    XpmAllocColorFunc	 allocColor,
+    void		*closure)
 {
     XColor xcolor;
     int status;
@@ -470,11 +481,19 @@ SetColor(display, colormap, visual, colorname, color_index,
 	} else
 	    alloc_pixels[(*nalloc_pixels)++] = xcolor.pixel;
 	*image_pixel = xcolor.pixel;
+#ifndef FOR_MSW
 	*mask_pixel = 1;
+#else
+	*mask_pixel = RGB(0,0,0);
+#endif
 	used_pixels[(*nused_pixels)++] = xcolor.pixel;
     } else {
 	*image_pixel = 0;
+#ifndef FOR_MSW
 	*mask_pixel = 0;
+#else
+  	*mask_pixel = RGB(255,255,255);
+#endif
 	/* store the color table index */
 	*mask_pixel_index = color_index;
     }
@@ -483,20 +502,18 @@ SetColor(display, colormap, visual, colorname, color_index,
 
 
 static int
-CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
-             mask_pixel_index, alloc_pixels, nalloc_pixels,
-             used_pixels, nused_pixels)
-    Display *display;
-    XpmAttributes *attributes;
-    XpmColor *colors;
-    unsigned int ncolors;
-    Pixel *image_pixels;
-    Pixel *mask_pixels;
-    unsigned int *mask_pixel_index;
-    Pixel *alloc_pixels;
-    unsigned int *nalloc_pixels;
-    Pixel *used_pixels;
-    unsigned int *nused_pixels;
+CreateColors(
+    Display		*display,
+    XpmAttributes	*attributes,
+    XpmColor		*colors,
+    unsigned int	 ncolors,
+    Pixel		*image_pixels,
+    Pixel		*mask_pixels,
+    unsigned int	*mask_pixel_index,
+    Pixel		*alloc_pixels,
+    unsigned int	*nalloc_pixels,
+    Pixel		*used_pixels,
+    unsigned int	*nused_pixels)
 {
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
@@ -569,7 +586,11 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
 #endif
 	    unsigned int i;
 
+#ifndef AMIGA
 	    ncols = visual->map_entries;
+#else
+	    ncols = colormap->Count;
+#endif
 	    cols = (XColor *) XpmCalloc(ncols, sizeof(XColor));
 	    for (i = 0; i < ncols; ++i)
 		cols[i].pixel = i;
@@ -626,7 +647,8 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
 			while (def_index <= 5 && defaults[def_index] == NULL)
 			    ++def_index;
 		    }
-		    if (def_index >= 2 && defaults[def_index] != NULL &&
+		    if (def_index >= 2 && def_index <= 5 &&
+			defaults[def_index] != NULL &&
 			!xpmstrcasecmp(symbol->value, defaults[def_index]))
 			break;
 		}
@@ -711,40 +733,34 @@ CreateColors(display, attributes, colors, ncolors, image_pixels, mask_pixels,
 
 /* default FreeColors function, simply call XFreeColors */
 static int
-FreeColors(display, colormap, pixels, n, closure)
-    Display *display;
-    Colormap colormap;
-    Pixel *pixels;
-    int n;
-    void *closure;		/* not used */
+FreeColors(
+    Display	*display,
+    Colormap	 colormap,
+    Pixel	*pixels,
+    int		 n,
+    void	*closure)		/* not used */
 {
     return XFreeColors(display, colormap, pixels, n, 0);
 }
 
 
-/* function call in case of error, frees only locally allocated variables */
+/* function call in case of error */
+
 #undef RETURN
 #define RETURN(status) \
-do { \
-    if (ximage) XDestroyImage(ximage); \
-    if (shapeimage) XDestroyImage(shapeimage); \
-    if (image_pixels) XpmFree(image_pixels); \
-    if (mask_pixels) XpmFree(mask_pixels); \
-    if (nalloc_pixels) \
-	(*freeColors)(display, colormap, alloc_pixels, nalloc_pixels, NULL); \
-    if (alloc_pixels) XpmFree(alloc_pixels); \
-    if (used_pixels) XpmFree(used_pixels); \
-    return (status); \
+do \
+{ \
+      ErrorStatus = status; \
+      goto error; \
 } while(0)
 
 int
-XpmCreateImageFromXpmImage(display, image,
-			   image_return, shapeimage_return, attributes)
-    Display *display;
-    XpmImage *image;
-    XImage **image_return;
-    XImage **shapeimage_return;
-    XpmAttributes *attributes;
+XpmCreateImageFromXpmImage(
+    Display		 *display,
+    XpmImage		 *image,
+    XImage		**image_return,
+    XImage		**shapeimage_return,
+    XpmAttributes	 *attributes)
 {
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
@@ -752,7 +768,6 @@ XpmCreateImageFromXpmImage(display, image,
     unsigned int depth;
     int bitmap_format;
     XpmFreeColorsFunc freeColors;
-    void *closure;
 
     /* variables to return */
     XImage *ximage = NULL;
@@ -799,14 +814,10 @@ XpmCreateImageFromXpmImage(display, image,
 	freeColors = attributes->free_colors;
     else
 	freeColors = FreeColors;
-    if (attributes && (attributes->valuemask & XpmColorClosure))
-	closure = attributes->color_closure;
-    else
-	closure = NULL;
 
     ErrorStatus = XpmSuccess;
 
-    if (image->ncolors >= UINT_MAX / sizeof(Pixel)) 
+    if (image->ncolors >= UINT_MAX / sizeof(Pixel))
 	return (XpmNoMemory);
 
     /* malloc pixels index tables */
@@ -849,6 +860,7 @@ XpmCreateImageFromXpmImage(display, image,
 	    RETURN(ErrorStatus);
 
 #ifndef FOR_MSW
+# ifndef AMIGA
 
 	/*
 	 * set the ximage data using optimized functions for ZPixmap
@@ -870,6 +882,10 @@ XpmCreateImageFromXpmImage(display, image,
 	else
 	    PutImagePixels(ximage, image->width, image->height,
 			   image->data, image_pixels);
+# else /* AMIGA */
+	APutImagePixels(ximage, image->width, image->height,
+			image->data, image_pixels);
+# endif
 #else  /* FOR_MSW */
 	MSWPutImagePixels(display, ximage, image->width, image->height,
 			  image->data, image_pixels);
@@ -883,9 +899,14 @@ XpmCreateImageFromXpmImage(display, image,
 	    RETURN(ErrorStatus);
 
 #ifndef FOR_MSW
+# ifndef AMIGA
 	PutImagePixels1(shapeimage, image->width, image->height,
 			image->data, mask_pixels);
-#else
+# else /* AMIGA */
+	APutImagePixels(shapeimage, image->width, image->height,
+			image->data, mask_pixels);
+# endif
+#else  /* FOR_MSW */
 	MSWPutImagePixels(display, shapeimage, image->width, image->height,
 			  image->data, mask_pixels);
 #endif
@@ -919,6 +940,25 @@ XpmCreateImageFromXpmImage(display, image,
 	*shapeimage_return = shapeimage;
 
     return (ErrorStatus);
+
+/* exit point in case of error, free only locally allocated variables */
+error:
+    if (ximage)
+	XDestroyImage(ximage);
+    if (shapeimage)
+	XDestroyImage(shapeimage);
+    if (image_pixels)
+	XpmFree(image_pixels);
+    if (mask_pixels)
+	XpmFree(mask_pixels);
+    if (nalloc_pixels)
+	(*freeColors)(display, colormap, alloc_pixels, nalloc_pixels, NULL);
+    if (alloc_pixels)
+	XpmFree(alloc_pixels);
+    if (used_pixels)
+	XpmFree(used_pixels);
+
+    return (ErrorStatus);
 }
 
 
@@ -926,14 +966,14 @@ XpmCreateImageFromXpmImage(display, image,
  * Create an XImage with its data
  */
 static int
-CreateXImage(display, visual, depth, format, width, height, image_return)
-    Display *display;
-    Visual *visual;
-    unsigned int depth;
-    int format;
-    unsigned int width;
-    unsigned int height;
-    XImage **image_return;
+CreateXImage(
+    Display	 *display,
+    Visual	 *visual,
+    unsigned int  depth,
+    int		  format,
+    unsigned int  width,
+    unsigned int  height,
+    XImage	**image_return)
 {
     int bitmap_pad;
 
@@ -951,14 +991,14 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
     if (!*image_return)
 	return (XpmNoMemory);
 
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
     if (height != 0 && (*image_return)->bytes_per_line >= INT_MAX / height) {
-  	XDestroyImage(*image_return);
-        return (XpmNoMemory);
+	XDestroyImage(*image_return);
+	return XpmNoMemory;
     }
-    if((*image_return)->bytes_per_line == 0 ||  height == 0)
-        return XpmNoMemory;
     /* now that bytes_per_line must have been set properly alloc data */
+    if((*image_return)->bytes_per_line == 0 ||  height == 0)
+    	return XpmNoMemory;
     (*image_return)->data =
 	(char *) XpmMalloc((*image_return)->bytes_per_line * height);
 
@@ -968,12 +1008,13 @@ CreateXImage(display, visual, depth, format, width, height, image_return)
 	return (XpmNoMemory);
     }
 #else
-    /* under FOR_MSW XCreateImage has done it all */
+    /* under FOR_MSW and AMIGA XCreateImage has done it all */
 #endif
     return (XpmSuccess);
 }
 
 #ifndef FOR_MSW
+# ifndef AMIGA
 /*
  * The functions below are written from X11R5 MIT's code (XImUtil.c)
  *
@@ -988,7 +1029,7 @@ LFUNC(_putbits, void, (register char *src, int dstoffset,
 
 LFUNC(_XReverse_Bytes, int, (register unsigned char *bpt, register unsigned int nb));
 
-static unsigned char Const _reverse_byte[0x100] = {
+static unsigned char const _reverse_byte[0x100] = {
     0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
     0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
     0x08, 0x88, 0x48, 0xc8, 0x28, 0xa8, 0x68, 0xe8,
@@ -1024,9 +1065,9 @@ static unsigned char Const _reverse_byte[0x100] = {
 };
 
 static int
-_XReverse_Bytes(bpt, nb)
-    register unsigned char *bpt;
-    register unsigned int nb;
+_XReverse_Bytes(
+    register unsigned char	*bpt,
+    register unsigned int	 nb)
 {
     do {
 	*bpt = _reverse_byte[*bpt];
@@ -1037,9 +1078,9 @@ _XReverse_Bytes(bpt, nb)
 
 
 void
-xpm_xynormalizeimagebits(bp, img)
-    register unsigned char *bp;
-    register XImage *img;
+xpm_xynormalizeimagebits(
+    register unsigned char	*bp,
+    register XImage		*img)
 {
     register unsigned char c;
 
@@ -1067,9 +1108,9 @@ xpm_xynormalizeimagebits(bp, img)
 }
 
 void
-xpm_znormalizeimagebits(bp, img)
-    register unsigned char *bp;
-    register XImage *img;
+xpm_znormalizeimagebits(
+    register unsigned char	*bp,
+    register XImage		*img)
 {
     register unsigned char c;
 
@@ -1106,19 +1147,19 @@ xpm_znormalizeimagebits(bp, img)
     }
 }
 
-static unsigned char Const _lomask[0x09] = {
+static unsigned char const _lomask[0x09] = {
 0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x3f, 0x7f, 0xff};
-static unsigned char Const _himask[0x09] = {
+static unsigned char const _himask[0x09] = {
 0xff, 0xfe, 0xfc, 0xf8, 0xf0, 0xe0, 0xc0, 0x80, 0x00};
 
 static void
-_putbits(src, dstoffset, numbits, dst)
-    register char *src;			/* address of source bit string */
-    int dstoffset;			/* bit offset into destination;
+_putbits(
+    register char	*src,		/* address of source bit string */
+    int			 dstoffset,	/* bit offset into destination;
 					 * range is 0-31 */
-    register int numbits;		/* number of bits to copy to
+    register int	 numbits,	/* number of bits to copy to
 					 * destination */
-    register char *dst;			/* address of destination bit string */
+    register char	*dst)		/* address of destination bit string */
 {
     register unsigned char chlo, chhi;
     int hibits;
@@ -1160,12 +1201,12 @@ _putbits(src, dstoffset, numbits, dst)
  */
 
 static void
-PutImagePixels(image, width, height, pixelindex, pixels)
-    XImage *image;
-    unsigned int width;
-    unsigned int height;
-    unsigned int *pixelindex;
-    Pixel *pixels;
+PutImagePixels(
+    XImage		*image,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	*pixelindex,
+    Pixel		*pixels)
 {
     register char *src;
     register char *dst;
@@ -1247,12 +1288,12 @@ static unsigned long byteorderpixel = MSBFirst << 24;
 */
 
 static void
-PutImagePixels32(image, width, height, pixelindex, pixels)
-    XImage *image;
-    unsigned int width;
-    unsigned int height;
-    unsigned int *pixelindex;
-    Pixel *pixels;
+PutImagePixels32(
+    XImage		*image,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	*pixelindex,
+    Pixel		*pixels)
 {
     unsigned char *data;
     unsigned int *iptr;
@@ -1357,12 +1398,12 @@ PutImagePixels32(image, width, height, pixelindex, pixels)
  */
 
 static void
-PutImagePixels16(image, width, height, pixelindex, pixels)
-    XImage *image;
-    unsigned int width;
-    unsigned int height;
-    unsigned int *pixelindex;
-    Pixel *pixels;
+PutImagePixels16(
+    XImage		*image,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	*pixelindex,
+    Pixel		*pixels)
 {
     unsigned char *data;
     unsigned int *iptr;
@@ -1438,12 +1479,12 @@ PutImagePixels16(image, width, height, pixelindex, pixels)
  */
 
 static void
-PutImagePixels8(image, width, height, pixelindex, pixels)
-    XImage *image;
-    unsigned int width;
-    unsigned int height;
-    unsigned int *pixelindex;
-    Pixel *pixels;
+PutImagePixels8(
+    XImage		*image,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	*pixelindex,
+    Pixel		*pixels)
 {
     char *data;
     unsigned int *iptr;
@@ -1485,12 +1526,12 @@ PutImagePixels8(image, width, height, pixelindex, pixels)
  */
 
 static void
-PutImagePixels1(image, width, height, pixelindex, pixels)
-    XImage *image;
-    unsigned int width;
-    unsigned int height;
-    unsigned int *pixelindex;
-    Pixel *pixels;
+PutImagePixels1(
+    XImage		*image,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	*pixelindex,
+    Pixel		*pixels)
 {
     if (image->byte_order != image->bitmap_bit_order)
 	PutImagePixels(image, width, height, pixelindex, pixels);
@@ -1599,14 +1640,13 @@ PutImagePixels1(image, width, height, pixelindex, pixels)
 }
 
 int
-XpmCreatePixmapFromXpmImage(display, d, image,
-			    pixmap_return, shapemask_return, attributes)
-    Display *display;
-    Drawable d;
-    XpmImage *image;
-    Pixmap *pixmap_return;
-    Pixmap *shapemask_return;
-    XpmAttributes *attributes;
+XpmCreatePixmapFromXpmImage(
+    Display		*display,
+    Drawable		 d,
+    XpmImage		*image,
+    Pixmap		*pixmap_return,
+    Pixmap		*shapemask_return,
+    XpmAttributes	*attributes)
 {
     XImage *ximage, *shapeimage;
     int ErrorStatus;
@@ -1638,39 +1678,85 @@ XpmCreatePixmapFromXpmImage(display, d, image,
     return (ErrorStatus);
 }
 
+# else /* AMIGA */
+
+static void
+APutImagePixels (
+    XImage        *image,
+    unsigned int   width,
+    unsigned int   height,
+    unsigned int  *pixelindex,
+    Pixel         *pixels)
+{
+    unsigned int   *data = pixelindex;
+    unsigned int    x, y;
+    unsigned char  *array;
+    XImage         *tmp_img;
+    BOOL            success = FALSE;
+
+    array = XpmMalloc ((((width+15)>>4)<<4)*sizeof (*array));
+    if (array != NULL)
+    {
+	tmp_img = AllocXImage ((((width+15)>>4)<<4), 1,
+			       image->rp->BitMap->Depth);
+	if (tmp_img != NULL)
+	{
+	    for (y = 0; y < height; ++y)
+	    {
+		for (x = 0; x < width; ++x)
+		    array[x] = pixels[*(data++)];
+		WritePixelLine8 (image->rp, 0, y, width, array, tmp_img->rp);
+	    }
+	    FreeXImage (tmp_img);
+	    success = TRUE;
+	}
+	XpmFree (array);
+    }
+
+    if (!success)
+    {
+	for (y = 0; y < height; ++y)
+	    for (x = 0; x < width; ++x)
+		XPutPixel (image, x, y, pixels[*(data++)]);
+    }
+}
+
+# endif/* AMIGA */
 #else  /* FOR_MSW part follows */
 static void
-MSWPutImagePixels(dc, image, width, height, pixelindex, pixels)
-    Display *dc;
-    XImage *image;
-    unsigned int width;
-    unsigned int height;
-    unsigned int *pixelindex;
-    Pixel *pixels;
+MSWPutImagePixels(
+    Display		*dc,
+    XImage		*image,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	*pixelindex,
+    Pixel		*pixels)
 {
     unsigned int *data = pixelindex;
     unsigned int x, y;
+    HBITMAP obm;
 
-    SelectObject(*dc, image->bitmap);
+    obm = SelectObject(*dc, image->bitmap);
     for (y = 0; y < height; y++) {
 	for (x = 0; x < width; x++) {
 	    SetPixel(*dc, x, y, pixels[*(data++)]); /* data is [x+y*width] */
 	}
     }
+    SelectObject(*dc, obm);
 }
 
 #endif /* FOR_MSW */
 
 
 
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
 
 static int
-PutPixel1(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel1(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     register char *src;
     register char *dst;
@@ -1701,11 +1787,11 @@ PutPixel1(ximage, x, y, pixel)
 }
 
 static int
-PutPixel(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     register char *src;
     register char *dst;
@@ -1738,12 +1824,13 @@ PutPixel(ximage, x, y, pixel)
     return 1;
 }
 
+#if !defined(WORD64) && !defined(LONG64)
 static int
-PutPixel32(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel32(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     unsigned char *addr;
 
@@ -1754,13 +1841,14 @@ PutPixel32(ximage, x, y, pixel)
     *((unsigned long *)addr) = pixel;
     return 1;
 }
+#endif
 
 static int
-PutPixel32MSB(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel32MSB(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     unsigned char *addr;
 
@@ -1776,11 +1864,11 @@ PutPixel32MSB(ximage, x, y, pixel)
 }
 
 static int
-PutPixel32LSB(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel32LSB(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     unsigned char *addr;
 
@@ -1796,14 +1884,14 @@ PutPixel32LSB(ximage, x, y, pixel)
 }
 
 static int
-PutPixel16MSB(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel16MSB(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     unsigned char *addr;
-    
+
     if(x < 0 || y < 0)
     	return 0;
 
@@ -1814,14 +1902,14 @@ PutPixel16MSB(ximage, x, y, pixel)
 }
 
 static int
-PutPixel16LSB(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel16LSB(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     unsigned char *addr;
-    
+
     if(x < 0 || y < 0)
     	return 0;
 
@@ -1832,11 +1920,11 @@ PutPixel16LSB(ximage, x, y, pixel)
 }
 
 static int
-PutPixel8(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel8(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     if(x < 0 || y < 0)
     	return 0;
@@ -1846,11 +1934,11 @@ PutPixel8(ximage, x, y, pixel)
 }
 
 static int
-PutPixel1MSB(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel1MSB(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     if(x < 0 || y < 0)
     	return 0;
@@ -1863,11 +1951,11 @@ PutPixel1MSB(ximage, x, y, pixel)
 }
 
 static int
-PutPixel1LSB(ximage, x, y, pixel)
-    register XImage *ximage;
-    int x;
-    int y;
-    unsigned long pixel;
+PutPixel1LSB(
+    register XImage	*ximage,
+    int			 x,
+    int			 y,
+    unsigned long	 pixel)
 {
     if(x < 0 || y < 0)
     	return 0;
@@ -1879,41 +1967,20 @@ PutPixel1LSB(ximage, x, y, pixel)
     return 1;
 }
 
-#endif /* FOR_MSW */
-
-/* function call in case of error, frees only locally allocated variables */
-#undef RETURN
-#define RETURN(status) \
-{ \
-    if (USE_HASHTABLE) xpmHashTableFree(&hashtable); \
-    if (colorTable) xpmFreeColorTable(colorTable, ncolors); \
-    if (hints_cmt)  XpmFree(hints_cmt); \
-    if (colors_cmt) XpmFree(colors_cmt); \
-    if (pixels_cmt) XpmFree(pixels_cmt); \
-    if (ximage) XDestroyImage(ximage); \
-    if (shapeimage) XDestroyImage(shapeimage); \
-    if (image_pixels) XpmFree(image_pixels); \
-    if (mask_pixels) XpmFree(mask_pixels); \
-    if (nalloc_pixels) \
-	(*freeColors)(display, colormap, alloc_pixels, nalloc_pixels, NULL); \
-    if (alloc_pixels) XpmFree(alloc_pixels); \
-    if (used_pixels) XpmFree(used_pixels); \
-    return(status); \
-}
+#endif /* not FOR_MSW && not AMIGA */
 
 /*
  * This function parses an Xpm file or data and directly create an XImage
  */
 int
-xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
-		      image, info, attributes)
-    Display *display;
-    xpmData *data;
-    XImage **image_return;
-    XImage **shapeimage_return;
-    XpmImage *image;
-    XpmInfo *info;
-    XpmAttributes *attributes;
+xpmParseDataAndCreate(
+    Display		 *display,
+    xpmData		 *data,
+    XImage		**image_return,
+    XImage		**shapeimage_return,
+    XpmImage		 *image,
+    XpmInfo		 *info,
+    XpmAttributes	 *attributes)
 {
     /* variables stored in the XpmAttributes structure */
     Visual *visual;
@@ -1921,7 +1988,6 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
     unsigned int depth;
     int bitmap_format;
     XpmFreeColorsFunc freeColors;
-    void *closure;
 
     /* variables to return */
     XImage *ximage = NULL;
@@ -1979,10 +2045,6 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	freeColors = attributes->free_colors;
     else
 	freeColors = FreeColors;
-    if (attributes && (attributes->valuemask & XpmColorClosure))
-	closure = attributes->color_closure;
-    else
-	closure = NULL;
 
     cmts = info && (info->valuemask & XpmReturnComments);
 
@@ -2009,12 +2071,12 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	xpmGetCmt(data, &hints_cmt);
 
     /*
-     * init the hastable
+     * init the hashtable
      */
     if (USE_HASHTABLE) {
 	ErrorStatus = xpmHashTableInit(&hashtable);
 	if (ErrorStatus != XpmSuccess)
-	    return (ErrorStatus);
+	    RETURN(ErrorStatus);
     }
 
     /*
@@ -2031,8 +2093,8 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	xpmGetCmt(data, &colors_cmt);
 
     /* malloc pixels index tables */
-    if (ncolors >= UINT_MAX / sizeof(Pixel)) 
-      RETURN (XpmNoMemory);
+    if (ncolors >= UINT_MAX / sizeof(Pixel))
+	RETURN(XpmNoMemory);
 
     image_pixels = (Pixel *) XpmMalloc(sizeof(Pixel) * ncolors);
     if (!image_pixels)
@@ -2072,7 +2134,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
 
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
 
 	/*
 	 * set the XImage pointer function, to be used with XPutPixel,
@@ -2106,8 +2168,9 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	    ximage->f.put_pixel = PutPixel1;
 	else
 	    ximage->f.put_pixel = PutPixel;
-#endif
+#endif /* not FOR_MSW && not AMIGA */
     }
+
     /* create the shape mask image */
     if (mask_pixel_index != XpmUndefPixel && shapeimage_return) {
 	ErrorStatus = CreateXImage(display, visual, 1, bitmap_format,
@@ -2115,7 +2178,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
 
-#ifndef FOR_MSW
+#if !defined(FOR_MSW) && !defined(AMIGA)
 	if (shapeimage->bitmap_bit_order == MSBFirst)
 	    shapeimage->f.put_pixel = PutPixel1MSB;
 	else
@@ -2126,11 +2189,11 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
     /*
      * read pixels and put them in the XImage
      */
-#ifndef FOR_MSW
-    ErrorStatus = ParseAndPutPixels(data, width, height, ncolors, cpp,
-#else
-    ErrorStatus = ParseAndPutPixels(display, data, width, height, ncolors, cpp,
+    ErrorStatus = ParseAndPutPixels(
+#ifdef FOR_MSW
+				    display,
 #endif
+				    data, width, height, ncolors, cpp,
 				    colorTable, &hashtable,
 				    ximage, image_pixels,
 				    shapeimage, mask_pixels);
@@ -2143,7 +2206,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
      * free the hastable
      */
     if (ErrorStatus != XpmSuccess)
-	RETURN(ErrorStatus)
+	RETURN(ErrorStatus);
     else if (USE_HASHTABLE)
 	xpmHashTableFree(&hashtable);
 
@@ -2156,8 +2219,7 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
     /*
      * parse extensions
      */
-    if (info && (info->valuemask & XpmReturnExtensions))
-    {
+    if (info && (info->valuemask & XpmReturnExtensions)) {
 	if (extensions) {
 	    ErrorStatus = xpmParseExtensions(data, &info->extensions,
 					     &info->nextensions);
@@ -2168,7 +2230,6 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	    info->nextensions = 0;
 	}
     }
-
     /*
      * store found informations in the XpmImage structure
      */
@@ -2216,29 +2277,53 @@ xpmParseDataAndCreate(display, data, image_return, shapeimage_return,
 	*shapeimage_return = shapeimage;
 
     return (XpmSuccess);
+
+/* exit point in case of error, free only locally allocated variables */
+error:
+    if (USE_HASHTABLE)
+	xpmHashTableFree(&hashtable);
+    if (colorTable)
+	xpmFreeColorTable(colorTable, ncolors);
+    if (hints_cmt)
+	XpmFree(hints_cmt);
+    if (colors_cmt)
+	XpmFree(colors_cmt);
+    if (pixels_cmt)
+	XpmFree(pixels_cmt);
+    if (ximage)
+	XDestroyImage(ximage);
+    if (shapeimage)
+	XDestroyImage(shapeimage);
+    if (image_pixels)
+	XpmFree(image_pixels);
+    if (mask_pixels)
+	XpmFree(mask_pixels);
+    if (nalloc_pixels)
+	(*freeColors)(display, colormap, alloc_pixels, nalloc_pixels, NULL);
+    if (alloc_pixels)
+	XpmFree(alloc_pixels);
+    if (used_pixels)
+	XpmFree(used_pixels);
+
+    return (ErrorStatus);
 }
 
-#ifndef FOR_MSW
 static int
-ParseAndPutPixels(data, width, height, ncolors, cpp, colorTable, hashtable,
-		  image, image_pixels, shapeimage, shape_pixels)
-#else  /* FOR_MSW */
-static int
-ParseAndPutPixels(dc, data, width, height, ncolors, cpp, colorTable, hashtable,
-		  image, image_pixels, shapeimage, shape_pixels)
-    Display *dc;
+ParseAndPutPixels(
+#ifdef FOR_MSW
+    Display		*dc,
 #endif
-    xpmData *data;
-    unsigned int width;
-    unsigned int height;
-    unsigned int ncolors;
-    unsigned int cpp;
-    XpmColor *colorTable;
-    xpmHashTable *hashtable;
-    XImage *image;
-    Pixel *image_pixels;
-    XImage *shapeimage;
-    Pixel *shape_pixels;
+    xpmData		*data,
+    unsigned int	 width,
+    unsigned int	 height,
+    unsigned int	 ncolors,
+    unsigned int	 cpp,
+    XpmColor		*colorTable,
+    xpmHashTable	*hashtable,
+    XImage		*image,
+    Pixel		*image_pixels,
+    XImage		*shapeimage,
+    Pixel		*shape_pixels)
 {
     unsigned int a, x, y;
 
@@ -2248,9 +2333,20 @@ ParseAndPutPixels(dc, data, width, height, ncolors, cpp, colorTable, hashtable,
 					 * colors */
 	{
 	    unsigned short colidx[256];
+#ifdef FOR_MSW
+	    HDC shapedc;
+	    HBITMAP obm, sobm;
 
- 	    if (ncolors > 256)
- 		return (XpmFileInvalid);
+	    if ( shapeimage ) {
+		shapedc = CreateCompatibleDC(*dc);
+		sobm = SelectObject(shapedc, shapeimage->bitmap);
+	    } else {
+	        shapedc = NULL;
+	    }
+	    obm = SelectObject(*dc, image->bitmap);
+#endif
+	    if (ncolors > 256)
+		return (XpmFileInvalid);
 
 	    bzero((char *)colidx, 256 * sizeof(short));
 	    for (a = 0; a < ncolors; a++)
@@ -2268,17 +2364,22 @@ ParseAndPutPixels(dc, data, width, height, ncolors, cpp, colorTable, hashtable,
 			    XPutPixel(shapeimage, x, y,
 				      shape_pixels[colidx[c] - 1]);
 #else
-			SelectObject(*dc, image->bitmap);
 			SetPixel(*dc, x, y, image_pixels[colidx[c] - 1]);
-			if (shapeimage) {
-			    SelectObject(*dc, shapeimage->bitmap);
-			    SetPixel(*dc, x, y, shape_pixels[colidx[c] - 1]);
+			if (shapedc) {
+			    SetPixel(shapedc, x, y, shape_pixels[colidx[c] - 1]);
 			}
 #endif
 		    } else
 			return (XpmFileInvalid);
 		}
 	    }
+#ifdef FOR_MSW
+	    if ( shapedc ) {
+	        SelectObject(shapedc, sobm);
+		DeleteDC(shapedc);
+	    }
+	    SelectObject(*dc, obm);
+#endif
 	}
 	break;
 
@@ -2314,7 +2415,8 @@ if (cidx[f]) XpmFree(cidx[f]);}
 		    int cc1 = xpmGetC(data);
 		    if (cc1 > 0 && cc1 < 256) {
 			int cc2 = xpmGetC(data);
-			if (cc2 > 0 && cc2 < 256 && cidx[cc1][cc2] != 0) {
+			if (cc2 > 0 && cc2 < 256 &&
+			    cidx[cc1] && cidx[cc1][cc2] != 0) {
 #ifndef FOR_MSW
 			    XPutPixel(image, x, y,
 				      image_pixels[cidx[cc1][cc2] - 1]);
