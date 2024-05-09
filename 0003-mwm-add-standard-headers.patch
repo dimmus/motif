@@ -1,0 +1,40 @@
+From 3874d896ad5c95ce12366bd95c7ac7e17c5f6a8b Mon Sep 17 00:00:00 2001
+From: dimmus <dmitri.chudinov@gmail.com>
+Date: Thu, 9 May 2024 20:07:12 +0500
+Subject: [PATCH 3/4] mwm: add standard headers
+
+
+diff --git a/clients/mwm/WmWinList.c b/clients/mwm/WmWinList.c
+index 025d7d82..2c469061 100644
+--- a/clients/mwm/WmWinList.c
++++ b/clients/mwm/WmWinList.c
+@@ -34,6 +34,13 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
+ #endif
+ #endif
+ 
++/* begin standard C headers. */
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++
++/* end standard C headers. */
++
+ /*
+  * Included Files:
+  */
+diff --git a/demos/unsupported/xmform/xmform.c b/demos/unsupported/xmform/xmform.c
+index 0e046741..3cc1e360 100644
+--- a/demos/unsupported/xmform/xmform.c
++++ b/demos/unsupported/xmform/xmform.c
+@@ -50,6 +50,8 @@ xmform*topShadowColor:           white
+ xmform*bottomShadowColor:        black
+ ***-------------------------------------------------------------------*/
+ 
++#include <stdlib.h> /* calloc */
++
+ #include <Xm/Xm.h>
+ #include <Xm/Form.h>
+ #include <Xm/PushB.h>
+-- 
+2.45.0
+

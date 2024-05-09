@@ -1,0 +1,34 @@
+From 1d12e0b3fee2e499097902b00f7f0cc4abba03e7 Mon Sep 17 00:00:00 2001
+From: dimmus <dmitri.chudinov@gmail.com>
+Date: Thu, 9 May 2024 20:08:16 +0500
+Subject: [PATCH 4/4] mwm: hide SetMwmClientList in WSM definition
+
+
+diff --git a/clients/mwm/WmWinList.c b/clients/mwm/WmWinList.c
+index 2c469061..8016c81b 100644
+--- a/clients/mwm/WmWinList.c
++++ b/clients/mwm/WmWinList.c
+@@ -66,8 +66,6 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
+ #endif /* WSM */
+ #include "WmEvent.h"
+ 
+-
+-
+ /*
+  * Global Variables:
+  */
+@@ -2886,9 +2884,9 @@ void UpdateScreenClientList (
+         }
+         pEntry = pEntry->nextSibling;
+     }
+-
++#ifdef WSM
+     SetMwmClientList (pSD->rootWindow, windows, count);
+-
++#endif
+     free (windows);
+ 
+ }  /* END OF FUNCTION UpdateScreenClientList */
+-- 
+2.45.0
+

@@ -1,0 +1,50 @@
+From 0c03ba4ff1da40f53336dc9d4fcb593614a168e2 Mon Sep 17 00:00:00 2001
+From: dimmus <dmitri.chudinov@gmail.com>
+Date: Thu, 9 May 2024 20:05:00 +0500
+Subject: [PATCH 2/4] wml: add yylex and yyerror declaration
+
+
+diff --git a/tools/wml/Uil.y b/tools/wml/Uil.y
+index fe7ee8bb..75324de6 100644
+--- a/tools/wml/Uil.y
++++ b/tools/wml/Uil.y
+@@ -59,6 +59,10 @@ YYSTYPE		prev_yylval;
+ 
+ %}    
+ 
++%{
++int yyerror(char* s);
++%}
++
+ /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  *     token name			token value	  token class	      *
+  *     ----------                       -----------       -----------         *
+diff --git a/tools/wml/wmlparse.y b/tools/wml/wmlparse.y
+index 8ee922a2..9deec600 100644
+--- a/tools/wml/wmlparse.y
++++ b/tools/wml/wmlparse.y
+@@ -56,6 +56,13 @@
+ 
+ %}
+ 
++%{
++int yylex();
++%}
++
++%{
++int yyerror(char* s);
++%}
+ 
+ /*
+  * Tokens defining terminals of the language
+@@ -145,7 +152,6 @@
+ 
+ %%
+ 
+-
+ /*
+  * Productions of the WML grammar. All routines assume that current
+  * data structures are kept in globals. This works as the language has
+-- 
+2.45.0
+
