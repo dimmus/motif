@@ -1,0 +1,27 @@
+From 7942fde0ad4d7febe0ca27205396983546bc2aa7 Mon Sep 17 00:00:00 2001
+From: dimmus <dmitri.chudinov@gmail.com>
+Date: Thu, 9 May 2024 20:46:13 +0500
+Subject: [PATCH 3/3] xm: don't share cached Xft renditions across display
+ connections
+
+Xft rendition caching added with the fix #1414 won't check whether the matching rendition was allocated trough a different display connection. This causes a forked process that creates Motif widgets on a separate display connection to fail with RenderBadGlyphSet X error as soon as the parent process closes its display, thus invalidating the associated
+Xft font resource.
+
+Author: alx210 (sf.net)
+
+diff --git a/lib/Xm/XmRenderT.c b/lib/Xm/XmRenderT.c
+index 275633a7..68e70e7c 100644
+--- a/lib/Xm/XmRenderT.c
++++ b/lib/Xm/XmRenderT.c
+@@ -2091,7 +2091,7 @@ ValidateAndLoadFont(XmRendition rend, Display *display)
+ 						  static int count_rend=0, num_rend;
+ 						  num_rend = GetSameRenditions(rend_cache, rend, count_rend);
+ 
+-						  if (num_rend>=0)
++						  if (num_rend>=0 && (display == _XmRendDisplay(rend_cache[num_rend])))
+ 							  _XmRendXftFont(rend) = _XmRendXftFont(rend_cache[num_rend]);
+ 						  else
+ 						  {
+-- 
+2.45.0
+
