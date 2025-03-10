@@ -116,7 +116,7 @@ static EventKey modifierStrings[] = {
 {"Mod4",	NULLQUARK,	0,		NULL,		Mod4Mask},
 {"Mod5",	NULLQUARK,	0,		NULL,		Mod5Mask},
 {NULL,		NULLQUARK,	0,		NULL,		0}};
-
+
 static EventKey buttonEvents[] = {
 
 /* Event Name,	Quark,		Event Type,	DetailProc,	Closure */
@@ -157,7 +157,7 @@ static XmConst Modifiers buttonModifierMasks[] = {
 static Boolean initialized = FALSE;
 
 
-
+
 /*************************************<->*************************************
  *
  *  Numeric convertion routines
@@ -241,7 +241,7 @@ StrToNum(
     return val;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  FillInQuarks (EventKey *table)
@@ -275,7 +275,7 @@ FillInQuarks(
         table[i].signature = XrmPermStringToQuark(table[i].event);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  LookupModifier (name, *valueP)
@@ -317,7 +317,7 @@ LookupModifier(
     return FALSE;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ScanAlphanumeric (String str)
@@ -349,7 +349,7 @@ ScanAlphanumeric(
     return str;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ScanWhitespace (String str)
@@ -380,7 +380,7 @@ ScanWhitespace(
     return str;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ParseImmed
@@ -415,7 +415,7 @@ ParseImmed(
    return str;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ParseKeySym (parameters)
@@ -500,7 +500,7 @@ ParseKeySym(
       return str;
     }
 }
-
+
 /*************************************<->*************************************
  *
  *  ParseModifiers (parameters)
@@ -591,7 +591,7 @@ ParseModifiers(
     return str;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ParseEventType (parameters)
@@ -648,7 +648,7 @@ ParseEventType(
     return (str);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  _MapEvent (parameters)
@@ -712,7 +712,7 @@ _MapEvent(
   return ((*(table[index].parseProc))(str, table[index].closure,
 				       detail, status));
 }
-
+
 /*************************************<->*************************************
  *
  *  _MapBtnEvent (parameters)
@@ -760,7 +760,7 @@ _XmMapBtnEvent(
   
   return (TRUE);
 }
-
+
 /*************************************<->*************************************
  *
  *  _XmMapKeyEvents (parameters)
@@ -843,7 +843,7 @@ _XmMapKeyEvents(String      str,
 
   return count;
 }
-
+
 /*************************************<->*************************************
  *
  *  _XmMatchBtnEvent (parameters)
@@ -885,7 +885,7 @@ _XmMatchBtnEvent(
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  _XmMatchKeyEvent (parameters)

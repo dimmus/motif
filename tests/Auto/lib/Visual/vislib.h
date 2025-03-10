@@ -133,7 +133,7 @@ extern  struct mvsTempImageRec *mvsTempImageRecHead, *mvsTempImageRecTail;
   visGLOBAL unsigned int   mvsImageRecordStartCode visINIT(0x87654321);
   visGLOBAL unsigned short mvsRecIdRecordStartCode visINIT(0xFEED);
 
-
+
 /**************************************************************************
 *                     GLOBAL COLOR STRUCTURES
 **************************************************************************/

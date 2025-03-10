@@ -225,7 +225,7 @@ static void GetMenuKidMargins(
 
 
 
-
+
 /*************************************************************************
  * 
  * This section is all the layout stuff, the whole thing has to operate 
@@ -374,7 +374,7 @@ GetMaxValues(
                                                  /* add another row/col */
 }
 
-
+
 /*
  * Make sure that entries in the right most column/row extend all the 
  * way to the right/bottom edge of the row column widget.  This keeps 
@@ -445,7 +445,7 @@ AdjustLast(
    }
 }
 
-
+
 /*
  * decide exactly the dimensions of the row column widget we will return to 
  * an asking caller based on the accumulated layout information.
@@ -524,7 +524,7 @@ SetAsking(
 
 
 
-
+
 
 static void
 FindLargestOption( 
@@ -580,7 +580,7 @@ FindLargestOption(
 }
 
 
-
+
 void
 _XmRC_CheckAndSetOptionCascade(
       XmRowColumnWidget menu )
@@ -859,7 +859,7 @@ ComputeTearOffHeight(
 }
 
 
-
+
 /*
  * figure out where all the children of a column style widget go.  The
  * border widths are already set.  
@@ -1024,7 +1024,7 @@ LayoutColumn(
         }
 }
 
-
+
 /*
  * do a vertical tight (non-column) layout.
  *
@@ -1136,7 +1136,7 @@ LayoutVerticalTight(
         }
 }
 
-
+
 static void 
 LayoutHorizontaltight(
         XmRowColumnWidget m,
@@ -1326,7 +1326,7 @@ LayoutHorizontaltight(
 }
 
 
-
+
 /*
  * wrap a box around the entries, used with packing mode of none.
  *
@@ -1389,7 +1389,7 @@ LayoutNone(
     if (Asking (*m_height)) *m_height = max_h;
 }
 
-
+
 /*
  * Routine used to determine the size of the option menu or to layout
  * the option menu given the current size.  The boolean calcMenuDimension
@@ -2138,7 +2138,7 @@ _XmRCSetKidGeo(
 
 
 
-
+
 static void 
 GetMenuKidMargins(
         XmRowColumnWidget m,

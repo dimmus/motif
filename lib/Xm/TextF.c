@@ -5212,7 +5212,7 @@ MoveDestination(Widget w,
   _XmTextFieldDrawInsertionPoint(tf, True);
 }
 
-
+
 /* ARGSUSED */
 static void 
 ExtendPrimary(Widget w,

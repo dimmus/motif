@@ -105,7 +105,7 @@
  */
 #define MrmResourceUnswapped (unsigned char)128
 
-
+
 /*
  * URM-wide constants
  */
@@ -189,7 +189,7 @@ MrmManageManage,
 MrmManageDefault
 } MrmManageFlag;
 
-
+
 /*
  * Urm typedefs
  */
@@ -225,7 +225,7 @@ typedef struct {
 #define	UrmPlistPtrN(list,ndx) ((list)->ptr_vec[ndx])
 
 
-
+
 /*
  * URM Resource context
  *
@@ -296,7 +296,7 @@ typedef struct {
 #define	URMErrOutStdout	2	/* print error messages to stdout */
 
 
-
+
 /*
  * IDB definitions in common use. The principal one is IDBFile; others
  * are included to make that definition valid.
@@ -358,7 +358,7 @@ typedef unsigned        IDBResource ;		/* a declaration for RIDs
 
 
 
-
+
 /*
  * Class descriptor.
  *
@@ -388,7 +388,7 @@ typedef struct _WCIClassDesc {
 					   XmRenderTable) */
 } WCIClassDesc, *WCIClassDescPtr ;
 
-
+
 /*
  * Table used to uncompress compression codes in a self-encoding UID file.
  * Table entries can be overlaid with function pointers for tables which
@@ -431,7 +431,7 @@ typedef struct
     } UidCompressionTable, *UidCompressionTablePtr;
 
 
-
+
 /*
  * Hash table entry
  */
@@ -446,7 +446,7 @@ typedef struct _URMHashTableEntry
 } URMHashTableEntry, *URMHashTableEntryPtr;
 
 
-
+
 /*
  * Low level file information.
  *
@@ -516,7 +516,7 @@ typedef struct {
 } IDBOpenFile, *IDBFile ;
 
 
-
+
 /*
  * Open hierarchy struct
  *
@@ -548,7 +548,7 @@ typedef struct MrmHierarchyDescStruct {
     ((hierarchy)->validation==MrmHIERARCHY_VALID)
 
 
-
+
 /*
  * RGM widget record typedefs
  */
@@ -618,7 +618,7 @@ typedef struct {
 #define	UrmWRPType(context)		(UrmWRWidgetRec(context)->type)
 
 
-
+
 /*
  * value descriptor. This consists of a representation type, followed
  * by a union of either an immediate value or an offset, depending
@@ -665,7 +665,7 @@ typedef struct {
 } RGMArgListDesc, *RGMArgListDescPtr ;
 
 
-
+
 /*
  * RGM widget record text vector item (text vector literal)
  *
@@ -716,7 +716,7 @@ typedef struct {
 					/* of n = .count+1 items.	    */
 } RGMIntegerVector, *RGMIntegerVectorPtr ;
 
-
+
 /*
  * RGM widget record callback item
  *
@@ -790,7 +790,7 @@ typedef struct {
 } OldRGMCallbackDesc, *OldRGMCallbackDescPtr ;
 
 /* BEGIN OSF Fix CR 4859 */
-
+
 /*
  * Wide character uid form
  *
@@ -807,7 +807,7 @@ typedef union {
 } RGMWCharEntry, *RGMWCharEntryPtr;
 
 /* END OSF Fix CR 4859 */
-
+
 /*
  * Font literal
  *
@@ -872,7 +872,7 @@ typedef struct {
 	OldRGMFontItem		item[1] ;	/* vector of RGMFontItems */
 } OldRGMFontList, *OldRGMFontListPtr ;
 
-
+
 /*
  * RGM widget record child descriptor
  */
@@ -940,7 +940,7 @@ typedef struct {
 					   the current operation */
 
 
-
+
 /*
  * Interface module descriptor
  *
@@ -984,7 +984,7 @@ typedef struct {
     ((module)->validation==URMInterfaceModuleValid)
 
 
-
+
 /*
  * Representations for URM color descriptor (MrmRtypeColor) and
  * color table (MrmRtypeColorTable).
@@ -1084,7 +1084,7 @@ typedef struct {
 #define	URMColorTableUserMin	2
 
 	
-
+
 /*
  * Definitions to a support a URM icon; the representation for
  * MrmRtypeIconImage objects.
@@ -1144,7 +1144,7 @@ typedef struct {
 #define	URMPixelSize8Bit	4	/* 8 bits */
 
 
-
+
 /*
  * Definitions of the data structures used to store units information for
  * dimensional values.
@@ -1161,7 +1161,7 @@ typedef struct {
 		     the Xm units values in Xm.h */
 } RGMUnitsFloat, *RGMUnitsFloatPtr ;
 
-
+
 /*
  * Definition of the data structure used during widget creation to retain
  * and provide the information required to resolve widget arguments which
@@ -1196,7 +1196,7 @@ typedef struct {
 #define	URMsvIconImage		2	/* icon image */
 #define	URMsvCallBackList	3	/* list of callbacks */
 
-
+
 /*
  * The following data structures support resolving references to widgets
  * found during creation of a widget tree. The data structure retains
@@ -1238,7 +1238,7 @@ typedef struct {
     ((String)((String)(ref_id)+(ref_id)->refs[(ndx)].w_name_offs))
 
 
-
+
 /*
  * Function prototypes for URM routines
  */

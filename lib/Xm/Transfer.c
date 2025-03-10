@@ -503,7 +503,7 @@ DisownCallback(Widget w,
   XtDisownSelection(w, (Atom) client_data, time);
 }
 
-
+
 /****************************************************************/
 /* XmeConvertMerge  merges the new data into the old return     */
 /* value in the callback structure.				*/
@@ -544,7 +544,7 @@ XmeConvertMerge(XtPointer data, Atom type, int format,
   _XmProcessUnlock();
 }
 
-
+
 /****************************************************************/
 /* XmeTransferAddDoneProc(tid, done_proc)			*/
 /* Adds a new done proc to the end of the current list of done  */
@@ -572,7 +572,7 @@ XmeTransferAddDoneProc(XtPointer id,
   _XmProcessUnlock();
 }
 
-
+
 /****************************************************************/
 /* XmePrimarySource(Widget, Time) 				*/
 /* Owns the primary selection and sets up the appropriate       */
@@ -1047,7 +1047,7 @@ XmeDragSource(Widget w, XtPointer location_data, XEvent *event,
   return(dragContext);
 }
 
-
+
 /****************************************************************/
 /* Destination section						*/
 /* 								*/
@@ -1280,7 +1280,7 @@ DropDestinationHandler(Widget w,
 			       (XtPointer) ds, ds -> timeStamp, NULL);
 }
 
-
+
 /*************************************************************/
 /* XmePrimarySink begins a transfer for the contents of the  */
 /* XA_PRIMARY selection.                                     */
@@ -1390,7 +1390,7 @@ XmeDropSink(Widget w, ArgList in_args, Cardinal in_arg_count)
   _XmAppUnlock(app);
 }
 
-
+
 /*************************************************************/
 /* Transfer routine section                                  */
 /*************************************************************/

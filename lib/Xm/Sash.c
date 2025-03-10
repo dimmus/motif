@@ -192,7 +192,7 @@ externaldef(xmsashclassrec) XmSashClassRec xmSashClassRec = {
 
 externaldef(xmsashwidgetclass) WidgetClass xmSashWidgetClass =
 					         (WidgetClass) &xmSashClassRec;
-
+
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -415,7 +415,7 @@ SashDisplayDestroyCallback
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  Redisplay (w, event)

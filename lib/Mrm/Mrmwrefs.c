@@ -59,7 +59,7 @@ static char rcsid[] = "$XConsortium: Mrmwrefs.c /main/14 1996/11/13 14:07:43 drk
 #include <Mrm/Mrm.h>
 #include "MrmMsgI.h"
 
-
+
 /*
  *++
  *
@@ -108,7 +108,7 @@ Urm__CW_InitWRef (URMResourceContextPtr		*wref_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -199,7 +199,7 @@ Urm__CW_AddWRef (URMResourceContextPtr	wref_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -256,7 +256,7 @@ Urm__CW_FindWRef (URMResourceContextPtr	wref_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -341,7 +341,7 @@ Urm__CW_AppendSVWidgetRef (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -430,7 +430,7 @@ Urm__CW_AppendCBSVWidgetRef (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -479,7 +479,7 @@ Urm__CW_UpdateSVWidgetRef (URMPointerListPtr		*svlist,
 	svdesc->setw = cur_id ;
     }
 }
-
+
 /*
  *++
  *
@@ -616,7 +616,7 @@ Urm__CW_ResolveSVWidgetRef (URMPointerListPtr		*svlist,
 	}
     }
 }
-
+
 /*
  *++
  *

@@ -65,7 +65,7 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
  * Global Variables:
  */
 
-
+
 /*************************************<->*************************************
  *
  *  AddClientToList (pWS, pCD, onTop)
@@ -221,7 +221,7 @@ void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, Boolean onTop)
 } /* END OF FUNCTION AddClientToList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AddEntryToList (pWS, pEntry, onTop, pStackEntry)
@@ -336,7 +336,7 @@ void AddEntryToList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTo
 } /* END OF FUNCTION AddEntryToList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MoveEntryInList (pWS, pEntry, onTop, pStackEntry)
@@ -376,7 +376,7 @@ void MoveEntryInList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onT
 } /* END OF FUNCTION MoveEntryInList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteEntryFromList (pWS, pListEntry)
@@ -424,7 +424,7 @@ void DeleteEntryFromList (WmWorkspaceData *pWS, ClientListEntry *pListEntry)
 } /* END OF FUNCTION DeleteEntryFromList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteClientFromList (pWS, pCD)
@@ -530,7 +530,7 @@ void DeleteClientFromList (WmWorkspaceData *pWS, ClientData *pCD)
 } /* END OF FUNCTION DeleteClientFromList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AddTransient (pWS, pCD)
@@ -648,7 +648,7 @@ void AddTransient (WmWorkspaceData *pWS, ClientData *pCD)
 } /* END OF FUNCTION AddTransient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MarkModalSubtree (pcdTree, pcdAvoid)
@@ -688,7 +688,7 @@ void MarkModalSubtree (ClientData *pcdTree, ClientData *pcdAvoid)
 
 }
 
-
+
 /*************************************<->*************************************
  *
  *  MarkModalTransient (pcdLeader, pCD)
@@ -727,7 +727,7 @@ void MarkModalTransient (ClientData *pcdLeader, ClientData *pCD)
 	pcdLeader->primaryModalCount++;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteTransient (pCD)
@@ -828,7 +828,7 @@ void DeleteTransient (ClientData *pCD)
 
 } /* END OF FUNCTION DeleteTransient */
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteFullAppModalChildren (pcdLeader, pCD)
@@ -868,7 +868,7 @@ void DeleteFullAppModalChildren (ClientData *pcdLeader, ClientData *pCD)
     
 } /* END OF FUNCTION DeleteFullAppModalChildren */
 
-
+
 /*************************************<->*************************************
  *
  *  FixupFullAppModalCounts (pcdLeader, pcdDelete)
@@ -922,7 +922,7 @@ FixupFullAppModalCounts (ClientData *pcdLeader, ClientData *pcdDelete)
 } /* END OF FUNCTION FixupFullAppModalCounts */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UnMarkModalTransient (pcdModee, modalCount, pcdModal)
@@ -968,7 +968,7 @@ void UnMarkModalTransient (ClientData *pcdModee, int modalCount, ClientData *pcd
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  PutTransientOnTop (pcd)
@@ -1036,7 +1036,7 @@ Boolean PutTransientOnTop (ClientData *pcd)
 } /* END OF FUNCTION PutTransientOnTop */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PutTransientBelowSiblings (pcd)
@@ -1101,7 +1101,7 @@ Boolean PutTransientBelowSiblings (ClientData *pcd)
 } /* END OF FUNCTION PutTransientBelowSiblings */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RestackTransients (pcd)
@@ -1201,7 +1201,7 @@ void RestackTransients (ClientData *pcd)
 } /* END OF FUNCTION RestackTransients */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RestackTransientsAtWindow (pcd)
@@ -1239,7 +1239,7 @@ void RestackTransientsAtWindow (ClientData *pcd)
 } /* END OF FUNCTION RestackTransientsAtWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindTransientTreeLeader (pcd)
@@ -1279,7 +1279,7 @@ ClientData * FindTransientTreeLeader (ClientData *pcd)
 } /* END OF FUNCTION FindTransientTreeLeader */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CountTransientChildren (pcd)
@@ -1328,7 +1328,7 @@ CountTransientChildren (ClientData *pcd)
 } /* END OF FUNCTION CountTransientChildren */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeTransientWindowList (windows, pcd)
@@ -1377,7 +1377,7 @@ Window * MakeTransientWindowList (Window *windows, ClientData *pcd)
 } /* END OF FUNCTION MakeTransientWindowList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindTransientFocus (pcd)
@@ -1451,7 +1451,7 @@ ClientData * FindTransientFocus (ClientData *pcd)
 } /* END OF FUNCTION FindTransientFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindTransientOnTop (pcd)
@@ -1518,7 +1518,7 @@ ClientData * FindTransientOnTop (ClientData *pcd)
 } /* END OF FUNCTION FindTransientOnTop */
 
 
-
+
 /*************************************<->*************************************
  *
  *  StackWindow (pWS, pEntry, onTop, pStackEntry)
@@ -1729,7 +1729,7 @@ void StackWindow (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTop, 
 } /* END OF FUNCTION StackWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  StackTransientWindow (pcd)
@@ -1784,7 +1784,7 @@ void StackTransientWindow (ClientData *pcd)
 } /* END OF FUNCTION StackTransientWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckIfClientObscuring (pcdTop, pcd)
@@ -1854,7 +1854,7 @@ Boolean CheckIfClientObscuring (ClientData *pcdTop, ClientData *pcd)
 } /* END OF FUNCTION CheckIfClientObscuring */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckIfObscuring (pcdA, pcdB)
@@ -1973,7 +1973,7 @@ Boolean CheckIfObscuring (ClientData *pcdA, ClientData *pcdB)
 } /* END OF FUNCTION CheckIfObscuring */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckIfClientObscuredByAny (pcd)
@@ -2040,7 +2040,7 @@ Boolean CheckIfClientObscuredByAny (ClientData *pcd)
 } /* END OF FUNCTION CheckIfClientObscuredByAny */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckIfClientObscuringAny (pcd)
@@ -2091,7 +2091,7 @@ Boolean CheckIfClientObscuringAny (ClientData *pcd)
 } /* END OF FUNCTION CheckIfClientObscuringAny */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetupSystemModalState (pCD)
@@ -2296,7 +2296,7 @@ void SetupSystemModalState (ClientData *pCD)
 } /* END OF FUNCTION SetupSystemModalState */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UndoSystemModalState ()
@@ -2356,7 +2356,7 @@ void UndoSystemModalState (void)
 } /* END OF FUNCTION UndoSystemModalState */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindClientNameMatch (pStartingEntry, toNext, clientName, types)
@@ -2435,7 +2435,7 @@ ClientListEntry * FindClientNameMatch (ClientListEntry *pEntry,
 
 } /* END OF FUNCTION FindClientNameMatch */
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  BumpPrimaryToTop (pcdLeader)
@@ -2480,7 +2480,7 @@ Boolean BumpPrimaryToTop (ClientData *pcdLeader)
     return (rval);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  BumpPrimaryToBottom (pcdLeader)
@@ -2523,7 +2523,7 @@ Boolean BumpPrimaryToBottom (ClientData *pcdLeader)
     return (rval);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  LowestWindowInTransientFamily (pcdLeader)
@@ -2586,7 +2586,7 @@ LowestWindowInTransientFamily (ClientData *pcdLeader)
 
 } /* END OF FUNCTION LowestWindowInTransientFamily */
 
-
+
 /*************************************<->*************************************
  *
  *  FindSubLeaderToTop (pcd)
@@ -2639,7 +2639,7 @@ FindSubLeaderToTop (
     return (pcdRet);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  MakeTransientFamilyStackingList (windows, pcdLeader)
@@ -2742,7 +2742,7 @@ MakeTransientFamilyStackingList (
 
 } /* END OF FUNCTION MakeTransientFamilyStackingList */
 
-
+
 /*************************************<->*************************************
  *
  *  NormalizeTransientTreeStacking (pcdLeader)
@@ -2791,7 +2791,7 @@ NormalizeTransientTreeStacking (
     return (bChanged);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  LeaderOnTop (pcdLeader)

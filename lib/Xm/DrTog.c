@@ -118,7 +118,7 @@ DrawCheckMark(Display *display,
 
   XChangeGC(display, gc, mask, &old_values);
 }
-
+
 static void
 DrawCross(Display *display,
 	  Drawable d,
@@ -348,7 +348,7 @@ XmeDrawIndicator(Display *display,
     }
   _XmAppUnlock(app);
 }
-
+
 void
 XmeDrawCircle(Display *display,
 	      Drawable d,

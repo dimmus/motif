@@ -79,7 +79,7 @@ typedef struct _XmMenuStateRec
    Boolean MU_InPMMode;
 } XmMenuStateRec, *XmMenuState;
 
-
+
 typedef struct _XmRCKidGeometryRec
 {
   Widget kid;

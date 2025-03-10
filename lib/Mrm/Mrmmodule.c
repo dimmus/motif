@@ -100,7 +100,7 @@ static char rcsid[] = "$XConsortium: Mrmmodule.c /main/12 1996/11/13 14:03:12 dr
   recptr = (RGMModuleDescPtr) UrmRCBuffer (ctx_ptr) ;		\
  }
 
-
+
 /*
  *++
  *
@@ -198,7 +198,7 @@ UrmIFMInitModule (URMResourceContextPtr		context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -262,7 +262,7 @@ UrmIFMSetTopmost (URMResourceContextPtr		context_id ,
 
 }
 
-
+
 /*
  *++
  *
@@ -329,7 +329,7 @@ UrmIFMPutModule (IDBFile		file_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -386,7 +386,7 @@ UrmIFMHGetModule (MrmHierarchy		hierarchy_id ,
 }
 
 
-
+
 /*
  *++
  *

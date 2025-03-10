@@ -53,7 +53,7 @@ static Bool ProcessEvents(Display *dpy, XEvent *Event, char *c_pCD);
 /* Global variables */
 	static unsigned long firstRequest, lastRequest;
 
-
+
 /*************************************<->*************************************
  *
  *  InitWorkspaceColormap ()
@@ -88,7 +88,7 @@ void InitWorkspaceColormap (WmScreenData *pSD)
 } /* END OF FUNCTION InitWorkspaceColormap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitColormapFocus (pSD)
@@ -148,7 +148,7 @@ void InitColormapFocus (WmScreenData *pSD)
 } /* END OF FUNCTION InitColormapFocus */
 
 
-
+
 #ifndef OLD_COLORMAP
 /*************************************<->*************************************
  *
@@ -208,7 +208,7 @@ void ForceColormapFocus (WmScreenData *pSD, ClientData *pCD)
 #endif
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetColormapFocus (pSD, pCD)
@@ -268,7 +268,7 @@ void SetColormapFocus (WmScreenData *pSD, ClientData *pCD)
 } /* END OF FUNCTION SetColormapFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmInstallColormap (pSD, colormap)
@@ -304,7 +304,7 @@ void WmInstallColormap (WmScreenData *pSD, Colormap colormap)
 } /* END OF FUNCTION WmInstallColormap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ResetColormapData (pCD, pWindows, count)

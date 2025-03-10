@@ -63,7 +63,7 @@ static char rcsid[] = "$XConsortium: Mrmptrlist.c /main/12 1996/11/13 14:03:53 d
  *
  */
 
-
+
 /*
  *++
  *
@@ -115,7 +115,7 @@ UrmPlistInit (int		size,
 }
 
 
-
+
 /*
  *++
  *
@@ -164,7 +164,7 @@ UrmPlistResize (URMPointerListPtr	list_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -199,7 +199,7 @@ Cardinal UrmPlistFree (URMPointerListPtr	list_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -243,7 +243,7 @@ UrmPlistFreeContents (URMPointerListPtr	list_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -294,7 +294,7 @@ UrmPlistAppendPointer (URMPointerListPtr	list_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -346,7 +346,7 @@ UrmPlistAppendString (URMPointerListPtr		list_id ,
 }
 
 
-
+
 /*
  *++
  *

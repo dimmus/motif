@@ -116,7 +116,7 @@ Cardinal insertPosition = 0;
 Const char *szhorizontal = "horizontal";
 Const char *szvertical = "vertical";
 
-
+
 /*************************************<->*************************************
  *
  *  InitIconBox (pSD)
@@ -163,7 +163,7 @@ void InitIconBox (WmScreenData *pSD)
 } /* END OF FUNCTION InitIconBox */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  AddIconBoxForWorkspace (pWS)
@@ -186,7 +186,7 @@ void AddIconBoxForWorkspace (WmWorkspaceData *pWS)
 } /* END OF FUNCTION AddIconBoxForWorkspace */
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  MakeIconBox (pWS, pCD);
@@ -287,7 +287,7 @@ Boolean MakeIconBox (WmWorkspaceData *pWS, ClientData *pCD)
 } /* END OF FUNCTION MakeIconBox */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  DestroyIconBox (pWS)
@@ -332,7 +332,7 @@ void DestroyIconBox (WmWorkspaceData *pWS)
 } /* END OF FUNCTION DestroyIconBox */
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  MakeShell (pWS, pIBD)
@@ -426,7 +426,7 @@ void MakeShell (WmWorkspaceData *pWS, IconBoxData *pIBD)
 } /* END OF FUNCTION MakeShell */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeScrolledWindow (pWS, pIBD)
@@ -549,7 +549,7 @@ void MakeScrolledWindow (WmWorkspaceData *pWS, IconBoxData *pIBD)
 } /* END OF FUNCTION MakeScrolledWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeBulletinBoard (pWS, pIBD)
@@ -629,7 +629,7 @@ void MakeBulletinBoard (WmWorkspaceData *pWS, IconBoxData *pIBD)
 } /* END OF FUNCTION MakeBulletinBoard */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RealizeIconBox (pWS, pIBD, pCD)
@@ -750,7 +750,7 @@ void RealizeIconBox (WmWorkspaceData *pWS, IconBoxData *pIBD, ClientData *pCD)
 } /* END OF FUNCTION RealizeIconBox */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AddNewBox (pWS, pIBD)
@@ -804,7 +804,7 @@ void AddNewBox (WmWorkspaceData *pWS, IconBoxData *pIBD)
 } /* END OF FUNCTION AddNewBox */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitializeIconBoxData (pWS, pIBD)
@@ -979,7 +979,7 @@ void InitializeIconBoxData (WmWorkspaceData *pWS, IconBoxData *pIBD)
 } /* END OF FUNCTION InitializeIconBoxData */   
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetIconBoxInfo (pWS, pCD)
@@ -1007,7 +1007,7 @@ void SetIconBoxInfo (WmWorkspaceData *pWS, ClientData *pCD)
 } /* END OF FUNCTION SetIconBoxInfo */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitializeClientData (pCD)
@@ -1071,7 +1071,7 @@ void InitializeClientData (ClientData *pCD, IconBoxData *pIBD)
 } /* END OF FUNCTION InitializeClientData */   
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeShrinkWrapIconsGC (pSD, bgPixmap)
@@ -1128,7 +1128,7 @@ void MakeShrinkWrapIconsGC (WmScreenData *pSD, Pixmap bgPixmap)
 } /* END OF FUNCTION MakeShrinkWrapIconsGC */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeFadeIconGC (pSD)
@@ -1190,7 +1190,7 @@ void MakeFadeIconGC (WmScreenData *pSD)
 } /* END OF FUNCTION MakeFadeIconGC */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetGeometry (pWS, pCD, pIBD)
@@ -1461,7 +1461,7 @@ void SetGeometry (WmWorkspaceData *pWS, ClientData *pCD, IconBoxData *pIBD)
 } /* END OF FUNCTION SetGeometry */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetGranularity (pWS, pCD, pIBD )
@@ -1661,7 +1661,7 @@ void SetGranularity (WmWorkspaceData *pWS, ClientData *pCD, IconBoxData *pIBD)
 } /* END OF FUNCTION SetGranularity */
 
 
-
+
 /*************************************<->*************************************
  *
  * GetIconBoxMenuItems ()
@@ -1685,7 +1685,7 @@ MenuItem *GetIconBoxMenuItems (pSD)
 } /* END OF FUNCTION GetIconBoxMenuItems */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MapIconBoxes ()
@@ -1734,7 +1734,7 @@ void MapIconBoxes (WmWorkspaceData *pWS)
 } /* END OF FUNCTION MapIconBoxes */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  UnmapIconBoxes (pWS)
@@ -1780,7 +1780,7 @@ void UnmapIconBoxes (WmWorkspaceData *pWS)
 #endif /* WSM */
 
 #if defined(PANELIST)
-
+
 /******************************<->*************************************
  *
  *  IconBoxShowing ()
@@ -1836,7 +1836,7 @@ IconBoxShowing (WmWorkspaceData *pWS, ControlWindowStruct *pCW)
 } /* END OF FUNCTION IconBoxShowing */
 
 
-
+
 /******************************<->*************************************
  *
  *  IconBoxPopUp (pWS, pCW, up)
@@ -1908,7 +1908,7 @@ IconBoxPopUp (WmWorkspaceData *pWS,
 
 
 
-
+
 /******************************<->*************************************
  *
  *  InsertIconIntoBox
@@ -2103,7 +2103,7 @@ Boolean InsertIconIntoBox (IconBoxData *pIBD, ClientData *pCD)
 } /* END FUNCTION InsertIconIntoBox() */   
    
 
-
+
 /*************************************<->*************************************
  *
  *  InsertIconInfo  (pIBD, pCD, theWidget)
@@ -2300,7 +2300,7 @@ IconInfo *InsertIconInfo (pIBD, pCD, theWidget)
 } /* END OF FUNCTION InsertIconInfo */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteIconFromBox
@@ -2427,7 +2427,7 @@ void DeleteIconFromBox (IconBoxData *pIBD, ClientData *pCD)
 } /* END FUNCTION DeleteIconFromBox */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteIconInfo (pIBD, pCD)
@@ -2479,7 +2479,7 @@ void DeleteIconInfo (IconBoxData *pIBD, ClientData *pCD)
 } /* END FUNCTION DeleteIconInfo */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ResetIconBoxMaxSize(pCD, bBoardWidget)
@@ -2515,7 +2515,7 @@ void ResetIconBoxMaxSize (ClientData *pCD, Widget bBoardWidget)
 } /* END OF FUNCTION 	ResetIconBoxMaxSize */
 
 
-
+
 /*************************************<->*************************************
  *
  * CheckIconBoxSize(pIBD)
@@ -2603,7 +2603,7 @@ Boolean CheckIconBoxSize (IconBoxData *pIBD)
 } /* END OF FUNCTION CheckIconBoxSize */
 
 
-
+
 /*************************************<->*************************************
  *
  * CheckIconBoxResize(pCD, changedValues)
@@ -2753,7 +2753,7 @@ void CheckIconBoxResize (ClientData *pCD, unsigned int changedValues, int newWid
 } /* END OF FUNCTION CheckIconBoxResize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ExpandVirtualSpace (pIBD, newWidth, newHeight)
@@ -2798,7 +2798,7 @@ Boolean ExpandVirtualSpace (IconBoxData *pIBD, int newWidth, int newHeight)
 } /* END OF FUNCTION ExpandVirtualSpace */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ExtendIconList (pIBD, incr);
@@ -2854,7 +2854,7 @@ Boolean ExtendIconList (IconBoxData *pIBD, int incr)
 } /* END OF FUNCTION ExtendIconList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PackIconBox(pIBD, packVert, packHorz, passedInWidth, passedInHeight)
@@ -3110,7 +3110,7 @@ void PackIconBox (IconBoxData *pIBD, Boolean packVert, Boolean packHorz, int pas
 
 } /* END FUNCTION PackIconBox */
 
-
+
 /*************************************<->*************************************
  *
  *  RealignIconList (pIBD, newRows, newCols)
@@ -3220,7 +3220,7 @@ void RealignIconList (IconBoxData *pIBD, int newCols, int newRows)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetNewBounds (pIBD)
@@ -3272,7 +3272,7 @@ void SetNewBounds (IconBoxData *pIBD)
 } /* END OF FUNCTION SetNewBounds */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InsertPosition (w)
@@ -3292,7 +3292,7 @@ Cardinal InsertPosition (Widget w)
 } /* END OF FUNCTION InsertPosition */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ShowClientIconState ();
@@ -3324,7 +3324,7 @@ void ShowClientIconState (ClientData *pCD, int newState)
 } /* END FUNCTION ShowClientIconState */
 
 
-
+
 #ifndef MOTIF_ONE_DOT_ONE
 /*************************************<->*************************************
  *
@@ -3353,7 +3353,7 @@ void IconScrollVisibleCallback (Widget w, caddr_t client_data, XmAnyCallbackStru
 
 #endif
 
-
+
 /*************************************<->*************************************
  *
  *  IconActivateCallback
@@ -3387,7 +3387,7 @@ void IconActivateCallback (Widget w, caddr_t client_data, XmAnyCallbackStruct *c
 } /* END OF FUNCTION IconActivateCallback */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UpdateIncrements
@@ -3405,7 +3405,7 @@ void UpdateIncrements (Widget sWidget, IconBoxData *pIBD, XConfigureEvent *event
   
 } /* END OF FUNCTION UpdateIncrements */
 
-
+
 /*************************************<->*************************************
  *
  *  ResetArrowButtonIncrements(pCD)
@@ -3428,7 +3428,7 @@ void ResetArrowButtonIncrements (ClientData *pCD)
 } /* END OF FUNCTION ResetArrowButtonIncrements */    
 
 
-
+
 /*************************************<->*************************************
  *
  *  ChangeActiveIconboxIconText
@@ -3479,7 +3479,7 @@ void ChangeActiveIconboxIconText (Widget icon, caddr_t dummy, XFocusChangeEvent 
 } /* END OF FUNCTION ChangeActiveIconboxIconText */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleIconBoxIconKeyPress
@@ -3534,7 +3534,7 @@ void HandleIconBoxIconKeyPress (Widget icon, caddr_t dummy, XKeyEvent *keyEvent)
 	
 } /* END OF FUNCTION HandleIconBoxIconKeyPress */
 
-
+
 /*************************************<->*************************************
  *
  *  HandleIconBoxButtonMotion
@@ -3570,7 +3570,7 @@ void HandleIconBoxButtonMotion (Widget icon, caddr_t client_data, XEvent *pev)
 } /* END OF FUNCTION HandleIconBoxButtonMotion */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetIconBoxIconRootXY (pCD, pX, pY)
@@ -3632,7 +3632,7 @@ void GetIconBoxIconRootXY (ClientData *pCD, int *pX, int *pY)
     }
 } /* END FUNCTION GetIconBoxIconRootXY */
 
-
+
 /*************************************<->*************************************
  *
  *  IconVisible (pCD)
@@ -3725,7 +3725,7 @@ Boolean IconVisible (ClientData *pCD)
     return(rval);
 
 } /* END OF FUNCTION IconVisible */
-
+
 /*************************************<->*************************************
  *
  *  WmXmStringToString (xmString

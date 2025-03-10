@@ -113,7 +113,7 @@
                     \
     if (XtIsManaged(*q))
 
-     
+     
 /* Warning Messages */
 #define BadWidthMsg \
     "Attempt to set width to zero: defaulting to 16"
@@ -177,7 +177,7 @@ defaulting to WorkArea"
 #define WrongChildMsg \
     "Attempt to add wrong type child to a homogeneous RowColumn widget"
 
-
+
 /*
  * forward declarations
  */
@@ -393,7 +393,7 @@ static XtActionsRec action_table [] =
     { NULL,                     NULL}
 };
 
-
+
 /*
  * define the resourse stuff for a rowcolumn widget
  */
@@ -732,7 +732,7 @@ static XmSyntheticResource get_resources[] =
 
 
 
-
+
 /*
  * static initialization of the row column widget class record, must do
  * each field
@@ -818,7 +818,7 @@ externaldef(xmrowcolumnclassrec) XmRowColumnClassRec xmRowColumnClassRec =
 
 externaldef(xmrowcolumnwidgetclass) WidgetClass xmRowColumnWidgetClass = 
    (WidgetClass) &xmRowColumnClassRec;
-
+
 static Widget lastSelectToplevel = NULL;
 
 /* REQUIRES FIX FOR MULTI SCREEN!!! */
@@ -963,7 +963,7 @@ XmRowColumnWidget pane;
 }
 
 
-
+
 /*
  * Destroy the widget, and any subwidgets there are
  */
@@ -1055,7 +1055,7 @@ Widget w;
    DoProcessMenuTree(w, XmDELETE);
 }
 
-
+
 /*
  * do all the stuff needed to make a subwidget of a menu work correctly
  */
@@ -1085,7 +1085,7 @@ static int fix_widget (m, w)
 }
 
 
-
+
 /*
  * Add a child to this row column widget
  */
@@ -1183,7 +1183,7 @@ Widget    child;
                 delete_child) (child);
 }
 
-
+
 /*
  * The set of our managed children changed, so maybe change the size of the
  * row column widget to fit them; there is no instigator of this change, and 
@@ -1271,7 +1271,7 @@ XmRowColumnWidget m;
    _XmNavigChangeManaged(m);
 }                       
 
-
+
 /*
  * make the row column widget appear
  */
@@ -1390,7 +1390,7 @@ XSetWindowAttributes *window_attributes;
        m->core.mapped_when_managed = FALSE;
 }
 
-
+
 /*
  * utilities for setvalue procs
  */
@@ -1510,7 +1510,7 @@ XmRowColumnWidget old, new;
     }
 }
 
-
+
 static Boolean set_values_non_popup (old, new)
 XmRowColumnWidget   old;            /* the old state widget */
 XmRowColumnWidget   new;            /* the new, real widget */
@@ -1873,7 +1873,7 @@ XmRowColumnWidget    new;           /* after superclasses */
    
    return (need_expose);
 }
-
+
 
 static char *GetRealKey(rc, str)
 XmRowColumnWidget rc;
@@ -2451,7 +2451,7 @@ int     is_radio;               /* the radio flag */
     return (m);
 }
 
-
+
 /*
  *************************************************************************
  *
@@ -2624,7 +2624,7 @@ Widget XmGetPostedFromWidget (Widget menu)
    return (NULL);
 }
 
-
+
 /*
  * class initialization
  */
@@ -2661,7 +2661,7 @@ static void ClassPartInitialize (rcc)
     _XmFastSubclassInit(rcc,XmROW_COLUMN_BIT);
 }
 
-
+
 /***************************************************************************
  *
  *
@@ -2763,7 +2763,7 @@ Widget  w;
 
 
 
-
+
 /**********************************************************************
  *
  * next section knows how to composite row column entries
@@ -3018,7 +3018,7 @@ XmRowColumnWidget rc;
     }
 }
 
-
+
 /* ARGSUSED */
 void _XmMenuFocus (Widget w, int operation, Time _time)
 {
@@ -3063,7 +3063,7 @@ void _XmMenuFocus (Widget w, int operation, Time _time)
       }
 }
 
-
+
 /*
  * Class function which is invoked when the post accelerator is received
  * for a popup menu or the menubar, or the post mnemonic is received for 
@@ -3227,7 +3227,7 @@ XKeyPressedEvent * event;
    }
 }
 
-
+
 /*
  * The following functions are used to manipulate lists of keyboard events
  * which are of interest to the menu system; i.e. accelerators and mnemonics.
@@ -3252,7 +3252,7 @@ XKeyPressedEvent * event;
  * associated widget is realized; grabs cannot be added to a widget which 
  * does not have a window!
  */ 
-
+
 
 /*
  * This function is used both by the row column widget, and components which
@@ -3886,7 +3886,7 @@ unsigned int modifiers;
    }
 }  
        
-
+
 /*
  * Given a menupane, this function traverses down through any posted submenus,
  * setting the state of the traversal_on field to the indicated value.
@@ -4219,7 +4219,7 @@ Boolean attach;
 
 }
 
-
+
 /*
  * This function determines if the widget to which a menu is 
  * attached is accessible to the user.  The widget is considered
@@ -4241,7 +4241,7 @@ Widget w;
    return (True);
 }
 
-
+
 /*
  * Button Action Procs
  */
@@ -4683,7 +4683,7 @@ Widget w;
        UpdateOptionMenuCBG (cb, w);
 }
 
-
+
 static char * which_callback (w)
 Widget w;
 {
@@ -4783,7 +4783,7 @@ XmAnyCallbackStruct *callback;
     RadioBehaviorAndMenuHistory (m, w);
 }
 
-
+
 /*************************************************************************
  * 
  * this section is all the layout stuff, the whole thing is messy because
@@ -4835,7 +4835,7 @@ int *items_per;
         (*items_per)++;             /* add another row/col */
 }
 
-
+
 /*
  * Make sure that entries in the right most column/row extend all the 
  * way to the right/bottom edge of the row column widget.  This keeps 
@@ -4880,7 +4880,7 @@ Dimension w, h;
    }
 }
 
-
+
 /*
  * decide exactly the dimensions of the row column widget we will return to 
  * an asking caller based on the accumulated layout information.
@@ -4922,7 +4922,7 @@ Dimension    w, h;
 
 
 
-
+
 /*
  * Decide where to put the help child.  He better be the last one
  * 'cuz we may trash the x, y's
@@ -4975,7 +4975,7 @@ Dimension   w, h;
    }
 }
 
-
+
 /*
  * figure out where all the children of a column style widget go.  The
  * border widths are already set.  
@@ -5066,7 +5066,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
         adjust_last (m, start_i, *m_width, *m_height);
 }
 
-
+
 /*
  * do a vertical tight (non-column) layout.
  *
@@ -5149,7 +5149,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
 	    kg[start_i++].box.width = w;    /* set uniform width */
 }
 
-
+
 static int layout_horizontal_tight (m, m_width, m_height)
 XmRowColumnWidget m;
 Dimension *m_width, *m_height;            /* if 0 then caller's asking */
@@ -5213,7 +5213,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
 	   kg[start_i++].box.height = h;   /* set uniform height */
 }
 
-
+
 static int layout_vertical (m, m_width, m_height)
 XmRowColumnWidget m;
 Dimension *m_width, *m_height;            /* if 0 then caller's asking */
@@ -5366,7 +5366,7 @@ Dimension *w, *h;
        layout_horizontal (m, w, h);
 }
 
-   
+   
 /**************************************************************************
  *
  * class support procedures
@@ -5560,7 +5560,7 @@ XmRowColumnWidget m;          /* sub-menu to position */
     XtY (m) = y1;
 }
 
-
+
 /*
  * lay out the row column widget to find it's best size, this is a 
  * read-only operation
@@ -5773,7 +5773,7 @@ XtWidgetGeometry *intended, *reply;
     }
 }
 
-
+
 /*
  * Layout the row column widget to fit it's current size; ignore possible 
  * non-fitting of the entries into a too small row column widget.
@@ -5853,7 +5853,7 @@ XmRowColumnWidget m;
 		      0, 0, m->core.width, m->core.height);
 }
 
-
+
 /*
  * class Redisplay proc 
  */
@@ -5902,7 +5902,7 @@ Region region;
     RC_SetExpose (m, TRUE);
 }
 
-
+
 /*
  * Geometry manager for subwidgets of a row column widget; be accomdating, 
  * try to say yes, and then deal with our parent's geometry mgr.
@@ -6037,7 +6037,7 @@ XtWidgetGeometry *desired, *allowed;
    return(XtGeometryDone);
 }
 
-
+
 /*
  * fix the visual attributes of the subwidget to be what we like
  *
@@ -6121,7 +6121,7 @@ Widget    w;
    }
 }
 
-
+
 static void XmGetMenuKidMargins (m, width, height, left, right, top, bottom)
 XmRowColumnWidget m;
 Dimension *width, *height, *left, *right, *top, *bottom;
@@ -6338,7 +6338,7 @@ XmRowColumnWidget m;
     }
 }
 
-
+
 /*
  * Action routines specific to traversal.
  */
@@ -6414,7 +6414,7 @@ int     *num_param;
     */
 }
 
-
+
 static void MenuTraverse (w, event, direction)
 XmCascadeButtonWidget w;
 XEvent * event;
@@ -7107,7 +7107,7 @@ XmRowColumnWidget menubar;
     }
 }
 
-
+
 /* ARGSUSED */
 static void _XmRC_FocusIn (rc, event, params, num_params)
 XmRowColumnWidget  rc;
@@ -7169,7 +7169,7 @@ XEvent      *event;
    _XmManagerEnter(rc, event);
 }
 
-
+
 /*
  * Catch an 'Escape' which occurs within a gadget, and bring down the
  * menu system.
@@ -7265,7 +7265,7 @@ Widget widget;
    return (True);
 }
 
-
+
 /*
  * this entry is set in label and label gadget's class field so that
  * all communication from the buttons to the RowColumn are done through

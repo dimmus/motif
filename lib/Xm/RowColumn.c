@@ -356,7 +356,7 @@ static XtActionsRec actions [] =
     {"MenuGadgetTraverseDown",   _XmRC_GadgetTraverseDown}
 };
 
-
+
 /*
  * define the resourse stuff for a rowcolumn widget
  */
@@ -776,7 +776,7 @@ static XmSyntheticResource syn_resources[] =
 };
 
 
-
+
 /*
  * static initialization of the row column widget class record, must do
  * each field
@@ -894,7 +894,7 @@ externaldef(xmrowcolumnclassrec) XmRowColumnClassRec xmRowColumnClassRec =
 externaldef(xmrowcolumnwidgetclass) WidgetClass xmRowColumnWidgetClass = 
    (WidgetClass) &xmRowColumnClassRec;
 
-
+
 /*
  * Destroy the widget, and any subwidgets there are
  */
@@ -1065,7 +1065,7 @@ ConstraintDestroy(
    _XmRC_DoProcessMenuTree(w, XmDELETE);
 }
 
-
+
 /*
  * do all the stuff needed to make a subwidget of a menu work correctly
  */
@@ -1096,7 +1096,7 @@ FixWidget(
 }
 
 
-
+
 static Cardinal 
 InsertPosition(Widget w)
 {
@@ -1118,7 +1118,7 @@ InsertPosition(Widget w)
     return rc->composite.num_children ;
 }
 
-
+
 /*
  * Add a child to this row column widget
  */
@@ -1340,7 +1340,7 @@ DeleteChild(
    ResetMatchingOptionMemWidget(m, child);
 }
 
-
+
 /*
  * The set of our managed children changed, so maybe change the size of the
  * row column widget to fit them; there is no instigator of this change, and 
@@ -1466,7 +1466,7 @@ ChangeManaged(
   XmeNavigChangeManaged( (Widget) m);
 }                       
 
-
+
 /*
  * make the row column widget appear
  */
@@ -1570,7 +1570,7 @@ Realize(
    }
 }
 
-
+
 /*
  * utilities for setvalue procs
  */
@@ -1711,7 +1711,7 @@ DoSize(
     }
 }
 
-
+
 static Boolean 
 set_values_non_popup(
         XmRowColumnWidget old,
@@ -2149,7 +2149,7 @@ SetValues(
 }
 
 
-
+
 /************************************************************************
  *
  *  QueryGeometry
@@ -2190,7 +2190,7 @@ QueryGeometry(
 
 
 
-
+
 /************************************************************************
  *
  *  GeometryManager class method
@@ -2396,7 +2396,7 @@ GeometryManager(
    return (XtGeometryYes);
 }
 
-
+
 static char * 
 GetRealKey(
         XmRowColumnWidget rc,
@@ -2443,7 +2443,7 @@ GetRealKey(
    else
      return NULL;
 }
-
+
 static void 
 MenuBarInitialize(
         XmRowColumnWidget bar )
@@ -3244,7 +3244,7 @@ create(
     return (m);
 }
 
-
+
 /*
  *************************************************************************
  *
@@ -3479,7 +3479,7 @@ XmCreatePulldownMenu(
     _XmAppUnlock(app);
     return w;
 }
-
+
 
 /*
  * class initialization
@@ -3626,7 +3626,7 @@ TraversalChildren (
        return (False);
 }
 
-
+
 /**********************************************************************
  *
  * next section knows how to composite row column entries
@@ -3649,7 +3649,7 @@ FixEventBindings(
    _XmRC_ProcessSingleWidget (w, XmADD);
 }
 
-
+
 /*****************************************************************************
  *
  * RowColumn's map and unmap callbacks funneled through here.
@@ -3694,7 +3694,7 @@ _XmCallRowColumnUnmapCallback(
    XtCallCallbackList ((Widget)rc, RC_Unmap_cb(rc), &callback);
 }
 
-   
+   
 /**************************************************************************
  *
  * class support procedures
@@ -3785,7 +3785,7 @@ Resize(
    RC_SetFromResize(m, FALSE);	
 }
 
-
+
 /*
  * class Redisplay proc 
  */
@@ -3837,7 +3837,7 @@ Redisplay(
 }
 
 
-
+
 /*
  * fix the visual attributes of the subwidget to be what we like
  *
@@ -3964,7 +3964,7 @@ EventNoop(
     */
 }
 
-
+
 /* ARGSUSED */
 static void 
 MenuFocusIn(
@@ -4034,7 +4034,7 @@ MenuEnter(
    _XmManagerEnter( (Widget) rc, event, NULL, NULL);
 }
 
-
+
 /*
  * Catch an 'Escape' which occurs within a gadget, and bring down the
  * menu system.
@@ -4073,7 +4073,7 @@ GadgetEscape(
    _XmRecordEvent(event);
 }
 
-
+
 /*
  * Copy the String in XmNmnemonicCharSet before returning it to the user.
  */

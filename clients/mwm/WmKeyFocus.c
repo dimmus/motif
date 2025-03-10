@@ -62,7 +62,7 @@ static char rcsid[] = "$XConsortium: WmKeyFocus.c /main/5 1996/05/17 12:53:16 rs
 static Boolean removeSelectGrab = True;
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitKeyboardFocus ()
@@ -195,7 +195,7 @@ void InitKeyboardFocus (void)
 } /* END OF FUNCTION InitKeyboardFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetKeyboardFocus (pCD, focusFlags)
@@ -341,7 +341,7 @@ void SetKeyboardFocus (ClientData *pCD, long focusFlags)
 } /* END OF FUNCTION SetKeyboardFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ResetExplicitSelectHandling (pCD)
@@ -397,7 +397,7 @@ void ResetExplicitSelectHandling (ClientData *pCD)
 } /* END OF FUNCTION ResetExplicitSelectHandling */    
 
 
-
+
 /*************************************<->*************************************
  *
  *  DoExplicitSelectGrab (window)
@@ -425,7 +425,7 @@ void DoExplicitSelectGrab (Window window)
 } /* END OF FUNCTION DoExplicitSelectGrab */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetFocusIndication (pCD)
@@ -480,7 +480,7 @@ void SetFocusIndication (ClientData *pCD)
 } /* END OF FUNCTION SetFocusIndication */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ClearFocusIndication (pCD, refresh)
@@ -551,7 +551,7 @@ void ClearFocusIndication (ClientData *pCD, Boolean refresh)
 } /* END OF FUNCTION ClearFocusIndication */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetClientUnderPointer (pSameScreen)
@@ -606,7 +606,7 @@ ClientData *GetClientUnderPointer (pSameScreen)
 } /* END OF FUNCTION GetClientUnderPointer */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FocusNextWindow (type, focusTime)
@@ -720,7 +720,7 @@ Boolean FocusNextWindow (unsigned long type, Time focusTime)
 } /* END OF FUNCTION FocusNextWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FocusNextTransient (pCD, type, initiate, focusTime)
@@ -859,7 +859,7 @@ Boolean FocusNextTransient (ClientData *pCD, unsigned long type, Boolean initiat
 } /* END OF FUNCTION FocusNextTransient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindLastTransientTreeFocus (pCD, pcdNoFocus)
@@ -922,7 +922,7 @@ ClientData *FindLastTransientTreeFocus (pCD, pcdNoFocus)
 } /* END OF FUNCTION FindLastTransientTreeFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindNextTFocusInSeq (pCD, startAt)
@@ -988,7 +988,7 @@ ClientData *FindNextTFocusInSeq (pCD, startAt)
 } /* END OF FUNCTION FindNextTFocusInSeq */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FocusPrevWindow (type, focusTime)
@@ -1103,7 +1103,7 @@ Boolean FocusPrevWindow (unsigned long type, Time focusTime)
 } /* END OF FUNCTION FocusPrevWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FocusPrevTransient (pCD, type, initiate, focusTime)
@@ -1204,7 +1204,7 @@ Boolean FocusPrevTransient (ClientData *pCD, unsigned long type, Boolean initiat
 } /* END OF FUNCTION FocusPrevTransient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindPrevTFocusInSeq (pCD, startAt)
@@ -1270,7 +1270,7 @@ ClientData *FindPrevTFocusInSeq (pCD, startAt)
 } /* END OF FUNCTION FindPrevTFocusInSeq */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckForKeyFocus (pNextEntry, type, focusNext, focusTime)
@@ -1362,7 +1362,7 @@ Boolean CheckForKeyFocus (ClientListEntry *pNextEntry, unsigned long type, Boole
 } /* END OF FUNCTION CheckForKeyFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RepairFocus ()
@@ -1434,7 +1434,7 @@ void RepairFocus (void)
 } /* END OF FUNCTION RepairFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AutoResetKeyFocus (pcdFocus, focusTime)

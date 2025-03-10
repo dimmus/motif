@@ -69,7 +69,7 @@ static char rcsid[] = "$XConsortium: MrmItopw.c /main/13 1996/11/13 13:59:22 drk
  *	UrmIdbPutRIDResource		Put resource id'ed resource in file
  *
  */
-
+
 /*
  *++
  *
@@ -207,7 +207,7 @@ UrmIdbOpenFileWrite (String			name ,
 }
 
 
-
+
 /*
  *++
  *
@@ -297,7 +297,7 @@ UrmIdbPutIndexedResource (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *

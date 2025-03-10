@@ -33,7 +33,7 @@
  */
 
 
-
+
 /******************************<->*************************************
  *
  *  Window manager resource names ...
@@ -245,7 +245,7 @@
 #endif /* WSM */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Window manager resource classes ...
@@ -454,7 +454,7 @@
 #endif /* WSM */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Window manager resource converter names ...
@@ -481,7 +481,7 @@
 #define WmRUsePPosition			"WmUsePPosition"
 
 
-
+
 /*************************************<->*************************************
  *
  *  Window manager resource set definitions and default resource values ...
@@ -494,7 +494,7 @@
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  Mwm resource description file definitions ...

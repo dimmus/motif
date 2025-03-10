@@ -571,7 +571,7 @@ _XmNavigDestroy(
     }
   return ;
 }
-
+
 static Boolean
 CallFocusMoved(Widget		    old,
 	       Widget		    new_wid,
@@ -623,7 +623,7 @@ CallFocusMoved(Widget		    old,
     }
   return( contin) ;
 }
-
+
 Boolean
 _XmCallFocusMoved(
         Widget old,
@@ -804,7 +804,7 @@ _XmMgrTraversal(
   traversal_in_progress = FALSE ;
   return rtnVal ;
 }
-
+
 static Boolean
 CallTraverseObsured(
         Widget new_focus,
@@ -856,7 +856,7 @@ CallTraverseObsured(
 
   return IsTraversable( new_focus, TRUE);
 }
-
+
 void 
 _XmClearFocusPath(
         Widget wid )
@@ -1044,7 +1044,7 @@ _XmGetFocusData (Widget wid)
    return NULL;
 }
 
-
+
 Boolean 
 _XmComputeVisibilityRect(Widget      w,
 			 XRectangle *rectPtr,
@@ -1109,7 +1109,7 @@ _XmComputeVisibilityRect(Widget      w,
 
   return True;
 }
-
+
 Boolean 
 _XmGetPointVisibility(Widget w,
 		      int    root_x,
@@ -1128,7 +1128,7 @@ _XmGetPointVisibility(Widget w,
 
   return False;
 }
-
+
 void 
 _XmSetRect(
         register XRectangle *rect,
@@ -1672,7 +1672,7 @@ XmRemoveTabGroup(
   XtSetArg(arg, XmNnavigationType, XmNONE);
   XtSetValues(w, &arg, 1);
 }
-
+
 /*
  * Invoke the traversal redirection trait for all ancestors of both
  * old_focus and new_focus.  Repeat until concensus is achieved.

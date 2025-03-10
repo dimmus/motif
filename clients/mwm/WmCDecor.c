@@ -108,7 +108,7 @@ static Bevel_Count Bevels[] =
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  FrameWindow (pcd)
@@ -172,7 +172,7 @@ Boolean FrameWindow (ClientData *pcd)
 } /* END OF FUNCTION FrameWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FrameExposureProc (pcd)
@@ -267,7 +267,7 @@ void FrameExposureProc (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  BaseWinExposureProc (pcd)
@@ -319,7 +319,7 @@ void BaseWinExposureProc (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  ConstructFrame (pcd)
@@ -519,7 +519,7 @@ Boolean ConstructFrame (ClientData *pcd)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  GenerateFrameDisplayLists (pcd)
@@ -993,7 +993,7 @@ void GenerateFrameDisplayLists (ClientData *pcd)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  AdoptClient (pcd)
@@ -1077,7 +1077,7 @@ void AdoptClient (ClientData *pcd)
 } /* END OF FUNCTION AdoptClient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetTextBox (pcd, pBox)
@@ -1179,7 +1179,7 @@ void GetTextBox (ClientData *pcd, XRectangle *pBox)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  DrawWindowTitle (pcd, eraseFirst)
@@ -1282,7 +1282,7 @@ void DrawWindowTitle (ClientData *pcd, Boolean eraseFirst)
 } /* END OF FUNCTION DrawWindowTitle */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CreateStretcherWindows (pcd)
@@ -1377,7 +1377,7 @@ void CreateStretcherWindows (ClientData *pcd)
 } /* END OF FUNCTION  CreateStretcherWindows  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CountFrameRectangles (pSD)
@@ -1439,7 +1439,7 @@ void CountFrameRectangles (WmScreenData *pSD)
 } /* END OF FUNCTION  CountFrameRectangles  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AllocateFrameDisplayLists (pcd)
@@ -1547,7 +1547,7 @@ Boolean AllocateFrameDisplayLists (ClientData *pcd)
     return(TRUE);
 } /* END OF FUNCTION  AllocateFrameDisplayLists  */
 
-
+
 /*************************************<->*************************************
  *
  *  InitClientDecoration (pSD)
@@ -1577,7 +1577,7 @@ void InitClientDecoration (WmScreenData *pSD)
 } /* END OF FUNCTION   InitClientDecoration */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AllocateGadgetRectangles (pcd)
@@ -1655,7 +1655,7 @@ Boolean AllocateGadgetRectangles (ClientData *pcd)
     return(TRUE);
 } /* END OF FUNCTION  AllocateGadgetRectangles  */
 
-
+
 /*************************************<->*************************************
  *
  *  ComputeGadgetRectangles (pcd)
@@ -1895,7 +1895,7 @@ void ComputeGadgetRectangles (ClientData *pcd)
 } /* END OF FUNCTION  ComputeGadgetRectangles   */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetSystemMenuPosition (pcd, px, py, height, context)
@@ -2048,7 +2048,7 @@ void GetSystemMenuPosition (ClientData *pcd, int *px, int *py,
 } /* END OF FUNCTION GetSystemMenuPosition */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ShowActiveClientFrame (pcd)
@@ -2144,7 +2144,7 @@ ShowActiveClientFrame (ClientData *pcd)
 } /* END OF FUNCTION ShowActiveClient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ShowInactiveClientFrame (pcd)
@@ -2247,7 +2247,7 @@ ShowInactiveClientFrame (ClientData *pcd)
 } /* END OF FUNCTION ShowInactiveClientFrame */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RegenerateClientFrame (pcd)
@@ -2375,7 +2375,7 @@ void RegenerateClientFrame (ClientData *pcd)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  BevelSystemButton (prTop, prBot, x, y, width, height)
@@ -2468,7 +2468,7 @@ void BevelSystemButton (RList *prTop, RList *prBot, int x, int y,
 } /* END OF FUNCTION  BevelSystemButton   */
 
 
-
+
 /*************************************<->*************************************
  *
  *  BevelMinimizeButton (prTop, prBot, x, y, height)
@@ -2534,7 +2534,7 @@ void BevelMinimizeButton (RList *prTop, RList *prBot, int x, int y,
 } /* END OF FUNCTION  BevelMinimizeButton   */
 
 
-
+
 /*************************************<->*************************************
  *
  *  BevelMaximizeButton (prTop, prBot, x, y, height)
@@ -2602,7 +2602,7 @@ void BevelMaximizeButton (RList *prTop, RList *prBot, int x, int y,
 		    1, 1, 1, 1);
 } /* END OF FUNCTION  BevelMaximizeButton   */
 
-
+
 /*************************************<->*************************************
  *
  *  DepressGadget (pcd, gadget, depressed)
@@ -2725,7 +2725,7 @@ Boolean DepressGadget (ClientData *pcd, int gadget, Boolean depressed)
     return(TRUE);
 } /* END OF FUNCTION  DepressGadget   */
 
-
+
 /*************************************<->*************************************
  *
  *  PushGadgetIn (pcd, gadget)
@@ -2777,7 +2777,7 @@ void PushGadgetIn (ClientData *pcd, int gadget)
     wmGD.gadgetDepressed =  gadget;
 } /* END OF FUNCTION  PushGadgetIn   */
 
-
+
 /*************************************<->*************************************
  *
  *  PopGadgetOut (pcd, gadget)
@@ -2830,7 +2830,7 @@ void PopGadgetOut (ClientData *pcd, int gadget)
 } /* END OF FUNCTION  PopGadgetOut   */
 
 #ifndef NO_SHAPE
-
+
 /*************************************<->*************************************
  *
  *  SetFrameShape (pcd)
@@ -2920,4 +2920,4 @@ void SetFrameShape (ClientData *pcd)
 #endif /* NO_SHAPE */
 
 
-
+

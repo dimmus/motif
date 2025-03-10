@@ -78,7 +78,7 @@ _XmGetFocusFlag(Widget w,
 	   (dd->display.displayInfo))->resetFocusFlag & mask);
 }
 
-
+
 void 
 _XmSetFocusFlag(Widget w,
 		unsigned int mask,
@@ -98,7 +98,7 @@ _XmSetFocusFlag(Widget w,
 	 (dd->display.displayInfo))->resetFocusFlag &= ~mask;
 }
      
-
+
 static Boolean 
 UpdatePointerData(Widget w,
 		  XEvent *event)
@@ -122,7 +122,7 @@ UpdatePointerData(Widget w,
 
   return FALSE;
 }
-
+
 static void 
 FlushPointerData(Widget w,
 		 XEvent *event)
@@ -158,7 +158,7 @@ FlushPointerData(Widget w,
       XtDispatchEvent((XEvent *) &lastEvent);
     }
 }
-
+
 /************************************************************************
  *
  *  _XmTrackShellFocus
@@ -277,7 +277,7 @@ _XmTrackShellFocus(Widget widget,
 
   focusData->focalPoint = newFocalPoint;
 }
-
+
 /************************************************************************
  *
  *  Enter & Leave
@@ -304,7 +304,7 @@ _XmPrimitiveEnter(Widget wid,
       UpdatePointerData(wid, event);
     }
 }
-
+
 /*ARGSUSED*/
 void 
 _XmPrimitiveLeave(Widget wid,
@@ -322,7 +322,7 @@ _XmPrimitiveLeave(Widget wid,
 	}
     }	
 }
-
+
 /************************************************************************
  *
  *  Focus In & Out
@@ -355,7 +355,7 @@ _XmPrimitiveFocusInInternal(Widget wid,
 	_XmWidgetFocusChange(wid, XmFOCUS_IN);
     }
 }
-
+
 /*ARGSUSED*/
 void 
 _XmPrimitiveFocusOut(Widget wid,
@@ -370,7 +370,7 @@ _XmPrimitiveFocusOut(Widget wid,
       _XmWidgetFocusChange(wid, XmFOCUS_OUT);
     }
 }
-
+
 void 
 _XmPrimitiveFocusIn(Widget pw,
 		    XEvent *event,
@@ -379,7 +379,7 @@ _XmPrimitiveFocusIn(Widget pw,
 {
   _XmPrimitiveFocusInInternal(pw, event, params, num_params);
 }
-
+
 /************************************************************************
  *
  *  _XmEnterGadget
@@ -413,7 +413,7 @@ _XmEnterGadget(Widget wid,
         }
     }
 }
-
+
 /************************************************************************
  *
  *  DispatchGadgetInput
@@ -432,7 +432,7 @@ DispatchGadgetInput(XmGadget g,
 	  gadget_class.input_dispatch)) ((Widget) g, event, mask);
      }
 }
-
+
 /************************************************************************
  *
  *  _XmLeaveGadget
@@ -458,7 +458,7 @@ _XmLeaveGadget(Widget wid,
       _XmWidgetFocusChange(wid, XmLEAVE);
     }
 }
-
+
 /************************************************************************
  *
  *  _XmFocusInGadget
@@ -476,7 +476,7 @@ _XmFocusInGadget(Widget wid,
   if (_XmGetFocusPolicy(wid) == XmEXPLICIT)
     _XmWidgetFocusChange(wid, XmFOCUS_IN);
 }
-
+
 /************************************************************************
  *
  *  _XmFocusOutGadget
@@ -494,7 +494,7 @@ _XmFocusOutGadget(Widget wid,
   if (_XmGetFocusPolicy(wid) == XmEXPLICIT)
     _XmWidgetFocusChange(wid, XmFOCUS_OUT);
 }
-
+
 /************************************************************************
  *
  *  Enter, FocusIn and Leave Window procs
@@ -539,7 +539,7 @@ _XmManagerEnter(Widget wid,
 	}
     }
 }
-
+
 /*ARGSUSED*/
 void 
 _XmManagerLeave(Widget wid,
@@ -571,7 +571,7 @@ _XmManagerLeave(Widget wid,
 	}
     }
 }
-
+
 /*ARGSUSED*/
 void 
 _XmManagerFocusInInternal(Widget wid,
@@ -611,7 +611,7 @@ _XmManagerFocusInInternal(Widget wid,
       _XmWidgetFocusChange(wid, XmFOCUS_IN);
     }
 }
-
+
 /*
  * Non-menu widgets use this entry point, so that they will ignore focus
  * events during menu activities.
@@ -624,7 +624,7 @@ _XmManagerFocusIn(Widget mw,
 {
   _XmManagerFocusInInternal(mw, event, params, num_params);
 }
-
+
 /*
  * If the manager widget received a FocusOut while it is processing its
  * FocusIn event, then it knows that the focus has been successfully moved
@@ -658,7 +658,7 @@ _XmManagerFocusOut(Widget wid,
 	}
     }
 }
-
+
 /*ARGSUSED*/
 void 
 _XmManagerUnmap(Widget mw,
@@ -680,7 +680,7 @@ _XmManagerUnmap(Widget mw,
    */
   _XmValidateFocus(mw);
 }
-
+
 /*ARGSUSED*/
 void 
 _XmPrimitiveUnmap(Widget pw,

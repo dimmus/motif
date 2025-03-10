@@ -71,7 +71,7 @@ static char rcsid[] = "$XConsortium: Mrmwread.c /main/11 1996/11/13 14:07:06 drk
  *
  */
 
-
+
 /*
  *++
  *
@@ -144,7 +144,7 @@ UrmHGetWidget (MrmHierarchy		hierarchy_id,
   return Urm__UT_Error("UrmHGetIndexedWidget", _MrmMMsg_0026,
 		       NULL, context_id, MrmBAD_WIDGET_REC) ;
 }
-
+
 /*
  *++
  *
@@ -218,7 +218,7 @@ UrmGetIndexedWidget (IDBFile			file_id,
 		       NULL, context_id, MrmBAD_WIDGET_REC) ;
 }
 
-
+
 /*
  *++
  *

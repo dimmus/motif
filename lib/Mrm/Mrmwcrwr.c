@@ -104,7 +104,7 @@ static char rcsid[] = "$XConsortium: Mrmwcrwr.c /main/14 1996/11/13 14:06:42 drk
  *
  */
 
-
+
 /*
  *++
  *
@@ -205,7 +205,7 @@ UrmCWRInit (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -288,7 +288,7 @@ UrmCWRSetClass (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -378,7 +378,7 @@ UrmCWRInitArglist (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -453,7 +453,7 @@ UrmCWRSetCompressedArgTag (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -526,7 +526,7 @@ UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -736,7 +736,7 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -826,7 +826,7 @@ UrmCWRSetArgResourceRef(URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -939,7 +939,7 @@ UrmCWRSetArgChar8Vec (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -1052,7 +1052,7 @@ UrmCWRSetArgCStringVec (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -1164,7 +1164,7 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -1331,7 +1331,7 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -1442,7 +1442,7 @@ UrmCWRSetCallbackItemRes (URMResourceContextPtr		context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -1500,7 +1500,7 @@ UrmCWRSetExtraArgs (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -1595,7 +1595,7 @@ UrmCWRInitChildren (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -1702,7 +1702,7 @@ UrmCWRSetChild (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -1769,7 +1769,7 @@ Cardinal UrmCWRSetComment (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -1870,7 +1870,7 @@ UrmCWRSetCreationCallback (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -1934,7 +1934,7 @@ UrmCWR__AppendString (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -2006,7 +2006,7 @@ UrmCWR__AppendCString (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -2070,7 +2070,7 @@ UrmCWR__AppendWcharString (URMResourceContextPtr	context_id ,
   return MrmSUCCESS ;
 }
 
-
+
 /*
  *++
  *
@@ -2132,7 +2132,7 @@ UrmCWR__GuaranteeSpace (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -2236,7 +2236,7 @@ UrmCWR__AppendResource (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -2288,7 +2288,7 @@ UrmCWR__ValidateContext (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -2359,7 +2359,7 @@ UrmCWR__BindArgPtrs (URMResourceContextPtr	context_id ,
 }
 
 
-
+
 /*
  *++
  *

@@ -194,7 +194,7 @@ void PrintMatrix( char * hdr, XmGeoMatrix spec) ;
 
 #endif /* DEBUG_GEOUTILS */
 
-   
+   
 /****************************************************************/
 XtGeometryResult 
 _XmHandleQueryGeometry(
@@ -245,7 +245,7 @@ _XmHandleQueryGeometry(
     return XmeReplyToQueryGeometry(widget, intended, desired) ;
 }
 
-
+
 /****************************************************************/
 XtGeometryResult 
 _XmHandleGeometryManager(
@@ -448,7 +448,7 @@ _XmHandleGeometryManager(
         } 
     return( result) ;
     }
-
+
 /****************************************************************
  * Handle geometry request for XmRESIZE_ANY resize policy.
  * Accept request allowed by parent.
@@ -539,7 +539,7 @@ QueryAnyPolicy(
         }
     return( queryResult) ;
     }
-
+
 /****************************************************************
  * Handle geometry request for XmRESIZE_GROW resize policy.
  * Accept request which would increase or maintain current size.
@@ -688,7 +688,7 @@ QueryNonePolicy(
 
     return( XtGeometryYes) ;
     }
-
+
 /****************************************************************/
 void 
 _XmHandleSizeUpdate(
@@ -784,7 +784,7 @@ _XmHandleSizeUpdate(
     _XmGeoMatrixFree( geoSpec) ;
     return ;
     }
-
+
 /****************************************************************
  * This routine allocates and initializes the data structure used
  *   to describe a matrix of geometry boxes.  Supplemental initialization
@@ -884,7 +884,7 @@ _XmGeoSetupKid(
     */
     return( TRUE) ;
     }
-
+
 /****************************************************************
  * This routine goes through the widget matrix and retrieves the appropriate
  *   values for the KidGeometry boxes.  Field values of the boxes may be
@@ -936,7 +936,7 @@ _XmGeoMatrixGet(
 #endif
     return ;
     }
-
+
 /****************************************************************
  * The XtConfigureWidget routine is called on all widgets of the geoSpec
  *   matrix as needed (when the geometry values of the box have changed).
@@ -1014,7 +1014,7 @@ _XmGeoMatrixSet(
         } 
     return ;
     }
-
+
 /****************************************************************
  * This routine adjusts boxes according to policies regarding border size
  *   and even-sized boxes.  Box dimensions are altered appropriately if
@@ -1066,7 +1066,7 @@ _XmGeoAdjustBoxes(
         }
     return ;
     }
-
+
 /****************************************************************
  * This routine traverses the matrix and collects data regarding the
  *   sizes of boxes, the minimum fill area expected, and various other
@@ -1176,7 +1176,7 @@ _XmGeoGetDimensions(
     geoSpec->boxes_minor = matrixBoxesH ;  /* Sum of tallest box in each row.*/
     geoSpec->fill_minor = matrixFillH ;    /* Sum of vertical fill spacing.  */
     }
-
+
 /****************************************************************
  * After the boxes have been layed-out according to the minimum vertical fill
  *   requirements of the matrix, this routine stretches the layout to fill
@@ -1288,7 +1288,7 @@ _XmGeoStretchVertical(
         }
     return( actualH + deltaY) ;                    /* Return new height.*/
     }
-
+
 /****************************************************************
  * After the boxes have been layed-out according to the minimum vertical fill
  *   requirements of the matrix, this routine stretches the layout to fill
@@ -1388,7 +1388,7 @@ _XmGeoFillVertical(
 
     return( actualH + deltaY) ;                    /* Return new height.*/
     }
-
+
 /****************************************************************
  * Calculates and returns appropriate fill factor from given layout
  *   parameters.  Also returns appropriate spacing for ends.
@@ -1450,7 +1450,7 @@ _XmGeoCalcFill(
     *pBetweenSpace = (betweenSpec * fillSpace) / totalSpecSpace ;
     return ;
     }
-
+
 /****************************************************************
  * The x, y, width, and height fields of the boxes in the geoSpec matrix
  *   are modified with values appropriate for the layout parameters specified
@@ -1582,7 +1582,7 @@ _XmGeoArrangeBoxes(
         } 
     return ;
     }
-
+
 /****************************************************************/
 static int 
 boxWidthCompare(
@@ -1678,7 +1678,7 @@ FitBoxesAveraging(
 
     return ;
     }
-
+
 /****************************************************************
  * This routine alters the width of boxes in proportion to the width of each
  *   box such that the total change is equal to amtOffset.  If amtOffset is
@@ -1740,7 +1740,7 @@ FitBoxesProportional(
         } 
     return ;
     }
-
+
 /****************************************************************/
 static void 
 SegmentFill(
@@ -1848,7 +1848,7 @@ SegmentFill(
     rowBoxes[numBoxes].kid = holdEnd ;
     return ;
     }
-
+
 /****************************************************************
  * This routine lays out the row of boxes with the spacing specified in
  *   the endSpace and betweenSpace parameters.  If the width of a row
@@ -2010,7 +2010,7 @@ _XmGeoLayoutSimple(
     return( y + rowH) ;
     }
 
-
+
 /****************************************************************
  * This routines lays out the boxes in this row according to the specified
  *   paramaters and the policies specified in the layout record at layoutPtr.
@@ -2116,7 +2116,7 @@ _XmGeoArrangeList(
         }
     return( y) ;
     }
-
+
 /****************************************************************
  * Changes boxes in the kid geometry list to have desired width.
  * If width > 1, then use the specified width.  
@@ -2209,7 +2209,7 @@ _XmGeoBoxesSameHeight(
         } 
     return( useH) ;
     }
-
+
 /**************************************************************** ARGSUSED
  * This routine is a fixup routine which can be used for rows which consist
  *   of a single separator widget.  The effect of this routine is to have 
@@ -2259,7 +2259,7 @@ _XmSeparatorFix(
     return ;
     } 
 
-
+
 /**************************************************************** ARGSUSED
  * This routine is a fixup routine which can be used for rows which consist
  *   of a single MenuBar RowColumn.  The effect of this routine is to have
@@ -2356,7 +2356,7 @@ _XmGeoLoadValues(
     geoResult->request_mode = CWX | CWY | CWWidth | CWHeight | CWBorderWidth ;
     return ;
     }
-
+
 /****************************************************************
  * Get a count of the managed kids of a parent, it is assumed that all 
  *   gadgets are always managed
@@ -2376,7 +2376,7 @@ _XmGeoCount_kids(
         }
     return( n) ;
     }
-
+
 /**************************************************************** ARGSUSED
  * Assemble a kid box for each child widget and gadget, fill in data about 
  *   each widget and optionally set up uniform border widths.
@@ -2446,7 +2446,7 @@ _XmGetKidGeo(
 
     return( geo) ;
     }
-
+
 /****************************************************************/
 void 
 _XmGeoClearRectObjAreas(
@@ -2467,7 +2467,7 @@ _XmGeoClearRectObjAreas(
                             (unsigned int) (r->rectangle.height + bw2), TRUE) ;
     return ;
     }
-
+
 /**************************************************************** ARGSUSED
  * Take the kid geometry array and change each kid to match them.
  *   remember not to do the resize of the instigator.
@@ -2500,7 +2500,7 @@ _XmSetKidGeo(
     }
     return ;
 }
-
+
 /****************************************************************
  * Returns TRUE if all specified geometries of geoA are equal to either the
  *   specified geometries of geoB or to the geometry of the widget, and 
@@ -2629,7 +2629,7 @@ _XmGeometryEqual(
         } 
     return( TRUE) ;
     }
-
+
 /****************************************************************
  * Returns TRUE if all specified geometries of "desired" correspond to
  *   specified geometries of "response" and are equal to them.
@@ -2688,7 +2688,7 @@ _XmGeoReplyYes(
         } 
     return( TRUE) ;
     }
-
+
 /****************************************************************
  * This routine calls the geometry manager and accept the almost
  ****************/
@@ -2718,7 +2718,7 @@ _XmMakeGeometryRequest(
   return answer ;
 }
 
-
+
 /****************************************************************/
 #ifdef DEBUG_GEOUTILS
 /****************************************************************/

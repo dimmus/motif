@@ -52,7 +52,7 @@
 #define DIRTEXT_STRING    _XmMMsgResource_0011
 #define PROMPT_STRING     _XmMMsgResource_0012
 
-
+
 
 /****************************************************************/
 static char *

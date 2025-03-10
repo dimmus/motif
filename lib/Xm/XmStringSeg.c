@@ -290,7 +290,7 @@ _XmStringGetSegment(_XmStringContext   context,
 
   return result;
 }
-
+
 Boolean 
 _XmStringGetNextSegment(
         _XmStringContext context,
@@ -342,7 +342,7 @@ _XmStringGetNextSegment(
 	  
   return result;
 }
-
+
 /*
  * fetch the next 'segment' of the external TCS
  */

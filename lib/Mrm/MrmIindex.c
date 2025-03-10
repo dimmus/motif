@@ -97,7 +97,7 @@ static char rcsid[] = "$XConsortium: MrmIindex.c /main/13 1996/11/13 13:57:31 dr
       _IdbBufferRecordType(buffer)==IDBrtIndexNode)
 
 
-
+
 /*
  *++
  *
@@ -181,7 +181,7 @@ Idb__INX_ReturnItem (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -274,7 +274,7 @@ Idb__INX_FindIndex (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -391,7 +391,7 @@ Idb__INX_SearchIndex (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -480,7 +480,7 @@ Idb__INX_GetBtreeRecord ( IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *

@@ -115,7 +115,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
  */
 static FILE *dbfile;
 static int  num_bits;
-
+
 void db_incorporate()
 
 /*
@@ -330,7 +330,7 @@ void db_incorporate()
 }
 
 
-
+
 void db_read_ints_and_string(header)
     _db_header_ptr   header;
 
@@ -424,7 +424,7 @@ void db_read_ints_and_string(header)
 }
 
 
-
+
 void db_read_char_table(header)
     _db_header_ptr   header;
 
@@ -515,7 +515,7 @@ void db_read_char_table(header)
 }
 
 
-
+
 void db_read_length_and_string(header)
     _db_header_ptr   header;
 
@@ -676,7 +676,7 @@ void db_read_length_and_string(header)
 }
 
 
-
+
 void db_read_int_and_shorts(header)
     _db_header_ptr   header;
 
@@ -760,7 +760,7 @@ void db_read_int_and_shorts(header)
 }
 
 
-
+
 void db_open_file ()
 
 /*
@@ -875,7 +875,7 @@ void db_open_file ()
 }
 
 
-
+
 
 String get_root_dir_name()
 {
@@ -914,7 +914,7 @@ String get_root_dir_name()
 	strcat (outptr, "/");
 	return outptr; 
 }
-
+
 /*
  * XAPPLRES_DEFAULT and UIDPATH_DEFAULT are intentionally split to support
  * SCCS. DO NOT reformat the lines else %-N-%-S could be converted by SCCS into

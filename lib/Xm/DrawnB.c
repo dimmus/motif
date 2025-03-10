@@ -202,7 +202,7 @@ static XtTranslations menu_parsed;
 
 #define menuTranslations	_XmDrawnB_menuTranslations
 
-
+
 /*************************************<->*************************************
  *
  *
@@ -344,7 +344,7 @@ static XmBaseClassExtRec       drawnBBaseClassExtRec = {
 };
 
 
-
+
 /*************************************<->*************************************
  *
  *
@@ -437,7 +437,7 @@ static XmMenuSavvyTraitRec MenuSavvyRecord = {
     _XmCBNameActivate,
 };
 
-
+
 /************************************************************************
  *
  *     Arm
@@ -598,7 +598,7 @@ ActivateCommon(
       }
    }
 }
-
+
 
 
 static void 
@@ -741,7 +741,7 @@ Disarm(
 }
 
 
-
+
 /************************************************************************
  *
  *     BtnDown
@@ -824,7 +824,7 @@ BtnDown(
     }
   _XmRecordEvent (event);
 }
-
+
 /************************************************************************
  *
  *     BtnUp
@@ -973,7 +973,7 @@ BtnUp(
     XmProcessTraversal((Widget) db, XmTRAVERSE_CURRENT);
   DB_FixTearoff(db);
 }
-
+
 /************************************************************************
  *
  *  Enter
@@ -1085,7 +1085,7 @@ Leave(
       DrawPushButton(db, FALSE);
   }
 }
-
+
 /*************************************<->*************************************
  *
  *  BorderHighlight 
@@ -1129,7 +1129,7 @@ BorderHighlight(
   }
 
 }
-
+
 /*************************************<->*************************************
  *
  *  BorderUnhighlight
@@ -1180,7 +1180,7 @@ BorderUnhighlight(
     (*border_unhighlight)(wid);
   }
 }
-
+
 
 
 /************************************************************************
@@ -1218,7 +1218,7 @@ ClassPartInitialize(
   /* Install the activatable trait for all subclasses */
   XmeTraitSet((XtPointer)wc, XmQTactivatable, (XtPointer) &drawnButtonAT);
 }
-     
+     
 /************************************************************
  *
  * InitializePrehook
@@ -1262,7 +1262,7 @@ InitializePrehook(
     bw->label.font = XmeGetDefaultRenderTable (nw, XmBUTTON_FONTLIST);
   _XmProcessUnlock();
 }
-
+
 /************************************************************
  *
  * InitializePosthook
@@ -1281,7 +1281,7 @@ InitializePosthook(
 {
   _XmRestoreCoreClassTranslations (nw);
 }
-
+
 /*************************************<->*************************************
  *
  *  Initialize 
@@ -1448,7 +1448,7 @@ DrawPushButton(
 		    type);
 }
 
-
+
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -1472,7 +1472,7 @@ SetValuesPrehook(
 
   return False;
 }
-
+
 /*************************************<->*************************************
  *
  *  SetValues(current, request, new_w)

@@ -112,7 +112,7 @@ int 			i;
 } /* End mvsCopyIntRes () */
 
  
-
+
 /*************************************************************************
 *  This function copies all resources. The entire list of resources is   *
 * looped through and each resource is copied using mvsCopyResource().    *
@@ -130,7 +130,7 @@ MvsArgVal 		dst_resource[], src_resource[];
 } /* End mvsCopyIntResources () */
 
  
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -182,7 +182,7 @@ int 			i;
 
 } /* End mvsFreeIntRes () */
  
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -212,7 +212,7 @@ MvsArgVal 		resources[];
 
 } /* End mvsFreeIntResources () */
  
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -250,7 +250,7 @@ char 			resource_name[];
 
 } /* End mvsGetInternalResource () */
 
-
+
 /***********************************************************************
         Author: PSN
         History:
@@ -276,7 +276,7 @@ char resource_name[];
 
 } /* End mvsGetParentIntRes() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -307,7 +307,7 @@ char 			resource_name[];
         
 } /* End mvsGetIntResNum () */
  
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -411,7 +411,7 @@ Cardinal 		nargs;
 
 } /* End mvsSetLocalIntResValues() */
 
-
+
 /***********************************************************************
   	Author: SJS
 	History:

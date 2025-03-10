@@ -52,7 +52,7 @@ static char rcsid[] = "$TOG: ArrowBG.c /main/20 1999/01/26 15:30:15 mgreess $"
 #define DELAY_DEFAULT	100
 #define INVALID_PIXEL	((Pixel) -1)
 #define INVALID_PIXMAP	((Pixmap) -1)
-
+
 /********    Static Function Declarations    ********/
 
 static Pixmap GetHighlightPixmapDefault(XmArrowButtonGadget ag);
@@ -112,7 +112,7 @@ static void DrawArrowG(XmArrowButtonGadget ag,
 static void GetColors(Widget widget, XmAccessColorData color_data);
 
 /********    End Static Function Declarations    ********/
-
+
 /*  Resource list for Arrow  */
 
 static XtResource resources[] = 
@@ -304,7 +304,7 @@ static XmConst XmAccessColorsTraitRec arrowBGACT =
   GetColors,			/* getColors	*/
   NULL				/* setColors	*/
 };
- 
+ 
 static Pixmap
 GetHighlightPixmapDefault(XmArrowButtonGadget ag)
 {
@@ -319,7 +319,7 @@ GetHighlightPixmapDefault(XmArrowButtonGadget ag)
 
   return result;
 }
-
+
 static Pixmap
 GetTopShadowPixmapDefault(XmArrowButtonGadget ag)
 {
@@ -340,7 +340,7 @@ GetTopShadowPixmapDefault(XmArrowButtonGadget ag)
 
   return result;
 }
-
+
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -363,7 +363,7 @@ ClassPartInitialize(
   /* Install the accessColors trait for all subclasses as well. */
   XmeTraitSet((XtPointer)wc, XmQTaccessColors, (XtPointer)&arrowBGACT);
 }
-
+
 /************************************************************************
  *
  *  Initialize
@@ -432,7 +432,7 @@ Initialize(
     XmFOCUS_IN_EVENT | XmFOCUS_OUT_EVENT | XmENTER_EVENT | XmLEAVE_EVENT
       | XmMULTI_ARM_EVENT|  XmMULTI_ACTIVATE_EVENT;
 }
-
+
 /************************************************************************
  *
  *  GetBackgroundGC
@@ -461,7 +461,7 @@ GetBackgroundGC(
   
   ag->arrowbutton.background_GC = XtGetGC ((Widget) mw, valueMask, &values);
 }
-
+
 /************************************************************************
  *
  *  GetArrowGC
@@ -495,7 +495,7 @@ GetArrowGC(
 						&values, GCClipMask, 
 						unusedMask);
 }
-
+
 /************************************************************************
  *
  *  Redisplay
@@ -568,7 +568,7 @@ Redisplay(
       (*(xmArrowButtonGadgetClassRec.gadget_class.border_highlight)) (w);
     } 
 }
-
+
  /*
   *
   * DealWithColors
@@ -612,7 +612,7 @@ DealWithColors(
       InitNewColorBehavior(ag);
     }
 }
- 
+ 
 static void
 InitNewColorBehavior(
         XmArrowButtonGadget ag)
@@ -666,7 +666,7 @@ InitNewColorBehavior(
       memcpy((char*) &ag->arrowbutton.highlight_color, value.addr,value.size);
     }
 }
-
+
  /*
   *
   * DealWithPixmaps
@@ -696,7 +696,7 @@ DealWithPixmaps(
       InitNewPixmapBehavior(ag);
     }
 }
-    
+    
 /*
  * InitNewPixmapBehavior
  *
@@ -717,7 +717,7 @@ InitNewPixmapBehavior(
       ag->arrowbutton.highlight_pixmap = GetHighlightPixmapDefault(ag);
     }
 }
-
+
 /************************************************************************
  *
  *  Destroy
@@ -743,7 +743,7 @@ Destroy(
   XtReleaseGC ((Widget) mw, aw->arrowbutton.bottom_shadow_GC);
   XtReleaseGC ((Widget) mw, aw->arrowbutton.highlight_GC);
 }
-
+
 /************************************************************************
  *
  *  SetValues
@@ -848,7 +848,7 @@ SetValues(
   
   return (returnFlag);
 }
-
+
 static void 
 HighlightBorder(
         Widget w)
@@ -872,7 +872,7 @@ HighlightBorder(
 		   ag->rectangle.width, ag->rectangle.height,
 		   ag->gadget.highlight_thickness);
 }
-
+
 static Boolean 
 HandleRedraw (
 	Widget kid, 	       
@@ -1001,7 +1001,7 @@ HandleRedraw (
   
   return redraw;
 }
-
+
 /************************************************************************
  *
  *  InputDispatch
@@ -1056,7 +1056,7 @@ InputDispatch(
   else if (event_mask & XmFOCUS_OUT_EVENT) 
     _XmFocusOutGadget ((Widget)ag, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *
  *  Arm
@@ -1085,7 +1085,7 @@ Arm(
 			  &call_value);
     }
 }
-
+
 /************************************************************************
  *
  *  Activate
@@ -1128,7 +1128,7 @@ Activate(
 			  aw->arrowbutton.activate_callback, &call_value);
     }
 }
-
+
 /************************************************************************
  *
  *     ArmAndActivate
@@ -1197,7 +1197,7 @@ ArmAndActivate(
 			ArmTimeout, (XtPointer)ab);
     }
 }
-
+
 /*ARGSUSED*/
 static void 
 ArmTimeout(
@@ -1214,7 +1214,7 @@ ArmTimeout(
       XFlush (XtDisplay (ab));
     }
 }
-
+
 /************************************************************************
  *
  *  Disarm
@@ -1233,7 +1233,7 @@ Disarm(
   XtCallCallbackList ((Widget) aw, aw->arrowbutton.disarm_callback,
 		      &call_value);
 }
-
+
 /************************************************************************
  *
  *  Enter
@@ -1251,7 +1251,7 @@ Enter(
     DrawArrowG(aw, aw->arrowbutton.bottom_shadow_GC,
 	       aw->arrowbutton.top_shadow_GC, NULL);
 }
-
+
 /************************************************************************
  *
  *  Leave
@@ -1269,7 +1269,7 @@ Leave(
     DrawArrowG(aw, aw->arrowbutton.top_shadow_GC,
 	       aw->arrowbutton.bottom_shadow_GC, NULL);
 }
-
+
 /************************************************************************
  *
  *  Help
@@ -1285,7 +1285,7 @@ Help(
 {
    _XmSocorro((Widget) aw, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *
  *  ChangeCB
@@ -1305,7 +1305,7 @@ ChangeCB(
   else
     XtRemoveCallback (w, XmNactivateCallback, activCB, closure);
 }
-
+
 static void
 GetColors(Widget w, 
 	  XmAccessColorData color_data)
@@ -1318,7 +1318,7 @@ GetColors(Widget w,
   color_data->top_shadow_color = ArrowBG_TopShadowColor(w);
   color_data->bottom_shadow_color = ArrowBG_BottomShadowColor(w);
 }
-
+
 /************************************************************************
  *
  *  XmCreateArrowButtonGadget
@@ -1384,7 +1384,7 @@ XmVaCreateManagedArrowButtonGadget(
     return w;
     
 }
-
+
 /* ARGSUSED */
 static void 
 ActivateCommonG(
@@ -1403,7 +1403,7 @@ ActivateCommonG(
 	gadget_class.arm_and_activate))
       ((Widget) ag, event, NULL, NULL);
 }
-
+
 /* Wrapper around XmeDrawArrow to calculate sizes. */
 static void
 DrawArrowG(XmArrowButtonGadget ag,

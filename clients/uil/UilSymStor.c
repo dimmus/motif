@@ -110,7 +110,7 @@ externaldef(uil_comp_glbl) URMPointerListPtr	sym_az_freed_nodes;
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -235,7 +235,7 @@ if ( sym_az_freed_nodes != NULL )
     UrmPlistFree (sym_az_freed_nodes);
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -290,7 +290,7 @@ sym_make_external_def( XmConst sym_name_entry_type *az_name )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -358,7 +358,7 @@ sym_make_forward_ref(XmConst yystype *az_id_frame,
     sym_az_forward_ref_chain = fwd_ref_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -436,7 +436,7 @@ sym_make_value_forward_ref (XmConst yystype  *az_value_frame,
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -553,7 +553,7 @@ switch ( node_entry->header.b_tag )
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -604,7 +604,7 @@ _debug_output ("\n\n");
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -739,7 +739,7 @@ sym_dump_symbol (sym_entry_type *az_symbol_entry)
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -794,7 +794,7 @@ sym_dump_widget( XmConst sym_widget_entry_type *az_widget_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -837,7 +837,7 @@ sym_dump_argument( XmConst sym_argument_entry_type *az_argument_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -891,7 +891,7 @@ sym_dump_control( XmConst sym_control_entry_type *az_control_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -935,7 +935,7 @@ sym_dump_callback( XmConst sym_callback_entry_type *az_callback_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -982,7 +982,7 @@ sym_dump_list( XmConst sym_list_entry_type *az_list_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1033,7 +1033,7 @@ sym_dump_name( XmConst sym_name_entry_type *az_name_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1080,7 +1080,7 @@ sym_dump_module( XmConst sym_module_entry_type *az_module_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1125,7 +1125,7 @@ sym_dump_color_item( XmConst sym_color_item_entry_type *az_color_item_entry )
 	  (unsigned)az_color_item_entry->az_next );
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1166,7 +1166,7 @@ sym_dump_parent_list_item ( XmConst sym_parent_list_type *az_parent_list_item )
       (unsigned)az_parent_list_item->next);
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1211,7 +1211,7 @@ sym_dump_external_def(
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1283,7 +1283,7 @@ sym_dump_proc_def( XmConst sym_proc_def_entry_type *az_proc_def_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1329,7 +1329,7 @@ sym_dump_proc_ref( XmConst sym_proc_ref_entry_type *az_proc_ref_entry )
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1380,7 +1380,7 @@ sym_dump_forward_ref(XmConst sym_forward_ref_entry_type *az_forward_ref_entry)
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1656,7 +1656,7 @@ common_table:
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1725,7 +1725,7 @@ output_text(XmConst int length, XmConst char *text)
     }
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1765,7 +1765,7 @@ sym_dump_source_info (sym_entry_header_type *hdr)
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1826,7 +1826,7 @@ sym_dump_obj_header (XmConst sym_obj_entry_type *az_obj_entry)
 }
 
 
-
+
 void
 sym_dump_include_file ( sym_include_file_entry_type *az_symbol_entry )
 {
@@ -1838,7 +1838,7 @@ sym_dump_include_file ( sym_include_file_entry_type *az_symbol_entry )
 }
 
 
-
+
 void
 sym_dump_section ( sym_section_entry_type *az_symbol_entry )
 {
@@ -1851,7 +1851,7 @@ sym_dump_section ( sym_section_entry_type *az_symbol_entry )
 }
 
 
-
+
 void
 sym_dump_object_variant ( sym_def_obj_entry_type * az_symbol_entry )
 {
@@ -1862,7 +1862,7 @@ sym_dump_object_variant ( sym_def_obj_entry_type * az_symbol_entry )
 }
 
 
-
+
 void
 sym_dump_root_entry ( sym_root_entry_type *az_symbol_entry )
 {
@@ -1874,7 +1874,7 @@ sym_dump_root_entry ( sym_root_entry_type *az_symbol_entry )
 }
 
 
-
+
 char *
 sym_section_text (int b_type)
 {

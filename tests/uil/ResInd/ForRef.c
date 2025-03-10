@@ -191,7 +191,7 @@ main(argc, argv)
   fprintf(stdout,"    UIL Value  \t\tC Value\t\tError\n");
   fprintf(stdout,"    -----------\t\t-------\t\t-----\n");
   
-  
+  
   /*
    * Fetch UIL integer expression values and test against equivalent C value
    */
@@ -225,7 +225,7 @@ main(argc, argv)
 	}
     }
   
-  
+  
   /*
    * Fetch UIL float expression values and test against equivalent C value
    */
@@ -262,7 +262,7 @@ main(argc, argv)
 	}
     }
   
-  
+  
   /*
    * Fetch UIL string expression values and test against equivalent C value
    */
@@ -293,7 +293,7 @@ main(argc, argv)
 	}
     }
   
-  
+  
   /*
    * Fetch UIL integer table values and test against equivalent C value
    */
@@ -325,7 +325,7 @@ main(argc, argv)
 	}
     }
   
-  
+  
   /*
    * Fetch UIL asciz string table values and test against equivalent C value
    */
@@ -357,7 +357,7 @@ main(argc, argv)
 	}
     }
   
-  
+  
   /*
    * Print error results
    */

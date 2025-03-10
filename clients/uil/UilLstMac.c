@@ -145,7 +145,7 @@ static int		off_info_cnt = 0;
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -355,7 +355,7 @@ URMResourceContext	* az_context;
     unload_stack(( char *) w_rec, w_rec_size, az_src_rec );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -867,7 +867,7 @@ src_source_record_type	*az_src_rec;
     src_append_machine_code ( az_src_rec, 0, 0, 0, 0 );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1146,7 +1146,7 @@ URMResourceContext	* az_context;
     src_append_machine_code ( az_src_rec, 0, 0, 0, 0 );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1227,7 +1227,7 @@ URMResourceContext	* az_context;
     src_append_machine_code ( az_src_rec, 0, 0, 0, 0 );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1294,7 +1294,7 @@ void	off_put
     off_info_cnt++;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1351,7 +1351,7 @@ unsigned short		* off_offset;
     off_info_cnt--;
 
 }
-
+
 char * type_from_code 
 
 	(MrmType type_code)
@@ -1453,7 +1453,7 @@ char * type_from_code
     }
 
 }
-
+
 char * access_from_code 
 
 	(MrmFlag access_code)
@@ -1497,7 +1497,7 @@ char * access_from_code
     }
 
 }
-
+
 char * group_from_code 
 
 	(MrmGroup group_code)
@@ -1542,7 +1542,7 @@ char * group_from_code
     }
 
 }
-
+
 
 void format_arg_value (argval_ptr, buffer)
 
@@ -1635,7 +1635,7 @@ char			* buffer;
 
 }
 
-
+
 char * class_name_from_code 
 
 	(MrmCode class)
@@ -1687,7 +1687,7 @@ return "unknown";
 
 }
 
-
+
 char * resource_name_from_code 
 
 	(MrmCode resource)

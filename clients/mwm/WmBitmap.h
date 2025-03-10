@@ -91,7 +91,7 @@ static unsigned char time16m_bits[] = {
 #endif /* MWM_NEED_TIME16 */
 
 
-
+
 /*
  * Define DO NOT ENTER cursor
  */

@@ -166,7 +166,7 @@ XIS SYNCHRONIZE
   further processing. Then the window manager takes these requests, and does 
   something to them according to their behavior policy, and possible sends 
   them back to the server in some alternate form.
-
+
   This gives us a worst-case data-flow model which looks something like this:
 
                       +-----------+
@@ -271,7 +271,7 @@ XIS SYNCHRONIZE
          E = Intermediate events
          R = Receive sync event
          D = Delete Widget
-
+
   The step which "Process all events" calls this routine.  The basic code
   path of this routine is as follows:
 
@@ -326,7 +326,7 @@ XIS SYNCHRONIZE
   events in the following order:
 
       P S E S E S E... R R R <- last sync response
-
+
   In reality, very few of the calls to XtDispatch() result in requests which
   generate more events.  So monitoring the events would indicate that we
   end up flooding the data flow path with a stream of many unnecessary 
@@ -398,7 +398,7 @@ XIS SYNCHRONIZE
   done to ensure that the load on the other systems and/or communication paths
   has not held up the events.
 */
-
+
 
 typedef struct _sync_values {
     int serviced_sync;

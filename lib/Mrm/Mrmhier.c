@@ -104,7 +104,7 @@ static char		*uidPath;
 static SubstitutionRec	uidSubs[1];
 
 
-
+
 /*
  *++
  *
@@ -337,7 +337,7 @@ Urm__OpenHierarchy (MrmCount			num_files,
 }
 
 
-
+
 /*
  *++
  *
@@ -414,7 +414,7 @@ Urm__CloseHierarchy (MrmHierarchy	hierarchy_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -508,7 +508,7 @@ UrmHGetIndexedResource (MrmHierarchy		hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -586,7 +586,7 @@ Urm__RegisterNamesInHierarchy (MrmHierarchy		hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -650,7 +650,7 @@ Urm__LookupNameInHierarchy (MrmHierarchy	hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *

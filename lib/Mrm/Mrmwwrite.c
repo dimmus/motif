@@ -69,7 +69,7 @@ static char rcsid[] = "$XConsortium: Mrmwwrite.c /main/11 1996/11/13 14:08:21 dr
  */
 
 
-
+
 /*
  *++
  *
@@ -136,7 +136,7 @@ UrmPutIndexedWidget (IDBFile			file_id ,
 }
 
 
-
+
 /*
  *++
  *

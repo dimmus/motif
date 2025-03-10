@@ -153,7 +153,7 @@ static void CheckSetRenderTables(Widget wid,
 
 /********    End Static Function Declarations    ********/
 
-
+
 /*  default translation table and action list  */
 
 #define defaultTranslations	_XmBulletinB_defaultTranslations
@@ -167,7 +167,7 @@ static XtActionsRec actionsList[] =
 };
 
 
-
+
 /*  Resource definitions for BulletinBoard
  */
 
@@ -195,7 +195,7 @@ static XmSyntheticResource syn_resources[] =
 };
 
 
-
+
 static XtResource resources[] =
 {
 	{	XmNshadowType,
@@ -343,7 +343,7 @@ static XtResource resources[] =
 };
 
 
-
+
 /****************************************************************
  *
  *	BulletinBoard class record
@@ -702,7 +702,7 @@ Initialize(
     return ;
 }
 
-
+
 /****************************************************************
  * Free fontlists, etc.
  ****************/
@@ -794,7 +794,7 @@ Destroy(
     } 
 }
 
-
+
 /****************************************************************
  * Modify attributes of a BulletinBoard instance.
  ****************/
@@ -1052,7 +1052,7 @@ SetValues(
 
     return( flag) ;
 }
-
+
 /****************************************************************/
 static Boolean 
 SetValuesHook(
@@ -1090,7 +1090,7 @@ SetValuesHook(
     return (False);
 }
 
-
+
 /****************************************************************
  * Arrange widgets and make geometry request if necessary.
  ****************/
@@ -1330,7 +1330,7 @@ HandleGeometryManager(
 
     return( result) ;
     }
-
+
 /****************************************************************/
 void 
 _XmBulletinBoardSizeUpdate(
@@ -1383,7 +1383,7 @@ _XmBulletinBoardSizeUpdate(
 
     return ;
     }
-
+
 /****************************************************************
  * Layout children of the BulletinBoard.
  ****************/
@@ -1451,7 +1451,7 @@ ChangeManaged(
 
     return ;
     }
-   
+   
 /****************************************************************
  * Unmanage BulletinBoard after button is activated.
  ****************/
@@ -1469,7 +1469,7 @@ UnmanageCallback(
 
     return ;
     }
-
+
 /****************************************************************
  * Add a child to the BulletinBoard.
  ****************/
@@ -1526,7 +1526,7 @@ InsertChild(
         }
     return ;
     }
-
+
 /****************************************************************
  * Clear widget id in instance record
  ****************/
@@ -1560,7 +1560,7 @@ DeleteChild(
   (*delete_child)(child);
   return ;
 }
-
+
 /****************************************************************/
 static XtGeometryResult 
 GeometryManager(
@@ -1587,7 +1587,7 @@ GeometryManager(
                                     bb->bulletin_board.resize_policy,
                                     bb->bulletin_board.allow_overlap));
     }
-   
+   
 /****************************************************************
  * Handle query geometry requests
  ****************/
@@ -1614,7 +1614,7 @@ QueryGeometry(
                                   bb->bulletin_board.margin_height, 
                                   bb->bulletin_board.resize_policy));
     }
-
+
 /****************************************************************
  * Conform to new size.
  ****************/
@@ -1661,7 +1661,7 @@ Resize(
 
     return ;
     }
-
+
 /****************************************************************
  * Redisplay gadgets and draw shadow.
  ****************/
@@ -1836,7 +1836,7 @@ _XmBulletinBoardFocusMoved(
 
     return ;
     }
-
+
 /****************************************************************/
 static Boolean 
 BulletinBoardParentProcess(
@@ -1868,7 +1868,7 @@ BulletinBoardParentProcess(
 
     return( _XmParentProcess( XtParent( bb), event)) ;
     }
-
+
 /****************************************************************
  * Process Return and Enter key events in the BulletinBoard.
  *   If there is a default button, call its Activate callbacks.
@@ -1928,7 +1928,7 @@ _XmBulletinBoardReturn(Widget wid,
 	} 
     }
 }
-
+
 /****************************************************************
  * Process Cancel key events in the BulletinBoard.
  * If there is a cancel button, call its Activate callbacks.
@@ -1988,7 +1988,7 @@ _XmBulletinBoardCancel(Widget wid,
 	} 
     }
 }
-
+
 /*ARGSUSED*/ 
 void 
 _XmBulletinBoardMap(
@@ -2179,7 +2179,7 @@ CheckSetRenderTables(Widget wid,
   }
 }
 
-
+
 
 /****************************************************************
  *

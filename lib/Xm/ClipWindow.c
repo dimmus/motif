@@ -218,7 +218,7 @@ externaldef( xmclipwindowwidgetclass) WidgetClass xmClipWindowWidgetClass
                                        = (WidgetClass) &xmClipWindowClassRec ;
 
 
-
+
 /************************************************************************
  *                                                                      *
  * GetRealTranslations - Builds up a "real" translation table out of    *
@@ -315,7 +315,7 @@ GetRealTranslations(
   
   return buf;
 }
-
+
 
 /****************************************************************/
 static XtTranslations ClipWindowTranslations = NULL;

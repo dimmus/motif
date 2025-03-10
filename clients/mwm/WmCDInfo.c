@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: WmCDInfo.c /main/4 1995/11/01 11:32:15 rswi
 #include "WmCDInfo.h"
 
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int TitleTextHeight (pcd)
@@ -108,7 +108,7 @@ unsigned int TitleTextHeight (ClientData *pcd)
     return (ttextheight);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int InitTitleBarHeight (pcd)
@@ -147,7 +147,7 @@ unsigned int InitTitleBarHeight (ClientData *pcd)
     return (tbarheight);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int UpperBorderWidth (pcd)
@@ -205,7 +205,7 @@ unsigned int UpperBorderWidth (ClientData *pcd)
     return (uswidth);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int LowerBorderWidth (pcd)
@@ -256,7 +256,7 @@ unsigned int LowerBorderWidth (ClientData *pcd)
     return (lswidth);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int FrameWidth (pcd)
@@ -288,7 +288,7 @@ unsigned int FrameWidth (ClientData *pcd)
     return (frameWidth);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int CornerWidth (pcd)
@@ -332,7 +332,7 @@ unsigned int CornerWidth (ClientData *pcd)
     return (cwidth);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int FrameHeight (pcd)
@@ -376,7 +376,7 @@ unsigned int FrameHeight (ClientData *pcd)
     return (frameHeight);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int CornerHeight (pcd)
@@ -420,7 +420,7 @@ unsigned int CornerHeight (ClientData *pcd)
     return (cheight);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  int BaseWindowX (pcd)
@@ -454,7 +454,7 @@ int BaseWindowX (ClientData *pcd)
     return (rval);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  int BaseWindowY (pcd)
@@ -489,7 +489,7 @@ int BaseWindowY (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  int FrameX (pcd)
@@ -521,7 +521,7 @@ int FrameX (ClientData *pcd)
     return (frameX);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  int FrameY (pcd)
@@ -561,7 +561,7 @@ int FrameY (ClientData *pcd)
     return (frameY);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int BaseWindowWidth (pcd)
@@ -611,7 +611,7 @@ unsigned int BaseWindowWidth (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  unsigned int BaseWindowHeight (pcd)
@@ -664,7 +664,7 @@ unsigned int BaseWindowHeight (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  Boolean GetFramePartInfo (pcd, part, pX, pY, pWidth, pHeight)
@@ -962,7 +962,7 @@ Boolean GetFramePartInfo (ClientData *pcd, int part, int *pX, int *pY, unsigned 
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  IdentifyFramePart (pCD, x, y)
@@ -1066,7 +1066,7 @@ int IdentifyFramePart (ClientData *pCD, int x, int y)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  GadgetID (x, y, pgadget, count)
@@ -1111,7 +1111,7 @@ int GadgetID (int x, int y, GadgetRectangle *pgadget, unsigned int count)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  FrameToClient (pcd, pX, pY, pWidth, pHeight)
@@ -1152,7 +1152,7 @@ void FrameToClient (ClientData *pcd, int *pX, int *pY, unsigned int *pWidth, uns
     *pY =  *pY + pcd->clientOffset.y;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ClientToFrame (pcd, pX, pY, pWidth, pHeight)
@@ -1193,7 +1193,7 @@ void ClientToFrame (ClientData *pcd, int *pX, int *pY, unsigned int *pWidth, uns
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  Boolean GetDepressInfo (pcd, part, pX, pY, pWidth, pHeight)
@@ -1401,7 +1401,7 @@ Boolean GetDepressInfo (ClientData *pcd, int part, int *pX, int *pY, unsigned in
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetFrameInfo (pcd)
@@ -1472,7 +1472,7 @@ void SetFrameInfo (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetClientOffset (pcd)
@@ -1537,7 +1537,7 @@ void SetClientOffset (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  XBorderIsShowing (pcd)

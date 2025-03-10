@@ -58,7 +58,7 @@ Boolean _init_modifiers = TRUE;
 unsigned int NumLockMask = 0;
 unsigned int ScrollLockMask = 0;
 
-
+
 /*************************************<->*************************************
  *
  *  _XmInitModifiers (void)

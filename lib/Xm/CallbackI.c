@@ -46,7 +46,7 @@ static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk
 
 /* However it doesn't contain a final NULL record */
 #define ToList(p)	((XtCallbackList) (&(p)->callbacks))
-
+
 void
 _XmAddCallback(InternalCallbackList* callbacks,
 	       XtCallbackProc        callback,
@@ -80,7 +80,7 @@ _XmAddCallback(InternalCallbackList* callbacks,
   cl->callback = callback;
   cl->closure = closure;
 }
-
+
 void
  _XmRemoveCallback (InternalCallbackList *callbacks,
 		    XtCallbackProc        callback,
@@ -144,7 +144,7 @@ void
 	}
     }
 }
-
+
 void
 _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
 {
@@ -160,7 +160,7 @@ _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
       *callbacks = NULL;
     }
 }
-
+
 void 
 _XmCallCallbackList(Widget widget,
 		    XtCallbackList callbacks,

@@ -270,7 +270,7 @@ externaldef( xmdrawingareawidgetclass) WidgetClass xmDrawingAreaWidgetClass
                                        = (WidgetClass) &xmDrawingAreaClassRec ;
 
 
-
+
 /****************************************************************/
 static void 
 ClassInitialize( void )
@@ -289,7 +289,7 @@ ClassPartInitialize(
 
 }
 
-
+
 /****************************************************************
  * Initialize. Check resizePolicy resource value
  ****************/
@@ -312,7 +312,7 @@ Initialize(
 }
 
 
-
+
 /****************************************************************
  * General redisplay function called on exposure events.
  ****************/
@@ -379,7 +379,7 @@ ObjectAtPoint(
     return (NULL);
 }
 
-
+
 /****************************************************************
  * This function processes key and button presses and releases
  *   belonging to the DrawingArea.
@@ -426,7 +426,7 @@ _XmDrawingAreaInput(
     }
 }
 
-
+
 /****************************************************************/
 static XtGeometryResult 
 GeometryManager(
@@ -447,7 +447,7 @@ GeometryManager(
                                     da->drawing_area.resize_policy,
                                     True)); /* no overlap checking */
 }
-
+
 /****************************************************************
  * Re-layout children.
  ****************/
@@ -523,7 +523,7 @@ SetValues(
     return( False) ;
 }
 
-   
+   
 /****************************************************************
  * Handle query geometry requests
  ****************/
@@ -547,7 +547,7 @@ QueryGeometry(
  * Xm private class method 
  ****************/
 
-
+
 static XmNavigability
 WidgetNavigable(
         Widget wid)
@@ -595,7 +595,7 @@ WidgetNavigable(
 
 
 
-
+
 /****************************************************************
  * This function creates and returns a DrawingArea widget.
  ****************/

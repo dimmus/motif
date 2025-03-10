@@ -351,7 +351,7 @@ extern WidgetClass xmMessageBoxWidgetClass;
 
 } /* End mvsSetLocalConstraints() */
 
-
+
 void mvsSetLocalStartConstraints(widget_info,resources, args, nargs)
 MvsWidgetInfoRecord *widget_info;
 MvsArgVal resources[];

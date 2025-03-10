@@ -144,7 +144,7 @@ static XtResource resources[] =
 
 };
 
-
+
 /*************************************<->*************************************
  *
  *
@@ -157,7 +157,7 @@ static XtResource resources[] =
 
 #define overrideTranslations	_XmTearOffB_overrideTranslations
 
-
+
 /*************************************<->*************************************
  *
  *
@@ -247,7 +247,7 @@ externaldef(xmtearoffbuttonclassrec)
 externaldef(xmtearoffbuttonwidgetclass)
    WidgetClass xmTearOffButtonWidgetClass = (WidgetClass)&xmTearOffButtonClassRec;
 
-
+
 
 /*********************************************************************
  *

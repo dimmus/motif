@@ -58,7 +58,7 @@ static void Destroy(Widget wid);
 static void UseParent(Widget w, int offset, XrmValue *value);
 
 /********    End Static Function Declarations    ********/
-
+
 /***************************************************************************
  *
  * ExtObject Resources
@@ -82,7 +82,7 @@ static XtResource extResources[] =
   }
 };
 #undef Offset
-
+
 #define XmNUM_ELEMENTS	4
 #define XmNUM_BYTES	255
 
@@ -166,7 +166,7 @@ XmExtClassRec xmExtClassRec = {
 
 externaldef(xmextobjectclass) 
 WidgetClass xmExtObjectClass = (WidgetClass) (&xmExtClassRec);
-
+
 /*ARGSUSED*/
 static void 
 UseParent(Widget w,
@@ -175,7 +175,7 @@ UseParent(Widget w,
 {
   value->addr = (XPointer) &(w->core.parent);
 }
-
+
 /************************************************************************
  *
  *  ClassInitialize
@@ -187,7 +187,7 @@ ClassInitialize(void)
 {
   myBaseClassExtRec.record_type = XmQmotif;
 }
-
+
 /************************************************************************
  *
  *  ClassPartInitPrehook
@@ -218,7 +218,7 @@ ClassPartInitPrehook(WidgetClass c)
 	}
     }
 }
-
+
 /************************************************************************
  *
  *  ClassPartInitPosthook
@@ -241,7 +241,7 @@ ClassPartInitPosthook(WidgetClass c)
       (*wcePtr)->num_ext_resources = wc->object_class.num_resources;
     }
 }
-
+
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -260,7 +260,7 @@ ClassPartInitialize(WidgetClass c)
 
   _XmBuildExtResources(c);
 }
-
+
 /*ARGSUSED*/
 static void 
 InitializePrehook(Widget req,	/* unused */
@@ -299,7 +299,7 @@ InitializePrehook(Widget req,	/* unused */
       _XmProcessUnlock();
     }
 }
-
+
 static void 
 Initialize(Widget req,
 	   Widget new_w,
@@ -332,7 +332,7 @@ Initialize(Widget req,
 	}
     }
 }
-
+
 /*ARGSUSED*/
 static Boolean 
 SetValuesPrehook(Widget req,	/* unused */
@@ -356,7 +356,7 @@ SetValuesPrehook(Widget req,	/* unused */
 
   return False;
 }
-
+
 static void 
 GetValuesPrehook(Widget new_w,
 		 ArgList args,
@@ -375,7 +375,7 @@ GetValuesPrehook(Widget new_w,
       _XmProcessUnlock();
     }
 }
-
+
 /************************************************************************
  *
  *  SetValues
@@ -423,7 +423,7 @@ SetValues(Widget old,
 
   return FALSE;
 }
-
+
 /************************************************************************
  *
  *  GetValuesHook
@@ -455,7 +455,7 @@ GetValuesHook(Widget new_w,
       _XmExtGetValuesHook(new_w, args, num_args);
     }
 }
-
+
 /************************************************************************
  *
  *  Destroy
@@ -477,7 +477,7 @@ Destroy(Widget wid)
       XtFree((char *) extData);
     }
 }
-
+
 char * 
 _XmExtObjAlloc(int size)
 {
@@ -495,7 +495,7 @@ _XmExtObjAlloc(int size)
   
   return XtMalloc(size);
 }
-
+
 void 
 _XmExtObjFree(XtPointer element)
 {
@@ -510,7 +510,7 @@ _XmExtObjFree(XtPointer element)
   
   XtFree((char *) element);
 }
-
+
 /**********************************************************************
  *
  *  _XmBuildExtResources

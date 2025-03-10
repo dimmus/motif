@@ -143,7 +143,7 @@ externaldef(uil_comp_glbl) int comment_size;
 static int last_token_seen = 0;
 
 
-
+
 /*
 **
 **  MACRO DEFINITIONS
@@ -288,7 +288,7 @@ static int last_token_seen = 0;
 **  form of each cell in the token table
 */
 
-
+
 typedef struct
 {
     char	action;			    /* action to be taken */
@@ -870,7 +870,7 @@ static cell XmConst token_table[ max_state+1][ max_class+1] =
     },
   };
 
-
+
 static char class_table[ 256 ] =
   {
 /* 00 */    class_eol,      class_illegal,  class_illegal,  class_illegal,
@@ -975,7 +975,7 @@ static int	punc2_token[2] =
 		    {	LEFT_SHIFT,
 			RIGHT_SHIFT };
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1927,7 +1927,7 @@ found_error:
 
   }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2023,7 +2023,7 @@ prev_yylval.az_source_record = src_az_current_source_record;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2067,7 +2067,7 @@ void  Uil_lex_cleanup_analyzer( )
 	}
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2143,7 +2143,7 @@ int		restart_token;
 
 }
 
-
+
 
 /*
 **
@@ -2151,7 +2151,7 @@ int		restart_token;
 **
 */
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2199,7 +2199,7 @@ void issue_control_char_diagnostic
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2259,7 +2259,7 @@ lex_buffer_type *az_current_lex_buffer;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2313,7 +2313,7 @@ void lex_filter_unprintable_chars
 
 }
 
-
+
 #if debug_version
 /*
 **++
@@ -2380,7 +2380,7 @@ int		l_lex_pos;
     }
 }
 #endif
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2450,7 +2450,7 @@ potential_overflow:
     return l_value;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

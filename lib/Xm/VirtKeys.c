@@ -175,7 +175,7 @@ static XmConst XmDefaultBindingStringRec fallbackBindingStrings[] =
   { "Tektronix, Inc.",
       _XmVirtKeys_tekFallbackBindingString }
 };
-
+
 /*ARGSUSED*/
 static Boolean 
 CvtStringToVirtualBinding(Display    *dpy,
@@ -348,7 +348,7 @@ CvtStringToVirtualBinding(Display    *dpy,
     XtDisplayStringConversionWarning(dpy, str, XmRVirtualBinding);
     return False;
 }
-
+
 static void
 FillBindingsFromDB(Display       *dpy,
 		   XrmDatabase    rdb,
@@ -434,7 +434,7 @@ FillBindingsFromDB(Display       *dpy,
 	}
     }
 }
-
+
 static Boolean 
 GetBindingsProperty(Display *display,
 		    String   property,
@@ -473,7 +473,7 @@ GetBindingsProperty(Display *display,
       return True;
     }
 }
-	   
+	   
 /*
  * This routine is called by the XmDisplay Initialize method to set
  * up the virtual bindings table, XtKeyProc, and event handler.
@@ -533,7 +533,7 @@ _XmVirtKeysInitialize(Widget widget)
   
   XtSetKeyTranslator(dpy, (XtKeyProc)XmTranslateKey);
 }
-
+
 /*
  * This routine is called by the XmDisplay Destroy method to free
  * up the virtual bindings table.
@@ -546,7 +546,7 @@ _XmVirtKeysDestroy(Widget widget)
   XtFree((char*)xmDisplay->display.lastKeyEvent);
   XtFree((char*)xmDisplay->display.bindings);
 }
-
+
 static void 
 FindVirtKey(Display *dpy,
 	    KeyCode keycode,
@@ -679,7 +679,7 @@ FindVirtKey(Display *dpy,
 	}
     }
 }
-
+
 static Modifiers
 EffectiveStdModMask(Display *dpy,
 		    KeySym *kc_map,
@@ -770,7 +770,7 @@ EffectiveStdModMask(Display *dpy,
 
   return esm_mask;
 }
-
+
 void
 XmTranslateKey(Display     *dpy,
 #if NeedWidePrototypes
@@ -789,7 +789,7 @@ XmTranslateKey(Display     *dpy,
   FindVirtKey(dpy, keycode, modifiers, modifiers_return, keysym_return);
   _XmAppUnlock(app);
 }
-
+
 int
 XmeVirtualToActualKeysyms(Display      *dpy,
 			  KeySym        virtKeysym,
@@ -830,7 +830,7 @@ XmeVirtualToActualKeysyms(Display      *dpy,
   _XmAppUnlock(app);
   return matches;
 }
-
+
 Boolean 
 _XmVirtKeysLoadFileBindings(char   *fileName,
 			    String *binding )
@@ -890,7 +890,7 @@ _XmVirtKeysLoadFileBindings(char   *fileName,
 
   return False;
 }
-
+
 static void 
 LoadVendorBindings(Display *display,
 		   char    *path,
@@ -948,7 +948,7 @@ LoadVendorBindings(Display *display,
 
   XtFree (vendorV);
 }
-
+
 int 
 _XmVirtKeysLoadFallbackBindings(Display	*display,
 				String	*binding )

@@ -82,7 +82,7 @@ static char rcsid[] = "$XConsortium: UilSarExp.c /main/11 1995/07/14 09:37:03 dr
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -214,7 +214,7 @@ yystype	    *op2_frame;
     return;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

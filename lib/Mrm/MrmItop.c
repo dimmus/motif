@@ -79,7 +79,7 @@ static char rcsid[] = "$XConsortium: MrmItop.c /main/15 1996/11/13 13:58:55 drk 
  *	Idb__FIL_Valid			Validate file id
  */
 
-
+
 /*
  *++
  *
@@ -183,7 +183,7 @@ UrmIdbOpenFileRead (String			name,
 
 }
 
-
+
 /*
  *++
  *
@@ -260,7 +260,7 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
 }
 
 
-
+
 /*
  *++
  *
@@ -360,7 +360,7 @@ UrmIdbCloseFile (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -443,7 +443,7 @@ UrmIdbGetIndexedResource (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -508,7 +508,7 @@ UrmIdbFindIndexedResource (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -589,7 +589,7 @@ UrmIdbGetRIDResource (IDBFile			file_id,
   return MrmSUCCESS ;
 
 }
-
+
 /*
  *++
  *
@@ -635,7 +635,7 @@ UrmIdbGetResourceId (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *

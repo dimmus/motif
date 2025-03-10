@@ -844,7 +844,7 @@ _read_component(
   return (uchar_p + *length);
 
 }
-
+
 /* Create a new XmString */
 XmString 
 XmStringCreate(
@@ -919,7 +919,7 @@ _XmStringNCreate(char *text,
       return(str);
     }
 }
-
+
 /*
  * Convenience routine creating localized XmString from NULL terminated string.
  */
@@ -929,7 +929,7 @@ XmStringCreateLocalized(
 {
   return (XmStringGenerate(text, NULL, XmCHARSET_TEXT, NULL));
 }
-
+
 /* Create an optimized _XmString with only direction set. */
 XmString 
 XmStringDirectionCreate(
@@ -984,7 +984,7 @@ XmStringDirectionCreate(
   _XmProcessUnlock();
   return (XmString) opt_str;
 }
-
+
 /* Create an empty non-optimized _XmString containing a single newline */
 XmString 
 XmStringSeparatorCreate( void )
@@ -1022,7 +1022,7 @@ XmStringSeparatorCreate( void )
   _XmProcessUnlock();
   return (XmString)ret_val;
 }
-
+
 /* Create an empty optimized _XmString containing a single tab. */
 static XmString 
 StringTabCreate( void )
@@ -1046,7 +1046,7 @@ StringTabCreate( void )
 
   return (XmString)opt_str;
 }
-
+
 /* Create an empty optimized _XmString. */
 static XmString 
 StringEmptyCreate( void )
@@ -1069,7 +1069,7 @@ StringEmptyCreate( void )
 
   return (XmString)opt_str;
 }
-
+
 /*
  * this set provides access to the internal components of XmStrings
  */
@@ -1209,7 +1209,7 @@ _XmStringCacheTag(XmStringTag tag,
   _XmProcessUnlock();
   return ret_val;
 }
-
+
 static Boolean
 RenditionsCompatible(_XmStringEntry seg1,
 		     _XmStringEntry seg2)
@@ -1247,7 +1247,7 @@ RenditionsCompatible(_XmStringEntry seg1,
   
   return(FALSE);
 }
-
+
 static void
 MergeEnds(_XmStringEntry a,
 	  _XmStringEntry b)
@@ -1316,7 +1316,7 @@ MergeBegins(_XmStringEntry a,
 
   _XmEntryRendBeginCountSet(a, (a_b_cnt + b_b_cnt));
 }
-
+
 /*
  * general external TCS utilties
  */
@@ -1389,7 +1389,7 @@ Unoptimize(_XmStringEntry entry, int free)
   return new_entry;
 }
 
-
+
 XmString 
 XmStringConcat(XmString a,
 	       XmString b )
@@ -1933,7 +1933,7 @@ XmStringConcatAndFree(XmString a,
   _XmProcessUnlock();
   return (XmString)a_str;
 }
-
+
 /************************************************************************
  *									*
  * XmStringCompare - compare two strings.  				*
@@ -2136,7 +2136,7 @@ XmStringCompare(
   _XmProcessUnlock();
   return (TRUE);
 }
-
+
 int 
 XmStringLength(
         XmString string )
@@ -2744,7 +2744,7 @@ _XmStringCharacterCount(XtPointer text,
       return byte_count;
     }
 }
-
+
 unsigned char 
 _XmEntryCharCountGet(_XmStringEntry entry, 
 		     XmRenderTable rt)
@@ -2775,7 +2775,7 @@ _XmEntryCharCountGet(_XmStringEntry entry,
   return(0);
 }
 
-
+
 _XmStringCache
 _XmStringCacheGet(_XmStringCache caches, 
 		  int type)
@@ -3430,7 +3430,7 @@ _XmStringOptToNonOpt(_XmStringOpt string)
   
   return(str);
 }
-
+
 /*
  * figure out if there is sub string match, and if so the begining
  * and end of the match section in pixels.  Don't touch anything if
@@ -3697,7 +3697,7 @@ SubStringPosition(
     }
   }
 }
-
+
 /*ARGSUSED*/
 extern void
 _XmStringDrawLining(Display *d,
@@ -3871,7 +3871,7 @@ _XmStringDrawLining(Display *d,
 	}
     }
 }
-
+
 extern void 
 _XmStringDrawSegment(Display *d,
 		     Drawable w, 
@@ -4231,7 +4231,7 @@ _XmStringDrawSegment(Display *d,
 	}
     }
 }
-
+
 /****************************************************************
  * recursive_layout:
  *    This (partly) recursive function sets up the left/right
@@ -5781,7 +5781,7 @@ XmCvtByteStreamToXmString(unsigned char *property)
   _XmProcessUnlock();
   return (string);
 }
-
+
 _XmStringEntry
 _XmStringEntryCopy(_XmStringEntry entry)
 {
@@ -5872,7 +5872,7 @@ _XmStringEntryCopy(_XmStringEntry entry)
   }
   return(new_entry);
 }
-
+
 /** Begin macros converted to functions. **/
 
 XmStringTag
@@ -6438,7 +6438,7 @@ _XmStringSegmentExtents(_XmStringEntry entry,
 				 XmSTRING_MIDDLE_SEG, 
 				 width, height, ascent, descent));
 }
-
+
 static Boolean
 SpecifiedSegmentExtents(_XmStringEntry entry, 
 			XmRenderTable    rendertable, 
@@ -6753,7 +6753,7 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
   
   return(can_do);
 }
-
+
 static void 
 _parse_locale(
         char *str,
@@ -7095,7 +7095,7 @@ XmStringBaseline(
       return (OptLineAscender(rendertable, (_XmStringOpt)string));
     } 
 }
-
+
 void
 _XmStringGetBaselines(XmRenderTable rendertable,
 		      _XmString string,
@@ -7163,7 +7163,7 @@ _XmStringGetBaselines(XmRenderTable rendertable,
 	}
     } 
 }
-
+
 /*
  * count the number of lines in an XmString.
  */
@@ -7749,7 +7749,7 @@ XmeSetWMShellTitle(
     }
     _XmAppUnlock(app);
 }
-
+
 /*
  * XmeGetDirection: An XmParseProc to insert a direction component.
  *	Does not consume the triggering character.
@@ -7778,7 +7778,7 @@ XmeGetDirection(XtPointer     *in_out,
   /* Don't consume the triggering character. */
   return XmINSERT;
 }
-
+
 /*
  * match_pattern: A helper for XmStringParseText.  Determine whether
  *	the text matches a XmParseMapping pattern.
@@ -7830,7 +7830,7 @@ match_pattern(XtPointer      text,
 
   return False;
 }
-
+
 /*
  * parse_unmatched: A Helper routine for XmStringParseText.  Produce
  *	a component for characters that weren't matched by any pattern.
@@ -7875,7 +7875,7 @@ parse_unmatched(XmString  *result,
   *result = XmStringConcatAndFree(tmp_1, tmp_2);
   *ptr += length;
 }
-
+
 /*
  * parse_pattern: A helper routine for XmStringParseText.  Process a
  *	pattern that has matched.
@@ -7939,7 +7939,7 @@ parse_pattern(XmString      *result,
   /* Advancing the pointer prevents multiple matches. */
   return (*ptr != orig_ptr);
 }
-
+
 XmString
 XmStringParseText(XtPointer    text, 
 		  XtPointer   *text_end,
@@ -8112,7 +8112,7 @@ XmStringParseText(XtPointer    text,
   _XmProcessUnlock();
   return result;
 }
-
+
 /*
  * check_unparse_models: A helper for XmStringUnparse.  Invoked
  *	after a text component is processed, this routine determines
@@ -8198,7 +8198,7 @@ check_unparse_models(XmStringContext context,
       break;
     }
 }
-
+
 /*
  * unparse_text: A helper for XmStringUnparse.  Output a matched text
  *	component.
@@ -8256,7 +8256,7 @@ unparse_text(char                **result,
       XtFree(null_text);
     }
 }
-
+
 /*
  * unparse_is_plausible: A helper routine for unparse_components.
  *	Decided whether a pattern is even eligible for unparsing.
@@ -8297,7 +8297,7 @@ unparse_is_plausible(XmParseMapping pattern)
       return True;
     }
 }
-
+
 /*
  * unparse_components: A helper for XmStringUnparse.  Compare
  *	components against the parse table.
@@ -8394,7 +8394,7 @@ unparse_components(char          **result,
 	}
     }
 }
-
+
 XtPointer
 XmStringUnparse(XmString          string, 
 		XmStringTag       tag, 
@@ -8502,7 +8502,7 @@ XmStringUnparse(XmString          string,
   _XmProcessUnlock();
   return (XtPointer) result;
 }
-
+
 XmString
 XmStringComponentCreate(XmStringComponentType c_type,
 			unsigned int          length,
@@ -8765,7 +8765,7 @@ XmStringComponentCreate(XmStringComponentType c_type,
   _XmProcessUnlock();
   return (XmString) str;
 }
-
+
 XmStringComponentType
 XmStringGetNextTriple(XmStringContext context, 
 		      unsigned int   *length,
@@ -8773,7 +8773,7 @@ XmStringGetNextTriple(XmStringContext context,
 {
   return XmeStringGetComponent((_XmStringContext) context, True, True, length, value);
 }
-
+
 /*
  * XmeStringGetComponent: A generalized implementation of XmStringGetNextTriple.
  */
@@ -9234,7 +9234,7 @@ XmeStringGetComponent(_XmStringContext context,
       return XmSTRING_COMPONENT_END;
     }
 }
-
+
 /*
  * _XmStringContextReInit: Initialize an allocated _XmStringContext.
  */
@@ -9249,7 +9249,7 @@ _XmStringContextReInit(_XmStringContext context,
   _XmStrContOpt(context)    = _XmStrOptimized(string);
   _XmStrContDir(context)    = XmSTRING_DIRECTION_UNSET;
 }
-
+
 /*
  * _XmStringContextCopy: Copy allocated _XmStringContexts.  The active
  *	rendition list is always copied because expanding it to
@@ -9273,7 +9273,7 @@ _XmStringContextCopy(_XmStringContext target,
      memcpy(_XmStrContRendTags(target), _XmStrContRendTags(source), size);
   }
 }
-
+
 /*
  * _XmStringContextFree: Deallocate an _XmStringContext's internal storage.
  */
@@ -9288,7 +9288,7 @@ _XmStringContextFree(_XmStringContext context)
   }
   _XmStrContRendTags(context) = NULL;
 }
-
+
 /*
  * begin_context_rends: Update an _XmStringContext to reflect some
  *	newly active renditions.
@@ -9311,7 +9311,7 @@ begin_context_rends(_XmStringContext context,
   if (update_context)
     _XmStrContRendCount(context) += count;
 }
-
+
 /*
  * end_context_rends: Remove some renditions from an _XmStringContext's
  *	list of active renditions.
@@ -9346,7 +9346,7 @@ end_context_rends(_XmStringContext context,
 	  }
     }
 }
-
+
 XmString
 XmStringGenerate(XtPointer   text,
 		 XmStringTag tag,
@@ -9526,7 +9526,7 @@ XmStringGenerate(XtPointer   text,
   _XmProcessUnlock();
   return result;
 }
-
+
 XtPointer
 _XmStringUngenerate(XmString    string,
 		    XmStringTag tag,
@@ -9555,7 +9555,7 @@ _XmStringUngenerate(XmString    string,
   return result;
 
 }
-
+
 XmParseMapping
 XmParseMappingCreate(ArgList  arg_list,
 		     Cardinal arg_count)
@@ -9580,7 +9580,7 @@ XmParseMappingCreate(ArgList  arg_list,
 
   return result;
 }
-
+
 void 
 XmParseMappingSetValues(XmParseMapping mapping,
 			ArgList        arg_list,
@@ -9629,9 +9629,9 @@ XmParseMappingSetValues(XmParseMapping mapping,
     mapping->internal_flags = XmSTRING_UNPARSE_UNKNOWN;
   _XmProcessUnlock();
 }
-
 
-
+
+
 static int
 _get_generate_parse_table (XmParseTable *gen_table)
 /*

@@ -335,7 +335,7 @@ GetDefaultColors(
 	_XmProcessUnlock();
 	return result;
 }
-
+
 
 
 Boolean 

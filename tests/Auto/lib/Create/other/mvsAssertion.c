@@ -82,7 +82,7 @@ char *assertion;
     }
 } /* End mvsAssertion() */
 
-
+
 /***********************************************************************
     This function zeros the assertion count. This signifies the beginning
    of a new validation set with new assertions to be filled in.
@@ -92,7 +92,7 @@ void mvsClearAsserts()
     mvsAssertCnt = 0;
 } /* End mvsClearAsserts() */
 
-
+
 /***********************************************************************
     This function prints out the list of assertions associated with
    the current validation.

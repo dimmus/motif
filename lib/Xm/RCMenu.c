@@ -664,7 +664,7 @@ _XmGetPopupMenuClick(
       return((Boolean)RC_popupMenuClick(wid));
    return(True);		/* If undefined, always return CUA */
 }
-
+
 /***************************************************************************
  *
  *
@@ -836,7 +836,7 @@ _XmSetSwallowEventHandler(
          SwallowEventHandler, NULL);
 }
 
-
+
 /*
  * Action routines specific to traversal.
  */
@@ -1093,7 +1093,7 @@ _XmMenuFocus(
       }
 }
 
-
+
 /*
  * Class function which is invoked when the post accelerator is received
  * for a popup menu or the menubar, or the post mnemonic is received for 
@@ -1236,7 +1236,7 @@ _XmRCArmAndActivate(
    }
 }
 
-
+
 /*
  * The following functions are used to manipulate lists of keyboard events
  * which are of interest to the menu system; i.e. accelerators and mnemonics.
@@ -1261,7 +1261,7 @@ _XmRCArmAndActivate(
  * associated widget is realized; grabs cannot be added to a widget which 
  * does not have a window!
  */ 
-
+
 
 /*
  * This function is used both by the row column widget, and components which
@@ -1571,7 +1571,7 @@ _XmRC_ProcessSingleWidget(
    }
 }
 
-
+
 /*
  * This function actually does the work of converting the accelerator
  * or mnemonic string into a workable format, and registering the keyboard 
@@ -1625,7 +1625,7 @@ AddToKeyboardList(
   XtFree((char *) keysyms);
   XtFree((char *) modifiers);
 }
-
+
 /*
  * This is a lower level interface to AddToKeyboardList which avoids the
  * overhead of passing in a string.
@@ -2234,7 +2234,7 @@ SetCascadeField(
    _XmRC_DoProcessMenuTree( (Widget) m, mode);
 }
 
-
+
 /*
  * _XmMatchBSelectEvent() is intended to be used to check if the event is
  * a valid BSelect.  It will only validate the event if the menu hierarchy
@@ -2631,7 +2631,7 @@ _XmMenuGadgetDrag(Widget wid, XEvent *event,
    }
 }
 
-
+
 void 
 _XmRC_UpdateOptionMenuCBG(
         Widget cbg,
@@ -2835,7 +2835,7 @@ _XmMenuGadgetTraverseCurrentUp(
 	_XmRecordEvent(event);
     }
 }
-
+
 static int
 MenuStatus( Widget wid )
 {
@@ -3692,7 +3692,7 @@ InvalidateOldFocus(
   *poldFocus = NULL;
 }
 
-
+
 /*
  * Return the widget which the menu was posted from.  
  *   - If this is in a popup, it is the widget which initiated the post 

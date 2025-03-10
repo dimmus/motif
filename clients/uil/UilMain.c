@@ -117,7 +117,7 @@ static unsigned	   doing_exit = 0;
 
 #define     compiler_called (1 << 0)
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -221,7 +221,7 @@ static void	common_main()
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -286,10 +286,10 @@ int	severity;
     exit(return_status);
 }
 
-
 
 
-
+
+
 
 #ifndef CALLABLE
 /*
@@ -341,7 +341,7 @@ char	*rac_argv[ ];
 #endif /* !CALLABLE */
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -393,7 +393,7 @@ static void	common_cleanup()
     return;
 }
 
-
+
 #ifdef CALLABLE
 /*
 **++

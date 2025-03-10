@@ -413,7 +413,7 @@ externaldef(xmseparatorgadgetclassrec) XmSeparatorGadgetClassRec xmSeparatorGadg
 externaldef(xmseparatorgadgetclass) WidgetClass xmSeparatorGadgetClass = 
    (WidgetClass) &xmSeparatorGadgetClassRec;
 
-
+
 /*ARGSUSED*/
 static void 
 SetTopShadowPixmapDefault(

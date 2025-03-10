@@ -105,7 +105,7 @@ extern yystype		yylval;
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -169,7 +169,7 @@ yystype	    *keyword_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -360,7 +360,7 @@ error_path:
 		(sym_entry_type *) sym_az_error_value_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -435,7 +435,7 @@ yystype	    * id_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -498,7 +498,7 @@ yystype	    *parse_frame;
     return(units_type);
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -710,7 +710,7 @@ int         arg_type;
 
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -893,7 +893,7 @@ yystype	    *comma_frame;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -950,7 +950,7 @@ char	    *error_text;
 	  error_text );
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1192,7 +1192,7 @@ yystype	    *op2_frame;
 
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1364,7 +1364,7 @@ sym_value_entry_type	*value_entry;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1492,7 +1492,7 @@ yystype	    *keyword_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1781,7 +1781,7 @@ yystype	    *keyword_frame;
   target_frame->value.az_symbol_entry = (sym_entry_type *)cstr_entry;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1864,7 +1864,7 @@ yystype	    *keyword_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1923,7 +1923,7 @@ int	    expected_type;
 		(sym_entry_type *) sym_az_error_value_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1990,7 +1990,7 @@ yystype	    *value_frame;
 		(sym_entry_type *) sym_az_error_value_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2056,7 +2056,7 @@ yystype	    *token_frame;
 		(sym_entry_type *) value_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2192,7 +2192,7 @@ yystype	    *semi_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2287,7 +2287,7 @@ XmConst yystype	    *id_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2394,7 +2394,7 @@ int	    value_type;
     return value_entry;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2485,7 +2485,7 @@ XmConst yystype	    *semi_frame;
     section_entry->entries = (sym_entry_type *)name_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2636,7 +2636,7 @@ yystype	    *keyword_frame;
 	(sym_entry_type *) font_table_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2763,7 +2763,7 @@ yystype	    *font_frame;
 		(sym_entry_type *) font_value_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2876,7 +2876,7 @@ yystype	    *keyword_frame;
 	(sym_entry_type *) font_value_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2989,7 +2989,7 @@ yystype	    *keyword_frame;
 	(sym_entry_type *) font_value_entry;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3159,7 +3159,7 @@ yystype	    *letter_frame;
     target_frame->value.az_symbol_entry = (sym_entry_type *) item_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3278,7 +3278,7 @@ yystype	    *prior_target_frame;
     }
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3427,7 +3427,7 @@ yystype	    *keyword_frame;
 		(sym_entry_type *) color_table_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3547,7 +3547,7 @@ yystype	    *keyword_frame;
 		(sym_entry_type *) color_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3797,7 +3797,7 @@ yystype	    *keyword_frame;
 		(sym_entry_type *) icon_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

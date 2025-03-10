@@ -144,7 +144,7 @@ Position clipX = 0;
 Position clipY = 0;
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetClipDimensions (pcd, fromRoot)
@@ -196,7 +196,7 @@ void GetClipDimensions (ClientData *pCD, Boolean fromRoot)
 } /* END OF FUNCTION GetClipDimensions */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleClientFrameMove (pcd, pev)
@@ -398,7 +398,7 @@ void HandleClientFrameMove (ClientData *pcd, XEvent *pev)
 } /* END OF FUNCTION HandleClientFrameMove */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UpdateAndDrawResize ()
@@ -544,7 +544,7 @@ void UpdateAndDrawResize (ClientData *pcd)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  HandleClientFrameResize (pcd, pev)
@@ -657,7 +657,7 @@ void HandleClientFrameResize (ClientData *pcd, XEvent *pev)
 } /* END OF FUNCTION HandleClientFrameResize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleResizeKeyPress (pcd, pev)
@@ -903,7 +903,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 
 } /* END OF FUNCTION HandleResizeKeyPress */
 
-
+
 /*************************************<->*************************************
  *
  *  DoFeedback (pcd, x, y, width, height, newStyle, resizing)
@@ -979,7 +979,7 @@ void DoFeedback (ClientData *pcd, int x, int y, unsigned int width, unsigned int
 } /* END OF FUNCTION DoFeedback  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckVisualPlace
@@ -1053,7 +1053,7 @@ Boolean CheckVisualPlace (ClientData *pCD, int tmpX, int tmpY)
 } /* END OF FUNCTION CheckVisualPlace */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CompleteFrameConfig (pcd, pev)
@@ -1357,7 +1357,7 @@ void CompleteFrameConfig (ClientData *pcd, XEvent *pev)
 
 } /* END OF FUNCTION CompleteFrameConfig */
 
-
+
 /*************************************<->*************************************
  *
  *  MoveOpaque (pcd, x, y, width, height)
@@ -1420,7 +1420,7 @@ void MoveOpaque (ClientData *pcd, int x, int y,
 } /* END OF FUNCTION MoveOpaque */
 
 
-
+
 /* thickness of outline */
 #define OUTLINE_WIDTH	2
 
@@ -1518,7 +1518,7 @@ void MoveOutline (int x, int y, unsigned int width, unsigned int height)
 } /* END OF FUNCTION  MoveOutline */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FlashOutline ()
@@ -1580,7 +1580,7 @@ void FlashOutline (int x, int y, unsigned int width, unsigned int height)
 } /* END OF FUNCTION  FlashOutline */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  CreateOutlineWindows (pSD)
@@ -1671,7 +1671,7 @@ CreateOutlineWindows (WmScreenData *pSD)
 
 } /* END OF FUNCTION  CreateOutlineWindows */
 
-
+
 /*************************************<->*************************************
  *
  *  WindowOutline ()
@@ -1783,7 +1783,7 @@ void WindowOutline (int x, int y, unsigned int width, unsigned int height)
 
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  DrawOutline (x, y, width, height)
@@ -1849,7 +1849,7 @@ void DrawOutline (int x, int y, unsigned int width, unsigned int height)
 } /* END OF FUNCTION  DrawOutline */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WindowIsOnScreen (pCD, dx, dy)
@@ -1909,7 +1909,7 @@ Boolean WindowIsOnScreen (ClientData *pCD, int *dx, int *dy)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessNewConfiguration (pCD, x, y, width, height, clientRequest)
@@ -2211,7 +2211,7 @@ void ProcessNewConfiguration (ClientData *pCD, int x, int y, unsigned int width,
 } /* END OF FUNCTION ProcessNewConfiguration */
 
 
-
+
 /*************************************<->*************************************
  *
  *  StartResizeConfig (pcd, pev)
@@ -2359,7 +2359,7 @@ Boolean StartResizeConfig (ClientData *pcd, XEvent *pev)
 } /* END OF FUNCTION StartResizeConfig */
 
 
-
+
 /*************************************<->*************************************
  *
  *  StartClientResize (pcd, pev)
@@ -2417,7 +2417,7 @@ void StartClientResize (ClientData *pcd, XEvent *pev)
 
 } /* END OF FUNCTION StartClientResize  */
 
-
+
 /*************************************<->*************************************
  *
  *  StartClientMove (pcd, pev)
@@ -2627,7 +2627,7 @@ void SetGrabServer (void)
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  DoGrabs (grab_win, cursor, pmask, grabTime, alwaysGrab)
@@ -2755,7 +2755,7 @@ if (grabServer == TRUE)
     return(TRUE);
 } /* END OF FUNCTION DoGrabs   */
 
-
+
 /*************************************<->*************************************
  *
  *  UndoGrabs ()
@@ -2801,7 +2801,7 @@ void UndoGrabs (void)
 } /* END OF FUNCTION UndoGrabs  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CancelFrameConfig (pcd)
@@ -2900,7 +2900,7 @@ void CancelFrameConfig (ClientData *pcd)
 } /* END OF FUNCTION  CancelFrameConfig */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckEatButtonRelease (pcd, pev)
@@ -2971,7 +2971,7 @@ CheckEatButtonRelease (ClientData *pcd, XEvent *pev)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  EatButtonRelease (releaseButtons)
@@ -3028,7 +3028,7 @@ EatButtonRelease (unsigned int releaseButtons)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  ButtonStateBit (button)
@@ -3086,7 +3086,7 @@ ButtonStateBit (unsigned int button)
     return (rval);
 
 }
-
+
 /*************************************<->*************************************
  *
  *  ConfigCursor (frame_part)
@@ -3147,7 +3147,7 @@ Cursor ConfigCursor (int frame_part)
 
 } /* END OF FUNCTION ConfigCursor  */
 
-
+
 /*************************************<->*************************************
  *
  *  ReGrabPointer (grab_win, grabTime)
@@ -3186,7 +3186,7 @@ void ReGrabPointer (Window grab_win, Time grabTime)
 } /* END OF FUNCTION  ReGrabPointer */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetPointerResizePart (pcd, pev)
@@ -3319,7 +3319,7 @@ Boolean SetPointerResizePart (ClientData *pcd, XEvent *pev)
 
 } /* END OF FUNCTION  SetPointerResizePart */
 
-
+
 /*************************************<->*************************************
  *
  *  ResizeType (pcd, pev)
@@ -3408,7 +3408,7 @@ int ResizeType (ClientData *pcd, XEvent *pev)
 } /* END OF FUNCTION  ResizeType */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FixFrameValues (pcd, pfX, pfY, pfWidth, pfHeight, resizing)
@@ -3554,7 +3554,7 @@ void FixFrameValues (ClientData *pcd, int *pfX, int *pfY, unsigned int *pfWidth,
 } /* END OF FUNCTION FixFrameValues */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ForceOnScreen (screen, pX, pY)
@@ -3596,7 +3596,7 @@ void ForceOnScreen (int screen, int *pX, int *pY)
 
 } /* END OF FUNCTION  ForceOnScreen  */
 
-
+
 /*************************************<->*************************************
  *
  *  SetPointerPosition (newX, newY, actualX, actualY)
@@ -3655,7 +3655,7 @@ void SetPointerPosition (int newX, int newY, int *actualX, int *actualY)
 } /* END OF FUNCTION SetPointerPositio  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetConfigEvent (display, window, mask, curX, curY, oX, oY, 
@@ -3838,7 +3838,7 @@ void GetConfigEvent (Display *display, Window window, unsigned long mask, int cu
 
 } /* END OF FUNCTION GetConfigEvent  */
 
-
+
 /*************************************<->*************************************
  *
  *  SetOutline (pOutline, x, y, width, height, fatness)
@@ -3906,7 +3906,7 @@ void SetOutline (XSegment *pOutline, int x, int y, unsigned int width, unsigned 
 
 } /* END OF FUNCTION SetOutline  */
 
-
+
 /*************************************<->*************************************
  *
  *  AdjustPos (pX, pY, oWidth, oHeight, nWidth, nHeight)
@@ -3983,7 +3983,7 @@ void AdjustPos (int *pX, int *pY, unsigned int oWidth, unsigned int oHeight, uns
 } /* END OF FUNCTION AdjustPos */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GrabWin (pcd, pev)
@@ -4045,7 +4045,7 @@ Window GrabWin (ClientData *pcd, XEvent *pev)
 
 } /* END OF FUNCTION GrabWin */
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  HandleMarqueeSelect (pSD, event)
@@ -4129,7 +4129,7 @@ HandleMarqueeSelect (WmScreenData *pSD, XEvent *pev)
 
 } /* END OF FUNCTION HandleMarqueeSelect */
 
-
+
 /*************************************<->*************************************
  *
  *  StartMarqueeSelect ()
@@ -4238,7 +4238,7 @@ StartMarqueeSelect(WmScreenData *pSD, XEvent *pev)
 
 } /* END OF FUNCTION StartMarqueeSelect  */
 
-
+
 /*************************************<->*************************************
  *
  *  UpdateMarqueeSelectData ()
@@ -4393,7 +4393,7 @@ void UpdateMarqueeSelectData (WmScreenData *pSD)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  HandleMarqueeKeyPress (pSD, pev)

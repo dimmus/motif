@@ -375,7 +375,7 @@ XmTextSetInsertionPosition(Widget widget,
   }
 }
 
-
+
 Boolean 
 XmTextRemove(Widget widget)
 {

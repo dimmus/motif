@@ -81,7 +81,7 @@ static	    char		lst_c_title1[132];
 static	    uil_fcb_type	*lst_az_fcb;
 static	     boolean		lst_v_listing_open = FALSE;
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -158,7 +158,7 @@ void	lst_open_listing()
     Uil_lst_c_title2[ 0 ] = 0;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -208,10 +208,10 @@ void	Uil_lst_cleanup_listing()
     lst_az_fcb = NULL;
 }
 
-
 
 
-
+
+
 
 
 /*
@@ -267,7 +267,7 @@ uil_fcb_type			*az_fcb;
     return src_k_open_normal;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -347,7 +347,7 @@ boolean	v_new_page;
     return;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -391,7 +391,7 @@ char	*current_time(_Xctimeparams *ctime_buf)
     return ascii_time;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -520,7 +520,7 @@ void	lst_output_listing()
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -591,7 +591,7 @@ src_message_item_type	*az_message_item;
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -841,7 +841,7 @@ src_source_record_type	*az_src_rec;
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -942,7 +942,7 @@ finished_scan:
     return;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

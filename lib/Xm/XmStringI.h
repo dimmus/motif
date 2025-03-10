@@ -120,7 +120,7 @@ typedef struct __XmParseMappingRec {
   XmIncludeStatus	include_status;
   unsigned char		internal_flags;	/* reserved for unparse data */
 } _XmParseMappingRec, *_XmParseMapping;
-
+
 /****************************************************************
  * Symbolic values
  ****************************************************************/

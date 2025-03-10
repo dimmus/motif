@@ -73,7 +73,7 @@ static char rcsid[] = "$TOG: TearOff.c /main/15 1997/08/21 14:19:26 csn $"
 #define OUTLINE_WIDTH	2
 #define SEGS_PER_DRAW	(4*OUTLINE_WIDTH)
 
-
+
 /********    Static Function Declarations    ********/
 
 static GC InitXmTearOffXorGC( 
@@ -354,7 +354,7 @@ GetTearOffCursor(
 
    return TearOffCursor;
 }
-
+
 static Boolean
 DoPlacement( 
        Widget wid,
@@ -471,7 +471,7 @@ DoPlacement(
 
    return (TRUE);
 }
-
+
 static void
 CallTearOffMenuActivateCallback(
 	Widget wid,

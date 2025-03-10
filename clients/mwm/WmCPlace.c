@@ -82,7 +82,7 @@ static int placeOffsetX;
 static int placeOffsetY;
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetupPlacement (pcd)
@@ -154,7 +154,7 @@ void SetupPlacement (ClientData *pcd)
 
 } /* END OF FUNCTION SetupPlacement  */
 
-
+
 /*************************************<->*************************************
  *
  *  IsRepeatedKeyEvent (dpy, pEvent, pOldEvent)
@@ -202,7 +202,7 @@ Bool IsRepeatedKeyEvent (Display *dpy, XEvent *pEvent, char *pOldEvent)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  StartInteractiveSizing (pcd, time)
@@ -254,7 +254,7 @@ void StartInteractiveSizing (ClientData *pcd, Time time)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  HandlePlacementKeyEvent (pcd, pev)
@@ -411,7 +411,7 @@ void HandlePlacementKeyEvent (ClientData *pcd, XKeyEvent *pev)
     }
 } /* END OF FUNCTION HandlePlacementKeyEvent */
 
-
+
 /*************************************<->*************************************
  *
  *  HandlePlacementButtonEvent (pev)
@@ -464,7 +464,7 @@ void HandlePlacementButtonEvent (XButtonEvent *pev)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandlePlacementMotionEvent (pcd, pev)
@@ -542,7 +542,7 @@ void HandlePlacementMotionEvent (ClientData *pcd, XMotionEvent *pev)
 } /* END OF FUNCTION HandlePlacementMotionEvent */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DoPlacement (pcd)
@@ -621,7 +621,7 @@ void DoPlacement (ClientData *pcd)
 } /* END OF FUNCTION DoPlacement  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PlaceWindowInteractively(pcd)

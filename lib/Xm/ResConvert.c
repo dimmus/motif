@@ -836,7 +836,7 @@ CvtStringToXmFontListDestroy(
 
     return ;
     }
-
+
 /************************************************************************
  *
  *  CvtStringToXmFontList
@@ -978,7 +978,7 @@ CvtStringToTextFontList(Display *dpy,
   return(CvtStringToXmFontList(dpy, args, num_args, from, to, 
 			       converter_data));
 }
-
+
 /************************************************************************
  *
  *  GetNextFontListEntry
@@ -1301,7 +1301,7 @@ GetNextXmString(
     *tmp = '\0';
     return(TRUE);
 }
-
+
 /************************************************************************
  *
  * CvtStringToXmStringTable
@@ -1369,7 +1369,7 @@ CvtStringToXmStringTable(
   to_val->size = sizeof(XtPointer);
   return TRUE;
 }
-
+
 /****************
  *
  * XmStringCvtDestroy - free up the space allocated by the converter
@@ -1910,7 +1910,7 @@ CvtStringToKeySymTableDestroy(
 
     return ;
     } 
-
+
 /*ARGSUSED*/
 static Boolean
 CvtStringToKeySymTable(
@@ -1965,7 +1965,7 @@ CvtStringToKeySymTable(
   _XM_CONVERTER_DONE(to, XmKeySymTable, keySymTable, 
 		     XtFree((char*)keySymTable);)
 }
-
+
 /*ARGSUSED*/
 static void
 CvtStringToCharSetTableDestroy( 
@@ -1979,7 +1979,7 @@ CvtStringToCharSetTableDestroy(
 
     return ;
     } 
-
+
 /*ARGSUSED*/
 static Boolean
 CvtStringToCharSetTable(
@@ -2036,7 +2036,7 @@ CvtStringToCharSetTable(
   _XM_CONVERTER_DONE(to, XmStringCharSetTable, charsetTable,
 		     XtFree((char *) charsetTable);)
 }
-
+
 /************************************************************************
  *
  *  CvtStringToBooleanDimension
@@ -2093,7 +2093,7 @@ CvtStringToBooleanDimension(
         } 
     _XM_CONVERTER_DONE( to, Dimension, outVal, ; )
     }
-
+
 
 
 /************************************************************************
@@ -2702,7 +2702,7 @@ CvtStringToXmTabList(Display *dpy,
   XtDisplayStringConversionWarning(dpy, (char *)from->addr, XmRTabList);
   return(FALSE);
 } 
-
+
 /*ARGSUSED*/
 static Boolean
 cvtStringToXmRenderTable(Display *dpy, 
@@ -2783,7 +2783,7 @@ cvtStringToXmRenderTable(Display *dpy,
 
   return FALSE;
 }
-
+
 /*ARGSUSED*/
 static Boolean
 CvtStringToRenderTable(Display *dpy,

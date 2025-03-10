@@ -108,7 +108,7 @@ static void CheckPushRecallClient (ClientData *pCD);
  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AdoptInitialClients (pSD)
@@ -290,7 +290,7 @@ void AdoptInitialClients (WmScreenData *pSD)
 } /* END OF FUNCTION AdoptInitialClients */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ManageWindow (pSD, clientWindow, manageFlags)
@@ -834,7 +834,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 } /* END OF FUNCTION ManageWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UnManageWindow (pCD)
@@ -933,7 +933,7 @@ void UnManageWindow (ClientData *pCD)
 } /* END OF FUNCTION UnManageWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WithdrawTransientChildren (pCD)
@@ -972,7 +972,7 @@ void WithdrawTransientChildren (ClientData *pCD)
 } /* END OF FUNCTION WithdrawTransientChildren */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WithdrawWindow (pCD)
@@ -1357,7 +1357,7 @@ void WithdrawWindow (ClientData *pCD)
 } /* END OF FUNCTION WithdrawWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteClientContext (pCD)
@@ -1418,7 +1418,7 @@ void DeleteClientContext (ClientData *pCD)
 } /* END OF FUNCTION DeleteClientContext */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ResetWitdrawnFocii (pCD)
@@ -1508,7 +1508,7 @@ void ResetWithdrawnFocii (ClientData *pCD)
 } /* END OF FUNCTION ResetWithdrawnFocii */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FreeClientFrame (pCD)
@@ -1567,7 +1567,7 @@ void FreeClientFrame (ClientData *pCD)
 } /* END OF FUNCTION FreeClientFrame */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FreeIcon (pCD)
@@ -1644,7 +1644,7 @@ void FreeIcon (ClientData *pCD)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  WithdrawDialog (dialogboxW)
@@ -1703,7 +1703,7 @@ void WithdrawDialog (Widget dialogboxW)
 } /* END OF FUNCTION WithdrawDialog */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ReManageDialog (pSD, dialogboxW)
@@ -1778,7 +1778,7 @@ void ReManageDialog (WmScreenData *pSD, Widget dialogboxW)
 } /* END OF FUNCTION ReManageDialog */
 
 #ifdef PANELIST
-
+
 /*************************************<->*************************************
  *
  *  RegisterEmbeddedClients (wPanelist, pECD, count)
@@ -1836,7 +1836,7 @@ RegisterEmbeddedClients (
 
 } /* END OF FUNCTION RegisterEmbeddedClients */
 
-
+
 #define LTT_INCREMENT  16
 /*************************************<->*************************************
  *
@@ -1907,7 +1907,7 @@ ListTransientSubtree (
 } /* END OF FUNCTION ListTransientSubtree */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ListTransientTree (pCD)
@@ -1971,7 +1971,7 @@ ListTransientTree (
     
 } /* END OF FUNCTION ListTransientTree */
 
-
+
 /*************************************<->*************************************
  *
  *  ReManageWindow (pCD)
@@ -2035,7 +2035,7 @@ ReManageWindow (
 } /* END OF FUNCTION ReManageWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ScanForEmbeddedClients (pSD)
@@ -2125,7 +2125,7 @@ ScanForEmbeddedClients (
 
 } /* END OF FUNCTION ScanForEmbeddedClients */
 
-
+
 /*************************************<->*************************************
  *
  *  IsEmbeddedClient (pCD, ppECD)
@@ -2183,7 +2183,7 @@ IsEmbeddedClient (ClientData *pCD, WmFpEmbeddedClientData **ppECD)
 
 } /* END OF FUNCTION IsEmbeddedClient */
 
-
+
 /******************************<->*************************************
  *
  *  ManageEmbeddedClient (pCD, pECD, manageFlags)
@@ -2347,7 +2347,7 @@ ManageEmbeddedClient (
 
 } /* END OF FUNCTION ManageEmbeddedClient */
 
-
+
 /******************************<->*************************************
  *
  *  ReparentEmbeddedClient (pECD, newControl, newWin, x, y, width, height)
@@ -2474,7 +2474,7 @@ ReparentEmbeddedClient (
 
 } /* END OF FUNCTION ReparentEmbeddedClient */
 
-
+
 /*************************************<->*************************************
  *
  *  ForceSubpanelWMState (win)
@@ -2553,7 +2553,7 @@ ForceSubpanelWMState (Window win)
 
 } /* END OF FUNCTION ForceSubpanelWMState */
 
-
+
 /*************************************<->*************************************
  *
  *  RegisterPushRecallClients (wPanelist, pPRCD, count)
@@ -2619,7 +2619,7 @@ RegisterPushRecallClients (
 
 } /* END OF FUNCTION RegisterPushRecallClients */
 
-
+
 /*************************************<->*************************************
  *
  *  IsPushRecallClient (pCD, ppPRCD)
@@ -2674,7 +2674,7 @@ IsPushRecallClient (ClientData *pCD, WmFpPushRecallClientData **ppPRCD)
 
 } /* END OF FUNCTION IsPushRecallClient */
 
-
+
 /*************************************<->*************************************
  *
  *  ScanForPushRecallClients (pSD)
@@ -2742,7 +2742,7 @@ ScanForPushRecallClients (
 
 } /* END OF FUNCTION ScanForPushRecallClients */
 
-
+
 /******************************<->*************************************
  *
  *  static void CheckPushRecallClient (pCD)
@@ -2783,7 +2783,7 @@ CheckPushRecallClient(
     }
 }
 
-
+
 /******************************<->*************************************
  *
  *  static void HandleSubstructEvents (Widget w, caddr_t pCD, XEvent *event)
@@ -2836,7 +2836,7 @@ HandleSubstructEvents(
 	}
 } /* END OF FUNCTION HandleSubstructEvents */
 
-
+
 /*******************************<->*************************************
  *
  *  UpdateEmbeddedClientsProperty (pSD)
@@ -2915,7 +2915,7 @@ UpdateEmbeddedClientsProperty(
 } /* END OF FUNCTION UpdateEmbeddedClientsProperty */
 
 
-
+
 /*******************************<->*************************************
  *
  *  UnParentControls (pSD, unmap)
@@ -2988,7 +2988,7 @@ UnParentControls(
 } /* END OF FUNCTION UnParentControl */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RegisterIconBoxControl (wPanelist)

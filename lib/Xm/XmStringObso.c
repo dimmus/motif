@@ -98,7 +98,7 @@ XmStringCreateLtoR(
   return (XmStringLtoRCreate (text, tag));
 }
 
-
+
 /*
  * build an external TCS 'segment', just a high level create
  */

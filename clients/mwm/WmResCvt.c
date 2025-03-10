@@ -68,7 +68,7 @@ long           DecStrToL ();
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  AddWmResourceConverters (args)
@@ -128,7 +128,7 @@ void AddWmResourceConverters (void)
 } /* END OF FUNCTION AddWmResourceConverters */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToAMBehavior (args, numArgs, fromVal, toVal)
@@ -216,7 +216,7 @@ void WmCvtStringToAMBehavior (XrmValue *args, Cardinal numArgs, XrmValue *fromVa
 } /* END OF FUNCTION WmCvtStringToAMBehavior */
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToCFocus (args, numArgs, fromVal, toVal)
@@ -306,7 +306,7 @@ void WmCvtStringToCFocus (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, X
 } /* END OF FUNCTION WmCvtStringToCFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToCDecor (args, numArgs, fromVal, toVal)
@@ -501,7 +501,7 @@ void WmCvtStringToCDecor (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, X
 } /* END OF FUNCTION WmCvtStringToCDecor */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToCFunc (args, numArgs, fromVal, toVal)
@@ -677,7 +677,7 @@ void WmCvtStringToCFunc (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, Xr
 
 } /* END OF FUNCTION WmCvtStringToCFunc */
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToFrameStyle (args, numArgs, fromVal, toVal)
@@ -748,7 +748,7 @@ void WmCvtStringToFrameStyle (XrmValue *args, Cardinal numArgs, XrmValue *fromVa
 } /* END OF FUNCTION WmCvtStringToFrameStyle */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToIDecor (args, numArgs, fromVal, toVal)
@@ -845,7 +845,7 @@ void WmCvtStringToIDecor (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, X
 } /* END OF FUNCTION WmCvtStringToIDecor */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToIPlace (args, numArgs, fromVal, toVal)
@@ -1013,7 +1013,7 @@ void WmCvtStringToIPlace (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, X
 } /* END OF FUNCTION WmCvtStringToIPlace */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToKFocus (args, numArgs, fromVal, toVal)
@@ -1093,7 +1093,7 @@ void WmCvtStringToKFocus (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, X
 } /* END OF FUNCTION WmCvtStringToKFocus */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToSize (args, numArgs, fromVal, toVal)
@@ -1195,7 +1195,7 @@ void WmCvtStringToSize (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, Xrm
 
 } /* END OF FUNCTION WmCvtStringToSize */
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToShowFeedback (args, numArgs, fromVal, toVal)
@@ -1396,7 +1396,7 @@ void WmCvtStringToShowFeedback (XrmValue *args, Cardinal numArgs, XrmValue *from
 } /* END OF FUNCTION WmCvtStringToShowFeedback */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmCvtStringToUsePPosition (args, numArgs, fromVal, toVal)
@@ -1472,7 +1472,7 @@ void WmCvtStringToUsePPosition (XrmValue *args, Cardinal numArgs, XrmValue *from
 
 } /* END OF FUNCTION WmCvtStringToUsePPosition */
 
-
+
 /*************************************<->*************************************
  *
  *  NextToken (pchIn, pLen, ppchNext)
@@ -1547,7 +1547,7 @@ unsigned char *NextToken (unsigned char *pchIn, int *pLen,
 } /* END OF FUNCTION NextToken */   
 
 
-
+
 /*************************************<->*************************************
  *
  *  StringsAreEqual (pch1, pch2, len)
@@ -1623,7 +1623,7 @@ Boolean StringsAreEqual (unsigned char *pch1, unsigned char *pch2, int len)
 
 } /* END OF StringsAreEqual */   
 
-
+
 /*************************************<->*************************************
  *
  *  long

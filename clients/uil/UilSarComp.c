@@ -104,7 +104,7 @@ extern yystype		yylval;
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -159,7 +159,7 @@ sym_value_entry_type 	*sem_create_cstr()
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -210,7 +210,7 @@ sym_value_entry_type 	*sem_create_wchar_str()
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -333,7 +333,7 @@ boolean			op2_temporary;
     new_str_entry->az_next_table_value = NULL;
     *ptr = new_str_entry;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -465,7 +465,7 @@ boolean			op2_temporary;
     *ptr = NULL;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -568,7 +568,7 @@ boolean			op2_temporary;
     return new_str_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -622,7 +622,7 @@ int	charset_as_subclass;
     }
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -675,7 +675,7 @@ yystype           *charset_frame;
     Uil_lex_l_literal_charset = az_keyword_entry->b_subclass;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -745,7 +745,7 @@ void sar_make_fallback_charset(name_frame)
     Uil_lex_l_literal_charset = az_keyword_entry->b_subclass;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -871,7 +871,7 @@ yystype	    *prior_value_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

@@ -776,7 +776,7 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
  *****************************************************************************/
 
 
-
+
 /*
  * Public API
  */

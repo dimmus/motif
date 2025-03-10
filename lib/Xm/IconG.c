@@ -253,9 +253,9 @@ static  Boolean PointIn(Widget widget,
 		        Position x, Position y);
 
 /********    End Static Function Declarations    ********/
-
 
-
+
+
 /*** Xt trivia: How do you manage a flag that tells you that something 
      happened during a resource conversion ?
      We need a association outside the widget instance for the
@@ -553,7 +553,7 @@ static XmGadgetClassExtRec GadClassExtRec = {
     MarginsProc,                        /* widget_margins */
 };
 
-
+
 externaldef( xmicongadgetclassrec) XmIconGadgetClassRec	xmIconGadgetClassRec =
 {	/* RectObjClassPart */
     {	
@@ -613,7 +613,7 @@ externaldef( xmicongadgetclassrec) XmIconGadgetClassRec	xmIconGadgetClassRec =
 
 externaldef(xmicongadgetclass) WidgetClass
 	xmIconGadgetClass=(WidgetClass)&xmIconGadgetClassRec;
-
+
 
 
 /* ContainerItem Trait record for IconGadget */
@@ -658,7 +658,7 @@ static XtConvertArgRec smallIconArgs[] =
    { XtAddress, (XtPointer)(int)XmSMALL_ICON, 0}
 };
 
-
+
 /*** XmRCallProcs ***/
 /*
  * XmRCallProc routine for checking icon_cache.render_table before setting 
@@ -2593,7 +2593,7 @@ QueryGeometry(
     return XmeReplyToQueryGeometry(wid, intended, desired) ;
 }
 
-
+
 /*-----------------
 | XmGadget methods |
 -----------------*/
@@ -2961,7 +2961,7 @@ MarginsProc(
 /*------------
 | ActionProcs |
 ------------*/
-
+
 /*-------------------
 | Internal functions |
 -------------------*/
@@ -3381,7 +3381,7 @@ GetSize(
     if (*ret_height == 0) *ret_height = ideal_height + 2*ht;
 
 }
-
+
 
 /*-------------------
 | Trait methods     |

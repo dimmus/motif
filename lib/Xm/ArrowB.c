@@ -46,7 +46,7 @@ static char rcsid[] = "$XConsortium: ArrowB.c /main/16 1995/10/25 19:50:57 cde-s
 #include "XmI.h"
 
 #define DELAY_DEFAULT	100
-
+
 /********    Static Function Declarations    ********/
 
 static void ClassPartInitialize( 
@@ -126,7 +126,7 @@ static void DrawArrow(XmArrowButtonWidget aw,
 		      GC center_gc);
 
 /********    End Static Function Declarations    ********/
-
+
 /*  Default translation table and action list  */
 
 #define defaultTranslations	_XmArrowB_defaultTranslations
@@ -263,7 +263,7 @@ static XmConst XmActivatableTraitRec arrowButtonAT =
   0,				/* version	*/
   ChangeCB			/* changeCB	*/
 };
-
+
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -280,7 +280,7 @@ ClassPartInitialize(
   /* Install the activatable trait for all subclasses */
   XmeTraitSet((XtPointer)wc, XmQTactivatable, (XtPointer) &arrowButtonAT);
 }
-      
+      
 /************************************************************************
  *
  *  Initialize
@@ -324,7 +324,7 @@ Initialize(
   /*  Get the drawing graphics contexts.  */
   GetArrowGC (new_w);
 }
-
+
 /************************************************************************
  *
  *  GetArrowGC
@@ -357,7 +357,7 @@ GetArrowGC(
 						&values, GCClipMask, 
 						unusedMask);
 }
-
+
 /************************************************************************
  *
  *  Redisplay
@@ -408,7 +408,7 @@ Redisplay(
   _XmProcessUnlock(); 
   (*(expose)) ((Widget) aw, event, region);
 }
-
+
 /************************************************************************
  *
  *  Destroy
@@ -428,7 +428,7 @@ Destroy(
   XtReleaseGC(w, aw->arrowbutton.arrow_GC);
   XtReleaseGC(w, aw->arrowbutton.insensitive_GC);
 }
-
+
 /************************************************************************
  *
  *  SetValues
@@ -479,7 +479,7 @@ SetValues(
   
   return (returnFlag);
 }
-
+
 /************************************************************************
  *
  *  Arm
@@ -517,7 +517,7 @@ Arm(
 			 &call_value);
     }
 }
-
+
 static void 
 MultiArm(
         Widget aw,
@@ -528,7 +528,7 @@ MultiArm(
   if (((XmArrowButtonWidget) aw)->arrowbutton.multiClick == XmMULTICLICK_KEEP)
     Arm(aw, event, params, num_params);
 }
-
+
 /************************************************************************
  *
  *  Activate
@@ -554,7 +554,7 @@ Activate(
   aw->arrowbutton.click_count = 1;
   ActivateCommon((Widget) aw, buttonEvent);
 }
-
+
 static void 
 MultiActivate(
         Widget wid,
@@ -580,7 +580,7 @@ MultiActivate(
       Disarm ((Widget) aw, buttonEvent, params, num_params);
     }
 }
-
+
 static void 
 ActivateCommon(
         Widget wid,
@@ -617,7 +617,7 @@ ActivateCommon(
 			 &call_value);
     }
 }
-
+
 /************************************************************************
  *
  *     ArmAndActivate
@@ -681,7 +681,7 @@ ArmAndActivate(
 			ArmTimeout, (XtPointer)ab);
     }
 }
-
+
 /* ARGSUSED */
 static void
 ArmTimeout(
@@ -703,7 +703,7 @@ ArmTimeout(
       XFlush (XtDisplay (ab));
     }
 }
-
+
 /************************************************************************
  *
  *  Disarm
@@ -731,7 +731,7 @@ Disarm(
   call_value.event = event;
   XtCallCallbackList((Widget) aw, aw->arrowbutton.disarm_callback, &call_value);
 }
-
+
 /************************************************************************
  *
  *  Enter
@@ -753,7 +753,7 @@ Enter(
     DrawArrow(aw, aw->primitive.bottom_shadow_GC,
 	      aw->primitive.top_shadow_GC, NULL);
 }
-
+
 /************************************************************************
  *
  *  Leave
@@ -775,7 +775,7 @@ Leave(
     DrawArrow(aw, aw->primitive.top_shadow_GC,
 	      aw->primitive.bottom_shadow_GC, NULL);
 }
-
+
 /************************************************************************
  *
  *  ChangeCB
@@ -795,7 +795,7 @@ ChangeCB(
   else
     XtRemoveCallback (w, XmNactivateCallback, activCB, closure);
 }
-
+
 /************************************************************************
  *
  *  XmCreateArrowButton
@@ -861,7 +861,7 @@ XmVaCreateManagedArrowButton(
     return w;
     
 }
-
+
 /* Wrapper around XmeDrawArrow to calculate sizes. */
 static void
 DrawArrow(XmArrowButtonWidget aw,

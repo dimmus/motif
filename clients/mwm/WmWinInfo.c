@@ -98,7 +98,7 @@ WmWorkspaceData *pIconBoxInitialWS;
 #endif /* WSM */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetClientInfo (pSD, clientWindow, manageFlags)
@@ -459,7 +459,7 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
 } /* END OF FUNCTION GetClientInfo */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetWmClientInfo (pWS, pCD, manageFlags)
@@ -860,7 +860,7 @@ int i;
 } /* END OF FUNCTION GetWmClientInfo */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmClass (pCD)
@@ -915,7 +915,7 @@ ProcessWmClass (ClientData *pCD)
 } /* END OF FUNCTION ProcessWmClass */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessSmClientID (pCD)
@@ -969,7 +969,7 @@ ProcessSmClientID (ClientData *pCD)
 } /* END OF FUNCTION ProcessSmClientID */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmSaveHint (pCD)
@@ -1019,7 +1019,7 @@ ProcessWmSaveHint (ClientData *pCD)
 
 } /* END OF FUNCTION ProcessWmSaveHint */
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmHints (pCD, firstTime)
@@ -1466,7 +1466,7 @@ ProcessWmHints (ClientData *pCD, Boolean firstTime)
 } /* END OF FUNCTION ProcessWmHints */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmNormalHints (pCD, firstTime, manageFlags)
@@ -2187,7 +2187,7 @@ ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, long manageFlags)
 
 } /* END OF FUNCTION ProcessWmNormalHints */
 
-
+
 /*************************************<->*************************************
  *
  *  WmICCCMToXmString (wmNameProp)
@@ -2279,7 +2279,7 @@ WmICCCMToXmString (XTextProperty *wmNameProp)
   return xms_return;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmWindowTitle (pCD, firstTime)
@@ -2414,7 +2414,7 @@ ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime)
 } /* END OF FUNCTION ProcessWmWindowTitle */
 
 #ifdef PANELIST
-
+
 /*************************************<->*************************************
  *
  *  FixSubpanelEmbeddedClientGeometry ( pCD )
@@ -2505,7 +2505,7 @@ FixSubpanelEmbeddedClientGeometry (ClientData *pCD)
 
 #endif /* PANELIST */
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmIconTitle (pCD, firstTime)
@@ -2585,7 +2585,7 @@ ProcessWmIconTitle (ClientData *pCD, Boolean firstTime)
 } /* END OF FUNCTION ProcessWmIconTitle */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmTransientFor (pCD)
@@ -2649,7 +2649,7 @@ ProcessWmTransientFor (ClientData *pCD)
 } /* END OF FUNCTION ProcessWmTransientFor */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeSystemMenu (pCD)
@@ -2747,7 +2747,7 @@ MakeSystemMenu (ClientData *pCD)
 } /* END OF FUNCTION MakeSystemMenu */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitCColormapData (pCD)
@@ -2798,7 +2798,7 @@ InitCColormapData (ClientData *pCD)
 } /* END OF FUNCTION InitCColormapData */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CalculateGravityOffset (pCD, xoff, yoff)
@@ -2909,7 +2909,7 @@ CalculateGravityOffset (ClientData *pCD, int *xoff, int *yoff)
 } /* END OF FUNCTION CalculateGravityOffset */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitClientPlacement (pCD, manageFlags)
@@ -3126,7 +3126,7 @@ InitClientPlacement (ClientData *pCD, long manageFlags)
 } /* END OF FUNCTION InitClientPlacement */
 
 #ifdef PANELIST
-
+
 /******************************<->*************************************
  *
  * void AdjustSlideOutGeometry (pCD)
@@ -3216,7 +3216,7 @@ AdjustSlideOutGeometry ( ClientData *pCD)
 }
 #endif  /* PANELIST */
 
-
+
 /*************************************<->*************************************
  *
  *  PlaceFrameOnScreen (pCD, pX, pY, w, h)
@@ -3293,7 +3293,7 @@ PlaceFrameOnScreen (ClientData *pCD, int *pX, int *pY, int w, int h)
 } /* END OF FUNCTION PlaceFrameOnScreen */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PlaceIconOnScreen (pCD, pX, pY)
@@ -3359,7 +3359,7 @@ PlaceIconOnScreen (ClientData *pCD, int *pX, int *pY)
 } /* END OF FUNCTION PlaceIconOnScreen */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FixWindowConfiguration (pCD, pWidth, pHeight, widthInc, heightInc)
@@ -3421,7 +3421,7 @@ FixWindowConfiguration (ClientData *pCD, unsigned int *pWidth, unsigned int *pHe
 } /* END OF FUNCTION FixWindowConfiguration */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FixWindowSize (pCD, pWidth, pHeight, widthInc, heightInc)
@@ -3637,7 +3637,7 @@ FixWindowSize (ClientData *pCD, unsigned int *pWidth, unsigned int *pHeight, uns
 } /* END OF FUNCTION FixWindowSize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindClientPlacement (pCD)
@@ -3821,7 +3821,7 @@ FindClientPlacement (ClientData *pCD)
 } /* END OF FUNCTION FindClientPlacement */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmGetWindowAttributes (window)
@@ -3876,7 +3876,7 @@ WmGetWindowAttributes (Window window)
 } /* END OF FUNCTION WmGetWindowAttributes */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetupClientIconWindow (pCD, window)
@@ -3947,7 +3947,7 @@ SetupClientIconWindow (ClientData *pCD, Window window)
 } /* END OF FUNCTION SetupClientIconWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessMwmHints (pCD)

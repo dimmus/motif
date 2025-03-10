@@ -172,7 +172,7 @@ _XmGrabKeyboard(
    return(status);
 }
 
-
+
 void 
 _XmMenuSetInPMMode (
 	Widget wid,
@@ -256,7 +256,7 @@ _XmLeafPaneFocusOut(
       _XmClearFocusPath((Widget)rc);
    }
 }
-
+
 /*ARGSUSED*/
 void
 _XmMenuHelp(
@@ -296,7 +296,7 @@ _XmMenuHelp(
    }
    _XmRecordEvent(event);
 }
-
+
 static void 
 MenuTraverse(
         Widget w,

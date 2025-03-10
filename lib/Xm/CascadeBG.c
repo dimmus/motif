@@ -495,7 +495,7 @@ static XmMenuSavvyTraitRec MenuSavvyRecord = {
     NULL,
     _XmCBNameActivate,
 };
-
+
 static void 
 ClassInitialize( void )
 {
@@ -630,7 +630,7 @@ SecondaryObjectCreate(
 		                                   ext.extensionType);
   memcpy(reqSec, newSec, size);
 }
-
+
 /************************************************************************
  *
  *  InitializePosthook
@@ -648,7 +648,7 @@ InitializePrehook(
   if (LabG_Font(new_w) == NULL)
     LabG_Font(new_w) = XmeGetDefaultRenderTable (new_w, XmBUTTON_FONTLIST);
 }
-
+
 /************************************************************************
  *
  *  InitializePosthook
@@ -820,7 +820,7 @@ BorderUnhighlight(
       Disarm (cb, False);
 }
 
-
+
 /*
  * Draw the 3D shadow around the widget if its in an option menu or if the
  * widget is armed.
@@ -970,7 +970,7 @@ DrawCascade(
    }
 }
 
-
+
 /*
  * set up the cascade position.  
  */
@@ -1107,7 +1107,7 @@ Redisplay(
     }
 }
 
-
+
 /*
  * Input sent by a manager is dispatched here.  The gadget handles Arm,
  * Activate, Enter, Leave, FocusIn, FocusOut and Help events.
@@ -1205,7 +1205,7 @@ InputDispatch(
        _XmCBHelp((Widget) cb, event, NULL, NULL); 
 }
 
-
+
 /*
  * Arming the CascadeButtonGadget consists of setting the armed bit
  * and drawing the 3D shadow.  CascadeButtonGadgets in
@@ -1279,7 +1279,7 @@ ArmAndPost(
 	  _XmRecordEvent(event);
    }
 }
-
+
 /*
  * class function to cause the cascade button to be armed and selected
  */
@@ -1437,7 +1437,7 @@ ArmAndActivate(
       _XmRecordEvent(event);
 }
 
-
+
 /*
  * Disarm the menu.  This may include popping down any submenu that is up
  * and removing the timeout to post a submenu.
@@ -1500,7 +1500,7 @@ Disarm(
    }
 }
 
-
+
 /*
  * called when the post delay timeout occurs.
  */
@@ -1561,7 +1561,7 @@ DelayedArm(
    }
 }
 
-
+
 /*
  * if traversal is not on and the mouse
  * has not entered its cascading submenu, disarm the
@@ -1601,7 +1601,7 @@ CheckDisarm(
    }
 }
 
-
+
 /*
  * post submenu and disable traversal.  These functions must be called
  * in this order.
@@ -1644,7 +1644,7 @@ StartDrag(
    _XmRecordEvent (event);
 }
 
-
+
 /*
  * do the popup and if there is not a submenu, bring down the menu system.
  */
@@ -1708,7 +1708,7 @@ Select(
 }
 
 
-
+
 /*
  * if there is a submenu, enable traversal.
  * call select to do the work
@@ -1775,7 +1775,7 @@ DoSelect(
    }
 }
 
-
+
 /*
  * if the menu system traversal is enabled, do a select
  */
@@ -1812,7 +1812,7 @@ KeySelect(
    _XmRecordEvent(event);
 }
 
-
+
 /*
  * If the menu system is not active, arm it and arm this cascadebutton
  * else start the drag mode
@@ -1898,7 +1898,7 @@ MenuBarSelect(
    }
 }
 
-
+
 /* 
  * If the menu is active, post submenu and arm.
  */
@@ -1924,7 +1924,7 @@ MenuBarEnter(
    }
 }
 
-
+
 /*
  * unless our submenu is posted or traversal is on, disarm
  */
@@ -1954,7 +1954,7 @@ MenuBarLeave(
    }
 }
 
-
+
 /*
  * Create the CB and CBG 3d arrows.
  * The Pixmaps must be unspecified going into this routine.  This helps to
@@ -2126,7 +2126,7 @@ _XmCreateArrowPixmaps(
    }
 }
 
-
+
 /*
  * get the cascade size set up
  */
@@ -2166,7 +2166,7 @@ size_cascade(
     }
 }
 
-
+
 /*
  * set up the cascade size and location
  */
@@ -2262,7 +2262,7 @@ setup_cascade(
    position_cascade(cascadebtn);
 }
 
-
+
 /*
  * Destroy the widget
  */
@@ -2302,7 +2302,7 @@ Destroy(
     _XmProcessUnlock();
 }
                          
-
+
 /*
  * routine to resize a cascade button, called by the parent
  * geometery manager
@@ -2326,7 +2326,7 @@ Resize(
     }
 }
 
-
+
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -2725,7 +2725,7 @@ SetValues(
 }
 
 
-
+
 /************************************************************************
  *
  *  GetArmGC
@@ -2786,7 +2786,7 @@ GetBackgroundGC(
   CBG_BackgroundGC(cb) = XtGetGC( (Widget) mw, valueMask, &values);
 }
 
-
+
 /*
  * Initialize
  */

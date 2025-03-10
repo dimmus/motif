@@ -76,7 +76,7 @@
 #define MrmEOF			64      /* End of file */
 #define MrmUNRESOLVED_REFS	65	/* Unresolved widget refs in callback*/
 
-
+
 /*
  * Definitions associated with widget representations
  */
@@ -136,7 +136,7 @@
 #define	MrmRtypeMax		33
 
 
-
+
 /*
  * MRM typedefs
  */
@@ -156,7 +156,7 @@ typedef short int		MrmGroup; /* For Mrm resource groups */
 
 #define	MrmMaxResourceSize	65535	/* (2)16 - 1 */ 
 
-
+
 /*
  * Operating System specific parameter struct.  Passed to low level
  * file OPEN.
@@ -194,7 +194,7 @@ typedef struct	{
 typedef struct MrmHierarchyDescStruct *MrmHierarchy;
 
 
-
+
 /*
  * Structure used to pass name/value pairs to MrmRegisterNames
  */

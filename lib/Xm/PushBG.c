@@ -228,7 +228,7 @@ static void ShowAsDefault(Widget w,
 static void PBG_FixTearoff( XmPushButtonGadget pb);
 
 /********    End Static Function Declarations    ********/
-
+
 /************************************************
  The uncached resources for Push Button  
  ************************************************/
@@ -352,7 +352,7 @@ static XmSyntheticResource cache_syn_resources[] =
      XmeToHorizontalPixels
    },
 };
-
+
 /*************************************<->*************************************
  *
  *
@@ -541,7 +541,7 @@ static XmMenuSavvyTraitRec MenuSavvyRecord = {
     NULL,
     _XmCBNameActivate,
 };
-
+
 /*****************************************************************
  *  SPECIAL PROPERTIES OF PUSHBUTTON GADGET INSIDE A MENU:
  *   When a PushButton (widget/gadget) is incorporated in a Menu
@@ -591,7 +591,7 @@ _XmPushBCacheCompare(
   else
     return 0;
 }
-
+
 /************************************************************************
  *
  *  InputDispatch
@@ -655,7 +655,7 @@ InputDispatch(
   else if (event_mask & XmBDRAG_EVENT)
     _XmProcessDrag ((Widget) pb, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *
  *     Arm
@@ -692,7 +692,7 @@ Arm(
       XtCallCallbackList ((Widget) pb, PBG_ArmCallback(pb), &call_value);
     }
 }
-
+
 /************************************************************************
  *
  *     Activate
@@ -747,7 +747,7 @@ Activate(
 	}
     }
 }
-
+
 static void 
 PBG_FixTearoff( XmPushButtonGadget pb)	
 {
@@ -938,7 +938,7 @@ ArmAndActivate(
 	}
     }
 }
-
+
 /*ARGSUSED*/
 static void 
 ArmTimeout(
@@ -989,7 +989,7 @@ ArmTimeout(
       XFlush (XtDisplay (pb));
     }
 }
-
+
 /************************************************************************
  *
  *    Disarm
@@ -1015,7 +1015,7 @@ Disarm(
       XtCallCallbackList ((Widget) pb, PBG_DisarmCallback(pb), &call_value);
     }
 }
-
+
 /************************************************************************
  *
  *     BtnDown
@@ -1097,7 +1097,7 @@ BtnDown(
     }
   _XmRecordEvent (event);
 }
-
+
 /************************************************************************
  *
  *     BtnUp
@@ -1235,7 +1235,7 @@ BtnUp(
     XmProcessTraversal((Widget) pb, XmTRAVERSE_CURRENT);
   PBG_FixTearoff(pb);
 }
-
+
 /************************************************************************
  *
  *  Enter
@@ -1309,7 +1309,7 @@ Enter(
        }
     }
 }
-
+
 /************************************************************************
  *
  *  Leave
@@ -1375,7 +1375,7 @@ Leave(
 	}
     }
 }
-
+
 /*************************************<->*************************************
  *
  *  BorderHighlight 
@@ -1429,7 +1429,7 @@ BorderHighlight(
     } 
 }
 
-
+
 static void
 DrawBorderHighlight(
         Widget wid)
@@ -1486,7 +1486,7 @@ DrawBorderHighlight(
 		       x, y, width, height, highlight_width);
     }
 } 
-
+
 /*************************************<->*************************************
  *
  *  BorderUnhighlight
@@ -1573,7 +1573,7 @@ BorderUnhighlight(
 	}
     } 
 }
-
+
 /*************************************<->*************************************
  *
  *  KeySelect
@@ -1628,7 +1628,7 @@ KeySelect(
 	menuSTrait->reparentToTearOffShell(XtParent(pb), event);
     }
 }
-
+
 /***********************************************************
  *
  *  ClassInitialize
@@ -1678,7 +1678,7 @@ ClassInitialize( void )
   
   PushBGClassExtensionRec.record_type = XmQmotif;
 }
-
+
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -1701,7 +1701,7 @@ ClassPartInitialize(
   /* Install the takesDefault trait for all subclasses */
   XmeTraitSet((XtPointer) wc, XmQTtakesDefault, (XtPointer) &pushButtonGTDT);
 }
-
+
 /************************************************************************
  *
  *  SecondaryObjectCreate
@@ -1766,7 +1766,7 @@ SecondaryObjectCreate(
 		       ((XmPushButtonGCacheObject)newSec)->ext.extensionType);
   memcpy(reqSec, newSec, size);
 }
-
+
 /************************************************************************
  *
  *  InitializePosthook
@@ -1785,7 +1785,7 @@ InitializePrehook(
   if (LabG_Font(new_w) == NULL)
     LabG_Font(new_w) = XmeGetDefaultRenderTable (new_w, XmBUTTON_FONTLIST);
 }
-
+
 /************************************************************************
  *
  *  InitializePosthook
@@ -1835,7 +1835,7 @@ InitializePosthook(
   _XmProcessUnlock();
   XtFree((char *) ext);
 }
-      
+      
 /*************************************<->*************************************
  *
  *  Initialize 
@@ -2004,7 +2004,7 @@ Initialize(
     XmFOCUS_IN_EVENT | XmFOCUS_OUT_EVENT | XmENTER_EVENT | XmLEAVE_EVENT
       | XmMULTI_ARM_EVENT |  XmMULTI_ACTIVATE_EVENT | XmBDRAG_EVENT;
 }
-
+
 /************************************************************************
  *
  *  GetFillGC
@@ -2028,7 +2028,7 @@ GetFillGC(
   
   PBG_FillGc(pb) = XtGetGC ((Widget) mw, valueMask, &values);
 }
-
+
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -2115,7 +2115,7 @@ SetValuesPrehook(
   
   return FALSE;
 }
-
+
 /************************************************************************
  *
  *  GetValuesPrehook
@@ -2190,7 +2190,7 @@ GetValuesPrehook(
   
   _XmExtGetValuesHook((Widget)newSec, args, num_args);
 }
-
+
 /************************************************************************
  *
  *  GetValuesPosthook
@@ -2213,7 +2213,7 @@ GetValuesPosthook(
   _XmProcessUnlock();
   XtFree((char *) ext);
 }
-
+
 /************************************************************************
  *
  *  SetValuesPosthook
@@ -2274,7 +2274,7 @@ SetValuesPosthook(
   
   return FALSE;
 }
-
+
 /*************************************<->*************************************
  *
  *  SetValues(current, request, new_w)
@@ -2495,7 +2495,7 @@ SetValues(
   
   return flag;
 }
-
+
 /************************************************************************
  *
  *  Help
@@ -2522,7 +2522,7 @@ Help(
   if (is_menupane && menuSTrait != NULL)
     menuSTrait->reparentToTearOffShell(XtParent(pb), event);
 }
-
+
 /************************************************************************
  *
  *  Destroy
@@ -2562,7 +2562,7 @@ Destroy(
   _XmCacheDelete((XtPointer) PBG_Cache(pb));
   _XmProcessUnlock();
 }
-
+
 /**************************************************************************
  *
  * Resize(w)
@@ -2585,7 +2585,7 @@ Resize(
     (* resize) ((Widget) pb);
   }
 }
-
+
 /*ARGSUSED*/
 static void 
 ActivateCommonG(
@@ -2613,7 +2613,7 @@ ActivateCommonG(
 	  ((Widget) pb, event, NULL, NULL);
     }
 }
-
+
 /*********************************************************
  *   Functions for manipulating Secondary Resources.
  *********************************************************/
@@ -2643,7 +2643,7 @@ GetPushBGClassSecResData(
   
   return (arrayCount);
 }
-
+
 /*
  * GetPushBGClassResBase ()
  *   retrun the address of the base of resources.
@@ -2677,7 +2677,7 @@ GetPushBGClassSecResBase(
   _XmProcessUnlock();
   return (widgetSecdataPtr);
 }
-
+
 #ifdef DEFAULT_GLYPH_PIXMAP
 /*
  * DrawDefaultGlyphPixmap (pb)
@@ -2713,7 +2713,7 @@ DrawDefaultGlyphPixmap(
 	      LabG_NormalGC(pb), 0, 0, width, height, dx, dy, 1);
 }
 #endif /* DEFAULT_GLYPH_PIXMAP */
-
+
 #ifdef DEFAULT_GLYPH_PIXMAP
 /*
  * EraseDefaultGlyphPixmap (pb)
@@ -2739,7 +2739,7 @@ EraseDefaultGlyphPixmap(
 	      dx, dy, width, height, False);
 }
 #endif /* DEFAULT_GLYPH_PIXMAP */
-
+
 /*
  * EraseDefaultButtonShadow (pb)
  *  - Called from SetValues() - effort to optimize shadow drawing.
@@ -2802,7 +2802,7 @@ EraseDefaultButtonShadow(
       XmeClearBorder(XtDisplay(pb), XtWindow(pb), x, y, width, height, size);
     }
 }
-
+
 /*
  * DrawDefaultButtonShadow (pb)
  *  - Called from SetValues() - effort to optimize shadow drawing.
@@ -2824,7 +2824,7 @@ DrawDefaultButtonShadow(
   
   DrawDefaultButtonShadows(pb);
 }
-
+
 /*
  * AdjustHighLightThickness ()
  *  HighlightThickness has a dependency on default_button-shadow-thickness;
@@ -2891,7 +2891,7 @@ AdjustHighLightThickness(
     }
   return (adjustment);
 }
-
+
 /*ARGSUSED*/
 static void 
 Redisplay(
@@ -2928,7 +2928,7 @@ Redisplay(
 	}
     }
 }
-
+
 /*
  * DrawPushButtonLabelGadget()
  */
@@ -2975,7 +2975,7 @@ DrawPushButtonLabelGadget(
     LabG_BackgroundGC(pb) =  fill_tmp_gc;
 }
 
-
+
 /*
  * DrawLabelGadget()
  */
@@ -3040,7 +3040,7 @@ DrawLabelGadget(
 }  
 
 
-
+
 /*
  * DrawPushButtonGadgetShadows()
  *
@@ -3068,7 +3068,7 @@ DrawPushButtonGadgetShadows(
   if (pb->gadget.shadow_thickness > 0)
     DrawPBGadgetShadows(pb);
 }
-
+
 /*
  * DrawPBGadgetShadows (pb)
  *   - Should be called only if PrimitiveShadowThickness > 0
@@ -3121,7 +3121,7 @@ DrawPBGadgetShadows(
 	}
     }
 }
-
+
 static void 
 EraseDefaultButtonShadows(
         XmPushButtonGadget pb )
@@ -3172,7 +3172,7 @@ EraseDefaultButtonShadows(
     EraseDefaultGlyphPixmap(pb);
 #endif
 }
-
+
 /*
  * DrawDefaultButtonShadows()
  *  - get the topShadowColor and bottomShadowColor from the parent;
@@ -3245,7 +3245,7 @@ DrawDefaultButtonShadows(
 		     default_button_shadow_thickness, XmSHADOW_OUT);
     }
 }
-
+
 static XmImportOperator 
 ShowAsDef_ToHorizPix(
         Widget widget,
@@ -3263,7 +3263,7 @@ ShowAsDef_ToHorizPix(
 
   return(returnVal);
 } 
-
+
 static Boolean 
 ComputePBLabelArea(
         XmPushButtonGadget pb,
@@ -3305,7 +3305,7 @@ ComputePBLabelArea(
 
   return (result);
 }
-
+
 static void 
 ExportHighlightThickness(
         Widget widget,
@@ -3321,7 +3321,7 @@ ExportHighlightThickness(
   
   XmeFromHorizontalPixels (widget, offset, value);
 }
-
+
 /*************************************************************************
  *
  * SetPushButtonSize(newpb)
@@ -3358,7 +3358,7 @@ SetPushButtonSize(
       (* resize) ((Widget) newpb);
   }
 }
-
+
 /************************************************************************
  *
  *  ChangeCB
@@ -3378,7 +3378,7 @@ ChangeCB(
   else
     XtRemoveCallback (w, XmNactivateCallback, activCB, closure);
 }
-
+
 /************************************************************************
  *
  *  ShowAsDefault
@@ -3455,7 +3455,7 @@ ShowAsDefault(Widget w,
 	  XtVaSetValues(w, XmNdefaultButtonShadowThickness, 0, NULL);
     }
 }
-	
+	
 /************************************************************************
  *
  *		Application Accessible External Functions

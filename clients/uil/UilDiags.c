@@ -410,7 +410,7 @@ void	diag_issue_diagnostic
     }
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -459,7 +459,7 @@ void	diag_issue_summary()
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -550,7 +550,7 @@ int XmConst   b_tag;
     }
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -602,7 +602,7 @@ int XmConst   b_type;
 #endif
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -656,7 +656,7 @@ int XmConst   b_type;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -710,7 +710,7 @@ int XmConst   b_type;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -789,7 +789,7 @@ void	diag_initialize_diagnostics()
     Uil_diag_status_delay_count = 0;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -827,7 +827,7 @@ void	diag_reset_overflow_handler()
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -910,7 +910,7 @@ int	l_error;
     /* we don't expect to come back */
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -969,7 +969,7 @@ char	* error_text;
 
 }
 
-
+
 
 
 /*
@@ -1105,7 +1105,7 @@ XmConst char  *loc_buffer;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1144,10 +1144,10 @@ int	d_message_number;
 	severity_table[ diag_rz_msg_table[ d_message_number ].l_severity ];
 }
 
-
 
 
-
+
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

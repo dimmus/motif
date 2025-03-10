@@ -58,7 +58,7 @@ static void DrawSimpleShadow(Display *display,
 
 /*-------------------- Private functions ----------------------*/
 /*-------------------------------------------------------------*/
-
+
 static void
 DrawSimpleShadow (Display *display, 
 		  Drawable d, 
@@ -120,7 +120,7 @@ DrawSimpleShadow (Display *display,
   _XmProcessUnlock();
 }
 
-    
+    
 /**************************** Public functions *************************/
 /***********************************************************************/
 

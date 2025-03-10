@@ -100,7 +100,7 @@ static int IgnoreXErrors(Display *, XErrorEvent *);
 
 
 /********    End Static Function Declarations    ********/
-
+
 static XtActionsRec actionsList[] = 
 {
   { "GrabShellBtnDown", BtnDown },
@@ -184,7 +184,7 @@ static XtResource resources[] =
   }
 };
 #undef Offset
-
+
 externaldef(xmgrabshellclassrec) XmGrabShellClassRec xmGrabShellClassRec = 
 {
   { /* core class fields */
@@ -245,7 +245,7 @@ externaldef(xmgrabshellclassrec) XmGrabShellClassRec xmGrabShellClassRec =
 
 externaldef(xmgrabshellwidgetclass) WidgetClass xmGrabShellWidgetClass = 
    (WidgetClass) &xmGrabShellClassRec;
-
+
 /* ------------- WIDGET CLASS METHODS ---------- */
 
 /*
@@ -285,7 +285,7 @@ Initialize(Widget req,		/* unused */
   grabsh->grab_shell.mapped = False;
 
 }
-
+
 /*
  * ClassPartInitialize()
  *	Set up the fast subclassing.
@@ -296,7 +296,7 @@ ClassPartInitialize(WidgetClass wc)
 {
   _XmFastSubclassInit (wc, XmGRAB_SHELL_BIT);
 }
-
+
 /*
  * SetValues()
  */
@@ -351,7 +351,7 @@ SetValues(Widget cw,
 
   return redisplay; 
 }
-
+
 /*
  * PopupCB()
  *	Grabs.
@@ -400,7 +400,7 @@ MapNotifyHandler(Widget shell, XtPointer client_data,
   XSync(XtDisplay(shell), False);
   XSetErrorHandler(old_handler);
 }
-
+
 #ifdef FIX_1445
 static void MouseWheel (Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
@@ -408,7 +408,7 @@ static void MouseWheel (Widget w, XEvent *event, String *params, Cardinal *num_p
 	GSAllowEvents(w, SyncPointer, event -> xbutton.time);
 }
 #endif
-
+
 /* 
  * For BtnUp and BtnDown events we need to decide whether to
  * popdown the grabshell.  We "see" these if the user presses
@@ -529,7 +529,7 @@ GSAllowEvents(Widget gs, int mode, Time time)
   }
 }
 
-
+
 /*
  * Destroy()
  */
@@ -542,7 +542,7 @@ Destroy(Widget widg)
   if (grabshell->grab_shell.cursor != None)
     XFreeCursor(XtDisplay(widg), grabshell->grab_shell.cursor);
 }
-
+
 /*
  * DoLayout()
  */
@@ -566,7 +566,7 @@ DoLayout(Widget wid)
 			  childW, childH, childwid->core.border_width);
     }
 }
-	
+	
 /************************************************************************
  *
  *  GeometryManager
@@ -601,7 +601,7 @@ GeometryManager(
   return ret_val;
 }
 
-
+
 /*
  * ChangeManaged()
  */
@@ -662,7 +662,7 @@ ChangeManaged(Widget wid)
       break;
     }
 }
-
+
 /*
  * Resize()
  */
@@ -672,7 +672,7 @@ Resize(Widget w)
 {
   DoLayout(w);
 }
-
+
 /*
  * When using an override redirect window, it is safe to draw to the
  * window as soon as you have mapped it; you need not wait for exposure
@@ -707,7 +707,7 @@ _XmFastExpose(Widget widg)
   XFlush(XtDisplay(widg));
   DrawBorder(widg);
 }
-
+
 /*
  * DrawBorder()
  */
@@ -727,7 +727,7 @@ DrawBorder(Widget widg)
 		 gs->grab_shell.shadow_thickness,
 		 XmSHADOW_OUT);
 }
-
+
 /* 
  * IgnoreXErrors()
  *	An XErrorHandler that smothers errors.
@@ -740,7 +740,7 @@ IgnoreXErrors(Display *dpy,	/* unused */
 {
   return 0;
 }
-
+
 /*******************
  * Public Routines *
  *******************/

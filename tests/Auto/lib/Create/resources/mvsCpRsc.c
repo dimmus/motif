@@ -107,7 +107,7 @@ int i;
     return (dst_resource);
 } /* End mvsCopyResource() */
 
-
+
 /*************************************************************************
 *  This function copies all resources. The entire list of resources is   *
 * looped through and each resource is copied using mvsCopyResource().    *

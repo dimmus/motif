@@ -59,7 +59,7 @@ static char rcsid[] = "$XConsortium: Mrmicon.c /main/14 1996/11/13 14:01:43 drk 
 
 
 
-
+
 /*
  *++
  *
@@ -188,7 +188,7 @@ UrmCreatePixmap (RGMIconImagePtr	icon,
   return MrmNOT_VALID;
 }
 
-
+
 /*
  *++
  *
@@ -246,7 +246,7 @@ UrmCreateBitmap (RGMIconImagePtr	icon,
 
 }
 
-
+
 /*
  *++
  *
@@ -309,7 +309,7 @@ Urm__CW_ReadBitmapFile (String			filename,
 
 
 
-
+
 /*
  *++
  *
@@ -542,7 +542,7 @@ Urm__MapIconBitmap(RGMIconImagePtr		icon,
 
 }
 
-
+
 /*
  *++
  *
@@ -718,7 +718,7 @@ Urm__MapIconBitmapDepth1 (RGMIconImagePtr	icon,
   return MrmSUCCESS;
 }
 
-
+
 /*
  *++
  *
@@ -862,7 +862,7 @@ Urm__MapIconReplace (RGMIconImagePtr		icon,
 }
 
 
-
+
 /*
  *++
  *
@@ -1044,7 +1044,7 @@ Urm__MapIconAllocate (RGMIconImagePtr		icon,
 }
 
 
-
+
 /*
  *++
  *
@@ -1271,7 +1271,7 @@ Urm__RealizeColorTable (Screen			*screen,
 
   return MrmSUCCESS;
 }
-
+
 /*
  *++
  *
@@ -1327,7 +1327,7 @@ UrmCopyAllocatedIconImage (RGMIconImagePtr	dst_icon,
 }
 
 
-
+
 /*
  *++
  *
@@ -1416,7 +1416,7 @@ Urm__UT_GetNamedColorPixel (Display		*display,
 }
 
 
-
+
 /*
  *++
  *
@@ -1487,7 +1487,7 @@ Urm__UT_GetColorPixel (Display			*display,
 }
 
 
-
+
 /*
  *++
  *
@@ -1531,7 +1531,7 @@ UrmIconImageSize (RGMIconImagePtr	icon)
 
 }
 
-
+
 /*
  *++
  *

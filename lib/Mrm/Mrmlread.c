@@ -69,7 +69,7 @@ static char rcsid[] = "$XConsortium: Mrmlread.c /main/16 1996/11/13 14:02:28 drk
  *	UrmHGetIndexedLiteral		Read indexed literal from hierarchy
  *
  */
-
+
 /*
  *++
  *
@@ -193,7 +193,7 @@ Urm__FetchLiteral (MrmHierarchy			hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -375,7 +375,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -482,7 +482,7 @@ MrmFetchIconLiteral (MrmHierarchy                hierarchy_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -594,7 +594,7 @@ MrmFetchBitmapLiteral (MrmHierarchy                hierarchy_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -704,7 +704,7 @@ MrmFetchColorLiteral (MrmHierarchy                hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -785,7 +785,7 @@ UrmGetIndexedLiteral (IDBFile			file_id ,
 
 }
 
-
+
 /*
  *++
  *
@@ -840,7 +840,7 @@ UrmGetRIDLiteral (IDBFile			file_id ,
 
 }
 
-
+
 /*
  *++
  *
@@ -904,7 +904,7 @@ Urm__HGetIndexedLiteral (MrmHierarchy		hierarchy_id ,
 }
 
 
-
+
 /*
  *++
  *

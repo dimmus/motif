@@ -254,7 +254,7 @@ static XtActionsRec action_table [] =
     {"Help",		_XmCBHelp},
 };
 
-
+
 static XtResource resources[] = 
 {
     {	XmNactivateCallback, 
@@ -334,7 +334,7 @@ static XtResource resources[] =
 	(XtPointer) XmINVALID_DIMENSION
     },
 };       
-
+
 /*
  * static initialization of the cascade button widget class record, 
  * must do each field
@@ -439,7 +439,7 @@ static XmMenuSavvyTraitRec MenuSavvyRecord = {
     _XmCBNameActivate,
 };
 
-
+
 /*
  * parse the translation tables for the different menutypes
  */
@@ -467,7 +467,7 @@ ClassPartInitialize(
   _XmLabelCloneMenuSavvy (wc, &MenuSavvyRecord);
 }
 
-
+
 /*
  * The button is armed (does not pop up submenus).
  */
@@ -511,7 +511,7 @@ BorderUnhighlight(
     Disarm ((XmCascadeButtonWidget) wid, popdown);
 }
 
-
+
 /*
  * Draw the 3D shadow around the widget if its is armed.
  */
@@ -681,7 +681,7 @@ Redisplay(
     }
 }
 
-
+
 /*
  * Arming the cascadebutton consists of setting the armed bit
  * and drawing the 3D shadow.
@@ -728,7 +728,7 @@ ArmAndPost(
 
 
 
-
+
 /*
  * class function to cause the cascade button to be armed and selected
  */
@@ -864,7 +864,7 @@ ArmAndActivate(
        _XmRecordEvent(event);
 }
 
-
+
 /*
  * disarm the menu.  This may include popping down any submenu that is up or
  * removing the timeout to post a submenu
@@ -925,7 +925,7 @@ Disarm(
    }
 }
 
-
+
 /*
  * called when the post delay timeout occurs.
  */
@@ -945,7 +945,7 @@ PostTimeout(
    }
 }
 
-
+
 /*
  * set the timer to post the submenu if a leave event does
  * not occur first.
@@ -981,7 +981,7 @@ DelayedArm(
    }
 }
 
-
+
 /*
  * if traversal is not on and the mouse
  * has not entered its cascading submenu, disarm the
@@ -1036,7 +1036,7 @@ CheckDisarm(
    }
 }
 
-
+
 /*
  * post submenu and disable menu's traversal.  The order of these 
  * function calls is critical.
@@ -1102,7 +1102,7 @@ StartDrag(
    XAllowEvents(XtDisplay(cb), SyncPointer, CurrentTime);
 }
 
-
+
 /*
  * do the popup (either w/ or w/o the cascade callbacks).
  * If there is not a submenu, bring down the menu system.
@@ -1165,7 +1165,7 @@ Select(
        Arm(cb);
      }
 }
-
+
 /*
  * if there is a submenu, enable traversal.
  * call select to do the work
@@ -1252,7 +1252,7 @@ DoSelect(
       }
    }
 }
-
+
 /*
  * if the menu system traversal is enabled, do a select
  */
@@ -1275,7 +1275,7 @@ KeySelect(
 			((Widget) cb, event, NULL, NULL);
 }
 
-
+
 /*
  * If the menu system is not active, arm it and arm this cascadebutton
  * else start the drag mode
@@ -1365,7 +1365,7 @@ MenuBarSelect(
    }
 }
 
-
+
 /* 
  * If the menu is active, post submenu and arm.
  */
@@ -1393,7 +1393,7 @@ MenuBarEnter(
    }
 }
 
-
+
 /*
  * unless our submenu is posted or traversal is on, disarm
  */
@@ -1426,7 +1426,7 @@ MenuBarLeave(
          Disarm (cb, TRUE);   
    }
 }
-
+
 /*
  * Cleanup the menubar, if its in the PM traversal mode
  */
@@ -1450,7 +1450,7 @@ CleanupMenuBar(
     }
 }
 
-
+
 /*
  * CascadeButton Widget and Gadget help routine - first bring down the
  * menu and then do the help callback.
@@ -1489,7 +1489,7 @@ _XmCBHelp(
       _XmPrimitiveHelp( w, event, params, num_params) ;
 }
 
-
+
 /*
  * When moving between a shared menupane, we only want to unpost the
  * descendant panes, not the shared one.
@@ -1514,7 +1514,7 @@ PopdownGrandChildren(
    }
 }
 
-
+
 /*
  * call the cascading callbacks.  The cb parameter can be either a 
  * cascadebutton widget or gadget.
@@ -1637,7 +1637,7 @@ _XmCascadingPopup(
        Cascading (cb, event);
    Popup (cb, event);
 }
-
+
 /*
  * pop up the pulldown menu associated with this cascadebutton
  */
@@ -1829,7 +1829,7 @@ Popup(
     }
 }
 
-
+
 /*
  * get the cascade size set up
  */
@@ -1857,7 +1857,7 @@ size_cascade(
     }
 }
 
-
+
 /*
  * set up the cascade position.  
  */
@@ -1895,7 +1895,7 @@ position_cascade(
    }
 }
 
-
+
 /*
  * set up the cascade size and location
  */
@@ -1986,7 +1986,7 @@ setup_cascade(
    position_cascade(cascadebtn);
 }
 
-
+
 /*
  * Destroy the widget
  */
@@ -2029,7 +2029,7 @@ Destroy(
   
 }
                          
-
+
 /*
  * routine to resize a cascade button, called by the parent
  * geometery manager
@@ -2055,7 +2055,7 @@ Resize(
 	position_cascade ((XmCascadeButtonWidget) cb);
      }
 }
-
+
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -2079,7 +2079,7 @@ SetValuesPrehook(
 
   return False;
 }
-
+
 /*
  * Set Values
  */
@@ -2289,7 +2289,7 @@ InitializePosthook(
 {
   _XmRestoreCoreClassTranslations (new_w);
 }
-
+
 /************************************************************************
  *
  *  GetArmGC
@@ -2317,7 +2317,7 @@ GetArmGC(
   
   CB_ArmGC(cb) = XtGetGC ((Widget) cb, valueMask, &values);
 }
-
+
 /************************************************************************
  *
  *  GetBackgroundGC
@@ -2346,7 +2346,7 @@ GetBackgroundGC(
   
   CB_BackgroundGC(cb) = XtGetGC ((Widget) cb, valueMask, &values);
 }
-
+
 /*
  * Initialize
  */
@@ -2452,7 +2452,7 @@ Initialize(
 
 }
 
-
+
 /*
  *************************************************************************
  *

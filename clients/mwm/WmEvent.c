@@ -106,7 +106,7 @@ extern int F_NOP_INDEX;
 #endif
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitEventHandling ()
@@ -189,7 +189,7 @@ void InitEventHandling (void)
     }  /* end for (all screens) */
 } /* END OF FUNCTION InitEventHandling */
 
-
+
 /*************************************<->*************************************
  *
  *  _WmGrabMasks (modifiers, pnum_masks)
@@ -277,7 +277,7 @@ _WmGrabMasks ( unsigned int modifiers, int *pnum_masks )
     return (pRetMasks);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  WmGrabKey (display, keycode, modifiers, grab_window, owner_events,
@@ -332,7 +332,7 @@ WmGrabKey (
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  WmGrabButton (display, button, modifiers, grab_window, owner_events,
@@ -394,7 +394,7 @@ WmGrabButton (
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  WmUngrabButton (display, button, modifiers, grab_window)
@@ -443,7 +443,7 @@ WmUngrabButton (
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  SetupKeyBindings (keySpecs, grabWindow, keyboardMode, context)
@@ -517,7 +517,7 @@ int SetupKeyBindings (KeySpec *keySpecs, Window grabWindow, int keyboardMode, lo
 } /* END OF FUNCTION SetupKeyBindings */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmDispatchMenuEvent (event)
@@ -854,7 +854,7 @@ Boolean WmDispatchMenuEvent (XButtonEvent *event)
 } /* END OF FUNCTION WmDispatchMenuEvent */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmDispatchWsEvent (event)
@@ -1029,7 +1029,7 @@ Boolean WmDispatchWsEvent (XEvent *event)
 } /* END OF FUNCTION WmDispatchWsEvent */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsKeyPress (keyEvent)
@@ -1158,7 +1158,7 @@ Boolean HandleWsKeyPress (XKeyEvent *keyEvent)
 } /* END OF FUNCTION HandleWsKeyPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleKeyPress (keyEvent, keySpecs, checkContext, context, onlyFirst, pCD)
@@ -1304,7 +1304,7 @@ Boolean HandleKeyPress (XKeyEvent *keyEvent,
 } /* END OF FUNCTION HandleKeyPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsButtonPress (buttonEvent)
@@ -1376,7 +1376,7 @@ void HandleWsButtonPress (XButtonEvent *buttonEvent)
 } /* END OF FUNCTION HandleWsButtonPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsButtonRelease (buttonEvent)
@@ -1447,7 +1447,7 @@ void HandleWsButtonRelease (XButtonEvent *buttonEvent)
 } /* END OF FUNCTION HandleWsButtonRelease */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckForButtonAction (buttonEvent, context, subContext, pCD)
@@ -1574,7 +1574,7 @@ Boolean CheckForButtonAction (XButtonEvent *buttonEvent, Context context, Contex
 } /* END OF FUNCTION CheckForButtonAction */
 
 
-
+
 /*************************************<->*************************************
  *
  *  IdentifyEventContext (event, pCD, pContext, pPartContext)
@@ -1695,7 +1695,7 @@ void IdentifyEventContext (XButtonEvent *event, ClientData *pCD, Context *pConte
 } /* END OF FUNCTION IdentifyEventContext */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessClickBPress (buttonEvent, pCD, context, subContext)
@@ -1812,7 +1812,7 @@ void ProcessClickBPress (XButtonEvent *buttonEvent, ClientData *pCD, Context con
 } /* END OF FUNCTION ProcessClickBPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessClickBRelease (buttonEvent, pCD, context, subContext)
@@ -1886,7 +1886,7 @@ void ProcessClickBRelease (XButtonEvent *buttonEvent, ClientData *pCD, Context c
 
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  HandleDtWmClientMessage (clientEvent)
@@ -1945,7 +1945,7 @@ void HandleDtWmClientMessage (XClientMessageEvent *clientEvent)
     } /* WM_PROTOCOLS */
 } /* END OF FUNCTION HandleDtWmClientMessage */
 
-
+
 /*************************************<->*************************************
  *
  *  HandleDtWmRequest (pSD, pev)
@@ -2136,7 +2136,7 @@ HandleDtWmRequest (WmScreenData *pSD, XEvent *pev)
 
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsEnterNotify (enterEvent)
@@ -2209,7 +2209,7 @@ void HandleWsEnterNotify (XEnterWindowEvent *enterEvent)
 } /* END OF FUNCTION HandleWsEnterNotify */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsLeaveNotify (leaveEvent)
@@ -2280,7 +2280,7 @@ void HandleWsLeaveNotify (XLeaveWindowEvent *leaveEvent)
 } /* END OF FUNCTION HandleWsLeaveNotify */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsConfigureRequest (focusEvent)
@@ -2391,7 +2391,7 @@ void HandleWsConfigureRequest (XConfigureRequestEvent *configureEvent)
 } /* END OF FUNCTION HandleWsConfigureRequest */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleWsFocusIn (focusEvent)
@@ -2521,7 +2521,7 @@ void HandleWsFocusIn (XFocusInEvent *focusEvent)
 } /* END OF FUNCTION HandleWsFocusIn */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetTimestamp ()
@@ -2628,7 +2628,7 @@ Time LastTime ()
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  PullExposureEvents ()
@@ -2712,7 +2712,7 @@ void PullExposureEvents (void)
 } /* END OF FUNCTION PullExposureEvents */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  ReplayedButtonEvent ()

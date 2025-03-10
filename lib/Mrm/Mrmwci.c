@@ -72,7 +72,7 @@ static char rcsid[] = "$TOG: Mrmwci.c /main/16 1999/05/19 15:25:58 mgreess $"
 static int hash_function ( int l_length , char *c_value );
 
 
-
+
 /*
  *
  *  GLOBAL VARIABLE DECLARATIONS
@@ -102,7 +102,7 @@ static Boolean			cldesc_hash_inited = FALSE;
 static URMHashTableEntryPtr	cldesc_hash_table [k_hash_table_size];
 
 
-
+
 /*
  *++
  *
@@ -222,7 +222,7 @@ MrmRegisterClassWithCleanup (
 
 }
 
-
+
 Cardinal 
 Urm__WCI_UnregisterName (String			name)
 {
@@ -235,7 +235,7 @@ Urm__WCI_UnregisterName (String			name)
   return MrmSUCCESS;	/* in any case */
 }
 
-
+
 /*
  *++
  *
@@ -298,7 +298,7 @@ Urm__WCI_RegisterNames (String			*names,
 }
 
 
-
+
 /*
  *++
  *
@@ -355,7 +355,7 @@ Urm__WCI_LookupClassDescriptor (String		class_name,
 }
 
 
-
+
 /*
  *++
  *
@@ -408,7 +408,7 @@ Urm__WCI_GetClRecOfName (String		clname)
 }
 
 
-
+
 /*
  *++
  *
@@ -461,7 +461,7 @@ Urm__WCI_LookupRegisteredName (String		name,
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -507,7 +507,7 @@ hash_initialize (URMHashTableEntryPtr	*htable,
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -590,7 +590,7 @@ hash_find_name (URMHashTableEntryPtr	*htable,
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -719,7 +719,7 @@ insert_name:
 
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -801,7 +801,7 @@ delete_name:
 
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

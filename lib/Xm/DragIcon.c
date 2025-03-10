@@ -84,7 +84,7 @@ static void ScreenObjectDestroy(
                         XtPointer client_data,
                         XtPointer call_data) ;
 /********    End Static Function Declarations    ********/
-
+
 #define valid_width 16
 #define valid_height 16
 #define valid_x_hot 1

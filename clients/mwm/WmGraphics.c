@@ -76,7 +76,7 @@ static char rcsid[] = "$XConsortium: WmGraphics.c /main/4 1995/11/01 11:38:53 rs
 #define GE1(x) ((x)>0?1:0)
 
 
-
+
 /*************************************<->*************************************
  *
  *   Procedure:	BevelRectangle (prTop, prBot, x, y, 
@@ -227,7 +227,7 @@ void BevelRectangle (RList *prTop, RList *prBot, int x, int y, unsigned int widt
 
 
 
-
+
 /*************************************<->*************************************
  *
  *   Procedure:	BevelDepressedRectangle (prTop, prBot, x, y, 
@@ -462,7 +462,7 @@ void BevelDepressedRectangle (RList *prTop, RList *prBot, int x, int y, unsigned
 
 
 
-
+
 /*************************************<->*************************************
  *
  *   Procedure:	StretcherCorner (prTop, prBot, x, y, cnum, 
@@ -833,7 +833,7 @@ void StretcherCorner (RList *prTop, RList *prBot, int x, int y, int cnum, unsign
 } /* END OF FUNCTION StretcherCorner */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DrawStringInBox (dpy, win, gc, pbox, str)
@@ -910,7 +910,7 @@ void DrawStringInBox (Display *dpy, Window win, GC gc, XFontStruct *pfs, XRectan
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  ExtendRList (prl, amt)
@@ -965,7 +965,7 @@ Boolean ExtendRList (RList *prl, unsigned int amt)
 } /* END OF FUNCTION ExtendRList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AllocateRList (amt)
@@ -1015,7 +1015,7 @@ RList *AllocateRList (amt)
 } /* END OF FUNCTION AllocateRList */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FreeRList (prl)
@@ -1048,7 +1048,7 @@ void FreeRList (RList *prl)
     }
 }/* END OF FUNCTION FreeRList */
 
-
+
 /*************************************<->*************************************
  *
  *  WmDrawString
@@ -1088,7 +1088,7 @@ void WmDrawString (Display *dpy, Drawable d, GC gc, int x, int y, char *string, 
 }/* END OF FUNCTION WmDrawString */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmXmDrawString
@@ -1165,7 +1165,7 @@ void WmDrawXmString (Display *dpy, Window w, XmFontList xmfontlist,
 } /* END OF FUNCTION WmDrawXmString */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  WmInstallBitmapIntoXmCache (pchName, bitmap, width, height)
@@ -1205,7 +1205,7 @@ void WmInstallBitmapIntoXmCache (unsigned char *pchName,
 } /* END OF FUNCTION WmInstallBitmapIntoXmCache */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmInstallBitmapDataIntoXmCache (pSD, pchName, pData)

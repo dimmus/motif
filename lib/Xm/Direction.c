@@ -109,7 +109,7 @@ _XmToLayoutDirection(
 
 
 
-
+
 XmStringDirection
 XmDirectionToStringDirection(XmDirection dir)
 {
@@ -119,7 +119,7 @@ XmDirectionToStringDirection(XmDirection dir)
     return XmSTRING_DIRECTION_R_TO_L;
   return XmSTRING_DIRECTION_DEFAULT;
 }
-
+
 XmDirection
 XmStringDirectionToDirection(XmStringDirection dir)
 {

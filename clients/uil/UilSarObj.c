@@ -113,7 +113,7 @@ extern yystype			yylval;
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -158,7 +158,7 @@ sym_obj_entry_type    *object;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -262,7 +262,7 @@ void		sar_create_object
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -332,7 +332,7 @@ void		sar_create_child
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -378,7 +378,7 @@ sym_az_current_section_entry->entries = (sym_entry_type *) section_entry;
 section_entry->entries = id_frame->value.az_symbol_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -424,7 +424,7 @@ _sar_save_source_pos (&section_entry->entries->header, semi_frame);
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -473,7 +473,7 @@ yystype	    *close_frame;
     _sar_save_source_pos ( &list_entry->header , close_frame );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -537,7 +537,7 @@ yystype    *entry_frame;
     _sar_save_source_pos ( &entry->header , close_frame );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -599,7 +599,7 @@ void	sar_set_object_flags
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -648,7 +648,7 @@ void	sar_unset_object_flags
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -697,7 +697,7 @@ yystype		* current_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -755,7 +755,7 @@ yystype		* current_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -873,7 +873,7 @@ yystype		* current_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -925,7 +925,7 @@ yystype 	* current_frame;
    return (object_frame);
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1112,7 +1112,7 @@ yystype 	* ref_frame;
 	}
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1184,7 +1184,7 @@ yystype 	* control_list_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1338,7 +1338,7 @@ sym_parent_list_type		*parent_ptr;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1448,7 +1448,7 @@ yystype 	* feature_frame;
     feature_frame->b_tag = sar_k_null_frame;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1566,7 +1566,7 @@ yystype		* equals_frame;
 
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1673,7 +1673,7 @@ yystype 	* equals_frame;
     reason_frame->value.az_symbol_entry = (sym_entry_type *) callback_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1763,7 +1763,7 @@ yystype		* item_frame;
     managed_frame->value.az_symbol_entry = (sym_entry_type *) control_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1864,7 +1864,7 @@ yystype		* item_frame;
     control_frame->value.az_symbol_entry = (sym_entry_type *) control_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1920,7 +1920,7 @@ yystype 	* proc_arg_frame;
     _sar_save_source_info (& proc_ref_entry->header, procedure_frame, proc_arg_frame );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2015,7 +2015,7 @@ int		context;
     return;    
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2133,7 +2133,7 @@ yystype		* entry_frame;
     entry_frame->b_tag = sar_k_null_frame;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2213,7 +2213,7 @@ yystype		* entry_frame;
     entry_frame->b_tag = sar_k_null_frame;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2330,7 +2330,7 @@ if (widget_type == uil_sym_user_defined_object)
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2376,7 +2376,7 @@ sym_entry_type	* sem_allocate_node
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

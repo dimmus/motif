@@ -70,7 +70,7 @@ static char rcsid[] = "$XConsortium: Mrmtable.c /main/13 1996/11/13 14:04:22 drk
  *
  *	Urm__IsSubtreeResource		predicate for subtree resources
  */
-
+
 /*
  *++
  *
@@ -153,7 +153,7 @@ Urm__FixupCompressionTable (UidCompressionTablePtr	ctable,
 }    
 
 
-
+
 /*
  *++
  *
@@ -216,7 +216,7 @@ Urm__FindClassDescriptor (IDBFile		cfile,
 }    
 
 
-
+
 /*
  *++
  *
@@ -273,7 +273,7 @@ Urm__UncompressCode (IDBFile			cfile,
 }    
 
 
-
+
 /*
  *++
  *

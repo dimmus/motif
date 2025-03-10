@@ -5363,7 +5363,7 @@ TraversePrevTabGroup(Widget w,
   }
 }
 
-
+
 /***************************************************************************
  * Functions to process text tw in multi-line edit mode versus single      *
  * line edit mode.                                                         *

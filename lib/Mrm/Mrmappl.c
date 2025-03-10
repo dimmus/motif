@@ -82,7 +82,7 @@ static char rcsid[] = "$XConsortium: Mrmappl.c /main/17 1996/11/13 13:59:58 drk 
  */
 
 
-
+
 /*
  *++
  *
@@ -142,7 +142,7 @@ MrmOpenHierarchy (
   return result;
 }
 
-
+
 /*
  *++
  *
@@ -211,7 +211,7 @@ MrmOpenHierarchyPerDisplay (Display		*display,
 }
 
 
-
+
 /*
  *++
  *
@@ -255,7 +255,7 @@ MrmOpenHierarchyFromBuffer (unsigned char	*uid_buffer,
   _MrmProcessUnlock();
   return result;
 }
-
+
 /*
  *++
  *
@@ -298,7 +298,7 @@ MrmCloseHierarchy (MrmHierarchy                hierarchy_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -376,7 +376,7 @@ MrmRegisterNames (MrmRegisterArglist		reglist,
 }
 
 
-
+
 /*
  *++
  *
@@ -451,7 +451,7 @@ MrmRegisterNamesInHierarchy (MrmHierarchy		hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -596,7 +596,7 @@ MrmFetchInterfaceModule (MrmHierarchy		hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -684,7 +684,7 @@ MrmFetchWidget (MrmHierarchy                hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -867,7 +867,7 @@ MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
 }
 
 
-
+
 /*
  *++
  *

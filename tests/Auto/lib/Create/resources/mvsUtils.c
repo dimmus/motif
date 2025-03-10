@@ -121,7 +121,7 @@ char 			src_res[], dest_res[];
     }
 } /* End mvsAssignRes() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -182,7 +182,7 @@ MvsArgVal 		val;
 
 } /* End mvsAssignVal() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -209,7 +209,7 @@ MvsArgVal 		val;
 
 } /* End mvsAssignParentVal() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -236,7 +236,7 @@ char 			dest_res[], src_res[];
 
 } /* End mvsAssignParentRes() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -315,7 +315,7 @@ int			opr;
     }
 } /* End mvsIncrOrDecrRes () */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -372,7 +372,7 @@ int			opr;
 
 } /* End mvsIncrOrDecrVal () */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -391,7 +391,7 @@ char 			src_res[], dest_res[];
     mvsIncrOrDecrRes (widget_info, dest_res, src_res, mvsADD);
 }
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -410,7 +410,7 @@ char 			src_res[], dest_res[];
     mvsIncrOrDecrRes (widget_info, dest_res, src_res, mvsSUBTRACT);
 }
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -430,7 +430,7 @@ MvsArgVal 		src_val;
     mvsIncrOrDecrVal (widget_info, dest_res, src_val, mvsADD);
 }
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -450,7 +450,7 @@ MvsArgVal		src_val;
     mvsIncrOrDecrVal (widget_info, dest_res, src_val, mvsSUBTRACT);
 }
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -482,7 +482,7 @@ char 			widget_res[], src_res[], dest_res[];
 
 } /* End mvsAssignResInWidget() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -515,7 +515,7 @@ MvsArgVal 		val;
 
 } /* End mvsAssignValInWidget() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -565,7 +565,7 @@ MvsArgVal 		val;
 
 } /* End mvsAssignValInParentWidget() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:

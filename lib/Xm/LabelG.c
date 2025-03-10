@@ -1420,7 +1420,7 @@ _XmCalcLabelGDimensions(Widget wid)
         }
     }
 }
-
+
 void 
 _XmLabelGCalcTextRect(Widget wid)
 {
@@ -4019,7 +4019,7 @@ FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
 	break;
     }
 }
-    
+    
 /**************************************************************************
  * ToPaddingPixels
  *
@@ -4041,7 +4041,7 @@ ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
 	return(XmeToHorizontalPixels(widget, offset, value));
     }
 }
-    
+    
 
 static char*
 GetLabelGadgetAccelerator(Widget w)

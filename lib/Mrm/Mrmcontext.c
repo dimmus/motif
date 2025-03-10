@@ -73,7 +73,7 @@ static char rcsid[] = "$XConsortium: Mrmcontext.c /main/12 1996/11/13 14:00:18 d
  */
 
 
-
+
 /*
  *++
  *
@@ -162,7 +162,7 @@ UrmGetResourceContext (char			*((*alloc_func) ()),
 }
 
 
-
+
 /*
  *++
  *
@@ -262,7 +262,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
 }
 
 
-
+
 /*
  *++
  *

@@ -86,7 +86,7 @@ static char rcsid[] = "$XConsortium: UilKeyTab.c /main/11 1995/07/14 09:34:29 dr
 
 static key_keytable_entry_type * key_keytable_ptr;
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -179,7 +179,7 @@ char		* symbol_ptr;
     return NULL;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

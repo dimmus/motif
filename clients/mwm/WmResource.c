@@ -614,7 +614,7 @@ Const char MENU_ITEM_PART[] = "menu";
 #define BITMAPDIR "/usr/include/X11/bitmaps/"
 #endif
 
-
+
 /*************************************<->*************************************
  *
  *  wmGlobalResources
@@ -1094,7 +1094,7 @@ XtResource wmGlobalScreenResources[] =
 };
 
 
-
+
 /******************************<->*************************************
  *
  *  wmStdGlobalResources
@@ -1206,7 +1206,7 @@ XtResource wmStdGlobalResources[] =
 
 };
 
-
+
 /******************************<->*************************************
  *
  *  wmScreenResources
@@ -1557,7 +1557,7 @@ XtResource wmScreenResources[] =
 
 };
 
-
+
 /******************************<->*************************************
  *
  *  wmStdScreenResources
@@ -1650,7 +1650,7 @@ XtResource wmStdScreenResources[] =
 };
 
 
-
+
 /******************************<->*************************************
  *
  *  wmWorkspaceResources
@@ -1694,7 +1694,7 @@ XtResource *wmWorkspaceResources = NULL;
 #endif /* WSM */
 
 
-
+
 /******************************<->*************************************
  *
  *  wmStdWorkspaceResources
@@ -1729,7 +1729,7 @@ XtResource *wmStdWorkspaceResources = NULL;
 #endif /* WSM */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  wmBackdropResources
@@ -1793,7 +1793,7 @@ XtResource wmBackdropResources[] =
 
 };
 
-
+
 /*************************************<->*************************************
  *
  *  wmWsPresenceResources
@@ -1824,7 +1824,7 @@ XtResource wmWsPresenceResources[] =
 };
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  wmClientResources
@@ -2033,7 +2033,7 @@ XtResource wmClientResources[] =
 }; /* END OF STRUCTURE wmClientResources */
 
 
-
+
 /*************************************<->*************************************
  *
  *  wmStdClientResources
@@ -2166,7 +2166,7 @@ XtResource wmStdClientResources[] =
 };
 
 
-
+
 /*************************************<->*************************************
  *
  *  wmClientResourcesM
@@ -2246,7 +2246,7 @@ XtResource wmClientResourcesM[] =
 };
 
 
-
+
 /*************************************<->*************************************
  *
  *  wmAppearanceResources
@@ -2430,7 +2430,7 @@ XtResource wmAppearanceResources[] =
 };
 
 
-
+
 /*************************************<->*************************************
  *
  *  _WmIconImageFDefault (widget, offset, value)
@@ -2581,7 +2581,7 @@ _WmMatteTSPDefault (Widget widget, int offset, XrmValue *value)
 } /* END OF FUNCTION _WmMatteTSCDefault */
 
 
-
+
 /*************************************<->*************************************
  *
  *  _WmBackgroundDefault (widget, offset, value)
@@ -2931,7 +2931,7 @@ _WmIconImageMaximumDefault (Widget widget, int offset, XrmValue *value)
 
 } /* END OF FUNCTION _WmIconImageMaximumDefault */
 
-
+
 /*************************************<->*************************************
  *
  *  DefaultWsColorSetId (pWS)
@@ -2999,7 +2999,7 @@ DefaultWsColorSetId (WmWorkspaceData *pWS)
 #endif /* WSM */
 
 
-
+
 /*************************************<->*************************************
  *
  *  _WmFocusAutoRaiseDefault (widget, offset, value)
@@ -3044,7 +3044,7 @@ _WmFocusAutoRaiseDefault (Widget widget, int offset, XrmValue *value)
 
 } /* END OF FUNCTION _WmFocusAutoRaiseDefault */
 
-
+
 /*************************************<->*************************************
  *
  *  _WmMultiClickTimeDefault (widget, offset, value)
@@ -3082,7 +3082,7 @@ _WmMultiClickTimeDefault (Widget widget, int offset, XrmValue *value)
 } /* END OF FUNCTION _WmMultiClickTimeDefault */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  _WmSecondariesOnTopDefault (widget, offset, value)
@@ -3129,7 +3129,7 @@ _WmSecondariesOnTopDefault (Widget widget, int offset, XrmValue *value)
 #endif /* WSM */
 
 
-
+
 /******************************<->*************************************
  *
  *  ProcessWmResources ()
@@ -3194,7 +3194,7 @@ ProcessWmResources (void)
 } /* END OF FUNCTION ProcessWmResources */
 
 
-
+
 /******************************<->*************************************
  *
  *  ProcessGlobalScreenResources ()
@@ -3240,7 +3240,7 @@ ProcessGlobalScreenResources (void)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetStdGlobalResourceValues ()
@@ -3284,7 +3284,7 @@ SetStdGlobalResourceValues (void)
 } /* END OF FUNCTION SetStdGlobalResourceValues */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessScreenListResource ()
@@ -3363,7 +3363,7 @@ ProcessScreenListResource (void)
 } /* END OF FUNCTION ProcessScreenListResource */
 
 #ifdef WSM
-
+
 /******************************<->*************************************
  *
  *  ProcessWmColors ()
@@ -3439,7 +3439,7 @@ ProcessWmColors (WmScreenData *pSD)
 
 } /* END OF FUNCTION ProcessWmColors */
 
-
+
 /******************************<->*************************************
  *
  *  WriteOutXrmColors ()
@@ -4068,7 +4068,7 @@ WriteOutXrmColors (WmScreenData *pSD)
     }
 }
 
-
+
 /******************************<->*************************************
  *
  *  ResCat (s1,s2,s3,s4)
@@ -4163,7 +4163,7 @@ ResCat (String s1, String s2, String s3, String s4)
 } /* END OF FUNCTION ResCat */
 
 
-
+
 /******************************<->*************************************
  *
  *  CheckForNoDither (pAD)
@@ -4232,7 +4232,7 @@ CheckForNoDither (AppearanceData *pAD)
 #endif /* WSM */
 
 
-
+
 /******************************<->*************************************
  *
  *  ProcessAppearanceResources (pSD)
@@ -4394,7 +4394,7 @@ ProcessAppearanceResources (WmScreenData *pSD)
 
 } /* END OF FUNCTION ProcessAppearanceResources */
 
-
+
 /*************************************<->*************************************
  *
  *  MakeAppearanceResources (pSD, pAData, makeActiveResources)
@@ -4639,7 +4639,7 @@ MakeAppearanceResources (WmScreenData *pSD, AppearanceData *pAData, Boolean make
 } /* END OF FUNCTION MakeAppearanceResources */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetAppearanceGCs (pSD, fg, bg, font, bg_pixmap, ts_color, 
@@ -4716,7 +4716,7 @@ GetAppearanceGCs (WmScreenData *pSD, Pixel fg, Pixel bg, XFontStruct *font, Pixm
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessScreenResources (pSD, screenName)
@@ -5009,7 +5009,7 @@ ProcessScreenResources (WmScreenData *pSD, unsigned char *screenName)
 } /* END OF FUNCTION ProcessScreenResources */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  ProcessDefaultBackdropImages (pSD)
@@ -5042,7 +5042,7 @@ ProcessDefaultBackdropImages (WmScreenData *pSD)
 } /* END OF FUNCTION ProcessDefaultBackdropImages */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWorkspaceList (pSD)
@@ -5188,7 +5188,7 @@ ProcessWorkspaceList (WmScreenData *pSD)
 
 #endif /* WSM */
 
-
+
 /******************************<->*************************************
  *
  *  ProcessWorkspaceResources (pWS)
@@ -5301,7 +5301,7 @@ ProcessWorkspaceResources (WmWorkspaceData *pWS)
 } /* END OF FUNCTION ProcessWorkspaceResources */
 
 #ifdef WSM
-
+
 /******************************<->*************************************
  *
  *  ProcessPresenceResources (pSD)
@@ -5400,7 +5400,7 @@ ProcessPresenceResources (WmScreenData *pSD)
 } /* END OF FUNCTION ProcessPresenceResources */
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessClientResources (pCD)
@@ -5661,7 +5661,7 @@ ProcessClientResources (ClientData *pCD)
 } /* END OF FUNCTION ProcessClientResources */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetStdClientResourceValues (pCD)
@@ -5697,7 +5697,7 @@ SetStdClientResourceValues (ClientData *pCD)
 } /* END OF FUNCTION SetStdClientResourceValues */
 
 
-
+
 /******************************<->*************************************
  *
  *  SetStdScreenResourceValues (pSD)
@@ -5746,7 +5746,7 @@ SetStdScreenResourceValues (WmScreenData *pSD)
 
 } /* END OF FUNCTION SetStdScreenResourceValues */
 
-
+
 /*************************************<->*************************************
  *
  *  GetHighlightGC (pSD, fg, bg, pixmap)
@@ -5807,7 +5807,7 @@ GC GetHighlightGC (WmScreenData *pSD, Pixel fg, Pixel bg, Pixmap pixmap)
 } /* END OF FUNCTION GetHighlightGC */
 
 
-
+
 /*************************************<->*************************************
  *
  *  _WmGetDynamicDefault (widget, type, defaultColor, newBackground, value)
@@ -5991,7 +5991,7 @@ _WmGetDynamicDefault (Widget widget, unsigned char type, String defaultColor, Pi
 } /* END OF FUNCTION _WmGetDynamicDefault */
 
 
-
+
 /*************************************<->*************************************
  *
  *  _WmGetDefaultColors (screen, colormap, defaultColor)
@@ -6129,7 +6129,7 @@ XmColorData * _WmGetDefaultColors (screen, colormap, defaultColor)
 } /* END OF FUNCTION _WmGetDefaultColors */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmRealloc (ptr, size)
@@ -6178,7 +6178,7 @@ char * WmRealloc (ptr, size)
 } /* END OF FUNCTION WmRealloc */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmMalloc (ptr, size)
@@ -6224,7 +6224,7 @@ char * WmMalloc (ptr, size)
 } /* END OF FUNCTION WmMalloc */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetupDefaultResources (pSD)
@@ -6391,7 +6391,7 @@ WmScreenData *pSD;
 } /* END OF FUNCTION SetupDefaultResources */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SimilarAppearanceData (pAD1, pAD2)
@@ -6480,7 +6480,7 @@ Boolean SimilarAppearanceData (AppearanceData *pAD1, AppearanceData *pAD2)
 } /* END OF FUNCTION SimilarAppearanceData */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  Monochrome (screen)

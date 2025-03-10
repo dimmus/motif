@@ -70,7 +70,7 @@ static char rcsid[] = "$TOG: WmProperty.c /main/7 1997/12/02 10:00:00 bill $"
 static SizeHints sizeHints;
 
 
-
+
 /*************************************<->*************************************
  *
  *  SizeHints *
@@ -207,7 +207,7 @@ GetNormalHints(
 } /* END OF FUNCTION GetNormalHints */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmProtocols (pCD)
@@ -340,7 +340,7 @@ void ProcessWmProtocols (ClientData *pCD)
 } /* END OF FUNCTION ProcessWmProtocols */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessMwmMessages (pCD)
@@ -442,7 +442,7 @@ void ProcessMwmMessages (ClientData *pCD)
 } /* END OF FUNCTION ProcessMwmMessages */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetMwmInfo (propWindow, flags, wmWindow)
@@ -484,7 +484,7 @@ void SetMwmInfo (Window propWindow, long flags, Window wmWindow)
 } /* END OF FUNCTION SetMwmInfo */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  SetMwmSaveSessionInfo (wmWindow)
@@ -521,7 +521,7 @@ void SetMwmSaveSessionInfo (Window wmWindow)
 } /* END OF FUNCTION SetMwmSaveSessionInfo */
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  GetWMState (window)
@@ -587,7 +587,7 @@ GetWMState(
 } /* END OF FUNCTION GetWMState */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetWMState (window, state, icon)
@@ -634,7 +634,7 @@ void SetWMState (Window window, int state, Window icon)
 } /* END OF FUNCTION SetWMState */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PropMwmHints *
@@ -717,7 +717,7 @@ GetMwmHints(
 } /* END OF FUNCTION GetMwmHints */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PropMwmInfo *
@@ -779,7 +779,7 @@ PropMwmInfo *GetMwmInfo (Window rootWindowOfScreen)
 } /* END OF FUNCTION GetMwmInfo */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmColormapWindows (pCD)
@@ -975,7 +975,7 @@ void ProcessWmColormapWindows (ClientData *pCD)
 } /* END OF FUNCTION ProcessWmColormapWindows */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindColormap (pCD, window)
@@ -1035,7 +1035,7 @@ Colormap FindColormap (ClientData *pCD, Window window)
 } /* END OF FUNCTION FindColormap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetMwmMenuItems (pCD)
@@ -1112,7 +1112,7 @@ GetMwmMenuItems(
 
 #ifdef WSM
 
-
+
 /*************************************<->*************************************
  *
  *  GetWorkspaceHints (display, window, ppWsAtoms, pCount, pbAll)
@@ -1196,7 +1196,7 @@ Status GetWorkspaceHints (Display *display, Window window,
 
 } /* END OF FUNCTION GetWorkspaceHints */
 
-
+
 /*************************************<->*************************************
  *
  *  SetEmbeddedClientsProperty (propWindow, pEmbeddedClients, 
@@ -1227,7 +1227,7 @@ void SetEmbeddedClientsProperty (Window propWindow,
 } /* END OF FUNCTION SetEmbeddedClientsProperty */
 
 #ifdef HP_VUE
-
+
 /*************************************<->*************************************
  *
  *  SetWorkspaceInfo (propWindow, pWsInfo, cInfo)
@@ -1257,7 +1257,7 @@ void SetWorkspaceInfo (Window propWindow, WorkspaceInfo *pWsInfo, unsigned long 
 } /* END OF FUNCTION SetWorkspaceInfo */
 #endif /* HP_VUE */
 
-
+
 /*************************************<->*************************************
  *
  *  SetWorkspaceListProperty (pSD)
@@ -1302,7 +1302,7 @@ SetWorkspaceListProperty (WmScreenData *pSD)
 
 } /* END OF FUNCTION SetWorkspaceListProperty */
 
-
+
 /*************************************<->*************************************
  *
  *  SetCurrentWorkspaceProperty (pSD)
@@ -1337,7 +1337,7 @@ SetCurrentWorkspaceProperty (WmScreenData *pSD)
 
 } /* END OF FUNCTION SetCurrentWorkspaceProperty */
 
-
+
 /*************************************<->*************************************
  *
  *  SetWorkspaceInfoProperty (pWS)
@@ -1465,7 +1465,7 @@ SetWorkspaceInfoProperty (WmWorkspaceData *pWS)
 
 } /* END OF FUNCTION SetWorkspaceInfoProperty */
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteWorkspaceInfoProperty (pWS)
@@ -1508,7 +1508,7 @@ DeleteWorkspaceInfoProperty (WmWorkspaceData *pWS)
 
 } /* END OF FUNCTION DeleteWorkspaceInfoProperty */
 
-
+
 /*************************************<->*************************************
  *
  *  WorkspacePropertyName (pWS)
@@ -1554,7 +1554,7 @@ WorkspacePropertyName (WmWorkspaceData *pWS)
 
 } /* END OF FUNCTION WorkspacePropertyName */
 
-
+
 /*************************************<->*************************************
  *
  *  SetWorkspacePresence (propWindow, pWsPresence, cPresence)
@@ -1586,7 +1586,7 @@ void SetWorkspacePresence (Window propWindow, Atom *pWsPresence, unsigned long c
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetDtSessionHints (pSD, sNum)
@@ -1661,7 +1661,7 @@ void GetDtSessionHints (WmScreenData *pSD, int sNum)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetDtWmRequest (pSD, pszReq, pmore)
@@ -1811,7 +1811,7 @@ GetDtWmRequest (
 
 } /* END OF FUNCTION GetDtWmRequest */
 
-
+
 /*************************************<->*************************************
  *
  *  GetIntialPropertyList (ClientData *)
@@ -1859,7 +1859,7 @@ GetInitialPropertyList (ClientData *pCD)
 
 } /* END OF FUNCTION GetInitialPropertyList */
 
-
+
 /*************************************<->*************************************
  *
  *  DiscardIntialPropertyList (ClientData *)
@@ -1901,7 +1901,7 @@ DiscardInitialPropertyList (ClientData *pCD)
     }
 } /* END OF FUNCTION DiscardInitialPropertyList */
 
-
+
 /*************************************<->*************************************
  *
  *  HasProperty (pCD, aProperty)

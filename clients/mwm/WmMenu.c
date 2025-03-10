@@ -112,7 +112,7 @@ static void UnmapPulldownCallback (Widget w, XtPointer client_data,
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeMenu (menuName, initialContext, accelContext, moreMenuItems,
@@ -333,7 +333,7 @@ MenuSpec *MakeMenu (WmScreenData *pSD,
 } /* END OF FUNCTION MakeMenu */
 
 
-
+
 /*************************************<->***********************************/
 void CheckTerminalSeparator(menuSpec, buttonWidget, manage)
      MenuSpec *menuSpec;
@@ -384,7 +384,7 @@ void CheckTerminalSeparator(menuSpec, buttonWidget, manage)
 } /* END OF FUNCTION CheckTerminalSeparator */
 
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -448,7 +448,7 @@ MakeMenuSpec (String menuName, CARD32 commandID)
     return(menuSpec);
 }
 #endif
-
+
 /*************************************<->*************************************
  *
  *  DuplicateMenuItems (menuItems)
@@ -550,7 +550,7 @@ DuplicateMenuItems (MenuItem *menuItems)
     return(returnMenuItem);
 }
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -614,7 +614,7 @@ DuplicateMenuExclusions (MenuExclusion *exclusions)
     return(returnMenuExclusion);
 }
 #endif
-
+
 /*************************************<->*************************************
  *
  *  DuplicateMenuSpec (menuSpec)
@@ -680,7 +680,7 @@ DuplicateMenuSpec (MenuSpec *menuSpec)
     return(newMenuSpec);
 }
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -762,7 +762,7 @@ MakeMenuItem (String label, WmFunction wmFunction, String funcArgs,
     return(menuItem);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  MakeMenuItemFromTemplate (template, name, funcArgs)
@@ -806,7 +806,7 @@ static MenuItem *MakeMenuItemFromTemplate (MenuItem *template, String name,
 			template->accelKeyCode, template->accelText));
 }
 
-
+
 /*************************************<->*************************************
  *
  *  MakeClientCommandMenuItem (label, funcArgs)
@@ -846,7 +846,7 @@ static MenuItem *MakeClientCommandMenuItem (String label, String funcArgs)
 			(KeyCode)(unsigned)NULL, (String)NULL));
 }
 
-
+
 /*************************************<->*************************************
  *
  *  PerformClientCommandMatch (clientCommand, menuItem, bestMatchSoFar)
@@ -1100,7 +1100,7 @@ static MenuItem *PerformClientCommandMatch (String clientCommand,
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ExcludeClientCommand (menuSpec, clientCommand)
@@ -1150,7 +1150,7 @@ static Boolean ExcludeClientCommand (MenuSpec *menuSpec, String clientCommand)
     return(FALSE);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ForceInLineToCascade (menuSpec, clientCommand, bestMatch)
@@ -1198,7 +1198,7 @@ static Boolean ForceInLineToCascade (MenuSpec *menuSpec,
     return(FALSE);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  FindClientCommandMatch (menuSpec, clientCommand, menuItem)
@@ -1297,7 +1297,7 @@ static Boolean FindClientCommandMatch (MenuSpec *menuSpec,
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  PerformInsertionsOnMatchList (matchlist)
@@ -1417,7 +1417,7 @@ static void PerformInsertionsOnMatchList (MatchList **matchlist)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  void
@@ -1475,7 +1475,7 @@ void DestroyMenuSpecWidgets (MenuSpec *menuSpec)
     return;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  void
@@ -1588,7 +1588,7 @@ void DestroyMenuSpec (WmScreenData *pSD, CARD32 commandID)
     return;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ReplaceMenuSpecForClient (menuspec, pCD)
@@ -1660,7 +1660,7 @@ static MenuSpec *ReplaceMenuSpecForClient (MenuSpec *menuSpec, ClientData *pCD)
     return(newMenuSpec);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  FindLastMenuSpecToModify (menuspec, command_id)
@@ -1721,7 +1721,7 @@ static MenuSpec * FindLastMenuSpecToModify(MenuSpec *menuSpec,
     return(lastToModify);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  RecreateMenuWidgets (matchlist)
@@ -1802,7 +1802,7 @@ static void RecreateMenuWidgets (WmScreenData *pSD, ClientData *pCD,
     XtFree((char *) to_change);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  FreeMatchList (matchlist)
@@ -1842,7 +1842,7 @@ static void FreeMatchList (MatchList **matchlist)
     *matchlist = (MatchList *) NULL;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  StoreMatchedCommand (matchlist, menuSpec, menuItem, command_string,
@@ -1918,7 +1918,7 @@ static void StoreMatchedCommand (MatchList **matchlist, MenuSpec *menuSpec,
     *matchlist = new;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  SearchForOtherMatches (pSD, pCD, treenode,
@@ -2045,7 +2045,7 @@ static void SearchForOtherMatches (WmScreenData *pSD, ClientData *pCD,
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  InsertTreeOnClient (pSD, pCD, tree, client_match_list, global_match_list,
@@ -2287,7 +2287,7 @@ static void InsertTreeOnClient (WmScreenData *pSD, ClientData *pCD,
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  InsertTreeOnAllClients (pSD, tree, selection, active_context, inLine)
@@ -2349,7 +2349,7 @@ void InsertTreeOnAllClients (WmScreenData *pSD, CmdTree *tree, Atom selection,
     FreeMatchList(&global_matchlist);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  InsertTreeOnSingleClient (pSD, pCD, tree, selection, inLine)
@@ -2400,7 +2400,7 @@ void InsertTreeOnSingleClient (WmScreenData *pSD, ClientData *pCD,
     FreeMatchList(&client_matchlist);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  InsertTreeOnRootMenu (pSD, tree, selection, active_context, inLine)
@@ -2456,7 +2456,7 @@ void InsertTreeOnRootMenu (WmScreenData *pSD, CmdTree *tree, Atom selection,
     FreeMatchList(&global_matchlist);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  RemoveClientCommandFromMenuSpec (menuSpec, id)
@@ -2505,7 +2505,7 @@ static Boolean RemoveClientCommandFromMenuSpec (MenuSpec *menuSpec,
     return(was_changed);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ModifyClientCommandForMenuSpec (menuSpec, id, modifier, context, newname)
@@ -2646,7 +2646,7 @@ static Boolean ModifyClientCommandForMenuSpec (MenuSpec *menuSpec,
     return(was_changed);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ModifyClientCommandID (pSD, pCD, range, id, modifier, context, newname)
@@ -2831,7 +2831,7 @@ static void ModifyClientCommandID (WmScreenData *pSD,
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ModifyClientCommandTree (pSD, pCD, range, tree, modifier, context, newname)
@@ -2873,7 +2873,7 @@ void ModifyClientCommandTree (WmScreenData *pSD,
     }
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
-
+
 /*************************************<->*************************************
  *
  *  static Boolean
@@ -3069,7 +3069,7 @@ static Boolean AdjustPBs (MenuSpec *menuSpec, ClientData  *pCD,
 } /* END OF FUNCTION AdjustPBs */
 
 
-
+
 /*************************************<->*************************************
  *
  *  static Boolean
@@ -3151,7 +3151,7 @@ static Boolean SavePBInfo (MenuSpec *topMenuSpec, MenuItem *menuItem,
 }
 
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -3257,7 +3257,7 @@ AdjustTearOffControl (Widget cascade,
 
   return (False);
 }
-
+
 
 /*************************************<->*************************************
  *
@@ -3354,7 +3354,7 @@ static Boolean CreateClientCommandSeparator (MenuItem *menuItem,
     return(TRUE);
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
-
+
 /*************************************<->*************************************
  *
  *  CreateMenuWidget (pSD, menuName, parent, fTopLevelPane, topMenuSpec, 
@@ -3915,7 +3915,7 @@ Widget CreateMenuWidget (WmScreenData *pSD,
 } /* END OF FUNCTION CreateMenuWidget */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PostMenu (menuSpec, pCD, x, y, button, newContext, flags, passedInEvent)
@@ -4127,7 +4127,7 @@ void PostMenu (MenuSpec *menuSpec, ClientData *pCD, int x, int y, unsigned int b
 } /* END OF FUNCTION PostMenu */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UnpostMenu (menuSpec)
@@ -4170,7 +4170,7 @@ void UnpostMenu (MenuSpec *menuSpec)
 } /* END OF FUNCTION UnpostMenu */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ActivateCallback (w, client_data, call_data)
@@ -4214,7 +4214,7 @@ void ActivateCallback (Widget w, caddr_t client_data, caddr_t call_data)
 } /* END OF FUNCTION ActivateCallback */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UnmapCallback (w, client_data, call_data)
@@ -4265,7 +4265,7 @@ static void UnmapCallback (Widget w, XtPointer client_data,
 
 } /* END OF FUNCTION UnmapCallback */
 
-
+
 /*************************************<->*************************************
  *
  *  MWarning (message)
@@ -4297,7 +4297,7 @@ void MWarning (char *format, char *message)
 } /* END OF FUNCTION MWarning */
 
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -4326,7 +4326,7 @@ static void UnmapPulldownCallback (Widget w, XtPointer client_data,
 } /* END OF FUNCTION UnmapPulldownCallback */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  TraversalOff (menuSpec)
@@ -4367,7 +4367,7 @@ void TraversalOff (MenuSpec *menuSpec)
 } /* END OF FUNCTION TraversalOff */
 
 
-
+
 /*************************************<->*************************************
  *
  *  TraversalOn (menuSpec)
@@ -4409,7 +4409,7 @@ void TraversalOn (MenuSpec *menuSpec)
 } /* END OF FUNCTION TraversalOn */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FreeCustomMenuSpec (menuSpec)
@@ -4503,4 +4503,4 @@ void FreeCustomMenuSpec (MenuSpec *menuSpec)
 
 } /* END OF FUNCTION FreeCustomMenuSpec */
 
-
+

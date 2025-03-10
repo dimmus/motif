@@ -676,7 +676,7 @@ _XmRC_RemovePopupEventHandlers(
 }
 
 
-
+
 /*
  *************************************************************************
  *
@@ -1090,7 +1090,7 @@ MatchInKeyboardList(
    return (-1);
 }
 
-
+
 /*
  * This function determines if the widget to which a menu is 
  * attached is accessible to the user.  The widget is considered

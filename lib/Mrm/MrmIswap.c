@@ -57,7 +57,7 @@
 #include "MrmosI.h"
 #include "MrmMsgI.h"
 
-
+
 /*
  *++
  *
@@ -216,14 +216,14 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
     }
   return MrmSUCCESS ;
 } 
-
+
 unsigned 
 Urm__SwapValidation (unsigned 		validation)
 {
   swapbytes(validation);
   return validation;
 }
-
+
 Cardinal 
 Urm__SwapRGMResourceDesc (RGMResourceDescPtr	res_desc)
 {
@@ -246,7 +246,7 @@ Urm__SwapRGMResourceDesc (RGMResourceDescPtr	res_desc)
 
   return MrmSUCCESS;
 }
-
+
 Cardinal 
 Urm__SwapRGMCallbackDesc (RGMCallbackDescPtr	callb_desc,
 			  RGMWidgetRecordPtr	widget_rec)
@@ -299,7 +299,7 @@ Urm__SwapRGMCallbackDesc (RGMCallbackDescPtr	callb_desc,
     }
   return MrmSUCCESS;
 }
-
+
 /*
  *++
  *

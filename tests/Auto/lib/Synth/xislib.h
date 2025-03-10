@@ -101,7 +101,7 @@
 #define xisINIT(x)
 #endif
 
-
+
 /******************************************************************************
                 GLOBAL DISPLAY AND APPLICATION CONTEXT INFO
 ******************************************************************************/
@@ -150,7 +150,7 @@
 
   xisGLOBAL int xisTerminateTestFlag xisINIT(0);
                                             /* Set true when user does ctrl-C */
-
+
 /******************************************************************************
                 OBJECT DECLARATION
 ******************************************************************************/
@@ -202,7 +202,7 @@
   xisGLOBAL char *(*xisGetWidgetClassName)(/* Widget widget */) xisINIT(NULL);
   xisGLOBAL Widget (*xisWindowToWidget)(/* Window window */) xisINIT(NULL);
 
-
+
 /******************************************************************************
                 DEFINE InformExpectedActions FUNCTION POINTER
 ******************************************************************************/
@@ -285,7 +285,7 @@ xisGLOBAL XisInformRecord xisInform;
 #define LeftEdge       3
 #define RightEdge      4
 
-
+
 /******************************************************************************
                 MOUSE POINTER AND BUTTON MANAGEMENT DECLARATIONS
 ******************************************************************************/
@@ -328,7 +328,7 @@ xisGLOBAL XisInformRecord xisInform;
 
   xisGLOBAL XisObjectRecord *xisSelectedObject   xisINIT(NULL);
 
-
+
 /******************************************************************************
                 KEYBOARD SYNTHESIS DECLARATIONS
 ******************************************************************************/
@@ -578,7 +578,7 @@ xisGLOBAL XisInformRecord xisInform;
 
 
 
-
+
 /* Key Symbol Names                                                      */
 /* KeySyms are X's way of naming keys. Valid KeySym names are listed in  */
 /* <X11/keysymdef.h> by removing the XK_ prefix from each name.          */
@@ -685,7 +685,7 @@ xisGLOBAL short xisKeyboardFocusMode xisINIT(KEYBOARD_FOCUS_NATURAL);
 
 xisGLOBAL short xisPointerGrabMode xisINIT(POINTER_GRAB_CONTROLLED);
 
-
+
 /******************************************************************************
                 WIDGET IMPLICIT STATE INFO MANAGEMENT DECLARATIONS
 ******************************************************************************/

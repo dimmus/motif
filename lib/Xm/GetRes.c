@@ -50,7 +50,7 @@ XmGetSecondaryResourceData(
 
   return num;
 }
-
+
 /*
  * GetSecResData()
  *  - Called from : XmGetSecondaryResourceData ().

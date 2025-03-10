@@ -84,7 +84,7 @@ externaldef(uil_comp_glbl) cmd_command_line_type Uil_cmd_z_command = {
 	1	/* v_database */
 };
 
-
+
 
 /*
 **++
@@ -341,5 +341,5 @@ char 	*rac_arg_value[ ];
 	  Uil_cmd_z_command.v_show_machine_code);
 }
 
-
+
 

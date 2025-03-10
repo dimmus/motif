@@ -108,7 +108,7 @@ static char rcsid[] = "$XConsortium: MrmIheader.c /main/16 1996/11/13 13:56:56 d
 static XmConst	char *idb__database_version = URMversion;
 
 
-
+
 /*
  *++
  *
@@ -232,7 +232,7 @@ Idb__HDR_GetHeader (IDBFile		file_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -351,7 +351,7 @@ Idb__HDR_InitHeader (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -406,7 +406,7 @@ Idb__HDR_PutHeader (IDBFile		file_id)
 }
 
 
-
+
 /*
  *++
  *
@@ -485,7 +485,7 @@ Idb__HDR_UpdateHeader (IDBFile			file_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -569,7 +569,7 @@ Idb__HDR_EnterItem (IDBFile		file_id,
   return MrmSUCCESS;
 
 }
-
+
 /*
  *++
  *
@@ -670,7 +670,7 @@ Idb__HDR_ReturnItem (IDBFile		file_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -730,7 +730,7 @@ Idb__HDR_NextRID (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -850,7 +850,7 @@ Idb__HDR_GetDataEntry (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -956,7 +956,7 @@ Idb__HDR_PutDataEntry (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *

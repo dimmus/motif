@@ -83,7 +83,7 @@ static char rcsid[] = "$TOG: UilSymNam.c /main/13 1997/09/08 11:12:50 cshi $"
 **/
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -168,7 +168,7 @@ char	*c_text;	/* text of the name */
     return NULL;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -302,7 +302,7 @@ insert_name:
     return az_new_name;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -392,7 +392,7 @@ char	*c_value;
     return (int)(l_hash_code % sym_k_hash_table_limit);
 }
 
-
+
 #if debug_version
 
 /*

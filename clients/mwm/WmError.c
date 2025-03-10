@@ -82,7 +82,7 @@ static char *pchErrorFormat [NUM_E_STRINGS];
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmInitErrorHandler (display)
@@ -135,7 +135,7 @@ WmInitErrorHandler (Display *display)
 
 } /* END OF FUNCTION WmInitErrorHandler */
 
-
+
 /*************************************<->*************************************
  *
  *  WmXErrorHandler (display, errorEvent)
@@ -216,7 +216,7 @@ WmXErrorHandler (Display *display, XErrorEvent *errorEvent)
 } /* END OF FUNCTION WmXErrorHandler */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmXIOErrorHandler (display)
@@ -249,7 +249,7 @@ WmXIOErrorHandler (Display *display)
 } /* END OF FUNCTIONS WmXIOErrorHandler */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmXtErrorHandler (message)
@@ -276,7 +276,7 @@ WmXtErrorHandler (char *message)
 } /* END OF FUNCTION WmXtErrorHandler */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmXtWarningHandler (message)
@@ -303,7 +303,7 @@ WmXtWarningHandler (char *message)
 
 } /* END OF FUNCTIONS WmXtWarningHandler */
 
-
+
 /*************************************<->*************************************
  *
  *  Warning (message)
@@ -339,7 +339,7 @@ Warning (char *message)
 
 #ifdef WSM
 #ifdef DEBUGGER
-
+
 /******************************<->*************************************
  *
  *  PrintFormatted (format, message, message, ...)

@@ -401,7 +401,7 @@ Initialize(
 
     return ;
 }
-   
+   
 /****************************************************************
  * Process callback from the List in a SelectionBox.
  ****************/
@@ -547,7 +547,7 @@ CommandCallback(
     XmStringFree (cb.value);
     return ;
 }
-
+
 /****************************************************************/
 static Boolean 
 CommandParentProcess(
@@ -578,7 +578,7 @@ CommandParentProcess(
 
     return( _XmParentProcess( XtParent( cmd), event)) ;
     }
-
+
 /****************************************************************
  * Return function to "complete" text entry
  ****************/
@@ -1085,7 +1085,7 @@ XmCommandError(
     return ;
     }
 
-
+
 /****************************************************************
  * This convenience function creates a DialogShell and a Command
  *   child of the shell; returns the Command widget.

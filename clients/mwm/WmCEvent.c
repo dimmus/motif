@@ -75,7 +75,7 @@ static char rcsid[] = "$XConsortium: WmCEvent.c /main/10 1996/08/09 15:05:39 rsw
 
 extern unsigned int buttonModifierMasks[];
 
-
+
 /*************************************<->*************************************
  *
  *  SetupCButtonBindings (window, buttonSpecs)
@@ -146,7 +146,7 @@ void SetupCButtonBindings (Window window, ButtonSpec *buttonSpecs)
 } /* END OF FUNCTION SetupCButtonBindings */
 
 
-
+
 /*************************************<->*************************************
  *
  *  WmDispatchClientEvent (event)
@@ -495,7 +495,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
 } /* END OF FUNCTION WmDispatchClientEvent */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleEventsOnSpecialWindows (pEvent)
@@ -631,7 +631,7 @@ Boolean HandleEventsOnSpecialWindows (XEvent *pEvent)
 } /* END OF FUNCTION HandleEventsOnSpecialWindows */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleEventsOnClientWindow (pCD, pEvent)
@@ -709,7 +709,7 @@ Boolean HandleEventsOnClientWindow (ClientData *pCD, XEvent *pEvent)
 } /* END OF FUNCTION HandleEventsOnClientWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCPropertyNotify (pCD, propertyEvent)
@@ -862,7 +862,7 @@ void HandleCPropertyNotify (ClientData *pCD, XPropertyEvent *propertyEvent)
 } /* END OF FUNCTION HandleCPropertyNotify */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCButtonPress (pCD, buttonEvent)
@@ -994,7 +994,7 @@ Boolean HandleCButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
 } /* END OF FUNCTION HandleCButtonPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessButtonGrabOnClient (pCD, buttonEvent, replayEvent)
@@ -1085,7 +1085,7 @@ void ProcessButtonGrabOnClient (ClientData *pCD, XButtonEvent *buttonEvent, Bool
 } /* END OF FUNCTION ProcessButtonGrabOnClient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckButtonPressBuiltin (buttonEvent, context, subContext, partContext, pCD)
@@ -1285,7 +1285,7 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
 } /* END OF FUNCTION CheckButtonPressBuiltin */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleIconButtonPress (pCD, buttonEvent)
@@ -1362,7 +1362,7 @@ void HandleIconButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
 } /* END OF FUNCTION HandleIconButtonPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleIconBoxButtonPress (pCD, buttonEvent, subContext)
@@ -1433,7 +1433,7 @@ void HandleIconBoxButtonPress (ClientData *pCD, XButtonEvent *buttonEvent, Conte
 } /* END OF FUNCTION HandleIconBoxButtonPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCButtonRelease (pCD, buttonEvent)
@@ -1499,7 +1499,7 @@ void HandleCButtonRelease (ClientData *pCD, XButtonEvent *buttonEvent)
 } /* END OF FUNCTION HandleCButtonRelease */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCKeyPress (pCD, keyEvent)
@@ -1643,7 +1643,7 @@ Boolean HandleCKeyPress (ClientData *pCD, XKeyEvent *keyEvent)
 } /* END OF FUNCTION HandleCKeyPress */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CheckButtonReleaseBuiltin (buttonEvent, context, subContext, pCD)
@@ -1797,7 +1797,7 @@ void CheckButtonReleaseBuiltin (XButtonEvent *buttonEvent, Context context, Cont
 } /* END OF FUNCTION CheckButtonReleaseBuiltin */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCMotionNotify (pCD, motionEvent)
@@ -1859,7 +1859,7 @@ void HandleCMotionNotify (ClientData *pCD, XMotionEvent *motionEvent)
 } /* END OF FUNCTION HandleCMotionNotify */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCEnterNotify (pCD, enterEvent)
@@ -1987,7 +1987,7 @@ void HandleCEnterNotify (ClientData *pCD, XEnterWindowEvent *enterEvent)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCLeaveNotify (pCD, leaveEvent)
@@ -2037,7 +2037,7 @@ void HandleCLeaveNotify (ClientData *pCD, XLeaveWindowEvent *leaveEvent)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCFocusIn (pCD, focusChangeEvent)
@@ -2139,7 +2139,7 @@ Boolean HandleCFocusIn (ClientData *pCD, XFocusChangeEvent *focusChangeEvent)
 } /* END OF FUNCTION HandleCFocusIn */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCFocusOut (pCD, focusChangeEvent)
@@ -2220,7 +2220,7 @@ Boolean HandleCFocusOut (ClientData *pCD, XFocusChangeEvent *focusChangeEvent)
 } /* END OF FUNCTION HandleCFocusOut */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCConfigureRequest (pCD, configureRequest)
@@ -2367,7 +2367,7 @@ void HandleCConfigureRequest (ClientData *pCD, XConfigureRequestEvent *configure
 } /* END OF FUNCTION HandleCConfigureRequest */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleCColormapNotify (pCD, colorEvent)
@@ -2544,7 +2544,7 @@ void HandleCColormapNotify (ClientData *pCD, XColormapEvent *colorEvent)
 } /* END OF FUNCTION HandleCColormapNotify */
 
 
-
+
 /*************************************<->*************************************
  *
  *  HandleClientMessage (pCD, clientEvent)
@@ -2599,7 +2599,7 @@ void HandleClientMessage (ClientData *pCD, XClientMessageEvent *clientEvent)
 
 
 #ifndef NO_SHAPE
-
+
 /*************************************<->*************************************
  *
  *  HandleCShapeNotify (pCD, shapeEvent)
@@ -2632,7 +2632,7 @@ HandleCShapeNotify (ClientData *pCD,  XShapeEvent *shapeEvent)
 } /* END OF FUNCTION HandleCShapeNotify */
 #endif /* NO_SHAPE */
 
-
+
 /*************************************<->*************************************
  *
  *  GetParentWindow (window)
@@ -2678,7 +2678,7 @@ Window GetParentWindow (Window window)
 
 } /* END OF FUNCTION GetParentWindow */
 
-
+
 /*************************************<->*************************************
  *
  *  DetermineActiveScreen (pEvent)
@@ -2731,7 +2731,7 @@ void DetermineActiveScreen (XEvent *pEvent)
 
 } /* END OF FUNCTION DetermineActiveScreen */
 
-
+
 /*************************************<->*************************************
  *
  *  GetScreenForWindow (win)

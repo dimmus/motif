@@ -87,7 +87,7 @@ static char rcsid[] = "$XConsortium: MrmIrid.c /main/13 1996/11/13 13:58:17 drk 
 #define	Idb__RID_ValidRecord(buffer) \
 	(_IdbBufferRecordType(buffer)==IDBrtRIDMap)
 
-
+
 /*
  *++
  *
@@ -176,7 +176,7 @@ Idb__RID_EnterItem (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -277,7 +277,7 @@ Idb__RID_ReturnItem (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -356,7 +356,7 @@ Idb__RID_NextRID (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *

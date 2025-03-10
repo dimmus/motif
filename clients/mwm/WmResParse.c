@@ -764,7 +764,7 @@ int F_NOP_INDEX;
 # endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 #endif /* WSM */
 #ifdef WSM
-
+
 /******************************<->*************************************
  *
  *  void GetFunctionTableValues (int *execIndex, int *nopIndex, 
@@ -804,7 +804,7 @@ GetFunctionTableValues (int *execIndex, int *nopIndex,
 } /* END OF FUNCTION GetFunctionTableValues */
 
 
-
+
 /******************************<->*************************************
  *
 
@@ -843,7 +843,7 @@ GetExecIndex (int tableSize, int *execIndex)
 	}
 } /* END OF FUNCTION GetExecIndex */
 
-
+
 /******************************<->*************************************
  *
 
@@ -884,7 +884,7 @@ GetActionIndex (int tableSize, int *actionIndex)
 } /* END OF FUNCTION GetActionIndex */
 
 
-
+
 /******************************<->*************************************
  *
 
@@ -924,7 +924,7 @@ GetNopIndex (int tableSize, int *nopIndex)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  void
@@ -984,7 +984,7 @@ WmDtGetHelpArgs(char *args,
 
 
 
-
+
 /******************************<->*************************************
  *
  *  void
@@ -1028,7 +1028,7 @@ ParseDtSessionHints (WmScreenData *pSD, unsigned char *property)
 
 } /* END OF FUNCTION ParseDtSessionHints */
 
-
+
 /*************************************<->*************************************
  *
  *  FindDtSessionMatch(commandArgc, commandArgv, pCD, pSD, pWorkSpaceList,
@@ -1211,7 +1211,7 @@ Boolean FindDtSessionMatch(int commandArgc, char **commandArgv,
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  void
@@ -1339,7 +1339,7 @@ ParseSessionItems (WmScreenData *pSD)
 } /* END OF FUNCTION ParseSessionItems */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseSessionClientState (pSD, count, string);
@@ -1373,7 +1373,7 @@ void ParseSessionClientState (WmScreenData *pSD, int count,
 
 } /* END OF FUNCTION ParseSessionClientState */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseSessionGeometry (pSD, count, string)
@@ -1428,7 +1428,7 @@ void ParseSessionGeometry (WmScreenData *pSD, int count,
     
 } /* END OF FUNCTION  ParseSessionGeometry */
 
-
+
 /*************************************<->*************************************
  *
  * void
@@ -1466,7 +1466,7 @@ void ParseSessionWorkspaces (WmScreenData *pSD,  int count,
 } /* END OF FUNCTION ParseSessionWorkspaces */
 
 
-
+
 /*************************************<->*************************************
  *
  * void
@@ -1547,7 +1547,7 @@ void ParseSessionCommand (WmScreenData *pSD,  int count,
 } /* END OF FUNCTION ParseSessionCommand */
 
 
-
+
 /*************************************<->*************************************
  *
  * void
@@ -1586,7 +1586,7 @@ void ParseSessionHost (WmScreenData *pSD,  int count,
 } /* END OF FUNCTION ParseSessionHost */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetSessionHintsInfo (pSD, numItems)
@@ -1623,7 +1623,7 @@ Boolean GetSessionHintsInfo (WmScreenData *pSD, long numItems)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  PeekAhead (currentChar, currentLev)
@@ -1720,7 +1720,7 @@ unsigned int PeekAhead(unsigned char *currentChar,
 #endif /* WSM */
 
 
-
+
 #ifdef MOTIF_ONE_DOT_ONE
 /*************************************<->*************************************
  *
@@ -1774,7 +1774,7 @@ void GetHomeDirName(String  fileName)
 }
 #endif
 
-
+
 /*************************************<->*************************************
  *
  *  SyncModifierStrings (fileName)
@@ -1834,7 +1834,7 @@ void SyncModifierStrings(void)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessWmFile ()
@@ -2066,7 +2066,7 @@ static char *ExtractLocaleName(lang)
 #define RC_CONFIG_SUBDIR		"/config/"
 #define RC_DEFAULT_CONFIG_SUBDIR	"/config/C"
 #endif /* WSM */
-
+
 /*************************************<->*************************************
  *
  *  FopenConfigFile ()
@@ -2529,7 +2529,7 @@ FILE *FopenConfigFile (void)
 
 } /* END OF FUNCTION FopenConfigFile */
 
-
+
 /*************************************<->*************************************
  *
  *  SaveMenuAccelerators (pSD, newMenuSpec)
@@ -2582,7 +2582,7 @@ void SaveMenuAccelerators (WmScreenData *pSD, MenuSpec *newMenuSpec)
 
 } /* END OF FUNCTION SaveMenuAccelerators */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseMenuSet (pSD, lineP)
@@ -2720,7 +2720,7 @@ static void ParseMenuSet (WmScreenData *pSD, unsigned char *lineP)
 
 } /* END OF FUNCTION ParseMenuSet */
 
-
+
 /*************************************<->*************************************
  *
  *  MenuItem *
@@ -2769,7 +2769,7 @@ MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr)
 
 } /* END OF FUNCTION ParseMwmMenuStr */
 
-
+
 /*************************************<->*************************************
  *
  *  static MenuItem *
@@ -3040,7 +3040,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 } /* END OF FUNCTION ParseMenuItems */
 
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -3081,7 +3081,7 @@ static void StoreExclusion (MenuSpec *menuSpec, String string)
     menuSpec->exclusions = exclusion;
 }
 
-
+
 /*************************************<->*************************************
  *
  *  IsClientCommand (string)
@@ -3141,7 +3141,7 @@ Boolean IsClientCommand (String string)
     return(FALSE);
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ParseClientCommand (linePP, menuSpec, menuitem, string, use_separators)
@@ -3460,7 +3460,7 @@ static Boolean ParseClientCommand (unsigned char **linePP, MenuSpec *menuSpec,
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmLabel (pSD, menuItem, string)
@@ -3538,7 +3538,7 @@ static Boolean ParseWmLabel (WmScreenData *pSD, MenuItem *menuItem,
 } /* END OF FUNCTION ParseWmLabel */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmMnemonic (linePP, menuItem)
@@ -3619,7 +3619,7 @@ static void ParseWmMnemonic (unsigned char **linePP, MenuItem *menuItem)
 
 } /* END OF FUNCTION ParseWmMnemonic */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmAccelerator (linePP, menuItem)
@@ -3720,7 +3720,7 @@ static Boolean ParseWmAccelerator (unsigned char **linePP, MenuItem *menuItem)
 
 } /* END OF FUNCTION ParseWmAccelerator */
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -3820,7 +3820,7 @@ static void ParseMenuItemName (unsigned char **linePP, MenuItem *menuItem)
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  int
@@ -3937,7 +3937,7 @@ int ParseWmFunction (unsigned char **linePP, unsigned int res_spec,
 
 } /* END OF FUNCTION ParseWmFunction */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmFuncMaybeStrArg (linePP, wmFunction, pArgs)
@@ -4016,7 +4016,7 @@ Boolean ParseWmFuncMaybeStrArg (unsigned char **linePP,
 
 } /* END OF FUNCTION ParseWmFuncMaybeStrArg */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmFuncNoArg (linePP, wmFunction, pArgs)
@@ -4056,7 +4056,7 @@ static Boolean ParseWmFuncNoArg (unsigned char **linePP, WmFunction wmFunction,
 
 } /* END OF FUNCTION ParseWmFuncNoArg */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmFuncStrArg (linePP, wmFunction, pArgs)
@@ -4159,7 +4159,7 @@ Boolean ParseWmFuncStrArg (unsigned char **linePP,
 
 } /* END OF FUNCTION ParseWmFuncStrArg */
 
-
+
 /*************************************<->*************************************
  *
  *  FreeMenuItem (menuItem)
@@ -4225,7 +4225,7 @@ void FreeMenuItem (MenuItem *menuItem)
 } /* END OF FUNCTION FreeMenuItem */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmFuncGrpArg (linePP, wmFunction, pGroup)
@@ -4345,7 +4345,7 @@ static Boolean ParseWmFuncGrpArg (unsigned char **linePP,
 } /* END OF FUNCTION ParseWmFuncGrpArg */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmFuncNbrArg (linePP, wmFunction, pNumber)
@@ -4395,7 +4395,7 @@ static Boolean ParseWmFuncNbrArg (unsigned char **linePP,
 
 } /* END OF FUNCTION ParseWmFuncNbrArg */
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -4499,7 +4499,7 @@ static Boolean ParseWmFuncCCIArgs (unsigned char **linePP,
 } /* END OF FUNCTION ParseWmFuncCCIArgs */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseButtonStr ()
@@ -4550,7 +4550,7 @@ void ParseButtonStr (WmScreenData *pSD, unsigned char *buttonStr)
 
 } /* END OF FUNCTION ParseButtonStr */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseButtonSet (pSD, lineP)
@@ -4771,7 +4771,7 @@ static void ParseButtonSet (WmScreenData *pSD, unsigned char *lineP)
 } /* END OF FUNCTION ParseButtonSet */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseContext (linePP, context, subContext)
@@ -4903,7 +4903,7 @@ static Boolean ParseContext (unsigned char **linePP, Context *context,
 
 } /* END OF FUNCTION ParseContext */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseKeyStr ()
@@ -4955,7 +4955,7 @@ ParseKeyStr (WmScreenData *pSD, unsigned char *keyStr)
 } /* END OF FUNCTION ParseKeyStr */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseKeySet (pSD, lineP)
@@ -5200,7 +5200,7 @@ static void ParseKeySet (WmScreenData *pSD, unsigned char *lineP)
 } /* END OF FUNCTION ParseKeySet */
 
 #ifndef WSM
-
+
 /*************************************<->*************************************
  *
  *  GetNextLine ()
@@ -5351,7 +5351,7 @@ GetNextLine (void)
 #endif /* WSM */
 
 #ifndef PANELIST
-
+
 #ifdef WSM
 /*************************************<->*************************************
  *
@@ -5768,7 +5768,7 @@ unsigned char *GetString (unsigned char **linePP)
 #endif /* PANELIST */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseBtnEvent (linePP, eventType, button, state, fClick)
@@ -5829,7 +5829,7 @@ Boolean ParseBtnEvent (unsigned char  **linePP,
 } /* END OF FUNCTION ParseBtnEvent */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseKeyEvent (linePP, eventType, keyCode, state)
@@ -5909,7 +5909,7 @@ Boolean ParseKeyEvent (unsigned char **linePP, unsigned int *eventType,
 
 } /* END OF FUNCTION ParseKeyEvent */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseEvent (linePP, table, eventType, detail, state, fClick)
@@ -5981,7 +5981,7 @@ static Boolean ParseEvent (unsigned char **linePP, EventTableEntry *table,
 } /* END OF FUNCTION ParseEvent */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ParseModifiers(linePP, state)
@@ -6072,7 +6072,7 @@ static Boolean ParseModifiers(unsigned char **linePP, unsigned int *state)
 
 } /* END OF FUNCTION ParseModifiers */
 
-
+
 /*************************************<->*************************************
  *
  *  LookupModifier (name, valueP)
@@ -6122,7 +6122,7 @@ static Boolean LookupModifier (unsigned char *name, unsigned int *valueP)
 
 } /* END OF FUNCTION LookupModifier */
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -6173,7 +6173,7 @@ static Boolean GetCCIModifier (String modString, CCIEntryModifier *mod)
 
 } /* END OF FUNCTION GetCCIModifier */
 
-
+
 /*************************************<->*************************************
  *
  *  FixMenuItem (menuSpec, menuItem)
@@ -6268,7 +6268,7 @@ static void FixMenuItem (MenuSpec *menuSpec, MenuItem *menuItem)
 }
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseEventType(linePP, table, eventType, ix)
@@ -6337,7 +6337,7 @@ static Boolean ParseEventType (unsigned char **linePP, EventTableEntry *table,
 
 } /* END OF FUNCTION ParseEventType */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseImmed (linePP, closure, detail)
@@ -6375,7 +6375,7 @@ static Boolean ParseImmed (unsigned char **linePP, unsigned int closure,
 
 } /* END OF FUNCTION ParseImmed */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseKeySym (linePP, closure, detail)
@@ -6462,7 +6462,7 @@ static Boolean ParseKeySym (unsigned char **linePP, unsigned int closure,
 } /* END OF FUNCTION ParseKeySym */
 
 
-
+
 /*************************************<->*************************************
  *
  *  StrToNum(str)
@@ -6522,7 +6522,7 @@ static unsigned int StrToNum(unsigned char *str)
 } /* END OF FUNCTION StrToNum */
 
 
-
+
 /*************************************<->*************************************
  *
 
@@ -6575,7 +6575,7 @@ static unsigned int StrToHex(unsigned char *str)
 } /* END OF FUNCTION StrToHex */
 
 
-
+
 /*************************************<->*************************************
  *
 
@@ -6620,7 +6620,7 @@ static unsigned int StrToOct(unsigned char *str)
 } /* END OF FUNCTION StrToOct */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ScanAlphanumeric (linePP)
@@ -6669,7 +6669,7 @@ void ScanAlphanumeric (unsigned char **linePP)
 
 
 #ifndef WSM
-
+
 /*************************************<->*************************************
  *
  *  ScanWhitespace(linePP)
@@ -6711,7 +6711,7 @@ void ScanWhitespace(unsigned char  **linePP)
 #endif /* not WSM */
 
 #ifndef WSM
-
+
 /*************************************<->*************************************
  *
  *  ToLower (string)
@@ -6766,7 +6766,7 @@ void ToLower (unsigned char  *string)
 } /* END OF FUNCTION ToLower */
 #endif  /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  PWarning (message)
@@ -6848,7 +6848,7 @@ typedef struct _keySubs
     unsigned char *	pchTo;
 } KeySub;
 
-
+
 /*************************************<->*************************************
  *
  *  InitKeySubs (ppKeySubs, pNumKeySubs)
@@ -6990,7 +6990,7 @@ static void InitKeySubs (
 }
 
 #endif /* WSM */
-
+
 /*************************************<->*************************************
  *
  *  ProcessAccelText (startP, endP, destP)
@@ -7143,7 +7143,7 @@ static void ProcessAccelText (unsigned char *startP, unsigned char *endP,
 } /* END OF FUNCTION ProcessAccelText */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessCommandLine (argc, argv)
@@ -7196,7 +7196,7 @@ void ProcessCommandLine (int argc,  char *argv[])
 
 } /* END OF FUNCTION ProcessCommandLine */
 
-
+
 /*************************************<->*************************************
  *
  *  ParseScreensArgument (argc, argv, pArgnum, lineP)
@@ -7296,7 +7296,7 @@ static void ParseScreensArgument (int argc, char *argv[], int *pArgnum,
 
 } /* END OF FUNCTION ParseScreensArgument */
 
-
+
 /*************************************<->*************************************
  *
  *  ProcessMotifBindings ()
@@ -7388,7 +7388,7 @@ void ProcessMotifBindings (void)
 } /* END OF FUNCTION ProcessMotifBindings */
 
 #ifdef PANELIST
-
+
 /*************************************<->*************************************
  *
  *  void
@@ -7526,7 +7526,7 @@ ParseWmFunctionArg (
 
 } /* END OF FUNCTION ParseWmFunctionArg */
 
-
+
 /*************************************<->*************************************
  *
  *  SystemCmd (pchCmd)
@@ -7571,7 +7571,7 @@ SystemCmd (char *pchCmd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteTempConfigFileIfAny ()
@@ -7619,7 +7619,7 @@ DeleteTempConfigFileIfAny (void)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ParseIncludeSet (pSD, lineP)
@@ -7709,7 +7709,7 @@ static void ParseIncludeSet (WmScreenData *pSD, unsigned char *lineP)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  ConfigStackInit (pchFileName)
@@ -7758,7 +7758,7 @@ static void ConfigStackInit (char *pchFileName)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ConfigStackPush (pchFileName)
@@ -7833,7 +7833,7 @@ ConfigStackPush (unsigned char *pchFileName)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  ConfigStackPop ()
@@ -7920,7 +7920,7 @@ static void ConfigStackPop (void)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  ParseWmFuncActionArg (linePP, wmFunction, pArgs)
@@ -8046,7 +8046,7 @@ Boolean ParseWmFuncActionArg (unsigned char **linePP,
 
 #endif /* PANELIST */
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  PreprocessConfigFile (pSD)
@@ -8105,7 +8105,7 @@ PreprocessConfigFile (void)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  GetNetworkFileName (char *pchFile)
@@ -8292,7 +8292,7 @@ GetNetworkFileName (char *pchFile)
 /****************************   eof    ***************************/
 #endif /* WSM */
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -8345,7 +8345,7 @@ Boolean SetGreyedContextAndMgtMask (MenuItem *menuItem,
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeSeparatorTemplate ()

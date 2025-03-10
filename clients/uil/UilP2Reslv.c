@@ -84,7 +84,7 @@ static char rcsid[] = "$XConsortium: UilP2Reslv.c /main/11 1995/07/14 09:36:35 d
 **
 **/
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -229,7 +229,7 @@ void	sem_resolve_forward_refs()
 
     }
 
-
+
     /*
     **  Now resolve the forward references to values
     **/

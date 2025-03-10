@@ -1415,7 +1415,7 @@ _XmFileSelectionBoxGetDirMask(
 
     return ;
 }
-
+
 /****************************************************************/
 static Widget 
 GetActiveText(

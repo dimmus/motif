@@ -458,7 +458,7 @@ externaldef(xmVendorShellExtobjectclass) WidgetClass
        xmVendorShellExtObjectClass = (WidgetClass) (&xmVendorShellExtClassRec);
 
 
-
+
 /* ARGSUSED */
 static Boolean 
 CvtStringToHorizontalInt(

@@ -63,7 +63,7 @@ static char rcsid[] = "$XConsortium: WmSignal.c /main/6 1996/10/17 16:20:07 drk 
 
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  AbortWmSignalHandler ()
@@ -99,7 +99,7 @@ AbortWmSignalHandler (int sig)
 
 } /* END OF FUNCTION AbortSignalHandler */
 
-
+
 /*************************************<->*************************************
  *
  *  RestoreDefaultSignalHandlers ()
@@ -151,7 +151,7 @@ RestoreDefaultSignalHandlers (void)
 }
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  SetupWmSignalHandlers ()
@@ -245,7 +245,7 @@ void SetupWmSignalHandlers (int dummy)
 
 } /* END OF FUNCTION SetupWmSignalHandlers */
 
-
+
 /*************************************<->*************************************
  *
  *  QuitWmSignalHandler ()

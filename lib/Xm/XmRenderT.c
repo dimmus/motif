@@ -180,7 +180,7 @@ static XftColor GetCachedXftColor(Display *display, Pixel color);
 #endif
 
 /********    End Static Function Declarations    ********/
-
+
 /* Resource List. */
 
 /************************************************************************/
@@ -308,7 +308,7 @@ static XtResource _XmRenditionResources[] = {
     XmRImmediate, (XtPointer) DEFAULT_backgroundState
   },
 };
-  
+  
 static XmConst Cardinal _XmNumRenditionResources = 
 	XtNumber(_XmRenditionResources);
 
@@ -600,7 +600,7 @@ GetResources(XmRendition rend,
 #endif
   return(got_one);
 }
-
+
 /* Sets all resources to defaults from resource list. */
 static void
 SetDefault(XmRendition rend)
@@ -652,7 +652,7 @@ SetDefault(XmRendition rend)
   _XmRendFontWeight(rend) = 0;
 #endif
 }
-
+
 /* Extern function to pick out display from rendertable. */
 Display *
 _XmRenderTableDisplay(XmRenderTable table)

@@ -3904,7 +3904,7 @@ _XmTextSetPreeditPosition(Widget w,
   return cursorPos;
 }
 
-
+
 /****************************************************************
  *
  * Public definitions.

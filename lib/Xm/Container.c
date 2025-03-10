@@ -2347,7 +2347,7 @@ SetValues(
     ncw->container.self = False;
     return(need_expose);
 }
-    
+    
 
 /*
  * XmRCallProc routine for checking font before setting it to NULL
@@ -2373,7 +2373,7 @@ CheckSetRenderTable(Widget wid,
   }
 }
 
-
+
 /*
  * XmRCallProc routine to determine the correct default collapsed
  * pixmap for this layout direction.
@@ -2399,7 +2399,7 @@ DefaultCollapsedPixmap(Widget wid,
   value->size = sizeof(result);
   value->addr = (char *) &result;
 }
-
+
 /************************************************************************
  *
  *  QueryGeometry (Core Method)
@@ -9332,7 +9332,7 @@ DropDoneCallback(
 	cw->container.drag_context = (Widget) NULL;
 }
 
-
+
 /************************************************************************
  *									*
  * EnterHandler - If there is a drag timeout, remove it.		*
@@ -9356,7 +9356,7 @@ EnterHandler(
     }
 }
 
-
+
 /************************************************************************
  *									*
  * LeaveHandler - If the user leaves in Marquee Select mode set up a    *

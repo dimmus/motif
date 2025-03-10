@@ -48,7 +48,7 @@ static void new_line(_XmString string) ;
 
 /********    End Static Function Declarations    ********/
 
-
+
 XmStringComponentType
 XmStringPeekNextTriple(XmStringContext context)
 {
@@ -177,7 +177,7 @@ XmStringHasSubstring(
   _XmProcessUnlock();
   return (FALSE);
 }
-
+
 XmStringTable
 XmStringTableParseStringArray(XtPointer   *strings,
 			      Cardinal     count,
@@ -259,7 +259,7 @@ XmStringTableToXmString(XmStringTable  table,
   _XmProcessUnlock();
   return(str);
 }
-
+
 XmString
 XmStringPutRendition(XmString string,
 		     XmStringTag rendition)
@@ -277,7 +277,7 @@ XmStringPutRendition(XmString string,
   
   return(str);
 }
-
+
 void 
 XmParseMappingGetValues(XmParseMapping mapping,
 			ArgList        arg_list,
@@ -319,7 +319,7 @@ XmParseMappingGetValues(XmParseMapping mapping,
     }
   _XmProcessUnlock();
 }
-
+
 void 
 XmParseMappingFree(XmParseMapping mapping)
 {
@@ -334,7 +334,7 @@ XmParseMappingFree(XmParseMapping mapping)
     }
   _XmProcessUnlock();
 }
-
+
 void 
 XmParseTableFree(XmParseTable parse_table,
 		 Cardinal     parse_count)
@@ -350,7 +350,7 @@ XmParseTableFree(XmParseTable parse_table,
   XtFree((char*) parse_table);
   _XmProcessUnlock();
 }
-
+
 /*
  * XmeGetNextCharacter: An XmParseProc to consume the triggering
  *	character and insert the following character.
@@ -432,7 +432,7 @@ XmeGetNextCharacter(XtPointer     *in_out,
   _XmProcessUnlock();
   return XmINSERT;
 }
-
+
 static void 
 new_line(
         _XmString string )
@@ -588,7 +588,7 @@ MakeStr(XmStringContext start,
     
   return(str);
 }
-
+
 Cardinal
 XmStringToXmStringTable(XmString string, 
 			XmString break_component,
@@ -672,7 +672,7 @@ XmStringToXmStringTable(XmString string,
   _XmProcessUnlock();
   return(count);
 }
-
+
 
 
 XmTabList
@@ -910,4 +910,4 @@ _XmStringGetNextTabWidth(XmStringContext ctx,
       return(XmTAB_EOS);
     }
 }
-
+

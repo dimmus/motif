@@ -78,7 +78,7 @@ extern String _XmOSInitPath(
 extern char    *getenv ();
 #endif
 
-
+
 /******************************<->*************************************
  *
  *  MakeClientIconPixmap (pCD, iconBitmap, iconMask)
@@ -144,7 +144,7 @@ Pixmap MakeClientIconPixmap (
 } /* END OF FUNCTION MakeClientIconPixmap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetNamedPixmap (pCD, iconName)
@@ -209,7 +209,7 @@ Pixmap GetNamedPixmap (Screen *scr, String iconName,
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeNamedIconPixmap (pCD, iconName)
@@ -280,7 +280,7 @@ Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
 } /* END OF FUNCTION MakeNamedIconPixmap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeIconPixmap (pCD, bitmap, mask, width, height, depth)
@@ -603,7 +603,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 } /* END OF FUNCTION MakeIconPixmap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Pixmap
@@ -730,7 +730,7 @@ Pixmap MakeCachedLabelPixmap (WmScreenData *pSD, Widget menuW, int bitmapIndex)
 } /* END OF FUNCTION MakeCachedLabelPixmap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  int
@@ -880,7 +880,7 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
 } /* END OF FUNCTION GetBitmapIndex */
 
 
-
+
 /*************************************<->*************************************
  *
  *  BitmapPathName (string)

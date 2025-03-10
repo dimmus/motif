@@ -105,7 +105,7 @@ int curXids = 0;
 #endif /* NO_WMQUERY */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetupWmICCC ()
@@ -308,7 +308,7 @@ void SetupWmICCC (void)
 } /* END OF FUNCTION SetupWmICCC */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SendConfigureNotify (pCD)
@@ -390,7 +390,7 @@ void SendConfigureNotify (ClientData *pCD)
 } /* END OF FUNCTION SendConfigureNotify */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SendClientOffsetMessage (pCD)
@@ -504,7 +504,7 @@ void SendClientOffsetMessage (ClientData *pCD)
 
 } /* END OF FUNCTION SendClientOffsetMessage */
 
-
+
 /*************************************<->*************************************
  *
  *  SendClientMsg (window, type, data0, time, pData, dataLen)
@@ -571,7 +571,7 @@ void SendClientMsg (Window window, long type, long data0, Time time, long *pData
 } /* END OF FUNCTION SendClientMsg */
 
 
-
+
 /*************************************<->*************************************
  *
  *  AddWmTimer (timerType, timerInterval, pCD)
@@ -618,7 +618,7 @@ Boolean AddWmTimer (unsigned int timerType, unsigned long timerInterval, ClientD
 } /* END OF FUNCTION AddWmTimer */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DeleteClientWmTimers (pCD)
@@ -675,7 +675,7 @@ void DeleteClientWmTimers (ClientData *pCD)
 } /* END OF FUNCTION DeleteClientWmTimers */
 
 
-
+
 /*************************************<->*************************************
  *
  *  TimeoutProc (client_data, id)
@@ -774,7 +774,7 @@ void TimeoutProc (caddr_t client_data, XtIntervalId *id)
 
 
 #ifndef NO_WMQUERY 
-
+
 /*************************************<->*************************************
  *
  *  Boolean wmq_convert (w, pSelection, pTarget, pType_return, 
@@ -851,7 +851,7 @@ wmq_convert (
     return (wm_query_found);
 } /* END OF FUNCTION wmq_convert */
 
-
+
 /*************************************<->*************************************
  *
  *  Boolean wmq_convert_all_clients (w, screen, pType_return, 
@@ -937,7 +937,7 @@ wmq_convert_all_clients (
 
 } /* END OF FUNCTION wmq_convert_all_clients */
 
-
+
 /*************************************<->*************************************
  *
  *  void wmq_list_subtree (pCD)
@@ -989,7 +989,7 @@ wmq_list_subtree (
 } /* END OF FUNCTION wmq_list_subtree */
 
 
-
+
 /*************************************<->*************************************
  *
  *  void wmq_add_xid (win)
@@ -1028,7 +1028,7 @@ wmq_add_xid (
 } /* END OF FUNCTION wmq_add_xid */
 
 
-
+
 /*************************************<->*************************************
  *
  *  void wmq_lose (w, pSelection)
@@ -1061,7 +1061,7 @@ wmq_lose (
 } /* END OF FUNCTION wmq_lose */
 
 
-
+
 /*************************************<->*************************************
  *
  *  void wmq_done (w, pSelection, pTarget)
@@ -1095,7 +1095,7 @@ wmq_done (
 } /* END OF FUNCTION wmq_done */
 
 
-
+
 /*************************************<->*************************************
  *
  *  static void wmq_bump_xids ()
@@ -1154,7 +1154,7 @@ wmq_bump_xids ( void )
 #endif /* NO_WMQUERY */
 
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -1236,7 +1236,7 @@ OwnWMSelections ( Time timestamp )
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  Boolean WMiConvert ( )
@@ -1460,7 +1460,7 @@ WMiConvert (
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  void WMiConvertCB ( )

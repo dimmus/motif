@@ -142,7 +142,7 @@ static String urm_codes_invalidcode = "Invalid URM code" ;
 
 
 
-
+
 /*
  *++
  *
@@ -217,7 +217,7 @@ Urm__UT_Error (char			*module,
 }
 
 
-
+
 /*
  *++
  *
@@ -266,7 +266,7 @@ Urm__UT_SetErrorReport (MrmCode report_type)
 }
 
 
-
+
 /*
  *++
  *
@@ -296,7 +296,7 @@ Urm__UT_LatestErrorCode (void)
 }
 
 
-
+
 /*
  *++
  *
@@ -327,7 +327,7 @@ Urm__UT_LatestErrorMessage (void)
 }
 
 
-
+
 /*
  *++
  *

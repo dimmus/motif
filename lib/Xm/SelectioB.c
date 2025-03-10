@@ -92,7 +92,7 @@ static char rcsid[] = "$TOG: SelectioB.c /main/19 1997/06/18 17:42:11 samborn $"
     }
 
 
-
+
 /********    Static Function Declarations    ********/
 
 static void ClassInitialize( void ) ;
@@ -140,7 +140,7 @@ static Boolean SetValues(
 
 /********    End Static Function Declarations    ********/
 
-
+
 static XtAccelerators defaultTextAcceleratorsParsed;
 
 /*  Action list  */
@@ -152,7 +152,7 @@ static XtActionsRec actionsList[] =
     { "SelectionBoxRestore",    _XmSelectionBoxRestore },
     };
 
-
+
 /*  Resource definitions for SelectionBox
 */
 
@@ -237,7 +237,7 @@ static XmSyntheticResource syn_resources[] =
 };
 
 
-
+
 static XtResource resources[] = 
 {
 	{	XmNtextAccelerators, 
@@ -362,7 +362,7 @@ static XtResource resources[] =
 };
 
 
-
+
 externaldef( xmselectionboxclassrec) XmSelectionBoxClassRec
                                                        xmSelectionBoxClassRec =
 {
@@ -447,7 +447,7 @@ externaldef( xmselectionboxclassrec) XmSelectionBoxClassRec
 externaldef( xmselectionboxwidgetclass) WidgetClass xmSelectionBoxWidgetClass
                                       = (WidgetClass) &xmSelectionBoxClassRec ;
 
-
+
 /****************************************************************/
 static void 
 ClassInitialize( void )
@@ -479,7 +479,7 @@ ClassPartInitialize(
     return ;
 }
 
-
+
 /****************************************************************
  * Create a SelectionBox instance.
  ****************/
@@ -629,7 +629,7 @@ Initialize(
 	}
 
 }
-
+
 /****************************************************************
  * Selection widget supports ONE child.  This routine
  *   handles adding a child to selection widget
@@ -667,7 +667,7 @@ InsertChild(
         } 
     return ;
     }
-
+
 /****************************************************************
  * Remove child from selection widget
  ****************/
@@ -735,7 +735,7 @@ DeleteChild(
     (*delete_child)( child) ;
     return ;
     }
-
+
 /****************************************************************
  * Set the default type (selection or workarea) based on parent.
  ****************/
@@ -761,7 +761,7 @@ _XmDialogTypeDefault(
     value->addr = (XPointer)(&type);
     return ;
 }
-
+
 /*ARGSUSED*/
 static XmImportOperator
 _XmSetSyntheticResForChild(
@@ -771,7 +771,7 @@ _XmSetSyntheticResForChild(
 { 
     return XmSYNTHETIC_LOAD;
     }
-
+
 /****************************************************************
  * Create the Label displayed above the List widget.
  ****************/
@@ -809,7 +809,7 @@ _XmSelectionBoxCreateSelectionLabel(
 				      XmSelectionStringLoc) ;
 }
 
-
+
 /****************************************************************
  * Create the List widget.
  ****************/
@@ -873,7 +873,7 @@ _XmSelectionBoxCreateList(
 
     return ;
     }
-
+
 /****************************************************************
  * Create the Text widget.
  ****************/
@@ -913,7 +913,7 @@ _XmSelectionBoxCreateText(
 	sel->core.accelerators = temp_accelerators;
         return ;
 }
-
+
 /****************************************************************
  * Create the Separator displayed above the buttons.
  ****************/
@@ -946,7 +946,7 @@ _XmSelectionBoxCreateOkButton(
                         SelectionBoxCallback, (XtPointer) XmDIALOG_OK_BUTTON) ;
     return ;
     }
-
+
 /****************************************************************
  * Create the "Apply" PushButton.
  ****************/
@@ -1001,7 +1001,7 @@ _XmSelectionBoxCreateHelpButton(
                       SelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON) ;
     return ;
     }
-   
+   
 /****************************************************************/
 
 XmGeoMatrix 
@@ -1224,7 +1224,7 @@ _XmSelectionBoxNoGeoRequest(
         } 
     return( FALSE) ;
     }
-   
+   
 /****************************************************************
  * Call the callbacks for a SelectionBox button.
  ****************/
@@ -1289,7 +1289,7 @@ SelectionBoxCallback(
         XmStringFree( temp.value) ;
         return ;
 }
-   
+   
 /****************************************************************
  * Process callback from the List in a SelectionBox.
  ****************/
@@ -1396,7 +1396,7 @@ ListCallback(
 	 }
         return ;
         }
-
+
 
 /****************************************************************
  * Set the label string of a label or button
@@ -1423,7 +1423,7 @@ UpdateString(
 	}
         return ;
 }
-
+
 /****************************************************************
  * Update widget when values change.
  ****************/
@@ -1582,7 +1582,7 @@ SetValues(
 	    }
 	return (Boolean) (FALSE);
         }
-
+
 /****************************************************************/
 /*ARGSUSED*/
 void 
@@ -1851,7 +1851,7 @@ _XmSelectionBoxGetHelpLabelString(
         } 
     return ;
     }
-
+
 /****************************************************************/
 /*ARGSUSED*/
 void 
@@ -1952,7 +1952,7 @@ _XmSelectionBoxUpOrDown(
         } 
     return ;
     }
-
+
 /****************************************************************/
 /*ARGSUSED*/
 void 
@@ -1995,7 +1995,7 @@ _XmSelectionBoxRestore(
         } 
     return ;
     }
-
+
 /****************************************************************
  * This function returns the widget id of a SelectionBox child widget.
  ****************/
@@ -2066,7 +2066,7 @@ XmSelectionBoxGetChild(
 	_XmAppUnlock(app);
 	return (child);
 }
-
+
 /****************************************************************
  * This function creates and returns a SelectionBox widget.
  ****************/
@@ -2155,7 +2155,7 @@ XmCreateSelectionDialog(
 }
 
 
-
+
 /****************************************************************
  * This convenience function creates a DialogShell and a SelectionBox
  *   child of the shell; returns the SelectionBox widget.

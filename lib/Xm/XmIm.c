@@ -302,7 +302,7 @@ static XmImResListRec XmImResList[] = {
 #define BG_CHG  0x2
 
 #define MSG1	_XmMMsgXmIm_0000
-
+
 /*ARGSUSED*/
 void 
 XmImRegister(Widget w,
@@ -361,7 +361,7 @@ XmImRegister(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 void 
 XmImUnregister(Widget w)
 {
@@ -397,7 +397,7 @@ XmImUnregister(Widget w)
   }
   _XmAppUnlock(app);
 }
-
+
 void 
 XmImSetFocusValues(Widget w,
 		   ArgList args,
@@ -482,7 +482,7 @@ XmImSetFocusValues(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 void 
 XmImSetValues(Widget w,
 	      ArgList args,
@@ -493,7 +493,7 @@ XmImSetValues(Widget w,
   set_values(w, args, num_args, XmINHERIT_POLICY);
   _XmAppUnlock(app);
 }
-
+
 void 
 XmImUnsetFocus(Widget w)
 {
@@ -511,7 +511,7 @@ XmImUnsetFocus(Widget w)
   xic_info->has_focus = False;
   _XmAppUnlock(app);
 }
-
+
 XIM 
 XmImGetXIM(Widget w)
 {
@@ -529,7 +529,7 @@ XmImGetXIM(Widget w)
     return NULL;
   }
 }
-
+
 void
 XmImCloseXIM(Widget w)
 {
@@ -602,7 +602,7 @@ XmImCloseXIM(Widget w)
   XtFree((char *) xim_info);
   _XmAppUnlock(app);
 }
-
+
 int 
 XmImMbLookupString(Widget w,
 		   XKeyPressedEvent *event,
@@ -631,7 +631,7 @@ XmImMbLookupString(Widget w,
   _XmAppUnlock(app);
   return ret_val;
 }
-
+
 XIC
 XmImGetXIC(Widget 	 w,
 #if NeedWidePrototypes
@@ -708,7 +708,7 @@ XmImGetXIC(Widget 	 w,
   _XmAppUnlock(app);
   return NULL;
 }
-
+
 XIC
 XmImSetXIC(Widget widget, 
 	   XIC    xic)
@@ -778,7 +778,7 @@ XmImSetXIC(Widget widget,
   _XmAppUnlock(app);
   return xic;
 }
-
+
 void
 XmImFreeXIC(Widget w,
 	    XIC    context)
@@ -817,7 +817,7 @@ XmImFreeXIC(Widget w,
 		      xic_info->widget_refs.refs[index]);
   _XmAppUnlock(app);
 }
-
+
 /*********************
  * Private Functions *
  *********************/
@@ -871,7 +871,7 @@ _XmImFreeShellData(Widget     widget,
   XtFree((char *) im_info);
   *data = NULL;
 }
-
+
 void 
 _XmImChangeManaged(
 		   Widget vw )
@@ -901,7 +901,7 @@ _XmImChangeManaged(
     }
   }
 }
-
+
 void
 _XmImRealize(
 	     Widget vw )
@@ -957,7 +957,7 @@ _XmImRealize(
       XtVaSetValues(vw, XmNbackground, bg, NULL);
     }
 }
-
+
 void
 _XmImResize(
 	    Widget vw )
@@ -965,7 +965,7 @@ _XmImResize(
   ImGetGeo(vw, NULL);
   ImSetGeo(vw, NULL);
 }
-
+
 void
 _XmImRedisplay(
 	       Widget vw )
@@ -983,7 +983,7 @@ _XmImRedisplay(
   
   draw_separator(vw);
 }
-
+
 /********************
  * Static functions *
  ********************/
@@ -1044,7 +1044,7 @@ recreate_xic_info(XIC		  xic,
   
   return xic_info;
 }
-
+
 /* Attempt to create an XmImXICInfo struct.  Return it or NULL. */
 static XmImXICInfo
 create_xic_info(Widget		shell,
@@ -1150,7 +1150,7 @@ create_xic_info(Widget		shell,
   
   return xic_info;
 }
-
+
 
 #define IsCallback(name) \
   if (name == XrmStringToName(XmNpreeditStartCallback) || \
@@ -1158,7 +1158,7 @@ create_xic_info(Widget		shell,
       name == XrmStringToName(XmNpreeditDrawCallback) || \
       name == XrmStringToName(XmNpreeditCaretCallback))
 
-
+
 static void 
 set_values(Widget w,
 	   ArgList args,
@@ -1880,7 +1880,7 @@ move_preedit_string(XmImXICInfo icp,
 }   
 
 
-
+
 /*ARGSUSED*/
 static int 
 add_sp(String name,
@@ -1940,7 +1940,7 @@ add_bgpxmp(String name,
   
   return add_sp( name, value, slp, plp, vlp );
 }
-
+
 static XIMStyle 
 check_style(XIMStyles *styles,
 	    XIMStyle preedit_style,
@@ -1957,7 +1957,7 @@ check_style(XIMStyles *styles,
     }
   return 0;
 }
-
+
 
 /* if this_icp is non-null, operations will only be performed on the
    corresponding IC. (Basically disables looping) */
@@ -2041,7 +2041,7 @@ ImGetGeo(Widget  vw,
     ve->vendor.im_height = height;
   return height;
 }
-
+
 
 /* if this_icp is non-null, operations will only be performed on the
    corresponding IC. (Basically disables looping) */
@@ -2135,7 +2135,7 @@ ImSetGeo(Widget  vw,
   XFree(va_slist);
   XFree(va_plist);
 }
-
+
 static void 
 ImGeoReq(Widget vw )
 {
@@ -2172,7 +2172,7 @@ ImGeoReq(Widget vw )
     }
   ImSetGeo(vw, NULL);
 }
-
+
 static XFontSet 
 extract_fontset(
 		XmFontList fl )
@@ -2211,7 +2211,7 @@ extract_fontset(
   XmFontListFreeFontContext(context);
   return first_fs;
 }
-
+
 /* Fetch (creating if necessary) the Display's xmim_info. */
 static XmImDisplayInfo
 get_xim_info(Widget  widget)
@@ -2300,7 +2300,7 @@ get_xim_info(Widget  widget)
   
   return xim_info;
 }
-
+
 static XtPointer*
 get_im_info_ptr(Widget  w,
 		Boolean create)
@@ -2339,7 +2339,7 @@ get_im_info_ptr(Widget  w,
   
   return &ve->vendor.im_info;
 }
-
+
 static XmImShellInfo
 get_im_info(Widget w,
 	    Boolean create)
@@ -2350,7 +2350,7 @@ get_im_info(Widget w,
   else
     return NULL;
 }
-
+
 static void 
 draw_separator(Widget vw )
 {
@@ -2478,7 +2478,7 @@ ImCreateArgList(va_list var,
   
   return args;
 }
-
+
 /* Return the current xic info for a widget, or NULL. */
 static XmImXICInfo
 get_current_xic(XmImDisplayInfo xim_info, 
@@ -2496,7 +2496,7 @@ get_current_xic(XmImDisplayInfo xim_info,
   else
     return xic_info;
 }
-
+
 /* Set the current XIC for an unregistered widget. */
 static void 
 set_current_xic(XmImXICInfo 	xic_info,
@@ -2515,7 +2515,7 @@ set_current_xic(XmImXICInfo 	xic_info,
   (void) XSaveContext(XtDisplay(widget), (XID) widget, 
 		      xim_info->current_xics, (XPointer) xic_info);
 }
-
+
 /* Unset the current XIC for a widget, freeing data as necesary. */
 static void 
 unset_current_xic(XmImXICInfo	  xic_info,
@@ -2558,7 +2558,7 @@ unset_current_xic(XmImXICInfo	  xic_info,
       XtFree((char *) xic_info);
     }
 }
-
+
 /* Add a widget to a list of references. */
 static Cardinal
 add_ref(XmImRefInfo refs,
@@ -2593,7 +2593,7 @@ add_ref(XmImRefInfo refs,
   
   return refs->num_refs;
 }
-
+
 /* Remove a widget from a list of references. */
 static Cardinal
 remove_ref(XmImRefInfo refs,
@@ -2643,7 +2643,7 @@ remove_ref(XmImRefInfo refs,
   
   return refs->num_refs;
 }
-
+
 /* Convert a VaArgList into a true XVaNestedList. */
 static XVaNestedList
 VaCopy(VaArgList list)
@@ -2675,7 +2675,7 @@ VaCopy(VaArgList list)
 #undef VA_NAME
 #undef VA_VALUE
 }
-
+
 static void
 VaSetArg(VaArgList list, 
 	 char     *name, 

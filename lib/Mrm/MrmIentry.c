@@ -70,7 +70,7 @@ static char rcsid[] = "$XConsortium: MrmIentry.c /main/13 1996/11/13 13:56:11 dr
  */
 
 
-
+
 /*
  *++
  *
@@ -222,7 +222,7 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -475,7 +475,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *

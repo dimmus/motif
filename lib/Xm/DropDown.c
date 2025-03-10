@@ -1971,7 +1971,7 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
     XtAddCallback(XmDropDown_arrow(cbw), XmNarmCallback, CheckUnpost, (XtPointer) w);
 #endif
 }
-
+
 /*
  * To deal with the problem, SBBtnDownEH will do an XtGrabPointer
  * to transfer the grab to the scrollbar and SBBtnUpEH will cause
@@ -1991,7 +1991,7 @@ SBBtnDownEH(Widget    w,
 		GrabModeAsync, GrabModeAsync,
 		None, shell->grab_shell.cursor, event->xbutton.time);
 }
-
+
 /*ARGSUSED*/
 static void
 SBBtnUpEH(Widget    w,		/* unused */
@@ -2011,7 +2011,7 @@ SBBtnUpEH(Widget    w,		/* unused */
   if (shell->grab_shell.grab_style == GrabModeSync)
     XAllowEvents(XtDisplay(shell), SyncPointer, event->xbutton.time);
 }
-
+
 
 /*	Function Name: CreatePopup
  *	Description:   Create the popup shell that contains the list.

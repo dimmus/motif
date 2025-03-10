@@ -42,7 +42,7 @@ static	void			ClassPartInitialize(
 static Widget GetContainerParent(Widget);
 
 /********    End Static Function Declarations    ********/
-
+
 static	XtResource		resources[] = 
 	{
 		{
@@ -66,7 +66,7 @@ static XmGadgetClassExtRec GadClassExtRec = {
     XmInheritMarginsProc,                   /* widget_margins */
 };
 
-
+
 externaldef( xmiconheaderclassrec) XmIconHeaderClassRec	xmIconHeaderClassRec =
 {	/* RectObjClassPart */
 	{	
@@ -129,7 +129,7 @@ externaldef( xmiconheaderclassrec) XmIconHeaderClassRec	xmIconHeaderClassRec =
 
 externaldef(xmiconheaderclass) WidgetClass
 	xmIconHeaderClass=(WidgetClass)&xmIconHeaderClassRec;
-
+
 
 
 

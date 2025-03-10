@@ -68,7 +68,7 @@ static char rcsid[] = "$XConsortium: Mrmlwrite.c /main/11 1996/11/13 14:02:48 dr
  */
 
 
-
+
 /*
  *++
  *
@@ -134,7 +134,7 @@ UrmPutIndexedLiteral (IDBFile			file_id ,
 }
 
 
-
+
 /*
  *++
  *

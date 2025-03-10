@@ -101,7 +101,7 @@ typedef struct
         Dimension   delta_width ;
         } FS_GeoExtensionRec, *FS_GeoExtension ;
 
-
+
 /********    Static Function Declarations    ********/
 
 static void ClassPartInitialize( 
@@ -264,7 +264,7 @@ static XtActionsRec ActionsTable[] =
     { "SelectionBoxRestore", FileSelectionBoxRestore },
     };
  
-
+
 /*---------------------------------------------------*/
 /* widget resources                                  */
 /*---------------------------------------------------*/
@@ -478,7 +478,7 @@ static XtResource resources[] =
         (XtPointer) NULL
     },
 };
-
+
 static XmSyntheticResource syn_resources[] =
 {
   {	XmNdirectory,
@@ -559,7 +559,7 @@ static XmSyntheticResource syn_resources[] =
 	(XmImportProc)NULL
   },  
 };
- 
+ 
 externaldef( xmfileselectionboxclassrec) XmFileSelectionBoxClassRec
                                                    xmFileSelectionBoxClassRec =
 {
@@ -640,7 +640,7 @@ externaldef( xmfileselectionboxclassrec) XmFileSelectionBoxClassRec
 externaldef( xmfileselectionboxwidgetclass) WidgetClass
      xmFileSelectionBoxWidgetClass = (WidgetClass)&xmFileSelectionBoxClassRec ;
 
-
+
 /****************************************************************
  * Class Initialization.  Sets up accelerators and fast subclassing.
  ****************/
@@ -882,7 +882,7 @@ Initialize(
         } 
     return ;
     }
-
+
 /****************************************************************/
 static void 
 Destroy(
@@ -896,7 +896,7 @@ Destroy(
 
     return ;
     }
-
+
 /****************************************************************
  * This procedure is called to remove the child from
  *   the child list, and to allow the parent to do any
@@ -941,7 +941,7 @@ DeleteChild(
     (*delete_child)( w) ;
     return ;
     }
-
+
 static XtGeometryResult 
 GeometryManager(
         Widget w,
@@ -976,7 +976,7 @@ ChangeManaged(
   UpdateHorizPos( wid) ;
 }
 
-
+
 /****************************************************************/
 static void 
 FSBCreateFilterLabel(
@@ -1009,7 +1009,7 @@ FSBCreateDirListLabel(
 					       XmDirListStringLoc) ;
     return ;
     }
-
+
 /****************************************************************
  * Create the directory List widget.
  ****************/
@@ -1048,7 +1048,7 @@ FSBCreateDirList(
 
     return ;
     }
-
+
 /****************************************************************
  * Creates fs dir search filter text entry field.
  ****************/
@@ -1091,7 +1091,7 @@ FSBCreateFilterText(
     XtFree( stext_value) ;
     return ;
     }
-
+
 
 static void 
 FSBCreateDirText(
@@ -1504,7 +1504,7 @@ FileSelectionBoxNoGeoRequest(
         } 
     return( FALSE) ;
     }
-
+
 /****************************************************************
  * This routine saves the geometry pointers of the list labels so that they
  *   can be altered as appropriate by the ListFix routine.
@@ -1534,7 +1534,7 @@ ListLabelFix(
 
     return ;
     }
-
+
 /****************************************************************
  * Geometry layout fixup routine for the directory and file lists.  This
  *   routine reduces the preferred width of the file list widget according 
@@ -1807,7 +1807,7 @@ UpdateHorizPos(
   return ;
 } 
 
-
+
 /****************************************************************/
 static void 
 FileSearchProc(
@@ -1896,7 +1896,7 @@ FileSearchProc(
     return ;
     }
 
-
+
 /****************************************************************
  * This routine validates and allocates new copies of all searchData
  *   fields that are required by the DirSearchProc and the FileSearchProc
@@ -2085,7 +2085,7 @@ QualifySearchDataProc(
     XtFree( maskString) ;
     return ;
     }
-
+
 /****************************************************************/
 static void 
 FileSelectionBoxUpdate(
@@ -2364,7 +2364,7 @@ DirSearchProc(
     FS_DirectoryValid( fs) = TRUE ;
     return ;
     }
-   
+   
 /****************************************************************
  * Process callback from either List of the File Selection Box.
  ****************/
@@ -2528,7 +2528,7 @@ ListCallback(
         }
     return ;
     }
-
+
 /****************************************************************
  * This routine detects differences in two versions
  *   of a widget, when a difference is found the
@@ -2714,7 +2714,7 @@ SetValues(
         }
     return( FALSE) ;
     }
-
+
 /****************************************************************/
 /*ARGSUSED*/
 static void
@@ -2954,7 +2954,7 @@ FSBGetDirMask(
 
     return ;
     }
-
+
 /****************************************************************/
 static Widget 
 GetActiveText(
@@ -2997,7 +2997,7 @@ GetActiveText(
     return( activeChild) ;
 }
 
-
+
 /****************************************************************/
 /*ARGSUSED*/
 static void 
@@ -3257,7 +3257,7 @@ FileSelectionBoxFocusMoved(
         } 
     return ;
     }
-
+
 /****************************************************************
  * This is the procedure which does all of the button
  *   callback magic.
@@ -3392,7 +3392,7 @@ FileSelectionPB(
         } 
     return ;
     }
-
+
 /****************************************************************
  * This function returns the widget id of the
  *   specified SelectionBox child widget.
@@ -3438,7 +3438,7 @@ XmFileSelectionBoxGetChild(
     _XmAppUnlock(app);
     return( child) ;
     }
-
+
 /****************************************************************/
 void 
 XmFileSelectionDoSearch(
@@ -3502,7 +3502,7 @@ XmFileSelectionDoSearch(
     _XmAppUnlock(app);
     return ;
     }
-
+
 /****************************************************************/
 Widget 
 XmCreateFileSelectionBox(

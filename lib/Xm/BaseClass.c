@@ -496,7 +496,7 @@ static void GetValuesLeafWrapper9(
 
 /********    End Static Function Declarations    ********/
  
-
+
 XmGenericClassExt * 
 _XmGetClassExtensionPtr(
         XmGenericClassExt *listHeadPtr,
@@ -517,7 +517,7 @@ _XmGetClassExtensionPtr(
   
   return lclPtr;
 }
-
+
 static XmWrapperData 
 GetWrapperData(
         WidgetClass w_class )
@@ -544,7 +544,7 @@ GetWrapperData(
 
   return (*wcePtr)->wrapperData;
 }
-
+
 
 typedef struct _ExtToContextRec {
     unsigned char	extType;
@@ -580,7 +580,7 @@ ExtTypeToContext(
 
   return context;
 }
-	 
+	 
 typedef struct _XmAssocDataRec {
     XtPointer			data;
     struct _XmAssocDataRec	*next;
@@ -619,7 +619,7 @@ _XmPushWidgetExtData(
     XSaveContext(XtDisplay(widget), (Window) widget,
 		 widgetExtContext, (XPointer) assocData);
 }
-
+
 void
 _XmPopWidgetExtData(
         Widget widget,
@@ -662,7 +662,7 @@ _XmPopWidgetExtData(
       *assocDataPtr = NULL;
     }
 }
-
+
 XmWidgetExtData 
 _XmGetWidgetExtData(
         Widget widget,
@@ -697,7 +697,7 @@ _XmGetWidgetExtData(
     }
 }
  
-
+
 Boolean
 _XmIsSubclassOf(
 	WidgetClass wc,
@@ -710,7 +710,7 @@ _XmIsSubclassOf(
 
   return (p == sc);
 }
-
+
 /*********************************************************************
  *
  *  RealizeWrappers for vendorShell
@@ -830,7 +830,7 @@ static XtRealizeProc realizeWrappers[] = {
     RealizeWrapper9,
     RealizeWrapper10
 };
-
+
 static Cardinal 
 GetRealizeDepth(
         WidgetClass wc )
@@ -853,7 +853,7 @@ GetRealizeDepth(
 
   return 0;
 }
-
+
 /************************************************************************
  *
  *  RealizeWrapper
@@ -926,7 +926,7 @@ RealizeWrapper(
 #endif /* DEBUG */
     }
 }
-
+
 /*********************************************************************
  *
  *  ResizeWrappers for rectObj
@@ -1048,7 +1048,7 @@ static XtWidgetProc resizeWrappers[] = {
     ResizeWrapper12,
     ResizeWrapper13
 };
-
+
 static Cardinal 
 GetResizeDepth(
         WidgetClass wc )
@@ -1067,7 +1067,7 @@ GetResizeDepth(
 
   return 0;
 }
-
+
 /************************************************************************
  *
  *  ResizeWrapper
@@ -1130,7 +1130,7 @@ ResizeWrapper(
   if (call_navig_resize)
     _XmNavigResize( w);
 }
-
+
 /*********************************************************************
  *
  *  GeometryHandlerWrappers for composite
@@ -1270,7 +1270,7 @@ static XtGeometryHandler geometryHandlerWrappers[] = {
     GeometryHandlerWrapper11,
     GeometryHandlerWrapper12
 };
-
+
 static Cardinal 
 GetGeometryHandlerDepth(
         WidgetClass wc )
@@ -1289,7 +1289,7 @@ GetGeometryHandlerDepth(
 
   return 0;
 }
-
+
 /************************************************************************
  *
  *  GeometryHandlerWrapper
@@ -1342,7 +1342,7 @@ GeometryHandlerWrapper(
   
   return result;
 }
-
+
 /************************************************************************
  *
  *  BaseClassPartInitialize
@@ -1541,7 +1541,7 @@ BaseClassPartInitialize(
   
   return wcePtr;
 }
-
+
 /*
  * This function replaces the objectClass classPartInit slot and is
  * called at the start of the first XtCreate invocation.
@@ -1582,7 +1582,7 @@ ClassPartInitRootWrapper(
   if (objectClassWrapper.classPartInit)
     (* objectClassWrapper.classPartInit) (wc);
 }
-
+
 static void 
 ClassPartInitLeafWrapper(
         WidgetClass wc )
@@ -1612,7 +1612,7 @@ ClassPartInitLeafWrapper(
       wrapperData->classPartInitLeaf = NULL;
     }
 }
-
+
 static Boolean 
 is_constraint_subclass(WidgetClass cls)
 {
@@ -1624,7 +1624,7 @@ is_constraint_subclass(WidgetClass cls)
 
   return False;
 }
-
+
 
 void 
 _XmInitializeExtensions( void )
@@ -1656,7 +1656,7 @@ _XmInitializeExtensions( void )
     resizeRefWContext = XUniqueContext();
     geoRefWContext = XUniqueContext();
 }
-
+
 
 Cardinal 
 _XmSecondaryResourceData(
@@ -1696,7 +1696,7 @@ _XmSecondaryResourceData(
   
   return count;
 }
-
+
 /*
  * This function makes assumptions about what the Intrinsics is
  * doing with the resource lists.  It is based on the X11R5 version
@@ -1717,7 +1717,7 @@ CreateIndirectionTable(XtResourceList resources,
 
   return table;
 }
-
+
 /*
  * The statement in this function calls CreateIndirectionTable() which
  * is scheduled for removal (see comment in function above).
@@ -2682,7 +2682,7 @@ GetDepth(WidgetClass wc)
 	else
 		return 0;
 }
-
+
 /*
  * These symbols must always be present so applications compiling with
  * -DXTHREADS can still link against libraries built without it.  How

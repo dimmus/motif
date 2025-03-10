@@ -120,7 +120,7 @@ static UidCompressionTable     	*extern_arg_compr;
 static UidCompressionTable      *extern_class_compr;
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -464,7 +464,7 @@ void	sem_output_uid_file()
 	issue_urm_error( "freeing context" );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -533,7 +533,7 @@ sym_entry_type	*sym_entry;
     out_l_next_offset++;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -591,7 +591,7 @@ sym_entry_type	*pop()
     return out_az_queue->entry[out_l_next_offset];
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -929,7 +929,7 @@ if( urm_status != MrmSUCCESS)
     }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -999,7 +999,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1075,7 +1075,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1144,7 +1144,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1217,7 +1217,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1286,7 +1286,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2006,7 +2006,7 @@ sym_value_entry_type	*value_entry;
     
     }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2175,7 +2175,7 @@ emit_callback_procedures
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2237,7 +2237,7 @@ int			count;
 	return (count);
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2361,7 +2361,7 @@ void	emit_callback_procedures
 	    }
         }
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2526,7 +2526,7 @@ if( urm_status != MrmSUCCESS)
     issue_urm_error ("setting arg value");
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2617,7 +2617,7 @@ int			control_offset;
 	issue_urm_error( "setting child" );
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2783,7 +2783,7 @@ MrmCode			*arg_group;
     return URMrIndex;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2905,7 +2905,7 @@ MrmResource_id		*id;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2948,7 +2948,7 @@ char	*problem;
 
     diag_issue_internal_error( buffer );
 }
-
+
 /*
  *++
  *
@@ -3028,7 +3028,7 @@ int	uil_type;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3133,7 +3133,7 @@ sym_value_entry_type	*table_entry;
     return size;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3251,7 +3251,7 @@ char			*buffer;
     }
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3368,7 +3368,7 @@ sym_value_entry_type	*icon_entry;
     return size;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3529,7 +3529,7 @@ char			*buffer;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3591,7 +3591,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 return count;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3700,7 +3700,7 @@ int	compression_code = 2;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -3935,7 +3935,7 @@ status	urm_status;
 	    issue_urm_error("emitting literal");
 	}
 
-
+
     /*
     ** Create compression code tables for classes
     **

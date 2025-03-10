@@ -69,7 +69,7 @@ char resource_name[];
 
 } /* End mvsGetLocalResource() */
 
-
+
 /************************************************************************
         mvsGetParentResource()	Date:1/22/91
   	Author: PSN

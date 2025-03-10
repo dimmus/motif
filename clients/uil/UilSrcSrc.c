@@ -118,7 +118,7 @@ externaldef(uil_comp_glbl) int
 
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -189,7 +189,7 @@ src_initialize_source(void)
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -297,7 +297,7 @@ Uil_src_cleanup_source(void)
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -420,7 +420,7 @@ src_open_file (XmConst char *c_file_name,
 
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -560,10 +560,10 @@ src_get_source_line(void)
 	return(src_k_read_error);
 }
 
-
 
 
-
+
+
 
 
 /*
@@ -730,7 +730,7 @@ open_label:
     return src_k_open_normal;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -777,7 +777,7 @@ close_source_file( uil_fcb_type *az_fcb )
     else
 	return src_k_close_error;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -887,7 +887,7 @@ get_line( uil_fcb_type *az_fcb )
 
     return src_k_read_error;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -963,7 +963,7 @@ reget_line( uil_fcb_type  *az_fcb,
     return FALSE;
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1007,7 +1007,7 @@ char
 
     return fcb->expanded_name;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1095,7 +1095,7 @@ boolean	src_retrieve_source
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1182,7 +1182,7 @@ src_append_diag_info( XmConst src_source_record_type *az_src_rec,
     
     return;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

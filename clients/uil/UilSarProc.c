@@ -81,7 +81,7 @@ static char rcsid[] = "$XConsortium: UilSarProc.c /main/12 1995/07/14 09:37:43 d
 **
 **/
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -242,7 +242,7 @@ sar_create_procedure(XmConst yystype *id_frame,
     section_entry->entries = (sym_entry_type *) proc_def_entry;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -352,7 +352,7 @@ sym_proc_ref_entry_type
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

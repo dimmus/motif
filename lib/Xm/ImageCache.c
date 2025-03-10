@@ -135,7 +135,7 @@ typedef struct _GCData
 } GCData;
 
 static XmHashTable gc_set = NULL;
-
+
 
 typedef struct _CleanKey {
     Screen * screen ;
@@ -192,7 +192,7 @@ static int FreeCacheColors(Display *display, Colormap colormap,
 
 
 
-
+
 /*** IMAGE CACHE PART FIRST ***/
 
 
@@ -219,7 +219,7 @@ HashString (XmHashKey key)
 
   return (((len << 8) | data[0]) << 8) | data[len];
 }
-
+
 /************************************************************************
  *
  *  InitializeImageSet
@@ -255,7 +255,7 @@ InitializeImageSet( void )
     }
   _XmProcessUnlock();
 }
-
+
 /************************************************************************
  *
  *  _XmInstallImage 
@@ -306,7 +306,7 @@ _XmInstallImage(
    _XmProcessUnlock();
    return (True);
 }
-
+
 /************************************************************************
  *
  *  XmInstallImage
@@ -355,7 +355,7 @@ UninstallImageMapProc (XmHashKey key, /* unused */
 
   return False;
 }
-
+
 /************************************************************************
  *
  *  XmUninstallImage
@@ -387,7 +387,7 @@ XmUninstallImage(
 
    return ret_val;
 }
-
+
 
 
 /************************************************************************
@@ -971,7 +971,7 @@ GetImage(
 
     return return_value;
 } 
-
+
 /*** Keep this one in here, this is the only entry point to
      the Image cache. It can be used to duplicate them, etc */
 Boolean
@@ -1038,7 +1038,7 @@ ComparePixmaps (XmHashKey key_1,
 	(data_1->screen == data_2->screen &&
 	 data_1->pixmap == data_2->pixmap) ;
 }
-
+
 static Boolean
 ComparePixmapDatas (XmHashKey key_1, 
 		    XmHashKey key_2)
@@ -1098,7 +1098,7 @@ ComparePixmapDatas (XmHashKey key_1,
 	  (data_1->acc_color->highlight_color == XmUNSPECIFIED_PIXEL) ||
 	  (data_2->acc_color->highlight_color == XmUNSPECIFIED_PIXEL))) ;
 }
-
+
 /* Hash a Pixmap entry. */
 static XmHashValue 
 HashPixmap (XmHashKey key)
@@ -1107,7 +1107,7 @@ HashPixmap (XmHashKey key)
 
   return ((long)data->screen + data->pixmap);
 }
-
+
 /* Hash a PixmapData entry. Reuse the string hash function */
 static XmHashValue 
 HashPixmapData (XmHashKey key)
@@ -1116,7 +1116,7 @@ HashPixmapData (XmHashKey key)
 
   return ((long)data->screen + HashString ((XmHashKey)data->image_name));
 }
-
+
 /************************************************************************
  *
  *  InitializePixmapSets
@@ -1139,7 +1139,7 @@ InitializePixmapSets( void )
     _XmProcessUnlock();
 
 }
-
+
 /************************************************************************
  *
  *  _XmCachePixmap
@@ -1611,7 +1611,7 @@ XmGetScaledPixmap(
 
 }
 
-
+
 /*******************************************************************
  *
  * XmGetPixmapByDepth.
@@ -1650,7 +1650,7 @@ XmGetPixmapByDepth(
     return  ret_val;
 }
 
-
+
 /************************************************************************
  *
  *  This one is deprecated, but keep it in here, it was public.
@@ -1705,7 +1705,7 @@ XmeGetMask(
     return ret_val;
 }
 
-
+
 /************************************************************************
  *
  *  XmDestroyPixmap
@@ -1764,7 +1764,7 @@ XmDestroyPixmap(
   return False;
 }
 
-
+
 /* Compare two gc entry. Only care about the colors for depth 1 */
 static Boolean 
 CompareGCDatas (XmHashKey key_1, 
@@ -1781,7 +1781,7 @@ CompareGCDatas (XmHashKey key_1,
 	   (data_1->foreground == data_2->foreground) &&
 	   (data_1->background == data_2->background)))) ;
 }
-
+
 /* Hash a GC entry. Only care about the colors for depth 1 */
 static XmHashValue 
 HashGCData (XmHashKey key)
@@ -1795,7 +1795,7 @@ HashGCData (XmHashKey key)
   return (hv + (long)data->screen + (long)data->print_shell +
 	  data->depth + data->image_depth);
 }
-
+
 /***
  * GetGCForPutImage
  * Maintain a cache of GC to use for transfering the XImage to

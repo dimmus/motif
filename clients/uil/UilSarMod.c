@@ -110,7 +110,7 @@ unsigned int	module_clauses;
 
 #define m_after_names		(m_charset_clause)
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -194,7 +194,7 @@ for ( i=0 ; i<uil_max_child+1 ; i++ )
     uil_child_compr[i] = 0;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -270,7 +270,7 @@ yystype	    *root_frame;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -370,7 +370,7 @@ yystype	    *module_frame;
 
     module_clauses = 0;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -467,7 +467,7 @@ yystype	    *start_frame;
 
     module_clauses |= m_version_clause;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -544,7 +544,7 @@ yystype	    *start_frame;
 
     module_clauses |= m_names_clause;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -637,7 +637,7 @@ yystype	    *start_frame;
     _sar_save_source_info ( &value_entry->header , start_frame , token_frame);
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -676,7 +676,7 @@ void	sar_save_module_source ()
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -725,7 +725,7 @@ sym_az_module_entry->az_def_obj = def_obj_entry;
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -816,7 +816,7 @@ yystype	    *variant_frame;
     def_obj_entry->b_variant_info = obj_variant;
 
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

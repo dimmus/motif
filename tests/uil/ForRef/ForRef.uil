@@ -42,7 +42,7 @@ value
 ! Expressions test
 !
 
-
+
 !
 ! Binary operators with integer results
 !
@@ -61,7 +61,7 @@ value
 ! Addition: backward ref op1, backward ref op2
 	integer_exp3	: exported integer0 + integer_exp0;
 
-
+
 !
 ! Binary operators with floating point results
 !
@@ -78,7 +78,7 @@ value
 	temp4		: 3.2;
 	float_exp1	: exported temp0;
 
-
+
 !
 ! Binary operators with string results
 !
@@ -88,7 +88,7 @@ value
 ! Concatenation: foward ref op1, backward ref op2
 	string_exp1	: exported string1 & string0;
 
-
+
 !
 ! UIL Functions
 !
@@ -109,7 +109,7 @@ value
 	string4		: "string4";
 	string5		: "<Btn1Down>: set()";
 	string6		: "<Btn1Up>: notify() unset()";
-
+
 	float1		: 1;
 
 end module;

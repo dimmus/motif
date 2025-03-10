@@ -287,7 +287,7 @@ static XmBaseClassExtRec baseClassExtRec = {
 };
 
 
-
+
 externaldef(xmmenushellclassrec) XmMenuShellClassRec xmMenuShellClassRec = 
 {
     {
@@ -405,7 +405,7 @@ _XmFastExpose(
    RC_SetExpose(rowcol, False);
 }
 
-
+
 
 /*
  * When unposting a group of cascading menupanes, we will first unmap all
@@ -423,7 +423,7 @@ _XmFastPopdown(
    XtUnmapWidget(shell);
 }
 
-
+
         
 static void
 slideCancel(Widget w, Widget slide)
@@ -572,7 +572,7 @@ PostMenuShell(
    /* mark the row column as NOT popping down */
    RC_SetPoppingDown(menuShell->composite.children[0], False);
 }
-
+
 /*
  * Class Initialize.  Set up fast subclassing.
  */
@@ -604,7 +604,7 @@ ClassPartInitialize(
 }
  
 
-
+
 /*
  * Initialize routine
  */
@@ -703,7 +703,7 @@ StructureNotifyHandler(
 	*continue_to_dispatch = False;
     }
 }
-
+
 /*
  * set values
  *
@@ -764,7 +764,7 @@ SetValues(
    return (TRUE);
 }
 
-
+
 /*
  * Resize our first child
  *
@@ -791,7 +791,7 @@ Resize(
    }
 }
 
-
+
 /*
  * DeleteChild routine
  */
@@ -905,7 +905,7 @@ InsertChild(
        XmeWarning(widget, ChildMsg);
 }
 
-
+
 static void 
 ForceMenuPaneOnScreen(
         register XmRowColumnWidget rowcol,
@@ -1255,7 +1255,7 @@ PopupSharedMenuShell(
       }
    }
 }                       
-
+
 /* BEGIN OSF fix pir 2131 */
 /* This is ripped off from Xt/Shell.c and modified to also deal with X
 and Y
@@ -1634,7 +1634,7 @@ ChangeManaged(
    mst->RC_ButtonEventStatus.verified = False;
 }                       
 
-
+
 void
 _XmPopdown(
         Widget widget)
@@ -1709,7 +1709,7 @@ Popdown(
     }
 }
 
-
+
 /*
  * Popdown all the popup kids of this widget, do bottom to top popdown.
  */
@@ -1733,7 +1733,7 @@ PopdownKids(
    }
 }
 
-
+
 /*
  * This routine determines if there is an enter event pending which will
  * just pop back up the row column that is about to be popped down.
@@ -1763,7 +1763,7 @@ SkipPopdown(
     return (FALSE);
 }
 
-
+
 /* 
  * event handler for entering on a row column widget.  The widget must
  * be either a pulldown or popup menu.
@@ -1832,7 +1832,7 @@ _XmEnterRowColumn(
     PopdownKids (menushell, event);
 }
 
-
+
 static void 
 PopdownOne(
         Widget widget,
@@ -1956,7 +1956,7 @@ PopdownEveryone(
     }
 }
 
-
+
 /*
  * Class function used to unpost all menupanes.  
  * Note that to catch BSelect in a gadget and popdown correctly, widget param
@@ -2251,7 +2251,7 @@ _XmClearTraversal(
        XAllowEvents(XtDisplay(ms), SyncPointer, CurrentTime);
 }
 
-
+
 /*
  * Public Routine
  */

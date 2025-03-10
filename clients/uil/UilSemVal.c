@@ -246,7 +246,7 @@ static sym_callback_entry_type		**reason_seen;
 
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -301,7 +301,7 @@ sem_validate_node (( sym_entry_type *)sym_az_root_entry->sections);
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -431,7 +431,7 @@ switch ( node->header.b_tag )
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -482,7 +482,7 @@ return value_node;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -578,7 +578,7 @@ widget_node->obj_header.b_flags |= sym_m_validated;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -666,7 +666,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1136,7 +1136,7 @@ if (!valid_value)
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1213,7 +1213,7 @@ return;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1319,7 +1319,7 @@ if ((argument_entry->az_arg_value->header.b_tag != sym_k_widget_entry) &&
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1392,7 +1392,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1555,7 +1555,7 @@ if ( (reason_value_entry->obj_header.b_flags&sym_m_builtin) &&
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1621,7 +1621,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1724,7 +1724,7 @@ else
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1781,7 +1781,7 @@ if ( cycle_res )
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1910,7 +1910,7 @@ return FALSE;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -1995,7 +1995,7 @@ return FALSE;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2053,7 +2053,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2278,7 +2278,7 @@ _assert (procref_entry->header.b_tag==sym_k_proc_ref_entry,
 sem_validate_node (( sym_entry_type *)procref_entry->az_arg_value);
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2322,7 +2322,7 @@ return (boolean) vec_byte & _BIT_MASK(class_code);
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2366,7 +2366,7 @@ return (boolean) vec_byte & _BIT_MASK(class_code);
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2411,8 +2411,8 @@ return (boolean) vec_byte & _BIT_MASK(class_code);
 
 }
 
-
-
+
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2458,7 +2458,7 @@ return (boolean) vec_byte & _BIT_MASK(class_code);
 
 }
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2764,7 +2764,7 @@ return(sem_evaluate_value_expr (val_entry));
 }
 
 
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -2917,7 +2917,7 @@ return (csval_entry);
 /* BEGIN OSF Fix CR 4859 */
 
 /* END OSF Fix CR 4859 */
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -4107,7 +4107,7 @@ sym_value_entry_type *sem_evaluate_value_expr (value_entry)
     goto continue_after_error;
 }
 
-
+
 int validate_arg( operand_entry, operator)
 
 sym_value_entry_type    *operand_entry;
@@ -4198,7 +4198,7 @@ int	    		operator;
 	return error_arg_type;
     }
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -4262,7 +4262,7 @@ data_value_type	    	*data_value;
     }
     return error_arg_type;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -4351,7 +4351,7 @@ data_value_type	    	*data_value;
 	return error_arg_type;
       }
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -4412,7 +4412,7 @@ data_value_type	    *data_value;
     }
     return error_arg_type;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:
@@ -4451,7 +4451,7 @@ data_value_type	    	*data_value;
 {
     return error_arg_type;
 }
-
+
 /*
 **++
 **  FUNCTIONAL DESCRIPTION:

@@ -122,7 +122,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #define ListMessage16	_XmMMsgList_0013
 #define ListMessage17	_XmMMsgList_0014
 #define ListMessage18	_XmMMsgList_0015
-
+
 /********    Static Function Declarations    ********/
 
 static void SliderMove(Widget w, XtPointer closure, XtPointer call_data);
@@ -465,7 +465,7 @@ static void ListScrollDown(Widget wid,
 			   Cardinal *num_params);
 
 /********    End Static Function Declarations    ********/
-
+
 
 
 /**************
@@ -558,7 +558,7 @@ static XtActionsRec ListActions[] = {
   { "ListProcessBtn1",		  ListProcessBtn1	},
   { "ListProcessBtn2",		  ListProcessBtn2	},
 };
-
+
 /************************************************************************
  *									*
  * XmList Resources.							*
@@ -740,7 +740,7 @@ static XtResource resources[] = {
     XmRImmediate, (XtPointer)XmREVERSED_GROUND_COLORS
   }
 };
-
+
 /****************
  *
  * Synthetic resources
@@ -772,7 +772,7 @@ static XmSyntheticResource get_resources[] = {
     CvtToExternalPos, CvtToInternalPos
   },
 };
-
+
 /************************************************************************
  *									*
  * 	              Class record for XmList class			*
@@ -857,7 +857,7 @@ externaldef(xmlistclassrec) XmListClassRec xmListClassRec = {
 externaldef(xmlistwidgetclass) WidgetClass xmListWidgetClass =
        (WidgetClass)&xmListClassRec;
 
-
+
 /* Transfer trait record */
 
 static XmConst XmTransferTraitRec ListTransfer = {
@@ -868,14 +868,14 @@ static XmConst XmTransferTraitRec ListTransfer = {
 };
 
 
-
+
 /*ARGSUSED*/
 static void
 NullRoutine(Widget wid)		/* unused */
 {
   /*EMPTY*/
 }
-
+
 /************************************************************************
  *									*
  *  SliderMove							        *
@@ -922,7 +922,7 @@ SliderMove(Widget w,
   _XmSFUpdateNavigatorsValue(XtParent((Widget)lw), &nav_data, False);
 
 }
-
+
 /************************************************************************
  *									*
  *  ClassPartInitialize - Set up the fast subclassing.			*
@@ -946,7 +946,7 @@ ClassPartInitialize(WidgetClass wc)
   /* Install transfer trait */
   XmeTraitSet((XtPointer)wc, XmQTtransfer, (XtPointer) &ListTransfer);
 }
-
+
 /************************************************************************
  *									*
  * Initialize - initialize the instance.				*
@@ -1311,7 +1311,7 @@ Initialize(Widget request,
       }
     }
 }
-
+
 /************************************************************************
  *									*
  * ReDisplay - draw the visible list items.				*
@@ -1333,7 +1333,7 @@ Redisplay(Widget wid,
   if (lw->list.Traversing)
     DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
 }
-
+
 /************************************************************************
  *									*
  * Resize - redraw the list in response to orders from above.		*
@@ -1393,7 +1393,7 @@ Resize(Widget wid)
   if (XtIsRealized((Widget)lw))
     SetClipRect(lw);
 }
-
+
 /************************************************************************
  *									*
  * ComputeVizCount - return the number of items that would fit in the	*
@@ -1453,7 +1453,7 @@ ComputeVizCount(XmListWidget lw)
 
   return viz;
 }
-
+
 /************************************************************************
  *									*
  * SetValues - change the instance data					*
@@ -1947,7 +1947,7 @@ SetValues(Widget old,
 
   return redraw;
 }
-
+
 /************************************************************************
  *									*
  * Destroy - destroy the list instance.  Free up all of our memory.	*
@@ -1990,7 +1990,7 @@ Destroy(Widget wid)
 
   XmImUnregister(wid);
 }
-
+
 /************************************************************************
  *									*
  *  QueryProc - Look at a new geometry and add/delete scrollbars as     *
@@ -2212,7 +2212,7 @@ QueryProc(Widget wid,
 
   return retval;
 }
-
+
 /*
  * Dynamic default for ScrollBarDisplayPolicy based on the
  * type of CDE FileSB parent
@@ -2245,7 +2245,7 @@ ScrollBarDisplayPolicyDefault(Widget widget,
   else
     sb_display_policy = XmAS_NEEDED;
 }
-
+
 /*
  * XmRCallProc routine for checking list.font before setting it to NULL
  * if no value is specified for both XmNrenderTable and XmNfontList.
@@ -2268,7 +2268,7 @@ CheckSetRenderTable(Widget wid,
 	lw->list.MouseMoved = True;
   }
 }
-
+
 /************************************************************************
  *                                                                      *
  * Conversion routines for XmNtopItemPostion.  Necessary because the    *
@@ -2286,7 +2286,7 @@ CvtToExternalPos(Widget wid,
 
   (*value) = (XtArgVal) (lw->list.top_position + 1);
 }
-
+
 /*ARGSUSED*/
 static XmImportOperator
 CvtToInternalPos(Widget wid,
@@ -2297,7 +2297,7 @@ CvtToInternalPos(Widget wid,
 
   return XmSYNTHETIC_LOAD;
 }
-
+
 /************************************************************************
  *									*
  *                           Visiual Routines				*
@@ -2318,7 +2318,7 @@ DrawListShadow(XmListWidget w)
 		 w->primitive.shadow_thickness,
 		 XmSHADOW_OUT);
 }
-
+
 static Dimension
 CalcVizWidth(XmListWidget lw)
 {
@@ -2332,7 +2332,7 @@ CalcVizWidth(XmListWidget lw)
   else
     return lw->core.width - borders;
 }
-
+
 /************************************************************************
  *									*
  * DrawList - draw the contents of the list.				*
@@ -2398,7 +2398,7 @@ DrawList(XmListWidget lw,
         }
     }
 }
-
+
 /************************************************************************
  *									*
  * DrawItem - Draw the specified item from the internal list.		*
@@ -2427,7 +2427,7 @@ DrawItem(Widget w,
 
   DrawItems(lw, position, position + 1, TRUE);
 }
-
+
 /************************************************************************
  *									*
  * DrawItems - draw some list items.					*
@@ -2572,7 +2572,7 @@ if (!XtIsSensitive((Widget)lw))
 		      lw->list.StrDir);
     }
 }
-
+
 /************************************************************************
  *									*
  * DrawHighlight - Draw or clear the traversal highlight on an item.	*
@@ -2655,7 +2655,7 @@ DrawHighlight(XmListWidget lw,
     }
 
 }
-
+
 /************************************************************************
  *									*
  * SetClipRect - set a clipping rectangle for the visible area of the	*
@@ -2701,7 +2701,7 @@ SetClipRect(XmListWidget widget)
 
   /* Set highlight clip in DrawHighlight */
 }
-
+
 /***************************************************************************
  *									   *
  * SetDefaultSize							   *
@@ -2772,7 +2772,7 @@ SetDefaultSize(XmListWidget lw,
   else
     *width = lw->core.width;
 }
-
+
 /************************************************************************
  *									*
  * MakeGC - Get the GC's for normal and inverse.			*
@@ -2839,7 +2839,7 @@ MakeGC(XmListWidget lw)
   lw->list.InsensitiveGC = XtAllocateGC((Widget) lw, lw->core.depth,
 					valueMask, &values, modifyMask, 0);
 }
-
+
 /************************************************************************
  *									*
  *  MakeHighlightGC - Get the graphics context used for drawing the	*
@@ -2876,7 +2876,7 @@ MakeHighlightGC(XmListWidget lw,
   lw->list.HighlightGC = XtAllocateGC((Widget) lw, lw->core.depth,
 				      valueMask, &values, modifyMask, 0);
 }
-
+
 /************************************************************************
  *                                                                      *
  * ChangeHighlightGC - change the highlight GC for add mode.  If        *
@@ -2900,7 +2900,7 @@ ChangeHighlightGC(XmListWidget lw,
   if (lw->list.HighlightGC)
     XChangeGC (XtDisplay(lw), lw->list.HighlightGC, valueMask, &values);
 }
-
+
 /************************************************************************
  *									*
  * SetVerticalScrollbar - set up all the vertical scrollbar stuff.	*
@@ -2981,7 +2981,7 @@ SetVerticalScrollbar(XmListWidget lw)
 
   return (was_managed != is_managed);
 }
-
+
 /************************************************************************
  *									*
  * SetHorizontalScrollbar - set up all the horizontal scrollbar stuff.	*
@@ -3086,7 +3086,7 @@ SetHorizontalScrollbar(XmListWidget lw)
 
   return (was_managed != is_managed);
 }
-
+
 /************************************************************************
  *									*
  * SetNewSize - see if we need a new size.  If so, do it.  If the	*
@@ -3143,7 +3143,7 @@ SetNewSize(XmListWidget lw,
 
   lw->list.FromSetNewSize = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * ResetExtents - recalculate the cumulative extents of the list items.	*
@@ -3178,7 +3178,7 @@ ResetExtents(XmListWidget lw,
   lw->list.MaxItemHeight = maxheight;
   lw->list.MaxWidth = maxwidth;
 }
-
+
 /************************************************************************
  *									*
  * Item/Element Manupulation routines					*
@@ -3241,7 +3241,7 @@ FixStartEnd(XmListWidget lw,
     *start = *end = 0;
 }
 /* END OSF Fix CR 4656 */
-
+
 /***************************************************************************
  *									   *
  * AddInternalElements()						   *
@@ -3313,7 +3313,7 @@ AddInternalElements(XmListWidget lw,
 
   return nsel;
 }
-
+
 /***************************************************************************
  *									   *
  * DeleteInternalElements()				       		   *
@@ -3387,7 +3387,7 @@ DeleteInternalElements(XmListWidget lw,
 
   return dsel;
 }
-
+
 /***************************************************************************
  *									   *
  * DeleteInternalElementPositions                                          *
@@ -3501,7 +3501,7 @@ DeleteInternalElementPositions(XmListWidget  lw,
 
   return nsel;
 }
-
+
 /***************************************************************************
  *									   *
  * ReplaceInternalElement(lw, position, selected)                          *
@@ -3540,7 +3540,7 @@ ReplaceInternalElement(XmListWidget lw,
   dsel += (item->selected ? 1 : 0);
   return dsel;
 }
-
+
 /************************************************************************
  *									*
  * AddItems - add items to the item list at the specified position	*
@@ -3571,7 +3571,7 @@ AddItems(XmListWidget lw,
 
   lw->list.itemCount = TotalItems;
 }
-
+
 /************************************************************************
  *									*
  * DeleteItems - delete items from the item list.			*
@@ -3619,7 +3619,7 @@ DeleteItems(XmListWidget lw,
 
   lw->list.itemCount = TotalItems;
 }
-
+
 /************************************************************************
  *									*
  * DeleteItemPositions                                                  *
@@ -3702,7 +3702,7 @@ DeleteItemPositions(XmListWidget  lw,
 
   lw->list.itemCount = TotalItems;
 }
-
+
 /************************************************************************
  *									*
  * ReplaceItem - Replace an item at the specified position	        *
@@ -3731,7 +3731,7 @@ ReplaceItem(XmListWidget lw,
   }
 }
 
-
+
 /***************************************************************************
  *									   *
  * ItemNumber - returns the item number of the specified item in the 	   *
@@ -3751,7 +3751,7 @@ ItemNumber(XmListWidget lw,
 
   return 0;
 }
-
+
 /***************************************************************************
  *									   *
  * ItemExists - returns TRUE if the specified item matches an item in the  *
@@ -3771,7 +3771,7 @@ ItemExists(XmListWidget lw,
 
   return FALSE;
 }
-
+
 /************************************************************************
  *									*
  * OnSelectedList - Returns TRUE if the given item is on the selected	*
@@ -3805,7 +3805,7 @@ OnSelectedList(
 
   return FALSE;
 }
-
+
 /************************************************************************
  *									*
  * CopyItems - Copy the item list into our space.			*
@@ -3827,7 +3827,7 @@ CopyItems(XmListWidget lw)
       lw->list.items = il;
     }
 }
-
+
 /************************************************************************
  *									*
  * CopySelectedItems - Copy the selected item list into our space.	*
@@ -3851,7 +3851,7 @@ CopySelectedItems(XmListWidget lw)
       lw->list.selectedItems = sl;
     }
 }
-
+
 /************************************************************************
  *									*
  * CopySelectedPositions - Copy the selected position list.		*
@@ -3870,7 +3870,7 @@ CopySelectedPositions(XmListWidget lw)
       lw->list.selectedPositions = sl;
     }
 }
-
+
 /************************************************************************
  *									*
  * ClearItemList - delete all elements from the item list, and		*
@@ -3906,7 +3906,7 @@ ClearItemList(XmListWidget lw)
       XmImVaSetValues((Widget)lw, XmNspotLocation, &xmim_point, NULL);
     }
 }
-
+
 /************************************************************************
  *									*
  * ClearSelectedPositions - delete all elements from the selected       *
@@ -3925,7 +3925,7 @@ ClearSelectedPositions(XmListWidget lw)
   lw->list.selectedPositionCount = 0;
   lw->list.selectedPositions = NULL;
 }
-
+
 /************************************************************************
  *									*
  * ClearSelectedList - delete all elements from the selected list       *
@@ -3949,7 +3949,7 @@ ClearSelectedList(
   lw->list.selectedItemCount = 0;
   lw->list.selectedItems = NULL;
 }
-
+
 /************************************************************************
  *									*
  *  BuildSelectedList - traverse the element list and construct a list	*
@@ -3994,7 +3994,7 @@ BuildSelectedList(XmListWidget lw,
         }
     }
 }
-
+
 /************************************************************************
  *									*
  *  BuildSelectedPositions - traverse the element list and construct    *
@@ -4041,7 +4041,7 @@ BuildSelectedPositions(XmListWidget lw,
 	}
     }
 }
-
+
 /************************************************************************
  *									*
  *  UpdateSelectedList - Build a new selected list.			*
@@ -4084,7 +4084,7 @@ UpdateSelectedList(XmListWidget lw,
         }
     }
 }
-
+
 /***************************************************************************
  *									   *
  * UpdateSelectedPositions - Build a new selected positions list.	   *
@@ -4098,7 +4098,7 @@ UpdateSelectedPositions(XmListWidget lw,
   ClearSelectedPositions(lw);
   BuildSelectedPositions(lw, count);
 }
-
+
 /***************************************************************************
  *									   *
  * ListSelectionChanged - a utility function that determines whether the   *
@@ -4145,7 +4145,7 @@ ListSelectionChanged(XmListWidget w)
   /* Everything was the same, so return False. */
   return False;
 }
-
+
 
 /************************************************************************
  *									*
@@ -4208,7 +4208,7 @@ WhichItem(XmListWidget w,
 
   return item;
 }
-
+
 /************************************************************************
  *									*
  * SelectRange - Select/deselect the range between start and end.       *
@@ -4246,7 +4246,7 @@ SelectRange(XmListWidget lw,
       DrawItem((Widget) lw, start);
     }
 }
-
+
 /************************************************************************
  *									*
  * RestoreRange - Restore the range between start and end.              *
@@ -4288,7 +4288,7 @@ RestoreRange(XmListWidget lw,
 	DrawItem((Widget) lw, start);
       }
 }
-
+
 /************************************************************************
  *                                                                      *
  * ArrangeRange - This does all the necessary magic for movement in     *
@@ -4355,7 +4355,7 @@ ArrangeRange(XmListWidget lw,
   else
     SelectRange(lw, start, i, set);
 }
-
+
 /************************************************************************
  *									*
  * HandleNewItem - called when a new item is selected in browse or	*
@@ -4438,7 +4438,7 @@ HandleNewItem(XmListWidget lw,
     }
   /* END OSF Fix CR 5954 */
 }
-
+
 /************************************************************************
  *									*
  * HandleExtendedItem - called when a new item is selected via the      *
@@ -4545,7 +4545,7 @@ HandleExtendedItem(XmListWidget lw,
         }
     }
 }
-
+
 /************************************************************************
  *									*
  * VerifyMotion - event handler for motion within the list.		*
@@ -4683,7 +4683,7 @@ VerifyMotion(Widget wid,
   HandleNewItem(lw, item, lw->list.LastHLItem);
 }
 
-
+
 /***************************************************************************
  *									   *
  * Element Select - invoked on button down on a widget.			   *
@@ -4881,7 +4881,7 @@ SelectElement(Widget wid,
       ClickElement(lw, NULL, FALSE);
     }
 }
-
+
 /***************************************************************************
  *									   *
  * KbdSelectElement - invoked on keyboard selection.			   *
@@ -4917,7 +4917,7 @@ KbdSelectElement(Widget wid,
   SelectElement((Widget) lw, event, params, num_params);
   lw->list.KbdSelection = FALSE;
 }
-
+
 /***************************************************************************
  *									   *
  * Element UnSelect - Handle the button up event.			   *
@@ -5010,7 +5010,7 @@ UnSelectElement(Widget wid,
   DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /***************************************************************************
  *									   *
  * KbdUnSelectElement - invoked on keyboard selection.			   *
@@ -5046,7 +5046,7 @@ KbdUnSelectElement(Widget wid,
   lw->list.AppendInProgress = FALSE;
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * Shift Select								*
@@ -5074,7 +5074,7 @@ ExSelect(Widget wid,
 
   SelectElement((Widget) lw, event, params, num_params);
 }
-
+
 /************************************************************************
  *									*
  * Shift UnSelect							*
@@ -5112,7 +5112,7 @@ ExUnSelect(Widget wid,
   UnSelectElement((Widget) lw, event, params, num_params);
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * CtrlBtnSelect							*
@@ -5137,7 +5137,7 @@ CtrlBtnSelect(Widget wid,
   else
     XmProcessTraversal(wid, XmTRAVERSE_CURRENT);
 }
-
+
 /************************************************************************
  *									*
  * Ctrl Select								*
@@ -5183,7 +5183,7 @@ CtrlSelect(Widget wid,
 
   SelectElement((Widget)lw, event, params, num_params);
 }
-
+
 /************************************************************************
  *									*
  * Ctrl UnSelect							*
@@ -5221,7 +5221,7 @@ CtrlUnSelect(Widget wid,
   UnSelectElement((Widget)lw, event, params, num_params);
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Shift Select						*
@@ -5251,7 +5251,7 @@ KbdShiftSelect(Widget wid,
 
   KbdSelectElement((Widget)lw, event, params, num_params);
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Shift UnSelect						*
@@ -5284,7 +5284,7 @@ KbdShiftUnSelect(Widget wid,
   KbdUnSelectElement((Widget)lw, event, params, num_params);
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Ctrl Select							*
@@ -5333,7 +5333,7 @@ KbdCtrlSelect(Widget wid,
   KbdSelectElement((Widget)lw, event, params, num_params);
 
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Ctrl UnSelect			        		*
@@ -5372,7 +5372,7 @@ KbdCtrlUnSelect(Widget wid,
   KbdUnSelectElement((Widget)lw, event, params, num_params);
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Activate                                                    *
@@ -5427,7 +5427,7 @@ KbdActivate(Widget wid,
 
   _XmParentProcess(XtParent(lw), (XmParentProcessData) &p_event);
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Cancel							*
@@ -5503,7 +5503,7 @@ KbdCancel(Widget wid,
       ClickElement(lw, NULL, FALSE);
     }
 }
-
+
 /************************************************************************
  *									*
  * Keyboard toggle Add Mode                                             *
@@ -5527,7 +5527,7 @@ KbdToggleAddMode(Widget wid,
     }
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * Keyboard Select All                                                  *
@@ -5607,7 +5607,7 @@ KbdSelectAll(Widget wid,
   ClickElement(lw, event, FALSE);
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *									*
  * Keyboard DeSelect All                                                *
@@ -5676,7 +5676,7 @@ KbdDeSelectAll(Widget wid,
   ClickElement(lw, event, FALSE);
   lw->list.Event = 0;
 }
-
+
 /***************************************************************************
  *									   *
  * DefaultAction - call the double click callback.			   *
@@ -5746,7 +5746,7 @@ DefaultAction(XmListWidget lw,
 
   lw->list.DownCount = 0;
 }
-
+
 /************************************************************************
  *									*
  * ClickElement - invoked for all selection actions other than double	*
@@ -5876,7 +5876,7 @@ ClickElement(XmListWidget lw,
 
   XmStringFree(cb.item);
 }
-
+
 static void
 GetPreeditPosition(XmListWidget lw,
 		   XPoint *xmim_point)
@@ -5907,7 +5907,7 @@ GetPreeditPosition(XmListWidget lw,
 		       2 * lw->list.HighlightThickness);
     }
 }
-
+
 /************************************************************************
  *									*
  * ListFocusIn								*
@@ -5940,7 +5940,7 @@ ListFocusIn(Widget wid,
   DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
   _XmPrimitiveFocusIn((Widget) lw, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *									*
  * ListFocusOut								*
@@ -5963,7 +5963,7 @@ ListFocusOut(Widget wid,
   lw->list.Traversing = FALSE;
   _XmPrimitiveFocusOut((Widget) lw, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *									*
  * BrowseScroll - timer proc that scrolls the list if the user has left *
@@ -6122,7 +6122,7 @@ BrowseScroll(XtPointer closure,
 				    (unsigned long) interval,
 				    BrowseScroll, (XtPointer) lw);
 }
-
+
 /************************************************************************
  *									*
  * ListLeave - If the user leaves in Browse or Extended Select mode	*
@@ -6191,7 +6191,7 @@ ListLeave(Widget wid,
 
   _XmPrimitiveLeave((Widget) lw, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *									*
  * ListEnter - If there is a drag timeout, remove it.			*
@@ -6231,7 +6231,7 @@ ListEnter(Widget wid,
 
   _XmPrimitiveEnter((Widget) lw, event, NULL, NULL);
 }
-
+
 /************************************************************************
  *                                                                      *
  * MakeItemVisible - scroll the list (if needed) such that the given    *
@@ -6264,7 +6264,7 @@ MakeItemVisible(XmListWidget lw,
       SetVerticalScrollbar(lw);
     }
 }
-
+
 /************************************************************************
  *									*
  * PrevElement - called when the user hits Up arrow.			*
@@ -6315,7 +6315,7 @@ PrevElement(XmListWidget lw,
 
   DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
 }
-
+
 /************************************************************************
  *									*
  * NextElement - called when the user hits Down arrow.			*
@@ -6369,7 +6369,7 @@ NextElement(XmListWidget lw,
 
   DrawHighlight(lw, lw->list.CurrentKbdItem, TRUE);
 }
-
+
 /************************************************************************
  *									*
  * Normal Next Element							*
@@ -6394,7 +6394,7 @@ NormalNextElement(Widget wid,
   lw->list.SelectionType = XmINITIAL;
   NextElement(lw, event, params, num_params);
 }
-
+
 /************************************************************************
  *									*
  * Shift Next Element							*
@@ -6429,7 +6429,7 @@ ShiftNextElement(Widget wid,
   lw->list.Event = 0;
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * Ctrl Next Element							*
@@ -6456,7 +6456,7 @@ CtrlNextElement(Widget wid,
   lw->list.Event = 0;
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * ExtendAdd Next Element						*
@@ -6486,7 +6486,7 @@ ExtendAddNextElement(Widget wid,
   lw->list.Event = 0;
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * Normal Prev Element							*
@@ -6511,7 +6511,7 @@ NormalPrevElement(Widget wid,
   lw->list.SelectionType = XmINITIAL;
   PrevElement(lw, event, params, num_params);
 }
-
+
 /************************************************************************
  *									*
  * Shift Prev Element							*
@@ -6544,7 +6544,7 @@ ShiftPrevElement(Widget wid,
   lw->list.Event = 0;
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * Ctrl Prev Element							*
@@ -6571,7 +6571,7 @@ CtrlPrevElement(Widget wid,
   lw->list.Event = 0;
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * ExtendAdd Prev Element						*
@@ -6601,7 +6601,7 @@ ExtendAddPrevElement(Widget wid,
   lw->list.Event = 0;
   lw->list.AppendInProgress = FALSE;
 }
-
+
 /************************************************************************
  *									*
  * PrevPage - called when the user hits PgUp                            *
@@ -6659,7 +6659,7 @@ KbdPrevPage(Widget wid,
 	   (lw->list.SelectionPolicy == XmBROWSE_SELECT))
     HandleExtendedItem(lw, item);
 }
-
+
 /************************************************************************
  *									*
  * NextPage - called when the user hits PgDn                            *
@@ -6719,7 +6719,7 @@ KbdNextPage(Widget wid,
 	   (lw->list.SelectionPolicy == XmBROWSE_SELECT))
     HandleExtendedItem(lw, item);
 }
-
+
 /************************************************************************
  *                                                                      *
  * KbdLeftChar - called when user hits left arrow.                      *
@@ -6750,7 +6750,7 @@ KbdLeftChar(Widget wid,
 
   XmListSetHorizPos((Widget) lw, pos);
 }
-
+
 /************************************************************************
  *                                                                      *
  * KbdLeftPage - called when user hits ctrl left arrow.                 *
@@ -6785,7 +6785,7 @@ KbdLeftPage(Widget wid,
   }
   XmListSetHorizPos((Widget) lw, pos);
 }
-
+
 /************************************************************************
  *                                                                      *
  * Begin Line - go to the beginning of the line                         *
@@ -6806,7 +6806,7 @@ BeginLine(Widget wid,
 
   XmListSetHorizPos((Widget) lw, 0);
 }
-
+
 /************************************************************************
  *                                                                      *
  * KbdRightChar - called when user hits right arrow.                    *
@@ -6836,7 +6836,7 @@ KbdRightChar(Widget wid,
   }
   XmListSetHorizPos((Widget) lw, pos);
 }
-
+
 /************************************************************************
  *                                                                      *
  * KbdRightPage - called when user hits ctrl right arrow.               *
@@ -6872,7 +6872,7 @@ KbdRightPage(Widget wid,
 
   XmListSetHorizPos((Widget) lw, pos);
 }
-
+
 /************************************************************************
  *                                                                      *
  * End Line - go to the end of the line                                 *
@@ -6893,7 +6893,7 @@ EndLine(Widget wid,
 
   XmListSetHorizPos((Widget) lw, lw->list.hmax - lw->list.hExtent);
 }
-
+
 /************************************************************************
  *                                                                      *
  * TopItem - go to the top item                                         *
@@ -6934,7 +6934,7 @@ TopItem(Widget wid,
     XmListSelectPos((Widget) lw, newtop + 1, TRUE);
   lw->list.StartItem = newtop;
 }
-
+
 /************************************************************************
  *                                                                      *
  * EndItem - go to the bottom item                                      *
@@ -6979,7 +6979,7 @@ EndItem(Widget wid,
   if (lw->list.SelectionMode == XmNORMAL_MODE)
     XmListSelectPos((Widget) lw, newbot + 1, TRUE);
 }
-
+
 /************************************************************************
  *                                                                      *
  * ExtendTopItem - Extend the selection to the top item			*
@@ -7035,7 +7035,7 @@ ExtendTopItem(Widget wid,
 
   lw->list.Event = 0;
 }
-
+
 /************************************************************************
  *                                                                      *
  * ExtendEndItem - extend the selection to the bottom item		*
@@ -7096,7 +7096,7 @@ ExtendEndItem(Widget wid,
 
   lw->list.Event = 0;
 }
-
+
 /***************************************************************************
  *									   *
  * ListItemVisible - make the current keyboard item visible.  		   *
@@ -7141,7 +7141,7 @@ ListItemVisible(Widget wid,
   DrawList(lw, NULL, TRUE);
   SetVerticalScrollbar(lw);
 }
-
+
 /***************************************************************************
  *									   *
  * ListCopyToClipboard - copy the current selected items to the clipboard. *
@@ -7164,7 +7164,7 @@ ListCopyToClipboard(Widget wid,
   if (lw->list.selectedItemCount > 0)
     (void) XmeClipboardSource(wid, XmCOPY, 0);
 }
-
+
 /*ARGSUSED*/
 static void
 DragDropFinished(Widget w,		/* unused */
@@ -7181,7 +7181,7 @@ DragDropFinished(Widget w,		/* unused */
   XtFree((char *) ListDragConv->strings);
   XtFree((char *) ListDragConv);
 }
-
+
 /***************************************************************************
  *									   *
  * ListProcessDrag - drag the selected items				   *
@@ -7264,7 +7264,7 @@ ListProcessDrag(Widget wid,
   else
     DragDropFinished(dc, lw, NULL);
 }
-
+
 /*
  * DragStart - begin a delayed drag.
  */
@@ -7281,7 +7281,7 @@ DragStart(XtPointer closure,
 
   ListProcessDrag((Widget) lw, &lw->list.drag_event, NULL, NULL);
 }
-
+
 /************************************************************************
  *									*
  * ListProcessBtn1 - handle enableBtn1Transfer.  This action expects	*
@@ -7408,7 +7408,7 @@ ListProcessBtn1(Widget wid,
       break;
     }
 }
-
+
 /************************************************************************
  *									*
  * ListProcessBtn2 - handle enableBtn1Transfer.  This action expects	*
@@ -7460,7 +7460,7 @@ ListProcessBtn2(Widget wid,
       break;
     }
 }
-
+
 /***************************************************************************
  *									   *
  * ListQuickNavigate - navigate to an item				   *
@@ -7524,7 +7524,7 @@ ListQuickNavigate(Widget wid,
 	XBell(XtDisplay(wid), 0);
     }
 }
-
+
 /***************************************************************************
  *									   *
  * FirstChar - return the first wchar in an XmString.			   *
@@ -7574,7 +7574,7 @@ FirstChar(XmString string)
 
   return result;
 }
-
+
 /***************************************************************************
  *									   *
  * CompareCharAndItem 						   	   *
@@ -7598,7 +7598,7 @@ CompareCharAndItem(XmListWidget lw,
 
   return False;
 }
-
+
 /***************************************************************************
  *									   *
  * ListConvert - Convert routine for dragNDrop.				   *
@@ -7798,7 +7798,7 @@ ListConvert(Widget w, XtPointer client_data,
 
   _XmConvertComplete(w, value, size, format, type, cs);
 }
-
+
 /*ARGSUSED*/
 static void
 ListPreDestProc(Widget w,
@@ -7819,7 +7819,7 @@ ListPreDestProc(Widget w,
 
   cs->location_data = (XtPointer) (long) index;
 }
-
+
 /************************************************************************
  *									*
  * Spiffy API entry points						*
@@ -7844,7 +7844,7 @@ XmListAddItem(Widget w,
   APIAddItems(lw, &item, 1, pos, TRUE);
   _XmAppUnlock(app);
 }
-
+
 /***************************************************************************
  *									   *
  * APIAddItems - do all the work for the XmListAddItems and		   *
@@ -7964,7 +7964,7 @@ APIAddItems(XmListWidget lw,
 
   /* SetTraversal(lw); */
 }
-
+
 /************************************************************************
  *									*
  * XmListAddItems - add the items starting at the specified position.   *
@@ -7984,7 +7984,7 @@ XmListAddItems(Widget w,
   APIAddItems(lw, items, item_count, pos, TRUE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListAddItemsUnselected - add the items starting at the specified   *
@@ -8005,7 +8005,7 @@ XmListAddItemsUnselected(Widget w,
   APIAddItems(lw, items, item_count, pos, FALSE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListAddItemUnselected - add the item at the specified position.	*
@@ -8026,7 +8026,7 @@ XmListAddItemUnselected(Widget w,
   APIAddItems(lw, &item, 1, pos, FALSE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeleteItem - delete the specified item from the list.		*
@@ -8061,7 +8061,7 @@ XmListDeleteItem(Widget w,
   APIDeletePositions(lw, &item_pos, 1, TRUE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *                                                                      *
  * CleanUpList - redraw the list if the items go to 0, and check for    *
@@ -8091,7 +8091,7 @@ CleanUpList(XmListWidget lw,
 		   False);
     }
 }
-
+
 /************************************************************************
  *									*
  * XmListDeleteItems - delete the specified items from the list.	*
@@ -8211,7 +8211,7 @@ XmListDeleteItems(Widget w,
   DEALLOCATE_LOCAL((char *)copy);
   _XmAppUnlock(app);
 }
-
+
 static void
 APIDeletePositions(XmListWidget lw,
 		   int *positions,
@@ -8304,7 +8304,7 @@ APIDeletePositions(XmListWidget lw,
     SetHorizontalScrollbar(lw);
   SetVerticalScrollbar(lw);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeletePositions - delete the specified positions from the list *
@@ -8323,7 +8323,7 @@ XmListDeletePositions(Widget    w,
   APIDeletePositions(lw, position_list, position_count, FALSE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeletePos - delete the item at the specified position from the	*
@@ -8346,7 +8346,7 @@ XmListDeletePos(Widget w,
   APIDeletePositions(lw, &position, 1, TRUE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeleteItemsPos - delete the items at the specified position    *
@@ -8490,7 +8490,7 @@ XmListDeleteItemsPos(Widget w,
   SetVerticalScrollbar(lw);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *                                                                      *
  * XmListDeleteAllItems - clear the list.                               *
@@ -8531,7 +8531,7 @@ XmListDeleteAllItems(Widget w)
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * APIReplaceItems - replace the given items with new ones.             *
@@ -8604,7 +8604,7 @@ APIReplaceItems(Widget w,
     SetHorizontalScrollbar(lw);
   SetVerticalScrollbar(lw);
 }
-
+
 /************************************************************************
  *									*
  * XmListReplaceItems - replace the given items with new ones.          *
@@ -8622,7 +8622,7 @@ XmListReplaceItems(Widget w,
   APIReplaceItems(w, old_items, item_count, new_items, TRUE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListReplaceItemsUnselected - replace the given items with new ones.*
@@ -8640,7 +8640,7 @@ XmListReplaceItemsUnselected(Widget w,
   APIReplaceItems(w, old_items, item_count, new_items, FALSE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * APIReplaceItemsPos - replace the given items with new ones.          *
@@ -8715,7 +8715,7 @@ APIReplaceItemsPos(Widget w,
     SetHorizontalScrollbar(lw);
   SetVerticalScrollbar(lw);
 }
-
+
 /************************************************************************
  *									*
  * XmListReplaceItemsPos - replace the given items at the specified     *
@@ -8734,7 +8734,7 @@ XmListReplaceItemsPos(Widget w,
   APIReplaceItemsPos( w, new_items, item_count, position, TRUE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListReplaceItemsPosUnselected - replace the given items at the     *
@@ -8753,7 +8753,7 @@ XmListReplaceItemsPosUnselected(Widget w,
   APIReplaceItemsPos( w, new_items, item_count, position, FALSE);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListReplacePositions - Replace a set of items based on a list of   *
@@ -8847,7 +8847,7 @@ XmListReplacePositions(Widget    w,
   SetVerticalScrollbar(lw);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * APISelect - do the necessary selection work for the API select	*
@@ -8913,7 +8913,7 @@ APISelect(XmListWidget lw,
       UpdateSelectedPositions(lw, lw->list.selectedItemCount);
     }
 }
-
+
 /************************************************************************
  *                                                                      *
  * SetSelectionParams - update the selection parameters so that an API  *
@@ -8970,7 +8970,7 @@ SetSelectionParams(XmListWidget lw)
       lw->list.LastHLItem = 0;
     }
 }
-
+
 /************************************************************************
  *									*
  * XmListSelectItem - select the given item and issue a callback if so	*
@@ -9005,7 +9005,7 @@ XmListSelectItem(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListSelectPos - select the item at the given position and issue a  *
@@ -9041,7 +9041,7 @@ XmListSelectPos(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeselectItem - deselect the given item and issue a callback if *
@@ -9078,7 +9078,7 @@ XmListDeselectItem(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeselectPos - deselect the item at the given position and issue*
@@ -9116,7 +9116,7 @@ XmListDeselectPos(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListDeselectAllItems - hose the entire selected list		*
@@ -9153,7 +9153,7 @@ XmListDeselectAllItems(Widget w)
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListSetPos - Make the specified position the top visible position	*
@@ -9189,7 +9189,7 @@ XmListSetPos(Widget w,
     }
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListSetBottomPos - Make the specified position the bottom visible 	*
@@ -9231,7 +9231,7 @@ XmListSetBottomPos(Widget w,
     }
     _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListSetItem - Make the specified item the top visible item 	*
@@ -9269,7 +9269,7 @@ XmListSetItem(Widget w,
     }
     _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListSetBottomItem - Make the specified item the bottom visible 	*
@@ -9308,7 +9308,7 @@ XmListSetBottomItem(Widget w,
     }
     _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListSetAddMode - Programatically update XmNselectionMode value     *
@@ -9391,7 +9391,7 @@ XmListSetAddMode(Widget w,
     }
     _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListItemExists - returns TRUE if the given item exists in the	*
@@ -9418,7 +9418,7 @@ XmListItemExists(Widget w,
   _XmAppUnlock(app);
   return exists;
 }
-
+
 /************************************************************************
  *									*
  * XmListItemPosition - returns the index (1-based) of the given item.  *
@@ -9444,7 +9444,7 @@ XmListItemPos(Widget w,
   _XmAppUnlock(app);
   return pos;
 }
-
+
 /************************************************************************
  *									*
  * XmListGetKbdItemPos - returns the index (1-based) of the current     *
@@ -9470,7 +9470,7 @@ XmListGetKbdItemPos(Widget w)
   _XmAppUnlock(app);
   return pos;
 }
-
+
 /************************************************************************
  *									*
  * XmListSetKbdItemPos - allows user to set the current keyboard item   *
@@ -9514,7 +9514,7 @@ XmListSetKbdItemPos(Widget w,
   _XmAppUnlock(app);
   return TRUE;
 }
-
+
 /************************************************************************
  *									*
  * XmListGetMatchPos - returns the positions that an item appears at in *
@@ -9568,7 +9568,7 @@ XmListGetMatchPos(Widget w,
   _XmAppUnlock(app);
   return TRUE;
 }
-
+
 void
 ListScrollUp(Widget wid, XEvent *event, String *params, Cardinal *num_params)
 {
@@ -9608,7 +9608,7 @@ ListScrollDown(Widget wid, XEvent *event, String *params, Cardinal *num_params)
         increment, page_increment, True);
   }
 }
-
+
 /************************************************************************
  *									*
  * XmListGetSelectedPos - returns XmNselectedPositions and              *
@@ -9653,7 +9653,7 @@ XmListGetSelectedPos(Widget w,
   _XmAppUnlock(app);
   return TRUE;
 }
-
+
 /************************************************************************
  *									*
  * XmListSetHorizPos - move the hsb.					*
@@ -9696,7 +9696,7 @@ XmListSetHorizPos(Widget w,
    */
    _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListYToPos - return the index of the item underneath position Y    *
@@ -9729,7 +9729,7 @@ XmListYToPos(Widget w,
   }
   /* END OSF Fix CR 5081 */
 }
-
+
 /************************************************************************
  *									*
  * XmListPosToBounds                                                    *
@@ -9792,7 +9792,7 @@ XmListPosToBounds(Widget      w,
   _XmAppUnlock(app);
   return True;
 }
-
+
 /************************************************************************
  *									*
  * XmListUpdateSelectedList - regen the selected items and positions    *
@@ -9811,7 +9811,7 @@ XmListUpdateSelectedList(Widget w)
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
   _XmAppUnlock(app);
 }
-
+
 /************************************************************************
  *									*
  * XmListPosSelected - Return selection state of item at position	*
@@ -9844,7 +9844,7 @@ XmListPosSelected(Widget w,
 
   return selected;
 }
-
+
 /************************************************************************
  *									*
  * XmCreateList - hokey interface to XtCreateWidget.			*
@@ -9859,7 +9859,7 @@ XmCreateList(Widget parent,
 {
   return XtCreateWidget(name, xmListWidgetClass, parent, args, argCount);
 }
-
+
 Widget 
 XmVaCreateList(
         Widget parent,
@@ -9883,7 +9883,7 @@ XmVaCreateList(
     va_end(var);   
     return w;
 }
-
+
 Widget
 XmVaCreateManagedList(
         Widget parent,
@@ -9906,7 +9906,7 @@ XmVaCreateManagedList(
     va_end(var);   
     return w;
 }
-
+
 /************************************************************************
  *									*
  * XmCreateScrolledList - create a list inside of a scrolled window.	*

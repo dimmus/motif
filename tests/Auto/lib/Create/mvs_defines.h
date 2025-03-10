@@ -65,7 +65,7 @@
 #define  MAX_UNIQUE_COLORS 10
 
 
-
+
 /** Define PARAMS to handle function prototypes ****/
 
 #ifndef PARAMS
@@ -115,7 +115,7 @@
 /* Failure return from mvsGetResourceNum() function */
 #define NON_EXISTENT   (-1)
 
-
+
 /* Defines used to determine what parts of validation to run */
 
 #define CREATE_SECT     (1<<1)

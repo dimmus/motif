@@ -83,7 +83,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState, Time s
  */
 extern int firstTime;
 
-
+
 /******************************<->*************************************
  *
  *  SetClientState (pCD, newState, setTime)
@@ -382,7 +382,7 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 } /* END OF FUNCTION SetClientStateWithEventMask */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetupWindowStateWithEventMask (pCD, newState, setTime, event_mask)
@@ -626,7 +626,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  ConfigureNewState (pcd)
@@ -684,7 +684,7 @@ void ConfigureNewState (ClientData *pcd)
 } /* END OF FUNCTION ConfigureNewState */
 
 
-
+
 /*************************************<->*************************************
  *
  *  UnmapClients (pCD, event_mask)
@@ -745,7 +745,7 @@ static void UnmapClients (ClientData *pCD, unsigned int event_mask)
 } /* END OF FUNCTION UnmapClients */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SetClientWMState (pCD, wmState, mwmState)
@@ -822,7 +822,7 @@ void SetClientWMState (ClientData *pCD, int wmState, int mwmState)
 } /* END OF FUNCTION SetClientWMState */
 
 #ifdef PANELIST
-
+
 #define SLIDE_UP_PERCENTAGE	5
 #define SLIDE_UP_DIVISOR	(100/SLIDE_UP_PERCENTAGE)
 #define SLIDE_UP_INTERVAL	15
@@ -961,7 +961,7 @@ SlideOutTimerProc ( XtPointer client_data, XtIntervalId *id)
 } /* END OF FUNCTION SlideOutTimerProc */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SlideWindowOut (pCD)
@@ -1125,7 +1125,7 @@ SlideWindowOut (ClientData *pCD)
 } /* END OF FUNCTION SlideOutWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  SlideSubpanelBackIn (pCD, wSubpanel)
@@ -1291,7 +1291,7 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 } /* END OF FUNCTION SlideOutWindow */
 #endif /* PANELIST */
 
-
+
 /*************************************<->*************************************
  *
  *  MapClientWindows (pCD)
@@ -1337,7 +1337,7 @@ void MapClientWindows (ClientData *pCD)
 } /* END OF FUNCTION MapClientWindows */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ShowIconForMinimizedClient (pWS, pCD)
@@ -1471,7 +1471,7 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
 } /* END OF FUNCTION ShowIconForMinimizedClient */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  ShowAllIconsForMinimizedClient (pCD)
@@ -1515,4 +1515,4 @@ void ShowAllIconsForMinimizedClient (ClientData *pCD)
 
 } /* END OF FUNCTION ShowAllIconsForMinimizedClient */
 #endif /* WSM */
-
+

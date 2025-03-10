@@ -411,7 +411,7 @@ static XmConst unsigned char workingBits[] = {
    0xfe, 0xff, 0x0f, 0x56, 0x55, 0x05, 0x00, 0x00, 0x00};
 
 
-
+
 /****************************************************************
  * Create a default images for symbol... used in ClassInitialize.
  ****************/
@@ -548,7 +548,7 @@ Destroy(
         } 
     return ;
     }
-
+
 /****************************************************************
  * Set the widget id to NULL for the child widget being destroyed.
  ****************/
@@ -597,7 +597,7 @@ DeleteChild(
     (*delete_child)(child) ;
     return ;
     }
-
+
 /****************************************************************/
 static void 
 MessageCallback(
@@ -633,7 +633,7 @@ MessageCallback(
     }
     return ;
 }
-
+
 /****************************************************************
  * Set attributes of a message widget
  ****************/
@@ -858,7 +858,7 @@ SetValues(
         }
     return( FALSE) ;
     }
-
+
 /****************************************************************
  * Set up the icon (pixmap label widget) and the label widget itself.
  ****************/
@@ -894,7 +894,7 @@ SetUpSymbol(
                                                                        al, ac);
     return ;
     }
-
+
 /****************************************************************
  * Set up the message label (assumes none set yet).
  ****************/
@@ -935,7 +935,7 @@ SetUpMessage(
 
     return ;
 }
-
+
 /****************************************************************/
 XmGeoMatrix 
 _XmMessageBoxGeoMatrixCreate(
@@ -1169,7 +1169,7 @@ _XmMessageBoxNoGeoRequest(
         } 
     return( FALSE) ;
     }
-
+
 
 
 /****************************************************************
@@ -1251,7 +1251,7 @@ CreateWidgets(
 }
 
 
-
+
 /****************************************************************
  * Common create routine for message dialogs...
  *   it will create the shell and widgets, and set the dialog_type to
@@ -1286,7 +1286,7 @@ CreateDialog(
     XtFree((char*)argsNew);
     return w ;
 }
-
+
 /****************************************************************/
 Widget 
 XmCreateMessageBox(
@@ -1297,7 +1297,7 @@ XmCreateMessageBox(
 {
     return XtCreateWidget (name, xmMessageBoxWidgetClass, parent, al, ac);
 }
-
+
 Widget 
 XmVaCreateMessageBox(
         Widget parent,
@@ -1321,7 +1321,7 @@ XmVaCreateMessageBox(
     va_end(var);   
     return w;
 }
-
+
 Widget
 XmVaCreateManagedMessageBox(
         Widget parent,
@@ -1344,7 +1344,7 @@ XmVaCreateManagedMessageBox(
     va_end(var);   
     return w;
 }
-
+
 /****************************************************************/
 Widget 
 XmCreateMessageDialog(
@@ -1405,7 +1405,7 @@ XmCreateWorkingDialog(
 {
     return CreateDialog (parent, name, al, ac, XmDIALOG_WORKING);
 }
-
+
 /****************************************************************/
 Widget 
 XmCreateTemplateDialog(
@@ -1416,7 +1416,7 @@ XmCreateTemplateDialog(
 {
     return CreateDialog (parent, name, al, ac, XmDIALOG_TEMPLATE);
 }
-
+
 /****************************************************************/
 Widget 
 XmMessageBoxGetChild(

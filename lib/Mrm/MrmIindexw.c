@@ -116,7 +116,7 @@ static char rcsid[] = "$XConsortium: MrmIindexw.c /main/12 1996/11/13 13:57:54 d
       _IdbBufferRecordType(buffer)==IDBrtIndexNode)
 
 
-
+
 /*
  *++
  *
@@ -202,7 +202,7 @@ Idb__INX_EnterItem (IDBFile		file_id ,
 }
 
 
-
+
 /*
  *++
  *
@@ -328,7 +328,7 @@ Idb__INX_EnterLeafIndex (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -503,7 +503,7 @@ Idb__INX_EnterNodeIndex (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -676,7 +676,7 @@ Idb__INX_SplitLeafRecord (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -863,7 +863,7 @@ Idb__INX_SplitNodeRecord (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -936,7 +936,7 @@ Idb__INX_InitRootLeafRecord (IDBFile		file_id,
   return MrmSUCCESS ;
 
 }
-
+
 /*
  *++
  *
@@ -1037,7 +1037,7 @@ Idb__INX_InitRootNodeRecord (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -1093,7 +1093,7 @@ Idb__INX_CopyLeafRecord (IDBIndexLeafRecordPtr	dst_recptr,
   UrmBCopy (src_data, dst_data, IDBIndexLeafFreeMax) ;
 
 }
-
+
 /*
  *++
  *
@@ -1148,7 +1148,7 @@ Idb__INX_CopyNodeRecord (IDBIndexNodeRecordPtr	dst_recptr,
   UrmBCopy (src_data, dst_data, IDBIndexNodeFreeMax) ;
 
 }
-
+
 /*
  *++
  *
@@ -1250,7 +1250,7 @@ Idb__INX_CollapseLeafRecord (IDBIndexLeafRecordPtr	recptr,
 
 }
 
-
+
 /*
  *++
  *
@@ -1358,7 +1358,7 @@ Idb__INX_CollapseNodeRecord (IDBIndexNodeRecordPtr	recptr,
 
 }
 
-
+
 /*
  *++
  *
@@ -1420,7 +1420,7 @@ Idb__INX_ConfirmNodeSpace (IDBFile		file_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -1504,7 +1504,7 @@ Idb__INX_SetParent (IDBFile		file_id,
 }
 
 
-
+
 /*
  *++
  *

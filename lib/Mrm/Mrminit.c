@@ -198,7 +198,7 @@ static char rcsid[] = "$TOG: Mrminit.c /main/14 1999/05/19 15:25:33 mgreess $"
  */
 static	Boolean	urm__initialize_complete = FALSE;
 
-
+
 /*
  *++
  *  PROCEDURE DESCRIPTION:

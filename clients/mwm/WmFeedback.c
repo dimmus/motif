@@ -216,7 +216,7 @@ static ConfirmFunc confirm_func[4] = {Do_Set_Behavior,
 				      Do_Restart,
 				      Do_Quit_Mwm};
 
-
+
 /*************************************<->*************************************
  *
  *  ShowFeedbackWindow(pSD, x, y, width, height, style)
@@ -407,7 +407,7 @@ void ShowFeedbackWindow (WmScreenData *pSD, int x, int y, unsigned int width, un
 } /* END OF FUNCTION ShowFeedbackWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PaintFeedbackWindow(pSD)
@@ -480,7 +480,7 @@ void PaintFeedbackWindow (WmScreenData *pSD)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  HideFeedbackWindow (pSD)
@@ -517,7 +517,7 @@ void HideFeedbackWindow (WmScreenData *pSD)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  UpdateFeedbackInfo (pSD, x, y, width, height)
@@ -576,7 +576,7 @@ void UpdateFeedbackInfo (WmScreenData *pSD, int x, int y, unsigned int width, un
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  UpdateFeedbackText (pSD, x, y, width, height)
@@ -629,7 +629,7 @@ void UpdateFeedbackText (WmScreenData *pSD, int x, int y, unsigned int width, un
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  static void
@@ -671,7 +671,7 @@ static void OkCB (w, client_data, call_data)
 
 } /* END OF FUNCTION OkCB */
 
-
+
 /*************************************<->*************************************
  *
  *  static void
@@ -712,7 +712,7 @@ static void CancelCB (w, client_data, call_data)
 } /* END OF FUNCTION CancelCB */
 
 
-
+
 /*************************************<->*************************************
  *
  *  void
@@ -902,7 +902,7 @@ void ConfirmAction (WmScreenData *pSD, int nbr)
 } /* END OF FUNCTION ConfirmAction */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ShowWaitState (flag)
@@ -1009,7 +1009,7 @@ void ShowWaitState (Boolean flag)
 } /* END OF FUNCTION ShowWaitState */
 
 
-
+
 /*************************************<->*************************************
  *
  *  InitCursorInfo ()

@@ -134,7 +134,7 @@ static ClientData *dirtyStackEntry = NULL;
 static ClientData *dirtyLeader = NULL;
 
 #ifdef WSM
-
+
 /***********************<->*************************************
  *
  *  F_Action (args, pCD, event)
@@ -201,7 +201,7 @@ F_Action (String actionName, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Action */
 #endif /* WSM */
 
-
+
 /******************************<->*************************************
  *
  *  F_Beep (args, pCD, event)
@@ -240,7 +240,7 @@ Boolean F_Beep (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Beep */
 
 
-
+
 /*
  * Handle Special case where the dirty window is the top most
  * transient window.  When this is the case, raising the window
@@ -278,7 +278,7 @@ ClientData *pcd;
 } /* END OF FUNCTION */
 
 
-
+
 Boolean ForceLowerWindow (ClientData *pcd)
 {
 #if 0
@@ -356,7 +356,7 @@ Boolean ForceLowerWindow (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Lower (args, pCD, event)
@@ -478,7 +478,7 @@ Boolean F_Lower (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Lower */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Do_Lower (pCD, pStackEntry)
@@ -752,7 +752,7 @@ void Do_Lower (ClientData *pCD, ClientListEntry *pStackEntry, int flags)
 } /* END OF FUNCTION Do_Lower */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_CircleDown (args, pCD, event)
@@ -848,7 +848,7 @@ Boolean F_Circle_Down (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Circle_Down */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Circle_Up (args, pCD, event)
@@ -945,7 +945,7 @@ Boolean F_Circle_Up (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Circle_Up */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Focus_Color (args, pCD, event)
@@ -986,7 +986,7 @@ Boolean F_Focus_Color (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Focus_Color */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Exec (args, pCD, event)
@@ -1190,7 +1190,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Exec */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Quit_Mwm (args, pCD, event)
@@ -1219,7 +1219,7 @@ Boolean F_Quit_Mwm (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Quit_Mwm */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Do_Quit_Mwm (diedOnRestart)
@@ -1297,7 +1297,7 @@ void Do_Quit_Mwm (Boolean diedOnRestart)
 
 } /* END OF FUNCTION Do_Quit_Mwm */
 
-
+
 /*************************************<->*************************************
  *
  *  ReBorderClient (pCD, reMapClient)
@@ -1397,7 +1397,7 @@ void ReBorderClient (ClientData *pCD, Boolean reMapClient)
 } /* END OF FUNCTION ReBorderClient */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Focus_Key (args, pCD, event)
@@ -1434,7 +1434,7 @@ Boolean F_Focus_Key (String args, ClientData *pCD, XEvent *event)
 
 } /* END OF FUNCTION F_Focus_Key */
 
-
+
 /*************************************<->*************************************
  *
  *  FindSomeReasonableClient
@@ -1542,7 +1542,7 @@ static Window FindSomeReasonableClient(void)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  Do_Focus_Key (pCD, focusTime, flags)
@@ -1831,7 +1831,7 @@ void Do_Focus_Key (ClientData *pCD, Time focusTime, long flags)
 
 
 #ifdef WSM
-
+
 /***********************<->*************************************
  *
  *  F_Goto_Workspace (args, pCD, event)
@@ -1897,7 +1897,7 @@ F_Goto_Workspace (String args, ClientData *pCD, XEvent *event)
 #endif /* WSM */
 
 #ifdef WSM
-
+
 /******************************<->*************************************
  *
  *  Boolean F_Help (String args, ClientData *pCD, XEvent *event)
@@ -1933,7 +1933,7 @@ F_Help (String args, ClientData *pCD, XEvent *event)
 
 }  /* END OF FUNCTION F_Help */
 
-
+
 /******************************<->*************************************
  *
  *  Boolean F_Help_Mode (String args, ClientData *pCD, XEvent *event)
@@ -1975,7 +1975,7 @@ F_Help_Mode (String args, ClientData *pCD, XEvent *event)
 }  /* END OF FUNCTION F_Help_Mode */
 
 #endif /* WSM */
-
+
 /******************************<->*************************************
  *
  *  F_Next_Key (args, pCD, event)
@@ -2030,7 +2030,7 @@ Boolean F_Next_Key (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Next_Key */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Prev_Cmap (args, pCD, event)
@@ -2079,7 +2079,7 @@ Boolean F_Prev_Cmap (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Prev_Cmap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Prev_Key (args, pCD, event)
@@ -2135,7 +2135,7 @@ Boolean F_Prev_Key (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Prev_Key */
 
 #ifdef PANELIST
-
+
 /***********************<->*************************************
  *
  *  F_Post_FpMenu (args, pCD, event)
@@ -2212,7 +2212,7 @@ F_Post_FpMenu (String args, ClientData *pCD, XEvent *event)
     return False;
 }
 
-
+
 /***********************<->*************************************
  *
  *  F_Push_Recall (args, pCD, event)
@@ -2353,7 +2353,7 @@ F_Push_Recall (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Push_Recall */
 #endif /* PANELIST */
 
-
+
 /*************************************<->*************************************
  *
  *  F_Pass_Key (args, pCD, event)
@@ -2403,7 +2403,7 @@ Boolean F_Pass_Key (args, pCD, event)
 } /* END OF FUNCTION F_Pass_Key */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Maximize (args, pCD, event)
@@ -2430,7 +2430,7 @@ Boolean F_Maximize (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Maximize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Menu (args, pCD, event)
@@ -2553,7 +2553,7 @@ Boolean F_Menu (String args, ClientData *pCD, XEvent *event)
 
 } /* END OF FUNCTION F_Menu */
 
-
+
 /*************************************<->*************************************
  *
  *  F_Minimize (args, pCD, event)
@@ -2593,7 +2593,7 @@ Boolean F_Minimize (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Minimize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Move (args, pCD, event)
@@ -2619,7 +2619,7 @@ Boolean F_Move (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Move */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Next_Cmap (args, pCD, event)
@@ -2668,7 +2668,7 @@ Boolean F_Next_Cmap (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Next_Cmap */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Nop (args, pCD, event)
@@ -2688,7 +2688,7 @@ Boolean F_Nop (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Nop */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Normalize (args, pCD, event)
@@ -2716,7 +2716,7 @@ Boolean F_Normalize (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Normalize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Normalize_And_Raise (args, pCD, event)
@@ -2802,7 +2802,7 @@ Boolean F_Normalize_And_Raise (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Normalize_And_Raise */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Restore (args, pCD, event)
@@ -2854,7 +2854,7 @@ Boolean F_Restore (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Restore */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Restore_And_Raise (args, pCD, event)
@@ -2922,7 +2922,7 @@ Boolean F_Restore_And_Raise (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Restore_And_Raise */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Pack_Icons (args, pCD, event)
@@ -2977,7 +2977,7 @@ Boolean F_Pack_Icons (String args, ClientData *pCD, XEvent *event)
 
 } /* END OF FUNCTION F_Pack_Icons */
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -3034,7 +3034,7 @@ Boolean F_Post_RMenu (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Post_RMenu */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  F_Post_SMenu (args, pCD, event)
@@ -3150,7 +3150,7 @@ Boolean F_Post_SMenu (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_PostSMenu */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Kill (args, pCD, event)
@@ -3257,7 +3257,7 @@ Boolean F_Kill (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Kill */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  F_Marquee_Selection (args, pCD, event)
@@ -3326,7 +3326,7 @@ RefreshByClearing (Window win)
 }
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  F_Refresh (args, pCD, event)
@@ -3377,7 +3377,7 @@ Boolean F_Refresh (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Refresh */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Resize (args, pCD, event)
@@ -3404,7 +3404,7 @@ Boolean F_Resize (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Resize */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Restart (args, pCD, event)
@@ -3439,7 +3439,7 @@ Boolean F_Restart (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Restart */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Do_Restart (dummy)
@@ -3458,7 +3458,7 @@ void Do_Restart (Boolean dummy)
 } /* END OF FUNCTION Do_Restart */
 
 
-
+
 /*************************************<->*************************************
  *
  *  RestartWm (startupFlags)
@@ -3566,7 +3566,7 @@ be found or could not be executed.")));
 
 } /* END OF FUNCTION RestartWm */
 
-
+
 /*************************************<->*************************************
  *
  *  DeFrameClient (pCD)
@@ -3670,7 +3670,7 @@ void DeFrameClient (ClientData *pCD)
 } /* END OF FUNCTION DeFrameClient */
 
 #if defined(PANELIST)
-
+
 /******************************<->*************************************
  *
  *  F_Toggle_Front_Panel (args, pCD, event)
@@ -3722,7 +3722,7 @@ F_Toggle_Front_Panel (String args, ClientData *pCD, XEvent *event)
     return(True);
 } /* END OF FUNCTION F_Toggle_Front_Panel */
 
-
+
 /******************************<->*************************************
  *
  *  Boolean F_Version (String args, ClientData *pCD, XEvent *event)
@@ -3770,7 +3770,7 @@ F_Version (String args, ClientData *pCD, XEvent *event)
 }  /* END OF FUNCTION F_Version */
 #endif /* PANELIST */
 
-
+
 /******************************<->*************************************
  *
  *  F_Send_Msg (args, pCD, event)
@@ -3821,7 +3821,7 @@ Boolean F_Send_Msg (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Send_Msg */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Separator (args, pCD, event)
@@ -3873,7 +3873,7 @@ Boolean ForceRaiseWindow (ClientData *pcd)
 }
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Raise (args, pCD, event)
@@ -3971,7 +3971,7 @@ Boolean F_Raise (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Raise */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Do_Raise (pCD, pStackEntry)
@@ -4248,7 +4248,7 @@ void Do_Raise (ClientData *pCD, ClientListEntry *pStackEntry, int flags)
 } /* END OF FUNCTION Do_Raise */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Raise_Lower (args, pCD, event)
@@ -4336,7 +4336,7 @@ Boolean F_Raise_Lower (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Raise_Lower */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Refresh_Win (args, pCD, event)
@@ -4402,7 +4402,7 @@ Boolean F_Refresh_Win (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Refresh_Win */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Set_Behavior (args, pCD, event)
@@ -4445,7 +4445,7 @@ Boolean F_Set_Behavior (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Set_Behavior */
 
 
-
+
 /*************************************<->*************************************
  *
  *  Do_Set_Behavior (dummy)
@@ -4465,7 +4465,7 @@ void Do_Set_Behavior (Boolean dummy)
 } /* END OF FUNCTION Do_Set_Behavior */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  F_Set_Context (args, pCD, event)
@@ -4487,7 +4487,7 @@ Boolean F_Set_Context (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Set_Context */
 #endif /* WSM */
 
-
+
 /*************************************<->*************************************
  *
  *  F_Title (args, pCD, event)
@@ -4507,7 +4507,7 @@ Boolean F_Title (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Title */
 
 
-
+
 /******************************<->*************************************
  *
  *  F_Screen (args, pCD, event)
@@ -4619,7 +4619,7 @@ Boolean F_Screen (String args, ClientData *pCD, XEvent *event)
 }
 
 
-
+
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
@@ -4653,7 +4653,7 @@ Boolean F_InvokeCommand (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_InvokeCommand */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-
+
 /*************************************<->*************************************
  *
  *  GetFunctionTimestamp (pEvent)
@@ -4748,7 +4748,7 @@ void ClearDirtyStackEntry (ClientData *pCD)
     }
 }
 #if defined(DEBUG) && defined(WSM)
-
+
 /***********************<->*************************************
  *
  *  F_ZZ_Debug (args, pCD, event)
@@ -4810,7 +4810,7 @@ F_ZZ_Debug (String subFcn, ClientData *pCD, XEvent *event)
 #endif /* DEBUG */
 
 #ifdef WSM
-
+
 /*************************************<->*************************************
  *
  *  F_Next_Workspace (args, pCD, event)
@@ -4847,7 +4847,7 @@ Boolean F_Next_Workspace (String args, ClientData *pCD, XEvent *event)
 
 } /* END OF FUNCTION F_Next_Workspace */
 
-
+
 /*************************************<->*************************************
  *
  *  F_Prev_Workspace (args, pCD, event)
@@ -4885,7 +4885,7 @@ Boolean F_Prev_Workspace (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Prev_Workspace */
 
 
-
+
 /*************************************<->*************************************
  *
  *  F_Workspace_Presence (args, pCD, event)

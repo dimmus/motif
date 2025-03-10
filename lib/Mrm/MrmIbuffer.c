@@ -84,7 +84,7 @@ static char rcsid[] = "$XConsortium: MrmIbuffer.c /main/16 1996/11/13 13:55:44 d
  *
  *	Idb__BM_DecommitAll		- Decommit all buffers for some file
  */
-
+
 /*
  *
  *  OWN VARIABLE DECLARATIONS
@@ -124,7 +124,7 @@ static	IDBRecordBufferPtr	idb__buffer_pool_vec = NULL ;
 static	long int		idb__buffer_activity_count = 1 ;
 
 
-
+
 /*
  *++
  *
@@ -183,7 +183,7 @@ Idb__BM_InitBufferVector (void)
 
 }
 
-
+
 /*
  *++
  *
@@ -309,7 +309,7 @@ Idb__BM_GetBuffer (IDBFile			file_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -350,7 +350,7 @@ Idb__BM_MarkActivity (IDBRecordBufferPtr	buffer)
 }
 
 
-
+
 /*
  *++
  *
@@ -392,7 +392,7 @@ Idb__BM_MarkModified (IDBRecordBufferPtr	buffer)
 }
 
 
-
+
 /*
  *++
  *
@@ -519,7 +519,7 @@ Idb__BM_GetRecord (IDBFile                     file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -601,7 +601,7 @@ Idb__BM_InitRecord (IDBFile                     file_id,
 
 }
 
-
+
 /*
  *++
  *
@@ -676,7 +676,7 @@ Idb__BM_InitDataRecord (IDBFile			file_id,
 }
 
 
-
+
 /*
  *++
  *
@@ -740,7 +740,7 @@ Idb__BM_Decommit (IDBRecordBufferPtr		buffer)
 }
 
 
-
+
 /*
  *++
  *

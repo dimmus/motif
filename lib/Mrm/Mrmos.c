@@ -82,7 +82,7 @@ void _MrmOSIEEEDoubleToHost(double *val)	/* unused */
 {
   /*EMPTY*/
 }
-
+
 /************************************************************************
  *  
  *    _MrmOSSetLocale   wrapper so vendor can disable call to set 

@@ -66,7 +66,7 @@ extern Dimension clipWidth;
 extern Dimension clipHeight;
 extern Position clipX;
 extern Position clipY;
-
+
 /*************************************<->*************************************
  *
  *  InitIconPlacement ()
@@ -328,7 +328,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
 } /* END OF FUNCTION InitIconPlacement */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetNextIconPlace (pIPD)
@@ -367,7 +367,7 @@ int GetNextIconPlace (IconPlacementData *pIPD)
 } /* END OF FUNCTION GetNextIconPlace */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CvtIconPlaceToPosition (pIPD, place, pX, pY)
@@ -438,7 +438,7 @@ void CvtIconPlaceToPosition (IconPlacementData *pIPD, int place, int *pX, int *p
 } /* END OF FUNCTION CvtIconPlaceToPosition */
 
 
-
+
 /*************************************<->*************************************
  *
  *  FindIconPlace (pCD, pIPD, x, y)
@@ -685,7 +685,7 @@ int FindIconPlace (ClientData *pCD, IconPlacementData *pIPD, int x, int y)
 } /* END OF FUNCTION FindIconPlace */
 
 
-
+
 /*************************************<->*************************************
  *
  *  CvtIconPostionToPlace (pIPD, x, y)
@@ -778,7 +778,7 @@ int CvtIconPositionToPlace (IconPlacementData *pIPD, int x, int y)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  PackRootIcons ()
@@ -885,7 +885,7 @@ void PackRootIcons (void)
 } /* END OF FUNCTION PackRootIcons */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MoveIconInfo (pIPD, p1, p2)

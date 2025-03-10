@@ -650,7 +650,7 @@ XmMapSegmentEncoding(char        *fontlist_tag)
   return(ret_val);
 }
 
-
+
 /************************************************************************
  *
  *  XmCvtCTToXmString
@@ -907,7 +907,7 @@ XmCvtCTToXmString(
     
 }
 
-
+
 /***********************************************************************
  *
  * Hacked procedures to work with XmCvtCTToXmString.
@@ -954,7 +954,7 @@ processESCHack(
     return(ok);
 }
 
-
+
 static Boolean 
 processExtendedSegmentsHack(
         ct_context *ctx,
@@ -1072,7 +1072,7 @@ processExtendedSegmentsHack(
     return(ok);
 }
   
-
+
 /************************************************************************
  *
  *  XmCvtTextToXmString
@@ -1106,7 +1106,7 @@ XmCvtTextToXmString(
     }
     return(ok);
 }
-
+
 
 static Boolean 
 cvtTextToXmString(
@@ -1359,7 +1359,7 @@ cvtTextToXmString(
 
     return (ok);
 }
-
+
 
 static char **
 cvtCTsegment(ct_context *ctx,
@@ -1586,7 +1586,7 @@ outputXmString(
 	};
     }; /* end if paired */
 }
-
+
 static XmString 
 concatStringToXmString(
         XmString compoundstring,
@@ -1615,7 +1615,7 @@ concatStringToXmString(
     return (compoundstring);
 }
 
-
+
 /* processESC - handle valid ESC sequences */
 static Boolean 
 processESC(
@@ -1656,7 +1656,7 @@ processESC(
     return(ok);
 }
 
-
+
 /*
 **  processCSI - handle valid CSI sequences
 **	CSI sequences
@@ -1714,7 +1714,7 @@ processCSI(
 }
 
 
-
+
 static Boolean 
 processExtendedSegments(
         ct_context *ctx,
@@ -1816,7 +1816,7 @@ processExtendedSegments(
     return(ok);
 }
 
-
+
 static Boolean 
 process94n(
         ct_context *ctx,
@@ -1875,7 +1875,7 @@ process94n(
 }
 
 
-
+
 static Boolean 
 process94GL(
         ct_context *ctx,
@@ -1899,7 +1899,7 @@ process94GL(
     return(True);
 }
 
-
+
 static Boolean 
 process94GR(
         ct_context *ctx,
@@ -1921,7 +1921,7 @@ process94GR(
 }
 
 
-
+
 static Boolean 
 process96GR(
         ct_context *ctx,
@@ -1969,7 +1969,7 @@ process96GR(
     return(True);
 }
 
-
+
 /************************************************************************
  *
  *  XmCvtXmStringToCT
@@ -2052,7 +2052,7 @@ _XmConvertCSToString(XmString cs) /* unused */
   
 }
 
-
+
 /***************************************************************************
  *									   *
  * _XmCvtXmStringToCT - public wrapper for the widgets to use.	  	   *
@@ -2114,7 +2114,7 @@ XmCvtXmStringToText(
     }
     return(ok);
 }
-
+
 #ifdef UTF8_SUPPORTED
 /************************************************************************
  *
@@ -2267,7 +2267,7 @@ cvtXmStringToUTF8String(
   return(True);
 }
 #endif
-
+
 /************************************************************************
  *
  *  cvtXmStringToText
@@ -2429,7 +2429,7 @@ cvtXmStringToText(
 
   return(True);
 }
-
+
 #ifdef UTF8_SUPPORTED
 static Boolean
 processCharsetAndTextUtf8(XmStringCharSet tag,
@@ -2531,7 +2531,7 @@ processCharsetAndTextUtf8(XmStringCharSet tag,
 }
 #endif
 
-
+
 static Boolean
 processCharsetAndText(XmStringCharSet tag,
 		      OctetPtr		ctext,
@@ -2788,7 +2788,7 @@ processCharsetAndText(XmStringCharSet tag,
   return(True);
 }
   
-
+
 static OctetPtr 
 ctextConcat(
         OctetPtr str1,

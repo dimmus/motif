@@ -38,12 +38,12 @@
  * IDB literals
  */
 
-
+
 /*
  * Primitive typedefs
  */
 
-
+
 /*
  * A data pointer. Consists of a record number (of a data record) and an
  * offset in the record to the data entry.
@@ -154,7 +154,7 @@ typedef struct {
 #define	IDBOverflowDataHdrSize	(sizeof(IDBOverflowData) - sizeof(char))
 
 
-
+
 /*
  * File record definitions
  *
@@ -206,7 +206,7 @@ typedef struct {
 } IDBDummyRecord, *IDBDummyRecordPtr ;
 
 
-
+
 /*
  * IDB header record definition
  *
@@ -294,7 +294,7 @@ typedef struct {
 #define	IDBHeaderRecordNumber	1
 
 
-
+
 /*
  * Index leaf record definition
  *
@@ -373,7 +373,7 @@ typedef struct {
 #define	IDBIndexLeafFreeMax	(IDBRecordSize - sizeof(IDBIndexLeafHdr))
 
 
-
+
 /*
  * Index B-tree node record definition
  *
@@ -440,7 +440,7 @@ typedef struct {
 				+ sizeof(IDBRecordNumber))
 
 
-
+
 /*
  * Resource ID record
  *
@@ -480,7 +480,7 @@ typedef struct {
 #define	IDBridPtrVecMax		(IDBridFreeMax / sizeof(IDBDataPointer))
 
 
-
+
 /*
  * Data record
  *
@@ -534,7 +534,7 @@ typedef struct {
 #define	IDBDataOverflowMax	(IDBDataFreeMax - IDBOverflowDataHdrSize)
 
 
-
+
 /*
  * In-memory definitions
  *

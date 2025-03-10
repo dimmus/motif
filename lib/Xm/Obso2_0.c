@@ -118,7 +118,7 @@ XmGadgetClassExtRec _XmToggleBGadClassExtRec = {
   NULL, NULLQUARK, 1L, sizeof(XmGadgetClassExtRec),
   XmInheritBaselineProc, XmInheritDisplayRectProc
 };
-
+
 /* XmWorld is defunct. */
 
 typedef struct _XmWorldClassPart {
@@ -194,7 +194,7 @@ externaldef(worldobjectclass) XmWorldClassRec xmWorldClassRec =
 
 externaldef(worldobjectclass) WidgetClass 
      xmWorldClass = (WidgetClass) &xmWorldClassRec;
-
+
 /************************************************************************
  *                                                                      *
  * _XmGetRealXlations - was global in ScrolledW.c, is now static.       *
@@ -754,7 +754,7 @@ _XmClearBGCompatibility(
 
 
 
-
+
 /****************************************************************/
 void 
 _XmBulletinBoardSetDefaultShadow(
@@ -794,7 +794,7 @@ _XmBulletinBoardSetDefaultShadow(
         } 
     return ;
     }
-
+
 
 static Widget
 GetBBWithDB(
@@ -1090,7 +1090,7 @@ _XmGetDefaultColors(
 
 	return (default_set[default_set_count - 1]);
 }
-
+
 
 
 static int 
@@ -1254,7 +1254,7 @@ _XmAccessColorData(
     return(p);
 }
 
-
+
 /* OBSOLETE: Replaced by _XmMapKeyEvents. */
 Boolean 
 _XmMapKeyEvent(
@@ -1738,7 +1738,7 @@ _XmGetWorldObject(
     return 
       worldObject;
 }
-
+
 /************************************************************************
  *
  *  _XmVirtKeysHandler
@@ -1760,7 +1760,7 @@ _XmVirtKeysHandler(Widget    widget,
 }
 
 
-
+
 /****************************************************************
  *
  *  TextOut.c functions 
@@ -1798,7 +1798,7 @@ _XmTextDestinationVisible(Widget w,
   /* DEPRECATED */
 }
 
-
+
 /****************************************************************
  *
  *  TextStrSo.c functions 
@@ -1813,7 +1813,7 @@ _XmStringSourceFindString(Widget w,
 {
   return(XmTextFindString(w, start, string, XmTEXT_FORWARD, position));
 }
-
+
 /****************************************************************
  *
  *  TextIn.c functions 
@@ -1827,7 +1827,7 @@ _XmTextGetAnchor(XmTextWidget tw)
   
   return(data->anchor);
 }
-
+
 /****************************************************************
  *
  *  Traversal.c functions 
@@ -1883,7 +1883,7 @@ _XmCreateVisibilityRect(Widget w,
 {   
   return _XmComputeVisibilityRect(w, rectPtr, FALSE, TRUE);
 }
-
+
 /****************************************************************
  *
  *  MenuShell.c functions 
@@ -1897,7 +1897,7 @@ _XmSetLastManagedMenuTime (
    _XmGetMenuState((Widget)wid)->MS_LastManagedMenuTime = newTime;
 }
 
-
+
 /****************************************************************
  *
  *  XmString.c functions 
@@ -2211,7 +2211,7 @@ XmTextFieldGetCursorPosition(Widget w)
   return XmTextFieldGetInsertionPosition(w);
 }
 
-
+
 /****************************************************************
  *
  *  TravAct.c functions 
@@ -2268,7 +2268,7 @@ _XmFreeWidgetExtData(
   /*EMPTY*/
 }
 
-
+
 /*ARGSUSED*/
 void 
 _XmBaseClassPartInitialize(
@@ -2277,7 +2277,7 @@ _XmBaseClassPartInitialize(
   /*EMPTY*/
 }
 
-
+
 Boolean 
 _XmIsSlowSubclass(
         WidgetClass wc,
@@ -2294,7 +2294,7 @@ _XmIsSlowSubclass(
     return False;
 }
 
-
+
 Boolean
 _XmIsStandardMotifWidgetClass(
         WidgetClass wc)

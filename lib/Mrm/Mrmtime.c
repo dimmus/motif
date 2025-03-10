@@ -74,7 +74,7 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
  *
  */
 
-
+
 /*
  *++
  *

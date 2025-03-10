@@ -94,7 +94,7 @@ static void CheckKids(
 
 
 
-
+
 /************************************************************************
  *									*
  * Main Window Resources						*
@@ -176,7 +176,7 @@ static XmScrolledWindowClassExtRec scrolled_windowClassExtRec = {
     GetVertRects,                      /* overide get_vert_rects */
 };
 
-
+
 /****************************************************************
  *
  * Full class record constant
@@ -262,7 +262,7 @@ externaldef(xmmainwindowwidgetclass) WidgetClass
              xmMainWindowWidgetClass = (WidgetClass)&xmMainWindowClassRec;
 
 
-
+
 
 /************************************************************************
  *									*
@@ -397,7 +397,7 @@ CheckKids(
 }
 
 
-
+
 /************************************************************************
  *									*
  *  InsertChild								*
@@ -708,7 +708,7 @@ Resize(
 }
 
 
-
+
 /************************************************************************
  *									*
  * GetSize - compute the size of the Main window to enclose all the	*
@@ -844,7 +844,7 @@ GetSize(
     if (!*pheight) *pheight = DEFAULT_SIZE ;
 
 }
-
+
 /************************************************************************
  *									*
  *  GeometryManager							*
@@ -997,7 +997,7 @@ GeometryManager(
 }
 
 
-
+
 /************************************************************************
  *									*
  *  ChangeManaged - called whenever there is a change in the managed	*
@@ -1296,7 +1296,7 @@ GetVertRects(
 
 }
 
-
+
 /************************************************************************
  *									*
  * Public API Functions							*

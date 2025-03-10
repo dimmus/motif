@@ -70,7 +70,7 @@ static int  iconShrinkY;
 static unsigned int iconShrinkWidth;
 static unsigned int iconShrinkHeight;
 
-
+
 /*************************************<->*************************************
  *
  *  MakeIcon (pWS, pcd)
@@ -262,7 +262,7 @@ Boolean MakeIcon (WmWorkspaceData *pWS, ClientData *pcd)
 } /* END OF FUNCTION MakeIcon */
 
 
-
+
 /*************************************<->*************************************
  *
  *  MakeIconShadows (pcd, xOffset, yOffset)
@@ -381,7 +381,7 @@ void MakeIconShadows (ClientData *pcd, int xOffset, int yOffset)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  IconExposureProc (pcd, expose)
@@ -697,7 +697,7 @@ void IconExposureProc (ClientData *pcd, Boolean expose)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetIconTitleBox (pcd, pBox)
@@ -836,7 +836,7 @@ void GetIconTitleBox (ClientData *pcd, XRectangle *pBox)
 } /* END OF FUNCTION GetIconTitleBox */
 
 
-
+
 /*************************************<->*************************************
  *
  *  DrawIconTitle (pcd)
@@ -918,7 +918,7 @@ void DrawIconTitle (ClientData *pcd)
 
 
 
-
+
 /*************************************<->*************************************
  *
  *  RedisplayIconTitle (pcd)
@@ -1021,7 +1021,7 @@ void RedisplayIconTitle (ClientData *pcd)
 } /* END OF FUNCTION  RedisplayIconTitle */
 
 
-
+
 /*************************************<->*************************************
  *
  *  GetIconDimensions (pSD, &pWidth, &pLabelHeight, &pImageHeight)
@@ -1139,7 +1139,7 @@ void GetIconDimensions (WmScreenData *pSD, unsigned int *pWidth, unsigned int *p
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  InitIconSize (pSD)
@@ -1236,7 +1236,7 @@ void InitIconSize (WmScreenData *pSD)
     
 } /* END OF FUNCTION InitIconSize */
 
-
+
 /*************************************<->*************************************
  *
  *  ShowActiveIcon (pcd)
@@ -1380,7 +1380,7 @@ void ShowActiveIcon (ClientData *pcd)
 } /* END OF FUNCTION ShowActiveIcon */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ShowInactiveIcon (pcd, refresh)
@@ -1484,7 +1484,7 @@ void ShowInactiveIcon (ClientData *pcd, Boolean refresh)
 } /* END OF FUNTION ShowInactiveIcon  */
 
 
-
+
 /*************************************<->*************************************
  *
  *  ReparentIconWindow (pcd, xOffset, yOffset)
@@ -1594,7 +1594,7 @@ void ReparentIconWindow (ClientData *pcd, int xOffset, int yOffset)
 #endif /* PANELIST */
 } /* END OF FUNCTION ReparentIconWindow */
 
-
+
 /*************************************<->*************************************
  *
  *  PutBoxOnScreen (screen, px, py, width, height)
@@ -1641,7 +1641,7 @@ void PutBoxOnScreen (int screen, int *px, int *py, unsigned int width, unsigned 
 
 } /* END OF FUNCTION PutBoxOnScreen */
 
-
+
 /*************************************<->*************************************
  *
  *  PutBoxInIconBox (pCD, px, py, width, height)
@@ -1705,7 +1705,7 @@ void PutBoxInIconBox (ClientData *pCD, int *px, int *py, unsigned int *width, un
 
 } /* END OF FUNCTION PutBoxInIconBox */
 
-
+
 /*************************************<->*************************************
  *
  *  CreateActiveIconTextWindow (pSD)
@@ -1773,7 +1773,7 @@ void CreateActiveIconTextWindow (WmScreenData *pSD)
 } /* END OF FUNCTION CreateActiveIconTextWindow */
 
 
-
+
 /*************************************<->*************************************
  *
  *  PaintActiveIconText (pcd, erase)
@@ -1856,7 +1856,7 @@ void PaintActiveIconText (ClientData *pcd, Boolean erase)
 
 } /* END OF FUNCTION PaintActiveIconText */
 
-
+
 /*************************************<->*************************************
  *
  *  ShowActiveIconText (pcd)
@@ -2007,7 +2007,7 @@ void ShowActiveIconText (ClientData *pcd)
     }
 } /* END OF FUNCTION ShowActiveIconText */
 
-
+
 /*************************************<->*************************************
  *
  *  HideActiveIconText ()
@@ -2051,7 +2051,7 @@ void HideActiveIconText (WmScreenData *pSD)
     }
 }
 
-
+
 /*************************************<->*************************************
  *
  *  MoveActiveIconText (pcd)

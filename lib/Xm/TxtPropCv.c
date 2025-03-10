@@ -376,7 +376,7 @@ GetUseableText(Display *display, XmString xmstring, char **buffer,
     _XmStringContextFree(&stack_context);
     return(Success);
 }
-    
+    
 /************************************************************************
  *
  *  XmCvtXmStringTableToTextProperty
@@ -565,7 +565,7 @@ XmCvtXmStringTableToTextProperty(Display *display,
       return(XLocaleNotSupported);
     }
 }
-
+
 /************************************************************************
  *
  *  XmCvtTextPropertyToXmStringTable
