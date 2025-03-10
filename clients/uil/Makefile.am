@@ -15,7 +15,7 @@ libUil_la_LIBADD = UilParser.lo ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la
 
 uil_LDADD = ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la 
 
-INCLUDES = -DINCDIR=\"@INCDIR@\" \
+AM_CPPFLAGS = -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
            -I$(srcdir)/../../include \
            -I$(srcdir)/../../lib \

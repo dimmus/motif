@@ -2,7 +2,7 @@ MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = Mrm.msg
 
-INCLUDES = -I$(srcdir)/.. -I.. -I../Xm ${X_CFLAGS}
+AM_CPPFLAGS = -I$(srcdir)/.. -I.. -I../Xm ${X_CFLAGS}
 
 mrmdir = $(includedir)/Mrm
 
@@ -50,4 +50,4 @@ else
 endif
 
 splint:
-	$(SPLINT) $(INCLUDES) $(SPLINT_EXTRAFLAGS) $(top_srcdir)/lib/Mrm/*.c
+	$(SPLINT) $(AM_CPPFLAGS) $(SPLINT_EXTRAFLAGS) $(top_srcdir)/lib/Mrm/*.c

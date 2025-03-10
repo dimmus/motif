@@ -5,7 +5,7 @@ CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = xmstring.list Xm.msg \
              XmStrDefs.ct
 
-INCLUDES = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
+AM_CPPFLAGS = -I.. -I$(srcdir)/.. -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
            -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
            ${X_CFLAGS}
@@ -307,6 +307,6 @@ else
 endif
 
 splint: $(STRING_FILES)
-	$(SPLINT) $(INCLUDES) $(SPLINT_EXTRAFLAGS) $(top_srcdir)/lib/Xm/*.c
+	$(SPLINT) $(AM_CPPFLAGS) $(SPLINT_EXTRAFLAGS) $(top_srcdir)/lib/Xm/*.c
 
 #include $(srcdir)/check_headers.am
