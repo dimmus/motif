@@ -5,8 +5,8 @@ datadir = ${prefix}/share/Xm/doc
 
 EXTRA_DIST = BUGREPORT \
              COPYING \
-             README RELEASE RELNOTES \
-             INSTALL.configure Makefile.imake-pure
+             README \
+             INSTALL Makefile.imake-pure
 
 MAINTAINERCLEANFILES = Makefile.in \
              configure libtool \
@@ -32,6 +32,8 @@ SUBDIRS	= bindings bitmaps \
              tools \
              clients \
              doc \
-             demos
+             demos \
+             tests
+
 AUTOMAKE_OPTIONS = 1.4
 # ACLOCAL_AMFLAGS = -I .
