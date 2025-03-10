@@ -20,7 +20,9 @@ MAINTAINERCLEANFILES = Makefile.in \
              install-sh \
              missing mkinstalldirs \
              ylwrap \
-             compile
+             compile \
+             XmStrDefs.c \
+             *~
 
 SUBDIRS	= bindings bitmaps \
              config \
