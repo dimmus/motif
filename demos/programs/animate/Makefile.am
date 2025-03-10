@@ -19,7 +19,7 @@ bin_PROGRAMS = xmanimate
 
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Mrm/libMrm.la ../../../lib/Xm/libXm.la
 
-INCLUDES = -I$(srcdir)/../../../lib \
+AM_CPPFLAGS = -I$(srcdir)/../../../lib \
            -I$(srcdir)/../../lib \
            -I$(top_builddir)/lib \
            ${X_CFLAGS} 

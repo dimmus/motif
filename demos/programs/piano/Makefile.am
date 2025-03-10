@@ -10,4 +10,4 @@ EXTRA_DIST = piano.images README Inv8_part1.piano Inv8_part2.piano \
 data_DATA  = $(EXTRA_DIST) $(piano_SOURCES) 
 LDADD = ../../../lib/Xm/libXm.la -lm
 
-INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 

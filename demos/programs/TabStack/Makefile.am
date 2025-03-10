@@ -10,4 +10,4 @@ data_DATA = $(tabstack_SOURCES) $(EXTRA_DIST)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la
 
-INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

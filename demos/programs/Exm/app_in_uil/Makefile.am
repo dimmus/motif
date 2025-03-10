@@ -10,7 +10,7 @@ CLEANFILES = exm_in_uil.uid
 LDADD = -L../../../lib/Exm -lExmMrm -lExm  $(top_builddir)/lib/Mrm/libMrm.la
 
 
-INCLUDES = -I$(top_srcdir)/lib -I$(top_srcdir)/lib -I../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_srcdir)/lib -I../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
 
 SUFFIXES = .uil .uid
 
@@ -18,10 +18,10 @@ SUFFIXES = .uil .uid
 	$(top_builddir)/clients/uil/uil -wmd ../../../lib/Exm/wml/Exm.wmd -I$(srcdir) -o $@ $<
 
 #  EXMSRC        = ../../../lib/Exm
-#  EXMINCLUDESRC	= $(MINCLUDESRC)
+#  EXMAM_CPPFLAGSRC	= $(MAM_CPPFLAGSRC)
 #  EXMLIB	= $(EXMSRC)/libExm.a
 #  EXMMRMLIB	= $(EXMSRC)/libExmMrm.a
-#  INCLUDES	= -I$(EXMINCLUDESRC)
+#  AM_CPPFLAGS	= -I$(EXMAM_CPPFLAGSRC)
 #  DEPLIBS	= $(EXMMRMLIB) $(EXMLIB) MrmClientDepLibs
 #LOCAL_LIBRARIES = $(EXMMRMLIB) $(EXMLIB) MrmClientLibs
 #LOCAL_UILFLAGS  = -wmd $(EXMSRC)/wml/Exm.wmd

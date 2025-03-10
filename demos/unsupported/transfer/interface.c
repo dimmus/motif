@@ -111,7 +111,7 @@ static Widget get_constraint_widget(Widget child, Widget parent)
   return (w);
 }
 
-
+
 
 /****************************************************************
  *

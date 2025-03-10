@@ -8,4 +8,4 @@ EXTRA_DIST = getsubres.help getsubres.man README
 getsubres_SOURCES = getsubres.c
 data_DATA = $(EXTRA_DIST) $(getsubres_SOURCES)
 LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la
-INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
