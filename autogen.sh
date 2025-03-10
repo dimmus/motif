@@ -22,3 +22,7 @@ automake --foreign  --include-deps --add-missing
 #
 #$srcdir/configure "$@"
 
+if test -z "$NOCONFIGURE"; then
+    exec "$srcdir"/configure "$@"
+fi
+
