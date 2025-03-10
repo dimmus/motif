@@ -1,8 +1,15 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT
+dnl AC_PREREQ([2.71])
+AC_INIT([Motif],[2.3.8],[https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues])
+
+AC_CANONICAL_TARGET
+
+AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
+AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_SRCDIR([lib/Xm/Form.c])
-AC_PREREQ(2.52)
 AC_CONFIG_AUX_DIR(.)
+AC_CONFIG_MACRO_DIRS([m4])
+
 AC_CHECK_FILE(/usr/X/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr/X),
   AC_PREFIX_DEFAULT(/usr))
@@ -10,8 +17,10 @@ AC_CHECK_FILE(/usr/X11R6/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr/X11R6),
   AC_PREFIX_DEFAULT(/usr))
 
-dnl AM_MAINTAINER_MODE
-AC_CANONICAL_TARGET
+dnl Initialize Automake
+AM_INIT_AUTOMAKE([foreign dist-xz subdir-objects])
+
+AM_MAINTAINER_MODE
 
 dnl The version of the Motif libraries
 CURRENT=4
@@ -22,7 +31,7 @@ AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
 dnl This is really dumb but it seems to be bug
-AM_INIT_AUTOMAKE(motif,2.3.8,no-define)
+dnl AM_INIT_AUTOMAKE(motif,2.3.8,no-define)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
@@ -31,14 +40,16 @@ dnl Override a default in libtool.
 dnl
 dnl AC_DISABLE_STATIC
 
-AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
-
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
-AM_PROG_LIBTOOL
+
+LT_INIT
 
 AC_EXEEXT
+
+# Required when PKG_CHECK_MODULES called within an if statement
+PKG_PROG_PKG_CONFIG
 
 dnl AC_PROG_YACC
 dnl Do this the old fashioned way. 'bison -y' doesn't cut it
@@ -47,7 +58,10 @@ AC_CHECK_PROGS(YACC, byacc, yacc)
 dnl AC_PROG_SPLINT
 AC_CHECK_PROGS(SPLINT, splint)
 
-AM_PROG_LEX
+AC_PROG_LEX([yywrap])
+if test "$LEX" = :; then
+  LEX=${am_missing_run}flex
+fi
 if test "x$LEX" == xflex; then
   AC_SUBST([LEXLIB], ['-lfl'])
 fi
@@ -61,12 +75,7 @@ dnl Checks for libraries.
 
 AC_PATH_X
 AC_PATH_XTRA
-LT_LIB_XTHREADS
-
-dnl Checks for Xos_r.h
-
-AC_CHECK_HEADERS([X11/Xos_r.h])
-AC_CHECK_HEADERS([X11/Xpoll.h])
+dnl LT_LIB_XTHREADS
 
 dnl Compile in EditRes support if we can find Xmu
 
@@ -87,13 +96,15 @@ AC_DEFINE(HAVE_XMU_N_COPY_ISO,1,Have XmuNCopyISOLatin1Lowered)
 
 
 AC_SUBST(X_XMU)
-LIBS="$save_LIBS"
+LIBS="$save_LIBS -lXt -lX11 -lXext"
 CFLAGS="$save_CFLAGS"
 AM_CONDITIONAL(OM_XMU, test x$X_XMU != x)
 
 dnl Checks for header files.
 AC_HEADER_DIRENT
-AC_HEADER_STDC
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/malloc.h strings.h sys/file.h sys/time.h unistd.h wchar.h)
 AC_CHECK_HEADERS(wctype.h, AC_DEFINE(HAS_WIDECHAR_FUNCTIONS,1,System supports wchar))
@@ -106,21 +117,37 @@ AC_TYPE_MODE_T
 AC_TYPE_OFF_T
 AC_TYPE_PID_T
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+
 AC_STRUCT_TM
 AC_TYPE_UID_T
-WEAK_ALIAS_SUPPORT
+dnl WEAK_ALIAS_SUPPORT
 
 dnl Checks for library functions.
 AC_FUNC_ALLOCA
 AC_FUNC_MEMCMP
 AC_FUNC_SETPGRP
-AC_TYPE_SIGNAL
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([#include <sys/types.h>
+                      #include <signal.h>
+                      ],
+                     [return *(signal(0, 0)) (0) == 1;])],
+    [ac_cv_type_signal=int],
+    [ac_cv_type_signal=void]
+)
+
+# Cache the result using AC_CACHE_VAL instead of AC_CACHE_CHECK
+AC_CACHE_VAL(ac_cv_type_signal,
+    [AC_MSG_RESULT([$ac_cv_type_signal])])
+
+# Define RETSIGTYPE accordingly
+AC_DEFINE_UNQUOTED([RETSIGTYPE], [$ac_cv_type_signal], [Define as the return type of signal handlers (`int' or `void').])
+
 AC_FUNC_STRCOLL
 AC_FUNC_STRFTIME
 AC_FUNC_FORK([])
 AC_FUNC_VPRINTF
-AM_FUNC_VOID_SPRINTF
+dnl AM_FUNC_VOID_SPRINTF
 AC_CHECK_FUNCS(wcslen wcscpy wcsncpy wcschr wcscat wcsncat getcwd gettimeofday mkdir re_comp regcmp select strcspn strerror strstr strtod strtol uname)
 AC_CHECK_FUNCS(strdup,,AC_DEFINE(NEED_STRDUP, 1, no strdup))
 AC_CHECK_FUNCS(strcasecmp,,AC_DEFINE(NEED_STRCASECMP, 1, no strcasecmp))

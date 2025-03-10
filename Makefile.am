@@ -13,11 +13,13 @@ MAINTAINERCLEANFILES = Makefile.in \
              config.guess \
              config.sub \
              config.log \
+             depcomp \
              ltconfig ltmain.sh \
              aclocal.m4 \
              config.h.in \
              install-sh \
              missing mkinstalldirs \
+             ylwrap \
              compile
 
 SUBDIRS	= bindings bitmaps \
@@ -30,4 +32,4 @@ SUBDIRS	= bindings bitmaps \
              doc \
              demos
 AUTOMAKE_OPTIONS = 1.4
-ACLOCAL_AMFLAGS = -I .
+# ACLOCAL_AMFLAGS = -I .
