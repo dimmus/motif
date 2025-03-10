@@ -9,7 +9,7 @@ noinst_PROGRAMS = wmldbcreate
 
 WMLDIR = $(top_srcdir)/tools/wml
 
-INCLUDES = -I$(top_srcdir)/lib \
+AM_CPPFLAGS = -I$(top_srcdir)/lib \
         -I$(top_builddir)/lib \
 	-I$(top_srcdir)/include \
 	-I$(srcdir)/../.. \
@@ -30,7 +30,7 @@ $(WMDTABLE): wmldbcreate $(TARGETS)
 	./wmldbcreate -o $@
 
 
-# INCLUDES = -I. -I$(INCLUDESRC) -I$(MINCLUDESRC) -I$(MLIBSRC) -I../../. -I$(MTOP)/include
+# AM_CPPFLAGS = -I. -I$(AM_CPPFLAGSRC) -I$(MAM_CPPFLAGSRC) -I$(MLIBSRC) -I../../. -I$(MTOP)/include
 # DEPLIBS = $(DEPXMLIB)  $(DEPXTOOLLIB) $(DEPXLIB)
 # LOCAL_LIBRARIES = XmClientLibs
 # 
@@ -54,7 +54,7 @@ TARGETS = $(YACCTARGETS) $(WMLTARGETS)
 # 
 # NormalLibraryObjectRule()
 #  
-# all::   includes $(WMDTABLE)
+# all::   AM_CPPFLAGS $(WMDTABLE)
 # 
 # install:: all
 #  
@@ -88,7 +88,7 @@ $(TARGETS):	$(TABLE) $(WMLDIR)/motif.wml
 # 
 # DependTarget()
 # 
-# includes:: $(TARGETS)  UilDBDef.h
+# AM_CPPFLAGS:: $(TARGETS)  UilDBDef.h
 
 .NOTPARALLEL:
 
