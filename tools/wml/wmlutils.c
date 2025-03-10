@@ -43,7 +43,7 @@ static char rcsid[] = "$XConsortium: wmlutils.c /main/8 1995/08/29 11:11:24 drk 
 #endif
 #include <stdio.h>
 
-
+
 /*
  * Utility to allocate dynamic space for a string, and return the
  * dynamic copy. Produces a NULL on null input.
@@ -66,7 +66,7 @@ return dynstg;
 }
 
 
-
+
 /*
  * Utility to convert a string to upper case. The conversion happens in
  * place, destroying the original string.
@@ -87,7 +87,7 @@ for ( ndx=0 ; ndx<strlen(stg) ; ndx++ )
 }
 
 
-
+
 /*
  * Routines for accessing and manipulating dynamic handle lists.
  */
@@ -119,7 +119,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to resize a dynamic handle list. Increases the size if required,
  * but does nothing if the list is already big enough.
@@ -148,7 +148,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to clear a dynamic handle list. It leaves the handle vector intact,
  * but frees all the allocated names. The count is reset to 0.
@@ -177,7 +177,7 @@ return;
 }
 
 
-
+
 /*
  * Function to find a name in a dynamic list. This will function on both
  * ordered and unordered lists.
@@ -232,7 +232,7 @@ else
 }
 
 
-
+
 /*
  * Routine to insert an entry into a list. The insertion is ordered or
  * unordered depending on the way the list is marked. Unordered lists
@@ -319,7 +319,7 @@ else
 
 }
 
-
+
 /*
  * Routine to insert an entry into a token list. The insertion is ordered.
  * This routine allows duplicates
@@ -385,7 +385,7 @@ void wmlInsertInKeyList (listptr, name, obj)
   return;
 }
 
-
+
 /*
  * Indicate if a resource is in a resource reference list by returning its
  * reference pointer.
@@ -406,7 +406,7 @@ return NULL;
 
 }
 
-
+
 /*
  * Indicate if a child is in a child reference list by returning its
  * reference pointer.

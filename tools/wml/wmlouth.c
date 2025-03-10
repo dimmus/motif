@@ -116,7 +116,7 @@ static int		max_charset_code = 0;
 static int		max_child_code = 0;
 
 
-
+
 /*
  * Output control routine, which simply outputs each .h file in turn.
  */
@@ -142,7 +142,7 @@ wmlOutputUilSymCSet ();
 }
 
 
-
+
 /*
  * Routine to write out UilSymGen.h
  *
@@ -329,7 +329,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilSymChCl.h
  *
@@ -396,7 +396,7 @@ fclose (outfil);
 
 }
 
-
+
 /*
  * Routine to write out UilSymArTy.h
  *
@@ -464,7 +464,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilSymRArg.h
  *
@@ -526,7 +526,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilUrmClas.h
  *
@@ -732,7 +732,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilConst.h
  *
@@ -810,7 +810,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilSymReas.h
  *
@@ -936,7 +936,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilSymArTa.h
  *
@@ -1061,7 +1061,7 @@ fclose (outfil);
 
 }
 
-
+
 /*
  * Routine to write out UilSymChTa.h
  *
@@ -1184,7 +1184,7 @@ fclose (outfil);
 
 }
 
-
+
 /*
  * Routine to write out UilSymCtl.h
  *
@@ -1307,7 +1307,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Predicate to indicate if a class object is in a controls list.
  */
@@ -1328,7 +1328,7 @@ return FALSE;
 }
 
 
-
+
 /*
  * Routine to write out UilSymNam.h
  *
@@ -1522,7 +1522,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilSymEnum.h
  *
@@ -1680,7 +1680,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write out UilSymCSet.h
  *

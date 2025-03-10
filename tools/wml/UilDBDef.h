@@ -199,7 +199,7 @@
 #define		sym_k_emitted		2
 
 
-
+
 /*
 **	Constants to define compiler-recognized data types. It is
 **	important that the names used in .wml language descriptions

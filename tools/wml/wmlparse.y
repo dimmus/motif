@@ -145,7 +145,7 @@
 
 %%
 
-
+
 /*
  * Productions of the WML grammar. All routines assume that current
  * data structures are kept in globals. This works as the language has
@@ -268,7 +268,7 @@ charset_statement_list
 	;
 
 
-
+
 /*
  * The CLASS statement
  */
@@ -448,7 +448,7 @@ class_children_element
 	;
 
 
-
+
 /*
  * The RESOURCE statement
  */
@@ -508,7 +508,7 @@ boolean_resource_resource_attribute_name
 	: XRMRESOURCE		{ yytknval1 = XRMRESOURCE; }
 	;
 
-
+
 /*
  * The CHILD statement
  */
@@ -517,7 +517,7 @@ child_statement
           { wmlCreateChild(yynameval, yystringval); }
        ;
   
-
+
 /*
  * DATATYPE statement
  */
@@ -555,7 +555,7 @@ datatype_attribute_name
 	;
 
 
-
+
 /*
  * The CONTROLLIST statement
  */
@@ -592,7 +592,7 @@ ctrlist_controls_attributes
 	;
 
 
-
+
 /*
  * The ENUMERATIONSET statement
  */
@@ -629,7 +629,7 @@ enumset_value
 	;
 
 
-
+
 /*
  * The ENUMERATIONVALUE statement
  */
@@ -666,7 +666,7 @@ enumvalue_attribute_name
 	;
 
 
-
+
 /*
  * CHARACTERSET statement
  */
@@ -722,7 +722,7 @@ predefined_charset_attribute_value
 	| MIXED1_2BYTE		{ yytknval2 = MIXED1_2BYTE; }
         ;
 
-
+
 /*
  * Other productions
  */

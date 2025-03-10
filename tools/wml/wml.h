@@ -91,7 +91,7 @@ typedef	char	*ObjectPtr;
 #define WmlTokenClassChild	14
 
 
-
+
 /*
  * Structures for WML objects. Two kinds are created for each object
  * recognized and built as a WML description is read:
@@ -351,7 +351,7 @@ typedef struct WmlSynCharSetDefStruct
     } WmlSynCharSetDef, *WmlSynCharSetDefPtr;
 
 
-
+
 /*
  * Data structures constructed during semantic validation. Each points
  * as required to syntactic data structures. These are typically accessed
@@ -548,7 +548,7 @@ typedef struct WmlCtrlListDefStruct
    } WmlCtrlListDef, *WmlCtrlListDefPtr;
 
 
-
+
 /*
  * Data structures used to locate and order objects in various ways.
  */
@@ -598,7 +598,7 @@ typedef struct
     } DynamicHandleListDef, *DynamicHandleListDefPtr;
 
 
-
+
 /*
  * Global declarations
  */

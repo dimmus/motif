@@ -74,7 +74,7 @@ DynamicHandleListDef	mm_ctl;
 DynamicHandleListDefPtr	mm_ctl_ptr = &mm_ctl;
 
 
-
+
 /*
  * Output control routine, which simply outputs each .mm file in turn.
  */
@@ -88,7 +88,7 @@ wmlOutputWmlUilMm ();
 }
 
 
-
+
 /*
  * Routine to write out wml-uil.mm
  *
@@ -143,7 +143,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to write a table for a class entry
  */

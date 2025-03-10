@@ -98,7 +98,7 @@ FILE *bfile, *afile;
 int DEBUG=FALSE;
 char outfilename[80];
 char debugfilename[80];
-
+
 int main(argc, argv)
 int argc;
 char **argv;
@@ -207,7 +207,7 @@ char **argv;
     return 0;    /* make compiler happy */
 }
 
-
+
 void emit_globals()
 {
     _db_globals globals;
@@ -235,7 +235,7 @@ void emit_globals()
     }
 
 
-
+
 void emit_header(header)
 _db_header_ptr header;
 {
@@ -248,7 +248,7 @@ _db_header_ptr header;
     }
 
 
-
+
 void emit_chars(table_id)
     int	    table_id;
 {
@@ -326,7 +326,7 @@ void emit_chars(table_id)
 	}
 }
 
-
+
 void emit_ints_and_string(table_id)
     int	    table_id;
 {
@@ -365,7 +365,7 @@ void emit_ints_and_string(table_id)
 	       
 }
 
-
+
 void emit_char_table(table_id)
 int	table_id;
 {
@@ -423,7 +423,7 @@ int	table_id;
         }
 }
 
-
+
 void emit_length_and_string(table_id)
 int	table_id;
 {
@@ -546,7 +546,7 @@ int	table_id;
     free (lengths);
 }
 
-
+
 void emit_shorts(table_id)
     int	    table_id;
 {
@@ -612,7 +612,7 @@ void emit_shorts(table_id)
 	}
 }
 
-
+
 void emit_int_and_table_shorts(table_id)
     int	    table_id;
 {
@@ -645,7 +645,7 @@ void emit_int_and_table_shorts(table_id)
         }
 }
 
-
+
 void emit_ints(table_id)
     int	    table_id;
 {

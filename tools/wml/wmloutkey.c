@@ -91,7 +91,7 @@ static int			grtok_max_val = 0;
 static WmlGrammarTokenPtr	grtok_vec[GrTokenMax];
 
 
-
+
 /*
  * Output control routine
  */
@@ -107,7 +107,7 @@ wmlOutputUilTokName ();
 }
 
 
-
+
 /*
  * Routine to construct token tables for building UilKeyTab.h
  *
@@ -150,7 +150,7 @@ wmlKeyWChildTokens ();
 }
 
 
-
+
 /*
  * Routine to read and enter tokens defined in Uil.y into the token tables.
  */
@@ -253,7 +253,7 @@ fclose (infil);
 }
 
 
-
+
 /*
  * This routine translates a string identifying a token class into
  * its matching internal literal.
@@ -297,7 +297,7 @@ return 0;
 }
 
 
-
+
 /*
  * Routine to process the class objects and enter them in the token tables.
  * Aliases are also entered, under their own names.
@@ -330,7 +330,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to process the argument objects and enter them in the token tables.
  * Aliases are also entered, under their own names.
@@ -363,7 +363,7 @@ for ( ndx=0 ; ndx<wml_obj_arg_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to process the reason objects and enter them in the token tables.
  */
@@ -394,7 +394,7 @@ for ( ndx=0 ; ndx<wml_obj_reason_ptr->cnt ; ndx++ )
 
 }
 
-
+
 /*
  * Routine to process the child objects and enter them in the token tables.
  */
@@ -420,7 +420,7 @@ for ( ndx=0 ; ndx<wml_obj_child_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to process the charset objects and enter them in the token tables.
  */
@@ -452,7 +452,7 @@ for ( ndx=0 ; ndx<wml_obj_charset_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to process the enumval objects and enter them in the token tables.
  */
@@ -479,7 +479,7 @@ for ( ndx=0 ; ndx<wml_obj_enumval_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to create tokens and enter them in the token list.
  *
@@ -518,7 +518,7 @@ wmlInsertInKeyList(wml_tok_sens_ptr, sens_name, senstok);
 wmlInsertInKeyList(wml_tok_insens_ptr, insens_name, insenstok);
 }
 
-
+
 /*
  * Routine to output UilKeyTab.h
  *
@@ -588,7 +588,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Routine to output the body of a keyword table
  */
@@ -632,7 +632,7 @@ for ( ndx=0 ; ndx<tokvec->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to return the string for a token class, tkn_k_class_...
  */
@@ -673,7 +673,7 @@ switch ( tok->class )
 }
 
 
-
+
 /*
  * Routine to return the string for a sym_k_... for some object
  */
@@ -727,7 +727,7 @@ switch ( tok->class )
 }
 
 
-
+
 /*
  * Routine to return the string for a token number, tkn_k_num_...
  */
@@ -770,7 +770,7 @@ switch ( tok->class )
 }
 
 
-
+
 /*
  * routine to output UilTokName.h
  */

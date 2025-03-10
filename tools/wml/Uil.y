@@ -225,7 +225,7 @@ YYSTYPE		prev_yylval;
 
 %%
 
-
+
 
 /* 
 **	productions of the grammar
@@ -304,7 +304,7 @@ module_declaration
     | include_directive
     ;
 
-
+
 
 /*	VALUE declaration	    */
 
@@ -390,7 +390,7 @@ asciz_table_type
     : ASCIZ_TABLE
     | ASCIZ_STRING_TABLE
     ;
-
+
 
 /*	PROCEDURE declaration	    */
 
@@ -437,7 +437,7 @@ opt_class
 */
     ;
 
-
+
 
 /*	IDENTIFIER declaration	    */
 
@@ -455,7 +455,7 @@ identifier_decl
     : id SEMICOLON					{ sar_create_identifier ( &$1, &$2 ); }
     ;
 
-
+
 
 /*    Directives.    */
 
@@ -466,7 +466,7 @@ include_directive
     | error { lex_issue_error (SEMICOLON); } SEMICOLON
     ;
 
-
+
 
 /*	OBJECT declaration	*/
 
@@ -576,7 +576,7 @@ opt_parens
     ;
 
 
-
+
 
 /*	object specification.    */
 
@@ -631,7 +631,7 @@ epsilon_production
   	{ $$ = gz_yynullval; }
     ;
 
-
+
 
 /*	LIST declaration	*/
 
@@ -918,7 +918,7 @@ opt_procedure_argument
   	{ $$ = gz_yynullval; }
     ;
 
-
+
 
 /*	definition of an id 	*/
 
@@ -990,7 +990,7 @@ keyword
     | FONTSET
     ;
 
-
+
 
 /*    values    */
 

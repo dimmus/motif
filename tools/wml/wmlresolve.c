@@ -87,7 +87,7 @@ void wmlIssueIllegalReferenceError ();
 void wmlIssueError ();
 
 
-
+
 /*
  * The control routine for semantic analysis. It calls the various phases.
  */
@@ -118,7 +118,7 @@ wmlResolvePrintReport ();
 }
 
 
-
+
 /*
  * Routine to linearize and assign sym_k... literals for objects. Simply
  * a dispatching routine.
@@ -171,7 +171,7 @@ wmlResolveSymKChild();
 }
 
 
-
+
 /*
  * Routine to linearize data types
  *
@@ -221,7 +221,7 @@ for ( ndx=0 ; ndx<wml_synobj_ptr->cnt ; ndx++ )
 
 }
 
-
+
 /*
  * Routine to linearize children
  *
@@ -281,7 +281,7 @@ for ( ndx=0 ; ndx<wml_obj_child_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to linearize and assign sym_k values to enumeration values
  *
@@ -353,7 +353,7 @@ for ( ndx=0 ; ndx<wml_obj_enumval_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to linearize and assign sym_k values to enumeration sets
  *
@@ -436,7 +436,7 @@ for ( ndx=0 ; ndx<wml_obj_enumset_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to linearize and assign sym_k values to reasons.
  *
@@ -508,7 +508,7 @@ for ( ndx=0 ; ndx<wml_obj_reason_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to linearize and assign sym_k values to arguments.
  *
@@ -588,7 +588,7 @@ for ( ndx=0 ; ndx<wml_obj_arg_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to resolve related argument references.
  *
@@ -627,7 +627,7 @@ for ( ndx=0 ; ndx<wml_obj_arg_ptr->cnt ; ndx++ )
 }
 
  
-
+
 /*
  * Routine to linearize and assign sym_k values to classes
  *
@@ -737,7 +737,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to validate controls lists
  *
@@ -795,7 +795,7 @@ for ( ndx=0 ; ndx<wml_synobj_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to linearize and assign sym_k values to character sets
  *
@@ -874,7 +874,7 @@ for ( ndx=0 ; ndx<wml_obj_charset_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to perform class inheritance and validation.
  *
@@ -1044,7 +1044,7 @@ for ( ndx=0 ; ndx<wml_obj_allclass_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to perform resource inheritance for a class.
  *
@@ -1249,7 +1249,7 @@ clsobj->inherit_done = TRUE;
 }
 
 
-
+
 /*
  * Routine to copy a resource reference
  */
@@ -1272,7 +1272,7 @@ dstobj->exclude = srcobj->exclude;
 
 }
 
-
+
 /*
  * Routine to copy a child reference
  */
@@ -1292,7 +1292,7 @@ childobj->ref_ptr = dstobj;
 }
 
 
-
+
 /*
  * Routine to print a report in a file.
  *
@@ -1342,7 +1342,7 @@ fclose (outfil);
 }
 
 
-
+
 /*
  * Print the information for a class
  */
@@ -1432,7 +1432,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to print the arguments for a class
  *
@@ -1571,7 +1571,7 @@ if ( constr )
 }
 
 
-
+
 /*
  * Routine to print reasons in a class.
  *
@@ -1638,7 +1638,7 @@ for ( ndx=0 ; ndx<wml_obj_reason_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to mark reference pointers for a class
  *
@@ -1675,7 +1675,7 @@ for ( ctrlref=clsobj->controls ; ctrlref!=NULL ; ctrlref=ctrlref->next )
 }
 
 
-
+
 /*
  * Routine to clear reference pointers
  */
@@ -1713,7 +1713,7 @@ for ( ndx=0 ; ndx<wml_obj_child_ptr->cnt ; ndx++ )
 }
 
 
-
+
 /*
  * Routine to find an object for binding. The name is always looked
  * in the syntactic object list, since all references made by the

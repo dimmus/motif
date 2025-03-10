@@ -76,7 +76,7 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 #include <stdlib.h>
 #include <unistd.h>
 
-
+
 /*
  * Globals used during WML parsing.
  *
@@ -158,7 +158,7 @@ extern  int yyparse();
 
 
 
-
+
 /*
  * The WML main routine:
  *
@@ -243,7 +243,7 @@ return (0);
 
 }
 
-
+
 /*
  * Routine to initialize WML.
  *

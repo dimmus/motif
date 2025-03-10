@@ -54,7 +54,7 @@ static char rcsid[] = "$XConsortium: wmlsynbld.c /main/9 1995/08/29 11:11:12 drk
 #endif
 #include <stdio.h>
 
-
+
 /*
  * Globals used during WML parsing.
  */
@@ -72,7 +72,7 @@ ObjectPtr	wml_cur_obj;
 ObjectPtr	wml_cur_subobj;
 
 
-
+
 /*
  * Routine to create a class descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -142,7 +142,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to create a resource descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -216,7 +216,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to create a datatype descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -257,7 +257,7 @@ return;
 
 }
 
-
+
 /*
  * Routine to create a child descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -298,7 +298,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to create a controls list descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -342,7 +342,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to create an enumeration set descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -385,7 +385,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to create an enumeration value descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -425,7 +425,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to create a charset descriptor. The result is placed in both
  * wml_cur_obj and wml_synobj.
@@ -471,7 +471,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to set an attribute in a class descriptor.
  *
@@ -562,7 +562,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to add a control specification to the current class.
  * The current object must be a class descriptor. The entry name
@@ -616,7 +616,7 @@ return;
 }
 
 
-
+
 /*
  * Add a resource descriptor to a class.
  * The current object must be a class descriptor. Create and add a
@@ -673,7 +673,7 @@ return;
 
 }
 
-
+
 /*
  * Add a child descriptor to a class.
  * The current object must be a class descriptor. Create and add a
@@ -728,7 +728,7 @@ return;
 }
 
 
-
+
 /*
  * This routine sets an attribute in the current class resource descriptor.
  * The current subobject must be a class resource descriptor. The
@@ -802,7 +802,7 @@ return;
 
 
 
-
+
 /*
  * Routine to set an attribute in a resource descriptor.
  *
@@ -908,7 +908,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to set an attribute in a datatype descriptor.
  *
@@ -985,7 +985,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to add a control specification to the current controls list.
  * The current object must be a controls list descriptor. The entry name
@@ -1039,7 +1039,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to add an enumeration value to the current enumeration set
  * The current object must be an enumeration set descriptor. The entry name
@@ -1088,7 +1088,7 @@ wml_cur_subobj = (ObjectPtr) evelm;
 }
 
 
-
+
 /*
  * Routine to set an attribute in an enumeration value
  *
@@ -1142,7 +1142,7 @@ return;
 }
 
 
-
+
 /*
  * Routine to set an attribute in a charset descriptor.
  *
@@ -1271,7 +1271,7 @@ return;
 }
 
 
-
+
 /*
  * The error reporting routine.
  *
