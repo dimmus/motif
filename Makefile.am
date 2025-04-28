@@ -22,6 +22,8 @@ MAINTAINERCLEANFILES = Makefile.in \
              ylwrap \
              compile \
              XmStrDefs.c \
+             m4/lt*.m4 \
+             m4/libtool.m4 \
              *~
 
 SUBDIRS	= bindings bitmaps \
