@@ -1,6 +1,5 @@
-dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.71])
-AC_INIT([Motif],[2.3.8],[https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues])
+AC_INIT([Motif],[2.3.8])
 
 AC_CANONICAL_TARGET
 
@@ -30,9 +29,6 @@ AC_SUBST(CURRENT)
 AC_SUBST(REVISION)
 AC_SUBST(AGE)
 
-dnl This is really dumb but it seems to be bug
-dnl AM_INIT_AUTOMAKE(motif,2.3.8,no-define)
-
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
 dnl
@@ -43,18 +39,12 @@ dnl AC_DISABLE_STATIC
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
-
-LT_INIT
-
-AC_EXEEXT
-
-# Required when PKG_CHECK_MODULES called within an if statement
-PKG_PROG_PKG_CONFIG
-
-dnl AC_PROG_YACC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_EGREP
 dnl Do this the old fashioned way. 'bison -y' doesn't cut it
 AC_CHECK_PROGS(YACC, byacc, yacc)
-
 dnl AC_PROG_SPLINT
 AC_CHECK_PROGS(SPLINT, splint)
 
@@ -66,10 +56,12 @@ if test "x$LEX" == xflex; then
   AC_SUBST([LEXLIB], ['-lfl'])
 fi
 
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
+LT_INIT
 
+AC_EXEEXT
+
+# Required when PKG_CHECK_MODULES called within an if statement
+PKG_PROG_PKG_CONFIG
 
 dnl Checks for libraries.
 
@@ -103,7 +95,6 @@ AM_CONDITIONAL(OM_XMU, test x$X_XMU != x)
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_CHECK_INCLUDES_DEFAULT
-AC_PROG_EGREP
 
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h limits.h malloc.h sys/malloc.h strings.h sys/file.h sys/time.h unistd.h wchar.h)
@@ -169,11 +160,11 @@ if test "$enable_themes" = "yes"
 then
     if test -f $srcdir/lib/Xm/Theme.h
     then
-	AC_DEFINE(USE_XMTHEMES, 1, "Use XmThemes")
-	XMTHEME_DIST = "Theme.h ThemeP.h DynLibP.h Theme.c DynLib.c"
+      AC_DEFINE(USE_XMTHEMES, 1, "Use XmThemes")
+      XMTHEME_DIST = "Theme.h ThemeP.h DynLibP.h Theme.c DynLib.c"
     else
-	AC_MSG_WARN([--enable-themes specified, but I don't have the code. Disabled])
-	enable_themes="no"
+      AC_MSG_WARN([--enable-themes specified, but I don't have the code. Disabled])
+      enable_themes="no"
     fi
 fi
 AC_SUBST(XMTHEME_DIST)
@@ -197,26 +188,13 @@ then
 fi
 AC_DEFINE(NO_OL_COMPAT, 1, "No OL Compatability")
 
-CDE_INSTALLATION_TOP="\${prefix}/dt"
-AC_SUBST(CDE_INSTALLATION_TOP)
-
-CDE_CONFIGURATION_TOP="\${prefix}/etc/dt"
-AC_SUBST(CDE_CONFIGURATION_TOP)
-
-LIBDIR="${libdir}/X11"
-AC_SUBST(LIBDIR)
-
-MWMRCDIR="${libdir}/X11"
-AC_SUBST(MWMRCDIR)
-
-INCDIR="${includedir}/X11"
-AC_SUBST(INCDIR)
-
-XMBINDDIR_FALLBACK="${libdir}/X11/bindings"
-AC_SUBST(XMBINDDIR_FALLBACK)
-
-RM="rm -f"
-AC_SUBST(RM)
+AC_SUBST(CDE_INSTALLATION_TOP, "\${prefix}/dt")
+AC_SUBST(CDE_CONFIGURATION_TOP, "\${prefix}/etc/dt")
+AC_SUBST(LIBDIR, "${libdir}/X11")
+AC_SUBST(MWMRCDIR, "${libdir}/X11")
+AC_SUBST(INCDIR, "${includedir}/X11")
+AC_SUBST(XMBINDDIR_FALLBACK, "${libdir}/X11/bindings")
+AC_SUBST(RM, "rm -f")
 
 AC_ARG_ENABLE(motif22-compatibility, [  --disable-motif22-compatibility
                        Disable binary compatibility with OpenMotif 2.2])
