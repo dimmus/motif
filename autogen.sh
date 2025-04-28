@@ -5,24 +5,17 @@ test -z "$srcdir" && srcdir=.
 
 THEDIR="`pwd`"
 cd "$srcdir"
-DIE=0
 
 libtoolize --force --automake
 aclocal -I .
 autoconf
 autoheader
-automake --foreign  --include-deps --add-missing
+automake --foreign  --include-deps
 
-#if test -z "$*"; then
-#        echo "I am going to run ./configure with no arguments - if you wish "
-#        echo "to pass any to it, please specify them on the $0 command line."
-#fi
-#
-#cd "$THEDIR"
-#
-#$srcdir/configure "$@"
-
-if test -z "$NOCONFIGURE"; then
-    exec "$srcdir"/configure "$@"
+if test -z "$*"; then
+        echo "I am going to run ./configure with no arguments - if you wish "
+        echo "to pass any to it, please specify them on the $0 command line."
 fi
 
+cd "$THEDIR"
+exec "$srcdir"/configure "$@"
