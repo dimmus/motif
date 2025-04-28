@@ -1438,7 +1438,7 @@ XtResource wmScreenResources[] =
 	(XtPointer)True
     },
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     {
 	WmNrootMenu,
 	WmCRootMenu,
@@ -5723,7 +5723,7 @@ SetStdClientResourceValues (ClientData *pCD)
 void 
 SetStdScreenResourceValues (WmScreenData *pSD)
 {
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     pSD->rootMenu = builtinRootMenuName;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
     pSD->buttonBindings = builtinButtonBindingsName;
@@ -6299,7 +6299,7 @@ WmScreenData *pSD;
 	 * set.
 	 */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
         /*
 	 * Before parsing the string, substitute the real name for
 	 * the default rootmenu using the resource rootMenu
@@ -6351,7 +6351,7 @@ WmScreenData *pSD;
 	 * set.
 	 */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
         /*
 	 * Before parsing the string, substitute the real name for
 	 * the default rootmenu using the resource rootMenu

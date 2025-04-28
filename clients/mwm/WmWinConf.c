@@ -134,7 +134,7 @@ static int moveLastPointerY= 0;
 
 static Boolean anyMotion = FALSE;
 static Boolean configGrab = FALSE;
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 static Boolean grabServer = TRUE;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
@@ -2596,7 +2596,7 @@ Boolean StartClientMove (ClientData *pcd, XEvent *pev)
 } /* END OF FUNCTION StartClientMove */
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  SetGrabServer ()

@@ -61,7 +61,7 @@ static char rcsid[] = "$TOG: WmInitWs.c /main/18 1999/09/20 15:18:22 mgreess $"
 #ifndef NO_HP_KEY_REMAP
 #include <Xm/VirtKeysP.h>
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 # include <Xm/DrawingA.h>
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
@@ -136,7 +136,7 @@ typedef struct
 
 #include "WmInitWs.h"
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 # include "WmWsmLib/wsm_proto.h"
 # include "WmWsmLib/utm_send.h"
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
@@ -1378,7 +1378,7 @@ InitWmScreen (WmScreenData *pSD, int sNum)
     pSD->bitmapCacheCount = 0;
     pSD->dataType = SCREEN_DATA_TYPE;
     pSD->managed = False;
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     pSD->cciTree = NULL;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
@@ -1481,7 +1481,7 @@ InitWmScreen (WmScreenData *pSD, int sNum)
 					       args,
 					       argnum);
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     /* Create a DrawingArea as a child of the popupShell.  This will be used
      * to handle UTM traffic relating to cci.  We need this
      * particular widget to get the callbacks from conversion requests made

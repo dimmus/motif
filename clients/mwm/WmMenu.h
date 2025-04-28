@@ -27,7 +27,7 @@
  * Motif Release 1.2.2
 */ 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 # define MAKE_MENU(pSD, pCD, mName, iC, aC, moreItems, sysMenu) \
 	MakeMenu(pSD, pCD, mName, iC, aC, moreItems, sysMenu)
 # define CREATE_MENU_WIDGET(pSD, pCD, mName, parent, fTLP, tSpec, moreItems) \
@@ -42,7 +42,7 @@
 extern void ActivateCallback (Widget w, caddr_t client_data, 
 			      caddr_t call_data);
 extern Widget CreateMenuWidget (WmScreenData *pSD,
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 				ClientData *pCD,
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 				String menuName, Widget parent,
@@ -51,7 +51,7 @@ extern Widget CreateMenuWidget (WmScreenData *pSD,
 extern void FreeCustomMenuSpec (MenuSpec *menuSpec);
 extern void MWarning (char *format, char *message);
 extern MenuSpec *MakeMenu (WmScreenData *pSD,
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 			   ClientData *pCD,
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 			   String menuName, 
@@ -64,7 +64,7 @@ extern void TraversalOff (MenuSpec *menuSpec);
 extern void TraversalOn (MenuSpec *menuSpec);
 extern void UnpostMenu (MenuSpec *menuSpec);
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 extern void InsertTreeOnAllClients (WmScreenData *pSD, CmdTree *tree,
 				    Atom selection, Context active_context,
 				    Boolean in_line);

@@ -106,7 +106,7 @@ extern Boolean F_Workspace_Presence (String args, ClientData *pCD,
 extern Boolean F_ZZ_Debug (String, ClientData *, XEvent *);
 #endif /* DEBUG */
 #endif /* WSM */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 extern Boolean F_InvokeCommand (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Post_RMenu (String args, ClientData *pCD, XEvent *event);
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */

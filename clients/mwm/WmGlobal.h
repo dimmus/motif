@@ -122,7 +122,7 @@ extern Pixel		FPselectcolor;
 
 /* ICCC atom names: */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 # define _XA_TARGETS		"TARGETS"
 # define _XA_MULTIPLE		"MULTIPLE"
 # define _XA_TIMESTAMP		"TIMESTAMP"
@@ -136,7 +136,7 @@ extern Pixel		FPselectcolor;
 #define _XA_WM_TAKE_FOCUS	"WM_TAKE_FOCUS"
 #define _XA_WM_COLORMAP_WINDOWS	"WM_COLORMAP_WINDOWS"
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /* original set of query targets */
 # define _XA_MOTIF_WM_CLIENT_WINDOW		"_MOTIF_WM_CLIENT_WINDOW"
 # define _XA_MOTIF_WM_POINTER_WINDOW		"_MOTIF_WM_POINTER_WINDOW"
@@ -805,7 +805,7 @@ typedef struct _SessionGeom
  *
  *************************************<->***********************************/
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*
  * Used to denote where the separators belong in a pair of separators
  * used to surround a client command.
@@ -832,7 +832,7 @@ typedef struct _MenuItem
     String	 wmFuncArgs;
     Context	 greyedContext;
     long         mgtMask;
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     String       clientCommandName; /* as specified by the user in
 				       his .mwmrc file. */
     CARD32	 clientCommandID;
@@ -862,7 +862,7 @@ typedef struct _MenuButton
 
 } MenuButton;
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 typedef struct _MenuExclusion
 {
   String                 command_string;
@@ -884,7 +884,7 @@ typedef struct _MenuSpec
     Context	  accelContext;    /* accelerator context */
     KeySpec	 *accelKeySpecs;   /* list of accelerator KeySpecs */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     MenuExclusion *exclusions;      /* list of client commands to be
 				       excluded from this menu. */
     Boolean        clientLocal;     /* this menu is owned by a client and not 
@@ -897,7 +897,7 @@ typedef struct _MenuSpec
 
 } MenuSpec;
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /* The range to which a client command operation should apply. */
 typedef enum { SINGLE, ROOT, ALL } OpRange;
 
@@ -1275,7 +1275,7 @@ typedef struct _WmScreenData
     Window	rootWindow;
     Widget	screenTopLevelW;
     Widget	screenTopLevelW1;       /* for internal WM components */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     Widget	utmShell;		/* DrawingArea used for UTM */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
     Widget      confirmboxW[4];
@@ -1314,7 +1314,7 @@ typedef struct _WmScreenData
 #ifdef WSM
     struct _WmWorkspaceData	*pLastWS;	/* previously active WS */
 #endif /* WSM */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     CmdTree     *cciTree;               /* pointer to cci definitions */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
@@ -1367,7 +1367,7 @@ typedef struct _WmScreenData
     int     actionNbr;
 
     /* resource description file data: */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     String	rootMenu;			/* resource */
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
     String	buttonBindings;			/* resource */
@@ -1941,7 +1941,7 @@ typedef struct _ClientData *PtrClientData;
 #define UNSEEN_STATE            8
 #endif /* WSM */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 # define NO_CHANGE              -1
 # define UNSET                   0
 # define SET                     1
@@ -2179,7 +2179,7 @@ typedef struct _WmGlobalData
     Atom	xa_MWM_OFFSET;
     Atom	xa_MWM_CLIENT_LIST;
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     Atom       *xa_WM;
 
     Atom	xa_TARGETS;

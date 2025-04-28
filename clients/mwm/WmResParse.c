@@ -96,7 +96,7 @@ static char rcsid[] = "$XConsortium: WmResParse.c /main/9 1996/11/01 10:17:34 dr
 
 #define MBBSIZ	    4096
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 # define PARSE_MENU_ITEMS(pSD, mSpec) ParseMenuItems(pSD, mSpec)
 #else
 # define PARSE_MENU_ITEMS(pSD, mSpec) ParseMenuItems(pSD)
@@ -183,7 +183,7 @@ typedef struct {
    Boolean       fClick;
 } EventTableEntry;
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 
 # define CCI_USE_DEFAULT_NAME_TAG "DEFAULT_NAME"
 
@@ -219,7 +219,7 @@ void GetHomeDirName(String  fileName);
 #ifdef WSM
 static String GetNetworkFileName (char *pchFile);
 #endif /* WSM */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 static MenuItem	       *MakeSeparatorTemplate  (int);
 static void ParseMenuItemName (unsigned char **linePP, MenuItem *menuItem);
 static Boolean ParseClientCommand (unsigned char **linePP, MenuSpec *menuSpec,
@@ -235,7 +235,7 @@ void SaveMenuAccelerators (WmScreenData *pSD, MenuSpec *newMenuSpec);
 static void ParseMenuSet (WmScreenData *pSD, unsigned char *lineP);
 MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr);
 static MenuItem *ParseMenuItems (WmScreenData *pSD
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 				 , MenuSpec *menuSpec
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 				);
@@ -408,7 +408,7 @@ FunctionTableEntry functionTable[] = {
 			0,
 			F_Beep,
 			ParseWmFuncNoArg},
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     {"f.cci",		0,
 	        	CRS_ANY,
 			0,
@@ -471,7 +471,7 @@ FunctionTableEntry functionTable[] = {
 			F_Help_Mode,
 			ParseWmFuncNoArg},  /* for now */
 #endif /* WSM */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     {"f.invoke_command",
 	        	0, CRS_ANY,
 			0,
@@ -577,7 +577,7 @@ FunctionTableEntry functionTable[] = {
 			0,
 			F_Pass_Key,
 			ParseWmFuncNoArg},
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     {"f.post_rmenu",	0,
 	        	CRS_KEY,
 			0,
@@ -2657,7 +2657,7 @@ static void ParseMenuSet (WmScreenData *pSD, unsigned char *lineP)
     menuSpec->menuItems = NULL;
     menuSpec->accelContext = 0;
     menuSpec->accelKeySpecs = NULL;
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     menuSpec->exclusions = NULL;
     menuSpec->clientLocal = FALSE;
     menuSpec->commandID = 0;
@@ -2813,7 +2813,7 @@ MenuItem *ParseMwmMenuStr (WmScreenData *pSD, unsigned char *menuStr)
  *************************************<->***********************************/
 
 static MenuItem *ParseMenuItems (WmScreenData *pSD
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 				 , MenuSpec *menuSpec
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 				)
@@ -2824,7 +2824,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
     MenuItem      *lastMenuItem;
     MenuItem      *menuItem;
     register int   ix = 0;
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
     Boolean        use_separators = False;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
     
@@ -2860,12 +2860,12 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 	menuItem->nextMenuItem = NULL;
 	menuItem->wmFunction = (WmFunction)NULL;
 	menuItem->wmFuncArgs = NULL;
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 	menuItem->clientCommandName = NULL;
 	menuItem->clientCommandID = 0;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 	/*
 	 * Is this a simple menu item label or is it a
 	 * client command specification.
@@ -2926,7 +2926,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 	 * but we do want to search for a menu item name that occupies
 	 * the same place as the function does for normal menu items.
 	 */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 	if (menuItem->wmFunction != NULL)
 	  ParseMenuItemName(&lineP, menuItem);
 	else
@@ -2964,7 +2964,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 	    continue;  /* skip this menu item */
         }
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 	/*
 	 * If we're working on the f.cci function, this will fix-up
 	 * the menuItem entries so that it appears that we read-in
@@ -3019,7 +3019,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 	}
 	lastMenuItem = menuItem;
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 	/* If this menu item is supposed to be wrapped in separators
 	 * then create a separator template after the menu item
 	 */
@@ -3041,7 +3041,7 @@ static MenuItem *ParseMenuItems (WmScreenData *pSD
 
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  StoreExclusion (menuSpec, string)
@@ -3680,7 +3680,7 @@ static Boolean ParseWmAccelerator (unsigned char **linePP, MenuItem *menuItem)
 
     if ((*lineP != '\0') &&     /* something follows */
 	(*lineP != '!')  &&     /* skip if we have the ! WmFunction */
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 	 /* skip label name for client command */
 	((*lineP != '"') || (menuItem->wmFunction != F_InvokeCommand)) &&
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
@@ -3721,7 +3721,7 @@ static Boolean ParseWmAccelerator (unsigned char **linePP, MenuItem *menuItem)
 } /* END OF FUNCTION ParseWmAccelerator */
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  ParseMenuItemName (linePP, menuItem)
@@ -4396,7 +4396,7 @@ static Boolean ParseWmFuncNbrArg (unsigned char **linePP,
 } /* END OF FUNCTION ParseWmFuncNbrArg */
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  ParseWmFuncCCIArgs (linePP, wmFunction, pArgs)
@@ -6123,7 +6123,7 @@ static Boolean LookupModifier (unsigned char *name, unsigned int *valueP)
 } /* END OF FUNCTION LookupModifier */
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  GetCCIModifier (modString, mod)
@@ -8293,7 +8293,7 @@ GetNetworkFileName (char *pchFile)
 #endif /* WSM */
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  SetGreyedContextAndMgtMask (menuItem, wmFunction)

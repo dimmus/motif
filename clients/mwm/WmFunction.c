@@ -2978,7 +2978,7 @@ Boolean F_Pack_Icons (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Pack_Icons */
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  F_Post_RMenu (args, pCD, event)
@@ -4620,7 +4620,7 @@ Boolean F_Screen (String args, ClientData *pCD, XEvent *event)
 
 
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  F_InvokeCommand (args, pCD, event)

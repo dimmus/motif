@@ -1240,7 +1240,7 @@ Boolean HandleKeyPress (XKeyEvent *keyEvent,
 		}
 
 	      if ((keySpecs->wmFunction == F_Menu) ||
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 		  (keySpecs->wmFunction == F_Post_RMenu) ||
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 		  (keySpecs->wmFunction == F_Post_SMenu))
@@ -2549,7 +2549,7 @@ Time GetTimestamp (void)
     Time timestamp;
     WmScreenData *pSD = ACTIVE_PSD;
     XEvent event;
-    long property;
+    long property = 0.f;
 
     /*
      * Do zero-length append to our own WM_STATE
@@ -2594,7 +2594,7 @@ Time GetTimestamp (void)
 
 } /* END OF FUNCTION GetTimestamp */
 
-#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
+#if !defined WSM || defined MWM_QATS_PROTOCOL
 /*************************************<->*************************************
  *
  *  LastTime ()
