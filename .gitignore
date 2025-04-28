@@ -24,6 +24,8 @@ install-sh
 ltmain.sh
 missing
 ylwrap
+m4/lt*.m4
+m4/libtool.m4
 demos/unsupported/xmform/xmform
 demos/unsupported/xmforc/xmforc
 demos/unsupported/xmfonts/xmfonts
