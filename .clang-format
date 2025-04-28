@@ -1,0 +1,5 @@
+BasedOnStyle: GNU
+AlwaysBreakAfterDefinitionReturnType: All
+BreakBeforeBinaryOperations: None
+SpaceAfterCStyleCast: true
+ColumnLimit: 0
