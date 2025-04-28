@@ -1,29 +1,12 @@
-Motif 2.3.8 Tue Dec  5 14:42:42 EET 2017
------------------------------------------------------------------------
 
+# Motif 2.3.8
 
-                               Motif 2.3.8
-
-                              Release Notes
-
-                             The Open Group
-                                   and
-                     Integrated Computer Solutions
-
-
-This document provides Release Notes for the release of Motif 2.3.8.
-
-This contains information on what is new in Motif 2.3.8. 
-Please see the COPYING file included with this release.
-
-
-# Introduction
 
 This document and accompanying text files contain important information. 
 Please read them carefully before starting the build and
 installation procedures.
 
-There are two ways to build Motif from source code: Imake and AutoTools.
+<!-- There are two ways to build Motif from source code: Imake and AutoTools.
 
 If you are using Imake, please read INSTALL.imake for notes on how to build
 and install this product using Imake. This method is deprecated due to
@@ -32,7 +15,7 @@ should join the development mailing list; all contributions are welcome.
 
 Please see the file INSTALL.configure on how to build and install this product
 using the autoconf tools. This method is now fully supported and 
-is the recommended build method.
+is the recommended build method. -->
 
 
 # What is Motif
@@ -47,12 +30,7 @@ Motif 2.3.X is an updated version of Motif 2.3.
 Any applications built against a previous 2.x release of Motif will be 
 binary compatible with this release.
 
-Pre-compiled versions are available for download at the ICS MotifZone:
-
-http://motif.ics.com
-
-After downloading this source distribution, it will need to be unpacked 
-and compiled. The distribution contains the following items:
+The distribution contains the following items:
 
 * libXm source code and include files
 * Motif reference documentation (man pages)
@@ -105,7 +83,7 @@ If you find a reproducible bug in any of the Motif libraries or code,
 or an error in the documentation, please reference the BUGREPORT file 
 and/or submit a bug report online at:
 
-http://bugs.motifzone.org
+https://gitverse.ru/xde/xde-motif/tasktracker/new
 
 The status of submitted bugs is maintained there.
 
