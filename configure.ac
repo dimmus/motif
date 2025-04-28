@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_PREREQ([2.71])
+AC_PREREQ([2.71])
 AC_INIT([Motif],[2.3.8],[https://gitlab.freedesktop.org/xorg/lib/libx11/-/issues])
 
 AC_CANONICAL_TARGET
@@ -18,7 +18,7 @@ AC_CHECK_FILE(/usr/X11R6/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr))
 
 dnl Initialize Automake
-AM_INIT_AUTOMAKE([foreign dist-xz subdir-objects])
+AM_INIT_AUTOMAKE([foreign dist-xz subdir-objects no-define])
 
 AM_MAINTAINER_MODE
 
