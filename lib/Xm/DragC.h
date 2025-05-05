@@ -74,7 +74,7 @@ enum{	XmDROP,				XmDROP_HELP,
 
 /* values for operation */
 #define	XmDROP_NOOP	0L
-#define XmDROP_MOVE 	(1L << 0)
+#define XmDROP_MOVE (1L << 0)
 #define XmDROP_COPY	(1L << 1)
 #define XmDROP_LINK	(1L << 2)
 

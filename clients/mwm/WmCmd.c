@@ -1194,18 +1194,16 @@ GetMaximizeInfo(ClientData *pcd, XtPointer reply)
 
 
       for (i=0; i < filledCount; i++)
-	{
-     
+	    {
         if (pcd->pTitleGadgets[i].id == FRAME_MAXIMIZE)
-	  {
-	    CopyMwmGadget (&(pcd->pTitleGadgets[i]),&maximize_button);
-	    maxFound = True;
-          }
-
-      	}
+	      {
+          CopyMwmGadget (&(pcd->pTitleGadgets[i]),&maximize_button);
+          maxFound = True;
+        }
+      }
       
       if (maxFound == False)
-	FillInvalidInfo (&maximize_button);
+	      FillInvalidInfo (&maximize_button);
 
 
 
@@ -1387,68 +1385,66 @@ GetIconInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box)
 
 static void
 GetMoveInfo(ClientData *pcd, XtPointer reply)
-
 {
-      int i;
-      GadgetRectangle title;
-      GadgetRectangle menu;
-      CARD32 filledCount;
-      CARD32 upperBorderWidth, lowerBorderWidth;
-      CARD32 windowX, windowY;
-      Window frameWin;
+    int i;
+    GadgetRectangle title;
+    GadgetRectangle menu;
+    CARD32 filledCount;
+    CARD32 upperBorderWidth, lowerBorderWidth;
+    CARD32 windowX, windowY;
+    Window frameWin;
 
-      Boolean titleFound = False;
-      Boolean system_found = False;
+    Boolean titleFound = False;
+    Boolean system_found = False;
 
 
-      filledCount = pcd->cTitleGadgets;
-      upperBorderWidth = pcd->frameInfo.upperBorderWidth;
-      lowerBorderWidth = pcd->frameInfo.lowerBorderWidth;
-      windowX = pcd->clientX;
-      windowY = pcd->clientY;
-      frameWin = pcd->clientFrameWin;
+    filledCount = pcd->cTitleGadgets;
+    upperBorderWidth = pcd->frameInfo.upperBorderWidth;
+    lowerBorderWidth = pcd->frameInfo.lowerBorderWidth;
+    windowX = pcd->clientX;
+    windowY = pcd->clientY;
+    frameWin = pcd->clientFrameWin;
 
-      for (i=0; i < filledCount; i++)
-	{
-	  if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
-	    {
-		CopyMwmGadget (&(pcd->pTitleGadgets[i]), &title);
-		titleFound = True;
-	    }
+    for (i=0; i < filledCount; i++)
+    {
+      if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
+      {
+        CopyMwmGadget (&(pcd->pTitleGadgets[i]), &title);
+        titleFound = True;
+      }
 
-	  if (pcd->pTitleGadgets[i].id == FRAME_SYSTEM)
-	    {
-	      CopyMwmGadget (&(pcd->pTitleGadgets[i]), &menu);
-	      system_found = True;
-	    }
-
-        }
-
-        if (titleFound == False)
-	 FillInvalidInfo (&title);
-
-        if (system_found == False)
-	 FillInvalidInfo (&menu);
-			  
-
-	 reply = PackCARD32 (reply, (CARD32)filledCount);
-	 reply = PackCARD32 (reply, (CARD32)title.id);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.x);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.y);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.height);
-       	 reply = PackCARD32 (reply, (CARD32)menu.id);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.x);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.y);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)menu.rect.height);
-	 reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
-	 reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
-	 reply = PackCARD32 (reply, (CARD32)windowX);
-	 reply = PackCARD32 (reply, (CARD32)windowY);
-	 reply = PackCARD32 (reply, (CARD32)frameWin);
+      if (pcd->pTitleGadgets[i].id == FRAME_SYSTEM)
+      {
+        CopyMwmGadget (&(pcd->pTitleGadgets[i]), &menu);
+        system_found = True;
+      }
 
     }
+
+    if (titleFound == False)
+      FillInvalidInfo (&title);
+
+    if (system_found == False)
+      FillInvalidInfo (&menu);
+			  
+
+    reply = PackCARD32 (reply, (CARD32)filledCount);
+    reply = PackCARD32 (reply, (CARD32)title.id);
+    reply = PackCARD32 (reply, (CARD32)title.rect.x);
+    reply = PackCARD32 (reply, (CARD32)title.rect.y);
+    reply = PackCARD32 (reply, (CARD32)title.rect.width);
+    reply = PackCARD32 (reply, (CARD32)title.rect.height);
+    reply = PackCARD32 (reply, (CARD32)menu.id);
+    reply = PackCARD32 (reply, (CARD32)menu.rect.x);
+    reply = PackCARD32 (reply, (CARD32)menu.rect.y);
+    reply = PackCARD32 (reply, (CARD32)menu.rect.width);
+    reply = PackCARD32 (reply, (CARD32)menu.rect.height);
+    reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
+    reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
+    reply = PackCARD32 (reply, (CARD32)windowX);
+    reply = PackCARD32 (reply, (CARD32)windowY);
+    reply = PackCARD32 (reply, (CARD32)frameWin);
+}
 
 
 
@@ -1460,65 +1456,56 @@ GetMoveInfo(ClientData *pcd, XtPointer reply)
 static void
 GetResizeInfo(ClientData *pcd, XtPointer reply, int dir)
 {
-      int i;
-      GadgetRectangle east_resize = {0, {0, 0, 0, 0}}, west_resize = {0, {0, 0, 0, 0}}, gravity_resize, title;
-      CARD32  upperBorderWidth, lowerBorderWidth;
-      Window frameWin;
-      int filledCount;
-      Boolean titleFound = False;
-      
+    int i;
+    GadgetRectangle east_resize = {0, {0, 0, 0, 0}}, west_resize = {0, {0, 0, 0, 0}}, gravity_resize, title;
+    CARD32  upperBorderWidth, lowerBorderWidth;
+    Window frameWin;
+    int filledCount;
+    Boolean titleFound = False;
+    
+    filledCount = pcd->cTitleGadgets;
+
+    if (!(pcd->decor & MWM_DECOR_RESIZEH))
+      FillInvalidInfo (&gravity_resize);
+    else
+    {
+      CopyMwmGadget (&pcd->pResizeGadgets[dir], &gravity_resize);
+      CopyMwmGadget (&pcd->pResizeGadgets[WM_WEST], &west_resize);
+      CopyMwmGadget (&pcd->pResizeGadgets[WM_EAST], &east_resize);
+    }
 
 
-      filledCount = pcd->cTitleGadgets;
+    for (i=0; i < filledCount; i++)
+      if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
+      {
+          CopyMwmGadget (&(pcd->pTitleGadgets[i]), &title);
+                titleFound = True;
+      }
 
-      if (!(pcd->decor & MWM_DECOR_RESIZEH))
-      	FillInvalidInfo (&gravity_resize);
-      else
-	{
-		CopyMwmGadget (&pcd->pResizeGadgets[dir], &gravity_resize);
-		CopyMwmGadget (&pcd->pResizeGadgets[WM_WEST], &west_resize);
-		CopyMwmGadget (&pcd->pResizeGadgets[WM_EAST], &east_resize);
-	}
+    if (titleFound == False)
+      FillInvalidInfo (&title);
 
+    upperBorderWidth = pcd->frameInfo.upperBorderWidth;
+    lowerBorderWidth = pcd->frameInfo.lowerBorderWidth;
+    frameWin = pcd->clientFrameWin;
 
-       for (i=0; i < filledCount; i++)
-	if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
-	   {
-	      CopyMwmGadget (&(pcd->pTitleGadgets[i]), &title);
-              titleFound = True;
-	   }
-
-	if (titleFound == False)
-	   FillInvalidInfo (&title);
-		
-
-
-	    
-
-        upperBorderWidth = pcd->frameInfo.upperBorderWidth;
-        lowerBorderWidth = pcd->frameInfo.lowerBorderWidth;
-	frameWin = pcd->clientFrameWin;
-
-		
-
-
-	 reply = PackCARD32 (reply, (CARD32)east_resize.id);
-	 reply = PackCARD32 (reply, (CARD32)east_resize.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)west_resize.id);
-	 reply = PackCARD32 (reply, (CARD32)west_resize.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)gravity_resize.id);
-	 reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.x);
-	 reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.y);
-	 reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.height);
-	 reply = PackCARD32 (reply, (CARD32)title.id);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.x);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.y);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.width);
-	 reply = PackCARD32 (reply, (CARD32)title.rect.height);
-	 reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
-	 reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
-	 reply = PackCARD32 (reply, (CARD32)frameWin);
+    reply = PackCARD32 (reply, (CARD32)east_resize.id);
+    reply = PackCARD32 (reply, (CARD32)east_resize.rect.width);
+    reply = PackCARD32 (reply, (CARD32)west_resize.id);
+    reply = PackCARD32 (reply, (CARD32)west_resize.rect.width);
+    reply = PackCARD32 (reply, (CARD32)gravity_resize.id);
+    reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.x);
+    reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.y);
+    reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.width);
+    reply = PackCARD32 (reply, (CARD32)gravity_resize.rect.height);
+    reply = PackCARD32 (reply, (CARD32)title.id);
+    reply = PackCARD32 (reply, (CARD32)title.rect.x);
+    reply = PackCARD32 (reply, (CARD32)title.rect.y);
+    reply = PackCARD32 (reply, (CARD32)title.rect.width);
+    reply = PackCARD32 (reply, (CARD32)title.rect.height);
+    reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
+    reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
+    reply = PackCARD32 (reply, (CARD32)frameWin);
 }
 
 

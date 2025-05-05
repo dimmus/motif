@@ -165,11 +165,11 @@ ConvertCallback(Widget  w,
     copy_of_selected_text = selected_text;
     
   /* Convert any lowercase letters in the selection to uppercase. */
-    while (*selected_text)  {
-       if (islower(*selected_text))
-         *selected_text = toupper(*selected_text); 
-         selected_text++;
-    }
+  while (*selected_text)  {
+      if (islower(*selected_text))
+        *selected_text = toupper(*selected_text); 
+      selected_text++;
+  }
 
   /* Place the converted text into the XmConvertCallbackStruct. */ 
     ccs->value = copy_of_selected_text;
@@ -234,11 +234,11 @@ TransferProc(Widget  w,
           MYTEXT_is_supported = 1; 
      }
 
-     if (MYTEXT_is_supported)
-       printf("TransferProc: Requesting conversion of MYTEXT.\n");
-       XmTransferValue(scs->transfer_id, MYTEXT,
-                   (XtCallbackProc)TransferProc, NULL,
-                   XtLastTimestampProcessed(XtDisplay(w)));
+    if (MYTEXT_is_supported)
+      printf("TransferProc: Requesting conversion of MYTEXT.\n");
+    XmTransferValue(scs->transfer_id, MYTEXT,
+                (XtCallbackProc)TransferProc, NULL,
+                XtLastTimestampProcessed(XtDisplay(w)));
    }
 
   if ((scs->target == MYTEXT)) { 

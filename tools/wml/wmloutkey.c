@@ -600,33 +600,33 @@ void wmlOutputUilKeyTabBody (outfil, tokvec, maxlen, maxkey)
 
 {
 
-int			ndx;		/* loop index */
-WmlKeyWTokenPtr		tok;		/* current token */
-char			*tokstg;	/* string for token (keyword) */
-char			tkclass[100];	/* token class string */
-char			tksym[100];	/* token sym_k string */
-char			tktoken[100];	/* token tkn_k_num string */
+    int			ndx;		/* loop index */
+    WmlKeyWTokenPtr		tok;		/* current token */
+    char			*tokstg;	/* string for token (keyword) */
+    char			tkclass[100];	/* token class string */
+    char			tksym[100];	/* token sym_k string */
+    char			tktoken[100];	/* token tkn_k_num string */
 
 
-/*
- * Loop over all tokens, and put out an entry for each.
- */
-for ( ndx=0 ; ndx<tokvec->cnt ; ndx++ )
+    /*
+    * Loop over all tokens, and put out an entry for each.
+    */
+    for ( ndx=0 ; ndx<tokvec->cnt ; ndx++ )
     {
-    tok = (WmlKeyWTokenPtr) tokvec->hvec[ndx].objptr;
-    tokstg = tokvec->hvec[ndx].objname;
-    wmlTokenClassString (tkclass, tok);
-    wmlTokenSymKString (tksym, tok);
-    wmlTokenTokenString (tktoken, tok);
-    fprintf (outfil, "    {%s, %s, %d, %s, \"%s\"},\n",
-	     tkclass,
-	     tksym,
-	     strlen(tokstg),
-	     tktoken,
-	     tokstg);
-    if ( (int)strlen(tokstg) > *maxlen )
-	*maxlen = strlen (tokstg);
-    *maxkey += 1;
+        tok = (WmlKeyWTokenPtr) tokvec->hvec[ndx].objptr;
+        tokstg = tokvec->hvec[ndx].objname;
+        wmlTokenClassString (tkclass, tok);
+        wmlTokenSymKString (tksym, tok);
+        wmlTokenTokenString (tktoken, tok);
+        fprintf (outfil, "    {%s, %s, %ld, %s, \"%s\"},\n",
+            tkclass,
+            tksym,
+            strlen(tokstg),
+            tktoken,
+            tokstg);
+        if ( (int)strlen(tokstg) > *maxlen )
+            *maxlen = strlen (tokstg);
+        *maxkey += 1;
     }
 
 }
