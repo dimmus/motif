@@ -1,12 +1,13 @@
-AC_PREREQ([2.71])
 AC_INIT([Motif],[2.3.8])
+
+AC_PREREQ([2.69])
 
 AC_CANONICAL_TARGET
 
 AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
 AC_CONFIG_SRCDIR([Makefile.am])
 AC_CONFIG_SRCDIR([lib/Xm/Form.c])
-AC_CONFIG_AUX_DIR(.)
+AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([m4])
 
 AC_CHECK_FILE(/usr/X/include/X11/X.h,
@@ -16,12 +17,10 @@ AC_CHECK_FILE(/usr/X11R6/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr/X11R6),
   AC_PREFIX_DEFAULT(/usr))
 
-dnl Initialize Automake
-AM_INIT_AUTOMAKE([foreign dist-xz subdir-objects no-define])
+AM_INIT_AUTOMAKE([foreign dist-xz subdir-objects no-define silent-rules std-options subdir-objects nostdinc])
 
 AM_MAINTAINER_MODE
 
-dnl The version of the Motif libraries
 CURRENT=4
 REVISION=4
 AGE=0
@@ -31,12 +30,8 @@ AC_SUBST(AGE)
 
 LIBTOOL_VERSION=$CURRENT:$REVISION:$AGE
 
-dnl
-dnl Override a default in libtool.
-dnl
 dnl AC_DISABLE_STATIC
 
-dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
@@ -63,27 +58,27 @@ AC_EXEEXT
 # Required when PKG_CHECK_MODULES called within an if statement
 PKG_PROG_PKG_CONFIG
 
-dnl Checks for libraries.
-
 AC_PATH_X
 AC_PATH_XTRA
 dnl LT_LIB_XTHREADS
 
-dnl Compile in EditRes support if we can find Xmu
+C_STD="gnu99"
+AC_SUBST(C_STD)
 
 save_LIBS="$LIBS"
 save_CFLAGS="$CFLAGS"
 LIBS="$X_LIBS $LIBS"
 CFLAGS="$X_CFLAGS $CFLAGS"
+
 AC_CHECK_HEADERS(X11/Xmu/Editres.h,
-AC_CHECK_LIB(Xmu, _XEditResCheckMessages,
-X_XMU=-lXmu
-AC_DEFINE(HAVE_LIBXMU, 1, This System has libXmu)
-, X_XMU="", -lXt -lX11)
-AC_CHECK_LIB(Xmu,XmuNCopyISOLatin1Lowered ,
-AC_DEFINE(HAVE_XMU_N_COPY_ISO,1,Have XmuNCopyISOLatin1Lowered)
-, , -lXt -lX11)
-,,[[#include <X11/Intrinsic.h>]]
+  AC_CHECK_LIB(Xmu, _XEditResCheckMessages,
+    X_XMU=-lXmu
+    AC_DEFINE(HAVE_LIBXMU, 1, This System has libXmu)
+    , X_XMU="", -lXt -lX11)
+  AC_CHECK_LIB(Xmu,XmuNCopyISOLatin1Lowered ,
+    AC_DEFINE(HAVE_XMU_N_COPY_ISO,1,Have XmuNCopyISOLatin1Lowered)
+    , , -lXt -lX11)
+  ,,[[#include <X11/Intrinsic.h>]]
 )
 
 
@@ -92,7 +87,6 @@ LIBS="$save_LIBS -lXt -lX11 -lXext"
 CFLAGS="$save_CFLAGS"
 AM_CONDITIONAL(OM_XMU, test x$X_XMU != x)
 
-dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_CHECK_INCLUDES_DEFAULT
 
@@ -102,7 +96,7 @@ AC_CHECK_HEADERS(wctype.h, AC_DEFINE(HAS_WIDECHAR_FUNCTIONS,1,System supports wc
 AC_CHECK_HEADER(langinfo.h,,AC_DEFINE(CSRG_BASED,1,System Has langinfo.h))
 AC_CHECK_HEADER(X11/Xos_r.h,,AC_DEFINE(NEED_XOS_R_H,1,System Missing Xos_r.h))
 AC_CHECK_HEADER(X11/Xpoll.h,,AC_DEFINE(NEED_XPOLL_H,1,system Missing X11/Xpoll.h))
-dnl Checks for typedefs, structures, and compiler characteristics.
+
 AC_C_CONST
 AC_TYPE_MODE_T
 AC_TYPE_OFF_T
@@ -114,7 +108,6 @@ AC_STRUCT_TM
 AC_TYPE_UID_T
 dnl WEAK_ALIAS_SUPPORT
 
-dnl Checks for library functions.
 AC_FUNC_ALLOCA
 AC_FUNC_MEMCMP
 AC_FUNC_SETPGRP
@@ -131,7 +124,6 @@ AC_COMPILE_IFELSE(
 AC_CACHE_VAL(ac_cv_type_signal,
     [AC_MSG_RESULT([$ac_cv_type_signal])])
 
-# Define RETSIGTYPE accordingly
 AC_DEFINE_UNQUOTED([RETSIGTYPE], [$ac_cv_type_signal], [Define as the return type of signal handlers (`int' or `void').])
 
 AC_FUNC_STRCOLL
@@ -181,7 +173,8 @@ fi
 
 if test x$GCC = xyes
 then
-    CFLAGS="$CFLAGS -Wall -g -fno-strict-aliasing -Wno-unused -Wno-comment"
+    CFLAGS="$CFLAGS -std=$C_STD -Wall -g -fno-strict-aliasing \
+        -Wno-unused -Wno-comment -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -Wno-unused-result"
     if test ` $CC -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4" ; then
         CFLAGS="$CFLAGS -fno-tree-ter"
     fi
