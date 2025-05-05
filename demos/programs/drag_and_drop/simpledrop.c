@@ -111,7 +111,7 @@ static void Warning(DropDemo this, String s1, String s2)
    else if (s2 == NULL)
      msg = XmStringCreateLocalized(s1);
    else {
-      strncat(strcpy(tmp, s1), s2, 256);
+      strncat(strcpy(tmp, s1), s2, 257);
       msg = XmStringCreateLocalized(tmp);
    }
    
