@@ -1,7 +1,8 @@
+ACLOCAL_AMFLAGS = -I m4
+
 datadir = ${prefix}/share/Xm/doc
 
-#data_DATA = BUGREPORT COPYRIGHT.MOTIF COPYING \
-#            README RELEASE RELNOTES
+data_DATA = README # RELEASE RELNOTES
 
 EXTRA_DIST = BUGREPORT \
              COPYING \
@@ -24,6 +25,7 @@ MAINTAINERCLEANFILES = Makefile.in \
              XmStrDefs.c \
              m4/lt*.m4 \
              m4/libtool.m4 \
+             build-aux/* \
              *~
 
 SUBDIRS	= bindings bitmaps \
@@ -35,6 +37,3 @@ SUBDIRS	= bindings bitmaps \
              clients \
              doc \
              demos
-
-AUTOMAKE_OPTIONS = 1.4
-# ACLOCAL_AMFLAGS = -I .
