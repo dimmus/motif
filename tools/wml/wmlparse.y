@@ -30,7 +30,6 @@
  * resources in the UIL language.
  */
 
-
 %{
 
 #include "wml.h"
@@ -53,6 +52,9 @@
  */
 #undef NULL
 #endif
+
+int yyerror (char *s);
+int	yylex();
 
 %}
 
@@ -736,8 +738,7 @@ name
 /*
  * Dummmy error routine, since we output our own.
  */
-int yyerror (s)
-char *s;
+int yyerror (char *s)
 {
 	return 0;
 }

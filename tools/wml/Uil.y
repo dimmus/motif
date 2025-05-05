@@ -57,6 +57,8 @@ YYSTYPE		prev_yylval;
 
 	/* End user declarations section */
 
+int yyerror (char *s);
+
 %}    
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1404,8 +1406,7 @@ units_specification
 /*    Dummy error routine for the parser.  We will output our own
       error messages.    */
 
-int yyerror (s)
-char	* s;
+int yyerror (char	* s)
 {
 	return 0;
 }

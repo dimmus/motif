@@ -60,6 +60,8 @@ static char rcsid[] = "$TOG: WmWinList.c /main/8 1997/06/10 15:50:50 samborn $"
 #include "WmEvent.h"
 
 
+extern void SetMwmClientList (Window propWindow, Window *wmWindowList, unsigned int wmWindowCount);
+
 
 /*
  * Global Variables:
