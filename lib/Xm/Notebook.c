@@ -1334,7 +1334,7 @@ SetValues (
     if (relayout)
 	{
 	Dimension save_width, save_height;
-	XtWidgetGeometry preferred_geo;
+	XtWidgetGeometry preferred_geo = {0};
 
 	/* Store new w/h, restore old w/h, and adjust geometry to the old */
 	save_width = XtWidth(new_w);
@@ -1355,13 +1355,13 @@ SetValues (
 	/* App request for width takes precedence over NewPreferredGeometry */
 	if (XtWidth(old) != save_width)
 	    XtWidth(new_w) = save_width;
-	else
+	else if (preferred_geo.width)
 	    XtWidth(new_w) = preferred_geo.width;
 
 	/* App request for height takes precedence over NewPreferredGeometry */
 	if (XtHeight(old) != save_height)
 	    XtHeight(new_w) = save_height;
-	else
+	else if (preferred_geo.height)
 	    XtHeight(new_w) = preferred_geo.height;
 	}
 

@@ -3756,7 +3756,7 @@ static void ParseMenuItemName (unsigned char **linePP, MenuItem *menuItem)
 {
     unsigned char *lineP, *endquote;
 #ifndef NO_MULTIBYTE
-    int chlen;
+    int chlen = 0;
 #endif
 
     /* Skip past any whitespace */
