@@ -1,16 +1,20 @@
 #!/bin/sh
 
-srcdir=`dirname $0`
-test -z "$srcdir" && srcdir=.
+# srcdir=`dirname $0`
+# test -z "$srcdir" && srcdir=.
 
-THEDIR="`pwd`"
-cd "$srcdir"
+# THEDIR="`pwd`"
+# cd "$srcdir"
 
-libtoolize --force --automake
-aclocal -I .
-autoconf
-autoheader
-automake --foreign  --include-deps --add-missing
+# libtoolize --force --automake
+# aclocal -I .
+# autoconf
+# autoheader
+# automake --foreign  --include-deps --add-missing
 
-cd "$THEDIR"
-exec "$srcdir"/configure "$@"
+# cd "$THEDIR"
+# exec "$srcdir"/configure "$@"
+
+[ "${0%/*}" = "$0" ] || cd "${0%/*}" || exit
+
+autoreconf -fiv && rm -rf autom4te.cache
