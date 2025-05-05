@@ -13,8 +13,10 @@ AC_CONFIG_MACRO_DIRS([m4])
 AC_CHECK_FILE(/usr/X/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr/X),
   AC_PREFIX_DEFAULT(/usr))
-AC_CHECK_FILE(/usr/X11R6/include/X11/X.h,
-  AC_PREFIX_DEFAULT(/usr/X11R6),
+AC_CHECK_FILE(/usr/X11R7/include/X11/X.h,
+  AC_PREFIX_DEFAULT(/usr/X11R7),
+  AC_PREFIX_DEFAULT(/usr))
+AC_CHECK_FILE(/usr/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr))
 
 AM_INIT_AUTOMAKE([1.16.1 foreign dist-xz subdir-objects no-define])
