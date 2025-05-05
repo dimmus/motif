@@ -17,7 +17,7 @@ AC_CHECK_FILE(/usr/X11R6/include/X11/X.h,
   AC_PREFIX_DEFAULT(/usr/X11R6),
   AC_PREFIX_DEFAULT(/usr))
 
-AM_INIT_AUTOMAKE([foreign dist-xz subdir-objects no-define silent-rules std-options subdir-objects nostdinc])
+AM_INIT_AUTOMAKE([1.16.1 foreign dist-xz subdir-objects no-define])
 
 AM_MAINTAINER_MODE
 
