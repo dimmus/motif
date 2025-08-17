@@ -434,6 +434,7 @@ AC_OUTPUT
 echo ""
 echo "the following optional features will be used:"
 echo "  Enable message catalog:    $enable_message_catalog"
+echo "  Enable demos:              $enable_demos"
 echo "  Enable themes:             $enable_themes"
 echo "  Enable themes debugging:   $enable_debug_themes"
 echo "  Enable UTF-8 support:      $enable_utf8"
