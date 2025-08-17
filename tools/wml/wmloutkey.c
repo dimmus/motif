@@ -618,10 +618,10 @@ void wmlOutputUilKeyTabBody (outfil, tokvec, maxlen, maxkey)
         wmlTokenClassString (tkclass, tok);
         wmlTokenSymKString (tksym, tok);
         wmlTokenTokenString (tktoken, tok);
-        fprintf (outfil, "    {%s, %s, %ld, %s, \"%s\"},\n",
+        fprintf (outfil, "    {%s, %s, %d, %s, \"%s\"},\n",
             tkclass,
             tksym,
-            strlen(tokstg),
+            (int)strlen(tokstg),
             tktoken,
             tokstg);
         if ( (int)strlen(tokstg) > *maxlen )
