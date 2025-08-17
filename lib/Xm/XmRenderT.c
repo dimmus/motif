@@ -2704,7 +2704,7 @@ XmRenderTableCvtToProp(Widget widget, /* unused */
       char temp2[2048];
       while(number > 0) {
         strncpy(temp2, temp, 2048);
-        sprintf(temp, "%s %f %d %d %d, ", temp2, tab -> value, 
+        sprintf(temp + strlen(temp), " %f %d %d %d, ", tab -> value,
             tab -> units, tab -> alignment, tab -> offsetModel);
         tab = (_XmTab) tab -> next;
         number--;
