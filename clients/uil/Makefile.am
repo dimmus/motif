@@ -13,7 +13,7 @@ UilParser.lo: UilParser.c
 
 libUil_la_LIBADD = UilParser.lo ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la 
 
-uil_LDADD = ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la 
+uil_LDADD = libUil.la ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la -lXt
 
 AM_CPPFLAGS = -DINCDIR=\"@INCDIR@\" \
            -DLIBDIR=\"@LIBDIR@\" \
@@ -42,7 +42,7 @@ COMMON_SRC =	UilCmd.c	UilDiags.c	UilKeyTab.c	UilLexAna.c  \
 		UilLstMac.c	UilSemVal.c	UilSemCSet.c	UilDB.c
 
 SRCS =		$(COMMON_SRC)
-SRCS2 =		$(COMMON_SRC)	UilMain.c
+SRCS2 =		UilMain.c
 
 HEADERS_1 = 	Uil.h		UilSymGl.h	UilSymDef.h \
 		UilDef.h	XmAppl.uil
