@@ -297,6 +297,16 @@ AC_IMAGE_SUPPORT
 
 # AM_CONDITIONAL(Motif22Compatibility, test x$enable_motif22_compatibility = xyes)
 
+# Option to disable building of demos
+AC_ARG_ENABLE(demos, [  --disable-demos
+                       Disable building demos])
+
+if test x$enable_demos = x
+then
+    enable_demos="yes"
+fi
+
+# Base configure files (excluding demos)
 AC_CONFIG_FILES([Makefile \
 bindings/Makefile \
 bitmaps/Makefile \
@@ -322,92 +332,103 @@ doc/man/man4/Makefile \
 doc/man/man5/Makefile \
 tools/Makefile \
 tools/wml/Makefile \
-demos/Makefile \
-demos/lib/Makefile \
-demos/lib/Xmd/Makefile \
-demos/lib/Wsm/Makefile \
-demos/lib/Exm/Makefile \
-demos/lib/Exm/wml/Makefile \
-demos/programs/Makefile \
-demos/programs/Exm/Makefile \
-demos/programs/Exm/app_in_c/Makefile \
-demos/programs/Exm/app_in_uil/Makefile \
-demos/programs/Exm/simple_app/Makefile \
-demos/programs/airport/Makefile \
-demos/programs/animate/Makefile \
-demos/programs/drag_and_drop/Makefile \
-demos/programs/draw/Makefile \
-demos/programs/earth/Makefile \
-demos/programs/filemanager/Makefile \
-demos/programs/fileview/Makefile \
-demos/programs/getsubres/Makefile \
-demos/programs/hellomotif/Makefile \
-demos/programs/hellomotifi18n/Makefile \
-demos/programs/hellomotifi18n/C/Makefile \
-demos/programs/hellomotifi18n/C/uid/Makefile \
-demos/programs/hellomotifi18n/english/Makefile \
-demos/programs/hellomotifi18n/english/uid/Makefile \
-demos/programs/hellomotifi18n/french/Makefile \
-demos/programs/hellomotifi18n/french/uid/Makefile \
-demos/programs/hellomotifi18n/hebrew/Makefile \
-demos/programs/hellomotifi18n/hebrew/uid/Makefile \
-demos/programs/hellomotifi18n/japan/Makefile \
-demos/programs/hellomotifi18n/japan/uid/Makefile \
-demos/programs/hellomotifi18n/japanese/Makefile \
-demos/programs/hellomotifi18n/japanese/uid/Makefile \
-demos/programs/hellomotifi18n/swedish/Makefile \
-demos/programs/hellomotifi18n/swedish/uid/Makefile \
-demos/programs/i18ninput/Makefile \
-demos/programs/panner/Makefile \
-demos/programs/periodic/Makefile \
-demos/programs/piano/Makefile \
-demos/programs/popups/Makefile \
-demos/programs/sampler2_0/Makefile \
-demos/programs/setdate/Makefile \
-demos/programs/todo/Makefile \
-demos/programs/workspace/Makefile \
-demos/programs/tooltips/Makefile \
-demos/programs/FontSel/Makefile \
-demos/programs/ButtonBox/Makefile \
-demos/programs/ColorSel/Makefile \
-demos/programs/Column/Makefile \
-demos/programs/Combo2/Makefile \
-demos/programs/Ext18List/Makefile \
-demos/programs/Ext18List/pixmaps/Makefile \
-demos/programs/IconB/Makefile \
-demos/programs/Outline/Makefile \
-demos/programs/Paned/Makefile \
-demos/programs/TabStack/Makefile \
-demos/programs/Tree/Makefile \
-demos/programs/pixmaps/Makefile \
-demos/unsupported/Makefile \
-demos/unsupported/Exm/Makefile \
-demos/unsupported/aicon/Makefile \
-demos/unsupported/dainput/Makefile \
-demos/unsupported/dogs/Makefile \
-demos/unsupported/hellomotif/Makefile \
-demos/unsupported/motifshell/Makefile \
-demos/unsupported/uilsymdump/Makefile \
-demos/unsupported/xmapdef/Makefile \
-demos/unsupported/xmfonts/Makefile \
-demos/unsupported/xmforc/Makefile \
-demos/unsupported/xmform/Makefile \
-demos/doc/Makefile \
-demos/doc/programGuide/Makefile \
-demos/doc/programGuide/ch05/Makefile \
-demos/doc/programGuide/ch05/Scale/Makefile \
-demos/doc/programGuide/ch06/Makefile \
-demos/doc/programGuide/ch06/spin_box/Makefile \
-demos/doc/programGuide/ch06/combo_box/Makefile \
-demos/doc/programGuide/ch08/Makefile \
-demos/doc/programGuide/ch08/Notebook/Makefile \
-demos/doc/programGuide/ch08/Container/Makefile \
-demos/doc/programGuide/ch16/Makefile \
-demos/doc/programGuide/ch17/Makefile \
-demos/doc/programGuide/ch17/simple_drop/Makefile \
-demos/doc/programGuide/ch17/simple_drag/Makefile \
 lib/Xm/xmstring.list \
 ])
+
+# Conditionally configure demos
+if test "$enable_demos" = "yes"
+then
+  AC_CONFIG_FILES([demos/Makefile \
+  demos/lib/Makefile \
+  demos/lib/Xmd/Makefile \
+  demos/lib/Wsm/Makefile \
+  demos/lib/Exm/Makefile \
+  demos/lib/Exm/wml/Makefile \
+  demos/programs/Makefile \
+  demos/programs/Exm/Makefile \
+  demos/programs/Exm/app_in_c/Makefile \
+  demos/programs/Exm/app_in_uil/Makefile \
+  demos/programs/Exm/simple_app/Makefile \
+  demos/programs/airport/Makefile \
+  demos/programs/animate/Makefile \
+  demos/programs/drag_and_drop/Makefile \
+  demos/programs/draw/Makefile \
+  demos/programs/earth/Makefile \
+  demos/programs/filemanager/Makefile \
+  demos/programs/fileview/Makefile \
+  demos/programs/getsubres/Makefile \
+  demos/programs/hellomotif/Makefile \
+  demos/programs/hellomotifi18n/Makefile \
+  demos/programs/hellomotifi18n/C/Makefile \
+  demos/programs/hellomotifi18n/C/uid/Makefile \
+  demos/programs/hellomotifi18n/english/Makefile \
+  demos/programs/hellomotifi18n/english/uid/Makefile \
+  demos/programs/hellomotifi18n/french/Makefile \
+  demos/programs/hellomotifi18n/french/uid/Makefile \
+  demos/programs/hellomotifi18n/hebrew/Makefile \
+  demos/programs/hellomotifi18n/hebrew/uid/Makefile \
+  demos/programs/hellomotifi18n/japan/Makefile \
+  demos/programs/hellomotifi18n/japan/uid/Makefile \
+  demos/programs/hellomotifi18n/japanese/Makefile \
+  demos/programs/hellomotifi18n/japanese/uid/Makefile \
+  demos/programs/hellomotifi18n/swedish/Makefile \
+  demos/programs/hellomotifi18n/swedish/uid/Makefile \
+  demos/programs/i18ninput/Makefile \
+  demos/programs/panner/Makefile \
+  demos/programs/periodic/Makefile \
+  demos/programs/piano/Makefile \
+  demos/programs/popups/Makefile \
+  demos/programs/sampler2_0/Makefile \
+  demos/programs/setdate/Makefile \
+  demos/programs/todo/Makefile \
+  demos/programs/workspace/Makefile \
+  demos/programs/tooltips/Makefile \
+  demos/programs/FontSel/Makefile \
+  demos/programs/ButtonBox/Makefile \
+  demos/programs/ColorSel/Makefile \
+  demos/programs/Column/Makefile \
+  demos/programs/Combo2/Makefile \
+  demos/programs/Ext18List/Makefile \
+  demos/programs/Ext18List/pixmaps/Makefile \
+  demos/programs/IconB/Makefile \
+  demos/programs/Outline/Makefile \
+  demos/programs/Paned/Makefile \
+  demos/programs/TabStack/Makefile \
+  demos/programs/Tree/Makefile \
+  demos/programs/pixmaps/Makefile \
+  demos/unsupported/Makefile \
+  demos/unsupported/Exm/Makefile \
+  demos/unsupported/aicon/Makefile \
+  demos/unsupported/dainput/Makefile \
+  demos/unsupported/dogs/Makefile \
+  demos/unsupported/hellomotif/Makefile \
+  demos/unsupported/motifshell/Makefile \
+  demos/unsupported/uilsymdump/Makefile \
+  demos/unsupported/xmapdef/Makefile \
+  demos/unsupported/xmfonts/Makefile \
+  demos/unsupported/xmforc/Makefile \
+  demos/unsupported/xmform/Makefile \
+  demos/doc/Makefile \
+  demos/doc/programGuide/Makefile \
+  demos/doc/programGuide/ch05/Makefile \
+  demos/doc/programGuide/ch05/Scale/Makefile \
+  demos/doc/programGuide/ch06/Makefile \
+  demos/doc/programGuide/ch06/spin_box/Makefile \
+  demos/doc/programGuide/ch06/combo_box/Makefile \
+  demos/doc/programGuide/ch08/Makefile \
+  demos/doc/programGuide/ch08/Notebook/Makefile \
+  demos/doc/programGuide/ch08/Container/Makefile \
+  demos/doc/programGuide/ch16/Makefile \
+  demos/doc/programGuide/ch17/Makefile \
+  demos/doc/programGuide/ch17/simple_drop/Makefile \
+  demos/doc/programGuide/ch17/simple_drag/Makefile \
+  ])
+  MAYBE_DEMOS=demos
+else
+  MAYBE_DEMOS=
+fi
+AC_SUBST(MAYBE_DEMOS)
+
 AC_OUTPUT
 
 echo ""

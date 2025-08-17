@@ -36,4 +36,4 @@ SUBDIRS	= bindings bitmaps \
              tools \
              clients \
              doc \
-             demos
+             $(MAYBE_DEMOS)
