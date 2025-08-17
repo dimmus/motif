@@ -1,0 +1,198 @@
+XCOMM platform:  $XFree86: xc/config/cf/darwin.cf,v 1.21.2.1 2002/05/03 00:36:17 torrey Exp $
+
+/* Darwin / Mac OS X configuration by John Carmack <johnc@idsoftware.com> */
+
+/* imake determines the default values by parsing uname */
+
+#ifndef OSName
+#define OSName                  DefaultOSName
+#endif
+#ifndef OSMajorVersion
+#define OSMajorVersion          DefaultOSMajorVersion
+#endif
+#ifndef OSMinorVersion
+#define OSMinorVersion          DefaultOSMinorVersion
+#endif
+#ifndef OSTeenyVersion
+#define OSTeenyVersion          DefaultOSTeenyVersion
+#endif
+
+
+XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVersion)
+
+#define VarDirectory ProjectRoot/lib
+
+#if OSMajorVersion < 7
+#       define Jaguar 1
+#endif
+
+/*
+ * Define the operating system's capabilities
+ */
+#define HasSnprintf             YES
+#define HasPutenv               YES
+#define HasBSD44Sockets         YES
+#define HasUsableFileMmap       YES
+#define HasZlib                 YES
+#ifndef HasShm
+# define HasShm                 YES
+#endif
+#define HasNdbm                 YES
+
+#ifndef HasGroff
+# define HasGroff               YES
+#endif
+
+/* Libtool on Darwin always uses minor numbers */
+#define LibtoolMinorVersions	YES
+
+/* The most common file system, HFS+, is not case sensitive. */
+#ifndef CaseSensitiveFileSystem
+# define CaseSensitiveFileSystem NO
+#endif
+
+/*
+ * This enables some settings for developers.
+ */
+#ifndef XFree86Devel
+# define XFree86Devel           NO
+#endif
+
+/*
+ * This enables Quartz compatibility.
+ * Turn off to build on raw Darwin systems.
+ */
+#ifndef DarwinQuartzSupport
+# define DarwinQuartzSupport    YES
+#endif
+
+/* we don't need -lm */
+#define MathLibrary             /**/
+
+#define TermcapLibrary          -lcurses
+
+/* we don't have a dbm library */
+#define DBMLibrary              /**/
+
+#define MkdirHierCmd            mkdir -p
+
+/* our cpp isn't in /lib/cpp and it doesn't like -undef */
+#define CppCmd                  /usr/bin/cpp
+#define RawCppCmd               CppCmd
+
+/* we have a gcc compatible compiler, but its not called gcc */
+#ifndef CcCmd
+#define CcCmd                   /usr/bin/cc
+#endif
+#ifndef CplusplusCmd
+#define CplusplusCmd            /usr/bin/c++
+#endif
+
+#ifdef Jaguar
+/* jaguar only of course */
+#define NoLocalWchar
+#define NoLocalLangInfo
+#endif
+
+/* default flags to pass to cc */
+#ifndef DefaultCCOptions
+#if XFree86Devel
+# define DefaultCCOptions       -Wall -Wpointer-arith -Wstrict-prototypes \
+				-Wmissing-prototypes -Wmissing-declarations \
+				-Wredundant-decls -Wnested-externs \
+				-no-cpp-precomp
+#else
+# define DefaultCCOptions       -Wall -Wpointer-arith -no-cpp-precomp
+#endif
+#endif
+
+/* flags to pass to cc when building libraries */
+#ifndef LibraryCCOptions
+# define LibraryCCOptions       DefaultCCOptions -fno-common
+#endif
+
+#define OptimizedCDebugFlags	-O2
+#define ByteOrder		UNKNOWN_BYTE_ORDER
+
+/*
+ * __DARWIN__ will be used for platform specific #ifdefs that can't
+ * be handled by existing X defines.
+ *
+ * Darwin's alloca() seg faults (rather than returning NULL) on failed
+ * allocations, so we can't use it.
+ *
+ * Darwin's setlocale() doesn't work properly, so use X11's instead.
+ */
+#define StandardDefines         -D__DARWIN__ -DNO_ALLOCA -DX_LOCALE
+
+/*
+ * Set this to NO to just build the client libs, which should work without
+ * having to write any platform specific code.
+ */
+#define BuildServer             YES
+
+/* our custom X server */
+# define XDarwinServer          NO
+# define XAppleServer		YES
+
+/* Thanks to the IOKit, the X server does not have to be SetUID. */
+#ifndef InstallXserverSetUID
+# define InstallXserverSetUID   NO
+#endif
+
+/* no direct graphics extension */
+#define BuildXF86DGA            NO
+
+/* no server support for extra tablets and weird input devices */
+#define BuildXInputExt          NO
+#define BuildXInputLib          YES
+
+/* no Display Power Management extension */
+#define BuildDPMSExt            NO
+
+#define BuildLibPathVar         DYLD_LIBRARY_PATH
+
+/* include rules to build shared libraries */
+#include <darwinLib.rules>
+
+/*
+ * Darwin specific Imake Config files
+ */
+#ifndef LocalConfigFiles
+#define LocalConfigFiles \
+	darwinLib.rules \
+	darwinLib.tmpl
+#endif
+
+/* include all the XFree86 rules */
+#include <xfree86.cf>
+
+
+#ifdef NoLocalWchar
+WCHARLIB=${TOP}/extras/wchar/lib/libwcs.a
+WCHARINCL=-I${TOP}/extras/wchar/h
+#endif
+
+
+/* ..and fix some stuff up */
+#if XAppleServer
+
+# undef GlxCoreLibDefines
+# define GlxCoreLibDefines -DGLX_USE_APPLEGL
+
+# undef GlxExtraDefines
+# define GlxExtraDefines -DGLX_DIRECT_RENDERING DRIDefines GlxCoreLibDefines GlxArchDefines
+
+# undef ServerExtraDefines
+# define ServerExtraDefines XFree86ServerDefines -UX_BYTE_ORDER -DROOTLESS -DDDXTIME
+
+/* Also, Imakefiles use XPLUGIN_INCLUDE for include flags */
+XPLUGIN_LIB = $(XPLUGIN_LIBDIR) -lXplugin
+
+#define InstallCmd   sudo install
+#define InstallFlags -c -o root -g admin
+
+EXTRA_FREETYPE2_REQUIREDLIBS = -framework CoreServices \
+	-framework ApplicationServices
+
+#endif /* XAppleServer */

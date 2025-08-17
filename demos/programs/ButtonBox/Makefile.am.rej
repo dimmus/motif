@@ -1,0 +1,10 @@
+--- demos/programs/ButtonBox/Makefile.am
++++ demos/programs/ButtonBox/Makefile.am
+@@ -8,6 +8,6 @@
+ bboxdemo_SOURCES = bboxdemo.c
+ data_DATA = $(EXTRA_DIST) $(bboxdemo_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la
++LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
+ 
+ INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

@@ -35,7 +35,7 @@ LibraryObjectRule()
 #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
 
 INCLUDES    = -I. -I$(MWIDGETSRC) \
-	      -I.. -I../../Synth -I../../Visual -I../../Util \
+	      -I../ -I../../Synth -I../../Visual -I../../Util \
 	      -I../../../../../lib/
 DEFINES	    = TestDefines
 

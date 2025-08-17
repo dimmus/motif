@@ -1,0 +1,9 @@
+--- demos/programs/getsubres/Makefile.am
++++ demos/programs/getsubres/Makefile.am
+@@ -7,5 +7,5 @@
+ EXTRA_DIST = getsubres.help getsubres.man README Imakefile
+ getsubres_SOURCES = getsubres.c
+ data_DATA = $(EXTRA_DIST) $(getsubres_SOURCES)
+-LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la
++LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Xm/libXm.la -lXt -lX11
+ INCLUDES = -I$(srcdir)/../../lib -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 

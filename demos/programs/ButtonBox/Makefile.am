@@ -8,6 +8,6 @@ EXTRA_DIST =
 bboxdemo_SOURCES = bboxdemo.c
 data_DATA = $(EXTRA_DIST) $(bboxdemo_SOURCES)
 TOPDIR = ../../..
-LDADD = $(TOPDIR)/lib/Xm/libXm.la
+LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
 
 AM_CPPFLAGS = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

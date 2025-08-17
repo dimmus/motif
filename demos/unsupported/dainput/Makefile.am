@@ -4,7 +4,7 @@ noinst_PROGRAMS = dainput
 
 dainput_SOURCES = dainput.c dainput_dlg.c dainput_ui.c
 
-LDADD = ../../../lib/Xm/libXm.la
+LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
 
 EXTRA_DIST =
 

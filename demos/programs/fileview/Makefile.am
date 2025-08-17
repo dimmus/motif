@@ -11,7 +11,7 @@ data_DATA = French.uid German.uid English.uid $(fileview_SOURCES) $(EXTRA_DIST)
 
 UILS= French.uil German.uil English.uil
 
-LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
+LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt -lX11
 
 AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
 

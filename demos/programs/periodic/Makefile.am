@@ -7,7 +7,7 @@ bin_PROGRAMS = periodic
 EXTRA_DIST = periodic.uil periodic_l.uil XmdPeriodic.ad README
 periodic_SOURCES = periodic.c
 data_DATA = $(EXTRA_DIST) $(periodic_SOURCES) periodic.uid
-LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
+LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt -lX11
 
 AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
 

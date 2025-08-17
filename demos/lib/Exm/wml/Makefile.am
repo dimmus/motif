@@ -18,7 +18,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/lib \
 	-I$(top_builddir)/clients/uil \
 	${X_CFLAGS} 
 
-LDADD = $(top_builddir)/lib/Xm/libXm.la
+LDADD = $(top_builddir)/lib/Xm/libXm.la -lXt
 
 DISTCLEANFILES = motif.wmd
 

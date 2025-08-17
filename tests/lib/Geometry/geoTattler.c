@@ -24,8 +24,8 @@
 /*
  * HISTORY
  */
-#include "IntrinsicI.h"      /* for the class_name field */
-#include "VarargsI.h"        /* for _GeoPrintTrace */
+#include <X11/IntrinsicI.h>      /* for the class_name field */
+#include <X11/VarargsI.h>        /* for _GeoPrintTrace */
 #include <X11/StringDefs.h>  /* XtRBoolean .. */
 #include "geoTattler.h"
 

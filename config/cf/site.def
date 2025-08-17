@@ -1,0 +1,72 @@
+XCOMM site:  $TOG: site.def /main/12 1997/07/02 17:52:18 samborn $
+
+/***************************************************************************
+ *                                                                         *
+ *		  X Consortium In-House Build Parameters                   *
+ *			Use at Your Own Risk				   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef SiteIConfigFiles
+# define SiteIConfigFiles $(IRULESRC)/host.def
+# define LocalConfigFiles host.def
+#endif
+
+#ifdef BeforeVendorCF
+
+# include <host.def>
+
+/* We will import x11. */
+# define ImportX11		YES
+
+# ifndef TopLevelProject
+#  define TopLevelProject	Motif
+# endif
+
+/* On systems where cpp doesn't expand correctly macros in include directives
+ * the two following macros need to be defined directly (accordingly to the
+ * TopLevelProject macro defined above).
+ */
+# if defined(SunArchitecture) || defined(AIXArchitecture) \
+     || defined(USLArchitecture) || defined(UXPArchitecture)
+#  ifndef ProjectRulesFile
+#   define ProjectRulesFile	<Motif.rules>
+#  endif
+#  ifndef ProjectTmplFile
+#   define ProjectTmplFile	<Motif.tmpl>
+#  endif
+# endif
+
+# ifdef AlphaArchitecture
+#  define HasDECCplusplus	YES
+# endif
+
+# ifdef HPArchitecture
+#  define HasHPCplusplus	YES
+# endif
+
+# if defined(SGIArchitecture)
+#  define MipsN32Architecture	YES
+# endif
+
+# ifdef SunArchitecture
+#  define HasSunCplusplus	YES
+# endif
+
+# if defined(UXPArchitecture) || defined(USLArchitecture) \
+     || defined(AIXArchitecture)
+#  define HasCplusplus		YES
+# endif
+
+#endif /* BeforeVendorCF */
+
+#ifdef AfterVendorCF
+
+# define X11ProjectRoot	/usr/X11R6
+# define ProjectRoot	/usr/OpenMotif-2.1.32${USERVARIANT}
+# define VirtualBindingsPath ProjectRoot/lib/bindings
+
+# undef DefaultUserPath
+# define DefaultUserPath /bin:/usr/bin:$(BINDIR):/usr/ucb:/usr/local/bin:/usr/local/bin/mh:/site/local/scripts
+
+#endif /* AfterVendorCF */

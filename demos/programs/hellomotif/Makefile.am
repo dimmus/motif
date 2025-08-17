@@ -7,7 +7,7 @@ bin_PROGRAMS = hellomotif
 EXTRA_DIST = hellomotif.uil README
 hellomotif_SOURCES = hellomotif.c
 data_DATA = $(EXTRA_DIST) $(hellomotif_SOURCES) hellomotif.uid
-LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la
+LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt
 AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
 
 all: hellomotif.uid

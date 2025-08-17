@@ -46,5 +46,3 @@ This way List1.vis from /Motif2.0/tests/visuals/Toolkit/List will be used
 for visual comparisons, and List1.prt from /Motif2.0/tests/visuals/Toolkit/List
 will be used for comparison of STDERR/STDOUT information. ONLY when both these
 files compare correctly is the test considered passed.
-
-

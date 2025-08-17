@@ -4,7 +4,7 @@ noinst_PROGRAMS = xmforc
 
 SOURCES = xmforc.c
 
-LDADD = ../../../lib/Xm/libXm.la
+LDADD = ../../../lib/Xm/libXm.la -lXt
 
 EXTRA_DIST =
 

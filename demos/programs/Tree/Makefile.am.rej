@@ -1,0 +1,10 @@
+--- demos/programs/Tree/Makefile.am
++++ demos/programs/Tree/Makefile.am
+@@ -8,6 +8,6 @@
+ tree_SOURCES = bxutil-c.c  tree.c
+ data_DATA = $(EXTRA_DIST) $(tree_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la
++LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
+ 
+ INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

@@ -8,7 +8,7 @@ bin_PROGRAMS = iconbuttondemo
 iconbuttondemo_SOURCES = misc.c  iconbuttondemo.c
 data_DATA = $(iconbuttondemo_SOURCES) $(EXTRA_DIST)
 TOPDIR = ../../..
-LDADD = $(TOPDIR)/lib/Xm/libXm.la
+LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
 
 AM_CPPFLAGS = -I$(TOPDIR)/lib -I$(srcdir)/.. \
            -I$(srcdir)/$(TOPDIR)/lib \

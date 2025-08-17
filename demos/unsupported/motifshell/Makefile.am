@@ -4,7 +4,7 @@ noinst_PROGRAMS = motifshell
 
 SOURCES = motifshell.c
 
-LDADD = ../../../lib/Xm/libXm.la
+LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
 
 EXTRA_DIST =
 

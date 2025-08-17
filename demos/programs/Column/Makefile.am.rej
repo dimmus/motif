@@ -1,0 +1,9 @@
+--- demos/programs/Column/Makefile.am
++++ demos/programs/Column/Makefile.am
+@@ -8,5 +8,5 @@
+ EXTRA_DIST = Imakefile Column.ad
+ data_DATA = $(EXTRA_DIST) $(column_SOURCES)
+ TOPDIR = ../../..
+-LDADD = $(TOPDIR)/lib/Xm/libXm.la
++LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
+ INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

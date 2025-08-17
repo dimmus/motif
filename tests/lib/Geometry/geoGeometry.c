@@ -25,8 +25,8 @@
  * HISTORY
  */
 
-#include "IntrinsicI.h"
-#include "ShellP.h"
+#include <X11/IntrinsicI.h>
+#include <X11/ShellP.h>
 
 #include "geoTattler.h"
 

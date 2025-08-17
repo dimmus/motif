@@ -133,6 +133,7 @@ AC_FUNC_STRFTIME
 AC_FUNC_FORK([])
 AC_FUNC_VPRINTF
 dnl AM_FUNC_VOID_SPRINTF
+
 AC_CHECK_FUNCS(wcslen wcscpy wcsncpy wcschr wcscat wcsncat getcwd gettimeofday mkdir re_comp regcmp select strcspn strerror strstr strtod strtol uname)
 AC_CHECK_FUNCS(strdup,,AC_DEFINE(NEED_STRDUP, 1, no strdup))
 AC_CHECK_FUNCS(strcasecmp,,AC_DEFINE(NEED_STRCASECMP, 1, no strcasecmp))
@@ -141,6 +142,10 @@ AC_CHECK_FUNCS(regcomp,,AC_DEFINE(NO_REGCOMP, 1, no regcmp))
 AC_CHECK_FUNCS(memmove,,AC_DEFINE(NO_MEMMOVE, 1, no memmove))
 AC_CHECK_TYPE(XICProc,,AC_DEFINE(NO_XICPROC, 1, XICProc isn't defined), [#include <X11/Xlib.h>])
 
+if test x$enable_message_catalog = x
+then
+    enable_message_catalog="yes"
+fi
 AC_ARG_ENABLE(message-catalog, [  --enable-message-catalog
                           Enable building of the message catalog (default=no)])
 if test "$enable_message_catalog" != "yes"
@@ -149,6 +154,10 @@ then
 fi
 AM_CONDITIONAL(MessageCatalog, test x$enable_message_catalog = xyes)
 
+if test x$enable_themes = x
+then
+    enable_themes="yes"
+fi
 AC_ARG_ENABLE(themes, [  --enable-themes         Enable themes (default=no)])
 if test "$enable_themes" = "yes"
 then
@@ -157,19 +166,23 @@ then
       AC_DEFINE(USE_XMTHEMES, 1, "Use XmThemes")
       XMTHEME_DIST = "Theme.h ThemeP.h DynLibP.h Theme.c DynLib.c"
     else
-      AC_MSG_WARN([--enable-themes specified, but I don't have the code. Disabled])
+      AC_MSG_WARN([--enable-themes specified, but I do not have the code. Disabled])
       enable_themes="no"
     fi
 fi
 AC_SUBST(XMTHEME_DIST)
 AM_CONDITIONAL(OM_XMTHEMES, test "$enable_themes" = "yes")
 
+if test x$enable_debug_themes = x
+then
+    enable_debug_themes="yes"
+fi
 AC_ARG_ENABLE(debug-themes, [  --enable-debug-themes   Enable themes debugging (default=no)])
 if test "$enable_themes" = "yes"
 then
     if test "$enable_debug_themes" = "yes"
     then
-	AC_DEFINE(DEBUGTHEMES, 1, "Debug Themes")
+	    AC_DEFINE(DEBUGTHEMES, 1, "Debug Themes")
     fi
 fi
 
@@ -396,3 +409,14 @@ demos/doc/programGuide/ch17/simple_drag/Makefile \
 lib/Xm/xmstring.list \
 ])
 AC_OUTPUT
+
+echo ""
+echo "the following optional features will be used:"
+echo "  Enable message catalog:    $enable_message_catalog"
+echo "  Enable themes:             $enable_themes"
+echo "  Enable themes debugging:   $enable_debug_themes"
+echo "  Enable UTF-8 support:      $enable_utf8"
+echo "  Enable XFT support:        $enable_xft"
+echo "  Enable printing support:   $enable_printing"
+echo "  Motif 2.2 comaptibility:   $enable_motif22_compatibility"
+echo ""

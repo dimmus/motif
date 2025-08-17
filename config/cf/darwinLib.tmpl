@@ -1,0 +1,49 @@
+XCOMM $XFree86: xc/config/cf/darwinLib.tmpl,v 1.2.4.1 2002/06/01 00:11:17 torrey Exp $
+/*
+ * Darwin/Mac OS X shared library template
+ */
+
+#ifndef FixupLibReferences
+#define FixupLibReferences()						@@\
+XMULIBONLY = -lXmu							@@\
+XMULIB = $(XMULIBONLY) $(XTOOLLIB) $(XLIB)				@@\
+GLXLIB := $(GLXLIB) $(XPLUGIN_LIB)
+#endif
+
+#define NoMessageCatalog
+
+#ifndef XawClientLibs
+#define XawClientLibs $(XAWLIB) $(XMULIBONLY) $(XTOOLLIB) $(XPMLIB) $(XLIB)
+#endif
+
+/* Allow for libpthread, as overridden by OS definitions */
+#if !defined(SharedX11Reqs)
+#define SharedX11Reqs  $(XTOOLLIB) $(XPLIB) $(XLIB)
+#endif
+
+#define SharedGLReqs        $(LDPRELIBS) $(XLIB)
+#define SharedGLUReqs       $(LDPRELIBS) $(XLIB) $(GLXLIB)
+#define SharedSMReqs        $(LDPRELIBS) $(ICELIB)
+#define SharedXawReqs       $(LDPRELIBS) $(XMULIB) $(XTOOLLIB) $(XPMLIB) $(XLIB)
+#define SharedXaw6Reqs      $(LDPRELIBS) $(XMULIB) $(XTOOLLIB) $(XLIB)
+#define SharedXextReqs      $(LDPRELIBS) $(XLIBONLY)
+#define SharedXfontReqs     $(LDPRELIBS) $(FONTSTUBLIB) GzipLibrary -flat_namespace
+#define SharedXiReqs        $(LDPRELIBS) $(XLIB)
+#define SharedXmuReqs       $(LDPRELIBS) $(XTOOLLIB) $(XLIB)
+#define SharedXmuuReqs      $(LDPRELIBS) $(XTOOLLIB) $(XLIB)
+#define SharedXpReqs        $(LDPRELIBS) $(XAUTHLIB) $(EXTENSIONLIB) $(XLIBONLY)
+#define SharedXpmReqs       $(LDPRELIBS) $(XLIB)
+#define SharedXrandrReqs    $(LDPRELIBS) $(XLIB)
+#define SharedXrenderReqs   $(LDPRELIBS) $(EXTENSIONLIB) $(XLIB)
+#define SharedXssReqs       $(LDPRELIBS) $(XLIB) $(EXTENSIONLIB) $(XTOOLLIB)
+#define SharedXtReqs        $(LDPRELIBS) $(XLIBONLY) $(SMLIB) $(ICELIB) -flat_namespace
+#define SharedXtstReqs      $(LDPRELIBS) $(XLIB)
+#define SharedXvReqs        $(LDPRELIBS) $(XLIB)
+#define SharedDPSReqs       $(LDPRELIBS) $(SMLIB) $(ICELIB) $(XTOOLLIB) $(XLIB)
+#define SharedDPSTKReqs     $(LDPRELIBS) $(SMLIB) $(ICELIB) $(XTOOLLIB) $(DPSLIB) $(XLIB)
+#define SharedOldXReqs      $(LDPRELIBS) $(XLIBONLY)
+#define SharedpsresReqs     $(LDPRELIBS) $(SMLIB) $(ICELIB) $(XTOOLLIB) $(XLIB)
+#define SharedXmReqs        $(LDPRELIBS) $(XTOOLLIB) $(XPMLIB) ${XPLIB} $(XLIB) $(WCHARLIB)
+
+#define SharedMrmReqs        $(LDPRELIBS) $(XMLIB) $(XTOOLLIB) $(XPMLIB) $(XPLIB) $(XLIB) $(WCHARLIB)
+#define SharedUilReqs        $(LDPRELIBS) $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XPMLIB) $(XPLIB) $(XLIB) $(WCHARLIB)

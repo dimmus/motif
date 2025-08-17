@@ -8,5 +8,5 @@ airport_SOURCES = main.c dragsource.c dropsite.c airport.h \
                   dragsource.h dropsite.h main.h
 EXTRA_DIST = XmdAirport.ad README
 data_DATA = $(airport_SOURCES) $(EXTRA_DIST)
-LDADD = ../../../lib/Xm/libXm.la
+LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
 AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 

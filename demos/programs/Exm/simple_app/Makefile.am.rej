@@ -1,0 +1,11 @@
+--- demos/programs/Exm/simple_app/Makefile.am
++++ demos/programs/Exm/simple_app/Makefile.am
+@@ -14,5 +14,6 @@
+            -I$(srcdir)/../../../lib \
+            -I$(top_builddir)/lib \
+            ${X_CFLAGS} 
+-LDADD = ../../../../lib/Xm/libXm.la \
+-        ../../../lib/Exm/libExm.a
++LDADD = ../../../lib/Exm/libExm.a \
++        ../../../../lib/Xm/libXm.la -lXt -lX11
++

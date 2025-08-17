@@ -25,8 +25,8 @@
  * HISTORY
  */
 
-#include "IntrinsicI.h"
-#include "StringDefs.h"
+#include <X11/IntrinsicI.h>
+#include <X11/StringDefs.h>
   
 #include "geoTattler.h"
 

@@ -15,7 +15,7 @@ dogs_SOURCES = dogs.c Dog.c Square.c
 
 dogs_DEPENDENCIES = dogs.uid
 
-LDADD = $(top_builddir)/lib/Mrm/libMrm.la $(top_builddir)/lib/Xm/libXm.la
+LDADD = $(top_builddir)/lib/Mrm/libMrm.la $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
 
 AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
 

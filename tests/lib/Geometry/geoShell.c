@@ -31,12 +31,13 @@
 #define DEFAULT_WM_TIMEOUT 5000
 #endif
 
-#include "IntrinsicI.h"
-#include "StringDefs.h"
-#include "Shell.h"
-#include "ShellP.h"
-#include "Vendor.h"
-#include "VendorP.h"
+#include <X11/Intrinsic.h>
+#include <X11/IntrinsicI.h>
+#include <X11/StringDefs.h>
+#include <X11/Shell.h>
+#include <X11/ShellP.h>
+#include <X11/Vendor.h>
+#include <X11/VendorP.h>
 #include <X11/Xatom.h>
 #include <X11/Xlocale.h>
 #include <stdio.h>

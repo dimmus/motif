@@ -12,7 +12,7 @@ Menus.h \
 Print.h PrintP.h \
 RegEdit.h RegEditI.h
 
-LDADD = libXmd.a ../../../lib/Xm/libXm.la
+LDADD = libXmd.a ../../../lib/Xm/libXm.la -lXt
 
 AM_CPPFLAGS = -I$(top_builddir)/lib -I$(srcdir)/../../../lib ${X_CFLAGS} 
 

@@ -7,6 +7,6 @@ bin_PROGRAMS = fontsel
 fontsel_SOURCES = callbacks-c.c creation-c.c fontsel.c fontsel.h
 EXTRA_DIST =
 data_DATA = $(EXTRA_DIST) $(fontsel_SOURCES)
-LDADD = $(TOPDIR)/lib/Xm/libXm.la
+LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
 TOPDIR = ../../..
 AM_CPPFLAGS = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 

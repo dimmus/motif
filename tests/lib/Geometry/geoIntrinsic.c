@@ -27,8 +27,8 @@
 
 #define INTRINSIC_C
 
-#include "IntrinsicI.h"
-#include "StringDefs.h"
+#include <X11/IntrinsicI.h>
+#include <X11/StringDefs.h>
 #ifndef NO_IDENTIFY_WINDOWS
 #include <X11/Xatom.h>
 #endif

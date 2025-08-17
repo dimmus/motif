@@ -4,7 +4,7 @@ noinst_PROGRAMS = xmfonts
 
 SOURCES = xmfonts.c
 
-LDADD = ../../../lib/Xm/libXm.la
+LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
 
 EXTRA_DIST =
 
