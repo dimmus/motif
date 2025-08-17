@@ -238,8 +238,9 @@ XpmCreateDataFromXpmImage(
 exit:
     if (header) {
 	for (l = 0; l < header_nlines; l++)
-	    if (header[l])
+	    if (header[l]) {
 		XpmFree(header[l]);
+	    }
 		XpmFree(header);
     }
     return(ErrorStatus);
