@@ -1385,7 +1385,7 @@ Urm__CW_CreateArglist (Widget			parent,
 			}
 		      break;
 		    default:
-		      sprintf (err_msg, "%s", _MrmMMsg_0040);
+		      sprintf (err_msg, _MrmMMsg_0040);
 		      result = Urm__UT_Error ("Urm__CW_ConvertValue",
 					      err_msg, NULL, NULL, MrmFAILURE) ;
 		    };
@@ -2421,7 +2421,7 @@ Urm__CW_ConvertValue (Widget			parent,
 	    }
 	  break;
 	default:
-	  sprintf(err_msg, "%s", _MrmMMsg_0040);
+	  sprintf(err_msg, _MrmMMsg_0040);
 	  return Urm__UT_Error ("Urm__CW_ConvertValue",
 				err_msg, NULL, NULL, MrmFAILURE) ;
 	};

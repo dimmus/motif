@@ -1170,7 +1170,7 @@ Urm__RealizeColorTable (Screen			*screen,
 		}
 		break;
 	      default:
-		sprintf(err_msg, "%s", _MrmMMsg_0040);
+		sprintf(err_msg, _MrmMMsg_0040);
 		return Urm__UT_Error ("Urm__RelizeColorTable",
 				      err_msg, NULL, NULL, MrmFAILURE) ;
 	      }
@@ -1246,7 +1246,7 @@ Urm__RealizeColorTable (Screen			*screen,
 	      break;
 	    default:
 	      result = MrmFAILURE;
-	      sprintf (err_msg, "%s", _MrmMMsg_0040);
+	      sprintf (err_msg, _MrmMMsg_0040);
 	      Urm__UT_Error ("Urm__RelizeColorTable",
 			     err_msg, NULL, NULL, MrmFAILURE) ;
 	    }
