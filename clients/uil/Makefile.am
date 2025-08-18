@@ -6,7 +6,7 @@ EXTRA_DIST = Uil.msg
 #
 bin_PROGRAMS = uil
 
-libUil_la_LDFLAGS = -version-info @CURRENT@:@REVISION@:@AGE@
+libUil_la_LDFLAGS = -version-info @ABI_VERSION@
 
 UilParser.lo: UilParser.c
 	$(LTCOMPILE) -DCALLABLE -c UilParser.c

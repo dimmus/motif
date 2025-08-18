@@ -8,7 +8,7 @@ mrmdir = $(includedir)/Mrm
 
 libMrm_la_LIBADD = ../Xm/libXm.la ${X_LIBS} -lXt ${X_PRE_LIBS} -lX11 ${X_EXTRA_LIBS}
 
-libMrm_la_LDFLAGS = -version-info @CURRENT@:@REVISION@:@AGE@
+libMrm_la_LDFLAGS = -version-info @ABI_VERSION@
 
 lib_LTLIBRARIES = libMrm.la
 
