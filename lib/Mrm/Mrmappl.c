@@ -56,6 +56,7 @@ static char rcsid[] = "$XConsortium: Mrmappl.c /main/17 1996/11/13 13:59:58 drk 
 #include <Mrm/Mrm.h>
 #include "MrmMsgI.h"
 
+#define FIX_1161
 
 /*
  *
@@ -193,12 +194,39 @@ MrmOpenHierarchyPerDisplay (Display		*display,
   /*
    *  Local variables
    */
+#if defined(FIX_1161)
+  MrmOsOpenParamPtr *new_os_ext_list = (MrmOsOpenParamPtr *) NULL;
+  int file_index;
+  Cardinal result;
+#else
   MrmOsOpenParam	os_data;
   MrmOsOpenParamPtr	new_os_ext_list = &os_data;
   Cardinal		result;
+#endif
 
   _MrmProcessLock();
- 
+#if defined(FIX_1161)
+  if (os_ext_list == NULL)
+  {
+    new_os_ext_list = (MrmOsOpenParamPtr *) XtMalloc(num_files * sizeof(MrmOsOpenParamPtr));
+    
+    for (file_index = 0; file_index < num_files; file_index++)
+    {
+      new_os_ext_list[file_index] = (MrmOsOpenParamPtr) XtMalloc(sizeof(MrmOsOpenParam));
+      new_os_ext_list[file_index]->display = display;
+    }
+    os_ext_list = new_os_ext_list;
+  }
+  
+  result = Urm__OpenHierarchy(num_files, name_list, os_ext_list, hierarchy_id_return, FALSE, NULL);
+  
+  if (new_os_ext_list != NULL) 
+  {
+    for (file_index = 0; file_index < num_files; file_index++)
+	    XtFree((char *)new_os_ext_list[file_index]);
+    XtFree((char *)new_os_ext_list);
+  }    
+#else
   if (os_ext_list == NULL) 
     os_ext_list = (MrmOsOpenParamPtr *)&new_os_ext_list;
       
@@ -206,6 +234,7 @@ MrmOpenHierarchyPerDisplay (Display		*display,
   
   result = Urm__OpenHierarchy(num_files, name_list, os_ext_list, 
 			      hierarchy_id_return, FALSE, NULL);
+#endif
   _MrmProcessUnlock();
   return result;
 }
