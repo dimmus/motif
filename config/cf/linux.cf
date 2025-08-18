@@ -59,9 +59,15 @@ XCOMM binutils:  (LinuxBinUtilsMajorVersion)
 #endif
 #endif
 #define BuildLibPathVar   	LD_LIBRARY_PATH
+#ifndef HasGcc
 #define HasGcc			YES
+#endif
+#ifndef HasGcc2
 #define HasGcc2			YES
+#endif
+#ifndef HasGcc2ForCplusplus
 #define HasGcc2ForCplusplus	YES
+#endif
 #define GccUsesGas		YES
 #define UseGas			YES
 #define GnuCpp			YES
@@ -133,14 +139,14 @@ XCOMM binutils:  (LinuxBinUtilsMajorVersion)
 
 #if LinuxCLibMajorVersion < 6
 #define LinuxSourceDefines	-D_POSIX_SOURCE \
-				-D_BSD_SOURCE -D_SVID_SOURCE LinuxLocaleDefines
+				-D_DEFAULT_SOURCE LinuxLocaleDefines
 #ifndef HasLibCrypt
 # define HasLibCrypt		NO
 #endif
 #else
 #define LinuxSourceDefines	-D_POSIX_C_SOURCE=199309L \
 				-D_POSIX_SOURCE \
-				-D_BSD_SOURCE -D_SVID_SOURCE
+				-D_DEFAULT_SOURCE
 #define HasPosixThreads		YES
 #define ThreadedX		YES
 #define HasThreadSafeAPI	YES
@@ -154,7 +160,7 @@ XCOMM binutils:  (LinuxBinUtilsMajorVersion)
 #ifdef i386Architecture
 #define OptimizedCDebugFlags	DefaultGcc2i386Opt
 #define LinuxMachineDefines	-D__i386__
-#define ServerOSDefines		XFree86ServerOSDefines -DDDXTIME
+#define ServerOSDefines	XFree86ServerOSDefines -DDDXTIME
 #define ServerExtraDefines	-DGCCUSESGAS XFree86ServerDefines
 #if UseElfFormat
 #define HasPlugin		YES
@@ -165,7 +171,7 @@ XCOMM binutils:  (LinuxBinUtilsMajorVersion)
 #ifdef AlphaArchitecture
 #define OptimizedCDebugFlags	-O2
 #define LinuxMachineDefines	-D__alpha__
-#define ServerOSDefines		XFree86ServerOSDefines -DDDXTIME -DPART_NET
+#define ServerOSDefines	XFree86ServerOSDefines -DDDXTIME -DPART_NET
 #define ServerExtraDefines	-DGCCUSESGAS XFree86ServerDefines -D_XSERVER64
 #endif /* AlphaArchitecture */
 
@@ -177,7 +183,11 @@ XCOMM binutils:  (LinuxBinUtilsMajorVersion)
 #define ServerExtraDefines      -DGCCUSESGAS XFree86ServerDefines
 #endif /* Mc68020Architecture */
 
-#define StandardDefines		-Dlinux LinuxMachineDefines LinuxSourceDefines
+#ifndef LinuxMachineDefines
+#define LinuxMachineDefines	-D__amd64__
+#endif
+
+#define StandardDefines	-Dlinux LinuxMachineDefines LinuxSourceDefines
 
 #define ConnectionFlags		-DUNIXCONN -DTCPCONN
 
@@ -202,6 +212,14 @@ XCOMM binutils:  (LinuxBinUtilsMajorVersion)
 #endif
 
 #define ArchitectureDefines	-DLINUX_ARCHITECTURE
+
+/* Use GNU ar-compatible flags on Linux */
+#ifndef ArCmdBase
+#define ArCmdBase ar
+#endif
+#define ArCmd ArCmdBase rcs
+#define ArAddCmd ArCmdBase r
+#define ArExtCmd ArCmdBase x
 
 #define TtClientLibs $(TTLIB) $(XTOOLLIB) $(XLIB)
 #define TtClientDepLibs $(DEPTTLIB) $(DEPXTOOLLIB) $(DEPXLIB)

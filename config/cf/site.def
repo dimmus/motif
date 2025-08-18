@@ -62,11 +62,15 @@ XCOMM site:  $TOG: site.def /main/12 1997/07/02 17:52:18 samborn $
 
 #ifdef AfterVendorCF
 
-# define X11ProjectRoot	/usr/X11R6
-# define ProjectRoot	/usr/OpenMotif-2.1.32${USERVARIANT}
-# define VirtualBindingsPath ProjectRoot/lib/bindings
+# define X11ProjectRoot	/usr
+# define ProjectRoot	/usr
+# define UsrLibDir	/usr/lib/x86_64-linux-gnu
+# define UsrIncDir	/usr/include
+# define VirtualBindingsPath ProjectRoot/lib/Xm/bindings
 
 # undef DefaultUserPath
 # define DefaultUserPath /bin:/usr/bin:$(BINDIR):/usr/ucb:/usr/local/bin:/usr/local/bin/mh:/site/local/scripts
 
 #endif /* AfterVendorCF */
+
+#define UseXprint NO

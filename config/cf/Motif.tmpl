@@ -373,39 +373,82 @@ LANGINFO_DEFS=
 #endif
 
 #ifndef XmClientLibs
-# define XmClientLibs $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
+# ifndef UseXprint
+#  define UseXprint NO
+# endif
+# if UseXprint
+#  define XmClientLibs $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
+# else
+#  define XmClientLibs $(XMLIB) $(XTOOLLIB) $(XLIB) $(XMEXTRA_LIBS)
+# endif
 #endif
 #ifndef XmClientDepLibs
-# define XmClientDepLibs $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXPLIB) $(DEPXLIB)
+# if UseXprint
+#  define XmClientDepLibs $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXPLIB) $(DEPXLIB)
+# else
+#  define XmClientDepLibs $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXLIB)
+# endif
 #endif
 
 #ifndef MrmClientLibs 
-# define MrmClientLibs $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
+# if UseXprint
+#  define MrmClientLibs $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
+# else
+#  define MrmClientLibs $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XLIB) $(XMEXTRA_LIBS)
+# endif
 #endif
 #ifndef MrmClientDepLibs
-# define MrmClientDepLibs $(DEPMRESOURCELIB) $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXPLIB) $(DEPXLIB)
+# if UseXprint
+#  define MrmClientDepLibs $(DEPMRESOURCELIB) $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXPLIB) $(DEPXLIB)
+# else
+#  define MrmClientDepLibs $(DEPMRESOURCELIB) $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXLIB)
+# endif
 #endif
 
 #ifndef UilClientLibs
-# define UilClientLibs $(UILLIB) $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
+# if UseXprint
+#  define UilClientLibs $(UILLIB) $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
+# else
+#  define UilClientLibs $(UILLIB) $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XLIB) $(XMEXTRA_LIBS)
+# endif
 #endif
 #ifndef UilClientDepLibs
-# define UilClientDepLibs $(DEPUILLIB) $(DEPMRESOURCELIB) $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXPLIB) $(DEPXLIB)
+# if UseXprint
+#  define UilClientDepLibs $(DEPUILLIB) $(DEPMRESOURCELIB) $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXPLIB) $(DEPXLIB)
+# else
+#  define UilClientDepLibs $(DEPUILLIB) $(DEPMRESOURCELIB) $(DEPXMLIB) $(DEPXTOOLLIB) $(DEPXLIB)
+# endif
 #endif
 
 #ifndef TestClientLibs
-# define TestClientLibs $(PURIFYLIBS) $(TESTCOMLIB) \
-		$(AUTOSCRIPTLIB) $(AUTOUTILLIB) \
-		$(AUTOCREATELIB) $(AUTOVISUALLIB) $(AUTOSYNTHLIB) \
-	$(XMLIB) $(TESTGEOLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) \
-	$(AUTOEXTRALIBS) $(XMEXTRA_LIBS)
+# if UseXprint
+#  define TestClientLibs $(PURIFYLIBS) $(TESTCOMLIB) \
+# 		$(AUTOSCRIPTLIB) $(AUTOUTILLIB) \
+# 		$(AUTOCREATELIB) $(AUTOVISUALLIB) $(AUTOSYNTHLIB) \
+# 	$(XMLIB) $(TESTGEOLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) \
+# 	$(AUTOEXTRALIBS) $(XMEXTRA_LIBS)
+# else
+#  define TestClientLibs $(PURIFYLIBS) $(TESTCOMLIB) \
+# 		$(AUTOSCRIPTLIB) $(AUTOUTILLIB) \
+# 		$(AUTOCREATELIB) $(AUTOVISUALLIB) $(AUTOSYNTHLIB) \
+# 	$(XMLIB) $(TESTGEOLIB) $(XTOOLLIB) $(XLIB) \
+# 	$(AUTOEXTRALIBS) $(XMEXTRA_LIBS)
+# endif
 #endif
 #ifndef TestUilClientLibs
-# define TestUilClientLibs $(PURIFYLIBS) $(TESTUILCOMLIB) $(TESTCOMLIB) \
-		$(AUTOSCRIPTLIB) $(AUTOUTILLIB) \
-		$(AUTOCREATELIB) $(AUTOVISUALLIB) $(AUTOSYNTHLIB) \
-	$(UILLIB) $(MRESOURCELIB) $(XMLIB) $(TESTGEOLIB) \
-	$(XTOOLLIB) $(XPLIB) $(XLIB) $(AUTOEXTRALIBS) $(XMEXTRA_LIBS)
+# if UseXprint
+#  define TestUilClientLibs $(PURIFYLIBS) $(TESTUILCOMLIB) $(TESTCOMLIB) \
+# 		$(AUTOSCRIPTLIB) $(AUTOUTILLIB) \
+# 		$(AUTOCREATELIB) $(AUTOVISUALLIB) $(AUTOSYNTHLIB) \
+# 	$(UILLIB) $(MRESOURCELIB) $(XMLIB) $(TESTGEOLIB) \
+# 	$(XTOOLLIB) $(XPLIB) $(XLIB) $(AUTOEXTRALIBS) $(XMEXTRA_LIBS)
+# else
+#  define TestUilClientLibs $(PURIFYLIBS) $(TESTUILCOMLIB) $(TESTCOMLIB) \
+# 		$(AUTOSCRIPTLIB) $(AUTOUTILLIB) \
+# 		$(AUTOCREATELIB) $(AUTOVISUALLIB) $(AUTOSYNTHLIB) \
+# 	$(UILLIB) $(MRESOURCELIB) $(XMLIB) $(TESTGEOLIB) \
+# 	$(XTOOLLIB) $(XLIB) $(AUTOEXTRALIBS) $(XMEXTRA_LIBS)
+# endif
 #endif
 #ifndef TestClientDepLibs
 # define TestClientDepLibs XmClientDepLibs
