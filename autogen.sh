@@ -17,4 +17,5 @@
 
 [ "${0%/*}" = "$0" ] || cd "${0%/*}" || exit
 
-autoreconf -fiv && rm -rf autom4te.cache
+autoreconf -fi && rm -rf autom4te.cache
+./configure "$@"
