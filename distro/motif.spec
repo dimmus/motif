@@ -47,6 +47,7 @@ This is the Motif %{version} example code and demo programs.
 %setup -q -n %{intern_name}-%{version}
 
 %build
+#Commented out the line below to fix build problems on SUSE:
 #cp /usr/share/libtool/config.* .
 CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
 ./configure \
