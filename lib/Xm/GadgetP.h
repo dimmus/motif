@@ -155,9 +155,6 @@ typedef struct _XmGadgetPart
 
    Mask event_mask;
    XmDirection layout_direction;
-#ifdef OM22_COMPATIBILITY   
-   XmString tool_tip_string;
-#endif
 } XmGadgetPart;
 
 /*  Full instance record declaration  */

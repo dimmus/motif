@@ -121,9 +121,6 @@ typedef struct _XmPrimitivePart
 
    XmDirection layout_direction;
 #endif
-#ifdef OM22_COMPATIBILITY
-   XmString tool_tip_string;
-#endif
 } XmPrimitivePart;
 
 #ifdef XM_PART_BC
