@@ -1,0 +1,70 @@
+
+#) This test enables you to test the basic geometry behavior of Notebook.
+#) There will be a Notebook widget on your screen, and a control panel
+   which lets you change various geometry settings. There will also
+   be a scrolled list which contains a list of widgets in the test -
+   this  is to let you set the resources on the widget of choice.
+C)
+
+#) Set the 'Set Width' scale to 400.
+#) Set the 'Set Height' scale to 400.
+#) Click on the 'Parent' item in the List. 
+#) The width and height of the parent Frame should both be set to 400.
+C)
+
+#) Set the 'Set Width' scale to 500.
+#) Set the 'Set Height' scale to 500.
+#) Click on the 'Notebook' item in the List. 
+#) The width and height of the Notebook should both be set to 500.
+C)
+
+#) Set the 'Set Width' scale to 600.
+#) Set the 'Set Height' scale to 600.
+#) Click on the 'Frame1' item in the List. 
+#) The Notebook should resize itself larger to accomodate the new width and
+   height of the Frame1 page.
+C)
+
+
+#) Set the 'Set Width' scale to 500.
+#) Set the 'Set Height' scale to 500.
+#) Click on the 'Parent' item in the List. 
+#) The width and height of the parent Frame should both be set to 500.
+C)
+
+#) Set the 'Set Width' scale to 400.
+#) Set the 'Set Height' scale to 400.
+#) Click on the 'Notebook' item in the List. 
+#) The width and height of the Notebook should both be set to 400.
+C)
+
+#) Set the 'Set Width' scale to 300.
+#) Set the 'Set Height' scale to 300.
+#) Click on the 'Frame1' item in the List. 
+#) The Notebook should resize itself smaller to accomodate the new width and
+   height of the Frame1 page.
+C)
+
+#) Set the 'Set y' scale to about 600.
+#) Click on the 'BBKid1' item in the ScrolledList. This will set the resource
+   on one of the children of page 5, which is a BulletinBoard.
+#) The Notebook should increase in height to accomodate this change in y 
+   position.
+#) Set the 'Set y' scale to about 400.
+#) Again, click on the  'BBKid1' item in the ScrolledList. 
+#) The Notebook should decrese in height. There should be no problem redrawing
+   the back pages.
+C)
+
+#) Type 'resizable' into the 'Resource Name' TextField. Hit Return.
+#) Type 'False' into the 'Resource Value' TextField. Hit Return.
+#) Click on the 'Frame1' item in the ScrolledList. This will set the resizable
+   resource for the Frame page to False.
+#) Set the 'Set Width' scale to 500.
+#) Set the 'Set Height' scale to 500.
+#) Click on the 'Frame1' item in the List. 
+#) There should be no change in the width and height of the Notebook
+C)
+
+E)
+

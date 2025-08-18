@@ -1,0 +1,15 @@
+
+
+
+#)This is a toggleButton with the following characteristics:   
+	- borderWidth is 2   
+	- background is turquoise   
+	- selectColor is violet   
+	- armCallback is O
+   	- disarmCallback is ON   
+	- spacing is 15
+	- detailShadowThickness is 2
+	- highlightThickness is 5
+	- traversalOn is true
+	- All other resources are set by default
+E)

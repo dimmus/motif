@@ -1,0 +1,17 @@
+
+#) This is a pulldownMenu with the following characteristics:
+   - the PulldownMenu is parented by a MenuBar.
+   - this PulldownMenu has two pushbuttons;
+                           a separatorGadget and
+                           a togglebutton
+   - shadowThickness is 15
+   - marginWidth, marginHeight are 10
+   - foreground is black
+   - background is forestgreen
+   - entryAlignment is XmALIGNMENT_CENTER
+   - spacing is 5
+   - map and unmap Callbacks are ON
+   - Callbacks are on for the pushbuttons and togglebuttons
+   All other resources are set by default.
+E)
+

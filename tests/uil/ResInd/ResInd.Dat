@@ -1,0 +1,10 @@
+
+#) The following test is for Resolution Independent units:
+	- leftmost is a navy colored bulletin board, 10 pixels wide 
+	  and 100 tall.
+	- right of that, a orange bulletin board, 1 inch wide and 
+	  4 inches tall.
+	- right of that, a red bulletin board, 10 millimeters wide 
+	  and 1 mm tall.
+
+E)

@@ -1,0 +1,13 @@
+
+
+#) This widget is a Command widget with the following characteritics:   
+	- width and height are 178
+	- borderWidth is 20
+	- borderColor is Forest Green
+	- defaultPosition is false
+	- promptString is 'Prompt'
+	- historyItems are history1, history2
+	- historyItemCount is 2
+	- All other resources are set by default
+
+E)

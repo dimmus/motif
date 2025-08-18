@@ -1,0 +1,28 @@
+
+#) This test tests CR 5861. The initial state of the top level shell has
+   been set to iconic in this test.
+C)
+
+#) An iconified shell should appear on your screen. It should have the
+   name "TESTING".
+C)
+
+#) There should be a message on the term window saying:
+@)   "setting NULL (NULL)"
+#) The name of the icon should change to be a NULL string. If it doesn't,
+   CR 5861 hasn't been fixed.
+C)
+
+#) There should be a message on the term window saying:
+@)   "setting empty string"
+#) The name of the icon should change to be an empty string. If it doesn't,
+   CR 5861 hasn't been fixed.
+C)
+
+#) There should be a message on the term window saying:
+@)   "setting space ()"
+#) The name of the icon should change to be a blank string.
+C)
+
+
+E)

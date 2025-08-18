@@ -1,0 +1,16 @@
+
+
+
+#)This is a toggleButton with the following characteristics:
+	- navigationType is TAB_GROUP
+	- shadowThickness is 5
+	- fontList is 8x13bold
+	- items is a list of 10
+	- itemCount is 10
+	- visibleItemCount is 7
+	- columns is 10
+	- positionMode is ONE_BASED
+	- background is green
+	- foreground is red  
+	- All other resources are set by default
+E)

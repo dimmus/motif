@@ -1,0 +1,13 @@
+
+#)  This is a Message Dialog with the following characteristics:   
+	- width is 250
+	- autoUnmanage is false
+	- messageString is \"Alignment Center\"
+	- messageAlignment is XmALIGNMENT_CENTER   
+	- okCallback is ON   
+	- cancelCallback is ON   
+	- helpCallback is ON
+	- All other resources are set by default
+	
+
+E)

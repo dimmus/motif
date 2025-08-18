@@ -1,0 +1,20 @@
+#) A BulletinBoardDialog will appear on the screen.  The
+   BulletinBoardDialog will have a RowColumn child, and the
+   RowColumn will contains several hundred PushButton children. 
+#) The RowColumn's children should be laid out in a vertical manner,
+   consisting of 30 columns of children. 
+#) Not all the children will be visible on the screen.
+#) Press Continue to continue the test. 
+C)
+
+#) All of the RowColumn's children should now have an x position of
+   100, and be laid out vertically in increments of 40 pixels. 
+#) Press Continue to continue the test. 
+C)
+
+#) All of the RowColumn's children should now have a width and
+   height of 100. 
+#) The RowColumn's children should be laid out in a vertical manner,
+   consisting of four columns of children. 
+E)
+

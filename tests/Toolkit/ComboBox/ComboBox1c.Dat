@@ -1,0 +1,16 @@
+
+
+#) This test should have been run with the flag "-u 3".
+#) The XtName of the ComboBox created in this test is CB3.
+#) All resources for this ComboBox are contained in the defaults
+   file ./ComboBox.defaults. 
+#) The ComboBox should be of type DROP_DOWN_LISTm
+#) Post the list of the ComboBox. It has 6 items, all of which should be 
+   visible.
+#) Type "d" in the non-editable Text widget. The item "dew" should be
+   selected, and be displayed on the widget.
+#) There should be no warnings on the term window indicating uninstalled
+   resource converters.
+E)
+
+	

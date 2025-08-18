@@ -1,0 +1,259 @@
+
+
+!) Pause event 1
+!)
+#) A client with a Paned Window with one pushbutton will appear.
+   They both will be of default size.
+C)
+
+!) Pause event 2
+!)
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+!) Pause event 3
+!)
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+!) Pause event 4
+!)
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 5
+!)
+#) A client with a Paned Window with one pushbutton will appear.
+   They will be of default size.
+C)
+
+!) Pause event 6
+!)
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+!) Pause event 7
+!)
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+!) Pause event 8
+!)
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 9
+!)
+#) A client with a Paned Window with one pushbutton will appear.
+   They will be of default size.
+C)
+
+!) Pause event 10
+!)
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+!) Pause event 11
+!)
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+!) Pause event 12
+!)
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 13
+!)
+#) A client with a Paned Window with one pushbutton will appear.
+   They will be of default size.
+C)
+
+!) Pause event 14
+!)
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+!) Pause event 15
+!)
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+!) Pause event 16
+!)
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 17
+!)
+#) A client with a Paned Window with two pushbuttons will appear.
+   They all will be of default size.
+C)
+
+!) Pause event 18
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 19
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 20
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 21
+!)
+#) A client with a Paned Window with two pushbuttons will appear.
+   They will be of default size.
+C)
+
+!) Pause event 22
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 23
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 24
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 25
+!)
+#) A client with a Paned Window with two pushbuttons will appear.
+   They will be of default size.
+C)
+
+!) Pause event 26
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 27
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 28
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 29
+!)
+#) A client with a Paned Window with two pushbuttons will appear.
+   They will be of default size.
+C)
+
+!) Pause event 30
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 31
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 32
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 33
+!)
+#) A client with a Paned Window with three pushbuttons will appear.
+   They all will be of default size.
+C)
+
+!) Pause event 34
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 35
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 36
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 37
+!)
+#) A client with a Paned Window with three pushbuttons will appear.
+   They will be of default size.
+C)
+
+!) Pause event 38
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 39
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 40
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 41
+!)
+#) A client with a Paned Window with three pushbuttons will appear.
+   They will be of default size.
+C)
+
+!) Pause event 42
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 43
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 44
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 45
+!)
+#) A client with a Paned Window with three pushbuttons will appear.
+   They will be of default size.
+C)
+
+!) Pause event 46
+!)
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+!) Pause event 47
+!)
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+!) Pause event 48
+!)
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+!) Pause event 49
+!)
+#) The paned window will be destroyed.
+C)
+E)

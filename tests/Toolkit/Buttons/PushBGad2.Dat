@@ -1,0 +1,14 @@
+
+#) A client with a pushbutton gadget should appear. It should be labeled
+   'Push Here'. All other resources will be set by default. 
+#) Click MB1 on the pushbutton. The pushbutton should set showAsDefault
+   to 5 which will place a second shadow region around the pushbutton
+   to visually mark it as a default button. 
+#) Click MB1 on the pushbutton again. Now, showAsDefault will be set at 10 and
+   and the shadow region around the pushbutton will grow to 10 pixels. 
+C)
+
+#) The background color of the manager is now Yellow. The background
+   color of the Push Button should also be changed.  The shadows are
+   still blue. 
+E)

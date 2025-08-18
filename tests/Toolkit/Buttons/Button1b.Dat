@@ -1,0 +1,20 @@
+#) This test ensures that the ArrowButton, PushButton, and ToggleButton
+   correctly change visually and stay in the correct state after calls
+   to the widgets' action procs.
+#) The instructions that follow assume you are running with a keyboardFocus
+Policy (not Window Manager Focus) of XmEXPLICIT. If you are running in 
+XmPOINTER focus policy, the instructions are not applicible.
+#) A window with an ArrowButton, a PushButton and a ToggleButton should
+   be visible.  They should be in a 'disarmed' state.
+C)
+#) The buttons should be armed.
+#) From the right hand side of the window, move the pointer in to and out of
+each widget in turn: Arrow, PushButton, then ToggleButton. There should be
+NO change when the pointer moves in, but when the pointer moves out of the
+widget, it should disarm.
+C)
+#) Pass the pointer over all the clients in the test. They should not change
+state.
+C)
+#) No change should have occurred.
+E)

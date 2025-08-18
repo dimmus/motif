@@ -1,0 +1,14 @@
+
+
+#) This is a text widget with the following characteristics: 
+   	- borderWidth is 8   
+	- shadowThickness is 8 
+   	- background is forestgreen   
+	- losingFocusCallback is ON   
+	- focusCallback is ON   
+	- modifyVerifyCallback is ON   
+	- valueChangedCallback is ON 
+   	- value is Single Line Editable   
+	- marginWidth and marginHeight are 20   
+	- cursorPosition is 5All other resources are set by default.
+E)

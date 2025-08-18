@@ -1,0 +1,37 @@
+
+
+#) Enumerated Values Test 3:
+!)	 The following is a Bulletin Board set up to test correct
+	 usage of enumeration values. (Note: this explanation text
+	 itself tests the following:
+	 - XmNeditMode = XmMULTI_LINE_EDIT
+#) Bulletin Board characteristics:
+!)	 - XmNborderWidth = 1
+	 - XmNbackground =  sky_blue
+	 - XmNmarginWidth =  20
+	 - XmNmarginHeight =  20
+	 - XmNdefaultPosition =  false
+	 - XmNnoResize =  true
+	 - XmNResizePolicy = XmRESIZE_GROW
+	 - XmNshadowType = XmSHADOW_ETCHED_OUT
+	 - XmNshadowThickness = 10
+#) RowColumn characteristics:
+!)	 - XmNunitType = XmPIXELS
+	 - XmNx = 30
+	 - XmNy = 30
+	 - XmNborderWidth = 2
+	 - XmNrowColumnType = XmMENU_BAR
+	 - XmNisHomogeneous = false
+	 - XmNpacking = XmPACK_NONE
+	 - XmNnumColumns = 2
+	 - XmNorientation = XmVERTICAL
+	 - XmNmarginHeight = 10
+	 - XmNmarginWidth = 10
+	 - Contains three cascade buttons (with no menus) which should
+	   appear staggered in the order 3 - 2 - 1. Buttons 2 and 1
+	   will overlap the border of the RowColumn
+
+C)
+
+E)
+

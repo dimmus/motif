@@ -1,0 +1,19 @@
+
+#) A client with a BulletinBoard containing four Labels and four Separators
+   will appear.
+C)
+
+#) The first separator will have changed to etched-out and will become smaller.
+#) The second separator will have changed to double-line.
+#) The third separator will have changed to double-dashed-line.
+#) The fourth separator will have changed to single-dashed-line.
+#) Inconify and Normalize the client window. 
+C)
+
+#) The first separator will have changed to vertical shadow etched-in.
+C)
+#) All separators should have become smaller in width and all should be
+   horizontal.
+C)
+	
+E)

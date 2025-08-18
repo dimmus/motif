@@ -1,0 +1,19 @@
+
+
+
+
+#) This is a list widget with the followingcharacteristics: 
+	   - width is 100, height is 200   
+	   - background is black  
+	   - listSpacing is 2   
+	   - items are item1, item2, item3, item4 
+	   - itemCount is 4   
+	   - automaticSelection is true 
+	   - fontList is variable 
+	   - selectionPolicy is XmSINGLE_SELECT 
+	   - listMarginWidth is 20   
+	   - listMarginHeight is 20 
+	   - singleSelectionCallback is ON 
+	   - All other reources are set by default.
+
+E)

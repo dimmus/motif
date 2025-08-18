@@ -1,0 +1,7 @@
+
+#) Two strings should be displayed in an italic font. One created using 
+XmStringCreate() and the other using XmStringCreateLocalized(). 
+Verify that both strings begin at the same horizontal position.
+
+
+E)

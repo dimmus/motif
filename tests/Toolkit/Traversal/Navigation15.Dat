@@ -1,0 +1,28 @@
+
+#) Testing the XmNinitialFocus resource of a DrawingArea.
+
+#) You should see a Form with two DrawingArea children separated by
+   a seperator.  The topmost DrawingArea has two children both of
+   which are TextFields.
+
+C)
+
+#) XmNinitialFocus set to NULL for both DrawingAreas.
+
+#) Use the KTab key to traverse around the form.
+
+#) You should see messages printed to stdout that indicate the focus is
+   being registered by the two TextFields and DrawingArea 2 (the one on
+   the bottom.)
+
+C)
+
+#) XmNinitialFocus set to non-NULL for both DrawingAreas.
+
+#) Use the KTab key to traverse around the form.
+
+#) You should see messages printed to stdout that indicate the focus is
+   being registered only by the two DrawingAreas.  The Focus should not
+   go to either of the TextFields.
+
+E)

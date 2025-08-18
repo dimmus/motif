@@ -1,0 +1,18 @@
+
+#) A client with a pushbutton will appear. The pushbutton
+   will be labeled 'mapbutton'. 
+#) Click MB1 on 'mapbutton'. An error dialog will appear.
+   Click MB1 on 'OK' button. The message 'Enter Message1'
+   should be printed in the term window and the
+   error dialog should disappear. 
+#) Click MB1 on 'mapbutton'. An error dialog will appear.
+   Click MB1 on 'OK' button. The message 'Enter Message2'
+   should be printed in the term window and the
+   error dialog should disappear. 
+C)
+#) The first MessageBox (message1) should be destroyed. A
+   single message will be printed in the term window stating
+   that the messageBox has been destroyed.
+C)
+#) A message box appears.
+E)

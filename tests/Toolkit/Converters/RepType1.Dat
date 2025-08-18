@@ -1,0 +1,6 @@
+#) This test tests the static representation management facility.  To
+   determine whether the test passed or failed, examine the output that
+   goes to stdout to see if each individual test PASSes or FAILs. 
+
+C)
+E)

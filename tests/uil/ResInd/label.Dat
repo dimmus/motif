@@ -1,0 +1,13 @@
+
+#) This is a label widget with the following charcteristics:
+   	- unitType is Xm1000TH_INCHES   - width is 2000
+   	- borderWidth is 10   
+	- background color is Yellow   
+	- traversalOn is true   
+ 	- highlightThickness is 60   
+	- highlightColor is Red   
+	- labelString is "This is a Label"   
+	- recomputeSize is true   
+	- helpCallback is ON via a translation to <Btn3Down>
+	- All other resources are set by default
+E)

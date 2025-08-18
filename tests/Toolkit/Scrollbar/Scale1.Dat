@@ -1,0 +1,22 @@
+#) A client with a scale should appear. Press and hold MB1 on
+   scale slider. Drag slider up and down the scale. The
+   number to the left of the scale should change from 0 at
+   the bottom to 100 at the top. Release MB1.
+#) Continue to have client window change size.
+C)
+#) Resize the client window.
+#) Press and hold MB1 on scale slider. Drag slider
+   up and down the scale. Number to the left of
+   the scale should change from -1.00 at bottom to
+   1.00 at the top. Release MB1.
+#) Resize the client window.
+#) Iconify and Normalize the client window.
+#) Shrink the client window to the smallest possible size.
+#) Re-expand the client window.
+C)
+#) Press and hold MB1 on scale slider. Slowly drag slider left
+   and right. The number on the top of the scale should change
+   from 0 on the left to 100 on the right. As the slider is
+   moved, the number should be drawn and redrawn cleanly
+   (leaving no garbage pixels).
+E)

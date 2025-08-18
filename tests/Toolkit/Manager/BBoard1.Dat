@@ -1,0 +1,36 @@
+#) Click on both pushbuttons. 
+#) Iconify the client window. 
+#) Normalize the client window. 
+#) Resize the client window to paritally obscure pushbutton2. 
+#) Press Help key, and a message, \"A help callback was issued.\" will be printed. 
+#) Continue to have a scrollbar appear below pushbutton1, and
+   an arrow appear to the right of pushbutton1.
+C)
+#) Click on the arrow, arrow should appear to go in and out. 
+#) Move the scrollbar slider. 
+#) Click on scrollbar arrows. The scrollbar slider should move. 
+#) Continue to have a new arrow appear at the bottom of the client window.
+C)
+#) Click on the new arrow, the arrow should go in and out. 
+#) Continue to have the scrollbar slider change size
+   and have the height and position of the second arrow change.
+C)
+#) Click on the second arrow, arrow should appear to go in and out. 
+#) Move the scrollbar slider. 
+#) Click on pushbutton2, it should appear to go in and out. 
+#) Continue to have width and height of pushbutton2 change.
+C)
+#) The height and widget of pushbutton2 were changed.
+#) Click on pushbutton2, it should appear to go in and out. 
+C)
+#) All the widgets except the parent bulletin board were destroyed.
+#) Two bulletin boards have been created and maanged. They should appear
+   exactly the same. This test may fail if you did not invoke it from the
+RUN script.
+C)
+#) The bulletin boards were destroyed and two frames created in their place.
+#) The two frames should have exactly the same appearance.
+#) This test may fail if you did not invoke it from the RUN script.
+E)
+
+

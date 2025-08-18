@@ -1,0 +1,65 @@
+#) Make a small selection in the TextField widget.  Click MB2 elsewhere
+in the TextField to copy the primary selection.  The original selection
+should remain highlighted.
+#) Click MB2 several more times to copy the selection several times.
+Confirm that the original selection remains highlighted the whole time.
+C)
+#) Click MB1 on the ScrolledText widget.  It should now have focus.
+#) Now press Ctrl-Tab twice to get the focus to the MultiLine Text widget.
+#) Holding the Shift key, drag MB1 in the ScrolledText widget to select
+   some text there.  As this text is selected, the focus should also move
+   off of the MultiLine Text widget and onto this widget.
+#) Try typing some text to confirm that the selected text in
+   the ScrolledText widget is
+   replaced with the newly typed text.
+C)
+
+#) In Normal Mode, use KSelect and KExtend to select a collection of text.
+   KDelete should delete the selection.
+#) Use KSelect and KExtend to select another collection of text.
+   KBackSpace should also delete the selection.
+#) Switch into Add Mode, KSelect and KExtend a collection of text.
+#) While the cursor is within the selection, KDelete or KBackSpace
+   should delete the selection.
+#) Switch back into Add Mode, KSelect and KExtend another collection of text.
+#) Move the cursor outside the current selection.
+#) KDelete should delete one character forward.
+#) KBackSpace should delete one character backward.
+
+C)
+
+#) Each of the four widgets now have their XmNsensitive resource set to
+False.  They should all be grayed out and inaccessible from the keyboard
+or the mouse.
+C) 
+@) Each of the text widgets is now sensitive again.  Additionally, 
+they have callbacks set for focus and losingFocus.
+#) Click the mouse pointer in each of the four widgets and confirm
+the callback messages for focus and losingFocus for each widget.
+C)
+@) Each of the text widgets now has callbacks set for valueChanged,
+modifyVerify, and motionVerify.
+#) Click the mouse pointer in each of the four widgets and modify
+the text in some way.  Confirm that the appropriate callback messages
+appear on the stdout.
+C)
+@) Each of the text widgets now has callbacks set for gainPrimary,
+losePrimary, activate and help.
+#) In each of the four widgets, click the mouse pointer, press
+the Help key, and press the activate key.  Confirm that the appropriate
+callback messages appear.
+
+C)
+#)  The action toggle-overstrike has been bound to the keys <Ctrl>-i.
+#)  Click MB1 in the MultiLine Text Widget after the first word, \"As\".
+Type the words \"Pluto and\". Both words should be inserted into the
+existing text.  Click MB1 prior to the word \"was\". Click <Ctrl>-i
+to toggle into overstrike mode. Type the word \"were\". The word \"were\"
+should have replaced \"was \".  Click <Ctrl>-i to toggle back into
+insertion mode and insert a space character.  Click <Ctrl>-i again to
+switch into overstrike mode and type \"walking\".  The word \"walking\"
+should have replaced \"going\". Click <Ctrl>-i again to revert back
+to insertion mode.
+#)  Repeat the above steps in the TextField widget.
+
+E)

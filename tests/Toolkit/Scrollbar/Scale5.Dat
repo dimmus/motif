@@ -1,0 +1,25 @@
+@) A client with a vertical scale will appear. The scale
+   will have two labels that say '0' and '100'. Both labels
+   will have thin black borders and the '100' will be at the bottom.
+#) Press MB1 on the slider and drag the slider. The callback
+   reasons (XmCR_DRAG's and then one XmCR_VALUE_CHANGED) and values 
+   should be printed in the stdout window.
+#) Click MB1 in the area above the slider. The callback reason 
+   (XmCR_VALUE_CHANGED) and value should be printed in the stdout window.
+#) Resize the client window larger. The labels should spread out
+   and remain on the left side, the scale area should span the right side.
+#) Resize the client window smaller.
+C)
+@) A client with a horizontal scale will appear. The scale
+   will have two labels that say '0' and '100'. Both labels
+   will have thin black borders and the '100' will be on the right.
+#) Press MB1 on the slider and drag the slider. The callback
+   reasons (XmCR_DRAG's and then one XmCR_VALUE_CHANGED) and values
+   should be printed in the stdout window.
+#) Click MB1 in area to the left of the slider. The callback
+   reason (XmCR_VALUE_CHANGED) and value should be printed in the 
+   stdout window.
+#) Resize the client window larger. The label should spread out
+   and remain on the top, the scale area should span the bottom.
+#) Resize the client window smaller.
+E)

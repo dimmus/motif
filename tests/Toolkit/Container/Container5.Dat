@@ -1,0 +1,27 @@
+
+#) A Container will appear empty.
+#) It has been created only with defaults, so layoutType is Spatial,
+   spatialStyle is XmGRID, viewType is ANY_ICON, and spatialResizeModel
+   is GROW_MINOR.
+#) A margin width of 20 has been set.
+C)
+
+#) 10 Icon Gadgets are added to the Container.
+#) The Container is only growing vertically, so all the icon gadgets
+   should be in one column.
+#) "IconGad0", "IconGad1", "IconGad3", "IconGad4" and "IconGad9" are
+   displayed in their large icon view. The other ones are displayed in 
+   their small icon view.
+C)
+
+#) The spatialStyle is now set to XmNONE.
+#) No change should be noticed.
+C)
+
+#) The Icon gadgets are unmanaged, the spatialResizeModel is set to
+   XmGROW_BALANCED.
+#) The Icon gadgets are managed again. The layout should be balanced.
+#) You should see 4 icons on the 2 first rows, and 2 on the last one.
+#) Container should resize itself to accomodate its new size.
+E)
+

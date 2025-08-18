@@ -1,0 +1,13 @@
+
+#) This widget is a ArrowButton gadget with the following characteristics :
+	- width and height is 80
+	- highlightOnEnter is true
+	- highlightThickness is 10
+	- traversalOn is true
+	- arrowDirection is XmARROW_LEFT
+	- armCallback is ON
+	- disarmCallback is ON
+	- activateCallback is ON
+	- Keyboard Input can be given via the spaceBar
+	- All other resources are by default.
+E)

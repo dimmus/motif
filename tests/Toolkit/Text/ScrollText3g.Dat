@@ -1,0 +1,13 @@
+#) Other Behavior:
+@) Space just inserts a space.
+Shift Space also just inserts a space.
+@) Return does a carriage return in multi-line.
+@) Tab inserts a tab in multi-line.
+#) Check that if pending delete enabled, typing a character or doing
+   any kind of paste deletes the text only if the cursor is within
+   the bounds of the selected area.
+#) Check that KClear clears the selected area (fills it with spaces).
+   Use a fixed font, and try a multi-line selected region.
+#) Check that Ctrl KDelete erases text between the cursor and the
+   end of line.
+E)

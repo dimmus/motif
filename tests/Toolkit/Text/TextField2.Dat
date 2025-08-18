@@ -1,0 +1,67 @@
+@) This test uses a MultiLine Text widget and a TextField widget to test
+various TextField widget functions.  Almost all of the functions to
+test can be found on a popup menu accessible by pressing MB3 in either
+widget.
+@) In the stdout window, there should now be several messages about
+TextPositions and XY locations of various characters.  Verify that they
+all are correct.
+@) The TextField widget should have a string starting at character
+position 3 reading \"**THIS TEXT INSERTED**\" that was inserted into
+the original source after the widget was created.
+#) Whenever a primary selection of any kind is made in either widget, a
+callback is called that prints a message saying that it gained or lost the
+primary selection ownership.  Verify that these come out in the stdout
+window.
+#) Whenever a selection is made in either widget and a function is chosen
+off the popup menu, the selection's left and right character positions
+are displayed in the stdout window.  If the widget does not own the Primary
+selection or can not perform the operation for some reason, a message to
+that affect will be printed in the stdout window.
+C)
+#) The following functions are found on the popup menus.  Each one should be
+tested in both widgets and between the widgets where appropriate:
+!)
+   Cut             - cuts primary selection to clipboard
+   Copy            - copies primary selection to clipboard
+   Paste           - pastes from clipboard to current
+                     cursor location
+   Remove          - deletes primary selection
+   HiLi Normal     - highlights 5 characters left of
+                     cursor location in normal mode (no
+                     highlight)
+   HiLi Selected   - highlights 5 characters left of
+                     cursor in selected mode (reverse
+                     video)
+   HiLi Secondary  - highlights 5 characters left of
+                     cursor in secondary selected mode
+                     (underlined)
+   Toggle AddMode  - toggles AddMode on and off
+                     (I-beam should be stippled)
+   Set String NULL - sets the text's string to \"\"
+   Get String      - gets the current text string and
+                     prints to stdout window
+   Set String Orig - sets the text's string back to what
+                     it was instantiated with
+   SetValue String - sets the text's string to
+                     \"new_string\", try after making a
+                     long primary selection (uses XtSetValues)
+
+              On the TextField widget only:
+   Show Pos 3      - adjusts the text string position so
+                     that character at position 3 is
+                     visible
+C)
+#) If it isn't already, set the string in the TextField widget back to
+its original string (use the "Set String Orig" item off popup menu).
+#) Click MB1 in the TextField widget.  Use the osfBeginLine key to
+move the insertion cursor to the very beginning of the text.  
+#) Press the osfSelect key to place the insertion point before the first
+word of text.
+#) Move the I-beam off the insertion point using the osfRight key
+several times. 
+#) Select the "SetValue String" item off the popup menu for the 
+TextField widget.  This will change the string in the widget to 
+be read "new string".  Move the mouse pointer over the TextField widget.
+The insertion cursor should be located before the first
+"n" in "new string" with no other cursors visible in this widget.
+E)

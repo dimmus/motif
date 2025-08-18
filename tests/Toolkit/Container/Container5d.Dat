@@ -1,0 +1,15 @@
+
+#) This is Container5 running with the option "-u d".
+#) A Container will appear empty.
+#) It has been created with a layoutType is Spatial,
+   spatialStyle is XmGRID, viewType is ANY_ICON, and spatialResizeModel
+   is GROW_BALANCED.
+#) It has been created insensitive.
+C)
+
+#) 20 Icon Gadgets are added to the Container.
+#) They should be insensitive.
+#) Try selecting one, you should not be able to do so.
+E)
+
+

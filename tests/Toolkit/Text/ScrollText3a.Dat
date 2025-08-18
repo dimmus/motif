@@ -1,0 +1,15 @@
+@) This test is used to exercise the user-level implementation of the
+text widgets.  Below is a list of all the keyboard/mouse bindings
+and their expected actions.  Try each one on all four flavors of
+text widgets and in both add mode and normal mode on each.
+#) Scrolling:
+
+@)    KPageUp      -- pages up
+@)    KPageDown    -- pages down
+@)    KPageLeft    -- pages left
+@)    KPageRight   -- pages right
+ 
+#) With MB1 (primary selection) or Alt-MB2 (secondary selection) pressed,
+moving the pointer beyond the list should
+scroll the text in that direction.
+E)

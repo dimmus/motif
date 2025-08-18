@@ -1,0 +1,15 @@
+
+#)  A SpinBox with XmNspinBoxChildType = XmSTRING has been created.
+    No XmString values have been assigned to the child
+    TextField widget.
+    Verify a warning message is printed to stdout
+    indicating that the TextField child of SpinBox was created 
+    with no XmString children.
+
+#)  Click MB1 on the right-pointing arrow.  The test should not
+    crash.
+
+#)  Click MB1 on the left-pointing arrow.  The test should not
+    crash. 
+C)
+E)

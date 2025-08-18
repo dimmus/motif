@@ -1,0 +1,19 @@
+#) This test should have been run with the flag "-u 2".
+#) A Notebook will appear on your screen. All resources for this Notebook 
+   have been set via the defaults file Notebook.defaults. 
+   There will also be a control panel with which you can do a GetValues on
+   those resources of the Notebook that are of type Dimension. (Since it
+   may be hard to visually gauge what values these resources have been
+   set to).
+#) For this particular test, the widget called "StatusArea" has been set
+   to be a major tab. However, clicking on it should have no effect.
+#) The width and height of the Notebook should both be 400.
+#) The Notebook should have vertical orientation.
+#) The placement of the back pages of the Notebook should be top left.
+#) The binding should be solid.
+#) Click on the "bindingWidth" PushButton. There should be a message on
+   stdout indicating that binding width is 20.
+C)    
+
+E)
+

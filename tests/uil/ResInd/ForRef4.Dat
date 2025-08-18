@@ -1,0 +1,20 @@
+
+
+#) This is a label widget with the following charcteristics:
+!) 	- width is 2000
+	   - borderWidth is 10   
+	   - background color is blue   
+	   - traversalOn is true   
+	   - highlightThickness is 60   
+	   - highlightColor is Red   
+	   - labelString is: This is a Label   
+	   - recomputeSize is true   
+	   - helpCallback is ON via a translation to <Btn3Down>
+
+#) All other resources are set by default.
+   The Label forward references the translation to Help().
+
+C)
+
+E)
+

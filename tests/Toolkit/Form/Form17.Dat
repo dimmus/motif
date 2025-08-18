@@ -1,0 +1,32 @@
+
+#) A client with three PushButtons labeled PushButton1,
+   PushButton2 and PushButton3 should appear in the Form. 
+#) Click MB1 on any of the three PushButtons. 
+#) The PushButton clicked on should disappear. 
+C)
+
+#) Click MB1 on either of the two remaining PushButtons. 
+#) The PushButton clicked on should disappear. 
+C)
+
+#) Click MB1 on the one remaining PushButton. 
+#) The remaining PushButton should disappear. 
+#) If remove_mode was set to "unmanage", the Form should now have a width 
+#) and height of 1x1. 
+C)
+
+#) A 3x3 matrix of PushButtons should appear in the form. 
+#) Click MB1 on the PushButtons; they should disappear. 
+#) Click MB1 on the PushButtons until they all go away. 
+#) If remove_mode was set to "unmanage", the Form should now have a width 
+#) and height of 1x1. 
+C)
+
+#) Nine Forms should appear within a Form. 
+#) Each child Form should contain a 3x3 matrix of PushButtons. 
+#) Click MB1 on the PushButtons; they should disappear. 
+#) Click MB1 on the PushButtons until they all go away. 
+#) If remove_mode was set to "unmanage", the Form should now have a width 
+#) and height of 1x1. 
+E)
+

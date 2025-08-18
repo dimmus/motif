@@ -1,0 +1,19 @@
+
+
+#) This is a Message Box in a Dialog Shell with the following 
+   characteristics:
+   	- XmNx is 50
+	- XmNy is 50
+	- XmNallowShellResize is true
+	- background color (MessageBox) is yellow
+	- foreground color (MessageBox)is red
+	- shadowThickness (MessageBox) is 5
+	- okCallback (MessageBox) is ON
+	- helpCallback (MessageBox) is ON
+	- cancelCallback (MessageBox) is ON
+	- autoUnmanage (MessageBox) is false
+	- messageString (MessageBox) is\n
+	- A Message Box in a Dialog Shell created in UIL
+	- All other resources are set by default.
+
+E)

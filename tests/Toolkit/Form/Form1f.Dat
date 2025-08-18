@@ -1,0 +1,5 @@
+#) Attach Child1 (blue)'s TOP to WIDGET.
+#) Attach Child2 (yellow)'s RIGHT to SELF.
+#) Change Child1's width to 400. The form should resize to show the larger
+button.
+E)

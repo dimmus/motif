@@ -1,0 +1,49 @@
+
+#) A client with an arrow button pointing upwards will appear. 1) A message should appear in the term window saying that the unitType
+   of the arrow button is XmPIXELS. 
+#) The height, width, borderWidth, x and y values for the Bulletin Board and
+   the arrow button will be printed out at each step.
+   The starting values for the PARENT bulletin board are:
+!)
+     Width & height, 224
+     x & y, 0
+     borderWidth, 0
+   The starting values for the CHILD Bulletin Board are:
+     x & y, 100
+     borderWidth, 10
+     height & width, 93 (calculated).
+   The starting values for Arrow Button are:
+     x & y, 50
+     borderWidth, 5
+     height & width, 23 (calculated) 
+#) Continue to change the unitType of the Bulletin Board and to destroy
+   and re-create the arrow button. 
+C)
+
+#) A client with a larger arrow button will appear. 
+#) A message will appear in the term window saying that the unitType of
+   the arrow button is Xm1000TH_INCHES. 
+#) The printed resource values have been adjusted for the new unit Type. This will
+   happen on all successive panels. 
+#) Continue to change the unitType of the Bulletin Board and to destroy
+   and re-create the arrow button. 
+C)
+
+#) A client with a smaller arrow button will appear. 
+#) A message will appear in the term window saying that the unitType of
+   the arrow button is Xm100TH_MILLIMETERS. 
+#) Continue to change the unitType of the Bulletin Board and to destroy
+   and re-create the arrow button. 
+C)
+
+#) A client with a smaller arrow button will appear. 
+#) A message will appear in the term window saying that the unitType of
+   the arrow button is Xm100TH_POINTS. 
+#) Continue to change the unitType of the Bulletin Board and to destroy
+   and re-create the arrow button. 
+C)
+
+#) A client with a larger arrow button will appear. 
+#) A message will appear in the term window saying that the unitType of
+   the arrow button is Xm100TH_FONT_UNITS. 
+E)

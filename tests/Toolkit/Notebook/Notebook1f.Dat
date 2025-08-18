@@ -1,0 +1,28 @@
+
+#) This test should have been run with the flag "-u 6".
+#) A Notebook will appear on your screen. All resources for this Notebook 
+   have been set via the defaults file Notebook.defaults. There will be
+   a list in the upper left of your screen containing the resources that have
+   been set for this Notebook. No warnings should appear on the term window.
+#) The layout direction has been set as Right-to-Left. 
+#) Verify that the book visuals correspond to a Right-to-Left layout.
+   The binding should be on the right, major tabs on the left, the meaning
+   of the right and left arrows in the page scroller should be the opposite 
+   from Left-to-Right layout. 
+C)
+E)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

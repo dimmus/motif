@@ -1,0 +1,16 @@
+ 
+#) This is a pushButton widget with the following charcteristics:
+   	- unitType is Xm100TH_MILLIMETERS
+	- width and height are 3500
+	- background color is Orange
+	- traversalOn is true
+	- highlightThickness is 100   
+	- highlightColor is navy
+   	- shadowThickness is 100   
+	- marginWidth and marginHeight
+	- armColor is green   
+	- armCallback and disarmCallbacks are ON
+	- highlightOnEnter is true
+	- fontList is 8x13bold
+	- All other resources are set by default.
+E)

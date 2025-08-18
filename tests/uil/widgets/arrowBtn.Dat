@@ -1,0 +1,13 @@
+
+#) This widget is a ArrowButton with the following characteristics:
+   	- width and height is 80
+	- border width is 30
+	- background color is blue
+	- border color is medium blue
+	- foreground color is green
+	- arrowDirection is XmARROW_DOWN
+	- activateCallback is ON
+	- All other resources are by default.
+
+
+E)

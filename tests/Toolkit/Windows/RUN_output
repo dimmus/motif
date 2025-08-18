@@ -1,0 +1,44 @@
+
+Beginning test  MainWin2
+Error - Test  MainWin2  does not exist
+
+Beginning test  ScrollWin1
+Error - Test  ScrollWin1  does not exist
+
+Beginning test  ScrollWin1
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin1 -I ScrollWin1a.Dat -S ScrollWin1a.Scr -V ScrollWin1a.vis -O ScrollWin1a.prt -xrm *ScrollWin1.layoutDirection:RIGHT_TO_LEFT  does not exist
+
+Beginning test  ScrollWin2
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin2  does not exist
+
+Beginning test  ScrollWin3
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin3  does not exist
+
+Beginning test  ScrollWin4
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin4  does not exist
+
+Beginning test  ScrollWin5
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin5  does not exist
+
+Beginning test  ScrollWin6
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin6  does not exist
+
+Beginning test  ScrollWin7
+Output redirected to  ScrollWin1a.prt
+Error - Test  ScrollWin7  does not exist
+No MainWin2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin1a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+No ScrollWin6.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Windows
+Automated run of directory Windows  complete
+This is a Report RUN

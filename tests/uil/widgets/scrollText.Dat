@@ -1,0 +1,17 @@
+
+
+#) This is a scrolled text widget with the following characteristics:
+      - background is forestGreen
+      - borderWidth is 8
+      - shadowThickness is 8
+      - autoShowCursorPosition is true
+      - scrollLeftSide is true
+      - focusCallback is ON   
+      - valueChangedCallback is ON   
+      - wordWrap is true   
+      - rows is 3   
+      - columns is 20   
+      - blinkRate is 0   
+      - editMode is XmMULTI_LINE_EDIT
+      - All other resources are set by default.;CompareVisual TopManager
+E)

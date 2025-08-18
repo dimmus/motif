@@ -1,0 +1,17 @@
+#) A client with five frames should appear.
+!) 
+     The top frame has a shadow type of XmSHADOW_ETCHED_IN and
+     contains an ArrowButton.
+
+     The second frame has a shadow type of XmSHADOW_ETCHED_IN and
+     contains the label \"LABEL1\".
+
+     The third frame has a shadow type of XmSHADOW_ETCHED_OUT and
+     contains a  pushbutton.
+
+     The fourth frame has a shadow type of SHADOW_IN and contains
+     a togglebutton.
+
+     The fifth frame has a shadow type of SHADOW_OUT and contains
+     the label gadget \"LABELGADGET1\". 
+E)

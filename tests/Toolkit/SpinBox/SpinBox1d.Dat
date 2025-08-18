@@ -1,0 +1,15 @@
+
+#) This test should have been run with the flag "-u 4".
+#) A SpinBox with 2 Text children will appear on your screen. One will
+   be STRING and one NUMERIC.
+#) The item displayed in the STRING child should be "B".
+#) The item displayed in the NUMERIC child should be 0.03.
+#) The two arrows should be at the left of the Text widgets, and horizontally
+   adjacent to each other. Both arrows should be insensitive.
+#) Set focus to the STRING child. Both arrows should stay insensitive.
+#) Set focus to the NUMERIC child. Both arrows should stay insensitive.
+#) No warnings should appear on the term window, indicating uninstalled
+   or incorrect resource converters.
+C)
+
+E)

@@ -1,0 +1,36 @@
+
+@)  A SpinBox with four text fields should be displayed.
+    The current layout direction is RIGHT_TO_LEFT.
+    The XmNarrowLayout resource is set as XmARROWS_BEGINNING, therefore
+    the increment and decrement arrows should be displayed to the right
+    of the text fields.
+
+#)  Set focus on the first text field which displays \"Mon\".
+    Click on the left arrow button to increment the weekday to \"Fri\".
+
+#)  Move the focus to the next text field which displays \"15\".
+    Click on the right arrow button to decrement the day value
+    to \"8\".
+    
+#)  Move the focus to the next text field which displays \"Jan\".
+    Click KLeft to increment the month to \"Oct\".
+
+#)  Move focus to the last text field which displays \"1995\".
+    Click KRight to decrement the year to \"1993\". 
+
+#)  The final date should read: Fri 8 Oct 1993.
+
+C)
+
+#)  XmNdefaultArrowSensitivity is set to XmARROWS_DECREMENT_SENSITIVE.
+    Since the layout direction is RIGHT_TO_LEFT, the right-pointing
+    arrow should be sensitive.
+
+C)
+
+#)  XmNdefaultArrowSensitivity is set to XmARROWS_INCREMENT_SENSITIVE.
+    Since the layout direction is RIGHT_TO_LEFT, the left-pointing
+    arrow should be sensitive.
+
+C)
+E)

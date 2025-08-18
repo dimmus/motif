@@ -1,0 +1,20 @@
+
+
+#) This is two Scrolled Lists contained in a form 
+   with the following characteristics: 
+	    * ScrollList1 is attached to the Form on the left, bottom,     
+             and the top 
+	    * ScrollList2 is attached to the Form on the right, bottom,     
+	     and the top. 
+	    * ScrollList2 is attached to List1 on the left 
+	    * Width of the form is 200, height is 200 
+	    * listMarginWidths are 10   
+	    * listMarginHeights are 10 
+	    * listSpacings are 10   
+	    * items are item1...item5   
+	    * itemCounts are 5 
+	    * visibleItemsCounts are 4   
+	    * fontLists are variable 
+	    * All other resources are set by default.
+
+E)

@@ -1,0 +1,57 @@
+
+#) A client with a Paned Window with three pushbuttons will appear.
+C)
+
+#) The first button will be unmapped.  It should have disappeared
+   but it's pane should still be visible and manipulable.
+C)
+
+#) The first button will be remapped and the second button unmapped.
+C)
+
+#) The second button will be remapped and the third button unmapped.
+C)
+
+#) The third button will be remapped and the first button unmanaged.
+   The pane for the first button will also disappear, leaving two panes
+   in the paned window.
+C)
+
+#) The first button will be remanaged and the second button unmanaged.
+   The pane for the first button will reappear, and the second will
+    disappear, again leaving two panes.
+C)
+
+#) The second button will be remanaged and the third button unmanaged.
+   The pane for the second button will reappear, and the third will
+   disappear, again leaving two panes.
+C)
+
+#) The third button will be remanaged.
+   The pane for the third button will reappear, restoring the paned
+   window to its original three panes.
+C)
+
+#) The paned window will be destroyed and recreated before the next
+   series of tests which will involve creating a paned window with
+   three buttons three times destroying a different button each time.
+C)
+
+#) The first button will be destroyed.  Its pane will disappear leaving
+   two panes in the paned window.
+C)
+
+#) The paned window will be destroyed and recreated with three buttons.
+C)
+
+#) The second button will be destroyed.  Its pane will disappear leaving
+   two panes in the paned window.
+C)
+
+#) The paned window will be destroyed and recreated with three buttons.
+C)
+
+#) The third button will be destroyed.  Its pane will disappear leaving
+   two panes in the paned window.
+E)
+

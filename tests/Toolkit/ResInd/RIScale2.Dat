@@ -1,0 +1,19 @@
+@) A client with a scale should appear. There should be
+   some X Toolkit Warnings in the stdout window.
+#) Press and hold MB1 on scale slider. Drag slider up and down the
+   scale. The number to the left of the scale should
+   change from 0 at the bottom to 100 at the top.
+   Release MB1. 
+#) Enlarge client window to the right. 
+C)
+#) A message to the stdout window should state that
+XmNtitleString = Noise Level 
+C)
+@) There should be more X Toolkit Warnings in the stdout window.
+#) Press and hold MB1 on scale slider. Drag slider up
+   and down the scale. Number on the left of the scale
+   should change from 0 at top to 100 at bottom.
+   Release MB1 and resize the client window. 
+#) Continue to have scale disappear.
+C)
+E)

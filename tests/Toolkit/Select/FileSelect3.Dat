@@ -1,0 +1,28 @@
+
+#) This test tests the capabilities of the file selection box which layout
+   its non-standard children.
+
+#) A file selection box should appear, with a menubar, drawing area with scale,
+   standard control buttons, plus an additional pushbutton,
+   arrow button and drawn button.  There should NOT be a toggle button.
+   The scale should appear above the selection area.
+
+#) Verify that the buttons along the bottom panel are all of uniform height
+   and width.  
+
+C) 
+
+#) Use KTab to get focus on the scale in the middle of the FileSelectionBox.
+   Press KRight several times to move the scale to the right.
+
+#) Select "Cascade1".  A pulldown menu should appear.  Press KRight.  The
+   cascade button "Cascade2" should appear highlighted and its pulldown menu
+   should appear.  Unpost the menu.
+
+C)
+
+#) The scale should move to below the selection area.
+C)
+#) The scale should move to on top of the filter area.
+C)
+E)

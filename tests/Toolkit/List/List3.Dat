@@ -1,0 +1,17 @@
+#) A client containing a List should appear. The List should have the
+   following resources set:
+!)
+    1) Should have 6 items (Item1 - Item6).
+    2) Should have 3 Selected Items (Item1, Item3, and Item6). 
+    3) Background should be wheat and foreground navy.
+    4) The font should be variable.
+    5) ListMarginWidth and listMarginHeight should be 20.
+    6) ShadowThickness and listSpacing should be 10.
+    7) SelectionPolicy should be MULTIPLE_SELECT.
+@) All these resources are defined in the resource file List3DB and should
+   have been merged into the system resource database via xrdb.
+C)
+#) The same List will appear but the names of the Items will change. Also,
+   all items except the last item will be selected. These resources have
+   been set in the application and not from List3DB.
+E)

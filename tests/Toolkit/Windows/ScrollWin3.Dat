@@ -1,0 +1,48 @@
+@) A client containing a ScrolledWindow with no children will appear.
+The ScrolledWindow has its
+scrolledWindowMarginWidth/Height set to 20 and has a translation
+installed on its clip window. It will also perform a XmProcessTraversal
+XmTRAVERSE_CURRENT to the empty ScrolledWindow.
+#) Click MB1 in the clip window of the ScrolledWindow.
+#) Press the 't' key.  There should be a message in the stdout window saying
+"Translation successfully set." No core dump should occcur.
+C)
+@) The ScrolledWindow
+   will now contain a DrawingArea which will contain a Text widget. The
+   DrawingArea will be green in color, while the ScrolledWindow will be
+   AquaMarine.  The ScrolledWindow will have a scrollingPolicy of
+   XmAPPLICATION_DEFINED, and the scrollbars will be created independently.
+C)
+#) Click MB1 in the trough area of the horizontal scrollbar. The cursor
+   will move with each click.  When the cursor reaches the end of
+   the Text area, the Text widget will scroll to the right.
+#) Click MB1 in the trough area of the vertical scrollbar. The cursor
+   will move to the next line in the Text widget.  When the cursor is on
+   the last visible line, it will be able to scroll down two more lines
+   of text.
+#) Press <Tab>.  The highlight will now be on the horizontal scrollbar.
+   Use the Arrow keys to scroll through the entire Text area horizontally.
+#) Press <Shift> <Tab>.  The highlight now will be in the vertical
+   scrollbar.  Use the Arrow keys again to scroll through the entire Text
+   area vertically.
+C)
+#) Two Warning messages will be printed in the term window.  The messages
+   will state:
+@)
+   "Cannot set a visual policy of CONSTANT in APPLICATION_DEFINED mode."
+      and
+   "Cannot set AS_NEEDED scrollbar policy with a
+      visual policy of VARIABLE."
+#) The scrollbars will now be found on the top and on the right of the Text
+   widget.
+#) Use the scrollbars to scroll through the entire Text area.
+C)
+#) The scrollbars will now be found on the left and on the bottom of the
+   Text widget.  Use the scrollbars to scroll through the entire Text area.
+C)
+#) Automatic and static scrollbars appear on the bottom and on the left
+   of the Text widget.
+#) Resize the window smaller so that the scrollbars are not completely
+   filled.  Press <Tab> to put the focus in the text area, and press
+   the PageDown and PageUp keys.  The text should scroll.
+E)

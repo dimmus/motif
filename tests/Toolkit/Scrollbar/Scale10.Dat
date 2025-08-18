@@ -1,0 +1,22 @@
+@) A client with two Scales and four PushButtons contained
+   in a Bulletin Board should appear.  The horizontal scale
+   is 375 pixels wide and 30 pixels high and has an initial
+   value of 44.  The vertical scale is 30 pixels wide and 375
+   pixels high and has an initial value of 66.
+@) Throughout all of the following operations, the value label
+   for each scale widget should remain directly above (horizontal
+   scale) or to the left (vertical scale) of the slider.
+#) Click MB1 in the PushButton labeled \"Horiz scaleHeight to 50\".
+   The horizontal scale should grow to a scaleHeight of 50.
+#) Click MB1 in the PushButton labeled \"Vert scaleHeight to 50\".
+   The vertical scale should shrink to a scaleHeight of 50.
+#) Click MB1 in the PushButton labeled \"Horiz scaleWidth to 50\".
+   The horizontal scale should shrink to a scaleWidth of 50.
+#) Click MB1 in the PushButton labeled \"Vert scaleWidth to 50\".
+   The vertical scale should grow to a scaleWidth of 50.
+#) Move the horizontal scale slider several times and look at the
+   values printed in the stdout window.  The old and new values
+   should reflect the direction and amount of movement.
+#) Click MB1 on the slider of the horizontal scale without
+   moving it.  The old and new values printed should be the same.
+E)

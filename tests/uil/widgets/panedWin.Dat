@@ -1,0 +1,16 @@
+
+
+   #) This is a paned window with the following characteristics:   
+	    - borderWidth is 2
+	    - width and height are 250   
+	    - marginWidth is 10   
+	    - marginHeight is 10 
+	    - spacing is 20   
+	    - sashWidth is 250   
+	    - sashHeight is 20   
+	    - sashShadowThickness is 5
+	    - separatorOn is false
+	    - paneMaximum is 100 for pushButton2   
+	    - paneMinimum is 100 for toggle Button1
+            - All other resources are set by default.
+    E)

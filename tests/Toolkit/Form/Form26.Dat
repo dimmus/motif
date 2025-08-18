@@ -1,0 +1,13 @@
+  
+#) A client containing a Scrolled Text widget in a form should appear.
+   The ScrolledText should be attached to the Form on the top, bottom, right
+   and left and should be forest green in color. There also should
+   be a Message Dialog located at (0,500). 
+C)
+@) The text widget has changed size and changed to a single line text widget.
+#) The form should resize smaller.
+#) Only one line of text should show, and the arrow keys should not take you
+to the other lines of text. However, the scroll bars still show that there
+is text outside the visible region.
+C)
+E)

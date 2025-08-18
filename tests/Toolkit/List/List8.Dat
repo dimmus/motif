@@ -1,0 +1,13 @@
+#) The List will contain 10 items. All items will be foobar.
+   The font for the list will be 8x13bold.
+#) Move to pointer to the list and click MB1 on the first
+   item in the list.
+#) The list should change so that it only contains 1 item.
+#) Again click MB1 on the first item in the list.
+#) The list should now again contain 10 items.
+#) Repeat this process approximately 10 times and make sure that
+   the program does not core dump.
+C)
+#) A list with one visible item appears. The manager
+should be "shrink-wrapped" around the list.
+E)

@@ -1,0 +1,20 @@
+
+#)  This test is for measuring the performance of the Scrolled Text widget.
+#)  To test the initial display time, clock the amount of time it takes for the 
+    scrolled text widget to display by exiting this test and running it again.
+C)
+
+#)  Select the slider in the scrollbar and move the slider down to the bottom. 
+#)  Note any lag time between the movement of the slider and the scrolling
+    of the text.
+#)  Select the slider in the scrollbar and move the slider up to the top.
+#)  Note any lag time between the movement of the slider and the scrolling
+    of the text.
+C)
+
+#)  Click on the down arrow of the scrollbar. Continuing clicking the down
+    arrow until the scrollbar slider reaches the bottom of the trough.
+#)  Click on the up arrow of the scrollbar. Continuing clicking the up
+    arrow until the scrollbar slider reaches the top of the trough.
+C)
+E)

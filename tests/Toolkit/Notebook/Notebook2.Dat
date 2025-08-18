@@ -1,0 +1,42 @@
+#) This test tests default translations for Notebook.
+#) A Notebook will appear on your screen. 
+C)
+
+
+#) Set the focus on the MajorTab3
+#) Click on osfBeginLine. MajorTab1 should now have the focus.
+#) Click on osfEndLine. MajorTab3 should now have the focus.
+#) Click on osfLeft. MajorTab2 should have focus.
+#) Click on osfRight. MajorTab3 should have focus.
+#) Click on osfUp. MajorTab2 should have focus.
+#) Click on osfDown. MajorTab3 should have focus.
+C) 
+
+
+#) Click on MajorTab1. MinorTab1, MinorTab2, MinorTab3 should become visible.
+#) Set the focus on the MinorTab3.
+#) Click on osfBeginLine. MinorTab1 should now have the focus.
+#) Click on osfEndLine. MinorTab3 should now have the focus.
+#) Click on osfLeft. MinorTab2 should have focus.
+#) Click on osfRight. MinorTab3 should have focus.
+#) Click on osfUp. MinorTab2 should have focus.
+#) Click on osfDown. MinorTab3 should have focus.
+
+C) 
+
+
+#) Set the focus on Page1.
+#) Use the arrow keys to traverse between the different children of the Form.
+#) Click Tab. The focus should move to the TextField status area.
+#) Click Tab. The focus should move to the SpinBox page scroller.
+#) Click Tab. The focus should move to MajorTab1.
+#  Click Tab. The focus should move to MinorTab1.
+C)
+
+
+
+#) The Notebook should have been destroyed.
+C)
+
+
+E)

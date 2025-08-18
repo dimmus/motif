@@ -1,0 +1,24 @@
+
+#) Resize the clients window. 
+#) Continue to have pushbuttongadget1 appear.
+C)
+
+#) Click on pushbuttongadget1, it should go in and out. 
+#) Continue to have pushbuttongadget2 appear on top of pushbuttongadget1.
+C)
+
+#) Click on push button gadgets, buttons should go in and out. 
+#) Continue to have pushbuttongadget1 shift to the right.
+C)
+
+#) Click on pushbuttongadgets, buttons should go in and out. 
+#) Continue to have pushbuttongadget1 shift down.
+C)
+
+#) Resize the client window to have to partially obscure pushbutton1. 
+#) Continue to have pushbuttongadget2 disappear
+   and have pushbuttongadget3 appear.
+C)
+#) Continue to have client window be empty.
+C)
+E)

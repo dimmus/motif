@@ -1,0 +1,62 @@
+
+Beginning test  SpinBox1
+Output redirected to  SpinBox1a.prt
+Error - Test  SpinBox1 -u 1 -I SpinBox1a.Dat -S SpinBox1a.Scr -V SpinBox1a.vis -O SpinBox1a.prt  does not exist
+
+Beginning test  SpinBox1
+Output redirected to  SpinBox1b.prt
+Error - Test  SpinBox1 -u 2 -I SpinBox1b.Dat -S SpinBox1b.Scr -V SpinBox1b.vis -O SpinBox1b.prt  does not exist
+
+Beginning test  SpinBox1
+Output redirected to  SpinBox1c.prt
+Error - Test  SpinBox1 -u 3 -I SpinBox1c.Dat -S SpinBox1c.Scr -V SpinBox1c.vis -O SpinBox1c.prt  does not exist
+
+Beginning test  SpinBox1
+Output redirected to  SpinBox1d.prt
+Error - Test  SpinBox1 -u 4 -I SpinBox1d.Dat -S SpinBox1d.Scr -V SpinBox1d.vis -O SpinBox1d.prt  does not exist
+
+Beginning test  SpinBox2
+Output redirected to  SpinBox1d.prt
+Error - Test  SpinBox2  does not exist
+
+Beginning test  SpinBox3
+Output redirected to  SpinBox3a.prt
+Error - Test  SpinBox3 -u XmForm,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3a.prt  does not exist
+
+Beginning test  SpinBox3
+Output redirected to  SpinBox3b.prt
+Error - Test  SpinBox3 -u XmFrame,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3b.prt  does not exist
+
+Beginning test  SpinBox3
+Output redirected to  SpinBox3c.prt
+Error - Test  SpinBox3 -u XmBulletinBoard,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3c.prt  does not exist
+
+Beginning test  SpinBox3
+Output redirected to  SpinBox3d.prt
+Error - Test  SpinBox3 -u XmRowColumn,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3d.prt  does not exist
+
+Beginning test  SpinBox4
+Output redirected to  SpinBox3d.prt
+Error - Test  SpinBox4  does not exist
+
+Beginning test  SpinBox5
+Output redirected to  SpinBox3d.prt
+Error - Test  SpinBox5  does not exist
+
+Beginning test  SpinBox6
+Output redirected to  SpinBox3d.prt
+Error - Test  SpinBox6  does not exist
+No SpinBox1a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox1b.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox1c.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox1d.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox3a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox3b.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox3c.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox3d.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+No SpinBox6.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/SpinBox
+Automated run of directory SpinBox  complete
+This is a Report RUN

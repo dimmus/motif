@@ -1,0 +1,37 @@
+
+#) A client with a tie_fighter pixmap contained in a RowColumn
+   should appear. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+
+#) A gnu pixmap should be added to the RowColumn. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+
+#) A warning pixmap should be added to the RowColumn. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+
+#) A mountain pixmap should be added to the RowColumn. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+
+#) A smiley face pixmap should be added to the RowColumn. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+
+#) A \"Don't Panic\" pixmap should be added to the RowColumn. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+
+#) A circle pixmap should be added to the RowColumn. 
+#) A message should have appeared in term window saying that the pixmap was
+   being read. 
+C)
+E)

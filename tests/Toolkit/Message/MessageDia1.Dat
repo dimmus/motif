@@ -1,0 +1,15 @@
+
+#) A client with a MessageDialog will appear. The MessageDialog
+   will have three buttons, labeled \"NoSymSet\", \"error\", and
+   \"question\".  There also will be an hourglass pixmap. 
+#) Click MB1 on \"error\". XmNdialogType will be changed to
+   XmDIALOG_ERROR,  and the pixmap will change to an error pixmap. 
+#) Click MB1 on \"question\".  XmDialogType will change to
+   XmDIALOG_QUESTION,  and the pixmap will change to a question
+   pixmap. 
+#) Click MB1 on \"NoSymSet\".  The button\'s label will change to \"SetSymbol\". 
+#) Click MB1 on \"error\". The SymbolPixmap will change to an
+   hourglass pixmap. 
+#) Click MB1 on \"question\". The Symbol pixmap will change to a
+   pixmap of Tina Turner. 
+E)

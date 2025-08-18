@@ -1,0 +1,25 @@
+
+#) Testing the XmNfocusMovedCallback feature in relation to
+   Gadget children.
+
+#) You should see a RowColumn and several children all of which
+   are gadgets.
+
+#) Try clicking on any of the gadgets to traverse through them.
+   You should not see any messages written to stdout.
+
+#) Try using the up/down arrows to traverse.  You should not
+   see any messages.
+
+C)
+
+#) Now the XmNfocusMovedCallback feature has been enabled.
+
+#) Try clicking on any of the gadgets to traverse through them.
+   You should now see messages written to stdout.  Make sure
+   the from widget and to widget are correct.
+
+#) Try using the up/down arrows to traverse.  You should get
+   the same results.
+
+E)

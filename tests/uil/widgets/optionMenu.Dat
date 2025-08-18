@@ -1,0 +1,12 @@
+
+
+#) This is an optionMenu with the following characteristics:
+	- mapCallback on Pulldown is ON
+	- unmapCallback on Pulldown is ON
+	- marginHeight is 5   
+	- marginWidth is 5
+	- fontList is variable on all Pushbuttons
+	- labelString is Option Menu ==>   - pulldown Menu has three
+	  pushbuttons asscoiated with it.
+	- All other resources are set by default.
+E)

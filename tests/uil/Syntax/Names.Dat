@@ -1,0 +1,27 @@
+
+
+
+#)	This is a form widget with the following characteristics:   
+@)		- width 150 and height is 350   
+@)		- borderWidth is 15 
+@)	   	- defaultPosition is false   
+@)		- allowOverlap is false 
+@)	   	- rubberPositioning is true 
+@)	   	- The form contains three pushButtons and one Form. 
+	     	  The right PB is attached on the TOP, BOTTOM, and on the 
+		  RIGHT.     
+@)		- The left PB is attached on the TOP, BOTTOM, and on the LEFT
+@)		- The Form is attached to the the first Form on the TOP, 
+	     	  the right PB on the RIGHT, and the left PB on the LEFT, 
+@)	        - the bottom PB is attached on the the BOTTOM, RIGHT, and on 
+		  the LEFT. 
+@)	   	- The second Form contains one pushButton 
+	     	  and one textWidget 
+@)	        - Callback is ON for all PushButtons 
+@)		All other resources are set by default.
+
+
+E)
+
+
+

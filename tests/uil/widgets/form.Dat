@@ -1,0 +1,15 @@
+#) This is a form widget with the following characteristics:
+	- width and height is 150
+	- borderWidth is 15
+	- defaultPosition is false
+	- allowOverlap is false
+	- rubberPositioning is true
+	- The form contains four pushButtons.
+	- the right PB is attached on the TOP, BOTTOM, and on the RIGHT.
+     	- the left PB is attached on the TOP, BOTTOM, and on the LEFT.
+	- the top PB is attached on the the TOP, RIGHT, and on the LEFT.     
+	- the bottom PB is attached on the the BOTTOM, RIGHT, and on the LEFT.
+	- Callback is ON for all PushButtons.
+	- All other resources are set by default.
+
+E)

@@ -1,0 +1,43 @@
+#) A client with a Paned Window with three pushbuttons labeled
+   PushButton1, PushButton2, and PushButton3 will appear. 
+   The Paned Window should be horizontal.
+#) The space on all 4 sides between the PanedWindow and its children should
+   be 20 pixels.
+#) The sash width and height should be 10.
+   The sashes should be offset 15 pixels from the top of the PanedWindow.
+   The shadow thickenss of the sashes should be 5 pixels.
+#) The panes should have separators between them.
+#) The distance between each child pane should be 25 pixels.
+C)
+
+#) Press and hold MB1 on the leftmost sash. Drag the pointer to the
+   right extreme of the client window.  Release MB1.
+@) - the leftmost pane should expand.
+@) - the middle pane should contract.
+@) - the rightmost pane should contract.
+@) - Pushbutton1 should be visible. 
+ 
+#) Press and hold MB1 on the leftmost sash.  Drag the pointer to the
+   left extreme of the client window.  Release MB1.
+@)   - the leftmost pane should contract
+@)   - the middle pane should expand
+@)   - the rightmost pane should be unchanged
+@)   - Pushbutton2 should be visible. 
+
+#) Press and hold MB1 on the rightmost sash.  Drag the pointer to the
+   left extreme of the client window.  Release MB1.
+@)   - the leftmost pane should be unchanged.
+@)   - the middle pane should contract.
+@)   - the rightmost pane should expand.
+@)   - Pushbutton3 should be visible. 
+C)
+
+#) Try to resize PushButton2. It should enforce a minumum and a maximum size
+   of 100 and 150 pixels respectively.
+#) Resize the client window several times. PushButton3 should not change
+   in width.
+C)
+
+#) PushButton1 should've grown to 250x250 pixels.
+E)
+

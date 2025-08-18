@@ -1,0 +1,10 @@
+
+
+#) This is a Warning Dialog with the following characteristics:
+   	- okCallback is ON
+	- cancelCallback is ON
+	- helpCallback is ON  
+	- autoUnmanage is false
+   	- message string is "MessageLabel"
+	- All other resources are set by default
+E)

@@ -1,0 +1,11 @@
+
+
+
+#)   A drawing area (yellow) with a arrowButton should be partially visible .
+              - scrollingPolicy is APPLICATION_DEFINED.   
+              - scrollBarDisplayPolicy is STATIC 
+              - horizontalScrollBar and verticalScrollBar are set 
+                to already created scrollbars. 
+              - The scrollbars SHOULD appear. 
+              - All other resources are set by default.
+E)

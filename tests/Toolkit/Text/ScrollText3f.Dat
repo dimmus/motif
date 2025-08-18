@@ -1,0 +1,19 @@
+#) Quick Transfer:
+
+@)    Alt Btn2 Drag       -- copy secondary selection to
+                          insertion cursor
+@)    Alt Ctrl Btn2 Drag  -- copy secondary selection to
+                          insertion cursor
+@)    Alt Shift Btn2 Drag -- cut secondary selection to
+                          insertion cursor
+@)    KCancel           -- cancels quick transfer operations
+   (Region between Btn2 Press and pointer is underlined)
+ 
+
+!)
+#) Try all the above with: 
+@)      - source and destination in same widget
+@)      - source and destination in different widgets in same window
+@)      - source and destination in different windows in same application
+@)      - source and destination in different applications
+E)

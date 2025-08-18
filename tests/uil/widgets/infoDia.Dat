@@ -1,0 +1,16 @@
+
+
+#) This is an informationDialog with the following characteristics:
+	- foreground is white
+        - background is black
+	- topShadowColor is gray
+	- noResize is true
+	- minimizeButtons is true
+	- autoUnmanage is false
+	- messageString is Info Dialog
+	- cancelCallback is ON
+	- okCallback is ON
+	- helpCallback is ON
+	- All other resources are set by default
+
+E)

@@ -1,0 +1,13 @@
+
+
+#) This is a pushButton gadget with the following characteristics:   
+	- width is 150
+	- height is 50   
+	- fillOnArm is true   
+	- armColor is Green   
+	- ShowAsDefault is 5   
+	- activateCallback is ON   
+	- armCallback is ON   
+	- disarmCallback is ONAll other resources are set by default.
+
+E)

@@ -1,0 +1,24 @@
+#) A client with a scrolled list should appear. The list should have
+   twenty items visible with 'func00' and 'func01' being highlighted. Two
+   message should be printed in the term window saying that the two
+   highlighted items have been selected.
+#) Continue to have all items unselected. Items 'decor00'
+   and 'decor01' should disappear.
+C)
+#) Continue to have items 'junk01' and 'junk02' appear as list entries 5 and 6.
+   'junk01' will be selected and'junk02' will be unselected.
+C)
+#) Continue to have 'menu00' become top item visible and to have 'menu01',
+   'menu02', 'menu03', and 'menu05' be selected.
+C)
+#) Continue to have messages printed in the term window which show if items
+   are contained in the list.
+C)
+#) Continue to have the last item in the list be visible.
+C)
+#) Continue to have the first item in the list be visible.
+C)
+#) Continue to have a new item added that is over 30 characters long
+   and to move the horizontal scrollbar to the 20th pixel position.
+C)
+E)

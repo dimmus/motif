@@ -1,0 +1,37 @@
+@) The client window should have two TextField widgets and
+one Text widget.
+The first TextField has XmNresizeWidth set to False.  The second has
+it set to True.  The Text widget also has it set to True.
+#) Type "all the king's horses and all the king's men" into the first 
+TextField widget.  For each character typed that exceeds the width
+of the TextField, the text should shift to the left one character 
+to keep the newly typed character in view.
+#) Type the same string into the second TextField widget.  The behavior should
+be identical.  In particular, the text should not jump more than one
+character at a time to the left as the new text in entered on the right.
+#) Type the same string again into the third Text widget.  The behavior should
+also be identical.
+C)
+#) Resize the shell window to the right by about an inch to give
+the two text fields space
+to grow.
+#) Click MB1 after the last character in the first TextField widget.
+#) Type "couldn't put humpty".  The widget should not change size, and
+the text should scroll as it did before.
+#) Click MB1 at the end of the second TextField widget and type the same
+string there.
+@) This widget should grow to accomodate the new characters until its
+size reaches the new size of the shell window.  At that point, the text
+should scroll as more new characters are entered.
+#) Click MB1 at the end of the third Text widget.  Confirm that is
+behaves the same as the second TextField widget did.
+C)
+#) Click MB1 at the end of the string in the second TextField widget.
+#) Type osfBackspaces until the string is slightly shorter than the
+width of the first TextField widget.
+Confirm that one character at a time is
+deleted and the window shrinks by one character each time.
+#) Click MB1 at the end of the string in the Text widget and type
+the same number of osfBackspaces.
+#) Confirm that this widget behaves the same as the TextField widget did.
+E)

@@ -1,0 +1,12 @@
+  
+#) A client with a Paned Window with three pushbuttons will appear.
+      Because the shell size set is small, all of each buttons is not visible. 
+  
+C)
+
+
+#) The sashes of the Paned Window will have gotten larger. Move the pointer 
+   into the Paned Window; the top button will get focus. Now, move the pointer
+   out of the client window, and move it back into the top sash. Repeat the 
+   last step several times. The sash should not be highlighted.
+E)

@@ -1,0 +1,7 @@
+#) A Main Window will appear, containing a work area and a
+   button box. The button box should be above the work area.
+C)
+#) A message area should appear beneath the work area.
+C)
+#) The button box should have moved to beneath the work area.
+E)

@@ -1,0 +1,51 @@
+@) Try the following steps.
+#) Only Child1 is visible.
+#) Attach the TOP edge of Child2 to WIDGET. Child2 appears below Child1.
+#) Attach the RIGHT edge of Child2 to FORM. Child2 resizes to the size of
+the Form.
+#) Attach the RIGHT edge of Child2 to WIDGET. Child2 disappears.
+#) Attach the RIGHT edge of Child2 to OPPOSITE_WIDGET. Child2 reappears the
+same size as Child1.
+#) Attach the RIGHT edge of Child1 to FORM. The edge of Child2, which is
+attached to the right edge of Child1, should resize with it.
+#) Attach the RIGHT edge of Child1 to POSITION-6.  The Form should resize
+larger so that the buttons fill 60% of the form.
+C)
+#) Attach the RIGHT edge of BUTTON2 to SELF. Note that the corresponding label
+in the bottom pane shows "ATTACH_POSITION".
+#) Attach the RIGHT edge of BUTTON1 to FORM. The edges of the two buttons are
+no longer attached, so PushButton2 should NOT resize.
+#) Attach the LEFT edge of BUTTON1 to WIDGET. The form will resize very 
+small and a warning about circular attachments will appear.
+#) Attach the LEFT edge of BUTTON1 to FORM. The form resizes so the buttons
+are visible.
+#) Attach the RIGHT edge of BUTTON2 to POSITION-4. The form grows and Push
+Button1 continues to fill the form left-to-right.
+C)
+!) Error Conditions.
+#) Attach the BOTTOM of BUTTON1 to ATTACH_WIDGET.
+#) In stdout, you should see an error message.
+@) Warning: 
+   Name: form
+   Class: XmForm
+   Circular dependency in Form children.
+#) Use the two CLEAR buttons to reset both buttons.
+#) Attach the BOTTOM of BUTTON1 to POSITION-8. Child2 is not visible and
+the form will grow slightly.
+C)
+!) More error conditions.
+#) Attach LEFT edge of BUTTON2 to WIDGET. Child2 appears to the right of
+Child1.
+#) Attach RIGHT edge of BUTTON2 to WIDGET.
+#) This is an impossible case to render, so Button2 will disappear and
+the following message appears in stdout:
+@) Warning: 
+@)    Name: form
+@)    Class: XmForm
+@)    Circular dependency in Form children.
+#) Use the CLEAR buttons to reset. 
+C)
+#) Got the idea? You can experiment for awhile.
+#) Use the CLEAR keys to reset things.
+E)
+

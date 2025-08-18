@@ -1,0 +1,15 @@
+	This is a simple test of traversal behaviors.  The two boxed groups of widgets are tab groups. You can move
+   between the groups by pressing TAB or Shift-TAB. Within each group, move between the buttons by using the up and
+   down arrow keys. Use the space key to activate (depress)
+   the buttons. Try moving amongst the buttons and back and forth
+   between the tab groups. 
+C)
+	Using the up and down arrow keys, move to the button labeled
+\"arrow2\".  The button should now have the highlight around it.
+Press return, and this pushbutton will become unmanaged and the
+highlight should move to the button labelled \"arrow3\".
+Now move up to the button labelled \"arrow1\" and press return.
+The \"arrow2\" button will be managed and visible again, but the
+highlight should remain around \"arrow1\".
+	
+E)

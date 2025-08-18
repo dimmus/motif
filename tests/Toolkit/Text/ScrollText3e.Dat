@@ -1,0 +1,28 @@
+#) Clipboard and Primary Transfer:
+
+@)    Ctrl KInsert       -- copy primary selection to clipboard
+@)    KCopy              -- copy primary selection to clipboard
+@)    Shift KDelete      -- cut primary selection to clipboard
+@)    KCut               -- cut primary selection to clipboard
+@)    Shift KInsert      -- paste clipboard to insertion cursor
+@)    KPaste             -- paste clipboard to insertion cursor
+ 
+@)    Btn2 Click         -- copy primary selection to pointer
+@)    Ctrl Btn2 Click    -- copy primary selection to pointer
+@)    KPrimaryCut        -- cut primary selection to pointer
+ 
+@)    KPrimaryPaste      -- copy primary selection to cursor
+@)    Ctrl KPrimaryPaste -- copy primary selection to cursor
+@)    Alt Ctrl KInsert   -- copy primary selection to cursor
+@)    Alt KCopy          -- copy primary selection to cursor
+@)    Alt KPrimaryPaste  -- cut primary selection to cursor
+@)    Alt Shift KDelete  -- cut primary selection to cursor
+@)    Alt KCut           -- cut primary selection to cursor
+ 
+!)
+#) Try all the above with: 
+@)      - source and destination in same widget
+@)      - source and destination in different widgets in same window
+@)      - source and destination in different windows in same application
+@)      - source and destination in different applications
+E)

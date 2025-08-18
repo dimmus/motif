@@ -1,0 +1,25 @@
+#) A client with an Arrow Button pointing upwards should appear. 
+C)
+
+#) The  Arrow should have turned Red and a highlight border should appear.
+C)
+
+#) The border should be enlarged and the Arrow should point left.
+C)
+
+#) The shadow thickness should have increased. The Top Shadow should be 
+   pink and the Arrow should point to the right.
+C)
+
+#) The bottom shadow color should be green and the Arrow should point down.
+
+C)
+
+#) There are now two arrow buttons.
+#) Click on each and an activate callback message appears in the stdout
+window.
+C)
+
+#) Both arrow buttons are now insensitive.
+#) No activate callback message will appear when you click on each arrow button.
+E)

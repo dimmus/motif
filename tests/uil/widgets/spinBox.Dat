@@ -1,0 +1,19 @@
+
+
+
+#)This is a toggleButton with the following characteristics:   
+	- arrowLayout is SPLIT
+	- arrowOrientation is HORIZONTAL
+	- marginWidth is 100
+	- marginHeight is 100
+	- spacing is 75
+	- navigationType is TAB_GROUP
+	- background is goldenrod
+	- foreground is midnight blue
+	- traversalOn is True
+	- incrementValue is 1
+	- maximumValue is 100
+	- minimumValue is 100
+	- position is 0
+	- All other resources are set by default
+E)

@@ -1,0 +1,15 @@
+
+#) A client with a drawing area will appear. The shell
+   will display four labels, with some room between the right and bottom
+   edges of the labels and the window frame.
+   Each label will contain a pixmap -- a tiefighter, a woman,
+   a pointer, and a target. The foreground and background
+   colors are determined from the drawing area.
+   The PIXMAPS have been created with XmGetPixmap. 
+C)
+
+#) Iconify and normalize the client window. 
+#) If no errors have been reported then tests with XmInstallImage,
+   XmUninstallImage, and XmDestroyPixmap were successful. 
+C)
+E)

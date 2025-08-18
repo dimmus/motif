@@ -1,0 +1,22 @@
+
+
+#) This is a text widget with the following characteristics:   
+	- background is forestGreen   
+	- width is 300   
+	- borderWidth is 8   
+	- shadowThickness is 8   
+	- topCharacter is 5
+	- autoShowCursorPosition is false   
+	- editable is false
+   	- motionVerifyCallback is ON   
+	- activateCallback is ON   
+	- wordWrap is true   
+	- rows is 3   
+	- blinkRate is 0   
+	- fontList is variable_font   
+	- editMode is XmMULTI_LINE_EDIT
+        - selectionArray is XmSELECT_POSITION,
+          XmSELECT_WORD
+	- All other resources are set by default.
+E)
+

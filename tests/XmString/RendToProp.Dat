@@ -1,0 +1,16 @@
+
+@) Running RendToProp.
+
+#) This test creates an XmRenderTable. The function XmRenderTableCvtToProp()
+is then called to convert the XmRenderTable to a string representation.
+A non-null string should be printed to stdout.
+
+#) The function XmRenderTableCvtFromProp() is then called to convert
+the string representation back into an XmRenderTable.  The converted
+XmRenderTable is compared against the original XmRenderTable.
+A message will be printed to stdout indicating whether the
+function XmRenderTableCvtFromProp() passed or failed.
+
+C)
+E)
+

@@ -1,0 +1,16 @@
+
+
+#) This is a list widget with the following characteristics:
+	- height is 300
+	- width is 100
+	- background is black
+	- items are item1, item2, item3, item4, item5, item6, item7
+	- itemCount is 7
+	- visibleItemCount is 5
+	- automaticSelection is true
+	- selectionPolicy is XmEXTENDED_SELECT
+	- extendedSelectionCallback is ON
+	- defaultActionCallback is ON
+	- All other resources are set by default
+
+E)

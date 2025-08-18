@@ -1,0 +1,52 @@
+
+#) This test tests the capabilities of the selection box which layout
+   its non-standard children.
+
+#) A selection box should appear, with a menubar, drawing area with text,
+   standard control buttons, plus an additional pushbutton, toggle button,
+   arrow button and drawn button.
+
+#) The message area (drawing area with the text message) should appear
+   below the selection area.
+
+#) Verify that the buttons are all approximately the same height and width.
+   They should appear of uniform size.
+
+#) Select "Carl".  Press KReturn.  A message about Carl should appear in 
+   the middle text region.
+
+#) Select "Cascade1".  A pulldown menu should appear.  Press KRight.  
+   "Cascade2" should highlight and its pulldown menu should appear.
+C)
+
+#) Select the toggle button "No men".  The names "Thomas", "Roger" and "Carl"
+   should disappear from the list.  Now select the toggle again.  "Thomas",
+   "Roger" and "Carl" should be reinserted into the list.
+
+#) Select list item "Roger".  Select OK.  A message about Roger should appear
+   in the  middle text region.
+
+#) Select the up arrow button.  Highlight in the list should now be on "Thomas".
+   Press KReturn.  A message about Thomas should appear in the middle text
+   region.
+
+#) Select "Susan".
+
+#) Select "Select the Manager".  Highlight in the list should now be back 
+   on "Libby".
+
+#) Select "Reset Text".  The middle text region should contain a statement
+   about what the region is used for.
+
+C)
+
+#) The message area should appear above the selection area.
+C)
+
+#) The message area should appear below the selection area.
+C)
+
+#)  The message area should have moved to the top of the selection box.
+C)
+
+E)

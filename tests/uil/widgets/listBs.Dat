@@ -1,0 +1,17 @@
+
+
+#) This is a list widget with the followingcharacteristics:
+	    - width is 150
+	    - height is 200   
+	    - background is black   
+	    - items are item1, item2, item3, item4, item5   
+	    - itemCount is 5   
+	    - visibleItemCount is 5   
+	    - automaticSelection is true
+	    - selectionPolicy is XmBROWSE_SELECT
+	    - fontList is variable
+	    - listMarginWidth is 40   - listMarginHeight is 40
+	    - browseSelectionCallback is ON
+	    - defaultActionCallback is ON 
+	    - All other reources are set by default.
+E)

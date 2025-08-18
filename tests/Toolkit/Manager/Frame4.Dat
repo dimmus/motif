@@ -1,0 +1,32 @@
+#) A client with five frames should appear.
+!)
+     The top frame has a shadow type of XmSHADOW_ETCHED_IN and
+     contains an ArrowButton.
+
+     The second frame has a shadow type of XmSHADOW_ETCHED_IN and
+     contains the label \"LABEL1\".
+
+     The third frame has a shadow type of XmSHADOW_ETCHED_OUT and
+     contains a  pushbutton.
+
+     The fourth frame has a shadow type of SHADOW_IN and contains
+     a togglebutton.
+
+     The fifth frame has a shadow type of SHADOW_OUT and contains
+     the label gadget \"LABELGADGET1\". 
+C)
+#) Move the client window so that it partially obscures the xterm
+   window.  Raise the xterm window.   Raise the client window. 
+#) Iconify the client window.  Normalize the client window. 
+#) Resize the client window. 
+C)
+#) The marginHeight of Frame5 (parent of the label) has increased to 40,
+which is four times its previous size. The entire client may resize in
+order to accomodate the Frame's new height.
+C)
+#) The marginWidth of Frame5 (parent of the label) has increased to 40,
+which is four times its previous size. The client should grow wider.
+C)
+#) The shadow type of Frame5 is changed from OUT to IN. The Frame should be
+redrawn with the new shadow.
+E)

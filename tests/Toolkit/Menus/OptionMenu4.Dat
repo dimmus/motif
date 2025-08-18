@@ -1,0 +1,37 @@
+
+#) A client window containing a Form widget with nine OptionMenu
+   children will appear.  The window will be located 350 pixels down
+   from the top left corner of the display.  Click on the buttons
+   labeled 'Himalayan', 'Siamese', and 'E. Shorthair' and
+   you'll see the same (shared) menu pane.
+      Note: there should be no warning messages in the xterm window. 
+#) Move the pointer into the client window.  Traverse from button to
+   button using the down arrow key.  The focus should move through
+   the buttons in the following order:
+      Himalayan, Siamese, D. Shorthair
+      Maine Cat, Burmese, E. Shorthair,
+      Turkish Van,  Persian,
+      Russian Blue. 
+C)
+
+
+#) The client window will now contain 3 OptionMenu children.
+   The three OptionMenu children share the same PulldownMenu.  OptionMenu1
+   sets XmNmenuHistory to Button1, OptionMenu2 sets XmNmenuHistory to
+   Button3, and OptionMenu3 sets XmNmenuHistory to Button2. 
+#) Verify the defaults are set correctly. 
+C)
+
+
+#) The client window will now contain one OptionMenu child.  The
+   selection area should be initialized to A Long Item. 
+#) Verify that the OptionMenu indicator (a little rectangular button) appears
+   to the right of the A Long Item label. 
+C)
+
+
+#) The client window will now be empty.  A menu shell will
+   appear that contains one OptionMenu child. 
+#) The Button Label should read: Button Label:
+   The contents of the OptionMenu should read: new long Text.  
+E)

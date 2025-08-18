@@ -1,0 +1,38 @@
+
+
+#) A ComboBox of the type COMBO_BOX is displayed. This type of ComboBox
+   always displays its list. Verify that a List is displayed with 20 
+   visible items.
+#) The spacing between list items should be 5.
+#) The height and width of the margin between the list border and the 
+   items should be 2.
+#) Click on the second item in the List. That item should be displayed in
+   the text entry field.
+C)
+
+
+#) The cursor of the TextField widget should be at position 5.
+#) Try typing into the TextField widget. 
+#) The margin height and margin width should both be 20. (space between the
+   4 sides of the window and the text).
+#) As you keep typing, the TextField widget should grow horizontally to
+   accomodate the text.
+C)
+
+#) A new item, "ExtraItem" should have been added to the end of the List.
+#) Scroll down to the end of the List to verify that this is the
+   last item.
+#) Click MB1 on the last item.  Verify that the Text Field is updated
+   with "ExtraItem".
+  
+C)
+
+#) This panel tests the XmComboBoxUpdate function.
+#) The selected item should change to be "Item1", and this is
+   the item that should be displayed in the edit box.  "Item1" has been
+   selected using XmListSelectionItem, and XmComboBoxUpdate should
+   bring the ComboBox in sync with the new selected item.
+#) Scroll upwards in the List to verify that "Item1" is selected in the List.
+C)
+
+E)

@@ -1,0 +1,38 @@
+#) This text widget has defined a number of different translations, which are
+listed below.  Try each translation and verify that the correct action is
+performed.  The fontList for this text widget is variable. If you 
+need to add more text to the example, do so.
+!) 
+   Ctrl<Key>g                 beep
+   Ctrl<Key>i                 insert string "newstring"
+   Ctrl<Key>right bracket     forward a paragraph
+   Ctrl<Key>left bracket      back a paragraph
+   Meta<Key>u                 scroll one line up
+   Meta<Key>d                 scroll down one line
+   Ctrl<Key>f                 next page
+   Ctrl<Key>b                 previous page
+   <Key>BackSpace             kill previous character
+   Ctrl<Key>s                 kill selection
+   Ctrl<Key>k                 kill next word
+   Meta<Key>k                 kill previous word
+   Ctrl<Key>u                 unkill
+   Ctrl<Key>r                 delete previous word
+   Meta<Key>r                 delete next word.
+   Ctrl<Key>c                 cut primary selection
+ 
+C)
+
+#) Move the cursor to the beginning of the text. Type the following lines, 
+typing a space where the instructions indicate \"_\".
+!)
+       __A paragraph that starts<CR>
+       with whitespace<CR>
+        <CR>
+
+#) Move the cursor to the beginning of the text again. Type 
+Ctrl<Key>right bracket to move forward a paragraph. You should 
+be able to continue, no infinite loop should occur.
+
+C)
+
+E)

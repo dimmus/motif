@@ -1,0 +1,37 @@
+
+#) A client with three PushButtons labeled PushButton1, PushButton2
+   and PushButton3 should appear in the Form. 
+#) Click MB1 on any one of the three PushButtons. 
+#) The PushButton clicked on should disappear. 
+!) 
+C)
+
+#) Click MB1 on either of the two remaining PushButtons. 
+#) The PushButton clicked on should disappear. 
+!) 
+C)
+
+#) Click MB1 on the one remaining PushButton. 
+#) The remaining PushButton should disappear. 
+!) 
+C)
+#) The form now contains one pushbutton with marginWidth and marginHeight
+   set to 25.
+C)
+#) The form's verticalSpacing and horizontalSpacing has been updated to
+   50, however it should have had no effect on the form.
+C)
+#) The form's marginHeight and marginWidth have been updated to 70.  This
+   should be reflected in the form.
+C)
+
+#) The pushbutton's left and right offset have been set to 20.
+   This should be reflected in the form.
+C)
+
+#) The form's horizontal and vertical spacing have been set to 50.  This
+   should have no effect on the form.
+E)
+
+
+

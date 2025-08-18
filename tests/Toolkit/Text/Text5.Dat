@@ -1,0 +1,60 @@
+#) Move the pointer into the Text window.  It should be sized
+   just large enough to fix the text in it.  Type some new text
+   including a few newlines.  The window should grow to
+   accommodate the text horizontally and vertically. 
+#) Now backspace from the end of the text until the remaining text
+   is just one or two words on the first line.  The window should
+   shrink back to be only one row high.
+C)
+@) A single line text widget with the string 'Sample Text' will appear in
+   the test window. The text is red on a white background. 
+   (If the text widget is not visible, resize the window larger to
+   expose it.)
+#) Move the pointer into the Text window and press the return key.
+   It should have no effect. 
+C)
+#) Move the pointer into the text widget and press ANY key. No matter
+   what key was pressed, an 'A' will appear. 
+#) Press another key. This time a 'B' will appear in the text widget. 
+#) Repeat this cycle and you will print out the entire alphabet. 
+C)
+#) Move the pointer into the test window, and again press return.
+   The text will change to the string \"Welcome to OSF/Motif\". 
+C)
+#) Move the pointer into the text widget and press ANY key. No matter
+   what key was pressed, an 'A' followed by a very long series of
+   digits will appear inserted in the original string before the
+   characters \"Motif\".
+#) Press another key. This time a 'B' followed by a very long series
+   of digits will appear in the text widget.
+#) Repeat this cycle ten times and it will print out more letters
+of the alphabet each
+followed by a long digit series.
+(This may be slow to watch - after typing the keys, use osfEndData
+to jump to the end of the text and check that it has updated correctly.)
+
+C)
+
+
+@) The text widget has been changed to have a variable font. 
+The number of columns for the Text widget has been set to 20.
+A dialog shell should appear with a scale for changing the
+width of the text widget. Also two pushbuttons \"Set String\"
+and \"Get Values\".  
+
+#) Select the pushbutton labelled \"Get Values\". The number of
+columns and the width of the text widget should both be printed
+to the terminal window.
+
+#) Decrease the width until just the letter\"I\" is displayed.
+Select the button \"Set String\". This will change the character \"I\"
+to the character \"W\". Increase the width of the text widget until
+the entire character \"W\" can be displayed.
+
+#) Try typing other characters into the text widget and changing
+the width of the text widget. Verify that no errors occur. 
+Change the width of the text widget to zero. Verify that no error occurs.
+
+C)
+
+E)

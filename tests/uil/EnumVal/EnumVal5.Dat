@@ -1,0 +1,31 @@
+
+
+#) Enumerated Values Test 5:
+!)	 The following is a Bulletin Board set up to test correct
+	 usage of enumeration values. (Note: this explanation text
+	 itself tests the following:
+	 - XmNeditMode = XmMULTI_LINE_EDIT
+#)Bulletin Board characteristics:
+!)	 - XmNborderWidth = 1
+	 - XmNbackground =  sky_blue
+	 - XmNmarginWidth =  20
+	 - XmNmarginHeight =  20
+	 - XmNdefaultPosition =  false
+	 - XmNnoResize =  true
+	 - XmNResizePolicy = XmRESIZE_GROW
+	 - XmNshadowType = XmSHADOW_ETCHED_OUT
+	 - XmNshadowThickness = 10
+#) MessageBox characteristics:
+!)	 - XmNx = 30
+	 - XmNy = 30
+	 - XmNmessageString = Don't Panic!! It just SAYS error.
+	 - XmNdialogType = XmDIALOG_ERROR
+	 - XmNdefaultButtonType = XmDIALOG_HELP_BUTTON
+	 - XmNshadowType = XmSHADOW_ETCHED_IN
+	 - XmNshadowThickness = 8
+
+C)
+
+E)
+
+

@@ -1,0 +1,16 @@
+
+
+ #) This is a scrollbar with the following characteristics:   
+	- width is 75, height is 250   
+	- borderWidth is 15   
+	- background is green   
+	- shadowThickness is 3   
+	- value is 50   
+	- sliderSize is 20   
+	- increment is 5   
+	- incrementCallback is ON   
+	- decrementCallback is ON   
+	- valueChangedCallback is ON
+	- All other resources are set by default.
+
+E)

@@ -1,0 +1,17 @@
+
+#) A client with MessageDialog will appear.  The MessageDialog will
+   display the message string
+   \"MBox is GrowOnly, Ok=Destroy, Help=GetValues\".  An X toolkit
+   warning message will appear in the xterm window. 
+#) Click MB1 on \"Cancel\".  The MessageDialog will grow and the
+   \"help\" button's label will change to \"longHelpLabelString\". 
+#) Click MB1 on \"Cancel\" again. The \"help\" button's label will
+   change to \"h\", but the Message Dialog will not shrink.  Three
+   X toolkit warning messages will be printed in the xterm window. 
+#) Click MB1 on \"h\".  The message string will change to
+   \"shortMessage\".  The MessageDialog will not change size. 
+#) Click MB1 on \"OK\".  All of the children of the MessageDialog
+   except the \"h\" (help) button will be destroyed.  The
+   MessageDialog will not shrink.  An X toolkit warning will be
+   printed in the xterm window. 
+E)

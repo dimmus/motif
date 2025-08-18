@@ -1,0 +1,6 @@
+#) Set the labelString (titleString) of Child1 (blue) to  "any label string".
+#) Add several characters to the labelString name, one character at a time.
+After each character is added, the labelString should change.
+#) As the string gets longer, it should continue to fill the space above the
+scale, moving rightward. When longer than the scale itself, the scale should resize.
+E)

@@ -1,0 +1,21 @@
+#) Keyboard Selection -- Add Mode & Normal Mode:
+
+@)    KSelect       -- clears the current selection and sets the
+                    insertion point
+@)    Ctrl Space    -- same as KSelect
+@)    Ctrl KSelect  -- no effect
+@)    Ctrl Shift KSelect   -- no effect
+@)    Shift KSelect -- selects the text between the last insertion
+                    location and the cursor, takes ownership of
+		    primary selection
+@)    Ctrl Shift Space     -- same as Shift KSelect
+@)    Shift <navigation operation> -- moves the cursor as indicated,
+                    selects the text between the last insertion point
+                    and the cursor, takes ownership of primary selection
+                    Includes Shift PageUp/PageDown
+
+@)    KSelectAll    -- selects entire text and takes ownership of
+                    primary selection
+
+@)    KDeselectAll  -- deselects everything in that widget
+E)

@@ -1,0 +1,58 @@
+
+@)  A Scrolled XmText widget should be displayed with four lines
+    of text, three ToggleButtons with the ToggleButton labelled \"6x12\"
+    selected, and a PushButton labelled \"Reset String\". 
+
+#)  Verify that the font displayed in the Scrolled Text widget is
+    \"6x12\".
+
+#)  Click MB1 at the beginning of the text. Click KTab.
+    The text on the first line should indent by eight characters.
+    The indentation can be verified by comparing the new location
+    of the first character on the line with the characters on the second
+    line of text.  The first character on the first line should be aligned 
+    to the right of the first occurance of the number "8" on the
+    the second line of text.
+
+#)  Click KTab again. Verify that the text indents by another 8 characters.  
+    The first character on the first line of text should align to the
+    right of the second occurance of the number "8" on the second line
+    of text.
+
+#)  Click MB1 at the beginning of the third line of text.  Click KRight
+    four times.  Click KTab.  The first character after the tab 
+    should align to the right of the first occurance of the number "8"
+    on the fourth line of text.
+    
+#)  Click KTab again. Verify that the text indents by another 8 characters.
+    The first character after the tab should align to the right of 
+    the second occurance of the number "8" on the fourth line of text.
+
+#)  Click MB1 on the Pushbutton labelled \"Reset String\". The text should
+    be redisplayed in the Scrolled Text widget without any tabs.
+
+#)  Click MB1 on the ToggleButton labelled \"fixed\".  The text in the
+    Scrolled Text widget should change to a \"fixed\" font. 
+    Repeat steps 2 through 6.
+
+#)  Click MB1 on the ToggleButton labelled \"9x15\".  The text in the
+    Scrolled Text widget should change to a \"9x15\" font.
+    Repeat steps 2 through 6. 
+
+C)
+
+#)  Click MB1 on the Pushbutton labelled \"Reset String\" so no more
+    tabs are displayed in the Scrolled Text widget.
+
+#)  Click MB1 anywhere in the Scrolled Text widget.  Click KTabs mutliple
+    times.  Slide the horizontal scrollbar to the right and verify that
+    there are no garbage characters displayed within the text. 
+
+#)  Click MB1 on \"Reset String\". Change the font to \"fixed\".  
+    Repeat steps 1 and 2.
+
+#)  Click MB1 on \"Reset String\". Change the font to \"6x12\". 
+    Repeat steps 1 and 2.
+
+C)
+E)

@@ -1,0 +1,21 @@
+
+
+#) This is a FileSelectionBox widget with the following characteristics:   
+	- help Callback is on   
+	- selectionLabelString is  Select a File
+	- cancelLabelString is Quit   
+	- helpLabelString is Info   
+	- cancel Callback is ON   
+	- filterCallback is ON
+	- listUpdated is false
+	- Automatically Created Widget Resources:
+	    - All auto widgets have 3 pixel shadow
+	    - Text widgets are green in backgroound and red in foreground.
+	    - List widgets are wheat in background
+	    - Most labels (unless specified above) have Auto prepended to 
+	      labelString
+	    - all scrollbars are yellow in background
+	    - Separator is double-dashed line
+	- All other resources are set by default
+
+E)

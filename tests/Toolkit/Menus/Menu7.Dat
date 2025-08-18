@@ -1,0 +1,27 @@
+#) A main window will appear with two pulldown menus in the menu bar, Menu1
+    and Menu2.
+#) Menu1 has three entries, PushButton1, PushButton2, and PushButton3.
+#) Menu2 has four entries, OtherButton1, OtherButton2, OtherButton3, and
+	OtherButton4.
+C)
+#) Menu1's entries have been rearranged so that PushButton1 comes last.
+#) Menu2's entries have been reordered so that they are reversed now:
+   OtherButton4 comes first, followed by OtherButton3, OtherButton2, and
+   OtherButton1.
+C)
+
+#) Some illegal values are being set for XmNpositionIndex for some
+  of the buttons.  No change should have been made to Menu1 or Menu2.
+C)
+
+#) A new child was added to the 2nd index position of Menu1 and two new
+children have been added to the 0th and last position of Menu2.
+C)
+E)
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+
+#) This is a radioBox with the following characteristics:
+   	- The radioBox has five children, 4 toggleButtonGadgets and 
+	  1 ToggleButton   
+	- ValueChangedCallbacks are ON for all toggleButtons.
+	- height and width are 200   
+	- borderWidth is 4   
+	- background is cadetblue 
+	- marginHeight, marginWidth are 10   
+	- numColumns are 2   
+	- packing is XmPACK_COLUMN 
+   	- spacing is 10   
+	- entryAlignment is XmALIGNMENT_CENTER   
+	- entryCallback is ON" 
+	- The Toggle buttons valueChanged callbacks will not come out. 
+	  They   are vectored to entryCallback." 
+	- All other resources are set by default."
+
+E)

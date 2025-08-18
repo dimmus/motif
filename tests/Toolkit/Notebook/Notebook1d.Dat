@@ -1,0 +1,15 @@
+
+#) This test should have been run with the flag "-u 4".
+#) A Notebook will appear on your screen. 
+   There will also be a control panel with which you can do a GetValues on
+   those resources of the Notebook that are of type Dimension. (Since it
+   may be hard to visually gauge what values these resources have been
+   set to).
+#) The width and height of the Notebook have been set to 200. 
+#) The Notebook should have vertical orientation.
+#) The placement of the back pages should be bottom left.
+#) The Notebook binding should be the GNU pixmap.
+
+C)
+
+E)

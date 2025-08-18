@@ -1,4 +1,8 @@
 /* $XConsortium: README /main/5 1996/07/15 14:20:13 drk $ */
+
+0. Packages to be installed before tests:
+sudo apt-get install -y libmotif-dev libxt-dev libx11-dev libice-dev libsm-dev
+
 1.  Test Suite Organization and Procedures
 
 This readme presents an overview of the organization of the

@@ -1,0 +1,23 @@
+@) Two text widgets were created using the helvetica1 font.
+#) Click on the helvetica2 font to change both widgets to the larger font.
+Both widgets should grow in width but their columns should remain
+unchanged.  The width and column data is displayed in the stdout window.
+#) Click on the helvetica1 font to change the widgets back to the
+smaller font.  Both widgets should shrink in width and keep the
+same column count.
+C)
+@) A resizable Text widget is displayed. 
+@) The following resources have been set:
+!)     XmNrows = 3
+!)     XmNcolumns = 20
+
+@) The text displayed in the widget should consist of, one row of numbers, 
+one row of the letter "m" and one row of the number "0". 
+
+#) Select the first fontname in the radiobox.
+#) Verify that there are at least twenty characters displayed in the
+text widget. This can be done by clicking MB1 at the beginning of
+a row of text and then clicking KRight counting each of characters
+until the end of the row.
+#) Repeat the above test for each of the fonts in the radiobox.
+E)

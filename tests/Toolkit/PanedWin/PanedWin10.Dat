@@ -1,0 +1,54 @@
+
+
+#) A client with a Paned Window with three pushbuttons will appear.
+   Each pane should be the same size. 
+C)
+
+#) By default all buttons have XmNallowResize set to False.
+
+#) An attempt was made to increase the size of each button, but no
+   visible change should have occurred.
+C)
+
+#) The first button had XmNallowResize set True.  An attempt was made to
+   increase the size of each button.  Each button should be wider, but
+   only the first button will be higher.
+C)
+
+#) The second button had XmNallowResize set True.  An attempt was made to
+   increase the size of each button.  Each button should be wider, but
+   only the first and second buttons will be higher.
+C)
+
+#) The third button had XmNallowResize set True.  An attempt was made to
+   increase the size of each button.  Each button should be both wider
+   and higher.
+C)
+
+#) The first button had XmNallowResize set False.  An attempt was made to
+   reduce the size of each button.  Only the second and third buttons
+   should be shorter.
+C)
+
+#) The second button had XmNallowResize set False.  An attempt was made
+   to reduce the size of each button.  Only the third button
+   should be shorter.
+C)
+
+#) The third button had XmNallowResize set False.  An attempt was made to
+   reduce the size of each button, but no visible change should have
+   occurred.
+C)
+
+#) An attempt was made to move the first button.  No visible
+   change should have occurred.
+C)
+
+#) An attempt was made to move the second button.  No visible
+   change should have occurred.
+C)
+
+#) An attempt was made to move the third button.  No visible
+   change should have occurred.
+
+E)

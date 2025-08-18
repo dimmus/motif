@@ -1,0 +1,12 @@
+
+@) Running XmStringConcat.
+
+#) This test calls XmStringConcatAndFree() with every combination
+   of two XmStringComponentTypes together.
+   Messages will be printed to the terminal indicating the pair 
+   of XmStringComponentTypes being passed to XmStringConcatAndFree()
+   and whether the return of a new XmString was successful.
+   Check that each combination passes. 
+
+C)
+E)

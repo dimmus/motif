@@ -1,0 +1,49 @@
+	 The button contains an arrow pointing up.   
+         Move the pointer into the arrow button's window and use   
+         mouse button 1 to click on the arrow button. It should appear   
+         to be pressed in, then popped out.  
+         Use the MINIMIZE button on the window frame to iconify the window.   
+         Then normalize the window.  
+C)
+	 Arrow is now pointing down. Pull one of the resize handles on  
+         the bottom of the window way down. The arrow should grow. Resize  
+         the window to the left. The arrow should grow again.  
+         Resize the right edge of the window toward the left and the arrow  
+         should grow smaller. Move the window using the mouse.  
+C)
+	 Arrow is now pointing left. Size the window as small as possible,  
+         then resize back to 300 by 300.  
+C)
+	 Arrow is now pointing right. Resize the window as small as possible  
+         horizontally.  
+         Then resize the window to 200 by 200.  
+C)
+	 Arrow is now pointing up.  
+C)
+	 An error message appears in the xterm window.  
+C)
+	 Arrow is now pointing down.  
+C)
+	 An error message appears in the xterm window.  
+C)
+	 Click on the arrow button.  
+         ACTIVATED should appear in the xterm window.  
+C)
+	 Click mouse button one down on arrow button and hold.  
+         ARMED should appear in xterm window.  
+         Then release mouse button one.  
+         ACTIVATED should appear in the xterm window.  
+C)
+	 Press mouse button one down on the arrow button and hold.  
+         ARMED should appear in the xterm window.  
+         Release mouse button one.  
+         ACTIVATED and DISARMED should appear in xterm window.  
+         Press mouse button one down on the arrow button and hold.  
+         ARMED should appear in the xterm window.  
+         Move sprite out of window and release mouse button 1.  
+         DISARMED should appear in xterm window.  
+C)
+	 Press Exit to end the test.  
+         Goodbye.
+E)
+

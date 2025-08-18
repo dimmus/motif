@@ -1,0 +1,11 @@
+
+#) A client with question dialog will appear. The question
+   dialog will have three pushbuttons labeled 'B&Whour',
+   'defaultIcon', and 'tinaIcon'. 
+#) Click MB1 on 'B&Whour' button. The SymbolPixmap will change
+   to a black and white hour-glass pixmap. 
+#) Click MB1 on 'defaultIcon' button. The SymbolPixmap will change to
+   a smaller hour-glass pixmap. 
+#) Click MB1 on 'tinaIcon' button. The SymbolPixmap will change
+   to a pixmap of Tina Turner. 
+E)

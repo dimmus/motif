@@ -1,0 +1,16 @@
+
+
+
+#) This is a Frame with the following characteristics:
+	- width is 250
+	- height is 100
+	- borderWidth is 2
+	- background is gold 
+	- shadowThickness is 20
+	- topShadowColor is brown
+	- bottomShadowColor is firebrick
+	- marginWidth is 5
+	- marginHeight is 5
+	- All other resources are set by default.
+
+E)

@@ -1,0 +1,14 @@
+
+#) A client window will appear with a radio box widget with two
+   children, \"toggle1\" and \"toggle2\". 
+#) Move the pointer into the client window and Press MB3.  A popup
+   menu will appear.  The cursor will change to a picture of a man. 
+#) Drag the cursor down through the popup menu.  Several nested
+   popup menus will appear. 
+#) Release MB3.  The popup menu will disappear.  A message indicating
+   which pushbutton was activated will be printed to the xterm
+   window. 
+#) Follow same instructions as above, but now use KMenu to post the Menu
+   and use the arrow keys and return to traverse and select.
+C)
+E)

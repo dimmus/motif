@@ -1,0 +1,84 @@
+
+
+#) A client window will appear with a menu bar containing three
+   cascade button gadgets, labeled \"Menu1\", \"Menu2\" and \"Menu3\".
+   Each of these gadgets will have one character in its label
+   underlined.
+
+#) Move the pointer into the client window.
+
+#) Press and hold MAlt, then press the '1' key.  The
+   pulldown menu \"Menu1\" will appear.  The button gadget
+   \"pushbutton1\" will appear raised.
+
+#) Use the KDown and KUp to move between the three
+   button gadgets in \"Menu1\".
+
+#) Press the 't' key.  The pulldown menu will disappear.
+
+#) Click MB1 on \"Menu1\".  The same pulldown menu will appear,
+   but there will be a filled square to the left of \"toggle1\".
+
+#) Press the 't' key.  The pulldown menu will disappear.
+
+C)
+
+
+#) Move the pointer into the client window.
+
+#) Press and hold MAlt, then press the '1' key.  \"Menu1
+   will appear with NO filled box to the left of \"toggle1\".
+
+#) Press the 'c' key.  \"Menu1A\" will appear.
+
+#) Press the return key.  The pulldown menus will disappear.
+
+#) Press and hold KAlt, then press the '1' key.  \"Menu1
+   will appear.
+
+#) Press the 'c' key.  \"Menu1A\" will appear.
+
+#) Press the 'a' key.  The pulldown menus will disappear.
+
+C)
+
+
+#) Move the pointer into the client window.
+
+#) Click MB1 on \"Menu1\".  The pulldown menu \"Menu1\" will appear
+
+#) Use the KRight and KLeft to move between the menus
+   \"Menu1\", \"Menu2\" and \"Menu3\".
+
+#) Click MB1 on \"Menu2\".  The pulldown menu \"Menu2\" will appear.
+
+#) Press the 'c' key.  The pulldown menu \"Menu2A\" will appear.
+
+#) Press the 'b' key.  Both pulldown menus will disappear.
+
+C)
+
+
+#) Move the pointer into the client window.
+
+#) Press and hold MAlt, then press the '2' key.  The menu
+   \"Menu2\" will appear.
+
+#) Press KRight three times.  The menus \"Menu3\",
+   \"Menu3A\" and \"Menu3AA\" will appear.
+
+#) Press KLeft.  The menu \"Menu3AA\" will disappear.
+
+#) Press KDown twice.  The button gadget \"cascade3C
+   will appear raised.
+
+#) Press KRight.  The menu \"Menu3CA\" will appear.
+
+#) Press the return key.  The menu \"Menu3CAA\" will appear.
+
+#) Press KCancel.  The menu \"Menu3CAA\" will disappear.
+
+#) Press KCancel three more times.  All of the menus will
+   disappear.
+
+E)

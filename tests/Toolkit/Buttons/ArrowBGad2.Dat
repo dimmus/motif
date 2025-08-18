@@ -1,0 +1,7 @@
+
+#) A client with a drawing area should appear. The shell
+   will then grow to contain a 4x4 matrix of ArrowButtonGadgets. 
+#) Move the pointer over each ArrowButtonGadget. They should
+   each display a highlight border in the light shadow color. 
+#) Iconify the client window. Normalize the client window. 
+E)

@@ -1,0 +1,89 @@
+Mode is  compare
+backing up RUN_failures file
+backing up output file
+Beginning test  BBoard1
+Error - Test  BBoard1 -xrm *BulletinBoard3.shadowThickness:10  does not exist.
+Beginning test  BBoard3
+Error - Test  BBoard3  does not exist.
+Beginning test  BBoard5
+Output redirected to  BBoard5a_1.prt
+Error - Test  BBoard5 -u 0,10 -I BBoard5a.Dat -S BBoard5a.Scr -O BBoard5a_1.prt -V BBoard5a_1.vis -xrm *board.resizePolicy:XmRESIZE_ANY  does not exist.
+Beginning test  BBoard5
+Output redirected to  BBoard5a_2.prt
+Error - Test  BBoard5 -u 10,5 -I BBoard5a.Dat -S BBoard5a.Scr -O BBoard5a_2.prt -V BBoard5a_2.vis -xrm *board.resizePolicy:XmRESIZE_NONE -xrm *board.width:400 -xrm *board.height:400  does not exist.
+Beginning test  BBoard5
+Output redirected to  BBoard5a_3.prt
+Error - Test  BBoard5 -u 20,20 -I BBoard5a.Dat -S BBoard5a.Scr -O BBoard5a_3.prt -V BBoard5a_3.vis -xrm *board.resizePolicy:XmRESIZE_NONE  does not exist.
+Beginning test  BBoard5
+Output redirected to  BBoard5b.prt
+Error - Test  BBoard5 -u 0,0 -I BBoard5b.Dat -S BBoard5b.Scr -O BBoard5b.prt -V BBoard5b.vis  does not exist.
+Beginning test  BBoard6
+Output redirected to  BBoard5b.prt
+Error - Test  BBoard6  does not exist.
+Beginning test  BBoard7
+Output redirected to  BBoard5b.prt
+Error - Test  BBoard7  does not exist.
+Beginning test  BBoard8
+Output redirected to  BBoard5b.prt
+Error - Test  BBoard8  does not exist.
+Beginning test  DrawArea2
+Output redirected to  BBoard5b.prt
+Error - Test  DrawArea2  does not exist.
+Beginning test  DrawArea2
+Output redirected to  DrawArea2a.prt
+Error - Test  DrawArea2 -I DrawArea2a.Dat -O DrawArea2a.prt -V DrawArea2a.vis -xrm *DrawArea2.layoutDirection:RIGHT_TO_LEFT_TOP_TO_BOTTOM  does not exist.
+Beginning test  Frame1
+Output redirected to  DrawArea2a.prt
+Error - Test  Frame1  does not exist.
+Beginning test  Frame2
+Output redirected to  DrawArea2a.prt
+Error - Test  Frame2  does not exist.
+Beginning test  Frame3
+Output redirected to  DrawArea2a.prt
+Error - Test  Frame3  does not exist.
+Beginning test  Frame4
+Output redirected to  DrawArea2a.prt
+Error - Test  Frame4  does not exist.
+Beginning test  RowCol3
+Output redirected to  DrawArea2a.prt
+Error - Test  RowCol3  does not exist.
+Beginning test  RowCol5
+Output redirected to  DrawArea2a.prt
+Error - Test  RowCol5  does not exist.
+Beginning test  Baseline1
+Output redirected to  DrawArea2a.prt
+Error - Test  Baseline1  does not exist.
+Beginning test  Baseline1
+Output redirected to  Baseline1a.prt
+Error - Test  Baseline1 -I Baseline1a.Dat -S Baseline1a.Scr -O Baseline1a.prt -V Baseline1a.vis -xrm *Baseline1.layoutDirection:RIGHT_TO_LEFT_TOP_TO_BOTTOM  does not exist.
+Beginning test  Baseline2
+Output redirected to  Baseline1a.prt
+Error - Test  Baseline2  does not exist.
+Beginning test  Visual1
+Output redirected to  Baseline1a.prt
+Error - Test  Visual1  does not exist.
+ls: No match.
+There are .prt files missing in  /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/Toolkit/Manager
+No BBoard1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard5a_1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard5a_2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard5a_3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard5b.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard6.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard7.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No BBoard8.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Baseline1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Baseline1a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Baseline2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No DrawArea2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No DrawArea2a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Frame1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Frame2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Frame3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No Frame4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No RowCol1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No RowCol3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+No RowCol5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Manager
+ls: No match.
+run_dir: Command not found.

@@ -1,0 +1,18 @@
+
+
+
+#) This is a scrolledWindow with thefollowing characteristics:
+       - a list is placed in the window with 10 elements
+       - borderWidth is 4   
+       - width is 150   
+       - height is 150   
+       - background is white   
+       - foreground is black
+       - scrollBarPlacement is XmBOTTOM_LEFT   
+       - scrollBarDisplayPolicy is XMSTATIC
+       - fontList is 8x13bold
+       - scrollingPolicy is XmAUTOMATIC   
+       - scrolledWindowMarginWidth and scrolledWindowHeight are 5
+       - All other resources are set by default.
+E)
+

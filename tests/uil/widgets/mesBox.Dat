@@ -1,0 +1,28 @@
+
+
+
+
+
+#) This is a Message Box with the following characteristics:   
+	- borderWidth is 4   
+	- background color is forest green
+	- foreground color is white
+	- shadowThickness is 5 
+	- width and height are 400 
+	- messageAlignment is XmALIGNMENT_END
+	- okCallback is ON 
+	- helpCallback is ON   
+	- cancelCallback is ON   
+	- noResize is true   
+	- autoUnmanage is false 
+	- messageString is The Message Box 
+	 Automatically Created Widget Resources: 
+	    - the OK button is unmanaged 
+	    - the message label is overidden with 
+	    - Overrride(The MessageBox) 
+	    - the symbol label's labelPixmap 
+	      is the pallete icon, also has 
+	      margin width and height of 75 
+	 All other resources are set by default
+
+E)

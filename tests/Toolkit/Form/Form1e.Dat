@@ -1,0 +1,8 @@
+#) Attach Child2 (yellow)'s TOP to WIDGET.
+#) Attach Child2's RIGHT to POSITION 5.
+#) Change Child2's height to 100.
+#) Attach Child2's LEFT to NONE.
+#) Change Child1 (blue)'s width to 300.
+#) Form should resize to "shrink-wrap" around its children.
+#) Attach Child2's BOTTOM to FORM. There should be no change.
+E)

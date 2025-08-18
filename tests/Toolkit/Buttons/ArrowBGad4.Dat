@@ -1,0 +1,10 @@
+#) A client with a drawing area will appear. The shell
+   should contain a 4x4 matrix of ArrowButtonGadgets.
+C)
+
+#) The bottom right arrow should start growing and moving
+   down to the right. 
+#) Move the cursor into the bottom right arrow. The arrow
+   highlight border should display. 
+#) Iconify and Normalize the client window. 
+E)

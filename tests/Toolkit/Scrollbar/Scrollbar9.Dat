@@ -1,0 +1,40 @@
+
+#) A client with a vertical scrollbar contained in a frame will
+   appear. 
+#) A X Toolkit Warning will appear in the term window. This will be the
+   result of the fact that the specified scrollbar value is greater
+   than the maximum scrollbar value minus the scrollbar slider size. 
+#) All new values will be printed in the term window. 
+C)
+
+#) A X Toolkit Warning will appear in the term window. This will be the
+   result of the fact that the specified scrollbar value is greater than
+   the maximum scrollbar value minus the scrollbar slider size. 
+#) All new values will be printed in the term window and will be reflected
+   in the displayed scrollbar. 
+C)
+
+#) A X Toolkit Warning will appear in the term window. This will be the
+   result of the fact that the specified scrollbar value is greater
+   than the maximum scrollbar value minus the scrollbar slider size. 
+#) All new values will be printed in the term window and will be reflected
+   in the displayed scrollbar. 
+C)
+
+#) There should not be any new X Toolkit Warnings in the term window. 
+#) All new values will be printed in the term window and will be reflected
+   in the displayed scrollbar. 
+C)
+
+#) A X Toolkit Warning will appear in the term window. This will be the
+   result of fact that the specified scrollbar value is less than
+   the minimum scrollbar value. 
+#) All new values will be printed in the term window and will be reflected
+   in the displayed scrollbar. 
+C)
+
+#) There should not be any new X Toolkit Warnings in the term window. 
+#) All new values will be printed in the term window and will be reflected
+   in the displayed scrollbar. 
+C)
+E)

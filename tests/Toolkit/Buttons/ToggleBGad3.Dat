@@ -1,0 +1,21 @@
+
+#) A client with a radio box with 6 toggle buttons should appear. 
+#) Click MB1 in all the toggle buttons. You should not be able to
+   make more than one button appear ON at any time. ToggleG2 will
+   not fill on select.  Indicator for ToggleButtonG3 is not
+   visible when not selected. 
+C)
+
+#) Click MB1 in all toggle buttons. You can now turn on more than one
+   toggle button at a time. ToggleButtonG2 will not fill on select. 
+C)
+
+#) Toggle buttons 1 and 2 have changed their indicators from the
+   diamond shape to a square shape. 
+C)
+	
+#) Two radio boxes will appear.  One should have colors of black and orange
+   and the other magenta and blue.  The diamond indicators should be their
+   appropriate colors.  For example, the black and orange radio box should 
+   NOT have magenta colored indicators.
+E)

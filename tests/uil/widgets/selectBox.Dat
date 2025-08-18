@@ -1,0 +1,16 @@
+
+
+#) This is a selectionBox with the following characteristics:   
+	- borderWidth is 4   
+	- background Color is cyan   
+	- noResize is true   
+	- selectionLabelString is Your Selection Please:   
+	- textString is item3   
+	- listItems are item1 ... item5 
+   	- noMatch Callback is ON   
+	- applyCallback is ON   
+	- okCallback is ON   
+	- cancelCallback is ON   
+	- helpCallback is ON
+	- All other resources are set by default.;
+E)

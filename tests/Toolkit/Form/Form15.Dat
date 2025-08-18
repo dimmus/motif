@@ -1,0 +1,9 @@
+
+#) Two windows should appear.  One containing two push buttons and another
+  with a scale and control pushbuttons.  Set the scale in the control box 
+  to the desired width and use the pushbuttons to apply that width to the
+  client's buttons.  Toggle XmNallowShellResize with the Shell Resize 
+  toggle button. It is True by default.
+!) 
+E)
+

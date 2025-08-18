@@ -1,0 +1,16 @@
+
+#) A client with a form should appear. The form should
+   contain one pushbutton labeled 'pushB'. 
+#) Press MB1 on the pushbutton. A callback tries to set
+   the fraction base to zero and an X Toolkit Warning is displayed in
+   the term window. 
+C)
+
+#) Press MB1 on the pushbutton. A callback will set the form width
+   to 200 and height to 300. The form should change to
+   to these sizes. 
+#) Press MB1 on the pushbutton. A callback tries to set the form
+   width to 0 and height to 0. This signals the form
+   to resize itself to contain its children. The form will resize
+   back to its original size in panel 1. 
+E)

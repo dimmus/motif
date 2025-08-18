@@ -1,0 +1,39 @@
+
+#) A client with a form should appear. The form should
+   contain one PushButton labeled push1. 
+#) Resize the client in width and height. You should
+   see a second PushButton attached to the right, left, and bottom
+   of the form and set 10 pixels from push1 border. 
+#) Press MB1 on the pushButton1. A callback will set
+   PushButton2's topAttachment to XmATTACH_NONE, and set the top Widget
+   constraint to NULL. The top of PushButton2 moves up and
+   under PushButton1. 
+C)
+
+#) Resize the client window in width and height. You should
+   see PushButton2 attached to the bottom, right, and left of the form. 
+#) Press MB1 on PushButton1. You should see PushButton2 attached
+   to all edges of the form with the top edge obscured by PushButton1. 
+#) Resize the client in width and height. All of PushButton2's
+   edges should remain attached. 
+C)
+
+#) Press MB1 on PushButton1. This sets the top widget
+   attachment for PushButton2 to NULL. 
+#) Press MB1 on PushButton1. This attaches the top of PushButton2 back onto
+   the bottom of PushButton1 with an offset of 10. 
+#) Resize the client window in width and height. All of PushButton2's
+   edges should remain attached. 
+C)
+
+#) Press MB1 on PushButton1. This sets the shell to non-resizable
+   and sets the size of PushButton2. The form should remain the
+   same size. 
+#) Press MB1 on PushButton1. This attaches the left and right
+   edges of PushButton2 to the opposite edges of PushButton1.
+   There should be no visible change. 
+#) Resize the client window in width and height. All of PushButton2's
+   edges should remain attached. 
+#) Press MB1 on PushButton1. This creates a very small
+   form dialog centered in the original form. 
+E)

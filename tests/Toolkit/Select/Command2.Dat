@@ -1,0 +1,27 @@
+
+#) A client window will appear containing a command widget. 
+#) Move the pointer into the client window. 
+#) Press the return key.  Three X Toolkit warnings will be
+   printed into the xterm window.  These warnings refer to
+   command widget resources which were set incorrectly. 
+#) Type a command into the command area and press the return
+   key.  An X Toolkit warning will be printed into the xterm
+   window.  This warning is caused by an attempt to fetch a
+   nonexistent child of the command widget. 
+C)
+
+#) Move the pointer into the client window. 
+#) Type a command into the command area and press the return key.
+   Two X Toolkit warnings will be printed into the xterm window.
+   These warnings are caused by attempts to replace the command
+   string with bad strings. 
+#) Type a command into the command area and press the return key.
+   The history list will move up two lines, but no error message
+   will be displayed below the history list.  This behavior is
+   caused by attempts to display bad error strings.
+   During one of the last two actions, scroll bars
+   will have appeared around the list. 
+#) Type a character into the command area.  An X Toolkit warning
+   will be printed into the xterm window.  This warning is caused
+   by an attempt to append a bad string to the command string. 
+E)

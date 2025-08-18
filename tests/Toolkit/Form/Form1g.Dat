@@ -1,0 +1,30 @@
+#) Attach Child2 (yellow)'s RIGHT to FORM.
+#) Attach Child2's LEFT to NONE.
+#) Attach Child1 (blue)'s RIGHT to WIDGET.
+#) Change Child2's label to "Maximize Life Expectancy". The form should resize
+so that both buttons are visible and Child2 is widened to show its whole
+label.
+#) Clear both Child1 and Child2.
+C)
+#) Attach Child2 (yellow)'s RIGHT to FORM.
+#) Attach Child2's LEFT to NONE.
+#) Attach Child1 (blue)'s RIGHT to WIDGET.
+#) Attach Child1's LEFT to NONE.
+#) Change Child1's width to 400. It should not change size.
+#) Change Child1's width to 1000. Make several additional changes to the
+   size of Child1. 
+
+#) Clear Child1 and Child2.  The result should be the same as at the
+beginning of this screen.
+C)
+#) Attach Child2 (yellow)'s TOP to WIDGET.
+#) Attach Child2's RIGHT to FORM.
+#) Attach Child2's BOTTOM to FORM.
+#) Attach Child2's LEFT to NONE.
+#) Attach Child1 (blue)'s RIGHT to POSITION 5.
+#) Get readings on width of form and of both Child1 and Child2 by pressing
+the appropriate "Get Size" buttons.
+#) Attach Child1's LEFT to NONE. No visible resizing should occur.
+#) Get readings on sizes again. They should be identical to the previous
+readings. (Look closely at form's numbers.)
+E)

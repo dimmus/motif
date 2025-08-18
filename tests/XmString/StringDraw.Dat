@@ -1,0 +1,27 @@
+
+#) This is the StringDraw test to test XmStringDraw.
+
+#) You should see a BulletinBoard containing an empty DrawingArea 
+   widget of size 300x200.
+
+C)
+
+#) There should be four lines showing the same string 
+   "TEST STRING FOR CLIPPING", in font "9x15bold" (or "fixed" if 
+   "9x15bold" is not available), with different levels of 
+   clipping taking place.
+
+#) Line 1 should show the string "TEST STRING FOR CLIPPING" complete.
+
+#) Line 2 should show the string "TEST STRING FOR CLIPPING" with some
+   horizontal clipping, meaning, some of the characters should be
+   clipped off.
+
+#) Line 3 should show the string "TEST STRING FOR CLIPPING" complete
+   in the horizontal direction, but with characters getting clipped
+   in height.
+
+#) Line 4 should show the string "TEST STRING FOR CLIPPING" with
+   both horizontal and vertical clipping.
+
+E)

@@ -1,0 +1,19 @@
+
+
+
+#) The following is a Bulletin Board set up to test correct handling of gadget
+   specification syntax. 
+
+#) The bulletin board contains two of each supported gadget. 
+
+#) The module header for this test specifies the gadget variant for each 
+   object supporting a gadget variant. Thus the gadget in the left 
+   column was specified with Xm<type> syntax. The gadget in 
+   the right column was specified with Xm<type>Gadget syntax. 
+
+#) The CascadeButton gadgets are contained in a MenuBar. 
+   A Message stating that the callback reason for 
+   MrmNcreateCallback is 43 should be printed in the 
+   term window.
+
+E)

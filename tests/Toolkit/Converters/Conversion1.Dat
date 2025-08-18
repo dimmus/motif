@@ -1,0 +1,8 @@
+#) This test tests Motif resource conversions.  To determine whether
+   the test passes or fails, review the output going to stdout and
+   look for FAIL.  All tests will either PASS or FAIL.  The test has
+   a list of answers which it compares the returned converted value
+   to.
+
+C)
+E)

@@ -1,0 +1,173 @@
+
+#) A client with a Paned Window with three pushbuttons will appear.
+   The panes should be 100 pixels wide and 50 pixels high.
+
+#) No constraints have been set, so all possible resizings should
+   be allowed.
+
+#) Return the panes to reasonable sizes and continue for more testing. 
+C)
+
+#) The maximum size of the first pane has been set to 100 pixels.
+
+#) Verify this by resizing the panes.
+C)
+
+#) The maximum size of the first pane has been reset to the default
+   while the maximum of the second has been set to 100 pixels.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The maximum size of the second pane has been reset to the default
+   while the maximum of the third has been set to 100 pixels.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The maximum size of the third pane has been reset to the default.
+
+#) The minimum value of the first pane has been reset to 100 pixels.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The minimum size of the first pane has been reset to the default
+   while the minimum of the second has been set to 100 pixels.
+
+#) Verify this by resizing the panes.
+
+C)
+
+
+#) The maximum size of the second pane has been reset to the default
+   while the maximum of the third has been set to 100 pixels.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The minimum size of the third pane has been reset to the default.
+
+#) An attempt was made to set the minimum of the first pane to a 
+   value less than zero.  An error message should have been displayed
+   on the xterm window and the minimum set to the default value.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) An attempt was made to set the minimum of the second pane to a 
+   value less than zero.  An error message should have been displayed
+   on the xterm window and the minimum set to the default value.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) An attempt was made to set the minimum of the third pane to a 
+   value less than zero.  An error message should have been displayed
+   on the xterm window and the minimum set to the default value.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The maximum and minimum for the first pane were set to 200 pixels
+   and 100 pixels respectively.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The maximum and minimum for the first pane were reset to their
+   default values.
+
+#) The maximum and minimum for the second pane were set to 200 pixels
+   and 100 pixels respectively.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The maximum and minimum for the second pane were reset to their
+   default values.
+
+#) The maximum and minimum for the third pane were set to 200 pixels
+   and 100 pixels respectively.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) The maximum and minimum for the third pane were reset to their
+   default values.
+
+#) An attempt was made to set the maximum and minimum of the first
+    pane to 100 pixels and 200 pixels respectively.  An error message
+    should have been displayed on the xterm window and the maximum
+    and minimum set to their default values.
+
+#) Verify this by resizing the panes.
+
+C)
+
+
+#) An attempt was made to set the maximum and minimum of the second
+    pane to 100 pixels and 200 pixels respectively.  An error message
+    should have been displayed on the xterm window and the maximum
+    and minimum set to their default values.
+
+#) Verify this by resizing the panes.
+
+C)
+
+#) An attempt was made to set the maximum and minimum of the third
+    pane to 100 pixels and 200 pixels respectively.  An error message
+    should have been displayed on the xterm window and the maximum
+    and minimum set to their default values.
+
+#) Verify this by resizing the panes.
+
+C)
+
+
+#) The maximum and minimum for the first pane were both set to 100 
+   pixels.  There should be no sash on the seperator at the bottom of
+   this pane.
+
+#) Verify that this pane cannot be resized.
+
+C)
+
+#) The maximum and minimum for the first pane were reset to their
+   default values.
+
+#) The maximum and minimum for the second pane were both set to 100 
+   pixels.  There should be no sash on the seperator at the bottom of
+   this pane.
+
+#) Verify that this pane cannot be resized.
+
+C)
+
+#) The maximum and minimum for the second pane were reset to their
+   default values.
+
+#) The maximum and minimum for the third pane were both set to 100 
+   pixels.
+
+#) Verify that this pane cannot be resized.
+
+C)
+
+#) The maximum and minimum for all the panes have been set to 100 
+   pixels.  There should be no sash on any of the seperators.
+
+#) Verify that no panes can be resized.
+
+E)
+

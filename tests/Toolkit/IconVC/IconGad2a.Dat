@@ -1,0 +1,32 @@
+#)An Icon Gadget with a label of "IconLabel" and a pixmap should appear.
+#)Verify that the pixmap is displayed horizontally centered above the label
+with four pixels vertically separating the pixmap and the label.
+C)
+#)Click MB1 on the icon.
+#)Verify that a highlight appears that is two pixels in height about
+the icon and below the label and two pixels in width to the left and to the
+right of the pixmap and label.
+C)
+#)The Icon Gadget's alignment has been set to XmALIGNMENT_BEGINNING.
+Verify that the pixmap displays horizontally to the left side of the
+label and the highlight displays two pixels in height about the icon and
+below the label, and two pixels in width to the left and to the right of 
+the pixmap and label.
+C)
+#)The Icon Gadget's alignment has been set to XmALIGNMENT_END.
+Verify that the pixmap displays horizontally to the right side of the
+label and the highlight displays two pixels in height about the icon and
+below the label, and two pixels in width to the left and to the right of 
+the pixmap and label.
+C)
+#) The Icon Gadget's spacing has been set to 20.
+Verify that the pixmap displays 20 pixels above the label.
+C)
+#) The Icon Gadget's margin Height has been set to 10.
+Verify that the highlight border is 10 pixels high above the pixmap and
+10 pixels high below the label.
+C)
+#) The Icon Gadget's margin Width has been set to 0.
+Verify that no highlight is displayed to the left and the right of the
+rectangular area containing the pixmap and label.
+E)

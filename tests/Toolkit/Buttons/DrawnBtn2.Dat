@@ -1,0 +1,22 @@
+
+#) A client window should appear with three DrawnButtons. First
+   DrawnButton has pushButtonEnabled set to true. The second and third have
+   pushButtonEnabled set to false. 
+C)
+
+#) Press and hold MB1 on the top DrawnButton. It should appear to be
+   pressed in. Move pointer out of and into the client window. DrawnButton
+   should appear popped out when out of the client window and pressed in
+   when in the client window. Release MB1. DrawnButton should appear popped out. 
+#) Click MB1 in each DrawnButton. The second and third buttons will not
+   change appearance. 
+#) Move the client window. 
+C)
+
+#) Iconify the client window. Normalize the client window. 
+#) Resize the client window.  If the window resize causes a resize of the
+   first DrawnButton, the new size of the button will be displayed on the
+   term window.   
+#) Move the client window so that it partially obscures the
+   term window. Raise the term window. Raise the client window. 
+E)

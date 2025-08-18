@@ -1,0 +1,31 @@
+
+#) A client with a MessageBox will appear. The MessageBox
+   will have three PushButtons labeled Minimize,
+   Cancel, and Help. 
+#) Click MB1 on Minimize button. XmNminimizeButtons will be
+   set to True and all buttons will minimize.  The text of the
+   button will change to NoMinimize.
+#) Click MB1 on Cancel. XmNdefaultButtonType will be set to the
+   Cancel button. 
+#) Click MB1 on Help. XmNdefaultButtonType will be set to the
+   Help button. 
+#) Click MB1 on NoMinimize button. XmNminimizeButtons will be
+   set back to False, buttons will resize back to original size, 
+   and the default button is reset to the Minimize button.  
+#) Continue to have a Question Dialog appear. 
+C)
+
+#) A client with a Question Dialog will appear. The Question Dialog
+   will have three PushButtons labeled Minimize,
+   Cancel, and Help. 
+#) Click MB1 on Minimize button. XmNminimizeButtons will be
+   set to True and all buttons will minimize.  The text of the
+   button will change to NoMinimize.
+#) Click MB1 on Cancel. XmNdefaultButtonType will be set to the
+   Cancel button. 
+#) Click MB1 on Help. XmNdefaultButtonType will be set to the
+   Help button. 
+#) Click MB1 on NoMinimize button. XmNminimizeButtons will be
+   set back to False, buttons will resize back to original size, 
+   and the default button is reset to the Minimize button. 
+E)

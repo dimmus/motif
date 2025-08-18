@@ -1,0 +1,27 @@
+
+#) A client with an MessageBox will appear. The MessageBox
+   will contain three PushButtons labeled Buttons, Symbol,
+   and Message. 
+#) Click MB1 on Buttons. The Buttons button will change to
+   an informational pixmap, the Symbol button will change to
+   to the string \"NewSymbol\", and the Message button will change to
+   the string \"NewMessage\". 
+#) Click MB1 on NewSymbol button. The informational pixmap in the
+   message area will change to the string \"StringIcon\". 
+#) Click MB1 on NewMessage button. The message will change to
+   the string \"Here is a new message\". 
+#) Continue to have a Information Dialog appear. 
+C)
+
+#) A client with an Information Dialog will appear. The Information
+   Dialog will contain three PushButtons labeled Buttons,
+   Symbol, and Message. 
+#) Click MB1 on Buttons. The Buttons button will change to
+   an informational pixmap, the Symbol button will change to
+   to the string \"NewSymbol\", and the Message button will change to
+   the string \"NewMessage\". 
+#) Click MB1 on NewSymbol button. The informational pixmap in the
+   message area will change to the string \"StringIcon\". 
+#) Click MB1 on NewMessage button. The message will change to
+   the string \"Here is a new message\". 
+E)

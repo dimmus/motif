@@ -1,0 +1,68 @@
+
+#) A client window containing a scrolled window whose work window has
+   pushbuttons
+   should appear.  Not all of the pushbuttons should be visible.
+   A vertical scrollbar should appear at the right side of the client. 
+#) Place focus in the window.  Now use KDown to traverse to all of the
+   buttons.  Once you reach the last visible button, KDown should 
+   scroll the Scrollbars such that the next button is visible.
+#) When a button becomes visible due to traversing, it should reside
+   right next to (no margin) the clip window.
+#) Continue typing KDown and make sure that the list scrolls back
+   to the first pushbutton.
+#) Use the osfPageUp and osfPageDown keys to move the focus by pages.
+#) Leave the focus in PushButton9.
+
+C)
+
+#) The RowColumn within the Scrolled Window has been updated to have
+   columns.  A scrollbar should appear at the bottom of the window.
+#) Press KLeft.  The focus should move to PushButton5.  Press KRight.
+   Focus should move back to PushButton9 and the widget should be
+   *fully* visible.
+#) Use KDown, KRight, KLeft, and KUp to traverse to the different 
+   buttons.  Make sure that the window scrolls to accommodate traversing
+   to a button which is not visible or totally visible.
+#) When a button becomes visible due to traversing, it should reside
+   5 pixels from the clip window.
+C)
+
+#) The RowColumn now has two more children, a ToggleButton and a Text
+   Field.  With the focus on PushButton1, press KTab.  The focus should
+   move to the Text widget and the window should scroll to display the
+   Text Widget fully.  
+
+#) Press KTab again until the focus moves to the pushbutton
+   tab group. It will first tab to the scroll bars.
+
+#) When a button becomes visible due to traversing, it should reside
+   10 pixels from the clip window.
+
+#) Press KUp, KDown, KRight and KLeft to traverse among all of the button
+   children.  Make sure that the window scrolls to accommodate traversing
+   to a button which is not visible or totally visible.
+
+C)
+#) The Row Column now has another child, a PushButton.  The PushButton has
+   occluded part of the TextField.
+
+#) Press KTab until the focus moves to the TextField.
+
+#) Type the string "The quick brown fox jumps over the lazy dog"
+
+#) The text should be visible on either side of the button which
+   is occluding the TextField.
+
+#) Move the cursor to the "q" in "quick".
+
+#) Type the string "very very very"
+
+#) Move the cursor so that is is on the Right hand side of the PushButton.
+
+#) Now type some more text.
+
+#) The text to the left of the pushbutton should remain the same until
+   the cursor reaches the widget border.
+
+E)
+

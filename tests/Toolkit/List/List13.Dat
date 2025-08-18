@@ -1,0 +1,21 @@
+
+@) A List widget should be displayed with three items in the list.
+The first item should be displayed in red. The second item displayed
+in green. The third item displayed in blue.
+
+#) Verify that there are two messages printed to the terminal.
+One message indicating that the XmNnoRenditionCallback has been called.
+Another message indicating that the XmNnoFontCallback has been called.
+
+#) Select the toggle button labelled \"Underline\". Each of the List
+items should now be underlined.  Select the toggle button again.
+The list items should no longer be underlined.
+
+#) Select the toggle button labelled \"StrikeThru\". Each of the list
+items should have a single dashed line displayed through the text.
+Select the toggle button again. The list items should no longer
+have the strike thru.
+
+C)
+
+E) 

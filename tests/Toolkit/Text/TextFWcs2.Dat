@@ -1,0 +1,7 @@
+@) A Text Field widget with the string 'Sample Text' will appear in
+   the test window. The text is red on a white background. 
+#) Move the pointer into the Text Field and press ANY key. No matter
+   what key was pressed, a 'A' will appear. 
+#) Press another key. This time a 'B' will appear in the text widget. 
+#) Repeat this cycle and you will print out the entire alphabet. 
+E)

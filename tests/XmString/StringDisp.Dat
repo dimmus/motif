@@ -1,0 +1,23 @@
+
+#) This is the StringDisp test to test display of XmString.
+
+C)
+
+
+#) The first two lines show hebrew strings. 
+
+#) The first line shows a LefttoRight string and the second line
+   shows a RighttoLeft string.
+
+#) The third and fourth lines shows kanji 16-bit character strings.
+
+#) The third line shows a LefttoRight string, and the fourth line 
+   shows a RighttoLeft string.
+
+C)
+
+#) Extensibility API test for XmeStringValid.  Tests if the function
+   correctly determines a valid and invalid XmString.  Test results are
+   dislplayed in the term window.
+
+E)

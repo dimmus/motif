@@ -1,0 +1,19 @@
+
+@) StringExt tests the XmString functions which get dimension information 
+for displaying XmStrings. The values returned from the XmString functions
+are compared against the values returned from the function XTextExtent().
+
+#) A blank drawing area widget should be displayed.
+#) Click MB1 in the drawing area widget. The strings \"X is an Example of Z\"
+and \"Z is an Example of X\" should now be displayed in the drawing area widget.
+A rectangle is drawn around each string where the dimensions of the rectangle
+are the dimensions returned from XmStringExtent(). Verify that the rectangles
+represent the smallest bounding box which encloses each string.
+#) Tables have been printed to stdout which list the functions called
+and the dimensions returned from each function for the given string. 
+A message will then be printed indicating whether each XmString function
+passed or failed. If your term window is small, you may need to scroll
+in order to see all the text. 
+
+C)
+E)

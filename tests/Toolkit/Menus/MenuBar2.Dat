@@ -1,0 +1,6 @@
+#)  This test allows configuration of a menubar, where the number of
+        entries, size in characters of the entries, and border width can
+        be specified.  Specify various settings and then select Set'em
+        up, Joe.  Try this several times and make sure that the menu
+        bar is created correctly.  
+E)

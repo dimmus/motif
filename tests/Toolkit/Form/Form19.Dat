@@ -1,0 +1,40 @@
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+#) All of the A children should now have a new width and height of 75. 
+C)
+
+#) All of the A children should now have an x and y position of 75. 
+C)
+
+#) All of the Forms should now be destroyed. 
+C)
+
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+#) All of the B children should now have a new width and height of 75. 
+C)
+
+#) All of the B children should now have an x and y position of 75. 
+C)
+
+#) All of the Forms should now be destroyed. 
+C)
+
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+#) All of the A and B children should now have a new width and height of 75. 
+C)
+
+#) All of the A children should now have an x and y position of 75;
+   all of the B children should have an x of 200 and a y position of 50. 
+E)
+

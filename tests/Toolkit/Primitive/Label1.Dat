@@ -1,0 +1,22 @@
+
+#) A client window with one text label and one pixmap label
+   should appear. The label is <Multi-Line Label String with extra newlines> 
+   and the pixmap is gnu.  Several new lines should appear between 
+   <Multi-Line Label String> and <with extra newlines>.
+C)
+
+#) Click and double click on each label.
+   Nothing should happen. 
+#) Move pointer into and out of the client window,
+   once with the MB1 held down and once with MB1 up.
+   Nothing should happen. 
+C)
+
+#) Move the client window. Resize the client window.
+   Iconify the client window. Normalize the
+   client window. 
+#) Move the client window so that it partially obscures
+   the term window. Raise the term window.
+   Raise the client window. 
+C)
+E)

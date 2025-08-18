@@ -1,0 +1,14 @@
+
+The following is a Bulletin Board withthe following characteristics: 
+	   - border width is 5   
+	   - background color is Coral (using RGB())  
+	   - dialogTitle is BBoard Test  
+	   - marginWidth is 50   
+           - marginHeight is 50   
+           - noResize is true   
+           - defaultPosition is false 
+	   - A label with a labelPixmap of a palette is a child of the 
+             Bulletin Board 
+	   - Default and Cancel buttons 
+	   - All other resources are set by default. 
+E)

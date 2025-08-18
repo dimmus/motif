@@ -1,0 +1,32 @@
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+
+#) All of the children should now be unmapped and invisible. 
+C)
+
+#) All of the children should now be mapped and visible. 
+#) There should exist no change in the position and size of the children. 
+C)
+
+#) All of the Forms should now be destroyed. 
+C)
+
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+
+#) All of the children should now be unmanaged and invisible. 
+C)
+
+#) All of the children should now be managed and visible. 
+#) There should exist no change in the position and size of the children. 
+C)
+
+#) All of the Forms should now be destroyed. 
+E)
+

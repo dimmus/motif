@@ -1,0 +1,36 @@
+#) A client window will appear containing a command widget.  The
+   history list will contain four items, and the command area
+   will contain the command \"next\". 
+#) Move the pointer into the client window. 
+#) Backspace to clear the command \"next\" from the command area. 
+#) Type a command into the command area and press the return key.
+   The newly typed command will appear at the bottom of the
+   history list, and the top element of the history list will
+   disappear. 
+C)
+#) Move the pointer into the client window. 
+#) Type a command into the command area and press the return key.
+   The command will appear at the bottom of the history list, and
+   the string \"setValue\" will appear in the command area. 
+#) Press the return key again.  The string \"setValue\" will
+   appear at the bottom of the history list. 
+C)
+#) Move the pointer into the client window. 
+#) Type a command into the command area and press the return key.
+   The command will appear at the bottom of the history list, and
+   the string \"errorValue\" will appear below the history list. 
+#) Type a command into the command area and press the return key.
+   The command will appear at the bottom of the history list, and
+   the string \"errorValue\" will disappear from below the
+   history list. 
+C)
+#) Move the pointer into the client window. 
+#) Type the string \"1234\" into the command area. The string
+   \"addValue\" will be appended to the end of the string \"1234
+   in the command area. 
+#) Press the return key.  The string \"1234addValue\" will appear
+   at the bottom of the history list. 
+C) 
+#) Testing CR 5739. If bug is fixed, the test will not dump core
+   now. Exit normally.
+E)

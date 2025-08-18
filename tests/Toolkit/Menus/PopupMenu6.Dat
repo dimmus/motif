@@ -1,0 +1,64 @@
+
+#) This test has a popupMenu created as a child of a RowColumn.  WhichBtn
+   is 3, an event handler has been set for the RowColumn.  
+   Btn3 should post the menu within all widgets, Btn1 and 
+   Btn2 should not.  Make sure the menu posts on a rapid click of MB3.
+C)
+
+
+#) Note that no warnings should appear in the term window.
+#) This test has a popupMenu created as a child of a RowColumn.  MenuPost is
+   3, an event handler has been set for the RowColumn.  
+   Btn3 should post the menu within all widgets, Btn1 and Btn2 
+   should not.  No hangs should occur.  
+#) Note that a rapid click of MB3 should cause the popupMenu to stay posted.
+   Try clicking MB3 within the context of the label and other child widgets.
+   The popup should stay posted.  Now try clicking in the edge of the window.
+   The popup should stay posted.
+C)
+
+
+#) This test has a popupMenu created as a child of a RowColumn.  MenuPost is
+   3, an event handler has been set for the RowColumn.
+   Btn3 should post the menu, Btn1 and Btn2 should not.  
+   No hangs should occur.
+C)
+
+
+#) A drawing area will appear with a drawing area child and a push button
+   child.  A popupmenu has been created as a child of the parent drawingArea
+   and is 
+   registered to popup for the drawing area child and parent.  A separate
+   popupmenu has been created as a child of the pushbutton.  XmNmenuPost is
+   "<Btn3>" for both popup menus.
+#) MB3 should post the menu with entries DrawChildx within the two drawing
+   areas; however, MB3 within the pushButton "MB3 to Popup" should post
+   a popupMenu with entries PushChildx.
+C)
+
+
+#) A drawing area will appear with a drawing area child and a push button
+   child.  A popupmenu has been created as a child of the parent drawingArea
+   and is 
+   registered to popup for the drawing area child and parent.  A separate
+   popupmenu has been created as a child of the pushbutton.  XmNmenuPost is
+   "<Btn3>" for the pushbutton popupMenu and "<Btn3>" for the drawingArea 
+   popupMenu.
+#) MB3 should post the DrawChild popupMenu within the context of the drawing
+   areas (but not the pushButton).
+#) MB3 should post the PushChild popupMenu only from within the context of
+   the PushButton.
+C)
+
+
+#) A drawing area will appear with a drawing area child and a push button
+   child.  Three popup menus have been created as children of the 3 widgets.
+   Pressing MB3 in the parent drawing area should post the parent's popup,
+   pressing MB3 in the child drawing area should post the child's and pressing
+   MB3 in the pushbutton should post the push button popup menu.
+  (Note: you may need to resize the window to see all children)
+C)
+
+
+E)
+

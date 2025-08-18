@@ -1,0 +1,19 @@
+!) This is a test of traversal behaviors.
+#) The four boxed groups of widgets are Frame/Row-Columns with
+  different TABbing attributes. 
+#) You can move between all of 
+  the groups except the one on the right by hitting TAB or 
+  Shift-TAB.  Note the order of the traversal is not left to 
+  right totally.  
+#) Within each TABable group, move between the 
+  buttons by using the up/down and right/left arrow keys. 
+#) Use 
+  the space key to activate (depress) the buttons. 
+  Try moving amongst the buttons and back and forth between the 
+  tab groups.  
+  
+C)
+#) Two empty frame/row columns have been added at the end. Try TABbing now. 
+The new row columns should not be TABable. 
+C)
+E)

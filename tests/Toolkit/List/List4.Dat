@@ -1,0 +1,31 @@
+#) A client with three lists, two push buttons, and a scale should appear.
+   The lists will be positioned in the top row and should be labeled
+   Functions:,   List1:, and List2:. Funtions will contain two items
+   (XmListReplaceItems()   and XmReplaceItemsPos()). List1 will contain
+   five items (Item1 - Item5).   List2 will contain four items (Item6 - Item9).
+#) Select XmListReplaceItems() from the Functions List.
+#) Select Item1 and Item3 from List1, and then select Item7 and Item9
+   from List2.
+#) Click MB1 in the Call Function push button. List1 should now contain Item7
+   and Item9 where Item1 and Item3 where before.
+C)
+#) Click MB1 in the Clear Args push button.
+#) Select XmListReplaceItems() from the Functions List.
+#) Select Item4 from List1, and then select Item6, Item7, and Item8,
+   and Item9 from List2.
+#) Click MB1 in the Call Function push button. Item4 in List1 will replaced
+   by Item6 from List2.
+C)
+#) Click MB1 in the Clear Args push button.
+#) Select XmListReplaceItemPos() from the Functions List.
+#) Select Item6, Item7, and Item8 from List2.
+#) Move the slider on the scale until it reads 2.
+#) Click MB1 in the Call Function pushbutton. Item6, Item7, and Item8
+   should replace Item2, Item9, and Item6 in List1.
+C)
+#) Click MB1 in the Clear Args push button.
+#) Select XmListReplaceItemPos() from the Functions List.
+#) Select Item6, Item7, Item8, and Item9 from List2.
+#) Move the slider on the scale till the scale reads 0.
+#) Click MB1 in the Call Function pushbutton. No change should be visible.
+E)

@@ -1,0 +1,27 @@
+
+
+#) This is a menuBar with the following characteristics:
+	- background is green
+	- borderWidth is 50   
+	- borderColor is mediumBlue 
+	- width is 200   
+	- height is 100
+	- shadowThickness is 5   
+	- bottomshadowColor is navy 
+	- entryAlignment is XmALIGNMENT_CENTER
+	- packing is XmPACK_COLUMN   
+	- marginWidth, marginHeight are 10 
+	- valueChangedcallback is ON for toggleButtons 
+	- armCallback is ON for pushbuttons" 
+	- background of TearOffButtons in both Pulldowns should be wheat 
+	- tearOffModel is XmTEAR_OFF_ENABLED for both Pulldown Menus
+	- tearOffMenuActivateCallback and
+	- tearOffMenuDeactivateCallback are ON for both Pulldown Menus
+	- Automatically created widget resources:" 
+	- background of PulldownMenu 1's control is wheat
+	- background of PulldownMenu 2's tearOff control is red
+	- tearOff control has 2 pixel shadow
+	- tearOff control has separatorType of XmDOUBLE_DASHED_LINE
+	- All other resources are set by default
+
+E)

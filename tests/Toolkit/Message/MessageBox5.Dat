@@ -1,0 +1,18 @@
+
+#) A client with a Message Box will appear. The Message Box will
+   have three PushButtons labeled Unmanage, Help
+   and Symbol. The message string will be 'Toggle
+   Unmanage/Destroy and select a button'. 
+#) Click MB1 on Symbol button. The SymbolPixmap will become
+   unmanaged and will disappear. 
+#) Click MB1 on Message button. The message string will become
+   unmanaged and will disappear. 
+#) Click MB1 on Help button. The third PushButton Message will
+   become unmanaged and will disappear. Also the Cancel
+   PushButton label will change to Ok. 
+#) Click MB1 on Ok. The first PushButton will become unmanaged
+   and will disappear. Also the Ok PushButton label will
+   change to Center. 
+#) Click MB1 on Center button. The widget will be destroyed
+   and an empty shell will be left. 
+E)

@@ -1,0 +1,15 @@
+#) The translations for the buttons and text widgets have been overridden so
+that each time you press the TAB key, a message will be printed out saying
+which widget currently has the focus, and in which tab group that widget is.
+Then the focus will move to the next tab group.
+#) Put the focus on several different buttons and hit tab. Verify that the
+widget and tab group names printed out are the widget and tab groups you
+are traversing FROM.
+#) Try this also for the empty frames and the text widgets.
+#) The traversal order should go from left to right, and from the top text
+widget to the bottom one.
+C)
+#) A variety of tests have been performed and the results printed to
+standard out. Review whether or not each test passed or failed.
+C)
+E)

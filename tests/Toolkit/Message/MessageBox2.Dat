@@ -1,0 +1,15 @@
+
+#) A client with a message Box will appear. There will
+   be three pushButtons Beginning, Center, and End. 
+#) Click MB1 on Center. The text should align to the center. 
+#) Click MB1 on End. The text should align to the end. 
+#) Click MB1 on Beginning. The text should align to the beginning,
+   and a Pixmap of a hourglass should appear to the left of the text. 
+#) Continue to have a Question Dialog appear. 
+C)
+
+#) Click MB1 on Center. The text should align to the center. 
+#) Click MB1 on End. The text should align to the end. 
+#) Click MB1 on Beginning. The text should align to the beginning, and
+   the question Pixmap should change to a hour glass Pixmap. 
+E)

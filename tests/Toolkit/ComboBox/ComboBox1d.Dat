@@ -1,0 +1,12 @@
+
+#) This test should have been run with the flag "-u 1".
+#) The XtName of the ComboBox created in this test is CB1.
+#) All resources for this ComboBox are contained in the defaults
+   file ./ComboBox.defaults. 
+#) There will be a list in the upper left of your screen containing the
+   resources set for this ComboBox.
+#  This ComboBox was created with layout direction set as Right-to-Left.
+   Verify that the arrow is to the left of the text.
+E)
+
+	

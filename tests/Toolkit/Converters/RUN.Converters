@@ -1,0 +1,19 @@
+Mode is  compare
+backing up RUN_failures file
+backing up output file
+Beginning test  Conversion1
+Error - Test  Conversion1  does not exist.
+Beginning test  Conversion2
+Error - Test  Conversion2  does not exist.
+Beginning test  RepType1
+Error - Test  RepType1  does not exist.
+Beginning test  RepType2
+Error - Test  RepType2  does not exist.
+ls: No match.
+There are .prt files missing in  /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/Toolkit/Converters
+No Conversion1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Converters
+No Conversion2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Converters
+No RepType1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Converters
+No RepType2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Converters
+ls: No match.
+run_dir: Command not found.

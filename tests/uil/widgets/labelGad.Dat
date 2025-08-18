@@ -1,0 +1,13 @@
+
+
+#) This is a label gadget with the following characteristics:
+   	- width is 200   
+	- alignment is XmALIGNMENT_BEGINNING
+	- fontList is variable
+   	- height is 100  
+	- marginTop is 20
+	- marginBottom is 20
+   	- labelString is "This is a Label Gadget"
+	- All other resources are set by default
+
+E)

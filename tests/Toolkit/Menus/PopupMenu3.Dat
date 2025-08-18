@@ -1,0 +1,36 @@
+
+#) A client containing the label \"Press MB3 to dismiss PopupMenu\"
+   will appear.  Below this window, a PopupMenu labeled \"Menu1\"
+   will appear.
+
+#) Place the pointer in \"PushButton1\".  \"PushButton1\" will
+   appear raised.
+
+#) Place the pointer in \"Toggle1\".  \"Toggle1\" will appear
+   raised.
+
+#) Click MB3.  The PopupMenu will disappear.
+
+C)
+
+#) The XToolkit warning
+           \"Widget hierarchy not appropriate for this XmRowColumnType: 
+	defaulting to WorkArea\"
+   will appear in the xterm window.  The client window will now
+   contain the label \"Menu2\", a Separator, a PushButton and a
+   ToggleButton.  \"PushButton2\" will appear raised.
+
+C)
+
+#) A Bulletin Board will appear as a child of the shell.  It will contain
+   a PushButton which has a PopupMenu associated with it.
+
+#) Use Mouse Button 3 to activate the PopupMenu.  \"PostPopup\" should 
+   appear in the terminal window. 
+C)
+
+
+#) The popup should be destroyed.
+ No errors should appear in the terminal window.
+
+E)

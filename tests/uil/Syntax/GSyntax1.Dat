@@ -1,0 +1,11 @@
+
+
+
+#)	The following is a Bulletin Board set up to test correct 
+	handling of gadget specification syntax. The bulletin board 
+	contains two of each supported gadget. The gadget in the left 
+	column was specified with Xm<type> gadget syntax. The gadget in 
+	the right column was specified with Xm<type>Gadget syntax. 
+	The CascadeButton Gadgets are contained in a MenuBar.
+
+E)

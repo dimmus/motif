@@ -1,0 +1,11 @@
+ 
+
+#) A client is created with a list containing 8 items, and a PushButton.
+
+#) Select items 5 through 8 as a single range and click MB1 on the PushButton.
+   This will delete the selected items.
+
+#) Now use crtl-MB1 to select item 1.  You should *NOT* get a core dump.
+
+C)
+E)

@@ -1,0 +1,41 @@
+#) Move the pointer into the Text field widget labeled \"Add String to Selected
+   List:\" and click MB1.
+#) Type the string NewWidget and hit return. NewWidget should be added 
+   to the list's selected items list.
+#) Click MB1 on \"Get SelectedItems\". \"The Selected Items:\" list should
+   contain 1 item \"Get SelectedItems\".
+#) Move the pointer into the Text field widget labeled \"Add String to Items
+   List:\" and click MB1.
+#) Type the string NewWidget and hit return. NewWidget should be added to the
+   \"Action List\" selected.
+C)
+#) Move the pointer into the Text field widget labeled \"Add String to Selected
+   List:\" and click MB1.
+#) Type the string NewerWidget and hit return. NewerWidget should be added 
+   to the list's selected items list.
+#) Click MB1 on \"Call XmListUpdateSelectedList\".
+#) Click MB1 on \"Get SelectedItems\". \"The Selected Items:\" list should
+   contain 1 item (NewWidget).
+#) Move the pointer into the Text field widget labeled \"Add String to Items
+   List:\" and click MB1.
+#) Type the string NewWidget and hit return. NewerWidget should be added to the
+   \"Action List\" unselected.
+C)
+#) Click MB1 on the ToggleButton labeled \"Dont Add Item Unselected\". It 
+   should toggle to \"Add Item Unselected\".
+#) Move the pointer into the Text field widget labeled \"Add String to Selected
+   List:\" and click MB1.
+#) Type the string OldWidget and hit return. OldWidget should be added
+   to the list's selected items list.
+#) Click MB1 on \"Get SelectedItems\". \"The Selected Items:\" list should
+   contain two items (NewWidget and OldWidget).
+#) Move the pointer into the Text field widget labeled \"Add String to Items
+   List:\" and click MB1.
+#) Type the string OldWidget and hit return. OldWidget should be added to the
+   \"Action List\" unselected.
+#) Click MB1 on \"Call XmListUpdateSelectedList\".
+#) Click MB1 on \"Get SelectedItems\". \"The Selected Items:\" list should
+   contain 1 item (NewWidget).
+E)
+#) This is a Motif 1.2 test only.
+E)

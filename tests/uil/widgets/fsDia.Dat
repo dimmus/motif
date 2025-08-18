@@ -1,0 +1,11 @@
+
+#) This is a FileSelection Dialog with the following characteristics
+	- foreground is orange
+	- background is maroon
+	- shadowThickness is 10
+	- autoUnmanage is true
+	- NoResize is true
+	- cancelCallback is ON
+	- helpCallback set by default.
+
+E)

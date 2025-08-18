@@ -1,0 +1,14 @@
+
+#) This test tests XmNvisual
+
+C)
+
+#) We try to create visuals from all six visual classes for the current 
+   display. At least one of the conversions must succeed. Any failures will
+   send a warning to stderr that can be ignored. See that the table 
+   in stdout has at least one of the entries as \"Yes\". Then, for each 
+   successful conversion, we attempt to change the value of the resource 
+   XmNvisual in the shell widget. In stdout, for each attempted change, the 
+   string \"Visual successfully modified\" must appear.
+
+E)

@@ -1,0 +1,69 @@
+
+Beginning test  FontListA
+Error - Test  FontListA  does not exist
+
+Beginning test  FontListC
+Error - Test  FontListC  does not exist
+
+Beginning test  StringComp
+Error - Test  StringComp  does not exist
+
+Beginning test  StringCopy
+Error - Test  StringCopy  does not exist
+
+Beginning test  StringDisp
+Error - Test  StringDisp  does not exist
+
+Beginning test  StringDraw
+Error - Test  StringDraw  does not exist
+
+Beginning test  StringEmpty
+Error - Test  StringEmpty  does not exist
+
+Beginning test  StringExt
+Error - Test  StringExt  does not exist
+
+Beginning test  StringGLR
+Error - Test  StringGLR  does not exist
+
+Beginning test  StringNext
+Error - Test  StringNext  does not exist
+
+Beginning test  StringParse
+Error - Test  StringParse  does not exist
+
+Beginning test  StringRend
+Error - Test  StringRend  does not exist
+
+Beginning test  StringTab
+Error - Test  StringTab  does not exist
+
+Beginning test  StringToByte
+Error - Test  StringToByte  does not exist
+
+Beginning test  StringToCT
+Error - Test  StringToCT  does not exist
+
+Beginning test  StringWidth
+Error - Test  StringWidth  does not exist
+
+Beginning test  RendToProp
+Error - Test  RendToProp  does not exist
+No FontListA.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No FontListC.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No RendToProp.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringComp.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringCopy.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringDisp.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringDraw.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringEmpty.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringExt.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringGLR.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringNext.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringParse.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringTab.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringToByte.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringToCT.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+No StringWidth.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/XmString
+Automated run of directory XmString  complete
+This is a Report RUN

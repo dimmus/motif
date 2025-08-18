@@ -1,0 +1,21 @@
+
+#) A client with a MessageBox will appear.  The MessageBox will
+   contain three buttons, labeled \"Unmanage\", \"Symbol\", and
+   \"Message\".  The message string should be
+   \"Toggle Unmanage/Manage and select a button\".  The pixmap
+   should be the error pixmap. 
+#) Click MB1 on the \"Symbol\" button.  The SymbolPixmap will be
+   unmanaged and will disappear.  The MessageBox will resize. 
+#) Click MB1 on the \"Message\" button.  The message string will
+   be unmanaged and will disappear.  The MessageBox will resize. 
+C)
+
+#) Click MB1 on the \"Unmanage\" button.  The button label will
+   change to \"Manage\".  The MessageBox will resize. 
+#) Click MB1 on the \"Symbol\" button.  The SymbolPixmap will be
+   managed and the error pixmap will appear again.  The MessageBox
+   will resize. 
+#) Click MB1 on the \"Message\" button.  The message string area
+   will be managed and the message string will appear again.  The
+   MessageBox will resize. 
+E)

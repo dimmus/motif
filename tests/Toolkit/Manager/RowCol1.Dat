@@ -1,0 +1,12 @@
+
+#)    PACK_TIGHT, case 1 (children default size)
+C)
+
+#)    PACK_TIGHT, case 2 (children each bigger)
+C)
+
+#)    PACK_NONE, case 1 (children default size)
+C)
+
+#)    PACK_NONE, case 2 (children each bigger)
+E)

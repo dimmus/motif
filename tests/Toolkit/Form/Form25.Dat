@@ -1,0 +1,32 @@
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+#) All of the children should be visible. 
+#) D should have a top position which is 75% of the height of the Form,
+    D should have a left position which is 60% of the width of the Form,
+    C should have a top position which is 50% of the height of the Form,
+    C should have a left position which is 40% of the width of the form,
+    B should have a top position which is 25% of the height of the Form,
+    B should have a left position which is 20% of the width of the Form,
+    A should have its original position. 
+!) 
+C)
+
+
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+#) All of the children should be visible. 
+#) D should have a top position which is 75% of the height of the Form,
+    D should have a left position which is 60% of the width of the Form,
+    C should have a top position which is 50% of the height of the Form,
+    C should have a left position which is 40% of the width of the form,
+    B should have a top position which is 25% of the height of the Form,
+    B should have a left position which is 20% of the width of the Form,
+    A should have its original position. 
+#) ALL of the children should have a new width and height of 100. 
+E)
+

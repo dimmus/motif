@@ -1,0 +1,16 @@
+
+
+#) This is a scale widget with the following characteristics:   
+    - X and Y are 80 
+    - value is 60   
+    - maximum is 250   
+    - showValue is true   
+    - scaleWidth is 20   
+    - scaleHeight is 100 
+    - valueChangedCallback is ON 
+	Automatically Created widget resources: 
+	   - labelString for title label is 
+	     The Verical Scale 
+	   - title label's fontList is variable 
+    - All other resources are set by default.
+E)

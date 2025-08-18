@@ -1,0 +1,11 @@
+#) This test ensures that the ArrowButton, PushButton, and ToggleButton
+   correctly change visually when sent a programmatic 'Disarm' message.
+#) A window with an ArrowButton, a PushButton and a ToggleButton should
+   be visible.  They should be in a 'disarmed' state.
+C)
+#) The buttons should be armed.
+C)
+#) The buttons should be disarmed
+C)
+#) No change should have occurred.
+E)

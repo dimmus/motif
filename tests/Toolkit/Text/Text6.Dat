@@ -1,0 +1,55 @@
+@) The test window shows two text widgets in a Paned Window.
+Note that although the Shell window size was set to  400W x 300H,
+the final hierarchy will only be sized to accomodate the two default
+Text widgets (1 row x 20 columns each).
+#) Give focus to the test client window. The focus should be at the start of the text in Text1.
+#) Press and drag MB2 over the text in Text1.
+#) Press the Tab key twice. Focus should be in Text2.
+#) Type the word 'The' and a space. The string should read \"The Sample Text2\".
+#) After you press continue, the test will verify the contents of Text2 and print out an error message if CR xxxx is still present.
+C)
+#) Check the results of the previous panel for an error message.
+#) If this test failed, the results for the remainder of this test will most likely be corrupted. You may wish to rerun the test and skip the MB2 Drag on Panel 1.
+C)
+#) Move the pointer into the top text widget and click MB1.
+   The insertion cursor should appear.
+#) Press the return key. The text should change to
+   "The <Return> Key was pressed." and a message indicating the
+   callback reason should appear in the stdout window.
+C)
+#) Move the pointer into the bottom text widget and click MB1.
+   The insertion cursor should appear.
+#) Press the return key. A newline is inserted but the message should not
+   change. 
+C)
+#) Put the pointer into the bottom text widget and press <Ctrl> r.  The text
+   in the bottom widget should change to "Changed the string.".
+   (Note that the bottom text widget will not get a focus highlight or
+   respond to any other keystrokes.  The only tranlation it currently
+   recognizes is <Ctrl> r.)
+C)
+#) Click MB1 in the top text widget.
+#) Type some text.
+   For each character typed, messages indicating the callback reasons
+   should appear in the stdout window.
+   You should see "XmCR_MODIFYING_TEXT_VALUE" before
+   "XmCR_VALUE_CHANGED".
+#) Select text elsewhere in the text widget.
+   Click MB2 to paste the text.
+   Messages indicating the callback reasons should appear in the
+   stdout window.
+   You should see "XmCR_MODIFYING_TEXT_VALUE" before
+   "XmCR_VALUE_CHANGED".
+
+C)
+
+#) Click MB1 on the pushbutton labelled \"Set String\" to add text into the text widget.
+#) Move the insertion cursor to position 3, which is immediately after the
+word \"New\".
+#) Click MB1 on the pushbutton labelled \"Insert\" which will insert new
+text at position 3.
+#) Verify that the insertion cursor moved to the end of the newly
+inserted text.
+
+C)
+E)

@@ -1,0 +1,10 @@
+
+#) This is a Working Dialog with the following characteristics:
+	- okCallback is ON   
+	- cancelCallback is ON   
+	- helpCallback is ON   
+	- autoUnmanage is true
+	- message string is "MessageLabel"
+	- All resources are set by default.
+
+E)

@@ -1,0 +1,31 @@
+
+#) This is the Notebook4 test. It tests the convenience function 
+   XmNotebookGetPageInfo.
+#) A Notebook widget should have appeared on your screen.
+C)
+
+#) The function has been called for an valid page. You should see
+   the following on the term window:
+
+@)   Expected : PAGE_FOUND, Actual : PAGE_FOUND
+C)
+
+#) The function has been called for an invalid page. You should see
+   the following on the term window:
+
+@)   Expected : PAGE_INVALID, Actual : PAGE_INVALID
+C)
+
+#) The function has been called for an empty page. You should see
+   the following on the term window:
+
+@)   Expected : PAGE_EMPTY, Actual : PAGE_EMPTY
+C)
+
+#) The function has been called for an duplicated page. You should see
+   the following on the term window:
+
+@)   Expected : PAGE_DUPLICATED, Actual : PAGE_DUPLICATED
+C)
+
+E)

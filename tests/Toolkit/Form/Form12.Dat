@@ -1,0 +1,27 @@
+
+#) A client with a form should appear. The form should be about
+   200x100 pixels, and should have a scrollbar centered within it.
+   The form will have top/bottom/left/right Attachment set to
+   XmATTACH_POSITION, and the scrollbar will have a leftPosition
+   of 10, a rightPosition of 90, a topPosition of 25, and a
+   bottomPosition of 75. 
+#) Note that the above resource settings will result in a scrollbar
+   widget which is centered in the form, and is 80% as wide as the
+   form, and 50% as tall as the form. 
+#) Resize the client several times. You should see the scrollbar
+   move and resize,  but retain the same relative position and size. 
+#) Iconify and Normalize the client window.  The scrollbar should
+   reappear when the client is normalized. 
+!) 
+C)
+#) A warning message should appear in the stdout window. The message should 
+say:
+!) Warning: 
+    Name: scrollbar1
+    Class: XmScrollBar
+    Illegal value (126) for rep type XmRAttachment
+C)
+#) A message dialog appears. Dismiss it by pressing the okay button.
+#) A second warning message identical to the one above should have appeared in
+the stdout window. Verify that this second message appears.
+E)

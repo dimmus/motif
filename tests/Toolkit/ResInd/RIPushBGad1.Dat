@@ -1,0 +1,67 @@
+
+#) Double click on the button. You should see 'Armed' and 'Activated'
+   messages, followed by the number of click counts, and 'Disarmed'.
+   There should be two sets of these, one with click count of 1
+   and one with click count of 2 
+#) Perform the same actions, with these changes:
+     leave/enter between first arm and disarm then click again
+     arm, wait several seconds, then disarm and click again. 
+C)
+
+
+#) Double click again on the button.  This time you should see 
+   'Armed' and 'Activated' messages, followed by a click count of 1,
+   and 'Disarmed'.  There should only be one set of these for every
+   multi click made.
+
+C)
+
+#) A pushbutton gadget labeled 'Push Gadget Here' should appear. 
+#) Arm the pushbutton gadget (press and hold MB1 on pushbutton gadget).
+   The gadget should appear to be pressed in and 
+   \"PushButtonGadget Armed\" should appear in the term window. 
+#) Release MB1. The gadget should appear popped out and
+   \"PushButtonGadget Activated\" and \"PushButtonGadget Disarmed\" should
+   appear in the term window. 
+#) Move, Resize, Iconify, and Normalize the client window. 
+
+C)
+
+#) The client window should have changed size and should contain the
+   image of the GNU appear in the pushbutton gadget.
+#) Arm the pushbutton gadget (press and hold MB1 on pushbutton gadget).
+   The gadget should appear to be pressed in and 
+   \"PushButtonGadget Armed\" should appear in the term window. 
+#) Release MB1. The gadget should appear popped out and
+   \"PushButtonGadget Activated\" and \"PushButtonGadget Disarmed\" should
+   appear in the term window. 
+C)
+
+#) The margin around the GNU pixmap should be 1 mm.
+#) Arm the pushbutton gadget (press and hold MB1 on pushbutton gadget).
+   The margin should change color and 
+   \"PushButtonGadget Armed\" should appear in the term window. 
+#) Move the pointer out of the client window. The margin
+   should revert back to the original color. 
+#) Move the pointer back into the window. The margin
+   should change color. 
+#) Move the pointer out of the window. The margin
+   should revert back to the original colors. 
+#) Release MB1. \"PushButtonGadget Disarmed\" should
+   appear in the term window. 
+#) Move the client window so it partially obscures the term window. 
+#) Raise the term window. 
+#) Raise the client window. 
+C)
+#) The label: 'PBG Label' should appear in the pushbutton gadget.
+   The default shadow should appear around the pushbutton gadget.
+#) Arm the pushbutton gadget (press and hold MB1 on pushbutton gadget).
+   The gadget should appear to be pressed in. 
+#) Release MB1. The gadget should appear popped out. 
+C)
+#) The window should be resized. The new size will be reported in the
+   term window.
+
+C)
+   The gadget should be destroyed.
+E)

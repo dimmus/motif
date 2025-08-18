@@ -1,0 +1,7 @@
+
+#) A client with a drawing area should appear. The shell
+   will than grow to contain a 4x4 matrix of arrowButtonGadgets.
+   The arrows should each display with a foreground the same color
+   as the light shadow color. 
+#) Iconify and Normalize the client window. 
+E)

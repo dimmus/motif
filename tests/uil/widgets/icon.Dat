@@ -1,0 +1,13 @@
+
+#) This test should be displayed on both a color and a monochrome screen for 
+   full coverage.
+   Three icons appear, each in a bulletin board.
+       - in the top right corner, a white board with a pallette icon is shown.
+       - in the middle right, a yellow board with a gray and blue line pattern.
+       - in the lower left, a red board with the same pallette icon as in the 
+         first board.
+       - When displayed on a monochrome system, the two palette icons should 
+         appear the same.
+
+
+E)

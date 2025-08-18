@@ -1,0 +1,16 @@
+
+#) Enter the client window containing the solid white form. No message
+should appear.
+#) Enter the client window. The message "formCB: Form1 focus"
+   should appear in the term window. Press the OsfHelp key. The message
+   "formCB callback:Form1 help" should appear in the term window. 
+#) Continue to have the white form destroyed and the shell highlight
+   return to magenta.
+C)
+#) A push button child has been created in the Form.
+#) Move the focus into the window.
+#) You should get a "formCB: Form1 focus" message.
+#) Press the osfHelp key. You should get a "help" message.
+C)
+#) The form is destroyed and the magenta-colored shell remains.
+E)

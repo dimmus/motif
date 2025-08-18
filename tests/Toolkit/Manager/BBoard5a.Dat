@@ -1,0 +1,17 @@
+#) The bulletin board has a marginHeight and marginWidth as specified by
+-u (UserData), and of 0 if not specified.
+#) Four arrow buttons appear, side by side. (If the margin width or height is
+large, some of the buttons may overlap.) The bulletin board's initial size
+is large enough to show the buttons.
+#) Click on top most button until it goes offscreen or stops moving.
+#) Once the button has stopped moving, press Space a few times to request
+additional moves.
+#) Repeat for all other buttons.
+#) All buttons should go equally far into the margins or beyond.
+#) There should be no unexpected resizing behavior.
+#) Go back and click on each button one more time. Again, there should be
+no unexpected resizing.
+C)
+#) The margins have been doubled, or set to 10 if they were 0. 
+#) The children which were outside of this margin are forced back inside it.
+E)

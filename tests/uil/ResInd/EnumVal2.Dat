@@ -1,0 +1,35 @@
+
+
+#) Enumerated Values Test 2:
+!) The following is a Bulletin Board set up to test correct
+   usage of enumeration values. (Note: this explanation text
+   itself tests the following:
+	 - XmNeditMode = XmMULTI_LINE_EDIT
+#)Bulletin Board characteristics:
+!)	 - XmNborderWidth = 1
+	 - XmNbackground =  sky_blue
+	 - XmNmarginWidth =  20
+	 - XmNmarginHeight =  20
+	 - XmNdefaultPosition =  false
+	 - XmNnoResize =  true
+	 - XmNResizePolicy = XmRESIZE_GROW
+	 - XmNshadowType = XmSHADOW_ETCHED_OUT
+	 - XmNshadowThickness = 10
+#) Label characeristics:
+!)	 - XmNunitType = Xm100TH_MILLIMETERS
+	 - XmNx = 1000
+	 - XmNy = 1000
+	 - XmNwidth = 6000
+	 - XmNalignment = align_value = XmALIGNMENT_END
+	 - XmNlabelString = Label 1
+	 - XmNstringDirection = XmSTRING_DIRECTION_L_TO_R
+#) Separator characteristics:
+!)	 - XmNunitType = Xm1000TH_INCHES
+	 - XmNx = 394
+	 - XmNy = 900
+	 - XmNwidth = 4000
+	 - XmNseparatorType = XmDOUBLE_DASHED_LINE
+
+C)
+
+E)

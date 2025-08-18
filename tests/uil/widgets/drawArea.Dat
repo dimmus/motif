@@ -1,0 +1,11 @@
+
+#) This is a Drawing Area widget with thefollowing characteristics:   
+    - width is 95   
+    - height is 95   
+    - backgroundPixmap is of a painter's palette 
+    - exposeCallback is ON   
+    - inputCallback is ON 
+    - marginWidth is 20   
+    - marginHeight is 20
+    - All other resources are set be default.;
+E)

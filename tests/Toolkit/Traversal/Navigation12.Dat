@@ -1,0 +1,13 @@
+!) This test tests P2063. 
+#) Click on the ScrollBar several times. If the focus moves back and forth between the list and the row column
+   the bug is not fixed.
+#) For each click on the Scroll Bar, you should see a message in the stdout
+window that says:
+@)	The VertSB got that press event
+C) 
+#) A list and text field appear. The list is a tab group, the text fields are
+not.
+#) Focus is on the top text widget.
+C)
+#) Focus in on the top text widget.
+E)

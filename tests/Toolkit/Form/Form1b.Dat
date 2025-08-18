@@ -1,0 +1,8 @@
+#) Attach the RIGHT side of Child1 (the blue one) to Position 7.
+#) Attach the LEFT side of Child1 (Blue) to NONE.
+#) Attach the RIGHT side of Child2 (Yellow) to WIDGET.
+#) Type 200 into the Width field in the panel for setting child resources,
+and set the toggle so that Child2 gets the change.
+#) Apply twice by hitting the return key twice. You should see the resize
+on the first apply and no change on the second apply.
+E)

@@ -1,0 +1,29 @@
+Mode is  compare
+backing up RUN_failures file
+backing up output file
+Beginning test  DialogRes
+Error - Test  DialogRes  does not exist.
+Beginning test  Protocol
+Error - Test  Protocol  does not exist.
+Beginning test  OverShell1
+Error - Test  OverShell1  does not exist.
+Beginning test  TopShell1
+Error - Test  TopShell1  does not exist.
+Beginning test  Visual
+Error - Test  Visual  does not exist.
+Beginning test  Display
+Output redirected to  Display1.prt
+Error - Test  Display -I Display.Dat -S Display.Scr -O Display1.prt -V Display1.vis -xrm "*enableThinThickness: False"  does not exist.
+Beginning test  Display
+Output redirected to  Display2.prt
+Error - Test  Display -I Display.Dat -S Display.Scr -O Display2.prt -V Display2.vis -xrm "*enableThinThickness: True"  does not exist.
+ls: No match.
+There are .prt files missing in  /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/Toolkit/Shells
+No DiaShell1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Shells
+No DialogRes.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Shells
+No OverShell1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Shells
+No Protocol.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Shells
+No TopShell1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Shells
+No Visual.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Shells
+ls: No match.
+run_dir: Command not found.

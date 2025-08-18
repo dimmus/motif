@@ -1,0 +1,19 @@
+
+
+
+#) This is a PopupMenu with the following characteristics: 
+	- Menu consists of four pushbuttons. 
+        - menuPost is <Btn1Down> 
+        - menuAccelerator is <Ctrl>Z 
+	- fontList is 8x13bold 
+        - accelerators are associated with each pushbutton. 
+	  Order is:     ^A, ^B, ^C, ^D 
+        - acceleratorText is associated with     each pushbutton. Order is: 
+		       <Ctrl>A, <Ctrl>B, <Ctrl>C, <Ctrl>D 
+        - activateCallback is associated with  the pushbuttons 
+	- background for popup_menu is forest green 
+	- You should be able to traverse the popupmenu via the keyboard. 
+        - All other resources are set by default.
+
+E)
+        

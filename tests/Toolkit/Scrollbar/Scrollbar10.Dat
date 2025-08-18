@@ -1,0 +1,43 @@
+
+#) A client with a vertical scrollbar contained in a frame will
+   appear.  Information on the scrollbar will be printed in the
+   xterm window. 
+C)
+
+#) An X Toolkit warning for setting the scrollbar value greater
+   than the maximum scrollbar value minus the scrollbar slider size
+   will be printed in the xterm window. 
+#) The new values for the displayed scrollbar will be printed in the
+   xterm window. 
+C)
+
+#) An X Toolkit warning for setting the scrollbar value greater
+   than the maximum scrollbar value minus the scrollbar slider size
+   will be printed in the xterm window. 
+#) The new values for the displayed scrollbar will be printed in the
+   xterm window. 
+C)
+
+#) The new values for the displayed scrollbar will be printed in the
+   xterm window. 
+C)
+
+#) An X Toolkit warning for setting the scrollbar value greater
+   than the maximum scrollbar value minus the scrollbar slider size
+   will be printed to the xterm window. 
+#) The new values for the displayed scrollbar will be printed in the
+   xterm window. 
+C)
+
+#) An X Toolkit warning for setting the scrollbar value less than
+   the minimum scrollbar value will be printed in the xterm window. 
+#) The new values for the displayed scrollbar will be printed in the
+   xterm window. 
+C)
+
+#) An X Toolkit warning for setting the scrollbar value less than
+   the minimum scrollbar value will be printed in the xterm window. 
+#) The new values for the displayed scrollbar will be printed in the
+   xterm window. 
+C)
+E)

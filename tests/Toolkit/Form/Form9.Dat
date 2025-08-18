@@ -1,0 +1,29 @@
+
+#) A client with a form should appear. The form should be about
+   200x200 pixels and have a scrollbar along the right edge
+   extending halfway down the form.  It should also have a
+   scrollbar along the bottom edge extending to the x location
+   of the vertical scrollbar. 
+#) Resize the client window several times.  You should see the
+   vertical scrollbar remain on the right edge of the form and
+   maintain its original height.  The horizontal scrollbar should
+   remain on the bottom edge of the form, but grow horizontally
+   so that its right edge always extends to the x location of the
+   vertical scrollbar. 
+#) Iconify and Normalize the client.  The scrollbars should reappear
+   when the client is normalized. 
+!) 
+C)
+
+#) A client with a form should appear. The form should
+   contain a very small scrollbar. 
+#) Resize the client window. You should see the scrollbar
+   grow to the size of the window minus some horizontal and
+   vertical spacing. 
+#) Iconify and Normalize the client window. You should see
+   the scollbar. 
+!) 
+E)
+
+
+

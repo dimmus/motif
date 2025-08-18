@@ -1,0 +1,13 @@
+
+#) This is a list widget with the following characteristics: 
+	   - background is black   
+	   - listSpacing is 2   
+	   - items are item1, item2, item3,item4 
+	   - itemCount is 4   
+	   - visibleItemCount is 4   
+	   - automaticSelection is true 
+	   - selectionPolicy is XmMULTIPLE_SELECT 
+	   - multipleSelectionCallback is ON 
+	   - All other reources are set by default
+
+E)

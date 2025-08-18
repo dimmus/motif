@@ -1,0 +1,10 @@
+#) A client with a drawing area should appear. The drawing
+   area will contain one ArrowButtonGadget at position
+   100x250 in 1000TH_INCHES. One Toolkit Warning will be
+   printed in the term window for an invalid unit type. 
+#) Click MB1 on the ArrowButtonGadget. The arrow will
+   disappear, leaving an empty drawing area. 
+#) Run the test with the option \"-u -show_geom_bug\" to test 
+   PIR 4250.  If the ArrowButtonGadget comes up at the same place 
+   as before, PIR 4250 has been fixed.
+E)

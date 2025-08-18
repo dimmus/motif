@@ -1,0 +1,43 @@
+
+#) Iconify the client window. 
+#) Normalize the client window. 
+#) Resize the client window. 
+#) Press continue, and three new widgets will appear.
+   An arrow appears in the top left corner.
+   Pushbutton1 appears below and to the right of the arrow,
+   and pushbutton2 appears below and to the right of pushbutton1.
+C)
+
+#) Click on the arrow, it should appear to go in and out. 
+#) Click on pushbutton1, it should appear to go in and out. 
+#) Click on pushbutton2, it should appear to go in and out. 
+#) Continue to have the border of pushbutton2 appear black.
+C)
+
+#) Click on pushbutton2, it should appear to go in and out. 
+#) Resize the client window to partially obscure pushbutton2. 
+#) Continue to have the height of pushbutton2 change. 
+C)
+
+#) Continue to have the width of pushbutton2 change.
+C)
+
+#) Continue for test of CR 5209. Note : may cause core dump.
+C)
+
+
+
+#) A Bulletic Board containing a FileSelectionBox will 
+   appear.
+#) Give the FileSelectionBox focus.
+#) Click the "Destroy" button in the dialog box to 
+   destroy FileSelectionBox.
+#) Click the "Create" button in the dialog box to recreate 
+   FileSelectionBox.
+#) Give the recreated FileSelectionBox focus.
+#) Repeat steps 4-6 a few times. No core dump should occur.
+C)
+
+
+#)
+E)

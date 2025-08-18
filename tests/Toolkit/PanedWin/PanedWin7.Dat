@@ -1,0 +1,159 @@
+#) A client with a Paned Window with one pushbutton will appear.
+   They both will be of default size.
+C)
+
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with one pushbutton will appear.
+   The paned window will be 125 pixels wide.
+C)
+
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with one pushbutton will appear.
+   The paned window will be 125 pixels high.
+C)
+
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with one pushbutton will appear.
+   The paned window will be 125 pixels in both width and height.
+
+C)
+
+#) The pushbutton will change size to be 100 pixels wide.
+C)
+
+#) The pushbutton will change size to be 100 pixels high.
+C)
+
+#) The pushbutton will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with two pushbuttons will appear.
+   They all will be of default size.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with two pushbuttons will appear.
+   The paned window will be 125 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with two pushbuttons will appear.
+   The paned window will be 125 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with two pushbuttons will appear.
+   The paned window will be 125 pixels in both width and height.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with three pushbuttons will appear.
+   They all will be of default size.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with three pushbuttons will appear.
+   The paned window will be 125 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with three pushbuttons will appear.
+   The paned window will be 125 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) A client with a Paned Window with three pushbuttons will appear.
+   The paned window will be 125 pixels in both width and height.
+C)
+
+#) The pushbuttons will change size to be 100 pixels wide.
+C)
+
+#) The pushbuttons will change size to be 100 pixels high.
+C)
+
+#) The pushbuttons will change size to be 100 pixels in both width and height.
+C)
+
+#) The paned window will be destroyed.
+E)

@@ -1,0 +1,28 @@
+
+#) A client with a MessageBox should appear.  The MessageBox will
+   have only two labels, \"NoMinimize\" and \"DoQuery\". 
+#) Click MB1 on the \"DoQuery\" button.  The following message
+   should be printed in the xterm window:
+       \"query with 50, 75, 300, 500
+              result is (mode, x, y, w, h) 12 0 0 300 500
+                       current is  0 0 198 89 
+#) Click MB1 on the \"DoQuery\" button again.  The following message
+   should be printed in the xterm window:
+       \"query with NULL
+              result is (mode, x, y, w, h) 12 0 0 198 89
+              current is 0 0 198 89\" 
+C)
+
+#) Click MB1 on the \"NoMinimize\" button.  The button label should
+   change to \"Minimize\" and the Message Box should shrink in size. 
+#) Click MB1 on the \"DoQuery\" button.  The following message
+   should be printed in the xterm window:
+       \"query with 50, 75, 300, 500
+              result is (mode, x, y, w, h) 12 0 0 300 500
+                       current is  0 0 168 89 
+#) Click MB1 on the \"DoQuery\" button again.  The following message
+   should be printed in the xterm window:
+       \"query with NULL
+              result is (mode, x, y, w, h) 12 0 0 168 89
+              current is  0 0 168 89\" 
+E)

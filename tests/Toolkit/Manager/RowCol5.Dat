@@ -1,0 +1,17 @@
+#) A BulletinBoardDialog will appear on the screen.  The
+   BulletinBoardDialog will have a RowColumn child, and the
+   RowColumn will contain 10 PushButton children.
+C)
+
+#) The children should appear in reverse order now. Instead of going
+from 0 to 9, they should go from 9 to 0.
+C)
+
+#) New children have been added to the 3rd and 9th positions.
+C)
+
+#) The new children have moved into the first positions and child 4
+has moved to the end.
+C)
+E)
+

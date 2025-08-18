@@ -1,0 +1,38 @@
+
+
+#) Enumerated Values Test 4:
+!)	 The following is a Bulletin Board set up to test correct
+	 usage of enumeration values. (Note: this explanation text
+	 itself tests the following:
+	 - XmNeditMode = XmMULTI_LINE_EDIT
+#) Bulletin Board characteristics:
+!)	 - XmNborderWidth = 1
+	 - XmNbackground =  sky_blue
+	 - XmNmarginWidth =  20
+	 - XmNmarginHeight =  20
+	 - XmNdefaultPosition =  false
+	 - XmNnoResize =  true
+	 - XmNResizePolicy = XmRESIZE_GROW
+	 - XmNshadowType = XmSHADOW_ETCHED_OUT
+	 - XmNshadowThickness = 10
+#) ArrowButton characteristics:
+!)	 - XmNx = 30
+	 - XmNy = 30
+	 - XmNarrowDirection = XmARROW_LEFT
+	 - XmNwidth = 40
+	 - XmNheight = 40
+	 - XmNshadowThickness = 5
+#) ScrollBar characteristics:
+!)	 - XmNx = 30
+	 - XmNy = 90
+	 - XmNwidth = 300
+	 - XmNheight = 20
+	 - XmNminimum = 0
+	 - XmNmaximum = 100
+	 - XmNvalue = 15
+	 - XmNorientation = XmHORIZONTAL
+	 - XmNprocessingDirection = XmMAX_ON_LEFT
+
+C)
+
+E)

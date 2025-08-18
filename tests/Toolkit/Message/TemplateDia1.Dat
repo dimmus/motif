@@ -1,0 +1,12 @@
+
+#) A client with a template dialog should appear. The dialog
+   should have only a separator widget.
+C)
+
+#) The template dialog should now have a label string - "Crepuscule for Nellie."
+
+C)
+
+#) The template dialog should now have a label pixmap.
+
+E)

@@ -22,7 +22,7 @@ all::
 
 # platform:  $TOG: linux.cf /main/47 1998/04/17 11:32:51 mgreess $
 
-# operating system:  Linux 6.11.0-26-generic x86_64 (6.11.0)
+# operating system:  Linux 6.14.0-27-generic x86_64 (6.14.0)
 # libc:  (6.39.0)
 # binutils:  (242)
 
@@ -88,7 +88,7 @@ XFREE86JAPANESEDOCDIR = $(XFREE86DOCDIR)/Japanese
           PATHSEP = /
             SHELL = /bin/sh
 
-              TOP = /media/dimmus/dev/x/xde-new/xde-motif/tests/..
+              TOP = /media/dimmus/dev/x/xde-classic/xde-motif/tests/..
       CURRENT_DIR = .
 
             IMAKE = imake
@@ -99,18 +99,18 @@ XFREE86JAPANESEDOCDIR = $(XFREE86DOCDIR)/Japanese
          IMAKESRC = $(CONFIGSRC)/imake
         DEPENDSRC = $(CONFIGSRC)/makedepend
 
-          INCROOT = /usr/OpenMotif-2.1.32${USERVARIANT}/include
-        USRLIBDIR = /usr/OpenMotif-2.1.32${USERVARIANT}/lib
-         SHLIBDIR = /usr/OpenMotif-2.1.32${USERVARIANT}/lib
+          INCROOT = /usr/include
+        USRLIBDIR = /usr/lib/x86_64-linux-gnu
+         SHLIBDIR = /usr/lib/x86_64-linux-gnu
        LINTLIBDIR = $(USRLIBDIR)/lint
-          MANPATH = /usr/OpenMotif-2.1.32${USERVARIANT}/man
+          MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
            MANDIR = $(MANSOURCEPATH)1
         LIBMANDIR = $(MANSOURCEPATH)3
        FILEMANDIR = $(MANSOURCEPATH)5
        MISCMANDIR = $(MANSOURCEPATH)$(MISCMANSUFFIX)
 
-               AR = ar clq
+               AR = ar rcs
   BOOTSTRAPCFLAGS =
                CC = gcc
                AS = as
@@ -124,7 +124,7 @@ XFREE86JAPANESEDOCDIR = $(XFREE86DOCDIR)/Japanese
 CXXDEPENDINCLUDES =
  CXXEXTRA_DEFINES =
 CXXEXTRA_INCLUDES =
-   CXXSTD_DEFINES = -Dlinux LinuxMachineDefines -D_POSIX_C_SOURCE=199309L 				-D_POSIX_SOURCE 				-D_BSD_SOURCE -D_SVID_SOURCE $(CXXPROJECT_DEFINES)
+   CXXSTD_DEFINES = -Dlinux -D__amd64__ -D_POSIX_C_SOURCE=199309L 				-D_POSIX_SOURCE 				-D_DEFAULT_SOURCE $(CXXPROJECT_DEFINES)
        CXXOPTIONS =
       CXXINCLUDES = $(INCLUDES) $(TOP_INCLUDES) $(CXXEXTRA_INCLUDES)
        CXXDEFINES = $(CXXINCLUDES) $(CXXSTD_DEFINES) $(THREADS_CXXDEFINES) $(CXXEXTRA_DEFINES) $(DEFINES)
@@ -171,8 +171,8 @@ CXXEXTRA_INCLUDES =
             LATEX = latex
 
      STD_INCLUDES =
-  STD_CPP_DEFINES = -traditional -Dlinux LinuxMachineDefines -D_POSIX_C_SOURCE=199309L 				-D_POSIX_SOURCE 				-D_BSD_SOURCE -D_SVID_SOURCE $(PROJECT_DEFINES)
-      STD_DEFINES = -Dlinux LinuxMachineDefines -D_POSIX_C_SOURCE=199309L 				-D_POSIX_SOURCE 				-D_BSD_SOURCE -D_SVID_SOURCE $(PROJECT_DEFINES)
+  STD_CPP_DEFINES = -traditional -Dlinux -D__amd64__ -D_POSIX_C_SOURCE=199309L 				-D_POSIX_SOURCE 				-D_DEFAULT_SOURCE $(PROJECT_DEFINES)
+      STD_DEFINES = -Dlinux -D__amd64__ -D_POSIX_C_SOURCE=199309L 				-D_POSIX_SOURCE 				-D_DEFAULT_SOURCE $(PROJECT_DEFINES)
  EXTRA_LOAD_FLAGS = -Wl,-rpath,$(USRLIBDIRPATH)
   EXTRA_LDOPTIONS =
   EXTRA_LIBRARIES =
@@ -199,7 +199,7 @@ CXXEXTRA_INCLUDES =
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4711
 
-      PROJECTROOT = /usr/OpenMotif-2.1.32${USERVARIANT}
+      PROJECTROOT = /usr
 
       CDEBUGFLAGS = -O
         CCOPTIONS = -ansi
@@ -251,7 +251,7 @@ LANGINFO_DEFS=
 # X Window System make variables; these need to be coordinated with rules
 
              XTOP = $(TOP)
-           BINDIR = /usr/OpenMotif-2.1.32${USERVARIANT}/bin
+           BINDIR = /usr/bin
      BUILDINCROOT = $(TOP)/exports
       BUILDINCDIR = $(BUILDINCROOT)/include
       BUILDINCTOP = ../..
@@ -311,7 +311,7 @@ LANGINFO_DEFS=
      TRANSCOMMSRC = $(LIBSRC)/xtrans
    TRANS_INCLUDES = -I$(TRANSCOMMSRC)
 
-     XPROJECTROOT = /usr/X11R6
+     XPROJECTROOT = /usr
 
        XENVLIBDIR = $(XPROJECTROOT)/lib
    CLIENTENVSETUP = LD_LIBRARY_PATH=$(MOTIFENVLIBDIR):$(XENVLIBDIR)
@@ -517,7 +517,7 @@ TOP_MOTIF_INCLUDES = -I$(MINCLUDESRC) ${WCHARDEFS} ${LANGINFO_DEFS}
 
     MOTIFENVLIBDIR = $(USRLIBDIR)
 
-      USRINCDIR = /usr/OpenMotif-2.1.32${USERVARIANT}/include
+      USRINCDIR = /usr/include
          UIDDIR = $(LIBDIR)/uid
         TESTSRC = $(MTOP)/tests
         TESTLIB = $(TESTSRC)/lib

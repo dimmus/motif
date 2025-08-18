@@ -1,0 +1,12 @@
+
+#) This test should be displayed on both a color and a monochrome screen for 
+   full coverage.
+   Two icon gadgets appear, each the container.
+       - the left icon gadget is a pallette with a white on wheat label.
+       - the right icon gadget is a board with a gray and blue line pattern
+	 with a white on wheat label.
+   Selecting either icon or label should cause the the label background to
+   turn red, signifying that it is selected.
+   Dragging and dropping either icon or label should reposition the icon
+   gadget in the container.
+E)

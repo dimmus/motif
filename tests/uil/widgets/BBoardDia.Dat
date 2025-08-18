@@ -1,0 +1,12 @@
+ 
+#) This widget is a Bulletin Board Dialog with the following characteristics:
+   	- width is 380   
+	- height is 100   
+	- background is gold   
+	- topShadowColor is  blue   
+	- allowOverlap is false   
+	- autoUnmanage is false   
+	- dialog title is: 
+	     'This is a Dialog Title (2 Segments)'
+	- All other resources are set by default.;
+#)

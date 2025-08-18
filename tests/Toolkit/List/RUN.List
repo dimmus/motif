@@ -1,0 +1,71 @@
+Mode is  compare
+backing up RUN_failures file
+backing up output file
+Beginning test  List1
+Error - Test  List1  does not exist.
+Beginning test  List2
+Error - Test  List2  does not exist.
+Beginning test  List3
+Error - Test  List3  does not exist.
+Beginning test  List4
+Error - Test  List4  does not exist.
+Beginning test  List5
+Error - Test  List5  does not exist.
+Beginning test  List6
+Error - Test  List6  does not exist.
+Beginning test  List7
+Error - Test  List7  does not exist.
+Beginning test  List8
+Error - Test  List8  does not exist.
+Beginning test  List9
+Error - Test  List9  does not exist.
+Beginning test  List10
+Error - Test  List10  does not exist.
+Beginning test  List11
+Error - Test  List11  does not exist.
+Beginning test  List12
+Error - Test  List12  does not exist.
+Beginning test  List13
+Error - Test  List13  does not exist.
+Beginning test  ScrollList1
+Error - Test  ScrollList1  does not exist.
+Beginning test  ScrollList2
+Error - Test  ScrollList2  does not exist.
+Beginning test  ScrollList3
+Error - Test  ScrollList3  does not exist.
+Beginning test  ScrollList4
+Error - Test  ScrollList4  does not exist.
+Beginning test  ScrollList5
+Error - Test  ScrollList5  does not exist.
+Beginning test  List7
+Output redirected to  List7a.prt
+Error - Test  List7 -I List7a.Dat -S List7a.Scr -V List7a.vis -O List7a.prt -xrm *List7.layoutDirection:RIGHT_TO_LEFT  does not exist.
+Beginning test  ScrollList3
+Output redirected to  ScrollList3a.prt
+Error - Test  ScrollList3 -I ScrollList3a.Dat -S ScrollList3a.Scr -V ScrollList3a.vis -O ScrollList3a.prt -xrm *ScrollList3.layoutDirection:RIGHT_TO_LEFT  does not exist.
+Beginning test  ScrollList6
+Output redirected to  ScrollList3a.prt
+Error - Test  ScrollList6  does not exist.
+ls: No match.
+There are .prt files missing in  /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/Toolkit/List
+No List1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List10.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List11.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List12.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List6.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List7.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List7a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List8.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No List9.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No ScrollList1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No ScrollList2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No ScrollList3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No ScrollList3a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No ScrollList4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+No ScrollList5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/List
+ls: No match.
+run_dir: Command not found.

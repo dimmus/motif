@@ -1,0 +1,21 @@
+
+#) The RowColumn has been created as a child of a DrawingArea widget.
+
+!)
+#) Verify that if XmNpacking is set to XmPACK_TIGHT, that setting XmNnumColumns
+   will have no effect.
+!)
+#) Change the button Label String to be "New Value".
+!)
+#) Now change the number of children to be 10.  10 children should appear
+   vertically in the RowColumn, all entitled "New Value".
+!)
+#) Verify that XmNpacking is XmPACK_TIGHT.  Now set XmNnumColumns to 2.
+   No change should occur.
+
+C)
+
+E)
+
+
+

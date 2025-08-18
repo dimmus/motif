@@ -1,0 +1,10 @@
+#) A List and a Text widget contained in a Paned Window should appear. 
+   The Font should be:
+!)
+   -adobe-helvetica-bold-r-normal--14-140-75-75-p-82-iso8859-1
+
+#) The application's keyboardFocusPolicy is pointer and XmNhighlightOnEnter
+   is set to True.. When you move into the window you should get focus on
+   the widget you are over. When you are on the List widget, you should 
+   have focus in the form of the location cursor on the first item.
+E)

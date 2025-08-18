@@ -1,0 +1,19 @@
+#) A series of Forms should appear on your screen. 
+#) Each Form should have four PushButton children. 
+C)
+
+
+#) All of the children should now be unmanaged and invisible. 
+C)
+
+#) All of the children should now be managed and visible. 
+#) The children should have the following sizes:
+!) 
+    D has a width of 125 and a height of 125,
+    C has a width of 100 and a height of 100,
+    B has a width of 75 and a height of 75, and
+    A has its original size. 
+!) 
+#) The top position of D, C, and B should be equal to the top position of to A.
+E)
+

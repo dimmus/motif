@@ -1,0 +1,17 @@
+
+#) This is the Container1 Test run with option "-I Container1n.Dat -u n".
+C)
+
+#) The container widget should be displayed in its ANY_ICON view,
+   with a DETAIL layoutType.
+#) There should be 4 columns in the following order: Icon, Age, 
+   Full Title and Favorite Flavor.
+#) The outlineColumnWidth has been set to 150, and the TabList is 
+   +50, +200.
+#) Move the pointer into the "Container1" window, and expand
+   successively "IconGad3" and "IconGad32", by clicking on the Outline
+   Button.
+#) "IconGad321" (child of "IconGad32")  should be truncated.
+C)
+
+E)

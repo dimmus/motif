@@ -1,0 +1,9 @@
+#) A client window with three scales will appear. 
+C)
+#) Resize the client window. 
+#) Press and hold MB1 on each scale slider. Drag each
+   slider up and down the scale. Number to the left of each scale
+   should change from -1.00 at bottom to 1.00 at top. Release MB1
+   so each slider is at a different position. 
+#) Resize bottom of the client window down. 
+E)

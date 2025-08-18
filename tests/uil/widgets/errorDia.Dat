@@ -1,0 +1,11 @@
+#) This is an error Dialog widget with the following chacteristics:   
+	- topShadow Color is blue   
+	- bottomShadowColor is CadetBlue   
+	- NoResize is true   
+	- MinimizeButtons is true   
+	- autoUnmanage is false   
+	- okLabelString is Yes   
+	- cancelLabelString is NoAll
+	- other resources are set by default.
+
+E)

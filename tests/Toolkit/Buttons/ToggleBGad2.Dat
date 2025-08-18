@@ -1,0 +1,9 @@
+
+#) A client with a toggleButton will appear. The toggle indicator
+   should be set. The smiley pixmap should have black background
+   and white foreground. 
+C)
+
+#) Press and Release MB1 in client window. Nothing should
+   happen. 
+E)

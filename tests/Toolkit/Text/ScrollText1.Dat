@@ -1,0 +1,30 @@
+#) Click MB1 anywhere in the text widget.
+#) Press the sequence Shift-osfPageDown, and the text will change.
+#) Press the sequence Shift-osfPageDown again and the text will change back.
+C)
+#) Place the pointer in the text widget again, and press the Help key.
+   An information box will appear. Press the Dismiss button.
+C)	
+#) Give the text window the focus.  Click MB1 after the last word in the
+   text widget.
+#) Type in ten lines of lines of new text.  The scrollbar slider should be
+at the bottom of the trough.
+#) Iconify and deiconify the window or otherwise cause it to be re-exposed.
+#) Confirm that the location of the text does not change within the window.
+C)
+@) The text widget should now be displayed in the "variable" font
+   and the string should have changed.
+#) Click MB1 just before any of the j's in the string and type a
+   few spaces.  Verify that no pieces of the character glyphs remain
+   where the spaces now are.
+C)
+@) The text widget has been destroyed and recreated.  It was created as a
+Scrolled Text widget with editMode == XmSINGLE_LINE_EDIT, rows == 3.
+#) Confirm that there is no vertical scrollbar present.
+#) Click on the togglebutton to switch the EditMode to
+XmMULTI_LINE_EDIT.  Confirm that a vertical scrollbar is generated.
+Use the vertical scrollbar to scroll through the text.
+#) Click on the togglebutton again to switch the EditMode back to 
+XmSINGLE_LINE_EDIT.  The vertical scrollbar should disappear and the text
+widget should return to only displaying 1 line.
+E)

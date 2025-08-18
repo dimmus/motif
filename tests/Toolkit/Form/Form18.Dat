@@ -1,0 +1,121 @@
+
+
+#) Dialog shells containing a form with four children should be created on your screen. 
+#) Position the dialog shells such that they are all visible to you. 
+#) The following tests will test XtUnmapWidget and XtMapWidget on the children of the forms. 
+C)
+
+#) All of the A children should now be invisible. 
+C)
+
+#) All of the A children should now be visible again. 
+C)
+
+#) All of the B children should now be invisible. 
+C)
+
+#) All of the B children should now be visible again. 
+C)
+
+#) All of the C children should now be invisible. 
+C)
+
+#) All of the C children should now be visible again. 
+C)
+
+#) All of the D children should now be invisible. 
+C)
+
+#) All of the D children should now be visible again. 
+C)
+
+#) All of the dialog shells should now be destroyed. 
+C)
+
+#) Dialog shells containing a form with four children should be created 
+   on your screen. 
+#) Position the dialog shells such that they are all visible to you. 
+#) The following tests will test XtUnmanageChild and XtManageChild on 
+   the children of the forms. 
+C)
+
+#) All of the A children should now be invisible. 
+C)
+
+#) All of the A children should now be visible again. 
+C)
+
+#) All of the B children should now be invisible. 
+C)
+
+#) All of the B children should now be visible again. 
+C)
+
+#) All of the C children should now be invisible. 
+C)
+
+#) All of the C children should now be visible again. 
+C)
+
+#) All of the D children should now be invisible. 
+C)
+
+#) All of the D children should now be visible again. 
+C)
+
+#) All of the dialog shells should now be destroyed. 
+C)
+
+#) Dialog shells containing a form with four children should be created 
+   on your screen. 
+#) Position the dialog shells such that they are all visible to you. 
+#) The following test will test XtDestroyWidget on the A children of the 
+   forms. 
+C)
+
+#) All of the A children should now be invisible. 
+C)
+
+#) All of the dialog shells should now be destroyed. 
+C)
+
+
+#) Dialog shells containing a form with four children should be created 
+   on your screen. 
+#) Position the dialog shells such that they are all visible to you. 
+#) The following test will test XtDestroyWidget on the B children of the 
+   forms. 
+C)
+
+#) All of the B children should now be invisible. 
+C)
+
+#) All of the dialog shells should now be destroyed. 
+C)
+
+#) Dialog shells containing a form with four children should be created 
+    on your screen. 
+#) Position the dialog shells such that they are all visible to you. 
+#) The following test will test XtDestroyWidget on the C children of the 
+   forms. 
+C)
+
+#) All of the C children should now be invisible. 
+C)
+
+#) All of the dialog shells should now be destroyed. 
+C)
+
+
+#) Dialog shells containing a form with four children should be created on 
+   our screen. 
+#) Position the dialog shells such that they are all visible to you. 
+#) The following test will test XtDestroyWidget on the D children of the forms.
+C)
+
+#) All of the D children should now be invisible. 
+C)
+
+#) All of the dialog shells should now be destroyed. 
+E)
+

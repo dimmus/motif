@@ -1,0 +1,39 @@
+#) A client with a horizontal scrollbar contained in a frame should
+   appear. The processing direction is reversed and the slider
+   is located 20 percent from the left. 
+#) The following messages should be printed in the term window:
+!)
+       Setting the value to 20.
+       GetValues value = 20
+       Reversing the processing direction to max on right.
+       GetValues value = 20
+C)
+#) A client with a vertical scrollbar contained in a frame should
+   appear. The processing direction is reversed and the slider
+   is located 20 percent from the bottom. 
+#) The following messages should be printed in the term window:
+!)
+       Setting the value to 20.
+       GetValues value = 20
+       Reversing the processing direction to max
+       on bottom.
+       Changing the value to 80.
+       GetValues value = 80
+C)
+#) The scrollbar is now insensitive.  It should appear grayed out and
+   should not be accessible with the mouse or keyboard. 
+C)
+#) A new scrollbar is created with orientation set to VERTICAL.  The slider
+should be in its default position at the top (value=0, 
+processingDirection=MAX_ON_BOTTOM).
+C)
+#) The processing direction is set to
+MAX_ON_TOP.  The slider should have shifted all the way to the bottom.
+C)
+#) The orientation is set to HORIZONTAL.  The slider should be in its 
+shifted position at the right (value=0, processingDirection=MAX_ON_LEFT -
+which corresponds to MAX_ON_TOP).
+C)
+#) The processing direction is set to MAX_ON_RIGHT.  The slider should
+have shifted to the far left end.
+E)

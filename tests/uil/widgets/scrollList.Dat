@@ -1,0 +1,20 @@
+
+
+
+
+#) This is a ScrolledList with thefollowing characteristics:   
+	- listMarginWidth is 10  
+	- listMarginHeight is 10   
+	- listSpacing is 10   
+	- items are item1.. item7   
+	- itemCount is 7   
+	- selectedItemCount is 2   
+	- selectedItems are  item1 and item7   
+	- visibleItemsCount is 4   
+	- fontList is 9x15   
+	- selectionPolicy is XmSINGLE_SELECT   
+	- singleSelectCallback is ON   
+	- listSizePolicy is XmRESIZE_IF_POSSIBLE 
+	- All other resources are set by default.
+
+E)

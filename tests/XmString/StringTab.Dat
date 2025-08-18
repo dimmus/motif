@@ -1,0 +1,56 @@
+
+@)  The following test panel allows you to specify upto five tab settings
+within the given string of text and then display the text with tabs inserted. 
+
+#) Click BSelect at a position within the text widget where you would like
+to insert a tab. Set values for the tab value, tab units and 
+tab offset. Select the pushbutton labelled \"Set Tab\" to actually 
+create the tab. A popup menu will appear displaying the current
+tab values.   
+
+#) Repeat the above steps to insert more tabs into the text
+string if desired.
+
+#) Select pushbutton \"Draw String\" to display the string with
+tabs included. The new text string will display below the text widget.
+Verify that the tabs in the new text string are inserted at the correct 
+positions and the tabs distances are correct. 
+
+#) Select \"Reset Tabs\" to remove the current tab settings.
+
+#) Select \"Draw String\" to redisplay the text without any tabs.
+
+C)
+
+@) A table of XmStrings have been created with tabs and separators inserted.
+When the strings are drawn, they should be displayed in three columns with
+six rows of strings. The first row of strings contains the headings for each
+column,  \"BREADS\", \"SALADS\", and \"SOUPS\". There should be three entries
+in the \"BREADS\" column, four entries in the \"SALADS\" column and
+five entries in the \"SOUPS\" column.
+
+
+#) With the \"Tab Options\" set to \"Default Tabs\", click MB1 on the button
+\"Draw Strings\". The strings will be displayed with a default tab 
+of a half inch between each column of strings.
+
+C)
+
+#) Select the \"Proposed Tabs\" option from the \"Tab Options\" menu.
+
+#) Specify the unit type used when creating tabs by selecting a type
+from the \"Unit Model\" menu. 
+
+#) Specify the amount of padding used, based on the selected unit type,
+to separate the columns of strings by setting \"Pad Value\".
+
+#) Specify the offset model used in creating tabs by selecting an offset
+from the \"Offset Model\" menu.
+
+#) Click MB1 on the \"Draw Strings\" button.
+
+#) Verify that the strings are displayed in three columns and six rows
+with no overlapping between the rows and strings.
+
+C)
+E)

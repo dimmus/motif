@@ -1,0 +1,14 @@
+
+
+#) This is a toggleButton gadget with the following characteristics:   
+	- width is 300   
+	- height is 150   
+	- traversalOn is true   
+	- highlightOnEnter is true
+   	- shadowThickness is 5   
+	- visibleWhenOff is false   
+	- selectColor is red 
+  	- valueChangedCallback is ON   
+	- set is true
+	All other resources are set by default.
+E)

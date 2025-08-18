@@ -1,0 +1,63 @@
+
+#) Testing the XmNscrolledWindowChildType resource of the
+   ScrollingWindow widget.  You should see a scrolled window whose
+   childType is XmNO_SCROLL
+
+#) There should be no scrollbars visible.
+
+C)
+
+#) Testing the XmNscrolledWindowChildType resource of the
+   ScrollingWindow widget.  You should see a scrolled window whose
+   childType is XmSCROLL_VERT.
+
+#) There will be two scroll bars visible but only the vertical
+   scrollbar does anything.  Try scrolling by using the mouse in both
+   the horizontal and vertical scrollbars.
+
+#) Now try scrolling using the keyboard.  Use KTab to move from the
+   vertical scrollbar to the horizontal one (and vice versa.)  Then
+   use the KUp, KDown, KLeft, KRight, MCtrl KUp, MCtrl KDown, MCtrl
+   KRight and MCtrl KLeft keys.  The work window should only move
+   vertically.
+
+C)
+
+#) Testing the XmNscrolledWindowChildType resource of the
+   ScrollingWindow widget.  You should see a scrolled window whose
+   childType is XmSCROLL_HOR.
+
+#) There will be two scroll bars visible but only the horizontal
+   scrollbar does anything.  Try scrolling by using the mouse in both
+   the horizontal and vertical scrollbars.
+
+#) Now try scrolling using the keyboard.  Use KTab to move from the
+   vertical scrollbar to the horizontal one (and vice versa.)  Then
+   use the KUp, KDown, KLeft, KRight, MCtrl KUp, MCtrl KDown, MCtrl
+   KRight and MCtrl KLeft keys.  The work window should only move
+   horizontally.
+
+C)
+
+#) Testing the XmNscrolledWindowChildType resource of the
+   ScrollingWindow widget.  You should see a scrolled window whose
+   childType is XmWORK_AREA
+
+#) There will be two scroll bars visible and both should work.  Try
+   scrolling by using the mouse in both the horizontal and vertical
+   scrollbars.
+
+#) Now try scrolling using the keyboard.  Use KTab to move from the
+   vertical scrollbar to the horizontal one (and vice versa.)  Then
+   use the KUp, KDown, KLeft, KRight, MCtrl KUp, MCtrl KDown, MCtrl
+   KRight and MCtrl KLeft keys.  The work window should move in both
+   directions.
+
+C)
+
+#) Testing the XmNscrolledWindowChildType resource of the
+   ScrollingWindow widget.  You should see a scrolled window with two
+   scrollbars whose childType is XmHOR_SCROLLBAR and XmVERT_SCROLLBAR.
+   The two scrollbars should have wide shadows.
+
+E)

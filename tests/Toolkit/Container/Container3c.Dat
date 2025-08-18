@@ -1,0 +1,60 @@
+
+
+#) This is Container3 test run with the option "-I Container3c.Dat -u c",  
+   trying to test a customized translation table.
+C)
+
+#) The following is the set of translations defined in the resource file
+   Container.defaults.
+!)
+	~Shift ~Ctrl<Btn2Down> :        ContainerBeginSelect() 
+	~Shift ~Ctrl<Btn2Up>:           ContainerEndSelect() 
+	<Btn2Motion>:                   ContainerButtonMotion() 
+	Ctrl<Btn2Down>:                 ContainerBeginToggle() 
+	Ctrl<Btn2Up>:                   ContainerEndToggle() 
+	Shift<Btn2Down>:                ContainerBeginExtend() 
+	Shift<Btn2Up>:                  ContainerEndExtend() 
+	~Shift ~Ctrl<Btn1Down>:         ContainerStartTransfer(Copy) 
+	Shift Ctrl<Btn1Down>:           ContainerStartTransfer(Link) 
+	Shift<Btn1Down>:                ContainerStartTransfer(Move) 
+	<Btn1Up>:                       ContainerEndTransfer() 
+	~Shift ~Ctrl<Key>osfDelete:     ContainerPrimaryCopy() 
+	Shift Ctrl<Key>osfDelete:       ContainerPrimaryLink() 
+	Shift<Key>osfInsert:            ContainerPrimaryMove() 
+	<Key>osfSelect:                 ContainerCancel() 
+	Shift<Key>osfCancel:            ContainerExtend() 
+	<Key>osfCancel:                 ContainerSelect() 
+	Shift<Key>osfDown:              ContainerExtendCursor(Up)
+	Shift<Key>osfUp:                ContainerExtendCursor(Down) 
+	<Key>osfDown:                   ContainerMoveCursor(Up) 
+	<Key>osfUp:                     ContainerMoveCursor(Down)
+	Shift Ctrl<Key>osfEndLine:      ContainerExtendCursor(First)
+	Shift Ctrl<Key>osfBeginLine:    ContainerExtendCursor(Last)
+	Ctrl<Key>osfEndLine:            ContainerMoveCursor(First)
+	Ctrl<Key>osfBeginLine:          ContainerMoveCursor(Last)
+	<Key>d:	                        ContainerToggleMode()
+	Ctrl<Key>backslash:             ContainerSelectAll() 
+	Ctrl<Key>slash:                 ContainerDeselectAll() 
+	<Key>osfActivate:               ContainerActivate() 
+
+#) You should not see any message in the term window about "Actions
+   not found".
+#) You can exercize these actions, however the following actions
+   cannot have translations overidden due to the traversal mechanism,
+   and the default translation will be used:
+!)
+        ContainerExtendCursor(Up) 
+        ContainerExtendCursor(Down) 
+        ContainerExtendCursor(Left) 
+        ContainerExtendCursor(Right) 
+        ContainerMoveCursor(Up) 
+        ContainerMoveCursor(Down) 
+        ContainerMoveCursor(Left) 
+        ContainerMoveCursor(Right) 
+        ContainerExtendCursor(First) 
+        ContainerExtendCursor(Last) 
+        ContainerMoveCursor(First) 
+        ContainerMoveCursor(Last) 
+E)
+
+

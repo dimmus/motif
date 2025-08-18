@@ -1,0 +1,14 @@
+
+#) A client with a working dialog should appear. The dialog
+   should have three buttons labeled 'HelpBtn', 'Symbol',
+   and 'Message'. 
+#) Click MB1 on 'Message' button. The message string should disappear.
+   An attempt to reset the string will not work because the widget
+   associated with the message string has been destroyed. 
+#) Click MB1 on 'Symbol' button. The SymbolPixmap should disappear.
+   An attempt to redisplay the pixmap will not work because the
+   widget associated with the pixmap has been destroyed. 
+#) Click MB1 on 'HelpBtn' button. The 'Message' button will disappear.
+   An attempt to redisplay that button will not work because the
+   widget associated with the 'Message' button has been destroyed. 
+E)

@@ -1,0 +1,14 @@
+!) This is a test of traversal behaviors.  
+#) The five boxed frames are tab groups explicitly set to XmNONE.  You can move
+ between the groups by hitting the left/right up/down arrow keys. 
+#) Use the return or space key to activate (depress) the buttons.
+C)
+@) The two-column Row Column has been set as a TAB_GROUP.
+#) Tab should take you between btn1 in the leftmost row column and btn1 in
+the third row column.
+#) Use the Traverse button in this panel to move the focus to the NEXT widget.
+#) Within each of the two tab groups,
+the focus should move to the next widget in creation order, ie from btn2 to
+btn3.
+C)	
+E)

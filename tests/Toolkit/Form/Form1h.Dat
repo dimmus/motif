@@ -1,0 +1,11 @@
+#) Set the offset scale to a number greater than 5.
+#) Reattach the top and left of Child1 to FORM so that the offset is applied.
+#) Attach the top of Child2 to WIDGET.
+C)
+#) Find out the size of the Form by pressing the Report Form Size button.
+#) Increase the form width by one pixel. Do this twice.
+#) Note the appearance of the parent form's shadow!
+#) Decrease the form width by one pixel. 
+#) The appearance of the form shadow should not change.
+C) 
+E)

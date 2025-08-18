@@ -1,0 +1,131 @@
+Mode is  compare
+backing up RUN_failures file
+backing up output file
+Beginning test  Menu1
+Error - Test  Menu1  does not exist.
+Beginning test  Menu1
+Output redirected to  Menu1a.prt
+Error - Test  Menu1 -I Menu1a.Dat -S Menu1a.Scr -O Menu1a.prt -V Menu1a.Vis -xrm "*Menu1.layoutDirection:RIGHT_TO_LEFT"  does not exist.
+Beginning test  Menu2
+Output redirected to  Menu1a.prt
+Error - Test  Menu2  does not exist.
+Beginning test  Menu3
+Output redirected to  Menu1a.prt
+Error - Test  Menu3  does not exist.
+Beginning test  Menu4
+Output redirected to  Menu1a.prt
+Error - Test  Menu4  does not exist.
+Beginning test  Menu5
+Output redirected to  Menu1a.prt
+Error - Test  Menu5  does not exist.
+Beginning test  Menu6
+Output redirected to  Menu1a.prt
+Error - Test  Menu6  does not exist.
+Beginning test  Menu7
+Output redirected to  Menu1a.prt
+Error - Test  Menu7  does not exist.
+Beginning test  MenuBar1
+Output redirected to  Menu1a.prt
+Error - Test  MenuBar1  does not exist.
+Beginning test  MenuBar2
+Output redirected to  Menu1a.prt
+Error - Test  MenuBar2  does not exist.
+Beginning test  MenuBar3
+Output redirected to  Menu1a.prt
+Error - Test  MenuBar3  does not exist.
+Beginning test  MenuGad1
+Output redirected to  Menu1a.prt
+Error - Test  MenuGad1  does not exist.
+Beginning test  OptionMenu1
+Output redirected to  Menu1a.prt
+Error - Test  OptionMenu1  does not exist.
+Beginning test  OptionMenu2
+Output redirected to  Menu1a.prt
+Error - Test  OptionMenu2  does not exist.
+Beginning test  OptionMenu3
+Output redirected to  Menu1a.prt
+Error - Test  OptionMenu3  does not exist.
+Beginning test  OptionMenu4
+Output redirected to  Menu1a.prt
+Error - Test  OptionMenu4  does not exist.
+Beginning test  OptionMenu4
+Output redirected to  OptionMenu4a.prt
+Error - Test  OptionMenu4 -I OptionMenu4a.Dat -S OptionMenu4.Scr -O OptionMenu4a.prt -V OptionMenu4a.vis -xrm "*OptionMenu4.layoutDirection:RIGHT_TO_LEFT"  does not exist.
+Beginning test  OptionMenu5
+Output redirected to  OptionMenu4a.prt
+Error - Test  OptionMenu5  does not exist.
+Beginning test  PopupMenu1
+Output redirected to  OptionMenu4a.prt
+Error - Test  PopupMenu1  does not exist.
+Beginning test  PopupMenu2
+Output redirected to  OptionMenu4a.prt
+Error - Test  PopupMenu2  does not exist.
+Beginning test  PopupMenu2
+Output redirected to  PopupMenu2a.prt
+Error - Test  PopupMenu2 -I PopupMenu2a.Dat -S PopupMenu2.Scr -O PopupMenu2a.prt -V PopupMenu2a.vis -xrm "*PopupMenu2.layoutDirection:RIGHT_TO_LEFT"  does not exist.
+Beginning test  PopupMenu3
+Output redirected to  PopupMenu2a.prt
+Error - Test  PopupMenu3  does not exist.
+Beginning test  PopupMenu4
+Output redirected to  PopupMenu2a.prt
+Error - Test  PopupMenu4  does not exist.
+Beginning test  PopupMenu5
+Output redirected to  PopupMenu2a.prt
+Error - Test  PopupMenu5  does not exist.
+Beginning test  PopupMenu6
+Output redirected to  PopupMenu2a.prt
+Error - Test  PopupMenu6  does not exist.
+Beginning test  PopupMenu7
+Output redirected to  PopupMenu2a.prt
+Error - Test  PopupMenu7  does not exist.
+Beginning test  RowCol1
+Output redirected to  PopupMenu2a.prt
+Error - Test  RowCol1  does not exist.
+Beginning test  RowCol2
+Output redirected to  PopupMenu2a.prt
+Error - Test  RowCol2  does not exist.
+Beginning test  RowCol3
+Output redirected to  RowCol3a.prt
+Error - Test  RowCol3 -u xmBulletinBoardWidgetClass -I RowCol3a.Dat -S RowCol3a.Scr -O RowCol3a.prt -V RowCol3a.vis  does not exist.
+Beginning test  RowCol3
+Output redirected to  RowCol3b.prt
+Error - Test  RowCol3 -u xmDrawingAreaWidgetClass -I RowCol3b.Dat -S RowCol3b.Scr -O RowCol3b.prt -V RowCol3b.vis  does not exist.
+Beginning test  RowCol3
+Output redirected to  RowCol3c.prt
+Error - Test  RowCol3 -u xmFrameWidgetClass -I RowCol3c.Dat -S RowCol3c.Scr -O RowCol3c.prt -V RowCol3c.vis  does not exist.
+Beginning test  RowCol3
+Output redirected to  RowCol3d.prt
+Error - Test  RowCol3 -u xmFormWidgetClass -I RowCol3d.Dat -S RowCol3d.Scr -O RowCol3d.prt -V RowCol3d.vis  does not exist.
+Beginning test  RowCol3
+Output redirected to  RowCol3e.prt
+Error - Test  RowCol3 -u xmMainWindowWidgetClass -I RowCol3e.Dat -S RowCol3e.Scr -O RowCol3e.prt -V RowCol3e.vis  does not exist.
+ls: No match.
+There are .prt files missing in  /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/Toolkit/Menus
+No Menu1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No Menu2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No Menu3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No Menu4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No Menu5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No Menu6.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No Menu7.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No MenuBar1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No MenuBar2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No MenuBar3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No MenuGad1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No OptionMenu1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No OptionMenu2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No OptionMenu3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No OptionMenu4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No OptionMenu4a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No OptionMenu5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No PopupMenu1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No PopupMenu2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No PopupMenu2a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No PopupMenu3.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No PopupMenu4.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No PopupMenu5.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No RowCol1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No RowCol2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+No RowCol3a.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/Toolkit/Menus
+ls: No match.
+run_dir: Command not found.

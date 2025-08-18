@@ -1,0 +1,37 @@
+#) Move the pointer into the Text widget and press the return key.
+You should see a message that an activate callback has been generated.
+The Text widget's parent is a Bulletin Board.
+C)
+#) Move the pointer into the Text widget and press the return key.
+Since this is a multi-line widget, the insert cursor will move to the
+next line and no message about an activate callback should appear.
+C)
+#) Move the pointer into the Text widget and press the return key.
+You should see a message that an activate callback has been generated.
+The Text widget's parent is a Form.
+C)
+#) Move the pointer into the Text widget and press the return key.
+Since this is a multi-line widget, the insert cursor will move to the
+next line and no message about an activate callback should appear.
+C)
+#) Move the pointer into the Text widget and press the return key.
+You should see a message that an activate callback has been generated.
+The Text widget's parent is a Form Dialog.
+C)
+#) Move the pointer into the Text widget and press the return key.
+Since this is a multi-line widget, the insert cursor will move to the
+next line and no message about an activate callback should appear.
+C)
+#) Move the pointer into the Text widget and press the return key.
+You should see a message that an activate callback has been generated.
+The Text widget's parent is a Bulletin Board Dialog.
+C)
+#) Move the pointer into the Text widget and press the return key.
+Since this is a multi-line widget, the insert cursor will move to the
+next line and no message about an activate callback should appear.
+C)
+#) Move the pointer into the text widget and start typing in text until
+the line is completely filled. Then type a few more characters, the
+text widget should resize. Now, press the return key multiple times
+until the first line of text is no longer visible.
+E)

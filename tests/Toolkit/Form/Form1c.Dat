@@ -1,0 +1,5 @@
+#) Attach TOP of Child2 (yellow) to OPPOSITE_WIDGET.
+#) Change height of Child1 (blue) to 100 (or any larger size).
+#) The Form should resize to fit the button.
+#) Clear Child2. There should be no change.
+E)

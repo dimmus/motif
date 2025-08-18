@@ -1,0 +1,46 @@
+
+#) Use arrow keys to traverse between the pushbutton, scrollbar and text.
+#) The arrow keys will not take you to the RowColumn.
+#) Tab will take you to the RowColumn.
+#) Within the RowColumn, arrow keys will traverse the children.
+C)
+#) ScrollBar/Scale destroyed and recreated.
+#) You should not be able to traverse to this widget with Tab or Arrows.
+C)
+#) Tab behavior should be as before.
+#) Click on the scroll bar/scale and on other widgets. 
+#) In no case should the focus move anywhere other than where you
+place the focus.
+C)
+#) Now all the children of the Bulletin Board are tab groups.
+#) The traversal order should be from left to right, top to bottom.
+C)
+#) Now all the children of the Bulletin Board are STICKY tab groups.
+#) The traversal order should still be from left to right, top to bottom.
+C)
+#) An EXCLUSIVE_TAB_GROUP ScrolledList has been added.
+#) The list is a tab group. The tab group status of the other widgets
+   should not have changed.
+#) The tab order should be counter-clockwise among the original children,
+with the ScrolledList after the RowColumn.
+C)
+#) The text and button children have been returned to XmNONE navigationType.
+#) The scroll bar/scale  and  RowColumn children were returned to XmTAB_GROUP.
+#) Their parent bulletin board is now an EXCLUSIVE_TAB_GROUP.
+#) The list remains an EXCLUSIVE_TAB_GROUP.
+#) The list should remain a tab group. The other children should be
+	traversable via the arrow keys.
+#) The traversal order within the first tab group should be: DefaultButton; the three children of the row column; text; scale/scrollbar.
+#) The second tab group is the scrolled list.
+C)
+E)
+
+
+
+
+
+
+
+
+
+

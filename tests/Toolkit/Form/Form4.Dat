@@ -1,0 +1,38 @@
+#) A client with a form should appear. The form should
+   contain one frame and should be 100x100 pixels.
+#) Resize the client window. The frame should remain around
+   the bounds of the window. 
+#) Iconify and Normalize the client window. The frame
+   should remain around the bounds of the window. 
+
+C)
+
+#) A client with one pushbutton contained in a form should appear.
+   The pushbutton should be \"Attached\" to the form on the top and on the
+   right. 
+#) Press MB1 on 'PushButton1'. The pushbutton should highlight. 
+!) 
+C)
+
+#) The form should now contain a second pushbutton. The new
+   pushbutton should be \"Attached\" to the form on the left and on the
+   bottom. It should also be \"Attached\" to 'PushButton1' on the right. 
+#) Press MB1 on 'PushButton2'. The pushbutton should highlight. 
+!) 
+C)
+
+#) The form should now contain a third pushbutton. The new
+   pushbutton should be \"Attached\" to the form on the left and on the
+   top. It should also be \"Attached\" to 'PushButton1' on the right, and
+   'PushButton2' on the bottom. 
+#) Press MB1 on 'PushButton3'. The pushbutton should highlight. 
+!) 
+C)
+
+#) The form should now contain a fourth pushbutton. The new
+   pushbutton should be \"Attached\" to the form on the right and on the
+   bottom. It should also be \"Attached\" to 'PushButton1' on the top, and
+   'PushButton2' on the left. 
+#) Press MB1 on 'PushButton4'. The pushbutton should highlight. 
+!) 
+E)

@@ -1,0 +1,27 @@
+Mode is  compare
+backing up RUN_failures file
+backing up output file
+Beginning test  displayUid
+Output redirected to  GSyntax1.prt
+Error - Test  displayUid -u GSyntax1 -I GSyntax1.Dat -S GSyntax1.Scr -O GSyntax1.prt -V GSyntax1.vis  does not exist.
+Beginning test  displayUid
+Output redirected to  GSyntax2.prt
+Error - Test  displayUid -u GSyntax2 -I GSyntax2.Dat -S GSyntax2.Scr -O GSyntax2.prt -V GSyntax2.vis  does not exist.
+Beginning test  displayUid
+Output redirected to  Names.prt
+Error - Test  displayUid -u Names -I Names.Dat -S Names.Scr -O Names.prt -V Names.vis  does not exist.
+Beginning test  displayUid
+Output redirected to  NamesU.prt
+Error - Test  displayUid -u NamesU -I NamesU.Dat -S NamesU.Scr -O NamesU.prt -V NamesU.vis  does not exist.
+Beginning test  Case
+Output redirected to  NamesU.prt
+Error - Test  Case  does not exist.
+ls: No match.
+There are .prt files missing in  /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/uil/Syntax
+No Case.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/uil/Syntax
+No GSyntax1.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/uil/Syntax
+No GSyntax2.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/uil/Syntax
+No Names.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/uil/Syntax
+No NamesU.prt file found in /media/dimmus/dev/x/xde-classic/xde-motif-dimmus/tests/../tests/visuals/uil/Syntax
+ls: No match.
+run_dir: Command not found.

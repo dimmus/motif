@@ -1,0 +1,21 @@
+
+        
+#) This widget is a cascade button with the following characteristics:
+	- there are two Pushbuttons, one is contained within a menuBar 
+	  and the other is a child of Pulldown Menu. 
+	- Each cascadeButton has a Pulldown Menu associated with it.
+	- each Pushbutton has a accelerator and acceleratorText associated
+          with it.
+	- each PushButton has a mnemonic corresponding to the first
+	  character of the PushButton.
+	- borderWidth is 2
+	- height is 50
+	- width is 100
+	- borderColor is brow
+	- mappingDelay is
+	- recomputeSize is false
+	- All other resources are by default.
+Exit
+
+
+
