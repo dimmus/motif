@@ -5,6 +5,7 @@ config.*
 *.o
 *.lo
 *.la
+*.cat
 .deps
 .libs
 stamp-h1
@@ -27,6 +28,8 @@ ylwrap
 m4/lt*.m4
 m4/libtool.m4
 build-aux
+motif.pc
+localized/util/mkcatdefs
 demos/unsupported/xmform/xmform
 demos/unsupported/xmforc/xmforc
 demos/unsupported/xmfonts/xmfonts
@@ -165,3 +168,5 @@ tools/wml/wmllex.c
 tools/wml/wmlparse.c
 tools/wml/wmlparse.h
 tools/wml/wmluiltok.c
+lib/Mrm/MrmMsgCatI.h
+lib/Xm/XmMsgCatI.h
