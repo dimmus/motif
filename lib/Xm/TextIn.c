@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -874,7 +874,7 @@ static XmTextPosition YtoPosInLine(XmTextWidget tw,
 
 
 static XContext _XmTextDestContext = 0;
- 
+
 static XmConst XmTextScanType sarray[] = {
   XmSELECT_POSITION, XmSELECT_WORD, XmSELECT_LINE, XmSELECT_ALL
 };
@@ -907,41 +907,41 @@ static XtResource input_resources[] = {
 
 };
 
-static TextDestData 
+static TextDestData
 GetTextDestData(Widget tw)
 {
   TextDestData dest_data;
   Display *display = XtDisplay(tw);
   Screen *screen = XtScreen(tw);
   XContext loc_context;
-  
+
   _XmProcessLock();
   if (_XmTextDestContext == 0)
     _XmTextDestContext = XUniqueContext();
   loc_context = _XmTextDestContext;
   _XmProcessUnlock();
-  
+
   if (XFindContext(display, (Window)screen,
 		   loc_context, (char **) &dest_data)) {
     XmTextContextData ctx_data;
     Widget xm_display = (Widget) XmGetXmDisplay(display);
-    
+
     ctx_data = (XmTextContextData) XtMalloc(sizeof(XmTextContextDataRec));
-    
+
     ctx_data->screen = screen;
     ctx_data->context = loc_context;
     ctx_data->type = _XM_IS_DEST_CTX;
-    
+
     dest_data = (TextDestData) XtCalloc(1, sizeof(TextDestDataRec));
-    
+
     XtAddCallback(xm_display, XmNdestroyCallback,
 		  (XtCallbackProc) _XmTextFreeContextData,
 		  (XtPointer) ctx_data);
-    
+
     XSaveContext(display, (Window)screen,
 		 loc_context, (char *)dest_data);
   }
-  
+
   return dest_data;
 }
 
@@ -952,15 +952,15 @@ _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
 			     int check_add_mode)
 {
   InputData data = tw->text.input->data;
-  
+
   if (!(*tw->text.source->GetSelection)(tw->text.source, left, right)) {
     *left = *right = tw->text.cursor_position;
     return False;
-  } else 
+  } else
     if (check_add_mode && !tw->text.add_mode)
       return (*left != *right);
     else
-      return (data->pendingdelete && 
+      return (data->pendingdelete &&
               *left != *right && *left <= tw->text.cursor_position &&
               *right >= tw->text.cursor_position);
 }
@@ -968,7 +968,7 @@ _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
 
 /* ARGSUSED */
 /*
- * static void 
+ * static void
  * #ifdef _NO_PROTO
  * CheckSync(w, tmp, event, cont)
  *      Widget w;
@@ -986,7 +986,7 @@ _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
  *   InputData data = tw->text.input->data;
  *   XEvent ev2;
  *   Boolean onewaiting;
- *   
+ *
  *   if (XPending(XtDisplay(tw))) {
  *     XPeekEvent(XtDisplay(tw), &ev2);
  *     onewaiting = (ev2.xany.type == KeyPress &&
@@ -1007,30 +1007,30 @@ _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
  */
 
 /* ARGSUSED */
-static void 
+static void
 RingBell(Widget w,
 	 XEvent *event,
 	 String *params,
 	 Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (tw->text.verify_bell)
     XBell(XtDisplay(tw), 0);
 }
 
 
-Boolean 
+Boolean
 _XmTextHasDestination(Widget w)
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   return (data->has_destination);
 }
 
 
-Boolean 
+Boolean
 _XmTextSetDestinationSelection(Widget w,
 			       XmTextPosition position,
 #if NeedWidePrototypes
@@ -1045,11 +1045,11 @@ _XmTextSetDestinationSelection(Widget w,
   Boolean result = TRUE;
   Atom MOTIF_DESTINATION = XInternAtom(XtDisplay(w),
 				       XmS_MOTIF_DESTINATION, False);
-  
+
   if (!XtIsRealized(w)) return False;
-  
+
   EraseInsertionPoint(tw);
-  
+
   if (!disown) {
     if (!data->has_destination) {
       if (!set_time) set_time = _XmValidTimestamp(w);
@@ -1063,22 +1063,22 @@ _XmTextSetDestinationSelection(Widget w,
     if (data->has_destination) {
       if (!set_time) set_time = _XmValidTimestamp(w);
       XtDisownSelection(w, MOTIF_DESTINATION, set_time);
-      
+
       /* Call XmGetDestination(dpy) to get widget that last had
 	 destination cursor. */
       if (w == XmGetDestination(XtDisplay(w)))
 	_XmSetDestination(XtDisplay(w), (Widget)NULL);
-      
+
       data->has_destination = False;
     }
   }
-  
+
   DisplayInsertionPoint(tw);
-  
+
   return result;
 }
 
-static Boolean 
+static Boolean
 DeleteOrKill(XmTextWidget tw,
 	     XEvent *event,
 	     XmTextPosition from,
@@ -1095,8 +1095,8 @@ DeleteOrKill(XmTextWidget tw,
   char *ptr;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
-  
+
+
   _XmTextDisableRedisplay(tw,False);
   if (kill && from < to) {
     ptr = _XmStringSourceGetString(tw, from, to, False);
@@ -1107,7 +1107,7 @@ DeleteOrKill(XmTextWidget tw,
   block.ptr = "";
   block.length = 0;
   block.format = XmFMT_8_BIT;
-  
+
   if (_XmTextModifyVerify(tw, event, &from, &to,
 			  cursorPos, &block, &newblock, &freeBlock)) {
     if ((*tw->text.source->Replace)(tw, NULL, &from,
@@ -1131,7 +1131,7 @@ DeleteOrKill(XmTextWidget tw,
   return TRUE;
 }
 
-static void 
+static void
 StuffFromBuffer(XmTextWidget tw,
 		XEvent *event,
 		int buffer)
@@ -1142,13 +1142,13 @@ StuffFromBuffer(XmTextWidget tw,
   Boolean freeBlock;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   from_pos = to_pos = tw->text.cursor_position;
   block.ptr = XFetchBuffer(XtDisplay(tw), &(block.length), buffer);
   block.format = XmFMT_8_BIT;
   if (_XmTextModifyVerify(tw, event, &from_pos, &to_pos,
 			  &cursorPos, &block, &newblock, &freeBlock)) {
-    if ((*tw->text.source->Replace)(tw, NULL, &from_pos, &to_pos, 
+    if ((*tw->text.source->Replace)(tw, NULL, &from_pos, &to_pos,
 				    &newblock, False) != EditDone) {
       RingBell((Widget)tw, (XEvent *) NULL, (String *) NULL, (Cardinal) 0);
     } else {
@@ -1165,7 +1165,7 @@ StuffFromBuffer(XmTextWidget tw,
 }
 
 /* ARGSUSED */
-static void 
+static void
 UnKill(Widget w,
        XEvent *event,
        String *params,
@@ -1178,7 +1178,7 @@ UnKill(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 RemoveCurrentSelection(Widget w,
 		       XEvent *event,
 		       String *params,
@@ -1193,13 +1193,13 @@ RemoveCurrentSelection(Widget w,
   XmTextPosition newCursorPos, cursorPos, left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   if (!(*tw->text.source->GetSelection)(tw->text.source, &left, &right)) {
     XBell(XtDisplay(tw), 0);
   } else {
     if (!_XmStringSourceGetEditable(GetSrc(w))) {
       /* Why bother with any of the following? Nothing will happen! */
-      return; 
+      return;
     }
     if (left < right) {
       cursorPos = tw->text.cursor_position;
@@ -1212,14 +1212,14 @@ RemoveCurrentSelection(Widget w,
 					 False, event_time);
 	}
 	_XmTextValueChanged(tw, event);
-      } else 
+      } else
 	(*tw->text.source->SetSelection)(tw->text.source, left,
 					 right, event_time);
     }
   }
 }
 
-static void 
+static void
 DeleteCurrentSelection(Widget w,
 		       XEvent *event,
 		       String *params,
@@ -1229,7 +1229,7 @@ DeleteCurrentSelection(Widget w,
   RemoveCurrentSelection(w, event, params, num_params, FALSE);
 }
 
-static void 
+static void
 KillCurrentSelection(Widget w,
 		     XEvent *event,
 		     String *params,
@@ -1247,16 +1247,16 @@ CheckDisjointSelection(Widget w,
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition left, right;
   InputData data = tw->text.input->data;
-  
+
   left = right = position;
-  
+
   if (tw->text.add_mode ||
       ((*tw->text.source->GetSelection)(tw->text.source, &left, &right) &&
        left != right && position >= left && position <= right))
     tw->text.pendingoff = FALSE;
   else
     tw->text.pendingoff = TRUE;
-  
+
   if (left == right) {
     _XmTextSetDestinationSelection(w, position, False, sel_time);
     data->anchor = position;
@@ -1266,9 +1266,9 @@ CheckDisjointSelection(Widget w,
   }
 }
 
-static Boolean 
+static Boolean
 PrintableString(XmTextWidget tw,
-		char* str, 
+		char* str,
 		int n)
 {
 #ifdef SUPPORT_ZERO_WIDTH
@@ -1298,7 +1298,7 @@ PrintableString(XmTextWidget tw,
 	 i += csize, csize = str[i] ? 1 : 0)
 #endif
       {
-	if (csize < 0) 
+	if (csize < 0)
 	  return False;
 	if (mbtowc(&wc, &(str[i]), tw->text.char_size) <= 0)
 	  return False;
@@ -1306,7 +1306,7 @@ PrintableString(XmTextWidget tw,
 	  return False;
 	}
       }
-#else /* HAS_WIDECHAR_FUNCTIONS */ 
+#else /* HAS_WIDECHAR_FUNCTIONS */
     /*
      * This will only check if any single-byte characters are non-
      * printable. Better than nothing...
@@ -1338,15 +1338,15 @@ PrintableString(XmTextWidget tw,
   } else if (o_data->use_xft) {
     XGlyphInfo ext;
     XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, (_Xconst FcChar8 *)str, n, &ext);
-    return ext.xOff != 0;    
+    return ext.xOff != 0;
 #endif
   } else {
     return (XTextWidth(o_data->font, str, n) != 0);
   }
-#endif /* SUPPORT_ZERO_WIDTH */ 
+#endif /* SUPPORT_ZERO_WIDTH */
 }
 
-static void 
+static void
 SelfInsert(Widget w,
 	   XEvent *event,
 	   String *params,
@@ -1364,12 +1364,12 @@ SelfInsert(Widget w,
   Boolean freeBlock;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   /* Determine what was pressed.
    */
-  n = XmImMbLookupString(w, (XKeyEvent *) event, str, TEXT_MAX_INSERT_SIZE, 
+  n = XmImMbLookupString(w, (XKeyEvent *) event, str, TEXT_MAX_INSERT_SIZE,
 			 (KeySym *) NULL, &status_return);
-  
+
   /* If the user has input more data than we can handle, bail out */
   if (status_return == XBufferOverflow || n > TEXT_MAX_INSERT_SIZE)
     return;
@@ -1381,11 +1381,11 @@ SelfInsert(Widget w,
 
   for (i=0; i < n; i++)
     if (str[i] == 0) n = 0; /* just toss out the entire input string */
-  
+
   if (n > 0) {
     EraseInsertionPoint(tw);
     str[n]='\0';
-    
+
     if (!PrintableString(tw, str, n) && strchr(str, '\t') == NULL) {
       DisplayInsertionPoint(tw);
       return;
@@ -1404,7 +1404,7 @@ SelfInsert(Widget w,
       if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
 	if (nextPos > lastPos) nextPos = lastPos;
       } else
-	if (nextPos >= lastPos) 
+	if (nextPos >= lastPos)
         {
 	  if (lastPos < tw->text.source->data->length)
           {
@@ -1442,7 +1442,7 @@ SelfInsert(Widget w,
   }
 }
 
-static void 
+static void
 InsertString(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -1458,17 +1458,17 @@ InsertString(Widget w,
   Boolean freeBlock;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextDisableRedisplay(tw, TRUE);
   cursorPos = beginPos = nextPos = tw->text.cursor_position;
-  
+
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, FALSE)) {
     beginPos = left;
     nextPos = right;
     pending_delete = True;
   }
-  
-  
+
+
   for (i=0; i<*num_params; i++) {
     str = params[i];
     block.ptr = str;
@@ -1499,18 +1499,18 @@ InsertString(Widget w,
       break;
     }
   }
-  
+
   if (value_changed) {
     _XmTextSetCursorPosition(w, cursorPos);
     CheckDisjointSelection(w, tw->text.cursor_position, event_time);
     _XmTextValueChanged(tw, event);
   }
-  
+
   _XmTextEnableRedisplay(tw);
-  
+
 }
 
-static void 
+static void
 ProcessVerticalParams(Widget w,
 		      XEvent *event,
 		      String *params,
@@ -1520,7 +1520,7 @@ ProcessVerticalParams(Widget w,
   Cardinal num;
   int direction;
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (*num_params > 0)
   {
     if (XmDirectionMatch(XmPrim_layout_direction(tw),
@@ -1565,7 +1565,7 @@ ProcessVerticalParams(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 ProcessHorizontalParams(Widget w,
 			XEvent *event,
 			String *params,
@@ -1578,20 +1578,20 @@ ProcessHorizontalParams(Widget w,
   InputData data = tw->text.input->data;
   XmTextPosition old_cursorPos = tw->text.cursor_position;
   int direction;
-  
+
   *position = (*tw->text.source->Scan)(tw->text.source,
 				       tw->text.cursor_position,
 				       XmSELECT_POSITION, XmsdRight, 1, False);
-  
+
   if (!(*tw->text.source->GetSelection)
       (tw->text.source, left, right) || *left == *right) {
     data->origLeft = data->origRight = data->anchor;
     *left = *right = old_cursorPos;
   }
-  
+
   /* move text cursor in direction of cursor key */
   if (*num_params > 0)
-  { 
+  {
     if (XmDirectionMatch(XmPrim_layout_direction(tw),
 				   XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
 	if (_XmConvertActionParamToRepTypeId((Widget) w,
@@ -1619,7 +1619,7 @@ ProcessHorizontalParams(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 ProcessSelectParams(Widget w,
 		    XEvent *event,
 		    XmTextPosition *left,
@@ -1628,7 +1628,7 @@ ProcessSelectParams(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   if (!((*tw->text.source->GetSelection)(tw->text.source, left, right))
       || *left == *right) {
     if (*position > data->anchor) {
@@ -1641,14 +1641,14 @@ ProcessSelectParams(Widget w,
   }
 }
 
-static XmTextPosition 
+static XmTextPosition
 SelectOutLine(XmTextWidget tw,
 	      XmTextPosition position,
 	      XmTextScanDirection dir,
 	      int count)
 {
   unsigned int line;
-  
+
   line = _XmTextGetTableIndex(tw, position);
   if (dir == XmsdLeft) {
     count--;
@@ -1663,13 +1663,13 @@ SelectOutLine(XmTextWidget tw,
     XmTextSource source = GetSrc(tw);
 
     line = tw->text.total_lines - 1;
-    return (*source->Scan)(source, tw->text.line_table[line].start_pos, 
+    return (*source->Scan)(source, tw->text.line_table[line].start_pos,
 			   XmSELECT_ALL, XmsdRight, 1, TRUE);
   }
 }
 
 
-static void 
+static void
 KeySelection(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -1683,41 +1683,41 @@ KeySelection(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
-  
+
+
   _XmTextResetIC(w);
   /* reset origLeft and origRight */
   (*tw->text.source->GetSelection)(tw->text.source,
 				   &(data->origLeft), &(data->origRight));
-  
+
     cursorPos = tw->text.cursor_position;
   position = cursorPos;
- 
+
    data->selectionHint.x = data->selectionHint.y = 0;
   data->extending = TRUE;
-  
+
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   if (*num_params == 0) {
     position = cursorPos;
     ProcessSelectParams(w, event, &left, &right, &position);
   } else if (*num_params > 0)
-  {   
-       
+  {
+
     if(XmDirectionMatch(XmPrim_layout_direction(tw),
-			XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) 
+			XmTOP_TO_BOTTOM_RIGHT_TO_LEFT))
     {
       if (_XmConvertActionParamToRepTypeId((Widget) w,
 				 XmRID_TEXT_VERTICAL_DIRECTION_ACTION_PARAMS,
-				 params[0], False, &value) == True) 
+				 params[0], False, &value) == True)
       {
 	SetAnchorBalancing(tw, cursorPos);
 	ProcessHorizontalParams(w, event, params, num_params, &left,
 				&right, &position);
       } else if (_XmConvertActionParamToRepTypeId((Widget) w,
 			       XmRID_TEXT_HORIZONTAL_DIRECTION_ACTION_PARAMS,
-			       params[0], False, &value) == True) 
+			       params[0], False, &value) == True)
       {
         /* The only legal values for this reptype are "right" and "left". If
 	   the parameter is a valid reptype, then it must be one of those
@@ -1728,8 +1728,8 @@ KeySelection(Widget w,
 	DisplayInsertionPoint(tw);
 	return;
       }
-   } 
-    else 
+   }
+    else
     {
 
       if (_XmConvertActionParamToRepTypeId((Widget) w,
@@ -1756,18 +1756,18 @@ KeySelection(Widget w,
     }
   }
   cursorPos = position;
-  
+
   if (position < 0 || position > tw->text.last_position) {
     _XmTextEnableRedisplay(tw);
     DisplayInsertionPoint(tw);
     return;
   }
-  
+
   if (cursorPos < data->anchor)
     data->extendDir = XmsdLeft;
   else if (cursorPos > data->anchor)
     data->extendDir = XmsdRight;
-  
+
   cursorDir = data->extendDir;   /* PIR1858 */
   if (data->extendDir == XmsdRight) {
     if (cursorPos < right)  /* PIR1858:  We are backtracking  */
@@ -1776,7 +1776,7 @@ KeySelection(Widget w,
       right = cursorPos = SelectOutLine(tw, position, cursorDir, 1);
     } else {
       right = cursorPos = (*tw->text.source->Scan)(tw->text.source,
-						   position, data->stype, 
+						   position, data->stype,
 						   cursorDir, 1, FALSE);
     }
     left = data->anchor;
@@ -1787,31 +1787,31 @@ KeySelection(Widget w,
       left = cursorPos = SelectOutLine(tw, position, cursorDir, 1);
     } else {
       left = cursorPos = (*tw->text.source->Scan)(tw->text.source,
-						  position, data->stype, 
+						  position, data->stype,
 						  cursorDir, 1, FALSE);
     }
     right = data->anchor;
   }
-  
+
   if (left > right) {  /* PIR1858: We are on other side of anchor */
     tempIndex = left;
     left = right;
     right = tempIndex;
   }  /* end PIR1858 */
-  
+
   (*tw->text.source->SetSelection)(tw->text.source, left, right,
 				   event_time);
   tw->text.pendingoff = FALSE;
   _XmTextSetCursorPosition(w, cursorPos);
   _XmTextSetDestinationSelection(w, tw->text.cursor_position,
 				 False, event_time);
-  
+
   if (tw->text.auto_show_cursor_position &&
       cursorPos == tw->text.bottom_position)
     (*tw->text.output->MakePositionVisible)(tw, cursorPos);
-  
+
   _XmTextEnableRedisplay(tw);
-  
+
   /* reset origLeft and origRight */
   (*tw->text.source->GetSelection)(tw->text.source,
 				   &(data->origLeft), &(data->origRight));
@@ -1827,13 +1827,13 @@ SetAnchorBalancing(XmTextWidget tw,
   InputData data = tw->text.input->data;
   XmTextPosition left, right;
   float bal_point;
-  
+
   if (!((*tw->text.source->GetSelection)(tw->text.source, &left, &right))
       || left == right) {
     data->anchor = position;
   } else {
     bal_point = (float)(((float)(right - left) / 2.0) + (float)left);
-    
+
     /* shift anchor and direction to opposite end of the selection */
     if ((float)position < bal_point) {
       data->extendDir = XmsdLeft;
@@ -1860,7 +1860,7 @@ SetNavigationAnchor(XmTextWidget tw,
   InputData data = tw->text.input->data;
   Boolean has_selection;
 
-  has_selection = ((*tw->text.source->GetSelection)(tw->text.source, 
+  has_selection = ((*tw->text.source->GetSelection)(tw->text.source,
 						    &left, &right)
 		   && left != right);
   if (!tw->text.add_mode) {
@@ -1868,8 +1868,8 @@ SetNavigationAnchor(XmTextWidget tw,
       if (old_position < left || old_position > right)
 	/* start outside selection - anchor at start position */
 	data->anchor = old_position;
-      else if (!has_selection || 
-          ((left <= new_position) && 
+      else if (!has_selection ||
+          ((left <= new_position) &&
           (new_position <= right)))
 	/* no selection, or moving into selection */
 	SetAnchorBalancing(tw, old_position);
@@ -1887,7 +1887,7 @@ SetNavigationAnchor(XmTextWidget tw,
     if (old_position < left || old_position > right)
       /* start outside selection - anchor at start position */
       data->anchor = old_position;
-    else if (!has_selection || 
+    else if (!has_selection ||
         ((left <= new_position) && (new_position <= right)))
       /* no selection, or moving into selection */
       SetAnchorBalancing(tw, old_position);
@@ -1909,14 +1909,14 @@ CompleteNavigation(XmTextWidget tw,
 {
   XmTextPosition left, right;
   InputData data = tw->text.input->data;
-  
+
   if ((tw->text.add_mode && (*tw->text.source->GetSelection)
        (tw->text.source, &left, &right) &&
        position >= left && position <= right) || extend)
     tw->text.pendingoff = FALSE;
   else
     tw->text.pendingoff = TRUE;
-  
+
   if (extend) {
     if (data->anchor > position) {
       left = position;
@@ -1926,7 +1926,7 @@ CompleteNavigation(XmTextWidget tw,
       right = position;
     }
     (*tw->text.source->SetSelection)(tw->text.source, left, right, time);
-    
+
     data->origLeft = left;
     data->origRight = right;
   }
@@ -1934,7 +1934,7 @@ CompleteNavigation(XmTextWidget tw,
 }
 
 /* ARGSUSED */
-static void 
+static void
 SimpleMovement(Widget w,
 	       XEvent *event,
 	       String *params ,
@@ -1953,10 +1953,10 @@ SimpleMovement(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -1968,19 +1968,19 @@ SimpleMovement(Widget w,
 	  extend = True;
       }
   }
-  
+
   newPos = (*tw->text.source->Scan)(tw->text.source, cursorPos,
 				    type, dir, 1, include);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
   DisplayInsertionPoint(tw);
-}    
+}
 
 
 /* ARGSUSED */
-static void 
+static void
 MoveForwardChar(Widget w,
 		XEvent *event,
 		String *params,
@@ -1994,7 +1994,7 @@ MoveForwardChar(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveBackwardChar(Widget w,
 		 XEvent *event,
 		 String *params,
@@ -2008,7 +2008,7 @@ MoveBackwardChar(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveForwardWord(Widget w,
 		XEvent *event,
 		String *params,
@@ -2020,10 +2020,10 @@ MoveForwardWord(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   cursorPos = tw->text.cursor_position;
-  
+
   EraseInsertionPoint(tw);
   if (*num_params > 0)
   {
@@ -2036,7 +2036,7 @@ MoveForwardWord(Widget w,
 	  extend = True;
       }
   }
-  
+
   /* Add if We only want to select to the end of the word w/o spaces
      if (*num_params > 0)
      {
@@ -2058,15 +2058,15 @@ MoveForwardWord(Widget w,
      */
   position = (*tw->text.source->Scan)(tw->text.source, cursorPos,
 				      XmSELECT_WORD, XmsdRight, 1, TRUE);
-  
+
   SetNavigationAnchor(tw, cursorPos, position, event_time, extend);
-  
+
   CompleteNavigation(tw, position, event_time, extend);
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveBackwardWord(Widget w,
 		 XEvent *event,
 		 String *params,
@@ -2078,10 +2078,10 @@ MoveBackwardWord(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   cursorPos = tw->text.cursor_position;
-  
+
   EraseInsertionPoint(tw);
   if (*num_params > 0)
   {
@@ -2094,7 +2094,7 @@ MoveBackwardWord(Widget w,
 	  extend = True;
       }
   }
-  
+
   position = (*tw->text.source->Scan)(tw->text.source, cursorPos,
 				      XmSELECT_WORD, XmsdLeft, 1, FALSE);
   if(position == cursorPos) {
@@ -2103,22 +2103,22 @@ MoveBackwardWord(Widget w,
     position = (*tw->text.source->Scan)(tw->text.source, position,
                                         XmSELECT_WORD, XmsdLeft, 1, FALSE);
   }
-  
+
   SetNavigationAnchor(tw, cursorPos, position, event_time, extend);
-  
+
   CompleteNavigation(tw, position, event_time, extend);
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveForwardParagraph(Widget w,
 		     XEvent *event,
 		     String *params,
 		     Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) return;
   EraseInsertionPoint(tw);
@@ -2128,14 +2128,14 @@ MoveForwardParagraph(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveBackwardParagraph(Widget w,
 		      XEvent *event,
 		      String *params,
 		      Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) return;
   EraseInsertionPoint(tw);
@@ -2145,7 +2145,7 @@ MoveBackwardParagraph(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveToLineStart(Widget w,
 		XEvent *event,
 		String *params,
@@ -2158,10 +2158,10 @@ MoveToLineStart(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2173,9 +2173,9 @@ MoveToLineStart(Widget w,
 	  extend = True;
       }
   }
-  
+
   EraseInsertionPoint(tw);
-  
+
   _XmTextShowPosition(w, cursorPos);
   line = _XmTextPosToLine(tw, cursorPos);
   if (line == NOLINE) {
@@ -2189,7 +2189,7 @@ MoveToLineStart(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveToLineEnd(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -2202,10 +2202,10 @@ MoveToLineEnd(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   cursorPos = tw->text.cursor_position;
-  
+
   EraseInsertionPoint(tw);
   if (*num_params > 0)
   {
@@ -2218,7 +2218,7 @@ MoveToLineEnd(Widget w,
 	  extend = True;
       }
   }
-  
+
   _XmTextShowPosition(w, cursorPos);
   line = _XmTextPosToLine(tw, cursorPos);
   if (line == NOLINE) {
@@ -2233,14 +2233,14 @@ MoveToLineEnd(Widget w,
 					  XmSELECT_POSITION, XmsdLeft,
 					  1, TRUE);
     SetNavigationAnchor(tw, cursorPos, position, event_time, extend);
-  
+
     CompleteNavigation(tw, position, event_time, extend);
   }
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 _MoveNextLine(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -2261,13 +2261,13 @@ _MoveNextLine(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) return;
-  
+
   currentPos = tw->text.cursor_position;
-  
+
   (*tw->text.output->PosToXY)(tw, currentPos, &cur_x, &cur_y);
-  
+
   if (*num_params > 0) {
     /* There is only one valid reptype value for this reptype, i.e.
        "extend". A True return value means that parameter was "extend". */
@@ -2277,21 +2277,21 @@ _MoveNextLine(Widget w,
       extend = True;
     }
   }
-  
+
   _XmTextShowPosition(w, currentPos);
   line = _XmTextPosToLine(tw, currentPos);
   if (line == NOLINE) {
     XBell(XtDisplay(tw), 0);
     return;
   }
-  
+
   _XmTextLineInfo(tw, line+1, &start, (LineTableExtra *) NULL);
   if (start == PASTENDPOS) {
-    newPos = (*tw->text.source->Scan)(tw->text.source, currentPos, 
+    newPos = (*tw->text.source->Scan)(tw->text.source, currentPos,
 				      XmSELECT_ALL, XmsdRight, 1, TRUE);
 
     SetNavigationAnchor(tw, currentPos, newPos, event_time, extend);
-  
+
     CompleteNavigation(tw, newPos, event_time, extend);
     tw->text.pendingoff = pendingoff;
   } else {
@@ -2316,18 +2316,18 @@ _MoveNextLine(Widget w,
       else
 	newPos = XtoPosInLine(tw, savePosX, line+1);
     }
-    
-    next = (*tw->text.source->Scan)(tw->text.source, newPos, 
+
+    next = (*tw->text.source->Scan)(tw->text.source, newPos,
 				    XmSELECT_LINE, XmsdRight, 1, FALSE);
-    
+
     SetNavigationAnchor(tw, currentPos, newPos, event_time, extend);
-  
+
     CompleteNavigation(tw, newPos, event_time, extend);
-    
+
     if (tw->text.cursor_position != next)
       tw->text.cursor_position_x = savePosX;
   }
-  
+
   _XmTextShowPosition(w, tw->text.cursor_position);
   line = _XmTextPosToLine(tw, tw->text.cursor_position);
   if (line != NOLINE) {
@@ -2337,13 +2337,13 @@ _MoveNextLine(Widget w,
 					XmSELECT_LINE, XmsdRight,
 					1, FALSE);
       SetNavigationAnchor(tw, currentPos, newPos, event_time, extend);
-  
+
       CompleteNavigation(tw, newPos, event_time, extend);
     }
   }
 }
 
-static void 
+static void
 MoveNextLine(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -2354,7 +2354,7 @@ MoveNextLine(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 _MovePreviousLine(Widget w,
 		  XEvent *event,
 		  String *params,
@@ -2376,16 +2376,16 @@ _MovePreviousLine(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) return;
-  
+
   /* Recompute lines if necessary */
   (void) XmTextGetTopCharacter(w);
-  
+
   currentPos = tw->text.cursor_position;
-  
+
   (*tw->text.output->PosToXY)(tw, currentPos, &cur_x, &cur_y);
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2397,7 +2397,7 @@ _MovePreviousLine(Widget w,
 	  extend = True;
       }
   }
-  
+
   _XmTextShowPosition(w, currentPos);
   line = _XmTextPosToLine(tw, currentPos);
   if (line == NOLINE) {
@@ -2409,7 +2409,7 @@ _MovePreviousLine(Widget w,
       XmTextScroll(w, -1);
       line = _XmTextPosToLine(tw, currentPos);
       if (line == 0) {
-	newPos = (*tw->text.source->Scan)(tw->text.source, currentPos, 
+	newPos = (*tw->text.source->Scan)(tw->text.source, currentPos,
 					  XmSELECT_ALL, XmsdLeft, 1, TRUE);
 	changed = True;
 	goto done;
@@ -2434,20 +2434,20 @@ _MovePreviousLine(Widget w,
     if (line != NOLINE) {
       _XmTextLineInfo(tw, line, &start2, (LineTableExtra *) NULL);
       if (start2 != start) {
-	newPos = (*tw->text.source->Scan)(tw->text.source, origstart, 
+	newPos = (*tw->text.source->Scan)(tw->text.source, origstart,
 					  XmSELECT_POSITION, XmsdLeft, 1,TRUE);
       }
     }
   }
  done:
   SetNavigationAnchor(tw, currentPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
   if (!changed)
     tw->text.cursor_position_x = savePosX;
 }
 
-static void 
+static void
 MovePreviousLine(Widget w,
 		 XEvent *event,
 		 String *params,
@@ -2458,7 +2458,7 @@ MovePreviousLine(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 MoveNextPage(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -2471,15 +2471,15 @@ MoveNextPage(Widget w,
   Boolean extend = False;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) return;
-  
+
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2491,14 +2491,14 @@ MoveNextPage(Widget w,
 	  extend = True;
       }
   }
-  
+
   (*tw->text.output->PosToXY)(tw, cursorPos, &x, &y);
-  
+
   n = _XmTextNumLines(tw);
   if (n > 1) n--;
-  
+
   XmTextScroll(w, n);
-  
+
   /* When y = 0, improper scrolling results.  This makes
    * sure no extra scroll results.
    */
@@ -2509,13 +2509,13 @@ MoveNextPage(Widget w,
   else {
     y -= tw->text.output->data->font_ascent;
   }
-  
+
   newPos = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
-  
+
   _XmTextEnableRedisplay(tw);
   DisplayInsertionPoint(tw);
 }
@@ -2523,7 +2523,7 @@ MoveNextPage(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 MovePreviousPage(Widget w,
 		 XEvent *event,
 		 String *params,
@@ -2536,15 +2536,15 @@ MovePreviousPage(Widget w,
   Boolean extend = False;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) return;
-  
+
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2556,28 +2556,28 @@ MovePreviousPage(Widget w,
 	  extend = True;
       }
   }
-  
+
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position, &x, &y);
   y -= tw->text.output->data->font_ascent;
-  
+
   n = _XmTextNumLines(tw);
   if (n > 1) n--;
-  
+
   XmTextScroll(w, -n);
-  
+
   newPos = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
-  
+
   _XmTextEnableRedisplay(tw);
   DisplayInsertionPoint(tw);
 }
 
 
 /* ARGSUSED */
-static void 
+static void
 MovePageLeft(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -2590,13 +2590,13 @@ MovePageLeft(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2608,23 +2608,23 @@ MovePageLeft(Widget w,
 	  extend = True;
       }
   }
-  
+
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position, &x, &y);
   y -= tw->text.output->data->font_ascent;
   _XmTextChangeHOffset(tw, -tw->text.inner_widget->core.width);
   newPos = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
-  
+
   _XmTextEnableRedisplay(tw);
   DisplayInsertionPoint(tw);
 }
 
 
 /* ARGSUSED */
-static void 
+static void
 MovePageRight(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -2637,13 +2637,13 @@ MovePageRight(Widget w,
   int value;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2655,23 +2655,23 @@ MovePageRight(Widget w,
 	  extend = True;
       }
   }
-  
+
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position, &x, &y);
   y -= tw->text.output->data->font_ascent;
   _XmTextChangeHOffset(tw, tw->text.inner_widget->core.width);
   newPos = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
-  
+
   _XmTextEnableRedisplay(tw);
   DisplayInsertionPoint(tw);
 }
 
 
 /* ARGSUSED */
-static void 
+static void
 MovePageUp(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -2684,12 +2684,12 @@ MovePageUp(Widget w,
   int value = 0;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2701,22 +2701,22 @@ MovePageUp(Widget w,
 	  extend = True;
       }
   }
-  
+
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position, &x, &y);
   _XmTextChangeVOffset(tw, -tw->text.inner_widget->core.height);
   newPos = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
-  
+
   _XmTextEnableRedisplay(tw);
   DisplayInsertionPoint(tw);
 }
 
 
 /* ARGSUSED */
-static void 
+static void
 MovePageDown(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -2729,12 +2729,12 @@ MovePageDown(Widget w,
   int value = 0;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, FALSE);
-  
+
   cursorPos = tw->text.cursor_position;
-  
+
   if (*num_params > 0)
   {
       /* There is only one valid reptype value for this reptype, i.e.
@@ -2746,29 +2746,29 @@ MovePageDown(Widget w,
 	  extend = True;
       }
   }
-  
+
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position, &x, &y);
   _XmTextChangeVOffset(tw, tw->text.inner_widget->core.height);
   newPos = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   SetNavigationAnchor(tw, cursorPos, newPos, event_time, extend);
-  
+
   CompleteNavigation(tw, newPos, event_time, extend);
-  
+
   _XmTextEnableRedisplay(tw);
   DisplayInsertionPoint(tw);
 }
 
 
 /* ARGSUSED */
-static void 
+static void
 MoveBeginningOfFile(Widget w,
 		    XEvent *event,
 		    String *params,
 		    Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   SimpleMovement(w, event, params, num_params, XmsdLeft, XmSELECT_ALL, TRUE);
@@ -2778,53 +2778,53 @@ MoveBeginningOfFile(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 MoveEndOfFile(Widget w,
 	      XEvent *event,
 	      String *params,
 	      Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   SimpleMovement(w, event, params, num_params, XmsdRight, XmSELECT_ALL, TRUE);
   DisplayInsertionPoint(tw);
 }
-    
+
 
 
 
 /* ARGSUSED */
-static void 
+static void
 ScrollOneLineUp(Widget w,
 		XEvent *event,
 		String *params,
 		Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   EraseInsertionPoint(tw);
   XmTextScroll(w, 1);
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 ScrollOneLineDown(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   EraseInsertionPoint(tw);
   XmTextScroll(w, -1);
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 ScrollCursorVertically(Widget w,
 		       XEvent *event,
 		       String *params,
@@ -2835,10 +2835,10 @@ ScrollCursorVertically(Widget w,
   LineNum desired_line, cur_line;
   int percentage;
   OutputData data = tw->text.output->data;
-  
+
   if (*num_params == 0) {
-    if (event) 
-      pos = (*tw->text.output->XYToPos)(tw, event->xbutton.x, 
+    if (event)
+      pos = (*tw->text.output->XYToPos)(tw, event->xbutton.x,
 					event->xbutton.y);
     else
       pos = tw->text.cursor_position;
@@ -2858,11 +2858,11 @@ ScrollCursorVertically(Widget w,
   else
     for (cur_line=0; cur_line<tw->text.number_lines; cur_line++)
       if (tw->text.line[cur_line+1].start > tw->text.cursor_position) break;
-  
+
   XmTextScroll(w, (int)(cur_line - desired_line));
 }
 
-static void 
+static void
 AddNewLine(Widget w,
 	   XEvent *event,
 #if NeedWidePrototypes
@@ -2876,16 +2876,16 @@ AddNewLine(Widget w,
   XmTextBlockRec block, newblock;
   Boolean pending_delete = False;
   Boolean freeBlock;
-  char str[32]; 
+  char str[32];
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
- 
+
   str[0] = '\n';
   str[1] = 0;
   block.length = 1;
   block.ptr = str;
   block.format = XmFMT_8_BIT;
-  
+
   EraseInsertionPoint(tw);
   beginPos = nextPos = tw->text.cursor_position;
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, FALSE)) {
@@ -2922,37 +2922,37 @@ AddNewLine(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 InsertNewLine(Widget w,
 	      XEvent *event,
 	      String *params,
 	      Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   AddNewLine(w, event, True);
   DisplayInsertionPoint(tw);
-}    
+}
 
 
 /* ARGSUSED */
-static void 
+static void
 InsertNewLineAndBackup(Widget w,
 		       XEvent *event,
 		       String *params,
 		       Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   AddNewLine(w, event, False);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 InsertNewLineAndIndent(Widget w,
 		       XEvent *event,
 		       String *params,
@@ -2964,7 +2964,7 @@ InsertNewLineAndIndent(Widget w,
   Boolean freeBlock, value_changed = False;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   _XmTextDisableRedisplay(tw, TRUE);
@@ -2978,7 +2978,7 @@ InsertNewLineAndIndent(Widget w,
   } else {
     right = (*tw->text.source->Scan)(tw->text.source, left,
 				     XmSELECT_WHITESPACE, XmsdRight, 1, TRUE);
-    if(right > pos) 
+    if(right > pos)
       right = pos;
     AddNewLine(w, event, True);
     cursorPos = from_pos = to_pos = tw->text.cursor_position;
@@ -3012,7 +3012,7 @@ InsertNewLineAndIndent(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 RedrawDisplay(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -3020,12 +3020,12 @@ RedrawDisplay(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition top = tw->text.top_character;
-  
+
   _XmTextInvalidate(tw, top, top, NODELTA);
 }
 
 /* ARGSUSED */
-static void 
+static void
 Activate(Widget w,
 	 XEvent *event,
 	 String *params,
@@ -3034,17 +3034,17 @@ Activate(Widget w,
   XmAnyCallbackStruct cb;
   XmTextWidget tw = (XmTextWidget) w;
   XmParentInputActionRec  p_event;
-  
+
   p_event.process_type = XmINPUT_ACTION;
   p_event.action = XmPARENT_ACTIVATE;
   p_event.event = event;            /* Pointer to XEvent. */
   p_event.params = params;          /* Or use what you have if   */
   p_event.num_params = num_params;  /* input is from translation.*/
-  
+
   cb.reason = XmCR_ACTIVATE;
   cb.event  = event;
   XtCallCallbackList(w, tw->text.activate_callback, (XtPointer) &cb);
-  
+
   (void) _XmParentProcess(XtParent(tw), (XmParentProcessData) &p_event);
 }
 
@@ -3058,7 +3058,7 @@ ToggleOverstrike(Widget w,
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   OutputData o_data = tw->text.output->data;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   data->overstrike = !data->overstrike;
@@ -3067,7 +3067,7 @@ ToggleOverstrike(Widget w,
     o_data->cursorwidth = o_data->cursorheight >> 1;
   else {
     o_data->cursorwidth = 5;
-    if (o_data->cursorheight > 19) 
+    if (o_data->cursorheight > 19)
       o_data->cursorwidth++;
   }
   DisplayInsertionPoint(tw);
@@ -3075,7 +3075,7 @@ ToggleOverstrike(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 ToggleAddMode(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -3084,13 +3084,13 @@ ToggleAddMode(Widget w,
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   XmTextPosition left, right;
-  
+
   EraseInsertionPoint(tw);
-  
+
   tw->text.add_mode = !tw->text.add_mode;
-  
+
   DisplayInsertionPoint(tw);
-  
+
   if (tw->text.add_mode &&
       (!(*tw->text.source->GetSelection)(data->widget->text.source,
 					 &left, &right) || left == right)) {
@@ -3100,7 +3100,7 @@ ToggleAddMode(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 SetCursorPosition(Widget w,
 		  XEvent *event,
 		  String *params,
@@ -3109,12 +3109,12 @@ SetCursorPosition(Widget w,
   XmTextWidget tw = (XmTextWidget) w;
   _XmTextResetIC(w);
   if (event)
-    _XmTextSetCursorPosition(w, (*tw->text.output->XYToPos)(tw, 
+    _XmTextSetCursorPosition(w, (*tw->text.output->XYToPos)(tw,
 							    event->xbutton.x,
 							    event->xbutton.y));
 }
 
-static void 
+static void
 RemoveBackwardChar(Widget w,
 		   XEvent *event,
 		   String *params,
@@ -3129,9 +3129,9 @@ RemoveBackwardChar(Widget w,
   XmTextPosition newCursorPos, cursorPos, nextPos, left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   cursorPos = nextPos = tw->text.cursor_position;
-  
+
   EraseInsertionPoint(tw);
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, TRUE)) {
     RemoveCurrentSelection(w, event, params, num_params, kill);
@@ -3149,7 +3149,7 @@ RemoveBackwardChar(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 DeleteBackwardChar(Widget w,
 		   XEvent *event,
 		   String *params,
@@ -3163,7 +3163,7 @@ DeleteBackwardChar(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 KillBackwardChar(Widget w,
 		 XEvent *event,
 		 String *params,
@@ -3178,7 +3178,7 @@ KillBackwardChar(Widget w,
 }
 
 
-static void 
+static void
 RemoveForwardWord(Widget w,
 		  XEvent *event,
 		  String *params,
@@ -3193,7 +3193,7 @@ RemoveForwardWord(Widget w,
   XmTextPosition newCursorPos, left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, TRUE)) {
     RemoveCurrentSelection(w, event, params, num_params, kill);
@@ -3202,7 +3202,7 @@ RemoveForwardWord(Widget w,
     left = tw->text.cursor_position;
     right = (*tw->text.source->Scan)(tw->text.source, left,
 				     XmSELECT_WORD, XmsdRight, 1, TRUE);
-    
+
     if (left < right) {
       if (DeleteOrKill(tw, event, left, right, kill, &newCursorPos)) {
 	_XmTextSetCursorPosition(w, newCursorPos);
@@ -3216,35 +3216,35 @@ RemoveForwardWord(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 DeleteForwardWord(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveForwardWord(w, event, params, num_params, FALSE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 KillForwardWord(Widget w,
 		XEvent *event,
 		String *params,
 		Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveForwardWord(w, event, params, num_params, TRUE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 RemoveBackwardWord(Widget w,
 		   XEvent *event,
 		   String *params,
@@ -3259,7 +3259,7 @@ RemoveBackwardWord(Widget w,
   XmTextPosition newCursorPos, left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, TRUE)) {
     RemoveCurrentSelection(w, event, params, num_params, kill);
@@ -3287,35 +3287,35 @@ RemoveBackwardWord(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 DeleteBackwardWord(Widget w,
 		   XEvent *event,
 		   String *params,
 		   Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveBackwardWord(w, event, params, num_params, FALSE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 KillBackwardWord(Widget w,
 		 XEvent *event,
 		 String *params,
 		 Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveBackwardWord(w, event, params, num_params, TRUE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 RemoveForwardChar(Widget w,
 		  XEvent *event,
 		  String *params,
@@ -3330,7 +3330,7 @@ RemoveForwardChar(Widget w,
   XmTextPosition newCursorPos, cursorPos, nextPos, left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, TRUE)) {
     RemoveCurrentSelection(w, event, params, num_params, kill);
@@ -3347,35 +3347,35 @@ RemoveForwardChar(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 KillForwardChar(Widget w,
 		XEvent *event,
 		String *params,
 		Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveForwardChar(w, event, params, num_params, TRUE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 DeleteForwardChar(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveForwardChar(w, event, params, num_params, FALSE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 RemoveToEndOfLine(Widget w,
 		  XEvent *event,
 		  String *params,
@@ -3391,7 +3391,7 @@ RemoveToEndOfLine(Widget w,
   LineNum line;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, TRUE)) {
     RemoveCurrentSelection(w, event, params, num_params, kill);
@@ -3417,14 +3417,14 @@ RemoveToEndOfLine(Widget w,
 	_XmTextValueChanged(tw, event);
       }
     } else if (left == right)
-      DeleteForwardChar(w, event, params, num_params);	
-  
+      DeleteForwardChar(w, event, params, num_params);
+
     _XmTextEnableRedisplay(tw);
   }
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 RemoveToStartOfLine(Widget w,
 		    XEvent *event,
 		    String *params,
@@ -3440,7 +3440,7 @@ RemoveToStartOfLine(Widget w,
   LineNum line;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   if (_XmTextNeedsPendingDeleteDis(tw, &left, &right, TRUE)) {
     RemoveCurrentSelection(w, event, params, num_params, kill);
@@ -3461,71 +3461,71 @@ RemoveToStartOfLine(Widget w,
 	  _XmTextValueChanged(tw, event);
 	}
       } else if (left == cursorPos)
-	DeleteBackwardChar(w, event, params, num_params);	
-      
+	DeleteBackwardChar(w, event, params, num_params);
+
     }
     _XmTextEnableRedisplay(tw);
   }
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 DeleteToStartOfLine(Widget w,
 		    XEvent *event,
 		    String *params,
 		    Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveToStartOfLine(w, event, params, num_params, FALSE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 KillToStartOfLine(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveToStartOfLine(w, event, params, num_params, TRUE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 DeleteToEndOfLine(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveToEndOfLine(w, event, params, num_params, FALSE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 KillToEndOfLine(Widget w,
 		XEvent *event,
 		String *params,
 		Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   RemoveToEndOfLine(w, event, params, num_params, TRUE);
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 RestorePrimaryHighlight(InputData data,
 			XmTextPosition prim_left,
 			XmTextPosition prim_right)
@@ -3566,14 +3566,14 @@ RestorePrimaryHighlight(InputData data,
       } else {
 	_XmTextSetHighlight((Widget)data->widget, prim_left, prim_right,
 			   XmHIGHLIGHT_SELECTED);
-	_XmTextSetHighlight((Widget)data->widget, data->sel2Left, 
+	_XmTextSetHighlight((Widget)data->widget, data->sel2Left,
 			   data->sel2Right, XmHIGHLIGHT_NORMAL);
       }
     }
   }
 }
 
-Boolean 
+Boolean
 _XmTextSetSel2(XmTextWidget tw,
 	       XmTextPosition left,
 	       XmTextPosition right, /* if right == -999, then we're in */
@@ -3581,11 +3581,11 @@ _XmTextSetSel2(XmTextWidget tw,
 {
   InputData data = tw->text.input->data;
   Boolean result = TRUE;
-  
+
   _XmTextDisableRedisplay(data->widget, FALSE);
   if (data->hasSel2) {
     XmTextPosition prim_left, prim_right;
-    
+
     /* If the tw has the primary selection, make sure the selection
      * highlight is restored appropriately.
      */
@@ -3593,17 +3593,17 @@ _XmTextSetSel2(XmTextWidget tw,
 						   &prim_left, &prim_right))
       RestorePrimaryHighlight(data, prim_left, prim_right);
     else
-      _XmTextSetHighlight((Widget) data->widget, data->sel2Left, 
+      _XmTextSetHighlight((Widget) data->widget, data->sel2Left,
 			 data->sel2Right, XmHIGHLIGHT_NORMAL);
   }
-  
+
   if (!set_time) set_time = _XmValidTimestamp((Widget)tw);
   if (left <= right) {
     if (!data->hasSel2) {
       result = XmeSecondarySource((Widget) data->widget, set_time);
       data->sec_time = set_time;
       data->hasSel2 = result;
-    } else 
+    } else
       result = TRUE;
     if (result) {
       _XmTextSetHighlight((Widget) data->widget, left, right,
@@ -3620,13 +3620,13 @@ _XmTextSetSel2(XmTextWidget tw,
   return result;
 }
 
-Boolean 
+Boolean
 _XmTextGetSel2(XmTextWidget tw,
 	       XmTextPosition *left,
 	       XmTextPosition *right)
 {
   InputData data = tw->text.input->data;
-  
+
   if (data->hasSel2 && data->sel2Left <= data->sel2Right) {
     *left = data->sel2Left;
     *right = data->sel2Right;
@@ -3638,7 +3638,7 @@ _XmTextGetSel2(XmTextWidget tw,
 }
 
 /* ARGSUSED */
-static void 
+static void
 SetSelectionHint(Widget w,
 		 XEvent *event,
 		 String *params,
@@ -3661,7 +3661,7 @@ SetSelectionHint(Widget w,
  * will allows clients to implements a wide class of draw through and
  * multi-click selection user interfaces.]
  */
-static void 
+static void
 a_Selection(XmTextWidget tw,
 #if NeedWidePrototypes
 	    int x,
@@ -3675,10 +3675,10 @@ a_Selection(XmTextWidget tw,
 {
   InputData data = tw->text.input->data;
   XmTextPosition position, newLeft, newRight;
-  
+
   _XmTextDisableRedisplay(tw, FALSE);
   position = (*tw->text.output->XYToPos)(tw, x, y);
-  
+
   if (data->stype == XmSELECT_OUT_LINE) {
     newLeft = SelectOutLine(tw, position, XmsdLeft, 1);
     newRight = SelectOutLine(tw, position, XmsdRight, 1);
@@ -3686,7 +3686,7 @@ a_Selection(XmTextWidget tw,
     newLeft = (*tw->text.source->Scan)(tw->text.source, position,
 				       data->stype, XmsdLeft, 1, FALSE);
     newRight = (*tw->text.source->Scan)(tw->text.source, position,
-					data->stype, XmsdRight, 1, 
+					data->stype, XmsdRight, 1,
 					data->stype == XmSELECT_LINE);
   }
   if (data->stype == XmSELECT_WORD && (int)tw->text.char_size > 1) {
@@ -3699,10 +3699,10 @@ a_Selection(XmTextWidget tw,
 				     newRight, sel_time);
   tw->text.pendingoff = FALSE;
   if (position - newLeft < newRight - position) {
-    _XmTextSetCursorPosition((Widget) tw, newLeft); 
+    _XmTextSetCursorPosition((Widget) tw, newLeft);
     data->extendDir = XmsdLeft;
   } else {
-    _XmTextSetCursorPosition((Widget) tw, newRight); 
+    _XmTextSetCursorPosition((Widget) tw, newRight);
     data->extendDir = XmsdRight;
   }
   _XmTextSetDestinationSelection((Widget)tw, tw->text.cursor_position,
@@ -3714,7 +3714,7 @@ a_Selection(XmTextWidget tw,
 }
 
 /* ARGSUSED */
-static void 
+static void
 SetAnchor(Widget w,
 	  XEvent *event,
 	  String *params,
@@ -3725,7 +3725,7 @@ SetAnchor(Widget w,
   XmTextPosition left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   data->anchor = tw->text.cursor_position;
   _XmTextSetDestinationSelection(w, data->anchor, False, event_time);
   if ((*tw->text.source->GetSelection)
@@ -3736,7 +3736,7 @@ SetAnchor(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 DoSelection(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -3748,7 +3748,7 @@ DoSelection(Widget w,
 		event->xbutton.time, True);
 }
 
-static void 
+static void
 SetScanType(Widget w,
 	    InputData data,
 	    XEvent *event)
@@ -3757,15 +3757,15 @@ SetScanType(Widget w,
   int multi_click_time;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
-  
+
   multi_click_time = XtGetMultiClickTime(XtDisplay(w));
-  
+
   if (event_time > data->lasttime &&
       event_time - data->lasttime < multi_click_time) {
-    
+
     i = 0;
     while (i < data->sarraycount && data->sarray[i] != data->stype) i++;
-    
+
     if (++i >= data->sarraycount) i = 0;
     data->stype = data->sarray[i];
   } else {			/* single-click event */
@@ -3774,18 +3774,18 @@ SetScanType(Widget w,
   data->lasttime = event_time;
 }
 
-static void 
+static void
 StartPrimary(Widget w,
 	     XEvent *event,
 	     String *params,
 	     Cardinal *num_params)
-{                                              
+{
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   XmTextPosition left, right;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   if (event)
@@ -3795,7 +3795,7 @@ StartPrimary(Widget w,
     data->anchor = tw->text.cursor_position;
   SetSelectionHint(w, event, params, num_params);
   SetScanType(w, data, event);
-  if (data->stype != XmSELECT_POSITION || 
+  if (data->stype != XmSELECT_POSITION ||
       ((*tw->text.source->GetSelection)(tw->text.source, &left, &right) &&
        left != right))
     DoSelection(w, event, params, num_params);
@@ -3803,17 +3803,17 @@ StartPrimary(Widget w,
     _XmTextSetDestinationSelection(w, data->anchor,
 				   False, event_time);
   DisplayInsertionPoint(tw);
-  
+
 }
 
 
 /* ARGSUSED */
-static void 
+static void
 StartSecondary(Widget w,
 	       XEvent *event,
 	       String *params,
 	       Cardinal *num_params)
-{                                              
+{
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   int status;
@@ -3829,7 +3829,7 @@ StartSecondary(Widget w,
     data->Sel2Hint.x = event->xbutton.x;
     data->Sel2Hint.y = event->xbutton.y;
   } else {
-    (*tw->text.output->PosToXY)(tw, tw->text.cursor_position, 
+    (*tw->text.output->PosToXY)(tw, tw->text.cursor_position,
 				&x, &y);
     data->Sel2Hint.x = x;
     data->Sel2Hint.y = y;
@@ -3837,27 +3837,27 @@ StartSecondary(Widget w,
   data->selectionMove = FALSE;
   data->selectionLink = FALSE;
   data->cancel = False;
-  
+
   status = XtGrabKeyboard(w, False, GrabModeAsync,
 			  GrabModeAsync, CurrentTime);
-  
+
   if (status != GrabSuccess) XmeWarning(w, GRABKBDERROR);
 }
 
 /* ARGSUSED */
-static void 
+static void
 StartDrag(Widget w,
 	  XEvent *event,
 	  String *params,
 	  Cardinal *num_params)
-{                                              
+{
   XmTextWidget tw = (XmTextWidget) w;
   Widget drag_icon;
   Arg args[10];
   int n = 0;
-  
+
   drag_icon = XmeGetTextualDragIcon(w);
-  
+
   n = 0;
   XtSetArg(args[n], XmNcursorBackground, tw->core.background_pixel);  n++;
   XtSetArg(args[n], XmNcursorForeground, tw->primitive.foreground);  n++;
@@ -3880,8 +3880,8 @@ DragStart(XtPointer data,
   InputData indata = tw->text.input->data;
 
   indata->drag_id = 0;
-  StartDrag((Widget)tw, indata->transfer_action->event, 
-	    indata->transfer_action->params, 
+  StartDrag((Widget)tw, indata->transfer_action->event,
+	    indata->transfer_action->params,
 	    indata->transfer_action->num_params);
 }
 
@@ -3921,7 +3921,7 @@ ProcessBDragEvent(Widget w,
   dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
   drag_on_btn1 = dpy->display.enable_btn1_transfer;
 
-  if (drag_on_btn1 == XmBUTTON2_ADJUST && *num_params > 0) 
+  if (drag_on_btn1 == XmBUTTON2_ADJUST && *num_params > 0)
     XtCallActionProc(w, params[0], event, NULL, 0);
   else if (*num_params > 1)
     XtCallActionProc(w, params[1], event, NULL, 0);
@@ -3936,7 +3936,7 @@ InSelection(Widget w,
   XmTextPosition position, left, right;
   Position left_x, left_y, right_x, right_y;
   Position x, y;
-  
+
   if (event) {
     position = (*tw->text.output->XYToPos)(tw, event->xbutton.x,
 					   event->xbutton.y);
@@ -3972,13 +3972,13 @@ ProcessBSelect(Widget w,
 
   dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
   drag_on_btn1 = dpy->display.enable_btn1_transfer;
-  
+
   if (!drag_on_btn1) {
     if (*num_params > 0)
       XtCallActionProc(w, params[0], event, NULL, 0);
     return;
   }
-  
+
   if (*num_params == 0) {
     if (event->type == ButtonPress &&
 	InSelection(w, event))
@@ -3992,10 +3992,10 @@ ProcessBSelect(Widget w,
 	if (*num_params > 0)
 	  XtCallActionProc(w, params[0], event, NULL, 0);
       } else {
-	if (data->drag_id) 
+	if (data->drag_id)
 	  XtRemoveTimeOut(data->drag_id);
 	if (data->transfer_action == NULL) {
-	  data->transfer_action = 
+	  data->transfer_action =
 	    (_XmTextActionRec *) XtMalloc(sizeof(_XmTextActionRec));
 	  data->transfer_action->event = (XEvent *)XtMalloc(sizeof(XEvent));
 	}
@@ -4015,7 +4015,7 @@ ProcessBSelect(Widget w,
 	data->drag_id = 0;
 	data->selectionHint.x = data->selectionHint.y = 0;
 	if (*data->transfer_action->num_params) {
-	  XtCallActionProc(w, data->transfer_action->params[0], 
+	  XtCallActionProc(w, data->transfer_action->params[0],
 			   data->transfer_action->event, NULL, 0);
 	}
       }
@@ -4049,7 +4049,7 @@ ProcessBSelectEvent(Widget w,
   dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
   drag_on_btn1 = dpy->display.enable_btn1_transfer;
 
-  if (drag_on_btn1 == XmBUTTON2_TRANSFER && *num_params > 0) 
+  if (drag_on_btn1 == XmBUTTON2_TRANSFER && *num_params > 0)
     XtCallActionProc(w, params[0], event, NULL, 0);
   else if (*num_params > 1)
     XtCallActionProc(w, params[1], event, NULL, 0);
@@ -4064,7 +4064,7 @@ ProcessBSelectEvent(Widget w,
  * will allows clients to implements a wide class of draw through and
  * multi-click selection user interfaces.]
 */
-static Boolean 
+static Boolean
 dragged(SelectionHint selectionHint,
         XEvent *event,
         int threshold)
@@ -4079,21 +4079,21 @@ dragged(SelectionHint selectionHint,
 }
 
 /* ARGSUSED */
-static void 
+static void
 DoExtendedSelection(Widget w,
-		    Time ev_time) 
+		    Time ev_time)
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   XmTextPosition position, left, right, cursorPos;
   float bal_point;
-  
+
   if (data->cancel) {
     if (data->select_id) XtRemoveTimeOut(data->select_id);
     data->select_id = 0;
     return;
   }
-  
+
   _XmTextDisableRedisplay(tw, FALSE);
   if (!((*tw->text.source->GetSelection)
 	(tw->text.source, &left, &right)) || left == right) {
@@ -4101,15 +4101,15 @@ DoExtendedSelection(Widget w,
     left = right = tw->text.cursor_position;
     data->origLeft = data->origRight = data->anchor;
     bal_point = data->anchor;
-  } else 
+  } else
     bal_point = (float)(((float)(data->origRight - data->origLeft) / 2.0) +
 			(float)data->origLeft);
-  
+
   position = (*tw->text.output->XYToPos)(tw, data->select_pos_x,
 					 data->select_pos_y);
-  
+
   /* shift anchor and direction to opposite end of the selection */
-  
+
   if ((float)position <= bal_point) {
     data->anchor = data->origRight;
     if (!data->extending)
@@ -4118,21 +4118,21 @@ DoExtendedSelection(Widget w,
     data->anchor = data->origLeft;
     if (!data->extending)
       data->extendDir = XmsdRight;
-  } 
-  
+  }
+
   data->extending = TRUE;
-  
+
   /* check for change in extend direction */
   if ((data->extendDir == XmsdRight && position < data->anchor) ||
       (data->extendDir == XmsdLeft && position > data->anchor)) {
     data->extendDir =
       (data->extendDir == XmsdRight) ? XmsdLeft : XmsdRight;
-    
+
     left = data->origLeft;
     right = data->origRight;
   }
-  
-  
+
+
   if (data->extendDir == XmsdRight) {
     if (data->stype == XmSELECT_OUT_LINE) {
       right = cursorPos = SelectOutLine(tw, position, XmsdRight, 1);
@@ -4160,7 +4160,7 @@ DoExtendedSelection(Widget w,
     }
     right = data->anchor;
   }
-  
+
   (*tw->text.source->SetSelection)(tw->text.source, left, right, ev_time);
   tw->text.pendingoff = FALSE;
   _XmTextSetCursorPosition(w, cursorPos);
@@ -4169,17 +4169,17 @@ DoExtendedSelection(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 DoSecondaryExtend(Widget w,
-		  Time ev_time) 
+		  Time ev_time)
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   XmTextPosition position, left, right;
-  
+
   position = (*tw->text.output->XYToPos)(tw, data->select_pos_x,
 					 data->select_pos_y);
-  
+
   _XmTextDisableRedisplay(tw, FALSE);
   _XmTextGetSel2(tw, &left, &right);
   /* check for change in extend direction */
@@ -4191,7 +4191,7 @@ DoSecondaryExtend(Widget w,
     left = data->Sel2OrigLeft;
     right = data->Sel2OrigRight;
   }
-  
+
   if (data->Sel2ExtendDir == XmsdRight)
     right = (*tw->text.source->Scan)(tw->text.source, position,
 				     XmSELECT_POSITION, XmsdRight,1, FALSE);
@@ -4219,34 +4219,34 @@ BrowseScroll(XtPointer closure,
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
   int interval = 100;
-  
+
   if (data->cancel) {
     data->select_id = 0;
     return;
   }
-  
+
   if (!data->select_id) return;
-  
+
   if (data->Sel2Extending)
     DoSecondaryExtend(w, XtLastTimestampProcessed(XtDisplay(w)));
   else if (data->extending)
     DoExtendedSelection(w, XtLastTimestampProcessed(XtDisplay(w)));
-  
+
   /* ask the vertical scroller its delay */
   if (tw->text.output->data->vbar)
-    XtVaGetValues((Widget)tw->text.output->data->vbar, 
+    XtVaGetValues((Widget)tw->text.output->data->vbar,
 		  XmNrepeatDelay, &interval, NULL);
-  
+
   XSync (XtDisplay(w), False);
-  
+
   data->select_id = XtAppAddTimeOut(XtWidgetToApplicationContext(w),
-				    (unsigned long)interval, 
+				    (unsigned long)interval,
 				    BrowseScroll, (XtPointer) w);
 }
-    
+
 
 /* ARGSUSED */
-static Boolean 
+static Boolean
 CheckTimerScrolling(Widget w,
 		    XEvent *event)
 {
@@ -4260,13 +4260,13 @@ CheckTimerScrolling(Widget w,
 
   data->select_pos_x = event->xmotion.x;
   data->select_pos_y = event->xmotion.y;
-  
+
   if ((event->xmotion.x > (int)o_data->leftmargin) &&
       (event->xmotion.x < (int)(tw->core.width - o_data->rightmargin))  &&
       (event->xmotion.y > (int)o_data->topmargin) &&
       (event->xmotion.y < (int)(o_data->topmargin + (o_data->lineheight *
 						     o_data->number_lines)))) {
-    
+
     if (data->select_id) {
       XtRemoveTimeOut(data->select_id);
       data->select_id = 0;
@@ -4280,7 +4280,7 @@ CheckTimerScrolling(Widget w,
 					 (o_data->font_ascent +
 					  o_data->font_descent + 1));
       /* to the below of the text */
-      else if (event->xmotion.y >= (int) (tw->core.height - 
+      else if (event->xmotion.y >= (int) (tw->core.height -
 					  o_data->bottommargin))
 	data->select_pos_y = (Position) ((tw->core.height -
 					  o_data->bottommargin) +
@@ -4292,17 +4292,17 @@ CheckTimerScrolling(Widget w,
 				     o_data->linewidth);
 	if (tw->text.top_line == 0)
 	  data->select_pos_x = tw->core.width;
-	
+
       /* left the text */
-      } else if (event->xmotion.x <= 
-		 (int) ((tw->core.width - o_data->rightmargin) - 
+      } else if (event->xmotion.x <=
+		 (int) ((tw->core.width - o_data->rightmargin) -
 			(o_data->linewidth * (o_data->number_lines + 1))))
 	data->select_pos_y = (tw->core.width - o_data->rightmargin) -
 			      (o_data->linewidth * (o_data->number_lines + 1));
-      
+
       /* ask the vertical scroller its delay */
       if (o_data->hbar)
-	XtVaGetValues(o_data->hbar, 
+	XtVaGetValues(o_data->hbar,
 		      XmNinitialDelay, &interval, NULL);
     } else {
       /* to the left of the text */
@@ -4310,7 +4310,7 @@ CheckTimerScrolling(Widget w,
 	data->select_pos_x = (Position) (o_data->leftmargin -
 					 (o_data->averagecharwidth + 1));
       /* to the right of the text */
-      else if (event->xmotion.x >= (int) (tw->core.width - 
+      else if (event->xmotion.x >= (int) (tw->core.width -
 					  o_data->rightmargin))
 	data->select_pos_x = (Position) ((tw->core.width -
 					  o_data->rightmargin) +
@@ -4320,24 +4320,24 @@ CheckTimerScrolling(Widget w,
 	data->select_pos_y = (int) (o_data->topmargin - o_data->lineheight);
 	if (tw->text.top_line == 0)
 	  data->select_pos_x = 0;
-	
+
       /* below the text */
-      } else if (event->xmotion.y >= 
+      } else if (event->xmotion.y >=
 		 (int) (o_data->topmargin +
 			(o_data->lineheight * o_data->number_lines)))
 	data->select_pos_y = o_data->topmargin + (o_data->lineheight *
 						  (o_data->number_lines + 1));
-    
+
       /* ask the vertical scroller its delay */
       if (o_data->vbar)
-	XtVaGetValues(o_data->vbar, 
+	XtVaGetValues(o_data->vbar,
 		      XmNinitialDelay, &interval, NULL);
     }
-    
+
     if (!data->select_id)
       data->select_id = XtAppAddTimeOut(XtWidgetToApplicationContext(w),
 					interval, BrowseScroll, (XtPointer) w);
-    return True; 
+    return True;
   }
   return False;
 }
@@ -4351,7 +4351,7 @@ StartExtendSelection(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   _XmTextResetIC(w);
   data->cancel = False;
   data->stuffpos = tw->text.cursor_position;
@@ -4359,7 +4359,7 @@ StartExtendSelection(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 ExtendSelection(Widget w,
 		XEvent *event,
 		String *params,
@@ -4370,14 +4370,14 @@ ExtendSelection(Widget w,
   OutputData o_data = tw->text.output->data;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
-  
+
   if (data->cancel) return;
   _XmTextResetIC(w);
-  
+
   EraseInsertionPoint(tw);
   if (!o_data->hasfocus && _XmGetFocusPolicy(w) == XmEXPLICIT)
     (void) XmProcessTraversal(w, XmTRAVERSE_CURRENT);
-  
+
   if (data->selectionHint.x || data->selectionHint.y) {
     if(!dragged(data->selectionHint, event, data->threshold)) {
       DisplayInsertionPoint(tw);
@@ -4388,15 +4388,15 @@ ExtendSelection(Widget w,
     data->selectionHint.x = data->selectionHint.y = 0;
     data->extending = True;
   }
-  
+
   if (!CheckTimerScrolling(w, event))
     DoExtendedSelection(w, event_time);
-  
+
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 ExtendSecondary(Widget w,
 		XEvent *event,
 		String *params,
@@ -4407,10 +4407,10 @@ ExtendSecondary(Widget w,
   XmTextPosition position, hintposition;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
-  
+
   if (data->cancel) return;
   _XmTextResetIC(w);
-  
+
   EraseInsertionPoint(tw);
   if (event)
     position = (*tw->text.output->XYToPos)(tw, event->xbutton.x,
@@ -4439,20 +4439,20 @@ ExtendSecondary(Widget w,
       data->Sel2ExtendDir = XmsdRight;
     }
     data->Sel2Hint.x = data->Sel2Hint.y = 0;
-  } 
-  
+  }
+
   if(!data->Sel2Extending) {
     DisplayInsertionPoint(tw);
     return;
   }
-  
+
   if (!CheckTimerScrolling(w, event))
     DoSecondaryExtend(w, event_time);
-  
+
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 ExtendEnd(Widget w,
 	  XEvent *event,
 	  String *params,
@@ -4460,29 +4460,29 @@ ExtendEnd(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   _XmTextResetIC(w);
   if(data->extending || dragged(data->selectionHint, event, data->threshold)) {
     ExtendSelection(w, event, params, num_params);
     (*tw->text.source->GetSelection)(tw->text.source,
 				     &(data->origLeft), &(data->origRight));
   }
-  
+
   if (data->select_id) {
     XtRemoveTimeOut(data->select_id);
     data->select_id = 0;
   }
-  
+
   data->select_pos_x = 0;
   data->select_pos_y = 0;
   data->extending = FALSE;
   data->selectionHint.x = data->selectionHint.y = 0;
-  
+
   if (!data->sel_start) data->cancel = True;
 }
 
 /* ARGSUSED */
-static void 
+static void
 DoGrabFocus(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -4500,7 +4500,7 @@ DoGrabFocus(Widget w,
     /* to the top of the text */
       if (event->xbutton.y <= (int) o_data->topmargin)
         event->xbutton.y = (Position) (o_data->topmargin + 1);
-      
+
       /* to the bottom of the text */
       else if (event->xbutton.y >=
 	       (int) (tw->core.height - o_data->bottommargin))
@@ -4509,9 +4509,9 @@ DoGrabFocus(Widget w,
       /* above the text */
       if (event->xbutton.x >= (int) (tw->core.width - o_data->rightmargin))
         event->xbutton.x = (int) (tw->core.width - o_data->rightmargin) - 1;
-      
+
       /* below the text */
-      else if (event->xbutton.x <= 
+      else if (event->xbutton.x <=
 	       (int)(tw->core.width - o_data->rightmargin -
 	       (o_data->linewidth * o_data->number_lines)))
         event->xbutton.x = ((int)(tw->core.width - o_data->rightmargin) -
@@ -4520,16 +4520,16 @@ DoGrabFocus(Widget w,
       /* to the left of the text */
       if (event->xbutton.x <= (int) o_data->leftmargin)
         event->xbutton.x = (Position) (o_data->leftmargin + 1);
-      
+
       /* to the right of the text */
       else if (event->xbutton.x >= (int) (tw->core.width - o_data->rightmargin))
         event->xbutton.x = (Position)((tw->core.width - o_data->rightmargin)- 1);
       /* above the text */
       if (event->xbutton.y <= (int) o_data->topmargin)
         event->xbutton.y = (int) (o_data->topmargin + 1);
-    
+
       /* below the text */
-      else if (event->xbutton.y >= 
+      else if (event->xbutton.y >=
 	       (int)(o_data->topmargin + (o_data->lineheight *
 					  o_data->number_lines)))
         event->xbutton.y = (o_data->topmargin +
@@ -4541,7 +4541,7 @@ DoGrabFocus(Widget w,
   if ((_XmGetFocusPolicy(w) == XmEXPLICIT) &&
       (XmGetFocusWidget(w) != w))
     (void) XmProcessTraversal(w, XmTRAVERSE_CURRENT);
-  
+
   StartPrimary(w, event, params, num_params);
   if (data->stype == XmSELECT_POSITION)
     SetCursorPosition(w, event, params, num_params);
@@ -4552,9 +4552,9 @@ DoGrabFocus(Widget w,
   }
   data->stuffpos = tw->text.cursor_position;
 }
- 
+
 /* ARGSUSED */
-static void 
+static void
 MoveDestination(Widget w,
 		XEvent *event,
 		String *params,
@@ -4564,7 +4564,7 @@ MoveDestination(Widget w,
   XmTextPosition new_pos, left, right;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   if (event)
@@ -4572,15 +4572,15 @@ MoveDestination(Widget w,
 					  event->xbutton.y);
   else
     new_pos = tw->text.cursor_position;
-  
+
   if ((*tw->text.source->GetSelection)(tw->text.source, &left, &right)
       && (right != left))
     _XmTextSetDestinationSelection(w, new_pos, False, event_time);
-  
+
   tw->text.pendingoff = False;
   if (_XmGetFocusPolicy(w) == XmEXPLICIT)
     (void) XmProcessTraversal(w, XmTRAVERSE_CURRENT);
-  
+
   _XmTextSetCursorPosition(w, new_pos);
   if (tw->text.cursor_position < left || tw->text.cursor_position > right)
     tw->text.pendingoff = TRUE;
@@ -4590,7 +4590,7 @@ MoveDestination(Widget w,
 /* This function make the request to do a primary paste */
 
 /* ARGSUSED */
-static void 
+static void
 Stuff(Widget w,
       XEvent *event,
       String *params,
@@ -4601,30 +4601,30 @@ Stuff(Widget w,
   InputData data = tw->text.input->data;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
-  
+
   _XmTextResetIC(w);
   /* Request targets from the selection owner so you can decide what to
    * request.  The decision process and request for the selection is
    * taken care of in HandleTargets().
    */
-  
+
   if (event && event->type == ButtonRelease) {
-      /* WARNING: do not free the following memory in this module. 
-       * It will be freed in FreeLocationData, triggered at the end of 
+      /* WARNING: do not free the following memory in this module.
+       * It will be freed in FreeLocationData, triggered at the end of
        * the data transfer operation.
        */
       point = (XPoint *) XtMalloc(sizeof(XPoint));
       point->x = event->xbutton.x;
       point->y = event->xbutton.y;
-  } 
+  }
 
   if (!event_time) event_time = _XmValidTimestamp(w);
-  
-  if (data->selectionLink) 
-    XmePrimarySink(w, XmLINK, (XtPointer) point, 
+
+  if (data->selectionLink)
+    XmePrimarySink(w, XmLINK, (XtPointer) point,
 		   event_time);
   else if (data->selectionMove)
-    XmePrimarySink(w, XmMOVE, (XtPointer) point, 
+    XmePrimarySink(w, XmMOVE, (XtPointer) point,
 		   event_time);
   else
     XmePrimarySink(w, XmCOPY, (XtPointer) point,
@@ -4632,7 +4632,7 @@ Stuff(Widget w,
 }
 
 /* ARGSUSED */
-void 
+void
 _XmTextHandleSecondaryFinished(Widget w,
 			       XEvent *event)
 {
@@ -4646,13 +4646,13 @@ _XmTextHandleSecondaryFinished(Widget w,
   XmTextPosition cursorPos;
   Boolean freeBlock;
   Time time = XtLastTimestampProcessed(XtDisplay(w));
-  
+
   dest_data = GetTextDestData(w);
   dest_tw = dest_data->widget;
-  
+
   if (dest_data->has_destination) {
     adjustment = data->sel2Right - data->sel2Left;
-    
+
     if (dest_data->position <= data->sel2Left) {
       data->sel2Left -= dest_data->replace_length;
       data->sel2Right += adjustment - dest_data->replace_length;
@@ -4662,28 +4662,28 @@ _XmTextHandleSecondaryFinished(Widget w,
       data->sel2Right += adjustment - dest_data->replace_length;
     }
   }
-  
+
   left = data->sel2Left;
   right = data->sel2Right;
-  
+
   (void) _XmTextSetSel2(tw, 1, 0, time);
-  
+
   block.ptr = "";
   block.length = 0;
   block.format = XmFMT_8_BIT;
   if (dest_data->position <= data->sel2Left) left += adjustment;
   if (_XmTextModifyVerify(tw, NULL, &left, &right,
 			  &cursorPos, &block, &newblock, &freeBlock)) {
-    if ((*tw->text.source->Replace)(tw, NULL, &left, &right, 
+    if ((*tw->text.source->Replace)(tw, NULL, &left, &right,
 				    &newblock, False) != EditDone) {
       RingBell(w, NULL, (String *) NULL, (Cardinal) 0);
     } else {
       int count;
       count = _XmTextCountCharacters(newblock.ptr, newblock.length);
-      
+
       if (dest_data->has_destination && dest_data->position > right) {
 	if (cursorPos == left + count)
-	  cursorPos = dest_data->position + count;    	
+	  cursorPos = dest_data->position + count;
 	if (!dest_data->quick_key)
 	  _XmTextSetCursorPosition((Widget)dest_tw, cursorPos);
 	_XmTextSetDestinationSelection((Widget)dest_tw,
@@ -4714,7 +4714,7 @@ _XmTextHandleSecondaryFinished(Widget w,
 
 /* Send a client message to perform the quick cut/copy and paste */
 /* ARGSUSED */
-static void 
+static void
 SecondaryNotify(Widget w,
 		XEvent *event,
 		String *params,
@@ -4727,7 +4727,7 @@ SecondaryNotify(Widget w,
   XmTextPosition left, right;
   Time event_time = event ? event->xbutton.time :
                             XtLastTimestampProcessed(XtDisplay(w));
-  
+
   _XmTextResetIC(w);
   if (data->selectionMove == TRUE && data->has_destination &&
       tw->text.dest_position >= data->sel2Left &&
@@ -4735,52 +4735,52 @@ SecondaryNotify(Widget w,
     (void)_XmTextSetSel2(tw, 1, 0, event_time);
     return;
   }
-  
+
   dest_data = GetTextDestData(w);
-  
+
   dest_data->replace_length = 0;
-  
+
   dest_tw = tw;
-  
+
   if (!dest_tw->text.input->data->has_destination &&
       dest_tw->text.source->data->numwidgets > 1) {
     int i;
-    
+
     for (i=0; i<tw->text.source->data->numwidgets; i++) {
       dest_tw = (XmTextWidget) tw->text.source->data->widgets[i];
       if (dest_tw->text.input->data->has_destination) break;
     }
     if (i == tw->text.source->data->numwidgets) dest_tw = tw;
   }
-  
+
   dest_data->has_destination = dest_tw->text.input->data->has_destination;
   dest_data->position = dest_tw->text.dest_position;
   dest_data->widget = dest_tw;
-  
+
   if (*(num_params) == 1) dest_data->quick_key = True;
   else dest_data->quick_key = False;
-  
+
   if ((*dest_tw->text.source->GetSelection)
       (dest_tw->text.source, &left, &right) && left != right) {
     if (dest_data->position >= left && dest_data->position <= right)
       dest_data->replace_length = right - left;
   }
-  
+
   /* special fix for handling case of shared source with secondary select */
   _XmTextSetHighlight((Widget) data->widget, data->sel2Left,
 		     data->sel2Right, XmHIGHLIGHT_NORMAL);
-  
+
   /*
    * Make a request for the primary selection to convert to
    * type INSERT_SELECTION as per ICCCM.
    */
   if (!event_time) event_time = _XmValidTimestamp(w);
-  
+
   if (data->selectionLink)
-    XmeSecondaryTransfer(w, XmeGetEncodingAtom(w), 
+    XmeSecondaryTransfer(w, XmeGetEncodingAtom(w),
 			 XmLINK, event_time);
   else if (data->selectionMove)
-    XmeSecondaryTransfer(w, XmeGetEncodingAtom(w), 
+    XmeSecondaryTransfer(w, XmeGetEncodingAtom(w),
 			 XmMOVE, event_time);
   else
     XmeSecondaryTransfer(w, XmeGetEncodingAtom(w),
@@ -4788,7 +4788,7 @@ SecondaryNotify(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 VoidAction(Widget w,
 	   XEvent *event,
 	   String *params,
@@ -4801,7 +4801,7 @@ VoidAction(Widget w,
  * This function set the final position of the secondary selection and
  * calls SecondaryNotify().
  */
-static void 
+static void
 ExtendSecondaryEnd(Widget w,
 		   XEvent *event,
 		   String *params,
@@ -4811,37 +4811,37 @@ ExtendSecondaryEnd(Widget w,
   InputData data = tw->text.input->data;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   if (!data->cancel) XtUngrabKeyboard(w, CurrentTime);
-  
+
   /* if the pointer is inside the text area, do the secondary transfer */
   if (event)
-    if (event->xbutton.x > (int) tw->core.width || event->xbutton.x < 0 || 
+    if (event->xbutton.x > (int) tw->core.width || event->xbutton.x < 0 ||
 	event->xbutton.y > (int) tw->core.height || event->xbutton.y < 0) {
       if (data->hasSel2 && data->Sel2Extending) {
 	data->cancel = True;
 	_XmTextSetSel2(tw, 1, 0, event_time);
       }
     }
-  
+
   if ((data->Sel2Extending || dragged(data->Sel2Hint, event, data->threshold))
       && !data->cancel) {
     _XmTextGetSel2(tw, &(data->Sel2OrigLeft), &(data->Sel2OrigRight));
     SecondaryNotify(w, event, params, num_params);
   }
-  
+
   /* Re-initialize the secondary selection data */
   data->select_pos_x = 0;
   data->select_pos_y = 0;
   data->Sel2Extending = FALSE;
   data->Sel2Hint.x = data->Sel2Hint.y = 0;
   data->sel_start = False;
-  
+
   if (data->select_id) {
     XtRemoveTimeOut(data->select_id);
     data->select_id = 0;
   }
-  
+
   data->cancel = True;
 }
 
@@ -4850,7 +4850,7 @@ ExtendSecondaryEnd(Widget w,
  * This Action Proc selects all of the text.
  */
 /* ARGSUSED */
-static void 
+static void
 SelectAll(Widget w,
 	  XEvent *event,
 	  String *params,
@@ -4858,15 +4858,15 @@ SelectAll(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  XmTextPosition last_position = 
+  XmTextPosition last_position =
     (*tw->text.source->Scan)(tw->text.source, 0, XmSELECT_ALL,
 			     XmsdRight, 1, TRUE);
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   data->stype = XmSELECT_ALL;
-  (*tw->text.source->SetSelection)(tw->text.source, 0, 
+  (*tw->text.source->SetSelection)(tw->text.source, 0,
 				   last_position, event_time);
   _XmTextMovingCursorPosition(tw, tw->text.cursor_position);
   data->anchor = 0;
@@ -4878,7 +4878,7 @@ SelectAll(Widget w,
  * This Action Proc deselects all of the text.
  */
 /* ARGSUSED */
-static void 
+static void
 DeselectAll(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -4889,7 +4889,7 @@ DeselectAll(Widget w,
   XmTextPosition cursorPos = tw->text.cursor_position;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   _XmTextSetDestinationSelection(w, cursorPos, False, event_time);
   data->stype = XmSELECT_POSITION;
@@ -4905,7 +4905,7 @@ DeselectAll(Widget w,
  * This Action Proc replaces the primary selection with spaces
  */
 /* ARGSUSED */
-static void 
+static void
 ClearSelection(Widget w,
 	       XEvent *event,
 	       String *params,
@@ -4916,22 +4916,22 @@ ClearSelection(Widget w,
   Boolean freeBlock;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   EraseInsertionPoint(tw);
   if (!(*tw->text.source->GetSelection)
       (tw->text.source, &left, &right)) {
     XBell(XtDisplay(tw), 0);
   } else if (left != right) {
-    char *select_string = _XmStringSourceGetString(tw, left, right, 
+    char *select_string = _XmStringSourceGetString(tw, left, right,
 						   False);
     XmTextBlockRec block, newblock;
     int num_spaces = right - left;
     int i;
-    
+
     for(i = 0; i < num_spaces; i++) {
       if (select_string[i] != '\012') select_string[i] = ' ';
     }
-    
+
     block.ptr = select_string;
     block.length = num_spaces;
     block.format = XmFMT_8_BIT;
@@ -4955,7 +4955,7 @@ ClearSelection(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static void 
+static void
 ProcessBDragRelease(Widget w,
 		    XEvent *event,
 		    String *params,
@@ -4970,7 +4970,7 @@ ProcessBDragRelease(Widget w,
 
   /* Work around for intrinsic bug.  Remove once bug is fixed. */
   XtUngrabPointer(w, ev->time);
-  
+
   EraseInsertionPoint(tw);
   if (data->sel_start) {
     if (dragged(data->Sel2Hint, event, data->threshold)) {
@@ -4989,7 +4989,7 @@ ProcessBDragRelease(Widget w,
       }
     } else {
       /*
-       * Quick transfer: Copy contents of primary selection to the 
+       * Quick transfer: Copy contents of primary selection to the
        * stuff position found above.
        */
       Stuff(w, event, params, num_params);
@@ -5005,7 +5005,7 @@ ProcessBDragRelease(Widget w,
  * It copies the contents of the primary selection to the x and y
  * position of the button pressed event.
  */
-static void 
+static void
 ProcessCopy(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -5013,14 +5013,14 @@ ProcessCopy(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   data->selectionMove = False;
   data->selectionLink = False;
   ProcessBDragRelease(w, event, params, num_params);
   DisplayInsertionPoint(tw);
-  
+
   data->cancel = True;
 }
 
@@ -5029,7 +5029,7 @@ ProcessCopy(Widget w,
  * It links the contents of the primary selection to the x and y
  * position of the button pressed event.
  */
-static void 
+static void
 ProcessLink(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -5037,18 +5037,18 @@ ProcessLink(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   EraseInsertionPoint(tw);
   data->selectionMove = False;
   data->selectionLink = True;
   ProcessBDragRelease(w, event, params, num_params);
   DisplayInsertionPoint(tw);
-  
+
   data->cancel = True;
 }
 
 /* This function does a primary cut and paste on mouse button actions. */
-static void 
+static void
 ProcessMove(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -5063,13 +5063,13 @@ ProcessMove(Widget w,
   data->selectionLink = False;
   ProcessBDragRelease(w, event, params, num_params);
   DisplayInsertionPoint(tw);
-  
+
   data->cancel = True;
 }
 
 
 /* This function does a primary copy and paste on keyboard actions. */
-static void 
+static void
 CopyPrimary(Widget w,
 	    XEvent *event,
 	    String *params,
@@ -5077,19 +5077,19 @@ CopyPrimary(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   data->selectionMove = False;
   data->selectionLink = FALSE;
-  
+
   /* perform the primary paste action */
   Stuff(w, event, params, num_params);
   DisplayInsertionPoint(tw);
 }
 
 /* This function does a primary cut and paste on keyboard actions. */
-static void 
+static void
 CutPrimary(Widget w,
 	   XEvent *event,
 	   String *params,
@@ -5097,19 +5097,19 @@ CutPrimary(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   _XmTextResetIC(w);
   EraseInsertionPoint(tw);
   data->selectionMove = True;
   data->selectionLink = FALSE;
-  
+
   /* perform the primary paste action */
   Stuff(w, event, params, num_params);
   DisplayInsertionPoint(tw);
 }
 
 /* This function does a primary link on keyboard actions. */
-static void 
+static void
 LinkPrimary(Widget w,
 	   XEvent *event,
 	   String *params,
@@ -5117,18 +5117,18 @@ LinkPrimary(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   EraseInsertionPoint(tw);
   data->selectionMove = False;
   data->selectionLink = True;
-  
+
   /* perform the primary paste action */
   Stuff(w, event, params, num_params);
   DisplayInsertionPoint(tw);
 }
 
 /* ARGSUSED */
-static void 
+static void
 CutClipboard(Widget w,
 	     XEvent *event,
 	     String *params,
@@ -5139,11 +5139,11 @@ CutClipboard(Widget w,
   XmTextPosition left, right;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   if (!event_time) event_time = _XmValidTimestamp(w);
-  
+
   EraseInsertionPoint(tw);
-  if (_XmStringSourceGetEditable(GetSrc(w)) && 
+  if (_XmStringSourceGetEditable(GetSrc(w)) &&
       (*source->GetSelection)(source, &left, &right) && right != left)
     XmeClipboardSource(w, XmMOVE, event_time);
   DisplayInsertionPoint(tw);
@@ -5151,7 +5151,7 @@ CutClipboard(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 CopyClipboard(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -5164,7 +5164,7 @@ CopyClipboard(Widget w,
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
 
   if (!event_time) event_time = _XmValidTimestamp(w);
-  
+
   EraseInsertionPoint(tw);
   if ((*source->GetSelection)(source, &left, &right) && right != left)
     XmeClipboardSource(w, XmCOPY, event_time);
@@ -5175,7 +5175,7 @@ CopyClipboard(Widget w,
 
 
 /* ARGSUSED */
-static void 
+static void
 PasteClipboard(Widget w,
 	       XEvent *event,
 	       String *params,
@@ -5183,7 +5183,7 @@ PasteClipboard(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   EraseInsertionPoint(tw);
   data->selectionMove = FALSE;
   data->selectionLink = FALSE;
@@ -5191,14 +5191,14 @@ PasteClipboard(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-static Boolean 
+static Boolean
 VerifyLeave(Widget w,
 	    XEvent *event)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   XmTextVerifyCallbackStruct  cbdata;
-  
+
   cbdata.reason = XmCR_LOSING_FOCUS;
   cbdata.event = event;
   cbdata.doit = True;
@@ -5213,66 +5213,66 @@ VerifyLeave(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 TextLeave(Widget w,
 	  XEvent *event,
 	  String *params,
 	  Cardinal *num_params)
 {
-  if (_XmGetFocusPolicy(w) == XmPOINTER) 
+  if (_XmGetFocusPolicy(w) == XmPOINTER)
     VerifyLeave(w, event);
-  
+
   _XmPrimitiveLeave(w, event, params, num_params);
 }
 
 /* ARGSUSED */
-static void 
+static void
 TextFocusIn(Widget w,
 	    XEvent *event,
 	    String *params,
 	    Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (!event || !event->xfocus.send_event) return;
-  
+
   if (_XmGetFocusPolicy(w) == XmEXPLICIT && !_XmTextHasDestination(w) &&
       !tw->text.input->data->sel_start)
-    _XmTextSetDestinationSelection(w, tw->text.cursor_position, False, 
+    _XmTextSetDestinationSelection(w, tw->text.cursor_position, False,
 				   XtLastTimestampProcessed(XtDisplay(w)));
-  
+
   _XmPrimitiveFocusIn(w, event, params, num_params);
 }
 
 /* ARGSUSED */
-static void 
+static void
 TextFocusOut(Widget w,
 	     XEvent *event,
 	     String *params,
 	     Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* If traversal is on, then the leave verification callback is called in
      the traversal event handler */
-  if (event && event->xfocus.send_event && 
+  if (event && event->xfocus.send_event &&
       _XmGetFocusPolicy(w) == XmEXPLICIT && !tw->text.traversed) {
     (void) VerifyLeave(w, event);
   } else
     if (tw->text.traversed) tw->text.traversed = False;
-  
+
   _XmPrimitiveFocusOut(w, event, params, num_params);
 }
 
 /* ARGSUSED */
-static void 
+static void
 TraverseDown(Widget w,
 	     XEvent *event,
 	     String *params,
 	     Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* Find out if there is anything else to traverse to */
   /* Allow the verification routine to control the traversal */
   if (tw->primitive.navigation_type == XmNONE && VerifyLeave(w, event)) {
@@ -5283,14 +5283,14 @@ TraverseDown(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 TraverseUp(Widget w,
 	   XEvent *event,
 	   String *params,
 	   Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* Allow the verification routine to control the traversal */
   if (tw->primitive.navigation_type == XmNONE && VerifyLeave(w, event)) {
     tw->text.traversed = True;
@@ -5300,14 +5300,14 @@ TraverseUp(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 TraverseHome(Widget w,
 	     XEvent *event,
 	     String *params,
 	     Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* Allow the verification routine to control the traversal */
   if (tw->primitive.navigation_type == XmNONE && VerifyLeave(w, event)) {
     tw->text.traversed = True;
@@ -5317,14 +5317,14 @@ TraverseHome(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 TraverseNextTabGroup(Widget w,
 		     XEvent *event,
 		     String *params,
 		     Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* Allow the verification routine to control the traversal */
   if (VerifyLeave(w, event)) {
     XmTraversalDirection dir;
@@ -5341,14 +5341,14 @@ TraverseNextTabGroup(Widget w,
 }
 
 /* ARGSUSED */
-static void 
+static void
 TraversePrevTabGroup(Widget w,
 		     XEvent *event,
 		     String *params,
 		     Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* Allow the verification routine to control the traversal */
   if (VerifyLeave(w, event)) {
     XmTraversalDirection dir;
@@ -5371,7 +5371,7 @@ TraversePrevTabGroup(Widget w,
  ***************************************************************************/
 
 /* ARGSUSED */
-static void 
+static void
 ProcessCancel(Widget w,
 	      XEvent *event,
 	      String *params,
@@ -5379,19 +5379,19 @@ ProcessCancel(Widget w,
 {
   XmTextWidget tw = (XmTextWidget) w;
   InputData data = tw->text.input->data;
-  
+
   XmParentInputActionRec  p_event;
   Time event_time = event ? event->xkey.time :
                             XtLastTimestampProcessed(XtDisplay((Widget)tw));
-  
+
   data->cancel = False;
-  
+
   p_event.process_type = XmINPUT_ACTION;
   p_event.action = XmPARENT_CANCEL;
   p_event.event = event;           /* Pointer to XEvent. */
   p_event.params = params;         /* Or use what you have if   */
   p_event.num_params = num_params; /* input is from translation.*/
-  
+
   EraseInsertionPoint(tw);
   if (data->sel_start) {
     data->cancel = True;
@@ -5399,7 +5399,7 @@ ProcessCancel(Widget w,
       _XmTextSetSel2(tw, 1, 0, event_time);
     XtUngrabKeyboard(w, CurrentTime);
   }
-  
+
   if (_XmStringSourceHasSelection(tw->text.source) && data->extending) {
     data->cancel = True;
     /* restore cursor position */
@@ -5410,27 +5410,27 @@ ProcessCancel(Widget w,
     (*tw->text.source->SetSelection)(tw->text.source, data->origLeft,
 				     data->origRight, event_time);
   }
-  
+
   if (!data->cancel)
     (void) _XmParentProcess(XtParent(tw), (XmParentProcessData) &p_event);
-  
+
   if (data->select_id) {
     XtRemoveTimeOut(data->select_id);
     data->select_id = 0;
   }
   DisplayInsertionPoint(tw);
-  
+
   data->cancel = True;
 }
 
-static void 
+static void
 ProcessReturn(Widget w,
 	      XEvent *event,
 	      String *params,
 	      Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT)
     Activate(w, event, params, num_params);
@@ -5441,15 +5441,15 @@ ProcessReturn(Widget w,
   }
 }
 
-static void 
+static void
 ProcessTab(Widget w,
 	   XEvent *event,
 	   String *params,
 	   Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
-  if (tw->text.edit_mode == XmSINGLE_LINE_EDIT || 
+
+  if (tw->text.edit_mode == XmSINGLE_LINE_EDIT ||
       !_XmStringSourceGetEditable(GetSrc(w)))
     if (*num_params == 0 || *(params[0]) == 'N')
       TraverseNextTabGroup(w, event, params, num_params);
@@ -5461,14 +5461,14 @@ ProcessTab(Widget w,
     /* do nothing for shift+Tab in multiline mode */
 }
 
-static void 
+static void
 ProcessUp(Widget w,
 	  XEvent *event,
 	  String *params,
 	  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmMULTI_LINE_EDIT) {
     EraseInsertionPoint(tw);
@@ -5478,14 +5478,14 @@ ProcessUp(Widget w,
     TraverseUp(w, event, params, num_params);
 }
 
-static void 
+static void
 ProcessDown(Widget w,
 	    XEvent *event,
 	    String *params,
 	    Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmMULTI_LINE_EDIT) {
     EraseInsertionPoint(tw);
@@ -5496,14 +5496,14 @@ ProcessDown(Widget w,
 }
 
 
-static void 
+static void
 ProcessLeft(Widget w,
 	    XEvent *event,
 	    String *params,
 	    Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (tw->text.edit_mode == XmMULTI_LINE_EDIT) {
     EraseInsertionPoint(tw);
     MoveNextLine(w, event, params, num_params);
@@ -5512,14 +5512,14 @@ ProcessLeft(Widget w,
     TraverseDown(w, event, params, num_params);
 }
 
-static void 
+static void
 ProcessRight(Widget w,
 	  XEvent *event,
 	  String *params,
 	  Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (tw->text.edit_mode == XmMULTI_LINE_EDIT) {
     EraseInsertionPoint(tw);
     MovePreviousLine(w, event, params, num_params);
@@ -5529,14 +5529,14 @@ ProcessRight(Widget w,
 }
 
 
-static void 
+static void
 ProcessShiftUp(Widget w,
 	       XEvent *event,
 	       String *params,
 	       Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
     TraverseUp(w, event, params, num_params);
@@ -5549,14 +5549,14 @@ ProcessShiftUp(Widget w,
   }
 }
 
-static void 
+static void
 ProcessShiftDown(Widget w,
 		 XEvent *event,
 		 String *params,
 		 Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   _XmTextResetIC(w);
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
     TraverseDown(w, event, params, num_params);
@@ -5570,14 +5570,14 @@ ProcessShiftDown(Widget w,
 }
 
 
-static void 
+static void
 ProcessShiftLeft(Widget w,
 	       XEvent *event,
 	       String *params,
 	       Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
     TraverseUp(w, event, params, num_params);
   } else {
@@ -5593,14 +5593,14 @@ ProcessShiftLeft(Widget w,
   }
 }
 
-static void 
+static void
 ProcessShiftRight(Widget w,
 		 XEvent *event,
 		 String *params,
 		 Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT) {
     TraverseDown(w, event, params, num_params);
   } else {
@@ -5617,14 +5617,14 @@ ProcessShiftRight(Widget w,
 }
 
 
-static void 
+static void
 ProcessHome(Widget w,
 	    XEvent *event,
 	    String *params,
 	    Cardinal *num_params)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   EraseInsertionPoint(tw);
   MoveToLineStart(w, event, params, num_params);
   DisplayInsertionPoint(tw);
@@ -5753,7 +5753,7 @@ static XtActionsRec ZdefaultTextActionsTable[] = {
 externaldef(nonvisible) XtPointer _XmdefaultTextActionsTable =
 					 (XtPointer) ZdefaultTextActionsTable;
 
-externaldef(nonvisible) Cardinal _XmdefaultTextActionsTableSize = 
+externaldef(nonvisible) Cardinal _XmdefaultTextActionsTableSize =
                                 XtNumber(ZdefaultTextActionsTable);
 
 /* added <Key> event */
@@ -5763,7 +5763,7 @@ externaldef(nonvisible) Cardinal _XmdefaultTextActionsTableSize =
 #define _XmTextVEventBindings	_XmTextIn_XmTextVEventBindings
 
 /* ARGSUSED */
-static void 
+static void
 Invalidate(XmTextWidget tw,
 	   XmTextPosition position,
 	   XmTextPosition topos,
@@ -5775,7 +5775,7 @@ Invalidate(XmTextWidget tw,
   if (data->origRight >= position) data->origRight += delta;
 }
 
-static void 
+static void
 InputGetValues(Widget wid,
 	       ArgList args,
 	       Cardinal num_args)
@@ -5786,7 +5786,7 @@ InputGetValues(Widget wid,
 }
 
 /* ARGSUSED */
-static void 
+static void
 InputSetValues(Widget oldw,
 	       Widget reqw,
 	       Widget new_w,
@@ -5796,9 +5796,9 @@ InputSetValues(Widget oldw,
   XmTextWidget tw = (XmTextWidget) new_w;
   InputData data = tw->text.input->data;
   XtPointer temp_ptr;
-  
+
   temp_ptr = (XtPointer)data->sarray;
-  
+
   XtSetSubvalues((XtPointer) data,
 		 input_resources, XtNumber(input_resources), args, *num_args);
   /*
@@ -5820,38 +5820,38 @@ InputSetValues(Widget oldw,
    */
 }
 
-static void 
+static void
 InputDestroy(Widget w)
 {
   XmTextWidget tw = (XmTextWidget) w;
   Atom MOTIF_DESTINATION = XInternAtom(XtDisplay(tw),
 				       XmS_MOTIF_DESTINATION, False);
   Widget dest = XmGetDestination(XtDisplay(w));
-  
+
   if (dest == w)
-    _XmSetDestination(XtDisplay(w), NULL); 
-  
+    _XmSetDestination(XtDisplay(w), NULL);
+
   if (tw->core.window == XGetSelectionOwner(XtDisplay(tw),
 					    MOTIF_DESTINATION))
     XtDisownSelection(w, MOTIF_DESTINATION,
 		      XtLastTimestampProcessed(XtDisplay(w)));
-  
+
   if (tw->core.window == XGetSelectionOwner(XtDisplay(tw),
 					    XA_PRIMARY))
-    XtDisownSelection(w, XA_PRIMARY, 
+    XtDisownSelection(w, XA_PRIMARY,
 		      XtLastTimestampProcessed(XtDisplay(w)));
-  
+
   if (tw->core.window == XGetSelectionOwner(XtDisplay(tw),
 					    XA_SECONDARY))
     XtDisownSelection(w, XA_SECONDARY,
 		      XtLastTimestampProcessed(XtDisplay(w)));
-  
+
   if (tw->text.input->data->drag_id)
     XtRemoveTimeOut(tw->text.input->data->drag_id);
 
-  if (tw->text.input->data->select_id) 
+  if (tw->text.input->data->select_id)
     XtRemoveTimeOut(tw->text.input->data->select_id);
-   
+
   if (tw->text.input->data->transfer_action) {
     XtFree((char *)tw->text.input->data->transfer_action->event);
     XtFree((char *)tw->text.input->data->transfer_action);
@@ -5889,13 +5889,13 @@ void
 _XmTextInputGetSecResData(XmSecondaryResourceData *secResDataRtn)
 {
   XmSecondaryResourceData               secResData;
-  
+
   secResData = XtNew(XmSecondaryResourceDataRec);
-  
-  _XmTransformSubResources(input_resources, XtNumber(input_resources), 
+
+  _XmTransformSubResources(input_resources, XtNumber(input_resources),
 			   &(secResData->resources),
 			   &(secResData->num_resources));
-  
+
   secResData->name = NULL;
   secResData->res_class = NULL;
   secResData->client_data = NULL;
@@ -5927,7 +5927,7 @@ DragProcCallback(Widget w,
   Atom *exp_targets;
   Cardinal num_exp_targets, n;
   Atom atoms[XtNumber(atom_names)];
-  
+
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
 
@@ -5938,14 +5938,14 @@ DragProcCallback(Widget w,
 #ifdef UTF8_SUPPORTED
   targets[4] = atoms[XmAUTF8_STRING];
 #endif
-  
+
   drag_cont = cb->dragContext;
-  
+
   n = 0;
   XtSetArg(args[n], XmNexportTargets, &exp_targets); n++;
   XtSetArg(args[n], XmNnumExportTargets, &num_exp_targets); n++;
   XtGetValues(drag_cont, args, n);
-  
+
   switch(cb->reason) {
   case XmCR_DROP_SITE_ENTER_MESSAGE:
 #ifdef UTF8_SUPPORTED
@@ -5994,7 +5994,7 @@ RegisterDropSite(Widget w)
   Arg args[10];
   int n;
   Atom atoms[XtNumber(atom_names)];
-  
+
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
 
@@ -6005,7 +6005,7 @@ RegisterDropSite(Widget w)
 #ifdef UTF8_SUPPORTED
   targets[4] = atoms[XmAUTF8_STRING];
 #endif
-  
+
   n = 0;
   XtSetArg(args[n], XmNimportTargets, targets); n++;
 #ifdef UTF8_SUPPORTED
@@ -6018,7 +6018,7 @@ RegisterDropSite(Widget w)
 }
 
 
-void 
+void
 _XmTextInputCreate(Widget wid,
 		   ArgList args,
 		   Cardinal num_args)
@@ -6027,17 +6027,17 @@ _XmTextInputCreate(Widget wid,
   Input input;
   InputData data;
   XtPointer temp_ptr;
-  
+
   tw->text.input = input = (Input) XtMalloc((unsigned) sizeof(InputRec));
   input->data = data = (InputData) XtMalloc((unsigned) sizeof(InputDataRec));
   XtGetSubresources(wid, (XtPointer)data, NULL, NULL, input_resources,
 		    XtNumber(input_resources), args, num_args);
   data->widget = tw;
-  
+
   if (data->sarray == NULL) data->sarray = (XmTextScanType *) sarray;
-  
+
   if (data->sarraycount <= 0) data->sarraycount = XtNumber(sarray);
-  
+
   /*
    * Fix for HaL DTS 9841 - copy the selectionArray into dedicated memory.
    */
@@ -6049,7 +6049,7 @@ _XmTextInputCreate(Widget wid,
   /*
    * End fix for HaL DTS 9841
    */
-  
+
   data->lasttime = 0;
   data->cancel = True;
   data->stype = data->sarray[0];
@@ -6060,7 +6060,7 @@ _XmTextInputCreate(Widget wid,
   data->origRight = 0;
   data->selectionHint.x = data->selectionHint.y = 0;
   data->anchor = 0;
-  
+
   data->hasSel2 = FALSE;
   data->sel2Left = 0;
   data->sel2Right = 0;
@@ -6070,7 +6070,7 @@ _XmTextInputCreate(Widget wid,
   data->Sel2Extending = FALSE;
   data->Sel2Hint.x = data->Sel2Hint.y = 0;
   data->select_pos_x = data->select_pos_y = 0;
-  
+
   data->select_id = 0;
   data->sec_time = 0;
   data->dest_time = 0;
@@ -6081,29 +6081,29 @@ _XmTextInputCreate(Widget wid,
   data->selectionLink = FALSE;
   data->drag_id = 0;
   data->transfer_action = NULL;
-  
-  /* This EventHandler scans the event queue to see if there are more 
+
+  /* This EventHandler scans the event queue to see if there are more
      key events pending for this widget. If there are, it will disable
      redisplay until there are no more key event on the queue. This can
      have severe effects when using certain input methods: The event
      that was in the queue may not get passed to the eventhandler - it
-     could be filtered out by the input method. If this was the last key 
-     event, the text may never be redrawn again. Put it in a comment for 
+     could be filtered out by the input method. If this was the last key
+     event, the text may never be redrawn again. Put it in a comment for
      now. Also, this seems to get used only in rare cases.
      XtAddEventHandler((Widget) tw, KeyPressMask, FALSE, CheckSync, NULL);
   */
-  
+
   input->Invalidate = Invalidate;
   input->GetValues = InputGetValues;
   input->SetValues = InputSetValues;
   input->destroy = InputDestroy;
-  
-  
+
+
   if (tw->text.editable) {
     XmTextSetEditable((Widget)tw, False);
     XmTextSetEditable((Widget)tw, True);
   }
-  
+
   RegisterDropSite(wid);
 }
 
@@ -6119,12 +6119,12 @@ XtoPosInLine(XmTextWidget tw,
   OutputData data = tw->text.output->data;
   Position        x1 = 0, y1 = 0;
   XmTextPosition  pos;
-  
-  pos = (*tw->text.output->XYToPos)(tw, x, 
+
+  pos = (*tw->text.output->XYToPos)(tw, x,
 				    line * data->lineheight + data->topmargin);
-  
+
   (*tw->text.output->PosToXY)(tw, pos, &x1, &y1);
-  if (pos > 0 && x1 > x) 
+  if (pos > 0 && x1 > x)
     return pos-1;
   else
     return pos;
@@ -6143,15 +6143,14 @@ YtoPosInLine(XmTextWidget tw,
   OutputData data = tw->text.output->data;
   Position        x1 = 0, y1 = 0;
   XmTextPosition  pos;
-  
+
   pos = (*tw->text.output->XYToPos)(tw, tw->text.inner_widget->core.width -
 					(line * data->linewidth) -
 					data->rightmargin, y);
-  
+
   (*tw->text.output->PosToXY)(tw, pos, &x1, &y1);
-  if (pos > 0 && y1 > y) 
+  if (pos > 0 && y1 > y)
     return pos-1;
   else
     return pos;
 }
-

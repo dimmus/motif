@@ -30,7 +30,7 @@ main(int argc, char *argv[] )
   container = XmCreateContainer(scrolledWindow, "ContainerC7",
     args, n);
   XtManageChild(container);
-  
+
   XtAppMainLoop(app_context);
 
 

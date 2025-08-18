@@ -23,7 +23,7 @@ XCOMM Floor, Boston, MA 02110-1301 USA
 XCOMM
 XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 
 INCLUDES 	= -I. -I../ -I$(TESTCOMSRC)
 DEFINES         = TestDefines
@@ -42,9 +42,6 @@ TestPPTarget(PerfCntnr3)
 
 SRCS=  \
 	PerfCntnr2.c \
-	PerfCntnr3.c 
-		  
-DependTarget () 
+	PerfCntnr3.c
 
-
-
+DependTarget ()

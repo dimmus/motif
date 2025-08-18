@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: main.c /main/8 1995/07/14 10:53:35 drk $"
@@ -50,7 +50,7 @@ extern void	error_proc();
  * Names to register with MrmRegisterNames
  */
 
-static MrmRegisterArg reglist[] = 
+static MrmRegisterArg reglist[] =
 {
     "continue_proc",	(caddr_t) continue_proc,
     "exit_proc",	(caddr_t) exit_proc,
@@ -85,7 +85,7 @@ main(argc, argv)
     int		nargs;
 
     XmString	message;
-    
+
     String	filename_vec[1];
     MrmCount	filename_num = 0;
 
@@ -123,7 +123,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -131,14 +131,14 @@ main(argc, argv)
 /*
  * Register the names of the callback routines with Mrm
  */
-    
+
     if(MrmRegisterNames(reglist,	/* list of names	*/
 			reglist_num)	/* number of names	*/
        != MrmSUCCESS)
     {
 	error_proc("Can't register names\n");
     }
-    
+
 /*
  *  Fetch and create the topmost widget and any children.  For these tests,
  * this will always be an XmMessageBox widget.
@@ -151,7 +151,7 @@ main(argc, argv)
     sprintf(message_begin, "This is the %s test.\nPress the continue button to start the test.", argv[0]);
 
     message = XmStringCreateLtoR(message_begin, XmSTRING_DEFAULT_CHARSET);
-    
+
     nargs = 0;
     XtSetArg(args[nargs], XmNmessageString, message); nargs++;
 
@@ -173,7 +173,7 @@ main(argc, argv)
  */
 
     XtManageChild(widgetmain);
-    
+
 /*
  *  Realize the toplevel widget.
  */

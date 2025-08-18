@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -39,7 +39,7 @@ externalref XrmQuark XmQTpointIn;
 
 /* Trait structures and typedefs, place typedefs first */
 
-typedef Boolean (*XmPointInProc)(Widget w, 
+typedef Boolean (*XmPointInProc)(Widget w,
 				 Position x,
 				 Position y);
 

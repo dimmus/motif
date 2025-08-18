@@ -1,5 +1,5 @@
 # $XConsortium: SelectBox2.scr /main/6 1995/07/17 20:38:23 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)SelectBox2.scr	1.2  92/01/28
 
@@ -43,7 +43,7 @@ CompareVisual sbox
 # Verify that the buttons are all approximately the same height and width.
 # They should appear of uniform size.
 
-# Select Carl.  Press KReturn.  A message about Carl should appear in 
+# Select Carl.  Press KReturn.  A message about Carl should appear in
 # the middle text region.
 
 LocatePointer sbox RSelectionListItem 3
@@ -51,7 +51,7 @@ ClickMB Btn1
 ClickKey KReturn
 CompareVisual label1
 
-# Select Cascade1.  A pulldown menu should appear.  Press KRight.  
+# Select Cascade1.  A pulldown menu should appear.  Press KRight.
 # Cascade2 should highlight and its pulldown menu should appear.
 
 LocatePointer Cascade1
@@ -84,7 +84,7 @@ CompareVisual sbox
 
 LocatePointer sbox RSelectionListItem 2
 ClickMB Btn1
-LocatePointer sbox ROkButton 
+LocatePointer sbox ROkButton
 ClickMB Btn1
 
 CompareVisual label1
@@ -103,7 +103,7 @@ LocatePointer sbox RSelectionListItem 4
 ClickMB Btn1 2
 CompareVisual label1
 
-# Select "Select the Manager".  Highlight in the list should now be back 
+# Select "Select the Manager".  Highlight in the list should now be back
 # on "Libby".
 
 LocatePointer drawnbutton

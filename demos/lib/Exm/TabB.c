@@ -35,12 +35,12 @@
 
 /******************************************************************************
  *
- * TabB.c - ExmTabButton widget.  This widget can serve as a Notebook tab. 
+ * TabB.c - ExmTabButton widget.  This widget can serve as a Notebook tab.
  *          This widget can affix itself to any parent widget that knows how
  *          to call the appropriate XmQTjoinSide trait methods.
- *          The ExmTabButton widget demonstrates how to 
- *               * install the XmQTjoinSide trait. 
- *               * use XmeDrawHighlight 
+ *          The ExmTabButton widget demonstrates how to
+ *               * install the XmQTjoinSide trait.
+ *               * use XmeDrawHighlight
  *               * use XmeClearBorder
  *               * use XmeDrawShadows
  *               * use XmeResolvePartOffsets
@@ -55,13 +55,13 @@
 #include <Xm/RepType.h>     /* for representation type facility */
 #include <Xm/SpecRenderT.h> /* defines RENDER_TABLE types. */
 #include <Xm/JoinSideT.h>   /* for XmQTjoinSide trait */
-#include <X11/extensions/shape.h> 
+#include <X11/extensions/shape.h>
 
 #define WARNING_SHAPE_CHANGED "Widget not allowed to change shape"
 #define WARNING_NO_SHAPE_EXTENSION "No Shape extension, style = rectangular"
 
 /* Define the macros that we want to go thru offset. */
-/* No need to offset primitive or core fields; the Intrinsics will not break 
+/* No need to offset primitive or core fields; the Intrinsics will not break
    binary compatibility. */
 #define OpenSide(w) \
     XmField(w, offsets, ExmTabButton, open_side, XtEnum)
@@ -74,7 +74,7 @@
 #define NeedToReconfigure(w) \
     XmField(w, offsets, ExmSimple, need_to_reconfigure, Boolean)
 
-#define DEFAULT_CORNER_ROUND_PERCENT 40 
+#define DEFAULT_CORNER_ROUND_PERCENT 40
 /* corber size based on percent of the smaller dimension of the button */
 #define CORNER_SIZE(w) \
    ((((w->core.width < w->core.height) ? w->core.width \
@@ -82,9 +82,9 @@
 
 /* Declare all static functions. */
 static void ClassInitialize(void) ;
-static void ClassPartInitialize( 
+static void ClassPartInitialize(
                         WidgetClass wc) ;
-static void Initialize( 
+static void Initialize(
                         Widget rw,
                         Widget nw,
                         ArgList args,
@@ -96,14 +96,14 @@ static void Resize(
 static void FillOpenRoundedRectangle(
 				     Display		*dpy,
 				     Drawable		draw,
-				     GC			top_gc, 
-				     GC                 bottom_gc, 
+				     GC			top_gc,
+				     GC                 bottom_gc,
 				     GC                 bg_gc,
-				     int		x, 
-				     int                y, 
-				     int                w, 
-				     int                h, 
-				     int                shad_thick, 
+				     int		x,
+				     int                y,
+				     int                w,
+				     int                h,
+				     int                shad_thick,
 				     int                corner_size,
 				     unsigned char       open_side);
 static void ShapeButton(
@@ -112,7 +112,7 @@ static void Realize(
 		    Widget w,
 		    XtValueMask *p_valueMask,
 		    XSetWindowAttributes *attributes );
-static Boolean SetValues( 
+static Boolean SetValues(
                         Widget cw,
                         Widget rw,
                         Widget nw,
@@ -121,14 +121,14 @@ static Boolean SetValues(
 static void GetHighlightRectangle (
 			ExmTabButtonWidget tb,
 			XRectangle * hrect);
-static void BorderHighlight( 
+static void BorderHighlight(
                         Widget wid) ;
-static void BorderUnhighlight( 
+static void BorderUnhighlight(
                         Widget wid) ;
 static void DrawShadow(
 		        Widget wid);
 static void JoinSideSetValue(Widget tab,
-                        unsigned char  join_side, 
+                        unsigned char  join_side,
                         Dimension join_thickness);
 static unsigned char JoinSideGetValue(Widget tab,
                         Dimension *join_thickness);
@@ -138,25 +138,25 @@ static unsigned char JoinSideGetValue(Widget tab,
    are inherited from ExmCommandButton. */
 
 
-/* ExmTabButton provides only one new resource. 
-   Use the resolve part offset type of resource */ 
+/* ExmTabButton provides only one new resource.
+   Use the resolve part offset type of resource */
 static XmPartResource resources[] = {
     {
-     ExmNopenSide, 
-     ExmCOpenSide,  
+     ExmNopenSide,
+     ExmCOpenSide,
      ExmROpenSide, sizeof (XtEnum),
      XmPartOffset (ExmTabButton, open_side),
-     XmRImmediate, 
+     XmRImmediate,
      (XtPointer) XmLEFT
    },
 };
 
 /* No synthetic resources. */
 
-/* Define the widget class record.  See Chapter 3 of the 
+/* Define the widget class record.  See Chapter 3 of the
    "OSF/Motif Widget Writer's Guide for details. */
 
-externaldef(exmtabbuttonclassrec) 
+externaldef(exmtabbuttonclassrec)
 ExmTabButtonClassRec exmTabButtonClassRec = {
   { /* Here is the Core class record. */
     /* superclass */	             (WidgetClass) &exmCommandButtonClassRec,
@@ -188,11 +188,11 @@ ExmTabButtonClassRec exmTabButtonClassRec = {
     /* version */	             XtVersionDontCheck,
     /* callback_private */           NULL,
     /* tm_table */                   XtInheritTranslations,
-    /* query_geometry */	     XtInheritQueryGeometry, 
+    /* query_geometry */	     XtInheritQueryGeometry,
     /* display_accelerator */        (XtStringProc)NULL,
     /* extension record */           NULL,
   },
-  { /* Here is the XmPrimitive class record. */ 
+  { /* Here is the XmPrimitive class record. */
     /* border_highlight */	     BorderHighlight,
     /* border_unhighlight */	     BorderUnhighlight,
     /* translations */               XtInheritTranslations,
@@ -212,11 +212,11 @@ ExmTabButtonClassRec exmTabButtonClassRec = {
     /* reconfigure */                ExmInheritReconfigure,
     /* extension */                  NULL,
   },
-  { /* Here is the ExmString class record. */ 
-    /* default_render_table_type */  XmBUTTON_RENDER_TABLE,           
+  { /* Here is the ExmString class record. */
+    /* default_render_table_type */  XmBUTTON_RENDER_TABLE,
     /* extension */                  NULL,
   },
-  { /* Here is the ExmCommandButton class record. */ 
+  { /* Here is the ExmCommandButton class record. */
     /* extension */                  NULL,
   },
   { /* Here is the ExmTabButton class record. */
@@ -226,13 +226,13 @@ ExmTabButtonClassRec exmTabButtonClassRec = {
 
 
 /* Establish the widget class name as an externally accessible symbol.
-   Use the "externaldef" macro rather than the "extern" keyword. */ 
+   Use the "externaldef" macro rather than the "extern" keyword. */
 externaldef(exmtabbuttonwidgetclass)
    WidgetClass exmTabButtonWidgetClass = (WidgetClass)&exmTabButtonClassRec;
 
 
 /* Define static representation type variables here.  ExmTabButton
-   introduces one new representation type. */ 
+   introduces one new representation type. */
 static String OpenSideNames[] = {
     "none", "left", "right", "top", "bottom"
 };
@@ -241,7 +241,7 @@ static XmRepTypeId openSideId;
 
 
 /* Define trait structure variables here. */
-/* This widget will install the XmQTjoinSide trait. */ 
+/* This widget will install the XmQTjoinSide trait. */
 static XmConst XmJoinSideTraitRec tabButtonOST = {
   0,		/* version */
   JoinSideSetValue,
@@ -250,7 +250,7 @@ static XmConst XmJoinSideTraitRec tabButtonOST = {
 
 
 /* Part Offset table for XmResolvePartOffsets */
-static XmOffsetPtr offsets; 
+static XmOffsetPtr offsets;
 
 
 /*************************************************************************
@@ -278,10 +278,10 @@ static void ClassInitialize()
  *
  *  ClassPartInitialize
  *      Called by the Intrinsics when this widget or a subclass of this
- *      widget is intantiated. 
+ *      widget is intantiated.
  *
  ************************************************************************/
-static void 
+static void
 ClassPartInitialize(
         WidgetClass wc )
 {
@@ -293,11 +293,11 @@ ClassPartInitialize(
 
 /*****************************************************************************
  *
- *  Initialize 
+ *  Initialize
  *      Called when the widget is instantiated.
  *
  ***************************************************************************/
-static void 
+static void
 Initialize(
         Widget rw,
         Widget nw,
@@ -309,12 +309,12 @@ Initialize(
 
   /* Validate the value of ExmNopenSide.  If ExmNopenSide does not
      have a valid value, set its value to XmLEFT. */
-   if (!XmRepTypeValidValue(openSideId, OpenSide(nw), nw)) 
+   if (!XmRepTypeValidValue(openSideId, OpenSide(nw), nw))
      OpenSide(nw) = XmLEFT ;
 
  /* check if the shape extention is on the server */
   if (SimpleShape(nw) != ExmSHAPE_RECTANGLE
-      && !XShapeQueryExtension(XtDisplay(nw), &shape_event_base, 
+      && !XShapeQueryExtension(XtDisplay(nw), &shape_event_base,
 			       &shape_error_base)) {
       XmeWarning(nw, WARNING_NO_SHAPE_EXTENSION);
       SimpleShape(nw) = ExmSHAPE_RECTANGLE;
@@ -329,7 +329,7 @@ Initialize(
 
 
 /*****************************************************************************
- * 
+ *
  * FillOpenRoundedRectangle
  *      Xlib style API for round edge graphics.
  *      This is used for both the bitmap used as a shape and the rendering
@@ -340,14 +340,14 @@ static void
 FillOpenRoundedRectangle(
 			 Display		*dpy,
 			 Drawable		draw,
-			 GC			top_gc, 
-			 GC                 bottom_gc, 
+			 GC			top_gc,
+			 GC                 bottom_gc,
 			 GC                 bg_gc,
-			 int		x, 
-			 int                y, 
-			 int                w, 
-			 int                h, 
-			 int                shad_thick, 
+			 int		x,
+			 int                y,
+			 int                w,
+			 int                h,
+			 int                shad_thick,
 			 int                corner_size,
 			 unsigned char       open_side)
 {
@@ -367,18 +367,18 @@ FillOpenRoundedRectangle(
 		     GCLineWidth|GCLineStyle|GCCapStyle|GCJoinStyle,
 		     &top_gcvalues);
 	/* change the line width and draw the lines */
-	XSetLineAttributes(dpy, top_gc,  shad_thick, 
+	XSetLineAttributes(dpy, top_gc,  shad_thick,
 			   LineSolid, CapButt, JoinMiter);
 
 	if (bottom_gc != top_gc) {
 	    XGetGCValues(dpy, bottom_gc,
 			 GCLineWidth|GCLineStyle|GCCapStyle|GCJoinStyle,
 			 &bottom_gcvalues);
-	    XSetLineAttributes(dpy, bottom_gc,  shad_thick, 
+	    XSetLineAttributes(dpy, bottom_gc,  shad_thick,
 			       LineSolid, CapButt, JoinMiter);
 	}
     }
- 
+
 
     /* this code is rather long and boring, but there is nothing
        complex here: we use arcs even for the vertical and horizontal
@@ -389,13 +389,13 @@ FillOpenRoundedRectangle(
 	arcs[0].y = y + demi_shad;
 	arcs[0].width = w - corner_size;
 	arcs[0].height = 0;
-	arcs[0].angle1 = 180*64; 
+	arcs[0].angle1 = 180*64;
 	arcs[0].angle2 = -180*64;
 	arcs[1].x = x + w - 2*corner_size + demi_shad;
 	arcs[1].y = y + demi_shad;
 	arcs[1].width = 2*corner_size - 2*demi_shad;
 	arcs[1].height = 2*corner_size - 2*demi_shad;
-	arcs[1].angle1 = 90*64; 
+	arcs[1].angle1 = 90*64;
 	arcs[1].angle2 = -50*64;
 	if (shad_thick) XDrawArcs (dpy, draw, top_gc, arcs, 2);
 	if (bg_gc) XFillArcs (dpy, draw, bg_gc, arcs+1, 1);
@@ -404,25 +404,25 @@ FillOpenRoundedRectangle(
 	arcs[0].y = y + demi_shad;
 	arcs[0].width = 2*corner_size - 2*demi_shad;
 	arcs[0].height = 2*corner_size - 2*demi_shad;
-	arcs[0].angle1 = 40*64; 
+	arcs[0].angle1 = 40*64;
 	arcs[0].angle2 = -40*64;
 	arcs[1].x = x + w - demi_shad;
 	arcs[1].y = y + corner_size;
 	arcs[1].width = 0;
 	arcs[1].height = h - 2*corner_size;
-	arcs[1].angle1 = 90*64; 
+	arcs[1].angle1 = 90*64;
 	arcs[1].angle2 = -180*64;
 	arcs[2].x = x + w - 2*corner_size + demi_shad;
 	arcs[2].y = y + h - 2*corner_size + demi_shad ;
 	arcs[2].width = 2*corner_size - 2*demi_shad;
 	arcs[2].height = 2*corner_size - 2*demi_shad;
-	arcs[2].angle1 = 0*64; 
+	arcs[2].angle1 = 0*64;
 	arcs[2].angle2 = -90*64;
 	arcs[3].x = x ;
 	arcs[3].y = y + h - demi_shad;
 	arcs[3].width = w - corner_size;
 	arcs[3].height = 0 ;
-	arcs[3].angle1 = 180*64; 
+	arcs[3].angle1 = 180*64;
 	arcs[3].angle2 = -180*64;
 	if (shad_thick) XDrawArcs (dpy, draw, bottom_gc, arcs, 4);
 
@@ -437,32 +437,32 @@ FillOpenRoundedRectangle(
 	    rects[1].width = corner_size;
 	    rects[1].height = h - corner_size*2;
 	    XFillRectangles (dpy, draw, bg_gc, rects, 2);
-	}  
+	}
     } else
     if (open_side == XmBOTTOM) {
 	arcs[0].x = x + demi_shad;
 	arcs[0].y = y + corner_size;
 	arcs[0].width = 0;
 	arcs[0].height = h - corner_size;
-	arcs[0].angle1 = 90*64; 
+	arcs[0].angle1 = 90*64;
 	arcs[0].angle2 = -180*64;
 	arcs[1].x = x + demi_shad;
 	arcs[1].y = y + demi_shad;
 	arcs[1].width = 2*corner_size - 2*demi_shad;
 	arcs[1].height = 2*corner_size - 2*demi_shad;
-	arcs[1].angle1 = 180*64; 
+	arcs[1].angle1 = 180*64;
 	arcs[1].angle2 = -90*64;
 	arcs[2].x = x + corner_size ;
 	arcs[2].y = y + demi_shad ;
 	arcs[2].width = w - 2*corner_size ;
 	arcs[2].height = 0;
-	arcs[2].angle1 = 180*64; 
+	arcs[2].angle1 = 180*64;
 	arcs[2].angle2 = -180*64;
 	arcs[3].x = x + w - 2*corner_size + demi_shad;
 	arcs[3].y = y + demi_shad;
 	arcs[3].width = 2*corner_size - 2*demi_shad;
 	arcs[3].height = 2*corner_size - 2*demi_shad ;
-	arcs[3].angle1 = 90*64; 
+	arcs[3].angle1 = 90*64;
 	arcs[3].angle2 = -50*64;
 	if (shad_thick) XDrawArcs (dpy, draw, top_gc, arcs, 4);
 	if (bg_gc) XFillArcs (dpy, draw, bg_gc, arcs+1, 3);
@@ -471,13 +471,13 @@ FillOpenRoundedRectangle(
 	arcs[0].y = y + demi_shad;
 	arcs[0].width = 2*corner_size - 2*demi_shad;
 	arcs[0].height = 2*corner_size - 2*demi_shad;
-	arcs[0].angle1 = 40*64; 
+	arcs[0].angle1 = 40*64;
 	arcs[0].angle2 = -40*64;
 	arcs[1].x = x + w - demi_shad;
 	arcs[1].y = y + corner_size;
 	arcs[1].width = 0;
 	arcs[1].height = h - corner_size;
-	arcs[1].angle1 = 90*64; 
+	arcs[1].angle1 = 90*64;
 	arcs[1].angle2 = -180*64;
  	if (shad_thick) XDrawArcs (dpy, draw, bottom_gc, arcs, 2);
 
@@ -492,20 +492,20 @@ FillOpenRoundedRectangle(
 	    rects[1].width = w;
 	    rects[1].height = h - corner_size;
 	    XFillRectangles (dpy, draw, bg_gc, rects, 2);
-	}  
+	}
     } else
     if (open_side == XmTOP) {
 	arcs[0].x = x + demi_shad;
 	arcs[0].y = y ;
 	arcs[0].width = 0;
 	arcs[0].height = h - corner_size;
-	arcs[0].angle1 = 90*64; 
+	arcs[0].angle1 = 90*64;
 	arcs[0].angle2 = -180*64;
 	arcs[1].x = x + demi_shad;
 	arcs[1].y = y + h - 2*corner_size + demi_shad;
 	arcs[1].width = 2*corner_size - 2*demi_shad;
 	arcs[1].height = 2*corner_size - 2*demi_shad;
-	arcs[1].angle1 = 180*64; 
+	arcs[1].angle1 = 180*64;
 	arcs[1].angle2 = 50*64;
 	if (shad_thick) XDrawArcs (dpy, draw, top_gc, arcs, 2);
 	if (bg_gc) XFillArcs (dpy, draw, bg_gc, arcs+1, 1);
@@ -514,25 +514,25 @@ FillOpenRoundedRectangle(
 	arcs[0].y = y + h - 2*corner_size + demi_shad;
 	arcs[0].width = 2*corner_size - 2*demi_shad;
 	arcs[0].height = 2*corner_size - 2*demi_shad;
-	arcs[0].angle1 = 230*64; 
+	arcs[0].angle1 = 230*64;
 	arcs[0].angle2 = 40*64;
 	arcs[1].x = x + corner_size;
 	arcs[1].y = y + h - demi_shad;
 	arcs[1].width = w - 2*corner_size;
 	arcs[1].height = 0;
-	arcs[1].angle1 = 180*64; 
+	arcs[1].angle1 = 180*64;
 	arcs[1].angle2 = -180*64;
 	arcs[2].x = x + w - 2*corner_size + demi_shad;
 	arcs[2].y = y + h - 2*corner_size + demi_shad ;
 	arcs[2].width = 2*corner_size - 2*demi_shad;
 	arcs[2].height = 2*corner_size - 2*demi_shad;
-	arcs[2].angle1 = 270*64; 
+	arcs[2].angle1 = 270*64;
 	arcs[2].angle2 = 90*64;
 	arcs[3].x = x + w - demi_shad;
 	arcs[3].y = y ;
 	arcs[3].width = 0;
 	arcs[3].height = h - corner_size ;
-	arcs[3].angle1 = 90*64; 
+	arcs[3].angle1 = 90*64;
 	arcs[3].angle2 = -180*64;
 	if (shad_thick) XDrawArcs (dpy, draw, bottom_gc, arcs, 4);
 
@@ -547,32 +547,32 @@ FillOpenRoundedRectangle(
 	    rects[1].width = w - 2*corner_size;
 	    rects[1].height = corner_size;
 	    XFillRectangles (dpy, draw, bg_gc, rects, 2);
-	}  
+	}
     }  else
     if (open_side == XmRIGHT) {
 	arcs[0].x = x + corner_size;
 	arcs[0].y = y + demi_shad;
 	arcs[0].width = w - corner_size;
 	arcs[0].height = 0;
-	arcs[0].angle1 = 180*64; 
+	arcs[0].angle1 = 180*64;
 	arcs[0].angle2 = -180*64;
 	arcs[1].x = x + demi_shad;
 	arcs[1].y = y + demi_shad;
 	arcs[1].width = 2*corner_size - 2*demi_shad;
 	arcs[1].height = 2*corner_size - 2*demi_shad;
-	arcs[1].angle1 = 180*64; 
+	arcs[1].angle1 = 180*64;
 	arcs[1].angle2 = -90*64;
 	arcs[2].x = x + demi_shad ;
 	arcs[2].y = y + corner_size ;
 	arcs[2].width = 0;
 	arcs[2].height = h - 2*corner_size;
-	arcs[2].angle1 = 90*64; 
+	arcs[2].angle1 = 90*64;
 	arcs[2].angle2 = -180*64;
 	arcs[3].x = x + demi_shad;
 	arcs[3].y = y + h - 2*corner_size + demi_shad;
 	arcs[3].width = 2*corner_size - 2*demi_shad;
 	arcs[3].height = 2*corner_size - 2*demi_shad ;
-	arcs[3].angle1 = 180*64; 
+	arcs[3].angle1 = 180*64;
 	arcs[3].angle2 = 50*64;
 	if (shad_thick) XDrawArcs (dpy, draw, top_gc, arcs, 4);
 	if (bg_gc) XFillArcs (dpy, draw, bg_gc, arcs+1, 3);
@@ -581,13 +581,13 @@ FillOpenRoundedRectangle(
 	arcs[0].y = y + h - 2*corner_size + demi_shad;
 	arcs[0].width = 2*corner_size - 2*demi_shad;
 	arcs[0].height = 2*corner_size - 2*demi_shad;
-	arcs[0].angle1 = 230*64; 
+	arcs[0].angle1 = 230*64;
 	arcs[0].angle2 = 40*64;
 	arcs[1].x = x + corner_size;
 	arcs[1].y = y + h - demi_shad;
 	arcs[1].width = w - corner_size;
 	arcs[1].height = 0;
-	arcs[1].angle1 = 180*64; 
+	arcs[1].angle1 = 180*64;
 	arcs[1].angle2 = -180*64;
  	if (shad_thick) XDrawArcs (dpy, draw, bottom_gc, arcs, 2);
 
@@ -602,19 +602,19 @@ FillOpenRoundedRectangle(
 	    rects[1].width = w - corner_size;
 	    rects[1].height = h ;
 	    XFillRectangles (dpy, draw, bg_gc, rects, 2);
-	}  
+	}
     }
 
    /* put the line attributes back */
     if (shad_thick != 1) {
-	XSetLineAttributes(dpy, top_gc,  
-			   top_gcvalues.line_width, top_gcvalues.line_style, 
+	XSetLineAttributes(dpy, top_gc,
+			   top_gcvalues.line_width, top_gcvalues.line_style,
 			   top_gcvalues.cap_style, top_gcvalues.join_style);
 	if (bottom_gc != top_gc)
-	    XSetLineAttributes(dpy, bottom_gc,  
-			       bottom_gcvalues.line_width, 
-			       bottom_gcvalues.line_style, 
-			       bottom_gcvalues.cap_style, 
+	    XSetLineAttributes(dpy, bottom_gc,
+			       bottom_gcvalues.line_width,
+			       bottom_gcvalues.line_style,
+			       bottom_gcvalues.cap_style,
 			       bottom_gcvalues.join_style);
     }
 }
@@ -622,7 +622,7 @@ FillOpenRoundedRectangle(
 
 
 /*****************************************************************************
- * 
+ *
  * ShapeButton
  *      Call on a realized window from Realize and Resize.
  *      Style is rounded edge at this point.
@@ -632,7 +632,7 @@ static void
 ShapeButton(
 Widget w)
 {
-    Pixmap p = XCreatePixmap(XtDisplay(w), XtWindow(w), 
+    Pixmap p = XCreatePixmap(XtDisplay(w), XtWindow(w),
 			     XtWidth(w), XtHeight(w), 1 );
     XGCValues values;
     GC gc;
@@ -644,14 +644,14 @@ Widget w)
     XFillRectangle( XtDisplay(w), p, gc, 0, 0, XtWidth(w), XtHeight(w));
     XSetForeground (XtDisplay(w), gc, 1);
 
-    FillOpenRoundedRectangle(XtDisplay(w), p, gc, gc, gc, 0, 0, 
+    FillOpenRoundedRectangle(XtDisplay(w), p, gc, gc, gc, 0, 0,
 			     XtWidth(w), XtHeight(w),
 			     Prim_ShadowThickness(w),
 			     CORNER_SIZE(w), OpenSide(w));
 
-    XShapeCombineMask(XtDisplay(w), XtWindow(w), ShapeBounding, 
+    XShapeCombineMask(XtDisplay(w), XtWindow(w), ShapeBounding,
 		      0, 0, p, ShapeSet );
-    XShapeCombineMask(XtDisplay(w), XtWindow(w),ShapeClip, 
+    XShapeCombineMask(XtDisplay(w), XtWindow(w),ShapeClip,
 		      0, 0, p, ShapeSet );
 
     XFreePixmap(XtDisplay(w), p );
@@ -660,14 +660,14 @@ Widget w)
 
 
 /*****************************************************************************
- * 
+ *
  * Realize
  *      Called by the Intrinsics to create the window for the widget.  This
- *      class's realize method creates a shaped window for this 
- *      exact class,  but uses the default window otherwise 
+ *      class's realize method creates a shaped window for this
+ *      exact class,  but uses the default window otherwise
  *
  *****************************************************************************/
-static void 
+static void
 Realize(Widget w,
         XtValueMask *p_valueMask,
         XSetWindowAttributes *attributes )
@@ -686,7 +686,7 @@ Realize(Widget w,
  *                     the string so it looks right.
  *
  ***************************************************************************/
-static void 
+static void
 FixVisualPosition(
     Widget w)
 {
@@ -711,11 +711,11 @@ FixVisualPosition(
  *      Must reshape the window.
  *
  ***************************************************************************/
-static void 
+static void
 Resize(
     Widget w)
 {
-    if (XtIsRealized(w) && SimpleShape(w) != ExmSHAPE_RECTANGLE) 
+    if (XtIsRealized(w) && SimpleShape(w) != ExmSHAPE_RECTANGLE)
 	ShapeButton(w);
 
     /* call superclass Resize */
@@ -731,7 +731,7 @@ Resize(
  *      of one of the resources.
  *
  ***************************************************************************/
-static Boolean 
+static Boolean
 SetValues(
         Widget cw,
         Widget rw,
@@ -742,13 +742,13 @@ SetValues(
     ExmSimpleWidgetClass wc = (ExmSimpleWidgetClass)XtClass(nw);
     Boolean expose_flag = False ;
 
-    /* Make sure that the new value of ExmNopenSide is a valid one. */  
+    /* Make sure that the new value of ExmNopenSide is a valid one. */
     if (OpenSide(nw) != OpenSide(cw)) {
-	if (!XmRepTypeValidValue(openSideId, OpenSide(nw), nw)) 
+	if (!XmRepTypeValidValue(openSideId, OpenSide(nw), nw))
 	    OpenSide(nw) = OpenSide(cw);
 	else {
 	    /* call Resize so the shape and the visual position be reset */
-	    if (wc->core_class.resize) 
+	    if (wc->core_class.resize)
 		(*(wc->core_class.resize))(nw);
 	    expose_flag = True ;
 	}
@@ -772,10 +772,10 @@ SetValues(
 
 /*****************************************************************************
  *
- *  BorderHighlight 
+ *  BorderHighlight
  *
  ***************************************************************************/
-static void 
+static void
 BorderHighlight(
         Widget wid )
 {
@@ -785,9 +785,9 @@ BorderHighlight(
     tb->primitive.highlighted = True ;
 
   /* If there is no need to draw a border highlight, then don't bother. */
-    if (XtWidth(wid) == 0 || 
-        XtHeight( wid) == 0 || 
-        tb->primitive.highlight_thickness == 0) 
+    if (XtWidth(wid) == 0 ||
+        XtHeight( wid) == 0 ||
+        tb->primitive.highlight_thickness == 0)
       return;
 
     if (SimpleShape(wid) == ExmSHAPE_OVAL) {
@@ -798,20 +798,20 @@ BorderHighlight(
 	    (tb->simple.visual.width != 0) &&
 	    (tb->simple.visual.height != 0)) {
 	    XmStringDraw (XtDisplay(tb), XtWindow(tb),
-			  tb->string.render_table, 
+			  tb->string.render_table,
 			  tb->string.compound_string,
 			  tb->primitive.highlight_GC,
 			  tb->simple.visual.x, tb->simple.visual.y,
 			  tb->simple.visual.width, tb->string.alignment,
-			  tb->primitive.layout_direction, NULL); 
+			  tb->primitive.layout_direction, NULL);
 	}
     } else {
-	/* Determine where the highlight should be drawn and then draw it. */  
+	/* Determine where the highlight should be drawn and then draw it. */
 	GetHighlightRectangle(tb, &hrect);
 
-	XmeDrawHighlight(XtDisplay( wid), XtWindow( wid), 
+	XmeDrawHighlight(XtDisplay( wid), XtWindow( wid),
 			 tb->primitive.highlight_GC,
-			 hrect.x, hrect.y, hrect.width, hrect.height, 
+			 hrect.x, hrect.y, hrect.width, hrect.height,
 			 tb->primitive.highlight_thickness);
     }
 }
@@ -822,22 +822,22 @@ BorderHighlight(
  *  BorderUnhighlight
  *
  ***************************************************************************/
-static void 
+static void
 BorderUnhighlight(
         Widget wid )
 {
     XRectangle hrect ;
     ExmTabButtonWidget tb = (ExmTabButtonWidget) wid;
-    
-  /* This flag tells XmPrimitive what the state of the highlights is. 
+
+  /* This flag tells XmPrimitive what the state of the highlights is.
      By turning it to False, we are alerting XmPrimitive that the
      highlight is off. */
     tb->primitive.highlighted = False ;
 
   /* If there is no need to undraw a border highlight, then don't bother. */
-    if (XtWidth(wid) == 0 || 
-        XtHeight(wid) == 0 || 
-        tb->primitive.highlight_thickness == 0) 
+    if (XtWidth(wid) == 0 ||
+        XtHeight(wid) == 0 ||
+        tb->primitive.highlight_thickness == 0)
       return;
 
     if (SimpleShape(wid) == ExmSHAPE_OVAL) {
@@ -846,34 +846,34 @@ BorderUnhighlight(
 	    (tb->simple.visual.width != 0) &&
 	    (tb->simple.visual.height != 0)) {
 	    XmStringDraw (XtDisplay(tb), XtWindow(tb),
-			  tb->string.render_table, 
+			  tb->string.render_table,
 			  tb->string.compound_string,
 			  tb->simple.normal_gc,
 			  tb->simple.visual.x, tb->simple.visual.y,
 			  tb->simple.visual.width, tb->string.alignment,
-			  tb->primitive.layout_direction, NULL); 
-	}	
+			  tb->primitive.layout_direction, NULL);
+	}
     } else {
-	/* Determine where the highlight should be drawn and then draw it. */  
+	/* Determine where the highlight should be drawn and then draw it. */
 	GetHighlightRectangle(tb, &hrect);
 
-	/* Erase the border highlights.  The border highlights of ExmTabButton 
-	   are located inside the widget; therefore, we can XmeClearBorder 
+	/* Erase the border highlights.  The border highlights of ExmTabButton
+	   are located inside the widget; therefore, we can XmeClearBorder
 	   rather than XmeDrawHighlight (which is used with the parent color
-	   in Motif). */ 
-	XmeClearBorder(XtDisplay (wid), XtWindow (wid), 
-		       hrect.x, hrect.y, hrect.width, hrect.height, 
-		       tb->primitive.highlight_thickness) ;	
+	   in Motif). */
+	XmeClearBorder(XtDisplay (wid), XtWindow (wid),
+		       hrect.x, hrect.y, hrect.width, hrect.height,
+		       tb->primitive.highlight_thickness) ;
     }
 }
 
 
 /************************************************************************
  *
- *  DrawShadow 
+ *  DrawShadow
  *
  ************************************************************************/
-static void 
+static void
 DrawShadow (
         Widget wid)
 {
@@ -883,56 +883,56 @@ DrawShadow (
     ExmTabButtonWidget tb = (ExmTabButtonWidget) wid;
 
   /* ExmTabButton cannot inherit the draw_shadow routine of ExmSimple.
-     This is because ExmSimple's draw_shadow method assumes rectangular 
+     This is because ExmSimple's draw_shadow method assumes rectangular
      shadows; however, ExmTabButton will require both rectangular
      and curved shadows.  That is, the shadows in an ExmTabButton will
      be partly rectangular and partly curved.  The rectangular portions
      will be drawn with XmeDrawShadows and the curved portions with
      XFillPolygon.  The resulting shadow will be drawn just outside the
-     border highlight.  The shadow will have one open side and a 3D   
+     border highlight.  The shadow will have one open side and a 3D
      appearance.  */
 
     if (SimpleShape(wid) == ExmSHAPE_RECTANGLE) {
-	    
+
 	/* Find the dimensions of the border highlight. */
 	GetHighlightRectangle (tb, &hrect) ;
 
-	/* Apply a correction to the returned border highlight dimensions 
+	/* Apply a correction to the returned border highlight dimensions
 	   since we're drawing the shadow this time around. */
 	hrect.x -= tb->primitive.shadow_thickness ;
 	hrect.y -= tb->primitive.shadow_thickness ;
 	hrect.width += 2*tb->primitive.shadow_thickness ;
 	hrect.height += 2*tb->primitive.shadow_thickness ;
 
-	/* Draw the rectangular portion of the shadows. 
+	/* Draw the rectangular portion of the shadows.
 	   We're drawing a square shadow, but because the position are
 	   negative on the open side, it'll look like an open shadow */
 	XmeDrawShadows (XtDisplay (tb), XtWindow (tb),
-			tb->primitive.top_shadow_GC, 
+			tb->primitive.top_shadow_GC,
 			tb->primitive.bottom_shadow_GC,
 			hrect.x, hrect.y, hrect.width, hrect.height,
-			tb->primitive.shadow_thickness, 
+			tb->primitive.shadow_thickness,
 			VisualArmed(tb) ? XmSHADOW_IN: XmSHADOW_OUT);
     } else {
-	 FillOpenRoundedRectangle(XtDisplay(wid), XtWindow (wid), 
+	 FillOpenRoundedRectangle(XtDisplay(wid), XtWindow (wid),
 				  VisualArmed(tb) ?
-				  tb->primitive.bottom_shadow_GC: 
-				  tb->primitive.top_shadow_GC, 
+				  tb->primitive.bottom_shadow_GC:
+				  tb->primitive.top_shadow_GC,
 				  VisualArmed(tb) ?
-				  tb->primitive.top_shadow_GC: 
-				  tb->primitive.bottom_shadow_GC, 
-				  NULL, 0, 0, 
+				  tb->primitive.top_shadow_GC:
+				  tb->primitive.bottom_shadow_GC,
+				  NULL, 0, 0,
 				  XtWidth(wid), XtHeight(wid),
 				  tb->primitive.shadow_thickness,
 				  CORNER_SIZE(wid), OpenSide(wid));
      }
-	
+
     /* Now draw the shadow join triangle */
     /* Determine the dimensions of the curved portions of the shadow. */
     if (OpenSide(wid) == XmLEFT) {
-	pts[0].x = 0 ; 
+	pts[0].x = 0 ;
 	pts[1].x = JoinShadowThickness(tb) ;
-	pts[2].x = 0 ; 
+	pts[2].x = 0 ;
 	if (!VisualArmed(tb)) {
 	    /* top part starts with half bottom gc to join clean */
 	    pts[0].y = 0 ;
@@ -945,11 +945,11 @@ DrawShadow (
 	    pts[2].y = tb->core.height ;
 	}
 	tune_gc = tb->primitive.bottom_shadow_GC ;
-    } else 
+    } else
     if (OpenSide(wid) == XmRIGHT) {
 	pts[0].x = tb->core.width - JoinShadowThickness(tb) ;
-	pts[1].x = tb->core.width ; 
-	pts[2].x = tb->core.width ; 
+	pts[1].x = tb->core.width ;
+	pts[2].x = tb->core.width ;
 	if (!VisualArmed(tb)) {
 	    /* bottom part ends with half top gc to join clean */
 	    pts[0].y = tb->core.height ;
@@ -962,48 +962,48 @@ DrawShadow (
 	    pts[2].y = 0 ;
 	}
 	tune_gc = tb->primitive.top_shadow_GC ;
-    } else 
+    } else
     if (OpenSide(wid) == XmTOP) {
 	pts[0].y = 0 ;
 	pts[1].y = 0 ;
 	pts[2].y = JoinShadowThickness(tb) ;
 	if (!VisualArmed(tb)) {
 	    /* right part starts with half bottom gc to join clean */
-	    pts[0].x = 0 ; 
-	    pts[1].x = tb->primitive.shadow_thickness ; 
-	    pts[2].x = 0 ; 
+	    pts[0].x = 0 ;
+	    pts[1].x = tb->primitive.shadow_thickness ;
+	    pts[2].x = 0 ;
 	} else {
 	    /* left part ends with half bottom gc to join clean */
-	    pts[0].x = tb->core.width - tb->primitive.shadow_thickness ; 
-	    pts[1].x = tb->core.width ; 
-	    pts[2].x = tb->core.width ; 
+	    pts[0].x = tb->core.width - tb->primitive.shadow_thickness ;
+	    pts[1].x = tb->core.width ;
+	    pts[2].x = tb->core.width ;
 	}
 	tune_gc = tb->primitive.bottom_shadow_GC ;
-    } else 
+    } else
     if (OpenSide(wid) == XmBOTTOM) {
 	pts[0].y = tb->core.height - JoinShadowThickness(tb) ;
 	pts[1].y = tb->core.height ;
 	pts[2].y = tb->core.height ;
 	if (!VisualArmed(tb)) {
 	    /* left part ends with half top gc to join clean */
-	    pts[0].x = tb->core.width ; 
-	    pts[1].x = tb->core.width - tb->primitive.shadow_thickness ; 
-	    pts[2].x = tb->core.width ; 
+	    pts[0].x = tb->core.width ;
+	    pts[1].x = tb->core.width - tb->primitive.shadow_thickness ;
+	    pts[2].x = tb->core.width ;
 	} else {
 	    /* right part ends with half top gc to join clean */
-	    pts[0].x = 0 ; 
-	    pts[1].x = tb->primitive.shadow_thickness ; 
-	    pts[2].x = 0 ; 
+	    pts[0].x = 0 ;
+	    pts[1].x = tb->primitive.shadow_thickness ;
+	    pts[2].x = 0 ;
 	}
 	tune_gc = tb->primitive.top_shadow_GC ;
-    } 
+    }
     /* else if (OpenSide(wid) == XmNONE) do nothing */
- 
+
 
 
   /* Draw the curved portion of the shadows, unless join thickness is zero */
     if ((OpenSide(wid) != XmNONE) && (JoinShadowThickness(wid) > (Dimension)0))
-	XFillPolygon (XtDisplay (tb), XtWindow (tb), 
+	XFillPolygon (XtDisplay (tb), XtWindow (tb),
 		      tune_gc, pts, 3, Convex, CoordModeOrigin);
 }
 
@@ -1016,41 +1016,41 @@ DrawShadow (
  *      in the case a rectangular tab only.
  *
  ***************************************************************************/
-static void 
+static void
 GetHighlightRectangle (
     ExmTabButtonWidget tb,
     XRectangle *hrect)
 {
-  /* This function writes the dimensions of the highlight rectangle 
-     into *hrect.  These dimensions depend on the value of ExmNopenSide. */ 
+  /* This function writes the dimensions of the highlight rectangle
+     into *hrect.  These dimensions depend on the value of ExmNopenSide. */
     if (OpenSide(tb) == XmLEFT) {
 	hrect->x = 0 ;
 	hrect->y = tb->primitive.shadow_thickness ;
-	hrect->width = XtWidth( tb) - tb->primitive.shadow_thickness ; 
+	hrect->width = XtWidth( tb) - tb->primitive.shadow_thickness ;
 	hrect->height = XtHeight(tb) - 2* tb->primitive.shadow_thickness ;
-    } else 
-    if (OpenSide(tb) == XmRIGHT) {		
+    } else
+    if (OpenSide(tb) == XmRIGHT) {
 	hrect->x = tb->primitive.shadow_thickness ;
 	hrect->y = tb->primitive.shadow_thickness ;
-	hrect->width = XtWidth(tb) - tb->primitive.shadow_thickness ; 
+	hrect->width = XtWidth(tb) - tb->primitive.shadow_thickness ;
 	hrect->height = XtHeight(tb) - 2* tb->primitive.shadow_thickness ;
-    } else 
-    if (OpenSide(tb) == XmTOP) {	
+    } else
+    if (OpenSide(tb) == XmTOP) {
 	hrect->x = tb->primitive.shadow_thickness ;
 	hrect->y = 0 ;
-	hrect->width = XtWidth(tb) - 2* tb->primitive.shadow_thickness ; 
+	hrect->width = XtWidth(tb) - 2* tb->primitive.shadow_thickness ;
 	hrect->height = XtHeight(tb) - tb->primitive.shadow_thickness ;
-    } else 
-    if (OpenSide(tb) == XmBOTTOM) {		
+    } else
+    if (OpenSide(tb) == XmBOTTOM) {
 	hrect->x = tb->primitive.shadow_thickness ;
 	hrect->y = tb->primitive.shadow_thickness ;
-	hrect->width = XtWidth(tb) - 2* tb->primitive.shadow_thickness ; 
+	hrect->width = XtWidth(tb) - 2* tb->primitive.shadow_thickness ;
 	hrect->height = XtHeight(tb) - tb->primitive.shadow_thickness ;
-    } else 
-    if (OpenSide(tb) == XmNONE) {		
+    } else
+    if (OpenSide(tb) == XmNONE) {
 	hrect->x = tb->primitive.shadow_thickness ;
 	hrect->y = tb->primitive.shadow_thickness ;
-	hrect->width = XtWidth(tb) - 2* tb->primitive.shadow_thickness ; 
+	hrect->width = XtWidth(tb) - 2* tb->primitive.shadow_thickness ;
 	hrect->height = XtHeight(tb) - 2*tb->primitive.shadow_thickness ;
     }
 }
@@ -1058,18 +1058,18 @@ GetHighlightRectangle (
 
 
 /***************************************************************
- * Trait methods for XmQTjoinSide trait 
+ * Trait methods for XmQTjoinSide trait
  ***************************************************************/
 
 /***************************************************************
  *
  * JoinSideSetValue:
- *      The setValue trait method of XmQTjoinSide. 
+ *      The setValue trait method of XmQTjoinSide.
  *
  ***************************************************************/
-static void 
+static void
 JoinSideSetValue(Widget tab,
-		 unsigned char join_side, 
+		 unsigned char join_side,
 		 Dimension join_thickness)
 {
    ExmTabButtonWidget tb = (ExmTabButtonWidget) tab;
@@ -1096,15 +1096,15 @@ JoinSideSetValue(Widget tab,
 /***************************************************************
  *
  * JoinSideGetValue:
- *      The getValue trait method of XmQTjoinSide. 
+ *      The getValue trait method of XmQTjoinSide.
  *
  ***************************************************************/
-static unsigned char 
+static unsigned char
 JoinSideGetValue(Widget tab,
 		 Dimension  * join_thickness)
 {
     ExmTabButtonWidget tb = (ExmTabButtonWidget) tab;
-    
+
     *join_thickness = JoinShadowThickness(tb);
 
     return OpenSide(tb) ;
@@ -1121,13 +1121,13 @@ JoinSideGetValue(Widget tab,
  *	Create an instance of a TabButton and return its widget id.
  *
  ************************************************************************/
-Widget 
+Widget
 ExmCreateTabButton(
         Widget parent,
         char *name,
         ArgList arglist,
         Cardinal argcount )
 {
-   return (XtCreateWidget (name, exmTabButtonWidgetClass, 
+   return (XtCreateWidget (name, exmTabButtonWidgetClass,
                            parent, arglist, argcount));
 }

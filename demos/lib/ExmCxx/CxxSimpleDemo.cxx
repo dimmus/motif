@@ -1,5 +1,5 @@
 /* $XConsortium: CxxSimpleDemo.cxx /main/4 1995/07/17 11:45:34 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -30,7 +30,7 @@
  **
  **   File:     simpleDemo.c
  **
- **   Description: C program to instantiate the ExmSimple widget. 
+ **   Description: C program to instantiate the ExmSimple widget.
  **
  ****************************************************************************
  ****************************************************************************/
@@ -71,11 +71,11 @@ void TickleCB(
  printf("In TickleCB\n");
 
  XtSetArg(arg[0], XmNmessageString, (XmString) stop_that);
- 
+
  MsgBox1 = XmCreateMessageDialog(w, "MsgBox1",  arg, 1);
 
  XtManageChild(MsgBox1);
-} 
+}
 
 
 void make_simple_widgets(Widget parent)
@@ -86,16 +86,16 @@ void make_simple_widgets(Widget parent)
   Arg          args[8];
   Cardinal     argcount;
 
-  simpleWidget1 = XtCreateManagedWidget("Simple1", 
-					exmCxxSimpleWidgetClass, parent, 
+  simpleWidget1 = XtCreateManagedWidget("Simple1",
+					exmCxxSimpleWidgetClass, parent,
 					NULL, 0);
 
   argcount = 0;
   XtSetArg(args[argcount], ExmNsimpleShape, ExmSHAPE_RECTANGLE); argcount++;
   XtSetArg(args[argcount], XmNmarginWidth, 20); argcount++;
 
-  simpleWidget2 = XtCreateManagedWidget("Simple2", 
-					exmCxxSimpleWidgetClass, parent, 
+  simpleWidget2 = XtCreateManagedWidget("Simple2",
+					exmCxxSimpleWidgetClass, parent,
 					args, argcount);
 
   compound_string1 = "ExmString";
@@ -104,8 +104,8 @@ void make_simple_widgets(Widget parent)
   argcount = 0;
   XtSetArg(args[argcount], ExmNcompoundString, (XmString) compound_string1);
   argcount++;
-  stringWidget = XtCreateManagedWidget("String", 
-				       exmCxxStringWidgetClass, parent, 
+  stringWidget = XtCreateManagedWidget("String",
+				       exmCxxStringWidgetClass, parent,
 				       args, argcount);
 
   compound_string2 = "ExmCommandButton";
@@ -114,8 +114,8 @@ void make_simple_widgets(Widget parent)
   argcount = 0;
   XtSetArg(args[argcount], ExmNcompoundString, (XmString) compound_string2);
   argcount++;
-  commandButtonWidget1 = XtCreateManagedWidget("CommandButtonWidget1", 
-					       exmCxxCommandWidgetClass, 
+  commandButtonWidget1 = XtCreateManagedWidget("CommandButtonWidget1",
+					       exmCxxCommandWidgetClass,
 					       parent, args, argcount);
 
   XtAddCallback(commandButtonWidget1, XmNactivateCallback, TickleCB, NULL);
@@ -146,16 +146,16 @@ int main (int argc, char **argv)
 
   shell = XtAppCreateShell(argv[0], APP_CLASS, applicationShellWidgetClass,
 			   display, args, argcount);
-			     
 
-  mainWindow = XtCreateManagedWidget("myMainWindow", xmMainWindowWidgetClass, 
+
+  mainWindow = XtCreateManagedWidget("myMainWindow", xmMainWindowWidgetClass,
 				     shell, NULL, 0);
 
   argcount = 0;
   XtSetArg(args[argcount], XmNrows, 2); argcount++;
   XtSetArg(args[argcount], XmNcolumns, 2); argcount++;
   workRegion = XtCreateManagedWidget("myWorkRegion", exmCxxGridWidgetClass,
-				     mainWindow, args, argcount); 
+				     mainWindow, args, argcount);
 
   make_simple_widgets(workRegion);
 

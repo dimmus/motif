@@ -777,14 +777,14 @@ static void ApplyCB(Widget w, XtPointer client_data,
 #ifndef	MOTIF1_1
 	case FindString:
 		value = XmTextGetString(StatText);
-		tmp_str = XmTextGetString( StatText ); 
+		tmp_str = XmTextGetString( StatText );
 		if (XmTextFindString(Text1, (XmTextPosition)scale1_val,
 			tmp_str, forb, &tmp_pos))
 			{
 			sprintf(stat_str,
 				"String FOUND! See Action selection.");
 			XmTextSetString( StatText, stat_str);
-                     
+
 			if (c_d->event != NULL)
 				XmTextSetSelection(Text1,
 					tmp_pos, tmp_pos + strlen(tmp_str),
@@ -800,7 +800,7 @@ static void ApplyCB(Widget w, XtPointer client_data,
 		break;
 	case GetSubstring:
 		tmp_str = (char *)XtMalloc(scale3_val);
-		retval = XmTextGetSubstring(Text1, 
+		retval = XmTextGetSubstring(Text1,
                                           (XmTextPosition)scale1_val,
 			                  scale2_val, scale3_val, tmp_str);
 		switch (retval)

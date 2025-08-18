@@ -19,9 +19,9 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-# 
+#
 # Original History:
 # Revision 1.2.4.3  1993/09/21  21:08:45  yak
 # 	Removed blocks ifdef'ed by MOTIF1_1.
@@ -31,17 +31,17 @@
 # Revision 1.2.4.2  1993/08/19  13:31:17  yak
 # 	Expanded copyright marker
 # 	[1993/07/30  19:27:33  yak]
-# 
+#
 # Revision 1.2.2.2  1992/04/21  14:52:10  qauser
 # 	Fix out-of-sync with .c file errors.
 # 	[1992/04/20  20:26:06  qauser]
-# 
+#
 # Revision 1.2  1992/03/13  17:06:08  devsrc
 # 	Converted to ODE
-# 
-# 
+#
+#
 
-# Client window will contain the following items: 
+# Client window will contain the following items:
 #  a label "Resize Drawn Button", with arrowButtons on both sides;
 #  a square Box;  two toggle buttons, "Resize Child" and "Resize Parent".
 
@@ -55,7 +55,7 @@ Continue
 #  the Drawing Area -- a form -- and one of its children, the Drawn button.
 #  In this test, the Drawn button appears as a square box.
 
-# This test is being run in BBForm mode. The UP arrow will INCREASE the 
+# This test is being run in BBForm mode. The UP arrow will INCREASE the
 #  size of the parent or child (depending on
 #  which toggle is set). The DOWN arrow will DECREASE the size.
 
@@ -77,7 +77,7 @@ CompareVisual parent
 
 # Decrease the size of the child several times. At some point, the Drawing
 #  Area will stop growing smaller. At this point, no more resize callback
-#  messages should appear as you decrease the child's size. 
+#  messages should appear as you decrease the child's size.
 
 LocatePointer ArrowButton2
 ClickMB Btn1 4
@@ -90,9 +90,9 @@ ClickMB Btn1 18
 LocatePointer ArrowButton1
 ClickMB Btn1 12
 CompareVisual parent
-Continue 
+Continue
 
-# Use the toggle to switch to resizing the Drawing Area's parent. 
+# Use the toggle to switch to resizing the Drawing Area's parent.
 
 LocatePointer ParentToggle
 ClickMB Btn1
@@ -105,7 +105,7 @@ ClickMB Btn1 5
 
 # Decrease the parent to the minimum possible. To do this, put the focus on
 #  the DECREASE arrow button and press the space bar repeatedly (if you use the
-#  mouse, at some point the window will be to small for you to click on the 
+#  mouse, at some point the window will be to small for you to click on the
 #  DECREASE arrow button.) Each decrease should also produce a resize callback
 #  message.
 
@@ -113,28 +113,28 @@ LocatePointer ArrowButton2
 PressMB Btn1
 LocatePointer ArrowButton2 Off
 ReleaseMB Btn1
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
-ClickKey KSpace 
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
+ClickKey KSpace
 
 # Resize the window by grabbing the resize border and increasing it. Another
 #  resize callback message should appear and the children should become visible
 #  again.
 
 CompareVisual DrawnButton1
-WindowResize Shell1 East 300 
+WindowResize Shell1 East 300
 Continue
 
 # By clicking on arrow buttons, you will instead MOVE the child. The "Resize
-#  Parent" toggle is no longer useful. Use the UP arrow to move the drawn 
-#  button until it forces the client to resize. Again, you should see resize 
+#  Parent" toggle is no longer useful. Use the UP arrow to move the drawn
+#  button until it forces the client to resize. Again, you should see resize
 #  callback messages each time the client appears to resize.
 
 LocatePointer ArrowButton1
@@ -143,7 +143,7 @@ CompareVisual parent
 Continue
 
 # The Parent toggle was unmanaged and remanaged. There should be
-#  only TWO messages about an expose event having been generated. 
+#  only TWO messages about an expose event having been generated.
 # Note: You can also compile this test with -DBESTCASE, and you may see fewer
 #  expose events being generated.
 
@@ -165,7 +165,7 @@ Continue
 
 
 # The drawing area should now contain an arrow button.  The size
-#   of the drawing area should be approximately 520x620. 
+#   of the drawing area should be approximately 520x620.
 
 
 Continue

@@ -26,7 +26,7 @@ char * BitmapPaths[] =
 void
 main(int argc, char **argv)
 {
-    Widget              Container, *IconGad;   
+    Widget              Container, *IconGad;
     int			i;
     const int		num_obj = NUM_OBJ;
     Cardinal		n;
@@ -56,7 +56,7 @@ main(int argc, char **argv)
 
 	n = 0 ;
 	sprintf(IconName, "IconGad%d", i);
-	icon_name = XmStringGenerate(IconName, NULL, XmCHARSET_TEXT, NULL); 
+	icon_name = XmStringGenerate(IconName, NULL, XmCHARSET_TEXT, NULL);
 
    	/* make icons from pixmap files */
 

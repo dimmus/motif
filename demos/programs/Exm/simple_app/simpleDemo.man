@@ -19,12 +19,12 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH simpleDemo 1X MOTIF "Demonstration programs"
 .SH NAME
-\*LsimpleDemo\*O\(emDemonstrates how to use the ExmSimple demonstration widget in a simple application 
+\*LsimpleDemo\*O\(emDemonstrates how to use the ExmSimple demonstration widget in a simple application
 .SH SYNOPSIS
 .sS
 \*LsimpleDemo\*O
@@ -32,7 +32,7 @@
 .SH DESCRIPTION
 \*LsimpleDemo\*O illustrates how to use an ExmSimple demonstration
 widget in an application.  Actually, simpleDemo instantiates four
-ExmSimple widgets, each one using different combinations of resources. 
+ExmSimple widgets, each one using different combinations of resources.
 .PP
-For details on the code, see Chapter 2 of the "OSF/Motif Widget 
+For details on the code, see Chapter 2 of the "OSF/Motif Widget
 Writer's Guide."

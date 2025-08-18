@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,11 +19,11 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! $XConsortium: system.mwmrc /main/9 1996/10/25 11:45:42 drk $
 !
 ! HISTORY
-! 
+!
 
 !!
 !!  DEFAULT Mwm RESOURCE DESCRIPTION FILE (system.mwmrc)
@@ -113,7 +113,7 @@ Buttons DefaultButtonBindings
 	<Btn3Down>	icon|frame	f.post_wmenu
 	<Btn3Down>	root		f.menu	DefaultRootMenu
 }
- 
+
 Buttons ExplicitButtonBindings
 {
 	<Btn1Down>	frame|icon	f.raise
@@ -125,7 +125,7 @@ Buttons ExplicitButtonBindings
 !	Alt<Btn3Down>	window|icon	f.move
 
 }
- 
+
 Buttons PointerButtonBindings
 {
 	<Btn1Down>	frame|icon	f.raise

@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH panner 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -95,13 +95,13 @@ following resources:
 .PP
 \fBpinStateLabelType\fR This specifies the label type.
 .br
-                        \fBXmPIXMAP\fR  Displays a pixmap 
+                        \fBXmPIXMAP\fR  Displays a pixmap
 .br
                                         using \fBpinnedPixmap\fR
 .br
                                         and unpinnedPixmap.
 .PP
-                        \fBXmSTRING\fR  Displays text 
+                        \fBXmSTRING\fR  Displays text
 .br
                                         using \fBpinnedString\fR
 .br
@@ -109,7 +109,7 @@ following resources:
 .PP
 \fBpinnedString\fR              This specifies the string to display
 .br
-                        when the \fBpinStateLabelType\fR is 
+                        when the \fBpinStateLabelType\fR is
 .br
                         \fBXmSTRING\fR and the associated window
 .br

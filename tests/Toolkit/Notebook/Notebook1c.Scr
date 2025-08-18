@@ -20,8 +20,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -30,13 +30,13 @@
 
 
 #  This test should have been run with the flag "-u 3".
-#  A Notebook will appear on your screen. All resources for this Notebook 
+#  A Notebook will appear on your screen. All resources for this Notebook
 #  have been set via the defaults file Notebook.defaults.
 #  There will also be a control panel with which you can do a GetValues on
 #  those resources of the Notebook that are of type Dimension. (Since it
 #  may not be hard to visually gauge what values these resources have been
 #  set to).
-#  The Notebook should have horizontal orientation. 
+#  The Notebook should have horizontal orientation.
 #  The placement of the back pages of the Notebook should be bottom right.
 #  The Notebook should have a spiral binding.
 
@@ -45,4 +45,3 @@ CompareVisual Notebook3
 Continue
 
 Exit
-

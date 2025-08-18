@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StringComp.c /main/7 1995/07/13 19:53:41 drk $"
@@ -44,7 +44,7 @@ char		*argv[];
 
 	int	i;
 	char	*tmp;
-	
+
     string_num = text_num = charset_num = test_num = 0;
     c_errors = bc_errors = 0;
 
@@ -98,10 +98,10 @@ String  Creation Routine          Text                 Character Set
     fprintf(stdout, "\n");
     fprintf(stdout, "  17    (string17 = NULL)\n");
 #ifndef MOTIF1_1
-    fprintf(stdout, 
+    fprintf(stdout,
 			"  18    XmStringCreate            \"This is to test PIR3933\" ");
     fprintf(stdout, "    XmSTRING_DEFAULT_CHARSET\n");
-    fprintf(stdout, 
+    fprintf(stdout,
 			"  19    XmStringCreate            \"This is to test PIR3933\" ");
     fprintf(stdout, "    XmFONTLIST_DEFAULT_TAG\n");
     fprintf(stdout, "  20    XmStringCreateLtoR        \"This tests\\n\\n\\n PIR7403\"");
@@ -117,7 +117,7 @@ String  Creation Routine          Text                 Character Set
     fprintf(stdout, " routines XmStringCompare and XmStringByteCompare.\n");
     fprintf(stdout, "For each comparison, the expected and actual results");
     fprintf(stdout, " are given.\n\n");
-    
+
 /*
                       XmStringCompare    XmStringByteCompare           Byte
       First   Second                                          Compare  Compare
@@ -139,17 +139,17 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
  */
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     do_comparisons(test_num, string_num, string_num);
 
     string_num++;
     test_num++;
-    
+
 /*
  * Test 2: Make a copy of a compound string and compare the two strings
  */
@@ -159,7 +159,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
 				string_num);
 		error_proc(error_string);
     }
-    
+
     do_comparisons(test_num, string_num-1, string_num);
 
     string_num++;
@@ -168,26 +168,26 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     test_num++;
 
 /*
- * Test 3: Create identical strings with XmStringCreate and 
+ * Test 3: Create identical strings with XmStringCreate and
  *         XmStringCreateLtoR and compare the two strings
  */
 
     if ((string[string_num] = XmStringCreate(text[text_num],
-					    					 charset[charset_num])) 
+					    					 charset[charset_num]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
 
     string_num++;
-    
+
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     do_comparisons(test_num, string_num-1, string_num);
 
     string_num++;
@@ -202,7 +202,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
  */
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -210,33 +210,33 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
 
     string_num++;
     text_num++;
-    
-    if ((string[string_num] = 
+
+    if ((string[string_num] =
 		 XmStringDirectionCreate(XmSTRING_DIRECTION_L_TO_R)) == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
 
     string_num++;
-    
+
     if ((string[string_num] = XmStringCreate(text[text_num],
-					    					 charset[charset_num])) 
+					    					 charset[charset_num]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
 
     string_num++;
-    
+
     if ((string[string_num] = XmStringConcat(string[string_num-2],
-					    					 string[string_num-1])) 
+					    					 string[string_num-1]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     string_num++;
-    
+
     if ((string[string_num] = XmStringSeparatorCreate()) == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -245,12 +245,12 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     string_num++;
 
     if ((string[string_num] = XmStringConcat(string[string_num-2],
-					    					 string[string_num-1])) 
+					    					 string[string_num-1]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     do_comparisons(test_num, string_num-5, string_num);
 
     string_num++;
@@ -263,7 +263,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
  */
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -273,7 +273,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     charset_num++;
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -299,7 +299,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     string_num++;
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -326,12 +326,12 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     string_num++;
 
     if ((string[string_num] = XmStringCreate(text[text_num],
-					    					 charset[charset_num])) 
+					    					 charset[charset_num]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     do_comparisons(test_num, string_num-1, string_num);
 
     string_num++;
@@ -342,7 +342,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
  */
 
     string[string_num] = NULL;
-    
+
     do_comparisons(test_num, 0, string_num);
 
 #ifndef MOTIF1_1
@@ -368,12 +368,12 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     string_num++;
 
     if ((string[string_num] = XmStringCreate(text[text_num],
-					    					 XmSTRING_DEFAULT_CHARSET)) 
+					    					 XmSTRING_DEFAULT_CHARSET))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     do_comparisons(test_num, string_num-1, string_num);
 
 
@@ -383,7 +383,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
 	text_num++;
 
 /*
- * Test 10: Create 1 string with separators with XmStringCreateLtoR.  
+ * Test 10: Create 1 string with separators with XmStringCreateLtoR.
  *          "Copy" it by converting it to compound text and back.
  *          Compare the two strings. This is to test PIR7403 against
  *		   XmCvtXmStringToCT.
@@ -400,7 +400,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
 	string_num++;
 
 	string[string_num] = XmCvtCTToXmString(tmp);
-	
+
 	do_comparisons(test_num, string_num-1, string_num);
 
 	string_num++;
@@ -410,7 +410,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
  * Test 11: Compare a nonopt 2-line to an opt 2-char, both using first charset
  *	    This tests CR 8015.
  */
-	
+
 	string[string_num] = XmStringCreateLtoR("CH", charset[0]);
 
 	do_comparisons(test_num, 0, string_num);
@@ -431,7 +431,7 @@ Test  String  String  Expect   Actual    Expect    Actual     Error    Error
     }
     else
 		fprintf(stdout, "\nThe XmStringCompare portion of this test passed.\n");
-    
+
     if (bc_errors) {
 		fprintf(stdout, "The XmStringByteCompare portion of this test failed");
 		fprintf(stdout, " with %d errors.\n", bc_errors);
@@ -462,13 +462,13 @@ int	test_num,
 
     error1 = error2 = 0;
     result1 = result2 = 0;
-    
+
 /*
  * Compare the two strings with XmStringCompare
  */
-     
+
     result1 = XmStringCompare(string[string_num1], string[string_num2]);
-    
+
     if (result1 != c_expect[test_num]) {
 		c_errors++;
 		error1++;
@@ -477,7 +477,7 @@ int	test_num,
 /*
  * Compare the two strings with XmStringByteCompare
  */
-     
+
     result2 = XmStringByteCompare(string[string_num1], string[string_num2]);
 
     if (result2 != bc_expect[test_num]) {
@@ -495,12 +495,12 @@ int	test_num,
     fprintf(stdout, "%8s %8s  %9s %9s  ", result_string1[c_expect[test_num]],
 	    	result_string1[result1], result_string2[bc_expect[test_num]],
 	    	result_string2[result2]);
-    	    
+
     if (error1)
 		fprintf(stdout, "   *    ");
     else
 		fprintf(stdout, "        ");
-    
+
     if(error2)
 		fprintf(stdout, "    *\n");
     else

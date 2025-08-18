@@ -25,15 +25,15 @@
 	   when you run your server. (See the startx_* files for examples
 	   of the latter.)
 
-        2. You need to run the Motif window manager built from the Motif 2.0 
-	   sources. 
+        2. You need to run the Motif window manager built from the Motif 2.0
+	   sources.
 
 	Once you have completed the steps mentioned above, you need to
 	make sure that your environment gets set up correctly, before
 	starting the test runs. Here is what we did to ensure this.
 
 	We created an account 'qauser'. We created this whole environment
-	hierarchy under the home directory of 'qauser' (~qauser/.). 
+	hierarchy under the home directory of 'qauser' (~qauser/.).
 	We began each test run by logging in as qauser in the following way:
 
 		Logout from the current session to console
@@ -48,7 +48,7 @@
 
 	If you wish to run the tests from your home directory, copy all
 	the qauser files into your home directory, preserving your own
-	defaults elsewhere. Note that the .motifbind files are in the 
+	defaults elsewhere. Note that the .motifbind files are in the
 	platform-specific subdirectories. You will probably need a fair number
 	of modifications to your home environment to get the tests to
 	work properly. We suggest use of the 'qauser' account if at all
@@ -62,6 +62,3 @@
 	that is causing an error. The line number printed out by the
 	automation code refers to the UNCOMMENTED line number, so scrline
 	is useful in debugging scripts with comments.
-
-
-

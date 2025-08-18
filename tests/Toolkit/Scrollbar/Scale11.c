@@ -56,7 +56,7 @@ main (int argc, char **argv)
 
    /* initialize toolkit */
    CommonTestInit(argc, argv);
-    
+
    n = 0;
 
    /* Create a thermometer scale */
@@ -65,7 +65,7 @@ main (int argc, char **argv)
    XtSetArg(args[n], XmNy, 10);  n++;
    XtSetArg(args[n], XmNslidingMode, XmTHERMOMETER); n++;
    XtSetArg(args[n], XmNsliderVisual, XmFOREGROUND_COLOR); n++;
-   Scale1 = XmCreateScale(Shell1, "Scale1", args, n); 
+   Scale1 = XmCreateScale(Shell1, "Scale1", args, n);
 
    XtAddCallback (Scale1, XmNvalueChangedCallback, ScaleValueChangedCB, NULL);
 
@@ -86,7 +86,7 @@ main (int argc, char **argv)
    XtAppMainLoop(app_context);
 }
 
-void 
+void
 ScaleValueChangedCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    int       value;
@@ -96,7 +96,7 @@ ScaleValueChangedCB(Widget w, XtPointer client_data, XtPointer call_data)
    XmScaleGetValue(Scale1, &value);
 
    /* Reflect the change in the Control Panel */
-   
+
    XmScaleSetValue(ValSC, value);
 
 }
@@ -115,7 +115,7 @@ CreateControlPanel()
    Arg    args[20];
    int    n, i, value;
 
-   static char          *scale_labels[] = 
+   static char          *scale_labels[] =
                          { "Num of scale values between big tics",
 			   "Num of medium tics between big values",
 			   "Num of small tics between medium values",
@@ -123,12 +123,12 @@ CreateControlPanel()
 			   "Medium tics size",
 			   "Small tics size"};
 
-  
+
    XmString LabelString;
    char     name[20];
 
-   /* Create main parent */ 
-   
+   /* Create main parent */
+
    n=0;
    XtSetArg(args[n], XmNdefaultPosition, False); n++;
    XtSetArg(args[n], XmNautoUnmanage, False); n++;
@@ -194,7 +194,7 @@ CreateControlPanel()
    Separator = XmCreateSeparatorGadget(FormD1, "Separator", args, n);
 
    XtManageChild(Separator);
-  
+
 
    /* Create Toggle Buttons */
 
@@ -223,20 +223,20 @@ CreateControlPanel()
    ResizeTB = XmCreateToggleButtonGadget(FormD1, "ResizeTB",args, n);
 
    XtAddCallback (ResizeTB, XmNvalueChangedCallback, ResizeCB, NULL);
-   
+
    XtManageChild(ResizeTB);
    XmStringFree(LabelString);
 
    /* Create the Show Value option menu and its buttons */
-   
+
    n = 0;
    pulldown = XmCreatePulldownMenu(FormD1, "show_value", args, n);
-    
+
    n = 0;
    LabelString = XmStringCreate("none",XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
    NonePB = XmCreatePushButtonGadget(pulldown, "NonePB", args, n);
-   XtAddCallback (NonePB, XmNactivateCallback, ShowValueCB, 
+   XtAddCallback (NonePB, XmNactivateCallback, ShowValueCB,
 		   (XtPointer) XmNONE);
    XtManageChild(NonePB);
    XmStringFree(LabelString);
@@ -245,7 +245,7 @@ CreateControlPanel()
    LabelString = XmStringCreate("near_slider",XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
    NearSliderPB = XmCreatePushButtonGadget(pulldown, "NearSliderPB", args, n);
-   XtAddCallback (NearSliderPB, XmNactivateCallback, ShowValueCB, 
+   XtAddCallback (NearSliderPB, XmNactivateCallback, ShowValueCB,
 		  (XtPointer) XmNEAR_SLIDER);
    XtManageChild(NearSliderPB);
    XmStringFree(LabelString);
@@ -254,7 +254,7 @@ CreateControlPanel()
    LabelString = XmStringCreate("near_border",XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
    NearBorderPB = XmCreatePushButtonGadget(pulldown, "NearBorderPB", args, n);
-   XtAddCallback (NearBorderPB, XmNactivateCallback, ShowValueCB, 
+   XtAddCallback (NearBorderPB, XmNactivateCallback, ShowValueCB,
 		  (XtPointer) XmNEAR_BORDER);
    XtManageChild(NearBorderPB);
    XmStringFree(LabelString);
@@ -268,7 +268,7 @@ CreateControlPanel()
    XtSetArg(args[n], XmNleftOffset, 30); n++;
    LabelString = XmStringCreate("Show Value",XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
    OptionM = XmCreateOptionMenu(FormD1, "OptionM", args, n);
    XtManageChild (OptionM);
 
@@ -308,17 +308,17 @@ CreateControlPanel()
    XtSetArg(args[n], XmNleftWidget, ValSC); n++;
    XtSetArg(args[n], XmNleftOffset, 20); n++;
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
    SetValuePB = XmCreatePushButtonGadget(FormD1, "SetValuePB", args, n);
 
    XtAddCallback (SetValuePB, XmNactivateCallback, SetValueCB, NULL);
 
    XtManageChild(SetValuePB);
    XmStringFree(LabelString);
-   
+
 }
 
-void 
+void
 SetScaleTicsCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -331,7 +331,7 @@ SetScaleTicsCB(Widget w, XtPointer client_data, XtPointer call_data)
    Dimension size_big, size_medium, size_small;
 
    /* First remove the current tics */
-   
+
    n = 0;
    XtSetArg (args[n], XmNnumChildren, &num_children);  n++;
    XtSetArg (args[n], XmNchildren, &children);  n++;
@@ -359,18 +359,18 @@ SetScaleTicsCB(Widget w, XtPointer client_data, XtPointer call_data)
 
    /* Create the new tics */
 
-   XmScaleSetTicks(Scale1, num_big, num_medium, num_small, size_big, 
+   XmScaleSetTicks(Scale1, num_big, num_medium, num_small, size_big,
 		   size_medium, size_small);
-  
+
 }
 
 
-void 
+void
 EditableCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
    int       n;
-   XmToggleButtonCallbackStruct * scb = 
+   XmToggleButtonCallbackStruct * scb =
 	(XmToggleButtonCallbackStruct *) call_data ;
 
    n=0;
@@ -380,12 +380,12 @@ EditableCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 ResizeCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
    int       n;
-   XmToggleButtonCallbackStruct * scb = 
+   XmToggleButtonCallbackStruct * scb =
 	(XmToggleButtonCallbackStruct *) call_data ;
 
    n=0;
@@ -393,7 +393,7 @@ ResizeCB(Widget w, XtPointer client_data, XtPointer call_data)
    XtSetValues(Shell1, args, n);
 }
 
-void 
+void
 SetValueCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[2];
@@ -405,7 +405,7 @@ SetValueCB(Widget w, XtPointer client_data, XtPointer call_data)
    XtSetValues(Scale1, args, n);
 }
 
-void 
+void
 ShowValueCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[2];

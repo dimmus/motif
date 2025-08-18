@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupMenu5.c /main/9 1995/07/13 18:53:02 drk $"
@@ -37,7 +37,7 @@ Widget popup11, popup12, popup31, popup32, popup;
 void menu_handler(Widget w, XtPointer tag, XEvent *event, Boolean *c)
 {
   printf("MenuHandler: button %d\n", event->xbutton.button);
-  if ((int)(long)tag == 1) 
+  if ((int)(long)tag == 1)
     switch (event->xbutton.button) {
     case Button1:
       XmMenuPosition(popup11, (XButtonPressedEvent *)event);
@@ -63,7 +63,7 @@ void menu_handler(Widget w, XtPointer tag, XEvent *event, Boolean *c)
 
 void menu_handler3(Widget w, XtPointer tag, XEvent *event,Boolean *c)
 {
-  printf("whichButton = 3, handler called for Button %d\n", 
+  printf("whichButton = 3, handler called for Button %d\n",
 	 event->xbutton.button);
 
   if (event->xbutton.button == 3)
@@ -75,7 +75,7 @@ void menu_handler3(Widget w, XtPointer tag, XEvent *event,Boolean *c)
 
 void menu_post3(Widget w, XtPointer tag, XEvent *event, Boolean *c)
 {
-  printf("menuPost = 3, handler called for Button %d\n", 
+  printf("menuPost = 3, handler called for Button %d\n",
 	 event->xbutton.button);
 
   if (event->xbutton.button == 3)
@@ -87,7 +87,7 @@ void menu_post3(Widget w, XtPointer tag, XEvent *event, Boolean *c)
 
 void menu_post1(Widget w, XtPointer tag, XEvent *event, Boolean *c)
 {
-  printf("menuPost = 3, handler called for Button %d\n", 
+  printf("menuPost = 3, handler called for Button %d\n",
 	 event->xbutton.button);
 
   if (event->xbutton.button == 1)
@@ -230,10 +230,10 @@ char *argv[];
   /* End test case for PIR 2968 */
 
   CommonPause();
-  
+
   /* Pause 3 */
 
-  /* 
+  /*
    *  Test: whichButton = Btn3, event handler set for bulletinBoard
    *   and pushButton
    */
@@ -267,7 +267,7 @@ char *argv[];
   /* Pause 4 */
 
   /* Test: whichButton = Btn3, event handler set for push button */
-  
+
   XtDestroyWidget(popup11);
   XtDestroyWidget(push1);
   XtDestroyWidget(bb);
@@ -296,10 +296,10 @@ char *argv[];
   CommonPause();
 
   /* Pause 5 */
-  
-  /* 
+
+  /*
    * Test: menuPost = Btn3, Set event handler on BulletinBoard
-   *  and pushbutton 
+   *  and pushbutton
    */
 
   XtDestroyWidget(bb);   /* Test for PIR 2972; no warnings should occur */
@@ -313,7 +313,7 @@ char *argv[];
   XtSetArg(args[n], XmNy, 25); n++;
   push1 = XmCreatePushButton(bb, "push1", args, n);
 
-  XtAddEventHandler(push1, ButtonPressMask, FALSE, menu_post3, NULL); 
+  XtAddEventHandler(push1, ButtonPressMask, FALSE, menu_post3, NULL);
   XtAddEventHandler(bb, ButtonPressMask, FALSE, menu_post3, NULL);
 
   XtSetArg(args[0], XmNmenuPost, "<Btn3>");
@@ -331,7 +331,7 @@ char *argv[];
   /* Pause 6 */
 
   /* Test: menuPost = Btn3, event handler set on push button */
-  
+
   XtDestroyWidget(popup11);
   XtDestroyWidget(push1);
   XtDestroyWidget(bb);
@@ -356,12 +356,12 @@ char *argv[];
   XtManageChild(XmCreatePushButton(popup11, "11entry1", NULL, 0));
   XtManageChild(XmCreatePushButton(popup11, "11entry2", NULL, 0));
   XtManageChild(XmCreatePushButton(popup11, "11entry3", NULL, 0));
-  
+
   CommonPause();
 
   /* Pause 7 */
 
-  /* 
+  /*
    * Test: menuPost = Btn3, Set event handler on BulletinBoard
    */
 
@@ -403,9 +403,5 @@ char *argv[];
 
   CommonPause();   /* Exit */
 
-  XtAppMainLoop(app_context); 
+  XtAppMainLoop(app_context);
 }
-
-
-
-

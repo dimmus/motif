@@ -1,13 +1,13 @@
 STARTFONT 2.1
 COMMENT $XConsortium: charR18.bdf /main/2 1996/07/23 13:03:25 drk $
-COMMENT  
+COMMENT
 COMMENT  Copyright 1988 Bitstream, Inc., Cambridge, Massachusetts, USA
 COMMENT  Bitstream and Charter are registered trademarks of Bitstream, Inc.
-COMMENT  
+COMMENT
 COMMENT  The names "Bitstream" and "Charter" are registered trademarks of
 COMMENT  Bitstream, Inc.  Permission to use these trademarks is hereby
 COMMENT  granted only in association with the images described in this file.
-COMMENT  
+COMMENT
 COMMENT  Permission to use, copy, modify, and distribute this software and
 COMMENT  its documentation for any purpose and without fee is hereby
 COMMENT  granted, provided that the above copyright notice appear in all
@@ -18,7 +18,7 @@ COMMENT  distribution of the software without specific, written prior
 COMMENT  permission.  Bitstream makes no representations about the
 COMMENT  suitability of this software for any purpose.  It is provided "as
 COMMENT  is" without express or implied warranty.
-COMMENT  
+COMMENT
 COMMENT  BITSTREAM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
 COMMENT  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
 COMMENT  NO EVENT SHALL BITSTREAM BE LIABLE FOR ANY SPECIAL, INDIRECT OR
@@ -26,8 +26,8 @@ COMMENT  CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 COMMENT  OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 COMMENT  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 COMMENT  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-COMMENT  
-COMMENT  
+COMMENT
+COMMENT
 COMMENT Fontware CVTBDF v1.0
 FONT -Bitstream-Charter-Medium-R-Normal--19-180-75-75-P-106-ISO8859-1
 SIZE 19 75 75

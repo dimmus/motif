@@ -42,7 +42,7 @@ PrintValues( Widget w, char *label )
 		  sashShadowThickness );
     return;
   }
-  else if ( strcmp(label,"ScrollBar") == 0 
+  else if ( strcmp(label,"ScrollBar") == 0
     || strcmp(label,"SelectionBox") == 0 )
   {
     XtSetArg( args[0], XmNshadowThickness, &shadowThickness );

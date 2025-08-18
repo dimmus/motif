@@ -10,7 +10,7 @@ Found name XmREP_TYPE1_FO
 
 
 RepType Name = XmRNewRepType1
-Allowable values and value names: 
+Allowable values and value names:
 0 rep_type1_fe
 1 rep_type1_fi
 2 rep_type1_fa
@@ -42,7 +42,7 @@ Found name XmREP_TYPE2_FU
 
 
 RepType Name = XmRNewRepType2
-Allowable values and value names: 
+Allowable values and value names:
 0 rep_type2_fe
 1 rep_type2_fi
 2 rep_type2_fa
@@ -74,7 +74,7 @@ Found name XmREP_TYPE3_EIGHT
 
 
 RepType Name = XmRNewRepType3
-Allowable values and value names: 
+Allowable values and value names:
 2 rep_type3_two
 4 rep_type3_four
 6 rep_type3_six
@@ -106,7 +106,7 @@ Found name XmREP_TYPE4_99
 
 
 RepType Name = XmRNewRepType4
-Allowable values and value names: 
+Allowable values and value names:
 69 rep_type4_69
 42 rep_type4_42
 105 rep_type4_105
@@ -131,7 +131,7 @@ Representation Type = SeparatorType,   Test PASSED
 
 
 RepType Name = Alignment
-Allowable values and value names: 
+Allowable values and value names:
 0 alignment_beginning
 1 alignment_center
 2 alignment_end
@@ -139,7 +139,7 @@ Reverse converter NOT installed
 
 
 RepType Name = AnimationStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 drag_under_none
 1 drag_under_pixmap
 2 drag_under_shadow_in
@@ -149,7 +149,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ArrowDirection
-Allowable values and value names: 
+Allowable values and value names:
 0 arrow_up
 1 arrow_down
 2 arrow_left
@@ -158,7 +158,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ArrowLayout
-Allowable values and value names: 
+Allowable values and value names:
 0 arrows_end
 1 arrows_beginning
 2 arrows_split
@@ -168,14 +168,14 @@ Reverse converter NOT installed
 
 
 RepType Name = ArrowOrientation
-Allowable values and value names: 
+Allowable values and value names:
 0 arrows_vertical
 1 arrows_horizontal
 Reverse converter NOT installed
 
 
 RepType Name = ArrowSensitivity
-Allowable values and value names: 
+Allowable values and value names:
 0 arrows_insensitive
 1 arrows_increment_sensitive
 2 arrows_decrement_sensitive
@@ -185,7 +185,7 @@ Reverse converter NOT installed
 
 
 RepType Name = Attachment
-Allowable values and value names: 
+Allowable values and value names:
 0 attach_none
 1 attach_form
 2 attach_opposite_form
@@ -197,21 +197,21 @@ Reverse converter NOT installed
 
 
 RepType Name = AudibleWarning
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 bell
 Reverse converter NOT installed
 
 
 RepType Name = AutoDragModel
-Allowable values and value names: 
+Allowable values and value names:
 0 auto_drag_enabled
 1 auto_drag_disabled
 Reverse converter NOT installed
 
 
 RepType Name = AutomaticSelection
-Allowable values and value names: 
+Allowable values and value names:
 0 no_auto_select
 1 auto_select
 0 off
@@ -226,7 +226,7 @@ Reverse converter NOT installed
 
 
 RepType Name = BindingType
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 pixmap
 2 solid
@@ -236,14 +236,14 @@ Reverse converter NOT installed
 
 
 RepType Name = BitmapConversionModel
-Allowable values and value names: 
+Allowable values and value names:
 0 match_depth
 1 dynamic_depth
 Reverse converter NOT installed
 
 
 RepType Name = BlendModel
-Allowable values and value names: 
+Allowable values and value names:
 0 blend_all
 1 blend_state_source
 2 blend_just_source
@@ -252,7 +252,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ChildHorizontalAlignment
-Allowable values and value names: 
+Allowable values and value names:
 0 alignment_beginning
 1 alignment_center
 2 alignment_end
@@ -260,7 +260,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ChildPlacement
-Allowable values and value names: 
+Allowable values and value names:
 0 place_top
 1 place_above_selection
 2 place_below_selection
@@ -268,7 +268,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ChildType
-Allowable values and value names: 
+Allowable values and value names:
 0 frame_generic_child
 1 frame_workarea_child
 2 frame_title_child
@@ -276,7 +276,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ChildVerticalAlignment
-Allowable values and value names: 
+Allowable values and value names:
 0 alignment_baseline_top
 1 alignment_center
 2 alignment_baseline_bottom
@@ -288,7 +288,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ComboBoxListActionActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 up
 1 down
 2 listprevpage
@@ -299,7 +299,7 @@ Reverse converter installed
 
 
 RepType Name = ComboBoxType
-Allowable values and value names: 
+Allowable values and value names:
 0 combo_box
 1 drop_down_combo_box
 2 drop_down_list
@@ -307,7 +307,7 @@ Reverse converter NOT installed
 
 
 RepType Name = CommandSelectionBoxUpOrDownActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 previous
 1 next
 2 first
@@ -316,14 +316,14 @@ Reverse converter installed
 
 
 RepType Name = CommandWindowLocation
-Allowable values and value names: 
+Allowable values and value names:
 0 command_above_workspace
 1 command_below_workspace
 Reverse converter NOT installed
 
 
 RepType Name = ContainerCursorActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 left
 1 right
 2 up
@@ -334,7 +334,7 @@ Reverse converter installed
 
 
 RepType Name = ContainerExpandCollapseActionParamName
-Allowable values and value names: 
+Allowable values and value names:
 0 left
 1 right
 2 collapse
@@ -343,7 +343,7 @@ Reverse converter installed
 
 
 RepType Name = ContainerStartTransferActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 link
 1 move
 2 copy
@@ -351,14 +351,14 @@ Reverse converter installed
 
 
 RepType Name = DefaultButtonEmphasis
-Allowable values and value names: 
+Allowable values and value names:
 0 external_highlight
 1 internal_highlight
 Reverse converter NOT installed
 
 
 RepType Name = DefaultButtonType
-Allowable values and value names: 
+Allowable values and value names:
 0 dialog_none
 2 dialog_cancel_button
 4 dialog_ok_button
@@ -367,7 +367,7 @@ Reverse converter NOT installed
 
 
 RepType Name = DeleteResponse
-Allowable values and value names: 
+Allowable values and value names:
 0 destroy
 1 unmap
 2 do_nothing
@@ -375,7 +375,7 @@ Reverse converter NOT installed
 
 
 RepType Name = DialogStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 dialog_modeless
 0 dialog_work_area
 1 dialog_primary_application_modal
@@ -386,7 +386,7 @@ Reverse converter NOT installed
 
 
 RepType Name = DialogType
-Allowable values and value names: 
+Allowable values and value names:
 0 dialog_template
 1 dialog_error
 2 dialog_information
@@ -398,7 +398,7 @@ Reverse converter NOT installed
 
 
 RepType Name = Direction
-Allowable values and value names: 
+Allowable values and value names:
 206 left_to_right
 205 right_to_left
 70 left_to_right_top_to_bottom
@@ -413,7 +413,7 @@ Reverse converter NOT installed
 
 
 RepType Name = DragInitiatorProtocolStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 drag_none
 1 drag_drop_only
 2 drag_prefer_preregister
@@ -425,7 +425,7 @@ Reverse converter NOT installed
 
 
 RepType Name = DragReceiverProtocolStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 drag_none
 1 drag_drop_only
 2 drag_prefer_preregister
@@ -436,7 +436,7 @@ Reverse converter NOT installed
 
 
 RepType Name = DropSiteActivity
-Allowable values and value names: 
+Allowable values and value names:
 0 drop_site_active
 1 drop_site_inactive
 2 drop_site_ignore
@@ -444,21 +444,21 @@ Reverse converter NOT installed
 
 
 RepType Name = DropSiteType
-Allowable values and value names: 
+Allowable values and value names:
 0 drop_site_simple
 1 drop_site_composite
 Reverse converter NOT installed
 
 
 RepType Name = EditMode
-Allowable values and value names: 
+Allowable values and value names:
 0 multi_line_edit
 1 single_line_edit
 Reverse converter NOT installed
 
 
 RepType Name = EnableBtn1Transfer
-Allowable values and value names: 
+Allowable values and value names:
 0 false
 1 true
 0 off
@@ -468,14 +468,14 @@ Reverse converter NOT installed
 
 
 RepType Name = EnableWarp
-Allowable values and value names: 
+Allowable values and value names:
 0 enable_warp_on
 1 enable_warp_off
 Reverse converter NOT installed
 
 
 RepType Name = EntryViewType
-Allowable values and value names: 
+Allowable values and value names:
 0 large_icon
 1 small_icon
 2 any_icon
@@ -483,14 +483,14 @@ Reverse converter NOT installed
 
 
 RepType Name = FileFilterStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 filter_none
 1 filter_hidden_files
 Reverse converter NOT installed
 
 
 RepType Name = FileSelectionBoxUpOrDownActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 previous
 1 next
 2 first
@@ -499,7 +499,7 @@ Reverse converter installed
 
 
 RepType Name = FileTypeMask
-Allowable values and value names: 
+Allowable values and value names:
 1 file_directory
 2 file_regular
 3 file_any_type
@@ -507,7 +507,7 @@ Reverse converter NOT installed
 
 
 RepType Name = FontType
-Allowable values and value names: 
+Allowable values and value names:
 0 font_is_font
 1 font_is_fontset
 255 as_is
@@ -515,7 +515,7 @@ Reverse converter NOT installed
 
 
 RepType Name = IconAttachment
-Allowable values and value names: 
+Allowable values and value names:
 0 attach_north_west
 1 attach_north
 2 attach_north_east
@@ -530,7 +530,7 @@ Reverse converter NOT installed
 
 
 RepType Name = IndicatorOn
-Allowable values and value names: 
+Allowable values and value names:
 0 indicator_none
 1 indicator_fill
 255 indicator_box
@@ -548,7 +548,7 @@ Reverse converter NOT installed
 
 
 RepType Name = IndicatorType
-Allowable values and value names: 
+Allowable values and value names:
 1 n_of_many
 2 one_of_many
 3 one_of_many_round
@@ -557,28 +557,28 @@ Reverse converter NOT installed
 
 
 RepType Name = InputPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 per_shell
 1 per_widget
 Reverse converter NOT installed
 
 
 RepType Name = KeyboardFocusPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 explicit
 1 pointer
 Reverse converter NOT installed
 
 
 RepType Name = LabelType
-Allowable values and value names: 
+Allowable values and value names:
 1 pixmap
 2 string
 Reverse converter NOT installed
 
 
 RepType Name = LayoutType
-Allowable values and value names: 
+Allowable values and value names:
 0 outline
 1 spatial
 2 detail
@@ -586,14 +586,14 @@ Reverse converter NOT installed
 
 
 RepType Name = LineStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 no_line
 1 single
 Reverse converter NOT installed
 
 
 RepType Name = LineType
-Allowable values and value names: 
+Allowable values and value names:
 0 no_line
 1 single_line
 2 double_line
@@ -604,7 +604,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ListSizePolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 variable
 1 constant
 2 resize_if_possible
@@ -612,7 +612,7 @@ Reverse converter NOT installed
 
 
 RepType Name = LoadModel
-Allowable values and value names: 
+Allowable values and value names:
 1 load_deferred
 2 load_immediate
 255 as_is
@@ -620,21 +620,21 @@ Reverse converter NOT installed
 
 
 RepType Name = MatchBehavior
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 quick_navigate
 Reverse converter NOT installed
 
 
 RepType Name = MultiClick
-Allowable values and value names: 
+Allowable values and value names:
 0 multiclick_discard
 1 multiclick_keep
 Reverse converter NOT installed
 
 
 RepType Name = NavigationType
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 tab_group
 2 sticky_tab_group
@@ -643,7 +643,7 @@ Reverse converter NOT installed
 
 
 RepType Name = NotebookChildType
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 page
 2 major_tab
@@ -654,7 +654,7 @@ Reverse converter NOT installed
 
 
 RepType Name = NotebookTraverseTabActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 home
 1 end
 2 next
@@ -663,28 +663,28 @@ Reverse converter installed
 
 
 RepType Name = Orientation
-Allowable values and value names: 
+Allowable values and value names:
 1 vertical
 2 horizontal
 Reverse converter NOT installed
 
 
 RepType Name = OutlineButtonPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 outline_button_present
 1 outline_button_absent
 Reverse converter NOT installed
 
 
 RepType Name = OutlineState
-Allowable values and value names: 
+Allowable values and value names:
 0 collapsed
 1 expanded
 Reverse converter NOT installed
 
 
 RepType Name = Packing
-Allowable values and value names: 
+Allowable values and value names:
 1 pack_tight
 2 pack_column
 3 pack_none
@@ -692,7 +692,7 @@ Reverse converter NOT installed
 
 
 RepType Name = PanedWindowSashActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 start
 1 move
 2 commit
@@ -701,7 +701,7 @@ Reverse converter installed
 
 
 RepType Name = PanedWindowSashDirectionActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 up
 1 down
 2 right
@@ -712,35 +712,35 @@ Reverse converter installed
 
 
 RepType Name = PanedWindowSashIncrementActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 defaultincr
 1 largeincr
 Reverse converter installed
 
 
 RepType Name = PathMode
-Allowable values and value names: 
+Allowable values and value names:
 0 path_mode_full
 1 path_mode_relative
 Reverse converter NOT installed
 
 
 RepType Name = PositionMode
-Allowable values and value names: 
+Allowable values and value names:
 0 zero_based
 1 one_based
 Reverse converter NOT installed
 
 
 RepType Name = PositionType
-Allowable values and value names: 
+Allowable values and value names:
 0 position_index
 1 position_value
 Reverse converter NOT installed
 
 
 RepType Name = PrimaryOwnership
-Allowable values and value names: 
+Allowable values and value names:
 0 own_never
 1 own_always
 2 own_multiple
@@ -749,7 +749,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ProcessingDirection
-Allowable values and value names: 
+Allowable values and value names:
 0 max_on_top
 1 max_on_bottom
 2 max_on_left
@@ -758,7 +758,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ResizePolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 resize_none
 1 resize_grow
 2 resize_any
@@ -766,7 +766,7 @@ Reverse converter NOT installed
 
 
 RepType Name = RowColumnType
-Allowable values and value names: 
+Allowable values and value names:
 0 work_area
 1 menu_bar
 2 menu_pulldown
@@ -776,42 +776,42 @@ Reverse converter NOT installed
 
 
 RepType Name = ScrollBarDisplayPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 static
 1 as_needed
 Reverse converter NOT installed
 
 
 RepType Name = ScrollBarIncrementDownOrRightActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 down
 1 right
 Reverse converter installed
 
 
 RepType Name = ScrollBarIncrementUpOrLeftActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 up
 1 left
 Reverse converter installed
 
 
 RepType Name = ScrollBarPageDownOrRightActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 down
 1 right
 Reverse converter installed
 
 
 RepType Name = ScrollBarPageUpOrLeftActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 up
 1 left
 Reverse converter installed
 
 
 RepType Name = ScrollBarPlacement
-Allowable values and value names: 
+Allowable values and value names:
 0 bottom_right
 1 top_right
 2 bottom_left
@@ -820,7 +820,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ScrolledWindowChildType
-Allowable values and value names: 
+Allowable values and value names:
 0 work_area
 1 menu_bar
 2 hor_scrollbar
@@ -837,14 +837,14 @@ Reverse converter NOT installed
 
 
 RepType Name = ScrollingPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 automatic
 1 application_defined
 Reverse converter NOT installed
 
 
 RepType Name = SelectionBoxUpOrDownActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 previous
 1 next
 2 first
@@ -853,14 +853,14 @@ Reverse converter installed
 
 
 RepType Name = SelectionMode
-Allowable values and value names: 
+Allowable values and value names:
 0 normal_mode
 1 add_mode
 Reverse converter NOT installed
 
 
 RepType Name = SelectionPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 single_select
 1 multiple_select
 2 extended_select
@@ -869,7 +869,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SelectionTechnique
-Allowable values and value names: 
+Allowable values and value names:
 0 marquee
 1 marquee_extend_start
 2 marquee_extend_both
@@ -879,7 +879,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SelectionType
-Allowable values and value names: 
+Allowable values and value names:
 0 dialog_work_area
 1 dialog_prompt
 2 dialog_selection
@@ -889,7 +889,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SeparatorType
-Allowable values and value names: 
+Allowable values and value names:
 0 no_line
 1 single_line
 2 double_line
@@ -903,7 +903,7 @@ Reverse converter NOT installed
 
 
 RepType Name = Set
-Allowable values and value names: 
+Allowable values and value names:
 0 unset
 1 set
 2 indeterminate
@@ -919,7 +919,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ShadowType
-Allowable values and value names: 
+Allowable values and value names:
 5 shadow_etched_in
 6 shadow_etched_out
 7 shadow_in
@@ -928,7 +928,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ShowArrows
-Allowable values and value names: 
+Allowable values and value names:
 1 each_side
 1 true
 1 yes
@@ -945,7 +945,7 @@ Reverse converter NOT installed
 
 
 RepType Name = ShowValue
-Allowable values and value names: 
+Allowable values and value names:
 1 near_slider
 1 true
 1 yes
@@ -961,7 +961,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SliderMark
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 etched_line
 2 thumb_mark
@@ -970,7 +970,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SliderVisual
-Allowable values and value names: 
+Allowable values and value names:
 0 background
 1 foreground
 2 trough_color
@@ -979,14 +979,14 @@ Reverse converter NOT installed
 
 
 RepType Name = SlidingMode
-Allowable values and value names: 
+Allowable values and value names:
 0 slider
 1 thermometer
 Reverse converter NOT installed
 
 
 RepType Name = SpatialIncludeModel
-Allowable values and value names: 
+Allowable values and value names:
 0 append
 1 closest
 2 first_fit
@@ -994,7 +994,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SpatialResizeModel
-Allowable values and value names: 
+Allowable values and value names:
 0 grow_minor
 1 grow_major
 2 grow_balanced
@@ -1002,7 +1002,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SpatialSnapModel
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 snap_to_grid
 2 center
@@ -1010,7 +1010,7 @@ Reverse converter NOT installed
 
 
 RepType Name = SpatialStyle
-Allowable values and value names: 
+Allowable values and value names:
 0 none
 1 grid
 2 cells
@@ -1018,68 +1018,68 @@ Reverse converter NOT installed
 
 
 RepType Name = SpinBoxChildType
-Allowable values and value names: 
+Allowable values and value names:
 2 string
 3 numeric
 Reverse converter NOT installed
 
 
 RepType Name = StringDirection
-Allowable values and value names: 
+Allowable values and value names:
 0 string_direction_l_to_r
 1 string_direction_r_to_l
 Reverse converter NOT installed
 
 
 RepType Name = TearOffModel
-Allowable values and value names: 
+Allowable values and value names:
 0 tear_off_enabled
 1 tear_off_disabled
 Reverse converter NOT installed
 
 
 RepType Name = TextExtendMovementActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 extend
 Reverse converter installed
 
 
 RepType Name = TextFieldDirectionActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 right
 1 left
 Reverse converter installed
 
 
 RepType Name = TextFieldExtendMovementActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 extend
 Reverse converter NOT installed
 
 
 RepType Name = TextHorizontalDirectionActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 right
 1 left
 Reverse converter installed
 
 
 RepType Name = TextVerticalDirectionActionParam
-Allowable values and value names: 
+Allowable values and value names:
 0 up
 1 down
 Reverse converter installed
 
 
 RepType Name = ToggleMode
-Allowable values and value names: 
+Allowable values and value names:
 0 toggle_boolean
 1 toggle_indeterminate
 Reverse converter NOT installed
 
 
 RepType Name = UnitType
-Allowable values and value names: 
+Allowable values and value names:
 0 pixels
 1 100th_millimeters
 2 1000th_inches
@@ -1094,14 +1094,14 @@ Reverse converter NOT installed
 
 
 RepType Name = UnpostBehavior
-Allowable values and value names: 
+Allowable values and value names:
 0 unpost
 1 unpost_and_replay
 Reverse converter NOT installed
 
 
 RepType Name = VerticalAlignment
-Allowable values and value names: 
+Allowable values and value names:
 0 alignment_baseline_top
 1 alignment_center
 2 alignment_baseline_bottom
@@ -1111,28 +1111,28 @@ Reverse converter NOT installed
 
 
 RepType Name = ViewType
-Allowable values and value names: 
+Allowable values and value names:
 0 large_icon
 1 small_icon
 Reverse converter NOT installed
 
 
 RepType Name = VisualEmphasis
-Allowable values and value names: 
+Allowable values and value names:
 0 selected
 1 not_selected
 Reverse converter NOT installed
 
 
 RepType Name = VisualPolicy
-Allowable values and value names: 
+Allowable values and value names:
 0 variable
 1 constant
 Reverse converter NOT installed
 
 
 RepType Name = WhichButton
-Allowable values and value names: 
+Allowable values and value names:
 1 button1
 1 1
 2 button2
@@ -1147,7 +1147,7 @@ Reverse converter NOT installed
 
 
 RepType Name = XmRNewRepType1
-Allowable values and value names: 
+Allowable values and value names:
 0 rep_type1_fe
 1 rep_type1_fi
 2 rep_type1_fa
@@ -1156,7 +1156,7 @@ Reverse converter installed
 
 
 RepType Name = XmRNewRepType2
-Allowable values and value names: 
+Allowable values and value names:
 0 rep_type2_fe
 1 rep_type2_fi
 2 rep_type2_fa
@@ -1166,7 +1166,7 @@ Reverse converter installed
 
 
 RepType Name = XmRNewRepType3
-Allowable values and value names: 
+Allowable values and value names:
 2 rep_type3_two
 4 rep_type3_four
 6 rep_type3_six
@@ -1175,7 +1175,7 @@ Reverse converter installed
 
 
 RepType Name = XmRNewRepType4
-Allowable values and value names: 
+Allowable values and value names:
 69 rep_type4_69
 42 rep_type4_42
 105 rep_type4_105
@@ -1184,7 +1184,7 @@ Allowable values and value names:
 Reverse converter installed
 
 
-TRACE:(2) LocatePointer bulletin  
+TRACE:(2) LocatePointer bulletin
 TRACE:(3) Exit
 AUTOWARNING** : selection value is NULL!
 Exiting Test...Please Standby...

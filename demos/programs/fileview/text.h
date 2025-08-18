@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: text.h /main/6 1995/07/14 10:04:01 drk $ */
 
 #include <stdio.h>
@@ -78,7 +78,7 @@ static void SearchSubstring(Widget button, ViewPtr this,
 
 static void NoInsert(Widget text, ViewPtr this, XmTextVerifyPtr verify);
 
-static void ChangeCurrentPane(Widget text, ViewPtr this, 
+static void ChangeCurrentPane(Widget text, ViewPtr this,
 			      XmAnyCallbackStruct verify);
 
 

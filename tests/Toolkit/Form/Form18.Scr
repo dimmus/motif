@@ -19,30 +19,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
 # Every panel in this test starts with raising the shell, as the form dialogs
-# are obscured by the instruction panels. 
+# are obscured by the instruction panels.
 
 
-#  Dialog shells containing a form with four children should be created on your#  screen. 
-#  Position the dialog shells such that they are all visible to you. 
-#  The following tests will test XtUnmapWidget and XtMapWidget on the children #  of the forms. 
+#  Dialog shells containing a form with four children should be created on your#  screen.
+#  Position the dialog shells such that they are all visible to you.
+#  The following tests will test XtUnmapWidget and XtMapWidget on the children #  of the forms.
 
 
-
-WindowRaise Shell1
-CompareVisual Case_0
-CompareVisual Case_1
-CompareVisual Case_2
-CompareVisual Case_3
-CompareVisual Case_4
-CompareVisual Case_5
-Continue
-
-#  All of the A children should now be invisible. 
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -53,7 +42,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the A children should now be visible again. 
+#  All of the A children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -64,7 +53,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the B children should now be invisible. 
+#  All of the A children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -75,7 +64,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the B children should now be visible again. 
+#  All of the B children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -86,7 +75,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the C children should now be invisible. 
+#  All of the B children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -97,7 +86,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the C children should now be visible again. 
+#  All of the C children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -108,7 +97,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the D children should now be invisible. 
+#  All of the C children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -119,7 +108,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the D children should now be visible again. 
+#  All of the D children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -130,16 +119,27 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the dialog shells should now be destroyed. 
+#  All of the D children should now be visible again.
+
+WindowRaise Shell1
+CompareVisual Case_0
+CompareVisual Case_1
+CompareVisual Case_2
+CompareVisual Case_3
+CompareVisual Case_4
+CompareVisual Case_5
+Continue
+
+#  All of the dialog shells should now be destroyed.
 
 CompareVisual Shell1
 Continue
 
-#  Dialog shells containing a form with four children should be created 
-#  on your screen. 
-#  Position the dialog shells such that they are all visible to you. 
-#  The following tests will test XtUnmanageChild and XtManageChild on 
-#  the children of the forms. 
+#  Dialog shells containing a form with four children should be created
+#  on your screen.
+#  Position the dialog shells such that they are all visible to you.
+#  The following tests will test XtUnmanageChild and XtManageChild on
+#  the children of the forms.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -150,7 +150,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-# All of the A children should now be invisible. 
+# All of the A children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -161,7 +161,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the A children should now be visible again. 
+#  All of the A children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -172,7 +172,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the B children should now be invisible. 
+#  All of the B children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -183,7 +183,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the B children should now be visible again. 
+#  All of the B children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -194,7 +194,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the C children should now be invisible. 
+#  All of the C children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -205,7 +205,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#  All of the C children should now be visible again. 
+#  All of the C children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -216,7 +216,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the D children should now be invisible. 
+#) All of the D children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -227,7 +227,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the D children should now be visible again. 
+#) All of the D children should now be visible again.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -238,16 +238,16 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the dialog shells should now be destroyed. 
+#) All of the dialog shells should now be destroyed.
 
 CompareVisual Shell1
 Continue
 
-#) Dialog shells containing a form with four children should be created 
-#   on your screen. 
-#) Position the dialog shells such that they are all visible to you. 
-#) The following test will test XtDestroyWidget on the A children of the 
-#   forms. 
+#) Dialog shells containing a form with four children should be created
+#   on your screen.
+#) Position the dialog shells such that they are all visible to you.
+#) The following test will test XtDestroyWidget on the A children of the
+#   forms.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -258,7 +258,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the A children should now be invisible. 
+#) All of the A children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -269,83 +269,83 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the dialog shells should now be destroyed. 
-
-CompareVisual Shell1
-Continue
-
-
-#) Dialog shells containing a form with four children should be created 
-#  on your screen. 
-#) Position the dialog shells such that they are all visible to you. 
-#) The following test will test XtDestroyWidget on the B children of the 
-#   forms. 
-
-WindowRaise Shell1
-CompareVisual Case_0
-CompareVisual Case_1
-CompareVisual Case_2
-CompareVisual Case_3
-CompareVisual Case_4
-CompareVisual Case_5
-Continue
-
-#) All of the B children should now be invisible. 
-
-WindowRaise Shell1
-CompareVisual Case_0
-CompareVisual Case_1
-CompareVisual Case_2
-CompareVisual Case_3
-CompareVisual Case_4
-CompareVisual Case_5
-Continue
-
-#) All of the dialog shells should now be destroyed. 
-
-
-CompareVisual Shell1
-Continue
-
-#) Dialog shells containing a form with four children should be created 
-#  on your screen. 
-#) Position the dialog shells such that they are all visible to you. 
-#) The following test will test XtDestroyWidget on the C children of the 
-#  forms. 
-
-WindowRaise Shell1
-CompareVisual Case_0
-CompareVisual Case_1
-CompareVisual Case_2
-CompareVisual Case_3
-CompareVisual Case_4
-CompareVisual Case_5
-Continue
-
-
-#) All of the C children should now be invisible. 
-
-WindowRaise Shell1
-CompareVisual Case_0
-CompareVisual Case_1
-CompareVisual Case_2
-CompareVisual Case_3
-CompareVisual Case_4
-CompareVisual Case_5
-Continue
-
-
-
-#) All of the dialog shells should now be destroyed. 
-
+#) All of the dialog shells should now be destroyed.
 
 CompareVisual Shell1
 Continue
 
 
-#) Dialog shells containing a form with four children should be created on 
-#  our screen. 
-#) Position the dialog shells such that they are all visible to you. 
+#) Dialog shells containing a form with four children should be created
+#  on your screen.
+#) Position the dialog shells such that they are all visible to you.
+#) The following test will test XtDestroyWidget on the B children of the
+#   forms.
+
+WindowRaise Shell1
+CompareVisual Case_0
+CompareVisual Case_1
+CompareVisual Case_2
+CompareVisual Case_3
+CompareVisual Case_4
+CompareVisual Case_5
+Continue
+
+#) All of the B children should now be invisible.
+
+WindowRaise Shell1
+CompareVisual Case_0
+CompareVisual Case_1
+CompareVisual Case_2
+CompareVisual Case_3
+CompareVisual Case_4
+CompareVisual Case_5
+Continue
+
+#) All of the dialog shells should now be destroyed.
+
+
+CompareVisual Shell1
+Continue
+
+#) Dialog shells containing a form with four children should be created
+#  on your screen.
+#) Position the dialog shells such that they are all visible to you.
+#) The following test will test XtDestroyWidget on the C children of the
+#  forms.
+
+WindowRaise Shell1
+CompareVisual Case_0
+CompareVisual Case_1
+CompareVisual Case_2
+CompareVisual Case_3
+CompareVisual Case_4
+CompareVisual Case_5
+Continue
+
+
+#) All of the C children should now be invisible.
+
+WindowRaise Shell1
+CompareVisual Case_0
+CompareVisual Case_1
+CompareVisual Case_2
+CompareVisual Case_3
+CompareVisual Case_4
+CompareVisual Case_5
+Continue
+
+
+
+#) All of the dialog shells should now be destroyed.
+
+
+CompareVisual Shell1
+Continue
+
+
+#) Dialog shells containing a form with four children should be created on
+#  our screen.
+#) Position the dialog shells such that they are all visible to you.
 #) The following test will test XtDestroyWidget on the D children of the forms.
 
 WindowRaise Shell1
@@ -357,7 +357,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the D children should now be invisible. 
+#) All of the D children should now be invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -368,13 +368,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the dialog shells should now be destroyed. 
+#) All of the dialog shells should now be destroyed.
 
 CompareVisual Shell1
 Exit
-
-
-
-
-
-

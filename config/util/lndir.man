@@ -20,7 +20,7 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-.\" 
+.\"
 .TH LNDIR 1 "Release 6.4" "X Version 11"
 .SH NAME
 lndir \- create a shadow directory of symbolic links to another directory tree
@@ -38,13 +38,13 @@ lndir \- create a shadow directory of symbolic links to another directory tree
 .SH DESCRIPTION
 The
 .I lndir
-program makes a shadow copy 
-.I todir 
+program makes a shadow copy
+.I todir
 of a directory tree
-.I fromdir, 
+.I fromdir,
 except that the shadow is not
 populated with real files but instead with symbolic links pointing at
-the real files in the 
+the real files in the
 .I fromdir
 directory tree.  This is usually useful for maintaining source code for
 different machine architectures.  You create a shadow directory
@@ -54,7 +54,7 @@ the object files will be in the shadow directory, while the
 source files in the shadow directory are just symlinks to the real
 files.
 .PP
-This scheme has the advantage that if you update the source, you need not 
+This scheme has the advantage that if you update the source, you need not
 propagate the change to the other architectures by hand, since all
 source in all shadow directories are symlinks to the real thing: just cd
 to the shadow directory and recompile away.
@@ -66,7 +66,7 @@ argument is optional and defaults to the current directory.  The
 argument may be relative (e.g., ../src) and is relative to
 .I todir
 (not the current directory).
-.PP 
+.PP
 .\" CVS.adm is used by the Concurrent Versions System.
 Note that RCS, SCCS, CVS and CVS.adm directories are not shadowed.
 .PP

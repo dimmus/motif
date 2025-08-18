@@ -194,8 +194,8 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 		    entry->sensitive = TRUE;
 		n = 0;
 		XtSetArg (wargs[n], XmNlabelString, xmstr);n++;
-		XtSetArg (wargs[n], XmNalignment, XmALIGNMENT_CENTER); n++; 
-		XtSetArg (wargs[n], XmNsensitive, entry->sensitive); n++; 
+		XtSetArg (wargs[n], XmNalignment, XmALIGNMENT_CENTER); n++;
+		XtSetArg (wargs[n], XmNsensitive, entry->sensitive); n++;
 		/* In the menu bar we must create a cascade button instead of
 		 * a push button.  (Note that since menu pixmaps are only in
 		 * the widget, we create a widget rather than a gadget
@@ -203,13 +203,13 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 		 */
 		w = XtCreateManagedWidget(entry->label,
 					  isMenuBar?
-				              xmCascadeButtonWidgetClass: 
+				              xmCascadeButtonWidgetClass:
 					      xmPushButtonGadgetClass,
 					  parent, wargs, n);
 		XtAddCallback(w, XmNactivateCallback, ExecCallback,
 			      (caddr_t)entry);
 		break;
-		
+
 	    case ME_SEPARATOR:
 		/* if we removed the last entry and the last non
 		 * removed entry was a separator, a title, or the start,
@@ -228,11 +228,11 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 		    XtManageChild(w);
 		}
 		break;
-		
+
 	    case ME_TITLE:
 		n = 0;
 		XtSetArg (wargs[n], XmNlabelString, xmstr);n++;
-		XtSetArg (wargs[n], XmNalignment, XmALIGNMENT_CENTER); n++; 
+		XtSetArg (wargs[n], XmNalignment, XmALIGNMENT_CENTER); n++;
 		w = XmCreateLabelGadget(parent, entry->label,
 					NULL, 0); n++;
 		XtManageChild(w);
@@ -241,21 +241,21 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 		w = XmCreateSeparatorGadget (parent, "separator",
 					     wargs, n);
 		XtManageChild(w);
-		
+
 	    case ME_LABEL:
 		n = 0;
 		XtSetArg (wargs[n], XmNlabelString, xmstr);n++;
-		XtSetArg (wargs[n], XmNalignment, XmALIGNMENT_CENTER); n++; 
+		XtSetArg (wargs[n], XmNalignment, XmALIGNMENT_CENTER); n++;
 		w = XmCreateLabelGadget(parent, entry->label,
 					NULL, 0);
 		XtManageChild(w);
 		break;
-		
+
 	    case ME_MENU:
 		{
 		    struct menu *submenu;
 		    Widget pane;
-		    
+
 		    submenu = FindMenu(entry->menuName, FALSE);
 		    if (submenu)
 		    {
@@ -264,14 +264,14 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 			{
 			    XtSetArg (wargs[n], XmNdepth,
 				      menuVisualDepth); n++;
-			    XtSetArg (wargs[n], XmNcolormap, 
+			    XtSetArg (wargs[n], XmNcolormap,
 				      menuVisualColormap); n++;
 			    XtSetArg (wargs[n], XmNvisual, menuVisual); n++;
 			}
 			pane = XmCreatePulldownMenu(parent, entry->menuName,
 						    wargs, n);
 			wm_windows[0] = XtWindow(pane);
-			
+
 			n = 0;
 			XtSetArg(wargs[n], XmNsubMenuId, pane);n++;
 			XtSetArg(wargs[n], XmNlabelString, xmstr);n++;
@@ -283,7 +283,7 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 			w = XmCreateCascadeButton(parent, submenu->name,
 						  wargs, n);
 			XtManageChild(w);
-			
+
 			buildMenu (submenu, pane, FALSE);
 		    }
 		    else
@@ -294,7 +294,7 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 		    }
 		}
 		break;
-		
+
 	    default:
 		XtError ("Unknown menu item type");
 	    }
@@ -304,7 +304,7 @@ buildMenu(struct menu *menu, Widget parent, Boolean isMenuBar)
 	}
     }
 }
-	    
+
 /* build the top level menu.  The flag isMenuBar indicates whether it
  * is in a menu bar
  */
@@ -316,7 +316,7 @@ BuildTopMenu(Widget parent, Boolean isMenuBar)
     if ((topMenu = FindMenu(TOP_MENU_NAME, FALSE)) == NULL)
     {
 	char buf[100];
-	sprintf(buf, 
+	sprintf(buf,
 		"Menu specification: menu '%s' referenced but not found\n",
 		TOP_MENU_NAME);
 	XtError(buf);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TearOffB.c /main/12 1996/03/06 17:09:22 pascale $"
@@ -49,27 +49,27 @@ static char rcsid[] = "$XConsortium: TearOffB.c /main/12 1996/03/06 17:09:22 pas
 
 /********    Static Function Declarations    ********/
 
-static void HeightDefault( 
+static void HeightDefault(
                         Widget widget,
                         int offset,
                         XrmValue *value) ;
 static void GetSeparatorGC(
                         XmTearOffButtonWidget tob) ;
 
-static void Initialize( 
+static void Initialize(
                         Widget rw,
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args) ;
-static Boolean SetValues( 
+static Boolean SetValues(
                         Widget cw,
                         Widget rw,
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args) ;
-static void Destroy( 
+static void Destroy(
                         Widget w) ;
-static void Redisplay( 
+static void Redisplay(
                         Widget wid,
                         XEvent *event,
                         Region region) ;
@@ -89,7 +89,7 @@ static void KActivate(
 			String *param,
 			Cardinal *num_param) ;
 static void ClassInitialize( void );
-static void ClassPartInitialize( 
+static void ClassPartInitialize(
                         WidgetClass wc) ;
 
 /********    End Static Function Declarations    ********/
@@ -130,7 +130,7 @@ static XtResource resources[] =
    },
 
 	/* The magic value will signal recomputeSize setting */
- 
+
    {
      "pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
      XtOffsetOf(XmTearOffButtonRec, tear_off_button.set_recompute_size),
@@ -138,7 +138,7 @@ static XtResource resources[] =
    },
    {
      XmNheight, XmCDimension, XmRVerticalDimension, sizeof(Dimension),
-     XtOffsetOf( struct _WidgetRec, core.height), XmRCallProc, 
+     XtOffsetOf( struct _WidgetRec, core.height), XmRCallProc,
      (XtPointer) HeightDefault
    },
 
@@ -178,10 +178,10 @@ static XtActionsRec actionsList[] =
 };
 
 
-externaldef(xmtearoffbuttonclassrec)  
+externaldef(xmtearoffbuttonclassrec)
 	XmTearOffButtonClassRec xmTearOffButtonClassRec = {
   {
-/* core_class record */	
+/* core_class record */
     /* superclass	  */	(WidgetClass) &xmPushButtonClassRec,
     /* class_name	  */	"XmTearOffButton",
     /* widget_size	  */	sizeof(XmTearOffButtonRec),
@@ -211,7 +211,7 @@ externaldef(xmtearoffbuttonclassrec)
     /* version            */	XtVersion,
     /* callback_private   */    NULL,
     /* tm_table           */    NULL,
-    /* query_geometry     */	XtInheritQueryGeometry, 
+    /* query_geometry     */	XtInheritQueryGeometry,
     /* display_accelerator */   NULL,
     /* extension          */    NULL,
   },
@@ -228,7 +228,7 @@ externaldef(xmtearoffbuttonclassrec)
   },
 
   { /* label_class record */
- 
+
     /* setOverrideCallback	*/	XmInheritWidgetProc,
     /* menu procedures		*/	XmInheritMenuProc,
     /* menu traversal xlation	*/ 	XtInheritTranslations,
@@ -252,15 +252,15 @@ externaldef(xmtearoffbuttonwidgetclass)
 /*********************************************************************
  *
  * HeightDefault
- *    This procedure provides the dynamic default behavior for 
+ *    This procedure provides the dynamic default behavior for
  *    the height. It the height is not explicitly set by the user
- *    then, a default is given and recomputeSize will be set True in 
+ *    then, a default is given and recomputeSize will be set True in
  *    Initialize, which will have  RC probably change it to suit it needs.
  *    If this is not called, recomputeSize will be False
  *
  *********************************************************************/
 /*ARGSUSED*/
-static void 
+static void
 HeightDefault(
         Widget widget,
         int offset,		/* unused */
@@ -299,7 +299,7 @@ GetSeparatorGC(
       values.line_style = LineDoubleDash;
    }
 
-   tob->tear_off_button.separator_GC = 
+   tob->tear_off_button.separator_GC =
       XtGetGC ((Widget) tob, valueMask, &values);
 }
 
@@ -321,7 +321,7 @@ ClassInitialize( void )
  *     Set up the fast subclassing for the widget
  *
  ************************************************************************/
-static void 
+static void
 ClassPartInitialize(
         WidgetClass wc )
 {
@@ -348,7 +348,7 @@ Initialize(
    GetSeparatorGC((XmTearOffButtonWidget)nw);
 
    _XmProcessLock();
-   trans = (XtTranslations) ((XmTearOffButtonClassRec *) 
+   trans = (XtTranslations) ((XmTearOffButtonClassRec *)
 		XtClass(nw))->tearoffbutton_class.translations;
    _XmProcessUnlock();
    XtOverrideTranslations(nw, trans);
@@ -362,9 +362,9 @@ Initialize(
    /* force the orientation */
    new_w->tear_off_button.orientation = XmHORIZONTAL ;
 
-   /* if set_recompute_size is True, this widget didn't have a 
+   /* if set_recompute_size is True, this widget didn't have a
       specific height, so set its recompute_size to True, so that
-      RCLayout can override it. if set_recompute_size is False, a 
+      RCLayout can override it. if set_recompute_size is False, a
       specific height was given, so force recompute_size to False */
    if (new_w->tear_off_button.set_recompute_size) {
        new_w->label.recompute_size = True;
@@ -383,7 +383,7 @@ Initialize(
  ************************************************************************/
 
 /*ARGSUSED*/
-static void 
+static void
 Redisplay(
         Widget wid,
         XEvent *event,
@@ -394,7 +394,7 @@ Redisplay(
     /*
      * Where do we check for dependency on MenyType ??
      */
-    if (XtIsRealized((Widget)tob)) { 
+    if (XtIsRealized((Widget)tob)) {
 	XtExposeProc expose;
 
 	XmeDrawSeparator(XtDisplay(tob), XtWindow(tob),
@@ -403,9 +403,9 @@ Redisplay(
 			 tob->tear_off_button.separator_GC,
 			 tob->primitive.highlight_thickness,
 			 tob->primitive.highlight_thickness,
-			 tob->core.width - 
+			 tob->core.width -
 			 2*tob->primitive.highlight_thickness,
-			 tob->core.height - 
+			 tob->core.height -
 			 2*tob->primitive.highlight_thickness,
 			 tob->primitive.shadow_thickness,
 			 tob->tear_off_button.margin,
@@ -431,7 +431,7 @@ static void
 Destroy(
         Widget wid )
 {
-   XtReleaseGC (wid, 
+   XtReleaseGC (wid,
       ((XmTearOffButtonWidget) wid)->tear_off_button.separator_GC);
 }
 
@@ -454,7 +454,7 @@ SetValues(
    Boolean flag = FALSE;
 
    if(!XmRepTypeValidValue(XmRID_SEPARATOR_TYPE,
-                           new_w->tear_off_button.separator_type, (Widget) new_w)) 
+                           new_w->tear_off_button.separator_type, (Widget) new_w))
    {
       new_w -> tear_off_button.separator_type = XmSHADOW_ETCHED_OUT_DASH;
    }
@@ -514,7 +514,7 @@ BActivate( Widget wid,
    Widget parent = XtParent(wid);
    XmMenuSystemTrait menuSTrait;
 
-   menuSTrait = (XmMenuSystemTrait) 
+   menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
 
    if (menuSTrait -> verifyButton(XtParent(wid), event))
@@ -540,7 +540,7 @@ KActivate( Widget wid,
    Position x, y;
 
    /* stick the tear off at the same location as the submenu */
-   XtTranslateCoords(parent, XtX(parent), XtY(parent), 
+   XtTranslateCoords(parent, XtX(parent), XtY(parent),
       &x, &y);
 
    xb_ev = event->xbutton;

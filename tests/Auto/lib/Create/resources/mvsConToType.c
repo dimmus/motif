@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsConToType.c /main/8 1995/07/14 11:19:33 drk $"
@@ -60,22 +60,22 @@ int type;
       case T_XtTranslations:
         return_value = (MvsArgVal)(*((XtTranslations *)&value));
         break;
-      case T_Boolean:       
+      case T_Boolean:
         return_value = (MvsArgVal)(*((Boolean *)&value));
         break;
-      case T_Pixel:         
+      case T_Pixel:
         return_value = (MvsArgVal)(*((Pixel *)&value));
         break;
       case T_XtProc:        /* This type needs fixing!!! AES */
         return_value = (MvsArgVal)(*((caddr_t *)&value));
         break;
-      case T_Pixmap:        
+      case T_Pixmap:
         return_value = (MvsArgVal)(*((Pixmap *)&value));
         break;
-      case T_Dimension:     
+      case T_Dimension:
         return_value = (MvsArgVal)(*((Dimension *)&value));
         break;
-      case T_Colormap:      
+      case T_Colormap:
         return_value = (MvsArgVal)(*((Colormap *)&value));
         break;
       case T_XtCallbackList:
@@ -84,49 +84,49 @@ int type;
       case T_XtEnum:
         return_value = (MvsArgVal)(*((XtEnum *)&value));
         break;
-      case T_Pointer:        
+      case T_Pointer:
         return_value = (MvsArgVal)(*((Pointer *)&value));
         break;
-      case T_Position:      
+      case T_Position:
         return_value = (MvsArgVal)(*((Position *)&value));
         break;
-      case T_Integer:     
+      case T_Integer:
         return_value = (MvsArgVal)(*((Integer *)&value));
         break;
-      case T_caddr_t:       
+      case T_caddr_t:
         return_value = (MvsArgVal)(*((caddr_t *)&value));
         break;
-      case T_unsigned_char:       
+      case T_unsigned_char:
         return_value = (MvsArgVal)(*((unsigned char *)&value));
         break;
-      case T_short:       
+      case T_short:
         return_value = (MvsArgVal)(*((short *)&value));
         break;
       case T_String:
-        return_value = (MvsArgVal)(*((String *)&value));       
+        return_value = (MvsArgVal)(*((String *)&value));
         break;
-      case T_Widget_ref:       
-        return_value = (MvsArgVal)(*((Widget *)&value));       
+      case T_Widget_ref:
+        return_value = (MvsArgVal)(*((Widget *)&value));
         break;
-      case T_XmFontList:       
-        return_value = (MvsArgVal)(*((XmFontList *)&value));       
+      case T_XmFontList:
+        return_value = (MvsArgVal)(*((XmFontList *)&value));
         break;
-      case T_XmString:       
+      case T_XmString:
         return_value = (MvsArgVal)(*((XmString *)&value));
         break;
-      case T_XmStringTable:       
+      case T_XmStringTable:
         return_value = (MvsArgVal)(*((XmStringTable *)&value));
         break;
-      case T_char:       
+      case T_char:
         return_value = (MvsArgVal)(*((char *)&value));
         break;
-      case T_XmNavigationType:       
+      case T_XmNavigationType:
         return_value = (MvsArgVal)(*((XmNavigationType *)&value));
         break;
-      case T_XmStringDirection:       
+      case T_XmStringDirection:
         return_value = (MvsArgVal)(*((XmStringDirection *)&value));
         break;
-      case T_KeySym:       
+      case T_KeySym:
         return_value = (MvsArgVal)(*((KeySym *)&value));
         break;
       case T_WidgetClass_ref:
@@ -135,7 +135,7 @@ int type;
       case T_Cardinal:
         return_value = (MvsArgVal)(*((Cardinal *)&value));
         break;
-      case T_WidgetList:      
+      case T_WidgetList:
         return_value = (MvsArgVal)(*((WidgetList *)&value));
         break;
       case T_XmFunction:        /* This type needs fixing!!! AES */
@@ -144,7 +144,7 @@ int type;
       case T_XmTextSource:        /* This type needs fixing!!! AES */
         return_value = (MvsArgVal)(*((WidgetClass *)&value));
         break;
-      case T_XmTextPosition:        
+      case T_XmTextPosition:
         return_value = (MvsArgVal)(*((XmTextPosition *)&value));
         break;
       case T_XtAccelerators:

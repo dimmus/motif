@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmPButtonP_h
 #define _XmPButtonP_h
 
@@ -66,12 +66,12 @@ typedef struct _XmPushButtonPart
    Pixmap	    unarm_pixmap;
    GC               fill_gc;
    GC               background_gc;
-   XtIntervalId     timer;	
+   XtIntervalId     timer;
    unsigned char    multiClick;		/* KEEP/DISCARD resource */
    int		    click_count;
    Time		    armTimeStamp;
    Boolean      compatible;   /* if false it is Motif 1.1 else Motif 1.0  */
-   Dimension    default_button_shadow_thickness;  
+   Dimension    default_button_shadow_thickness;
 		/* New resource - always add it
                     to widgets dimension. */
 

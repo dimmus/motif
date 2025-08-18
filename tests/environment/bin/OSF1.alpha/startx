@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# 
-# This is just a sample implementation of a slightly less primitive 
+#
+# This is just a sample implementation of a slightly less primitive
 # interface than xinit.  It looks for user .xinitrc and .xserverrc
 # files, then system xinitrc and xserverrc files, else lets xinit choose
 # its default.  The system xinitrc should probably do things like check
@@ -9,7 +9,7 @@
 # and pop a clock and serveral xterms.
 #
 # Site administrators are STRONGLY urged to write nicer versions.
-# 
+#
 
 userclientrc=$HOME/.xinitrc
 userserverrc=$HOME/.xserverrc

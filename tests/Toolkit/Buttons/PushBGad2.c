@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PushBGad2.c /main/8 1995/07/13 17:29:25 drk $"
@@ -37,24 +37,24 @@ static char rcsid[] = "$XConsortium: PushBGad2.c /main/8 1995/07/13 17:29:25 drk
 void activate_msg(w, client_data, call_data)
 Widget w;
 XtPointer client_data;
-XtPointer call_data; 
+XtPointer call_data;
 {
   int n;
   short show_as_default;
   Arg args[20];
 
   n=0;
-  XtSetArg(args[n], XmNshowAsDefault, &show_as_default); n++; 
+  XtSetArg(args[n], XmNshowAsDefault, &show_as_default); n++;
   XtGetValues(w, args, n);
 
   n=0;
   if (show_as_default == 5)
     {
-      XtSetArg(args[n], XmNshowAsDefault,10); n++; 
+      XtSetArg(args[n], XmNshowAsDefault,10); n++;
     }
   else
     {
-      XtSetArg(args[n], XmNshowAsDefault, 5); n++; 
+      XtSetArg(args[n], XmNshowAsDefault, 5); n++;
     }
   XtSetValues(w, args, n);
 }
@@ -79,26 +79,26 @@ char **argv;
     };
 
   CommonTestInit(argc, argv);
-    
+
   n=0;
   XtSetArg(args[n], XmNwidth, 200); n++;
   XtSetArg(args[n], XmNheight,200); n++;
   bboard = XmCreateFrame(Shell1,"bboard", args, n);
 
   n=0;
-  XtSetArg(args[n], XmNwidth,100); n++; 
-  XtSetArg(args[n], XmNheight,100); n++; 
+  XtSetArg(args[n], XmNwidth,100); n++;
+  XtSetArg(args[n], XmNheight,100); n++;
   string = XmStringLtoRCreate("Push Here", XmSTRING_DEFAULT_CHARSET);
-  XtSetArg(args[n], XmNactivateCallback, activateCBs); n++; 
-  XtSetArg(args[n], XmNlabelType, XmSTRING); n++; 
-  XtSetArg(args[n], XmNlabelString, string); n++; 
-  pushbutton = XmCreatePushButtonGadget(bboard,"pushbutton" ,args,n); 
+  XtSetArg(args[n], XmNactivateCallback, activateCBs); n++;
+  XtSetArg(args[n], XmNlabelType, XmSTRING); n++;
+  XtSetArg(args[n], XmNlabelString, string); n++;
+  pushbutton = XmCreatePushButtonGadget(bboard,"pushbutton" ,args,n);
 
   XtManageChild (bboard);
   XtManageChild (pushbutton);
 
   XtRealizeWidget (Shell1);
-   
+
   CommonPause(); /* now change background color of manager */
 
   n = 0;

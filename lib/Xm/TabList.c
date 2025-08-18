@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #include <Xm/Xm.h>
@@ -180,7 +180,7 @@ XmTabbedStackListFree(tab_list)
         for( i = 0; i < tab_list->used; ++i )
         {
             if( tab_list->tabs[i].value_mode == XmTAB_VALUE_SHARE ) continue;
-            
+
             XiXmStringFree(tab_list->tabs[i].label_string);
         }
     }
@@ -230,7 +230,7 @@ XmTabbedStackListRemove(tab_list, position)
     /*
      * Now deallocate the data associated with this tab, if needed.
      */
-    if( to->value_mode == XmTAB_VALUE_COPY ) 
+    if( to->value_mode == XmTAB_VALUE_COPY )
     {
         XmStringFree(to->label_string);
     }
@@ -288,7 +288,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 
     /*
      * Now lets add our new tab to the list in the correct position.
-     * If the list is not large enough to hold our new tab we will 
+     * If the list is not large enough to hold our new tab we will
      * grow the list.
      */
     if( tab_list->allocated == tab_list->used )
@@ -357,7 +357,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 	    newTab->label_string = attributes->label_string;
 	}
     }
-    
+
     if( mask & XmTAB_STRING_DIRECTION )
     {
 	newTab->string_direction = attributes->string_direction;
@@ -392,7 +392,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
     {
 	newTab->foreground = attributes->foreground;
     }
-    
+
     if( mask & XmTAB_LABEL_ALIGNMENT )
     {
 	newTab->label_alignment = attributes->label_alignment;
@@ -474,7 +474,7 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
     tab = &(tab_list->tabs[position]);
 
     /*
-     * Now lets check the various flags and see what we need to 
+     * Now lets check the various flags and see what we need to
      * change.
      */
     if( mask & XmTAB_VALUE_MODE && tab->value_mode != attributes->value_mode &&
@@ -487,7 +487,7 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
 	tab->value_mode = attributes->value_mode;
 	tab->label_string = XiXmStringCopy(attributes->label_string);
     }
-    
+
     if( mask & XmTAB_LABEL_STRING )
     {
 	if( tab->value_mode == XmTAB_VALUE_COPY )
@@ -546,7 +546,7 @@ XmTabbedStackListModify(tab_list, position, mask, attributes)
  * Function:
  *	XmTabbedStackListQuery(tab_list, position, mask, attributes)
  * Description:
- *	Retrieve attributes from the specified tab. (NOTE: This may be 
+ *	Retrieve attributes from the specified tab. (NOTE: This may be
  *	a copy out, depends on value_mode, so be sure to free
  *	this when done.)
  * Input:
@@ -609,7 +609,7 @@ XmTabbedStackListQuery(tab_list, position, attributes)
  *	tab_list     : XmTabbedStackList - the XmTabbedStackList to search
  *	label_string : XmString  - the label_string to search for
  * Output:
- *	int - the index of the tab found, or XmTAB_NOT_FOUND if 
+ *	int - the index of the tab found, or XmTAB_NOT_FOUND if
  *	      a match is not found.
  */
 int
@@ -632,7 +632,7 @@ XmTabbedStackListFind(tab_list, label_string)
 	    return( i );
 	}
     }
-    
+
     return( XmTAB_NOT_FOUND );
 }
 
@@ -688,7 +688,7 @@ XmTabbedStackListSimpleInsert(tab_list, position, label_string)
     XmTabAttributeRec attributes;
 
     attributes.label_string = label_string;
-    
+
     return( XmTabbedStackListInsert(tab_list, position, XmTAB_LABEL_STRING,
 			    &attributes) );
 }
@@ -717,7 +717,7 @@ XmTabbedStackListSimpleAppend(tab_list, label_string)
     XmTabAttributeRec attributes;
 
     attributes.label_string = label_string;
-    
+
     return( XmTabbedStackListAppend(tab_list, XmTAB_LABEL_STRING,
 			    &attributes) );
 }
@@ -894,7 +894,7 @@ _XmTabbedStackListArray(tab_list)
  * Function:
  *	XmTabbedStackListCompare(XmTabbedStackList list1, XmTabbedStackList list2)
  * Description:
- *	Compares to tab lists to see if they are logically 
+ *	Compares to tab lists to see if they are logically
  *	equivalent.
  * Input:
  *	list1 : XmTabbedStackList - tab list to compare
@@ -920,7 +920,7 @@ XmTabbedStackListCompare(list1, list2)
     for( i = 0; i < list1->used; ++i )
     {
 	if( list1->tabs[i].label_pixmap != list2->tabs[i].label_pixmap ||
-	    !XiXmStringCompare(list1->tabs[i].label_string, 
+	    !XiXmStringCompare(list1->tabs[i].label_string,
 			       list2->tabs[i].label_string) ||
  	    list1->tabs[i].pixmap_placement !=
 	    list2->tabs[i].pixmap_placement )
@@ -933,7 +933,7 @@ XmTabbedStackListCompare(list1, list2)
 	    list1->tabs[i].foreground != list2->tabs[i].foreground ||
 	    list1->tabs[i].background != list2->tabs[i].background ||
 	    list1->tabs[i].sensitive != list2->tabs[i].sensitive ||
-	    list1->tabs[i].background_pixmap != 
+	    list1->tabs[i].background_pixmap !=
 	    list2->tabs[i].background_pixmap )
 	{
 	    result = XmTAB_CMP_VISUAL;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: PIProto.h /main/6 1995/07/13 20:24:06 drk $ */
 
 /*  X headers  */
@@ -34,7 +34,7 @@
 #include <Xm/MwmUtil.h>
 
 
-/* 
+/*
  * Data for summary
  */
 
@@ -68,7 +68,7 @@
 
 #endif /* P899 */
 
-struct TestInfo PIInfo[NUM_TESTS] = 
+struct TestInfo PIInfo[NUM_TESTS] =
 {
 	{"Check if ClientMessage sent for f.kill      WM_DELETE_WINDOW",
 		True,	0},

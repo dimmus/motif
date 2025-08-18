@@ -34,7 +34,7 @@ extern unsigned int num_datums;
 
 Atom type = None;
 
-void 
+void
 SetTypeCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
   char *in;
@@ -50,9 +50,9 @@ SetTypeCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 /*******************************************************************
  * FindRightButton
- * 
+ *
  * picks the correct button for the type option menu to display
- * note that the names are ATOMNAMEbutton,  so it prepends a 
+ * note that the names are ATOMNAMEbutton,  so it prepends a
  * '*' in front and 'button' after the name before looking up
  * the button.
  ******************************************************************/
@@ -71,7 +71,7 @@ FindRightButton(char* atom_string)
 
 /* Put a 32bit or larger value into the Label widget */
 
-static void 
+static void
 Display32bit(XtPointer value)
 {
   char temp[80];
@@ -79,7 +79,7 @@ Display32bit(XtPointer value)
   unsigned long data;
   int n;
   Arg args[2];
-  
+
   data = * (unsigned long *) value;
 
   sprintf(temp, "0x%lx", data);
@@ -95,13 +95,13 @@ Display32bit(XtPointer value)
 
 /*********************************************************************
  * ListSelectItem
- * 
+ *
  * this is called when the user selects an item in the list.  It takes
  * the type of the item and decides how to display it in the Label
  * widget
  *********************************************************************/
 
-void 
+void
 ListSelectItemCB(Widget w, XtPointer ignore, XtPointer call_data)
 {
   XmListCallbackStruct *listcb;
@@ -110,9 +110,9 @@ ListSelectItemCB(Widget w, XtPointer ignore, XtPointer call_data)
   Atom XA_COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False),
        XA_PIXEL = XInternAtom(XtDisplay(w), "PIXEL", False),
        XA_LOCALE_TEXT = XmeGetEncodingAtom(w),
-       XA_MOTIF_CS = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_CS = XInternAtom(XtDisplay(w),
                                  XmS_MOTIF_COMPOUND_STRING, False),
-       XA_MOTIF_RT = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_RT = XInternAtom(XtDisplay(w),
                                  XmS_MOTIF_RENDER_TABLE, False);
   Widget mem = (Widget) NULL;
   char *targetname;
@@ -156,11 +156,11 @@ ListSelectItemCB(Widget w, XtPointer ignore, XtPointer call_data)
     if (type == XA_ATOM) {
       sprintf(str, "%s", GetSafeAtom(XtDisplay(w), alist[0]));
     } else {
-      sprintf(str, "%s %s", 
+      sprintf(str, "%s %s",
               GetSafeAtom(XtDisplay(w), alist[0]),
               GetSafeAtom(XtDisplay(w), alist[1]));
     }
-    
+
     tmp = XmStringCreateLocalized(str);
 
   } else if (type == XA_INTEGER || type == XA_PIXEL) {
@@ -174,14 +174,14 @@ ListSelectItemCB(Widget w, XtPointer ignore, XtPointer call_data)
   } else if (type == XInternAtom(XtDisplay(w), "SPAN", False)) {
     unsigned long *data = (unsigned long *) datums[index].value;
     char str[80];
-    
+
     sprintf(str, "%ld %ld", data[0], data[1]);
 
     tmp = XmStringCreateLocalized(str);
 
   } else if (type == XA_STRING) {
     mem = FindRightButton("STRING");
-    
+
     tmp = XmStringCreateLocalized(datums[index].value);
 
   } else if (type == XA_COMPOUND_TEXT) {

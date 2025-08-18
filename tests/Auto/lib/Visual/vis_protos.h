@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: vis_protos.h /main/7 1995/07/14 11:51:36 drk $ */
 /***********************************************************************
   	@(#)vis_protos.h	1.3.1.1	Date:1/22/91
@@ -133,4 +133,3 @@ visGLOBAL void (*visTraceMsg)() visINIT(NULL); /* Trace message func */
 visGLOBAL void (*visWarningMsg)() visINIT(NULL); /* Warning message func */
 
 visGLOBAL void (*visErrorMsg)() visINIT(NULL); /* Error message func */
-

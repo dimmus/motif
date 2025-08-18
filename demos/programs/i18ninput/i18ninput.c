@@ -1,5 +1,5 @@
 /* $XConsortium: i18ninput.c /main/5 1995/07/15 20:45:37 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,7 +107,7 @@ int main(int argc, char **argv)
     exit(0);
   }
 
-  /* Call init functions. This creates the user interface 
+  /* Call init functions. This creates the user interface
      (placed in input.c) */
   if (dialog_init(&argc, argv, display) != 0)
     exit(1);
@@ -116,4 +116,3 @@ int main(int argc, char **argv)
 
   return 0;    /* make compiler happy */
 }
-

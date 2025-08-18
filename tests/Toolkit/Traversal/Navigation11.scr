@@ -19,17 +19,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #!) This is a test of traversal behaviors.
 #) A Bulletin Board contains a button, labeled NewerButton
 #  and another bulletin board which contains Frame/Row Columns
 #  with button and toggles, an arrowbutton, a single NewToggle
 #  and a NewButton.  The default button is set to 3btn1.
-  
+
 #)  Check out the Tabbing behavior.  Tab should move from group
-#  to group.  Note that NewButton cannot be Tabbed to.  It is 
-#  within the NewToggle group and can be reached via KDown when 
+#  to group.  Note that NewButton cannot be Tabbed to.  It is
+#  within the NewToggle group and can be reached via KDown when
 #  focus is on NewToggle.  Also note that 3btn1 gets highlighted
 #  whenever focus is *not* on a push button.
 #C)
@@ -67,7 +67,7 @@ CompareVisual rc3
 
 #rc4
 ClickKey KTab
-#Draw 
+#Draw
 ClickKey KTab
 CompareVisual btn31
 
@@ -78,4 +78,3 @@ CompareVisual rc3
 
 Continue
 Exit
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: multC.c /main/4 1995/07/13 20:30:51 drk $"
@@ -34,7 +34,7 @@ static char rcsid[] = "$XConsortium: multC.c /main/4 1995/07/13 20:30:51 drk $"
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
     int	i,
     	errors = 0;
 
@@ -60,7 +60,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -68,14 +68,14 @@ main(argc, argv)
 /*
  * Register the names of the callback routines with Mrm
  */
-    
+
     if(MrmRegisterNames(reglist,	/* list of names	*/
 			reglist_num)	/* number of names	*/
        != MrmSUCCESS)
     {
 	error_proc("Can't register names\n");
     }
-    
+
 /*
  * Get display, colormap
  */
@@ -110,7 +110,7 @@ main(argc, argv)
  * procedures associated with one reason
  */
 
-	if(MrmFetchWidget(s_MrmHierarchy,	
+	if(MrmFetchWidget(s_MrmHierarchy,
 			  part1_widget_names[i],
 			  toplevel,
 			  &part1_widget[i],
@@ -128,13 +128,13 @@ main(argc, argv)
 
 	    callbacks_called = 0;
 	    order_preserved = 0;
-	    
+
 	    XtCallCallbacks(part1_widget[i], XmNactivateCallback, NULL);
 
 	    part1_callbacks_called[i] = callbacks_called;
 	    part1_order_actual[i] = order_preserved;
 
-/*	    
+/*
  * Compare callbacks called to callbacks expected and print results
  */
 
@@ -184,7 +184,7 @@ main(argc, argv)
  * associated with each of several reasons
  */
 
-	if(MrmFetchWidget(s_MrmHierarchy,	
+	if(MrmFetchWidget(s_MrmHierarchy,
 			  part2_widget_names[i],
 			  toplevel,
 			  &part2_widget[i],
@@ -202,14 +202,14 @@ main(argc, argv)
  */
 
 	    callbacks_called = 0;
-	    
+
 	    XtCallCallbacks(part2_widget[i], XmNactivateCallback, NULL);
 	    XtCallCallbacks(part2_widget[i], XmNarmCallback, NULL);
 	    XtCallCallbacks(part2_widget[i], XmNdisarmCallback, NULL);
 
 	    part2_callbacks_called[i] = callbacks_called;
 
-/*	    
+/*
  * Compare callbacks called to callbacks expected and print results
  */
 
@@ -248,7 +248,7 @@ main(argc, argv)
  * associated with each of several reasons
  */
 
-	if(MrmFetchWidget(s_MrmHierarchy,	
+	if(MrmFetchWidget(s_MrmHierarchy,
 			  part3_widget_names[i],
 			  toplevel,
 			  &part3_widget[i],
@@ -266,14 +266,14 @@ main(argc, argv)
  */
 
 	    callbacks_called = 0;
-	    
+
 	    XtCallCallbacks(part3_widget[i], XmNactivateCallback, NULL);
 	    XtCallCallbacks(part3_widget[i], XmNarmCallback, NULL);
 	    XtCallCallbacks(part3_widget[i], XmNdisarmCallback, NULL);
 
 	    part3_callbacks_called[i] = callbacks_called;
 
-/*	    
+/*
  * Compare callbacks called to callbacks expected and print results
  */
 
@@ -312,7 +312,7 @@ main(argc, argv)
  * associated with each of several reasons
  */
 
-	if(MrmFetchWidget(s_MrmHierarchy,	
+	if(MrmFetchWidget(s_MrmHierarchy,
 			  part4_widget_names[i],
 			  toplevel,
 			  &part4_widget[i],
@@ -330,14 +330,14 @@ main(argc, argv)
  */
 
 	    callbacks_called = 0;
-	    
+
 	    XtCallCallbacks(part4_widget[i], XmNactivateCallback, NULL);
 	    XtCallCallbacks(part4_widget[i], XmNarmCallback, NULL);
 	    XtCallCallbacks(part4_widget[i], XmNdisarmCallback, NULL);
 
 	    part4_callbacks_called[i] = callbacks_called;
 
-/*	    
+/*
  * Compare callbacks called to callbacks expected and print results
  */
 
@@ -358,7 +358,7 @@ main(argc, argv)
 
 #ifdef notdef
     fprintf(stdout,"\n\nPart 1\n------\n\n");
-	
+
     for(i=0 ; i<NUM_TESTS_PART1 ; i++)
     {
 	fprintf(stdout,"callbacks called = %8d\tcallbacks expected = %8d\n",
@@ -367,9 +367,9 @@ main(argc, argv)
 	fprintf(stdout,"    actual order = %8d\t    expected order = %8d\n",
 		part1_order_actual[i], part1_order_expected[i]);
     }
-    
+
     fprintf(stdout,"\n\n\nPart 2\n------\n\n");
-	
+
     for(i=0 ; i<NUM_TESTS_PART2 ; i++)
     {
 	fprintf(stdout,"callbacks called = %8d\tcallbacks expected = %8d\n",
@@ -377,7 +377,7 @@ main(argc, argv)
     }
 
     fprintf(stdout,"\n\n\nPart 3\n------\n\n");
-	
+
     for(i=0 ; i<NUM_TESTS_PART2 ; i++)
     {
 	fprintf(stdout,"callbacks called = %8d\tcallbacks expected = %8d\n",
@@ -385,7 +385,7 @@ main(argc, argv)
     }
 
     fprintf(stdout,"\n\n\nPart 4\n------\n\n");
-	
+
     for(i=0 ; i<NUM_TESTS_PART4 ; i++)
     {
 	fprintf(stdout,"callbacks called = %8d\tcallbacks expected = %8d\n",
@@ -424,7 +424,7 @@ void callback1_1(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK1_1;
 }
 
@@ -437,7 +437,7 @@ void callback2_1(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK2_1;
 }
 
@@ -450,7 +450,7 @@ void callback2_2(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK2_2;
 }
 
@@ -463,7 +463,7 @@ void callback2_3(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK2_3;
 }
 
@@ -476,7 +476,7 @@ void callback3_1(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK3_1;
 }
 
@@ -489,7 +489,7 @@ void callback3_2(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK3_2;
 }
 
@@ -502,7 +502,7 @@ void callback4_1(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK4_1;
 }
 
@@ -515,7 +515,7 @@ void callback4_2(w, tag, reason)
     {
 	order_preserved++;
     }
-    
+
     callbacks_called |= CALLBACK4_2;
 }
 

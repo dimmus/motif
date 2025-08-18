@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -79,13 +79,13 @@ static Atom    time_atom = (Atom) 0;
 *   A boolean startup_time can be used to conditionalize these calls.    *
 *   A boolean startup_exit can be used to exit after printing the        *
 *   startup time.                                                        *
-*                                                                        * 
+*                                                                        *
 *************************************************************************/
 
 
 void CommonCheckEvent(XEvent *event, Widget shell)
 {
-    
+
     if (event->type == Expose) {
 	XClientMessageEvent xmessage;
 	static Boolean first = True;
@@ -108,17 +108,17 @@ void CommonCheckEvent(XEvent *event, Widget shell)
 	xmessage.format = 8;
 	xmessage.data.b[0] = 'z';
 
-	XSendEvent(XtDisplay(shell), XtWindow(shell),  
-		   FALSE, NoEventMask, (XEvent *) &xmessage);    
+	XSendEvent(XtDisplay(shell), XtWindow(shell),
+		   FALSE, NoEventMask, (XEvent *) &xmessage);
     }
     else
-    
+
 	if (time_atom != (Atom) 0) {
 	    XClientMessageEvent *xmessage;
 
 	    xmessage = (XClientMessageEvent *) event;
 
-	    if ((xmessage->type == ClientMessage) && 
+	    if ((xmessage->type == ClientMessage) &&
 		(xmessage->message_type == time_atom)) {
                 CommonGetTime();
                 CommonPrintTime();
@@ -140,7 +140,7 @@ void CommonPrintTime()
 {
      struct timeval first, previous, current, lapsed, cumul;
      int i;
-     
+
      first = value_time[0];
 
      current = value_time[num_value_time-1];
@@ -184,4 +184,3 @@ void CommonPrintTime()
      }
 */
 }
-

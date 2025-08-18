@@ -18,8 +18,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 # $XConsortium: LocatePointer.3X /main/4 1995/07/13 20:01:33 drk $
 ...\" **
@@ -38,11 +38,11 @@
 The
 \*LLocatePointer\*O
 command will move the pointer over any widget in the current
-widget hierarchy. 
+widget hierarchy.
 If only a \*VWidgetName\*L argument is supplied, the pointer will
-be moved over the midpoint of that widget. Optionally, 
+be moved over the midpoint of that widget. Optionally,
 the pointer can move to the specified
-component within a widget (for example, to a certain character in a 
+component within a widget (for example, to a certain character in a
 text widget). The \*Vdestination\*O argument to \*LLocatePointer\*O
 orders the automation code to move \*Eoff\*O of the given widget in a
 the specified direction.
@@ -53,15 +53,15 @@ The XtName of the widget to be acted upon.
 Particular component within the widget. See \*LComponentList(3X)\*O for
 a full list of supported components.
 .IP "\*V[Destination]\*O"
-\*VDestination\*O can be either an integer correponding to an index within 
+\*VDestination\*O can be either an integer correponding to an index within
 the \*Vcomponent\*O, or one of the following literals.
-\*LOff\*O, \*LLeft\*O, \*LRight\*O, \*LDown\*O and \*LUp\*O 
-will move the pointer off the widget specified in the direction specified. 
+\*LOff\*O, \*LLeft\*O, \*LRight\*O, \*LDown\*O and \*LUp\*O
+will move the pointer off the widget specified in the direction specified.
 \*VOff\*O will take the quickest path possible.  In the case where the
 component is \*LRListItem\*O, \*VDestination\*O refers to the visible list item
 number (0 is the first visible element in the list; the list refers only
 to visible items). A value of \*LMax\*O for
-\*VDestination\*O in a List refers to the last visible item, 
+\*VDestination\*O in a List refers to the last visible item,
 while \*LMin\*O refers to the first visible item.
 If the component is \*VRTextChar\*O, \*VDestination\*O refers to the visible
 character position in the Text widget (0 is the first visible character).
@@ -75,7 +75,7 @@ the \*EOSF/Motif Quality Assurance Test Suite User's Guide\*O.
 \*LLocatePointer List1 RListItem 2\*O
 .PP
 This will move the pointer over the 3rd Item in List1.
-.PP 
+.PP
 \*LLocatePointer Text1 RTextChar Max\*O
 .PP
 This will move the pointer to the area after the last visible character

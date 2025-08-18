@@ -19,21 +19,21 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the StringDraw test to test XmStringDraw.
 
-# #) You should see a BulletinBoard containing an empty DrawingArea 
+# #) You should see a BulletinBoard containing an empty DrawingArea
 #   widget of size 300x200.
 
 # C)
 Continue
 
-# #) There should be four lines showing the same string 
-#    "TEST STRING FOR CLIPPING", in font "9x15bold" (or "fixed" if 
-#    "9x15bold" is not available), with different levels of 
+# #) There should be four lines showing the same string
+#    "TEST STRING FOR CLIPPING", in font "9x15bold" (or "fixed" if
+#    "9x15bold" is not available), with different levels of
 #    clipping taking place.
 
 # #) Line 1 should show the string "TEST STRING FOR CLIPPING" complete.

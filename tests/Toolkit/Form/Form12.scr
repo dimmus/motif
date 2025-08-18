@@ -1,5 +1,5 @@
 # $XConsortium: Form12.scr /main/4 1995/07/17 20:18:05 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,27 +20,27 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #) A client with a form should appear. The form should be about
 #)   200x100 pixels, and should have a scrollbar centered within it.
 #)   The form will have top/bottom/left/right Attachment set to
 #)   XmATTACH_POSITION, and the scrollbar will have a leftPosition
 #)   of 10, a rightPosition of 90, a topPosition of 25, and a
-#)   bottomPosition of 75. 
+#)   bottomPosition of 75.
 #) Note that the above resource settings will result in a scrollbar
 #)   widget which is centered in the form, and is 80% as wide as the
-#)   form, and 50% as tall as the form. 
+#)   form, and 50% as tall as the form.
 
 CompareVisual frame
 
 #) Resize the client several times. You should see the scrollbar
-#)   move and resize,  but retain the same relative position and size. 
+#)   move and resize,  but retain the same relative position and size.
 #) Iconify and Normalize the client window.  The scrollbar should
-#)   reappear when the client is normalized. 
+#)   reappear when the client is normalized.
 
 WindowResize Shell1 South 250
 CompareVisual form
@@ -54,9 +54,9 @@ WindowDeiconify Shell1
 CompareVisual form
 Continue
 
-#) A warning message should appear in the stdout window. The message should 
+#) A warning message should appear in the stdout window. The message should
 #)say:
-#)!) Warning: 
+#)!) Warning:
 #)    Name: scrollbar1
 #)    Class: XmScrollBar
 #)    Incorrect form attachment type.

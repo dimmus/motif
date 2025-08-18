@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DialogS.c /main/17 1996/03/25 17:50:11 barstow $"
@@ -55,31 +55,31 @@ static char rcsid[] = "$XConsortium: DialogS.c /main/17 1996/03/25 17:50:11 bars
 /********    Static Function Declarations    ********/
 
 static void ClassInitialize( void ) ;
-static void ClassPartInit( 
+static void ClassPartInit(
                         WidgetClass wc) ;
-static Widget GetRectObjKid( 
+static Widget GetRectObjKid(
                         CompositeWidget p) ;
-static void Initialize( 
+static void Initialize(
                         Widget request,
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args) ;
-static Boolean SetValues( 
+static Boolean SetValues(
                         Widget current,
                         Widget request,
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args) ;
-static void InsertChild( 
+static void InsertChild(
                         Widget w) ;
-static void GetDefaultPosition( 
+static void GetDefaultPosition(
                         Widget child,
                         Widget parent,
                         Position *xRtn,
                         Position *yRtn) ;
-static void ChangeManaged( 
+static void ChangeManaged(
                         Widget wid) ;
-static XtGeometryResult GeometryManager( 
+static XtGeometryResult GeometryManager(
                         Widget wid,
                         XtWidgetGeometry *request,
                         XtWidgetGeometry *reply) ;
@@ -106,7 +106,7 @@ static XmBaseClassExtRec	myBaseClassExtRec = {
 externaldef(xmdialogshellclassrec)
 XmDialogShellClassRec xmDialogShellClassRec = {
     {					    /* core class record */
-	
+
 	(WidgetClass) & transientShellClassRec,	/* superclass */
 	"XmDialogShell", 		/* class_name */
 	sizeof(XmDialogShellWidgetRec), /* widget_size */
@@ -171,9 +171,9 @@ XmDialogShellClassRec xmDialogShellClassRec = {
 
 externaldef(xmdialogshellwidgetclass)
     WidgetClass xmDialogShellWidgetClass = (WidgetClass)&xmDialogShellClassRec;
-    
 
-static void 
+
+static void
 ClassInitialize( void )
 {
   Cardinal                    wc_num_res, sc_num_res, wc_unique_res;
@@ -218,7 +218,7 @@ ClassInitialize( void )
   for (i = 0, j = num; i < wc_num_res; i++)
   {
 
-   k = 0; 
+   k = 0;
    while ((k < sc_num_res) &&
 	  (strcmp(merged_list[k].resource_name,res_list[i].resource_name) != 0))
      k++;
@@ -248,14 +248,14 @@ ClassInitialize( void )
  *    Set up the fast subclassing for the widget.
  *
  ************************************************************************/
-static void 
+static void
 ClassPartInit(
         WidgetClass wc )
 {
    _XmFastSubclassInit(wc, XmDIALOG_SHELL_BIT);
 }
 
-static Widget 
+static Widget
 GetRectObjKid(
         CompositeWidget p )
 {
@@ -269,7 +269,7 @@ GetRectObjKid(
 	     && ((*currKid)->core.widget_class != coreWidgetClass)) ||
 	    XmeTraitGet((XtPointer) XtClass(*currKid), XmQTdialogShellSavvy)) {
 	    return (*currKid);
-	} 
+	}
     }
     return NULL;
 }
@@ -281,7 +281,7 @@ GetRectObjKid(
  *
  ************************************************************************/
 /*ARGSUSED*/
-static void 
+static void
 Initialize(
         Widget request,		/* unused */
         Widget new_w,
@@ -301,7 +301,7 @@ Initialize(
  *
  ************************************************************************/
 /*ARGSUSED*/
-static Boolean 
+static Boolean
 SetValues(
         Widget current,
         Widget request,		/* unused */
@@ -312,29 +312,29 @@ SetValues(
     Widget child ;
     XmDialogSavvyTrait trait ;
 
-    if(!current->core.mapped_when_managed 
-       && new_w->core.mapped_when_managed) {   
+    if(!current->core.mapped_when_managed
+       && new_w->core.mapped_when_managed) {
         if((child = GetRectObjKid ((CompositeWidget) new_w))
-	   && !child->core.being_destroyed    ) {   
+	   && !child->core.being_destroyed    ) {
 	    if ((trait = (XmDialogSavvyTrait)
-		 XmeTraitGet((XtPointer) XtClass(child), 
+		 XmeTraitGet((XtPointer) XtClass(child),
 			     XmQTdialogShellSavvy)) != NULL) {
 		trait->callMapUnmapCB(child, True);	/* call Map callback */
 	    }
             XtPopup(new_w, XtGrabNone) ;
-	} 
-    } 
+	}
+    }
 
     return (FALSE);
 }
 
-static void 
+static void
 InsertChild(
         Widget w )
 {
     CompositeWidget p = (CompositeWidget) XtParent (w);
     XtWidgetProc insert_child;
-   
+
     /*
      * Make sure we only have a rectObj, a VendorObject, and
      *   maybe an Input Method (CoreClass) object as children.
@@ -351,7 +351,7 @@ InsertChild(
 	      }
 	    else
 	      {   /*
-		   * make sure we're realized so people won't core dump when 
+		   * make sure we're realized so people won't core dump when
 		   *   doing incorrect managing prior to realize
 		   */
 		  XtRealizeWidget((Widget) p);
@@ -365,7 +365,7 @@ InsertChild(
     return ;
 }
 
-static void 
+static void
 GetDefaultPosition(
         Widget child,
         Widget parent,
@@ -378,23 +378,23 @@ GetDefaultPosition(
 
     x = HALFDIFF(XtWidth(parent), XtWidth(child));
     y = HALFDIFF(XtHeight(parent), XtHeight(child));
-    
-    /* 
+
+    /*
      * find root co-ords of the parent's center
      */
     if (XtIsRealized (parent))
       XtTranslateCoords(parent, x, y, &x, &y);
-    
+
     /*
      * try to keep the popup from dribbling off the display
      */
     disp = XtDisplay (child);
     max_w = DisplayWidth  (disp, DefaultScreen (disp));
     max_h = DisplayHeight (disp, DefaultScreen (disp));
-    
-    if ((x + (int)TotalWidth  (child)) > max_w) 
+
+    if ((x + (int)TotalWidth  (child)) > max_w)
       x = max_w - TotalWidth  (child);
-    if ((y + (int)TotalHeight (child)) > max_h) 
+    if ((y + (int)TotalHeight (child)) > max_h)
       y = max_h - TotalHeight (child);
     if (x < 0) x = 0;
     if (y < 0) y = 0;
@@ -429,11 +429,11 @@ GetDefaultPosition(
  * exactly the same thing with the window it puts around the shell.
  * Hence the shell and child have a border width just as the user
  * set but the window manager overrides that and only a single
- * pixel border is displayed.  In a non-wm environment the child 
+ * pixel border is displayed.  In a non-wm environment the child
  * appears to have a border width, in reality this is the shell
  * widget border.  You wanted to know...
  */
-static void 
+static void
 ChangeManaged(
         Widget wid )
 {
@@ -442,9 +442,9 @@ ChangeManaged(
      *  If the child went to unmanaged, call XtPopdown.
      *  If the child went to managed, call XtPopup.
      */
-    
+
     Widget	 child;
-    XmWidgetExtData		extData = 
+    XmWidgetExtData		extData =
 	_XmGetWidgetExtData((Widget) shell, XmSHELL_EXTENSION);
     XmVendorShellExtObject ve;
     XmDialogSavvyTrait trait ;
@@ -465,9 +465,9 @@ ChangeManaged(
 
 
 
-    trait = (XmDialogSavvyTrait) 
+    trait = (XmDialogSavvyTrait)
       XmeTraitGet((XtPointer) XtClass(child), XmQTdialogShellSavvy) ;
-    
+
     /* MANAGED Case first ********/
     if (child->core.managed)  {
 	XtWidgetGeometry	request;
@@ -484,7 +484,7 @@ ChangeManaged(
 		ve->vendor.old_managed = (Widget)child;
 	    }
 
-	/* 
+	/*
 	 * if the child isn't realized, then we need to realize it
 	 * so we have a valid size. It will get created as a result
 	 * so we  zero out it's position info so it'll
@@ -494,20 +494,20 @@ ChangeManaged(
 	    kidX = XtX(child);
 	    kidY = XtY(child);
 	    kidBW = XtBorderWidth(child);
-		
+
 	    XtX(child) = 0;
 	    XtY(child) = 0;
 	    XtBorderWidth(child) = 0;
-		
+
 	    XtRealizeWidget(child);
-		
+
 	    XtX(child) = kidX;
 	    XtY(child) = kidY;
 	    XtBorderWidth(child) = kidBW;
 	}
-	  
+
 	else if (trait) {
-	    /*  
+	    /*
 	     *  Move the window to 0,0
 	     *  but don't tell the widget.  It thinks it's where
 	     *  the shell is...
@@ -519,21 +519,21 @@ ChangeManaged(
 	/*
 	 * map callback should occur BEFORE child default positioning
 	 * otherwise, widgets such as fileselection using map callback for
-	 * correct sizing have default positioning done before the widget 
+	 * correct sizing have default positioning done before the widget
 	 * grows to its correct dimensions
 	 */
 
-	if(shell->core.mapped_when_managed && trait ) { 
+	if(shell->core.mapped_when_managed && trait ) {
 	    trait->callMapUnmapCB(child, True);	 /* call Map callback */
-	}	
+	}
 
-	/* 
-	 * Make sure that the shell has the same common parameters as 
-	 * its child.  Then move the child so that the shell will 
+	/*
+	 * Make sure that the shell has the same common parameters as
+	 * its child.  Then move the child so that the shell will
 	 * correctly surround it.
 	 */
 	request.request_mode = 0;
-	
+
 	if (trait) {
 	    XtVaGetValues(child, XmNdefaultPosition, &defaultPosition, NULL);
 
@@ -548,7 +548,7 @@ ChangeManaged(
 	    XtX(child) = 0;
 	} else
 	    kidX = XtX(shell);
-	
+
 	if (XtY(child) && trait) {
 	    kidY = XtY(child);
 	    XtY(child) = 0;
@@ -560,7 +560,7 @@ ChangeManaged(
 	    XtBorderWidth(child) = 0;
 	} else
 	    kidBW = XtBorderWidth(shell);
-	
+
 
 	if (XtWidth (child) != XtWidth (shell)) {
 	    request.request_mode |= CWWidth;
@@ -571,7 +571,7 @@ ChangeManaged(
 	    request.request_mode |= CWHeight;
 	    request.height = XtHeight(child) + ve->vendor.im_height;
 	}
-	
+
 	if (trait) {
 	    if (defaultPosition)  {
 		GetDefaultPosition(child,
@@ -623,13 +623,13 @@ ChangeManaged(
                _XmImResize((Widget)shell);
             }
 	}
-	
+
 	/*
 	 * the grab_kind is handled in the popup_callback
 	 */
-	if(shell->core.mapped_when_managed    ) {   
+	if(shell->core.mapped_when_managed    ) {
 	    XtPopup  ((Widget) shell, XtGrabNone);
-	} 
+	}
     }
 
 
@@ -645,7 +645,7 @@ ChangeManaged(
 	 */
 	for (i = 0; i < child->core.num_popups; i++) {
 	  if (XmIsDialogShell(child->core.popup_list[i])) {
-	    XmDialogShellWidget next_shell = 
+	    XmDialogShellWidget next_shell =
 	      (XmDialogShellWidget)(child->core.popup_list[i]);
 
 	    for (j = 0; j < next_shell->composite.num_children; j++) {
@@ -654,20 +654,20 @@ ChangeManaged(
 	  }
 	}
 	/* End Fix CR5043, CR5758 and CR8825 */
-	    
+
 	/*
 	 * take it down and then tell user
 	 */
-	    
+
 	XtPopdown((Widget) shell);
-	    
-	if(trait ) { 
+
+	if(trait ) {
 	    trait->callMapUnmapCB(child, False); /* call UnMap callback */
-	}	
+	}
     }
 
     XmeNavigChangeManaged((Widget) shell);
-}                       
+}
 
 
 /************************************************************************
@@ -676,7 +676,7 @@ ChangeManaged(
  *
  ************************************************************************/
 /*ARGSUSED*/
-static XtGeometryResult 
+static XtGeometryResult
 GeometryManager(
         Widget wid,
         XtWidgetGeometry *request,
@@ -702,11 +702,11 @@ GeometryManager(
        (request->request_mode & (CWWidth | CWHeight | CWBorderWidth)))
       return(XtGeometryNo);
 
-    
+
     /*
      * Because of our klutzy API we mimic position requests on the
-     * dialog to ourselves. 
-     * We cannot check for the trait here since it isn't done only for 
+     * dialog to ourselves.
+     * We cannot check for the trait here since it isn't done only for
      * BB. DialogShell GM behavior is to always follow position requests
      * even if the child is not dialogShellSavvy.
      */
@@ -769,7 +769,7 @@ GeometryManager(
 		  wid->core.height = my_request.height - ve->vendor.im_height;
 	  }
 	  return XtGeometryYes;
-      } else 
+      } else
 	  return XtGeometryNo;
 }
 
@@ -784,7 +784,7 @@ GeometryManager(
 /*
  * low level create entry points
  */
-Widget 
+Widget
 XmCreateDialogShell(
         Widget p,
         char *name,
@@ -808,14 +808,14 @@ XmCreateDialogShell(
  * This convenience function creates a DialogShell and a given class
  *   child of the shell; returns the child widget.
  ****************/
-Widget 
+Widget
 XmeCreateClassDialog(
 	WidgetClass w_class,
 	Widget ds_p,
         String name,
         ArgList bb_args,
         Cardinal bb_n )
-{   
+{
     Widget		bb ;		/*  child	*/
     Widget		ds ;		/*  DialogShell		*/
     ArgList		ds_args ;	/*  arglist for shell	*/
@@ -831,7 +831,7 @@ XmeCreateClassDialog(
 
     ds_args = (ArgList) XtMalloc( sizeof( Arg) * (bb_n + 1)) ;
     memcpy( ds_args, bb_args, (sizeof( Arg) * bb_n)) ;
-    XtSetArg( ds_args[bb_n], XmNallowShellResize, True) ; 
+    XtSetArg( ds_args[bb_n], XmNallowShellResize, True) ;
     ds = XmCreateDialogShell( ds_p, ds_name, ds_args, bb_n + 1) ;
 
     XtFree( (char *) ds_args);
@@ -843,11 +843,9 @@ XmeCreateClassDialog(
 
     /*	Add callback to destroy DialogShell parent.
     */
-    XtAddCallback(bb, XmNdestroyCallback, _XmDestroyParentCallback, 
+    XtAddCallback(bb, XmNdestroyCallback, _XmDestroyParentCallback,
 		  (XtPointer) NULL) ;
     /*	Return child.
     */
     return( bb) ;
 }
-
-

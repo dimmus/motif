@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -38,7 +38,7 @@
 #define SPIN1_MIN	 0
 #define SPIN1_MAX	 6
 
-/* 
+/*
  * Externaly declared functions
  */
 void CreateMenus(Widget);
@@ -60,7 +60,7 @@ void CreateSpinBoxes(Widget parent_of_spin_box);
 
 int thisMM = 3;
 int thisDD = 27;
-int thisYY = 94; 
+int thisYY = 94;
 
 static char *months[NUM_MONTHS] =
   {
@@ -70,7 +70,7 @@ static char *months[NUM_MONTHS] =
 
 static char *letters[NUM_LETTERS] =
   {
-  "a", "b", "c", "d", "e", "f", "g", "f", "h", "i" 
+  "a", "b", "c", "d", "e", "f", "g", "f", "h", "i"
   };
 
 XmString monthValues[NUM_MONTHS];
@@ -78,7 +78,7 @@ XmString letterValues[NUM_LETTERS];
 
 /*****		SpinBox Widgets		*****/
 
-Widget spin0, spin0_text, spin1, spin1_text, spin2, spin2_text; 
+Widget spin0, spin0_text, spin1, spin1_text, spin2, spin2_text;
 Widget spin3, spin3_text, spin4, spin4_text, spin5, spin5_text;
 
 Widget spin6, spin6_text1, spin6_deco1, spin6_text2, spin6_deco2;
@@ -106,12 +106,12 @@ main (int argc, char **argv)
  Widget       main_window;
 
    XtSetLanguageProc(NULL, NULL, NULL);
-   top_level = XtVaOpenApplication(&app_context, APP_CLASS, 
-                                NULL, 0, &argc, argv, 
+   top_level = XtVaOpenApplication(&app_context, APP_CLASS,
+                                NULL, 0, &argc, argv,
                                 fallbacks, sessionShellWidgetClass,
                                 NULL);
    XmdRegisterEditres(top_level);
-   main_window = XtVaCreateManagedWidget("main_window", 
+   main_window = XtVaCreateManagedWidget("main_window",
                                 xmMainWindowWidgetClass, top_level,
                                 NULL);
 
@@ -142,7 +142,7 @@ XmString     decoString;
     XtSetArg(argList[n], XmNwidth, 250); n++;
     XtSetArg(argList[n], XmNheight, 400); n++;
 
-    parent = XmCreateBulletinBoard(parent_of_spin_box, "Parent", 
+    parent = XmCreateBulletinBoard(parent_of_spin_box, "Parent",
                                    argList, n);
     XtManageChild(parent);
 
@@ -212,10 +212,10 @@ XmString     decoString;
     /*****  Create SpinBox parent  *****/
     n = 0;
     XtSetArg(argList[n], XmNy, nextY); n++;
-    XtSetArg(argList[n], XmNdefaultArrowSensitivity, 
+    XtSetArg(argList[n], XmNdefaultArrowSensitivity,
                          XmARROWS_DECREMENT_SENSITIVE); n++;
     spin1 = XmCreateSpinBox(parent, "spin1", argList, n);
-			   
+
 
     /*****  Increment Y position for next SpinBox  *****/
     nextY += Y_OFFSET;
@@ -228,12 +228,12 @@ XmString     decoString;
     XtSetArg(argList[n], XmNvalues, letterValues); n++;
     XtSetArg(argList[n], XmNnumValues, NUM_LETTERS); n++;
     XtSetArg(argList[n], XmNspinBoxChildType, XmSTRING); n++;
-    XtSetArg(argList[n], XmNarrowSensitivity, 
+    XtSetArg(argList[n], XmNarrowSensitivity,
                          XmARROWS_INCREMENT_SENSITIVE); n++;
     XtSetArg(argList[n], XmNeditable, False); n++;
 
     spin1_text = XmCreateTextField(spin1, "spin0_text", argList, n);
-				  
+
 
     /*****  Manage SpinBox  *****/
     XtManageChild(spin1);
@@ -281,8 +281,8 @@ XmString     decoString;
     spin2_text = XmCreateTextField( spin2,
 				    "spin2_text",
 				    argList,
-				    n ); 
-				  
+				    n );
+
 
     /*****  Manage SpinBox  *****/
     XtManageChild(spin2);
@@ -313,7 +313,7 @@ XmString     decoString;
 			     "spin3",
 			     argList,
 			     n );
-			   
+
 
     /*****  Increment Y position for next SpinBox  *****/
     nextY +=  Y_OFFSET;
@@ -328,8 +328,8 @@ XmString     decoString;
     spin3_text = XmCreateTextField( spin3,
 				    "spin3_text",
 				    argList,
-				    n ); 
-				  
+				    n );
+
 
     /*****  Manage SpinBox  *****/
     XtManageChild(spin3);
@@ -375,8 +375,8 @@ XmString     decoString;
     spin4_text = XmCreateTextField( spin4,
 				    "spin4_text",
 				    argList,
-				    n ); 
-				  
+				    n );
+
 
     /*****  Manage SpinBox  *****/
     XtManageChild(spin4);
@@ -414,7 +414,7 @@ XmString     decoString;
 			     "spin5",
 			     argList,
 			     n );
-			   
+
 
     /*****  Increment Y position for next SpinBox  *****/
     nextY +=  Y_OFFSET;
@@ -428,8 +428,8 @@ XmString     decoString;
     spin5_text = XmCreateTextField( spin5,
 				    "spin5_text",
 				    argList,
-				    n ); 
-				  
+				    n );
+
 
     /*****  Manage SpinBox  *****/
     XtManageChild(spin5);
@@ -476,7 +476,7 @@ XmString     decoString;
 			     "spin6",
 			     argList,
 			     n );
-			   
+
 
     /*****  Increment Y position for next SpinBox  *****/
     nextY +=  Y_OFFSET;
@@ -492,8 +492,8 @@ XmString     decoString;
     spin6_text1 = XmCreateTextField( spin6,
 				     "spin6_text1",
 				     argList,
-				     n ); 
-				   
+				     n );
+
 
     /*****  Create SpinBox decoration child  *****/
     n = 0;
@@ -516,7 +516,7 @@ XmString     decoString;
     spin6_text2 = XmCreateTextField( spin6,
 				     "spin6_text2",
 				     argList,
-				     n ); 
+				     n );
 
     /*****  Create SpinBox decoration child  *****/
     n = 0;
@@ -526,7 +526,7 @@ XmString     decoString;
 			         "spin6_deco2",
 			         argList,
 			         n );
-			       
+
 
     XmStringFree(decoString);
 
@@ -536,12 +536,12 @@ XmString     decoString;
     XtSetArg(argList[n], XmNposition, thisYY); n++;
     XtSetArg(argList[n], XmNmaximumValue, 99); n++;
     XtSetArg(argList[n], XmNspinBoxChildType, XmNUMERIC); n++;
-    
+
 
     spin6_text3 = XmCreateTextField( spin6,
 				     "spin6_text3",
 				     argList,
-				     n ); 
+				     n );
 
     /*****  Manage SpinBox  *****/
     XtManageChild(spin6);
@@ -877,4 +877,3 @@ Arg		   	argList[5];
 		user->doit = False;
 	}
 }
-

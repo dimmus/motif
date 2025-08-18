@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -62,13 +62,13 @@ extern Time GetTimestamp (Display *dpy);
  *                 reply_data - Client data passed to the reply_callback.
  *	Returns: True if an attempt is made to retrieve the selection,
  *               False if an obvious error occured.
- * 
+ *
  * NOTE: Reply callback will be called with reply == NULL if unable
  *       to convert request.
  */
 
 Boolean
-WSMSendMessage(Widget w, WSMClientType send_to, WSMRequest *request, 
+WSMSendMessage(Widget w, WSMClientType send_to, WSMRequest *request,
 	       WSMReplyCallbackFunc reply_callback, XtPointer reply_data)
 {
     int screen_num = XScreenNumberOfScreen(XtScreen(w));
@@ -128,8 +128,8 @@ WSMSendMessage(Widget w, WSMClientType send_to, WSMRequest *request,
  *	Description: Called after the selection owner's convert proc
  *                   has finished.
  *	Arguments: w - The widget who initiated the request.
- *                 clientData - 
- *                 callData - 
+ *                 clientData -
+ *                 callData -
  *	Returns: none
  */
 static void
@@ -238,12 +238,12 @@ ReplyReceived(Widget w, XtPointer req_info_ptr,
     }
     else {
 	screen_num = XScreenNumberOfScreen(XtScreen(w));
-	
+
 	_WSMUnpackReply(dpy, screen_num, value, *length,
 			  req_info->request_type, &reply);
-	
+
 	(*req_info->reply_callback)(w, req_info->reply_data, &reply,fail_code);
-	
+
 	FreeReply(&reply);
     }
 

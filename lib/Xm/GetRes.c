@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -41,7 +41,7 @@ static Cardinal GetSecResData(WidgetClass w_class,
 /********    End Static Function Declarations    ********/
 
 
-Cardinal 
+Cardinal
 XmGetSecondaryResourceData(
         WidgetClass w_class,
         XmSecondaryResourceData **secondaryDataRtn )
@@ -55,19 +55,17 @@ XmGetSecondaryResourceData(
  * GetSecResData()
  *  - Called from : XmGetSecondaryResourceData ().
  */
-static Cardinal 
+static Cardinal
 GetSecResData(
         WidgetClass w_class,
         XmSecondaryResourceData **secResDataRtn )
 {
   XmBaseClassExt  *bcePtr;	/* bcePtr is really **XmBaseClassExtRec */
   Cardinal count = 0;
-  
-  bcePtr = _XmGetBaseClassExtPtr( w_class, XmQmotif); 
+
+  bcePtr = _XmGetBaseClassExtPtr( w_class, XmQmotif);
   if ((bcePtr) && (*bcePtr) && ((*bcePtr)->getSecResData))
     count = ( (*bcePtr)->getSecResData)( w_class, secResDataRtn);
 
   return count;
 }
-
-

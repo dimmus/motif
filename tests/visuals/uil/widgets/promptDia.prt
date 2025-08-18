@@ -23,7 +23,7 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is promptDia.uid ---- 
+---- The uid file to be opened is promptDia.uid ----
 /*********************************************************/
 
 
@@ -33,9 +33,9 @@
 ---- Reason was XmCR_MAP ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual Prompt_Dialog 
-TRACE:(2) LocatePointer Prompt_Dialog ROkButton 
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual Prompt_Dialog
+TRACE:(2) LocatePointer Prompt_Dialog ROkButton
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- okCallback callback made ----
@@ -43,9 +43,9 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_OK ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual Prompt_Dialog 
-TRACE:(5) LocatePointer Prompt_Dialog RHelpButton 
-TRACE:(6) ClickMB Btn1 
+TRACE:(4) CompareVisual Prompt_Dialog
+TRACE:(5) LocatePointer Prompt_Dialog RHelpButton
+TRACE:(6) ClickMB Btn1
 
 /*********************************************************/
 ---- helpCallback callback made ----
@@ -53,9 +53,9 @@ TRACE:(6) ClickMB Btn1
 ---- Reason was XmCR_HELP ----
 /*********************************************************/
 
-TRACE:(7) CompareVisual Prompt_Dialog 
-TRACE:(8) LocatePointer Prompt_Dialog RCancelButton 
-TRACE:(9) ClickMB Btn1 
+TRACE:(7) CompareVisual Prompt_Dialog
+TRACE:(8) LocatePointer Prompt_Dialog RCancelButton
+TRACE:(9) ClickMB Btn1
 
 /*********************************************************/
 ---- cancelCallback callback made ----
@@ -63,6 +63,6 @@ TRACE:(9) ClickMB Btn1
 ---- Reason was XmCR_CANCEL ----
 /*********************************************************/
 
-TRACE:(10) CompareVisual Prompt_Dialog 
+TRACE:(10) CompareVisual Prompt_Dialog
 TRACE:(11) Exit
 Exiting Test...Please Standby...

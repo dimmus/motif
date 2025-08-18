@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsSetLocCon.c /main/7 1995/07/14 11:22:19 drk $"
@@ -330,12 +330,12 @@ extern WidgetClass xmMessageBoxWidgetClass;
         int diag;
 
         diag = mvsGetResNumInArgs(args_in, (int)nargs,XmNdialogType);
-        if((diag != NON_EXISTENT) && 
+        if((diag != NON_EXISTENT) &&
 	   (args_in[diag].value == (XtArgVal) XmDIALOG_PROMPT)) {
             (void)mvsAssignVal(widget_info, XmNlistLabelString,(MvsArgVal)NULL);
         }
     }
-                         
+
     /* This section is the "Free Pass" for non-specification of
        geometry management.
     */

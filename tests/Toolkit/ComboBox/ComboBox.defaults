@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 
@@ -66,6 +66,3 @@ ComboBox2*ComboBox*items : broccoli,cauliflower,carrots,potatoes,zucchini,squash
 ComboBox2*ComboBox*itemCount : 20
 ComboBox2*ComboBox*visibleItemCount : 8
 ComboBox2*ComboBox.selectedItem : carrots
-
-
-

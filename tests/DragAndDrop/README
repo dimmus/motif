@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/5 1996/07/15 14:13:07 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 DNDDrop1
 PIRS No.:      3785
 DragIcon is invisible during dragging on OSF/1 X server (R4).
@@ -157,7 +157,7 @@ PIRS No.:      4361
 Dragging to a different screen with a non-default opIcon
 results in initiator exit with Protocol eroor.
 Version found in:	1.2
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	5
 Status:		A

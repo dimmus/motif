@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Sash.c /main/12 1995/07/13 17:51:55 drk $"
@@ -45,47 +45,47 @@ static char rcsid[] = "$XConsortium: Sash.c /main/12 1995/07/13 17:51:55 drk $"
 
 /********    Static Function Declarations    ********/
 
-static void ClassPartInitialize( 
+static void ClassPartInitialize(
                         WidgetClass wc) ;
 static void ClassInitialize( void ) ;
-static void Initialize( 
+static void Initialize(
                         Widget rw,
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args) ;
-static void HighlightSash( 
+static void HighlightSash(
                         Widget sash) ;
-static void UnhighlightSash( 
+static void UnhighlightSash(
                         Widget sash) ;
-static XmNavigability WidgetNavigable( 
+static XmNavigability WidgetNavigable(
                         Widget wid) ;
-static void SashFocusIn( 
+static void SashFocusIn(
                         Widget w,
                         XEvent *event,
                         char **params,
                         Cardinal *num_params) ;
-static void SashFocusOut( 
+static void SashFocusOut(
                         Widget w,
                         XEvent *event,
                         char **params,
                         Cardinal *num_params) ;
-static void SashAction( 
+static void SashAction(
                         Widget widget,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-static void Realize( 
+static void Realize(
                         register Widget w,
                         XtValueMask *p_valueMask,
                         XSetWindowAttributes *attributes) ;
-static void Redisplay( 
+static void Redisplay(
                         Widget w,
                         XEvent *event,
                         Region region) ;
 
-static void SashDisplayDestroyCallback ( 
-			Widget w, 
-			XtPointer client_data, 
+static void SashDisplayDestroyCallback (
+			Widget w,
+			XtPointer client_data,
 			XtPointer call_data );
 /********    End Static Function Declarations    ********/
 
@@ -94,7 +94,7 @@ static XtResource resources[] = {
    {XmNborderWidth, XmCBorderWidth, XmRHorizontalDimension, sizeof(Dimension),
       XtOffsetOf( struct _XmSashRec, core.border_width), XmRImmediate, (XtPointer) 0},
 
-   {XmNcallback, XmCCallback, XmRCallback, sizeof(XtCallbackList), 
+   {XmNcallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
       XtOffsetOf( struct _XmSashRec, sash.sash_action), XmRPointer, NULL},
 
    { XmNnavigationType, XmCNavigationType, XmRNavigationType,
@@ -199,7 +199,7 @@ externaldef(xmsashwidgetclass) WidgetClass xmSashWidgetClass =
  *    Set up the fast subclassing for the widget.
  *
  ************************************************************************/
-static void 
+static void
 ClassPartInitialize(
         WidgetClass wc )
 {
@@ -209,22 +209,22 @@ ClassPartInitialize(
 /************************************************************************
  *
  *  ClassInitialize
- *    Initialize the primitive part of class structure with 
+ *    Initialize the primitive part of class structure with
  *    routines to do special highlight & unhighlight for Sash.
  *
  ************************************************************************/
-static void 
+static void
 ClassInitialize( void )
 {
    xmSashClassRec.primitive_class.border_highlight =
                   HighlightSash;
-   xmSashClassRec.primitive_class.border_unhighlight = 
+   xmSashClassRec.primitive_class.border_unhighlight =
                   UnhighlightSash;
    SashBaseClassExtRec.record_type = XmQmotif;
 }
 
 /*ARGSUSED*/
-static void 
+static void
 Initialize(
         Widget rw,
         Widget nw,
@@ -240,25 +240,25 @@ Initialize(
   new_w->sash.has_focus = False;
 }
 
-static void 
+static void
 HighlightSash(
         Widget sash )
 {
   int x, y;
-  
+
   x = y = ((XmSashWidget) sash)->primitive.shadow_thickness;
-  
+
   XFillRectangle( XtDisplay( sash), XtWindow( sash),
                    ((XmSashWidget) sash)->primitive.highlight_GC,
                    x,y, sash->core.width-(2*x), sash->core.height-(2*y));
 }
 
-static void 
+static void
 UnhighlightSash(
         Widget sash )
 {
   int x, y;
-  
+
   x = y = ((XmSashWidget) sash)->primitive.shadow_thickness;
 
   XClearArea( XtDisplay( sash), XtWindow( sash),
@@ -269,7 +269,7 @@ UnhighlightSash(
 static XmNavigability
 WidgetNavigable(
         Widget wid)
-{   
+{
   if(    _XmShellIsExclusive( wid)    )
     {
       /* Preserve 1.0 behavior.  (Why?  Don't ask me!)
@@ -278,7 +278,7 @@ WidgetNavigable(
     }
   if(    XtIsSensitive(wid)
      &&  ((XmPrimitiveWidget) wid)->primitive.traversal_on    )
-    {   
+    {
       XmNavigationType nav_type = ((XmPrimitiveWidget) wid)
 	                                          ->primitive.navigation_type ;
       if(    (nav_type == XmSTICKY_TAB_GROUP)
@@ -293,7 +293,7 @@ WidgetNavigable(
 }
 
 /* ARGSUSED */
-static void 
+static void
 SashFocusIn(
         Widget w,
         XEvent *event,
@@ -320,7 +320,7 @@ SashFocusIn(
 }
 
 /* ARGSUSED */
-static void 
+static void
 SashFocusOut(
         Widget w,
         XEvent *event,
@@ -345,7 +345,7 @@ SashFocusOut(
     sash->sash.has_focus = False;
 }
 
-static void 
+static void
 SashAction(
         Widget widget,
         XEvent *event,
@@ -362,37 +362,37 @@ SashAction(
     XtCallCallbackList(widget, sash->sash.sash_action, (XtPointer)&call_data);
 }
 
-static void 
+static void
 Realize(
         register Widget w,
         XtValueMask *p_valueMask,
         XSetWindowAttributes *attributes )
 {
 	XmDisplay   dd = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
-	Cursor SashCursor = 
+	Cursor SashCursor =
 		((XmDisplayInfo *)(dd->display.displayInfo))->SashCursor;
-	
+
 	if (0L == SashCursor)
 		{
-		/* create some data shared among all instances on this 
-		** display; the first one along can create it, and 
+		/* create some data shared among all instances on this
+		** display; the first one along can create it, and
 		** any one can remove it; note no reference count
 		*/
-        	SashCursor = 
-		((XmDisplayInfo *)(dd->display.displayInfo))->SashCursor = 
+        	SashCursor =
+		((XmDisplayInfo *)(dd->display.displayInfo))->SashCursor =
 			XCreateFontCursor(XtDisplay(w), XC_crosshair);
-		XtAddCallback((Widget)dd, XtNdestroyCallback, 
+		XtAddCallback((Widget)dd, XtNdestroyCallback,
 			SashDisplayDestroyCallback, (XtPointer) NULL);
 		}
 
 	attributes->cursor = SashCursor;
-	XtCreateWindow (w, InputOutput, CopyFromParent, 
+	XtCreateWindow (w, InputOutput, CopyFromParent,
 		*p_valueMask | CWCursor, attributes);
 }
 
 /*ARGSUSED*/
-static void 
-SashDisplayDestroyCallback 
+static void
+SashDisplayDestroyCallback
 	( Widget w,
         XtPointer client_data,	/* unused */
         XtPointer call_data )	/* unused */
@@ -401,7 +401,7 @@ SashDisplayDestroyCallback
 	Cursor SashCursor;
         if ((XmDisplay)NULL != dd)
 	{
-	  SashCursor  = 
+	  SashCursor  =
 		((XmDisplayInfo *)(dd->display.displayInfo))->SashCursor;
 	    if (0L != SashCursor)
 		{
@@ -430,7 +430,7 @@ SashDisplayDestroyCallback
  *     w = widget to be redisplayed;
  *     event = event structure identifying need for redisplay on this
  *             widget.
- * 
+ *
  *   Outputs:
  *   -------
  *
@@ -440,7 +440,7 @@ SashDisplayDestroyCallback
  *   XDrawString()
  *************************************<->***********************************/
 /* ARGSUSED */
-static void 
+static void
 Redisplay(
         Widget w,
         XEvent *event,
@@ -448,9 +448,9 @@ Redisplay(
 {
    register XmSashWidget sash = (XmSashWidget) w;
 
-     XmeDrawShadows (XtDisplay (w), XtWindow (w), 
+     XmeDrawShadows (XtDisplay (w), XtWindow (w),
                       sash->primitive.top_shadow_GC,
-                      sash->primitive.bottom_shadow_GC, 
+                      sash->primitive.bottom_shadow_GC,
 		      0,0,w->core.width, w->core.height,
                       sash->primitive.shadow_thickness,
 		      XmSHADOW_OUT);

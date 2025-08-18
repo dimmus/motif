@@ -37,7 +37,7 @@ then
 
     if test "$libjpeg_present" = "yes" -a "$libjpeg_headers_present" = "yes"
     then
-        AC_SUBST(LIBS)	
+        AC_SUBST(LIBS)
 	use_libjpeg=yes
         AC_DEFINE(JPEG_SUPPORTED, 1, We have discovered the libjpeg library)
     else
@@ -74,7 +74,7 @@ then
 
     if test "$libpng_present" = "yes" -a "$libpng_headers_present" = "yes"
     then
-        AC_SUBST(LIBS)	
+        AC_SUBST(LIBS)
 	use_libpng=yes
         AC_DEFINE(PNG_SUPPORTED, 1, We have discovered the libpng library)
     else

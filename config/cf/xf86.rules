@@ -79,7 +79,7 @@ clean::									@@\
 #ifndef Depend
 # define Depend depend
 #endif
- 
+
 #ifndef ConfigTargetLong
 #define ConfigTargetLong(target,dep,script,args,extra)			@@\
 all:: Configure								@@\
@@ -182,4 +182,3 @@ install:: module							@@\
 	MakeDir($(DESTDIR)dest)						@@\
 	$(INSTALL) -c module $(DESTDIR)dest
 #endif
-

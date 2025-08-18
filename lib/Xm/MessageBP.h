@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmessageP_h
 #define _XmessageP_h
 
@@ -104,7 +104,7 @@ typedef struct _XmMessageBoxRec
     CompositePart        composite;
     ConstraintPart       constraint;
     XmManagerPart        manager;
-    XmBulletinBoardPart  bulletin_board; 
+    XmBulletinBoardPart  bulletin_board;
     XmMessageBoxPart     message_box;
 } XmMessageBoxRec;
 

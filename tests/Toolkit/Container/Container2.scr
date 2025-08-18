@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -33,11 +33,11 @@
 #    various resource settings.
 # C)
 Continue
- 
+
 # @) This panel plays with the display of a "AnyIcon" view Type with an
 #    OUTLINE layout Type.
 # #) Four IconGadgets should be visible in a single column.
-#    IconGad", IconGad2 and IconGad4 are displayed in their small icon 
+#    IconGad", IconGad2 and IconGad4 are displayed in their small icon
 #    view, with the pixmap part displaying a "S" within
 #    a black box, and the label part displaying the strings "IconGad1",
 #    "IconGad2", and "IconGad4" respectively.
@@ -58,7 +58,7 @@ CompareVisual Container2
 #    the item "IconGad3" has child items that are displayed; in
 #    other words, item "IconGad3" is in the expandedState. Also, this
 #    pixmap should have a white foreground and a black background.
-# #) Also, you should see 3 more items displayed in their small view,  
+# #) Also, you should see 3 more items displayed in their small view,
 #    "IconGad31", "IconGad32",
 #    and "IconGad33" displayed below IconGad3 and indented right by 100
 #    pixels. A line is connecting these items to the item "IconGad3".
@@ -67,7 +67,7 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 
-# #) Expand all the children. "IconGad321" and "IconGad3211" should be 
+# #) Expand all the children. "IconGad321" and "IconGad3211" should be
 #    displayed in their large icon view.
 # #) The pixmap should change to showing the letter "E", indicating that
 #    the item have child items that are displayed;
@@ -84,7 +84,7 @@ ClickMB Btn1
 CompareVisual Container2
 Continue
 
-# #) Select "XmNO_LINE" from the "Outline LineStyle" option menu. The 
+# #) Select "XmNO_LINE" from the "Outline LineStyle" option menu. The
 #    connecting lines should disappear.
 
 WindowRaise FormDialog
@@ -92,16 +92,16 @@ LocatePointer OutlineLineStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmNO_LINE
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Move the "Outline Indentation" scale to 250. The children should move 
+# #) Move the "Outline Indentation" scale to 250. The children should move
 #    to the right.
 
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Right 250
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmOUTLINE_BUTTON_ABSENT" from the "Outline ButtonPolicy" option
@@ -113,18 +113,18 @@ LocatePointer OutlineButtonPolicy_Option ROptionButton
 PressMB Btn1
 LocatePointer XmOUTLINE_BUTTON_ABSENT
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmOUTLINE_BUTTON_PRESENT" from the "Outline ButtonPolicy" option
-#    menu. The expand/collpase state pixmap should reappear. 
+#    menu. The expand/collpase state pixmap should reappear.
 
 WindowRaise FormDialog
 LocatePointer OutlineButtonPolicy_Option ROptionButton
 PressMB Btn1
 LocatePointer XmOUTLINE_BUTTON_PRESENT
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmSINGLE" from the "Outline LineStyle" menu.
@@ -135,7 +135,7 @@ LocatePointer OutlineLineStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmSINGLE
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 #    Collpase all the children.
@@ -145,11 +145,11 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # @) This panel plays with the display of an "AnyIcon" view type with
 #    a DETAIL layout Type.
 # #) Select "Detail" from the "Layout Type" option menu.
-#    A heading column should appear on top of the icon gadgets. 
+#    A heading column should appear on top of the icon gadgets.
 #    There should be 4 columns, the first
 #    one for the pixmap-label and the 3 others with plain text.
 #    There should be 4 rows of Icon gadgets.
@@ -159,7 +159,7 @@ LocatePointer LayoutType_Option ROptionButton
 PressMB Btn1
 LocatePointer Detail
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Move the "Outline Indentation" scale to 70.
@@ -169,25 +169,25 @@ CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Left 70
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 
 # #) Move the "Outline ColumnWidth" scale to 200. The text becomes aligned
-#    in columns, overlapping the outline display. 
+#    in columns, overlapping the outline display.
 #    Move the "Outline ColumnWidth" scale to 320.
 
 WindowRaise FormDialog
 LocatePointer ColumnWidthScale RScaleSlider
 DragSliderValue Right 200
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer ColumnWidthScale RScaleSlider
 DragSliderValue Right 320
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmNO_LINE" from the "Outline LineStyle" menu.
@@ -198,7 +198,7 @@ LocatePointer OutlineLineStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmNO_LINE
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmSINGLE" from the "Outline LineStyle" menu.
@@ -209,7 +209,7 @@ LocatePointer OutlineLineStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmSINGLE
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "One" from the "Number of Columns" option menu. You should only
@@ -220,7 +220,7 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer One
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "Zero" from the "Number of Columns" option menu. You should have
@@ -231,10 +231,10 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer Zero
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "Two" from the "Number of Columns" option menu. Only the two first 
+# #) Select "Two" from the "Number of Columns" option menu. Only the two first
 #    columns of text are displayed.
 
 WindowRaise FormDialog
@@ -242,10 +242,10 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer Two
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "NO" from "Show ColumnHeading". The column heading should 
+# #) Select "NO" from "Show ColumnHeading". The column heading should
 #    disappear.
 
 WindowRaise FormDialog
@@ -253,20 +253,20 @@ LocatePointer ShowColumnHeading_Option ROptionButton
 PressMB Btn1
 LocatePointer NO
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "No" again from "Show ColumnHeading". No core dump should occur. 
+# #) Select "No" again from "Show ColumnHeading". No core dump should occur.
 
 WindowRaise FormDialog
 LocatePointer ShowColumnHeading_Option ROptionButton
 PressMB Btn1
 LocatePointer NO
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "Three" from the "Number of Columns" option menu. The last column 
+# #) Select "Three" from the "Number of Columns" option menu. The last column
 #    should reappear.
 
 WindowRaise FormDialog
@@ -274,11 +274,11 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer Three
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Collapse the children, by clicking on the collapse button of "IconGad3".
-# #) Select "Yes" from "Show ColumnHeading". The column heading should 
+# #) Select "Yes" from "Show ColumnHeading". The column heading should
 #    re_appear.
 
 LocatePointer IconGad3 ROutlineBtn
@@ -289,7 +289,7 @@ LocatePointer ShowColumnHeading_Option ROptionButton
 PressMB Btn1
 LocatePointer YES
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Move the "Outline ColumnWidth" scale to 320.
@@ -298,10 +298,10 @@ CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer ColumnWidthScale RScaleSlider
 DragSliderValue Left 0
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 Continue
- 
+
 # @) This panel plays with the display of a "AnyIcon" view type with
 #    a SPATIAL layout Type.
 # #) Select "Spatial" from the "Layout Type" option menu.
@@ -310,14 +310,14 @@ Continue
 #           IconGad2 should be located at 200,200
 #           IconGad3 should be located at 300,100
 #           IconGad4 should be located at 50,400
-# 
+#
 
 WindowRaise FormDialog
 LocatePointer LayoutType_Option ROptionButton
 PressMB Btn1
 LocatePointer Spatial
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmGRID" from the "Spatial Style" option menu.
@@ -328,25 +328,25 @@ LocatePointer PlaceStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmGRID
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "LargeCell Width" scale values and the "LargeCell 
+# #) Play with the "LargeCell Width" scale values and the "LargeCell
 #    Height" scale value.
 
 WindowRaise FormDialog
 LocatePointer LargeCellWidthScale RScaleSlider
 DragSliderValue Left 50
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer LargeCellHeightScale RScaleSlider
 DragSliderValue Left 50
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmCELLS" from the "Spatial Style" option menu.
-#    The Icon gadgets are placed in a minimum number of cells needed to 
+#    The Icon gadgets are placed in a minimum number of cells needed to
 #    fit them.
 
 WindowRaise FormDialog
@@ -354,7 +354,7 @@ LocatePointer PlaceStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmCELLS
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmSNAP_TO_GRID" from the "Snap Model" option menu.
@@ -366,21 +366,21 @@ LocatePointer SnapModel_Option ROptionButton
 PressMB Btn1
 LocatePointer XmSNAP_TO_GRID
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "LargeCell Width" scale values and the "LargeCell 
+# #) Play with the "LargeCell Width" scale values and the "LargeCell
 #    Height" scale value.
 
 WindowRaise FormDialog
 LocatePointer LargeCellWidthScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer LargeCellHeightScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmCENTER" from the "Snap Model" option menu.
@@ -391,22 +391,22 @@ LocatePointer SnapModel_Option ROptionButton
 PressMB Btn1
 LocatePointer XmCENTER
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "LargeCell Width" scale values and the "LargeCell 
+# #) Play with the "LargeCell Width" scale values and the "LargeCell
 #    Height" scale value.
 # C)
 
 WindowRaise FormDialog
 LocatePointer LargeCellWidthScale RScaleSlider
 DragSliderValue Left 50
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer LargeCellHeightScale RScaleSlider
 DragSliderValue Left 50
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 Continue
 
@@ -432,7 +432,7 @@ LocatePointer LayoutType_Option ROptionButton
 PressMB Btn1
 LocatePointer Outline
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
@@ -449,7 +449,7 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 
-# #) Select "XmNO_LINE" from the "Outline LineStyle" option menu. The 
+# #) Select "XmNO_LINE" from the "Outline LineStyle" option menu. The
 #    connecting lines should disappear.
 
 WindowRaise FormDialog
@@ -457,16 +457,16 @@ LocatePointer OutlineLineStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmNO_LINE
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Move the "Outline Indentation" scale to 250. The children should move 
+# #) Move the "Outline Indentation" scale to 250. The children should move
 #    to the right.
 
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Right 250
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmOUTLINE_BUTTON_ABSENT" from the "Outline ButtonPolicy" option
@@ -479,14 +479,14 @@ LocatePointer OutlineButtonPolicy_Option ROptionButton
 PressMB Btn1
 LocatePointer XmOUTLINE_BUTTON_ABSENT
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 Continue
- 
+
 # @) This panel plays with the display of a "SmallIcon" view Type with
 #    an OUTLINE layout Type.
 # #) Select "SmallIcon" from the "Entry View Type" option menu.
-# #) The IconGadgets are now displayed with the pixmap part displaying a 
+# #) The IconGadgets are now displayed with the pixmap part displaying a
 #    "S" within a black box, and the label part displaying the strings
 #    should be visible next to them.
 
@@ -495,7 +495,7 @@ LocatePointer EntryViewType_Option ROptionButton
 PressMB Btn1
 LocatePointer SmallIcon
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmOUTLINE_BUTTON_PRESENT" from the "Outline ButtonPolicy" option
@@ -503,7 +503,7 @@ CompareVisual Container2
 #    should redisplay itself to accomodate the new pixmaps.
 # #) There should be visible to the left of IconGad3, a
 #    pixmap displaying letter "E" with background black and foreground
-#    white. A pixmap displaying letter "C" should be visible to the left of 
+#    white. A pixmap displaying letter "C" should be visible to the left of
 #    "IconGad32" with background white and foreground black.
 
 WindowRaise FormDialog
@@ -511,10 +511,10 @@ LocatePointer OutlineButtonPolicy_Option ROptionButton
 PressMB Btn1
 LocatePointer XmOUTLINE_BUTTON_PRESENT
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "XmSINGLE" from the "Outline LineStyle" option menu. The 
+# #) Select "XmSINGLE" from the "Outline LineStyle" option menu. The
 #    connecting lines should reappear.
 
 WindowRaise FormDialog
@@ -522,32 +522,32 @@ LocatePointer OutlineLineStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmSINGLE
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Move the "Outline Indentation" scale to 0. The children should move 
+# #) Move the "Outline Indentation" scale to 0. The children should move
 #    to the left, forming a single column with the parents.
 
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Left 0
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Move the Outline Indentation" scale to 100. The children should move 
+# #) Move the Outline Indentation" scale to 100. The children should move
 #    to the right.
 # C)
 
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 Continue
- 
+
 # @) This panel plays with the display of a "LargeIcon" view Type with
 #    a DETAIL layout Type.
-# #) Select "LargeIcon" from the "Entry View Type" option menu, and 
+# #) Select "LargeIcon" from the "Entry View Type" option menu, and
 ##    "Detail" from the "Layout Type" option menu.
 # #) A Column heading should appear. There should be 4 columns, the first
 #    one for the pixmap-label and the 3 others with plain text.
@@ -562,21 +562,21 @@ LocatePointer LayoutType_Option ROptionButton
 PressMB Btn1
 LocatePointer Detail
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "Outline Indentation" scale and the  
+# #) Play with the "Outline Indentation" scale and the
 #    "Outline ColumnWidth" scale.
 
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Left 0
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer IndentationScale RScaleSlider
 DragSliderValue Right 80
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmNO_LINE" from the "Outline LineStyle" menu.
@@ -601,7 +601,7 @@ ReleaseMB Btn1
 WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "Two" from the "Number of Columns" option menu. The last 
+# #) Select "Two" from the "Number of Columns" option menu. The last
 #    column should desappear.
 
 WindowRaise FormDialog
@@ -609,7 +609,7 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer Two
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "Zero" from the "Number of Columns" option menu. All the columns
@@ -620,10 +620,10 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer Zero
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "NO" from "Show ColumnHeading". The column heading should 
+# #) Select "NO" from "Show ColumnHeading". The column heading should
 #    disappear.
 
 WindowRaise FormDialog
@@ -631,12 +631,12 @@ LocatePointer ShowColumnHeading_Option ROptionButton
 PressMB Btn1
 LocatePointer NO
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Collapse all the children.
 # C)
- 
+
 LocatePointer IconGad321 ROutlineBtn
 ClickMB Btn1
 LocatePointer IconGad32 ROutlineBtn
@@ -645,10 +645,10 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # @) This panel plays with the display of a "SmallIcon" view Type with
 #    a DETAIL layout Type.
-# #) Select "SmallIcon" from the "Entry View Type" option menu. The 
+# #) Select "SmallIcon" from the "Entry View Type" option menu. The
 #    Icon gadgets are now displayed in their small icon view.
 
 WindowRaise FormDialog
@@ -656,7 +656,7 @@ LocatePointer EntryViewType_Option ROptionButton
 PressMB Btn1
 LocatePointer SmallIcon
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "One" from the "Number of Columns" menu to modify the
@@ -668,7 +668,7 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer One
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "Three" from the "Number of Columns" menu to modify the
@@ -680,10 +680,10 @@ LocatePointer Columns_Option ROptionButton
 PressMB Btn1
 LocatePointer Three
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Select "Yes" from "Show ColumnHeading". The column heading should 
+# #) Select "Yes" from "Show ColumnHeading". The column heading should
 #    reappear.
 
 WindowRaise FormDialog
@@ -691,7 +691,7 @@ LocatePointer ShowColumnHeading_Option ROptionButton
 PressMB Btn1
 LocatePointer YES
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Expand the children.
@@ -705,7 +705,7 @@ LocatePointer IconGad321 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # @) This panel plays with the display of a "LargeIcon" view type with
 #    a SPATIAL layout Type.
 # #) Select "LargeIcon" from the "Entry View Type" option menu, and
@@ -720,7 +720,7 @@ LocatePointer LayoutType_Option ROptionButton
 PressMB Btn1
 LocatePointer Spatial
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmGRID" from the "Spatial Style" option menu.
@@ -731,25 +731,25 @@ LocatePointer PlaceStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmGRID
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "LargeCell Width" scale values and the "LargeCell 
+# #) Play with the "LargeCell Width" scale values and the "LargeCell
 #    Height" scale value.
 
 WindowRaise FormDialog
 LocatePointer LargeCellWidthScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer LargeCellHeightScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmCELLS" from the "Spatial Style" option menu.
-#    The Icon gadgets are placed in a minimum number of cells needed to 
+#    The Icon gadgets are placed in a minimum number of cells needed to
 #    fit them.
 
 WindowRaise FormDialog
@@ -757,7 +757,7 @@ LocatePointer PlaceStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmCELLS
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmSNAP_TO_GRID" from the "Snap Model" option menu.
@@ -769,21 +769,21 @@ LocatePointer SnapModel_Option ROptionButton
 PressMB Btn1
 LocatePointer XmSNAP_TO_GRID
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "LargeCell Width" scale values and the "LargeCell 
+# #) Play with the "LargeCell Width" scale values and the "LargeCell
 #    Height" scale value.
 
 WindowRaise FormDialog
 LocatePointer LargeCellWidthScale RScaleSlider
 DragSliderValue Left 70
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer LargeCellHeightScale RScaleSlider
 DragSliderValue Left 70
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmCENTER" from the "Snap Model" option menu.
@@ -794,25 +794,25 @@ LocatePointer SnapModel_Option ROptionButton
 PressMB Btn1
 LocatePointer XmCENTER
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "LargeCell Width" scale values and the "LargeCell 
+# #) Play with the "LargeCell Width" scale values and the "LargeCell
 #    Height" scale value.
 # C)
 
 WindowRaise FormDialog
 LocatePointer LargeCellWidthScale RScaleSlider
 DragSliderValue Right 110
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer LargeCellHeightScale RScaleSlider
 DragSliderValue Right 110
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 Continue
- 
+
 # #) This panel plays with the display of a "SmallIcon" view type with
 #    a SPATIAL layout Type.
 # #) Select "SmallIcon" from the "Entry View Type" option menu.
@@ -822,21 +822,21 @@ LocatePointer EntryViewType_Option ROptionButton
 PressMB Btn1
 LocatePointer SmallIcon
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "SmallCell Width" scale values and the "SmallCell 
+# #) Play with the "SmallCell Width" scale values and the "SmallCell
 #    Height" scale value.
 
 WindowRaise FormDialog
 LocatePointer SmallCellWidthScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer SmallCellHeightScale RScaleSlider
 DragSliderValue Right 100
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmSNAP_TO_GRID" from the "Snap Model" option menu.
@@ -848,21 +848,21 @@ LocatePointer SnapModel_Option ROptionButton
 PressMB Btn1
 LocatePointer XmSNAP_TO_GRID
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "SmallCell Width" scale values and the "SmallCell 
+# #) Play with the "SmallCell Width" scale values and the "SmallCell
 #    Height" scale value.
 
 WindowRaise FormDialog
 LocatePointer SmallCellWidthScale RScaleSlider
 DragSliderValue Right 150
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer SmallCellHeightScale RScaleSlider
 DragSliderValue Right 150
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
 # #) Select "XmGRID" from the "Spatial Style" option menu.
@@ -873,24 +873,24 @@ LocatePointer PlaceStyle_Option ROptionButton
 PressMB Btn1
 LocatePointer XmGRID
 ReleaseMB Btn1
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 
-# #) Play with the "SmallCell Width" scale values and the "SmallCell 
+# #) Play with the "SmallCell Width" scale values and the "SmallCell
 #    Height" scale value.
 # C)
 
 WindowRaise FormDialog
 LocatePointer SmallCellWidthScale RScaleSlider
 DragSliderValue Left 50
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 WindowRaise FormDialog
 LocatePointer SmallCellHeightScale RScaleSlider
 DragSliderValue Left 50
-WindowRaise Container2 
+WindowRaise Container2
 CompareVisual Container2
 Continue
- 
+
 # E)
 Exit

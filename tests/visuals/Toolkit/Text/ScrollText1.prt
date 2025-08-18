@@ -22,20 +22,20 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer Text1  
+TRACE:(1) LocatePointer Text1
 TRACE:(2) ClickKey <Shift> KPageDown
-TRACE:(3) CompareVisual Text1 
+TRACE:(3) CompareVisual Text1
 TRACE:(4) ClickKey <Shift> KPageDown
-TRACE:(5) CompareVisual Text1 
+TRACE:(5) CompareVisual Text1
 TRACE:(6) Continue
-TRACE:(7) LocatePointer Text1  
+TRACE:(7) LocatePointer Text1
 TRACE:(8) ClickKey KHelp
-TRACE:(9) CompareVisual info_box 
-TRACE:(10) LocatePointer info_box ROkButton 
-TRACE:(11) ClickMB Btn1 
+TRACE:(9) CompareVisual info_box
+TRACE:(10) LocatePointer info_box ROkButton
+TRACE:(11) ClickMB Btn1
 TRACE:(12) Continue
-TRACE:(13) LocatePointer Text1  
-TRACE:(14) ClickMB Btn1 
+TRACE:(13) LocatePointer Text1
+TRACE:(14) ClickMB Btn1
 TRACE:(15) ClickKey KEndData
 TRACE:(16) ClickKey KReturn
 TRACE:(17) InputString "line 1"
@@ -57,28 +57,28 @@ TRACE:(32) ClickKey KReturn
 TRACE:(33) InputString "line 9"
 TRACE:(34) ClickKey KReturn
 TRACE:(35) InputString "line 10"
-TRACE:(36) CompareVisual Text1 
+TRACE:(36) CompareVisual Text1
 TRACE:(37) WindowIconify Shell1
 TRACE:(38) WindowDeiconify Shell1
-TRACE:(39) CompareVisual Text1 
+TRACE:(39) CompareVisual Text1
 TRACE:(40) Continue
-TRACE:(41) CompareVisual Text1 
+TRACE:(41) CompareVisual Text1
 TRACE:(42) LocatePointer Text1 RTextChar 11
-TRACE:(43) ClickMB Btn1 
+TRACE:(43) ClickMB Btn1
 TRACE:(44) InputString "   "
-TRACE:(45) CompareVisual Text1 
+TRACE:(45) CompareVisual Text1
 TRACE:(46) Continue
-TRACE:(47) CompareVisual BBoard1 
-TRACE:(48) LocatePointer ToggleB1  
-TRACE:(49) ClickMB Btn1 
-TRACE:(50) CompareVisual BBoard1 
-TRACE:(51) LocatePointer Text2 RVertScrollBarSlider 
-TRACE:(52) DragSliderValue Down Max 
-TRACE:(53) CompareVisual BBoard1 
-TRACE:(54) DragSliderValue Up Min 
-TRACE:(55) CompareVisual BBoard1 
-TRACE:(56) LocatePointer ToggleB1  
-TRACE:(57) ClickMB Btn1 
-TRACE:(58) CompareVisual BBoard1 
+TRACE:(47) CompareVisual BBoard1
+TRACE:(48) LocatePointer ToggleB1
+TRACE:(49) ClickMB Btn1
+TRACE:(50) CompareVisual BBoard1
+TRACE:(51) LocatePointer Text2 RVertScrollBarSlider
+TRACE:(52) DragSliderValue Down Max
+TRACE:(53) CompareVisual BBoard1
+TRACE:(54) DragSliderValue Up Min
+TRACE:(55) CompareVisual BBoard1
+TRACE:(56) LocatePointer ToggleB1
+TRACE:(57) ClickMB Btn1
+TRACE:(58) CompareVisual BBoard1
 TRACE:(59) Exit
 Exiting Test...Please Standby...

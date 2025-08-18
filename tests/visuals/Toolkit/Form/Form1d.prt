@@ -22,45 +22,45 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer labelText  
-TRACE:(2) ClickMB Btn1 
+TRACE:(1) LocatePointer labelText
+TRACE:(2) ClickMB Btn1
 TRACE:(3) InputString "any label string"
 TRACE:(4) ClickKey KReturn
-TRACE:(5) CompareVisual form 
-TRACE:(6) LocatePointer labelText  
-TRACE:(7) ClickMB Btn1 
+TRACE:(5) CompareVisual form
+TRACE:(6) LocatePointer labelText
+TRACE:(7) ClickMB Btn1
 TRACE:(8) InputString "a"
 TRACE:(9) ClickKey KReturn
-TRACE:(10) CompareVisual form 
+TRACE:(10) CompareVisual form
 TRACE:(11) InputString "a"
 TRACE:(12) ClickKey KReturn
-TRACE:(13) CompareVisual form 
+TRACE:(13) CompareVisual form
 TRACE:(14) InputString "a"
 TRACE:(15) ClickKey KReturn
-TRACE:(16) CompareVisual form 
+TRACE:(16) CompareVisual form
 TRACE:(17) InputString "a"
 TRACE:(18) ClickKey KReturn
-TRACE:(19) CompareVisual form 
+TRACE:(19) CompareVisual form
 TRACE:(20) InputString "a"
 TRACE:(21) ClickKey KReturn
-TRACE:(22) CompareVisual form 
+TRACE:(22) CompareVisual form
 TRACE:(23) InputString "a"
 TRACE:(24) ClickKey KReturn
-TRACE:(25) CompareVisual form 
+TRACE:(25) CompareVisual form
 TRACE:(26) InputString "a"
 TRACE:(27) ClickKey KReturn
-TRACE:(28) CompareVisual form 
+TRACE:(28) CompareVisual form
 TRACE:(29) InputString "a"
 TRACE:(30) ClickKey KReturn
-TRACE:(31) CompareVisual form 
+TRACE:(31) CompareVisual form
 TRACE:(32) InputString "a"
 TRACE:(33) ClickKey KReturn
-TRACE:(34) CompareVisual form 
+TRACE:(34) CompareVisual form
 TRACE:(35) InputString "a"
 TRACE:(36) ClickKey KReturn
-TRACE:(37) CompareVisual form 
+TRACE:(37) CompareVisual form
 TRACE:(38) InputString "a"
 TRACE:(39) ClickKey KReturn
-TRACE:(40) CompareVisual form 
+TRACE:(40) CompareVisual form
 TRACE:(41) Exit
 Exiting Test...Please Standby...

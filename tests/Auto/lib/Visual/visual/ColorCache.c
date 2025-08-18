@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ColorCache.c /main/7 1995/07/14 11:48:38 drk $"
@@ -37,20 +37,20 @@ static char rcsid[] = "$XConsortium: ColorCache.c /main/7 1995/07/14 11:48:38 dr
 
 	Summary:
             This file contains the function visLookUpColorCache &
-	visAddToColorCache which looks-up local color cache for 
+	visAddToColorCache which looks-up local color cache for
 	existance of already looked up pixel, if present use the cache
 	value otherwise do XQueryColor for the given pixel and save that
 	XColor returned.
-	      
+
         INPUTS
-            Pointer to XColor that contains correct pixel value for 
+            Pointer to XColor that contains correct pixel value for
 	visLookUpColorCache & visAddToColorCache; but also contains
 	other fields correctly initialized for visAddToColorCache.
 
         OUTPUTS
             XColor initialized by visLookUpColorCache.
 	    Cache updated by visAddToColorCache.
- 
+
         RETURNS
             <0 failed, >=0 succeeded for visLookUpColorCache.
 ************************************************************************/
@@ -83,13 +83,10 @@ XColor	*color;
 
 } /* End visAddToColorCache() */
 
-/* 
+/*
  * Clear cache pointer so that it effectively clears the color cache
  */
 void visClearColorCache()
 {
     cache_pointer = 0;
 } /* End visClearColorCache() */
-
-
-

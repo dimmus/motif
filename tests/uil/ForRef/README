@@ -3,7 +3,7 @@
 FORWARD REFERENCE TESTS:
 
 This test will test Forward References within UIL. It is designed to be
-user interactive, with on-line user instructions for each part of the 
+user interactive, with on-line user instructions for each part of the
 test. These tests consist of three two files a piece, one containing the
 UIL information, and the second containing the USER interactive instructions
 for the test. All resources specified in the instructions must match the
@@ -44,4 +44,4 @@ file for_ref.out.
 BUGS SHOWN BY THESE TESTS
 
 
-ENDBUGS 
+ENDBUGS

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List9.c /main/8 1995/07/13 18:21:58 drk $"
@@ -89,7 +89,7 @@ void  main (argc, argv)
     List1 = XmCreateList(Form, "List1", args, n);
     XtManageChild(List1);
 
-    XtAddCallback(List1, XmNbrowseSelectionCallback, 
+    XtAddCallback(List1, XmNbrowseSelectionCallback,
 		  (XtCallbackProc) SSelCB_List1, NULL);
 
     n = 0;
@@ -208,7 +208,7 @@ void  main (argc, argv)
     XtManageChild(Toggle_AddMode);
     XmStringFree(tcs);
 
-    XtAddCallback(Toggle_AddMode, XmNvalueChangedCallback, 
+    XtAddCallback(Toggle_AddMode, XmNvalueChangedCallback,
 		  (XtCallbackProc) AddModeCB, NULL);
 
     n = 0;
@@ -230,13 +230,13 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNset, True);				n++;
     XtSetValues(Browse, args, n);
 
-    XtAddCallback(Single, XmNvalueChangedCallback, 
+    XtAddCallback(Single, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmSINGLE_SELECT);
-    XtAddCallback(Multiple, XmNvalueChangedCallback, 
+    XtAddCallback(Multiple, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmMULTIPLE_SELECT);
-    XtAddCallback(Browse, XmNvalueChangedCallback, 
+    XtAddCallback(Browse, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmBROWSE_SELECT);
-    XtAddCallback(Extended, XmNvalueChangedCallback, 
+    XtAddCallback(Extended, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmEXTENDED_SELECT);
 
     tcs = XmStringCreateLtoR("Action List:", XmSTRING_DEFAULT_CHARSET);
@@ -276,13 +276,13 @@ void  main (argc, argv)
     List2 = XmCreateScrolledList(Form, "List2", args, n);
     XtManageChild(List2);
 
-    XtAddCallback(List2, XmNsingleSelectionCallback, 
+    XtAddCallback(List2, XmNsingleSelectionCallback,
 		  (XtCallbackProc) CommonGenericCB, NULL);
-    XtAddCallback(List2, XmNbrowseSelectionCallback, 
+    XtAddCallback(List2, XmNbrowseSelectionCallback,
 		  (XtCallbackProc) CommonGenericCB, NULL);
-    XtAddCallback(List2, XmNextendedSelectionCallback, 
+    XtAddCallback(List2, XmNextendedSelectionCallback,
 		  (XtCallbackProc) CommonGenericCB, NULL);
-    XtAddCallback(List2, XmNmultipleSelectionCallback, 
+    XtAddCallback(List2, XmNmultipleSelectionCallback,
 		  (XtCallbackProc) CommonGenericCB, NULL);
 
     XtRealizeWidget(Shell1);
@@ -293,7 +293,7 @@ void  main (argc, argv)
 
     /* Test for CR 5676 */
     CommonPause();
-  
+
     XmListDeleteAllItems(List2);
 
     CommonPause();
@@ -427,7 +427,7 @@ static Widget CreateToggle(Widget parent, char *label)
 }
 
 
-static void CHSPolicyCB(Widget w, unsigned char client_data, 
+static void CHSPolicyCB(Widget w, unsigned char client_data,
 			XtPointer call_data)
 
 {

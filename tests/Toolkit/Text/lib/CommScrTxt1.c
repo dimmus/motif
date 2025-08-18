@@ -52,8 +52,8 @@ john said, jack, enjoy the job";
 
 int     EditMode;
 
-static char font_name1[] = "8x13bold"; 
-static char font_name2[] = "variable"; 
+static char font_name1[] = "8x13bold";
+static char font_name2[] = "variable";
 
 static char render_tag[] = "Render1";
 

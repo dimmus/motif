@@ -1,15 +1,15 @@
 STARTFONT 2.1
 COMMENT $XConsortium: heb8x13.bdf,v 1.2 91/08/22 19:44:01 gildea Exp $
-COMMENT 
+COMMENT
 COMMENT Characters #224--#250 designed, made, and are
 COMMENT Copyright (c) 1991 by Joseph Friedman (yossi@CS.Stanford.EDU).
 COMMENT The rest of the font is taken from 8x13.bdf.
-COMMENT 
+COMMENT
 COMMENT Permission to use, copy, modify, distribute, and sell this
 COMMENT software and its documentation for any purpose is hereby
 COMMENT granted without fee, provided that the above copyright
 COMMENT notice appear in all copies.
-COMMENT 
+COMMENT
 FONT -Misc-Fixed-Medium-R-Normal--13-120-75-75-C-80-ISO8859-8
 SIZE 13 78 78
 FONTBOUNDINGBOX 8 13 0 -3

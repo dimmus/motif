@@ -37,7 +37,7 @@
 void
 PostIt(Widget w, XtPointer p, XEvent *ev, Boolean *c);
 
-void 
+void
 main (int argc, char **argv)
 {
 
@@ -53,7 +53,7 @@ main (int argc, char **argv)
 
     CommonTestInit(argc, argv);
 
-  
+
     n = 0;
     RC1 = XmCreateRowColumn( Shell1, "RC1", args, n );
     XtManageChild(RC1);
@@ -65,9 +65,9 @@ main (int argc, char **argv)
 	XtManageChild (Frame[i]);
       }
 
-    
 
-    /* 
+
+    /*
      * Create a tear-off Pulldown menu. This will also enable testing dragging
      * from a MenuBar.
      */
@@ -99,12 +99,12 @@ main (int argc, char **argv)
     XtManageChild (PulldownPB1);
     XmStringFree (LabelString);
 
-    
-    
 
 
-    /* 
-     * Create an option menu 
+
+
+    /*
+     * Create an option menu
      */
 
     n=0;
@@ -130,14 +130,14 @@ main (int argc, char **argv)
     XtManageChild (OptionPB2);
     XmStringFree (LabelString);
 
-    
-    
-    /* 
-     * Create a popup menu 
+
+
+    /*
+     * Create a popup menu
      */
 
 
-    n = 0; 
+    n = 0;
     LabelString = XmStringCreate("Popup Menu on MB3", XmFONTLIST_DEFAULT_TAG);
     XtSetArg(args[n], XmNlabelString, LabelString); n++;
     Label1 = XmCreateLabel(Frame[2], "Label1", args, n);
@@ -147,7 +147,7 @@ main (int argc, char **argv)
 
     n = 0;
     XtSetArg(args[n], XmNorientation, XmVERTICAL); n++;
-    XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+    XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
     XtSetArg (args[n], XmNtearOffModel, XmTEAR_OFF_ENABLED); n++;
     Popup1 = XmCreatePopupMenu(Label1, "popup", args, n);
     XtAddEventHandler(Label1, ButtonPressMask, False, PostIt, (XtPointer)Popup1);
@@ -158,14 +158,14 @@ main (int argc, char **argv)
     PopupPB1 = XmCreatePushButton (Popup1,"PopupPB1", args, n);
     XtManageChild (PopupPB1);
 
-    
-    
-    /* 
-     * Create a Text widget for dropping into 
+
+
+    /*
+     * Create a Text widget for dropping into
      */
 
-    n=0;   
-    TopLevel1 = XtCreatePopupShell("TopLevel1", topLevelShellWidgetClass, 
+    n=0;
+    TopLevel1 = XtCreatePopupShell("TopLevel1", topLevelShellWidgetClass,
 				 Shell1,args,n);
 
 
@@ -176,7 +176,7 @@ main (int argc, char **argv)
     Text1 = XmCreateText (TopLevel1, "Text1", args, n);
     XtManageChild (Text1);
 
-  
+
     XtPopup (TopLevel1,XtGrabNone);
 
 
@@ -202,10 +202,3 @@ PostIt(Widget w, XtPointer p, XEvent *event, Boolean *c)
   XmMenuPosition(popup, (XButtonPressedEvent *)event);
   XtManageChild(popup);
 }
-
-
-
-
-
-
-

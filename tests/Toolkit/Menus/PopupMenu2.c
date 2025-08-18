@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupMenu2.c /main/9 1995/07/13 18:51:50 drk $"
@@ -58,41 +58,41 @@ static void TranslationPost(Widget w, XEvent *event, String *params,
   XtManageChild (popup);
 }
 
-static void cascading_msg(Widget w, XtPointer client_data, 
+static void cascading_msg(Widget w, XtPointer client_data,
 			  XtPointer call_data)
 {
   fprintf(stdout, "cascading callback - %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
-static void ArmCallback(Widget w, XtPointer client_data, 
+static void ArmCallback(Widget w, XtPointer client_data,
 		    XtPointer call_data)
 {
   fprintf(stdout, "arm callback - %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
-static void disArmCallback(Widget w, XtPointer client_data, 
+static void disArmCallback(Widget w, XtPointer client_data,
 		       XtPointer call_data)
 {
   fprintf(stdout, "disarm callback - %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
-static void activate_msg(Widget w, XtPointer client_data, 
+static void activate_msg(Widget w, XtPointer client_data,
 					XtPointer call_data)
 {
   fprintf(stdout, "activate callback - destroy %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
-    
+
   XtDestroyWidget(w);
 }
 
-void PrintName_2(Widget rc, XtPointer client_data, 
+void PrintName_2(Widget rc, XtPointer client_data,
 		 XtPointer rc_data)
 {
   XmRowColumnCallbackStruct * rc_struct = (XmRowColumnCallbackStruct *)rc_data;
-  fprintf(stdout, "Widget %s was activated\n", 
+  fprintf(stdout, "Widget %s was activated\n",
 	  XrmQuarkToString(rc_struct->widget->core.xrm_name));
 }
 
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
   static char menuTranslations[] = "<Btn1Down>: PostPopupMenu()";
 
   CommonTestInit(argc, argv);
-    
+
   XtAppAddActions(app_context, actionTable, 1);
 
   n = 0;
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
   XtSetArg(args[n], XtNallowShellResize, True); n++;
   XtSetValues(Shell1, args, n);
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Popup Menu on MB2", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   label = XmCreateLabel(Shell1, "top_label", args, n);
@@ -138,14 +138,14 @@ int main(int argc, char *argv[])
   popup = XmCreatePopupMenu(label, "popup", args, n);
   XtAddEventHandler(label, ButtonPressMask, False, PostIt, (XtPointer) popup);
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("PopupMenu", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   title = XmCreateLabel(popup, "Title", args, n);
   XtManageChild(title);
   XmStringFree(tcs);
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Red (W)", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   red = XmCreatePushButton(popup, "red", args, n);
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
   XtManageChild(red);
   XmStringFree(tcs);
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Blue (G)", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   blue = XmCreatePushButtonGadget(popup, "blue", args, n);
@@ -164,8 +164,8 @@ int main(int argc, char *argv[])
   XtAddCallback(blue, XmNdisarmCallback, disArmCallback, NULL);
   XtManageChild(blue);
   XmStringFree(tcs);
-    
-  n = 0; 
+
+  n = 0;
   tcs = XmStringLtoRCreate ("Yellow (W)", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   yellow = XmCreatePushButton(popup, "yellow", args, n);
@@ -175,11 +175,11 @@ int main(int argc, char *argv[])
   XtManageChild(yellow);
   XmStringFree(tcs);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNentryCallback, (XtArgVal)PrintName_CB); n++;
   submenu2 = (Widget)XmCreatePulldownMenu(popup, "submenu2", args, n);
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Green (W)", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   green = XmCreatePushButton(submenu2, "green", args, n);
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
   submenu4 = (Widget)XmCreatePulldownMenu(popup, "submenu4", args, n);
 
   n = 0;
-  tcs = XmStringLtoRCreate("Child1 (G)", CharSet); 
+  tcs = XmStringLtoRCreate("Child1 (G)", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   child1 = XmCreatePushButtonGadget(submenu4, "child1", args, n);
   XtAddCallback(child1, XmNarmCallback, ArmCallback, NULL);
@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringLtoRCreate("Children", CharSet); 
+  tcs = XmStringLtoRCreate("Children", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNsubMenuId, submenu4); n++;
   children = XmCreateCascadeButton(popup, "children", args, n);

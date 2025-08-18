@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form23.c /main/4 1995/07/13 18:07:42 drk $"
@@ -56,15 +56,15 @@ char    **argv;
 {
   register int  n;
   Arg           args[MAX_ARGS];
-  
+
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth,  50);                               n++;
   XtSetArg (args[n], XmNheight, 25);                               n++;
   XtSetValues(Shell1, args, n);
-    
-  XtRealizeWidget(Shell1);    
+
+  XtRealizeWidget(Shell1);
 
   RunTest(Shell1);
 
@@ -81,23 +81,23 @@ Widget Shell;
 
   CreateForms(Shell);
   CommonPause();
-    
+
   for (i = 0; i < MAXCASE; i++) XtUnmanageChild(ChildA[i]);
   for (i = 0; i < MAXCASE; i++) XtUnmanageChild(ChildB[i]);
   for (i = 0; i < MAXCASE; i++) XtUnmanageChild(ChildC[i]);
   for (i = 0; i < MAXCASE; i++) XtUnmanageChild(ChildD[i]);
-    
+
   for (i = 0; i < MAXCASE; i++) {
     n = 0;
     XtSetArg(args[n], XmNwidth, 75);                                   n++;
-    XtSetArg(args[n], XmNheight, 75);                                  n++;  
+    XtSetArg(args[n], XmNheight, 75);                                  n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET);     n++;
     XtSetArg(args[n], XmNtopWidget, ChildA[i]);                        n++;
     XtSetValues(ChildB[i], args, n);
 
     n = 0;
     XtSetArg(args[n], XmNwidth, 100);                                  n++;
-    XtSetArg(args[n], XmNheight, 100);                                 n++;  
+    XtSetArg(args[n], XmNheight, 100);                                 n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET);     n++;
     XtSetArg(args[n], XmNtopWidget, ChildB[i]);                        n++;
     XtSetValues(ChildC[i], args, n);
@@ -110,19 +110,19 @@ Widget Shell;
     XtSetValues(ChildD[i], args, n);
 
   }
-    
-    
+
+
   CommonPause();
-    
+
   for (i = 0; i < MAXCASE; i++) XtManageChild(ChildA[i]);
   for (i = 0; i < MAXCASE; i++) XtManageChild(ChildB[i]);
   for (i = 0; i < MAXCASE; i++) XtManageChild(ChildC[i]);
   for (i = 0; i < MAXCASE; i++) XtManageChild(ChildD[i]);
-    
+
   CommonPause();
-  
+
   DestroyForms();
-    
+
 }
 
 static void CreateForms(Shell)
@@ -132,7 +132,7 @@ Widget Shell;
   register int  case_number;
   char label[80];
   Arg args[MAX_ARGS];
-  
+
   for (case_number = 0; case_number < MAXCASE; case_number++) {
 
     sprintf(label, "Case_%d", case_number);
@@ -150,31 +150,31 @@ Widget Shell;
     n = 0;
     XtSetArg(args[n], XmNallowShellResize, True);                  n++;
     XtSetValues(XtParent(Form[case_number]), args, n);
-    
+
     Child1[case_number] = XmCreatePushButton(Form[case_number], "", NULL, 0);
     Child2[case_number] = XmCreatePushButton(Form[case_number], "", NULL, 0);
     Child3[case_number] = XmCreatePushButton(Form[case_number], "", NULL, 0);
     Child4[case_number] = XmCreatePushButton(Form[case_number], "", NULL, 0);
-    
+
     switch ( case_number ) {
-      
+
     case 0:
 
       sprintf(label, "Child: A 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);         n++;
       XtSetValues(Child1[case_number], args, n);
 
       ChildA[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: B 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -182,11 +182,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildB[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: C 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -194,11 +194,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildC[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: D 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);        n++;
@@ -207,25 +207,25 @@ Widget Shell;
       XtSetValues(Child4[case_number], args, n);
 
       ChildD[case_number] = Child4[case_number];
-      
+
       break;
-      
+
     case 1:
 
       sprintf(label, "Child: A 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
-      XtSetValues(Child1[case_number], args, n);    
+      XtSetValues(Child1[case_number], args, n);
 
       ChildA[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: B 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -233,11 +233,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildB[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: C 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -245,11 +245,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildC[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: D 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);        n++;
@@ -258,26 +258,26 @@ Widget Shell;
       XtSetValues(Child4[case_number], args, n);
 
       ChildD[case_number] = Child4[case_number];
-      
+
       break;
-      
+
     case 2:
 
       sprintf(label, "Child: A 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);         n++;
       XtSetValues(Child1[case_number], args, n);
 
       ChildA[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: B 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -285,11 +285,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildB[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: C 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -297,11 +297,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildC[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: D 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -311,23 +311,23 @@ Widget Shell;
       ChildD[case_number] = Child4[case_number];
 
       break;
-      
+
     case 3:
 
       sprintf(label, "Child: A 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetValues(Child1[case_number], args, n);
 
       ChildA[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: B 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -335,11 +335,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildB[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: C 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -347,11 +347,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildC[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: D 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -361,13 +361,13 @@ Widget Shell;
       ChildD[case_number] = Child4[case_number];
 
       break;
-      
+
     case 4:
 
       sprintf(label, "Child: D 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);        n++;
@@ -376,11 +376,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildD[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: C 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -388,11 +388,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildC[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: B 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -400,11 +400,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildB[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: A 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);         n++;
@@ -413,13 +413,13 @@ Widget Shell;
       ChildA[case_number] = Child4[case_number];
 
       break;
-      
+
     case 5:
 
       sprintf(label, "Child: D 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);        n++;
@@ -428,11 +428,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildD[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: C 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -440,11 +440,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildC[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: B 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -452,11 +452,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildB[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: A 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetValues(Child4[case_number], args, n);
@@ -464,13 +464,13 @@ Widget Shell;
       ChildA[case_number] = Child4[case_number];
 
       break;
-      
+
     case 6:
 
       sprintf(label, "Child: D 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -478,11 +478,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildD[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: C 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -490,11 +490,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildC[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: B 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -502,11 +502,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildB[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: A 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);         n++;
@@ -515,13 +515,13 @@ Widget Shell;
       ChildA[case_number] = Child4[case_number];
 
       break;
-      
+
     case 7:
 
       sprintf(label, "Child: D 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -529,11 +529,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildD[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: C 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -541,11 +541,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildC[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: B 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);       n++;
@@ -553,11 +553,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildB[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: A 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));   n++;
       XtSetValues(Child4[case_number], args, n);
@@ -571,7 +571,7 @@ Widget Shell;
       sprintf(label, "Child: A 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);          n++;
@@ -580,11 +580,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildA[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: B 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -593,11 +593,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildB[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: C 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -606,11 +606,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildC[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: D 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);         n++;
@@ -626,7 +626,7 @@ Widget Shell;
       sprintf(label, "Child: A 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -634,11 +634,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildA[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: B 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -647,11 +647,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildB[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: C 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -660,11 +660,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildC[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: D 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);         n++;
@@ -674,13 +674,13 @@ Widget Shell;
       ChildD[case_number] = Child4[case_number];
 
       break;
-      
+
     case 10:
 
       sprintf(label, "Child: D 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);         n++;
@@ -688,11 +688,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildD[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: C 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -701,11 +701,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildC[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: B 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -714,11 +714,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildB[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: A 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);          n++;
@@ -729,13 +729,13 @@ Widget Shell;
       ChildA[case_number] = Child4[case_number];
 
       break;
-      
+
     case 11:
 
       sprintf(label, "Child: D 1");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);         n++;
@@ -743,11 +743,11 @@ Widget Shell;
       XtSetValues(Child1[case_number], args, n);
 
       ChildD[case_number] = Child1[case_number];
-      
+
       sprintf(label, "Child: C 2");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -756,11 +756,11 @@ Widget Shell;
       XtSetValues(Child2[case_number], args, n);
 
       ChildC[case_number] = Child2[case_number];
-      
+
       sprintf(label, "Child: B 3");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -769,11 +769,11 @@ Widget Shell;
       XtSetValues(Child3[case_number], args, n);
 
       ChildB[case_number] = Child3[case_number];
-      
+
       sprintf(label, "Child: A 4");
 
       n = 0;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
                XmNlabelString,
                XmStringCreate(label, XmSTRING_DEFAULT_CHARSET));    n++;
       XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);       n++;
@@ -785,24 +785,24 @@ Widget Shell;
       break;
 
     }
-    
-    
+
+
     XtManageChild(Child1[case_number]);
     XtManageChild(Child2[case_number]);
     XtManageChild(Child3[case_number]);
     XtManageChild(Child4[case_number]);
-    
-    
+
+
     XtManageChild(Form[case_number]);
 
   }
-}	
+}
 
 static void DestroyForms()
 {
   register int  case_number;
-  
-  
+
+
   for (case_number = 0; case_number < MAXCASE; case_number++) {
 
     XtDestroyWidget(XtParent(Form[case_number]));

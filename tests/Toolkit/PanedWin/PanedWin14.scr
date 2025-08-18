@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #  Buttons 1 and 2 are 150 in height, Button 3 is 80. Pane minimum
-#  is 100. Try to resize panes smaller than their mimimum. 
+#  is 100. Try to resize panes smaller than their mimimum.
 #  Press Alt-F8 (or pull down Size from the client's
-#  window menu) and take note of the current height of the client. 
+#  window menu) and take note of the current height of the client.
 
 CompareVisual XmVPanedWindow1
 
@@ -47,8 +47,8 @@ Continue
 #  not be able to make any pane smaller.
 #  Because the Paned Window's top and bottom margins were increased,
 #  the Pane and Shell should grow by about 100 pixels to
-#  accomodate the mimimums and margins. 
-#  Again take note of the current height of the client. 
+#  accomodate the mimimums and margins.
+#  Again take note of the current height of the client.
 
 
 LocatePointer XmVPanedWindow1 RSash 0
@@ -64,16 +64,16 @@ Continue
 
 
 #  The sashes are doubled in size. Should be a net gain of about 22 pixels in
-#  the size of the shell. 
+#  the size of the shell.
 
 CompareVisual Shell1
 Continue
-  
+
 
 #  The separators should disappear. The sash is now as wide as the
 #  Paned Window, making a sort of bar where the
 #  separator and sash were. The children remain the same, except the minimum
-#  size for each has been reduced by 50 so the sashes can be moved.  
+#  size for each has been reduced by 50 so the sashes can be moved.
 
 CompareVisual XmVPanedWindow1
 Continue
@@ -92,7 +92,3 @@ Continue
 
 CompareVisual XmVPanedWindow1
 Exit
-
-
-
-

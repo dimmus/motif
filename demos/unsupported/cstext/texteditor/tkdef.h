@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: tkdef.h /main/5 1995/07/14 09:45:45 drk $ */
 
 
@@ -35,7 +35,7 @@
 
 enum warn_reasons { warn_open, warn_write, warn_save, warn_remove };
 
-enum attributes { TkFONT, TkCOLOR, TkTHRU, TkUNDER }; 
+enum attributes { TkFONT, TkCOLOR, TkTHRU, TkUNDER };
 
 #define TkBEGIN 0
 #define TkEND 1

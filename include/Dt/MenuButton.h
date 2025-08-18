@@ -91,7 +91,7 @@ externalref WidgetClass dtMenuButtonWidgetClass;
  * Functions
  */
 
-extern Widget DtCreateMenuButton( 
+extern Widget DtCreateMenuButton(
 		Widget		parent,
 		char		*name,
 		ArgList		arglist,

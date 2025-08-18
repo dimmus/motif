@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -58,7 +58,7 @@ FreeRequest(WSMRequest *request)
 
 	    num = request->extensions.num_extensions;
 	    ptr = request->extensions.extension_suggestions;
-	    for (i = 0; i < num; i++, ptr++) 
+	    for (i = 0; i < num; i++, ptr++)
 		XtFree((XtPointer) *ptr);
 
 	    XtFree((XtPointer) request->extensions.extension_suggestions);
@@ -69,7 +69,7 @@ FreeRequest(WSMRequest *request)
 	    register int num = request->set_state.num_win_info_list;
 	    WSMWinInfo *win_info = request->set_state.win_info_list;
 
-	    for (i = 0; i < num; i++, win_info++) 
+	    for (i = 0; i < num; i++, win_info++)
 		FreeWinData(win_info->data_list, win_info->num_data_list);
 
 	    XtFree((XtPointer) request->set_state.win_info_list);
@@ -102,7 +102,7 @@ FreeReply(WSMReply *reply)
 
 	    num = reply->extensions.num_extensions;
 	    ptr = reply->extensions.extensions;
-	    for (i = 0; i < num; i++, ptr++) 
+	    for (i = 0; i < num; i++, ptr++)
 		XtFree((XtPointer) *ptr);
 
 	    XtFree((XtPointer) reply->extensions.extensions);
@@ -113,7 +113,7 @@ FreeReply(WSMReply *reply)
 	    WSMWinInfo *win_info = reply->get_state.win_info_list;
 	    register int num = reply->get_state.num_win_info_list;
 
-	    for (i = 0; i < num; i++, win_info++) 
+	    for (i = 0; i < num; i++, win_info++)
 		FreeWinData(win_info->data_list, win_info->num_data_list);
 
 	    XtFree((XtPointer) reply->get_state.win_info_list);
@@ -152,7 +152,7 @@ FreeWinData(WSMWinData *data, int num)
 	case WSM_CHAR_LIST_DATA:
 	    XtFree((XtPointer) data->data.char_ptr);
 	    break;
-	case WSM_SHORT_LIST_DATA: 
+	case WSM_SHORT_LIST_DATA:
 	    XtFree((XtPointer) data->data.short_ptr);
 	    break;
 	case WSM_LONG_LIST_DATA:
@@ -162,6 +162,6 @@ FreeWinData(WSMWinData *data, int num)
 	    break;
 	}
     }
-    
+
     XtFree((XtPointer) top);
-}	
+}

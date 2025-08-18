@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TestInit.c /main/10 1995/07/14 11:59:29 drk $"
@@ -90,7 +90,7 @@ void CommonTestInit(int argc, char **argv)
 	Fix some day. */
 
      /* atexit (ManualRegressionSignal); */
-	
+
 	/* open output file; if impossible, use stdout */
 
 	output_file = fopen ("RUN_output", "a");
@@ -127,7 +127,7 @@ void CommonTestInit(int argc, char **argv)
      if (CommonExtraN > 0) {
         for (i = 0 ; i < CommonExtraN; i++) {
                 if (strcmp(CommonExtraArgs[i].name, "CommonAppClass") == 0)
-                        strcpy(CommonAppClass, 
+                        strcpy(CommonAppClass,
  			       (char *) CommonExtraArgs[i].value);
                 else {
                         args[n].name = CommonExtraArgs[i].name;
@@ -138,7 +138,7 @@ void CommonTestInit(int argc, char **argv)
 
      /*
       *  Initialize malloc checking.  Note: a side effect of this
-      *  is that the above signals will be redefined to call 
+      *  is that the above signals will be redefined to call
       *  MallocExit.
      */
 
@@ -160,9 +160,9 @@ void CommonTestInit(int argc, char **argv)
      }
 
      rootWindow = XDefaultRootWindow(display);
-	
+
      XtSetArg(args[n], XmNallowShellResize, True);  	n++;
-     Shell1 = XtAppCreateShell(argv[0], CommonAppClass, 
+     Shell1 = XtAppCreateShell(argv[0], CommonAppClass,
 		          applicationShellWidgetClass, display, args, n);
 
      screen = XtScreen(Shell1);
@@ -185,8 +185,8 @@ void CommonTestInit(int argc, char **argv)
 *									 *
 *************************************************************************/
 
-void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc, 
-			XtPointer client_data) 
+void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
+			XtPointer client_data)
 
 {
      int 	n, i;
@@ -205,7 +205,7 @@ void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
 	Fix some day. */
 
      /* atexit (ManualRegressionSignal); */
-	
+
 	/* open output file; if impossible, use stdout */
 
 	output_file = fopen ("RUN_output", "a");
@@ -242,7 +242,7 @@ void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
      if (CommonExtraN > 0) {
         for (i = 0 ; i < CommonExtraN; i++) {
                 if (strcmp(CommonExtraArgs[i].name, "CommonAppClass") == 0)
-                        strcpy(CommonAppClass, 
+                        strcpy(CommonAppClass,
  			       (char *) CommonExtraArgs[i].value);
                 else {
                         args[n].name = CommonExtraArgs[i].name;
@@ -253,7 +253,7 @@ void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
 
      /*
       *  Initialize malloc checking.  Note: a side effect of this
-      *  is that the above signals will be redefined to call 
+      *  is that the above signals will be redefined to call
       *  MallocExit.
      */
 
@@ -261,7 +261,7 @@ void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
 
      XtToolkitInitialize();
      app_context = XtCreateApplicationContext();
-     
+
      /*
       * Register the language procedure called to set the locale.
       */
@@ -278,15 +278,15 @@ void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
      CommonGetOptions(&argc, argv);
 
      rootWindow = XDefaultRootWindow(display);
-	
+
      XtSetArg(args[n], XmNallowShellResize, True);  	n++;
-     Shell1 = XtAppCreateShell(argv[0], CommonAppClass, 
+     Shell1 = XtAppCreateShell(argv[0], CommonAppClass,
 		          applicationShellWidgetClass, display, args, n);
 
      screen = XtScreen(Shell1);
 
 }
-	
+
 static void  ManualSignalQuit(sig, code, scp)
 int sig, code;
 struct sigcontext *scp;
@@ -354,7 +354,7 @@ struct sigcontext *scp;
 
      /* even on an interrupt, write out summary */
 
-     if (InstructionBox != NULL) 
+     if (InstructionBox != NULL)
      	XtCallCallbacks (XmMessageBoxGetChild(InstructionBox,
                                               XmDIALOG_CANCEL_BUTTON),
                          XmNactivateCallback, NULL);
@@ -362,5 +362,3 @@ struct sigcontext *scp;
 	exit(0);
 
 }
-
-

@@ -1,9 +1,9 @@
 /*********************************************************/
----- The uid file to be opened is textSl.uid ---- 
+---- The uid file to be opened is textSl.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer ttext  
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer ttext
 
 /*********************************************************/
 ---- focusCallback callback made ----
@@ -25,7 +25,7 @@ TRACE:(2) LocatePointer ttext
 ---- Reason was XmCR_FOCUS ----
 /*********************************************************/
 
-TRACE:(3) ClickMB Btn1 
+TRACE:(3) ClickMB Btn1
 TRACE:(4) InputString "This is a test line that is kinda long"
 
 /*********************************************************/
@@ -560,7 +560,7 @@ TRACE:(4) InputString "This is a test line that is kinda long"
 /*********************************************************/
 
 TRACE:(5) ClickKey KReturn
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
+TRACE:(6) CompareVisual S_MAIN_WIDGET
 TRACE:(7) Exit
 
 /*********************************************************/

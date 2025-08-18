@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # A client with a form should appear.
@@ -36,7 +36,7 @@ CompareVisual form
 # C)
 Continue
 
-# The form should contain one pushbutton labeled 'pushB'. 
+# The form should contain one pushbutton labeled 'pushB'.
 # is set). The existing button should be offset by 2 inches from the new button.
 # Press MB1 on the larger button. The new button will disappear and the
 # larger button will have its top attached to the form again. The verticalSpacing

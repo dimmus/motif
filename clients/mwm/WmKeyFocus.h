@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,28 +19,28 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 
 extern void AutoResetKeyFocus (ClientData *pcdNoFocus, Time focusTime);
 extern void ClearFocusIndication (ClientData *pCD, Boolean refresh);
-extern Boolean CheckForKeyFocus (ClientListEntry *pNextEntry, 
-				 unsigned long type, Boolean focusNext, 
+extern Boolean CheckForKeyFocus (ClientListEntry *pNextEntry,
+				 unsigned long type, Boolean focusNext,
 				 Time focusTime);
 extern void DoExplicitSelectGrab (Window window);
-extern ClientData *FindLastTransientTreeFocus (ClientData *pCD, 
+extern ClientData *FindLastTransientTreeFocus (ClientData *pCD,
 					       ClientData *pcdNoFocus);
-extern ClientData *FindNextTFocusInSeq (ClientData *pCD, 
+extern ClientData *FindNextTFocusInSeq (ClientData *pCD,
 					unsigned long startAt);
-extern ClientData *FindPrevTFocusInSeq (ClientData *pCD, 
+extern ClientData *FindPrevTFocusInSeq (ClientData *pCD,
 					unsigned long startAt);
-extern Boolean FocusNextTransient (ClientData *pCD, unsigned long type, 
+extern Boolean FocusNextTransient (ClientData *pCD, unsigned long type,
 				   Boolean initiate, Time focusTime);
 extern Boolean FocusNextWindow (unsigned long type, Time focusTime);
-extern Boolean FocusPrevTransient (ClientData *pCD, unsigned long type, 
+extern Boolean FocusPrevTransient (ClientData *pCD, unsigned long type,
 				   Boolean initiate, Time focusTime);
 extern Boolean FocusPrevWindow (unsigned long type, Time focusTime);
 extern ClientData *GetClientUnderPointer (Boolean *pSameScreen);
@@ -49,6 +49,3 @@ extern void RepairFocus (void);
 extern void ResetExplicitSelectHandling (ClientData *pCD);
 extern void SetFocusIndication (ClientData *pCD);
 extern void SetKeyboardFocus (ClientData *pCD, long focusFlags);
-
-
-

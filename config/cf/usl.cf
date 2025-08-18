@@ -111,7 +111,7 @@ XCOMM operating system: OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVer
 #    define SharedUilReqs $(LDPRELIBS) $(MRESOURCELIB) $(XMLIB) SharedXReqs -lsocket -lnsl
 #  endif
 #endif
-  
+
 /* <X11/Xos_r.h> requires process locking for missing _r functions */
 #define TtClientLibs $(TTLIB) $(XTOOLLIB) $(XLIB)
 #define TtClientDepLibs $(DEPTTLIB) $(DEPXTOOLLIB) $(DEPXLIB)

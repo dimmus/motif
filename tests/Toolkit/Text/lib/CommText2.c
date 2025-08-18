@@ -61,7 +61,7 @@ int main_text2 (argc, argv)
 
    /*  initialize toolkit  */
    CommonTestInit(argc, argv);
-    
+
    /* Begin Test for Pir2718 */
 
    n = 0;
@@ -72,7 +72,7 @@ int main_text2 (argc, argv)
    XtSetArg(args[n], XmNwidth, 390); n++;
    XtSetArg(args[n], XmNheight, 115); n++;
    XtSetValues(Shell1, args, n);
-   
+
    new_table = XtParseTranslationTable (new_translations);
 
    n = 0;

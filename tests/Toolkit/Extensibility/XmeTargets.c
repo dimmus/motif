@@ -56,23 +56,23 @@ Window window;
 
 static void DestinationCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data);
 static void DoneProcCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data);
 static void SetForegroundCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data);
 static void StandardTestCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data);
 static void TargetConvertCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data);
 
 Widget		targ1, targ2, reset;
@@ -140,10 +140,10 @@ XErrorEvent	*ev;
 /*** define callbacks for setting up test cases ***/
 
 /*ARGSUSED*/
-static void 
+static void
 TargetConvertCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data)
 {
   int n = (int) client_data;
@@ -169,10 +169,10 @@ TargetConvertCB(
 }
 
 /*ARGSUSED*/
-static void 
+static void
 DestinationCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data)
 {
   int n = (int) client_data;
@@ -184,10 +184,10 @@ DestinationCB(
 }
 
 /*ARGSUSED*/
-static void 
+static void
 StandardTestCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data)
 {
   int n = (int) client_data;
@@ -198,15 +198,15 @@ StandardTestCB(
 		  FOREGROUND, /* target */
 		  (XtCallbackProc) SetForegroundCB, /* proc */
 		  (XtPointer) NULL, /* client_data */
-		  NULL); /* parm */ 
+		  NULL); /* parm */
   return;
 }
 
 /*ARGSUSED*/
-static void 
+static void
 SetForegroundCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data)
 {
   XmSelectionCallbackStruct *ss = (XmSelectionCallbackStruct *) call_data;
@@ -219,14 +219,14 @@ SetForegroundCB(
 }
 
 /*ARGSUSED*/
-static void 
+static void
 DoneProcCB(
 	Widget w,
-	XtPointer client_data, 
+	XtPointer client_data,
 	XtPointer call_data)
 {
   int n = (int) client_data;
-  XmTransferDoneCallbackStruct *ts = 
+  XmTransferDoneCallbackStruct *ts =
     (XmTransferDoneCallbackStruct *) call_data;
 
   done_proc_called = True;
@@ -234,7 +234,7 @@ DoneProcCB(
 }
 
 /*ARGSUSED*/
-static void ResetCB(Widget w, XtPointer client_data, 
+static void ResetCB(Widget w, XtPointer client_data,
 			   XtPointer call_data)
 {
   int	i, n, status;
@@ -254,7 +254,7 @@ static void ResetCB(Widget w, XtPointer client_data,
   XtSetValues(targ2, args, n);
 }
 
-int 
+int
 main (int argc, char **argv)
 {
   register int       n;
@@ -284,7 +284,7 @@ main (int argc, char **argv)
 	      argv[0]);
       exit(0);
     }
-  }    
+  }
 #endif
 
   XSetErrorHandler(ProtoError);
@@ -294,9 +294,9 @@ main (int argc, char **argv)
   /* Set the initiatorProtocolStyle and recieverProtocolStyle resources */
   n = 0;
   xmDisplay = XmGetXmDisplay(XtDisplay(Shell1));
-  XtSetArg(args[n], XmNdragInitiatorProtocolStyle, 
+  XtSetArg(args[n], XmNdragInitiatorProtocolStyle,
 	   initiatorProtocolStyle); n++;
-  XtSetArg(args[n], XmNdragReceiverProtocolStyle, 
+  XtSetArg(args[n], XmNdragReceiverProtocolStyle,
 	   receiverProtocolStyle); n++;
   XtSetValues(xmDisplay, args, n);
 
@@ -314,14 +314,14 @@ main (int argc, char **argv)
 
   n = 0;
   grid = XtVaCreateManagedWidget("Grid",
-				 exmGridWidgetClass, Shell1, 
+				 exmGridWidgetClass, Shell1,
 				 XmNrows, 1,
 				 XmNcolumns, 3,
-				 NULL); 
+				 NULL);
 
   default_str1 = XmStringCreateLocalized("Widget ONE");
   targ1 = XtVaCreateManagedWidget("targ1",
-				  exmTargetsWidgetClass, grid, 
+				  exmTargetsWidgetClass, grid,
 				  XmNwidth, 100,
 				  XmNheight, 10,
 /*				  XtVaTypedArg, XmNforeground, XmRString,
@@ -334,7 +334,7 @@ main (int argc, char **argv)
 
   default_str2 = XmStringCreateLocalized("Widget TWO");
   targ2 = XtVaCreateManagedWidget("targ2",
-				   exmTargetsWidgetClass, grid, 
+				   exmTargetsWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 10,
 				   ExmNcompoundString, default_str2,
@@ -345,7 +345,7 @@ main (int argc, char **argv)
 
   reset_str = XmStringCreateLocalized("RESET");
   reset = XtVaCreateManagedWidget("reset",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   XmNalignment, XmALIGNMENT_CENTER,
@@ -366,7 +366,7 @@ main (int argc, char **argv)
   XtAddCallback(targ1, XmNdestinationCallback, StandardTestCB, (XtPointer)1);
   XtAddCallback(targ2, XmNdestinationCallback, StandardTestCB, (XtPointer)2);
 
-  /* test standard convert by requesting a FOREGROUND target in the 
+  /* test standard convert by requesting a FOREGROUND target in the
      StandardTestCB. */
   CommonPause();
 

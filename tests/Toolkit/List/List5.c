@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List5.c /main/9 1995/07/13 18:18:57 drk $"
@@ -47,7 +47,7 @@ void  main (argc, argv)
     XmFontList         	newfontlist;
 
     CommonTestInit(argc, argv);
-    
+
     newfontlist = CommonGetFontList(
 	  "-adobe-helvetica-bold-r-normal--14-140-75-75-p-82-iso8859-1");
 
@@ -89,7 +89,7 @@ void  main (argc, argv)
 
     /* Enter Add Mode with Selection Policy as EXTENDED SELECT */
 
-    XmListSetAddMode(List1, True);  
+    XmListSetAddMode(List1, True);
 
     CommonPause();
     CommonPause();
@@ -266,4 +266,3 @@ static void SensitiveCB(Widget w, XtPointer client_data,
 	XtSetSensitive(List1, False);
 
 }
-

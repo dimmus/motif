@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifndef _XmDropTransferP_h
 #define _XmDropTransferP_h
@@ -79,7 +79,7 @@ typedef struct _XmDropTransferPart
     unsigned char		transfer_status;
 
     Atom 			motif_drop_atom;
-    
+
     XmDropTransferList		drop_transfer_lists;
     Cardinal			num_drop_transfer_lists;
     Cardinal			cur_drop_transfer_list;

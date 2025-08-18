@@ -28,9 +28,9 @@
 /*
  *	file: TextPerf.c
  *
- *	Has a Multi line Scrolled Text widget under Form. 
+ *	Has a Multi line Scrolled Text widget under Form.
  *      The XmNcolumns resource is being set to 80 at creation time,
- *      and XmNrows to 24. The wordWrap is off. 
+ *      and XmNrows to 24. The wordWrap is off.
  *	The file TextPerfIn.c from Motif 1.1 is read in and the
  *	memory measured.
  */
@@ -108,7 +108,7 @@ char **argv;
 	XtSetArg(args[n], XtNwidth, 800);  n++;
 	XtSetArg(args[n], XtNheight, 500);  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
 	/* create main form */
 	n = 0;
@@ -139,7 +139,7 @@ char **argv;
 	XtRealizeWidget(Shell1);
 
         /*  Instruct user to rerun test - timing the display of text widget. */
-        CommonPause(); 
+        CommonPause();
 
         /*  Test scrolling by moving slider. */
         CommonPause();

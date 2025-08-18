@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
-# Scroll vertically to the end using the arrow down 
+# Scroll vertically to the end using the arrow down
 
 LocatePointer ScrolledW RVertScrollBarDownArrow
 AutoPerformMonitor On
@@ -37,7 +37,7 @@ AutoPerformMonitor On
 ClickMB Btn1 9
 AutoPerformMonitor Off
 
-# Scroll vertically to the end using the slider 
+# Scroll vertically to the end using the slider
 
 LocatePointer ScrolledW RVertScrollBarSlider
 AutoPerformMonitor On
@@ -65,7 +65,7 @@ AutoPerformMonitor On
 ClickMB Btn1 9
 AutoPerformMonitor Off
 
-# Scroll horizontally to the end using the slider 
+# Scroll horizontally to the end using the slider
 
 LocatePointer ScrolledW RHorizScrollBarSlider
 AutoPerformMonitor On
@@ -103,12 +103,11 @@ AutoPerformMonitor Off
 AutoPerformMonitor On
 WindowResize Shell1 South 375
 AutoPerformMonitor Off
- 
+
 # resize to show one more column
 
 AutoPerformMonitor On
 WindowResize Shell1 East 400
 AutoPerformMonitor Off
- 
-Exit
 
+Exit

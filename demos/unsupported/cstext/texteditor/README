@@ -50,7 +50,7 @@ of other layers as possible.  The various files have the following roles:
                  dialogue layer of the application.
 
                  The second half of the file defines all the callback
-                 routines and registers the callbacks in Mrm. 
+                 routines and registers the callbacks in Mrm.
 			  Many of these simply update state internal
                  to this layer; others perform additional actions.  Where
                  those actions unambiguously correspond to toolkit-specific
@@ -60,7 +60,7 @@ of other layers as possible.  The various files have the following roles:
 
 	dlg.c -- This code manages the dialogue with the user.  By
                  using tk.c, it is toolkit-independent.
- 
+
 	texteditor.c -- Used to initialize the application and instantiates
                  widget hierarchies.  Hides the use of UIL and Mrm from the
                  rest of the application.
@@ -149,6 +149,3 @@ Have fun!
 
 	W. Scott Meeks
 	meeks@osf.org
-
-
-

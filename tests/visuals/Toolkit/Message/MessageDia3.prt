@@ -22,30 +22,30 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual mbox 
-TRACE:(2) LocatePointer mbox  
+TRACE:(1) CompareVisual mbox
+TRACE:(2) LocatePointer mbox
 This message is expected on Cancel or FocusIn
-TRACE:(3) LocatePointer mbox ROkButton 
-TRACE:(4) ClickMB Btn1 
+TRACE:(3) LocatePointer mbox ROkButton
+TRACE:(4) ClickMB Btn1
 TRACE:(5) Continue
 TRACE:(6) WindowMove mbox 200 500
-TRACE:(7) LocatePointer Shell1  
-TRACE:(8) CompareVisual Shell1 
-TRACE:(9) LocatePointer mbox ROkButton 
-TRACE:(10) ClickMB Btn1 
-TRACE:(11) CompareVisual mbox 
+TRACE:(7) LocatePointer Shell1
+TRACE:(8) CompareVisual Shell1
+TRACE:(9) LocatePointer mbox ROkButton
+TRACE:(10) ClickMB Btn1
+TRACE:(11) CompareVisual mbox
 TRACE:(12) Continue
 The default button is OK
-TRACE:(13) LocatePointer mbox RCancelButton 
-TRACE:(14) ClickMB Btn1 
+TRACE:(13) LocatePointer mbox RCancelButton
+TRACE:(14) ClickMB Btn1
 This message is expected on Cancel or FocusIn
-TRACE:(15) CompareVisual mbox 
+TRACE:(15) CompareVisual mbox
 TRACE:(16) Continue
 The default button is OK
-TRACE:(17) LocatePointer mbox RCancelButton 
-TRACE:(18) ClickMB Btn1 
+TRACE:(17) LocatePointer mbox RCancelButton
+TRACE:(18) ClickMB Btn1
 This message is expected on Cancel or FocusIn
-TRACE:(19) CompareVisual mbox 
+TRACE:(19) CompareVisual mbox
 TRACE:(20) Continue
 TRACE:(21) Exit
 Exiting Test...Please Standby...

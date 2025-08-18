@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1h.Dat -u h".
 # C)
-# 
+#
 # #) The container widget should be displayed in its ANY_ICON view.
 # #) Four IconGadgets should be visible.
 #    "IconGad1", "IconGad2" and "IconGad3" should be displayed in their small
@@ -33,11 +33,11 @@
 #    a black box, and the label part displaying the strings "IconGad1",
 #    "IconGad2", and "IconGad4" respectively.
 #    "IconGad3" should be displayed in its large icon view.
-# #) The layoutType is XmSPATIAL, the spatialStyle is XmCELLS, 
-#    the spatialSnapModel is XmCenter, smallCellHeight is 80, 
+# #) The layoutType is XmSPATIAL, the spatialStyle is XmCELLS,
+#    the spatialSnapModel is XmCenter, smallCellHeight is 80,
 #    smallCellWidth is 100, largeCellHeight is 80, largeCellWidth is 100,
 #    marginHeight is 20, and marginWidth is 20.
-# #)  Resize the window until the width is 250. 
+# #)  Resize the window until the width is 250.
 # C)
 
 Continue
@@ -55,7 +55,7 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 0
 #       Names of items selected:
-# 
+#
 # #) Press BSelect on "IconGad1"
 # #) "IconGad1" gets selected.
 # #) With BSelect pressed, drag the pointer over item "IconGad4", touching
@@ -67,12 +67,12 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 3
 #       Names of items selected: IconGad1 IconGad3 IconGad4
-# 
+#
 # #) Click BSelect in the background of Container where there is no item.
 #    All selected items should get deselected.
 # C)
 
-LocatePointerXYRel Container1h 10 10 
+LocatePointerXYRel Container1h 10 10
 ClickMB Btn1
 CompareVisual Container1h
 LocatePointer IconGad1
@@ -82,11 +82,11 @@ LocatePointer IconGad3
 LocatePointer IconGad4
 ReleaseMB Btn1
 CompareVisual Container1h
-LocatePointerXYRel Container1h 10 10 
+LocatePointerXYRel Container1h 10 10
 ClickMB Btn1
 CompareVisual Container1h
 Continue
- 
+
 # #) Press Bselect in the background of the Container at some point to the
 #    top and left of the item "IconGad1" and drag a little. You will notice
 #    a marquee rectangle following the pointer.
@@ -103,7 +103,7 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 3
 #       Names of items selected: IconGad1 IconGad2 IconGad3
-# 
+#
 # #) Click BSelect in the background of the Container outside of all the
 #    items. All the selected items should get deselected. You should also
 #    see the following message in the term window:
@@ -113,18 +113,18 @@ Continue
 #       Names of items selected:
 # C)
 
-LocatePointerXYRel Container1h 10 10 
+LocatePointerXYRel Container1h 10 10
 PressMB Btn1
 CompareVisual Container1h
-LocatePointerXYRel Container1h 50 50 
+LocatePointerXYRel Container1h 50 50
 CompareVisual Container1h
 LocatePointerXYRel Container1h 200 190
 CompareVisual Container1h
 ReleaseMB Btn1
 CompareVisual Container1h
-LocatePointerXYRel Container1h 10 10 
+LocatePointerXYRel Container1h 10 10
 ClickMB Btn1
-Continue 
+Continue
 
 # E)
 Exit

@@ -1,5 +1,5 @@
 # $XConsortium: Frame4.scr /main/5 1995/07/17 20:25:07 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client with five frames should appear.
 #
@@ -40,13 +40,13 @@
 #    a togglebutton.
 #
 #    The fifth frame has a shadow type of SHADOW_OUT and contains
-#    the label gadget \"LABELGADGET1\". 
+#    the label gadget \"LABELGADGET1\".
 
 CompareVisual RowColumn1
 Continue
 
-# Iconify the client window.  Normalize the client window. 
-#  Resize the client window. 
+# Iconify the client window.  Normalize the client window.
+#  Resize the client window.
 
 WindowIconify Shell1
 WindowDeiconify Shell1
@@ -72,15 +72,3 @@ Continue
 
 CompareVisual RowColumn1
 Exit
-
-
-
-
-
-
-
-
-
-
-
-

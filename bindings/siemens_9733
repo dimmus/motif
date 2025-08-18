@@ -45,6 +45,3 @@ osfAddMode	:Shift		<Key>F8
 osfHelp		:		<Key>Help
 osfMenu		:		<Key>Linefeed
 osfMenuBar	:		<Key>F10
-
-
-

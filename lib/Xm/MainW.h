@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmMainWindow_h
 #define _XmMainWindow_h
 
@@ -41,20 +41,20 @@ typedef struct _XmMainWindowRec      * XmMainWindowWidget;
 
 /********    Public Function Declarations    ********/
 
-extern void XmMainWindowSetAreas( 
+extern void XmMainWindowSetAreas(
                         Widget w,
                         Widget menu,
                         Widget command,
                         Widget hscroll,
                         Widget vscroll,
                         Widget wregion) ;
-extern Widget XmMainWindowSep1( 
+extern Widget XmMainWindowSep1(
                         Widget w) ;
-extern Widget XmMainWindowSep2( 
+extern Widget XmMainWindowSep2(
                         Widget w) ;
-extern Widget XmMainWindowSep3( 
+extern Widget XmMainWindowSep3(
                         Widget w) ;
-extern Widget XmCreateMainWindow( 
+extern Widget XmCreateMainWindow(
                         Widget parent,
                         char *name,
                         ArgList args,

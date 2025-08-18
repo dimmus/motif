@@ -24,7 +24,7 @@
 /*
  * HISTORY
  */
-/* 
+/*
  * Original History:
  *
  * Revision 1.7.4.4  1993/05/20  15:58:47  msmith
@@ -35,7 +35,7 @@
  * Revision 1.7.4.3  1993/04/08  17:28:15  yak
  * 	Replaced #ifdef MOTIF1_2 with #ifndef MOTIF1_1.
  * 	[1993/04/08  16:37:44  yak]
- * 
+ *
  * Revision 1.7.4.2  1993/03/15  20:01:01  rec
  * 	Test was recreating a widget that was not previously destroyed.
  * 	This caused pixmap comparison problems (looked like it was comparing
@@ -43,27 +43,27 @@
  * 	of XmCreate.  This work was done to resolve pixmap comparison
  * 	problems (T 34).
  * 	[1993/03/15  20:00:35  rec]
- * 
+ *
  * Revision 1.7.2.5  1992/04/06  20:53:38  libby
  * 	Can't use FlushEvents under Automation.
  * 	[1992/04/06  20:52:40  libby]
- * 
+ *
  * Revision 1.7.2.4  1992/04/02  22:01:13  tomm
  * 	Ansi changes from HP.
  * 	[1992/04/02  21:58:35  tomm]
- * 
+ *
  * Revision 1.7.2.3  1992/03/30  13:04:43  libby
  * 	Force Panel12 to come up 300 x 300.
  * 	[1992/03/28  21:16:32  libby]
- * 
+ *
  * Revision 1.7.2.2  1992/03/26  14:58:57  libby
  * 	Add test to correct working of P4502 (operator error as reported).
  * 	[1992/03/26  14:56:29  libby]
- * 
+ *
  * Revision 1.7  1992/03/13  17:05:45  devsrc
  * 	Converted to ODE
- * 
-*/ 
+ *
+*/
 
 
 #include <signal.h>
@@ -119,18 +119,18 @@ char  **argv;
 
     CommonTestInit(argc, argv);
 
-    /* 
+    /*
      *  If UserData is "xmBulletinBoardWidgetClass" or
      *  is not specified, we will create a
      *  Bulletin Board parent, which illustrates P2721. If it's
      *  xmFormWidgetClass,
-     *  we'll create the Form parent, which lets us test ForceResize 
+     *  we'll create the Form parent, which lets us test ForceResize
      *  on the parent, an uninteresting case unless the parent is
-     *  a Form. Hence, when we're in BBParent mode, we'll also ignore 
+     *  a Form. Hence, when we're in BBParent mode, we'll also ignore
      *  the ResizeParent cases and insensitize that toggle.
      */
-   
-    if (UserData) { 
+
+    if (UserData) {
        if (strcmp (UserData, "xmFormWidgetClass") == 0) {
            parentMode = FormParent;
 	   printf ("Using Form Parent.\n");
@@ -144,8 +144,8 @@ char  **argv;
         printf ("Using BulletinBoard Parent.\n");
         parentMode = BBParent;
     }
-      
-    
+
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  40);  n++;
     XtSetArg(args[n], XmNheight, 30);  n++;
@@ -194,14 +194,14 @@ char  **argv;
     XtSetArg(args[n], XmNarrowDirection, XmARROW_UP);  n++;
     ArrowButton1 = XmCreateArrowButton(DrawingArea1, "ArrowButton1", args, n);
     XtManageChild(ArrowButton1);
-    XtAddCallback (ArrowButton1, XmNactivateCallback, 
-		   ForceResize, (XtPointer) 1); 
+    XtAddCallback (ArrowButton1, XmNactivateCallback,
+		   ForceResize, (XtPointer) 1);
 
     n = 0;
     tcs = XmStringCreateSimple ("Resize Drawn Button");
     XtSetArg(args[n], XmNx, 50);  n++;
     XtSetArg(args[n], XmNy, 4);  n++;
-    XtSetArg(args[n], XmNlabelString, tcs ); n++; 
+    XtSetArg(args[n], XmNlabelString, tcs ); n++;
     Label1 = XmCreateLabel(DrawingArea1, "Label1", args, n);
     XtManageChild(Label1);
     XmStringFree(tcs);
@@ -212,8 +212,8 @@ char  **argv;
     XtSetArg(args[n], XmNarrowDirection, XmARROW_DOWN);  n++;
     ArrowButton2 = XmCreateArrowButton(DrawingArea1, "ArrowButton2", args, n);
     XtManageChild(ArrowButton2);
-    XtAddCallback (ArrowButton2, XmNactivateCallback, 
-		   ForceResize, (XtPointer) -1); 
+    XtAddCallback (ArrowButton2, XmNactivateCallback,
+		   ForceResize, (XtPointer) -1);
 
     n = 0;
     XtSetArg(args[n], XmNx, 4);  n++;
@@ -239,7 +239,7 @@ char  **argv;
     ChildToggle = XmCreateToggleButton(rowcol, "ChildToggle", args, n);
     XtManageChild(ChildToggle);
     XmStringFree(tcs);
-    XtAddCallback (ChildToggle, XmNvalueChangedCallback, 
+    XtAddCallback (ChildToggle, XmNvalueChangedCallback,
 		   ChangeResizeTarget, (XtPointer) DrawnButton1);
 
     resize_target = DrawnButton1;
@@ -255,7 +255,7 @@ char  **argv;
     ParentToggle = XmCreateToggleButtonGadget(rowcol, "ParentToggle", args, n);
     XtManageChild(ParentToggle);
     XmStringFree(tcs);
-    XtAddCallback (ParentToggle, XmNvalueChangedCallback, ChangeResizeTarget, 
+    XtAddCallback (ParentToggle, XmNvalueChangedCallback, ChangeResizeTarget,
 		   (XtPointer) parent);
 
     /* if the parentMode is BB, this isn't an interesting case, so make
@@ -268,7 +268,7 @@ char  **argv;
     }
 
     XtManageChild (rowcol);
-    
+
     /* reset the margins, change margin units */
     n = 0;
     XtSetArg(args[n],XmNmarginHeight,5); n++;
@@ -299,7 +299,7 @@ char  **argv;
     XmStringFree(tcs);
 
     if (XmToggleButtonGetState(ChildToggle) == False)
-       XmToggleButtonSetState(ChildToggle, 
+       XmToggleButtonSetState(ChildToggle,
 			      True,         /* set it ON */
 			      False);       /* no notify */
 
@@ -311,9 +311,9 @@ char  **argv;
 
     /* switch over to move callbacks */
 
-    XtRemoveCallback (ArrowButton1, XmNactivateCallback, ForceResize, 
+    XtRemoveCallback (ArrowButton1, XmNactivateCallback, ForceResize,
 		      (XtPointer) 1);
-    XtRemoveCallback (ArrowButton2, XmNactivateCallback, ForceResize, 
+    XtRemoveCallback (ArrowButton2, XmNactivateCallback, ForceResize,
 		      (XtPointer) -1);
     XtAddCallback (ArrowButton1, XmNactivateCallback, ForceMove, (XtPointer) 1);
     XtAddCallback (ArrowButton2, XmNactivateCallback, ForceMove, (XtPointer) -1);
@@ -378,7 +378,7 @@ char  **argv;
     XtManageChild(DrawnButton1);
 
     n = 0;
-    tcs = XmStringCreateSimple ("Push me to change Size"); 
+    tcs = XmStringCreateSimple ("Push me to change Size");
     XtSetArg(args[n], XmNx, 10); n++;
     XtSetArg(args[n], XmNy, 30); n++;
     XtSetArg(args[n], XmNlabelString, tcs ); n++;
@@ -386,12 +386,12 @@ char  **argv;
     XtManageChild(PB);
     XmStringFree(tcs);
     XtAddCallback(PB, XmNactivateCallback, PBsize, (XtPointer) DrawnButton1);
-  
+
 
     CommonPause();
 
 
-    /* 
+    /*
      *  Begin code for PIR 2775
      */
 
@@ -403,7 +403,7 @@ char  **argv;
     XtSetArg(args[n], XmNheight, 500); n++;
     DrawingArea1 = XmCreateDrawingArea(Shell1, "DrawingArea1", args, n);
     XtManageChild(DrawingArea1);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth, 100);  n++;
     XtSetArg(args[n], XmNheight, 100);  n++;
@@ -417,7 +417,7 @@ char  **argv;
 
     CommonPause();
 
-    /* 
+    /*
      *  End code for PIR 2775
      */
 
@@ -429,7 +429,7 @@ char  **argv;
     XtSetArg(args[n], XmNwidth, 100); n++;
     XtSetArg(args[n], XmNheight, 150); n++;
     XtSetValues(DrawingArea1, args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 100);  n++;
     XtSetArg(args[n], XmNy, 100);  n++;
@@ -440,7 +440,7 @@ char  **argv;
 
     CommonPause();
 
-    /* 
+    /*
      *  Now move the child, drawing area should be (100, 200)
      *   not (50, 200)
      */
@@ -476,7 +476,7 @@ char  **argv;
     XtSetArg(args[n], XmNresizePolicy, XmRESIZE_NONE); n++;
     DrawingArea1 = XmCreateDrawingArea(Shell1, "DrawingArea1", args, n);
     XtManageChild(DrawingArea1);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 50);  n++;
     XtSetArg(args[n], XmNy, 50);  n++;
@@ -503,7 +503,7 @@ char  **argv;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_ANY); n++;
     XtSetValues (DrawingArea1, args, n);
 
-    XtAddCallback(DrawingArea1, XmNresizeCallback, ResizeChildtoFit, 
+    XtAddCallback(DrawingArea1, XmNresizeCallback, ResizeChildtoFit,
 		  (XtPointer) ArrowButton1);
 
     /* End test for PIR 4052 */
@@ -541,7 +541,7 @@ Arg args[2];
   if ((int)(long)client_data > 0) {  /* increase them */
     height += 10;
     width  += 10;
-  }  
+  }
   else /* client_data < 1 */ {
     if (height <= 10)
       height = 1;
@@ -550,7 +550,7 @@ Arg args[2];
       width = 1;
     else width  -= 10;
   }
-  
+
   XtSetArg (args[0], XmNheight, height);
   XtSetArg (args[1], XmNwidth, width);
   XtSetValues (resize_target, args, 2);
@@ -574,7 +574,7 @@ Arg args[2];
   if ((int)(long)client_data > 0) {  /* increase them */
     xpos += 10;
     ypos  += 10;
-  }  
+  }
   else /* client_data < 1 */ {
     if (xpos <= 10)
       xpos = 1;
@@ -583,13 +583,13 @@ Arg args[2];
       ypos = 1;
     else ypos  -= 10;
   }
-  
+
   XtSetArg (args[0], XmNx, xpos);
   XtSetArg (args[1], XmNy, ypos);
   XtSetValues (resize_target, args, 2);
 
 }
-  
+
 void ChangeResizeTarget (widget, client_data, call_data)
 Widget widget;
 Widget client_data;
@@ -620,10 +620,10 @@ XtPointer call_data;
   Dimension width; int tptr;
   Arg args[1];
 
-  XtSetArg(args[0], XmNwidth, &width); 
+  XtSetArg(args[0], XmNwidth, &width);
   XtGetValues((Widget) client_data, args, 1);
   printf("Setting width from %d TO %d\n",width,width+20);
-  XtSetArg(args[0], XmNwidth, width+20); 
+  XtSetArg(args[0], XmNwidth, width+20);
   XtSetValues((Widget) client_data, args, 1);
 
 }
@@ -633,18 +633,18 @@ void ResizeChildtoFit (Widget w, XtPointer client_data, XtPointer call_data)
   Dimension manager_width, manager_height;
   int n;
   Arg args[10];
-  
+
   n=0;
   XtSetArg(args[n], XmNwidth, &manager_width); n++;
   XtSetArg(args[n], XmNheight, &manager_height); n++;
   XtGetValues(w, args, n);
 
-  printf("manager_width =%d  manager_height = %d\n", 
+  printf("manager_width =%d  manager_height = %d\n",
 	 manager_width, manager_height);
 
-  XtConfigureWidget ((Widget) client_data, 
+  XtConfigureWidget ((Widget) client_data,
 		     0, 0,
-		     manager_width - 1, 		
-		     manager_height - 1, 
+		     manager_width - 1,
+		     manager_height - 1,
 		     0);
 }

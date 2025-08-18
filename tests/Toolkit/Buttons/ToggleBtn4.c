@@ -34,7 +34,7 @@ static char rcsid[] = "$XConsortium: ToggleBtn4.c /main/4 1995/07/13 17:32:52 dr
  *
  * This program tests the indicator dimensions - Changing pixmap sizes,
  * setting the indicator dimension for pixmaps, and changing the label in
- * a pulldown menu of toggle buttons. 
+ * a pulldown menu of toggle buttons.
  *
  ****************************************************************************/
 #include <testlib.h>
@@ -119,7 +119,7 @@ void tbCB (widget, moreinfo, callData)
   }
   XtSetValues(widget, args, n);
 }
-  
+
 void main (argc, argv)
 unsigned int argc;
 char **argv;
@@ -135,8 +135,8 @@ char **argv;
 
 /* Begin test for 4998 - Change the pixmaps to verify that the indicator
  * size changes to match the size of the new pixmap.
- */ 
-  
+ */
+
   rc = XmCreateRowColumn(Shell1, "rc", NULL, 0);
   XtManageChild(rc);
 
@@ -182,8 +182,8 @@ char **argv;
 
 /*
  * Begin test for 5203: Create a pulldown menu of toggle buttons.
- * Add a callback to the first toggle button which will cause a change 
- * in its label.  Verify that the indicator size stays the same after 
+ * Add a callback to the first toggle button which will cause a change
+ * in its label.  Verify that the indicator size stays the same after
  * the change.
  */
 
@@ -198,7 +198,7 @@ char **argv;
     labelstring[strlen(labelstring) - 1] = 'A' + n;
     tcs = XmStringCreateLocalized(labelstring);
     XtSetArg(args[0], XmNlabelString, tcs);
-    XtSetArg(args[1], XmNset, True);  
+    XtSetArg(args[1], XmNset, True);
     tb[n] = XmCreateToggleButton(pulldown, labelstring, args, 2);
     XmStringFree(tcs);
   }
@@ -209,11 +209,9 @@ char **argv;
   XtSetArg(args[n], XmNsubMenuId, pulldown); n++;
   cb1 = XmCreateCascadeButton(menubar, "MENU", args, n);
   XtManageChild(cb1);
-  XtManageChild(menubar); 
+  XtManageChild(menubar);
   CommonPause();
 
   CommonPause(); /* exit */
   XtAppMainLoop(app_context);
 }
-
-

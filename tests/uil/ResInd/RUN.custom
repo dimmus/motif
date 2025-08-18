@@ -20,8 +20,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 #
 # DISPLAY would be set one way or the other by this time
@@ -53,4 +53,3 @@ set displayUid6 = 'displayUid1 -u pushBtn -I pushBtn.Dat -S pushBtn.Scr -O pushB
 
 foreach test ("$displayUid1" "$displayUid2" "$displayUid3" \
 			  "$displayUid4" "$displayUid5" "$displayUid6" )
-

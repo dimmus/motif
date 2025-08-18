@@ -1,5 +1,5 @@
 # $XConsortium: ArrowBGad2.scr /main/6 1995/07/17 20:05:44 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,15 +20,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client with a drawing area should appear. The shell
-#  will then grow to contain a 4x4 matrix of ArrowButtonGadgets. 
+#  will then grow to contain a 4x4 matrix of ArrowButtonGadgets.
 # Move the pointer over each ArrowButtonGadget. They should
-#  each display a highlight border in the light shadow color. 
+#  each display a highlight border in the light shadow color.
 
 LocatePointer arrowButton0
 CompareVisual arrowButton0
@@ -71,11 +71,8 @@ CompareVisual arrowButton14
 LocatePointer arrowButton15
 CompareVisual arrowButton15
 
-# Iconify the client window. Normalize the client window. 
+# Iconify the client window. Normalize the client window.
 
 WindowIconify Shell1
 WindowDeiconify Shell1
 Exit
-
-
-

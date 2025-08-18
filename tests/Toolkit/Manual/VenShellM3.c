@@ -30,7 +30,7 @@
 
 Widget button0,  shell1, shell2, shell3, button1, button2, button3;
 
-static void 
+static void
 button_activate(Widget w, XtPointer client, XtPointer data)
 {
     int button_num = *((int *)client);
@@ -55,7 +55,7 @@ main(int argc, char *argv[])
  int n;
  static int i = 1;
 
-  
+
  CommonTestInit (argc,argv);
 
  n=0;
@@ -64,14 +64,14 @@ main(int argc, char *argv[])
  XtManageChild(button0);
 
  n=0;
- shell1 = XtAppCreateShell("shell1", "Shell1", topLevelShellWidgetClass, 
+ shell1 = XtAppCreateShell("shell1", "Shell1", topLevelShellWidgetClass,
 			   display,args,n);
 
  n=0;
  button1 = (Widget) XmCreatePushButton(shell1, "Button1", args,n);
  XtManageChild (button1);
 
- shell2 = XtAppCreateShell("shell2", "Shell2", topLevelShellWidgetClass, 
+ shell2 = XtAppCreateShell("shell2", "Shell2", topLevelShellWidgetClass,
 			   display,args,n);
 
 
@@ -79,10 +79,10 @@ main(int argc, char *argv[])
  button2 = (Widget) XmCreatePushButton(shell2, "Button2", args,n);
  XtManageChild (button2);
 
- shell3 = XtAppCreateShell("shell3", "Shell3", topLevelShellWidgetClass, 
+ shell3 = XtAppCreateShell("shell3", "Shell3", topLevelShellWidgetClass,
 			   display,args,n);
 
- 
+
  n=0;
  button3 = (Widget) XmCreatePushButton(shell3, "Button3", args,n);
  XtManageChild (button3);

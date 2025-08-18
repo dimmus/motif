@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ResPartOffM1.c /main/6 1995/07/13 18:37:26 drk $"
@@ -96,7 +96,7 @@ typedef struct _FooRec      * FooWidget;
 
 #define FooIndex (XmScrollBarIndex + 1)
 
-static XmPartResource resources[] = 
+static XmPartResource resources[] =
 {
    {
       XmNbar, XmCBar, XmRInt, sizeof (int),
@@ -123,24 +123,24 @@ FooClassRec fooClassRec =
       FALSE,                            /* class_inited          */
       NULL,                             /* initialize	         */
       NULL,                             /* initialize_hook       */
-      XtInheritRealize,                 /* realize	         */	
-      NULL,                             /* actions               */	
-      0,                                /* num_actions	         */	
-      (XtResource *) resources,         /* resources	         */	
-      XtNumber (resources),             /* num_resources         */	
-      NULLQUARK,                        /* xrm_class	         */	
-      TRUE,                             /* compress_motion       */	
-      TRUE,                             /* compress_exposure     */	
+      XtInheritRealize,                 /* realize	         */
+      NULL,                             /* actions               */
+      0,                                /* num_actions	         */
+      (XtResource *) resources,         /* resources	         */
+      XtNumber (resources),             /* num_resources         */
+      NULLQUARK,                        /* xrm_class	         */
+      TRUE,                             /* compress_motion       */
+      TRUE,                             /* compress_exposure     */
       TRUE,                             /* compress_enterleave   */
-      FALSE,                            /* visible_interest      */	
-      NULL,                             /* destroy               */	
-      XtInheritResize,                  /* resize                */	
-      XtInheritExpose,                  /* expose                */	
-      NULL,                             /* set_values    	 */	
+      FALSE,                            /* visible_interest      */
+      NULL,                             /* destroy               */
+      XtInheritResize,                  /* resize                */
+      XtInheritExpose,                  /* expose                */
+      NULL,                             /* set_values    	 */
       NULL,                             /* set_values_hook       */
       XtInheritSetValuesAlmost,         /* set_values_almost     */
       NULL,				/* get_values_hook       */
-      XtInheritAcceptFocus,             /* accept_focus	         */	
+      XtInheritAcceptFocus,             /* accept_focus	         */
       XtVersionDontCheck,               /* version               */
       NULL,                             /* callback private      */
       XtInheritTranslations,            /* tm_table              */
@@ -208,7 +208,7 @@ char **argv;
 
    /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
 
    /*  The form creation.  */
 
@@ -273,15 +273,3 @@ caddr_t call_data;
       break;
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-

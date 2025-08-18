@@ -218,8 +218,8 @@ XCOMM operating system:  OSName
 
 /*
  * ForceSubdirs - force make to build subdirectories
- * 
- * For BSD 4.4 make 
+ *
+ * For BSD 4.4 make
  */
 #define ForceSubdirs(dirs)						@@\
 dirs:	.EXEC								@@\
@@ -306,9 +306,9 @@ install.man:: 								@@\
 #define BuildScreenSaverLibrary	YES
 #endif
 /*
- * XFree86 uses its own (more portable) database routines to speed up 
+ * XFree86 uses its own (more portable) database routines to speed up
  * the RGB database lookups
- * However, if you want to use ndbm anyway, you can set that to NO in 
+ * However, if you want to use ndbm anyway, you can set that to NO in
  * site.def
  */
 #ifndef UseRgbTxt

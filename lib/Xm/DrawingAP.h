@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDrawingAreaP_h
 #define _XmDrawingAreaP_h
 
@@ -74,7 +74,7 @@ typedef struct
   XtCallbackList	input_callback;
 
   unsigned char		resize_policy;
-  
+
 #ifndef XM_PART_BC
   XtCallbackList	convert_callback;
   XtCallbackList	destination_callback;

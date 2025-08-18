@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifndef _XmDragBSI_h
 #define _XmDragBSI_h
@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 /*
- * defalut values for XmNnumImportTargets and XmNimportTargets. 
+ * defalut values for XmNnumImportTargets and XmNimportTargets.
  */
 #define _XmDefaultNumImportTargets	0;
 #define _XmDefaultImportTargets		NULL;
@@ -103,24 +103,24 @@ typedef struct {
 
 /********    Private Function Declarations for DragBS.c   ********/
 
-extern void _XmInitTargetsTable( 
+extern void _XmInitTargetsTable(
                         Display *display) ;
 extern void _XmClearDisplayTables (Display *display);
-extern Cardinal _XmIndexToTargets( 
+extern Cardinal _XmIndexToTargets(
                         Widget shell,
                         Cardinal t_index,
                         Atom **targetsRtn) ;
-extern Cardinal _XmTargetsToIndex( 
+extern Cardinal _XmTargetsToIndex(
                         Widget shell,
                         Atom *targets,
                         Cardinal numTargets) ;
-extern Atom _XmAllocMotifAtom( 
+extern Atom _XmAllocMotifAtom(
                         Widget shell,
                         Time time) ;
-extern void _XmFreeMotifAtom( 
+extern void _XmFreeMotifAtom(
                         Widget shell,
                         Atom atom) ;
-extern void _XmDestroyMotifWindow( 
+extern void _XmDestroyMotifWindow(
                         Display *dpy) ;
 extern Window _XmGetDragProxyWindow(
 			Display *display) ;

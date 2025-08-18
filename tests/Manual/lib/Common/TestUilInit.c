@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,19 +19,19 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TestUilInit.c /main/6 1995/07/14 11:59:48 drk $"
 #endif
 #endif
-  
+
 #include "testlib.h"
-  
+
 
 /*************************************************************************
  *                                                                       *
@@ -47,13 +47,9 @@ static char rcsid[] = "$XConsortium: TestUilInit.c /main/6 1995/07/14 11:59:48 d
  *************************************************************************/
 
 void CommonTestUilInit(int argc, char **argv)
-     
+
 {
 
   CommonTestInit(argc, argv);
 
 }
-
-
-
-

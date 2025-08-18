@@ -19,9 +19,9 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-# 
+#
 # Original History:
 # Revision 1.2.4.3  1993/09/21  21:08:44  yak
 # 	Removed blocks ifdef'ed by MOTIF1_1.
@@ -31,21 +31,21 @@
 # Revision 1.2.4.2  1993/08/19  13:31:08  yak
 # 	Expanded copyright marker
 # 	[1993/07/30  19:27:23  yak]
-# 
+#
 # Revision 1.2.2.3  1992/04/20  19:23:16  qauser
 # 	Out of sync number of Continues.
 # 	[1992/04/20  19:22:55  qauser]
-# 
+#
 # Revision 1.2.2.2  1992/03/26  14:59:12  libby
 # 	PIR 4502, correct behavior
 # 	[1992/03/26  14:58:09  libby]
-# 
+#
 # Revision 1.2  1992/03/13  17:05:56  devsrc
 # 	Converted to ODE
-# 
-# 
+#
+#
 
-# Client window will contain the following items: 
+# Client window will contain the following items:
 #  a label "Resize Drawn Button", with arrowButtons on both sides;
 #  a square Box;  two toggle buttons, "Resize Child" and "Resize Parent".
 
@@ -83,7 +83,7 @@ CompareVisual parent
 
 # Decrease the size of the child several times. At some point, the Drawing
 #  Area will stop growing smaller. At this point, no more resize callback
-#  messages should appear as you decrease the child's size. 
+#  messages should appear as you decrease the child's size.
 
 LocatePointer ArrowButton2
 ClickMB Btn1 4
@@ -96,14 +96,14 @@ ClickMB Btn1 18
 LocatePointer ArrowButton1
 ClickMB Btn1 12
 CompareVisual parent
-Continue 
+Continue
 
 # Resize parent is off, so continue
 Continue
 
 # By clicking on arrow buttons, you will instead MOVE the child. The "Resize
-#  Parent" toggle is no longer useful. Use the UP arrow to move the drawn 
-#  button until it forces the client to resize. Again, you should see 
+#  Parent" toggle is no longer useful. Use the UP arrow to move the drawn
+#  button until it forces the client to resize. Again, you should see
 #  resize callback messages each time the client appears to resize.
 
 LocatePointer ArrowButton1
@@ -112,7 +112,7 @@ CompareVisual parent
 Continue
 
 # The Parent toggle was unmanaged and remanaged. There should be
-#  only TWO messages about an expose event having been generated. 
+#  only TWO messages about an expose event having been generated.
 # Note: You can also compile this test with -DBESTCASE, and you may see fewer
 #  expose events being generated.
 
@@ -132,7 +132,7 @@ CompareVisual DrawnButton1
 Continue
 
 # The drawing area should now contain an arrow button.  The size
-#  of the drawing area should be approximately 520x620. 
+#  of the drawing area should be approximately 520x620.
 
 CompareVisual DrawingArea1
 

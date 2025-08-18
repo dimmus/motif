@@ -1,5 +1,5 @@
 # $XConsortium: Label3.scr /main/5 1995/07/17 20:33:52 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 #  A client with a drawing area will appear. The shell
@@ -31,8 +31,8 @@
 #  Each label will contain a pixmap -- a tiefighter, a woman,
 #  a pointer, and a target. The foreground and background
 #  colors are determined from the drawing area.
-#  The PIXMAPS have been created with XmGetPixmap. 
-#  Iconify and normalize the client window. 
+#  The PIXMAPS have been created with XmGetPixmap.
+#  Iconify and normalize the client window.
 
 CompareVisual drawarea
 WindowIconify Shell1

@@ -45,7 +45,7 @@
  *************************************/
 
 /******************************************
- * Class declaration for CxxPrimitive * 
+ * Class declaration for CxxPrimitive *
  ******************************************/
 
 externaldef (xmcxxprimitiveclassrec)
@@ -78,7 +78,7 @@ WidgetClass xmCxxPrimitiveWidgetClass = (WidgetClass) &xmCxxPrimitiveClassRec;
  *   -  core_class.destroy (subclass destructors should be used instead)
  *   -  basically all function slots corresponding to a virtual function
  *	(subclasses should implement their own virtual function instead)
- *	
+ *
  *   -  TO BE CONTINUED...
  *
  * Some entries may be overriden by subclass constructors :
@@ -93,9 +93,9 @@ XmCxxPrimitiveClass::XmCxxPrimitiveClass(char*		name,
 					 Cardinal	num_resources,
 					 XtInitProc	cxx_cast) {
 
-    XmBaseClassExt core_ext = 
+    XmBaseClassExt core_ext =
 	(XmBaseClassExt) XtMalloc(sizeof(XmBaseClassExtRec));
-    
+
     /*
      * Passed parameter initialization
      */
@@ -123,7 +123,7 @@ XmCxxPrimitiveClass::XmCxxPrimitiveClass(char*		name,
     core_class.callback_private		= NULL;
     core_class.tm_table			= XtInheritTranslations;
     core_class.extension		= core_ext;
-	
+
 
     /*
      * Core part class-methods
@@ -131,7 +131,7 @@ XmCxxPrimitiveClass::XmCxxPrimitiveClass(char*		name,
      */
     // Chained methods must be NULL for all classes but CxxPrimitiveClass;
     if (this == &xmCxxPrimitiveClassRec) {
-        core_class.class_part_initialize= 
+        core_class.class_part_initialize=
 	    XmCxxPrimitiveClass::ClassPartInitialize;
 	core_class.initialize		= XmCxxPrimitive::Initialize;
 	core_class.initialize_hook	= XmCxxPrimitive::InitializeHook;
@@ -158,8 +158,8 @@ XmCxxPrimitiveClass::XmCxxPrimitiveClass(char*		name,
     core_class.accept_focus		= XmCxxPrimitive::AcceptFocus;
     core_class.query_geometry		= XmCxxPrimitive::QueryGeometry;
     core_class.display_accelerator	= XmCxxPrimitive::DisplayAccelerator;
-    
-    
+
+
     /*
      * Base class extension data
      */
@@ -204,7 +204,7 @@ XmCxxPrimitiveClass::XmCxxPrimitiveClass(char*		name,
      */
     XmPrimitiveClassExt prim_ext	= (XmPrimitiveClassExt)
 	XtMalloc(sizeof(XmPrimitiveClassExtRec));
-    
+
     primitive_class.translations	= NULL;
     primitive_class.syn_resources	= NULL;
     primitive_class.num_syn_resources	= 0;
@@ -272,7 +272,7 @@ void XmCxxPrimitive::operator delete(void*) {}
 
 void XmCxxPrimitiveClass::SetBaseClassExtensionQuark() {
     /*
-     * Set base_class extension record type. 
+     * Set base_class extension record type.
      * This cannot be done staticaly (quarks are not initialized then).
      * Make sure to get the right extension record...
      */
@@ -300,7 +300,7 @@ void XmCxxPrimitiveClass::SetBaseClassExtensionQuark() {
  *
  * ClassInitialize
  *
- ********************************************************************/         
+ ********************************************************************/
 void XmCxxPrimitiveClass::ClassInitialize() {
     /* set up base_class extension quark */
     xmCxxPrimitiveClassRec.SetBaseClassExtensionQuark();
@@ -322,7 +322,7 @@ void XmCxxPrimitive::_MakeCxxWidget(Widget /*req_w*/, Widget new_w,
 void XmCxxPrimitive::Destroy(Widget w) {
     // Upward chained;
     // call overloaded operator delete : no free, just call all destructors;
-    delete (XmCxxPrimitiveWidget) w; 
+    delete (XmCxxPrimitiveWidget) w;
 }
 
 
@@ -337,7 +337,7 @@ void XmCxxPrimitive::Destroy(Widget w) {
  *   The static members are only defined for CxxPrimitive and are stored
  *   in each class record, or for some of them (chained methods) only in
  *   the CxxPrimitiveClass instance.
- *   
+ *
  *   Instead of overriding the function slot in the class record,
  *   new subclasses should (must) implement their version of the
  *   corresponding virtual function.
@@ -352,7 +352,7 @@ void XmCxxPrimitive::Destroy(Widget w) {
  *
  *  class_part_initialize : virtual
  *     Downward chained Xt method :
- *     each class re-implementing class_part_initialize() should start by 
+ *     each class re-implementing class_part_initialize() should start by
  *     calling <superclass>::class_part_initialize()
  *
  ************************************************************************/
@@ -387,7 +387,7 @@ void XmCxxPrimitive::Initialize(Widget req_w, Widget new_w,
  *
  *  initialize_hook : virtual
  *     Downward chained Xt method :
- *     each class re-implementing initialize_hook() should start by 
+ *     each class re-implementing initialize_hook() should start by
  *     calling <superclass>::initialize_hook()
  *
  ************************************************************************/
@@ -520,7 +520,7 @@ Boolean XmCxxPrimitive::accept_focus(Time* t) {
 Boolean XmCxxPrimitive::AcceptFocus(Widget w, Time* t) {
     return ((XmCxxPrimitiveWidget) w)->accept_focus(t);
 }
-    
+
 
 /************************************************************************
  *
@@ -906,4 +906,3 @@ void XmCxxPrimitive::widget_margins(XmBaselineMargins* margins) {
 void XmCxxPrimitive::WidgetMargins(Widget w, XmBaselineMargins* margins) {
     ((XmCxxPrimitiveWidget) w)->widget_margins(margins);
 }
-

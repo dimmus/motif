@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -52,10 +52,10 @@ void main(int argc, char **argv)
     XtSetArg(args[n], XmNenableDragIcon, True);                 n++;
     XtSetValues(xmDisplay, args, n);
 
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  580);  			n++;
-    XtSetArg(args[n], XmNheight, 450);  			n++; 
+    XtSetArg(args[n], XmNheight, 450);  			n++;
     XtSetValues(Shell1, args, n);
 
     n = 0;
@@ -79,7 +79,7 @@ void main(int argc, char **argv)
     XtSetArg(args[n], XmNorientation, XmVERTICAL);             n++;
     RC1 = XmCreateRowColumn(Form, "RC1", args, n);
     XtManageChild(RC1);
-    
+
     n = 0;
     tcs = XmStringGenerate("Click and try ",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
@@ -142,7 +142,7 @@ void main(int argc, char **argv)
     XtSetArg(args[n], XmNorientation, XmVERTICAL);             n++;
     RC2 = XmCreateRowColumn(Form, "RC2", args, n);
     XtManageChild(RC2);
-    
+
     n = 0;
     tcs = XmStringGenerate("Click and try again ",
 			   XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
@@ -155,7 +155,7 @@ void main(int argc, char **argv)
     XtManageChild(ToggleG2);
 
     XmStringFree(tcs);
-    
+
     n = 0;
     tcs = XmStringGenerate("with PATH_MODE_RELATIVE ",
 			   XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
@@ -164,7 +164,7 @@ void main(int argc, char **argv)
     XtManageChild(LabelG2);
 
     XmStringFree(tcs);
-   
+
     n = 0;
     tcs = XmStringCreateSimple(
       "/users/qauser/FS/fourteencharac/");
@@ -202,5 +202,3 @@ void main(int argc, char **argv)
 
     XtAppMainLoop(app_context);
 }
-
-

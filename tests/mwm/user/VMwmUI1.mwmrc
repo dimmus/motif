@@ -60,12 +60,3 @@ Buttons VMwmButtonBindings
 	<Btn3Down>              root            f.menu GotoMenu
 	<Btn1Down>              root            f.menu RootMenu
 }
-
-
-	
-
-
-
-
-
-

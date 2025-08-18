@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -44,7 +44,7 @@
 /**********************************************************************/
 
 /*ARGSUSED*/
-void 
+void
 _XmRCColorHook(
         Widget w,
         ArgList alIn,		/* unused */
@@ -70,7 +70,7 @@ _XmRCColorHook(
     _XmProcessUnlock();
 
     /** get the colorObj for this display connection **/
-    if (XFindContext(ColorObjCacheDisplay, (XID)XtDisplay(w), 
+    if (XFindContext(ColorObjCacheDisplay, (XID)XtDisplay(w),
 		     ColorObjCache, (XPointer *)&tmpColorObj) != 0)
     {   /* none found, use default */
 	if (DefaultColorObj)
@@ -95,7 +95,7 @@ _XmRCColorHook(
             if (tmpColorObj->color_obj.
 		colorUse[tmpColorObj->color_obj.myScreen] == XmCO_BLACK_WHITE)
                 mono = 1;
-            else 
+            else
                 mono = 0;
 
             color = tmpColorObj->color_obj.secondary;
@@ -105,23 +105,23 @@ _XmRCColorHook(
         }
 	_XmProcessUnlock();
 
-	/** if background didn't default to ColorObj, 
+	/** if background didn't default to ColorObj,
 	  don't overwrite colors **/
 	if (defaultBackground != tmpColorObj->color_obj.myColors[colorPrim].bg)
 	    return;
 
         ac = 0;
-        XtSetArg (al[ac], XmNbackground, 
+        XtSetArg (al[ac], XmNbackground,
                   tmpColorObj->color_obj.myColors[color].bg);        ac++;
-        XtSetArg (al[ac], XmNforeground, 
+        XtSetArg (al[ac], XmNforeground,
                   tmpColorObj->color_obj.myColors[color].fg);        ac++;
-        XtSetArg (al[ac], XmNtopShadowColor, 
+        XtSetArg (al[ac], XmNtopShadowColor,
                   tmpColorObj->color_obj.myColors[color].ts);        ac++;
-        XtSetArg (al[ac], XmNbottomShadowColor, 
+        XtSetArg (al[ac], XmNbottomShadowColor,
                   tmpColorObj->color_obj.myColors[color].bs);        ac++;
 
         /** put dithers for top shadows if needed **/
-        if (XmCO_DitherTopShadow(tmpColorObj->color_obj.display, 
+        if (XmCO_DitherTopShadow(tmpColorObj->color_obj.display,
 				 tmpColorObj->color_obj.myScreen,
 				 &tmpColorObj->color_obj.myColors[color]))
         {
@@ -139,7 +139,7 @@ _XmRCColorHook(
             XtSetArg (al[ac], XmNtopShadowPixmap, ditherPix);         ac++;
         }
         else      /** see if we need to "undo" primary dither **/
-        if (XmCO_DitherTopShadow(tmpColorObj->color_obj.display, 
+        if (XmCO_DitherTopShadow(tmpColorObj->color_obj.display,
 				 tmpColorObj->color_obj.myScreen,
 				 &tmpColorObj->color_obj.myColors[colorPrim]))
         {   /* simulate solid white (will happen for B_W case only)*/
@@ -151,7 +151,7 @@ _XmRCColorHook(
         }
 
         /** put dithers for bottom shadows if needed **/
-        if (XmCO_DitherBottomShadow(tmpColorObj->color_obj.display, 
+        if (XmCO_DitherBottomShadow(tmpColorObj->color_obj.display,
 				    tmpColorObj->color_obj.myScreen,
 				    &tmpColorObj->color_obj.myColors[color]))
         {
@@ -168,7 +168,7 @@ _XmRCColorHook(
             XtSetArg (al[ac], XmNbottomShadowPixmap, ditherPix);      ac++;
         }
         else      /** see if we need to "undo" primary dither **/
-        if (XmCO_DitherBottomShadow(tmpColorObj->color_obj.display, 
+        if (XmCO_DitherBottomShadow(tmpColorObj->color_obj.display,
 				    tmpColorObj->color_obj.myScreen,
 				    &tmpColorObj->color_obj.myColors[colorPrim]))
         {   /* simulate solid black (will happen for B_W case only)*/
@@ -182,5 +182,3 @@ _XmRCColorHook(
         XtSetValues (w, al, ac);
     }
 }
-
-

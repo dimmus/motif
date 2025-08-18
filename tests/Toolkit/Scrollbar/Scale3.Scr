@@ -19,21 +19,21 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-#  #) A client window with three scales will appear. 
+#  #) A client window with three scales will appear.
 #  C)
 Continue
 
-#  #) Resize the client window. 
+#  #) Resize the client window.
 WindowResize Shell1 SouthEast 300 300
 CompareVisual Shell1
 
 #  #) Press and hold MB1 on each scale slider. Drag each
 #     slider up and down the scale. Number to the left of each scale
 #     should change from -1.00 at bottom to 1.00 at top. Release MB1
-#     so each slider is at a different position. 
+#     so each slider is at a different position.
 LocatePointer Scale1 RScaleSlider
 DragSliderValue Up Max
 CompareVisual Scale1
@@ -64,7 +64,7 @@ CompareVisual Scale3
 DragSliderValue Down -.15
 CompareVisual Scale3
 
-#  #) Resize bottom of the client window down. 
+#  #) Resize bottom of the client window down.
 WindowResize Shell1 South 400
 CompareVisual Shell1
 

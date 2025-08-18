@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scrollbar2.c /main/6 1995/07/13 19:14:15 drk $"
@@ -48,7 +48,7 @@ char **argv;
   Arg args[MAX_ARGS];
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
@@ -154,21 +154,3 @@ char **argv;
   CommonPause();
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

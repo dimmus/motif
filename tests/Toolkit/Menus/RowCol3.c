@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol3.c /main/10 1995/07/13 18:55:07 drk $"
@@ -36,7 +36,7 @@ static char rcsid[] = "$XConsortium: RowCol3.c /main/10 1995/07/13 18:55:07 drk 
 #define MAX_CHILDREN 25
 
 #if XmVERSION  < 2
-#define XmSET 1 
+#define XmSET 1
 #endif
 
 Widget RC, parent, child[MAX_CHILDREN];
@@ -90,7 +90,7 @@ static void CreateChild(char *name);
 /*  CALLBACKS TO UPDATE THE CONTROL PANEL */
 
 static void
-updateNumColumns(Widget w, XtPointer closure, 
+updateNumColumns(Widget w, XtPointer closure,
 		 XtPointer data)
 {
   XmScaleCallbackStruct *call_data=(XmScaleCallbackStruct *)data;
@@ -100,7 +100,7 @@ updateNumColumns(Widget w, XtPointer closure,
 }
 
 static void
-updateSpacing(Widget w, XtPointer closure, 
+updateSpacing(Widget w, XtPointer closure,
 		XtPointer data)
 {
   XmScaleCallbackStruct *call_data=(XmScaleCallbackStruct *)data;
@@ -110,7 +110,7 @@ updateSpacing(Widget w, XtPointer closure,
 }
 
 static void
-updateWidth(Widget w, XtPointer closure, 
+updateWidth(Widget w, XtPointer closure,
 		XtPointer data)
 {
   XmScaleCallbackStruct *call_data=(XmScaleCallbackStruct *)data;
@@ -140,7 +140,7 @@ updateEntryBorder(Widget w, XtPointer closure,
 }
 
 static void
-updateAdjustLast(Widget w, XtPointer adjustLast, 
+updateAdjustLast(Widget w, XtPointer adjustLast,
 		XtPointer data)
 {
   XmToggleButtonCallbackStruct *call_data=(XmToggleButtonCallbackStruct *)data;
@@ -149,8 +149,8 @@ updateAdjustLast(Widget w, XtPointer adjustLast,
   return;
 }
 
-static void 
-updateAdjustMargin(Widget w, XtPointer adjustMargin, 
+static void
+updateAdjustMargin(Widget w, XtPointer adjustMargin,
 		XtPointer data)
 {
   XmToggleButtonCallbackStruct *call_data=(XmToggleButtonCallbackStruct *)data;
@@ -159,8 +159,8 @@ updateAdjustMargin(Widget w, XtPointer adjustMargin,
   return;
 }
 
-static void 
-updateIsAligned(Widget w, XtPointer isAligned, 
+static void
+updateIsAligned(Widget w, XtPointer isAligned,
 		XtPointer data)
 {
   XmToggleButtonCallbackStruct *call_data=(XmToggleButtonCallbackStruct *)data;
@@ -169,7 +169,7 @@ updateIsAligned(Widget w, XtPointer isAligned,
   return;
 }
 
-static void 
+static void
 updateResizeHeight(Widget w, XtPointer resizeHeight,
 		XtPointer data)
 {
@@ -179,8 +179,8 @@ updateResizeHeight(Widget w, XtPointer resizeHeight,
   return;
 }
 
-static void 
-updateResizeWidth(Widget w, XtPointer resizeWidth, 
+static void
+updateResizeWidth(Widget w, XtPointer resizeWidth,
 		XtPointer data)
 {
   XmToggleButtonCallbackStruct *call_data=(XmToggleButtonCallbackStruct *)data;
@@ -189,7 +189,7 @@ updateResizeWidth(Widget w, XtPointer resizeWidth,
   return;
 }
 
-static void 
+static void
 updateOrientation(Widget w, XtPointer orientation,
 		  XtPointer data)
 {
@@ -201,7 +201,7 @@ updateOrientation(Widget w, XtPointer orientation,
   return;
 }
 
-static void 
+static void
 updateAlignment(Widget w, XtPointer alignment,
 		XtPointer data)
 {
@@ -211,7 +211,7 @@ updateAlignment(Widget w, XtPointer alignment,
   return;
 }
 
-static void 
+static void
 updateChildren(Widget w, XtPointer closure,
 		XtPointer data)
 {
@@ -228,12 +228,12 @@ updateChildren(Widget w, XtPointer closure,
 	  XtDestroyWidget(child[i]);
 	  num_children--;
 	}
-    }	
+    }
   else
     if (call_data->value > num_children)
-      {	
+      {
 	/* Add more children */
-	
+
 	for (i = num_children; i < call_data->value; i++)
 	  CreateChild(text_value);
       }
@@ -251,7 +251,7 @@ print_width_height(Widget w, XtPointer closure, XtPointer call_data)
   printf("My width = %d, my height = %d\n", my_width, my_height);
 }
 
-static void 
+static void
 updatePacking(Widget w, XtPointer packtype,
 		XtPointer data)
 {
@@ -276,7 +276,7 @@ updateRCwidth(Widget w, XtPointer closure,
   if (value != NULL)
     {
       rc_width = atoi(value);
-      XtSetArg(args[0], XmNwidth, rc_width); 
+      XtSetArg(args[0], XmNwidth, rc_width);
       XtSetValues(RC, args, 1);
     }
 }
@@ -291,7 +291,7 @@ updateRCheight(Widget w, XtPointer closure,
   if (value != NULL)
     {
       rc_height = atoi(value);
-      XtSetArg(args[0], XmNheight, rc_height); 
+      XtSetArg(args[0], XmNheight, rc_height);
       XtSetValues(RC, args, 1);
     }
 }
@@ -316,7 +316,7 @@ updateButtonLabels(Widget w, XtPointer closure,
 
 static void
 updateShadow( Widget w, XtPointer closure, XtPointer data)
-{ 
+{
   XmScaleCallbackStruct *call_data=(XmScaleCallbackStruct *)data;
   int i;
   XtSetArg(args[0], XmNshadowThickness, call_data->value);
@@ -335,7 +335,7 @@ resetControlPanel(Widget w, XtPointer parent_widget, XtPointer call_data)
   XtDestroyWidget(Popup);
 
   /* Reset global variable num_children */
-  
+
   num_children = 0;
   text_value = NULL;
 
@@ -451,19 +451,19 @@ static void CreateChild(char *name)
 {
   register int n;
   static char strbuf[50];
-  
+
   n = 0;
   XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
   XtSetArg(args[n], XmNhighlightThickness, 2); n++;
   if (name == NULL)
     {
       sprintf(strbuf, "%d", num_children + 1);
-      child[num_children] = XmCreatePushButton(RC, strbuf, args, n); 
+      child[num_children] = XmCreatePushButton(RC, strbuf, args, n);
     }
   else
-    child[num_children] = XmCreatePushButton(RC, name, args, n); 
+    child[num_children] = XmCreatePushButton(RC, name, args, n);
   XtManageChild(child[num_children]);
-  XtAddCallback(child[num_children], XmNactivateCallback, 
+  XtAddCallback(child[num_children], XmNactivateCallback,
 		print_width_height, NULL);
   num_children++;
   return;
@@ -474,7 +474,7 @@ ParentClass(char *parent_class_name)
 {
   int i;
 
-  for (i = 0; i <= NUM_LEGAL_PARENTS - 1; i++) 
+  for (i = 0; i <= NUM_LEGAL_PARENTS - 1; i++)
     if (strcmp(parent_class_name, parent_table[i].string) == 0)
       {
 	parent_index = i;
@@ -530,7 +530,7 @@ CreateControlPanel()
   Widget separator, adjustlast, adjustmargin, isaligned, resizeheight;
   Widget resetPanel, resizewidth, rcwidth, rcheight, widthtext,heighttext;
   Widget shadow, shadowscale;
-  
+
   XmString tcs, tcs1, tcs2;
 
   register int i, n;
@@ -549,7 +549,7 @@ CreateControlPanel()
 
   n = 0;
   mainParent = XmCreatePanedWindow(controlpanel, "mainParent", args, n);
- 
+
   n = 0;
   actionsBoard = XmCreateBulletinBoard(mainParent, "actions", args, n);
 
@@ -584,7 +584,7 @@ CreateControlPanel()
   textf1 = XmCreateTextField(actionsBoard, "textf1", args, n);
   XtManageChild(textf1);
   XtAddCallback(textf1, XmNactivateCallback, updateButtonLabels, NULL);
-  
+
   n = 0;
   tcs = XmStringCreateLtoR("Number of Children: ", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -752,7 +752,7 @@ CreateControlPanel()
   pack_tight = XmCreateToggleButtonGadget(rbox1, "pack_tight", args, n);
   XtManageChild(pack_tight);
   XmStringFree(tcs);
-  XtAddCallback(pack_tight, XmNvalueChangedCallback, updatePacking, 
+  XtAddCallback(pack_tight, XmNvalueChangedCallback, updatePacking,
 		(XtPointer) XmPACK_TIGHT);
 
   n = 0;
@@ -762,7 +762,7 @@ CreateControlPanel()
   pack_col = XmCreateToggleButtonGadget(rbox1, "pack_col", args, n);
   XtManageChild(pack_col);
   XmStringFree(tcs);
-  XtAddCallback(pack_col, XmNvalueChangedCallback, updatePacking, 
+  XtAddCallback(pack_col, XmNvalueChangedCallback, updatePacking,
 		(XtPointer) XmPACK_COLUMN);
 
   n = 0;
@@ -771,9 +771,9 @@ CreateControlPanel()
   pack_none = XmCreateToggleButtonGadget(rbox1, "pack_none", args, n);
   XtManageChild(pack_none);
   XmStringFree(tcs);
-  XtAddCallback(pack_none, XmNvalueChangedCallback, updatePacking, 
+  XtAddCallback(pack_none, XmNvalueChangedCallback, updatePacking,
 		(XtPointer) XmPACK_NONE);
-    
+
 
   n = 0;
   tcs = XmStringCreateLtoR("XmNorientation: ", XmSTRING_DEFAULT_CHARSET);
@@ -798,9 +798,9 @@ CreateControlPanel()
   horizontal = XmCreateToggleButtonGadget(rbox2, "horizontal", args, n);
   XtManageChild(horizontal);
   XmStringFree(tcs);
-  XtAddCallback(horizontal, XmNvalueChangedCallback, updateOrientation, 
+  XtAddCallback(horizontal, XmNvalueChangedCallback, updateOrientation,
 		(XtPointer) XmHORIZONTAL);
-    
+
   n = 0;
   tcs = XmStringCreateLtoR("XmVERTICAL", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -808,7 +808,7 @@ CreateControlPanel()
   vertical = XmCreateToggleButtonGadget(rbox2, "vertical", args, n);
   XtManageChild(vertical);
   XmStringFree(tcs);
-  XtAddCallback(vertical, XmNvalueChangedCallback, updateOrientation, 
+  XtAddCallback(vertical, XmNvalueChangedCallback, updateOrientation,
 		(XtPointer) XmVERTICAL);
   XtManageChild(rbox1);
   XtManageChild(rbox2);
@@ -823,7 +823,7 @@ CreateControlPanel()
   XtManageChild(adjustlast);
   XmStringFree(tcs);
   XtAddCallback(adjustlast, XmNvalueChangedCallback, updateAdjustLast, NULL);
-  
+
   n = 0;
   tcs = XmStringCreateLtoR("XmNadjustMargin", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -833,7 +833,7 @@ CreateControlPanel()
   adjustmargin = XmCreateToggleButton(actionsBoard, "adjustmargin", args, n);
   XtManageChild(adjustmargin);
   XmStringFree(tcs);
-  XtAddCallback(adjustmargin, XmNvalueChangedCallback, updateAdjustMargin, 
+  XtAddCallback(adjustmargin, XmNvalueChangedCallback, updateAdjustMargin,
 		NULL);
 
   n = 0;
@@ -856,7 +856,7 @@ CreateControlPanel()
   resizeheight = XmCreateToggleButton(actionsBoard, "resizeHeight", args, n);
   XtManageChild(resizeheight);
   XmStringFree(tcs);
-  XtAddCallback(resizeheight, XmNvalueChangedCallback, updateResizeHeight, 
+  XtAddCallback(resizeheight, XmNvalueChangedCallback, updateResizeHeight,
 		NULL);
 
   n = 0;
@@ -877,14 +877,14 @@ CreateControlPanel()
   XtSetArg(args[n], XmNmarginHeight, 5); n++;
   resetPanel = XmCreatePushButton(actionsBoard, "Reset_Panel", args, n);
   XtManageChild(resetPanel);
-  XtAddCallback(resetPanel, XmNactivateCallback, resetControlPanel, 
+  XtAddCallback(resetPanel, XmNactivateCallback, resetControlPanel,
 		(XtPointer) controlpanel);
 
   n = 0;
   tcs = XmStringCreateLtoR("XmNwidth: ", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNx, 315); n++;
-  XtSetArg(args[n], XmNy, 255); n++; 
+  XtSetArg(args[n], XmNy, 255); n++;
   rcwidth = XmCreateLabel(actionsBoard, "rcwidth", args, n);
   XtManageChild(rcwidth);
   XmStringFree(tcs);
@@ -939,7 +939,7 @@ CreateControlPanel()
   align_begin = XmCreateToggleButtonGadget(rbox3, "align_begin", args, n);
   XtManageChild(align_begin);
   XmStringFree(tcs);
-  XtAddCallback(align_begin, XmNvalueChangedCallback, updateAlignment, 
+  XtAddCallback(align_begin, XmNvalueChangedCallback, updateAlignment,
 		(XtPointer) XmALIGNMENT_BEGINNING);
 
   n = 0;
@@ -948,7 +948,7 @@ CreateControlPanel()
   align_center = XmCreateToggleButtonGadget(rbox3, "align_center", args, n);
   XtManageChild(align_center);
   XmStringFree(tcs);
-  XtAddCallback(align_center, XmNvalueChangedCallback, updateAlignment, 
+  XtAddCallback(align_center, XmNvalueChangedCallback, updateAlignment,
 		(XtPointer) XmALIGNMENT_CENTER);
 
   n = 0;
@@ -957,7 +957,7 @@ CreateControlPanel()
   align_end = XmCreateToggleButtonGadget(rbox3, "align_end", args, n);
   XtManageChild(align_end);
   XmStringFree(tcs);
-  XtAddCallback(align_end, XmNvalueChangedCallback, updateAlignment, 
+  XtAddCallback(align_end, XmNvalueChangedCallback, updateAlignment,
 		(XtPointer) XmALIGNMENT_END);
 
   XtManageChild(actionsBoard);

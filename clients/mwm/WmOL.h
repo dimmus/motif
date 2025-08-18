@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 
 #ifndef _WM_OL_H
 #define _WM_OL_H
@@ -39,7 +39,7 @@ static char rcsid[] = ""
 #endif
 
 /*
- * Property Names 
+ * Property Names
  */
 #define OL_WIN_ATTR		"_OL_WIN_ATTR"
 #define OL_DECOR_ADD		"_OL_DECOR_ADD"

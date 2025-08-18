@@ -47,9 +47,9 @@
 class ExmCxxGridClass : public XmCxxManagerClass {
 
     friend class ExmCxxGrid;
-    
+
   public:
-    
+
     ExmCxxGridClass(char*		name,
 		   WidgetClass		parent,
 		   Cardinal		widgetSize,
@@ -91,8 +91,8 @@ struct ExmCxxGridPart {
 	XmRenderTable           text_render_table ;
         XmString	        dialog_title;
 
-	/* processing_constraints is a flag.  If its value is True, then 
-	   it means that the ConstraintSetValues method is requesting a 
+	/* processing_constraints is a flag.  If its value is True, then
+	   it means that the ConstraintSetValues method is requesting a
 	   geometry change. */
 	Boolean			processing_constraints;
 };
@@ -143,7 +143,7 @@ class ExmCxxGrid : public XmCxxManager {
 						      Widget req_w,
 						      Widget new_w,
 						      ArgList, Cardinal*);
-    
+
     /*
      * virtual self contained class-methods
      */
@@ -161,8 +161,8 @@ class ExmCxxGrid : public XmCxxManager {
 
     // Functions for this class and for subclasses to override
     virtual void		layout(Widget);
-    virtual void		calc_size(Widget, 
-					  Dimension *, 
+    virtual void		calc_size(Widget,
+					  Dimension *,
 					  Dimension *);
     virtual Boolean		need_relayout(Widget);
   public:
@@ -174,7 +174,7 @@ class ExmCxxGrid : public XmCxxManager {
     static void			_MakeCxxWidget(Widget req, Widget new_w,
 					       ArgList, Cardinal*);
     /* Synthetic resource methods */
-    static void			GetDialogTitle(Widget w, int resource, 
+    static void			GetDialogTitle(Widget w, int resource,
 					       XtArgVal *value);
     /* Trait methods */
     static void 		CallMapUnmap(Widget wid, Boolean map_unmap);
@@ -212,7 +212,7 @@ externalref ExmCxxGridClass	ExmCxxGridClassRec;
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-extern Widget ExmCreateCxxGrid(Widget parent, char *name, 
+extern Widget ExmCreateCxxGrid(Widget parent, char *name,
 			       ArgList args, Cardinal nargs);
 extern Widget ExmCreateCxxGridDialog(Widget parent, char   *name,
 				     ArgList arglist, Cardinal argcount);

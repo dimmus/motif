@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: PIHints.h /main/6 1995/07/13 20:20:28 drk $ */
 
 /*  X headers  */
@@ -107,13 +107,13 @@ static char PIIcon_msk_bits[] = {
    0x00, 0xfc, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0xf8, 0xff, 0xff, 0x7f,
    0x00, 0x00};
 
-/* 
+/*
  * Data for summary
  */
 #define NUM_TESTS		9
 #define TEST_DESCRIP_LENGTH	65
 
-struct TestInfo PIInfo[NUM_TESTS] = 
+struct TestInfo PIInfo[NUM_TESTS] =
 {
 	{"Change Normal Hints - position, size               WM_NORMAL_HINTS",
 		True,	0},

@@ -70,12 +70,12 @@ switch ($MACHINE)
 	stty susp 
 	stty intr 
 	eval `tset -I -Q -s -m :xterm`
-        breaksw	
+        breaksw
 endsw
 
 
-setenv	EDITOR  vi				# default editor 
-setenv	MAILHOST osf.osf.org 			# for nbiff 
+setenv	EDITOR  vi				# default editor
+setenv	MAILHOST osf.osf.org 			# for nbiff
 setenv  TZ est5edt
 setenv  QA_REGDIR 20Final_reg
 setenv	MB /project/motif/build

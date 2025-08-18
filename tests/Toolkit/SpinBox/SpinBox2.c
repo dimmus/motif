@@ -1,7 +1,7 @@
 /* $XConsortium: SpinBox2.c /main/6 1996/04/30 13:56:08 schuldy $ */
 /*
- *  (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC. 
- *  ALL RIGHTS RESERVED 
+ *  (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC.
+ *  ALL RIGHTS RESERVED
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -41,7 +41,7 @@ ValueChanged(Widget w,XtPointer client_data,XtPointer call_data)
   int reason = ((XmSpinBoxCallbackStruct *) call_data)->reason;
 
   printf ("XmNvalueChangedCallback invoked ");
-  
+
   switch (reason)
     {
     case XmCR_OK:
@@ -100,7 +100,7 @@ SetPosition(Widget w, XtPointer client_data, XtPointer call_data)
     XtSetArg (args[n], XmNincrementValue, &incr); n++;
     XtGetValues( TextF1, args, n );
 
-    max_pos = ( incr > 0 ) ? ( max - min ) / incr : ( max - min ); 
+    max_pos = ( incr > 0 ) ? ( max - min ) / incr : ( max - min );
 
     switch( cb_struct->reason )
     {
@@ -189,7 +189,7 @@ main (int argc, char **argv)
 
     CommonPause();
     CommonPause();
-   
+
     XtAddCallback( SpinBox1, XmNmodifyVerifyCallback, CrossedBound,
                    (XtPointer)0 );
     CommonPause();
@@ -205,7 +205,5 @@ main (int argc, char **argv)
 
     XtAppMainLoop (app_context);
 
-    
+
 }
-
-

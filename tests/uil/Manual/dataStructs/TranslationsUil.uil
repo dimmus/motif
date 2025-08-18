@@ -39,7 +39,7 @@ module test
 procedure
         quit(string);
 
-list 
+list
   button_translations:
   arguments
   {
@@ -98,11 +98,11 @@ object appMain : XmForm {
         arguments appMain_translations;
 
         XmNdefaultButton = XmPushButton squeeze;
-    }; 
+    };
     controls {
         XmTextField text;
         XmPushButton squeeze;
-        XmPushButton done; 
+        XmPushButton done;
     };
 };
 
@@ -152,7 +152,3 @@ object done : XmPushButton {
 };
 
 end module;
-
-
-
-

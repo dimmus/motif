@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -31,7 +31,7 @@
 #  those resources of the Notebook that are of type Dimension. (Since it
 #  may not be hard to visually gauge what values these resources have been
 #  set to).
-# The notebook should have horizontal orientation. 
+# The notebook should have horizontal orientation.
 # The placement of the back pages should be top right.
 #  The back page foreground should be red, the back page background should be
 #  green, and the frame background should be blue.
@@ -47,9 +47,9 @@ CompareVisual Notebook1
 
 
 #  The page that is displayed on the screen should be Page2.
-#  Use the ScrollBar page scroller to scroll through the pages. You should 
+#  Use the ScrollBar page scroller to scroll through the pages. You should
 #  not be able to scroll beyond Page 6 or before Page1.
-#  Click on MajorTab1. Page2 should be displayed. 
+#  Click on MajorTab1. Page2 should be displayed.
 #  Click on MinorTab2. Page3 should be displayed.
 #  Click on MajorTab2. Page4 should be displayed.
 #  Click on MinorTab3. Page5 should be displayed.
@@ -101,7 +101,7 @@ ClickMB Btn1
 LocatePointer backPageSize
 ClickMB Btn1
 
-#  Click on the 'frameShadowThickness' PushButton. There should be a 
+#  Click on the 'frameShadowThickness' PushButton. There should be a
 #  message on stdout indicating that frame shadow thickness is 10.
 
 LocatePointer frameShadowThickness
@@ -134,11 +134,3 @@ ClickMB Btn1
 
 
 Exit
-
-
-
-
-
-
-
-

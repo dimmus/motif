@@ -40,26 +40,26 @@
 /*-------------------------------------------------------------
 **	Forwarded functions
 */
-void CreateApplication ();	
-void WarnUser ();	
-Widget CreateHelp ();		
+void CreateApplication ();
+void WarnUser ();
+Widget CreateHelp ();
 
-/*      Xt callbacks 
+/*      Xt callbacks
 */
-void DrawCB ();			
-void ValueCB ();			
-void OpenCB ();			
-void ReadCB ();			
-void QuitCB ();			
-void HelpCB ();			
+void DrawCB ();
+void ValueCB ();
+void OpenCB ();
+void ReadCB ();
+void QuitCB ();
+void HelpCB ();
 
 /*-------------------------------------------------------------
 **      File i/o and drawing stuff
 */
-void InitFile ();			
-Boolean BuildLineTable ();			
-void ReDraw ();			
-void ReSize ();			
+void InitFile ();
+Boolean BuildLineTable ();
+void ReDraw ();
+void ReSize ();
 
 typedef struct {
     Widget work_area  ;
@@ -75,13 +75,13 @@ typedef struct {
 /*-------------------------------------------------------------
 **	    Main body
 */
-int main(argc, argv) 
+int main(argc, argv)
 int argc; char **argv;
 {
     XtAppContext app_context;
     Widget      toplevel ;
     FileData    filedata ;
-    
+
     toplevel = XtAppInitialize(&app_context, "XMdemos", NULL, 0,
 			       &argc, argv, NULL, NULL, 0);
 
@@ -100,14 +100,14 @@ int argc; char **argv;
 **	Create a app_defined Main Window with a Menubar to load a file
 **      Add the vertical scrollbar and the workarea to filedata.
 */
-void CreateApplication (parent, filedata) 
-Widget		parent;	
+void CreateApplication (parent, filedata)
+Widget		parent;
 FileData *       filedata;
 {
-    Widget main_window, menu_bar, menu_pane, cascade, 
+    Widget main_window, menu_bar, menu_pane, cascade,
            button ;
-    Arg args[5];	
-    int	n ;		   
+    Arg args[5];
+    int	n ;
 
 
     /*	Create app_defined MainWindow.
@@ -121,7 +121,7 @@ FileData *       filedata;
     /*	Create MenuBar in MainWindow.
      */
     n = 0;
-    menu_bar = XmCreateMenuBar (main_window, "menu_bar", args, n); 
+    menu_bar = XmCreateMenuBar (main_window, "menu_bar", args, n);
     XtManageChild (menu_bar);
 
 
@@ -171,25 +171,25 @@ FileData *       filedata;
      n = 0;
     XtSetArg (args[n], XmNorientation, XmVERTICAL);  n++;
     filedata->v_scrb = XmCreateScrollBar (main_window, "v_scrb", args, n);
-    XtAddCallback (filedata->v_scrb, XmNvalueChangedCallback, ValueCB, 
+    XtAddCallback (filedata->v_scrb, XmNvalueChangedCallback, ValueCB,
 		   (XtPointer)filedata);
     XtManageChild (filedata->v_scrb);
 
 
-    /*	Create work_area in MainWindow 
+    /*	Create work_area in MainWindow
      */
     n = 0;
     filedata->work_area = XmCreateDrawingArea(main_window, "work_area", args, n);
-    XtAddCallback (filedata->work_area, XmNexposeCallback, DrawCB, 
+    XtAddCallback (filedata->work_area, XmNexposeCallback, DrawCB,
 		   (XtPointer)filedata);
-    XtAddCallback (filedata->work_area, XmNresizeCallback, DrawCB, 
+    XtAddCallback (filedata->work_area, XmNresizeCallback, DrawCB,
 		   (XtPointer)filedata);
     XtManageChild (filedata->work_area);
 
 
-    /*	Set MainWindow areas 
+    /*	Set MainWindow areas
      */
-    XmMainWindowSetAreas (main_window, menu_bar, NULL, NULL, 
+    XmMainWindowSetAreas (main_window, menu_bar, NULL, NULL,
 			  filedata->v_scrb,
 			  filedata->work_area);
 
@@ -198,7 +198,7 @@ FileData *       filedata;
 /*-------------------------------------------------------------
 **	OpenCB			- callback for Open button
 */
-void OpenCB (w, client_data, call_data) 
+void OpenCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 caddr_t		client_data;	/*  data from application   */
 caddr_t		call_data;	/*  data from widget class  */
@@ -206,11 +206,11 @@ caddr_t		call_data;	/*  data from widget class  */
 	static Widget fsb_box = NULL ;
 
 	if (!fsb_box) {
-	    fsb_box = XmCreateFileSelectionDialog (w, "Load file", 
+	    fsb_box = XmCreateFileSelectionDialog (w, "Load file",
 						   NULL, 0);
 	    /* just propagate the graphic information */
 	    XtAddCallback (fsb_box, XmNokCallback, ReadCB, client_data);
-	}    
+	}
 
 	XtManageChild (fsb_box);
 }
@@ -219,7 +219,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	QuitCB			- callback for quit button
 */
-void QuitCB (w, client_data, call_data) 
+void QuitCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 caddr_t		client_data;	/*  data from applicaiton   */
 caddr_t		call_data;	/*  data from widget class  */
@@ -231,7 +231,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	HelpCB			- callback for help button
 */
-void HelpCB (w, client_data, call_data) 
+void HelpCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 caddr_t		client_data;	/*  data from application   */
 caddr_t		call_data;	/*  data from widget class  */
@@ -248,15 +248,15 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	ReadCB	- callback for fsb activate
 */
-void ReadCB (w, client_data, call_data) 
+void ReadCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 caddr_t		client_data;	/*  data from application   */
 caddr_t		call_data;	/*  data from widget class  */
 {
     FileData * filedata = (FileData *) client_data ;
     String file_name ;
-    Arg args[5];	
-    int	n, slider_size ;	
+    Arg args[5];
+    int	n, slider_size ;
     Dimension height ;
 
     file_name = XmTextGetString(
@@ -275,7 +275,7 @@ caddr_t		call_data;	/*  data from widget class  */
 	slider_size = (height - 4) / (filedata->font_struct->ascent
 				      + filedata->font_struct->descent) ;
 	if (slider_size <= 0) slider_size = 1 ;
-	if (slider_size > filedata->num_lines) 
+	if (slider_size > filedata->num_lines)
 	    slider_size = filedata->num_lines ;
 
 	n = 0 ;
@@ -294,7 +294,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	ValueCB		- callback for scrollbar
 */
-void ValueCB (w, client_data, call_data) 
+void ValueCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 caddr_t		client_data;	/*  data from application   */
 caddr_t		call_data;	/*  data from widget class  */
@@ -312,24 +312,24 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	DrawCB			- callback for drawing area
 */
-void DrawCB (w, client_data, call_data) 
+void DrawCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 caddr_t		client_data;	/*  data from application   */
 caddr_t		call_data;	/*  data from widget class  */
 {
-    
+
     XmDrawingAreaCallbackStruct * dacs =
 	(XmDrawingAreaCallbackStruct *) call_data ;
     FileData * filedata = (FileData *) client_data ;
     XSetWindowAttributes xswa;
-    
+
     static Boolean first_time = True ;
 
     switch (dacs->reason) {
-    case XmCR_EXPOSE: 
+    case XmCR_EXPOSE:
 	if (first_time) {
 	    /* Change once the bit gravity of the Drawing Area; default
-	       is north west and we want forget, so that resize 
+	       is north west and we want forget, so that resize
 	       always generates exposure events */
 	    first_time = False ;
 	    xswa.bit_gravity = ForgetGravity ;
@@ -340,7 +340,7 @@ caddr_t		call_data;	/*  data from widget class  */
 	ReDraw(filedata) ;
 
 	break ;
-    case XmCR_RESIZE: 
+    case XmCR_RESIZE:
 	ReSize(filedata) ;
 
 	break ;
@@ -350,7 +350,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	CreateHelp		- create help window
 */
-Widget CreateHelp (parent) 
+Widget CreateHelp (parent)
 	Widget		parent;		/*  parent widget	*/
 {
 	Widget		button;
@@ -372,11 +372,11 @@ window and see the slider size change.\n\n\
 You can specify which font to display the test using the\n\
 XmNfont screen resource.");
 
-	message_string = XmStringCreateLtoR (message, 
+	message_string = XmStringCreateLtoR (message,
 					     XmSTRING_DEFAULT_CHARSET);
-	button_string = XmStringCreateLtoR ("Close", 
+	button_string = XmStringCreateLtoR ("Close",
 					    XmSTRING_DEFAULT_CHARSET);
-	title_string = XmStringCreateLtoR ("General Help", 
+	title_string = XmStringCreateLtoR ("General Help",
 					   XmSTRING_DEFAULT_CHARSET);
 
 
@@ -411,19 +411,19 @@ String name ;
     /* better ui needed */
     printf(format, name);
 }
-	
+
 
 /*************************** FILE STUFF **********************************/
 
 void InitFile(widget, filedata, argc, argv)
-Widget		widget;	
+Widget		widget;
 FileData *       filedata;
 int argc;     char **argv;
 {
-    Arg args[5];	
-    int	n ;		   
+    Arg args[5];
+    int	n ;
     XGCValues val ;
-    
+
     filedata->lines = NULL ;
     filedata->num_lines = 0 ;
 
@@ -435,8 +435,8 @@ int argc;     char **argv;
     filedata->font_struct = XLoadQueryFont(XtDisplay(widget), "fixed");
 #else
     XtSetArg (args[n], XmNfont, &(filedata->font_struct));  n++;
-    XtGetValues (XmGetXmScreen(XDefaultScreenOfDisplay(XtDisplay(widget))), 
-		 args, n); 
+    XtGetValues (XmGetXmScreen(XDefaultScreenOfDisplay(XtDisplay(widget))),
+		 args, n);
 #endif
     val.font = filedata->font_struct->fid ;
     filedata->draw_gc = XtGetGC(widget, GCFont, &val);
@@ -477,10 +477,10 @@ String file_name ;
 	while (fgets (linebuff, 256, in_file)) {
 	    filedata->num_lines ++ ;
 	    /* better fragmentation needed... */
-	    filedata->lines = (char**) XtRealloc((char*)filedata->lines, 
+	    filedata->lines = (char**) XtRealloc((char*)filedata->lines,
 					filedata->num_lines * sizeof(char*)) ;
 	    filedata->lines[filedata->num_lines-1] = XtNewString(linebuff);
-	} 
+	}
 	return True ;
     }
 }
@@ -493,8 +493,8 @@ FileData * filedata ;
 
     Cardinal i ;
     int value, slider_size ;
-    Arg args[5];	
-    int	n ;	
+    Arg args[5];
+    int	n ;
     Position y ;
 
     if (filedata->num_lines == 0) return ;
@@ -503,9 +503,9 @@ FileData * filedata ;
     XtSetArg (args[n], XmNvalue, &value);  n++;
     XtSetArg (args[n], XmNsliderSize, &slider_size);  n++;
     XtGetValues (filedata->v_scrb, args, n);
-	
-    for (i = value, y = 2 + filedata->font_struct->ascent; 
-	 i < value + slider_size ; 
+
+    for (i = value, y = 2 + filedata->font_struct->ascent;
+	 i < value + slider_size ;
 	 i++, y += (filedata->font_struct->ascent
 		    + filedata->font_struct->descent)) {
 	XDrawString(XtDisplay(filedata->work_area),
@@ -522,8 +522,8 @@ FileData * filedata ;
     /* Just update the scrollbar internals here, don't bother to redisplay
        since the gravity is none */
 
-    Arg args[5];	
-    int	n ;	
+    Arg args[5];
+    int	n ;
     int value, slider_size ;
     Dimension height ;
 
@@ -532,12 +532,12 @@ FileData * filedata ;
     n = 0;
     XtSetArg (args[n], XmNheight, &height);  n++;
     XtGetValues (filedata->work_area, args, n);
-	
+
     /* sliderSize is the number of visible lines */
     slider_size = (height - 4) / (filedata->font_struct->ascent
 				  + filedata->font_struct->descent) ;
     if (slider_size <= 0) slider_size = 1 ;
-    if (slider_size > filedata->num_lines) 
+    if (slider_size > filedata->num_lines)
 	slider_size = filedata->num_lines ;
 
     n = 0;
@@ -546,7 +546,7 @@ FileData * filedata ;
 
     /* value shouldn't change that often but there are cases
        where it matters */
-    if (value > filedata->num_lines - slider_size) 
+    if (value > filedata->num_lines - slider_size)
 	value = filedata->num_lines - slider_size;
 
     n = 0;
@@ -555,4 +555,3 @@ FileData * filedata ;
     XtSetArg (args[n], XmNmaximum, filedata->num_lines);  n++;
     XtSetValues (filedata->v_scrb, args, n);
 }
-

@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #  A PushButton (PushButton1), ScrolledList, and another PushButton
 #  (PushButton2) should appear.
 #  The ScrolledList should contain twenty items which are selectable
-#  one at a time. 
-#  Ten of the twenty items should be visible. 
+#  one at a time.
+#  Ten of the twenty items should be visible.
 #  The two PushButtons should have their top edges aligned with the top edge
 #  of the ScrolledList.
 
@@ -55,13 +55,13 @@ Continue
 
 
 #   A PushButton (PushButton1), ScrolledList, and another PushButton
-#  (PushButton2) should appear. 
+#  (PushButton2) should appear.
 #  The ScrolledList should contain twenty items which are selectable
-#  one at a time. 
-#  Ten of the twenty items should be visible. 
+#  one at a time.
+#  Ten of the twenty items should be visible.
 #  The two PushButtons should have their BOTTOM edges aligned with the BOTTOM
-#  edge of the ScrolledList. 
-#  The PushButtons and the ScrolledList should retain their original sizes. 
+#  edge of the ScrolledList.
+#  The PushButtons and the ScrolledList should retain their original sizes.
 
 CompareVisual Form
 
@@ -78,10 +78,10 @@ Continue
 
 
 #  A PushButton (PushButton1), ScrolledList, and another PushButton
-#  (PushButton2) should appear. 
+#  (PushButton2) should appear.
 #  The ScrolledList should contain twenty items which are selectable
-#  one at a time. 
-#  Ten of the twenty items should be visible. 
+#  one at a time.
+#  Ten of the twenty items should be visible.
 #  The two PushButtons should have their top edges aligned with the top edge
 #  of the ScrolledList.
 
@@ -107,19 +107,19 @@ LocatePointer ScrolledList RListItem 9
 ClickMB Btn1
 CompareVisual ScrolledList
 
-Continue 
+Continue
 
 
- 
+
 
 #  A PushButton (PushButton1), ScrolledList, and another PushButton
-#  (PushButton2) should appear. 
+#  (PushButton2) should appear.
 #  The ScrolledList should contain twenty items which are selectable
-#  one at a time. 
-#  Ten of the twenty items should be visible. 
+#  one at a time.
+#  Ten of the twenty items should be visible.
 #  The two PushButtons should have their BOTTOM edges aligned with the BOTTOM
-#  edge of the ScrolledList. 
-#  The PushButtons and the ScrolledList should retain their original sizes. 
+#  edge of the ScrolledList.
+#  The PushButtons and the ScrolledList should retain their original sizes.
 
 CompareVisual Form
 
@@ -134,6 +134,3 @@ CompareVisual ScrolledList
 
 
 Exit
-
-
-

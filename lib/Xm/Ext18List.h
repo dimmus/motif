@@ -31,7 +31,7 @@ extern "C" {
 
 #include <Xm/MultiList.h>
 #include <Xm/XmP.h>
-    
+
 externalref WidgetClass xmExt18ListWidgetClass XM_DEPRECATED;
 
 enum {
@@ -46,7 +46,7 @@ typedef XmMultiListRowInfo       Xm18RowInfo;
 
 typedef XmMultiListCallbackStruct   XmExt18ListCallbackStruct;
 
-/* 
+/*
  * Function Name: XmExt18ListGetSelectedRows
  * Description:   Takes an Extended List and returns a NULL terminated array
  *                of pointers to selected rows from the internal list
@@ -150,7 +150,7 @@ extern void XmExt18ListSelectRow(Widget, int, Boolean) XM_DEPRECATED;
  */
 extern void XmExt18ListDeselectRow(Widget, int) XM_DEPRECATED;
 
-/* 
+/*
  * Function Name: XmExt18ListGetSelectedRowArray
  * Description:   Takes an Extended List and returns a NULL terminated array
  *                of pointers to selected rows from the internal list

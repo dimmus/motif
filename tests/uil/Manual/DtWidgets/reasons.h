@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,15 +19,15 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: reasons.h /main/1 1996/08/13 10:17:22 jakku $ */
 
 /* This array contains all the available reasons for Callbacks */
 
-static char *REASONS[50] = 
+static char *REASONS[50] =
 	{
 		"XmCR_NONE",
 		"XmCR_HELP",

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: multi.c /main/7 1995/07/13 17:58:11 drk $"
@@ -135,7 +135,7 @@ int main(argc, argv)
 
    /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     if (MrmOpenHierarchy (1, mrm_vec, NULL, &mrm_id) != MrmSUCCESS) exit(0);
     if (MrmRegisterNames (regvec, regnum) != MrmSUCCESS) exit(0);
     if (MrmFetchWidget (mrm_id, "app_main", Shell1, &app_main, &mrm_class)
@@ -283,7 +283,7 @@ static void set_slider(val)
     int val;
 {
     if (val < MIN_VALUE || val > MAX_VALUE) return;
-    XmScaleSetValue (slider, val);    
+    XmScaleSetValue (slider, val);
 }
 
 static void set_text(val)
@@ -294,7 +294,7 @@ static void set_text(val)
 
     if (val < MIN_VALUE || val > MAX_VALUE) return;
     sprintf (text_data, "The value is %d percent", val);
-    cs = XmStringCreateLtoR (text_data, XmSTRING_DEFAULT_CHARSET); 
+    cs = XmStringCreateLtoR (text_data, XmSTRING_DEFAULT_CHARSET);
     XtSetArg (arglist[0], XmNlabelString, cs);
     XtSetValues (text_value, arglist, 1);
     XmStringFree (cs);
@@ -305,14 +305,14 @@ static void set_pixmap(val)
 {
     Arg arglist[1];
     if (val < MIN_VALUE || val > MAX_VALUE) return;
-    XSetForeground (display, pixmap_gc, WhitePixel(display, DefaultScreen(display)));  
+    XSetForeground (display, pixmap_gc, WhitePixel(display, DefaultScreen(display)));
     XFillRectangle (display, pixmap_id, pixmap_gc, 0, 0, pixmap_width,
 							pixmap_height);
     if (val > 0) {
 	XSetForeground (display, pixmap_gc, BlackPixel(display, DefaultScreen(display)));
  	XFillRectangle (display, pixmap_id, pixmap_gc, 1, pixmap_height/4,
 			(val*pixmap_width)/100,	pixmap_height/2);
-    }   
+    }
     /* Ensure local pixmap is displayed */
     XtSetArg (arglist[0], XmNlabelPixmap, pixmap_id);
     XtSetValues (pixmap_value, arglist, 1);
@@ -330,7 +330,7 @@ static void set_int(val)
     if (val < MIN_VALUE || val > MAX_VALUE) return;
     int_data = val;
     sprintf (str, "%d", val);
-    cs = XmStringCreateLtoR (str, XmSTRING_DEFAULT_CHARSET); 
+    cs = XmStringCreateLtoR (str, XmSTRING_DEFAULT_CHARSET);
     XtSetArg (arglist[0], XmNlabelString, cs);
     XtSetValues (int_value, arglist, 1);
     XmStringFree(cs);
@@ -681,7 +681,7 @@ static void paste_proc(widget, tag, cb)
 	    else {
 		add_to_log ("Retrieved STRING\n");
 		buffer[paste_length] = '\0';
-		cs = XmStringCreateLtoR(buffer,XmSTRING_DEFAULT_CHARSET); 
+		cs = XmStringCreateLtoR(buffer,XmSTRING_DEFAULT_CHARSET);
 		XtSetArg (arglist[0], XmNlabelString, cs);
 		XtSetValues (text_value, arglist, 1);
 		XmStringFree(cs);
@@ -710,7 +710,7 @@ static void paste_proc(widget, tag, cb)
 	    else {
 		add_to_log ("Retrieved INTEGER\n");
 		sprintf (str, "%d", (int)*((long *)buffer));
-		cs = XmStringCreateLtoR (str, XmSTRING_DEFAULT_CHARSET); 
+		cs = XmStringCreateLtoR (str, XmSTRING_DEFAULT_CHARSET);
 		XtSetArg (arglist[0], XmNlabelString, cs);
 		XtSetValues (int_value, arglist, 1);
 		XmStringFree(cs);
@@ -808,7 +808,7 @@ static void inquire_proc(widget, tag, cb)
 		}
 	 	else {
 		    add_to_log ("\nInquireFormat failed\n");
-		    XBell(display, 0); 
+		    XBell(display, 0);
 		}
 	    }
 	    add_to_log ("\n");

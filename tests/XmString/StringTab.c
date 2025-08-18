@@ -26,7 +26,7 @@
  */
 
 /*
- *   StringTab.c - 
+ *   StringTab.c -
  *     Tests the tab components within XmString.
  */
 #include <testlib.h>
@@ -38,14 +38,14 @@ char fontname[] = "fixed";
 static char *rendstrings[] = {
   "Headings", "Entries" };
 
-static char string1[] = 
+static char string1[] =
 "Fat and Skinny had a race";
 
 static char *unit_types[] = {
- "PIXELS", "100TH_MILLIMETERS", "1000TH_INCHES", 
+ "PIXELS", "100TH_MILLIMETERS", "1000TH_INCHES",
  "100TH_POINTS", "100TH_FONT_UNITS", "INCHES",
- "CENTIMETERS", "MILLIMETERS", "POINTS", 
- "FONT_UNITS" }; 
+ "CENTIMETERS", "MILLIMETERS", "POINTS",
+ "FONT_UNITS" };
 
 static char *offset_types[] = {
  "ABSOLUTE", "RELATIVE" };
@@ -73,15 +73,15 @@ static char *soups[] = {
 #define NUM_ARGS   50
 #define FORM_WIDTH 500
 #define FORM_HEIGHT 350
-#define OFFSET     5 
+#define OFFSET     5
 #define MARGINS    10
 #define DRAW_AREA_WIDTH FORM_WIDTH
 #define DRAW_AREA_HEIGHT FORM_HEIGHT / 2
-#define NUM_UNITS  ( sizeof( unit_types ) / sizeof( unit_types[0] )) 
-#define NUM_OFFSETS ( sizeof( offset_types ) / sizeof( offset_types[0] )) 
+#define NUM_UNITS  ( sizeof( unit_types ) / sizeof( unit_types[0] ))
+#define NUM_OFFSETS ( sizeof( offset_types ) / sizeof( offset_types[0] ))
 #define NUM_TAB_OPTIONS ( sizeof( tab_options )/ sizeof( tab_options[0] ))
-#define NUM_COLUMNS ( sizeof( headings ) / sizeof( headings[0] ))   
-#define NUM_ROWS    ( sizeof( breads ) / sizeof( breads[0] ) + 1 ) 
+#define NUM_COLUMNS ( sizeof( headings ) / sizeof( headings[0] ))
+#define NUM_ROWS    ( sizeof( breads ) / sizeof( breads[0] ) + 1 )
 #define MAX_TABS   5
 #define POPUP_WIDTH 500
 #define POPUP_HEIGHT 125
@@ -101,18 +101,18 @@ typedef struct _TabInfo
   XmTextPosition insert_pos;
 } TabInfo;
 
-/* 
+/*
  *  Global variables.
  */
 Arg       args[NUM_ARGS];
 int       n, i;
 Widget    Form1, Text1, Scale1, UnitLabel, UnitMenu, OffsetLabel, OffsetMenu,
-          UnitPullDown, UnitPB[NUM_UNITS],  OffsetPullDown, 
+          UnitPullDown, UnitPB[NUM_UNITS],  OffsetPullDown,
           OffsetPB[NUM_OFFSETS], DrawArea1, Label1,
           CreateTabPB, ResetTabsPB, DrawStringPB, VertSep1, VertSep2, HorizSep1,
           PopupShell, Form2, PositionLabel, ValueLabel, UnitLabel, OffsetLabel,
           PositionList, ValueList, UnitList, OffsetList,
-          TabOptionsPullDown, TabOptionsMenu, 
+          TabOptionsPullDown, TabOptionsMenu,
           TabOptionsPB[NUM_TAB_OPTIONS];
 XmString  Label, TextComp[MAX_TABS + 1], RendComp[2], TabbedString,
           UntabbedString, TempString,
@@ -125,7 +125,7 @@ XmRendition rend;
 XmRenderTable RenderTable = NULL;
 Boolean   TabSet = False;
 Display   *display;
-Window    window; 
+Window    window;
 GC        gc;
 XGCValues      gcv;
 XFontStruct    *fontStruct;
@@ -169,21 +169,21 @@ unsigned char GetTabUnits( Widget w )
 
   return( units );
 }
-           
+
 XmOffsetModel GetTabOffsets( Widget w )
 {
-   XmOffsetModel  offset_model = XmABSOLUTE; 
+   XmOffsetModel  offset_model = XmABSOLUTE;
 
    if ( w == OffsetPB[0] )
         offset_model = XmABSOLUTE;
    else if ( w == OffsetPB[1] )
         offset_model = XmRELATIVE;
-  
+
   return( offset_model );
 }
 
 /*
- *  Callbacks 
+ *  Callbacks
  */
 void CreateTab( Widget w, XtPointer client_data, XtPointer call_data )
 {
@@ -207,7 +207,7 @@ void CreateTab( Widget w, XtPointer client_data, XtPointer call_data )
 
     /*  Update TabValue list. */
      sprintf(buffer, "%.1f", tab_info->value);
-     ListValue[count] = XmStringCreateLtoR(buffer, XmFONTLIST_DEFAULT_TAG ); 
+     ListValue[count] = XmStringCreateLtoR(buffer, XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
      XtSetArg( args[n], XmNitemCount, count + 1 ); n++;
@@ -224,7 +224,7 @@ void CreateTab( Widget w, XtPointer client_data, XtPointer call_data )
 
     /*  Update TabUnit List. */
      ListUnit[count] = XmStringCreateLtoR(unit_types[tab_info->units],
-                          XmFONTLIST_DEFAULT_TAG ); 
+                          XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
      XtSetArg( args[n], XmNitemCount, count + 1 ); n++;
@@ -242,9 +242,9 @@ void CreateTab( Widget w, XtPointer client_data, XtPointer call_data )
     /*  If count is zero, offset_model must be absolute. */
      if (( count == 0 ) && tab_info->offset_model != XmABSOLUTE )
      {
-        printf("For initial tab, Tab Offset must be Absolute. \n"); 
+        printf("For initial tab, Tab Offset must be Absolute. \n");
         tab_info->offset_model = XmABSOLUTE;
-     } 
+     }
 
     /*  Update TabOffset List. */
      switch( tab_info->offset_model )
@@ -257,10 +257,10 @@ void CreateTab( Widget w, XtPointer client_data, XtPointer call_data )
             i = 1;
             break;
      }
- 
-     ListOffset[count] = 
+
+     ListOffset[count] =
          XmStringCreateLtoR(offset_types[i],
-                            XmFONTLIST_DEFAULT_TAG ); 
+                            XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
      XtSetArg( args[n], XmNitemCount, count + 1 ); n++;
@@ -269,15 +269,15 @@ void CreateTab( Widget w, XtPointer client_data, XtPointer call_data )
      XtSetValues( OffsetList, args, n );
 
     /*  Create tab and insert at end of tab list. */
-     tab_info->tab = XmTabCreate( tab_info->value, tab_info->units, 
-                             tab_info->offset_model, 
+     tab_info->tab = XmTabCreate( tab_info->value, tab_info->units,
+                             tab_info->offset_model,
                              XmALIGNMENT_BEGINNING, NULL );
 
      TabList = XmTabListInsertTabs( TabList, &tab_info->tab, 1, count );
 
     /*  Create tab component. */
      tab_info->tab_comp = XmStringComponentCreate( XmSTRING_COMPONENT_TAB,
-                                                   0, NULL ); 
+                                                   0, NULL );
 
     /*  Get current insertion position from Text widget. */
      tab_info->insert_pos = XmTextGetInsertionPosition( Text1 );
@@ -304,15 +304,15 @@ void PopupTabList( Widget w, XtPointer client_data, XtPointer call_data )
        XtSetArg( args[n], XmNy, 400 ); n++;
        XtSetArg( args[n], XmNwidth, POPUP_WIDTH ); n++;
        XtSetArg( args[n], XmNheight, POPUP_HEIGHT ); n++;
-       PopupShell = XtCreatePopupShell("Current Tab Values", 
+       PopupShell = XtCreatePopupShell("Current Tab Values",
                                        topLevelShellWidgetClass,
-                                       Shell1, args, n ); 
+                                       Shell1, args, n );
        XtManageChild(PopupShell);
 
        n = 0;
        XtSetArg( args[n], XmNwidth, POPUP_WIDTH ); n++;
        XtSetArg( args[n], XmNheight, POPUP_HEIGHT ); n++;
-       Form2 = XmCreateForm( PopupShell, "Form2", args, n ); 
+       Form2 = XmCreateForm( PopupShell, "Form2", args, n );
        XtManageChild(Form2);
 
        Label = XmStringCreateLtoR("Tab Positions", XmFONTLIST_DEFAULT_TAG );
@@ -387,7 +387,7 @@ void PopupTabList( Widget w, XtPointer client_data, XtPointer call_data )
        XtSetArg( args[n], XmNvisibleItemCount, MAX_TABS ); n++;
        ValueList = XmCreateList( Form2, "ValueList", args, n );
        XtManageChild(ValueList);
-       
+
        n = 0;
        XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
        XtSetArg( args[n], XmNtopWidget, UnitLabel ); n++;
@@ -398,7 +398,7 @@ void PopupTabList( Widget w, XtPointer client_data, XtPointer call_data )
        XtSetArg( args[n], XmNvisibleItemCount, MAX_TABS ); n++;
        UnitList = XmCreateList( Form2, "UnitList", args, n );
        XtManageChild(UnitList);
-       
+
        n = 0;
        XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
        XtSetArg( args[n], XmNtopWidget, OffsetLabel ); n++;
@@ -409,13 +409,13 @@ void PopupTabList( Widget w, XtPointer client_data, XtPointer call_data )
        XtSetArg( args[n], XmNvisibleItemCount, MAX_TABS ); n++;
        OffsetList = XmCreateList( Form2, "OffsetList", args, n );
        XtManageChild(OffsetList);
-       
-       XtPopup( PopupShell, XtGrabNone ); 
+
+       XtPopup( PopupShell, XtGrabNone );
 
        TabSet = True;
     }
 }
-    
+
 void ResetTabs( Widget w, XtPointer client_data, XtPointer call_data )
 {
    int            j;
@@ -428,9 +428,9 @@ void ResetTabs( Widget w, XtPointer client_data, XtPointer call_data )
         return;
 
      for ( j = 0; j < count; j++ )
-     {     
+     {
        position[j] = j;
-       XmTabFree( TabData[j].tab ); 
+       XmTabFree( TabData[j].tab );
        XmStringFree( TabData[j].tab_comp );
      }
 
@@ -453,10 +453,10 @@ void ResetTabs( Widget w, XtPointer client_data, XtPointer call_data )
     /*  Free the current List items. */
      for ( j = 0; j < count; j++ )
      {
-        if ( ListPosition[j] ) XmStringFree( ListPosition[j] ); 
-        if ( ListValue[j] ) XmStringFree( ListValue[j] ); 
-        if ( ListUnit[j] ) XmStringFree( ListUnit[j] ); 
-        if ( ListOffset[j] ) XmStringFree( ListOffset[j] ); 
+        if ( ListPosition[j] ) XmStringFree( ListPosition[j] );
+        if ( ListValue[j] ) XmStringFree( ListValue[j] );
+        if ( ListUnit[j] ) XmStringFree( ListUnit[j] );
+        if ( ListOffset[j] ) XmStringFree( ListOffset[j] );
      }
 
     /*  Reset the Lists containing the current tab information. */
@@ -481,7 +481,7 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
    int            string_length, sub_string_length, num_chars, NumTextComp;
    Dimension      width, height;
    XmTextPosition tab_pos;
-   unsigned int   position[MAX_TABS]; 
+   unsigned int   position[MAX_TABS];
    unsigned char  units, alignment;
    XmOffsetModel  offset;
    char           *decimal;
@@ -517,8 +517,8 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
      XtSetArg(args[n], XmNrenditionForeground, CommonGetColor("blue"));    n++;
      rend = XmRenditionCreate(drawArea, "Tabs", args, n);
 
-     RenderTable = XmRenderTableAddRenditions( RenderTable, &rend, 
-                                               1, XmMERGE_REPLACE ); 
+     RenderTable = XmRenderTableAddRenditions( RenderTable, &rend,
+                                               1, XmMERGE_REPLACE );
      XmRenditionFree( rend );
 
     /*  If no tabs are set, display the Untabbed String. */
@@ -526,23 +526,23 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
      {
        XmStringExtent( RenderTable, UntabbedString, &width, &height );
        XmStringDraw( display, window, RenderTable, UntabbedString,
-                     gc, MARGINS, MARGINS, width, XmALIGNMENT_BEGINNING, 
+                     gc, MARGINS, MARGINS, width, XmALIGNMENT_BEGINNING,
                      XmSTRING_DIRECTION_L_TO_R, (XRectangle *)0 );
      }
      else
      {
-        /* 
+        /*
          *  If the first tab is not at position zero, then there is
          *  one more text component than there are tab components
          *  since a text component is created for the text from
          *  position zero to the first tab.
-         */ 
-         NumTextComp = ( TabData[0].insert_pos > 0 ) ? count + 1 : count; 
+         */
+         NumTextComp = ( TabData[0].insert_pos > 0 ) ? count + 1 : count;
 
     /*  Shuffle TabData structures into insert position order. */
        for ( j = 0; j < count - 1; j++ )
        {
-         for ( k = j + 1; k < count; k++ ) 
+         for ( k = j + 1; k < count; k++ )
          {
             if ( TabData[j].insert_pos > TabData[k].insert_pos )
             {
@@ -560,9 +560,9 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
        memcpy( &Tabs[j], &(TabData[j].tab), sizeof( Tabs[j] ));
      }
 
-     TabList = XmTabListReplacePositions( TabList, position, Tabs, count ); 
+     TabList = XmTabListReplacePositions( TabList, position, Tabs, count );
 
-    /* 
+    /*
      *  Verify that
      *    1. The number of tabs remained the same.
      *    2. Tabs in new TabList are ordered the same as tabs
@@ -589,17 +589,17 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
     /*  Create Rendition Components. */
      RendComp[0] = XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_BEGIN,
                      strlen("Tabs"), "Tabs" );
-                      
+
      RendComp[1] = XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_END,
                      strlen("Tabs"), "Tabs" );
-     
+
 
     /*
      *  Create Text Components corresponding to the text before
-     *  and after tab breaks. 
+     *  and after tab breaks.
      */
      string = XmTextGetString( Text1 );
-     string_length = ( string ) ? strlen( string ) : 0; 
+     string_length = ( string ) ? strlen( string ) : 0;
      for ( j = 0; j < count; j++ )
      {
         tab_pos = TabData[j].insert_pos;
@@ -608,7 +608,7 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
                      string_length - tab_pos;
         sub_string = (char *)XtMalloc( ( num_chars + 1 ) * sizeof( char ));
         XmTextGetSubstring( Text1, tab_pos, num_chars,
-                            num_chars + 1, sub_string ); 
+                            num_chars + 1, sub_string );
 
         sub_string_length = ( sub_string ) ? strlen( sub_string ) : 0;
         TextComp[j] = XmStringComponentCreate( XmSTRING_COMPONENT_TEXT,
@@ -621,11 +621,11 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
         */
         if (( j == ( count - 1 )) && ( NumTextComp > count ))
         {
-          num_chars = TabData[0].insert_pos - 0; 
+          num_chars = TabData[0].insert_pos - 0;
           XtFree( sub_string );
           sub_string = (char *)XtMalloc( ( num_chars + 1 ) * sizeof( char ));
           XmTextGetSubstring( Text1, 0, num_chars,
-                            num_chars + 1, sub_string ); 
+                            num_chars + 1, sub_string );
           sub_string_length = ( sub_string ) ? strlen( sub_string ) : 0;
           TextComp[count] = XmStringComponentCreate( XmSTRING_COMPONENT_TEXT,
                               sub_string_length, (XtPointer)sub_string );
@@ -662,17 +662,17 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
          else
          {
             TempString = TabbedString;
-            TabbedString = XmStringConcat( TempString, TabData[j].tab_comp ); 
+            TabbedString = XmStringConcat( TempString, TabData[j].tab_comp );
             XmStringFree(TempString);
             TempString = TabbedString;
-            TabbedString = XmStringConcat( TempString, TextComp[j] ); 
+            TabbedString = XmStringConcat( TempString, TextComp[j] );
             XmStringFree(TempString);
          }
 
          if ( j == count - 1 )
          {
             TempString = TabbedString;
-            TabbedString = XmStringConcat( TempString, RendComp[1] ); 
+            TabbedString = XmStringConcat( TempString, RendComp[1] );
             XmStringFree(TempString);
          }
       }
@@ -698,10 +698,10 @@ void DrawString( Widget w, XtPointer client_data, XtPointer call_data )
 
         XmRenditionFree( rend );
       }
-      
+
       XmStringExtent( RenderTable, TabbedString, &width, &height );
       XmStringDraw( display, window, RenderTable, TabbedString,
-                    gc, MARGINS, MARGINS, width, XmALIGNMENT_BEGINNING, 
+                    gc, MARGINS, MARGINS, width, XmALIGNMENT_BEGINNING,
                     XmSTRING_DIRECTION_L_TO_R, (XRectangle *)0 );
      }
 }
@@ -781,20 +781,20 @@ DrawStringTable( Widget w, XtPointer client_data, XtPointer call_data )
         n = 0;
         XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++;
         XtGetValues( OffsetMenu, args, n );
- 
+
         offset = GetTabOffsets( widgetID );
-        
+
         n = 0;
         XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++;
         XtGetValues( UnitMenu, args, n );
- 
+
         units = GetTabUnits( widgetID );
 
        /*
         *  Create a Label widget which will supply display,
         *  renderTable and unit information to the XmStringTableProposeTablist
         *  function.
-        *  Note:  Need to unmanage Label widget when test is run automated. 
+        *  Note:  Need to unmanage Label widget when test is run automated.
         */
         n = 0;
         XtSetArg( args[n], XmNunitType, units ); n++;
@@ -804,7 +804,7 @@ DrawStringTable( Widget w, XtPointer client_data, XtPointer call_data )
              XtUnmanageChild( Label1 );
 
         tabList = XmStringTableProposeTablist( stringTable, NUM_ROWS,
-                    Label1, (float)padValue, offset );                      
+                    Label1, (float)padValue, offset );
 
         XtDestroyWidget( Label1 );
       }
@@ -813,7 +813,7 @@ DrawStringTable( Widget w, XtPointer client_data, XtPointer call_data )
       *  Update the render table with the desired tablist.
       */
       n = 0;
-      XtSetArg( args[0], XmNtabList, tabList ); n++; 
+      XtSetArg( args[0], XmNtabList, tabList ); n++;
       XmRenditionUpdate( rendition[0], args, n );
       XmRenditionUpdate( rendition[1], args, n );
 
@@ -837,19 +837,19 @@ DrawStringTable( Widget w, XtPointer client_data, XtPointer call_data )
       /*
        *  Clear the drawing area prior to displaying the next string.
        */
-       XFillRectangle( display, window, gc, 0, 0, 
+       XFillRectangle( display, window, gc, 0, 0,
                        DRAW_AREA_WIDTH, DRAW_AREA_HEIGHT );
 
       /*
        *  Display the tabbed strings.
        */
-      y_coord = MARGINS; 
+      y_coord = MARGINS;
       for ( i = 0; i < NUM_ROWS; i++ )
       {
-        XmStringExtent( RenderTable, stringTable[i], &width, &height ); 
+        XmStringExtent( RenderTable, stringTable[i], &width, &height );
         XmStringDraw( display, window,
-                RenderTable, stringTable[i], gc, 
-                MARGINS, y_coord, width, XmALIGNMENT_BEGINNING, 
+                RenderTable, stringTable[i], gc,
+                MARGINS, y_coord, width, XmALIGNMENT_BEGINNING,
                 XmSTRING_DIRECTION_L_TO_R, (XRectangle *)0 );
         y_coord += height;
 
@@ -857,7 +857,7 @@ DrawStringTable( Widget w, XtPointer client_data, XtPointer call_data )
 
       XmTabListFree( tabList );
 }
-  
+
 
 void
 CreateStringTable()
@@ -881,7 +881,7 @@ CreateStringTable()
         {
            tab = XmStringComponentCreate( XmSTRING_COMPONENT_TAB, (int)0,
                                           (XtPointer)0 );
-        
+
            temp2 = temp1;
            temp1 = XmStringConcat( temp2, tab );
            XmStringFree( temp2 );
@@ -925,7 +925,7 @@ CreateStringTable()
            }
            else
            {
-             temp1 = XmStringConcat( text, tab ); 
+             temp1 = XmStringConcat( text, tab );
              XmStringFree( text );
              XmStringFree( tab );
            }
@@ -1047,9 +1047,9 @@ void main( int argc, char **argv )
       Label = XmStringCreateLtoR( unit_types[i], XmFONTLIST_DEFAULT_TAG );
       sprintf( name, "UnitPushB%d", i );
       n = 0;
-      XtSetArg( args[n], XmNlabelString, Label ); n++; 
+      XtSetArg( args[n], XmNlabelString, Label ); n++;
       UnitPB[i] = XmCreatePushButton( UnitPullDown, name, args, n );
-      XmStringFree(Label); 
+      XmStringFree(Label);
     }
 
     XtManageChildren( UnitPB, NUM_UNITS );
@@ -1067,7 +1067,7 @@ void main( int argc, char **argv )
     XtSetArg( args[n], XmNlabelString, Label ); n++;
     UnitMenu = XmCreateOptionMenu(Form1, "UnitMenu", args, n);
     XtManageChild( UnitMenu );
-         
+
     XmStringFree( Label );
 
     OffsetPullDown = XmCreatePulldownMenu( Form1, "OffsetPullDown", NULL, 0 );
@@ -1077,9 +1077,9 @@ void main( int argc, char **argv )
       Label = XmStringCreateLtoR( offset_types[i], XmFONTLIST_DEFAULT_TAG );
       sprintf( name, "OffsetPushB%d", i );
       n = 0;
-      XtSetArg( args[n], XmNlabelString, Label ); n++; 
+      XtSetArg( args[n], XmNlabelString, Label ); n++;
       OffsetPB[i] = XmCreatePushButton( OffsetPullDown, name, args, n );
-      XmStringFree(Label); 
+      XmStringFree(Label);
     }
 
     XtManageChildren( OffsetPB, NUM_OFFSETS );
@@ -1097,7 +1097,7 @@ void main( int argc, char **argv )
     XtSetArg( args[n], XmNlabelString, Label ); n++;
     OffsetMenu = XmCreateOptionMenu(Form1, "OffsetMenu", args, n);
     XtManageChild( OffsetMenu );
-         
+
     XmStringFree( Label );
 
     n = 0;
@@ -1129,7 +1129,7 @@ void main( int argc, char **argv )
     Label = XmStringCreateLtoR("Set Tab", XmFONTLIST_DEFAULT_TAG );
 
    /*
-    *  For some wierd reason, just attaching to form is not working. 
+    *  For some wierd reason, just attaching to form is not working.
     *  Need to specify y-dimension.
     */
     n = 0;
@@ -1145,14 +1145,14 @@ void main( int argc, char **argv )
 
     XtAddCallback( CreateTabPB, XmNactivateCallback, PopupTabList, NULL );
     XtAddCallback( CreateTabPB, XmNactivateCallback, CreateTab, NULL );
- 
+
     XmStringFree(Label);
 
     n = 0;
     XtSetArg( args[n], XmNheight, &height ); n++;
     XtGetValues( CreateTabPB, args, n );
 
-   /*  Create button for Resetting Tabs. */ 
+   /*  Create button for Resetting Tabs. */
 
     Label = XmStringCreateLtoR("Reset Tabs", XmFONTLIST_DEFAULT_TAG );
 
@@ -1179,7 +1179,7 @@ void main( int argc, char **argv )
     XtGetValues( ResetTabsPB, args, n );
 
    /*
-    *  For some wierd reason, just attaching to top widget is not working. 
+    *  For some wierd reason, just attaching to top widget is not working.
     *  Need to specify y-dimension.
     */
     n = 0;
@@ -1212,7 +1212,7 @@ void main( int argc, char **argv )
     XtSetArg( args[n], XmNheight, DRAW_AREA_HEIGHT ); n++;
     XtSetArg( args[n], XmNbackground, CommonGetColor("white")); n++;
     XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
-    DrawArea1 = XmCreateDrawingArea( Form1, "DrawArea1", args, n ); 
+    DrawArea1 = XmCreateDrawingArea( Form1, "DrawArea1", args, n );
 
     XtManageChild( DrawArea1 );
 
@@ -1230,16 +1230,16 @@ void main( int argc, char **argv )
     XtSetArg(args[n], XmNheight, &height); n++;
     XtGetValues(DrawArea1, args, n);
 
-    fontStruct = (XFontStruct *)XLoadQueryFont( display, fontname ); 
+    fontStruct = (XFontStruct *)XLoadQueryFont( display, fontname );
 
     gcv.font = fontStruct->fid;
 
     gc = XCreateGC( display, window, GCForeground | GCBackground | GCFont,
-                     &gcv ); 
+                     &gcv );
 
    /*  Test setting tabs in the given string. */
     CommonPause();
-   
+
    /*
     *  Deallocate unnecessary structures from the first portion
     *  of the test.
@@ -1301,20 +1301,20 @@ void main( int argc, char **argv )
 
     XtUnmanageChild( ResetTabsPB );
     XtDestroyWidget( ResetTabsPB );
-    
-    TabOptionsPullDown = 
+
+    TabOptionsPullDown =
        XmCreatePulldownMenu( Form1, "UnitPullDown", NULL, 0 );
 
     for ( i = 0; i < NUM_TAB_OPTIONS; i++ )
     {
-      Label = XmStringCreateLtoR( tab_options[i], 
+      Label = XmStringCreateLtoR( tab_options[i],
                 XmFONTLIST_DEFAULT_TAG );
       sprintf( name, "TabOptionsPushB%d", i );
       n = 0;
-      XtSetArg( args[n], XmNlabelString, Label ); n++; 
-      TabOptionsPB[i] = 
+      XtSetArg( args[n], XmNlabelString, Label ); n++;
+      TabOptionsPB[i] =
          XmCreatePushButton( TabOptionsPullDown, name, args, n );
-      XmStringFree(Label); 
+      XmStringFree(Label);
     }
 
     XtManageChildren( TabOptionsPB, NUM_TAB_OPTIONS );
@@ -1329,13 +1329,13 @@ void main( int argc, char **argv )
     XtSetArg( args[n], XmNsubMenuId, TabOptionsPullDown); n++;
     XtSetArg( args[n], XmNmenuHistory, TabOptionsPB[0]); n++;
     XtSetArg( args[n], XmNlabelString, Label ); n++;
-    TabOptionsMenu = 
+    TabOptionsMenu =
        XmCreateOptionMenu(Form1, "TabOptionsMenu", args, n);
     XtManageChild( TabOptionsMenu );
-         
+
     XmStringFree( Label );
 
-    Label = XmStringCreateLtoR("Draw Strings", 
+    Label = XmStringCreateLtoR("Draw Strings",
               XmFONTLIST_DEFAULT_TAG );
 
     n = 0;
@@ -1347,10 +1347,10 @@ void main( int argc, char **argv )
 
     XmStringFree( Label );
 
-    XtRemoveCallback( DrawStringPB, XmNactivateCallback, DrawString, 
-                      DrawArea1 ); 
-    XtAddCallback( DrawStringPB, XmNactivateCallback, DrawStringTable, 
-                   DrawArea1 ); 
+    XtRemoveCallback( DrawStringPB, XmNactivateCallback, DrawString,
+                      DrawArea1 );
+    XtAddCallback( DrawStringPB, XmNactivateCallback, DrawStringTable,
+                   DrawArea1 );
 
     CreateStringTable();
 
@@ -1361,7 +1361,7 @@ void main( int argc, char **argv )
     XtGetValues( DrawArea1, args, n );
 
    /*
-    *  Clear the drawing area prior to displaying the next 
+    *  Clear the drawing area prior to displaying the next
     *  instruction panel.
     */
     XFillRectangle( display, window, gc, 0, 0, width, height );

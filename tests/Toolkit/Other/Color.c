@@ -99,4 +99,3 @@ gobyebye(w, client, closure)
 	exit(0);
 
 }
-

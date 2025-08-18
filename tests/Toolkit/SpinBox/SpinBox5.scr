@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # @) Welcome to the Resource Control Panel test for SpinBox.
@@ -51,7 +51,7 @@ CompareVisual SpinBox1
 LocatePointer ArrowLayoutOptions ROptionButton
 PressMB Btn1
 LocatePointer ArrowLayoutPB0
-ReleaseMB Btn1 
+ReleaseMB Btn1
 CompareVisual SpinBox1
 
 # #) Change the value of Arrow Layout to \"Arrows Beginning\".
@@ -61,7 +61,7 @@ CompareVisual SpinBox1
 LocatePointer ArrowLayoutOptions ROptionButton
 PressMB Btn1
 LocatePointer ArrowLayoutPB1
-ReleaseMB Btn1 
+ReleaseMB Btn1
 CompareVisual SpinBox1
 
 # C)
@@ -73,19 +73,19 @@ Continue
 LocatePointer ArrowSizeOptions ROptionButton
 PressMB Btn1
 LocatePointer ArrowSizePB1
-ReleaseMB Btn1 
+ReleaseMB Btn1
 CompareVisual SpinBox1
 
 LocatePointer ArrowSizeOptions ROptionButton
 PressMB Btn1
 LocatePointer ArrowSizePB2
-ReleaseMB Btn1 
+ReleaseMB Btn1
 CompareVisual SpinBox1
 
 LocatePointer ArrowSizeOptions ROptionButton
 PressMB Btn1
 LocatePointer ArrowSizePB0
-ReleaseMB Btn1 
+ReleaseMB Btn1
 CompareVisual SpinBox1
 
 # #) Verify that each of the SpinBox arrows are sensitive by clicking
@@ -97,7 +97,7 @@ Continue
 
 # #) Change the value of Default Arrow Sensitivity to \"Arrows Decrement
 #    Sensitive\". The right-pointing arrows should be grayed out and
-#    should not respond to clicking MB1.  
+#    should not respond to clicking MB1.
 
 LocatePointer DefArrowSensitiveOptions ROptionButton
 PressMB Btn1
@@ -136,7 +136,7 @@ CompareVisual SpinBox1
 # C)
 Continue
 
-# #) Set Initial Delay to a 2000. Click KReturn. Set Repeat Delay to 1000. 
+# #) Set Initial Delay to a 2000. Click KReturn. Set Repeat Delay to 1000.
 #    Click KReturn. Press MB1 on one of the XmSTRING SpinBox arrows.
 #    arrows. While holding MB1 should notice a delay
 #    of 2 seconds before the SpinBox value changes.  After the initial value
@@ -144,14 +144,14 @@ Continue
 #    change.  Release MB1.
 
 
-LocatePointer InitialDelayTF RTextChar Max 
+LocatePointer InitialDelayTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace
 ClickKey KBackSpace
 InputString "2000"
 ClickKey KReturn
-LocatePointer RepeatDelayTF RTextChar Max 
+LocatePointer RepeatDelayTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace
@@ -174,7 +174,7 @@ ReleaseMB Btn1
 #    uses the value of RepeatDelay as the time lapsed prior to any value change.
 #    Press MB1 on one of the XmSTRING SpinBox arrows. Verify that a delay of 1
 #    second occurs prior to the SpinBox value changing.  Release MB1.
-LocatePointer InitialDelayTF RTextChar Max 
+LocatePointer InitialDelayTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace
@@ -196,12 +196,12 @@ ReleaseMB Btn1
 #    spinning is disabled.  Press MB1 on one of the SpinBox arrows
 #    for over one second.  Verify that the SpinBox value does not change while
 #    the SpinBox arrow is depressed. Release MB1.
-LocatePointer InitialDelayTF RTextChar Max 
+LocatePointer InitialDelayTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "1000"
 ClickKey KReturn
-LocatePointer RepeatDelayTF RTextChar Max 
+LocatePointer RepeatDelayTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace
@@ -274,14 +274,14 @@ InputString "2"
 ClickKey KReturn
 CompareVisual SpinBox1
 
-LocatePointer StringIncrValueTF RTextChar Max 
+LocatePointer StringIncrValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "2"
 ClickKey KReturn
 CompareVisual SpinBox1
 
-LocatePointer StringMaxValueTF RTextChar Max 
+LocatePointer StringMaxValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace
@@ -289,7 +289,7 @@ InputString "20"
 ClickKey KReturn
 CompareVisual SpinBox1
 
-LocatePointer StringMinValueTF RTextChar Max 
+LocatePointer StringMinValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "2"
@@ -299,7 +299,7 @@ CompareVisual SpinBox1
 # #) Change the value of Position for the XmSTRING SpinBox to 3.
 #    Verify that the string now displayed in the XmSTRING SpinBox
 #    is \"Fourth\".
-LocatePointer StringPositionTF RTextChar Max 
+LocatePointer StringPositionTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "3"
@@ -323,7 +323,7 @@ CompareVisual SpinBox1
 #    arrow again.  The value should now be 6. Click MB1 two more times
 #    on the right-pointing arrow. The XmNUMERIC SpinBox should wrap around
 #    pass the maximum value to the minimum value of 0.
-LocatePointer NumericIncrValueTF RTextChar Max 
+LocatePointer NumericIncrValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "3"
@@ -358,7 +358,7 @@ ClickKey KBackSpace
 ClickKey KBackSpace
 InputString "20"
 ClickKey KReturn
-LocatePointer NumericIncrValueTF RTextChar Max 
+LocatePointer NumericIncrValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "5"
@@ -381,7 +381,7 @@ CompareVisual NumericTextF
 #    the right-pointing arrow two times. The value should now be 20.
 #    Click on the right-pointing arrow once more. The XmNUMERIC SpinBox
 #    should display the minimum value of 10.
-LocatePointer NumericMinValueTF RTextChar Max 
+LocatePointer NumericMinValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "10"
@@ -424,12 +424,12 @@ Continue
 #    in the XmNUMERIC SpinBox.
 #    Verify that the value displayed in the XmNUMERIC SpinBox is 15.
 
-LocatePointer NumericIncrValueTF RTextChar Max 
+LocatePointer NumericIncrValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "1"
 ClickKey KReturn
-LocatePointer NumericPositionTF RTextChar Max 
+LocatePointer NumericPositionTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 InputString "5"
@@ -478,7 +478,7 @@ ClickKey KReturn
 
 # #) Click MB1 on the right-pointing arrow of the XmNUMERIC SpinBox.
 #    The value of the SpinBox should decrease.
-LocatePointer SpinBox2 RIncrementBtn 
+LocatePointer SpinBox2 RIncrementBtn
 ClickMB Btn1
 CompareVisual NumericTextF
 
@@ -495,7 +495,7 @@ ClickKey KReturn
 
 # #) Click MB1 on the right-pointing arrow of the XmNUMERIC SpinBox.
 #    The value of the SpinBox should increase.
-LocatePointer SpinBox2 RIncrementBtn 
+LocatePointer SpinBox2 RIncrementBtn
 ClickMB Btn1
 CompareVisual NumericTextF
 
@@ -564,7 +564,7 @@ Continue
 
 # #) Change the Minimum Value of the XmNUMERIC SpinBox to a positive value
 #    less than the Maximum Value.  Set Increment Value to 1.
-LocatePointer NumericMinValueTF RTextChar Max 
+LocatePointer NumericMinValueTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace

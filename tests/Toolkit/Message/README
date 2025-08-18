@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/6 1996/07/15 14:23:58 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 ErrorDia1
 PIRS No.:      3204
 When specifing a destroyCallback on a MessageDialog (all kinds
@@ -37,7 +37,7 @@ PIRS No.:      4109
 When Mwm is in explicit mode, and the application does not
 have mwm focus, focusCallbacks for MessageBox are called.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	MICHAEL YEE
 Priority:	5
 Status:		A
@@ -57,7 +57,7 @@ PIRS No.:      3804
 focusCallback is called twice if you move the mouse fast,
 once slowly and not at all after a keyboard action.
 Version found in:	1.2S2
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	6
 Status:		A
@@ -87,7 +87,7 @@ PIRS No.:      3369
 MessageBox with added children is not laying out correctly.
 Non-menu, Non-button child should be visible.
 Version found in:	1.2
-Version fixed in:	
+Version fixed in:
 Assigned to:	ALASTAIR GOURLAY
 Priority:	6
 Status:		A
@@ -127,7 +127,7 @@ PIRS No.:      2440
 Non-modal windows in an application with a modal get keyboard
 focus. Also see P1686, and P2754.
 Version found in:	1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -147,7 +147,7 @@ PIRS No.:      4147
 MODELESS msg dialogs stack UNDER client window; in 1.1.4,
 they correctly stacked on top of client window.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	MICHAEL YEE
 Priority:	5
 Status:		A
@@ -157,7 +157,7 @@ PIRS No.:      4149
 Run test being sure to try clicking in "locked out" areas
 with modal dialogs up. On either panels 2, 3, or 4, you crash.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	5
 Status:		A
@@ -187,7 +187,7 @@ PIRS No.:      4350
 If two dialogs are posted, and second dialog comes up RIGHT
 under pointer, no focus hilite shows in Dialog1 on focus/click
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A

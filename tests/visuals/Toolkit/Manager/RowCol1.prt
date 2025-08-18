@@ -34,7 +34,7 @@ Width requested by child 4 is 50
 Width returned by GetValues for child 4 is 50
 Width requested by child 5 is 50
 Width returned by GetValues for child 5 is 50
-TRACE:(1) CompareVisual RowColumn1 
+TRACE:(1) CompareVisual RowColumn1
 TRACE:(2) Continue
 Width requested by child 0 is 50
 Width returned by GetValues for child 0 is 50
@@ -48,7 +48,7 @@ Width requested by child 4 is 50
 Width returned by GetValues for child 4 is 50
 Width requested by child 5 is 50
 Width returned by GetValues for child 5 is 50
-TRACE:(3) CompareVisual RowColumn1 
+TRACE:(3) CompareVisual RowColumn1
 TRACE:(4) Continue
 Width requested by child 0 is 50
 Width returned by GetValues for child 0 is 50
@@ -62,7 +62,7 @@ Width requested by child 4 is 50
 Width returned by GetValues for child 4 is 50
 Width requested by child 5 is 50
 Width returned by GetValues for child 5 is 50
-TRACE:(5) CompareVisual RowColumn1 
+TRACE:(5) CompareVisual RowColumn1
 TRACE:(6) Continue
 Width requested by child 0 is 50
 Width returned by GetValues for child 0 is 50
@@ -76,6 +76,6 @@ Width requested by child 4 is 50
 Width returned by GetValues for child 4 is 50
 Width requested by child 5 is 50
 Width returned by GetValues for child 5 is 50
-TRACE:(7) CompareVisual RowColumn1 
+TRACE:(7) CompareVisual RowColumn1
 TRACE:(8) Exit
 Exiting Test...Please Standby...

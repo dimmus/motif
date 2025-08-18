@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation13.c /main/7 1995/07/13 19:41:43 drk $"
@@ -63,11 +63,11 @@ char **argv;
     Widget test_returns [2];
     Widget expected_returns[2];
 
-    static char newMgrXl[] = 
+    static char newMgrXl[] =
 		"~m ~a <Key>Tab: PrintInfo() ManagerGadgetNextTabGroup()";
-    static char newPrimXl[] = 
+    static char newPrimXl[] =
 		"~m ~a <Key>Tab: PrintInfo() PrimitiveNextTabGroup()";
-    static char newTextXl[] = 
+    static char newTextXl[] =
 		"~m ~a <Key>Tab: PrintInfo() next-tab-group()";
     int i;
 
@@ -77,8 +77,8 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-     
-    managerWidgets[0] = 
+
+    managerWidgets[0] =
       XmCreateBulletinBoard(Shell1, "bb", (ArgList) args, 0);
     mgrCt++;
 
@@ -96,7 +96,7 @@ char **argv;
 	 n = 0;
 	 XtSetArg(args[n], XmNx, 10); n++;
 	 XtSetArg(args[n], XmNy, 10); n++;
-	 managerWidgets[1] = XmCreateFrame (managerWidgets[0], 
+	 managerWidgets[1] = XmCreateFrame (managerWidgets[0],
 					      "Frame1", args, n);
          mgrCt++;
 
@@ -106,14 +106,14 @@ char **argv;
 	 n = 0;
          XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
          XtSetArg(args[n], XmNnumColumns, 1); n++;
-         managerWidgets[2] = 
-	   XmCreateRowColumn(managerWidgets[1], 
+         managerWidgets[2] =
+	   XmCreateRowColumn(managerWidgets[1],
 			     "RC1", (ArgList) args, n);
          mgrCt++;
 
 #ifndef MOTIF1_1
 	n = 0;
-        XtSetArg(args[n], XmNlabelString, 
+        XtSetArg(args[n], XmNlabelString,
 		XmStringCreateSimple ("RC1"));                         n++;
         XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);        n++;
         XtSetArg(args[n], XmNchildHorizontalAlignment, XmALIGNMENT_CENTER); n++;
@@ -128,22 +128,22 @@ char **argv;
          XtSetArg(args[n], XmNtraversalOn, True); n++;
          XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
          XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-         primitiveWidgets[0]  = 
-	   XmCreatePushButton(managerWidgets[2], 
+         primitiveWidgets[0]  =
+	   XmCreatePushButton(managerWidgets[2],
 			      "btn1",(ArgList)args, n);
-         primitiveWidgets[1] 
-	   = XmCreatePushButton(managerWidgets[2], 
+         primitiveWidgets[1]
+	   = XmCreatePushButton(managerWidgets[2],
 				"btn2", (ArgList) args, n);
-         primitiveWidgets[2] = 
-	   XmCreatePushButton(managerWidgets[2], 
+         primitiveWidgets[2] =
+	   XmCreatePushButton(managerWidgets[2],
 			      "btn3", (ArgList) args, n);
 
          n = 0;
          tcs = XmStringLtoRCreate("Toggle1", XmSTRING_DEFAULT_CHARSET);
          XtSetArg(args[n], XmNlabelString, tcs);  n++;
          XtSetArg(args[n], XmNindicatorOn, True);  n++;
-         primitiveWidgets[3] = 
-	   XmCreateToggleButtonGadget(managerWidgets[2], 
+         primitiveWidgets[3] =
+	   XmCreateToggleButtonGadget(managerWidgets[2],
 				      "ToggleButtnG1",(ArgList) args, n);
          if(tcs) XmStringFree(tcs);
 
@@ -152,7 +152,7 @@ char **argv;
 	 n = 0;
 	 XtSetArg(args[n], XmNx, 100); n++;
 	 XtSetArg(args[n], XmNy, 10); n++;
-	 managerWidgets[3] = XmCreateFrame (managerWidgets[0], 
+	 managerWidgets[3] = XmCreateFrame (managerWidgets[0],
 						  "Frame2", args, n);
          mgrCt++;
 
@@ -160,14 +160,14 @@ char **argv;
 	 n = 0;
          XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
          XtSetArg(args[n], XmNnumColumns, 1); n++;
-         managerWidgets[4] = 
-	    XmCreateRowColumn(managerWidgets[3], 
+         managerWidgets[4] =
+	    XmCreateRowColumn(managerWidgets[3],
 	                      "RC2", (ArgList) args, n);
 	 mgrCt++;
 
 #ifndef MOTIF1_1
 	n = 0;
-        XtSetArg(args[n], XmNlabelString, 
+        XtSetArg(args[n], XmNlabelString,
 		XmStringCreateSimple ("RC2"));                         n++;
         XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);        n++;
         XtSetArg(args[n], XmNchildHorizontalAlignment, XmALIGNMENT_CENTER); n++;
@@ -181,10 +181,10 @@ char **argv;
          XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
          XtSetArg(args[n], XmNhighlightThickness, 2); n++;
          primitiveWidgets[4] =
-	   XmCreatePushButton(managerWidgets[4], 
+	   XmCreatePushButton(managerWidgets[4],
 			      "misc2", (ArgList) args, n);
-         primitiveWidgets[5] = 
-	   XmCreatePushButton(managerWidgets[4], 
+         primitiveWidgets[5] =
+	   XmCreatePushButton(managerWidgets[4],
 			      "misc1", (ArgList) args, n);
 
 /* Lets do a couple of  toggles now... */
@@ -192,8 +192,8 @@ char **argv;
          tcs = XmStringLtoRCreate("Toggle21", XmSTRING_DEFAULT_CHARSET);
          XtSetArg(args[n], XmNlabelString, tcs);  n++;
          XtSetArg(args[n], XmNindicatorOn, True);  n++;
-         primitiveWidgets[6] = 
-	   XmCreateToggleButtonGadget(managerWidgets[4], 
+         primitiveWidgets[6] =
+	   XmCreateToggleButtonGadget(managerWidgets[4],
 				      "Toggle21",(ArgList) args, n);
          if(tcs) XmStringFree(tcs);
 /* and another... */
@@ -201,8 +201,8 @@ char **argv;
          tcs = XmStringLtoRCreate("Toggle22", XmSTRING_DEFAULT_CHARSET);
          XtSetArg(args[n], XmNlabelString, tcs);  n++;
          XtSetArg(args[n], XmNindicatorOn, True);  n++;
-         primitiveWidgets[7] = 
-	   XmCreateToggleButtonGadget(managerWidgets[4], 
+         primitiveWidgets[7] =
+	   XmCreateToggleButtonGadget(managerWidgets[4],
 				      "Toggle22",(ArgList) args, n);
          if(tcs) XmStringFree(tcs);
 /*Two down, many to go... */
@@ -210,7 +210,7 @@ char **argv;
 	 n = 0;
 	 XtSetArg(args[n], XmNx, 200); n++;
 	 XtSetArg(args[n], XmNy, 10); n++;
-	 managerWidgets[5] = XmCreateFrame (managerWidgets[0], 
+	 managerWidgets[5] = XmCreateFrame (managerWidgets[0],
 						  "Frame3", args, n);
          mgrCt++;
 /* Let's make this Frame contain a RowColumn with six buttons.
@@ -219,14 +219,14 @@ char **argv;
 	 n = 0;
          XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
          XtSetArg(args[n], XmNnumColumns, 2); n++;
-         managerWidgets[6] = 
-	   XmCreateRowColumn(managerWidgets[5], 
+         managerWidgets[6] =
+	   XmCreateRowColumn(managerWidgets[5],
 			     "RC3", (ArgList) args, n);
          mgrCt++;
 
 #ifndef MOTIF1_1
 	n = 0;
-        XtSetArg(args[n], XmNlabelString, 
+        XtSetArg(args[n], XmNlabelString,
 		XmStringCreateSimple ("RC3"));                         n++;
         XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);        n++;
         XtSetArg(args[n], XmNchildHorizontalAlignment, XmALIGNMENT_CENTER); n++;
@@ -240,10 +240,10 @@ char **argv;
    XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
    primitiveWidgets[8]
-     = XmCreatePushButton(managerWidgets[6], 
+     = XmCreatePushButton(managerWidgets[6],
 			  "3btn1", (ArgList) args, n);
    primitiveWidgets[9]
-     = XmCreatePushButton(managerWidgets[6], 
+     = XmCreatePushButton(managerWidgets[6],
 			  "3btn2", (ArgList) args, n);
    primitiveWidgets[10]
      = XmCreatePushButton(managerWidgets[6],
@@ -263,7 +263,7 @@ char **argv;
     tcs = XmStringLtoRCreate("Toggle31", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, tcs);  n++;
     XtSetArg(args[n], XmNindicatorOn, True);  n++;
-    primitiveWidgets[14] = 
+    primitiveWidgets[14] =
       XmCreateToggleButtonGadget(managerWidgets[6],
 				 "Toggle31",(ArgList) args, n);
     if(tcs) XmStringFree(tcs);
@@ -289,7 +289,7 @@ char **argv;
     n = 0;
     XtSetArg(args[n], XmNx, 375); n++;
     XtSetArg(args[n], XmNy, 10); n++;
-    managerWidgets[7] = XmCreateFrame (managerWidgets[0], 
+    managerWidgets[7] = XmCreateFrame (managerWidgets[0],
 					     "Frame4", args, n);
     mgrCt++;
 
@@ -299,14 +299,14 @@ char **argv;
     n = 0;
     XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
     XtSetArg(args[n], XmNnumColumns, 1); n++;
-    managerWidgets[8] = 
-      XmCreateRowColumn(managerWidgets[7], 
+    managerWidgets[8] =
+      XmCreateRowColumn(managerWidgets[7],
 			"RC4", (ArgList) args, n);
     mgrCt++;
 
 #ifndef MOTIF1_1
 	n = 0;
-        XtSetArg(args[n], XmNlabelString, 
+        XtSetArg(args[n], XmNlabelString,
 		XmStringCreateSimple ("RC4"));                         n++;
         XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);        n++;
         XtSetArg(args[n], XmNchildHorizontalAlignment, XmALIGNMENT_CENTER); n++;
@@ -319,10 +319,10 @@ char **argv;
    XtSetArg(args[n], XmNtraversalOn, True); n++;
    XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-   primitiveWidgets[17] 
+   primitiveWidgets[17]
      = XmCreatePushButton(managerWidgets[8],
 			  "btn41", (ArgList) args, n);
-   primitiveWidgets[18] 
+   primitiveWidgets[18]
      = XmCreatePushButton(managerWidgets[8],
 			  "btn42", (ArgList) args, n);
 
@@ -343,15 +343,15 @@ char **argv;
    XtSetArg(args[n], XmNborderWidth, 5); n++;
    XtSetArg(args[n], XmNheight, 5); n++;
    XtSetArg(args[n], XmNwidth, 5); n++;
-   managerWidgets[9] = XmCreateFrame (managerWidgets[0], 
+   managerWidgets[9] = XmCreateFrame (managerWidgets[0],
 					    "Frame5", args, n);
    mgrCt++;
 
    n = 0;
    XtSetArg(args[n], XmNborderWidth, 5); n++;
    XtSetArg(args[n], XmNwidth, 20); n++;
-   managerWidgets[10] = 
-     XmCreateRowColumn(managerWidgets[9], 
+   managerWidgets[10] =
+     XmCreateRowColumn(managerWidgets[9],
 		       "RC5", (ArgList) args, n);
    mgrCt++;
 
@@ -361,21 +361,21 @@ char **argv;
    XtSetArg(args[n], XmNborderWidth, 5); n++;
    XtSetArg(args[n], XmNheight, 5); n++;
    XtSetArg(args[n], XmNwidth, 5); n++;
-   managerWidgets[11] = XmCreateFrame (managerWidgets[0], 
+   managerWidgets[11] = XmCreateFrame (managerWidgets[0],
 					    "Frame6", args, n);
    mgrCt++;
 
     n = 0;
     XtSetArg(args[n], XmNborderWidth, 5); n++;
     XtSetArg(args[n], XmNwidth, 5); n++;
-    managerWidgets[12] 
+    managerWidgets[12]
       = XmCreateRowColumn(managerWidgets[11],
 			  "RC6", (ArgList) args, n);
 
     n = 0;
     XtSetArg (args[n], XmNx, 600); n++;
     XtSetArg (args[n], XmNy, 10); n++;
-    managerWidgets[13] = XmCreateForm (managerWidgets[0], 
+    managerWidgets[13] = XmCreateForm (managerWidgets[0],
 					    "Form1", args, n);
     mgrCt++;
 
@@ -383,7 +383,7 @@ char **argv;
     XtSetArg (args[n], XmNcolumns, 11); n++;
     XtSetArg (args[n], XmNeditMode, XmSINGLE_LINE_EDIT); n++;
     /* navigationType is XmTAB_GROUP by default */
-    textWidgets[0] = XmCreateText (managerWidgets[13], 
+    textWidgets[0] = XmCreateText (managerWidgets[13],
 					  "text1", args, n);
 
     n = 0;
@@ -391,7 +391,7 @@ char **argv;
     /* navigationType is XmTAB_GROUP by default */
     XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
     XtSetArg (args[n], XmNtopWidget, textWidgets[0]); n++;
-    textWidgets[1] = XmCreateTextField (managerWidgets[13], 
+    textWidgets[1] = XmCreateTextField (managerWidgets[13],
 					  "text2", args, n);
 
     for (i = 0; i <= MGR_CT -1; i++)
@@ -419,7 +419,7 @@ char **argv;
      XtAppAddActions (app_context, newAction, 1);
 
      /* do an translation override for every widget */
-    
+
     for (i = 0; i <= MGR_CT - 1; i++)
       XtOverrideTranslations (managerWidgets[i],
 			      XtParseTranslationTable (newMgrXl));
@@ -456,7 +456,7 @@ char **argv;
     test_returns[1] = XmGetFocusWidget (Shell1);
     expected_returns[0] = managerWidgets[0];
     expected_returns[1] = NULL;
- 
+
     /* tests 3 and 4 */
     printf ("MANAGER ONLY\n");
     PrintResults (test_returns, expected_returns);
@@ -512,7 +512,7 @@ Cardinal *num_params;
 
 {
   if (w) {
-    printf ("Widget %s had the focus.\n", 
+    printf ("Widget %s had the focus.\n",
 		XtName(XmGetFocusWidget(w)));
     printf ("Leaving tab group %s\n",
 		XtName(XmGetTabGroup(w)));
@@ -523,7 +523,7 @@ Cardinal *num_params;
 void TopLevelFocus (Widget w, XtPointer client_data, XtPointer call_data)
 {
   Widget fw;
- 
+
   fw = XmGetFocusWidget(w);
   if (fw) {
     printf ("FOCUS IN: on %s\n", XtName(fw));
@@ -541,7 +541,7 @@ void PrintResults (Widget *test_results, Widget *expected_results)
 	for (i = 0; i <= 1; i++) {
         	printf ("Test %d:\n", counter++);
 		printf ("Expected: ");
-		if (expected_results[i]) 
+		if (expected_results[i])
 			printf ("%s\t", XtName (expected_results[i]));
 		else    printf ("NULL\t");
 		printf ("Actual: ");
@@ -554,7 +554,3 @@ void PrintResults (Widget *test_results, Widget *expected_results)
 	}
         fflush (stdout);
 }
-
-
-
-

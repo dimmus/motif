@@ -22,10 +22,10 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual label1 
+TRACE:(1) CompareVisual label1
 TRACE:(2) Continue
-TRACE:(3) LocatePointer label1  
-TRACE:(4) ClickMB Btn1 
-TRACE:(5) CompareVisual label1 
+TRACE:(3) LocatePointer label1
+TRACE:(4) ClickMB Btn1
+TRACE:(5) CompareVisual label1
 TRACE:(6) Exit
 Exiting Test...Please Standby...

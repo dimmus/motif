@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: BBoard.uil /main/9 1995/07/13 20:41:54 drk $
 !******************************************************************************
 module Test
@@ -30,7 +30,7 @@ module Test
         names = case_sensitive
 
   include file "BBoard.msg";
-  
+
   procedure
           exit_test();
 	  Report_Callback(string);
@@ -47,8 +47,8 @@ module Test
 	  orange : color('orange',background);
 	  violet : color('violet',background);
 	  red    : color('red',background);
-	
-  value 
+
+  value
 	colors_8 : color_table(black = ' ',
        			       white='x',
         		       red='r',
@@ -97,7 +97,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -158,7 +158,7 @@ object  cancel_button : XmPushButton {
 
 object  toggle_color_button : XmPushButton {
 	     arguments {
-		XmNlabelString = 
+		XmNlabelString =
 			compound_string ("Press to toggle", separate=true)
 				   & "parent background color";
 		XmNx = 175;
@@ -180,7 +180,7 @@ object
 
 object
 	explanation : XmBulletinBoardDialog {
-			arguments { 
+			arguments {
 				  XmNx = 500;
 				  XmNy  = 0;
 				  XmNdefaultPosition = false;
@@ -218,13 +218,13 @@ object
 				  XmNlabelString = compound_string("Explanation of Widget Displayed");
 				  };
 		};
-		
+
 
 object
 	text1 : XmText {
 			arguments {
 				  XmNx = 0;
-				  XmNy = 40;  
+				  XmNy = 40;
 				  XmNheight = 350;
 				  XmNwidth = 300;
 				  XmNwordWrap = true;
@@ -234,6 +234,6 @@ object
 				  XmNforeground = navy;
 				  XmNvalue = message;
 				  };
-				   
+
 		};
 end module;

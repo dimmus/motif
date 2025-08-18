@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsGetRscVal.c /main/7 1995/07/14 11:21:23 drk $"
@@ -50,7 +50,7 @@ int type;
 {
     Arg args[1];
     MvsArgVal value = 0;
-   
+
     XtSetArg(args[0],resource_name,&value);
     XtGetValues(widget, args,1);
 

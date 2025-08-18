@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu4.c /main/10 1995/07/13 18:45:14 drk $"
@@ -46,10 +46,10 @@ Widget frame1, frame2;
 Widget button1, button2, button3, button4, button5, button6;
 Widget submenua, option1a, option2a, option3a, option4a, option5a,
   option6a, option7a;
-Widget submenub, option1b, option2b, option3b, option4b, option5b, 
+Widget submenub, option1b, option2b, option3b, option4b, option5b,
   option6b, option7b;
 Widget option_menu1, option_menu2;
- 
+
 static void CreateOption();
 static void CreateButtons();
 
@@ -61,14 +61,14 @@ XtPointer d2)
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
-void PrintName_2(Widget rc, XtPointer client_data, 
+void PrintName_2(Widget rc, XtPointer client_data,
 		 XtPointer rc_data)
 {
   XmRowColumnCallbackStruct * rc_struct;
-  
+
   rc_struct = (XmRowColumnCallbackStruct *)rc_data;
 
-  fprintf(stdout, "Widget %s was activated\n", 
+  fprintf(stdout, "Widget %s was activated\n",
 	  XrmQuarkToString(rc_struct->widget->core.xrm_name));
 }
 
@@ -200,7 +200,7 @@ int main(unsigned int argc, char *argv[])
 
   separator = XmCreateSeparatorGadget(rc0, "separator", NULL, 0);
   XtManageChild(separator);
-    
+
   /*
    * XmRowColumn: rc2
    */
@@ -217,7 +217,7 @@ int main(unsigned int argc, char *argv[])
    */
 
   CreateButtons();
-    
+
   /*
    * Create the children of the second row-column manager
    */
@@ -227,7 +227,7 @@ int main(unsigned int argc, char *argv[])
   /*
    * Realize the widget hierarchy
    */
-   
+
   XtRealizeWidget (Shell1);
 
   CommonPause();
@@ -243,27 +243,27 @@ int main(unsigned int argc, char *argv[])
 static void CreateButtons()
 {
   button1 = XmCreatePushButton(rc1, "button1", NULL, 0);
-  XtAddCallback(button1, XmNactivateCallback, SetBadValues, NULL); 
+  XtAddCallback(button1, XmNactivateCallback, SetBadValues, NULL);
   XtManageChild(button1);
 
   button2 = XmCreatePushButton(rc1, "button2", NULL, 0);
-  XtAddCallback(button2, XmNactivateCallback, ChangeOrientation, NULL); 
+  XtAddCallback(button2, XmNactivateCallback, ChangeOrientation, NULL);
   XtManageChild(button2);
 
   button3 = XmCreatePushButton(rc1, "button3", NULL, 0);
-  XtAddCallback(button3, XmNactivateCallback, ChangeUnit1, NULL); 
+  XtAddCallback(button3, XmNactivateCallback, ChangeUnit1, NULL);
   XtManageChild(button3);
 
   button4 = XmCreatePushButton(rc1, "button4", NULL, 0);
-  XtAddCallback(button4, XmNactivateCallback, ChangeUnit2, NULL); 
+  XtAddCallback(button4, XmNactivateCallback, ChangeUnit2, NULL);
   XtManageChild(button4);
 
   button5 = XmCreatePushButton(rc1, "button5", NULL, 0);
-  XtAddCallback(button5, XmNactivateCallback, ChangeUnit3, NULL); 
+  XtAddCallback(button5, XmNactivateCallback, ChangeUnit3, NULL);
   XtManageChild(button5);
 
   button6 = XmCreatePushButton(rc1, "button6", NULL, 0);
-  XtAddCallback(button6, XmNactivateCallback, ChangeSpacing, NULL); 
+  XtAddCallback(button6, XmNactivateCallback, ChangeSpacing, NULL);
   XtManageChild(button6);
 }
 
@@ -298,7 +298,7 @@ static void CreateOption()
    XtManageChild(option7a);
 
    string = XmStringCreateLtoR("OptionMenu1: ", XmSTRING_DEFAULT_CHARSET);
-   n = 0; 
+   n = 0;
    XtSetArg(args[n], XmNsubMenuId, submenua); n++;
    XtSetArg(args[n], XmNlabelString, string); n++;
    option_menu1 = XmCreateOptionMenu(rc2, "option_menu1", args, n);
@@ -342,7 +342,7 @@ static void CreateOption()
 
    string = XmStringCreateLtoR("OptionMenu2: ", XmSTRING_DEFAULT_CHARSET);
 
-   n = 0; 
+   n = 0;
    XtSetArg(args[n], XmNsubMenuId, submenub); n++;
    XtSetArg(args[n], XmNmenuHistory, option4b); n++;
    XtSetArg(args[n], XmNlabelString, string); n++;
@@ -350,4 +350,3 @@ static void CreateOption()
    XtManageChild(option_menu2);
    XmStringFree(string);
 }
-

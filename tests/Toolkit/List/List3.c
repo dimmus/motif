@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List3.c /main/9 1995/07/13 18:17:25 drk $"
@@ -32,10 +32,10 @@ static char rcsid[] = "$XConsortium: List3.c /main/9 1995/07/13 18:17:25 drk $"
 #include <testlib.h>
 #include "List3.h"
 
-/* 
+/*
    Test of PIR792 - When specifing selectedItems and items in a resource
 		    file, overlaping of the arrays occured causing a memory
-		    fault. 
+		    fault.
    Test of PIR872 - Memory fault due to short allocation in ResConvert.c
 */
 
@@ -101,7 +101,7 @@ void  main (argc, argv)
     List1 = XmCreateList(Shell1, "List1", args, n);
     XtManageChild(List1);
 
-    /* 
+    /*
        do this so Automation will work properly. ChangedManaged()
        routine in Shell is the problem.
     */

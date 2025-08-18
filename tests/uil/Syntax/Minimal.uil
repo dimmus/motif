@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 module hellominimal
     version = 'v1.0'
     names = case_sensitive
@@ -37,12 +37,12 @@ object
 
 object
     helloworld_button : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNx = 90;
 	    XmNy = 90;
 	    XmNlabelString = compound_string('Hello',separate=true) & 'Minimal!';
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure helloworld_button_activate();
 	};
     };

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilP2Out.c /main/15 1997/03/12 15:17:24 dbl $"
@@ -129,7 +129,7 @@ static UidCompressionTable      *extern_class_compr;
 **	handles:
 **	    1) creating the UID file and closing it
 **	    2) initializing the queue of other objects to be processed
-**	    3) creating the module widget 
+**	    3) creating the module widget
 **	    4) emitting exported literals and procedures
 **	    5) creating the compression code table for this UID file
 **
@@ -181,7 +181,7 @@ void	sem_output_uid_file()
 
     if (uil_l_compile_status >= uil_k_error_status)
     {
-	diag_issue_diagnostic( 
+	diag_issue_diagnostic(
 	    d_no_uid,
 	    diag_k_no_source,
 	    diag_k_no_column );
@@ -227,7 +227,7 @@ void	sem_output_uid_file()
 
     if (urm_status != MrmSUCCESS)
     {
-	diag_issue_diagnostic( 
+	diag_issue_diagnostic(
 	    d_uid_open,
 	    diag_k_no_source,
 	    diag_k_no_column,
@@ -243,7 +243,7 @@ void	sem_output_uid_file()
     */
     Uil_current_file =  uid_fcb.result_file;
     if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
-	diag_report_status();    
+	diag_report_status();
 
 
     /*
@@ -251,7 +251,7 @@ void	sem_output_uid_file()
     */
 
     urm_status =
-    	UrmGetResourceContext ( _get_memory, _free_memory, 
+    	UrmGetResourceContext ( _get_memory, _free_memory,
 	initial_context_size, &out_az_context );
     if( urm_status != MrmSUCCESS)
 	issue_urm_error( "allocating context" );
@@ -263,7 +263,7 @@ void	sem_output_uid_file()
     out_l_next_offset = 0;
     out_az_queue = (out_queue_type *)src_az_avail_source_buffer;
     out_az_queue->az_prior_queue = NULL;
-    src_az_avail_source_buffer = 
+    src_az_avail_source_buffer =
 	src_az_avail_source_buffer->az_prior_source_buffer;
 
     /*
@@ -273,8 +273,8 @@ void	sem_output_uid_file()
 
     topmost_widget_count = 0;
 
-    for (ext_entry = sym_az_external_def_chain;  
-	 ext_entry != NULL;  
+    for (ext_entry = sym_az_external_def_chain;
+	 ext_entry != NULL;
 	 ext_entry = ext_entry->az_next_object)
     {
 	symbol_entry = ext_entry->az_name->az_object;
@@ -302,10 +302,10 @@ void	sem_output_uid_file()
 
     create_int_compression_codes();
 
-    /* 
+    /*
     **	Exported objects are on a chain that we will now walk.
     **	They can be of 3 types: widgets, gadgets and values.
-    **	Values, gadgets and widgets are pushed on LIFO queue and processed 
+    **	Values, gadgets and widgets are pushed on LIFO queue and processed
     **	shortly.
     **	Each widget on the list is top most if it is not referenced.  Topmost
     **	widgets are added to the current context for the interface module.
@@ -313,8 +313,8 @@ void	sem_output_uid_file()
 
     topmost_index = 0;
 
-    for (ext_entry = sym_az_external_def_chain;  
-	 ext_entry != NULL;  
+    for (ext_entry = sym_az_external_def_chain;
+	 ext_entry != NULL;
 	 ext_entry = ext_entry->az_next_object)
     {
 	/*
@@ -325,7 +325,7 @@ void	sem_output_uid_file()
 	    80+	(.20 *((float)topmost_index/(float)(topmost_widget_count+.5)))*100, 80);
 
 	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
-	    diag_report_status();    
+	    diag_report_status();
 
 	symbol_entry = ext_entry->az_name->az_object;
 
@@ -337,7 +337,7 @@ void	sem_output_uid_file()
 	    sym_value_entry_type   *value_entry;
 
 	    value_entry = (sym_value_entry_type *)symbol_entry;
-	
+
 	    value_entry->output_state = sym_k_queued;
 
 	    push( (sym_entry_type *)value_entry );
@@ -351,7 +351,7 @@ void	sem_output_uid_file()
 	    sym_widget_entry_type   *widget_entry;
 
 	    widget_entry = (sym_widget_entry_type *)symbol_entry;
-	
+
 	    if ((widget_entry->obj_header.az_name->b_flags & sym_m_referenced)
 		== 0)
 	    {
@@ -359,10 +359,10 @@ void	sem_output_uid_file()
 
 		push((sym_entry_type *) widget_entry );
 
-		urm_status = 
+		urm_status =
 		UrmIFMSetTopmost
-		    ( out_az_context, 
-		      topmost_index, 
+		    ( out_az_context,
+		      topmost_index,
 		      widget_entry->obj_header.az_name->c_text );
 		if( urm_status != MrmSUCCESS)
 		    issue_urm_error( "adding topmost widget" );
@@ -389,14 +389,14 @@ void	sem_output_uid_file()
     if( urm_status != MrmSUCCESS)
 	{
 	if (urm_status == MrmEOF)
-	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source, 
+	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
 				    diag_k_no_column, Uil_current_file );
 	else
 	    issue_urm_error( "emitting module" );
 	}
 
     if (Uil_cmd_z_command.v_show_machine_code) {
-	save_module_machine_code 
+	save_module_machine_code
 	    ( src_az_module_source_record, out_az_context );
     }
 
@@ -411,7 +411,7 @@ void	sem_output_uid_file()
 	**  Call the Status callback routine to report our progress.
 	*/
 	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
-	    diag_report_status();    
+	    diag_report_status();
 
 	switch (symbol_entry->header.b_tag)
 	{
@@ -455,7 +455,7 @@ void	sem_output_uid_file()
 
 
     /*
-    **	Free the context 
+    **	Free the context
     */
 
     urm_status =
@@ -513,14 +513,14 @@ sym_entry_type	*sym_entry;
     {
 	if (src_az_avail_source_buffer == NULL)
 	{
-	    src_az_avail_source_buffer = 
+	    src_az_avail_source_buffer =
 		(src_source_buffer_type *)
 		    _get_memory( sizeof( src_source_buffer_type ) );
 	    src_az_avail_source_buffer->az_prior_source_buffer = NULL;
 	}
 
 	next_queue = (out_queue_type *)src_az_avail_source_buffer;
-	src_az_avail_source_buffer = 
+	src_az_avail_source_buffer =
 	    src_az_avail_source_buffer->az_prior_source_buffer;
 
 	next_queue->az_prior_queue = out_az_queue;
@@ -647,20 +647,20 @@ sym_widget_entry_type	*widget_entry;
 		(widget_entry->header.b_tag == sym_k_child_entry),
 		"object to be emitted is not an object" );
 
-	_assert( (widget_entry->obj_header.b_flags & 
+	_assert( (widget_entry->obj_header.b_flags &
 		(sym_m_exported | sym_m_private)),
 		"object being emitted is not exported or private" );
 
 	if (widget_entry->header.b_tag == sym_k_child_entry)
 		widget_variety = UilMrmAutoChildVariety;
-	else 
+	else
 		widget_variety = UilMrmWidgetVariety;
 
 	/*
 	* Each real widget needs a name.  Automatic children just get an
 	* empty string since the name is stored in the compression tables.
 	* For real widgets, we use the user provided name
-	* if there is one; otherwise widgetfile#-line#-col# 
+	* if there is one; otherwise widgetfile#-line#-col#
 	* For example, widget-1-341-111 was defined in file=1, line=341
 	* and column=11
 	*/
@@ -668,7 +668,7 @@ sym_widget_entry_type	*widget_entry;
 		widget_name = "";
 	else if (widget_entry->obj_header.az_name == NULL)
 	{
-		sprintf(buffer, "widget-%d-%d-%d", 
+		sprintf(buffer, "widget-%d-%d-%d",
 			widget_entry->header.az_src_rec->b_file_number,
 			widget_entry->header.az_src_rec->w_line_number,
 			widget_entry->header.b_src_pos);
@@ -678,7 +678,7 @@ sym_widget_entry_type	*widget_entry;
 		widget_name = widget_entry->obj_header.az_name->c_text;
 
 	access_code = URMaPublic;
-	
+
 	if (widget_entry->obj_header.b_flags & sym_m_private)
 		access_code = URMaPrivate;
 
@@ -690,7 +690,7 @@ sym_widget_entry_type	*widget_entry;
 	}
 
     /*
-    **	Set the class of the widget. 
+    **	Set the class of the widget.
     */
 
     widget_class_name = NULL;
@@ -705,7 +705,7 @@ sym_widget_entry_type	*widget_entry;
     */
     if ( widget_entry->header.b_type == uil_sym_user_defined_object )
 	{
-		widget_class_name = 
+		widget_class_name =
 	    	widget_entry->az_create_proc->az_proc_def->obj_header.az_name->c_text;
 	}
 
@@ -749,18 +749,18 @@ sym_widget_entry_type	*widget_entry;
     if (widget_variety == UilMrmAutoChildVariety)
       widget_class = uil_child_compr[(int)widget_entry->header.b_type];
     else
-		widget_class = uil_widget_compr[(int)widget_entry->header.b_type];      
+		widget_class = uil_widget_compr[(int)widget_entry->header.b_type];
 
 
     /*
-     * User defined widgets don't get compressed.  
+     * User defined widgets don't get compressed.
      */
 
     if (widget_entry->header.b_type == uil_sym_user_defined_object)
 		widget_class = MrmwcUnknown;
 
     urm_status =
-    UrmCWRSetClass( out_az_context, 
+    UrmCWRSetClass( out_az_context,
 		    widget_class,
 		    widget_class_name,
 		    widget_variety );
@@ -779,7 +779,7 @@ sym_widget_entry_type	*widget_entry;
 		arg_count += compute_list_size (list_entry, sym_k_callback_entry);
 		callback_entry = NULL;
 		extract_create_callback (list_entry, &callback_entry);
-		
+
 		if ( callback_entry != NULL )
 		{
 			arglist_index = 0;
@@ -825,7 +825,7 @@ sym_widget_entry_type	*widget_entry;
 			MrmCode	    widget_form;
 			char	    *widget_index;
 			MrmResource_id  widget_id;
-			
+
 			urm_status =
 			UrmCWRSetCompressedArgTag
 			(out_az_context, arglist_index,
@@ -833,8 +833,8 @@ sym_widget_entry_type	*widget_entry;
 			if( urm_status != MrmSUCCESS)
 			issue_urm_error( "setting compressed arg" );
 
-			widget_form = 
-			ref_control( subtree_control, 
+			widget_form =
+			ref_control( subtree_control,
 					&widget_access, &widget_index, &widget_id );
 			urm_status =
 			UrmCWRSetArgResourceRef
@@ -850,7 +850,7 @@ sym_widget_entry_type	*widget_entry;
 			issue_urm_error( "setting arg reference" );
 			subtree_control->header.b_tag = sym_k_error_entry;
 
-			arglist_index++; 
+			arglist_index++;
 	    }
 	}
 
@@ -918,7 +918,7 @@ sym_widget_entry_type	*widget_entry;
     if( urm_status != MrmSUCCESS)
 	{
 		if (urm_status == MrmEOF)
-			diag_issue_diagnostic ( d_uid_write, diag_k_no_source, 
+			diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
 						diag_k_no_column, Uil_current_file );
 		else
 			issue_urm_error( "emitting widget" );
@@ -968,7 +968,7 @@ void extract_subtree_control (list_entry, menu_entry, count)
     sym_list_entry_type		*list_entry;
     sym_control_entry_type	**menu_entry;
     int				*count;
-    
+
 {
 
 /*
@@ -997,7 +997,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 	    control_entry = (sym_control_entry_type *) list_member;
 	    *count += 1;
 	    *menu_entry = control_entry;
-	    
+
 	}
 
 }
@@ -1032,7 +1032,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 void extract_create_callback (list_entry, create_entry)
     sym_list_entry_type		*list_entry;
     sym_callback_entry_type	**create_entry;
-    
+
 {
 
 /*
@@ -1064,7 +1064,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 	    value_entry = callback_entry->az_call_reason_name;
 	    if (value_entry->obj_header.b_flags & sym_m_builtin)
 		{
-		key_entry = 
+		key_entry =
 		    (key_keytable_entry_type *)value_entry->value.l_integer;
 		if ( strcmp(uil_reason_toolkit_names[key_entry->b_subclass],
 			    MrmNcreateCallback) == 0 )
@@ -1110,7 +1110,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 void process_all_callbacks (list_entry, arglist_index)
     sym_list_entry_type		*list_entry;
     int				*arglist_index;
-    
+
 {
 
 /*
@@ -1181,7 +1181,7 @@ void process_all_arguments (list_entry, arglist_index, related_count)
     sym_list_entry_type		*list_entry;
     int				*arglist_index;
     int				*related_count;
-    
+
 {
 
 /*
@@ -1251,7 +1251,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 void process_all_controls (list_entry, widget_index)
     sym_list_entry_type		*list_entry;
     int				*widget_index;
-    
+
 {
 
 /*
@@ -1328,11 +1328,11 @@ sym_value_entry_type	*value_entry;
     MrmCode	    access;
     int		    value_size = 0;
     MrmType	    value_type;
-    int		    value_count = 0;    
+    int		    value_count = 0;
     char	    *buffer;
     status	    urm_status;
     XmString	    tmp_str;
-    
+
     _assert( value_entry->header.b_tag == sym_k_value_entry,
 	     "object to be emitted is not a value" );
 
@@ -1355,7 +1355,7 @@ sym_value_entry_type	*value_entry;
 	access = URMaPrivate;
     }
 
-    /* 
+    /*
     **	Case on the type of literal.
     */
 
@@ -1364,7 +1364,7 @@ sym_value_entry_type	*value_entry;
 	{
 	case sym_k_bool_value:
 	case sym_k_integer_value:
-	    _assert(access == URMaPublic, 
+	    _assert(access == URMaPublic,
 		    "private value should not get resource ids");
 	    value_size = sizeof(long);
 	    break;
@@ -1375,7 +1375,7 @@ sym_value_entry_type	*value_entry;
 	    break;
 
 	case sym_k_float_value:
-	    _assert(access == URMaPublic, 
+	    _assert(access == URMaPublic,
 		    "private floats should not get resource ids");
 	    value_size = sizeof (double);
 	    break;
@@ -1393,8 +1393,8 @@ sym_value_entry_type	*value_entry;
 
 	case sym_k_compound_string_value:
 	    tmp_str = value_entry->value.xms_value;
-	    value_size = 
-	      XmCvtXmStringToByteStream(tmp_str, 
+	    value_size =
+	      XmCvtXmStringToByteStream(tmp_str,
 				(unsigned char **)&(value_entry->value.c_value));
 	    XmStringFree(tmp_str);
 	    break;
@@ -1408,7 +1408,7 @@ sym_value_entry_type	*value_entry;
 	     */
 	     value_size = sizeof(RGMFontItem)
 	       + strlen(sem_charset_name(value_entry->b_charset,
-					 value_entry->az_charset_value)) 
+					 value_entry->az_charset_value))
 		 + 1 + strlen(value_entry->value.c_value) + 1;
 	    break;
 	    }
@@ -1456,7 +1456,7 @@ sym_value_entry_type	*value_entry;
 /* BEGIN OSF Fix CR 4859 */
 	case sym_k_wchar_string_value:
 	    value_size = sizeof(RGMWCharEntry) +
-	      value_entry->az_first_table_value->w_length;  
+	      value_entry->az_first_table_value->w_length;
 	    break;
 /* END OSF Fix CR 4859 */
 	case sym_k_identifier_value:
@@ -1466,12 +1466,12 @@ sym_value_entry_type	*value_entry;
 	case sym_k_string_table_value:
 	    {
 	    sym_value_entry_type	*value_segment;
-	    
+
 	    /* value_size accounts for header and null at end of the index */
-	    value_size = sizeof( RGMTextVector ); 
+	    value_size = sizeof( RGMTextVector );
 	    value_count = 0;
 
-	    /* 
+	    /*
 	     **  Determine the size of the string table by adding together
 	     **  the lengths of component strings.  Before the string is a
 	     **  table of words.  The first word is the number of component
@@ -1479,12 +1479,12 @@ sym_value_entry_type	*value_entry;
 	     **  from the start of the buffer.
 	     */
 	    for (value_segment=value_entry->az_first_table_value;
-		 value_segment != NULL;  
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		value_count++;
 
-		value_size += 
+		value_size +=
 		  XmCvtXmStringToByteStream(value_segment->value.xms_value, NULL) +
 		    sizeof( RGMTextEntry );
 		}
@@ -1497,10 +1497,10 @@ sym_value_entry_type	*value_entry;
 	    sym_value_entry_type	*value_segment;
 
 	    /* value_size accounts for header and null at end of the index */
-	    value_size = sizeof( RGMTextVector ); 
+	    value_size = sizeof( RGMTextVector );
 	    value_count = 0;
 
-	    /* 
+	    /*
 	     **  Determine the size of the string table by adding together
 	     **  the lengths of component strings.  Before the string is a
 	     **  table of words.  The first word is the number of component
@@ -1509,7 +1509,7 @@ sym_value_entry_type	*value_entry;
 	     */
 
 	    for (value_segment=value_entry->az_first_table_value;
-		 value_segment != NULL;  
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		value_count++;
@@ -1522,22 +1522,22 @@ sym_value_entry_type	*value_entry;
 	case sym_k_integer_table_value:
 	    {
 	    sym_value_entry_type	*value_segment;
-	    
+
 	    /*
 	     **  The size needed for the vector is the size of the header
 	     **  information followed by the the list of integers.  Add in
 	     **  the header size here.
 	     */
-	    value_size = sizeof( RGMIntegerVector ); 
+	    value_size = sizeof( RGMIntegerVector );
 	    value_count = 0;
 
-	    /* 
+	    /*
 	     **  Determine the size of the integer table by adding together
 	     **  the lengths of component integers to the header.
 	     */
 
-	    for (value_segment = value_entry->az_first_table_value;  
-		 value_segment != NULL;  
+	    for (value_segment = value_entry->az_first_table_value;
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		value_size += sizeof(long);
@@ -1557,16 +1557,16 @@ sym_value_entry_type	*value_entry;
 	     * definition.
 	     */
 	    /* value_size accounts for header and null at end of the index */
-	    value_size = sizeof(RGMFontList) - sizeof(RGMFontItem); 
+	    value_size = sizeof(RGMFontList) - sizeof(RGMFontItem);
 	    value_count = 0;
-	    
-	    /* 
+
+	    /*
 	     **  Determine the size of the font list by adding together
 	     **  the lengths of component fonts.  Each component is a FontItem
 	     **  in the list, plus space for the charset name and font name.
 	     */
-	    for (font_value = value_entry->az_first_table_value;  
-		 font_value != NULL;  
+	    for (font_value = value_entry->az_first_table_value;
+		 font_value != NULL;
 		 font_value = font_value->az_next_table_value)
 		{
 		/* Fix for CR 5266 Part 2a -- Pull az_charset_value off of
@@ -1584,20 +1584,20 @@ sym_value_entry_type	*value_entry;
 	case sym_k_trans_table_value:
 	    {
 	    sym_value_entry_type	*value_segment;
-	    
+
 	    value_size = 0;
 
 	    /*
 	     **  Determine the length of the translation table by adding
 	     **  together the length of the component strings.
 	     */
-	    for (value_segment = value_entry->az_first_table_value;  
-		 value_segment != NULL;  
+	    for (value_segment = value_entry->az_first_table_value;
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		value_size += value_segment->w_length + 1;
 	    break;
 	    }
-	
+
 	default:
 	    _assert( FALSE, "unexpected value type" );
 	}
@@ -1608,7 +1608,7 @@ sym_value_entry_type	*value_entry;
 
     if ((int)(UrmRCSize( out_az_context ) ) < value_size)
 	{
-	if( MrmSUCCESS != 
+	if( MrmSUCCESS !=
 	   UrmResizeResourceContext( out_az_context, value_size ))
 	    issue_urm_error( "allocating context" );
 	urm_status = UrmResizeResourceContext( out_az_context, value_size );
@@ -1626,8 +1626,8 @@ sym_value_entry_type	*value_entry;
 		issue_urm_error( "allocating context" );
 	    }
 	}
-    
-    
+
+
     /*
     **	Move the literal to the context.
     */
@@ -1670,17 +1670,17 @@ sym_value_entry_type	*value_entry;
         case sym_k_wchar_string_value:
           {
             RGMWCharEntryPtr  wcharentry;
-            
+
             wcharentry = (RGMWCharEntryPtr)buffer;
-            
+
             wcharentry->wchar_item.count = value_size;
-            
+
             _move(wcharentry->wchar_item.bytes,
                   value_entry->az_first_table_value->value.c_value, value_size);
             break;
           }
 /* END OSF Fix CR 4859 */
-          
+
 	case sym_k_font_value:
 	case sym_k_fontset_value:
 	    {
@@ -1689,12 +1689,12 @@ sym_value_entry_type	*value_entry;
 	    char		*textptr;
 	    char		*charset_name;
 	    int			text_len;
-	    
+
 	    fontitem = (RGMFontItemPtr) buffer;
 	    textoffs = (MrmOffset) sizeof(RGMFontItem);
 	    textptr = (char *)fontitem+textoffs;
-	    
-	    charset_name = sem_charset_name (value_entry->b_charset, 
+
+	    charset_name = sem_charset_name (value_entry->b_charset,
 					     value_entry->az_charset_value);
 	    text_len = strlen(charset_name) + 1;
 
@@ -1705,16 +1705,16 @@ sym_value_entry_type	*value_entry;
 	    textptr += text_len;
 	    fontitem->font.font_offs = textoffs;
 	    strcpy (textptr, value_entry->value.c_value);
-	    
+
 	    break;
 	    }
 
 	case sym_k_color_value:
 	    {
 	    RGMColorDesc	*color_buffer;
-	    
+
 	    color_buffer = (RGMColorDesc *)buffer;
-	    
+
 	    switch (value_entry->b_arg_type)
 		{
 		case sym_k_unspecified_color:
@@ -1730,10 +1730,10 @@ sym_value_entry_type	*value_entry;
 
 	    color_buffer->desc_type = URMColorDescTypeName;
 
-	    _move( color_buffer->desc.name, 
-		  value_entry->value.c_value, 
+	    _move( color_buffer->desc.name,
+		  value_entry->value.c_value,
 		  value_entry->w_length + 1 );
-	    
+
 	    break;
 	    }
 
@@ -1746,7 +1746,7 @@ sym_value_entry_type	*value_entry;
 
 	    color_buffer = (RGMColorDesc *)buffer;
 	    index = value_count;
-	    
+
 	    index--;
 	    for (value_segment=value_entry->az_first_table_value;
 		 value_segment != NULL;
@@ -1755,7 +1755,7 @@ sym_value_entry_type	*value_entry;
 		color_vector[index] = (long) value_segment->value.l_integer;
 		index--;
 		}
-	    
+
 	    color_buffer->desc_type = URMColorDescTypeRGB;
 	    color_buffer->desc.rgb.red = color_vector[0];
 	    color_buffer->desc.rgb.green = color_vector[1];
@@ -1781,7 +1781,7 @@ sym_value_entry_type	*value_entry;
 	    int				index;
 	    int				segment_size;
 	    RGMTextVector		*string_vector;
-	    
+
 	    /*
 	     **  Value entries are reversed.  Need to fill the buffer
 	     **  from the end to front.
@@ -1792,18 +1792,18 @@ sym_value_entry_type	*value_entry;
 	    string_vector->count = value_count;
 	    index = value_count;
 	    string_vector->item[index].pointer = NULL;
-	    
+
 	    for (value_segment=value_entry->az_first_table_value;
-		 value_segment != NULL;  
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		  tmp_str = value_segment->value.xms_value;
-		  segment_size = 
-		    XmCvtXmStringToByteStream(tmp_str, 
+		  segment_size =
+		    XmCvtXmStringToByteStream(tmp_str,
 				      (unsigned char **)&(value_segment->value.c_value));
 		  XmStringFree(tmp_str);
 		  text_offset -= segment_size;
-		  _move(&(buffer[text_offset]), 
+		  _move(&(buffer[text_offset]),
 			value_segment->value.c_value, segment_size);
 		  index--;
 		  string_vector->item[index].text_item.offset = text_offset;
@@ -1820,7 +1820,7 @@ sym_value_entry_type	*value_entry;
 	    int				index;
 	    int				segment_size;
 	    RGMTextVector		*string_vector;
-	    
+
 	    /*
 	     **  Value entries are reversed.  Need to fill the buffer
 	     **  from the end to front.
@@ -1833,13 +1833,13 @@ sym_value_entry_type	*value_entry;
 	    string_vector->item[index].pointer = NULL;
 
 	    for (value_segment=value_entry->az_first_table_value;
-		 value_segment != NULL;  
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		segment_size = value_segment->w_length + 1;
 		buffer[text_offset-1] = '\0';
 		text_offset -= segment_size;
-		_move( &(buffer[text_offset]), 
+		_move( &(buffer[text_offset]),
 		      value_segment->value.c_value, segment_size - 1);
 		index--;
 		string_vector->item[index].text_item.offset = text_offset;
@@ -1867,7 +1867,7 @@ sym_value_entry_type	*value_entry;
 	     */
 	    index = value_count - 1;
 	    for (value_segment=value_entry->az_first_table_value;
-		 value_segment != NULL;  
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		integer_vector->item [index] =
@@ -1887,7 +1887,7 @@ sym_value_entry_type	*value_entry;
 	    int				index;
 	    char			*charset_name;
 	    int				text_len;
-	    
+
 	    /*
 	     **  Font items are in correct order.
 	     */
@@ -1903,10 +1903,10 @@ sym_value_entry_type	*value_entry;
 	    textoffs = sizeof (RGMFontList) +
 		sizeof(RGMFontItem)*(value_count-1);
 	    textptr = (char *)fontlist+textoffs;
-	    
+
 	    for (index = 0,
-		 font_value = value_entry->az_first_table_value;  
-		 font_value != NULL;  
+		 font_value = value_entry->az_first_table_value;
+		 font_value != NULL;
 		 index++, font_value = font_value->az_next_table_value)
 		{
 		fontitem = &fontlist->item[index];
@@ -1914,8 +1914,8 @@ sym_value_entry_type	*value_entry;
                  * Fix for CR 5266 Part 2b -- Pull az_charset_value off of
                  *                    font_value, rather than value_entry.
                  */
-		charset_name = 
-		  sem_charset_name (font_value->b_charset, 
+		charset_name =
+		  sem_charset_name (font_value->b_charset,
 				    font_value->az_charset_value);
 
 		fontitem->type = Urm_code_from_uil_type(font_value->b_type);
@@ -1938,21 +1938,21 @@ sym_value_entry_type	*value_entry;
 	    sym_value_entry_type	*value_segment;
 	    int				offset;
 	    int				segment_size;
-	    
+
 	    /*
 	     **  Value entries are reversed.  Need to fill the buffer
 	     **  from the end to front.
 	     */
 
 	    offset = value_size;
-	    for (value_segment = value_entry->az_first_table_value;  
-		 value_segment != NULL;  
+	    for (value_segment = value_entry->az_first_table_value;
+		 value_segment != NULL;
 		 value_segment = value_segment->az_next_table_value)
 		{
 		buffer[offset - 1] = '\n';
 		segment_size = value_segment->w_length + 1;
 		offset -= segment_size;
-		_move( &(buffer[offset]), 
+		_move( &(buffer[offset]),
 		      value_segment->value.c_value, segment_size-1 );
 		}
 	    buffer[value_size - 1] = 0;
@@ -1997,17 +1997,17 @@ sym_value_entry_type	*value_entry;
     if( urm_status != MrmSUCCESS)
 	{
 	if (urm_status == MrmEOF)
-	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source, 
+	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
 				    diag_k_no_column, Uil_current_file );
 	else
 	    issue_urm_error( "emitting literal" );
 	}
-    
+
     if (Uil_cmd_z_command.v_show_machine_code)
 	save_value_machine_code (value_entry, out_az_context);
-    
+
     value_entry->output_state = sym_k_emitted;
-    
+
     }
 
 
@@ -2083,7 +2083,7 @@ reason_entry = callback_entry->az_call_reason_name;
 if ( reason_entry->obj_header.b_flags & sym_m_builtin )
     {
     key_keytable_entry_type *key_entry;
-    
+
     key_entry = (key_keytable_entry_type *) reason_entry->value.l_integer;
     qcreate =
 	(strcmp(uil_reason_toolkit_names[key_entry->b_subclass],
@@ -2102,7 +2102,7 @@ if ( reason_entry->obj_header.b_flags & sym_m_builtin )
 	if( urm_status != MrmSUCCESS)
 	    {
 	    if (urm_status == MrmEOF)
-		diag_issue_diagnostic ( d_uid_write, diag_k_no_source, 
+		diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
 					diag_k_no_column, Uil_current_file );
 	    else
 		issue_urm_error ("emitting creation callback");
@@ -2118,7 +2118,7 @@ if ( reason_entry->obj_header.b_flags & sym_m_builtin )
 	    (out_az_context,
 	     *arglist_index,
 	     uil_reas_compr[key_entry->b_subclass],
-	     0);	
+	     0);
 	    if( urm_status != MrmSUCCESS)
 		issue_urm_error( "setting compressed arg" );
 	}
@@ -2135,7 +2135,7 @@ else
 	     "EXPORTED and IMPORTED arguments and reasons" );
 	return;
 	}
-    
+
     /*
      **  case 3: private, non-builtin case - use an uncompressed argument
      */
@@ -2169,7 +2169,7 @@ if (callback_entry->az_call_proc_ref != 0)
 else
     {
     proc_ref_index = proc_count - 1;
-    proc_ref_entry_next = 
+    proc_ref_entry_next =
 	(sym_proc_ref_entry_type *) callback_entry->
 	    az_call_proc_ref_list->obj_header.az_next;
     }
@@ -2228,7 +2228,7 @@ int			count;
 	    case sym_k_nested_list_entry:
 		count = count_proc(((sym_nested_list_entry_type *)
 			proc_list_next)->
-		        az_list, 
+		        az_list,
 			count);
 		break;
 	    case sym_k_proc_ref_entry:
@@ -2274,8 +2274,8 @@ int			count;
 **/
 
 /*
- * Fix for CR 4772 - Change the proc_ref_index entry from an integer to an 
- *                   integer pointer to allow for proper construction of 
+ * Fix for CR 4772 - Change the proc_ref_index entry from an integer to an
+ *                   integer pointer to allow for proper construction of
  *                   internal callback arrays.
  */
 void	emit_callback_procedures
@@ -2300,7 +2300,7 @@ void	emit_callback_procedures
     for (
         ;
         proc_ref_entry_next != 0;
-        proc_ref_entry_next = 
+        proc_ref_entry_next =
             (sym_proc_ref_entry_type *) proc_ref_entry_next->
             obj_header.az_next)
 
@@ -2311,8 +2311,8 @@ void	emit_callback_procedures
 		nested_proc_list_entry = (sym_nested_list_entry_type *)
 		    proc_ref_entry_next;
 		proc_list_entry = nested_proc_list_entry->az_list;
-		emit_callback_procedures (( sym_proc_ref_entry_type *)proc_list_entry->obj_header.az_next, 
-		    proc_ref_index,		
+		emit_callback_procedures (( sym_proc_ref_entry_type *)proc_list_entry->obj_header.az_next,
+		    proc_ref_index,
 		    callback_offset);
 		break;
 	    case sym_k_proc_ref_entry:
@@ -2328,11 +2328,11 @@ void	emit_callback_procedures
                 else
                     {
         	        arg_form = ref_value
-        		            ( proc_arg_entry, 
+        		            ( proc_arg_entry,
         		              &arg_type, &arg_value, &arg_access, &arg_index,
         		              &arg_id, &arg_group );
                     }
-    
+
                 if (arg_form == URMrImmediate)
                     urm_status =
     	        UrmCWRSetCallbackItem
@@ -2351,7 +2351,7 @@ void	emit_callback_procedures
     	              arg_form,
     	              arg_index,
     	              arg_id );
-    
+
                 if( urm_status != MrmSUCCESS)
 		    issue_urm_error( "setting callback proc" );
         	*proc_ref_index = *proc_ref_index - 1;
@@ -2417,7 +2417,7 @@ status				urm_status;
 
 /*
  *	For an argument, we must:
- *	    1) create the argument 
+ *	    1) create the argument
  *	    2) create the argument value
  */
 
@@ -2425,14 +2425,14 @@ arg_name_entry = argument_entry->az_arg_name;
 if (arg_name_entry->obj_header.b_flags & sym_m_builtin)
     {
     key_keytable_entry_type *key_entry;
-    
+
     key_entry = (key_keytable_entry_type *)arg_name_entry->value.l_integer;
-    
+
     urm_status = UrmCWRSetCompressedArgTag
 	(out_az_context,
 	 arglist_index,
 	 uil_arg_compr[key_entry->b_subclass],
-	 uil_arg_compr[related_argument_table[key_entry->b_subclass]]); 
+	 uil_arg_compr[related_argument_table[key_entry->b_subclass]]);
     if ( related_argument_table[key_entry->b_subclass] != 0 )
 	*related_arg_count += 1;
     if( urm_status != MrmSUCCESS)
@@ -2443,7 +2443,7 @@ else
     /*
      **  Non private reasons and arguments are not supported
      */
-    
+
     if ( arg_name_entry->obj_header.b_flags & (sym_m_imported|sym_m_exported) )
 	{
 	diag_issue_diagnostic
@@ -2492,7 +2492,7 @@ else
 		sym_m_builtin )
 		{
 		key_keytable_entry_type		* keytable_entry;
-	    
+
 		keytable_entry = (key_keytable_entry_type *)
 		    argument_entry->az_arg_name->value.l_integer;
 		_assert (keytable_entry->b_class == tkn_k_class_argument,
@@ -2525,7 +2525,7 @@ else
 	    break;
 	}
     }
-    
+
 if( urm_status != MrmSUCCESS)
     issue_urm_error ("setting arg value");
 
@@ -2595,14 +2595,14 @@ int			control_offset;
     widget_entry = control_entry->az_con_obj;
 
     while (widget_entry->obj_header.az_reference != NULL)
-      widget_entry = 
+      widget_entry =
 	(sym_widget_entry_type *)widget_entry->obj_header.az_reference;
 
     managed = ((widget_entry->header.b_type != sym_k_XmRenderTable_object) &&
 	       (widget_entry->header.b_type != sym_k_XmRendition_object) &&
 	       (widget_entry->header.b_type != sym_k_XmTabList_object) &&
 	       ((control_entry->obj_header.b_flags & sym_m_managed) != 0));
-    
+
     /*
     **  Add the object as a child.
     */
@@ -2616,7 +2616,7 @@ int			control_offset;
 	  form,
 	  index,
 	  id );
-    
+
     if( urm_status != MrmSUCCESS)
 	issue_urm_error( "setting child" );
 
@@ -2658,7 +2658,7 @@ int			control_offset;
 **--
 **/
 
-MrmCode	ref_value(value_entry, 
+MrmCode	ref_value(value_entry,
 		  arg_type, arg_value, arg_access, arg_index, arg_id, arg_group)
 
 sym_value_entry_type	*value_entry;
@@ -2683,19 +2683,19 @@ MrmCode			*arg_group;
 
     if (value_entry->header.b_tag == sym_k_widget_entry)
 	{
-	
+
 	/*  Set up a dummy control entry, and process the widget reference.  */
 
 	sym_control_entry_type	control_entry;
 	sym_widget_entry_type	* widget_entry;
-	
+
 	widget_entry = (sym_widget_entry_type *)value_entry;
 	control_entry.header.b_tag = sym_k_control_entry;
 	control_entry.az_con_obj = widget_entry;
-	
+
 	*arg_group = URMgWidget;
 	*arg_type = RGMwrTypeReference;
-	
+
 	return ref_control (&control_entry, arg_access, arg_index, arg_id);
 	}
 
@@ -2759,15 +2759,15 @@ MrmCode			*arg_group;
 		    value_entry->output_state = sym_k_queued;
 		    push((sym_entry_type *) value_entry );
 		    }
-		
+
 		*arg_id = value_entry->resource_id;
 		return URMrRID;
-		
+
 	    default:
 		_assert( FALSE, "unexpected value type" );
 		return URMrImmediate;
 	    }
-	
+
 	}
 
     /*
@@ -2852,7 +2852,7 @@ MrmResource_id		*id;
     */
 
     while (widget_entry->obj_header.az_reference != NULL)
-	widget_entry = 
+	widget_entry =
 	    (sym_widget_entry_type *)widget_entry->obj_header.az_reference;
 
     /*
@@ -2861,7 +2861,7 @@ MrmResource_id		*id;
     */
 
     if ((widget_entry->obj_header.b_flags & (sym_m_exported | sym_m_private))
-	&& 
+	&&
 	(widget_entry->output_state == sym_k_not_processed)
        )
     {
@@ -2946,8 +2946,8 @@ char	*problem;
 {
     char    buffer[132];
 
-    sprintf(buffer, "while %s encountered %s", 
-	    problem, 
+    sprintf(buffer, "while %s encountered %s",
+	    problem,
 	    Urm__UT_LatestErrorMessage());
 
     diag_issue_internal_error( buffer );
@@ -3003,7 +3003,7 @@ int	uil_type;
     case sym_k_asciz_table_value:	    return MrmRtypeChar8Vector;
     case sym_k_string_table_value:	    return MrmRtypeCStringVector;
     case sym_k_compound_string_value:	    return MrmRtypeCString;
-    case sym_k_wchar_string_value:	    return MrmRtypeWideCharacter; 
+    case sym_k_wchar_string_value:	    return MrmRtypeWideCharacter;
     case sym_k_integer_table_value:	    return MrmRtypeIntegerVector;
     case sym_k_color_value:		    return MrmRtypeColor;
     case sym_k_color_table_value:	    return MrmRtypeColorTable;
@@ -3020,7 +3020,7 @@ int	uil_type;
     case sym_k_widget_ref_value:	    return MrmRtypeAny;
     case sym_k_pixmap_value:		    return MrmRtypeIconImage;
     case sym_k_any_value:		    return MrmRtypeAny;
-    case sym_k_keysym_value:                return MrmRtypeKeysym;    
+    case sym_k_keysym_value:                return MrmRtypeKeysym;
     case sym_k_single_float_value:          return MrmRtypeSingleFloat;
     case sym_k_rgb_value:                   return MrmRtypeColor;
 
@@ -3207,7 +3207,7 @@ char			*buffer;
 	int	index;
 
 	index = table_entry->value.z_color[i].b_index;
-	table->item[index].color_item.coffs = 
+	table->item[index].color_item.coffs =
 	    table_entry->value.z_color[i].w_desc_offset;
 	desc = (RGMResourceDesc *)
 		    (buffer + table_entry->value.z_color[i].w_desc_offset);
@@ -3245,7 +3245,7 @@ char			*buffer;
 	    case URMrIndex:
 		desc->size = strlen( arg_index ) + 1;
 		_move( desc->key.index, arg_index, desc->size );
-		desc->size += sizeof( RGMResourceDesc ) - 
+		desc->size += sizeof( RGMResourceDesc ) -
 			      sizeof( MrmResource_id );
 		break;
 	    default:
@@ -3472,7 +3472,7 @@ char			*buffer;
     case URMrIndex:
 	desc->size = strlen( arg_index ) + 1;
 	_move( desc->key.index, arg_index, desc->size );
-	desc->size += sizeof( RGMResourceDesc ) - 
+	desc->size += sizeof( RGMResourceDesc ) -
 		      sizeof( MrmResource_id );
 	break;
     default:
@@ -3497,7 +3497,7 @@ char			*buffer;
 	 w_len = ((int)row_entry->w_length / (int)pixel_per_byte) * pixel_per_byte,
 	 p_len = row_entry->w_length - w_len;
 
-	 row_entry != NULL;  
+	 row_entry != NULL;
 
 	 row_entry = row_entry->az_next_table_value)
     {
@@ -3505,8 +3505,8 @@ char			*buffer;
 
 	for (i = 0;  i < w_len; tbyte++)
 	{
-	    for (*tbyte = 0, j = 0;  
-		 j < 8;  
+	    for (*tbyte = 0, j = 0;
+		 j < 8;
 		 j += pixel_size )
 	    {
 		unsigned char	t;
@@ -3600,18 +3600,18 @@ return count;
 **++
 **  FUNCTIONAL DESCRIPTION:
 **
-**	This routine creates the internal compression code tables.  
+**	This routine creates the internal compression code tables.
 **
 **      Upon calling this routine, the internal compression code tables
-**      (uil_arg_compr, uil_reas_compr, and uil_widget_compr) have zero 
-**	entries for resources which have not been referenced in this UIL 
-**	module and have one entries for resrources which have been referenced.  
+**      (uil_arg_compr, uil_reas_compr, and uil_widget_compr) have zero
+**	entries for resources which have not been referenced in this UIL
+**	module and have one entries for resrources which have been referenced.
 **
 **      This routine assigns increasing integers to each non-zero entry in the
 **      internal compression code tables.
 **
 **      The internal compression code tables are indexed by subclass to yield
-**      the external compression code values which are written to the UID file. 
+**      the external compression code values which are written to the UID file.
 **
 **  FORMAL PARAMETERS:
 **
@@ -3709,7 +3709,7 @@ int	compression_code = 2;
 **++
 **  FUNCTIONAL DESCRIPTION:
 **
-**	This routine creates the external compression code tables.  
+**	This routine creates the external compression code tables.
 **
 **
 **      This routine writes the corresponding toolkit name to the external
@@ -3717,7 +3717,7 @@ int	compression_code = 2;
 **      compression code table.
 **
 **      The internal compression code tables are indexed by subclass to yield
-**      the external compression code values which are written to the UID file. 
+**      the external compression code values which are written to the UID file.
 **      The external compression codes are used as an index to the external
 **      compression code tables so that MRM can map the compression code into
 **      the corresponding toolkit name.
@@ -3770,7 +3770,7 @@ status	urm_status;
     /*
     ** Create compression code tables for arguments
     **
-    ** Determine number of elements in external compression table 
+    ** Determine number of elements in external compression table
     ** ( extern_arg_compr[] ) and size of external compression table.
     */
 
@@ -3843,7 +3843,7 @@ status	urm_status;
 
     if ( (int)(UrmRCSize( out_az_context )) < arg_value_size )
 	{
-	if( MrmSUCCESS != 
+	if( MrmSUCCESS !=
 	   UrmResizeResourceContext( out_az_context, arg_value_size ))
 	    issue_urm_error( "allocating context" );
 	}
@@ -3866,7 +3866,7 @@ status	urm_status;
 
     /*
     ** Now fill in the actual value of the external compresion code
-    ** table ( extern_arg_compr[] ).  
+    ** table ( extern_arg_compr[] ).
     */
 
     extern_arg_compr->validation = UidCompressionTableValid;
@@ -3883,8 +3883,8 @@ status	urm_status;
 	{
 	if (uil_arg_compr[i] != 0)
 	    {
-	    _move( &(arg_buffer[text_offset]), 
-		  uil_argument_toolkit_names[i], 
+	    _move( &(arg_buffer[text_offset]),
+		  uil_argument_toolkit_names[i],
 		  strlen(uil_argument_toolkit_names[i]) + 1);
 	    extern_arg_compr->entry[comp_code].stoffset = text_offset;
 	    text_offset += (strlen(uil_argument_toolkit_names[i]) + 1);
@@ -3896,10 +3896,10 @@ status	urm_status;
 	{
 	if (uil_reas_compr[i] != 0)
 	    {
-	    _move( &(arg_buffer[text_offset]), 
-		  uil_reason_toolkit_names[i], 
+	    _move( &(arg_buffer[text_offset]),
+		  uil_reason_toolkit_names[i],
 		  strlen(uil_reason_toolkit_names[i]) + 1);
-	    extern_arg_compr->entry[comp_code].stoffset = 
+	    extern_arg_compr->entry[comp_code].stoffset =
 		text_offset;
 	    text_offset += (strlen(uil_reason_toolkit_names[i]) + 1);
 	    comp_code++;
@@ -3911,8 +3911,8 @@ status	urm_status;
 	if (uil_child_compr[i] != 0)
 	  {
 	    char *name;
-	    
-	    if (strncmp(uil_child_names[i], AUTO_CHILD_PREFIX, 
+
+	    if (strncmp(uil_child_names[i], AUTO_CHILD_PREFIX,
 			strlen(AUTO_CHILD_PREFIX)) == 0)
 	      name = (uil_child_names[i] + strlen(AUTO_CHILD_PREFIX));
 	    else name = uil_child_names[i];
@@ -3927,13 +3927,13 @@ status	urm_status;
     /*
     ** Finally write the argument compression code table out to the UID file
     */
-    urm_status = 
-      UrmPutIndexedLiteral (out_az_idbfile_id, 
+    urm_status =
+      UrmPutIndexedLiteral (out_az_idbfile_id,
 			    UilMrmResourceTableIndex, out_az_context);
     if (urm_status != MrmSUCCESS)
 	{
 	if (urm_status == MrmEOF)
-	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source, 
+	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
 				    diag_k_no_column, Uil_current_file );
 	else
 	    issue_urm_error("emitting literal");
@@ -3943,8 +3943,8 @@ status	urm_status;
     /*
     ** Create compression code tables for classes
     **
-    ** Determine number of elements in external compression table 
-    ** ( extern_class_compr[] ) and size of external 
+    ** Determine number of elements in external compression table
+    ** ( extern_class_compr[] ) and size of external
     ** compression table.
     ** PROBABL ERROR: WHAT ABOUT GADGETS???
     */
@@ -3979,7 +3979,7 @@ status	urm_status;
 
     if ( (int)(UrmRCSize(out_az_context)) < class_value_size )
 	{
-	if( MrmSUCCESS != 
+	if( MrmSUCCESS !=
 	   UrmResizeResourceContext( out_az_context, class_value_size ))
 	    issue_urm_error( "allocating context" );
 	}
@@ -4002,7 +4002,7 @@ status	urm_status;
 
     /*
     ** Now fill in the actual value of the external compresion code
-    ** table ( extern_class_compr[] ).  
+    ** table ( extern_class_compr[] ).
     */
 
     extern_class_compr->validation = UidCompressionTableValid;
@@ -4021,10 +4021,10 @@ status	urm_status;
 	{
 	if (uil_widget_compr[i] != 0)
 	    {
-	    _move( &(class_buffer[text_offset]), 
-	        uil_widget_funcs[i], 
+	    _move( &(class_buffer[text_offset]),
+	        uil_widget_funcs[i],
 	        strlen(uil_widget_funcs[i]) + 1);
-	    extern_class_compr->entry[comp_code].stoffset = 
+	    extern_class_compr->entry[comp_code].stoffset =
 		text_offset;
 	    text_offset += (strlen(uil_widget_funcs[i]) + 1);
 	    comp_code++;
@@ -4034,13 +4034,13 @@ status	urm_status;
     /*
     ** Finally write the class compression code table out to the UID file
     */
-    urm_status = 
-      UrmPutIndexedLiteral (out_az_idbfile_id, UilMrmClassTableIndex, 
+    urm_status =
+      UrmPutIndexedLiteral (out_az_idbfile_id, UilMrmClassTableIndex,
 			    out_az_context);
     if (urm_status != MrmSUCCESS)
 	{
 	if (urm_status == MrmEOF)
-	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source, 
+	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
 				    diag_k_no_column, Uil_current_file );
 	else
 	    issue_urm_error("emitting literal");

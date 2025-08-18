@@ -55,7 +55,7 @@ static void ChangeString(Widget w, XtPointer client_data,
       XtSetValues(w, args, n);
 
       if ( tcs ) XmStringFree( tcs );
-      
+
 }
 
 
@@ -67,7 +67,7 @@ static void ChangeString2(Widget w, XtPointer client_data,
       n = 0;
     XtSetArg(args[n], XmNvalue, string4);  n++;
       XtSetValues(w, args, n);
-     
+
       if (tcs) XmStringFree(tcs);
 }
 
@@ -78,7 +78,7 @@ void SetStringCB(w, client_data, call_data)
 {
      XmString  string;
      static char new_string[] = "New\nset\nvalue";
-       
+
      XmTextSetString((Widget)client_data, new_string);
 }
 
@@ -89,7 +89,7 @@ void InsertStringCB(w, client_data, call_data)
 {
      XmString  string;
      static char new_string[] = "+123+";
-       
+
      XmTextInsert((Widget)client_data, 3, new_string);
 }
 
@@ -119,12 +119,12 @@ void main_text6 (argc, argv)
 
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNwidth, 400);  n++;
 	XtSetArg(args[n], XmNheight, 300);  n++;
 	XtSetValues(Shell1, args, n);
-	
+
 	/* test case for PIR 3677 - realized here, not after children mngd */
 	XtRealizeWidget(Shell1);
 	/* end of test case for PIR 3677 */
@@ -147,7 +147,7 @@ void main_text6 (argc, argv)
 	XtManageChild (Text2);
 
 	/* begin test for CR */
-	CommonPause(); 
+	CommonPause();
 
 	/* The instructions ask the user to change Text1 in a way that
 	   can mess up the focus, then modify Text2 by adding a "2" at
@@ -160,7 +160,7 @@ void main_text6 (argc, argv)
 
 	text2_return = (char *)ret_val;
 
-	if (!strcmp(text2_return, "The Sample Text2") == 0) 
+	if (!strcmp(text2_return, "The Sample Text2") == 0)
 	   printf ("\n+++\n.Test FAILS. String in Text2 does not match expected value.\n+++\n");
 	else printf ("+++\nTest PASSES. No error.\n");
 	fflush(stdout);

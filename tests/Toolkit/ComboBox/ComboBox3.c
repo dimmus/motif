@@ -122,7 +122,7 @@ main (int argc, char **argv)
 
   Manager = strtok (UserData,",");
   ComboBoxType = strtok (NULL,",");
-  
+
 
   /* Create the parent. */
   n=0;
@@ -179,19 +179,19 @@ main (int argc, char **argv)
     }
 
   XtManageChild (ComboBox);
-  XtAddCallback (ComboBox, XmNselectionCallback, SelectionCallback, 
+  XtAddCallback (ComboBox, XmNselectionCallback, SelectionCallback,
 		 (XtPointer)NULL);
 
 
-  
+
 
 
   n=0;
   XtSetArg (args[n], XmNitemCount, NUM_LIST_ITEM); n++;
   XtSetArg (args[n], XmNvisibleItemCount, 6); n++;
   XtSetArg (args[n], XmNitems, ListItem); n++;
-  XtSetValues (XtNameToWidget (ComboBox,"*List"), args, n);  
-  
+  XtSetValues (XtNameToWidget (ComboBox,"*List"), args, n);
+
   printf ("This is the widget hierarchy, starting from the ComboBox\n");
   CommonDumpHierarchy (ComboBox,stdout);
 
@@ -213,12 +213,12 @@ main (int argc, char **argv)
        for (i = 0; i < 8; i++)
          CommonPause();
  }
-     
+
   XtAppMainLoop (app_context);
-    
+
 }
 
-  
+
 void
 CreateControlPanel()
 
@@ -241,11 +241,11 @@ CreateControlPanel()
   Widget        ComboSetPB[8];
   Widget        ComboGetPB[8];
   Widget        Separator1;
-  
 
-  
 
-  static char          *scale_labels[] = 
+
+
+  static char          *scale_labels[] =
                          { "Highlight Thickness",
 			   "Arrow Size",
 			   "Arrow Spacing",
@@ -262,8 +262,8 @@ CreateControlPanel()
                         { "STRING_DIRECTION_L_TO_R",
 			  "STRING_DIRECTION_R_TO_L"};
 
-  
-  static char          *set_labels[] = 
+
+  static char          *set_labels[] =
                          { "Set Highlight Thickness",
 			   "Set Arrow Size",
 			   "Set Arrow Spacing",
@@ -274,7 +274,7 @@ CreateControlPanel()
 			   };
 
 
-  static char          *get_labels[] = 
+  static char          *get_labels[] =
                          { "Get Highlight Thickness",
 			   "Get Arrow Size",
 			   "Get Arrow Spacing",
@@ -285,7 +285,7 @@ CreateControlPanel()
 			   };
 
 
-  static char          *font_labels[] = 
+  static char          *font_labels[] =
                          { "Fixed",
 			   "Variable",
 			   "9x15",
@@ -293,7 +293,7 @@ CreateControlPanel()
 			 };
 
 
-  
+
   Arg           args[32];
   XmString      LabelString;
   char          name[32];
@@ -323,7 +323,7 @@ CreateControlPanel()
 
 
 
-  
+
   /* Create 2 frames */
 
 
@@ -369,7 +369,7 @@ CreateControlPanel()
 
 
   /* Create Frames which will hold RadioBoxes */
-  
+
   for (i=0; i < 1; i++)
     {
       sprintf (name, "RboxFrame%d", i);
@@ -411,7 +411,7 @@ CreateControlPanel()
     };
 
   /* Set NONE on by default */
-   XmToggleButtonSetState(ToggleMatch[NONE], True, False); 
+   XmToggleButtonSetState(ToggleMatch[NONE], True, False);
 
 
 
@@ -432,9 +432,9 @@ CreateControlPanel()
 
 
   n=0;
-  LabelString = XmStringCreate ("Set Font", 
+  LabelString = XmStringCreate ("Set Font",
 				XmFONTLIST_DEFAULT_TAG);
- 
+
   XtSetArg(args[n], XmNsubMenuId, FontPulldown1); n++;
   XtSetArg (args[n], XmNlabelString, LabelString); n++;
   FontCascade1 =XmCreateCascadeButton(FontMenubar1,
@@ -483,14 +483,14 @@ CreateControlPanel()
 					  "ComboPulldown1",args, n);
 
 
-  LabelString = XmStringCreate ("Set ComboBox Values", 
+  LabelString = XmStringCreate ("Set ComboBox Values",
 				XmFONTLIST_DEFAULT_TAG);
- 
+
   XtSetArg(args[n], XmNsubMenuId, ComboPulldown[0]); n++;
   XtSetArg (args[n], XmNlabelString, LabelString); n++;
   ComboCascade[0] =XmCreateCascadeButton(ComboMenubar[0],
 					  "ComboCascade1", args, n);
-  XtManageChild (ComboCascade[0]); 
+  XtManageChild (ComboCascade[0]);
 
   XmStringFree(LabelString);
 
@@ -499,39 +499,39 @@ CreateControlPanel()
     for (i=0; i < 7; i++)
     {
       sprintf (name, "ComboSetPB%d", i);
-      LabelString = XmStringCreate(set_labels[i], 
+      LabelString = XmStringCreate(set_labels[i],
 					 XmFONTLIST_DEFAULT_TAG);
-  
+
       n=0;
       XtSetArg (args[n], XmNlabelString, LabelString); n++;
       ComboSetPB[i] = XmCreatePushButton(ComboPulldown[0], name, args, n);
       XtManageChild(ComboSetPB[i]);
       XmStringFree (LabelString);
     }
-  
+
 
  /* Add Callbacks for PushButtons */
 
-  XtAddCallback (ComboSetPB[SetHighlightThickness], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetHighlightThickness], XmNactivateCallback,
 		 SetAndGetHighlightThickness, (XtPointer)&set);
 
-  XtAddCallback (ComboSetPB[SetArrowSize], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetArrowSize], XmNactivateCallback,
 		 SetAndGetArrowSize, (XtPointer)&set);
 
-  XtAddCallback (ComboSetPB[SetArrowSpacing], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetArrowSpacing], XmNactivateCallback,
 		 SetAndGetArrowSpacing, (XtPointer)&set);
 
-  XtAddCallback (ComboSetPB[SetMarginWidth], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetMarginWidth], XmNactivateCallback,
 		 SetAndGetMarginWidth, (XtPointer)&set);
 
-  XtAddCallback (ComboSetPB[SetMarginHeight], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetMarginHeight], XmNactivateCallback,
 		 SetAndGetMarginHeight, (XtPointer)&set);
 
-  XtAddCallback (ComboSetPB[SetMatchBehavior], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetMatchBehavior], XmNactivateCallback,
 		 SetAndGetMatchBehavior, (XtPointer)&set);
 
 
-  XtAddCallback (ComboSetPB[SetSelectedPosition], XmNactivateCallback, 
+  XtAddCallback (ComboSetPB[SetSelectedPosition], XmNactivateCallback,
 		 SetAndGetSelectedPosition, (XtPointer)&set);
 
 
@@ -555,14 +555,14 @@ CreateControlPanel()
 
 
 
-  LabelString = XmStringCreate ("Get ComboBox Values", 
+  LabelString = XmStringCreate ("Get ComboBox Values",
 				XmFONTLIST_DEFAULT_TAG);
- 
+
   XtSetArg(args[n], XmNsubMenuId, ComboPulldown[1]); n++;
   XtSetArg (args[n], XmNlabelString, LabelString); n++;
   ComboCascade[1] =XmCreateCascadeButton(ComboMenubar[1],
 					  "ComboCascade2", args, n);
-  XtManageChild (ComboCascade[1]); 
+  XtManageChild (ComboCascade[1]);
 
   XmStringFree(LabelString);
 
@@ -571,38 +571,38 @@ CreateControlPanel()
     for (i=0; i < 7; i++)
     {
       sprintf (name, "ComboGetPB%d", i);
-      LabelString = XmStringCreate(get_labels[i], 
+      LabelString = XmStringCreate(get_labels[i],
 					 XmFONTLIST_DEFAULT_TAG);
-  
+
       n=0;
       XtSetArg (args[n], XmNlabelString, LabelString); n++;
       ComboGetPB[i] = XmCreatePushButton(ComboPulldown[1], name, args, n);
       XtManageChild(ComboGetPB[i]);
       XmStringFree (LabelString);
     }
-  
+
 
  /* Add Callbacks for PushButtons */
 
-  XtAddCallback (ComboGetPB[GetHighlightThickness], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetHighlightThickness], XmNactivateCallback,
 		 SetAndGetHighlightThickness, (XtPointer)&get);
 
-  XtAddCallback (ComboGetPB[GetArrowSize], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetArrowSize], XmNactivateCallback,
 		 SetAndGetArrowSize, (XtPointer)&get);
 
-  XtAddCallback (ComboGetPB[GetArrowSpacing], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetArrowSpacing], XmNactivateCallback,
 		 SetAndGetArrowSpacing, (XtPointer)&get);
 
-  XtAddCallback (ComboGetPB[GetMarginWidth], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetMarginWidth], XmNactivateCallback,
 		 SetAndGetMarginWidth, (XtPointer)&get);
 
-  XtAddCallback (ComboGetPB[GetMarginHeight], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetMarginHeight], XmNactivateCallback,
 		 SetAndGetMarginHeight, (XtPointer)&get);
 
-  XtAddCallback (ComboGetPB[GetMatchBehavior], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetMatchBehavior], XmNactivateCallback,
 		 SetAndGetMatchBehavior, (XtPointer)&get);
 
-  XtAddCallback (ComboGetPB[GetSelectedPosition], XmNactivateCallback, 
+  XtAddCallback (ComboGetPB[GetSelectedPosition], XmNactivateCallback,
 		 SetAndGetSelectedPosition, (XtPointer)&get);
 
 
@@ -619,7 +619,7 @@ CreateControlPanel()
 
 
 
-  
+
 }
 
 
@@ -628,7 +628,7 @@ CreateControlPanel()
 void
 CreateGeoPanel()
 {
-  Widget GeoPB[5];  
+  Widget GeoPB[5];
   Widget GeoRC1;
   Widget GeoFrame[2];
   Widget GeoRC[2];
@@ -637,7 +637,7 @@ CreateGeoPanel()
   XmString LabelString;
   Widget ResourceLabel, ValueLabel;
 
-  static char *geo_labels[] = 
+  static char *geo_labels[] =
                          { "Set Width",
 			   "Set Height",
 			   "Set x",
@@ -645,13 +645,13 @@ CreateGeoPanel()
 			   "Set Border Width"};
 
 
-  static char *geo_apply[] = 
+  static char *geo_apply[] =
                          { "Apply to Shell",
 			   "Apply to Parent",
 			   "Apply to ComboBox",
 			   "Apply to List",
 			   "Apply to Text" };
-			  
+
 
   int i,n;
   Arg args[10];
@@ -758,7 +758,7 @@ CreateGeoPanel()
    n=0;
    ValueText = XmCreateTextField (TextRC1, "ValueText", args, n);
    XtManageChild (ValueText);
-   XtAddCallback (ValueText, XmNactivateCallback, ValueHasChanged, 
+   XtAddCallback (ValueText, XmNactivateCallback, ValueHasChanged,
                   (XtPointer)NULL);
 
 
@@ -778,7 +778,7 @@ CreateGeoPanel()
 /* add callbacks */
     XtAddCallback (GeoPB[0], XmNactivateCallback, SetWidgetValues, (XtPointer)"Shell1");
     XtAddCallback (GeoPB[1], XmNactivateCallback, SetWidgetValues, (XtPointer)"Parent");
-    XtAddCallback (GeoPB[2], XmNactivateCallback, SetWidgetValues, (XtPointer)"ComboBox"); 
+    XtAddCallback (GeoPB[2], XmNactivateCallback, SetWidgetValues, (XtPointer)"ComboBox");
     XtAddCallback (GeoPB[3], XmNactivateCallback, SetWidgetValues, (XtPointer)"List");
     XtAddCallback (GeoPB[4], XmNactivateCallback, SetWidgetValues, (XtPointer)"Text");
 
@@ -792,7 +792,7 @@ CreateGeoPanel()
 
 /* Routines for setting and getting values */
 
-void 
+void
 SetAndGetHighlightThickness(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -801,7 +801,7 @@ SetAndGetHighlightThickness(Widget w,XtPointer client_data, XtPointer call_data)
   Arg args[2];
   int n;
   int *cdata = (int *)client_data;
-  
+
 
   switch (*cdata)
     {
@@ -821,16 +821,16 @@ SetAndGetHighlightThickness(Widget w,XtPointer client_data, XtPointer call_data)
 
     default:
     break;
-      
+
     }
-      
+
 }
 
 
 
 
 
-void 
+void
 SetAndGetSelectedPosition(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -860,17 +860,17 @@ SetAndGetSelectedPosition(Widget w,XtPointer client_data, XtPointer call_data)
 
     default:
     break;
-      
+
     }
 
-      
+
 }
 
 
 
 
 
-void 
+void
 SetAndGetArrowSize(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -900,12 +900,12 @@ SetAndGetArrowSize(Widget w,XtPointer client_data, XtPointer call_data)
 
       break;
     }
-  
+
 }
 
 
 
-void 
+void
 SetAndGetArrowSpacing(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -944,7 +944,7 @@ SetAndGetArrowSpacing(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 
-void 
+void
 SetAndGetMarginWidth(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -975,11 +975,11 @@ SetAndGetMarginWidth(Widget w,XtPointer client_data, XtPointer call_data)
       break;
     }
 
-      
+
 }
 
 
-void 
+void
 SetAndGetMarginHeight(Widget w,XtPointer client_data, XtPointer call_data)
 {
   Dimension get;
@@ -1009,13 +1009,13 @@ SetAndGetMarginHeight(Widget w,XtPointer client_data, XtPointer call_data)
 
       break;
     }
-      
+
 }
 
 
 
 
-void 
+void
 SetAndGetMatchBehavior(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -1029,7 +1029,7 @@ SetAndGetMatchBehavior(Widget w,XtPointer client_data, XtPointer call_data)
     case SET:
         i=0;
 	while (!(XmToggleButtonGetState(ToggleMatch[i]))) i++;
-  
+
         switch (i)
 	  {
 	   case NONE:
@@ -1041,7 +1041,7 @@ SetAndGetMatchBehavior(Widget w,XtPointer client_data, XtPointer call_data)
 	   case QUICK_NAVIGATE:
 	   n=0;
 	   XtSetArg (args[n], XmNmatchBehavior, XmQUICK_NAVIGATE); n++;
-	   XtSetValues (ComboBox, args, n);  
+	   XtSetValues (ComboBox, args, n);
 	   break;
 
 	  default:
@@ -1051,7 +1051,7 @@ SetAndGetMatchBehavior(Widget w,XtPointer client_data, XtPointer call_data)
       case GET:
 	   n=0;
 	   XtSetArg (args[n], XmNmatchBehavior, &match); n++;
-	   XtGetValues (ComboBox, args, n);  
+	   XtGetValues (ComboBox, args, n);
 	   switch (match)
 	     {
 	     case XmNONE:
@@ -1075,20 +1075,20 @@ SetAndGetMatchBehavior(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 
-void 
+void
 SetFont(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
   Arg args[2];
   int n;
-  
+
 
 
   XmFontList font_list = CommonGetFontList ((char *) client_data);
-  
+
   n=0;
   XtSetArg (args[n], XmNrenderTable, font_list); n++;
-  XtSetValues (ComboBox,args,n); 
+  XtSetValues (ComboBox,args,n);
 }
 
 
@@ -1096,7 +1096,7 @@ SetFont(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 
-void 
+void
 SelectionCallback(Widget w,XtPointer client_data, XtPointer call_data)
 {
 
@@ -1112,8 +1112,8 @@ SelectionCallback(Widget w,XtPointer client_data, XtPointer call_data)
    /* Print item that was just selected */
 
    /* Retrieve text string from XmString. */
-        
-   XmStringInitContext (&context, cb->item_or_text); 
+
+   XmStringInitContext (&context, cb->item_or_text);
    XmStringGetNextSegment (context, &item, &charset, &direction,
                                                         &separator);
    printf ("ComboBox SelectionCallback invoked\n");
@@ -1124,7 +1124,7 @@ SelectionCallback(Widget w,XtPointer client_data, XtPointer call_data)
     {
       printf ("Reason is XmCR_SELECT\n");
     }
-  else printf ("invalid reason\n"); 
+  else printf ("invalid reason\n");
   printf ("\n\n");
 }
 
@@ -1133,7 +1133,7 @@ SelectionCallback(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 
-void 
+void
 ManageGeoBB(Widget w,XtPointer client_data, XtPointer call_data)
 {
     XtManageChild (GeoBB1);
@@ -1145,9 +1145,9 @@ ManageGeoBB(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 
-  
 
-void 
+
+void
 SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
 {
   int value;
@@ -1161,14 +1161,14 @@ SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
   Widget wid;
   char name[32];
   char *wname = (char *) client_data;
-  
+
 
   UserEntry = False;
 
 
 
   n=0;
-     
+
       printf ("%s\n", wname);
       if (WidthChanged)
 	{
@@ -1241,17 +1241,17 @@ SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 /* set of functions which resets flags */
- 
+
 void
 WidthHasChanged()
 {
-  
+
   WidthChanged = True;
 
 }
 
 
-void 
+void
 HeightHasChanged()
 {
 
@@ -1260,7 +1260,7 @@ HeightHasChanged()
 }
 
 
-void 
+void
 XHasChanged()
 
 {
@@ -1270,7 +1270,7 @@ XHasChanged()
 }
 
 
-void 
+void
 YHasChanged()
 
 {
@@ -1280,7 +1280,7 @@ YHasChanged()
 }
 
 
-void 
+void
 BWHasChanged()
 
 {
@@ -1290,7 +1290,7 @@ BWHasChanged()
 }
 
 
-void 
+void
 ResourceHasChanged()
 
 {
@@ -1302,7 +1302,7 @@ ResourceHasChanged()
 
 
 
-void 
+void
 ValueHasChanged()
 
 {
@@ -1310,11 +1310,3 @@ ValueHasChanged()
   ValueChanged = True;
 
 }
-
-
-
-
-
-
-
-

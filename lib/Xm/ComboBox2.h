@@ -72,7 +72,7 @@ extern Widget XmVaCreateCombinationBox2(
                         Widget parent,
                         char *name,
                         ...) XM_DEPRECATED;
-  
+
 extern Widget XmVaCreateManagedCombinationBox2(
                         Widget parent,
                         char *name,

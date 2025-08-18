@@ -38,7 +38,7 @@ externalref XrmQuark XmQTjoinSide;
 /* Trait structures and typedefs, place typedefs first */
 
 typedef void (*XmJoinSideSetValueProc)(Widget tab,
-				       unsigned char join_side, 
+				       unsigned char join_side,
 				       Dimension join_thickness) ;
 typedef unsigned char (*XmJoinSideGetValueProc)(Widget tab,
 						Dimension * join_thickness);
@@ -52,7 +52,7 @@ typedef struct _XmJoinSideTraitRec {
   XmJoinSideGetValueProc getValue;
 } XmJoinSideTraitRec, *XmJoinSideTrait;
 
-enum {/* XmNONE already defined in Xm.h */ 
+enum {/* XmNONE already defined in Xm.h */
 	 XmLEFT = 1, XmRIGHT, XmTOP, XmBOTTOM} ;
 
 #ifdef __cplusplus

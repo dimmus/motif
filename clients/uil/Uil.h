@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 /*
 **++
@@ -89,7 +89,7 @@ typedef struct  _Uil_command_type
     unsigned	    report_warn_msg_flag: 1;/* report warnings		    */
     unsigned	    parse_tree_flag: 1;	    /* generate parse tree	    */
     unsigned        issue_summary: 1;       /* issue diagnostics summary    */
-    
+
     unsigned int    status_update_delay;    /* Number of times a status	    */
 		    			    /* point is passed before	    */
 					    /* calling statusCB routine	    */
@@ -111,9 +111,9 @@ typedef struct _Uil_comp_desc
     unsigned int	compiler_version;   /* version number of Compiler */
     unsigned int	data_version;	    /* version number of structures */
     char		*parse_tree_root;   /* parse tree output */
-    unsigned int	message_count[Uil_k_max_status+1];    
+    unsigned int	message_count[Uil_k_max_status+1];
 					    /* array of severity counts */
-} Uil_compile_desc_type;    
+} Uil_compile_desc_type;
 
 
 

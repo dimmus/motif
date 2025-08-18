@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MovePointer.c /main/7 1995/07/14 11:30:21 drk $"
@@ -52,7 +52,7 @@ static char rcsid[] = "$XConsortium: MovePointer.c /main/7 1995/07/14 11:30:21 d
 
         INPUTS:
             new_x,new_y       - location to move pointer relative to root
-        
+
         OUTPUTS:
             none
 
@@ -91,7 +91,7 @@ int new_x,new_y;
         dist = sqrt((double)(a*a + b*b));/* Calc current distance betw points */
 
         if (dist < PTR_MOVE_INCREMENT) { /* If within incr range set to end pt*/
-            x = new_x;            
+            x = new_x;
             y = new_y;
         }
         else {                           /* Otherwise calc new x,y along line */
@@ -122,107 +122,107 @@ int new_x,new_y;
         subwindow = None;
 
         relevant_event = PointerMotionMask | Button1MotionMask |
-                          Button2MotionMask | Button3MotionMask | 
-                          Button4MotionMask | Button5MotionMask | 
-                          ButtonMotionMask;        
+                          Button2MotionMask | Button3MotionMask |
+                          Button4MotionMask | Button5MotionMask |
+                          ButtonMotionMask;
 
-/* 
+/*
    Automation Added. If you are off the current hierarchy the object will
    be NULL. So wait until the object becomes valid to send appropriate
-   events. 
+   events.
 */
 
      	if (object != NULL) {
           while (object != &xisObjects[0]) {
 
             if (object->id.window) {
-                if (relevant_event & PointerMotionMask) { 
+                if (relevant_event & PointerMotionMask) {
                     if ((object->your_event_mask)&PointerMotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~PointerMotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&PointerMotionMask)
                         relevant_event &= ~(PointerMotionMask);
 		}
                 if ((relevant_event & Button1MotionMask) &&
-                    (xisState.mod_button_state & Button1Mask)) { 
+                    (xisState.mod_button_state & Button1Mask)) {
                     if ((object->your_event_mask)&Button1MotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~Button1MotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&Button1MotionMask)
                         relevant_event &= ~(Button1MotionMask);
 		}
                 if ((relevant_event & Button2MotionMask) &&
-                    (xisState.mod_button_state & Button2Mask)) { 
+                    (xisState.mod_button_state & Button2Mask)) {
                     if ((object->your_event_mask)&Button2MotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~Button2MotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&Button2MotionMask)
                         relevant_event &= ~(Button2MotionMask);
 		}
                 if ((relevant_event & Button3MotionMask) &&
-                    (xisState.mod_button_state & Button3Mask)) { 
+                    (xisState.mod_button_state & Button3Mask)) {
                     if ((object->your_event_mask)&Button3MotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~Button3MotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&Button3MotionMask)
                         relevant_event &= ~(Button3MotionMask);
 		}
                 if ((relevant_event & Button4MotionMask) &&
-                    (xisState.mod_button_state & Button4Mask)) { 
+                    (xisState.mod_button_state & Button4Mask)) {
                     if ((object->your_event_mask)&Button4MotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~Button4MotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&Button4MotionMask)
                         relevant_event &= ~(Button4MotionMask);
 		}
                 if ((relevant_event & Button5MotionMask) &&
-                    (xisState.mod_button_state & Button5Mask)) { 
+                    (xisState.mod_button_state & Button5Mask)) {
                     if ((object->your_event_mask)&Button5MotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~Button5MotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&Button5MotionMask)
                         relevant_event &= ~(Button5MotionMask);
 		}
                 if ((relevant_event & ButtonMotionMask) &&
                     (xisState.mod_button_state & (Button1Mask|Button2Mask|
-                     Button3Mask|Button4Mask|Button5Mask))) { 
+                     Button3Mask|Button4Mask|Button5Mask))) {
                     if ((object->your_event_mask)&ButtonMotionMask) {
                         xisSendEvent(object->id.window,subwindow,
                                      MotionNotify,xisGetServerTime(0),
                                      x - object->x,y - object->y,
                                      x,y,xisState.mod_button_state,False);
                         relevant_event &= (~ButtonMotionMask);
-                        
+
                     }
                     if ((object->do_not_propagate_mask)&ButtonMotionMask)
                         relevant_event &= ~(ButtonMotionMask);

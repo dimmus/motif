@@ -12,7 +12,7 @@ README for Motif Shell - A shell environment using motif
 	environment for dispatching other programs and utilities.
 
 	Motifshell is written in C code only.  There are no UIL references.
-	The makefile in the current directory should be all you need to 
+	The makefile in the current directory should be all you need to
 	compile the program.
 
 	Bugs:

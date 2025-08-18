@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /***********************************************************************
  *
  * Toggle Gadget
@@ -50,9 +50,9 @@ typedef struct _XmToggleButtonGCacheObjRec       *XmToggleButtonGCacheObject;
 
 /********    Public Function Declarations    ********/
 
-Boolean XmToggleButtonGadgetGetState( 
+Boolean XmToggleButtonGadgetGetState(
                         Widget w);
-void XmToggleButtonGadgetSetState( 
+void XmToggleButtonGadgetSetState(
                         Widget w,
 #if NeedWidePrototypes
                         int newstate,
@@ -72,7 +72,7 @@ Boolean XmToggleButtonGadgetSetValue(
 					    Boolean notify);
 #endif /* NeedWidePrototypes */
 
-Widget XmCreateToggleButtonGadget( 
+Widget XmCreateToggleButtonGadget(
                         Widget parent,
                         char *name,
                         Arg *arglist,

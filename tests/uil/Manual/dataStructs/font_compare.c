@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: font_compare.c /main/4 1995/07/13 20:35:53 drk $"
@@ -49,7 +49,7 @@ void compare_fonts(font1, font2, errors, error_message)
     		i;
 
     char	err_msg[80];
-    
+
     XCharStruct	*ptr1,
     		*ptr2;
 
@@ -59,7 +59,7 @@ void compare_fonts(font1, font2, errors, error_message)
     {
 	sprintf(err_msg,"NULL font(s)       \t");
 	add_err_msg(error_message, err_msg);
-	
+
 	if(font1 == NULL)
 	{
 	    (*errors)++;
@@ -95,7 +95,7 @@ void compare_fonts(font1, font2, errors, error_message)
 		font1->direction, font2->direction);
 	add_err_msg(error_message, err_msg);
     }
-	    
+
     if(font1->min_char_or_byte2 != font2->min_char_or_byte2)
     {
 	(*errors)++;
@@ -271,7 +271,7 @@ void compare_fonts(font1, font2, errors, error_message)
     ptr2 = font2->per_char;
 
     /*
-     * Don't do any more testing if the per_char is null on both. 
+     * Don't do any more testing if the per_char is null on both.
      */
 
     if((ptr1 == NULL) && (ptr2 == NULL))
@@ -300,12 +300,12 @@ void compare_fonts(font1, font2, errors, error_message)
 	    }
 	}
     }
-    
+
     if(num1 != num2)
     {
 	per_char_errors++;
     }
-    
+
     if(per_char_errors)
     {
 	*errors += per_char_errors;

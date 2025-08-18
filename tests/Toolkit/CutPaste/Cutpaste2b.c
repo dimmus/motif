@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cutpaste2b.c /main/7 1995/07/13 17:55:21 drk $"
@@ -50,13 +50,13 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  10);  n++;
     XtSetArg(args[n], XmNheight, 10);  n++;
     XtSetArg(args[n], XtNgeometry, "+500+0");  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 

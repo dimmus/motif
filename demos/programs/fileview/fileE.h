@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,15 +19,15 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: fileE.h /main/6 1995/07/14 10:02:54 drk $ */
 
 
 #if ( defined file_h )
-#define extern 
+#define extern
 #endif
 
 
@@ -39,5 +39,5 @@ char * ReadFile(FILE * file, int *filesize);
 
 
 #if ( defined extern )
-#undef extern 
+#undef extern
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PIMwmHints.c /main/7 1995/07/13 20:21:39 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: PIMwmHints.c /main/7 1995/07/13 20:21:39 dr
 #include	<testlib.h>
 #include	<PITests.h>
 
-#include	"PIMwmHints.h" 
+#include	"PIMwmHints.h"
 #include	"btn1.bmp"
 #include	"btn2.bmp"
 
@@ -59,10 +59,10 @@ XtPointer	client_data, call_data;
 		mwm_set_hints.flags = ( MWM_HINTS_INPUT_MODE );
 		mwm_set_hints.inputMode = MWM_INPUT_APPLICATION_MODAL;
 		XChangeProperty(display, test_wdw,
-			test_atom, 
+			test_atom,
 			test_atom, 32, PropModeReplace,
 			(unsigned char *)&mwm_set_hints, sizeof(PropMwmHints)/sizeof(int));
-	
+
 		/*
 		 * Unmap and remap the window to change state
 		 */
@@ -72,7 +72,7 @@ XtPointer	client_data, call_data;
 		XSetWMHints(display, test_wdw, &wm_set_hints);
 		XMapWindow(display, test_wdw);
 		XMoveWindow(display, test_wdw, 100, 100);
-	
+
 		printf("Keyboard input focus set back to APPLICATION MODAL\n");
 	}
 }
@@ -112,7 +112,7 @@ char	*argv[];
 		PIInfo[i].actual_return = False;
 
 /*
-    
+
 /*
  * Create top level shell widget as parent for test_button widgets
  */
@@ -173,7 +173,7 @@ char	*argv[];
 	mwm_set_hints.decorations = MWM_DECOR_TITLE;
 	mwm_set_hints.inputMode = MWM_INPUT_SYSTEM_MODAL;
 	XChangeProperty(display, test_wdw,
-		test_atom, 
+		test_atom,
 		test_atom, 32, PropModeReplace,
 		(unsigned char *)&mwm_set_hints, sizeof(PropMwmHints)/sizeof(int));
 
@@ -230,7 +230,7 @@ char	*argv[];
 								MWM_FUNC_MINIMIZE
 								);
 	XChangeProperty(display, test_wdw,
-		test_atom, 
+		test_atom,
 		test_atom, 32, PropModeReplace,
 		(unsigned char *)&mwm_set_hints, sizeof(PropMwmHints)/sizeof(int));
 
@@ -282,7 +282,7 @@ char	*argv[];
 	mwm_set_hints.functions = ( MWM_FUNC_ALL );
 	mwm_set_hints.inputMode = ( MWM_INPUT_MODELESS );
 	XChangeProperty(display, test_wdw,
-		test_atom, 
+		test_atom,
 		test_atom, 32, PropModeReplace,
 		(unsigned char *)&mwm_set_hints, sizeof(PropMwmHints)/sizeof(int));
 
@@ -329,7 +329,7 @@ char	*argv[];
 	mwm_set_hints.decorations = ( MWM_DECOR_ALL | MWM_DECOR_RESIZEH );
 	mwm_set_hints.functions = ( MWM_FUNC_ALL | MWM_FUNC_CLOSE );
 	XChangeProperty(display, test_wdw,
-		test_atom, 
+		test_atom,
 		test_atom, 32, PropModeReplace,
 		(unsigned char *)&mwm_set_hints, sizeof(PropMwmHints)/sizeof(int));
 
@@ -402,13 +402,13 @@ char	*argv[];
 								MWM_DECOR_MINIMIZE |
 								MWM_DECOR_MAXIMIZE
 								);
-	mwm_set_hints.functions = ( MWM_FUNC_RESIZE | 
+	mwm_set_hints.functions = ( MWM_FUNC_RESIZE |
 								MWM_FUNC_MOVE |
 								MWM_FUNC_MINIMIZE |
 								MWM_FUNC_MAXIMIZE
 								);
 	XChangeProperty(display, test_wdw2,
-		test_atom, 
+		test_atom,
 		test_atom, 32, PropModeReplace,
 		(unsigned char *)&mwm_set_hints, sizeof(PropMwmHints)/sizeof(int));
 
@@ -455,4 +455,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-

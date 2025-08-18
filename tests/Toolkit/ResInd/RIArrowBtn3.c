@@ -24,21 +24,21 @@
 /*
  * HISTORY
  */
-/* 
+/*
  * Original History:
  *
  *   Revision 1.5.2.2  92/05/19  18:12:39  tomm
  * 	  Ansi changes.
  * 	  [1992/05/19  18:03:17  tomm]
- * 
+ *
  *   Revision 1.5  1992/03/13  16:57:34  devsrc
  * 	  Converted to ODE
- * 
-*/ 
+ *
+*/
 
 /**************************************************************************
  *
- *  Create an arrow using inches and setting the width and height. 
+ *  Create an arrow using inches and setting the width and height.
  *  Reset the size, change the unit type, set the size again.
  *
  **************************************************************************/
@@ -151,7 +151,7 @@ int n;
    XtSetArg (args[n], XmNwidth, &width);			n++;
    XtSetArg (args[n], XmNheight, &height);			n++;
    XtGetValues (widget, args, n);
-   printf ("%d  %d\t%d  %d\n", k*1000, k*1500, 
+   printf ("%d  %d\t%d  %d\n", k*1000, k*1500,
 	                           (int)width, (int)height);
    width = 0; height = 0;
    sleep (4);
@@ -177,10 +177,3 @@ static XtCallbackProc PrintSizes(widget, client_data, call_data)
   fflush (stdout);
 
 }
-
-
-
-
-
-
-

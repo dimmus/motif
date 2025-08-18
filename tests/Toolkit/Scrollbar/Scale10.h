@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: Scale10.h /main/6 1995/07/13 19:11:16 drk $ */
 
 Boolean   wait;
@@ -36,7 +36,7 @@ static Widget          CreateContinuePopup();
 static XtCallbackProc  ContinueCB();
 static XtCallbackProc  QuitCB();
 
-static char *Pause_events[] = 
+static char *Pause_events[] =
    {
 "\
 1) A client with two Scales and four PushButtons contained\n\

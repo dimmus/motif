@@ -22,23 +22,23 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer pushb  
-TRACE:(2) ClickMB Btn1 
+TRACE:(1) LocatePointer pushb
+TRACE:(2) ClickMB Btn1
 Setting the fraction base to 0.
-Warning: 
+Warning:
     Name: form
     Class: XmForm
     Fraction base cannot be zero.
 
-TRACE:(3) CompareVisual form 
+TRACE:(3) CompareVisual form
 TRACE:(4) Continue
-TRACE:(5) LocatePointer pushb  
-TRACE:(6) ClickMB Btn1 
+TRACE:(5) LocatePointer pushb
+TRACE:(6) ClickMB Btn1
 Changing the size of the form to (200, 300).
-TRACE:(7) CompareVisual form 
-TRACE:(8) LocatePointer pushb  
-TRACE:(9) ClickMB Btn1 
+TRACE:(7) CompareVisual form
+TRACE:(8) LocatePointer pushb
+TRACE:(9) ClickMB Btn1
 Changing the size of the form to (0, 0).
-TRACE:(10) CompareVisual form 
+TRACE:(10) CompareVisual form
 TRACE:(11) Exit
 Exiting Test...Please Standby...

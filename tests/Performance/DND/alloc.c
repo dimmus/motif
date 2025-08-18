@@ -60,7 +60,7 @@ tcMalloc(size_t size)
     }
     entriesMalloced[numEntriesMalloced] = (void *)XtMalloc(size);
     return (entriesMalloced[numEntriesMalloced++]);
-} 
+}
 
 void
 tcFreeAll()

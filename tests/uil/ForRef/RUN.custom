@@ -21,7 +21,7 @@
 # Floor, Boston, MA 02110-1301 USA
 #
 # HISTORY
-# 
+#
 
 
 # The following needed for Vista and Purify usage
@@ -38,5 +38,4 @@ setenv AUTOVPATH /proj/motif/tests/visuals/uil/ForRef
 endif
 
 
-foreach test ("$displayUid" "$displayUid2" "$displayUid3") 
-
+foreach test ("$displayUid" "$displayUid2" "$displayUid3")

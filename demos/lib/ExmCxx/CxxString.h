@@ -54,12 +54,12 @@ public:
 		    XtResourceList	resources,
 		    Cardinal		num_resources,
 		    XtInitProc		cxx_cast);
-    
+
  // public static methods
   static  void      ClassInitialize();
 
 protected:
-  virtual void      class_part_initialize(); 
+  virtual void      class_part_initialize();
   unsigned char     default_render_table_type;
 };
 
@@ -81,7 +81,7 @@ typedef struct _exmCxxStringPart
         XmRenderTable           render_table;
         Boolean                 recompute_size;
 
-        ExmHowAligned           text_starts_here; 
+        ExmHowAligned           text_starts_here;
 } ExmCxxStringPart;
 
 
@@ -103,13 +103,13 @@ public:
   // override certain methods of primitive class extension record.
   virtual Boolean             widget_baseline(Dimension** dim, int* nb);
   virtual Boolean             widget_display_rect(XRectangle*);
-    
-  // override certain methods of simple class 
+
+  // override certain methods of simple class
   virtual void draw_visual(void);
   virtual void create_gc(void);
   virtual void calc_visual_size(void);
-  
-  // provide methods for string class 
+
+  // provide methods for string class
   virtual void AlignmentDirection(void);
 
   static void DefaultFont (Widget, int, XrmValue*);

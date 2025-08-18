@@ -1,5 +1,5 @@
 # $XConsortium: MessageBox5.scr /main/5 1995/07/17 20:29:43 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,28 +20,28 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client with a Message Box will appear. The Message Box will
 #  have three PushButtons labeled Unmanage, Help
 #  and Symbol. The message string will be 'Toggle
-#  Unmanage/Destroy and select a button'. 
+#  Unmanage/Destroy and select a button'.
 
 CompareVisual mbox
 
 # Click MB1 on Symbol button. The SymbolPixmap will become
-#  unmanaged and will disappear. 
+#  unmanaged and will disappear.
 
 LocatePointer mbox RHelpButton
 ClickMB Btn1
 CompareVisual mbox
 
 # Click MB1 on Message button. The message string will become
-#  unmanaged and will disappear. 
+#  unmanaged and will disappear.
 
 LocatePointer mbox RHelpButton
 ClickMB Btn1
@@ -49,7 +49,7 @@ CompareVisual mbox
 
 # Click MB1 on Help button. The third PushButton Message will
 #  become unmanaged and will disappear. Also the Cancel
-#  PushButton label will change to Ok. 
+#  PushButton label will change to Ok.
 
 LocatePointer mbox RCancelButton
 ClickMB Btn1
@@ -57,14 +57,14 @@ CompareVisual mbox
 
 # Click MB1 on Ok. The first PushButton will become unmanaged
 #  and will disappear. Also the Ok PushButton label will
-#  change to Center. 
+#  change to Center.
 
 LocatePointer mbox RCancelButton
 ClickMB Btn1
 CompareVisual mbox
 
 # Click MB1 on Center button. The widget will be destroyed
-#   and an empty shell will be left. 
+#   and an empty shell will be left.
 
 LocatePointer mbox RCancelButton
 ClickMB Btn1

@@ -24,7 +24,7 @@ Please note that the automation performance monitor is affected by the
 current system load.
 
 The automation script will enter text 9600 characters total into the widget.
-The characters will be entered in sets of 50 character long strings. 
+The characters will be entered in sets of 50 character long strings.
 There will be six measurements taken. Each measurement will correspond
 to a total of 1600 characters entered into the widget.
 Ideally, these six measurements should not vary significantly.
@@ -48,18 +48,18 @@ Required Runs:
 A complete run of this test involves four runs with the following command
 line options specified:
 
-1. CSTextEnter                                    - Tests an XmCSText widget 
+1. CSTextEnter                                    - Tests an XmCSText widget
                                                     with XmNwordWarp = False.
-         
-2. CSTextEnter -use_word_wrap                     - Tests an XmCSText widget 
+
+2. CSTextEnter -use_word_wrap                     - Tests an XmCSText widget
                                                     with XmNwordWrap = True.
-         
+
 3. CSTextEnter -regular_text                      - Tests an XmText widget with
                                                     XmNwordWarp = False.
-         
+
 4. CSTextEnter -regular_text -use_word_wrap       - Tests an XmText widget with
                                                     XmNwordWrap = True.
-         
+
 Output:
 ------
 The measurements taken will be reported to the file named CSTextEnter.prt
@@ -80,7 +80,7 @@ when dealing with a large amount of text.
 The Scrolled CSText widget is created with 80 columns and 24 rows.
 Measurements are taken for the following actions:
   o Loading a large text file into a buffer.
-  o Generating an XmString using the buffered text. 
+  o Generating an XmString using the buffered text.
   o Assigning the XmString to the XmCSText widget.
   o Scrolling to the end of the text.
   o Scrolling to the beginning of the text.
@@ -114,21 +114,21 @@ There are four command line options which can be specified for this test:
                              approximately 80 characters per line.
 
 3. -u -test_word_wrap_on   - Creates XmCSText widget with XmNwordWrap set
-                             to True.  The text file, 
+                             to True.  The text file,
                              ./../DataSpace/WordWrap.dat is displayed in
                              the widget.  This file contains approximately
                              500 characters per line. When text is
                              displayed, the characters should wrap around
                              to fit within the horizontal boundaries of the
                              widget.
-                             
+
 4. -u -test-word_wrap_off  - Creates XmCSText widget with XmNwordWrap set
-                             to False. The text file, 
+                             to False. The text file,
                              ./../DataSpace/WordWrap.dat is displayed in
                              the widget. This file contains approximately
                              500 characters per line. When text is displayed,
                              the characters beyond the 80 column boundary
-                             will be clipped at the widget borders. 
+                             will be clipped at the widget borders.
 
 5. -u "-f <filename>"      - Loads the text file, <filename>, to be displayed
                              in the widget. NOTE: There is a maximum line
@@ -147,8 +147,8 @@ line options specified:
 
 2. CSTextScroll -u -show_perf_bug                - Tests XmCSText widget with
                                                    XmNwordWrap = False,
-                                                   XmNresizeWidth and 
-                                                   XmNresizeHeight = True. 
+                                                   XmNresizeWidth and
+                                                   XmNresizeHeight = True.
 
 3. TextScroll -u -use_word_wrap                  - Tests XmText widget with
                                                    XmNwordWrap = True and
@@ -159,19 +159,19 @@ line options specified:
                                                    XmNwordWrap = True and
                                                    displays a file containing
                                                    approximately 500 characters
-                                                   per line. 
+                                                   per line.
 
 5. CSTextScroll -u -test_word_wrap_off           - Tests XmCSText widget with
                                                    XmNwordWrap = False and
                                                    displays a file containing
-                                                   approximately 500 characters 
-                                                   per line. 
+                                                   approximately 500 characters
+                                                   per line.
 
 Output:
 ------
 The measurements taken will be reported to the file named CSTextScroll.out
 in the current directory. If the file cannot be created in the current directory
-it will be created under /tmp. 
+it will be created under /tmp.
 Since each run of the test produces a file named CSTextScroll.out, output
 from the previous run should be moved to a file of another name prior
 to each new run of the test.
@@ -299,12 +299,12 @@ Defaults:
 
 By default, the XmNwordWrap is False. The widget is filled with the
 character 'n'.  The is displayed in a "6x10" font if its available,
-otherwise it falls back to a "fixed" font. 
+otherwise it falls back to a "fixed" font.
 
 Options:
 -------
 
-1. -use_word_wrap                      - Creates XmText widget with 
+1. -use_word_wrap                      - Creates XmText widget with
                                          XmNwordWrap = True.
 
 Required Runs:
@@ -314,17 +314,16 @@ A complete run of this test involves two runs with the following command
 line options specified:
 
 TextWorst                              - Tests XmText widget with XmNwordWrap =
-                                         False. 
+                                         False.
 
 TextWorst -use_word_wrap               - Tests XmText widget with XmNwordWrap =
-                                         True. 
+                                         True.
 
 Output:
 ------
 The measurements taken will be reported to the file named TextWorst.out
 in the current directory. If the file cannot be created in the current directory
-it will be created under /tmp. 
+it will be created under /tmp.
 Since each run of the test produces a file named TextWorst.out, output
 from the previous run should be moved to a file of another name prior
 to each new run of the test.
-

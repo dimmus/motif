@@ -11,11 +11,11 @@
 # True.
 
 # #)  Verify that the indicators for all the ToggleButtons and the
-# ToggleButtonGadgets are displayed as unfilled rectangles. 
+# ToggleButtonGadgets are displayed as unfilled rectangles.
 # The default values of the XmNindicatorOn and XmNindicatorType
 # resources will be printed to stdout for both the ToggleButtons and
 # the ToggleButtonGadgets.  Verify that the default values printed
-# in both cases are as follows: 
+# in both cases are as follows:
 
 CompareVisual Manager1
 
@@ -28,7 +28,7 @@ CompareVisual Manager1
 # verify that all the indicators display a checkmark within
 # a box after all of the indicators have been clicked on.
 # Perform the same test on the ToggleButtonGadget indicators
-# in the right column. 
+# in the right column.
 
 LocatePointer ToggleButton0
 ClickMB Btn1
@@ -54,7 +54,7 @@ CompareVisual Manager1
 # value of the XmNindicatorOn resource to XmINDICATOR_CHECK_BOX.
 # This will set the XmNindicatorOn resource to XmINDICATOR_CHECK_BOX
 # for all the ToggleButtons and ToggleButtonGadgets.
-# Verify that all of the toggle buttons indicators continue to display 
+# Verify that all of the toggle buttons indicators continue to display
 # a checkmark within a box.
 
 LocatePointer IndicatorOnOptions ROptionButton
@@ -66,7 +66,7 @@ CompareVisual Manager1
 
 # #)  In the window titled \"Resource Control Panel\", set the
 # value of the XmNindicatorOn resource to XmINDICATOR_BOX.
-# Verify that all of the toggle buttons indicators display 
+# Verify that all of the toggle buttons indicators display
 # as filled rectangles.
 
 LocatePointer IndicatorOnOptions ROptionButton
@@ -80,7 +80,7 @@ Continue
 
 # #)  Click MB1 on each of the ToggleButton and ToggleButtonGadget
 # indicators.  Verify that the indicators for each of the toggle
-# buttons display as an unfilled rectangular box. 
+# buttons display as an unfilled rectangular box.
 
 LocatePointer ToggleButton0
 ClickMB Btn1
@@ -103,8 +103,8 @@ ClickMB Btn1
 CompareVisual Manager1
 
 # #)  In the window titled \"Resource Control Panel\", set the
-# value of the XmNindicatorType resource to XmONE_OF_MANY. 
-# Verify that all of the toggle buttons indicators display 
+# value of the XmNindicatorType resource to XmONE_OF_MANY.
+# Verify that all of the toggle buttons indicators display
 # as an unfilled circle.
 
 LocatePointer IndicatorTypeOptions ROptionButton
@@ -118,7 +118,7 @@ CompareVisual Manager1
 # indicators.  Verify that only the most recently selected toggle
 # button indicator displays as a filled circle while all other
 # toggle button indicators, whether they were previously selected or not,
-# display as unfilled circles.  
+# display as unfilled circles.
 
 LocatePointer ToggleButton0
 ClickMB Btn1
@@ -142,14 +142,14 @@ CompareVisual Manager1
 
 
 # #)  In the window titled \"Resource Control Panel\", set the
-# value of the XmNindicatorType resource to XmONE_OF_MANY_ROUND. 
-# Verify that all of the toggle buttons indicators continue to display 
+# value of the XmNindicatorType resource to XmONE_OF_MANY_ROUND.
+# Verify that all of the toggle buttons indicators continue to display
 # as circles.  In addition, only the last selected indicator should
 # be displayed as a filled circle, while all of the other indicators
 # should be displayed as an unfilled circle.
 
-LocatePointer IndicatorTypeOptions ROptionButton 
-PressMB Btn1 
+LocatePointer IndicatorTypeOptions ROptionButton
+PressMB Btn1
 LocatePointer IndicatorTypePB2
 ReleaseMB Btn1
 
@@ -158,14 +158,14 @@ CompareVisual Manager1
 Continue
 
 # #)  In the window titled \"Resource Control Panel\", set the
-# value of the XmNindicatorType resource to XmONE_OF_MANY_DIAMOND. 
-# Verify that all of the toggle buttons indicators display 
+# value of the XmNindicatorType resource to XmONE_OF_MANY_DIAMOND.
+# Verify that all of the toggle buttons indicators display
 # as diamonds.  In addition, only the last selected indicator should
 # be displayed as a filled diamonds, while all of the other indicators
 # should be displayed as an unfilled diamonds.
 
-LocatePointer IndicatorTypeOptions ROptionButton 
-PressMB Btn1 
+LocatePointer IndicatorTypeOptions ROptionButton
+PressMB Btn1
 LocatePointer IndicatorTypePB2
 ReleaseMB Btn1
 
@@ -177,11 +177,11 @@ CompareVisual Manager1
 # are displayed vertically on the right.
 
 # #)  Verify that all indicators for both the ToggleButtons and the
-# ToggleButtonGadgets are displayed as unfilled, shadowed circles. 
+# ToggleButtonGadgets are displayed as unfilled, shadowed circles.
 # The default values of the XmNindicatorOn and XmNindicatorType
 # resources will be printed to stdout for both the ToggleButtons and
 # the ToggleButtonGadgets.  Verify that the default values printed
-# in both cases are as follows: 
+# in both cases are as follows:
 
 CompareVisual Manager1
 
@@ -214,15 +214,15 @@ ClickMB Btn1
 CompareVisual Manager1
 
 # #)  In the window titled \"Resource Control Panel\", set the
-# value of the XmNindicatorType resource to XmONE_OF_MANY_ROUND. 
-# Verify that all of the toggle button indicators continue to display 
+# value of the XmNindicatorType resource to XmONE_OF_MANY_ROUND.
+# Verify that all of the toggle button indicators continue to display
 # as circles.  In addition, only the last selected indicator should
 # be displayed as a circle containing a checkmark within a box. All
-# the remaining toggle button indicators should display as an 
+# the remaining toggle button indicators should display as an
 # unfilled circle.
 
-LocatePointer IndicatorTypeOptions ROptionButton 
-PressMB Btn1 
+LocatePointer IndicatorTypeOptions ROptionButton
+PressMB Btn1
 LocatePointer IndicatorTypePB2
 ReleaseMB Btn1
 
@@ -231,30 +231,30 @@ CompareVisual Manager1
 Continue
 
 # #)  In the window titled \"Resource Control Panel\", set the
-# value of the XmNindicatorType resource to XmONE_OF_MANY_DIAMOND. 
-# Verify that all of the toggle button indicators display 
+# value of the XmNindicatorType resource to XmONE_OF_MANY_DIAMOND.
+# Verify that all of the toggle button indicators display
 # as diamonds.  In addition, only the last selected indicator should
 # be displayed as a diamond containing a checkmark within a box. All
-# the remaining toggle button indicators should display as an 
+# the remaining toggle button indicators should display as an
 # unfilled diamond.
 
-LocatePointer IndicatorTypeOptions ROptionButton 
-PressMB Btn1 
+LocatePointer IndicatorTypeOptions ROptionButton
+PressMB Btn1
 LocatePointer IndicatorTypePB3
 ReleaseMB Btn1
 
 CompareVisual Manager1
 
 # #)  In the window titled \"Resource Control Panel\", set the
-# value of the XmNindicatorType resource to XmN_OF_MANY. 
-# Verify that all of the toggle button indicators display 
+# value of the XmNindicatorType resource to XmN_OF_MANY.
+# Verify that all of the toggle button indicators display
 # as rectangles.  In addition, only the last selected indicator should
 # be displayed as a filled rectangle containing a checkmark within a box.
-# All the remaining toggle button indicators should display as 
+# All the remaining toggle button indicators should display as
 # unfilled rectangles.
 
-LocatePointer IndicatorTypeOptions ROptionButton 
-PressMB Btn1 
+LocatePointer IndicatorTypeOptions ROptionButton
+PressMB Btn1
 LocatePointer IndicatorTypePB0
 ReleaseMB Btn1
 
@@ -263,9 +263,9 @@ CompareVisual Manager1
 # #)  Click MB1 on each of the indicators that are currently
 # displayed as unfilled rectangles. Verify that each indicator
 # is redisplayed as a rectangle containing a checkmark within
-# a box upon being selected. In addition, verify that after all 
+# a box upon being selected. In addition, verify that after all
 # of the unfilled toggle buttons have been selected, that all
-# of the toggle buttons display a checkmark within a box. 
+# of the toggle buttons display a checkmark within a box.
 
 LocatePointer ToggleButton0
 ClickMB Btn1
@@ -292,4 +292,3 @@ Continue
 
 # E)
 Exit
-

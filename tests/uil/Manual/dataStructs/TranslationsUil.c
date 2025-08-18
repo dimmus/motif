@@ -48,17 +48,17 @@ static MrmCode mrmClass;
 static MRMRegisterArg mrmNames[] = {
   {"SetTextCb", (caddr_t)SetTextCb },
   {"quit", (caddr_t)quit }
-};	
+};
 
 static  XtActionsRec  actions[] = {
   { "actSetTextCb", actSetTextCb },
-  { "actquit",  actquit }, 
+  { "actquit",  actquit },
 };
 
 static XtAppContext  appContext;
 
 static Widget appMain;
-  
+
 main(argc, argv)
      int argc;
      char *argv[];
@@ -85,19 +85,19 @@ main(argc, argv)
 			   display, NULL, 0);
 
   uid = XtMalloc (strlen (argv[0]) + 5);
-  sprintf (uid, "%s.uid", argv[0]); 
+  sprintf (uid, "%s.uid", argv[0]);
   if (MrmOpenHierarchy (1, &uid, NULL, &mrmId) != MrmSUCCESS) exit(0);
   MrmRegisterNames(mrmNames, XtNumber(mrmNames));
   MrmFetchWidget (mrmId, "appMain", shell, &appMain, &mrmClass);
   XtManageChild(appMain);
 
   XtAppAddActions(appContext, actions, XtNumber(actions));
-  
+
   XtRealizeWidget(shell);
 
   XtInstallAccelerators(XtNameToWidget(appMain, "text"),
                         XtNameToWidget(appMain, "squeeze"));
-  
+
   XtAppMainLoop(appContext);
 
 
@@ -110,9 +110,9 @@ static void SetTextCb(w, id, cb)
 {
   Widget text = XtNameToWidget(appMain, id);
   char *value = XmTextFieldGetString (text);
-  XmString label = XmStringCreate (value, XmSTRING_DEFAULT_CHARSET); 
+  XmString label = XmStringCreate (value, XmSTRING_DEFAULT_CHARSET);
   Arg args[1];
-  
+
   XtSetArg (args[0], XmNlabelString, label);
   XtSetValues (w, args, 1);
   XmStringFree (label);
@@ -169,8 +169,3 @@ static void actquit(w, event, pars, num_pars)
   quit(w, "*text", NULL);
 
 }
-
-
-
-
-  

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /*********************************************************************
  *
  * XmPanedWindowWidget Private Data
@@ -76,7 +76,7 @@ typedef struct _XmPanedWindowConstraintPart {
     short       position_index; /* new 1.2 positionIndex resource */
 } XmPanedWindowConstraintPart;
 
-typedef struct _XmPanedWindowConstraintRec 
+typedef struct _XmPanedWindowConstraintRec
 {
     XmManagerConstraintPart manager;
     XmPanedWindowConstraintPart  panedw;
@@ -124,7 +124,7 @@ typedef struct {
     WidgetList  managed_children;     /* keep track of managed children */
 
     unsigned char orientation ;     /* horizontal or vertical panedw */
-    
+
     XtIntervalId timer ;            /* handle key event on sash */
 } XmPanedWindowPart;
 

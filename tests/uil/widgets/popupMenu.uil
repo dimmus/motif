@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: popupMenu.uil /main/8 1995/07/13 20:50:09 drk $
 !******************************************************************************
 module Test
@@ -30,7 +30,7 @@ module Test
         names = case_sensitive
 
   include file "popupMenu.msg";
-  
+
   procedure
           exit_test();
 	  Report_Callback(string);
@@ -41,7 +41,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -76,15 +76,15 @@ module Test
         };
 
 ! /**************************************************************************/
-object	
+object
 	label2 :  XmLabel {
 		arguments {
-		  	XmNlabelString = compound_string 
+		  	XmNlabelString = compound_string
 				('<Ctrl>Z in Label for a Popup Menu');
 			XmNfontList = bold_font;
 		};
 	};
-			
+
 object
 	push_button1 :	XmPushButton {
 		arguments {
@@ -94,12 +94,12 @@ object
 			XmNfontList = bold_font;
 		};
 		callbacks {
-			XmNactivateCallback = procedure Report_Callback 
+			XmNactivateCallback = procedure Report_Callback
 				('activateCallback push_button1');
 		};
 	};
 
-object 
+object
 	push_button2 : 	XmPushButton {
 		arguments {
 			XmNbackground = forest_green;
@@ -108,12 +108,12 @@ object
 			XmNfontList = bold_font;
 		};
 		callbacks {
-			XmNactivateCallback = procedure Report_Callback 
+			XmNactivateCallback = procedure Report_Callback
 				('activateCallback push_button2');
 		};
 	};
 
-object 
+object
 	push_button3 : 	XmPushButton {
 		arguments {
 			XmNbackground = forest_green;
@@ -122,12 +122,12 @@ object
 			XmNfontList = bold_font;
 		};
 		callbacks {
-			XmNactivateCallback = procedure Report_Callback 
+			XmNactivateCallback = procedure Report_Callback
 				('activateCallback push_button3');
 		};
 	};
 
-object 
+object
 	push_button4 : 	XmPushButton {
 		arguments {
 			XmNbackground = forest_green;
@@ -136,7 +136,7 @@ object
 			XmNfontList = bold_font;
 		};
 		callbacks {
-			XmNactivateCallback = procedure Report_Callback 
+			XmNactivateCallback = procedure Report_Callback
 				('activateCallback push_button4');
 		};
 	};
@@ -144,7 +144,7 @@ object
 
 object
 	explanation : XmBulletinBoardDialog {
-			arguments { 
+			arguments {
 				  XmNx = 500;
 				  XmNy  = 0;
 				  XmNdefaultPosition = false;
@@ -182,13 +182,13 @@ object
 				  XmNlabelString = compound_string("Explanation of Widget Displayed");
 				  };
 		};
-		
+
 
 object
 	text1 : XmText {
 			arguments {
 				  XmNx = 0;
-				  XmNy = 40;  
+				  XmNy = 40;
 				  XmNheight = 320;
 				  XmNwidth = 300;
 				  XmNwordWrap = true;
@@ -198,6 +198,6 @@ object
 				  XmNforeground = navy;
 				  XmNvalue = message;
 				  };
-				   
+
 		};
 end module;

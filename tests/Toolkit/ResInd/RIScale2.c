@@ -24,7 +24,7 @@
 /*
  * HISTORY
  */
-/* 
+/*
  * Original History:
  *
  * Revision 1.3.2.2  1993/04/27  17:24:48  shobana
@@ -33,8 +33,8 @@
  *
  * Revision 1.3  1992/03/13  17:44:26  devsrc
  * 	Converted to ODE
- * 
-*/ 
+ *
+*/
 #include <testlib.h>
 
 Widget  Scale1;
@@ -48,13 +48,13 @@ void  main(argc, argv)
     XmString      tcs;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
     XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 

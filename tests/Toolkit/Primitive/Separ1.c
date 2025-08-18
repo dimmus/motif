@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Separ1.c /main/8 1995/07/13 19:09:44 drk $"
@@ -52,10 +52,10 @@ char **argv;
   XmString tcs;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
-  XtSetArg(args[n], XmNheight, 300);  n++; 
+  XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
   XtSetValues(Shell1, args, n);
   XtRealizeWidget(Shell1);
@@ -69,14 +69,14 @@ char **argv;
   XtSetArg(args[n], XmNy, 10); n++;
   Label1 = XmCreateLabel(BBoard, "Label1", args, n);
   XtManageChild(Label1);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 10); n++;
   XtSetArg(args[n], XmNy, 40); n++;
   XtSetArg(args[n], XmNwidth, 100); n++;
   Separator1 = XmCreateSeparator(BBoard, "Separator1", args, n);
   XtManageChild(Separator1);
-  
+
   n = 0;
   XtSetArg(args[n], XmNmargin, &separator_margin); n++;
   XtGetValues(Separator1, args, n);
@@ -88,14 +88,14 @@ char **argv;
   XtSetArg(args[n], XmNy, 70); n++;
   Label2 = XmCreateLabel(BBoard, "Label2", args, n);
   XtManageChild(Label2);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 10); n++;
   XtSetArg(args[n], XmNy, 100); n++;
   XtSetArg(args[n], XmNwidth, 100); n++;
   Separator2 = XmCreateSeparator(BBoard, "Separator2", args, n);
   XtManageChild(Separator2);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 10); n++;
   XtSetArg(args[n], XmNy, 130); n++;
@@ -108,7 +108,7 @@ char **argv;
   XtSetArg(args[n], XmNwidth, 100); n++;
   Separator3 = XmCreateSeparator(BBoard, "Separator3", args, n);
   XtManageChild(Separator3);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 10); n++;
   XtSetArg(args[n], XmNy, 190); n++;
@@ -122,7 +122,7 @@ char **argv;
   Separator4 = XmCreateSeparator(BBoard, "Separator4", args, n);
   XtManageChild(Separator4);
 
-  CommonPause();		
+  CommonPause();
 
   n = 0;
   tcs = XmStringCreateLtoR("Shadow Etched Out", XmSTRING_DEFAULT_CHARSET);
@@ -165,7 +165,7 @@ char **argv;
   XmStringFree(tcs);
 
   n = 0;
-  XtSetArg(args[n], XmNwidth, 100);  n++; 
+  XtSetArg(args[n], XmNwidth, 100);  n++;
   XtSetArg(args[n], XmNseparatorType, XmSINGLE_DASHED_LINE);  n++;
   XtSetValues(Separator4, args, n);
   CommonPause();
@@ -209,21 +209,3 @@ char **argv;
   CommonPause();
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

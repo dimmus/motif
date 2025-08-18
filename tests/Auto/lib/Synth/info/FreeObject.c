@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FreeObject.c /main/7 1995/07/14 11:31:36 drk $"
@@ -54,14 +54,14 @@ void xisFreeObject(object)
 XisObjectRecord *object;
 {
     XisObjectRecord *child_obj, *parent_obj;
-   
+
     if (object->parent != NULL) {
         parent_obj = object->parent;
         child_obj = parent_obj->first_child;
         if (child_obj == object)
             parent_obj->first_child = object->next_sibling;
         else {
-            while (child_obj->next_sibling != NULL_Object && 
+            while (child_obj->next_sibling != NULL_Object &&
                    child_obj->next_sibling != object) {
                 child_obj = object->next_sibling;
             }

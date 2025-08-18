@@ -35,4 +35,3 @@ SUBDIRS = airport \
          pixmaps
 
 EXTRA_DIST =
-

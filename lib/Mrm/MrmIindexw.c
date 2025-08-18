@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -41,7 +41,7 @@ static char rcsid[] = "$XConsortium: MrmIindexw.c /main/12 1996/11/13 13:57:54 d
  *
  *  ABSTRACT:
  *
- *	These routines manage the index of an IDB file, including 
+ *	These routines manage the index of an IDB file, including
  *	retrieving data entries accessed by index, and maintaing the
  *	index structure, particularly index splitting
  *
@@ -146,7 +146,7 @@ static char rcsid[] = "$XConsortium: MrmIindexw.c /main/12 1996/11/13 13:57:54 d
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_EnterItem (IDBFile		file_id ,
 		    char		*index ,
 		    IDBDataHandle	data_entry )
@@ -238,7 +238,7 @@ Idb__INX_EnterItem (IDBFile		file_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_EnterLeafIndex (IDBFile		file_id,
 			 IDBRecordBufferPtr	buffer,
 			 char			*index,
@@ -366,7 +366,7 @@ Idb__INX_EnterLeafIndex (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_EnterNodeIndex (IDBFile		file_id,
 			 IDBRecordBufferPtr	buffer,
 			 char			*index,
@@ -556,7 +556,7 @@ Idb__INX_EnterNodeIndex (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_SplitLeafRecord (IDBFile		file_id,
 			  IDBRecordBufferPtr	gt_buffer)
 {
@@ -895,7 +895,7 @@ Idb__INX_SplitNodeRecord (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_InitRootLeafRecord (IDBFile		file_id,
 			     IDBRecordBufferPtr	*buffer_return)
 {
@@ -971,7 +971,7 @@ Idb__INX_InitRootLeafRecord (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_InitRootNodeRecord (IDBFile			file_id,
 			     IDBRecordBufferPtr		*buffer_return,
 			     char			*index,
@@ -1061,7 +1061,7 @@ Idb__INX_InitRootNodeRecord (IDBFile			file_id,
  *--
  */
 
-void 
+void
 Idb__INX_CopyLeafRecord (IDBIndexLeafRecordPtr	dst_recptr,
 			 IDBIndexLeafRecordPtr	src_recptr)
 {
@@ -1117,7 +1117,7 @@ Idb__INX_CopyLeafRecord (IDBIndexLeafRecordPtr	dst_recptr,
  *--
  */
 
-void 
+void
 Idb__INX_CopyNodeRecord (IDBIndexNodeRecordPtr	dst_recptr,
 			 IDBIndexNodeRecordPtr	src_recptr)
 {
@@ -1177,7 +1177,7 @@ Idb__INX_CopyNodeRecord (IDBIndexNodeRecordPtr	dst_recptr,
  *--
  */
 
-void 
+void
 Idb__INX_CollapseLeafRecord (IDBIndexLeafRecordPtr	recptr,
 			     MrmCount			start,
 			     MrmCount			end)
@@ -1283,7 +1283,7 @@ Idb__INX_CollapseLeafRecord (IDBIndexLeafRecordPtr	recptr,
  *--
  */
 
-void 
+void
 Idb__INX_CollapseNodeRecord (IDBIndexNodeRecordPtr	recptr,
 			     MrmCount			start,
 			     MrmCount			end)
@@ -1388,7 +1388,7 @@ Idb__INX_CollapseNodeRecord (IDBIndexNodeRecordPtr	recptr,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_ConfirmNodeSpace (IDBFile		file_id,
 			   IDBRecordBufferPtr	buffer)
 {
@@ -1448,7 +1448,7 @@ Idb__INX_ConfirmNodeSpace (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_SetParent (IDBFile		file_id,
 		    IDBRecordNumber	parent_record,
 		    IDBRecordNumber	child_record)
@@ -1532,7 +1532,7 @@ Idb__INX_SetParent (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_FixNodeChildren (IDBFile		file_id,
 			  IDBRecordNumber	p_record)
 {
@@ -1579,5 +1579,3 @@ Idb__INX_FixNodeChildren (IDBFile		file_id,
   return MrmSUCCESS ;
 
 }
-
-

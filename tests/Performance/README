@@ -38,7 +38,7 @@ Issue the command:
 
 from tests/Performance.
 
-On the other hand, you can issue the make command from inside each of 
+On the other hand, you can issue the make command from inside each of
 the subdirectories to build them individually.
 
 1.4  Running the Tests
@@ -83,7 +83,7 @@ shot just by typing "run-all" from the command line.
 		motif widget list in the form of a periodic table. The purpose
 		of this test is to measure the complete reexpose time for
 		a typical motif application. After starting the test, the test
-		window should be covered as much as possible with other 
+		window should be covered as much as possible with other
 		windows on the screen, and then it should be exposed.
 
 		To run the test, type "periodic" from the command line. To
@@ -99,7 +99,7 @@ shot just by typing "run-all" from the command line.
 		buttons and toggle buttons. To post the menu, click mouse
 		button 2 in the push button region of the test window.
 
-		OptionMenu2 - To post a slightly complex option menu with some 
+		OptionMenu2 - To post a slightly complex option menu with some
 		push buttons and toggle buttons. To post the menu, click mouse
 		button 2 in the push button region of the test window.
 
@@ -108,7 +108,7 @@ shot just by typing "run-all" from the command line.
 		"Select Me" push button. To post further cascade menus,
 		click mouse button 3 on the cascade button of the posted menu.
 
-		PopupMenu2 - To post a popup menu with a long list of 
+		PopupMenu2 - To post a popup menu with a long list of
 		push buttons with no cascade menus. To post the menu, click
 		mouse button 3 on the "Select Me" push button.
 
@@ -129,12 +129,12 @@ shot just by typing "run-all" from the command line.
 
 	(v) Startup : This contains a test to measure the application
 		startup time when all the widgets/menus that are used in
-		the application are created at startup, against the 
+		the application are created at startup, against the
 		startup time when the application is started with the
-		minimum required widgets created (with all the other 
+		minimum required widgets created (with all the other
 		widgets being created when needed inside the application).
 		This is in fact, a simple text editor with a File menu
-		and Edit menu and a scrolled text widget. By default, the 
+		and Edit menu and a scrolled text widget. By default, the
 		application is started with just the push buttons "File",
 		"Edit", "Help", and two push buttons "Create File Menu",
 		and "Create Edit Menu". To create the menus, click on
@@ -147,18 +147,18 @@ shot just by typing "run-all" from the command line.
 		type "editor". To get a list of command line options,
 		type "editor -h". To exit, select "Exit" from "File" menu.
 
-   (vi) Text : This directory contains six tests. 
+   (vi) Text : This directory contains six tests.
                textedit - A simple test to measure the
 		performance of text input. By default, it displays a "Quit"
-		pushbutton widget and a text consisting of 200 lines of 100 
-		characters each in a text widget of 24 rows and 80 columns 
-		(these are also the maximum allowed values in the test at 
-		this time.) with wordWrap on. These values can be controlled 
-		through command line options. To run the program with default 
-		values, type "text_edit". To get a list of command line 
-		options, type "text_edit -h". To type in text, position the 
-		text cursor by clicking inside the text widget to get a 
-		blinking beam, and then start typing. To exit, click on 
+		pushbutton widget and a text consisting of 200 lines of 100
+		characters each in a text widget of 24 rows and 80 columns
+		(these are also the maximum allowed values in the test at
+		this time.) with wordWrap on. These values can be controlled
+		through command line options. To run the program with default
+		values, type "text_edit". To get a list of command line
+		options, type "text_edit -h". To type in text, position the
+		text cursor by clicking inside the text widget to get a
+		blinking beam, and then start typing. To exit, click on
 		"Quit".
 
                scrolledText - measures scrolling through a text widget
@@ -169,23 +169,23 @@ shot just by typing "run-all" from the command line.
                 using an XmCSText or XmText widget with wordWrap resource
                 on or off. Test configuration is specified using command
                 line options.  Test uses automation performance monitor
-                record time elapsed. 
-                
+                record time elapsed.
+
                CSTextScroll - measures performance of a scrolled XmCSText
-                widget scrolling through a large volume of text. There 
+                widget scrolling through a large volume of text. There
                 are a number of command line options which can be specified
                 for controlling the wordWrap, resizeHeight, resizeWidth
                 resource values as well as the text file loaded into the widget.
-                
+
                TextScroll - measures performance of a scrolled XmText
-                widget scrolling through a large volume of text. There 
+                widget scrolling through a large volume of text. There
                 are a number of command line options which can be specified
                 for controlling the wordWrap, resizeHeight, resizeWidth
                 resource values as well as the text file loaded into the widget.
 
                TextWorst - measures the performance of an XmText widget
                 when the widget is large enough to fill the screen.
-                
+
 
   (vii) Mwm : This contains two tests to measure the performance of
 		enter/leave compression in mwm. The test focus_icon, tests
@@ -214,16 +214,16 @@ shot just by typing "run-all" from the command line.
 			the mwm menu.
 			Then run the test by typing "focus_win".
 
-		By default, the test moves the pointer from 
-		(20, (scrren_ht / scrren_width) * 20) to (scrren_width, screen_ht) 
-		and back in steps of 100 pixels in X direction, for 10 times. 
-		These values can be specified from command line also. To get a 
-		list of command line options, type "focus_win -h". 
-		To make the test result more visible, arrange the windows on 
-		the screen, in a staggered manner (for example, position the 
-		top corner of each window about 100 pixels below and to the 
-		right of the top corner of the previous window), and execute 
-		the test from the window which is nearest to the top left 
+		By default, the test moves the pointer from
+		(20, (scrren_ht / scrren_width) * 20) to (scrren_width, screen_ht)
+		and back in steps of 100 pixels in X direction, for 10 times.
+		These values can be specified from command line also. To get a
+		list of command line options, type "focus_win -h".
+		To make the test result more visible, arrange the windows on
+		the screen, in a staggered manner (for example, position the
+		top corner of each window about 100 pixels below and to the
+		right of the top corner of the previous window), and execute
+		the test from the window which is nearest to the top left
 		corner of the screen.
 
 
@@ -244,32 +244,32 @@ shot just by typing "run-all" from the command line.
 
 		and then make all the tests.
 
-        TextData1 - This test creates a text widget with 80 
+        TextData1 - This test creates a text widget with 80
         columns, 24 rows, with vertical scrolling, with no
-        horizontal scrolling, and no wordwrap. The data size 
-        will be measured against the file RowCol.c of 1.1. 
-        The test will begin by setting text value to "". Then 
+        horizontal scrolling, and no wordwrap. The data size
+        will be measured against the file RowCol.c of 1.1.
+        The test will begin by setting text value to "". Then
         the special malloc is turned on. The file is read in,
         the instrumented malloc turned on, and the text value
-        set to the file read in.  Then the text is scrolled 
+        set to the file read in.  Then the text is scrolled
         page by page from the keyboard to the end of the file.
-        Memory is measured. This is compared between 1.2 
-        and 1.1.1. Then the text value is again set to 
-        "" and the memory measured. This is to check for 
+        Memory is measured. This is compared between 1.2
+        and 1.1.1. Then the text value is again set to
+        "" and the memory measured. This is to check for
         memory leaks.
 
         TextData2 - This test also creates a text widget with 80
         columns, 24 rows, with vertical scrolling, and no
         wordwrap. This test will read in files of different
-        sizes and measure the data space in each case. Typical 
-        cases will be files containing 10 chars, 20 chars, 50 
-        chars, and 100 chars per line, and each case will have 
+        sizes and measure the data space in each case. Typical
+        cases will be files containing 10 chars, 20 chars, 50
+        chars, and 100 chars per line, and each case will have
         10 files with varying number of lines (1000, 2000,
-        ..., 10000). This test can be run in different locales, 
-		for example, the standard 8-bit 'C' locale, the 16-bit 
-		'JP' locale, etc. The test will generate a data file 
-		containing data which will help to draw a graph of the 
-		ratio of data space to the number of characters in the 
+        ..., 10000). This test can be run in different locales,
+		for example, the standard 8-bit 'C' locale, the 16-bit
+		'JP' locale, etc. The test will generate a data file
+		containing data which will help to draw a graph of the
+		ratio of data space to the number of characters in the
 		file versus the number of lines in the file.
 
         MotifData - This test gives a measurement of total memory
@@ -288,7 +288,7 @@ performance comparison between Motif 1.1.1 and Motif 1.2S1.
 General comments: All times are 1/30th second intervals (30 = 1 sec).
 "x0" suffix means time to post a dialog/menu the first time, "x10"
 means time to post a dialog/menu the tenth time.
-    
+
 
 Dialogs          Motif 1.1.1   Motif 1.2(Snapshot)
 _____________    ___________   _________
@@ -306,28 +306,28 @@ PostSelx10           28           27.2
 
 Menus
 _____________
-MenuBar1x0           80.4         132      
-MenuBar1x10          141.6        164.2    
-OptionMenu1x0        18.6         16.2     
-OptionMenu1x10       17.8         15.5     
-OptionMenu2x0        17           15.6     
-OptionMenu2x10       15           17.7     
-PopupMenu1x0         8            7.8      
-PopupMenu1x10        8.1          6.5      
-#2                   10           9        
-#3                   10           10.1     
-#4                   9.2          8.1      
-PopupMenu2x0         18.2         18.2     
-PopupMenu2x10        18.9         18.6     
-PopupMenu3x0         18           20.6     
-PopupMenu3x10        17           17.8     
-#2                   25.7         24.1     
-#3                   24.4         23.2     
+MenuBar1x0           80.4         132
+MenuBar1x10          141.6        164.2
+OptionMenu1x0        18.6         16.2
+OptionMenu1x10       17.8         15.5
+OptionMenu2x0        17           15.6
+OptionMenu2x10       15           17.7
+PopupMenu1x0         8            7.8
+PopupMenu1x10        8.1          6.5
+#2                   10           9
+#3                   10           10.1
+#4                   9.2          8.1
+PopupMenu2x0         18.2         18.2
+PopupMenu2x10        18.9         18.6
+PopupMenu3x0         18           20.6
+PopupMenu3x10        17           17.8
+#2                   25.7         24.1
+#3                   24.4         23.2
 
 MWM Focus
 ______________
-Focus-Window         2.2          1        
-Focus-Icon           4            3.2      
+Focus-Window         2.2          1
+Focus-Icon           4            3.2
 
 
 Periodic
@@ -337,11 +337,11 @@ Expose-Periodic      885.86       849.1
 
 Traversal Cycling
 _________________
-<1-2>                2.6          2.6      
-<2-3>                2.6          2.9      
-<3-4>                2.4          3.2      
-<4-5>                4.2          3        
-<5-1>                2.5          2.1      
+<1-2>                2.6          2.6
+<2-3>                2.6          2.9
+<3-4>                2.4          3.2
+<4-5>                4.2          3
+<5-1>                2.5          2.1
 
 Text Performance
 _________________
@@ -349,22 +349,22 @@ Key-hit-expose       4.5          dnf      dnf = did not finish -
 Wordwrap-expose      5.5          dnf      mechanical problems here.
 CTRL-f7              8.5          dnf      See text measurement data below.
 Home                 19.2         dnf      for some timed measurements.
-Arrow-up             6.1          dnf      
-Arrow-down           16           dnf      
+Arrow-up             6.1          dnf
+Arrow-down           16           dnf
 
 "editor" program
 _________________
-Editor               112.6        108.4    
+Editor               112.6        108.4
 a-                   325.2        385.8
-e-                   62.3         62.7     
-f-                   325.8        309.6    
-T-                   150.2        185.8    
+e-                   62.3         62.7
+f-                   325.8        309.6
+T-                   150.2        185.8
 
 
 ________________________________________________________________________
 
 The following is performance data to demonstrate time savings in
-text scrolling in the use of the latest line table vs. Motif 1.1 computing 
+text scrolling in the use of the latest line table vs. Motif 1.1 computing
 on the fly.   It shows the performance numbers for wordwrap and non-wordwrap.
 
 The test is basically creating a scrolled text widget in a shell.  Then

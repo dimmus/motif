@@ -55,7 +55,7 @@ char **argv;
     XtSetArg( args[n], XmNx, 10); n++;
     XtSetArg( args[n], XmNy, 0); n++;
     XtSetArg( args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
-    Label1 = XmCreateLabel(BBoard1, "Label1", args, n ); 
+    Label1 = XmCreateLabel(BBoard1, "Label1", args, n );
 
     XmStringFree( string );
 
@@ -71,7 +71,7 @@ char **argv;
     XtSetArg( args[n], XmNx, 10); n++;
     XtSetArg( args[n], XmNy, 40); n++;
     XtSetArg( args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
-    Label2 = XmCreateLabel(BBoard1, "Label2", args, n ); 
+    Label2 = XmCreateLabel(BBoard1, "Label2", args, n );
 
     XmStringFree( string );
 
@@ -84,4 +84,3 @@ char **argv;
 
     XtAppMainLoop(app_context);
 }
-

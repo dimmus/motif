@@ -23,42 +23,42 @@
 #
 # HISTORY
 TRACE:(1) LocatePointer Text1 RTextChar Max
-TRACE:(2) ClickMB Btn1 
+TRACE:(2) ClickMB Btn1
 TRACE:(3) ClickKey KReturn
-TRACE:(4) CompareVisual Text1 
+TRACE:(4) CompareVisual Text1
 TRACE:(5) Continue
 TRACE:(6) LocatePointer Text1 RTextChar Max
-TRACE:(7) ClickMB Btn1 
+TRACE:(7) ClickMB Btn1
 TRACE:(8) ClickKey Kf
 TRACE:(9) ClickKey Ky
-TRACE:(10) CompareVisual Text1 
+TRACE:(10) CompareVisual Text1
 TRACE:(11) InputString "this string has how many"
-TRACE:(12) CompareVisual Text1 
+TRACE:(12) CompareVisual Text1
 TRACE:(13) Continue
-TRACE:(14) LocatePointer Text1  
-TRACE:(15) ClickMB Btn1 
+TRACE:(14) LocatePointer Text1
+TRACE:(15) ClickMB Btn1
 TRACE:(16) ClickKey KReturn
-TRACE:(17) CompareVisual Text1 
+TRACE:(17) CompareVisual Text1
 TRACE:(18) Continue
 TRACE:(19) LocatePointer Text1 RTextChar Max
-TRACE:(20) ClickMB Btn1 
+TRACE:(20) ClickMB Btn1
 TRACE:(21) InputString "new text"
 TRACE:(22) ClickKey KReturn
-TRACE:(23) CompareVisual Text1 
+TRACE:(23) CompareVisual Text1
 TRACE:(24) ClickKey KReturn
-TRACE:(25) CompareVisual Text1 
+TRACE:(25) CompareVisual Text1
 TRACE:(26) Continue
 TRACE:(27) LocatePointer Text1 RTextChar Max
-TRACE:(28) ClickMB Btn1 
+TRACE:(28) ClickMB Btn1
 TRACE:(29) InputString "new text"
-TRACE:(30) CompareVisual Text1 
+TRACE:(30) CompareVisual Text1
 TRACE:(31) Continue
 TRACE:(32) LocatePointer Text1 RTextChar Max
-TRACE:(33) ClickMB Btn1 
+TRACE:(33) ClickMB Btn1
 TRACE:(34) InputString "new text"
-TRACE:(35) CompareVisual Text1 
+TRACE:(35) CompareVisual Text1
 TRACE:(36) Continue
-TRACE:(37) CompareVisual Text1 
+TRACE:(37) CompareVisual Text1
 TRACE:(38) Continue
 TRACE:(39) Continue
 TRACE:(40) Continue

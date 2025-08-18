@@ -23,27 +23,27 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is scrollWin2.uid ---- 
+---- The uid file to be opened is scrollWin2.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Scrolled_Window RVertScrollBar 
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) ClickMB Btn1 
-TRACE:(5) ClickMB Btn1 
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
-TRACE:(7) LocatePointer Scrolled_Window RVertScrollBarSlider 
-TRACE:(8) DragSliderValue Up Min 
-TRACE:(9) DragSliderValue Down Max 
-TRACE:(10) CompareVisual S_MAIN_WIDGET 
-TRACE:(11) LocatePointer Scrolled_Window RHorizScrollBar 
-TRACE:(12) ClickMB Btn1 
-TRACE:(13) ClickMB Btn1 
-TRACE:(14) ClickMB Btn1 
-TRACE:(15) CompareVisual S_MAIN_WIDGET 
-TRACE:(16) LocatePointer Scrolled_Window RHorizScrollBarSlider 
-TRACE:(17) DragSliderValue Left Min 
-TRACE:(18) DragSliderValue Right Max 
-TRACE:(19) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Scrolled_Window RVertScrollBar
+TRACE:(3) ClickMB Btn1
+TRACE:(4) ClickMB Btn1
+TRACE:(5) ClickMB Btn1
+TRACE:(6) CompareVisual S_MAIN_WIDGET
+TRACE:(7) LocatePointer Scrolled_Window RVertScrollBarSlider
+TRACE:(8) DragSliderValue Up Min
+TRACE:(9) DragSliderValue Down Max
+TRACE:(10) CompareVisual S_MAIN_WIDGET
+TRACE:(11) LocatePointer Scrolled_Window RHorizScrollBar
+TRACE:(12) ClickMB Btn1
+TRACE:(13) ClickMB Btn1
+TRACE:(14) ClickMB Btn1
+TRACE:(15) CompareVisual S_MAIN_WIDGET
+TRACE:(16) LocatePointer Scrolled_Window RHorizScrollBarSlider
+TRACE:(17) DragSliderValue Left Min
+TRACE:(18) DragSliderValue Right Max
+TRACE:(19) CompareVisual S_MAIN_WIDGET
 TRACE:(20) Exit
 Exiting Test...Please Standby...

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol2.c /main/9 1995/07/13 18:54:34 drk $"
@@ -54,7 +54,7 @@ AddAllTabGroups()
   XmAddTabGroup(rc3);
 /* XmAddTabGroup(pButton3); */
   XmAddTabGroup(rc4);
-  XmAddTabGroup(pButton6); 
+  XmAddTabGroup(pButton6);
 }
 
 /*************CALLBACK PROCEDURES****************/
@@ -69,10 +69,10 @@ static XtCallbackRec killCallback[] = {
   {NULL,   (XtPointer) NULL }};
 
 Pixel CvtStringToPixel(char *src_string)
-{ 
-  XColor aColor, bColor;   
+{
+  XColor aColor, bColor;
   XAllocNamedColor(XtDisplay(Shell1),
-		   DefaultColormapOfScreen(XtScreen(Shell1)), 
+		   DefaultColormapOfScreen(XtScreen(Shell1)),
 		   src_string, &aColor, &bColor);
   return(aColor.pixel);
 }
@@ -141,7 +141,7 @@ void Sensitivity(Widget w, XtPointer closure, XtPointer call_data)
 
   if (sensitive)
     {
-      tcs = XmStringCreateLtoR("Make Blue Button Sensitive", 
+      tcs = XmStringCreateLtoR("Make Blue Button Sensitive",
 			       XmSTRING_DEFAULT_CHARSET);
       XtSetSensitive(pButton3, False);
       XtSetArg(args[0], XmNlabelString, tcs);
@@ -149,7 +149,7 @@ void Sensitivity(Widget w, XtPointer closure, XtPointer call_data)
     }
   else
     {
-      tcs = XmStringCreateLtoR("Make Blue Button Insensitive", 
+      tcs = XmStringCreateLtoR("Make Blue Button Insensitive",
 			       XmSTRING_DEFAULT_CHARSET);
       XtSetSensitive(pButton3, True);
       XtSetArg(args[0], XmNlabelString, tcs);
@@ -200,7 +200,7 @@ static XtCallbackRec shrinkCallback[] = {
   {NULL,   (XtPointer) NULL }};
 
 void UnMap(Widget w, XtPointer closure, XtPointer call_data)
-{ 
+{
 
   XtSetMappedWhenManaged (pButton3, FALSE);
 }
@@ -291,7 +291,7 @@ void DestroyMgr(Widget w, XtPointer closure, XtPointer call_data)
       XtSetArg(args[n], XmNspacing, 4); n++;
       rc2 = XmCreatePanedWindow(frame2, "rc2", (ArgList) args, n);
       /* Xt: a composite child of a realized widget needs to be explicitly
-      ** realized before managed [as VTS does] in order to have its 
+      ** realized before managed [as VTS does] in order to have its
       ** ChangeManaged proc called correctly
       */
       XtRealizeWidget(rc2);
@@ -363,7 +363,7 @@ int main(int argc, char **argv)
   XtManageChild(frame2);
 
   /* should match DestroyMgr */
-  XtSetArg(args[0], XmNspacing, 4); 
+  XtSetArg(args[0], XmNspacing, 4);
   rc2 = XmCreatePanedWindow(frame2, "rc2", (ArgList) args, 1);
   XtManageChild(rc2);
 
@@ -467,8 +467,8 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNactivateCallback, (XtArgVal) destroyMgrCallback);n++;
   XtSetArg(args[n], XmNtraversalOn, True);n++;
   XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-  XtSetArg(args[n], XmNhighlightOnEnter, True); n++; 
-  pButton6 = XmCreatePushButton(rc0, "destroyMgr", (ArgList) args, n); 
+  XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
+  pButton6 = XmCreatePushButton(rc0, "destroyMgr", (ArgList) args, n);
   XtManageChild(pButton6);
 
   /****************************************************************/
@@ -503,7 +503,7 @@ int main(int argc, char **argv)
 
   CommonPause();                               /* look around */
   CommonPause();                               /* first region */
-    
+
   XtSetArg(args[0], XmNtraversalOn, False);
   XtSetValues(pButton5, args, 1);
   CommonPause();                               /* non-traversable buttons */

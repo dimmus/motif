@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is listBs.uid ---- 
+---- The uid file to be opened is listBs.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) LocatePointer List RListItem 0
-TRACE:(3) PressMB Btn1 
+TRACE:(3) PressMB Btn1
 
 /*********************************************************/
 ---- browseSelectionCallback callback made ----
@@ -52,8 +52,8 @@ TRACE:(5) LocatePointer List RListItem 2
 ---- Reason was XmCR_BROWSE_SELECT ----
 /*********************************************************/
 
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
-TRACE:(7) ReleaseMB Btn1 
-TRACE:(8) CompareVisual S_MAIN_WIDGET 
+TRACE:(6) CompareVisual S_MAIN_WIDGET
+TRACE:(7) ReleaseMB Btn1
+TRACE:(8) CompareVisual S_MAIN_WIDGET
 TRACE:(9) Exit
 Exiting Test...Please Standby...

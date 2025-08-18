@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 extern void AdoptInitialClients (WmScreenData *pSD);
 extern void DeleteClientContext (ClientData *pCD);
@@ -37,12 +37,12 @@ extern void WithdrawDialog (Widget dialogboxW);
 extern void ReManageDialog (WmScreenData *pSD, Widget dialogboxW);
 #ifdef PANELIST
 extern void RegisterEmbeddedClients (
-	Widget wPanelist, 
-	WmFpEmbeddedClientList pECD, 
+	Widget wPanelist,
+	WmFpEmbeddedClientList pECD,
 	int count);
 extern void RegisterPushRecallClients (
-	Widget wPanelist, 
-	WmFpPushRecallClientList pPRCD, 
+	Widget wPanelist,
+	WmFpPushRecallClientList pPRCD,
 	int count);
 extern void UnParentControls(WmScreenData *pSD, Boolean unmap);
 extern void RegisterIconBoxControl (Widget wPanelist);
@@ -50,9 +50,9 @@ extern Boolean ReparentEmbeddedClient (
 	WmFpEmbeddedClientData *pECD,
 	Widget newControl,
 	Window newWin,
-	int x, 
+	int x,
 	int y,
-	unsigned int width, 
+	unsigned int width,
 	unsigned int height);
 extern void ScanForEmbeddedClients (WmScreenData *pSD);
 extern void ScanForPushRecallClients (WmScreenData *pSD);

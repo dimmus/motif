@@ -22,31 +22,31 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual FileSelectionBox1 
+TRACE:(1) CompareVisual FileSelectionBox1
 TRACE:(2) Continue
 Adding an additional Work Area - Text widget
-TRACE:(3) CompareVisual FileSelectionBox1 
+TRACE:(3) CompareVisual FileSelectionBox1
 TRACE:(4) Continue
 Unmanage Files label and list
-TRACE:(5) CompareVisual FileSelectionBox1 
+TRACE:(5) CompareVisual FileSelectionBox1
 TRACE:(6) Continue
 Manage Files and Unmanage Directories label and list
-TRACE:(7) CompareVisual FileSelectionBox1 
+TRACE:(7) CompareVisual FileSelectionBox1
 TRACE:(8) Continue
 Manage Directories label and list - unmap Files list
-TRACE:(9) CompareVisual FileSelectionBox1 
+TRACE:(9) CompareVisual FileSelectionBox1
 TRACE:(10) Continue
 Remap the Files list
-TRACE:(11) CompareVisual FileSelectionBox1 
+TRACE:(11) CompareVisual FileSelectionBox1
 TRACE:(12) Continue
 Set new DirSearchProc
-TRACE:(13) CompareVisual FileSelectionBox1 
+TRACE:(13) CompareVisual FileSelectionBox1
 TRACE:(14) Continue
 Set new FileSearchProc
-TRACE:(15) CompareVisual FileSelectionBox1 
+TRACE:(15) CompareVisual FileSelectionBox1
 TRACE:(16) Continue
 Set FileSearchProc and DirSearchProc back to default
 That's All Folks
-TRACE:(17) CompareVisual FileSelectionBox1 
+TRACE:(17) CompareVisual FileSelectionBox1
 TRACE:(18) Exit
 Exiting Test...Please Standby...

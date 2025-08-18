@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is Container5 running with the option "-u e".
@@ -31,7 +31,7 @@
 # C)
 
 Continue
- 
+
 # #) 4 Icon Gadgets are added to the Container.
 # #) "IconGad1" should be insensitive.
 # #) Try selecting it, you should not be able to do so.

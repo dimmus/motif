@@ -1,5 +1,5 @@
 # $XConsortium: DrawnBtn2.scr /main/6 1995/07/17 20:06:27 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,20 +20,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client window should appear with three DrawnButtons. First
 #  DrawnButton has pushButtonEnabled set to true. The second and third have
-#  pushButtonEnabled set to false. 
+#  pushButtonEnabled set to false.
 
 CompareVisual RowColumn1
 Continue
 
 # Press and hold MB1 on the top DrawnButton. It should appear to be
-#  pressed in. 
+#  pressed in.
 
 LocatePointer DrawnButton1
 PressMB Btn1
@@ -41,8 +41,8 @@ CompareVisual DrawnButton1
 
 # Move pointer out of and into the client window. DrawnButton
 #  should appear popped out when out of the client window and pressed in
-#  when in the client window. Release MB1. 
-#  DrawnButton should appear popped out. 
+#  when in the client window. Release MB1.
+#  DrawnButton should appear popped out.
 
 LocatePointer RowColumn1
 CompareVisual DrawnButton1
@@ -50,7 +50,7 @@ ReleaseMB Btn1
 CompareVisual DrawnButton1
 
 # Click MB1 in each DrawnButton. The second and third buttons will not
-#   change appearance. 
+#   change appearance.
 
 LocatePointer DrawnButton2
 PressMB Btn1
@@ -63,16 +63,16 @@ CompareVisual DrawnButton3
 ReleaseMB Btn1
 CompareVisual DrawnButton3
 
-# Move the client window. 
+# Move the client window.
 
 WindowMove Shell1 100 100
 CompareVisual RowColumn1
 Continue
 
-# Iconify the client window. Normalize the client window. 
+# Iconify the client window. Normalize the client window.
 # Resize the client window.  If the window resize causes a resize of the
 #   first DrawnButton, the new size of the button will be displayed on the
-#   term window.   
+#   term window.
 
 WindowIconify Shell1
 WindowDeiconify Shell1

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FindObj.c /main/7 1995/07/14 11:32:53 drk $"
@@ -125,7 +125,7 @@ int instance;
             }
 /* Begin Automation Added */
 
-/* 
+/*
    This is an ugly hack. Basically what is up is that a oFileList and
    a oDirList are children of the ScrolledWindow, and not of the
    FileSelectionBox. Beacuse of this when accessing the scrollbar
@@ -149,23 +149,23 @@ int instance;
 		widget_class_code == mvsXmFileSelectionBoxWidgetClass) {
 	        tmp_object = object->first_child;
 
-/* 
+/*
    Look down the scrolledWindow childrens list to see if you have a
-   directory list or filelist  object code 
+   directory list or filelist  object code
 */
 
 		while (tmp_object != NULL && ! in_dir_file_list)
-			if (tmp_object->id.object_type == 
+			if (tmp_object->id.object_type ==
 			    		object_type_stack[tindx - 1])
 			    in_dir_file_list = True;
 			else
 				tmp_object = tmp_object->next_sibling;
 
-/* 
+/*
    If you have the dirlist of filelist then adjust the object_type
    stack. This will have the effect of ignoring the filelist or
    dirlist and continue looking down the scrolledWindows children
-   list 
+   list
 */
 		if (in_dir_file_list)
 			tindx--;
@@ -189,7 +189,7 @@ int instance;
 	    }
             if (object == NULL)
                 break;
-        }       
+        }
     } /* End while(1) */
 
     return(NULL_Object);

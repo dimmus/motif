@@ -54,7 +54,7 @@ XtPointer call;
     Cardinal argcnt;
 
     argcnt = 0;
-    XtSetArg(args[argcnt], XmNshowFontName, XmToggleButtonGetState(w)); 
+    XtSetArg(args[argcnt], XmNshowFontName, XmToggleButtonGetState(w));
     argcnt++;
     XtSetValues(G_font, args, argcnt);
 }

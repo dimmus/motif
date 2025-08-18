@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -81,11 +81,11 @@ extern XmTab _XmTabCopy(XmTab tab);
 extern Widget _XmCreateTabList(Widget parent,
                                String name,
                                ArgList arglist,
-                               Cardinal argcount); 
+                               Cardinal argcount);
 extern Widget _XmCreateTab(Widget parent,
 			   String name,
 			   ArgList arglist,
-			   Cardinal argcount); 
+			   Cardinal argcount);
 extern Position _XmTabListGetPosition(
 				     Screen * screen,
 				     XmTabList tab_list,

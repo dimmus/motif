@@ -1,4 +1,4 @@
- /* 
+ /*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: motifshell.c /main/7 1997/03/31 13:41:20 dbl $"
@@ -137,7 +137,7 @@ void FontSelectApply (Widget w, XtPointer client_data, XtPointer call_data)
   XmSelectionBoxCallbackStruct *cdata = (XmSelectionBoxCallbackStruct *)call_data;
   Widget       textWidget = (Widget)client_data;
   char        *textstr;
-  XmFontList   fontList; 
+  XmFontList   fontList;
   XFontStruct *mfinfo;
 
 
@@ -184,11 +184,11 @@ void FontSelectOK (Widget w, XtPointer client_data, XtPointer call_data)
  *-------------------------------------------------------------*/
 void FontTest (Widget w, XtPointer client_data, XtPointer call_data)
 {
-  XmSelectionBoxCallbackStruct *callback_data = 
+  XmSelectionBoxCallbackStruct *callback_data =
     (XmSelectionBoxCallbackStruct *)call_data;
   Widget       txtWidget = (Widget)client_data;
   char        *textstr = DEFAULT_FONT;
-  XmFontList   fontList; 
+  XmFontList   fontList;
   XFontStruct *mfinfo;
 
 
@@ -211,17 +211,17 @@ void FontTest (Widget w, XtPointer client_data, XtPointer call_data)
 /*-------------------------------------------------------------*
  |                        NextCap                              |
  *-------------------------------------------------------------*/
-  
+
 char *NextCap (char *path, char *cp, int len)
 {
   static int  finish = 0;
   int         span;
   char       *ep, *np;
-   
-  
+
+
   if (!finish)
     return(NULL);
-  
+
   if ((ep = strchr(cp, ':')))
     span = ep - cp;
   else
@@ -230,7 +230,7 @@ char *NextCap (char *path, char *cp, int len)
       ep = strchr(cp, '\0');
       span = ep - cp;
     };
-  
+
   np = malloc(span + len + 2);
   strncpy(np, cp, span);
 
@@ -256,7 +256,7 @@ int file_exist (char *fullname)
   }
   else
     return(0);
-}  
+}
 
 
 /*-------------------------------------------------------------*
@@ -272,8 +272,8 @@ char *search_in_env (char *filename)
   if ((envpath = getenv("PATH")))
     {
       cp  = envpath;
-      cp += 2; 
-      
+      cp += 2;
+
       while ((prefix = NextCap(envpath, cp, len)))
 	{
 	  cp += strlen(prefix);
@@ -281,10 +281,10 @@ char *search_in_env (char *filename)
 
 	  if (file_exist(prefix))
 	    return(prefix);
-	  
+
 	  free(prefix);
-        }  
-   
+        }
+
     }
 
   return(NULL);
@@ -298,8 +298,8 @@ char *GetSource (char *fileptr)
   static char *retbuff;
   int          fd, flen, catlen;
   char        *capfileptr, *defaultcap, *datahome;
-  
-  
+
+
   if ((fd = open (fileptr, O_RDONLY)) < 0)
   {
     /* Try looking in MSHELLDIR. */
@@ -307,7 +307,7 @@ char *GetSource (char *fileptr)
     /* strcpy(pathname, MSHELLDIR); */
     strcat(pathname, "/");
     strcat(pathname, fileptr);
-      
+
     if ((fd = open (pathname, O_RDONLY)) < 0)
     {
       if ((defaultcap = getenv("MOTIFSHELLFILES")))
@@ -559,9 +559,9 @@ int GetFileLen (int fd)
   static int retval;
 
 #if defined(L_SET) && defined(L_XTND)
-  lseek (fd, 0, L_SET);  
+  lseek (fd, 0, L_SET);
   retval = lseek (fd, 0, L_XTND);
-  lseek (fd, 0, L_SET);  
+  lseek (fd, 0, L_SET);
 #else
   lseek (fd, 0, SEEK_SET);
   retval = lseek (fd, 0, SEEK_END);
@@ -671,7 +671,7 @@ void Menu2CB (Widget w, XtPointer clientData, XtPointer callData)
     case 2: buffer = GetSource (PRINCIPLES_FILE);  break;
     case 3: buffer = GetSource (MOTIF_FILE);       break;
     }
-  XmTextSetString (TextWin, buffer); 
+  XmTextSetString (TextWin, buffer);
 }
 
 
@@ -788,7 +788,7 @@ void Menu6CB (Widget w, XtPointer clientData, XtPointer callData)
 void Menu7CB (Widget w, XtPointer clientData, XtPointer callData)
 {
   int itemNo = (int)clientData;
-  
+
 
   switch (itemNo)
     {
@@ -920,7 +920,7 @@ int main (int argc, char **argv)
 
   shell = XtVaAppCreateShell(argv[0], APP_CLASS, applicationShellWidgetClass,
 			     display, XmNallowShellResize, True, NULL);
-			     
+
 
   mainWindow = XtVaCreateManagedWidget("mainWindow", xmMainWindowWidgetClass, shell,
 				       XmNmarginWidth,  2,

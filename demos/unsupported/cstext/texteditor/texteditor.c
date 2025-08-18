@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: texteditor.c /main/6 1995/07/14 09:44:58 drk $"
@@ -114,13 +114,13 @@ DemoTextPaneCreate(int paneht)
      it will actually get that size */
 
   n = 0;
-  XtSetArg( args[n], XmNsource, XmCSTextGetSource( textStore ) ); n++; 
+  XtSetArg( args[n], XmNsource, XmCSTextGetSource( textStore ) ); n++;
   XtSetArg( args[n], XmNheight, paneht ); n++;
   XtSetArg( args[n], XmNpaneMinimum, paneht ); n++;
   XtSetArg( args[n], XmNrenderTable, renditions ); n++;
   MrmFetchWidgetOverride( muid, "textPane", panedWindow,
 			 NULL, args, n,  &w, &type);
-  
+
   XtManageChild( w );
 
   /* Now that "textPane" is managed, we can reset paneMinimum */
@@ -179,14 +179,14 @@ main(int argc, char *argv[])
     /* Need to exit cleanly here if this fails. */
     MrmFetchWidget( muid, "mainWindow", toplevel, &mainWindow, &type);
     if (mainWindow == NULL) exit(1);
-    
+
     /* Modify the menuBar from its initial state. */
     menuBar = XtNameToWidget(mainWindow, "*menuBar");
     viewMenu = XtNameToWidget(menuBar, "*viewMenu");
-    
+
     XtUnmanageChild(XtNameToWidget(viewMenu, "*changeViewButton"));
     XtUnmanageChild(XtNameToWidget(viewMenu, "*newWindowButton"));
-    
+
     MrmFetchWidget(muid, "splitButton", viewMenu, &tmp_wid, &type);
     XtManageChild(tmp_wid);
     MrmFetchWidget(muid, "removePaneButton", viewMenu, &tmp_wid, &type);
@@ -207,17 +207,17 @@ main(int argc, char *argv[])
     renditions = TkUpdateRenditions(textFirst, renditions);
 
     XtVaSetValues(textFirst, XmNrenderTable, renditions, NULL);
-    
+
     XtVaSetValues(XtNameToWidget(mainWindow, "*colorsMenu"),
 		  XmNrenderTable, renditions, NULL);
-    
+
       /* The unmanaged text widget textStore will hold onto the
          "source" shared by all the text panes */
 
 /* $$$ comment the following code out */
 
     n = 0;
-    XtSetArg( args[n], XmNsource, XmCSTextGetSource( textFirst ) ); n++; 
+    XtSetArg( args[n], XmNsource, XmCSTextGetSource( textFirst ) ); n++;
     textStore = NULL;
     MrmFetchWidgetOverride( muid, "textStore", toplevel,
                                   NULL, args, n,  &textStore, &type);
@@ -245,7 +245,7 @@ main(int argc, char *argv[])
 
     /* Locate format menu so that it's current state can be read. */
     formatMenu = XtNameToWidget(fileDialog, "*formatMenu");
-    
+
       /* Instantiate other dialogs, but leave unmanaged */
 
     saveDialog = NULL;
@@ -260,7 +260,7 @@ main(int argc, char *argv[])
     XtSetArg(args[n], XmNrenderTable, renditions); n++;
     XtSetArg(args[n], XmdNhelpFile, "texteditor"); n++;
     helpDialog = (Widget)XmdCreateHelpDialog(toplevel, "HelpDialog", args, n);
-    
+
     /* Print Dialog */
     printDialog = XmdCreatePrintDialog(toplevel, "PrintDialog", NULL, 0);
     XtAddCallback(printDialog, XmdNprintCallback,
@@ -274,6 +274,3 @@ main(int argc, char *argv[])
 
     XtAppMainLoop(app_context);
 }
-
-
-

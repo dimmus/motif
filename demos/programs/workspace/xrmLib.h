@@ -1,5 +1,5 @@
 /* $XConsortium: xrmLib.h /main/5 1995/07/15 20:46:59 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,20 +20,20 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 
 #ifndef xrmLib_h
 #define xrmLib_h
 
 /*	Function Name: InitializeXrm
  *
- *      Description: Open the Xrm database 
- *   
+ *      Description: Open the Xrm database
+ *
  *      Arguments: file_name - name of xrm database file
- * 
+ *
  *
  */
 
@@ -44,17 +44,17 @@ char *
 /*	Function Name: GetWorkspaceResources
  *
  *	Description: Gets the workspace resources for a window
- *     
+ *
  *      Arguments: widget -    any widget
  *                 specifier - A list of quarks that specifies the
- *                             window (SM_CLIENT_ID, WM_ROLE).  
+ *                             window (SM_CLIENT_ID, WM_ROLE).
  *                 room_list - returns a quark list of room names that
  *                             the window is in.
  *                 all_workspaces - returns allWorkspaces resource
  *                 linked     - returns linked resource
- *                            
+ *
  */
- 
+
 
 extern Boolean GetWorkspaceResources(
 				     Widget w,
@@ -78,7 +78,7 @@ Boolean*
 );
 
 
-/*	Function Name: GetWindowConfigurationEntry 
+/*	Function Name: GetWindowConfigurationEntry
  *
  *	Description: Gets the configuration information for a specified
  *                   window.
@@ -95,10 +95,10 @@ Boolean*
  *                                   length is equal to attribute_list length.
  *                                   (If no value is found for an attribute then
  *                                   a value with 0 length and NULL addr is passed)
- *                                  
+ *
  *	Returns:   True if any resources found, else False.
  *
- * 
+ *
  */
 
 
@@ -111,7 +111,7 @@ XrmValue **attribute_values
 );
 
 
-/*	Function Name: GetWindowStackedEntry 
+/*	Function Name: GetWindowStackedEntry
  *
  *	Description: Gets the stacked resource for a specified
  *                   window.
@@ -122,10 +122,10 @@ XrmValue **attribute_values
  *                                   if it is linked then the linkedRoom
  *                                   quark should be passed.
  *                 attributes_value - Returns a stacked value
- *                                  
+ *
  *	Returns:   True if resources found, else False.
  *
- * 
+ *
  */
 
 extern Boolean GetWindowStackedEntry(
@@ -135,7 +135,7 @@ XrmValue *attribute_value
 );
 
 /*
- *	Function Name: GetAllWindowConfigurationEntry 
+ *	Function Name: GetAllWindowConfigurationEntry
  *
  *	Description: Gets the configuration information for a specified
  *                   window.
@@ -153,7 +153,7 @@ XrmValue *attribute_value
  *                                   length is equal to attribute_list length.
  *                                   (If no value is found for an attribute then
  *                                   a value with 0 length and NULL addr is passed)
- *                                  
+ *
  *	Returns:   True if any resources found, else False.
  *
  *
@@ -168,7 +168,7 @@ XrmValue ***attribute_values
 );
 
 
-/* 
+/*
  *
  *	Function Name: SaveWorkspaceResources
  *

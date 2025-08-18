@@ -51,7 +51,7 @@ class XmCxxPrimitiveClass {
     friend class XmCxxPrimitive;
 
   public:
-    
+
     XmCxxPrimitiveClass(char*		name,
 			WidgetClass	parent,
 			Cardinal	widgetSize,
@@ -67,14 +67,14 @@ class XmCxxPrimitiveClass {
      * (must be public : passed as parameter to class_rec static constructor)
      */
     static void			ClassInitialize();
-    
+
   protected:
 
     CoreClassPart		core_class;
     XmPrimitiveClassPart	primitive_class;
 
     XtPointer			cxx_primitive_extension;
-    
+
     // convenience function;
     void			SetBaseClassExtensionQuark();
 
@@ -127,7 +127,7 @@ class XmCxxPrimitive {
     void  operator delete(void*);
     virtual ~XmCxxPrimitive();
     XmCxxPrimitive();
-    
+
     /*
      * virtual chained class-methods
      */

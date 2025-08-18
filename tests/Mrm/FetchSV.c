@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FetchSV.c /main/9 1995/07/14 10:48:13 drk $"
@@ -30,9 +30,9 @@ static char rcsid[] = "$XConsortium: FetchSV.c /main/9 1995/07/14 10:48:13 drk $
 #endif
 
 #include <testlib.h>
-#include <MrmTest.h> 
+#include <MrmTest.h>
 
-/* 
+/*
  * Data for summary
  */
 
@@ -52,7 +52,7 @@ extern String		summary();
  * Local declarations
  */
 
-struct TestInfo FetchSetValueInfo[NUM_TESTS] = 
+struct TestInfo FetchSetValueInfo[NUM_TESTS] =
 	{
 	  {"Fetch undefined background color - Salmon                       ",
                                 MrmNOT_FOUND,   0},
@@ -85,7 +85,7 @@ char **argv;
       Arg		args[4];
       int		nargs;
 
-  
+
       String	        summary_msg;
       Pixel	        fg, bg;
       int		widgetwidth = 0;
@@ -97,7 +97,7 @@ char **argv;
       String      testname;
 
       char        uidname[80];
-                
+
 
       MrmHierarchy        s_MrmHierarchy;
       MrmType             class;
@@ -124,7 +124,7 @@ char **argv;
                         filename_vec,           /* files                */
                         NULL,                   /* os_ext_list (null)   */
                         &s_MrmHierarchy)        /* ptr to returned id   */
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
         printf("Can't open hierarchy\n");
     }
@@ -197,7 +197,7 @@ char **argv;
  * Fetch second two button widgets
  */
 
-/* 
+/*
  * Fetch two valid values, topshadow=blue, bottomshadow=black
  */
 	buttons[1] = NULL;
@@ -218,7 +218,7 @@ char **argv;
 	FSV_info_cnt++;
 
 
-/* 
+/*
  * Fetch two values, one found, topshadow=white, bottomshadow=Coral
  */
 	buttons[2] = NULL;
@@ -238,7 +238,7 @@ char **argv;
 						nargs);
 	FSV_info_cnt++;
 
-/* 
+/*
  * Fetch a value not valid for widget, selectColor for pushbutton
  */
 	nargs = 0;
@@ -255,7 +255,7 @@ char **argv;
  */
 
 	XtManageChildren(&buttons[1], 2);
-	
+
         CommonPause();
 
 /*

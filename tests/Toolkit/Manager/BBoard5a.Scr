@@ -1,5 +1,5 @@
 # $XConsortium: BBoard5a.scr /main/6 1995/07/17 20:23:32 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 CompareVisual board
 LocatePointer Arrow0
@@ -100,7 +100,7 @@ ClickKey KSpace
 ClickKey KSpace
 CompareVisual board
 #Neither Arrow0 nor Arrow1 should be visible
-#so the next two LocatePointer commands 
+#so the next two LocatePointer commands
 #SHOULD produce automation warnings!
 LocatePointer Arrow0
 ClickMB Btn1

@@ -1,5 +1,5 @@
 # $XConsortium: List4.scr /main/5 1995/07/17 20:21:50 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List4.scr	1.1  91/10/11
 # Screen 1
@@ -75,7 +75,7 @@ ClickMB Btn1
 
 # Select XmListReplaceItems() from the Functions List.
 
-LocatePointer List1 RListItem 0 
+LocatePointer List1 RListItem 0
 ClickMB Btn1
 
 # Select Item4 from List1, and then select Item6, Item7, and Item8,
@@ -86,7 +86,7 @@ ClickMB Btn1
 
 LocatePointer List3 RListItem 0
 ClickMB Btn1
-LocatePointer List3 RListItem 1 
+LocatePointer List3 RListItem 1
 ClickMB Btn1
 LocatePointer List3 RListItem 2
 ClickMB Btn1
@@ -166,7 +166,7 @@ ClickMB Btn1
 
 # Move the slider on the scale till the scale reads 0.
 
-LocatePointer Scale RScaleSlider 
+LocatePointer Scale RScaleSlider
 DragSliderValue Left 0
 
 # Click MB1 in the Call Function pushbutton. No change should be visible.

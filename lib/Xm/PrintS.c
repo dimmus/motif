@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -34,21 +34,21 @@
 
 /********    Static Function Declarations    ********/
 
-static void ClassPartInitialize( 
+static void ClassPartInitialize(
                         WidgetClass wc) ;
 static void ClassInitialize( void ) ;
-static void Initialize( 
+static void Initialize(
                         Widget requested_widget,
                         Widget new_widget,
                         ArgList args,
                         Cardinal *num_args) ;
-static Boolean SetValues( 
+static Boolean SetValues(
                         Widget current,
                         Widget request,
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args) ;
-static void Destroy( 
+static void Destroy(
                         Widget w) ;
 static void PrintNotifyHandler(
 		    Widget w,
@@ -77,7 +77,7 @@ static void SelectXpEvents (
 
 static void PrintToFileProc(Display  * dpy,
 			    XPContext context,
-			    unsigned char *data, 
+			    unsigned char *data,
 			    unsigned int data_len,
 			    XPointer client_data);
 
@@ -91,7 +91,7 @@ static void PDMPhase2Handler(Widget w,
 			     XEvent *event,
 			     Boolean *cont);
 
-static void PDMSelectionProc (Widget w, 
+static void PDMSelectionProc (Widget w,
 			 XtPointer client_data,
 			 Atom *selection,
 			 Atom *type,
@@ -110,29 +110,29 @@ static void AddToTable (XPContext context, Widget widget);
 
 static XtResource resources[] = {
    {
-      XmNallowShellResize, XmCAllowShellResize, XmRBoolean, 
-      sizeof(Boolean), XtOffsetOf(XmPrintShellRec, shell.allow_shell_resize), 
+      XmNallowShellResize, XmCAllowShellResize, XmRBoolean,
+      sizeof(Boolean), XtOffsetOf(XmPrintShellRec, shell.allow_shell_resize),
       XtRImmediate, (XtPointer)False,
    },
    {
-       XmNminX, XmCMinX, XmRHorizontalDimension, sizeof (Dimension), 
+       XmNminX, XmCMinX, XmRHorizontalDimension, sizeof (Dimension),
        Offset(min_x), XmRImmediate, (XtPointer) 0,
    },
    {
-       XmNminY, XmCMinY, XmRVerticalDimension, sizeof (Dimension), 
+       XmNminY, XmCMinY, XmRVerticalDimension, sizeof (Dimension),
        Offset(min_y), XmRImmediate, (XtPointer) 0,
    },
    {
-       XmNmaxX, XmCMaxX, XmRHorizontalDimension, sizeof (Dimension), 
+       XmNmaxX, XmCMaxX, XmRHorizontalDimension, sizeof (Dimension),
        Offset(max_x), XmRImmediate, (XtPointer) 0,
    },
    {
-       XmNmaxY, XmCMaxY, XmRVerticalDimension, sizeof (Dimension), 
+       XmNmaxY, XmCMaxY, XmRVerticalDimension, sizeof (Dimension),
        Offset(max_y), XmRImmediate, (XtPointer) 0,
-   },    
+   },
    {
 	XmNdefaultPixmapResolution, XmCDefaultPixmapResolution, XmRShort,
-	sizeof(unsigned short), Offset(default_pixmap_resolution), 
+	sizeof(unsigned short), Offset(default_pixmap_resolution),
 	XmRImmediate, (XtPointer)100,
     },
     {
@@ -189,40 +189,40 @@ static XmSyntheticResource syn_resources[] =
 
 externaldef(xmprintshellclassrec)
 XmPrintShellClassRec xmPrintShellClassRec = {
-    {	
-	(WidgetClass) &applicationShellClassRec,  /* superclass		*/   
-	"XmPrintShell",			/* class_name 		*/   
-	sizeof(XmPrintShellRec),	/* size 		*/   
-	ClassInitialize,		/* Class Initializer 	*/   
-	ClassPartInitialize,	        /* class_part_init 	*/ 
-	FALSE, 				/* Class init'ed ? 	*/   
-	Initialize,		        /* initialize         	*/   
- 	NULL,		                /* initialize_notify    */ 
-	XtInheritRealize,		/* realize            	*/   
-	NULL,	 			/* actions            	*/   
-	0,				/* num_actions        	*/   
-	resources,			/* resources          	*/   
-	XtNumber(resources),		/* resource_count     	*/   
-	NULLQUARK, 			/* xrm_class          	*/   
-	FALSE, 				/* compress_motion    	*/   
-	XtExposeCompressSeries, 	/* compress_exposure  	*/   
-	FALSE, 				/* compress_enterleave	*/   
-	FALSE, 				/* visible_interest   	*/   
-	Destroy,			/* destroy            	*/   
-	XtInheritResize, 		/* resize             	*/   
-	(XtExposeProc)NULL, 		/* expose             	*/   
-	SetValues, 		        /* set_values         	*/   
-	(XtArgsFunc)NULL, 		/* set_values_hook      */ 
-	XtInheritSetValuesAlmost,	/* set_values_almost    */ 
-	_XmPrintShellGetValuesHook,	/* get_values_hook      */ 
-	(XtAcceptFocusProc)NULL, 	/* accept_focus       	*/   
-	XtVersion, 			/* intrinsics version 	*/   
-	NULL, 				/* callback offsets   	*/   
-	XtInheritTranslations,		/* tm_table           	*/   
-	XtInheritQueryGeometry, 	/* query_geometry       */ 
-	(XtStringProc)NULL, 		/* display_accelerator  */ 
-	(XtPointer)NULL, 	        /* extension            */ 
-    },	
+    {
+	(WidgetClass) &applicationShellClassRec,  /* superclass		*/
+	"XmPrintShell",			/* class_name 		*/
+	sizeof(XmPrintShellRec),	/* size 		*/
+	ClassInitialize,		/* Class Initializer 	*/
+	ClassPartInitialize,	        /* class_part_init 	*/
+	FALSE, 				/* Class init'ed ? 	*/
+	Initialize,		        /* initialize         	*/
+ 	NULL,		                /* initialize_notify    */
+	XtInheritRealize,		/* realize            	*/
+	NULL,	 			/* actions            	*/
+	0,				/* num_actions        	*/
+	resources,			/* resources          	*/
+	XtNumber(resources),		/* resource_count     	*/
+	NULLQUARK, 			/* xrm_class          	*/
+	FALSE, 				/* compress_motion    	*/
+	XtExposeCompressSeries, 	/* compress_exposure  	*/
+	FALSE, 				/* compress_enterleave	*/
+	FALSE, 				/* visible_interest   	*/
+	Destroy,			/* destroy            	*/
+	XtInheritResize, 		/* resize             	*/
+	(XtExposeProc)NULL, 		/* expose             	*/
+	SetValues, 		        /* set_values         	*/
+	(XtArgsFunc)NULL, 		/* set_values_hook      */
+	XtInheritSetValuesAlmost,	/* set_values_almost    */
+	_XmPrintShellGetValuesHook,	/* get_values_hook      */
+	(XtAcceptFocusProc)NULL, 	/* accept_focus       	*/
+	XtVersion, 			/* intrinsics version 	*/
+	NULL, 				/* callback offsets   	*/
+	XtInheritTranslations,		/* tm_table           	*/
+	XtInheritQueryGeometry, 	/* query_geometry       */
+	(XtStringProc)NULL, 		/* display_accelerator  */
+	(XtPointer)NULL, 	        /* extension            */
+    },
     { 					/* composite class record */
 	XtInheritGeometryManager,	/* geometry_manager 	*/
 	XtInheritChangeManaged,		/* change_managed	*/
@@ -252,7 +252,7 @@ XmPrintShellClassRec xmPrintShellClassRec = {
     },
 };
 
-externaldef(xmprintshellclass) WidgetClass 
+externaldef(xmprintshellclass) WidgetClass
       xmPrintShellWidgetClass = (WidgetClass) (&xmPrintShellClassRec);
 
 
@@ -267,21 +267,21 @@ Cardinal _XmPrintShellCounter = 0 ;
  *  ClassInitialize
  *
  ************************************************************************/
-static void 
+static void
 ClassInitialize( void )
 {
     if (PrintContextToWidget == 0)
 	PrintContextToWidget = XUniqueContext();
     if (_XmPrintScreenToShellContext == 0)
 	_XmPrintScreenToShellContext = XUniqueContext();
-}    
+}
 
 /************************************************************************
  *
  *  ClassPartInitialize
  *
  ************************************************************************/
-static void 
+static void
 ClassPartInitialize(
 	WidgetClass wc )
 {
@@ -289,7 +289,7 @@ ClassPartInitialize(
 }
 
 
-static void 
+static void
 PrintNotifyHandler(
 		    Widget w,
 		    XtPointer client_data,
@@ -299,7 +299,7 @@ PrintNotifyHandler(
     XPPrintEvent * xpev = (XPPrintEvent *) event ;
     XmPrintShellWidget print_shell = (XmPrintShellWidget) w ;
     XmPrintShellCallbackStruct pr_cbs ;
-    
+
     /* don't interfere with the app if it hasn't set any callback.
        (since we set the handler all the time)
        It is probably using it's own handler doing start page, etc */
@@ -315,7 +315,7 @@ PrintNotifyHandler(
 	print_shell->print.last_page = False ;
 	pr_cbs.reason = XmCR_START_JOB ;
 	pr_cbs.last_page = False ;
-	XtCallCallbackList (w, print_shell->print.start_job_callback, 
+	XtCallCallbackList (w, print_shell->print.start_job_callback,
 			    &pr_cbs);
 	/* fall thru : call both callbacks if present */
     case XPEndPageNotify :
@@ -323,7 +323,7 @@ PrintNotifyHandler(
 	if (!print_shell->print.last_page) {
 	    pr_cbs.reason = XmCR_PAGE_SETUP;
 	    pr_cbs.last_page = False ;
-	    XtCallCallbackList (w, print_shell->print.page_setup_callback, 
+	    XtCallCallbackList (w, print_shell->print.page_setup_callback,
 				&pr_cbs);
 	    /* on return from pageSetup, save whether or not that was the
 	       last page set up by the app */
@@ -331,7 +331,7 @@ PrintNotifyHandler(
 
 	    /* only start a page if a callback is there */
 	    if (print_shell->print.page_setup_callback) {
-		XpStartPage(XtDisplay(w), XtWindow(w));	
+		XpStartPage(XtDisplay(w), XtWindow(w));
 	    }
 	}
 	break ;
@@ -344,16 +344,16 @@ PrintNotifyHandler(
     case XPEndJobNotify :
 	pr_cbs.reason = XmCR_PAGE_SETUP;
 	pr_cbs.last_page = True ;
-	XtCallCallbackList (w, print_shell->print.page_setup_callback, 
+	XtCallCallbackList (w, print_shell->print.page_setup_callback,
 			    &pr_cbs);
 	pr_cbs.reason = XmCR_END_JOB ;
-	XtCallCallbackList (w, print_shell->print.end_job_callback, 
+	XtCallCallbackList (w, print_shell->print.end_job_callback,
 			    &pr_cbs);
 	break ;
     }
 }
 
-static void 
+static void
 ResourcesUpdate(Widget w, XPContext pcontext,
 		Dimension * pwidth, Dimension * pheight)
 {
@@ -362,7 +362,7 @@ ResourcesUpdate(Widget w, XPContext pcontext,
     XRectangle imageable_area ;
 
     /*** Get the resolution so that unit Type conversion works */
-    string_resolution =  
+    string_resolution =
 	XpGetOneAttribute(XtDisplay(w), pcontext,
 			  XPDocAttr, "default-printer-resolution") ;
     print_shell->print.print_resolution = atoi(string_resolution);
@@ -370,22 +370,22 @@ ResourcesUpdate(Widget w, XPContext pcontext,
 
     if (!print_shell->print.print_resolution)
 	/* compute from the X screen resolution */
-	print_shell->print.print_resolution = 
+	print_shell->print.print_resolution =
 	    (254 * WidthOfScreen(XtScreen(w)) +
 	     5 * WidthMMOfScreen(XtScreen(w))) /
 	    (10 * WidthMMOfScreen(XtScreen(w))) ;
 
     /* get our size from the print server now */
     XpGetPageDimensions(XtDisplay(w), pcontext,
-			pwidth, pheight, 
+			pwidth, pheight,
 			&imageable_area);
-    print_shell->print.min_x = imageable_area.x ;    
-    print_shell->print.min_y = imageable_area.y ;    
-    print_shell->print.max_x = imageable_area.x + imageable_area.width ;    
+    print_shell->print.min_x = imageable_area.x ;
+    print_shell->print.min_y = imageable_area.y ;
+    print_shell->print.max_x = imageable_area.x + imageable_area.width ;
     print_shell->print.max_y = imageable_area.y + imageable_area.height ;
 }
 
-static void 
+static void
 AttributesNotifyHandler(
 		    Widget w,
 		    XtPointer client_data,
@@ -402,7 +402,7 @@ AttributesNotifyHandler(
     XtResizeWidget(w, width, height, w->core.border_width);
 }
 
-static void 
+static void
 SelectXpEvents (
 		Widget widget,
 		int *event_types,
@@ -417,33 +417,33 @@ SelectXpEvents (
 
 
 /*****************************
-  Maintain a XPContext to widget binding for use in event dispatch to 
-  print shell logic. 
+  Maintain a XPContext to widget binding for use in event dispatch to
+  print shell logic.
   Limitation is only one shell per XPContext in this implementation.
   Could improve to dispatch to all widget in this context later, but
   not sure if supported by Xp itself.
 ******************************/
 
-static void GetFromTable (Display* pdpy, XPContext context, Widget * widget) 
+static void GetFromTable (Display* pdpy, XPContext context, Widget * widget)
 {
-    XFindContext(pdpy, (XID)context, PrintContextToWidget, 
+    XFindContext(pdpy, (XID)context, PrintContextToWidget,
 		 (XPointer *) widget);
 }
 
-static void DeleteFromTable (XPContext context, Widget widget) 
+static void DeleteFromTable (XPContext context, Widget widget)
 {
     XDeleteContext(XtDisplay(widget), (XID)context, PrintContextToWidget);
 }
 
-static void AddToTable (XPContext context, Widget widget) 
+static void AddToTable (XPContext context, Widget widget)
 {
-    XSaveContext(XtDisplay(widget), (XID)context, PrintContextToWidget, 
+    XSaveContext(XtDisplay(widget), (XID)context, PrintContextToWidget,
 	 	 (XPointer) widget);
 }
 
 
 /*****************************/
-static Boolean 
+static Boolean
 PrintDispatchEvent (XEvent *event)
 {
     XPPrintEvent * xpev = (XPPrintEvent *) event ;
@@ -474,7 +474,7 @@ PrintDispatchEvent (XEvent *event)
  *  Initialize
  *
  ************************************************************************/
-static void 
+static void
 Initialize(
         Widget req_widget,
         Widget new_widget,
@@ -487,7 +487,7 @@ Initialize(
 
     _XmProcessLock();
     /* mark the screen of this print shell in this context */
-    XSaveContext(XtDisplay(new_widget), (XID)XtScreen(new_widget), 
+    XSaveContext(XtDisplay(new_widget), (XID)XtScreen(new_widget),
 		 _XmPrintScreenToShellContext, (XPointer) new_widget);
     /* also maintain a counter of all shell */
      _XmPrintShellCounter ++ ;
@@ -508,50 +508,50 @@ Initialize(
        and for which a context was establish on a different screen -
        which can be common in preview case */
     pcontext = XpGetContext(XtDisplay(new_widget));
-    if (!pcontext || 
-	XpGetScreenOfContext(XtDisplay(new_widget),pcontext) 
+    if (!pcontext ||
+	XpGetScreenOfContext(XtDisplay(new_widget),pcontext)
 	!= XtScreen(new_widget)) {
 	return ;
     }
 
     print_shell->print.xp_connected = True ;
 
-    /*** add an element to a widget/XPContext table, used in 
+    /*** add an element to a widget/XPContext table, used in
          the event dispatch mechanism */
     AddToTable(pcontext, new_widget);
 
     /*** add extension event Handler for Start/End Job/Page Notify */
-    XtInsertEventTypeHandler(new_widget, 
+    XtInsertEventTypeHandler(new_widget,
 			     event_base_return + XPPrintNotify,
-			     (XtPointer)XPPrintMask, 
-			     PrintNotifyHandler, NULL, 
+			     (XtPointer)XPPrintMask,
+			     PrintNotifyHandler, NULL,
 			     XtListTail);
 
     /*** also add extension event Handler for tracking attributes change */
-    XtInsertEventTypeHandler(new_widget, 
+    XtInsertEventTypeHandler(new_widget,
 			     event_base_return + XPAttributeNotify,
-			     (XtPointer)XPAttributeMask, 
-			     AttributesNotifyHandler, NULL, 
+			     (XtPointer)XPAttributeMask,
+			     AttributesNotifyHandler, NULL,
 			     XtListTail);
 
     /* always register the extension selector, and the event dispatcher,
        it will override itself accordingly and works ok for different
        display connection */
-    XtRegisterExtensionSelector(XtDisplay(new_widget), 
-				event_base_return + XPPrintNotify, 
-				event_base_return + XPAttributeNotify, 
+    XtRegisterExtensionSelector(XtDisplay(new_widget),
+				event_base_return + XPPrintNotify,
+				event_base_return + XPAttributeNotify,
 				SelectXpEvents,
 				NULL);
-    (void) XtSetEventDispatcher(XtDisplay(new_widget), 
-				event_base_return + XPPrintNotify, 
+    (void) XtSetEventDispatcher(XtDisplay(new_widget),
+				event_base_return + XPPrintNotify,
 				PrintDispatchEvent);
-    (void) XtSetEventDispatcher(XtDisplay(new_widget), 
-				event_base_return + XPAttributeNotify, 
+    (void) XtSetEventDispatcher(XtDisplay(new_widget),
+				event_base_return + XPAttributeNotify,
 				PrintDispatchEvent);
-			
+
     /* go and get resolution and initial sizes */
-    ResourcesUpdate(new_widget, pcontext, 
-		    &(new_widget->core.width), 
+    ResourcesUpdate(new_widget, pcontext,
+		    &(new_widget->core.width),
 		    &(new_widget->core.height));
 }
 
@@ -561,7 +561,7 @@ Initialize(
  *
  ************************************************************************/
 /*ARGSUSED*/
-static Boolean 
+static Boolean
 SetValues(
         Widget current,
         Widget request,		/* unused */
@@ -595,7 +595,7 @@ SetValues(
  *
  ************************************************************************/
 /* ARGSUSED */
-static void 
+static void
 Destroy(
         Widget w )
 {
@@ -609,13 +609,13 @@ Destroy(
     if (!print_shell->print.xp_connected)
 	return ;
 
-    /*** remove entry in the widget/XPContext table, used in 
+    /*** remove entry in the widget/XPContext table, used in
          the event dispatch mechanism */
     DeleteFromTable(XpGetContext(XtDisplay(w)), w);
 
     _XmProcessLock();
     /* unmark the screen of this print shell in this context */
-    XDeleteContext(XtDisplay(w), (XID)XtScreen(w), 
+    XDeleteContext(XtDisplay(w), (XID)XtScreen(w),
 		   _XmPrintScreenToShellContext);
     /* also maintain a counter of all shells alive */
     _XmPrintShellCounter -- ;
@@ -633,10 +633,10 @@ Destroy(
  *
  *  XmPrintSetup
  *
- *    add print display in app context and create the print shell 
+ *    add print display in app context and create the print shell
  *
  ************************************************************************/
- 
+
 
 Widget
 XmPrintSetup(
@@ -667,18 +667,18 @@ XmPrintSetup(
        named "print".
        */
     pappshell = XtVaAppCreateShell(video_name, video_class,
-                                   applicationShellWidgetClass, 
-                                   print_display, 
-                                   XmNscreen, print_screen, 
+                                   applicationShellWidgetClass,
+                                   print_display,
+                                   XmNscreen, print_screen,
                                    NULL);
 
     /* then create the XmPrintShell */
-    print_shell = XtCreatePopupShell(print_shell_name, 
-				     xmPrintShellWidgetClass, 
+    print_shell = XtCreatePopupShell(print_shell_name,
+				     xmPrintShellWidgetClass,
 				     pappshell, args, num_args);
 
     /* Add callback to destroy application Shell parent. */
-    XtAddCallback(print_shell, XmNdestroyCallback, 
+    XtAddCallback(print_shell, XmNdestroyCallback,
                   _XmDestroyParentCallback, (XtPointer) NULL) ;
 
     /* we're mapping/unmapping at start/end page time */
@@ -705,7 +705,7 @@ typedef struct {
 } FileDescRec ;
 
 
-typedef struct { 
+typedef struct {
   Display *display;
   XPFinishProc finish_proc;
   XPointer client_data;
@@ -716,15 +716,15 @@ typedef struct {
 
 static void PrintToFileProc(Display  * dpy,
 			    XPContext context,
-			    unsigned char *data, 
+			    unsigned char *data,
 			    unsigned int data_len,
 			    XPointer client_data)
 {
     FileDescRec * file_desc = (FileDescRec *) client_data ;
-    
+
     /* write to the file */
     fwrite(data, data_len, 1, file_desc->file);
-}   
+}
 
 
 static void FinishProc(Display *display,
@@ -755,7 +755,7 @@ static void FilePipeCB(XtPointer client_data, int *source, XtInputId *id)
   FileCallbackRec *cb = (FileCallbackRec *) client_data;
   XPGetDocStatus status;
 
-  /* read the status from the child */ 
+  /* read the status from the child */
   (void) read(cb->pipe, &status, sizeof(XPGetDocStatus));
 
   XtRemoveInput(cb->input_id);
@@ -771,12 +771,12 @@ static void FilePipeCB(XtPointer client_data, int *source, XtInputId *id)
 }
 
 
-static void ChildPrintToFile(String display_name, 
+static void ChildPrintToFile(String display_name,
 		      XPContext pcontext,
 		      FILE *file,
 		      char *file_name,
 		      int pipe,
-		      String application_name, 
+		      String application_name,
 		      String application_class)
 {
   FileDescRec *file_desc;
@@ -791,14 +791,14 @@ static void ChildPrintToFile(String display_name,
   file_desc->pipe = pipe;
 
   app_context = XtCreateApplicationContext();
-  if ((display = XtOpenDisplay(app_context, display_name, 
+  if ((display = XtOpenDisplay(app_context, display_name,
 			       application_name, application_class,
 			       NULL, 0, &argc, argv)) == NULL) {
     _exit(1);
   }
 
   XpGetDocumentData(display, pcontext,
-		    PrintToFileProc, FinishProc, 
+		    PrintToFileProc, FinishProc,
 		    (XPointer) file_desc);
 
   XtAppMainLoop(app_context);
@@ -807,9 +807,9 @@ static void ChildPrintToFile(String display_name,
 }
 
 
-XtEnum XmPrintToFile(Display *pdpy, 
+XtEnum XmPrintToFile(Display *pdpy,
 		     char *file_name,
-		     XPFinishProc finish_proc, 
+		     XPFinishProc finish_proc,
 		     XPointer client_data)
 {
     FileCallbackRec *callback;
@@ -818,7 +818,7 @@ XtEnum XmPrintToFile(Display *pdpy,
     String application_name, application_class, display_name;
     FILE *file;
     int filedes[2];
-    
+
     /* make sure we can open the file for writing */
     if ((file = fopen(file_name, "w")) == NULL) {
       return False;
@@ -862,8 +862,8 @@ XtEnum XmPrintToFile(Display *pdpy,
     callback->client_data = client_data;
 
     /* notification that the child has completed */
-    callback->input_id = 
-        XtAppAddInput(XtDisplayToApplicationContext(pdpy), 
+    callback->input_id =
+        XtAppAddInput(XtDisplayToApplicationContext(pdpy),
 		      callback->pipe, (XtPointer)XtInputReadMask,
 		      FilePipeCB, callback);
 
@@ -892,7 +892,7 @@ PDMPhase2Handler(Widget w,
     Atom atoms[XtNumber(atom_names)];
 
     assert(XtNumber(atom_names) == NUM_ATOMS);
-    XInternAtoms(XtDisplay(print_shell), atom_names, XtNumber(atom_names), 
+    XInternAtoms(XtDisplay(print_shell), atom_names, XtNumber(atom_names),
 		 False, atoms);
 
     if (xevent->type == ClientMessage &&
@@ -901,15 +901,15 @@ PDMPhase2Handler(Widget w,
 	/* check for the exit status of the PDM */
 	if (xevent->data.l[0] == atoms[XmAPDM_EXIT_OK])
 	    pr_cbs.reason = XmCR_PDM_OK ;
-	else 
+	else
 	if (xevent->data.l[0] == atoms[XmAPDM_EXIT_CANCEL])
 	    pr_cbs.reason = XmCR_PDM_CANCEL ;
-	else 
+	else
 	if (xevent->data.l[0] == atoms[XmAPDM_EXIT_ERROR])
 	    pr_cbs.reason = XmCR_PDM_EXIT_ERROR ;
 	    /* some error message might have been logged */
 
-	XtCallCallbackList (w, print_shell->print.pdm_notification_callback, 
+	XtCallCallbackList (w, print_shell->print.pdm_notification_callback,
 			    &pr_cbs);
     }
 
@@ -924,7 +924,7 @@ typedef struct {
     Window transient_for_input_only_window;
 } PDMSelectData ;
 
-static void PDMSelectionProc (Widget w, 
+static void PDMSelectionProc (Widget w,
 			 XtPointer client_data,
 			 Atom *selection,
 			 Atom *type,
@@ -947,7 +947,7 @@ static void PDMSelectionProc (Widget w,
 		 XtNumber(atom_names), False, atoms);
 
     /* set back the video shell widget usable */
-    XDestroyWindow(XtDisplay(pdm_select_data->transient_for_video_shell), 
+    XDestroyWindow(XtDisplay(pdm_select_data->transient_for_video_shell),
 		  pdm_select_data->transient_for_input_only_window);
 
     /* look at value and decide if success or failure */
@@ -971,18 +971,18 @@ static void PDMSelectionProc (Widget w,
 
 	/* if PDM is up, install a handler for phase 2 */
 	if (pr_cbs.reason == XmCR_PDM_UP) {
-	    XtAddEventHandler((Widget)pdm_select_data->print_shell, 
-			      (EventMask) 0, 
+	    XtAddEventHandler((Widget)pdm_select_data->print_shell,
+			      (EventMask) 0,
 			      True, /* ClientMessage are non maskable */
 			      PDMPhase2Handler, NULL);
 	}
     }
-	
-    XtCallCallbackList ((Widget)pdm_select_data->print_shell, 
+
+    XtCallCallbackList ((Widget)pdm_select_data->print_shell,
 			pdm_select_data->print_shell
-			   ->print.pdm_notification_callback, 
+			   ->print.pdm_notification_callback,
 			&pr_cbs);
-	
+
     XtFree((char*)pdm_select_data);
 }
 
@@ -1004,8 +1004,8 @@ XmPrintPopupPDM(Widget print_shell,
     XtAppContext app;
     unsigned long old_timeout;
 
-    /* get parameter for PDM_START from libXp 
-       ask conversion using XtSetSelectionParameters, 
+    /* get parameter for PDM_START from libXp
+       ask conversion using XtSetSelectionParameters,
        and then call XtGetSelectionValue, which registers a
        XtSelectionCallbackProc that will wait for failure (no pdm
        owner, or timeout) or success.
@@ -1013,9 +1013,9 @@ XmPrintPopupPDM(Widget print_shell,
        Phase 2 of the pdm (clientmessage) will be handled by a
        event handler set up from the selection callback on success */
 
-    if (!XpGetPdmStartParams (XtDisplay(print_shell), 
-			 XtWindow(print_shell), 
-			 XpGetContext(XtDisplay(print_shell)), 
+    if (!XpGetPdmStartParams (XtDisplay(print_shell),
+			 XtWindow(print_shell),
+			 XpGetContext(XtDisplay(print_shell)),
 			 XtDisplay(transient_for_video_shell),
 			 XtWindow(transient_for_video_shell), &display_used,
 			 &pdm_selection, &type, &format, &value, &length))
@@ -1024,10 +1024,10 @@ XmPrintPopupPDM(Widget print_shell,
     /* only support XPDMDISPLAY = "print" or "video" */
     if (display_used == XtDisplay(print_shell))
 	widget_for_selection = print_shell ;
-    else 
+    else
     if (display_used == XtDisplay(transient_for_video_shell))
 	widget_for_selection = transient_for_video_shell ;
-    else 
+    else
 	return XmPDM_NOTIFY_FAIL ;
 
     XtSetSelectionParameters(widget_for_selection, pdm_selection,
@@ -1038,16 +1038,16 @@ XmPrintPopupPDM(Widget print_shell,
     pdm_select_data = (PDMSelectData *) XtMalloc(sizeof(PDMSelectData));
     pdm_select_data->pdm_selection = pdm_selection ;
     pdm_select_data->transient_for_video_shell = transient_for_video_shell ;
-    pdm_select_data->print_shell = (XmPrintShellWidget) print_shell ; 
+    pdm_select_data->print_shell = (XmPrintShellWidget) print_shell ;
                                   /* need this one in all cases */
 
-    PDM_START = XInternAtom(XtDisplay(widget_for_selection), 
+    PDM_START = XInternAtom(XtDisplay(widget_for_selection),
 			    XmIPDM_START, False);
 
     app = XtWidgetToApplicationContext(widget_for_selection);
 
 /* twenty minutes */
-#define REALLY_LONG_TIMEOUT (2 * 60 * 1000) 
+#define REALLY_LONG_TIMEOUT (2 * 60 * 1000)
 
     _XmAppLock(app);
 
@@ -1055,11 +1055,11 @@ XmPrintPopupPDM(Widget print_shell,
 
     XtAppSetSelectionTimeout(app, REALLY_LONG_TIMEOUT);
 
-    XtGetSelectionValue(widget_for_selection, 
+    XtGetSelectionValue(widget_for_selection,
 			pdm_selection,
-			PDM_START, 
-			PDMSelectionProc, 
-			(XtPointer)pdm_select_data, 
+			PDM_START,
+			PDMSelectionProc,
+			(XtPointer)pdm_select_data,
 			XtLastTimestampProcessed(
 				       XtDisplay(widget_for_selection)));
 
@@ -1068,17 +1068,17 @@ XmPrintPopupPDM(Widget print_shell,
     _XmAppUnlock(app);
 
     /* put up a InputOnly window on top of the dialog,
-       so that the end-user cannot  muck around with the print setup 
-       dialog hile the PDM is  trying to come up. 
+       so that the end-user cannot  muck around with the print setup
+       dialog hile the PDM is  trying to come up.
        This is removed in PDMSelectionProc */
 
     pdm_select_data->transient_for_input_only_window =
 	XCreateWindow(XtDisplay(transient_for_video_shell),
 		      XtWindow(transient_for_video_shell),
-		      0, 0, 
-		      XtWidth(transient_for_video_shell), 
-		      XtHeight(transient_for_video_shell), 
-		      0, CopyFromParent, InputOnly, CopyFromParent, 
+		      0, 0,
+		      XtWidth(transient_for_video_shell),
+		      XtHeight(transient_for_video_shell),
+		      0, CopyFromParent, InputOnly, CopyFromParent,
 		      0, NULL);
     XMapRaised(XtDisplay(transient_for_video_shell),
 	       pdm_select_data->transient_for_input_only_window);
@@ -1096,8 +1096,8 @@ XmPrintPopupPDM(Widget print_shell,
  *
  ************************************************************************/
 
-void 
-XmRedisplayWidget(Widget widget) 
+void
+XmRedisplayWidget(Widget widget)
 {
     XExposeEvent xev ;
     Region region ;
@@ -1105,7 +1105,7 @@ XmRedisplayWidget(Widget widget)
     xev.type = Expose ;
                  /* is this better than 0 ? shouldn't make much difference
 		  unless the expose method is very tricky... */
-    xev.serial = LastKnownRequestProcessed(XtDisplay(widget)) ;  
+    xev.serial = LastKnownRequestProcessed(XtDisplay(widget)) ;
     xev.send_event = False ;
     xev.display = XtDisplay(widget);
     xev.window = XtWindowOfObject(widget);  /* work with gadget too */
@@ -1116,7 +1116,7 @@ XmRedisplayWidget(Widget widget)
     xev.count = 0 ;
 
     region = XCreateRegion();
-    XtAddExposureToRegion((XEvent*)&xev, region);    
+    XtAddExposureToRegion((XEvent*)&xev, region);
 
     if (widget->core.widget_class->core_class.expose)
 	(*(widget->core.widget_class->core_class.expose))

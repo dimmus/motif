@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef _XmDataFSelP_h
@@ -47,7 +47,7 @@ extern void _XmDataFieldLoseSelection() ;
 
 #else
 
-extern Boolean _XmDataFieldConvert( 
+extern Boolean _XmDataFieldConvert(
                         Widget w,
                         Atom *selection,
                         Atom *target,
@@ -55,7 +55,7 @@ extern Boolean _XmDataFieldConvert(
                         XtPointer *value,
                         unsigned long *length,
                         int *format) ;
-extern void _XmDataFieldLoseSelection( 
+extern void _XmDataFieldLoseSelection(
                         Widget w,
                         Atom *selection) ;
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ReleasButton.c /main/8 1995/07/14 11:42:29 drk $"
@@ -37,11 +37,11 @@ static char rcsid[] = "$XConsortium: ReleasButton.c /main/8 1995/07/14 11:42:29 
 	Calls:
 
 	Summary:
-            Simulates the user releasing the specified mouse button. 
+            Simulates the user releasing the specified mouse button.
 
         INPUTS:
             none
-        
+
         OUTPUTS:
             none
 
@@ -95,20 +95,20 @@ int button_num;
     /* If Grab Window still exists, then ... */
 
     if (xisPointerGrabbed && xisWindowExists(xisGrabPointerWindow)) {
-        
+
         /* Call all relavent InformExpectedActions functions */
-  
+
         object = xisFindObject(xisState.selected_widget,
                                xisState.selected_object_type,
                                xisState.selected_instance);
 
-        if (object == NULL) 
+        if (object == NULL)
             object = xisFindObjectFromWindow(xisGrabPointerWindow);
 
         if (object == NULL)
             AutoMessage(_AutoMessages[WARNMSG21]);
 
-        xisInform.is_valid = 1;        
+        xisInform.is_valid = 1;
         xisInform.action_obj = object;
         xisInform.modifier_key_status = modifier_keys;
         xisInform.button_num = button_num;
@@ -124,7 +124,7 @@ int button_num;
             if (current_object->proc_InformExpectedActions != NULL) {
                 xisInform.current_obj = current_object;
 
-                (*current_object->proc_InformExpectedActions)(EventMouseButtonUp); 
+                (*current_object->proc_InformExpectedActions)(EventMouseButtonUp);
 	    }
             current_object = current_object->parent;
 	}
@@ -152,7 +152,7 @@ int button_num;
 			menu_invalid = True;
 			menu_manager = False;
 		}
-		else 
+		else
 			if (! menu_invalid)
 				menu_widget = XtParent(menu_widget);
 	}
@@ -222,7 +222,7 @@ int button_num;
                	          ButtonRelease,
                	          time,
                	          root_x - send_object->x,
-               	          root_y - send_object->y, 
+               	          root_y - send_object->y,
                	          root_x, root_y, modifier_keys,
                	          xisMouseButtonDetail[button_num]);
 	    else
@@ -234,10 +234,10 @@ int button_num;
                	          ButtonRelease,
                	          time,
                	          root_x - send_object->x,
-               	          root_y - send_object->y, 
+               	          root_y - send_object->y,
                	          root_x, root_y, modifier_keys,
                	          xisMouseButtonDetail[button_num]);
-		
+
         }
 
         /* Alter local info about which mouse buttons are down */

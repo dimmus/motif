@@ -1,18 +1,18 @@
 .TH "XmDataField" "library call"
 .SH NAME
 \fBXmDataField\fP \(em The DataField widget class
-.SH SYNOPSIS 
+.SH SYNOPSIS
 .nf
 #include <Xm/DataF\&.h>
 .fi
 .SH DESCRIPTION
 The DataField widget is a Data Presentation widget that handles display and entry of data as text.
-The DataField widget is a subclass of the XmTextField widget intended for data entry 
-applications. In addition to all of the normal XmTextField functionality, it supports regular 
-expression-based parsing and acceptance/rejection of its input through the XmNpicture resource, 
-and right justification through the XmNalignment resource. 
+The DataField widget is a subclass of the XmTextField widget intended for data entry
+applications. In addition to all of the normal XmTextField functionality, it supports regular
+expression-based parsing and acceptance/rejection of its input through the XmNpicture resource,
+and right justification through the XmNalignment resource.
 .PP
-The DataField widget provides added capability by supporting several types of validation: a 
+The DataField widget provides added capability by supporting several types of validation: a
 DataField widget containing an invalid value will not give-up focus; the user must enter a
 correct value before proceeding to another field.
 .SS "Classes"
@@ -57,11 +57,11 @@ XmNvalidateCallbackXmCCallbackXtCallbackListNULLC
 _____
 .TE
 .IP "\fBXmNalignment\fP" 10
-When set to XmALIGNMENT_END, the widget aligns all its text with the right hand side of the 
+When set to XmALIGNMENT_END, the widget aligns all its text with the right hand side of the
 input area.
 .IP "\fBXmNautoFill\fP" 10
-When set to True, the widget "auto-fills" its contents when it can determine that the next 
-character in the string must be a particular literal\&. For instance, the picture "###-####" 
+When set to True, the widget "auto-fills" its contents when it can determine that the next
+character in the string must be a particular literal\&. For instance, the picture "###-####"
 automatically inserts a '-' character after receiving three numeric digits as input\&.
 .IP "\fBXmNpicture\fP" 10
 Specifies a picture for data entry in the widget. A picture acts as a template that formats
@@ -95,16 +95,16 @@ Alternative values
 .IP ""
 Other characters are interpreted literally.
 .IP ""
-Set XmNpicture to NULL to disable regular expression processing. The DataField widget is 
+Set XmNpicture to NULL to disable regular expression processing. The DataField widget is
 cleared whenever the XmNpicture resource is changed.
 .RE
 .IP "\fBXmNpictureErrorCallback\fP" 10
-Specifies a list of callbacks to be called when the XmDataField widget determines that data is 
+Specifies a list of callbacks to be called when the XmDataField widget determines that data is
 being entered that does not match the format specified by the XmNpicture resource.
 .IP "\fBXmNvalidateCallback\fP" 10
-Specifies a list of callbacks to be called when data has been entered in the XmDataField widget 
-and the user has moved out of the XmDataField widget (usually by pressing the Tab key). The 
-callbacks can reject the movement of focus. 
+Specifies a list of callbacks to be called when data has been entered in the XmDataField widget
+and the user has moved out of the XmDataField widget (usually by pressing the Tab key). The
+callbacks can reject the movement of focus.
 .PP
 .SS "Inherited Resources"
 .PP
@@ -277,8 +277,8 @@ XmDataField inherits translations from XmTextField\&.
 A pointer to the following structure is passed to the list of routines for the XmNvalidateCallback:
 .nf
 typedef struct _XmDataFieldCallbackStruct {
-	Widget   w;       /* The XmDataField */   
-	String   text;    /* Proposed string */   
+	Widget   w;       /* The XmDataField */
+	String   text;    /* Proposed string */
 	Boolean  accept;  /* Accept return value, for validation */
 } XmDataFieldCallbackStruct;
 .fi

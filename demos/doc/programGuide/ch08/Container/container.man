@@ -19,21 +19,21 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH container 1X MOTIF "Demonstration programs"
 .SH NAME
-\*Lcontainer\*O\(emDemonstrates how to use XmContainer in a simple application 
+\*Lcontainer\*O\(emDemonstrates how to use XmContainer in a simple application
 .SH SYNOPSIS
 .sS
 \*LContainer\*O
 .sE
 .SH DESCRIPTION
-\*Lcontainer\*O illustrates how to place an XmContainer into an application. 
+\*Lcontainer\*O illustrates how to place an XmContainer into an application.
 The XmContainer in the application displays an organizational chart
 for a small company.  You can toggle the arrows to expand or collapse
-portions of the chart. 
+portions of the chart.
 .PP
 For details on the code, see Chapter 8 of the "OSF/Motif Programmer's
 Guide."

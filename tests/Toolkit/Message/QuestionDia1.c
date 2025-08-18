@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: QuestionDia1.c /main/8 1995/07/13 19:02:55 drk $"
@@ -73,7 +73,7 @@ static XtCallbackRec help_cb[] = {
 /*-------------------------------------------------------------
 **      OkCB        - callback for ok button
 */
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -90,7 +90,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      CancelCB        - callback for cancel button
 */
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -107,7 +107,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      HelpCB        - callback for help button
 */
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -135,12 +135,12 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 10);                     n++;
     XtSetArg (args[n], XmNheight, 10);                    n++;
     XtSetValues(Shell1, args, n);
-    
+
     /* create message dialog */
 
     str1 = XmStringCreate ("Warning",  XmSTRING_DEFAULT_CHARSET);
@@ -183,7 +183,7 @@ char **argv;
     XtDestroyWidget ((Widget) mbox);
     n = 0;
     bb = XmCreateBulletinBoardDialog (Shell1, "bb", args, n);
-    
+
     for (i = 0; i <= 2; i++) {
 	sprintf (buf, "button%d", i);
 	n = 0;

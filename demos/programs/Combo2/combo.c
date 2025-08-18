@@ -8,7 +8,7 @@
 
 static int done = 0;
 
-static void quitCB(Widget w, XtPointer client, XtPointer call) 
+static void quitCB(Widget w, XtPointer client, XtPointer call)
 {
 	done = 1;
 }
@@ -18,7 +18,7 @@ static char * values[] = {
 	"Mercury", "Venus",
 	"Earth", "Mars",
 	"Jupiter", "Saturn",
-	"Uranus", "Neptune", 
+	"Uranus", "Neptune",
 	"Pluto",
 };
 
@@ -36,7 +36,7 @@ static void createScreen(Widget parent)
 	Widget tab = XmCreateTabStack(top,"tab",NULL,0);
 
 	XtManageChild(XmCreateScrolledText(tab,"explanation",NULL,0));
-	
+
 	{
 	XmStringTable    tmp0;
 	Arg args[10];
@@ -52,9 +52,9 @@ static void createScreen(Widget parent)
 	XtSetArg(args[n], XmNitems, tmp0); n++;
 	XtSetArg(args[n], XmNitemCount, i); n++;
 	combo = XmCreateDropDown(rc, "combo", args, n);
-	
+
 	XtManageChild(combo);
-	}	
+	}
 
 	createQuit(top);
 
@@ -64,30 +64,30 @@ static void createScreen(Widget parent)
 
 #define CLASS "Combo"
 
-int 
+int
 main (int argc,char *argv[])
 {
 	XtAppContext app_context;
 	Widget app_shell;
 	Display *display;
 
-        XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
- 
-        app_shell = XtVaOpenApplication ( &app_context, 
-                                   CLASS, 
-                                   NULL, 
-                                   0, 
-                                   &argc, 
-                                   argv, 
-                                   NULL, 
-                                   sessionShellWidgetClass, 
+        XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);
+
+        app_shell = XtVaOpenApplication ( &app_context,
+                                   CLASS,
+                                   NULL,
+                                   0,
+                                   &argc,
+                                   argv,
+                                   NULL,
+                                   sessionShellWidgetClass,
                                    NULL );
 
 	XtVaSetValues(app_shell,XmNallowShellResize, True, NULL);
 
 	/* create application */
 	createScreen(app_shell);
-	
+
 	XtRealizeWidget(app_shell);
 
 	/*	Process events, unwrapping correctly.  */
@@ -102,4 +102,3 @@ main (int argc,char *argv[])
 	XtDestroyApplicationContext(app_context);
 	exit(0);
 }
-

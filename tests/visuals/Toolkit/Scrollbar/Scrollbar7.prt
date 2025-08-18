@@ -27,23 +27,23 @@ GetValues value = 20
 Reversing the processing direction to max on right.
 GetValues value = 20
 
-TRACE:(1) CompareVisual scrollbar 
+TRACE:(1) CompareVisual scrollbar
 TRACE:(2) Continue
 Setting the value to 20.
 GetValues value = 20
 Reversing the processing direction to max on bottom.
 Changing the value to 80.
 GetValues value = 80
-TRACE:(3) CompareVisual scrollbar 
+TRACE:(3) CompareVisual scrollbar
 TRACE:(4) Continue
-TRACE:(5) CompareVisual scrollbar 
+TRACE:(5) CompareVisual scrollbar
 TRACE:(6) Continue
-TRACE:(7) CompareVisual scrollbar 
+TRACE:(7) CompareVisual scrollbar
 TRACE:(8) Continue
-TRACE:(9) CompareVisual scrollbar 
+TRACE:(9) CompareVisual scrollbar
 TRACE:(10) Continue
-TRACE:(11) CompareVisual scrollbar 
+TRACE:(11) CompareVisual scrollbar
 TRACE:(12) Continue
-TRACE:(13) CompareVisual scrollbar 
+TRACE:(13) CompareVisual scrollbar
 TRACE:(14) Exit
 Exiting Test...Please Standby...

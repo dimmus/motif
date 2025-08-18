@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 exec >/dev/null 2>/dev/null
 
@@ -26,7 +26,7 @@ then
 
 	cp $HOME/bin/Ultrix/.motifbind $HOME
 	$HOME/bin/Ultrix/mwm &
-	
+
 fi
 
 if [ ${MACHINE}  = "hp700" ] ||
@@ -36,7 +36,7 @@ then
 	xmodmap $HOME/bin/HPUX/.xmodmaprc
 	cp $HOME/bin/HPUX/.motifbind $HOME
 	$HOME/bin/HPUX/mwm &
-	
+
 fi
 
 if [ ${MACHINE}  = "osf1" ] ||

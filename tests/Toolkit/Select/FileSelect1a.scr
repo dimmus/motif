@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # #) A client window with a FileSelectionBox will appear. The FileSelectionBox
@@ -78,19 +78,19 @@ LocatePointer FileSelectionBox1 RFileListItem 0
 ClickMB Btn1
 CompareVisual FileSelectionBox1
 
-# Resize the client window. 
+# Resize the client window.
 
 WindowResize Shell1 SouthEast 400 400
 
 # Iconify the client window.
 
-WindowIconify Shell1 
+WindowIconify Shell1
 
-# Normalize the client window. 
+# Normalize the client window.
 
 WindowDeiconify Shell1
 
-# Move the client window. 
+# Move the client window.
 
 WindowMove Shell1 50 50
 
@@ -153,15 +153,15 @@ InputString "b*"
 
 # While focus is in the text widget, hit the return key. This should depress
 # the Filter button, and the Files list should redisplay with files that
-# begin with the letter b. 
+# begin with the letter b.
 
 ClickKey KReturn
 
 CompareVisual FileSelectionBox1
 
 # The vertical scrollbar should have filled on the last operation.
-# Move client window so that it partially obscures the term window. 
-# Raise the term window. Raise the client window. 
+# Move client window so that it partially obscures the term window.
+# Raise the term window. Raise the client window.
 
 WindowFocus Shell1
 
@@ -174,9 +174,9 @@ ClickKey KBackSpace
 ClickKey KBackSpace
 InputString "d*"
 
-# While focus is in the text widget, hit the return key. This should depress 
+# While focus is in the text widget, hit the return key. This should depress
 # the Filter button, and the Files list should redisplay with files that
-# begin with the letter d. 
+# begin with the letter d.
 
 ClickKey KReturn
 
@@ -196,7 +196,7 @@ CompareVisual FileSelectionBox1
 Continue
 
 # Move to the Files list and click MB on item \"decor00\". This item should
-# invert and appear in the \'Selection\' field (with full pathname). 
+# invert and appear in the \'Selection\' field (with full pathname).
 
 LocatePointer FileSelectionBox1 RFileListItem 0
 ClickMB Btn1
@@ -243,7 +243,7 @@ CompareVisual FileSelectionBox1
 Continue
 
 
-# Move the pointer into the directories list. The Default button should 
+# Move the pointer into the directories list. The Default button should
 # be the Filter button. Now move off the directories list to the background
 # of the FileSelectionBox. The Default button should NOT change, it should
 # still be on the Filter button.

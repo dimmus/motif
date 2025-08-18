@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetXisState.c /main/7 1995/07/14 11:50:40 drk $"
@@ -36,7 +36,7 @@ static char rcsid[] = "$XConsortium: GetXisState.c /main/7 1995/07/14 11:50:40 d
 
 	Summary:
             Used to generate a compressed representation of the current
-        input synthesis 
+        input synthesis
         state.
 
           INPUTS
@@ -49,7 +49,7 @@ static char rcsid[] = "$XConsortium: GetXisState.c /main/7 1995/07/14 11:50:40 d
           RETURNS
             nothing
 ************************************************************************/
-  
+
 #include "mvslib.h"
 
 void mvsGetXisStateHash(hash,num_bytes)
@@ -62,7 +62,7 @@ short *num_bytes;
     int root_x,root_y;
     XisObjectRecord *pointer_obj, *focus_obj, *selected_obj;
     short pointer_id_code,focus_id_code,selected_id_code;
-    
+
     xisGetPointerLocation(&root_x,&root_y);
     pointer_obj = xisFindObjectAtLocation(root_x,root_y);
     if (pointer_obj == NULL_Object)
@@ -90,7 +90,7 @@ short *num_bytes;
             selected_id_code = 0;
         else
             selected_id_code = selected_obj->id_code;
-    
+
     }
 
     mvsPushHashBits(hash,&byte,&bit,pointer_id_code,8);

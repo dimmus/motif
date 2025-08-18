@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-# A client with an empty Paned Window will appear. 
+# A client with an empty Paned Window will appear.
 
 CompareVisual PanedWindow1
 Continue
@@ -58,10 +58,10 @@ Continue
 CompareVisual PanedWindow1
 Continue
 
-# The second push button is destroyed. PB3 moves into Pane 2 and an empty 
+# The second push button is destroyed. PB3 moves into Pane 2 and an empty
 # (no children) RowColumn widget moves into Pane 3.
 # Press the button now labelled "Push Me". A bunch of children of the Row
-# Column are created and managed. The Paned Window should resize so that 
+# Column are created and managed. The Paned Window should resize so that
 # all the Row Column's children are visible.
 
 LocatePointer PB1
@@ -83,7 +83,7 @@ ClickMB Btn1
 CompareVisual rc
 Continue
 
-# A client with an empty Paned Window will appear. 
+# A client with an empty Paned Window will appear.
 
 CompareVisual PanedWindow1
 Continue
@@ -97,7 +97,3 @@ Continue
 
 CompareVisual PanedWindow1
 Exit
-
-
-
-

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -74,7 +74,7 @@ void
  |         param_fmt - param format (should be WSM_PROTO_FMT).    |
  |         callback - function to invoke when done.               |
  |         closure - data to pass to the callback.                |
- |         time - timestamp of the event; not CurrentTime.        | 
+ |         time - timestamp of the event; not CurrentTime.        |
  *----------------------------------------------------------------*/
 void
 UTMSendMessage(
@@ -175,18 +175,18 @@ UTMDestinationProc (
 
   /* pull off the real client data */
   pUtmData = (UTMPackageRec *)DequeueUtmData();
-  
+
   /* if no UTMData, then transfer can't be done. Punt. */
   if (pUtmData == NULL)
     return;
-  
+
   /* Setup the parameters to pass. */
   XmTransferSetParameters(dcs->transfer_id,
 			  pUtmData->param, /* ptr to parameter data. */
 			  pUtmData->fmt, /* param format (8,16,32) */
 			  pUtmData->len, /* size of param in fmt units */
 			  dcs->selection); /* not used */
-  
+
   /* Make the transfer. This invokes the selection owner's ConvertCB.
    * When done, UTMReplyReceived callback proc is invoked.
    */
@@ -195,7 +195,7 @@ UTMDestinationProc (
 		  pUtmData->doneProc, /* an XtCallbackProc called when done. */
 		  pUtmData->closure,  /* client data passed to done proc */
 		  time);
-      
+
   /* don't need the structure any more. */
   XtFree((char*)pUtmData);
 
@@ -246,7 +246,7 @@ DequeueUtmData()
 	ptr->prev->next = NULL;
       else
 	dataQueue = NULL;
- 
+
       dataPtr = ptr->data;
       XtFree((char*)ptr);
     }

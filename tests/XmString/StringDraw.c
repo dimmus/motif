@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StringDraw.c /main/5 1995/07/13 19:55:17 drk $"
@@ -94,10 +94,10 @@ char 			**argv;
 	fontList1 = XmFontListCreate(fnt, cs);
 
 #else
-	fixed_font = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT, 
+	fixed_font = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT,
 							 	  	 XmFONTLIST_DEFAULT_TAG);
 
-	if ((font1 = XmFontListEntryLoad(display, "9x15bold", XmFONT_IS_FONT, 
+	if ((font1 = XmFontListEntryLoad(display, "9x15bold", XmFONT_IS_FONT,
 									 XmFONTLIST_DEFAULT_TAG)) == NULL) {
 
 		fprintf(stderr, "Cannot create FontEntry for 9x15bold\n");
@@ -122,8 +122,8 @@ char 			**argv;
 	XtManageChild (bboard);
 
 	n = 0;
-	XtSetArg (args[n], XmNx, 10 ); n++; 
-	XtSetArg (args[n], XmNy, 50 ); n++;  
+	XtSetArg (args[n], XmNx, 10 ); n++;
+	XtSetArg (args[n], XmNy, 50 ); n++;
 	XtSetArg(args[n], XmNwidth,  300); n++;
 	XtSetArg(args[n], XmNheight, 200); n++;
 	drawArea = XmCreateDrawingArea(bboard, "drawArea", args, n);
@@ -168,7 +168,7 @@ char 			**argv;
     clip.height = height;
 
     XmStringDraw(display, window, fontList1, tcs, gc,
-         		 x, y, width, XmALIGNMENT_BEGINNING, 
+         		 x, y, width, XmALIGNMENT_BEGINNING,
 				 XmSTRING_DIRECTION_L_TO_R, &clip);
 
 	x = INITIAL_X;
@@ -182,7 +182,7 @@ char 			**argv;
     clip.height = height;
 
     XmStringDraw(display, window, fontList1, tcs, gc,
-         		 x, y, width, XmALIGNMENT_BEGINNING, 
+         		 x, y, width, XmALIGNMENT_BEGINNING,
 				 XmSTRING_DIRECTION_L_TO_R, &clip);
 													/*EndPIR4294*/
 
@@ -196,7 +196,7 @@ char 			**argv;
     clip.height = height - CLIP_HEIGHT;
 
     XmStringDraw(display, window, fontList1, tcs, gc,
-         		 x, y, width, XmALIGNMENT_BEGINNING, 
+         		 x, y, width, XmALIGNMENT_BEGINNING,
 				 XmSTRING_DIRECTION_L_TO_R, &clip);
 
 	x = INITIAL_X;
@@ -209,7 +209,7 @@ char 			**argv;
     clip.height = height - CLIP_HEIGHT;
 
     XmStringDraw(display, window, fontList1, tcs, gc,
-         		 x, y, width, XmALIGNMENT_BEGINNING, 
+         		 x, y, width, XmALIGNMENT_BEGINNING,
 				 XmSTRING_DIRECTION_L_TO_R, &clip);
 
 	CommonPause();

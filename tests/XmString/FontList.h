@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: FontList.h /main/7 1995/07/13 19:52:11 drk $ */
 
 #define NUM_FONTS 4
@@ -43,7 +43,7 @@ XmFontList	fontlist[10] =
 
 XFontStruct	*font[NUM_FONTS] =
 {
-    NULL, 
+    NULL,
     NULL,
     NULL,
     NULL,
@@ -80,4 +80,3 @@ int		fontlist_num,
     	charset_num;
 
 int		errors;
-

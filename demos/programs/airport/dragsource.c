@@ -76,10 +76,10 @@ static void FlightFinished(Widget dc, Flight flight,
 				  XmDragDropFinishCallback *call_data);
 /* drag drop finish callback on initiator. Remove data for that plane */
 
-static Boolean SendPlaneID(Widget drag_context, Atom *selection, Atom *target, 
+static Boolean SendPlaneID(Widget drag_context, Atom *selection, Atom *target,
 			 Atom *type,
 			 XtPointer *value, unsigned long *length,
-			 int *format); 
+			 int *format);
 
 /* The Xt selection convert proc sending the data to the drop site */
 
@@ -169,7 +169,7 @@ static void EnterTopLevel(Widget dc, Airport this,
 
 static void LeaveTopLevel(Widget dc, Airport this,
 			  XmTopLevelLeaveCallbackStruct *call_data)
-{  
+{
    XmToggleButtonSetState(this->from.over_ocean, True, True);
 }
 
@@ -191,7 +191,7 @@ static void DropSiteEnter(Widget dc, Airport this,
 
 static void DropSiteLeave(Widget dc, Airport this,
 			  XmDropSiteLeaveCallbackStruct *call_data)
-{  
+{
    XmToggleButtonSetState(this->from.over_land, True, True);
 }
 
@@ -206,16 +206,16 @@ static void Flying(Widget dc,  Airport this,
 {
    static Boolean first = True;
 
-   if (first) 
-     { 
+   if (first)
+     {
 	XKeyboardControl controlValues;
 	unsigned long valueMask = KBBellPercent | KBBellPitch | KBBellDuration;
 
 	controlValues.bell_percent  = AirportResources.bell_percent;
-	controlValues.bell_pitch    = 440; 
+	controlValues.bell_pitch    = 440;
 	controlValues.bell_duration = AirportResources.bell_duration;
 	XChangeKeyboardControl(this->display, valueMask, &controlValues);
-	first = False; 
+	first = False;
      }
 
    XBell(this->display, 100);
@@ -259,9 +259,9 @@ static void PlaneHasLanded(Widget dc, Flight flight,
 
    if (call_data->completionStatus == XmDROP_SUCCESS) {
       Spot spot = &(this->park.spots[flight->gate]);
-      
+
       spot->empty = True;
-      XClearArea(this->display, XtWindow(this->airport), 
+      XClearArea(this->display, XtWindow(this->airport),
 		 spot->x, spot->y, plane_width, plane_height, False);
      sprintf(msg, "Passengers from flight %ld have landed safely",
 	      flight->number);
@@ -284,12 +284,12 @@ static void FlightFinished(Widget dc, Flight flight,
    XtFree((char *) flight);
 }
 /* ===============================================================
- *  Xt convert selection proc. 
+ *  Xt convert selection proc.
  *  Send flight ID on drop transfer request.
  *  Delete the source plane image on Delete. You know it's arrived there.
  */
 
-static Boolean SendPlaneID(Widget drag_context, Atom *selection, Atom *target, 
+static Boolean SendPlaneID(Widget drag_context, Atom *selection, Atom *target,
 			 Atom *type,
 			 XtPointer *value, unsigned long *length,
 			 int *format)

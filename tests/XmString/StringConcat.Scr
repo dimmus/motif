@@ -19,18 +19,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # @) Running XmStringConcat.
 
 # #) This test calls XmStringConcatAndFree(), concatting each combination
 #    of XmStringComponentTypes together.
-#    Messages will be printed to the terminal indicating the 
+#    Messages will be printed to the terminal indicating the
 #    XmStringComponentTypes being passed to XmStringConcatAndFree()
 #    and whether the return of a new XmString was successful.
-#    Check that each combination passes. 
+#    Check that each combination passes.
 
 # C)
 Continue

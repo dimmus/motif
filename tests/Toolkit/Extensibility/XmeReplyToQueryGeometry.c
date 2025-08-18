@@ -71,7 +71,7 @@ char **argv;
   intended->height = (Dimension) 50;
   intended->request_mode = (CWWidth | CWHeight);
 
-  /* check if 1) the desired and intended values match and 
+  /* check if 1) the desired and intended values match and
               2) the widget intends to use these values (request_mode
 	         is set for width and height) */
   if (XmeReplyToQueryGeometry(bboard, intended, desired) == XtGeometryYes)

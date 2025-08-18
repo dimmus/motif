@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,7 +36,7 @@
 #define NUM_MAJOR_TAB 3
 #define NUM_MINOR_TAB 3
 
-/* This test takes its XmNtranslations resource value from the defaults file 
+/* This test takes its XmNtranslations resource value from the defaults file
    ./tests/Toolkit/Notebook.defaults. */
 
 void
@@ -51,7 +51,7 @@ main (int argc, char **argv)
 	Widget MinorTab[NUM_MINOR_TAB];
 	Arg args[NUMARGS];
 	int n,i,page_no;
-	
+
 	char buf[32];
 
 	XmNotebookPageInfo page_info1, page_info2, page_info3, page_info4;
@@ -60,8 +60,8 @@ main (int argc, char **argv)
 
 	CommonTestInit(argc,argv);
 
-	
-	
+
+
 
 
 	n=0;
@@ -91,10 +91,10 @@ main (int argc, char **argv)
 		Page[i] = XmCreatePushButton (Notebook1,buf, args, n);
 		XtManageChild (Page[i]);
 	      }
-	  }  
+	  }
 
 	/* duplicate page for page 5. This is to test PAGE_DUPLICATED. */
-	
+
 	page_no = 5;
 	n=0;
 	XtSetArg(args[n], XmNnotebookChildType, XmPAGE); n++;
@@ -113,7 +113,7 @@ main (int argc, char **argv)
 	    XtSetArg(args[n], XmNpageNumber, page_no); n++;
 	    StatusArea[i] = XmCreateLabel (Notebook1,buf, args, n);
 	    XtManageChild (StatusArea[i]);
-	  }  
+	  }
 
 
 	for (i=0; i<NUM_MAJOR_TAB; i++)
@@ -142,9 +142,9 @@ main (int argc, char **argv)
 	    MinorTab[i] = XmCreatePushButton (Notebook1,buf, args, n);
 	    XtManageChild (MinorTab[i]);
 
-	  } 
+	  }
 
-	XtRealizeWidget (Shell1);			   
+	XtRealizeWidget (Shell1);
 
 
 
@@ -158,7 +158,7 @@ main (int argc, char **argv)
 	page_info1.page_widget = Page[0];
 	page_info1.status_area_widget = StatusArea[0];
 	page_info1.major_tab_widget = NULL;
-	page_info1.minor_tab_widget = NULL; 
+	page_info1.minor_tab_widget = NULL;
 
 	result1 = XmNotebookGetPageInfo(Notebook1,1,&page_info1);
 	if (result1 == XmPAGE_FOUND)
@@ -171,7 +171,7 @@ main (int argc, char **argv)
 	  printf ("Expected : PAGE_FOUND, Actual : PAGE_DUPLICATED\n");
 	else
 	  printf ("Expected : PAGE_FOUND, Actual : Some random value\n");
-	
+
 	CommonPause();
 
 
@@ -248,6 +248,3 @@ main (int argc, char **argv)
 
 	XtAppMainLoop (app_context);
       }
-
-
-

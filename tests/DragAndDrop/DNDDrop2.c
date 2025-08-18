@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDDrop2.c /main/10 1996/10/07 14:54:01 drk $"
@@ -65,7 +65,7 @@ static void 	Quit();
 static void 	StartDrag();
 
 
-static char translations[] = 
+static char translations[] =
 "#override \
   Ctrl<Key>t: XtDisplayTranslations()\n\
   Ctrl<Key>a: XtDisplayAccelerators()\n\
@@ -100,22 +100,22 @@ typedef struct _AppDataRec{
 
 XtResource	appResources[] = {
 	{
-	"xlations1", XtCTranslations, XtRString, 
+	"xlations1", XtCTranslations, XtRString,
 	sizeof(String), XtOffset(AppData, xlation1.str),
 	XtRString, (XtPointer)translations,
 	},
 	{
-	"xlations1", XtCTranslations, XtRTranslationTable, 
+	"xlations1", XtCTranslations, XtRTranslationTable,
 	sizeof(XtTranslations), XtOffset(AppData, xlation1.xlation),
 	XtRString, (XtPointer)translations,
 	},
 	{
-	"xlations2", XtCTranslations, XtRString, 
+	"xlations2", XtCTranslations, XtRString,
 	sizeof(String), XtOffset(AppData, xlation2.str),
 	XtRString, (XtPointer)dragTranslations,
 	},
 	{
-	"xlations2", XtCTranslations, XtRTranslationTable, 
+	"xlations2", XtCTranslations, XtRTranslationTable,
 	sizeof(XtTranslations), XtOffset(AppData, xlation2.xlation),
 	XtRString, (XtPointer)dragTranslations,
 	},
@@ -164,7 +164,7 @@ Widget	Form;
 
 Widget	Whichanim_Pulldown;
 Widget	Whichanim_Option;
-Widget	DragUnderHighLight, DragUnderShadowOut, DragUnderShadowIn, 
+Widget	DragUnderHighLight, DragUnderShadowOut, DragUnderShadowIn,
 		DragUnderNone, DragUnderPixmap;
 
 Widget	WhichdropAct_Pulldown;
@@ -215,8 +215,8 @@ static void Quit()
 
 
 /*ARGSUSED*/
-static Boolean DragConvertProc(w, selection, target, typeRtn, valueRtn, 
-							  lengthRtn, formatRtn, max_lengthRtn, 
+static Boolean DragConvertProc(w, selection, target, typeRtn, valueRtn,
+							  lengthRtn, formatRtn, max_lengthRtn,
 							  client_data, request_id)
 Widget              w;
 Atom                *selection;
@@ -240,11 +240,11 @@ XtRequestId			*request_id;
 	if (*target == COMPOUND_TEXT) {
 
 		ok = 0;
-		ok = XmbTextListToTextProperty(display, &string, 1, 
+		ok = XmbTextListToTextProperty(display, &string, 1,
 									   XCompoundTextStyle, &tmp_prop);
 		if (ok != Success)
 			return(False);
-		
+
 		*valueRtn = (char *) tmp_prop.value;
 		*lengthRtn = tmp_prop.nitems;
 		*typeRtn = COMPOUND_TEXT;
@@ -470,49 +470,49 @@ XEvent	*event;
 	Arg			args[MAX_ARGS];
 	Cardinal	n;
 	Atom		exportList[1];
-	static XtCallbackRec DragMotionCB[2] = 
+	static XtCallbackRec DragMotionCB[2] =
 	{
 		{DragMotionCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DnDFinishCB[2] = 
+	static XtCallbackRec DnDFinishCB[2] =
 	{
 		{DnDFinishCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropFinishCB[2] = 
+	static XtCallbackRec DropFinishCB[2] =
 	{
 		{DropFinishCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropSiteEnterCB[2] = 
+	static XtCallbackRec DropSiteEnterCB[2] =
 	{
 		{DropSiteEnterCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropSiteLeaveCB[2] = 
+	static XtCallbackRec DropSiteLeaveCB[2] =
 	{
 		{DropSiteLeaveCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropStartCB[2] = 
+	static XtCallbackRec DropStartCB[2] =
 	{
 		{DropStartCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec TopLEnterCB[2] = 
+	static XtCallbackRec TopLEnterCB[2] =
 	{
 		{TopLEnterCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec TopLLeaveCB[2] = 
+	static XtCallbackRec TopLLeaveCB[2] =
 	{
 		{TopLLeaveCallback,NULL},
 		{NULL, NULL}
@@ -560,7 +560,7 @@ XtPointer	client_data, call_data;
 }
 
 
-static void DropTransferCallback(w, closure, seltype, type, value, 
+static void DropTransferCallback(w, closure, seltype, type, value,
 								 length, format)
 Widget 			w;
 XtPointer 		closure ;
@@ -608,7 +608,7 @@ int 			*format ;
 				actual_length = strlen(total_tmp_value);
 #ifdef DEBUG
 				fprintf(stderr, "the transfer value is : %s\n", actual_value);
-				fprintf(stderr, "the length of transfer is : %d\n", 
+				fprintf(stderr, "the length of transfer is : %d\n",
 						actual_length);
 #endif
 				XFreeStringList(tmp_value);
@@ -693,9 +693,9 @@ XtPointer	client_data, call_data;
 	}
 	else {
 
-		if (DropProc->operation & XmDROP_MOVE || 
+		if (DropProc->operation & XmDROP_MOVE ||
 			DropProc->operation & XmDROP_COPY) {
-		
+
 			if (DropProc->operation & XmDROP_MOVE) {
 				transferEntries[1].target = DELETE;
 				transferEntries[1].client_data = NULL;
@@ -708,7 +708,7 @@ XtPointer	client_data, call_data;
 			XtSetArg(args[n], XmNnumDropTransfers, numTransfers); n++;
 			XtSetArg(args[n], XmNtransferProc, DropTransferCallback); n++;
 
-		} 
+		}
 		else {
 			if (DropProc->operation & XmDROP_LINK)
 				fprintf(stderr, "Link Operation currently not supported\n");
@@ -740,7 +740,7 @@ XErrorEvent	*ev;
 }
 
 
-static void DragUnderHighLightCB(Widget w, XtPointer client_data, 
+static void DragUnderHighLightCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -750,7 +750,7 @@ static void DragUnderHighLightCB(Widget w, XtPointer client_data,
 }
 
 
-static void DragUnderShadowOutCB(Widget w, XtPointer client_data, 
+static void DragUnderShadowOutCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -760,7 +760,7 @@ static void DragUnderShadowOutCB(Widget w, XtPointer client_data,
 }
 
 
-static void DragUnderShadowInCB(Widget w, XtPointer client_data, 
+static void DragUnderShadowInCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -770,7 +770,7 @@ static void DragUnderShadowInCB(Widget w, XtPointer client_data,
 }
 
 
-static void DragUnderPixmapCB(Widget w, XtPointer client_data, 
+static void DragUnderPixmapCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -780,7 +780,7 @@ static void DragUnderPixmapCB(Widget w, XtPointer client_data,
 }
 
 
-static void DragUnderNoneCB(Widget w, XtPointer client_data, 
+static void DragUnderNoneCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -790,7 +790,7 @@ static void DragUnderNoneCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropActiveCB(Widget w, XtPointer client_data, 
+static void dropActiveCB(Widget w, XtPointer client_data,
                		 	 XtPointer call_data)
 {
 
@@ -800,7 +800,7 @@ static void dropActiveCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropInactiveCB(Widget w, XtPointer client_data, 
+static void dropInactiveCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -810,7 +810,7 @@ static void dropInactiveCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropIgnoreCB(Widget w, XtPointer client_data, 
+static void dropIgnoreCB(Widget w, XtPointer client_data,
                		 	 XtPointer call_data)
 {
 
@@ -820,7 +820,7 @@ static void dropIgnoreCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropMoveCopyCB(Widget w, XtPointer client_data, 
+static void dropMoveCopyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -830,7 +830,7 @@ static void dropMoveCopyCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropMoveOnlyCB(Widget w, XtPointer client_data, 
+static void dropMoveOnlyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -840,7 +840,7 @@ static void dropMoveOnlyCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropCopyOnlyCB(Widget w, XtPointer client_data, 
+static void dropCopyOnlyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -850,7 +850,7 @@ static void dropCopyOnlyCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropLinkOnlyCB(Widget w, XtPointer client_data, 
+static void dropLinkOnlyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -860,7 +860,7 @@ static void dropLinkOnlyCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropMoveLinkCB(Widget w, XtPointer client_data, 
+static void dropMoveLinkCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -870,7 +870,7 @@ static void dropMoveLinkCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropCopyLinkCB(Widget w, XtPointer client_data, 
+static void dropCopyLinkCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -880,7 +880,7 @@ static void dropCopyLinkCB(Widget w, XtPointer client_data,
 }
 
 
-static void dropAllCB(Widget w, XtPointer client_data, 
+static void dropAllCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -891,7 +891,7 @@ static void dropAllCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dropNoneCB(Widget w, XtPointer client_data, 
+static void dropNoneCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -902,7 +902,7 @@ static void dropNoneCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragMoveCopyCB(Widget w, XtPointer client_data, 
+static void dragMoveCopyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -913,7 +913,7 @@ static void dragMoveCopyCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragMoveOnlyCB(Widget w, XtPointer client_data, 
+static void dragMoveOnlyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -924,7 +924,7 @@ static void dragMoveOnlyCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragCopyOnlyCB(Widget w, XtPointer client_data, 
+static void dragCopyOnlyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -935,7 +935,7 @@ static void dragCopyOnlyCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragLinkOnlyCB(Widget w, XtPointer client_data, 
+static void dragLinkOnlyCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -946,7 +946,7 @@ static void dragLinkOnlyCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragMoveLinkCB(Widget w, XtPointer client_data, 
+static void dragMoveLinkCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -957,7 +957,7 @@ static void dragMoveLinkCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragCopyLinkCB(Widget w, XtPointer client_data, 
+static void dragCopyLinkCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -968,7 +968,7 @@ static void dragCopyLinkCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragAllCB(Widget w, XtPointer client_data, 
+static void dragAllCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -979,7 +979,7 @@ static void dragAllCB(Widget w, XtPointer client_data,
 
 
 /*ARGSUSED*/
-static void dragNoneCB(Widget w, XtPointer client_data, 
+static void dragNoneCB(Widget w, XtPointer client_data,
 						   XtPointer call_data)
 {
 
@@ -1020,7 +1020,7 @@ static void ApplyChanges(int modify_site)
 }
 
 
-static void PushButtonsCB(Widget w, XtPointer client_data, 
+static void PushButtonsCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -1029,7 +1029,7 @@ static void PushButtonsCB(Widget w, XtPointer client_data,
 }
 
 
-static void BulletinBoardCB(Widget w, XtPointer client_data, 
+static void BulletinBoardCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -1038,7 +1038,7 @@ static void BulletinBoardCB(Widget w, XtPointer client_data,
 }
 
 
-static void BothCB(Widget w, XtPointer client_data, 
+static void BothCB(Widget w, XtPointer client_data,
                        		 	 XtPointer call_data)
 {
 
@@ -1047,7 +1047,7 @@ static void BothCB(Widget w, XtPointer client_data,
 }
 
 
-static void updateLabelCB(Widget w, XtPointer client_data, 
+static void updateLabelCB(Widget w, XtPointer client_data,
 			 XtPointer call_data)
 {
     Arg args[1];
@@ -1058,7 +1058,7 @@ static void updateLabelCB(Widget w, XtPointer client_data,
 
     XtSetArg(args[0], XmNuserData, &userDataStr);
     XtGetValues(xmDisplay, args, 1);
-    
+
     label = XmStringCreateSimple(userDataStr);
 
     labelGadget = (Widget)client_data;
@@ -1105,11 +1105,11 @@ char **argv;
 	sprintf(name, "%s.out", argv[0]);
 	if ((outfp = fopen(name, "w+")) == NULL) {
 
-		fprintf(stderr, "Can not open output file %s.out. Trying in /tmp\n", 
+		fprintf(stderr, "Can not open output file %s.out. Trying in /tmp\n",
 				argv[0]);
 		sprintf(name, "/tmp/%s.out", argv[0]);
 		if ((outfp = fopen(name, "w+")) == NULL) {
-			fprintf(stderr, "Can not open output file /tmp/%s.out. Exiting\n", 
+			fprintf(stderr, "Can not open output file /tmp/%s.out. Exiting\n",
 					argv[0]);
 			exit(0);
 		}
@@ -1126,20 +1126,20 @@ char **argv;
 
 	XtAppAddActions(app_context, (XtActionList)myactions, XtNumber(myactions));
 
-	XtGetApplicationResources(Shell1, (XtPointer)appData, 
+	XtGetApplicationResources(Shell1, (XtPointer)appData,
 							  appResources, XtNumber(appResources), NULL, 0);
 
 	/* try out stuffing the translations directly in */
 	n = 0;
 	XtSetArg(args[n], XmNtranslations, appData->xlation1.xlation); n++;
-	/* 
+	/*
 	 * Set the initiatorProtocolStyle and receiverProtocolStyle resources
 	 * if asked to from the command line.
 	 */
 	xmDisplay = XmGetXmDisplay(display);
-	XtSetArg(args[n], XmNdragInitiatorProtocolStyle, 
+	XtSetArg(args[n], XmNdragInitiatorProtocolStyle,
 			 initiatorProtocolStyle); n++;
-	XtSetArg(args[n], XmNdragReceiverProtocolStyle, 
+	XtSetArg(args[n], XmNdragReceiverProtocolStyle,
 			 receiverProtocolStyle); n++;
 	XtSetValues(xmDisplay, args, n);
 
@@ -1159,7 +1159,7 @@ char **argv;
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));    n++;
-    Whichanim_Pulldown = XmCreatePulldownMenu(Shell1, "Whichanim_Pulldown", 
+    Whichanim_Pulldown = XmCreatePulldownMenu(Shell1, "Whichanim_Pulldown",
                                               args, n);
 
     DragUnderHighLight = CreatePushButton(Whichanim_Pulldown, "HighLight");
@@ -1168,15 +1168,15 @@ char **argv;
     DragUnderNone = CreatePushButton(Whichanim_Pulldown, "None");
     DragUnderPixmap = CreatePushButton(Whichanim_Pulldown, "Pixmap");
 
-    XtAddCallback(DragUnderHighLight, XmNactivateCallback, 
+    XtAddCallback(DragUnderHighLight, XmNactivateCallback,
 				  DragUnderHighLightCB, NULL);
-    XtAddCallback(DragUnderShadowOut, XmNactivateCallback, 
+    XtAddCallback(DragUnderShadowOut, XmNactivateCallback,
 				  DragUnderShadowOutCB, NULL);
-    XtAddCallback(DragUnderShadowIn, XmNactivateCallback, 
+    XtAddCallback(DragUnderShadowIn, XmNactivateCallback,
 				  DragUnderShadowInCB, NULL);
-    XtAddCallback(DragUnderNone, XmNactivateCallback, 
+    XtAddCallback(DragUnderNone, XmNactivateCallback,
 				  DragUnderNoneCB, NULL);
-    XtAddCallback(DragUnderPixmap, XmNactivateCallback, 
+    XtAddCallback(DragUnderPixmap, XmNactivateCallback,
 				  DragUnderPixmapCB, NULL);
 
     n = 0;
@@ -1197,7 +1197,7 @@ char **argv;
     XtSetArg(args[n], XmNleftOffset, 5); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
-    Whichanim_Option = XmCreateOptionMenu(Form, "Whichanim_Option", 
+    Whichanim_Option = XmCreateOptionMenu(Form, "Whichanim_Option",
                                            args, n);
     XtManageChild(Whichanim_Option);
 
@@ -1205,8 +1205,8 @@ char **argv;
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));    n++;
-    WhichdropAct_Pulldown = XmCreatePulldownMenu(Shell1, 
-												 "WhichdropAct_Pulldown", 
+    WhichdropAct_Pulldown = XmCreatePulldownMenu(Shell1,
+												 "WhichdropAct_Pulldown",
 												 args, n);
 
     dropActive = CreatePushButton(WhichdropAct_Pulldown, "Active");
@@ -1232,7 +1232,7 @@ char **argv;
     XtSetArg(args[n], XmNleftOffset, 5); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
-    WhichdropAct_Option = XmCreateOptionMenu(Form, "WhichdropAct_Option", 
+    WhichdropAct_Option = XmCreateOptionMenu(Form, "WhichdropAct_Option",
                                              args, n);
     XtManageChild(WhichdropAct_Option);
 
@@ -1240,7 +1240,7 @@ char **argv;
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));    n++;
-    WhichdropOp_Pulldown = XmCreatePulldownMenu(Shell1, "WhichdropOp_Pulldown", 
+    WhichdropOp_Pulldown = XmCreatePulldownMenu(Shell1, "WhichdropOp_Pulldown",
                                               	args, n);
 
     dropMoveCopy = CreatePushButton(WhichdropOp_Pulldown, "Move_n_Copy");
@@ -1274,7 +1274,7 @@ char **argv;
     XtSetArg(args[n], XmNleftOffset, 5); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
-    WhichdropOp_Option = XmCreateOptionMenu(Form, "WhichdropOp_Option", 
+    WhichdropOp_Option = XmCreateOptionMenu(Form, "WhichdropOp_Option",
                                            args, n);
     XtManageChild(WhichdropOp_Option);
 
@@ -1282,7 +1282,7 @@ char **argv;
 
 	n = 0;
 	XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));	n++;
-	WhichdragOp_Pulldown = XmCreatePulldownMenu(Shell1, "WhichdragOp_Pulldown", 
+	WhichdragOp_Pulldown = XmCreatePulldownMenu(Shell1, "WhichdragOp_Pulldown",
 												  args, n);
 
 	dragMoveCopy = CreatePushButton(WhichdragOp_Pulldown, "Move_n_Copy");
@@ -1318,7 +1318,7 @@ char **argv;
 	XtSetArg(args[n], XmNleftOffset, 5); n++;
 	XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
 	XtSetArg(args[n], XmNrightOffset, 5); n++;
-	WhichdragOp_Option = XmCreateOptionMenu(Form, "WhichdragOp_Option", 
+	WhichdragOp_Option = XmCreateOptionMenu(Form, "WhichdragOp_Option",
 										   args, n);
 	XtManageChild(WhichdragOp_Option);
 
@@ -1326,7 +1326,7 @@ char **argv;
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));    n++;
-    WhichSite_Pulldown = XmCreatePulldownMenu(Shell1, "WhichSite_Pulldown", 
+    WhichSite_Pulldown = XmCreatePulldownMenu(Shell1, "WhichSite_Pulldown",
                                               args, n);
 
     PushButtons = CreatePushButton(WhichSite_Pulldown, "PushButtons");
@@ -1354,7 +1354,7 @@ char **argv;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
 
-    WhichSite_Option = XmCreateOptionMenu(Form, "WhichSite_Option", 
+    WhichSite_Option = XmCreateOptionMenu(Form, "WhichSite_Option",
                                           args, n);
     XtManageChild(WhichSite_Option);
 
@@ -1409,7 +1409,7 @@ char **argv;
 
 		sprintf(name, "topLevel%d",i);
 		n = 0;
-		topLevel = XtCreatePopupShell(name, topLevelShellWidgetClass, Shell1, 
+		topLevel = XtCreatePopupShell(name, topLevelShellWidgetClass, Shell1,
 								      args, n);
 
 		sprintf(name, "BulletinB%d",i);
@@ -1430,12 +1430,12 @@ char **argv;
 				XtSetArg(args[n], XmNy, 10 + k * 100); n++;
 				XtSetArg(args[n], XmNwidth, 90); n++;
 				XtSetArg(args[n], XmNheight, 90); n++;
-				XtSetArg(args[n], XmNbottomShadowColor, 
+				XtSetArg(args[n], XmNbottomShadowColor,
 						 CommonGetColor("blue")); n++;
-				XtSetArg(args[n], XmNtopShadowColor, 
+				XtSetArg(args[n], XmNtopShadowColor,
 						 CommonGetColor("red")); n++;
 				if (appData->applyOverrides) {
-					XtSetArg(args[n], XmNtranslations, 
+					XtSetArg(args[n], XmNtranslations,
 							 appData->xlation2.xlation); n++;
 				}
 				sprintf(name, "PushBtn%d", (j * appData->numRows) + k);
@@ -1477,13 +1477,13 @@ char **argv;
 				XtSetArg(args[n], XmNimportTargets, importList); n++;
 				XtSetArg(args[n], XmNnumImportTargets, 1); n++;
 				if (receiverProtocolStyle == XmDRAG_DYNAMIC) {
-					XtSetArg(args[n], XmNanimationStyle, 
+					XtSetArg(args[n], XmNanimationStyle,
 							 XmDRAG_UNDER_SHADOW_IN); n++;
 				}
 			}
 			if (numDropSites >= MAX_DROPSITES) {
 
-				fprintf(stderr, 
+				fprintf(stderr,
 						"Error: Trying to register too many dropSites\n");
 #ifdef DEBUG
 				fflush(outfp);
@@ -1553,17 +1553,17 @@ char **argv;
 		  else
 		  printf ("For widget PushBtn0 :\nExpected : True ; Actual : False\n\n");
 
-		
+
 		/* this widget has not been registered as a dropsite */
 		dropSiteStatus = XmDropSiteRegistered (buttons[1]);
-		
+
 		if (dropSiteStatus)
 		  printf ("For widget PushBtn1 :\nExpected : False ; Actual : True");
 		else
 		  printf ("For widget PushBtn1 :\nExpected : False ; Actual : False\n\n");}
 	CommonPause();
 	CommonPause();
-      
+
 	XtAppMainLoop(app_context);
 
       }

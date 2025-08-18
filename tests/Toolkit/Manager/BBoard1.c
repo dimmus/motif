@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BBoard1.c /main/8 1995/07/13 18:25:20 drk $"
@@ -66,7 +66,7 @@ void  main(argc, argv)
     static char translation2[]=  "Ctrl<Key>p:  ManagerGadgetActivate() ";
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
@@ -90,16 +90,16 @@ void  main(argc, argv)
     n = 0;
     XtSetArg(args[n], XmNmarginHeight, 0);  n++;
     XtSetValues(BulletinBoard1, args, n);
-   
+
     n = 0;
-    PushButton1 = XmCreatePushButtonGadget(BulletinBoard1, 
+    PushButton1 = XmCreatePushButtonGadget(BulletinBoard1,
 					   "PushButton1", args, n);
     XtManageChild(PushButton1);
 
     n = 0;
     XtSetArg(args[n], XmNx, 50);  n++;
     XtSetArg(args[n], XmNy, 150);  n++;
-    PushButton2 = XmCreatePushButtonGadget(BulletinBoard1, 
+    PushButton2 = XmCreatePushButtonGadget(BulletinBoard1,
 					   "PushButton2", args, n);
     XtManageChild(PushButton2);
 
@@ -116,7 +116,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNy, 10); n++;		/* leave room for big hilite */
     XtSetArg(args[n], XmNwidth, 50);  n++;
     XtSetArg(args[n], XmNheight, 50);  n++;
-    ArrowButton1 = XmCreateArrowButton(BulletinBoard1, 
+    ArrowButton1 = XmCreateArrowButton(BulletinBoard1,
 				       "ArrowButton1", args, n);
     XtManageChild(ArrowButton1);
     CommonPause();
@@ -164,7 +164,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNshadowThickness, 10); n++;
     XtSetArg (args[n], XmNwidth, 100); n++;
     XtSetArg (args[n], XmNheight, 100); n++;
-    BulletinBoard2 = XmCreateBulletinBoard (BulletinBoard1, 
+    BulletinBoard2 = XmCreateBulletinBoard (BulletinBoard1,
 					    "BulletinBoard2", args, n);
 
     n = 0;
@@ -174,10 +174,10 @@ void  main(argc, argv)
     BulletinBoard3 = XmCreateBulletinBoard (BulletinBoard1,
 					    "BulletinBoard3", args, n);
 
-  
+
     XtManageChild (BulletinBoard2);
-    XtManageChild (BulletinBoard3);  
-  
+    XtManageChild (BulletinBoard3);
+
     CommonPause();
 
     XtDestroyWidget (BulletinBoard2);
@@ -187,7 +187,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNshadowThickness, 10); n++;
     XtSetArg (args[n], XmNwidth, 100); n++;
     XtSetArg (args[n], XmNheight, 100); n++;
-    BulletinBoard2 = XmCreateFrame (BulletinBoard1, 
+    BulletinBoard2 = XmCreateFrame (BulletinBoard1,
 				    "BulletinBoard2", args, n);
 
     n = 0;
@@ -197,9 +197,9 @@ void  main(argc, argv)
     BulletinBoard3 = XmCreateFrame (BulletinBoard1,
 				    "BulletinBoard3", args, n);
 
-  
+
     XtManageChild (BulletinBoard2);
-    XtManageChild (BulletinBoard3);  
+    XtManageChild (BulletinBoard3);
 
     CommonPause();
 
@@ -207,13 +207,3 @@ void  main(argc, argv)
 
     XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-

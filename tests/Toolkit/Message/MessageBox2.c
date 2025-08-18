@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageBox2.c /main/9 1995/07/13 18:59:03 drk $"
@@ -34,7 +34,7 @@ static char rcsid[] = "$XConsortium: MessageBox2.c /main/9 1995/07/13 18:59:03 d
 Widget 		mbox;                        /*  MessageBox widget   */
 Widget  	dbox; 		             /*  Question Dialog     */
 Boolean		isSet;
-Widget          shell;                       
+Widget          shell;
 
 static  XmString  str1 = NULL;
 static  XmString  str2 = NULL;
@@ -60,7 +60,7 @@ static XtCallbackRec help_cb[] = {
 
 
 /*#### OkCB ####*/
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -80,7 +80,7 @@ XtPointer     call_data;                   /*  data from widget class  */
 
 
 /*#### CancelCB ####*/
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -95,7 +95,7 @@ XtPointer     call_data;                   /*  data from widget class  */
 
 
 /*#### HelpCB ####*/
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -115,14 +115,14 @@ unsigned int argc;
 char **argv;
 {
     Arg             args[10];
-    register int    n;      
+    register int    n;
     Widget	    Frame;
 
 
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     Frame = XmCreateFrame(Shell1, "Frame1", args, n);
     XtManageChild(Frame);
@@ -155,7 +155,7 @@ char **argv;
     CommonPause();
 
     isSet = False;
-    
+
     dbox = XmCreateQuestionDialog (Shell1, "dbox", args, n);
     XtManageChild (dbox);
 

@@ -2,10 +2,9 @@
 +++ demos/lib/Exm/wml/Makefile.am
 @@ -18,7 +18,7 @@
  	-I$(top_builddir)/clients/uil \
- 	${X_CFLAGS} 
- 
+ 	${X_CFLAGS}
+
 -LDADD = $(top_builddir)/lib/Xm/libXm.la
 +LDADD = $(top_builddir)/lib/Xm/libXm.la -lXt
- 
+
  DISTCLEANFILES = motif.wmd
- 

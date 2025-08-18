@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
 # This is an optionMenu with the following characteristics:
 #	- mapCallback on Pulldown is ON
 #	- unmapCallback on Pulldown is ON
-#	- marginHeight is 5   
+#	- marginHeight is 5
 #	- marginWidth is 5
 #	- fontList is variable on all Pushbuttons
 #	- labelString is Option Menu ==>   - pulldown Menu has three
@@ -43,4 +43,3 @@ CompareVisual S_MAIN_WIDGET
 ReleaseMB Btn1
 CompareVisual S_MAIN_WIDGET
 Exit
-

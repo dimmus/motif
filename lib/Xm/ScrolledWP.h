@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmScrolledWindowP_h
 #define _XmScrolledWindowP_h
 
@@ -115,16 +115,16 @@ typedef struct {
    unsigned char	ScrollPolicy;
    unsigned char	ScrollBarPolicy;
    unsigned char	Placement;
-   
+
    XmScrollBarWidget   	hScrollBar;
    XmScrollBarWidget   	vScrollBar;
    XmDrawingAreaWidget 	ClipWindow;
    Widget              	WorkWindow;
-   
+
    XtCallbackList       traverseObscuredCallback;
 
    XtEnum       auto_drag_model;
-   XtIntervalId auto_drag_timer; 
+   XtIntervalId auto_drag_timer;
 
    Boolean scroll_frame_inited ;
    XmScrollFrameData scroll_frame_data ;

@@ -1,5 +1,5 @@
 # $XConsortium: Frame1.scr /main/5 1995/07/17 20:24:48 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client window will appear which may not be large enough to display
 #  its children.  If necessary, resize the client so that all of its
@@ -50,7 +50,7 @@ CompareVisual Shell1
 Continue
 
 # A RowColumn widget will appear with 5 frame children, each of which
-#  has a drawnButton child.  
+#  has a drawnButton child.
 
 CompareVisual Shell1
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsFreeRsc.c /main/7 1995/07/14 11:20:26 drk $"
@@ -71,7 +71,7 @@ int i;
 	    	*presource = 0L;
             break;
 
-	case RefXmString:     
+	case RefXmString:
 	case RefString:
 	case RefCallbackList:
             if (presource && *presource) {
@@ -81,10 +81,10 @@ int i;
             break;
 
 	default:
-	    sprintf(msg_string,_AutoMessages[WARNMSG68], 
+	    sprintf(msg_string,_AutoMessages[WARNMSG68],
 		    mvsTypeInfo[resource_info[i].type_code].ref_type);
             AutoMessage(msg_string);
-                       
+
             break;
     }
 
@@ -99,7 +99,7 @@ int i;
 	Summary:
 		This function frees up the memory associated with
 	the current args array's value field depending on the type of
-	resource it contains. 
+	resource it contains.
 ************************************************************************/
 void mvsFreeArgs(widget_class_info, args, nargs)
 MvsWidgetClassInfo	*widget_class_info;

@@ -19,21 +19,21 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
- 
+
 #  This is a pushButton widget with the following charcteristics:
 #   	- unitType is Xm100TH_MILLIMETERS
 #	- width and height are 3500
 #	- background color is Orange
 #	- traversalOn is true
-#	- highlightThickness is 100   
+#	- highlightThickness is 100
 #	- highlightColor is navy
-#   	- shadowThickness is 100   
+#   	- shadowThickness is 100
 #	- marginWidth and marginHeight
-#	- armColor is green   
+#	- armColor is green
 #	- armCallback and disarmCallbacks are ON
 #	- highlightOnEnter is true
 #	- fontList is 8x13bold

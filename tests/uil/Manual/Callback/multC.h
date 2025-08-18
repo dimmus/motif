@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: multC.h /main/4 1995/07/13 20:31:01 drk $ */
 
 #include <stdio.h>
@@ -122,7 +122,7 @@ void		callback12_2();
  * Names to register with MrmRegisterNames
  */
 
-static MrmRegisterArg	reglist[] = 
+static MrmRegisterArg	reglist[] =
 			{
 			    "callback1_1",	(caddr_t) callback1_1,
 			    "callback2_1",	(caddr_t) callback2_1,
@@ -165,7 +165,7 @@ static int		reglist_num = (sizeof(reglist) / sizeof(reglist[0]));
 #define NUM_TESTS_PART1		5
 #define PART1_TEST_NAME_LENGTH	58
 
-String	part1_test_names[NUM_TESTS_PART1] = 
+String	part1_test_names[NUM_TESTS_PART1] =
 	{
 	    "One inline callback procedure assigned to one reason      ",
 	    "Multiple inline callback procedures assigned to one reason",
@@ -174,10 +174,10 @@ String	part1_test_names[NUM_TESTS_PART1] =
             "Inline nested procedures lists assigned to one reason     ",
 	};
 
-#define NUM_TESTS_PART2	3	
+#define NUM_TESTS_PART2	3
 #define PART2_TEST_NAME_LENGTH	33
 
-String	part2_test_names[NUM_TESTS_PART2] = 
+String	part2_test_names[NUM_TESTS_PART2] =
 	{
 	    "Multiple inline callbacks        ",
 	    "Predefined callbacks list        ",
@@ -187,7 +187,7 @@ String	part2_test_names[NUM_TESTS_PART2] =
 #define NUM_TESTS_PART3		3
 #define PART3_TEST_NAME_LENGTH	63
 
-String	part3_test_names[NUM_TESTS_PART3] = 
+String	part3_test_names[NUM_TESTS_PART3] =
 	{
 	    "Multiple inline callbacks with multiply defined reasons        ",
 	    "Predefined callbacks list with multiply defined reasons        ",
@@ -197,7 +197,7 @@ String	part3_test_names[NUM_TESTS_PART3] =
 #define NUM_TESTS_PART4		2
 #define PART4_TEST_NAME_LENGTH	63
 
-String	part4_test_names[NUM_TESTS_PART2] = 
+String	part4_test_names[NUM_TESTS_PART2] =
 	{
 	    "Single callback procedure assigned to multiple reasons         ",
 	    "Single callback procedure assigned multiple times to one reason",
@@ -301,12 +301,12 @@ int		part1_order_actual[NUM_TESTS_PART1] =
 		{
 		    0, 0, 0, 0, 0,
 		};
-    
+
 int		part1_order_expected[NUM_TESTS_PART1] =
 		{
 		    1, 3, 2, 4, 1,
 		};
-    
+
 int		callbacks_called = 0,
 		order_preserved = 0;
 

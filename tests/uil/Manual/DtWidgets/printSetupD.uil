@@ -22,7 +22,7 @@
 !
 !
 ! HISTORY
-! $XConsortium: printSetupD.uil /main/1 1996/08/12 15:45:03 jakku $ 
+! $XConsortium: printSetupD.uil /main/1 1996/08/12 15:45:03 jakku $
 !******************************************************************************
 module Test
         version = 'v1.0'
@@ -37,7 +37,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -69,7 +69,7 @@ module Test
 		};
 	      callbacks {
 		DtNcancelCallback = procedure Report_Dtcallback();
-		
+
             };
         };
 

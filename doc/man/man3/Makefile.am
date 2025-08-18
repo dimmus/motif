@@ -696,4 +696,4 @@ man_MANS = ApplicationShell.3 \
     XmVaCreateToggleButton.3 \
     XmVaCreateToggleButtonGadget.3 \
     XmWidgetGetBaselines.3 \
-    XmWidgetGetDisplayRect.3 
+    XmWidgetGetDisplayRect.3

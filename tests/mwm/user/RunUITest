@@ -29,7 +29,7 @@ SYSTEM=`uname -a | awk -F' ' '{print $1}'`
 # print out error message
 
 	case $# in
-		0) echo "Usage : RunUITest [executable]" 
+		0) echo "Usage : RunUITest [executable]"
 		exit
 	esac
 
@@ -45,11 +45,11 @@ SYSTEM=`uname -a | awk -F' ' '{print $1}'`
 	echo "completion, the original \"mwm\" will be restarted with it's"
 	echo "original resource database intact."
 	echo
-	echo "It is assumed the original \"mwm\" running was ${TEST_MWM}," 
+	echo "It is assumed the original \"mwm\" running was ${TEST_MWM},"
 	echo "and, therefore, that is what will be restarted."
 	echo
 
-if [ ${SYSTEM} = "HP-UX" ] || [ ${SYSTEM} = "IRIX" ] 
+if [ ${SYSTEM} = "HP-UX" ] || [ ${SYSTEM} = "IRIX" ]
 then
 # HP version
 	echo "Do you want to continue? (n) \c"
@@ -77,7 +77,7 @@ fi
 #	this should give you only things that really are mwm
 #	remove all leading whitespace and replace multiple
 #	tabs/spaces with 1 space
-if [ ${SYSTEM} = "HP-UX" ] || [ ${SYSTEM} = "IRIX" ] 
+if [ ${SYSTEM} = "HP-UX" ] || [ ${SYSTEM} = "IRIX" ]
 then
 # HP version
 	MWM_LINE=`ps -ef | egrep ' mwm|/mwm' | grep -v egrep`
@@ -87,7 +87,7 @@ then
 	MWM_CMD=`echo ${BETTER_MWM_LINE} | cut -d' ' -f8-`
 	MWM_OPTS=`echo ${BETTER_MWM_LINE} | cut -d' ' -f9-`
 fi
-if [ ${SYSTEM} = "OSF1" ] 
+if [ ${SYSTEM} = "OSF1" ]
 then
 	MWM_LINE=`ps -a | egrep ' mwm|/mwm' | grep -v egrep`
 	BETTER_MWM_LINE=`echo ${MWM_LINE} | sed -e 's/^[	 ]*//
@@ -96,7 +96,7 @@ then
 	MWM_CMD=`echo ${BETTER_MWM_LINE} | cut -d' ' -f8-`
 	MWM_OPTS=`echo ${BETTER_MWM_LINE} | cut -d' ' -f9-`
 fi
-if [ ${SYSTEM} = "SunOS" ] 
+if [ ${SYSTEM} = "SunOS" ]
 then
 # others, like DEC version
     MWM_LINE=`ps axw | egrep ' mwm|/mwm' | grep -v egrep`
@@ -125,7 +125,7 @@ fi
 
 
 
-if [ ${SYSTEM} = "HP-UX" ] || [ ${SYSTEM} = "IRIX" ] || [ ${SYSTEM} = "OSF1" ] 
+if [ ${SYSTEM} = "HP-UX" ] || [ ${SYSTEM} = "IRIX" ] || [ ${SYSTEM} = "OSF1" ]
 then
 # HP version
 TEST_MWM_PID=`ps -eaf | egrep ' mwm|/mwm' | grep -v egrep | awk -F' ' '{print $2}'`
@@ -144,7 +144,7 @@ if [ -s /tmp/oldxdef$$ ]
 then
 	xrdb /tmp/oldxdef$$
 else
-	xrdb -remove	
+	xrdb -remove
 fi
 
 
@@ -155,7 +155,3 @@ fi
 	rm -f /tmp/oldxdef$$*
 
 # end of script
-
-
-
-

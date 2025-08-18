@@ -82,8 +82,8 @@ set totalVista = false
 #     -fu     - Log only Freed and Uninintialized Memory access errors
 #     -fa     - Log only Freed and Array Bound Memory access errors
 #     -ua     - Log only Uninintialized and Array Bound Memory access errors
-#     -nocopy - Don't copy a .purify file in your current directory. If you 
-#	        have a customized .purify in your current directory, it will 
+#     -nocopy - Don't copy a .purify file in your current directory. If you
+#	        have a customized .purify in your current directory, it will
 #		use it, else it will act as -all.
 #
 # All of the above will have memory leak information along with the
@@ -216,7 +216,7 @@ set noglob
 # remember all arguments MUST be a single word (ie no spaces)
 # use single quotes around the right side.
 
-# START CUSTOMIZE # 
+# START CUSTOMIZE #
 
 # $XConsortium: RUN.custom /main/7 1996/08/15 14:05:16 jakku $
 # Motif
@@ -247,10 +247,10 @@ set SpinBox1b = 'SpinBox1 -u 2 -I SpinBox1b.Dat -S SpinBox1b.Scr -V SpinBox1b.vi
 set SpinBox1c = 'SpinBox1 -u 3 -I SpinBox1c.Dat -S SpinBox1c.Scr -V SpinBox1c.vis -O SpinBox1c.prt'
 set SpinBox1d = 'SpinBox1 -u 4 -I SpinBox1d.Dat -S SpinBox1d.Scr -V SpinBox1d.vis -O SpinBox1d.prt'
 
-set SpinBox3a = 'SpinBox3 -u XmForm,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3a.prt' 
-set SpinBox3b = 'SpinBox3 -u XmFrame,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3b.prt' 
-set SpinBox3c = 'SpinBox3 -u XmBulletinBoard,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3c.prt' 
-set SpinBox3d = 'SpinBox3 -u XmRowColumn,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3d.prt' 
+set SpinBox3a = 'SpinBox3 -u XmForm,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3a.prt'
+set SpinBox3b = 'SpinBox3 -u XmFrame,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3b.prt'
+set SpinBox3c = 'SpinBox3 -u XmBulletinBoard,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3c.prt'
+set SpinBox3d = 'SpinBox3 -u XmRowColumn,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3d.prt'
 
 setenv XFILESEARCHPATH ./SpinBox.defaults
 if ( $MOTIF_HOME != "" ) then
@@ -269,10 +269,10 @@ foreach test ("$SpinBox1a" "$SpinBox1b" "$SpinBox1c" "$SpinBox1d" \
               SpinBox4 \
               SpinBox5 \
               SpinBox6 )
-              
+
 
 # END CUSTOMIZE #
-    
+
 if ($count == 0 && $Purifyrun == true) then
     if (-e .purify.bak) then
         rm -f .purify.bak
@@ -321,7 +321,7 @@ endif
 
     set test =($test)
 	@ Total_Test_Num++
-    
+
     foreach word ($test)
         if ($?name_flag) then
             set test_output = $word
@@ -395,7 +395,7 @@ endif
             endif
             echo "failure in test: "$test[1] >> RUN_failures
             echo "FAILURE IN TEST: "$test[1] >> RUN_output
-            echo "FAILURE IN TEST: "$test[1] 
+            echo "FAILURE IN TEST: "$test[1]
         else if ($Vistarun == true && $totalVista == false) then
             if (-e hits) then
                 mv hits ${HIT_FILE}
@@ -458,7 +458,7 @@ end
 
 unset noglob
 #
-# if totalVista is true, generate the overall coverage report for the 
+# if totalVista is true, generate the overall coverage report for the
 # directory
 #
 if ($Vistarun == true && $totalVista == true) then
@@ -485,10 +485,10 @@ if ($mode == compare) then
         set prts_there = `ls -l $AUTOVPATH/*.prt | wc -l`
         if ($prts_here > $prts_there) then
             echo "There are .prt files missing in " $AUTOVPATH >> RUN_failures
-            echo "There are .prt files missing in " $AUTOVPATH 
+            echo "There are .prt files missing in " $AUTOVPATH
         else if ($prts_there > $prts_here) then
             echo "There are .prt files missing in " $cwd >> RUN_failures
-            echo "There are .prt files missing in " $cwd 
+            echo "There are .prt files missing in " $cwd
         endif
         foreach file ($AUTOVPATH/*.prt)
             if (-e $cwd/$file:t) then
@@ -496,7 +496,7 @@ if ($mode == compare) then
                     mv $file:t.diff $file:t.err
 	    else
                 echo "No "$file:t file found in $AUTOVPATH >> RUN_output
-                echo "No "$file:t file found in $AUTOVPATH 
+                echo "No "$file:t file found in $AUTOVPATH
             endif
         end
     endif
@@ -569,6 +569,6 @@ if (pathExists == true) then
 else
 	unsetenv XFILESEARCHPATH
 endif
-	
 
-exit 0 
+
+exit 0

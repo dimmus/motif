@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageBox3.c /main/9 1995/07/13 18:59:27 drk $"
@@ -71,7 +71,7 @@ static XtCallbackRec help_cb[] = {
 
 
 /*#### OkCB ####*/
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -102,7 +102,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 
 
 /*#### CancelCB ####*/
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -120,7 +120,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 
 
 /*#### HelpCB ####*/
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -141,8 +141,8 @@ void main (argc,argv)
 unsigned int argc;
 char **argv;
 {
-    Arg             args[10];       
-    register int    n;             
+    Arg             args[10];
+    register int    n;
     Widget	    Frame;
 
 
@@ -152,7 +152,7 @@ char **argv;
     n = 0;
     Frame = XmCreateFrame(Shell1, "Frame1", args, n);
     XtManageChild(Frame);
-    
+
     /* create compound string */
     str1 = XmStringCreate ("Buttons", XmSTRING_DEFAULT_CHARSET);
     str2 = XmStringCreate ("Symbol", XmSTRING_DEFAULT_CHARSET);
@@ -182,7 +182,7 @@ char **argv;
 
     CommonPause();
 
-    dbox = 
+    dbox =
       (XmMessageBoxWidget) XmCreateInformationDialog (Shell1, "dbox", args, n);
     XtManageChild ((Widget) dbox);
 

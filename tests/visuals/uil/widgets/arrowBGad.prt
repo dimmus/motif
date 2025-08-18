@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is arrowBGad.uid ---- 
+---- The uid file to be opened is arrowBGad.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Arrow_Button  
-TRACE:(3) PressMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Arrow_Button
+TRACE:(3) PressMB Btn1
 
 /*********************************************************/
 ---- armCallback callback made ----
@@ -36,7 +36,7 @@ TRACE:(3) PressMB Btn1
 ---- Reason was XmCR_ARM ----
 /*********************************************************/
 
-TRACE:(4) ReleaseMB Btn1 
+TRACE:(4) ReleaseMB Btn1
 
 /*********************************************************/
 ---- activateCallback callback made ----
@@ -51,7 +51,7 @@ TRACE:(4) ReleaseMB Btn1
 ---- Reason was XmCR_DISARM ----
 /*********************************************************/
 
-TRACE:(5) ClickMB Btn1 
+TRACE:(5) ClickMB Btn1
 
 /*********************************************************/
 ---- armCallback callback made ----
@@ -73,6 +73,6 @@ TRACE:(5) ClickMB Btn1
 ---- Reason was XmCR_DISARM ----
 /*********************************************************/
 
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
+TRACE:(6) CompareVisual S_MAIN_WIDGET
 TRACE:(7) Exit
 Exiting Test...Please Standby...

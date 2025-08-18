@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ChekNaColors.c /main/7 1995/07/14 11:47:05 drk $"
@@ -40,8 +40,8 @@ static char rcsid[] = "$XConsortium: ChekNaColors.c /main/7 1995/07/14 11:47:05 
             Check to make sure all the colors named in mvsColorTalbe are indeed
         installed on the user's server.
 
-        Note: This is no longer a necessary requirement since 
-              mvsAllocNamedColor now translates the color name 
+        Note: This is no longer a necessary requirement since
+              mvsAllocNamedColor now translates the color name
               to the appropriate RGB value for the user and calls
               XAllocColor instead of XAllocNamedColor like it used to.
 
@@ -50,7 +50,7 @@ static char rcsid[] = "$XConsortium: ChekNaColors.c /main/7 1995/07/14 11:47:05 
 
         OUTPUTS
             none
- 
+
         RETURNS
             nothing
 ************************************************************************/
@@ -78,17 +78,17 @@ void mvsCheckNamedColors PARAMS((void))
             AutoMessage (msg_string);}
         else {
             if (exact.red != (mvsColorTable[i].red<<8)) {
-	      sprintf(msg_string, _AutoMessages[VISMSG26],name,exact.red,mvsColorTable[i].red<<8); 
+	      sprintf(msg_string, _AutoMessages[VISMSG26],name,exact.red,mvsColorTable[i].red<<8);
               AutoMessage(msg_string);}
-                    
+
             if (exact.green != (mvsColorTable[i].green<<8)) {
-	      sprintf (msg_string, _AutoMessages[VISMSG27],name,exact.green,mvsColorTable[i].green<<8); 
+	      sprintf (msg_string, _AutoMessages[VISMSG27],name,exact.green,mvsColorTable[i].green<<8);
                AutoMessage(msg_string);}
-                    
+
             if (exact.blue != (mvsColorTable[i].blue<<8)) {
-	      sprintf(msg_string, _AutoMessages[VISMSG28],name,exact.blue,mvsColorTable[i].blue<<8); 
+	      sprintf(msg_string, _AutoMessages[VISMSG28],name,exact.blue,mvsColorTable[i].blue<<8);
               AutoMessage(msg_string); }
-                    
+
         }
         pixels[0] = nearest.pixel;
         XFreeColors(display2,cmap,pixels,1,0);
@@ -99,17 +99,17 @@ void mvsCheckNamedColors PARAMS((void))
 	   AutoMessage(msg_string);}
         else {
             if (exact.red != (mvsColorTable[i].red<<8)){
-	        sprintf(msg_string,_AutoMessages[VISMSG26],name,exact.red,mvsColorTable[i].red<<8); 
+	        sprintf(msg_string,_AutoMessages[VISMSG26],name,exact.red,mvsColorTable[i].red<<8);
                 AutoMessage(msg_string);}
-                    
+
             if (exact.green != (mvsColorTable[i].green<<8)) {
 	        sprintf (msg_string, _AutoMessages[VISMSG27], name,exact.green,mvsColorTable[i].green<<8);
                 AutoMessage(msg_string);}
-                    
+
             if (exact.blue != (mvsColorTable[i].blue<<8)) {
 	      sprintf (msg_string, _AutoMessages[WARNMSG28], name,exact.blue,mvsColorTable[i].blue<<8); }
-                
-                    
+
+
         }
         pixels[0] = nearest.pixel;
         XFreeColors(display2,cmap,pixels,1,0);

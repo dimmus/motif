@@ -1,5 +1,5 @@
 # $XConsortium: ArrowBGad1.scr /main/6 1995/07/17 20:05:38 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,15 +20,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
-# A client with an Arrow Button Gadget pointing upward should appear. 
-# Press MB1 in the client window.  The arrow should appear pressed in. 
-# Release MB1 and the arrow should appear popped out. 
+# A client with an Arrow Button Gadget pointing upward should appear.
+# Press MB1 in the client window.  The arrow should appear pressed in.
+# Release MB1 and the arrow should appear popped out.
 
 CompareVisual PanedWindow1
 LocatePointer ArrowButton1
@@ -39,7 +39,7 @@ CompareVisual ArrowButton1
 Continue
 
 # A new arrow gadget will appear pointing up.
-# Click MB1 on each arrow.  Arrows should go in and out. 
+# Click MB1 on each arrow.  Arrows should go in and out.
 
 LocatePointer ArrowButton1
 ClickMB Btn1
@@ -49,8 +49,8 @@ CompareVisual ArrowButtonGadget1
 ReleaseMB Btn1
 CompareVisual ArrowButtonGadget1
 
-# Resize the window from the lower right corner.  Bottom arrows should grow. 
-# Move the sash with MB1. 
+# Resize the window from the lower right corner.  Bottom arrows should grow.
+# Move the sash with MB1.
 
 WindowResize Shell1 SouthEast 250 250
 CompareVisual ArrowButtonGadget1
@@ -60,7 +60,7 @@ CompareVisual PanedWindow1
 Continue
 
 # A new arrow gadget will appear pointing down.
-# Click MB1 on each arrow.  Arrows should go in and out. 
+# Click MB1 on each arrow.  Arrows should go in and out.
 
 LocatePointer ArrowButton1
 ClickMB Btn1
@@ -72,9 +72,9 @@ CompareVisual ArrowButtonGadget2
 ReleaseMB Btn1
 CompareVisual ArrowButtonGadget2
 
-# Resize the bottom of the window down.  The bottom arrow should grow. 
-# Move the top sash with MB1. 
-# Move bottom sash with MB1. 
+# Resize the bottom of the window down.  The bottom arrow should grow.
+# Move the top sash with MB1.
+# Move bottom sash with MB1.
 
 WindowResize Shell1 South 290
 CompareVisual ArrowButtonGadget2
@@ -87,8 +87,8 @@ CompareVisual PanedWindow1
 Continue
 
 # A new arrow gadget will appear pointing left.
-# Click MB1 on each arrow.  Arrows should go in and out. 
-# Move all sashes. 
+# Click MB1 on each arrow.  Arrows should go in and out.
+# Move all sashes.
 
 LocatePointer ArrowButton1
 ClickMB Btn1
@@ -113,7 +113,7 @@ CompareVisual PanedWindow1
 Continue
 
 # A new arrow gadget will appear pointing right.
-# Click MB1 on each arrow.  Arrows should go in and out. 
+# Click MB1 on each arrow.  Arrows should go in and out.
 
 LocatePointer ArrowButton1
 ClickMB Btn1
@@ -129,12 +129,12 @@ CompareVisual ArrowButtonGadget4
 ReleaseMB Btn1
 CompareVisual ArrowButtonGadget4
 
-# Resize the bottom of the window down.  The bottom arrow should grow. 
+# Resize the bottom of the window down.  The bottom arrow should grow.
 
 WindowResize Shell1 South 380
 CompareVisual Shell1
 
-# Move the bottom sash to the bottom.  The bottom arrow should disappear. 
+# Move the bottom sash to the bottom.  The bottom arrow should disappear.
 
 LocatePointer PanedWindow1 RSash 3
 PressMB Btn1
@@ -142,16 +142,16 @@ LocatePointer PanedWindow1 Down
 ReleaseMB Btn1
 CompareVisual PanedWindow1
 
-# Resize the right edge.  All arrows should center themselves. 
+# Resize the right edge.  All arrows should center themselves.
 
 WindowResize Shell1 East 280
 CompareVisual PanedWindow1
 
-# Resize the bottom of the window.  The last arrow should reappear. 
+# Resize the bottom of the window.  The last arrow should reappear.
 
 WindowResize Shell1 South 400
 
-# Move the upper 2 sashes to the top.  The top two arrows should disappear. 
+# Move the upper 2 sashes to the top.  The top two arrows should disappear.
 
 LocatePointer PanedWindow1 RSash 0
 PressMB Btn1
@@ -163,8 +163,8 @@ LocatePointer PanedWindow1 Up
 ReleaseMB Btn1
 CompareVisual PanedWindow1
 
-# Move the lower 2 sashes to the bottom.  The bottom two arrows should 
-#  disappear. 
+# Move the lower 2 sashes to the bottom.  The bottom two arrows should
+#  disappear.
 
 LocatePointer PanedWindow1 RSash 2
 PressMB Btn1
@@ -176,7 +176,7 @@ LocatePointer PanedWindow1 Down
 ReleaseMB Btn1
 CompareVisual PanedWindow1
 
-# Move sashes so that all windows are visible. 
+# Move sashes so that all windows are visible.
 
 LocatePointer PanedWindow1 RSash 1
 DragXYRelative Down 80 Btn1
@@ -188,11 +188,3 @@ LocatePointer PanedWindow1 RSash 3
 DragXYRelative Up 55 Btn1
 
 Exit
-
-
-
-
-
-
-
-

@@ -31,7 +31,7 @@
  **
  **   File:     simpleDemo.c
  **
- **   Description: C program to demonstrate the ExmSimple widget. 
+ **   Description: C program to demonstrate the ExmSimple widget.
  **
  ****************************************************************************
  ****************************************************************************/
@@ -64,26 +64,26 @@
 #define      APP_CLASS  "XMdemo"
 
 /*******************************************************************************
-exercise_ExmSimple: Realize four ExmSimple widgets. 
+exercise_ExmSimple: Realize four ExmSimple widgets.
 *******************************************************************************/
-void 
+void
 exercise_ExmSimple(Widget parent)
 {
  Widget   simpleWidget1, simpleWidget2, simpleWidget3, simpleWidget4;
 
  /* Instantiate a default ExmSimple widget; the default shape is an oval. */
-  simpleWidget1 = XtVaCreateManagedWidget("Simple1", 
-                               exmSimpleWidgetClass, parent, 
-                               NULL); 
+  simpleWidget1 = XtVaCreateManagedWidget("Simple1",
+                               exmSimpleWidgetClass, parent,
+                               NULL);
 
- /* Override the default shape; draw a rectangle instead. */ 
-  simpleWidget2 = XtVaCreateManagedWidget("Simple2", 
-                               exmSimpleWidgetClass, parent, 
+ /* Override the default shape; draw a rectangle instead. */
+  simpleWidget2 = XtVaCreateManagedWidget("Simple2",
+                               exmSimpleWidgetClass, parent,
                                ExmNsimpleShape,      ExmSHAPE_RECTANGLE,
                                NULL);
 
- /* Override the default shadow thickness and margin width. */ 
-  simpleWidget3 = XtVaCreateManagedWidget("Simple3", 
+ /* Override the default shadow thickness and margin width. */
+  simpleWidget3 = XtVaCreateManagedWidget("Simple3",
                                exmSimpleWidgetClass, parent,
                                ExmNsimpleShape,     ExmSHAPE_OVAL,
                                XmNshadowThickness,  14,
@@ -91,8 +91,8 @@ exercise_ExmSimple(Widget parent)
                                NULL);
 
  /* Experiment with a different unit type. */
-  simpleWidget4 = XtVaCreateManagedWidget("Simple4", 
-                               exmSimpleWidgetClass, parent, 
+  simpleWidget4 = XtVaCreateManagedWidget("Simple4",
+                               exmSimpleWidgetClass, parent,
                                ExmNsimpleShape,     ExmSHAPE_RECTANGLE,
                                XmNunitType,         Xm100TH_MILLIMETERS,
                                XmNmarginHeight,     1000,
@@ -114,7 +114,7 @@ QuitCB(Widget w, XtPointer ignore, XtPointer cbstruct)
 /*******************************************************************************
 main: Set up the application, including the mainWindow and menuBar.
 *******************************************************************************/
-int 
+int
 main (int argc, char **argv)
 {
   Display	*display;
@@ -135,9 +135,9 @@ main (int argc, char **argv)
 
   shell = XtVaAppCreateShell(argv[0], APP_CLASS, applicationShellWidgetClass,
 			     display, XmNallowShellResize, True, NULL);
-			     
 
-  mainWindow = XtVaCreateManagedWidget("myMainWindow", xmMainWindowWidgetClass, 
+
+  mainWindow = XtVaCreateManagedWidget("myMainWindow", xmMainWindowWidgetClass,
                                        shell, NULL);
 
  /* Create a menu bar with one simple menu. */
@@ -162,9 +162,9 @@ main (int argc, char **argv)
  /* Create a XmRowColumn widget; the ExmSimple widgets will ultimately be
     managed by this XmRowColumn. */
   workRegion = XtVaCreateManagedWidget("myWorkRegion", xmRowColumnWidgetClass,
-                                       mainWindow, 
+                                       mainWindow,
                                        NULL);
-  
+
   exercise_ExmSimple(workRegion);
 
   XtRealizeWidget(shell);

@@ -36,7 +36,7 @@ void toggleCB3();
 void toggleCB4();
 void do_change();
 
-static XtCallbackRec 
+static XtCallbackRec
   disarmCR1[] = {{ toggleCB1, NULL}, {NULL, NULL},};
 
 static XtCallbackRec
@@ -64,7 +64,7 @@ Widget   PushButton1,
          PushButtonMove1,
          PushButtonMove2,
          PushButtonMove3;
-         
+
 
 static void SetSpacing(spacing)
 Dimension spacing;
@@ -102,7 +102,7 @@ caddr_t  call_data;
 {
   switch(((XmToggleButtonCallbackStruct*)call_data)->reason)
     {
-    case XmCR_DISARM: 
+    case XmCR_DISARM:
       SetSpacing(50);
       GetSpacing();
       break;
@@ -170,7 +170,7 @@ caddr_t call_data;
 {
   Arg args[2];
   int n = 0;
-	
+
   /* to test y */
   XtSetArg(args[n], XmNy, 240); n++;
   XtSetValues(client_data, args, n);
@@ -186,7 +186,7 @@ main(unsigned int argc, char **argv)
 
   n = 0;
   bb = XmCreateBulletinBoard(Shell1, "bb", args, n);
-  
+
   /* Begin test for CR 5303 */
 
   n = 0;
@@ -262,7 +262,7 @@ main(unsigned int argc, char **argv)
   XtSetArg(args[n], XmNborderWidth, 1); n++;
   Label1 = XmCreateLabel(bb, "Label1", args, n);
 
-  str = XmStringCreateLtoR("Move TglBtn1", XmSTRING_DEFAULT_CHARSET); 
+  str = XmStringCreateLtoR("Move TglBtn1", XmSTRING_DEFAULT_CHARSET);
   n = 0;
   XtSetArg(args[n], XmNx, 10); n++;
   XtSetArg(args[n], XmNy, 150); n++;
@@ -273,7 +273,7 @@ main(unsigned int argc, char **argv)
   XtAddCallback(PushButtonMove1, XmNactivateCallback, do_change, ToggleButton1);
 
   XmStringFree(str);
-  str = XmStringCreateLtoR("Move PushBtn1", XmSTRING_DEFAULT_CHARSET); 
+  str = XmStringCreateLtoR("Move PushBtn1", XmSTRING_DEFAULT_CHARSET);
   n = 0;
   XtSetArg(args[n], XmNx, 150); n++;
   XtSetArg(args[n], XmNy, 150); n++;
@@ -284,7 +284,7 @@ main(unsigned int argc, char **argv)
   XtAddCallback(PushButtonMove2, XmNactivateCallback, do_change, PushButton1);
 
   XmStringFree(str);
-  str = XmStringCreateLtoR("Move Lbl1", XmSTRING_DEFAULT_CHARSET); 
+  str = XmStringCreateLtoR("Move Lbl1", XmSTRING_DEFAULT_CHARSET);
   n = 0;
   XtSetArg(args[n], XmNx, 280); n++;
   XtSetArg(args[n], XmNy, 150); n++;
@@ -305,7 +305,7 @@ main(unsigned int argc, char **argv)
   /* End test for CR 5163 */
 
   CommonPause();
-  
+
   XtDestroyWidget(bb);
 
   CommonPause();
@@ -313,8 +313,3 @@ main(unsigned int argc, char **argv)
   XtAppMainLoop(app_context);
 
 }
-
-
-
-
-

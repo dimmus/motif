@@ -102,7 +102,7 @@ static char tinaBits[] = {
 /***********************************************************************
  *
  *  CreatePixmap - This routine will return a pixmap from the output
- *         of the bitmap editor.  The output pixmap will be 
+ *         of the bitmap editor.  The output pixmap will be
  *         the depth of the screen.  This is so that label can
  *         write it using its current foreground and background.
  *
@@ -141,7 +141,7 @@ Pixel   foreground_pixel, background_pixel;
     /* get a chunk of off-screen, display on root screen */
     /* 1 bit deep, this is still just bit data, not color pixel data */
     pixmap = XCreatePixmap (display, RootWindowOfScreen (screen),
-                image.width, image.height, 
+                image.width, image.height,
                 (unsigned) DefaultDepthOfScreen(screen));
     if (!pixmap)
     return (pixmap);
@@ -160,7 +160,7 @@ Pixel   foreground_pixel, background_pixel;
     return ((Pixmap) NULL);
 
     /* put bits into the pixmap */
-    XPutImage (display, pixmap, gc, &image, 0, 0, 
+    XPutImage (display, pixmap, gc, &image, 0, 0,
            0, 0, image.width, image.height);
 
     XFreeGC (display, gc);
@@ -174,14 +174,14 @@ unsigned int argc;
 char **argv;
 {
     Arg             args[MAX_ARGS];
-    register int    n;            
+    register int    n;
     Widget	    Frame;
     XmMessageBoxWidget mbox;
     XmString	    string;
 
     /*  initialize toolkit  */
     CommonTestInit (argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 10);                     n++;
     XtSetArg (args[n], XmNheight, 10);                    n++;

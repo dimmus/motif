@@ -83,10 +83,6 @@ main (int argc, char *argv[])
   XtRealizeWidget (Shell1);
 
   CommonPause();
-  
-  doit();
-
-  CommonPause();
 
   doit();
 
@@ -95,17 +91,13 @@ main (int argc, char *argv[])
   doit();
 
   CommonPause();
+
+  doit();
+
   CommonPause();
-  
+  CommonPause();
+
 
   XtAppMainLoop (app_context);
 
 }
-
-
-
-
-
-
-
-

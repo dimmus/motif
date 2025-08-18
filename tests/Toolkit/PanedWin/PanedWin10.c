@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin10.c /main/4 1995/07/13 19:05:52 drk $"
@@ -50,7 +50,7 @@ char  **argv;
     Arg			args[MAX_ARGS];
     Widget		PW, PBarray[BUTTONS];
     Boolean	        resizable;
-    
+
 
     CommonTestInit(argc, argv);
 
@@ -64,18 +64,18 @@ char  **argv;
     PW = XmCreatePanedWindow(Shell1, "PW", args, n);
 
     n = 0;
-    XtSetArg(args[n], XmNwidth, B_WIDTH / 2 ); n++; 
-    XtSetArg(args[n], XmNheight, B_HEIGHT / 2 ); n++;  
-    XtSetArg(args[n], XmNallowResize, False); n++; 
+    XtSetArg(args[n], XmNwidth, B_WIDTH / 2 ); n++;
+    XtSetArg(args[n], XmNheight, B_HEIGHT / 2 ); n++;
+    XtSetArg(args[n], XmNallowResize, False); n++;
 
-    for (i = 0; i < BUTTONS; i++) 
+    for (i = 0; i < BUTTONS; i++)
       {
 	PBarray[i] = XmCreatePushButton(PW, "PB", args, n);
 	XtManageChild(PBarray[i]);
       }
-    
-    XtManageChild(PW);  
-    
+
+    XtManageChild(PW);
+
     CommonPause();
 
     /* Try to resize each in turn with and without allowResize set. */
@@ -87,7 +87,7 @@ char  **argv;
 	XtSetArg(args[n], XmNwidth, B_WIDTH); n++;
 	XtSetArg(args[n], XmNheight, B_HEIGHT); n++;
 	XtSetValues(PBarray[i], args, n);
-	
+
       }
 
     CommonPause();
@@ -99,7 +99,7 @@ char  **argv;
 	n = 0;
 	XtSetArg(args[n], XmNallowResize, True); n++;
 	XtSetValues(PBarray[j-1], args, n);
-	    
+
 	/* Increasing the size of each button. */
 	for (i = 0; i < BUTTONS; i++)
 	  {
@@ -107,12 +107,12 @@ char  **argv;
 	    XtSetArg(args[n], XmNwidth, 2 * B_WIDTH); n++;
 	    XtSetArg(args[n], XmNheight, 2 * B_HEIGHT); n++;
 	    XtSetValues(PBarray[i], args, n);
-	
+
 	  }
 
 	CommonPause();
       }
-    
+
     /* Setting allowResize False for each button in turn. */
 
     for (j = 1; j <= BUTTONS; j++)
@@ -120,7 +120,7 @@ char  **argv;
 	n = 0;
 	XtSetArg(args[n], XmNallowResize, False); n++;
 	XtSetValues(PBarray[j-1], args, n);
-	    
+
 	/* Decreasing the size of each button. */
 	for (i = 0; i < BUTTONS; i++)
 	  {
@@ -128,12 +128,12 @@ char  **argv;
 	    XtSetArg(args[n], XmNwidth, B_WIDTH / 2 ); n++;
 	    XtSetArg(args[n], XmNheight, B_HEIGHT / 2 ); n++;
 	    XtSetValues(PBarray[i], args, n);
-	
+
 	  }
 
 	CommonPause();
       }
-    
+
     /* "Move" each in turn. */
     for (i = 0; i < BUTTONS; i++)
       {
@@ -141,14 +141,14 @@ char  **argv;
 	XtSetArg(args[n], XmNx, B_X); n++;
 	XtSetArg(args[n], XmNy, B_Y); n++;
 	XtSetValues(PBarray[i], args, n);
-	
+
 	CommonPause();
       }
 
     XtDestroyWidget(PW);
 
     CommonPause();
-    
+
     XtAppMainLoop(app_context);
 }
 
@@ -159,12 +159,11 @@ static void ReportSize (w)
   register int	n;
   Arg		args[2];
   Dimension	width, height;
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, &width); n++;
   XtSetArg(args[n], XmNheight, &height); n++;
   XtGetValues(w, args, n);
-  
+
   printf("%dX%d\n", (int)width, (int)height);
 }
-

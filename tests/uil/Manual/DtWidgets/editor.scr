@@ -23,5 +23,5 @@
 # $XConsortium: editor.scr /main/1 1996/08/12 15:45:23 jakku $
 
 
-CompareVisual S_MAIN_WIDGET 
+CompareVisual S_MAIN_WIDGET
 Exit

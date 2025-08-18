@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ConcatObj.c /main/7 1995/07/14 11:32:33 drk $"
@@ -38,7 +38,7 @@ static char rcsid[] = "$XConsortium: ConcatObj.c /main/7 1995/07/14 11:32:33 drk
 	Summary:
         CONCATENATE OBJECT TYPES
 
-            Returns a new object type that consists of the last two object types 
+            Returns a new object type that consists of the last two object types
         concatenated together.
 
         INPUTS

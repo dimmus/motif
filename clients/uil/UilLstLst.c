@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilLstLst.c /main/20 1999/07/21 09:03:16 vipin $"
@@ -128,7 +128,7 @@ void	lst_open_listing()
 
     /* open the listing file */
 
-    open_status = 
+    open_status =
 	create_listing_file( lst_az_fcb );
 
     if ( open_status == src_k_open_error )
@@ -145,7 +145,7 @@ void	lst_open_listing()
     lst_l_page_no = 0;
     lst_v_listing_open = TRUE;
 
-    sprintf(lst_c_title1, 
+    sprintf(lst_c_title1,
 	    "%s %s \t%s\t\t Page ",
 	    _host_compiler, _compiler_version,
 	    current_time(&ctime_buf));
@@ -201,7 +201,7 @@ void	Uil_lst_cleanup_listing()
 	return;
 
     /*
-    ** free fcb 
+    ** free fcb
     */
 
     _free_memory((char*)lst_az_fcb);
@@ -319,7 +319,7 @@ boolean	v_new_page;
     */
     Uil_current_file = lst_az_fcb->expanded_name;
     if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
-	diag_report_status();    
+	diag_report_status();
 
 
     if ((lst_l_lines_left <= 0) || v_new_page)
@@ -327,8 +327,8 @@ boolean	v_new_page;
 	lst_l_page_no ++;
 	lst_l_lines_left = lst_l_usable_lines;
 
-	fprintf(lst_az_fcb->az_file_ptr, 
-		"\f\n%s%d\n%s\n\n", 
+	fprintf(lst_az_fcb->az_file_ptr,
+		"\f\n%s%d\n%s\n\n",
 		lst_c_title1, lst_l_page_no, Uil_lst_c_title2);
     }
 
@@ -435,8 +435,8 @@ void	lst_output_listing()
     **	Walk the list of source records.
     */
 
-    for (az_src_rec = src_az_first_source_record;  
-	 az_src_rec != NULL;  
+    for (az_src_rec = src_az_first_source_record;
+	 az_src_rec != NULL;
 	 az_src_rec = az_src_rec->az_next_source_record)
     {
 
@@ -444,12 +444,12 @@ void	lst_output_listing()
 	**  place the line and file number in the output buffer
 	*/
 
-	sprintf(src_buffer, "%5d (%d)\t", 
-		az_src_rec->w_line_number, 
+	sprintf(src_buffer, "%5d (%d)\t",
+		az_src_rec->w_line_number,
 		az_src_rec->b_file_number);
 
 	src_ptr = &(src_buffer[ strlen( src_buffer ) ]);
-	
+
 	src_retrieve_source( az_src_rec, src_ptr );
 
 	/*
@@ -466,7 +466,7 @@ void	lst_output_listing()
 	if ( az_src_rec->b_flags & src_m_form_feed)
 	    *src_ptr = ' ';
 
-	lst_output_line( src_buffer, 
+	lst_output_line( src_buffer,
 			 (az_src_rec->b_flags & src_m_form_feed) != 0 );
 
 	/*
@@ -514,7 +514,7 @@ void	lst_output_listing()
 		 "     File (%d)   %s",
 		 i, az_fcb->expanded_name );
 	lst_output_line( buffer, FALSE );
-    }    
+    }
 
     lst_output_line( " ", FALSE );
 
@@ -563,8 +563,8 @@ src_message_item_type	*az_message_item;
     last_pos = -1;
     msg_no = 9;
 
-    for (az_msg = az_message_item;  
-	 az_msg != NULL;  
+    for (az_msg = az_message_item;
+	 az_msg != NULL;
 	 az_msg = az_msg->az_next_message)
     {
 	current_pos = az_msg->b_source_pos;
@@ -579,13 +579,13 @@ src_message_item_type	*az_message_item;
 	}
 
 
-	sprintf(buffer, "%s (%d) %s", 
+	sprintf(buffer, "%s (%d) %s",
 		diag_get_message_abbrev( az_msg->l_message_number ),
-		msg_no, 
+		msg_no,
 		az_msg->c_text);
 
 	lst_output_line( buffer, FALSE );
-    }    
+    }
 
     lst_output_line( " ", FALSE );
 
@@ -645,17 +645,17 @@ src_source_record_type	*az_src_rec;
 	if (mc_array != NULL) {
 	    _free_memory ((char*)mc_array);
 	}
-	mc_array = 
+	mc_array =
 	    (src_machine_code_type * *)_get_memory (sizeof (char *) * code_cnt);
 	mc_cnt = code_cnt;
     }
 
     for (az_code = az_src_rec->az_machine_code_list, mc_i = 0;
-	 az_code != NULL;  
+	 az_code != NULL;
 	 az_code = az_code->az_next_machine_code, mc_i++) {
 	mc_array [mc_i] = az_code;
     }
-   
+
     for (mc_i = code_cnt - 1; mc_i >= 0; mc_i--)
     {
 
@@ -813,7 +813,7 @@ src_source_record_type	*az_src_rec;
 		    sprintf ((char *)
 			     & hex_longword [HEX_PER_LONG - (2 * (l + 1))],
 			     "%02X", extra_bytes [extra_byte_cnt-l-1]);
-		
+
 		}
 		_move (& buffer [start_hex_long [extra_long_cnt]],
 			hex_longword, HEX_PER_LONG);
@@ -835,7 +835,7 @@ src_source_record_type	*az_src_rec;
 	    }
 	}
 
-    }    
+    }
 
 
 
@@ -904,7 +904,7 @@ char			*src_buffer;
 	return;
 
     v_output_line = FALSE;
-    
+
     for (pos = 0;  c_char = src_buffer[ pos ], c_char != 0; )
     {
 	if (pos < msg_pos)
@@ -916,7 +916,7 @@ char			*src_buffer;
 
 	    continue;
 	}
-    
+
 	msg_no = (msg_no % 9) + 1;
 	ptr_buffer[ pos++ ] = msg_no + '0';
 	v_output_line = TRUE;
@@ -1003,12 +1003,12 @@ void	lst_debug_output
 	{
 	    _assert( ptr <= &(buffer[132]), "Overflowed debug listing buffer" );
 	    count = strcspn( ptr, "\n" );
-	    if (count == strlen( ptr )) 
+	    if (count == strlen( ptr ))
 	    {
 		cur_pos = ptr - buffer + count;
 		return;
-	    } 
-	    else 
+	    }
+	    else
 	    {
 		ptr[ count ] = '\0';
 	    }

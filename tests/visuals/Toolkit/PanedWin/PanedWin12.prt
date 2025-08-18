@@ -22,23 +22,23 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual PW 
+TRACE:(1) CompareVisual PW
 TRACE:(2) Continue
-TRACE:(3) CompareVisual PW 
+TRACE:(3) CompareVisual PW
 TRACE:(4) Continue
 Value of PB4 XmNpositionIndex = 0
-TRACE:(5) CompareVisual PW 
+TRACE:(5) CompareVisual PW
 TRACE:(6) Continue
 Value of PB3 XmNpositionIndex = 1
-TRACE:(7) CompareVisual PW 
+TRACE:(7) CompareVisual PW
 TRACE:(8) Continue
 Value of PB5 XmNpositionIndex = 4
-TRACE:(9) CompareVisual PW 
+TRACE:(9) CompareVisual PW
 TRACE:(10) Continue
 Value of PB5 XmNpositionIndex = 4
-TRACE:(11) CompareVisual PW 
+TRACE:(11) CompareVisual PW
 TRACE:(12) Continue
 Value of PB4 XmNpositionIndex = 0
-TRACE:(13) CompareVisual PW 
+TRACE:(13) CompareVisual PW
 TRACE:(14) Exit
 Exiting Test...Please Standby...

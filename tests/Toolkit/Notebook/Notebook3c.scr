@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #  A Notebook Widget will appear on your screen. It will have all
 #  the default settings.
@@ -62,8 +62,8 @@ LocatePointer ChildPB1
 ReleaseMB Btn1
 
 
- 
-#  A SelectionDialog will appear on your screen. Choose "XmMessageBox" from 
+
+#  A SelectionDialog will appear on your screen. Choose "XmMessageBox" from
 #  the list of choices, and click on the OK button of the SelectionDialog.
 #  A MessageBox page should appear.
 
@@ -97,7 +97,7 @@ PressMB Btn1
 LocatePointer pageNumberPB1
 ReleaseMB Btn1
 
-#  Select "Create Child" from the "Child" menu. 
+#  Select "Create Child" from the "Child" menu.
 
 LocatePointer MenuCascade2
 PressMB Btn1
@@ -106,8 +106,8 @@ ReleaseMB Btn1
 
 
 #  Select "XmLabel" from the list of choices in the SelectionDialog.
-#  A Label status area, "StatusArea1"  should appear on the screen. It is 
-#  associated with page 1. 
+#  A Label status area, "StatusArea1"  should appear on the screen. It is
+#  associated with page 1.
 
 LocatePointer ChildWidgetSelectionDialog RSelectionListItem 7
 ClickMB Btn1
@@ -118,7 +118,7 @@ ClickMB Btn1
 
 
 #  Repeat steps 1-7.
-#  A Label status area, "StatusArea2" should appear on the screen. It is 
+#  A Label status area, "StatusArea2" should appear on the screen. It is
 #  associated with the same page as "StatusArea1". "StatusArea1" should
 #  no longer be visible.
 
@@ -133,7 +133,7 @@ PressMB Btn1
 LocatePointer pageNumberPB1
 ReleaseMB Btn1
 
-#  Select "Create Child" from the "Child" menu. 
+#  Select "Create Child" from the "Child" menu.
 
 LocatePointer MenuCascade2
 PressMB Btn1
@@ -142,8 +142,8 @@ ReleaseMB Btn1
 
 
 #  Select "XmLabel" from the list of choices in the SelectionDialog.
-#  A Label status area, "StatusArea1"  should appear on the screen. It is 
-#  associated with page 1. 
+#  A Label status area, "StatusArea1"  should appear on the screen. It is
+#  associated with page 1.
 
 LocatePointer ChildWidgetSelectionDialog RSelectionListItem 7
 ClickMB Btn1
@@ -180,7 +180,7 @@ LocatePointer pageNumberPB1
 ReleaseMB Btn1
 
 
-#  Select "Create Child" from the "Child" menu. 
+#  Select "Create Child" from the "Child" menu.
 
 LocatePointer MenuCascade2
 PressMB Btn1
@@ -190,7 +190,7 @@ ReleaseMB Btn1
 
 #  Select "XmPushButton" from the list of choices in the SelectionDialog.
 #  A PushButton major tab should appear on the screen, which is associated with
-#  page 1. 
+#  page 1.
 
 
 LocatePointer ChildWidgetSelectionDialog RSelectionListItem 13
@@ -249,8 +249,8 @@ ClickMB Btn1
 CompareVisual Notebook
 
 
-#  Repeat steps 1-5 3 more times, increasing the value of the 
-#  "Set Page Number" scale to 10,11,12. The result will be 3 major tabs 
+#  Repeat steps 1-5 3 more times, increasing the value of the
+#  "Set Page Number" scale to 10,11,12. The result will be 3 major tabs
 #  associated with pages 1,6,10,11,12. (MajorTab1, MajorTab2, MajorTab3,
 #  MajorTab4,MajorTab5).
 
@@ -357,7 +357,7 @@ ClickMB Btn1
 CompareVisual Notebook
 
 
-#  Major tab scrollers will appear in the Notebook. Use these to scroll 
+#  Major tab scrollers will appear in the Notebook. Use these to scroll
 #  through the major tabs.
 
 
@@ -402,7 +402,7 @@ ReleaseMB Btn1
 
 
 
-#  Select "Create Child" from the "Child" menu. Choose "XmPushButton" from 
+#  Select "Create Child" from the "Child" menu. Choose "XmPushButton" from
 #  the list of choices in the SelectionDialog.
 #  A PushButton minor tab will appear.
 
@@ -420,8 +420,8 @@ ClickMB Btn1
 
 CompareVisual Notebook
 
-#  Repeat steps 1-5 three more times, increasing the value of the 
-# "Set Page Number" scale by 1 every time. The result will be 3 minor tabs 
+#  Repeat steps 1-5 three more times, increasing the value of the
+# "Set Page Number" scale by 1 every time. The result will be 3 minor tabs
 #  associated with pages 2,3,4,5. (MinorTab1, MinorTab2, MinorTab3,MinorTab4).
 
 
@@ -503,9 +503,9 @@ ClickMB Btn1
 CompareVisual Notebook
 
 
-#  Minor tab scrollers will appear in the Notebook. Use these to scroll 
+#  Minor tab scrollers will appear in the Notebook. Use these to scroll
 #  through the minor tabs.
- 
+
 
 LocatePointer MinorTabScrollerPrevious
 ClickMB Btn1
@@ -533,7 +533,7 @@ Continue
 
 LocatePointer NotebookScale8 RScaleSlider
 DragSliderValue Right 25
-LocatePointer NotebookCascade1 
+LocatePointer NotebookCascade1
 PressMB Btn1
 LocatePointer ApplyScalePB8
 ReleaseMB Btn1
@@ -575,9 +575,3 @@ Continue
 
 
 Exit
-
-
-
-
-
-

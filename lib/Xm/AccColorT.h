@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -49,9 +49,9 @@ typedef struct _XmAccessColorDataRec {
     Pixel select_color ;
 } XmAccessColorDataRec, *XmAccessColorData;
 
-typedef void (*XmAccessColorsGetProc)(Widget widget, 
+typedef void (*XmAccessColorsGetProc)(Widget widget,
 				      XmAccessColorData color_data);
-typedef void (*XmAccessColorsSetProc)(Widget widget, 
+typedef void (*XmAccessColorsSetProc)(Widget widget,
 				      XmAccessColorData color_data);
 
 /* Trait structures and typedefs, place typedefs first */
@@ -65,12 +65,12 @@ typedef struct _XmAccessColorsTraitRec {
 } XmAccessColorsTraitRec, *XmAccessColorsTrait;
 
 #define AccessColorInvalid         0L
-#define AccessForeground           (1L<<0)  
-#define AccessBackgroundPixel      (1L<<1)   
-#define AccessHighlightColor       (1L<<2)   
-#define AccessTopShadowColor       (1L<<3)   
-#define AccessBottomShadowColor    (1L<<4)   
-#define AccessSelectColor          (1L<<5)   
+#define AccessForeground           (1L<<0)
+#define AccessBackgroundPixel      (1L<<1)
+#define AccessHighlightColor       (1L<<2)
+#define AccessTopShadowColor       (1L<<3)
+#define AccessBottomShadowColor    (1L<<4)
+#define AccessSelectColor          (1L<<5)
 
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */

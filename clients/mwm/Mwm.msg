@@ -17,7 +17,7 @@ WMINITWS_MSG_1 Insufficient memory for Screen data
 WMINITWS_MSG_2 Another window manager is running on screen %d
 WMINITWS_MSG_3 Unable to manage any screens on display.
 WMINITWS_MSG_4 Cannot configure X connection
-WMINITWS_MSG_5 
+WMINITWS_MSG_5
 WMINITWS_MSG_6 Insufficient memory for Workspace data
 WMINITWS_MSG_7 Insufficient memory for displayString
 WMINITWS_MSG_8 Insufficient memory for window manager data

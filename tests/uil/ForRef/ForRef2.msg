@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
-        message : 
+        message :
 	"Forward Reference Test 1:\n\n" &
 	"This is a Drawn Button Widget with the\n" &
 	"following characteristics:\n\n" &
@@ -34,4 +34,3 @@
 	"The text at the bottom of the bulletin\n" &
 	"board forward references a font and is\n" &
 	"bold";
-

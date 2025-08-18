@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List1.c /main/9 1995/07/13 18:14:01 drk $"
@@ -50,12 +50,12 @@ void  main (argc, argv)
     Boolean		selected;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  350);  		n++;
     XtSetArg(args[n], XmNheight, 300);  		n++;
     XtSetValues(Shell1, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
     /* convert the plain strings to fancy Xstrings */
@@ -137,10 +137,10 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNselectedItems, &selected_items);      		n++;
     XtGetValues(List1, args, n);
 
-    if (selected_item_count == 0) 
+    if (selected_item_count == 0)
 	printf("Please make a selection in the List\n");
     else
-    	printf("SelectedItemCount = %d, SelectedItems = %s\n", 
+    	printf("SelectedItemCount = %d, SelectedItems = %s\n",
 			selected_item_count, CommonCsToRs(selected_items[0]));
 
     printf("\n");
@@ -180,7 +180,7 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNselectedItems, NULL);				n++;
     XtSetValues(List1, args, n);
 
-    new_items_2[0] = XmStringCreateLtoR("Same Item", 
+    new_items_2[0] = XmStringCreateLtoR("Same Item",
 					  XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -205,7 +205,7 @@ void  main (argc, argv)
     else
 	printf("No Selected Items\n");
 
-    n = 0; 
+    n = 0;
     XtSetArg(args[n], XmNselectedItemCount, &selected_item_count);	n++;
     XtGetValues(List1, args, n);
 
@@ -275,13 +275,13 @@ void  main (argc, argv)
 }
 
 
-static void SinSelCB(Widget w, XtPointer client_data, 
+static void SinSelCB(Widget w, XtPointer client_data,
 			       XtPointer call_data)
 
 {
     char **text;
     XmString tcs;
-    
+
     printf("One item selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. %d\n", ((XmListCallbackStruct*)call_data)->item_position);
@@ -303,7 +303,7 @@ static void MulSelCB(Widget w, XtPointer client_data,
 {
     char **text;
     XmString tcs;
-    
+
     printf("One or more items selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. of items is %d\n",
@@ -318,7 +318,7 @@ static void ExtSelCB(Widget w, XtPointer client_data,
 {
     char **text;
     XmString tcs;
-    
+
     printf("One or more items selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. of items is %d\n",

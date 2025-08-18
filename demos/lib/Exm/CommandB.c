@@ -1,5 +1,5 @@
 /* $XConsortium: CommandB.c /main/5 1995/07/15 20:40:23 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -28,7 +28,7 @@
  *
  * ExmCommandButton is a demonstration widget.  OSF provides this widget
  * solely to teach programmers how to write their own Motif widgets.
- * OSF does not support this widget in any way." 
+ * OSF does not support this widget in any way."
  *
  ************************************ WARNING *********************************/
 
@@ -39,7 +39,7 @@
  *              when activated, initiates a callback.
  *              This widget demonstrates how to
  *                  * create Motif-style button visuals.
- *                  * establish Motif-style actions for buttons. 
+ *                  * establish Motif-style actions for buttons.
  *                  * establish the XmQTactivatable trait.
  *                  * establish the XmQTtakesDefault trait.
  *                  * establish a simple Motif callback.
@@ -75,7 +75,7 @@ static Boolean SetValues (
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args);
-static void DrawShadow ( 
+static void DrawShadow (
                         Widget w);
 
 static void ExmCommandButtonEnter (
@@ -120,7 +120,7 @@ static void ShowAsDefault(
                         Widget w,
                         XtEnum state);
 
-/* Define the translations for the ExmCommandButton widget. 
+/* Define the translations for the ExmCommandButton widget.
    The first four translations will be handled by the XmPrimitive
    widget; the last six translations will be handled by the
    ExmCommandButton widget itself. */
@@ -148,10 +148,10 @@ static XtActionsRec actions[] = {
 
 
 /* Define the resources for the ExmCommandButton widget.  This widget supports
-   one new resource: XmNactivateCallback.   In addition, this widget overrides 
+   one new resource: XmNactivateCallback.   In addition, this widget overrides
    the default values of two resources in XmPrimitive:
    XmNshadowThickness and XmNtraversalOn. */
-static XtResource resources[] = 
+static XtResource resources[] =
 {
     {
 	XmNshadowThickness,
@@ -160,7 +160,7 @@ static XtResource resources[] =
 	sizeof (Dimension),
 	XtOffsetOf( ExmCommandButtonRec, primitive.shadow_thickness),
 	XmRImmediate,
-	(XtPointer) 3  
+	(XtPointer) 3
     },
     {
 	XmNtraversalOn,
@@ -168,7 +168,7 @@ static XtResource resources[] =
 	XmRBoolean,
 	sizeof (Boolean),
 	XtOffsetOf( ExmCommandButtonRec, primitive.traversal_on),
-	XmRImmediate, 
+	XmRImmediate,
 	(XtPointer) True
     },
     {
@@ -177,12 +177,12 @@ static XtResource resources[] =
 	XmRCallback,
 	sizeof(XtCallbackList),
 	XtOffsetOf( ExmCommandButtonRec, command_button.activate_callback),
-	XmRPointer, 
+	XmRPointer,
         (XtPointer) NULL
     },
 };
 
-/* ExmCommandButton does not treat any of its resources 
+/* ExmCommandButton does not treat any of its resources
    as synthetic resources. */
 
 
@@ -193,16 +193,16 @@ static XmPrimitiveClassExtRec primClassExtRec = {
     /* version */                    XmPrimitiveClassExtVersion,
     /* record_size */                sizeof(XmPrimitiveClassExtRec),
     /* widget_baseline */            XmInheritBaselineProc,
-    /* widget_display_rect */        XmInheritDisplayRectProc, 
+    /* widget_display_rect */        XmInheritDisplayRectProc,
     /* widget_margins */             NULL,
 };
 
 
 /* Define the widget class record.  See Chapter 3 of the
    "OSF/Motif Widget Writer's Guide" for details. */
-externaldef (exmcommandbuttonclassrec) ExmCommandButtonClassRec 
+externaldef (exmcommandbuttonclassrec) ExmCommandButtonClassRec
 exmCommandButtonClassRec = {
-  {    
+  {
     /* superclass */                 (WidgetClass)&exmStringClassRec,
     /* class_name */                 "ExmCommandButton",
     /* widget_size */                sizeof(ExmCommandButtonRec),
@@ -235,7 +235,7 @@ exmCommandButtonClassRec = {
     /* query_geometry */             XtInheritQueryGeometry,
     /* display_accelerator */        NULL,
     /* extension */                  NULL,
-  },    
+  },
   { /* XmPrimitive */
     /* border_highlight */           XmInheritBorderHighlight,
     /* border_unhighlight */         XmInheritBorderUnhighlight,
@@ -243,9 +243,9 @@ exmCommandButtonClassRec = {
     /* arm_and_activate */           ExmCommandButtonArmAndActivate,
     /* syn_resources */              NULL,
     /* num_syn_resources */          0,
-    /* extension */                  (XtPointer)&primClassExtRec, 
-  },    
-  { /* ExmSimple */ 
+    /* extension */                  (XtPointer)&primClassExtRec,
+  },
+  { /* ExmSimple */
     /* draw_visual */                ExmInheritDrawVisual,
     /* draw_shadow */                DrawShadow,
     /* create_gc */                  ExmInheritCreateGC,
@@ -255,15 +255,15 @@ exmCommandButtonClassRec = {
     /* calc_widget_size */           ExmInheritCalcWidgetSize,
     /* reconfigure */                ExmInheritReconfigure,
     /* extension */                  NULL,
-  },    
-  { /* ExmString */ 
+  },
+  { /* ExmString */
     /* default_render_table_type */  XmBUTTON_RENDER_TABLE,
     /* extension */                  NULL,
-  },    
-  { /* ExmCommandButton */ 
+  },
+  { /* ExmCommandButton */
     /* extension */                  NULL,
-  },    
-};    
+  },
+};
 
 /* Establish the widget class name as an externally accessible symbol.
    Use the "externaldef" macro rather than the "extern" keyword. */
@@ -288,7 +288,7 @@ static XmConst XmTakesDefaultTraitRec  commandButtonTDT = {
  *     Called by the Intrinsics when this widget is instantiated.
  *
  ******************************************************************************/
-static void 
+static void
 Initialize (
         Widget request_w,
         Widget new_w,
@@ -304,10 +304,10 @@ Initialize (
    nw->command_button.visual_armed = False;
    nw->command_button.visual_timer = 0;
 
- /* Reconfigure if necessary. 
+ /* Reconfigure if necessary.
     (This Reconfigure method is defined in the ExmSimple widget.) */
    if (wc->simple_class.reconfigure)
-     (*(wc->simple_class.reconfigure))(exmCommandButtonWidgetClass, 
+     (*(wc->simple_class.reconfigure))(exmCommandButtonWidgetClass,
                                        new_w, NULL);
 }
 
@@ -315,16 +315,16 @@ Initialize (
 /************************************************************************
  *
  *  ClassInitialize
- *      Called by the Intrinsics the first time a widget of this class is 
+ *      Called by the Intrinsics the first time a widget of this class is
  *      instantiated.
  *
  ************************************************************************/
-static void 
+static void
 ClassInitialize(void)
 {
 #ifndef USE_ORIGINAL_MOTIF_CODE
  /* Install the XmQTtakesDefault trait on CommandButton only. */
-   XmeTraitSet((XtPointer) exmCommandButtonWidgetClass, XmQTtakesDefault, 
+   XmeTraitSet((XtPointer) exmCommandButtonWidgetClass, XmQTtakesDefault,
                (XtPointer) &commandButtonTDT);
 #endif
 }
@@ -336,20 +336,20 @@ ClassInitialize(void)
  *
  *  ClassPartInitialize
  *      Called by the Intrinsics when this widget or a subclass of this
- *      widget is instantiated.  
+ *      widget is instantiated.
  *
  ************************************************************************/
-static void 
+static void
 ClassPartInitialize(
         WidgetClass widgetclass )
 {
  /* Install the XmQTactivatable trait on CommandButton and its subclasses. */
-   XmeTraitSet((XtPointer) widgetclass, XmQTactivatable, 
+   XmeTraitSet((XtPointer) widgetclass, XmQTactivatable,
                (XtPointer) &commandButtonAT);
 
 #ifdef USE_ORIGINAL_MOTIF_CODE
  /* Install the XmQTtakesDefault trait on CommandButton and its subclasses. */
-   XmeTraitSet((XtPointer) widgetclass, XmQTtakesDefault, 
+   XmeTraitSet((XtPointer) widgetclass, XmQTtakesDefault,
                (XtPointer) &commandButtonTDT);
 #endif
 }
@@ -358,10 +358,10 @@ ClassPartInitialize(
 /*******************************************************************************
  *
  *  Destroy:
- *      Called by the Intrinsics when this widget is deallocated. 
+ *      Called by the Intrinsics when this widget is deallocated.
  *
  ******************************************************************************/
-static void 
+static void
 Destroy (
         Widget w
         )
@@ -370,7 +370,7 @@ Destroy (
 
  /* If the widget is deallocated during the middle of a time out, remove
     the time out.  (In other words, if we didn't do this, then we could
-    only deallocate the widget after any time outs had expired. */ 
+    only deallocate the widget after any time outs had expired. */
    if (cw->command_button.visual_timer != 0)
      XtRemoveTimeOut (cw->command_button.visual_timer);
 }
@@ -380,10 +380,10 @@ Destroy (
 /*******************************************************************************
  *
  *  SetValues:
- *      Called by the Intrinsics in response to a change in a resource value. 
+ *      Called by the Intrinsics in response to a change in a resource value.
  *
  ******************************************************************************/
-static Boolean 
+static Boolean
 SetValues (
         Widget old_w,
         Widget request_w,
@@ -396,7 +396,7 @@ SetValues (
  ExmCommandButtonWidget nw = (ExmCommandButtonWidget)new_w;
  Boolean redisplayFlag = False;
 
- /* If the simple.reconfigure flag changes, trigger a redisplay. */ 
+ /* If the simple.reconfigure flag changes, trigger a redisplay. */
    if (nw->simple.need_to_reconfigure == True) {
      if (wc->simple_class.reconfigure)
        (*(wc->simple_class.reconfigure))(exmCommandButtonWidgetClass,
@@ -412,12 +412,12 @@ SetValues (
 /*******************************************************************************
  *
  *  DrawShadow:
- *      Called by the ExmCommandButtonEnter, ExmCommandButtonLeave, 
- *      ExmCommandButtonArmAndActivate, ExmCommandButtonArm, 
- *      ExmCommandButtonDisarm, and VisualDisarm methods. 
+ *      Called by the ExmCommandButtonEnter, ExmCommandButtonLeave,
+ *      ExmCommandButtonArmAndActivate, ExmCommandButtonArm,
+ *      ExmCommandButtonDisarm, and VisualDisarm methods.
  *
  ******************************************************************************/
-static void 
+static void
 DrawShadow (
         Widget w
            )
@@ -439,7 +439,7 @@ DrawShadow (
      XmeDrawShadows (XtDisplay (cw), XtWindow (cw),
    	             cw->primitive.top_shadow_GC,
    	             cw->primitive.bottom_shadow_GC,
-   	             cw->primitive.highlight_thickness + 
+   	             cw->primitive.highlight_thickness +
                        cw->simple.margin_width,
    	             cw->primitive.highlight_thickness +
                        cw->simple.margin_height,
@@ -449,7 +449,7 @@ DrawShadow (
                        - (2 * cw->simple.margin_height),
    	             cw->primitive.shadow_thickness,
                      cw->command_button.visual_armed ? XmSHADOW_ETCHED_IN :
-                                                       XmSHADOW_ETCHED_OUT); 
+                                                       XmSHADOW_ETCHED_OUT);
    }
 
 }
@@ -459,10 +459,10 @@ DrawShadow (
 /*******************************************************************************
  *
  * ExmCommandButtonEnter:
- *     Called by the Intrinsics whenever the cursor enters a window.  
+ *     Called by the Intrinsics whenever the cursor enters a window.
  *
  ******************************************************************************/
-static void 
+static void
 ExmCommandButtonEnter (
         Widget w,
         XEvent *event,
@@ -474,7 +474,7 @@ ExmCommandButtonEnter (
  ExmCommandButtonWidget cw = (ExmCommandButtonWidget)w;
 
    if (cw->command_button.armed == True) {
-     /* In order for this code to be executed, the user had to have just 
+     /* In order for this code to be executed, the user had to have just
         performed the following steps:
            1. moved the cursor into the widget window.
            2. armed the widget.
@@ -482,7 +482,7 @@ ExmCommandButtonEnter (
            4. moved the cursor back into the widget window.  */
      cw->command_button.visual_armed = True;
 
-     if (wc->simple_class.draw_shadow) 
+     if (wc->simple_class.draw_shadow)
        (*(wc->simple_class.draw_shadow)) (w);
    }
 
@@ -495,10 +495,10 @@ ExmCommandButtonEnter (
 /*******************************************************************************
  *
  * ExmCommandButtonLeave:
- *     Called by the Intrinsics whenever the cursor leaves the widget's window. 
+ *     Called by the Intrinsics whenever the cursor leaves the widget's window.
  *
  ******************************************************************************/
-static void 
+static void
 ExmCommandButtonLeave (
         Widget w,
         XEvent *event,
@@ -516,7 +516,7 @@ ExmCommandButtonLeave (
            3. moved the cursor out of the widget window. */
      cw->command_button.visual_armed = False;
 
-     if (wc->simple_class.draw_shadow) 
+     if (wc->simple_class.draw_shadow)
        (*(wc->simple_class.draw_shadow)) (w);
    }
 
@@ -532,7 +532,7 @@ ExmCommandButtonLeave (
  *    <Key>space.
  *
  ******************************************************************************/
-static void 
+static void
 ExmCommandButtonArmAndActivate (
         Widget w,
         XEvent *event,
@@ -545,15 +545,15 @@ ExmCommandButtonArmAndActivate (
  ExmCommandButtonWidget cw = (ExmCommandButtonWidget)w;
  XmAnyCallbackStruct cb;
 
- /* Call DrawShadow. */ 
+ /* Call DrawShadow. */
    cw->command_button.visual_armed = True;
-   if (wc->simple_class.draw_shadow) 
+   if (wc->simple_class.draw_shadow)
      (*(wc->simple_class.draw_shadow)) (w);
 
  /* Eliminate any data waiting in the X Window's output buffer. */
    XFlush (XtDisplay (cw));
 
- /* Assuming that the XmNactivateCallback resource is set to True, call the 
+ /* Assuming that the XmNactivateCallback resource is set to True, call the
     callback routine. */
    if (cw->command_button.activate_callback) {
      cb.reason = XmCR_ACTIVATE;
@@ -561,13 +561,13 @@ ExmCommandButtonArmAndActivate (
      XtCallCallbackList ((Widget)cw, cw->command_button.activate_callback, &cb);
    }
 
- /* Provide a short delay prior to the appearance of any new windows created 
+ /* Provide a short delay prior to the appearance of any new windows created
     by the callback.  The net effect is that the ExmCommandButton will appear
     to flash on and off immediately prior to the appearance of any window that
-    may overwrite it. */ 
+    may overwrite it. */
    if ((cw->core.being_destroyed == False) &&
        (cw->command_button.visual_timer == 0))
-     cw->command_button.visual_timer = 
+     cw->command_button.visual_timer =
            XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)cw),
    			   (unsigned long) VISUAL_DELAY,
    			   VisualDisarm,
@@ -582,7 +582,7 @@ ExmCommandButtonArmAndActivate (
  *     Called by the Intrinsics in response to a <Btn1Down> event.
  *
  ******************************************************************************/
-static void 
+static void
 ExmCommandButtonArm (
         Widget w,
         XEvent *event,
@@ -592,7 +592,7 @@ ExmCommandButtonArm (
 {
  ExmCommandButtonWidgetClass wc = (ExmCommandButtonWidgetClass)XtClass(w);
  ExmCommandButtonWidget cw = (ExmCommandButtonWidget)w;
- 
+
  /* Make this ExmCommandButton widget the current widget.  (Highlight its
     border, if appropriate. */
    XmProcessTraversal (w, XmTRAVERSE_CURRENT);
@@ -600,7 +600,7 @@ ExmCommandButtonArm (
  /* Redraw the shadow to indicate arming. */
    cw->command_button.armed = True;
    cw->command_button.visual_armed = True;
-   if (wc->simple_class.draw_shadow) 
+   if (wc->simple_class.draw_shadow)
      (*(wc->simple_class.draw_shadow))(w);
 }
 
@@ -612,7 +612,7 @@ ExmCommandButtonArm (
  *     Called by the Intrinsics in response to a <Btn1Up> event.
  *
  ******************************************************************************/
-static void 
+static void
 ExmCommandButtonActivate (
         Widget w,
         XEvent *event,
@@ -636,10 +636,10 @@ ExmCommandButtonActivate (
 /*******************************************************************************
  *
  * ExmCommandButtonDisarm:
- *    Called by the Intrinsics after every call to the Activate method. 
+ *    Called by the Intrinsics after every call to the Activate method.
  *
  ******************************************************************************/
-static void 
+static void
 ExmCommandButtonDisarm (
         Widget w,
         XEvent *event,
@@ -651,11 +651,11 @@ ExmCommandButtonDisarm (
  ExmCommandButtonWidget cbw = (ExmCommandButtonWidget)w;
 
  /* Change the appearance of the shadow to indicate that the widget is no
-    longer armed. */ 
+    longer armed. */
    cbw->command_button.armed = False;
    cbw->command_button.visual_armed = False;
 
-   if (cbwc->simple_class.draw_shadow) 
+   if (cbwc->simple_class.draw_shadow)
      (*(cbwc->simple_class.draw_shadow)) (w);
 }
 
@@ -663,10 +663,10 @@ ExmCommandButtonDisarm (
 /*******************************************************************************
  *
  * VisualDisarm:
- *     Called by ExmCommandButtonArmAndActivate. 
+ *     Called by ExmCommandButtonArmAndActivate.
  *
  ******************************************************************************/
-static void  
+static void
 VisualDisarm (
         XtPointer client_data,
         XtIntervalId *id
@@ -674,8 +674,8 @@ VisualDisarm (
 {
  ExmCommandButtonWidget cw = (ExmCommandButtonWidget)client_data;
  ExmCommandButtonWidgetClass wc = (ExmCommandButtonWidgetClass)XtClass(cw);
- 
- /* Change back the shadow appearance at the end of the timeout period. */ 
+
+ /* Change back the shadow appearance at the end of the timeout period. */
    cw->command_button.visual_timer = 0;
    cw->command_button.visual_armed = False;
 
@@ -690,19 +690,19 @@ VisualDisarm (
 /************************************************************************
  *
  *  Trait methods --------
- *      
+ *
  ************************************************************************/
 
 /************************************************************************
  *
  *  ChangeCB:
  *       Called by a parent widget of ExmCommandButton to update the
- *       callback list. 
- *      
+ *       callback list.
+ *
  ************************************************************************/
-static void 
+static void
 ChangeCB(
-	 Widget w, 
+	 Widget w,
 	 XtCallbackProc activCB,
 	 XtPointer closure,
 	 Boolean setunset)
@@ -718,24 +718,24 @@ ChangeCB(
  *
  *  ShowAsDefault
  *	set up the default visual
- *      
+ *
  ************************************************************************/
-static void 
-ShowAsDefault(Widget w, 
+static void
+ShowAsDefault(Widget w,
 	      XtEnum state)
 {
  ExmCommandButtonWidgetClass cbwc = (ExmCommandButtonWidgetClass)XtClass(w);
  ExmCommandButtonWidget cbw = (ExmCommandButtonWidget)w;
- Position   start_x_of_outer_shadow,  start_y_of_outer_shadow; 
+ Position   start_x_of_outer_shadow,  start_y_of_outer_shadow;
  Dimension  margin_push_out=0;
- Dimension  width_of_outer_shadow, height_of_outer_shadow; 
+ Dimension  width_of_outer_shadow, height_of_outer_shadow;
  int   dx, dy, width, height;
  GC    top_GC, bottom_GC;
  Dimension outer_shadow_thickness;
  int       outer_shadow_type;
  int       margins_were_pushed_out=0;
 #define MARGIN_BETWEEN_HIGHLIGHT_AND_OUTER_SHADOW 2
- 
+
 
    start_x_of_outer_shadow = cbw->primitive.highlight_thickness +
                                MARGIN_BETWEEN_HIGHLIGHT_AND_OUTER_SHADOW;
@@ -747,38 +747,38 @@ ShowAsDefault(Widget w,
 
    switch (state) {
      case XmDEFAULT_READY:
-         /* Push out the margins to make room for subsequent increases in the 
+         /* Push out the margins to make room for subsequent increases in the
             shadow thickness.  The request to push out the margins will increase
             the size of the CommandButton widget assuming that its manager has
-            the space to spare. */ 
-          
+            the space to spare. */
+
           if (cbw->primitive.shadow_thickness < 5)
             margin_push_out = 5;
           else
-            margin_push_out = cbw->primitive.shadow_thickness; 
+            margin_push_out = cbw->primitive.shadow_thickness;
           margins_were_pushed_out = 1;
-          XtVaSetValues((Widget)cbw, 
-                   XmNmarginWidth,  cbw->simple.margin_width + margin_push_out, 
-                   XmNmarginHeight, cbw->simple.margin_height + margin_push_out, 
-                   NULL); 
+          XtVaSetValues((Widget)cbw,
+                   XmNmarginWidth,  cbw->simple.margin_width + margin_push_out,
+                   XmNmarginHeight, cbw->simple.margin_height + margin_push_out,
+                   NULL);
 	  break ;
      case XmDEFAULT_ON :
          /* Draw an outer shadow.  The outer shadow is drawn outside the
-            widget's margins but inside the border highlight. 
-            The inner shadow is drawn by the DrawShadow method. */ 
+            widget's margins but inside the border highlight.
+            The inner shadow is drawn by the DrawShadow method. */
           top_GC = cbw->primitive.top_shadow_GC;
           bottom_GC = cbw->primitive.bottom_shadow_GC;
-          outer_shadow_type = cbw->command_button.visual_armed ? 
+          outer_shadow_type = cbw->command_button.visual_armed ?
                                                     XmSHADOW_ETCHED_IN :
-                                                    XmSHADOW_ETCHED_OUT; 
+                                                    XmSHADOW_ETCHED_OUT;
           XmeDrawShadows(XtDisplay(w), XtWindow(w),
-                         top_GC, 
+                         top_GC,
                          bottom_GC,
                          start_x_of_outer_shadow,
                          start_y_of_outer_shadow,
                          width_of_outer_shadow,
                          height_of_outer_shadow,
-                         outer_shadow_thickness, 
+                         outer_shadow_thickness,
                          outer_shadow_type);
 	  break ;
      case XmDEFAULT_OFF :
@@ -796,14 +796,14 @@ ShowAsDefault(Widget w,
            is called at some point after XmDEFAULT_READY was called, then
            we have to restore the margins back to their original size. */
           if (margins_were_pushed_out)
-            XtVaSetValues((Widget)cbw, 
+            XtVaSetValues((Widget)cbw,
                      XmNmarginWidth,  cbw->simple.margin_width - margin_push_out,
                      XmNmarginHeight, cbw->simple.margin_height - margin_push_out,
-                     NULL); 
+                     NULL);
 	  break ;
     }
 }
-	
+
 
 
 /************************************************************************
@@ -818,7 +818,7 @@ ShowAsDefault(Widget w,
  *      Called by an application.
  *
  ******************************************************************************/
-Widget 
+Widget
 ExmCreateCommandButton (
         Widget parent,
         char *name,
@@ -831,4 +831,3 @@ ExmCreateCommandButton (
    return (XtCreateWidget(name,exmCommandButtonWidgetClass,
                           parent,arglist,argCount));
 }
-

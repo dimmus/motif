@@ -23,12 +23,12 @@
 #
 # HISTORY
 RowCol3    width: 1164, height: 52
-TRACE:(1) CompareVisual Child4 
+TRACE:(1) CompareVisual Child4
 TRACE:(2) Continue
 RowColumn    width: 60, height: 563
-TRACE:(3) CompareVisual Child16 
+TRACE:(3) CompareVisual Child16
 TRACE:(4) Continue
 RowColumn    width: 415, height: 518
-TRACE:(5) CompareVisual Child8 
+TRACE:(5) CompareVisual Child8
 TRACE:(6) Exit
 Exiting Test...Please Standby...

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmRepType_h
 #define _XmRepType_h
 
@@ -37,7 +37,7 @@ extern "C" {
 typedef unsigned short XmRepTypeId ;
 
 typedef struct
-{   
+{
     String rep_type_name ;
     String *value_names ;
     unsigned char *values ;
@@ -49,7 +49,7 @@ typedef struct
 
 /********    Public Function Declarations    ********/
 
-extern XmRepTypeId XmRepTypeRegister( 
+extern XmRepTypeId XmRepTypeRegister(
                         String rep_type,
                         String *value_names,
                         unsigned char *values,
@@ -58,13 +58,13 @@ extern XmRepTypeId XmRepTypeRegister(
 #else
                         unsigned char num_values) ;
 #endif /* NeedWidePrototypes */
-extern void XmRepTypeAddReverse( 
+extern void XmRepTypeAddReverse(
 #if NeedWidePrototypes
                         int rep_type_id) ;
 #else
                         XmRepTypeId rep_type_id) ;
 #endif /* NeedWidePrototypes */
-extern Boolean XmRepTypeValidValue( 
+extern Boolean XmRepTypeValidValue(
 #if NeedWidePrototypes
                         int rep_type_id,
                         unsigned int test_value,
@@ -74,15 +74,15 @@ extern Boolean XmRepTypeValidValue(
 #endif /* NeedWidePrototypes */
                         Widget enable_default_warning) ;
 extern XmRepTypeList XmRepTypeGetRegistered( void ) ;
-extern XmRepTypeEntry XmRepTypeGetRecord( 
+extern XmRepTypeEntry XmRepTypeGetRecord(
 #if NeedWidePrototypes
                         int rep_type_id) ;
 #else
                         XmRepTypeId rep_type_id) ;
 #endif /* NeedWidePrototypes */
-extern XmRepTypeId XmRepTypeGetId( 
+extern XmRepTypeId XmRepTypeGetId(
                         String rep_type) ;
-extern String * XmRepTypeGetNameList( 
+extern String * XmRepTypeGetNameList(
 #if NeedWidePrototypes
                         int rep_type_id,
                         int use_uppercase_format) ;

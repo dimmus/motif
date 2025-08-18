@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DumpHier.c /main/9 1995/07/14 10:56:08 drk $"
@@ -70,7 +70,7 @@ void DumpHierarchy(Widget w, FILE *file, int space)
 		fprintf(file, "%s(parent)\n",XtName((Widget)cw));
 		for(i = 0; i < cw->composite.num_children; i++)
 		{
-			DumpHierarchy(cw->composite.children[i], file, 
+			DumpHierarchy(cw->composite.children[i], file,
 				      (space + 2));
 		}
 	}

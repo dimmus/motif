@@ -4,40 +4,40 @@ UIL TEST SUITE:
     This is a test suite that displays all MOTIF widgets created with UIL.
 It it designed to be user interactive, with on-line user instructions
 accompanying each test widget. All widgets have two files associated with them.
-The first is the uil file itself and the second is a message file which 
-contains the description of the widget to be displayed. Also included is a 
-common C source file that will display the UID file produced from the UIL test 
-code. This C file is very generic and is intended only to display single 
+The first is the uil file itself and the second is a message file which
+contains the description of the widget to be displayed. Also included is a
+common C source file that will display the UID file produced from the UIL test
+code. This C file is very generic and is intended only to display single
 hierarchy UID files.
 
 DESCRIPTION OF FILES:
 
 displayUid.c 	- 	The generic C routine to display UID files, report
-			Callbacks, and popup a popupMenu. 
+			Callbacks, and popup a popupMenu.
 reasons.h	-	The header file which contains an array of REASONS for
 			reporting Callbacks.
 Imakefile	-	The Imakefile is used to build Makefile. When Makefile
-			is built, it can be used to build displayUid and all 
+			is built, it can be used to build displayUid and all
 			UID files from their associated UIL files. Syntax is
 			make <rootname of UIL file> - to build UID file, or
 			make all - to build everthing, or
 			make displayUid - to build displayUid, or
-			make clean  - to remove all UID files 
+			make clean  - to remove all UID files
 README_UILTS	-	The file you are reading, containing information about
 			the UIL test suite.
 run_all		-	A simple shell script that will execute all tests
 			sequentially.
 *.uil		-	The UIL sources for this test suite.
-*.msg		-	The message files that correspond to the UIL test 
-			you are building, containing a description of the 
+*.msg		-	The message files that correspond to the UIL test
+			you are building, containing a description of the
 			test being displayed.
 
 REPORTING CALLBACKS:
 
 Callbacks are simply handled by printing to STDOUT the name of the callback
-that has been triggered, and the REASON for that callback. To find out how to 
+that has been triggered, and the REASON for that callback. To find out how to
 trigger a callback, refer to the appropriate page in the "OSF Motif Programmers
-Reference Manual" . A callback is active when it is defined as ON in the 
+Reference Manual" . A callback is active when it is defined as ON in the
 message portion of the test.
 
 NOTE:
@@ -51,7 +51,7 @@ SYNTAX:
 % run_all
 
 BUGS SHOWN BY THESE TESTS
- 
+
 BBoard
 PIRS No.:      1819
 Enhanced highlight thickness is refreshed using Button's color
@@ -107,7 +107,7 @@ PIRS No.:      2428
 BACKGROUND and FOREGROUND specified for icons on monochrome
 are relative to parent's color, not absolute.Unclear what's ok
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	SCOTT MEEKS
 Priority:	9
 Status:		A
@@ -157,7 +157,7 @@ PIRS No.:      3881
 Scrollbars are not dislayed when a scrolled window defined wit
 h UIL has: XmNscrollingPolicy = XmAPPLICATION_DEFINED
 Version found in:	1.1.2
-Version fixed in:	
+Version fixed in:
 Assigned to:	SCOTT MEEKS
 Priority:	5
 Status:		A

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -140,7 +140,7 @@ static char rcsid[] = "$XConsortium: Mrmmodule.c /main/12 1996/11/13 14:03:12 dr
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIFMInitModule (URMResourceContextPtr		context_id,
 		  MrmCount			num_widget,
 		  MrmCode			access,
@@ -228,7 +228,7 @@ UrmIFMInitModule (URMResourceContextPtr		context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIFMSetTopmost (URMResourceContextPtr		context_id ,
 		  Cardinal			topmost_ndx ,
 		  String			index )
@@ -296,7 +296,7 @@ UrmIFMSetTopmost (URMResourceContextPtr		context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIFMPutModule (IDBFile		file_id ,
 		 String			index ,
 		 URMResourceContextPtr	context_id )
@@ -362,7 +362,7 @@ UrmIFMPutModule (IDBFile		file_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIFMHGetModule (MrmHierarchy		hierarchy_id ,
 		  String		index ,
 		  URMResourceContextPtr	context_id ,
@@ -417,7 +417,7 @@ UrmIFMHGetModule (MrmHierarchy		hierarchy_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIFMGetModule (IDBFile		file_id ,
 		 String			index ,
 		 URMResourceContextPtr	context_id )
@@ -455,4 +455,3 @@ UrmIFMGetModule (IDBFile		file_id ,
   return MrmSUCCESS ;
 
 }
-

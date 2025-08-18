@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsBtnDown.c /main/7 1995/07/14 11:39:20 drk $"
@@ -37,13 +37,13 @@ static char rcsid[] = "$XConsortium: IsBtnDown.c /main/7 1995/07/14 11:39:20 drk
 	Calls:
 
 	Summary:
-            Returns True if mouse button is in pressed state. It does not 
+            Returns True if mouse button is in pressed state. It does not
 	have to be the most recent event.
 
         INPUTS:
 	    modifier_keys - modifier key mask
             button_num - the mouse button in question (Button1, Button2, etc.)
-        
+
         OUTPUTS:
             none
 
@@ -61,4 +61,3 @@ int button_num;
     return ((xisMouseButtonMask[button_num] | modifier_keys) ==
 						xisState.mod_button_state);
 } /* End xisIsMouseButtonDown() */
-

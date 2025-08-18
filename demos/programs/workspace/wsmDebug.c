@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: wsmDebug.c /main/6 1995/07/14 09:48:58 drk $"
@@ -48,7 +48,7 @@ Space *s
 /**********************************************************************/
 
 
-void 
+void
 print_window(WorkWindow *w_window)
 {
 #ifdef DEBUG2
@@ -57,7 +57,7 @@ print_window(WorkWindow *w_window)
   for (p = 0; w_window->specifier_qlist[p] != NULLQUARK; p++)
     PRINT("%s.", XrmQuarkToString(w_window->specifier_qlist[p]));
   PRINT("\n");
-  if (w_window->mapped) PRINT("mapped\n");	
+  if (w_window->mapped) PRINT("mapped\n");
   else PRINT("unmapped\n");
 
 #endif
@@ -69,14 +69,14 @@ void print_all_windows()
   WorkWindow *w_window = work_windows;
   while (w_window != NULL)
     {
-      PRINT("WINDOW   0x%X %s\n", w_window->window, 
+      PRINT("WINDOW   0x%X %s\n", w_window->window,
 	     XrmQuarkToString(w_window->specifier_qlist[0]));
       w_window = w_window->next;
     }
 #endif
 }
 
-void 
+void
 print_space_windows(Space *s)
 {
 #ifdef DEBUG
@@ -87,7 +87,7 @@ print_space_windows(Space *s)
       while (w_list != NULL)
 	{
 	  PRINT("SPACE %s WINDOW   0x%X %s\n", XrmQuarkToString(s->nameq),
-		 w_list->work_win->window, 
+		 w_list->work_win->window,
 		 XrmQuarkToString(w_list->work_win->specifier_qlist[0]));
 	  w_list = w_list->next;
 	}
@@ -97,7 +97,7 @@ print_space_windows(Space *s)
 }
 
 
-void 
+void
 print_all_values(XrmValue **attr_values,XrmQuarkList attrib_qlist,XrmQuarkList rooms_qlist, int num_attrib)
 {
 #ifdef DEBUG
@@ -106,56 +106,56 @@ print_all_values(XrmValue **attr_values,XrmQuarkList attrib_qlist,XrmQuarkList r
     {
       for (q = 0; q < num_attrib; q++)		{
 	if (attr_values[p][q].size != 0)
-	  PRINT("%s %s : %s \n", 
+	  PRINT("%s %s : %s \n",
 		 XrmQuarkToString(rooms_qlist[p]),
 		 XrmQuarkToString(attrib_qlist[q]),
 		 (char*)attr_values[p][q].addr);
 	else
 	  {
-	    PRINT("%s %s : NOT FOUND \n", 
+	    PRINT("%s %s : NOT FOUND \n",
 		   XrmQuarkToString(rooms_qlist[p]),
-		   XrmQuarkToString(attrib_qlist[q]));      
+		   XrmQuarkToString(attrib_qlist[q]));
 	  }
-			
+
       }
     }
-#endif	
+#endif
 }
 
 
-void 
+void
 print_values(XrmValue *attr_values,XrmQuarkList attrib_qlist,XrmQuark room, int num_attrib)
 {
 #ifdef DEBUG2
   int q;
 
-  for (q = 0; q < num_attrib; q++)		
+  for (q = 0; q < num_attrib; q++)
     {
       if (attr_values[q].size != 0)
-	PRINT(" v: %s %s : %s \n", 
+	PRINT(" v: %s %s : %s \n",
 	       XrmQuarkToString(room),
 	       XrmQuarkToString(attrib_qlist[q]),
 	       (char*)attr_values[q].addr);
       else
-	    PRINT(" v: %s %s : NOT FOUND \n", 
+	    PRINT(" v: %s %s : NOT FOUND \n",
 		   XrmQuarkToString(room),
-		   XrmQuarkToString(attrib_qlist[q]));      
+		   XrmQuarkToString(attrib_qlist[q]));
     }
-#endif	
+#endif
 }
 
 
-void 
+void
 print_win_data(  WSMWinData *xrm_data_list, int num_xrm_data_list)
 {
   int p;
 #ifdef DEBUG2
   if (num_xrm_data_list == 0)
     PRINT("D:  no data \n");
-  else	
+  else
     {
       for (p = 0; p < num_xrm_data_list; p++)
-	{	
+	{
 	  PRINT("D:  %s %ld\n",
 		 XrmQuarkToString(xrm_data_list[p].nameq),
 		 xrm_data_list[p].data.value);
@@ -169,14 +169,14 @@ print_win_data(  WSMWinData *xrm_data_list, int num_xrm_data_list)
 
 
 
-void 
+void
 print_internal_win_data(  WSMWinData *xrm_data_list, int num_xrm_data_list)
 {
 #ifdef DEBUG
   int p;
 
       for (p = 0; p < num_xrm_data_list; p++)
-	{	
+	{
 	  PRINT("I:  %s %ld\n",
 		 XrmQuarkToString(xrm_data_list[p].nameq),
 		 xrm_data_list[p].data.value);
@@ -186,10 +186,10 @@ print_internal_win_data(  WSMWinData *xrm_data_list, int num_xrm_data_list)
 
 
 
-void 
+void
 print_request(WSMRequest *request)
 {
-#ifdef DEBUG2   
+#ifdef DEBUG2
   int p,q,i;
   Window window;
   WorkWindow *w_window;
@@ -217,17 +217,17 @@ print_request(WSMRequest *request)
 	    for (q = 0; q < request->set_state.win_info_list[p].num_data_list; q++)
 	    {
 		PRINT("     %s %d\n",
-		      XrmQuarkToString(request->set_state.win_info_list[p].data_list[q].nameq),	
+		      XrmQuarkToString(request->set_state.win_info_list[p].data_list[q].nameq),
 		      request->set_state.win_info_list[p].data_list[q].data.value);
 	    }
-	}	
+	}
   }
   PRINT("\n");
 #endif
-}	
+}
 
 
-void 
+void
 print_reply(WSMReply *reply)
 {
 #ifdef DEBUG2
@@ -239,14 +239,14 @@ print_reply(WSMReply *reply)
      for (q = 0; q < reply->register_window.num_window_data; q++)
        {
 	 PRINT("   %s %d\n",
-		XrmQuarkToString(reply->register_window.window_data[q].nameq),		
+		XrmQuarkToString(reply->register_window.window_data[q].nameq),
 		reply->register_window.window_data[q].data.value);
        }
    }
 #endif
 }
 
-void 
+void
 print_reply_start_state(WSMGetStateReply *get_state)
 {
 #ifdef DEBUG2
@@ -274,14 +274,14 @@ print_reply_start_state(WSMGetStateReply *get_state)
 	PRINT("\n");
 	for (j = 0; j < get_state->win_info_list[i].num_data_list; j++)
 	  PRINT("     %s %ld\n",
-		 XrmQuarkToString(get_state->win_info_list[i].data_list[j].nameq),	
+		 XrmQuarkToString(get_state->win_info_list[i].data_list[j].nameq),
 		 get_state->win_info_list[i].data_list[j].data.value);
     }
 #endif
 }
 
 
-void 
+void
 PrintSpace(char *name)
 {
 #ifdef DEBUG
@@ -297,7 +297,7 @@ void PrintAllSpaces()
 {
 #ifdef DEBUG
   Space *s = space_list;
-  
+
   while (s != NULL)
     {
       PRINT("SPACE: %s\n", s->name);

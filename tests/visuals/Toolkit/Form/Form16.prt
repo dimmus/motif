@@ -22,26 +22,26 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer PushButton1  
-TRACE:(2) ClickMB Btn1 
-TRACE:(3) CompareVisual form 
+TRACE:(1) LocatePointer PushButton1
+TRACE:(2) ClickMB Btn1
+TRACE:(3) CompareVisual form
 TRACE:(4) Continue
-TRACE:(5) LocatePointer PushButton2  
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) CompareVisual form 
+TRACE:(5) LocatePointer PushButton2
+TRACE:(6) ClickMB Btn1
+TRACE:(7) CompareVisual form
 TRACE:(8) Continue
-TRACE:(9) LocatePointer PushButton3  
-TRACE:(10) ClickMB Btn1 
-TRACE:(11) CompareVisual form 
+TRACE:(9) LocatePointer PushButton3
+TRACE:(10) ClickMB Btn1
+TRACE:(11) CompareVisual form
 TRACE:(12) Continue
-TRACE:(13) CompareVisual form 
+TRACE:(13) CompareVisual form
 TRACE:(14) Continue
-TRACE:(15) CompareVisual form 
+TRACE:(15) CompareVisual form
 TRACE:(16) Continue
-TRACE:(17) CompareVisual form 
+TRACE:(17) CompareVisual form
 TRACE:(18) Continue
-TRACE:(19) CompareVisual form 
+TRACE:(19) CompareVisual form
 TRACE:(20) Continue
-TRACE:(21) CompareVisual form 
+TRACE:(21) CompareVisual form
 TRACE:(22) Exit
 Exiting Test...Please Standby...

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifndef idb_h
 #define	idb_h	1
@@ -317,7 +317,7 @@ typedef struct {
  * contains fixed-length entries, with the key strings being allocated
  * at the bottom of the record. The vector grows down from the top and
  * the string heap up from the bottom as entries are added, until the
- * record fills. 
+ * record fills.
  */
 
 /*

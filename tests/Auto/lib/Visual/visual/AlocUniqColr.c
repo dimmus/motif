@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AlocUniqColr.c /main/7 1995/07/14 11:46:20 drk $"
@@ -37,17 +37,17 @@ static char rcsid[] = "$XConsortium: AlocUniqColr.c /main/7 1995/07/14 11:46:20 
 
 	Summary:
             This function is used for providing simple "hard-wired" color index
-        values for use during the visual generate run of a test.  It keeps 
-        track of the lowest unique color index values and which ones are 
+        values for use during the visual generate run of a test.  It keeps
+        track of the lowest unique color index values and which ones are
         already in use so that new additional color index values may
         be obtained at any time.
 
         INPUTS
             none
- 
+
         OUTPUTS
             none
- 
+
         RETURNS
             none
 ************************************************************************/
@@ -65,7 +65,7 @@ int color_ref;
 {
     Pixel i;
 
-/* 
+/*
    Changed for Automation. No longer allocate into global array
    mvsUniqueColorAllocInfo, now each widget will carry around a
    representation of this array and the comparison and generation
@@ -82,7 +82,7 @@ int color_ref;
 
     if (i == MAX_COLORS) {
         AutoError(_AutoMessages[VISMSG23]);
-        
+
     }
 
     mvsUniqueColorAllocInfo[i].in_use = 1;
@@ -91,15 +91,15 @@ int color_ref;
 
 */
 
-/* 
+/*
    Check for MonoChrome server an if so only return 0 or 1. If
    color return anything up to 256 and then cycle through colors
    again. If GRAY scale, retrun 0-5 and cycle through the rest.
 */
 
 
-    if (mvsVisualInfo.depth == 1) 
-    	return(color_ref % MONO);    
+    if (mvsVisualInfo.depth == 1)
+    	return(color_ref % MONO);
     else if ((mvsVisualInfo.class == StaticGray) ||
              (mvsVisualInfo.class == GrayScale))
 	return(color_ref % GRAY);

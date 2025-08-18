@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Simple.c /main/11 1995/09/19 23:08:54 cde-sun $"
@@ -43,7 +43,7 @@ static char rcsid[] = "$XConsortium: Simple.c /main/11 1995/09/19 23:08:54 cde-s
 
 /********    Static Function Declarations    ********/
 
-static void EvaluateConvenienceStructure( 
+static void EvaluateConvenienceStructure(
                         Widget wid,
                         XmSimpleMenu sm) ;
 
@@ -59,7 +59,7 @@ static XtResource SimpleMenuResources[] =
 	  XtOffsetOf( struct _XmSimpleMenuRec, post_from_button),
 	  XmRImmediate, (XtPointer) -1
 	},
-	{ XmNsimpleCallback, XmCCallback, XmRCallbackProc, 
+	{ XmNsimpleCallback, XmCCallback, XmRCallbackProc,
 	  sizeof(XtCallbackProc), XtOffsetOf( struct _XmSimpleMenuRec, callback),
 	  XmRImmediate, (XtPointer) NULL
 	},
@@ -67,11 +67,11 @@ static XtResource SimpleMenuResources[] =
 	  sizeof(XmStringTable), XtOffsetOf( struct _XmSimpleMenuRec, label_string),
 	  XmRImmediate, (XtPointer) NULL
 	},
-	{ XmNbuttonAccelerators, XmCButtonAccelerators, XmRStringTable, 
+	{ XmNbuttonAccelerators, XmCButtonAccelerators, XmRStringTable,
 	  sizeof(String *), XtOffsetOf( struct _XmSimpleMenuRec,  accelerator),
 	  XmRImmediate, (XtPointer) NULL
 	},
-	{ XmNbuttonAcceleratorText, XmCButtonAcceleratorText, 
+	{ XmNbuttonAcceleratorText, XmCButtonAcceleratorText,
 	  XmRXmStringTable, sizeof(XmStringTable),
 	  XtOffsetOf( struct _XmSimpleMenuRec, accelerator_text),
 	  XmRImmediate, (XtPointer) NULL
@@ -80,7 +80,7 @@ static XtResource SimpleMenuResources[] =
 	  sizeof(XmKeySymTable), XtOffsetOf( struct _XmSimpleMenuRec, mnemonic),
 	  XmRImmediate, (XtPointer) NULL
 	},
-	{ XmNbuttonMnemonicCharSets, XmCButtonMnemonicCharSets, 
+	{ XmNbuttonMnemonicCharSets, XmCButtonMnemonicCharSets,
 	  XmRCharSetTable, sizeof(XmStringCharSetTable),
 	  XtOffsetOf( struct _XmSimpleMenuRec, mnemonic_charset),
 	  XmRImmediate, (XtPointer) NULL
@@ -103,7 +103,7 @@ static XtResource SimpleMenuResources[] =
 	},
 };
 
-static void 
+static void
 EvaluateConvenienceStructure(
         Widget wid,
         XmSimpleMenu sm )
@@ -133,8 +133,8 @@ EvaluateConvenienceStructure(
 		}
 		if (sm->accelerator_text && sm->accelerator_text[i])
 		{
-			XtSetArg(args[n], XmNacceleratorText, 
-				sm->accelerator_text[i]); 
+			XtSetArg(args[n], XmNacceleratorText,
+				sm->accelerator_text[i]);
 			n++;
 		}
 		if (sm->mnemonic && sm->mnemonic[i])
@@ -144,11 +144,11 @@ EvaluateConvenienceStructure(
 		}
 		if (sm->mnemonic_charset && sm->mnemonic_charset[i])
 		{
-			XtSetArg(args[n], XmNmnemonicCharSet, 
-				sm->mnemonic_charset[i]); 
+			XtSetArg(args[n], XmNmnemonicCharSet,
+				sm->mnemonic_charset[i]);
 			n++;
 		}
-		
+
 		/* Dynamic Defaulting of button type */
 
 		if (sm->button_type && sm->button_type[i])
@@ -163,7 +163,7 @@ EvaluateConvenienceStructure(
 			else
 				btype = XmPUSHBUTTON;
 		}
-		
+
 		switch (btype)
 		{
 			case XmTITLE:
@@ -175,12 +175,12 @@ EvaluateConvenienceStructure(
 				XtSetArg(args[n], XmNseparatorType, XmDOUBLE_LINE); n++;
 			case XmSEPARATOR:
 				sprintf(name_buf,"separator_%d", separator_count++);
-				child = XtCreateManagedWidget(name_buf, 
+				child = XtCreateManagedWidget(name_buf,
                                  xmSeparatorGadgetClass, (Widget) rc, args, n);
 			break;
 			case XmPUSHBUTTON:
 				sprintf(name_buf,"button_%d", button_count++);
-				child = XtCreateManagedWidget(name_buf, 
+				child = XtCreateManagedWidget(name_buf,
                                                        xmPushButtonGadgetClass,
                                                          (Widget) rc, args, n);
 				if (sm->callback)
@@ -219,7 +219,7 @@ EvaluateConvenienceStructure(
 	}
 }
 
-Widget 
+Widget
 XmCreateSimpleMenuBar(
         Widget parent,
         String name,
@@ -233,7 +233,7 @@ XmCreateSimpleMenuBar(
 	_XmAppLock(app);
 
 	XtGetSubresources(parent, &mr, name, XmCSimpleMenuBar,
-		SimpleMenuResources, XtNumber(SimpleMenuResources), 
+		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
 
 	rc = XmCreateMenuBar(parent, name, args, arg_count);
@@ -244,7 +244,7 @@ XmCreateSimpleMenuBar(
 	return(rc);
 }
 
-Widget 
+Widget
 XmCreateSimplePopupMenu(
         Widget parent,
         String name,
@@ -258,7 +258,7 @@ XmCreateSimplePopupMenu(
 	_XmAppLock(app);
 
 	XtGetSubresources(parent, &mr, name, XmCSimplePopupMenu,
-		SimpleMenuResources, XtNumber(SimpleMenuResources), 
+		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
 
 	rc = XmCreatePopupMenu(parent, name, args, arg_count);
@@ -269,7 +269,7 @@ XmCreateSimplePopupMenu(
 	return(rc);
 }
 
-Widget 
+Widget
 XmCreateSimplePulldownMenu(
         Widget parent,
         String name,
@@ -287,9 +287,9 @@ XmCreateSimplePulldownMenu(
 	_XmAppLock(app);
 
 	XtGetSubresources(parent, &mr, name, XmCSimplePulldownMenu,
-		SimpleMenuResources, XtNumber(SimpleMenuResources), 
+		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-	
+
 	rc = XmCreatePulldownMenu(parent, name, args, arg_count);
 
 	EvaluateConvenienceStructure(rc, &mr);
@@ -330,7 +330,7 @@ XmCreateSimplePulldownMenu(
 	return(rc);
 }
 
-Widget 
+Widget
 XmCreateSimpleOptionMenu(
         Widget parent,
         String name,
@@ -348,9 +348,9 @@ XmCreateSimpleOptionMenu(
 	_XmAppLock(app);
 
 	XtGetSubresources(parent, &mr, name, XmCSimpleOptionMenu,
-		SimpleMenuResources, XtNumber(SimpleMenuResources), 
+		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-	
+
 	rc = XmCreateOptionMenu(parent, name, args, arg_count);
 
 	sub_rc = XmCreatePulldownMenu(parent, name, args, arg_count);
@@ -366,7 +366,7 @@ XmCreateSimpleOptionMenu(
 	{
 		XtSetArg(local_args[n], XmNmnemonic, mr.option_mnemonic); n++;
 	}
-	
+
 	XtSetArg(local_args[n], XmNsubMenuId, sub_rc); n++;
 	XtSetValues(rc, local_args, n);
 
@@ -410,7 +410,7 @@ XmCreateSimpleOptionMenu(
 	return(rc);
 }
 
-Widget 
+Widget
 XmCreateSimpleRadioBox(
         Widget parent,
         String name,
@@ -426,7 +426,7 @@ XmCreateSimpleRadioBox(
 	rc = XmCreateRadioBox(parent, name, args, arg_count);
 
 	XtGetSubresources(parent, &mr, name, XmCSimpleRadioBox,
-		SimpleMenuResources, XtNumber(SimpleMenuResources), 
+		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
 
 	for(i=0; i < mr.count; i++)
@@ -436,24 +436,24 @@ XmCreateSimpleRadioBox(
 		n = 0;
 		if (mr.label_string && mr.label_string[i])
 		{
-			XtSetArg(local_args[n], 
+			XtSetArg(local_args[n],
 				XmNlabelString, mr.label_string[i]); n++;
 		}
 		if (mr.button_set == i)
 		{
 			XtSetArg(local_args[n], XmNset, TRUE); n++;
 		}
-		child = XtCreateManagedWidget(name_buf, 
+		child = XtCreateManagedWidget(name_buf,
 			xmToggleButtonGadgetClass, (Widget) rc, local_args, n);
 		if (mr.callback)
 			XtAddCallback(child, XmNvalueChangedCallback,
 				mr.callback, (XtPointer)(unsigned long)i);
 	}
-	
+
 	return(rc);
 }
 
-Widget 
+Widget
 XmCreateSimpleCheckBox(
         Widget parent,
         String name,
@@ -473,10 +473,10 @@ XmCreateSimpleCheckBox(
         XtSetArg(local_args[n], XmNradioBehavior, FALSE); n++;
 
 	XtSetValues(rc, local_args, n);
-	
+
 
 	XtGetSubresources(parent, &mr, name, XmCSimpleCheckBox,
-		SimpleMenuResources, XtNumber(SimpleMenuResources), 
+		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
 
 	for(i=0; i < mr.count; i++)
@@ -486,7 +486,7 @@ XmCreateSimpleCheckBox(
 		n = 0;
 		if (mr.label_string && mr.label_string[i])
 		{
-			XtSetArg(local_args[n], 
+			XtSetArg(local_args[n],
 				XmNlabelString, mr.label_string[i]); n++;
 		}
 		child = XtCreateManagedWidget(name_buf,

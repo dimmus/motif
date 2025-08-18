@@ -32,14 +32,14 @@ static Widget help_dialog = NULL;
 static Arg args[MAX_ARGS];
 
 char single_text[] = "Single Line Text Widget";
-char multi_text[] = "Multi Line Text Widget"; 
+char multi_text[] = "Multi Line Text Widget";
 
 static char font_name1[] = "fixed";
 static char font_name2[] = "variable";
 
 static char render_tag[] = "render1";
 
-static char  *stat_msg[] = 
+static char  *stat_msg[] =
 {
   "This is generic help for the application,\nor the widget you've selected has no help",
   "This is help for the Default Button.\nPress to make things happen",
@@ -50,7 +50,7 @@ static char  *stat_msg[] =
 static void GenericHelp(Widget w, XtPointer client_data,
                                 XtPointer call_data)
 {	/*
-	1 = bulletinBoard or a widget with no help 
+	1 = bulletinBoard or a widget with no help
 	2 = Default button
 	3 = Text1 (the single line text)
 	4 = OtherButton
@@ -66,8 +66,8 @@ static void GenericHelp(Widget w, XtPointer client_data,
 	XtSetValues(help_dialog, args, n);
 
 	XtManageChild(help_dialog);
-}                                            
-	           
+}
+
 
 static void MyReturnRoutine(Widget w, XEvent *event,
 				String *params, Cardinal *num_params)
@@ -258,7 +258,7 @@ void main_text8( argc, argv )
 	Text2 = CreateMultiLineText(Form1);
 
 	TextF = CreateTextField(Form1);
-	
+
 	OtherB =  CreateOtherButton(Form1);
 
 	ToggleB = CreateToggleButton(Form1);
@@ -274,7 +274,7 @@ void main_text8( argc, argv )
 	XtManageChild(OtherB);
 	XtManageChild(ScrollB);
 	XtRealizeWidget(Shell1);
-  
+
 	CommonPause();  /* form */  /* number #11 */
 
 	XtAppMainLoop(app_context);
@@ -313,7 +313,7 @@ Widget CreateTheForm(Widget parent)
 {
 	int n;
 	Widget widget;
-	
+
 	n = 0;
 #ifdef	MOTIF1_1
 	XtSetArg(args[n], XmNwidth, 400); n++;
@@ -375,7 +375,7 @@ Widget CreateOtherButton(Widget parent)
 	n = 0;
         XtSetArg(args[n], XmNx, 375); n++;
 	XtSetArg(args[n], XmNy, 330); n++;
-	XtSetArg(args[n], XmNlabelString, tmp_string); n++; 
+	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 
 	OtherB = XmCreatePushButtonGadget(parent, "OtherB", args, n);
 	XtAddCallback(OtherB, XmNactivateCallback, CommonGenericCB, NULL);
@@ -402,7 +402,7 @@ Widget CreateTheDefaultButton(Widget parent)
 	DefaultB = XmCreatePushButtonGadget(parent, "DefaultB", args, n);
 	XtAddCallback(DefaultB, XmNactivateCallback, ActivationDB, NULL);
 	XtAddCallback(DefaultB, XmNhelpCallback, GenericHelp, (XtPointer)2);
-  
+
         XmStringFree (tmp_string);
 	return(DefaultB);
 }
@@ -446,7 +446,7 @@ Widget CreateTextField(Widget parent)
 	XtSetArg(args[n], XmNforeground, CommonGetColor("Red"));  n++;
 	XtSetArg(args[n], XmNbackground, CommonGetColor("White"));  n++;
 	XtSetArg(args[n], XmNx, 10); n++;
-	XtSetArg(args[n], XmNy, 300); n++; 
+	XtSetArg(args[n], XmNy, 300); n++;
 	XtSetArg(args[n], XmNfontList, CommonGetFontList(font_name1));  n++;
 	TextF = XmCreateTextField(parent, "TextF", args, n);
 	XtAddCallback(TextF, XmNactivateCallback, CommonGenericCB, NULL);
@@ -481,7 +481,6 @@ Widget CreateScrollBar(Widget parent)
 	XtSetArg(args[n], XmNorientation, XmVERTICAL); n++;
 	XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
 	XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-	ScrollB = XmCreateScrollBar (parent, "ScrollB", args, n);   
+	ScrollB = XmCreateScrollBar (parent, "ScrollB", args, n);
 	return(ScrollB);
 }
-

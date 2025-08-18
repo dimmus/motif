@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu3.c /main/10 1995/07/13 18:44:44 drk $"
@@ -124,7 +124,7 @@ void _XmBindHelpAction(Widget widget, void (*func)(), XtPointer client_data,
 	}
       for(i=0 ; i<widget->core.num_popups ; i++)
 	{
-	  _XmBindHelpAction(widget->core.popup_list[i], func, client_data, 
+	  _XmBindHelpAction(widget->core.popup_list[i], func, client_data,
 			    recursive);
 	}
     }
@@ -146,7 +146,7 @@ void ChangeCursor(Widget rc, XtPointer client_data,
 	if (call_data->set) {
   cursor = (Cursor) client_data;
   XmSetMenuCursor(display, cursor);
-  
+
   if (XmGetMenuCursor(display) != cursor)
     {
       fprintf(stdout,"Error: problem occurred while changing menu cursor\n");
@@ -156,7 +156,7 @@ void ChangeCursor(Widget rc, XtPointer client_data,
 
 Help(Widget w)
 {
-  fprintf(stdout, "Help requested for widget %s\n", 
+  fprintf(stdout, "Help requested for widget %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
@@ -180,7 +180,7 @@ void PostIt(Widget w, XtPointer popup, XEvent *event, Boolean *c)
   n = 0;
   XtSetArg(args[n], XmNpopupEnabled, &popupEnabled); n++;
   XtGetValues(lpopup, args, n);
-  
+
   if (popupEnabled)
     {
       XmMenuPosition(lpopup, (XButtonPressedEvent *)event);
@@ -257,7 +257,7 @@ XtPointer d2)
 {
   Arg args[10];
   int n;
-   
+
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, NULL); n++;
   XtSetValues(child[15], args, n);
@@ -307,7 +307,7 @@ void main(unsigned int argc, char *argv[])
   int n;
 
   CommonTestInit(argc, argv);
-  
+
   /*
    * Create menu cursors
    */
@@ -482,7 +482,7 @@ void main(unsigned int argc, char *argv[])
   XtDestroyWidget(rc0);
 */
   XtDestroyWidget(mainw);
-  
+
   CommonPause();
   XtAppMainLoop(app_context);
 }
@@ -493,7 +493,7 @@ void CreatePixmaps()
   Arg args[2];
   int n;
   Drawable drawable;
-    
+
   n = 0;
   XtSetArg(args[n], XmNforeground, &fg); n++;
   XtSetArg(args[n], XmNbackground, &bg); n++;
@@ -501,7 +501,7 @@ void CreatePixmaps()
 
   depth = DefaultDepthOfScreen(Shell1->core.screen);
   drawable = RootWindowOfScreen(XtScreen(Shell1));
-       
+
   arm = XCreatePixmapFromBitmapData(display,
 				    drawable,
 				    armPix_bits,
@@ -510,7 +510,7 @@ void CreatePixmaps()
 				    fg, bg,
 				    depth);
 
-  arrowPix = XCreatePixmapFromBitmapData(display, 
+  arrowPix = XCreatePixmapFromBitmapData(display,
 					 drawable,
 					 arrowPix_bits,
 					 arrowPix_width,
@@ -587,7 +587,7 @@ void CreateMenubar()
   XtAddCallback(help, XmNactivateCallback, PrintName, NULL);
   XtManageChild(help);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNmenuHelpWidget, help); n++;
   XtSetValues(menubar, args, n);
 
@@ -596,12 +596,12 @@ void CreateMenubar()
    */
 
   submenu1 = XmCreatePulldownMenu(menubar, "submenu1", NULL, 0);
-    
+
   /*
    * XmPushButtonGadget: child[012]
    */
 
-  child[0] = 
+  child[0] =
     special = XmCreatePushButtonGadget(submenu1, "option1a", NULL, 0);
   XtAddCallback(child[0], XmNactivateCallback, PrintName, NULL);
 
@@ -627,7 +627,7 @@ void CreateMenubar()
 
   child[3] = XmCreatePushButtonGadget(submenu2, "option1b", NULL, 0);
   XtAddCallback(child[3], XmNactivateCallback, PrintName, NULL);
-    
+
   child[4] = XmCreatePushButtonGadget(submenu2, "option2b", NULL, 0);
   XtAddCallback(child[4], XmNactivateCallback, PrintName, NULL);
 
@@ -675,7 +675,7 @@ void CreateMenubar()
   child[9] = XmCreateToggleButtonGadget(submenu5,"sailboat", NULL, 0);
   XtAddCallback(child[9], XmNvalueChangedCallback, ChangeCursor, (XtPointer) sailboat);
 
-  child[10] = 
+  child[10] =
     special2 = XmCreateToggleButtonGadget(submenu5,"heart", NULL, 0);
   XtAddCallback(child[10], XmNvalueChangedCallback, ChangeCursor, (XtPointer) heart);
 
@@ -687,21 +687,21 @@ void CreateMenubar()
 
   child[13] = XmCreateToggleButtonGadget(submenu5,"shuttle", NULL, 0);
   XtAddCallback(child[13], XmNvalueChangedCallback, ChangeCursor, (XtPointer) shuttle);
-  
+
   child[14] = XmCreateToggleButtonGadget(submenu5,"arrow", NULL, 0);
   XtAddCallback(child[14], XmNvalueChangedCallback, ChangeCursor, (XtPointer) arrow);
 
   XtManageChildren(&(child[9]), 6);
 
   /*
-   * XmCascadeButton: child[15-16-17] 
+   * XmCascadeButton: child[15-16-17]
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu1); n++;
   child[15] = XmCreateCascadeButton(menubar, "pdbtn1", args, n);
-  
-  n = 0; 
+
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu5); n++;
   child[16] = XmCreateCascadeButton(menubar, "pdbtn2", args, n);
 
@@ -712,12 +712,12 @@ void CreateMenubar()
    * XmCascadeButtonGadget: child[18]
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu2); n++;
   child[18] = XmCreateCascadeButtonGadget(submenu1, "more", args, n);
   XtManageChild(child[18]);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNcascadePixmap, arrowPix); n++;
   XtSetValues(child[18], args, 1);
 
@@ -725,7 +725,7 @@ void CreateMenubar()
    * XmCascadeButtonGadget: child[19]
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu4); n++;
   child[19] = XmCreateCascadeButtonGadget(submenu1, "more2", args, n);
   XtManageChild(child[19]);

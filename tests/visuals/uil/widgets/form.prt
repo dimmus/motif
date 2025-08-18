@@ -23,24 +23,24 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is form.uid ---- 
+---- The uid file to be opened is form.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer RPush  
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer RPush
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
-TRACE:(5) LocatePointer LPush  
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual S_MAIN_WIDGET
+TRACE:(5) LocatePointer LPush
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
-TRACE:(8) LocatePointer TPush  
+TRACE:(6) ClickMB Btn1
+TRACE:(7) CompareVisual S_MAIN_WIDGET
+TRACE:(8) LocatePointer TPush
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
-TRACE:(9) ClickMB Btn1 
-TRACE:(10) CompareVisual S_MAIN_WIDGET 
-TRACE:(11) LocatePointer BPush  
-TRACE:(12) ClickMB Btn1 
+TRACE:(9) ClickMB Btn1
+TRACE:(10) CompareVisual S_MAIN_WIDGET
+TRACE:(11) LocatePointer BPush
+TRACE:(12) ClickMB Btn1
 
 /*********************************************************/
 ---- activateCallback BottomPushButton callback made ----
@@ -48,6 +48,6 @@ TRACE:(12) ClickMB Btn1
 ---- Reason was XmCR_ACTIVATE ----
 /*********************************************************/
 
-TRACE:(13) CompareVisual S_MAIN_WIDGET 
+TRACE:(13) CompareVisual S_MAIN_WIDGET
 TRACE:(14) Exit
 Exiting Test...Please Standby...

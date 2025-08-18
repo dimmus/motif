@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FontListC.c /main/7 1995/07/13 19:52:48 drk $"
@@ -51,10 +51,10 @@ main(argc, argv)
      unsigned int	argc;
      char		*argv[];
 {
-    
+
     fontlist_num = font_num = charset_num = 0;
     errors = 0;
-    
+
     CommonTestInit(argc, argv);
 
 /*
@@ -81,7 +81,7 @@ main(argc, argv)
     fprintf(stdout, "----  --------  ------------------------  --------  ");
     fprintf(stdout, "-------  -----\n");
     fflush(stdout);
-   
+
 /*
                                           Expected   Actual
 Test  Font      Character Set              Result    Result  Error
@@ -109,7 +109,7 @@ Test  Font      Character Set              Result    Result  Error
 		errors++;
 		fprintf(stdout, "  SUCCESS    *\n");
     }
-    
+
 /**********************************************************
  * Test 2: Create a font list with a valid font structure *
  **********************************************************/
@@ -131,7 +131,7 @@ Test  Font      Character Set              Result    Result  Error
     }
     else
 		fprintf(stdout, "  SUCCESS\n");
-    
+
 /************************************************************
  * Test 3: Create a font list with an invalid character set *
  ************************************************************/

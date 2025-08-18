@@ -54,7 +54,7 @@ typedef int (*Xm18SortFunction) \
 *	GLOBAL DECLARATIONS
 *************************************************************/
 
-/* 
+/*
  * Function Name: XmMultiListGetSelectedRows
  * Description:   Takes an Extended List and returns a NULL terminated array
  *                of pointers to selected rows from the internal list
@@ -164,7 +164,7 @@ extern void XmMultiListSelectRow(Widget w, int row, Boolean notify);
  */
 extern void XmMultiListDeselectRow(Widget w, int row);
 
-/* 
+/*
  * Function Name: XmMultiListGetSelectedRowArray
  * Description:   Takes an Extended List and returns a NULL terminated array
  *                of pointers to selected rows from the internal list

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Dest.c /main/12 1995/09/19 23:00:44 cde-sun $"
@@ -36,14 +36,14 @@ static char rcsid[] = "$XConsortium: Dest.c /main/12 1995/09/19 23:00:44 cde-sun
 #include "XmI.h"
 #include "DestI.h"
 
-/* 
+/*
    This function is used for setting the "last editable widget on which a
    select, edit, insert, or paste operation was performed and is a destination
-   for quick paste and certain clipboard functions" (for this display 
-   connection) and is not necessarily a text widget.  
+   for quick paste and certain clipboard functions" (for this display
+   connection) and is not necessarily a text widget.
    Under current usage by Motif internals:
    This function is for squirreling away the widget that has the destination
-   cursor so that it can be retrieved when pasting from a menu.  Called by 
+   cursor so that it can be retrieved when pasting from a menu.  Called by
    _XmTextSetDestinationSelection.
 */
 void _XmSetDestination (Display *dpy, Widget w)
@@ -51,7 +51,7 @@ void _XmSetDestination (Display *dpy, Widget w)
       XmDisplay   dd = (XmDisplay) XmGetXmDisplay(dpy);	/* w may be NULL */
       if ((XmDisplay)NULL != dd)
 	((XmDisplayInfo *)(dd->display.displayInfo))->destinationWidget =
-		w;	
+		w;
 }
 
 /* This public function retrieves the widget saved by _XmSetDestination. */

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FetchW.c /main/9 1995/07/14 10:48:34 drk $"
@@ -54,7 +54,7 @@ extern String		summary();
  * Local declarations
  */
 
-struct TestInfo FetchWidgetInfo[NUM_TESTS] = 
+struct TestInfo FetchWidgetInfo[NUM_TESTS] =
 {
     {"Fetch valid widget                       ", MrmSUCCESS,	0},
     {"Fetch nonexistent widget                 ", MrmNOT_FOUND,	0},
@@ -70,7 +70,7 @@ void main(argc,argv)
        int argc;
        char **argv;
 
-{ 	
+{
 
 
 MrmHierarchy	s_MrmHierarchy;
@@ -113,7 +113,7 @@ MrmCount    filename_num=0;
                         filename_vec,           /* files                */
                         NULL,                   /* os_ext_list (null)   */
                         &s_MrmHierarchy)        /* ptr to returned id   */
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
         printf("Can't open hierarchy\n");
 
@@ -135,14 +135,14 @@ CommonPause();
  */
 
 	XtManageChild(test_box);
-    
+
 /*
  * Realize top level shell widget
  */
 
 	XtRealizeWidget(Shell1);
 
-   CommonPause();			       
+   CommonPause();
 /*
  * Try to fetch a nonexistent widget
  */
@@ -176,7 +176,7 @@ CommonPause();
 
 	badwidget1 = NULL;
 	badwidget1 = XtNameToWidget(test_box, "button1");
-	
+
 	FetchWidgetInfo[2].actual_return = MrmFetchWidget(s_MrmHierarchy,
 							  "button1",
 							  Shell1,
@@ -189,7 +189,7 @@ CommonPause();
 
 	XtManageChild(button1);
 	XtManageChild(button2);
-	
+
   CommonPause();
 
 /*

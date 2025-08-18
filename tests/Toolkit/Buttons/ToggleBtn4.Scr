@@ -25,7 +25,7 @@
 # HISTORY
 #
 
-# This is a test of the operation of the toggle button indicator.  
+# This is a test of the operation of the toggle button indicator.
 # A toggle button with a small pixmap and a push button should now be
 # displayed.  Notice the size of the toggle indicator.
 
@@ -34,7 +34,7 @@
 # original pixmap.  The indicator should resize itself to remain in
 # proportion to the pixmap height.
 
-# Click MB1 on the push button again.  Again, the pixmap will change and 
+# Click MB1 on the push button again.  Again, the pixmap will change and
 # the indicator will grow in proportion to its size.
 
 # Click MB1 one more time.  The pixmap returns to its original size and the
@@ -60,7 +60,7 @@ Continue
 # "Button A".  Release MB1.
 
 # Call up the pulldown menu again.  The label of the top button in the
-# menu has been changed to "A New Label".  The indicator on this toggle 
+# menu has been changed to "A New Label".  The indicator on this toggle
 # button should remain the same as the other buttons in the Pulldown menu.
 
 LocatePointer MENU
@@ -75,7 +75,3 @@ ReleaseMB Btn1
 
 Continue
 Exit
-
-
-
-

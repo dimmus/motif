@@ -109,7 +109,7 @@ setenv PATH  $PATH\:/usr/bin/X11/
 alias	bye	'.mylogout &; exit'
 alias   rs      'set noglob; eval `resize`; unset noglob'
 alias	cls	clear			# DOS type aliases for novices
-alias	c	clear			
+alias	c	clear
 alias	hist	'history 15'
 alias	grip    'grep -i'
 alias	j	jobs

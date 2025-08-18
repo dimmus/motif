@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DrawnBtnM1.c /main/7 1995/07/13 18:35:38 drk $"
@@ -67,7 +67,7 @@ static void ReDrawCB(Widget w, XtPointer client_data, XtPointer call_data)
    */
 
   if (((XmAnyCallbackStruct*)call_data)->reason == XmCR_RESIZE ||
-      firstime ) 
+      firstime )
     {
       firstime = 1;
       /* Get new size of widget */
@@ -81,10 +81,10 @@ static void ReDrawCB(Widget w, XtPointer client_data, XtPointer call_data)
 
       /* calculate available drawing area, width 1st */
       border = bwidt + hlthick + shthick;
-      
-      /* 
+
+      /*
        * See if window is bigger than pixmap (center it),
-       *  or if pixmap is bigger (clip it) 
+       *  or if pixmap is bigger (clip it)
        */
 
       drawsize = w_width- 2*border;
@@ -92,11 +92,11 @@ static void ReDrawCB(Widget w, XtPointer client_data, XtPointer call_data)
       phite = dont_panic_height;
 
       if (drawsize > dont_panic_width){
-	srcx = 0; 
+	srcx = 0;
 	destx = (drawsize-dont_panic_width)/2 + border;
       }
       else {
-	destx = border; 
+	destx = border;
 	srcx = (dont_panic_width - drawsize)/2;
       }
 
@@ -106,7 +106,7 @@ static void ReDrawCB(Widget w, XtPointer client_data, XtPointer call_data)
 	desty = (drawsize-dont_panic_height)/2 + border;
       }
       else {
-	desty = border; 
+	desty = border;
 	srcy = (dont_panic_height - drawsize)/2;
       }
     }
@@ -126,45 +126,45 @@ void main (int argc, char **argv)
   XFontStruct        *newfont;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, 100);  n++;
   XtSetArg(args[n], XmNheight, 100);  n++;
   XtSetValues(Shell1, args, n);
-    
+
   newfont = XLoadQueryFont(display, "12x24");
   fontlist = XmFontListCreate(newfont, XmSTRING_DEFAULT_CHARSET);
 
   XtRealizeWidget(Shell1);
 
   /*   Define the pixmap from data */
-  nopanic = 
+  nopanic =
     XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display), dont_panic_bits,
 				dont_panic_width, dont_panic_height,
 				WhitePixel(display,DefaultScreen(display)),
 				BlackPixel(display,DefaultScreen(display)),
 				DefaultDepth(display,DefaultScreen(display)));
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, 100);  n++;
   XtSetArg(args[n], XmNheight, 100);  n++;
   XtSetArg(args[n], XmNpushButtonEnabled, TRUE);  n++;
   XtSetArg(args[n], XmNshadowThickness, 50); n++;
   XtSetArg(args[n], XmNfontList, fontlist); n++;
-  tcs = XmStringCreateLtoR("supercalifragalixspelling", 
+  tcs = XmStringCreateLtoR("supercalifragalixspelling",
 			   XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   DrawnButton4 = XmCreateDrawnButton(Shell1, "DrawnButton4", args, n);
   XtManageChild(DrawnButton4);
-  
+
   /* add expose and resize callbacks */
   XtAddCallback(DrawnButton4,XmNexposeCallback,ReDrawCB,NULL);
   XtAddCallback(DrawnButton4,XmNresizeCallback,ReDrawCB,NULL);
-    
+
   /* Get the graphics context needed by the callback */
   db4gc = XtGetGC(DrawnButton4, GCForeground | GCBackground, &db4gcv);
-  
+
   CommonPause();
   CommonPause();
 

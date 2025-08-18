@@ -37,7 +37,7 @@ extern "C" {
 
 /* The GrabShell instance record */
 
-typedef struct 
+typedef struct
 {
   Cursor	cursor;
   Dimension	shadow_thickness;
@@ -60,7 +60,7 @@ typedef struct
 
 /* Full instance record declaration */
 
-typedef  struct _XmGrabShellRec 
+typedef  struct _XmGrabShellRec
 {
   CorePart		core;
   CompositePart		composite;
@@ -84,7 +84,7 @@ typedef  struct _XmGrabShellWidgetRec /* OBSOLETE (for compatibility only).*/
 
 /* GrabShell class structure */
 
-typedef struct 
+typedef struct
 {
   XtPointer		extension;	 /* Pointer to extension record */
 } XmGrabShellClassPart;
@@ -92,7 +92,7 @@ typedef struct
 
 /* Full class record declaration */
 
-typedef struct _XmGrabShellClassRec 
+typedef struct _XmGrabShellClassRec
 {
   CoreClassPart	    	core_class;
   CompositeClassPart	composite_class;

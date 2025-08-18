@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cutpaste4a.c /main/7 1995/07/13 17:56:29 drk $"
@@ -121,7 +121,7 @@ XmStringCharSet		charset = (XmStringCharSet) XmSTRING_DEFAULT_CHARSET;
 
 static Widget		w,
 			panedwindow,
-			workdialog, 
+			workdialog,
 			setdialog,
 			functdialog,
 			worktext,
@@ -152,7 +152,7 @@ main(argc, argv)
     XtManageChild(panedwindow);
 
     cutpastetester(panedwindow);
-    
+
     XtRealizeWidget(Shell1);
 
     window = XtWindow(panedwindow);
@@ -381,7 +381,7 @@ cutpastetester(parent)
 /*
  * Create pushbuttons
  */
- 
+
     drawbuttons();
 
 }
@@ -606,7 +606,7 @@ static void begin_copy_test(widget, client_data, call_data)
     begin_copy(widget, client_data, call_data);
     copy_to(widget, client_data, call_data);
     end_copy(widget, client_data, call_data);
-    
+
 }
 
 /*
@@ -619,13 +619,13 @@ static void start_copy_test(widget, client_data, call_data)
      XtPointer	call_data;
 {
     by_name = 1;
-    
+
     start_copy(widget, client_data, call_data);
     copy_to(widget, client_data, call_data);
     end_copy(widget, client_data, call_data);
-    
+
     by_name = 0;
-    
+
 }
 
 /*
@@ -670,7 +670,7 @@ static void cancel_copy_test(widget, client_data, call_data)
      XtPointer	call_data;
 {
     set_text = XmTextGetString(settext);
-    
+
     start_copy(widget, client_data, call_data);
     copy_to(widget, client_data, call_data);
     cancel_copy(widget, client_data, call_data);
@@ -702,7 +702,7 @@ static void mult_copy_from_test(widget, client_data, call_data)
     start_copy(widget, client_data, call_data);
     copy_to(widget, client_data, call_data);
     end_copy(widget, client_data, call_data);
-    
+
     start_copy_from(widget, client_data, call_data);
     copy_from(widget, client_data, call_data);
     copy_from(widget, client_data, call_data);
@@ -738,8 +738,8 @@ XtPointer call_data;
     status = XmClipboardBeginCopy(display, window, set_cs, workdialog,
 				  cut_by_name_callback, &itemid);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -762,8 +762,8 @@ XtPointer call_data;
     status = XmClipboardStartCopy(display, window, set_cs, timestamp,
 				  workdialog, cut_by_name_callback, &itemid);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -806,7 +806,7 @@ XtPointer call_data;
         set_char = buffer;
         set_length = buffer_size;
     }else{
-        if(by_name) 
+        if(by_name)
         {
 	    set_length = length_text;
         }else{
@@ -817,11 +817,11 @@ XtPointer call_data;
 
     if(by_name) set_char = 0;
 
-    status = XmClipboardCopy(display, window, itemid, format_name, set_char, 
+    status = XmClipboardCopy(display, window, itemid, format_name, set_char,
 			     set_length, private_id, &data_id);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -841,8 +841,8 @@ XtPointer call_data;
     }
     status = XmClipboardEndCopy(display, window, itemid);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -861,8 +861,8 @@ XtPointer call_data;
 
     status = XmClipboardStartRetrieve(display, window, timestamp);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -881,7 +881,7 @@ XtPointer call_data;
     int status, buffer_size;
     unsigned long copy_length;
 
-    if(big) 
+    if(big)
 	buffer_size = 263000;
     else
 	buffer_size = 12;
@@ -891,14 +891,14 @@ XtPointer call_data;
     status = XmClipboardRetrieve(display, window, format_name, set_char,
 				 buffer_size, &copy_length, &private_id);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
 	XtFree(set_char);
 	display_lock_message();
 	return;
     }
 
-    if(buffer_size > 20 && copy_length > 20) 
+    if(buffer_size > 20 && copy_length > 20)
     {
 	set_char[20] = '\0';
     }else{
@@ -928,8 +928,8 @@ XtPointer call_data;
 
     status = XmClipboardEndRetrieve(display, window);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -964,13 +964,13 @@ XtPointer call_data;
     int status;
 
     set_char = recopy_text;
-    
+
     if(strlen(set_char) == 0) set_char = 0;
     status = XmClipboardCopyByName(display, window, data_id, set_char,
 				   strlen(set_char), private_id);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -986,8 +986,8 @@ XtPointer call_data;
 
     status = XmClipboardUndoCopy(display, window);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -1008,11 +1008,11 @@ XtPointer call_data;
     bufferlength = 100;
 
     status = XmClipboardInquireFormat(display, window, count_text, buffer,
-				      bufferlength, 
+				      bufferlength,
 				      &outlength);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -1034,8 +1034,8 @@ XtPointer call_data;
 
     status = XmClipboardInquireLength(display, window, format_name, &length);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -1057,8 +1057,8 @@ XtPointer call_data;
     status = XmClipboardInquireCount(display, window, &count_text,
 				     &max_length);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -1088,8 +1088,8 @@ XtPointer call_data;
     status = XmClipboardInquirePendingItems(display, window, format_name,
 					    &list, &count);
 
-    if(status == ClipboardLocked) 
-    { 
+    if(status == ClipboardLocked)
+    {
     	display_lock_message();
     	return;
     }
@@ -1138,8 +1138,8 @@ XtPointer call_data;
     	locked = 0;
     	status = XmClipboardUnlock(display, window, 0);
 
-	if(status == ClipboardLocked) 
-	{ 
+	if(status == ClipboardLocked)
+	{
 	    display_lock_message();
     	    locked = 1;
 	}
@@ -1147,8 +1147,8 @@ XtPointer call_data;
     	locked = 1;
     	status = XmClipboardLock(display, window);
 
-	if(status == ClipboardLocked) 
-	{ 
+	if(status == ClipboardLocked)
+	{
 	    display_lock_message();
             locked = 0;
 	}
@@ -1253,10 +1253,10 @@ int *reason;
     int i;
 
     set_char = recopy_text;
-    
+
     if(*reason == XmCR_CLIPBOARD_DATA_REQUEST)
     {
-	if(big) 
+	if(big)
 	{
 	    buffer_size = 263000;
 	    set_char = XtMalloc(buffer_size);
@@ -1276,7 +1276,7 @@ int *reason;
     {
 
     	cs = XmStringLtoRCreate("Data Delete Message Recieved", charset);
-   
+
 	n = 0;
         XtSetArg(args[n], XmNmessageString, cs); n++;
         XtSetArg(args[n], XmNokCallback, dd_ok_callback); n++;

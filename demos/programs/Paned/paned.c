@@ -58,7 +58,7 @@ static String fallbacks[] = {
     "*XmPaned*XmForm*XmLabel.labelString: Motif Paned Widget",
     "*XmPaned*XmForm*XmToggleButton.labelString: Show Sash",
     "*XmPaned*XmForm*sash_three_tog.labelString: Pane Demo",
-    
+
     NULL,
 };
 
@@ -68,7 +68,7 @@ static String fallbacks[] = {
 
 /*
  * Function Name: InitControls
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
@@ -150,14 +150,14 @@ InitControls()
 
 /*
  * Function Name: SashValChCB
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
 void
 SashValChCB(Widget w, XtPointer client, XtPointer call)
 {
-    /* 
+    /*
      * BE CAREFUL...ASSUMES THIS WIDGET IS CHILD OF FORM, WHICH IS CHILD
      * OF A XI PANED
      */
@@ -171,7 +171,7 @@ SashValChCB(Widget w, XtPointer client, XtPointer call)
 }
 /*
  * Function Name: SepValChCB
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
@@ -184,7 +184,7 @@ SepValChCB(Widget w, XtPointer client, XtPointer call)
 
     if (!XmToggleButtonGetState(w))
 	return;
-    
+
     argcnt = 0;
     XtSetArg(args[argcnt], XmNseparatorOn, val); argcnt++;
     XtSetValues(G_paned, args, argcnt);
@@ -192,7 +192,7 @@ SepValChCB(Widget w, XtPointer client, XtPointer call)
 
 /*
  * Function Name: OrientChValCB
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
@@ -202,10 +202,10 @@ OrientChValCB(Widget w, XtPointer client, XtPointer call)
     Arg args[5];
     Cardinal argcnt;
     unsigned char orient = (unsigned char) (unsigned)client;
-    
+
     if (!XmToggleButtonGetState(w))
 	return;
-    
+
     argcnt = 0;
     XtSetArg(args[argcnt], XmNorientation, orient); argcnt++;
     XtSetValues(G_paned, args, argcnt);
@@ -213,7 +213,7 @@ OrientChValCB(Widget w, XtPointer client, XtPointer call)
 
 /*
  * Function Name: ConstraintResCB
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
@@ -257,7 +257,7 @@ inside it. Here's the list of available constraint resources:\n\
 
 /*
  * Function Name: OtherResCB
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
@@ -301,7 +301,7 @@ list of available resources:\n\
 
 /*
  * Function Name: CreateLabel
- * Description:   
+ * Description:
  * Arguments:     This is an XtCallback
  * Returns:       Nothing
  */
@@ -311,7 +311,7 @@ CreateLabel(Widget w, XtPointer client, XtPointer call)
     Arg args[5];
     Cardinal argcnt;
     XmString xmstring;
-    
+
     xmstring = XmStringCreateLtoR(
 "The Motif Paned Widget extends the capabilities of the standard Paned\n\
 Window that comes with Motif.\n\
@@ -324,14 +324,14 @@ The Motif Paned Widget can be used as a \"smarter\" Row Column widget, by\n\
 turning off the separators between panes. Press the True or False toggles\n\
 to see this behavior.",
 				  XmSTRING_DEFAULT_CHARSET);
-     
+
     argcnt = 0;
     XtSetArg(args[argcnt], XmNmarginHeight, 10); argcnt++;
     XtSetArg(args[argcnt], XmNmarginWidth, 10); argcnt++;
     XtSetArg(args[argcnt], XmNalignment, XmALIGNMENT_BEGINNING); argcnt++;
     XtSetArg(args[argcnt], XmNlabelString, xmstring); argcnt++;
     XtSetValues(w, args, argcnt);
-    
+
     XmStringFree(xmstring);
 
 }
@@ -350,27 +350,27 @@ QuitCB(Widget w, XtPointer client, XtPointer call)
 
 /*
  * Function Name: main
- * Description:   
+ * Description:
  * Arguments:     the usual suspects
  * Returns:       nothing
  *
  */
-int 
+int
 main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;
     Widget top, paned_top, w;
     XtAppContext app;
-    
-    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
     XtSetArg(args[argcnt], XmNtitle, "Motif Paned Widget Demo"); argcnt++;
     top = XtOpenApplication(&app, "Paned", NULL, 0,
-			    &argc, argv, fallbacks, 
-                            sessionShellWidgetClass, 
+			    &argc, argv, fallbacks,
+                            sessionShellWidgetClass,
                             args, argcnt);
 
     G_form = Createform(top);
@@ -395,4 +395,3 @@ main(int argc, char **argv)
     XtAppMainLoop(app);
     return(0);
 }
-

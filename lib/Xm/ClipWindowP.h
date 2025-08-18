@@ -48,7 +48,7 @@ typedef struct _XmClipWindowRec      * XmClipWindowWidget;
 
 typedef struct
 {
-   XtPointer extension;   
+   XtPointer extension;
 } XmClipWindowClassPart;
 
 

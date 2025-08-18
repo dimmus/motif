@@ -22,19 +22,19 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Shell1 
+TRACE:(1) CompareVisual Shell1
 TRACE:(2) Continue
-TRACE:(3) LocatePointer pushbutton  
-TRACE:(4) CompareVisual pushbutton 
-TRACE:(5) ClickMB Btn1 
+TRACE:(3) LocatePointer pushbutton
+TRACE:(4) CompareVisual pushbutton
+TRACE:(5) ClickMB Btn1
 Number of clicks is 1
 *************************
-TRACE:(6) ClickMB Btn1 
+TRACE:(6) ClickMB Btn1
 Number of clicks is 1
 *************************
-TRACE:(7) CompareVisual bboard 
+TRACE:(7) CompareVisual bboard
 TRACE:(8) Continue
-TRACE:(9) LocatePointer pushbutton  
+TRACE:(9) LocatePointer pushbutton
 TRACE:(10) ClickMB Btn1 2
 Number of clicks is 1
 *************************
@@ -42,7 +42,7 @@ TRACE:(11) ClickMB Btn1 3
 Number of clicks is 1
 *************************
 TRACE:(12) Continue
-TRACE:(13) LocatePointer pushbutton  
+TRACE:(13) LocatePointer pushbutton
 TRACE:(14) ClickMB Btn1 2
 Number of clicks is 1
 *************************
@@ -67,19 +67,19 @@ Number of clicks is 4
 Number of clicks is 5
 *************************
 TRACE:(17) Continue
-TRACE:(18) LocatePointer pushbutton1  
+TRACE:(18) LocatePointer pushbutton1
 TRACE:(19) ClickKey <Alt> <Shift> Kr
 TRACE:(20) ClickKey <Alt> Kr
 TRACE:(21) ClickKey <Alt> Kl
-TRACE:(22) LocatePointer pushbutton1  
-TRACE:(23) ClickMB Btn1 
+TRACE:(22) LocatePointer pushbutton1
+TRACE:(23) ClickMB Btn1
 Run push button hit
-TRACE:(24) LocatePointer pushbutton2  
-TRACE:(25) ClickMB Btn1 
+TRACE:(24) LocatePointer pushbutton2
+TRACE:(25) ClickMB Btn1
 Walk push button hit
 TRACE:(26) Continue
-TRACE:(27) LocatePointer push0  
-TRACE:(28) ClickMB Btn1 
+TRACE:(27) LocatePointer push0
+TRACE:(28) ClickMB Btn1
 TRACE:(29) Continue
 TRACE:(30) Exit
 Exiting Test...Please Standby...

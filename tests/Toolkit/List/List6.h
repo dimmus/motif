@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: List6.h /main/9 1995/07/13 18:19:53 drk $ */
 
 #define NITEMS  12
@@ -76,6 +76,5 @@ static XtCallbackProc  BSelCB(Widget w, caddr_t client_data,
 			      caddr_t call_data);
 static XtCallbackProc  HelpCB(Widget w, caddr_t client_data,
 			      caddr_t call_data);
-static void 	       DeleteMe(Widget w, XEvent *event, 
+static void 	       DeleteMe(Widget w, XEvent *event,
 			      String *params, Cardinal num_params);
-

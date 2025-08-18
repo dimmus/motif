@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDTxtLbl1.c /main/8 1995/07/14 11:55:24 drk $"
@@ -31,8 +31,8 @@ static char rcsid[] = "$XConsortium: DNDTxtLbl1.c /main/8 1995/07/14 11:55:24 dr
 /*
  *	file: TextLabel1.c
  *
- *	Has a two line Label widget under Form. Also has a Multi line Text 
- *	widget under Form. The XmNcolumns resource is being set to 50 at 
+ *	Has a two line Label widget under Form. Also has a Multi line Text
+ *	widget under Form. The XmNcolumns resource is being set to 50 at
  *	creation time, and XmNrows to 10. A program to be run either as one
  *	of the clients in a Drag And Drop transaction, or as both the initiator
  *	and the receiver for testing Drag And Drop transaction.
@@ -87,12 +87,12 @@ char **argv;
 
 	if (UserData != NULL)
 		ProcessCommandArgs();
-    
+
     n = 0;
 	XtSetArg(args[n], XtNwidth, 500);  n++;
 	XtSetArg(args[n], XtNheight, 250);  n++;
     XtSetValues(Shell1, args, n);
-    
+
 	/* create main form */
 	n = 0;
 	Form1 = XmCreateForm (Shell1, "Form1", args, n);
@@ -134,7 +134,7 @@ char **argv;
 	XtSetArg(args[n], XmNleftOffset, 5); n++;
 	XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
 	XtSetArg(args[n], XmNrightOffset, 5); n++;
-						
+
 	Text1 = XmCreateText(Form1, "Text1", args, n);
 	XtManageChild(Text1);
 
@@ -162,7 +162,7 @@ char **argv;
 		XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
 		XtSetArg(args[n], XmNrightOffset, 5); n++;
 		XtSetArg(args[n], XmNborderWidth, 5); n++;
-	
+
     	Label2 = XmCreateLabel(Form1, "Label2", args, n);
     	XtManageChild(Label2);
 
@@ -189,7 +189,7 @@ char **argv;
 		XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
 		XtSetArg(args[n], XmNrightOffset, 5); n++;
 		XtSetArg(args[n], XmNborderWidth, 5); n++;
-	
+
     	PushB1 = XmCreatePushButton(Form1, "PushB1", args, n);
     	XtManageChild(PushB1);
 

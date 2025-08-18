@@ -53,7 +53,7 @@ Digit				[0-9]
 [ \t\f\n]			{}
 ^#.*$				{}
 
-\-?\.?{Digit}*			{ 
+\-?\.?{Digit}*			{
 				/* Remove decimal point from value. Reasoning
 				   is that Scale does not use floating point
 				   values, rather the integer representation
@@ -71,7 +71,7 @@ Digit				[0-9]
 				yydigitval = (int) atoi(yyscaleval);
 				if (yyscaleval)
 					free(yyscaleval);
-				return(DIGIT); 
+				return(DIGIT);
 				}
 
 \"{StringData}\"		{
@@ -95,7 +95,7 @@ Digit				[0-9]
 				}
 
 {DigitOrLetterOrUnder}		{
-				yystringval = (char *) malloc(sizeof(char) * 
+				yystringval = (char *) malloc(sizeof(char) *
 						             (yyleng + 1));
 				strcpy(yystringval, (char *) yytext);
 				return(STRING);

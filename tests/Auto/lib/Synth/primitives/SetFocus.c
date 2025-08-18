@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SetFocus.c /main/8 1995/07/14 11:43:06 drk $"
@@ -46,7 +46,7 @@ static char rcsid[] = "$XConsortium: SetFocus.c /main/8 1995/07/14 11:43:06 drk 
 
         INPUTS:
             widget - the widget to set the keyboard focus to.
-        
+
         OUTPUTS:
             none
 
@@ -68,7 +68,7 @@ int instance;
     Arg             args[1];
 
 
-    if (widget == NULL) 
+    if (widget == NULL)
         (*xisTraceMsg)("Got send_event_request = SetFocus to RootWindow\n");
     else
         (*xisTraceMsg)("Got send_event_request = SetFocus to %s\n",
@@ -78,9 +78,9 @@ int instance;
         XtSetArg(args[0], XmNrowColumnType, &rc_type);
         XtGetValues(widget, args, 1);
     }
-    
+
     /* Call all relavent InformExpectedActions functions for Focus Out */
-  
+
     current_object = xisGetFocusObject();
 
     if(object == current_object) {
@@ -99,7 +99,7 @@ int instance;
 
         if (current_object->proc_InformExpectedActions != NULL) {
             xisInform.current_obj = current_object;
-            (*current_object->proc_InformExpectedActions)(EventFocusOut); 
+            (*current_object->proc_InformExpectedActions)(EventFocusOut);
         }
         current_object = current_object->parent;
     }
@@ -127,7 +127,7 @@ int instance;
         xisState.focus_instance = instance;
 
         /* Call all relavent InformExpectedActions functions for Focus In */
-  
+
         current_object = object;
         xisInform.action_obj = object;
         xisInform.modifier_key_status = 0;
@@ -141,7 +141,7 @@ int instance;
 
             if (current_object->proc_InformExpectedActions != NULL) {
                 xisInform.current_obj = current_object;
-                (*current_object->proc_InformExpectedActions)(EventFocusIn); 
+                (*current_object->proc_InformExpectedActions)(EventFocusIn);
 	    }
             current_object = current_object->parent;
         }

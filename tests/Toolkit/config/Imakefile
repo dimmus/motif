@@ -19,7 +19,7 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
+XCOMM
 XCOMM HISTORY
 INCLUDES 	= -I. -I../bitmaps -I.. -I../Text/lib -I$(TESTCOMSRC)
 DEFINES         = TestDefines
@@ -138,10 +138,10 @@ SRCS=  \
 	CProtocol.c \
 	CMainWin2.c \
 	CScrollWin1.c
-		  
+
 includes:: $(SRCS)
 
-DependTarget () 
+DependTarget ()
 
 $(SRCS):
 	csh ./MK_LINKS

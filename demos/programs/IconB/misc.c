@@ -163,7 +163,7 @@ static wchar_t *CStrCommonWideCharsGet	();
  *	STATIC CODE
  *****************************************************************************/
 
-#if defined(LOCAL_STRCASECMP) 
+#if defined(LOCAL_STRCASECMP)
 
 /*
  * Function:
@@ -183,7 +183,7 @@ static int StrCasecmp
         GRA(register char *, s2)
 {
     register int        c1, c2;
-    
+
     while (*s1 && *s2)
     {
         c1 = isupper(*s1) ? tolower(*s1) : *s1;
@@ -243,9 +243,9 @@ static int strlenWc
 {
     register wchar_t	*p = ptr;
     register int	x = 0;
-    
+
     if (!ptr) return(0);
-    
+
     while (*p++) x++;
     return (x);
 }
@@ -254,7 +254,7 @@ static int strlenWc
  * Function:
  *      bytesConv = doMbstowcs(wcs, mbs, n);
  * Description:
- *      Create a wcs string from an input mbs. 
+ *      Create a wcs string from an input mbs.
  * Input:
  *	wcs - wchar_t* : pointer to result buffer of wcs
  *      mbs - char* : pointer to the source mbs
@@ -270,7 +270,7 @@ static size_t doMbstowcs
 {
 #ifndef SUPPORTS_WCHARS
     int i;
-    
+
     for (i = 0; i < n && mbs[i] != 0; ++i)
     {
 	wcs[i] = mbs[i];
@@ -289,7 +289,7 @@ static size_t doMbstowcs
  *      Create a mbs string from an input wcs.
  * Input:
  *	wcs - wchar_t* : pointer to the source wcs
- *      mbs - char* : pointer to result mbs buffer 
+ *      mbs - char* : pointer to result mbs buffer
  *	n - size_t : the number of characters to convert
  * Output:
  *      bytesConv - size_t : number of bytes converted
@@ -302,7 +302,7 @@ static size_t doWcstombs
 {
 #ifndef SUPPORTS_WCHARS
     int i;
-    
+
     for (i = 0; i < n && wcs[i] != 0; ++i)
     {
 	mbs[i] = wcs[i];
@@ -338,7 +338,7 @@ static void copyWcsToMbs
 {
     static	wchar_t	*tbuf;
     static	int	tbufSize = 0;
-    
+
     int		numCvt;
     int		lenToConvert;
     wchar_t	*fromP = wcs;
@@ -346,7 +346,7 @@ static void copyWcsToMbs
     wchar_t	*toP;
     wchar_t	*commonWChars = CStrCommonWideCharsGet();
     wchar_t	tmp;
-    
+
     /*
      * Make sure there's room in the buffer
      */
@@ -355,7 +355,7 @@ static void copyWcsToMbs
 	tbuf = (wchar_t*)XtRealloc((char*)tbuf, (len + 1) * sizeof(wchar_t));
 	tbufSize = len;
     }
-    
+
     /*
      * Now copy and process
      */
@@ -414,7 +414,7 @@ static void copyWcsToMbs
 	}
 	lenToConvert++;
     }
-    
+
     numCvt = doWcstombs(mbs, tbuf, lenToConvert);
     mbs[numCvt] = '\0';
 }
@@ -443,14 +443,14 @@ static int dombtowc
         GRA(size_t, size)
 {
     int		retVal = 0;
-    
+
 #ifndef SUPPORTS_WCHARS
     if ((multi == NULL) || (*multi == '\000'))
     {
 	if (wide) wide[0] = '\0';
 	return (0);
     }
-    
+
     for (retVal = 0; retVal < size && multi[retVal] != '\000'; retVal++)
     {
 	if (wide != NULL)
@@ -478,11 +478,11 @@ static int dombtowc
  */
 static wchar_t* getNextSeparator
     ARGLIST((str))
-        GRA(wchar_t *, str)	
+        GRA(wchar_t *, str)
 {
     wchar_t	*ptr = str;
     wchar_t	*commonWChars = CStrCommonWideCharsGet();
-    
+
     while (*ptr)
     {
 	/*
@@ -510,14 +510,14 @@ static wchar_t* getNextSeparator
 /*
  * Function:
  *	more =
- *        extractSegment(str, tagStart, tagLen, txtStart, txtLen, 
+ *        extractSegment(str, tagStart, tagLen, txtStart, txtLen,
  *			pDir, pSep);
  * Description:
  *	Parse through a string version of a compound string and extract
  *	the first compound string segment from the string.
  * Inputs:
  *	str - char** : the address of address of the string to parse
- *	tagStart - char** : address to return pointer to tag start into 
+ *	tagStart - char** : address to return pointer to tag start into
  *	tagLen - int* : address where to return the tag length into
  *	txtStart - char** : address to return the text start into
  *	txtLen - int* : address where to return the text length
@@ -622,7 +622,7 @@ static Boolean extractSegment
 		{
 		    start = getNextSeparator(++start);
 		}
-		
+
 		if ((textL = start - text) == 0)
 		{
 		    text = NULL;	/* Null text specified  */
@@ -643,9 +643,9 @@ static Boolean extractSegment
 		    done = True;
 		    break;
 		}
-		
+
 		/*
-		 * If the next character is a t or f, the we've got 
+		 * If the next character is a t or f, the we've got
 		 * a separator.
 		 */
 		modsSeen = True;
@@ -749,7 +749,7 @@ static XmString StringToXmString
     int			textLen;
     Boolean		sep;
     int			dir;
-    
+
     Boolean		more;
     wchar_t		*wcStr;
     int			curDir;
@@ -837,7 +837,7 @@ static XmString StringToXmString
 		strcpy(tagBuf, XmSTRING_DEFAULT_CHARSET);
 	    }
 
-	    s1 = XmStringCreate(textBuf, tagBuf); 
+	    s1 = XmStringCreate(textBuf, tagBuf);
 	    s2 = xmStr;
 	    xmStr = XmStringConcat(s2, s1);
 	    XmStringFree(s1);
@@ -856,7 +856,7 @@ static XmString StringToXmString
 	    XmStringFree(s2);
 	}
     }
-    
+
     /*
      * Free up memory and return
      */
@@ -898,7 +898,7 @@ static char* getNextCStrDelim
 	    comma += len;
 	    continue;
 	}
-	
+
 	if (*comma == '\\')
 	{
 	    comma++;	/* Over quote */
@@ -981,7 +981,7 @@ static wchar_t *CStrCommonWideCharsGet()
     static char	*characters[] = { "\000", "\t", "\n", "\r", "\f", "\v",
 				  "\\", "\"", "#", ":", "f", "l", "n", "r",
 				  "t", "v", "F", "L", "R", "T", "0", "1" };
-	
+
 
     if (CommonWideChars == NULL)
     {
@@ -991,7 +991,7 @@ static wchar_t *CStrCommonWideCharsGet()
 	 * Allocate and create the array.
 	 */
 	CommonWideChars = (wchar_t*)XtMalloc(NUM_COMMON_WCHARS * sizeof(wchar_t));
-	
+
 	for (i = 0; i < NUM_COMMON_WCHARS; i++)
 	{
 	    (void)dombtowc(&(CommonWideChars[i]), characters[i], 1);
@@ -1034,7 +1034,7 @@ static Boolean CvtStringToXmString
      */
     if (*num_args != 0)
     {
-	XtAppWarningMsg(XtDisplayToApplicationContext(d), 
+	XtAppWarningMsg(XtDisplayToApplicationContext(d),
 			"cvtStringToXmString",
 			"wrongParameters",
 			"XtToolkitError",
@@ -1074,7 +1074,7 @@ static Boolean CvtStringToXmString
 	XmStringFree(resStr);
 	return(False);
     }
-    else 
+    else
     {
 	*(XmString *)toVal->addr = resStr;
 	toVal->size = sizeof(XmString);
@@ -1134,7 +1134,7 @@ static Boolean CvtStringToXmStringTable
     if (*num_args != 0)
     {
 	XtAppWarningMsg
-	    (XtDisplayToApplicationContext(d), 
+	    (XtDisplayToApplicationContext(d),
 	     "cvtStringToXmStringTable",
 	     "wrongParameters",
 	     "XtToolkitError",
@@ -1172,7 +1172,7 @@ static Boolean CvtStringToXmStringTable
 	while (str)
 	{
 	    nextDelim = getNextCStrDelim(str);
-	    
+
 	    /*
 	     * Overwrite nextDelim
 	     */
@@ -1181,7 +1181,7 @@ static Boolean CvtStringToXmStringTable
 		*nextDelim = '\0';
 		nextDelim++;
 	    }
-	    
+
 	    /*
 	     * Convert it
 	     */
@@ -1189,7 +1189,7 @@ static Boolean CvtStringToXmStringTable
 	    fVal.addr = str;
 	    tVal.size = sizeof(XTPOINTER);
 	    tVal.addr = (XTPOINTER)tblPtr;
-	    
+
 	    /*
 	     * Call converter ourselves since this is used to create
 	     * the strings in the table we create. We need to do this
@@ -1232,7 +1232,7 @@ static Boolean CvtStringToXmStringTable
 	XtFree((char*)CStrTable);
 	return(False);
     }
-    else 
+    else
     {
 	*(XmString **)toVal->addr = CStrTable;
 	toVal->size = sizeof(XmString*);
@@ -1254,7 +1254,7 @@ static void XmStringTableCvtDestroy
 	XmStringFree(*tblPtr);
     }
     XtFree((char*)(*(XmString**)(to->addr)));
-}    
+}
 
 /*****************************************************************************
  *	GLOBAL CODE
@@ -1342,7 +1342,7 @@ XtPointer CONVERT
      * routine.
      */
     convResult = XtConvertAndStore(w, XmRString, &fromVal, to_type, &toVal);
-    
+
 
     /*
      * Now we have two conditions here.  One the conversion was a success
@@ -1376,7 +1376,7 @@ XtPointer CONVERT
     else
     {
 	/*
-	 * Here is the generic conversion return value handler.  This 
+	 * Here is the generic conversion return value handler.  This
 	 * just does some size specific casting so that value that we
 	 * return is in the correct bytes of the XtPointer that we
 	 * return.  Here we check all sizes from 1 to 8 bytes.
@@ -1467,7 +1467,7 @@ void MENU_POST
  *  NOTES:  This assumes that args later in the argument list
  *          override those already in the list.  Therfore i f
  *          there are shadow colors later in the list they will win.
- *        
+ *
  *          There is no need to use this function when creating a widget
  *          only when doing a set values, shadow colors are automatically
  *          calculated at creation time.
@@ -1521,7 +1521,7 @@ void SET_BACKGROUND_COLOR
      * need to use XmGetColors to get the shadow colors from the backgound
      * color and add those that are not already in the arglist to the
      * arglist.
-     * 
+     *
      */
     if ((bottomShadowLoc == UNSET) ||
 	(topShadowLoc == UNSET) ||
@@ -1537,30 +1537,30 @@ void SET_BACKGROUND_COLOR
 
 	XtSetArg(larg[0], XmNcolormap, &cmap);
 	XtGetValues(w, larg, 1);
-	XmGetColors(XtScreen(w), cmap, bg_color, 
+	XmGetColors(XtScreen(w), cmap, bg_color,
 		    &fgColor, &topShadow, &bottomShadow, &select);
 
 	if (topShadowLoc == UNSET)
 	{
-	    XtSetArg(args[*argcnt], XmNtopShadowColor, topShadow); 
+	    XtSetArg(args[*argcnt], XmNtopShadowColor, topShadow);
 	    (*argcnt)++;
 	}
-	
+
 	if (bottomShadowLoc == UNSET)
 	{
-	    XtSetArg(args[*argcnt], XmNbottomShadowColor, bottomShadow); 
+	    XtSetArg(args[*argcnt], XmNbottomShadowColor, bottomShadow);
 	    (*argcnt)++;
 	}
 
 	if (selectLoc == UNSET)
 	{
-	    XtSetArg(args[*argcnt], XmNarmColor, select); 
+	    XtSetArg(args[*argcnt], XmNarmColor, select);
 	    (*argcnt)++;
 	}
 
 	if (fgLoc == UNSET)
 	{
-	    XtSetArg(args[*argcnt], XmNforeground, fgColor); 
+	    XtSetArg(args[*argcnt], XmNforeground, fgColor);
 	    (*argcnt)++;
 	}
     }
@@ -1587,7 +1587,7 @@ Widget BxFindTopShell
         GRA(Widget, start)
 {
     Widget	p;
-    
+
     while ((p = XtParent(start)))
     {
 	start = p;
@@ -1626,14 +1626,14 @@ WidgetList BxWidgetIdsFromNames
     String	start;
     String	widget;
     char       *ptr;
-    
+
     /*
      * For backward compatibility, remove [ and ] from the list.
      */
     tmp = start = XtNewString(stringList);
     if((start = strchr(start, '[')) != NULL) start++;
     else start = tmp;
-    
+
     while((start && *start) && isspace(*start))
     {
 	start++;
@@ -1643,7 +1643,7 @@ WidgetList BxWidgetIdsFromNames
     {
 	*ptr = '\0';
     }
-    
+
     ptr = start + strlen(start) - 1;
     while(ptr && *ptr)
     {
@@ -1661,7 +1661,7 @@ WidgetList BxWidgetIdsFromNames
     {
 	*ptr = '\0';
     }
-    
+
     /*
      * start now points to the first character after the [.
      * the list is now either empty, one, or more widget
@@ -1697,9 +1697,9 @@ WidgetList BxWidgetIdsFromNames
 	 */
         widget = (char *)XtMalloc((strlen(start) + 2) * sizeof(char));
         sprintf(widget, "*%s", start);
-	
+
 	/*
-	 * Start at this level and continue up until the widget is found 
+	 * Start at this level and continue up until the widget is found
 	 * or until the top of the hierarchy is reached.
 	 */
 	current = ref;
@@ -1709,7 +1709,7 @@ WidgetList BxWidgetIdsFromNames
 	    if (inst != NULL )
 	    {
 		wgtCount++;
-		wgtIds = (WidgetList)XtRealloc((char *)wgtIds, 
+		wgtIds = (WidgetList)XtRealloc((char *)wgtIds,
 					       wgtCount * sizeof(Widget));
 		wgtIds[wgtCount - 1] = inst;
 		break;
@@ -1729,7 +1729,7 @@ Cannot find widget %s\n", cbName, widget);
     /*
      * NULL terminate the list.
      */
-    wgtIds = (WidgetList)XtRealloc((char *)wgtIds, 
+    wgtIds = (WidgetList)XtRealloc((char *)wgtIds,
 				   (wgtCount + 1) * sizeof(Widget));
     wgtIds[wgtCount] = NULL;
 
@@ -1767,7 +1767,7 @@ Cannot find widget %s\n", cbName, widget);
  * indirect or consequential damages or any damages
  * whatsoever resulting from loss of use, data or profits,
  * whether in an action of contract, negligence or other tortious
- * action, arising out of or in connection with the use 
+ * action, arising out of or in connection with the use
  * or performance of this software.
  *
  */
@@ -2077,7 +2077,7 @@ Pixmap XPM_PIXMAP
     Pixmap		pixmap;
     Pixmap		shape;
     int			returnValue;
-    
+
     argcnt = 0;
     XtSetArg(args[argcnt], XmNdepth, &(attributes.depth)); argcnt++;
     XtSetArg(args[argcnt], XmNcolormap, &(attributes.colormap)); argcnt++;
@@ -2086,7 +2086,7 @@ Pixmap XPM_PIXMAP
     attributes.visual = DefaultVisual(XtDisplay(w),
 				      DefaultScreen(XtDisplay(w)));
     attributes.valuemask = (XpmDepth | XpmColormap | XpmVisual);
-    
+
     returnValue = XpmCreatePixmapFromData(XtDisplay(w),
 					  DefaultRootWindow(XtDisplay(w)),
 					  pixmapName, &pixmap, &shape,
@@ -2094,7 +2094,7 @@ Pixmap XPM_PIXMAP
     if ( shape )
     {
 	XFreePixmap(XtDisplay(w), shape);
-    }	
+    }
 
     switch(returnValue)
     {
@@ -2324,7 +2324,7 @@ GRA(XpmAttributes *, attributes)
     char curbuf[BUFSIZ];		/* current buffer */
 
     /*
-     * read hints: width, height, ncolors, chars_per_pixel 
+     * read hints: width, height, ncolors, chars_per_pixel
      */
     if (!(xpmNextUI(data, &width) && xpmNextUI(data, &height)
 	  && xpmNextUI(data, &rncolors) && xpmNextUI(data, &cpp)))
@@ -2333,18 +2333,18 @@ GRA(XpmAttributes *, attributes)
     ncolors = rncolors;
 
     /*
-     * read hotspot coordinates if any 
+     * read hotspot coordinates if any
      */
     hotspot = xpmNextUI(data, &x_hotspot) && xpmNextUI(data, &y_hotspot);
 
     /*
-     * store the hints comment line 
+     * store the hints comment line
      */
     if (attributes && (attributes->valuemask & XpmReturnInfos))
 	xpmGetCmt(data, &hints_cmt);
 
     /*
-     * read colors 
+     * read colors
      */
     colorTable = (char ***) calloc(ncolors, sizeof(char **));
     if (!colorTable)
@@ -2357,7 +2357,7 @@ GRA(XpmAttributes *, attributes)
 	    RETURN(XpmNoMemory);
 
 	/*
-	 * read pixel value 
+	 * read pixel value
 	 */
 	colorTable[a][0] = (char *) malloc(cpp);
 	if (!colorTable[a][0])
@@ -2366,7 +2366,7 @@ GRA(XpmAttributes *, attributes)
 	    colorTable[a][0][b] = xpmGetC(data);
 
 	/*
-	 * read color keys and values 
+	 * read color keys and values
 	 */
 	curkey = 0;
 	lastwaskey = 0;
@@ -2407,13 +2407,13 @@ GRA(XpmAttributes *, attributes)
     }
 
     /*
-     * store the colors comment line 
+     * store the colors comment line
      */
     if (attributes && (attributes->valuemask & XpmReturnInfos))
 	xpmGetCmt(data, &colors_cmt);
 
     /*
-     * read pixels and index them on color number 
+     * read pixels and index them on color number
      */
     pixelindex =
 	(unsigned int *) malloc(sizeof(unsigned int) * width * height);
@@ -2441,7 +2441,7 @@ GRA(XpmAttributes *, attributes)
     }
 
     /*
-     * store the pixels comment line 
+     * store the pixels comment line
      */
     if (attributes && (attributes->valuemask & XpmReturnInfos))
 	xpmGetCmt(data, &pixels_cmt);
@@ -2449,7 +2449,7 @@ GRA(XpmAttributes *, attributes)
     free(chars);
 
     /*
-     * store found informations in the xpmInternAttrib structure 
+     * store found informations in the xpmInternAttrib structure
      */
     attrib_return->width = width;
     attrib_return->height = height;
@@ -2544,7 +2544,7 @@ GRA(XpmAttributes *, attributes)
 
 
     /*
-     * retrieve information from the XpmAttributes 
+     * retrieve information from the XpmAttributes
      */
     if (attributes && attributes->valuemask & XpmColorSymbols) {
 	colorsymbols = attributes->colorsymbols;
@@ -2571,7 +2571,7 @@ GRA(XpmAttributes *, attributes)
     ErrorStatus = XpmSuccess;
 
     /*
-     * alloc pixels index tables 
+     * alloc pixels index tables
      */
 
     key = xpmVisualType(visual);
@@ -2586,14 +2586,14 @@ GRA(XpmAttributes *, attributes)
     mask_pixel = UNDEF_PIXEL;
 
     /*
-     * get pixel colors, store them in index tables 
+     * get pixel colors, store them in index tables
      */
     for (a = 0; a < attrib->ncolors; a++) {
 	colorname = NULL;
 	pixel_defined = False;
 
 	/*
-	 * look for a defined symbol 
+	 * look for a defined symbol
 	 */
 	if (numsymbols && attrib->colorTable[a][1]) {
 	    for (l = 0; l < numsymbols; l++)
@@ -2653,7 +2653,7 @@ GRA(XpmAttributes *, attributes)
     }
 
     /*
-     * create the image 
+     * create the image
      */
     if (image_return) {
 	ErrorStatus2 = CreateXImage(display, visual, depth,
@@ -2662,10 +2662,10 @@ GRA(XpmAttributes *, attributes)
 	    RETURN(ErrorStatus2);
 
 	/*
-	 * set the image data 
+	 * set the image data
 	 *
 	 * In case depth is 1 or bits_per_pixel is 4, 6, 8, 24 or 32 use
-	 * optimized functions, otherwise use slower but sure general one. 
+	 * optimized functions, otherwise use slower but sure general one.
 	 *
 	 */
 
@@ -2687,7 +2687,7 @@ GRA(XpmAttributes *, attributes)
     }
 
     /*
-     * create the shape mask image 
+     * create the shape mask image
      */
     if (mask_pixel != UNDEF_PIXEL && shapeimage_return) {
 	ErrorStatus2 = CreateXImage(display, visual, 1, attrib->width,
@@ -2701,7 +2701,7 @@ GRA(XpmAttributes *, attributes)
     free((char *)mask_pixels);
 
     /*
-     * if requested store allocated pixels in the XpmAttributes structure 
+     * if requested store allocated pixels in the XpmAttributes structure
      */
     if (attributes &&
 	(attributes->valuemask & XpmReturnInfos
@@ -2736,7 +2736,7 @@ GRA(XpmAttributes *, attributes)
 
 
     /*
-     * return created images 
+     * return created images
      */
     if (image_return)
 	*image_return = image;
@@ -2797,7 +2797,7 @@ GRA(XImage **, image_return)
  * The idea is to have faster functions than the standard XPutPixel function
  * to build the image data. Indeed we can speed up things by supressing tests
  * performed for each pixel. We do exactly the same tests but at the image
- * level. Assuming that we use only ZPixmap images. 
+ * level. Assuming that we use only ZPixmap images.
  */
 
 LFUNC(_putbits, void, (register char *src, int dstoffset,

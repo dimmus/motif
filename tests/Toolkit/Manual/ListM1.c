@@ -57,12 +57,12 @@ void  main (argc, argv)
     Boolean		selected;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  350);  		n++;
     XtSetArg(args[n], XmNheight, 300);  		n++;
     XtSetValues(Shell1, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
     /* convert the plain strings to fancy Xstrings */

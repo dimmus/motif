@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDText1.c /main/9 1995/07/14 11:55:02 drk $"
@@ -82,12 +82,12 @@ char **argv;
 
 	if (UserData != NULL)
 		ProcessCommandArgs();
-    
+
     n = 0;
 	XtSetArg(args[n], XtNwidth, 500);  n++;
 	XtSetArg(args[n], XtNheight, 250);  n++;
     XtSetValues(Shell1, args, n);
-    
+
 	/* create main form */
 	n = 0;
 	Form1 = XmCreateForm(Shell1, "Form1", args, n);

@@ -36,8 +36,8 @@ XmSTRING_COMPONENT_CHARSET: ISO8859-1
 XmSTRING_COMPONENT_TEXT: This is only a test.
 TRACE:(1) Continue
 
-Compound Text returned from XmCvtXmStringToCT(): 
--------------------------------------------------- 
+Compound Text returned from XmCvtXmStringToCT():
+--------------------------------------------------
 ›2]This is a test.
 
 

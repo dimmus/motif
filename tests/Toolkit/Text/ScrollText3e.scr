@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText3e.scr /main/5 1995/07/17 20:40:49 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,20 +20,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Clipboard and Primary Transfer:
-#  
+#
 #  @)    Ctrl KInsert       -- copy primary selection to clipboard
 #  @)    KCopy              -- copy primary selection to clipboard
 #  @)    Shift KDelete      -- cut primary selection to clipboard
 #  @)    KCut               -- cut primary selection to clipboard
 #  @)    Shift KInsert      -- paste clipboard to insertion cursor
 #  @)    KPaste             -- paste clipboard to insertion cursor
-#   
+#
 LocatePointer Text1 RTextChar 5
 ClickMB Btn1 2
 ClickKey <Ctrl> KInsert
@@ -457,7 +457,7 @@ CompareVisual Text2
 #  @)    Alt KPrimaryPaste  -- cut primary selection to cursor
 #  @)    Alt Shift KDelete  -- cut primary selection to cursor
 #  @)    Alt KCut           -- cut primary selection to cursor
-#   
+#
 ## Reset Strings to original value
 LocatePointer PushB1
 ClickMB Btn1
@@ -575,7 +575,7 @@ CompareVisual Text4
 CompareVisual Text3
 
 #  !)
-#  #) Try all the above with: 
+#  #) Try all the above with:
 #  @)      - source and destination in same widget
 ## Done above.
 #  @)      - source and destination in different widgets in same window

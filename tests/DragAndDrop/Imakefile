@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/8 1995/07/14 09:58:02 drk $
 INCLUDES 	= -I. -I$(LIBSRC) -I$(MTOOLKITSRC) \
 		  -I../Toolkit/bitmaps -I../ -I$(TESTCOMSRC)
@@ -90,12 +90,5 @@ SRCS=  \
 
 
 
-		  
-DependTarget () 
 
-
-
-
-
-
-
+DependTarget ()

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: OptionMenu5.c /main/8 1995/07/13 18:50:41 drk $"
@@ -82,7 +82,7 @@ void cycle_values (Widget w, XtPointer client_data, XtPointer call_data)
     char *bits;
     int width;
     int height;
-  } orig_pixmap[] = 
+  } orig_pixmap[] =
     {
       {(char *) star_bits, star_width, star_height},
       {(char *) opendot_bits, opendot_width, opendot_height},
@@ -126,7 +126,7 @@ void cycle_values (Widget w, XtPointer client_data, XtPointer call_data)
 void change_sensitive (Widget w, XtPointer client_data, XtPointer call_data)
 {
   Widget option = (Widget) client_data;
-  XmToggleButtonCallbackStruct *info = 
+  XmToggleButtonCallbackStruct *info =
     (XmToggleButtonCallbackStruct *)call_data;
   Arg args[1];
   int n;
@@ -163,10 +163,10 @@ void change_labelType(Widget w, XtPointer client_data, XtPointer call_data)
   XtSetArg(args[n], XmNlabelType, &labelType); 		n++;
   XtGetValues(entries[0], args, n);
 
-  if (XmSTRING == labelType) 
-    XtSetArg(args[0], XmNlabelType, XmPIXMAP); 
-  else	
-    XtSetArg(args[0], XmNlabelType, XmSTRING); 
+  if (XmSTRING == labelType)
+    XtSetArg(args[0], XmNlabelType, XmPIXMAP);
+  else
+    XtSetArg(args[0], XmNlabelType, XmSTRING);
 
   for (i=0; i < NUM_CHILDREN; i++)
     XtSetValues(entries[i], args, 1);
@@ -185,11 +185,11 @@ void change_labelType(Widget w, XtPointer client_data, XtPointer call_data)
 main(argc, argv)
      int argc;
      char *argv[];
-{  
+{
   Widget form, rc, option, buttons[NUM_CHILDREN], entries[NUM_CHILDREN], 		toggles;
   Widget sensitive, labelType;
   Widget pulldown, bb;
-  Arg args[10]; 
+  Arg args[10];
   int n;
   int i;
   XmString dummy;
@@ -197,7 +197,7 @@ main(argc, argv)
   /* initialize toolkit; classname is XMcommon; sets global Shell1  */
 
   CommonTestInit(argc, argv);
-  
+
   n = 0;
   form = XmCreateForm (Shell1, "form", args, n);		n++;
 
@@ -305,8 +305,8 @@ main(argc, argv)
 	XtSetValues(entries[i], args,1);
   }
 
-  /* if the option appears as the name then the 
-  ** updating of the label is busted 
+  /* if the option appears as the name then the
+  ** updating of the label is busted
   */
   for (i=0; i < NUM_CHILDREN; i++) {
 	char buffer[100];
@@ -322,13 +322,13 @@ main(argc, argv)
 	buttons[i] = XmCreatePushButton(rc, lab, args, n);
   	XmStringFree(dummy);
 
-	XtAddCallback(buttons[i], XmNactivateCallback, cycle_values, 
+	XtAddCallback(buttons[i], XmNactivateCallback, cycle_values,
 		      entries[i]);
 	n = 0;
 	XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);	n++;
 	XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
 	XtSetArg(args[n], XmNtopAttachment, XmATTACH_POSITION);	n++;
-	XtSetArg(args[n], XmNtopPosition, i*100/NUM_CHILDREN);	n++;	
+	XtSetArg(args[n], XmNtopPosition, i*100/NUM_CHILDREN);	n++;
 	XtSetValues(buttons[i], args, n);
 
   }
@@ -344,7 +344,7 @@ main(argc, argv)
   /* if we realize after setting the labels, there is no problem; it works.
   ** The sequence of realizing is important only because the option menu
   ** sets the cascade label at realize time, so we set afterwards so that if
-  ** the name as the label shows we know it's wrong.  
+  ** the name as the label shows we know it's wrong.
   */
 #ifdef DONT_SHOW_INITIAL_BUG
   XtRealizeWidget(Shell1);
@@ -353,13 +353,13 @@ main(argc, argv)
   {
 /* confirm that we can change the labels programmatically and have the
 ** labels appear correctly in the XmOptionButtonGadget before the menu has
-** been popped up by the user . So we set them here to what they should 
+** been popped up by the user . So we set them here to what they should
 ** appear as. We should see "Label Gadget" echoed.
 ** Optimally, we will also see correct geometry for the CBG.
 */
   static char *strings[NUM_VALUES]=
 	{
-	  "Label Gadget", 
+	  "Label Gadget",
 	  "Label",
 	  "Push Button Gadget",
 	  "Push Button",
@@ -373,12 +373,12 @@ main(argc, argv)
   for (i=0; i< NUM_CHILDREN; i++)
 	{
 	dummy = XmStringCreateSimple(strings[i]);
-    
+
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, dummy);		n++;
 	XtSetValues(entries[i], args, n);
 	XmStringFree(dummy);
-	}   
+	}
   }
 
 #ifndef DONT_SHOW_INITIAL_BUG

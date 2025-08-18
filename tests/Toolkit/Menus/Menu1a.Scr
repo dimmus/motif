@@ -19,17 +19,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # A client window will appear with a menu bar containing three
-# cascade buttons, labeled "MenuBtn1", "MenuBtn2" and "MenuBtn3".  
+# cascade buttons, labeled "MenuBtn1", "MenuBtn2" and "MenuBtn3".
 # Each of these buttons will have one character in its label underlined.
 
 CompareVisual Shell1
 Continue
 
-# Give focus to the client window. 
+# Give focus to the client window.
 
 WindowFocus Shell1
 
@@ -66,7 +66,7 @@ ClickKey Kt
 Continue
 
 
-# Test for PIR 3502 
+# Test for PIR 3502
 
 # Post Menu1 by clicking MB1 in MenuBtn1.  Now click MB1 in the tear off
 # button of Menu1.  The menu should tear off.
@@ -78,7 +78,7 @@ ClickMB Btn1
 CompareVisual pulldown1
 
 # Press MB1 on MenuBtn1 to activate pulldown menu Menu1.  Select pushbutton1
-# by releasing MB1 over pushbutton1.  
+# by releasing MB1 over pushbutton1.
 
 LocatePointer MenuBtn1
 PressMB Btn1
@@ -94,7 +94,7 @@ ClickKey KCancel
 
 Continue
 
-# Test for PIR 3510 
+# Test for PIR 3510
 
 # Post Menu3 by clicking MB1 in MenuBtn3.  Now click MB1 in the tear off
 # button of Menu3.  The menu should tear off.
@@ -105,7 +105,7 @@ LocatePointer pulldown3 RTearOffButton
 ClickMB Btn1
 CompareVisual pulldown3
 
-# Select pushbutton3 in the torn off menu Menu3 by clicking MB1 over 
+# Select pushbutton3 in the torn off menu Menu3 by clicking MB1 over
 # pushbutton3.  No warning should appear in the xterm window.
 
 LocatePointer pushbutton3
@@ -133,9 +133,9 @@ ReleaseMB Btn1
 
 Continue
 
-# Test for PIR 3515 
+# Test for PIR 3515
 
-# Select MB1 in MenuBtn1 to post Menu1.  Select MB1 on Menu1's tear off 
+# Select MB1 in MenuBtn1 to post Menu1.  Select MB1 on Menu1's tear off
 #  button.  The menu should tear off.
 
 LocatePointer MenuBtn1
@@ -176,8 +176,8 @@ ClickKey KCancel
 Continue
 
 
-# Test for PIR 3522 
-# Press MB1 on MenuBtn3 to bring up Menu3.  Drag the pointer over the 
+# Test for PIR 3522
+# Press MB1 on MenuBtn3 to bring up Menu3.  Drag the pointer over the
 # tear off button.  Release MB1 on the tear off button.  The menu should
 # tear off.
 
@@ -188,7 +188,7 @@ ReleaseMB Btn1
 CompareVisual pulldown3
 
 # Select MB1 on cascade3 to bring up Menu3A.  Select MB1 on Cascade3A to
-# bring up Menu3AA.  Select MB1 on pushbutton3AA. 
+# bring up Menu3AA.  Select MB1 on pushbutton3AA.
 
 LocatePointer cascade3
 ClickMB Btn1
@@ -203,9 +203,9 @@ ClickMB Btn1
 LocatePointer Menu3
 CompareVisual pulldown3
 
-# Post Menu3Ca by selecting MB1 on Casade3C after selecting Cascade3.  
-# Select MB1 on Cascade3Ca and 
-# another menu will appear.  Select MB1 on Menu3CAA.  
+# Post Menu3Ca by selecting MB1 on Casade3C after selecting Cascade3.
+# Select MB1 on Cascade3Ca and
+# another menu will appear.  Select MB1 on Menu3CAA.
 
 LocatePointer cascade3
 ClickMB Btn1
@@ -225,7 +225,7 @@ ClickKey KCancel
 Continue
 
 
-# Give focus to the client window. 
+# Give focus to the client window.
 
 WindowFocus Shell1
 
@@ -260,7 +260,7 @@ ClickKey Kc
 ClickKey Ka
 Continue
 
-# Give focus to the client window. 
+# Give focus to the client window.
 
 WindowFocus Shell1
 
@@ -292,7 +292,7 @@ ClickKey Kb
 
 Continue
 
-# Give focus to the client window. 
+# Give focus to the client window.
 
 WindowFocus Shell1
 
@@ -379,9 +379,3 @@ Continue
 Continue
 
 Exit
-
-
-
-
-
-

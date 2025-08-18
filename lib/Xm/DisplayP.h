@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDisplayP_h
 #define _XmDisplayP_h
 
@@ -47,7 +47,7 @@ typedef struct {
     XtPointer               extension;
 } XmDisplayClassPart;
 
-/* 
+/*
  * we make it a appShell subclass so it can have it's own instance
  * hierarchy
  */
@@ -150,4 +150,3 @@ externalref String _Xm_MOTIF_DRAG_AND_DROP_MESSAGE ;
 
 #endif /* _XmDisplayP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */
-

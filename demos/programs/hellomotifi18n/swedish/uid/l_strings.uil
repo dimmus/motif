@@ -19,14 +19,14 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 module latin_strings
     version = 'v1.0'
     names = case_sensitive
 
 value
-    local_font : exported 
+    local_font : exported
         font('*helvetica-medium-r-normal--14-*-iso8859-1');
 
     string_direction : exported XmSTRING_DIRECTION_L_TO_R ;
@@ -41,5 +41,5 @@ value
                               separate=true) &
 		            compound_string('för att ändra texten;',separate=true) &
 		                  'två gånger för att avsluta';
-    			  			  
+
 end module ;

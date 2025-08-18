@@ -26,13 +26,13 @@ tek
 These files were provided by various vendors, though not necessarily
 the vendors whose hardware they apply to.  Each file contains a set of
 keyboard bindings that is suggested for use on that particular
-server/hardware combination.  These files should be used as examples 
+server/hardware combination.  These files should be used as examples
 of ~/.motifbind files to work from.
 
 By copying the appropriate file into the user's home directory and
 renaming it to ".motifbind", the bindings will be recognized and used
 when the Motif window manager is (re)started.
-These bindings will override any other default bindings except those 
+These bindings will override any other default bindings except those
 initiated within a client application (using XtOverrideTranslations).
 
 These examples are provided, as is, only as a service to the vendors

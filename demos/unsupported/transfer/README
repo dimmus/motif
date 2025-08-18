@@ -17,21 +17,21 @@ as a destination for a transfer from a problematic application allows
 the programmer to find the values for the various targets supported
 in the application.
 
-Caveat:  At this time you cannot edit the list of targets or the 
+Caveat:  At this time you cannot edit the list of targets or the
 values and types of those targets.
 
 To use
 ------
 
-The "red" area is a drawing area widget.  This is setup as both a 
+The "red" area is a drawing area widget.  This is setup as both a
 drag source and drop site.  The simplest way to use transfer is to
 drop an item onto this drop site.  Then the list of targets will
 be shown at the bottom of the application.
 
 To see the data in each target,  click on the target in the list
-of targets.  The data will be put in the text widgets and the 
+of targets.  The data will be put in the text widgets and the
 option menus will be set to the type of the target.
 
-It is also possible to set the transfer style using the option 
-menu supplied,  and use the menu choices in the edit menu to 
+It is also possible to set the transfer style using the option
+menu supplied,  and use the menu choices in the edit menu to
 cause various data exchanges to take place.

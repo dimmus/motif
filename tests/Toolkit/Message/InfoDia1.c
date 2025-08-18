@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: InfoDia1.c /main/9 1995/07/13 18:57:45 drk $"
@@ -78,7 +78,7 @@ static XtCallbackRec help_cb[] = {
 /*-------------------------------------------------------------
 **      OkCB        - callback for ok button
 */
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -106,7 +106,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      CancelCB        - callback for cancel button
 */
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -122,7 +122,7 @@ XtPointer     call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      HelpCB        - callback for help button
 */
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -146,7 +146,7 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 10);                            n++;
     XtSetArg (args[n], XmNheight, 10);                           n++;
@@ -170,7 +170,7 @@ char **argv;
     XtSetArg (args[n], XmNminimizeButtons, False);                n++;
     XtSetArg (args[n], XmNdefaultButtonType, XmDIALOG_CANCEL_BUTTON); n++;
 
-    mbox = (XmMessageBoxWidget)XmCreateInformationDialog (Shell1, "mbox", 
+    mbox = (XmMessageBoxWidget)XmCreateInformationDialog (Shell1, "mbox",
                                                           args, n);
 
 /* Test for Pir 4109 and 4114 */
@@ -227,7 +227,7 @@ char **argv;
     XtSetArg (args[n], XmNdefaultButtonType, XmDIALOG_CANCEL_BUTTON); n++;
     XtSetArg (args[n], XmNmappedWhenManaged, False);             n++;
 
-    mbox = (XmMessageBoxWidget)XmCreateInformationDialog (Shell1, "mbox", 
+    mbox = (XmMessageBoxWidget)XmCreateInformationDialog (Shell1, "mbox",
                                                           args, n);
 
     n = 0;
@@ -249,7 +249,7 @@ char **argv;
     XtSetArg (args[n], XmNdefaultButtonType, XmDIALOG_CANCEL_BUTTON); n++;
     XtSetArg (args[n], XmNmappedWhenManaged, False);             n++;
 
-    mbox = (XmMessageBoxWidget)XmCreateInformationDialog (Shell1, "mbox", 
+    mbox = (XmMessageBoxWidget)XmCreateInformationDialog (Shell1, "mbox",
                                                           args, n);
 
     XtManageChild ((Widget) mbox);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmPButtonGP_h
 #define _XmPButtonGP_h
 
@@ -39,8 +39,8 @@ typedef struct _XmPushButtonGCacheObjClassPart
     int foo;
 } XmPushButtonGCacheObjClassPart;
 
-					
-typedef struct _XmPushButtonGCacheObjClassRec  
+
+typedef struct _XmPushButtonGCacheObjClassRec
 {
 	ObjectClassPart                     object_class;
         XmExtClassPart                      ext_class;
@@ -69,7 +69,7 @@ typedef struct _XmPushButtonGCacheObjPart
    */
    XtIntervalId     timer;
    Widget           timer_widget;
-   
+
 } XmPushButtonGCacheObjPart;
 
 typedef struct _XmPushButtonGCacheObjRec
@@ -91,7 +91,7 @@ typedef struct _XmPushButtonGadgetClassPart
 
 /* Full class record declaration for PushButton class */
 
-typedef struct _XmPushButtonGadgetClassRec 
+typedef struct _XmPushButtonGadgetClassRec
 {
    RectObjClassPart             rect_class;
    XmGadgetClassPart            gadget_class;
@@ -118,7 +118,7 @@ typedef struct _XmPushButtonGadgetPart
 
    Boolean	    compatible;	  /* if false it is Motif 1.1 else Motif 1.0  */
                                   /* not cached for performance reasons */
-   
+
    XmPushButtonGCacheObjPart  *cache; /* Replace cache instance fields */
 					/* with a pointer */
 } XmPushButtonGadgetPart;

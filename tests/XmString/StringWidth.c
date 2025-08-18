@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StringWidth.c /main/7 1995/07/13 19:56:55 drk $"
@@ -30,12 +30,12 @@ static char rcsid[] = "$XConsortium: StringWidth.c /main/7 1995/07/13 19:56:55 d
 #endif
 #include        <stdio.h>
 #include        <testlib.h>
- 
+
 char *test_strings[] = {"", "", "a", "a", "aaaaaa" };
 Dimension expected[] = {0, 0, 9, 54, 54, 0, 0 };
 
 #define XmSTRING_DIRECTION_REVERT 2
-#define NUM_TESTS 7 
+#define NUM_TESTS 7
 
 void
 main( int argc, char **argv )
@@ -46,17 +46,17 @@ main( int argc, char **argv )
     register	i;
     Dimension received[NUM_TESTS];
     int test_num = 0;
- 
+
     CommonTestInit (argc, argv);
 
     fl = CommonGetFontList
 	      ("-adobe-courier-medium-r-normal--14-140-75-75-m-90-iso8859-1");
 
-/*  Test 1 */ 
+/*  Test 1 */
     cs = XmStringCreate ( test_strings[test_num], XmSTRING_DEFAULT_CHARSET );
     received[test_num++] = XmStringWidth(fl , cs );
 
-/*  Test 2 */ 
+/*  Test 2 */
     cs1 = XmStringCreate ( test_strings[test_num], XmSTRING_DEFAULT_CHARSET );
     for (i = 0; i < 5; i++) {
         temp = cs1;
@@ -68,14 +68,14 @@ main( int argc, char **argv )
     XmStringFree( cs1 );
 
 /*  Test 3 */
-    cs = XmStringSegmentCreate ( test_strings[test_num], 
+    cs = XmStringSegmentCreate ( test_strings[test_num],
 		XmSTRING_DEFAULT_CHARSET,
                 XmSTRING_DIRECTION_L_TO_R,
                 FALSE);
     received[test_num++] = XmStringWidth(fl , cs );
 
-/*  Test 4 */ 
-    cs1 = XmStringSegmentCreate ( test_strings[test_num], 
+/*  Test 4 */
+    cs1 = XmStringSegmentCreate ( test_strings[test_num],
                 XmSTRING_DEFAULT_CHARSET,
                 XmSTRING_DIRECTION_L_TO_R,
                 FALSE);
@@ -98,7 +98,7 @@ main( int argc, char **argv )
     received[test_num++] = XmStringWidth(fl , cs1 );
     XmStringFree( cs1 );
 
-/*  Test 7 */ 
+/*  Test 7 */
     cs2 = XmStringDirectionCreate( XmSTRING_DIRECTION_REVERT );
     received[test_num++] = XmStringWidth(fl , cs2 );
     XmStringFree( cs2 );
@@ -109,7 +109,7 @@ main( int argc, char **argv )
       printf ("%6d\t%8d\t%8d\t%s\n",     i + 1,
 	                              (int) expected[i],
 	                              (int) received[i],
-	                              ((expected[i] == received[i]) 
+	                              ((expected[i] == received[i])
 				                   ? "PASSED\n" : "FAILED\n"));
     }
 
@@ -118,4 +118,3 @@ main( int argc, char **argv )
     CommonPause();
     XtAppMainLoop( app_context );
 }
-

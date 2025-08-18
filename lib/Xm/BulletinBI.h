@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -38,7 +38,7 @@ typedef enum {
     XmOkStringLoc,
     XmCancelStringLoc,
     XmSelectionStringLoc,
-    XmApplyStringLoc, 
+    XmApplyStringLoc,
     XmHelpStringLoc,
     XmFilterStringLoc,
     XmDirListStringLoc,
@@ -49,38 +49,38 @@ typedef enum {
 
 /********    Private Function Declarations    ********/
 
-extern Widget _XmBB_CreateButtonG( 
+extern Widget _XmBB_CreateButtonG(
                         Widget bb,
                         XmString l_string,
 			char *name,
                         XmLabelStringLoc l_loc) ;
-extern Widget _XmBB_CreateLabelG( 
+extern Widget _XmBB_CreateLabelG(
                         Widget bb,
                         XmString l_string,
                         char *name,
                         XmLabelStringLoc l_loc) ;
-extern void _XmBulletinBoardSizeUpdate( 
+extern void _XmBulletinBoardSizeUpdate(
                         Widget wid) ;
-extern void _XmBulletinBoardFocusMoved( 
+extern void _XmBulletinBoardFocusMoved(
                         Widget wid,
                         XtPointer client_data,
                         XtPointer data) ;
-extern void _XmBulletinBoardReturn( 
+extern void _XmBulletinBoardReturn(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *numParams) ;
-extern void _XmBulletinBoardCancel( 
+extern void _XmBulletinBoardCancel(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *numParams) ;
-extern void _XmBulletinBoardMap( 
+extern void _XmBulletinBoardMap(
                          Widget wid,
                          XEvent *event,
                          String *params,
                          Cardinal *numParams) ;
-extern void _XmBulletinBoardSetDynDefaultButton( 
+extern void _XmBulletinBoardSetDynDefaultButton(
                         Widget wid,
                         Widget newDefaultButton) ;
 

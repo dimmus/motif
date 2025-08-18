@@ -19,22 +19,22 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-#  This is a scale widget with the following characteristics:   
-#    - X and Y are 80 
-#    - value is 60   
-#    - maximum is 250   
-#    - showValue is true   
-#    - scaleWidth is 20   
-#    - scaleHeight is 100 
-#    - valueChangedCallback is ON 
-#	Automatically Created widget resources: 
-#	   - labelString for title label is 
-#	     The Verical Scale 
-#	   - title label's fontList is variable 
+#  This is a scale widget with the following characteristics:
+#    - X and Y are 80
+#    - value is 60
+#    - maximum is 250
+#    - showValue is true
+#    - scaleWidth is 20
+#    - scaleHeight is 100
+#    - valueChangedCallback is ON
+#	Automatically Created widget resources:
+#	   - labelString for title label is
+#	     The Verical Scale
+#	   - title label's fontList is variable
 #    - All other resources are set by default.
 
 CompareVisual S_MAIN_WIDGET
@@ -42,4 +42,3 @@ LocatePointer Scale RScrollBarSlider
 DragSliderValue Up 200
 CompareVisual S_MAIN_WIDGET
 Exit
-

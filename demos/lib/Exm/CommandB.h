@@ -27,7 +27,7 @@
 
 /*******************************************************************************
  *
- * CommandB.h: The widget public header file for the ExmCommandButton 
+ * CommandB.h: The widget public header file for the ExmCommandButton
  *             demonstration widget.
  *
  ******************************************************************************/

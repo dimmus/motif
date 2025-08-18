@@ -22,15 +22,15 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Form1 
+TRACE:(1) CompareVisual Form1
 TRACE:(2) Continue
-TRACE:(3) CompareVisual Form1 
+TRACE:(3) CompareVisual Form1
 TRACE:(4) Continue
-TRACE:(5) CompareVisual ScrollBar1 
+TRACE:(5) CompareVisual ScrollBar1
 TRACE:(6) Continue
 TRACE:(7) CompareVisual ScrollBar1 RSlider
 TRACE:(8) Continue
-Warning: 
+Warning:
     Name: ScrollBar1
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -39,41 +39,41 @@ Warning:
 TRACE:(9) Continue
 TRACE:(10) CompareVisual ScrollBar1 RSlider
 TRACE:(11) Continue
-TRACE:(12) CompareVisual ScrollBar1 
+TRACE:(12) CompareVisual ScrollBar1
 TRACE:(13) Continue
-Warning: 
+Warning:
     Name: ScrollBar1
     Class: XmScrollBar
     The scrollbar increment is less than 1.
 
-Warning: 
+Warning:
     Name: ScrollBar1
     Class: XmScrollBar
     The scrollbar page increment is less than 1.
 
-Warning: 
+Warning:
     Name: ScrollBar1
     Class: XmScrollBar
     The scrollbar initial delay is less than 1.
 
-Warning: 
+Warning:
     Name: ScrollBar1
     Class: XmScrollBar
     The scrollbar repeat delay is less than 1.
 
 TRACE:(14) Continue
-TRACE:(15) CompareVisual ScrollBar1 
+TRACE:(15) CompareVisual ScrollBar1
 TRACE:(16) Continue
-Warning: 
+Warning:
     Name: ScrollBar1
     Class: XmScrollBar
     The specified scrollbar value is less than the minimum
     scroll bar value.
 
-TRACE:(17) LocatePointer ScrollBar1 RSlider 
+TRACE:(17) LocatePointer ScrollBar1 RSlider
 TRACE:(18) DragSliderValue Down 50 Btn1
 TRACE:(19) Continue
-TRACE:(20) CompareVisual ScrollBar1 
+TRACE:(20) CompareVisual ScrollBar1
 TRACE:(21) Continue
 TRACE:(22) Exit
 Exiting Test...Please Standby...

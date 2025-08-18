@@ -20,4 +20,3 @@ You can also run the test automated, to get output from the Automation
 performance monitor. to do this, build the Makefile for automation,
 and type 'PComboBox1 -c -T' on the command line. This
 will run the test with the nocompare and TRACE options.
-

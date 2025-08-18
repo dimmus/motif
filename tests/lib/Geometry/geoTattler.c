@@ -32,7 +32,7 @@
 
 /**************************************************************************
  GeoTattler API:
-  
+
   if those lines are found in the resource database:
 
     myapp*draw.XmScale.geoTattler: ON
@@ -55,7 +55,7 @@ typedef struct {   Boolean   geo_tattler ;} GeoDataRec ;
 
 static XtResource geo_resources[] = {
     { XtNgeoTattler, XtCGeoTattler, XtRBoolean, sizeof(Boolean),
-      XtOffsetOf(GeoDataRec, geo_tattler), 
+      XtOffsetOf(GeoDataRec, geo_tattler),
       XtRImmediate, (caddr_t) False }
 };
 
@@ -78,7 +78,7 @@ static GeoTatCache * geotat_cache = NULL;
 /****************************************************************
   This function return True is the widget is already in the cache,
   False otherwise. It also return the current value if True */
-Boolean 
+Boolean
 #if NeedFunctionPrototypes
 _GeoIsCached (Widget widget, Boolean* is_geotattled)
 #else
@@ -88,7 +88,7 @@ Boolean * is_geotattled ;
 #endif
 {
     register GeoTatCache * cache_ptr;
-    
+
     for (cache_ptr = geotat_cache; cache_ptr; cache_ptr = cache_ptr->next) {
 	if ((cache_ptr->widget == widget) &&
 	    (strcmp (cache_ptr->widget_name, XtName(widget)) == 0)  &&
@@ -99,16 +99,16 @@ Boolean * is_geotattled ;
 	    return (True);
 	}
     }
-    
+
     return (False);
 }
 
 
 /****************************************************************
    This function looks for a widget in the cache and if found, assigns
-   a new value for the is_geotattled field 
+   a new value for the is_geotattled field
    It is used for dynamic change (e.g. editres stuff) */
-void 
+void
 #if NeedFunctionPrototypes
 _GeoChangeCache (Widget widget, Boolean geo_tat)
 #else
@@ -129,7 +129,7 @@ Boolean geo_tat ;
 	    return ;
 	}
     }
-    
+
     return ;
 }
 
@@ -137,7 +137,7 @@ Boolean geo_tat ;
    This function adds an entry in the cache, based on the given widget
    and bool */
 
-void 
+void
 #if NeedFunctionPrototypes
 _GeoCache (Widget widget, Boolean geo_tat)
 #else
@@ -167,7 +167,7 @@ Boolean geo_tat ;
   needs to be geo-spied by the caller.
   Since XtGetSubresources is expensive, it also uses a cache. */
 
-Boolean 
+Boolean
 #if NeedFunctionPrototypes
 _GeoIsTattled (Widget widget)
 #else
@@ -183,10 +183,10 @@ Widget widget;
 
        /* no widget found in the cache, look in the database and cache */
     XtGetSubresources(widget, (XtPointer)&geo_data,
-                      (String)NULL, (String)NULL, 
-		      geo_resources, XtNumber(geo_resources), 
+                      (String)NULL, (String)NULL,
+		      geo_resources, XtNumber(geo_resources),
 		      NULL, 0);
-    
+
        /* add in the cache */
     _GeoCache(widget, geo_data.geo_tattler) ;
 
@@ -200,7 +200,7 @@ Widget widget;
 
 static n_tab = 0 ;
 
-void 
+void
 #if NeedFunctionPrototypes
 _GeoTabTrace (void)
 #else
@@ -222,7 +222,7 @@ _GeoUnTabTrace ()
 }
 
 
-void 
+void
 #if NeedFunctionPrototypes
 _GeoPrintTab (void)
 #else
@@ -235,7 +235,7 @@ _GeoPrintTab ()
 }
 
 
-void 
+void
 #if NeedVarargsPrototypes
 _GeoPrintTrace (Widget widget, ...)
 #else
@@ -255,5 +255,3 @@ va_dcl
 	va_end(args);
     }
 }
-
-

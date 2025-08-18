@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RepType2.c /main/9 1995/07/13 17:54:07 drk $"
@@ -34,12 +34,12 @@ static char rcsid[] = "$XConsortium: RepType2.c /main/9 1995/07/13 17:54:07 drk 
  *  This test tests the Representation Type Management facility in terms
  *  of its dynamic registering capabilities.
  *
- *  Several representation type will be added to the manager to manage. 
+ *  Several representation type will be added to the manager to manage.
  *  The functionality of the XmRepTypeRegister, XmRepTypeAddReverse,
  *  XmRepTypeValidValue, XmRepTypeGetNameList, XmRepTypeGetId,
  *  XmRepTypeGetRecord, and XmRepTypeGetRegistered routines will be checked.
  *
- *  Alternating queries of static and dynamic rep types will occur at 
+ *  Alternating queries of static and dynamic rep types will occur at
  *  different points in the test to make sure that dynamically adding a
  *  rep type doesn;t mess up the static part, etc.
  */
@@ -65,7 +65,7 @@ typedef struct
 } RepTypeVal;
 
 static RepTypeVal reptypedata[] =
-{ 
+{
   {XmRAlignment, 3},
   {XmRArrowDirection, 4},
   {XmRAttachment, 7},
@@ -121,7 +121,7 @@ static ConvertVal convert_set[] =
   /* XmRCommandWindowLocation */
   { "command_above_workspace", XmCOMMAND_ABOVE_WORKSPACE},
   { "command_below_workspace", XmCOMMAND_BELOW_WORKSPACE},
-  
+
   /* XmREditMode */
   { "multi_line_edit", XmMULTI_LINE_EDIT},
   { "single_line_edit", XmSINGLE_LINE_EDIT},
@@ -146,7 +146,7 @@ static ConvertVal convert_set[] =
   { "menu_pulldown", XmMENU_PULLDOWN},
   { "menu_popup", XmMENU_POPUP},
   { "menu_option", XmMENU_OPTION},
-  
+
   /* XmRScrollBarDisplayPolicy */
   { "static", XmSTATIC},
   { "as_needed", XmAS_NEEDED},
@@ -160,7 +160,7 @@ static ConvertVal convert_set[] =
   /* XmRScrollingPolicy */
   { "automatic", XmAUTOMATIC},
   { "application_defined", XmAPPLICATION_DEFINED},
-  
+
   /* XmRSelectionPolicy */
   { "single_select", XmSINGLE_SELECT},
   { "multiple_select", XmMULTIPLE_SELECT},
@@ -199,26 +199,26 @@ char *argv[];
 
   static String RepType1Names[] = {
     "rep_type1_fe", "rep_type1_fi", "rep_type1_fa", "rep_type1_fo"};
- 
-  static String RepType2Names[] = 
+
+  static String RepType2Names[] =
     { "rep_type2_fe", "rep_type2_fi", "rep_type2_fa", "rep_type2_fo",
       "rep_type2_fu"
       };
-  static String RepType3Names[] = 
+  static String RepType3Names[] =
     { "rep_type3_two", "rep_type3_four", "rep_type3_six", "rep_type3_eight" };
 
   static unsigned char RepType3Values[] =
     { '\002', '\004', '\006', '\010' };
 
   static String RepType4Names[] =
-    { "rep_type4_69", "rep_type4_42", "rep_type4_105", "rep_type4_0", 
+    { "rep_type4_69", "rep_type4_42", "rep_type4_105", "rep_type4_0",
 	"rep_type4_99" };
 
   static unsigned char RepType4Values[] =
     { '\105', '\052', '\151', '\000', '\143' };
 
 #endif
- 
+
   /*
    * Initialize toolkit
    */
@@ -238,14 +238,14 @@ char *argv[];
   XtManageChild (bulletin);
 
   AddRepType(XmRNewRepType1, RepType1Names, 4, NULL);
- 
+
   /*
    * Query some legal static representation types to see if they're
    *  still OK.
    */
 
   CheckStaticTypes();
-  
+
   /*
    *  Now add another representation type.
    */
@@ -257,7 +257,7 @@ char *argv[];
    */
 
   temp_rep_id = XmRepTypeGetId(XmRNewRepType1);
-  
+
   if (temp_rep_id == XmREP_TYPE_INVALID)
     {
       printf("Error getting ID of RepType1\n");
@@ -266,29 +266,29 @@ char *argv[];
     {
       temp_rep_type = XmRepTypeGetRecord(temp_rep_id);
       /* verify record */
- 
+
       XtFree((char *)temp_rep_type);
    }
 
-  /* 
+  /*
    *  Query the static types *just* to make sure
    */
 
   CheckStaticTypes();
 
-  /* 
+  /*
    * Do the same thing over again for a pair of mapped types.
    */
 
   AddRepType(XmRNewRepType3, RepType3Names, 4, RepType3Values);
- 
+
   /*
    * Query some legal static representation types to see if they're
    *  still OK.
    */
 
   CheckStaticTypes();
-  
+
   /*
    *  Now add another representation type.
    */
@@ -300,7 +300,7 @@ char *argv[];
    */
 
   temp_rep_id = XmRepTypeGetId(XmRNewRepType3);
-  
+
   if (temp_rep_id == XmREP_TYPE_INVALID)
     {
       printf("Error getting ID of RepType3\n");
@@ -309,18 +309,18 @@ char *argv[];
     {
       temp_rep_type = XmRepTypeGetRecord(temp_rep_id);
       /* verify record */
- 
+
       XtFree((char *)temp_rep_type);
    }
 
-  /* 
+  /*
    *  Query the static types *just* to make sure
    */
 
   CheckStaticTypes();
 
   /*
-   *  Do a full-blown XmRepTypeGetRegistered to make sure we're all 
+   *  Do a full-blown XmRepTypeGetRegistered to make sure we're all
    *    there!
    */
 
@@ -338,7 +338,7 @@ char *argv[];
 
 #ifndef MOTIF1_1
 
-static void AddRepType(String rep_type, char *names[], 
+static void AddRepType(String rep_type, char *names[],
 		       unsigned char num_values, unsigned char *values)
 {
 
@@ -349,11 +349,11 @@ static void AddRepType(String rep_type, char *names[],
   char **name_list;
   int i;
 
-  /* 
+  /*
    * Add the representation type
    */
 
-  temp_rep_id = XmRepTypeRegister(rep_type, names, values, num_values); 
+  temp_rep_id = XmRepTypeRegister(rep_type, names, values, num_values);
 
   /*
    *  Install reverse converter.
@@ -375,20 +375,20 @@ static void AddRepType(String rep_type, char *names[],
 	    &from,	/* value to be converted */
 	    rep_type,   /* destination type */
 	    &to_return);/* converted value */
- 
+
   /* Convert the first one. */
   if (values)
     value = values[0];
   else
     value = 0;
-      
-  if (to_return.addr == NULL) 
+
+  if (to_return.addr == NULL)
     {
       printf("FAILED.\n");
     }
   else
     {
-      if ((*((unsigned char *) to_return.addr) != value ) || 
+      if ((*((unsigned char *) to_return.addr) != value ) ||
 	  (to_return.size != 1))
 	printf(" FAILED.\n");
       else
@@ -400,7 +400,7 @@ static void AddRepType(String rep_type, char *names[],
    */
 
   printf("Conversion from type %s to XmRString ...", rep_type);
- 
+
   /* Look for the first one */
   from.size = 1;
   from.addr = (char *) &value;
@@ -458,8 +458,8 @@ static void AddRepType(String rep_type, char *names[],
       i++;
     }
 
-  /*  
-   *  Free the name list 
+  /*
+   *  Free the name list
    */
 
   XtFree((char *)name_list);
@@ -469,7 +469,7 @@ static void AddRepType(String rep_type, char *names[],
    */
 
   temp_rep_type_record = XmRepTypeGetRecord(temp_rep_id);
-  
+
   /*
    *  Diagnose it
    */
@@ -497,7 +497,7 @@ static void CheckStaticTypes(void)
   register int i=0, value_counter=0, k=0;
   unsigned short temp_rep_id, error_counter;
   XmRepTypeEntry temp_rep_type;
- 
+
   for (i=0; reptypedata[i].rep_type != NULL; i++)
     {
       error_counter = 0;
@@ -516,7 +516,7 @@ static void CheckStaticTypes(void)
       /*
        * Diagnose the answers
        */
-      
+
       if (reptypedata[i].num_of_tests != temp_rep_type->num_values)
 	{
 	  printf("\n   FAILED: Discrepancy in returned number of values\n");
@@ -535,7 +535,7 @@ static void CheckStaticTypes(void)
 	      error_counter++;
 	    }
 
-	  if (strcmp(temp_rep_type->value_names[k], 
+	  if (strcmp(temp_rep_type->value_names[k],
 		     convert_set[value_counter].from_string) != 0)
 	    {
 	      printf("\n   Error: Discrepancy in name returned \n");
@@ -567,7 +567,7 @@ static void GetRegisteredAndDiagnose(void)
   save_list = rep_list;
 
   /* Diagnose rep_list */
-  
+
   printf("\n\n");
 
   while (rep_list != NULL && rep_list->rep_type_name != NULL)
@@ -594,12 +594,3 @@ static void GetRegisteredAndDiagnose(void)
 }
 
 #endif /*  MOTIF1_1 */
-
-
-
-
-
-
-
-
-

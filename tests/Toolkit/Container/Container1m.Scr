@@ -19,24 +19,24 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1m.Dat -u m".
 # C)
 Continue
- 
+
 # #) The container widget should be displayed in its ANY_ICON view,
 #    with an OUTLINE layoutStyle.
 # #) Four IconGadgets should be visible in a single column.
-#    "IconGad1", "IconGad2" and "IconGad4" should be displayed with a small 
+#    "IconGad1", "IconGad2" and "IconGad4" should be displayed with a small
 #    icon view, with the pixmap part displaying a "S" within
 #    a black box, and the label part displaying the strings "IconGad1",
-#    "IconGad2", "IconGad3" and "IconGad4" next to the pixmap. 
+#    "IconGad2", "IconGad3" and "IconGad4" next to the pixmap.
 #    The label "IconGad2" should be truncated.
-# #) "IconGad3" should be displayed in its large icon view, with the pixmap 
-#    part displaying a "L" within a black box, and the label part 
+# #) "IconGad3" should be displayed in its large icon view, with the pixmap
+#    part displaying a "L" within a black box, and the label part
 #    displaying the string "IconGad3" below the pixmap.
 #    There should also be visible to the left of IconGad3, a
 #    pixmap displaying letter "C" with background white and foreground
@@ -44,12 +44,12 @@ Continue
 #    are not displayed; in other words, this item is in the collapsedState.
 # C)
 Continue
- 
+
 # #) The selectionTechnique has been specified to be MARQUEE.
 # #) Press BSelect in the background on Container on the left of "IconGad1"
 # #) With BSelect pressed, drag the pointer over to the right and bottom
 #    of"IconGad3".
-# #) You may not notice it immediately, but as soon as you start dragging, 
+# #) You may not notice it immediately, but as soon as you start dragging,
 #    you should notice a marque rectangle. As the pointer moves over an
 #    item, and that item gets completely enclosed in the marquee rectangle,
 #    it becomes selected.
@@ -60,15 +60,15 @@ Continue
 # !)
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 2
-#       Names of items selected: IconGad2 IconGad3 
-# 
+#       Names of items selected: IconGad2 IconGad3
+#
 # #) Click BSelect in the background of the Container outside of all the
 #    items. All the selected items should get deselected. You should also
 #    see the following message in the term window:
 # !)
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 0
-#       Names of items selected: 
+#       Names of items selected:
 # C)
 
 LocatePointerXYRel Container1m 30 30
@@ -82,7 +82,7 @@ LocatePointerXYRel Container1m 10 10
 ClickMB Btn1
 CompareVisual Container1m
 Continue
- 
+
 # #) Press BSelect on "IconGad1"
 # #) With BSelect pressed, drag the pointer over to the right a little.
 # #) As soon as you start dragging, you should notice a marque rectangle,
@@ -98,7 +98,7 @@ CompareVisual Container1m
 ReleaseMB Btn1
 CompareVisual Container1m
 Continue
-  
+
 # #) Expand the children of "IconGad3" by clicking on the Outline button.
 # #) Press BSelect in the background of the Container and start dragging.
 # #) You should see a marquee rectangle. If not CR 8368 has not been fixed.
@@ -107,9 +107,9 @@ Continue
 
 LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
-LocatePointerXYRel Container1m 10 10 
+LocatePointerXYRel Container1m 10 10
 PressMB Btn1
-LocatePointerXYRel Container1m 60 60 
+LocatePointerXYRel Container1m 60 60
 CompareVisual Container1m
 ReleaseMB Btn1
 CompareVisual Container1m
@@ -117,4 +117,3 @@ Continue
 
 # E)
 Exit
-

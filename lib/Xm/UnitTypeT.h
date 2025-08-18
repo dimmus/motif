@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -44,7 +44,7 @@ typedef unsigned char (*XmSpecUnitTypeGetProc)(Widget wid);
 
 typedef struct _XmSpecUnitTypeTraitRec {
   int			version;	/* 0 */
-  XmSpecUnitTypeGetProc getUnitType; 
+  XmSpecUnitTypeGetProc getUnitType;
 } XmSpecUnitTypeTraitRec, *XmSpecUnitTypeTrait;
 
 
@@ -53,4 +53,3 @@ typedef struct _XmSpecUnitTypeTraitRec {
 #endif
 
 #endif /* _XmUnitTypeT_H */
-

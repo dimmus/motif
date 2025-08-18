@@ -18,7 +18,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 Menu RootMenu
  {
@@ -37,7 +37,7 @@ Buttons MwmUI2ButtonBindings
    Ctrl<Btn3Down>	icon | window   f.normalize
    Shift<Btn1Down>      frame | window  f.beep
    <Btn1Down>           root            f.menu RootMenu
-   
+
 }
 
 Keys MwmUI2KeyBindings

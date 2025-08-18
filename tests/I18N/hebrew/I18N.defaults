@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 !
 !------------------------------------------------------------------------
@@ -35,13 +35,12 @@ I18N1.I18N1b*layoutDirection:	 	 RIGHT_TO_LEFT
 
 I18N1.*TextFieldLabel.labelString:	 OSF Motif!
 
-I18N1.*TextField1.value:		 םולש 
+I18N1.*TextField1.value:		 םולש
 
-I18N1.*TextLabel.labelString:		 XmText 
+I18N1.*TextLabel.labelString:		 XmText
 
-I18N1.*Text1.value:			 ופעמיים בכדי לצאת. 
+I18N1.*Text1.value:			 ופעמיים בכדי לצאת.
 
 I18N1.*CSTextLabel.labelString:		 תוארתהל
 
 I18N1.*CSText1.cstextValue:		 You know what? I'm happy! \n תוארתהל
-

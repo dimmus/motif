@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PISizeHints.c /main/6 1995/07/13 20:24:21 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: PISizeHints.c /main/6 1995/07/13 20:24:21 d
 #include	<testlib.h>
 #include	<PITests.h>
 
-#include	"PISizeHints.h" 
+#include	"PISizeHints.h"
 #include	"btn1.bmp"
 
 
@@ -184,7 +184,7 @@ char	*argv[];
     CommonPause();
 
 /*
-    
+
 /*
  * Create top level shell widget as parent for test1_btn1 widget
  */
@@ -466,4 +466,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-

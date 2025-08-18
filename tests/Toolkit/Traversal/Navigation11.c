@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation11.c /main/6 1995/07/13 19:40:57 drk $"
@@ -38,7 +38,7 @@ static char rcsid[] = "$XConsortium: Navigation11.c /main/6 1995/07/13 19:40:57 
 
 Widget bb, main_bb;
 Widget Frame1, Frame2, Frame3, Frame4, Frame5, Frame6, Frame7;
-Widget Draw1, Draw2; 
+Widget Draw1, Draw2;
 Widget rc1, rc2, rc3, rc4, rc5, rc6, rc7;
 Widget btn1, btn2, btn3;
 Widget toggle1;
@@ -94,8 +94,8 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
- 
+
+
    main_bb = XmCreateBulletinBoard(Shell1, "main_bb", (ArgList) args, 0);
    XtManageChild(main_bb);
    n = 0;
@@ -134,7 +134,7 @@ char **argv;
     XtSetArg(args[n], XmNx, 750); n++;
     NewButton = XmCreatePushButton(bb, "NewButton", (ArgList) args, n);
     XtManageChild(NewButton);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 10); n++;
     XtSetArg(args[n], XmNy, 10); n++;
@@ -343,8 +343,8 @@ char **argv;
     toggle41 = XmCreateToggleButtonGadget(rc4,"toggle41",(ArgList) args, n);
     if(tcs) XmStringFree(tcs);
     XtManageChild(toggle41);
- 
- 
+
+
     n = 0;
     XtSetArg (args[n], XmNx, 485); n++;
     XtSetArg (args[n], XmNy, 10); n++;
@@ -357,7 +357,7 @@ char **argv;
     XtSetArg(args[n], XmNarrowDirection, XmARROW_RIGHT);  n++;
     Draw1 = XmCreateArrowButton (Frame5,"Draw1", args, n);
     XtManageChild (Draw1);
-   
+
 
 /* Now lets make two more RCs with nothing on them! */
 
@@ -367,15 +367,3 @@ char **argv;
     CommonPause (); /* end */
     XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-

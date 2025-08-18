@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -62,7 +62,7 @@ static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
  */
 
 
-/*** ArrowB.c ***/ 
+/*** ArrowB.c ***/
 externaldef(translations) _XmConst char _XmArrowB_defaultTranslations[] = "\
 <EnterWindow>:			Enter()\n\
 <LeaveWindow>:			Leave()\n\
@@ -406,7 +406,7 @@ s ~m ~a <KeyUp>space:		ListKbdEndExtend()\n\
 <Btn5Down>,<Btn5Up>:		ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown()";
 
 /*** Manager.c ***/
-externaldef(translations) 
+externaldef(translations)
 _XmConst char _XmManager_managerTraversalTranslations[] = "\
 <EnterWindow>:			ManagerEnter()\n\
 <LeaveWindow>:			ManagerLeave()\n\
@@ -615,7 +615,7 @@ s ~m ~a <Key>Tab:		PrimitivePrevTabGroup()\n\
 <Btn5Down>,<Btn5Up>:		IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1)IncrementDownOrRight(1)";
 
 /*** ScrolledW.c ***/
-externaldef(translations) 
+externaldef(translations)
 _XmConst char _XmScrolledW_ScrolledWindowXlations[] = "\
 <EnterWindow>:		ManagerEnter()\n\
 <FocusOut>:		ManagerFocusOut()\n\
@@ -657,7 +657,7 @@ externaldef(translations) _XmConst char _XmClipWindowTranslationTable[] = "\
 
 
 /*** SelectioB.c ***/
-externaldef(translations) 
+externaldef(translations)
 _XmConst char _XmSelectioB_defaultTextAccelerators[] = "\
 \043override\n\
 :<Key>osfUp:		SelectionBoxUpOrDown(0)\n\
@@ -1347,5 +1347,3 @@ osfAddMode:Shift <Key>F8\n\
 osfHelp:<Key>F1\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-

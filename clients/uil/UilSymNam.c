@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilSymNam.c /main/13 1997/09/08 11:12:50 cshi $"
@@ -89,7 +89,7 @@ static char rcsid[] = "$TOG: UilSymNam.c /main/13 1997/09/08 11:12:50 cshi $"
 **  FUNCTIONAL DESCRIPTION:
 **
 **  This routine searches for a name entry of the same name as its parameters.
-**  If the entry is found, a pointer to that name node is 
+**  If the entry is found, a pointer to that name node is
 **  returned as the value of the function.  If no entry is found, a NULL
 **  pointer is returned.
 **
@@ -119,7 +119,7 @@ static char rcsid[] = "$TOG: UilSymNam.c /main/13 1997/09/08 11:12:50 cshi $"
 **--
 **/
 
-sym_name_entry_type 
+sym_name_entry_type
     *sym_find_name(l_length, c_text)
 
 int	l_length;	/* length of name to find */
@@ -174,8 +174,8 @@ char	*c_text;	/* text of the name */
 **  FUNCTIONAL DESCRIPTION:
 **
 **  This routine searches for a name entry of the same name as its parameters.
-**  If the entry is found, a pointer to that name node is 
-**  returned as the value of the function.  If no entry is found, one is 
+**  If the entry is found, a pointer to that name node is
+**  returned as the value of the function.  If no entry is found, one is
 **  inserted.  In this case the value of the function is a pointer to
 **  the name entry created.
 **
@@ -227,7 +227,7 @@ char	*c_text;	/* text of the name */
 
     /*
     **  algorithm keeps 2 pointers, one for the previous name and one
-    **  for the current name.  This permits easy insertion of a new name 
+    **  for the current name.  This permits easy insertion of a new name
     */
 
 
@@ -278,7 +278,7 @@ insert_name:
     /* allocate and initialize the name entry */
 
     az_new_name = (sym_name_entry_type *)
-	sem_allocate_node (sym_k_name_entry, 
+	sem_allocate_node (sym_k_name_entry,
 			   sym_k_name_entry_size + l_length + 1);
 
     az_new_name->header.b_type = l_length;	/* b_type holds length */
@@ -314,7 +314,7 @@ insert_name:
 **  FORMAL PARAMETERS:
 **
 **      l_length	    length of the value in bytes not including null
-**	c_value		    a null terminated string 
+**	c_value		    a null terminated string
 **
 **  IMPLICIT INPUTS:
 **
@@ -356,7 +356,7 @@ char	*c_value;
                   0x00FFFFFFFFFFFFFF, 0xFFFFFFFFFFFFFFFF, };
 #else
 #define _shift 2
-    static unsigned int XmConst	mask[ 4 ] = 
+    static unsigned int XmConst	mask[ 4 ] =
 		{ 0x000000FF, 0x0000FFFF, 0x00FFFFFF, 0xFFFFFFFF };
 #endif
 
@@ -435,7 +435,7 @@ void	sym_dump_hash_table()
     total_count = 0;
     empty_count = 0;
     max_length = 0;
-	
+
     for (i=0;  i<sym_k_hash_table_limit;  i++)
     {
 	int		    bucket_count;
@@ -443,8 +443,8 @@ void	sym_dump_hash_table()
 
 	bucket_count = 0;
 
-	for (az_name = sym_az_hash_table[ i ];  
-	     az_name != NULL;  
+	for (az_name = sym_az_hash_table[ i ];
+	     az_name != NULL;
 	     az_name = az_name->az_next_name_entry)
 	{
 	    bucket_count++;

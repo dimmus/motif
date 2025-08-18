@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetServrTime.c /main/7 1995/07/14 11:30:11 drk $"
@@ -44,13 +44,13 @@ static char rcsid[] = "$XConsortium: GetServrTime.c /main/7 1995/07/14 11:30:11 
         PropertyNotify event.
 
         INPUTS
-            inter_button_time - Time to be sure that passes (func blocks) since 
+            inter_button_time - Time to be sure that passes (func blocks) since
                                 xisLastButtonPressTime prior to returning server
                                 time. If 0 then don't delay.
- 
+
         OUTPUTS
             none
- 
+
         RETURNS
             nothing
 ************************************************************************/
@@ -78,9 +78,9 @@ Time inter_button_time;
         my_property[1] = XInternAtom(xisDisplay,"your property",False);
         property_type  = XInternAtom(xisDisplay,"INTEGER",True);
 
-	XChangeProperty(xisDisplay, xisSyncWindow, my_property[0], 
+	XChangeProperty(xisDisplay, xisSyncWindow, my_property[0],
 			property_type, 8, PropModeReplace, &property_value, 1);
-	XChangeProperty(xisDisplay, xisSyncWindow, my_property[1], 
+	XChangeProperty(xisDisplay, xisSyncWindow, my_property[1],
 			property_type, 8, PropModeReplace, &property_value, 1);
 	list_prop = XListProperties(xisDisplay, xisSyncWindow, &num_prop);
 
@@ -88,13 +88,13 @@ Time inter_button_time;
     }
 
     if (!xisUseSyntheticTime) {
-        while ( (xisLastEventTime == 0) || 
+        while ( (xisLastEventTime == 0) ||
               (xisLastEventTime < (inter_button_time+xisLastButtonPressTime))) {
 
-            XRotateWindowProperties(xisDisplay, xisSyncWindow, 
+            XRotateWindowProperties(xisDisplay, xisSyncWindow,
 		 		    list_prop, num_prop, 1);
 
-            old_xisLastEventTime = xisLastEventTime; 
+            old_xisLastEventTime = xisLastEventTime;
             xisProcessEvents(NULL,0);
 
 	    /* The following becomes true because of server 3 problem. */
@@ -113,7 +113,7 @@ Time inter_button_time;
             xisSyntheticTime += 10;
         else
             xisSyntheticTime = new_time;
-            
+
         return(xisSyntheticTime);
     }
     else {

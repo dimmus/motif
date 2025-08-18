@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH sampler2_0 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -32,7 +32,7 @@
 .SH DESCRIPTION
 \*LSampler2_0\*O
 provides a demonstration of of almost all the new visible
-features the OSF/Motif 2.0 release. 
+features the OSF/Motif 2.0 release.
 
 It uses a Notebook as its main component and each page demonstrates
 one or more different new functionalities:
@@ -57,9 +57,9 @@ Try something like: XENVIRONMENT=XmdSampler2_0 sampler2_0
 
 .fi
 .SH X Defaults
-The class of this application is \fIXmdSampler2_0\fR.  
+The class of this application is \fIXmdSampler2_0\fR.
 
-.SH Editres: 
+.SH Editres:
 Sampler2_0 is Editres aware, so you can use 'editres' to see the
 names of the widgets in the instance hierarchy.
 

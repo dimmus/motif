@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1e.Dat -u e".
 # C)
-# 
-# #) The container widget should be displayed in its LARGE_ICON view, 
+#
+# #) The container widget should be displayed in its LARGE_ICON view,
 #    with an OUTLINE layoutType.
 # #) Four IconGadgets with the pixmap part displaying a "L" within
 #    a black box, and the label part displaying the strings "IconGad1",
@@ -41,7 +41,7 @@
 Continue
 CompareVisual Container1e
 Continue
- 
+
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
 #    of the item "IconGad3".
 # #) The pixmap should change to showing the letter "E", indicating that
@@ -50,7 +50,7 @@ Continue
 #    pixmap should have a white foreground and a black background.
 # #) Also, you should see 3 more items displayed, "IconGad31", "IconGad32",
 #    and "IconGad33" displayed below IconGad3 and indented right by 100
-#    pixels. 
+#    pixels.
 # #) The container should resize itself to fit in the new items.
 # #) You should also see a message in the term window indicating that
 #    a valueChangedCallback has been invoked with the reason
@@ -63,7 +63,7 @@ Continue
 
 LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
-CompareVisual Container1e 
+CompareVisual Container1e
 Continue
 
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
@@ -86,7 +86,7 @@ Continue
 
 LocatePointer IconGad32 ROutlineBtn
 ClickMB Btn1
-CompareVisual Container1e 
+CompareVisual Container1e
 Continue
 
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
@@ -105,9 +105,9 @@ Continue
 
 LocatePointer IconGad321 ROutlineBtn
 ClickMB Btn1
-CompareVisual Container1e 
+CompareVisual Container1e
 Continue
- 
+
 # #) The selectionTechnique has been specified to be MARQUEE_EXTEND_START.
 # #) Press BSelect on "IconGad1"
 # #) "IconGad1" should get selected. Also, you should see a marquee
@@ -128,29 +128,29 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 5
 #       Names of items selected: IconGad1 IconGad2 IconGad3 IconGad31 IconGad32
-# 
+#
 # #) Click BSelect in the background of the Container outside of all the
 #    items. All the selected items should get deselected. You should also
 #    see the following message in the term window:
 # !)
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 0
-#       Names of items selected: 
+#       Names of items selected:
 # C)
 
 LocatePointer IconGad1
 PressMB Btn1
-CompareVisual Container1e 
-LocatePointerXYRel Container1e 150 150 
-CompareVisual Container1e 
+CompareVisual Container1e
+LocatePointerXYRel Container1e 150 150
+CompareVisual Container1e
 LocatePointerXYRel Container1e 250 320
-CompareVisual Container1e 
+CompareVisual Container1e
 ReleaseMB Btn1
-CompareVisual Container1e 
+CompareVisual Container1e
 LocatePointerXYRel Container1e 10 10
 ClickMB Btn1
-CompareVisual Container1e 
+CompareVisual Container1e
 Continue
- 
+
 # E)
 Exit

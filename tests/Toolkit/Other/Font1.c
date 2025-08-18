@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,30 +19,30 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Font1.c /main/6 1995/07/13 19:04:59 drk $"
 #endif
 #endif
 /*
- *  Create labels, buttons, and text widgets with and without fonts specified 
+ *  Create labels, buttons, and text widgets with and without fonts specified
  *  to test the correct search path for default fonts.  This test is not valid
  *  for Motif releases prior to 1.2.
- *  
+ *
  *  For BulletinBoard hierarchies:
  *	If the XmNxxxFontList resources are set on the BulletinBoard,
  *         the xxx children inherit that font
  *      If the XmNxxxFontList resources are NOT set, XmDEFAULT_FONT (fixed)
  *         is used.
- * 
+ *
  *  For MenuShell and VendorShell hierarchies:
  *	If the XmNxxxFontList resources are set on the Shell,
  *         the xxx children inherit that font
- *      If the XmNxxxFontList resources are NOT set, 
+ *      If the XmNxxxFontList resources are NOT set,
  *          if XmNdefaultFontList is set, use that
  *          else use XmDEFAULT_FONT
  */
@@ -59,7 +59,7 @@ void PrintName();
 void main(argc, argv)
 unsigned int argc;
 char **argv;
-{ 	
+{
   Widget separator, menushell, bb, bboard, bboard2, rowcolumn1, rowcolumn2;
   Widget rowcolumn3, label[15], fontlabel[5], bulletinboard, rowcol1;
   Widget headerlabel, DialogShell1, DialogShell2, DialogShell3;
@@ -98,7 +98,7 @@ char **argv;
   bb = XmCreateBulletinBoard(Shell1, "popup", args, n);
 
   n = 0;
-  tcs = XmStringLtoRCreate("VARIOUS FONTS USED IN THIS TEST", 
+  tcs = XmStringLtoRCreate("VARIOUS FONTS USED IN THIS TEST",
 			   XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNx, 10); n++;
   XtSetArg(args[n], XmNy, 10); n++;
@@ -167,14 +167,14 @@ char **argv;
 
   /* Create a Popup shell with a bulletin board as a child */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNallowShellResize, True); n++;
   DialogShell1 = XtCreatePopupShell("DialogShell1", topLevelShellWidgetClass,
 				    Shell1, args, n);
   n = 0;
   XtSetArg(args[n], XmNbuttonFontList, font1); n++;
   XtSetArg(args[n], XmNtextFontList, font4); n++;
-  bulletinboard = XmCreateBulletinBoard(DialogShell1, "bulletinboard", 
+  bulletinboard = XmCreateBulletinBoard(DialogShell1, "bulletinboard",
 					args, n);
 
   /*  Create Label, PushButton,ToggleButton and Text Children */
@@ -205,8 +205,8 @@ char **argv;
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringLtoRCreate("Label: Should be fixed", 
-			   XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("Label: Should be fixed",
+			   XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNy, 160); n++;
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   label1 = XmCreateLabel(bulletinboard, "label1", args, n);
@@ -226,7 +226,7 @@ char **argv;
 
   /* Create a Popup shell with a bulletin board as a child */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNallowShellResize, True); n++;
   DialogShell1 = XtCreatePopupShell("DialogShell1", topLevelShellWidgetClass,
 				    Shell1, args, n);
@@ -234,7 +234,7 @@ char **argv;
   XtSetArg(args[n], XmNbuttonFontList, font1); n++;
   XtSetArg(args[n], XmNlabelFontList, font2); n++;
   XtSetArg(args[n], XmNtextFontList, font3); n++;
-  bulletinboard = XmCreateBulletinBoard(DialogShell1, "bulletinboard", 
+  bulletinboard = XmCreateBulletinBoard(DialogShell1, "bulletinboard",
 					args, n);
 
   /*  Create Label, PushButton,ToggleButton and Text Children */
@@ -265,8 +265,8 @@ char **argv;
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringLtoRCreate("Label: Should be 8x13bold", 
-			   XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("Label: Should be 8x13bold",
+			   XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNy, 160); n++;
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   label1 = XmCreateLabel(bulletinboard, "label1", args, n);
@@ -284,7 +284,7 @@ char **argv;
 
   CommonPause();
 
-  /* 
+  /*
    * Change the value at setvalues time and then add a kid
    */
 
@@ -309,14 +309,14 @@ char **argv;
    * Create a Popup shell with a menu shell as a child
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNbuttonFontList, font3); n++;
   XtSetArg(args[n], XmNlabelFontList, font2); n++;
   XtSetArg(args[n], XmNorientation, XmVERTICAL); n++;
   popupmenu = XmCreatePopupMenu(DialogShell1, "popupmenu", args, n);
 
   XtAddEventHandler(DialogShell1, ButtonPressMask, False, PostIt, popupmenu);
-  
+
   tcs = XmStringLtoRCreate("Press MB3 for Popup", XmSTRING_DEFAULT_CHARSET);
   n = 0;
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -346,11 +346,11 @@ char **argv;
   n = 0;
   popup[3] = XmCreateToggleButton(popupmenu, "ToggleB 10x20", args, n);
 
-  popup[4] = XmCreateToggleButtonGadget(popupmenu, "ToggleBGadget 10x20", 
+  popup[4] = XmCreateToggleButtonGadget(popupmenu, "ToggleBGadget 10x20",
 					NULL, 0);
   XtManageChildren(&(popup[0]), 5);
 
-  
+
   CommonPause();
 
   XtDestroyWidget(popupmenu);
@@ -358,7 +358,7 @@ char **argv;
   n = 0;
   XtSetArg(args[n], XmNallowShellResize, True); n++;
   XtSetArg(args[n], XmNbuttonFontList, font2); n++;
-  XtSetArg(args[n], XmNlabelFontList, font4); n++;  
+  XtSetArg(args[n], XmNlabelFontList, font4); n++;
   XtSetArg(args[n], XmNwidth, 100); n++;
   XtSetArg(args[n], XmNheight, 100); n++;
   menushell = XmCreateMenuShell(DialogShell1, "menushell", args, n);
@@ -396,7 +396,7 @@ char **argv;
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringLtoRCreate("Label 8x13", XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("Label 8x13", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNy, 160); n++;
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   label2 = XmCreateLabel(rowcol1, "label2", args, n);
@@ -414,7 +414,7 @@ char **argv;
   /* Create a Popup shell with a bulletin board as a child */
   /* Test XmNdefaultFontList for backwards compatibility */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNdefaultFontList, font2); n++;
   XtSetArg(args[n], XmNallowShellResize, True); n++;
   DialogShell1 = XtCreatePopupShell("DialogShell1", topLevelShellWidgetClass,
@@ -422,7 +422,7 @@ char **argv;
   n = 0;
   XtSetArg(args[n], XmNbuttonFontList, font1); n++;
   XtSetArg(args[n], XmNtextFontList, font3); n++;
-  bulletinboard = XmCreateBulletinBoard(DialogShell1, "bulletinboard", 
+  bulletinboard = XmCreateBulletinBoard(DialogShell1, "bulletinboard",
 					args, n);
 
   /*  Create Label, PushButton,ToggleButton and Text Children */
@@ -453,8 +453,8 @@ char **argv;
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringLtoRCreate("Label: Should be 8x13bold", 
-			   XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("Label: Should be 8x13bold",
+			   XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNy, 160); n++;
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   label1 = XmCreateLabel(bulletinboard, "label1", args, n);

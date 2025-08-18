@@ -49,7 +49,7 @@ class ExmCxxCommandClass : public ExmCxxStringClass {
     friend class ExmCxxCommand;
 
   public:
-    
+
     ExmCxxCommandClass(char*		name,
 		      WidgetClass	parent,
 		      Cardinal		widgetSize,
@@ -59,7 +59,7 @@ class ExmCxxCommandClass : public ExmCxxStringClass {
 		      XtResourceList	resources,
 		      Cardinal		num_resources,
 		      XtInitProc	cxx_cast);
-    
+
     /*
      * static class-methods
      * (must be public : passed as parameter to class_rec static constructor)
@@ -85,13 +85,13 @@ struct ExmCxxCommandPart {
   Boolean		armed;
 
   /* visual_armed is a flag.  If its value is True, then the widget is to
-     visually represent its armed state by drawing a certain kind 
-     of shadow. */ 
+     visually represent its armed state by drawing a certain kind
+     of shadow. */
   Boolean		visual_armed;
-  
+
   /* visual_timer holds an integral value representing the time
      (in milliseconds) between when armed is set to True and
-     visual_armed is set to True. */ 
+     visual_armed is set to True. */
   XtIntervalId		visual_timer;
 };
 
@@ -100,21 +100,21 @@ class ExmCxxCommand : public ExmCxxString {
 
     friend class ExmCxxCommandClass;
     friend class ExmCxxCommandActions;
-    
+
   public:
     /*
      * should really be protected but we must reference fields when
      * declaring the static resources array;
      */
     ExmCxxCommandPart	command;
-    
+
   protected:
-    
+
     /*
      * constructors & destructors
      */
     ~ExmCxxCommand();
-    
+
     /*
      * virtual chained class-methods
      */
@@ -122,22 +122,22 @@ class ExmCxxCommand : public ExmCxxString {
     virtual void	initialize(Widget req_w, ArgList, Cardinal*);
     virtual Boolean	set_values(Widget old_w, Widget req_w,
 				   ArgList, Cardinal*);
-    
+
     /*
      * virtual self contained class-methods
      */
     // StaticText class part;
     virtual void	draw_shadow();
-    
+
   public:
-    
+
     /*
      * static class-methods
      * (must be public : passed as parameter to class_rec static constructor)
      */
     static void		_MakeCxxWidget(Widget req, Widget new_w,
 				       ArgList, Cardinal*);
-    /* 
+    /*
      * Trait methods
      */
     static void		ChangeCB(Widget w, XtCallbackProc activCB,

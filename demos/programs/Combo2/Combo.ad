@@ -17,4 +17,3 @@ then setting a few resources on the XmDropDown.\n\
 \n\
 The callbacks in this code set the data appropriately\n\
 to match the text or the list of toggles.
-

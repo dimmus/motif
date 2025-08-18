@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmGMUtilsI_h
 #define _XmGMUtilsI_h
 
@@ -34,7 +34,7 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmGMCalcSize( 
+extern void _XmGMCalcSize(
                         XmManagerWidget manager,
 #if NeedWidePrototypes
                         int margin_width,
@@ -45,7 +45,7 @@ extern void _XmGMCalcSize(
 #endif /* NeedWidePrototypes */
                         Dimension *replyWidth,
                         Dimension *replyHeight) ;
-extern Boolean _XmGMDoLayout( 
+extern Boolean _XmGMDoLayout(
                         XmManagerWidget manager,
 #if NeedWidePrototypes
                         int margin_width,
@@ -60,7 +60,7 @@ extern Boolean _XmGMDoLayout(
 #else
                         Boolean queryonly) ;
 #endif /* NeedWidePrototypes */
-extern void _XmGMEnforceMargin( 
+extern void _XmGMEnforceMargin(
                         XmManagerWidget manager,
 #if NeedWidePrototypes
                         int margin_width,
@@ -71,7 +71,7 @@ extern void _XmGMEnforceMargin(
                         Dimension margin_height,
                         Boolean setvalue) ;
 #endif /* NeedWidePrototypes */
-extern XtGeometryResult _XmGMHandleQueryGeometry( 
+extern XtGeometryResult _XmGMHandleQueryGeometry(
                         Widget widget,
                         XtWidgetGeometry *intended,
                         XtWidgetGeometry *desired,
@@ -83,10 +83,10 @@ extern XtGeometryResult _XmGMHandleQueryGeometry(
                         Dimension margin_height,
 #endif /* NeedWidePrototypes */
                         int resize_policy) ;
-extern Boolean _XmGMOverlap( 
+extern Boolean _XmGMOverlap(
                         XmManagerWidget manager,
                         Widget w) ;
-extern XtGeometryResult _XmGMHandleGeometryManager( 
+extern XtGeometryResult _XmGMHandleGeometryManager(
                         Widget parent,
                         Widget w,
                         XtWidgetGeometry *request,

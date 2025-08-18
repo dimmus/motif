@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: MainWin2.h /main/7 1995/07/13 19:47:23 drk $ */
 
 #define MAX_ARGS 	100
@@ -37,7 +37,7 @@ static Widget          CreateContinuePopup();
 static XtCallbackProc  ContinueCB();
 static XtCallbackProc  QuitCB();
 
-static char *Pause_events[] = 
+static char *Pause_events[] =
       {
 "\
 Main Window\n\
@@ -53,6 +53,6 @@ Main Window\n\
    \n\
    Exit now please\n\
 "
-};	
+};
 int Pause_cnt = 0;
 XtAppContext  app_context;

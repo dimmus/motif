@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CButtonPress.c /main/7 1995/07/14 11:37:22 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: CButtonPress.c /main/7 1995/07/14 11:37:22 
             clicks              - Number of button multi clicks
             hold_time_intervals - Number of Xt timer intervals to press the
                                   button
-        
+
         OUTPUTS:
             none
 
@@ -54,23 +54,23 @@ static char rcsid[] = "$XConsortium: CButtonPress.c /main/7 1995/07/14 11:37:22 
 #include "xislib.h"
 #include <AutoMessages.h>
 
-/* 
-  When an X-server gets a button press from the real mouse device, this is 
+/*
+  When an X-server gets a button press from the real mouse device, this is
   how it determines the appropriate event window to send it to:
 
     If ActiveGrabInProgress
         Send to client window that grabbed it (if visible)
 
     Else
-        Search visible ancestors of window from root down for a passive button 
+        Search visible ancestors of window from root down for a passive button
             grab
 
-        If found, 
+        If found,
             Activate grab (call XGrabPointer) on that window (pg 144 Xlib)
             Send event to that same window
         Else
             Starting from lowest ancestor window containing pointer, go up tree
-               (up meaning to ancestors) looking for window that has this event 
+               (up meaning to ancestors) looking for window that has this event
                selected.
             Send event to that window (with subwindow set to child in direction
                of window containing pointer).
@@ -112,17 +112,17 @@ int clicks;
     Time time;
     int i, multi = 0;
     char msg_string[125];
-    
+
     xisUseSessionInfo(routine_name);
     xisUpdateObjectAttributes();
-    
+
     if (clicks > 1)
 	multi++;
 
     /* First make sure this button is not already pressed */
 
     if ( xisState.mod_button_state & xisMouseButtonMask[button_num] ) {
-            sprintf(msg_string,_AutoMessages[WARNMSG46], routine_name,button_num); 
+            sprintf(msg_string,_AutoMessages[WARNMSG46], routine_name,button_num);
             AutoMessage(msg_string);
         xisReleaseMouseButton(NoModifierKeys,button_num);
     }
@@ -145,7 +145,7 @@ int clicks;
 	  sprintf(msg_string, _AutoMessages[WARNMSG48], routine_name);
 	  AutoMessage(msg_string);
 	}
-           
+
 
         action_object = xisInform.pointer_obj;
 
@@ -155,15 +155,15 @@ int clicks;
 
         /* Find window (object) which has elected to receive these events */
 
-        send_object = action_object;    
+        send_object = action_object;
         subwindow = 0L;
 
-        while (!send_object->id.window) 
+        while (!send_object->id.window)
             send_object = send_object->parent;
 
         while (send_object != NULL) {
 
-            if ((send_object->your_event_mask&ButtonPressMask) && 
+            if ((send_object->your_event_mask&ButtonPressMask) &&
                 (send_object->visibility_state != IsUnmapped) ) {
                 pursue = 1;
                 send_window = send_object->id.window;
@@ -186,13 +186,13 @@ int clicks;
     } /* End if (xisState.mod_button_state != 0 && xisPointerGrabbed) */
 
     if ((send_object != NULL) && pursue) {
-    
-        if (clicks == 0) 
+
+        if (clicks == 0)
             xisInform.event_code = EventMouseButtonDown;
-        else 
+        else
             xisInform.event_code = EventMouseButtonMultiClick;
 
-        /* Call all relavent InformExpectedActions functions */    
+        /* Call all relavent InformExpectedActions functions */
 
         xisInform.is_valid = 1;
         xisInform.action_obj = action_object;
@@ -201,7 +201,7 @@ int clicks;
         xisInform.key_code = 0;
         xisInform.edge_code = 0;
         xisInform.num_clicks = clicks;
-    
+
         current_object = action_object;
 
         while (current_object != NULL) {
@@ -223,14 +223,14 @@ int clicks;
         if (clicks == 0)
             clicks = 1;
 
-        time = xisGetServerTime(xisMultiClickTime); 
+        time = xisGetServerTime(xisMultiClickTime);
 
         for (i=0; i<clicks; i++) {
             xisSendEvent(send_window, xisGrabPointerSubwindow,
                          ButtonPress, xisUseCurrentTime && !multi ?
 			 CurrentTime : time + 4*i + 1,
                          root_x - send_object->x,
-                         root_y - send_object->y, 
+                         root_y - send_object->y,
                          root_x, root_y, modifier_keys,
                          xisMouseButtonDetail[button_num]);
 
@@ -243,8 +243,8 @@ int clicks;
                 /**NoteGrab: after xisProcessEvents now for menus **/
                 xisPointerGrabbed = 1;
                 xisGrabPointerWindow = send_window;
-	 
-   
+
+
 	        if (xisPointerGrabMode == POINTER_GRAB_CONTROLLED) {
 
                    while (!send_object->id.window)
@@ -255,7 +255,7 @@ int clicks;
                              (send_object->your_event_mask & GOOD_GRAB_BITS) |
                              (ButtonPressMask|ButtonReleaseMask),
                              GrabModeAsync,GrabModeAsync,None,None,
-                             xisUseCurrentTime && !multi ? CurrentTime : 
+                             xisUseCurrentTime && !multi ? CurrentTime :
 							   time + 4*i + 1 );
 
                 /**NoteGrab***/
@@ -263,11 +263,11 @@ int clicks;
             }
 
             if (clicks > 1) { /* Doing a Multi-click */
-                xisSendEvent(send_window, xisGrabPointerSubwindow, 
+                xisSendEvent(send_window, xisGrabPointerSubwindow,
                              ButtonRelease, xisUseCurrentTime && !multi ?
 			     CurrentTime : time + 4*i +2,
                              root_x - send_object->x,
-                             root_y - send_object->y, 
+                             root_y - send_object->y,
                              root_x, root_y, modifier_keys,
                              xisMouseButtonDetail[button_num]);
 
@@ -276,8 +276,8 @@ int clicks;
 
                 if (xisState.mod_button_state == 0) {
 	            if (xisPointerGrabMode == POINTER_GRAB_CONTROLLED)
-                       XUngrabPointer(xisDisplay, xisUseCurrentTime && !multi ? 
-						  CurrentTime : 
+                       XUngrabPointer(xisDisplay, xisUseCurrentTime && !multi ?
+						  CurrentTime :
 						  time + 4*i + 3);
                     xisPointerGrabbed = 0;
                     xisGrabPointerWindow = 0;

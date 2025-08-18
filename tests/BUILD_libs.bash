@@ -74,4 +74,4 @@ for dir in "${DIR_TEXT[@]}"; do
 	imake -DUseInstalled -DAUTOMATIC -I"$TESTS_HOME/../config/cf" -TMotif.tmpl -TImake.tmpl -DTOPDIR="$TESTS_HOME/.."
 	make
 
-done 
+done

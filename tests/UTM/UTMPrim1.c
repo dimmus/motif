@@ -29,14 +29,14 @@
 /*
  *  Defines
  */
-#define NUM_FLAVORS 31 
+#define NUM_FLAVORS 31
 #define NUM_SELECT_TYPES 4
-#define FORM_WIDTH  500 
+#define FORM_WIDTH  500
 #define FORM_HEIGHT 375
-#define LIST_WIDTH  150 
-#define LABEL_WIDTH 100 
-#define TEXT_WIDTH  150 
-#define TEXT_HEIGHT 50 
+#define LIST_WIDTH  150
+#define LABEL_WIDTH 100
+#define TEXT_WIDTH  150
+#define TEXT_HEIGHT 50
 #define OFFSET      15
 #define BUTTON_CNT  4
 
@@ -54,7 +54,7 @@ static char *flavors[] = {
      "Maple Walnut", "Rocky Road", "Pistachio",
      "Peanut Butter Cup", "Heath Bar Crunch", "Jamoca",
      "Vanilla Fudge", "Mint Chocolate Chip", "Chocolate Chip",
-     "Peach", "Butter Pecan", "Lemon Jubiliee", 
+     "Peach", "Butter Pecan", "Lemon Jubiliee",
      "Daquari Ice", "Rasberry", "Cookie Crunch",
      "Pralenes 'n Creame", "Lemon 'n Lime", "Caramel Crunch",
      "Cherry Garcia", "White Chocolate", "Coconut",
@@ -66,7 +66,7 @@ static char *select_types[] = {
      "Single", "Multiple",
      "Extended", "Browse" };
 
-static char string1[] = 
+static char string1[] =
      "I scream! You scream! ";
 
 static char string2[] =
@@ -86,7 +86,7 @@ Widget XmCreatePopupMenu();
 /*
  *  Declare local functions.
  */
-static void CreateListPrim(), CreateTextPrim(), 
+static void CreateListPrim(), CreateTextPrim(),
             CreateTextFieldPrim(),
             CreatePBPrim(), CreateToggleBPrim(), CreateLabelPrim(),
             CreateScalePrim();
@@ -112,11 +112,11 @@ int             n, ndx;
 Arg             args[25];
 XmFontList      fontlist;
 XmString        ItemList[NUM_FLAVORS], Label;
-Widget          Form1, ListLabel1, List1, 
-                PullDown1, OptionPB[NUM_SELECT_TYPES], OptionMenu1, 
-                Text1, TextLabel1, 
+Widget          Form1, ListLabel1, List1,
+                PullDown1, OptionPB[NUM_SELECT_TYPES], OptionMenu1,
+                Text1, TextLabel1,
                 TextField1, TextFieldLabel1,
-                HorizSeparator1, VertSeparator1, 
+                HorizSeparator1, VertSeparator1,
                 PBLabel1, PB1, ToggleBLabel1, ToggleB1,
                 Label1, ScaleLabel1, Scale1,
                 Popup1Btn[BUTTON_CNT], Popup1, Popup2Btn[BUTTON_CNT], Popup2,
@@ -126,8 +126,8 @@ FlagWidgetPair  FWP1[BUTTON_CNT], FWP2[BUTTON_CNT], FWP3[BUTTON_CNT];
 char            buf[10];
 
 
-/* 
- *  Callback functions 
+/*
+ *  Callback functions
  */
 static void QuitCB(Widget w, XtPointer client_data,
                                 XtPointer call_data)
@@ -265,21 +265,21 @@ static void TextConvertCB(Widget w, XtPointer client_data,
   /* support for Clipboard Link transfer */
 
   if ((cs->selection == XInternAtom(XtDisplay(w), XmSCLIPBOARD, False)) &&
-      (cs->target == XInternAtom(XtDisplay(w), XmS_MOTIF_CLIPBOARD_TARGETS, 
+      (cs->target == XInternAtom(XtDisplay(w), XmS_MOTIF_CLIPBOARD_TARGETS,
 				 False) ||
-       cs->target == XInternAtom(XtDisplay(w), 
-				 XmS_MOTIF_DEFERRED_CLIPBOARD_TARGETS, 
+       cs->target == XInternAtom(XtDisplay(w),
+				 XmS_MOTIF_DEFERRED_CLIPBOARD_TARGETS,
 				 False))) {
 
       if (cs->parm != (XtPointer) 0)
-	  printf("        parm              = %s\n", 
+	  printf("        parm              = %s\n",
 		 GetStringFrom((XtEnum) cs->parm));
 
-      if ((cs->target == XInternAtom(XtDisplay(w), 
+      if ((cs->target == XInternAtom(XtDisplay(w),
 				     XmS_MOTIF_CLIPBOARD_TARGETS,
 				     False)) &&
 	  (cs->parm == (XtPointer) XmLINK)) {
-      
+
 	  Atom *targargs;
 
 	  targargs = (Atom *) XtMalloc(sizeof(Atom));
@@ -291,8 +291,8 @@ static void TextConvertCB(Widget w, XtPointer client_data,
 	  cs->value = (XtPointer) targargs;
 	  cs->status = XmCONVERT_DONE;
       }
-  } 
-  else { 
+  }
+  else {
 
       if (cs->target == XInternAtom(XtDisplay(w), "MY_LINK_TARGET", False)) {
 
@@ -303,17 +303,17 @@ static void TextConvertCB(Widget w, XtPointer client_data,
 	  cs->status = XmCONVERT_DONE;
       }
   }
-  printf("\n"); 
+  printf("\n");
 
   return;
 }
 
-static void 
-TextReceiveData(Widget w, XtPointer ignore, 
+static void
+TextReceiveData(Widget w, XtPointer ignore,
 		XmSelectionCallbackStruct *data)
 {
     if (data->target == XInternAtom(XtDisplay(w), "MY_LINK_TARGET", False)) {
-	
+
 	if (data->length == 0) {
 	    XmTransferDone(data -> transfer_id, XmTRANSFER_DONE_FAIL);
 	    return;
@@ -342,8 +342,8 @@ static void TextDestinCB(Widget w, XtPointer client_data,
   printf("        selection = %s\n", selection_atom_name);
   printf("        operation = %s\n\n", GetStringFrom(cs->operation));
 
-  if (cs->operation == XmLINK) 
-      XmTransferValue(cs -> transfer_id, 
+  if (cs->operation == XmLINK)
+      XmTransferValue(cs -> transfer_id,
                   XInternAtom(XtDisplay(w), "MY_LINK_TARGET", False),
                   (XtCallbackProc) TextReceiveData, NULL, 0);
 
@@ -373,21 +373,21 @@ static void TextFieldConvertCB(Widget w, XtPointer client_data,
   /* support for Clipboard Link transfer */
 
   if ((cs->selection == XInternAtom(XtDisplay(w), XmSCLIPBOARD, False)) &&
-      (cs->target == XInternAtom(XtDisplay(w), XmS_MOTIF_CLIPBOARD_TARGETS, 
+      (cs->target == XInternAtom(XtDisplay(w), XmS_MOTIF_CLIPBOARD_TARGETS,
 				 False) ||
-       cs->target == XInternAtom(XtDisplay(w), 
-				 XmS_MOTIF_DEFERRED_CLIPBOARD_TARGETS, 
+       cs->target == XInternAtom(XtDisplay(w),
+				 XmS_MOTIF_DEFERRED_CLIPBOARD_TARGETS,
 				 False))) {
 
       if (cs->parm != (XtPointer) 0)
-	  printf("        parm              = %s\n", 
+	  printf("        parm              = %s\n",
 		 GetStringFrom((XtEnum) cs->parm));
 
-      if ((cs->target == XInternAtom(XtDisplay(w), 
+      if ((cs->target == XInternAtom(XtDisplay(w),
 				     XmS_MOTIF_CLIPBOARD_TARGETS,
 				     False)) &&
 	  (cs->parm == (XtPointer) XmLINK)) {
-      
+
 	  Atom *targargs;
 
 	  targargs = (Atom *) XtMalloc(sizeof(Atom));
@@ -399,8 +399,8 @@ static void TextFieldConvertCB(Widget w, XtPointer client_data,
 	  cs->value = (XtPointer) targargs;
 	  cs->status = XmCONVERT_DONE;
       }
-  } 
-  else { 
+  }
+  else {
 
       if (cs->target == XInternAtom(XtDisplay(w), "MY_LINK_TARGET", False)) {
 
@@ -411,18 +411,18 @@ static void TextFieldConvertCB(Widget w, XtPointer client_data,
 	  cs->status = XmCONVERT_DONE;
       }
   }
-  printf("\n"); 
+  printf("\n");
 
   return;
 }
 
 
-static void 
-TextFieldReceiveData(Widget w, XtPointer ignore, 
+static void
+TextFieldReceiveData(Widget w, XtPointer ignore,
 		     XmSelectionCallbackStruct *data)
 {
     if (data->target == XInternAtom(XtDisplay(w), "MY_LINK_TARGET", False)) {
-	
+
 	if (data->length == 0) {
 	    XmTransferDone(data -> transfer_id, XmTRANSFER_DONE_FAIL);
 	    return;
@@ -452,8 +452,8 @@ TextFieldDestinCB(Widget w, XtPointer client_data, XtPointer call_data)
   printf("        selection = %s\n", selection_atom_name);
   printf("        operation = %s\n\n", GetStringFrom(cs->operation));
 
-  if (cs->operation == XmLINK) 
-      XmTransferValue(cs -> transfer_id, 
+  if (cs->operation == XmLINK)
+      XmTransferValue(cs -> transfer_id,
                   XInternAtom(XtDisplay(w), "MY_LINK_TARGET", False),
                   (XtCallbackProc) TextFieldReceiveData, NULL, 0);
 
@@ -552,7 +552,7 @@ void  main (argc, argv)
     XtManageChild(TextField1);
 
     /*  Create popup menu of functions for TextField widget. */
-    Popup1 = XmCreatePopupMenu( TextField1, "Popup1", NULL, 0 );  
+    Popup1 = XmCreatePopupMenu( TextField1, "Popup1", NULL, 0 );
     XtAddEventHandler(TextField1, ButtonPressMask, False, PostIt, Popup1);
 
     ndx = 0;
@@ -615,7 +615,7 @@ void  main (argc, argv)
     XtManageChild(Text1);
 
     /*  Create popup menu of functions for Text widget. */
-    Popup2 = XmCreatePopupMenu( Text1, "Popup2", NULL, 0 );  
+    Popup2 = XmCreatePopupMenu( Text1, "Popup2", NULL, 0 );
     XtAddEventHandler(Text1, ButtonPressMask, False, PostIt, Popup2);
 
     ndx = 0;
@@ -656,7 +656,7 @@ void  main (argc, argv)
     XtManageChildren(Popup2Btn, ndx);
 
     /*
-     *  Create vertical separator. 
+     *  Create vertical separator.
      */
     n = 0;
 /*
@@ -700,7 +700,7 @@ void  main (argc, argv)
     XtManageChild(OptionMenu1);
 
     /*
-     *  Create horizontal separator. 
+     *  Create horizontal separator.
      */
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET );     n++;
@@ -770,7 +770,7 @@ void  main (argc, argv)
     XtSetValues(Label1, args, n);
     XtManageChild(Label1);
 
-    /* 
+    /*
      *  Create ScaleLabel1 and Scale1.
      */
     CreateScalePrim( Form1, &ScaleLabel1, &Scale1 );
@@ -816,15 +816,15 @@ void  main (argc, argv)
        /*  Test convert and destination callbacks of Text widget. */
        CommonPause();
 
-       /*  
-	*  Test the CopyLink and PasteLink functions within each of the 
+       /*
+	*  Test the CopyLink and PasteLink functions within each of the
 	*  Text widgets.
 	*/
 
        CommonPause();
 
-       /*  
-	*  Test the CopyLink and PasteLink functions between each of the 
+       /*
+	*  Test the CopyLink and PasteLink functions between each of the
 	*  Text widgets.
 	*/
        CommonPause();
@@ -849,7 +849,7 @@ static void CreateListPrim( Parent, ListLabel, List, PullDown, OptionMenu )
 Widget Parent, *ListLabel, *List, *PullDown, *OptionMenu;
 {
 
-    Label = XmStringCreateSimple("List"); 
+    Label = XmStringCreateSimple("List");
 
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM );        n++;
@@ -901,27 +901,27 @@ Widget Parent, *ListLabel, *List, *PullDown, *OptionMenu;
 
     *PullDown = XmCreatePulldownMenu(Parent, "PullDown", NULL, 0);
 
-    /* 
-     *  Convert pushbutton labels from char * to XmString types. 
-     *  Create pushbuttons within the pulldown menu. 
-     */   
+    /*
+     *  Convert pushbutton labels from char * to XmString types.
+     *  Create pushbuttons within the pulldown menu.
+     */
     for ( n = 0; n < NUM_SELECT_TYPES; n++ )
     {
-       Label = XmStringCreateSimple(select_types[n]); 
-       XtSetArg(args[0], XmNlabelString, Label ); 
+       Label = XmStringCreateSimple(select_types[n]);
+       XtSetArg(args[0], XmNlabelString, Label );
        sprintf(buf, "PB%d", n );
        OptionPB[n] = XmCreatePushButton( PullDown1, buf, args, 1 );
 
        /*  Set callback functions for each pushbutton. */
-       XtAddCallback( OptionPB[n], XmNactivateCallback, 
-                      SetSelectType, OptionPB[n]); 
+       XtAddCallback( OptionPB[n], XmNactivateCallback,
+                      SetSelectType, OptionPB[n]);
        XmStringFree( Label );
     }
 
     XtManageChildren(OptionPB, NUM_SELECT_TYPES);
 
 
-    Label = XmStringCreateSimple("Selection Policy"); 
+    Label = XmStringCreateSimple("Selection Policy");
 
     n = 0;
     XtSetArg(args[n], XmNwidth, LIST_WIDTH );			n++;
@@ -953,7 +953,7 @@ Widget Parent, *TextLabel, *Text;
     XtSetArg(args[n], XmNfontList, fontlist );                  n++;
     XtSetArg(args[n], XmNlabelString, Label );			n++;
     *TextLabel = XmCreateLabel(Parent, "TextLabel", args, n );
-   
+
     XmStringFree(Label);
 
     n = 0;
@@ -996,7 +996,7 @@ Widget Parent, *TextFieldLabel, *TextField;
 
 
     XtAddCallback( *TextField, XmNconvertCallback, TextFieldConvertCB, NULL );
-    XtAddCallback( *TextField, XmNdestinationCallback, 
+    XtAddCallback( *TextField, XmNdestinationCallback,
                                TextFieldDestinCB, NULL );
 }
 
@@ -1026,7 +1026,7 @@ Widget Parent, *PBLabel, *PB;
     *PB = XmCreatePushButton( Parent, "PB", args, n );
 
     XmStringFree(Label);
- 
+
     XtAddCallback(*PB, XmNconvertCallback, PBConvertCB, NULL );
 }
 
@@ -1058,7 +1058,7 @@ Widget Parent, *ToggleBLabel, *ToggleB;
     *ToggleB = XmCreateToggleButton(Parent, "ToggleB", args, n );
 
     XmStringFree(Label);
-    XtAddCallback( *ToggleB, XmNconvertCallback, ToggleConvertCB, NULL ); 
+    XtAddCallback( *ToggleB, XmNconvertCallback, ToggleConvertCB, NULL );
 }
 
 static void CreateLabelPrim( Parent, Label1 )
@@ -1107,8 +1107,8 @@ Widget Parent, *ScaleLabel, *Scale;
 /* Error handler for XGetAtomName */
 
 static int SIF_ErrorFlag;
- 
-static int 
+
+static int
 SIF_ErrorHandler(Display *display, XErrorEvent *event)
 {
   SIF_ErrorFlag = event -> type;
@@ -1116,7 +1116,7 @@ SIF_ErrorHandler(Display *display, XErrorEvent *event)
   return 0;
 }
 
-static char * 
+static char *
 GetSafeAtom(Display *display, Atom a)
 {
   XErrorHandler old_Handler;
@@ -1146,7 +1146,7 @@ GetStringFrom(XtEnum operation)
         case XmMOVE:
            returnvalue = "XmMOVE";
            break;
-        case XmCOPY: 
+        case XmCOPY:
            returnvalue = "XmCOPY";
            break;
         case XmLINK:
@@ -1182,12 +1182,12 @@ Convert_info(Widget w, XtPointer call_data)
   printf("        selection         = %s\n", selection_atom_name);
   printf("        conversion target = %s\n", target_atom_name);
 
-  if (cs->selection == XInternAtom(XtDisplay(w), XmSCLIPBOARD, False)) 
+  if (cs->selection == XInternAtom(XtDisplay(w), XmSCLIPBOARD, False))
       if (cs->parm != (XtPointer) 0)
-	  printf("        parm              = %s\n", 
+	  printf("        parm              = %s\n",
 		 GetStringFrom((XtEnum) cs->parm));
 
-  printf("\n"); 
+  printf("\n");
 
 }
 

@@ -1,5 +1,5 @@
- 
-/* 
+
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form1.c /main/4 1995/07/13 18:00:28 drk $"
@@ -128,11 +128,11 @@ char **argv;
    XtAddCallback (form, XmNhelpCallback, FormCallback, NULL);
 
    if (UserData != NULL) {
-      InitializeClassLookupTables(); 
-      child_class = ChildClass (UserData); 
+      InitializeClassLookupTables();
+      child_class = ChildClass (UserData);
       if (child_class != NULL) {
 	CreateButtonChildren (form, child_class, 1);
-	CreateButtonChildren (form, child_class, 0);   
+	CreateButtonChildren (form, child_class, 0);
       }
       else {
 	printf ("Child class %s not a legal class. Exiting.\n", UserData);
@@ -146,8 +146,8 @@ char **argv;
       exit (1);
      }
 
-   
-  
+
+
 
 
    CreateControlPanel();
@@ -156,7 +156,7 @@ char **argv;
 
    if (instruct_file_name != NULL) {
      if (strncmp (instruct_file_name, "Form1a", 6) == 0)
-       /* if you look carefully, you can spot P2253 
+       /* if you look carefully, you can spot P2253
 	  in this test in panel #3. */
        /* the circular dependency message shows up early & twice */
        for (i = 0; i <= 5; i++)
@@ -189,7 +189,7 @@ char * child_class_name;
 {
   int i;
 
-  for (i = 0; i <= NUM_LEGAL_CHILDREN - 1; i++) 
+  for (i = 0; i <= NUM_LEGAL_CHILDREN - 1; i++)
     if (strcmp (child_class_name, child_table[i].string) == 0)
       return child_table[i].class;
 
@@ -201,7 +201,7 @@ void InitializeClassLookupTables ()
 
 {
 
-/* 
+/*
    this grotesque hack is the simplest way I could think of to deal
    with the fact that the class pointer variables cannot be used
    in my lovely static arrays. A change to this array also requires changing
@@ -254,7 +254,7 @@ if (whichchild == 0) {
    target[0]=CreateChild (child_class, parent, "Child1", args, n);
    XtManageChild (target[0]);
 
-   
+
    /* store starting size for Clear */
    XtSetArg (args[0], XmNheight, &child1_h);
    XtSetArg (args[1], XmNwidth, &child1_w);
@@ -298,75 +298,75 @@ int n;
     Widget wid;
 
     if (child_class == xmScaleWidgetClass)
-    wid = XmCreateScale (parent, name, args, n); 
+    wid = XmCreateScale (parent, name, args, n);
 
     if (child_class == xmScrollBarWidgetClass)
-    wid = XmCreateScrollBar (parent, name, args, n); 
+    wid = XmCreateScrollBar (parent, name, args, n);
 
     if (child_class == xmMessageBoxWidgetClass)
-    wid = XmCreateMessageBox (parent, name, args, n); 
+    wid = XmCreateMessageBox (parent, name, args, n);
 
     if (child_class == xmSelectionBoxWidgetClass)
-    wid = XmCreateSelectionBox (parent, name, args, n); 
+    wid = XmCreateSelectionBox (parent, name, args, n);
 
     if (child_class == xmCommandWidgetClass)
-    wid = XmCreateCommand (parent, name, args, n); 
+    wid = XmCreateCommand (parent, name, args, n);
 
     if (child_class == xmFileSelectionBoxWidgetClass)
-    wid = XmCreateFileSelectionBox (parent, name, args, n); 
+    wid = XmCreateFileSelectionBox (parent, name, args, n);
 
     if (child_class == xmArrowButtonWidgetClass)
-    wid = XmCreateArrowButton (parent, name, args, n); 
+    wid = XmCreateArrowButton (parent, name, args, n);
 
     if (child_class == xmListWidgetClass)
-    wid = XmCreateList (parent, name, args, n); 
+    wid = XmCreateList (parent, name, args, n);
 
     if (child_class == xmSeparatorWidgetClass)
-    wid = XmCreateSeparator (parent, name, args, n); 
+    wid = XmCreateSeparator (parent, name, args, n);
 
     if (child_class == xmTextWidgetClass)
-    wid = XmCreateText (parent, name, args, n); 
+    wid = XmCreateText (parent, name, args, n);
 
     if (child_class == xmTextFieldWidgetClass)
-    wid = XmCreateTextField (parent, name, args, n); 
+    wid = XmCreateTextField (parent, name, args, n);
 
     if (child_class == xmLabelWidgetClass)
-    wid = XmCreateLabel (parent, name, args, n); 
+    wid = XmCreateLabel (parent, name, args, n);
 
     if (child_class == xmDrawnButtonWidgetClass)
-    wid = XmCreateDrawnButton (parent, name, args, n); 
+    wid = XmCreateDrawnButton (parent, name, args, n);
 
     if (child_class == xmPushButtonWidgetClass)
-    wid = XmCreatePushButton (parent, name, args, n); 
+    wid = XmCreatePushButton (parent, name, args, n);
 
     if (child_class == xmArrowButtonGadgetClass)
-    wid = XmCreateArrowButtonGadget (parent, name, args, n); 
+    wid = XmCreateArrowButtonGadget (parent, name, args, n);
 
     if (child_class == xmSeparatorGadgetClass)
-    wid = XmCreateSeparatorGadget (parent, name, args, n); 
+    wid = XmCreateSeparatorGadget (parent, name, args, n);
 
     if (child_class == xmLabelGadgetClass)
-    wid = XmCreateLabelGadget (parent, name, args, n); 
+    wid = XmCreateLabelGadget (parent, name, args, n);
 
     if (child_class == xmPushButtonGadgetClass)
-    wid = XmCreatePushButtonGadget (parent, name, args, n); 
+    wid = XmCreatePushButtonGadget (parent, name, args, n);
 
     if (child_class == xmToggleButtonGadgetClass)
-    wid = XmCreateToggleButtonGadget (parent, name, args, n); 
+    wid = XmCreateToggleButtonGadget (parent, name, args, n);
 
     if (child_class == xmBulletinBoardWidgetClass)
-    wid = XmCreateBulletinBoard(parent, name, args, n); 
+    wid = XmCreateBulletinBoard(parent, name, args, n);
 
     if (child_class == xmFormWidgetClass)
-    wid = XmCreateForm(parent, name, args, n); 
+    wid = XmCreateForm(parent, name, args, n);
 
     return (wid);
 
-  
+
 }
 
 
-    
+
 
 
 void  QuitCB(w, client_data, call_data)
@@ -431,10 +431,10 @@ XtPointer call_data;
 
   int value; /* for scale value */
   int offset; /* for offset scale */
-  
+
   int target_number = 0;
   if ( (int)(long)client_data == 0 ) target_number = 1;
-  
+
   while (!(XmToggleButtonGadgetGetState(sides[i])))
     i++;
 
@@ -445,52 +445,52 @@ XtPointer call_data;
 
   if ((j == 1) || (j == 2)) { /* ATTACH_FORM or ATTACH_OPPOSITE_FORM */
     switch (i) {
-    case 0:  
-      XtSetArg (args[n], XmNtopOffset, offset); 
+    case 0:
+      XtSetArg (args[n], XmNtopOffset, offset);
       n++;     /* we use !((int)client_data because you are setting the */
       break;   /* OTHER widget to be the top, bottom, left, rightWidget!!! */
 
-    case 1:  
+    case 1:
       XtSetArg (args[n], XmNbottomOffset, offset);
-       n++; 
+       n++;
       break;
 
-    case 2:  
-       XtSetArg (args[n], XmNleftOffset, offset); 
-        n++; 
+    case 2:
+       XtSetArg (args[n], XmNleftOffset, offset);
+        n++;
       break;
 
-    case 3:  
+    case 3:
         XtSetArg (args[n], XmNrightOffset, offset);
-        n++; 
+        n++;
       break;
     }
   }
 
   if ((j == 3) || (j == 4)) {  /* ATTACH_WIDGET or ATTACH_OPPOSITE_WIDGET */
     switch (i) {
-    case 0:  
+    case 0:
       XtSetArg (args[n], XmNtopWidget, target[target_number]);
       n++;     /* we use !((int)client_data because you are setting the */
       XtSetArg (args[n], XmNtopOffset, offset);
       n++;
       break;   /* OTHER widget to be the top, bottom, left, rightWidget!!! */
 
-    case 1:  
+    case 1:
       XtSetArg (args[n], XmNbottomWidget, target[target_number]);
       n++;
-      XtSetArg (args[n], XmNbottomOffset, offset); 
+      XtSetArg (args[n], XmNbottomOffset, offset);
       n++;
       break;
 
-    case 2:  
+    case 2:
       XtSetArg (args[n], XmNleftWidget, target[target_number]);
       n++;
       XtSetArg (args[n], XmNleftOffset, offset);
       n++;
       break;
 
-    case 3:  
+    case 3:
       XtSetArg (args[n], XmNrightWidget, target[target_number]);
       n++;
       XtSetArg (args[n], XmNrightOffset, offset);
@@ -498,32 +498,32 @@ XtPointer call_data;
       break;
     }
   }
- 
+
   if (j == 5) {  /* ATTACH_POSITION */
     XmScaleGetValue (positionScale, &value);
     switch (i) {
-    case 0:  
+    case 0:
       XtSetArg (args[n], XmNtopPosition, value);
       n++;
       break;
 
-    case 1:  
+    case 1:
       XtSetArg (args[n], XmNbottomPosition, value);
       n++;
       break;
 
-    case 2:  
+    case 2:
       XtSetArg (args[n], XmNleftPosition, value);
       n++;
       break;
 
-    case 3:  
+    case 3:
       XtSetArg (args[n], XmNrightPosition, value);
       n++;
       break;
     }
-  }      
-  
+  }
+
   XtSetArg(args[n], whichside[i], whichattach[j]); n++;
   XtSetValues(target[!target_number], args, n);
 
@@ -543,7 +543,7 @@ XtPointer client_data, call_data;
   if ((int)(long)client_data == 1) {   /* reset button 2 top left corner */
     n = 0;
     tcs = XmStringCreateSimple ("Child2");
-    tcs2 = XmStringCreateSimple (""); 
+    tcs2 = XmStringCreateSimple ("");
     XtSetArg (args[n], XmNheight, child1_h); n++;
     XtSetArg (args[n], XmNwidth, child1_w); n++;
     XtSetArg (args[n], XmNborderWidth, child1_b); n++;
@@ -640,9 +640,9 @@ void CreateControlPanel()
   XtSetArg (args[n], XmNy, 0); n++;
   rbox2 = XmCreateRadioBox (actionsBoard, "rbox1", args, n);
 
-    
+
   for (i = 0; i <= 3; i++)
-    { 
+    {
       n = 0;
       tcs = XmStringCreate(side_names[i], XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, tcs ); n++;
@@ -651,13 +651,13 @@ void CreateControlPanel()
       XtManageChild(sides[i]);
       XmStringFree(tcs);
     }
- 
+
  /* set one side on by default */
 
   XmToggleButtonGadgetSetState (sides[0], True, False);
 
   for (i = 0; i <= 6; i++)
-    { 
+    {
       n = 0;
       tcs = XmStringCreate(attaches_names[i], XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, tcs ); n++;
@@ -692,12 +692,12 @@ void CreateControlPanel()
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringCreateSimple ("Position Attachment"); 
+  tcs = XmStringCreateSimple ("Position Attachment");
   XtSetArg (args[n], XmNorientation, XmHORIZONTAL); n++;
   XtSetArg (args[n], XmNminimum, 1); n++;
   XtSetArg (args[n], XmNmaximum, 10); n++;
   XtSetArg (args[n], XmNshowValue, True); n++;
-  XtSetArg (args[n], XmNtitleString, tcs ); n++; 
+  XtSetArg (args[n], XmNtitleString, tcs ); n++;
   XtSetArg (args[n], XmNx, 20); n++;
   XtSetArg (args[n], XmNy, 125); n++;
   XtSetArg (args[n], XmNscaleMultiple, 1); n++;
@@ -711,7 +711,7 @@ void CreateControlPanel()
   XtSetArg (args[n], XmNminimum, 0); n++;
   XtSetArg (args[n], XmNmaximum, 200); n++;
   XtSetArg (args[n], XmNshowValue, True); n++;
-  XtSetArg (args[n], XmNtitleString, tcs ); n++; 
+  XtSetArg (args[n], XmNtitleString, tcs ); n++;
   XtSetArg (args[n], XmNx, 20); n++;
   XtSetArg (args[n], XmNy, 180); n++;
   XtSetArg (args[n], XmNscaleMultiple, 1); n++;
@@ -754,13 +754,13 @@ void CreateControlPanel()
 
   for (i = 0; i <= NUM_REPORT_LABELS - 1; i++) {
     n = 0;
-    if (i%3 == 1) 
+    if (i%3 == 1)
       XtSetArg (args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
     sprintf(buf, "labelchildlabelchildi%d", i);
     reportLabels[i] = XmCreateLabelGadget (reportPanel, buf, args, n);
     XtManageChild (reportLabels[i]);
   }
-  
+
   RefreshAttachmentsReport(reportLabels);
 
   n = 0;
@@ -783,7 +783,7 @@ void CreateControlPanel()
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
   XtSetArg (args[n], XmNtopWidget, form_rc); n++;
   resizeButton = XmCreatePushButton (formPanel, "formsize", args, n);
-  XtAddCallback (resizeButton, XmNactivateCallback, 
+  XtAddCallback (resizeButton, XmNactivateCallback,
 		 ReportFormSize, NULL);
   XmStringFree(tcs);
 
@@ -823,15 +823,15 @@ void CreateControlPanel()
     XtAddCallback (formSizeControl[i], XmNactivateCallback,
 		   FormSizeControlCallback, (XtPointer) (long)i);
   }
-    
+
 
   /* a panel of controls for controlling the children of Form */
-  
+
    n=0;
     XtSetArg (args[n], XmNallowResize, True); n++;
   kidPanel = XmCreateForm (mainParent, "kidPanel", args, n);
 
-  
+
   CreateKidControls(kidPanel);
 
   XtManageChild (kidPanel);
@@ -858,7 +858,7 @@ XtPointer client_data, call_data;
 {
   Dimension h, w;
   Arg args[2];
-  
+
   XtSetArg (args[0], XmNheight, &h);
   XtSetArg (args[1], XmNwidth, &w);
   XtGetValues (form, args, 2);
@@ -912,7 +912,7 @@ XtPointer call_data;
 }
 
 void PositionScaleModifyQuery()
- 
+
 {
   /* ask the user if s/he wants to redo the max for positionScale
      when fractionBase is changed */
@@ -927,7 +927,7 @@ void PositionScaleModifyQuery()
   popup = XmCreateBulletinBoardDialog (Shell1, "popup", args, n);
   XtPopup (popup,XtGrabNone);
 
-  
+
   n = 0;
   XtSetArg (args[n], XmNx, 20); n++;
   XtSetArg (args[n], XmNy, 25); n++;
@@ -947,7 +947,7 @@ void PositionScaleModifyQuery()
   XtSetArg (args[n], XmNx, 20); n++;
   XtSetArg (args[n], XmNy, 150); n++;
   apply = XmCreatePushButton (popup, "apply", args, n);
-  XtAddCallback (apply, XmNactivateCallback, ChangePositionScaleMax, 
+  XtAddCallback (apply, XmNactivateCallback, ChangePositionScaleMax,
 		 max_text);
 
   n = 0;
@@ -973,7 +973,7 @@ XtPointer call_data;
   char * string;
   Arg args[1];
   int cur_max, new_max;
-  
+
   string = XmTextFieldGetString (client_data);
 
   XtSetArg (args[0], XmNmaximum, &cur_max);
@@ -998,7 +998,7 @@ static int created = 0;
 Arg args[6];
 unsigned char top, bottom, left, right;
 
-/* what we are building is this: 
+/* what we are building is this:
  *  Button1attachment         TOP        Button2attachment
  *        ditto             BOTTOM             ditto
  *        ditto              LEFT              ditto
@@ -1035,7 +1035,7 @@ unsigned char top, bottom, left, right;
     created = 1;
     }
 
-/* 
+/*
    labels 0, 3, 6, 9 contain button 1's attachments. Go get 'em, then
    use that value as the index into attaches_names[] and print out
    the string.
@@ -1049,7 +1049,7 @@ unsigned char top, bottom, left, right;
   XtGetValues (target[0], args, n);
 
 #ifdef DEBUG
-  printf ("Button1:\n  top: %d\n,  bottom: %d\n,  left:  %d\n  right %d\n", 
+  printf ("Button1:\n  top: %d\n,  bottom: %d\n,  left:  %d\n  right %d\n",
 	  (int) top, (int) bottom, (int) left, (int) right);
 #endif
 
@@ -1091,7 +1091,7 @@ unsigned char top, bottom, left, right;
   XtGetValues (target[1], args, n);
 
 #ifdef DEBUG
-  printf ("Button1:\n  top: %d\n,  bottom: %d\n,  left:  %d\n  right %d\n", 
+  printf ("Button1:\n  top: %d\n,  bottom: %d\n,  left:  %d\n  right %d\n",
 	  (int) top, (int) bottom, (int) left, (int) right);
 #endif
 
@@ -1123,7 +1123,7 @@ unsigned char top, bottom, left, right;
 
 void CreateKidControls(parent)
 Widget parent;
-{ 
+{
   Widget measure_rc, target_rc;
   static Widget target_toggle[2];
   Widget width_rc, height_rc, border_rc, label_rc, font_rc, x_rc, y_rc;
@@ -1133,7 +1133,7 @@ Widget parent;
   XmString tcs;
   Arg args[10];
   int n;
- 
+
   /* parent is a Form */
 
   n = 0;
@@ -1228,19 +1228,19 @@ Widget parent;
   /* create the target toggles */
 
   n = 0;
-  tcs = XmStringCreateSimple ("Set child 1"); 
+  tcs = XmStringCreateSimple ("Set child 1");
   XtSetArg (args[n], XmNlabelString, tcs ); n++;
   XtSetArg (args[n], XmNset, True); n++;
   XtSetArg (args[n], XmNselectColor, CommonGetColor ("blue")); n++;
-  target_toggle[0] = XmCreateToggleButtonGadget (target_rc, "target0", 
+  target_toggle[0] = XmCreateToggleButtonGadget (target_rc, "target0",
 						 args, n);
   XmStringFree(tcs);
-  
+
   n = 0;
   tcs = XmStringCreateSimple ("Set child 2");
   XtSetArg (args[n], XmNlabelString, tcs ); n++;
   XtSetArg (args[n], XmNselectColor, CommonGetColor ("yellow")); n++;
-  target_toggle[1] = XmCreateToggleButtonGadget (target_rc, "target1", 
+  target_toggle[1] = XmCreateToggleButtonGadget (target_rc, "target1",
 						 args, n);
   XmStringFree(tcs);
 
@@ -1248,15 +1248,15 @@ Widget parent;
   tcs = XmStringCreateSimple ("Get Child Width & Height");
   XtSetArg (args[n], XmNlabelString, tcs ); n++;
   WHButton = XmCreatePushButton (measure_rc, "WHButton", args, n);
-  XtAddCallback (WHButton, XmNactivateCallback, 
+  XtAddCallback (WHButton, XmNactivateCallback,
 		 GetChildWidthHeight, target_toggle[0]);
   XmStringFree(tcs);
 
   n = 0;
-  tcs = XmStringCreateSimple ("Get Child x & y Position"); 
+  tcs = XmStringCreateSimple ("Get Child x & y Position");
   XtSetArg (args[n], XmNlabelString, tcs ); n++;
   xyButton = XmCreatePushButton (measure_rc, "xyButton", args, n);
-  XtAddCallback (xyButton, XmNactivateCallback, 
+  XtAddCallback (xyButton, XmNactivateCallback,
 		 GetChildxyPosition, target_toggle[0]);
   XmStringFree(tcs);
 
@@ -1264,7 +1264,7 @@ Widget parent;
   XtSetArg (args[n], XmNlabelString,
 	    XmStringCreateSimple ("Get Child Border Width")); n++;
   BorderButton = XmCreatePushButton (measure_rc, "BorderButton", args, n);
-  XtAddCallback (BorderButton, XmNactivateCallback, 
+  XtAddCallback (BorderButton, XmNactivateCallback,
 		 GetChildBorderWidth, target_toggle[0]);
 
 
@@ -1298,25 +1298,25 @@ Widget parent;
   label_pair[1] = XmCreateTextField (label_rc, "labelText", args, n);
   font_pair[1] = XmCreateTextField (font_rc, "fontText", args, n);
 
-  XtAddCallback (width_pair[1], XmNactivateCallback, 
+  XtAddCallback (width_pair[1], XmNactivateCallback,
 		 SetTargetWidth, target_toggle[0]);
 
-  XtAddCallback (height_pair[1],  XmNactivateCallback, 
+  XtAddCallback (height_pair[1],  XmNactivateCallback,
 		 SetTargetHeight, target_toggle[0]);
-	       
-  XtAddCallback (label_pair[1], XmNactivateCallback, 
+
+  XtAddCallback (label_pair[1], XmNactivateCallback,
 		 SetTargetLabelString, target_toggle[0]);
 
-  XtAddCallback (border_pair[1], XmNactivateCallback, 
+  XtAddCallback (border_pair[1], XmNactivateCallback,
 		 SetTargetBorderWidth, target_toggle[0]);
 
-  XtAddCallback (x_pair[1], XmNactivateCallback, 
+  XtAddCallback (x_pair[1], XmNactivateCallback,
 		 SetTargetxPosition, target_toggle[0]);
 
-  XtAddCallback (y_pair[1], XmNactivateCallback, 
+  XtAddCallback (y_pair[1], XmNactivateCallback,
 		 SetTargetyPosition, target_toggle[0]);
 
-  XtAddCallback (font_pair[1], XmNactivateCallback, 
+  XtAddCallback (font_pair[1], XmNactivateCallback,
 		 SetTargetFont, target_toggle[0]);
 
   /* manage everyone */
@@ -1336,13 +1336,13 @@ Widget parent;
   XtManageChild (height_rc);
   XtManageChild (x_rc);
   XtManageChild (y_rc);
-  XtManageChild (border_rc);  
+  XtManageChild (border_rc);
   XtManageChild (label_rc);
   XtManageChild (font_rc);
   XtManageChild (measure_rc);
   XtManageChild (target_rc);
 
-  return; 
+  return;
 
 }
 
@@ -1356,7 +1356,7 @@ XtPointer call_data;
   char *text_value;
 
   text_value = XmTextFieldGetString (w);
-  XtSetArg (args[0], XmNheight, (Dimension) atoi (text_value)); 
+  XtSetArg (args[0], XmNheight, (Dimension) atoi (text_value));
 
   /* which target to set */
 
@@ -1379,7 +1379,7 @@ XtPointer call_data;
   char *text_value;
 
   text_value = XmTextFieldGetString (w);
-  XtSetArg (args[0], XmNwidth, (Dimension) atoi (text_value)); 
+  XtSetArg (args[0], XmNwidth, (Dimension) atoi (text_value));
 
   /* which target to set */
 
@@ -1402,7 +1402,7 @@ XtPointer call_data;
   char *text_value;
 
   text_value = XmTextFieldGetString (w);
-  XtSetArg (args[0], XmNx, (Dimension) atoi (text_value)); 
+  XtSetArg (args[0], XmNx, (Dimension) atoi (text_value));
 
   /* which target to set */
 
@@ -1425,7 +1425,7 @@ XtPointer call_data;
   char *text_value;
 
   text_value = XmTextFieldGetString (w);
-  XtSetArg (args[0], XmNy, (Dimension) atoi (text_value)); 
+  XtSetArg (args[0], XmNy, (Dimension) atoi (text_value));
 
   /* which target to set */
 
@@ -1448,7 +1448,7 @@ XtPointer call_data;
   char *text_value;
 
   text_value = XmTextFieldGetString (w);
-  XtSetArg (args[0], XmNborderWidth, (Dimension) atoi (text_value)); 
+  XtSetArg (args[0], XmNborderWidth, (Dimension) atoi (text_value));
 
   /* which target to set */
 
@@ -1479,7 +1479,7 @@ XtPointer call_data;
 
 
   XtSetArg (args[0], XmNlabelString, tcs);
-  XtSetArg (args[1], XmNtitleString, tcs); 
+  XtSetArg (args[1], XmNtitleString, tcs);
 
   /* which target to set */
 
@@ -1515,7 +1515,7 @@ XtPointer call_data;
 
   XtSetArg (args[0], XmNheight, &h);
   XtSetArg (args[1], XmNwidth, &w);
-  
+
   if (XmToggleButtonGetState (client_data))  { /* get for target[0] */
     XtGetValues (target[0], args, 2);
     printf ("Child 1:\n");
@@ -1528,7 +1528,7 @@ XtPointer call_data;
   fflush (stdout);
 
 }
- 
+
 void GetChildxyPosition (widget, client_data, call_data)
 Widget widget;
 Widget client_data;
@@ -1540,7 +1540,7 @@ XtPointer call_data;
 
   XtSetArg (args[0], XmNx, &x);
   XtSetArg (args[1], XmNy, &y);
-  
+
   if (XmToggleButtonGetState (client_data))  { /* get for target[0] */
     XtGetValues (target[0], args, 2);
     printf ("Child 1:\n");
@@ -1552,7 +1552,7 @@ XtPointer call_data;
   printf ("x %d, y %d\n", (int) x, (int) y);
   fflush (stdout);
 
-} 
+}
 
 void GetChildBorderWidth (widget, client_data, call_data)
 Widget widget;
@@ -1564,7 +1564,7 @@ XtPointer call_data;
   Arg args[1];
 
   XtSetArg (args[0], XmNborderWidth, &b);
-  
+
   if (XmToggleButtonGetState (client_data))  { /* get for target[0] */
     XtGetValues (target[0], args, 1);
     printf ("Child 1:\n");
@@ -1576,13 +1576,4 @@ XtPointer call_data;
   printf ("Border Width %d\n ", (int) b);
   fflush (stdout);
 
-} 
-
-
-
-
-
-
-
-
-
+}

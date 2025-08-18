@@ -55,7 +55,7 @@ unsigned char	combo_box_type;
   }
 
   n = 0;
-  Form = XmCreateForm( Shell1, "Form", args, n ); 
+  Form = XmCreateForm( Shell1, "Form", args, n );
   XtManageChild( Form );
 
   sprintf( buffer, "ComboBox%d", instance );
@@ -71,7 +71,7 @@ unsigned char	combo_box_type;
   XtSetArg( args[n], XmNitems, list_items ); n++;
   XtSetArg( args[n], XmNitemCount, NUM_STRINGS ); n++;
   XtSetArg( args[n], XmNvisibleItemCount, NUM_STRINGS-1 ); n++;
-  ComboBox = XmCreateComboBox( Form, buffer, args, n ); 
+  ComboBox = XmCreateComboBox( Form, buffer, args, n );
   XtManageChild( ComboBox );
 
   XtRealizeWidget( Shell1 );
@@ -81,17 +81,17 @@ unsigned char	combo_box_type;
   (void)printf( "Test Purpose 1\n" );
   XmComboBoxSelectItem( ComboBox, list_items[0] );	/* The first item */
   CommonPause();
- 
+
   /* TP 2 */
   (void)printf( "Test Purpose 2\n" );
   XmComboBoxSelectItem( ComboBox, list_items[3] );	/* The last item */
   CommonPause();
- 
+
   /* TP 3 */
   (void)printf( "Test Purpose 3\n" );
   /* The user scrolls down to display the final item */
   CommonPause();
- 
+
   /* TP 4 */
   (void)printf( "Test Purpose 4\n" );
   (void)printf( "Deliberate Error: XmComboBoxSelectItem called with an "

@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH wsm 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -57,32 +57,32 @@ initial Wsm dialog.
 .SS Options
 Wsm supports the following command-line options:
 .PP
-\fB-fileName, -file, -f\fR      Specifies the name of the workspace 
+\fB-fileName, -file, -f\fR      Specifies the name of the workspace
 .br
                         manager configuration file.
 .PP
-\fB-workspaceList, -wL\fR       Specifies the list of workspaces 
+\fB-workspaceList, -wL\fR       Specifies the list of workspaces
 .br
                         to use.
 .PP
-\fB-backgroundList, -bL\fR      Specifies the background color 
+\fB-backgroundList, -bL\fR      Specifies the background color
 .br
                         to apply to each of the workspaces.
 .PP
 \fB-labelPixmapList, -labelPL\fR
 .br
-                        Specifies the label image to 
+                        Specifies the label image to
 .br
-                        use for each of the workspace 
+                        use for each of the workspace
 .br
                         buttons.
 .PP
 \fB
--currentWorkspace, -cW\fR       Specifies the default workspace 
+-currentWorkspace, -cW\fR       Specifies the default workspace
 .br
                         from the list of workspaces.
 .PP
-\fB-showWSDialog, -s\fR If True, a \fBmenuBar\fR is displayed 
+\fB-showWSDialog, -s\fR If True, a \fBmenuBar\fR is displayed
 .br
                         in the Wsm main dialog window.
 .br
@@ -93,37 +93,37 @@ Wsm will add menu entries to Mwm's menus that provide you with the
 needed tools to use the capabilities of Wsm.  Each window menu will be
 modified by adding the following items:
 .PP
-\fBOccupy...\fR         This will display a dialog window 
+\fBOccupy...\fR         This will display a dialog window
 .br
                         allowing you to select which
 .br
-                        workspaces the associated window 
+                        workspaces the associated window
 .br
-                        should be duplicated into.  
+                        should be duplicated into.
 .br
-                        The dialog also allows either 
+                        The dialog also allows either
 .br
-                        \fBLink\fR or \fBCopy\fR the window 
+                        \fBLink\fR or \fBCopy\fR the window
 .br
                         to each of the selected workspaces.
 .PP
-\fBCopy To All\fR               This will cause the window to be 
+\fBCopy To All\fR               This will cause the window to be
 .br
                         copied to each of the workspaces.
 .PP
-\fBLink To All\fR               This will cause the window to be 
+\fBLink To All\fR               This will cause the window to be
 .br
                         linked to each of the workspaces.
 .PP
-\fBRemove From Workspace\fR     This will remove the window from 
+\fBRemove From Workspace\fR     This will remove the window from
 .br
-                        this workspace. If the window is 
+                        this workspace. If the window is
 .br
                         only in one workspace, then this
 .br
-                        command will be inactive.  It is 
+                        command will be inactive.  It is
 .br
-                        not possible to remove a window 
+                        not possible to remove a window
 .br
                         from all workspaces using this
 .br
@@ -132,13 +132,13 @@ modified by adding the following items:
 Wsm will modify the root menu (specified by Mwm's resource \fBrootMenu\fR)
 by adding the following commands:
 .PP
-\fBSwitch Workspace\fR  This is a cascade menu which 
+\fBSwitch Workspace\fR  This is a cascade menu which
 .br
-                        will cascade to a menu containing 
+                        will cascade to a menu containing
 .br
-                        an entry for each workspace.  Selecting 
+                        an entry for each workspace.  Selecting
 .br
-                        an item will cause Wsm to swith 
+                        an item will cause Wsm to swith
 .br
                         to the corresponding workspace.
 .PP
@@ -146,11 +146,11 @@ by adding the following commands:
 .br
 \fB(Show Workspace Manager)\fR
 .br
-                        This will cause the workspace to be 
+                        This will cause the workspace to be
 .br
-                        unmapped (mapped) and the menu item 
+                        unmapped (mapped) and the menu item
 .br
-                        label to be switched to 
+                        label to be switched to
 .br
                         \fBShow Workspace Manager\fR
 .br
@@ -167,9 +167,9 @@ The menu bar contains the following:
 .br
 ----\fR
 .PP
-\fBSave\fR                      Saves the state of the workspace 
+\fBSave\fR                      Saves the state of the workspace
 .br
-                        manager and the information it 
+                        manager and the information it
 .br
                         holds for each window.
 .br
@@ -179,23 +179,23 @@ The menu bar contains the following:
 .br
                         default, is $HOME/.wsmdb.
 .PP
-\fBSave As...\fR                Prompts for the name of the file 
+\fBSave As...\fR                Prompts for the name of the file
 .br
                         to save the workspace manager
 .br
                         data into.
 .PP
-\fBQuit\fR                      Terminates the workspace.  
+\fBQuit\fR                      Terminates the workspace.
 .br
                         Note that there may be
 .br
-                        a slight delay before the 
+                        a slight delay before the
 .br
                         workspace manager fully
 .br
-                        terminates since it does some 
+                        terminates since it does some
 .br
-                        cleaning-up of Mwm's menus 
+                        cleaning-up of Mwm's menus
 .br
                         and removes the items it added.
 .PP
@@ -204,75 +204,75 @@ The menu bar contains the following:
 .br
 ---------\fR
 .PP
-\fBNew Workspace\fR             Creates a new workspace and 
+\fBNew Workspace\fR             Creates a new workspace and
 .br
                         adds to associated toggle
 .br
                         button to the rowcolumn.
 .PP
-\fBRename Workspaces...\fR       Displays a dialog window 
+\fBRename Workspaces...\fR       Displays a dialog window
 .br
                         you to rename each of the
 .br
-                        workspaces.  It also allows 
+                        workspaces.  It also allows
 .br
                         you to enter a fully qualified
 .br
-                        bitmap to use as the label 
+                        bitmap to use as the label
 .br
                         instead of the name.
 .PP
-\fBSet Background...\fR This displays a dialog that 
+\fBSet Background...\fR This displays a dialog that
 .br
                         allows you to specify the
 .br
                         background color of the workspace.
 .PP
-\fBConfigure Workspaces...\fR       This displays a dialog that 
+\fBConfigure Workspaces...\fR       This displays a dialog that
 .br
                         allows you to move windows
 .br
                         from one workspace to another.
 .br
-                        In the dialog, two lists are 
+                        In the dialog, two lists are
 .br
                         displayed.  On top of each list
 .br
-                        is an option menu that allows 
+                        is an option menu that allows
 .br
-                        you to select the corresponding 
+                        you to select the corresponding
 .br
-                        workspace for the windows 
+                        workspace for the windows
 .br
                         in the list.  By selecting a
 .br
-                        window or windows in the left 
+                        window or windows in the left
 .br
                         list, you can copy or move the to
 .br
-                        the workspace specified in the 
+                        the workspace specified in the
 .br
-                        list on the right.  By selecting 
+                        list on the right.  By selecting
 .br
-                        \fBRemove\fR, you can, instead, 
+                        \fBRemove\fR, you can, instead,
 .br
-                        remove them from the workspace 
+                        remove them from the workspace
 .br
-                        on the left.  The buttons at the 
+                        on the left.  The buttons at the
 .br
-                        bottom, \fBClient\fR and 
+                        bottom, \fBClient\fR and
 .br
-                        \fBWindow\fR, will cause either 
+                        \fBWindow\fR, will cause either
 .br
-                        all windows for a client to 
+                        all windows for a client to
 .br
-                        automatically be selected, 
+                        automatically be selected,
 .br
                         or individual windows.
 .PP
-\fBDelete Workspaces...\fR       This displays a dialog prompting 
+\fBDelete Workspaces...\fR       This displays a dialog prompting
 .br
-                        you to select the workspace(s) 
+                        you to select the workspace(s)
 .br
                         you with to delete.
 .PP
@@ -281,9 +281,9 @@ The menu bar contains the following:
 .br
 ----\fR
 .PP
-\fBHide Workspace Manager\fR    This will cause the workspace 
+\fBHide Workspace Manager\fR    This will cause the workspace
 .br
-                        manager to unmap.  Make sure that 
+                        manager to unmap.  Make sure that
 .br
                         Wsm has inserted the command
 .br
@@ -330,32 +330,30 @@ necessary.
 .PP
 Wsm supports the following resources:
 .PP
-\fBfileName\fR          Specifies the name of the workspace 
+\fBfileName\fR          Specifies the name of the workspace
 .br
                         manager configuration file.
 .PP
-\fBworkspaceList\fR             Specifies the list of workspaces 
+\fBworkspaceList\fR             Specifies the list of workspaces
 .br
                         to use.
 .PP
-\fBbackgroundList\fR            Specifies the background color 
+\fBbackgroundList\fR            Specifies the background color
 .br
                         to apply to each of the workspaces.
 .PP
-\fBlabelPixmapList\fR           Specifies the label image to 
+\fBlabelPixmapList\fR           Specifies the label image to
 .br
-                        use for each of the workspace 
+                        use for each of the workspace
 .br
                         buttons.
 .PP
-\fBcurrentWorkspace\fR  Specifies the default workspace 
+\fBcurrentWorkspace\fR  Specifies the default workspace
 .br
                         from the list of workspaces.
 .PP
-\fBuseMenuBar\fR                If True, a \fBmenuBar\fR is 
+\fBuseMenuBar\fR                If True, a \fBmenuBar\fR is
 .br
                         displayed in the Wsm main dialog
 .br
                         window.  The default is True.
-
-

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -180,19 +180,19 @@ main (int argc, char** argv)
 {
   Widget mainWin, frame;
   XEvent event;
-  
+
 
   pInfoList = (PannerInfoRec *) XtMalloc(sizeof(PannerInfoRec) *
 					 MAX_DISPLAY_COUNT);
   for (DSP = 0;  DSP < MAX_DISPLAY_COUNT;  DSP++)
     pInfoList[DSP].display = NULL;
   DSP = LOCAL;
-    
-  XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
-    
+
+  XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);
+
 
   pInfoList[LOCAL].shell   = XtVaOpenApplication(&app, "Panner", NULL, 0,
-					       &argc, argv, 
+					       &argc, argv,
                                                fallback,
                                                sessionShellWidgetClass, NULL);
   pInfoList[LOCAL].display = XtDisplay(pInfoList[LOCAL].shell);
@@ -218,7 +218,7 @@ main (int argc, char** argv)
   XtAddEventHandler(notebook, ExposureMask, False, HandleInitialExpose, NULL);
 
   XtMapWidget(pInfoList[LOCAL].shell);
-  
+
   for (;;)
     {
       XtAppNextEvent(app, &event);
@@ -291,13 +291,13 @@ OpenNewDisplay(
    *  We must set-up a destination callback function that
    *  does the actual transfer of the parameter info to Mwm.
    */
-  
+
   pInfoList[newDsp].utmShell
     = XtVaCreateManagedWidget("utmShell", xmDrawingAreaWidgetClass,
 			      pInfoList[newDsp].shell,
 			      XmNmappedWhenManaged, False,
 			      NULL);
-  
+
   XtAddCallback(pInfoList[newDsp].utmShell, XmNdestinationCallback,
 		DestinationCB, &(pInfoList[newDsp]));
 
@@ -352,7 +352,7 @@ OpenNewDisplay(
 		                          XmNheight, &canvasH, NULL);
   pInfoList[newDsp].thumbX = (int)canvasW/2 - (int)pInfoList[newDsp].thumbW/2;
   pInfoList[newDsp].thumbY = (int)canvasH/2 - (int)pInfoList[newDsp].thumbH/2;
-  
+
   /* Setup the atoms needed to communicate with Mwm. Check screen number! */
   sprintf(selectionName, WM_SELECTION_FORMAT,
 	  XScreenNumberOfScreen(pInfoList[newDsp].screen));
@@ -584,7 +584,7 @@ HandlePropertyChange (XEvent *event)
 	  XTranslateCoordinates(pInfoList[LOCAL].display,
 				XtWindow(pInfoList[LOCAL].shell),
 				rWin, x, y, &newX, &newY, &child);
-  
+
 	  if ((newX == origX) && (newY == origY))
 	    pinnedState = VERIFIED;
 	  else
@@ -629,7 +629,7 @@ DrawWindows (PannerInfoRec *pInfoList)
   unsigned int  childCount, width, height;
   int (*oldHandler)();
 
-  
+
   realRoot = RootWindow(pInfoList[DSP].display,
 			XScreenNumberOfScreen(pInfoList[DSP].screen));
 
@@ -644,15 +644,15 @@ DrawWindows (PannerInfoRec *pInfoList)
       for (i=0; i<childCount; i++)
 	{
 	  XWindowAttributes attr;
-	  
+
 	  XGetWindowAttributes(pInfoList[DSP].display, child[i], &attr);
-	  
+
 	  if (attr.map_state == IsViewable)
 	    {
 	      TranslateCoordinates(&pInfoList[DSP],
 				   attr.x, attr.y, attr.width, attr.height,
 				   &x, &y, &width, &height);
-	      
+
 	      SetWindowColor (&pInfoList[LOCAL], i);
 	      XFillRectangle(pInfoList[LOCAL].display,
 			     XtWindow(pInfoList[DSP].canvas),
@@ -688,7 +688,7 @@ SetupColorsAndGCs()
 {
   int i;
   XColor color;
-  Colormap cmap = DefaultColormapOfScreen(pInfoList[LOCAL].screen);    
+  Colormap cmap = DefaultColormapOfScreen(pInfoList[LOCAL].screen);
 
   /*
    * set-up the global GCs.
@@ -795,7 +795,7 @@ TranslateCoordinates (
 /*----------------------------------------------------------------*
  |                          IgnoreError                           |
  *----------------------------------------------------------------*/
-static int 
+static int
 IgnoreError (Display *dsp, XErrorEvent *event)
 {
   /*
@@ -834,7 +834,7 @@ StartTracking (
 
       if ((event->xbutton.x < pInfo->thumbX) ||
 	  (event->xbutton.y < pInfo->thumbY) ||
-	  (event->xbutton.x > pInfo->thumbX + (int)pInfo->thumbW) || 
+	  (event->xbutton.x > pInfo->thumbX + (int)pInfo->thumbW) ||
 	  (event->xbutton.y > pInfo->thumbY + (int)pInfo->thumbH))
 	{
 	  /*
@@ -914,7 +914,7 @@ MoveScreen (
   XtPointer     msg, fulldata;
   unsigned long size;
 
-  
+
   DrawThumb(pInfo);
 
   dx = newX - pInfo->thumbX;
@@ -954,7 +954,7 @@ MoveScreen (
 
     display = XtDisplay(notebook); /* notebook just happens to be a global. */
     window = XtWindow(notebook);
-    
+
     MY_PANNER_PROP = XInternAtom(display, "MY_PANNER_PROP", False);
 
 
@@ -1088,7 +1088,7 @@ CreateMenuBar (Widget parent)
  |                             MenuCB                             |
  *----------------------------------------------------------------*/
 static void
-MenuCB (Widget w, XtPointer clientData, XtPointer callData) 
+MenuCB (Widget w, XtPointer clientData, XtPointer callData)
 {
 
   switch ((long)clientData)
@@ -1193,14 +1193,14 @@ GetTimestamp (Display *dsp)
 
   if (! (attr.your_event_mask & PropertyChangeMask))
     XSelectInput(dsp, rwin, attr.your_event_mask | PropertyChangeMask);
-  
+
   XChangeProperty(dsp, rwin, timeProp, timeProp, 8, PropModeAppend, NULL, 0);
-  
+
   XWindowEvent(dsp, rwin, PropertyChangeMask, &event);
-  
+
   if (! (attr.your_event_mask & PropertyChangeMask))
     XSelectInput(dsp, rwin, attr.your_event_mask);
-  
+
   return(event.xproperty.time);
 }
 
@@ -1231,7 +1231,7 @@ static void CheckPinnedState ()
 
   XTranslateCoordinates(pInfoList[LOCAL].display, XtWindow(pInfoList[LOCAL].shell),
 			rWin, x, y, &origX, &origY, &child);
-  
+
   size  = sizeof(CARD32);  /* panDx */
   size += sizeof(CARD32);  /* panDy */
   size += sizeof(CARD8);   /* config */

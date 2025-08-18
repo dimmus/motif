@@ -19,23 +19,23 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-#) This is a toggleButton gadget with the following characteristics:   
-#	- width is 300   
-#	- height is 150   
-#	- traversalOn is true   
+#) This is a toggleButton gadget with the following characteristics:
+#	- width is 300
+#	- height is 150
+#	- traversalOn is true
 #	- highlightOnEnter is true
-#   	- shadowThickness is 5   
-#	- visibleWhenOff is false   
-#	- selectColor is red 
-#  	- valueChangedCallback is ON   
+#   	- shadowThickness is 5
+#	- visibleWhenOff is false
+#	- selectColor is red
+#  	- valueChangedCallback is ON
 #	- indeterminateInsensitivePixmap is ?
 #	- set is true
 #	All other resources are set by default.
- 
+
 
 CompareVisual S_MAIN_WIDGET
 LocatePointer Toggle_Button_Gadget

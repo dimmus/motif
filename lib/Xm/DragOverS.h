@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDragOverS_h
 #define _XmDragOverS_h
 
@@ -51,4 +51,3 @@ externalref WidgetClass	xmDragOverShellWidgetClass;
 
 #endif /* _XmDragOverS_h */
 /* DON'T ADD STUFF AFTER THIS #endif */
-

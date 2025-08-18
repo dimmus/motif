@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,14 +19,14 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: periodic.uil /main/8 1995/07/14 12:00:32 drk $
 !*******************************************************************************
 
-module sample 
+module sample
     version = 'v1.1'
     names = case_sensitive
     objects = {
@@ -1648,7 +1648,7 @@ object list_box_1 : XmScrolledList {
 };
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
+
 object
     menu_bar_1 : XmMenuBar {
 	    arguments {
@@ -1837,12 +1837,12 @@ object
 
 object
     Quit : XmPushButton {
-	arguments { 
+	arguments {
 		arguments menus_args;
 !	    x = 10;
 !	    y = 200;
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure quit_button_activate();
 	};
     };

@@ -44,20 +44,20 @@ extern "C" {
 
 /* Flags */
 
-typedef enum { XmTRANSFER_DONE_SUCCEED = 0, XmTRANSFER_DONE_FAIL, 
-	       XmTRANSFER_DONE_CONTINUE, XmTRANSFER_DONE_DEFAULT 
+typedef enum { XmTRANSFER_DONE_SUCCEED = 0, XmTRANSFER_DONE_FAIL,
+	       XmTRANSFER_DONE_CONTINUE, XmTRANSFER_DONE_DEFAULT
 	     } XmTransferStatus;
 
 enum { XmSELECTION_DEFAULT = 0, XmSELECTION_INCREMENTAL,
        XmSELECTION_PERSIST, XmSELECTION_SNAPSHOT,
        XmSELECTION_TRANSACT };
 
-enum { XmCONVERTING_NONE = 0, 
-       XmCONVERTING_SAME = 1, 
+enum { XmCONVERTING_NONE = 0,
+       XmCONVERTING_SAME = 1,
        XmCONVERTING_TRANSACT = 2,
        XmCONVERTING_PARTIAL = 4 };
 
-enum { XmCONVERT_DEFAULT = 0, XmCONVERT_MORE, 
+enum { XmCONVERT_DEFAULT = 0, XmCONVERT_MORE,
        XmCONVERT_MERGE, XmCONVERT_REFUSE, XmCONVERT_DONE };
 
 /* Callback structures */
@@ -85,7 +85,7 @@ typedef struct {
 	int		reason;
   	XEvent		*event;
 	Atom		selection;
-	XtEnum		operation;	
+	XtEnum		operation;
 	int		flags;
 	XtPointer	transfer_id;
 	XtPointer	destination_data;

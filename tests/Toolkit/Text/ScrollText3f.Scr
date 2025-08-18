@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText3f.scr /main/5 1995/07/17 20:40:56 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,14 +20,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Quick Transfer:
 #  #ifdef	MOTIF1_1
-#  
+#
 #  @)    Btn2 Drag         -- copy secondary selection to
 #                           destination cursor
 #  @)    Ctrl Btn2 Drag    -- copy secondary selection to
@@ -131,7 +131,7 @@ CompareVisual Text4
 
 #  @)    KCancel           -- cancels quick transfer operations
 #     (Region between Btn2 Press and pointer is underlined)
-#   
+#
 LocatePointer Text1 RTextChar 18
 ClickMB Btn1
 LocatePointer Text1 RTextChar 5
@@ -416,7 +416,7 @@ ClickKey <Shift> KQuickPaste
 CompareVisual Text3
 
 #  !)
-#  #) Try all the above with: 
+#  #) Try all the above with:
 #  @)      - source and destination in same widget
 ## Done above.
 #  @)      - source and destination in different widgets in same window

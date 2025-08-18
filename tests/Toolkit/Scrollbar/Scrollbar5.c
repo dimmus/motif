@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scrollbar5.c /main/6 1995/07/13 19:15:09 drk $"
@@ -50,8 +50,8 @@ char **argv;
    int n;
 
    CommonTestInit(argc, argv);
-    
-   frame = 
+
+   frame =
       XmCreateFrame(Shell1, "frame", NULL, 0);
    XtManageChild(frame);
    n = 0;
@@ -103,7 +103,7 @@ caddr_t call_data;
   int reason;
   int pixel;
 
-  XmScrollBarCallbackStruct * call_value = 
+  XmScrollBarCallbackStruct * call_value =
     (XmScrollBarCallbackStruct *) call_data;
 
   reason = call_value -> reason;
@@ -156,15 +156,3 @@ caddr_t call_data;
 
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-

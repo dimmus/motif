@@ -34,7 +34,7 @@ void
 main (int argc, char **argv)
 {
    Display    *mydisplay;
-   int        erster_aufruf=1; 
+   int        erster_aufruf=1;
    Window     win_fix_pos, win_toggle;
    XEvent     event;
    XSizeHints hint;
@@ -42,19 +42,19 @@ main (int argc, char **argv)
    CommonTestInit (argc,argv);
 
 
-   
+
    win_fix_pos = XCreateSimpleWindow (display, DefaultRootWindow(display),
                            50, 50, 200, 200, 0, 0, 1);
 
    win_toggle = XCreateSimpleWindow (display, DefaultRootWindow(display),
                            500, 500, 200, 200, 0, 0, 0);
- 
+
    hint.flags = (USPosition | USSize | PMinSize | PMaxSize |
                  PResizeInc | PBaseSize | PAspect);
 
    hint.x = 50;
    hint.y = 50;
-   hint.width  = 200; 
+   hint.width  = 200;
    hint.height = 200;
    hint.max_width  = 200;
    hint.max_height = 200;
@@ -93,12 +93,10 @@ main (int argc, char **argv)
        printf ("\nMove after Maximize was executed\n");
        erster_aufruf=0;
      }
-    
+
 
 
 CommonPause();
 
 XtAppMainLoop(app_context);
 }
-
-

@@ -44,7 +44,7 @@ fi
 export LANG XFILESEARCHPATH XAPPLRESDIR XNLSPATH
 typeset sysname=
 if [ -n "$(whence uname)" ]
-then 
+then
 	typeset sysname=$(uname -s)
 else
 	typeset sysname="unix"
@@ -118,6 +118,6 @@ case $language in
 	echo unknown language $language -- try running in C locale
         XAPPLRESDIR=$(pwd)
 	unset LANG
-	;;	
+	;;
 esac
 ./fileview -ok

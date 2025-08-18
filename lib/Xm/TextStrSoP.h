@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmTextStrSoP_h
 #define _XmTextStrSoP_h
 
@@ -69,9 +69,9 @@ typedef void (*RemoveWidgetProc)(XmTextSource,
 
 typedef XmTextPosition (*ReadProc)(XmTextSource,
 				   XmTextPosition,	/* starting position */
-				   XmTextPosition,	/* The last position 
+				   XmTextPosition,	/* The last position
 							   we're interested in.
-							   Don't return info 
+							   Don't return info
 							   about any later
 							   positions. */
 				   XmTextBlock);	/* RETURN: text read */

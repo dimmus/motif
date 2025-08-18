@@ -28,4 +28,3 @@ osfAddMode	:Shift		<Key>F8
 osfCopy		:		<Key>SunCopy
 osfCut		:		<Key>SunCut
 osfPaste	:		<Key>SunPaste
-

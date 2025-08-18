@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: wsm_cb.c /main/8 1997/05/02 10:05:18 dbl $"
@@ -63,7 +63,7 @@ Boolean copy_mode = True;
 /**********************************************************************/
 /*                        WSM Dialog Interface                       */
 /**********************************************************************/
-void 
+void
 InitializeInterface(WSM_UI* wsm_ui)
 {
   int num_rooms = GetNumberSpaces();
@@ -77,7 +77,7 @@ InitializeInterface(WSM_UI* wsm_ui)
   wsm_ui->to_space = NULL;
 }
 
-void 
+void
 HideWsm()
 {
     wsm_shown = False;
@@ -86,13 +86,13 @@ HideWsm()
   XtPopdown(XtParent(wsm_ui->configure_form));
   XtPopdown(XtParent(wsm_ui->name_form));
   XtPopdown(XtParent(wsm_ui->delete_form));
-  XtPopdown(XtParent(wsm_ui->save_as_form)); 
+  XtPopdown(XtParent(wsm_ui->save_as_form));
   XtUnmapWidget(shell);
 }
 
 
 
-void 
+void
 ShowWsm()
 {
     wsm_shown = True;
@@ -105,7 +105,7 @@ ShowWsm()
 /*                       Workspace Panel                              */
 /**********************************************************************/
 
-Widget 
+Widget
 CreateWorkspacePanel(Widget shell, WSM_UI* wsm_ui, Boolean show_menu)
 {
   Widget parent;
@@ -113,19 +113,19 @@ CreateWorkspacePanel(Widget shell, WSM_UI* wsm_ui, Boolean show_menu)
   int i;
   Space *space;
   parent = CreateWorkspacePanelBX(shell,wsm_ui, show_menu);
-  
+
   space = space_list;
   for (i = 0; space != NULL && i < wsm_ui->num_space_buttons; i++)
     {
       xmstr = XmStringCreateLtoR(space->name, XmSTRING_DEFAULT_CHARSET);
-      XtVaSetValues(wsm_ui->space_button[i],XmNlabelString,xmstr,NULL);    
+      XtVaSetValues(wsm_ui->space_button[i],XmNlabelString,xmstr,NULL);
       XmStringFree(xmstr);
-      space = space->next;      
+      space = space->next;
     }
   return parent;
 }
 
-void 
+void
 CreateNewSpaceButton(int i, char *name, WSM_UI *wsm_ui)
 {
   int argcnt;
@@ -202,7 +202,7 @@ NewActivateCB(Widget w, XtPointer client, XtPointer call)
   UpdateSpaceList(wsm_ui->background_list);
 #ifndef _NO_OCCUPY_DIALOG
   UpdateSpaceList(wsm_ui->occupy_list);
-#endif  
+#endif
 }
 
 /* ARGSUSED */
@@ -238,7 +238,7 @@ ExitCB(Widget w, XtPointer client, XtPointer call)
 /**********************************************************************/
 
 
-void 
+void
 CreateFromOptionButton(int i, char *name)
 {
   int argcnt;
@@ -264,7 +264,7 @@ CreateFromOptionButton(int i, char *name)
 
 
 
-void 
+void
 CreateToOptionButton(int i, char *name)
 {
   int argcnt;
@@ -294,12 +294,12 @@ CreateToOptionButton(int i, char *name)
   XtManageChild(wsm_ui->to_option_button[i+1]);
 }
 
-void 
+void
 UpdateList(Widget list,Space *s)
 {
 
  char *str;
- XmString xmstr;	
+ XmString xmstr;
  WorkWindowList *w_list;
 
  w_list = s->w_list;
@@ -312,7 +312,7 @@ UpdateList(Widget list,Space *s)
        {
 	 str = (char*) XtMalloc((strlen(w_list->work_win->name) + 15) * sizeof(char));
 	 sprintf(str,"0x%x %s",(unsigned)w_list->work_win->window, w_list->work_win->name);
-     
+
 	 xmstr = XmStringCreateLocalized(str);
 	 XmListAddItemUnselected(list,xmstr,0);
 	 XmStringFree(xmstr);
@@ -320,8 +320,8 @@ UpdateList(Widget list,Space *s)
        }
      w_list = w_list->next;
    }
- 
-}	
+
+}
 
 void
 UpdateBothList(Space *s)
@@ -344,15 +344,15 @@ UpdateButtons(WorkWindow *w_window)
     {
       if (w_window->linked)
 	XmToggleButtonSetState(wsm_ui->link_toggle,True,True);
-      else	
+      else
 	XmToggleButtonSetState(wsm_ui->copy_toggle,True,True);
       if (w_window->s_list->next == NULL || w_window->window == 0 ||
 	  _WSMGetConfigFormatType(w_window->window) == WSM_ICON_FMT)
 	XtVaSetValues(wsm_ui->delete_button,XmNsensitive,False,NULL);
-      else 
+      else
 	XtVaSetValues(wsm_ui->delete_button,XmNsensitive,True,NULL);
-      if (w_window->window == 0 || 
-	  _WSMGetConfigFormatType(w_window->window) == WSM_ICON_FMT || 
+      if (w_window->window == 0 ||
+	  _WSMGetConfigFormatType(w_window->window) == WSM_ICON_FMT ||
 	  wsm_ui->to_space == all_space)
 	XtVaSetValues(wsm_ui->move_button,XmNsensitive,False,NULL);
       else
@@ -375,15 +375,15 @@ CreateConfigureCB(Widget w, XtPointer client, XtPointer call)
 	    space_id = GetSpaceID(current_space);
 	    if (space_id != -1)
 	      {
-		XtVaSetValues(wsm_ui->from_option_menu, 
+		XtVaSetValues(wsm_ui->from_option_menu,
 			      XmNmenuHistory, wsm_ui->from_option_button[space_id],
 			      NULL);
-		XtVaSetValues(wsm_ui->to_option_menu, 
+		XtVaSetValues(wsm_ui->to_option_menu,
 			      XmNmenuHistory, wsm_ui->to_option_button[space_id],
 			      NULL);
 	      }
 	}
-    }	
+    }
   XtManageChild(wsm_ui->configure_form);
   XtPopup(XtParent(wsm_ui->configure_form), XtGrabNone);
 
@@ -394,7 +394,7 @@ void
 MoveCB(Widget w, XtPointer client, XtPointer call)
 {
   int pos_count = 0;
-  int *pos_list;	
+  int *pos_list;
   int i;
 			WorkWindow *w_window;
   WSM_UI *wsm_ui = (WSM_UI*)client;
@@ -442,7 +442,7 @@ ToWorkspaceCB(Widget w, XtPointer client, XtPointer call)
   XtVaGetValues(w,XmNuserData,&room_num, NULL);
   if (room_num != 0)
       space = GetSpaceFromID(room_num-1);
-  else 
+  else
       space = all_space;
   if (space != NULL)
     {
@@ -460,23 +460,23 @@ ToWorkspaceCB(Widget w, XtPointer client, XtPointer call)
 void
 FromWorkspaceCB(Widget w, XtPointer client, XtPointer call)
 {
-  
+
   WSM_UI *wsm_ui = (WSM_UI*)client;
   int room_num;
   Space *space;
-  
+
   XtVaGetValues(w,XmNuserData,&room_num, NULL);
   space = GetSpaceFromID(room_num-1);
   if (space != NULL)
     {
       wsm_ui->from_space = space;
       UpdateList(wsm_ui->from_list,space);
-    }	
+    }
   else PRINT("Not Found %d\n", room_num);
 
 }
 
-void 
+void
 Copy(WSM_UI* wsm_ui)
 {
   int pos_count = 0;
@@ -498,7 +498,7 @@ Copy(WSM_UI* wsm_ui)
   if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
-void 
+void
 Link(WSM_UI* wsm_ui)
 {
   int pos_count = 0;
@@ -596,7 +596,7 @@ MultSelectFromListCB(Widget w,XtPointer client,XtPointer call)
       wsm_ui->w_window = w_window;
       UpdateButtons(w_window);
       GetWorkWindowClientIDs(item_pos-1, wsm_ui->from_space,&select_ids,&num_select);
-     
+
       if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
 	{
 	  for (i = 0; i < pos_count; i++)
@@ -610,7 +610,7 @@ MultSelectFromListCB(Widget w,XtPointer client,XtPointer call)
 		if (pos_list[i] != item_pos)
 		  XmListDeselectPos(wsm_ui->from_list,pos_list[i]);
 	      }
-	}	
+	}
       if (num_select > 0)
 	{
 	  for (i = 0; i < num_select; i++)
@@ -665,12 +665,12 @@ CreateNameCB(Widget w, XtPointer client, XtPointer call)
 {
 
   WSM_UI *wsm_ui = (WSM_UI*)client;
-  
+
   if (connected )
     {
       UpdateSpaceList(wsm_ui->name_list);
-    }	
-  
+    }
+
   XtManageChild(wsm_ui->name_form);
   XmListSelectPos(wsm_ui->name_list,1,True);
 
@@ -679,10 +679,10 @@ CreateNameCB(Widget w, XtPointer client, XtPointer call)
 }
 
 
-void 
+void
 UpdateSpaceList(Widget list)
 {
-  XmString xmstr;	
+  XmString xmstr;
   Space *s = space_list;
 
   XmListDeleteAllItems(list);
@@ -718,15 +718,15 @@ SelectNameSpaceCB(Widget w, XtPointer client, XtPointer call)
 }
 
 
-void 
+void
 ChangeSpaceName(WSM_UI* wsm_ui,Space *space,int wsm_index)
 {
   XmString xmstr;
 
   xmstr = XmStringCreateLtoR(space->name, XmSTRING_DEFAULT_CHARSET);
-  XtVaSetValues(wsm_ui->space_button[wsm_index],XmNlabelString,xmstr,NULL);  
-  XtVaSetValues(wsm_ui->from_option_button[wsm_index],XmNlabelString,xmstr,NULL);  
-  XtVaSetValues(wsm_ui->to_option_button[wsm_index],XmNlabelString,xmstr,NULL);  
+  XtVaSetValues(wsm_ui->space_button[wsm_index],XmNlabelString,xmstr,NULL);
+  XtVaSetValues(wsm_ui->from_option_button[wsm_index],XmNlabelString,xmstr,NULL);
+  XtVaSetValues(wsm_ui->to_option_button[wsm_index],XmNlabelString,xmstr,NULL);
   XmStringFree(xmstr);
   UpdateSpaceList(wsm_ui->name_list);
   UpdateSpaceList(wsm_ui->delete_list);
@@ -742,7 +742,7 @@ void
 NameActivateCB(Widget w, XtPointer client, XtPointer call)
 {
   XmProcessTraversal(wsm_ui->pixmap_text,XmTRAVERSE_CURRENT);
-  
+
 }
 
 
@@ -797,7 +797,7 @@ NameOkActivateCB(Widget w, XtPointer client, XtPointer call)
 	}
     }
   if (pos_count > 0) XtFree((XtPointer)pos_list);
- 
+
 }
 
 
@@ -829,7 +829,7 @@ CreateBackgroundCB(Widget w, XtPointer client, XtPointer call)
   if (connected )
     {
       UpdateSpaceList(wsm_ui->background_list);
-    }	
+    }
    XtManageChild(wsm_ui->background_form);
   XmListSelectPos(wsm_ui->background_list,1,True);
   XtPopup(XtParent(wsm_ui->background_form), XtGrabNone);
@@ -897,7 +897,7 @@ BackgroundActivateCB(Widget w, XtPointer client, XtPointer call)
 	}
     }
   if (pos_count > 0) XtFree((XtPointer)pos_list);
-  
+
 }
 
 
@@ -923,8 +923,8 @@ CreateDeleteCB(Widget w, XtPointer client, XtPointer call)
   if (connected )
     {
       UpdateSpaceList(wsm_ui->delete_list);
-    }	
-  
+    }
+
   XtManageChild(wsm_ui->delete_form);
   XtPopup(XtParent(wsm_ui->delete_form), XtGrabNone);
 }
@@ -943,7 +943,7 @@ DismissDeleteCB(Widget w, XtPointer client, XtPointer call)
 /* ARGSUSED */
 void
 DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
-{  
+{
   Space *space;
   int pos_count = 0;
   int *pos_list;
@@ -964,9 +964,9 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
 	  XtDestroyWidget(wsm_ui->to_option_button[pos_list[0]-1]);
 	  for (i = pos_list[0]-1; i < wsm_ui->num_space_buttons-1; i++)
 	    {
-	      wsm_ui->space_button[i] = wsm_ui->space_button[i+1];	
+	      wsm_ui->space_button[i] = wsm_ui->space_button[i+1];
 	      XtVaSetValues(wsm_ui->space_button[i], XmNuserData,i+1,NULL);
-	      wsm_ui->from_option_button[i] = wsm_ui->from_option_button[i+1]; 
+	      wsm_ui->from_option_button[i] = wsm_ui->from_option_button[i+1];
 	      XtVaSetValues(wsm_ui->from_option_button[i],XmNuserData,i+1,NULL);
 	      wsm_ui->to_option_button[i] = wsm_ui->to_option_button[i+1];
 	      XtVaSetValues(wsm_ui->to_option_button[i],XmNuserData,i+1,NULL);
@@ -978,9 +978,9 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
 	  UpdateSpaceList(wsm_ui->background_list);
 #ifndef _NO_OCCUPY_DIALOG
 	  UpdateSpaceList(wsm_ui->occupy_list);
-#endif	  
+#endif
 	}
-    } 
+    }
   if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
@@ -1008,7 +1008,7 @@ SelectDeleteCB(Widget w, XtPointer client, XtPointer call)
 	    {
 	      if (w_list->work_win->s_list->next == NULL)
 		{
-		  XtVaSetValues(wsm_ui->ok_button,XmNsensitive,False,NULL);	
+		  XtVaSetValues(wsm_ui->ok_button,XmNsensitive,False,NULL);
 		  return;
 		}
 	      w_list = w_list->next;
@@ -1052,17 +1052,17 @@ SaveAsOkCB(Widget w, XtPointer client, XtPointer call)
 	  file_name = XtRealloc(file_name, new_length * sizeof(char));
 	  strcpy(file_name,home_name);
 	  strcat(file_name, "/");
-	  strcat(file_name,new_file_name);	  
+	  strcat(file_name,new_file_name);
 	}
       else
 	{
 	  new_length = strlen(new_file_name) + 1;
-	  file_name = XtRealloc(file_name, new_length * sizeof(char));	  
+	  file_name = XtRealloc(file_name, new_length * sizeof(char));
 	  strcpy(file_name,new_file_name);
 	}
-      
+
       SendSaveWsm(file_name);
-      XtPopdown(XtParent(wsm_ui->save_as_form)); 
+      XtPopdown(XtParent(wsm_ui->save_as_form));
       XtFree((XtPointer)new_file_name);
     }
 }
@@ -1085,10 +1085,10 @@ DismissSaveAsCB(Widget w, XtPointer  client, XtPointer call)
 /**********************************************************************/
 
 
-void 
+void
 UpdateOccupySpaceList(Widget list)
 {
-  XmString xmstr;	
+  XmString xmstr;
   Space *s = space_list;
 
   XmListDeleteAllItems(list);
@@ -1111,11 +1111,11 @@ CreateOccupy(WorkWindow *w_window)
   if (connected )
     {
       UpdateSpaceList(wsm_ui->occupy_list);
-    }	
-  
+    }
+
   if (w_window->linked)
     XmToggleButtonSetState(wsm_ui->link_occupy_toggle,True,True);
-  else	
+  else
     XmToggleButtonSetState(wsm_ui->copy_occupy_toggle,True,True);
   XtManageChild(wsm_ui->occupy_form);
   XtPopup(XtParent(wsm_ui->occupy_form), XtGrabNone);
@@ -1135,7 +1135,7 @@ DismissOccupyCB(Widget w, XtPointer client, XtPointer call)
 /* ARGSUSED */
 void
 OccupyActivateCB(Widget w, XtPointer client, XtPointer call)
-{  
+{
   Space *space;
   int pos_count = 0;
   int *pos_list;
@@ -1151,18 +1151,18 @@ OccupyActivateCB(Widget w, XtPointer client, XtPointer call)
 	    {
 		if (copy_mode)
 		{
-		    PRINT("Copy to space: %s\n", space->name);	
+		    PRINT("Copy to space: %s\n", space->name);
 		    CopyWindow(wsm_ui->occupy_window,current_space,space);
 		}
 		else
 		{
-		    PRINT("Link to space: %s\n", space->name);	
+		    PRINT("Link to space: %s\n", space->name);
 		    LinkWindow(wsm_ui->occupy_window,current_space,space);
 		}
 	    }
 	  else PRINT("Space == NULL\n");
 	}
-    } 
+    }
   if (pos_count > 0) XtFree((XtPointer)pos_list);
   XtPopdown(XtParent(wsm_ui->occupy_form));
 }

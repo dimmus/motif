@@ -19,9 +19,9 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-# 
+#
 # Original History:
 #
 # Revision 1.1.4.2  1993/02/17  18:39:50  yak
@@ -31,17 +31,17 @@
 # Revision 1.1.2.2  1992/07/30  20:18:16  scholz
 # 	 	Added CompareVisuals.
 # 	 	[1992/07/30  14:15:26  scholz]
-# 
+#
 # 	 	Initial version.
 # 	 	[1992/07/27  19:54:27  scholz]
-# 
+#
 
 #  @) A client with a scale should appear. There should be
 #     some X Toolkit Warnings in the stdout window.
 #  #) Press and hold MB1 on scale slider. Drag slider up and down the
 #     scale. The number to the left of the scale should
 #     change from 0 at the bottom to 100 at the top.
-#     Release MB1. 
+#     Release MB1.
 LocatePointer Scale1 RScaleSlider
 DragSliderValue Up Max
 CompareVisual Scale1
@@ -50,7 +50,7 @@ CompareVisual Scale1
 DragSliderValue Up 65
 CompareVisual Scale1
 
-#  #) Enlarge client window to the right. 
+#  #) Enlarge client window to the right.
 WindowResize Shell1 SouthEast 100 200
 CompareVisual Shell1
 
@@ -58,7 +58,7 @@ CompareVisual Shell1
 Continue
 
 #  #) A message to the stdout window should state that
-#  XmNtitleString = Noise Level 
+#  XmNtitleString = Noise Level
 CompareVisual Scale1
 
 #  C)
@@ -68,7 +68,7 @@ Continue
 #  #) Press and hold MB1 on scale slider. Drag slider up
 #     and down the scale. Number on the left of the scale
 #     should change from 0 at top to 100 at bottom.
-#     Release MB1 and resize the client window. 
+#     Release MB1 and resize the client window.
 LocatePointer Scale1 RScaleSlider
 DragSliderValue Down Max
 CompareVisual Scale1

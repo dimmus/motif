@@ -22,31 +22,31 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer BulletinBoard  
+TRACE:(1) LocatePointer BulletinBoard
 TRACE:(2) ClickKey KTab
 TRACE:(3) ClickKey Kb
 Received keypress event for b.
-TRACE:(4) CompareVisual BulletinBoard 
-TRACE:(5) LocatePointer DrawingArea1  
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) DragXYRelative Left 50 
-TRACE:(8) ClickMB Btn1 
-TRACE:(9) DragXYRelative 542 20 20 
-TRACE:(10) ClickMB Btn1 
-TRACE:(11) DragXYRelative 542 -30 25 
-TRACE:(12) ClickMB Btn1 
-TRACE:(13) DragXYRelative 542 -40 -40 
-TRACE:(14) ClickMB Btn1 
+TRACE:(4) CompareVisual BulletinBoard
+TRACE:(5) LocatePointer DrawingArea1
+TRACE:(6) ClickMB Btn1
+TRACE:(7) DragXYRelative Left 50
+TRACE:(8) ClickMB Btn1
+TRACE:(9) DragXYRelative 542 20 20
+TRACE:(10) ClickMB Btn1
+TRACE:(11) DragXYRelative 542 -30 25
+TRACE:(12) ClickMB Btn1
+TRACE:(13) DragXYRelative 542 -40 -40
+TRACE:(14) ClickMB Btn1
 TRACE:(15) LocatePointerXYAbs 200 200
-TRACE:(16) ClickMB Btn2 
+TRACE:(16) ClickMB Btn2
 TRACE:(17) LocatePointerXYAbs 250 200
-TRACE:(18) ClickMB Btn1 
+TRACE:(18) ClickMB Btn1
 TRACE:(19) LocatePointerXYAbs 250 300
-TRACE:(20) ClickMB Btn1 
-TRACE:(21) CompareVisual DrawingArea1 
+TRACE:(20) ClickMB Btn1
+TRACE:(21) CompareVisual DrawingArea1
 TRACE:(22) ClickKey <Shift> Kz
 Received keypress event for Z.
-TRACE:(23) ClickKey <Shift> 
+TRACE:(23) ClickKey <Shift>
 Received keypress event for .
 TRACE:(24) ClickKey Ka
 Received keypress event for a.
@@ -57,8 +57,8 @@ Received keypress event for c.
 TRACE:(27) ClickKey Kd
 Received keypress event for d.
 TRACE:(28) LocatePointerXYAbs 250 300
-TRACE:(29) ClickMB Btn1 
-TRACE:(30) ClickKey <Shift> 
+TRACE:(29) ClickMB Btn1
+TRACE:(30) ClickKey <Shift>
 Received keypress event for .
 TRACE:(31) ClickKey Ka
 Received keypress event for a.
@@ -72,10 +72,10 @@ TRACE:(35) ClickKey KCancel
 Received keypress event for .
 TRACE:(36) ClickKey KActivate
 Received keypress event for .
-TRACE:(37) LocatePointer DrawingArea1  
-TRACE:(38) ClickMB Btn1 
+TRACE:(37) LocatePointer DrawingArea1
+TRACE:(38) ClickMB Btn1
 TRACE:(39) LocatePointerXYAbs 200 200
-TRACE:(40) ClickMB Btn1 
+TRACE:(40) ClickMB Btn1
 TRACE:(41) ClickKey <Shift> KTab
 Received keypress event for 	.
 TRACE:(42) ClickKey KSpace
@@ -85,24 +85,24 @@ The widget value is not NULL. This is expected.
 An expose event has been generated
 An expose event has been generated
 TRACE:(43) Continue
-TRACE:(44) LocatePointer BulletinBoard  
+TRACE:(44) LocatePointer BulletinBoard
 TRACE:(45) ClickKey KTab
 TRACE:(46) ClickKey Kb
 Received keypress event for b.
-TRACE:(47) CompareVisual BulletinBoard 
-TRACE:(48) LocatePointer DrawingArea1  
-TRACE:(49) ClickMB Btn1 
-TRACE:(50) DragXYRelative Right 50 
-TRACE:(51) ClickMB Btn1 
-TRACE:(52) DragXYRelative 542 -10 -10 
-TRACE:(53) ClickMB Btn1 
-TRACE:(54) DragXYRelative 542 20 20 
-TRACE:(55) ClickMB Btn1 
-TRACE:(56) DragXYRelative 542 -30 25 
-TRACE:(57) ClickMB Btn1 
-TRACE:(58) CompareVisual DrawingArea1 
+TRACE:(47) CompareVisual BulletinBoard
+TRACE:(48) LocatePointer DrawingArea1
+TRACE:(49) ClickMB Btn1
+TRACE:(50) DragXYRelative Right 50
+TRACE:(51) ClickMB Btn1
+TRACE:(52) DragXYRelative 542 -10 -10
+TRACE:(53) ClickMB Btn1
+TRACE:(54) DragXYRelative 542 20 20
+TRACE:(55) ClickMB Btn1
+TRACE:(56) DragXYRelative 542 -30 25
+TRACE:(57) ClickMB Btn1
+TRACE:(58) CompareVisual DrawingArea1
 TRACE:(59) Continue
-TRACE:(60) LocatePointer DrawingArea2  
-TRACE:(61) CompareVisual DrawingArea2 
+TRACE:(60) LocatePointer DrawingArea2
+TRACE:(61) CompareVisual DrawingArea2
 TRACE:(62) Exit
 Exiting Test...Please Standby...

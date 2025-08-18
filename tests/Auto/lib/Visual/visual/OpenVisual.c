@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: OpenVisual.c /main/7 1995/07/14 11:51:02 drk $"
@@ -43,8 +43,8 @@ static char rcsid[] = "$XConsortium: OpenVisual.c /main/7 1995/07/14 11:51:02 dr
 
         INPUTS
             none
-  
-        OUTPUTS 
+
+        OUTPUTS
             none
 
         RETURNS
@@ -60,7 +60,7 @@ static char rcsid[] = "$XConsortium: OpenVisual.c /main/7 1995/07/14 11:51:02 dr
 extern Boolean AutoAltVisualFile;
 extern char    AutoAltVisualFileName[50];
 
-void mvsOpenVisual() 
+void mvsOpenVisual()
 {
     static GC gcw,gcb;
     int i,j,x,y;
@@ -82,14 +82,14 @@ void mvsOpenVisual()
 
 
     /* Initialize MVS Visual Info Record */
-    
+
     vis_info_in.visualid = XDefaultVisual(mvsDisplay,
                                           XDefaultScreen(mvsDisplay))->visualid;
-    
+
     vis_info = XGetVisualInfo(mvsDisplay,VisualIDMask,&vis_info_in,&n);
 
     if (vis_info == NULL)
-      AutoMessage(_AutoMessages[VISMSG14]);        
+      AutoMessage(_AutoMessages[VISMSG14]);
 
     mvsVisualInfo.visual = vis_info->visual;
     mvsVisualInfo.class = vis_info->class;
@@ -99,7 +99,7 @@ void mvsOpenVisual()
     mvsVisualInfo.blue_mask = vis_info->blue_mask;
     mvsVisualInfo.colormap_size = vis_info->colormap_size;
     mvsVisualInfo.bits_per_rgb = vis_info->bits_per_rgb;
-  
+
     mvsVisualInfo.colormap_id = XDefaultColormap(mvsDisplay,XDefaultScreen(mvsDisplay));
 
 
@@ -141,7 +141,7 @@ void mvsOpenVisual()
 
 	        sprintf (msg_string,_AutoMessages[VISMSG44], mvsColorTable[i].name1);
                 AutoMessage(msg_string);
-                    
+
 	    }
         }
     }
@@ -150,14 +150,14 @@ void mvsOpenVisual()
     /* Initialize MVS Pixmap Table */
 
     root = DefaultRootWindow(mvsDisplay);
-        
+
     gcw = XCreateGC(mvsDisplay,root,0,&values);
     XSetForeground(mvsDisplay,gcw,white);
     gcb = XCreateGC(mvsDisplay,root,0,&values);
     XSetForeground(mvsDisplay,gcb,black);
 
     for (i=0; i<mvsNumTablePixmaps; i++) {
-        mvsPixmapTable[i].pixmap = 
+        mvsPixmapTable[i].pixmap =
             XCreatePixmap(mvsDisplay,root,
                           mvsPixmapTable[i].width,
                           mvsPixmapTable[i].height,
@@ -176,9 +176,9 @@ void mvsOpenVisual()
     XFreeGC(mvsDisplay,gcb);
 
 
-    /* 
+    /*
        Open Image File (if needed)  - look at environment variable
-       AUTOVPATH to dtermine where to read and write visual files  
+       AUTOVPATH to dtermine where to read and write visual files
        AUTOMATION ADDED.
     */
 
@@ -260,22 +260,10 @@ void mvsOpenVisual()
         default:
 	    sprintf (msg_string, _AutoMessages[VISMSG17], mvsGetVisualMode());
             AutoMessage(msg_string);
-                      
+
             break;
     }
 
     XFree(vis_info);
 
 } /* End mvsOpenVisual() */
-
-
-
-
-
-
-
-
-
-
-
-

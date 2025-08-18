@@ -26,8 +26,8 @@ TRACE:(1) WindowMove InstructionBox 140 500
 TRACE:(2) WindowFocus Shell1
 FOCUS IN: on btn1
 FOCUS IN: on btn1
-TRACE:(3) LocatePointer RC4  
-TRACE:(4) CompareVisual RC1 
+TRACE:(3) LocatePointer RC4
+TRACE:(4) CompareVisual RC1
 TRACE:(5) ClickKey KTab
 Widget btn1 had the focus.
 Leaving tab group RC1
@@ -50,7 +50,7 @@ TRACE:(13) ClickKey KTab
 Widget text2 had the focus.
 Leaving tab group text2
 TRACE:(14) ClickKey KDown
-TRACE:(15) CompareVisual RC1 
+TRACE:(15) CompareVisual RC1
 TRACE:(16) ClickKey KTab
 Widget btn2 had the focus.
 Leaving tab group RC1
@@ -60,7 +60,7 @@ Leaving tab group RC2
 TRACE:(18) ClickKey KRight
 TRACE:(19) ClickKey KRight
 TRACE:(20) ClickKey KRight
-TRACE:(21) CompareVisual RC3 
+TRACE:(21) CompareVisual RC3
 TRACE:(22) Continue
 NO TRAVERSIBLE WIDGETS OR TAB GROUPS
 Test 1:

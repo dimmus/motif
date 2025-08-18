@@ -32,12 +32,12 @@
 #include "UTMtransfer.h"
 
 /* Internal functions */
-static void SetModeCB(Widget widget, XtPointer client_data, 
+static void SetModeCB(Widget widget, XtPointer client_data,
 		      XtPointer call_data);
 static void CutCB(Widget widget, XtPointer client_data, XtPointer call_data);
 static void CopyCB(Widget widget, XtPointer client_data, XtPointer call_data);
-static void PasteCB(Widget widget, XtPointer client_data,XtPointer call_data); 
-static void PasteMoveCB(Widget widget, XtPointer client_data, 
+static void PasteCB(Widget widget, XtPointer client_data,XtPointer call_data);
+static void PasteMoveCB(Widget widget, XtPointer client_data,
 			XtPointer call_data);
 static void InputCB(Widget w, XtPointer client_data, XtPointer call_data);
 static int ErrorHandler(Display *display, XErrorEvent *event);
@@ -92,7 +92,7 @@ main(int argc, char **argv)
     Widget SPANbutton, LOCALE_TEXTbutton, _MOTIF_COMPOUND_STRINGbutton;
     Widget unknownbutton;
     XmString Label;
- 
+
     CommonTestInit(argc, argv);
 
     n = 0;
@@ -102,7 +102,7 @@ main(int argc, char **argv)
     MainW = XmCreateMainWindow(Shell1, "MainW", args, n);
     XtManageChild(MainW);
 
-    /* 
+    /*
      * Create a menu bar
      */
     n = 0;
@@ -111,7 +111,7 @@ main(int argc, char **argv)
 
     n = 0;
     pulldown = XmCreatePulldownMenu(menubar, "pulldown", args, n);
-    
+
     Label = XmStringCreate("Edit", XmSTRING_DEFAULT_CHARSET);
     n = 0;
     XtSetArg(args[n], XmNlabelString, Label);  n++;
@@ -141,7 +141,7 @@ main(int argc, char **argv)
     n = 0;
     SeparatorG = XmCreateSeparatorGadget(pulldown, "SeparatorG", args, n);
     XtManageChild(SeparatorG);
-    
+
     n = 0;
     Label = XmStringCreate("Paste (copy)", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
@@ -160,7 +160,7 @@ main(int argc, char **argv)
     XmStringFree(Label);
     XtAddCallback(PasteMovePB, XmNactivateCallback, PasteMoveCB, NULL);
 
-    /* 
+    /*
      * Create a form which contains:
      * - an option menu for choosing the type of selection,
      * - a drawing area for dragging the target,
@@ -183,27 +183,27 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, Label);  n++;
     PrimaryPB = XmCreatePushButtonGadget(SelectionMenu, "PrimaryPB", args, n);
     XtManageChild(PrimaryPB);
-    XtAddCallback(PrimaryPB, XmNactivateCallback, SetModeCB, 
+    XtAddCallback(PrimaryPB, XmNactivateCallback, SetModeCB,
 		  (XtPointer) Mprimary);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("Secondary", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    SecondaryPB = XmCreatePushButtonGadget(SelectionMenu, "SecondaryPB", 
+    SecondaryPB = XmCreatePushButtonGadget(SelectionMenu, "SecondaryPB",
 					   args, n);
     XtManageChild(SecondaryPB);
-    XtAddCallback(SecondaryPB, XmNactivateCallback, SetModeCB, 
+    XtAddCallback(SecondaryPB, XmNactivateCallback, SetModeCB,
 		  (XtPointer) Msecondary);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("Clipboard", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    ClipboardPB = XmCreatePushButtonGadget(SelectionMenu, "ClipboardPB", 
+    ClipboardPB = XmCreatePushButtonGadget(SelectionMenu, "ClipboardPB",
 					   args, n);
     XtManageChild(ClipboardPB);
-    XtAddCallback(ClipboardPB, XmNactivateCallback, SetModeCB, 
+    XtAddCallback(ClipboardPB, XmNactivateCallback, SetModeCB,
 		  (XtPointer) Mclipboard);
     XmStringFree(Label);
 
@@ -248,7 +248,7 @@ main(int argc, char **argv)
 
     /* Add other callbacks on the drawing area */
     XtAddCallback(target, XmNinputCallback, InputCB, NULL);
-    
+
 
     n = 0;
     Label = XmStringCreate("Selection Ownership: ", XmSTRING_DEFAULT_CHARSET);
@@ -302,7 +302,7 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNleftOffset, 10); n++;
     frame1 = XmCreateFrame(form, "frame1", args, n);
     XtManageChild(frame1);
-    
+
     n = 0;
     Label = XmStringCreate("Target Values", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
@@ -336,7 +336,7 @@ main(int argc, char **argv)
     label2 = XmCreateLabelGadget(field2, "label2", args, n);
     XtManageChild(label2);
     XmStringFree(Label);
-    
+
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
@@ -371,7 +371,7 @@ main(int argc, char **argv)
     label1 = XmCreateLabelGadget(field1, "label1", args, n);
     XtManageChild(label1);
     XmStringFree(Label);
-    
+
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
@@ -394,17 +394,17 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, Label);  n++;
     ATOMbutton = XmCreatePushButtonGadget(TypeMenu, "ATOMbutton", args, n);
     XtManageChild(ATOMbutton);
-    XtAddCallback(ATOMbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(ATOMbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[0]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("DRAWABLE", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    DRAWABLEbutton = XmCreatePushButtonGadget(TypeMenu, "DRAWABLEbutton", 
+    DRAWABLEbutton = XmCreatePushButtonGadget(TypeMenu, "DRAWABLEbutton",
 					      args, n);
     XtManageChild(DRAWABLEbutton);
-    XtAddCallback(DRAWABLEbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(DRAWABLEbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[1]);
     XmStringFree(Label);
 
@@ -413,27 +413,27 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, Label);  n++;
     WINDOWbutton = XmCreatePushButtonGadget(TypeMenu, "WINDOWbutton", args, n);
     XtManageChild(WINDOWbutton);
-    XtAddCallback(WINDOWbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(WINDOWbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[2]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("COLORMAP", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    COLORMAPbutton = XmCreatePushButtonGadget(TypeMenu, "COLORMAPbutton", 
+    COLORMAPbutton = XmCreatePushButtonGadget(TypeMenu, "COLORMAPbutton",
 					      args, n);
     XtManageChild(COLORMAPbutton);
-    XtAddCallback(COLORMAPbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(COLORMAPbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[3]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("INTEGER", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    INTEGERbutton = XmCreatePushButtonGadget(TypeMenu, "INTEGERbutton", 
+    INTEGERbutton = XmCreatePushButtonGadget(TypeMenu, "INTEGERbutton",
 					      args, n);
     XtManageChild(INTEGERbutton);
-    XtAddCallback(INTEGERbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(INTEGERbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[4]);
     XmStringFree(Label);
 
@@ -442,18 +442,18 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, Label);  n++;
     PIXELbutton = XmCreatePushButtonGadget(TypeMenu, "PIXELbutton", args, n);
     XtManageChild(PIXELbutton);
-    XtAddCallback(PIXELbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(PIXELbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[5]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("COMPOUND_TEXT", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    COMPOUND_TEXTbutton = XmCreatePushButtonGadget(TypeMenu, 
-						   "COMPOUND_TEXTbutton", 
+    COMPOUND_TEXTbutton = XmCreatePushButtonGadget(TypeMenu,
+						   "COMPOUND_TEXTbutton",
 						   args, n);
     XtManageChild(COMPOUND_TEXTbutton);
-    XtAddCallback(COMPOUND_TEXTbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(COMPOUND_TEXTbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[6]);
     XmStringFree(Label);
 
@@ -462,7 +462,7 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, Label);  n++;
     STRINGbutton = XmCreatePushButtonGadget(TypeMenu, "STRINGbutton", args, n);
     XtManageChild(STRINGbutton);
-    XtAddCallback(STRINGbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(STRINGbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[7]);
     XmStringFree(Label);
 
@@ -471,38 +471,38 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, Label);  n++;
     SPANbutton = XmCreatePushButtonGadget(TypeMenu, "SPANbutton", args, n);
     XtManageChild(SPANbutton);
-    XtAddCallback(SPANbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(SPANbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[8]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("LOCALE_TEXT", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    LOCALE_TEXTbutton = XmCreatePushButtonGadget(TypeMenu, 
+    LOCALE_TEXTbutton = XmCreatePushButtonGadget(TypeMenu,
 						 "LOCALE_TEXTbutton",
 						 args, n);
     XtManageChild(LOCALE_TEXTbutton);
-    XtAddCallback(LOCALE_TEXTbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(LOCALE_TEXTbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[9]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("MOTIF COMPOUND STRING", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    _MOTIF_COMPOUND_STRINGbutton = XmCreatePushButtonGadget(TypeMenu, 
+    _MOTIF_COMPOUND_STRINGbutton = XmCreatePushButtonGadget(TypeMenu,
 			"_MOTIF_COMPOUND_STRINGbutton", args, n);
     XtManageChild(_MOTIF_COMPOUND_STRINGbutton);
-    XtAddCallback(_MOTIF_COMPOUND_STRINGbutton, XmNactivateCallback, 
+    XtAddCallback(_MOTIF_COMPOUND_STRINGbutton, XmNactivateCallback,
 		  SetTypeCB, &TargetType[10]);
     XmStringFree(Label);
 
     n = 0;
     Label = XmStringCreate("unknown", XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, Label);  n++;
-    unknownbutton = XmCreatePushButtonGadget(TypeMenu, "unknownbutton", args, 
+    unknownbutton = XmCreatePushButtonGadget(TypeMenu, "unknownbutton", args,
 					     n);
     XtManageChild(unknownbutton);
-    XtAddCallback(unknownbutton, XmNactivateCallback, SetTypeCB, 
+    XtAddCallback(unknownbutton, XmNactivateCallback, SetTypeCB,
 		  &TargetType[11]);
     XmStringFree(Label);
 
@@ -548,7 +548,7 @@ main(int argc, char **argv)
     XSetErrorHandler((XErrorHandler) ErrorHandler);
 
     XtRealizeWidget(Shell1);
-    
+
     for (n = 0; n < 17; n++)
       CommonPause();
 
@@ -556,10 +556,10 @@ main(int argc, char **argv)
 }
 
 /***************************************************
- * function setMode                               
+ * function setMode
  * Set the mode to PRIMARY, SECONDARY or CLIPBOARD
  ***************************************************/
-static void 
+static void
 SetModeCB(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   Tmode = (int) client_data;
@@ -574,7 +574,7 @@ SetModeCB(Widget widget, XtPointer client_data, XtPointer call_data)
  * of where the widget writing API should be used by app. developers
  ******************************************************************/
 
-static void 
+static void
 CutCB(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   if (Tmode == Mprimary) {
@@ -582,8 +582,8 @@ CutCB(Widget widget, XtPointer client_data, XtPointer call_data)
     XtManageChild(OwnPrimLG);
   } else if (Tmode == Msecondary) {
     XmeSecondarySource(target, 0);
-    XmeSecondaryTransfer(target, 
-                         XInternAtom(XtDisplay(widget), 
+    XmeSecondaryTransfer(target,
+                         XInternAtom(XtDisplay(widget),
                                      XmSCOMPOUND_TEXT, False),
                          XmMOVE, 0);
   } else if (Tmode == Mclipboard)
@@ -591,7 +591,7 @@ CutCB(Widget widget, XtPointer client_data, XtPointer call_data)
 }
 
 
-static void 
+static void
 CopyCB(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   if (Tmode == Mprimary) {
@@ -599,15 +599,15 @@ CopyCB(Widget widget, XtPointer client_data, XtPointer call_data)
     XtManageChild(OwnPrimLG);
   } else if (Tmode == Msecondary) {
     XmeSecondarySource(target, 0);
-    XmeSecondaryTransfer(target, 
-                         XInternAtom(XtDisplay(widget), 
+    XmeSecondaryTransfer(target,
+                         XInternAtom(XtDisplay(widget),
                                      XmSCOMPOUND_TEXT, False),
                          XmCOPY, 0);
   } else if (Tmode == Mclipboard)
     XmeClipboardSource(target, XmCOPY, 0);
 }
 
-static void 
+static void
 PasteCB(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   if (Tmode == Mprimary)
@@ -620,7 +620,7 @@ PasteCB(Widget widget, XtPointer client_data, XtPointer call_data)
     XmeClipboardSink(target, XmCOPY, 0);
 }
 
-static void 
+static void
 PasteMoveCB(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   if (Tmode == Mprimary)
@@ -635,7 +635,7 @@ PasteMoveCB(Widget widget, XtPointer client_data, XtPointer call_data)
 
 /* Error handler for X protocol errors.  Display error text in labelN,V */
 
-static int 
+static int
 ErrorHandler(Display *display, XErrorEvent *event)
 {
   char buffer[80];
@@ -671,7 +671,7 @@ ErrorHandler(Display *display, XErrorEvent *event)
   return 0;
 }
 
-static void 
+static void
 InputCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
   XmDrawingAreaCallbackStruct *cbstruct;
@@ -685,4 +685,3 @@ InputCB(Widget w, XtPointer client_data, XtPointer call_data)
     XmeDragSource(w, NULL, event, NULL, 0);
   }
 }
-

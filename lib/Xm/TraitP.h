@@ -55,12 +55,12 @@ extern "C" {
 
 extern XtPointer XmeTraitGet(XtPointer, XrmQuark);
 
-/* 
+/*
  * Boolean XmeTraitSet(object, traitname, traitrecord)
  *
  * Installs the trait on the object.  Boolean will indicate
- * success of the installation.  
- * 
+ * success of the installation.
+ *
  * Install will use the direct pointer to traitrecord given.  The
  * implementation is therefore not allowed to use automatic
  * storage for traitrecord,  but can use malloc or static initialization
@@ -76,4 +76,3 @@ extern Boolean XmeTraitSet(XtPointer, XrmQuark, XtPointer);
 #endif
 
 #endif /* _XmTraitP_H */
-

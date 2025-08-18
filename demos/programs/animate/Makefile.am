@@ -22,7 +22,7 @@ LDADD = ../../lib/Xmd/libXmd.a ../../../lib/Mrm/libMrm.la ../../../lib/Xm/libXm.
 AM_CPPFLAGS = -I$(srcdir)/../../../lib \
            -I$(srcdir)/../../lib \
            -I$(top_builddir)/lib \
-           ${X_CFLAGS} 
+           ${X_CFLAGS}
 
 all: dog.uid plane.uid superman.uid xmanimate.uid
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Simple.c /main/4 1995/07/13 20:34:27 drk $"
@@ -102,7 +102,7 @@ String		colors[5] =
     "blue",
 };
 
-XColor		RGB_colors[2] = 
+XColor		RGB_colors[2] =
 {
   { 0, 0, 0, 0 },
   { 0, 65025, 12996, 7396 }
@@ -116,7 +116,7 @@ double		floats[4] =
     0,
 };
 
-float		sfloats[4] = 
+float		sfloats[4] =
 {
   3.14159,
   6000,
@@ -137,7 +137,7 @@ String		strings[2] =
     "teSt String1",
 };
 
-char		keysyms[3] = 
+char		keysyms[3] =
 {
   'Q',
   's',
@@ -164,7 +164,7 @@ String		float_names[4] =
     "float4",
 };
 
-String		sfloat_names[4] = 
+String		sfloat_names[4] =
 {
   "sfloat1",
   "sfloat2",
@@ -178,7 +178,7 @@ String		string_names[2] =
     "string2",
 };
 
-String		keysym_names[3] = 
+String		keysym_names[3] =
 {
   "bigQ",
   "littleS",
@@ -195,7 +195,7 @@ String		integer_names[3] =
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
     int	i,
     	errors = 0;
 
@@ -221,7 +221,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -269,14 +269,14 @@ main(argc, argv)
 	    fprintf(stdout,"\n");
 	}
     }
-    
+
 /*
  * Fetch UIL Color literals and test against
  * equivalent Xlib colors (from rgb database)
  */
 
     fprintf(stdout, "\n");
-    
+
     for(i=0 ; i<=4 ; i++)
     {
 	XAllocNamedColor(dsp,		 /* display			 */
@@ -313,11 +313,11 @@ main(argc, argv)
 
 /*
  * Fetch UIL RGB Color literals and test against
- * equivalent Xlib colors generated with XAllocColor 
+ * equivalent Xlib colors generated with XAllocColor
  */
 
     fprintf(stdout, "\n");
-    
+
     for(i=0 ; i<=1 ; i++)
     {
       if (XAllocColor(dsp,		 /* display			 */
@@ -327,7 +327,7 @@ main(argc, argv)
 	{
 	  error_proc("Can't allocate color");
 	}
-      
+
 	X_color_literal = RGB_colors[i].pixel;
 
 	if(MrmFetchColorLiteral(s_MrmHierarchy,
@@ -403,7 +403,7 @@ main(argc, argv)
 	    error_proc("Can't fetch single_float literal");
 	}
 
-	fprintf(stdout,"%13s\t%+8e\t%+8e", "Single_Float", 
+	fprintf(stdout,"%13s\t%+8e\t%+8e", "Single_Float",
 		*UIL_single_float_literal, sfloats[i]);
 
 	if(*UIL_single_float_literal != sfloats[i])
@@ -417,7 +417,7 @@ main(argc, argv)
 	    fprintf(stdout,"\n");
 	}
     }
-    
+
 /*
  * Fetch UIL Integer literals and test against equivalent Xt value
  */
@@ -449,7 +449,7 @@ main(argc, argv)
 	    fprintf(stdout,"\n");
 	}
     }
-    
+
 /*
  * Fetch UIL String literals and test against equivalent Xt value
  */
@@ -495,7 +495,7 @@ main(argc, argv)
 			    dsp,
 			    (XtPointer) &UIL_keysym_literal,
 			    &type) != MrmSUCCESS)
-	  {	
+	  {
 	    error_proc("Can't fetch string literal");
 	  }
 
@@ -513,7 +513,7 @@ main(argc, argv)
 	    fprintf(stdout,"\n");
 	  }
       }
-    
+
 /*
  * Print error results
  */

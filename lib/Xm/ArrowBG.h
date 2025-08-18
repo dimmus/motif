@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmArrowButtonGadget_h
 #define _XmArrowButtonGadget_h
 
@@ -41,7 +41,7 @@ typedef struct _XmArrowButtonGadgetRec      * XmArrowButtonGadget;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateArrowButtonGadget( 
+extern Widget XmCreateArrowButtonGadget(
                         Widget parent,
                         char *name,
                         ArgList arglist,

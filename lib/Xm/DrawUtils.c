@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -128,4 +128,3 @@ XmDrawBevel(dpy, d, top_gc, bottom_gc, x, y, size, option)
 	XFillRectangles(dpy, d, bottom_gc, rt, size);
     }
 }
-

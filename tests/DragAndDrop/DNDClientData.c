@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -86,7 +86,7 @@ Atom importList[1];
 void
 main (int argc, char **argv)
 {
-  	
+
 
   Arg args[10];
   	int i,n;
@@ -106,8 +106,8 @@ main (int argc, char **argv)
 	XtManageChild (PushB1);
 
 
-	
-		
+
+
 	n=0;
 	XtSetArg (args[n], XmNpacking, XmPACK_COLUMN); n++;
 	XtSetArg (args[n], XmNnumColumns, 1); n++;
@@ -137,8 +137,8 @@ main (int argc, char **argv)
 	DropSite[4] = XmCreatePushButton(RowCol1, "PushBtn1", args, n);
 	XtManageChild (DropSite[4]);
 
-   
-	
+
+
 	/*
 	 * Create the drop site
 	 */
@@ -146,7 +146,7 @@ main (int argc, char **argv)
 	COMPOUND_TEXT = XmInternAtom (display, "COMPOUND_TEXT",
 				      False);
         importList[0] = COMPOUND_TEXT;
-	
+
         /*
          * Create dropsites
          */
@@ -159,14 +159,14 @@ main (int argc, char **argv)
 	    XtSetArg (args[n], XmNdropProc, HandleDrop); n++;
 	    XtSetArg (args[n], XmNdropSiteOperations, XmDROP_COPY); n++;
 	    XmDropSiteRegister (DropSite[i], args, n);
-	    
+
 	  }
 
 
    	/*
     	 * Initialize client data structure
     	 */
-	
+
 	/*
 	 * First
 	 */
@@ -185,7 +185,7 @@ main (int argc, char **argv)
 	 * Second
 	 */
 
-	
+
 
 	MyPixmap =  XCreatePixmapFromBitmapData(display,
                                 DefaultRootWindow(display),
@@ -201,17 +201,17 @@ main (int argc, char **argv)
 
 
 	n=0;
-	XtSetArg (args[n], XmNclientData, (XtPointer)&TestData2);  n++; 
+	XtSetArg (args[n], XmNclientData, (XtPointer)&TestData2);  n++;
 	XmDropSiteUpdate (DropSite[1],args,n);
 
-	
+
 
 	/*
 	 * Third
 	 */
 
 
-	MyCompString = XmStringCreate ("ListItem", 
+	MyCompString = XmStringCreate ("ListItem",
 					XmSTRING_DEFAULT_CHARSET);
 
 	TestData3.id = 3;
@@ -221,7 +221,7 @@ main (int argc, char **argv)
 	XtSetArg (args[n], XmNclientData, (XtPointer)&TestData3);  n++;
 	XmDropSiteUpdate (DropSite[2],args,n);
 
-	
+
 
 	/*
 	 * Fourth
@@ -230,7 +230,7 @@ main (int argc, char **argv)
 	MyInt = 2;
 	TestData4.id = 4;
 	TestData4.data = (XtPointer)&MyInt;
-	
+
 	n=0;
 	XtSetArg (args[n], XmNclientData, (XtPointer)&TestData4);  n++;
 	XmDropSiteUpdate (DropSite[3],args,n);
@@ -242,10 +242,10 @@ main (int argc, char **argv)
 	MyChar = "Another Label";
 	TestData5.id = 5;
 	TestData5.data = (XtPointer)&MyChar;
-	
+
 	n=0;
 	XtSetArg (args[n], XmNclientData, (XtPointer)&TestData5);  n++;
-	XmDropSiteUpdate (DropSite[4],args,n); 
+	XmDropSiteUpdate (DropSite[4],args,n);
 
 
 
@@ -263,7 +263,7 @@ main (int argc, char **argv)
 	CommonPause();
 
 	XtAppMainLoop(app_context);
-  
+
       }
 
 
@@ -272,7 +272,7 @@ main (int argc, char **argv)
 
 
 static void
-HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)	
+HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)
 {
 	XmDropProcCallback DropProc;
         Widget dc;
@@ -283,27 +283,27 @@ HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)
         int n;
         Arg cargs[MAX_ARGS];
         int cn;
-        ClientData *cdata;        
+        ClientData *cdata;
 
 	int which_widget;
 	XmString tcs, ListItems[1];
 
 	DropProc = (XmDropProcCallback)call_data;
         dc = DropProc->dragContext;
-        
+
 	n=0;
-	if ((DropProc->dropAction != XmDROP) || 
+	if ((DropProc->dropAction != XmDROP) ||
 	    (DropProc->operation != XmDROP_COPY))
 	  {
 	      XtSetArg(args[n], XmNtransferStatus, XmTRANSFER_FAILURE); n++;
-	  } 
+	  }
 
 	cn=0;
 	XtSetArg (cargs[n], XmNclientData, &cdata);  cn++;
 	XmDropSiteRetrieve (w, cargs, cn);
 
 	which_widget = cdata->id;
-	
+
 	cn = 0;
 	switch (which_widget)
 	  {
@@ -313,7 +313,7 @@ HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)
 
 	   case 2:
 	     XtSetArg(cargs[cn], XmNlabelType, XmPIXMAP); cn++;
-  	     XtSetArg(cargs[cn], XmNlabelPixmap,*((Pixmap *)cdata->data));cn++; 
+  	     XtSetArg(cargs[cn], XmNlabelPixmap,*((Pixmap *)cdata->data));cn++;
 	     break;
 
 	   case 3:
@@ -322,7 +322,7 @@ HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)
 	     break;
 
 	   case 4:
-	     XtSetArg(cargs[cn], XmNvalue,*((int *)cdata->data)); cn++; 
+	     XtSetArg(cargs[cn], XmNvalue,*((int *)cdata->data)); cn++;
 	     break;
 
 	   case 5:
@@ -330,7 +330,7 @@ HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)
                    XmFONTLIST_DEFAULT_TAG); cn++;
 	     XtSetArg(cargs[cn], XmNlabelString, tcs); cn++;
 	     break;
-	
+
 	   default:
 	     break;
 	     }
@@ -338,20 +338,5 @@ HandleDrop (Widget w, XtPointer client_data, XtPointer call_data)
 	if (cn > 0)
 	  XtSetValues (w,cargs,cn);
 
-	XmDropTransferStart(dc,args,n); 
+	XmDropTransferStart(dc,args,n);
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

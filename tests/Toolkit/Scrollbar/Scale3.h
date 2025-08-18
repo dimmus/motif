@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: Scale3.h /main/6 1995/07/13 19:11:35 drk $ */
 
 Boolean   wait;
@@ -35,12 +35,12 @@ static Widget          CreateContinuePopup();
 static XtCallbackProc  ContinueCB();
 static XtCallbackProc  QuitCB();
 
-static char *Pause_events[] = 
+static char *Pause_events[] =
       {
 	"1) A client window with three scales will appear.\n2) Continue for more testing.\n",
 	"1) Resize the client window.\n2) Press and hold MB1 on each scale slider. Drag each\n   slider up and down the scale. Number to the left of each scale\n   should change from -1.00 at bottom to 1.00 at top. Release MB1\n   so each slider is at a different position.\n3) Resize bottom of the client window down.\n4) Test Finished -- Exit Please"
       };
-	
+
 int Pause_cnt = 0;
 static XtCallbackProc  QuitCB();
 XtAppContext  app_context;

@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText3h.scr /main/5 1995/07/17 20:41:08 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Make a small selection in the TextField widget.  Click MB2 elsewhere
 #  in the TextField to copy the primary selection.  The original selection
@@ -73,7 +73,7 @@ Continue
 
 # #) In Normal Mode, select a collection of text. KDelete should
 #    delete the selection.
-LocatePointer Text1 RTextChar 3 
+LocatePointer Text1 RTextChar 3
 ClickMB Btn1
 ClickKey KSelect
 ClickKey KRight
@@ -87,7 +87,7 @@ CompareVisual Text1
 
 # #) Select another collection of text.  KBackSpace should
 #    also delete the selection.
-LocatePointer Text1 RTextChar 5 
+LocatePointer Text1 RTextChar 5
 ClickMB Btn1
 ClickKey KSelect
 ClickKey KRight
@@ -116,7 +116,7 @@ ClickKey KRight
 ClickKey KExtend
 ClickKey KDelete
 CompareVisual Text1
-  
+
 LocatePointer Text1 RTextChar 0
 ClickMB Btn1
 ClickKey KSelect
@@ -134,7 +134,7 @@ CompareVisual Text1
 # #) Move the cursor outside the current selection.
 # #) KDelete should delete one character forward.
 # #) KBackSpace should delete one character backward.
-LocatePointer Text1 RTextChar 7 
+LocatePointer Text1 RTextChar 7
 ClickMB Btn1
 ClickKey KSelect
 ClickKey KAddMode
@@ -183,10 +183,10 @@ ClickMB Btn1
 ClickKey Ka
 CompareVisual Text4
 
-#  C) 
+#  C)
 Continue
 
-#  @) Each of the text widgets is now sensitive again.  Additionally, 
+#  @) Each of the text widgets is now sensitive again.  Additionally,
 #  they have callbacks set for focus and losingFocus.
 #  #) Click the mouse pointer in each of the four widget and confirm
 #  the callback messages for focus and losingFocus for each widget.

@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 if (test $# -lt 1)
@@ -33,7 +33,7 @@ else
 fi
 
 if [ -n "$(whence uname)" ]
-then 
+then
 	sysname=`uname -s`
 else
 	sysname="unix"
@@ -126,10 +126,10 @@ case $language in
 	echo unknown language $language -- try running in C locale
         XAPPLRESDIR=`pwd`
 	unset LANG
-	;;	
+	;;
 esac
 
-XFILESEARCHPATH=$XAPPLRESDIR/I18N.defaults:$XFILESEARCHPATH 
+XFILESEARCHPATH=$XAPPLRESDIR/I18N.defaults:$XFILESEARCHPATH
 
 export XFILESEARCHPATH LANG XAPPLRESDIR
 

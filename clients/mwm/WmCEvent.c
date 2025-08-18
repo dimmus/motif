@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.4
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WmCEvent.c /main/10 1996/08/09 15:05:39 rswiston $"
@@ -195,7 +195,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
 #endif
     {
 	/*
-	 *  Set active screen if we're not sure. 
+	 *  Set active screen if we're not sure.
 	 */
 	if (wmGD.queryScreen)
 	    DetermineActiveScreen (event);
@@ -306,11 +306,11 @@ Boolean WmDispatchClientEvent (XEvent *event)
 
 	case Expose:
 	{
-	    /* 
+	    /*
 	     * If multiple expose events, wait for last one.
 	     */
 
-	    if (event->xexpose.count == 0) 
+	    if (event->xexpose.count == 0)
 	    {
 		if (event->xexpose.window == ICON_FRAME_WIN(pCD))
 		{
@@ -320,7 +320,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
 			dispatchEvent = True;
 		    }
 		}
-		else if (event->xexpose.window == 
+		else if (event->xexpose.window ==
 			     pCD->pSD->activeIconTextWin)
 		{
 		    PaintActiveIconText (pCD, FALSE);
@@ -342,7 +342,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
 		{
 	        /*
 		 *
-		 *  Then this client is the shell for the 
+		 *  Then this client is the shell for the
 		 *  front panel and we want the toolkit to repaint
 		 *  it.
 		 *
@@ -391,7 +391,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
 	case UnmapNotify:
 	{
 	    /*
-	     * This event is generated when a managed  client window is 
+	     * This event is generated when a managed  client window is
 	     * unmapped by the client or when the window manager unmaps the
 	     * client window; check the wmMapCount to determine if this is
 	     * the result of a window manager unmap. If this is a client
@@ -424,7 +424,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
 	    {
 		if (pCD->absentMapBehavior == AMAP_BEHAVIOR_IGNORE)
 		{
-		    SetClientState (pCD, NORMAL_STATE|UNSEEN_STATE, 
+		    SetClientState (pCD, NORMAL_STATE|UNSEEN_STATE,
 				    GetTimestamp ());
 		}
 		else
@@ -511,7 +511,7 @@ Boolean WmDispatchClientEvent (XEvent *event)
  *  ------
  *  pEvent = pointer to an XEvent structure
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  RETURN = If True the event should be dispatched by the toolkit,
@@ -648,7 +648,7 @@ Boolean HandleEventsOnSpecialWindows (XEvent *pEvent)
  *
  *  pEvent = pointer to an XEvent structure
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  RETURN = If True the event should be dispatched by the toolkit,
@@ -685,7 +685,7 @@ Boolean HandleEventsOnClientWindow (ClientData *pCD, XEvent *pEvent)
 	    /*
 	     * Process property changes on managed client windows:
 	     */
-		
+
 	    HandleCPropertyNotify (pCD, (XPropertyEvent *)pEvent);
 	    doXtDispatchEvent = False;
 	    break;
@@ -739,31 +739,31 @@ void HandleCPropertyNotify (ClientData *pCD, XPropertyEvent *propertyEvent)
 	    ProcessWmHints (pCD, FALSE /*not first time*/);
 	    break;
 	}
-	
+
         case XA_WM_NORMAL_HINTS:
 	{
 	    ProcessWmNormalHints (pCD, FALSE /*not first time*/, 0);
 	    break;
 	}
-	
+
         case XA_WM_NAME:
 	{
 	    ProcessWmWindowTitle (pCD, FALSE /*not first time*/);
 	    break;
 	}
-	
+
         case XA_WM_ICON_NAME:
 	{
 	    ProcessWmIconTitle (pCD, FALSE /*not first time*/);
 	    break;
 	}
-	
+
         case XA_WM_CLASS:
 	{
 
 	    break;
 	}
-	
+
         case XA_WM_COMMAND:
 	{
 	    if (pCD->clientFlags & CLIENT_TERMINATING)
@@ -786,7 +786,7 @@ void HandleCPropertyNotify (ClientData *pCD, XPropertyEvent *propertyEvent)
 	     * so the dialog is treated as a transient window.
 	     *
 	     * Note that we also handle the case of the WM_TRANSIENT_FOR
-	     * property being removed. 
+	     * property being removed.
 	     */
 	    DeleteClientFromList (pCD->pSD->pActiveWS, pCD);
 	    ProcessWmTransientFor(pCD);
@@ -795,7 +795,7 @@ void HandleCPropertyNotify (ClientData *pCD, XPropertyEvent *propertyEvent)
 		StackTransientWindow(pCD);
 	    break;
 	}
-	
+
 	default:
 	{
 	    if (propertyEvent->atom == wmGD.xa_WM_PROTOCOLS)
@@ -921,7 +921,7 @@ Boolean HandleCButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
             baseWinTime = buttonEvent->time;
             baseWinButton = buttonEvent->button;
 	}
- 
+
         /*
          * If this event was caught by the base window grab and
          * replayed, then don't reprocess if caught by the frame
@@ -951,7 +951,7 @@ Boolean HandleCButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
 	    ProcessClickBPress (buttonEvent, pCD, context, subContext);
 #endif
 
-	    if (CheckForButtonAction (buttonEvent, context, subContext, pCD) 
+	    if (CheckForButtonAction (buttonEvent, context, subContext, pCD)
 		&& pCD)
 	    {
 		/*
@@ -1023,7 +1023,7 @@ void ProcessButtonGrabOnClient (ClientData *pCD, XButtonEvent *buttonEvent, Bool
 
 
 
-    if ((buttonEvent->button == SELECT_BUTTON) && 
+    if ((buttonEvent->button == SELECT_BUTTON) &&
 	((buttonEvent->state == 0) ||
 	 (NOLOCKMOD(buttonEvent->state) == 0)))
     {
@@ -1116,8 +1116,8 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
      * modifiers. (Ignore locking modifiers)
      */
 
-    if (((buttonEvent->button != SELECT_BUTTON)  && 
-	 (buttonEvent->button != DMANIP_BUTTON)) || 
+    if (((buttonEvent->button != SELECT_BUTTON)  &&
+	 (buttonEvent->button != DMANIP_BUTTON)) ||
 	   NOLOCKMOD(buttonEvent->state))
     {
 	return;
@@ -1164,7 +1164,7 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
 	 * frame component that was selected.
 	 */
 
-	if ((buttonEvent->button == SELECT_BUTTON) && 
+	if ((buttonEvent->button == SELECT_BUTTON) &&
 	    (subContext == F_SUBCONTEXT_W_SYSTEM))
 	{
 	    int flags = 0;
@@ -1216,7 +1216,7 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
 
             pCD->grabContext = context;
 
-	    PostMenu (pCD->systemMenuSpec, pCD, 0, 0, SELECT_BUTTON, 
+	    PostMenu (pCD->systemMenuSpec, pCD, 0, 0, SELECT_BUTTON,
 		      context, flags, (XEvent *)buttonEvent);
 
 	}
@@ -1224,7 +1224,7 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
 	{
             /*
 	     * Title component:
-             * SELECT_BUTTON  or DMANIP_BUTTON Press - 
+             * SELECT_BUTTON  or DMANIP_BUTTON Press -
 	     *               start looking for a move.
              */
 
@@ -1254,7 +1254,7 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
 	{
             /*
 	     * Resize border handle components:
-             * SELECT_BUTTON or DMANIP_BUTTON Press - 
+             * SELECT_BUTTON or DMANIP_BUTTON Press -
 	     *              start looking for a resize.
              */
 
@@ -1276,7 +1276,7 @@ void CheckButtonPressBuiltin (XButtonEvent *buttonEvent, Context context, Contex
 
 	    PushGadgetIn (pCD, partContext);
 	}
-	   
+
 	/*
 	 * Other components: no action
 	 */
@@ -1336,7 +1336,7 @@ void HandleIconButtonPress (ClientData *pCD, XButtonEvent *buttonEvent)
     else
     {
         /*
-         * This is a regular button press (it may be the start of a 
+         * This is a regular button press (it may be the start of a
          * double-click).  Set the focus and top the icon if appropriate.
          */
 
@@ -1425,7 +1425,7 @@ void HandleIconBoxButtonPress (ClientData *pCD, XButtonEvent *buttonEvent, Conte
     if ((P_ICON_BOX(pCD)->pCD_iconBox == wmGD.keyboardFocus) ||
 	(P_ICON_BOX(pCD)->pCD_iconBox == wmGD.nextKeyboardFocus))
     {
-	XmProcessTraversal (XtWindowToWidget(DISPLAY, ICON_FRAME_WIN(pCD)), 
+	XmProcessTraversal (XtWindowToWidget(DISPLAY, ICON_FRAME_WIN(pCD)),
 			    XmTRAVERSE_CURRENT);
     }
 
@@ -1535,7 +1535,7 @@ Boolean HandleCKeyPress (ClientData *pCD, XKeyEvent *keyEvent)
 	/*
 	 * The active menu accelerators have been checked and keyEvent was
 	 * not one of them.  We will check for an iconbox icon widget key and
-	 * for pass keys mode and then have the toolkit dispatch the event, 
+	 * for pass keys mode and then have the toolkit dispatch the event,
 	 * without rechecking the client accelerator list.
 	 */
 
@@ -1564,7 +1564,7 @@ Boolean HandleCKeyPress (ClientData *pCD, XKeyEvent *keyEvent)
 	{
 	    /*
 	     * The event is really for the icon, not the active
-	     * label, so ... correct the window id 
+	     * label, so ... correct the window id
 	     */
 
 	    keyEvent->window = ICON_FRAME_WIN(pCD);
@@ -1604,7 +1604,7 @@ Boolean HandleCKeyPress (ClientData *pCD, XKeyEvent *keyEvent)
 
     if (checkKeyEvent && (keyEvent->window == ICON_FRAME_WIN(pCD)))
     {
-	if ((checkKeyEvent = HandleKeyPress (keyEvent, 
+	if ((checkKeyEvent = HandleKeyPress (keyEvent,
 					     ACTIVE_PSD->keySpecs, True,
 					     F_CONTEXT_ICON, False,
 					     (ClientData *)NULL))
@@ -1710,7 +1710,7 @@ void CheckButtonReleaseBuiltin (XButtonEvent *buttonEvent, Context context, Cont
 	     * used to manipulate the menu).
 	     */
 	    pCD->grabContext = F_CONTEXT_ICON;
-	    PostMenu (pCD->systemMenuSpec, pCD, 0, 0, NoButton, 
+	    PostMenu (pCD->systemMenuSpec, pCD, 0, 0, NoButton,
 		      F_CONTEXT_ICON, POST_STICKY, (XEvent *)buttonEvent);
 	}
     }
@@ -1724,7 +1724,7 @@ void CheckButtonReleaseBuiltin (XButtonEvent *buttonEvent, Context context, Cont
 	     (wmGD.clickData.clickContext == F_SUBCONTEXT_IB_WICON))  )
         {
             wmGD.checkHotspot = True;
-	    
+
             /*
              * Post the system menu with traversal on (Button 1 should be
              * used to manipulate the menu.
@@ -1835,7 +1835,7 @@ void HandleCMotionNotify (ClientData *pCD, XMotionEvent *motionEvent)
 	if (diffY < 0) diffY = -diffY;
 
 
-	if ((diffX >= wmGD.moveThreshold) || (diffY >= wmGD.moveThreshold)) 
+	if ((diffX >= wmGD.moveThreshold) || (diffY >= wmGD.moveThreshold))
 	{
 	    /*
 	     * The move threshold has been exceded; start the config action.
@@ -1925,7 +1925,7 @@ void HandleCEnterNotify (ClientData *pCD, XEnterWindowEvent *enterEvent)
 	((wmGD.keyboardFocusPolicy == KEYBOARD_FOCUS_POINTER) ||
 	 (wmGD.colormapFocusPolicy == CMAP_FOCUS_POINTER)))
     {
-	/* 
+	/*
 	 * Make sure that EnterNotify is applicable; don't do anything if
 	 * the window is minimized (not currently visible) or the event is
 	 * associated with an icon in the icon box.
@@ -1933,7 +1933,7 @@ void HandleCEnterNotify (ClientData *pCD, XEnterWindowEvent *enterEvent)
 
 	if (!(((enterEvent->window == pCD->clientFrameWin) &&
 	      (pCD->clientState == MINIMIZED_STATE)) ||
-	     (((enterEvent->window == ICON_FRAME_WIN(pCD)) && 
+	     (((enterEvent->window == ICON_FRAME_WIN(pCD)) &&
 	       P_ICON_BOX(pCD)) ||
 	      (enterEvent->window == pCD->pSD->activeIconTextWin))))
 
@@ -1955,7 +1955,7 @@ void HandleCEnterNotify (ClientData *pCD, XEnterWindowEvent *enterEvent)
                     /* Does the event need to be replayed for modalized windows ? */
                     if ( wmGD.replayEnterEvent )
                         /* Yes, save the event. */
-                        memcpy( &wmGD.savedEnterEvent, enterEvent, 
+                        memcpy( &wmGD.savedEnterEvent, enterEvent,
                                 sizeof( XEnterWindowEvent ) );
 
 
@@ -2073,7 +2073,7 @@ Boolean HandleCFocusIn (ClientData *pCD, XFocusChangeEvent *focusChangeEvent)
      * processed for a window that has been minimized.
      */
 
-    if ((focusChangeEvent->window == ICON_FRAME_WIN(pCD)) && 
+    if ((focusChangeEvent->window == ICON_FRAME_WIN(pCD)) &&
 	P_ICON_BOX(pCD))
     {
 	doXtDispatchEvent = True;
@@ -2126,7 +2126,7 @@ Boolean HandleCFocusIn (ClientData *pCD, XFocusChangeEvent *focusChangeEvent)
 	    }
 	    else
 	    {
-		Do_Focus_Key ((ClientData *) NULL, GetTimestamp (), 
+		Do_Focus_Key ((ClientData *) NULL, GetTimestamp (),
 			ALWAYS_SET_FOCUS);
 	    }
 	}
@@ -2178,7 +2178,7 @@ Boolean HandleCFocusOut (ClientData *pCD, XFocusChangeEvent *focusChangeEvent)
      * out events for clients that aren't on the current screen.
      */
 
-    if (((focusChangeEvent->window == ICON_FRAME_WIN(pCD)) && 
+    if (((focusChangeEvent->window == ICON_FRAME_WIN(pCD)) &&
 	 P_ICON_BOX(pCD)) ||
 	(SCREEN_FOR_CLIENT(pCD) != ACTIVE_SCREEN))
     {
@@ -2262,9 +2262,9 @@ void HandleCConfigureRequest (ClientData *pCD, XConfigureRequestEvent *configure
 	    ProcessNewConfiguration (pCD,
 		(mask & CWX) ? configureRequest->x : pCD->maxX,
 		(mask & CWY) ? configureRequest->y : pCD->maxY,
-		(unsigned int) ((mask & CWWidth) ? 
+		(unsigned int) ((mask & CWWidth) ?
 		    configureRequest->width : pCD->maxWidth),
-		(unsigned int) ((mask & CWHeight) ? 
+		(unsigned int) ((mask & CWHeight) ?
 		    configureRequest->height : pCD->maxHeight),
 		True /*client request*/);
 	}
@@ -2287,9 +2287,9 @@ void HandleCConfigureRequest (ClientData *pCD, XConfigureRequestEvent *configure
 	    ProcessNewConfiguration (pCD,
 		(mask & CWX) ? configureRequest->x : pCD->clientX - xOff,
 		(mask & CWY) ? configureRequest->y : pCD->clientY - yOff,
-		(unsigned int) ((mask & CWWidth) ? 
+		(unsigned int) ((mask & CWWidth) ?
 		    configureRequest->width : pCD->clientWidth),
-		(unsigned int) ((mask & CWHeight) ? 
+		(unsigned int) ((mask & CWHeight) ?
 		    configureRequest->height : pCD->clientHeight),
 		True /*client request*/);
 	}
@@ -2442,7 +2442,7 @@ void HandleCColormapNotify (ClientData *pCD, XColormapEvent *colorEvent)
 	        if (colorEvent->colormap == None)
 	        {
 	            /* use the workspace colormap */
-	            pCD->clientColormap = 
+	            pCD->clientColormap =
 			ACTIVE_PSD->workspaceColormap;
 		}
 		else
@@ -2509,7 +2509,7 @@ void HandleCColormapNotify (ClientData *pCD, XColormapEvent *colorEvent)
 		    if (colorEvent->colormap == None)
 		    {
 			/* use the workspace colormap */
-			pCD->clientCmapList[i] = 
+			pCD->clientCmapList[i] =
 			    ACTIVE_PSD->workspaceColormap;
 		    }
 		    else
@@ -2562,7 +2562,7 @@ void HandleCColormapNotify (ClientData *pCD, XColormapEvent *colorEvent)
  *  pCD = pointer to client data
  *
  *  clientEvent = pointer to a client message event on the root window
- * 
+ *
  *************************************<->***********************************/
 
 void HandleClientMessage (ClientData *pCD, XClientMessageEvent *clientEvent)
@@ -2625,7 +2625,7 @@ HandleCShapeNotify (ClientData *pCD,  XShapeEvent *shapeEvent)
 	{
 	    return;
 	}
-	
+
 	pCD->wShaped = shapeEvent->shaped;
 	SetFrameShape (pCD);
     }
@@ -2646,11 +2646,11 @@ HandleCShapeNotify (ClientData *pCD,  XShapeEvent *shapeEvent)
  *  Inputs:
  *  ------
  *  window = find the parent of this window
- * 
+ *
  *  Outputs:
  *  -------
  *  Return = return the window id of the parent of the specified window
- * 
+ *
  *************************************<->***********************************/
 
 Window GetParentWindow (Window window)
@@ -2692,14 +2692,14 @@ Window GetParentWindow (Window window)
  *  Inputs:
  *  ------
  *  pEvent = pointer to an event structure
- * 
+ *
  *  Outputs:
  *  -------
  *  ACTIVE_PSD =  set to point to the screen data for the currently
  *                active scree;
  *  wmGD.queryScreen =  set to False if we're sure about the ACTIVE_PSD
  *                      setting
- * 
+ *
  *************************************<->***********************************/
 
 void DetermineActiveScreen (XEvent *pEvent)
@@ -2718,7 +2718,7 @@ void DetermineActiveScreen (XEvent *pEvent)
 		 */
 		pSD = GetScreenForWindow (pEvent->xany.window);
 
-		if (pSD) 
+		if (pSD)
 		{
 		    /*
 		     * Set the ACTIVE_PSD to the event's screen to
@@ -2745,11 +2745,11 @@ void DetermineActiveScreen (XEvent *pEvent)
  *  Inputs:
  *  ------
  *  win = window id
- * 
+ *
  *  Outputs:
  *  -------
  *  value of function = pointer to screen data (pSD) or NULL on failure
- * 
+ *
  *************************************<->***********************************/
 
 WmScreenData * GetScreenForWindow (win)
@@ -2765,7 +2765,7 @@ WmScreenData * GetScreenForWindow (win)
      */
     if (XGetWindowAttributes (DISPLAY, win, &attribs))
     {
-	if (!XFindContext (DISPLAY, attribs.root, wmGD.screenContextType, 
+	if (!XFindContext (DISPLAY, attribs.root, wmGD.screenContextType,
 			    (caddr_t *)&pSD))
 	{
 	    if (pSD && !pSD->screenTopLevelW)

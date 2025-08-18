@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scale1.c /main/6 1995/07/13 19:10:45 drk $"
@@ -47,13 +47,13 @@ void  main(argc, argv)
     XFontStruct *newfont;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
     XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 
@@ -89,7 +89,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNmaximum, 100); n++;
     XtSetValues(Scale1, args, n);
 
-    
+
     CommonPause();
 
     /* test case for PIR 2808 - use Italics font to show bug HORIZONTAL */

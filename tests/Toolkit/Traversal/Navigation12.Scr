@@ -19,10 +19,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-#!) This test tests P2063. 
-#) Click on the ScrollBar several times. 
+#!) This test tests P2063.
+#) Click on the ScrollBar several times.
 #  If the focus moves back and forth between the list and the row column
 #   the bug is not fixed.
 #) For each click on the Scroll Bar, you should see a message in the stdout
@@ -39,8 +39,8 @@ ClickMB Btn1
 CompareVisual Form
 
 Continue
- 
-#) A list and text field appear. 
+
+#) A list and text field appear.
 # The list is a tab group, the text fields are not.
 #) Focus is on the top text widget.
 

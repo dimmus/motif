@@ -85,17 +85,17 @@ main (int argc, char **argv)
  /*
   *  Determine which type of ComboBox is being created.
   */
-  if ( strcmp( UserData, "COMBO_BOX" ) == 0 ) 
+  if ( strcmp( UserData, "COMBO_BOX" ) == 0 )
   {
     instance = 1;
     combo_box_type = XmCOMBO_BOX;
   }
-  else if ( strcmp( UserData, "DROP_DOWN_COMBO_BOX" ) == 0 ) 
+  else if ( strcmp( UserData, "DROP_DOWN_COMBO_BOX" ) == 0 )
   {
     instance = 2;
     combo_box_type = XmDROP_DOWN_COMBO_BOX;
   }
-  else if ( strcmp( UserData, "DROP_DOWN_LIST" ) == 0 ) 
+  else if ( strcmp( UserData, "DROP_DOWN_LIST" ) == 0 )
   {
     instance = 3;
     combo_box_type = XmDROP_DOWN_LIST;
@@ -177,4 +177,4 @@ main (int argc, char **argv)
   (void)printf( "End Test\n" );
 
   return 0;
-} 
+}

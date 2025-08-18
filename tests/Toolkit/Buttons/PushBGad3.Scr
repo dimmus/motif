@@ -1,5 +1,5 @@
 # $XConsortium: PushBGad3.scr /main/6 1995/07/17 20:06:40 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-# This is a simple test of traversal behaviors.  The two boxed groups of 
-#  widgets are tab groups. You can move between the groups by pressing TAB 
-#  or Shift-TAB. Within each group, move between the buttons by using the 
+# This is a simple test of traversal behaviors.  The two boxed groups of
+#  widgets are tab groups. You can move between the groups by pressing TAB
+#  or Shift-TAB. Within each group, move between the buttons by using the
 #  up and down arrow keys. Use the space key to activate (depress)
 #  the buttons. Try moving amongst the buttons and back and forth between
-#  the tab groups. 
+#  the tab groups.
 
 LocatePointer arrow1
 CompareVisual rc1
@@ -42,9 +42,9 @@ ClickKey KDown
 CompareVisual rc1
 Continue
 
-# Using the up and down arrow keys, move to the button labeled "arrow2".  
-#  The button should now have the highlight around it.  Press return, and 
-#  this pushbutton will become unmanaged and the highlight should move to 
+# Using the up and down arrow keys, move to the button labeled "arrow2".
+#  The button should now have the highlight around it.  Press return, and
+#  this pushbutton will become unmanaged and the highlight should move to
 #  the button labelled "arrow3".
 
 # Now move up to the button labelled "arrow1" and press return.
@@ -59,4 +59,3 @@ ClickKey KUp
 ClickKey KActivate
 CompareVisual rc1
 Exit
-

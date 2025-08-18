@@ -10,7 +10,6 @@ SUBDIRS =   dainput \
             aicon \
             dogs \
             uilsymdump \
-            motifshell 
+            motifshell
 
 EXTRA_DIST =
-

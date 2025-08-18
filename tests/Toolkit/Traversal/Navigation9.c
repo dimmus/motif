@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation9.c /main/9 1995/07/13 19:45:52 drk $"
@@ -299,7 +299,7 @@ char **argv;
        The focus should be on the red button.
     */
 
-    
+
     init_focus[0] = bb;
     init_focus[1] = NULL;
     init_focus[2] = NULL;
@@ -464,4 +464,3 @@ void PrintFocus (Widget w, XtPointer client_data, XtPointer call_data)
    printf ("Widget %s has focus\n", XtName(fw));
    fflush (stdout);
 }
-

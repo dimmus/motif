@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollWin3.c /main/8 1995/07/13 19:49:07 drk $"
@@ -140,33 +140,33 @@ void  main(argc, argv)
     XtTranslations new_table;
 
     CommonTestInit(argc, argv);
-    
+
     /* test case for PIR 3180 */
     XtAppAddActions(app_context, actions, XtNumber(actions));
 
     n = 0;
     XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);  n++;
-    XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmSTATIC);  n++; 
+    XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmSTATIC);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginHeight, 20);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginWidth, 20);  n++;
     XtSetArg(args[n], XmNspacing, 10);  n++;
     XtSetArg(args[n], XmNscrollBarPlacement, XmTOP_RIGHT);  n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("aquamarine"));  n++;
-    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2", 
+    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2",
         args, n);
     XtManageChild(ScrolledWindow2);
     /* end of test case for PIR 3180 */
-  
+
     /* test case for PIR 2945 */
     n = 0;
     XtSetArg(args[n], XmNclipWindow, &Clip1);  n++;
     XtGetValues(ScrolledWindow2, args, n);
-  
+
     /* add some translations to that widget */
     new_table = XtParseTranslationTable(translations);
     XtOverrideTranslations(Clip1, new_table);
     /* end of test case for PIR 2945 */
-    
+
     XtRealizeWidget(Shell1);
 
     CommonPause();
@@ -180,7 +180,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNspacing, 10);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginHeight, 20);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginWidth, 20);  n++;
-    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2", 
+    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2",
 	args, n);
     XtManageChild(ScrolledWindow2);
 
@@ -218,7 +218,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNspacing, 10);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginHeight, 20);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginWidth, 20);  n++;
-    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2", 
+    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2",
 	args, n);
     XtManageChild(ScrolledWindow2);
 
@@ -248,12 +248,12 @@ void  main(argc, argv)
     n = 0;
     XtSetArg(args[n], XmNscrollingPolicy, XmAPPLICATION_DEFINED);  n++;
     XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmSTATIC);  n++;
-    XtSetArg(args[n], XmNscrollBarPlacement, XmBOTTOM_LEFT);  n++; 
+    XtSetArg(args[n], XmNscrollBarPlacement, XmBOTTOM_LEFT);  n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("aquamarine"));  n++;
     XtSetArg(args[n], XmNspacing, 10);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginHeight, 20);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginWidth, 20);  n++;
-    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2", 
+    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2",
 	args, n);
     XtManageChild(ScrolledWindow2);
 
@@ -281,14 +281,14 @@ void  main(argc, argv)
     XtDestroyWidget(ScrolledWindow2);
 
     n = 0;
-    XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);  n++; 
-    XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmSTATIC);  n++; 
+    XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);  n++;
+    XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmSTATIC);  n++;
     XtSetArg(args[n], XmNscrollBarPlacement, XmBOTTOM_LEFT);  n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("aquamarine"));  n++;
     XtSetArg(args[n], XmNspacing, 10);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginHeight, 20);  n++;
     XtSetArg(args[n], XmNscrolledWindowMarginWidth, 20);  n++;
-    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2", 
+    ScrolledWindow2 = XmCreateScrolledWindow(Shell1, "ScrolledWindow2",
 	args, n);
     XtManageChild(ScrolledWindow2);
 

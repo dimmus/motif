@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
-# #) This is Container3 test run with the option "-I Container3b.Dat -u b",  
+# #) This is Container3 test run with the option "-I Container3b.Dat -u b",
 #    trying to test default translations and actions.
 # C)
 # C)
@@ -32,22 +32,22 @@
 Continue
 Continue
 
-# #) Click Btn1 on IconGad2 to select it. 
-# #) Press Btn1 on IconGad1 and drag to IconGad4 to select all four. 
+# #) Click Btn1 on IconGad2 to select it.
+# #) Press Btn1 on IconGad1 and drag to IconGad4 to select all four.
 #    Release Btn1.
 # #) Click Btn1 outside the icon gadgets to unselect all gadgets.
 
 CompareVisual Container3b
 LocatePointer IconGad2
-ClickMB Btn1          
+ClickMB Btn1
 CompareVisual Container3b
 LocatePointer IconGad1
-PressMB Btn1          
+PressMB Btn1
 LocatePointer IconGad4
 ReleaseMB Btn1
 CompareVisual Container3b
-LocatePointerXYRel Container3b 10 10 
-ClickMB Btn1          
+LocatePointerXYRel Container3b 10 10
+ClickMB Btn1
 CompareVisual Container3b
 
 # #) Click Btn1 on IconGad1 to select it and click <Shift> Btn1 on IconGad3.
@@ -55,48 +55,48 @@ CompareVisual Container3b
 # #) Click Btn1 outside the icon gadgets to unselect all gadgets.
 
 LocatePointer IconGad1
-ClickMB Btn1          
+ClickMB Btn1
 CompareVisual Container3b
 LocatePointer IconGad3
-ClickMB <Shift> Btn1          
+ClickMB <Shift> Btn1
 CompareVisual Container3b
-LocatePointerXYRel Container3b 10 10 
-ClickMB Btn1          
+LocatePointerXYRel Container3b 10 10
+ClickMB Btn1
 CompareVisual Container3b
 
 # #) Press <Ctrl> Btn1 on IconGad1 and drag across to IconGad4.
 #    Release Btn1. This will select all.  Repeat to unselect.
 
 LocatePointer IconGad1
-PressMB <Ctrl> Btn1          
+PressMB <Ctrl> Btn1
 LocatePointer IconGad4
 ReleaseMB Btn1
 CompareVisual Container3b
 LocatePointer IconGad1
-PressMB <Ctrl> Btn1          
+PressMB <Ctrl> Btn1
 LocatePointer IconGad4
 ReleaseMB Btn1
 CompareVisual Container3b
 
 # #) Press Btn1 on IconGad1 and start dragging to IconGad4 to select the gadgets.
-#    Press escape to cancel the selection. 
+#    Press escape to cancel the selection.
 #    Release Btn1.
 
 LocatePointer IconGad1
-PressMB Btn1          
+PressMB Btn1
 LocatePointer IconGad4
 CompareVisual Container3b
 ClickKey KEscape
 ReleaseMB Btn1
 CompareVisual Container3b
 
-# #) Press Btn1 outside IconGad1 on the left, and start dragging towards 
-#    IconGad4. A Marquee rectangle appears. When a gadget is inside this 
+# #) Press Btn1 outside IconGad1 on the left, and start dragging towards
+#    IconGad4. A Marquee rectangle appears. When a gadget is inside this
 #    rectangle, its selection state changes. Release Btn1.
 #    The gadgets inside the Marquee rectangle are selected.
-# C) 
+# C)
 
-LocatePointerXYRel Container3b 10 10 
+LocatePointerXYRel Container3b 10 10
 PressMB Btn1
 LocatePointerXYRel Container3b 50 50
 CompareVisual Container3b
@@ -104,7 +104,7 @@ LocatePointerXYRel Container3b 88 180
 ReleaseMB Btn1
 CompareVisual Container3b
 Continue
-                                                        
+
 # #) Click Btn1 on IconGad1 to select it.
 # #) Move the selection over the gadgets by using the up and down arrow
 #    keys. Stay on IconGad2.
@@ -112,17 +112,17 @@ Continue
 LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container3b
-ClickKey KUp 
-ClickKey KUp 
+ClickKey KUp
+ClickKey KUp
 CompareVisual Container3b
 ClickKey KDown
 ClickKey KDown
 ClickKey KDown
 CompareVisual Container3b
 
-# #) Press <Ctrl> and osfBeginLine to move the selection to IconGad1 (the 
-#    first item). 
-# #) Press <Ctrl> and osfEndLine to move the selection to IconGad4 (the last 
+# #) Press <Ctrl> and osfBeginLine to move the selection to IconGad1 (the
+#    first item).
+# #) Press <Ctrl> and osfEndLine to move the selection to IconGad4 (the last
 #    item).
 
 ClickKey <Ctrl> KBeginLine
@@ -131,11 +131,11 @@ ClickKey <Ctrl> KEndLine
 CompareVisual Container3b
 
 # #) Click Btn1 on IconGad3. This is now the anchor item.
-#    Press <Shift> osfDown arrow key. 
+#    Press <Shift> osfDown arrow key.
 #    IconGad4 is also selected.
 # #) Press <Shift> osfUp key.
 #    IconGad4 is deselected.
-#    Press <Shift> osfUp arrow key. 
+#    Press <Shift> osfUp arrow key.
 #    IconGad2 is also selected.
 
 LocatePointer IconGad3
@@ -166,7 +166,7 @@ ClickKey <Shift> <Ctrl> KEndLine
 CompareVisual Container3b
 
 # #) Press osfDeselectAll to unselect.
-#    Press osfSelectAll to select all items.  
+#    Press osfSelectAll to select all items.
 
 ClickKey <Ctrl> KDeselectAll
 CompareVisual Container3b
@@ -182,7 +182,7 @@ ClickMB Btn1
 CompareVisual Container3b
 Continue
 
-# #) Press osfAddMode to toggle the selection mode (Add mode). 
+# #) Press osfAddMode to toggle the selection mode (Add mode).
 #    The shape of the location cursor changes (dashed rectangle).
 # #) Click Btn1 on IconGad2 to select it.
 #    Move the location cursor by using the osfUp and osfDown arrow
@@ -246,19 +246,19 @@ ClickKey <Shift> KUp
 ClickKey <Shift> KUp
 CompareVisual Container3b
 
-# #) Press the osfSelect key on IconGad1.   
-#    Press <Shift> osfDown key. 
+# #) Press the osfSelect key on IconGad1.
+#    Press <Shift> osfDown key.
 #    IconGad1 is still selected and IconGad2 is selected.
-# #) Press <Shift> <Ctrl> and osfEndLine to move the position cursor to 
+# #) Press <Shift> <Ctrl> and osfEndLine to move the position cursor to
 #    IconGad4 (the last item).
 #    All the gadgets are selected.
-# #) Click the osfSelect key on IconGad4 to toggle it. 
+# #) Click the osfSelect key on IconGad4 to toggle it.
 #    IconGad4 is deselected.
-# #) Press <Shift> osfUp key. 
+# #) Press <Shift> osfUp key.
 #    IconGad3 is now deselected.
 # #) Press <Ctrl> <Shift> and osfBeginLine to unselect all.
 #    The location cursor is on IconGad1.
-# #) Press osfAddMode to toggle the selection mode (Normal mode). 
+# #) Press osfAddMode to toggle the selection mode (Normal mode).
 #    The shape of the location cursor is changes (rectangle).
 # C)
 

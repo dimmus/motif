@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol1.c /main/9 1995/07/13 18:54:12 drk $"
@@ -69,15 +69,15 @@ int main(int argc, char **argv)
   XmString tcs;
 
   CommonTestInit(argc, argv);
-    
+
   /* Add test for PIR 4287 */
-  
-  n = 0;	
+
+  n = 0;
   XtSetArg(args[n], XmNentryAlignment, XmALIGNMENT_CENTER); n++;
   XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
   XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
   XtSetArg(args[n], XmNnumColumns, 1); n++;
-  
+
   RowColumn1 = XmCreateRowColumn(Shell1, "RowColumn1", args, n);
   XtManageChild(RowColumn1);
 
@@ -132,14 +132,14 @@ int main(int argc, char **argv)
   XtManageChild(ToggleButton1);
 
   CommonPause();
-  
-  Leatherette = 
+
+  Leatherette =
     XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow (display), Leatherette_bits,
 				Leatherette_width, Leatherette_height,
-				CommonGetColor("black"), 
+				CommonGetColor("black"),
 				CommonGetColor("yellow"),
-				DefaultDepth (display, 
+				DefaultDepth (display,
 					      DefaultScreen (display)));
 
   n = 0;
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
   n = 0;
   XtSetArg(args[n], XmNpacking, XmPACK_TIGHT);  n++;
   XtSetValues(RowColumn1, args, n);
-  
+
   CommonPause();
 
   n = 0;
@@ -215,7 +215,7 @@ void genericCallback(Widget w, caddr_t client_data, caddr_t call_data)
     printf ("Activation Callback was received.\n");
 
   if (((XmAnyCallbackStruct *)call_data)->reason == XmCR_VALUE_CHANGED)
-    { 
+    {
       printf ("Value Changed Callback was received.\n");
       printf (" State check: button is %s\n\n",
 	      ((XmToggleButtonGetState(w)) ? "ON" : "OFF"));

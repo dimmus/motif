@@ -1,6 +1,6 @@
 #include <testlib.h>
 
-static char *Strings = { 
+static char *Strings = {
 	"We few, we happy few, we band of brothers;\n"
 	"For he to-day that sheds his blood with me\n"
 	"Shall be my brother; be he ne'er so vile,\n"
@@ -114,7 +114,7 @@ PrintValues( Widget window, char *label )
 
   return;
 }
-  
+
 
 
   int
@@ -189,7 +189,7 @@ main( int argc, char *argv[] )
   SetWidgetColor( Text, "green" );
   PrintValues( Window, "Assertion 2" );
   CommonPause();
-  
+
   /* Cleanup Time */
   XmDestroyPixmap( screen, WindPixmap );
   XmDestroyPixmap( screen, TextPixmap );

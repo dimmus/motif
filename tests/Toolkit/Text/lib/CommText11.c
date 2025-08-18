@@ -54,14 +54,14 @@ void enlarge_it(Widget w, XtPointer client_data, XtPointer call_data)
 	Arg args[MAX_ARGS];
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, &get_width);  n++; 
+	XtSetArg(args[n], XmNwidth, &get_width);  n++;
 	XtGetValues(w, args, n);
 
 	n=0;
 	if (get_width == 100)
 	{
-		XtSetArg(args[n], XmNwidth, 120);  n++; 
-		XtSetArg(args[n], XmNheight, 120);  n++; 
+		XtSetArg(args[n], XmNwidth, 120);  n++;
+		XtSetArg(args[n], XmNheight, 120);  n++;
 	}
 	else
 	{
@@ -181,35 +181,35 @@ void main_text11 (argc, argv)
 	CommonTestInit(argc, argv);
 
 	n=0;
-	XtSetArg(args[n], XmNmarginWidth, 20);  n++; 
-	XtSetArg(args[n], XmNmarginHeight, 20);  n++; 
+	XtSetArg(args[n], XmNmarginWidth, 20);  n++;
+	XtSetArg(args[n], XmNmarginHeight, 20);  n++;
 	bboard = XmCreateBulletinBoard(Shell1, "bboard", args, n);
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, 100);  n++; 
-	XtSetArg(args[n], XmNheight, 100);  n++; 
+	XtSetArg(args[n], XmNwidth, 100);  n++;
+	XtSetArg(args[n], XmNheight, 100);  n++;
 	string = XmStringLtoRCreate("Push Button 1", XmSTRING_DEFAULT_CHARSET);
-	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++; 
-	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++; 
-	XtSetArg(args[n], XmNlabelString, string);  n++; 
+	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++;
+	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++;
+	XtSetArg(args[n], XmNlabelString, string);  n++;
 
-	pushbutton = XmCreatePushButton(bboard, "pushbutton", args, n); 
+	pushbutton = XmCreatePushButton(bboard, "pushbutton", args, n);
 
 	XmStringFree(string);
 
 	new_accel = XtParseAcceleratorTable(new_accelerators);
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, 100);  n++; 
-	XtSetArg(args[n], XmNheight, 100);  n++; 
-	XtSetArg(args[n], XmNy, 140);  n++; 
+	XtSetArg(args[n], XmNwidth, 100);  n++;
+	XtSetArg(args[n], XmNheight, 100);  n++;
+	XtSetArg(args[n], XmNy, 140);  n++;
 	string = XmStringLtoRCreate("Push Button 2", XmSTRING_DEFAULT_CHARSET);
-	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++; 
-	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++; 
-	XtSetArg(args[n], XmNlabelString, string);  n++; 
-	XtSetArg(args[n], XmNaccelerators, new_accel);  n++; 
+	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++;
+	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++;
+	XtSetArg(args[n], XmNlabelString, string);  n++;
+	XtSetArg(args[n], XmNaccelerators, new_accel);  n++;
 
-	pushbutton2 = XmCreatePushButton(bboard, "pushbutton2", args, n); 
+	pushbutton2 = XmCreatePushButton(bboard, "pushbutton2", args, n);
 
 	XmStringFree(string);
 
@@ -222,12 +222,12 @@ void main_text11 (argc, argv)
 	XtInstallAccelerators(pushbutton, pushbutton2);
 
 
-	CommonPause();  
+	CommonPause();
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, 100);  n++; 
-	XtSetArg(args[n], XmNheight, 100);  n++; 
-	XtSetArg(args[n], XmNy, 300);  n++; 
+	XtSetArg(args[n], XmNwidth, 100);  n++;
+	XtSetArg(args[n], XmNheight, 100);  n++;
+	XtSetArg(args[n], XmNy, 300);  n++;
 	XtSetArg(args[n], XmNeditMode, XmMULTI_LINE_EDIT); n++;
 	XtSetArg(args[n], XmNvalue, text_string);  n++;
 	text1 = XmCreateText(bboard, "text1", args, n);
@@ -237,46 +237,46 @@ void main_text11 (argc, argv)
 	XtInstallAccelerators(text1, pushbutton2);
 	/* end of test case for PIR 2162, PIR 4275 */
 
-	CommonPause();  
+	CommonPause();
 
 	XtDestroyWidget(pushbutton);
 	XtDestroyWidget(pushbutton2);
 	XtDestroyWidget(text1);
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, 100);  n++; 
-	XtSetArg(args[n], XmNheight, 100);  n++; 
+	XtSetArg(args[n], XmNwidth, 100);  n++;
+	XtSetArg(args[n], XmNheight, 100);  n++;
 	string = XmStringLtoRCreate("Push Button 1", XmSTRING_DEFAULT_CHARSET);
-	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++; 
-	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++; 
-	XtSetArg(args[n], XmNlabelString, string);  n++; 
+	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++;
+	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++;
+	XtSetArg(args[n], XmNlabelString, string);  n++;
 
-	pushbutton = XmCreatePushButton(bboard, "pushbutton", args, n); 
+	pushbutton = XmCreatePushButton(bboard, "pushbutton", args, n);
 
 	XmStringFree(string);
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, 100);  n++; 
-	XtSetArg(args[n], XmNheight, 100);  n++; 
-	XtSetArg(args[n], XmNy, 140);  n++; 
+	XtSetArg(args[n], XmNwidth, 100);  n++;
+	XtSetArg(args[n], XmNheight, 100);  n++;
+	XtSetArg(args[n], XmNy, 140);  n++;
 	string = XmStringLtoRCreate("Push Button 2", XmSTRING_DEFAULT_CHARSET);
-	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++; 
-	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++; 
-	XtSetArg(args[n], XmNlabelString, string);  n++; 
+	XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++;
+	XtSetArg(args[n], XmNlabelType, XmSTRING);  n++;
+	XtSetArg(args[n], XmNlabelString, string);  n++;
 
-	pushbutton2 = XmCreatePushButton(bboard, "pushbutton2", args, n); 
+	pushbutton2 = XmCreatePushButton(bboard, "pushbutton2", args, n);
 
 	XmStringFree(string);
 
 	new_accel = XtParseAcceleratorTable(new_accelerators2);
 
 	n=0;
-	XtSetArg(args[n], XmNwidth, 100);  n++; 
-	XtSetArg(args[n], XmNheight, 100);  n++; 
-	XtSetArg(args[n], XmNy, 300);  n++; 
+	XtSetArg(args[n], XmNwidth, 100);  n++;
+	XtSetArg(args[n], XmNheight, 100);  n++;
+	XtSetArg(args[n], XmNy, 300);  n++;
 	XtSetArg(args[n], XmNeditMode, XmMULTI_LINE_EDIT); n++;
 	XtSetArg(args[n], XmNvalue, text_string);  n++;
-	XtSetArg(args[n], XmNaccelerators, new_accel);  n++; 
+	XtSetArg(args[n], XmNaccelerators, new_accel);  n++;
 	text1 = XmCreateText(bboard, "text1", args, n);
 
 	XtManageChild (pushbutton);
@@ -285,7 +285,7 @@ void main_text11 (argc, argv)
 
 	XtInstallAccelerators(pushbutton, text1);
 
-	CommonPause();  
+	CommonPause();
 
         XtDestroyWidget( pushbutton );
         XtDestroyWidget( pushbutton2 );

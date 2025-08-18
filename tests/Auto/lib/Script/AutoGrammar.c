@@ -2542,7 +2542,7 @@ yyreduce:
 
   case 26: /* MouseCommands: MCommandName ModKeyList Button Count  */
 #line 395 "Automation.y"
-                        {	
+                        {
 				BuildMouseCommand(yytknval1,
 						  yymodmaskval,
 						  yymaskcnt,
@@ -2580,7 +2580,7 @@ yyreduce:
 
   case 32: /* ModKey: SHIFTMASK  */
 #line 415 "Automation.y"
-                                                { yymodmaskval[yymaskcnt++] 
+                                                { yymodmaskval[yymaskcnt++]
 								= SHIFTMASK; }
 #line 2586 "y.tab.c"
     break;
@@ -4782,7 +4782,7 @@ yyreduce:
   case 400: /* SCommand: STRING  */
 #line 995 "Automation.y"
                                                 { yystringval2 = (char *)malloc(
-						     sizeof(char) * 
+						     sizeof(char) *
 						     (strlen(yystringval) + 1));
 						  strcpy(yystringval2,
 							 yystringval); }
@@ -4798,10 +4798,10 @@ yyreduce:
 
   case 404: /* SCommandArg: DIGIT  */
 #line 1008 "Automation.y"
-                                                { 
+                                                {
 						  temp = (char *) malloc
 							  (sizeof(char) * 10);
-						  sprintf(temp, "%d", 
+						  sprintf(temp, "%d",
 							       yydigitval);
 						  yysysarglist[yysysargs++] =
 							temp; }
@@ -4834,7 +4834,7 @@ yyreduce:
   case 408: /* WidgetName1: STRING  */
 #line 1037 "Automation.y"
                                                { yystringval2 = (char *)malloc(
-						    sizeof(char) * 
+						    sizeof(char) *
 						    (strlen(yystringval) + 1));
 						  strcpy(yystringval2,
 						         yystringval); }
@@ -4859,7 +4859,7 @@ yyreduce:
 
   case 412: /* DragCommands: DCommandName DragList  */
 #line 1069 "Automation.y"
-                        {	
+                        {
 				BuildDragCommand(yytknval1,
 						 yydigitval2,
 						 yydigitval,
@@ -4867,7 +4867,7 @@ yyreduce:
 						 yytknval4,
 						 yydigitval3,
 						 yytknval3,
-						 yymodmaskval, 
+						 yymodmaskval,
 						 yymaskcnt);
 				yydigitval2 = yydigitval = yydigitval3 = 0;
 				yymaskcnt = 0;
@@ -4975,7 +4975,7 @@ yyreduce:
 
   case 432: /* InputCommands: InputCommandName InputStringData  */
 #line 1127 "Automation.y"
-                        {	
+                        {
 				BuildInputCommand(yytknval1,
 						  yyinputstring);
 			}
@@ -5071,7 +5071,7 @@ yyreduce:
   case 447: /* Wname: STRING  */
 #line 1178 "Automation.y"
                                                 { yystringval2 = (char *)malloc(
-						     sizeof(char) * 
+						     sizeof(char) *
 						     (strlen(yystringval) + 1));
 						  strcpy(yystringval2,
 							 yystringval); }
@@ -5123,9 +5123,9 @@ yyreduce:
   case 455: /* WidgetName1: STRING  */
 #line 1215 "Automation.y"
                                                 { yystringval2 = (char *)malloc(
-						     sizeof(char) * 
+						     sizeof(char) *
 						     (strlen(yystringval) + 1));
-						     strcpy(yystringval2, 
+						     strcpy(yystringval2,
 							 yystringval); }
 #line 5131 "y.tab.c"
     break;
@@ -5163,7 +5163,7 @@ yyreduce:
   case 462: /* WindowPostCommands: PostCommandName WidgetName Keyboard  */
 #line 1237 "Automation.y"
                         {
-				BuildPostCommand(yytknval1, 
+				BuildPostCommand(yytknval1,
 						 yystringval,
 						 yytknval2);
 			}
@@ -5501,7 +5501,7 @@ yyerror (s)
 char *s;
 {
 
-	fprintf(stderr, "%s found parsing input - line %d - Exiting...\n", 
+	fprintf(stderr, "%s found parsing input - line %d - Exiting...\n",
 		s, line_cnt);
 	exit(0);
 

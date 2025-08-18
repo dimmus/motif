@@ -24,7 +24,7 @@
 # HISTORY
 #
 
-#   $XConsortium: Scrollbar11.scr /main/4 1995/07/13 19:14:06 drk $ 
+#   $XConsortium: Scrollbar11.scr /main/4 1995/07/13 19:14:06 drk $
 
 
 # A client with two vertical scrollbars will appear. Both will have
@@ -44,7 +44,7 @@ ClickKey KUp
 ClickKey KUp
 ClickKey KDown
 ClickKey KDown
-CompareVisual scrollbar1 
+CompareVisual scrollbar1
 
 LocatePointer scrollbar2
 ClickMB Btn1
@@ -65,12 +65,12 @@ DragSliderValue Up Max Btn1
 Continue
 
 #  Vertical Scrollbars:
-   
+
 # Change the scrollbar value with the keyboard and verify the following
 # behavior (check ~/.motifbind for key bindings). Look at the behavior
 # of the scrollbar, and the output in the stdout window:
-   
-# 
+
+#
 # osfUp             - left SB:   XmCR_INCREMENT +1
 #                     right SB:  XmCR_DECREMENT -1
 
@@ -199,7 +199,7 @@ CompareVisual scrollbar2
 Continue
 
 # !) Horizontal Scrollbars:
-   
+
 # Change the scrollbar value with the keyboard and verify the following
 # behavior (check ~/.motifbind for key bindings). Look at the behavior
 # of the scrollbar, and the output in the stdout window:
@@ -332,7 +332,7 @@ CompareVisual scrollbar1
 CompareVisual scrollbar2
 
 Continue
-   
+
 # Scrollbar2 has been destroyed and recreated in a bulletin board which
 # has been set insensitive.
 # Scrollbar1 has been set insensitive.
@@ -340,5 +340,5 @@ Continue
 
 CompareVisual bb
 Continue
-      
+
 Exit

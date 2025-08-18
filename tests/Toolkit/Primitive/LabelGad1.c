@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: LabelGad1.c /main/7 1995/07/13 19:09:32 drk $"
@@ -61,13 +61,13 @@ char **argv;
   int newx,newy,newH,newW;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
   XtSetValues(Shell1, args, n);
-  
+
   XtRealizeWidget(Shell1);
 
   n = 0;
@@ -93,7 +93,7 @@ char **argv;
   XtSetValues(Frame1, args, n);
 
   /* change so that button displays a pixmap on arm */
-  gnumap = 
+  gnumap =
     XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				gnu_bits, gnu_width, gnu_height,
@@ -151,7 +151,7 @@ char *words[];
 	len += (n - 1);
 
 	buffer = (char *) malloc(len + 1);
-	if (buffer == NULL) 
+	if (buffer == NULL)
 		{
 		fprintf(stderr, "Out of Memory in concat_args()\n");
 		exit(1);
@@ -174,18 +174,9 @@ XEvent	*event;
 {
 exit(0);
 }
-	
+
 void myQuit()
 {
 	printf("Completed\n");
 	exit(0);
 }
-
-
-
-
-
-
-
-
-

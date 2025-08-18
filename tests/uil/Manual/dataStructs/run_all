@@ -22,7 +22,7 @@
 #
 # HISTORY
 
-# 
+#
 #	This shell script will run each of the UIL Data Structures tests
 #	and redirect the output to the file 'dataStruct.out'
 #
@@ -71,9 +71,3 @@ echo ""
 #
 #  End Run script
 #
-
-
-
-
-
-

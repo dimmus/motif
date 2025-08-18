@@ -34,7 +34,7 @@
 
 Continue
 
-# Now post "Pink Black Red" by clicking MB3 in the pushbutton area.  
+# Now post "Pink Black Red" by clicking MB3 in the pushbutton area.
 
 # Unpost the menu by clicking MB1 in the pushbutton area.
 
@@ -47,7 +47,7 @@ Continue
 
 Continue
 
-# XmNunpostBehavior is set to XmUNPOST now.  
+# XmNunpostBehavior is set to XmUNPOST now.
 
 # Post "Pink Black Red" by clicking  MB3.  Now select MB3 elsewhere in the
 # pushbutton area.  The menu should be unposted from its original position.

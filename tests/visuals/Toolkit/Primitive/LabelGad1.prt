@@ -22,33 +22,33 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Shell1 
-TRACE:(2) LocatePointer LabelGadget1  
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual Shell1
+TRACE:(2) LocatePointer LabelGadget1
+TRACE:(3) ClickMB Btn1
 TRACE:(4) LocatePointer Frame1  Off
-TRACE:(5) LocatePointer LabelGadget1  
+TRACE:(5) LocatePointer LabelGadget1
 TRACE:(6) LocatePointer Frame1  Off
-TRACE:(7) PressMB Btn1 
-TRACE:(8) LocatePointer LabelGadget1  
+TRACE:(7) PressMB Btn1
+TRACE:(8) LocatePointer LabelGadget1
 TRACE:(9) LocatePointer Frame1  Off
-TRACE:(10) ReleaseMB Btn1 
+TRACE:(10) ReleaseMB Btn1
 TRACE:(11) WindowIconify Shell1
 TRACE:(12) WindowDeiconify Shell1
 TRACE:(13) Continue
-TRACE:(14) CompareVisual Frame1 
-TRACE:(15) LocatePointer LabelGadget1  
-TRACE:(16) ClickMB Btn1 
+TRACE:(14) CompareVisual Frame1
+TRACE:(15) LocatePointer LabelGadget1
+TRACE:(16) ClickMB Btn1
 TRACE:(17) LocatePointer Frame1  Off
-TRACE:(18) LocatePointer LabelGadget1  
+TRACE:(18) LocatePointer LabelGadget1
 TRACE:(19) LocatePointer Frame1  Off
      AUTOWARNING** : Bad direction code '%d' sent to xisMovePointerTo ()
      AUTOWARNING** : ...will assume direction Move Right
-TRACE:(20) PressMB Btn1 
-TRACE:(21) LocatePointer LabelGadget1  
+TRACE:(20) PressMB Btn1
+TRACE:(21) LocatePointer LabelGadget1
 TRACE:(22) LocatePointer Frame1  Off
      AUTOWARNING** : Bad direction code '%d' sent to xisMovePointerTo ()
      AUTOWARNING** : ...will assume direction Move Right
-TRACE:(23) ReleaseMB Btn1 
+TRACE:(23) ReleaseMB Btn1
 TRACE:(24) Continue
 TRACE:(25) Exit
 Exiting Test...Please Standby...

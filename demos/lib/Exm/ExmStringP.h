@@ -82,7 +82,7 @@ typedef struct _ExmStringPart
 	unsigned char		alignment;
         XmRenderTable           render_table;
         Boolean                 recompute_size;
-        ExmHowAligned           text_starts_here; 
+        ExmHowAligned           text_starts_here;
 } ExmStringPart;
 
 /* Define the full instance record. */

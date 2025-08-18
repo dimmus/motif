@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Scrollbar8.c /main/7 1999/01/15 12:36:34 jff $"
@@ -54,7 +54,7 @@ char **argv;
   Boolean notify = False;
 
   CommonTestInit(argc, argv);
-    
+
   frame = XmCreateFrame(Shell1, "frame", NULL, 0);
   XtManageChild(frame);
 
@@ -78,11 +78,11 @@ char **argv;
 
   for(i = 0; i < 5; i ++)
     {
-      XmScrollBarSetValues(scrollbar, value, slider_size, 
+      XmScrollBarSetValues(scrollbar, value, slider_size,
 			   increment, page_increment, notify);
       if(notify == False) notify = True;
       else notify = False;
-      XmScrollBarGetValues(scrollbar, &value, &slider_size, 
+      XmScrollBarGetValues(scrollbar, &value, &slider_size,
                             &increment, &page_increment);
       printf("value = %d,  slider_size = %d,  incr = %d,  page_incr = %d\n\n",
               value, slider_size, increment, page_increment);
@@ -113,7 +113,7 @@ XtPointer call_data;
    int n;
 
 
-   XmScrollBarCallbackStruct * call_value = 
+   XmScrollBarCallbackStruct * call_value =
      (XmScrollBarCallbackStruct *) call_data;
 
    reason = call_value -> reason;

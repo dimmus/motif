@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WinToWidgInf.c /main/7 1995/07/14 11:18:02 drk $"
@@ -58,14 +58,14 @@ Window window;
     MvsWidgetInfoRecord *widget_info_stack[100];
     short stack_top = 0;
 
-    while ( widget_info != mvsRootWidgetInfo && 
+    while ( widget_info != mvsRootWidgetInfo &&
             window != XtWindowOfObject(widget_info->widget) ) {
 
         if (widget_info->first_child != NULL) {
             widget_info_stack[stack_top++] = widget_info;
             widget_info = (MvsWidgetInfoRecord *)widget_info->first_child;
         }
-        else 
+        else
             if (widget_info->next_sibling != NULL)
                 widget_info = (MvsWidgetInfoRecord *)widget_info->next_sibling;
             else {
@@ -76,7 +76,7 @@ Window window;
 
                 if (stack_top == 0)
                     break;
-            } 
+            }
     } /* End while() */
 
     return widget_info;

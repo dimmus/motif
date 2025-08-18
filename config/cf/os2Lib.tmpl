@@ -71,41 +71,41 @@ XCOMM $XFree86: xc/config/cf/os2Lib.tmpl,v 3.3 1996/04/15 11:13:56 dawes Exp $
  * are using shared libraries, we really do not need to depend on anything
  */
 #if SharedLibXext
- DEPEXTENSIONLIB = 
+ DEPEXTENSIONLIB =
     EXTENSIONLIB = _Use(SDlibXExt,-L$(EXTENSIONSRC)/lib SDlibXExt)
 #endif
 #if SharedLibX11
-         DEPXLIB = 
+         DEPXLIB =
             XLIB = $(EXTENSIONLIB) _Use(SDlibX11,-L$(XLIBSRC) SDlibX11)
 #endif
 #if SharedLibXmu
-       DEPXMULIB = 
+       DEPXMULIB =
           XMULIB = _Use(SDlibXmu,-L$(XMUSRC) SDlibXmu) $(XLIB)
 #ifndef XawClientLibs
 #define XawClientLibs $(XAWLIB) $(XMULIB) $(XTOOLLIB) $(XLIB)
 #endif
 #endif
 #if SharedOldX
-      DEPOLDXLIB = 
+      DEPOLDXLIB =
          OLDXLIB = _Use(-loldX,-L$(OLDXLIBSRC) -loldX)
 #endif
 #if SharedLibXt
-     DEPXTOOLLIB = 
+     DEPXTOOLLIB =
         XTOOLLIB = _Use(SDlibXt,-L$(TOOLKITSRC) SDlibXt)
 #endif
 #if SharedLibXaw
-       DEPXAWLIB = 
+       DEPXAWLIB =
           XAWLIB = _Use(SDlibXaw,-L$(AWIDGETSRC) SDlibXaw)
 #endif
 #if SharedLibXi
-        DEPXILIB = 
+        DEPXILIB =
            XILIB = _Use(SDlibXi,-L$(XILIBSRC) SDlibXi)
 #endif
 #if SharedLibXTest
-    DEPXTESTLIB = 
+    DEPXTESTLIB =
        XTESTLIB = _Use(SDlibXtst,-L$(EXTENSIONSRC)/lib/xtest SDlibXtst)
 #endif
 #if SharedLibPex
-      DEPPEXLIB = 
+      DEPPEXLIB =
          PEXLIB = _Use(SDlibPEX5,-L$(PEXLIBSRC) SDlibPEX5)
 #endif

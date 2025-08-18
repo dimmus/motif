@@ -28,7 +28,7 @@ else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Menus
 endif
 
-# The following needed for Vista usage 
+# The following needed for Vista usage
 setenv TOP ../../..
 
 set Menu1a = 'Menu1 -I Menu1a.Dat -S Menu1a.Scr -O Menu1a.prt -V Menu1a.Vis -xrm "*Menu1.layoutDirection:RIGHT_TO_LEFT"'

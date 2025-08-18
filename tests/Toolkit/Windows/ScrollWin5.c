@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollWin5.c /main/8 1995/07/13 19:50:28 drk $"
@@ -62,7 +62,7 @@ void  main(argc, argv)
     n = 0;
     XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);			n++;
     XtSetArg(args[n], XmNvisualPolicy, XmVARIABLE);			n++;
-    XtSetArg(args[n], XmNscrollBarPlacement, XmBOTTOM_LEFT); 		n++; 
+    XtSetArg(args[n], XmNscrollBarPlacement, XmBOTTOM_LEFT); 		n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("MediumAquamarine")); n++;
     XtSetArg(args[n], XmNwidth, 200);					n++;
     XtSetArg(args[n], XmNheight, 200);					n++;
@@ -94,7 +94,7 @@ void  main(argc, argv)
 
     n = 0;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
-    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);	n++; 
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);      n++;
     XtSetArg(args[n], XmNleftWidget, ArrowB1);      		n++;
     XtSetArg(args[n], XmNleftOffset, 10);	      		n++;
@@ -108,8 +108,8 @@ void  main(argc, argv)
     XtManageChild(ArrowB3);
 
     XtRealizeWidget(Shell1);
- 
-    CommonPause();  
+
+    CommonPause();
 
     n = 0;
     XtSetArg(args[n], XmNarrowDirection, XmARROW_LEFT);		n++;

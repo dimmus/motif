@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PIColormap.c /main/7 1995/07/13 20:18:29 drk $"
@@ -122,7 +122,7 @@ char	*argv[];
 	XmString    message;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
 	XtSetArg(args[n], XmNwidth, 10); n++;
 	XtSetArg(args[n], XmNheight, 10); n++;
@@ -139,10 +139,10 @@ char	*argv[];
 	 * Initialize the callbacks actual returns
 	 */
 	for (i = (PIInfo_CMstart + VALID_TEST1);
-		 i < (PIInfo_CMstart + VALID_TEST3); 
+		 i < (PIInfo_CMstart + VALID_TEST3);
 		 i++)
 		PIInfo[i].actual_return = False;
-    
+
 /*
  * Create top level shell widget as parent for test_button widgets
  */
@@ -228,11 +228,11 @@ char	*argv[];
 	test_atom = XmInternAtom(display, "WM_COLORMAP_WINDOWS", False);
 	wdw_list[0] = button_wdw;
 	wdw_list[1] = test_wdw;
-	XChangeProperty(display, test_wdw, test_atom, XA_WINDOW, 32, 
+	XChangeProperty(display, test_wdw, test_atom, XA_WINDOW, 32,
 					PropModeReplace, (unsigned char *)wdw_list, 2);
 
 	/*
-	 * Initialize the callbacks actual returns 
+	 * Initialize the callbacks actual returns
 	 */
 	for (i = (PIInfo_CMstart + VALID_TEST1);
 		 i < (PIInfo_CMstart + VALID_TEST3);
@@ -295,7 +295,7 @@ char	*argv[];
 	test_atom = XmInternAtom(display, "WM_COLORMAP_WINDOWS", False);
 	wdw_list[0] = button_wdw2;
 	wdw_list[1] = test_wdw;
-	XChangeProperty(display, test_wdw, test_atom, XA_WINDOW, 32, 
+	XChangeProperty(display, test_wdw, test_atom, XA_WINDOW, 32,
 					PropModeReplace, (unsigned char *)wdw_list, 2);
 
 	CommonPause();
@@ -309,14 +309,14 @@ char	*argv[];
 	wdw_list[0] = test_wdw;
 	wdw_list[1] = button_wdw;
 	wdw_list[2] = button_wdw2;
-	XChangeProperty(display, test_wdw, test_atom, XA_WINDOW, 32, 
+	XChangeProperty(display, test_wdw, test_atom, XA_WINDOW, 32,
 					PropModeReplace, (unsigned char *)wdw_list, 3);
 
 	CommonPause();
 
     XtDestroyWidget (test_top);
 
-   
+
     /* test for CR 5183 */
 
     rc = XmCreateRowColumn(Shell1, "rc", NULL, 0);
@@ -337,7 +337,7 @@ char	*argv[];
     XtSetArg(args[n], XmNy, 100); n++ ;
     popupShell = XtCreatePopupShell("popup", overrideShellWidgetClass,
                                     Shell1, args, n);
-    
+
     /* the popup shell must be realized so that XSetWMColormapWindows is
      * guaranteed to have a window
      */
@@ -363,4 +363,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-

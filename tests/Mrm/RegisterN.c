@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RegisterN.c /main/9 1995/07/14 10:52:48 drk $"
@@ -62,7 +62,7 @@ void		error_proc();
  * Names to register with MrmRegisterNames
  */
 
-static MrmRegisterArg reglist_1[] = 
+static MrmRegisterArg reglist_1[] =
 {
     "test1_proc",	(caddr_t) test1_1_proc,
     "test2_proc",	(caddr_t) test2_1_proc,
@@ -159,7 +159,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -169,7 +169,7 @@ main(argc, argv)
 /*
  * Register the names of the callback routines and variables with Mrm
  */
-    
+
     if(MrmRegisterNames(reglist_1,	/* list of names	*/
 			reglist_1_num)	/* number of names	*/
        != MrmSUCCESS)
@@ -180,7 +180,7 @@ main(argc, argv)
 /*
  * Fetch widget with callbacks test1_1_proc() and test2_1_proc()
  */
-    
+
     if(MrmFetchWidget(s_MrmHierarchy,	/* id of uid hierarchy	   */
 		      "S_MAIN_WIDGET_1",/* uil name of widget	   */
 		      toplevel,		/* parent of widget	   */
@@ -197,7 +197,7 @@ main(argc, argv)
 
     XtCallCallbacks(widgetmain_1, XmNactivateCallback, NULL);
     XtCallCallbacks(widgetmain_1, XmNarmCallback, NULL);
-    
+
 /*
  * See if test1_1_proc() and test2_1_proc() were called
  */
@@ -212,7 +212,7 @@ main(argc, argv)
     if(!test2_1_called)
     {
 	errors++;
-	
+
 	fprintf(stdout, "RegisterN: failed to properly register callback routine test2_1_proc().\n");
     }
 
@@ -226,7 +226,7 @@ main(argc, argv)
     XtSetArg(args[nargs], XmNmarginTop, &test4_1_return ); nargs++;
     XtSetArg(args[nargs], XmNmarginLeft, &test5_1_return ); nargs++;
     XtGetValues(widgetmain_1, args, nargs);
-	
+
 /*
  * See if the values were set correctly
  */
@@ -234,21 +234,21 @@ main(argc, argv)
     if(test3_1_return != test3_1_expect)
     {
 	errors++;
-	
+
 	fprintf(stdout,"RegisterN: failed to properly register literal test3_1_var.\n");
     }
-    
+
     if(test4_1_return != test4_1_expect)
     {
 	errors++;
-	    
+
 	fprintf(stdout,"RegisterN: failed to properly register literal test4_1_var.\n");
     }
 
     if(test5_1_return != test5_1_expect)
     {
 	errors++;
-	
+
 	fprintf(stdout,"RegisterN: failed to properly register literal test5_1_var.\n");
     }
 
@@ -306,7 +306,7 @@ main(argc, argv)
 /*
  * Fetch widget with callbacks test1_2_proc() and test2_2_proc()
  */
-    
+
     if(MrmFetchWidget(s_MrmHierarchy,	/* id of uid hierarchy	   */
 		      "S_MAIN_WIDGET_2",/* uil name of widget	   */
 		      toplevel,		/* parent of widget	   */
@@ -323,7 +323,7 @@ main(argc, argv)
 
     XtCallCallbacks(widgetmain_2, XmNactivateCallback, NULL);
     XtCallCallbacks(widgetmain_2, XmNarmCallback, NULL);
-    
+
 /*
  * See if test1_2_proc() and test2_2_proc() were called
  */
@@ -340,7 +340,7 @@ main(argc, argv)
     if(!test2_2_called)
     {
 	errors++;
-	
+
 	fprintf(stdout, "RegisterN: failed to properly register callback routine test2_2_proc().\n");
     }
 
@@ -354,7 +354,7 @@ main(argc, argv)
     XtSetArg(args[nargs], XmNmarginTop, &test4_2_return ); nargs++;
     XtSetArg(args[nargs], XmNmarginLeft, &test5_2_return ); nargs++;
     XtGetValues(widgetmain_2, args, nargs);
-	
+
 /*
  * See if the values were set correctly
  */
@@ -362,24 +362,24 @@ main(argc, argv)
     if(test3_2_return != test3_2_expect)
     {
 	errors++;
-	
+
 	fprintf(stdout,"RegisterN: failed to properly register literal test3_2_var.\n");
     }
-    
+
     if(test4_2_return != test4_2_expect)
     {
 	errors++;
-	    
+
 	fprintf(stdout,"RegisterN: failed to properly register literal test4_2_var.\n");
     }
 
     if(test5_2_return != test5_2_expect)
     {
 	errors++;
-	
+
 	fprintf(stdout,"RegisterN: failed to properly register literal test5_2_var.\n");
     }
-    
+
 /*
  * Print total number of errors for part 2 of this test
  */
@@ -409,7 +409,7 @@ void test1_1_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test1_1_called++;
 }
 
@@ -417,7 +417,7 @@ void test2_1_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test2_1_called++;
 }
 
@@ -425,7 +425,7 @@ void test1_2_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test1_2_called++;
 }
 
@@ -433,7 +433,7 @@ void test2_2_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test2_2_called++;
 }
 
@@ -447,4 +447,3 @@ void error_proc(error_string)
     fprintf(stdout,"Mrm error: %s\n", error_string);
     fflush(stdout);
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmMwmUtil_h
 #define _XmMwmUtil_h
 
@@ -85,10 +85,10 @@ typedef MotifWmHints	MwmHints;
 #define WINDOW_RESIZE_NORTHWEST_INFO   	9
 #define WINDOW_RESIZE_SOUTHEAST_INFO   	10
 #define WINDOW_RESIZE_SOUTHWEST_INFO   	11
-#define WINDOW_MENU_ITEM_SELECT_INFO    12  
+#define WINDOW_MENU_ITEM_SELECT_INFO    12
 #define WINDOW_DEICONIFY_INFO          	13
 #define WINDOW_MENU_POST_INFO   	14
-#define WINDOW_FOCUS_INFO              	15  
+#define WINDOW_FOCUS_INFO              	15
 #define WINDOW_MENU_UNPOST_INFO  	16
 #define WINDOW_MENU_ITEM_CHECK_INFO  	17
 #define ICON_MOVE_INFO   	        18

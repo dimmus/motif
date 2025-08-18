@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SelectBox2.c /main/9 1995/07/13 19:19:40 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: SelectBox2.c /main/9 1995/07/13 19:19:40 dr
 #endif
 
 
-/* 
+/*
  * Create a selection box with menu bar and button children, as detailed in
  *  the Motif 1.2 specification
  */
@@ -98,7 +98,7 @@ static void pickTomCB(Widget w, XtPointer client_data, XtPointer call_data)
 
 /* ARGSUSED */
 
-static void noMenCB(Widget w, XtPointer client_data, 
+static void noMenCB(Widget w, XtPointer client_data,
 		    XmToggleButtonCallbackStruct *call_data)
 {
 
@@ -140,7 +140,7 @@ static void nextEngCB(Widget w, XtPointer client_data, XtPointer call_data)
    */
 
   if (position_count != 0)
-    if (position_array[0] == 1) 
+    if (position_array[0] == 1)
       XmListSelectPos(listw, 0, True);
     else
       XmListSelectPos(listw, position_array[0] - 1, True);
@@ -197,33 +197,33 @@ static void changeTextCB(Widget w, XtPointer client_data, XtPointer call_data)
     }
 
   switch (qa_engineer) {
-  
+
   case LIBBY:
     tcs = XmStringLtoRCreate("Libby is the fearless manager of the group and a big cat fan (no size preference though).\n  She's an excellent cook and always has delicious leftovers for lunch that we all envy.",
 			     XmSTRING_DEFAULT_CHARSET);
-    break;	
+    break;
 
   case THOMAS:
     tcs = XmStringLtoRCreate("Thomas is the VTS whiz of the group and a quick \n bug finder.  He enjoys chicken patty sandwiches, fast cars, and picking on Roger.",
 			     XmSTRING_DEFAULT_CHARSET);
-    break;	
+    break;
 
   case ROGER:
     tcs = XmStringLtoRCreate("M.S. Ramesh by his given name (don't ask what the M and S stand for!),\n Roger works on making Motif perform faster.",
 			     XmSTRING_DEFAULT_CHARSET);
-    break;	
+    break;
 
   case CARL:
     tcs = XmStringLtoRCreate("Carl (Dr. Purz) is the bug keeper.  He can be found racing his \nBMW when he's not cranking out scripts and cranking his stereo.",
 			     XmSTRING_DEFAULT_CHARSET);
-    break;	
+    break;
 
   case SUSAN:
     tcs = XmStringLtoRCreate("Susan is the Menu/memory/miscellaneous QA Engineer who created this very different test!\nShe is very fond of Jamaica and chewing on pens",
 			     XmSTRING_DEFAULT_CHARSET);
-    break;	
+    break;
   }
-    
+
   XtSetArg(args[0], XmNlabelString, tcs);
   XtSetValues(label1, args, 1);
 
@@ -265,19 +265,19 @@ char **argv;
   /*  initialize toolkit */
 
   CommonTestInit(argc, argv);
-  
+
   /* create selection box */
 
   /* Convert the items to Xm strings */
   for (n = 0; n < NUM_NAMES; n++)
     namelist[n] = XmStringCreateLtoR((char *)Istrings[n],
 					XmSTRING_DEFAULT_CHARSET);
-  tcs = XmStringCreateLtoR("(Enter Your Favorite QA Engineer here)",	
+  tcs = XmStringCreateLtoR("(Enter Your Favorite QA Engineer here)",
 			   XmSTRING_DEFAULT_CHARSET);
-  tcs1 = XmStringCreateLtoR("Motif QA Engineer ", 
+  tcs1 = XmStringCreateLtoR("Motif QA Engineer ",
 			    XmSTRING_DEFAULT_CHARSET);
   tcs2 = XmStringCreateLtoR("Reset Text", XmSTRING_DEFAULT_CHARSET);
-  
+
   n = 0;
   XtSetArg(args[n], XmNlistItemCount, NUM_NAMES); n++;
   XtSetArg(args[n], XmNlistItems, namelist); n++;
@@ -322,15 +322,15 @@ char **argv;
   pushButton = XmCreatePushButton(sbox, "Pick Tom", args, n);
   XtManageChild(pushButton);
   XtAddCallback(pushButton, XmNactivateCallback, pickTomCB, NULL);
-  
+
   n = 0;
-  tcs = XmStringLtoRCreate("No Men", XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("No Men", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNborderWidth, 1); n++;
   toggleButton = XmCreateToggleButton(sbox, "NoMen", args, n);
   XmStringFree(tcs);
   XtManageChild(toggleButton);
-  XtAddCallback(toggleButton, XmNvalueChangedCallback, 
+  XtAddCallback(toggleButton, XmNvalueChangedCallback,
 		(XtCallbackProc) noMenCB, NULL);
 
   n = 0;
@@ -351,7 +351,7 @@ char **argv;
 
   n = 0;
   menuBar = XmCreateMenuBar(sbox, "menuBar", args, n);
-  XtManageChild(menuBar); 
+  XtManageChild(menuBar);
 
   n = 0;
   pulldown1 = XmCreatePulldownMenu(menuBar, "Pulldown1", args, n);

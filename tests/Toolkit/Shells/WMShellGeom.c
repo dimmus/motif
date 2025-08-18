@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WMShellGeom.c /main/8 1995/07/13 19:21:19 drk $"
@@ -92,7 +92,7 @@ void  main (argc, argv)
             Scales[i].maxValue = screenHeight / 4;
 
     }
-            
+
     n = 0;
     XtSetArg(args[n], XmNallowShellResize, True); n++;
 	XtSetValues(Shell1, args, n);
@@ -104,7 +104,7 @@ void  main (argc, argv)
     Form = XmCreateForm(Shell1, "Form", args, n);
     XtManageChild(Form);
 
-    tcs = XmStringCreateLtoR("WMShell Resources:", 
+    tcs = XmStringCreateLtoR("WMShell Resources:",
                              XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, tcs); n++;
     XtSetArg(args[n], XmNfontList, CommonGetFontList(fontName)); n++;
@@ -157,16 +157,16 @@ void  main (argc, argv)
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));    n++;
-    WhichShell_Pulldown = XmCreatePulldownMenu(Shell1, "WhichShell_Pulldown", 
+    WhichShell_Pulldown = XmCreatePulldownMenu(Shell1, "WhichShell_Pulldown",
                                                args, n);
 
-    Application_Shell = CreatePushButton(WhichShell_Pulldown, 
+    Application_Shell = CreatePushButton(WhichShell_Pulldown,
 										 "ApplicationShell");
     Top_Shell = CreatePushButton(WhichShell_Pulldown, "TopShell");
     Dialog_Shell = CreatePushButton(WhichShell_Pulldown, "DialogShell");
     All_Shells = CreatePushButton(WhichShell_Pulldown, "All Shells");
 
-    XtAddCallback(Application_Shell, XmNactivateCallback, 
+    XtAddCallback(Application_Shell, XmNactivateCallback,
 				  Application_ShellCB, NULL);
     XtAddCallback(Top_Shell, XmNactivateCallback, Top_ShellCB, NULL);
     XtAddCallback(Dialog_Shell, XmNactivateCallback, Dialog_ShellCB, NULL);
@@ -191,13 +191,13 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNleftOffset, 5); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
-    WhichShell_Option = XmCreateOptionMenu(Form, "WhichShell_Option", 
+    WhichShell_Option = XmCreateOptionMenu(Form, "WhichShell_Option",
                                            args, n);
     XtManageChild(WhichShell_Option);
 
     XmStringFree(tcs);
 
-    /* 
+    /*
      * Create an applicationShell.
      */
 
@@ -214,11 +214,11 @@ void  main (argc, argv)
                                      	applicationShellWidgetClass, display,
                                      	args, n);
     n = 0;
-    XtSetArg(args[n], XmNlabelString, 
+    XtSetArg(args[n], XmNlabelString,
              XmStringCreateSimple("applicationShell")); n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
-    application_btn = XmCreatePushButton(applicationShell, 
+    application_btn = XmCreatePushButton(applicationShell,
 										 "application_btn", args, n);
     XtManageChild(application_btn);
     XtRealizeWidget(applicationShell);
@@ -229,7 +229,7 @@ void  main (argc, argv)
 
     CommonPause();
 
-    /* 
+    /*
      * Create a topLevelShell.
      */
 
@@ -246,7 +246,7 @@ void  main (argc, argv)
                                      topLevelShellWidgetClass, display,
                                      args, n);
     n = 0;
-    XtSetArg(args[n], XmNlabelString, 
+    XtSetArg(args[n], XmNlabelString,
              XmStringCreateSimple("topLevelShell")); n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
@@ -260,11 +260,11 @@ void  main (argc, argv)
 
 	CommonPause();
 
-	/* 
+	/*
 	 *	Create a dialog shell
 	 */
 	n = 0;
-	XtSetArg (args[n], XmNmessageString, 
+	XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple ("This is a modeless dialog box"));
 	XtSetArg (args[n], XmNtitle, "Modeless Dialog"); n++;
 	XtSetArg (args[n], XmNdialogStyle, XmDIALOG_MODELESS); n++;
@@ -301,7 +301,7 @@ static void CreateWMShellResources(Widget parent)
     for (i = 0; i < NUM_SCALES; i++) {
 
         n = 0;
-        XtSetArg(args[n], XmNtitleString, 
+        XtSetArg(args[n], XmNtitleString,
                  XmStringCreateSimple(Scales[i].titleString)); n++;
         XtSetArg(args[n], XmNminimum, Scales[i].minValue); n++;
         XtSetArg(args[n], XmNmaximum, Scales[i].maxValue); n++;
@@ -321,7 +321,7 @@ static void CreateWMShellResources(Widget parent)
 }
 
 
-static void Application_ShellCB(Widget w, XtPointer client_data, 
+static void Application_ShellCB(Widget w, XtPointer client_data,
                        XtPointer call_data)
 {
 
@@ -341,7 +341,7 @@ static void Application_ShellCB(Widget w, XtPointer client_data,
 }
 
 
-static void Top_ShellCB(Widget w, XtPointer client_data, 
+static void Top_ShellCB(Widget w, XtPointer client_data,
                        XtPointer call_data)
 {
 
@@ -362,7 +362,7 @@ static void Top_ShellCB(Widget w, XtPointer client_data,
 
 
 													/* Begin PIR3262 */
-static void Dialog_ShellCB(Widget w, XtPointer client_data, 
+static void Dialog_ShellCB(Widget w, XtPointer client_data,
                            XtPointer call_data)
 {
 
@@ -383,7 +383,7 @@ static void Dialog_ShellCB(Widget w, XtPointer client_data,
 													/* End PIR3262 */
 
 
-static void All_ShellsCB(Widget w, XtPointer client_data, 
+static void All_ShellsCB(Widget w, XtPointer client_data,
                          XtPointer call_data)
 {
 
@@ -458,7 +458,7 @@ static void SetWMShellResources(Widget shell)
     for (i = 0; i < NUM_SCALES; i++) {
 
         if (scale_values[i].value != -1)
-            XtSetArg (args[n], scale_values[i].name, 
+            XtSetArg (args[n], scale_values[i].name,
 					  scale_values[i].value); n++;
 
     }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetFocusWidg.c /main/8 1995/07/14 11:34:18 drk $"
@@ -51,7 +51,7 @@ static char rcsid[] = "$XConsortium: GetFocusWidg.c /main/8 1995/07/14 11:34:18 
             none
 
         RETURNS
-            Widget that is in keyboard focus. If the current window is not a 
+            Widget that is in keyboard focus. If the current window is not a
             recognizable widget, it then returns NULL.  If the current window
             is the root window, then it return the constant PointerRoot.
 ************************************************************************/
@@ -69,7 +69,7 @@ Widget xisGetFocusWidget()
     XGetInputFocus(xisDisplay, &server_focus_window, &revert);
     xisGetPointerInfo(&pointer_window,&rx,&ry,&wx,&wy,&button_mask);
 
-    if ( (server_focus_window == PointerRoot) || 
+    if ( (server_focus_window == PointerRoot) ||
          (xisIsAncestorWindow(server_focus_window,pointer_window)) )
         server_focus_window = pointer_window;
 

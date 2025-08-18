@@ -22,7 +22,7 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Shell1 
+TRACE:(1) CompareVisual Shell1
 TRACE:(2) LocatePointer Text1 RTextChar 0
 TRACE:(3) DragComponent Text1 RTextChar 4 Btn2
 TRACE:(4) ClickKey KTab
@@ -33,23 +33,23 @@ TRACE:(7) Continue
 Test PASSES. No error.
 TRACE:(8) Continue
 TRACE:(9) LocatePointer Text1 RTextChar 5
-TRACE:(10) ClickMB Btn1 
+TRACE:(10) ClickMB Btn1
 TRACE:(11) ClickKey KReturn
 Generic Callback called:  Reason - XmCR_ACTIVATE
-TRACE:(12) CompareVisual Text1 
+TRACE:(12) CompareVisual Text1
 TRACE:(13) Continue
 TRACE:(14) LocatePointer Text2 RTextChar 5
-TRACE:(15) ClickMB Btn1 
-TRACE:(16) CompareVisual Text2 
+TRACE:(15) ClickMB Btn1
+TRACE:(16) CompareVisual Text2
 TRACE:(17) ClickKey KReturn
-TRACE:(18) CompareVisual Text2 
+TRACE:(18) CompareVisual Text2
 TRACE:(19) Continue
 TRACE:(20) LocatePointer Text2 RTextChar 7
 TRACE:(21) ClickKey <Ctrl> Kr
-TRACE:(22) CompareVisual Text2 
+TRACE:(22) CompareVisual Text2
 TRACE:(23) Continue
 TRACE:(24) LocatePointer Text1 RTextChar 5
-TRACE:(25) ClickMB Btn1 
+TRACE:(25) ClickMB Btn1
 TRACE:(26) InputString "new"
 Generic Callback called:  Reason - XmCR_MODIFYING_TEXT_VALUE
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
@@ -58,19 +58,19 @@ Generic Callback called:  Reason - XmCR_VALUE_CHANGED
 Generic Callback called:  Reason - XmCR_MODIFYING_TEXT_VALUE
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
 TRACE:(27) LocatePointer Text1 RTextChar 10
-TRACE:(28) DragComponent Text1 RTextChar 15 
+TRACE:(28) DragComponent Text1 RTextChar 15
 TRACE:(29) LocatePointer Text1 RTextChar 2
-TRACE:(30) ClickMB Btn2 
+TRACE:(30) ClickMB Btn2
 Generic Callback called:  Reason - XmCR_MODIFYING_TEXT_VALUE
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
 TRACE:(31) Continue
-TRACE:(32) LocatePointer SetStringPB  
-TRACE:(33) ClickMB Btn1 
+TRACE:(32) LocatePointer SetStringPB
+TRACE:(33) ClickMB Btn1
 TRACE:(34) LocatePointer Text1 RTextChar 3
-TRACE:(35) ClickMB Btn1 
-TRACE:(36) LocatePointer InsertStringPB  
-TRACE:(37) ClickMB Btn1 
-TRACE:(38) CompareVisual Text1 
+TRACE:(35) ClickMB Btn1
+TRACE:(36) LocatePointer InsertStringPB
+TRACE:(37) ClickMB Btn1
+TRACE:(38) CompareVisual Text1
 TRACE:(39) Continue
 TRACE:(40) Exit
 Exiting Test...Please Standby...

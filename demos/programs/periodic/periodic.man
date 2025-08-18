@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH periodic 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -34,7 +34,7 @@
 provides a quick visual reference chart for the Motif widget set.
 This program is built in \fBuil\fP.
 .SH USAGE
-Most of the menu items in 
+Most of the menu items in
 \*LPeriodic\*O
 are for show only, and do nothing.
 The \fBExit\fP item in the \fBFile\fP menu will exit the program.

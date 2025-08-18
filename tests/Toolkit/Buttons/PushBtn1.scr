@@ -1,5 +1,5 @@
 # $XConsortium: PushBtn1.scr /main/6 1995/07/17 20:06:53 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,28 +20,28 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A pushbutton labeled 'PushButton1' should appear. It should be
 #  the default blue color with a 2 pixel white border around the
-#  pushbutton. 
+#  pushbutton.
 
 CompareVisual PushButton1
 
 # Press and hold MB1 in pushbutton, it should have the white highlight
 #  border filled with your highlight color and the pushbutton should
-#  appear to be pressed in. 
+#  appear to be pressed in.
 
 LocatePointer PushButton1
 PressMB Btn1
 CompareVisual PushButton1
 
-# Release MB1 - 'PushButton1' should appear popped out. 
-# Iconify and Normalize the client window. 
+# Release MB1 - 'PushButton1' should appear popped out.
+# Iconify and Normalize the client window.
 
 ReleaseMB Btn1
 CompareVisual PushButton1
@@ -49,51 +49,51 @@ WindowIconify Shell1
 WindowDeiconify Shell1
 
 # Arm the pushbutton (press and hold MB1 on pushbutton).
-#  'PushButton1' should appear to be pressed in. 
+#  'PushButton1' should appear to be pressed in.
 
 LocatePointer PushButton1
 PressMB Btn1
 CompareVisual PushButton1
 
 # Move the pointer out of the client window.
-#  'PushButton1' should appear to be popped out. 
+#  'PushButton1' should appear to be popped out.
 
 LocatePointer PushButton1 Off
 CompareVisual PushButton1
 
 # Move the pointer into client window.
-#  'PushButton1' should appear to be pressed in. 
+#  'PushButton1' should appear to be pressed in.
 
 LocatePointer PushButton1 Off
 CompareVisual PushButton1
 
 # Move the pointer out of the client window.
-#  'PushButton1' should appear to be popped out. 
+#  'PushButton1' should appear to be popped out.
 
 LocatePointer PushButton1 Off
 
-# Disarm the pushbutton (release MB1 outside of window). 
+# Disarm the pushbutton (release MB1 outside of window).
 
 ReleaseMB Btn1
 Continue
 
-# The client window should be smaller.	
+# The client window should be smaller.
 
 LocatePointer PushButton1
 CompareVisual PushButton1
 
 # Resize and move the client window. The pushbutton should have a highlight
-#  area of 20 pixels, white when the widget does not have focus, highlight 
-#  color when it does. 
+#  area of 20 pixels, white when the widget does not have focus, highlight
+#  color when it does.
 
 WindowResize Shell1 SouthEast 500 400
 WindowMove Shell1 200 200
 CompareVisual PushButton1
 
 # Arm 'PushButton1'. The pushbutton background color should change to yellow.
-#   "PushButton1 Armed" should appear in the term window as well as the 
+#   "PushButton1 Armed" should appear in the term window as well as the
 #   event type.  Release MB1. Colors should revert back.
-#   "Event is okay" & "Pushbutton Disarmed" should appear in the term window. 
+#   "Event is okay" & "Pushbutton Disarmed" should appear in the term window.
 
 LocatePointer PushButton1
 PressMB Btn1
@@ -101,21 +101,21 @@ CompareVisual PushButton1
 ReleaseMB Btn1
 CompareVisual PushButton1
 
-# Press and hold MB1 on 'PushButton1'. The background color should change to 
-#  yellow.  'Pushbutton Armed' should appear in the term window. 
+# Press and hold MB1 on 'PushButton1'. The background color should change to
+#  yellow.  'Pushbutton Armed' should appear in the term window.
 
 LocatePointer PushButton1
 PressMB Btn1
 
 # Move out of the client window. Colors should revert back.
-#  Release MB1. "PushButton1 Disarmed" should appear in term window. 
+#  Release MB1. "PushButton1 Disarmed" should appear in term window.
 
 LocatePointer PushButton1 Off
 ReleaseMB Btn1
 
 # With pointer in client window, press Return and Space keys.
 #  For each, messages "Pushbutton armed", "Event is okay", and "PushButton
-#  Disarmed" should appear and the button looks pressed and released. 
+#  Disarmed" should appear and the button looks pressed and released.
 
 # With the focus in the client window, wiggle the mouse and press Return *many*
 #  times.  The event type printed in the term window should be consistent.
@@ -131,8 +131,8 @@ ClickKey KReturn
 Continue
 
 # A mountain should appear.
-# Arm 'PushButton1'. An image of GNU should appear. 
-# Release 'PushButton1'. An image of the mountain should appear. 
+# Arm 'PushButton1'. An image of GNU should appear.
+# Release 'PushButton1'. An image of the mountain should appear.
 
 CompareVisual PushButton1
 LocatePointer PushButton1
@@ -142,7 +142,7 @@ ReleaseMB Btn1
 CompareVisual PushButton1
 Continue
 
-# Two push buttons should appear in a drawing area with highlight 
+# Two push buttons should appear in a drawing area with highlight
 #  thickness = 7.  The background of the drawing area has a pixmap.
 #  Press and release on each push button.  The pixmap should appear
 #  correctly around the highlight area of each push button.
@@ -253,4 +253,3 @@ CompareVisual twoButton
 ReleaseMB Btn1
 
 Exit
-

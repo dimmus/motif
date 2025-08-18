@@ -40,7 +40,7 @@ main (int argc, char **argv)
     Widget TextF1, TextF2, TextF3, TextF4;
     Arg    args[5];
     int    n;
-    
+
 
     CommonTestInit (argc, argv);
 
@@ -70,21 +70,19 @@ main (int argc, char **argv)
     CommonPause();
 
     n = 0;
-    XtSetArg( args[n], XmNdefaultArrowSensitivity, 
-                       XmARROWS_DECREMENT_SENSITIVE ); n++; 
+    XtSetArg( args[n], XmNdefaultArrowSensitivity,
+                       XmARROWS_DECREMENT_SENSITIVE ); n++;
     XtSetValues( SpinBox1, args, n );
     CommonPause();
 
     n = 0;
-    XtSetArg( args[n], XmNdefaultArrowSensitivity, 
-                       XmARROWS_INCREMENT_SENSITIVE ); n++; 
+    XtSetArg( args[n], XmNdefaultArrowSensitivity,
+                       XmARROWS_INCREMENT_SENSITIVE ); n++;
     XtSetValues( SpinBox1, args, n );
     CommonPause();
     CommonPause();
 
     XtAppMainLoop (app_context);
 
-    
+
 }
-
-

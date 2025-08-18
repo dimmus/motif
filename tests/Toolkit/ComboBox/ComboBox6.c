@@ -5,13 +5,13 @@
 #define NUM_STRINGS 3
 
 static char *strings[NUM_STRINGS] = {
-	"Apples", 
+	"Apples",
   	"Blueberries",
 	"Cherries" };
 
 XmString	list_items[NUM_STRINGS];
 
-Widget		Form, ComboBox, Separator, TextField, TextFieldLabel, 
+Widget		Form, ComboBox, Separator, TextField, TextFieldLabel,
                 UniqueTB, PositionScale, AddStringLabel, AddStringPB;
 
 void
@@ -80,15 +80,15 @@ ResetWidgets()
   n = 0;
   XtSetArg( args[n], XmNset, False ); n++;
   XtSetValues( UniqueTB, args, n );
-  
+
   n = 0;
   XtSetArg( args[n], XmNvalue, 1 ); n++;
   XtSetValues( PositionScale, args, n );
 
   return;
 }
-  
-	
+
+
 void
 main( int argc, char **argv )
 {
@@ -128,7 +128,7 @@ unsigned char	combo_box_type;
   }
 
   n = 0;
-  Form = XmCreateForm( Shell1, "Form", args, n ); 
+  Form = XmCreateForm( Shell1, "Form", args, n );
   XtManageChild( Form );
 
   sprintf( buffer, "ComboBox%d", instance );
@@ -147,7 +147,7 @@ unsigned char	combo_box_type;
   XtSetArg( args[n], XmNitems, list_items ); n++;
   XtSetArg( args[n], XmNitemCount, NUM_STRINGS ); n++;
   XtSetArg( args[n], XmNvisibleItemCount, NUM_STRINGS ); n++;
-  ComboBox = XmCreateComboBox( Form, buffer, args, n ); 
+  ComboBox = XmCreateComboBox( Form, buffer, args, n );
   XtManageChild( ComboBox );
 
 
@@ -162,7 +162,7 @@ unsigned char	combo_box_type;
 
   label_string = XmStringCreateLtoR("Enter New String",
 	 	   XmFONTLIST_DEFAULT_TAG );
- 
+
   n = 0;
   XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
   XtSetArg( args[n], XmNtopWidget, Separator ); n++;
@@ -173,7 +173,7 @@ unsigned char	combo_box_type;
   XtManageChild( TextFieldLabel );
 
   XmStringFree( label_string );
-  
+
   n = 0;
   XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
   XtSetArg( args[n], XmNtopWidget, Separator ); n++;
@@ -191,7 +191,7 @@ unsigned char	combo_box_type;
   XtSetArg( args[n], XmNtopWidget, TextFieldLabel ); n++;
   XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++;
   XtSetArg( args[n], XmNlabelString, label_string ); n++;
-  UniqueTB = XmCreateToggleButton( Form, "UniqueTB", args, n ); 
+  UniqueTB = XmCreateToggleButton( Form, "UniqueTB", args, n );
   XtManageChild( UniqueTB );
 
   XmStringFree( label_string );
@@ -224,10 +224,10 @@ unsigned char	combo_box_type;
 
   XmStringFree( label_string );
 
-  XtAddCallback( AddStringPB, XmNactivateCallback, AddStringCB, 
-                 ( XtPointer )NULL ); 
-  XtAddCallback( AddStringPB, XmNactivateCallback, PrintNumItemsCB, 
-                 ( XtPointer )NULL ); 
+  XtAddCallback( AddStringPB, XmNactivateCallback, AddStringCB,
+                 ( XtPointer )NULL );
+  XtAddCallback( AddStringPB, XmNactivateCallback, PrintNumItemsCB,
+                 ( XtPointer )NULL );
 
   XtRealizeWidget( Shell1 );
 
@@ -236,22 +236,22 @@ unsigned char	combo_box_type;
   CommonPause();
 
   XtRemoveCallback( AddStringPB, XmNactivateCallback, PrintNumItemsCB,
-                 ( XtPointer )NULL ); 
+                 ( XtPointer )NULL );
 
   ResetWidgets();
- 
+
   /* TP 2 */
   (void)printf( "Test Purpose 2\n" );
   CommonPause();
 
   ResetWidgets();
- 
+
   /* TP 3 */
   (void)printf( "Test Purpose 3\n" );
   CommonPause();
 
   ResetWidgets();
- 
+
   /* TP 4 */
   (void)printf( "Test Purpose 4\n" );
   CommonPause();

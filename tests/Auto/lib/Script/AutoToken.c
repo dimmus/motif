@@ -354,7 +354,7 @@ static struct {
 {"",				-1},
 };
 
-int	
+int
 AutoFindToken(char* token)
 {
 Cardinal	n;
@@ -363,7 +363,6 @@ Cardinal	n;
 	while ( strcmp(token_list[n].token, token) != 0 )	{
 		if ( strcmp(token_list[n].token, "" ) == 0 ) return(-1);
 		n++;
-	} 
+	}
 	return(token_list[n].value);
 }
-

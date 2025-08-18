@@ -1,5 +1,5 @@
 # $XConsortium: QuestionDia1.scr /main/6 1995/07/17 20:30:24 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 CompareVisual	mbox
 
@@ -50,6 +50,6 @@ LocatePointer	textfield
 ClickMB 	Btn1
 LocatePointer	InstructionBox
 LocatePointer	bb
-CompareVisual   bb	
+CompareVisual   bb
 
 Exit

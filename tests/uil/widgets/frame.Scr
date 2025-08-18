@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
@@ -28,7 +28,7 @@
 #	- width is 250
 #	- height is 100
 #	- borderWidth is 2
-#	- background is gold 
+#	- background is gold
 #	- shadowThickness is 20
 #	- topShadowColor is brown
 #	- bottomShadowColor is firebrick

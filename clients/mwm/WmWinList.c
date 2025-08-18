@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.3
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -93,11 +93,11 @@ extern void SetMwmClientList (Window propWindow, Window *wmWindowList, unsigned 
  *      stack and is added to the beginning of the window list, otherwise
  *      it is added to the end of the window list.
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  pWS = (clientList, lastClient)
- * 
+ *
  *************************************<->***********************************/
 
 void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, Boolean onTop)
@@ -122,9 +122,9 @@ void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, Boolean onTop)
 	if (!wmGD.systemModalActive || (wmGD.systemModalClient != pCD))
 	{
 	    /*
-	     * If we failed to setup as system modal, then 
+	     * If we failed to setup as system modal, then
 	     * back off to MWM_INPUT_FULL_APPLICATION_MODAL.
-	     * This will do *something* if this is a transient 
+	     * This will do *something* if this is a transient
 	     * window.
 	     */
 	    pCD->inputMode = MWM_INPUT_FULL_APPLICATION_MODAL;
@@ -241,7 +241,7 @@ void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, Boolean onTop)
  *  pWS  = pointer to workspace data
  *  pEntry = pointer to a client list entry to be added to the client list
  *
- *  onTop = if True then the client list entry is added on top of the 
+ *  onTop = if True then the client list entry is added on top of the
  *	specified client list stack entry (if the stack entry is not
  *	specified then the entry is added to the front of the list);
  *	otherwise the entry is added after the specified stacking entry
@@ -249,11 +249,11 @@ void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, Boolean onTop)
  *
  *  pStackEntry = pointer to a client list entry to be used as a reference
  *	in adding an entry to the client list.
- * 
+ *
  *  Outputs:
  *  -------
  *  pWS = (clientList, lastClient)
- * 
+ *
  *************************************<->***********************************/
 
 void AddEntryToList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTop, ClientListEntry *pStackEntry)
@@ -355,7 +355,7 @@ void AddEntryToList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTo
  *
  *  pEntry = pointer to a client list entry to be moved in the client list
  *
- *  onTop = if True then the client list entry is moved on top of the 
+ *  onTop = if True then the client list entry is moved on top of the
  *	specified client list stack entry (if the stack entry is not
  *	specified then the entry is moved to the front of the list);
  *	otherwise the entry is moved after the specified stacking entry
@@ -363,11 +363,11 @@ void AddEntryToList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTo
  *
  *  pStackEntry = pointer to a client list entry to be used as a reference
  *	in moving an entry in the client list.
- * 
+ *
  *  Outputs:
  *  -------
  *  pWS = (clientList, lastClient)
- * 
+ *
  *************************************<->***********************************/
 
 void MoveEntryInList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTop, ClientListEntry *pStackEntry)
@@ -395,16 +395,16 @@ void MoveEntryInList (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onT
  *  ------
  *  pWS = pointer to workspace data
  *  listEntry = pointer to a client list entry
- * 
+ *
  *  Outputs:
  *  -------
  *  pWS = (clientList, lastClient)
- * 
+ *
  *************************************<->***********************************/
 
 void DeleteEntryFromList (WmWorkspaceData *pWS, ClientListEntry *pListEntry)
 {
-    
+
     if (pListEntry->prevSibling)
     {
 	pListEntry->prevSibling->nextSibling = pListEntry->nextSibling;
@@ -442,11 +442,11 @@ void DeleteEntryFromList (WmWorkspaceData *pWS, ClientListEntry *pListEntry)
  *  Inputs:
  *  ------
  *  pCD	= pointer to client data for the window to be added to the list
- * 
+ *
  *  Outputs:
  *  -------
  *  pWS = (clientList, lastClient)
- * 
+ *
  *************************************<->***********************************/
 
 void DeleteClientFromList (WmWorkspaceData *pWS, ClientData *pCD)
@@ -549,11 +549,11 @@ void DeleteClientFromList (WmWorkspaceData *pWS, ClientData *pCD)
  *  pWS	= pointer to workspace data
  *  pCD	= pointer to client data of a transient window
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  pCD->transientLeader = (transientChildren, modalCount)
- * 
+ *
  *************************************<->***********************************/
 
 void AddTransient (WmWorkspaceData *pWS, ClientData *pCD)
@@ -587,8 +587,8 @@ void AddTransient (WmWorkspaceData *pWS, ClientData *pCD)
     if (pCD->inputMode == MWM_INPUT_PRIMARY_APPLICATION_MODAL)
     {
 	/*
-	 * If this is a primary application modal window then increment 
-	 * the modal count for transient leaders that are directly up 
+	 * If this is a primary application modal window then increment
+	 * the modal count for transient leaders that are directly up
 	 * the transient tree.
 	 *
 	 * (This is the old MWM_INPUT_APPLICATION_MODAL behavior.)
@@ -602,7 +602,7 @@ void AddTransient (WmWorkspaceData *pWS, ClientData *pCD)
     else if (pCD->inputMode == MWM_INPUT_FULL_APPLICATION_MODAL)
     {
 	/*
-	 * If this is a full application modal window then increment 
+	 * If this is a full application modal window then increment
 	 * the modal count for the rest of the transient tree.
 	 */
 
@@ -666,7 +666,7 @@ void AddTransient (WmWorkspaceData *pWS, ClientData *pCD)
  *  pcdTree	= pointer to client data of the tree to mark
  *  pcdAvoid	= pointer to client data to not mark if in tree
  *
- * 
+ *
  *************************************<->***********************************/
 
 void MarkModalSubtree (ClientData *pcdTree, ClientData *pcdAvoid)
@@ -678,7 +678,7 @@ void MarkModalSubtree (ClientData *pcdTree, ClientData *pcdAvoid)
 
     /* Mark this node */
 
-    if (pcdTree != pcdAvoid) 
+    if (pcdTree != pcdAvoid)
     {
 	MarkModalTransient (pcdTree, pcdAvoid);
     }
@@ -706,7 +706,7 @@ void MarkModalSubtree (ClientData *pcdTree, ClientData *pcdAvoid)
  *  pcdLeader = pointer to client data to mark
  *  pCD	= pointer to client data of new transient
  *
- * 
+ *
  *************************************<->***********************************/
 
 void MarkModalTransient (ClientData *pcdLeader, ClientData *pCD)
@@ -725,7 +725,7 @@ void MarkModalTransient (ClientData *pcdLeader, ClientData *pCD)
     /* bump application modal count */
     if (pCD->inputMode == MWM_INPUT_FULL_APPLICATION_MODAL)
 	pcdLeader->fullModalCount++;
-    else 
+    else
 	pcdLeader->primaryModalCount++;
 }
 
@@ -744,7 +744,7 @@ void MarkModalTransient (ClientData *pcdLeader, ClientData *pCD)
  *  mixtures of both full- and primary-application modal transients.
  *  It also tries to handle the case where a sequence of application
  *  modal transients appear in different places in the transient tree
- *  (i.e. not as descendents of a previously existing full app modal 
+ *  (i.e. not as descendents of a previously existing full app modal
  *  transient).
  *
  *  Inputs:
@@ -756,7 +756,7 @@ void MarkModalTransient (ClientData *pcdLeader, ClientData *pCD)
 void DeleteTransient (ClientData *pCD)
 {
     ClientData *pcdLeader;
-    ClientData *pcdPrev; 
+    ClientData *pcdPrev;
     int modalCount;
 
 
@@ -798,7 +798,7 @@ void DeleteTransient (ClientData *pCD)
 
     {
 	/*
-	 * If this is a full application modal window then decrement 
+	 * If this is a full application modal window then decrement
 	 * the modal count for the rest of the transient tree.
 	 */
 
@@ -844,7 +844,7 @@ void DeleteTransient (ClientData *pCD)
  *
  *  The algorithm is to traverse the transient children depth first and
  *  fix up the tree's fullModalCount for each full application modal
- *  window that's found. 
+ *  window that's found.
  *
  *  Inputs:
  *  ------
@@ -867,7 +867,7 @@ void DeleteFullAppModalChildren (ClientData *pcdLeader, ClientData *pCD)
     if (pCD->transientSiblings)
 	DeleteFullAppModalChildren (pcdLeader, pCD->transientSiblings);
 
-    
+
 } /* END OF FUNCTION DeleteFullAppModalChildren */
 
 
@@ -878,13 +878,13 @@ void DeleteFullAppModalChildren (ClientData *pcdLeader, ClientData *pCD)
  *
  *  Description:
  *  -----------
- *  This function traverses the entire transient tree (pointed to by 
- *  pcdLeader) and fixes up the fullModalCounts to reflect the removal 
- *  of pcdDelete. 
+ *  This function traverses the entire transient tree (pointed to by
+ *  pcdLeader) and fixes up the fullModalCounts to reflect the removal
+ *  of pcdDelete.
  *
  *  The fix-up consists of decrementing the count
  *  of the remaining full app modal windows in the tree iff the remaining
- *  window's fullModalCount is greater than the fullModalCount of the 
+ *  window's fullModalCount is greater than the fullModalCount of the
  *  transient being deleted.
  *
  *  Inputs:
@@ -900,12 +900,12 @@ FixupFullAppModalCounts (ClientData *pcdLeader, ClientData *pcdDelete)
 {
 
     /* fixup children */
-    if (pcdLeader->transientChildren) 
+    if (pcdLeader->transientChildren)
     {
 	FixupFullAppModalCounts (pcdLeader->transientChildren, pcdDelete);
     }
 
-    /* 
+    /*
      * fixup leader: decrement the count if it is greater than
      * the transient being deleted.
      *
@@ -916,11 +916,11 @@ FixupFullAppModalCounts (ClientData *pcdLeader, ClientData *pcdDelete)
     }
 
     /* fixup siblings */
-    if (pcdLeader->transientSiblings) 
+    if (pcdLeader->transientSiblings)
     {
 	FixupFullAppModalCounts (pcdLeader->transientSiblings, pcdDelete);
     }
-    
+
 } /* END OF FUNCTION FixupFullAppModalCounts */
 
 
@@ -941,7 +941,7 @@ FixupFullAppModalCounts (ClientData *pcdLeader, ClientData *pcdDelete)
  *  pcdModal   = pointer to client data for modal transient
  *  modalCount = amount to decrement the client's modal count by
  *
- * 
+ *
  *************************************<->***********************************/
 
 void UnMarkModalTransient (ClientData *pcdModee, int modalCount, ClientData *pcdModal)
@@ -957,7 +957,7 @@ void UnMarkModalTransient (ClientData *pcdModee, int modalCount, ClientData *pcd
      */
     if (!IS_APP_MODALIZED(pcdModee))
     {
-	XUngrabButton (DISPLAY, AnyButton, AnyModifier, 
+	XUngrabButton (DISPLAY, AnyButton, AnyModifier,
 	    pcdModee->clientBaseWin);
 
 	SetupCButtonBindings (pcdModee->clientBaseWin, BUTTON_SPECS(pcdModee));
@@ -989,7 +989,7 @@ void UnMarkModalTransient (ClientData *pcdModee, int modalCount, ClientData *pcd
  *  ------
  *  pcd	= pointer to client data of a transient window
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  pcdLeader = (transientSiblings)
@@ -1054,7 +1054,7 @@ Boolean PutTransientOnTop (ClientData *pcd)
  *  ------
  *  pcd	= pointer to client data of a transient window
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  pcdLeader = (transientSiblings)
@@ -1115,7 +1115,7 @@ Boolean PutTransientBelowSiblings (ClientData *pcd)
  *  (transient) windows are stacked on top of their associated primary
  *  windows and the first secondary window in the transientSiblings list
  *  is stacked on top of the second window in the list, etc.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1214,7 +1214,7 @@ void RestackTransients (ClientData *pcd)
  *  This function restacks windows in a transient window tree.  The
  *  "anchor point" in the stack for the transient window tree is the
  *  specified window.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1251,7 +1251,7 @@ void RestackTransientsAtWindow (ClientData *pcd)
  *  -----------
  *  This function identifies the leader of the transient tree that
  *  contains the specified client.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1289,9 +1289,9 @@ ClientData * FindTransientTreeLeader (ClientData *pcd)
  *
  *  Description:
  *  -----------
- *  This function returns a count of the number of children in the 
+ *  This function returns a count of the number of children in the
  *  transient window tree headed by the specified client window.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1338,10 +1338,10 @@ CountTransientChildren (ClientData *pcd)
  *
  *  Description:
  *  -----------
- *  This function makes a transient window list of windows in the 
+ *  This function makes a transient window list of windows in the
  *  transient window tree headed by the specified client.  This list is
  *  to be passed to XRestackWindows.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1390,7 +1390,7 @@ Window * MakeTransientWindowList (Window *windows, ClientData *pcd)
  *  This function identifies a window in the transient tree that is headed
  *  by the specified client that can accept the keyboard input.  The
  *  effect of application modal windows is taken into account.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1423,7 +1423,7 @@ ClientData * FindTransientFocus (ClientData *pcd)
     /*
      * If (search of descendents FAILS) then search siblings.
      */
-    
+
     if (IS_APP_MODALIZED(pcdFocus))
     {
 	ClientData *pcdSibling;
@@ -1463,7 +1463,7 @@ ClientData * FindTransientFocus (ClientData *pcd)
  *  -----------
  *  This function identifies the top-most transient window in the
  *  transient window tree that contains the specified client.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1530,7 +1530,7 @@ ClientData * FindTransientOnTop (ClientData *pcd)
  *  -----------
  *  This function stacks a window of a particular type (normal or icon)
  *  to the top or botton of the window stack on the screen.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1690,7 +1690,7 @@ void StackWindow (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTop, 
 #ifdef WSM
 		if (pSD->lastClient->pCD->transientChildren)
 		{
-		    stackWindow = 
+		    stackWindow =
 			LowestWindowInTransientFamily (pSD->lastClient->pCD);
 		}
 		else
@@ -1742,7 +1742,7 @@ void StackWindow (WmWorkspaceData *pWS, ClientListEntry *pEntry, Boolean onTop, 
  *  This function stacks a transient window within its transient window
  *  tree on the screen.  The transient window tree should indicate the
  *  intended stacking position.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1797,7 +1797,7 @@ void StackTransientWindow (ClientData *pcd)
  *  This function determines whether a window or a transient window tree
  *  is obscuring (at least partially) a window or a transient window tree
  *  that is below it in the window stack.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1867,7 +1867,7 @@ Boolean CheckIfClientObscuring (ClientData *pcdTop, ClientData *pcd)
  *  This function determines whether a window (not a transient tree)
  *  is obscuring (at least partially) a window (not a transient tree)
  *  that is below it in the window stack.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -1919,7 +1919,7 @@ Boolean CheckIfObscuring (ClientData *pcdA, ClientData *pcdB)
     {
 	aX1 = ICON_X(pcdA);
 	aY1 = ICON_Y(pcdA);
-	aX2 = aX1 + ICON_WIDTH(pcdA) - 1; 
+	aX2 = aX1 + ICON_WIDTH(pcdA) - 1;
 	aY2 = aY1 + ICON_HEIGHT(pcdA) - 1;
     }
     else /* (pcdA->clientState == MAXIMIZED_STATE) */
@@ -1943,7 +1943,7 @@ Boolean CheckIfObscuring (ClientData *pcdA, ClientData *pcdB)
     {
 	bX1 = ICON_X(pcdB);
 	bY1 = ICON_Y(pcdB);
-	bX2 = bX1 + ICON_WIDTH(pcdB) - 1; 
+	bX2 = bX1 + ICON_WIDTH(pcdB) - 1;
 	bY2 = bY1 + ICON_HEIGHT(pcdB) - 1;
     }
     else /* (pcdB->clientState == MAXIMIZED_STATE) */
@@ -1985,7 +1985,7 @@ Boolean CheckIfObscuring (ClientData *pcdA, ClientData *pcdB)
  *  -----------
  *  This function determines whether a window or a transient window tree
  *  is obscured (at least partially) by any other window.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -2052,7 +2052,7 @@ Boolean CheckIfClientObscuredByAny (ClientData *pcd)
  *  -----------
  *  This function determines whether a window or a transient window tree
  *  is obscuring another window.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -2104,7 +2104,7 @@ Boolean CheckIfClientObscuringAny (ClientData *pcd)
  *  This function prepares for mapping a system modal window.  An input
  *  screen window is mapped below the system modal window to prevent input
  *  to the windows not related to the system modal window.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -2141,10 +2141,10 @@ void SetupSystemModalState (ClientData *pCD)
 
     /*
      * Try to grab the pointer and keyboard. If either
-     * fails because event processing is frozen by another grab, then 
+     * fails because event processing is frozen by another grab, then
      * don't do system modal for fear of leaving the system unusable.
      */
-    if (XGrabPointer(DISPLAY, 
+    if (XGrabPointer(DISPLAY,
 		     ROOT_FOR_CLIENT(pCD),
 		     FALSE,			/* owner_events */
 		     (unsigned int) 0,		/* event mask */
@@ -2153,7 +2153,7 @@ void SetupSystemModalState (ClientData *pCD)
 		     None,			/* confine_to window */
 		     None,			/* cursor */
 		     CurrentTime) == GrabFrozen)
-    {	
+    {
 	return;
     }
     else
@@ -2161,13 +2161,13 @@ void SetupSystemModalState (ClientData *pCD)
 	XUngrabPointer (DISPLAY, CurrentTime);
     }
 
-    if (XGrabKeyboard(DISPLAY, 
+    if (XGrabKeyboard(DISPLAY,
 		     ROOT_FOR_CLIENT(pCD),
 		     FALSE,			/* owner_events */
 		     GrabModeAsync,		/* pointer_mode */
 		     GrabModeAsync,		/* keyboard_mode */
 		     CurrentTime) == GrabFrozen)
-    {	
+    {
 	return;
     }
     else
@@ -2202,42 +2202,42 @@ void SetupSystemModalState (ClientData *pCD)
     for (scr=0; scr<wmGD.numScreens; scr++)
     {
 	pSD = &(wmGD.Screens[scr]);
-	
+
 	/*
 	 * Make the system modal input screen window if necessary.
 	 */
-	
+
 	if (pSD->managed && pSD->inputScreenWindow == 0)
 	{
 	    XSetWindowAttributes windowAttributes;
 	    Pixmap               pixmap;
 	    Pixmap               maskPixmap;
 	    XColor               xcolors[2];
-	    
+
 	    windowAttributes.event_mask = ButtonPressMask;
 	    if (wmGD.keyboardFocusPolicy == KEYBOARD_FOCUS_POINTER)
 	    {
 		windowAttributes.event_mask |= EnterWindowMask;
 	    }
 	    windowAttributes.override_redirect = True;
-	    
-	    pixmap = XCreateBitmapFromData (DISPLAY, pSD->rootWindow, 
+
+	    pixmap = XCreateBitmapFromData (DISPLAY, pSD->rootWindow,
 					    (char *)bits, width, height);
-	    
-	    maskPixmap = XCreateBitmapFromData (DISPLAY, pSD->rootWindow, 
+
+	    maskPixmap = XCreateBitmapFromData (DISPLAY, pSD->rootWindow,
 						(char *)mask_bits, width, height);
-	    
+
 	    xcolors[0].pixel = BlackPixel (DISPLAY, pSD->screen);
 	    xcolors[1].pixel = WhitePixel (DISPLAY, pSD->screen);
-	    XQueryColors (DISPLAY, DefaultColormap (DISPLAY, pSD->screen), 
+	    XQueryColors (DISPLAY, DefaultColormap (DISPLAY, pSD->screen),
 			  xcolors, 2);
 	    windowAttributes.cursor =
 		XCreatePixmapCursor (DISPLAY, pixmap, maskPixmap,
-				     &(xcolors[0]), &(xcolors[1]), 
+				     &(xcolors[0]), &(xcolors[1]),
 				     x_hot, y_hot);
 	    XFreePixmap (DISPLAY, pixmap);
 	    XFreePixmap (DISPLAY, maskPixmap);
-	    
+
 	    pSD->inputScreenWindow =
 		XCreateWindow (DISPLAY, pSD->rootWindow, 0, 0,
 			       DisplayWidth (DISPLAY, pSD->screen),
@@ -2254,7 +2254,7 @@ void SetupSystemModalState (ClientData *pCD)
 	    XMapRaised (DISPLAY, pSD->inputScreenWindow);
 	}
     }
-    
+
     if (pCD)
     {
 	wmGD.systemModalWindow = pCD->clientFrameWin;
@@ -2263,38 +2263,38 @@ void SetupSystemModalState (ClientData *pCD)
     {
         /*
          * ELSE: the system modal window is a special window manager dialog
-         * box and wmGD.systemModalWindow is set prior to the call to 
+         * box and wmGD.systemModalWindow is set prior to the call to
          * SetupSystemModalState.  Set the focus to the special window manager
 	 * dialog box.
          */
-	
+
 	SetKeyboardFocus (NULL, REFRESH_LAST_FOCUS);
 	XSetInputFocus (DISPLAY, wmGD.systemModalWindow, RevertToPointerRoot,
 			CurrentTime);
     }
-    
-    
+
+
     /*
      * Map the system modal input screen window below the system modal
      * window.
      */
-    
+
     windowChanges.sibling = wmGD.systemModalWindow;
     windowChanges.stack_mode = Below;
-    XConfigureWindow (DISPLAY, ACTIVE_PSD->inputScreenWindow, 
+    XConfigureWindow (DISPLAY, ACTIVE_PSD->inputScreenWindow,
 		      CWSibling | CWStackMode, &windowChanges);
-    
+
     XMapWindow (DISPLAY, ACTIVE_PSD->inputScreenWindow);
-    
-    
+
+
     /*
      * Setup the system modal global data.
      */
-    
+
     wmGD.systemModalActive = True;
     wmGD.systemModalClient = pCD;
-    
-    
+
+
 } /* END OF FUNCTION SetupSystemModalState */
 
 
@@ -2307,7 +2307,7 @@ void SetupSystemModalState (ClientData *pCD)
  *  Description:
  *  -----------
  *  This function cleans up after a system modal window goes away.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -2323,7 +2323,7 @@ void SetupSystemModalState (ClientData *pCD)
 void UndoSystemModalState (void)
 {
     int scr;
-    
+
     /*
      * Unmap the system modal input screen window.
      */
@@ -2369,7 +2369,7 @@ void UndoSystemModalState (void)
  *  This function searches for a client that has a particular name or class.
  *  A match will be indicated if the client with the name or class also
  *  is in a particular state.
- *  
+ *
  *
  *  Inputs:
  *  ------
@@ -2446,7 +2446,7 @@ ClientListEntry * FindClientNameMatch (ClientListEntry *pEntry,
  *  Description:
  *  -----------
  *  This function moves the primary window to the "top" of the transient
- *  tree. 
+ *  tree.
  *
  *  Inputs:
  *  ------
@@ -2491,7 +2491,7 @@ Boolean BumpPrimaryToTop (ClientData *pcdLeader)
  *  Description:
  *  -----------
  *  This function moves the primary window to the "bottom" of the transient
- *  tree. 
+ *  tree.
  *
  *  Inputs:
  *  ------
@@ -2553,7 +2553,7 @@ LowestWindowInTransientFamily (ClientData *pcdLeader)
     Window wReturn = None;
 
     /*
-     * Build a window list 
+     * Build a window list
      */
     count = CountTransientChildren (pcdLeader);
 
@@ -2596,17 +2596,17 @@ LowestWindowInTransientFamily (ClientData *pcdLeader)
  *
  *  Description:
  *  -----------
- *  This function identifies a candidate window to top within the 
- *  transient tree that is a local transient leader (the window has 
- *  transients hanging off of it, too). 
- *  
+ *  This function identifies a candidate window to top within the
+ *  transient tree that is a local transient leader (the window has
+ *  transients hanging off of it, too).
+ *
  *
  *  Inputs:
  *  ------
  *  pcd = pointer to client data of a transient leader window
  *
  *  Return:  ptr to client data for client that should be topped, or NULL
- *  
+ *
  *
  *  Comments:
  *  --------
@@ -2649,9 +2649,9 @@ FindSubLeaderToTop (
  *
  *  Description:
  *  -----------
- *  This function makes a transient window list of windows in the 
- *  transient window tree headed by the specified client.  
- *  
+ *  This function makes a transient window list of windows in the
+ *  transient window tree headed by the specified client.
+ *
  *
  *  Inputs:
  *  ------
@@ -2665,14 +2665,14 @@ FindSubLeaderToTop (
  *
  *  Comments:
  *  --------
- *  This function puts the transient leader window in the list in the 
+ *  This function puts the transient leader window in the list in the
  *  right place.
  *
  *************************************<->***********************************/
 
 void
 MakeTransientFamilyStackingList (
-	Window *windows, 
+	Window *windows,
 	ClientData *pcdLeader)
 
 {
@@ -2690,7 +2690,7 @@ MakeTransientFamilyStackingList (
     if (!(pcdLeader->secondariesOnTop))
     {
 	/*
-	 * If the leader window shouldn't be on the bottom , then 
+	 * If the leader window shouldn't be on the bottom , then
 	 * adjust the stacking of the list.
 	 */
 	if ((pcdLeader->primaryStackPosition > 0) &&
@@ -2752,21 +2752,21 @@ MakeTransientFamilyStackingList (
  *
  *  Description:
  *  -----------
- *  This function traverses the transient tree and cleans up any 
+ *  This function traverses the transient tree and cleans up any
  *  local primary windows that are above their respective secondary
  *  windows.
- *  
+ *
  *
  *  Inputs:
  *  ------
  *  pcdLeader = pointer to client data of a transient tree leader
  *
  *  Return:  True if any changes in stacking order were made
- *  
+ *
  *
  *  Comments:
  *  --------
- *  This only touches the data structures. 
+ *  This only touches the data structures.
  *
  *************************************<->***********************************/
 
@@ -2802,15 +2802,15 @@ NormalizeTransientTreeStacking (
  *  Description:
  *  -----------
  *  This function tests a leader of a transient (sub) tree to see if
- *  it should be on top of its transient windows. 
- *  
+ *  it should be on top of its transient windows.
+ *
  *
  *  Inputs:
  *  ------
  *  pcdLeader = pointer to client data of a transient tree leader
  *
  *  Return:  True if this leader is on top of its transients
- *  
+ *
  *
  *  Comments:
  *  --------
@@ -2851,11 +2851,11 @@ LeaderOnTop (
  *  ------
  *  pSD	= pointer to screen data
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  The _MWM_CLIENT_LIST property of the root window is modified
- * 
+ *
  *************************************<->***********************************/
 
 void UpdateScreenClientList (
@@ -2887,5 +2887,3 @@ void UpdateScreenClientList (
     free (windows);
 
 }  /* END OF FUNCTION UpdateScreenClientList */
-
-

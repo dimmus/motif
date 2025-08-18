@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Conversion1.c /main/8 1995/07/13 17:52:50 drk $"
@@ -48,7 +48,7 @@ extern void XmCvtStringToUnitType();
 
 #define UNKNOWN	-99
 
-/* 
+/*
  * Structure to define a resource and its values
  */
 
@@ -70,7 +70,7 @@ static ConvertVal convert_set[] =
   {XmRArrowDirection, "arrow_left"              , XmARROW_LEFT      },
   {XmRArrowDirection, "arrow_right"             , XmARROW_RIGHT     },
   {XmRArrowDirection, "foo bar"                 , UNKNOWN           },
-  
+
   {XmRPacking        , "pack_none"               , XmPACK_NONE       },
   {XmRPacking        , "pack_tight"              , XmPACK_TIGHT      },
   {XmRPacking        , "pack_column"             , XmPACK_COLUMN     },
@@ -79,7 +79,7 @@ static ConvertVal convert_set[] =
   {XmROrientation    , "vertical"                , XmVERTICAL        },
   {XmROrientation    , "horizontal"              , XmHORIZONTAL      },
   {XmROrientation    , "foo bar"                 , UNKNOWN           },
-  
+
   {XmRAlignment      , "alignment_center"        , XmALIGNMENT_CENTER},
   {XmRAlignment      , "alignment_beginning"     , XmALIGNMENT_BEGINNING},
   {XmRAlignment      , "alignment_end"           , XmALIGNMENT_END   },
@@ -140,13 +140,13 @@ static ConvertVal convert_set[] =
   {XmRUnitType       , "100th_points"            , Xm100TH_POINTS    },
   {XmRUnitType       , "100th_font_units"        , Xm100TH_FONT_UNITS},
   {XmRUnitType       , "foo bar"                 , UNKNOWN           },
-  
+
   {XmRProcessingDirection   , "max_on_top"              , XmMAX_ON_TOP      },
   {XmRProcessingDirection   , "max_on_bottom"           , XmMAX_ON_BOTTOM   },
   {XmRProcessingDirection   , "max_on_left"             , XmMAX_ON_LEFT     },
   {XmRProcessingDirection   , "max_on_right"            , XmMAX_ON_RIGHT    },
   {XmRProcessingDirection   , "foo bar"                 , UNKNOWN           },
-  
+
   {XmRStringDirection , "string_direction_l_to_r" , XmSTRING_DIRECTION_L_TO_R},
   {XmRStringDirection, "string_direction_r_to_l" , XmSTRING_DIRECTION_R_TO_L},
   {XmRStringDirection, "foo bar"                 , UNKNOWN           },
@@ -159,7 +159,7 @@ static ConvertVal convert_set[] =
   {XmRSeparatorType  , "shadow_etched_out"       , XmSHADOW_ETCHED_OUT},
   {XmRSeparatorType  , "shadow_etched_in"        , XmSHADOW_ETCHED_IN},
   {XmRSeparatorType  , "foo bar"                 , UNKNOWN           },
-  
+
   {XmRShadowType     , "shadow_etched_in"        , XmSHADOW_ETCHED_IN},
   {XmRShadowType     , "shadow_etched_out"       , XmSHADOW_ETCHED_OUT},
   {XmRShadowType     , "shadow_in"               , XmSHADOW_IN       },
@@ -272,13 +272,13 @@ Boolean 	passed;
 	fprintf(stdout,"       NULL   NULL Passed\n");
       else
 	fprintf(stdout," %8d       NULL FAILED\n", correct_value);
-	
+
       return;
     }
 
   /*
-   * Print the results of the conversion and check to see what has to 
-   * be done according to the size of the data being extracted from 
+   * Print the results of the conversion and check to see what has to
+   * be done according to the size of the data being extracted from
    * the result structure.
    */
 
@@ -291,18 +291,18 @@ Boolean 	passed;
       else
 	{
 	  fprintf(stdout," %8d %8d", *(result->addr), correct_value);
-	  
+
 	  if(*((char *) (result->addr)) == correct_value)
 	    {
 	      fprintf(stdout," Passed\n");
-	    }	
+	    }
 	  else
 	    {
 	      fprintf(stdout," FAILED\n");
 	    }
 	}
     }
-  else 
+  else
     if (result->size == 2)
       {
 	if (correct_value == UNKNOWN)
@@ -314,7 +314,7 @@ Boolean 	passed;
 	  {
 	    fprintf(stdout," %8d %8d", *((short *) (result->addr)),
 		  correct_value);
-	    
+
 	    if (*((short *) (result->addr)) == correct_value)
 	      {
 		fprintf(stdout," Passed\n");
@@ -325,7 +325,7 @@ Boolean 	passed;
 	      }
 	  }
       }
-    else 
+    else
       {
 	if (correct_value == UNKNOWN)
 	{
@@ -336,7 +336,7 @@ Boolean 	passed;
 	  {
 	    fprintf(stdout," %8d %8d", *((int *) (result->addr)),
 		    correct_value);
-	    
+
 	    if (*((int *) (result->addr)) == correct_value)
 	      {
 		fprintf(stdout," Passed\n");
@@ -421,7 +421,7 @@ char		*argv[];
 		convert_set[i].type,    /* destination type      */
 		&to_return);		/* converted value       */
 
-      PrintToVal(convert_set[i].type, &from, &to_return, 
+      PrintToVal(convert_set[i].type, &from, &to_return,
 		 convert_set[i].correct_value);
 
 #else  /* No workaround, shows Instrinsics bug in convert */
@@ -432,7 +432,7 @@ char		*argv[];
 		convert_set[i].type,	/* destination type	*/
 		&to_return);	  	/* converted value	*/
 
-      PrintToVal(convert_set[i].type, &from, &to_return, 
+      PrintToVal(convert_set[i].type, &from, &to_return,
 		 convert_set[i].correct_value, passed);
 #endif
 
@@ -440,6 +440,3 @@ char		*argv[];
 
   CommonPause();
 }
-
-
-

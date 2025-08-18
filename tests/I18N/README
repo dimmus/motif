@@ -16,7 +16,7 @@ There are 2 different kinds of tests in this directory:
 			 the script if it does not support your operating
 			 system.
 
-             test_case can be a or b. 
+             test_case can be a or b.
 
 		         a is just displaying text.
 			 b is also doing a conversion of the text value of

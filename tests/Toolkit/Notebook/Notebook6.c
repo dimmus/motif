@@ -46,18 +46,18 @@ main (int argc, char **argv)
   Widget Page[NUM_PAGES];
   Widget MajorTab[NUM_MAJOR_TAB];
   Widget MinorTab[NUM_MINOR_TAB];
-  int page_no;  
+  int page_no;
   char name[16];
 
   int num_widgets = XtNumber (WidgetStruct);  /* Number of widgets. */
   int w;
-  
+
   Arg args[10];
   int n,i;
 
   CommonTestInit(argc,argv);
 
-  
+
   if (UserData == NULL)
     {
       printf ("Usage: PNotebook1 -u\nXmForm\nXmLabel\nXmLabelGadget\nXmList\nXmMainWindow\nXmMessageBox\nXmPanedWindow\nXmPushButton\nXmPushButtonGadget\nXmRowColumn\nXmScale\nXmScrollbar\nXmScrolledText\nXmSelectionBox\nXmSeparator\nXmSeparatorGadget\nXmText\nXmTextField\nXmToggleButton\nXmToggleButtonGadget\nXmScrolledWindow\n");
@@ -84,12 +84,12 @@ main (int argc, char **argv)
   while (strcmp (UserData, WidgetStruct[w].name) != 0 && (w < num_widgets))
     w++;
 
-  if (w==num_widgets) 
+  if (w==num_widgets)
     {
       printf ("Not a valid widget!\n");
       exit(0);
     }
-  
+
 
   for (i=0; i < NUM_PAGES; i++)
     {
@@ -105,7 +105,7 @@ main (int argc, char **argv)
 
 
   /* Create major tabs with page numbers in the following sequence: 5,10,15...
-     These will be updated later to show a performance problem with changing 
+     These will be updated later to show a performance problem with changing
      the page numbers of tabs. */
 
   for (i=0; i < NUM_MAJOR_TAB; i++)
@@ -120,7 +120,7 @@ main (int argc, char **argv)
     }
 
 
-  
+
   for (i=0; i < NUM_MINOR_TAB; i++)
     {
       sprintf (name, "MinorTab%d", i+1);
@@ -162,8 +162,7 @@ main (int argc, char **argv)
 
   CommonPause();
   CommonPause();
-  
+
   XtAppMainLoop(app_context);
 
 }
-  

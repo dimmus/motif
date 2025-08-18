@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List4.c /main/9 1995/07/13 18:18:17 drk $"
@@ -45,7 +45,7 @@ void  main (argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     newfontlist = CommonGetFontList("variable");
 
     n = 0;
@@ -331,14 +331,14 @@ static void ApplyCB(Widget w, XtPointer client_data,
 
 {
     switch (function) {
-	case 1:	
+	case 1:
 		XmListReplaceItems(List2, CS_ItemList1, count2, CS_ItemList2);
 		break;
 	case 2:
 		XmListReplaceItemsPos(List2, CS_ItemList2, count2, arg_count);
 		break;
 #ifndef MOTIF1_1
-	case 3:	
+	case 3:
 		XmListReplaceItemsUnselected
 			(List2, CS_ItemList1, count2, CS_ItemList2);
 		break;

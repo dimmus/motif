@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -43,7 +43,7 @@ externalref Display  *_XmColorObjCacheDisplay;
 
 /********    Private Function Declarations    ********/
 
-extern void _XmColorObjCreate( 
+extern void _XmColorObjCreate(
                         Widget w,
                         ArgList al,
                         Cardinal *acPtr) ;
@@ -56,4 +56,3 @@ extern void _XmColorObjCreate(
 #endif
 
 #endif /* _XmColorObjI_h */
-

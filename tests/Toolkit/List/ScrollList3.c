@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollList3.c /main/9 1995/07/13 18:23:50 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: ScrollList3.c /main/9 1995/07/13 18:23:50 d
 #endif
 
 
-/*	
+/*
 	This file contains test code for the following PIRS:
 
 		- 705 - ScrolledList in Form
@@ -54,7 +54,7 @@ static void addCB(Widget w, XtPointer client_data, XtPointer call_data)
     XmString str;
     XmString *items;
 
-    n = 0; 
+    n = 0;
     XtSetArg(args[n], XmNitemCount, &count); 	n++;
     XtSetArg(args[n], XmNitems, &items);	n++;
     XtGetValues(client_data, args, n);
@@ -74,7 +74,7 @@ static void addCB(Widget w, XtPointer client_data, XtPointer call_data)
 		printf("Out of test cases\n");
 		break;
     }
-		
+
     str = XmStringCreateSimple("Yet another");
     XmListAddItem(client_data, str, 0);
 
@@ -102,7 +102,7 @@ void  main (argc, argv)
     Widget	       Push1, Push2;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth, 300); 				n++;
     XtSetArg(args[n], XmNheight, 200);				n++;
@@ -147,12 +147,12 @@ void  main (argc, argv)
     CommonPause();  /* all list objects now gone */
 
     for (i = 0; i <= (NITEMS - 1); i++)
-    { 
-	XmListAddItem (List1, XmStringCreate(Istrings[i], 
+    {
+	XmListAddItem (List1, XmStringCreate(Istrings[i],
 		       XmSTRING_DEFAULT_CHARSET), 0);
         XmListSetBottomPos (List1, 0);
     }
-    
+
     CommonPause();
 
     n = 0;
@@ -196,7 +196,7 @@ void  main (argc, argv)
 
     XtAddCallback(Push1, XmNactivateCallback, addCB, (XtPointer) List1);
     XmStringFree(tcs);
-    
+
     tcs = XmStringCreateSimple("Push to Add one Item");
 
     n = 0;

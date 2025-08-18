@@ -22,32 +22,32 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual mbox 
-TRACE:(2) LocatePointer mbox RHelpButton 
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual mbox
+TRACE:(2) LocatePointer mbox RHelpButton
+TRACE:(3) ClickMB Btn1
 query with 50, 75, 300, 500
       result is (mode, x, y, w, h) 12 1 1 300 500
                current is  1 1 196 87
-TRACE:(4) CompareVisual mbox 
-TRACE:(5) ClickMB Btn1 
+TRACE:(4) CompareVisual mbox
+TRACE:(5) ClickMB Btn1
 query with NULL
       result is (mode, x, y, w, h) 12 1 1 196 87
       current is 1 1 196 87
-TRACE:(6) CompareVisual mbox 
+TRACE:(6) CompareVisual mbox
 TRACE:(7) Continue
-TRACE:(8) LocatePointer mbox ROkButton 
-TRACE:(9) ClickMB Btn1 
-TRACE:(10) CompareVisual mbox 
-TRACE:(11) LocatePointer mbox RHelpButton 
-TRACE:(12) ClickMB Btn1 
+TRACE:(8) LocatePointer mbox ROkButton
+TRACE:(9) ClickMB Btn1
+TRACE:(10) CompareVisual mbox
+TRACE:(11) LocatePointer mbox RHelpButton
+TRACE:(12) ClickMB Btn1
 query with 50, 75, 300, 500
       result is (mode, x, y, w, h) 12 1 1 300 500
                current is  1 1 166 87
-TRACE:(13) CompareVisual mbox 
-TRACE:(14) ClickMB Btn1 
+TRACE:(13) CompareVisual mbox
+TRACE:(14) ClickMB Btn1
 query with NULL
       result is (mode, x, y, w, h) 12 1 1 166 87
       current is 1 1 166 87
-TRACE:(15) CompareVisual mbox 
+TRACE:(15) CompareVisual mbox
 TRACE:(16) Exit
 Exiting Test...Please Standby...

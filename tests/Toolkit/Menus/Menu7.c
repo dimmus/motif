@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu7.c /main/5 1995/07/13 18:46:13 drk $"
@@ -50,7 +50,7 @@ char **argv;
 
   CommonTestInit(argc, argv);
 
-  /* 
+  /*
    * The parent of all this will be a main window
    */
   mainWindow = XmCreateMainWindow(Shell1, "mainWindow", NULL, 0);
@@ -68,7 +68,7 @@ char **argv;
   pb1 = XmCreatePushButton(pulldown1, "PushButton1", args, 0);
   pb2 = XmCreatePushButton(pulldown1, "PushButton2", args, 0);
   pb3 = XmCreatePushButton(pulldown1, "PushButton3", args, 0);
-  
+
   XtManageChild(pb1);
   XtManageChild(pb2);
   XtManageChild(pb3);
@@ -141,15 +141,3 @@ char **argv;
   XtAppMainLoop(app_context);
   return(1);
 }
-
-
-
-
-
-
-
-
-
-
-
-

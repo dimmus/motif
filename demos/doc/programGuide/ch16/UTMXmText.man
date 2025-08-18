@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH UTMXmText 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -30,7 +30,7 @@
 \*LUTMXmText\*O
 .sE
 .SH DESCRIPTION
-\*LUTMXmText\*O illustrates how an application can add UTM callbacks 
+\*LUTMXmText\*O illustrates how an application can add UTM callbacks
 to enhance the data transfer capabilities of a Motif widget.
 When you invoke the program, two text widgets will appear.
 The top widget is marked as the "DESTINATION" widget.

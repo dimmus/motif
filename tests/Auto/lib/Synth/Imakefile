@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/8 1995/07/14 09:57:03 drk $
 
 
@@ -47,7 +47,7 @@ EVENTS_OBJS =	$(EVENTS_DIR)/GetEventTime.o \
   		$(EVENTS_DIR)/PrintEvent.o \
   		$(EVENTS_DIR)/ProcesEvents.o \
   		$(EVENTS_DIR)/SendEvent.o \
-  		$(EVENTS_DIR)/Synchronize.o 
+  		$(EVENTS_DIR)/Synchronize.o
 
 INFO_OBJS = 	$(INFO_DIR)/AllocObject.o \
   		$(INFO_DIR)/BeginSession.o \
@@ -81,7 +81,7 @@ OTHER_OBJS =	$(OTHER_DIR)/ConcatObj.o \
   		$(OTHER_DIR)/SetClickTime.o \
   		$(OTHER_DIR)/Terminate.o \
   		$(OTHER_DIR)/UngrabButton.o \
-  		$(OTHER_DIR)/WindowExists.o 
+  		$(OTHER_DIR)/WindowExists.o
 
 PRIMITIV_OBJS = $(PRIMITIV_DIR)/CButtonPress.o \
   		$(PRIMITIV_DIR)/CMovePointer.o \
@@ -115,7 +115,7 @@ PRIMITIV_OBJS = $(PRIMITIV_DIR)/CButtonPress.o \
   		$(PRIMITIV_DIR)/SetFocusMode.o \
   		$(PRIMITIV_DIR)/UnmapWidget.o \
   		$(PRIMITIV_DIR)/UpdObjAttr.o
-		
+
 
 EVENTS_SRCS =	$(EVENTS_DIR)/GetEventTime.c \
   		$(EVENTS_DIR)/GetServrTime.c \
@@ -158,7 +158,7 @@ OTHER_SRCS =	$(OTHER_DIR)/ConcatObj.c \
   		$(OTHER_DIR)/SetClickTime.c \
   		$(OTHER_DIR)/Terminate.c \
   		$(OTHER_DIR)/UngrabButton.c \
-  		$(OTHER_DIR)/WindowExists.c 
+  		$(OTHER_DIR)/WindowExists.c
 
 PRIMITIV_SRCS = $(PRIMITIV_DIR)/CButtonPress.c \
   		$(PRIMITIV_DIR)/CMovePointer.c \
@@ -191,18 +191,18 @@ PRIMITIV_SRCS = $(PRIMITIV_DIR)/CButtonPress.c \
   		$(PRIMITIV_DIR)/SetFocus.c \
   		$(PRIMITIV_DIR)/SetFocusMode.c \
   		$(PRIMITIV_DIR)/UnmapWidget.c \
-  		$(PRIMITIV_DIR)/UpdObjAttr.c 
-		
+  		$(PRIMITIV_DIR)/UpdObjAttr.c
+
 
 OBJS = 	$(EVENTS_OBJS) \
 	$(INFO_OBJS) \
 	$(OTHER_OBJS) \
-	$(PRIMITIV_OBJS) 
+	$(PRIMITIV_OBJS)
 
 SRCS = 	$(EVENTS_SRCS) \
 	$(INFO_SRCS) \
 	$(OTHER_SRCS) \
-	$(PRIMITIV_SRCS) 
+	$(PRIMITIV_SRCS)
 
 #if DoNormalLib && DoSharedLib && SeparateSharedCompile
 MakeShadowTree(unshared,$(SUBDIRS))

@@ -364,4 +364,3 @@ xpmDataClose(xpmData *mdata)
     if (mdata->stream.file != (stdout))
 	fclose(mdata->stream.file);
 }
-

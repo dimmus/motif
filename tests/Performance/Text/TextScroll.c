@@ -127,7 +127,7 @@ char **argv;
     XtSetValues(Shell1, args, n);
 
 	XtRealizeWidget(Shell1);
-    
+
 
 	/* create main form */
 	n = 0;
@@ -271,7 +271,7 @@ caddr_t  call_data;
 	if (Text1 == NULL)
 		return;
 
-	fprintf(outfp, "Total Number of Lines in the textfile : %d\n\n", 
+	fprintf(outfp, "Total Number of Lines in the textfile : %d\n\n",
 			total_lines);
 
 	gettimeofday(&act_time1, &zone_time1);

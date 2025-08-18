@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ToggleBGad1.c /main/8 1995/07/13 17:30:51 drk $"
@@ -127,14 +127,14 @@ char **argv;
   GC      gc;
   Screen *screen;
   XGCValues  values;
-  XtGCMask valueMask; 
+  XtGCMask valueMask;
   Pixel foreground, background;
   Drawable drawable;
   Window win;
 
   /*  initialize toolkit  */
   CommonTestInit(argc, argv);
-  
+
   n = 0;
   bb = XmCreateBulletinBoard(Shell1, "bb", args, n);
 
@@ -144,20 +144,20 @@ char **argv;
 				      smileRaster, 64, 64, foreground,
 				      background,
 				      DefaultDepthOfScreen(XtScreen(Shell1)));
- 
+
   pixOff = XCreatePixmapFromBitmapData(display, rootWindow,
 				      smileRaster, 64, 64, background,
 				      foreground,
 				      DefaultDepthOfScreen(XtScreen(Shell1)));
-				      
+
   n = 0;
   XtSetArg(args[n], XmNlabelType, XmPIXMAP);  n++;
-  XtSetArg(args[n], XmNlabelPixmap, pixOff);  n++;  
-  XtSetArg(args[n], XmNlabelInsensitivePixmap, pixOn);  n++; 
-  XtSetArg(args[n], XmNselectInsensitivePixmap, pixOff);  n++; 
+  XtSetArg(args[n], XmNlabelPixmap, pixOff);  n++;
+  XtSetArg(args[n], XmNlabelInsensitivePixmap, pixOn);  n++;
+  XtSetArg(args[n], XmNselectInsensitivePixmap, pixOff);  n++;
   XtSetArg(args[n], XmNset, True); n++;
   XtSetArg(args[n], XmNselectColor, CommonGetColor("red")); n++;
-  toggle = XmCreateToggleButtonGadget(bb, "toggle", args, n); 
+  toggle = XmCreateToggleButtonGadget(bb, "toggle", args, n);
   XtManageChild (bb);
   XtManageChild (toggle);
   XtRealizeWidget (Shell1);
@@ -165,7 +165,7 @@ char **argv;
   CommonPause();
 
   XtSetSensitive (toggle, False);
- 
+
   CommonPause();
 
   n = 0;
@@ -188,21 +188,15 @@ char **argv;
   /* actual pixmaps are specified via .Xdefaults */
   label = XmCreateLabel (bb, "label", args, n);
   XtManageChild (label);
-  
+
   CommonPause();
 
-  XtSetSensitive (label, False); 
+  XtSetSensitive (label, False);
 
-  CommonPause();  
+  CommonPause();
   CommonPause(); /* exit */
 
   XtAppMainLoop(app_context);
   XtDestroyWidget(toggle);
   XtDestroyWidget(bb);
 }
-
-
-
-
-
-

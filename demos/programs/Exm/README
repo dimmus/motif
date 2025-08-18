@@ -3,14 +3,14 @@ This directory contains the source code for the Exm demonstration widgets.
 The Exm demonstration widgets illustrate how to write a Motif widget in C.
 If you are interested in writing a Motif widget in C++, you should see the
 ../ExmCxx directory.  Complete details on the Exm demonstration widgets can
-be found in the "OSF/Motif Widget Writer's Guide and Reference" manual. 
+be found in the "OSF/Motif Widget Writer's Guide and Reference" manual.
 
-We are providing the Exm widget set for educational purposes only.  
+We are providing the Exm widget set for educational purposes only.
 Programmers should not use any Exm widgets inside a commercial application.
 
-This README file summarizes the purpose of each file in this directory. 
+This README file summarizes the purpose of each file in this directory.
 The end of this README file contains instructions for building the Exm widget
-set. 
+set.
 
 
                            ***************************
@@ -43,29 +43,29 @@ hierarchy:
 *********
 ExmSimple
 *********
-The ExmSimple widget consists of three files: 
-   * Simple.c 
+The ExmSimple widget consists of three files:
+   * Simple.c
    * Simple.h
    * SimpleP.h
-The ExmSimple widget renders a rectangle or an oval.  This widget demonstrates 
-how to create a 
+The ExmSimple widget renders a rectangle or an oval.  This widget demonstrates
+how to create a
    * relatively easy Motif widget.
    * primitive widget that can serve as a superclass for other widgets.
    * new representation type.
- 
+
 
 *********
 ExmString
 *********
-The ExmString widget consists of three files: 
+The ExmString widget consists of three files:
    * String.c
    * String.h
    * StringP.h
 The ExmString widget demonstrates how to handle compound strings in Motif
-widgets.  The ExmString widget is similar to the XmLabel widget.  
-The biggest difference between the two is that an XmLabel can 
-render either a compound string or a pixmap but an ExmString can 
-render only a compound string.  More specifically, the ExmString 
+widgets.  The ExmString widget is similar to the XmLabel widget.
+The biggest difference between the two is that an XmLabel can
+render either a compound string or a pixmap but an ExmString can
+render only a compound string.  More specifically, the ExmString
 widget demonstrates how to:
   * use the four recommended resources for handling compound strings.
   * use the XmQTaccessTextual trait.
@@ -75,14 +75,14 @@ widget demonstrates how to:
 ****************
 ExmCommandButton
 ****************
-The ExmCommandButton widget consists of three files: 
-   * CommandB.c 
-   * CommandB.h 
+The ExmCommandButton widget consists of three files:
+   * CommandB.c
+   * CommandB.h
    * CommandBP.h
 This widget displays a button that, when activated, initiates a callback.
 This widget demonstrates how to
    * create Motif-style button visuals.
-   * establish Motif-style actions for buttons. 
+   * establish Motif-style actions for buttons.
    * install the XmQTactivatable trait.
    * install the XmQTtakesDefault trait.
    * establish a simple Motif callback.
@@ -91,25 +91,25 @@ This widget demonstrates how to
 *************
 ExmMenuButton
 *************
-The ExmMenuButton widget consists of three files: 
+The ExmMenuButton widget consists of three files:
    * MenuB.c
    * MenuB.h
    * MenuBP.h
 This widget renders a menu child button that, when activated, initiates
-a callback.  This widget demonstrates how to 
-   * create a menu child widget, in the style of XmPushButton. 
-   * install the XmQTmenuSavvy trait. 
+a callback.  This widget demonstrates how to
+   * create a menu child widget, in the style of XmPushButton.
+   * install the XmQTmenuSavvy trait.
    * call the trait methods of XmQTmenuSystem.
 
 
 *****************
 ExmStringTransfer
 *****************
-The ExmStringTransfer widget consists of three files: 
+The ExmStringTransfer widget consists of three files:
    * StringTrans.c
    * StringTrans.h
    * StringTransP.h
-This widget renders a compound string.  The ExmStringTransfer widget 
+This widget renders a compound string.  The ExmStringTransfer widget
 demonstrates how to
    * implement the Uniform Transfer Method (UTM) in a Motif widget.
    * write a widget that supports Drag and Drop.
@@ -119,24 +119,24 @@ demonstrates how to
 *********
 ExmPanner
 *********
-The ExmPanner widget consists of three files: 
+The ExmPanner widget consists of three files:
    * Panner.c
    * Panner.h
    * PannerP.h
 This widget allows users to pan (navigate) through different portions
-of another widget.  The ExmPanner widget renders a small rectangle 
-inside a widget.  The user may move this rectangle.  As the rectangle 
-moves to different portions of its surrounding widget, different 
+of another widget.  The ExmPanner widget renders a small rectangle
+inside a widget.  The user may move this rectangle.  As the rectangle
+moves to different portions of its surrounding widget, different
 portions of the target widget will become visible.  The ExmPanner widget
 demonstrates how to:
    * write a navigator widget.
    * use the XmQTnavigator trait.
- 
+
 
 ************
 ExmTabButton
 ************
-The ExmTabButton widget consists of three files: 
+The ExmTabButton widget consists of three files:
    * TabB.c
    * TabB.h
    * TabBP.h
@@ -150,12 +150,12 @@ ExmTabButton widget is activatable.  It demonstrates how to
 *******
 ExmGrid
 *******
-The ExmGrid widget consists of three files: 
-   * Grid.c 
+The ExmGrid widget consists of three files:
+   * Grid.c
    * Grid.h
    * GridP.h
 The ExmGrid widget demonstrates how to
-   * write a manager widget. 
+   * write a manager widget.
    * use the XmQTdialogSavvy trait.
 
 
@@ -186,21 +186,18 @@ Exm widgets.  They are:
                          BUILDING THE EXM WIDGET SET
                          ***************************
 This directory contains an Imakefile.  In order to build the Exm widget set
-from this Imakefile, you should follow these steps: 
+from this Imakefile, you should follow these steps:
    1. $ make Makefile    # This command should create a true Makefile.
    2. $ make includes
    3. $ make depend
    4. $ make
 
 The "make" command should compile all of the source code files in the directory.
-The resulting widget object files will be archived into a library file named 
-libExm.a.  The ExmMrm.o object file will be archived into a library file named 
+The resulting widget object files will be archived into a library file named
+libExm.a.  The ExmMrm.o object file will be archived into a library file named
 libMrm.a.  In order to exercise the code in the libraries, you must build an
 application stored in one of the following subdirectories:
 
    * simple_app
    * exm_app_in_c
    * exm_app_in_uil
-
- 
-       

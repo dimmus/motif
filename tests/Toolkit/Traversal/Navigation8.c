@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation8.c /main/6 1995/07/13 19:45:23 drk $"
@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: Navigation8.c /main/6 1995/07/13 19:45:23 d
 
 Widget bb;
 Widget Frame1, Frame2, Frame3, Frame4, Frame5, Frame6;
-Widget Draw1, Draw2; 
+Widget Draw1, Draw2;
 Widget rc1, rc2, rc3, rc4, rc5, rc6;
 Widget btn1, btn2, btn3;
 Widget toggle1;
@@ -69,8 +69,8 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
- 
+
+
     bb = XmCreateBulletinBoard(Shell1, "bb", (ArgList) args, 0);
     XtManageChild(bb);
 
@@ -273,7 +273,7 @@ char **argv;
 	XtSetArg(args[n], XmNarrowDirection, XmARROW_RIGHT);  n++;
 	Draw1 = XmCreateArrowButton (bb,"Draw1", args, n);
 	XtManageChild (Draw1);
-	
+
 
 /* Now lets make two more RCs with nothing on them! */
 

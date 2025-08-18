@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsCmpRscs.c /main/7 1995/07/14 11:19:20 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: mvsCmpRscs.c /main/7 1995/07/14 11:19:20 dr
                         like Strings
 	   07/29/90 PSN initialize args, parameter changes
 	   09/04/90 SJS check for gettability
-	   11/12/90 PSN don't print addresses (RefGeneric) on failed 
+	   11/12/90 PSN don't print addresses (RefGeneric) on failed
 			comparisons & also number failures.
 	Calls:
 
@@ -125,7 +125,7 @@ MvsWidgetInfoRecord *widget_info;
 		    }
                     else
                         /* do nothing since both are NULL */;
-                else 
+                else
                     if (resources2[i] == NULL) {
                         if (strcmp(resources[i],"") != 0) {
                             msg_failure("1000.%d: Resource 'XmN%s' mismatch:\n\t\texpected '%s', received NULL\n",
@@ -145,7 +145,7 @@ MvsWidgetInfoRecord *widget_info;
                                                  resources2[i],i);
                         }
                     }
-                break; 
+                break;
 
             case RefCallbackList:
                 widget = widget_info->widget;
@@ -160,7 +160,7 @@ MvsWidgetInfoRecord *widget_info;
             /**               resource_info[i].name);                         **/
             /**     else                                                      **/
                         /* do nothing since both are NULL */;
-                else { 
+                else {
                     if(XtHasCallbacks(widget,resource_info[i].name) !=
                                                             XtCallbackHasSome)
                         msg_failure("1000.%d: Resource 'XmN%s' mismatch:\n\t\texpected non-empy callback list, received empty list\n",
@@ -181,12 +181,12 @@ MvsWidgetInfoRecord *widget_info;
                 break;
 
 	    default:
-		sprintf (msg_string, _AutoMessages[WARNMSG64]), 
+		sprintf (msg_string, _AutoMessages[WARNMSG64]),
 		         mvsTypeInfo[resource_info[i].type_code].ref_type);
                 AutoMessage(msg_string);
-                          
+
 	 }
     } /* End for(i<num_resources) */
-    mvsFreeResources(widget_info->widget_class_info, resources2);    
+    mvsFreeResources(widget_info->widget_class_info, resources2);
 
 } /* End mvsCompareResources() */

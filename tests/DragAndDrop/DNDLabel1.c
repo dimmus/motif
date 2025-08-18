@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDLabel1.c /main/9 1995/07/14 11:53:50 drk $"
@@ -68,7 +68,7 @@ char	**argv;
 
 	if (UserData != NULL)
 		ProcessCommandArgs();
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
@@ -84,7 +84,7 @@ char	**argv;
 
     /* make a string label widget */
     n = 0;
-    tcs = XmStringLtoRCreate("Two-Line\nLabel String", 
+    tcs = XmStringLtoRCreate("Two-Line\nLabel String",
 							 XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[n], XmNlabelString, tcs);  n++;
     XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
@@ -169,4 +169,3 @@ int		*spaces;
 	*spaces = space_count;
 
 }
-

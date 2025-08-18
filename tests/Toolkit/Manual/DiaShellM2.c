@@ -72,7 +72,7 @@ XtPointer client_data, call_data;
 
 /* make HELP button spawn a child */
     spawnButton = XmMessageBoxGetChild (Dialog1, XmDIALOG_HELP_BUTTON);
-    XtAddCallback (spawnButton, XmNactivateCallback, 
+    XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostModelessDialog, Dialog1);
     if (delay) sleep (delay);
     XtManageChild (Dialog1);
@@ -98,7 +98,7 @@ XtPointer client_data, call_data;
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 XmStringCreateSimple ("While this box is up, you should not be able to use its parent")); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
     XtSetArg (args[n], XmNhelpLabelString, XmStringCreateSimple ("Spawn Dialog Child")); n++;
@@ -137,10 +137,10 @@ XtPointer client_data, call_data;
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 XmStringCreateSimple ("While this box is up, you should not be able to use either Shell1 or Shell2 nor any other dialog box.")); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
-	XtSetArg (args[n], XmNhelpLabelString, 
+	XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
     /* dialog shell resources */
     XtSetArg (args[n], XmNtitle, "Full Application Modal Dialog"); n++;
@@ -151,7 +151,7 @@ XmStringCreateSimple ("While this box is up, you should not be able to use eithe
     Dialog2 = XmCreateMessageDialog(parent, "Dialog1", args, n);
 /* make HELP button spawn a child */
 	spawnButton = XmMessageBoxGetChild (Dialog2, XmDIALOG_HELP_BUTTON);
-	XtAddCallback (spawnButton, XmNactivateCallback, 
+	XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostFullAppModalDialog, Dialog2);
 
     if (delay) sleep (delay);
@@ -180,7 +180,7 @@ XtPointer client_data, call_data;
     /* message box resources */
     XtSetArg (args[n], XmNmessageString, XmStringCreateSimple ("While this box is up, you should not be able to use any other application nor any other part of this client.")); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
-	XtSetArg (args[n], XmNhelpLabelString, 
+	XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
 
     /* dialog shell resources */
@@ -192,7 +192,7 @@ XtPointer client_data, call_data;
     Dialog3 = XmCreateMessageDialog(parent, "Dialog1", args, n);
 /* make HELP button spawn a child */
 	spawnButton = XmMessageBoxGetChild (Dialog3, XmDIALOG_HELP_BUTTON);
-	XtAddCallback (spawnButton, XmNactivateCallback, 
+	XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostSystemModalDialog, Dialog3);
     if (delay) sleep (delay);
     XtManageChild (Dialog3);
@@ -240,7 +240,7 @@ XtPointer client_data, call_data;
 
 /* make HELP button spawn a child */
     destroyButton = XmMessageBoxGetChild (DialogW, XmDIALOG_HELP_BUTTON);
-    XtAddCallback (destroyButton, XmNactivateCallback, 
+    XtAddCallback (destroyButton, XmNactivateCallback,
 				   DestroyWorkingDialog, DialogW);
     if (delay) sleep (delay);
     XtManageChild (DialogW);
@@ -285,7 +285,7 @@ XtPointer client_data, call_data;
     Shell3 = XtCreatePopupShell("Shell 3", topLevelShellWidgetClass, parent,
                               args, n);
     n = 0;
-    BB3 = XmCreateBulletinBoard (Shell3, "BB3", args, n);    
+    BB3 = XmCreateBulletinBoard (Shell3, "BB3", args, n);
     XtManageChild (BB3);
 
     n = 0;
@@ -348,7 +348,7 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     if (UserData != NULL)				/*PIR3421*/
 		ProcessCommandArgs();
 
@@ -358,19 +358,19 @@ void  main(argc, argv)
     XtSetArg(args[n], XtNgeometry, "+500+0");  n++;
     Shell2 = XtAppCreateShell(argv[0], NULL, topLevelShellWidgetClass,
 			      display, args, n);
-   
+
     /* Shell 1 children */
 
     n = 0;
     BB1 = XmCreateBulletinBoard (Shell1, "BB1", args, n);
     XtManageChild (BB1);
-    
+
     n = 0;
     XtSetArg (args[n], XmNx, 300); n++;
     XtSetArg (args[n], XmNy, 50); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Default Button")); n++;
-    DB = XmCreatePushButton (BB1, "DB", args, n);	  
+    DB = XmCreatePushButton (BB1, "DB", args, n);
     XtManageChild (DB);
 
     n = 0;
@@ -403,7 +403,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 100); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Primary Modal from Shell2")); n++;
-    test1 = XmCreatePushButton (BB1, "test1", args, n);	  
+    test1 = XmCreatePushButton (BB1, "test1", args, n);
     XtManageChild (test1);
     XtAddCallback (test1, XmNactivateCallback, PostPrimaryModalDialog, Shell2);
 
@@ -412,7 +412,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 150); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Primary Modal from Shell1")); n++;
-    test1a = XmCreatePushButton (BB1, "test1a", args, n);	  
+    test1a = XmCreatePushButton (BB1, "test1a", args, n);
     XtManageChild (test1a);
     XtAddCallback (test1a, XmNactivateCallback, PostPrimaryModalDialog, Shell1);
 
@@ -421,7 +421,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 200); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Full App Modal Dialog")); n++;
-    test2 = XmCreatePushButton (BB1, "test2", args, n);	  
+    test2 = XmCreatePushButton (BB1, "test2", args, n);
     XtManageChild (test2);
     XtAddCallback (test2,  XmNactivateCallback, PostFullAppModalDialog, Shell1);
 
@@ -430,17 +430,17 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 250); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create System Modal Dialog")); n++;
-    test3 = XmCreatePushButton (BB1, "test3", args, n);	  
+    test3 = XmCreatePushButton (BB1, "test3", args, n);
     XtManageChild (test3);
     XtAddCallback (test3, XmNactivateCallback, PostSystemModalDialog, Shell2);
 
 										/*Begin PIR2753*/
-    n = 0;									
+    n = 0;
     XtSetArg (args[n], XmNx, 10); n++;
     XtSetArg (args[n], XmNy, 300); n++;
     XtSetArg (args[n], XmNlabelString,
 			  XmStringCreateSimple ("Create Modeless Dialog from Shell1")); n++;
-    test1b = XmCreatePushButton (BB1, "test1b", args, n);	  
+    test1b = XmCreatePushButton (BB1, "test1b", args, n);
     XtManageChild (test1b);
     XtAddCallback (test1b, XmNactivateCallback, PostModelessDialog, Shell1);
 										/*End PIR2753*/
@@ -451,7 +451,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 350); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Popup Shell from Shell2")); n++;
-    test1c = XmCreatePushButton (BB1, "test1c", args, n);	  
+    test1c = XmCreatePushButton (BB1, "test1c", args, n);
     XtManageChild (test1c);
     XtAddCallback (test1c, XmNactivateCallback, PostPopupShell, Shell2);
 										/*End PIR2145*/
@@ -459,7 +459,7 @@ void  main(argc, argv)
     /* Shell 2 children */
 
     n = 0;
-    BB2 = XmCreateBulletinBoard (Shell2, "BB2", args, n);    
+    BB2 = XmCreateBulletinBoard (Shell2, "BB2", args, n);
     XtManageChild (BB2);
 
     n = 0;
@@ -494,34 +494,34 @@ void  main(argc, argv)
 	if (modal_bug == True) {
 
     	n = 0;
-    	XtSetArg (args[n], XmNmessageString, 
-				  XmStringCreateSimple ("This is a FullApp Modal dialog")); 
+    	XtSetArg (args[n], XmNmessageString,
+				  XmStringCreateSimple ("This is a FullApp Modal dialog"));
 				  n++;
 
     	XtSetArg (args[n], XmNtitle, "FullApp Modal Dialog"); n++;
-    	XtSetArg (args[n], XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL); 
+    	XtSetArg (args[n], XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL);
 				  n++;
-		XtSetArg (args[n], XmNhelpLabelString, 
+		XtSetArg (args[n], XmNhelpLabelString,
 			  	  XmStringCreateSimple ("Destroy Me")); n++;
     	FullAppDialog = XmCreateMessageDialog(Shell1, "FullAppDialog", args, n);
 
-    	cancelButton = XmMessageBoxGetChild (FullAppDialog, 
+    	cancelButton = XmMessageBoxGetChild (FullAppDialog,
 											 XmDIALOG_CANCEL_BUTTON);
 		XtUnmanageChild(cancelButton);
-    	okButton = XmMessageBoxGetChild (FullAppDialog, 
+    	okButton = XmMessageBoxGetChild (FullAppDialog,
 										 XmDIALOG_OK_BUTTON);
 		XtUnmanageChild(okButton);
 
-    	destroyButton = XmMessageBoxGetChild (FullAppDialog, 
+    	destroyButton = XmMessageBoxGetChild (FullAppDialog,
 											  XmDIALOG_HELP_BUTTON);
-    	XtAddCallback (destroyButton, XmNactivateCallback, destroyDialogCB, 
+    	XtAddCallback (destroyButton, XmNactivateCallback, destroyDialogCB,
 				   	   FullAppDialog);
 
     	XtManageChild (FullAppDialog);
 
 	}
 											/*End PIR3421*/
-    
+
     XtRealizeWidget(Shell1);
     XtRealizeWidget(Shell2);
 

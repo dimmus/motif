@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,12 +37,12 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmCommandReturn( 
+extern void _XmCommandReturn(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *numParams) ;
-extern void _XmCommandUpOrDown( 
+extern void _XmCommandUpOrDown(
                         Widget wid,
                         XEvent *event,
                         String *argv,

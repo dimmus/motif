@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-        
+
 # This widget is a cascade button with the following characteristics:
-#	- there are two Pushbuttons, one is contained within a menuBar 
-#	  and the other is a child of Pulldown Menu. 
+#	- there are two Pushbuttons, one is contained within a menuBar
+#	  and the other is a child of Pulldown Menu.
 #	- Each cascadeButton has a Pulldown Menu associated with it.
 #	- each Pushbutton has a accelerator and acceleratorText associated
 #          with it.
@@ -51,6 +51,3 @@ LocatePointer Push_button1
 CompareVisual S_MAIN_WIDGET
 ReleaseMB Btn1
 Exit
-
-
-

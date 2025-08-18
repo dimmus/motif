@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -38,10 +38,10 @@ abcdefghijklmnopqrstuvwxyz\n\
 0123456789\n\
 abcdefghijklmnopqrstuvwxyz\n\
 0123456789\n\
-Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec."; 
+Jan. Feb. Mar. Apr. May Jun. Jul. Aug. Sep. Oct. Nov. Dec.";
 
-void main (argc, argv) 
-int argc; 
+void main (argc, argv)
+int argc;
 char **argv;
 {
 	int     n = 0;
@@ -50,7 +50,7 @@ char **argv;
 
 	CommonTestInit( argc, argv );
 
- 	n = 0;	
+ 	n = 0;
 	XtSetArg( args[n], XmNwidth, MANAGER_WIDTH ); n++;
 	XtSetArg( args[n], XmNheight, MANAGER_HEIGHT ); n++;
 	BBoard1 = XmCreateBulletinBoard( Shell1, "BBoard1", args, n );
@@ -69,7 +69,7 @@ char **argv;
 	XtSetArg( args[n], XmNeditable, False ); n++;
 	Text1 = XmCreateTextField( BBoard1, "Text1", args, n );
 	XtManageChild( Text1 );
-	
+
 	XtDestroyWidget( Text1 );
 
      	XtRealizeWidget(Shell1);
@@ -78,5 +78,3 @@ char **argv;
 	CommonPause();
 	XtAppMainLoop( app_context );
 }
-        
-	

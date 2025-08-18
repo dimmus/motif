@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetGeometry.c /main/8 1995/07/14 10:58:40 drk $"
@@ -39,11 +39,11 @@ static char rcsid[] = "$XConsortium: GetGeometry.c /main/8 1995/07/14 10:58:40 d
 	Calls:
 
 	Summary:
-            Returns the specified widget's position and size on the screen.    
-           
+            Returns the specified widget's position and size on the screen.
+
             INPUTS:
                 widget
-        
+
             OUTPUTS:
                 x,y           - position of widget relative to root window in
                                 pixels
@@ -86,14 +86,14 @@ int *x, *y, *width, *height, *border_width;
                                     not in our hierarchy yet */
     else
         being_destroyed = w_info->being_destroyed;
-    
+
     if(!being_destroyed && XtIsRealized(widget)) {
         if (!XGetGeometry(mvsDisplay,window,&root_return,&tmp_x, &tmp_y,
                           (unsigned int *)width, (unsigned int *)height,
                           (unsigned int *)border_width,
                           (unsigned int *) &tmp_d)) {
             AutoError(_AutoMessages[WARNMSG62]);
-            
+
         }
 
         window_x = 0;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TextField4.c /main/6 1995/07/13 19:35:51 drk $"
@@ -71,7 +71,7 @@ char **argv;
 
 
 	n = 0;
-        tmp_string = XmStringCreate("TextField2 - resizeWidth: True", 
+        tmp_string = XmStringCreate("TextField2 - resizeWidth: True",
 		                    XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNy, 80); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
@@ -88,11 +88,11 @@ char **argv;
 
 
 	n = 0;
-        tmp_string = XmStringCreate("Text1 - resizeWidth: True", 
+        tmp_string = XmStringCreate("Text1 - resizeWidth: True",
                          	     XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNy, 140); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string);
-		
+
 	Label3 = XmCreateLabel(BBoard1, "Label3", args, n);
 	XtManageChild(Label3);
         XmStringFree (tmp_string);
@@ -119,6 +119,6 @@ char **argv;
 
 	/* test case for PIR 2898, see .dat */
 	CommonPause();
-	
+
 	XtAppMainLoop(app_context);
 }

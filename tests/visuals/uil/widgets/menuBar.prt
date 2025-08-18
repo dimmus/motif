@@ -23,20 +23,20 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is menuBar.uid ---- 
+---- The uid file to be opened is menuBar.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer cb1  
-TRACE:(3) PressMB Btn1 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
-TRACE:(5) ReleaseMB Btn1 
-TRACE:(6) LocatePointer cb2  
-TRACE:(7) PressMB Btn1 
-TRACE:(8) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer cb1
+TRACE:(3) PressMB Btn1
+TRACE:(4) CompareVisual S_MAIN_WIDGET
+TRACE:(5) ReleaseMB Btn1
+TRACE:(6) LocatePointer cb2
+TRACE:(7) PressMB Btn1
+TRACE:(8) CompareVisual S_MAIN_WIDGET
 TRACE:(9) ClickKey KDown
-TRACE:(10) CompareVisual S_MAIN_WIDGET 
-TRACE:(11) ReleaseMB Btn1 
+TRACE:(10) CompareVisual S_MAIN_WIDGET
+TRACE:(11) ReleaseMB Btn1
 
 /*********************************************************/
 ---- armCallback - Push Button 1 callback made ----

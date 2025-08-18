@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -47,7 +47,7 @@ extern "C" {
 extern void _XmSWNotifyGeoChange(Widget sw,
 				 Widget child,
 				 XtWidgetGeometry *request);
-extern Boolean _XmSWGetClipArea(Widget widget, 
+extern Boolean _XmSWGetClipArea(Widget widget,
 				XRectangle *rect);
 
 /********    End Private Function Declarations    ********/

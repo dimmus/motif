@@ -19,19 +19,19 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH combo_box 1X MOTIF "Demonstration programs"
 .SH NAME
-\*Lcombo_box\*O\(emDemonstrates how to use XmComboBox in a simple application 
+\*Lcombo_box\*O\(emDemonstrates how to use XmComboBox in a simple application
 .SH SYNOPSIS
 .sS
 \*Lcombo_box\*O
 .sE
 .SH DESCRIPTION
-\*Lcombo_box\*O illustrates how to place an XmComboBox into an application. 
-The XmComboBox in the application is of type XmDROP_DOWN_COMBO_BOX. 
+\*Lcombo_box\*O illustrates how to place an XmComboBox into an application.
+The XmComboBox in the application is of type XmDROP_DOWN_COMBO_BOX.
 You can make a selection by typing it directly into the TextField
 or by selecting the item from the DropDown list.  To make the list
 drop down, click on the arrow that appears next to the TextField.

@@ -24,10 +24,10 @@
 # HISTORY
 min = 0,   max = 100,   value = 0,  slider size = 10
 
-TRACE:(1) CompareVisual scrollbar 
+TRACE:(1) CompareVisual scrollbar
 TRACE:(2) Continue
 changing the slider size to 40 and value to 70
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -35,10 +35,10 @@ Warning:
 
 min = 0,   max = 100,   value = 60,  slider size = 40
 
-TRACE:(3) CompareVisual scrollbar 
+TRACE:(3) CompareVisual scrollbar
 TRACE:(4) Continue
 changing the maximum to 90 and value to 60
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -46,14 +46,14 @@ Warning:
 
 min = 0,   max = 90,   value = 50,  slider size = 40
 
-TRACE:(5) CompareVisual scrollbar 
+TRACE:(5) CompareVisual scrollbar
 TRACE:(6) Continue
 changing the value to 50
 min = 0,   max = 90,   value = 50,  slider size = 40
 
 TRACE:(7) Continue
 changing the maximum to 80
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -61,10 +61,10 @@ Warning:
 
 min = 0,   max = 80,   value = 40,  slider size = 40
 
-TRACE:(8) CompareVisual scrollbar 
+TRACE:(8) CompareVisual scrollbar
 TRACE:(9) Continue
 changing the value to 0 and the min to 10
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is less than the minimum
@@ -72,10 +72,10 @@ Warning:
 
 min = 10,   max = 80,   value = 10,  slider size = 40
 
-TRACE:(10) CompareVisual scrollbar 
+TRACE:(10) CompareVisual scrollbar
 TRACE:(11) Continue
 changing the min to 20
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is less than the minimum
@@ -83,7 +83,7 @@ Warning:
 
 min = 20,   max = 80,   value = 20,  slider size = 40
 
-TRACE:(12) CompareVisual scrollbar 
+TRACE:(12) CompareVisual scrollbar
 TRACE:(13) Continue
 TRACE:(14) Exit
 Exiting Test...Please Standby...

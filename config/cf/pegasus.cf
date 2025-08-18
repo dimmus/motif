@@ -15,7 +15,7 @@ XCOMM operating system:  OSName
 #define HasVoidSignalReturn NO
 
 #define BootstrapCFlags    -DM4310 -DUTEK
-#define StandardDefines    -DM4310 -DUTEK -Dpegasus 
+#define StandardDefines    -DM4310 -DUTEK -Dpegasus
 
 #if HasGcc
 /* put back all of the -Ds which -ansi removes */
@@ -31,4 +31,3 @@ XCOMM operating system:  OSName
 #define PrimaryScreenResolution 95
 
 .DIRECTORIES:		/* Turn off directory search for RCS */
-

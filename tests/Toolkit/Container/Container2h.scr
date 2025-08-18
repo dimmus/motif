@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is Container2 testing EXTENDED_SELECT selectionPolicy in SPATIAL
@@ -43,7 +43,7 @@ WindowIconify FormDialog
 WindowResize Container2 SouthEast 400 450
 CompareVisual Container2
 Continue
- 
+
 # #) This panel is testing the Touch Click, Select Mode technique.
 # #) Click Btn1 on "IconGad1". It should become selected.
 # #) You should see the following in your term window:
@@ -51,18 +51,18 @@ Continue
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad1
-# 
+#
 # #) Notice that the location cursor is a plain line rectangle.
-# #) Click on "IconGad2". It should get selected, and "IconGad1" should 
+# #) Click on "IconGad2". It should get selected, and "IconGad1" should
 #    become deselected. The location cursor is on "IconGad2".
 # #) You should see the following in your term window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad2
-# 
+#
 # C)
- 
+
 LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container2
@@ -73,18 +73,18 @@ Continue
 
 # #) Press Btn1 on "IconGad3", move the pointer over "IconGad4" and
 #    release Btn1.
-# #) As soon as you press Btn1 on "IconGad3", it gets selected, and 
+# #) As soon as you press Btn1 on "IconGad3", it gets selected, and
 #    "IconGad2" gets deselected.
 # #) The location cursor is still on "IconGad3".
-# #) When you release on "IconGad4", the following appears in your term 
+# #) When you release on "IconGad4", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 2
 #           Names of items selected: IconGad3 IconGad4
-# 
+#
 # C)
- 
+
 LocatePointer IconGad3
 PressMB Btn1
 CompareVisual Container2
@@ -98,25 +98,25 @@ Continue
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 0
-#           Names of items selected: 
-# 
+#           Names of items selected:
+#
 # #) Press Btn1 in the background of Container, on the left and top
 #    side of "IconGad1", move the pointer over "IconGad2" and
 #    release Btn1 in the background of Container on the right and bottom
 #    side of "IconGad2".
 # #) As soon as you press Btn1 and start moving, you will see a marquee
-#    rectangle. When "IconGad1" gets enclosed in the marquee rectangle, 
+#    rectangle. When "IconGad1" gets enclosed in the marquee rectangle,
 #    it gets selected.
 # #) When moving over "IconGad2", and enclosing it in the marquee rectangle,
-#    it gets also selected. 
+#    it gets also selected.
 # #) When you release on Btn1, the marquee rectangle should disappear.
-#    the location cursor stays on "IconGad1", and the following appears 
+#    the location cursor stays on "IconGad1", and the following appears
 #    in your term window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 2
 #           Names of items selected: IconGad1 IconGad2
-# 
+#
 # #) Repeat the same action. But this time, don't release the mouse until
 #    you come back from where you started.
 # #) When pressing the mouse in the background of Container, notice that all
@@ -126,11 +126,11 @@ Continue
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 0
-#           Names of items selected: 
-# 
+#           Names of items selected:
+#
 # C)
 
- 
+
 LocatePointerXYRel Container2 80 80
 PressMB Btn1
 CompareVisual Container2
@@ -150,20 +150,20 @@ LocatePointerXYRel Container2 80 80
 ReleaseMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Click BToggle on "IconGad3". It gets selected.
 # #) Press BToggle on "IconGad1", move over "IconGad2" and release.
 #    They become selected. The location cursor stays on "IconGad1".
-# #) When you release on "IconGad2", the following appears in your term 
+# #) When you release on "IconGad2", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 3
 #           Names of items selected: IconGad1 IconGad2 IconGad3
-# 
+#
 # #) Repeat the previous action to unselect "IconGad1" and "IconGad2".
 #    The location cursor stays on "IconGad1".
-# #) When you release on "IconGad2", the following appears in your term 
+# #) When you release on "IconGad2", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
@@ -192,21 +192,21 @@ Continue
 #    release Btn1 in the background of Container on the right and bottom
 #    side of "IconGad2".
 # #) As soon as you press Btn1 and start moving, you will see a marquee
-#    rectangle. When "IconGad1" gets enclosed in the marquee rectangle, 
+#    rectangle. When "IconGad1" gets enclosed in the marquee rectangle,
 #    it gets selected.
 # #) When moving over "IconGad2", and enclosing it in the marquee rectangle,
-#    it gets also selected. 
+#    it gets also selected.
 # #) When you release Btn1, the marquee rectangle should disappear.
-#    the location cursor stays on "IconGad1", and the following appears 
+#    the location cursor stays on "IconGad1", and the following appears
 #    in your term window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 3
 #           Names of items selected: IconGad1 IconGad2 IconGad3
-# 
+#
 # #) Repeat the previous action to unselect "IconGad1" and "IconGad2".
 # C)
- 
+
 LocatePointerXYRel Container2 80 80
 ClickMB <Ctrl> Btn1
 CompareVisual Container2
@@ -227,17 +227,17 @@ LocatePointerXYRel Container2 290 250
 ReleaseMB Btn1
 CompareVisual Container2
 Continue
- 
-# #) Click osfSelect. "IconGad1" gets selected. 
+
+# #) Click osfSelect. "IconGad1" gets selected.
 #    All the other icon gadgets are deselected.
-# #) Click BToggle on "IconGad1". It gets deselected. 
-# #) Using osfDown key, move the location cursor on "IconGad2". 
+# #) Click BToggle on "IconGad1". It gets deselected.
+# #) Using osfDown key, move the location cursor on "IconGad2".
 #    "IconGad2" gets selected.
-# #) Using osfDown key, move the location cursor on "IconGad3". 
+# #) Using osfDown key, move the location cursor on "IconGad3".
 #    "IconGad3" gets selected, and "IconGad2" gets deselected.
-# #) Using osfUp key, move the location cursor on "IconGad2". 
+# #) Using osfUp key, move the location cursor on "IconGad2".
 #    "IconGad2" gets selected, and "IconGad3" gets deselected.
-# 
+#
 # C)
 
 LocatePointer Container2
@@ -253,6 +253,6 @@ CompareVisual Container2
 ClickKey KUp
 CompareVisual Container2
 Continue
- 
+
 # E)
 Exit

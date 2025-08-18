@@ -19,18 +19,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # @)  The following test panel allows you to specify upto five tab settings
-# within the given string of text and then display the text with tabs inserted. 
+# within the given string of text and then display the text with tabs inserted.
 
 # #) Click BSelect at a position within the text widget where you would like
-# to insert a tab. Set values for the tab value, tab units and 
-# tab offset. Select the pushbutton labelled \"Set Tab\" to actually 
+# to insert a tab. Set values for the tab value, tab units and
+# tab offset. Select the pushbutton labelled \"Set Tab\" to actually
 # create the tab. A popup menu will appear displaying the current
-# tab values.   
+# tab values.
 LocatePointer Text1 RTextChar 4
 ClickMB Btn1
 
@@ -79,8 +79,8 @@ ClickMB Btn1
 
 # #) Select pushbutton \"Draw String\" to display the string with
 # tabs included. The new text string will display below the text widget.
-# Verify that the tabs in the new text string are inserted at the correct 
-# positions and the tabs distances are correct. 
+# Verify that the tabs in the new text string are inserted at the correct
+# positions and the tabs distances are correct.
 LocatePointer DrawStringPB
 ClickMB Btn1
 CompareVisual DrawArea1
@@ -106,7 +106,7 @@ Continue
 
 
 # #) With the \"Tab Options\" set to \"Default Tabs\", click MB1 on the button
-# \"Draw Strings\". The strings will be displayed with a default tab 
+# \"Draw Strings\". The strings will be displayed with a default tab
 # of a half inch between each column of strings.
 LocatePointer TabOptionsMenu ROptionButton
 PressMB Btn1
@@ -126,7 +126,7 @@ LocatePointer TabOptionsPushB1
 ReleaseMB Btn1
 
 # #) Specify the unit type used when creating tabs by selecting a type
-# from the \"Unit Model\" menu. 
+# from the \"Unit Model\" menu.
 LocatePointer UnitMenu ROptionButton
 PressMB Btn1
 LocatePointer UnitPushB5

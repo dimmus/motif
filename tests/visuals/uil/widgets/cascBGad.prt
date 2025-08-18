@@ -23,16 +23,16 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is cascBGad.uid ---- 
+---- The uid file to be opened is cascBGad.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Cascade_Button  
-TRACE:(3) PressMB Btn1 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
-TRACE:(5) LocatePointer p_btn1  
-TRACE:(6) LocatePointer p_btn2  
-TRACE:(7) LocatePointer CB2  
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Cascade_Button
+TRACE:(3) PressMB Btn1
+TRACE:(4) CompareVisual S_MAIN_WIDGET
+TRACE:(5) LocatePointer p_btn1
+TRACE:(6) LocatePointer p_btn2
+TRACE:(7) LocatePointer CB2
 
 /*********************************************************/
 ---- cascadingCallback callback made ----
@@ -40,8 +40,8 @@ TRACE:(7) LocatePointer CB2
 ---- Reason was XmCR_CASCADING ----
 /*********************************************************/
 
-TRACE:(8) CompareVisual S_MAIN_WIDGET 
+TRACE:(8) CompareVisual S_MAIN_WIDGET
 TRACE:(9) LocatePointer Cascade_Button  Off
-TRACE:(10) ReleaseMB Btn1 
+TRACE:(10) ReleaseMB Btn1
 TRACE:(11) Exit
 Exiting Test...Please Standby...

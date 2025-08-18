@@ -37,7 +37,7 @@
 
 
 /* Include appropriate files. */
-#include <Exm/Grid.h>  /* public header file for ExmGrid */ 
+#include <Exm/Grid.h>  /* public header file for ExmGrid */
 #include <Xm/ManagerP.h> /* private header file for XmManager */
 
 
@@ -47,7 +47,7 @@ extern "C" {
 #endif
 
 
-/* Make the following two methods inheritable by subclasses of ExmGrid. */ 
+/* Make the following two methods inheritable by subclasses of ExmGrid. */
 #define ExmInheritLayout   ((ExmLayoutProc) _XtInherit)
 #define ExmInheritCalcSize ((ExmCalcSizeProc) _XtInherit)
 #define ExmInheritNeedRelayout ((ExmNeedRelayoutProc) _XtInherit)
@@ -105,8 +105,8 @@ typedef struct
 	XmRenderTable           text_render_table ;
         XmString	        dialog_title;
 
- /* processing_constraints is a flag.  If its value is True, then 
-    it means that the ConstraintSetValues method is requesting a 
+ /* processing_constraints is a flag.  If its value is True, then
+    it means that the ConstraintSetValues method is requesting a
     geometry change. */
 	Boolean			processing_constraints;
 

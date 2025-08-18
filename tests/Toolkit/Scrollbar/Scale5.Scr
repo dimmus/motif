@@ -19,19 +19,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #  @) A client with a vertical scale will appear. The scale
 #     will have two labels that say '0' and '100'. Both labels
 #     will have thin black borders and the '100' will be at the bottom.
 #  #) Press MB1 on the slider and drag the slider. The callback
-#     reasons (XmCR_DRAG's and then one XmCR_VALUE_CHANGED) and values 
+#     reasons (XmCR_DRAG's and then one XmCR_VALUE_CHANGED) and values
 #     should be printed in the stdout window.
 LocatePointer Scale1 RScaleSlider
 DragSliderValue Down 40
 CompareVisual Scale1
 
-#  #) Click MB1 in the area above the slider. The callback reason 
+#  #) Click MB1 in the area above the slider. The callback reason
 #     (XmCR_VALUE_CHANGED) and value should be printed in the stdout window.
 LocatePointer Scale1 RScaleUpOrLeftSliderArea
 ClickMB Btn1
@@ -60,7 +60,7 @@ DragSliderValue Right 70
 CompareVisual Scale1
 
 #  #) Click MB1 in area to the left of the slider. The callback
-#     reason (XmCR_VALUE_CHANGED) and value should be printed in the 
+#     reason (XmCR_VALUE_CHANGED) and value should be printed in the
 #     stdout window.
 LocatePointer Scale1 RScaleDownOrRightSliderArea
 ClickMB Btn1

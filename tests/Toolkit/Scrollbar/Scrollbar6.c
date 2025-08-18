@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Scrollbar6.c /main/8 1999/01/15 12:35:43 jff $"
@@ -54,7 +54,7 @@ char **argv;
   int n;
 
   CommonTestInit(argc, argv);
-    
+
   frame = XmCreateFrame(Shell1, "frame", NULL, 0);
   XtManageChild(frame);
 
@@ -73,8 +73,8 @@ char **argv;
   XtAddCallback(scrollbar, XmNvalueChangedCallback,  ScrollCallback, NULL);
   XtAddCallback(scrollbar, XmNhelpCallback,          ScrollCallback, NULL);
   XtAddCallback(scrollbar, XmNpageIncrementCallback, ScrollCallback, NULL);
-  XtAddCallback(scrollbar, XmNpageDecrementCallback, ScrollCallback, NULL); 
-  
+  XtAddCallback(scrollbar, XmNpageDecrementCallback, ScrollCallback, NULL);
+
   XtRealizeWidget(Shell1);
 
   CommonPause();
@@ -90,11 +90,11 @@ char **argv;
   XtSetValues(scrollbar, args, n);
 
   CommonPause();
-  CommonPause();	
+  CommonPause();
 
   /* Test slider visuals */
   CreateControlPanel();
-  
+
   n = 0;
   XtSetArg(args[n], XmNslidingMode, XmSLIDER);	n++;
   XtSetValues(scrollbar, args, n);
@@ -112,7 +112,7 @@ char **argv;
 }
 
 
-static void 
+static void
 ScrollCallback(Widget w, XtPointer closure, XtPointer call_data)
 {
    XmScrollBarWidget sbw = (XmScrollBarWidget)w;
@@ -122,7 +122,7 @@ ScrollCallback(Widget w, XtPointer closure, XtPointer call_data)
    Arg args[10];
    int n;
 
-   XmScrollBarCallbackStruct * call_value = 
+   XmScrollBarCallbackStruct * call_value =
      (XmScrollBarCallbackStruct *) call_data;
 
    reason = call_value -> reason;
@@ -168,25 +168,25 @@ CreateControlPanel()
    Arg    args[20];
    int    n, i;
 
-   static char          *mark_labels[] = 
+   static char          *mark_labels[] =
                          { "XmNONE",
 			   "XmETCHED_LINE",
 			   "XmTHUMB_MARK",
 			   "XmROUND_MARK"};
 
-  
-   static char          *visual_labels[] = 
+
+   static char          *visual_labels[] =
                          { "XmBACKGROUND_COLOR",
 			   "XmFOREGROUND_COLOR",
 			   "XmTROUGH_COLOR",
 			   "XmSHADOWED_BACKGROUND"};
 
-  
+
    XmString LabelString;
    char     name[20];
 
-   /* Create main parent */ 
-   
+   /* Create main parent */
+
    n=0;
    XtSetArg(args[n], XmNdefaultPosition, False); n++;
    XtSetArg(args[n], XmNautoUnmanage, False); n++;
@@ -224,14 +224,14 @@ CreateControlPanel()
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
 
 	RCToggle[i] = XmCreateToggleButton(RowC1, name, args, n);
-	XtAddCallback(RCToggle[i], XmNvalueChangedCallback, 
+	XtAddCallback(RCToggle[i], XmNvalueChangedCallback,
 		      SliderMarkCB, (XtPointer) (long) i);
 	XtManageChild(RCToggle[i]);
-	
+
 	XmStringFree(LabelString);
 
      }
-   
+
    LabelString = XmStringCreate("Slider visual",XmSTRING_DEFAULT_CHARSET);
    n=0;
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
@@ -264,23 +264,23 @@ CreateControlPanel()
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
 
 	RCToggle[i] = XmCreateToggleButton(RowC2, name, args, n);
-	XtAddCallback(RCToggle[i], XmNvalueChangedCallback, 
+	XtAddCallback(RCToggle[i], XmNvalueChangedCallback,
 		      SliderVisualCB, (XtPointer) (long) i);
 	XtManageChild(RCToggle[i]);
-	
+
 	XmStringFree(LabelString);
 
      }
-   
+
 }
 
 
-static void 
+static void
 SliderMarkCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
    int       n;
-   XmToggleButtonCallbackStruct * scb = 
+   XmToggleButtonCallbackStruct * scb =
 	(XmToggleButtonCallbackStruct *) call_data ;
 
    if (scb->set) {
@@ -290,12 +290,12 @@ SliderMarkCB(Widget w, XtPointer client_data, XtPointer call_data)
    }
 }
 
-static void 
+static void
 SliderVisualCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
    int       n;
-   XmToggleButtonCallbackStruct * scb = 
+   XmToggleButtonCallbackStruct * scb =
 	(XmToggleButtonCallbackStruct *) call_data ;
 
    if (scb->set) {
@@ -304,4 +304,3 @@ SliderVisualCB(Widget w, XtPointer client_data, XtPointer call_data)
      XtSetValues(scrollbar, args, n);
    }
 }
-

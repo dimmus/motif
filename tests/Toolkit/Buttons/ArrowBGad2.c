@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ArrowBGad2.c /main/9 1995/07/13 17:27:29 drk $"
@@ -60,7 +60,7 @@ char **argv;
 
   /* Set the focus-policy to pointer mode for the shell */
   n = 0;
-  XtSetArg (args[n], XmNkeyboardFocusPolicy, XmPOINTER);   n++;  
+  XtSetArg (args[n], XmNkeyboardFocusPolicy, XmPOINTER);   n++;
   XtSetValues (Shell1, args, n);
 
   /*  The drawing area creation.  Contained in an outer frame.  */
@@ -87,12 +87,12 @@ char **argv;
 	XtManageChild(arrow[i]);
         i = i + 1;
       }
-  }	
+  }
 
   n = 0;
   XtSetArg (args[n], XmNtopShadowColor, &top_shadow_color);	n++;
   XtGetValues (drawarea, args, n);
-  
+
   n = 0;
   XtSetArg (args2[n], XmNhighlightColor, top_shadow_color); 	n++;
   XtSetValues (drawarea, args2, n);

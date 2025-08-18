@@ -131,7 +131,7 @@ void XtManageChildren(children, num_children)
          "null child passed to XtManageChildren",
 	 (String *)NULL, (Cardinal *)NULL);
 	return;
-    } 
+    }
     parent = (CompositeWidget) children[0]->core.parent;
     if (XtIsComposite((Widget) parent)) {
         change_managed = ((CompositeWidgetClass) parent->core.widget_class)
@@ -185,13 +185,13 @@ void XtManageChildren(children, num_children)
 	    unique_children[num_unique_children++] = child;
 	    child->core.managed = TRUE;
 	    _GeoPrintTrace(child,"Child \"%s\"[%d,%d] is marked managed\n", XtName(child),child->core.width,child->core.height);
-    
+
     	}
     }
 
     if (num_unique_children != 0 && parent_realized) {
 	/* Compute geometry of new managed set of children. */
-	
+
 	if (change_managed != NULL) {
 	    _GeoPrintTrace((Widget)parent,"Call parent: \"%s\"[%d,%d]'s changemanaged\n", XtName((Widget)parent), parent->core.width,parent->core.height);
 	    (*change_managed) ((Widget)parent);
@@ -254,5 +254,3 @@ void XtSetMappedWhenManaged(widget, mapped_when_managed)
 	if (XtIsRealized(widget)) XtUnmapWidget(widget);
     }
 } /* XtSetMappedWhenManaged */
-
-

@@ -71,4 +71,3 @@ then
 	echo "This is not binary - using tob"
 	$bindir/tob $unxfile $dest
 fi
-

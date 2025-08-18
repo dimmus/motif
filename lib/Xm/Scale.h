@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmScale_h
 #define _XmScale_h
 
@@ -45,13 +45,13 @@ typedef struct _XmScaleRec      * XmScaleWidget;
 
 /********    Public Function Declarations    ********/
 
-void XmScaleSetValue( 
+void XmScaleSetValue(
                  Widget w,
                  int value) ;
-void XmScaleGetValue( 
+void XmScaleGetValue(
                  Widget w,
                  int *value) ;
-Widget XmCreateScale( 
+Widget XmCreateScale(
                  Widget parent,
                  char *name,
                  ArgList arglist,
@@ -68,7 +68,7 @@ void XmScaleSetTicks(
                      Widget scale,
                      int big_every,
 		     Cardinal num_med,
-		     Cardinal num_small, 
+		     Cardinal num_small,
 		     Dimension  size_big,
 		     Dimension  size_med,
 		     Dimension  size_small);

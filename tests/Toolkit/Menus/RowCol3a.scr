@@ -56,10 +56,10 @@ CompareVisual parent
 
 LocatePointer scale1 RScaleSlider
 ClickMB Btn1
-ClickKey KRight 
-ClickKey KRight 
-ClickKey KRight 
-ClickKey KRight 
+ClickKey KRight
+ClickKey KRight
+ClickKey KRight
+ClickKey KRight
 CompareVisual parent
 
 LocatePointer entborscale RScaleSlider
@@ -75,13 +75,13 @@ Continue
 # /* PIR 3193 */
 
 # Verify that children can be added on-the-fly to the RowColumn and they
-#  actually appear where they are supposed to. 
+#  actually appear where they are supposed to.
 
 #  Reset the RowColumn back to its initial state by using the Reset Panel
 #  pushButton.  Use the Number of Children slider to create 2 additional
 #  children (set it to three).  The RowColumn should grow in the vertical
 #  direction and two new pushbutton children, labeled 2 and 3 should appear.
-   
+
 LocatePointer Reset_Panel
 ClickMB Btn1
 
@@ -126,7 +126,7 @@ CompareVisual parent
 #  The entry border should be drawn correctly as it is being increased and
 #  decreased.
 
-Continue 
+Continue
 
 /* PIR 3453 */
 
@@ -149,7 +149,7 @@ Continue
 
 # Reset the RowColumn back to its initial state by using the Reset Panel
 #  pushButton.  Set XmNpacking to XmPACK_COLUMN and XmNnumColumns to 3.
-#  Set Number of Children to 6.  
+#  Set Number of Children to 6.
 
 # The client RowColumn should display a 3 X 2 matrix, with 1, 3, and 5
 #  across the top row and 2, 4 and 6 across the bottom row.
@@ -166,9 +166,9 @@ Continue
 #  change in the RowColumn.
 
 # Reset the RowColumn back to its initial state by using the Reset Panel
-#  pushButton.  
+#  pushButton.
 
-# Create several kids (like 11) of the rowColumn.  Packing should be 
+# Create several kids (like 11) of the rowColumn.  Packing should be
 #  XmPACK_COLUMN, orientation should be XmVERTICAL.  Set XmNnumColumns to
 #  3.
 
@@ -211,6 +211,3 @@ Continue
 Continue
 
 Exit
-
-
-

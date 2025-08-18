@@ -201,7 +201,7 @@ XCOMM $XFree86: xc/config/cf/svr3.cf,v 3.8 1995/09/22 07:06:34 dawes Exp $
 #endif
 
 #if RemoveDSDENroffMacros
-# define RemoveDSDENroffMacrosCmd sed -e '/^\.D[S|E]$$/d' 
+# define RemoveDSDENroffMacrosCmd sed -e '/^\.D[S|E]$$/d'
 #else
 # define RemoveDSDENroffMacrosCmd cat
 #endif
@@ -243,7 +243,7 @@ XCOMM $XFree86: xc/config/cf/svr3.cf,v 3.8 1995/09/22 07:06:34 dawes Exp $
 #endif
 
 #if RemoveDSDENroffMacros
-# define RemoveDSDENroffMacrosCmd sed -e '/^\.D[S|E]$$/d' 
+# define RemoveDSDENroffMacrosCmd sed -e '/^\.D[S|E]$$/d'
 #else
 # define RemoveDSDENroffMacrosCmd cat
 #endif
@@ -332,4 +332,3 @@ install.man::                                                           @@\
 #ifdef i386Architecture
 #include <xfree86.cf>
 #endif
-

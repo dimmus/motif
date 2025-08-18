@@ -5,9 +5,8 @@ the Motif Nightly Build process.
 During the smoke testing the directory gets populated
 with the links to the several tests in the tests/Tookit
 directory. The 'smoke_test' script from the internal/bin/share
-directory control the building and automated execution of 
+directory control the building and automated execution of
 the tests, according to the instructions in the logs/smoke.rc file.
 
 The results of the smoke testing are included in the
 Nightly Build Summary.
-

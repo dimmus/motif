@@ -1,5 +1,5 @@
 # $XConsortium: OptionMenu2.scr /main/5 1995/07/17 20:26:57 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,21 +20,21 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client window will appear with an Option Menu.  The Option Menu
 #  will have a label named Option with the 'o' in Option underlined,
 #  and a CascadeButton labeled Experience Hackerungnen.  The Shell
-#  will be located 50 pixels from the top left corner of the display. 
+#  will be located 50 pixels from the top left corner of the display.
 
 CompareVisual optionMenu
 
 # Press and hold MB3 on the Selection Area (Experience Hackerungnen).
-#  A Pulldown Menu labeled Menu1 will appear. Release MB3. 
+#  A Pulldown Menu labeled Menu1 will appear. Release MB3.
 
 LocatePointer optionMenu ROptionButton
 PressMB Btn3
@@ -45,21 +45,21 @@ Continue
 # Press and hold MB3 on the Selection Area (Experience Hackerungnen).
 #  The label for ShortBtn1 (the topmost button in Menu1) will be the
 #  circles pixmap.  The label for MediumLength (the second button in Menu1)
-#  will be the gnu pixmap. 
+#  will be the gnu pixmap.
 
 LocatePointer optionMenu ROptionButton
 PressMB Btn3
 CompareVisual PullDown1
 
 # Drag the pointer up to the top selection and release MB3.  Menu1 will
-#  disappear and the circles pixmap will appear in the Selection Area. 
+#  disappear and the circles pixmap will appear in the Selection Area.
 
 LocatePointer Short
 ReleaseMB Btn3
 
 # Again, press and hold MB3 on the Selection Area (circles pixmap).
 #  Verify that each entry in Menu1, when selected, becomes the entry which
-#  appears in the Selection Area.  
+#  appears in the Selection Area.
 
 LocatePointer optionMenu ROptionButton
 PressMB Btn3
@@ -92,15 +92,15 @@ Continue
 CompareVisual optionMenu
 Continue
 
-# The shadow thickness of the Selection Area will now be set to 4. 
+# The shadow thickness of the Selection Area will now be set to 4.
 
 CompareVisual optionMenu
 Continue
 
 
-# The OptionMenu will now contain many many entries.   
+# The OptionMenu will now contain many many entries.
 # Select pushbutton15.  Then select pushbutton16.  The menu should not move
-#  position. 
+#  position.
 
 LocatePointer optionMenu ROptionButton
 PressMB Btn3
@@ -114,4 +114,3 @@ ReleaseMB Btn3
 
 
 Exit
-

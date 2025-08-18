@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -96,7 +96,7 @@ static char rcsid[] = "$XConsortium: Mrmtable.c /main/13 1996/11/13 14:04:22 drk
  *  FUNCTION VALUE:
  *
  *	MrmSUCCESS	if all fixup operations succeed
- *	MrmFAILURE	if any operation fails (usually function lookup)    
+ *	MrmFAILURE	if any operation fails (usually function lookup)
  *
  * SIDE EFFECTS:
  *
@@ -105,7 +105,7 @@ static char rcsid[] = "$XConsortium: Mrmtable.c /main/13 1996/11/13 14:04:22 drk
  *--
  */
 
-Cardinal 
+Cardinal
 Urm__FixupCompressionTable (UidCompressionTablePtr	ctable,
 			    Boolean			qfindcldesc,
 			    Boolean			byte_swapped)
@@ -128,9 +128,9 @@ Urm__FixupCompressionTable (UidCompressionTablePtr	ctable,
   for ( fixndx=UilMrmMinValidCode ; fixndx<ctable->num_entries ; fixndx++ )
     {
       if ( byte_swapped ) swapbytes(ctable->entry[fixndx].stoffset);
-      ctable->entry[fixndx].cstring = 
+      ctable->entry[fixndx].cstring =
 	((char *)ctable+ctable->entry[fixndx].stoffset);
-    }	
+    }
   /*
    * Look up each string as a function if requested
    */
@@ -150,7 +150,7 @@ Urm__FixupCompressionTable (UidCompressionTablePtr	ctable,
 
   return result;
 
-}    
+}
 
 
 
@@ -189,7 +189,7 @@ Urm__FixupCompressionTable (UidCompressionTablePtr	ctable,
  *--
  */
 
-Cardinal 
+Cardinal
 Urm__FindClassDescriptor (IDBFile		cfile,
 			  MrmCode		code,
 			  char			*name,
@@ -213,7 +213,7 @@ Urm__FindClassDescriptor (IDBFile		cfile,
     return MrmFAILURE;
   return MrmSUCCESS;
 
-}    
+}
 
 
 
@@ -270,7 +270,7 @@ Urm__UncompressCode (IDBFile			cfile,
   *stg_return = cfile->resource_ctable->entry[code].cstring;
   return MrmSUCCESS;
 
-}    
+}
 
 
 
@@ -308,7 +308,7 @@ Urm__UncompressCode (IDBFile			cfile,
  *--
  */
 
-Boolean 
+Boolean
 Urm__IsSubtreeResource (IDBFile			cfile,
 			MrmCode			code)
 {
@@ -325,6 +325,4 @@ Urm__IsSubtreeResource (IDBFile			cfile,
     return TRUE;
   return FALSE;
 
-}    
-
-
+}

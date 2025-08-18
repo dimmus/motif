@@ -12,7 +12,7 @@ simpledrop
 ----------
 
     The program simpledrop is a minimal drag and drop demonstration.
-    It displays a scale widget and a drawing area.          
+    It displays a scale widget and a drawing area.
 
     To use,  startup the program,  set the scale to a value and then
     use BTransfer to drag the scale value.  Drop the scale value into
@@ -25,8 +25,8 @@ simpledrop
 DNDDemo
 -------
 
-    This demonstration program uses the Uniform Transfer Model in 
-    Motif 2.0.  
+    This demonstration program uses the Uniform Transfer Model in
+    Motif 2.0.
 
     When the demo comes up, it does not have any valid drop sites. It
     comes up with different color rectangles which act as drag sources
@@ -36,7 +36,7 @@ DNDDemo
         Press MouseBtn1 and drag. You will see the rubberbanding effect.
         Release MouseBtn1 after dragging some distance. A rectangle
         will appear with one of its corners corresponding to the point
-        of MouseBtn1 press, and the diagonally opposite corner 
+        of MouseBtn1 press, and the diagonally opposite corner
         corresponding to the point of MouseBtn1 release. The rectangle
         comes up filled with black by default. You can create any number
         of rectangles like this.
@@ -47,19 +47,19 @@ DNDDemo
     palette in the same color as the color rectangle from which the
     drag is initiated.
 
-    The rectanlges inside the drawing area that you created will act 
+    The rectanlges inside the drawing area that you created will act
     as valid drop sites for colors. You can test this by, for example,
     initiating the drag from the yellow color rectangle, dragging over
     to one of the rectangles inside the drawing area, and releasing
-    BTransfer. 
+    BTransfer.
 
     While you are dragging, you will notice several things.
     When you are dragging over root window, the dragicon consists of
-    only the painter's palette. When you drag over parts of the 
+    only the painter's palette. When you drag over parts of the
     drawing area where there are no rectangles, you will notice that
     the dragicon changes to include a "DO NOT ENTER!" sign on top of
-    the painter's palette; when you are dragging over any of the 
-    rectangles inside the drawing area, you will see that the 
+    the painter's palette; when you are dragging over any of the
+    rectangles inside the drawing area, you will see that the
     "DO NOT ENTER!" sign gets replaced with a painter's brush.
 
     To attempt a drop, you will release BTransfer. If you release
@@ -68,7 +68,7 @@ DNDDemo
     that the dragicon snaps back to the point of drag initiation,
     and disappears. This is an indication that the drop you
     attempted was a failure. On the other hand, if you release
-    BTransfer with the pointer over any of the rectangles inside 
+    BTransfer with the pointer over any of the rectangles inside
     the drawing area, you will see that the dragicon melts into
     the background and disappears; this indicates that the drop
     you attempted was a success. Also, when the rectangle on which

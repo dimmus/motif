@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PMenuBar1.c /main/8 1995/07/14 12:00:52 drk $"
@@ -57,8 +57,8 @@ Widget  Text;
 
 Widget  LabelScale, BorderScale, ChildrenScale;
 Widget  BBD, defBtn, quitBtn;
-   
-Boolean	ownms;   
+
+Boolean	ownms;
 
 XmStringCharSet	CharSet = (XmStringCharSet) XmSTRING_DEFAULT_CHARSET;
 
@@ -101,7 +101,7 @@ if (created)
     n = 0;
     XtSetArg(args[n], XmNvalue, &num_children); n++;
     XtGetValues(ChildrenScale, args, n);
-   
+
     n = 0;
     XtSetArg (args[n], XmNborderWidth, border); n++;
     menubar = XmCreateMenuBar(BB, "menubar", args, n);
@@ -109,15 +109,15 @@ if (created)
 /*
  * XmPulldownMenu: submenu1
  */
-   
-    n = 0; 
+
+    n = 0;
     submenu1 = XmCreatePulldownMenu(menubar, "submenu1", args, n);
 
 /*
  * XmPulldownMenu: submenu2
  */
-   
-    n = 0; 
+
+    n = 0;
     submenu2 = XmCreatePulldownMenu(menubar, "submenu2", args, n);
 
 
@@ -126,7 +126,7 @@ if (created)
  * XmPushButton: toggle_MS
  */
 
-    n = 0; 
+    n = 0;
 
     XtSetArg(args[n], XmNlabelString,
 	     XmStringLtoRCreate("Toggle MenuShell", CharSet)); n++;
@@ -137,13 +137,13 @@ if (created)
     XtAddCallback (toggle_MS, XmNactivateCallback, PrintMe, NULL);
 
     XtManageChild(toggle_MS);
-   
+
 /*
  * XmPushButton: toggle_RC
  */
 
-    n = 0; 
-    XtSetArg(args[n], XmNlabelString, 
+    n = 0;
+    XtSetArg(args[n], XmNlabelString,
 	     XmStringLtoRCreate("Toggle RowColumn", CharSet)); n++;
     XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>R"); n++;
     XtSetArg(args[n], XmNacceleratorText,
@@ -156,17 +156,17 @@ if (created)
  * XmPushButton: toggle_CB
  */
 
-    n = 0; 
+    n = 0;
     toggle_CB = XmCreatePushButton(submenu1, "toggle_CB", args, n);
 
     XtManageChild(toggle_CB);
-   
+
 /*
  * XmPushButton: toggle_CBG
  */
 
-    n = 0; 
-    XtSetArg(args[n], XmNlabelString, 
+    n = 0;
+    XtSetArg(args[n], XmNlabelString,
 	     XmStringLtoRCreate("Toggle CascadeButtonGadget", CharSet)); n++;
     XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>G"); n++;
     XtSetArg(args[n], XmNacceleratorText,
@@ -187,9 +187,9 @@ pb1 = XmCreatePushButtonGadget (submenu2, "pb1", args, n);
 pb2 = XmCreatePushButtonGadget (submenu2, "pb2", args, n);
 XtManageChild (pb1);
 XtManageChild (pb2);
- 
+
  /***/
- printf ("num_children is %d\n", num_children); 
+ printf ("num_children is %d\n", num_children);
 
 /* We need several button children, let's try this */
     for (i = 0; i <= (num_children - 1); i++)
@@ -198,7 +198,7 @@ XtManageChild (pb2);
             buf[n] = '+';
         buf[n] = '\0';
         n = 0;
-        XtSetArg(args[n], XmNlabelString, 
+        XtSetArg(args[n], XmNlabelString,
 	     XmStringCreate (&buf[0], XmSTRING_DEFAULT_CHARSET)); n++;
 	if (i%2)
 	  {
@@ -238,7 +238,7 @@ void main(argc, argv)
     int border;
 
     CommonTestInit(argc, argv);
-    
+
 
     /* create a dialog shell to run things */
     /* a scale for border width, a scale for number of chars in label */
@@ -277,7 +277,7 @@ void main(argc, argv)
     XtSetArg (args[n], XmNtopOffset, 10); n++;
     BorderScale = XmCreateScale (BBD, "BorderScale", args, n);
     XtManageChild (BorderScale);
-   
+
     n = 0;
     XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
     XtSetArg(args[n], XmNshowValue, True); n++;
@@ -316,7 +316,7 @@ void main(argc, argv)
     XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
     XtSetArg (args[n], XmNtopWidget, ChildrenScale); n++;
     XtSetArg (args[n], XmNtopOffset, 10); n++;
-    quitBtn = XmCreatePushButtonGadget (BBD, "quitBtn", args, n); 
+    quitBtn = XmCreatePushButtonGadget (BBD, "quitBtn", args, n);
     XtAddCallback (quitBtn, XmNactivateCallback, quitCB, NULL);
     XtManageChild(quitBtn);
 
@@ -346,7 +346,7 @@ void main(argc, argv)
 
     XtManageChild (BB);
    XtRealizeWidget(Shell1);
- 
+
     XtAppMainLoop(app_context);
 }
 

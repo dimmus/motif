@@ -1,5 +1,5 @@
 /* $XConsortium: XmeGetTextualDragIcon.c /main/4 1995/07/15 21:04:49 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 /*
  * HISTORY
  */

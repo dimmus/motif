@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 
@@ -34,7 +34,7 @@
 
 ! There are 5 sets of Notebook resources for the test. Which one is applied
 ! depends on the flag the user passes into the test, which determines the
-! Xt name of the Notebook.  
+! Xt name of the Notebook.
 ! The geometry resources are set separately at the bottom
 
 
@@ -121,7 +121,7 @@ Notebook1*Notebook1.PageScr.orientation: HORIZONTAL
 Notebook1*StatusArea.notebookChildType: STATUS_AREA
 
 /* this is non-intuitive, I know, but I wanted to test having a tab
-   w/out the XmQTActivatable trait. So we have a tab called StatusArea, big 
+   w/out the XmQTActivatable trait. So we have a tab called StatusArea, big
    deal. */
 
 Notebook1*Notebook2.StatusArea.notebookChildType : MAJOR_TAB
@@ -452,5 +452,3 @@ Notebook5*BBKid4.y : 60
 Notebook5*ScrollList1.items : Shell1,Parent,Notebook,Frame1,Form1,RC1,BB1,PW1,FormKid1,FormKid2,FormKid3,FormKid4,FrameKid1,PWKid1,PWKid2,PWKid3,PWKid4,BBKid1,BBKid2,BBKid3,BBKid4,RCKid1,RCKid2,RCKid3,RCKid4,MajorTab1,MajorTab2,MinorTab1,MinorTab2
 Notebook5*ScrollList1.itemCount : 28
 Notebook5*ScrollList1.visibleItemCount : 15
-
-

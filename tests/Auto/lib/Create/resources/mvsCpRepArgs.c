@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsCpRepArgs.c /main/7 1995/07/14 11:19:55 drk $"
@@ -45,7 +45,7 @@ static char rcsid[] = "$XConsortium: mvsCpRepArgs.c /main/7 1995/07/14 11:19:55 
 ************************************************************************/
 #include "mvslib.h"
 
-void mvsCopyReplaceArgs(w_class_info, orig_args, orig_argcnt, new_args, 
+void mvsCopyReplaceArgs(w_class_info, orig_args, orig_argcnt, new_args,
 			new_argcnt)
 MvsWidgetClassInfo	*w_class_info;
 Arg orig_args[];
@@ -58,7 +58,7 @@ Cardinal new_argcnt;
     if (new_args == NULL || new_argcnt == 0)
 	return;
     for (i=0; i<new_argcnt; i++) {
-	mvsCopyReplace1Arg(w_class_info, orig_args, (int *)orig_argcnt, 
+	mvsCopyReplace1Arg(w_class_info, orig_args, (int *)orig_argcnt,
 			new_args[i].name, new_args[i].value);
     } /* End for(i<new_argcnt) */
 

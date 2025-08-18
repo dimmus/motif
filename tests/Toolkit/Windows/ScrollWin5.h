@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: ScrollWin5.h /main/7 1995/07/13 19:50:57 drk $ */
 
 
@@ -38,7 +38,7 @@ static XtCallbackProc  ResizeDrawAreaCB();
 static XtCallbackProc  ContinueCB();
 static XtCallbackProc  QuitCB();
 
-static char *Pause_events[] = 
+static char *Pause_events[] =
       {
       "1) A client containing a ScrolledWindow will appear. The ScrolledWindow\n\
    will contain a Form which will contain three Arrow Buttons. The Arrow\n\
@@ -102,6 +102,6 @@ static char *Pause_events[] =
    of the Scrolled Window.\n\
 3) Test Finished -- Exit Please\n"
 };
-	
+
 int Pause_cnt = 0;
 XtAppContext  app_context;

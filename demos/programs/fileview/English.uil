@@ -1,5 +1,5 @@
 ! $XConsortium: English.uil /main/4 1996/07/15 15:13:35 drk $
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 ! Motif File Viewer -- main uil file
 !
 ! Created October 1991 Vania Joloboff
@@ -32,19 +32,18 @@ module mce
     version = 'v1.1'
     names = case_sensitive
 
-value searchprompt : exported compound_string ('String searched'); 
-value fatal_error : exported compound_string ('Error'); 	
-value no_file : exported compound_string ('Cannot Open File'); 	
+value searchprompt : exported compound_string ('String searched');
+value fatal_error : exported compound_string ('Error');
+value no_file : exported compound_string ('Cannot Open File');
 value no_pane : exported compound_string ('No pane to close');
 value no_pattern : exported compound_string ('Enter string to be searched');
 value no_search : exported compound_string ('Searched string too long');
-value not_found : exported compound_string ('String not found: '); 
+value not_found : exported compound_string ('String not found: ');
 value empty_file : exported compound_string ('No File');
-value help_file	 : exported compound_string 
+value help_file	 : exported compound_string
 ('In File Menu: open a file with Open, close it with Close');
-value help_view : exported compound_string 
+value help_view : exported compound_string
 ('In Help menu: open a new pane with New Pane, close it with Close Pane');
-value help_search : exported compound_string 
+value help_search : exported compound_string
 ('                      Search a string with Search');
 end module;
-

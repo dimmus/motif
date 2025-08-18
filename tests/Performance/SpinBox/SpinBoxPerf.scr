@@ -19,18 +19,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 LocatePointer SpinBox RIncrementBtn
 AutoPerformMonitor On
-ClickMB Btn1 1000 
+ClickMB Btn1 1000
 AutoPerformMonitor Off
 
 LocatePointer SpinBox RDecrementBtn
 AutoPerformMonitor On
-ClickMB Btn1 1000 
+ClickMB Btn1 1000
 AutoPerformMonitor Off
 
 # C)

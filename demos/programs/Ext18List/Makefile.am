@@ -12,4 +12,4 @@ data_DATA = $(EXTRA_DIST) $(ext18list_SOURCES)
 TOPDIR = ../../..
 LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
 
-AM_CPPFLAGS = -I$(TOPDIR)/lib -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(TOPDIR)/lib -I.. -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS}

@@ -19,15 +19,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #  This test should have been run with the flag "-u 3".
 #  The XtName of the ComboBox created in this test is ComboBox.
 #  All resources for this ComboBox are contained in the defaults
-#  file ./ComboBox.defaults. 
+#  file ./ComboBox.defaults.
 #  The ComboBox should be of type DROP_DOWN_LIST
-#  Post the list of the ComboBox. It has 6 items, all of which should be 
+#  Post the list of the ComboBox. It has 6 items, all of which should be
 #  visible.
 #  Select the item "leaves". "leaves" should be displayed in the Text widget.
 #  Type "d" in the non-editable Text widget. The item "dew" should be

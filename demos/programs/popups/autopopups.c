@@ -126,7 +126,7 @@ int main(int argc, char **argv)
   da2 = XmCreateDrawingArea(frame2, "da2", args, count);
   XtManageChild(da2);
   XtAddCallback(da2, XmNexposeCallback, (XtCallbackProc) ExposeCB, NULL);
-  XtAddCallback(da2, XmNpopupHandlerCallback, 
+  XtAddCallback(da2, XmNpopupHandlerCallback,
 		(XtCallbackProc) PopupHandlerCB, NULL);
 
   count = 0;
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
   XtSetArg(args[count], XmNy, 40); count++;
   btn1 = XmCreatePushButton(da2, "pb1", args, count);
   XtManageChild(btn1);
-  XtAddCallback(btn1, XmNactivateCallback, 
+  XtAddCallback(btn1, XmNactivateCallback,
 		(XtCallbackProc) QuitAppl, NULL);
 
   str = XmStringCreateLocalized("Another Button With no Menu");
@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 
   addChildren(popup3, "Button2Menu");
   addButton(popup3, "Do something more");
-  
+
   count = 0;
   XtSetArg(args[count], XmNpopupEnabled, True); count++;
   popup4 = XmCreatePopupMenu(da2, "PopupObjects1", args, count);
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
   addButton(popup4, "Flip");
   addButton(popup4, "Size");
   addButton(popup4, "Stretch");
-  
+
   XtRealizeWidget(shell);
 
   XtAppMainLoop(context);
@@ -228,13 +228,13 @@ int main(int argc, char **argv)
 }
 
 
-void 
+void
 QuitAppl(Widget w, char *i, XmPushButtonCallbackStruct *e)
 {
   exit(0);
 }
 
-void 
+void
 addChildren(Widget popup, char* label)
 {
   XmString str;
@@ -256,8 +256,8 @@ addChildren(Widget popup, char* label)
 
 }
 
-void 
-addButton(Widget parent, char* label) 
+void
+addButton(Widget parent, char* label)
 {
   Widget ch;
   XmString str;
@@ -273,7 +273,7 @@ addButton(Widget parent, char* label)
 
 GC drawGC = NULL;
 
-void 
+void
 ExposeCB(Widget da, char *ig, XmDrawingAreaCallbackStruct *cbs)
 {
   Arg args[2];
@@ -292,14 +292,14 @@ ExposeCB(Widget da, char *ig, XmDrawingAreaCallbackStruct *cbs)
   }
 
   XDrawArc(XtDisplay(da), XtWindow(da), drawGC,
-	   circlex, circley, circled, circled, 
+	   circlex, circley, circled, circled,
 	   0, (360 * 64));
-  XDrawRectangle(XtDisplay(da), XtWindow(da), drawGC, 
+  XDrawRectangle(XtDisplay(da), XtWindow(da), drawGC,
 		 rectx, recty, rectw, recth);
 
 }
 
-void 
+void
 PopupHandlerCB(Widget da, XtPointer ignore, XmPopupHandlerCallbackStruct *phcs)
 {
   int radius;
@@ -315,8 +315,8 @@ PopupHandlerCB(Widget da, XtPointer ignore, XmPopupHandlerCallbackStruct *phcs)
   /* Now calculate relative offset */
   eventx = bevent -> x_root - wox;
   eventy = bevent -> y_root - woy;
-  
-  /* Check for hit in circle or rectangle to post special 
+
+  /* Check for hit in circle or rectangle to post special
      menus */
 
   dx = eventx - rectx;

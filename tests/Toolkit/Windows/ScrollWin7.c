@@ -105,7 +105,7 @@ PrintValues( Widget window, char *label )
 
   return;
 }
-  
+
 
 
   int
@@ -199,8 +199,8 @@ main( int argc, char *argv[] )
   XtSetValues( Window, Args, n );
   PrintValues( Window, "Assertion 2" );
   CommonPause();
-  
-  
+
+
   /*************
    * Assertion 3.  Change the childrens values, check they differ from
    * the windows.

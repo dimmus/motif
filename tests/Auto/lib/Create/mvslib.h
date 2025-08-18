@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: mvslib.h /main/10 1996/10/30 11:34:29 drk $ */
 /***********************************************************************
   	@(#)mvslib.h	1.68	Date:1/11/91
@@ -80,11 +80,11 @@
 #define Next 0
 #define All 0
 
-/************ Resource Types Codes *****************/    
+/************ Resource Types Codes *****************/
 
 #define    T_XtTranslations             0
 #define    T_Boolean                    1
-#define    T_Pixel                      2 
+#define    T_Pixel                      2
 #define    T_Pixmap                     3
 #define    T_Dimension                  4
 #define    T_Thickness                  5
@@ -93,7 +93,7 @@
 #define    T_XtCallbackList             8
 #define    T_XtEnum			9
 /*** T_Pointer used to be T_ScreenP ****/
-#define    T_Pointer                    10   
+#define    T_Pointer                    10
 #define    T_Position                   11
 #define    T_Integer                    12
 #define    T_caddr_t                    13
@@ -119,7 +119,7 @@
 #define    T_XtAccelerators             32
 #define	   T_XmDirection		33
 #define	   T_XtOrderProc		34
-#define    T_XmRenderTable		35 
+#define    T_XmRenderTable		35
 #define    T_XmTabList			36
 #define	   T_XmViewType			37
 #define    T_XmVisualEmphasis		38
@@ -303,7 +303,7 @@ mvsGLOBAL char mvsTestName[MAX_TEST_NAME] = { 0 };
 /**************************************************************************
 *                     SET EXPECTED ACTION CODES
 **************************************************************************/
- 
+
 /* POSSIBLE OBJECT CODES */
 
 # define oUserDefined             0
@@ -333,9 +333,9 @@ mvsGLOBAL char mvsTestName[MAX_TEST_NAME] = { 0 };
 # define oSelectionLabel         24
 # define oSelectionList          25
 # define oSelectionListLabel     26
-# define oFileList               27 
+# define oFileList               27
 # define oFileListLabel          28
-# define oDirList                29 
+# define oDirList                29
 # define oDirListLabel           30
 /* Make this and oSelectionText the same */
 # define oFileSelectionText      23
@@ -717,7 +717,7 @@ mvsGLOBAL char mvsTestName[MAX_TEST_NAME] = { 0 };
   /* For Buttons and all else, just use 0                              */
 
 
-  mvsGLOBAL MvsWidgetInfoRecord mvsWidgetInfos[MAX_NUM_WIDGET_INFOS] 
+  mvsGLOBAL MvsWidgetInfoRecord mvsWidgetInfos[MAX_NUM_WIDGET_INFOS]
                                                    mvsINIT({ 0 });
   /* NOTE: mvsWidgetInfos[0] is always the root widget info record */
 
@@ -754,11 +754,11 @@ mvsGLOBAL long mvsCallbacksCheckSum[];
 #endif
 
 
-mvsGLOBAL MvsCallbackInfoRecord mvsCallbackInfo[MAX_CALLBACKS] 
+mvsGLOBAL MvsCallbackInfoRecord mvsCallbackInfo[MAX_CALLBACKS]
           mvsINIT({ 0 });
 
-mvsGLOBAL int mvsExpectedCallback[MAX_CALLBACKS]; 
-mvsGLOBAL int mvsExpectedReasons[MAX_CALLBACKS]; 
+mvsGLOBAL int mvsExpectedCallback[MAX_CALLBACKS];
+mvsGLOBAL int mvsExpectedReasons[MAX_CALLBACKS];
 
 
 #ifndef DECLARE_MVSLIB_GLOBALS_HERE

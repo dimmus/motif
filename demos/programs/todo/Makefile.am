@@ -8,5 +8,5 @@ bin_PROGRAMS = todo
 todo_SOURCES = todo.c io.c actions.c page.h
 data_DATA = $(EXTRA_DIST) $(todo_SOURCES)
 
-AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
-LDADD = -L../../lib/Xmd -lXmd -L../../lib/Exm -lExm ../../../lib/Xm/libXm.la -lXt -lXext -lX11 
+AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS}
+LDADD = -L../../lib/Xmd -lXmd -L../../lib/Exm -lExm ../../../lib/Xm/libXm.la -lXt -lXext -lX11

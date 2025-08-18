@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsWidgSelect.c /main/7 1995/07/14 11:40:46 drk $"
@@ -41,7 +41,7 @@ static char rcsid[] = "$XConsortium: IsWidgSelect.c /main/7 1995/07/14 11:40:46 
 
         INPUTS:
             none
-        
+
         OUTPUTS:
             none
 
@@ -58,13 +58,13 @@ int bool;
 {
    int result;
 
-   if (!xisInform.is_valid) 
+   if (!xisInform.is_valid)
        AutoMessage(_AutoMessages[WARNMSG58]);
 
    if (xisInform.current_obj->id.widget == xisState.selected_widget &&
        xisInform.current_obj->id.object_type == xisState.selected_object_type &&
        xisInform.current_obj->id.instance == xisState.selected_instance)
-       
+
        result = bool;
    else
        result = (!bool);

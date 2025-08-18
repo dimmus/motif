@@ -26,7 +26,7 @@
  */
 /*******************************************************************************
  *
- * StringTransP.h: The widget private header file for the ExmStringTransfer 
+ * StringTransP.h: The widget private header file for the ExmStringTransfer
  *                 uniform transfer model demonstration widget.
  *
  ******************************************************************************/

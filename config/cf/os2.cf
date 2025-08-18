@@ -14,8 +14,8 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
  */
 #ifdef __EMX__
 
-/* set this to what you like (almost :-) 
- * OS/2 does a nonstandard bootstrap of imake 
+/* set this to what you like (almost :-)
+ * OS/2 does a nonstandard bootstrap of imake
  */
 #define BootstrapCFlags   -DBSD43
 
@@ -34,8 +34,8 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 /* This will be mangled with a drive letter in most OS/2 rules ... */
 #define ProjectRoot	/XFree86
 
-/* ... but not when a user tries to compile something from a different drive 
- * Please report any directories missed to Holger.Veit@gmd.de 
+/* ... but not when a user tries to compile something from a different drive
+ * Please report any directories missed to Holger.Veit@gmd.de
 */
 #ifdef UseInstalled
 #define IncRoot $(X11ROOT)/XFree86/include
@@ -58,7 +58,7 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 /* you must have installed groff! */
 #define TblCmd		tbl
 #define ColCmd		cat
-#define NeqnCmd		eqn 
+#define NeqnCmd		eqn
 #define NroffCmd	groff -Tascii
 #define	EqnCmd 		eqn -Tascii
 #define TroffCmd        groff -Tps
@@ -137,7 +137,7 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define CplusplusCmd	g++
 #define CplusplusOptions	-Zmtd -Zsysv-signals
 
-#define MakeCmd x11make 
+#define MakeCmd x11make
 #define AsCmd	gcc -S
 #define GccGasOption	-DGCCUSESGAS
 #define AsmDefines	-DUSE_GAS
@@ -163,7 +163,7 @@ XCOMM platform:  $XFree86: xc/config/cf/os2.cf,v 3.14 1996/10/17 15:09:58 dawes 
 #define CompressCmd	compress
 #define LnCmd cp
 #define CpCmd cp
-#define RmCmd	ImakeHelper 4 
+#define RmCmd	ImakeHelper 4
 
 #ifndef UseInstalled
 #define ImakeCmd \imake

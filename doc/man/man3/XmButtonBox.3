@@ -8,15 +8,15 @@
 .fi
 .SH DESCRIPTION
 .PP
-The Button Box widget manages children (usually buttons) in a single row or single 
+The Button Box widget manages children (usually buttons) in a single row or single
 column layout.
 .PP
-The Button Box maintains equal spacing between its children at all times and attempts 
-to adjust its height and width as necessary so that all children will fit. If this is not 
-possible, due to parent or application programmer constraints, the Button Box will resize 
+The Button Box maintains equal spacing between its children at all times and attempts
+to adjust its height and width as necessary so that all children will fit. If this is not
+possible, due to parent or application programmer constraints, the Button Box will resize
 its children as necessary to fit within the available space.
 .PP
-Note: in what follows, major direction refers to the direction of orientation, and minor 
+Note: in what follows, major direction refers to the direction of orientation, and minor
 direction refers to the perpendicular direction.
 .SS "Classes"
 .PP
@@ -63,48 +63,48 @@ XmNdefaultButtonXmCWidgetWidgetNULLSG
 _____
 .TE
 .IP  "\fBXmNequalSize\fP" 10
-Specifies whether the children are to be maintained with equal sized heights and 
-widths. The chosen height and width for the children is found by asking each 
+Specifies whether the children are to be maintained with equal sized heights and
+widths. The chosen height and width for the children is found by asking each
 child for its preferred size and taking the largest value in each direction.
 .IP  "\fBXmNfillOption\fP" 10
-Specifies how to use any extra space left over once all children have been sized 
+Specifies how to use any extra space left over once all children have been sized
 according to either their preference or equalSize. There are four options:
 .RS
 .IP  "\fBXmFillNone\fP" 10
 No automatic filling is performed. Center the children in the minor direction and
 place the children with equal padding between them in the major direction.
 .IP  "\fBXmFillMinor\fP" 10
-Place the children with equal padding between them in 
-the major direction, but force all the children to take on 
-the Button Box minor dimension as their minor 
+Place the children with equal padding between them in
+the major direction, but force all the children to take on
+the Button Box minor dimension as their minor
 direction.
 .IP  "\fBXmFillMajor\fP" 10
-Center the children in the minor direction, but expand 
-all the children in their major direction so that there is 
-no padding between them. Expand the children such 
+Center the children in the minor direction, but expand
+all the children in their major direction so that there is
+no padding between them. Expand the children such
 that their relative sizes remain constant.
 .IP  "\fBXmFillAll\fP" 10
-This option combines the placement actions and sizing 
+This option combines the placement actions and sizing
 actions of XmFillMinor and XmFillMajor.
 .IP "" 10
-Regardless of the fill mode, the ButtonBox widget will always leave the specified 
-margin between its edge and the nearest child. A new String to fillOption 
-resource converter has been registered to convert the following strings to fill 
-options: "none", "major", "minor", "all." This resource can therefore be set in an 
+Regardless of the fill mode, the ButtonBox widget will always leave the specified
+margin between its edge and the nearest child. A new String to fillOption
+resource converter has been registered to convert the following strings to fill
+options: "none", "major", "minor", "all." This resource can therefore be set in an
 application defaults file.
 .RE
 .IP  "\fBXmNmarginHeight\fP" 10
 .IP  "\fBXmNmarginWidth\fP" 10
-Specifies the number of pixels to use as a margin around the entire group of 
-children. The marginHeight value applies to both the top and bottom margins, 
-while the marginWidth applies to the left and right margins. 
+Specifies the number of pixels to use as a margin around the entire group of
+children. The marginHeight value applies to both the top and bottom margins,
+while the marginWidth applies to the left and right margins.
 .IP  "\fBXmNorientation\fP" 10
-Specifies whether children are to be placed in a row or a column. The orientation 
-may be either XmHORIZONTAL or XmVERTICAL. If the orientation is 
-XmHORIZONTAL, the children are placed in a row with the major dimension 
-being width and the minor dimension being height. If the value is 
-XmVERTICAL, the children are placed in a column with the major dimension 
-being height and the minor dimension being width. The default value is 
+Specifies whether children are to be placed in a row or a column. The orientation
+may be either XmHORIZONTAL or XmVERTICAL. If the orientation is
+XmHORIZONTAL, the children are placed in a row with the major dimension
+being width and the minor dimension being height. If the value is
+XmVERTICAL, the children are placed in a column with the major dimension
+being height and the minor dimension being width. The default value is
 XmHORIZONTAL.
 .SS "Inherited Resources"
 .PP

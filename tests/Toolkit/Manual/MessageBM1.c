@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: MessageBM1.c /main/5 1995/07/13 18:36:42 dr
 #endif
 
 
-/* 
+/*
  * Create a message box with menu bar and button children, as detailed in
  *  the Motif 1.2 specification.  Then create a MessageBox of Type:
  *  XmDIALOG_TEMPLATE.
@@ -74,7 +74,7 @@ static XtCallbackRec help_cb[] = {
 static void OkCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
   printf("OK Callback received\n");
-}	
+}
 
 /* ARGSUSED */
 static void HelpCB(Widget w, XtPointer client_data, XtPointer call_data)
@@ -93,8 +93,8 @@ void main (argc,argv)
 unsigned int argc;
 char **argv;
 {
-  Arg args[10];       
-  register int n;    
+  Arg args[10];
+  register int n;
   XmString tcs, tcs1;
   Widget Frame;
   Pixmap smilemap, mtnmap;
@@ -109,7 +109,7 @@ char **argv;
   n = 0;
   Frame = XmCreateFrame(Shell1, "Frame1", args, n);
   XtManageChild(Frame);
-  
+
   /* create message dialog */
 
   tcs = XmStringLtoRCreate("This is a Message Box with multiple children.",
@@ -141,7 +141,7 @@ char **argv;
   pushButton = XmCreatePushButton(mbox, "PushMe1", args, n);
   XtManageChild(pushButton);
 
-  tcs = XmStringLtoRCreate("ToggleMe2", XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("ToggleMe2", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   toggleButton = XmCreateToggleButton(mbox, "ToggleMe2", args, n);
   XmStringFree(tcs);
@@ -196,14 +196,14 @@ char **argv;
   /*  Destroy the message box so we can create another one  */
   XtDestroyWidget(mbox);
 
-  /*  
+  /*
    * Create an XmDIALOG_TEMPLATE type MessageBox widget via
    *  XmCreateTemplateDialog
    */
 
   n = 0;
   tcs = XmStringLtoRCreate(
-          "This is a test of the XmCreateTemplateDialog function", 
+          "This is a test of the XmCreateTemplateDialog function",
 			   XmSTRING_DEFAULT_CHARSET);
 
   mtnmap = XCreatePixmapFromBitmapData(display,
@@ -256,7 +256,7 @@ char **argv;
   buttonsa[0] = XmCreatePushButton(pulldown1, "High", NULL, 0);
   buttonsa[1] = XmCreatePushButton(pulldown1, "Low", NULL, 0);
   buttonsa[2] = XmCreatePushButton(pulldown1, "Middle", NULL, 0);
-  buttonsb[0] = XmCreatePushButton(pulldown2, "Over the River", NULL, 0); 
+  buttonsb[0] = XmCreatePushButton(pulldown2, "Over the River", NULL, 0);
   buttonsb[1] = XmCreateSeparator(pulldown2, "hmmmmm", NULL, 0);
   buttonsb[2] = XmCreatePushButton(pulldown2, "and through the", NULL, 0);
   buttonsb[3] = XmCreatePushButton(pulldown2, "woods", NULL, 0);
@@ -267,7 +267,7 @@ char **argv;
   pushButton = XmCreatePushButton(mbox, "Ticonderoga", args, n);
   XtManageChild(pushButton);
 
-  tcs = XmStringLtoRCreate("Guide Dogs?", XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("Guide Dogs?", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   toggleButton = XmCreateToggleButton(mbox, "Guide Dogs", args, n);
   XmStringFree(tcs);
@@ -299,7 +299,7 @@ char **argv;
 
   n = 0;
   tcs = XmStringLtoRCreate(
-          "This is a XmDIALOG_TEMPLATE XmNdialogType MessageBox!  SMILE!!", 
+          "This is a XmDIALOG_TEMPLATE XmNdialogType MessageBox!  SMILE!!",
 			   XmSTRING_DEFAULT_CHARSET);
 
   smilemap = XCreatePixmapFromBitmapData(display,
@@ -369,7 +369,7 @@ char **argv;
   XtManageChild(radbox1);
   XtManageChild(radbox2);
   /* running with -u realize, we see PIR 4173 */
-if (UserData && (strcmp (UserData, "realize") == 0)) 
+if (UserData && (strcmp (UserData, "realize") == 0))
      XtRealizeWidget (panedWindow);
   XtManageChild(panedWindow);
   XtManageChild(rowcol2);
@@ -389,10 +389,10 @@ if (UserData && (strcmp (UserData, "realize") == 0))
   XmStringFree(tcs);
   XtManageChild(pushButton);
 
-  /* attempt to fix P4001 */ 
-  XtRealizeWidget (mbox); 
+  /* attempt to fix P4001 */
+  XtRealizeWidget (mbox);
   XtManageChild(mbox);
-  
+
   CommonPause();
 
   /*  process events  */

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsAncesWin.c /main/7 1995/07/14 11:36:06 drk $"
@@ -40,9 +40,9 @@ static char rcsid[] = "$XConsortium: IsAncesWin.c /main/7 1995/07/14 11:36:06 dr
         but not the root. It returns true if this is in fact a true statement.
 
         INPUTS:
-            window1 - window which may be ancestor of window2 
+            window1 - window which may be ancestor of window2
             window2 - any window
-        
+
         OUTPUTS:
             none
 

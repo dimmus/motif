@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -144,7 +144,7 @@ UrmPlistInit (int		size,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmPlistResize (URMPointerListPtr	list_id,
 		int			size)
 {
@@ -226,7 +226,7 @@ Cardinal UrmPlistFree (URMPointerListPtr	list_id)
  *--
  */
 
-Cardinal 
+Cardinal
 UrmPlistFreeContents (URMPointerListPtr	list_id)
 {
 
@@ -271,7 +271,7 @@ UrmPlistFreeContents (URMPointerListPtr	list_id)
  *--
  */
 
-Cardinal 
+Cardinal
 UrmPlistAppendPointer (URMPointerListPtr	list_id ,
 		       XtPointer		ptr )
 {
@@ -323,7 +323,7 @@ UrmPlistAppendPointer (URMPointerListPtr	list_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmPlistAppendString (URMPointerListPtr		list_id ,
 		      String			stg )
 {
@@ -375,7 +375,7 @@ UrmPlistAppendString (URMPointerListPtr		list_id ,
  *--
  */
 
-MrmCount 
+MrmCount
 UrmPlistFindString (URMPointerListPtr		list_id ,
 		    String			stg )
 
@@ -392,4 +392,3 @@ UrmPlistFindString (URMPointerListPtr		list_id ,
   return -1 ;
 
 }
-

@@ -17,11 +17,9 @@ dogs_DEPENDENCIES = dogs.uid
 
 LDADD = $(top_builddir)/lib/Mrm/libMrm.la $(top_builddir)/lib/Xm/libXm.la -lXt -lX11
 
-AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS}
 
 SUFFIXES = .uil .uid
 
 .uil.uid:
 	../../../clients/uil/uil $< -I$(srcdir) -o $@
-
-

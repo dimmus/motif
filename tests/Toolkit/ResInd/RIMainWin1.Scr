@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # There should be a client window made up of a mainwindow that has three
@@ -30,7 +30,7 @@
 CompareVisual MainWindow
 
 # Press and hold MB1 on the 'File' element of the menu bar.
-#  A menu with 'New', 'Open', and 'Save' should appear. 
+#  A menu with 'New', 'Open', and 'Save' should appear.
 
 LocatePointer MenuBtn1
 ClickKey KMenuBar
@@ -38,43 +38,43 @@ PressMB Btn1
 CompareVisual Pulldown1
 
 # Drag the pointer to 'Edit' element of the menu bar.
-#  A menu with 'Cut', 'Copy', 'Paste', and 'Undo' should appear. 
+#  A menu with 'Cut', 'Copy', 'Paste', and 'Undo' should appear.
 
 LocatePointer MenuBtn2
 
 # Drag the pointer to the 'Font' element of the menu bar.
-#  A menu with 'Courier', 'Times', 'Helvetica', and 'Geneva' should appear. 
+#  A menu with 'Courier', 'Times', 'Helvetica', and 'Geneva' should appear.
 
 LocatePointer MenuBtn3
 
 # Drag the pointer left thru the 'Edit' element to the 'File' element
 #  of the menu bar. Drag the pointer down to 'Open' and
-#  release MB1. The menu should disappear. 
+#  release MB1. The menu should disappear.
 
 LocatePointer MenuBtn1
 LocatePointer OpenButton
 ReleaseMB Btn1
 
 # Click and release MB1 on the 'Font' element of the menu bar. The
-#  menu should appear with the 'Courier' toggle indicator visible. 
+#  menu should appear with the 'Courier' toggle indicator visible.
 
 LocatePointer MenuBtn3
-ClickMB Btn1 
+ClickMB Btn1
 CompareVisual Pulldown3
 
-# Click on 'Helvetica'. The menu should disappear. 
+# Click on 'Helvetica'. The menu should disappear.
 
 LocatePointer HelveticaButton
 ClickMB Btn1
 
-# Click on the 'Edit' element of the menu bar. The menu should appear. 
+# Click on the 'Edit' element of the menu bar. The menu should appear.
 
 LocatePointer MenuBtn2
 ClickMB Btn1
 CompareVisual Pulldown2
 
 # Press the right arrow key. The 'Font' menu should appear.
-#  The 'Helvetica' toggle indicator should be visible. 
+#  The 'Helvetica' toggle indicator should be visible.
 
 ClickKey KRight
 CompareVisual Pulldown3
@@ -117,14 +117,14 @@ CompareVisual MainWindow RVertScrollBar
 CompareVisual MainWindow RHorizScrollBar
 Continue
 
-# The top separator should have changed to double line and the 
+# The top separator should have changed to double line and the
 #  bottom separator should have changed to single line.
 
 WindowRaise Shell1
 CompareVisual MainWindow
 Continue
 
-# The client window should have grown. The marginWidth and 
+# The client window should have grown. The marginWidth and
 #  marginHeight should be 50 pixels.
 
 WindowRaise Shell1
@@ -139,7 +139,7 @@ LocatePointer MainWindow
 CompareVisual MainWindow
 Continue
 
-# The client window should be smaller. The marginWidth and 
+# The client window should be smaller. The marginWidth and
 #  marginHeight should be 1 millimeter.
 
 CompareVisual MainWindow
@@ -149,7 +149,7 @@ Continue
 
 Continue
 
-# The client window should be blank.	
+# The client window should be blank.
 
 CompareVisual Shell1
 Exit

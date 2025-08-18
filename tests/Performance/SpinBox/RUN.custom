@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 setenv XFILESEARCHPATH ./SpinBox.defaults
@@ -30,4 +30,3 @@ set SpinBoxPerf2 = 'SpinBoxPerf2 -c -T'
 set SpinBoxPerf3 = 'SpinBoxPerf3 -c -T'
 
 foreach test ("$SpinBoxPerf" "$SpinBoxPerf2" "$SpinBoxPerf3")
-

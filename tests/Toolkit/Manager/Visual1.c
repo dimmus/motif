@@ -50,7 +50,7 @@ Arg           args[25];
 int           n, i, primitiveCount, managerCount,
               x_coord, y_coord, y1_coord, delta;
 Widget        Manager, primitiveWidgets[NUM_WIDGETS],
-              managerWidgets[NUM_WIDGETS], FileSelectB, ToggleB1, 
+              managerWidgets[NUM_WIDGETS], FileSelectB, ToggleB1,
               ToggleB2, PullDown, pushb[LIST_COUNT], SpinBtn, TextF1,
               Page[NUM_PAGE], PageScroller, StatusArea, Notebook,
               OptionMenu,
@@ -98,7 +98,7 @@ void SetWidgetVisuals( Widget w, XtPointer client_data, XtPointer call_data )
           if ( managerWidgets[j] )
            XtSetSensitive( managerWidgets[j], False );
      }
-     
+
      else
      {
         string = XmStringCreateLtoR("Sensitive Children",
@@ -111,7 +111,7 @@ void SetWidgetVisuals( Widget w, XtPointer client_data, XtPointer call_data )
           if ( managerWidgets[j] )
            XtSetSensitive( managerWidgets[j], True );
      }
-    
+
      n = 0;
      XtSetArg(args[n], XmNlabelString, string); n++;
      XtSetValues(w, args, n);
@@ -157,14 +157,14 @@ char    **argv;
     CommonTestInit( argc, argv );
 
     /*
-     *  Create Manager widget. 
+     *  Create Manager widget.
      */
      n = 0;
      XtSetArg( args[n], XmNwidth, MGR_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, MGR_HEIGHT ); n++;
      XtSetArg( args[n], XmNmarginWidth, MARGINS ); n++;
      XtSetArg( args[n], XmNmarginHeight, MARGINS ); n++;
-     Manager = XmCreateBulletinBoard( Shell1, "Manager", args, n ); 
+     Manager = XmCreateBulletinBoard( Shell1, "Manager", args, n );
      XtManageChild( Manager );
 
      n = 0;
@@ -179,15 +179,15 @@ char    **argv;
     /*
      *  Create Manager Children
      */
-    
+
      primitiveCount = 0;
      managerCount = 0;
-     x_coord = y_coord = ORIGIN; 
+     x_coord = y_coord = ORIGIN;
 
     /*  Arrow Button */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 3 ); n++;
      primitiveWidgets[primitiveCount++] =
@@ -201,8 +201,8 @@ char    **argv;
      pixmap1 = XmGetPixmap (screen, "tie_fighter", foreground, background);
 
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 3 ); n++;
      XtSetArg( args[n], XmNlabelType, XmPIXMAP ); n++;
@@ -217,8 +217,8 @@ char    **argv;
      string = XmStringCreateLtoR("Push Button", XmSTRING_DEFAULT_CHARSET );
 
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH - (delta + MARGINS)); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 3 ); n++;
      XtSetArg( args[n], XmNlabelString, string ); n++;
@@ -232,8 +232,8 @@ char    **argv;
 
     /* Text */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 3 ); n++;
      XtSetArg( args[n], XmNvalue, "An XmText widget." ); n++;
@@ -245,8 +245,8 @@ char    **argv;
 
     /* TextField */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 3 ); n++;
      XtSetArg( args[n], XmNvalue, "An XmTextField widget." ); n++;
@@ -259,21 +259,21 @@ char    **argv;
 
     /* Scale */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 5 ); n++;
      XtSetArg( args[n], XmNmaximum, 100 ); n++;
      XtSetArg( args[n], XmNorientation, XmHORIZONTAL ); n++;
      primitiveWidgets[primitiveCount++] =
          XmCreateScale(Manager, "Scale", args, n);
-     
-     y_coord += WIDGET_HEIGHT / 3; 
+
+     y_coord += WIDGET_HEIGHT / 3;
 
     /* ScrollBar */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 5 ); n++;
      XtSetArg( args[n], XmNmaximum, 100 ); n++;
@@ -282,12 +282,12 @@ char    **argv;
          XmCreateScrollBar(Manager, "ScrollBar", args, n);
 
      /* ToggleButton */
-     y_coord += WIDGET_HEIGHT / 3; 
+     y_coord += WIDGET_HEIGHT / 3;
      string = XmStringCreateLtoR("Toggle Away", XmSTRING_DEFAULT_CHARSET );
 
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 3 ); n++;
      XtSetArg( args[n], XmNlabelString, string ); n++;
@@ -301,8 +301,8 @@ char    **argv;
      font_list = XmeGetDefaultRenderTable(primitiveWidgets[primitiveCount - 1],
 					  XmTEXT_FONTLIST );
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT ); n++;
      XtSetArg( args[n], XmNcomboBoxType, XmCOMBO_BOX ); n++;
@@ -330,8 +330,8 @@ char    **argv;
 
     /* File Selection Box */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT ); n++;
      XtSetArg( args[n], XmNfileListItems, ListItems ); n++;
@@ -346,8 +346,8 @@ char    **argv;
 
     /* List */
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT / 2 ); n++;
      XtSetArg( args[n], XmNitems, ListItems ); n++;
@@ -359,9 +359,9 @@ char    **argv;
      y_coord += WIDGET_HEIGHT / 2 + OFFSET;
 
     /* Menu */
-     PullDown = XmCreatePulldownMenu( Manager, "Pulldown", NULL, 0 ); 
+     PullDown = XmCreatePulldownMenu( Manager, "Pulldown", NULL, 0 );
 
-     
+
 /*
  *  The following causes a crash when creating second pushbutton.
  *  Go figure ?!
@@ -388,7 +388,7 @@ char    **argv;
      pushb[5] = XmCreatePushButton( PullDown, "PushB6", args, 1 );
 
      XtManageChildren( pushb, LIST_COUNT );
-    
+
      string = XmStringCreateLtoR( "Menu", XmSTRING_DEFAULT_CHARSET );
 
      n = 0;
@@ -403,9 +403,9 @@ char    **argv;
          XmCreateOptionMenu(Manager, "Menu", args, n);
 
      XmStringFree( string );
-     
+
      x_coord += WIDGET_WIDTH;
-     y_coord = ORIGIN + WIDGET_HEIGHT + WIDGET_HEIGHT / 3; 
+     y_coord = ORIGIN + WIDGET_HEIGHT + WIDGET_HEIGHT / 3;
 
     /* Spin Button */
      n = 0;
@@ -428,7 +428,7 @@ char    **argv;
 
     /* Container */
 /**
-     CollapsedStatePixmap = 
+     CollapsedStatePixmap =
             XCreatePixmapFromBitmapData(display, rootWindow,
 	       	  (char *)collapsedState_bits,
                   collapsedState_width, collapsedState_height,
@@ -450,8 +450,8 @@ char    **argv;
                                               XmSTRING_DEFAULT_CHARSET);
 
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT ); n++;
      XtSetArg( args[n], XmNlargeIcon, largeIcon ); n++;
@@ -469,11 +469,11 @@ char    **argv;
                 XmStringFree(ColumnHeadings[i]);
         XtFree((XtPointer)ColumnHeadings);
 */
-     
+
 
     /* Notebook */
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, MGR_WIDTH / 3 - MARGINS ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT ); n++;
      XtSetArg( args[n], XmNcurrentPageNumber, 1 ); n++;
@@ -483,7 +483,7 @@ char    **argv;
      XtSetArg( args[n], XmNbackPageSize, 15 ); n++;
      XtSetArg( args[n], XmNbackPageForeground,
                         CommonGetColor("red")); n++;
-     XtSetArg( args[n], XmNbackPageBackground, 
+     XtSetArg( args[n], XmNbackPageBackground,
                         CommonGetColor("green")); n++;
      XtSetArg( args[n], XmNframeBackground,
                         CommonGetColor("red")); n++;
@@ -515,7 +515,7 @@ char    **argv;
         PageScroller = XmCreateArrowButton (Notebook, "PageScroller", NULL, 0);
 
         StatusArea = XmCreateLabel (Notebook, "StatusArea", NULL, 0);
-     
+
 
 
      XtManageChildren (Page,NUM_PAGE);
@@ -525,14 +525,14 @@ char    **argv;
      XtManageChildren (MajorTab, NUM_MAJOR_TAB);
 
     /*  Create toggle for the sensitive visuals. */
-     string = XmStringCreateLtoR( "Sensitive Visuals", 
+     string = XmStringCreateLtoR( "Sensitive Visuals",
                                   XmSTRING_DEFAULT_CHARSET );
      n = 0;
-     XtSetArg( args[n], XmNx, MGR_WIDTH - WIDGET_WIDTH ); n++;  
-     XtSetArg( args[n], XmNy, MGR_HEIGHT - WIDGET_HEIGHT / 2 ); n++;  
-     
+     XtSetArg( args[n], XmNx, MGR_WIDTH - WIDGET_WIDTH ); n++;
+     XtSetArg( args[n], XmNy, MGR_HEIGHT - WIDGET_HEIGHT / 2 ); n++;
+
     /* Container */
-     CollapsedStatePixmap = 
+     CollapsedStatePixmap =
             XCreatePixmapFromBitmapData(display, rootWindow,
 	       	  (char *)collapsedState_bits,
                   collapsedState_width, collapsedState_height,
@@ -554,8 +554,8 @@ char    **argv;
                                               XmSTRING_DEFAULT_CHARSET);
 
      n = 0;
-     XtSetArg( args[n], XmNx, x_coord ); n++;  
-     XtSetArg( args[n], XmNy, y_coord ); n++;  
+     XtSetArg( args[n], XmNx, x_coord ); n++;
+     XtSetArg( args[n], XmNy, y_coord ); n++;
      XtSetArg( args[n], XmNwidth, WIDGET_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, WIDGET_HEIGHT ); n++;
      XtSetArg( args[n], XmNlargeIcon, largeIcon ); n++;
@@ -574,11 +574,11 @@ char    **argv;
         for (i = 0; i < NUM_COL; i++)
                 XmStringFree(ColumnHeadings[i]);
         XtFree((XtPointer)ColumnHeadings);
-     
+
      XtManageChildren( primitiveWidgets, primitiveCount );
      XtManageChildren( managerWidgets, managerCount );
 
-  /* 
+  /*
    *  Create Popup Shell to contain toggle buttons for setting
    *  the sensitivity of the child and parent widgets.
    */
@@ -601,12 +601,12 @@ char    **argv;
        XtManageChild(Form1);
 
   /*  Create toggle for setting the sensitivity visuals of widgets. */
-     
-     string = XmStringCreateLtoR( "Sensitive Children", 
+
+     string = XmStringCreateLtoR( "Sensitive Children",
                                   XmSTRING_DEFAULT_CHARSET );
      n = 0;
-     XtSetArg( args[n], XmNx, 0 ); n++;  
-     XtSetArg( args[n], XmNy, 0 ); n++;  
+     XtSetArg( args[n], XmNx, 0 ); n++;
+     XtSetArg( args[n], XmNy, 0 ); n++;
      XtSetArg( args[n], XmNheight, POPUP_HEIGHT / 2 ); n++;
      XtSetArg( args[n], XmNwidth, POPUP_WIDTH - 2 * MARGINS ); n++;
      XtSetArg( args[n], XmNtopAttachment, XmATTACH_FORM ); n++;
@@ -617,15 +617,15 @@ char    **argv;
 
      XmStringFree(string);
 
-     XtAddCallback( ToggleB1, XmNvalueChangedCallback, 
+     XtAddCallback( ToggleB1, XmNvalueChangedCallback,
                     SetWidgetVisuals, (XtPointer)0 );
-                              
+
     /*  Create toggle for setting the sensitivity visuals on parent widget. */
-     string = XmStringCreateLtoR( "Sensitive Parent", 
+     string = XmStringCreateLtoR( "Sensitive Parent",
                                   XmSTRING_DEFAULT_CHARSET );
      n = 0;
-     XtSetArg( args[n], XmNx, 0 ); n++;  
-     XtSetArg( args[n], XmNy, POPUP_HEIGHT / 2 ); n++;  
+     XtSetArg( args[n], XmNx, 0 ); n++;
+     XtSetArg( args[n], XmNy, POPUP_HEIGHT / 2 ); n++;
      XtSetArg( args[n], XmNwidth, POPUP_WIDTH - 2 * MARGINS ); n++;
      XtSetArg( args[n], XmNheight, POPUP_HEIGHT / 2 ); n++;
      XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
@@ -638,20 +638,16 @@ char    **argv;
 
      XmStringFree(string);
 
-     XtAddCallback( ToggleB2, XmNvalueChangedCallback, 
+     XtAddCallback( ToggleB2, XmNvalueChangedCallback,
                     SetParentVisuals, (XtPointer)Manager );
 
      XtPopup( PopupShell, XtGrabNone );
      XtRealizeWidget(Shell1);
 
-     CommonPause();  
-     CommonPause();  
-     CommonPause();  
-     CommonPause();  
+     CommonPause();
+     CommonPause();
+     CommonPause();
+     CommonPause();
 
-     XtAppMainLoop( app_context ); 
+     XtAppMainLoop( app_context );
 }
-        
-     
-      
-      

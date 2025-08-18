@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cutpaste2a.c /main/7 1995/07/13 17:54:58 drk $"
@@ -55,40 +55,40 @@ void ButtonCB(w, client_data, call_data)
     switch((int) client_data)
     {
       case 1:
- 	fprintf(stdout, "CUTTING...\n"); 
-	CopyFileToClipboard(Text1, cb->event->xbutton.time); 
+ 	fprintf(stdout, "CUTTING...\n");
+	CopyFileToClipboard(Text1, cb->event->xbutton.time);
 	break;
 
       case 2:
- 	fprintf(stdout, "PASTING...\n"); 
-	PasteItemFromClipboard(Text1); 
+ 	fprintf(stdout, "PASTING...\n");
+	PasteItemFromClipboard(Text1);
 	break;
 
       case 3:
 	XtSetArg(args[0], XmNset, &state);
 	XtGetValues(ToggleButton1, args, 1);
-	
+
 	if(!state)
 	{
 	    fprintf(stdout, "UNLOCKING CLIPBOARD...\n");
-	    if(XmClipboardUnlock(XtDisplay(Text1), XtWindow(Text1), TRUE) != 
+	    if(XmClipboardUnlock(XtDisplay(Text1), XtWindow(Text1), TRUE) !=
 	       ClipboardSuccess)
 	    {
-		fprintf(stdout, "unlock failed\n");	
-		XtSetArg(args[0], XmNset, True);  
-		XtSetValues(ToggleButton1, args, 1); 
+		fprintf(stdout, "unlock failed\n");
+		XtSetArg(args[0], XmNset, True);
+		XtSetValues(ToggleButton1, args, 1);
 	    }
 	}
 	else
 	{
 	    fprintf(stdout, "LOCKING CLIPBOARD...\n");
-		
+
 	    if(XmClipboardLock(XtDisplay(Text1), XtWindow(Text1)) !=
 	       ClipboardSuccess)
 	    {
-		fprintf(stdout, "lock failed\n");	
-		XtSetArg(args[0], XmNset, False);  
-		XtSetValues(ToggleButton1, args, 1); 
+		fprintf(stdout, "lock failed\n");
+		XtSetArg(args[0], XmNset, False);
+		XtSetValues(ToggleButton1, args, 1);
 	    }
 	}
 	break;
@@ -109,12 +109,12 @@ void  main(argc, argv)
     XmString		tcs;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 160);  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
 /*
  * Form
@@ -134,14 +134,14 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);  n++;
     XtSetArg(args[n], XmNrows, 8);  n++;
     XtSetArg(args[n], XmNcolumns, 40);  n++;
-    
+
     Text1 = XmCreateText(Form1, "Text1", args, n);
     XtManageChild(Text1);
-    
+
 /*
  * RowColumn
  */
-    
+
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET);  n++;
     XtSetArg(args[n], XmNtopWidget, Text1);  n++;
@@ -155,7 +155,7 @@ void  main(argc, argv)
 
     RowCol1 = XmCreateRowColumn(Form1, "RowCol1", args, n);
     XtManageChild(RowCol1);
-    
+
 /*
  * CUT PushButton
  */
@@ -198,7 +198,7 @@ void  main(argc, argv)
  */
 
     XtRealizeWidget(Shell1);
-    
+
 /*
  * Add callbacks for buttons
  */
@@ -231,9 +231,9 @@ void CopyFileToClipboard(textw, time)
  * using the clipboard facilities, copy the selected text to the clipboard
  */
 
-   if (selected_string != NULL) 
+   if (selected_string != NULL)
    {
-	
+
 /*
  * start copy to clipboard
  */
@@ -297,7 +297,7 @@ void PasteItemFromClipboard(textw)
  * and paste it at the current cursor position
  */
 
-/* 
+/*
  * find the length of the paste item
  */
 
@@ -307,7 +307,7 @@ void PasteItemFromClipboard(textw)
 	fprintf(stdout, "paste inquire length failed\n");
 	return;
     }
-			
+
 /*
  * malloc necessary space
  */
@@ -322,7 +322,7 @@ void PasteItemFromClipboard(textw)
 			   length, &outlength, &private_id)
        != ClipboardSuccess)
     {
-	fprintf(stdout, "paste retrieve failed\n");	
+	fprintf(stdout, "paste retrieve failed\n");
 	return;
     }
 
@@ -332,7 +332,7 @@ void PasteItemFromClipboard(textw)
 
     XtSetArg(al[0], XmNcursorPosition, &cursorPos);
     XtGetValues(textw, al, 1);
-			
+
 /*
  * add new text
  */

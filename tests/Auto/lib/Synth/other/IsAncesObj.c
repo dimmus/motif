@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsAncesObj.c /main/7 1995/07/14 11:35:57 drk $"
@@ -40,9 +40,9 @@ static char rcsid[] = "$XConsortium: IsAncesObj.c /main/7 1995/07/14 11:35:57 dr
         It returns true if this is in fact a true statement.
 
         INPUTS:
-            object1 - object which may be ancestor of object2 
+            object1 - object which may be ancestor of object2
             object2 - any object
-        
+
         OUTPUTS:
             none
 
@@ -73,8 +73,3 @@ XisObjectRecord  *object1,*object2;
     else
         return(False);
 } /* End xisIsAncestorObject */
-
-
-
-
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SendEvent.c /main/8 1995/07/14 11:30:58 drk $"
@@ -54,9 +54,9 @@ static char rcsid[] = "$XConsortium: SendEvent.c /main/8 1995/07/14 11:30:58 drk
                         window
             rx,ry     - location of pointer when event occured relative to root
             state     - key or button mask (Button1Mask, etc)
-            detail    - Button that changed state (Button1,etc) 
+            detail    - Button that changed state (Button1,etc)
                         or Key pressed (KeyReturn,KeySpace, etc)
-        
+
         OUTPUTS:
             none
 
@@ -77,7 +77,7 @@ unsigned int state,detail;
     char msg_string[125];
     static char routine_name[] = "xisSendEvent";
 
-    static unsigned int event_mask[] = 
+    static unsigned int event_mask[] =
        { 0,0,KeyPressMask,KeyPressMask|KeyReleaseMask,
 	 ButtonPressMask,
 	 ButtonPressMask|ButtonReleaseMask,
@@ -92,7 +92,7 @@ unsigned int state,detail;
     /* Hack for List and Text tests that does not get correct time from X11r3
      * server and crashes.
      */
-    if (xisUseCurrentTime && 
+    if (xisUseCurrentTime &&
 	(xisInform.event_code != EventMouseButtonMultiClick ||
 	 xisInform.num_clicks < 2) )
 	time = CurrentTime;
@@ -146,7 +146,7 @@ unsigned int state,detail;
         event.xmotion.same_screen = True;
         event.xmotion.time = time;
         break;
-      
+
       default:
         sprintf (msg_string, _AutoMessages[WARNMSG47], type);
         AutoMessage(msg_string);
@@ -157,13 +157,3 @@ unsigned int state,detail;
     XSendEvent(xisDisplay,window,True,event_mask[type],&event);
 
 } /* End xisSendEvent() */
-
-
-
-
-
-
-
-
-
-

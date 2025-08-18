@@ -1,5 +1,5 @@
 # $XConsortium: Form6.scr /main/4 1995/07/17 20:20:48 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #) Enter the client window containing the solid white form.
 #)   The message "formCB callback: Form1 focus"
-#)   should appear in the term window. Leave client window. 
+#)   should appear in the term window. Leave client window.
 #) Enter the client window. The message "formCB: Form1 focus"
 #)   should appear in the term window. Press the OsfHelp key. The message
-#)   "formCB callback:Form1 help" should appear in the term window. 
+#)   "formCB callback:Form1 help" should appear in the term window.
 #) Continue to have the white form destroyed and the shell highlight
 #)   return to magenta.
 

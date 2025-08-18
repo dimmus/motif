@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu5.c /main/10 1995/07/13 18:45:38 drk $"
@@ -33,7 +33,7 @@ static char rcsid[] = "$XConsortium: Menu5.c /main/10 1995/07/13 18:45:38 drk $"
 #include <testlib.h>
 #include <X11/Xlib.h>
 #include "armPixft.h"
-  
+
 #include <X11/cursorfont.h>
 #include <X11/StringDefs.h>
 #include <X11/Vendor.h>
@@ -71,13 +71,13 @@ static XtTranslations translation1;
 void PrintMessage(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   switch ((int)((XmAnyCallbackStruct *)call_data)->reason) {
-  case XmCR_VALUE_CHANGED: 
+  case XmCR_VALUE_CHANGED:
     printf ("Value changed callback for toggle");
     break;
   case XmCR_ARM:
     printf ("Arm callback for toggle");
     break;
-  case XmCR_DISARM: 
+  case XmCR_DISARM:
     printf ("Disarm callback for toggle");
     break;
   default:
@@ -134,15 +134,15 @@ void _XmBindHelpAction(Widget widget, void (*func)(), XtPointer client_data,
 
 	  for (i = 0; i < mw->composite.num_children; i++)
 	    {
-	      _XmBindHelpAction(mw->composite.children[i], func, client_data, 
+	      _XmBindHelpAction(mw->composite.children[i], func, client_data,
 				recursive);
 	    }
 	}
-      
+
       /* Handle popup descendants */
       for (i = 0; i < widget->core.num_popups; i++)
 	{
-	  _XmBindHelpAction(widget->core.popup_list[i], func, client_data, 
+	  _XmBindHelpAction(widget->core.popup_list[i], func, client_data,
 			    recursive);
 	}
     }
@@ -161,7 +161,7 @@ void PrintName_2(Widget rc, XtPointer client_data,
   XmRowColumnCallbackStruct *rc_struct;
 
   rc_struct = (XmRowColumnCallbackStruct *) rc_data;
-  printf ("Widget %s was activated\n", 
+  printf ("Widget %s was activated\n",
 	  XrmQuarkToString(rc_struct->widget->core.xrm_name));
 }
 
@@ -176,7 +176,7 @@ void PrintNameAndChangeCursor(Widget rc, XtPointer client_data,
   XmRowColumnCallbackStruct *rc_struct = (XmRowColumnCallbackStruct *)rc_data;
   if (rc_struct->data == NULL)
     {
-      printf ("Widget %s was activated\n", 
+      printf ("Widget %s was activated\n",
 	      XrmQuarkToString(rc_struct->widget->core.xrm_name));
     }
   else
@@ -195,7 +195,7 @@ static XtCallbackRec PrintNameAndChangeCursor_CB[] = {
 
 Help(Widget w)
 {
-  printf ("Help requested for widget %s\n", 
+  printf ("Help requested for widget %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
@@ -280,14 +280,14 @@ int main(unsigned int argc, char **argv)
 
   CommonPause();
 
-#ifdef WORKAROUND 
+#ifdef WORKAROUND
   XtDestroyWidget(submenu3);
   XtDestroyWidget(submenu1);
   XtDestroyWidget(submenu2);
   XtDestroyWidget(popup);
-#endif	
+#endif
 
-  XtDestroyWidget(rc2);  
+  XtDestroyWidget(rc2);
   CommonPause();
   XtAppMainLoop(app_context);
 }
@@ -353,17 +353,17 @@ static void CreatePopup()
   XtManageChild(option1o);
   XtManageChild(option2o);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu3); n++;
   pdbtn1 = XmCreateCascadeButtonGadget(submenu1, "pdbtn1", args, n);
   XtManageChild(pdbtn1);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu1); n++;
   pdbtn2 = XmCreateCascadeButton(submenu2, "pdbtn2", args, n);
   XtManageChild(pdbtn2);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu2); n++;
   pdbtn3 = XmCreateCascadeButton(popup, "pdbtn3", args, n);
   XtManageChild(pdbtn3);

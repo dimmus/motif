@@ -9,27 +9,27 @@
 .fi
 .SH DESCRIPTION
 .PP
-The DropDown widget allows the user to select elements from a list of choices, 
-and enter their own values in a text widget. To conserve screen space, the list of choices 
-is shown only when the user selects the down arrow button. The choices may then be 
-selected from this list. If the list widget is in Browse Select mode (the default) or Single 
-Select mode, then the list will automatically be removed when the user selects an item 
-in the list. When the list is in other modes, multiple items may be selected and the list 
-may be popped down by either another click on the arrow button, a click outside the 
-list or double-clicking an item. When using keyboard traversal, the list may be popped 
-down by selecting the arrow button or Alt - down arrow, and popped back up by typing either 
-the osfActivate key, a carriage return, or Alt - up arrow. In any case, when 
-the list is removed the item or items that were selected will be placed in the text widget 
-separated by commas. Typing the escape key when the list is up, cancels the list popup, 
+The DropDown widget allows the user to select elements from a list of choices,
+and enter their own values in a text widget. To conserve screen space, the list of choices
+is shown only when the user selects the down arrow button. The choices may then be
+selected from this list. If the list widget is in Browse Select mode (the default) or Single
+Select mode, then the list will automatically be removed when the user selects an item
+in the list. When the list is in other modes, multiple items may be selected and the list
+may be popped down by either another click on the arrow button, a click outside the
+list or double-clicking an item. When using keyboard traversal, the list may be popped
+down by selecting the arrow button or Alt - down arrow, and popped back up by typing either
+the osfActivate key, a carriage return, or Alt - up arrow. In any case, when
+the list is removed the item or items that were selected will be placed in the text widget
+separated by commas. Typing the escape key when the list is up, cancels the list popup,
 restoring the DropDown widget to the state it was in before the list was popped up. If
 the text field area is non-editable, clicking anywhere in the text field the list will
 also pop down.
 .PP
-Resources are available to change the margin sizes, the location of the left edge of the 
-popup list, whether or not the label is shown, whether the text field widget may be 
-edited, and whether or not the text in the list is verified against the choices available in 
-the list. By setting resources that occur in the children of the DropDown widget, the 
-contents of the list, the number of items visible in the list, the initial value of the text 
+Resources are available to change the margin sizes, the location of the left edge of the
+popup list, whether or not the label is shown, whether the text field widget may be
+edited, and whether or not the text in the list is verified against the choices available in
+the list. By setting resources that occur in the children of the DropDown widget, the
+contents of the list, the number of items visible in the list, the initial value of the text
 field, and the value of the label may be set or changed dynamically.
 .PP
 If a developer wishes the popup list's shell to be resizable, they should set the
@@ -103,16 +103,16 @@ XmNvisibleItemCountXmCVisibleItemCountint0CSG
 _____
 .TE
 .IP "\fBXmNcustomizedCombinationBox\fP" 10
-If this resource is True then the widget will not automatically create a popup shell 
-and list widget. This resource can be used, as the name implies, to create a custom 
-combination box that has something other than a list in it. If this resource is true 
-then a shell must be provided to the DropDown widget via the popupShellWidget 
-resource. Just before the shell is popped up the updateShellCallback is called. Just 
-after the shell is popped down the updateTextCallback is called. If verify is true 
-then the verifyTextCallback is called when the combo box needs to verify the 
-contents of the text widget against the allowable values in the custom shell. 
+If this resource is True then the widget will not automatically create a popup shell
+and list widget. This resource can be used, as the name implies, to create a custom
+combination box that has something other than a list in it. If this resource is true
+then a shell must be provided to the DropDown widget via the popupShellWidget
+resource. Just before the shell is popped up the updateShellCallback is called. Just
+after the shell is popped down the updateTextCallback is called. If verify is true
+then the verifyTextCallback is called when the combo box needs to verify the
+contents of the text widget against the allowable values in the custom shell.
 .IP "\fBXmNeditable\fP" 10
-This boolean value determines whether the user is allowed to type into 
+This boolean value determines whether the user is allowed to type into
 TextField widget of the DropDown widget. If this value is False, selecting the text
 field will popup the combo box list
 .IP "\fBXmNhorizontalMargin\fP" 10
@@ -128,28 +128,28 @@ The list of all choice that will be displayed in the popup list.
 .IP "\fBXmNlabelString\fP" 10
 The string displayed as the label of the DropDown widget.
 .IP "\fBXmNpopupCursor\fP" 10
-The cursor to display to the user when the DropDown's list is popped up. 
+The cursor to display to the user when the DropDown's list is popped up.
 See X Window System, Robert Scheiffler et al., Appendix B, for choices.
 .IP "\fBXmNpopupOffset\fP" 10
-The amount of space in pixels between the left edge of the Text widget and the left 
-edge of the list when the list is displayed. Positive values mean the text's left edge 
-is farther to the left, negative values mean the list's edge is farther to the left. If this 
-is a non-custom DropDown widget the right edge of the text and the right edge of 
+The amount of space in pixels between the left edge of the Text widget and the left
+edge of the list when the list is displayed. Positive values mean the text's left edge
+is farther to the left, negative values mean the list's edge is farther to the left. If this
+is a non-custom DropDown widget the right edge of the text and the right edge of
 the arrow button will always line up.
 .IP "\fBXmNpopupShellWidget\fP" 10
-The widget identifier for the shell that is popped up when the arrow is clicked. If 
-customizedCombinationBox is False then this widget is automatically created 
+The widget identifier for the shell that is popped up when the arrow is clicked. If
+customizedCombinationBox is False then this widget is automatically created
 by the DropDown widget.
 .IP "\fBXmNshowLabel\fP" 10
-A boolean value that specifies whether or not to display the DropDown 
+A boolean value that specifies whether or not to display the DropDown
 Label widget.
 .IP "\fBXmNupdateShellCallback\fP" 10
 .IP "\fBXmNupdateTextCallback\fP" 10
-The callback routine to call when either the shell widget contents or the Text 
-widget need to be updated to correspond with the other. The shell is updated just 
-before it is popped up. The text is updated just after the shell is popped down. If 
-customizedComboBox is False then the updates are done automatically by the 
-combo box. These routines are called to inform the application that an action has 
+The callback routine to call when either the shell widget contents or the Text
+widget need to be updated to correspond with the other. The shell is updated just
+before it is popped up. The text is updated just after the shell is popped down. If
+customizedComboBox is False then the updates are done automatically by the
+combo box. These routines are called to inform the application that an action has
 been taken, in case it would like to do any further processing.
 .IP "\fBXmNuseTextField\fP" 10
 A boolean value that specifies if an XmTextField or an XmText widget
@@ -157,25 +157,25 @@ should be used for the text entry portion of the DropDown widget.
 .IP "\fBXmNvalue\fP" 10
 The string displayed in the Text widget.
 .IP "\fBXmNverify\fP" 10
-If this resource is true the DropDown widget will verify its value against the list 
-whenever it loses focus or the user types <Carriage Return>. If the verification 
-fails, an XtWarning is generated with a name of XmNtextVerifyFailed. To trap this 
+If this resource is true the DropDown widget will verify its value against the list
+whenever it loses focus or the user types <Carriage Return>. If the verification
+fails, an XtWarning is generated with a name of XmNtextVerifyFailed. To trap this
 message register an XtWarningMsgHandler.
 .IP "\fBXmNverifyTextCallback\fP" 10
-This routine is called whenever the Text widget's contents may need to be verified 
-against the popup shell's contents. If the customizedComboBox resource is False 
-then the DropDown widget has already performed the verification when this 
+This routine is called whenever the Text widget's contents may need to be verified
+against the popup shell's contents. If the customizedComboBox resource is False
+then the DropDown widget has already performed the verification when this
 routine is called.
 .IP "\fBXmNvisibleItemCount\fP" 10
 The number of items visible in the popup list at one time.
 .RE
 .SS Children
 .PP
-The DropDown is composed of many sub-widgets. Most of the information 
-displayed to the user is set through these sub widgets. Most 
-values passed to this widget through the argument list at creation time or via set values 
-are passed to each of this widget's children. Get values requests must be made on a 
-child by child basis. The children of the DropDown are listed below. The 
+The DropDown is composed of many sub-widgets. Most of the information
+displayed to the user is set through these sub widgets. Most
+values passed to this widget through the argument list at creation time or via set values
+are passed to each of this widget's children. Get values requests must be made on a
+child by child basis. The children of the DropDown are listed below. The
 OSF/Motifdocumentation should be consulted for an exhaustive set of resources for each child.
 A partial list of the most common resources are listed here for convenience.
 .PP
@@ -202,7 +202,7 @@ XmDropDown	comboBox
 		XmList	list
 .fi
 
-The popup shell and its children are only created when 
+The popup shell and its children are only created when
 customizedCombinationBox is False.
 .PP
 .SS "Inherited Resources"
@@ -317,7 +317,7 @@ _____
 .TE
 .SS "Callback Information"
 .PP
-None of the DropDown's callback procedures have any call data currently 
+None of the DropDown's callback procedures have any call data currently
 defined for them. The widget passed to each of these functions is the DropDown
 widget.
 .HP 20
@@ -333,28 +333,28 @@ unused		This value is undefined.
 .PP
 .SS "Geometry Management"
 .PP
-The DropDown widget lays out its children (the label, text and arrow) in a row. 
-The amount of space they are each allocated when the DropDown is not allowed 
+The DropDown widget lays out its children (the label, text and arrow) in a row.
+The amount of space they are each allocated when the DropDown is not allowed
 to be the exact size it desires is determined using the following rules:
 .ta 5
 .HP 5
 1.	The arrow is always given its requested size.
 .HP 5
-2.	If the combo box is bigger than it wants to be all extra space is given to the text 
+2.	If the combo box is bigger than it wants to be all extra space is given to the text
 widget.
 .HP 5
-3.	If the combo box is smaller that is wants to be then the text and label widgets 
+3.	If the combo box is smaller that is wants to be then the text and label widgets
 are each sized smaller than they desire in exactly the same ratio.
 
 For example:
 
-If the amount of space for the label and text is 100 pixels and the label 
-wants to be 50 pixels wide and the text would like to be 100 pixels wide 
+If the amount of space for the label and text is 100 pixels and the label
+wants to be 50 pixels wide and the text would like to be 100 pixels wide
 then the label will get 34 pixels and the text 66.
 
-The popup shell widget is sized such that the width of the scrolled list widget equals 
-the width of the text widget minus the value of the "popupOffset" resource. If the 
-popup shell resides in a customized combination box, however, it is allowed to be 
+The popup shell widget is sized such that the width of the scrolled list widget equals
+the width of the text widget minus the value of the "popupOffset" resource. If the
+popup shell resides in a customized combination box, however, it is allowed to be
 whatever size the child of the popup shell would like to be.
 .PP
 .SH RELATED

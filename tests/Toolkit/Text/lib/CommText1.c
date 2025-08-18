@@ -43,8 +43,8 @@ And the ittsie bittsie spider\n\
 went up the spout again.";
 
 static char string2[] = "Spider Lives!";
- 
-  
+
+
 void
 main_text1 (int argc, char **argv)
 {
@@ -61,7 +61,7 @@ main_text1 (int argc, char **argv)
 
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-	 
+
 	n = 0;
 	/* test case for CR 4356 */
 	XtSetArg(args[n], XmNscrollingPolicy, (unsigned char) 42); n++;
@@ -72,7 +72,7 @@ main_text1 (int argc, char **argv)
 	n = 0;
 	XtSetArg(args[n], XmNscrollingPolicy, &scrollingPolicy); n++;
 	XtGetValues(SWin, args, n);
-	if (scrollingPolicy == XmAPPLICATION_DEFINED) 
+	if (scrollingPolicy == XmAPPLICATION_DEFINED)
 	{
 	    printf("GetValues of scrollingPolicy = XmAPPLICATION_DEFINED\n");
 	}
@@ -96,7 +96,7 @@ main_text1 (int argc, char **argv)
 	XtSetArg(args[n], XmNscrollVertical, True);  n++;
 	XtSetArg(args[n], XmNscrollHorizontal, True);  n++;
 	XtSetArg(args[n], XmNeditMode, XmMULTI_LINE_EDIT);  n++;
-     
+
 	XtSetArg(args[n], XmNvalue, string0); n++;
 	XtSetArg(args[n], XmNfontList, CommonGetFontList(font)); n++;
 	Text1 = XmCreateText(SWin, "Text1", args, n);
@@ -104,13 +104,13 @@ main_text1 (int argc, char **argv)
         XmStringFree(tcs);
 
 	XtRealizeWidget(Shell1);
-	
+
 	CommonPause();
 	CommonPause();
 	CommonPause();
 	CommonPause();
 	CommonPause();
-       
+
        /*  Test case for CR 5166. */
         tcs = XmStringCreateLtoR( string1, XmFONTLIST_DEFAULT_TAG );
 
@@ -124,7 +124,7 @@ main_text1 (int argc, char **argv)
 	CommonPause();
 
 	XmTextSetString( Text1, string2 );
-         
+
 	CommonPause();
 	CommonPause();
 

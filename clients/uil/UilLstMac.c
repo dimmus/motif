@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilLstMac.c /main/15 1997/03/12 15:21:48 dbl $"
@@ -410,7 +410,7 @@ src_source_record_type	*az_src_rec;
 			strlen (ptr) + 1, ptr, NULL );
 		break;
 	    }
-	    
+
 	    case k_unknown_off : {
 
 		unsigned short int	len;
@@ -434,7 +434,7 @@ src_source_record_type	*az_src_rec;
 			len, ptr, NULL );
 		break;
 	    }
-	    
+
 	    case k_arglist_off : {
 
 		RGMArgListDescPtr	argdesc;
@@ -715,7 +715,7 @@ src_source_record_type	*az_src_rec;
 			buffer );
 
 		sprintf (buffer, "resource type: %s",
-			(r_desc_ptr->res_group == URMgLiteral) ? 
+			(r_desc_ptr->res_group == URMgLiteral) ?
 				type_from_code (r_desc_ptr->cvt_type) :
 				class_name_from_code (r_desc_ptr->cvt_type) );
 
@@ -948,7 +948,7 @@ URMResourceContext	* az_context;
     rc_buffer = UrmRCBuffer (az_context);
     rc_size = UrmRCSize (az_context);
 
-    /* 
+    /*
     **	Case on the type of literal.
     */
 
@@ -974,7 +974,7 @@ URMResourceContext	* az_context;
 		az_src_rec, 0, rc_size, rc_buffer, buffer );
 	    break;
 
-	case sym_k_integer_table_value: 
+	case sym_k_integer_table_value:
 	case sym_k_rgb_value:  /* rgb data type RAP */
 	    {
 	    int index = 0;
@@ -984,9 +984,9 @@ URMResourceContext	* az_context;
 		{
 		sprintf (buffer, "value[%d]: %ld",
 			 index, ((unsigned long *) rc_buffer)[index] );
-		
+
 		src_append_machine_code
-		    (az_src_rec, 0, sizeof(int), 
+		    (az_src_rec, 0, sizeof(int),
 		     (char*)&(((unsigned long *)rc_buffer)[index]), buffer );
 		}
 	    break;
@@ -1069,7 +1069,7 @@ URMResourceContext	* az_context;
 			char *stringPtr = (char *) _Pointer (rc_buffer,off_offset);
 			src_append_machine_code (az_src_rec, off_offset,
 						 ASNstrlen( stringPtr ),
-						 stringPtr, NULL );	    
+						 stringPtr, NULL );
 		      }
 			break;
 
@@ -1082,7 +1082,7 @@ URMResourceContext	* az_context;
 				"end of text vector" );
 
 			break;
-	    
+
 		    case k_text_entry_off :
 
 			te_ptr = (RGMTextEntryPtr)
@@ -1129,7 +1129,7 @@ URMResourceContext	* az_context;
 		az_src_rec, 0, rc_size, rc_buffer, NULL );
 
 	    break;
-	    
+
 	default: {
 
 	    sprintf (buffer, "unknown value");
@@ -1262,7 +1262,7 @@ URMResourceContext	* az_context;
 **--
 **/
 
-void	off_put 
+void	off_put
 
 	(unsigned short off_type, unsigned short off_offset)
 
@@ -1352,7 +1352,7 @@ unsigned short		* off_offset;
 
 }
 
-char * type_from_code 
+char * type_from_code
 
 	(MrmType type_code)
 
@@ -1454,7 +1454,7 @@ char * type_from_code
 
 }
 
-char * access_from_code 
+char * access_from_code
 
 	(MrmFlag access_code)
 
@@ -1491,14 +1491,14 @@ char * access_from_code
 {
 
     switch (access_code) {
-	case URMaPublic:	return "public"; 
-	case URMaPrivate:	return "private"; 
-	default:		return "unknown"; 
+	case URMaPublic:	return "public";
+	case URMaPrivate:	return "private";
+	default:		return "unknown";
     }
 
 }
 
-char * group_from_code 
+char * group_from_code
 
 	(MrmGroup group_code)
 
@@ -1535,10 +1535,10 @@ char * group_from_code
 {
 
     switch (group_code) {
-	case URMgWidget:	return "widget"; 
-	case URMgLiteral:	return "literal"; 
-	case URMgResourceSet:	return "resource set"; 
-	default:		return "unknown"; 
+	case URMgWidget:	return "widget";
+	case URMgLiteral:	return "literal";
+	case URMgResourceSet:	return "resource set";
+	default:		return "unknown";
     }
 
 }
@@ -1636,7 +1636,7 @@ char			* buffer;
 }
 
 
-char * class_name_from_code 
+char * class_name_from_code
 
 	(MrmCode class)
 
@@ -1688,7 +1688,7 @@ return "unknown";
 }
 
 
-char * resource_name_from_code 
+char * resource_name_from_code
 
 	(MrmCode resource)
 
@@ -1742,4 +1742,3 @@ for ( sym_code=0 ; sym_code<=uil_max_child ; sym_code++ )
 return "unknown";
 
 }
-

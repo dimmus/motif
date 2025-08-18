@@ -65,7 +65,7 @@ typedef struct _ExmSimpleRec *ExmSimpleWidget;
 #define ExmCSimpleShape "SimpleShape"
 #define ExmRSimpleShape "ExmSimpleShape"
 
-/* Specify new enumerated constants for resources. */ 
+/* Specify new enumerated constants for resources. */
 enum { ExmSHAPE_OVAL=0, ExmSHAPE_RECTANGLE=1 };
 
 
@@ -84,4 +84,3 @@ extern Widget ExmCreateSimple(Widget    parent,
 
 #endif /* _ExmSimple_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-

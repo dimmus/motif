@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FReadLong.c /main/7 1995/07/14 11:44:08 drk $"
@@ -61,7 +61,7 @@ FILE *fd;
     value2 = fread_short(fd);
 
     value = ((unsigned long)value1<<16) | (unsigned long)value2;
-    
+
     return(value);
 
 } /* End fread_long() */

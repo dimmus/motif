@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PushBGad4.c /main/8 1995/07/13 17:29:58 drk $"
@@ -63,7 +63,7 @@ char  **argv;
   Widget	       Pulldown1, MenuBar1, PushButton2, PushButton3;
 
   CommonTestInit(argc, argv);
-  
+
   blue_pixel = CommonGetColor("cadetblue");
   red_pixel = CommonGetColor("maroon");
 
@@ -73,7 +73,7 @@ char  **argv;
   XtSetArg (args[n], XmNbackground, blue_pixel); 	n++;
   XtSetArg (args[n], XmNwidth, 150);			n++;
   XtSetArg (args[n], XmNheight, 175);			n++;
-  Form1 = XmCreateForm (Shell1, "Form1", args, n); 
+  Form1 = XmCreateForm (Shell1, "Form1", args, n);
   XtManageChild(Form1);
 
   n = 0;
@@ -83,10 +83,10 @@ char  **argv;
   XtSetArg (args[n], XmNtraversalOn, True);  n++;
   MenuBar1 = XmCreateMenuBar (Form1, "MenuBar1", args, n);
   XtManageChild (MenuBar1);
-  
+
   n = 0;
   Pulldown1 = XmCreatePulldownMenu (MenuBar1, "Pulldown1", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, Pulldown1);  n++;
   Cascade1 = XmCreateCascadeButton(MenuBar1, "Cascade1", args, n);
@@ -155,14 +155,14 @@ char  **argv;
   PBGadget1 = XmCreatePushButtonGadget (Form1, "PBGadget1", args, n);
   XtManageChild(PBGadget1);
 
-  XmAddTabGroup(PBGadget1);	
+  XmAddTabGroup(PBGadget1);
 
   XtAddCallback(PBGadget1, XmNactivateCallback, ActCB, "PushButtonGadget");
-  XtAddCallback(PushB1, XmNactivateCallback, ActCB, "PushButton"); 
+  XtAddCallback(PushB1, XmNactivateCallback, ActCB, "PushButton");
   XtAddCallback(PushButton1, XmNactivateCallback, DestroyCB, PushB1);
   XtAddCallback(PushButton2, XmNactivateCallback, DestroyCB, Form1);
   XtAddCallback(PushButton3, XmNactivateCallback, DestroyCB, PBGadget1);
-    
+
   XtRealizeWidget(Shell1);
 
   CommonPause();
@@ -203,7 +203,7 @@ caddr_t  call_data;
   /* CR 1139 fix begin */
   XmChangeColor(w, yellow);
   /* CR 1139 fix end */
-  
+
   green = CommonGetColor("forestgreen");
 
   printf("...Setting the background color of %s to Green\n\n", name);
@@ -222,5 +222,3 @@ caddr_t  call_data;
 
   XtDestroyWidget(PushB);
 }
-
-

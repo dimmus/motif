@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #  A ComboBox will appear on your screen.
@@ -33,14 +33,14 @@ Continue
 
 #  This panel tests accelerators which are installed with List as the source
 #  and Text as the destination.
-#  With the pointer in the TextField widget, click <Ctrl>KDown. 
-#  The List of the ComboBox should be posted. Click <Ctrl>KUp. 
+#  With the pointer in the TextField widget, click <Ctrl>KDown.
+#  The List of the ComboBox should be posted. Click <Ctrl>KUp.
 #  The List should be unposted.
 #  Click on KUp. The item displayed in the TextField widget should change
 #  to be "cauliflower".
 #  Click on KDown. The item displayed in the TextField widget should change
 #  back to "carrots".
-#  Click <Ctrl>KDown to post the List widget. Click on KPageDown. 
+#  Click <Ctrl>KDown to post the List widget. Click on KPageDown.
 #  The item displayed in the TextField widget should change to "beans".
 #  The items in the List widget should have scrolled down so that \"onions\"
 #  is now the first item and the third item \"beans\" should be highlighted.

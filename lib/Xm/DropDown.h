@@ -10,7 +10,7 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-    
+
 externalref WidgetClass xmDropDownWidgetClass;
 
 typedef struct _XmDropDownClassRec	*XmDropDownWidgetClass;

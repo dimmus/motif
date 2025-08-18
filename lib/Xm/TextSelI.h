@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,7 +36,7 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern Boolean _XmTextConvert( 
+extern Boolean _XmTextConvert(
                         Widget w,
                         Atom *selection,
                         Atom *target,
@@ -46,10 +46,10 @@ extern Boolean _XmTextConvert(
                         int *format,
 			Widget dc,
 			XEvent *event) ;
-extern void _XmTextLoseSelection( 
+extern void _XmTextLoseSelection(
                         Widget w,
                         Atom *selection) ;
-extern Widget _XmTextGetDropReciever( 
+extern Widget _XmTextGetDropReciever(
                         Widget w) ;
 extern void _XmTextInstallTransferTrait(void);
 

@@ -34,7 +34,7 @@
  * Revision 1.1.2.2  1992/12/10  16:59:03  shobana
  * 	Test for CR 3203
  * 	[1992/12/10  16:58:48  shobana]
- * 
+ *
  */
 #include <testlib.h>
 
@@ -68,7 +68,7 @@ char **argv;
 	printf ("Usage: %s -u [early middle late]\n", argv[0]);
 	printf ("Assuming late realize.\n");
    }
-    
+
    frame = XmCreateFrame(Shell1, "frame", NULL, 0);
    XtManageChild(frame);
 
@@ -202,7 +202,7 @@ caddr_t closure;
       n = 0;
       if (UserData != NULL)
 	if (strcmp (UserData, "default") == 0) {
-	  XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM); 
+	  XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);
 	  n++;
 	}
       pb2 = XmCreatePushButtonGadget (form, "pb2", args, n);
@@ -237,24 +237,3 @@ caddr_t closure;
 
    count++;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

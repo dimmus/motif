@@ -2,7 +2,7 @@
 To run the tests:
 
 Usage: focus [-x startx] [-y y_decr] [-n trials] [-m max_xpos] [-s x_step] [-h]
-where - 
+where -
         startx - X position from where to start moving the cursor
         y_decr - Y value to be subtracted from screen height to get y pos.
         trials - no. of roundtrips that the cursor will make

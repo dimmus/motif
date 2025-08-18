@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 ...\" "
 .TH filemanager 1X MOTIF "Demonstration programs"
@@ -33,13 +33,13 @@
 .SH DESCRIPTION
 \*LFilemanager\*O
 provides a display of the contents of a directory as file and directory
-icons.  You may run it anywhere and it allows customization of the 
+icons.  You may run it anywhere and it allows customization of the
 icons and actions via the X resource mechanism.
 .SH X Defaults
 The class of this application is \fIXmDFilemanager\fR.  The following
 are examples of the right resources to change.  "suffix" can be any
-file suffix.  Pixmaps are specified in XPM format (see XmGetPixmap in the 
-Programmer's Reference for details on this subject).  
+file suffix.  Pixmaps are specified in XPM format (see XmGetPixmap in the
+Programmer's Reference for details on this subject).
 
 Actions are specified as control strings for sprintf, where the %s is
 substituted for by the pathname of the object. "default_file" is

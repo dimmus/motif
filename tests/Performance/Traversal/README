@@ -2,7 +2,7 @@
 
 
 BUGS SHOWN BY THESE TESTS
- 
+
 Navigation1
 PIRS No.:      2555
 If all visible traversable children become insensitive, focus
@@ -28,7 +28,7 @@ PIRS No.:      3601
 Focus disappears completely after children of RowCol are dest-
 royed/recreated, then 1st button w/ invisible focus insensitiz
 Version found in:	1.1.3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -58,7 +58,7 @@ PIRS No.:      4386
 Creation of a 1.0-style traversal paned window causes 1.1-styl
 e PW's created subsequently to show wrong (old) trav. beh.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	5
 Status:		A
@@ -68,7 +68,7 @@ PIRS No.:      2933
 In some cases, location cursor can be "lost" or at least not
 visible.
 Version found in:	1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -88,7 +88,7 @@ PIRS No.:      2561
 Why does the defaultButton graphic move to otherButton in Text
 8 but not in Navigation11?
 Version found in:	1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	4
 Status:		A
@@ -128,7 +128,7 @@ PIRS No.:      2933
 In some cases, location cursor can be "lost" or at least not
 visible.
 Version found in:	1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -168,7 +168,7 @@ PIRS No.:      4107
 1.0-compat broken. The buttons not included via XmAddTabGroup
 now treated collectively as a tab group. Different from 1.1.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	5
 Status:		A
@@ -218,7 +218,7 @@ PIRS No.:      4113
 Beh. of TRAVERSE_NEXT in 2D RowCol has changed between 1.1.4
 and 1.2S3. Used to do equiv. of DOWN, now does RIGHT.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -328,7 +328,7 @@ PIRS No.:      3959
 Every character typed into text widget leaves behind a text
 cursor or cursor droppings.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	5
 Status:		A

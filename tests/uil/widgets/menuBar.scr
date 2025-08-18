@@ -19,24 +19,24 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
 #  This is a menuBar with the following characteristics:
 #	- background is green
-#	- borderWidth is 50   
-#	- borderColor is mediumBlue 
-#	- width is 200   
+#	- borderWidth is 50
+#	- borderColor is mediumBlue
+#	- width is 200
 #	- height is 100
-#	- shadowThickness is 5   
-#	- bottomshadowColor is navy 
+#	- shadowThickness is 5
+#	- bottomshadowColor is navy
 #	- entryAlignment is XmALIGNMENT_CENTER
-#	- packing is XmPACK_COLUMN   
-#	- marginWidth, marginHeight are 10 
-#	- valueChangedcallback is ON for toggleButtons 
-#	- armCallback is ON for pushbuttons" 
-#	- background of TearOffButtons in both Pulldowns should be wheat 
+#	- packing is XmPACK_COLUMN
+#	- marginWidth, marginHeight are 10
+#	- valueChangedcallback is ON for toggleButtons
+#	- armCallback is ON for pushbuttons"
+#	- background of TearOffButtons in both Pulldowns should be wheat
 #	- tearOffModel is XmTEAR_OFF_ENABLED for both Pulldown Menus
 #	- tearOffMenuActivateCallback and
 #	- tearOffMenuDeactivateCallback are ON for both Pulldown Menus
@@ -59,5 +59,3 @@ ClickKey KDown
 CompareVisual S_MAIN_WIDGET
 ReleaseMB Btn1
 Exit
- 
-

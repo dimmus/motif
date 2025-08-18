@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupMenu1.c /main/10 1995/07/13 18:51:11 drk $"
@@ -49,11 +49,11 @@ void CBHandler(Widget w, XtPointer client_data, XtPointer call_data)
   CoreWidget  *tmpwidget;
 
   switch ( ((XmAnyCallbackStruct *)call_data)->reason)
-    {    
-    case XmCR_ARM:    
+    {
+    case XmCR_ARM:
       printf ("Arm ");
       break;
-    case XmCR_ACTIVATE:   
+    case XmCR_ACTIVATE:
       printf ("Activate ");
       break;
     case XmCR_DISARM:
@@ -102,11 +102,11 @@ static Widget CreatePushButton(char *label, Widget parent)
     XtSetArg(args[n], XmNlabelString, tcs);  n++;
     widget = XmCreatePushButton(parent, label, args, n);
     XtManageChild(widget);
-    XtAddCallback (widget, XmNactivateCallback, CBHandler, 
+    XtAddCallback (widget, XmNactivateCallback, CBHandler,
 		   (XtPointer) PUSHBUTTON);
-    XtAddCallback (widget, XmNdisarmCallback, CBHandler, 
+    XtAddCallback (widget, XmNdisarmCallback, CBHandler,
 		   (XtPointer) PUSHBUTTON);
-    XtAddCallback (widget, XmNarmCallback, CBHandler, 
+    XtAddCallback (widget, XmNarmCallback, CBHandler,
 		   (XtPointer) PUSHBUTTON);
     XmStringFree(tcs);
     return(widget);
@@ -124,11 +124,11 @@ static Widget CreateToggle(char *label, Widget parent)
     XtSetArg(args[n], XmNlabelString, tcs);  n++;
     widget = XmCreateToggleButton(parent, label, args, n);
     XtManageChild(widget);
-    XtAddCallback (widget, XmNvalueChangedCallback, CBHandler, 
+    XtAddCallback (widget, XmNvalueChangedCallback, CBHandler,
 		   (XtPointer) TOGGLEBUTTON);
-    XtAddCallback (widget, XmNdisarmCallback, CBHandler, 
+    XtAddCallback (widget, XmNdisarmCallback, CBHandler,
 		   (XtPointer) TOGGLEBUTTON);
-    XtAddCallback (widget, XmNarmCallback, CBHandler, 
+    XtAddCallback (widget, XmNarmCallback, CBHandler,
 		   (XtPointer) TOGGLEBUTTON);
     XmStringFree(tcs);
     return(widget);
@@ -162,9 +162,9 @@ static Widget CreateCascade(char *label, Widget submenu, Widget parent)
     XtSetArg(args[n], XmNsubMenuId, submenu); n++;
     widget = XmCreateCascadeButton(parent, label, args,n);
     XtManageChild(widget);
-    XtAddCallback(widget, XmNactivateCallback, CBHandler, 
+    XtAddCallback(widget, XmNactivateCallback, CBHandler,
 		  (XtPointer) CASCADEBUTTON);
-    XtAddCallback(widget, XmNcascadingCallback, CBHandler, 
+    XtAddCallback(widget, XmNcascadingCallback, CBHandler,
 		  (XtPointer) CASCADEBUTTON);
     XmStringFree(tcs);
     return(widget);
@@ -187,13 +187,13 @@ int main(int argc, char **argv)
   XrmDatabase new_db, sav_db;
 
   CommonTestInit(argc, argv);
-    
+
   /* Code for Pir2716 */
 
   XrmInitialize();
 
   new_db = XrmGetFileDatabase("PopupMenu1.db");
-  
+
 #ifdef MOTIF1_1
   XrmMergeDatabases(new_db, &(display->db));
 #else
@@ -207,7 +207,7 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNwidth,  200);  n++;
   XtSetArg(args[n], XmNheight, 40);   n++;
   XtSetValues(Shell1, args, n);
-  
+
   XtRealizeWidget(Shell1);
 
   Label = CreateLabel("SelectMe", Shell1);
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
 
   n = 0;
   PopupMenu1 = XmCreatePopupMenu(Label, "popMenu", args, n);
-  XtAddEventHandler(Label, ButtonPressMask, False, PostMenu, 
+  XtAddEventHandler(Label, ButtonPressMask, False, PostMenu,
 		    (XtPointer) PopupMenu1);
 
   /*

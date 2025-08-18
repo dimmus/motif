@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: mvscolor.h /main/7 1995/07/14 11:26:40 drk $ */
 #ifndef MVS_COLOR
 
@@ -109,7 +109,7 @@
     {     47,     47,     79, "midnight blue",      "MidnightBlue"           },
     {     35,     35,    142, "navy",               "Navy"                   },
     {     35,     35,    142, "navy blue",          "NavyBlue"               },
-    {    204,     50,     50, "orange",             "Orange"                 }, 
+    {    204,     50,     50, "orange",             "Orange"                 },
     {    255,      0,    127, "orange red",         "OrangeRed"              },
     {    219,    112,    219, "orchid",             "Orchid"                 },
     {    143,    188,    143, "pale green",         "PaleGreen"              },
@@ -168,10 +168,10 @@
 };
 #endif
 
-visGLOBAL int mvsNumTablePixmaps 
+visGLOBAL int mvsNumTablePixmaps
                   visINIT(sizeof(mvsPixmapTable) / sizeof(MvsPixmapTableRecord));
 
-visGLOBAL int mvsNumTableColors 
+visGLOBAL int mvsNumTableColors
                   visINIT(sizeof(mvsColorTable) / sizeof(MvsColorTableRecord));
 
 visGLOBAL short mvsBigChars

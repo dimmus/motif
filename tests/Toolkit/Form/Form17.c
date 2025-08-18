@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form17.c /main/4 1995/07/13 18:03:31 drk $"
@@ -44,7 +44,7 @@ static void PushButtonCallback();
 static void CreateMatrix();
 extern char *optarg;
 static char *color_name[] = {
-  "Red",       "Green",       "Blue", 
+  "Red",       "Green",       "Blue",
   "Orange",    "Yellow",      "Pink",
   "Magenta",   "Brown",       "Violet",
 };
@@ -66,7 +66,7 @@ char **argv;
   char c;
 
 
-   
+
        CommonTestInit(argc, argv);
 
        if (UserData == NULL)
@@ -86,23 +86,23 @@ char **argv;
       else
       if (UserData && (strcmp (UserData, "unmanage")  == 0))
 	remove_mode = unmanage;
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 1);               n++;
   XtSetArg (args[n], XmNheight, 1);              n++;
   XtSetValues(Shell1, args, n);
-    
+
   XtRealizeWidget (Shell1);
 
   CreateForm(Shell1);
-    
+
   n = 0;
   XtSetArg (args[n], XmNleftAttachment, XmATTACH_FORM);	         n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		 n++;
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	         n++;
   PushButton1 = XmCreatePushButton(Form, "PushButton1", args, n);
   XtAddCallback(PushButton1, XmNactivateCallback, PushButtonCallback, NULL);
-    
+
   n = 0;
   XtSetArg (args[n], XmNleftAttachment, XmATTACH_WIDGET);	         n++;
   XtSetArg (args[n], XmNleftWidget, PushButton1);		         n++;
@@ -110,7 +110,7 @@ char **argv;
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	         n++;
   PushButton2 = XmCreatePushButton(Form, "PushButton2", args, n);
   XtAddCallback(PushButton2, XmNactivateCallback, PushButtonCallback, NULL);
-    
+
   n = 0;
   XtSetArg (args[n], XmNleftAttachment, XmATTACH_WIDGET);	         n++;
   XtSetArg (args[n], XmNleftWidget, PushButton2); 	                 n++;
@@ -132,30 +132,30 @@ char **argv;
 
   DestroyForm();
   CreateForm(Shell1);
-    
+
 
   XtManageChild(Form);
   CreateMatrix(Form, color[0]);
 
-    
+
   CommonPause();
 
   DestroyForm();
   CreateForm(Shell1);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	        n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   Form1 = XmCreateForm(Form, "Form1", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
   XtSetArg (args[n], XmNrightWidget, Form1);		                n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   Form2 = XmCreateForm(Form, "Form2", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -163,14 +163,14 @@ char **argv;
   XtSetArg (args[n], XmNleftAttachment, XmATTACH_FORM);               n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   Form3 = XmCreateForm(Form, "Form3", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET);	        n++;
   XtSetArg (args[n], XmNtopWidget, Form3);	                        n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	        n++;
   Form4 = XmCreateForm(Form, "Form4", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -178,7 +178,7 @@ char **argv;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET);	        n++;
   XtSetArg (args[n], XmNtopWidget, Form2);        	                n++;
   Form5 = XmCreateForm(Form, "Form5", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -187,7 +187,7 @@ char **argv;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET);	        n++;
   XtSetArg (args[n], XmNtopWidget, Form1);    	                n++;
   Form6 = XmCreateForm(Form, "Form6", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	        n++;
@@ -195,7 +195,7 @@ char **argv;
   XtSetArg (args[n], XmNtopWidget, Form4);    	                n++;
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	        n++;
   Form7 = XmCreateForm(Form, "Form7", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -204,7 +204,7 @@ char **argv;
   XtSetArg (args[n], XmNtopWidget, Form5);        	                n++;
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	        n++;
   Form8 = XmCreateForm(Form, "Form8", args, n);
-    
+
   n = 0;
   XtSetArg (args[n], XmNallowOverlap, False);                         n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -238,13 +238,13 @@ char **argv;
   CreateMatrix(Form9, color[8]);
 
 
-    
+
   CommonPause();
 
 
 /*  DestroyForm(); */
 
-  XtAppMainLoop(app_context);      
+  XtAppMainLoop(app_context);
 }
 
 static void CreateForm(Shell)
@@ -252,9 +252,9 @@ Widget Shell;
 {
   unsigned int n;
   Arg args[MAX_ARGS];
-  
+
   n = 0;
-  XtSetArg (args[n], XmNallowOverlap, False);                          n++;  
+  XtSetArg (args[n], XmNallowOverlap, False);                          n++;
   Form = XmCreateForm (Shell, "Form", args, n);
 }
 
@@ -307,7 +307,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   sprintf (buf, "PushButton%d", button_num++);
   PushButton1 = XmCreatePushButton(form, buf, args, n);
-       
+
   n = 0;
   XtSetArg (args[n], XmNbackground, color);                     n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	n++;
@@ -315,7 +315,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   sprintf (buf, "PushButton%d", button_num++);
   PushButton2 = XmCreatePushButton(form, buf, args, n);
-  
+
   n = 0;
   XtSetArg (args[n], XmNbackground, color);                     n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	n++;
@@ -332,7 +332,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
   sprintf (buf, "PushButton%d", button_num++);
   PushButton4 = XmCreatePushButton(form, buf, args, n);
-       
+
   n = 0;
   XtSetArg (args[n], XmNbackground, color);                     n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	n++;
@@ -351,7 +351,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopWidget, PushButton3);    	n++;
   sprintf (buf, "PushButton%d", button_num++);
   PushButton6 = XmCreatePushButton(form, buf, args, n);
-  
+
   n = 0;
   XtSetArg (args[n], XmNbackground, color);                     n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
@@ -360,7 +360,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
   sprintf (buf, "PushButton%d", button_num++);
   PushButton7 = XmCreatePushButton(form, buf, args, n);
-       
+
   n = 0;
   XtSetArg (args[n], XmNbackground, color);                     n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	n++;
@@ -370,7 +370,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
   sprintf (buf, "PushButton%d", button_num++);
   PushButton8 = XmCreatePushButton(form, buf, args, n);
-  
+
   n = 0;
   XtSetArg (args[n], XmNbackground, color);                     n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	n++;

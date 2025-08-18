@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH draw 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -32,18 +32,17 @@
 .SH DESCRIPTION
 \*LDraw\*O
 provides a demonstration of using a DrawingArea in an AUTOMATIC
-ScrolledWindow. 
+ScrolledWindow.
 
 .SH Files
 .nf
 .ta 1.2i
 XmdDraw: the app-default file is very important for usability.
-Try running something like: (XENVIRONMENT=XmdDraw draw) 
+Try running something like: (XENVIRONMENT=XmdDraw draw)
 .fi
 .SH X Defaults
-The class of this application is \fIXmdDraw\fR.  
+The class of this application is \fIXmdDraw\fR.
 
-.SH Editres: 
+.SH Editres:
 Draw is Editres aware, so you can use 'editres' to see the
 names of the widgets in the instance hierarchy.
-

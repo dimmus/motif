@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsSetRscDef.c /main/7 1995/07/14 11:22:51 drk $"
@@ -54,12 +54,12 @@ static char rcsid[] = "$XConsortium: mvsSetRscDef.c /main/7 1995/07/14 11:22:51 
 #include <AutoMessages.h>
 #include "mvslib.h"
 
-void mvsSetResourcesToDefaults(widget_info,args,nargs) 
+void mvsSetResourcesToDefaults(widget_info,args,nargs)
 MvsWidgetInfoRecord *widget_info;
 Arg args[];
 Cardinal nargs;
-{ 
-    int i,j; 
+{
+    int i,j;
     Arg loc_args[1];
     Pixel pixel;
     short num_resources;
@@ -99,7 +99,7 @@ Cardinal nargs;
 			if (resources[i] < 0)
 			    resources[i] = 0;
                         if (!mvsAllocColor(resources[i])) {
-			    sprintf (msg_string, _AutoMessages[WARNMSG26], 
+			    sprintf (msg_string, _AutoMessages[WARNMSG26],
 				     routine_name);
                             AutoMessage(msg_string); }
                     }
@@ -128,9 +128,9 @@ Cardinal nargs;
 				     routine_name);
 			    AutoMessage(msg_string);}
 
-                            
+
                         resources[i] = (MvsArgVal) pixel;
-                        if(pixel != XBlackPixel(mvsDisplay,xisScreen)) 
+                        if(pixel != XBlackPixel(mvsDisplay,xisScreen))
                             AutoMessage (_AutoMessages[WARNMSG29]);
                     }
                     else
@@ -140,7 +140,7 @@ Cardinal nargs;
 
                 case MVSXtCopyFromParent:
                     XtSetArg(loc_args[0],resource_info[i].name,&resources[i]);
-                    XtGetValues(XtParent(widget),loc_args,1); 	
+                    XtGetValues(XtParent(widget),loc_args,1);
                     if (resource_info[i].type_code == T_Pixel) {
                         if (!mvsAllocColor(resources[i])) {
 			  sprintf (msg_string, _AutoMessages[WARNMSG31],
@@ -160,7 +160,7 @@ Cardinal nargs;
                     if(dflt_func)
                         resources[i] = (*dflt_func)(widget_info);
                     else {
-		       sprintf (msg_string, _AutoMessages[WARNMSG80], 
+		       sprintf (msg_string, _AutoMessages[WARNMSG80],
 				routine_name);
                        AutoMessage(msg_string); }
                 } /* End switch() */
@@ -175,4 +175,3 @@ Cardinal nargs;
     mvsSetLocalStartConstraints(widget_info,resources,args,nargs);
 
 } /* End mvsSetResourcesToDefaults() */
-  

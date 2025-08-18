@@ -12,4 +12,4 @@ LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt -lX11
 
 AM_CPPFLAGS = -I$(TOPDIR)/lib -I$(srcdir)/.. \
            -I$(srcdir)/$(TOPDIR)/lib \
-           ${X_CFLAGS} 
+           ${X_CFLAGS}

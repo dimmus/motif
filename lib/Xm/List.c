@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
@@ -448,9 +448,9 @@ static void APIReplaceItemsPos(Widget w,
 			       int position,
 			       Boolean select);
 static void APISelect(XmListWidget lw, int item_pos, Boolean notify);
-static void APIDeletePositions(XmListWidget lw, 
-			       int *positions, 
-			       int count, 
+static void APIDeletePositions(XmListWidget lw,
+			       int *positions,
+			       int count,
 			       Boolean track_kbd);
 static void SetSelectionParams(XmListWidget lw);
 static void GetPreeditPosition(XmListWidget lw, XPoint *xmim_point);
@@ -1060,7 +1060,7 @@ Initialize(Widget request,
    * Some pre-Motif 2.0 XmManager subclasses may be bypassing the
    * synthetic resouce GetValues hook and passing us the manager's raw
    * string_direction field (which is now a layout_direction).  Fixup
-   * the common/simple cases. 
+   * the common/simple cases.
    */
   switch (lw->list.StrDir)
     {
@@ -1097,7 +1097,7 @@ Initialize(Widget request,
 	XmDirectionToStringDirection(XmPrim_layout_direction(lw));
     }
 
-  if (!XmRepTypeValidValue(XmRID_STRING_DIRECTION, 
+  if (!XmRepTypeValidValue(XmRID_STRING_DIRECTION,
 			   lw->list.StrDir, (Widget) lw))
     lw->list.StrDir = XmSTRING_DIRECTION_L_TO_R;
 
@@ -1230,8 +1230,8 @@ Initialize(Widget request,
       XPoint xmim_point;
 
       GetPreeditPosition(lw, &xmim_point);
-      XmImVaSetValues((Widget) lw, 
-		      XmNspotLocation, &xmim_point, 
+      XmImVaSetValues((Widget) lw,
+		      XmNspotLocation, &xmim_point,
 		      XmNfontList, lw->list.font, NULL);
     }
 
@@ -1941,9 +1941,9 @@ SetValues(Widget old,
       GetPreeditPosition(newlw, &xmim_point);
       if (newlw->list.font != oldlw->list.font ||
 	  oldlw->list.matchBehavior != XmQUICK_NAVIGATE)
-	XmImVaSetValues((Widget)newlw, XmNspotLocation, &xmim_point, 
+	XmImVaSetValues((Widget)newlw, XmNspotLocation, &xmim_point,
 			XmNfontList, newlw->list.font, NULL);
-      else 
+      else
 	XmImVaSetValues((Widget)newlw, XmNspotLocation, &xmim_point, NULL);
     }
 
@@ -2566,7 +2566,7 @@ if (!XtIsSensitive((Widget)lw))
 		      lw->list.font,
 		      lw->list.scratchRend,
 		      (_XmString)lw->list.items[pos],
-		      x, 
+		      x,
 		      y + ((int)(lw->list.MaxItemHeight -
 				   lw->list.InternalList[pos]->height) >> 1),
 		      width,
@@ -2687,7 +2687,7 @@ SetClipRect(XmListWidget widget)
 #ifdef USE_XFT
     _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), x, y,
 	                    &rect, 1);
-#endif      
+#endif
 
   if (lw->list.NormalGC)
     XSetClipRectangles(XtDisplay(lw), lw->list.NormalGC, x, y,
@@ -2740,7 +2740,7 @@ SetDefaultSize(XmListWidget lw,
       int height = 0;
 
       XmRenderTableGetDefaultFontExtents(lw->list.font, &height, NULL, NULL);
-					 
+
       lw->list.MaxItemHeight = (Dimension)height;
       if (lw->list.MaxItemHeight == 0)
         lw->list.MaxItemHeight = 1;
@@ -3018,7 +3018,7 @@ SetHorizontalScrollbar(XmListWidget lw)
   if (lw->list.ScrollBarDisplayPolicy == XmAS_NEEDED)
     {
       /* CR 9663: Hide scrollbars in empty lists. */
-      if ((lw->list.MaxWidth <= (Dimension)listwidth) || 
+      if ((lw->list.MaxWidth <= (Dimension)listwidth) ||
 	  (lw->list.itemCount == 0))
 	{
 	  lw->list.BaseX = ((int) lw->list.margin_width +
@@ -3456,7 +3456,7 @@ DeleteInternalElementPositions(XmListWidget  lw,
         }
     }
 
-  /* 
+  /*
    * The fixups above may leave a non-existent selection if multiple
    * selected items are deleted from the end of the list.
    */
@@ -3674,7 +3674,7 @@ DeleteItemPositions(XmListWidget  lw,
 		  ASSIGN_MAX(lw->list.CurrentKbdItem, 0);
 		  if ((lw->list.SelectionPolicy == XmEXTENDED_SELECT) ||
 		      (lw->list.SelectionPolicy == XmBROWSE_SELECT))
-		    lw->list.LastHLItem = lw->list.CurrentKbdItem;            
+		    lw->list.LastHLItem = lw->list.CurrentKbdItem;
 		}
 	    }
         }
@@ -4416,9 +4416,9 @@ HandleNewItem(XmListWidget lw,
     case XmEXTENDED_SELECT:
       /* BEGIN OSF Fix CR 5954 */
       dir = (lw->list.LastHLItem < item) ? 1 : -1;
-      while (lw->list.LastHLItem != item && 
-	     lw->list.StartItem >= 0 && lw->list.EndItem >= 0 && 
-	     lw->list.StartItem < lw->list.itemCount && 
+      while (lw->list.LastHLItem != item &&
+	     lw->list.StartItem >= 0 && lw->list.EndItem >= 0 &&
+	     lw->list.StartItem < lw->list.itemCount &&
 	     lw->list.EndItem < lw->list.itemCount)
 	{
 	  lw->list.LastHLItem += dir;
@@ -4587,7 +4587,7 @@ VerifyMotion(Widget wid,
       (event->xmotion.y < (int)lw->core.height) &&
       (event->xmotion.y >(int)lw->core.y))
     {
-      if (lw->list.DragID) 
+      if (lw->list.DragID)
 	{
 	  XtRemoveTimeOut(lw->list.DragID);
 	  lw->list.DragID = 0;
@@ -4605,7 +4605,7 @@ VerifyMotion(Widget wid,
 	    ((event->xmotion.x >= (int)lw->core.width) &&
 	     (lw->list.LeaveDir & RIGHTLEAVE)))
 	  {
-	    if (lw->list.DragID) 
+	    if (lw->list.DragID)
 	      {
 		XtRemoveTimeOut(lw->list.DragID);
 		lw->list.DragID = 0;
@@ -4623,7 +4623,7 @@ VerifyMotion(Widget wid,
 	    ((event->xmotion.x >= (int)lw->core.width) &&
 	     (lw->list.LeaveDir & LEFTLEAVE)))
 	  {
-	    if (lw->list.DragID) 
+	    if (lw->list.DragID)
 	      {
 		XtRemoveTimeOut(lw->list.DragID);
 		lw->list.DragID = 0;
@@ -5102,7 +5102,7 @@ ExUnSelect(Widget wid,
 	return;
 	}
 
-  if ((lw->list.AutoSelect != XmNO_AUTO_SELECT) && 
+  if ((lw->list.AutoSelect != XmNO_AUTO_SELECT) &&
       (lw->list.AutoSelectionType == XmAUTO_UNSET))
     {
       if (ListSelectionChanged(lw))
@@ -5463,7 +5463,7 @@ KbdCancel(Widget wid,
       !(lw->list.Event & BUTTONDOWN))
     return;
 
-  if (lw->list.DragID) 
+  if (lw->list.DragID)
     {
       XtRemoveTimeOut(lw->list.DragID);
       lw->list.DragID = 0;
@@ -5595,7 +5595,7 @@ KbdSelectAll(Widget wid,
 	  }
     }
 
-  if ((lw->list.AutoSelect != XmNO_AUTO_SELECT) && 
+  if ((lw->list.AutoSelect != XmNO_AUTO_SELECT) &&
       (lw->list.AutoSelectionType == XmAUTO_UNSET) &&
       (lw->list.SelectionPolicy == XmEXTENDED_SELECT ||
        lw->list.SelectionPolicy == XmBROWSE_SELECT))
@@ -5799,7 +5799,7 @@ ClickElement(XmListWidget lw,
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
   SLcount = lw->list.selectedItemCount;
 
-  /* A callback can change the policy. Use the saved value for alloc and free 
+  /* A callback can change the policy. Use the saved value for alloc and free
      of the selected_items list. */
   selection_policy = lw->list.SelectionPolicy;
 
@@ -6423,7 +6423,7 @@ ShiftNextElement(Widget wid,
   lw->list.Event |= SHIFTDOWN;
   lw->list.SelectionType = XmMODIFICATION;
 
-  if ((lw->list.AutoSelect != XmNO_AUTO_SELECT) && 
+  if ((lw->list.AutoSelect != XmNO_AUTO_SELECT) &&
       (lw->list.AutoSelectionType == XmAUTO_UNSET))
     lw->list.AutoSelectionType = XmAUTO_CHANGE;
 
@@ -6743,7 +6743,7 @@ KbdLeftChar(Widget wid,
 
   if (LayoutIsRtoLP(lw)) {
     pos = lw->list.hOrigin + CHAR_WIDTH_GUESS;
-    
+
     if ((lw->list.hExtent + pos) > lw->list.hmax)
       pos = lw->list.hmax - lw->list.hExtent;
   } else {
@@ -6832,7 +6832,7 @@ KbdRightChar(Widget wid,
     pos = lw->list.hOrigin - CHAR_WIDTH_GUESS;
   } else {
     pos = lw->list.hOrigin + CHAR_WIDTH_GUESS;
-    
+
     if ((lw->list.hExtent + pos) > lw->list.hmax)
       pos = lw->list.hmax - lw->list.hExtent;
   }
@@ -7203,7 +7203,7 @@ ListProcessDrag(Widget wid,
   Widget drag_icon, dc;
   Arg args[10];
   int n, location_data;
-  XmListDragConvertStruct *ListDragConv; 
+  XmListDragConvertStruct *ListDragConv;
 
   /* Dequeue any pending drag initiation just to be safe. */
   if (lw->list.drag_start_timer)
@@ -7502,7 +7502,7 @@ ListQuickNavigate(Widget wid,
       (void) mbtowc(&input_char, NULL, 0);
       (void) mbtowc(&input_char, input_string, input_length);
 
-#ifdef FIX_1210	  
+#ifdef FIX_1210
       if (iswprint((wint_t)input_char))
       {
 #endif
@@ -7515,7 +7515,7 @@ ListQuickNavigate(Widget wid,
           }
 
 	      /* Wrap around to the start of the list if necessary. */
-	      if (!found)      
+	      if (!found)
         {
 		    for (i = 0; i <= lw->list.CurrentKbdItem; i++)
           if (CompareCharAndItem(lw, input_char, i))
@@ -7544,7 +7544,7 @@ ListQuickNavigate(Widget wid,
  *									   *
  ***************************************************************************/
 
-static wchar_t 
+static wchar_t
 FirstChar(XmString string)
 {
   /* This code is patterned on _XmStringGetTextConcat. */
@@ -7553,19 +7553,19 @@ FirstChar(XmString string)
   unsigned int len;
   XtPointer val;
   wchar_t result = 0;
-  
+
   if (string != NULL)
     {
       _XmStringContextReInit(&stack_context, string);
 
       (void) mbtowc(&result, NULL, 0);
       while((result == 0) &&
-	    ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE, 
+	    ((type = XmeStringGetComponent(&stack_context, TRUE, FALSE,
 					   &len, &val)) !=
 	     XmSTRING_COMPONENT_END))
-	{   
+	{
 	  switch( type)
-	    {   
+	    {
 	    case XmSTRING_COMPONENT_TEXT:
 	    case XmSTRING_COMPONENT_LOCALE_TEXT:
 	      if (len)
@@ -7579,7 +7579,7 @@ FirstChar(XmString string)
 
 	    default:
 	      break;
-	    } 
+	    }
 	}
 
       _XmStringContextFree(&stack_context);
@@ -7628,7 +7628,7 @@ ListConvert(Widget w, XtPointer client_data,
 	 XmA_MOTIF_EXPORT_TARGETS, XmA_MOTIF_CLIPBOARD_TARGETS,
 	 XmAUTF8_STRING,
 	 NUM_ATOMS };
-  static char *atom_names[] = { 
+  static char *atom_names[] = {
     XmS_MOTIF_COMPOUND_STRING, XmSCOMPOUND_TEXT, XmSTEXT,
     XmSTARGETS, XmS_MOTIF_DROP, XmS_MOTIF_LOSE_SELECTION,
     XmS_MOTIF_EXPORT_TARGETS, XmS_MOTIF_CLIPBOARD_TARGETS,
@@ -8084,7 +8084,7 @@ XmListDeleteItem(Widget w,
  ************************************************************************/
 
 static void
-CleanUpList(XmListWidget lw, 
+CleanUpList(XmListWidget lw,
 	    Boolean always)
 {
   Dimension VertMargin, HorzMargin;
@@ -8689,7 +8689,7 @@ APIReplaceItemsPos(Widget w,
 
   for (i = 0; i < item_count; i++, position++)
     {
-      reset_width |= 
+      reset_width |=
 	(lw->list.InternalList[position - 1]->width == old_max_width);
       reset_height |=
 	(lw->list.InternalList[position - 1]->height == old_max_height);
@@ -9851,7 +9851,7 @@ XmListPosSelected(Widget w,
     int_pos = lw->list.LastItem - 1;
   else
     int_pos = pos - 1;
-  
+
   selected = lw->list.InternalList[int_pos]->selected;
   _XmAppUnlock(app);
 
@@ -9873,7 +9873,7 @@ XmCreateList(Widget parent,
   return XtCreateWidget(name, xmListWidgetClass, parent, args, argCount);
 }
 
-Widget 
+Widget
 XmVaCreateList(
         Widget parent,
         char *name,
@@ -9882,18 +9882,18 @@ XmVaCreateList(
     register Widget w;
     va_list var;
     int count;
-    
+
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
 
-    
+
     Va_start(var, name);
-    w = XmeVLCreateWidget(name, 
+    w = XmeVLCreateWidget(name,
                          xmListWidgetClass,
-                         parent, False, 
+                         parent, False,
                          var, count);
-    va_end(var);   
+    va_end(var);
     return w;
 }
 
@@ -9906,17 +9906,17 @@ XmVaCreateManagedList(
     Widget w = NULL;
     va_list var;
     int count;
-    
+
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-    
+
     Va_start(var, name);
-    w = XmeVLCreateWidget(name, 
+    w = XmeVLCreateWidget(name,
                          xmListWidgetClass,
-                         parent, True, 
+                         parent, True,
                          var, count);
-    va_end(var);   
+    va_end(var);
     return w;
 }
 

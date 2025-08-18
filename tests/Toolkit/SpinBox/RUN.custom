@@ -27,10 +27,10 @@ set SpinBox1b = 'SpinBox1 -u 2 -I SpinBox1b.Dat -S SpinBox1b.Scr -V SpinBox1b.vi
 set SpinBox1c = 'SpinBox1 -u 3 -I SpinBox1c.Dat -S SpinBox1c.Scr -V SpinBox1c.vis -O SpinBox1c.prt'
 set SpinBox1d = 'SpinBox1 -u 4 -I SpinBox1d.Dat -S SpinBox1d.Scr -V SpinBox1d.vis -O SpinBox1d.prt'
 
-set SpinBox3a = 'SpinBox3 -u XmForm,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3a.prt' 
-set SpinBox3b = 'SpinBox3 -u XmFrame,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3b.prt' 
-set SpinBox3c = 'SpinBox3 -u XmBulletinBoard,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3c.prt' 
-set SpinBox3d = 'SpinBox3 -u XmRowColumn,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3d.prt' 
+set SpinBox3a = 'SpinBox3 -u XmForm,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3a.prt'
+set SpinBox3b = 'SpinBox3 -u XmFrame,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3b.prt'
+set SpinBox3c = 'SpinBox3 -u XmBulletinBoard,XmTextField -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3c.prt'
+set SpinBox3d = 'SpinBox3 -u XmRowColumn,XmText -I SpinBox3.Dat -S SpinBox3.Scr -V SpinBox3.vis -O SpinBox3d.prt'
 
 setenv XFILESEARCHPATH ./SpinBox.defaults
 if ( $MOTIF_HOME != "" ) then
@@ -49,4 +49,3 @@ foreach test ("$SpinBox1a" "$SpinBox1b" "$SpinBox1c" "$SpinBox1d" \
               SpinBox4 \
               SpinBox5 \
               SpinBox6 )
-              

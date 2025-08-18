@@ -55,9 +55,9 @@ typedef struct _XmContainerItemDataRec {
 #define ContItemDetailCount          (1L<<3)
 
 
-typedef void (*XmContainerItemSetValuesProc)(Widget w, 
+typedef void (*XmContainerItemSetValuesProc)(Widget w,
 					XmContainerItemData contItemData);
-typedef void (*XmContainerItemGetValuesProc)(Widget w, 
+typedef void (*XmContainerItemGetValuesProc)(Widget w,
 					XmContainerItemData contItemData);
 
 /* Version 0: initial release. */

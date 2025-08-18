@@ -10,7 +10,7 @@ XCOMM platform:  $TOG: sgi.cf /main/49 1998/02/26 09:12:19 barstow $
 # define OSMinorVersion	DefaultOSMinorVersion
 #endif
 #ifndef OSTeenyVersion
-# define OSTeenyVersion	DefaultOSTeenyVersion 
+# define OSTeenyVersion	DefaultOSTeenyVersion
 #endif
 XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 
@@ -96,7 +96,7 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 #define ServerSymbolTables -Wf,-XNp8000,-XNh2000,-XNd8000
 #else
 #define SymbolTables
-#define PexSymbolTables 
+#define PexSymbolTables
 #define ServerSymbolTables
 #endif
 
@@ -130,14 +130,14 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 #   endif
 #   define ThreadedX HasPosixThreads
 #   define ThreadsLibraries -lpthread
-/* 
- * Add "#define HasSgiThreadsPatch1403 YES" to your site.def or host.def if 
+/*
+ * Add "#define HasSgiThreadsPatch1403 YES" to your site.def or host.def if
  * that's which patch you have.
  */
 #   ifndef HasSgiThreadsPatch1403
 #    define HasSgiThreadsPatch1403 NO
 #   endif
-#   if (HasSgiThreadsPatch1403) 
+#   if (HasSgiThreadsPatch1403)
 #    define SystemMTDefines -D_POSIX_THREAD_SAFE_FUNCTIONS
 #   endif
 #  endif
@@ -179,7 +179,7 @@ XCOMM operating system: OSName (OSMajorVersion.OSMinorVersion.OSTeenyVersion)
 #ifndef BuildServer
 #define BuildServer             NO
 #endif
-#define ServerOSDefines		-DDDXTIME 
+#define ServerOSDefines		-DDDXTIME
 /* only need this for binary compatibility with their ddx */
 #ifndef Mips64Architecture
 #define ServerExtraDefines	-DNEED_LINEHELPER AllocateLocalDefines

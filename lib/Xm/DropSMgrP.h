@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifndef _XmDropSMgrP_h
 #define _XmDropSMgrP_h
@@ -79,20 +79,20 @@ typedef struct {
     XmDSMRetrieveInfoProc	retrieveInfo;
     XmDSMUpdateInfoProc		updateInfo;
     XmDSMEndUpdateProc		endUpdate;
-    
+
     /* Used by DragController Object */
-    
+
     XmDSMUpdateProc		updateDSM;
-    
+
     /* Used by update proc */
-    
+
     XmDSMProcessMotionProc	processMotion;
     XmDSMProcessDropProc	processDrop;
     XmDSMOperationChangedProc	operationChanged;
     XmDSMChangeRootProc		changeRoot;
-    
+
     /* Used to manage DropSites */
-    
+
     XmDSMInsertInfoProc		insertInfo;
     /* Need a get and a put function for update? */
     XmDSMRemoveInfoProc		removeInfo;
@@ -101,15 +101,15 @@ typedef struct {
 
     XmDSMSyncTreeProc		syncTree;
     XmDSMGetTreeFromDSMProc	getTreeFromDSM;
-    
+
     /* Used to hash between widgets and info */
-    
+
     XmDSMCreateDSInfoTable	createTable;
     XmDSMDestroyDSInfoTable 	destroyTable;
     XmDSMRegisterInfoProc	registerInfo;
     XmDSMWidgetToInfoProc	widgetToInfo;
     XmDSMUnregisterInfoProc 	unregisterInfo;
-    
+
     XtPointer			extension;
 } XmDropSiteManagerClassPart;
 

@@ -23,10 +23,10 @@
 #
 # HISTORY
 TRACE:(1) Continue
-TRACE:(2) CompareVisual label1 
-TRACE:(3) CompareVisual label2 
-TRACE:(4) CompareVisual label3 
-TRACE:(5) CompareVisual label4 
+TRACE:(2) CompareVisual label1
+TRACE:(3) CompareVisual label2
+TRACE:(4) CompareVisual label3
+TRACE:(5) CompareVisual label4
 TRACE:(6) Continue
 XmeStringValid PASSED with an invalid string.
 XmeStringValid PASSED with a valid string.

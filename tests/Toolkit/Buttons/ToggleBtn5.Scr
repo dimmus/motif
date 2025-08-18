@@ -24,9 +24,9 @@
 # HISTORY
 #
 
-#   $XConsortium: ToggleBtn5.scr /main/4 1995/07/13 17:33:25 drk $ 
+#   $XConsortium: ToggleBtn5.scr /main/4 1995/07/13 17:33:25 drk $
 
-#  Begin CR 5303 
+#  Begin CR 5303
 
 # A bulletin board containing 4 toggle buttons is created.  The initial
 # spacing (XmNspacing) is set to 4.  The purpose of the test is to make
@@ -36,7 +36,7 @@
 # The spacing value for each button is printed on the calling xterm.
 
 # Next click MB1 on ToggleButton2.  The spacing should DECREASE to 5.
-# The spacing value for each button is printed on the calling xterm.   
+# The spacing value for each button is printed on the calling xterm.
 
 # Next click MB1 on ToggleButton3.  The spacing should increase to 100.
 # The spacing value for each button is printed on the calling xterm.
@@ -91,5 +91,3 @@ Continue
 # End CR 5163
 
 Exit
-
-

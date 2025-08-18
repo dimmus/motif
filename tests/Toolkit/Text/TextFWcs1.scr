@@ -1,5 +1,5 @@
 # $XConsortium: TextFWcs1.scr /main/5 1995/07/17 20:42:33 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,14 +20,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-#  @) A client with a list of functions, control panel and TextField widget to 
+#  @) A client with a list of functions, control panel and TextField widget to
 #  be acted upon should appear.
-#  @) The Action TextField widget should initially contain the string 
+#  @) The Action TextField widget should initially contain the string
 #  "This is the starting string".
 WindowRaise Shell1
 CompareVisual Text1
@@ -65,7 +65,7 @@ ClickMB Btn1
 InputString "NEW"
 
 #  #) Click the Call Function PushButton.  The string in the Status/Input
-#  widget should get inserted after the third character in the Action TextField 
+#  widget should get inserted after the third character in the Action TextField
 #  widget.
 LocatePointer ApplyB
 ClickMB Btn1
@@ -93,11 +93,11 @@ CompareVisual StatText
 LocatePointer ClearB
 ClickMB Btn1
 
-#  #) Select the XmTextFieldSetStringWcs() function.  
+#  #) Select the XmTextFieldSetStringWcs() function.
 LocatePointer List1 RListItem 1
 ClickMB Btn1
 
-#  #) Click in the Status/Input widget and type "Here is a new string". 
+#  #) Click in the Status/Input widget and type "Here is a new string".
 LocatePointer StatText
 ClickMB Btn1
 InputString "Here is a new string"
@@ -191,4 +191,3 @@ CompareVisual StatText
 
 #  E)
 Exit
-

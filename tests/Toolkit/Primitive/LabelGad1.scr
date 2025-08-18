@@ -1,5 +1,5 @@
 # $XConsortium: LabelGad1.scr /main/6 1995/07/17 20:34:22 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,15 +20,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
-# Click on the Label gadget. 
+# Click on the Label gadget.
 # Move the pointer in and out of the client window,
-# once with MB1 pressed, and  once with it released. 
+# once with MB1 pressed, and  once with it released.
 
 CompareVisual Shell1
 LocatePointer LabelGadget1
@@ -48,9 +48,9 @@ WindowDeiconify Shell1
 Continue
 
 # The gnu pixmap should appear on the label gadget.
-# Click on the Label gadget. 
+# Click on the Label gadget.
 # Move the pointer in and out of the client window,
-# once with MB1 pressed, and once with it released. 
+# once with MB1 pressed, and once with it released.
 
 CompareVisual Frame1
 
@@ -69,5 +69,3 @@ ReleaseMB Btn1
 Continue
 
 Exit
-
-

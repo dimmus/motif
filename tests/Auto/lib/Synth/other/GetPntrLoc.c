@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetPntrLoc.c /main/7 1995/07/14 11:35:24 drk $"
@@ -37,10 +37,10 @@ static char rcsid[] = "$XConsortium: GetPntrLoc.c /main/7 1995/07/14 11:35:24 dr
 
 	Summary:
             Returns the current mouse pointer location relative to the root.
-           
+
         INPUTS:
             none
-        
+
         OUTPUTS:
             root_x,root_y     - position of pointer relative to the root window
 
@@ -66,4 +66,3 @@ int *root_x,*root_y;
         exit(-1);
     }
 } /* End xisGetPointerLocation() */
-

@@ -19,13 +19,13 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 !****************************************************************************
 !*
 !*  Exm.uil -  Exm widgets UIL header file
-!*  
+!*
 !****************************************************************************
 
 
@@ -46,20 +46,20 @@ procedure
 value
     ExmNsimpleShape : private argument ('simpleShape', integer);
     ExmNcompoundString : private argument ('compoundString', compound_string);
-    ExmNgridMarginWidthWithinCell : private argument ('gridMarginWidthWithinCell', 
+    ExmNgridMarginWidthWithinCell : private argument ('gridMarginWidthWithinCell',
                                                        integer);
-    ExmNgridMarginHeightWithinCell : private argument ('gridMarginHeightWithinCell', 
+    ExmNgridMarginHeightWithinCell : private argument ('gridMarginHeightWithinCell',
                                                         integer);
     ExmNopenSide : private argument ('openSide', integer);
 
-    ExmNreportCallback : private argument ('reportCallback', callback); 
-    ExmNrubberBand : private argument ('rubberBand', boolean); 
-    ExmNcanvasWidth : private argument ('canvasWidth', integer); 
-    ExmNcanvasHeight : private argument ('canvasHeight', integer); 
-    ExmNsliderX : private argument ('sliderX', integer); 
-    ExmNsliderY : private argument ('sliderY', integer); 
-    ExmNsliderWidth : private argument ('sliderWidth', integer); 
-    ExmNsliderHeight : private argument ('sliderHeight', integer); 
+    ExmNreportCallback : private argument ('reportCallback', callback);
+    ExmNrubberBand : private argument ('rubberBand', boolean);
+    ExmNcanvasWidth : private argument ('canvasWidth', integer);
+    ExmNcanvasHeight : private argument ('canvasHeight', integer);
+    ExmNsliderX : private argument ('sliderX', integer);
+    ExmNsliderY : private argument ('sliderY', integer);
+    ExmNsliderWidth : private argument ('sliderWidth', integer);
+    ExmNsliderHeight : private argument ('sliderHeight', integer);
 
 value
     ExmSHAPE_OVAL : 0; ExmSHAPE_RECTANGLE : 1;

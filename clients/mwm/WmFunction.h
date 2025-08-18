@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.3
-*/ 
+*/
 
 
 #ifdef WSM
@@ -58,7 +58,7 @@ extern Boolean F_Move (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Next_Cmap (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Nop (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Normalize (String args, ClientData *pCD, XEvent *event);
-extern Boolean F_Normalize_And_Raise (String args, ClientData *pCD, 
+extern Boolean F_Normalize_And_Raise (String args, ClientData *pCD,
 				      XEvent *event);
 extern Boolean F_Pack_Icons (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Post_SMenu (String args, ClientData *pCD, XEvent *event);
@@ -71,7 +71,7 @@ extern Boolean F_Refresh (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Resize (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Restart (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Restore (String args, ClientData *pCD, XEvent *event);
-extern Boolean F_Restore_And_Raise (String args, ClientData *pCD, 
+extern Boolean F_Restore_And_Raise (String args, ClientData *pCD,
 				      XEvent *event);
 extern void Do_Restart (Boolean dummy);
 extern void RestartWm (long startupFlags);
@@ -93,14 +93,14 @@ extern void Do_Set_Behavior (Boolean dummy);
 extern Boolean F_Title (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Screen (String args, ClientData *pCD, XEvent *event);
 #if defined(PANELIST)
-extern Boolean F_Toggle_Front_Panel (String args, ClientData *pCD, 
+extern Boolean F_Toggle_Front_Panel (String args, ClientData *pCD,
 				     XEvent *event);
 extern Boolean F_Version (String args, ClientData *pCD, XEvent *event);
 #endif /* PANELIST */
 #ifdef WSM
 extern Boolean F_Next_Workspace (String args, ClientData *pCD, XEvent *event);
 extern Boolean F_Prev_Workspace (String args, ClientData *pCD, XEvent *event);
-extern Boolean F_Workspace_Presence (String args, ClientData *pCD, 
+extern Boolean F_Workspace_Presence (String args, ClientData *pCD,
 				     XEvent *event);
 #if defined(DEBUG)
 extern Boolean F_ZZ_Debug (String, ClientData *, XEvent *);

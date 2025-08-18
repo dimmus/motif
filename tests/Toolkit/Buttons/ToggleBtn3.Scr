@@ -19,21 +19,21 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-# This is a simple test of toggle button behaviors. To toggle a 
-#  toggle button, click anywhere on the label or on the indicator.  
+# This is a simple test of toggle button behaviors. To toggle a
+#  toggle button, click anywhere on the label or on the indicator.
 
 # Click on ToggleButton1. The indicator should fill to show it is on.
-# Toggle Button 1 uses a large font and its indicator is sized proportionally. 
+# Toggle Button 1 uses a large font and its indicator is sized proportionally.
 
 # Press MB1 down on ToggleButton1, then move outside the window and release
-# the button. The toggle indicator will change when you press the button 
-# and should revert when you move outside the window. 
+# the button. The toggle indicator will change when you press the button
+# and should revert when you move outside the window.
 
 # Move the pointer back over ToggleButton1, and use both the return key and
-# the space bar to toggle the indicator. 
+# the space bar to toggle the indicator.
 
 LocatePointer ToggleButton1
 ClickMB Btn1
@@ -53,13 +53,13 @@ CompareVisual ToggleButton1
 CompareVisual Manager1
 Continue
 
-# Move the pointer over ToggleButton2. Toggle the toggle button using either 
-# the mouse or the keyboard, as you did with ToggleButton1. The indicator 
-# should not fill with a new color, but the top and bottom shadows 
+# Move the pointer over ToggleButton2. Toggle the toggle button using either
+# the mouse or the keyboard, as you did with ToggleButton1. The indicator
+# should not fill with a new color, but the top and bottom shadows
 # should change.
 
 # Leave this button ON before you continue
-# It should remain highlighted for the remainder of the test. 
+# It should remain highlighted for the remainder of the test.
 
 LocatePointer ToggleButton2
 ClickMB Btn1
@@ -67,7 +67,7 @@ CompareVisual ToggleButton2
 CompareVisual Manager1
 Continue
 
-# ToggleButton3 should show no indicator. Toggle it, and the indicator will appear. 
+# ToggleButton3 should show no indicator. Toggle it, and the indicator will appear.
 
 LocatePointer ToggleButton3
 CompareVisual ToggleButton3
@@ -77,9 +77,9 @@ CompareVisual ToggleButton3
 CompareVisual Manager1
 Continue
 
-# ToggleButton4 should already appear ON. You can manipulate it normally. 
+# ToggleButton4 should already appear ON. You can manipulate it normally.
 # ToggleButton5 contains a pixmap instead of a label. When you toggle the
-#   toggle button, the pixmap will change. 
+#   toggle button, the pixmap will change.
 
 LocatePointer ToggleButton4
 CompareVisual ToggleButton4
@@ -95,8 +95,8 @@ CompareVisual ToggleButton5
 CompareVisual Manager1
 Continue
 
-# ToggleButton6 has no indicator. When you toggle it, the shadows should change 
-#  so that it appears depressed. Press again and it will revert. 
+# ToggleButton6 has no indicator. When you toggle it, the shadows should change
+#  so that it appears depressed. Press again and it will revert.
 
 LocatePointer ToggleButton6
 CompareVisual ToggleButton6
@@ -109,27 +109,27 @@ CompareVisual ToggleButton6
 CompareVisual Manager1
 Continue
 
-# ToggleButton5 should now be toggled to the ON position (smiley face). 
+# ToggleButton5 should now be toggled to the ON position (smiley face).
 
 CompareVisual ToggleButton5
 CompareVisual Manager1
 Continue
 
-# ToggleButton5 should now be toggled to the OFF position (circles). 
+# ToggleButton5 should now be toggled to the OFF position (circles).
 
 CompareVisual ToggleButton5
 CompareVisual Manager1
 Continue
 
 # The background of ToggleButton5 will change to be a smiley face
-# pixmap 
+# pixmap
 
 CompareVisual ToggleButton5
 CompareVisual Manager1
 Continue
 
 # The background of ToggleButton5 will change back to the default
-# background color. 
+# background color.
 
 CompareVisual ToggleButton5
 CompareVisual Manager1

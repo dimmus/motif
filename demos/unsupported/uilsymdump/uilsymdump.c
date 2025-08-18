@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: uilsymdump.c /main/6 1998/04/17 11:26:22 mgreess $"
@@ -99,12 +99,12 @@ main(int argc, char *argv[])
     return return_status;
 }
 
-Uil_status_type	MessageCB(  message_user_data, 
-			    msg_number, 
+Uil_status_type	MessageCB(  message_user_data,
+			    msg_number,
 			    msg_severity,
 			    msg_text,
-			    src_text, 
-			    ptr_text, 
+			    src_text,
+			    ptr_text,
 			    loc_text,
 			    message_summary)
 
@@ -116,7 +116,7 @@ Uil_status_type	MessageCB(  message_user_data,
     char    *ptr_text;	    /* source column information */
     char    *loc_text;	    /* location line */
     unsigned int (*message_summary)[Uil_k_max_status+1];
- 
+
 {
     printf ("Message(%d) -- %d-%d-%s\n    %s\n    %s\n    %s\n",
 		*message_user_data, msg_number, msg_severity, msg_text,
@@ -128,8 +128,8 @@ Uil_status_type	MessageCB(  message_user_data,
 
 
 
-Uil_status_type	StatusCB(	status_user_data, 
-				percent_complete, 
+Uil_status_type	StatusCB(	status_user_data,
+				percent_complete,
 				lines_processed,
 				current_file,
 				message_summary)
@@ -147,4 +147,3 @@ Uil_status_type	StatusCB(	status_user_data,
     *status_user_data = *status_user_data + 1;
     return Uil_k_continue;
 }
-

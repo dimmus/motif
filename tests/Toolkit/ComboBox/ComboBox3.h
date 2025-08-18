@@ -41,7 +41,7 @@ enum          {
 enum          {
                  STRING_DIRECTION_L_TO_R,
 		 STRING_DIRECTION_R_TO_L
-	      };		   
+	      };
 
 
 /* enumeration of values for XmNtype */
@@ -49,7 +49,7 @@ enum          {
                  COMBO_BOX,
 		 DROP_DOWN_COMBO_BOX,
 		 DROP_DOWN_LIST
-	      };		   
+	      };
 
 /* enumberation of offsets for array of "apply" PushButtons. */
 
@@ -103,18 +103,3 @@ enum             {
                    SET,
 		   GET
 		 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

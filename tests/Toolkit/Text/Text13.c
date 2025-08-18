@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -46,7 +46,7 @@ void
 SetNewFont( Widget w, XtPointer client_data, XtPointer call_data )
 {
 	char *new_font = (char *)client_data;
-	XmToggleButtonCallbackStruct *cb_data = 
+	XmToggleButtonCallbackStruct *cb_data =
                          (XmToggleButtonCallbackStruct *)call_data;
 	Arg	args[25];
 	int	n;
@@ -58,7 +58,7 @@ SetNewFont( Widget w, XtPointer client_data, XtPointer call_data )
            XtSetValues( Text1, args, n );
         }
 }
-           
+
 
 void
 ResetString( Widget w, XtPointer client_data, XtPointer call_data )
@@ -114,28 +114,28 @@ main( int argc, char *argv[] )
 
 	for ( i = 0; i < NUM_FONTS; i++ )
         {
-	    tmp_string = XmStringGenerate( font_names[i], 
+	    tmp_string = XmStringGenerate( font_names[i],
                                            XmFONTLIST_DEFAULT_TAG,
 		                           XmCHARSET_TEXT, NULL );
 
 	    n = 0;
-            XtSetArg( args[n], XmNlabelString, tmp_string ); n++; 
-            XtSetArg( args[n], XmNselectColor, CommonGetColor("green")); n++; 
+            XtSetArg( args[n], XmNlabelString, tmp_string ); n++;
+            XtSetArg( args[n], XmNselectColor, CommonGetColor("green")); n++;
             if ( i == 0 )
             {
-              XtSetArg( args[n], XmNset, True ); n++; 
+              XtSetArg( args[n], XmNset, True ); n++;
             }
             sprintf( buffer, "ToggleB%d", i );
 	    ToggleB[i] = XmCreateToggleButton( RowColumn, buffer, args, n );
 	    XtAddCallback( ToggleB[i], XmNvalueChangedCallback,
                            SetNewFont, (XtPointer)font_names[i] );
-          
+
             XmStringFree( tmp_string );
         }
 
 	XtManageChildren( ToggleB, NUM_FONTS );
 
-	tmp_string = XmStringGenerate( "Reset String", 
+	tmp_string = XmStringGenerate( "Reset String",
                                        XmFONTLIST_DEFAULT_TAG,
 	                               XmCHARSET_TEXT, NULL );
 
@@ -157,7 +157,7 @@ main( int argc, char *argv[] )
        /*
         *  Shrink the width of the Text widget.
         */
-        n = 0; 
+        n = 0;
 	XtSetArg( args[n], XmNcolumns, 20 ); n++;
 	XtSetArg( args[n], XmNresizeWidth, False ); n++;
 	XtSetValues( Text1, args, n );

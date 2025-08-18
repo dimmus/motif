@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PushBGad3.c /main/8 1995/07/13 17:29:42 drk $"
@@ -56,11 +56,11 @@ char **argv;
   int n;
 
   CommonTestInit(argc, argv);
-   
+
   bb = XmCreateBulletinBoard(Shell1, "bb", (ArgList) args, 0);
   XtManageChild(bb);
 
-  XtSetArg(args[0], XmNborderWidth, 4); 
+  XtSetArg(args[0], XmNborderWidth, 4);
   rc1 = XmCreateRowColumn(bb, "rc1", (ArgList) args, 1);
   XtManageChild(rc1);
   n = 0;
@@ -128,8 +128,3 @@ caddr_t  call_data;
 {
   XtUnmanageChild(arrow2);
 }
-
-
-
-
-

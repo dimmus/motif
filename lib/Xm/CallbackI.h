@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifndef _XmCallbackI_h
 #define _XmCallbackI_h
 
@@ -34,7 +34,7 @@ extern "C" {
 #define _XtCBFreeAfterCalling	2
 
 /* The internal callback list is a little header followed by an array of
- * XtCallbackRec structs.  Declaring the first element of the array with 
+ * XtCallbackRec structs.  Declaring the first element of the array with
  * the header allows the compiler to take care of any alignment required.
  */
 typedef struct internalCallbackRec {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /* static char rcsid[] = "$TOG: Automation.y /main/11 1999/10/27 12:31:31 jff $" */
 %{
 
@@ -37,8 +37,8 @@ int line_cnt = 1;
 
 %}
 
-%token			STRING 		
-%token			DIGIT 	
+%token			STRING
+%token			DIGIT
 %token			ISTRING
 
 %token			CONTINUE
@@ -47,55 +47,55 @@ int line_cnt = 1;
 
 %token			WAIT
 
-%token			PRESSMB 	
-%token			RELEASEMB 
-%token			CLICKMB 
+%token			PRESSMB
+%token			RELEASEMB
+%token			CLICKMB
 
-%token			SHIFTMASK 	
-%token			LOCKMASK 
+%token			SHIFTMASK
+%token			LOCKMASK
 %token			CTRLMASK
 %token			METAMASK
-%token			ALTMASK 	
-%token			MOD1MASK 
-%token			MOD2MASK 	
-%token			MOD3MASK 
-%token			MOD4MASK 
-%token			MOD5MASK 
+%token			ALTMASK
+%token			MOD1MASK
+%token			MOD2MASK
+%token			MOD3MASK
+%token			MOD4MASK
+%token			MOD5MASK
 
-%token			BTN1 		
-%token			BTN2 		
-%token			BTN3 		
-%token			BTN4 		
-%token			BTN5 		
+%token			BTN1
+%token			BTN2
+%token			BTN3
+%token			BTN4
+%token			BTN5
 
-%token			CLICKKEY 
-%token			PRESSKEY 
-%token			RELEASEKEY 	
+%token			CLICKKEY
+%token			PRESSKEY
+%token			RELEASEKEY
 
-%token			BACKSPACE 
-%token			INSERT 	
-%token			DELETE 
-%token			COPY 
-%token			CUT 
-%token			PASTE 		
-%token			ADDMODE 
-%token			PRIMARYPASTE 	
-%token			QUICKPASTE 	
-%token			PAGEUP 		
-%token			PAGEDOWN 	
-%token			ENDLINE 	
-%token			BEGINLINE 	
-%token			ACTIVATE 	
-%token			MENUBAR	 	
-%token			CLEAR 		
-%token			CANCEL 		
-%token			HELP 		
-%token			MENU 	
-%token			SELECT 		
-%token			UNDO 	
+%token			BACKSPACE
+%token			INSERT
+%token			DELETE
+%token			COPY
+%token			CUT
+%token			PASTE
+%token			ADDMODE
+%token			PRIMARYPASTE
+%token			QUICKPASTE
+%token			PAGEUP
+%token			PAGEDOWN
+%token			ENDLINE
+%token			BEGINLINE
+%token			ACTIVATE
+%token			MENUBAR
+%token			CLEAR
+%token			CANCEL
+%token			HELP
+%token			MENU
+%token			SELECT
+%token			UNDO
 %token			UPK
 %token			RIGHTK
-%token			DOWNK 		
+%token			DOWNK
 %token			LEFTK
 
 %token			AUTOMAX
@@ -296,18 +296,18 @@ int line_cnt = 1;
 
 %token			TEAROFFBUTTON
 
-%token			LOCATEPOINTER 	
+%token			LOCATEPOINTER
 %token			LOCATEPOINTERABS
 %token			LOCATEPOINTERREL
-%token			SYSTEM 	
-%token			COMPAREVISUAL 	
-%token			SETFOCUS 
+%token			SYSTEM
+%token			COMPAREVISUAL
+%token			SETFOCUS
 %token			INPUTSTRING
 
 %token			STOREVISUAL
 %token			COMPARESTOREDVISUAL
 
-%token			DRAG 		
+%token			DRAG
 %token			DRAGRELATIVE
 %token 			DRAGSLIDERVAL
 %token 			DRAGABS
@@ -371,7 +371,7 @@ Command			:	FlowCommands
 			|	CompareCommands
                         |	StoreCommands
 			|	InputCommands
-			|	DragCommands 
+			|	DragCommands
 			| 	WindowCommands
 			|	WindowCheckCommands
 			|	WindowSelectCommands
@@ -391,8 +391,8 @@ FlowCommands		:	END		{ BuildFlowCommand(END); }
 
 /* Begin MouseCommands */
 
-MouseCommands		:	MCommandName ModKeyList Button Count 
-			{	
+MouseCommands		:	MCommandName ModKeyList Button Count
+			{
 				BuildMouseCommand(yytknval1,
 						  yymodmaskval,
 						  yymaskcnt,
@@ -412,7 +412,7 @@ ModKeyList		:	/* empty */	{ yymaskcnt = 0; }
 			|	ModKeyList ModKey
 			;
 
-ModKey			:	SHIFTMASK	{ yymodmaskval[yymaskcnt++] 
+ModKey			:	SHIFTMASK	{ yymodmaskval[yymaskcnt++]
 								= SHIFTMASK; }
 			|	LOCKMASK	{ yymodmaskval[yymaskcnt++]
 								= LOCKMASK; }
@@ -442,15 +442,15 @@ Button			:	BTN1		{ yytknval3 = BTN1; }
 			;
 
 Count			:	/* empty */	{ yydigitval = 0; }
-			|	DIGIT 
+			|	DIGIT
 			;
 
 
 /* End MouseCommands */
-	
+
 /* Begin KeyCommands */
 
-KeyCommands		:	KCommandName ModKeyList Key 
+KeyCommands		:	KCommandName ModKeyList Key
 
 			{
 				BuildKeyCommand(yytknval1,
@@ -468,7 +468,7 @@ KCommandName		:	CLICKKEY	{ yytknval1 = CLICKKEY; }
 
 Key			:	BACKSPACE	{ yytknval3 = BACKSPACE; }
 			| 	INSERT		{ yytknval3 = INSERT; }
-			| 	DELETE		{ yytknval3 = DELETE; } 
+			| 	DELETE		{ yytknval3 = DELETE; }
 			| 	COPY		{ yytknval3 = COPY; }
 			| 	CUT		{ yytknval3 = CUT; }
 			| 	PASTE		{ yytknval3 = PASTE; }
@@ -605,12 +605,12 @@ AbsCommands		:	AbsCommandName Coordinates ModKeyList DragButton
 						yytknval3);
 			};
 
-AbsCommandName		:	LOCATEPOINTERABS 
+AbsCommandName		:	LOCATEPOINTERABS
 					    { yytknval1 = LOCATEPOINTERABS; }
 			|	DRAGABS	    { yytknval1 = DRAGABS; }
 			;
 
-Coordinates		:	XCoordinate YCoordinate 
+Coordinates		:	XCoordinate YCoordinate
 			;
 
 XCoordinate		:	DIGIT		{ yydigitval2 = yydigitval; }
@@ -631,7 +631,7 @@ DragButton		:	/* empty */	{ yytknval3 = 0; }
 
 /* Begin PointerRelCommands */
 
-PointerRelCommands	:	PRelCommandName WidgetName Component Coordinates 
+PointerRelCommands	:	PRelCommandName WidgetName Component Coordinates
 			{
 				BuildRelCommand(yytknval1,
 						yystringval,
@@ -644,7 +644,7 @@ PRelCommandName		:	LOCATEPOINTERREL
 						{ yytknval1 = LOCATEPOINTERREL; }
 			;
 
-WidgetName		:	STRING		
+WidgetName		:	STRING
 			;
 
 Component		:	/* empty */	{ yytknval4 = -1; }
@@ -790,7 +790,7 @@ WidgetComponents	: SEPARATOR		{ yytknval4 = SEPARATOR; }
 				{ yytknval4 = TEAROFFBUTTON; }
 			;
 
-Coordinates		:	XCoordinate YCoordinate 
+Coordinates		:	XCoordinate YCoordinate
 			;
 
 XCoordinate		:	DIGIT		{ yydigitval2 = yydigitval; }
@@ -804,7 +804,7 @@ YCoordinate		:	DIGIT
 
 /* Begin PointerCommands */
 
-PointerCommands		:	PCommandName WidgetName Component Location 
+PointerCommands		:	PCommandName WidgetName Component Location
 			{
 				BuildPointerCommand(yytknval1,
 						    yystringval,
@@ -816,7 +816,7 @@ PointerCommands		:	PCommandName WidgetName Component Location
 PCommandName		:	LOCATEPOINTER	{ yytknval1 = LOCATEPOINTER; }
 			;
 
-WidgetName		:	STRING		
+WidgetName		:	STRING
 			;
 
 Component		:	/* empty */	{ yytknval4 = -1; }
@@ -993,7 +993,7 @@ SCommandName		:	SYSTEM		{ yytknval1 = SYSTEM; }
 			;
 
 SCommand		:	STRING 		{ yystringval2 = (char *)malloc(
-						     sizeof(char) * 
+						     sizeof(char) *
 						     (strlen(yystringval) + 1));
 						  strcpy(yystringval2,
 							 yystringval); }
@@ -1005,10 +1005,10 @@ SCommandArgs		:	/* empty */
 
 SCommandArg		:	STRING		{ yysysarglist[yysysargs++] =
 						  	yystringval; }
-			|	DIGIT		{ 
+			|	DIGIT		{
 						  temp = (char *) malloc
 							  (sizeof(char) * 10);
-						  sprintf(temp, "%d", 
+						  sprintf(temp, "%d",
 							       yydigitval);
 						  yysysarglist[yysysargs++] =
 							temp; }
@@ -1028,14 +1028,14 @@ StoreCommands		:	StoreCommandName WidgetName1 Component Identifier
 						  yystringval);
 			};
 
-StoreCommandName	:	STOREVISUAL          
+StoreCommandName	:	STOREVISUAL
                                                { yytknval1 = STOREVISUAL; }
-                        |       COMPARESTOREDVISUAL  
+                        |       COMPARESTOREDVISUAL
                                                { yytknval1 = COMPARESTOREDVISUAL; }
 			;
 
 WidgetName1		:	STRING	       { yystringval2 = (char *)malloc(
-						    sizeof(char) * 
+						    sizeof(char) *
 						    (strlen(yystringval) + 1));
 						  strcpy(yystringval2,
 						         yystringval); }
@@ -1064,9 +1064,9 @@ CCommandName		:	COMPAREVISUAL	{ yytknval1 = COMPAREVISUAL; }
 
 /* Begin DragCommands */
 
-DragCommands		:	DCommandName DragList 
+DragCommands		:	DCommandName DragList
 
-			{	
+			{
 				BuildDragCommand(yytknval1,
 						 yydigitval2,
 						 yydigitval,
@@ -1074,7 +1074,7 @@ DragCommands		:	DCommandName DragList
 						 yytknval4,
 						 yydigitval3,
 						 yytknval3,
-						 yymodmaskval, 
+						 yymodmaskval,
 						 yymaskcnt);
 				yydigitval2 = yydigitval = yydigitval3 = 0;
 				yymaskcnt = 0;
@@ -1124,7 +1124,7 @@ DragComponentList	:	WidgetName Component Location ModKeyList DragButton
 
 InputCommands		:	InputCommandName InputStringData
 
-			{	
+			{
 				BuildInputCommand(yytknval1,
 						  yyinputstring);
 			};
@@ -1139,7 +1139,7 @@ InputStringData		:	ISTRING
 
 /* Begin Window Manager Commands */
 
-WindowCommands		:	WCommandName WidgetName 
+WindowCommands		:	WCommandName WidgetName
 			{
 				BuildWindowCommand(yytknval1,
 						   yystringval);
@@ -1176,7 +1176,7 @@ WCheckCommandName	:	WINDOWICHECK	{ yytknval1 = WINDOWICHECK; }
 			;
 
 Wname			:	STRING 		{ yystringval2 = (char *)malloc(
-						     sizeof(char) * 
+						     sizeof(char) *
 						     (strlen(yystringval) + 1));
 						  strcpy(yystringval2,
 							 yystringval); }
@@ -1188,7 +1188,7 @@ Iname			:	STRING
 
 Group			:	SYSTEMMENU	{ yytknval2 = SYSTEMMENU; }
 			|	ICONMENU	{ yytknval2 = ICONMENU; }
-			|	WINDOWDECORATION 
+			|	WINDOWDECORATION
 					       { yytknval2 = WINDOWDECORATION; }
 			;
 
@@ -1208,14 +1208,14 @@ WindowSelectCommands	:	WSelectCommandName WidgetName1 Name ItemNumber Keyboard
 
 WSelectCommandName	:	WINDOWMENUSELECT
 					       { yytknval1 = WINDOWMENUSELECT; }
-			|	ICONMENUSELECT 	
+			|	ICONMENUSELECT
 					       { yytknval1 = ICONMENUSELECT; }
 			;
 
 WidgetName1		:	STRING		{ yystringval2 = (char *)malloc(
-						     sizeof(char) * 
+						     sizeof(char) *
 						     (strlen(yystringval) + 1));
-						     strcpy(yystringval2, 
+						     strcpy(yystringval2,
 							 yystringval); }
 
 Name			:	/* empty */	{ yystringval = NULL; }
@@ -1235,7 +1235,7 @@ Keyboard		:	/* empty */	{ yytknval2 = -1; }
 
 WindowPostCommands	:	PostCommandName WidgetName Keyboard
 			{
-				BuildPostCommand(yytknval1, 
+				BuildPostCommand(yytknval1,
 						 yystringval,
 						 yytknval2);
 			};
@@ -1311,7 +1311,7 @@ yyerror (s)
 char *s;
 {
 
-	fprintf(stderr, "%s found parsing input - line %d - Exiting...\n", 
+	fprintf(stderr, "%s found parsing input - line %d - Exiting...\n",
 		s, line_cnt);
 	exit(0);
 

@@ -242,5 +242,3 @@ WidgetClass xmScreenObjectClass = (WidgetClass) &xmScreenClassRec;
 extern int _XmInheritClass = 0;
 extern XrmQuark XmQmotif = NULLQUARK;
 extern XmBaseClassExt * _Xm_fastPtr = NULL;
-
-

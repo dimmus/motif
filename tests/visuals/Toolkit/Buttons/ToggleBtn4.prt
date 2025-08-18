@@ -22,25 +22,25 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer pb1  
-TRACE:(2) ClickMB Btn1 
-TRACE:(3) CompareVisual tb1 
-TRACE:(4) LocatePointer pb1  
-TRACE:(5) ClickMB Btn1 
-TRACE:(6) CompareVisual tb1 
-TRACE:(7) LocatePointer pb1  
-TRACE:(8) ClickMB Btn1 
-TRACE:(9) CompareVisual tb1 
+TRACE:(1) LocatePointer pb1
+TRACE:(2) ClickMB Btn1
+TRACE:(3) CompareVisual tb1
+TRACE:(4) LocatePointer pb1
+TRACE:(5) ClickMB Btn1
+TRACE:(6) CompareVisual tb1
+TRACE:(7) LocatePointer pb1
+TRACE:(8) ClickMB Btn1
+TRACE:(9) CompareVisual tb1
 TRACE:(10) Continue
-TRACE:(11) LocatePointer MENU  
-TRACE:(12) PressMB Btn1 
-TRACE:(13) CompareVisual pulldown 
-TRACE:(14) LocatePointer Button_A  
-TRACE:(15) ReleaseMB Btn1 
-TRACE:(16) LocatePointer MENU  
-TRACE:(17) PressMB Btn1 
-TRACE:(18) CompareVisual pulldown 
-TRACE:(19) ReleaseMB Btn1 
+TRACE:(11) LocatePointer MENU
+TRACE:(12) PressMB Btn1
+TRACE:(13) CompareVisual pulldown
+TRACE:(14) LocatePointer Button_A
+TRACE:(15) ReleaseMB Btn1
+TRACE:(16) LocatePointer MENU
+TRACE:(17) PressMB Btn1
+TRACE:(18) CompareVisual pulldown
+TRACE:(19) ReleaseMB Btn1
 TRACE:(20) Continue
 TRACE:(21) Exit
 Exiting Test...Please Standby...

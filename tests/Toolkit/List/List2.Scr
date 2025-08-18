@@ -1,5 +1,5 @@
 # $XConsortium: List2.scr /main/5 1995/07/17 20:21:38 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,22 +20,22 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List2.scr	1.2  91/10/11
 # Screen 1
 # This test will contain a form with three children, a Scrolled List,
 # a RowColumn with settable resources, and another RowColumn with
-# Callback Information. 
+# Callback Information.
 
 # The Scrolled List will contain 28 items, 18 which are initially
 # visible. It will have a background color of wheat.
 
 # The middle panel will contain scales, Option Menus, a Toggle Button,
-# and a PushButton. These widgets will control resources for the 
+# and a PushButton. These widgets will control resources for the
 # Scrolled List. For instance to change the visibleItemCount of the
 # List you should move the scale to the value you wish and a SetValues()
 # will be performed on that resource.
@@ -179,7 +179,7 @@ ClickKey KCopy
 LocatePointer Text1
 ClickMB Btn1
 
-# Press KPaste. The string "1) DrawnButton" should be pasted into the 
+# Press KPaste. The string "1) DrawnButton" should be pasted into the
 # Text widget.
 
 ClickKey KPaste
@@ -236,7 +236,7 @@ CompareVisual Text1
 # first three.
 LocatePointer List1 RListItem 5
 PressMB <Ctrl> Btn1
-LocatePointer List1 RListItem 7 
+LocatePointer List1 RListItem 7
 ReleaseMB <Ctrl> Btn1
 
 CompareVisual List1
@@ -244,7 +244,7 @@ CompareVisual List1
 # Now select "11) DrawnButton", "12) DrawingArea", and "13) ScrolledWindow"
 # using BToggle (<Ctrl>Btn1).  These three items should be selected in
 # addition to the six previously selected.
-LocatePointer List1 RListItem 10 
+LocatePointer List1 RListItem 10
 PressMB <Ctrl> Btn1
 LocatePointer List1 RListItem 12
 ReleaseMB <Ctrl> Btn1
@@ -253,7 +253,7 @@ CompareVisual List1
 
 #  Now press BSelect on "15) Command" but don't release it.  This item should
 #  be selected and the others deselected.
-LocatePointer List1 RListItem 14 
+LocatePointer List1 RListItem 14
 PressMB Btn1
 CompareVisual List1
 
@@ -321,14 +321,14 @@ ClickKey KAddMode
 # C)
 Continue
 
-# From the String Direction Option Menu select "Right to Left".  
-# The List widget should immediately update to show the strings drawn 
+# From the String Direction Option Menu select "Right to Left".
+# The List widget should immediately update to show the strings drawn
 # from the right.
 # Now select "Left to Right."  The List should immediately switch back to
 # showing the strings drawn from the left.
 LocatePointer Dirs_Option ROptionButton
 PressMB Btn1
-LocatePointer Right_to_Left 
+LocatePointer Right_to_Left
 ReleaseMB Btn1
 
 CompareVisual List1

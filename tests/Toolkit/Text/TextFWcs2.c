@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TextFWcs2.c /main/7 1995/07/13 19:33:20 drk $"
@@ -51,7 +51,7 @@ static void ModifyVerifyCB (Widget w, XtPointer client_data,
 	if (modify_verify->event == NULL)
 		printf("Null event in ModifyVerify callback\n");
 
-	if (modify_verify->text->wcsptr != NULL) 
+	if (modify_verify->text->wcsptr != NULL)
 	{
 		/* Make sure that it is not a BS */
 		nbytes = mbtowc(&wc, &c, 1);
@@ -114,7 +114,7 @@ char **argv;
 	XtAddCallback(Text1, XmNmodifyVerifyCallbackWcs, ModifyVerifyCB, NULL);
 
 	CommonPause();
-	
+
 	XtAppMainLoop(app_context);
 
 #else	/* MOTIF1_1 */

@@ -49,14 +49,14 @@ main (int argc, char ** argv)
    XtSetArg(args[n], XmNheight, 300); n++;
    XtSetArg(args[n], XmNwidth, 100); n++;
    form = XmCreateForm(Shell1, "form", args, n);
-  
+
    n = 0;
    XtSetArg(args[n], XmNheight, 150); n++;
    XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
    drawarea1 = XmCreateDrawingArea(form, "drawarea1", args, n);
-  
+
    n = 0;
    XtSetArg(args[n], XmNx, 20); n++;
    XtSetArg(args[n], XmNy, 40); n++;
@@ -85,7 +85,7 @@ main (int argc, char ** argv)
    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
    drawarea2 = XmCreateDrawingArea(form, "drawarea2", args, n);
-  
+
    XtManageChild(textfield1);
    XtManageChild(textfield2);
    XtManageChild(drawarea1);
@@ -104,17 +104,17 @@ main (int argc, char ** argv)
    CommonPause ();
 
    XtAddEventHandler(form, FocusChangeMask, FALSE, FocusEvent,
-		     (XtPointer)"form"); 
+		     (XtPointer)"form");
    XtAddEventHandler(drawarea1, FocusChangeMask, FALSE, FocusEvent,
-		     (XtPointer)"drawarea1"); 
+		     (XtPointer)"drawarea1");
    XtAddEventHandler(textfield1, FocusChangeMask, FALSE, FocusEvent,
-		     (XtPointer)"textfield1"); 
+		     (XtPointer)"textfield1");
    XtAddEventHandler(textfield2, FocusChangeMask, FALSE, FocusEvent,
-		     (XtPointer)"textfield2"); 
+		     (XtPointer)"textfield2");
    XtAddEventHandler(sep, FocusChangeMask, FALSE, FocusEvent,
-		     (XtPointer)"seperator"); 
+		     (XtPointer)"seperator");
    XtAddEventHandler(drawarea2, FocusChangeMask, FALSE, FocusEvent,
-		     (XtPointer)"drawarea2"); 
+		     (XtPointer)"drawarea2");
    n = 0;
    XtSetArg(args[n], XmNinitialFocus, NULL); n++;
    XtSetValues(drawarea1, args, n);
@@ -131,6 +131,3 @@ main (int argc, char ** argv)
 
    XtAppMainLoop (app_context);
 }
-
-
-

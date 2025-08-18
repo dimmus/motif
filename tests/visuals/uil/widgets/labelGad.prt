@@ -23,9 +23,9 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is labelGad.uid ---- 
+---- The uid file to be opened is labelGad.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) Exit
 Exiting Test...Please Standby...

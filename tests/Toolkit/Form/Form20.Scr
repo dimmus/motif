@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-#) A series of Forms should appear on your screen. 
-#) Each Form should have four PushButton children. 
+#) A series of Forms should appear on your screen.
+#) Each Form should have four PushButton children.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -36,7 +36,7 @@ CompareVisual Case_5
 Continue
 
 
-#) All of the children should now be unmapped and invisible. 
+#) All of the children should now be unmapped and invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -47,8 +47,8 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the children should now be mapped and visible. 
-#) There should exist no change in the position and size of the children. 
+#) All of the children should now be mapped and visible.
+#) There should exist no change in the position and size of the children.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -59,14 +59,14 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the Forms should now be destroyed. 
+#) All of the Forms should now be destroyed.
 
 CompareVisual Shell1
 Continue
 
 
-#) A series of Forms should appear on your screen. 
-#) Each Form should have four PushButton children. 
+#) A series of Forms should appear on your screen.
+#) Each Form should have four PushButton children.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -78,7 +78,7 @@ CompareVisual Case_5
 Continue
 
 
-#) All of the children should now be unmanaged and invisible. 
+#) All of the children should now be unmanaged and invisible.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -89,8 +89,8 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the children should now be managed and visible. 
-#) There should exist no change in the position and size of the children. 
+#) All of the children should now be managed and visible.
+#) There should exist no change in the position and size of the children.
 
 WindowRaise Shell1
 CompareVisual Case_0
@@ -101,23 +101,7 @@ CompareVisual Case_4
 CompareVisual Case_5
 Continue
 
-#) All of the Forms should now be destroyed. 
+#) All of the Forms should now be destroyed.
 
 CompareVisual Shell1
 Exit
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

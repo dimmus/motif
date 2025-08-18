@@ -86,7 +86,7 @@ static MvsResourceInfoRecord Wresource_info[] = {
 { XmNdetailOrderCount    , T_Cardinal           , False, (MvsArgVal)0                    ,
   False, NULL , 0x0|CREATE|SET|GET,	False },
 { XmNdetailTabList       , T_XmTabList          , False, (MvsArgVal)NULL                 ,
-  False, NULL , 0x0|CREATE|SET|GET,	False }, 
+  False, NULL , 0x0|CREATE|SET|GET,	False },
 { XmNentryParent         , T_Widget_ref		, False, (MvsArgVal)NULL                 ,
   False, NULL , 0x0|CREATE|SET|GET,	False },
 { XmNentryViewType       , T_unsigned_char      , False, (MvsArgVal)XmANY_ICON         ,
@@ -254,7 +254,7 @@ static MvsWidgetClassInfo mvXmContainerWidgetClass = {
   /* short                 num_resources;                */
                           sizeof(Wresource_info)/sizeof(MvsResourceInfoRecord),
   /* MvsIntResInfoRecord   *intres_info;  */                NULL,
-  /* short                 num_intres;                   */ 
+  /* short                 num_intres;                   */
                            0,
   /* Arg                   common_args[20];              */
       { {"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},
@@ -271,4 +271,3 @@ static MvsWidgetClassInfo mvXmContainerWidgetClass = {
 };
 
 MvsWidgetClassInfo *iXmContainerWidgetClass = &mvXmContainerWidgetClass;
-

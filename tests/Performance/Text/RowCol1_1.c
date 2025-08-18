@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifdef REV_INFO
 #ifndef lint
@@ -108,7 +108,7 @@ static char rcsid[] = "$XConsortium: RowCol1_1.c /main/7 1996/10/30 11:17:38 drk
                     \
     if (XtIsManaged(*q))
 
-     
+
 /* Warning Messages */
 #define BadWidthMsg \
     "Attempt to set width to zero: defaulting to 16"
@@ -405,7 +405,7 @@ static unsigned char resource_alignment   = XmALIGNMENT_BEGINNING;
 static unsigned char resource_packing     = XmNO_PACKING;
 static unsigned char resource_orient      = XmNO_ORIENTATION;
 
-static XtResource resources[]  =  
+static XtResource resources[]  =
 {
     {   XmNresizeWidth,
         XmCResizeWidth,
@@ -447,92 +447,92 @@ static XtResource resources[]  =
         XmRImmediate,
         (caddr_t) TRUE,
     },
-    {   XmNmarginWidth, 
-        XmCMarginWidth, 
-        XmRHorizontalDimension, 
+    {   XmNmarginWidth,
+        XmCMarginWidth,
+        XmRHorizontalDimension,
         sizeof (Dimension),
-        XtOffset (XmRowColumnWidget, row_column.margin_width), 
-        XmRImmediate, 
+        XtOffset (XmRowColumnWidget, row_column.margin_width),
+        XmRImmediate,
         (caddr_t) XmINVALID_DIMENSION
     },
-    {   XmNmarginHeight, 
-        XmCMarginHeight, 
-        XmRVerticalDimension, 
+    {   XmNmarginHeight,
+        XmCMarginHeight,
+        XmRVerticalDimension,
         sizeof (Dimension),
-        XtOffset (XmRowColumnWidget, row_column.margin_height), 
-        XmRImmediate, 
+        XtOffset (XmRowColumnWidget, row_column.margin_height),
+        XmRImmediate,
         (caddr_t) XmINVALID_DIMENSION
     },
     {   XmNentryCallback,
-        XmCCallback, 
-        XmRCallback, 
-        sizeof (caddr_t),
-        XtOffset (XmRowColumnWidget, row_column.entry_callback), 
-        XmRCallback, 
-        NULL
-    },
-    {   XmNmapCallback, 
-        XmCCallback, 
+        XmCCallback,
         XmRCallback,
         sizeof (caddr_t),
-        XtOffset (XmRowColumnWidget, row_column.map_callback), 
-        XmRCallback, 
+        XtOffset (XmRowColumnWidget, row_column.entry_callback),
+        XmRCallback,
         NULL
     },
-    {   XmNunmapCallback, 
-        XmCCallback, 
-        XmRCallback, 
+    {   XmNmapCallback,
+        XmCCallback,
+        XmRCallback,
         sizeof (caddr_t),
-        XtOffset (XmRowColumnWidget, row_column.unmap_callback), 
-        XmRCallback, 
+        XtOffset (XmRowColumnWidget, row_column.map_callback),
+        XmRCallback,
         NULL
     },
-    {   XmNorientation, 
-        XmCOrientation, 
-        XmROrientation, 
+    {   XmNunmapCallback,
+        XmCCallback,
+        XmRCallback,
+        sizeof (caddr_t),
+        XtOffset (XmRowColumnWidget, row_column.unmap_callback),
+        XmRCallback,
+        NULL
+    },
+    {   XmNorientation,
+        XmCOrientation,
+        XmROrientation,
         sizeof(unsigned char),
-        XtOffset (XmRowColumnWidget, row_column.orientation), 
-        XmROrientation, 
+        XtOffset (XmRowColumnWidget, row_column.orientation),
+        XmROrientation,
         (caddr_t) &resource_orient
     },
-    {   XmNspacing, 
-        XmCSpacing, 
-        XmRHorizontalDimension, 
+    {   XmNspacing,
+        XmCSpacing,
+        XmRHorizontalDimension,
         sizeof(Dimension),
-        XtOffset (XmRowColumnWidget, row_column.spacing), 
-        XmRImmediate, 
+        XtOffset (XmRowColumnWidget, row_column.spacing),
+        XmRImmediate,
         (caddr_t) XmINVALID_DIMENSION
     },
     {   XmNentryBorder,         /* border width of all the */
         XmCEntryBorder,         /* entries, always uniform */
-        XmRHorizontalDimension, 
+        XmRHorizontalDimension,
         sizeof(Dimension),
-        XtOffset (XmRowColumnWidget, row_column.entry_border), 
-        XmRImmediate, 
+        XtOffset (XmRowColumnWidget, row_column.entry_border),
+        XmRImmediate,
 	(caddr_t) 0
     },
     {   XmNisAligned,           /* T/F, do all entrys have */
         XmCIsAligned,           /* same alignment */
-        XmRBoolean, 
+        XmRBoolean,
         sizeof(Boolean),
         XtOffset(XmRowColumnWidget, row_column.do_alignment),
-        XmRBoolean, 
+        XmRBoolean,
         (caddr_t) &resource_True_boolean
     },
     {   XmNentryAlignment,          /* how entries are to be */
         XmCAlignment,               /* aligned */
-        XmRAlignment, 
+        XmRAlignment,
         sizeof(unsigned char),
         XtOffset(XmRowColumnWidget, row_column.entry_alignment),
-        XmRAlignment, 
+        XmRAlignment,
         (caddr_t) &resource_alignment
     },
     {   XmNadjustMargin,            /* should all entries have */
         XmCAdjustMargin,            /* the same label margins */
-        XmRBoolean, 
+        XmRBoolean,
         sizeof(Boolean),
         XtOffset(XmRowColumnWidget, row_column.adjust_margin),
-        XmRBoolean, 
+        XmRBoolean,
         (caddr_t) &resource_True_boolean
     },
     {   XmNpacking,         /* how to pack menu entries */
@@ -548,7 +548,7 @@ static XtResource resources[]  =
         XmRShort,
         sizeof (short),
         XtOffset(XmRowColumnWidget, row_column.num_columns),
-        XmRShort, 
+        XmRShort,
         (caddr_t) &resource_1_short
     },
     {   XmNradioBehavior,           /* should the menu enforce */
@@ -556,7 +556,7 @@ static XtResource resources[]  =
         XmRBoolean,             /* ie, radio buttons */
         sizeof (Boolean),
         XtOffset(XmRowColumnWidget, row_column.radio),
-        XmRBoolean, 
+        XmRBoolean,
         (caddr_t) &resource_False_boolean
     },
     {   XmNradioAlwaysOne,          /* should there always be one */
@@ -564,7 +564,7 @@ static XtResource resources[]  =
         XmRBoolean,
         sizeof (Boolean),
         XtOffset(XmRowColumnWidget, row_column.radio_one),
-        XmRBoolean, 
+        XmRBoolean,
         (caddr_t) &resource_True_boolean
     },
     {   XmNisHomogeneous,           /* should we enforce the */
@@ -572,7 +572,7 @@ static XtResource resources[]  =
         XmRBoolean,             /* entry is allow in the menu */
         sizeof (Boolean),
         XtOffset(XmRowColumnWidget, row_column.homogeneous),
-        XmRBoolean, 
+        XmRBoolean,
         (caddr_t) &resource_False_boolean
     },
     {   XmNentryClass,              /* if enforcing homogeneous */
@@ -580,47 +580,47 @@ static XtResource resources[]  =
         XmRInt,
         sizeof (WidgetClass),
         XtOffset(XmRowColumnWidget, row_column.entry_class),
-        XmRWidgetClass, 
+        XmRWidgetClass,
         (caddr_t) NULL
     },
     {   XmNrowColumnType,       /* warning - non-standard resource */
-        XmCRowColumnType, 
-        XmRRowColumnType, 
+        XmCRowColumnType,
+        XmRRowColumnType,
         sizeof(unsigned char),
-        XtOffset (XmRowColumnWidget, row_column.type), 
-        XmRRowColumnType, 
+        XtOffset (XmRowColumnWidget, row_column.type),
+        XmRRowColumnType,
         (caddr_t) &resource_type
     },
     {   XmNmenuHelpWidget,          /* which widget is the help */
         XmCMenuWidget,              /* widget */
-        XmRMenuWidget, 
+        XmRMenuWidget,
         sizeof (Widget),
-        XtOffset (XmRowColumnWidget, row_column.help_pushbutton), 
-        XmRMenuWidget, 
+        XtOffset (XmRowColumnWidget, row_column.help_pushbutton),
+        XmRMenuWidget,
         (caddr_t) &resource_0_widget
     },
     {   XmNlabelString,               /* option menus have a label */
-        XmCString, 
-        XmRXmString, 
+        XmCString,
+        XmRXmString,
         sizeof(_XmString),
-        XtOffset (XmRowColumnWidget, row_column.option_label), 
-        XmRImmediate, 
+        XtOffset (XmRowColumnWidget, row_column.option_label),
+        XmRImmediate,
         (caddr_t)NULL
     },
     {   XmNsubMenuId,               /* option menus have built-in */
         XmCMenuWidget,              /* submenu */
-        XmRMenuWidget, 
+        XmRMenuWidget,
         sizeof (Widget),
-        XtOffset (XmRowColumnWidget, row_column.option_submenu), 
-        XmRMenuWidget, 
+        XtOffset (XmRowColumnWidget, row_column.option_submenu),
+        XmRMenuWidget,
         (caddr_t) &resource_0_widget
     },
     {   XmNmenuHistory,         /* pretend a subwidget fired */
         XmCMenuWidget,              /* off, used to pre-load the */
         XmRMenuWidget,              /* option menu and popup menu */
         sizeof (Widget),            /* mouse/muscle memory */
-        XtOffset (XmRowColumnWidget, row_column.memory_subwidget), 
-        XmRMenuWidget, 
+        XtOffset (XmRowColumnWidget, row_column.memory_subwidget),
+        XmRMenuWidget,
         (caddr_t) &resource_0_widget
     },
     {   XmNpopupEnabled,            /* are accelerator enabled */
@@ -628,7 +628,7 @@ static XtResource resources[]  =
         XmRBoolean,
         sizeof (Boolean),
         XtOffset(XmRowColumnWidget, row_column.popup_enabled),
-        XmRBoolean, 
+        XmRBoolean,
         (caddr_t) &resource_True_boolean
     },
     {   XmNmenuAccelerator,         /* popup menu accelerator */
@@ -636,7 +636,7 @@ static XtResource resources[]  =
         XmRString,
         sizeof (char *),
         XtOffset(XmRowColumnWidget, row_column.menu_accelerator),
-        XmRString, 
+        XmRString,
         (caddr_t) ""
     },
     {   XmNmnemonic,                /* option menu mnemonic */
@@ -644,7 +644,7 @@ static XtResource resources[]  =
         XmRKeySym,
         sizeof (KeySym),
         XtOffset(XmRowColumnWidget, row_column.mnemonic),
-        XmRImmediate, 
+        XmRImmediate,
         (caddr_t) NULL
     },
     {
@@ -659,7 +659,7 @@ static XtResource resources[]  =
     {
         XmNshadowThickness,
 	XmCShadowThickness,
-	XmRHorizontalDimension, 
+	XmRHorizontalDimension,
 	sizeof (Dimension),
 	XtOffset (XmRowColumnWidget, manager.shadow_thickness),
 	XmRImmediate,
@@ -684,18 +684,18 @@ static XtResource resources[]  =
 	(caddr_t) -1
     },
     {
-	XmNnavigationType, 
-	XmCNavigationType, 
-	XmRNavigationType, 
+	XmNnavigationType,
+	XmCNavigationType,
+	XmRNavigationType,
 	sizeof (unsigned char),
 	XtOffset(XmManagerWidget, manager.navigation_type),
-	XmRImmediate, 
+	XmRImmediate,
 	(caddr_t) XmTAB_GROUP,
     },
 };
 
 
-static XmSyntheticResource get_resources[] = 
+static XmSyntheticResource get_resources[] =
 {
     {   XmNspacing,
         sizeof(Dimension),
@@ -711,14 +711,14 @@ static XmSyntheticResource get_resources[] =
     },
     {   XmNmarginWidth,
         sizeof(Dimension),
-        XtOffset (XmRowColumnWidget, row_column.margin_width), 
+        XtOffset (XmRowColumnWidget, row_column.margin_width),
         _XmFromHorizontalPixels,
         _XmToHorizontalPixels,
     },
     {
         XmNentryBorder,
         sizeof(Dimension),
-        XtOffset (XmRowColumnWidget, row_column.entry_border), 
+        XtOffset (XmRowColumnWidget, row_column.entry_border),
         _XmFromHorizontalPixels,
         _XmToHorizontalPixels,
     },
@@ -733,7 +733,7 @@ static XmSyntheticResource get_resources[] =
  * each field
  */
 
-externaldef(xmrowcolumnclassrec) XmRowColumnClassRec xmRowColumnClassRec = 
+externaldef(xmrowcolumnclassrec) XmRowColumnClassRec xmRowColumnClassRec =
 {
     {                   /* core class record */
         (WidgetClass)&xmManagerClassRec, /* superclass ptr */
@@ -811,7 +811,7 @@ externaldef(xmrowcolumnclassrec) XmRowColumnClassRec xmRowColumnClassRec =
  * now make a public symbol that points to this class record
  */
 
-externaldef(xmrowcolumnwidgetclass) WidgetClass xmRowColumnWidgetClass = 
+externaldef(xmrowcolumnwidgetclass) WidgetClass xmRowColumnWidgetClass =
    (WidgetClass) &xmRowColumnClassRec;
 
 static Widget lastSelectToplevel = NULL;
@@ -823,7 +823,7 @@ XmButtonEventStatusRec _XmButtonEventStatus = {-1,FALSE,TRUE, NULL};
 static XtTimerCallbackProc PostTimeOut (popup, id)
 XmRowColumnWidget popup;
 XtIntervalId *id;
-{  
+{
   if (_XmButtonEventStatus.waiting_to_be_managed)
      MenuPopDown (popup, &_XmButtonEventStatus.event);
   _XmButtonEventStatus.waiting_to_be_managed = FALSE;
@@ -848,11 +848,11 @@ XEvent * event;
    _XmButtonEventStatus.verified = _XmMatchBtnEvent( event,
       RC_PostEventType(popup), RC_PostButton(popup), RC_PostModifiers(popup));
 
-   if (xbutton_event->type == ButtonPress) 
+   if (xbutton_event->type == ButtonPress)
    {
       _XmButtonEventStatus.waiting_to_be_managed = TRUE;
-      XtAppAddTimeOut(XtWidgetToApplicationContext(popup), 
-	  (unsigned long) POST_TIME_OUT, 
+      XtAppAddTimeOut(XtWidgetToApplicationContext(popup),
+	  (unsigned long) POST_TIME_OUT,
 	  (XtTimerCallbackProc) PostTimeOut, (caddr_t) popup);
       _XmButtonEventStatus.event = *xbutton_event;
    }
@@ -863,7 +863,7 @@ Widget popup;
 Widget widget;
 {
    Cursor cursor;
-   
+
    cursor = XmGetMenuCursor(XtDisplay(popup));
 
    XtInsertEventHandler(widget, ButtonPressMask|ButtonReleaseMask,
@@ -883,12 +883,12 @@ Widget widget;
    XtAddEventHandler(widget, ButtonReleaseMask,
 		     False, DoNothing, NULL);
 
-   /* 
+   /*
     * Must add a passive grab, so that owner_events is set to True
     * when the button grab is activated; this is so that enter/leave
     * events get dispatched by the server to the client.
     */
-   XtGrabButton (widget, RC_PostButton(popup), RC_PostModifiers(popup), 
+   XtGrabButton (widget, RC_PostButton(popup), RC_PostModifiers(popup),
       TRUE, ButtonReleaseMask, GrabModeSync, GrabModeSync, None, cursor);
 }
 
@@ -906,7 +906,7 @@ Widget widget;
 			False, DoNothing, NULL);
 
    /* Remove our passive grab */
-   XtUngrabButton (widget, RC_PostButton(popup), AnyModifier); 
+   XtUngrabButton (widget, RC_PostButton(popup), AnyModifier);
 }
 
 
@@ -917,7 +917,7 @@ static void AddPopupEventHandlers (pane)
 XmRowColumnWidget pane;
 {
    int i;
-   
+
    /* to myself for gadgets */
    XtAddEventHandler(pane, KeyPressMask|KeyReleaseMask,
 		     False, KeyboardInputHandler, pane);
@@ -940,7 +940,7 @@ static void RemovePopupEventHandlers (pane)
 XmRowColumnWidget pane;
 {
    int i;
-   
+
    /* Remove it from us */
    XtRemoveEventHandler(pane, KeyPressMask|KeyReleaseMask,
 			False, KeyboardInputHandler, pane);
@@ -968,7 +968,7 @@ XmRowColumnWidget m;
 {
    Widget topManager;
    int i;
-   
+
    XtRemoveAllCallbacks (m, XmNentryCallback);
    XtRemoveAllCallbacks (m, XmNmapCallback);
    XtRemoveAllCallbacks (m, XmNunmapCallback);
@@ -1109,7 +1109,7 @@ Widget w;
      * allowed. 2) if the entry class is ToggleButton or ToggleButtonGadget,
      * either of those classes are allowed.
      */
-    if (XtIsRectObj(w) && RC_IsHomogeneous(m) && 
+    if (XtIsRectObj(w) && RC_IsHomogeneous(m) &&
 	(RC_EntryClass(m) != XtClass(w)))
     {
        if (! ((RC_EntryClass(m) == xmCascadeButtonWidgetClass &&
@@ -1121,11 +1121,11 @@ Widget w;
 	      (RC_EntryClass(m) == xmToggleButtonWidgetClass &&
 	       XmIsToggleButtonGadget(w))))
        {
-	   
+
 	  _XmWarning (m, WrongChildMsg);
        }
     }
-       
+
     /*
      * use composite class insert proc to do all the dirty work
      */
@@ -1151,7 +1151,7 @@ Widget    child;
 {
    XmRowColumnWidget m = (XmRowColumnWidget) XtParent(child);
 
-    if (child == RC_HelpPb (m)) 
+    if (child == RC_HelpPb (m))
        RC_HelpPb (m) = NULL;
 
     else if (child == RC_MemWidget(m))
@@ -1164,7 +1164,7 @@ Widget    child;
      * the event handler we added for catching keyboard input.
      */
     if (XtIsWidget(child) &&
-	((IsPopup(m) || IsBar(m) || IsPulldown(m)) && 
+	((IsPopup(m) || IsBar(m) || IsPulldown(m)) &&
 	  XmIsLabel(child) && (child->core.widget_class != xmLabelWidgetClass)))
     {
 	   XtRemoveEventHandler(child, KeyPressMask|KeyReleaseMask, False,
@@ -1181,8 +1181,8 @@ Widget    child;
 
 /*
  * The set of our managed children changed, so maybe change the size of the
- * row column widget to fit them; there is no instigator of this change, and 
- * ignore any dimensional misfit of the row column widget and the entries, 
+ * row column widget to fit them; there is no instigator of this change, and
+ * ignore any dimensional misfit of the row column widget and the entries,
  * which is a result of our geometry mgr being nasty.  Get it laid out.
  */
 static void ManagedSetChanged (m)
@@ -1195,7 +1195,7 @@ XmRowColumnWidget m;
    Boolean any_changed = FALSE;
 
    /*
-    * We have to manage the "was_managed" field of the 
+    * We have to manage the "was_managed" field of the
     * constraint record.
     */
 
@@ -1205,7 +1205,7 @@ XmRowColumnWidget m;
       {
 	 any_changed = TRUE;
       }
-      
+
       WasManaged(*q) = IsManaged(*q);
    }
 
@@ -1216,7 +1216,7 @@ XmRowColumnWidget m;
    }
 
    DoMarginAdjustment (m);
-   
+
    /*
     * find out what size we need to be with the current set of kids
     */
@@ -1229,13 +1229,13 @@ XmRowColumnWidget m;
    {
       XtWidgetGeometry menu_desired, menu_allowed;
       menu_desired.request_mode = 0;
-      
+
       if (w != XtWidth (m))
       {
 	 menu_desired.width =  w;
 	 menu_desired.request_mode |= CWWidth;
       }
-      
+
       if (h != XtHeight (m))
       {
 	 menu_desired.height = h;
@@ -1246,25 +1246,25 @@ XmRowColumnWidget m;
    }
 
    /*
-    * if we get to here the row column widget has been changed and his 
+    * if we get to here the row column widget has been changed and his
     * window has been resized, so effectively we need to do a Resize.
     */
 
    AdaptToSize (m, NULL, NULL);
-   
+
    /*	Clear shadow if necessary. */
-   
+
    if (m->row_column.old_shadow_thickness)
-       _XmClearShadowType (m, m->row_column.old_width, 
-			   m->row_column.old_height, 
+       _XmClearShadowType (m, m->row_column.old_width,
+			   m->row_column.old_height,
 			   m->row_column.old_shadow_thickness, 0);
-   
+
    m->row_column.old_width = m->core.width;
    m->row_column.old_height = m->core.height;
    m->row_column.old_shadow_thickness = m->manager.shadow_thickness;
 
    _XmNavigChangeManaged(m);
-}                       
+}
 
 
 /*
@@ -1318,7 +1318,7 @@ XSetWindowAttributes *window_attributes;
 	       }
 	    }
 	 }
-	 
+
 	 /* find out what size we need to be */
 	 PreferredSize (m, &w, &h);
 
@@ -1326,9 +1326,9 @@ XSetWindowAttributes *window_attributes;
 	 if ((w != XtWidth (m)) || (h != XtHeight (m)))
 	 {
 	    XtWidgetGeometry menu_desired, menu_allowed;
-	    
+
 	    menu_desired.request_mode = 0;
-	    
+
 	    if (w != XtWidth (m))
 	    {
 	       menu_desired.width = w;
@@ -1370,17 +1370,17 @@ XSetWindowAttributes *window_attributes;
    (*window_mask) |= CWDontPropagate | CWBitGravity;
    window_attributes->bit_gravity = NorthWestGravity;
 
-   window_attributes->do_not_propagate_mask = ButtonPressMask| 
+   window_attributes->do_not_propagate_mask = ButtonPressMask|
        ButtonReleaseMask|KeyPressMask|KeyReleaseMask|PointerMotionMask;
 
-   XtCreateWindow ( m, InputOutput, CopyFromParent, *window_mask, 
+   XtCreateWindow ( m, InputOutput, CopyFromParent, *window_mask,
 		   window_attributes);
 
    /*
     * Keep menus which are a child of shell widgets mapped at all times.
     * Mapping is now done by the menu shell widget.
     */
-   
+
    if (XmIsMenuShell (XtParent(m)))
        m->core.mapped_when_managed = FALSE;
 }
@@ -1415,7 +1415,7 @@ XmRowColumnWidget old, new;
         need_expose = TRUE;
     }
 
-    if ((RC_EntryAlignment (old) != RC_EntryAlignment (new)) && 
+    if ((RC_EntryAlignment (old) != RC_EntryAlignment (new)) &&
         (IsAligned (new)) &&
         (!IsOption(new)))
     {
@@ -1432,7 +1432,7 @@ XmRowColumnWidget old, new;
 
         need_expose  = TRUE;
     }
-    
+
     return (need_expose);
 }
 
@@ -1450,7 +1450,7 @@ XmRowColumnWidget old, new;
         Arg al[2];
         int ac = 0;
 
-        XtSetArg (al[ac], XmNorientation, 
+        XtSetArg (al[ac], XmNorientation,
             (IsVertical (new) ? XmHORIZONTAL : XmVERTICAL));
 
         ForAllChildren (new, i, p)
@@ -1462,17 +1462,17 @@ XmRowColumnWidget old, new;
 
     if ((!XtWidth(new))  || (XtWidth (new) != XtWidth(old))   ||
         (!XtHeight(new)) || (XtHeight (new) != XtHeight(old)) ||
-        (orient          || 
-        ((IsPopup(new) || IsPulldown(new) || IsBar(new)) && 
+        (orient          ||
+        ((IsPopup(new) || IsPulldown(new) || IsBar(new)) &&
             (MGR_ShadowThickness(new) != MGR_ShadowThickness(old))) ||
-        (RC_EntryBorder (old) != RC_EntryBorder (new)) || 
-        (RC_MarginW     (old) != RC_MarginW     (new)) || 
-        (RC_MarginH     (old) != RC_MarginH     (new)) || 
-        (RC_Spacing     (old) != RC_Spacing     (new)) || 
-        (RC_Packing     (old) != RC_Packing     (new)) || 
-        (RC_NCol        (old) != RC_NCol        (new)) || 
-        (RC_AdjLast     (old) != RC_AdjLast     (new)) || 
-        (RC_AdjMargin   (old) != RC_AdjMargin   (new)) || 
+        (RC_EntryBorder (old) != RC_EntryBorder (new)) ||
+        (RC_MarginW     (old) != RC_MarginW     (new)) ||
+        (RC_MarginH     (old) != RC_MarginH     (new)) ||
+        (RC_Spacing     (old) != RC_Spacing     (new)) ||
+        (RC_Packing     (old) != RC_Packing     (new)) ||
+        (RC_NCol        (old) != RC_NCol        (new)) ||
+        (RC_AdjLast     (old) != RC_AdjLast     (new)) ||
+        (RC_AdjMargin   (old) != RC_AdjMargin   (new)) ||
         (RC_HelpPb      (old) != RC_HelpPb      (new))))
     {
         if (!RC_ResizeWidth(new) && RC_ResizeHeight(new))
@@ -1597,8 +1597,8 @@ XmRowColumnWidget   new;            /* the new, real widget */
     }
 
     /*
-     * If we are a popup menu, then we need to check the 
-     * state of the popupEnabled resource; we may need to add or remove the 
+     * If we are a popup menu, then we need to check the
+     * state of the popupEnabled resource; we may need to add or remove the
      * event handler we use to catch accelerators and mnemonics.
      */
     if (IsPopup(new))
@@ -1637,7 +1637,7 @@ XmRowColumnWidget   new;            /* the new, real widget */
 
 
 
-/* 
+/*
  * Empty event handler, added to the associated widget for a popup menu.
  * Forces the widget to select for button release events.
  */
@@ -1667,7 +1667,7 @@ XmRowColumnWidget   new;            /* the new, real widget */
             /* Remove our passive grab */
             if (XtIsRealized(old->row_column.postFromList[i]))
             {
-               XtUngrabButton (old->row_column.postFromList[i], 
+               XtUngrabButton (old->row_column.postFromList[i],
 		  RC_PostButton(old), RC_PostModifiers(old));
             }
          }
@@ -1685,9 +1685,9 @@ XmRowColumnWidget   new;            /* the new, real widget */
                 * this is so that enter/leave
                 * events get dispatched by the server to the client.
                 */
-	       XtGrabButton (new->row_column.postFromList[i], 
-		  RC_PostButton(new), RC_PostModifiers(new), 
-		  TRUE, ButtonReleaseMask, GrabModeSync, GrabModeSync, 
+	       XtGrabButton (new->row_column.postFromList[i],
+		  RC_PostButton(new), RC_PostModifiers(new),
+		  TRUE, ButtonReleaseMask, GrabModeSync, GrabModeSync,
 		  None, cursor);
             }
          }
@@ -1860,12 +1860,12 @@ XmRowColumnWidget    new;           /* after superclasses */
          PreparePostFromList(new);
       }
    }
-	 
+
    if (IsBar (new) || IsWorkArea (new) || IsOption (new))
        need_expose |= set_values_non_popup (old, new);
    else
        need_expose |= set_values_popup (old, new);
-   
+
    return (need_expose);
 }
 
@@ -1878,11 +1878,11 @@ char *str;
    Modifiers mods;
    char tmp[128];
    char *ks;
-    
+
    keysym = XStringToKeysym(str);
-   if (keysym == NoSymbol) 
+   if (keysym == NoSymbol)
       return(NULL);
-            
+
    _XmVirtualToActualKeysym(XtDisplay(rc), keysym, &keysym, &mods);
 
    if (!(ks = XKeysymToString(keysym)))
@@ -1894,7 +1894,7 @@ char *str;
 
    if (mods & ShiftMask)
       strcat(tmp, "Shift ");
-            
+
    strcat(tmp,"<KeyUp>");
    strcat(tmp, ks);
 
@@ -1914,7 +1914,7 @@ XmRowColumnWidget bar;
 
     if (RC_PostButton(bar) == -1)
         RC_PostButton(bar) = Button1;
-    
+
 
     if (RC_Packing(bar) == XmNO_PACKING)
         RC_Packing(bar) = XmPACK_TIGHT;
@@ -1929,7 +1929,7 @@ XmRowColumnWidget bar;
         bar->core.tm.translations = menu_parsed;
 
     XtOverrideTranslations(bar, menu_traversal_parsed);
-    
+
     if (RC_MenuAccelerator(bar) && (*RC_MenuAccelerator(bar) == '\0'))
         if (!(RC_MenuAccelerator(bar) = GetRealKey(bar, "osfMenuBar")))
 	      RC_MenuAccelerator(bar) = "<KeyUp>F10";
@@ -1943,7 +1943,7 @@ XmRowColumnWidget bar;
         False, KeyboardInputHandler, bar);
     XtAddEventHandler(topManager, KeyPressMask|KeyReleaseMask,
         False, KeyboardInputHandler, bar);
-    
+
     if (RC_MenuAccelerator(bar))
         DoProcessMenuTree(bar, XmADD);
 }
@@ -1959,7 +1959,7 @@ XmRowColumnWidget rowcol;
    Widget * tempPtr;
    Boolean forceParent = FALSE;
    int i;
-   
+
    if (rowcol->row_column.postFromCount < 0)
    {
       if (IsPopup(rowcol) && rowcol->row_column.postFromList == NULL)
@@ -1985,7 +1985,7 @@ XmRowColumnWidget rowcol;
       /* use temp - postFromCount incremented in AddToPostFromList() */
       int cnt = rowcol->row_column.postFromCount;
       /* reset the postFromCount for correct AddToPostFromList() assignment */
-      rowcol->row_column.postFromCount = 0;	
+      rowcol->row_column.postFromCount = 0;
 
       for (i=0; i < cnt; i++)
       {
@@ -2004,10 +2004,10 @@ XmRowColumnWidget popup;
 {
    popup->manager.traversal_on = False;
    popup->row_column.lastSelectToplevel = (Widget) popup;
-   
+
    if (RC_PostButton(popup) == -1)
        RC_PostButton(popup) = Button3;
-    
+
    if (RC_Packing(popup) == XmNO_PACKING)
        RC_Packing(popup) = XmPACK_TIGHT;
 
@@ -2019,7 +2019,7 @@ XmRowColumnWidget popup;
       _XmWarning(popup, BadPopupHelpMsg);
       RC_HelpPb(popup) = NULL;
    }
-   
+
    if (RC_Spacing(popup) == XmINVALID_DIMENSION)
        RC_Spacing(popup) = 0;
 
@@ -2035,12 +2035,12 @@ XmRowColumnWidget popup;
 
    /* Save a copy of the accelerator string */
    if (RC_MenuAccelerator(popup))
-      RC_MenuAccelerator(popup) = 
+      RC_MenuAccelerator(popup) =
          (String) strcpy (XtMalloc(XmStrlen(RC_MenuAccelerator(popup)) + 1),
          RC_MenuAccelerator(popup));
 
    PreparePostFromList(popup);
-    
+
    /* Add event handlers to all appropriate widgets */
    if (RC_PopupEnabled(popup))
    {
@@ -2071,7 +2071,7 @@ XmRowColumnWidget pulldown;
 
     if (RC_Spacing(pulldown) == XmINVALID_DIMENSION)
         RC_Spacing(pulldown) = 0;
-    
+
     if (pulldown->core.tm.translations == NULL)
         pulldown->core.tm.translations = menu_parsed;
 
@@ -2084,7 +2084,7 @@ XmRowColumnWidget pulldown;
     XtAddEventHandler(pulldown, KeyPressMask|KeyReleaseMask,
 		      False, KeyboardInputHandler, pulldown);
 }
-       
+
 
 static void OptionInitialize (option)
 XmRowColumnWidget option;
@@ -2108,7 +2108,7 @@ XmRowColumnWidget option;
 
     if (RC_PostButton(option) == -1)
         RC_PostButton(option) = Button1;
-    
+
     if (RC_Spacing(option) == XmINVALID_DIMENSION)
         RC_Spacing(option) = 3;
 
@@ -2161,7 +2161,7 @@ XmRowColumnWidget work;
 
     if (RC_PostButton(work) == -1)
         RC_PostButton(work) = Button1;
-    
+
     if (RC_Packing(work) == XmNO_PACKING)
         RC_Packing(work) = XmPACK_TIGHT;
 
@@ -2189,7 +2189,7 @@ XmRowColumnWidget work;
                           manager_class.translations);
 
     RC_MenuAccelerator(work) = NULL;
-    
+
 }
 
 /*
@@ -2392,7 +2392,7 @@ int     is_radio;               /* the radio flag */
 
         /*
          * if this is a pulldown of a pulldown or popup then the parent
-         * should really be the shell of the parent not the indicated 
+         * should really be the shell of the parent not the indicated
          * parent, this keeps the cascade tree correct
          */
 
@@ -2401,7 +2401,7 @@ int     is_radio;               /* the radio flag */
         else
             pw = p;
 
-        /* 
+        /*
          * Shared menupanes are supported for all menu types but the option
          * menu.  If this is not an option menupane, then see if a shell is
          * already present; if so, then we'll use it.
@@ -2431,7 +2431,7 @@ int     is_radio;               /* the radio flag */
 
             sprintf (b, "popup_%s", name);
 
-            pop = (XmMenuShellWidget)XtCreatePopupShell(b, 
+            pop = (XmMenuShellWidget)XtCreatePopupShell(b,
                      xmMenuShellWidgetClass, pw, s_al, s_ac);
 
             /* Mark the shell as having been created by us */
@@ -2450,7 +2450,7 @@ int     is_radio;               /* the radio flag */
 /*
  *************************************************************************
  *
- * Public Routines                                                        
+ * Public Routines
  *
  *************************************************************************
  */
@@ -2487,11 +2487,11 @@ Widget XmOptionLabelGadget (Widget m)
 {
    int i;
    Widget child;
-   
+
    if (XmIsRowColumn(m) && IsOption(m))
    {
       XmRowColumnWidget rowcol = (XmRowColumnWidget) m;
-      
+
       for (i = 0; i < rowcol->composite.num_children; i++)
       {
 	 child = rowcol->composite.children[i];
@@ -2509,11 +2509,11 @@ Widget XmOptionButtonGadget (Widget m)
 {
    int i;
    Widget child;
-   
+
    if (XmIsRowColumn(m) && IsOption(m))
    {
       XmRowColumnWidget rowcol = (XmRowColumnWidget) m;
-      
+
       for (i = 0; i < rowcol->composite.num_children; i++)
       {
 	 child = rowcol->composite.children[i];
@@ -2554,7 +2554,7 @@ void XmAddToPostFromList (XmRowColumnWidget menu, Widget widget)
        ! (IsPopup(menu) || IsPulldown(menu)) ||
        ! widget)
        return;
-   
+
    if (OnPostFromList(menu, widget) == -1)
    {
       if (IsPulldown(menu))
@@ -2562,7 +2562,7 @@ void XmAddToPostFromList (XmRowColumnWidget menu, Widget widget)
 	 XtSetArg (args[0], XmNsubMenuId, menu);
 	 XtSetValues (widget, args, 1);
       }
-      else 
+      else
       {
 	 AddToPostFromList (menu, widget);
 	 AddHandlersToPostFromWidget (menu, widget);
@@ -2579,7 +2579,7 @@ void XmRemoveFromPostFromList (XmRowColumnWidget menu, Widget widget)
        ! (IsPopup(menu) || IsPulldown(menu)) ||
        ! widget)
        return;
-	
+
    if ((OnPostFromList(menu, widget)) == -1)
    {
       if (IsPulldown(menu))
@@ -2587,7 +2587,7 @@ void XmRemoveFromPostFromList (XmRowColumnWidget menu, Widget widget)
 	 XtSetArg (args[0], XmNsubMenuId, NULL);
 	 XtSetValues (widget, args, 1);
       }
-      else 
+      else
       {
 	 RemoveFromPostFromList (menu, widget);
 	 RemoveHandlersFromPostFromWidget (menu, widget);
@@ -2603,7 +2603,7 @@ void XmRemoveFromPostFromList (XmRowColumnWidget menu, Widget widget)
  */
 Widget XmGetPostedFromWidget (Widget menu)
 {
-   Widget toplevel = 
+   Widget toplevel =
      ((XmRowColumnWidget) menu)->row_column.lastSelectToplevel;
 
    if (XmIsRowColumn(menu))
@@ -2645,7 +2645,7 @@ static void ClassInitialize ()
 
    /* set up the menu procedure entry for button children to access */
    _XmSaveMenuProcContext( (caddr_t) MenuProcedureEntry);
-   
+
    tabGroup = NULL;
 }
 
@@ -2668,7 +2668,7 @@ static void ClassPartInitialize (rcc)
  *
  */
 
-    
+
 
 static XmRowColumnWidget find_menu (w)
 Widget w;
@@ -2699,7 +2699,7 @@ XEvent * event;
    if (IsPopup(rc))
        (*(((XmMenuShellClassRec *)xmMenuShellWidgetClass)->
 	  menu_shell_class.popdownDone))(rc, event);
-       
+
    else if (RC_PopupPosted(rc))
    {
       (*(((XmMenuShellClassRec *)xmMenuShellWidgetClass)->
@@ -2769,7 +2769,7 @@ XmRowColumnWidget  m;       /* row column (parent) widget */
 Widget      w;          /* subwidget */
 {
    if (XtIsWidget(w) &&
-       ((IsPopup(m) || IsBar(m) || IsPulldown(m)) && 
+       ((IsPopup(m) || IsBar(m) || IsPulldown(m)) &&
 	 XmIsLabel(w) && (w->core.widget_class != xmLabelWidgetClass)))
    {
       XtAddEventHandler(w, KeyPressMask|KeyReleaseMask, False,
@@ -2808,7 +2808,7 @@ XmRowColumnWidget m;
 	     m->manager.active_child = RC_CascadeBtn(menupane);
 	 return;
       }
-       
+
       /* Set it to ourselves */
       event.type = FocusIn;
       event.xfocus.send_event = True;
@@ -2845,11 +2845,11 @@ XmRowColumnWidget m;
     else
 	rc = (Widget) m;
 
-    /* 
+    /*
      * Clear focus entries for each posted menupane.
      */
-    while (rc && 
-           ((RC_Type(rc) == XmMENU_POPUP) || 
+    while (rc &&
+           ((RC_Type(rc) == XmMENU_POPUP) ||
             (RC_Type(rc) == XmMENU_PULLDOWN)))
     {
        /*
@@ -2863,7 +2863,7 @@ XmRowColumnWidget m;
        if (gadget && XmIsGadget(gadget))
        {
 	  /* Direct focus to rc to handle focus events for gadgets */
-	  _XmSetFocusResetFlag(rc, True); 
+	  _XmSetFocusResetFlag(rc, True);
 	  (void) XmProcessTraversal (rc, XmTRAVERSE_CURRENT);
 	  _XmSetFocusResetFlag(rc, False);
 
@@ -2914,7 +2914,7 @@ XmRowColumnWidget toplevel;
       {
 	 subpane = (XmRowColumnWidget)
             ((CompositeWidget) RC_PopupPosted(toplevel))->composite.children[0];
-	    
+
 	 if (! IsBar(toplevel))
 	 {
 	    toplevel->manager.active_child = RC_CascadeBtn(subpane);
@@ -2944,7 +2944,7 @@ Boolean on;
    XmRowColumnWidget pane;
 
    _XmGetActiveTopLevelMenu (m, &topLevel);
-   
+
    if (on)
    {
       /* The order here is important */
@@ -3019,7 +3019,7 @@ void _XmMenuFocus (Widget w, int operation, Time _time)
 {
     static int	oldFocus = NULL;
     static int	oldRevert = 0;
- 
+
    switch (operation)
       {
 	case XmMENU_END:
@@ -3061,7 +3061,7 @@ void _XmMenuFocus (Widget w, int operation, Time _time)
 
 /*
  * Class function which is invoked when the post accelerator is received
- * for a popup menu or the menubar, or the post mnemonic is received for 
+ * for a popup menu or the menubar, or the post mnemonic is received for
  * an option menu.
  */
 
@@ -3082,7 +3082,7 @@ XKeyPressedEvent * event;
 
 	 /* the posted from widget is saved in RC_CascadeBtn */
 	 RC_CascadeBtn(m) = XtWindowToWidget(XtDisplay(m), event->window);
-	 
+
 	 /* Position & post menupane; then enable traversal */
 	 RC_SetWidgetMoved(m, True);
 	 /* Position the pane off of the parent of this rowcolumn's menushell.
@@ -3193,7 +3193,7 @@ XKeyPressedEvent * event;
 
          if (XtIsWidget(m->manager.active_child))
             (void) XmProcessTraversal (m->manager.active_child, XmTRAVERSE_CURRENT);
-	 
+
 	 cursor = XmGetMenuCursor(XtDisplay(m));
 	 _XmMenuFocus(m, XmMENU_BEGIN, CurrentTime);
          XtGrabPointer (m, True, ButtonPressMask | ButtonReleaseMask |
@@ -3235,18 +3235,18 @@ XKeyPressedEvent * event;
  * The times at which a complete path may be formed is 1) When a button
  * in a menupane becomes managed, when a pulldown menupane is attached
  * to a cascading button, when the application sets the popupEnabled
- * resource to True, or when an option menu is created.  A complete path 
- * may be broken when 1) a button in a menupane is unmanaged, a pulldown 
- * menupane is detached from a cascading button, when the application clears 
+ * resource to True, or when an option menu is created.  A complete path
+ * may be broken when 1) a button in a menupane is unmanaged, a pulldown
+ * menupane is detached from a cascading button, when the application clears
  * the popupEnabled resource or an option menu is destroyed.
  *
  * The event handler for catching keyboard events is added by the row column
  * widget during its initialize process, and removed when the row column
  * widget is destroyed.  Keyboard grabs, which are needed to make accelerators
- * work, are added either when the accelerator is registered, or when the 
- * associated widget is realized; grabs cannot be added to a widget which 
+ * work, are added either when the accelerator is registered, or when the
+ * associated widget is realized; grabs cannot be added to a widget which
  * does not have a window!
- */ 
+ */
 
 
 /*
@@ -3299,7 +3299,7 @@ int    mode;                    /* Add, Replace or Delete */
              * with submenus, we will treat this like a pushbutton.
              */
             if (mode == XmREPLACE)
-            {  
+            {
                /* Remove old one, if it exists */
                ProcessSingleWidget(w, XmDELETE);
                mode = XmADD;
@@ -3308,7 +3308,7 @@ int    mode;                    /* Add, Replace or Delete */
             ProcessSingleWidget(w, mode);
             return;
          }
-         else if (IsBar(XtParent(w)) || 
+         else if (IsBar(XtParent(w)) ||
                   IsPopup(XtParent(w)) ||
                   IsPulldown(XtParent(w)))
          {
@@ -3322,7 +3322,7 @@ int    mode;                    /* Add, Replace or Delete */
 
             /*
              * If we are in a menubar, a popup menupane or a pulldown
-             * menupane, then we need to not only modify our keyboard 
+             * menupane, then we need to not only modify our keyboard
              * event, but also any which are defined in our submenu.
              */
             ProcessSingleWidget(w, mode);
@@ -3355,7 +3355,7 @@ int    mode;                    /* Add, Replace or Delete */
    {
       /*
        * When the popupEnabled resource is enabled for a popup menupane,
-       * we need to add the accelerator associated with the menu, followed 
+       * we need to add the accelerator associated with the menu, followed
        * by all keyboard events associated with submenus.  The reverse
        * happens when the resource is disabled.
        *
@@ -3468,8 +3468,8 @@ int mode;
                strcpy (buf, "Mod1<KeyUp>");
 	       strcat (buf,  XKeysymToString(LabG_Mnemonic(c)));
 
-	       /* although this is technically a mnemonic, it will be 
-                * treated like an acclerator */ 
+	       /* although this is technically a mnemonic, it will be
+                * treated like an acclerator */
                AddToKeyboardList(w, buf, True, False);
 
 	       /* save it again as a mnemonic so that it is available w/o
@@ -3518,7 +3518,7 @@ int mode;
                AddToKeyboardList(w, buf, True, False);
 
 	       /* save again as a mnemonic so its available w/o Mod1
-		* once the menu system is active */ 
+		* once the menu system is active */
                strcpy (buf, "<KeyUp>");
 	       strcat (buf,  XKeysymToString(Lab_Mnemonic(c)));
                AddToKeyboardList(w, buf, False, True);
@@ -3595,9 +3595,9 @@ int mode;
 
       if (IsPopup(m) || IsBar(m))
       {
-         /* 
-          * Popup Menus and the menubar may have an accelerator associated 
-          * with them 
+         /*
+          * Popup Menus and the menubar may have an accelerator associated
+          * with them
           */
          if (mode == XmADD)
          {
@@ -3619,7 +3619,7 @@ int mode;
                strcpy (buf, "Mod1<KeyUp>");
 	       strcat (buf,  XKeysymToString(RC_Mnemonic(m)));
                AddToKeyboardList(w, buf, True, True);
-            
+
                /* Tell the label gadget */
                XtSetArg(args[0], XmNmnemonic, RC_Mnemonic(m));
                XtSetArg(args[1], XmNmnemonicCharSet, RC_MnemonicCharSet(m));
@@ -3630,7 +3630,7 @@ int mode;
          else
          {
             RemoveFromKeyboardList(w);
-            
+
             /* Tell the label gadget */
             if (child = XmOptionLabelGadget(m))
             {
@@ -3645,7 +3645,7 @@ int mode;
 
 /*
  * This function actually does the work of converting the accelerator
- * or mnemonic string into a workable format, and registering the keyboard 
+ * or mnemonic string into a workable format, and registering the keyboard
  * grab, if possible.
  */
 
@@ -3679,14 +3679,14 @@ Boolean isMnemonic;
        rowcol = w;
    else
        rowcol = XtParent(w);
-   
+
    /* Add to the list of keyboard entries */
    if (MGR_NumKeyboardEntries(rowcol) >= MGR_SizeKeyboardList(rowcol))
    {
       /* Grow list */
       MGR_SizeKeyboardList(rowcol) += 10;
-      MGR_KeyboardList(rowcol) = 
-             (XmKeyboardData *)XtRealloc(MGR_KeyboardList(rowcol), 
+      MGR_KeyboardList(rowcol) =
+             (XmKeyboardData *)XtRealloc(MGR_KeyboardList(rowcol),
                   (MGR_SizeKeyboardList(rowcol) * sizeof(XmKeyboardData)));
    }
 
@@ -3695,7 +3695,7 @@ Boolean isMnemonic;
    list[i].eventType = eventType;
    list[i].keysym = keysym;
    list[i].key = detail;
-   list[i].modifiers = isMnemonic ? 
+   list[i].modifiers = isMnemonic ?
       (modifiers &  ~(ShiftMask | LockMask)) : modifiers;
    list[i].component = w;
    list[i].needGrab = needGrab;
@@ -3729,7 +3729,7 @@ Widget w;
 
    list = MGR_KeyboardList(rowcol);
    count = MGR_NumKeyboardEntries(rowcol);
-   
+
    for (i = 0; i < count; )
    {
       if (list[i].component == w)
@@ -3738,7 +3738,7 @@ Widget w;
 	  * for completeness, they probably should be.  The problem is that
 	  * it is difficult to tell whether an item should really be
 	  * ungrabbed since the sharing of menupanes could mean that this
-	  * item exists somewhere else on this hierarchy. 
+	  * item exists somewhere else on this hierarchy.
 	  */
 
          /* Move the rest of the entries up 1 slot */
@@ -3776,14 +3776,14 @@ int startIndex;
    for (i = startIndex; i < count; i++)
    {
       /*
-       * We want to ignore shift and shift-lock for mnemonics.  So, OR the 
-       * event's two bits with the (previously two bits initialized to zero) 
+       * We want to ignore shift and shift-lock for mnemonics.  So, OR the
+       * event's two bits with the (previously two bits initialized to zero)
        * list.modifier
        */
-      if (_XmMatchKeyEvent(event, list[i].eventType, list[i].key, 
-           list[i].isMnemonic ? 
+      if (_XmMatchKeyEvent(event, list[i].eventType, list[i].key,
+           list[i].isMnemonic ?
 	      list[i].modifiers | (event->state & (ShiftMask | LockMask)) :
-	      list[i].modifiers)) 
+	      list[i].modifiers))
       {
          return(i);
       }
@@ -3811,7 +3811,7 @@ Widget widget;
 
    return (-1);
 }
-   
+
 /*
  * Useful for MenuBars and Option Menus to determine where to set up the
  * event handlers and grabs.
@@ -3831,7 +3831,7 @@ Widget * topManager;
  *
  * This function is only useful when the menu system is active.  That is
  * the only time that the CascadeBtn field in the RowColumn in guarrenteed
- * to be valid.  
+ * to be valid.
  */
 void _XmGetActiveTopLevelMenu (XmRowColumnWidget w, XmRowColumnWidget *topLevel)
 {
@@ -3843,7 +3843,7 @@ void _XmGetActiveTopLevelMenu (XmRowColumnWidget w, XmRowColumnWidget *topLevel)
        w = (XmRowColumnWidget) XtParent(RC_CascadeBtn(w));
 
    * topLevel = w;
-} 
+}
 
 /*
  * set up the grabs on the appropriate assoc widgets.  For a popup, this
@@ -3852,7 +3852,7 @@ void _XmGetActiveTopLevelMenu (XmRowColumnWidget w, XmRowColumnWidget *topLevel)
  * pulldown, the assoc widgets can only be determined by following the
  * chain up the postFromList.
  */
- 
+
 static void GrabKeyOnAssocWidgets (rowcol, detail, modifiers)
 XmRowColumnWidget rowcol;
 KeyCode detail;
@@ -3860,7 +3860,7 @@ unsigned int modifiers;
 {
    Widget topManager;
    int i;
-   
+
    if (IsPopup(rowcol))
    {
       for (i=0; i < rowcol->row_column.postFromCount; i++)
@@ -3879,8 +3879,8 @@ unsigned int modifiers;
 	  GrabKeyOnAssocWidgets (XtParent(rowcol->row_column.postFromList[i]),
 				 detail, modifiers);
    }
-}  
-       
+}
+
 
 /*
  * Given a menupane, this function traverses down through any posted submenus,
@@ -3925,7 +3925,7 @@ XEvent * event;
        if (! _XmAllWidgetsAccessible(topLevel))
 	   return;
 
-   /* 
+   /*
     * XmGetPostFromWidget() requires help to identify the topLevel widget
     * when a menupane is posted via accelerators.
     */
@@ -3937,7 +3937,7 @@ XEvent * event;
    }
    else
       lastSelectToplevel = NULL;
-   
+
    ProcessKey (topLevel, event);
 
    lastSelectToplevel = NULL;	/* reset toplevel "accelerator" state to NULL */
@@ -4005,7 +4005,7 @@ XEvent * event;
    int menu_index = 0;
    XmKeyboardData * entry;
    ShellWidget shell;
-   
+
    /* Process all matching key events */
    while ((menu_index = _XmMatchInKeyboardList(rowcol, event, menu_index)) != -1)
    {
@@ -4036,14 +4036,14 @@ XEvent * event;
 	 continue;
       }
 
-      /* 
+      /*
        * For a mnemonic, the associated component must be visible, and
        * it must be in the last menupane posted.
        * This only needs to be checked for a popup or pulldown menu pane.
        */
       if (entry->isMnemonic)
       {
-         if ((XmIsLabel(entry->component) || 
+         if ((XmIsLabel(entry->component) ||
               XmIsLabelGadget(entry->component)))
 	 {
 	    if (IsBar(XtParent(entry->component)) &&
@@ -4060,13 +4060,13 @@ XEvent * event;
 	      {
 		/* See if the associated shell is visible */
 		shell = (ShellWidget)XtParent(XtParent(entry->component));
-		
+
 		/*
-		 * Verify the pane is popped up, and the active pane is our 
+		 * Verify the pane is popped up, and the active pane is our
 		 * parent (this is necessary because of shared menupanes.
 		 */
 		if ((!shell->shell.popped_up) ||
-		    (shell->composite.children[0] != 
+		    (shell->composite.children[0] !=
 		     XtParent(entry->component)))
 		  {
 		    menu_index++;
@@ -4132,7 +4132,7 @@ static void AddToPostFromList (m, widget)
 XmRowColumnWidget m;
 Widget widget;
 {
-   
+
    if (m->row_column.postFromListSize == m->row_column.postFromCount)
    {
       /* increase the size to fit the new one and one more */
@@ -4193,7 +4193,7 @@ Boolean attach;
 	  return;
 
       AddToPostFromList (m, cascadeBtn);
-      
+
       /* if being attached to an option menu, set the option menus submenu */
       if (RC_Type(XtParent(cascadeBtn)) == XmMENU_OPTION)
 	  RC_OptionSubMenu(XtParent(cascadeBtn)) = (Widget) m;
@@ -4216,7 +4216,7 @@ Boolean attach;
 
 
 /*
- * This function determines if the widget to which a menu is 
+ * This function determines if the widget to which a menu is
  * attached is accessible to the user.  The widget is considered
  * accessible if it, and its ancestors, are both sensitive and
  * managed.  This is useful for MenuBars and Option Menus only.
@@ -4252,18 +4252,18 @@ XButtonPressedEvent *event;
        ! _XmIsEventUnique(event))
        return;
 
-   /* Overload _XmButtonEventStatus's time for MenuShell's managed_set_changed 
-    * routine to determine if an option menu is trying to post using BSelect 
+   /* Overload _XmButtonEventStatus's time for MenuShell's managed_set_changed
+    * routine to determine if an option menu is trying to post using BSelect
     * Click.  _XmButtonEventStatus's verified is irrelevant.
     */
-   if (IsOption(w)) 
+   if (IsOption(w))
    {
       _XmButtonEventStatus.time = event->time;
    }
 
    /*
     * It's possible that this event has been passed to this widget/window
-    * due to a grabbed pointer.  If so, it's probable that it doesn't belong 
+    * due to a grabbed pointer.  If so, it's probable that it doesn't belong
     * to any gadget children of the event's window (widget) where the pointer
     * is currently positioned.
     */
@@ -4291,8 +4291,8 @@ XmRowColumnWidget  w;
 XButtonPressedEvent *event;
 {
    XmGadget gadget;
-   
-   if (! _XmIsEventUnique(event) || 
+
+   if (! _XmIsEventUnique(event) ||
        ! _XmMatchBtnEvent( event, XmIGNORE_EVENTTYPE, RC_PostButton(w),
        RC_PostModifiers(w)) ||
        (IsBar(w) && ! RC_IsArmed(w)))
@@ -4352,7 +4352,7 @@ Widget memWidget;
    else if (XmIsLabel(memWidget))
    {
       XmLabelWidget lw = (XmLabelWidget) memWidget;
-      
+
       if (Lab_IsText (lw))
       {
 	 thing = (char *) _XmStringCreateExternal(lw->label.font,
@@ -4378,7 +4378,7 @@ Widget memWidget;
 
    if (freeThing)
        XmStringFree(thing);
-}	
+}
 
 
 static int is_in_widget_list (m, w)
@@ -4392,7 +4392,7 @@ RectObj w;
 
     for (i = 0, q = m->composite.children;
          i < m->composite.num_children;
-         i++, q++) 
+         i++, q++)
 
         if ((*q == (Widget) w) && IsManaged (*q)) return (TRUE);
 
@@ -4431,17 +4431,17 @@ Widget *w;
     {
         for (i = 0, q = search_m->composite.children;
              i < search_m->composite.num_children;
-             i++, q++) 
+             i++, q++)
         {
             if (XtIsManaged(*q))
             {
                 if (XmIsCascadeButtonGadget(*q))
                 {
-                    XmCascadeButtonGadget p = 
+                    XmCascadeButtonGadget p =
                         (XmCascadeButtonGadget) *q;
 
                     if (CBG_Submenu(p) &&
-                        search_menu (CBG_Submenu(p),parent_m,child,w)) 
+                        search_menu (CBG_Submenu(p),parent_m,child,w))
                     {
                         return (TRUE);
                     }
@@ -4452,7 +4452,7 @@ Widget *w;
                         (XmCascadeButtonWidget) *q;
 
                     if (CB_Submenu(p) &&
-                        search_menu (CB_Submenu(p),parent_m,child,w)) 
+                        search_menu (CB_Submenu(p),parent_m,child,w))
                     {
                         return (TRUE);
                     }
@@ -4487,7 +4487,7 @@ XEvent * event;
 Boolean * valid;
 {
    *valid = event &&  _XmMatchBtnEvent( event, XmIGNORE_EVENTTYPE,
-			 RC_PostButton(w), RC_PostModifiers(w)); 
+			 RC_PostButton(w), RC_PostModifiers(w));
 }
 
 /*
@@ -4502,7 +4502,7 @@ XmRowColumnWidget menu;
 Widget child;
 {
    int i;
-   
+
    RC_MemWidget(menu) = child;
 
    if (IsOption(menu))
@@ -4547,7 +4547,7 @@ RectObj child;
    lota_magic (m, child, &parent_m, &w);
 
    if (w)
-       UpdateMenuHistory (parent_m, w);       
+       UpdateMenuHistory (parent_m, w);
 }
 
 
@@ -4590,12 +4590,12 @@ XmRowColumnWidget m;
     {
         if (XmIsToggleButtonGadget(*q))
         {
-            if (XmToggleButtonGadgetGetState (*q)) 
+            if (XmToggleButtonGadgetGetState (*q))
                return (FALSE);
         }
         else if (XmIsToggleButton(*q))
         {
-            if (XmToggleButtonGetState (*q)) 
+            if (XmToggleButtonGetState (*q))
                return (FALSE);
         }
     }
@@ -4604,8 +4604,8 @@ XmRowColumnWidget m;
 }
 
 
-/* 
- * note that this is potentially recursive, setting the state of a 
+/*
+ * note that this is potentially recursive, setting the state of a
  * toggle in this row column widget may re-enter this routine...
  */
 
@@ -4616,20 +4616,20 @@ Widget w;
    XmRowColumnWidget menu;
    Widget cb;
    Boolean done = FALSE;
-   
+
    if (! IsManaged(w))
        return;
-   
+
    if (RC_RadioBehavior(m))
    {
       if (XmIsToggleButtonGadget(w))
       {
 	 /* turned on */
-	 if (XmToggleButtonGadgetGetState (w)) 
+	 if (XmToggleButtonGadgetGetState (w))
 	     all_off_except (m, w);
 
 	 /* he turned off */
-	 else  
+	 else
 	 {
             if (RC_RadioAlwaysOne(m))
                 if (no_toggles_on (m))
@@ -4640,21 +4640,21 @@ Widget w;
       else if (XmIsToggleButton (w))
       {
 	 /* turned on */
-	 if (XmToggleButtonGetState (w)) 
+	 if (XmToggleButtonGetState (w))
 	     all_off_except (m, w);
 
 	 /* turned off */
 	 else
 	 {
             if (RC_RadioAlwaysOne(m))
-                if (no_toggles_on (m))  
+                if (no_toggles_on (m))
 		    /* can't allow that */
                     XmToggleButtonSetState (w, TRUE, TRUE);
 	 }
       }
-      
+
       /* record for posterity */
-      RC_MemWidget (m) = w; 
+      RC_MemWidget (m) = w;
    }
 
    /* record the mouse memory and history widget all the way up the cascade */
@@ -4662,7 +4662,7 @@ Widget w;
    while ( ! done)
    {
       RC_MemWidget (menu) = w;
-      
+
       if (! IsPopup(menu) && RC_CascadeBtn(menu))
       {
 	cb = RC_CascadeBtn(menu);
@@ -4682,7 +4682,7 @@ Widget w;
 static char * which_callback (w)
 Widget w;
 {
-    if (XmIsPushButtonGadget(w) || XmIsPushButton(w) || 
+    if (XmIsPushButtonGadget(w) || XmIsPushButton(w) ||
         XmIsCascadeButton(w) || XmIsCascadeButtonGadget(w) ||
 	XmIsDrawnButton(w))
        return (XmNactivateCallback);
@@ -4711,7 +4711,7 @@ Opaque call_value;
    XmRowColumnWidget topLevel;
    char *c = which_callback (child);       /* which callback to use */
 
-  /* 
+  /*
    * Save the last selected toplevel in each menupane.
    * "lastSelectToplevel" only set for accelerators via KeyboardInputHandler().
    * Do this before entrycallback because the application may call
@@ -4751,11 +4751,11 @@ Opaque call_value;
        /* no entry callback, but must do radio behavior & menu history */
        EntryFired (child, NULL, call_value);
 }
-        
+
 /*
  * This is the callback for widgets which are composited into row column
- * widgets.  It notifies the menu that some individual widget fired off; 
- * this allows * the row column widget to tell the application if it wants 
+ * widgets.  It notifies the menu that some individual widget fired off;
+ * this allows * the row column widget to tell the application if it wants
  * to know.  also to do various other automagical things
  */
 
@@ -4780,7 +4780,7 @@ XmAnyCallbackStruct *callback;
 
 
 /*************************************************************************
- * 
+ *
  * this section is all the layout stuff, the whole thing is messy because
  * it has to operate in two different modes, one: a read-only mode which
  * is nice for making decisions about the size of the row column vs. the size
@@ -4788,12 +4788,12 @@ XmAnyCallbackStruct *callback;
  * change.
  *
  * further complicated by the xtoolkit restriction that a subwidget making
- * a geo request (referred to as the 'instigator') of the row column may not 
+ * a geo request (referred to as the 'instigator') of the row column may not
  * have his resize proc called but all other widget children must.
  *
  * this is done by building a set of XtWidgetGeometry request blocks, one
- * for each child (widget and gadget), which holds the changes we would like to 
- * make for this child.  If needed then another pass is made over the requests 
+ * for each child (widget and gadget), which holds the changes we would like to
+ * make for this child.  If needed then another pass is made over the requests
  * to actually implement the changes.
  */
 
@@ -4832,10 +4832,10 @@ int *items_per;
 
 
 /*
- * Make sure that entries in the right most column/row extend all the 
- * way to the right/bottom edge of the row column widget.  This keeps 
- * 'dead space' in the row column widget to a minimum.  For single 
- * column widgets, the only column is the right most.  
+ * Make sure that entries in the right most column/row extend all the
+ * way to the right/bottom edge of the row column widget.  This keeps
+ * 'dead space' in the row column widget to a minimum.  For single
+ * column widgets, the only column is the right most.
  *
  */
 
@@ -4861,7 +4861,7 @@ Dimension w, h;
 	 /* if w (rowcol width) is greater than subtrahend (the smallest
 	  * width of the child, we'll guarantee at least a width of 1.
 	  */
-	 if (w > subtrahend) 
+	 if (w > subtrahend)
 	     BWidth (b) = w-subtrahend;
       }
       else
@@ -4869,7 +4869,7 @@ Dimension w, h;
          subtrahend =  MGR_ShadowThickness(m) + RC_MarginH (m) + BY (b)
 	     + Double (BBorder (b));
 
-	 if (h > subtrahend) 
+	 if (h > subtrahend)
 	     BHeight (b) = h-subtrahend;
       }
    }
@@ -4877,7 +4877,7 @@ Dimension w, h;
 
 
 /*
- * decide exactly the dimensions of the row column widget we will return to 
+ * decide exactly the dimensions of the row column widget we will return to
  * an asking caller based on the accumulated layout information.
  */
 
@@ -4890,11 +4890,11 @@ Dimension    w, h;
 {
     if (IsVertical (m))             /* tell caller what he wants */
     {
-        if (Asking (*m_width)) 
+        if (Asking (*m_width))
             *m_width =   x + w + b      /* right edge of last child */
                    + MGR_ShadowThickness(m)
                    + RC_MarginW (m);    /* plus margin on right */
-    
+
         if (Asking (*m_height))
             *m_height =   max_y         /* last unused y */
                 - RC_Spacing (m)    /* up by unused spacing */
@@ -4903,8 +4903,8 @@ Dimension    w, h;
     }
     else
     {
-        if (Asking (*m_width)) 
-            *m_width = max_x - RC_Spacing (m) 
+        if (Asking (*m_width))
+            *m_width = max_x - RC_Spacing (m)
                 + MGR_ShadowThickness(m)
                 + RC_MarginW (m);
 
@@ -4941,11 +4941,11 @@ Dimension   w, h;
 	 else                /* go up from max_y */
 	 {
 	     subtrahend = RC_Spacing (m) + h + b;
-	     *y = (max_y > subtrahend) ? max_y - subtrahend : 0; 
+	     *y = (max_y > subtrahend) ? max_y - subtrahend : 0;
 	 }
       }
       else
-      {   
+      {
 	  subtrahend = MGR_ShadowThickness(m) + RC_MarginH (m) + h + b;
 	  *y = (*m_height > subtrahend) ? *m_height - subtrahend : 0;
       }
@@ -4973,14 +4973,14 @@ Dimension   w, h;
 
 /*
  * figure out where all the children of a column style widget go.  The
- * border widths are already set.  
+ * border widths are already set.
  *
  * In columnar mode, all heights and widths are identical.  They are the
  * size of the largest item.
  *
  * For vertical widgets the items are laid out in columns, going down the
  * first column and then down the second.  For horizonatal, think of the
- * columns as rows. 
+ * columns as rows.
  *
  * By convention incoming row column size can be zero, indicating a request
  * for preferred size, this means lay it out and record the needed size.
@@ -5005,7 +5005,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
 
     /* loc of first item */
     x   = MGR_ShadowThickness(m) + RC_MarginW (m);
-    y   = MGR_ShadowThickness(m) + RC_MarginH (m); 
+    y   = MGR_ShadowThickness(m) + RC_MarginH (m);
 
     get_info (m, &w, &h, &items_per_column);
 
@@ -5039,7 +5039,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
 	   start_i = child_i;          /* record index */
         }
 
-        if (IsHelp (m, ((Widget) kg[child_i].kid))) 
+        if (IsHelp (m, ((Widget) kg[child_i].kid)))
             calc_help (m, m_width, m_height, b, max_x, max_y, &x, &y, w, h);
 
         SetPosition (bx, x, y);         /* plunk him down */
@@ -5056,7 +5056,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
      }
 
     set_asking (m, m_width, m_height, b, max_x, max_y, x, y, w, h);
-    
+
     if (RC_AdjLast(m))
         adjust_last (m, start_i, *m_width, *m_height);
 }
@@ -5066,9 +5066,9 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
  * do a vertical tight (non-column) layout.
  *
  * In a tight layout one dimension of the items is left alone and the other
- * is kept uniform.  In a vertical row column widgets, the widths of each child 
- * are uniform for each column, the heights are never changed.  In a horiz 
- * row column widget, the widths are never changed and the heights are kept 
+ * is kept uniform.  In a vertical row column widgets, the widths of each child
+ * are uniform for each column, the heights are never changed.  In a horiz
+ * row column widget, the widths are never changed and the heights are kept
  * uniform for each row.
  *
  * It gets messy w.r.t. the help child because we don't know if there will
@@ -5096,7 +5096,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
     /* first item location */
     x = MGR_ShadowThickness(m) + RC_MarginW (m);
     y = MGR_ShadowThickness(m) + RC_MarginH (m);
-        
+
     for (child_i=0; kg [child_i].kid != NULL; child_i++)
     {
        bx = &(kg[child_i].box);
@@ -5105,23 +5105,23 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
 
        h = BHeight (bx) + b;           /* calc this item's height */
 
-       if (((y + h) > *m_height) && 
+       if (((y + h) > *m_height) &&
 	   ( ! Asking (*m_height)) &&
 	   (child_i))
        {                   /* start new column */
 	  while (start_i < child_i)
 	      kg[start_i++].box.width = w;    /* set uniform width */
 
-	  x += w + b 
+	  x += w + b
 	      + MGR_ShadowThickness(m)
 		  + RC_MarginW (m);       /* go right and */
-            
+
 	  y = MGR_ShadowThickness(m)
 	      + RC_MarginH (m);           /* back to top of menu */
 	  w = BWidth (bx);            /* reset for new column */
        }
 
-       if (IsHelp (m, ((Widget) kg[child_i].kid))) 
+       if (IsHelp (m, ((Widget) kg[child_i].kid)))
 	   calc_help (m, m_width, m_height, b, 0, max_y, &x, &y, w, h);
 
        SetPosition (bx, x, y);
@@ -5161,7 +5161,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
    /* first item location */
    x = MGR_ShadowThickness(m) + RC_MarginW (m);
    y = MGR_ShadowThickness(m) + RC_MarginH (m);
-        
+
    for (child_i=0; kg [child_i].kid != NULL; child_i++)
    {
       bx = &(kg[child_i].box);
@@ -5170,24 +5170,24 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
 
       w = BWidth (bx) + b;            /* item's width */
 
-      if (((x + w) > *m_width) && 
+      if (((x + w) > *m_width) &&
 	  ( ! Asking (*m_width)) &&
 	  (child_i))
       {                   /* start a new row */
 	 while (start_i < child_i)
 	     kg[start_i++].box.height = h;   /* set uniform height */
 
-	 x = MGR_ShadowThickness(m) 
+	 x = MGR_ShadowThickness(m)
 	     + RC_MarginW (m);       /* left edge of menu */
-	 y += h + b 
-	     + MGR_ShadowThickness(m) 
+	 y += h + b
+	     + MGR_ShadowThickness(m)
 		 + RC_MarginH (m);       /* down to top of next row */
 	 h = BHeight (bx);           /* reset for this row */
       }
-      
-      if (IsHelp (m, ((Widget) kg[child_i].kid))) 
+
+      if (IsHelp (m, ((Widget) kg[child_i].kid)))
 	  calc_help (m, m_width, m_height, b, max_x, 0, &x, &y, w, h);
-      
+
       SetPosition (bx, x, y);
 
       if (h < BHeight (bx))
@@ -5200,7 +5200,7 @@ Dimension *m_width, *m_height;            /* if 0 then caller's asking */
    }
 
    set_asking (m, m_width, m_height, b, max_x, 0, x, y, w, h);
-   
+
    if (RC_AdjLast(m))
        adjust_last (m, start_i, *m_width, *m_height);
    else
@@ -5289,8 +5289,8 @@ Dimension *width, *height;
    Dimension h;
    XmKidGeometry kg;
    XtWidgetGeometry    *label_box, *button_box;
-   register int i; 
-   register Dimension c_width=0; 
+   register int i;
+   register Dimension c_width=0;
    register Dimension c_height=0;
    register XmRowColumnWidget p = (XmRowColumnWidget) RC_OptionSubMenu(menu);
    Widget cb = XmOptionButtonGadget(menu);
@@ -5325,7 +5325,7 @@ Dimension *width, *height;
       if (p && !p->composite.num_children && IsOption(menu))
 	 BWidth(button_box) = LabG_TextRect(cb).width +
 	         LabG_MarginRight(cb) + LabG_MarginLeft(cb) +
-	         (2*(LabG_MarginWidth(cb) + 
+	         (2*(LabG_MarginWidth(cb) +
 		    G_ShadowThickness(cb) + G_HighlightThickness(cb)));
       else
 	 BWidth(button_box) = XtWidth(cb);
@@ -5361,7 +5361,7 @@ Dimension *w, *h;
        layout_horizontal (m, w, h);
 }
 
-   
+
 /**************************************************************************
  *
  * class support procedures
@@ -5379,7 +5379,7 @@ XButtonPressedEvent *event;
     XmRowColumnWidget root = NULL;
     XmCascadeButtonWidget p;
 
-    if (m == NULL) 
+    if (m == NULL)
        return;
 
     switch (m->row_column.type)
@@ -5409,12 +5409,12 @@ XButtonPressedEvent *event;
         case XmMENU_PULLDOWN:
             p = (XmCascadeButtonWidget) m->row_column.cascadeBtn;
 
-            if (p != NULL) 
+            if (p != NULL)
                root = (XmRowColumnWidget) XtParent (p);
             else
                return;
 
-            if (! XmIsRowColumn(root)) 
+            if (! XmIsRowColumn(root))
                root = NULL;
 
             LocatePulldown(
@@ -5444,13 +5444,13 @@ Boolean first_button;
     register int i = 0;
     register int n = m->composite.num_children;
 
-    while( (i < n) && 
-	   (!XtIsManaged(*kid) || 
-	   (first_button && 
+    while( (i < n) &&
+	   (!XtIsManaged(*kid) ||
+	   (first_button &&
 	    !(XmIsPushButton(*kid) ||
 	      XmIsPushButtonGadget(*kid) ||
 	      XmIsToggleButton(*kid) ||
-	      XmIsToggleButtonGadget(*kid)) 
+	      XmIsToggleButtonGadget(*kid))
 	   )) )
         kid++, i++;
 
@@ -5477,7 +5477,7 @@ XEvent * event;
 
    if (IsOption(XtParent(cb)))
        RC_MemWidget(submenu) = RC_MemWidget(XtParent(cb));
-   
+
    PositionMenu (submenu, event);
 
    submenu->manager.traversal_on =
@@ -5495,23 +5495,23 @@ static void LocatePulldown (root, p, m, event)
 XmRowColumnWidget root;       /* menu holding pulldown */
 XmCascadeButtonWidget p;      /* cascadebutton doing the pulling */
 XmRowColumnWidget m;          /* sub-menu to position */
-{   
+{
     Position x, y, x1, y1;
 
-    if (root == NULL) 
+    if (root == NULL)
       return;
 
     x = y = 0;                  /* punt, don't know */
 
     if (IsOption (root))           /* near hot spot */
     {                              /* of option button (p) */
-        if (! XtIsRealized (m))  
+        if (! XtIsRealized (m))
            XtRealizeWidget (m);
 
         x = 0;
         y = RC_MemWidget(m) ? (Half (XtHeight (p)) - (XtY(RC_MemWidget(m)) +
             Half(XtHeight(RC_MemWidget(m))))) : XtY(p);
-    }   
+    }
 
     else if (IsBar (root))  /* aligned with left edge of */
     {                       /* cascade button, below cascade button */
@@ -5545,8 +5545,8 @@ XmRowColumnWidget m;          /* sub-menu to position */
     }
 
     /*
-     * Take these co-ords which are in the cascade button 
-     * widget's co-ord system and convert them to the root 
+     * Take these co-ords which are in the cascade button
+     * widget's co-ord system and convert them to the root
      * window co-ords.
      */
     XtTranslateCoords(p, x, y, &x1, &y1);
@@ -5557,7 +5557,7 @@ XmRowColumnWidget m;          /* sub-menu to position */
 
 
 /*
- * lay out the row column widget to find it's best size, this is a 
+ * lay out the row column widget to find it's best size, this is a
  * read-only operation
  */
 
@@ -5566,9 +5566,9 @@ static void think_about_option_size(m, w, h, instigator, request)
 register XmRowColumnWidget m;
 Dimension *w, *h;
 Widget instigator;
-XtWidgetGeometry *request;  
+XtWidgetGeometry *request;
 {
-   register int i; 
+   register int i;
    Dimension width=0, height=0;
    register XmRowColumnWidget p = (XmRowColumnWidget) RC_OptionSubMenu(m);
    Widget cb = XmOptionButtonGadget(m);
@@ -5578,7 +5578,7 @@ XtWidgetGeometry *request;
     * created, so the label is first and the cascade button is second
     * (any other children are erroneous).
     */
-    
+
    RC_Boxes(m)[0].box.x = RC_MarginW(m);
    RC_Boxes(m)[0].box.y = RC_MarginH(m);
    *w = RC_MarginW(m) + RC_Boxes(m)[0].box.width + RC_Spacing(m);
@@ -5614,7 +5614,7 @@ XtWidgetGeometry *request;
       /* Option menu draws a toggle indicator with a childless submenu */
       if (p && !p->composite.num_children && IsOption(m))
 	 width = LabG_TextRect(cb).width +
-	         LabG_MarginRight(cb) + LabG_MarginLeft(cb) + 
+	         LabG_MarginRight(cb) + LabG_MarginLeft(cb) +
 	         (2*(LabG_MarginWidth(cb) +
 		    G_ShadowThickness(cb)));
       else
@@ -5630,7 +5630,7 @@ XtWidgetGeometry *request;
    RC_Boxes(m)[1].box.height = height;
 
    *w += width + RC_MarginW(m) + Double(G_HighlightThickness(cb));
-       
+
 
    if (height > *h)
    {
@@ -5646,7 +5646,7 @@ static void think_about_size (m, w, h, instigator, request)
 register XmRowColumnWidget m;
 Dimension *w, *h;
 Widget instigator;
-XtWidgetGeometry *request;  
+XtWidgetGeometry *request;
 {
     if (IsOption(m))
     {
@@ -5676,7 +5676,7 @@ XmRowColumnWidget m;
 Dimension *w, *h;
 {
    /*
-    * get array built for both widgets and gadgets layout is based only on 
+    * get array built for both widgets and gadgets layout is based only on
     * this array, adjust width margins &  adjust height margins
     */
    RC_Boxes(m)=
@@ -5770,12 +5770,12 @@ XtWidgetGeometry *intended, *reply;
 
 
 /*
- * Layout the row column widget to fit it's current size; ignore possible 
+ * Layout the row column widget to fit it's current size; ignore possible
  * non-fitting of the entries into a too small row column widget.
  *
  * Don't forget the instigator,
  */
-  
+
 static void AdaptToSize (m, instigator, request)
 XmRowColumnWidget m;
 Widget instigator;
@@ -5799,11 +5799,11 @@ XtWidgetGeometry *request;
 				    (IsOption(m) ? XmGET_ACTUAL_SIZE :
 				     XmGET_PREFERRED_SIZE));
 
-   if (!PackNone (m)) 
+   if (!PackNone (m))
        Layout (m, &w, &h);
-   
+
    _XmSetKidGeo (RC_Boxes(m), instigator);
-   
+
    XtFree (RC_Boxes(m));
 }
 
@@ -5850,7 +5850,7 @@ XmRowColumnWidget m;
 
 
 /*
- * class Redisplay proc 
+ * class Redisplay proc
  */
 
 static void Redisplay (m, event, region)
@@ -5899,7 +5899,7 @@ Region region;
 
 
 /*
- * Geometry manager for subwidgets of a row column widget; be accomdating, 
+ * Geometry manager for subwidgets of a row column widget; be accomdating,
  * try to say yes, and then deal with our parent's geometry mgr.
  *
  * I'm not even going to try to figure out what to do with an Almost
@@ -5931,7 +5931,7 @@ XtWidgetGeometry *desired, *allowed;
    {
       if (instigator == XmOptionButtonGadget(m))
       {
-	 /* 
+	 /*
 	  * Grow only
 	  */
          if ((desired->request_mode & CWWidth) &&
@@ -5986,7 +5986,7 @@ XtWidgetGeometry *desired, *allowed;
     */
 
    XtFree(RC_Boxes(m));
-   
+
    if ((w != XtWidth (m)) || (h != XtHeight (m)))
    {
       XtWidgetGeometry menu_desired, menu_allowed;
@@ -6005,7 +6005,7 @@ XtWidgetGeometry *desired, *allowed;
       }
 
       result = XtMakeGeometryRequest(m,&menu_desired,&menu_allowed);
-      
+
       switch (result)
       {
        case XtGeometryAlmost:
@@ -6019,10 +6019,10 @@ XtWidgetGeometry *desired, *allowed;
    AdaptToSize(m,instigator,desired);
 
    /*	Clear shadow if necessary. */
-   
+
    if (m->row_column.old_shadow_thickness)
-       _XmClearShadowType (m, m->row_column.old_width, 
-			   m->row_column.old_height, 
+       _XmClearShadowType (m, m->row_column.old_width,
+			   m->row_column.old_height,
 			   m->row_column.old_shadow_thickness, 0);
 
    m->row_column.old_width = m->core.width;
@@ -6046,10 +6046,10 @@ Widget    w;
 {
    Arg al[10];
    int ac;
-   
+
    if (RC_EntryBorder(m))
    {
-      _XmConfigureObject(w,w->core.x,w->core.y, 
+      _XmConfigureObject(w,w->core.x,w->core.y,
 			 w->core.width, w->core.height, RC_EntryBorder(m));
    }
 
@@ -6063,7 +6063,7 @@ Widget    w;
 	 if (IsWorkArea(m) ||
 	     ((w->core.widget_class != xmLabelWidgetClass) &&
 	      (w->core.widget_class != xmLabelGadgetClass)))
-	     
+
 	 {
 	    ac = 0;
 	    XtSetArg (al[ac], XmNalignment, RC_EntryAlignment (m));
@@ -6104,7 +6104,7 @@ Widget    w;
 
    if (m->row_column.entry_callback)
    {
-      /* 
+      /*
        * Disable the buttons activate callbacks
        */
       if (XmIsLabelGadget(w))
@@ -6127,7 +6127,7 @@ Dimension *width, *height, *left, *right, *top, *bottom;
 
     for (i = 0; i < m->composite.num_children; i++)
     {
-        Widget p = (Widget) m->composite.children[i]; 
+        Widget p = (Widget) m->composite.children[i];
 
         if (IsManaged (p))
         {
@@ -6135,44 +6135,44 @@ Dimension *width, *height, *left, *right, *top, *bottom;
             {
                 register XmLabelGadget lg = (XmLabelGadget) p;
 
-                if (LabG_MarginWidth (lg) > *width)  
+                if (LabG_MarginWidth (lg) > *width)
                        *width  = LabG_MarginWidth  (lg);
 
-                if (LabG_MarginHeight(lg) > *height) 
+                if (LabG_MarginHeight(lg) > *height)
                        *height = LabG_MarginHeight (lg);
 
-                if (LabG_MarginLeft  (lg) > *left)   
+                if (LabG_MarginLeft  (lg) > *left)
                        *left   = LabG_MarginLeft   (lg);
 
-                if (LabG_MarginRight (lg) > *right)  
+                if (LabG_MarginRight (lg) > *right)
                        *right  = LabG_MarginRight  (lg);
 
-                if (LabG_MarginTop   (lg) > *top)    
+                if (LabG_MarginTop   (lg) > *top)
                        *top = LabG_MarginTop (lg);
 
-                if (LabG_MarginBottom(lg) > *bottom) 
+                if (LabG_MarginBottom(lg) > *bottom)
                        *bottom = LabG_MarginBottom (lg);
             }
             else if (XmIsLabel(p))
             {
                 register XmLabelWidget lw = (XmLabelWidget) p;
 
-                if (Lab_MarginWidth (lw) > *width)  
+                if (Lab_MarginWidth (lw) > *width)
                        *width  = Lab_MarginWidth  (lw);
 
-                if (Lab_MarginHeight(lw) > *height) 
+                if (Lab_MarginHeight(lw) > *height)
                        *height = Lab_MarginHeight (lw);
 
-                if (Lab_MarginLeft  (lw) > *left)   
+                if (Lab_MarginLeft  (lw) > *left)
                        *left   = Lab_MarginLeft   (lw);
 
-                if (Lab_MarginRight (lw) > *right)  
+                if (Lab_MarginRight (lw) > *right)
                        *right  = Lab_MarginRight  (lw);
 
-                if (Lab_MarginTop   (lw) > *top)    
+                if (Lab_MarginTop   (lw) > *top)
                        *top = Lab_MarginTop (lw);
 
-                if (Lab_MarginBottom(lw) > *bottom) 
+                if (Lab_MarginBottom(lw) > *bottom)
                        *bottom = Lab_MarginBottom (lw);
             }
         }
@@ -6186,15 +6186,15 @@ Dimension *width, *height, *left, *right, *top, *bottom;
  * marginRight also.
  *
  * For generality's sake we should insure that all
- * of the current label subclass widgets in the menu have the 
- * margins set to the same value.  
+ * of the current label subclass widgets in the menu have the
+ * margins set to the same value.
  */
 
 static void DoMarginAdjustment (m)
 XmRowColumnWidget m;
 {
     register Widget *p;
-    register int i; 
+    register int i;
     Dimension m_w, m_h, m_l, m_r, m_t, m_b;
     Dimension w, h;
 
@@ -6226,7 +6226,7 @@ XmRowColumnWidget m;
 
             q = (XmLabelGadget) (*p);
 
-            if (IsVertical (m)) 
+            if (IsVertical (m))
             {
 	       /* change horiz margins to  be uniform */
 	       if (LabG_MarginLeft(q) != m_l)
@@ -6246,17 +6246,17 @@ XmRowColumnWidget m;
 		  w += LabG_MarginWidth(q) - m_w;
 		  _XmAssignLabG_MarginWidth(q, m_w);
 	       }
-	       
+
 	       _XmReCacheLabG(q);
 
-	       if (q->rectangle.width != w) 
+	       if (q->rectangle.width != w)
 	       {
 		  _XmConfigureObject(q,q->rectangle.x,q->rectangle.y,
 				     w, q->rectangle.height,
 				     q->rectangle.border_width);
 	       }
             }
-            else 
+            else
             {
 	       /* change vert margins */
 	       if (LabG_MarginTop(q) != m_t)
@@ -6264,22 +6264,22 @@ XmRowColumnWidget m;
 		  h += LabG_MarginTop(q) - m_t;
 		  _XmAssignLabG_MarginTop(q, m_t);
 	       }
-	       
+
 	       if (LabG_MarginBottom(q) != m_b)
 	       {
 		  h += LabG_MarginBottom(q) - m_b;
 		  _XmAssignLabG_MarginBottom(q, m_b);
 	       }
-	       
+
 	       if (LabG_MarginHeight(q) != m_h)
 	       {
 		  h += LabG_MarginHeight(q) - m_h;
 		  _XmAssignLabG_MarginHeight(q, m_h);
 	       }
-	       
+
 	       _XmReCacheLabG(q);
 
-	       if (q->rectangle.width != h) 
+	       if (q->rectangle.width != h)
 	       {
 		  _XmConfigureObject(q,q->rectangle.x,q->rectangle.y,
 				     q->rectangle.width, h,
@@ -6309,7 +6309,7 @@ XmRowColumnWidget m;
                ChangeMargin (Lab_MarginRight (lw), m_r, w);
                ChangeMargin (Lab_MarginWidth (lw), m_w, w);
 
-                if (XtWidth (lw) != w) 
+                if (XtWidth (lw) != w)
                 {
                     _XmConfigureObject(lw,lw->core.x,lw->core.y,
                         w, lw->core.height,
@@ -6322,7 +6322,7 @@ XmRowColumnWidget m;
                 ChangeMargin (Lab_MarginBottom (lw), m_b, h);
                 ChangeMargin (Lab_MarginHeight (lw), m_h, h);
 
-                if (XtHeight (lw) != h) 
+                if (XtHeight (lw) != h)
                 {
                     _XmConfigureObject(lw,lw->core.x,lw->core.y,
                         lw->core.width, h,
@@ -6429,7 +6429,7 @@ int     direction;
    else
       return;
 
-   if ((RC_Type(parent) == XmMENU_POPUP) || 
+   if ((RC_Type(parent) == XmMENU_POPUP) ||
        (RC_Type(parent) == XmMENU_PULLDOWN) ||
        (RC_Type(parent) == XmMENU_BAR))
    {
@@ -6451,7 +6451,7 @@ int     *num_param;
 
    if (_XmIsEventUnique(event))
    {
-      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) && 
+      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) &&
 	  !IsBar(rc) &&
 	  (rc->row_column.orientation == XmHORIZONTAL))
 	 MenuTraverse(cb, event, XmTRAVERSE_UP);
@@ -6473,7 +6473,7 @@ int     *num_param;
 
    if (_XmIsEventUnique(event))
    {
-      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) && 
+      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) &&
 	  !IsBar(rc) &&
 	  (rc->row_column.orientation == XmHORIZONTAL))
 	 MenuTraverse(cb, event, XmTRAVERSE_DOWN);
@@ -6495,7 +6495,7 @@ int     *num_param;
 
    if (_XmIsEventUnique(event))
    {
-      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) && 
+      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) &&
 	  !IsBar(rc) &&
 	  (rc->row_column.orientation == XmHORIZONTAL))
 	 MenuTraverse(cb, event, XmTRAVERSE_LEFT);
@@ -6517,7 +6517,7 @@ int     *num_param;
 
    if (_XmIsEventUnique(event))
    {
-      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) && 
+      if (XmIsRowColumn(rc = (XmRowColumnWidget)XtParent(cb)) &&
 	  !IsBar(rc) &&
 	  (rc->row_column.orientation == XmHORIZONTAL))
 	 MenuTraverse(cb, event, XmTRAVERSE_RIGHT);
@@ -6703,7 +6703,7 @@ Widget pw;
     if (XmIsPrimitive(pw))
     {
         XmPrimitiveClassRec * prim;
-      
+
         prim = (XmPrimitiveClassRec *)XtClass(pw);
         (*(prim->primitive_class.arm_and_activate)) (pw, NULL);
     }
@@ -6711,7 +6711,7 @@ Widget pw;
     else if (XmIsGadget(pw))
     {
         XmGadgetClassRec * gad;
-      
+
         gad = (XmGadgetClassRec *)XtClass(pw);
         (*(gad->gadget_class.arm_and_activate)) (pw, NULL);
     }
@@ -6752,12 +6752,12 @@ XmRowColumnWidget rc;
 Widget pw;
 {
    XmRowColumnWidget topLevel;
-   
+
    /*
     * If the primitive widget is a cascade button, then post its
     * submenu, if there is one.
     */
-   if (!IsBar(rc) && XmIsCascadeButtonGadget(pw) && CBG_Submenu(pw)) 
+   if (!IsBar(rc) && XmIsCascadeButtonGadget(pw) && CBG_Submenu(pw))
    {
       (*(((XmGadgetClassRec *)XtClass(pw))->gadget_class.
 	 arm_and_activate)) (pw, NULL);
@@ -6802,7 +6802,7 @@ XmRowColumnWidget menubar;
     Widget active_child;
     XRectangle visRect;
 
-    /* 
+    /*
      * We're not in the PM menubar mode if we don't have an active child.
      */
     if (menubar->manager.active_child == NULL)
@@ -6839,7 +6839,7 @@ XmRowColumnWidget menubar;
             if (XmIsPrimitive(active_child))
             {
                XmPrimitiveClassRec * prim;
-      
+
                prim = (XmPrimitiveClassRec *)XtClass(active_child);
                (*(prim->primitive_class.border_unhighlight)) (active_child);
             }
@@ -6847,7 +6847,7 @@ XmRowColumnWidget menubar;
             else if (XmIsGadget(active_child))
             {
                XmGadgetClassRec * gadget;
-      
+
                gadget = (XmGadgetClassRec *)XtClass(active_child);
                (*(gadget->gadget_class.border_unhighlight)) (active_child);
             }
@@ -6859,14 +6859,14 @@ XmRowColumnWidget menubar;
             if (XmIsPrimitive(child))
             {
                XmPrimitiveClassRec * prim;
-      
+
                prim = (XmPrimitiveClassRec *)XtClass(child);
                (*(prim->primitive_class.border_highlight)) (child);
             }
             else if (XmIsGadget(child))
             {
                XmGadgetClassRec * gadget;
-      
+
                gadget = (XmGadgetClassRec *)XtClass(child);
                (*(gadget->gadget_class.border_highlight)) (child);
             }
@@ -6924,14 +6924,14 @@ XmRowColumnWidget menubar;
             if (XmIsPrimitive(active_child))
             {
                XmPrimitiveClassRec * prim;
-      
+
                prim = (XmPrimitiveClassRec *)XtClass(active_child);
                (*(prim->primitive_class.border_unhighlight)) (active_child);
             }
             else if (XmIsGadget(active_child))
             {
                XmGadgetClassRec * gadget;
-      
+
                gadget = (XmGadgetClassRec *)XtClass(active_child);
                (*(gadget->gadget_class.border_unhighlight)) (active_child);
             }
@@ -6943,14 +6943,14 @@ XmRowColumnWidget menubar;
             if (XmIsPrimitive(child))
             {
                XmPrimitiveClassRec * prim;
-      
+
                prim = (XmPrimitiveClassRec *)XtClass(child);
                (*(prim->primitive_class.border_highlight)) (child);
             }
             else if (XmIsGadget(child))
             {
                XmGadgetClassRec * gadget;
-      
+
                gadget = (XmGadgetClassRec *)XtClass(child);
                (*(gadget->gadget_class.border_highlight)) (child);
             }
@@ -6976,7 +6976,7 @@ XmRowColumnWidget menubar;
    _XmCreateVisibilityRect(menubar, &visRect);
    upper_limit = menubar->composite.num_children;
 
-   /* 
+   /*
     * Determine which child is popped up.
     */
    shell = (ShellWidget) RC_PopupPosted(menubar);
@@ -6997,17 +6997,17 @@ XmRowColumnWidget menubar;
 	  i = 0;
 
       child = menubar->composite.children[i];
-      
+
       if (XmIsCascadeButtonGadget(child))
       {
 	 /* You can't traverse to a button which has no submenu */
 	 if (XmIsCascadeButtonGadget(child) && (CBG_Submenu(child) == NULL))
 	     continue;
-	 
+
 	 if (_XmTestTraversability(child, &visRect))
 	 {
 	    XmGadgetClassRec * gadget;
-	    
+
 	    gadget = (XmGadgetClassRec *)XtClass(child);
 	    (*(gadget->gadget_class.arm_and_activate)) (child, NULL);
 	    return;
@@ -7023,7 +7023,7 @@ XmRowColumnWidget menubar;
 	 if (_XmTestTraversability(child, &visRect))
 	 {
 	    XmPrimitiveClassRec * prim;
-      
+
 	    prim = (XmPrimitiveClassRec *)XtClass(child);
 	    (*(prim->primitive_class.arm_and_activate)) (child, NULL);
 	    return;
@@ -7068,7 +7068,7 @@ XmRowColumnWidget menubar;
            i = upper_limit - 1;
 
 	child = menubar->composite.children[i];
-	
+
 	if (XmIsCascadeButtonGadget(child))
 	{
 	   /* You can't traverse to a button which has no submenu */
@@ -7078,7 +7078,7 @@ XmRowColumnWidget menubar;
 	   if (_XmTestTraversability(child, &visRect))
 	   {
 	      XmGadgetClassRec * gadget;
-      
+
 	      gadget = (XmGadgetClassRec *)XtClass(child);
 	      (*(gadget->gadget_class.arm_and_activate)) (child, NULL);
 	      return;
@@ -7093,7 +7093,7 @@ XmRowColumnWidget menubar;
 	   if (_XmTestTraversability(child, &visRect))
 	   {
 	      XmPrimitiveClassRec * prim;
-      
+
 	      prim = (XmPrimitiveClassRec *)XtClass(child);
 	      (*(prim->primitive_class.arm_and_activate)) (child, NULL);
 	      return;
@@ -7144,7 +7144,7 @@ int     *num_params;
 {
    /*
     * For popup and pulldown menupanes, we never care about being notified
-    * when we are unmapped.  For menubars, we want normal unmapping 
+    * when we are unmapped.  For menubars, we want normal unmapping
     * processing to occur.
     */
 
@@ -7179,8 +7179,8 @@ XEvent      *event;
 
     if (IsBar(rc))
     {
-        /*  
-         * We're in the PM menubar mode, so let our own arm and activate 
+        /*
+         * We're in the PM menubar mode, so let our own arm and activate
          * procedure clean things up .
          */
         if (RC_IsArmed(rc))
@@ -7233,9 +7233,9 @@ Widget widget;
 {
    XmManagerWidget parent = (XmManagerWidget)XtParent(widget);
 
-   if (XmIsRowColumn(parent) && 
+   if (XmIsRowColumn(parent) &&
        ((RC_Type(parent) == XmMENU_BAR) ||
-        (RC_Type(parent) == XmMENU_POPUP) || 
+        (RC_Type(parent) == XmMENU_POPUP) ||
         (RC_Type(parent) == XmMENU_PULLDOWN)))
    {
        if (XmIsCascadeButton(widget))
@@ -7278,7 +7278,7 @@ caddr_t data2;
      case XmMENU_CASCADING:
        PrepareToCascade(widget, data, data2);
        break;
-			
+
      case XmMENU_POPDOWN:
        MenuPopDown (widget, data);
        break;
@@ -7291,12 +7291,12 @@ caddr_t data2;
      case XmMENU_BUTTON:
        VerifyMenuButton (widget, data, data2);
        break;
-       
+
      case XmMENU_CALLBACK:
        /* data points to the widget which was activated */
        ChildsActivateCallback (widget, data, data2);
        break;
-       
+
      case XmMENU_TRAVERSAL:
        /* data points to a boolean */
        SetMenuTraversal (widget, flag);

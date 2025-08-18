@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmScrollBarP_h
 #define _XmScrollBarP_h
 
@@ -98,10 +98,10 @@ typedef struct _XmScrollBarPart
    int saved_value;
 
    XtEnum  etched_slider;
-   /* we used a #define slider_visual to referenced this field in 
+   /* we used a #define slider_visual to referenced this field in
       the c file, etched_slider is not a good name anymore, */
    XtEnum slider_mark;
- 
+
    unsigned char flags;
 /* Values for the XmScrollBarPart flags field */
 

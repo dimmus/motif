@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #) The translations for the buttons and text widgets have been overridden so
 #  that each time you press the TAB key, a message will be printed out saying
@@ -66,4 +66,3 @@ Continue
 
 Continue
 Exit
-

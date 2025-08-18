@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/config
-# The following needed for Vista usage 
+# The following needed for Vista usage
 setenv TOP ../../..
 
 foreach test (CMenu1 CMenuBar1 COptionMenu1 CPopupMenu1 \
@@ -36,4 +36,3 @@ foreach test (CMenu1 CMenuBar1 COptionMenu1 CPopupMenu1 \
 	CScale1 CScale3 CScrollbar1 CScrollbar2 \
 	CDiaShell1 CProtocol \
 	CMainWin2 CScrollWin1)
-

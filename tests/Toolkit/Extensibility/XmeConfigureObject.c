@@ -45,7 +45,7 @@
 #include <Xm/PushB.h>
 #include <Xm/PushBG.h>
 
-int 
+int
 main (int argc, char **argv)
 {
   Widget             workRegion, simpleWidget, simpleGadget;

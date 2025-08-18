@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin11.c /main/4 1995/07/13 19:06:04 drk $"
@@ -59,7 +59,7 @@ char  **argv;
     XtSetArg(args[n], XmNgeometry, "150x150+0+0"); n++;
     XtSetValues(Shell1, args, n);
     XtRealizeWidget(Shell1);
-    
+
     /**	 These tests are for 1 each of 3 buttons in turn. 	**/
 
     /* Create the Paned Window and the buttons. */
@@ -67,14 +67,14 @@ char  **argv;
     PW = XmCreatePanedWindow(Shell1, "PW", args, n);
 
     n = 0;
-    for (i = 0; i < BUTTONS; i++) 
+    for (i = 0; i < BUTTONS; i++)
       {
 	PBarray[i] = XmCreatePushButton(PW, "PB", args, n);
 	XtManageChild(PBarray[i]);
       }
-    
+
     XtManageChild(PW);
-    
+
     CommonPause();
 
     /* Unmap and remap each in turn. */
@@ -83,7 +83,7 @@ char  **argv;
 	n = 0;
 	XtSetArg(args[n], XmNmappedWhenManaged, False); n++;
 	XtSetValues(PBarray[i], args, n);
-	
+
 	CommonPause();
 
 	n = 0;
@@ -91,23 +91,23 @@ char  **argv;
 	XtSetValues(PBarray[i], args, n);
 
       }
-    
+
     /* Manage and unmanage each in turn. */
     for (i = 0; i < BUTTONS; i++)
       {
 	XtUnmanageChild(PBarray[i]);
-	
+
 	CommonPause();
 
 	XtManageChild(PBarray[i]);
-	
+
       }
-    
+
     CommonPause();
-    
-    /* Destroy each of the three buttons in turn, recreating 
+
+    /* Destroy each of the three buttons in turn, recreating
        window each time. */
-    for (i = 0; i < BUTTONS; i++) 
+    for (i = 0; i < BUTTONS; i++)
       {
 	n = 0;
 	PW = XmCreatePanedWindow(Shell1, "PW", args, n);
@@ -115,21 +115,21 @@ char  **argv;
 	n = 0;
 	XtSetArg(args[n], XmNwidth, B_WIDTH); n++;
 	XtSetArg(args[n], XmNheight, 50); n++;
-	for (j = 0; j < BUTTONS; j++) 
+	for (j = 0; j < BUTTONS; j++)
 	  {
 	    PBarray[j] = XmCreatePushButton(PW, "PB", args, n);
 	    XtManageChild(PBarray[j]);
 	  }
-    
+
 	XtManageChild(PW);
-    
+
 	CommonPause();
 	XtDestroyWidget(PBarray[i]);
-	
+
 	CommonPause();
       }
      CommonPause();
-      
+
     XtAppMainLoop(app_context);
   }
 
@@ -139,12 +139,11 @@ Widget w;
   register int	n;
   Arg		args[2];
   Dimension	width, height;
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, &width); n++;
   XtSetArg(args[n], XmNheight, &height); n++;
   XtGetValues(w, args, n);
-  
+
   printf("%dX%d\n", (int)width, (int)height);
 }
-

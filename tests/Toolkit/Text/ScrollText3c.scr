@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText3c.scr /main/5 1995/07/17 20:40:37 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,13 +20,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Keyboard Selection -- Add Mode & Normal Mode:
-#  
+#
 #  @)    KSelect       -- clears the current selection and sets the
 #                      anchor
 LocatePointer Text1
@@ -92,7 +92,7 @@ CompareVisual Text4
 #  @)    Shift KSelect -- selects the text between the anchor and the
 #                      cursor, takes ownership of primary selection
 #  @)    Ctrl Shift KSelect   -- no effect
-#  
+#
 LocatePointer Text1 RTextChar 5
 ClickMB Btn1
 ClickKey KSelect
@@ -152,7 +152,7 @@ CompareVisual Text4
 ## NOTE: these are tested at the end of the file.
 ##
 #  #endif  MOTIF1_2
-#  
+#
 LocatePointer Text1 RTextChar 5
 ClickMB Btn1
 ClickKey KSelect
@@ -183,7 +183,7 @@ CompareVisual Text4
 
 #  @)    KSelectAll    -- selects entire text and takes ownership of
 #                      primary selection
-#  
+#
 #  @)    KDeselectAll  -- deselects everything in that widget
 #
 LocatePointer Text1 RTextChar 5
@@ -227,7 +227,7 @@ CompareVisual Text4
 
 
 #  #) Keyboard Selection -- Add Mode & Normal Mode:
-#  
+#
 ## ...
 #  @)    Ctrl Space    -- same as KSelect
 ## Reset Strings to original value

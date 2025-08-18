@@ -55,11 +55,11 @@ char **argv;
 
   if (UserData != NULL)
     ProcessCommandArgs();
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 400);	n++;
   XtSetArg (args[n], XmNheight, 400);	n++;
-  XtSetArg (args[n], XmNallowShellResize, False);	n++; 
+  XtSetArg (args[n], XmNallowShellResize, False);	n++;
   XtSetValues (Shell1, args, n);
 
   if (show_geom_bug == True)				/*PIR4250*/

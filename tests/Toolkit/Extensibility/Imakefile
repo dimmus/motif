@@ -1,5 +1,5 @@
 XCOMM $XConsortium: Imakefile /main/4 1995/07/14 17:36:10 drk $
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,11 +20,11 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
+XCOMM
 
-XCOMM 
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 
 
 XCOMM	The following lines specify the location of the Exm library and
@@ -36,7 +36,7 @@ EXMLIB          = $(MTOP)/demos/lib/Exm/libExm.a
 INCLUDES 	= -I. -I$(TESTCOMSRC) -I$(EXMINCLUDESRC)
 DEFINES         = TestDefines
 DEPLIBS         = $(EXMLIB) TestClientDepLibs
-LOCAL_LIBRARIES = $(EXMLIB) TestClientLibs 
+LOCAL_LIBRARIES = $(EXMLIB) TestClientLibs
 
 NormalLibraryObjectRule()
 
@@ -120,5 +120,4 @@ OBJS=  \
 	XmeTransfer.o \
 	XmeUserMessages.o
 
-DependTarget () 
-
+DependTarget ()

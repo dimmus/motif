@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -35,17 +35,17 @@
  */
 
 typedef struct {
-		
+
 		Pixel TestPixel;
 		Pixmap TestPixmap;
 		XmString TestString;
 		Widget	TestWidget[2];
-		
-		
+
+
 		int    TestInt;
 		char *TestChar;
-	        
-	      } DropClientData;		
+
+	      } DropClientData;
 
 
 /*
@@ -75,7 +75,7 @@ main (int argc, char **argv)
 
 	int num_widgets = XtNumber (WidgetStruct);  /* Number of widgets. */
 	int w;
-	
+
 
 	/*
 	 * dropSiteData related variables
@@ -83,7 +83,7 @@ main (int argc, char **argv)
 
 	DropClientData MyClientData;
 	Widget FormD1;
-	
+
 	Widget MyWidget[2];
 	XmString MyString;
 	Pixel MyPixel;
@@ -107,7 +107,7 @@ main (int argc, char **argv)
 	    n=0;
 	    DropSite = XmCreatePushButton (Frame1, "DropSite", args, n);
 	  }
-	
+
 	else
 	  {
 	    /*
@@ -115,32 +115,32 @@ main (int argc, char **argv)
 	     */
 
 	    w=0;
-	    while (strcmp (UserData, WidgetStruct[w].name) != 0 && 
+	    while (strcmp (UserData, WidgetStruct[w].name) != 0 &&
 	       (w < num_widgets))
 	      w++;
 
-	    if (w==num_widgets) 
+	    if (w==num_widgets)
 	      {
            	printf ("Not a valid widget!\n");
       		exit(0);
 	      }
-  
+
 	    DropSite = (*WidgetStruct[w].CreateFunction)(Frame1,"DropSite"
 							 ,args,n);
-	   
+
 	  }
-	
+
 	XtManageChild (DropSite);
-   
+
    	/*
     	 * Initialize client data structure
     	 */
-	
+
 	n=0;
 	FormD1 = XmCreateFormDialog (Shell1, "FormD1", args, n);
 	XtManageChild (FormD1);
 
-	
+
 	n=0;
 	XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM); n++;
 	MyWidget[0]=
@@ -153,7 +153,7 @@ main (int argc, char **argv)
 	XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
 	MyWidget[1]=
 	XmCreatePushButton (FormD1, "PushB", args, n);
-	XtManageChild (MyWidget[1]);	
+	XtManageChild (MyWidget[1]);
 
 	MyPixel = CommonGetColor ("Red");
 
@@ -164,7 +164,7 @@ main (int argc, char **argv)
                                 BlackPixel(display,DefaultScreen(display)),
                                 DefaultDepth(display,DefaultScreen(display)));
 	MyString = XmStringCreate ("MyString", XmSTRING_DEFAULT_CHARSET);
-	
+
 	MyInt = 2;
 	MyChar = ("The sixth sick sheikh's sixth sheep's sick\n");
 
@@ -176,8 +176,8 @@ main (int argc, char **argv)
 
 	MyClientData.TestInt = MyInt;
 	MyClientData.TestChar = MyChar;
-	
-	
+
+
 	/*
 	 * Create the drop site
 	 */
@@ -193,16 +193,16 @@ main (int argc, char **argv)
 	CommonPause();
 
 	XtAppMainLoop(app_context);
-  
+
 }
 
 
 static void
-DragProc (Widget w, XtPointer call_data, XtPointer client_data)	
+DragProc (Widget w, XtPointer call_data, XtPointer client_data)
 {
         int n;
 	Arg args[10];
-	
+
 	DropClientData GetData;
 
 	n=0;
@@ -217,15 +217,15 @@ DragProc (Widget w, XtPointer call_data, XtPointer client_data)
 	        XtSetArg (args[n], XmNlabelString, GetData.TestString); n++;
 	        XtSetArg (args[n], XmNlabelPixmap, GetData.TestPixmap); n++;
 		XtSetValues (GetData.TestWidget[0], args, n);
-	   } 
+	   }
 }
 
 
 
 static void
-DropProc (Widget w, XtPointer call_data, XtPointer client_data)	
+DropProc (Widget w, XtPointer call_data, XtPointer client_data)
 {
-	
+
 	DropClientData GetData;
 	Arg args[10];
 	int n;
@@ -245,20 +245,3 @@ DropProc (Widget w, XtPointer call_data, XtPointer client_data)
 	   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

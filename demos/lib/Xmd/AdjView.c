@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,21 +37,21 @@
 #include <Xm/XmAll.h>
 #include "AdjView.h"
 
-static void ClipResize (Widget clip_window, 
+static void ClipResize (Widget clip_window,
 			XtPointer client_data, XtPointer call_data) ;
-static void WorkResize(Widget work_window, 
+static void WorkResize(Widget work_window,
 		       XtPointer client_data, XEvent *event, Boolean *cont);
 
 
 
-/* The following hack needs more thinking, it appears as if the scrollbar 
+/* The following hack needs more thinking, it appears as if the scrollbar
    highlight thickness must be removed from the work_window new size.
    If that is the model, then the real vertical or scrollbar ht values would
    have to be used instead of this constant */
 #define SB_HT 2
 
-static void 
-ClipResize (Widget clip_window, XtPointer client_data, XtPointer call_data) 
+static void
+ClipResize (Widget clip_window, XtPointer client_data, XtPointer call_data)
 {
     Widget work_window = (Widget) client_data ;
     static Dimension prev_clip_width = 0, prev_clip_height = 0 ;
@@ -64,7 +64,7 @@ ClipResize (Widget clip_window, XtPointer client_data, XtPointer call_data)
        and if we're still bigger than it, resize the work_window so it just
        fits the clipwindow, else resize it to its preferred size. */
 
-    XtVaGetValues(clip_window, XmNwidth, &clip_width, 
+    XtVaGetValues(clip_window, XmNwidth, &clip_width,
 		  XmNheight, &clip_height, NULL);
 
     if (clip_width > prev_clip_width) {
@@ -80,7 +80,7 @@ ClipResize (Widget clip_window, XtPointer client_data, XtPointer call_data)
 	} else {
 	    XtVaSetValues(work_window, XmNwidth, preferred.width, NULL);
 	}
-    }    
+    }
     prev_clip_width = clip_width ;
 
     if (clip_height > prev_clip_height) {
@@ -96,11 +96,11 @@ ClipResize (Widget clip_window, XtPointer client_data, XtPointer call_data)
 	} else {
 	    XtVaSetValues(work_window, XmNheight, preferred.height, NULL);
 	}
-    }    
+    }
     prev_clip_height = clip_height ;
 }
 
-static void 
+static void
 WorkResize(Widget work_window, XtPointer client_data, XEvent *event, Boolean *cont)
 {
     Widget clip_window = (Widget) client_data ;
@@ -108,9 +108,9 @@ WorkResize(Widget work_window, XtPointer client_data, XEvent *event, Boolean *co
 
     /* if the work_window is getting smaller than its clip_window
        parent, resize it so it just fits. */
-    XtVaGetValues(work_window, XmNwidth, &work_width, 
+    XtVaGetValues(work_window, XmNwidth, &work_width,
 		  XmNheight, &work_height, NULL);
-    XtVaGetValues(clip_window, XmNwidth, &clip_width, 
+    XtVaGetValues(clip_window, XmNwidth, &clip_width,
 		  XmNheight, &clip_height, NULL);
     if (clip_width > work_width + 1) {
 	XtVaSetValues(work_window, XmNwidth, clip_width - SB_HT, NULL);
@@ -121,16 +121,16 @@ WorkResize(Widget work_window, XtPointer client_data, XEvent *event, Boolean *co
 }
 
 /*---------That's the public API ----------------------*/
-void 
+void
 XmdSWAdjustView (Widget sw)
 {
     Widget clip_window, work_window ;
     unsigned char scrolling_policy ;
 
     /* get the clipwindow and _a_ workwindow.
-       To be really correct, this code would have to figure out 
+       To be really correct, this code would have to figure out
        the case where there are more than one work window */
-    XtVaGetValues(sw, XmNclipWindow, &clip_window, XmNworkWindow, 
+    XtVaGetValues(sw, XmNclipWindow, &clip_window, XmNworkWindow,
 		  &work_window, XmNscrollingPolicy, &scrolling_policy, NULL);
 
     if (scrolling_policy != XmAUTOMATIC) return ;
@@ -138,11 +138,10 @@ XmdSWAdjustView (Widget sw)
      /* attach callback to ClipWindow so that Container never
        goes smaller than clip window. We know ClipWindow is
        a DrawingArea subclass, so we can use a resizeCallback */
-    XtAddCallback(clip_window, XmNresizeCallback, ClipResize, 
+    XtAddCallback(clip_window, XmNresizeCallback, ClipResize,
 		  (XtPointer) work_window);
     /* also attach handler to Container sp that it never
        goes smaller than clip window by itself */
-    XtAddEventHandler(work_window, StructureNotifyMask, False, WorkResize, 
+    XtAddEventHandler(work_window, StructureNotifyMask, False, WorkResize,
 		      (XtPointer) clip_window);
 }
-

@@ -27,31 +27,31 @@ One or more items selected : no. of items is 1
 One or more items selected : no. of items is 2
     Last item selected has position no. 16
 TRACE:(1) LocatePointer List1 RListItem 0
-TRACE:(2) CompareVisual List1 
+TRACE:(2) CompareVisual List1
 TRACE:(3) Continue
 TRACE:(4) LocatePointer List1 RListItem 0
-TRACE:(5) CompareVisual List1 
+TRACE:(5) CompareVisual List1
 TRACE:(6) Continue
 TRACE:(7) LocatePointer List1 RListItem 0
-TRACE:(8) CompareVisual List1 
+TRACE:(8) CompareVisual List1
 TRACE:(9) Continue
 TRACE:(10) LocatePointer List1 RListItem 0
-TRACE:(11) CompareVisual List1 
+TRACE:(11) CompareVisual List1
 TRACE:(12) Continue
 Item decor00 is MISSING from the list
 Item btest1a is in the list
 Item func06 is in the list
 Item decor08 is in the list
 TRACE:(13) LocatePointer List1 RListItem 0
-TRACE:(14) CompareVisual List1 
+TRACE:(14) CompareVisual List1
 TRACE:(15) Continue
 TRACE:(16) LocatePointer List1 RListItem 0
-TRACE:(17) CompareVisual List1 
+TRACE:(17) CompareVisual List1
 TRACE:(18) Continue
 TRACE:(19) LocatePointer List1 RListItem 0
-TRACE:(20) CompareVisual List1 
+TRACE:(20) CompareVisual List1
 TRACE:(21) Continue
 TRACE:(22) LocatePointer List1 RListItem 0
-TRACE:(23) CompareVisual List1 
+TRACE:(23) CompareVisual List1
 TRACE:(24) Exit
 Exiting Test...Please Standby...

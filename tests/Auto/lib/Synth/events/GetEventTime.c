@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetEventTime.c /main/7 1995/07/14 11:29:59 drk $"
@@ -37,15 +37,15 @@ static char rcsid[] = "$XConsortium: GetEventTime.c /main/7 1995/07/14 11:29:59 
 
 	Summary:
             Extract the time field from the X event
-           
+
         INPUTS:
             event         - the pointer to the X event structure
-        
+
         OUTPUTS:
             none
 
         RETURNS:
-            The X Time found in the event data structure if it exists. 
+            The X Time found in the event data structure if it exists.
             If it doesn't exist, it returns zero.
 ************************************************************************/
 

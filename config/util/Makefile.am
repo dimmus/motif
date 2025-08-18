@@ -8,5 +8,3 @@ EXTRA_DIST = aminstall.sh bsdinst.sh checktree.c chownxterm.c \
 
 AM_CPPFLAGS = ${X_CFLAGS}
 noinst_PROGRAMS = makestrs
-
-

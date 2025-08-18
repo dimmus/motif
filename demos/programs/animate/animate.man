@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH animate 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -37,14 +37,14 @@ demonstrates the following Motif features:
      - use of the Motif form widget.
      - background procedure running while the client process
        is waiting for inputs (Xt intrinsics feature).
-     
+
 The pixmaps are not fixed by animate but instead read at startup from
-existing UID files. 
+existing UID files.
 
 The syntax of all the 'animation.uid' files follows some simple rules and
 one can easily add a new set of pixmap to be animated using animate.
 
-dog.uil, plane.uil and superman.uil are tree examples of animation data 
+dog.uil, plane.uil and superman.uil are tree examples of animation data
 files. (superman<N>.xbm are referenced in superman.uil). The default animation
 is 'dog'. To run the demo with the other animations, use the command:
 
@@ -52,7 +52,7 @@ is 'dog'. To run the demo with the other animations, use the command:
 
 % animate -anim superman
 
-motiflogo.uil, animate.uil and animate.c are the core components 
+motiflogo.uil, animate.uil and animate.c are the core components
 of the program.
 
 speed_factor is a number between 0 and 100.
@@ -62,14 +62,12 @@ speed_factor is a number between 0 and 100.
 .nf
 .ta 1.2i
 XmdAnimate: the app-default file.
-Try running something like: (XENVIRONMENT=XmdAnimate animate) 
+Try running something like: (XENVIRONMENT=XmdAnimate animate)
 
 .fi
 .SH X Defaults
-The class of this application is \fIXmdAnimate\fR.  
+The class of this application is \fIXmdAnimate\fR.
 
-.SH Editres: 
+.SH Editres:
 Animate is Editres aware, so you can use 'editres' to see the
 names of the widgets in the instance hierarchy.
-
-

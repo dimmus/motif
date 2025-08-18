@@ -1,6 +1,6 @@
 #include <testlib.h>
 
-static char *Strings[] = { 
+static char *Strings[] = {
 	"We few, we happy few, we band of brothers; ",
 	"For he to-day that sheds his blood with me ",
 	"Shall be my brother; be he ne'er so vile, ",
@@ -90,7 +90,7 @@ PrintValues( Widget window, char *label )
 
   return;
 }
-  
+
 
 
   int
@@ -173,8 +173,8 @@ main( int argc, char *argv[] )
   SetWidgetColor( List, "green" );
   PrintValues( Window, "Assertion 2" );
   CommonPause();
-  
-  
+
+
   CommonPause();
   XtAppMainLoop(app_context);
 

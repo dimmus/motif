@@ -1,5 +1,5 @@
 # $XConsortium: Text10.scr /main/6 1995/07/17 20:41:19 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  /* test case for PIR 3317 */
 #  @) Two text widgets were created using the helvetica1 font.
@@ -47,29 +47,29 @@ Continue
 
 #  PIR CLOSED, test case is invalid
 #  #  /* test case for PIR 3753 */
-#  #  #) Press and hold MB1 on the helvetica2 ToggleButton.  While it is 
+#  #  #) Press and hold MB1 on the helvetica2 ToggleButton.  While it is
 #  #  being held, the font should change for the text widget.
 #  LocatePointer RB1_helv2
 #  PressMB Btn1
 #  System sleep 1
-#  
+#
 #  #  #) Without moving the mouse, release MB1.  Confirm that the ToggleButton
 #  #  indicator for the helvetica2 button appears depressed and all other
 #  #  ToggleButtons do not.
 #  ReleaseMB Btn1
-#  
+#
 #  #  #) Press and hold MB1 on the helvetica3 ToggleButton.  While it is
 #  #  being held, the font should change again for the text widget.
 #  LocatePointer RB1_helv3
 #  PressMB Btn1
 #  System sleep1
-#  
+#
 #  #  #) Move the pointer outside the test window and release the MB1.
 #  #  The ToggleButton indicator for the helvetica2 button should still appear
 #  #  depressed and the indicator for helvetica3 should not.
 #  LocatePointer RB1_helv3 Off
 #  ReleaseMB Btn1
-#  
+#
 #  #  /* end of test case for PIR 3753 */
 #  #  C)
 #

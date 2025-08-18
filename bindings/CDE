@@ -19,12 +19,12 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 ! Bindings for CDE 1.0, generic keyboard
-! 
+!
 ! This file does not correspond to any specific server, so it cannot
 ! be accessed via xmbind.aliases.  If you wish to use these bindings,
 ! copy them into ~/.motifbind or use xmbind to load this file directly.

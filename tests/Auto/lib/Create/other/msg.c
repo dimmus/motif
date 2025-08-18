@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: msg.c /main/7 1995/07/14 11:18:29 drk $"
@@ -92,11 +92,11 @@ va_list ap;
                 switch (parse [++i]) {
                 case 'd':
 #if !defined(__STDC__)
-		      if (ap != NULL) 
+		      if (ap != NULL)
 #endif
 		      {
 	                 intargs[intargno] = (int *)va_arg(ap, int *);
-		         sprintf(allargs [allargno ++], 
+		         sprintf(allargs [allargno ++],
 				"%d", intargs[intargno++]);
 		         parse [i] = 's';
 		      }
@@ -105,10 +105,10 @@ va_list ap;
 
 	        case 's':
 #if !defined(__STDC__)
-		      if (ap != NULL) 
+		      if (ap != NULL)
 #endif
 		      {
-	       	          args[argno] = (char *)va_arg(ap, char *); 
+	       	          args[argno] = (char *)va_arg(ap, char *);
 		          if (args [argno] != (char *) NULL)
                              strcpy (allargs [allargno], args [argno]);
 		          allargno ++; argno++;
@@ -118,11 +118,11 @@ va_list ap;
 
                 case 'l':
 #if !defined(__STDC__)
-		      if (ap != NULL) 
+		      if (ap != NULL)
 #endif
 		      {
 	                 longargs[longargno] = (long *)va_arg(ap, long *);
-		         sprintf (allargs [allargno ++], "%l", 
+		         sprintf (allargs [allargno ++], "%l",
 			          longargs [longargno ++]);
 		         parse [i] = 's';
 		      }
@@ -131,11 +131,11 @@ va_list ap;
 
                 case 'c':
 #if !defined(__STDC__)
-		      if (ap != NULL) 
+		      if (ap != NULL)
 #endif
 		      {
 	                 *chargs[chargno] = (char)va_arg(ap, char);
-		         sprintf (allargs [allargno ++], "%c", 
+		         sprintf (allargs [allargno ++], "%c",
 			          chargs [chargno ++]);
 		      }
                       type_found = TRUE;
@@ -150,7 +150,7 @@ va_list ap;
     va_end(ap);
 
     /* This printf should be done a better way */
-    printf (parse, allargs [0], allargs [1], allargs [2], 
+    printf (parse, allargs [0], allargs [1], allargs [2],
 	    allargs [3], allargs [4], allargs [5], allargs [6],
 	    allargs [7], allargs [8], allargs [9]);
     fflush (stdout);
@@ -182,7 +182,7 @@ void msg_failure ( va_alist )
     char *parse2;
 #endif
 
-    if(mvsDetailLevel & FAILURE) { 
+    if(mvsDetailLevel & FAILURE) {
         strcpy(parse, "    FAILURE **: ");
 
 #ifdef __STDC__
@@ -219,7 +219,7 @@ void msg_error ( va_alist )
 #endif
     *parse = '\0';
 
-    if(mvsDetailLevel & ERROR) { 
+    if(mvsDetailLevel & ERROR) {
         strcpy(parse, "    ERROR **: ");
 
 #ifdef __STDC__
@@ -254,7 +254,7 @@ void msg_info ( va_alist )
     char *parse2;
 #endif
 
-    if(mvsDetailLevel & INFO) { 
+    if(mvsDetailLevel & INFO) {
         strcpy(parse, "    INFO: ");
 
 #ifdef __STDC__

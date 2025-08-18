@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cutpaste1.c /main/8 1995/07/13 17:54:26 drk $"
@@ -66,41 +66,41 @@ void ButtonCB(w, client_data, call_data)
     switch((int) client_data)
     {
       case 1:
-	fprintf(stdout, "CUTTING...\n"); 
-	CopyFileToClipboard(Text1, cb->event->xbutton.time); 
+	fprintf(stdout, "CUTTING...\n");
+	CopyFileToClipboard(Text1, cb->event->xbutton.time);
 	break;
 
       case 2:
-	fprintf(stdout, "PASTING...\n"); 
-	PasteItemFromClipboard(Text1); 
+	fprintf(stdout, "PASTING...\n");
+	PasteItemFromClipboard(Text1);
 	break;
 
       case 3:
-	fprintf(stdout, "DELETING PRIMARY SELECTION...\n"); 
-	DeletePrimarySelection(Text1, cb->event->xbutton.time); 
+	fprintf(stdout, "DELETING PRIMARY SELECTION...\n");
+	DeletePrimarySelection(Text1, cb->event->xbutton.time);
 	break;
 
       case 4:
-	fprintf(stdout, "DELETING FROM CLIPBOARD...\n"); 
+	fprintf(stdout, "DELETING FROM CLIPBOARD...\n");
 	XmClipboardUndoCopy(XtDisplay(Text1), XtWindow(Text1));
 	break;
 
       case 5:
 	fprintf(stdout, "STATUS...\n");
 	length = 256;
-    
-	status = XmClipboardInquireCount(XtDisplay(Text1), XtWindow(Text1), 
-					 &count, &length); 
+
+	status = XmClipboardInquireCount(XtDisplay(Text1), XtWindow(Text1),
+					 &count, &length);
 	if (status == ClipboardSuccess)
 	    fprintf(stdout, "XmClipboardInquireCount: %d\n", count);
 	else
-	    fprintf(stdout, "XmClipboardInquireCount status: %s\n", 
+	    fprintf(stdout, "XmClipboardInquireCount status: %s\n",
 		    StatusToString(status));
-	
-	status = XmClipboardInquireFormat(XtDisplay(Text1), XtWindow(Text1), 
-					  count, format_name, 
+
+	status = XmClipboardInquireFormat(XtDisplay(Text1), XtWindow(Text1),
+					  count, format_name,
 					  sizeof(format_name)-1, &length);
-	
+
 	if (status == ClipboardSuccess)
 	{
 	    format_name[length] = '\0';
@@ -108,37 +108,37 @@ void ButtonCB(w, client_data, call_data)
 		    length);
 	}
 	else
-	    fprintf(stdout, "XmClipboardInquireFormat status: %s\n", 
+	    fprintf(stdout, "XmClipboardInquireFormat status: %s\n",
 		    StatusToString(status));
-	
+
 	status = XmClipboardInquireLength(XtDisplay(Text1), XtWindow(Text1),
 					  format_name, &length);
 
 	if (status == ClipboardSuccess)
 	    fprintf(stdout, "XmClipboardInquireLength: %d\n", (int)length);
 	else
-	    fprintf(stdout, "XmClipboardInquireLength status: %s\n", 
+	    fprintf(stdout, "XmClipboardInquireLength status: %s\n",
 		    StatusToString(status));
 
-	
+
 	item_list = NULL;
 
-	status = XmClipboardInquirePendingItems(XtDisplay(Text1), 
+	status = XmClipboardInquirePendingItems(XtDisplay(Text1),
 						XtWindow(Text1),
-						format_name, &item_list, 
+						format_name, &item_list,
 						&pend_count);
 	if (status == ClipboardSuccess)
 	{
 	    fprintf(stdout, "XmClipboardInquirePending:\n");
-	
+
 	    for(i=0; i<(int) pend_count; i++)
 	    {
-		fprintf(stdout, "item %d: DataId=%d PrivateId=%d\n", 
+		fprintf(stdout, "item %d: DataId=%d PrivateId=%d\n",
 			item_list[i].DataId, item_list[i].PrivateId);
 	    }
 	}
 	else
-	    fprintf(stdout, "XmClipboardInquirePending status: %s\n", 
+	    fprintf(stdout, "XmClipboardInquirePending status: %s\n",
 		    StatusToString(status));
 
 	if(item_list)
@@ -163,7 +163,7 @@ void  main(argc, argv)
     XmString      tcs;
 
     CommonTestInit(argc, argv);
-    
+
 /*
  * Form
  */
@@ -182,14 +182,14 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);  n++;
     XtSetArg(args[n], XmNrows, 8);  n++;
     XtSetArg(args[n], XmNcolumns, 40);  n++;
-    
+
     Text1 = XmCreateText(Form1, "Text1", args, n);
     XtManageChild(Text1);
-    
+
 /*
  * RowColumn
  */
-    
+
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET);  n++;
     XtSetArg(args[n], XmNtopWidget, Text1);  n++;
@@ -203,7 +203,7 @@ void  main(argc, argv)
 
     RowCol1 = XmCreateRowColumn(Form1, "RowCol1", args, n);
     XtManageChild(RowCol1);
-    
+
 /*
  * CUT PushButton
  */
@@ -232,7 +232,7 @@ void  main(argc, argv)
  * DELETE PRIMARY SELECTION PushButton
  */
 
-    tcs = XmStringLtoRCreate( "DELETE\nPRIMARY\nSELECTION", 
+    tcs = XmStringLtoRCreate( "DELETE\nPRIMARY\nSELECTION",
 			     XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -245,7 +245,7 @@ void  main(argc, argv)
  * DELETE FROM CLIPBOARD PushButton
  */
 
-    tcs = XmStringLtoRCreate( "DELETE\nFROM\nCLIPBOARD", 
+    tcs = XmStringLtoRCreate( "DELETE\nFROM\nCLIPBOARD",
 	XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -315,16 +315,16 @@ void CopyFileToClipboard(textw, time)
  * using the clipboard facilities, copy the selected text to the clipboard
  */
 
-   if (selected_string != NULL) 
+   if (selected_string != NULL)
    {
-	
+
 /*
  * start copy to clipboard
  */
 
         tcs = XmStringLtoRCreate( "XM_EDITOR", XmSTRING_DEFAULT_CHARSET);
 
-	status = XmClipboardStartCopy(XtDisplay(textw), XtWindow(textw), tcs, 
+	status = XmClipboardStartCopy(XtDisplay(textw), XtWindow(textw), tcs,
 				      time, textw, NULL, &item_id);
 
 	if (status != ClipboardSuccess)
@@ -353,7 +353,7 @@ void CopyFileToClipboard(textw, time)
  * end the copy to the clipboard
  */
 
-	status = XmClipboardEndCopy(XtDisplay(textw),  XtWindow(textw), 
+	status = XmClipboardEndCopy(XtDisplay(textw),  XtWindow(textw),
 				    item_id);
 
 	if (status != ClipboardSuccess)
@@ -425,11 +425,11 @@ void PasteItemFromClipboard(textw)
  * and paste it at the current cursor position
  */
 
-/* 
+/*
  * find the length of the paste item
  */
 
-    status = XmClipboardInquireLength(XtDisplay(textw), XtWindow(textw), 
+    status = XmClipboardInquireLength(XtDisplay(textw), XtWindow(textw),
 				      "STRING", &length);
 
     if (status != ClipboardSuccess)
@@ -438,7 +438,7 @@ void PasteItemFromClipboard(textw)
 		StatusToString(status));
 	return;
     }
-			
+
 /*
  * malloc necessary space
  */
@@ -449,7 +449,7 @@ void PasteItemFromClipboard(textw)
  * Retrieve paste item
  */
 
-    status = XmClipboardRetrieve(XtDisplay(textw), XtWindow(textw), "STRING", 
+    status = XmClipboardRetrieve(XtDisplay(textw), XtWindow(textw), "STRING",
 				 buffer, length, &outlength, &private_id);
 
     if (status != ClipboardSuccess)
@@ -465,7 +465,7 @@ void PasteItemFromClipboard(textw)
 
     XtSetArg(al[0], XmNcursorPosition, &cursorPos);
     XtGetValues(textw, al, 1);
-			
+
 /*
  * add new text
  */
@@ -482,7 +482,7 @@ static char *StatusToString(status)
         case ClipboardFail:
            returnvalue = "Clipboard Fail";
            break;
-        case ClipboardTruncate: 
+        case ClipboardTruncate:
            returnvalue = "Clipboard Truncate";
            break;
         case ClipboardLocked:
@@ -501,4 +501,3 @@ static char *StatusToString(status)
   return(returnvalue);
 
 }
-

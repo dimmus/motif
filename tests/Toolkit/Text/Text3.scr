@@ -1,5 +1,5 @@
 # $XConsortium: Text3.scr /main/6 1995/07/17 20:41:51 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,18 +20,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-#  @) A client with a list of functions, a control panel and a Text widget to 
+#  @) A client with a list of functions, a control panel and a Text widget to
 #  be acted upon should appear.
 #  #) Select the XmTextGetEditable() function from the Functions List by
 #  clicking MB1 on it.
 #  Click on the Call Function PushButton.
 #  The current editing status of the Action Text widget will be shown in
-#  the Status/Input widget.  The status will be True.  Confirm this by clicking 
+#  the Status/Input widget.  The status will be True.  Confirm this by clicking
 #  MB1 in the Action text and deleting a few characters.
 WindowRaise Shell1
 LocatePointer List1 RListItem 0
@@ -94,7 +94,7 @@ CompareVisual Text1
 
 #  #) Select the XmTextSetMaxLength() function from the list.
 #  Set the Numerical Arg 1 Scale to 30.  Click the Call Function PushButton.
-#  Now select the XmTextGetMaxLength() function.  The Status widget should 
+#  Now select the XmTextGetMaxLength() function.  The Status widget should
 #  read 30.
 #  You should be able to add text to the Action
 #  Text widget until it's length is 30.

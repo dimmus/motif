@@ -27,7 +27,7 @@
 /*
  *	File: ToggleBtn3.c
  *
- *	Program to compare between 1.1 and 1.2 various togglebuttons within 
+ *	Program to compare between 1.1 and 1.2 various togglebuttons within
  *	different managers.
  *
  */
@@ -56,16 +56,16 @@ unsigned char   manager_needed;
 
 Widget	Manager1;
 
-Widget	ToggleButton1, 
-		ToggleButton2, 
-		ToggleButton3, 
+Widget	ToggleButton1,
+		ToggleButton2,
+		ToggleButton3,
 		ToggleButton4,
 		ToggleButton5,
 		ToggleButton6;
 
-Widget	ToggleBGad1, 
-		ToggleBGad2, 
-		ToggleBGad3, 
+Widget	ToggleBGad1,
+		ToggleBGad2,
+		ToggleBGad3,
 		ToggleBGad4,
 		ToggleBGad5,
 		ToggleBGad6;
@@ -78,7 +78,7 @@ main(unsigned int argc, char **argv)
 	Arg			args[MAX_ARGS];
 	Cardinal	n;
 	XmFontList fontlist;
-	
+
 
 	manager_needed = BULLETINBOARD;
 
@@ -97,7 +97,7 @@ main(unsigned int argc, char **argv)
     else if (manager_needed == PANEDWINDOW)
         Manager1 = XmCreatePanedWindow(Shell1, "Manager1", args, n);
     else if (manager_needed == ROWCOLUMN) {
-	
+
 		XtSetArg(args[n], XmNcolumns, 1); n++;
 		XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
         Manager1 = XmCreateRowColumn(Shell1, "Manager1", args, n);
@@ -172,12 +172,12 @@ main(unsigned int argc, char **argv)
 
 	px_unselect = XCreatePixmapFromBitmapData(display,
 				  DefaultRootWindow(display),
-				  XBMu_BITS, 
+				  XBMu_BITS,
 				  XBMu_WIDTH,XBMu_HEIGHT,
 				  WhitePixel(display,DefaultScreen(display)),
 				  BlackPixel(display,DefaultScreen(display)),
 				  DefaultDepth(display,DefaultScreen(display)));
-	px_select = XCreatePixmapFromBitmapData(display, 
+	px_select = XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				XBMs_BITS, XBMs_WIDTH,XBMs_HEIGHT,
 				WhitePixel(display,DefaultScreen(display)),
@@ -202,7 +202,7 @@ main(unsigned int argc, char **argv)
 	}
 	ToggleButton5 = XmCreateToggleButton(Manager1, "ToggleButton5", args, n);
 	XtManageChild(ToggleButton5);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNindicatorOn, False);  n++;
 	XtSetArg(args[n], XmNshadowThickness, 4); n++;
@@ -224,7 +224,7 @@ main(unsigned int argc, char **argv)
 	XtRealizeWidget(Shell1);
 
   	for (n = 0; n < 5; n++)
-		CommonPause();                  
+		CommonPause();
 
 	XmToggleButtonSetState(ToggleButton5, TRUE, FALSE);
 

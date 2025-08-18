@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # Try the following steps.
@@ -125,7 +125,7 @@ CompareVisual form
 
 
 
-# Attach the LEFT edge of BUTTON1 to WIDGET. The form will resize very 
+# Attach the LEFT edge of BUTTON1 to WIDGET. The form will resize very
 # small and a warning about circular attachments will appear.
 
 LocatePointer sides2
@@ -220,14 +220,14 @@ ClickMB Btn1
 
 # This is an impossible case to render, so Button2 will disappear and
 # the following message appears in stdout:
-#  Warning: 
+#  Warning:
 #    Name: form
 #    Class: XmForm
 #    Circular dependency in Form children.
 
 CompareVisual form
 
-# Use the CLEAR buttons to reset. 
+# Use the CLEAR buttons to reset.
 
 LocatePointer clear1
 ClickMB Btn1
@@ -240,6 +240,3 @@ Continue
 
 CompareVisual form
 Exit
-
-
-

@@ -22,7 +22,7 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual form 
+TRACE:(1) CompareVisual form
 TRACE:(2) WindowIconify Shell1
 TRACE:(3) WindowDeiconify Shell1
 TRACE:(4) Exit

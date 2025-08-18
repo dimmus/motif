@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -32,7 +32,7 @@
 
 
 /* Include appropriate files. */
-#include "Help.h" 
+#include "Help.h"
 #include <Xm/ManagerP.h>
 
 /* Allow for C++ compilation. */
@@ -108,4 +108,3 @@ typedef struct _XmdHelpConstraintRec
 
 /* Ensure that the file be included only once. */
 #endif /* _XmdHelpP_h */
-

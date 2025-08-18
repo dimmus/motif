@@ -23,13 +23,13 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is mesDia.uid ---- 
+---- The uid file to be opened is mesDia.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual Message_Dialog 
-TRACE:(2) LocatePointer Message_Dialog RCancelButton 
-TRACE:(3) LocatePointer Message_Dialog ROkButton 
-TRACE:(4) LocatePointer Message_Dialog RHelpButton 
-TRACE:(5) CompareVisual Message_Dialog 
+TRACE:(1) CompareVisual Message_Dialog
+TRACE:(2) LocatePointer Message_Dialog RCancelButton
+TRACE:(3) LocatePointer Message_Dialog ROkButton
+TRACE:(4) LocatePointer Message_Dialog RHelpButton
+TRACE:(5) CompareVisual Message_Dialog
 TRACE:(6) Exit
 Exiting Test...Please Standby...

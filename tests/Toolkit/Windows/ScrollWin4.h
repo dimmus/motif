@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: ScrollWin4.h /main/7 1995/07/13 19:50:16 drk $ */
 
 
@@ -39,7 +39,7 @@ static XtCallbackProc  ContinueCB();
 static XtCallbackProc  actCB();
 static XtCallbackProc  QuitCB();
 
-static char *Pause_events[] = 
+static char *Pause_events[] =
       {
       "1) A Scrolled Window with horizontal and vertical scrollbars should\n\
    appear. The scrollbars should be on top and on the left. The background\n\
@@ -104,12 +104,6 @@ static char *Pause_events[] =
    should be visible.\n\
 2) Test Finished -- Exit Please"
 };
-	
+
 int Pause_cnt = 0;
 XtAppContext  app_context;
-
-
-
-
-
-

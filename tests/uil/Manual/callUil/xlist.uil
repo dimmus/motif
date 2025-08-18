@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,13 +19,13 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: xlist.uil /main/4 1995/07/13 20:32:59 drk $
 !******************************************************************************
-!* 	This module is a correct version of a list facility. It is 
+!* 	This module is a correct version of a list facility. It is
 !*	designed as UIL interface to a test the Callable UIL compiler.
 
 module xlist
@@ -90,7 +90,7 @@ module xlist
 	File_Button:	XmCascadeButton {
 		arguments {
 			XmNlabelString = compound_string("File");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		controls {
 			XmPulldownMenu 	File_Menu;
@@ -101,7 +101,7 @@ module xlist
 	Option_Button:	XmCascadeButton {
 		arguments {
 			XmNlabelString = compound_string("Option");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		controls {
 			XmPulldownMenu 	Option_Menu;
@@ -112,7 +112,7 @@ module xlist
 !/*		    and exit the editor.
 !/****************************************************************************
 
-   object 
+   object
 	File_Menu:	XmPulldownMenu {
 		arguments {
 			XmNbackground = forest_green;
@@ -128,19 +128,19 @@ module xlist
 	Open_Button:	XmPushButton  {
 		arguments {
 			XmNlabelString = compound_string("Open File ..");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		callbacks {
 			XmNactivateCallback = procedure Place_FsBox();
 		};
 	};
-  
+
 
   object
 	Quit_Button:	XmPushButton  {
 		arguments {
 			XmNlabelString = compound_string("Quit");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		callbacks {
 			XmNactivateCallback = procedure exit_test();
@@ -149,7 +149,7 @@ module xlist
 !/****************************************************************************
 !/*	Option Menu - To Give the user the ability to chose options
 !/****************************************************************************
-	
+
   object
 	Option_Menu:	XmPulldownMenu {
 		arguments {
@@ -186,8 +186,8 @@ module xlist
 			XmPushButton font4;
 		};
 	};
-			
-		
+
+
    object
 	font1:	XmPushButton {
 		arguments {
@@ -196,7 +196,7 @@ module xlist
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('fixed');	
+					('fixed');
 		};
 	};
 
@@ -209,7 +209,7 @@ module xlist
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('variable');	
+					('variable');
 		};
 	};
 
@@ -222,7 +222,7 @@ module xlist
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('8x13bold');	
+					('8x13bold');
 		};
 	};
 
@@ -235,7 +235,7 @@ module xlist
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('6x12');	
+					('6x12');
 		};
 	};
 
@@ -251,9 +251,9 @@ module xlist
 		};
 	};
 !/****************************************************************************
-!/*	Text Area - Define The actual Text area 
+!/*	Text Area - Define The actual Text area
 !/****************************************************************************
-   object 
+   object
 	ScrolledWin:	XmScrolledWindow {
 		arguments {
 			XmNx = 0;
@@ -295,7 +295,7 @@ module xlist
 		};
 	};
 !/**************************************************************************/
-!/*	A File Selection Box to be used to open a file for viewing       
+!/*	A File Selection Box to be used to open a file for viewing
 !/**************************************************************************/
 
    object

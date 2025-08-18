@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CMovePointer.c /main/7 1995/07/14 11:37:30 drk $"
@@ -145,7 +145,7 @@ int target_x, target_y;
                         tmp_object = new_object->parent;
                         xisInform.current_obj = tmp_object;
                     }
-                    if (tmp_object != NULL && 
+                    if (tmp_object != NULL &&
                         tmp_object->proc_InformExpectedActions != NULL) {
 
                         (*tmp_object->proc_InformExpectedActions)
@@ -166,7 +166,7 @@ int target_x, target_y;
                         tmp_object = object->parent;
                         xisInform.current_obj = tmp_object;
                     }
-                    if (tmp_object != NULL && 
+                    if (tmp_object != NULL &&
                         tmp_object->proc_InformExpectedActions != NULL) {
                         (*tmp_object->proc_InformExpectedActions)
                                                     (xisInform.event_code);
@@ -246,7 +246,7 @@ int target_x, target_y;
         } /* End if(!xisPointerGrabbed || xisWindowExists) */
         xisInform.is_valid = False;
     } /* End for() */
-        
+
     /* Now move pointer on the screen */
     xisMovePointer(target_x, target_y);
 

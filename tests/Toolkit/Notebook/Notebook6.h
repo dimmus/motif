@@ -33,7 +33,7 @@
 
 /* Mechanism used to get the creation function associated with a widget. */
 
-typedef struct { 
+typedef struct {
 	         char *name;
 		 Widget (*CreateFunction) (Widget, char *, ArgList, Cardinal);
 	       } WidgetItem;
@@ -43,33 +43,32 @@ typedef struct {
 
 
 WidgetItem WidgetStruct[] =  {
-                   "XmArrowButton", XmCreateArrowButton,   
-                   "XmArrowButtonGadget", XmCreateArrowButtonGadget, 
+                   "XmArrowButton", XmCreateArrowButton,
+                   "XmArrowButtonGadget", XmCreateArrowButtonGadget,
 		   "XmBulletinBoard", XmCreateBulletinBoard,
-		   "XmDrawnButton", XmCreateDrawnButton,   
+		   "XmDrawnButton", XmCreateDrawnButton,
 		   "XmDrawingArea", XmCreateDrawingArea,
                    "XmFileSelectionBox",XmCreateFileSelectionBox,
                    "XmForm", XmCreateForm,
 		   "XmFrame", XmCreateFrame,
-		   "XmLabel", XmCreateLabel,  
-		   "XmLabelGadget", XmCreateLabelGadget,   
+		   "XmLabel", XmCreateLabel,
+		   "XmLabelGadget", XmCreateLabelGadget,
                    "XmList", XmCreateList  ,
 		   "XmMainWindow", XmCreateMainWindow,
-                   "XmMessageBox", XmCreateMessageBox,   
+                   "XmMessageBox", XmCreateMessageBox,
 		   "XmPanedWindow",XmCreatePanedWindow,
                    "XmPushButton",   XmCreatePushButton,
-		   "XmPushButtonGadget", XmCreatePushButtonGadget,  
+		   "XmPushButtonGadget", XmCreatePushButtonGadget,
 		   "XmRowColumn", XmCreateRowColumn,
 		   "XmScale", XmCreateScale,
-                   "XmScrollBar", XmCreateScrollBar,  
+                   "XmScrollBar", XmCreateScrollBar,
 		   "XmScrolledText", XmCreateScrolledText,
-                   "XmSelectionBox", XmCreateSelectionBox,  
-		   "XmSeparator", XmCreateSeparator,                     
-                   "XmSeparatorGadget",XmCreateSeparatorGadget, 
+                   "XmSelectionBox", XmCreateSelectionBox,
+		   "XmSeparator", XmCreateSeparator,
+                   "XmSeparatorGadget",XmCreateSeparatorGadget,
 		   "XmText", XmCreateText,
-                   "XmTextField", XmCreateTextField,   
-		   "XmToggleButton", XmCreateToggleButton,   
-                   "XmToggleButtonGadget", XmCreateToggleButtonGadget,  
+                   "XmTextField", XmCreateTextField,
+		   "XmToggleButton", XmCreateToggleButton,
+                   "XmToggleButtonGadget", XmCreateToggleButtonGadget,
 		   "XmScrolledWindow", XmCreateScrolledWindow
 		   };
-

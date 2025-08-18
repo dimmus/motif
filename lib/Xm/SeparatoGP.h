@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmSeparatorGadgetP_h
 #define _XmSeparatorGadgetP_h
 
@@ -60,17 +60,17 @@ typedef struct _XmSeparatorGCacheObjPart
    unsigned char  orientation;
    unsigned char  separator_type;
    GC             separator_GC;
-   
+
    GC               background_GC;
    GC               top_shadow_GC;
    GC               bottom_shadow_GC;
-   
+
    Pixel            foreground;
    Pixel            background;
-   
+
    Pixel            top_shadow_color;
    Pixmap           top_shadow_pixmap;
-   
+
    Pixel            bottom_shadow_color;
    Pixmap           bottom_shadow_pixmap;
 } XmSeparatorGCacheObjPart;

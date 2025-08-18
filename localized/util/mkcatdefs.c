@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #include <stdio.h>
@@ -86,7 +86,7 @@ static int hash(char *);
  *         mkcatdefs <name> <msg_file>
  *
  *  	Results are 1) Creates header file <name>.h.
- *                  2) Displays message file to stdout. The message file is 
+ *                  2) Displays message file to stdout. The message file is
  *                     ready to be used as input to gencat.
  *
  *   	mkcatdefs takes a message definition file and produces
@@ -102,28 +102,28 @@ static int hash(char *);
  */
 
 int
-main (int argc, 
-      char *argv[]) 
+main (int argc,
+      char *argv[])
 {
   register int i;
   register char *cp;
   int count;
   char *t;
-  
+
   setlocale (LC_ALL,"");
-  
+
   /* usage: handle multiple files; -h option has to be at the end */
   if (argc < 3) {
-    fprintf (stderr, 
-	     "mkcatdefs: Usage: %s header_file msg_file [msg_file...] [-h]\n", 
-	     argv [0]);	
+    fprintf (stderr,
+	     "mkcatdefs: Usage: %s header_file msg_file [msg_file...] [-h]\n",
+	     argv [0]);
     exit (0);
   }
-  
+
   /* check if  include file should be created; -h is the last argument */
-  if (argv[argc-1][0] == '-' && argv[argc-1][1] == 'h') 
+  if (argv[argc-1][0] == '-' && argv[argc-1][1] == 'h')
     inclfile = 0;
-  
+
   /* open header output file */
   if (inclfile) {
     mname = argv [1];
@@ -154,14 +154,14 @@ main (int argc,
       }
     }
   } else sprintf (outname, "msg.h");
-  
-  
+
+
   /* open new msg output file */
   msgfp = stdout;
-  
-  /* if message descriptor files were specified then process each one in turn 
+
+  /* if message descriptor files were specified then process each one in turn
    */
-  
+
   if (inclfile == 0 )
     count = argc - 1;
   else
@@ -184,17 +184,17 @@ main (int argc,
       }
     }
   }
-  
+
   if (inclfile) {
     fflush (outfp);
     if (ferror (outfp)) {
-      fprintf (stderr, "mkcatdefs: There were write errors on file %s\n", 
+      fprintf (stderr, "mkcatdefs: There were write errors on file %s\n",
 	       outname);
       errflg = 1;
     }
     fclose (outfp);
   }
-  
+
   if (errflg) {
     fprintf (stderr, "mkcatdefs: Errors found: no %s created\n", outname);
     if (inclfile)  unlink(outname);
@@ -207,8 +207,8 @@ main (int argc,
 		 outname);
 	unlink (outname);
       }
-    } 
-    else 
+    }
+    else
       fprintf(stderr, "mkcatdefs: no %s created\n", outname);
   }
   exit (errflg);
@@ -236,16 +236,16 @@ mkcatdefs(char *fname)
   register int n;
   int contin = 0;
   int len;		/* # bytes in a character */
-  
-  
+
+
   /* put out header for include file */
   if (inclfile)
     {
       fprintf (outfp, "/* $%s$ */\n", "XConsortium");
-      fprintf (outfp, "\n\n/* The following was generated from %s. */\n\n", 
+      fprintf (outfp, "\n\n/* The following was generated from %s. */\n\n",
 	       fname);
     }
-  
+
   /* process the message file */
   while (fgets(line, MAXLINELEN, descfile)) {
     line[MAXLINELEN-1] = '\0'; /* terminate in case length exceeded */
@@ -253,8 +253,8 @@ mkcatdefs(char *fname)
     for (cp=line; *cp; cp+=len) {
       len = mblen(cp, MB_CUR_MAX);
       if (len < 0) {
-	fprintf (stderr, 
-		 "mkcatdefs: sourcefile contains invalid character:\n\t%s", 
+	fprintf (stderr,
+		 "mkcatdefs: sourcefile contains invalid character:\n\t%s",
 		 line);
 	errflg = 1;
 	return;
@@ -267,7 +267,7 @@ mkcatdefs(char *fname)
       for (cpt = cp; *cp; cp += len) {
 	len = mblen(cp, MB_CUR_MAX);
 	if (len < 0) {
-	  fprintf (stderr, 
+	  fprintf (stderr,
 		   "mkcatdefs: sourcefile contains invalid character:\n\t%s",
 		   line);
 	  errflg = 1;
@@ -286,19 +286,19 @@ mkcatdefs(char *fname)
 	  fputs (line, msgfp);
 	continue; /* line is a comment */
       }
-      if ((strncmp (cp, "set", 3) == 0) && 
-	  ((len = mblen(&(cp[3]), MB_CUR_MAX)) == 1) && 
+      if ((strncmp (cp, "set", 3) == 0) &&
+	  ((len = mblen(&(cp[3]), MB_CUR_MAX)) == 1) &&
 	  (isspace(cp[3]) != 0)) {
 	char setname [MAXIDLEN];
-	
+
 	sscanf (cp+3+len, "%s", setname);
-	if (inclfile) 
+	if (inclfile)
 	  fprintf (outfp, "\n/* definitions for set %s */\n", setname);
 	if (isdigit(setname[0])) {
 	  cpt = setname;
 	  do  {
 	    if (!isdigit(*cpt)) {
-	      fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n", 
+	      fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n",
 		      setname);
 	      errflg = 1;
 	      return;
@@ -309,11 +309,11 @@ mkcatdefs(char *fname)
 	    setno = n;
 	  else {
 	    if (n == 0)
-	      fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n", 
-		      setname);	
+	      fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n",
+		      setname);
 	    else
-	      fprintf(stderr, 
-		      "mkcatdefs: set # %d already assigned or sets not in ascending sequence\n", 
+	      fprintf(stderr,
+		      "mkcatdefs: set # %d already assigned or sets not in ascending sequence\n",
 		      n);
 	    errflg = 1;
 	    return;
@@ -323,15 +323,15 @@ mkcatdefs(char *fname)
 	  do  {
 	    len = mblen(cpt, MB_CUR_MAX);
 	    if (len <= 0) {
-	      fprintf (stderr, 
+	      fprintf (stderr,
 		       "mkcatdefs: sourcefile contains invalid character:\n\t%s",
 		       line);
 	      errflg = 1;
 	      return;
 	    }
 	    if (len == 1 && (isalnum(*cpt) == 0) && (*cpt != '_')) {
-	      fprintf(stderr, 
-		      "mkcatdefs: %s is an invalid identifier\n", 
+	      fprintf(stderr,
+		      "mkcatdefs: %s is an invalid identifier\n",
 		      setname);
 	      errflg = 1;
 	      return;
@@ -358,12 +358,12 @@ mkcatdefs(char *fname)
 	  contin = 0;
       } else if (setno > 1) { /* set must have been seen first */
 	char msgname [MAXIDLEN];
-	
+
 	msgname [0] = '\0';
 	if (sscanf (cp, "%s", msgname) && msgname[0]) {
 	  len = mblen(cp, MB_CUR_MAX);
 	  if (len < 0) {
-	    fprintf (stderr, 
+	    fprintf (stderr,
 		     "mkcatdefs: sourcefile contains invalid character:\n\t%s",
 		     line);
 	    errflg = 1;
@@ -374,15 +374,15 @@ mkcatdefs(char *fname)
 	    do  {
 	      len = mblen(cpt, MB_CUR_MAX);
 	      if (len < 0) {
-		fprintf (stderr, 
+		fprintf (stderr,
 			 "mkcatdefs: sourcefile contains invalid character:\n\t%s",
 			 line);
 		errflg = 1;
 		return;
 	      }
 	      if (len == 1 && (isalnum(*cpt) == 0) && (*cpt != '_')) {
-		fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n", 
-			msgname);	
+		fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n",
+			msgname);
 		errflg = 1;
 		return;
 	      }
@@ -395,8 +395,8 @@ mkcatdefs(char *fname)
 	    if (chkcontin(line))
 	      contin = 1;
 	    if(insert(msgname,msgno++) < 0) {
-	      fprintf(stderr, "mkcatdefs: name %s used more than once\n", 
-		      msgname); 
+	      fprintf(stderr, "mkcatdefs: name %s used more than once\n",
+		      msgname);
 	      errflg = 1;
 	      return;
 	    }
@@ -416,11 +416,11 @@ mkcatdefs(char *fname)
 	    else {
 	      errflg = 1;
 	      if (n == 0)
-		fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n", 
+		fprintf(stderr, "mkcatdefs: %s is an invalid identifier\n",
 			msgname);
-	      else if (n == msgno) 
+	      else if (n == msgno)
 		fprintf(stderr,
-			"mkcatdefs: message id %s already assigned to identifier\n", 
+			"mkcatdefs: message id %s already assigned to identifier\n",
 			msgname);
 	      else
 		fprintf(stderr,
@@ -434,7 +434,7 @@ mkcatdefs(char *fname)
       }
     fputs (line, msgfp);
   }
-  
+
   /* make sure the operations read/write operations were successful */
   if (ferror(descfile)) {
     fprintf (stderr, "mkcatdefs: There were read errors on file %s\n", inname);
@@ -455,17 +455,17 @@ mkcatdefs(char *fname)
  *          1 - continuation line.
  */
 static int
-chkcontin(char *line) 
+chkcontin(char *line)
 {
   int	len;		/* # bytes in character */
   wchar_t	wc;		/* process code of current character in line */
   wchar_t	wcprev;		/* process code of previous character in line */
-  
+
   for (wc=0; *line; line+=len) {
     wcprev = wc;
     len = mbtowc(&wc, line, MB_CUR_MAX);
     if (len < 0) {
-      fprintf (stderr, 
+      fprintf (stderr,
 	       "mkcatdefs: sourcefile contains invalid character:\n\t%s",
 	       line);
       errflg = 1;
@@ -494,9 +494,9 @@ static struct name *symtab[HASHSIZE];	/* hashed pointers to binary trees */
  *
  * FUNCTION: Insert symbol
  *
- * EXECUTION ENVIRONMENT: 
+ * EXECUTION ENVIRONMENT:
  *  	User mode.
- * 
+ *
  * NOTES: These routines manipulate a symbol table for the mkcatdefs program.
  *  	  The symbol table is organized as a hashed set of binary trees. If the
  *  	  symbol being passed in is found then a -1 is returned, otherwise the
@@ -509,49 +509,49 @@ static struct name *symtab[HASHSIZE];	/* hashed pointers to binary trees */
  *         -1 - symbol exists.
  */
 
-static int 
+static int
 insert(char *tname,
        int seqno)
      /*
        tname - pointer to symbol
        seqno - integer value of symbol
        */
-     
+
 {
   register struct name *ptr,*optr;
   int rslt = -1,i,hashval;
-  
+
   hashval = hash(tname);
   ptr = symtab[hashval];
-  
+
   /* search the binary tree for specified symbol */
   while (ptr && (rslt = strcmp(tname,ptr->regname))) {
-    optr=ptr;  
+    optr=ptr;
     if (rslt<0)
       ptr = ptr->left;
     else
       ptr = ptr->right;
   }
-  
+
   if (rslt == 0)  /* found the symbol already defined */
     return (-1);
-  else {          /* symbol not defined yet so put it into symbol table */    
+  else {          /* symbol not defined yet so put it into symbol table */
     ptr = (struct name *)calloc(sizeof(struct name), 1);
     ptr->regname = malloc(strlen(tname) + 1);
     strcpy (ptr->regname, tname);
     ptr->regnr = seqno;
-    
+
     /* not first entry in tree so update branch pointer */
     if (symtab[hashval]) {
       if (rslt < 0)
 	optr->left = ptr;
       else
 	optr->right = ptr;
-      
+
       /* first entry in tree so set the root pointer */
     } else
       symtab[hashval] = ptr;
-    
+
     return (0);
   }
 }
@@ -561,37 +561,37 @@ insert(char *tname,
  *
  * FUNCTION: Search for symbol
  *
- * EXECUTION ENVIRONMENT: 
+ * EXECUTION ENVIRONMENT:
  *  	User mode.
- * 
+ *
  * NOTES: Searches for specific identifier. If found, return allocated number.
  * 	  If not found, return -1.
  *
  * RETURNS: Symbol sequence number if symbol is found.
  *          -1 if symbol is not found.
  */
-static int 
+static int
 nsearch (char *tname)
      /*
        tname - pointer to symbol
        */
-     
+
 {
   register struct name *ptr,*optr;
   int rslt = -1,i,hashval;
-  
+
   hashval = hash(tname);
   ptr = symtab[hashval];
-  
+
   /* search the binary tree for specified symbol */
   while (ptr && (rslt = strcmp(tname,ptr->regname))) {
-    optr=ptr;  
+    optr=ptr;
     if (rslt<0)
       ptr = ptr->left;
     else
       ptr = ptr->right;
   }
-  
+
   if (rslt == 0)		/* found the symbol already defined */
     return(ptr->regnr);
   else
@@ -604,22 +604,22 @@ nsearch (char *tname)
  *
  * FUNCTION: Create hash value from symbol name.
  *
- * EXECUTION ENVIRONMENT: 
+ * EXECUTION ENVIRONMENT:
  *  	User mode.
- * 
+ *
  * NOTES: Hash the symbol name using simple addition algorithm.
  * 	  Make sure that the hash value is in range when it is returned.
  *
  * RETURNS: A hash value.
  */
 
-static int 
+static int
 hash (char *name) /* pointer to symbol */
 {
   register int hashval = 0;
-  
+
   while (*name)
     hashval += *name++;
-  
+
   return (hashval & HASHMAX);
 }

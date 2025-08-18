@@ -63,7 +63,7 @@ main (int argc, char **argv)
   n=0;
   XtSetArg (args[n], XmNheight, 200); n++;
   XtSetArg (args[n], XmNwidth, 200); n++;
-  TestShell2 = XtCreatePopupShell ("TestWindow2", 
+  TestShell2 = XtCreatePopupShell ("TestWindow2",
 				 topLevelShellWidgetClass,
 				 Shell1, args, n);
 
@@ -77,7 +77,7 @@ main (int argc, char **argv)
   n=0;
   XtSetArg (args[n], XmNheight, 200); n++;
   XtSetArg (args[n], XmNwidth, 200); n++;
-  TestShell3 = XtCreatePopupShell ("TestWindow3", 
+  TestShell3 = XtCreatePopupShell ("TestWindow3",
 				 topLevelShellWidgetClass,
 				 Shell1, args, n);
 
@@ -91,18 +91,18 @@ main (int argc, char **argv)
 
   CommonPause();
 
-  
+
   n=0;
   MesDialog1= XmCreateMessageDialog (TestShell1,"MesDialog1",
                                      args, n);
   XtManageChild (MesDialog1);
-  
+
   CommonPause();
   CommonPause();
 
-  
 
-  
+
+
 
 
   CommonPause();
@@ -114,4 +114,3 @@ main (int argc, char **argv)
   XtAppMainLoop (app_context);
 
 }
-

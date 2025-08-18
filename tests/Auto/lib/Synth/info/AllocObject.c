@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AllocObject.c /main/7 1995/07/14 11:31:17 drk $"
@@ -71,17 +71,17 @@ int object_type,instance;
     static char routine_name[] = "xisAllocObject():";
     char msg_string[125];
 
-    /* Find first unused object. */   
+    /* Find first unused object. */
     /* Note "<=" since we may need 1 beyond end */
 
     for (i=0; (i <= xisMaxObjectNum && xisObjects[i].in_use); i++) {
         if (i >= MAX_NUM_OBJECTS) {
 	    sprintf (msg_string, _AutoMessages[WARNMSG101], routine_name);
             AutoError(msg_string);
-                            
-            
+
+
         }
-    } 
+    }
 
     xisObjects[i].in_use = True;
 
@@ -140,12 +140,12 @@ int object_type,instance;
 	} /* End while() */
 	xisObjects[i].id.window_under_parent = window;
     }
-    else 
+    else
         xisObjects[i].id.window_under_parent = xisObjects[i].id.window;
 
     /* Then insert in parent's child list in correct stacking position */
     if (parent_obj != NULL_Object) {
-                
+
         object = xisObjects[i].parent->first_child;
 
         /* If 1st child for parent... */
@@ -172,24 +172,24 @@ int object_type,instance;
         /* top to bottom stacking order)                    */
 
         else {
-                   
+
             /* First find this new obj's window in parent list */
             for (j=0; j<parent_obj->id.num_children; j++) {
-                if (parent_obj->id.children_windows[j] 
+                if (parent_obj->id.children_windows[j]
                     == xisObjects[i].id.window_under_parent)
 
                     break;
             }
             if (j == parent_obj->id.num_children) {
                 (*xisTraceMsg)("xisAllocObject(): parent_obj not true window parent of widget\n");
-                        
+
                 /* If parent does not know this window then orphan :-)*/
                 /* So, blow it off again, and just put on end of list.*/
                 /* This occurs with PullDown/Popup children of        */
                 /* Pulldown/Popup widgets. Even though the 2nd is the */
                 /* child of the first, they both "share" the same     */
                 /* Shell parent.                                      */
-                      
+
                 while (object->next_sibling != NULL_Object) {
                     object = object->next_sibling;
 	        }
@@ -200,7 +200,7 @@ int object_type,instance;
                 /* Now, starting from the child following that child  */
                 /* in the parent's list (in bot to top stacking order */
                 /* see Xlib's XQueryTree for more on this) look for   */
-                /* first window that we find a corresponding object   */ 
+                /* first window that we find a corresponding object   */
                 /* for.  This object is above the new object.         */
 
                 for (k=j+1; k<parent_obj->id.num_children; k++) {
@@ -208,7 +208,7 @@ int object_type,instance;
                     /* See if we find corresponding child object */
                     for ( object=parent_obj->first_child;
                           (object != NULL_Object) &&
-                          (object->id.window_under_parent != 
+                          (object->id.window_under_parent !=
                               parent_obj->id.children_windows[k]);
                           object=object->next_sibling               );
 

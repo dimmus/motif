@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 #
 # File menu
@@ -113,7 +113,7 @@
 # Colors and fonts for all widgets, unless otherwise specified
 #
 *background:			ivory
-*renderTable:			
+*renderTable:
 *renderTable*fontName:		*helvetica*bold*-r-*--14*
 *renderTable*fontType:		font_is_font
 *renderTable*tabList:		20fu, +17fu

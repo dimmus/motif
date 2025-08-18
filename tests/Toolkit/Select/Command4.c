@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Command4.c /main/7 1995/07/13 19:17:16 drk $"
@@ -68,7 +68,7 @@ void  main(argc, argv)
     Widget        Frame2, RadioBox1;
     Widget        Go, PopB, QuitB, Redo;
     Widget	  Frame3, RowCol;
-    static char   *toggle_names[ ] = { 
+    static char   *toggle_names[ ] = {
 				      "listVisibleItemCount",
 				      "historyVisibleItemCount",
 				      "listItemCount",
@@ -88,14 +88,14 @@ void  main(argc, argv)
     XmString    tcs;
 
 #ifdef DEBUG
-    printf ("Number of names in name array %d\n", 
+    printf ("Number of names in name array %d\n",
 	             ((sizeof (toggle_names))/(sizeof(char *))) );
 #endif
 
     CommonTestInit(argc, argv);
 
     XtRealizeWidget(Shell1);
-    
+
 
     /* Overall Plan:
        Create Command box whose list/listCount resources can be set
@@ -153,7 +153,7 @@ void  main(argc, argv)
     XmStringFree(tcs);
     XtManageChild(Scale0);
 
-    XtAddCallback (Scale0, XmNvalueChangedCallback, WidthChange, NULL); 
+    XtAddCallback (Scale0, XmNvalueChangedCallback, WidthChange, NULL);
 
     n = 0;
     tcs = XmStringCreateSimple ("Height in Pixels");
@@ -172,7 +172,7 @@ void  main(argc, argv)
     XmStringFree(tcs);
     XtManageChild(Scale1);
 
-    XtAddCallback (Scale1, XmNvalueChangedCallback, HeightChange, NULL); 
+    XtAddCallback (Scale1, XmNvalueChangedCallback, HeightChange, NULL);
 
     n = 0;
     tcs = XmStringCreateSimple ("Item Count/Visible Item Count");
@@ -206,9 +206,9 @@ void  main(argc, argv)
     ControlBox = XmCreateRowColumn (Form2, "ControlBox", args, n);
     XtRealizeWidget(ControlBox);
     XtManageChild(ControlBox);
-    
+
     for (i = 0; i <= NUM_TOGGLES - 1; i++)
-      {    
+      {
 		   n = 0;
            tcs = XmStringCreateSimple(toggle_names[i]);
            XtSetArg (args[n], XmNlabelString, tcs ); n++;
@@ -256,7 +256,7 @@ void  main(argc, argv)
 
     n = 0;
     tcs = XmStringCreateSimple ("Append");
-    XtSetArg (args[n], XmNlabelString, tcs );			n++; 
+    XtSetArg (args[n], XmNlabelString, tcs );			n++;
     Append = XmCreateToggleButtonGadget(RadioBox1, "Append", args, n);
     XtRealizeWidget(Append);
     XmStringFree(tcs);
@@ -328,7 +328,7 @@ void  main(argc, argv)
 
     XtAddCallback (QuitB, XmNactivateCallback, Quit, NULL);
 
-    
+
     /* manage widgets */
     XtManageChild(Redo);
     XtManageChild(QuitB);
@@ -342,8 +342,8 @@ void  main(argc, argv)
     XtManageChild(Frame2);
     XtManageChild(Frame3);
     XtManageChild(ControlBox);
-    XtManageChild(Scale0);    
-    XtManageChild(Scale1);    
+    XtManageChild(Scale0);
+    XtManageChild(Scale1);
     XtManageChild(Scale2);
     XtManageChild(Text1);
     XtManageChild(Form2);
@@ -459,9 +459,9 @@ void CreateCommandBox(parent, firstTime, dependent)
     XtRealizeWidget(Command1);
     XtManageChild(Command1);
 
-    XtAddCallback (Command1, XmNcommandChangedCallback, CommandChanged, 
+    XtAddCallback (Command1, XmNcommandChangedCallback, CommandChanged,
 		   (XtPointer) 1);
-    XtAddCallback (Command1, XmNcommandEnteredCallback, CommandChanged, 
+    XtAddCallback (Command1, XmNcommandEnteredCallback, CommandChanged,
 		   (XtPointer) 2);
 
     XtManageChild (Command1);
@@ -487,10 +487,10 @@ void CommandChanged(w, client_data, call_data)
     Widget w;
     XtPointer client_data;
     XtPointer call_data;
-    
+
 {
     static int i = 0;
-    
+
     switch ((int) client_data) {
     	case 1:  printf ("Received CommandChangedCallback number %d\n", ++i);
        	         break;
@@ -499,35 +499,35 @@ void CommandChanged(w, client_data, call_data)
     	default: printf ("Received some bogus callback, HELP !!!!!!\n");
 		 break;
     }
-    
+
 }
 
 
 void WidthChange (w, client_data, call_data)
     Widget w;
     XtPointer client_data, call_data;
-    
+
 {
     Arg args[1];
-    
-    XtSetArg (args[0], XmNwidth, 
+
+    XtSetArg (args[0], XmNwidth,
     	  ((Dimension)(((XmScaleCallbackStruct *)call_data)->value)));
     XtSetValues (Command1, args, 1);
-    
+
 }
 
 
 void HeightChange (w, client_data, call_data)
     Widget w;
     XtPointer client_data, call_data;
-    
+
 {
     Arg args[1];
-    
-    XtSetArg (args[0], XmNheight, 
+
+    XtSetArg (args[0], XmNheight,
     	  ((Dimension)(((XmScaleCallbackStruct *)call_data)->value)));
     XtSetValues (Command1, args, 1);
-    
+
 }
 
 
@@ -557,12 +557,12 @@ if (XmToggleButtonGetState (GetB))     /* get is true */
 	   /* Command resource */
            /* the userData of the togglebutton is the index into toggle_names*/
 	   /* that contains the string to be set */
-           
+
 	  if (XmToggleButtonGadgetGetState(toggles[i]))
-	    { 
+	    {
 	      XtSetArg (args[0], XmNuserData, &resource_name);
 	      XtGetValues (toggles[i], args, 1);
-	     
+
 	      if ((strcmp(resource_name, "promptString") != 0) &&
 		  (strcmp(resource_name, "command") !=0) ) {
 	      	XtSetArg (args[0], resource_name, &countValue);
@@ -576,15 +576,15 @@ if (XmToggleButtonGetState (GetB))     /* get is true */
 
 		printf("%25s\t%s\n", resource_name, CommonCsToRs(textString));
 	      }
-	      
+
 	    }
 	}
     }
-else   
+else
   if (XmToggleButtonGetState (SetB)) {   /* set */
        XtSetArg (args[0], XmNvalue, &countValue);
        XtGetValues ((Widget) client_data, args, 1);
-   
+
        reg_string = XmTextGetString(Text1);
        tcs = XmStringCreateSimple(reg_string);
 
@@ -593,11 +593,11 @@ else
 	    {
 	      XtSetArg (args[0], XmNuserData, &resource_name);
 	      XtGetValues (toggles[i], args, 1);
-	     
+
 	      if ((strcmp(resource_name, "promptString") != 0) &&
 		  (strcmp(resource_name, "command") !=0) ) {
 	      		XtSetArg (args[0], resource_name, countValue);
-	      		XtSetValues (Command1, args, 1);	      
+	      		XtSetValues (Command1, args, 1);
 	      }
 	      else {
 			if (strcmp(resource_name, "command") ==0)
@@ -613,7 +613,7 @@ else
          XtFree(reg_string);
          XmStringFree(tcs);
    }
-   else 
+   else
 	if (XmToggleButtonGetState (Append) ||
 	    XmToggleButtonGetState (Error)) {
 	    reg_string = XmTextGetString(Text1);
@@ -639,7 +639,7 @@ else
            XtFree(reg_string);
            XmStringFree(tcs);
 	}
-			
+
 fflush (stdout);
 }
 
@@ -652,26 +652,26 @@ void PopulateList (w, client_data, call_data)
     int value;
     register int i;
     Arg args[2];
-    
+
     /* change Command's history list to contain # of items set by Scale */
     /* we'll set either the historyItems or listItems depending on what's */
     /* on: listItemCount or historyItemCount */
     /* historyItem will be the default */
     /* first, create a list of items, number of items scale's value */
-    
+
     XmScaleGetValue ((Widget)client_data, &value);
-    
+
     printf ("Creating %d strings\n", value);
-    
+
     for (i = 0; i <= (value - 1); i++) {
      	 sprintf (buf, "ListItem%d", i);
        	 itemTable[i] = XmStringCreateSimple (buf);
     }
-    
-    /* we SHOULD look through all items and figure out which are 
+
+    /* we SHOULD look through all items and figure out which are
        listItemCount and histItemCount but for now, we'll just KNOW
        they are in toggles[2,3] */
-    
+
     if  ( (XmToggleButtonGadgetGetState (toggles[2])) &&
           (!(XmToggleButtonGadgetGetState(toggles[3]))) ) {
          	XtSetArg (args[0], XmNlistItems, itemTable);

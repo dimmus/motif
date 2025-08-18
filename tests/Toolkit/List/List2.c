@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List2.c /main/9 1995/07/13 18:16:37 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: List2.c /main/9 1995/07/13 18:16:37 drk $"
 #include "testlib.h"
 #include "List2.h"
 
-/* 
+/*
 	Pirs Tested -
 
 		Pir 2782 - Changing font after TopItemPosition does not
@@ -63,7 +63,7 @@ void  main (argc, argv)
     font_list = CommonGetFontList("fixed");
 
     Init_Resources();
-    
+
     n = 0;
     XtSetArg(args[n], XmNdefaultFontList, CommonGetFontList("9x15"));	n++;
     XtSetValues(Shell1, args, n);
@@ -165,7 +165,7 @@ void  main (argc, argv)
    /*  End testing CR 5678 */
 
     CommonPause();
-    
+
     XtAppMainLoop(app_context);
 }
 
@@ -323,9 +323,9 @@ static void CreateOptions()
     Static = CreatePushButton(SBDPolicy_Pulldown, "XmSTATIC");
     AsNeeded = CreatePushButton(SBDPolicy_Pulldown, "XmAS_NEEDED");
 
-    XtAddCallback(Static, XmNactivateCallback, CHSBDPolicyCB, 
+    XtAddCallback(Static, XmNactivateCallback, CHSBDPolicyCB,
 						(XtPointer) XmSTATIC);
-    XtAddCallback(AsNeeded, XmNactivateCallback, CHSBDPolicyCB, 
+    XtAddCallback(AsNeeded, XmNactivateCallback, CHSBDPolicyCB,
 						(XtPointer) XmAS_NEEDED);
 
 
@@ -341,11 +341,11 @@ static void CreateOptions()
     VariableP = CreatePushButton(LSPolicy_Pulldown, "XmVARIABLE");
     Possible = CreatePushButton(LSPolicy_Pulldown, "XmRESIZE_IF_POSSIBLE");
 
-    XtAddCallback(Constant, XmNactivateCallback, CHLSPolicyCB, 
+    XtAddCallback(Constant, XmNactivateCallback, CHLSPolicyCB,
 						(XtPointer) XmCONSTANT);
-    XtAddCallback(VariableP, XmNactivateCallback, CHLSPolicyCB, 
+    XtAddCallback(VariableP, XmNactivateCallback, CHLSPolicyCB,
 						(XtPointer) XmVARIABLE);
-    XtAddCallback(Possible, XmNactivateCallback, CHLSPolicyCB, 	
+    XtAddCallback(Possible, XmNactivateCallback, CHLSPolicyCB,
 					(XtPointer) XmRESIZE_IF_POSSIBLE);
 
     /* Fonts Pulldown Menu */
@@ -395,18 +395,18 @@ static void CreateOptions()
     Browse = CreatePushButton(SPolicy_Pulldown, "XmBROWSE_SELECT");
     Extended = CreatePushButton(SPolicy_Pulldown, "XmEXTENDED_SELECT");
 
-    XtAddCallback(Single, XmNactivateCallback, CHSPolicyCB, 
+    XtAddCallback(Single, XmNactivateCallback, CHSPolicyCB,
 						(XtPointer) XmSINGLE_SELECT);
-    XtAddCallback(Multiple, XmNactivateCallback, CHSPolicyCB, 
+    XtAddCallback(Multiple, XmNactivateCallback, CHSPolicyCB,
 						(XtPointer) XmMULTIPLE_SELECT);
-    XtAddCallback(Browse, XmNactivateCallback, CHSPolicyCB, 
+    XtAddCallback(Browse, XmNactivateCallback, CHSPolicyCB,
 						(XtPointer) XmBROWSE_SELECT);
     XtAddCallback(Extended, XmNactivateCallback, CHSPolicyCB,
 						(XtPointer) XmEXTENDED_SELECT);
-    
+
     /* List Size Policy Option Menu */
 
-    tcs = XmStringLtoRCreate("List Size Policy         ", 
+    tcs = XmStringLtoRCreate("List Size Policy         ",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -422,7 +422,7 @@ static void CreateOptions()
 
     /* ScrollBar Display Policy Option Menu */
 
-    tcs = XmStringLtoRCreate("ScrollBar Display Policy ", 
+    tcs = XmStringLtoRCreate("ScrollBar Display Policy ",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -438,7 +438,7 @@ static void CreateOptions()
 
     /* Fonts Option Menu */
 
-    tcs = XmStringLtoRCreate("Available Fonts          ", 
+    tcs = XmStringLtoRCreate("Available Fonts          ",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -469,7 +469,7 @@ static void CreateOptions()
 
     /* Selection Policy Option Menu */
 
-    tcs = XmStringLtoRCreate("Selection Policy         ", 
+    tcs = XmStringLtoRCreate("Selection Policy         ",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -483,7 +483,7 @@ static void CreateOptions()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("List Sensitive", 
+    tcs = XmStringCreateLtoR("List Sensitive",
 			     XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -498,7 +498,7 @@ static void CreateOptions()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Automatic Selection False", 
+    tcs = XmStringCreateLtoR("Automatic Selection False",
 			     XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -604,7 +604,7 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Item Length = <Not Set>", 
+    tcs = XmStringCreateLtoR("Item Length = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -615,7 +615,7 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Item Position = <Not Set>", 
+    tcs = XmStringCreateLtoR("Item Position = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -626,7 +626,7 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Selection Type = <Not Set>", 
+    tcs = XmStringCreateLtoR("Selection Type = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -637,13 +637,13 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Selected Item Count = <Not Set>", 
+    tcs = XmStringCreateLtoR("Selected Item Count = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("cyan"));		n++;
-    Label_Selected_Count = XmCreateLabel(RowCol2, "Label_Selected_Count", 
+    Label_Selected_Count = XmCreateLabel(RowCol2, "Label_Selected_Count",
 						args, n);
     XtManageChild(Label_Selected_Count);
 
@@ -655,7 +655,7 @@ static void CreateCallbackInfo()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("cyan"));		n++;
-    Label_Selected_Items = XmCreateLabel(RowCol2, "Label_Selected_Items", 
+    Label_Selected_Items = XmCreateLabel(RowCol2, "Label_Selected_Items",
 						args, n);
     XtManageChild(Label_Selected_Items);
 
@@ -949,7 +949,7 @@ static void ChangeFontCB(Widget w, XtPointer client_data,
     XtSetArg(args[n], XmNfontList, font_list);			n++;
     XtSetValues(List1, args, n);
 }
-	
+
 static void ChangeDirCB(Widget w, XtPointer client_data,
 				   XtPointer call_data)
 
@@ -961,7 +961,7 @@ static void ChangeDirCB(Widget w, XtPointer client_data,
     XtSetArg(args[n], XmNstringDirection, client_data);			n++;
     XtSetValues(List1, args, n);
 }
-	
+
 
 static void CHSPolicyCB(Widget w, XtPointer client_data,
 				  XtPointer call_data)
@@ -1110,7 +1110,7 @@ static void Update_selected_items(XmString *item_list, int item_count,
     char	tmp_string[50];
     XmString	item_list2[NITEMS];
 
-    /* Append to the end of the item string. The Items postion from 
+    /* Append to the end of the item string. The Items postion from
        the callback field selected_item_position */
 
 
@@ -1187,7 +1187,7 @@ static void Destroy_and_Create(Widget w, XtPointer client_data,
     XtSetArg(args[n], XmNvisibleItemCount, visible_item_count);	n++;
     XtSetArg(args[n], XmNtopItemPosition, top_item_pos);	n++;
     XtSetArg(args[n], XmNselectionPolicy, selection_policy);	n++;
-    XtSetArg(args[n], XmNscrollBarDisplayPolicy, 
+    XtSetArg(args[n], XmNscrollBarDisplayPolicy,
 					scroll_display_policy); n++;
     XtSetArg(args[n], XmNautomaticSelection, auto_selection);	n++;
     XtSetArg(args[n], XmNitems, ItemList); 			n++;

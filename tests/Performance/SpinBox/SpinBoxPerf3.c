@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -54,7 +54,7 @@ main(int argc, char **argv);
 
 int thisMM = 1;
 int thisDD = 1;
-int thisYY = 89; 
+int thisYY = 89;
 
 static char *months[NUM_MONTHS] =
   {
@@ -299,7 +299,7 @@ Arg	     argList[25];
 			     "SpinBox",
 			     argList,
 			     n );
-			   
+
 
     /*****  Create SpinBox child  *****/
     n = 0;
@@ -312,8 +312,8 @@ Arg	     argList[25];
     TextField1 = XmCreateTextField( SpinBox,
 				     "TextField1",
 				     argList,
-				     n ); 
-				   
+				     n );
+
 
     /*****  Create SpinBox decoration child  *****/
     n = 0;
@@ -336,7 +336,7 @@ Arg	     argList[25];
     TextField2 = XmCreateTextField( SpinBox,
 				     "TextField2",
 				     argList,
-				     n ); 
+				     n );
 
     /*****  Create SpinBox decoration child  *****/
     n = 0;
@@ -346,7 +346,7 @@ Arg	     argList[25];
 			         "Decoration2",
 			         argList,
 			         n );
-			       
+
 
     XmStringFree(decoString);
 
@@ -357,12 +357,12 @@ Arg	     argList[25];
     XtSetArg(argList[n], XmNmaximumValue, 89); n++;
     XtSetArg(argList[n], XmNmaximumValue, 99); n++;
     XtSetArg(argList[n], XmNspinBoxChildType, XmNUMERIC); n++;
-    
+
 
     TextField3 = XmCreateTextField( SpinBox,
 				     "TextField3",
 				     argList,
-				     n ); 
+				     n );
 
     /*****  Manage SpinBox  *****/
     XtManageChild(SpinBox);

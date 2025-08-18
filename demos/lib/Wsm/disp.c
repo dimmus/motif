@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -67,10 +67,10 @@ _WSMGetDispInfo(Display *dpy)
     }
 
     disp_info->disp = dpy;
-    
+
     /*
      * These are our names.
-     * 
+     *
      * ||| Should use XtConvertAndStore().
      */
 
@@ -141,10 +141,10 @@ _WSMGetScreenInfo(Display *dpy, int screen_number)
 	while (True) {
 	    if (screen_info->screen_num == screen_number)
 		return(screen_info);
-	    
+
 	    if (screen_info->next == NULL)
 		break;
-	    
+
 	    screen_info = screen_info->next;
 	}
 
@@ -199,16 +199,16 @@ _WSMClearConfigScreenInfo(Display *dpy, int screen_number)
 
 	/*
 	 * Hunt through the screen info structs on this display until we
-	 * find one that matches the screen num passed. 
+	 * find one that matches the screen num passed.
 	 */
 
 	while (True) {
 	  if (screen_info->screen_num == screen_number)
 	    break;
-	  
+
 	  if (screen_info->next == NULL)
 	    return;
-	  
+
 	  screen_info = screen_info->next;
 	}
 
@@ -216,12 +216,12 @@ _WSMClearConfigScreenInfo(Display *dpy, int screen_number)
 	  XtFree((XtPointer)screen_info->global.attr_list);
 	  screen_info->global.num_attrs = 0;
 	}
-	
+
 	if (screen_info->window.num_attrs != 0){
 	  XtFree((XtPointer)screen_info->window.attr_list);
 	  screen_info->window.num_attrs = 0;
 	}
-	
+
 	if (screen_info->icon.num_attrs != 0){
 	  XtFree((XtPointer)screen_info->icon.attr_list);
 	  screen_info->icon.num_attrs = 0;

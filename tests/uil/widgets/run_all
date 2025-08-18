@@ -22,7 +22,7 @@
 #
 # HISTORY
 
-# 
+#
 #	This shell script will display each test in the Uil Test Suite
 #
 displayUid BBoard

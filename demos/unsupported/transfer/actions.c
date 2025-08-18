@@ -47,14 +47,14 @@ unsigned int num_snapshot = 0;
 
 /*******************************************************************
  * UpdateList
- * 
+ *
  * This takes the transfered items and updates the displayed list
  * with the transferred target names.  Note that we call a version of
  * XGetAtomName with an installed error handler.  This prevents an
- * app. exit if the Atom id is illegal.  
+ * app. exit if the Atom id is illegal.
  *******************************************************************/
 
-void 
+void
 UpdateList(Widget w, XtEnum ignore, XmTransferDoneCallbackStruct *data)
 {
   int i;
@@ -96,7 +96,7 @@ UpdateList(Widget w, XtEnum ignore, XmTransferDoneCallbackStruct *data)
  * these targets.
  ********************************************************************/
 
-void 
+void
 ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
 {
   Atom MRT = XInternAtom(XtDisplay(w), XmS_MOTIF_RENDER_TABLE, False);
@@ -111,12 +111,12 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
     datums[num_datums].deferred = False;
     num_datums++;
 
-    /* If this is a render table,  use it on the display text 
+    /* If this is a render table,  use it on the display text
        widget. */
     if (data -> target == MRT &&
 	data -> type == XA_STRING) {
       XmRenderTable tab;
-      tab = XmRenderTableCvtFromProp(w, (char*) data -> value, 
+      tab = XmRenderTableCvtFromProp(w, (char*) data -> value,
 				     (unsigned int) data -> length);
       XtVaSetValues(text_display, XmNrenderTable, tab, NULL, NULL);
     }
@@ -134,7 +134,7 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
     num_datums = 0;
 
     /* This doneProc is performed after all transfers have completed. */
-    XmeTransferAddDoneProc(data -> transfer_id, 
+    XmeTransferAddDoneProc(data -> transfer_id,
 			   (XmSelectionFinishedProc) UpdateList);
 
     DELETE = XInternAtom(XtDisplay(w), "DELETE", False);
@@ -154,11 +154,11 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
 	  dlist[i] != LINK_SELECTION &&
 	  dlist[i] != None &&
 	  dlist[i] != TARGETS) {
-	XmTransferValue(data -> transfer_id, dlist[i], 
+	XmTransferValue(data -> transfer_id, dlist[i],
 			(XtCallbackProc) ReceiveData, NULL, 0);
       }
     }
-    
+
     XmTransferSendRequest(data -> transfer_id, 0);
   }
 }
@@ -170,8 +170,8 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
  * rest.
  *****************************************************************/
 
-void 
-targetDestinationCallback(Widget w, XtPointer ignore, 
+void
+targetDestinationCallback(Widget w, XtPointer ignore,
 			  XmDestinationCallbackStruct *cs)
 {
   XmTransferValue(cs -> transfer_id,
@@ -179,14 +179,14 @@ targetDestinationCallback(Widget w, XtPointer ignore,
 		  (XtCallbackProc) ReceiveData, NULL, 0);
 }
 
-void 
+void
 targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
 {
   Atom TARGETS = XInternAtom(XtDisplay(w), "TARGETS", False);
   Atom ME_TARGETS = XInternAtom(XtDisplay(w), "_MOTIF_EXPORT_TARGETS", False);
-  Atom MC_TARGETS = XInternAtom(XtDisplay(w), 
+  Atom MC_TARGETS = XInternAtom(XtDisplay(w),
 				"_MOTIF_CLIPBOARD_TARGETS", False);
-  Atom MD_TARGETS = XInternAtom(XtDisplay(w), 
+  Atom MD_TARGETS = XInternAtom(XtDisplay(w),
 				"_MOTIF_DEFERRED_CLIPBOARD_TARGETS", False);
   Atom SNAPSHOT = XInternAtom(XtDisplay(w),
 			      "_MOTIF_SNAPSHOT", False);
@@ -205,7 +205,7 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
       int i;
 
       /* Disown the particular snapshot */
-      XtDisownSelection(w, cs -> selection, 
+      XtDisownSelection(w, cs -> selection,
 			XtLastTimestampProcessed(XtDisplay(w)));
 
       /* Free the data */
@@ -219,16 +219,16 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
 	 target */
       if (num_snapshot > 0) {
 	int i;
-	
-	for(i = 0; 
-	    i < num_snapshot && snapshot[i].target != cs -> target; 
+
+	for(i = 0;
+	    i < num_snapshot && snapshot[i].target != cs -> target;
 	    i++);
 
 	if (i < num_snapshot) {
-	  unsigned long size = BYTELENGTH(snapshot[i].length, 
+	  unsigned long size = BYTELENGTH(snapshot[i].length,
 					  snapshot[i].format);
 	  XtPointer rval = XtMalloc(size);
-	  
+
 	  memcpy(rval, snapshot[i].value, size);
 	  cs -> value = rval;
 	  cs -> type = snapshot[i].type;
@@ -236,11 +236,11 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
 	  cs -> format = snapshot[i].format;
 	  cs -> status = XmCONVERT_DONE;
 	}
-      } 
+      }
     }
     return;
   }
-    
+
   if (cs -> target == ME_TARGETS ||
       cs -> target == MC_TARGETS ||
       cs -> target == MD_TARGETS) {
@@ -267,7 +267,7 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
 	  targs[count++] = datums[i].target;
 	}
     }
-    
+
     if (count > 0) {
       cs -> value = (XtPointer) targs;
       cs -> length = count;
@@ -304,8 +304,8 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
     Atom snapshot_atom = (Atom) cs -> parm;
     int i, count, size;
 
-    /* Note that it would not generally be acceptable to 
-       have only a single distinguisher atom available for 
+    /* Note that it would not generally be acceptable to
+       have only a single distinguisher atom available for
        SNAPSHOT requests,  but this demonstration and testing
        program doesn't hold multiple snapshots */
     if (snapshot_atom == (Atom) NULL) {
@@ -337,7 +337,7 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
     /* Own the particular snapshot.  We won't bother keeping
        state,  as this is for testing,  not for real persistence.
        Note that using XtLastTimestampProcessed here is not
-       ideal,  but the SNAPSHOT distinguisher selection atom 
+       ideal,  but the SNAPSHOT distinguisher selection atom
        is a display unique unowned atom,  so it isn't crucial */
     XmeNamedSource(w, snapshot_atom,
 		   XtLastTimestampProcessed(XtDisplay(w)));
@@ -345,9 +345,9 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
   } else {
     /* Try and find the right target,  otherwise fail */
     int i = 0;
-    
+
     while(i < num_datums &&
-	  datums[i].target != cs -> target) 
+	  datums[i].target != cs -> target)
       i++;
 
     if (i >= num_datums /* Not found */ ||
@@ -380,8 +380,8 @@ targetConvertCallback(Widget w, XtPointer ignore, XmConvertCallbackStruct *cs)
 /* Error handler for XGetAtomName */
 
 static int SIF_ErrorFlag;
- 
-static int 
+
+static int
 SIF_ErrorHandler(Display *display, XErrorEvent *event)
 {
   SIF_ErrorFlag = event -> type;
@@ -389,7 +389,7 @@ SIF_ErrorHandler(Display *display, XErrorEvent *event)
   return 0;
 }
 
-char* 
+char*
 GetSafeAtom(Display *display, Atom a)
 {
   XErrorHandler old_Handler;

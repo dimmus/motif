@@ -23,29 +23,29 @@
 #
 # HISTORY
 TRACE:(1) WindowRaise Case0
-TRACE:(2) CompareVisual Case0 
+TRACE:(2) CompareVisual Case0
 TRACE:(3) WindowRaise Case1
-TRACE:(4) CompareVisual Case1 
+TRACE:(4) CompareVisual Case1
 TRACE:(5) WindowRaise Case2
-TRACE:(6) CompareVisual Case2 
+TRACE:(6) CompareVisual Case2
 TRACE:(7) WindowRaise Case3
-TRACE:(8) CompareVisual Case3 
+TRACE:(8) CompareVisual Case3
 TRACE:(9) WindowRaise Case4
-TRACE:(10) CompareVisual Case4 
+TRACE:(10) CompareVisual Case4
 TRACE:(11) WindowRaise Case5
-TRACE:(12) CompareVisual Case5 
+TRACE:(12) CompareVisual Case5
 TRACE:(13) Continue
 TRACE:(14) WindowRaise Case0
-TRACE:(15) CompareVisual Case0 
+TRACE:(15) CompareVisual Case0
 TRACE:(16) WindowRaise Case1
-TRACE:(17) CompareVisual Case1 
+TRACE:(17) CompareVisual Case1
 TRACE:(18) WindowRaise Case2
-TRACE:(19) CompareVisual Case2 
+TRACE:(19) CompareVisual Case2
 TRACE:(20) WindowRaise Case3
-TRACE:(21) CompareVisual Case3 
+TRACE:(21) CompareVisual Case3
 TRACE:(22) WindowRaise Case4
-TRACE:(23) CompareVisual Case4 
+TRACE:(23) CompareVisual Case4
 TRACE:(24) WindowRaise Case5
-TRACE:(25) CompareVisual Case5 
+TRACE:(25) CompareVisual Case5
 TRACE:(26) Exit
 Exiting Test...Please Standby...

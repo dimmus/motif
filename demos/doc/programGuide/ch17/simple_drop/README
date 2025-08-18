@@ -1,5 +1,5 @@
 /* $XConsortium: README /main/3 1996/07/15 13:59:14 drk $ */
-                   README File for SimpleDrop Example 
+                   README File for SimpleDrop Example
 
 The SimpleDrop demonstrates how a Motif application can add an
 XmNdestinationCallback procedure to an XmDrawingArea widget.
@@ -9,4 +9,4 @@ To run the program, just type:
  $ SimpleDrop <pixmap_file_name>
 
 For an explanation of how this program works, see Chapter 17 of the
-"OSF/Motif Programmer's Guide." 
+"OSF/Motif Programmer's Guide."

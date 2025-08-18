@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/10 1995/07/14 09:57:32 drk $
 
 #define DoNormalLib	NormalLibVisual
@@ -45,7 +45,7 @@ OTHER_OBJS = 	$(OTHER_DIR)/CmpRecId.o \
     		$(OTHER_DIR)/FWriteShort.o \
     		$(OTHER_DIR)/FindCorrRsc.o \
     		$(OTHER_DIR)/PushHashBits.o \
-    		$(OTHER_DIR)/StringCompar.o 
+    		$(OTHER_DIR)/StringCompar.o
 
 VISUAL_OBJS = 	$(VISUAL_DIR)/AllocColor.o \
     		$(VISUAL_DIR)/AllocColorSt.o \
@@ -85,7 +85,7 @@ OTHER_SRCS = 	$(OTHER_DIR)/CmpRecId.c \
     		$(OTHER_DIR)/FWriteShort.c \
     		$(OTHER_DIR)/FindCorrRsc.c \
     		$(OTHER_DIR)/PushHashBits.c \
-    		$(OTHER_DIR)/StringCompar.c 
+    		$(OTHER_DIR)/StringCompar.c
 
 VISUAL_SRCS = 	$(VISUAL_DIR)/AllocColor.c \
     		$(VISUAL_DIR)/AllocColorSt.c \
@@ -120,10 +120,10 @@ VISUAL_SRCS = 	$(VISUAL_DIR)/AllocColor.c \
 
 
 OBJS =  $(OTHER_OBJS) 	\
-	$(VISUAL_OBJS) 
+	$(VISUAL_OBJS)
 
 SRCS = 	$(OTHER_SRCS) 	\
-	$(VISUAL_SRCS) 
+	$(VISUAL_SRCS)
 
 #if DoNormalLib && DoSharedLib && SeparateSharedCompile
 MakeShadowTree(unshared,$(SUBDIRS))
@@ -143,4 +143,3 @@ $(OBJS):: $(SUBDIRS)
 ForceSubdirs($(SUBDIRS))
 
 DependSubdirs($(SUBDIRS))
-

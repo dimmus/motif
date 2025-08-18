@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -59,7 +59,7 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
 #include <X11/Xos_r.h> /* Must precede Mrm/MrmAppl.h and Mrm/Mrm.h to avoid
 			  possible redefinitions of MIN() and MAX(). */
 #else
- #include <Xm/Xmos_r.h> 
+ #include <Xm/Xmos_r.h>
 #endif
 
 #include <Mrm/MrmAppl.h>
@@ -99,7 +99,7 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
  *--
  */
 
-void 
+void
 Urm__UT_Time (char		*time_stg)
 {
 #if defined(__STDC__)
@@ -117,4 +117,3 @@ Urm__UT_Time (char		*time_stg)
   else
     *time_stg = 0;
 }
-

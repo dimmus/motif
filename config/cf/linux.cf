@@ -13,7 +13,7 @@ XCOMM platform:  $TOG: linux.cf /main/47 1998/04/17 11:32:51 mgreess $
 #define OSTeenyVersion		DefaultOSTeenyVersion
 #endif
 
-#ifndef LinuxDistribution 
+#ifndef LinuxDistribution
 #define LinuxDistribution	DefaultLinuxDistribution
 /*
   Add "#define LinuxDistribution Linux<mumble>" to your site.def or host.def.

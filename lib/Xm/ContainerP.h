@@ -26,7 +26,7 @@
  */
 #ifndef	_XmContainerP_h
 #define _XmContainerP_h
- 
+
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/DragCP.h>
@@ -37,12 +37,12 @@ extern "C" {
 #endif
 
 /*
- * One _XmCwidNodeRec structure is allocated by Container for each of 
- * it's children (except for OutlineButtons).  Information about the 
+ * One _XmCwidNodeRec structure is allocated by Container for each of
+ * it's children (except for OutlineButtons).  Information about the
  * relationship of the child to other Container children (parentage and
  * order) is maintained here by Container.
  *
- * _XmCwidNodeRec structures are XtCalloc'd by Container in the 
+ * _XmCwidNodeRec structures are XtCalloc'd by Container in the
  * ConstraintInitialize method and XtFree'd in the ConstraintDestroy method.
  * They are linked/unlinked to other _XmCwidNodeRec structures in the
  * ChangeManaged method.
@@ -73,7 +73,7 @@ typedef	struct	_XmContainerXfrActionRec
 /*
  * Container allocates an array of _XmContainerCwidCellInfoRec structures
  * to use in calculating an ideal size in the GetSpatialSize procedure when
- * XmNspatialStyle is XmCELLS.  The array is created and destroyed in the 
+ * XmNspatialStyle is XmCELLS.  The array is created and destroyed in the
  * GetSpatialSize procedure.
  */
 typedef	struct	_XmContainerCwidCellInfoRec
@@ -179,10 +179,10 @@ typedef	struct	_XmContainerPart
 	int		drag_offset_y;
 	unsigned int    selected_item_count;    /* XmNselectedItemCount */
 	Cardinal        detail_heading_count; /* XmNdetailColumnHeadingCount */
-        Cardinal        saved_detail_heading_count; 
+        Cardinal        saved_detail_heading_count;
         Cardinal        detail_order_count;     /* XmNdetailOrderCount */
 	Dimension       first_col_width;        /* XmNoutlineColumnWidth */
-	Dimension       real_first_col_width;    
+	Dimension       real_first_col_width;
 	Dimension       large_cell_height;      /* XmNlargeCellHeight */
         Dimension       large_cell_width;       /* XmNlargeCellWidth */
 	Dimension	small_cell_height;	/* XmNsmallCellHeight */
@@ -236,7 +236,7 @@ typedef	struct	_XmContainerPart
 	XtIntervalId    scroll_proc_id;         /* scroll TimeOutProc */
 	int             last_xmotion_x;
 	int             last_xmotion_y;
-	XmString *	cache_detail_heading;  /* XmNdetailColumnHeading 
+	XmString *	cache_detail_heading;  /* XmNdetailColumnHeading
 						  getValues */
 	}	XmContainerPart;
 
@@ -388,5 +388,3 @@ enum {	CONTAINER_ICON,
 
 #endif /* _XmContainerP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-
-

@@ -33,7 +33,7 @@ setenv TOP ../../..
 
 set List7a = 'List7 -I List7a.Dat -S List7a.Scr -V List7a.vis -O List7a.prt -xrm *List7.layoutDirection:RIGHT_TO_LEFT'
 set ScrollList3a = 'ScrollList3 -I ScrollList3a.Dat -S ScrollList3a.Scr -V ScrollList3a.vis -O ScrollList3a.prt -xrm *ScrollList3.layoutDirection:RIGHT_TO_LEFT'
- 
+
 foreach test ( List1 List2 List3 List4 List5 List6 List7 List8 List9 List10 \
                List11 List12 List13 \
 	       ScrollList1 ScrollList2 ScrollList3 ScrollList4 ScrollList5 \

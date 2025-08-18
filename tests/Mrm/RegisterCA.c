@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RegisterCA.c /main/8 1995/07/14 10:52:28 drk $"
@@ -50,7 +50,7 @@ extern void	nyi_proc();
  * Names to register with MrmRegisterNames
  */
 
-static MrmRegisterArg reglist[] = 
+static MrmRegisterArg reglist[] =
 {
     "abrowse_help_proc",	(caddr_t) abrowse_help_proc,
     "abrowse_quit_proc",	(caddr_t) abrowse_quit_proc,
@@ -66,7 +66,7 @@ static int reglist_num =
 #define NUM_TESTS		2
 #define TEST_DESCRIP_LENGTH	49
 
-struct TestInfo RegisterClassInfo[NUM_TESTS] = 
+struct TestInfo RegisterClassInfo[NUM_TESTS] =
 {
     {"Register valid Athena widget class               ", MrmSUCCESS, NULL},
     {"Fetch user-defined Athena widget (of valid class)", MrmSUCCESS, NULL},
@@ -103,7 +103,7 @@ Colormap	cmap;
 Pixmap		images[5];
 int		num_images = 5;
 
-    
+
 Pixel		image_background,
 		image_foreground;
 
@@ -111,7 +111,7 @@ void continue_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
 
     String	msg_valid_tst1 = "There should now be a Athena ABrowse widget in the second\nwindow.  This widget consists of four command widgets and\na label widget displaying an image.  There are five such\nimages, and they can be seen by using the Next and Prev\nbuttons.  Note that pressing Next while viewing the last\nimage will have no effect.  This is also true for pressing\nPrev while viewing the first image.\n\nPress the continue button to continue the test.";
 
@@ -152,20 +152,20 @@ void continue_proc(w, tag, reason)
 /*
  * Register the names of the ABrowse widget callback routines with Mrm
  */
-    
+
 	if(MrmRegisterNames(reglist,		/* list of names	*/
 			    reglist_num)	/* number of names	*/
 	   != MrmSUCCESS)
 	{
 	    error_proc("Can't register Browse/ABrowse widget callbacks\n");
 	}
-    
+
 /*
  * Get display, screen, colormap
  */
 
 	dsp = XtDisplay(toplevel);
-	
+
 	screen = DefaultScreenOfDisplay(dsp);
 
 	cmap = DefaultColormap(dsp, DefaultScreen(dsp));
@@ -182,7 +182,7 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch the color yellow");
 	}
-    
+
 	if(MrmFetchColorLiteral(s_MrmHierarchy,
 				"red",
 				dsp,
@@ -191,11 +191,11 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch the color red");
 	}
-    
+
 /*
  * Fetch images (pixmaps)
  */
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "blank_icon",
 			       screen,
@@ -206,7 +206,7 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch blank_icon");
 	}
-    
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test1_btn1_icon",
 			       screen,
@@ -217,7 +217,7 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch test1_btn1_icon");
 	}
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test1_btn2_icon",
 			       screen,
@@ -228,7 +228,7 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch test1_btn2_icon");
 	}
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test2_btn1_icon",
 			       screen,
@@ -239,7 +239,7 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch test2_btn1_icon");
 	}
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test2_btn2_icon",
 			       screen,
@@ -250,7 +250,7 @@ void continue_proc(w, tag, reason)
 	{
 	    error_proc("can't fetch test2_btn2_icon");
 	}
-	
+
 /*
  * Try to fetch ABrowse widget
  */
@@ -275,7 +275,7 @@ void continue_proc(w, tag, reason)
  */
 
 	XtManageChild(abrowse);
-    
+
 /*
  * Realize top level shell widget
  */
@@ -287,7 +287,7 @@ void continue_proc(w, tag, reason)
  */
 
 	message = XmStringCreateLtoR(msg_valid_tst1, XmSTRING_DEFAULT_CHARSET);
-	
+
 	nargs = 0;
 	XtSetArg(args[nargs], XmNmessageString, message); nargs++;
 	XtSetValues(widgetmain, args, nargs);
@@ -299,9 +299,9 @@ void continue_proc(w, tag, reason)
 	summary_msg = summary(NUM_TESTS,
 			      TEST_DESCRIP_LENGTH,
 			      RegisterClassInfo);
-    
+
 	message = XmStringCreateLtoR(summary_msg, XmSTRING_DEFAULT_CHARSET);
-	
+
 	nargs = 0;
 	XtSetArg(args[nargs], XmNmessageString, message); nargs++;
 	XtSetValues(widgetmain, args, nargs);

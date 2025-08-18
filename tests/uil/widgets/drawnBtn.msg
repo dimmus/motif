@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This is a Drawn Button Widget with the\nfollowing characteristics:\n\n   - X and Y " &
@@ -32,7 +32,7 @@ value
 
 	black:	color('black');
 	white:	color('white');
-	
+
 motif_colors : color_table(black = 'x',white=' ');
 motif_icon : icon(color_table = motif_colors,
 '                                                        ',

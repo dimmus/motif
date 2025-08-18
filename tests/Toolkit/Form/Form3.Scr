@@ -1,5 +1,5 @@
 # $XConsortium: Form3.scr /main/4 1995/07/17 20:20:37 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 #) A client with a form should appear. The form should
-#)   contain one pushbutton labeled 'pushB'. 
+#)   contain one pushbutton labeled 'pushB'.
 #) Press MB1 on the pushbutton. A callback tries to set
 #)   the fraction base to zero and an X Toolkit Warning is displayed in
-#)   the term window. 
+#)   the term window.
 
 
 LocatePointer pushb
@@ -40,11 +40,11 @@ Continue
 
 #) Press MB1 on the pushbutton. A callback will set the form width
 #)   to 200 and height to 300. The form should change to
-#)   to these sizes. 
+#)   to these sizes.
 #) Press MB1 on the pushbutton. A callback tries to set the form
 #)   width to 0 and height to 0. This signals the form
 #)   to resize itself to contain its children. The form will resize
-#)   back to its original size in panel 1. 
+#)   back to its original size in panel 1.
 
 LocatePointer pushb
 ClickMB Btn1

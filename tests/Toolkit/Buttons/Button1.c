@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Button1.c /main/6 1995/07/13 17:28:44 drk $"
@@ -72,7 +72,7 @@ char *argv[];
   /*  Arm */
   printf("=> ARM %s\n", XtName((Widget)arr));
   printf("=> ARM %s\n", XtName((Widget)pb));
-  printf("=> ARM %s\n", XtName((Widget)tog)); 
+  printf("=> ARM %s\n", XtName((Widget)tog));
   XtCallActionProc((Widget)arr, "Arm", ev, NULL, 5000);
   XtCallActionProc((Widget)pb, "Arm", ev, NULL, 5000);
   XtCallActionProc((Widget)tog, "Arm", ev, NULL, 5000);
@@ -81,7 +81,7 @@ char *argv[];
 /*  Activate */
   printf("=> ACTIVATE %s\n", XtName((Widget)arr));
   printf("=> ACTIVATE %s\n", XtName((Widget)pb));
-  printf("=> ACTIVATE %s\n", XtName((Widget)tog)); 
+  printf("=> ACTIVATE %s\n", XtName((Widget)tog));
   XtCallActionProc((Widget)arr, "Activate", ev, NULL, 5000);
   XtCallActionProc((Widget)pb, "Activate", ev, NULL, 5000);
   XtCallActionProc((Widget)tog, "Select", ev, NULL, 5000);
@@ -101,11 +101,11 @@ char *argv[];
   printf("=> EXPOSE %s\n", XtName((Widget)arr));
   printf("=> EXPOSE %s\n", XtName((Widget)pb));
   printf("=> EXPOSE %s\n", XtName((Widget)tog));
-  XClearArea(XtDisplayOfObject((Widget)arr), XtWindowOfObject((Widget)arr), 
+  XClearArea(XtDisplayOfObject((Widget)arr), XtWindowOfObject((Widget)arr),
 		0, 0, 0, 0, True);
-  XClearArea(XtDisplayOfObject((Widget)pb), XtWindowOfObject((Widget)pb), 
+  XClearArea(XtDisplayOfObject((Widget)pb), XtWindowOfObject((Widget)pb),
 		0, 0, 0, 0, True);
-  XClearArea(XtDisplayOfObject((Widget)tog), XtWindowOfObject((Widget)tog), 
+  XClearArea(XtDisplayOfObject((Widget)tog), XtWindowOfObject((Widget)tog),
 		0, 0, 0, 0, True);
 
   CommonPause();
@@ -113,5 +113,3 @@ char *argv[];
 
   XtMainLoop();
 }
-
-

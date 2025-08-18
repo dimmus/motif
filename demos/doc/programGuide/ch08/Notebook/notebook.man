@@ -19,22 +19,22 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH notebook 1X MOTIF "Demonstration programs"
 .SH NAME
-\*Lnotebook\*O\(emDemonstrates how to use XmNotebook in a simple application 
+\*Lnotebook\*O\(emDemonstrates how to use XmNotebook in a simple application
 .SH SYNOPSIS
 .sS
 \*LNotebook\*O
 .sE
 .SH DESCRIPTION
-\*Lnotebook\*O illustrates how to place an XmNotebook into an application. 
-You can turn the pages of the notebook by 
-  * clicking on the page scroller arrows 
-  * clicking on one of the major tab buttons (fruits or vegetables) 
-  * clicking on one of the minor tab buttons (green or orange) 
+\*Lnotebook\*O illustrates how to place an XmNotebook into an application.
+You can turn the pages of the notebook by
+  * clicking on the page scroller arrows
+  * clicking on one of the major tab buttons (fruits or vegetables)
+  * clicking on one of the minor tab buttons (green or orange)
 A status area appears when the current page number is 2.
 .PP
 For details on the code, see Chapter 8 of the "OSF/Motif Programmer's

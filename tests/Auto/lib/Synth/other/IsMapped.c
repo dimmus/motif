@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsMapped.c /main/7 1995/07/14 11:36:20 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: IsMapped.c /main/7 1995/07/14 11:36:20 drk 
 
         INPUTS:
             window - window which may be mapped or not
-        
+
         OUTPUTS:
             none
 
@@ -62,7 +62,7 @@ Window window;
 
     XGetWindowAttributes(xisDisplay,window,&wattr);
 
-    return(wattr.map_state != IsUnmapped); 
+    return(wattr.map_state != IsUnmapped);
 
 } /* End xisIsMapped() */
 
@@ -77,7 +77,7 @@ Window window;
 
     XGetWindowAttributes(xisDisplay,window,&wattr);
 
-    return(wattr.map_state == IsViewable); 
+    return(wattr.map_state == IsViewable);
 
 } /* End xisIsViewable() */
 

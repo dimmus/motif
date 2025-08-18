@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,14 +19,14 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 extern void AddWmResourceConverters (void);
 #ifdef WSM
-extern void WmCvtStringToAMBehavior (XrmValue *args, Cardinal numArgs, 
+extern void WmCvtStringToAMBehavior (XrmValue *args, Cardinal numArgs,
 				 XrmValue *fromVal, XrmValue *toVal);
 #endif /* WSM */
 extern void WmCvtStringToCFocus (XrmValue *args, Cardinal numArgs, XrmValue *fromVal, XrmValue *toVal);

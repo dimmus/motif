@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollList2.c /main/9 1995/07/13 18:23:21 drk $"
@@ -42,13 +42,13 @@ void  main (argc, argv)
     XmString           tcs, ItemList[NITEMS];
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  150);  			n++;
     XtSetArg(args[n], XmNheight, 300);  			n++;
     XtSetArg(args[n], XtNgeometry, "+0+0");  			n++;
     XtSetValues(Shell1, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
     /* convert the plain strings to Xstrings */
@@ -57,7 +57,7 @@ void  main (argc, argv)
 			  XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
-    XtSetArg(args[n], XmNlistSpacing, 5);  			n++; 
+    XtSetArg(args[n], XmNlistSpacing, 5);  			n++;
     XtSetArg(args[n], XmNlistMarginWidth, 2);  			n++;
     XtSetArg(args[n], XmNlistMarginHeight, 2);  		n++;
     XtSetArg(args[n], XmNlistSizePolicy, XmCONSTANT);  		n++;
@@ -173,7 +173,7 @@ static void SinSelCB(Widget w, XtPointer client_data,
 
 {
     XmString tcs;
-    
+
     printf("One item selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. %d\n", ((XmListCallbackStruct*)call_data)->item_position);
@@ -185,7 +185,7 @@ static void MulSelCB(Widget w, XtPointer client_data,
 
 {
     XmString tcs;
-    
+
     printf("One or more items selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. of items is %d\n",
@@ -200,7 +200,7 @@ static void ExtSelCB(Widget w, XtPointer client_data,
 
 {
     XmString tcs;
-    
+
     printf("One or more items selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. of items is %d\n",

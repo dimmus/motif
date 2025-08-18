@@ -31,7 +31,7 @@
  *     HEWLETT-PACKARD COMPANY
  * (c) Copyright 1996 International Business Machines Corp.
  * (c) Copyright 1996 Sun Microsystems, Inc.
- * (c) Copyright 1996 Novell, Inc. 
+ * (c) Copyright 1996 Novell, Inc.
  * (c) Copyright 1996 FUJITSU LIMITED.
  * (c) Copyright 1996 Hitachi.
  */
@@ -45,7 +45,7 @@ extern "C" {
 #endif
 
 /*
- * Class record constants 
+ * Class record constants
  */
 externalref WidgetClass dtPrintSetupBoxWidgetClass;
 

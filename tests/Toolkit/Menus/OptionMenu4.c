@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 <<<<<<< 1.6.8.2
@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: OptionMenu4.c /main/10 1995/07/13 18:50:16 
 
 Widget    RC;
 Widget    RC_children[NUM_RC_CHILDREN];
-static char *RC_children_names[] = { 
+static char *RC_children_names[] = {
   "Himalyan",
   "Siamese",
   "D. Shorthair",
@@ -91,25 +91,25 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNallowShellResize, True); n++;
   XtSetValues(Shell1, args, n);
 #endif /* MOTIF1_1 */
-    
+
   n = 0;
   XtSetArg(args[n], XtNgeometry, "+0+350");  n++;
   XtSetValues(Shell1, args, n);
-  
-  /* 
-   *  Test: nine Option Menu children of a Form. 
+
+  /*
+   *  Test: nine Option Menu children of a Form.
    */
 
   n = 0;
   RC = XmCreateForm (Shell1, "RC", args, n);
   XtManageChild (RC);
 
-  /* 
-   *  Put the nine cascadebutton children of RC into an array 
+  /*
+   *  Put the nine cascadebutton children of RC into an array
    */
 
   for (i = 0; i <= (NUM_RC_CHILDREN - 1); i++)
-    {  
+    {
       n = 0;
       tcs = XmStringCreate(RC_children_names[i], XmSTRING_DEFAULT_CHARSET);
       sprintf (buf, "OptionMenu%d", i);
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
    */
 
   n = 0;
-  XtSetArg(args[n], XmNrowColumnType, XmMENU_PULLDOWN); n++; 
+  XtSetArg(args[n], XmNrowColumnType, XmMENU_PULLDOWN); n++;
   SharedMenu = XmCreatePulldownMenu(RC, "SharedMenu", args, n);
 
   n = 0;
@@ -159,8 +159,8 @@ int main(int argc, char **argv)
    *  Manage the push buttons
    */
 
-  XtManageChild(PushBtn1); 
-  XtManageChild(PushBtn2); 
+  XtManageChild(PushBtn1);
+  XtManageChild(PushBtn2);
   XtManageChild(PushBtn3);
 
   n = 0;
@@ -169,45 +169,45 @@ int main(int argc, char **argv)
   XtSetValues(RC_children[1], args, n);
   XtSetValues(RC_children[5], args, n);
 
-  /*  
+  /*
    *  Set Form constraints.
    *  For Children 0,3,6 set top attachment ATTACH_FORM
    *  For all others, set top attachment to widget [i-1]
    */
 
   for (i = 0; i<=8; i++)
-    {  
+    {
       n = 0;
       if (i%3)
-	{ 
+	{
 	  XtSetArg(args[n], XmNtopWidget, RC_children[i - 1]); n++;
 	  XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
 	  XtSetValues(RC_children[i], args, n);
 	}
       else
-	{ 
+	{
 	  XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
 	  XtSetValues (RC_children[i], args, n);
 	}
     }
-    
-  /* 
+
+  /*
    *  Set children 0,1 and 2 left-attach Form
    */
 
   for (i = 0; i<=2; i++)
-    { 
+    {
       n = 0;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
       XtSetValues(RC_children[i], args, n);
     }
 
-  /* 
-   *  Set all except above to left-attach, widget i - 3 
+  /*
+   *  Set all except above to left-attach, widget i - 3
    */
 
   for (i=3; i <= 8; i++)
-    { 
+    {
       n = 0;
       XtSetArg(args[n], XmNleftWidget, RC_children[i - 3]); n++;
       XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET); n++;
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
    *  Test 2: Verify different OptionMenu XmNmenuHistory settings
    *  for 3 OptionMenus sharing the same pulldown...
    */
-  
+
   XtUnmanageChild(RC);
 
   /*
@@ -244,7 +244,7 @@ int main(int argc, char **argv)
   XtSetArg(args[1], XmNmenuHistory, RC2b3);
   XtManageChild(XmCreateOptionMenu(RC2, "option2", args, 2));
 
-  XtSetArg(args[1], XmNmenuHistory, RC2b2); 
+  XtSetArg(args[1], XmNmenuHistory, RC2b2);
   XtManageChild(XmCreateOptionMenu(RC2, "option3", args, 2));
 
   XtManageChild(RC2);
@@ -283,7 +283,7 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n],  XmNmarginLeft, 4); n++;
   XtSetArg(args[n],  XmNmarginRight,  4); n++;
-  RC3pb2 = XmCreatePushButton(RC3pd, "PLBPB2", args, n);	
+  RC3pb2 = XmCreatePushButton(RC3pd, "PLBPB2", args, n);
   XmStringFree(tcs);
 
   /*
@@ -296,7 +296,7 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNmarginLeft, 4); n++;
   XtSetArg(args[n], XmNmarginRight, 4); n++;
 
-  RC3pb3 = XmCreatePushButton(RC3pd, "PLBPB3", args, n);    	
+  RC3pb3 = XmCreatePushButton(RC3pd, "PLBPB3", args, n);
   XmStringFree(tcs);
 
   /*
@@ -312,7 +312,7 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNrowColumnType, XmMENU_OPTION); n++;
 
-  RC3om = XmCreateOptionMenu(RC3, "RC3OM", args, n);  
+  RC3om = XmCreateOptionMenu(RC3, "RC3OM", args, n);
 
   XtManageChild(RC3pb1);
   XtManageChild(RC3pb2);
@@ -335,7 +335,7 @@ int main(int argc, char **argv)
    * Motif 1.1 has a bug where if the shell gets realized with no
    * children, an error occurs because the shell thinks it has no
    * width and height.  In Motif 1.2 this is supposed to get fixed.
-   * BTW - this only surfaces during automation where widgets are 
+   * BTW - this only surfaces during automation where widgets are
    * managed as they are created.
    */
 
@@ -375,9 +375,9 @@ int main(int argc, char **argv)
   XtSetArg(args[0], XmNlabelString, cmpLabel);
   XtSetValues(itm1, args, 1);
   XmStringFree(cmpLabel);
-  
-/* 
- * The below commented code resets menuHistory to another item, 
+
+/*
+ * The below commented code resets menuHistory to another item,
  *  and when setting it back to the original item, it then shows
  *  "new long Text" as the current item.
  */
@@ -394,4 +394,3 @@ int main(int argc, char **argv)
   XtAppMainLoop(app_context);
 
 } /*  End main */
-

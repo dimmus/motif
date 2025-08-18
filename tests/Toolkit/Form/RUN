@@ -82,8 +82,8 @@ set totalVista = false
 #     -fu     - Log only Freed and Uninintialized Memory access errors
 #     -fa     - Log only Freed and Array Bound Memory access errors
 #     -ua     - Log only Uninintialized and Array Bound Memory access errors
-#     -nocopy - Don't copy a .purify file in your current directory. If you 
-#	        have a customized .purify in your current directory, it will 
+#     -nocopy - Don't copy a .purify file in your current directory. If you
+#	        have a customized .purify in your current directory, it will
 #		use it, else it will act as -all.
 #
 # All of the above will have memory leak information along with the
@@ -216,7 +216,7 @@ set noglob
 # remember all arguments MUST be a single word (ie no spaces)
 # use single quotes around the right side.
 
-# START CUSTOMIZE # 
+# START CUSTOMIZE #
 
 # $XConsortium: RUN.custom /main/5 1996/08/15 14:03:38 jakku $
 # Motif
@@ -253,7 +253,7 @@ set TOP = ../../..
 set Form1a = 'Form1 -u xmPushButtonWidgetClass -I  Form1a.dat -S Form1a.scr -V Form1a.vis -O Form1a.prt'
 set Form1b = 'Form1 -u xmArrowButtonWidgetClass -I  Form1b.dat -S Form1b.scr -V Form1b.vis -O Form1b.prt'
 set Form1c = 'Form1 -u xmPushButtonWidgetClass -I  Form1c.dat -S Form1c.scr -V Form1c.vis -O Form1c.prt'
-set Form1d = 'Form1 -u xmScaleWidgetClass -I  Form1d.dat -S Form1d.scr -V Form1d.vis -O Form1d.prt -xrm *XmScale*orientation:XmHORIZONTAL' 
+set Form1d = 'Form1 -u xmScaleWidgetClass -I  Form1d.dat -S Form1d.scr -V Form1d.vis -O Form1d.prt -xrm *XmScale*orientation:XmHORIZONTAL'
 set Form1e = 'Form1 -u xmBulletinBoardWidgetClass -I  Form1e.dat -S Form1e.scr -V Form1e.vis -O Form1e.prt  -xrm *Child1.height:100 -xrm *Child1.width:400 -xrm *Child2.width:10 -xrm *Child2.height:10'
 set Form1f = 'Form1 -u xmPushButtonWidgetClass -I  Form1f.dat -S Form1f.scr -V Form1f.vis -O Form1f.prt -xrm *Child1.width:100 -xrm *Child2.width:100'
 set Form1g = 'Form1 -u xmPushButtonWidgetClass -I  Form1g.dat -S Form1g.scr -V Form1g.vis -O Form1g.prt -xrm *Child1.resizable:False'
@@ -270,7 +270,7 @@ foreach test ( "$Form1a" "$Form1b" "$Form1c" "$Form1d" "$Form1e" "$Form1f" "$For
 
 
 # END CUSTOMIZE #
-    
+
 if ($count == 0 && $Purifyrun == true) then
     if (-e .purify.bak) then
         rm -f .purify.bak
@@ -319,7 +319,7 @@ endif
 
     set test =($test)
 	@ Total_Test_Num++
-    
+
     foreach word ($test)
         if ($?name_flag) then
             set test_output = $word
@@ -393,7 +393,7 @@ endif
             endif
             echo "failure in test: "$test[1] >> RUN_failures
             echo "FAILURE IN TEST: "$test[1] >> RUN_output
-            echo "FAILURE IN TEST: "$test[1] 
+            echo "FAILURE IN TEST: "$test[1]
         else if ($Vistarun == true && $totalVista == false) then
             if (-e hits) then
                 mv hits ${HIT_FILE}
@@ -456,7 +456,7 @@ end
 
 unset noglob
 #
-# if totalVista is true, generate the overall coverage report for the 
+# if totalVista is true, generate the overall coverage report for the
 # directory
 #
 if ($Vistarun == true && $totalVista == true) then
@@ -483,10 +483,10 @@ if ($mode == compare) then
         set prts_there = `ls -l $AUTOVPATH/*.prt | wc -l`
         if ($prts_here > $prts_there) then
             echo "There are .prt files missing in " $AUTOVPATH >> RUN_failures
-            echo "There are .prt files missing in " $AUTOVPATH 
+            echo "There are .prt files missing in " $AUTOVPATH
         else if ($prts_there > $prts_here) then
             echo "There are .prt files missing in " $cwd >> RUN_failures
-            echo "There are .prt files missing in " $cwd 
+            echo "There are .prt files missing in " $cwd
         endif
         foreach file ($AUTOVPATH/*.prt)
             if (-e $cwd/$file:t) then
@@ -494,7 +494,7 @@ if ($mode == compare) then
                     mv $file:t.diff $file:t.err
 	    else
                 echo "No "$file:t file found in $AUTOVPATH >> RUN_output
-                echo "No "$file:t file found in $AUTOVPATH 
+                echo "No "$file:t file found in $AUTOVPATH
             endif
         end
     endif
@@ -567,6 +567,6 @@ if (pathExists == true) then
 else
 	unsetenv XFILESEARCHPATH
 endif
-	
 
-exit 0 
+
+exit 0

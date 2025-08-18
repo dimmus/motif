@@ -3,11 +3,11 @@
 i18ninput
 =========
 
-This program is set up to handle text input in any 
+This program is set up to handle text input in any
 language. It shows the effect of changing background or
 font in a text widget that uses an input method.
 
-The main window contains a scrolled multi-line XmText, a 
+The main window contains a scrolled multi-line XmText, a
 one-line XmText and an XmTextField. All three have a separate
 control panel for the font and background color of the text
 widgets.
@@ -23,7 +23,7 @@ render text in this language. Therefore, the demo uses
 fontsets as a default.
 
 Worth noting is that no fonts or labels are hardcoded. The
-labels, colors and fonts necessary for the demo to be 
+labels, colors and fonts necessary for the demo to be
 meaningful are either specified as fallback resources or
 as the default value of application resources.
 

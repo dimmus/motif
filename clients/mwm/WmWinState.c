@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.1
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -105,7 +105,7 @@ extern int firstTime;
  *
  *  setTime = timestamp for state setting operations
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  pCD.clientState = new client state
@@ -262,7 +262,7 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 		    }
 		    else
 		    {
-		        Do_Focus_Key (NULL, setTime, 
+		        Do_Focus_Key (NULL, setTime,
 				ALWAYS_SET_FOCUS | WORKSPACE_IF_NULL);
 		    }
 
@@ -280,7 +280,7 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 	     * Display the icon for the minimized client.
 	     */
 
-	    if (ICON_FRAME_WIN(pCD)) 
+	    if (ICON_FRAME_WIN(pCD))
 	    {
 #ifdef WSM
 		if (pCD->clientState & UNSEEN_STATE)
@@ -310,13 +310,13 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 		     */
 		    HideActiveIconText((WmScreenData *)NULL);
 		    pSD->activeLabelParent = ACTIVE_ROOT;
-		    XReparentWindow(DISPLAY, ACTIVE_ICON_TEXT_WIN , 
+		    XReparentWindow(DISPLAY, ACTIVE_ICON_TEXT_WIN ,
 				ACTIVE_ROOT, 0, 0 );
 		}
 		if (ICON_FRAME_WIN(pCD))
 		{
-		    /* 
-		     * force icon appearance in icon box to change 
+		    /*
+		     * force icon appearance in icon box to change
 		     */
 		    IconExposureProc (pCD, True);
 		}
@@ -324,7 +324,7 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 	    break;
 	}
 
-#ifdef WSM 
+#ifdef WSM
 
         case UNSEEN_STATE | NORMAL_STATE:
         case UNSEEN_STATE | MAXIMIZED_STATE:
@@ -333,9 +333,9 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 	    if (wmGD.keyboardFocus == pCD)
 	    {
 		/*
-		 * Give up the keyboard focus 
+		 * Give up the keyboard focus
 		 */
-		Do_Focus_Key ((ClientData *)NULL, 
+		Do_Focus_Key ((ClientData *)NULL,
 			CurrentTime, ALWAYS_SET_FOCUS);
 		SetKeyboardFocus (NULL, 0);
 	    }
@@ -348,8 +348,8 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 		UnmapClients (pcdLeader, event_mask);
 
 	    }
-      
-	    if (pCD->clientFrameWin) 
+
+	    if (pCD->clientFrameWin)
 	    {
 		if (!P_ICON_BOX(pCD))
 		{
@@ -359,7 +359,7 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
 		    }
 		    if (pCD->iconWindow)
 			XUnmapWindow (DISPLAY, pCD->iconWindow);
-		} 
+		}
 	    }
 
 	    switch (newState & ~UNSEEN_STATE)
@@ -404,14 +404,14 @@ void SetClientStateWithEventMask (ClientData *pCD, int newState, Time setTime, u
  *  setTime = timestamp for state setting operations
  *
  *  event_mask = what to grab to prevent stray events going somewhere
- * 
+ *
  *  Outputs:
  *  -------
  *  pCD.clientState = new client state
  *
  *************************************<->***********************************/
 
-static void SetupWindowStateWithEventMask (ClientData *pCD, int newState, 
+static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 	Time setTime, unsigned int event_mask)
 {
     int currentState;
@@ -441,14 +441,14 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 	     * what the new configuration is.
 	     */
 
-	    ConfigureNewState (pCD); 
+	    ConfigureNewState (pCD);
 	}
     }
     else /* MAXIMIZED_STATE */
     {
 	if (pCD->maxConfig == False)
 	{
-	    ConfigureNewState (pCD); 
+	    ConfigureNewState (pCD);
         }
     }
 
@@ -457,7 +457,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 	Boolean clearIconFocus;
 
 	/*
-	 * give up keyboard focus 
+	 * give up keyboard focus
 	 */
 
 	if ((wmGD.keyboardFocus == pCD) ||
@@ -483,16 +483,16 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 
 	if (ICON_FRAME_WIN(pCD))
 	{
-	    if (pSD->useIconBox && P_ICON_BOX(pCD) && 
+	    if (pSD->useIconBox && P_ICON_BOX(pCD) &&
 		!(pCD->clientFlags & ICON_BOX))
 	    {
 	        ShowClientIconState(pCD, newState);
 	    }
-	    else 
+	    else
 	    {
 		Boolean doGrab = False;
     		if (event_mask)
-		doGrab = (Success == XGrabPointer 
+		doGrab = (Success == XGrabPointer
 			(DISPLAY, DefaultRootWindow(DISPLAY),
 			False, event_mask, GrabModeAsync, GrabModeAsync,
 			None, None, CurrentTime));
@@ -508,7 +508,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 			XUngrabPointer(DISPLAY,CurrentTime);
 		}
 #ifdef WSM
-	        if (wmGD.iconAutoPlace) 
+	        if (wmGD.iconAutoPlace)
 	        {
                     for (wsI = 0; wsI < pCD->numInhabited; wsI++)
 		    {
@@ -517,7 +517,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 			{
 			    pWS_i = GetWorkspaceData (pCD->pSD,
 						pCD->pWsList[wsI].wsID);
-			    pWS_i->IPData.placeList[iplace].pCD = 
+			    pWS_i->IPData.placeList[iplace].pCD =
 				    NULL;
 			}
 		    }
@@ -525,7 +525,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 #else /* WSM */
 	        if ((wmGD.iconAutoPlace) && (ICON_PLACE(pCD) != NO_ICON_PLACE))
 	        {
-		    pWS->IPData.placeList[ICON_PLACE(pCD)].pCD = 
+		    pWS->IPData.placeList[ICON_PLACE(pCD)].pCD =
 			NULL;
 	        }
 #endif /* WSM */
@@ -562,11 +562,11 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
 #endif /* WSM */
 	}
 
-	if ( (!(pCD->clientFlags & ICON_BOX)) || 
+	if ( (!(pCD->clientFlags & ICON_BOX)) ||
 	     ((pCD->clientFlags & ICON_BOX) && (!(firstTime))) )
 	{
 #ifdef PANELIST
-	  if ((currentState == WITHDRAWN_STATE) && 
+	  if ((currentState == WITHDRAWN_STATE) &&
 	      (pCD->dtwmBehaviors & DtWM_BEHAVIOR_SUBPANEL) &&
 	      !(pCD->transientChildren))
 	  {
@@ -615,8 +615,8 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
     if ( pSD->useIconBox &&  P_ICON_BOX(pCD) &&
 	 (!(pCD->clientFlags & ICON_BOX)) && (ICON_FRAME_WIN(pCD)))
     {
-	/* 
-	 * force icon appearance in icon box to change 
+	/*
+	 * force icon appearance in icon box to change
 	 */
 
 	IconExposureProc (pCD, True);
@@ -640,7 +640,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
  *  Inputs:
  *  ------
  *  pcd		- pointer to client data
- * 
+ *
  *  Outputs:
  *  -------
  *
@@ -648,7 +648,7 @@ static void SetupWindowStateWithEventMask (ClientData *pCD, int newState,
  *  Comments:
  *  --------
  *  o This is only good for going between NORMAL and MAXIMIZED state.
- * 
+ *
  *************************************<->***********************************/
 
 void ConfigureNewState (ClientData *pcd)
@@ -658,13 +658,13 @@ void ConfigureNewState (ClientData *pcd)
 	pcd->maxConfig = FALSE;
 	RegenerateClientFrame(pcd);
 	XResizeWindow (DISPLAY, pcd->client,
-			   (unsigned int) pcd->clientWidth, 
+			   (unsigned int) pcd->clientWidth,
 			   (unsigned int) pcd->clientHeight);
     }
     else
     {
 	XResizeWindow (DISPLAY, pcd->client,
-			   (unsigned int) pcd->maxWidth, 
+			   (unsigned int) pcd->maxWidth,
 			   (unsigned int) pcd->maxHeight);
 	pcd->maxConfig = TRUE;
 	RegenerateClientFrame(pcd);
@@ -732,7 +732,7 @@ static void UnmapClients (ClientData *pCD, unsigned int event_mask)
 		False, event_mask, GrabModeAsync, GrabModeAsync,
 		None, None, CurrentTime));
     /* unmap this primary window */
-    XUnmapWindow (DISPLAY, pCD->clientFrameWin); 
+    XUnmapWindow (DISPLAY, pCD->clientFrameWin);
     XUnmapWindow (DISPLAY, pCD->client);
     if (event_mask && doGrab)
 	{
@@ -838,10 +838,10 @@ void SetClientWMState (ClientData *pCD, int wmState, int mwmState)
  *  Inputs:
  *  ------
  *  client_data = pointer to a SlideOutRec
- * 
+ *
  *  Outputs:
  *  -------
- *  
+ *
  *
  *  Comments:
  *  --------
@@ -872,7 +872,7 @@ SlideOutTimerProc ( XtPointer client_data, XtIntervalId *id)
 		    }
 		    bDone = (pSOR->currY == pSOR->pCD->frameInfo.y);
 		}
-		else 
+		else
 		{
 		    pSOR->currY += pSOR->incHeight;
 		    if (pSOR->incHeight >= pSOR->currHeight)
@@ -895,7 +895,7 @@ SlideOutTimerProc ( XtPointer client_data, XtIntervalId *id)
 		    {
 			pSOR->currHeight = pSOR->pCD->frameInfo.height;
 		    }
-		    bDone = 
+		    bDone =
 		      (pSOR->currHeight == pSOR->pCD->frameInfo.height);
 		}
 		else
@@ -918,15 +918,15 @@ SlideOutTimerProc ( XtPointer client_data, XtIntervalId *id)
 	 */
 	if (pSOR->currHeight > 0)
 	{
-	    XMoveResizeWindow (DISPLAY, pSOR->coverWin, 
+	    XMoveResizeWindow (DISPLAY, pSOR->coverWin,
 		pSOR->currX, pSOR->currY,
 		pSOR->currWidth, pSOR->currHeight);
 
-	    XMoveResizeWindow (DISPLAY, pSOR->pCD->clientFrameWin, 
-	        pSOR->currX, pSOR->currY, 
+	    XMoveResizeWindow (DISPLAY, pSOR->pCD->clientFrameWin,
+	        pSOR->currX, pSOR->currY,
 		pSOR->currWidth, pSOR->currHeight);
 	}
-	
+
 	/*
 	 * See if we need to continue
 	 */
@@ -978,8 +978,8 @@ SlideOutTimerProc ( XtPointer client_data, XtIntervalId *id)
  *
  *  Comment:
  *  -------
- *  Only supports slide-up or slide-down 
- * 
+ *  Only supports slide-up or slide-down
+ *
  *************************************<->***********************************/
 
 static void
@@ -1029,7 +1029,7 @@ SlideWindowOut (ClientData *pCD)
 	 * the window size. If the window is short, we'll
 	 * just map it, avoiding a lot of processing.
 	 */
-	pSOR->incHeight = (Dimension) (DisplayHeight(DISPLAY, 
+	pSOR->incHeight = (Dimension) (DisplayHeight(DISPLAY,
 			SCREEN_FOR_CLIENT(pCD))/SLIDE_UP_DIVISOR);
     }
 
@@ -1040,7 +1040,7 @@ SlideWindowOut (ClientData *pCD)
 	XWindowChanges window_changes;
 	unsigned long mask;
 
-	/* 
+	/*
 	 * Set up data for processing slide up
 	 */
 	pSOR->pCD = pCD;
@@ -1049,7 +1049,7 @@ SlideWindowOut (ClientData *pCD)
 	pSOR->mapping = True;
 	pSOR->wSubpanel = NULL;
 	pSOR->pCD->pSOR = pSOR;
-	
+
 	switch (pSOR->direction)
 	{
 	    case SLIDE_NORTH:
@@ -1057,7 +1057,7 @@ SlideWindowOut (ClientData *pCD)
 		pSOR->currWidth = pCD->frameInfo.width;
 		pSOR->currHeight = pSOR->incHeight;
 		pSOR->currX = pCD->frameInfo.x;
-		pSOR->currY = pCD->frameInfo.y + 
+		pSOR->currY = pCD->frameInfo.y +
 		    (pCD->frameInfo.height - pSOR->currHeight);
 		break;
 
@@ -1078,12 +1078,12 @@ SlideWindowOut (ClientData *pCD)
 	window_attribs.override_redirect = True;
 	pSOR->coverWin = XCreateWindow(DISPLAY,
 			    RootWindow (DISPLAY, SCREEN_FOR_CLIENT(pCD)),
-			    pSOR->currX, pSOR->currY, 
+			    pSOR->currX, pSOR->currY,
 			    pSOR->currWidth, pSOR->currHeight, 0,
 			    CopyFromParent,InputOnly,CopyFromParent,
 			    mask, &window_attribs);
 
-	/* 
+	/*
 	 * Put screen window above the slide-up client
 	 */
         mask = CWStackMode | CWSibling;
@@ -1093,10 +1093,10 @@ SlideWindowOut (ClientData *pCD)
 
 	/*
 	 * Start slide-up processing
-	 */ 
+	 */
 	XMoveResizeWindow (DISPLAY, pSOR->coverWin, pSOR->currX, pSOR->currY,
 	    pSOR->currWidth, pSOR->currHeight);
-	XMoveResizeWindow (DISPLAY, pCD->clientFrameWin, 
+	XMoveResizeWindow (DISPLAY, pCD->clientFrameWin,
 	    pSOR->currX, pSOR->currY, pSOR->currWidth, pSOR->currHeight);
 	XMapWindow (DISPLAY, pSOR->coverWin);
 	XMapWindow (DISPLAY, pCD->clientFrameWin);
@@ -1104,7 +1104,7 @@ SlideWindowOut (ClientData *pCD)
 
 	XtAppAddTimeOut(wmGD.mwmAppContext, pSOR->interval,
 			SlideOutTimerProc, (XtPointer)pSOR);
-	
+
 	wmGD.iSlideUpsInProgress += 1;
 
     }
@@ -1115,7 +1115,7 @@ SlideWindowOut (ClientData *pCD)
 	 * is just a little guy.
 	 */
 	XMapWindow (DISPLAY, pCD->clientFrameWin);
-	if (pSOR) 
+	if (pSOR)
 	{
 	    XtFree ((char *) pSOR);
 	    pCD->pSOR = NULL;
@@ -1143,7 +1143,7 @@ SlideWindowOut (ClientData *pCD)
  *
  *  Comment:
  *  -------
- * 
+ *
  *************************************<->***********************************/
 
 void
@@ -1189,7 +1189,7 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 	 * is short. If it is, we'll just unmap it, avoiding
 	 * a lot of extra work.
 	 */
-	pSOR->incHeight = (Dimension) (DisplayHeight(DISPLAY, 
+	pSOR->incHeight = (Dimension) (DisplayHeight(DISPLAY,
 		SCREEN_FOR_CLIENT(pCD))/SLIDE_UP_DIVISOR);
     }
 
@@ -1200,7 +1200,7 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 	XWindowChanges window_changes;
 	unsigned long mask;
 
-	/* 
+	/*
 	 * Set up data for processing slide up
 	 */
 	pSOR->pCD = pCD;
@@ -1209,7 +1209,7 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 	pSOR->mapping = False;
 	pSOR->wSubpanel = wSubpanel;
 	pSOR->pCD->pSOR = pSOR;
-	
+
 	pSOR->incWidth = 0;
 	pSOR->currWidth = pCD->frameInfo.width;
 	pSOR->currHeight = pCD->frameInfo.height;
@@ -1236,12 +1236,12 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 	window_attribs.override_redirect = True;
 	pSOR->coverWin = XCreateWindow(DISPLAY,
 			    RootWindow (DISPLAY, SCREEN_FOR_CLIENT(pCD)),
-			    pSOR->currX, pSOR->currY, 
+			    pSOR->currX, pSOR->currY,
 			    pSOR->currWidth, pSOR->currHeight, 0,
 			    CopyFromParent,InputOnly,CopyFromParent,
 			    mask, &window_attribs);
 
-	/* 
+	/*
 	 * Put screen window above the slide-up client
 	 */
 	mask = CWStackMode | CWSibling;
@@ -1251,17 +1251,17 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 
 	/*
 	 * Start slide-up processing
-	 */ 
+	 */
 	XMapWindow (DISPLAY, pSOR->coverWin);
 
 	if (pSOR->currHeight > 0)
 	{
-	    XMoveResizeWindow (DISPLAY, pCD->clientFrameWin, 
-		pSOR->currX, pSOR->currY, 
+	    XMoveResizeWindow (DISPLAY, pCD->clientFrameWin,
+		pSOR->currX, pSOR->currY,
 		pSOR->currWidth, pSOR->currHeight);
 
-	    XMoveResizeWindow (DISPLAY, pSOR->coverWin, 
-		pSOR->currX, pSOR->currY, 
+	    XMoveResizeWindow (DISPLAY, pSOR->coverWin,
+		pSOR->currX, pSOR->currY,
 		pSOR->currWidth, pSOR->currHeight);
 
 	    XSync (DISPLAY, False);
@@ -1281,7 +1281,7 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
 	 */
 	/* Just unmanage the slide-up */
 	XtUnmanageChild (wSubpanel);
-	if (pSOR) 
+	if (pSOR)
 	{
 	    XtFree ((char *) pSOR);
 	    pCD->pSOR = NULL;
@@ -1306,7 +1306,7 @@ SlideSubpanelBackIn (ClientData *pCD, Widget wSubpanel)
  *  Inputs:
  *  ------
  *  pCD	= pointer to  client data
- * 
+ *
  *************************************<->***********************************/
 
 void MapClientWindows (ClientData *pCD)
@@ -1348,7 +1348,7 @@ void MapClientWindows (ClientData *pCD)
  *  This function shows the icon for the specified client.  If the icon
  *  is in an icon box then the "minimized" icon is displayed.  If the icon
  *  is on the root window it is mapped.
- * 
+ *
  *
  *  Inputs:
  *  ------
@@ -1376,19 +1376,19 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
 	     * find a free place to put the icon.
              */
 
-	    if ((ICON_PLACE(pCD) = GetNextIconPlace (&pWS->IPData)) 
+	    if ((ICON_PLACE(pCD) = GetNextIconPlace (&pWS->IPData))
 		== NO_ICON_PLACE)
 	    {
-	        ICON_PLACE(pCD) = 
+	        ICON_PLACE(pCD) =
 		    CvtIconPositionToPlace (&pWS->IPData,
 							 pCD->clientX,
 			               	                 pCD->clientY);
 	    }
-	    CvtIconPlaceToPosition (&pWS->IPData, ICON_PLACE(pCD), 
+	    CvtIconPlaceToPosition (&pWS->IPData, ICON_PLACE(pCD),
 				    &ICON_X(pCD), &ICON_Y(pCD));
 
 #ifndef WSM
-	    XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD), 
+	    XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD),
 		ICON_X(pCD), ICON_Y(pCD));
 #endif /* WSM */
 
@@ -1404,7 +1404,7 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
      */
     if ((pWS == pSD->pActiveWS) && !P_ICON_BOX(pCD))
     {
-	XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD), 
+	XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD),
 	    ICON_X(pCD), ICON_Y(pCD));
     }
 #endif /* WSM */
@@ -1422,7 +1422,7 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
 	XWindowChanges windowChanges;
 
 	/*
-	 * Map the icon on the screen at the appropriate place in the 
+	 * Map the icon on the screen at the appropriate place in the
 	 * window stack.
 	 */
 
@@ -1433,7 +1433,7 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
 	    {
 		if (pSD->lastClient->type == MINIMIZED_STATE)
 		{
-		    windowChanges.sibling = 
+		    windowChanges.sibling =
 			ICON_FRAME_WIN(pSD->lastClient->pCD);
 		}
 		else
@@ -1444,7 +1444,7 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
 		windowChanges.stack_mode = Below;
 		XConfigureWindow (DISPLAY, ICON_FRAME_WIN(pCD),
 		    		  (CWSibling | CWStackMode), &windowChanges);
-		MoveEntryInList (pWS, &pCD->iconEntry, 
+		MoveEntryInList (pWS, &pCD->iconEntry,
 		    False /*on bottom*/, NULL);
 	    }
 	}
@@ -1483,7 +1483,7 @@ void ShowIconForMinimizedClient (WmWorkspaceData *pWS, ClientData *pCD)
  *  client. Since there is only one clientState per client (not per
  *  workspace), this loops over all workspace in which the client
  *  resides and places an icon in each.
- * 
+ *
  *
  *  Inputs:
  *  ------
@@ -1510,9 +1510,8 @@ void ShowAllIconsForMinimizedClient (ClientData *pCD)
 				    pCD->pWsList[tmpWsc].wsID);
 	ShowIconForMinimizedClient(pWS, pCD);
     }
-    
+
     pCD->currentWsc = saveWsc;
 
 } /* END OF FUNCTION ShowAllIconsForMinimizedClient */
 #endif /* WSM */
-

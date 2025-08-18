@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form9.c /main/4 1995/07/13 18:12:18 drk $"
@@ -34,7 +34,7 @@ static char rcsid[] = "$XConsortium: Form9.c /main/4 1995/07/13 18:12:18 drk $"
  *  Create two scrollbars in a form.  The first being attached to the right
  *  and top sides of the form.  The second being attached to the left
  *  and bottom of the form and the left edge of the first scrollbar.
- *  Create another scrollbar with the horizontal and vertical spacing 
+ *  Create another scrollbar with the horizontal and vertical spacing
  *  resources set for the form.
  */
 
@@ -63,7 +63,7 @@ char **argv;
 
    /*  initialize toolkit  */
    CommonTestInit(argc, argv);
-    
+
    frame = XmCreateFrame(Shell1, "frame", NULL, 0);
    XtManageChild(frame);
 

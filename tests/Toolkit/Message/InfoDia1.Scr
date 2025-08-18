@@ -1,4 +1,4 @@
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 # A client with an information dialog should appear. The
 # dialog will have three buttons labeled 'Minimize',
-# 'W=500', and 'H=300'. The 'W=500' button should have highlight. 
+# 'W=500', and 'H=300'. The 'W=500' button should have highlight.
 
 CompareVisual mbox
 
@@ -48,14 +48,14 @@ LocatePointer mbox
 # (the window should not have window manager focus).
 
 # Click MB1 on the 'H=300' button. The dialog should grow
-# to a height of 300 pixels. 
+# to a height of 300 pixels.
 
 LocatePointer mbox RHelpButton
 ClickMB Btn1
 CompareVisual mbox
 
 # Click MB1 on the 'W=500' button. The dialog should grow
-# to a width of 500 pixels. 
+# to a width of 500 pixels.
 
 LocatePointer mbox RCancelButton
 ClickMB Btn1
@@ -64,7 +64,7 @@ WindowRaise Shell1
 CompareVisual mbox
 
 # Click MB1 on the 'Minimize' button. Buttons should minimize
-# and dialog should shrink to minimal dimensions. 
+# and dialog should shrink to minimal dimensions.
 
 LocatePointer mbox ROkButton
 ClickMB Btn1
@@ -75,14 +75,14 @@ CompareVisual mbox
 Continue
 
 # Click MB1 on the 'H=300' button. The dialog should grow
-# to a height of 300 pixels. 
+# to a height of 300 pixels.
 
 LocatePointer mbox RHelpButton
 ClickMB Btn1
 CompareVisual mbox
 
 # Click MB1 on the 'W=500' button. The dialog should grow
-# to a width of 500 pixels. 
+# to a width of 500 pixels.
 
 LocatePointer mbox RCancelButton
 ClickMB Btn1

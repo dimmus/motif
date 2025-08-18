@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is selectBox.uid ---- 
+---- The uid file to be opened is selectBox.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Selection_Box ROkButton 
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Selection_Box ROkButton
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- okCallback callback made ----
@@ -36,8 +36,8 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_OK ----
 /*********************************************************/
 
-TRACE:(4) LocatePointer Selection_Box RHelpButton 
-TRACE:(5) ClickMB Btn1 
+TRACE:(4) LocatePointer Selection_Box RHelpButton
+TRACE:(5) ClickMB Btn1
 
 /*********************************************************/
 ---- helpCallback callback made ----
@@ -45,15 +45,15 @@ TRACE:(5) ClickMB Btn1
 ---- Reason was XmCR_HELP ----
 /*********************************************************/
 
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
+TRACE:(6) CompareVisual S_MAIN_WIDGET
 TRACE:(7) LocatePointer Selection_Box RSelectionListItem 3
-TRACE:(8) ClickMB Btn1 
-TRACE:(9) CompareVisual S_MAIN_WIDGET 
+TRACE:(8) ClickMB Btn1
+TRACE:(9) CompareVisual S_MAIN_WIDGET
 TRACE:(10) LocatePointer Selection_Box RSelectionListItem 2
-TRACE:(11) ClickMB Btn1 
-TRACE:(12) CompareVisual S_MAIN_WIDGET 
-TRACE:(13) LocatePointer Selection_Box RSelectionText 
+TRACE:(11) ClickMB Btn1
+TRACE:(12) CompareVisual S_MAIN_WIDGET
+TRACE:(13) LocatePointer Selection_Box RSelectionText
 TRACE:(14) InputString "noMatch"
-TRACE:(15) CompareVisual S_MAIN_WIDGET 
+TRACE:(15) CompareVisual S_MAIN_WIDGET
 TRACE:(16) Exit
 Exiting Test...Please Standby...

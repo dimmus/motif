@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MenuM1.c /main/7 1995/07/13 18:36:21 drk $"
@@ -56,7 +56,7 @@ static void ChangeCursor(Widget tb, XtPointer client_data, XtPointer call_data)
 
   if (XmToggleButtonGadgetGetState(tb) == XmSET) {
       XmSetMenuCursor(display, cursor);
-  
+
       if (XmGetMenuCursor(display) != cursor)
 	  fprintf(stdout,"Error: problem occurred while changing menu cursor\n");
   }
@@ -78,7 +78,7 @@ void main(unsigned int argc, char *argv[])
   int n;
 
   CommonTestInit(argc, argv);
-  
+
   /*
    * Create menu cursors
    */
@@ -171,7 +171,7 @@ void main(unsigned int argc, char *argv[])
 
   CommonPause();
   XtDestroyWidget(mainw);
-  
+
   CommonPause();
   XtAppMainLoop(app_context);
 }
@@ -195,7 +195,7 @@ static void CreateMenubar()
   help = XmCreateCascadeButton(menubar, "help", NULL, 0);
   XtManageChild(help);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNmenuHelpWidget, help); n++;
   XtSetValues(menubar, args, n);
 
@@ -204,12 +204,12 @@ static void CreateMenubar()
    */
 
   submenu1 = XmCreatePulldownMenu(menubar, "submenu1", NULL, 0);
-    
+
   /*
    * XmPushButtonGadget: child[012]
    */
 
-  child[0] = 
+  child[0] =
     special = XmCreatePushButtonGadget(submenu1, "option1a", NULL, 0);
   child[1] = XmCreatePushButtonGadget(submenu1,"option2a", NULL, 0);
   child[2] = XmCreatePushButtonGadget(submenu1,"option3a", NULL, 0);
@@ -262,41 +262,41 @@ static void CreateMenubar()
    */
 
   child[9] = XmCreateToggleButtonGadget(submenu5,"sailboat", NULL, 0);
-  XtAddCallback(child[9], XmNvalueChangedCallback, 
+  XtAddCallback(child[9], XmNvalueChangedCallback,
 		ChangeCursor, (XtPointer) sailboat);
 
-  child[10] = 
+  child[10] =
     special2 = XmCreateToggleButtonGadget(submenu5,"heart", NULL, 0);
-  XtAddCallback(child[10], XmNvalueChangedCallback, 
+  XtAddCallback(child[10], XmNvalueChangedCallback,
 		ChangeCursor, (XtPointer) heart);
 
   child[11] = XmCreateToggleButtonGadget(submenu5,"man", NULL, 0);
-  XtAddCallback(child[11], XmNvalueChangedCallback, 
+  XtAddCallback(child[11], XmNvalueChangedCallback,
 		ChangeCursor, (XtPointer) man);
 
   child[12] = XmCreateToggleButtonGadget(submenu5,"pirate", NULL, 0);
-  XtAddCallback(child[12], XmNvalueChangedCallback, 
+  XtAddCallback(child[12], XmNvalueChangedCallback,
 		ChangeCursor, (XtPointer) pirate);
 
   child[13] = XmCreateToggleButtonGadget(submenu5,"shuttle", NULL, 0);
-  XtAddCallback(child[13], XmNvalueChangedCallback, 
+  XtAddCallback(child[13], XmNvalueChangedCallback,
 		ChangeCursor, (XtPointer) shuttle);
-  
+
   child[14] = XmCreateToggleButtonGadget(submenu5,"arrow", NULL, 0);
-  XtAddCallback(child[14], XmNvalueChangedCallback, 
+  XtAddCallback(child[14], XmNvalueChangedCallback,
 		ChangeCursor, (XtPointer) arrow);
 
   XtManageChildren(&(child[9]), 6);
 
   /*
-   * XmCascadeButton: child[15-16-17] 
+   * XmCascadeButton: child[15-16-17]
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu1); n++;
   child[15] = XmCreateCascadeButton(menubar, "pdbtn1", args, n);
-  
-  n = 0; 
+
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu5); n++;
   child[16] = XmCreateCascadeButton(menubar, "pdbtn2", args, n);
 
@@ -307,7 +307,7 @@ static void CreateMenubar()
    * XmCascadeButtonGadget: child[18]
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu2); n++;
   child[18] = XmCreateCascadeButtonGadget(submenu1, "more", args, n);
   XtManageChild(child[18]);
@@ -316,7 +316,7 @@ static void CreateMenubar()
    * XmCascadeButtonGadget: child[19]
    */
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu4); n++;
   child[19] = XmCreateCascadeButtonGadget(submenu1, "more2", args, n);
   XtManageChild(child[19]);

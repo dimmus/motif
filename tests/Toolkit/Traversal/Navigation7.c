@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation7.c /main/7 1995/07/13 19:44:45 drk $"
@@ -98,8 +98,8 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
- 
+
+
     bb = XmCreateBulletinBoard(Shell1, "bb", (ArgList) args, 0);
     XtManageChild(bb);
 
@@ -358,15 +358,3 @@ char **argv;
     CommonPause (); /* end */
     XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-

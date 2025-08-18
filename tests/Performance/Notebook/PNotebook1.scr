@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -50,9 +50,9 @@ AutoPerformMonitor Off
 
 
 # !) /* test flipping through pages */
-#  Scroll forwards through all the pages of the Notebook using the page 
+#  Scroll forwards through all the pages of the Notebook using the page
 #  scroller.
-#  Scroll backwards through all the pages of the Notebook using the page 
+#  Scroll backwards through all the pages of the Notebook using the page
 #  scroller.
 
 LocatePointer PageScroller RIncrementBtn
@@ -98,10 +98,3 @@ AutoPerformMonitor Off
 Continue
 
 Exit
-
-
-
-
-
-
-

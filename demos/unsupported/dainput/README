@@ -3,12 +3,11 @@
 DAINPUT
 -------
 
-This demo shows how get internationalized text input in a 
-drawingarea widget. It has the necessary calls to set up and 
-handle the connection with the input method: XmImRegister, 
+This demo shows how get internationalized text input in a
+drawingarea widget. It has the necessary calls to set up and
+handle the connection with the input method: XmImRegister,
 XmImSetValues, XmImSetFocusValues and XmImUnsetFocus.
 
 This demo only does text input. It does not try to be a text editor,
 so there is no way to delete text, select text etc. The intention
 is to show the use of the XmIm API.
-

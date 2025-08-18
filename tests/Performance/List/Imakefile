@@ -20,7 +20,7 @@ XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
 XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/5 1995/07/14 09:59:53 drk $
 
 INCLUDES 	= -I. -I../bitmaps -I../ -I$(TESTCOMSRC)
@@ -36,9 +36,6 @@ TestPPTarget(ScrollPerf)
 
 
 SRCS=  \
-	ScrollPerf.c 
-		  
-DependTarget () 
+	ScrollPerf.c
 
-
-
+DependTarget ()

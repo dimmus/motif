@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FontListA.c /main/8 1995/07/13 19:52:33 drk $"
@@ -69,7 +69,7 @@ char	*argv[];
 
     fontlist_num = font_num = charset_num = 0;
     errors = 0;
-    
+
     CommonTestInit(argc, argv);
 
 	/*
@@ -77,7 +77,7 @@ char	*argv[];
  	 */
     for (font_num = 1; font_num < NUM_FONTS; font_num++) {
 
-		if ((font[font_num] = XLoadQueryFont(display, 
+		if ((font[font_num] = XLoadQueryFont(display,
 											 fontname[font_num])) == NULL) {
 			sprintf(error_string, "Can't load font \"%s\"", fontname[font_num]);
 	    	error_proc("FontListA", error_string);
@@ -91,7 +91,7 @@ char	*argv[];
  	 */
 
     if ((fontlist[fontlist_num] = XmFontListCreate(font[font_num+1],
-						  						   charset[charset_num])) 
+						  						   charset[charset_num]))
 												   == NULL)
 		error_proc("FontListA", "Can't create fontlist1\n");
 
@@ -104,7 +104,7 @@ char	*argv[];
     fprintf(stdout, "----  ---------  --------  ------------------------  ");
     fprintf(stdout, "---------  --------- -----\n");
     fflush(stdout);
-   
+
 /*
          Old                                         Expected   Actual
 Test  Font List  Font      Character Set             Return     Return    Error
@@ -125,9 +125,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     fontlist[fontlist_num] = XmFontListAdd(fontlist[fontlist_num-1],
-					   					   font[font_num++], 
+					   					   font[font_num++],
 										   charset[charset_num]);
-   
+
     if (fontlist[fontlist_num] == fontlist[fontlist_num-1])
 		fprintf(stdout, "  fontlist1\n");
     else if (fontlist[fontlist_num] == NULL) {
@@ -143,7 +143,7 @@ Test  Font List  Font      Character Set             Return     Return    Error
     }
 
     fontlist_num++;
-   
+
 /*****************************************************
  * Test 2: Add a valid font to an existing font list *
  *****************************************************/
@@ -158,9 +158,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     fontlist[fontlist_num] = XmFontListAdd(fontlist[fontlist_num-1],
-					   					   font[font_num], 
+					   					   font[font_num],
 										   charset[charset_num++]);
-   
+
     if (fontlist[fontlist_num] == fontlist[fontlist_num-1]) {
 		errors++;
 		fprintf(stdout, "  fontlist2   *\n");
@@ -174,9 +174,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
     }
     else
 		fprintf(stdout, "  fontlist3\n");
-   
+
     fontlist_num++;
-   
+
 /*******************************************************************
  * Test 3: Add a font with an invalid character set to a font list *
  *******************************************************************/
@@ -191,9 +191,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     fontlist[fontlist_num] = XmFontListAdd(fontlist[fontlist_num-1],
-					   					   font[font_num++], 
+					   					   font[font_num++],
 										   charset[charset_num++]);
-   
+
     if (fontlist[fontlist_num] == fontlist[fontlist_num-1])
 		fprintf(stdout, "  fontlist3\n");
     else if (fontlist[fontlist_num] == NULL) {
@@ -207,7 +207,7 @@ Test  Font List  Font      Character Set             Return     Return    Error
 		errors++;
 		fprintf(stdout, "  fontlist4   *\n");
     }
-   
+
     fontlist_num++;
 
 /****************************************************************
@@ -224,9 +224,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     fontlist[fontlist_num] = XmFontListAdd(fontlist[fontlist_num-1],
-					   					   font[font_num++], 
+					   					   font[font_num++],
 										   charset[charset_num++]);
-   
+
     if (fontlist[fontlist_num] == fontlist[fontlist_num-1]) {
 		errors++;
 		fprintf(stdout, "  fontlist4   *\n");
@@ -240,9 +240,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
     }
     else
 		fprintf(stdout, "  fontlist5\n");
-   
+
     fontlist_num++;
-   
+
 /***************************************************
  * Test 5: Add a font with a character set defined *
  *         in an app-defaults file to a font list  *
@@ -258,15 +258,15 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     fontlist[fontlist_num] = XmFontListAdd(fontlist[fontlist_num-1],
-					   					   font[font_num], 
+					   					   font[font_num],
 										   charset[charset_num]);
-   
+
     if (fontlist[fontlist_num] == fontlist[fontlist_num-1]) {
 		errors++;
 		fprintf(stdout, "  fontlist5   *\n");
     }
     else if (fontlist[fontlist_num] == NULL) {
-	
+
 		errors++;
 		fprintf(stdout, "       NULL   *\n");
 		fontlist[fontlist_num] = fontlist[0];
@@ -274,9 +274,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
     }
     else
 		fprintf(stdout, "  fontlist6\n");
-   
+
     fontlist_num++;
-   
+
 /*************************************************
  * Test 6: Add the same font to a fontlist twice *
  *************************************************/
@@ -291,9 +291,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     fontlist[fontlist_num] = XmFontListAdd(fontlist[fontlist_num-1],
-					   					   font[font_num], 
+					   					   font[font_num],
 										   charset[charset_num]);
-   
+
     if (fontlist[fontlist_num] == fontlist[fontlist_num-1]) {
 		errors++;
 		fprintf(stdout, "  fontlist6   *\n");
@@ -307,9 +307,9 @@ Test  Font List  Font      Character Set             Return     Return    Error
     }
     else
 		fprintf(stdout, "  fontlist7\n");
-   
+
     fontlist_num++;
-   
+
 /*******************************************************
  * Test 7: Add a valid font to a nonexistent font list *
  *******************************************************/
@@ -324,14 +324,14 @@ Test  Font List  Font      Character Set             Return     Return    Error
  */
 
     if ((fontlist[fontlist_num] = XmFontListAdd(NULL, font[font_num],
-					       						charset[charset_num])) 
+					       						charset[charset_num]))
 												== NULL)
 		fprintf(stdout, "       NULL\n");
     else {
 		errors++;
 		fprintf(stdout, "  fontlist8   *\n");
     }
-   
+
     fontlist_num++;
 
     summary_proc("FontListA", errors);

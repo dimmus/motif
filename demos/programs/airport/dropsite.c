@@ -55,7 +55,7 @@ void MakeAirportDropSite(Widget area, Airport this)
 {
    Arg args[10];
    int n = 0;
-   
+
    XtSetArg(args[n], XmNimportTargets, &FlightAtom); n++;
    XtSetArg(args[n], XmNnumImportTargets, 1); n++;
    XtSetArg(args[n], XmNdragProc, TrafficSignal); n++;
@@ -76,19 +76,19 @@ static void TrafficSignal(Widget dropSite, XtPointer client_data,
    Airport this;
 
    XtVaGetValues(dropSite, XmNuserData, &this, NULL);
-   switch(call_data->reason) { 
-      
+   switch(call_data->reason) {
+
    case XmCR_DROP_SITE_MOTION_MESSAGE:
       DrawAirport(this, XtWindow(dropSite),
 		  AirportResources.drag_under_background,
 		  AirportResources.drag_under_foreground);
       break;
-      
+
    case XmCR_DROP_SITE_ENTER_MESSAGE:
       XmToggleButtonSetState(this->to.enter, True, True);
       break;
 
-   case XmCR_DROP_SITE_LEAVE_MESSAGE: 
+   case XmCR_DROP_SITE_LEAVE_MESSAGE:
       XmToggleButtonSetState(this->to.leave, True, True);
       DrawAirport(this, XtWindow(dropSite),
 		  AirportResources.track_background,
@@ -99,7 +99,7 @@ static void TrafficSignal(Widget dropSite, XtPointer client_data,
 }
 
 /* ===============================================================
- * Drop proc callback of the drop site. 
+ * Drop proc callback of the drop site.
  * The airport knows that something is landing. What is it ?
  * If it is a plane then check there is a gate available.
  * 	If no gate available, reject the drop
@@ -123,7 +123,7 @@ static void SomethingLanding(Widget dropSite, XtPointer client_data,
    if (call_data->dropSiteStatus == XmVALID_DROP_SITE)
      {
 	int gate;
-	      
+
 	for (gate = 0; gate < this->park.spot_count; gate ++) {
 	   if (this->park.spots[gate].empty == True)
 	     break;
@@ -161,13 +161,13 @@ static void TaxiIn(Widget transfer, Airport this,
 		   unsigned long *length, int *format)
 {
    if ((*format == 32) && (*length == 1) && (*type == FlightAtom)) {
-      /* 
+      /*
        * received a 32 bit value that is the flight number
        */
       long flight_number;
       char msg[256];
 
-      flight_number =  *((long *)value); 
+      flight_number =  *((long *)value);
       this->park.spots[this->to.gate].empty = False;
       sprintf(msg, "Flight %ld arrived at gate %d",
 	   flight_number, this->to.gate);

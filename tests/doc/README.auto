@@ -3,7 +3,7 @@
                 =======================================
 
 
-    To build the QATS you must first extract the tape into a staging area. 
+    To build the QATS you must first extract the tape into a staging area.
     When you have done this, you should have two files: tests (a directory)
     and README (this file). The following build process assumes that you have
     already built Motif 2.0 and you still have the build tree in a build area
@@ -12,14 +12,14 @@
     To build the QATS execute the following steps:
 
         1) Remove the tests directory in your Motif build tree.
-                
+
                 % rm -rf $MOTIF_TOP/tests
 
         2) Move the extracted tests directory from the QATS tape into
            your Motif build tree.
 
                 % mv ./tests $MOTIF_TOP
-        
+
         3) Modify site.def in the config directory of your Motif
            build tree. Add the following line:
 
@@ -54,6 +54,5 @@
            After these libraries are built, you can build any test for
            Automation or for Manual mode.
 
-    For more information on building tests, see the README file in 
+    For more information on building tests, see the README file in
     $MOTIF_TOP/tests.
-

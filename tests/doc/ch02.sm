@@ -18,8 +18,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 # $XConsortium: ch02.sm /main/3 1995/07/13 20:08:39 drk $
 ...\"  (c) Copyright 1992 OPEN SOFTWARE FOUNDATION, INC.
@@ -33,7 +33,7 @@ following sections.
 Instructions are presented to the user in a series of InformationDialogBoxes, called "panels," which contain a list of steps for the user to perform, and three buttons. (For manual test directories, a four-button mode with \*LPass\*L and \*LFail\*O buttons is supported. See Chapter 5 for details.)
 The first two buttons will always be labeled \*LContinue\*O and \*LExit\*O. The third button may, at the discretion of the test writer, be used for other test activities. For example, the third button might be labeled \*LShowSize\*O and when pressed, print out the \*LXmNheight\*O and \*LXmNwidth\*O of the widget under test. By default, the third button is insensitive.
 .P
-A new panel of instructions is posted in a message dialog each time a call to 
+A new panel of instructions is posted in a message dialog each time a call to
 \*LCommonPause\*O is made in the test code. The instruction files include
 a formatting syntax, which enables the writer to control the appearance of
 the instructions in the panel.
@@ -60,7 +60,7 @@ Escape the next character. This allows any character with symbolic meaning to ap
 .P
 Newlines, tabs, and extra
 spaces will be stripped from the instruction text, unless they appear in
-a "no format" area. When the special formatting characters are read, 
+a "no format" area. When the special formatting characters are read,
 the appropriate characters are inserted into the data stream, in order
 to produce the desired format.
 The \*L.dat\*O file is read in two passes, first to reconcile the special characters, then to format the text to the proper length.
@@ -71,7 +71,7 @@ something like this.
 .sS
 .iS
 #) Move the pointer to the scrollbar's slider area and press Mouse
-button1.\n\n 
+button1.\n\n
 #) Drag the slider to the top of the scrollbar (with key \\#).
 @) Note the slider will not take any input because it is insensitive
 C)
@@ -98,7 +98,7 @@ Screen 1:
 	2) Drag the slider to the top of the scrollbar (with
 	   key #).
 .sp
-	   Note the slider will not take any input because 
+	   Note the slider will not take any input because
 	   it is insensitive.
 .sp
         Press the Continue Button for more testing.
@@ -133,20 +133,20 @@ Our goal in designing the language was to allow the automation of user
 actions, and \fBonly\fP user actions. There are no commands, for example,
 that allow a tester to check and print out the value of resources. There
 are no looping constructs, although you can specify multiple button clicks
-on the same line. 
+on the same line.
 The scripts simply capture a description of how a human would interact
 with a test in order to verify some aspects of the code under test.
 .P
-The automation technology, however, lets us synthesize a user with a photographic memory of the appearance of widgets in previous versions. An automated test cannot judge correctness of appearance the first time it sees a new widget; human intelligence is sill required for that. 
+The automation technology, however, lets us synthesize a user with a photographic memory of the appearance of widgets in previous versions. An automated test cannot judge correctness of appearance the first time it sees a new widget; human intelligence is sill required for that.
 However, automated visual comparisons
 are particularly efficient at capturing minute differences between two versions of the same thing: namely, regression testing.
 .H 3 "The Scripting Language"
 .P
-The Chapter 6 of this book contains the reference 
+The Chapter 6 of this book contains the reference
 pages for all the  commands in
 the automation scripting language.
-Refer to these pages for details on the syntax of the commands. 
-The following subsections will describe briefly the \*Epurpose\*O 
+Refer to these pages for details on the syntax of the commands.
+The following subsections will describe briefly the \*Epurpose\*O
 of each command and give
 examples of how a script writer might use it.
 .H 4 "Locating the Pointer"
@@ -154,7 +154,7 @@ examples of how a script writer might use it.
 Perhaps without realizing it, a user must explicitly choose a widget with
 which he wants to interact, and move the pointer over that widget before
 he can do so. The automation command \*LLocatePointer \*Vwidget_name\*O
-moves the pointer over the midpoint of the named widget. 
+moves the pointer over the midpoint of the named widget.
 This command usually precedes
 any other mouse button command. Optionally, \*LLocatePointer\*O takes
 arguments that let the scripter specify a move to a particular \*Vcomponent\*O
@@ -170,12 +170,12 @@ ReleaseMB Btn1
 .oE
 .P
 Most composite widgets, and even a few simpler ones, have components, or
-regions, that one might need to specify. See the \*LComponentList\*O 
+regions, that one might need to specify. See the \*LComponentList\*O
 reference page
 for a complete list of supported components.
 .P
 Sometimes, the desired location is not a widget. In this case, the command
-\*LLocatePointerXYAbs\*O can be used to specify an explicit x,y location 
+\*LLocatePointerXYAbs\*O can be used to specify an explicit x,y location
 relative to the root window.
 .H 4 "Mouse Button Commands"
 .P
@@ -183,9 +183,9 @@ Perhaps the most frequent user interaction with Motif takes place via the
 buttons on the mouse. Automation supports commands to simulate the
 user clicking, pressing, or releasing any of the five mouse buttons.
 The three commands are \*LClickMB\*O, \*LPressMB\*O, and \*LReleaseMB\*O,
-where \*LMB\*O stands for \*LMouse Button\*O. Each command takes an argument 
+where \*LMB\*O stands for \*LMouse Button\*O. Each command takes an argument
 which specifies which button - 1, 2, 3, 4 or 5 - should be manipulated.
-The scripter may also specify multiple clicks with an optional 
+The scripter may also specify multiple clicks with an optional
 final integer argument.
 .H 4 "Dragging Commands"
 .P
@@ -196,7 +196,7 @@ still held down, and finally releasing the mouse button in the desired location.
 \*LDragComponent\*O allows the scripter to drag between two components of the same widget: for instance, to do a drag-select in a list by dragging from the first to the third list item. The sequence of commands to accomplish this goal would be:
 .oS
 /* 0 is the first item in a list */
-LocatePointer List1 RListItem 0  
+LocatePointer List1 RListItem 0
 DragComponent List1 RListItem 3
 .oE
 .P
@@ -207,11 +207,11 @@ for dragging the slider so that it is set at a particular value.
 .P
 \*LDragXYAbs\*O can be used after any call to a \*LLocatePointer...\*O
 command.
-It is used to drag from the current location to any x,y location 
-relative to the root window. 
-\*LDragXYRelative\*O 
+It is used to drag from the current location to any x,y location
+relative to the root window.
+\*LDragXYRelative\*O
 allows you to move the pointer by an x,y
-\*Vdelta\*O, relative to the current pointer location, 
+\*Vdelta\*O, relative to the current pointer location,
 in the specified direction.
 .H 4 "Keyboard Commands"
 .P
@@ -221,7 +221,7 @@ PressKey and ReleaseKey events, users will generally think of their
 action as a key click: pressing and releasing the key as one movement.
 Scripters will probably find few situations where the separate \*LPress\*O
 and \*LRelease\*O construct is necessary. In addition, any key can
-be accompanied by one or more modifier keys, 
+be accompanied by one or more modifier keys,
 such as \*L<Shift>\*O or \*L<Ctrl>\*O.
 .P
 Please examine the reference page called \*LKeyList\*O.  Notice that most
@@ -238,7 +238,7 @@ It does not matter which actual key or combination of keys a user might
 need to press on any given keyboard: the virtual binding \*LKPageDown\*O
 will always produce the same action. For more information on virtual
 bindings, read the \*LVirtual Bindings\*O reference page in the \*LOSF/Motif
-Programmer's Reference\*O and the \*LTranslations\*O section of 
+Programmer's Reference\*O and the \*LTranslations\*O section of
 the reference page for the widget with which you are working.
 .P
 A shortcut is provided for typing long strings, which one might use for
@@ -250,7 +250,7 @@ commands which enter each character separately.
 .P
 Visual comparisons are central to automated regression testing. The command
 \*LCompareVisual \*Vwidget\*O instructs the automation code to take a
-"photograph" of the widget \*Vwidget\*O 
+"photograph" of the widget \*Vwidget\*O
 as it appears on the screen at that time. The
 \*LCompareVisual\*O command can be used at any time, so for example one
 can record an image of a PushButton both while a mouse button is held down and
@@ -314,13 +314,13 @@ distinct colors are used.
 .P
 A large subset of commands exists to allow testers to manipulate and control
 the various areas in the window border, that region which is drawn and
-controlled by the Motif Window Manager (\*Lmwm\*O). As stated earlier, the 
+controlled by the Motif Window Manager (\*Lmwm\*O). As stated earlier, the
 \*Lmwm\*O
 used during all phases of testing must be specially compiled to support
 automated testing. Also note that \*Lmwm\*O must be run with a specific
 configuration: for example, \*Lmwm\*O must be run with a \*LkeyboardFocusPolicy\*O of \*LPOINTER\*O.
 The \*L.Xdefaults\*O, \*L.motifbind\*O,
-and \*L.mwmrc\*O 
+and \*L.mwmrc\*O
 files are provided in the sample environment, located on the tape
 in \*L$TOP/tests/environment\*O.
 .P
@@ -344,7 +344,7 @@ Gives a window focus by clicking on the title area of the window frame.
 .LI "\*LWindowIconify\*O"
 Iconifies a window.
 .LI "\*LWindowItemCheck\*O"
-Verifies the existence of a particular window decoration; for example, 
+Verifies the existence of a particular window decoration; for example,
 the minimize button.
 .LI "\*LWindowMaximize\*O"
 Resize a window to the largest possible size.
@@ -394,5 +394,5 @@ or executable can be invoked via the \*LSystem\*O command. For example,
 one might write scripts aimed at performance testing, and use the \*LSystem\*O command to call certain profiling tools after certain sequences of events.
 .H 4 "Comments"
 .P
-Both C-style (\*L/* \*Vcomment text \*L*/\*O) and shell script-style comments 
+Both C-style (\*L/* \*Vcomment text \*L*/\*O) and shell script-style comments
 (\*L# \*Vcomment text\*O) are supported.

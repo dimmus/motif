@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin5.c /main/4 1995/07/13 19:07:12 drk $"
@@ -61,9 +61,9 @@ char **argv;
     XtSetValues(Shell1, args, n);
 
     XtRealizeWidget(Shell1);
-    
+
     /* Do all cases for 1 to BUTTONS. */
-    for (i = 0; i < BUTTONS; i++) 
+    for (i = 0; i < BUTTONS; i++)
       {
 	/* Paned window with nothing set. */
 	PWn = 0;
@@ -86,7 +86,7 @@ char **argv;
 	DoTheButtons(i, PWargs, PWn);
 
       }
-    
+
     CommonPause();
     CommonPause();
 
@@ -100,12 +100,12 @@ int	PWn;
 {
   Arg          	PBargs[MAX_ARGS];
   int		PBn;
-  
+
   /* Nothing set. */
   PBn = 0;
-  
+
   DoTheWindows(num, PWargs, PWn, PBargs, PBn);
-  
+
   /* Width set. */
   PBn = 0;
   XtSetArg(PBargs[PBn], XmNwidth, B_WIDTH); PBn++;
@@ -145,7 +145,7 @@ static void DoTheWindows(num, PWargs, PWn, PBargs, PBn)
 
   register int	i;
   Widget	PW, PB[3];
-  
+
   PW = XmCreatePanedWindow(Shell1, "PW", PWargs, PWn);
   for (i = 0; i <= num; i++)
     {
@@ -169,16 +169,15 @@ static void ReportSize (w, type_string, arg)
   register int	n;
   Arg		args[2];
   Dimension	width, height;
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, &width); n++;
   XtSetArg(args[n], XmNheight, &height); n++;
   XtGetValues(w, args, n);
-  
+
   if (arg != 0)
     printf(type_string, arg);
   else
     printf(type_string);
   printf("%dX%d\n", (int)width, (int)height);
 }
-

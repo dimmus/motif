@@ -4,13 +4,13 @@
 
 
 This directory contains the visual files (*.vis) and output files (*.prt)
-for the directories which have been automated for the Motif 2.0 release. 
+for the directories which have been automated for the Motif 2.0 release.
 Each file in these directories corresponds to a test in the Motif 2.0 test
 suite. The visual files (*.vis) contain normalized screen "pictures" of the
-test which was recorded. The output files (*.prt) contain 
+test which was recorded. The output files (*.prt) contain
 the redirection of STDOUT and STDERR. Output files generally contain
 callback information and warning messages issued from Xm, Xt, Automation
-or the test code itself. The directories contained in this area correspond 
+or the test code itself. The directories contained in this area correspond
 to the entries in the file $MOTIF_TOP/tests/General/dirsAuto.
 
 		Using this information
@@ -20,14 +20,14 @@ The information in these directories is used to verify the results of
 regression tests. Two types of comparisons are made: first, the visuals
 of the test being executed are compared against the previously-recorded
 images stored in the .vis file. Second, all statements printed out to
-STDOUT and STDERR are compared with the previously stored output (.prt) 
-file. (The output of the .vis and .prt files shipped in this directory 
+STDOUT and STDERR are compared with the previously stored output (.prt)
+file. (The output of the .vis and .prt files shipped in this directory
 were recorded against Motif 2.0.) By using both types of comparisons, we
 assure that both the appearance and behavior of Motif remain the same
 across releases.
 
 Some of the files in these directories are incorrect, i.e. they have some
-know problem. For the list of known problems with these files please 
+know problem. For the list of known problems with these files please
 refer to the OPENBUGS file at the top of the Motif 2.0 source tree.
 
 		AUTOVPATH environment variable

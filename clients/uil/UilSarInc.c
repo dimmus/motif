@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilSarInc.c /main/12 1997/03/12 15:21:31 dbl $"
@@ -134,7 +134,7 @@ yystype	    * semi_frame;
 	(sym_value_entry_type *) file_frame -> value . az_symbol_entry;
 
 /*
- * Fix for CR 5465 - If the value_entry is not of type char_8, print an 
+ * Fix for CR 5465 - If the value_entry is not of type char_8, print an
  *                   error message and abort the compilation
  */
     if ((value_entry->b_type != sym_k_char_8_value) &&
@@ -148,17 +148,17 @@ yystype	    * semi_frame;
 /*
  * If the direction is RtoL then reverse the include file.
  */
-    if (value_entry->b_direction == XmSTRING_DIRECTION_R_TO_L) 
+    if (value_entry->b_direction == XmSTRING_DIRECTION_R_TO_L)
 	{
 	/*
 	**  Just reverse the bytes from the first to last
 	*/
-	for (i=0, j=value_entry->w_length-1;  
-	     i < (int)((int)value_entry->w_length>>1);  
+	for (i=0, j=value_entry->w_length-1;
+	     i < (int)((int)value_entry->w_length>>1);
 	     i++,j--)
 	    {
 	    tmp1 = value_entry->value.c_value[ i ];
-	    value_entry->value.c_value[ i ] = 
+	    value_entry->value.c_value[ i ] =
 		value_entry->value.c_value[ j ];
 	    value_entry->value.c_value[ j ] = tmp1;
 	    }

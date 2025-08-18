@@ -1,5 +1,5 @@
 # $XConsortium: List7.scr /main/5 1995/07/17 20:22:09 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List7.scr	1.1  91/10/14
 
@@ -133,7 +133,7 @@ ClickMB Btn1
 # Click MB1 in the Call Funtion push button. The last item (Item3) should
 # be deleted from the list.
 
-LocatePointer ApplyB 
+LocatePointer ApplyB
 ClickMB Btn1
 
 CompareVisual List2
@@ -141,7 +141,7 @@ CompareVisual List2
 # Click MB1 in the Call Funtion push button again. A warning message
 # should be printed in the term window.
 
-LocatePointer ApplyB 
+LocatePointer ApplyB
 ClickMB Btn1
 
 CompareVisual List2
@@ -153,7 +153,7 @@ DragSliderValue Left 0
 
 # Click MB1 in the Call Function push button. No change will be visible.
 
-LocatePointer ApplyB 
+LocatePointer ApplyB
 ClickMB Btn1
 
 CompareVisual List2
@@ -178,7 +178,7 @@ ClickMB Btn1
 
 # Move the Scale slider to 6.
 
-LocatePointer Scale RScaleSlider 
+LocatePointer Scale RScaleSlider
 DragSliderValue Right 6
 
 # Click MB1 in the Call Function push button, Item7 should be added (selected)
@@ -208,7 +208,7 @@ Continue
 
 # Click MB1 in the Clear Args push button.
 
-LocatePointer ClearB 
+LocatePointer ClearB
 ClickMB Btn1
 
 # Select XmListDeleteItem() from the Functions List, and then select
@@ -223,7 +223,7 @@ ClickMB Btn1
 # Click MB1 in the Call Function push button, Item9 should be deleted
 # from the Action List.
 
-LocatePointer ApplyB 
+LocatePointer ApplyB
 ClickMB Btn1
 
 CompareVisual List2
@@ -231,7 +231,7 @@ CompareVisual List2
 # Click MB1 in the Call Function push button again. A warning message should
 # be printed in the term window.
 
-LocatePointer ApplyB 
+LocatePointer ApplyB
 ClickMB Btn1
 
 CompareVisual List2

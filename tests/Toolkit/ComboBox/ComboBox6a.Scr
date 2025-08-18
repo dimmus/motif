@@ -1,5 +1,5 @@
-# @)  This testcase should be run with the option \"-u COMBO_BOX\". 
-# A ComboBox widget of type COMBO_BOX should be displayed.  
+# @)  This testcase should be run with the option \"-u COMBO_BOX\".
+# A ComboBox widget of type COMBO_BOX should be displayed.
 # A ComboBox should display an empty TextField and a
 # List widget.  Beneath the ComboBox widget there should be
 # an empty TextField labelled \"Enter New String\", a ToggleButton
@@ -40,7 +40,7 @@ Continue
 # strings \"Apples\", \"Blueberries\" and \"Cherries\".  In addition,
 # the TextField labelled \"Enter New String\", the \"Unique\" ToggleButton
 # and the \"Position\" Scale should all be reset to their default
-# settings. 
+# settings.
 
 # #)  Enter a text string into the TextField labelled \"Enter New String\"
 # that matches one of the strings currently displayed in the List widget.
@@ -74,15 +74,15 @@ Continue
 # strings \"Apples\", \"Blueberries\" and \"Cherries\".  In addition,
 # the TextField labelled \"Enter New String\", the \"Unique\" ToggleButton
 # and the \"Position\" Scale should all be reset to their default
-# settings. 
+# settings.
 
 # #)  Enter a text string into the TextField labelled \"Enter New String\"
 # that matches one of the strings currently displayed in the List widget.
-# Click MB1 on the indicator of the \"Unique\" ToggleButton. 
+# Click MB1 on the indicator of the \"Unique\" ToggleButton.
 # Move the \"Position\" Scale slider to the value 2. Click MB1 on the
 # \"Add String\" PushButton to attempt to add the entered text string
 # at the second position in the ComboBox List.  Verify that the
-# text string is not added to the ComboBox List and that the 
+# text string is not added to the ComboBox List and that the
 # scrollbar slider should no longer fill the trough. (ComboBox6 TP4)
 
 LocatePointer TextField
@@ -104,11 +104,11 @@ Continue
 # strings \"Apples\", \"Blueberries\" and \"Cherries\".  In addition,
 # the TextField labelled \"Enter New String\", the \"Unique\" ToggleButton
 # and the \"Position\" Scale should all be reset to their default
-# settings. 
+# settings.
 
 # #)  Enter a text string into the TextField labelled \"Enter New String\"
 # that does not match any of the strings currently displayed in the List widget.
-# Click MB1 on the indicator of the \"Unique\" ToggleButton. 
+# Click MB1 on the indicator of the \"Unique\" ToggleButton.
 # Move the \"Position\" Scale slider to the value 2. Click MB1 on the
 # \"Add String\" PushButton to add the entered text string
 # text to the ComboBox List.  Verify that the text string is added to

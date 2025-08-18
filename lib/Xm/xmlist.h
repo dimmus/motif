@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef _LIST_H
@@ -38,7 +38,7 @@ extern "C" {
 
 /************************************************************
  *
- * Stack Data structure.  
+ * Stack Data structure.
  *
  ************************************************************/
 
@@ -60,7 +60,7 @@ XtPointer _XmStackPop(XmStack);
 
 /************************************************************
  *
- * Queue Data structure.  
+ * Queue Data structure.
  *
  ************************************************************/
 
@@ -86,7 +86,7 @@ void _XmQueueFree(XmQueue), _XmQueuePush(XmQueue, XtPointer);
 XtPointer _XmQueuePop(XmQueue);
 int _XmQueueCount(XmQueue);
 
-/* 
+/*
  * Internal functions used only by other parts of the utils library.
  */
 
@@ -126,7 +126,7 @@ typedef Boolean (*XmListFunc)(XmListElem *, XtPointer);
 void _XmListFree(XmList), _XmListRemove(XmList, XmListElem *);
 
 XmListElem * _XmListAddAfter(XmList, XmListElem *, XtPointer);
-XmListElem * _XmListAddBefore(XmList, XmListElem *, XtPointer); 
+XmListElem * _XmListAddBefore(XmList, XmListElem *, XtPointer);
 
 XmList _XmListInit(void);
 

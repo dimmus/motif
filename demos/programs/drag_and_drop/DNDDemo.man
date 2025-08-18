@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH DNDDemo 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -33,5 +33,3 @@
 \*LDNDDemo\*O
 shows off the features in Motif Drag and Drop.  It also serves as a
 programming example.  For a simpler example,  look at simpledrop.c.
-
-

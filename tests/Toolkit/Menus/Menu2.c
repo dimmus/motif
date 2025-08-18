@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu2.c /main/10 1995/07/13 18:43:48 drk $"
@@ -81,7 +81,7 @@ void _XmRegisterHelpEvent(String event)
   XtFree(bufr);
 }
 
-void _XmBindHelpAction (Widget widget, void (*func)(), XtPointer client_data, 
+void _XmBindHelpAction (Widget widget, void (*func)(), XtPointer client_data,
 			Boolean recursive)
 {
    int i;
@@ -109,7 +109,7 @@ void _XmBindHelpAction (Widget widget, void (*func)(), XtPointer client_data,
 
          for (i = 0; i < mw->composite.num_children; i++)
          {
-            _XmBindHelpAction(mw->composite.children[i], func, client_data, 
+            _XmBindHelpAction(mw->composite.children[i], func, client_data,
                               recursive);
          }
       }
@@ -117,7 +117,7 @@ void _XmBindHelpAction (Widget widget, void (*func)(), XtPointer client_data,
       /* Handle popup descendants */
       for (i = 0; i < widget->core.num_popups; i++)
       {
-         _XmBindHelpAction(widget->core.popup_list[i], func, client_data, 
+         _XmBindHelpAction(widget->core.popup_list[i], func, client_data,
                            recursive);
       }
    }
@@ -132,11 +132,11 @@ XtPointer d2)
 
 /* ARGSUSED */
 
-void PrintName_2(Widget rc, XtPointer client_data, 
+void PrintName_2(Widget rc, XtPointer client_data,
 		 XtPointer data)
 {
    XmRowColumnCallbackStruct *rc_data = (XmRowColumnCallbackStruct *)data ;
-  printf ("Widget %s was activated\n", 
+  printf ("Widget %s was activated\n",
 	  XrmQuarkToString(rc_data->widget->core.xrm_name));
 }
 
@@ -147,13 +147,13 @@ static XtCallbackRec PrintName_CB[] = {
 
 /* ARGSUSED */
 
-void PrintNameAndChangeCursor(Widget rc, XtPointer client_data, 
+void PrintNameAndChangeCursor(Widget rc, XtPointer client_data,
 			      XtPointer data)
 {
 XmRowColumnCallbackStruct *rc_data = (XmRowColumnCallbackStruct *)data ;
   if (rc_data->data == NULL)
     {
-      printf ("Widget %s was activated\n", 
+      printf ("Widget %s was activated\n",
 	      XrmQuarkToString(rc_data->widget->core.xrm_name));
     }
   else
@@ -172,7 +172,7 @@ static XtCallbackRec PrintNameAndChangeCursor_CB[] = {
 
 Help(Widget w)
 {
-  printf("Help requested for widget %s\n", 
+  printf("Help requested for widget %s\n",
 	  XrmQuarkToString(w->core.xrm_name));
 }
 
@@ -257,7 +257,7 @@ XtPointer d2)
   if (mnemonic == (KeySym) '\0')
     {
       XtSetArg(args[n], XmNmnemonic, '3'); n++;
-    }	
+    }
   else
     {
       XtSetArg(args[n], XmNmnemonic, '\0'); n++;
@@ -322,7 +322,7 @@ char **argv;
   XmString string;
 
   CommonTestInit(argc, argv);
-  
+
   /****************************************************************/
   /*  Create the of the top-level frame and row-column manager    */
   /****************************************************************/
@@ -427,7 +427,7 @@ char **argv;
    XtManageChildren(child, 2);
 
    string = XmStringCreateLtoR("OptionMenu3: ", XmSTRING_DEFAULT_CHARSET);
-   n = 0; 
+   n = 0;
    XtSetArg(args[n], XmNsubMenuId, submenu3); n++;
    XtSetArg(args[n], XmNmenuHistory, child[1]); n++;
    XtSetArg(args[n], XmNlabelString, string); n++;
@@ -450,7 +450,7 @@ char **argv;
 
    string = XmStringCreateLtoR("OptionMenu4: ", XmSTRING_DEFAULT_CHARSET);
 
-   n = 0; 
+   n = 0;
    XtSetArg(args[n], XmNsubMenuId, submenu4); n++;
    XtSetArg(args[n], XmNmenuHistory, child[0]); n++;
    XtSetArg(args[n], XmNlabelString, string); n++;
@@ -458,13 +458,13 @@ char **argv;
    XtManageChild(option_menu4);
    XmStringFree(string);
 
-  /*   
+  /*
    *  Begin Test PIR 2480
    */
 
   rcparent = XmCreateRowColumn(rc0, "rc", NULL, 0);
   XtManageChild(rcparent);
-  
+
   n=0;
   XtSetArg(args[n], XmNborderWidth, 0); n++;
   tb = XmCreateToggleButton(rcparent, "ToggleButton1", args, n);
@@ -516,7 +516,7 @@ char **argv;
   /****************************************************************/
 
   AddAllTabGroups();
-   
+
   XtRealizeWidget (Shell1);
 
 /*    _XmRegisterHelpEvent("<Key>F8"); */
@@ -537,7 +537,7 @@ void CreatePixmaps()
     Arg	args[2];
     int	n;
     Drawable drawable;
-    
+
     n = 0;
     XtSetArg(args[n], XmNforeground, &fg); n++;
     XtSetArg(args[n], XmNbackground, &bg); n++;
@@ -545,7 +545,7 @@ void CreatePixmaps()
 
     depth = DefaultDepthOfScreen(mainw->core.screen);
     drawable = RootWindowOfScreen(XtScreen(Shell1));
-       
+
     arm = XCreatePixmapFromBitmapData(display,
 				      drawable,
 				      armPix_bits,
@@ -554,15 +554,15 @@ void CreatePixmaps()
 				      fg, bg,
 				      depth);
 
-    disarm = XCreatePixmapFromBitmapData(display, 
+    disarm = XCreatePixmapFromBitmapData(display,
 					 drawable,
 					 disarmPix_bits,
 					 disarmPix_width,
 					 disarmPix_height,
-					 fg, bg, 
+					 fg, bg,
 					 depth);
 
-    arrowPix = XCreatePixmapFromBitmapData(display, 
+    arrowPix = XCreatePixmapFromBitmapData(display,
 					   drawable,
 					   arrowPix_bits,
 					   arrowPix_width,
@@ -594,7 +594,7 @@ CreateOption()
 
    string = XmStringCreateLtoR("OptionMenu1: ", XmSTRING_DEFAULT_CHARSET);
 
-   n = 0; 
+   n = 0;
    XtSetArg(args[n], XmNsubMenuId, submenu1); n++;
    XtSetArg(args[n], XmNmenuHistory, child[4]); n++;
    XtSetArg(args[n], XmNlabelString, string); n++;
@@ -612,7 +612,7 @@ CreateOption()
 
    n = 0;
    XtSetArg(args[n], XmNmnemonic, '3'); n++;
-   child[2] = 
+   child[2] =
    special3 = XmCreatePushButtonGadget(submenu2, "option3b", args, n);
    XtAddCallback(child[2], XmNactivateCallback, PrintName, NULL);
 
@@ -632,7 +632,7 @@ CreateOption()
 
    string = XmStringCreateLtoR("OptionMenu2: ", XmSTRING_DEFAULT_CHARSET);
 
-   n = 0; 
+   n = 0;
    XtSetArg(args[n], XmNsubMenuId, submenu2); n++;
    XtSetArg(args[n], XmNmenuHistory, child[3]); n++;
    XtSetArg(args[n], XmNlabelString, string); n++;
@@ -640,4 +640,3 @@ CreateOption()
    XtManageChild(option_menu2);
    XmStringFree(string);
 }
-

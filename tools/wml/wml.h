@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 /*
  * This file contains the structure and literal definitions required
@@ -98,7 +98,7 @@ typedef	char	*ObjectPtr;
  *	- A syntactic descriptor, which captures the information parse
  *	  from the input in pretty much its raw form
  *	- A semantically resolved descriptor, in which pointers to
- *	  other descriptors have been resolved, ordering is done, 
+ *	  other descriptors have been resolved, ordering is done,
  *	  superclass inheritance is complete, etc.
  */
 
@@ -136,7 +136,7 @@ typedef struct WmlSynClassResDefStruct
     } WmlSynClassResDef, *WmlSynClassResDefPtr;
 
 /*
- * A class child descriptor. 
+ * A class child descriptor.
  */
 #define WmlClassChildDefValid	780344
 
@@ -500,8 +500,8 @@ typedef struct WmlClassCtrlDefStruct
     struct WmlClassDefStruct
 			*ctrl;		/* class being controlled */
     } WmlClassCtrlDef, *WmlClassCtrlDefPtr;
-    
-    
+
+
 
 /*
  * A resolved class descriptor. It has a pointer to its superclass, and

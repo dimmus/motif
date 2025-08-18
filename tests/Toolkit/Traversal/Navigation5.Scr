@@ -1,5 +1,5 @@
 # $XConsortium: Navigation5.scr /main/4 1995/07/17 20:44:52 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,18 +20,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 #) A client window containing a scrolled window whose work window has
 #   pushbuttons
 #   should appear.  Not all of the pushbuttons should be visible.
-#   A vertical scrollbar should appear at the right side of the client. 
+#   A vertical scrollbar should appear at the right side of the client.
 #) Place focus in the window.  Now use KDown to traverse to all of the
-#   buttons.  Once you reach the last visible button, KDown should 
+#   buttons.  Once you reach the last visible button, KDown should
 #   scroll the Scrollbars such that the next button is visible.
 #) When a button becomes visible due to traversing, it should reside
 #   right next to (no margin) the clip window.
@@ -79,7 +79,7 @@ Continue
 #) Press KLeft.  The focus should move to PushButton5.  Press KRight.
 #   Focus should move back to PushButton9 and the widget should be
 #   *fully* visible.
-#) Use KDown, KRight, KLeft, and KUp to traverse to the different 
+#) Use KDown, KRight, KLeft, and KUp to traverse to the different
 #   buttons.  Make sure that the window scrolls to accommodate traversing
 #   to a button which is not visible or totally visible.
 #) When a button becomes visible due to traversing, it should reside
@@ -109,7 +109,7 @@ Continue
 #) The RowColumn now has two more children, a ToggleButton and a Text
 #   Field.  With the focus on PushButton1, press KTab.  The focus should
 #   move to the Text widget and the window should scroll to display the
-#   Text Widget fully.  
+#   Text Widget fully.
 #) Press KTab again until the focus moves to the pushbutton
 #   tab group. It will first tab to the scroll bars.
 #) When a button becomes visible due to traversing, it should reside
@@ -187,6 +187,3 @@ InputString " so it goes"
 CompareVisual ScrolledWindow1
 
 Exit
-
-
-

@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 if ( $MOTIF_HOME != "" ) then
@@ -90,4 +90,3 @@ foreach test ("$Container1a" "$Container1b" "$Container1c" "$Container1d" \
 	      Container5 "$Container5a" "$Container5b" "$Container5c" \
 	      "$Container5d" "$Container5e" \
 	      IconGadget1)
-

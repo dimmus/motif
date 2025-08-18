@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List7.c /main/9 1995/07/13 18:20:11 drk $"
@@ -256,7 +256,7 @@ static void SSelCB_List1(Widget w, XtPointer client_data,
 	case AddItem:
 		printf("XmListAddItem chosen\n");
 		break;
-	case DeleteItem: 
+	case DeleteItem:
 		printf("XmListDeleteItem chosen\n");
 		break;
 	case DeleteAllItems:
@@ -329,29 +329,29 @@ static void ApplyCB(Widget w, XtPointer client_data,
 {
 
     switch (function) {
-	case AddItems:	
+	case AddItems:
 		XmListAddItems(List2, CS_ItemList, count, arg_count);
 		break;
 #ifndef MOTIF1_1
-	case AddItemsUnselected:	
+	case AddItemsUnselected:
 		XmListAddItemsUnselected(List2, CS_ItemList, count, arg_count);
 		break;
 #endif /* MOTIF1_1 */
 	case DeleteItems:
 		XmListDeleteItems(List2, CS_ItemList, count);
 		break;
-	case DeleteItemsPos: 
+	case DeleteItemsPos:
 		XmListDeleteItemsPos(List2, arg_count, position);
 		break;
 	case AddItem:
-		if (count > 0) 
-			XmListAddItem(List2, CS_ItemList[count - 1], 
+		if (count > 0)
+			XmListAddItem(List2, CS_ItemList[count - 1],
 				      arg_count);
 		else
 			printf("Please Choose a Item from the List\n");
 		break;
 	case DeleteItem:
-		if (count > 0) 
+		if (count > 0)
 			XmListDeleteItem(List2, CS_ItemList[count - 1]);
 		else
 			printf("Please Choose a Item from the List\n");
@@ -362,7 +362,7 @@ static void ApplyCB(Widget w, XtPointer client_data,
 		break;
 	case AddItemUnselected:
 		if (count > 0)
-			XmListAddItemUnselected(List2, CS_ItemList[count - 1], 
+			XmListAddItemUnselected(List2, CS_ItemList[count - 1],
 					        arg_count);
 		else
 			printf("Please Choose a Item from the List\n");
@@ -384,7 +384,7 @@ static void ApplyCB(Widget w, XtPointer client_data,
 		break;
 	case SelectItem:
 		if (count > 0)
-			XmListSelectItem(List2, CS_ItemList[count - 1], 
+			XmListSelectItem(List2, CS_ItemList[count - 1],
 					 notify);
 		else
 			printf("Please Choose an Item from the List\n");

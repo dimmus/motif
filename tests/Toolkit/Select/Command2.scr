@@ -1,5 +1,5 @@
 # $XConsortium: Command2.scr /main/6 1995/07/17 20:37:23 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,23 +20,23 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)Command2.scr	1.2  92/01/28
-# A client window will appear containing a command widget. 
+# A client window will appear containing a command widget.
 
 CompareVisual command
 
-# Move the pointer into the client window. 
+# Move the pointer into the client window.
 
-LocatePointer command 
+LocatePointer command
 
 # Press the return key.  Three X Toolkit warnings will be
 # printed into the xterm window.  These warnings refer to
-# command widget resources which were set incorrectly. 
+# command widget resources which were set incorrectly.
 
 ClickKey KReturn
 CompareVisual command
@@ -44,7 +44,7 @@ CompareVisual command
 # Type a command into the command area and press the return
 # key.  An X Toolkit warning will be printed into the xterm
 # window.  This warning is caused by an attempt to fetch a
-# nonexistent child of the command widget. 
+# nonexistent child of the command widget.
 
 LocatePointer command RSelectionText
 ClickMB Btn1
@@ -56,11 +56,11 @@ CompareVisual command
 
 Continue
 
-# Move the pointer into the client window. 
+# Move the pointer into the client window.
 # Type a command into the command area and press the return key.
 # Two X Toolkit warnings will be printed into the xterm window.
 # These warnings are caused by attempts to replace the command
-# string with bad strings. 
+# string with bad strings.
 
 LocatePointer command
 ClickKey KTab
@@ -72,7 +72,7 @@ CompareVisual command
 # will be displayed below the history list.  This behavior is
 # caused by attempts to display bad error strings.
 # During one of the last two actions, scroll bars
-# will have appeared around the list. 
+# will have appeared around the list.
 
 LocatePointer command RSelectionText
 ClickMB Btn1
@@ -83,7 +83,7 @@ CompareVisual command
 
 # Type a character into the command area.  An X Toolkit warning
 # will be printed into the xterm window.  This warning is caused
-# by an attempt to append a bad string to the command string. 
+# by an attempt to append a bad string to the command string.
 
 LocatePointer command RSelectionText
 ClickMB Btn1

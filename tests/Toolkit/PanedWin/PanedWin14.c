@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin14.c /main/4 1995/07/13 19:06:46 drk $"
@@ -77,11 +77,11 @@ char  **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
     XtSetValues(Shell1, args, n);
-  
+
     XmRegisterConverters();
 
     n = 0;
@@ -134,10 +134,10 @@ char  **argv;
     /* can get its act together */
 
     n = 0;
-    XtSetArg (args[n], XmNsashWidth, 20); n++;           
-    XtSetArg (args[n], XmNsashHeight, 20); n++;          
-    XtSetArg (args[n], XmNsashShadowThickness, 5); n++; 
-    XtSetArg (args[n], XmNspacing, 20); n++;             
+    XtSetArg (args[n], XmNsashWidth, 20); n++;
+    XtSetArg (args[n], XmNsashHeight, 20); n++;
+    XtSetArg (args[n], XmNsashShadowThickness, 5); n++;
+    XtSetArg (args[n], XmNspacing, 20); n++;
     XtSetValues (XmVPanedWindow1, args, n);
 
     CommonPause();
@@ -145,11 +145,11 @@ char  **argv;
     /* the desired effect is the same as in panedWin.uil */
     /* the separators are OFF and the sash extends across the width of the */
     /* paned window. Gives a nice sort of bar to grab and move the sash */
-  
+
     n = 0;
     XtSetArg (args[n], XmNwidth, &currentWidth); n++;
-    XtGetValues (XmVPanedWindow1, args, n); 
-      
+    XtGetValues (XmVPanedWindow1, args, n);
+
     n = 0;
     XtSetArg (args[n], XmNsashWidth, currentWidth); n++;
     XtSetArg (args[n], XmNseparatorOn, False); n++;
@@ -203,16 +203,16 @@ char  **argv;
     n = 0;
     /*    XtSetArg (args[n], XmNborderWidth, 50); n++; */
     Manager1 = XmCreateBulletinBoard (XmVPanedWindow1, "Manager1", args, n);
-    
+
     n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("A refreshing alternative")); n++;
     ManagerKids[kidCount] = XmCreateLabel (Manager1, "Label1", args, n);
     XtManageChild(ManagerKids[kidCount]);
-    kidCount++; 
-    
+    kidCount++;
+
     XtDestroyWidget(PushButton1);
-    XtManageChild (Manager1); 
+    XtManageChild (Manager1);
 
     MakeChildUnresizable(Manager1);
 
@@ -222,11 +222,11 @@ char  **argv;
     XtSetArg(args[n], XmNresizeHeight, True); n++;
     XtSetArg(args[n], XmNvalue, string1); n++;
     Manager2 = XmCreateScrolledText(XmVPanedWindow1, "Manager2", args, n);
-    
-    XtDestroyWidget(PushButton2);
-    XtManageChild (Manager2); 
 
-    MakeChildUnresizable(Manager2);    
+    XtDestroyWidget(PushButton2);
+    XtManageChild (Manager2);
+
+    MakeChildUnresizable(Manager2);
 
     CommonPause();
 
@@ -234,14 +234,14 @@ char  **argv;
     XtSetArg(args[n], XmNresizeHeight, False); n++;
     XtSetArg(args[n], XmNvalue, string2); n++;
     Manager3 = XmCreateScrolledText(XmVPanedWindow1, "Manager2", args, n);
-    
-    XtDestroyWidget(PushButton3);
-    XtManageChild (Manager3); 
 
-    MakeChildUnresizable(Manager3);    
+    XtDestroyWidget(PushButton3);
+    XtManageChild (Manager3);
+
+    MakeChildUnresizable(Manager3);
 
     CommonPause();
-  
+
     XtAppMainLoop(app_context);
 }
 
@@ -276,7 +276,7 @@ Widget child;
   XtSetArg(args[n], XmNpaneMaximum, currentHeight); n++;
   XtSetValues(child, args, n);
 
-  printf ("Using the %s method...\n", 
+  printf ("Using the %s method...\n",
 	  (setValuesMethod == True ? "setValues" : "queryGeometry"));
 
   n = 0;

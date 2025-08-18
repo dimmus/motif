@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MenuBar1.c /main/9 1995/07/13 18:46:39 drk $"
@@ -39,17 +39,17 @@ static char rcsid[] = "$XConsortium: MenuBar1.c /main/9 1995/07/13 18:46:39 drk 
 
 Widget newcb = NULL, newcbg = NULL, newms = NULL, newrc = NULL,
   newrc_label = NULL, separator = NULL, menubar = NULL, new_menu = NULL,
-  beagle = NULL, corgi = NULL, collie = NULL, more = NULL, 
+  beagle = NULL, corgi = NULL, collie = NULL, more = NULL,
   unspec_pixmap = NULL, more2 = NULL, more3 = NULL, move_submenu = NULL;
 
-Widget menu1 = NULL, menu2 = NULL, menu3 = NULL, menu4 = NULL, 
+Widget menu1 = NULL, menu2 = NULL, menu3 = NULL, menu4 = NULL,
   submenu1 = NULL, submenu2 = NULL, submenu3 = NULL, submenu4 = NULL,
   submenu5 = NULL, submenu6 = NULL,
-  invalid_submenu = NULL, mine = NULL, yours = NULL, ours = NULL, 
+  invalid_submenu = NULL, mine = NULL, yours = NULL, ours = NULL,
   toggle_RC = NULL, toggle_MS = NULL, toggle_CB = NULL, toggle_CBG = NULL,
   toggle_ML;
 
-Boolean	ownms, longlabel=FALSE;   
+Boolean	ownms, longlabel=FALSE;
 
 XmStringCharSet	CharSet = (XmStringCharSet) XmSTRING_DEFAULT_CHARSET;
 
@@ -92,7 +92,7 @@ XtPointer d2)
     {
       shadow = 12;
     }
-    
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, shadow); n++;
   XtSetValues(w, args, n);
@@ -114,7 +114,7 @@ XtPointer d2)
 	  newcb = XmCreateCascadeButton(newrc, "New CascadeButton", NULL, 0);
 	  XtManageChild(newcb);
 	}
-    }	
+    }
 }
 
 void ToggleCbg(Widget w,
@@ -136,7 +136,7 @@ XtPointer d2)
 	  XtAddCallback(newcbg, XmNactivateCallback, ShadowThickness, NULL);
 	  XtManageChild(newcbg);
 	}
-    }	
+    }
 }
 
 void ToggleRc(Widget w,
@@ -146,7 +146,7 @@ XtPointer d2)
   XmString string;
   Arg args[10];
   int n;
-   
+
   if (newrc)
     {
       XtDestroyWidget(newrc);
@@ -194,7 +194,7 @@ XtPointer d2)
 {
   Arg args[10];
   int n;
-   
+
   if (newms)
     {
       if (ownms)
@@ -247,7 +247,7 @@ void MoveCascade(Widget w, XtPointer newsubmenu, XtPointer d2)
   XmRowColumnWidget submenu;
   Arg args[1];
   int n;
-   
+
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, &submenu); n++;
   XtGetValues(more2, args, n);
@@ -288,7 +288,7 @@ XtPointer d2)
   Arg args[10];
   int n;
   XmString tcs,tcs2;
-   
+
   if (longlabel) {
     tcs = XmStringLtoRCreate("Menu3", CharSet);
     tcs2 = XmStringLtoRCreate("Menu4", CharSet);
@@ -320,14 +320,14 @@ int main(int argc, char *argv[])
   int n;
 
   CommonTestInit(argc, argv);
-    
+
   /*
    * XmMenuBar: menubar
    */
 
   accelerator_string = XtMalloc(sizeof(NEW_MENU_ACCELERATOR) + 1);
   strcpy(accelerator_string, NEW_MENU_ACCELERATOR);
-   
+
   n = 0;
   XtSetArg(args[n], XmNmenuAccelerator, accelerator_string);	n++;
   XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
@@ -348,15 +348,15 @@ int main(int argc, char *argv[])
   /*
    * XmPulldownMenu: submenu1
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu1 = XmCreatePulldownMenu(menubar, "submenu1", args, n);
 
   /*
    * XmPushButton: toggle_MS
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Toggle MenuShell", CharSet);
   tcs1 = XmStringCreate("Ctrl-M", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -367,12 +367,12 @@ int main(int argc, char *argv[])
   XtManageChild(toggle_MS);
   XmStringFree(tcs1);
   XmStringFree(tcs);
-   
+
   /*
    * XmPushButton: toggle_RC
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Toggle RowColumn", CharSet);
   tcs1 = XmStringCreate("Ctrl-R", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -388,7 +388,7 @@ int main(int argc, char *argv[])
    * XmPushButton: toggle_CB
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Toggle CascadeButton", CharSet);
   tcs1 = XmStringCreate("Ctrl-C", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -399,12 +399,12 @@ int main(int argc, char *argv[])
   XtManageChild(toggle_CB);
   XmStringFree(tcs);
   XmStringFree(tcs1);
-   
+
   /*
    * XmPushButton: toggle_CBG
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Toggle CascadeButtonGadget", CharSet);
   tcs1 = XmStringCreate("Ctrl-G", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -419,22 +419,22 @@ int main(int argc, char *argv[])
   /*
    * XmPulldownMenu: submenu2
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu2 = XmCreatePulldownMenu(menubar, "submenu2", args, n);
 
   /*
    * XmPulldownMenu: submenu4
    */
 
-  n = 0; 
+  n = 0;
   submenu4 = XmCreatePulldownMenu(submenu2, "submenu4", args, n);
 
   /*
    * XmCascadeButton: more2
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("More2", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   more2 = XmCreateCascadeButton(submenu2, "more2", args, n);
@@ -446,7 +446,7 @@ int main(int argc, char *argv[])
    * XmCascadeButton: more3
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("More3", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   more3 = XmCreateCascadeButton(submenu2, "more3", args, n);
@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
    * XmPushButtonGadget: move_submenu
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Move Submenu", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   move_submenu = XmCreatePushButtonGadget(submenu2, "move_submenu", args, n);
@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
    * XmPushButtonGadget: beagle
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Beagle", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   beagle = XmCreatePushButtonGadget(submenu4, "beagle", args, n);
@@ -481,7 +481,7 @@ int main(int argc, char *argv[])
    * XmPushButtonGadget: corgi
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Corgi", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   corgi = XmCreatePushButtonGadget(submenu4, "corgi", args, n);
@@ -493,7 +493,7 @@ int main(int argc, char *argv[])
    * XmPushButtonGadget: collie
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Collie", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   collie = XmCreatePushButtonGadget(submenu4, "collie", args, n);
@@ -504,15 +504,15 @@ int main(int argc, char *argv[])
   /*
    * XmPulldownMenu: submenu3
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu3 = XmCreatePulldownMenu(menubar, "submenu3", args, n);
 
   /*
    * XmPushButton: invalid_submenu
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Invalid Submenu", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   invalid_submenu = XmCreatePushButton(submenu3, "invalid_submenu", args, n);
@@ -524,7 +524,7 @@ int main(int argc, char *argv[])
    * XmPushButton: unspec_pixmap
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Unspecified Pixmap", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   unspec_pixmap = XmCreatePushButton(submenu3, "unspec_pixmap", args, n);
@@ -535,15 +535,15 @@ int main(int argc, char *argv[])
   /*
    * XmPulldownMenu: submenu5
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu5 = XmCreatePulldownMenu(submenu3, "submenu5", args, n);
 
   /*
    * XmPushButtonGadget: mine
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Mine", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   mine = XmCreatePushButtonGadget(submenu5, "mine", args, n);
@@ -554,7 +554,7 @@ int main(int argc, char *argv[])
    * XmPushButtonGadget: yours
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Yours", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   yours = XmCreatePushButtonGadget(submenu5, "yours", args, n);
@@ -565,7 +565,7 @@ int main(int argc, char *argv[])
    * XmPushButtonGadget: ours
    */
 
-  n = 0; 
+  n = 0;
   tcs =  XmStringLtoRCreate("Ours", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   ours = XmCreatePushButtonGadget(submenu5, "ours", args, n);
@@ -576,7 +576,7 @@ int main(int argc, char *argv[])
    * XmCascadeButton: more
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("More", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNsubMenuId, submenu5); n++;
@@ -587,15 +587,15 @@ int main(int argc, char *argv[])
   /*
    * XmPulldownMenu: submenu6  (4th menu in menu bar)
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu6 = XmCreatePulldownMenu(menubar, "submenu6", args, n);
 
   /*
    * XmPushButton: toggle_ML  (toggle Menu Labels)
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Toggle Menu Labels", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   toggle_ML = XmCreatePushButton(submenu6, "toggle_ML", args, n);
@@ -607,7 +607,7 @@ int main(int argc, char *argv[])
    * XmCascadeButton: menu1
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Menu1", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNsubMenuId, submenu1); n++;
@@ -619,7 +619,7 @@ int main(int argc, char *argv[])
    * XmCascadeButton: menu2
    */
 
-  n = 0; 
+  n = 0;
   tcs =  XmStringLtoRCreate("Menu2", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNsubMenuId, submenu2); n++;
@@ -631,7 +631,7 @@ int main(int argc, char *argv[])
    *  XmCascadeButton: menu3
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Menu3", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNsubMenuId, submenu3); n++;
@@ -643,7 +643,7 @@ int main(int argc, char *argv[])
    *  XmCascadeButton: menu4
    */
 
-  n = 0; 
+  n = 0;
   tcs = XmStringLtoRCreate("Menu4", CharSet);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
   XtSetArg(args[n], XmNsubMenuId, submenu6); n++;
@@ -655,14 +655,14 @@ int main(int argc, char *argv[])
    * XmCascadeButton: new_menu
    */
 
-  /* put in to test PIR785 underlining in multisegment 
+  /* put in to test PIR785 underlining in multisegment
      compound strings  */
 
   tcs = XmStringLtoRCreate("New", CharSet);
   tcs1 = XmStringLtoRCreate("Menu", CharSet);
   tcs2 = XmStringConcat(tcs, tcs1);
-   
-  n = 0; 
+
+  n = 0;
   XtSetArg(args[n], XmNlabelString, tcs2);    n++;
   XtSetArg(args[n], XmNmnemonic, 'e');        n++;
   new_menu = XmCreateCascadeButton(menubar, "new_menu", args, n);
@@ -681,7 +681,7 @@ int main(int argc, char *argv[])
   CommonPause();
   CommonPause();  /* 2098 test */
 
-  /* 
+  /*
    * Begin Test code for PIR 2814.  Vertical menu bars should have
    *  pulldown menus which cascade to the side.
    */
@@ -689,20 +689,10 @@ int main(int argc, char *argv[])
   n = 0;
   XtSetArg(args[n], XmNorientation, XmVERTICAL); n++;
   XtSetValues(menubar, args, n);
-  
+
   CommonPause();
-    
+
   XtDestroyWidget(menubar);
   CommonPause();
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-

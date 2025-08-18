@@ -23,15 +23,15 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is BBoard.uid ---- 
+---- The uid file to be opened is BBoard.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer default_button  
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
-TRACE:(5) LocatePointer toggle_color_button  
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer default_button
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual S_MAIN_WIDGET
+TRACE:(5) LocatePointer toggle_color_button
+TRACE:(6) ClickMB Btn1
+TRACE:(7) CompareVisual S_MAIN_WIDGET
 TRACE:(8) Exit
 Exiting Test...Please Standby...

@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is templateDia.uid ---- 
+---- The uid file to be opened is templateDia.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual Message_Dialog 
-TRACE:(2) LocatePointer Message_Dialog ROkButton 
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual Message_Dialog
+TRACE:(2) LocatePointer Message_Dialog ROkButton
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- okcallback callback made ----
@@ -36,9 +36,9 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_OK ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual Message_Dialog 
-TRACE:(5) LocatePointer Message_Dialog RHelpButton 
-TRACE:(6) ClickMB Btn1 
+TRACE:(4) CompareVisual Message_Dialog
+TRACE:(5) LocatePointer Message_Dialog RHelpButton
+TRACE:(6) ClickMB Btn1
 
 /*********************************************************/
 ---- helpCallback callback made ----
@@ -46,9 +46,9 @@ TRACE:(6) ClickMB Btn1
 ---- Reason was XmCR_HELP ----
 /*********************************************************/
 
-TRACE:(7) CompareVisual Message_Dialog 
-TRACE:(8) LocatePointer Message_Dialog RCancelButton 
-TRACE:(9) ClickMB Btn1 
+TRACE:(7) CompareVisual Message_Dialog
+TRACE:(8) LocatePointer Message_Dialog RCancelButton
+TRACE:(9) ClickMB Btn1
 
 /*********************************************************/
 ---- cancelCallback callback made ----
@@ -56,6 +56,6 @@ TRACE:(9) ClickMB Btn1
 ---- Reason was XmCR_CANCEL ----
 /*********************************************************/
 
-TRACE:(10) CompareVisual Message_Dialog 
+TRACE:(10) CompareVisual Message_Dialog
 TRACE:(11) Exit
 Exiting Test...Please Standby...

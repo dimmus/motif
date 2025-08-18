@@ -22,21 +22,21 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual mapbutton 
-TRACE:(2) LocatePointer mapbutton  
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual message1 
-TRACE:(5) LocatePointer message1 ROkButton 
-TRACE:(6) ClickMB Btn1 
-Enter Message 1 
-TRACE:(7) LocatePointer mapbutton  
-TRACE:(8) ClickMB Btn1 
-TRACE:(9) CompareVisual message2 
-TRACE:(10) LocatePointer message2 ROkButton 
-TRACE:(11) ClickMB Btn1 
-Enter Message 2 
-TRACE:(12) LocatePointer mapbutton  
-TRACE:(13) CompareVisual mapbutton 
+TRACE:(1) CompareVisual mapbutton
+TRACE:(2) LocatePointer mapbutton
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual message1
+TRACE:(5) LocatePointer message1 ROkButton
+TRACE:(6) ClickMB Btn1
+Enter Message 1
+TRACE:(7) LocatePointer mapbutton
+TRACE:(8) ClickMB Btn1
+TRACE:(9) CompareVisual message2
+TRACE:(10) LocatePointer message2 ROkButton
+TRACE:(11) ClickMB Btn1
+Enter Message 2
+TRACE:(12) LocatePointer mapbutton
+TRACE:(13) CompareVisual mapbutton
 TRACE:(14) Continue
 Destroyed MessageBox
 TRACE:(15) Continue

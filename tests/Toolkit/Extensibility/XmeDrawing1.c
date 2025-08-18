@@ -49,7 +49,7 @@ main (int argc, char **argv)
 
    /* initialize toolkit */
    CommonTestInit(argc, argv);
-    
+
    /* Create the drawing area. */
    n=0;
    XtSetArg (args[n], XmNheight, DRAWING_AREA_HEIGHT); n++;
@@ -76,8 +76,8 @@ CreateControlPanel()
    Widget RCScale[8];
    Widget Separator1, Separator2;
    Widget ClearImagePB, SetValuesPB;
-   Widget directionPDM, indicatorPDM, orientationPDM; 
-   Widget separator_typePDM, drawingPDM; 
+   Widget directionPDM, indicatorPDM, orientationPDM;
+   Widget separator_typePDM, drawingPDM;
    Widget directionPB[4];
    Widget indicatorPB[2];
    Widget orientationPB[2];
@@ -87,7 +87,7 @@ CreateControlPanel()
    Arg    args[20];
    int    n, i, value;
 
-   static char          *scale_labels[] = 
+   static char          *scale_labels[] =
                          { "X Bounding",
 			   "Y Bounding",
 			   "Widgth",
@@ -97,28 +97,28 @@ CreateControlPanel()
 			   "Image Thickness",
 			   "Margin"};
 
-   static char          *option_menu_labels[] = 
+   static char          *option_menu_labels[] =
                          { "Direction",
 			   "Indicator Type",
 			   "Orientation",
 			   "Separator Type",
 			   "Drawing"};
 
-   static char          *direction_pulldown_options[] = 
+   static char          *direction_pulldown_options[] =
                          { "XmARROW_RIGHT",
                            "XmARROW_LEFT",
                            "XmARROW_UP",
 			   "XmARROW_DOWN"};
 
-   static char          *indicator_pulldown_options[] = 
+   static char          *indicator_pulldown_options[] =
                          { "XmINDICATOR_CHECK",
 			   "XmINDICATOR_CROSS"};
 
-   static char          *orientation_pulldown_options[] = 
+   static char          *orientation_pulldown_options[] =
                          { "XmHORIZONTAL",
 			   "XmVERTICAL"};
 
-   static char          *separator_type_pulldown_options[] = 
+   static char          *separator_type_pulldown_options[] =
                          { "XmSINGLE_LINE",
                            "XmDOUBLE_LINE",
                            "XmSINGLE_DASHED_LINE",
@@ -130,21 +130,21 @@ CreateControlPanel()
                            "XmSHADOW_ETCHED_OUT_DASHED",
 			   "XmVERTICAL"};
 
-   static char          *drawing_pulldown_options[] = 
+   static char          *drawing_pulldown_options[] =
                          { "xmeDrawArrow",
                            "xmeDrawDiamond",
                            "xmeDrawIndicator",
 			   "xmeDrawSeparator"};
 
 
-  
+
    XmString LabelString;
    char     name[20];
    char     PBGadgetName[20];
    char     CBname[20];
 
-   /* Create main parent */ 
-   
+   /* Create main parent */
+
    n=0;
    XtSetArg(args[n], XmNdefaultPosition, False); n++;
    XtSetArg(args[n], XmNautoUnmanage, False); n++;
@@ -233,8 +233,8 @@ CreateControlPanel()
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
 	directionPB[i] = XmCreatePushButtonGadget(directionPDM, name, args, n);
-	XtAddCallback (directionPB[i], XmNactivateCallback, 
-		       DirectionPulldownCB, 
+	XtAddCallback (directionPB[i], XmNactivateCallback,
+		       DirectionPulldownCB,
 		       (XtPointer) direction_pulldown_options[i]);
 	XtManageChild(directionPB[i]);
 	XmStringFree(LabelString);
@@ -246,7 +246,7 @@ CreateControlPanel()
      LabelString = XmStringCreate("Arrow Direction",
 				  XmSTRING_DEFAULT_CHARSET);
      XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
      DirectionM = XmCreateOptionMenu(RowC2, "DirectionM", args, n);
      XtManageChild (DirectionM);
 
@@ -267,8 +267,8 @@ CreateControlPanel()
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
 	indicatorPB[i] = XmCreatePushButtonGadget(indicatorPDM, name, args, n);
-	XtAddCallback (indicatorPB[i], XmNactivateCallback, 
-		       IndicatorPulldownCB, 
+	XtAddCallback (indicatorPB[i], XmNactivateCallback,
+		       IndicatorPulldownCB,
 		       (XtPointer) indicator_pulldown_options[i]);
 	XtManageChild(indicatorPB[i]);
 	XmStringFree(LabelString);
@@ -280,7 +280,7 @@ CreateControlPanel()
    LabelString = XmStringCreate("Indicator Type",
 				XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
    IndicatorM = XmCreateOptionMenu(RowC2, "IndicatorM", args, n);
    XtManageChild (IndicatorM);
 
@@ -300,10 +300,10 @@ CreateControlPanel()
 
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
-	orientationPB[i] = XmCreatePushButtonGadget(orientationPDM, name, 
+	orientationPB[i] = XmCreatePushButtonGadget(orientationPDM, name,
 						    args, n);
-	XtAddCallback (orientationPB[i], XmNactivateCallback, 
-		       OrientationPulldownCB, 
+	XtAddCallback (orientationPB[i], XmNactivateCallback,
+		       OrientationPulldownCB,
 		       (XtPointer) orientation_pulldown_options[i]);
 	XtManageChild(orientationPB[i]);
 	XmStringFree(LabelString);
@@ -315,7 +315,7 @@ CreateControlPanel()
    LabelString = XmStringCreate("Separator Orientation",
 				XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
    OrientationM = XmCreateOptionMenu(RowC2, "OrientationM", args, n);
    XtManageChild (OrientationM);
 
@@ -325,7 +325,7 @@ CreateControlPanel()
    /* Create the Separator Type Option Menu and its buttons */
 
    n = 0;
-   separator_typePDM = XmCreatePulldownMenu(RowC2, "separator_typePDM", 
+   separator_typePDM = XmCreatePulldownMenu(RowC2, "separator_typePDM",
 					    args, n);
 
    for (i=0; i<9; i++)
@@ -336,10 +336,10 @@ CreateControlPanel()
 
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
-	separator_typePB[i] = XmCreatePushButtonGadget(separator_typePDM, name, 
+	separator_typePB[i] = XmCreatePushButtonGadget(separator_typePDM, name,
 						       args, n);
-	XtAddCallback (separator_typePB[i], XmNactivateCallback, 
-		       SeparatorTypePulldownCB, 
+	XtAddCallback (separator_typePB[i], XmNactivateCallback,
+		       SeparatorTypePulldownCB,
 		       (XtPointer) separator_type_pulldown_options[i]);
 	XtManageChild(separator_typePB[i]);
 	XmStringFree(LabelString);
@@ -351,7 +351,7 @@ CreateControlPanel()
    LabelString = XmStringCreate("Separator Type",
 				XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
    SeparatorTypeM = XmCreateOptionMenu(RowC2, "SeparatorTypeM", args, n);
    XtManageChild (SeparatorTypeM);
 
@@ -371,10 +371,10 @@ CreateControlPanel()
 
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, LabelString); n++;
-	drawing_typePB[i] = XmCreatePushButtonGadget(drawingPDM, name, 
+	drawing_typePB[i] = XmCreatePushButtonGadget(drawingPDM, name,
 						       args, n);
-	XtAddCallback (drawing_typePB[i], XmNactivateCallback, 
-		       DrawingPulldownCB, 
+	XtAddCallback (drawing_typePB[i], XmNactivateCallback,
+		       DrawingPulldownCB,
 		       (XtPointer) drawing_pulldown_options[i]);
 	XtManageChild(drawing_typePB[i]);
 	XmStringFree(LabelString);
@@ -386,7 +386,7 @@ CreateControlPanel()
    LabelString = XmStringCreate("Draw Function",
 				XmSTRING_DEFAULT_CHARSET);
    XtSetArg(args[n], XmNlabelString, LabelString); n++;
-   
+
    DrawingM = XmCreateOptionMenu(RowC2, "DrawingM", args, n);
    XtManageChild (DrawingM);
 
@@ -450,7 +450,7 @@ CreateControlPanel()
 }
 
 
-void 
+void
 DirectionPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -459,7 +459,7 @@ DirectionPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 IndicatorPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -467,7 +467,7 @@ IndicatorPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 
 /* empty stub */
 
-   /* XmToggleButtonCallbackStruct * scb = 
+   /* XmToggleButtonCallbackStruct * scb =
 	(XmToggleButtonCallbackStruct *) call_data ;
 
    n=0;
@@ -476,7 +476,7 @@ IndicatorPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 OrientationPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -485,7 +485,7 @@ OrientationPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 SeparatorTypePulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -494,7 +494,7 @@ SeparatorTypePulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 DrawingPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -505,7 +505,7 @@ DrawingPulldownCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 ClearImageCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[20];
@@ -514,11 +514,10 @@ ClearImageCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 SetValuesCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
    Arg       args[2];
    int       n, value;
 /* empty stub */
 }
-

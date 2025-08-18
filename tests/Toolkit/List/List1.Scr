@@ -1,5 +1,5 @@
 # $XConsortium: List1.scr /main/5 1995/07/17 20:21:07 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List1.scr	1.2  91/10/11
 # Screen 1
@@ -214,7 +214,7 @@ CompareVisual List1
 
 # C)
 
-Continue 
+Continue
 
 # Screen 6
 # Item \"List\" should now be replaced with item \"NEWList\". Information
@@ -244,7 +244,7 @@ CompareVisual List1
 
 # Select this item.
 
-LocatePointer List1 RListItem 0 
+LocatePointer List1 RListItem 0
 ClickMB Btn1
 
 # C)
@@ -275,7 +275,7 @@ Continue
 # If the second message shows a non-zero value, CR5228 has not been fixed.
 
 
-# C) 
+# C)
 
 Continue
 

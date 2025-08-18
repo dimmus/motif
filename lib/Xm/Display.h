@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifndef _XmDisplay_h
 #define _XmDisplay_h
@@ -57,10 +57,10 @@ externalref 	WidgetClass xmDisplayClass;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmGetDragContext( 
+extern Widget XmGetDragContext(
                         Widget w,
                         Time time) ;
-extern Widget XmGetXmDisplay( 
+extern Widget XmGetXmDisplay(
                         Display *display) ;
 
 /********    End Public Function Declarations    ********/
@@ -70,5 +70,3 @@ extern Widget XmGetXmDisplay(
 #endif
 
 #endif /* _XmDisplay_h */
-
-

@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: selectDia.uil /main/8 1995/07/13 20:55:33 drk $
 !******************************************************************************
 module Test
@@ -30,7 +30,7 @@ module Test
         names = case_sensitive
 
   include file "selectDia.msg";
-  
+
   procedure
           exit_test();
 	  Report_Callback(string);
@@ -41,7 +41,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -72,22 +72,22 @@ module Test
             callbacks {
 !		/* deleted due to known Bug in CharSets */
 !		XmNnoMatchCallback = procedure Report_Callback
-!				('noMatchCallback');	
+!				('noMatchCallback');
 		XmNokCallback = procedure Report_Callback
-				('okCallback');	
+				('okCallback');
 		XmNapplyCallback = procedure Report_Callback
-				('applyCallback');	
+				('applyCallback');
 		XmNcancelCallback = procedure Report_Callback
-				('cancelCallback');	
+				('cancelCallback');
 		XmNhelpCallback = procedure Report_Callback
-				('helpCallback');	
+				('helpCallback');
             };
         };
 
 
 object
 	explanation : XmBulletinBoardDialog {
-			arguments { 
+			arguments {
 				  XmNx = 500;
 				  XmNy  = 0;
 				  XmNdefaultPosition = false;
@@ -125,13 +125,13 @@ object
 				  XmNlabelString = compound_string("Explanation of Widget Displayed");
 				  };
 		};
-		
+
 
 object
 	text1 : XmText {
 			arguments {
 				  XmNx = 0;
-				  XmNy = 40;  
+				  XmNy = 40;
 				  XmNheight = 250;
 				  XmNwidth = 300;
 				  XmNwordWrap = true;
@@ -141,6 +141,6 @@ object
 				  XmNforeground = navy;
 				  XmNvalue = message;
 				  };
-				   
+
 		};
 end module;

@@ -53,4 +53,3 @@ foreach test ( ScrollText1 "$ScrollText1a" ScrollText2 \
                TextField1 TextField2 TextField3 \
 	       TextField4 TextField5 TextWcs1 TextWcs2 \
 	       "$TextFWcs1" "$TextFWcs2" )
-

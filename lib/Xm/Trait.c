@@ -88,10 +88,10 @@ externaldef(traits) XrmQuark _XmQTclipWindow = NULLQUARK;
 externaldef(traits) XrmQuark XmQTtoolTipConfig = NULLQUARK;
 externaldef(traits) XrmQuark XmQTtoolTip = NULLQUARK;
 
-/* 
+/*
  * Initialize traits system
- * 
- * This routine sets up all quarks used by the traits in 
+ *
+ * This routine sets up all quarks used by the traits in
  * Motif
  */
 
@@ -114,7 +114,7 @@ void _XmInitializeTraits()
 
   /* String get/set */
   XmQTaccessTextual = XrmPermStringToQuark("XmTaccessTextual");
-  
+
   /* Navigator/Scrolling trait */
   XmQTnavigator = XrmPermStringToQuark("XmTnavigator");
   XmQTscrollFrame = XrmPermStringToQuark("XmTscrollFrame");
@@ -143,7 +143,7 @@ void _XmInitializeTraits()
   XmQTcontainer = XrmPermStringToQuark("XmTcontainer");
 
   /* LayoutDirection trait */
-  XmQTspecifyLayoutDirection = 
+  XmQTspecifyLayoutDirection =
     XrmPermStringToQuark("XmTspecifyLayoutDirection");
 
   /* get colors */
@@ -167,7 +167,7 @@ void _XmInitializeTraits()
 }
 
 XtPointer
-XmeTraitGet(XtPointer obj, XrmQuark name) 
+XmeTraitGet(XtPointer obj, XrmQuark name)
 {
   XtPointer trait;
   XmTraitEntryRec entry;
@@ -219,7 +219,7 @@ TraitCompare(XmHashKey key1, XmHashKey key2)
 	 entry1 -> name == entry2 -> name);
 }
 
-static XmHashValue 
+static XmHashValue
 TraitHash(XmHashKey key)
 {
   XmTraitEntry entry = (XmTraitEntry) key;

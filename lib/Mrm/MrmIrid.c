@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -119,7 +119,7 @@ static char rcsid[] = "$XConsortium: MrmIrid.c /main/13 1996/11/13 13:58:17 drk 
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__RID_EnterItem (IDBFile			file_id,
 		    IDBResource			resource_id,
 		    IDBDataHandle		data_entry)
@@ -212,7 +212,7 @@ Idb__RID_EnterItem (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__RID_ReturnItem (IDBFile			file_id,
 		     IDBResource		resource_id,
 		     Boolean			signal_null,
@@ -262,7 +262,7 @@ Idb__RID_ReturnItem (IDBFile			file_id,
     { if ( signal_null )
         return Urm__UT_Error ("Idb__RID_ReturnItem", _MrmMMsg_0014,
 			    file_id, NULL, MrmNULL_DATA);
-      else 
+      else
         return MrmNULL_DATA;
     }
   entry_return->rec_no = recptr->pointers[resndx].internal_id.rec_no;
@@ -309,7 +309,7 @@ Idb__RID_ReturnItem (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__RID_NextRID (IDBFile		file_id,
 		  IDBResource		*res_id_return)
 
@@ -383,7 +383,7 @@ Idb__RID_NextRID (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__RID_AddRecord (IDBFile		file_id)
 {
 
@@ -426,4 +426,3 @@ Idb__RID_AddRecord (IDBFile		file_id)
   return MrmSUCCESS;
 
 }
-

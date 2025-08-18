@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scrollbar3.c /main/6 1995/07/13 19:14:33 drk $"
@@ -48,7 +48,7 @@ char  **argv;
   Arg args[MAX_ARGS];
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
@@ -139,7 +139,7 @@ char  **argv;
   XtSetArg(args[n], XmNpageIncrement, 5);  n++;
   XtSetValues(ScrollBar1, args, n);
   CommonPause();
-  
+
   n = 0;
   XtSetArg(args[n], XmNinitialDelay, 5);  n++;
   XtSetArg(args[n], XmNrepeatDelay, 25);  n++;
@@ -149,7 +149,7 @@ char  **argv;
   XtSetArg(args[n], XmNminimum, 50);  n++;
   XtSetValues(ScrollBar1, args, n);
   CommonPause();
-  
+
   n = 0;
   XtSetArg(args[n], XmNmaximum, 20);  n++;
   XtSetValues(ScrollBar1, args, n);
@@ -191,7 +191,7 @@ char  **argv;
   XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_TOP);  n++;
   XtSetValues(ScrollBar4, args, n);
   CommonPause();
-  
+
   n = 0;
   XtSetArg(args[n], XmNvalue, 10);  n++;
   XtSetValues(ScrollBar4, args, n);
@@ -244,21 +244,3 @@ char  **argv;
 
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

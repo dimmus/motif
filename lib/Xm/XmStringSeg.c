@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -49,16 +49,16 @@ static char rcsid[] = "$XConsortium: XmStringSeg.c /main/7 1995/09/19 23:13:59 c
  *	and XmeStringGetComponent() is supported.
  */
 Boolean
-_XmStringGetSegment(_XmStringContext   context, 
+_XmStringGetSegment(_XmStringContext   context,
 		    Boolean	       update_context,
 		    Boolean	       copy_data,
-		    XtPointer         *text, 
-		    XmStringTag       *tag, 
-		    XmTextType        *type, 
-		    XmStringTag      **rendition_tags, 
+		    XtPointer         *text,
+		    XmStringTag       *tag,
+		    XmTextType        *type,
+		    XmStringTag      **rendition_tags,
 		    unsigned int      *tag_count,
 		    XmStringDirection *direction,
-		    Boolean           *separator, 
+		    Boolean           *separator,
 		    unsigned char     *tabs,
 		    short             *char_count,
 		    XmDirection       *push_before,
@@ -73,7 +73,7 @@ _XmStringGetSegment(_XmStringContext   context,
   XmStringComponentType ctype;
   unsigned int 		len;
   XtPointer 		val;
-  
+
   /* Initialize the out parameters */
   if (text)           *text           = NULL;
   if (tag)            *tag            = NULL;
@@ -86,7 +86,7 @@ _XmStringGetSegment(_XmStringContext   context,
   if (char_count)     *char_count     = 0;
   if (push_before)    *push_before    = 0;
   if (pop_after)      *pop_after      = False;
-  
+
   /* No NULL pointers allowed. */
   if (! (context && text && tag && type && rendition_tags && tag_count
 	 && direction && separator && tabs && char_count && push_before
@@ -148,7 +148,7 @@ _XmStringGetSegment(_XmStringContext   context,
 		      *rendition_tags = (XmStringTag *)
 			XtMalloc(sizeof(XmStringTag) * *tag_count);
 		      for (tmp = 0; tmp < *tag_count; tmp++)
-			(*rendition_tags)[tmp] = 
+			(*rendition_tags)[tmp] =
 			  XtNewString(_XmStrContRendTags(local_context)[tmp]);
 		    }
 		  else
@@ -190,7 +190,7 @@ _XmStringGetSegment(_XmStringContext   context,
 	    {
 	      *char_count = len;
 	      *text = val;
-	      
+
 	      if (ctype == XmSTRING_COMPONENT_TEXT)
 		*type = XmCHARSET_TEXT;
 	      else if (ctype == XmSTRING_COMPONENT_LOCALE_TEXT)
@@ -199,13 +199,13 @@ _XmStringGetSegment(_XmStringContext   context,
 		*type = XmWIDECHAR_TEXT;
 	      else
 		{ assert(FALSE); }
-	      
+
 	      /* Force a tag for backward compatibility with Motif 1.2 */
 	      if (! *tag)
 		*tag = _XmStrContTag(local_context);
 
 	      result = TRUE;
-	      
+
 	      /* Save the renditions now. */
 	      if ((*tag_count == 0) && _XmStrContRendCount(local_context))
 		{
@@ -216,7 +216,7 @@ _XmStringGetSegment(_XmStringContext   context,
 		      *rendition_tags = (XmStringTag*)
 			XtMalloc(sizeof(XmStringTag) * *tag_count);
 		      for (tmp = 0; tmp < *tag_count; tmp++)
-			(*rendition_tags)[tmp] = 
+			(*rendition_tags)[tmp] =
 			  XtNewString(_XmStrContRendTags(local_context)[tmp]);
 		    }
 		  else
@@ -231,10 +231,10 @@ _XmStringGetSegment(_XmStringContext   context,
 		}
 	    }
 	  break;
-	      
+
 	case XmSTRING_COMPONENT_RENDITION_END:
 	  break;
-	      
+
 	case XmSTRING_COMPONENT_LAYOUT_POP:
 	  if (*tabs || *text)
 	    {
@@ -255,7 +255,7 @@ _XmStringGetSegment(_XmStringContext   context,
 	      done = TRUE;
 	    }
 	  break;
-	  
+
 	case XmSTRING_COMPONENT_END:
 	default:
 	  done = TRUE;
@@ -291,7 +291,7 @@ _XmStringGetSegment(_XmStringContext   context,
   return result;
 }
 
-Boolean 
+Boolean
 _XmStringGetNextSegment(
         _XmStringContext context,
         XmStringTag *tag,
@@ -319,7 +319,7 @@ _XmStringGetNextSegment(
 	  XtFree((char*) rendition_tags[tag_count]);
 	XtFree((char*) rendition_tags);
       }
-    
+
     if (type == XmWIDECHAR_TEXT && *text) {
       /* must convert (this should be done in segment's locale instead) */
       int len;
@@ -337,16 +337,16 @@ _XmStringGetNextSegment(
       } else
 	(*text)[*char_count] = '\0';
       XtFree((char *)wtext);
-    } 
+    }
   }
-	  
+
   return result;
 }
 
 /*
  * fetch the next 'segment' of the external TCS
  */
-Boolean 
+Boolean
 XmStringGetNextSegment(XmStringContext context,
 		       char **text,
 		       XmStringTag *tag,
@@ -355,9 +355,9 @@ XmStringGetNextSegment(XmStringContext context,
 {
   short char_count;
   Boolean ret_val;
-  
+
   _XmProcessLock();
-  ret_val = _XmStringGetNextSegment((_XmStringContext)context, 
+  ret_val = _XmStringGetNextSegment((_XmStringContext)context,
 		 tag, direction, text, &char_count, separator);
   _XmProcessUnlock();
   return ret_val;

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -29,7 +29,7 @@
 * Motifanim.
 * ---------
 * This program displays a animation made of a succession of pixmaps drawn
-*    side by side in a scrolled drawingarea; there are also control 
+*    side by side in a scrolled drawingarea; there are also control
 *    buttons for managing the animation (start, speed, stop, step ...)
 * This program reads two uid files: 'motifanim.uid', describing the general
 *    interface of the buttons, label etc, and a <NAME>.uid file, describing
@@ -53,8 +53,8 @@
 #include <Xm/Xm.h>          /* Motif Toolkit */
 #include <Xm/Scale.h>
 #include <Mrm/MrmPublic.h>   /* Mrm */
-#include <Xmd/RegEdit.h>   
-#include <Xmd/Help.h>   
+#include <Xmd/RegEdit.h>
+#include <Xmd/Help.h>
 #include <stdlib.h>
 
 static MrmHierarchy	s_MrmHierarchy;	   /* MRM database hierarch id */
@@ -92,8 +92,8 @@ static MrmCount regnum = XtNumber(regvec);
 static Display 	*display;
 static XtAppContext    app_context;
 
-/** 
---  Animation variables 
+/**
+--  Animation variables
 **/
 static int scalespeed, max_scale ; /* init with widget values */
 static short width ;
@@ -143,8 +143,8 @@ int main(argc, argv)
     MrmInitialize ();
     XtSetLanguageProc(NULL, NULL, NULL);
     toplevel = XtVaOpenApplication(&app_context, APP_CLASS,
-				 NULL , 0, &argc, argv, fallbacks, 
-                                 sessionShellWidgetClass, 
+				 NULL , 0, &argc, argv, fallbacks,
+                                 sessionShellWidgetClass,
                                  NULL);
 
     /**  Plug in Editres protocol  */
@@ -156,17 +156,17 @@ int main(argc, argv)
 
     while (*++argv) {
 	if (!strcmp(*argv,"-anim")) {
-	    if (*++argv)  anim_name = *argv ; 
+	    if (*++argv)  anim_name = *argv ;
 	} else
 	if (!strcmp(*argv,"-speed")) {
-	    if (*++argv)  speed_factor = atoi(*argv) ; 
+	    if (*++argv)  speed_factor = atoi(*argv) ;
 	}
     }
-		
+
 
     /*
      *  Build the secong uid file and open the Mrm.hierarchy (2 files)
-     */ 
+     */
     strcpy(uidanimfile,anim_name);
     strcat(uidanimfile,".uid");
     vec[1] = uidanimfile ;
@@ -196,13 +196,13 @@ int main(argc, argv)
     }
 
     XtManageChild(motifanimmain);
-    
+
     XtRealizeWidget(toplevel);
 
     /*
      *  Call the routine that will fetch the animation variables.
      */
-    
+
     InitAnim() ;
 
 
@@ -269,8 +269,8 @@ static void InitAnim()
     }
 
     /* to avoid event accumulation during animation */
-    gcv.graphics_exposures = False ; 
-    gc = XCreateGC(XtDisplay(drawingArea), XtWindow(drawingArea), 
+    gcv.graphics_exposures = False ;
+    gc = XCreateGC(XtDisplay(drawingArea), XtWindow(drawingArea),
 		   GCGraphicsExposures, &gcv);
     speedcount = 0 ;
 }
@@ -293,7 +293,7 @@ static Boolean fstep(client_data)
 	xanim = (xanim > width)?(-wanim[ianim]):(xanim+step_size) ;
 	ianim = (ianim == nimage)?0:(ianim+1);
 	XCopyArea(XtDisplay(drawingArea), panim[ianim], XtWindow(drawingArea),
-		  gc, 0, 0, wanim[ianim], hanim[ianim], 
+		  gc, 0, 0, wanim[ianim], hanim[ianim],
 		  xanim, yanim);
 	XSync(XtDisplay(drawingArea),False);
     }
@@ -303,15 +303,15 @@ static Boolean fstep(client_data)
 /** The callbacks **/
 /*******************/
 
-static void 
-p_motifanim_help (Widget w, XtPointer client_data, XtPointer call_data) 
+static void
+p_motifanim_help (Widget w, XtPointer client_data, XtPointer call_data)
 {
     static Widget help_widget = NULL ;
 
     if (!help_widget)
 	help_widget = XmdCreateHelpDialog(w, "help_manager", NULL, 0);
 
-    XtManageChild(help_widget);   
+    XtManageChild(help_widget);
 }
 
 
@@ -367,11 +367,11 @@ static void p_motifanim_draw( widget, tag, callback_data )
     if (*tag == 0) {
 	XtSetArg(arg,XmNwidth,&width);
 	XtGetValues(widget,&arg,1);
-	drawingArea = widget ; 
+	drawingArea = widget ;
     } else {
-	XCopyArea(XtDisplay(drawingArea), panim[ianim], 
+	XCopyArea(XtDisplay(drawingArea), panim[ianim],
 		  XtWindow(drawingArea),
-		  gc, 0, 0, wanim[ianim], hanim[ianim], 
+		  gc, 0, 0, wanim[ianim], hanim[ianim],
 		  xanim, yanim);
     }
 

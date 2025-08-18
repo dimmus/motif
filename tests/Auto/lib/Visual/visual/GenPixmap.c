@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GenPixmap.c /main/8 1995/07/14 11:49:52 drk $"
@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: GenPixmap.c /main/8 1995/07/14 11:49:52 drk
 
         INPUTS:
             widget - the widget whose image needs generating.
-        
+
         OUTPUTS:
             none
 
@@ -57,7 +57,7 @@ static char rcsid[] = "$XConsortium: GenPixmap.c /main/8 1995/07/14 11:49:52 drk
             2 byte width
             2 byte height
             n byte compressed image (n=width*height)
-        
+
             4 byte image record start code
             4 byte checksum
             2 byte width
@@ -114,7 +114,7 @@ MvsWidgetInfoRecord *widget_info;
     }
 
 /*
-    See if we already have this visual state 
+    See if we already have this visual state
 
     Don't need to calculate hash - always compare - Automation
     ---------------------------------------------
@@ -179,14 +179,14 @@ MvsWidgetInfoRecord *widget_info;
 
             mvsVisualChecksum[i] = checksum;
 
-	    if (image != NULL) 
+	    if (image != NULL)
             	XDestroyImage(image);
 
             /* check to see if we have record with identical checksum */
 
-/* 
+/*
    Automation - Even if visual image is the same still store. Up to writer
-   to resolve extra storages.  
+   to resolve extra storages.
 */
 
 	    j = i;
@@ -206,7 +206,7 @@ MvsWidgetInfoRecord *widget_info;
                           image_count++,i);
             }
         }
-/* 
+/*
  	Automation Fix
 
     }
@@ -229,7 +229,7 @@ static void CheckNormalizedColors(MvsWidgetInfoRecord *widget_info)
     MvsWidgetInfoRecord *widget_info_stack[100];
     short stack_top = 0;
 
-    /* Go down the hierarchy of widgets, and check that each current value 
+    /* Go down the hierarchy of widgets, and check that each current value
        of a Color resource is normalized */
 
     winfo = widget_info;
@@ -249,29 +249,29 @@ static void CheckNormalizedColors(MvsWidgetInfoRecord *widget_info)
 
 	for (i=0; i<num_res_colors; i++) {
 	  if (res_color_ref[i] >= 0) {
-	      if ( (Pixel) mvsGetResourceValue(widget, 
-				    resource_info[res_color_ref[i]].name, 
-				    T_Pixel) 
+	      if ( (Pixel) mvsGetResourceValue(widget,
+				    resource_info[res_color_ref[i]].name,
+				    T_Pixel)
                    != winfo->unique_color_ref[i]) {
-		  
+
 		  XtSetArg(color_args[num_color_args],
 			   resource_info[res_color_ref[i]].name,
 			   winfo->unique_color_ref[i]);
 	          num_color_args++;
-               }	  
+               }
 	  }
 	}
-	
+
 	if (num_color_args != (Cardinal) 0) {
 	    XtSetValues(widget, color_args, num_color_args);
 	    need_to_wait = 1;
 	}
-	        
+
         if (winfo->first_child != NULL) {
             widget_info_stack[stack_top++] = winfo;
             winfo = (MvsWidgetInfoRecord *)winfo->first_child;
         }
-        else 
+        else
             if (winfo->next_sibling != NULL)
                 winfo = (MvsWidgetInfoRecord *)winfo->next_sibling;
             else {
@@ -282,8 +282,8 @@ static void CheckNormalizedColors(MvsWidgetInfoRecord *widget_info)
 
                 if (stack_top == 0)
                     done = 1;
-            } 
-    } /* End while(!done) */    
+            }
+    } /* End while(!done) */
 
     /* Be sure the SetValues is going to happen */
 
@@ -294,7 +294,7 @@ static void CheckNormalizedColors(MvsWidgetInfoRecord *widget_info)
 	while (XtAppPending(app_context)) {
 	    XtAppNextEvent(app_context, &event);
 	    XtDispatchEvent(&event);
-	}	
+	}
     }
-    
+
 } /* End CheckNormalizedColors() */

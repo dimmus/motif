@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BBoard5.c /main/8 1995/07/13 18:26:24 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: BBoard5.c /main/8 1995/07/13 18:26:24 drk $
 
 /**************************************************************************
  *
- *  Create an arrow using inches and setting the width and height. 
+ *  Create an arrow using inches and setting the width and height.
  *  Reset the size, change the unit type, set the size again.
  *
  **************************************************************************/
@@ -68,7 +68,7 @@ char **argv;
 
    /*  initialize toolkit  */
    CommonTestInit(argc, argv);
-   
+
    ParseUserData (UserData, &mHeight, &mWidth);
 
    n = 0;
@@ -90,25 +90,25 @@ char **argv;
    n = 0;
    XtSetArg (args[n], XmNarrowDirection, XmARROW_LEFT); n++;
    XtSetValues (arrow[0], args, n);
-   XtAddCallback (arrow[0], XmNactivateCallback, 
+   XtAddCallback (arrow[0], XmNactivateCallback,
 		  DecrementPosition, (XtPointer) XmHORIZONTAL);
-   
+
    n = 0;
    XtSetArg (args[n], XmNarrowDirection, XmARROW_UP); n++;
    XtSetValues (arrow[1], args, n);
-   XtAddCallback(arrow[1], XmNactivateCallback, 
+   XtAddCallback(arrow[1], XmNactivateCallback,
 		 DecrementPosition, (XtPointer) XmVERTICAL);
 
    n = 0;
    XtSetArg (args[n], XmNarrowDirection, XmARROW_RIGHT); n++;
    XtSetValues (arrow[2], args, n);
-   XtAddCallback (arrow[2], XmNactivateCallback, 
+   XtAddCallback (arrow[2], XmNactivateCallback,
 		  IncrementPosition, (XtPointer) XmHORIZONTAL);
 
    n = 0;
    XtSetArg (args[n], XmNarrowDirection, XmARROW_DOWN); n++;
    XtSetValues (arrow[3], args, n);
-   XtAddCallback(arrow[3], XmNactivateCallback, 
+   XtAddCallback(arrow[3], XmNactivateCallback,
 		 IncrementPosition, (XtPointer) XmVERTICAL);
 
    XtManageChildren (arrow, 4);
@@ -185,7 +185,7 @@ XtPointer call_data;
     XtSetArg (args[0], XmNy, (current_pos - POSMOVE));
     XtSetValues (w, args, 1);
 
-    
+
   }
   else if (client_data == XmHORIZONTAL) {
     XtSetArg (args[0], XmNx, &current_pos);
@@ -208,7 +208,7 @@ Dimension *mheight, *mwidth;
 
   char *token;
   char buf[8];
-  
+
   /* initialize it */
   buf[0] = buf[1] = buf[2] = buf[3] = buf[4] = buf[5] = buf[6] = buf[7] = '\0';
 
@@ -249,6 +249,3 @@ Dimension *mheight, *mwidth;
     }
   }
 }
-      
-      
-    

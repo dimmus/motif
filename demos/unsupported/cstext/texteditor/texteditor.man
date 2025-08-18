@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 ...\" "
 .TH texteditor 1X MOTIF "Demonstration programs"
@@ -31,7 +31,7 @@
 \*Ltexteditor\*O
 .sE
 .SH DESCRIPTION
-\*Ltexteditor\*O 
+\*Ltexteditor\*O
 is a primitive text editor, based on Motif's XmCSText
 widget.  In addition to standard text editing features, it supports
 multiple views of the same underlying text, modification of the rendition
@@ -64,7 +64,7 @@ after an operation is completed.
 If this option is selected, the file selection dialog's operation will
 automatically be reset to \fBOpen\fP after an operation is completed.
 .SH "Renditions Menu"
-This menu provides commands to change the appearance of selected text.  
+This menu provides commands to change the appearance of selected text.
 .SH "Help Menu"
 This is a completely standard Help menu.
 .SH "FileSelectionBox"
@@ -77,7 +77,7 @@ Reads in the file as straight ASCII text.  Writes only the text portion of
 a file.  All rendition information is lost.
 .IP "\fBByte Stream\fP"
 Reads and writes files in Compound String Byte Stream format.  This
-preserves all rendition information.  See 
+preserves all rendition information.  See
 .IR XmCvtXmStringToByteStream(3X)
 and
 .IR XmCvtByteStreamToXmString(3X).

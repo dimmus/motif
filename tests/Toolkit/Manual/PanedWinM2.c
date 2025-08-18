@@ -68,7 +68,7 @@ XtPointer			client_data;
 XtPointer	data;
 {
 XmRowColumnCallbackStruct	*rc_data=(XmRowColumnCallbackStruct*) data ;
-    fprintf(stdout, "Widget %s was activated\n", 
+    fprintf(stdout, "Widget %s was activated\n",
 	    XrmQuarkToString(rc_data->widget->core.xrm_name));
 }
 
@@ -80,8 +80,8 @@ static XtCallbackRec PrintName_CB[] =
 
 void SetInsensitive(w, cld, cad)
 Widget w;
-XtPointer cld ; 
-XtPointer cad ; 
+XtPointer cld ;
+XtPointer cad ;
 {
     Arg args[1];
     int	n;
@@ -102,8 +102,8 @@ char		*argv[];
     Widget      Shell2, PW1, PW2;
     Widget      tokenChild1, tokenChild2, tokenChild3, tokenChild4;
     Widget	tokenChild5, tokenChild6;
-    
-    /* 
+
+    /*
      * Copy argv for use in opening second display because XtOpenDisplay
      * can destructively modify.
      */
@@ -118,22 +118,22 @@ char		*argv[];
 	printf("Couldn't perform XtMalloc for argv_lookalike!\n");
 	exit(1);
       }
-    
+
     CommonTestInit(argc, argv);
 
     /* to test P2641, we need to open a second display, and to do that */
     /* we need to get the name of a second display from the user.      */
 
     n = 0;
-    XtSetArg (args[n], XmNselectionLabelString, 
+    XtSetArg (args[n], XmNselectionLabelString,
 	      XmStringCreateLtoR ("If you wish to perform some multi-display tests,\nenter the name of a second display here (ex: workstation:0)", "charset")); n++;
-    XtSetArg (args[n], XmNokLabelString, 
+    XtSetArg (args[n], XmNokLabelString,
 	      XmStringCreateLtoR ("Perform test", "charset")); n++;
     XtSetArg (args[n], XmNcancelLabelString,
 	      XmStringCreateLtoR ("Don't perform test", "charset")); n++;
     displayPrompt = XmCreatePromptDialog (Shell1, "displayPrompt", args, n);
 
-    XtUnmanageChild (XmSelectionBoxGetChild (displayPrompt, 
+    XtUnmanageChild (XmSelectionBoxGetChild (displayPrompt,
 					     XmDIALOG_HELP_BUTTON));
 
     /* we need to set a callback on the okay button so the we only open
@@ -160,10 +160,10 @@ char		*argv[];
 					   PIR 2641 */
 
         Shell2 = XtAppCreateShell (argv_lookalike[0], "XMcommon",
-				   applicationShellWidgetClass, 
+				   applicationShellWidgetClass,
 				   secondDisplay, NULL, 0);
 
-	
+
         PW1 = XmCreatePanedWindow(Shell1, "PW1", NULL, 0);
         PW2 = XmCreatePanedWindow(Shell2, "PW2", NULL, 0);
 
@@ -174,7 +174,7 @@ char		*argv[];
 	tokenChild4 = XmCreateLabel (PW2, "tokenChild2", args, n);
 	tokenChild5 = XmCreatePushButton (PW1, "tokenChild3", args, n);
 	tokenChild6 = XmCreatePushButton (PW2, "tokenChild3", args, n);
-	
+
 	XtManageChild (tokenChild1);
 	XtManageChild (tokenChild2);
 	XtManageChild (tokenChild3);
@@ -199,17 +199,17 @@ char		*argv[];
     rc1 = XmCreatePanedWindow(Shell1, "rc1", (ArgList) args, n);
 
 
-    /* 
+    /*
      * Create the children of the first row-column manager
      */
 
     CreateButtons();
-    
+
     /*
      * Create the children of the second row-column manager
      */
 
-    XtManageChild(rc1); 
+    XtManageChild(rc1);
 
 
     CommonPause();
@@ -263,7 +263,7 @@ char * displayString;
 							   XmDIALOG_TEXT));
     /* open the display and check the return */
 
-    secondDisplay = XtOpenDisplay (app_context, displayString, 
+    secondDisplay = XtOpenDisplay (app_context, displayString,
 				   argv_lookalike[0], "XMcommon",
 				   (XrmOptionDescRec * )NULL, 0,
 				    &argc_lookalike, argv_lookalike);

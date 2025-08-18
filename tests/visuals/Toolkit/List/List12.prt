@@ -23,11 +23,11 @@
 #
 # HISTORY
 TRACE:(1) LocatePointer List1 RListItem 4
-TRACE:(2) DragComponent List1 RListItem 7 
-TRACE:(3) LocatePointer PushButton  
-TRACE:(4) ClickMB Btn1 
+TRACE:(2) DragComponent List1 RListItem 7
+TRACE:(3) LocatePointer PushButton
+TRACE:(4) ClickMB Btn1
 TRACE:(5) LocatePointer List1 RListItem 0
-TRACE:(6) ClickMB <Ctrl> Btn1 
+TRACE:(6) ClickMB <Ctrl> Btn1
 TRACE:(7) Continue
 TRACE:(8) Exit
 Exiting Test...Please Standby...

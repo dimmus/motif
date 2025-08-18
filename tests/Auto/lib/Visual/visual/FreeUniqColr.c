@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FreeUniqColr.c /main/7 1995/07/14 11:49:43 drk $"
@@ -51,7 +51,7 @@ static char rcsid[] = "$XConsortium: FreeUniqColr.c /main/7 1995/07/14 11:49:43 
 #include <AutoMessages.h>
 #include "vislib.h"
 
-/* 
+/*
    Changed for Automation to look at widgetUniqueColorInfo from the
    widget (via the widget_info struct, and not the global array
    (now not used)
@@ -62,14 +62,14 @@ MvsWidgetInfoRecord *winfo;
 Pixel pixel;
 {
   char msg_string[125];
-  
+
     if (pixel >= MAX_COLORS) {
        sprintf(msg_string, _AutoMessages[VISMSG36], pixel);
-       AutoMessage(msg_string); } 
+       AutoMessage(msg_string); }
     else {
         if (winfo->widgetUniqueColorInfo[pixel].in_use == 0){
        sprintf(msg_string, _AutoMessages[VISMSG37], pixel);
-       AutoMessage(msg_string); } 
+       AutoMessage(msg_string); }
 
         winfo->widgetUniqueColorInfo[pixel].in_use = 0;
         winfo->widgetUniqueColorInfo[pixel].widget_info = NULL;

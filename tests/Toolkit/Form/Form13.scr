@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #) A client with a form should appear. The form should be about
 #   200x100 pixels, and should have three ArrowButtons within it.
@@ -33,10 +33,10 @@
 #   widgets which are centered vertically in the form, are each 20%
 #   as wide as the form, 50% as tall as the form, and separated
 #   horizontally from the form and eachother by a space 10% as wide
-#   as the form. 
+#   as the form.
 #) Resize the client several times. You should see the arrows move
-#  and resize,  but retain the same relative positions and sizes. 
-#) Iconify and Normalize the client window. 
+#  and resize,  but retain the same relative positions and sizes.
+#) Iconify and Normalize the client window.
 
 
 CompareVisual form

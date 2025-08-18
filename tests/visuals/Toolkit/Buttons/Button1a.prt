@@ -22,21 +22,21 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual bulletin 
+TRACE:(1) CompareVisual bulletin
 TRACE:(2) Continue
 => ARM ArrowButton
 => ARM PushButton
 => ARM ToggleButton
-TRACE:(3) CompareVisual bulletin 
+TRACE:(3) CompareVisual bulletin
 TRACE:(4) Continue
 => ACTIVATE ArrowButton
 => ACTIVATE PushButton
 => ACTIVATE ToggleButton
-TRACE:(5) CompareVisual bulletin 
+TRACE:(5) CompareVisual bulletin
 TRACE:(6) Continue
 => DISARM ArrowButton
 => DISARM PushButton
 => DISARM ToggleButton
-TRACE:(7) CompareVisual bulletin 
+TRACE:(7) CompareVisual bulletin
 TRACE:(8) Exit
 Exiting Test...Please Standby...

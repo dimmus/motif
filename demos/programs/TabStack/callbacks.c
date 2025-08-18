@@ -69,7 +69,7 @@ ARG( XtPointer, client)
 GRAU( XtPointer, call)
 {
     int		exitValue = (int)client;
-    
+
     exit(exitValue);
 }
 
@@ -120,7 +120,7 @@ GRAU( XtPointer, call)
         count++;
         if ( count == CHUNK )
         {
-            valueList = 
+            valueList =
 		(String *)XtRealloc((char *)valueList,
 				    (count + CHUNK) * sizeof(String));
         }
@@ -130,7 +130,7 @@ GRAU( XtPointer, call)
     for ( i = 0; i < count; i++ )
     {
 	/*
-	 * First, extract the widget name and generate a string to 
+	 * First, extract the widget name and generate a string to
 	 * pass to BxWidgetIdsFromNames().
 	 */
 	cptr = strrchr(valueList[i], '.');
@@ -176,7 +176,7 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
 	    XtFree((char *)(valueList[i]));
 	    return;
 	}
-	
+
 	/*
 	 * Next, get the resource name to set.
 	 */
@@ -198,7 +198,7 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
         {
             rsc++;
         }
-	
+
         ptr = rsc + strlen(rsc) - 1;
         while( ptr && *ptr )
         {
@@ -216,7 +216,7 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
         {
             *ptr = '\0';
         }
-	
+
 	/*
 	 * Lastly, get the string value to which to set the resource.
 	 */
@@ -234,7 +234,7 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
 	    XtFree((char *)(valueList[i]));
 	    return;
 	}
-	
+
         ptr = start + strlen(start) - 1;
         while( ptr && *ptr )
         {
@@ -252,7 +252,7 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
         {
             *ptr = '\0';
         }
-	
+
 	/*
 	 * Now convert the widget name to a Widget ID
 	 */
@@ -262,7 +262,7 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
 	    XtFree((char *)(valueList[i]));
 	    continue;
         }
-	
+
 	/*
 	 * If the widget name conversion succeeded, we now need to get the
 	 * resource list for the widget so that we can do a resource conversion
@@ -276,5 +276,3 @@ Syntax Error - specify BxSetValuesCB data as\n\t\
 
 #undef CHUNK
 }
-
-

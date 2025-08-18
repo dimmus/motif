@@ -46,7 +46,7 @@ char *argv[];
 
   CommonTestInit (argc,argv);
 
-  n = 0; 
+  n = 0;
   mainw = XmCreateMainWindow(Shell1, "mainw", args, n);
   XtManageChild(mainw);
 
@@ -89,8 +89,8 @@ char *argv[];
   XtRealizeWidget(Shell1);
 
   rectangle_gc = ((XmPushButtonWidget)highlightpb)->primitive.highlight_GC;
-  XSetLineAttributes(XtDisplay(highlightpb), 
-                     rectangle_gc, 5, 
+  XSetLineAttributes(XtDisplay(highlightpb),
+                     rectangle_gc, 5,
                      LineSolid, CapButt, JoinMiter);
 
   CommonPause();
@@ -111,8 +111,8 @@ Widget widget;
 XtPointer data;
 XtPointer callData;
 {
-  XFillRectangle(XtDisplay(rc), XtWindow(rc), 
-                 ((XmFormWidget)rc)->manager.background_GC, 
+  XFillRectangle(XtDisplay(rc), XtWindow(rc),
+                 ((XmFormWidget)rc)->manager.background_GC,
                  10, 85, 130, 130);
 }
 
@@ -128,4 +128,3 @@ XtPointer callData;
   XtSetArg (args[n], XmNhighlightThickness, 20); n++;
   XtSetValues(highlightpb, args, n);
 }
-

@@ -2,7 +2,7 @@ XCOMM!/bin/sh
 
 XCOMM
 XCOMM make a Makefile from an Imakefile from inside or outside the sources
-XCOMM 
+XCOMM
 XCOMM $XConsortium: xmkmf.cpp /main/22 1996/09/28 16:17:05 rws $
 
 usage="usage:  $0 [-a] [top_of_sources_pathname [current_directory]]"
@@ -19,7 +19,7 @@ case "$1" in
     ;;
 esac
 
-case $# in 
+case $# in
     0) ;;
     1) topdir=$1 ;;
     2) topdir=$1  curdir=$2 ;;
@@ -30,7 +30,7 @@ case "$topdir" in
     -*) echo "$usage" 1>&2; exit 1 ;;
 esac
 
-if [ -f Makefile ]; then 
+if [ -f Makefile ]; then
     echo mv -f Makefile Makefile.bak
     mv -f Makefile Makefile.bak
 fi
@@ -44,7 +44,7 @@ fi
 echo imake $args
 case "$do_all" in
 yes)
-    imake $args && 
+    imake $args &&
     echo "make Makefiles" &&
     make Makefiles &&
     echo "make includes" &&

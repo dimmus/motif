@@ -19,17 +19,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
-# #) This is Container2 testing EXTENDED_SELECT selectionPolicy in OUTLINE 
+# #) This is Container2 testing EXTENDED_SELECT selectionPolicy in OUTLINE
 #    layoutType.
 # #) Select "ExtendedSelect" from the "Selection Policy" option menu.
 # #) Iconify the Control Panel.
 # #) Expand IconGad3 by clicking on the "C" Outline Button.
 # C)
- 
+
 LocatePointer SelectionPolicy_Option ROptionButton
 PressMB Btn1
 LocatePointer ExtendedSelect
@@ -39,7 +39,7 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) This panel is testing the Range Click, Select Mode technique.
 # #) Click Btn1 on "IconGad1". It should become selected.
 # #) You should see the following in your term window:
@@ -47,18 +47,18 @@ Continue
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad1
-# 
+#
 # #) Notice that the location cursor is a plain line rectangle.
-# #) Click on "IconGad2". It should get selected, and "IconGad1" should 
+# #) Click on "IconGad2". It should get selected, and "IconGad1" should
 #    become deselected. The location cursor is on "IconGad2".
 # #) You should see the following in your term window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad2
-# 
+#
 # C)
- 
+
 LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container2
@@ -66,20 +66,20 @@ LocatePointer IconGad2
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Press Btn1 on "IconGad3", move the pointer over "IconGad32" and
 #    release Btn1.
-# #) As soon as you press Btn1 on "IconGad3", it gets selected, and 
+# #) As soon as you press Btn1 on "IconGad3", it gets selected, and
 #    "IconGad2" gets deselected.
-# #) When moving over "IconGad32", "IconGad31" and "IconGad32" get also 
+# #) When moving over "IconGad32", "IconGad31" and "IconGad32" get also
 #    selected. The location cursor is still on "IconGad3".
-# #) When you release on "IconGad32", the following appears in your term 
+# #) When you release on "IconGad32", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 3
 #           Names of items selected: IconGad3 IconGad31 IconGad32
-# 
+#
 # C)
 
 LocatePointer IconGad3
@@ -93,23 +93,23 @@ Continue
 # #) Click BToggle on "IconGad3". It gets deselected.
 # #) Press BToggle on "IconGad1", move over "IconGad2" and release.
 #    They become selected. The location cursor stays on "IconGad1".
-# #) When you release on "IconGad2", the following appears in your term 
+# #) When you release on "IconGad2", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 4
 #           Names of items selected: IconGad1 IconGad2 IconGad31 IconGad32
-# 
+#
 # #) Repeat the previous action to unselect "IconGad1" and "IconGad2".
 #    The location cursor stay on "IconGad1".
-# #) When you release on "IconGad2", the following appears in your term 
+# #) When you release on "IconGad2", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 2
 #           Names of items selected: IconGad31 IconGad32
 # C)
- 
+
 LocatePointer IconGad3
 ClickMB <Ctrl> Btn1
 CompareVisual Container2
@@ -124,7 +124,7 @@ LocatePointer IconGad2
 ReleaseMB <Ctrl> Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Click osfSelect. "IconGad1" gets selected. It is now the anchor
 #    cursor. All the other icon gadgets are deselected.
 # #) Move your pointer over "IconGad32" and click BExtend.
@@ -135,13 +135,13 @@ Continue
 #           Reason for SelectionCallback: CR_EXTENDED_SELECT
 #           Number of items selected: 5
 #           Names of items selected: IconGad1 IconGad2 IconGad3 IconGad31 IconGad32
-# 
-# #) Press BExtend and move over "IconGad4" without releasing. 
+#
+# #) Press BExtend and move over "IconGad4" without releasing.
 # #) As you move over "IconGad4", "IconGad33" and "IconGad4" get selected.
 # #) Move back over "IconGad32", and release.
 # #) As you move back, "IconGad33" and "IconGad4" get deselected.
 # C)
- 
+
 LocatePointer Container2
 ClickKey KSelect
 CompareVisual Container2
@@ -155,14 +155,14 @@ LocatePointer IconGad32
 ReleaseMB <Shift> Btn1
 CompareVisual Container2
 Continue
- 
-# #) Using osfDown key, move the location cursor on "IconGad33". 
+
+# #) Using osfDown key, move the location cursor on "IconGad33".
 #    "IconGad33" gets selected, and the other icon gadgets are deselected.
 # #) Using <Shift> osfUp key, move the location cursor back on "IconGad32".
 # #) "IconGad32" gets also selected.
-# #) Click osfSelect. "IconGad33" gets deselected. 
+# #) Click osfSelect. "IconGad33" gets deselected.
 #    "IconGad32" is still selected.
-# 
+#
 # E)
 
 LocatePointer Container2

@@ -53,4 +53,3 @@ typedef struct _XmSpecRenderTraitRec {
 #endif
 
 #endif /* _XmSpecRenderT_H */
-

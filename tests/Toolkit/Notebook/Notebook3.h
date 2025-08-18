@@ -72,18 +72,18 @@ enum               {
 		     RESIZABLE,
 		     CREATE_CHILD,
 		     SET_VALUES_CHILD
-		     
+
 		     } ClientDataChild;
 
 
-/* This is an enumenration of the possible values for the resource 
+/* This is an enumenration of the possible values for the resource
    XmNorientation. */
 
 enum               { HORIZONTAL = 0,
 		     VERTICAL } Orientation_Types;
 
 
-/* This is an enumenration of the possible values for the resource 
+/* This is an enumenration of the possible values for the resource
    XmNbackPagePlacement. */
 
 enum                { BOTTOM_RIGHT = 0,
@@ -92,7 +92,7 @@ enum                { BOTTOM_RIGHT = 0,
 		      TOP_LEFT } Back_Page_Placement_Types;
 
 
-/* This is an enumenration of the possible values for the resource 
+/* This is an enumenration of the possible values for the resource
    XmNbindingType. */
 
 enum                 { NONE = 0,
@@ -136,32 +136,32 @@ typedef struct {
 
 
 WidgetItem WidgetStruct[] =  {
-                   "XmArrowButton", XmCreateArrowButton,   
-                   "XmArrowButtonGadget", XmCreateArrowButtonGadget,  
-		   "XmDrawnButton", XmCreateDrawnButton,   
+                   "XmArrowButton", XmCreateArrowButton,
+                   "XmArrowButtonGadget", XmCreateArrowButtonGadget,
+		   "XmDrawnButton", XmCreateDrawnButton,
 		   "XmDrawingArea", XmCreateDrawingArea,
                    "XmFileSelectionBox",XmCreateFileSelectionBox,
                    "XmForm", XmCreateForm,
 		   "XmFrame", XmCreateFrame,
-		   "XmLabel", XmCreateLabel,  
-		   "XmLabelGadget", XmCreateLabelGadget,   
+		   "XmLabel", XmCreateLabel,
+		   "XmLabelGadget", XmCreateLabelGadget,
                    "XmList", XmCreateList  ,
 		   "XmMainWindow", XmCreateMainWindow,
-                   "XmMessageBox", XmCreateMessageBox,   
+                   "XmMessageBox", XmCreateMessageBox,
 		   "XmPanedWindow",XmCreatePanedWindow,
                    "XmPushButton",   XmCreatePushButton,
-		   "XmPushButtonGadget", XmCreatePushButtonGadget,  
+		   "XmPushButtonGadget", XmCreatePushButtonGadget,
 		   "XmRowColumn", XmCreateRowColumn,
 		   "XmScale", XmCreateScale,
-                   "XmScrollBar", XmCreateScrollBar,  
+                   "XmScrollBar", XmCreateScrollBar,
 		   "XmScrolledText", XmCreateScrolledText,
-                   "XmSelectionBox", XmCreateSelectionBox,  
-		   "XmSeparator", XmCreateSeparator,                     
-                   "XmSeparatorGadget",XmCreateSeparatorGadget, 
+                   "XmSelectionBox", XmCreateSelectionBox,
+		   "XmSeparator", XmCreateSeparator,
+                   "XmSeparatorGadget",XmCreateSeparatorGadget,
 		   "XmText", XmCreateText,
-                   "XmTextField", XmCreateTextField,   
-		   "XmToggleButton", XmCreateToggleButton,   
-                   "XmToggleButtonGadget", XmCreateToggleButtonGadget,  
+                   "XmTextField", XmCreateTextField,
+		   "XmToggleButton", XmCreateToggleButton,
+                   "XmToggleButtonGadget", XmCreateToggleButtonGadget,
 		   "XmScrolledWindow", XmCreateScrolledWindow
 		   };
 
@@ -169,38 +169,35 @@ WidgetItem WidgetStruct[] =  {
 
 
 char *WidgetNames[] = {
-                   "XmArrowButton",   
-                   "XmArrowButtonGadget",   
-		   "XmDrawnButton",   
+                   "XmArrowButton",
+                   "XmArrowButtonGadget",
+		   "XmDrawnButton",
 		   "XmDrawingArea",
                    "XmFileSelectionBox",
                    "XmForm",
 		   "XmFrame",
-		   "XmLabel",   
-		   "XmLabelGadget",   
-                   "XmList",   
+		   "XmLabel",
+		   "XmLabelGadget",
+                   "XmList",
 		   "XmMainWindow",
-                   "XmMessageBox",   
+                   "XmMessageBox",
 		   "XmPanedWindow",
-                   "XmPushButton",   
-		   "XmPushButtonGadget",   
+                   "XmPushButton",
+		   "XmPushButtonGadget",
 		   "XmRowColumn",
 		   "XmScale",
-                   "XmScrollBar",   
+                   "XmScrollBar",
 		   "XmScrolledText",
-                   "XmSelectionBox",   
-		   "XmSeparator",                      
-                   "XmSeparatorGadget",   
+                   "XmSelectionBox",
+		   "XmSeparator",
+                   "XmSeparatorGadget",
 		   "XmText",
-                   "XmTextField",   
-		   "XmToggleButton",   
-                   "XmToggleButtonGadget",  
+                   "XmTextField",
+		   "XmToggleButton",
+                   "XmToggleButtonGadget",
 		   "XmScrolledWindow",
 
 		   };
 
 
 int num_widgets = XtNumber(WidgetNames);
-
-
-

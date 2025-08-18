@@ -38,7 +38,7 @@ needed tools to use the capabilities of Wsm.  Each window menu will be
 modified by adding the following items:
 
 	Occupy...
-		This will display a dialog window allowing you to 
+		This will display a dialog window allowing you to
 		select which workspaces the associated window should
 		be duplicated into.  The dialog also allows either
 		Link or Copy the window to each of the selected
@@ -65,7 +65,7 @@ by adding the following commands:
 
 	Switch Workspace
 		This is a cascade menu which will cascade to a menu
-		containing an entry for each workspace.  Selecting 
+		containing an entry for each workspace.  Selecting
 		an item will cause Wsm to switch to the corresponding
 		workspace.
 
@@ -230,12 +230,3 @@ Wsm supports the following command-line options:
 	-showWSDialog, -s
 		If True, a menuBar is displayed in the Wsm main dialog
 		window.  The default is True.
-
-
-
-
-
-
-
-
-

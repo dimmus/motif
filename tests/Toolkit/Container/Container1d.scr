@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1d.Dat -u d".
 # C)
-# 
+#
 # #) The container widget should be displayed in its SMALL_ICON view.
 # #) Four IconGadgets with the pixmap part displaying a "S" within
 #    a black box, and the label part displaying the strings "IconGad1",
@@ -42,7 +42,7 @@
 Continue
 CompareVisual Container1d
 Continue
- 
+
 # #) The selectionPolicy is the default EXTENDED_SELECT and the
 #    selectionTechnique is the TOUCH_ONLY.
 # #) Click BSelect in the background of Container where there is no item.
@@ -52,7 +52,7 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 0
 #       Names of items selected:
-# 
+#
 # #) Press BSelect on "IconGad1"
 # #) "IconGad1" gets selected.
 # #) With BSelect pressed, drag the pointer over item "IconGad4", touching
@@ -64,12 +64,12 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 3
 #       Names of items selected: IconGad1 IconGad3 IconGad4
-# 
+#
 # #) Click BSelect in the background of Container where there is no item.
 #    All selected items should get deselected.
 # C)
 
-LocatePointerXYRel Container1d 10 10 
+LocatePointerXYRel Container1d 10 10
 ClickMB Btn1
 CompareVisual Container1d
 LocatePointer IconGad1
@@ -80,10 +80,10 @@ LocatePointerXYRel Container1d 400 450
 LocatePointer IconGad4
 ReleaseMB Btn1
 CompareVisual Container1d
-LocatePointerXYRel Container1d 10 10 
+LocatePointerXYRel Container1d 10 10
 ClickMB Btn1
 CompareVisual Container1d
 Continue
- 
+
 # E)
 Exit

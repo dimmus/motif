@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -214,11 +214,11 @@ static XtGeometryResult QueryGeometry(Widget w,
 static void _XmTextSetString(Widget widget,
 			     char *value);
 
-static XtPointer TextGetValue(Widget w, 
+static XtPointer TextGetValue(Widget w,
 			      int format);
 
-static void TextSetValue(Widget w, 
-			 XtPointer s, 
+static void TextSetValue(Widget w,
+			 XtPointer s,
 			 int format);
 
 static int TextPreferredValue(Widget w);
@@ -244,7 +244,7 @@ static void ResetUnder(XmTextWidget tw);
 /********    End Static Function Declarations    ********/
 
 /*
- * For resource list management. 
+ * For resource list management.
  */
 
 static XmTextSourceRec nullsource;
@@ -310,8 +310,8 @@ static XtResource resources[] =
   },
 
   {
-    XmNmodifyVerifyCallbackWcs, XmCCallback, XmRCallback, 
-    sizeof(XtCallbackList), 
+    XmNmodifyVerifyCallbackWcs, XmCCallback, XmRCallback,
+    sizeof(XtCallbackList),
     XtOffsetOf(struct _XmTextRec, text.wcs_modify_verify_callback),
     XmRCallback, NULL
   },
@@ -490,7 +490,7 @@ static XmPrimitiveClassExtRec _XmTextPrimClassExtRec = {
 
 externaldef(xmtextclassrec) XmTextClassRec xmTextClassRec = {
   {
-/* core_class fields */	
+/* core_class fields */
     /* superclass	  */	(WidgetClass) &xmPrimitiveClassRec,
     /* class_name	  */	"XmText",
     /* widget_size	  */	sizeof(XmTextRec),
@@ -526,7 +526,7 @@ externaldef(xmtextclassrec) XmTextClassRec xmTextClassRec = {
   },
 
 /* primitive_class fields  */
-  {				
+  {
     XmInheritBorderHighlight,             /* Primitive border_highlight   */
     XmInheritBorderUnhighlight,           /* Primitive border_unhighlight */
     NULL,         		          /* translations                 */
@@ -551,21 +551,21 @@ externaldef(xmtextwidgetclass) WidgetClass xmTextWidgetClass =
  ****************************************************************/
 
 /* ARGSUSED */
-static void 
+static void
 NullAddWidget(XmTextSource source,
 	      XmTextWidget tw)
 {
 }
 
 /* ARGSUSED */
-static void 
+static void
 NullRemoveWidget(XmTextSource source,
 		 XmTextWidget tw)
 {
 }
 
 /* ARGSUSED */
-static XmTextPosition 
+static XmTextPosition
 NullRead(XmTextSource source,
 	 XmTextPosition position,
 	 XmTextPosition last_position,
@@ -574,12 +574,12 @@ NullRead(XmTextSource source,
   block->ptr = NULL;
   block->length = 0;
   block->format = XmFMT_8_BIT;
-  
+
   return 0;
 }
 
 /* ARGSUSED */
-static XmTextStatus 
+static XmTextStatus
 NullReplace(XmTextWidget tw,
 	    XEvent * event,
 	    XmTextPosition *start,
@@ -595,7 +595,7 @@ NullReplace(XmTextWidget tw,
 }
 
 /* ARGSUSED */
-static XmTextPosition 
+static XmTextPosition
 NullScan(XmTextSource source,
 	 XmTextPosition position,
 	 XmTextScanType sType,
@@ -609,9 +609,9 @@ NullScan(XmTextSource source,
 {
   return 0;
 }
- 
+
 /* ARGSUSED */
-static Boolean 
+static Boolean
 NullGetSelection(XmTextSource source,
 		 XmTextPosition *start,
 		 XmTextPosition *end)
@@ -620,7 +620,7 @@ NullGetSelection(XmTextSource source,
 }
 
 /* ARGSUSED */
-static void 
+static void
 NullSetSelection(XmTextSource source,
 		 XmTextPosition start,
 		 XmTextPosition end,
@@ -628,7 +628,7 @@ NullSetSelection(XmTextSource source,
 {
 }
 
-static void 
+static void
 _XmCreateCutBuffers(Widget w)
 {
   static XContext context = (XContext)NULL;
@@ -646,17 +646,17 @@ _XmCreateCutBuffers(Widget w)
   if (XFindContext(dpy, (Window)screen, local_context, &tmp)) {
     XmTextContextData ctx_data;
     Widget xm_display = (Widget) XmGetXmDisplay(dpy);
-    
+
     ctx_data = (XmTextContextData) XtMalloc(sizeof(XmTextContextDataRec));
-    
+
     ctx_data->screen = screen;
     ctx_data->context = local_context;
     ctx_data->type = '\0';
-    
+
     XtAddCallback(xm_display, XmNdestroyCallback,
 		  (XtCallbackProc) _XmTextFreeContextData,
 		  (XtPointer) ctx_data);
-    
+
     XChangeProperty(dpy, RootWindowOfScreen(screen), XA_CUT_BUFFER0,
 		    XA_STRING, 8, PropModeAppend, NULL, 0);
     XChangeProperty(dpy, RootWindowOfScreen(screen), XA_CUT_BUFFER1,
@@ -673,7 +673,7 @@ _XmCreateCutBuffers(Widget w)
 		    XA_STRING, 8, PropModeAppend, NULL, 0);
     XChangeProperty(dpy, RootWindowOfScreen(screen), XA_CUT_BUFFER7,
 		    XA_STRING, 8, PropModeAppend, NULL, 0);
-    
+
     XSaveContext(dpy, (Window)screen, local_context, tmp);
   }
 }
@@ -694,8 +694,8 @@ GetSecResData(WidgetClass w_class,
 	      XmSecondaryResourceData **secResDataRtn)
 {
   XmSecondaryResourceData               *secResDataPtr;
-  
-  secResDataPtr = 
+
+  secResDataPtr =
     (XmSecondaryResourceData *) XtMalloc(sizeof(XmSecondaryResourceData) * 2);
 
   _XmTextInputGetSecResData(&secResDataPtr[0]);
@@ -724,7 +724,7 @@ static XmConst XmAccessTextualTraitRec TextCS = {
  *     Translation table.
  *
  ****************************************************************/
-static void 
+static void
 ClassPartInitialize(WidgetClass wc)
 {
   XmTextWidgetClass twc = (XmTextWidgetClass) wc;
@@ -736,24 +736,24 @@ ClassPartInitialize(WidgetClass wc)
   super = twc->core_class.superclass;
   wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
   scePtr = _XmGetPrimitiveClassExtPtr(super, NULLQUARK);
-  
+
   if ((*wcePtr)->widget_baseline == XmInheritBaselineProc)
     (*wcePtr)->widget_baseline = (*scePtr)->widget_baseline;
-  
+
   if ((*wcePtr)->widget_display_rect == XmInheritDisplayRectProc)
     (*wcePtr)->widget_display_rect  = (*scePtr)->widget_display_rect;
-  
+
   event_bindings = (char *)XtMalloc(strlen(_XmTextEventBindings1) +
 				    strlen(_XmTextEventBindings2) +
 				    strlen(_XmTextEventBindings3) + 1);
   strcpy(event_bindings, _XmTextEventBindings1);
   strcat(event_bindings, _XmTextEventBindings2);
   strcat(event_bindings, _XmTextEventBindings3);
-  xmTextClassRec.core_class.tm_table = 
+  xmTextClassRec.core_class.tm_table =
     (String) XtParseTranslationTable(event_bindings);
-  
+
   XtFree(event_bindings);
-  
+
   _XmFastSubclassInit (wc, XmTEXT_BIT);
   _XmProcessUnlock();
 }
@@ -761,16 +761,16 @@ ClassPartInitialize(WidgetClass wc)
 /****************************************************************
  *
  * ClassInitialize
- *   
+ *
  *
  ****************************************************************/
-static void 
+static void
 ClassInitialize(void)
 {
   xmTextClassRec.core_class.actions =
     (XtActionList)_XmdefaultTextActionsTable;
   xmTextClassRec.core_class.num_actions = _XmdefaultTextActionsTableSize;
-  
+
   nullsource.AddWidget = NullAddWidget;
   nullsource.RemoveWidget = NullRemoveWidget;
   nullsource.ReadSource = NullRead;
@@ -790,19 +790,19 @@ ClassInitialize(void)
 /*
  * Mark the given range of text to be redrawn.
  */
-static void 
+static void
 AddRedraw(XmTextWidget tw,
 	  XmTextPosition left,
 	  XmTextPosition right)
 {
   RangeRec *r = tw->text.repaint.range;
   int i;
-  
+
   if (left == tw->text.last_position &&
       tw->text.output->data->number_lines >= 1)
     left = (*tw->text.source->Scan)(tw->text.source, left,
 					XmSELECT_POSITION, XmsdLeft, 1, TRUE);
-  
+
   if (left < right) {
     for (i = 0; i < tw->text.repaint.number; i++) {
       if (left <= r[i].to && right >= r[i].from) {
@@ -827,7 +827,7 @@ AddRedraw(XmTextWidget tw,
  * pointer to the record.  The third argument indicates whether we are probing
  * the left or right edge of a highlighting range.
  */
-static _XmHighlightRec * 
+static _XmHighlightRec *
 FindHighlight(XmTextWidget tw,
 	      XmTextPosition position,
 	      XmTextScanDirection dir)
@@ -854,7 +854,7 @@ FindHighlight(XmTextWidget tw,
  * Redraw the specified range of text.  Should only be called by
  * RedrawChanges(), below (as well as calling itself recursively).
  */
-static void 
+static void
 DisplayText(XmTextWidget tw,
 	    XmTextPosition updateFrom,
 	    XmTextPosition updateTo)
@@ -862,26 +862,26 @@ DisplayText(XmTextWidget tw,
   LineNum i;
   XmTextPosition nextstart;
   _XmHighlightRec *l1, *l2;
-  
+
   if (updateFrom < tw->text.top_character)
     updateFrom = tw->text.top_character;
   if (updateTo > tw->text.bottom_position)
     updateTo = tw->text.bottom_position;
   if (updateFrom > updateTo) return;
-  
+
   l1 = FindHighlight(tw, updateFrom, XmsdLeft);
   l2 = FindHighlight(tw, updateTo, XmsdRight);
   if ( (l1 != l2) && (l1->position != l2->position) ) {
     DisplayText(tw, updateFrom, l2->position);
     updateFrom = l2->position;
   }
-  
+
   /*
    * Once we get here, we need to paint all of the text from updateFrom to
    * updateTo with current highlightmode.  We have to break this into
    * separate lines, and then call the output routine for each line.
    */
-  
+
   for (i = _XmTextPosToLine(tw, updateFrom);
        updateFrom <= updateTo && i < tw->text.number_lines;
        i++) {
@@ -894,17 +894,17 @@ DisplayText(XmTextWidget tw,
 
 /*
  * Redraw the changed areas of the text.  This should only be called by
- * Redisplay(), below. 
+ * Redisplay(), below.
  */
-static void 
+static void
 RedrawChanges(XmTextWidget tw)
 {
   RangeRec *r = tw->text.repaint.range;
   XmTextPosition updateFrom, updateTo;
   int w, i;
-  
+
   EraseInsertionPoint(tw);
-  
+
   while (tw->text.repaint.number != 0) {
     updateFrom = r[0].from;
     w = 0;
@@ -936,8 +936,8 @@ RedrawChanges(XmTextWidget tw)
   }
   TextDrawInsertionPoint(tw);
 }
-    
-static void 
+
+static void
 DoMove(XmTextWidget tw,
        int startcopy,
        int endcopy,
@@ -945,7 +945,7 @@ DoMove(XmTextWidget tw,
 {
   Line line = tw->text.line;
   LineNum i;
-  
+
   EraseInsertionPoint(tw);
   if (tw->text.disable_depth == 0 &&
       (*tw->text.output->MoveLines)(tw, (LineNum) startcopy,
@@ -964,7 +964,7 @@ DoMove(XmTextWidget tw,
  * Find the starting position of the line that is delta lines away from the
  * line starting with position start.
  */
-XmTextPosition 
+XmTextPosition
 _XmTextFindScroll(XmTextWidget tw,
 		  XmTextPosition start,
 		  int delta)
@@ -972,18 +972,18 @@ _XmTextFindScroll(XmTextWidget tw,
   register XmTextLineTable line_table;
   register unsigned int t_index;
   register unsigned int max_index = 0;
-  
+
   if (tw->text.total_lines <= tw->text.table_index)
     tw->text.table_index = tw->text.total_lines - 1;
- 
- 
+
+
   line_table = tw->text.line_table;
   t_index = tw->text.table_index;
-  
+
   max_index = tw->text.total_lines - 1;
-  
-  
-  
+
+
+
   /* look forward to find the current record */
   if (line_table[t_index].start_pos < (unsigned int) start) {
     while (t_index <= max_index &&
@@ -995,9 +995,9 @@ _XmTextFindScroll(XmTextWidget tw,
 	  	t_index++;
   } else
     /* look backward to find the current record */
-    while (t_index && 
+    while (t_index &&
 	   line_table[t_index].start_pos > (unsigned int) start) t_index--;
-  
+
   if (delta > 0) {
     t_index += delta;
     if (t_index > tw->text.total_lines - 1)
@@ -1008,18 +1008,18 @@ _XmTextFindScroll(XmTextWidget tw,
     else
       t_index = 0;
   }
-  
+
   start = line_table[t_index].start_pos;
-  
+
   tw->text.table_index = t_index;
-  
+
   return start;
 }
 
-/* 
+/*
  * Refigure the line breaks in this widget.
  */
-static void 
+static void
 RefigureLines(XmTextWidget tw)
 {
   Line line = tw->text.line;
@@ -1028,7 +1028,7 @@ RefigureLines(XmTextWidget tw)
   static XmTextPosition tell_output_force_display = -1;
   int oldNumLines = tw->text.number_lines;
   int startcopy, endcopy, destcopy, lastcopy; /* %%% Document! */
-  
+
   if (tw->text.in_refigure_lines || !tw->text.needs_refigure_lines)
     return;
   tw->text.in_refigure_lines = TRUE;
@@ -1038,8 +1038,8 @@ RefigureLines(XmTextWidget tw)
 
   memcpy((void *) oldline, (void *) line,
 	 (size_t) (oldNumLines + 1) * sizeof(LineRec));
-  
-  
+
+
   if (tw->text.pending_scroll != 0) {
     tw->text.new_top = _XmTextFindScroll(tw, tw->text.new_top,
 					     tw->text.pending_scroll);
@@ -1050,7 +1050,7 @@ RefigureLines(XmTextWidget tw)
   line[0].start = tw->text.top_character = tw->text.new_top;
   line[0].past_end = FALSE;
   line[0].extra = NULL;
-  
+
   tw->text.number_lines = 0;
   j = 0;
   startcopy = endcopy = lastcopy = destcopy = -99;
@@ -1058,7 +1058,7 @@ RefigureLines(XmTextWidget tw)
     if (i+2 > tw->text.maximum_lines) {
       tw->text.maximum_lines = i+2;
       line = tw->text.line = (Line)
-	XtRealloc((char *)line, 
+	XtRealloc((char *)line,
 		  tw->text.maximum_lines * sizeof(LineRec));
     }
     while (j < oldNumLines && oldline[j].start < line[i].start)
@@ -1075,7 +1075,7 @@ RefigureLines(XmTextWidget tw)
 	!(*tw->text.output->MeasureLine)(tw, i, line[i].start,
 					     &line[i+1].start, &line[i].extra);
       line[i+1].extra = NULL;
-      if (!line[i].past_end && 
+      if (!line[i].past_end &&
 	  (line[i+1].start == PASTENDPOS) &&
 	  (line[i].start != PASTENDPOS))
 	AddRedraw(tw, line[i].start, tw->text.last_position);
@@ -1085,7 +1085,7 @@ RefigureLines(XmTextWidget tw)
       line[i].past_end =
 	!(*tw->text.output->MeasureLine)(tw, i, line[i].start,
 					     NULL, NULL);
-      
+
       line[i+1].start = oldline[j+1].start;
       line[i+1].extra = oldline[j+1].extra;
     }
@@ -1109,7 +1109,7 @@ RefigureLines(XmTextWidget tw)
 	    /* This line was stomped by a previous move. */
 	    AddRedraw(tw, line[i].start, line[i+1].start);
 	  } else {
-	    if (startcopy >= 0) 
+	    if (startcopy >= 0)
 	      DoMove(tw, startcopy, endcopy, destcopy);
 	    startcopy = endcopy = j;
 	    destcopy = lastcopy = i;
@@ -1198,36 +1198,36 @@ RemoveLines(XmTextWidget tw,
 	    unsigned int cur_index)
 {
   if (!num_lines) return;
-  
+
   /* move the existing lines at the end of the buffer */
   if (tw->text.total_lines > cur_index)
-    memmove((void *) &tw->text.line_table[cur_index - num_lines], 
+    memmove((void *) &tw->text.line_table[cur_index - num_lines],
 	    (void *) &tw->text.line_table[cur_index],
 	    (size_t) ((tw->text.total_lines - (cur_index)) *
 		      sizeof (XmTextLineTableRec)));
-  
+
   /* reduce total line count */
   tw->text.total_lines -= num_lines;
-  
+
   /* fix for bug 5166 */
   if (tw->text.total_lines <= tw->text.table_index)
     tw->text.table_index = tw->text.total_lines - 1;
-  
-  
+
+
   /* Shrink Table if Necessary */
   if ((tw->text.table_size > TABLE_INCREMENT &&
        tw->text.total_lines <= tw->text.table_size-TABLE_INCREMENT) ||
       tw->text.total_lines <= tw->text.table_size >> 1) {
-    
+
     tw->text.table_size = INIT_TABLE_SIZE;
-    
+
     while (tw->text.total_lines >= tw->text.table_size) {
       if (tw->text.table_size < TABLE_INCREMENT)
 	tw->text.table_size *= 2;
       else
 	tw->text.table_size += TABLE_INCREMENT;
     }
-    
+
     tw->text.line_table = (XmTextLineTable)
       XtRealloc((char *) tw->text.line_table,
 		tw->text.table_size * sizeof(XmTextLineTableRec));
@@ -1248,7 +1248,7 @@ AddLines(XmTextWidget tw,
   cur_index = current_index;
   temp_index = tmp_index;
   size_needed = tw->text.total_lines + temp_index;
-  
+
   /* make sure table is big enough to handle the additional lines */
   if (tw->text.table_size < size_needed) {
     while (tw->text.table_size < size_needed)
@@ -1260,23 +1260,23 @@ AddLines(XmTextWidget tw,
       XtRealloc((char *) tw->text.line_table,
 		tw->text.table_size * sizeof(XmTextLineTableRec));
   }
-  
+
   /* move the existing lines at the end of the buffer */
   if (tw->text.total_lines > cur_index)
-    memmove((void *) &tw->text.line_table[cur_index + temp_index], 
+    memmove((void *) &tw->text.line_table[cur_index + temp_index],
 	    (void *) &tw->text.line_table[cur_index],
 	    (size_t) ((tw->text.total_lines - cur_index) *
 		      sizeof (XmTextLineTableRec)));
-  
+
   tw->text.total_lines += temp_index;
-  
+
   /* Add the lines from the temp table */
   if (temp_table)
     for (i = 0; i < temp_index; i++, cur_index++)
       tw->text.line_table[cur_index] = temp_table[i];
 }
 
-void 
+void
 _XmTextRealignLineTable(XmTextWidget tw,
 			XmTextLineTable *temp_table,
 			int *temp_table_size,
@@ -1289,7 +1289,7 @@ _XmTextRealignLineTable(XmTextWidget tw,
   register XmTextPosition line_end;
   register XmTextPosition next_start;
   XmTextLineTable line_table;
-  
+
   if (temp_table) {
     line_table = *temp_table;
     table_size = *temp_table_size;
@@ -1297,10 +1297,10 @@ _XmTextRealignLineTable(XmTextWidget tw,
     line_table = tw->text.line_table;
     table_size = tw->text.table_size;
   }
-  
+
   line_table[cur_index].start_pos = next_start = cur_start;
   cur_index++;
-  
+
   line_end = (*tw->text.source->Scan)(tw->text.source, cur_start,
 					  XmSELECT_LINE, XmsdRight, 1, TRUE);
   while (next_start < cur_end) {
@@ -1322,7 +1322,7 @@ _XmTextRealignLineTable(XmTextWidget tw,
 	table_size *= 2;
       else
 	table_size += TABLE_INCREMENT;
-      
+
       line_table = (XmTextLineTable) XtRealloc((char *)line_table,
 					       table_size *
 					       sizeof(XmTextLineTableRec));
@@ -1338,7 +1338,7 @@ _XmTextRealignLineTable(XmTextWidget tw,
     cur_index++;
     cur_start = next_start;
   }
-  
+
   if (temp_table) {
     *temp_table = line_table;
     *temp_table_size = cur_index;
@@ -1355,14 +1355,14 @@ InitializeLineTable(XmTextWidget tw,
 {
   register unsigned int t_index;
   register XmTextLineTable line_table;
-  
+
   line_table = (XmTextLineTable) XtMalloc(size * sizeof(XmTextLineTableRec));
-  
+
   for (t_index = 0; t_index < size; t_index++) {
     line_table[t_index].start_pos = 0;
     line_table[t_index].virt_line = 0;
   }
-  
+
   tw->text.line_table = line_table;
   tw->text.table_index = 0;
   tw->text.table_size = size;
@@ -1376,12 +1376,12 @@ _XmTextGetTableIndex(XmTextWidget tw,
   register unsigned int cur_index;
   register unsigned int max_index;
   register XmTextPosition position;
-  
+
   position = pos;
   max_index = tw->text.total_lines - 1;
   line_table = tw->text.line_table;
   cur_index = tw->text.table_index;
-  
+
   /* look forward to find the current record */
   if (line_table[cur_index].start_pos < (unsigned int) position) {
     while (cur_index < max_index &&
@@ -1394,13 +1394,13 @@ _XmTextGetTableIndex(XmTextWidget tw,
     while (cur_index &&
 	   line_table[cur_index].start_pos > (unsigned int) position)
       cur_index--;
-  
+
   return (cur_index);
 }
 
 
 
-void 
+void
 _XmTextUpdateLineTable(Widget widget,
 		       XmTextPosition start,
 		       XmTextPosition end,
@@ -1427,16 +1427,16 @@ _XmTextUpdateLineTable(Widget widget,
   int diff = 0;
   int block_num_chars = 0;
   int char_size = 0;
-  
+
   lines_avail = 0;
   max_index = tw->text.total_lines - 1;
-  if (tw->text.char_size != 1) 
+  if (tw->text.char_size != 1)
     block_num_chars = _XmTextCountCharacters(block->ptr, block->length);
   else
     block_num_chars = block->length;
   delta = block_num_chars - (end - start);
   length = block_num_chars;
-  
+
   if (tw->text.line_table == NULL)
   {
     if (tw->text.edit_mode == XmSINGLE_LINE_EDIT)
@@ -1450,25 +1450,25 @@ _XmTextUpdateLineTable(Widget widget,
   }
   /* if there is no change or we expect RelignLineTable()
      to be called before the line table is necessary */
-  if ((start == end && length == 0) || 
+  if ((start == end && length == 0) ||
       (word_wrap && !XtIsRealized(widget)
        && XmIsScrolledWindow(XtParent(widget))
        && XtIsShell(XtParent(XtParent(widget))))) {
     return;
   }
-  
+
   line_table = tw->text.line_table;
-  
+
   cur_index = _XmTextGetTableIndex(tw, start);
   top_index = _XmTextGetTableIndex(tw, tw->text.top_character);
-  
+
   begin_index = start_index = end_index = cur_index;
-  
+
   if (word_wrap && delta > 0)
     cur_end = end + delta;
   else
     cur_end = end;
-  
+
   /* Find the cur_end position.
      Count the number of lines that were deleted. */
   if (end > start) {
@@ -1483,21 +1483,21 @@ _XmTextUpdateLineTable(Widget widget,
       lines_avail++;
     }
   }
-  
+
   cur_index = end_index;
-  
+
   if (word_wrap) {
     register int i;
     XmTextLineTable temp_table = NULL;
     int temp_table_size = 0;
-    
+
     if (line_table[start_index].virt_line) start_index--;
 
     begin_index = start_index;
-    
+
     /* get the start position of the line at the start index. */
     cur_start = line_table[begin_index].start_pos;
-    
+
     /* If we are not at the end of the table, */
     if (cur_index < max_index) {
 
@@ -1519,42 +1519,42 @@ _XmTextUpdateLineTable(Widget widget,
 	  if (!temp_table_size) temp_table_size++;
 	  /* do initial allocation of the temp_table */
 	  temp_table = (XmTextLineTable) XtMalloc(temp_table_size *
-						  sizeof(XmTextLineTableRec)); 
+						  sizeof(XmTextLineTableRec));
 	  /* Determine the lines that have changed. */
 	  _XmTextRealignLineTable(tw, &temp_table, &temp_table_size,
 				  0, cur_start, cur_end + delta);
-      
+
 	  /* Compute the difference in the number of lines that have changed */
 	  diff = temp_table_size - (cur_index - begin_index);
-	  
+
 	  /* if new/wrapped lines were added, push line down*/
 	  if (diff > 0)
 	      AddLines(tw, NULL, diff, cur_index);
 	  /* if new/wrapped lines were deleted, move line up */
 	  else
 	      RemoveLines(tw, -diff, cur_index);
-	  
+
 	  /*
 	   * The line table may have been realloc'd in any of the three
 	   * previous function calls, so it must be reassigned to prevent
 	   * a stale pointer.
 	   */
 	  line_table = tw->text.line_table;
-	  
+
 	  /* Bypass the first entry in the temp_table */
 	  begin_index++;
-	  
+
 	  /* Add the lines from the temp table */
 	  for (i = 1; i < temp_table_size; i++, begin_index++)
 	      line_table[begin_index] = temp_table[i];
-	  
+
 	  /* Free temp table */
 	  XtFree((char *)temp_table);
-      
+
 	  /* Adjust the cur_index by the number of lines that changed. */
 	  cur_index += diff;
 	  max_index += diff;
-      
+
 	  /* Adjust start values in table by the amount of change */
 	  while (cur_index <= max_index) {
 	      line_table[cur_index].start_pos += delta;
@@ -1564,7 +1564,7 @@ _XmTextUpdateLineTable(Widget widget,
 	  /* we are at the end of the table */
 	  _XmTextRealignLineTable(tw, NULL, 0, begin_index,
 				  cur_start, PASTENDPOS);
-	
+
     } else
       /* add lines to the end */
       _XmTextRealignLineTable(tw, NULL, 0, begin_index,
@@ -1574,18 +1574,18 @@ _XmTextUpdateLineTable(Widget widget,
     register XmTextLineTable temp_table;
     register int temp_table_size;
     register int temp_index;
-    
+
     temp_table = NULL;
     temp_table_size = 0;
     temp_index = 0;
     ptr = block->ptr;
     cur_start = start;
-    
+
     while (cur_index < max_index) {
       cur_index++;
       line_table[cur_index].start_pos += delta;
     }
-    
+
     if (tw->text.char_size == 1) {
       char *nl;
       while (length > 0 && (nl = (char *)memchr(ptr, '\012', length)) != NULL) {
@@ -1601,7 +1601,7 @@ _XmTextUpdateLineTable(Widget widget,
 	  if (temp_index >= temp_table_size) {
 	    if (!temp_table_size) {
 	      if (tw->text.output->data->columns > 1) {
-		temp_table_size = length / 
+		temp_table_size = length /
 		  (tw->text.output->data->columns / 2);
 		if (!temp_table_size) temp_table_size = 1;
 	      } else {
@@ -1662,12 +1662,12 @@ _XmTextUpdateLineTable(Widget widget,
 	}
       }
     }
-    
+
     /* add a block of lines to the line table */
     if (temp_index) {
       AddLines(tw, temp_table, temp_index, begin_index + 1);
     }
-    
+
     /* remove lines that are no longer necessary */
     if (lines_avail) {
       RemoveLines(tw, lines_avail, end_index + 1);
@@ -1681,10 +1681,10 @@ _XmTextUpdateLineTable(Widget widget,
     line_table = tw->text.line_table;
 
     diff = temp_index - lines_avail;
-    
+
     if (temp_table) XtFree((char *)temp_table);
   }
-  
+
   if (update) {
     if (start < tw->text.top_character) {
       if (end < tw->text.top_character) {
@@ -1707,22 +1707,22 @@ _XmTextUpdateLineTable(Widget widget,
       }
       tw->text.top_character = tw->text.new_top;
       tw->text.forget_past = MIN(tw->text.forget_past, tw->text.new_top);
-      
+
       tw->text.top_line = _XmTextGetTableIndex(tw, tw->text.new_top);
-      
-      if (tw->text.top_line < 0) 
+
+      if (tw->text.top_line < 0)
 	tw->text.top_line = 0;
-      
+
       if (tw->text.top_line > tw->text.total_lines)
 	tw->text.top_line = tw->text.total_lines - 1;
     }
-    
+
     if (tw->text.table_index > tw->text.total_lines)
       tw->text.table_index = tw->text.total_lines;
-    
+
 #ifdef FIX_1367
     if (tw->text.on_or_off == on) {
-      XmTextPosition cursorPos = tw->text.cursor_position;    
+      XmTextPosition cursorPos = tw->text.cursor_position;
       if (start < tw->text.cursor_position) {
         if (tw->text.cursor_position < end) {
 	  if (tw->text.cursor_position - start <= block_num_chars)
@@ -1760,7 +1760,7 @@ _XmTextUpdateLineTable(Widget widget,
  * Compare the old_highlight list and the highlight list, determine what
  * changed, and call AddRedraw with the changed areas.
  */
-static void 
+static void
 FindHighlightingChanges(XmTextWidget tw)
 {
   int n1 = tw->text.old_highlight.number;
@@ -1769,7 +1769,7 @@ FindHighlightingChanges(XmTextWidget tw)
   _XmHighlightRec *l2 = tw->text.highlight.list;
   int i1, i2;
   XmTextPosition next1, next2, last_position;
-  
+
   i1 = i2 = 0;
   last_position = 0;
   while (i1 < n1 && i2 < n2) {
@@ -1791,34 +1791,34 @@ FindHighlightingChanges(XmTextWidget tw)
  * stuff that has been pending. Prevent recursive calls and text redisplays
  * during destroys
  */
-static void 
+static void
 Redisplay(XmTextWidget tw)
 {
    /* Prevent recursive calls or text redisplay during detroys. */
   if (tw->text.in_redisplay || tw->core.being_destroyed ||
       tw->text.disable_depth != 0 || !XtIsRealized((Widget)tw)) return;
-  
+
   EraseInsertionPoint(tw);
-  
+
   tw->text.in_redisplay = TRUE;
-  
+
   if (tw->text.needs_refigure_lines) RefigureLines(tw);
   tw->text.needs_redisplay = FALSE;
-  
+
   if (tw->text.highlight_changed) {
     FindHighlightingChanges(tw);
     tw->text.highlight_changed = FALSE;
   }
-  
+
   RedrawChanges(tw);
-  
+
   /* Can be caused by auto-horiz scrolling... */
   if (tw->text.needs_redisplay) {
     RedrawChanges(tw);
     tw->text.needs_redisplay = FALSE;
   }
   tw->text.in_redisplay = FALSE;
-  
+
   TextDrawInsertionPoint(tw);
 }
 
@@ -1834,7 +1834,7 @@ Redisplay(XmTextWidget tw)
  * Mark the given range of text to be redrawn.
  */
 
-void 
+void
 _XmTextMarkRedraw(XmTextWidget tw,
 		  XmTextPosition left,
 		  XmTextPosition right)
@@ -1850,14 +1850,14 @@ _XmTextMarkRedraw(XmTextWidget tw,
 /*
  * Return the number of lines in the linetable.
  */
-LineNum 
+LineNum
 _XmTextNumLines(XmTextWidget tw)
 {
   if (tw->text.needs_refigure_lines) RefigureLines(tw);
   return tw->text.number_lines;
 }
 
-void 
+void
 _XmTextLineInfo(XmTextWidget tw,
 		LineNum line,
 		XmTextPosition *startpos,
@@ -1869,7 +1869,7 @@ _XmTextLineInfo(XmTextWidget tw,
     if (extra) *extra = tw->text.line[line].extra;
   } else {
     if (startpos) {
-      unsigned int cur_index = 
+      unsigned int cur_index =
 	_XmTextGetTableIndex(tw, tw->text.line[line - 1].start);
       if (cur_index < tw->text.total_lines - 1)
 	*startpos = tw->text.line_table[cur_index + 1].start_pos;
@@ -1884,7 +1884,7 @@ _XmTextLineInfo(XmTextWidget tw,
  * Return the line number containing the given position.  If text currently
  * knows of no line containing that position, returns NOLINE.
  */
-LineNum 
+LineNum
 _XmTextPosToLine(XmTextWidget tw,
 		 XmTextPosition position)
 {
@@ -1897,7 +1897,7 @@ _XmTextPosToLine(XmTextWidget tw,
     if (tw->text.line[i+1].start > position) return i;
   if (position == tw->text.line[tw->text.number_lines].start)
     return tw->text.number_lines;
-  return NOLINE;  /* Couldn't find line with given position */ 
+  return NOLINE;  /* Couldn't find line with given position */
 }
 
 
@@ -1907,7 +1907,7 @@ _XmTextPosToLine(XmTextWidget tw,
  * Definitions exported to sources.
  *
  ****************************************************************/
-void 
+void
 _XmTextInvalidate(XmTextWidget tw,
 		  XmTextPosition position,
 		  XmTextPosition topos,
@@ -1918,7 +1918,7 @@ _XmTextInvalidate(XmTextWidget tw,
   XmTextPosition p, endpos;
   int shift = 0;
   int shift_start = 0;
-  
+
 #define ladjust(p) \
   if ((p > position && p != PASTENDPOS) ||	                            \
       (p == position && delta < 0)) {		                            \
@@ -1935,10 +1935,10 @@ _XmTextInvalidate(XmTextWidget tw,
     if (p > tw->text.last_position) p = tw->text.last_position;     \
   }
 
-  tw->text.first_position = 
+  tw->text.first_position =
     (*tw->text.source->Scan)(tw->text.source, 0,
 				 XmSELECT_ALL, XmsdLeft, 1, FALSE);
-    tw->text.last_position = 
+    tw->text.last_position =
       (*tw->text.source->Scan)(tw->text.source,  0,
 				   XmSELECT_ALL, XmsdRight, 1, FALSE);
   if (delta == NODELTA) {
@@ -1952,16 +1952,16 @@ _XmTextInvalidate(XmTextWidget tw,
       tw->text.pending_scroll = -1;
       tw->text.forget_past = MIN(tw->text.forget_past, position);
     }
-    
+
     if (tw->text.in_resize && tw->text.line_table != NULL) {
       unsigned int top_index, last_index, next_index;
       int index_offset, lines_used;
-      
+
       top_index = tw->text.top_line;
       last_index = _XmTextGetTableIndex(tw, tw->text.last_position);
-      
+
       lines_used = (last_index - top_index) + 1;
-      
+
       if (top_index != 0 &&
 	  tw->text.output->data->number_lines > lines_used) {
 	index_offset = tw->text.output->data->number_lines-lines_used;
@@ -1973,7 +1973,7 @@ _XmTextInvalidate(XmTextWidget tw,
 	  tw->text.line_table[next_index].start_pos;
       }
     }
-    
+
     tw->text.forget_past = MIN(tw->text.forget_past, position);
   } else {
     for (i=0; i<tw->text.repaint.number; i++) {
@@ -2000,7 +2000,7 @@ _XmTextInvalidate(XmTextWidget tw,
 	    (tw->text.old_highlight.list[i].mode != XmHIGHLIGHT_NORMAL))))
 	radjust(tw->text.old_highlight.list[i].position);
     }
-    for (i=0; i <= tw->text.number_lines && 
+    for (i=0; i <= tw->text.number_lines &&
 	 tw->text.line[i].start != PASTENDPOS; i++) {
       if (delta > 0) {
 	radjust(tw->text.line[i].start);
@@ -2031,7 +2031,7 @@ _XmTextInvalidate(XmTextWidget tw,
 	}
 	tw->text.line[i].changed = TRUE;
 	if (tw->text.line[i].start != PASTENDPOS)
-	  tw->text.line[i].changed_position = 
+	  tw->text.line[i].changed_position =
 	    tw->text.line[i + 1].start - 1;
 	else
 	  tw->text.line[i].changed_position = PASTENDPOS;
@@ -2041,7 +2041,7 @@ _XmTextInvalidate(XmTextWidget tw,
     tw->text.output->data->refresh_ibeam_off = True;
     endpos = topos;
     radjust(endpos);
-    
+
     /* Force _XmTextPosToLine to not bother trying to recalculate. */
     tw->text.needs_refigure_lines = FALSE;
     for (l = _XmTextPosToLine(tw, position), p = position;
@@ -2050,7 +2050,7 @@ _XmTextInvalidate(XmTextWidget tw,
 	 l++, p = tw->text.line[l].start) {
       if (l != NOLINE) {
 	if (tw->text.line[l].changed) {
-	  tw->text.line[l].changed_position = 
+	  tw->text.line[l].changed_position =
 	    MIN(p, tw->text.line[l].changed_position);
 	} else {
 	  tw->text.line[l].changed_position = p;
@@ -2065,7 +2065,7 @@ _XmTextInvalidate(XmTextWidget tw,
   if (tw->text.disable_depth == 0) Redisplay(tw);
 }
 
-static void 
+static void
 InsertHighlight(XmTextWidget tw,
 		XmTextPosition position,
 		XmHighlightMode mode)
@@ -2073,7 +2073,7 @@ InsertHighlight(XmTextWidget tw,
   _XmHighlightRec *l1;
   _XmHighlightRec *l = tw->text.highlight.list;
   int i, j;
-  
+
   l1 = FindHighlight(tw, position, XmsdLeft);
   if (l1->position == position && position != 0)
     l1->mode = mode;
@@ -2092,7 +2092,7 @@ InsertHighlight(XmTextWidget tw,
     l[i].mode = mode;
   }
 }
-	
+
 /****************************************************************
  *
  * Creation definitions.
@@ -2105,7 +2105,7 @@ InsertHighlight(XmTextWidget tw,
  * height and width state.
  */
 /* ARGSUSED */
-static void 
+static void
 Initialize(Widget rw,
 	   Widget nw,
 	   ArgList args,
@@ -2113,34 +2113,34 @@ Initialize(Widget rw,
 {
   XmTextWidget req = (XmTextWidget) rw;
   XmTextWidget newtw = (XmTextWidget) nw;
-  
+
   if (MB_CUR_MAX > 0)
     newtw->text.char_size = (char)MB_CUR_MAX;
-  else 
+  else
     newtw->text.char_size = 1;
 
   if (req->core.width == 0) newtw->core.width = req->core.width;
   if (req->core.height == 0) newtw->core.height = req->core.height;
-  
+
   /* Flag used in losing focus verification to indicate that a traversal
      key was pressed.  Must be initialized to False */
   newtw->text.traversed = False;
-  
+
   newtw->text.total_lines = 1;
   newtw->text.top_line = 0;
   newtw->text.vsbar_scrolling = False;
   newtw->text.hsbar_scrolling = False;
   newtw->text.in_setvalues = False;
-  
+
   if (newtw->text.output_create == NULL)
     newtw->text.output_create = _XmTextOutputCreate;
   if (newtw->text.input_create == NULL)
     newtw->text.input_create = _XmTextInputCreate;
-  
+
   /*  The following resources are defaulted to invalid values to indicate    */
   /*  that it was not set by the application.  If it gets to this point      */
   /*  and they are still invalid then set them to their appropriate default. */
-  
+
   if (!XmRepTypeValidValue(XmRID_EDIT_MODE,
 			   newtw->text.edit_mode, nw)) {
     newtw->text.edit_mode = XmSINGLE_LINE_EDIT;
@@ -2150,7 +2150,7 @@ Initialize(Widget rw,
    _XmCreateCutBuffers(nw);
 
    if (newtw->text.verify_bell == (Boolean) XmDYNAMIC_BOOL) {
-     if (_XmGetAudibleWarning(nw) == XmBELL) 
+     if (_XmGetAudibleWarning(nw) == XmBELL)
        newtw->text.verify_bell = True;
      else
        newtw->text.verify_bell = False;
@@ -2176,7 +2176,7 @@ Initialize(Widget rw,
  * to be done by the output create routine called here, since output is in
  * charge of window handling.
  */
-static void 
+static void
 InitializeHook(Widget wid,
 	       ArgList args,
 	       Cardinal *num_args_ptr)
@@ -2188,9 +2188,9 @@ InitializeHook(Widget wid,
   XmTextBlockRec block;
   Position dummy;
   Boolean used_source = False;
-  
+
   tw = (XmTextWidget) wid;
-  
+
   /* If text.wc_value is set, it overrides. Call _Xm..Create with it. */
   if (tw->text.source == nullsourceptr) {
     if (tw->text.wc_value != NULL) {
@@ -2206,11 +2206,11 @@ InitializeHook(Widget wid,
     if (tw->text.wc_value != NULL) {
       char * tmp_value;
       int num_chars, n_bytes;
-      
+
       for (num_chars=0; tw->text.wc_value[num_chars]!=0L; num_chars++)
 	/*EMPTY*/;
-      
-      tmp_value = XtMalloc((unsigned) 
+
+      tmp_value = XtMalloc((unsigned)
 			   (num_chars + 1) * (int)tw->text.char_size);
       n_bytes = wcstombs(tmp_value, tw->text.wc_value,
 			 (num_chars + 1) * (int)tw->text.char_size);
@@ -2224,7 +2224,7 @@ InitializeHook(Widget wid,
       int i;
       for (i = 0; i < num_args; i++)
 	if (tw->text.value == (char *)args[i].value &&
-	    (args[i].name == XmNvalue || 
+	    (args[i].name == XmNvalue ||
 	     strcmp(args[i].name, XmNvalue) == 0)) {
 	  _XmStringSourceSetValue(tw, tw->text.value);
 	  break;
@@ -2233,12 +2233,12 @@ InitializeHook(Widget wid,
     tw->text.value = NULL;
     used_source = True;
   }
-  
+
   tw->text.disable_depth = 1;
   tw->text.first_position = 0;
   tw->text.last_position = 0;
   tw->text.dest_position = 0;
-  
+
   tw->text.needs_refigure_lines = tw->text.needs_redisplay = TRUE;
   tw->text.number_lines = 0;
   tw->text.maximum_lines = 1;
@@ -2276,7 +2276,7 @@ InitializeHook(Widget wid,
   if (XmDirectionMatch(XmPrim_layout_direction(tw),
 		       XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
     char *vevent_bindings;
-    
+
     vevent_bindings =
 		(String)XtMalloc(strlen(_XmTextIn_XmTextVEventBindings) + 1);
     strcpy(vevent_bindings, _XmTextIn_XmTextVEventBindings);
@@ -2284,59 +2284,59 @@ InitializeHook(Widget wid,
     XtFree(vevent_bindings);
     XtOverrideTranslations(wid, tw->text.tm_table);
   }
-  
+
   /* Initialize table */
   if (tw->text.edit_mode == XmSINGLE_LINE_EDIT)
     InitializeLineTable(tw, 1);
   else
     InitializeLineTable(tw, INIT_TABLE_SIZE);
-  
+
   (*tw->text.source->RemoveWidget)(tw->text.source, tw);
   tw->text.source = source;
   (*tw->text.source->AddWidget)(tw->text.source, tw);
   (*tw->text.output_create)(wid, args, num_args);
-  
+
   _XmTextSetEditable(wid, tw->text.editable);
   _XmStringSourceSetMaxLength(GetSrc(tw), tw->text.max_length);
-  
+
   (*tw->text.input_create)(wid, args, num_args);
-  
-  tw->text.first_position = 
+
+  tw->text.first_position =
     (*tw->text.source->Scan)(tw->text.source, 0,
 				 XmSELECT_ALL, XmsdLeft, 1, FALSE);
-  tw->text.last_position = 
+  tw->text.last_position =
     (*tw->text.source->Scan)(tw->text.source, 0,
 				 XmSELECT_ALL, XmsdRight, 1, FALSE);
-  
+
   if (tw->text.cursor_position < 0)
     tw->text.cursor_position = 0;
-  
+
   if (tw->text.cursor_position > tw->text.last_position)
     tw->text.cursor_position = tw->text.last_position;
-  
+
   tw->text.dest_position = tw->text.cursor_position;
-  
+
   if (!tw->text.editable || !XtIsSensitive(wid))
     _XmTextSetDestinationSelection(wid, 0, False, (Time)NULL);
-  
+
   if (tw->text.edit_mode == XmMULTI_LINE_EDIT)
-    top_character = (*tw->text.source->Scan)(tw->text.source, 
-                                                 tw->text.top_character, 
-						 XmSELECT_LINE, XmsdLeft, 1, 
+    top_character = (*tw->text.source->Scan)(tw->text.source,
+                                                 tw->text.top_character,
+						 XmSELECT_LINE, XmsdLeft, 1,
 						 FALSE);
   else
     top_character = tw->text.top_character;
-  
+
   tw->text.new_top = top_character;
   tw->text.top_character = 0;
   _XmTextInvalidate(tw, top_character, top_character, NODELTA);
   if (tw->text.disable_depth == 0)
     Redisplay(tw);
-  
+
   /*
    * Fix for CR 5704 - If the source has already been created, do not use
    *                   the original code - it has already been processed and
-   *                   the gaps are not where they were the first time 
+   *                   the gaps are not where they were the first time
    *                   through for this source.  Instead, use
    *                   code similar to that used in XmTextSetSource().
    */
@@ -2349,25 +2349,25 @@ InitializeHook(Widget wid,
       block.ptr = tw->text.source->data->ptr;
       if (block.ptr == NULL) block.length = 0;
       else block.length = strlen(block.ptr);
-    } else 
+    } else
       (void)(*tw->text.source->ReadSource)(source, 0, source->data->length,
 					       &block);
   } else
     (void)(*tw->text.source->ReadSource)(source, 0, source->data->length,
 					     &block);
-  
+
   _XmTextUpdateLineTable(wid, 0, 0, &block, False);
-  
+
   _XmStringSourceSetGappedBuffer(source->data, tw->text.cursor_position);
-  
+
   tw->text.forget_past = tw->text.first_position;
-  
+
   tw->text.disable_depth = 0;
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position,
 				  &(tw->text.cursor_position_x), &dummy);
 }
 
-static void 
+static void
 Realize(Widget w,
         XtValueMask *valueMask,
         XSetWindowAttributes *attributes)
@@ -2377,7 +2377,7 @@ Realize(Widget w,
   Arg im_args[20];
   XIMCallback xim_cb[4];
   Cardinal n = 0;
-  
+
   (*tw->text.output->realize)(w, valueMask, attributes);
   (*tw->text.output->PosToXY)(tw, tw->text.cursor_position,
 			      &(tw->text.cursor_position_x), &dummy);
@@ -2408,69 +2408,69 @@ Realize(Widget w,
  * Semi-public definitions.
  *
  ****************************************************************/
-static void 
+static void
 Destroy(Widget w)
 {
   XmTextWidget tw = (XmTextWidget) w;
   int j;
-  
+
   (*tw->text.source->RemoveWidget)(tw->text.source, tw);
   if (tw->text.input->destroy) (*tw->text.input->destroy)(w);
   if (tw->text.output->destroy) (*tw->text.output->destroy)(w);
-  
+
   for (j = 0; j < tw->text.number_lines; j++) {
     if (tw->text.line[j].extra)
       XtFree((char *)tw->text.line[j].extra);
   }
-  
+
   XtFree((char *)tw->text.line);
-  
+
   XtFree((char *)tw->text.repaint.range);
   XtFree((char *)tw->text.highlight.list);
   XtFree((char *)tw->text.old_highlight.list);
-  
+
   if (tw->text.line_table != NULL)
     XtFree((char *)tw->text.line_table);
-  
+
   if (tw->text.onthespot != NULL)
     XtFree((char *)tw->text.onthespot);
-    
+
   if (tw->text.tm_table != NULL)
     XtFree((char *)tw->text.tm_table);
 }
 
-static void 
+static void
 Resize(Widget w)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* this flag prevents resize requests */
   tw->text.in_resize = True;
-  
+
   if (_XmTextShouldWordWrap(tw))
     _XmTextRealignLineTable(tw, NULL, 0, 0, 0, PASTENDPOS);
-  
+
   (*(tw->text.output->resize))(w, FALSE);
-  
+
   tw->text.in_resize = False;
 }
 
-static void 
+static void
 DoExpose(Widget w,
 	 XEvent *event,
 	 Region region)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   /* this flag prevents resize requests */
   tw->text.in_expose = True;
-  
+
   (*(tw->text.output->expose))(w, event, region);
-  
+
   tw->text.in_expose = False;
 }
 
-static void 
+static void
 GetValuesHook(Widget w,
 	      ArgList args,
 	      Cardinal *num_args_ptr)
@@ -2478,24 +2478,24 @@ GetValuesHook(Widget w,
   XmTextWidget tw = (XmTextWidget) w;
   Cardinal num_args = *num_args_ptr;
   int i;
-  
+
   XtGetSubvalues((XtPointer) tw,
 		 resources, XtNumber(resources), args, num_args);
-  
+
   for (i = 0; i < num_args; i++) {
     if (!strcmp(args[i].name, XmNvalue)) {
       *((XtPointer *)args[i].value) =
 	(XtPointer)_XmStringSourceGetValue(GetSrc(tw), False);
     }
   }
-  
+
   for (i = 0; i < num_args; i++) {
     if (!strcmp(args[i].name, XmNvalueWcs)) {
       *((XtPointer *)args[i].value) =
 	(XtPointer)_XmStringSourceGetValue(GetSrc(tw), True);
     }
   }
-  
+
   (*tw->text.output->GetValues)(w, args, num_args);
   (*tw->text.input->GetValues)(w, args, num_args);
 }
@@ -2506,12 +2506,12 @@ _XmTextSetTopCharacter(Widget widget,
 {
   XmTextWidget tw = (XmTextWidget) widget;
   LineNum line_num;
-  
+
   if (tw->text.edit_mode != XmSINGLE_LINE_EDIT) {
     line_num = _XmTextGetTableIndex(tw, top_character);
     top_character = tw->text.line_table[line_num].start_pos;
   }
-  
+
   if (top_character != tw->text.new_top) {
     EraseInsertionPoint(tw);
     tw->text.new_top = top_character;
@@ -2525,17 +2525,17 @@ _XmTextSetTopCharacter(Widget widget,
   }
   /*
    * Fixes CDExc23645 and CDExc23898
-   */ 
+   */
   else if (tw->text.auto_show_cursor_position &&
 	   tw->text.edit_mode == XmSINGLE_LINE_EDIT)
     _XmTextShowPosition(widget, top_character);
 }
 
-static void 
+static void
 LosingFocus(XmTextWidget tw)
 {
   XmTextVerifyCallbackStruct  cbdata;
-  
+
   cbdata.reason = XmCR_LOSING_FOCUS;
   cbdata.event = NULL;
   cbdata.doit = True;
@@ -2544,13 +2544,13 @@ LosingFocus(XmTextWidget tw)
   cbdata.startPos = tw->text.cursor_position;
   cbdata.endPos = tw->text.cursor_position;
   cbdata.text = NULL;
-  XtCallCallbackList((Widget)tw, tw->text.losing_focus_callback, 
+  XtCallCallbackList((Widget)tw, tw->text.losing_focus_callback,
 		     (XtPointer) &cbdata);
   tw->text.source->data->take_selection = True;
 }
 
 /* ARGSUSED */
-static Boolean 
+static Boolean
 SetValues(Widget oldw,
 	  Widget reqw,
 	  Widget new_w,
@@ -2567,15 +2567,15 @@ SetValues(Widget oldw,
   Boolean new_source = (newtw->text.source != old->text.source);
   XmTextSource cache_source = NULL;
 
-  if (newtw->core.being_destroyed) 
-  { 
+  if (newtw->core.being_destroyed)
+  {
       return False;
   }
 
   _XmTextResetIC(oldw);
-  
+
   newtw->text.in_setvalues = True;
-  
+
   if (newtw->text.cursor_position<0)
   {
         newtw->text.cursor_position=0;
@@ -2583,12 +2583,12 @@ SetValues(Widget oldw,
 
   /* It is unfortunate that the rest of the Text widget code, particularly the
   ** redisplay code, assumes that the current source is valid; in fact, it may
-  ** have been changed by a set-values call. Ideally, we would be able to 
-  ** handle before anything else a change in the XmNsource resource of the 
-  ** widget; in practice, the changes would be extensive. 
-  ** Compromise by temporarily restoring the old value for those pieces of 
-  ** code which affect the display of the old source; then restore the new 
-  ** value for the display of the current source. That is, deal with the old 
+  ** have been changed by a set-values call. Ideally, we would be able to
+  ** handle before anything else a change in the XmNsource resource of the
+  ** widget; in practice, the changes would be extensive.
+  ** Compromise by temporarily restoring the old value for those pieces of
+  ** code which affect the display of the old source; then restore the new
+  ** value for the display of the current source. That is, deal with the old
   ** value for just this one line of code.
   */
   if (new_source) {
@@ -2600,25 +2600,25 @@ SetValues(Widget oldw,
 
   if (new_source)
       newtw->text.source = cache_source;
-  
+
   _XmTextDisableRedisplay(newtw, TRUE);
-  
+
   /* set cursor_position to a known acceptable value (0 is always acceptable)
    */
   new_cursor_pos = newtw->text.cursor_position;
   newtw->text.cursor_position = 0;
-  
+
   if (! XtIsSensitive(new_w) &&
       newtw->text.input->data->has_destination) {
     _XmTextSetDestinationSelection(new_w, 0, True,
 				   XtLastTimestampProcessed(XtDisplay(new_w)));
   }
-  
+
   if (!XmRepTypeValidValue(XmRID_EDIT_MODE,
 			     newtw->text.edit_mode, new_w)) {
     newtw->text.edit_mode = old->text.edit_mode;
   }
-  
+
   if ((old->text.top_character != newtw->text.top_character) &&
       (newtw->text.top_character != newtw->text.new_top)) {
     XmTextPosition new_top;
@@ -2628,13 +2628,13 @@ SetValues(Widget oldw,
       new_top = 0;
     else
       new_top = newtw->text.top_character;
-    
+
     newtw->text.top_character = old->text.top_character;
     _XmTextSetTopCharacter(new_w, new_top);
     if (newtw->text.needs_refigure_lines)
       newtw->text.top_character = new_top;
   }
-  
+
   if (old->text.source != newtw->text.source) {
     XmTextSource source = newtw->text.source;
     newtw->text.source = old->text.source;
@@ -2643,15 +2643,15 @@ SetValues(Widget oldw,
     need_text_redisplay = newtw->text.needs_redisplay;
     newtw->text.needs_redisplay = o_redisplay;
   }
-  
+
   if (old->text.editable != newtw->text.editable) {
     Boolean editable = newtw->text.editable;
     newtw->text.editable = old->text.editable;
     _XmTextSetEditable(new_w, editable);
   }
-  
+
   _XmStringSourceSetMaxLength(GetSrc(newtw), newtw->text.max_length);
-  
+
   /* Four cases to handle for value:
    *   1. user set both XmNvalue and XmNwcValue.
    *   2. user set the opposite resource (i.e. value is a char*
@@ -2660,21 +2660,21 @@ SetValues(Widget oldw,
    *      and user set XmNValue, or vice versa).
    *   4. user set neither XmNValue nor XmNwcValue
    */
-  
+
   /* OSF says:  if XmNvalueWcs set, it overrides all else */
-  
+
   if (newtw->text.wc_value != NULL) {
     /* user set XmNvalueWcs resource - it rules ! */
     wchar_t * wc_value;
     char * tmp_value;
     int num_chars, n_bytes;
-    
+
     num_chars = n_bytes = 0;
-    
+
     for (num_chars = 0, wc_value = newtw->text.wc_value;
 	 wc_value[num_chars] != 0L;) num_chars++;
-    
-    tmp_value = XtMalloc((unsigned) 
+
+    tmp_value = XtMalloc((unsigned)
 			 (num_chars + 1) * (int)newtw->text.char_size);
     n_bytes = wcstombs(tmp_value, newtw->text.wc_value,
 		       (num_chars + 1) * (int)newtw->text.char_size);
@@ -2690,7 +2690,7 @@ SetValues(Widget oldw,
     need_new_cursorPos = True;
   } else if (newtw->text.value != NULL) {
     char * tmp_value;
-    
+
     newtw->text.pendingoff = TRUE;
     o_redisplay = newtw->text.needs_redisplay;
     tmp_value = newtw->text.value;
@@ -2700,14 +2700,14 @@ SetValues(Widget oldw,
     newtw->text.needs_redisplay = o_redisplay;
     need_new_cursorPos = True;
   }
-  
+
   /* return cursor_position to it's original changed value */
   newtw->text.cursor_position = new_cursor_pos;
-  
+
   if (old->text.cursor_position != newtw->text.cursor_position) {
     XmTextPosition new_position = newtw->text.cursor_position;
     newtw->text.cursor_position = old->text.cursor_position;
-    
+
     if (new_position > newtw->text.source->data->length)
       _XmTextSetCursorPosition(new_w, newtw->text.source->data->length);
     else
@@ -2726,12 +2726,12 @@ SetValues(Widget oldw,
 					      newtw->text.cursor_position,
 					      XmSELECT_ALL, XmsdLeft, 1, TRUE);
     _XmTextSetCursorPosition(new_w, cursorPos);
-  } else 
+  } else
     if (newtw->text.cursor_position > newtw->text.source->data->length) {
       _XmTextSetCursorPosition(new_w, newtw->text.source->data->length);
     }
-   
-  
+
+
   o_redisplay = (*newtw->text.output->SetValues)
     (oldw, reqw, new_w, args, num_args);
   (*newtw->text.input->SetValues)(oldw, reqw, new_w, args, num_args);
@@ -2742,11 +2742,11 @@ SetValues(Widget oldw,
 				    _XmTextEnableRedisplay() call. */
   (*newtw->text.output->PosToXY)(newtw, newtw->text.cursor_position,
 				 &(newtw->text.cursor_position_x), &dummy);
-  
+
   if (o_redisplay) newtw->text.needs_redisplay = True;
-  
+
   TextDrawInsertionPoint(newtw);
-  
+
   if (XtIsSensitive(new_w) != XtIsSensitive(oldw)) {
     if (XtIsSensitive(new_w)) {
       EraseInsertionPoint(newtw);
@@ -2765,19 +2765,19 @@ SetValues(Widget oldw,
     if (newtw->text.source->data->length > 0)
       newtw->text.needs_redisplay = True;
   }
-  
+
   if ((!newtw->text.editable || !XtIsSensitive(new_w)) &&
       _XmTextHasDestination(new_w))
     _XmTextSetDestinationSelection(new_w, 0, False, (Time)NULL);
-  
+
   /* don't shrink to nothing */
   if (newtw->core.width == 0) newtw->core.width = old->core.width;
   if (newtw->core.height == 0) newtw->core.height = old->core.height;
-  
-  /* Optimization for the case when only XmNvalue changes. 
+
+  /* Optimization for the case when only XmNvalue changes.
      This considerably reduces flashing due to unneeded redraws */
-  if (need_text_redisplay && 
-      !newtw->text.needs_redisplay && 
+  if (need_text_redisplay &&
+      !newtw->text.needs_redisplay &&
       newtw->text.disable_depth == 0) {
     EraseInsertionPoint(newtw);
     newtw->text.disable_depth++;
@@ -2785,24 +2785,24 @@ SetValues(Widget oldw,
     _XmTextEnableRedisplay(newtw);
     newtw->text.needs_redisplay = False;
   }
-  
+
   newtw->text.in_setvalues = newtw->text.needs_redisplay;
-  
+
   return newtw->text.needs_redisplay;
 }
 
-static XtGeometryResult 
+static XtGeometryResult
 QueryGeometry(Widget w,
 	      XtWidgetGeometry *intended,
 	      XtWidgetGeometry *reply)
 {
   XmTextWidget tw = (XmTextWidget) w;
-  
+
   if (GMode (intended) & (~(CWWidth | CWHeight)))
     return(XtGeometryNo);
-  
+
   reply->request_mode = (CWWidth | CWHeight);
-  
+
   (*tw->text.output->GetPreferredSize)(w, &reply->width, &reply->height);
   if ((GMode(intended) != GMode(reply)) ||
       (reply->width != intended->width) ||
@@ -2814,23 +2814,23 @@ QueryGeometry(Widget w,
   }
 }
 
-static void 
+static void
 _XmTextSetString(Widget widget,
 		 char *value)
 {
   XmTextWidget tw = (XmTextWidget) widget;
-  
+
   _XmTextResetIC(widget);
 
   tw->text.pendingoff = TRUE;
   if (value == NULL) value = "";
   _XmStringSourceSetValue(tw, value);
-  
+
   /* after set, move insertion cursor to beginning of string. */
   _XmTextSetCursorPosition(widget, 0);
 }
 
-void 
+void
 _XmTextSetCursorPosition(Widget widget,
 			 XmTextPosition position)
 {
@@ -2842,17 +2842,17 @@ _XmTextSetCursorPosition(Widget widget,
   XPoint xmim_point;
   XRectangle xmim_area;
   Arg args[10];
-  
+
   if (position < 0) {
     position = 0;
   }
-  
+
   if (position > tw->text.last_position) {
     position = tw->text.last_position;
   }
-  
+
   source = GetSrc(tw);
-  
+
   /* if position hasn't changed, don't call the modify verify callback */
   if (position != tw->text.cursor_position) {
     /* Call Motion Verify Callback before Cursor Changes Positon */
@@ -2863,18 +2863,18 @@ _XmTextSetCursorPosition(Widget widget,
     cb.doit = True;
     XtCallCallbackList (widget, tw->text.motion_verify_callback,
 			(XtPointer) &cb);
-    
+
     /* Cancel action upon application request */
     if (!cb.doit) {
       if (tw->text.verify_bell) XBell(XtDisplay(widget), 0);
       return;
     }
   }
-  
+
   /* Erase insert cursor prior to move */
   EraseInsertionPoint(tw);
   tw->text.cursor_position = position;
-  
+
   /*
    * If not in add_mode and pending delete state is on reset
    * the selection.
@@ -2883,21 +2883,21 @@ _XmTextSetCursorPosition(Widget widget,
       _XmStringSourceHasSelection(source))
     (*source->SetSelection)(source, position, position,
 			    XtLastTimestampProcessed(XtDisplay(widget)));
-  
+
   /* ensure that IBeam at new location will be displayed correctly */
   _XmTextMovingCursorPosition(tw, position); /*correct GC for new location */
-  
+
   if (tw->text.auto_show_cursor_position)
     _XmTextShowPosition(widget, position);
   if (tw->text.needs_redisplay && tw->text.disable_depth == 0)
     Redisplay(tw);
-  
-  (*tw->text.output->PosToXY) (tw, position, &(tw->text.cursor_position_x), 
+
+  (*tw->text.output->PosToXY) (tw, position, &(tw->text.cursor_position_x),
 			       &dummy);
 
   tw->text.output->data->refresh_ibeam_off = True; /* update IBeam off area
 						    * before drawing IBeam */
-  
+
   (*tw->text.output->PosToXY)(tw, position, &xmim_point.x, &xmim_point.y);
   (void)_XmTextGetDisplayRect((Widget)tw, &xmim_area);
   n = 0;
@@ -2908,7 +2908,7 @@ _XmTextSetCursorPosition(Widget widget,
 }
 
 /* ARGSUSED */
-void 
+void
 _XmTextDisableRedisplay(XmTextWidget widget,
 #if NeedWidePrototypes
 			int losesbackingstore)
@@ -2920,16 +2920,16 @@ _XmTextDisableRedisplay(XmTextWidget widget,
   EraseInsertionPoint(widget);
 }
 
-void 
+void
 _XmTextEnableRedisplay(XmTextWidget widget)
 {
   if (widget->text.disable_depth) widget->text.disable_depth--;
   if (widget->text.disable_depth == 0 && widget->text.needs_redisplay)
     Redisplay(widget);
-  
+
   /* If this is a scrolled widget, better update the scroll bars to reflect
    * any changes that have occured while redisplay has been disabled.  */
-  
+
   if (widget->text.disable_depth == 0) {
     if (XmDirectionMatch(XmPrim_layout_direction(widget),
 			 XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
@@ -2966,7 +2966,7 @@ _XmTextEnableRedisplay(XmTextWidget widget)
 	_XmRedisplayHBar(widget);
     }
   }
-  
+
   TextDrawInsertionPoint(widget);
 }
 
@@ -2981,15 +2981,15 @@ _XmTextCountCharacters(char *str,
   char * bptr;
   int count = 0;
   int char_size = 0;
-  
+
   if (num_count_bytes <= 0)
     return 0;
-  
+
 #ifndef NO_MULTIBYTE
   if (MB_CUR_MAX == 1 || MB_CUR_MAX == 0) /* Sun sets MB_CUR_MAX to 0, Argg!!*/
 #endif
     return num_count_bytes;
-  
+
   for (bptr = str; num_count_bytes > 0; count++, bptr+= char_size) {
     char_size = mblen(bptr, MB_CUR_MAX);
     if (char_size <= 0) break; /* error */
@@ -2998,7 +2998,7 @@ _XmTextCountCharacters(char *str,
   return count;
 }
 
-void 
+void
 _XmTextSetEditable(Widget widget,
 #if NeedWidePrototypes
 		  int editable)
@@ -3012,12 +3012,12 @@ _XmTextSetEditable(Widget widget,
   XPoint xmim_point;
   XRectangle xmim_area;
   XmTextWidget tw = (XmTextWidget) widget;
-  
+
   if (!tw->text.editable && editable) {
     OutputData o_data = tw->text.output->data;
-    
+
     XmImRegister(widget, (unsigned int) NULL);
-    
+
     (*tw->text.output->PosToXY)(tw, tw->text.cursor_position,
 				&xmim_point.x, &xmim_point.y);
     (void)_XmTextGetDisplayRect((Widget)tw, &xmim_area);
@@ -3055,23 +3055,23 @@ _XmTextSetEditable(Widget widget,
   } else if (tw->text.editable && !editable) {
     XmImUnregister(widget);
   }
-  
+
   tw->text.editable = editable;
-  
+
   n = 0;
-  
+
   if (editable) {
     XtSetArg(args[n], XmNdropSiteActivity, XmDROP_SITE_ACTIVE); n++;
   } else {
     XtSetArg(args[n], XmNdropSiteActivity, XmDROP_SITE_INACTIVE); n++;
   }
-  
+
   XmDropSiteUpdate(widget, args, n);
-  
+
   _XmStringSourceSetEditable(GetSrc(tw), editable);
 }
 
-void 
+void
 _XmTextSetHighlight(Widget w,
 		   XmTextPosition left,
 		   XmTextPosition right,
@@ -3082,20 +3082,20 @@ _XmTextSetHighlight(Widget w,
   XmHighlightMode endmode;
   int i, j;
   _XmWidgetToAppContext(w);
-  
+
   _XmAppLock(app);
 
   /* If right position is out-bound, change it to the last position. */
-  if (right > tw->text.last_position) 
+  if (right > tw->text.last_position)
     right = tw->text.last_position;
-  
+
   /* If left is out-bound, don't do anything. */
   if (left >= right || right <= 0) {
     _XmAppUnlock(app);
     return;
   }
 
-  if (left < 0) 
+  if (left < 0)
     left = 0;
 
   EraseInsertionPoint(tw);
@@ -3133,14 +3133,14 @@ _XmTextSetHighlight(Widget w,
   tw->text.needs_redisplay = TRUE;
   if (tw->text.disable_depth == 0)
     Redisplay(tw);
-  
+
   tw->text.output->data->refresh_ibeam_off = True;
   TextDrawInsertionPoint(tw);
 
   _XmAppUnlock(app);
 }
 
-void 
+void
 _XmTextShowPosition(Widget widget,
 		    XmTextPosition position)
 {
@@ -3148,8 +3148,8 @@ _XmTextShowPosition(Widget widget,
   _XmWidgetToAppContext(widget);
 
   _XmAppLock(app);
-  
-  if (!tw->text.needs_refigure_lines && 
+
+  if (!tw->text.needs_refigure_lines &&
       (position < 0 || (position >= tw->text.top_character &&
 			position < tw->text.bottom_position))) {
     (*tw->text.output->MakePositionVisible)(tw, position);
@@ -3174,34 +3174,34 @@ _XmTextGetTotalLines(Widget widget)
 
 /* Why is this here? It's never used */
 XmTextLineTable
-_XmTextGetLineTable(Widget widget, 
+_XmTextGetLineTable(Widget widget,
 		    int *total_lines)
 {
   XmTextWidget tw = (XmTextWidget) widget;
   XmTextLineTable line_table;
-  
+
   *total_lines = tw->text.total_lines;
   line_table = (XmTextLineTable) XtMalloc((unsigned) *total_lines *
 					  sizeof(XmTextLineTableRec));
-  
+
   memcpy((void *) line_table, (void *) tw->text.line_table,
 	 *total_lines * sizeof(XmTextLineTableRec));
-  
+
   return line_table;
 }
 
 
 /********************************************
- * AccessTextual trait method implementation 
+ * AccessTextual trait method implementation
  ********************************************/
 
 static XtPointer
-TextGetValue(Widget w, 
-	     int format) 
+TextGetValue(Widget w,
+	     int format)
 {
   char *str;
   XmString tmp;
-  
+
   switch(format) {
   case XmFORMAT_XmSTRING:
     str = XmTextGetString(w);
@@ -3217,16 +3217,16 @@ TextGetValue(Widget w,
   return(NULL);
 }
 
-static void 
-TextSetValue(Widget w, 
-	     XtPointer s, 
+static void
+TextSetValue(Widget w,
+	     XtPointer s,
 	     int format)
 {
   char *str;
 
   switch(format) {
   case XmFORMAT_XmSTRING:
-    str = (char*) _XmStringUngenerate((XmString)s, NULL, 
+    str = (char*) _XmStringUngenerate((XmString)s, NULL,
 				      XmMULTIBYTE_TEXT, XmMULTIBYTE_TEXT);
     XmTextSetString(w, str);
     if (str != NULL) XtFree(str);
@@ -3311,8 +3311,8 @@ static void PreeditVerifyReplace(Widget w,
   }
   _XmTextSetCursorPosition(w, cursor);
 }
-  
-  
+
+
 
 /*
  * This is the function set to XNPreeditStartCallback resource.
@@ -3382,14 +3382,14 @@ PreeditDone(XIC xic,
 
   while (!XtIsShell(p))
     p = XtParent(p);
-  XtVaGetValues(p, XmNverifyPreedit, &need_verify, NULL);  
-  
+  XtVaGetValues(p, XmNverifyPreedit, &need_verify, NULL);
+
   /*
    * Delete preedit string
    */
   if (PreEndTW(tw) > PreStartTW(tw)) {
     if (need_verify) {
-	PreeditVerifyReplace(w, PreStartTW(tw), PreEndTW(tw), NULL, 
+	PreeditVerifyReplace(w, PreStartTW(tw), PreEndTW(tw), NULL,
 				PreStartTW(tw), &end_preedit);
 	if (end_preedit) return;
     }
@@ -3397,7 +3397,7 @@ PreeditDone(XIC xic,
     	block.ptr = NULL;
     	block.length = 0;
     	block.format = XmFMT_8_BIT;
-    	(*tw->text.source->Replace)(tw, NULL, &PreStartTW(tw), &PreEndTW(tw), 
+    	(*tw->text.source->Replace)(tw, NULL, &PreStartTW(tw), &PreEndTW(tw),
 				&block, False);
     }
   }
@@ -3414,9 +3414,9 @@ PreeditDone(XIC xic,
     }
 
     if (need_verify) {
-	PreeditVerifyReplace(w, PreStartTW(tw), PreStartTW(tw), mb, 
+	PreeditVerifyReplace(w, PreStartTW(tw), PreStartTW(tw), mb,
                                 PreStartTW(tw), &end_preedit);
-        if (end_preedit) return;	
+        if (end_preedit) return;
     }
     else {
 	(*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position,
@@ -3425,7 +3425,7 @@ PreeditDone(XIC xic,
     	block.length = strlen(block.ptr);
     	block.format = XmFMT_8_BIT;
 
-    	(*tw->text.source->Replace)(tw, NULL, &PreStartTW(tw), &PreStartTW(tw), 
+    	(*tw->text.source->Replace)(tw, NULL, &PreStartTW(tw), &PreStartTW(tw),
 				&block, False);
     	_XmTextPreeditSetCursorPosition(w, PreStartTW(tw));
 	(*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position,
@@ -3542,7 +3542,7 @@ PreeditDraw(XIC xic,
 
   /* if no data in callback structs simply return - nothing to do */
   if (!call_data->caret && !call_data->chg_first && !call_data->chg_length
-      && !call_data->text) 
+      && !call_data->text)
     return;
 
   /* have we exceeded max size of preedit buffer? - then punt */
@@ -3572,15 +3572,15 @@ PreeditDraw(XIC xic,
     endPos = startPos + call_data->chg_length;
     PreCursorTW(tw) = startPos;
     PreEndTW(tw) -= endPos - startPos;
-    
+
     if (need_verify) {
       PreeditVerifyReplace(w, startPos, endPos, NULL, startPos, &end_preedit);
       if (end_preedit) {
-	(*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, 
+	(*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position,
 					       on);
 	return;
       }
-    } 
+    }
     else {
       block.ptr = NULL;
       block.length = 0;
@@ -3590,16 +3590,16 @@ PreeditDraw(XIC xic,
 				      &block, False) != EditDone) {
       	  XBell(XtDisplay(tw), 0);
 	  return;
-      } 
-      else 
+      }
+      else
       	_XmTextPreeditSetCursorPosition(w, PreCursorTW(tw));
     }
-    (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on); 
+    (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
     return;
   }
 
   /* sanity check data to make sure its *really* there */
-  if (call_data->text) 
+  if (call_data->text)
     if ((call_data->text->encoding_is_wchar &&
 	 !call_data->text->string.wide_char) ||
 	(!call_data->text->encoding_is_wchar &&
@@ -3615,9 +3615,9 @@ PreeditDraw(XIC xic,
     if (o_data->use_fontset) {
       if (call_data->text->encoding_is_wchar){
         mb = XtMalloc((insert_length+1)*tw->text.char_size);
-        mb_siz = wcstombs(mb, call_data->text->string.wide_char, 
+        mb_siz = wcstombs(mb, call_data->text->string.wide_char,
                   insert_length);
-      } 
+      }
       else {
 	mb = XtMalloc((insert_length+1)*tw->text.char_size);
         strcpy(mb,call_data->text->string.multi_byte);
@@ -3634,7 +3634,7 @@ PreeditDraw(XIC xic,
 					       on);
         return;
       }
-    } 
+    }
     else {
       (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
       return;
@@ -3654,18 +3654,18 @@ PreeditDraw(XIC xic,
       if (tmp_end - PreStartTW(tw) > PreOverLen(tw)){
         endPos = startPos + call_data->chg_length;
         PreOverMaxLen(tw) = PreOverLen(tw);
-      } 
+      }
       else {
         endPos = PreEndTW(tw) + tmp_end - PreStartTW(tw) - PreOverMaxLen(tw);
         PreOverMaxLen(tw) = tmp_end - PreStartTW(tw);
       }
-    } 
+    }
     else {
       if (PreOverMaxLen(tw) > tmp_end - PreStartTW(tw)){
 	endPos = PreEndTW(tw);
 	recover_len = PreOverMaxLen(tw) - tmp_end + PreStartTW(tw);
 	PreOverMaxLen(tw) = tmp_end - PreStartTW(tw);
-      } 
+      }
       else
 	endPos = startPos + call_data->chg_length;
     }
@@ -3680,7 +3680,7 @@ PreeditDraw(XIC xic,
       strcat(mb, over_mb);
       XtFree(over_mb);
     }
-    
+
     if (recover_len > 0) {
       mb = XtRealloc(mb, strlen(mb) + (recover_len + 1 ) * tw->text.char_size);
       ptr = PreOverStr(tw);
@@ -3693,7 +3693,7 @@ PreeditDraw(XIC xic,
       strncat(mb, ptr, total_mb_len);
       mb[i+total_mb_len] = '\0';
     }
-  } 
+  }
   else {
     startPos = PreStartTW(tw) + call_data->chg_first;
     endPos = startPos + call_data->chg_length;
@@ -3707,7 +3707,7 @@ PreeditDraw(XIC xic,
 
   /* verify preedit set, so call PreeditVerifyReplace */
   if (need_verify) {
-    PreeditVerifyReplace(w, startPos, endPos, mb, 
+    PreeditVerifyReplace(w, startPos, endPos, mb,
 			 PreCursorTW(tw), &end_preedit);
     if (end_preedit) {
       (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
@@ -3719,12 +3719,12 @@ PreeditDraw(XIC xic,
     block.ptr = mb;
     block.length = strlen(mb);
     block.format = XmFMT_8_BIT;
-    if ((*tw->text.source->Replace)(tw, NULL, &startPos, &endPos, 
+    if ((*tw->text.source->Replace)(tw, NULL, &startPos, &endPos,
 				    &block, False) != EditDone) {
       XBell(XtDisplay(tw), 0);
       return;
     }
-    else 
+    else
       _XmTextPreeditSetCursorPosition(w, PreCursorTW(tw));
   }
 
@@ -3776,19 +3776,19 @@ PreeditCaret(XIC xic,
 
   _XmTextValidate(&start, &new_position, data->length);
   PreCursorTW(tw) = PreStartTW(tw) + new_position;
-  
+
   if (need_verify) {
     UnderVerifyPreedit(tw) = True;
     _XmTextSetCursorPosition (w, PreCursorTW(tw));
     UnderVerifyPreedit(tw) = False;
   }
-  else 
+  else
     _XmTextPreeditSetCursorPosition(w, PreCursorTW(tw));
-  
+
   (*tw->text.output->DrawInsertionPoint)(tw, tw->text.cursor_position, on);
 }
 
-static void 
+static void
 ResetUnder(XmTextWidget tw)
 {
     if (XmImGetXICResetState((Widget)tw) != XIMPreserveState)
@@ -3823,9 +3823,9 @@ _XmTextResetIC(Widget widget)
     XmImMbResetIC(widget, &tmp_mb);
     if (tmp_mb) XtFree(tmp_mb);
   }
-  else 
+  else
     XmImMbResetIC(widget, &mb);
-     
+
   if (!mb) {
     ResetUnder(tw);
     return;
@@ -3911,12 +3911,12 @@ _XmTextSetPreeditPosition(Widget w,
  *
  ****************************************************************/
 
-char * 
+char *
 XmTextGetString(Widget widget)
 {
   char *text_copy = NULL;
   _XmWidgetToAppContext(widget);
-  
+
   _XmAppLock(app);
   if (XmIsTextField(widget)) {
     XmAccessTextualTrait textT;
@@ -3926,7 +3926,7 @@ XmTextGetString(Widget widget)
       text_copy = (char*) textT->getValue(widget, XmFORMAT_MBYTE);
   } else
     text_copy = _XmStringSourceGetValue(GetSrc(widget), False);
-  
+
   _XmAppUnlock(app);
   return (text_copy);
 }
@@ -3937,7 +3937,7 @@ XmTextGetStringWcs(Widget widget)
 {
   wchar_t *text_copy = NULL;
   _XmWidgetToAppContext(widget);
-  
+
   _XmAppLock(app);
   if (XmIsTextField(widget)){
     XmAccessTextualTrait textT;
@@ -3952,7 +3952,7 @@ XmTextGetStringWcs(Widget widget)
   return (text_copy);
 }
 
-void 
+void
 XmTextSetString(Widget widget,
 		char *value)
 {
@@ -3965,13 +3965,13 @@ XmTextSetString(Widget widget,
       XmeTraitGet((XtPointer) XtClass(widget), XmQTaccessTextual);
     if (textT)
       textT->setValue(widget, (XtPointer)value, XmFORMAT_MBYTE);
-  } else 
+  } else
     _XmTextSetString(widget, value);
 
   _XmAppUnlock(app);
 }
 
-void 
+void
 XmTextSetStringWcs(Widget widget,
 		   wchar_t *wc_value)
 {
@@ -3991,12 +3991,12 @@ XmTextSetStringWcs(Widget widget,
   } else {
 
     for (num_chars = 0; wc_value[num_chars] != (wchar_t)0L; num_chars++)
-      /*EMPTY*/; 
-  
+      /*EMPTY*/;
+
     tmp = XtMalloc((unsigned) (num_chars + 1) * (int)tw->text.char_size);
-    result = wcstombs(tmp, wc_value, 
+    result = wcstombs(tmp, wc_value,
 		      (num_chars + 1) * (int)tw->text.char_size);
-    
+
     if (result == (size_t) -1) {/* if wcstombs fails, it returns (size_t) -1 */
       XtFree(tmp);              /* if invalid data, pass in the empty string */
       _XmTextSetString(widget, "");
@@ -4008,7 +4008,7 @@ XmTextSetStringWcs(Widget widget,
   _XmAppUnlock(app);
 }
 
-XmTextPosition 
+XmTextPosition
 XmTextGetTopCharacter(Widget widget)
 {
   XmTextWidget tw = (XmTextWidget) widget;
@@ -4022,46 +4022,46 @@ XmTextGetTopCharacter(Widget widget)
   _XmAppUnlock(app);
   return ret_val;
 }
-    
 
-void 
+
+void
 XmTextSetTopCharacter(Widget widget,
 		      XmTextPosition top_character)
 {
   XmTextWidget tw = (XmTextWidget) widget;
   _XmWidgetToAppContext(widget);
- 
-  _XmAppLock(app); 
+
+  _XmAppLock(app);
    if (tw->text.output->data->resizeheight &&
        !(tw->text.output->data->scrollvertical &&
        XmIsScrolledWindow(XtParent(widget))) ) {
     if (tw->text.top_character == 0) {
-      _XmAppUnlock(app); 
+      _XmAppUnlock(app);
       return;
     }
     else
       top_character = 0;
   }
-  
+
   _XmTextSetTopCharacter(widget, top_character);
-  _XmAppUnlock(app); 
+  _XmAppUnlock(app);
 }
 
 
-XmTextSource 
+XmTextSource
 XmTextGetSource(Widget widget)
 {
   XmTextWidget tw = (XmTextWidget) widget;
   XmTextSource ret_val;
   _XmWidgetToAppContext(widget);
-  
+
   _XmAppLock(app);
   ret_val = tw->text.source;
   _XmAppUnlock(app);
   return ret_val;
 }
 
-void 
+void
 XmTextSetSource(Widget widget,
 		XmTextSource source,
 		XmTextPosition top_character,
@@ -4079,7 +4079,7 @@ XmTextSetSource(Widget widget,
   _XmWidgetToAppContext(widget);
 
   _XmAppLock(app);
-  
+
   _XmTextResetIC(widget);
   EraseInsertionPoint(tw);
   if (source == NULL) {
@@ -4087,21 +4087,21 @@ XmTextSetSource(Widget widget,
     _XmAppUnlock(app);
     return;
   }
-  
+
   /* zero out old line table */
   block.ptr = NULL;
   block.length = 0;
   _XmTextUpdateLineTable(widget, 0, 0, &block, False);
   tw->text.total_lines = 1;
-  
+
   (*tw->text.source->RemoveWidget)(tw->text.source, tw);
   tw->text.source = source;
-  
+
   if (cursor_position > source->data->length)
     cursor_position = source->data->length;
   else if (cursor_position < 0)
     cursor_position = 0;
-  
+
   tw->text.cursor_position = cursor_position;
   _XmTextMovingCursorPosition(tw, cursor_position); /*correct GC for
 						     * new location */
@@ -4110,12 +4110,12 @@ XmTextSetSource(Widget widget,
   _XmStringSourceSetGappedBuffer(source->data, cursor_position);
   if (tw->text.edit_mode == XmMULTI_LINE_EDIT)
     top_character = (*tw->text.source->Scan)(tw->text.source, top_character,
-					     XmSELECT_LINE, XmsdLeft, 1, 
+					     XmSELECT_LINE, XmsdLeft, 1,
 					     FALSE);
 
   tw->text.new_top = top_character;
   tw->text.top_character = 0;
-  
+
   /* reset line table with new source */
   last_pos = (XmTextPosition) source->data->length;
   while (pos < last_pos) {
@@ -4125,11 +4125,11 @@ XmTextSetSource(Widget widget,
     _XmTextUpdateLineTable(widget, old_pos, old_pos, &block, False);
     old_pos = pos;
   }
-  
+
   _XmTextInvalidate(tw, top_character, top_character, NODELTA);
   if (tw->text.disable_depth == 0)
     Redisplay(tw);
-  
+
   /* Tell the input method the new x,y location of the cursor */
   (*tw->text.output->PosToXY)(tw, cursor_position, &xmim_point.x,
 			      &xmim_point.y);
@@ -4138,14 +4138,14 @@ XmTextSetSource(Widget widget,
   XtSetArg(args[n], XmNspotLocation, &xmim_point); n++;
   XtSetArg(args[n], XmNarea, &xmim_area); n++;
   XmImSetValues((Widget)tw, args, n);
-  
+
   TextDrawInsertionPoint(tw);
 
   _XmAppUnlock(app);
 }
 
 
-void 
+void
 XmTextScroll(Widget widget,
 	     int n)
 {
@@ -4153,16 +4153,16 @@ XmTextScroll(Widget widget,
   _XmWidgetToAppContext(widget);
 
   _XmAppLock(app);
-  
+
   tw->text.pending_scroll += n;
   tw->text.needs_refigure_lines = tw->text.needs_redisplay = TRUE;
-  
+
   if (tw->text.disable_depth == 0) Redisplay(tw);
 
   _XmAppUnlock(app);
 }
 
-void 
+void
 XmTextDisableRedisplay(Widget widget)
 {
   _XmWidgetToAppContext(widget);
@@ -4172,7 +4172,7 @@ XmTextDisableRedisplay(Widget widget)
   _XmAppUnlock(app);
 }
 
-void 
+void
 XmTextEnableRedisplay(Widget widget)
 {
   _XmWidgetToAppContext(widget);
@@ -4182,7 +4182,7 @@ XmTextEnableRedisplay(Widget widget)
   _XmAppUnlock(app);
 }
 
-Widget 
+Widget
 XmCreateScrolledText(Widget parent,
 		     char *name,
 		     ArgList arglist,
@@ -4201,7 +4201,7 @@ XmCreateScrolledText(Widget parent,
 
   _XmAppLock(app);
   s_size = ((name) ? strlen(name) : 0) + 3;
-  
+
   s = (char *) XmStackAlloc(s_size, s_cache);  /* Name + NULL + "SW" */
   if (name) {
     strcpy(s, name);
@@ -4209,7 +4209,7 @@ XmCreateScrolledText(Widget parent,
   } else {
     strcpy(s, "SW");
   }
-  
+
   /*
    * merge the application arglist with the required preset arglist, for
    * creating the scrolled window portion of the scroll text.
@@ -4224,15 +4224,15 @@ XmCreateScrolledText(Widget parent,
   XtSetArg(merged_args[n], XmNvisualPolicy, (XtArgVal)XmVARIABLE); n++;
   XtSetArg(merged_args[n], XmNscrollBarDisplayPolicy, (XtArgVal)XmSTATIC); n++;
   XtSetArg(merged_args[n], XmNshadowThickness, (XtArgVal) 0); n++;
-  
+
   swindow = XtCreateManagedWidget(s, xmScrolledWindowWidgetClass, parent,
 				  merged_args, n);
   XmStackFree(s, s_cache);
   XmStackFree((char *)merged_args, args_cache);
-  
+
   /* Create Text widget.  */
   stext = XtCreateWidget(name, xmTextWidgetClass, swindow, arglist, argcount);
-  
+
   /* Add callback to destroy ScrolledWindow parent. */
   XtAddCallback (stext, XmNdestroyCallback, _XmDestroyParentCallback, NULL);
 
@@ -4241,7 +4241,7 @@ XmCreateScrolledText(Widget parent,
   return (stext);
 }
 
-Widget 
+Widget
 XmCreateText(Widget parent,
 	     char *name,
 	     ArgList arglist,
@@ -4249,7 +4249,7 @@ XmCreateText(Widget parent,
 {
   return XtCreateWidget(name, xmTextWidgetClass, parent, arglist, argcount);
 }
-Widget 
+Widget
 XmVaCreateText(
         Widget parent,
         char *name,
@@ -4258,22 +4258,22 @@ XmVaCreateText(
     register Widget w;
     va_list var;
     int count;
-    
+
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
 
-    
+
     Va_start(var, name);
-    w = XmeVLCreateWidget(name, 
-                         xmTextWidgetClass, 
-                         parent, False, 
+    w = XmeVLCreateWidget(name,
+                         xmTextWidgetClass,
+                         parent, False,
                          var, count);
-    va_end(var);   
+    va_end(var);
     return w;
-    
+
 }
-Widget 
+Widget
 XmVaCreateManagedText(
         Widget parent,
         char *name,
@@ -4282,17 +4282,17 @@ XmVaCreateManagedText(
     Widget w = NULL;
     va_list var;
     int count;
-    
+
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-    
+
     Va_start(var, name);
-    w = XmeVLCreateWidget(name, 
-                         xmTextWidgetClass, 
-                         parent, True, 
+    w = XmeVLCreateWidget(name,
+                         xmTextWidgetClass,
+                         parent, True,
                          var, count);
-    va_end(var);   
+    va_end(var);
     return w;
-    
+
 }

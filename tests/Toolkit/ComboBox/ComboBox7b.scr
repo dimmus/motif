@@ -1,5 +1,5 @@
-# @)  This testcase should be run with the option \"-u DROP_DOWN_COMBO_BOX\". 
-# A ComboBox widget of type DROP_DOWN_COMBO_BOX should be displayed.  
+# @)  This testcase should be run with the option \"-u DROP_DOWN_COMBO_BOX\".
+# A ComboBox widget of type DROP_DOWN_COMBO_BOX should be displayed.
 # A ComboBox should display a List widget.  Beneath the list should be a Scale
 # labelled \"Position\" and a PushButton labelled \"Delete Item\".
 

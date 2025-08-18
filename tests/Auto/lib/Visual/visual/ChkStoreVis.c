@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ChkStoreVis.c /main/5 1995/07/14 11:47:29 drk $"
@@ -35,14 +35,14 @@ static char rcsid[] = "$XConsortium: ChkStoreVis.c /main/5 1995/07/14 11:47:29 d
 	Calls:
 
 	Summary:
-	    Called to determine the current mode when a store temp 
+	    Called to determine the current mode when a store temp
 	    visaul command is executed.  Store the temp image only if
 	    running in a compare (batch or interactive) mode.
 
         INPUTS:
             widget - the widget whose image needs comparing or capturing
 	    identifier - the tag assocated with an image
-        
+
         OUTPUTS:
             none
 
@@ -58,7 +58,7 @@ char *identifier;
 {
 
     char msg_string[125];
-  
+
     if (XmIsGadget(widget_info->widget))
         widget_info = widget_info->parent;
 

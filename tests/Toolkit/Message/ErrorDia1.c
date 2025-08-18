@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ErrorDia1.c /main/8 1995/07/13 18:56:51 drk $"
@@ -105,7 +105,7 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
- 
+
     w2 = XmCreatePushButton (Shell1, "mapbutton", NULL, 0);
     XtManageChild (w2);
 

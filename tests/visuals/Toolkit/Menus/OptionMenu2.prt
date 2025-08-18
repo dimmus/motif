@@ -22,44 +22,44 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual optionMenu 
-TRACE:(2) LocatePointer optionMenu ROptionButton 
-TRACE:(3) PressMB Btn3 
-TRACE:(4) CompareVisual PullDown1 
-TRACE:(5) ReleaseMB Btn3 
+TRACE:(1) CompareVisual optionMenu
+TRACE:(2) LocatePointer optionMenu ROptionButton
+TRACE:(3) PressMB Btn3
+TRACE:(4) CompareVisual PullDown1
+TRACE:(5) ReleaseMB Btn3
 TRACE:(6) Continue
-TRACE:(7) LocatePointer optionMenu ROptionButton 
-TRACE:(8) PressMB Btn3 
-TRACE:(9) CompareVisual PullDown1 
-TRACE:(10) LocatePointer Short  
-TRACE:(11) ReleaseMB Btn3 
-TRACE:(12) LocatePointer optionMenu ROptionButton 
-TRACE:(13) PressMB Btn3 
-TRACE:(14) LocatePointer MediumLength  
-TRACE:(15) ReleaseMB Btn3 
-TRACE:(16) CompareVisual optionMenu 
-TRACE:(17) LocatePointer optionMenu ROptionButton 
-TRACE:(18) PressMB Btn3 
-TRACE:(19) LocatePointer TennesseeJed  
-TRACE:(20) ReleaseMB Btn3 
-TRACE:(21) CompareVisual optionMenu 
-TRACE:(22) LocatePointer optionMenu ROptionButton 
-TRACE:(23) PressMB Btn3 
-TRACE:(24) LocatePointer MediumLength  
-TRACE:(25) ReleaseMB Btn3 
+TRACE:(7) LocatePointer optionMenu ROptionButton
+TRACE:(8) PressMB Btn3
+TRACE:(9) CompareVisual PullDown1
+TRACE:(10) LocatePointer Short
+TRACE:(11) ReleaseMB Btn3
+TRACE:(12) LocatePointer optionMenu ROptionButton
+TRACE:(13) PressMB Btn3
+TRACE:(14) LocatePointer MediumLength
+TRACE:(15) ReleaseMB Btn3
+TRACE:(16) CompareVisual optionMenu
+TRACE:(17) LocatePointer optionMenu ROptionButton
+TRACE:(18) PressMB Btn3
+TRACE:(19) LocatePointer TennesseeJed
+TRACE:(20) ReleaseMB Btn3
+TRACE:(21) CompareVisual optionMenu
+TRACE:(22) LocatePointer optionMenu ROptionButton
+TRACE:(23) PressMB Btn3
+TRACE:(24) LocatePointer MediumLength
+TRACE:(25) ReleaseMB Btn3
 TRACE:(26) Continue
-TRACE:(27) CompareVisual optionMenu 
+TRACE:(27) CompareVisual optionMenu
 TRACE:(28) Continue
-TRACE:(29) CompareVisual optionMenu 
+TRACE:(29) CompareVisual optionMenu
 TRACE:(30) Continue
-TRACE:(31) LocatePointer optionMenu ROptionButton 
-TRACE:(32) PressMB Btn3 
-TRACE:(33) LocatePointer PushButton15  
-TRACE:(34) ReleaseMB Btn3 
-TRACE:(35) LocatePointer optionMenu ROptionButton 
-TRACE:(36) PressMB Btn3 
-TRACE:(37) LocatePointer PushButton16  
-TRACE:(38) CompareVisual PullDown1 
-TRACE:(39) ReleaseMB Btn3 
+TRACE:(31) LocatePointer optionMenu ROptionButton
+TRACE:(32) PressMB Btn3
+TRACE:(33) LocatePointer PushButton15
+TRACE:(34) ReleaseMB Btn3
+TRACE:(35) LocatePointer optionMenu ROptionButton
+TRACE:(36) PressMB Btn3
+TRACE:(37) LocatePointer PushButton16
+TRACE:(38) CompareVisual PullDown1
+TRACE:(39) ReleaseMB Btn3
 TRACE:(40) Exit
 Exiting Test...Please Standby...

@@ -19,18 +19,18 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH spin_box 1X MOTIF "Demonstration programs"
 .SH NAME
-\*Lspin_box\*O\(emDemonstrates how to use XmSpinBox in a simple application 
+\*Lspin_box\*O\(emDemonstrates how to use XmSpinBox in a simple application
 .SH SYNOPSIS
 .sS
 \*Lspin_box\*O
 .sE
 .SH DESCRIPTION
-\*Lspin_box\*O illustrates how to use an XmComboBox into an application. 
+\*Lspin_box\*O illustrates how to use an XmComboBox into an application.
 The application creates seven different SpinBoxes for you to manipulate.
 Click the ArrowButtons next to each SpinBox in order to increment or
 decrement the values of the SpinBox Children.

@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,22 +36,22 @@ extern "C" {
 
 /********    Private Function Declarations for MapEvents.c    ********/
 
-extern Boolean _XmMapBtnEvent( 
+extern Boolean _XmMapBtnEvent(
                         register String str,
                         int *eventType,
                         unsigned int *button,
                         Modifiers *modifiers) ;
-extern int _XmMapKeyEvents( 
+extern int _XmMapKeyEvents(
                         register String str,
                         int **eventType,
                         KeySym **keysym,
                         Modifiers **modifiers) ;
-extern Boolean _XmMatchBtnEvent( 
+extern Boolean _XmMatchBtnEvent(
                         XEvent *event,
                         int eventType,
                         unsigned int button,
                         Modifiers modifiers) ;
-extern Boolean _XmMatchKeyEvent( 
+extern Boolean _XmMatchKeyEvent(
                         XEvent *event,
                         int eventType,
                         unsigned int key,

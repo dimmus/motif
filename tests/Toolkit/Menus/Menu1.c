@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu1.c /main/12 1996/07/26 16:55:18 jakku $"
@@ -117,7 +117,7 @@ void tearOffDeactivate(Widget w, XtPointer closure, XtPointer call_data)
   printf("Tear off deactivated\n");
 }
 
-static XtCallbackRec toDCallback[] = 
+static XtCallbackRec toDCallback[] =
 {
   {tearOffDeactivate, (XtPointer) NULL},
   {NULL, (XtPointer) NULL}
@@ -207,7 +207,7 @@ static Widget CreateCascade(char *label, KeySym mnemonic, Widget submenu,
   XtSetArg(args[n], XmNmnemonic,  mnemonic);  n++;
   if ((int)submenu != 0)
     {
-      XtSetArg(args[n], XmNsubMenuId, submenu); 
+      XtSetArg(args[n], XmNsubMenuId, submenu);
       n++;
     }
   widget = XmCreateCascadeButton(parent, label, args,n);
@@ -286,7 +286,7 @@ char **argv;
 #endif
   PullDown1 = XmCreatePulldownMenu (MenuBar1, "pulldown1", args, n);
 /*  XtManageChild(PullDown1);*/
- 
+
   XtAddCallback(PullDown1, XmNmapCallback, MapCB, (XtPointer) "TearOff #1");
   XtAddCallback(PullDown1, XmNunmapCallback, UnmapCB, (XtPointer) 1);
 
@@ -317,15 +317,15 @@ char **argv;
   MenuBtn3 = CreateCascade("MenuBtn3", '3', PullDown3, MenuBar1);
 
   XtRealizeWidget(Shell1);
-  
+
 #ifndef MOTIF1_1
-  
+
   /*
-   * Check to see if XmGetTearOffControl can get the widget id of 
+   * Check to see if XmGetTearOffControl can get the widget id of
    *  the tear off control
    */
 
-  tearOffWidget = XmGetTearOffControl(PullDown1); 
+  tearOffWidget = XmGetTearOffControl(PullDown1);
 
 #endif
 
@@ -462,7 +462,7 @@ char **argv;
 
 #ifndef MOTIF1_1
   CommonPause();
-  CommonPause();  
+  CommonPause();
   CommonPause();
   CommonPause();
   CommonPause();
@@ -483,7 +483,7 @@ char **argv;
 
   CommonPause();
 
-  /* 
+  /*
    * Test for 8 bit mnemonic
    */
 
@@ -492,14 +492,14 @@ char **argv;
 
   CommonPause();
 
-  /*  
-   *  Add code for PIR 2965 
+  /*
+   *  Add code for PIR 2965
    *  Illegal mnemonics cause core dump
    */
 
   PullDown5 = CreatePullDown(MenuBar1, "pulldown5");
   Menu5 = CreateCascade("Menu5", (unsigned char) '\t',PullDown5, MenuBar1);
-  
+
   CommonPause();
   CommonPause();
 
@@ -510,18 +510,6 @@ char **argv;
   CommonPause();
 
   XtDestroyWidget(MenuBar1);
- 
+
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-

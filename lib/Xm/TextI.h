@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -86,7 +86,7 @@ extern void _XmTextDisableRedisplay(XmTextWidget widget,
 #else
                                     Boolean losesbackingstore);
 #endif /* NeedWidePrototypes */
-extern void _XmTextEnableRedisplay(XmTextWidget widget);  
+extern void _XmTextEnableRedisplay(XmTextWidget widget);
 
 extern void _XmTextSetHighlight(Widget, XmTextPosition,
                                 XmTextPosition, XmHighlightMode);
@@ -105,7 +105,7 @@ extern Boolean _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
 extern void _XmTextReplace(Widget widget,
                            XmTextPosition frompos,
                            XmTextPosition topos,
-	                   char *value, 
+	                   char *value,
 #if NeedWidePrototypes
                            int is_wchar);
 #else

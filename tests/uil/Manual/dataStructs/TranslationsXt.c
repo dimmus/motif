@@ -29,14 +29,14 @@
 static char rcsid[] = "$XConsortium: TranslationsXt.c /main/4 1995/07/13 20:35:20 drk $"
 #endif
 #endif
-  
+
 #include <stdio.h>
 #include <Xm/Xm.h>
 #include <Xm/Form.h>
 #include <Xm/TextF.h>
 #include <Xm/PushB.h>
 #include <Xm/ArrowB.h>
-  
+
 static void actSetTextCb();
 static void actquit();
 
@@ -45,39 +45,39 @@ static void leave();
 
 String button_trans = "<Btn1Down>, <Btn1Up>: actSetTextCb() \n\
                        Ctrl<Key>q: actquit()";
-     
+
 String appMain_trans = "Ctrl<Key>q: actquit()";
-     
+
 String text_trans = "Ctrl<Key>q: actquit() \n\
                      Ctrl<Key>b: beginning-of-line() \n\
                      Ctrl<Key>e: end-of-line() ";
-     
+
 String done_trans = "<Btn1Down>: actquit() \n\
                      Ctrl<Key>q: actquit()";
-     
+
 static  XtActionsRec  actions[] = {
   { "actSetTextCb", actSetTextCb },
   { "actquit",  actquit },
 };
-     
-     
+
+
 static XtAppContext  appContext;
-     
-static Widget appMain, shell, textfd, button, done; 
-     
-     
+
+static Widget appMain, shell, textfd, button, done;
+
+
 main(argc, argv)
      int argc;
      char *argv[];
 {
-  
+
   Display *display;
   Arg args[10];
   Boolean size;
   int n;
   XtAccelerators accels;
-  
-  
+
+
   XtToolkitInitialize();
   appContext = XtCreateApplicationContext();
   display = XtOpenDisplay(appContext, NULL, "test", "Test",
@@ -86,15 +86,15 @@ main(argc, argv)
     fprintf(stderr, "%s:  Can't open display\n", argv[0]);
     exit(1);
   }
-  
-  
+
+
   shell = XtAppCreateShell("Xt Version", NULL, applicationShellWidgetClass,
 			   display, NULL, 0);
-  
+
   appMain = XmCreateForm(shell, "form", NULL, 0);
-  XtOverrideTranslations(appMain, XtParseTranslationTable(appMain_trans)); 
+  XtOverrideTranslations(appMain, XtParseTranslationTable(appMain_trans));
   XtManageChild(appMain);
- 
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_POSITION); n++;
   XtSetArg(args[n], XmNtopPosition, 0); n++;
@@ -104,11 +104,11 @@ main(argc, argv)
   XtSetArg(args[n], XmNleftPosition, 10);n++;
   XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION); n++;
   XtSetArg(args[n], XmNrightPosition, 40); n++;
-  
+
   textfd = XmCreateTextField(appMain, "text", args, n);
-  XtOverrideTranslations(textfd, XtParseTranslationTable(text_trans)); 
+  XtOverrideTranslations(textfd, XtParseTranslationTable(text_trans));
   XtManageChild(textfd);
-  
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_POSITION); n++;
   XtSetArg(args[n], XmNtopPosition, 0); n++;
@@ -118,15 +118,15 @@ main(argc, argv)
   XtSetArg(args[n], XmNleftPosition, 50);n++;
   XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION); n++;
   XtSetArg(args[n], XmNrightPosition, 80); n++;
-  
+
   button = XmCreatePushButton(appMain, "Change My Label", args, n);
   n = 0;
   XtSetArg(args[n], XmNdefaultButton, button); n++;
   XtSetValues(appMain, args, n);
-  XtOverrideTranslations(button, XtParseTranslationTable(button_trans)); 
+  XtOverrideTranslations(button, XtParseTranslationTable(button_trans));
   XtManageChild(button);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_POSITION); n++;
   XtSetArg(args[n], XmNtopPosition, 0); n++;
@@ -136,21 +136,21 @@ main(argc, argv)
   XtSetArg(args[n], XmNleftPosition, 85);n++;
   XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION); n++;
   XtSetArg(args[n], XmNrightPosition, 95); n++;
-  
-  
+
+
   done = XmCreatePushButton(appMain, "Done", args, n);
-  XtOverrideTranslations(done, XtParseTranslationTable(done_trans)); 
+  XtOverrideTranslations(done, XtParseTranslationTable(done_trans));
   XtManageChild(done);
-  
+
   XtAppAddActions(appContext, actions, XtNumber(actions));
-  
+
   XtRealizeWidget(shell);
 
   XtInstallAccelerators(textfd, button);
-  
+
   XtAppMainLoop(appContext);
-  
-  
+
+
 }
 
 static void SetTextCb(w, id, cb)
@@ -158,11 +158,11 @@ static void SetTextCb(w, id, cb)
      char *id;
      XtPointer cb;
 {
-  Widget txt = XtNameToWidget(appMain, id); 
+  Widget txt = XtNameToWidget(appMain, id);
   char *value = XmTextFieldGetString (txt);
-  XmString label = XmStringCreate (value, XmSTRING_DEFAULT_CHARSET); 
+  XmString label = XmStringCreate (value, XmSTRING_DEFAULT_CHARSET);
   Arg args[1];
-  
+
   XtSetArg (args[0], XmNlabelString, label);
   XtSetValues (w, args, 1);
   XmStringFree (label);
@@ -178,25 +178,25 @@ static void quit(w, client_data, call_data )
   XmString label;
   Arg args[10];
   int n;
-  
+
   cp = (char *)client_data;
   tw = XtNameToWidget(appMain, cp);
   value =  XmTextFieldGetString (tw);
-  
+
   n = 0;
   XtSetArg (args[n], XmNlabelString, &label); n++;
   XtGetValues (button, args, n);
   XmStringGetLtoR(label, XmSTRING_DEFAULT_CHARSET, &cp);
-  
+
   fw = XtParent(w);
   XtDestroyWidget(XtParent(fw));
-  
-  
+
+
   printf("\nThe current text field string : %s \n\n", value);
-  
+
   printf("\nThe current Shift button label : %s \n\n", cp);
-  
-  
+
+
   exit(0);
 }
 
@@ -207,7 +207,7 @@ static void actSetTextCb(w, event, pars, num_pars)
      Cardinal *num_pars;
 {
   SetTextCb(w, "*text", NULL);
-  
+
 }
 
 static void actquit(w, event, pars, num_pars)
@@ -216,11 +216,7 @@ static void actquit(w, event, pars, num_pars)
      String *pars;
      Cardinal *num_pars;
 {
-  
+
   quit(w, "*text", NULL);
-  
+
 }
-
-
-
-

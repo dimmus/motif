@@ -45,14 +45,14 @@ Widget	Container3;
 Widget	IconGad1,IconGad2,IconGad3,IconGad4;
 Widget	IconGad31,IconGad32,IconGad321,IconGad3211,IconGad33;
 
-char	*ColumnHeadingText[NUM_COL] = { 
+char	*ColumnHeadingText[NUM_COL] = {
     "Icon",
     "Full Title",
     "Favorite Flavor",
     "Age"
     };
 
-char	*FullTitleText[NUM_OBJ] = { 
+char	*FullTitleText[NUM_OBJ] = {
     "The First Object",
     "2nd Object, but still important",
     "Show",
@@ -64,7 +64,7 @@ char	*FullTitleText[NUM_OBJ] = {
     "Cat Lives"
     };
 
-char	*FlavorText[NUM_OBJ] = { 
+char	*FlavorText[NUM_OBJ] = {
     "Chocolate",
     "Raspberry",
     "Blueberry",
@@ -76,7 +76,7 @@ char	*FlavorText[NUM_OBJ] = {
     "Lemon"
     };
 
-char	*AgeText[NUM_OBJ] = { 
+char	*AgeText[NUM_OBJ] = {
     "42",
     "10",
     "4",
@@ -93,7 +93,7 @@ XmStringTable	ColumnHeadings;
 void
 main(int argc, char **argv)
 {
-    
+
     XmStringTable	ColumnDetails;
     int    		i,j;
     Cardinal		n;
@@ -102,50 +102,50 @@ main(int argc, char **argv)
     char		test_char;
     char		ContainerName[NAME_LEN + 1];
     Pixmap		CollapsedStatePixmap, ExpandedStatePixmap;
-    
+
     ContainerName[0] = '\0';
     test_num = 0;
     test_char = '\0';
-    
+
     CommonTestInit(argc, argv);
 
     if (UserData != NULL) {
-	
-	if (strcmp(UserData, "a") == 0) 
+
+	if (strcmp(UserData, "a") == 0)
 	    test_num = 1;
-	else if (strcmp(UserData, "b") == 0) 
+	else if (strcmp(UserData, "b") == 0)
 	    test_num = 2;
-	else if (strcmp(UserData, "c") == 0) 
+	else if (strcmp(UserData, "c") == 0)
 	    test_num = 3;
-	else if (strcmp(UserData, "d") == 0) 
+	else if (strcmp(UserData, "d") == 0)
 	    test_num = 4;
-	
+
 	test_char = *UserData;
-	
+
 	free(UserData);
-	
+
     }
     sprintf(ContainerName, "Container3%c", test_char);
-    
+
     CollapsedStatePixmap = XCreatePixmapFromBitmapData(display, rootWindow,
 						       collapsedState_bits,
-						       collapsedState_width, 
+						       collapsedState_width,
 						       collapsedState_height,
 						       CommonGetColor("black"),
 						       CommonGetColor("white"),
-						       XDefaultDepth(display, 
+						       XDefaultDepth(display,
 								     XDefaultScreen(display)));
-    
+
     ExpandedStatePixmap = XCreatePixmapFromBitmapData(display, rootWindow,
 						      expandedState_bits,
-						      expandedState_width, 
+						      expandedState_width,
 						      expandedState_height,
 						      CommonGetColor("white"),
 						      CommonGetColor("black"),
-						      XDefaultDepth(display, 
+						      XDefaultDepth(display,
 								    XDefaultScreen(display)));
-    
-    
+
+
     ColumnHeadings = (XmStringTable) XtMalloc(NUM_COL * sizeof(XmString));
 
     for (i = 0; i < NUM_COL; i++)
@@ -154,7 +154,7 @@ main(int argc, char **argv)
 					      XmCHARSET_TEXT,
 					      NULL);
 
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryViewType, XmLARGE_ICON); n++;
     XtSetArg(args[n], XmNlayoutType, XmOUTLINE); n++;
@@ -166,9 +166,9 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNexpandedStatePixmap, ExpandedStatePixmap); n++;
     Container3 = XmCreateContainer(Shell1, ContainerName, args, n);
     XtManageChild(Container3);
-    
+
     EntryDetails = (XmStringTable *) XtMalloc(NUM_OBJ * sizeof(XmStringTable));
-    
+
     for (i = 0; i < NUM_OBJ; i++) {
 
 	ColumnDetails = (XmStringTable)XtMalloc((NUM_COL-1) * sizeof(XmString));
@@ -186,95 +186,95 @@ main(int argc, char **argv)
 					    NULL);
 	EntryDetails[i] = ColumnDetails;
     }
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 100); n++;
     XtSetArg(args[n], XmNy, 100); n++;
     XtSetArg(args[n], XmNentryViewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[0]); n++;
     IconGad1 = XmCreateIconGadget(Container3, "IconGad1", args, n);
     XtManageChild(IconGad1);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 200); n++;
     XtSetArg(args[n], XmNy, 200); n++;
     XtSetArg(args[n], XmNentryViewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[1]); n++;
     IconGad2 = XmCreateIconGadget(Container3, "IconGad2", args, n);
     XtManageChild(IconGad2);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 300); n++;
     XtSetArg(args[n], XmNy, 100); n++;
     XtSetArg(args[n], XmNentryViewType, XmLARGE_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[2]); n++;
     IconGad3 = XmCreateIconGadget(Container3, "IconGad3", args, n);
     XtManageChild(IconGad3);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 50); n++;
     XtSetArg(args[n], XmNy, 400); n++;
     XtSetArg(args[n], XmNentryViewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[3]); n++;
     IconGad4 = XmCreateIconGadget(Container3, "IconGad4", args, n);
     XtManageChild(IconGad4);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad3); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNentryViewType, XmSMALL_ICON); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[4]); n++;
     IconGad31 = XmCreateIconGadget(Container3, "IconGad31", args, n);
     XtManageChild(IconGad31);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad3); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNentryViewType, XmSMALL_ICON); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[5]); n++;
     IconGad32 = XmCreateIconGadget(Container3, "IconGad32", args, n);
     XtManageChild(IconGad32);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad32); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNentryViewType, XmLARGE_ICON); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[6]); n++;
     IconGad321 = XmCreateIconGadget(Container3, "IconGad321", args, n);
     XtManageChild(IconGad321);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad321); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNentryViewType, XmLARGE_ICON); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[7]); n++;
     IconGad3211 = XmCreateIconGadget(Container3, "IconGad3211", args, n);
     XtManageChild(IconGad3211);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad3); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNentryViewType, XmSMALL_ICON); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[8]); n++;
     IconGad33 = XmCreateIconGadget(Container3, "IconGad33", args, n);
     XtManageChild(IconGad33);
-    
+
     for (i = 0; i < NUM_OBJ; i++) {
-	
+
 	ColumnDetails = EntryDetails[i];
 	for (j = 0; j < NUM_COL-1; j++)
 	    XmStringFree(ColumnDetails[j]);
 	XtFree((XtPointer)ColumnDetails);
-	
+
     }
     XtFree((XtPointer)EntryDetails);
-    
+
     XtRealizeWidget(Shell1);
-    
+
     CommonPause();
 
     if ((test_num == 1) || (test_num == 2)) {
@@ -284,7 +284,7 @@ main(int argc, char **argv)
        CommonPause();
        CommonPause();
        CommonPause();
-    
+
        for (i = 0; i < NUM_COL; i++)
 	 XmStringFree(ColumnHeadings[i]);
        XtFree((XtPointer)ColumnHeadings);
@@ -293,16 +293,13 @@ main(int argc, char **argv)
     if (test_num == 3) {
 
        CommonPause();
-    
+
        for (i = 0; i < NUM_COL; i++)
 	 XmStringFree(ColumnHeadings[i]);
        XtFree((XtPointer)ColumnHeadings);
     }
 
-    
+
     XtAppMainLoop(app_context);
-    
+
 }
-
-
-

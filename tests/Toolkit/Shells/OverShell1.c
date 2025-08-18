@@ -29,7 +29,7 @@
 
 /* This is a test for CR 5195 */
 
-void 
+void
 main (int argc, char **argv)
 {
     Widget TestShell, PB;
@@ -43,17 +43,17 @@ main (int argc, char **argv)
     XtSetArg (args[n], XmNy, 100); n++;
     XtSetArg (args[n], XmNwidth, 100); n++;
     XtSetArg (args[n], XmNheight, 100); n++;
-    TestShell=XtCreatePopupShell ("popup", overrideShellWidgetClass, Shell1, 
+    TestShell=XtCreatePopupShell ("popup", overrideShellWidgetClass, Shell1,
 				   args, n);
 
- 
+
     n=0;
     PB = XmCreatePushButton (TestShell, "PB", args ,n);
     XtManageChild (PB);
- 
+
     XtPopup (TestShell, XtGrabNone);
 
     CommonPause();
-     
+
     XtAppMainLoop (app_context);
 }

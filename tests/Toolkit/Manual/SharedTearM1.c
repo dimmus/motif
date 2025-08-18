@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: SharedTearM1.c /main/7 1999/05/19 11:21:49 jff $"
@@ -111,7 +111,7 @@ static int quiet = FALSE;
 #define TEST_CASCADE_CB 1
 #define LAST_TEST_TYPE 1
 
-/* 
+/*
  * Some Utility routines
  */
 
@@ -134,7 +134,7 @@ get_options(unsigned int argc, char **argv)
    for(i=0; i<argc; i++)
    {
 	if ( argv[i] != NULL ) { /* Some arguments can be replaced with NULLs */
-				/* in CommonTestInit		*/		
+				/* in CommonTestInit		*/
       if(!strncmp(NFLAG,argv[i], strlen(NFLAG)))
       {
         num_popups = atoi(&(argv[i][strlen(NFLAG)])) - 1;
@@ -164,7 +164,7 @@ get_options(unsigned int argc, char **argv)
    }
 }
 
-void 
+void
 MyWarningHandler(char *message)
 {
    if (!ignore_warnings && !quiet)
@@ -238,7 +238,7 @@ update_submenu_state(Widget context, XmRowColumnWidget rc)
 	       {
 		  if ((context == ToggleStateList[j].context) &&
 		      (menu_item == ToggleStateList[j].menu_item))
-		     XmToggleButtonSetState(menu_item, 
+		     XmToggleButtonSetState(menu_item,
 			ToggleStateList[j].state, False);
 	       }
 	    }
@@ -252,7 +252,7 @@ FindTopMostShell(Widget w)
 {
    while(w && !XtIsShell(w))
       w = XtParent(w);
-   
+
    return(w);
 }
 
@@ -275,7 +275,7 @@ SensitiveManagedVerified(Widget context, Widget menu_item)
 }
 #endif
 
-/* 
+/*
  * Popup event handlers
  */
 
@@ -285,8 +285,8 @@ SensitiveManagedVerified(Widget context, Widget menu_item)
  * MenuShell's XmNpopupCallback.
  *
  * If no menu accelerator is defined for Popup, then it's ok to use this
- * routine to set context (test_type == TEST_CASCADE_CB).  In our case we 
- * would use the topmost shell of 'w' as our context.  It's the same as the 
+ * routine to set context (test_type == TEST_CASCADE_CB).  In our case we
+ * would use the topmost shell of 'w' as our context.  It's the same as the
  * postedFromWidget.
  *
  * FYI: In pre Motif1.2, you cannot call XmGetPostedFromWidget until after
@@ -315,7 +315,7 @@ PostIt(Widget w, Widget popup, XEvent *event, Boolean *continue_to_dispatch)
 }
 
 void
-PrintInfo(char *wid_name, char *btn_name, char *cb, char *cb_value, 
+PrintInfo(char *wid_name, char *btn_name, char *cb, char *cb_value,
 	  char *postedFrom, char *toplevel)
 {
    static int cnt = 0;
@@ -325,10 +325,10 @@ PrintInfo(char *wid_name, char *btn_name, char *cb, char *cb_value,
 
    if (!(cnt++ % 20))
    {
-      printf("\n%-8s %-16s %-16s %4s %-12s %s\n", 
+      printf("\n%-8s %-16s %-16s %4s %-12s %s\n",
          "Name", "Button Label", "Callback Reason", "CBvl", "PstFrmWdgt",
 	 "Toplevel Shell");
-      printf("%-8s %-16s %-16s %4s %-12s %s\n", 
+      printf("%-8s %-16s %-16s %4s %-12s %s\n",
          "----", "------------", "---------------", "----", "---------",
 	 "--------------");
    }
@@ -345,7 +345,7 @@ PrintInfo(char *wid_name, char *btn_name, char *cb, char *cb_value,
  * Callbacks
  */
 
-void 
+void
 ResetMenuCB(Widget w, caddr_t clientData, caddr_t callData)
 {
    int i;
@@ -369,7 +369,7 @@ ResetMenuCB(Widget w, caddr_t clientData, caddr_t callData)
 	 ButtonDataList[i].sensitive = TRUE;
 
 	 /* If the parent pane is torn, only change the sensitivity
-	  * immeditately if the toplevels match.  Otherwise, the next 
+	  * immeditately if the toplevels match.  Otherwise, the next
 	  * post/map will update sensitivity appropriately.
 	  */
 	 if (!XmIsMenuShell(XtParent(XtParent(menu_item))))
@@ -380,7 +380,7 @@ ResetMenuCB(Widget w, caddr_t clientData, caddr_t callData)
 	    if (tearoff_toplevel == ButtonDataList[i].context)
 	    {
 	       XtSetSensitive(menu_item, ButtonDataList[i].sensitive);
-	       if (XmIsToggleButton(menu_item) || 
+	       if (XmIsToggleButton(menu_item) ||
 		  XmIsToggleButtonGadget(menu_item))
 	       {
 		  XmToggleButtonSetState(menu_item, False, False);
@@ -393,7 +393,7 @@ ResetMenuCB(Widget w, caddr_t clientData, caddr_t callData)
       ToggleStateList[i].state = False;
 }
 
-void 
+void
 TestAccCB (Widget w, caddr_t clientData, caddr_t callData)
 {
    Arg args[8];
@@ -405,7 +405,7 @@ TestAccCB (Widget w, caddr_t clientData, caddr_t callData)
    XtSetValues(pd1_pb1, args, 1);
 }
 
-void 
+void
 TestOpaqueCB(Widget w, caddr_t clientData, caddr_t callData)
 {
    Arg args[8];
@@ -430,7 +430,7 @@ TestOpaqueCB(Widget w, caddr_t clientData, caddr_t callData)
    XtSetValues(xmscreen, args, n);
 }
 
-void 
+void
 CascadingCB (Widget w, caddr_t clientData, caddr_t callData)
 {
    Arg args[15];
@@ -444,9 +444,9 @@ CascadingCB (Widget w, caddr_t clientData, caddr_t callData)
    toplevel = FindTopMostShell(postedFromWidget);
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       s,
-      "CASCADING",     
+      "CASCADING",
       "",
       XrmQuarkToString(postedFromWidget->core.xrm_name),
       XrmQuarkToString(toplevel->core.xrm_name));
@@ -460,7 +460,7 @@ CascadingCB (Widget w, caddr_t clientData, caddr_t callData)
    }
 }
 
-void 
+void
 ArmCB(Widget w, caddr_t clientData, caddr_t callData)
 {
    char *s;
@@ -480,7 +480,7 @@ ArmCB(Widget w, caddr_t clientData, caddr_t callData)
    strcpy(cr_value, "ARM");
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       s,
       cr_value,
       "",
@@ -488,7 +488,7 @@ ArmCB(Widget w, caddr_t clientData, caddr_t callData)
       XrmQuarkToString(toplevel->core.xrm_name));
 }
 
-void 
+void
 DisarmCB (Widget w, caddr_t clientData, caddr_t callData)
 {
    char *s;
@@ -508,7 +508,7 @@ DisarmCB (Widget w, caddr_t clientData, caddr_t callData)
    strcpy(cr_value, "DISARM");
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       s,
       cr_value,
       "",
@@ -516,7 +516,7 @@ DisarmCB (Widget w, caddr_t clientData, caddr_t callData)
       XrmQuarkToString(toplevel->core.xrm_name));
 }
 
-void 
+void
 ActivateCB (Widget w, caddr_t clientData, XmPushButtonCallbackStruct pb_cbs)
 {
    char *s;
@@ -536,7 +536,7 @@ ActivateCB (Widget w, caddr_t clientData, XmPushButtonCallbackStruct pb_cbs)
    strcpy(cr_value, "ACTIVATE");
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       s,
       cr_value,
       "",
@@ -544,8 +544,8 @@ ActivateCB (Widget w, caddr_t clientData, XmPushButtonCallbackStruct pb_cbs)
       XrmQuarkToString(toplevel->core.xrm_name));
 }
 
-void 
-ValueChangedCB (Widget w, caddr_t clientData, 
+void
+ValueChangedCB (Widget w, caddr_t clientData,
 		XmToggleButtonCallbackStruct *tb_cbs)
 {
    char *s;
@@ -568,7 +568,7 @@ ValueChangedCB (Widget w, caddr_t clientData,
 
    sprintf(svalue, "%d", tb_cbs->set);
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       s,
       cr_value,
       svalue,
@@ -584,7 +584,7 @@ ValueChangedCB (Widget w, caddr_t clientData,
 	 {
 	    /* since the toggle's state is not always set to the correct
 	     * context before an accelerator is pressed, we cannot depend
-	     * on the Motif state and must use our application's own 
+	     * on the Motif state and must use our application's own
 	     * tracking.  Note this occurs when no menu is posted which
 	     * would give our map/tear off activate callbacks a chance to
 	     * properly set toggle state.
@@ -594,18 +594,18 @@ ValueChangedCB (Widget w, caddr_t clientData,
 	    {
 	       ToggleStateList[j].state = !ToggleStateList[j].state;
 	       if (!quiet)
-		  printf("ToggleB REAL internal tracked value: %d\n", 
+		  printf("ToggleB REAL internal tracked value: %d\n",
 		     ToggleStateList[j].state);
 	    }
 	    else
-	       ToggleStateList[j].state = XmToggleButtonGetState(w); 
+	       ToggleStateList[j].state = XmToggleButtonGetState(w);
 	    break;
 	 }
       }
    }
 }
 
-void 
+void
 PopupCB (Widget w, caddr_t clientData, caddr_t callData)
 {
    Arg args[15];
@@ -624,9 +624,9 @@ PopupCB (Widget w, caddr_t clientData, caddr_t callData)
    toplevel = FindTopMostShell(postedFromWidget);
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       "",
-      "POPUP",     
+      "POPUP",
       "",
       XrmQuarkToString(postedFromWidget->core.xrm_name),
       XrmQuarkToString(toplevel->core.xrm_name));
@@ -642,7 +642,7 @@ PopupCB (Widget w, caddr_t clientData, caddr_t callData)
    }
 }
 
-void 
+void
 MapCB(Widget w, caddr_t clientData, caddr_t callData)
 {
    XmRowColumnWidget rc = (XmRowColumnWidget)w;
@@ -652,9 +652,9 @@ MapCB(Widget w, caddr_t clientData, caddr_t callData)
    toplevel = FindTopMostShell(postedFromWidget);
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       "",
-      "MAP",     
+      "MAP",
       "",
       XrmQuarkToString(postedFromWidget->core.xrm_name),
       XrmQuarkToString(toplevel->core.xrm_name));
@@ -663,7 +663,7 @@ MapCB(Widget w, caddr_t clientData, caddr_t callData)
       update_submenu_state(toplevel, rc);
 }
 
-void 
+void
 UnmapCB(Widget w, caddr_t clientData, caddr_t callData)
 {
    Widget toplevel, postedFromWidget;
@@ -672,16 +672,16 @@ UnmapCB(Widget w, caddr_t clientData, caddr_t callData)
    toplevel = FindTopMostShell(postedFromWidget);
 
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       "",
-      "UNMAP",     
+      "UNMAP",
       "",
       XrmQuarkToString(postedFromWidget->core.xrm_name),
       XrmQuarkToString(toplevel->core.xrm_name));
 }
 
-void 
-TearOffActivateCB (Widget w,caddr_t clientData, 
+void
+TearOffActivateCB (Widget w,caddr_t clientData,
 		   XmRowColumnCallbackStruct *callData)
 {
    Widget toplevel, postedFromWidget;
@@ -692,18 +692,18 @@ TearOffActivateCB (Widget w,caddr_t clientData,
 
    sprintf(svalue, "%d", (unsigned short)callData->data);
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       "",
-      "TEAR_OFF_ACTIVATE",     
+      "TEAR_OFF_ACTIVATE",
       svalue,
       XrmQuarkToString(postedFromWidget->core.xrm_name),
       XrmQuarkToString(toplevel->core.xrm_name));
-  
+
    if (test_type == TEST_CASCADE_CB)
       update_submenu_state(toplevel, (XmRowColumnWidget)w);
 }
 
-void 
+void
 TearOffDeactivateCB (Widget w, caddr_t clientData,
 		     XmRowColumnCallbackStruct *callData)
 {
@@ -715,15 +715,15 @@ TearOffDeactivateCB (Widget w, caddr_t clientData,
 
    sprintf(svalue, "%d", (unsigned short)callData->data);
    PrintInfo(
-      XrmQuarkToString(w->core.xrm_name), 
+      XrmQuarkToString(w->core.xrm_name),
       "",
-      "TEAR_OFF_DEACTIVATE",     
+      "TEAR_OFF_DEACTIVATE",
       svalue,
       XrmQuarkToString(postedFromWidget->core.xrm_name),
       XrmQuarkToString(toplevel->core.xrm_name));
 }
 
-void 
+void
 ChangeSensitivity (Widget w, caddr_t clientData, caddr_t callData)
 {
    Widget toplevel, menu_item;
@@ -745,18 +745,18 @@ ChangeSensitivity (Widget w, caddr_t clientData, caddr_t callData)
       {
 	 menu_item = ButtonDataList[i].menu_item;
 	 ButtonDataList[i].sensitive = !ButtonDataList[i].sensitive;
-	 
+
          sprintf(svalue, "%d", ButtonDataList[i].sensitive);
 	 PrintInfo(
-	    XrmQuarkToString(w->core.xrm_name), 
+	    XrmQuarkToString(w->core.xrm_name),
 	    s,
-	    "Change Sensitivity",     
+	    "Change Sensitivity",
 	    svalue,
 	    "",
 	    XrmQuarkToString(toplevel->core.xrm_name));
 
 	 /* If the parent pane is torn, only change the sensitivity
-	  * immeditately if the toplevels match.  Otherwise, the next 
+	  * immeditately if the toplevels match.  Otherwise, the next
 	  * post/map will update sensitivity appropriately.
 	  */
 	 if (!XmIsMenuShell(XtParent(XtParent(menu_item))))
@@ -787,16 +787,16 @@ RegisterButtonData(Widget wid, Widget data)
    /* inefficient, but quick and dirty */
    if (!ButtonDataList)
    {
-      ButtonDataList = 
+      ButtonDataList =
 	 (ButtonDataRec *)XtMalloc((Cardinal)sizeof(ButtonDataRec));
       nButtonData = 0;
-   } 
+   }
    else
       {
          ButtonDataList = (ButtonDataRec *)XtRealloc((char *)ButtonDataList,
 	    (Cardinal)((nButtonData + 1) * sizeof(ButtonDataRec)));
       }
-   
+
    ButtonDataList[nButtonData].context = FindTopMostShell(wid);
    ButtonDataList[nButtonData].button = wid;
    ButtonDataList[nButtonData].menu_item = data;
@@ -810,10 +810,10 @@ RegisterToggleState(Widget wid, Widget tb)
 {
    if (!ToggleStateList)
    {
-      ToggleStateList = 
+      ToggleStateList =
 	 (ToggleStateRec *)XtMalloc((Cardinal)sizeof(ToggleStateRec));
       nToggleState = 0;
-   } 
+   }
    else
       {
          ToggleStateList = (ToggleStateRec *)XtRealloc((char *)ToggleStateList,
@@ -840,7 +840,7 @@ CreateSelectionButton(Widget parent, char * name, caddr_t data)
     n = 0;
     wid = XmCreatePushButton(parent, name, args, n);
     XtManageChild(wid);
-    XtAddCallback(wid, XmNactivateCallback, 
+    XtAddCallback(wid, XmNactivateCallback,
 		  (XtCallbackProc) ChangeSensitivity, (XtPointer)data);
 
     RegisterButtonData(wid, (Widget)data);
@@ -853,40 +853,40 @@ CreateSelectionButton(Widget parent, char * name, caddr_t data)
     return(wid);
 }
 
-void 
+void
 AddMenuCallbacks(Widget w)
 {
    XtAddCallback(w, XmNmapCallback, (XtCallbackProc) MapCB, (XtPointer)NULL);
-   XtAddCallback(w, XmNunmapCallback, (XtCallbackProc) UnmapCB, 
+   XtAddCallback(w, XmNunmapCallback, (XtCallbackProc) UnmapCB,
 		 (XtPointer)NULL);
-   XtAddCallback(w, XmNtearOffMenuActivateCallback, 
+   XtAddCallback(w, XmNtearOffMenuActivateCallback,
 		 (XtCallbackProc) TearOffActivateCB, (XtPointer) NULL);
-   XtAddCallback(w, XmNtearOffMenuDeactivateCallback, 
-		 (XtCallbackProc) TearOffDeactivateCB, 
+   XtAddCallback(w, XmNtearOffMenuDeactivateCallback,
+		 (XtCallbackProc) TearOffDeactivateCB,
       (XtPointer) NULL);
 }
 
-void 
+void
 AddMenuPushButtonCallbacks(Widget w)
 {
    XtAddCallback(w, XmNarmCallback, (XtCallbackProc) ArmCB, (XtPointer) NULL);
-   XtAddCallback(w, XmNactivateCallback, (XtCallbackProc) ActivateCB, 
+   XtAddCallback(w, XmNactivateCallback, (XtCallbackProc) ActivateCB,
 		 (XtPointer) NULL);
-   XtAddCallback(w, XmNdisarmCallback, (XtCallbackProc) DisarmCB, 
+   XtAddCallback(w, XmNdisarmCallback, (XtCallbackProc) DisarmCB,
 		 (XtPointer) NULL);
 }
 
-void 
+void
 AddMenuToggleButtonCallbacks(Widget w)
 {
    XtAddCallback(w, XmNarmCallback, (XtCallbackProc) ArmCB, (XtPointer) NULL);
-   XtAddCallback(w, XmNvalueChangedCallback, (XtCallbackProc) ValueChangedCB, 
+   XtAddCallback(w, XmNvalueChangedCallback, (XtCallbackProc) ValueChangedCB,
 		 (XtPointer) NULL);
-   XtAddCallback(w, XmNdisarmCallback, (XtCallbackProc) DisarmCB, 
+   XtAddCallback(w, XmNdisarmCallback, (XtCallbackProc) DisarmCB,
 		 (XtPointer) NULL);
 }
 
-void 
+void
 CreatePopup(Widget attach_widget)
 {
    Arg args[15];
@@ -897,7 +897,7 @@ CreatePopup(Widget attach_widget)
    if (pop)
    {
       XmAddToPostFromList(pop, attach_widget);
-      XtAddEventHandler(attach_widget, ButtonPressMask, False, 
+      XtAddEventHandler(attach_widget, ButtonPressMask, False,
 			(XtEventHandler)PostIt, (XtPointer) pop);
       return;
    }
@@ -909,10 +909,10 @@ CreatePopup(Widget attach_widget)
    n = 0;
    pop = XmCreatePopupMenu(attach_widget, "pop", args, n);
    AddMenuCallbacks(pop);
-   XtAddCallback(XtParent(pop), XmNpopupCallback, (XtCallbackProc) PopupCB, 
+   XtAddCallback(XtParent(pop), XmNpopupCallback, (XtCallbackProc) PopupCB,
 		 (XtPointer) NULL);
 
-   XtAddEventHandler(attach_widget, ButtonPressMask, False, 
+   XtAddEventHandler(attach_widget, ButtonPressMask, False,
 		     (XtEventHandler)PostIt, (XtPointer) pop);
 
    nchild = 0;
@@ -939,14 +939,14 @@ CreatePopup(Widget attach_widget)
    XtSetArg(args[n], XmNsubMenuId, pd1); n++;
    child[nchild++] =
    pop_cb1 = XmCreateCascadeButton(pop, "pop_cb1", args, n);
-   XtAddCallback(pop_cb1, XmNcascadingCallback, (XtCallbackProc) CascadingCB, 
+   XtAddCallback(pop_cb1, XmNcascadingCallback, (XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    n = 0;
    XtSetArg(args[n], XmNsubMenuId, pd4); n++;
    child[nchild++] =
    pop_cb2 = XmCreateCascadeButtonGadget(pop, "pop_cb2", args, n);
-   XtAddCallback(pop_cb2, XmNcascadingCallback,(XtCallbackProc) CascadingCB, 
+   XtAddCallback(pop_cb2, XmNcascadingCallback,(XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    XtManageChildren(child, nchild);
@@ -970,7 +970,7 @@ SetupMainWindow(Widget toplevel)
    CreatePopup(mw);
 
    /**
-    ** Create menubar and it's immediate cascade buttons 
+    ** Create menubar and it's immediate cascade buttons
     **/
    n = 0;
    mb = XmCreateMenuBar(mw, "mb", args, n);
@@ -979,31 +979,31 @@ SetupMainWindow(Widget toplevel)
    nchild = 0;
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    mb_cb1 = XmCreateCascadeButton(mb, "mb_cb1", args, n);
-   XtAddCallback(mb_cb1, XmNcascadingCallback, (XtCallbackProc) CascadingCB, 
+   XtAddCallback(mb_cb1, XmNcascadingCallback, (XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    n = 0;
    child[nchild++] =
    mb_cb2 = XmCreateCascadeButtonGadget(mb, "mb_cb2", args, n);
-   XtAddCallback(mb_cb2, XmNcascadingCallback, (XtCallbackProc) CascadingCB, 
+   XtAddCallback(mb_cb2, XmNcascadingCallback, (XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    n = 0;
    child[nchild++] =
    mb_cb3 = XmCreateCascadeButtonGadget(mb, "mb_cb3", args, n);
-   XtAddCallback(mb_cb3, XmNcascadingCallback, (XtCallbackProc) CascadingCB, 
+   XtAddCallback(mb_cb3, XmNcascadingCallback, (XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    XtManageChildren(child, nchild);
-   
+
    /**
     ** Now set up the toplevel menu to cascading pulldown connections
     ** In the technical sense, these are shared because they have more
     ** than one attach-widget (cascade button).
     **/
-  
+
    n = 0;
    XtSetArg(args[n], XmNsubMenuId, pd1); n++;
    XtSetValues(mb_cb1, args, n);
@@ -1042,7 +1042,7 @@ SetupMainWindow(Widget toplevel)
    n = 0;
    action_reset = XmCreatePushButton(action_wa, "action_reset", args, n);
    XtManageChild(action_reset);
-   XtAddCallback(action_reset, XmNactivateCallback, 
+   XtAddCallback(action_reset, XmNactivateCallback,
 		 (XtCallbackProc)ResetMenuCB, (XtPointer)NULL);
 
    if (one_time_only)
@@ -1050,14 +1050,14 @@ SetupMainWindow(Widget toplevel)
       n = 0;
       action_test = XmCreatePushButton(action_wa, "action_test_acc", args, n);
       XtManageChild(action_test);
-      XtAddCallback(action_test, XmNactivateCallback, 
+      XtAddCallback(action_test, XmNactivateCallback,
 		    (XtCallbackProc)TestAccCB, (XtPointer) NULL);
 
       n = 0;
-      action_test = 
+      action_test =
 	 XmCreatePushButton(action_wa, "action_test_opaque", args, n);
       XtManageChild(action_test);
-      XtAddCallback(action_test, XmNactivateCallback, 
+      XtAddCallback(action_test, XmNactivateCallback,
 		    (XtCallbackProc) TestOpaqueCB, (XtPointer) NULL);
 
       one_time_only = FALSE;
@@ -1141,7 +1141,7 @@ CreateCascadingMenuHierarchy(Widget toplevel)
    {
       if (child[0])
       {
-	 printf("pd1's tear off control 0x%p (%s)\n", child[0], 
+	 printf("pd1's tear off control 0x%p (%s)\n", child[0],
 	    child[0]->core.name);
 
 	 if(XtParent(child[0]) == pd1)
@@ -1156,43 +1156,43 @@ CreateCascadingMenuHierarchy(Widget toplevel)
    nchild = 0;
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_lbl = XmCreateLabel(pd1, "pd1_lbl", args, n);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_sep = XmCreateSeparator(pd1, "pd1_sep", args, n);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_pb1 = XmCreatePushButton(pd1, "pd1_pb1", args, n);
    AddMenuPushButtonCallbacks(pd1_pb1);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_pb2 = XmCreatePushButtonGadget(pd1, "pd1_pb2", args, n);
    AddMenuPushButtonCallbacks(pd1_pb2);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_tb1 = XmCreateToggleButton(pd1, "pd1_tb1", args, n);
    AddMenuToggleButtonCallbacks(pd1_tb1);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_tb2 = XmCreateToggleButtonGadget(pd1, "pd1_tb2", args, n);
    AddMenuToggleButtonCallbacks(pd1_tb2);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_cb1 = XmCreateCascadeButton(pd1, "pd1_cb1", args, n);
-   XtAddCallback(pd1_cb1, XmNcascadingCallback, (XtCallbackProc) CascadingCB, 
+   XtAddCallback(pd1_cb1, XmNcascadingCallback, (XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd1_cb2 = XmCreateCascadeButtonGadget(pd1, "pd1_cb2", args, n);
-   XtAddCallback(pd1_cb2, XmNcascadingCallback, (XtCallbackProc) CascadingCB, 
+   XtAddCallback(pd1_cb2, XmNcascadingCallback, (XtCallbackProc) CascadingCB,
 		 (XtPointer) NULL);
 
    XtManageChildren(child, nchild);
@@ -1205,12 +1205,12 @@ CreateCascadingMenuHierarchy(Widget toplevel)
    nchild = 0;
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd2_pb1 = XmCreatePushButton(pd2, "pd2_pb1", args, n);
    AddMenuPushButtonCallbacks(pd2_pb1);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd2_pb2 = XmCreatePushButtonGadget(pd2, "pd2_pb2", args, n);
    AddMenuPushButtonCallbacks(pd2_pb2);
 
@@ -1224,12 +1224,12 @@ CreateCascadingMenuHierarchy(Widget toplevel)
    nchild = 0;
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd3_tb1 = XmCreateToggleButton(pd3, "pd3_tb1", args, n);
    AddMenuToggleButtonCallbacks(pd3_tb1);
 
    n = 0;
-   child[nchild++] = 
+   child[nchild++] =
    pd3_tb2 = XmCreateToggleButtonGadget(pd3, "pd3_tb2", args, n);
    AddMenuToggleButtonCallbacks(pd3_tb2);
 
@@ -1296,7 +1296,7 @@ CreateCascadingMenuHierarchy(Widget toplevel)
 #endif
 }
 
-void 
+void
 main (argc, argv)
 unsigned int argc;
 char **argv;

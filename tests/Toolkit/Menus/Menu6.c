@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Menu6.c /main/10 1995/07/13 18:45:52 drk $"
@@ -37,8 +37,8 @@ static char rcsid[] = "$XConsortium: Menu6.c /main/10 1995/07/13 18:45:52 drk $"
 #define LAYOUT_MENU_SIZE 6
 #define SUBMENU4SIZE 6
 
-static char *arrangeMenuNames[] = 
-{ 
+static char *arrangeMenuNames[] =
+{
   "Align Top Sides",
   "Align Bottom Sides",
   "Align Left Sides",
@@ -49,8 +49,8 @@ static char *arrangeMenuNames[] =
   "Align Diagonally"
   };
 
-static char *layoutMenuNames[] = 
-{ 
+static char *layoutMenuNames[] =
+{
   "Square and Circle",
   "Circle and Rectangle",
   "Square and Oval",
@@ -59,8 +59,8 @@ static char *layoutMenuNames[] =
   "Two Ovals"
   };
 
-static char *submenu4Names[] = 
-{ 
+static char *submenu4Names[] =
+{
   "Circle and Square",
   "Square and Square",
   "Rectangle and Square",
@@ -93,7 +93,7 @@ void remove_text(Widget w, XtPointer client_data, XtPointer call_data)
       break;
     case 1:
       i=0;
-      XtSetArg(args[i],XmNacceleratorText,tcs=XmStringCreateSimple("Alt+R")); 
+      XtSetArg(args[i],XmNacceleratorText,tcs=XmStringCreateSimple("Alt+R"));
       i++;
       XtSetValues(w, args,i);
       XmStringFree(tcs);
@@ -101,7 +101,7 @@ void remove_text(Widget w, XtPointer client_data, XtPointer call_data)
     }
 }
 
-static void activate_msg(Widget w, XtPointer client_dat, 
+static void activate_msg(Widget w, XtPointer client_dat,
 			 XtPointer call_data)
 {
   fprintf(stdout, "widget cascade callback called\n");
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 
   CommonTestInit(argc, argv);
 
-  /* 
+  /*
    * The parent of all this will be a main window
    */
 
@@ -126,20 +126,20 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNborderWidth, 2); n++;
   mainWindow = XmCreateMainWindow(Shell1, "mainWindow", args, n);
 
-  /* 
-   * now the menu bar 
+  /*
+   * now the menu bar
    */
 
   n = 0;
   MenuBar = XmCreateMenuBar(mainWindow, "MenuBar", args, n);
   XtManageChild(MenuBar);
 
-  /* 
-   * The cascade button children of the menu bar 
+  /*
+   * The cascade button children of the menu bar
    */
 
   n = 0;
-  string = XmStringCreate("File", XmSTRING_DEFAULT_CHARSET); 
+  string = XmStringCreate("File", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, string); n++;
   CascadeBtn1 = XmCreateCascadeButtonGadget(MenuBar, "CascadeBtn1", args, n);
   XtAddCallback(CascadeBtn1, XmNcascadingCallback, activate_msg, NULL);
@@ -147,7 +147,7 @@ int main(int argc, char **argv)
   XmStringFree(string);
 
   n = 0;
-  string = XmStringCreate("Edit", XmSTRING_DEFAULT_CHARSET); 
+  string = XmStringCreate("Edit", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, string); n++;
   CascadeBtn2 = XmCreateCascadeButtonGadget(MenuBar, "CascadeBtn2", args, n);
   XtAddCallback(CascadeBtn2, XmNcascadingCallback, activate_msg, NULL);
@@ -168,8 +168,8 @@ int main(int argc, char **argv)
   XtManageChild(CascadeBtn4);
   XmStringFree(string);
 
-  /* 
-   *  The Arrange subMenu will be 2D, ie 2 cols 
+  /*
+   *  The Arrange subMenu will be 2D, ie 2 cols
    */
 
   n = 0;
@@ -178,20 +178,20 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNnumColumns, 2); n++;
   ArrangeMenu = XmCreatePulldownMenu(MenuBar, "ArrangeMenu", args, n);
 
-  /* 
-   * ArrangeMenu is the submenu of CascadeBtn3 
+  /*
+   * ArrangeMenu is the submenu of CascadeBtn3
    */
 
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, ArrangeMenu); n++;
   XtSetValues(CascadeBtn3, args, n);
 
-  /* 
-   * We need several button children, let's try this 
+  /*
+   * We need several button children, let's try this
    */
 
   for (i = 0; i <= (ARRANGE_MENU_SIZE - 1); i++)
-    { 
+    {
       n = 0;
       string = XmStringCreate(arrangeMenuNames[i], XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, string); n++;
@@ -201,11 +201,11 @@ int main(int argc, char **argv)
       XtManageChild(arrangeMenuButtons[i]);
       XmStringFree(string);
     };
-    
+
   /*
    *  some of the button children, say, 4 and 6, need submenus
    *  submenu 4 will be a 2D menu as well, with six children;
-   *  we'll use the same scheme as above 
+   *  we'll use the same scheme as above
    */
 
   n = 0;
@@ -217,9 +217,9 @@ int main(int argc, char **argv)
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, submenu4); n++;
   XtSetValues(arrangeMenuButtons[3], args, n);
-  
+
   for (i = 0; i <= (SUBMENU4SIZE - 1); i++)
-    { 
+    {
       n = 0;
       string = XmStringCreate(submenu4Names[i], XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, string); n++;
@@ -230,7 +230,7 @@ int main(int argc, char **argv)
     };
 
   /*
-   *  create the layout menu. It will hang off of CascadeBtn4 
+   *  create the layout menu. It will hang off of CascadeBtn4
    */
 
   n = 0;
@@ -244,12 +244,12 @@ int main(int argc, char **argv)
   XtSetArg(args[n], XmNsubMenuId, LayoutMenu); n++;
   XtSetValues(CascadeBtn4, args, n);
 
-  /* 
-   * children of the Layout menu 
+  /*
+   * children of the Layout menu
    */
 
   for (i = 0; i <= (LAYOUT_MENU_SIZE - 1); i++)
-    { 
+    {
       n = 0;
       string = XmStringCreate(layoutMenuNames[i], XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, string); n++;
@@ -260,12 +260,12 @@ int main(int argc, char **argv)
       XmStringFree(string);
     };
 
-  /* 
+  /*
    * set up the main window areas
    */
-  
+
   XmMainWindowSetAreas(mainWindow, MenuBar, NULL, NULL, NULL, NULL);
-    
+
   XtManageChild(mainWindow);
   XtRealizeWidget(Shell1);
 
@@ -315,8 +315,8 @@ int main(int argc, char **argv)
   n=0;
   XtSetArg(nargs[n],XmNsubMenuId, pulldown4); n++;
   XtManageChild(XmCreateCascadeButtonGadget(MenuBar, "Menu4", nargs, n));
-  XtManageChild(w = XmCreateToggleButtonGadget(pulldown4, 
-					       "ToggleButtonGadget", 
+  XtManageChild(w = XmCreateToggleButtonGadget(pulldown4,
+					       "ToggleButtonGadget",
 					       args, i));
   XtAddCallback(w, XmNvalueChangedCallback, remove_text, NULL);
 
@@ -332,15 +332,3 @@ int main(int argc, char **argv)
   XtAppMainLoop(app_context);
   return(1);
 }
-
-
-
-
-
-
-
-
-
-
-
-

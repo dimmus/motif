@@ -1,5 +1,5 @@
 # $XConsortium: FileSelect2.scr /main/6 1995/07/17 20:37:55 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)FileSelect2.scr	1.2  92/01/29
 
@@ -85,7 +85,7 @@ Continue
 # The full FileSelectionBox should be visible.
 # The next step should redefine a new DirSearchProc this should change the
 # Directories list to contain the strings Hello, this, is, a, new, dir,
-# search, proc. The directories label string should change to 
+# search, proc. The directories label string should change to
 # \"A very very long label\".
 
 CompareVisual FileSelectionBox1
@@ -98,7 +98,7 @@ Continue
 # visible.
 # The next step should redefine a new FileSearchProc this should change the
 # Files list to contain the strings Hello, this, is, a, new, file, search,
-# proc. The Files label string will change to 
+# proc. The Files label string will change to
 # \"A Very Long Label for test purposes\".
 
 CompareVisual FileSelectionBox1
@@ -108,8 +108,8 @@ CompareVisual FileSelectionBox1
 Continue
 
 # The full FileSelectionBox with the modified Files list should be visible.
-# The next step should reset the DirSearchProc and the FileSearchProc 
-# back to default values. The FileSelectionBox should look as it did in 
+# The next step should reset the DirSearchProc and the FileSearchProc
+# back to default values. The FileSelectionBox should look as it did in
 # the first step (except for the directory and file list label strings).
 
 CompareVisual FileSelectionBox1
@@ -127,4 +127,3 @@ CompareVisual FileSelectionBox1
 # E)
 
 Exit
-

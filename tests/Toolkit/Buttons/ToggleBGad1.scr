@@ -1,5 +1,5 @@
 # $XConsortium: ToggleBGad1.scr /main/6 1995/07/17 20:07:05 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client window with a ToggleButton and pixmap should appear.
 #  The toggleButton should appear set, and the smiley face
-#  should have a white background and a black foreground. 
+#  should have a white background and a black foreground.
 # Press and release MB1 in client window. Indicator
-#  should toggle, but not the pixmap. 
+#  should toggle, but not the pixmap.
 
 LocatePointer toggle
 CompareVisual toggle
@@ -40,9 +40,9 @@ Continue
 
 # A client window with a ToggleButton and pixmap should appear.
 #  The toggleButton should appear set, and the smiley face
-#  should have a white background and a black foreground. 
+#  should have a white background and a black foreground.
 # Press and release MB1 in client window.
-#  Nothing should happen. 
+#  Nothing should happen.
 
 LocatePointer toggle
 CompareVisual toggle
@@ -52,9 +52,9 @@ Continue
 
 
 # A client window with a ToggleButton and pixmap should appear.
-#  The smiley face should have a white background and a black foreground. 
+#  The smiley face should have a white background and a black foreground.
 # Press and release MB1 in client window. Indicator
-#  should toggle, but not the pixmap. 
+#  should toggle, but not the pixmap.
 
 LocatePointer toggle
 CompareVisual toggle
@@ -63,9 +63,9 @@ CompareVisual toggle
 Continue
 
 # A client window with a ToggleButton and pixmap should appear.
-#  The smiley face should have a white background and a black foreground. 
+#  The smiley face should have a white background and a black foreground.
 # Press and release MB1 in client window. Indicator
-#  should toggle, but not the pixmap. 
+#  should toggle, but not the pixmap.
 
 LocatePointer toggle
 CompareVisual toggle
@@ -73,7 +73,7 @@ ClickMB Btn1
 CompareVisual toggle
 Continue
 
-# This panel and the next assume the existance of certain installed 
+# This panel and the next assume the existance of certain installed
 # bitmaps in /usr/lib/X11/bitmaps. If any of the described pixmaps do not
 # appear, you may not have these pixmaps installed.
 # A label is added with an xlogo pixmap.

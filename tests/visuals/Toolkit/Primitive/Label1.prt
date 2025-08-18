@@ -22,27 +22,27 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual RowColumn1 
+TRACE:(1) CompareVisual RowColumn1
 TRACE:(2) Continue
-TRACE:(3) LocatePointer Label1  
-TRACE:(4) ClickMB Btn1 
+TRACE:(3) LocatePointer Label1
+TRACE:(4) ClickMB Btn1
 TRACE:(5) ClickMB Btn1 2
-TRACE:(6) LocatePointer Label2  
-TRACE:(7) ClickMB Btn1 
+TRACE:(6) LocatePointer Label2
+TRACE:(7) ClickMB Btn1
 TRACE:(8) ClickMB Btn1 2
 TRACE:(9) LocatePointer Label2  Off
-TRACE:(10) LocatePointer RowColumn1  
+TRACE:(10) LocatePointer RowColumn1
 TRACE:(11) LocatePointer RowColumn1  Off
-TRACE:(12) PressMB Btn1 
-TRACE:(13) LocatePointer RowColumn1  
+TRACE:(12) PressMB Btn1
+TRACE:(13) LocatePointer RowColumn1
 TRACE:(14) LocatePointer RowColumn1  Off
-TRACE:(15) ReleaseMB Btn1 
+TRACE:(15) ReleaseMB Btn1
 TRACE:(16) Continue
 TRACE:(17) WindowMove Shell1 50 40
 TRACE:(18) WindowResize Shell1 SouthEast 100 200
 TRACE:(19) WindowIconify Shell1
 TRACE:(20) WindowDeiconify Shell1
-TRACE:(21) CompareVisual Shell1 
+TRACE:(21) CompareVisual Shell1
 TRACE:(22) Continue
 TRACE:(23) Exit
 Exiting Test...Please Standby...

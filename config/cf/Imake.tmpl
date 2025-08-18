@@ -507,10 +507,10 @@ XCOMM the platform-specific parameters - edit site.def to change
 #endif
 #ifndef CcCmd
 #if HasGcc2
-#define CcCmd gcc -fpcc-struct-return 
+#define CcCmd gcc -fpcc-struct-return
 #else
 #if HasGcc
-#define CcCmd gcc -fstrength-reduce -fpcc-struct-return 
+#define CcCmd gcc -fstrength-reduce -fpcc-struct-return
 #else
 #if HasCenterLineC
 #define CcCmd clcc
@@ -888,7 +888,7 @@ XCOMM the platform-specific parameters - edit site.def to change
 #define ExtraFilesToClean /**/
 #endif
 #ifndef FilesToClean
-#define FilesToClean *.CKP *.ln *.BAK *.bak *.Osuf core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut 
+#define FilesToClean *.CKP *.ln *.BAK *.bak *.Osuf core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut
 #endif
 
           PATHSEP = PathSeparator
@@ -938,7 +938,7 @@ CXXDEPENDINCLUDES = CplusplusDependIncludes
 CXXEXTRA_INCLUDES = CplusplusExtraIncludes
    CXXSTD_DEFINES = CplusplusStandardDefines $(CXXPROJECT_DEFINES)
        CXXOPTIONS = CplusplusOptions
-      CXXINCLUDES = $(INCLUDES) $(TOP_INCLUDES) $(CXXEXTRA_INCLUDES) 
+      CXXINCLUDES = $(INCLUDES) $(TOP_INCLUDES) $(CXXEXTRA_INCLUDES)
        CXXDEFINES = $(CXXINCLUDES) $(CXXSTD_DEFINES) $(THREADS_CXXDEFINES) $(CXXEXTRA_DEFINES) $(DEFINES)
          CXXFLAGS = $(CXXDEBUGFLAGS) $(CXXOPTIONS) $(THREADS_CXXFLAGS) $(CXXDEFINES)
 #endif
@@ -1014,9 +1014,9 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
      SHLIBLDFLAGS = SharedLibraryLoadFlags
 #endif
 /*
- * Here we set up flags needed to produce position-independent code 
+ * Here we set up flags needed to produce position-independent code
  * when doing C and C++ compilation.  The default if you specify C
- * PIC flags without also specifying C++ PIC flags is to assume that 
+ * PIC flags without also specifying C++ PIC flags is to assume that
  * the C flags work for both.  If your C++ compiler requires different
  * flags, specify them explicitly in PositionIndependentCplusplusFlags.
  */
@@ -1071,14 +1071,14 @@ CXXEXTRA_INCLUDES = CplusplusExtraIncludes
 #else
 #define _wideprotodef -DNARROWPROTO
 #endif
-    PROTO_DEFINES = _funcprotodef _wideprotodef 
+    PROTO_DEFINES = _funcprotodef _wideprotodef
 #undef _funcprotodef
 #undef _wideprotodef
 
 #if StripInstalledPrograms
      INSTPGMFLAGS = InstPgmFlags	/* install flags for stripping */
 #else
-     INSTPGMFLAGS = 
+     INSTPGMFLAGS =
 #endif
      INSTBINFLAGS = InstBinFlags	/* install flags for programs */
      INSTUIDFLAGS = InstUidFlags	/* install flags for setuid programs */

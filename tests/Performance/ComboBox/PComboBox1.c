@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,7 +37,7 @@ int		nitems;
 XmString	add_item;
 
 
-void  
+void
 main (int argc, char **argv)
 {
     register int	n;
@@ -58,12 +58,12 @@ main (int argc, char **argv)
     XtSetArg(args[n], XmNheight, 300);  			n++;
     XtSetArg(args[n], XtNgeometry, "+0+0");  			n++;
     XtSetValues(Shell1, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
-    /* 
-     * generate items for list and 
-     * convert the plain strings to Xmstrings 
+    /*
+     * generate items for list and
+     * convert the plain strings to Xmstrings
      */
     for (n = 0; n < nitems; n++)  {
 	sprintf(Item, "%s%d", "item", n);
@@ -89,15 +89,15 @@ main (int argc, char **argv)
 
     CommonPause();
 
-    /* 
+    /*
      * test performance in .scr file by scrolling from top to bottom
      * and bottom to top
      */
 
     CommonPause();
 
-    /* 
-     * test the performance of adding one 
+    /*
+     * test the performance of adding one
      * item to the botton when:
      *	- top is visible
      */
@@ -105,8 +105,8 @@ main (int argc, char **argv)
 
     CommonPause();
 
-    /* 
-     * test the performance of adding one 
+    /*
+     * test the performance of adding one
      * item to the botton when:
      *	- bottom is visible
      */
@@ -114,8 +114,8 @@ main (int argc, char **argv)
 
     CommonPause();
 
-    /* 
-     * test the performance of deleting one 
+    /*
+     * test the performance of deleting one
      * item from the bottom when:
      *	- top is visible
      */
@@ -124,7 +124,7 @@ main (int argc, char **argv)
 
     CommonPause();
 
-    /* 
+    /*
      * test the performance of deleting one
      * item from the bottom when:
      * - bottom is visible
@@ -137,5 +137,3 @@ main (int argc, char **argv)
 
     XtAppMainLoop(app_context);
 }
-
-

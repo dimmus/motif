@@ -27,7 +27,7 @@
  *  (c) Copyright 1993, 1994 Sun Microsystems, Inc.
  *  (c) Copyright 1993, 1994 Novell, Inc.
  */
-     
+
 #ifndef	_Dt_TermPrim_h
 #define	_Dt_TermPrim_h
 
@@ -70,16 +70,16 @@ extern "C" {
 #define	DtNjumpScroll		"jumpScroll"
 #endif
 #ifndef DtNkshMode
-#define	DtNkshMode              "kshMode"       
+#define	DtNkshMode              "kshMode"
 #endif
 #ifndef DtNlogFile
-#define	DtNlogFile              "logFile"    
+#define	DtNlogFile              "logFile"
 #endif
 #ifndef DtNlogInhibit
 #define	DtNlogInhibit		"logInhibit"
 #endif
 #ifndef DtNlogging
-#define	DtNlogging              "logging"    
+#define	DtNlogging              "logging"
 #endif
 #ifndef DtNloginShell
 #define	DtNloginShell		"loginShell"
@@ -257,16 +257,16 @@ extern "C" {
 #define	DtCJumpScroll		"JumpScroll"
 #endif
 #ifndef DtCKshMode
-#define	DtCKshMode              "KshMode"       
+#define	DtCKshMode              "KshMode"
 #endif
 #ifndef DtCLogFile
-#define	DtCLogFile              "LogFile"    
+#define	DtCLogFile              "LogFile"
 #endif
 #ifndef DtCLogInhibit
 #define	DtCLogInhibit		"LogInhibit"
 #endif
 #ifndef DtCLogging
-#define	DtCLogging              "Logging"    
+#define	DtCLogging              "Logging"
 #endif
 #ifndef DtCLoginShell
 #define	DtCLoginShell		"LoginShell"

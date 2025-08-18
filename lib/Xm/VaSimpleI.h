@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,13 +37,13 @@ extern "C" {
 
 /********  Private Function Declarations  ********/
 
-extern void _XmCountVaList( 
+extern void _XmCountVaList(
                         va_list var,
                         int *button_count,
                         int *args_count,
                         int *typed_count,
                         int *total_count) ;
-extern void _XmVaToTypedArgList( 
+extern void _XmVaToTypedArgList(
                         va_list var,
                         int max_count,
                         XtTypedArgList *args_return,

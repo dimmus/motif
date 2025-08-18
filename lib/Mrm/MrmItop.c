@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -117,7 +117,7 @@ static char rcsid[] = "$XConsortium: MrmItop.c /main/15 1996/11/13 13:58:55 drk 
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIdbOpenFileRead (String			name,
 		    MrmOsOpenParamPtr		os_ext,
 		    IDBFile			*file_id_return,
@@ -190,7 +190,7 @@ UrmIdbOpenFileRead (String			name,
  *  PROCEDURE DESCRIPTION:
  *
  *     	This is a simplified version of UrmIdbOpenFile which opens
- * 	a buffer contained in memory.  
+ * 	a buffer contained in memory.
  *
  *  FORMAL PARAMETERS:
  *
@@ -214,7 +214,7 @@ UrmIdbOpenFileRead (String			name,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
 		  IDBFile			*file_id_return)
 {
@@ -297,7 +297,7 @@ UrmIdbOpenBuffer (unsigned char 		*uid_buffer,
  */
 
 /*ARGSUSED*/
-Cardinal 
+Cardinal
 UrmIdbCloseFile (IDBFile		file_id,
 		 Boolean		keep_new_file)	  /* unused */
 {
@@ -398,7 +398,7 @@ UrmIdbCloseFile (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIdbGetIndexedResource (IDBFile			file_id,
 			  String			index,
 			  MrmGroup			group_filter,
@@ -482,7 +482,7 @@ UrmIdbGetIndexedResource (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIdbFindIndexedResource (IDBFile		file_id,
 			   MrmGroup		group_filter,
 			   MrmType		type_filter,
@@ -546,7 +546,7 @@ UrmIdbFindIndexedResource (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIdbGetRIDResource (IDBFile			file_id,
 		      MrmResource_id		resource_id,
 		      MrmGroup			group_filter,
@@ -615,7 +615,7 @@ UrmIdbGetRIDResource (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmIdbGetResourceId (IDBFile			file_id,
 		     MrmResource_id		*resource_id_return)
 {
@@ -627,7 +627,7 @@ UrmIdbGetResourceId (IDBFile			file_id,
   IDBResource resource_id;
 
   if ( (result=Idb__FIL_Valid((IDBFile)file_id)) != MrmSUCCESS ) return result ;
-  result = Idb__RID_NextRID ((IDBFile)file_id, 
+  result = Idb__RID_NextRID ((IDBFile)file_id,
                              &resource_id) ;
   *resource_id_return = resource_id;
   return result ;
@@ -663,7 +663,7 @@ UrmIdbGetResourceId (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__FIL_Valid (IDBFile		file_id)
 {
 
@@ -672,4 +672,3 @@ Idb__FIL_Valid (IDBFile		file_id)
   return MrmSUCCESS ;
 
 }
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Label5.c /main/8 1999/01/29 13:48:09 jff $"
@@ -58,7 +58,7 @@ char **argv;
 		            "label5","label6","label7","label8",
 		            "label9","label10","label11","label12",
 		            "label13","label14","label15"};
-  static Widget labels[15] = 
+  static Widget labels[15] =
     {NULL, NULL,NULL, NULL,NULL, NULL,NULL, NULL,NULL, NULL,
        NULL, NULL,NULL, NULL,NULL};
   Pixmap pixmap;
@@ -91,7 +91,7 @@ char **argv;
     labels[j] = XmCreateLabel (drawarea, label_names[j], args, n);
     XtManageChild (labels[j]);
     XmStringFree (tcs);
-    
+
     printf ("Reading image %s\n", bitmapNames[j]);
 
     if ((pixmap = XmGetPixmap (XtScreen(drawarea), bitmapNames[j],
@@ -101,7 +101,7 @@ char **argv;
 	j++;
 	continue;
       }
-   
+
     n = 0;
     XtSetArg (args[n], XmNx, j * 20 + 5);	n++;
     XtSetArg (args[n], XmNlabelType, XmPIXMAP);	n++;
@@ -116,7 +116,7 @@ char **argv;
 
     CommonPause();
 
-    j++; 
+    j++;
   }
 
   j = 0;
@@ -128,7 +128,7 @@ char **argv;
     }
 
   XmDestroyPixmap(XtScreen(drawarea), pixmap);
- 
+
   CommonPause();
 
   XtAppMainLoop(app_context);

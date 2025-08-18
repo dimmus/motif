@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UilP2Reslv.c /main/11 1995/07/14 09:36:35 drk $"
@@ -129,15 +129,15 @@ void	sem_resolve_forward_refs()
     sym_parent_list_type        	* parent_ptr;
     int                         	found;
 
-    /* 
+    /*
     **	Forward references are placed on a chain by the first pass of
     **	the compiler.  This routine walks the chain checking that
     **	    1) name is now defined
     **	    2) name points to the correct type of object
     */
 
-    for (fwd_entry = sym_az_forward_ref_chain;  
-	 fwd_entry != NULL;  
+    for (fwd_entry = sym_az_forward_ref_chain;
+	 fwd_entry != NULL;
 	 fwd_entry = next_fwd_entry)
     {
 	sym_name_entry_type	* name_entry;
@@ -146,7 +146,7 @@ void	sem_resolve_forward_refs()
 
 
 	/*
-	**  Save the pointer to the next forward entry so we can free the current 
+	**  Save the pointer to the next forward entry so we can free the current
 	**  entry after it is processed.
 	*/
 	next_fwd_entry = fwd_entry->az_next_ref;
@@ -158,7 +158,7 @@ void	sem_resolve_forward_refs()
 	/* %COMPLETE */
 	Uil_percent_complete = 60;
 	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
-	    diag_report_status();    
+	    diag_report_status();
 
 
 	object_type = fwd_entry->header.b_type;
@@ -212,8 +212,8 @@ void	sem_resolve_forward_refs()
 		}
 	    if (found == FALSE)
 		{
-		parent_node = (sym_parent_list_type *) 
-		    sem_allocate_node (sym_k_parent_list_entry, 
+		parent_node = (sym_parent_list_type *)
+		    sem_allocate_node (sym_k_parent_list_entry,
 		    sym_k_parent_list_size);
 		parent_node -> next = object_entry -> parent_list;
 		object_entry -> parent_list = parent_node;
@@ -224,7 +224,7 @@ void	sem_resolve_forward_refs()
 
 	/*
 	**  Free the Forward reference entry now that it is no longer needed
-	*/    
+	*/
 	sem_free_node(( sym_entry_type *)fwd_entry);
 
     }
@@ -234,15 +234,15 @@ void	sem_resolve_forward_refs()
     **  Now resolve the forward references to values
     **/
 
-    /* 
+    /*
     **	Forward references are placed on a chain by the first pass of
     **	the compiler.  This routine walks the chain checking that
     **	    1) name is now defined
     **	    2) name points to the correct type of value
     */
 
-    for (fwd_val_entry = sym_az_val_forward_ref_chain;  
-	 fwd_val_entry != NULL;  
+    for (fwd_val_entry = sym_az_val_forward_ref_chain;
+	 fwd_val_entry != NULL;
 	 fwd_val_entry = next_fwd_val_entry)
     {
 	sym_name_entry_type	* name_entry;
@@ -251,7 +251,7 @@ void	sem_resolve_forward_refs()
 
 
 	/*
-	**  Save the pointer to the next forward entry so we can free the current 
+	**  Save the pointer to the next forward entry so we can free the current
 	**  entry after it is processed.
 	*/
 	next_fwd_val_entry = fwd_val_entry->az_next_ref;
@@ -263,7 +263,7 @@ void	sem_resolve_forward_refs()
 	/* %COMPLETE */
 	Uil_percent_complete = 60;
 	if (Uil_cmd_z_command.status_cb != (Uil_continue_type(*)())NULL)
-	    diag_report_status();    
+	    diag_report_status();
 
 	name_entry = fwd_val_entry->az_name;
 	value_entry = (sym_value_entry_type *) name_entry->az_object;
@@ -296,7 +296,7 @@ void	sem_resolve_forward_refs()
 
 	/*
 	**  Free the Forward reference entry now that it is no longer needed
-	*/    
+	*/
 	sem_free_node(( sym_entry_type *)fwd_val_entry);
 
     }

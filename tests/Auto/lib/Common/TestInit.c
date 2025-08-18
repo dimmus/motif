@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TestInit.c /main/12 1996/06/25 10:08:28 jakku $"
@@ -72,10 +72,10 @@ static void             AutoExitSignal();
 
 static int ProtoError(Display *dpy, XErrorEvent *ev)
 {
-    
+
     fprintf(stderr, "Proto Error\n");
     exit(0);
-    
+
 }
 
 #endif
@@ -91,23 +91,23 @@ AutoWmInit()
 
      /* Atoms for use by automation */
 
-     _MOTIF_WM_AUTOMATION = 
+     _MOTIF_WM_AUTOMATION =
        XmInternAtom (display, "_MOTIF_WM_AUTOMATION", False);
-      WM_S0 = 
+      WM_S0 =
        XmInternAtom (display, "WM_S0", False);
 
      /* This is a DrawingArea widget created so that we can use UTM for
         window manager commands. Part of the work needed to add a target
-        to mwm that automation can use. DrawingArea supports the 
+        to mwm that automation can use. DrawingArea supports the
         destinationCallback. The callback will actually be added in
         AutoWmCmd.c  */
 
-     
+
      n=0;
      XtSetArg (args[n], XmNwidth, 10); n++;
      XtSetArg (args[n], XmNheight, 10); n++;
      XtSetArg (args[n], XmNmappedWhenManaged, False); n++;
-     UTMShell = XtCreatePopupShell ("UTMShell", 
+     UTMShell = XtCreatePopupShell ("UTMShell",
 				    topLevelShellWidgetClass, Shell1,
 				    args, n);
      XtRealizeWidget (UTMShell);
@@ -153,7 +153,7 @@ _CommonTestInit(int argc, char **argv, XtLanguageProc proc, XtPointer client_dat
 
      n = 0;
 
-     /* 
+     /*
 	merge in Extra arguments in the args list for the creation
 	of the application shell. Args are set by CommonExtraResources().
 
@@ -166,7 +166,7 @@ _CommonTestInit(int argc, char **argv, XtLanguageProc proc, XtPointer client_dat
      if (CommonExtraN > 0) {
 	for (i = 0 ; i < CommonExtraN; i++) {
 		if (strcmp(CommonExtraArgs[i].name, "CommonAppClass") == 0)
-			strcpy(CommonAppClass, 	
+			strcpy(CommonAppClass,
 			       (char *) CommonExtraArgs[i].value);
 		else {
 			args[n].name = CommonExtraArgs[i].name;
@@ -174,7 +174,7 @@ _CommonTestInit(int argc, char **argv, XtLanguageProc proc, XtPointer client_dat
 		}
 	}
      }
-			
+
      MallocInit();
 
 #ifdef DEBUG_AUTOMATION
@@ -237,7 +237,7 @@ _CommonTestInit(int argc, char **argv, XtLanguageProc proc, XtPointer client_dat
      XtSetArg(args[n], XmNgeometry, "=125x125+0+0"); 			n++;
      XtSetArg(args[n], XmNallowShellResize, True);  			n++;
      Shell_info = mvsCreateWidget(iXmApplicationShellWidgetClass,
-			          mvsRootWidgetInfo, argv[0], 
+			          mvsRootWidgetInfo, argv[0],
 				  DontUseCommonArgs, args, n,
 				  applicationShellWidgetClass);
 
@@ -261,7 +261,7 @@ _CommonTestInit(int argc, char **argv, XtLanguageProc proc, XtPointer client_dat
 
      /* Once we are done initializing everything, we want to tell xisSynchronize
 	that it is safe to start using a widget instead of using a window, like
-	it has been doing up until this point. For details about why we want 
+	it has been doing up until this point. For details about why we want
 	it to be using a widget, see the file Synth/events/Synchronize.c */
      xisResetSyncWindow();
 }
@@ -307,14 +307,14 @@ void CommonTestInit(int argc, char **argv)
 *									 *
 *************************************************************************/
 
-void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc, 
+void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
 			XtPointer client_data)
 
 {
     _CommonTestInit(argc, argv, proc, client_data  /* initialize i18n */);
 }
 
-	
+
 static void  AutoExitSignal(sig, code, scp)
 int sig, code;
 struct sigcontext *scp;
@@ -364,28 +364,3 @@ struct sigcontext *scp;
      exit(0);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

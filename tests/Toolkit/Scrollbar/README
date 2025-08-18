@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/6 1996/07/15 14:26:11 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 Scale1
 PIRS No.:      2808
 Scale does not erase old values completely when using italic f
@@ -87,7 +87,7 @@ PIRS No.:      2594
 The teStatus:		mentioned in the Supp Doc Loc field used to give
 X warnings that they are not giving in 1.1.1
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	CARL SCHOLZ
 Priority:	8
 Status:		A
@@ -97,7 +97,7 @@ PIRS No.:      4138
 CallInitialize for Scrollbar calls superclass.initialize first
 in Primitive which calls Importvalue in SB before it is set
 Version found in:	1.2S2
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -117,7 +117,7 @@ PIRS No.:      2594
 The teStatus:		mentioned in the Supp Doc Loc field used to give
 X warnings that they are not giving in 1.1.1
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	CARL SCHOLZ
 Priority:	8
 Status:		A
@@ -157,7 +157,7 @@ PIRS No.:      2594
 The teStatus:		mentioned in the Supp Doc Loc field used to give
 X warnings that they are not giving in 1.1.1
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	CARL SCHOLZ
 Priority:	8
 Status:		A

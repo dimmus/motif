@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,27 +19,27 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CloseH.c /main/10 1995/07/14 10:46:24 drk $"
 #endif
 #endif
 
-#include <MrmTest.h> 
+#include <MrmTest.h>
 #include <testlib.h>
 
-/* 
+/*
  * Data for summary
  */
 
 #define NUM_TESTS    4
 #define TEST_DESCRIP_LENGTH    	60
 
-struct TestInfo CloseHierarchyInfo[NUM_TESTS] = 
+struct TestInfo CloseHierarchyInfo[NUM_TESTS] =
 {
     {"Close a valid hierarchy                                     ",
         MrmSUCCESS,	0},
@@ -70,7 +70,7 @@ FILE	*CH_logfile;
 void main (argc,argv)
 int argc;
 char **argv;
-{ 
+{
 
 
 
@@ -96,7 +96,7 @@ char **argv;
 
     char	uidnameMain[80];
 
-    
+
 
     String          filename_vec[1];
     MrmCount        filename_num = 0;
@@ -118,7 +118,7 @@ char **argv;
     MrmInitialize();
 
 
-     /* 
+     /*
         * Open the Mrm hierarchy
         */
     testname=argv[0];
@@ -130,13 +130,13 @@ char **argv;
                          filename_vec,       /* files                */
                          NULL,               /* os_ext_list (null)   */
                          &s_MrmHierarchy)    /* ptr to returned id   */
-      != MrmSUCCESS) 
+      != MrmSUCCESS)
          {
             printf("Can't open hierarchy\n");
          }
 
 
-    
+
 
     MrmFetchWidget(
                        s_MrmHierarchy,
@@ -144,7 +144,7 @@ char **argv;
 		       Shell1,
                        &test_box,
                        &class);
-    
+
     XtManageChild(test_box);
     XtRealizeWidget(Shell1);
 
@@ -156,14 +156,14 @@ char **argv;
     sprintf(uidname[0], "OpenH_vh");
     OH_filename_num = 0;
     OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-    
+
     OpenHierarchy[0] = NULL;
     open_return = MrmOpenHierarchy(
                                OH_filename_num,
                                OH_filename_vec,
                                NULL,
                                &OpenHierarchy[0]);
-    
+
     if (open_return == MrmSUCCESS)
      {
        CH_test[CH_test_cnt] = NULL;
@@ -182,7 +182,7 @@ char **argv;
      CloseHierarchyInfo[CH_info_cnt].actual_return =
                  MrmCloseHierarchy(OpenHierarchy[0]);
      CH_info_cnt++;
-    
+
     /*
      * Close an empty hierarchy
      */
@@ -200,21 +200,21 @@ char **argv;
             MrmCloseHierarchy(OpenHierarchy[0]);
      CH_info_cnt++;
 #endif /* BADTEST */
-    
+
     /*
      * Close a garbage hierarchy
      */
      OH_filename_num = 0;
      sprintf(uidname[0], "OpenH_if");
      OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-    
+
      OpenHierarchy[0] = NULL;
      open_return = MrmOpenHierarchy(
                                OH_filename_num,
                                OH_filename_vec,
                                NULL,
                                &OpenHierarchy[0]);
-    
+
       if (open_return == MrmSUCCESS)
         {    /* This will never happen, not a valid hierarchy */
             CH_test[CH_test_cnt] = NULL;
@@ -233,11 +233,11 @@ char **argv;
       CloseHierarchyInfo[CH_info_cnt].actual_return =
             MrmCloseHierarchy(OpenHierarchy[0]);
       CH_info_cnt++;
-    
+
 
       CommonPause();
-   
-    
+
+
     /*
      * Close a valid hierarchy opened from three files
      */
@@ -248,7 +248,7 @@ char **argv;
      OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
      sprintf(uidname[2], "OpenH_mf3");
      OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-    
+
      OpenHierarchy[0] = NULL;
      open_return = MrmOpenHierarchy(
                                OH_filename_num,
@@ -299,7 +299,7 @@ char **argv;
         CH_info_cnt++;
 
         CommonPause();
-    
+
         summary_msg = summary(NUM_TESTS,
                       TEST_DESCRIP_LENGTH,
                       CloseHierarchyInfo);

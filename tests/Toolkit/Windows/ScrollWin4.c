@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollWin4.c /main/10 1995/07/13 19:49:47 drk $"
@@ -50,7 +50,7 @@ char **argv;
     register int  n;
     Arg           args[MAX_ARGS];
     XmString      tcs;
-    
+
     CommonTestInit(argc, argv);
 
 #ifdef	MOTIF1_1
@@ -81,7 +81,7 @@ char **argv;
     XtManageChild(ScrolledWindow1);
 
 /* test case for PIR 4276 */
-/* 
+/*
  * Removed explicit calls to set traversalOn to True
  * that were added at the beginning of 1.2 - shouldn't
  * need them.
@@ -90,7 +90,7 @@ char **argv;
 
     n = 0;
     DrawingArea1 = XmCreateDrawingArea
-				(ScrolledWindow1, "DrawingArea", args, n); 
+				(ScrolledWindow1, "DrawingArea", args, n);
     XtManageChild(DrawingArea1);
 
     n = 0;
@@ -101,7 +101,7 @@ char **argv;
     ArrowB1 = XmCreateArrowButton(DrawingArea1, "ArrowButton1", args, n);
     XtManageChild(ArrowB1);
 
-    XtAddCallback(ArrowB1, XmNactivateCallback, actCB, 
+    XtAddCallback(ArrowB1, XmNactivateCallback, actCB,
 		  (XtPointer) "ArrowB1");
 
     n = 0;
@@ -114,10 +114,10 @@ char **argv;
     ArrowB2 = XmCreateArrowButton(DrawingArea1, "ArrowButton2", args, n);
     XtManageChild(ArrowB2);
 
-    XtAddCallback(ArrowB2, XmNactivateCallback, (XtCallbackProc) actCB, 
+    XtAddCallback(ArrowB2, XmNactivateCallback, (XtCallbackProc) actCB,
 		  (XtPointer) "ArrowB2");
- 
-    CommonPause();  
+
+    CommonPause();
 
     n = 0;
     XtSetArg(args[n], XmNwidth, 500);			n++;
@@ -128,9 +128,9 @@ char **argv;
     XtSetArg(args[n], XmNwidth, 500);			n++;
     XtSetArg(args[n], XmNheight, 500);			n++;
     XtSetArg(args[n], XmNy, 510);			n++;
-    XtSetValues(ArrowB2, args, n);			
+    XtSetValues(ArrowB2, args, n);
 
-    CommonPause();  
+    CommonPause();
 
     XtUnmanageChild(ArrowB1);
 
@@ -144,7 +144,7 @@ char **argv;
     XtManageChild(DrawingArea1);
     XtManageChild(ArrowB1);
     XtManageChild(ArrowB2);
-  
+
     CommonPause();
 
     n = 0;

@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-# A series of Forms should appear on your screen. 
-# Each Form should have four PushButton children. 
+# A series of Forms should appear on your screen.
+# Each Form should have four PushButton children.
 
 WindowRaise Case_0
 CompareVisual Case_0
@@ -39,14 +39,14 @@ Continue
 
 
 
-# All of the children should be visible. 
+# All of the children should be visible.
 # D should have a top position which is 75% of the height of the Form,
 #    D should have a left position which is 60% of the width of the Form,
 #    C should have a top position which is 50% of the height of the Form,
 #    C should have a left position which is 40% of the width of the form,
 #    B should have a top position which is 25% of the height of the Form,
 #    B should have a left position which is 20% of the width of the Form,
-#    A should have its original position. 
+#    A should have its original position.
 
 WindowRaise Case_0
 CompareVisual Case_0
@@ -61,8 +61,8 @@ CompareVisual Case_4
 Continue
 
 
-#  A series of Forms should appear on your screen. 
-#  Each Form should have four PushButton children. 
+#  A series of Forms should appear on your screen.
+#  Each Form should have four PushButton children.
 
 WindowRaise Case_0
 CompareVisual Case_0
@@ -76,15 +76,15 @@ WindowRaise Case_4
 CompareVisual Case_4
 Continue
 
-#  All of the children should be visible. 
+#  All of the children should be visible.
 #  D should have a top position which is 75% of the height of the Form,
 #    D should have a left position which is 60% of the width of the Form,
 #    C should have a top position which is 50% of the height of the Form,
 #    C should have a left position which is 40% of the width of the form,
 #    B should have a top position which is 25% of the height of the Form,
 #    B should have a left position which is 20% of the width of the Form,
-#    A should have its original position. 
-#  ALL of the children should have a new width and height of 100. 
+#    A should have its original position.
+#  ALL of the children should have a new width and height of 100.
 
 WindowRaise Shell1
 WindowRaise Case_0

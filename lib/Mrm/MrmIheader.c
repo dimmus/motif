@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -143,7 +143,7 @@ static XmConst	char *idb__database_version = URMversion;
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_GetHeader (IDBFile		file_id)
 {
 
@@ -165,7 +165,7 @@ Idb__HDR_GetHeader (IDBFile		file_id)
   result = Idb__BM_GetRecord (file_id, IDBHeaderRecordNumber, &hdrbuf);
   if ( result != MrmSUCCESS ) return result;
   if ( ! Idb__HDR_ValidRecord(hdrbuf) )
-    return Urm__UT_Error ("Idb__HDR_GetHeader", _MrmMMsg_0010, 
+    return Urm__UT_Error ("Idb__HDR_GetHeader", _MrmMMsg_0010,
 			  file_id, NULL, MrmBAD_RECORD);
 
   /*
@@ -203,7 +203,7 @@ Idb__HDR_GetHeader (IDBFile		file_id)
   if (sscanf(hdrptr->db_version, "URM %d.%d", &file_major, &file_minor) != 2)
     {
       sprintf(errmsg, _MrmMMsg_0117, hdrptr->db_version);
-      return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg, 
+      return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
 
@@ -214,18 +214,18 @@ Idb__HDR_GetHeader (IDBFile		file_id)
     sscanf(buf, "URM %d.%d", &db_major, &db_minor);
     XtFree(buf);
   }
-    
+
   if ((file_major > db_major) ||
       ((file_major == db_major) && (file_minor > db_minor)))
     {
       sprintf (errmsg, _MrmMMsg_0011, hdrptr->db_version, idb__database_version);
-      return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg, 
+      return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
   else if (db_major > file_major)
     {
       sprintf(errmsg, _MrmMMsg_0118, idb__database_version, hdrptr->db_version);
-      return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg, 
+      return Urm__UT_Error ("Idb__HDR_GetHeader", errmsg,
 			    file_id, NULL, MrmNOT_VALID);
     }
   return MrmSUCCESS;
@@ -266,7 +266,7 @@ Idb__HDR_GetHeader (IDBFile		file_id)
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_InitHeader (IDBFile		file_id,
 		     String		creator,
 		     String		creator_version,
@@ -384,7 +384,7 @@ Idb__HDR_InitHeader (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_PutHeader (IDBFile		file_id)
 {
 
@@ -435,7 +435,7 @@ Idb__HDR_PutHeader (IDBFile		file_id)
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_UpdateHeader (IDBFile			file_id,
 		       IDBRecordBufferPtr	*buffer)
 {
@@ -455,7 +455,7 @@ Idb__HDR_UpdateHeader (IDBFile			file_id,
   result = Idb__BM_GetRecord (file_id, IDBHeaderRecordNumber, buffer);
   if ( result != MrmSUCCESS ) return result;
   if ( ! Idb__HDR_ValidRecord(*buffer) )
-    return Urm__UT_Error("Idb__HDR_PutHeader", _MrmMMsg_0010, 
+    return Urm__UT_Error("Idb__HDR_PutHeader", _MrmMMsg_0010,
 			 file_id, NULL, MrmBAD_RECORD);
 
   /*
@@ -517,7 +517,7 @@ Idb__HDR_UpdateHeader (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_EnterItem (IDBFile		file_id,
 		    IDBResource		resource_id,
 		    IDBDataHandle	data_entry)
@@ -604,7 +604,7 @@ Idb__HDR_EnterItem (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_ReturnItem (IDBFile		file_id,
 		     IDBResource	resource_id,
 		     Boolean		signal_null,
@@ -654,7 +654,7 @@ Idb__HDR_ReturnItem (IDBFile		file_id,
       return Urm__UT_Error("Idb__HDR_ReturnItem", _MrmMMsg_0014,
 			   file_id, NULL, MrmNULL_DATA);
     }
-    else 
+    else
     {
         return MrmNULL_DATA;
     }
@@ -700,7 +700,7 @@ Idb__HDR_ReturnItem (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_NextRID (IDBFile		file_id,
 		  IDBResource		*res_id_return)
 {
@@ -760,7 +760,7 @@ Idb__HDR_NextRID (IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_GetDataEntry (IDBFile			file_id,
 		       IDBDataHandle		data_entry,
 		       URMResourceContextPtr	context_id)
@@ -879,7 +879,7 @@ Idb__HDR_GetDataEntry (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__HDR_PutDataEntry (IDBFile			file_id,
 		       URMResourceContextPtr	context_id,
 		       IDBDataHandle		*data_entry)
@@ -937,7 +937,7 @@ Idb__HDR_PutDataEntry (IDBFile			file_id,
 
   /*
    * Set the return value to the data pointer for this entry
-   */	
+   */
   data_entry->rec_no = _IdbBufferRecordNumber (bufptr);
   data_entry->item_offs = recptr->free_ptr;
 
@@ -989,7 +989,7 @@ Idb__HDR_PutDataEntry (IDBFile			file_id,
  *--
  */
 
-Boolean 
+Boolean
 Idb__HDR_MatchFilter (IDBFile		file_id,
 		      IDBDataHandle	data_entry,
 		      MrmCode		group_filter,
@@ -1043,4 +1043,3 @@ Idb__HDR_MatchFilter (IDBFile		file_id,
   return TRUE;
 
 }
-

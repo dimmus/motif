@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,17 +19,17 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupS.c /main/8 1995/07/14 11:07:19 drk $"
 #endif
 #endif
 /*      @(#)instance	1.2     Date:02/12/91                              */
-/**************************************************************************                                                           
+/**************************************************************************
     TEST: XmPopupShell
     AUTHOR: Automatic generation.
     DATE: Wed Oct  9 16:42:08 EDT 1991
@@ -205,7 +205,7 @@ static MvsWidgetClassInfo mvXmPopupShellWidgetClass = {
   /* short                 num_resources;                */
                           sizeof(Wresource_info)/sizeof(MvsResourceInfoRecord),
   /* MvsIntResInfoRecord   *intres_info;  */                NULL,
-  /* short                 num_intres;                   */ 
+  /* short                 num_intres;                   */
                            0,
   /* Arg                   common_args[20];              */
       { {"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},
@@ -222,4 +222,3 @@ static MvsWidgetClassInfo mvXmPopupShellWidgetClass = {
 };
 
 MvsWidgetClassInfo *iXmPopupShellWidgetClass = &mvXmPopupShellWidgetClass;
-

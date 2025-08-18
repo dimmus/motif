@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is listMs.uid ---- 
+---- The uid file to be opened is listMs.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) LocatePointer List RListItem 0
-TRACE:(3) ClickMB Btn1 
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- multipleSelectionCallback callback made ----
@@ -36,9 +36,9 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_MULTIPLE_SELECT ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
+TRACE:(4) CompareVisual S_MAIN_WIDGET
 TRACE:(5) LocatePointer List RListItem 2
-TRACE:(6) ClickMB Btn1 
+TRACE:(6) ClickMB Btn1
 
 /*********************************************************/
 ---- multipleSelectionCallback callback made ----
@@ -47,7 +47,7 @@ TRACE:(6) ClickMB Btn1
 /*********************************************************/
 
 TRACE:(7) LocatePointer List RListItem 3
-TRACE:(8) ClickMB Btn1 
+TRACE:(8) ClickMB Btn1
 
 /*********************************************************/
 ---- multipleSelectionCallback callback made ----
@@ -55,6 +55,6 @@ TRACE:(8) ClickMB Btn1
 ---- Reason was XmCR_MULTIPLE_SELECT ----
 /*********************************************************/
 
-TRACE:(9) CompareVisual S_MAIN_WIDGET 
+TRACE:(9) CompareVisual S_MAIN_WIDGET
 TRACE:(10) Exit
 Exiting Test...Please Standby...

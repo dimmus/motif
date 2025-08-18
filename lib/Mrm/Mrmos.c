@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -84,10 +84,10 @@ void _MrmOSIEEEDoubleToHost(double *val)	/* unused */
 }
 
 /************************************************************************
- *  
- *    _MrmOSSetLocale   wrapper so vendor can disable call to set 
+ *
+ *    _MrmOSSetLocale   wrapper so vendor can disable call to set
  *                    if locale is superset of "C".
- *  
+ *
  ************************************************************************/
 
 String

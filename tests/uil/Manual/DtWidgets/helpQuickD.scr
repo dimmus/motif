@@ -22,7 +22,7 @@
 # HISTORY
 # $XConsortium: helpQuickD.scr /main/1 1996/08/12 15:45:39 jakku $
 
-#) This uil test case is designed to test the resources of the 
+#) This uil test case is designed to test the resources of the
 #  DtHelpDialog wdiget. It tests the following resources:
 #)
 #)    Dt resources
@@ -38,10 +38,10 @@
 #	- XmNheight
 #)
 #)
-#) 
+#)
 #) The DtHelpDialog Widget should come up with the following values:
 #)
-#	- Width is 200. 
+#	- Width is 200.
 #	- Height is  200.
 #	- A string "This is a test for HelpQuickDialog widget" should be displayed
 #	- Topic title should be "Testing DtHelpQuickDialogWdiget"
@@ -49,5 +49,5 @@
 
 #	All other resources are set to their default values.
 
-CompareVisual S_MAIN_WIDGET 
+CompareVisual S_MAIN_WIDGET
 Exit

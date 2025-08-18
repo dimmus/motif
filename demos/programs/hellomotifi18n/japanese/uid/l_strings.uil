@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 module kanji_strings
     version = 'v1.0'
@@ -28,24 +28,24 @@ module kanji_strings
 
 value
   local_font : exported fontset ('*medium-r*--14*');
-				 
+
   string_direction : exported XmSTRING_DIRECTION_L_TO_R;
 
-  hello_label : exported 
-                compound_string("今一羽", separate=true) & 
+  hello_label : exported
+                compound_string("今一羽", separate=true) &
 		compound_string("こんにちは");
 
-  bye_label : exported 
+  bye_label : exported
 	    compound_string("さよなら", separate=true)&
 		compound_string("こんにちは");
 
   label_label :  exported compound_string(
-        "１回のクリックで", 
+        "１回のクリックで",
 	         separate=true)&
                           compound_string(
-        "ラベルが変わり", 
+        "ラベルが変わり",
 	         separate=true)&
-                          compound_string(	
+                          compound_string(
        "２回で終了します");
 
 end module ;

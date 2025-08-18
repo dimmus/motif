@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk $"
@@ -35,11 +35,11 @@ static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk
 
 
 /********************************************************************
- * VendorShell and Dialog Shell's extension objects are no longer 
+ * VendorShell and Dialog Shell's extension objects are no longer
  * full fledged Xt objects and therefore  cannot be passed as an
  * argument  to the Xt calls XtAddCallback(), XtRemoveCallback(),
  * and XtCallCallbackList(). The functions _XmAddCallback()
- * _XmRemoveCallback() and _XmCallCallbackList() replace these 
+ * _XmRemoveCallback() and _XmCallCallbackList() replace these
  * Xt calls for non Xt objects.
  ********************************************************************/
 
@@ -55,17 +55,17 @@ _XmAddCallback(InternalCallbackList* callbacks,
   register XtCallbackList cl;
   register InternalCallbackList icl = *callbacks;
   register int count = icl ? icl->count : 0;
-  
-  if (icl && icl->call_state) 
+
+  if (icl && icl->call_state)
     {
       icl->call_state |= _XtCBFreeAfterCalling;
       icl = (InternalCallbackList)
 	XtMalloc(sizeof(InternalCallbackRec) + sizeof(XtCallbackRec) * count);
-      
+
       memcpy((char *)ToList(icl), (char *)ToList(*callbacks),
 	     sizeof(XtCallbackRec) * count);
-    } 
-  else 
+    }
+  else
     {
       icl = (InternalCallbackList)
 	XtRealloc((char *) icl, sizeof(InternalCallbackRec) +
@@ -90,22 +90,22 @@ void
   register XtCallbackList cl, ncl, ocl;
   register InternalCallbackList icl = *callbacks;
 
-  if (!icl) 
+  if (!icl)
     return;
-  
+
   cl = ToList(icl);
-  for (i = icl->count; --i >= 0; cl++) 
+  for (i = icl->count; --i >= 0; cl++)
     {
-      if (cl->callback == callback && cl->closure == closure) 
+      if (cl->callback == callback && cl->closure == closure)
 	{
-	  if (icl->call_state) 
+	  if (icl->call_state)
 	    {
 	      icl->call_state |= _XtCBFreeAfterCalling;
-	      if (icl->count == 1) 
+	      if (icl->count == 1)
 		{
 		  *callbacks = NULL;
-		} 
-	      else 
+		}
+	      else
 		{
 		  j = icl->count - i - 1;
 		  ocl = ToList(icl);
@@ -123,9 +123,9 @@ void
 		  *callbacks = icl;
 		}
 	    }
-	  else 
+	  else
 	    {
-	      if (--icl->count) 
+	      if (--icl->count)
 		{
 		  ncl = cl + 1;
 		  while (--i >= 0)
@@ -149,8 +149,8 @@ void
 _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
 {
   register InternalCallbackList icl = *callbacks;
-  
-  if (icl) 
+
+  if (icl)
     {
       if (icl->call_state)
 	icl->call_state |= _XtCBFreeAfterCalling;
@@ -161,7 +161,7 @@ _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
     }
 }
 
-void 
+void
 _XmCallCallbackList(Widget widget,
 		    XtCallbackList callbacks,
 		    XtPointer call_data)
@@ -170,13 +170,13 @@ _XmCallCallbackList(Widget widget,
   register XtCallbackList cl;
   register int i;
   char ostate;
-  
-  if (!callbacks) 
+
+  if (!callbacks)
     return;
 
   icl = (InternalCallbackList)callbacks;
   cl = ToList(icl);
-  if (icl->count == 1) 
+  if (icl->count == 1)
     {
       (*cl->callback) (widget, cl->closure, call_data);
       return;

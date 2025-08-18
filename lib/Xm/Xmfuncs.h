@@ -1,7 +1,7 @@
 /*
  * $TOG: Xmfuncs.h /main/1 1997/03/24 16:25:46 dbl $
- * 
- * 
+ *
+ *
 Copyright (c) 1990  X Consortium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

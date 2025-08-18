@@ -68,7 +68,7 @@ void main_scrtext3(argc, argv)
     XmRendition   rendition;
     XmRenderTable renderTab = NULL;
     XtTranslations  new_table;
-    static char     translations[] = 
+    static char     translations[] =
       "Ctrl<Key>i:      toggle-overstrike() ";
 
 	/* initialize toolkit */
@@ -106,7 +106,7 @@ void main_scrtext3(argc, argv)
 	n = 0;
 	XtSetArg(args[n], XmNy, 150); n++;
 	XtSetArg(args[n], XmNlabelString,
-		 XmStringCreateLtoR("SingleLine Text widget", 
+		 XmStringCreateLtoR("SingleLine Text widget",
 				XmSTRING_DEFAULT_CHARSET)); n++;
 	Label2 = XmCreateLabel(BBoard1, "Label2", args, n);
 	XtManageChild(Label2);
@@ -126,7 +126,7 @@ void main_scrtext3(argc, argv)
 	n = 0;
 	XtSetArg(args[n], XmNy, 220); n++;
 	XtSetArg(args[n], XmNlabelString,
-	XmStringCreateLtoR("MultiLine Text widget", 
+	XmStringCreateLtoR("MultiLine Text widget",
 		       XmSTRING_DEFAULT_CHARSET)); n++;
 	Label3 = XmCreateLabel(BBoard1, "Label3", args, n);
 	XtManageChild(Label3);
@@ -196,7 +196,7 @@ void main_scrtext3(argc, argv)
 	XtSetValues(Text3, args, n);
 	XtSetValues(Text4, args, n);
 
-	CommonPause(); 
+	CommonPause();
 
 	XtAddCallback(Text1, XmNfocusCallback, CommonGenericCB,
 		"ScrolledText");

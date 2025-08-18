@@ -54,7 +54,7 @@ static String fallbacks[] = {
     "*other_pb.labelString: Other Resources...",
     "*quit_pb.labelString: Quit",
     "*resform*rgbFileLabel.labelString: XmNrgbFile",
-    
+
     NULL,
 };
 /**************************************************************
@@ -63,12 +63,12 @@ static String fallbacks[] = {
 
 /*
  * Function Name: InitializeDemoForm
- * Description:   
- * Arguments:     form - 
+ * Description:
+ * Arguments:     form -
  * Returns:       nothing
  *
  */
-void 
+void
 InitializeDemoForm(Widget form)
 {
     Widget w;
@@ -91,7 +91,7 @@ InitializeDemoForm(Widget form)
 
 /*
  * Function Name: main
- * Description:   
+ * Description:
  * Arguments:     the usual suspects
  * Returns:       nothing
  *
@@ -123,4 +123,3 @@ char **argv;
     XtAppMainLoop(app);
     return 0;
 }
-

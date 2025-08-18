@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef _XmTreeP_h_
@@ -150,7 +150,7 @@ typedef struct _TreePart {
 
     Dimension max_width;	/* Our new desired width. */
     Dimension max_height;	/* Our new desired height. */
-    
+
     XmList child_op_list;		/* List of child operations */
     XPoint ul_point, lr_point;	/* Bounding box for exposure compression. */
 
@@ -198,9 +198,3 @@ extern XmTreeClassRec 	xmTreeClassRec;
 #endif
 
 #endif /* _TreeP_h */
-
-
-
-
-
-

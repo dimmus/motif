@@ -539,7 +539,7 @@ static void ApplyCB(Widget w, XtPointer client_data,
 		XmTextSetString( StatText, stat_str);
 		break;
 	case SetInsertionPosition:
-		XmTextSetInsertionPosition(Text1, 
+		XmTextSetInsertionPosition(Text1,
                                            (XmTextPosition)scale1_val);
 		break;
 	case GetBaseline:

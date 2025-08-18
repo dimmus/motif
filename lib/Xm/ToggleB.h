@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /***********************************************************************
  *
  * Toggle Widget
@@ -47,9 +47,9 @@ typedef struct _XmToggleButtonRec      *XmToggleButtonWidget;
 
 /********    Public Function Declarations    ********/
 
-Boolean XmToggleButtonGetState( 
+Boolean XmToggleButtonGetState(
                         Widget w);
-void XmToggleButtonSetState( 
+void XmToggleButtonSetState(
                         Widget w,
 #if NeedWidePrototypes
                         int newstate,
@@ -68,7 +68,7 @@ Boolean XmToggleButtonSetValue(
         XmToggleButtonState newstate,
         Boolean notify );
 #endif /* NeedWidePrototypes */
-Widget XmCreateToggleButton( 
+Widget XmCreateToggleButton(
                         Widget parent,
                         char *name,
                         Arg *arglist,

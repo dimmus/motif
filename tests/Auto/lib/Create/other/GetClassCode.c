@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetClassCode.c /main/9 1995/07/14 11:16:01 drk $"
@@ -47,7 +47,7 @@ static char rcsid[] = "$XConsortium: GetClassCode.c /main/9 1995/07/14 11:16:01 
 
             OUTPUTS
                 none
-  
+
             RETURNS
                 class code
 ************************************************************************/
@@ -99,7 +99,7 @@ static char rcsid[] = "$XConsortium: GetClassCode.c /main/9 1995/07/14 11:16:01 
 #include <Xm/ToggleBG.h>
 
 #ifndef MOTIF1_1
-#include <Xm/DesktopP.h> 	
+#include <Xm/DesktopP.h>
 #include <Xm/Screen.h>
 #include <Xm/ShellEP.h>
 #include <Xm/VendorSEP.h>
@@ -114,10 +114,10 @@ static char rcsid[] = "$XConsortium: GetClassCode.c /main/9 1995/07/14 11:16:01 
 static WidgetClass *mvsWidgetClass[] = {
       /*  0 */ &vendorShellWidgetClass,
       /*  1 */ &xmArrowButtonWidgetClass,
-      /*  2 */ &xmArrowButtonGadgetClass, 
+      /*  2 */ &xmArrowButtonGadgetClass,
       /*  3 */ &xmBulletinBoardWidgetClass,
       /*  4 */ &xmCascadeButtonWidgetClass,
-      /*  5 */ &xmCascadeButtonGadgetClass, 
+      /*  5 */ &xmCascadeButtonGadgetClass,
       /*  6 */ &xmCommandWidgetClass,
 #ifdef MOTIF1_1
       /*  7 */ &xmDesktopObjectClass,
@@ -131,7 +131,7 @@ static WidgetClass *mvsWidgetClass[] = {
       /* 12 */ &xmFileSelectionBoxWidgetClass,
       /* 13 */ &xmFormWidgetClass,
       /* 14 */ &xmFrameWidgetClass,
-      /* 15 */ &xmGadgetClass, 
+      /* 15 */ &xmGadgetClass,
       /* 16 */ &xmLabelWidgetClass,
       /* 17 */ &xmLabelGadgetClass,
       /* 18 */ &xmListWidgetClass,
@@ -142,8 +142,8 @@ static WidgetClass *mvsWidgetClass[] = {
       /* 23 */ &xmPanedWindowWidgetClass,
       /* 24 */ &xmPrimitiveWidgetClass,
       /* 25 */ &xmProtocolObjectClass,
-      /* 26 */ &xmPushButtonGadgetClass, 
-      /* 27 */ &xmRowColumnWidgetClass, 
+      /* 26 */ &xmPushButtonGadgetClass,
+      /* 27 */ &xmRowColumnWidgetClass,
       /* 28 */ &xmSashWidgetClass,
       /* 29 */ &xmScaleWidgetClass,
 #ifdef MOTIF1_1
@@ -154,7 +154,7 @@ static WidgetClass *mvsWidgetClass[] = {
       /* 31 */ &xmScrollBarWidgetClass,
       /* 32 */ &xmScrolledWindowWidgetClass,
       /* 33 */ &xmSelectionBoxWidgetClass,
-      /* 34 */ &xmSeparatorGadgetClass, 
+      /* 34 */ &xmSeparatorGadgetClass,
       /* 35 */ &xmSeparatorWidgetClass,
       /* 36 */ &xmShellExtObjectClass,
       /* 37 */ &xmTextWidgetClass,
@@ -172,7 +172,7 @@ static WidgetClass *mvsWidgetClass[] = {
       /* 49 */ &topLevelShellWidgetClass,
       /* 50 */ &transientShellWidgetClass,
       /* 51 */ &wmShellWidgetClass,
-      /* 52 */ &xmPushButtonWidgetClass, 
+      /* 52 */ &xmPushButtonWidgetClass,
 #ifndef MOTIF1_1
       /* 53 */ &xmTearOffButtonWidgetClass,
 #else

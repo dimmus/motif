@@ -22,15 +22,15 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual BBoard 
+TRACE:(1) CompareVisual BBoard
 TRACE:(2) Continue
-TRACE:(3) CompareVisual BBoard 
+TRACE:(3) CompareVisual BBoard
 TRACE:(4) Continue
-TRACE:(5) CompareVisual BBoard 
+TRACE:(5) CompareVisual BBoard
 TRACE:(6) Continue
-TRACE:(7) CompareVisual BBoard 
+TRACE:(7) CompareVisual BBoard
 TRACE:(8) Continue
-TRACE:(9) CompareVisual Child1 
+TRACE:(9) CompareVisual Child1
 TRACE:(10) Continue
 TRACE:(11) Exit
 Exiting Test...Please Standby...

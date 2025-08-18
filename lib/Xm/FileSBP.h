@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmFSelectP_h
 #define _XmFSelectP_h
 
@@ -32,7 +32,7 @@ extern "C" {
 
 /* Defines for use in allocation geometry matrix. */
 
-#define XmFSB_MAX_WIDGETS_VERT   12 
+#define XmFSB_MAX_WIDGETS_VERT   12
 
 /* Bit locations for the state_flags bit field.
 */
@@ -98,7 +98,7 @@ typedef struct
 
     XtEnum   path_mode ;
     XtEnum   file_filter_style ;
-    Widget          dir_text ; 
+    Widget          dir_text ;
     Widget          dir_text_label ;
     XmString        dir_text_label_string ;
     time_t   	    prev_dir_modtime;

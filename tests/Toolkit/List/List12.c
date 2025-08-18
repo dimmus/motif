@@ -30,7 +30,7 @@
 static char rcsid[] = "$XConsortium: List12.c /main/5 1995/07/13 18:16:08 drk $"
 #endif
 #endif
-  
+
 #include <testlib.h>
 
 #define NITEMS 8
@@ -49,7 +49,7 @@ static void PushButtonCB(Widget w, Widget l,
   int num;
   int* sel;
   int i;
-  
+
   if (!XmListGetSelectedPos(l, &sel, &num))
     return;
   for (i = 0; i < num; i++)
@@ -65,7 +65,7 @@ main(argc, argv)
   Arg args[MAX_ARGS];
   XmString ItemList[NITEMS];
   Widget RC, List1, PushButton;
-  
+
   CommonTestInit(argc, argv);
 
   n = 0;
@@ -104,7 +104,7 @@ main(argc, argv)
   PushButton = XmCreatePushButton (RC, "PushButton", args, n);
   XtManageChild(PushButton);
 
-  XtAddCallback(PushButton, XmNactivateCallback, 
+  XtAddCallback(PushButton, XmNactivateCallback,
 		(XtCallbackProc) PushButtonCB, List1);
 
   CommonPause();

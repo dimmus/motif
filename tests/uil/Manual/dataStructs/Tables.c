@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Tables.c /main/4 1995/07/13 20:34:37 drk $"
@@ -36,7 +36,7 @@ static char rcsid[] = "$XConsortium: Tables.c /main/4 1995/07/13 20:34:37 drk $"
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
     char	mrm_err[50];
 
 /*
@@ -61,7 +61,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -69,7 +69,7 @@ main(argc, argv)
 /*
  * Register the names of the callback routines with Mrm
  */
-    
+
     if(MrmRegisterNames(reglist,	/* list of names	*/
 			reglist_num)	/* number of names	*/
        != MrmSUCCESS)
@@ -154,7 +154,7 @@ void integer_table_proc(w, UIL_integer_table, reason)
     fprintf(stdout,"   Element   \t Value  \t Value  \tError\n");
     fprintf(stdout,"-------------\t--------\t--------\t-----\n");
 
-    
+
     for(i=0 ; i<=4 ; i++)
     {
 	fprintf(stdout,"      %1d      \t%8d\t%8d",i+1, UIL_integer_table[i],
@@ -163,7 +163,7 @@ void integer_table_proc(w, UIL_integer_table, reason)
 	if(UIL_integer_table[i] != X_integer_table[i])
 	{
 	    errors[ndx]++;
-	    
+
 	    fprintf(stdout,"\t  *\n");
 	}
 	else
@@ -225,7 +225,7 @@ void compound_string_table_proc(w, UIL_compound_string_table, reason)
 		    }
 		else
 		    {
-		    the_whole_string = XtRealloc (the_whole_string, 
+		    the_whole_string = XtRealloc (the_whole_string,
 			          strlen (the_whole_string) +
 				  strlen (next_string) + 1);
 		    strcat (the_whole_string, next_string);
@@ -244,7 +244,7 @@ void compound_string_table_proc(w, UIL_compound_string_table, reason)
 	if(strcmp(the_whole_string, X_compound_string_table[i]) != 0)
 	{
 	    errors[ndx]++;
-	    
+
 	    fprintf(stdout,"\t  *\n");
 	}
 	else
@@ -266,7 +266,7 @@ void asciz_string_table_proc(w, UIL_asciz_string_table, reason)
      unsigned long	*reason;
 {
     int			i;
-    
+
 /*
  * Print test result header
  */
@@ -283,7 +283,7 @@ void asciz_string_table_proc(w, UIL_asciz_string_table, reason)
 	if(strcmp(UIL_asciz_string_table[i], X_asciz_string_table[i]) != 0)
 	{
 	    errors[ndx]++;
-	    
+
 	    fprintf(stdout,"\t  *\n");
 	}
 	else
@@ -306,12 +306,12 @@ void font_table_proc(w, UIL_font_table, reason)
     XmFontContext	context;
     XmStringCharSet     char_set;
     XFontStruct		*font;
-    
+
     int			i,
     			font_errors = 0;
 
     XmFontListInitFontContext(&context, UIL_font_table);
-    
+
 /*
  * Print test result header
  */
@@ -335,12 +335,12 @@ void font_table_proc(w, UIL_font_table, reason)
 	    compare_fonts(font, X_font, &font_errors, NULL);
 	    UIL_font_table++;
 	}
-	
+
 
 	if(font_errors)
 	{
 	    errors[ndx]++;
-	    
+
 	    fprintf(stdout,"\tFonts differ\n");
 	}
 	else
@@ -365,7 +365,7 @@ void identifier_proc(w, ident_tag, reason)
     short	ident_resource = 0;
 
     Arg	args[1];
-    
+
     fprintf(stdout, "                                   \tActual\tExpected\n");
     fprintf(stdout, "Identifier Use                     \tValue \t Value  \t");
     fprintf(stdout, "Error\n");
@@ -381,14 +381,14 @@ void identifier_proc(w, ident_tag, reason)
     nargs = 0;
     XtSetArg(args[nargs], XmNx, &ident_resource); nargs++;
     XtGetValues(w, args, nargs);
-    
+
     fprintf(stdout, "%35s\t%6d\t%8d", ident_type[i], ident_resource,
 	    expected_ident[i]);
 
     if(ident_resource != expected_ident[i])
     {
 	errors[ndx]++;
-	
+
 	fprintf(stdout, "\t  *\n");
     }
     else
@@ -397,18 +397,18 @@ void identifier_proc(w, ident_tag, reason)
     }
 
     i++;
-    
+
 /*
  * Identifier as callback tag value
  */
-    
+
     fprintf(stdout, "%35s\t%6d\t%8d", ident_type[i], ident_tag,
 	    expected_ident[i]);
 
     if(ident_tag != expected_ident[i])
     {
 	errors[ndx]++;
-	
+
 	fprintf(stdout, "\t  *\n");
     }
     else

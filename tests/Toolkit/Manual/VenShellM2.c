@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: VenShellM2.c /main/6 1999/01/29 16:34:55 jff $"
@@ -52,8 +52,8 @@ main(Cardinal argc, char **argv)
     Cardinal    	n;
     Arg         	args[MAX_ARGS];
 
-    /* 
-       NOTE: This test specifically does not call CommonTestInit() and 
+    /*
+       NOTE: This test specifically does not call CommonTestInit() and
        other Common functions. Its purpose is to test the creation of
        fontList resources outside of the normal flow of automated tests.
     */
@@ -66,10 +66,10 @@ main(Cardinal argc, char **argv)
     if (display == NULL) {
       printf ("Couldn't open display. Exiting.\n"); exit (1);
     }
-    
+
     /*  Load some fonts using XmFontListEntryLoad */
 
-    fl_0 = XmFontListEntryLoad (display, "fixed", 
+    fl_0 = XmFontListEntryLoad (display, "fixed",
 				XmFONT_IS_FONT, XmFONTLIST_DEFAULT_TAG);
     fl_1 = XmFontListEntryLoad (display, "6x10",
 				XmFONT_IS_FONT, "button_tag");
@@ -83,7 +83,7 @@ main(Cardinal argc, char **argv)
     dfl = XmFontListAppendEntry (NULL, fl_0);
     bfl = XmFontListAppendEntry (NULL, fl_1);
     lfl = XmFontListAppendEntry (NULL, fl_2);
-    
+
     XmFontListEntryFree (&fl_0);
     XmFontListEntryFree (&fl_1);
     XmFontListEntryFree (&fl_2);
@@ -92,7 +92,7 @@ main(Cardinal argc, char **argv)
     XtSetArg (args[n], XmNdefaultFontList, dfl); n++;
     XtSetArg (args[n], XmNbuttonFontList, bfl); n++;
     XtSetArg (args[n], XmNlabelFontList, lfl); n++;
-    vshell = XtAppCreateShell ("VenShellM2", "XMcommon", 
+    vshell = XtAppCreateShell ("VenShellM2", "XMcommon",
 			       applicationShellWidgetClass,
 			       display,
 			       args, n);

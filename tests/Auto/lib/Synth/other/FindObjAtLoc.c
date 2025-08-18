@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FindObjAtLoc.c /main/7 1995/07/14 11:33:04 drk $"
@@ -68,8 +68,8 @@ int x,y;
 
     /* Check to see if the current l & y is valid */
 
-    if ( x < 0 || y < 0 || 
-         x > DisplayWidth(xisDisplay,xisScreen) || 
+    if ( x < 0 || y < 0 ||
+         x > DisplayWidth(xisDisplay,xisScreen) ||
          y > DisplayHeight(xisDisplay,xisScreen)   ) {
 
         return(NULL);
@@ -85,7 +85,7 @@ int x,y;
 	border_width = 0;
 
 	if (object->id.widget != NULL) {
-		border_width = 
+		border_width =
 			(int) object->id.widget->core.border_width;
 	}
 
@@ -95,7 +95,7 @@ int x,y;
              ((object->x + object->width + border_width) > x) &&
              ((object->y + object->height + border_width) > y) &&
              (object->visibility_state != IsUnmapped)   ) {
-        
+
             save_object = object;
 	}
 
@@ -121,7 +121,7 @@ int x,y;
                     if (object == save_object)
                         done = True;
                     object = object->next_sibling;
-                    if (object != NULL) 
+                    if (object != NULL)
                         break;
 	        }
                 if (object == NULL)

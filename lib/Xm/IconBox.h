@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef _XmIconBox_h
@@ -92,7 +92,7 @@ Widget, String, ArgList, Cardinal
 *	EXTERNAL DECLARATIONS
 *************************************************************/
 
-extern WidgetClass xmIconBoxWidgetClass; 
+extern WidgetClass xmIconBoxWidgetClass;
 
 #if defined(__cplusplus)
 }

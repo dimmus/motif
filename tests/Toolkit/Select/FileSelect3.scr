@@ -1,5 +1,5 @@
 # $XConsortium: FileSelect3.scr /main/7 1995/07/17 20:38:00 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # This test tests the capabilities of the file selection box which layout
@@ -35,7 +35,7 @@
 #  area.
 
 # Verify that the buttons along the bottom panel are all of uniform height
-#  and width.  
+#  and width.
 
 WindowRaise Shell1
 CompareVisual fsbox
@@ -83,5 +83,3 @@ CompareVisual fsbox
 Continue
 
 Exit
-
-

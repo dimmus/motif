@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef XmButtonBoxP_h
@@ -83,7 +83,7 @@ typedef struct _XmButtonBoxClassRec
 typedef struct _XmBBoxConstraintsPart {
     Dimension pref_width, pref_height;
 } XmBBoxConstraintsPart;
-    
+
 typedef struct _XmBBoxConstraintsRec {
     XmManagerConstraintPart	manager;
     XmBBoxConstraintsPart	bbox;
@@ -104,7 +104,7 @@ typedef struct
     Dimension		spacing;
     unsigned char	orientation;
     Widget          default_button;
-    
+
 } XmButtonBoxPart;
 
 typedef struct _XmButtonBoxRec

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,36 +19,36 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 
 extern void FindClientPlacement (ClientData *pCD);
-extern void FixWindowConfiguration (ClientData *pCD, unsigned int *pWidth, 
-				    unsigned int *pHeight, 
-				    unsigned int widthInc, 
+extern void FixWindowConfiguration (ClientData *pCD, unsigned int *pWidth,
+				    unsigned int *pHeight,
+				    unsigned int widthInc,
 				    unsigned int heightInc);
-extern void FixWindowSize (ClientData *pCD, unsigned int *pWidth, 
-			   unsigned int *pHeight, unsigned int widthInc, 
+extern void FixWindowSize (ClientData *pCD, unsigned int *pWidth,
+			   unsigned int *pHeight, unsigned int widthInc,
 			   unsigned int heightInc);
-extern ClientData *GetClientInfo (WmScreenData *pSD, Window clientWindow, 
+extern ClientData *GetClientInfo (WmScreenData *pSD, Window clientWindow,
 				  long manageFlags);
-extern ClientData *GetWmClientInfo (WmWorkspaceData *pWS, ClientData *pCD, 
+extern ClientData *GetWmClientInfo (WmWorkspaceData *pWS, ClientData *pCD,
 				    long manageFlags);
 extern void CalculateGravityOffset (ClientData *pCD, int *xoff, int *yoff);
 extern Boolean InitClientPlacement (ClientData *pCD, long manageFlags);
 extern void InitCColormapData (ClientData *pCD);
 extern void MakeSystemMenu (ClientData *pCD);
-extern void PlaceFrameOnScreen (ClientData *pCD, int *pX, int *pY, int w, 
+extern void PlaceFrameOnScreen (ClientData *pCD, int *pX, int *pY, int w,
 				int h);
 extern void PlaceIconOnScreen (ClientData *pCD, int *pX, int *pY);
 extern void ProcessMwmHints (ClientData *pCD);
 extern void ProcessWmClass (ClientData *pCD);
 extern void ProcessWmHints (ClientData *pCD, Boolean firstTime);
 extern void ProcessWmIconTitle (ClientData *pCD, Boolean firstTime);
-extern void ProcessWmNormalHints (ClientData *pCD, Boolean firstTime, 
+extern void ProcessWmNormalHints (ClientData *pCD, Boolean firstTime,
 				  long manageFlags);
 extern void ProcessWmTransientFor (ClientData *pCD);
 extern void ProcessWmWindowTitle (ClientData *pCD, Boolean firstTime);

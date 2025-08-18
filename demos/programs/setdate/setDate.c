@@ -92,15 +92,15 @@ int main(int argc, char **argv)
   mn = thetime -> tm_mon;
   hr = thetime -> tm_hour;
   mi = thetime -> tm_min;
-  
+
   panedw    = XmCreatePanedWindow(shell, "BBoard", NULL, 0);
   XtManageChild(panedw);
 
-  /* 
+  /*
   argcount = 0;
   XtSetArg(args[argcount], XmNlabelType, XmSTRING), argcount++;
   XtSetArg(args[argcount], XmNlabelString,
-	   XmStringCreate("Set Current Date and Time", 
+	   XmStringCreate("Set Current Date and Time",
 			  XmSTRING_DEFAULT_CHARSET)), argcount++;
   label = XmCreateLabel(panedw, "label1", args, argcount);
   XtManageChild(label);
@@ -116,10 +116,10 @@ int main(int argc, char **argv)
 
   rc = XmCreateRowColumn(panedw, "SpinBoxs", NULL, 0);
   XtManageChild(rc);
-  
+
   label = XmCreateLabel(rc, "label2", NULL, 0);
   XtManageChild(label);
-  
+
   sb1 = XmCreateSpinBox(rc, "DateSB", NULL, 0);
   XtAddCallback(sb1, XmNvalueChangedCallback, ValueChanged, NULL);
   XtManageChild(sb1);
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
   XtSetArg(args[argcount], XmNcolumns, 3), argcount++;
   day = XmCreateTextField(sb1, "Day", args, argcount);
   XtManageChild(day);
-   
+
 #ifndef CSRG_BASED
   months[0]  = XmStringCreate(nl_langinfo(MON_1), XmSTRING_DEFAULT_CHARSET);
   months[1]  = XmStringCreate(nl_langinfo(MON_2), XmSTRING_DEFAULT_CHARSET);
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
   argcount = 0;
   label = XmCreateLabel(rc, "label3", args, argcount);
   XtManageChild(label);
-  
+
   argcount = 0;
   XtSetArg(args[argcount], XmNy, 50), argcount++;
   sb2 = XmCreateSpinBox(rc, "TimeSB", args, argcount);
@@ -200,16 +200,16 @@ int main(int argc, char **argv)
   XtSetArg(args[argcount], XmNcolumns, 3), argcount++;
   hour = XmCreateTextField(sb2, "Hour", args, argcount);
   XtManageChild(hour);
-  
+
   argcount = 0;
   XtSetArg(args[argcount], XmNpositionType, XmPOSITION_INDEX), argcount++;
   XtSetArg(args[argcount], XmNlabelType, XmSTRING), argcount++;
   XtSetArg(args[argcount], XmNlabelString,
-	   XmStringCreate(":", 
+	   XmStringCreate(":",
 			  XmSTRING_DEFAULT_CHARSET)), argcount++;
   label = XmCreateLabel(sb2, "label4", args, argcount);
   XtManageChild(label);
-   
+
   argcount = 0;
   XtSetArg(args[argcount], XmNpositionType, XmPOSITION_INDEX), argcount++;
   XtSetArg(args[argcount], XmNspinBoxChildType, XmNUMERIC), argcount++;
@@ -274,10 +274,8 @@ void Doit(Widget w, XtPointer client_data, XtPointer data)
   char buffer[80];
   char date[32];
 
-  sprintf(date, "%02d%02d%02d%02d%02d", (mn + 1), dy, 
+  sprintf(date, "%02d%02d%02d%02d%02d", (mn + 1), dy,
 	  hr, mi, yr - (100 * (yr / 100)));
   sprintf(buffer, dateCommand, date);
   system(buffer);
 }
-
-

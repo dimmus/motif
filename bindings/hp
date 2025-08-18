@@ -49,5 +49,3 @@ osfSelect	:		<Key>Select
 osfClear	:		<Key>Clear
 osfUndo		:		<Key>Undo
 osfPrimaryPaste	:Meta	Ctrl	<Key>Insert
-
-

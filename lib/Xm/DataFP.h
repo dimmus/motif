@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 #ifndef _XmDataFP_h
 #define _XmDataFP_h
@@ -68,7 +68,7 @@ typedef struct _XmDataFieldRec {
     XmTextFieldPart text;
     XmDataFieldPart data;
 } XmDataFieldRec;
-    
+
 extern XmDataFieldClassRec xmDataFieldClassRec;
 
 #define XmTextF_activate_callback(w) (((XmDataFieldWidget)(w))->text.activate_callback)

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDDrop3.c /main/8 1995/07/14 11:52:47 drk $"
@@ -97,7 +97,7 @@ static DropZoneRec DropZones[] = {
 
 static int numZones = XtNumber(DropZones);
 
-static String myDNDTranslations = 
+static String myDNDTranslations =
 	" <Btn2Down> :  StartMyDrag() \n\
 	 m <Btn1Up>  :  Raise(1)        \n\
 	   <Btn1Up>  :  Raise(0)        \n\
@@ -186,7 +186,7 @@ Boolean *continue_to_dispatch;
 
 		XSetRegion(XtDisplay(w), dzGC, clipRegion);
 
-		XFillRectangle(XtDisplay(w), XtWindow(w), dzGC, 
+		XFillRectangle(XtDisplay(w), XtWindow(w), dzGC,
 			XtX(w), XtY(w), XtWidth(w), XtHeight(w));
 	}
 }
@@ -228,7 +228,7 @@ XEvent *event;
 String *params;
 Cardinal *num_params;
 {
-	
+
 }
 
 static void StartMyDragProc(w, event, params, num_params)
@@ -246,12 +246,12 @@ Cardinal *num_params;
 	for (i=0; i < numZones; i++)
 		if (XPointInRegion(DropZones[i].region, myEvent->x, myEvent->y))
 			break;
-	
+
 	/* if in a drop zone, load the appropriate cursor */
 
 	if (i == numZones)
 		return;
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNsourceCursorIcon, DropZones[i].icon); n++;
 	dc = XmDragStart(w, event, args, n);
@@ -308,7 +308,7 @@ DropZone dz;
 	dz->region = XCreateRegion();
 	for (i=0; i < dz->num_rects; i++)
 		XUnionRectWithRegion(&(dz->rects[i]), dz->region, dz->region);
-	
+
 	/* Get the bounding box of the region */
 	XClipBox(dz->region, &clipBox);
 
@@ -339,13 +339,13 @@ DropZone dz;
 	values.background = 1;
 	values.foreground = 1;
 	XChangeGC(display, clipGC, valueMask, &values);
-	
+
 	/* Fill the shape of the icon with 1's */
 	XUnionRegion(dz->region, dz->region, r1);
 	XOffsetRegion(r1, (-1 * clipBox.x), (-1 * clipBox.y));
 	XSetRegion(display, clipGC, r1);
 
-	XFillRectangle(display, iconMap, clipGC, 
+	XFillRectangle(display, iconMap, clipGC,
 		0, 0, clipBox.width, clipBox.height);
 
 	/* Create a clip region to shoot the 1's thru into the mask */
@@ -355,9 +355,9 @@ DropZone dz;
 
 	XSetRegion(display, clipGC, r1);
 
-	XFillRectangle(display, maskMap, clipGC, 
+	XFillRectangle(display, maskMap, clipGC,
 		0, 0, clipBox.width, clipBox.height);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNpixmap, iconMap); n++;
 	XtSetArg(args[n], XmNmask, maskMap); n++;
@@ -367,7 +367,7 @@ DropZone dz;
 	XtSetArg(args[n], XmNhotX, (clipBox.width / 2)); n++;
 	XtSetArg(args[n], XmNhotY, (clipBox.height / 2)); n++;
 	dz->icon = XmCreateDragIcon(w, dz->name, args, n);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNimportTargets, targets); n++;
 	XtSetArg(args[n], XmNnumImportTargets, num_targets); n++;
@@ -390,7 +390,7 @@ char **argv;
 	this_app = XtCreateApplicationContext();
 	display = XtOpenDisplay(this_app, NULL, NULL, "DNDNonRect",
 		NULL, 0, &argc, argv);
-	
+
 	if (display == NULL) {
 		fprintf(stderr, "%s:  Can't open display\n", argv[0]);
 		exit(1);
@@ -408,7 +408,7 @@ char **argv;
 	XtSetArg(args[n], XmNheight, 300);  n++;
 	shell1 = XtAppCreateShell(NULL, "XMclient",
 		applicationShellWidgetClass, display, args, n);
-	
+
 	n = 0;
 	form1 = XmCreateForm(shell1, "form1", args, n);
 	XtManageChild(form1);
@@ -461,4 +461,3 @@ char **argv;
 	/* MainLoop */
 	XtAppMainLoop(this_app);
 }
-

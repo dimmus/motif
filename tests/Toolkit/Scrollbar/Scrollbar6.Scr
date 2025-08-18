@@ -24,47 +24,47 @@
 # HISTORY
 #
 
-#   $XConsortium: Scrollbar6.scr /main/4 1995/07/13 19:15:39 drk $ 
+#   $XConsortium: Scrollbar6.scr /main/4 1995/07/13 19:15:39 drk $
 
 
 # A client with a scrollbar contained in a frame should appear.
 # The scrollbar should be horizontal with a height of 50 and
 # a width of 250. The processing direction will be reversed and
-# the slider will located 20 percent from the right. 
+# the slider will located 20 percent from the right.
 
 CompareVisual frame
 
 # Press MB1 in the left arrow area of the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 LocatePointer scrollbar RUpOrLeftArrow
 ClickMB Btn1
 
 
 # Press MB1 in the right arrow area of the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 LocatePointer scrollbar RDownOrRightArrow
 ClickMB Btn1
 CompareVisual scrollbar
 
 # Press the left arrow key in the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 LocatePointer scrollbar
 ClickKey KLeft
 
 # Press the right arrow key in the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 ClickKey KRight
 CompareVisual scrollbar
 
-# Press the up arrow key in the scrollbar. Nothing should happen. 
+# Press the up arrow key in the scrollbar. Nothing should happen.
 
 ClickKey KUp
 
-# Press the down arrow key in the scrollbar. Nothing should happen. 
+# Press the down arrow key in the scrollbar. Nothing should happen.
 
 ClickKey KDown
 CompareVisual scrollbar
@@ -72,59 +72,59 @@ CompareVisual scrollbar
 Continue
 
 # Press MB1 in scrollbar area to the left of the slider. The callback
-# reasons (PAGE_INCREMENT) and values will be printed in the term window. 
+# reasons (PAGE_INCREMENT) and values will be printed in the term window.
 
 LocatePointer scrollbar RUpOrLeftSliderArea
 ClickMB Btn1
 
 # Press MB1 in scrollbar area to the right of the slider. The callback
-# reasons (PAGE_DECREMENT) and values will be printed in the term window. 
+# reasons (PAGE_DECREMENT) and values will be printed in the term window.
 
 LocatePointer scrollbar RDownOrRightSliderArea
 ClickMB Btn1
 CompareVisual scrollbar
 
-# Continue for orientation to be VERTICAL. 
+# Continue for orientation to be VERTICAL.
 Continue
 
 
 # A client with a scrollbar contained in a frame should appear.
 # The scrollbar should be vertical with a height of 250 and
 # a width of 50. The processing direction will be reversed and
-# the slider will located 20 percent from the bottom. 
+# the slider will located 20 percent from the bottom.
 
 CompareVisual frame
 
 # Press MB1 in the down arrow area of the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 LocatePointer scrollbar RDownOrRightArrow
 ClickMB Btn1
 
 # Press MB1 in the up arrow area of the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 LocatePointer scrollbar RUpOrLeftArrow
 ClickMB Btn1
 CompareVisual scrollbar
 
 # Press the up arrow key in the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 LocatePointer scrollbar
 ClickKey KUp
 
 # Press the down arrow key in the scrollbar. The callback
-# reasons (VALUE_CHANGED) and values will be printed in the term window. 
+# reasons (VALUE_CHANGED) and values will be printed in the term window.
 
 ClickKey KDown
 CompareVisual scrollbar
 
-# Press the right arrow key in the scrollbar. Nothing should happen. 
+# Press the right arrow key in the scrollbar. Nothing should happen.
 
 ClickKey KRight
 
-# Press the left arrow key in the scrollbar. Nothing should happen. 
+# Press the left arrow key in the scrollbar. Nothing should happen.
 
 ClickKey KLeft
 CompareVisual scrollbar
@@ -132,13 +132,13 @@ CompareVisual scrollbar
 Continue
 
 # Press MB1 in scrollbar area above the slider. The callback
-# reasons (PAGE_INCREMENT) and values will be printed in the top term window. 
+# reasons (PAGE_INCREMENT) and values will be printed in the top term window.
 
 LocatePointer scrollbar RUpOrLeftSliderArea
 ClickMB Btn1
 
 # Press MB1 in scrollbar area below the slider. The callback
-# reasons (PAGE_DECREMENT) and values will be printed in the term window. 
+# reasons (PAGE_DECREMENT) and values will be printed in the term window.
 
 LocatePointer scrollbar RDownOrRightSliderArea
 ClickMB Btn1

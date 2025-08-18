@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,7 +36,7 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmPushWidgetExtData( 
+extern void _XmPushWidgetExtData(
                         Widget widget,
                         XmWidgetExtData data,
 #if NeedWidePrototypes
@@ -44,7 +44,7 @@ extern void _XmPushWidgetExtData(
 #else
                         unsigned char extType) ;
 #endif /* NeedWidePrototypes */
-extern void _XmPopWidgetExtData( 
+extern void _XmPopWidgetExtData(
                         Widget widget,
                         XmWidgetExtData *dataRtn,
 #if NeedWidePrototypes
@@ -52,7 +52,7 @@ extern void _XmPopWidgetExtData(
 #else
                         unsigned char extType) ;
 #endif /* NeedWidePrototypes */
-extern XmWidgetExtData _XmGetWidgetExtData( 
+extern XmWidgetExtData _XmGetWidgetExtData(
                         Widget widget,
 #if NeedWidePrototypes
                         unsigned int extType) ;
@@ -60,13 +60,13 @@ extern XmWidgetExtData _XmGetWidgetExtData(
                         unsigned char extType) ;
 #endif /* NeedWidePrototypes */
 extern void _XmInitializeExtensions( void ) ;
-extern void _XmTransformSubResources( 
+extern void _XmTransformSubResources(
                         XtResourceList comp_resources,
                         Cardinal num_comp_resources,
                         XtResourceList *resources,
                         Cardinal *num_resources) ;
 
-extern Cardinal _XmSecondaryResourceData( 
+extern Cardinal _XmSecondaryResourceData(
                         XmBaseClassExt bcePtr,
                         XmSecondaryResourceData **secResDataRtn,
                         XtPointer client_data,

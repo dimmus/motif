@@ -23,10 +23,10 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is EnumVal3.uid ---- 
+---- The uid file to be opened is EnumVal3.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual TopManager 
+TRACE:(1) CompareVisual TopManager
 TRACE:(2) Continue
 TRACE:(3) Exit
 Exiting Test...Please Standby...

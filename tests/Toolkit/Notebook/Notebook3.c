@@ -76,7 +76,7 @@ void PageChangedCallback(Widget,XtPointer,XtPointer);
   Widget        ChildWidgetSelectionDialog;
   Widget        ListOfAppWidgets;
 
-  
+
 void
 main(int argc, char **argv)
 {
@@ -119,9 +119,9 @@ main(int argc, char **argv)
 
  Notebook = XmCreateNotebook (Parent, "Notebook", NULL,0);
  XtAddCallback (Notebook, XmNpageChangedCallback,PageChangedCallback,(XtPointer)NULL);
- 
 
- XtManageChild(Notebook); 
+
+ XtManageChild(Notebook);
  XtManageChild(Parent);
 
 
@@ -130,7 +130,7 @@ main(int argc, char **argv)
  CreateMainParent();
  CreateNotebookPanel();
  CreateChildPanel();
- CreateNotebookApplyPanel(); 
+ CreateNotebookApplyPanel();
  CreateChildApplyPanel();
  CreateWidgetSelectionBox();
  CreatePopupSelectionPanel();
@@ -163,7 +163,7 @@ main(int argc, char **argv)
 
  XtAppMainLoop(app_context);
 
-}	
+}
 
 
 
@@ -243,7 +243,7 @@ CreateNotebookPanel()
   Widget        TextRC1;
   Widget        ApplyRC1;
   Widget	ConstraintRadioBox[3];
-  
+
   Widget        NotebookText[3];
   Widget        NotebookLabel[3];
 
@@ -255,53 +255,53 @@ CreateNotebookPanel()
   int           n,i;
 
 
-  
 
 
-  static char *scale_labels[] = { 
-                           "Current Page Number", 
-			   "First Page Number", 
+
+  static char *scale_labels[] = {
+                           "Current Page Number",
+			   "First Page Number",
 			   "Last Page Number",
-			   "Back Page Number", 
-			   "Back Page Size", 
-			   "Binding Width", 
-			   "Inner Margin Width", 
-			   "Inner Margin Height", 
-			   "Major Tab Spacing", 
+			   "Back Page Number",
+			   "Back Page Size",
+			   "Binding Width",
+			   "Inner Margin Width",
+			   "Inner Margin Height",
+			   "Major Tab Spacing",
 			   "Minor Tab Spacing",
 			   "Frame Shadow Thickness"};
-			   
 
 
-  
 
-  static char          *color_labels[]  = { 
-                           "Back Page Foreground", 
-			   "Back Page Background", 
-			   "Frame Background" }; 
 
-  static  char          *orientation_names[] = { 
-                           "HORIZONTAL", 
+
+  static char          *color_labels[]  = {
+                           "Back Page Foreground",
+			   "Back Page Background",
+			   "Frame Background" };
+
+  static  char          *orientation_names[] = {
+                           "HORIZONTAL",
 			   "VERTICAL" };
 
-  static  char          *place_names[] = { 
+  static  char          *place_names[] = {
                           "BOTTOM_RIGHT",
 			  "BOTTOM_LEFT",
 			  "TOP_RIGHT",
 			  "TOP_LEFT" };
-  
-  static  char          *binding_names[] = { 
+
+  static  char          *binding_names[] = {
                           "NONE",
 			  "SOLID",
 			  "SPIRAL",
 			  "PIXMAP",
 			  "PIXMAP_OVERLAP_ONLY" };
-  
+
 
 /* Create panel for setting Notebook resources */
 
 
-  
+
   /* Create 2 frames */
 
 
@@ -356,7 +356,7 @@ CreateNotebookPanel()
 
 
   /* Create Frames which will hold RadioBoxes */
-  
+
   for (i=0; i < 4; i++)
     {
       sprintf (name, "ResourceFrame%d", i);
@@ -368,7 +368,7 @@ CreateNotebookPanel()
 
 
 
-  
+
 
 
   /* Create RadioBoxes */
@@ -465,7 +465,7 @@ CreateNotebookPanel()
       n=0;
       XtSetArg(args[n], XmNlabelString, TitleString); n++;
       NotebookLabel[i] = XmCreateLabel (TextRC1, name, args, n);
-      XtManageChild (NotebookLabel[i]); 
+      XtManageChild (NotebookLabel[i]);
 
       sprintf (name, "NotebookText%d", i);
       n=0;
@@ -477,13 +477,13 @@ CreateNotebookPanel()
 
   /* Add Callbacks for Text Widgets */
 
-  XtAddCallback (NotebookText[0], XmNactivateCallback, 
+  XtAddCallback (NotebookText[0], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)BACK_PAGE_FOREGROUND);
 
-  XtAddCallback (NotebookText[1], XmNactivateCallback, 
+  XtAddCallback (NotebookText[1], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)BACK_PAGE_BACKGROUND);
 
-  XtAddCallback (NotebookText[2], XmNactivateCallback, 
+  XtAddCallback (NotebookText[2], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)FRAME_BACKGROUND);
 
 }
@@ -497,18 +497,18 @@ CreateNotebookApplyPanel()
 {
 
 
-    static char          *scale_set_labels[] = 
-                         { "Set Current Page Number", 
-			   "Set First Page Number", 
+    static char          *scale_set_labels[] =
+                         { "Set Current Page Number",
+			   "Set First Page Number",
 			   "Set Last Page Number",
-			   "Set Back Page Number", 
+			   "Set Back Page Number",
 			   "Set Back Page Size",
-			   "Set Binding Width", 
-			   "Set Inner Margin Width", 
-			   "Set Inner Margin Height", 
-			   "Set Major Tab Spacing", 
+			   "Set Binding Width",
+			   "Set Inner Margin Width",
+			   "Set Inner Margin Height",
+			   "Set Major Tab Spacing",
 			   "Set Minor Tab Spacing" ,
-			   "Set Frame Shadow Thickness" }; 
+			   "Set Frame Shadow Thickness" };
 
   Widget ApplyFrame1;
   Widget        NotebookPulldown1;
@@ -534,8 +534,8 @@ CreateNotebookApplyPanel()
   /* Create Pulldown Menu for applying Notebook Values */
 
   n=0;
-  NotebookMenubar1 = XmCreateMenuBar (ApplyFrame1, "NotebookMenubar1", 
-				      args, n); 
+  NotebookMenubar1 = XmCreateMenuBar (ApplyFrame1, "NotebookMenubar1",
+				      args, n);
   XtManageChild (NotebookMenubar1);
 
   n=0;
@@ -544,14 +544,14 @@ CreateNotebookApplyPanel()
 					  "NotebookPulldown1",args, n);
 
   n=0;
-  TitleString = XmStringCreate ("Set Notebook Values", 
+  TitleString = XmStringCreate ("Set Notebook Values",
 				XmFONTLIST_DEFAULT_TAG);
- 
+
   XtSetArg(args[n], XmNsubMenuId, NotebookPulldown1); n++;
   XtSetArg (args[n], XmNlabelString, TitleString); n++;
   NotebookCascade1 =XmCreateCascadeButton(NotebookMenubar1,
 					  "NotebookCascade1", args, n);
-  XtManageChild (NotebookCascade1); 
+  XtManageChild (NotebookCascade1);
 
   /* Create PushButtons for menus */
 
@@ -559,63 +559,63 @@ CreateNotebookApplyPanel()
     {
       sprintf (name, "ApplyScalePB%d", i);
       TitleString = XmStringCreateSimple (scale_set_labels[i]);
-  
+
       n=0;
       XtSetArg (args[n], XmNlabelString, TitleString); n++;
       ApplyScalePB[i] = XmCreatePushButton(NotebookPulldown1, name, args, n);
       XtManageChild(ApplyScalePB[i]);
       XmStringFree (TitleString);
     }
-  
+
 
  /* Add Callbacks for PushButtons */
 
-  XtAddCallback (ApplyScalePB[CurrentPageNumber], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[CurrentPageNumber], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)CURRENT_PAGE_NUMBER);
 
 
-  XtAddCallback (ApplyScalePB[FirstPageNumber], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[FirstPageNumber], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)FIRST_PAGE_NUMBER);
 
 
-  XtAddCallback (ApplyScalePB[LastPageNumber], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[LastPageNumber], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)LAST_PAGE_NUMBER);
 
 
-  XtAddCallback (ApplyScalePB[BackPageNumber], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[BackPageNumber], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)BACK_PAGE_NUMBER);
 
 
 
-  XtAddCallback (ApplyScalePB[BackPageSize], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[BackPageSize], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)BACK_PAGE_SIZE);
 
 
 
-  XtAddCallback (ApplyScalePB[BindingWidth], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[BindingWidth], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)BINDING_WIDTH);
 
 
 
-  XtAddCallback (ApplyScalePB[InnerMarginWidth], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[InnerMarginWidth], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)INNER_MARGIN_WIDTH);
 
 
 
-  XtAddCallback (ApplyScalePB[InnerMarginHeight], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[InnerMarginHeight], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)INNER_MARGIN_HEIGHT);
 
 
 
-  XtAddCallback (ApplyScalePB[MajorTabSpacing], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[MajorTabSpacing], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)MAJOR_TAB_SPACING);
 
 
 
-  XtAddCallback (ApplyScalePB[MinorTabSpacing], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[MinorTabSpacing], XmNactivateCallback,
 		 CreateAndSetNotebookValues, (XtPointer)MINOR_TAB_SPACING);
 
-  XtAddCallback (ApplyScalePB[FrameShadowThickness], XmNactivateCallback, 
+  XtAddCallback (ApplyScalePB[FrameShadowThickness], XmNactivateCallback,
 		CreateAndSetNotebookValues, (XtPointer)FRAME_SHADOW_THICKNESS);
 
 
@@ -629,12 +629,12 @@ CreateNotebookApplyPanel()
 
    n=0;
    TitleString = XmStringCreate("Set Orientation",XmFONTLIST_DEFAULT_TAG);
-   XtSetArg (args[n], XmNlabelString, TitleString); n++; 
+   XtSetArg (args[n], XmNlabelString, TitleString); n++;
    ApplyPB[0] = XmCreatePushButton(NotebookPulldown1, "OrientationPB1", args, n);
    XtManageChild (ApplyPB[0]);
-   XtAddCallback (ApplyPB[0], XmNactivateCallback, CreateAndSetNotebookValues, 
+   XtAddCallback (ApplyPB[0], XmNactivateCallback, CreateAndSetNotebookValues,
 		  (XtPointer)ORIENTATION);
-   XmStringFree (TitleString); 
+   XmStringFree (TitleString);
 
 
 
@@ -644,7 +644,7 @@ CreateNotebookApplyPanel()
    XtSetArg (args[n], XmNlabelString, TitleString); n++;
    ApplyPB[1] = XmCreatePushButton(NotebookPulldown1, "PlacementPB1", args, n);
    XtManageChild (ApplyPB[1]);
-   XtAddCallback (ApplyPB[1], XmNactivateCallback, CreateAndSetNotebookValues, 
+   XtAddCallback (ApplyPB[1], XmNactivateCallback, CreateAndSetNotebookValues,
 		  (XtPointer)BACK_PAGE_PLACEMENT);
    XmStringFree (TitleString);
 
@@ -654,9 +654,9 @@ CreateNotebookApplyPanel()
    XtSetArg (args[n], XmNlabelString, TitleString); n++;
    ApplyPB[2] = XmCreatePushButton(NotebookPulldown1, "BindingPB1", args, n);
    XtManageChild (ApplyPB[2]);
-   XtAddCallback (ApplyPB[2], XmNactivateCallback, CreateAndSetNotebookValues, 
+   XtAddCallback (ApplyPB[2], XmNactivateCallback, CreateAndSetNotebookValues,
 		  (XtPointer)BINDING_TYPE);
-   XmStringFree (TitleString); 
+   XmStringFree (TitleString);
 
   }
 
@@ -678,7 +678,7 @@ CreateChildPanel()
   Widget        ChildRC1;
   Widget        ChildRboxFrame1, ChildToggleFrame1, ChildScaleFrame1;
   Widget        ChildRbox1;
-  
+
   Arg           args[MAX_ARGS];
   int n,i;
   XmString TitleString;
@@ -702,14 +702,14 @@ CreateChildPanel()
   XtManageChild (ChildRboxFrame1);
 
   /* Create frame for "pageNumber" Scale */
-  
+
   n=0;
   ChildScaleFrame1 = XmCreateFrame (ChildRC1, "ChildScaleFrame1", args,n);
   XtManageChild (ChildScaleFrame1);
 
 
   /* Create frame for "resizable" Toggle */
-  
+
   n=0;
   ChildToggleFrame1 = XmCreateFrame (ChildRC1, "ChildToggleFrame1", args,n);
   XtManageChild (ChildToggleFrame1);
@@ -755,15 +755,15 @@ CreateChildPanel()
    XtManageChild (PageNumberScale);
    XmStringFree (TitleString);
 
-  
+
   /* Create "resizable" Toggle */
 
      TitleString = XmStringCreate("Resizable",XmFONTLIST_DEFAULT_TAG);
    n = 0;
    XtSetArg (args[n], XmNlabelString, TitleString); n++;
-   ToggleResizable = XmCreateToggleButton(ChildToggleFrame1, 
+   ToggleResizable = XmCreateToggleButton(ChildToggleFrame1,
 						"ToggleResizable", args,n);
-						
+
    XtManageChild (ToggleResizable);
    XmStringFree (TitleString);
 
@@ -795,7 +795,7 @@ CreateChildApplyPanel()
     /* Create Pulldown Menu for applying Notebook Values */
 
   n=0;
-  ChildMenubar1 = XmCreateMenuBar (ApplyFrame2, "ChildMenubar1", args, n); 
+  ChildMenubar1 = XmCreateMenuBar (ApplyFrame2, "ChildMenubar1", args, n);
   XtManageChild (ChildMenubar1);
 
   n=0;
@@ -803,14 +803,14 @@ CreateChildApplyPanel()
 					  "ChildPulldown1",args, n);
 
   n=0;
-  TitleString = XmStringCreate ("Set Child Values", 
+  TitleString = XmStringCreate ("Set Child Values",
 				XmFONTLIST_DEFAULT_TAG);
- 
+
   XtSetArg(args[n], XmNsubMenuId, ChildPulldown1); n++;
   XtSetArg (args[n], XmNlabelString, TitleString); n++;
   ChildCascade1 =XmCreateCascadeButton(ChildMenubar1,
 					  "ChildCascade1", args, n);
-  XtManageChild (ChildCascade1); 
+  XtManageChild (ChildCascade1);
 
 
   n=0;
@@ -820,7 +820,7 @@ CreateChildApplyPanel()
   XtManageChild (ChildApplyPB[0]);
   XtAddCallback (ChildApplyPB[0], XmNactivateCallback, CreateAndSetChildValues,
 		  (XtPointer)CHILD_TYPE);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 
   n=0;
@@ -830,7 +830,7 @@ CreateChildApplyPanel()
   XtManageChild (ChildApplyPB[1]);
   XtAddCallback (ChildApplyPB[1], XmNactivateCallback, CreateAndSetChildValues,
 		  (XtPointer)PAGE_NUMBER);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 
   n=0;
@@ -840,7 +840,7 @@ CreateChildApplyPanel()
   XtManageChild (ChildApplyPB[2]);
   XtAddCallback (ChildApplyPB[2], XmNactivateCallback, CreateAndSetChildValues,
 		  (XtPointer)RESIZABLE);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 }
 
@@ -870,7 +870,7 @@ CreateWidgetSelectionBox()
   XtSetArg (args[n],XmNlistItemCount, num_widgets); n++;
   XtSetArg (args[n],XmNlistVisibleItemCount, num_widgets); n++;
   XtSetArg (args[n],XmNlistItems, ChildWidgetType); n++;
-  ChildWidgetSelectionDialog = XmCreateSelectionDialog (Shell1, 
+  ChildWidgetSelectionDialog = XmCreateSelectionDialog (Shell1,
 			       "ChildWidgetSelectionDialog",args, n);
 
   XtAddCallback (ChildWidgetSelectionDialog, XmNokCallback,
@@ -878,7 +878,7 @@ CreateWidgetSelectionBox()
   XmStringFree (label);
 
     while (--i >= 0)
-    XmStringFree(ChildWidgetType[i]); 
+    XmStringFree(ChildWidgetType[i]);
 
 
 }
@@ -921,7 +921,7 @@ DisplayWidgetList(Widget w,XtPointer client_data,XtPointer call_data)
 }
 
 
-void 
+void
 CreatePopupSelectionPanel()
 
 {
@@ -950,7 +950,7 @@ CreatePopupSelectionPanel()
   /* Create Pulldown Menu for Creating/Setting Values on Notebook */
 
   n=0;
-  Menubar1 = XmCreateMenuBar (SetRC1, "Menubar1", args, n); 
+  Menubar1 = XmCreateMenuBar (SetRC1, "Menubar1", args, n);
   XtManageChild (Menubar1);
 
   n=0;
@@ -958,14 +958,14 @@ CreatePopupSelectionPanel()
 					  "MenuPulldown1",args, n);
 
   n=0;
-  TitleString = XmStringCreate ("Get Notebook Values", 
+  TitleString = XmStringCreate ("Get Notebook Values",
 				XmFONTLIST_DEFAULT_TAG);
- 
+
   XtSetArg(args[n], XmNsubMenuId, MenuPulldown1); n++;
   XtSetArg (args[n], XmNlabelString, TitleString); n++;
   MenuCascade1 =XmCreateCascadeButton(Menubar1,
 					  "MenuCascade1", args, n);
-  XtManageChild (MenuCascade1); 
+  XtManageChild (MenuCascade1);
   XmStringFree (TitleString);
 
 
@@ -974,14 +974,14 @@ CreatePopupSelectionPanel()
   XtSetArg (args[n], XmNlabelString, TitleString); n++;
   NotebookPB[1] = XmCreatePushButton(MenuPulldown1,"NotebookPB1", args, n);
   XtManageChild (NotebookPB[1]);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 
 
   /* Create Pulldown Menu for Creating/Setting Values on Notebook */
 
   n=0;
-  Menubar2 = XmCreateMenuBar (SetRC1, "Menubar2", args, n); 
+  Menubar2 = XmCreateMenuBar (SetRC1, "Menubar2", args, n);
   XtManageChild (Menubar2);
 
   n=0;
@@ -992,8 +992,8 @@ CreatePopupSelectionPanel()
   XtSetArg(args[n], XmNsubMenuId, MenuPulldown2); n++;
   XtSetArg (args[n], XmNlabelString, TitleString); n++;
   MenuCascade2 =XmCreateCascadeButton(Menubar2,"MenuCascade2", args, n);
-  XtManageChild (MenuCascade2); 
-  XmStringFree (TitleString); 
+  XtManageChild (MenuCascade2);
+  XmStringFree (TitleString);
 
   n=0;
   TitleString = XmStringCreate("Create Child",XmFONTLIST_DEFAULT_TAG);
@@ -1002,7 +1002,7 @@ CreatePopupSelectionPanel()
   XtManageChild (ChildPB[0]);
   XtAddCallback (ChildPB[0], XmNactivateCallback, DisplayWidgetList,
 		  (XtPointer)ChildWidgetSelectionDialog);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 
   n=0;
@@ -1012,7 +1012,7 @@ CreatePopupSelectionPanel()
   XtManageChild (ChildPB[1]);
   XtAddCallback (ChildPB[1], XmNactivateCallback, CreateAndSetChildValues,
 		  (XtPointer)SET_VALUES_CHILD);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 
   n=0;
@@ -1021,7 +1021,7 @@ CreatePopupSelectionPanel()
   DestroyPB1 = XmCreatePushButton(SetRC1,"DestroyPB1", args, n);
   XtManageChild (DestroyPB1);
   XtAddCallback (DestroyPB1,XmNactivateCallback,DestroyW,(XtPointer)NULL);
-  XmStringFree (TitleString); 
+  XmStringFree (TitleString);
 
 }
 
@@ -1038,7 +1038,7 @@ ModifyList (XmString item, char *action)
   int n;
 
 
-  
+
       if (strcmp (action,"add")==0)
 	{
 	  XmListAddItem (ListOfAppWidgets,item,pos);
@@ -1047,7 +1047,7 @@ ModifyList (XmString item, char *action)
 
   else
       if (strcmp (action,"delete")==0)
-	
+
 	  XmListDeleteItem (ListOfAppWidgets,item);
   else
     printf ("invalid action!\n");
@@ -1056,9 +1056,9 @@ ModifyList (XmString item, char *action)
 
 
 
-  
 
-void 
+
+void
 CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data)
 {
 
@@ -1068,7 +1068,7 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
   char * textValue;
   int i;
   static int SetCurrentPageNumber = FALSE;
-  
+
   n=0;
     switch ((int) client_data)
 	{
@@ -1077,20 +1077,20 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
                 n=0;
 	        XtSetArg (args[n], XmNcurrentPageNumber, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
-		break;		
-	
+		break;
+
 	    case FIRST_PAGE_NUMBER:
 	      	XmScaleGetValue(NotebookScale[FirstPageNumber], &scaleValue);
 	        XtSetArg (args[n], XmNfirstPageNumber, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
 	        break;
-	    
+
 	    case  LAST_PAGE_NUMBER:
 	      	XmScaleGetValue(NotebookScale[LastPageNumber], &scaleValue);
 	        XtSetArg (args[n], XmNlastPageNumber, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
 	        break;
-	    
+
 	    case  BACK_PAGE_NUMBER:
 	      	XmScaleGetValue(NotebookScale[BackPageNumber], &scaleValue);
 	        XtSetArg (args[n], XmNbackPageNumber, scaleValue); n++;
@@ -1102,22 +1102,22 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
 	        XtSetArg (args[n], XmNbackPageSize, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
 	        break;
-	    
+
 	    case  BINDING_WIDTH:
 	        XmScaleGetValue(NotebookScale[BindingWidth], &scaleValue);
 	        XtSetArg (args[n], XmNbindingWidth, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
 	        break;
-	    
+
 	      case  INNER_MARGIN_WIDTH:
 	        XmScaleGetValue(NotebookScale[InnerMarginWidth], &scaleValue);
 	        XtSetArg (args[n], XmNinnerMarginWidth, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
 	        break;
-	    
+
 	      case  INNER_MARGIN_HEIGHT:
 	        XmScaleGetValue(NotebookScale[InnerMarginHeight], &scaleValue);
-	        XtSetArg (args[n], XmNinnerMarginHeight, scaleValue); n++; 
+	        XtSetArg (args[n], XmNinnerMarginHeight, scaleValue); n++;
                 XtSetValues (Notebook,args,n);
                 break;
 
@@ -1145,7 +1145,7 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
 	        while (!(XmToggleButtonGadgetGetState (ToggleOrientation[i])))
 		  i++;
 
-		  
+
 		switch (i)
 		  {
 		  case HORIZONTAL:
@@ -1154,27 +1154,27 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
 	          case VERTICAL:
 		      XtSetArg (args[n], XmNorientation, XmVERTICAL); n++;
                       break;
-		    } 
+		    }
             XtSetValues (Notebook,args,n);
             break;
-	       
+
 
 	    case BACK_PAGE_PLACEMENT:
 		i=0;
-	        while (!(XmToggleButtonGadgetGetState (TogglePlacement[i]))) 
+	        while (!(XmToggleButtonGadgetGetState (TogglePlacement[i])))
 		  i++;
 		switch (i)
 		  {
 		    case BOTTOM_RIGHT:
-		    XtSetArg (args[n], XmNbackPagePlacement, XmBOTTOM_RIGHT);n++;               
+		    XtSetArg (args[n], XmNbackPagePlacement, XmBOTTOM_RIGHT);n++;
                    break;
-      
+
 		  case BOTTOM_LEFT:
-		    XtSetArg (args[n], XmNbackPagePlacement, XmBOTTOM_LEFT);n++;                  
+		    XtSetArg (args[n], XmNbackPagePlacement, XmBOTTOM_LEFT);n++;
 		    break;
 		  case TOP_RIGHT:
 		    XtSetArg (args[n], XmNbackPagePlacement, XmTOP_RIGHT);n++;
-                    
+
 		    break;
 		  case TOP_LEFT:
 		    XtSetArg (args[n], XmNbackPagePlacement, XmTOP_LEFT);n++;
@@ -1183,7 +1183,7 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
                 XtSetValues (Notebook,args,n);
 		break;
 
-	    
+
 	    case BINDING_TYPE:
 		i=0;
 		while (!(XmToggleButtonGadgetGetState (ToggleBinding[i]))) i++;
@@ -1209,10 +1209,10 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
 		  }
                 XtSetValues (Notebook,args,n);
 		break;
-		
+
 	      case BACK_PAGE_FOREGROUND:
 		textValue = XmTextFieldGetString(w);
-		XtSetArg(args[n], XmNbackPageForeground, 
+		XtSetArg(args[n], XmNbackPageForeground,
 			 CommonGetColor(textValue)); n++;
                 XtSetValues (Notebook,args,n);
 		break;
@@ -1244,14 +1244,14 @@ CreateAndSetNotebookValues (Widget w, XtPointer client_data, XtPointer call_data
 
 
 
-void 
+void
 CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 
 {
 
 
   static  char name[16];
-  
+
   static Arg args[MAX_ARGS];
   static int n=0;
   int i;
@@ -1261,7 +1261,7 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 
   int scaleValue;
   char *ChildWanted;
-  static int num_page=0, num_minor_tab=0, num_major_tab=0, 
+  static int num_page=0, num_minor_tab=0, num_major_tab=0,
              num_page_scroller=0, num_status_area = 0;
   XmString ChildJustCreated;
   XmStringTable ListItem;
@@ -1270,7 +1270,7 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 
   static char *notebookChildType = "PAGE";
 
-  
+
   switch ((int)client_data)
     {
     case CHILD_TYPE:
@@ -1282,7 +1282,7 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 	     XtSetArg (args[n], XmNnotebookChildType, XmPAGE); n++;
 	     notebookChildType = "PAGE";
 	     break;
-	   
+
 	   case MAJOR_TAB:
 	     XtSetArg (args[n], XmNnotebookChildType, XmMAJOR_TAB); n++;
 	     notebookChildType = "MAJOR_TAB";
@@ -1319,7 +1319,7 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 	     XtSetArg (args[n], XmNresizable, True); n++;
 	   }
         break;
-	      
+
 
        case CREATE_CHILD:
 
@@ -1332,35 +1332,35 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 	 i=0;
 	 while (((strcmp (ChildWanted, WidgetStruct[i].name) != 0) && (i < num_widgets)) && (name != NULL)) i++;
 	 if ((i != num_widgets) && (Notebook != NULL))
-	   { 
+	   {
 	     if (strcmp (notebookChildType, "PAGE") == 0)
 
-	    
+
 	       {
 		 sprintf (name, "Page%d", num_page+1);
-		 Page[num_page] = 
+		 Page[num_page] =
 		    (*WidgetStruct[i].CreateFunction)(Notebook, name, args, n);
 		 XtManageChild (Page[num_page]);
 		 num_page++;
 	       }
 
 	     else
-	       
+
 		 if (strcmp (notebookChildType, "MAJOR_TAB") == 0)
 		   {
 		     sprintf (name, "MajorTab%d", num_major_tab+1);
-		     MajorTab[num_major_tab] = 
+		     MajorTab[num_major_tab] =
 		    (*WidgetStruct[i].CreateFunction)(Notebook, name, args, n);
 		     XtManageChild (MajorTab[num_major_tab]);
 		     num_major_tab++;
 		   }
 
 	     else
-	       
+
 		 if (strcmp (notebookChildType, "MINOR_TAB") == 0)
 		   {
 		   sprintf (name, "MinorTab%d", num_minor_tab+1);
-		   MinorTab[num_minor_tab] = 
+		   MinorTab[num_minor_tab] =
 		    (*WidgetStruct[i].CreateFunction)(Notebook, name, args, n);
 		   XtManageChild (MinorTab[num_minor_tab]);
 		   num_minor_tab++;
@@ -1371,7 +1371,7 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 	     if (strcmp (notebookChildType, "STATUS_AREA") == 0)
 	       {
 		 sprintf (name, "StatusArea%d", num_status_area+1);
-		 StatusArea[num_status_area] = 
+		 StatusArea[num_status_area] =
 		   (*WidgetStruct[i].CreateFunction)(Notebook, name, args, n);
 		 XtManageChild (StatusArea[num_status_area]);
 		 num_status_area++;
@@ -1379,16 +1379,16 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 
 
 	     else
-	       
+
 	     if (strcmp (notebookChildType, "PAGE_SCROLLER") == 0)
 	       {
 		 sprintf (name, "PageScroller%d", num_page_scroller+1);
-		 PageScroller[num_page_scroller] = 
+		 PageScroller[num_page_scroller] =
 		 (*WidgetStruct[i].CreateFunction)(Notebook, name, args, n);
 		 XtManageChild (PageScroller[num_page_scroller]);
 		 num_page_scroller++;
 	       }
-	     
+
 
 
 
@@ -1396,24 +1396,24 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 	    ModifyList (ChildJustCreated,"add");
 	    XmStringFree (ChildJustCreated);
 
-	   
-	    
 
-}		   
-		   
+
+
+}
+
 	 break;
 
        case SET_VALUES_CHILD:
-	   XtSetArg (nargs[0], XmNselectedItems, &ListItem); 
+	   XtSetArg (nargs[0], XmNselectedItems, &ListItem);
 	   XtGetValues (ListOfAppWidgets,nargs,1);
 	   XmStringGetLtoR (*ListItem,XmFONTLIST_DEFAULT_TAG,&NameOfWidget);
-	 
+
         if ((NameOfWidget != NULL) && (n!=0))
 	  {
 	    XtSetValues(XtNameToWidget(Notebook, (String)NameOfWidget),args,n);
 	    n=0;
 	  }
-	break;		     
+	break;
 
        default:
 	 break;
@@ -1422,7 +1422,7 @@ CreateAndSetChildValues (Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void 
+void
 DestroyW (Widget w, XtPointer client_data, XtPointer call_data)
 
 {
@@ -1432,7 +1432,7 @@ DestroyW (Widget w, XtPointer client_data, XtPointer call_data)
     char *NameOfWidget;
     XmStringTable ListItem;
 
-  
+
     n = 0;
     XtSetArg (args[n], XmNselectedItems, &ListItem); n++;
     XtGetValues (ListOfAppWidgets,args,n);
@@ -1443,7 +1443,7 @@ DestroyW (Widget w, XtPointer client_data, XtPointer call_data)
 	    XtDestroyWidget(XtNameToWidget(Notebook, (String)NameOfWidget));
 	    ModifyList (*ListItem,"delete");
 	  }
-   
+
   }
 
 
@@ -1451,7 +1451,7 @@ DestroyW (Widget w, XtPointer client_data, XtPointer call_data)
 
 
 
-void 
+void
 PageChangedCallback(Widget w, XtPointer client_data, XtPointer call_data)
 {
 
@@ -1484,7 +1484,6 @@ PageChangedCallback(Widget w, XtPointer client_data, XtPointer call_data)
 	}
       printf ("Current page is %d\n",current_page_no);
       printf ("Desired page is %d\n\n\n",want_page_no);
-    
+
 
 }
-

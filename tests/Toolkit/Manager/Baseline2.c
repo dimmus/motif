@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Baseline2.c /main/5 1995/07/13 18:28:48 drk $"
@@ -98,7 +98,7 @@ void  main (argc, argv)
 
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);	n++;
-    PushButtonGad1 = XmCreatePushButtonGadget(RowColumn, "PushButtonGad1", 
+    PushButtonGad1 = XmCreatePushButtonGadget(RowColumn, "PushButtonGad1",
 					      args, n);
     XtManageChild(PushButtonGad1);
 
@@ -109,7 +109,7 @@ void  main (argc, argv)
 
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);	n++;
-    PushButtonGad2 = XmCreatePushButtonGadget(RowColumn, "PushButtonGad2", 
+    PushButtonGad2 = XmCreatePushButtonGadget(RowColumn, "PushButtonGad2",
 					      args, n);
     XtManageChild(PushButtonGad2);
 
@@ -124,7 +124,7 @@ void  main (argc, argv)
 
     XmStringFree(tcs);
 
-    pixmap1 = XmGetPixmap(XtScreenOfObject(Shell1), "woman", 
+    pixmap1 = XmGetPixmap(XtScreenOfObject(Shell1), "woman",
 			  CommonGetColor("black"), CommonGetColor("white"));
 
     n = 0;
@@ -251,7 +251,7 @@ static void CreatePanel()
     Toggle_Bottom = XmCreateToggleButton(RadioBox1, "Toggle_Bottom", args, n);
     XtManageChild(Toggle_Bottom);
 
-    XtAddCallback(Toggle_Bottom, XmNarmCallback, AlignCB, 
+    XtAddCallback(Toggle_Bottom, XmNarmCallback, AlignCB,
 		  (XtPointer) XmALIGNMENT_BASELINE_BOTTOM);
 
     XmStringFree(tcs);
@@ -263,7 +263,7 @@ static void CreatePanel()
     Toggle_Top = XmCreateToggleButton(RadioBox1, "Toggle_Top", args, n);
     XtManageChild(Toggle_Top);
 
-    XtAddCallback(Toggle_Top, XmNarmCallback, AlignCB, 
+    XtAddCallback(Toggle_Top, XmNarmCallback, AlignCB,
 		  (XtPointer) XmALIGNMENT_BASELINE_TOP);
 
     XmStringFree(tcs);
@@ -276,7 +276,7 @@ static void CreatePanel()
 					     args, n);
     XtManageChild(Toggle_Con_Bottom);
 
-    XtAddCallback(Toggle_Con_Bottom, XmNarmCallback, AlignCB, 
+    XtAddCallback(Toggle_Con_Bottom, XmNarmCallback, AlignCB,
 		  (XtPointer) XmALIGNMENT_CONTENTS_BOTTOM);
 
     XmStringFree(tcs);
@@ -288,7 +288,7 @@ static void CreatePanel()
     Toggle_Con_Top = XmCreateToggleButton(RadioBox1, "Toggle_Con_Top", args, n);
     XtManageChild(Toggle_Con_Top);
 
-    XtAddCallback(Toggle_Con_Top, XmNarmCallback, AlignCB, 
+    XtAddCallback(Toggle_Con_Top, XmNarmCallback, AlignCB,
 		  (XtPointer) XmALIGNMENT_CONTENTS_TOP);
 
     XmStringFree(tcs);
@@ -300,7 +300,7 @@ static void CreatePanel()
     Toggle_Center = XmCreateToggleButton(RadioBox1, "Toggle_Center", args, n);
     XtManageChild(Toggle_Center);
 
-    XtAddCallback(Toggle_Center, XmNarmCallback, AlignCB, 
+    XtAddCallback(Toggle_Center, XmNarmCallback, AlignCB,
 		  (XtPointer) XmALIGNMENT_CENTER);
 
     XmStringFree(tcs);

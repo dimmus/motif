@@ -84,7 +84,7 @@ XCOMM $XFree86: xc/config/cf/sv3Lib.rules,v 3.0 1994/05/21 23:39:31 dawes Exp $
 
 #ifndef PositionIndependentCFlags
 # if HasGcc2
-#  define PositionIndependentCFlags -msvr3-shlib  
+#  define PositionIndependentCFlags -msvr3-shlib
 # else
 #  define PositionIndependentCFlags /**/
 # endif
@@ -92,7 +92,7 @@ XCOMM $XFree86: xc/config/cf/sv3Lib.rules,v 3.0 1994/05/21 23:39:31 dawes Exp $
 
 #ifndef PositionIndependentCplusplusFlags
 # if HasGcc2
-#  define PositionIndependentCplusplusFlags -msvr3-shlib  
+#  define PositionIndependentCplusplusFlags -msvr3-shlib
 # else
 #  define PositionIndependentCplusplusFlags /**/
 # endif

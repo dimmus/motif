@@ -19,51 +19,50 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-# A client with an arrow button pointing upwards will appear. 
+# A client with an arrow button pointing upwards will appear.
 #  Messages should appear in the term window saying that the unitType
 #  of the arrow button is XmPIXELS, and what the width and height is of the
-#  Arrow button is in XmPIXELS. 
+#  Arrow button is in XmPIXELS.
 
 CompareVisual arrow
 Continue
 
-# The unitType of the arrow button should be changed. 
-#  The arrow button will NOT change size. 
+# The unitType of the arrow button should be changed.
+#  The arrow button will NOT change size.
 # Messages will appear in the term window saying that the unitType of
 #  the arrow button is Xm1000TH_INCHES, and what the width and height of the
-#  arrow button is in Xm1000TH_INCHES.    
+#  arrow button is in Xm1000TH_INCHES.
 
 CompareVisual arrow
 Continue
 
-# The unitType of the arrow button should be changed. 
-# The arrow button will NOT change size. 
+# The unitType of the arrow button should be changed.
+# The arrow button will NOT change size.
 # Messages will appear in the term window saying that the unitType of
 #  the arrow button is Xm100TH_POINTS, and what the width and height of the
-#  arrow button is in Xm100TH_POINTS. 
+#  arrow button is in Xm100TH_POINTS.
 
 CompareVisual arrow
 Continue
 
-# The unitType of the arrow button should be changed. 
-# The arrow button will NOT change size. 
+# The unitType of the arrow button should be changed.
+# The arrow button will NOT change size.
 # Messages will appear in the term window saying that the unitType of
-#  the arrow button is Xm100TH_MILLIMETERS, and what the width and height 
-#  of the arrow button is in Xm100TH_MILLIMETERS. 
+#  the arrow button is Xm100TH_MILLIMETERS, and what the width and height
+#  of the arrow button is in Xm100TH_MILLIMETERS.
 
 CompareVisual arrow
 Continue
 
-# The unitType of the arrow button should be changed. 
-# The arrow button will NOT change size. 
+# The unitType of the arrow button should be changed.
+# The arrow button will NOT change size.
 # Messages will appear in the term window saying that the unitType of
 #  the arrow button is Xm100TH_FONT_UNITS, and what the width and height of the
-#  arrow button is in Xm100TH_FONT_UNITS. 
+#  arrow button is in Xm100TH_FONT_UNITS.
 
 CompareVisual arrow
 Exit
-

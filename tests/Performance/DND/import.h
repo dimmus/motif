@@ -151,6 +151,6 @@ extern int __shlibXmVersion;
 
 	extern char *regex(char *re, char *subject);
 
- 
+
 
 #endif /*ATTSHAREDLIB*/

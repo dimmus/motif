@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH transfer 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -31,7 +31,7 @@
 .sE
 .SH DESCRIPTION
 \*Ltransfer\*O
-shows off the features in UTM and can aid in debugging data 
+shows off the features in UTM and can aid in debugging data
 interchange problems.
 .SH X Defaults
 The class of this application is \fIXmDTransfer\fR.

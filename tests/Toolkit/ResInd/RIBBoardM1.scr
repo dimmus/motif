@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-# A client with an arrow button pointing upwards will appear. 
+# A client with an arrow button pointing upwards will appear.
 # 1) A message should appear in the term window saying that the unitType
-#  of the arrow button is XmPIXELS. 
+#  of the arrow button is XmPIXELS.
 
 CompareVisual board
 CompareVisual arrow
@@ -32,25 +32,25 @@ CompareVisual arrow
 # C)
 Continue
 
-# A client with a larger arrow button will appear. 
+# A client with a larger arrow button will appear.
 CompareVisual board
 CompareVisual arrow
 # C)
 Continue
 
-# A client with a smaller arrow button will appear. 
+# A client with a smaller arrow button will appear.
 CompareVisual board
 CompareVisual arrow
 # C)
 Continue
 
-# A client with a smaller arrow button will appear. 
+# A client with a smaller arrow button will appear.
 CompareVisual board
 CompareVisual arrow
 # C)
 Continue
 
-# A client with a larger arrow button will appear. 
+# A client with a larger arrow button will appear.
 CompareVisual board
 CompareVisual arrow
 # E)

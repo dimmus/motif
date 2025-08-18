@@ -33,7 +33,7 @@ typedef struct _FontCBData {
   Widget	widget;
   char        	*fontname;
 } FontCBData;
-  
+
 /*
  *  Global variables.
  */
@@ -46,7 +46,7 @@ static char new_string3[] = "012345";
 
 static char render_tag[] = "render1";
 
-Widget RowCol1, Label1; 
+Widget RowCol1, Label1;
 Widget Text1, Text2;
 Widget fonttitle1;
 XFontStruct  *fontStruct0, *fontStruct1, *fontStruct2;
@@ -60,7 +60,7 @@ static void fontTBCB1(Widget w, XtPointer client_data,
 	int n;
         XmRendition   rendition;
         XmRenderTable renderTab = NULL;
-        FontCBData    *fontCBData = (FontCBData *)client_data; 
+        FontCBData    *fontCBData = (FontCBData *)client_data;
         Widget	      widget;
 	char	      *fontname;
 
@@ -85,7 +85,7 @@ static void fontTBCB2(Widget w, XtPointer client_data,
 	int n;
         XmRendition   rendition;
         XmRenderTable renderTab = NULL;
-        FontCBData    *fontCBData = (FontCBData *)client_data; 
+        FontCBData    *fontCBData = (FontCBData *)client_data;
         Widget	      widget;
 	char	      *fontname;
 	unsigned int  em_space;
@@ -99,7 +99,7 @@ static void fontTBCB2(Widget w, XtPointer client_data,
 	widget = fontCBData->widget;
         fontname = fontCBData->fontname;
 
-        fontStruct2 = XLoadQueryFont( display, fontname ); 
+        fontStruct2 = XLoadQueryFont( display, fontname );
 
         n = 0;
         XtSetArg(args[n], XmNfont, (XtPointer)fontStruct2);  n++;
@@ -110,7 +110,7 @@ static void fontTBCB2(Widget w, XtPointer client_data,
         renderTab = XmRenderTableAddRenditions( renderTab, &rendition, 1,
                       XmMERGE_REPLACE );
 
-        XmRenditionFree( rendition ); 
+        XmRenditionFree( rendition );
 
 	n = 0;
 	XtSetArg(args[n], XmNrenderTable, renderTab);  n++;
@@ -152,12 +152,12 @@ main_text10 (argc, argv)
 
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-    
+
 	/* create main rowcolumn */
 	n = 0;
-	XtSetArg(args[n], XmNadjustLast, False);  n++; 
+	XtSetArg(args[n], XmNadjustLast, False);  n++;
 	/* fix for PIR 3317 */
-	XtSetArg(args[n], XmNpacking, XmPACK_NONE);n++;  
+	XtSetArg(args[n], XmNpacking, XmPACK_NONE);n++;
 	/* end of fix for PIR 3317 */
 	RowCol1 = XmCreateRowColumn(Shell1, "RowCol1", args, n);
 	XtManageChild(RowCol1);
@@ -185,7 +185,7 @@ main_text10 (argc, argv)
 	XtManageChild(Text2);
 
 	n = 0;
-        tmp_string = XmStringCreate("text font", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("text font", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNy, 80);  n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fonttitle1 = XmCreateLabel(RowCol1, "fonttitle", args, n);
@@ -206,7 +206,7 @@ main_text10 (argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("helvetica2", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("helvetica2", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[1] = XmCreateToggleButtonGadget(fontRB1, "RB1_helv2", args, n);
         XmStringFree(tmp_string);
@@ -219,7 +219,7 @@ main_text10 (argc, argv)
 
 	/* test case for PIR 3317 */
 
-        
+
         fontCB1.widget = Text1;
         fontCB1.fontname = fontname[0];
 	XtAddCallback(fontTB1[0], XmNarmCallback,
@@ -242,13 +242,13 @@ main_text10 (argc, argv)
 	XtManageChild(fontTB1[1]);
 
 	XtRealizeWidget(Shell1);
-	XSynchronize(XtDisplay(Shell1), True); 
+	XSynchronize(XtDisplay(Shell1), True);
 
 	n = 0;
 	XtSetArg(args[n], XmNwidth, 350); n++;
 	XtSetArg(args[n], XmNheight, 375); n++;
-	XtSetArg(args[n], XmNresizeHeight, False);n++;  
-	XtSetArg(args[n], XmNresizeWidth, False);n++;  
+	XtSetArg(args[n], XmNresizeHeight, False);n++;
+	XtSetArg(args[n], XmNresizeWidth, False);n++;
 	XtSetValues(RowCol1, args, n);
 
 	CommonPause();
@@ -263,56 +263,56 @@ main_text10 (argc, argv)
 	XtUnmanageChild(fontRB1);
 
 	n = 0;
-	XtSetArg(args[n], XmNpacking, XmPACK_NONE);n++;  
+	XtSetArg(args[n], XmNpacking, XmPACK_NONE);n++;
 	XtSetValues(RowCol1, args, n);
 
 	i = 2;
 	n = 0;
-        tmp_string = XmStringCreate("helvetica3", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("helvetica3", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		 
+
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_helv3", args, n);
 	i++;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("6x12", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("6x12", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		 
+
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_6x12", args, n);
 	i++;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("9x15", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("9x15", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_9x15", args, n);
 	i++;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("courier1", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("courier1", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_cour1", args, n);
 	i++;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("courier2", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("courier2", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_cour2", args, n);
 	i++;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("times1", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("times1", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_times1", args, n);
 	i++;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("times2", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("times2", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[i] = XmCreateToggleButtonGadget(fontRB1, "RB1_times2", args, n);
 	i++;
@@ -342,8 +342,8 @@ main_text10 (argc, argv)
 	n = 0;
 	XtSetArg(args[n], XmNwidth, 170); n++;
 	XtSetArg(args[n], XmNheight, 375); n++;
-	XtSetArg(args[n], XmNresizeHeight, True);n++;  
-	XtSetArg(args[n], XmNresizeWidth, True);n++;  
+	XtSetArg(args[n], XmNresizeHeight, True);n++;
+	XtSetArg(args[n], XmNresizeWidth, True);n++;
 	XtSetValues(RowCol1, args, n);
 
 	/* create multi line text widget */
@@ -392,5 +392,3 @@ main_text10 (argc, argv)
 
 	XtAppMainLoop(app_context);
 }
-
-

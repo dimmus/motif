@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsCpRsc.c /main/7 1995/07/14 11:20:13 drk $"
@@ -49,11 +49,11 @@ static char rcsid[] = "$XConsortium: mvsCpRsc.c /main/7 1995/07/14 11:20:13 drk 
 *   This function copies One resource. The resource is copied           *
 *   based on its type and a pointer/value is returned.                  *
 ************************************************************************/
-MvsArgVal mvsCopyResource(widget_class_info, src_resource, i) 
+MvsArgVal mvsCopyResource(widget_class_info, src_resource, i)
 MvsWidgetClassInfo *widget_class_info;
-MvsArgVal src_resource; 
+MvsArgVal src_resource;
 int i;
-{ 
+{
     MvsArgVal dst_resource;
     MvsResourceInfoRecord *resource_info;
 
@@ -63,42 +63,42 @@ int i;
 
 	    case RefXmStringTable: /* Here until handling of compound strings */
 	                           /* becomes clear */
-	    case RefValue: 	 
+	    case RefValue:
             case RefGeneric:
-            case RefBoolean: 
-                dst_resource = src_resource; 
+            case RefBoolean:
+                dst_resource = src_resource;
                 break;
 
 	    case RefXmString:
-	    case RefString: 
-            { 
-                char *str = (char *)src_resource; 
-                if (str != NULL) { 
+	    case RefString:
+            {
+                char *str = (char *)src_resource;
+                if (str != NULL) {
                     dst_resource = (MvsArgVal)XtMalloc(strlen(str)+1);
-                    strcpy((char *)dst_resource,str); 
-                } 
-                else dst_resource = 0L; 
-                break; 	 
+                    strcpy((char *)dst_resource,str);
+                }
+                else dst_resource = 0L;
+                break;
             }
 
-	    case RefCallbackList: 	 
-            { 
-                XtCallbackList cb_list = (XtCallbackList)src_resource; 
-                int j=0; 
-                if (cb_list != NULL) { 
-                    while (cb_list->callback != NULL) { 
-                        cb_list++; j++; 
-                    } 
-                    cb_list = (XtCallbackList)src_resource; 
+	    case RefCallbackList:
+            {
+                XtCallbackList cb_list = (XtCallbackList)src_resource;
+                int j=0;
+                if (cb_list != NULL) {
+                    while (cb_list->callback != NULL) {
+                        cb_list++; j++;
+                    }
+                    cb_list = (XtCallbackList)src_resource;
                     dst_resource = (MvsArgVal)XtMalloc(sizeof(XtCallbackRec)*(j+1));
                     memcpy((char *)dst_resource,cb_list,sizeof(XtCallbackRec)*(j+1));
                 }
                 else dst_resource = 0L;
                 break;
-   	    } 
+   	    }
 
-	    default: 
-                dst_resource = src_resource; 
+	    default:
+                dst_resource = src_resource;
                 msg_error("bad resource type code=%d in mvsCopyResource\n",
                           mvsTypeInfo[resource_info[i].type_code].ref_type);
                 break;
@@ -115,12 +115,11 @@ int i;
 void mvsCopyResources(widget_class_info, dst_resource,src_resource)
 MvsWidgetClassInfo *widget_class_info;
 MvsArgVal dst_resource[],
-src_resource[]; 
-{ 
+src_resource[];
+{
     int i;
 
     for (i=0; i<widget_class_info->num_resources; i++)
         dst_resource[i] = mvsCopyResource(widget_class_info, src_resource[i],i);
 
 } /* End mvsCopyResource() */
-

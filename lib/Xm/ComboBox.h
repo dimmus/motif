@@ -48,17 +48,17 @@ typedef struct _XmComboBoxRec 		* XmComboBoxWidget;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateComboBox (Widget parent, 
-				char *name, 
-				ArgList args, 
+extern Widget XmCreateComboBox (Widget parent,
+				char *name,
+				ArgList args,
 				Cardinal argCount);
-extern Widget XmCreateDropDownComboBox (Widget parent, 
-					char *name, 
-					ArgList args, 
+extern Widget XmCreateDropDownComboBox (Widget parent,
+					char *name,
+					ArgList args,
 					Cardinal argCount);
-extern Widget XmCreateDropDownList (Widget parent, 
-				    char *name, 
-				    ArgList args, 
+extern Widget XmCreateDropDownList (Widget parent,
+				    char *name,
+				    ArgList args,
 				    Cardinal argCount);
 extern Widget XmVaCreateComboBox(
                         Widget parent,
@@ -93,4 +93,3 @@ extern void XmComboBoxUpdate (Widget widget);
 
 #endif /* _XmComboBox_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-

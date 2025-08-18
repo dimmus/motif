@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Traversal1.c /main/7 1995/07/13 17:26:55 drk $"
@@ -60,7 +60,7 @@ AddAllTabGroups()
    XmAddTabGroup(rc3);
 /* XmAddTabGroup(pButton3); */
    XmAddTabGroup(rc4);
-   XmAddTabGroup(pButton6); 
+   XmAddTabGroup(pButton6);
 }
 
 /*************CALLBACK PROCEDURES****************/
@@ -83,11 +83,11 @@ static XtCallbackRec killCallback[] =
 
 Pixel CvtStringToPixel(src_string)
     char *  src_string;
-{ 
-    XColor aColor, bColor;   
+{
+    XColor aColor, bColor;
 
     XAllocNamedColor(XtDisplay(Shell1),
-                     DefaultColormapOfScreen(XtScreen(Shell1)), 
+                     DefaultColormapOfScreen(XtScreen(Shell1)),
 		     src_string, &aColor, &bColor);
 
     return(aColor.pixel);
@@ -346,7 +346,7 @@ void PrimTabGroup(w, closure, call_data)
       primRegistered = False;
       XmRemoveTabGroup(pButton6);
 	  n = 0;
-     label_string = 
+     label_string =
 		XmStringCreateLtoR("Add Primitive TabGroup", XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, label_string); n++;
       XtSetValues(w, args, n);
@@ -355,7 +355,7 @@ void PrimTabGroup(w, closure, call_data)
    {
       primRegistered = True;
 	  n = 0;
-     label_string = 
+     label_string =
 		XmStringCreateLtoR("Remove Primitive TabGroup", XmSTRING_DEFAULT_CHARSET);
       XtSetArg(args[n], XmNlabelString, label_string); n++;
       XtSetValues(w, args, n);
@@ -431,11 +431,11 @@ char **argv;
     Arg args[15];
 	Widget	quit_button;
 
-  
+
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
 
    /****************************************************************/
    /*  Create the of the top-level frame and row-column manager    */
@@ -530,7 +530,7 @@ char **argv;
    XtSetArg(args[n], XmNtraversalOn, True); n++;
    XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-   
+
    XtManageChild(XmCreatePushButton(rc2, "misc1", (ArgList) args, n));
 
    XtManageChild(XmCreatePushButton(rc2, "misc2", (ArgList) args, n));
@@ -593,8 +593,8 @@ char **argv;
    XtSetArg(args[n], XmNactivateCallback, (XtArgVal) destroyMgrCallback);n++;
    XtSetArg(args[n], XmNtraversalOn, True);n++;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-   XtSetArg(args[n], XmNhighlightOnEnter, True); n++; 
-   pButton6 = XmCreatePushButton(rc0, "destroyMgr", (ArgList) args, n); 
+   XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
+   pButton6 = XmCreatePushButton(rc0, "destroyMgr", (ArgList) args, n);
    XtManageChild(pButton6);
 
 
@@ -629,9 +629,9 @@ char **argv;
    n=0;
    XtSetArg(args[n], XmNtraversalOn, True);n++;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
-   XtSetArg(args[n], XmNhighlightOnEnter, True); n++; 
-   XtSetArg(args[n], XmNshowAsDefault, 2); n++; 
-   quit_button = XmCreatePushButton(rc0, "Quit", (ArgList) args, n); 
+   XtSetArg(args[n], XmNhighlightOnEnter, True); n++;
+   XtSetArg(args[n], XmNshowAsDefault, 2); n++;
+   quit_button = XmCreatePushButton(rc0, "Quit", (ArgList) args, n);
 	XtManageChild(quit_button);
 	XtAddCallback(quit_button, XmNactivateCallback, quitCB, NULL);
 
@@ -659,5 +659,3 @@ static void  quitCB(w, client_data, call_data)
 	printf("Exiting...Please Standby...\n");
 	exit(0);
 }
-
-

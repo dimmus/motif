@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -42,7 +42,7 @@
  *
  **********************************************************************/
 
-Time 
+Time
 _XmValidTimestamp(
      Widget w )
 {
@@ -54,7 +54,7 @@ _XmValidTimestamp(
 
   while (!XtIsShell(w)) w = XtParent(w);
   win = XtWindow(w);
- 
+
   if (! ((shellMask = XtBuildEventMask(w)) & PropertyChangeMask) )
     XSelectInput(dsp, win, shellMask | PropertyChangeMask);
 
@@ -67,4 +67,3 @@ _XmValidTimestamp(
 
   return (event.xproperty.time);
 }
-

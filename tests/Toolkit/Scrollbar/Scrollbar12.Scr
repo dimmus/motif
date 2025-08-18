@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # The following panels test the snapback scrolling feature.
@@ -90,7 +90,7 @@ DragXYRelative Any 50 100
 CompareVisual Scrollbar1
 
 LocatePointer Scrollbar1 RSlider
-DragXYRelative Any 85 50 
+DragXYRelative Any 85 50
 CompareVisual Scrollbar1
 
 LocatePointer Scrollbar1 RSlider
@@ -98,7 +98,7 @@ DragXYRelative Any -50 -100
 CompareVisual Scrollbar1
 
 LocatePointer Scrollbar1 RSlider
-DragXYRelative Any -85 -50 
+DragXYRelative Any -85 -50
 CompareVisual Scrollbar1
 
 # C)
@@ -133,7 +133,7 @@ DragXYRelative Any -135 -50
 CompareVisual Scrollbar1
 
 # C)
-Continue 
+Continue
 
 # The scrollbar should now be displayed horizontally.
 # The XmNsnapBackMultiple resource is set to 1000 which should be
@@ -240,7 +240,7 @@ DragXYRelative Any -100 -130
 CompareVisual Scrollbar1
 
 LocatePointer Scrollbar1 RSlider
-DragXYRelative Any 100 130 
+DragXYRelative Any 100 130
 CompareVisual Scrollbar1
 
 # C)

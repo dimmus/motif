@@ -1,5 +1,5 @@
 # $XConsortium: Label5.scr /main/6 1995/07/17 20:34:04 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,58 +20,58 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 #  A client with a tie_fighter pixmap contained in a RowColumn
-#  should appear. 
+#  should appear.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label1
 Continue
 
-#  A gnu pixmap should be added to the RowColumn. 
+#  A gnu pixmap should be added to the RowColumn.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label2
 Continue
 
-#  A warning pixmap should be added to the RowColumn. 
+#  A warning pixmap should be added to the RowColumn.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label3
 Continue
 
-#  A mountain pixmap should be added to the RowColumn. 
+#  A mountain pixmap should be added to the RowColumn.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label4
 Continue
 
-#  A smiley face pixmap should be added to the RowColumn. 
+#  A smiley face pixmap should be added to the RowColumn.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label5
 Continue
 
-#  A \"Don't Panic\" pixmap should be added to the RowColumn. 
+#  A \"Don't Panic\" pixmap should be added to the RowColumn.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label6
 Continue
 
-#  A circle pixmap should be added to the RowColumn. 
+#  A circle pixmap should be added to the RowColumn.
 #  A message should have appeared in term window saying that the pixmap was
-#  being read. 
+#  being read.
 
 CompareVisual label7
 Continue

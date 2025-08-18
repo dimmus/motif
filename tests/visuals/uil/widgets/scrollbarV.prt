@@ -23,20 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is scrollbarV.uid ---- 
+---- The uid file to be opened is scrollbarV.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Scroll_Bar RDownOrRightArrow 
-TRACE:(3) ClickMB Btn1 
-
-/*********************************************************/
----- incrementCallback callback made ----
-
----- Reason was XmCR_INCREMENT ----
-/*********************************************************/
-
-TRACE:(4) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Scroll_Bar RDownOrRightArrow
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- incrementCallback callback made ----
@@ -44,7 +36,7 @@ TRACE:(4) ClickMB Btn1
 ---- Reason was XmCR_INCREMENT ----
 /*********************************************************/
 
-TRACE:(5) ClickMB Btn1 
+TRACE:(4) ClickMB Btn1
 
 /*********************************************************/
 ---- incrementCallback callback made ----
@@ -52,9 +44,17 @@ TRACE:(5) ClickMB Btn1
 ---- Reason was XmCR_INCREMENT ----
 /*********************************************************/
 
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
-TRACE:(7) LocatePointer Scroll_Bar RUpOrLeftArrow 
-TRACE:(8) ClickMB Btn1 
+TRACE:(5) ClickMB Btn1
+
+/*********************************************************/
+---- incrementCallback callback made ----
+
+---- Reason was XmCR_INCREMENT ----
+/*********************************************************/
+
+TRACE:(6) CompareVisual S_MAIN_WIDGET
+TRACE:(7) LocatePointer Scroll_Bar RUpOrLeftArrow
+TRACE:(8) ClickMB Btn1
 
 /*********************************************************/
 ---- decrementCallback callback made ----
@@ -62,7 +62,7 @@ TRACE:(8) ClickMB Btn1
 ---- Reason was XmCR_DECREMENT ----
 /*********************************************************/
 
-TRACE:(9) ClickMB Btn1 
+TRACE:(9) ClickMB Btn1
 
 /*********************************************************/
 ---- decrementCallback callback made ----
@@ -70,7 +70,7 @@ TRACE:(9) ClickMB Btn1
 ---- Reason was XmCR_DECREMENT ----
 /*********************************************************/
 
-TRACE:(10) ClickMB Btn1 
+TRACE:(10) ClickMB Btn1
 
 /*********************************************************/
 ---- decrementCallback callback made ----
@@ -78,6 +78,6 @@ TRACE:(10) ClickMB Btn1
 ---- Reason was XmCR_DECREMENT ----
 /*********************************************************/
 
-TRACE:(11) CompareVisual S_MAIN_WIDGET 
+TRACE:(11) CompareVisual S_MAIN_WIDGET
 TRACE:(12) Exit
 Exiting Test...Please Standby...

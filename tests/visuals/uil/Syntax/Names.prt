@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is Names.uid ---- 
+---- The uid file to be opened is Names.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer RPush  
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer RPush
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- activateCallback RightPushButton callback made ----
@@ -36,8 +36,8 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_ACTIVATE ----
 /*********************************************************/
 
-TRACE:(4) LocatePointer LPush  
-TRACE:(5) ClickMB Btn1 
+TRACE:(4) LocatePointer LPush
+TRACE:(5) ClickMB Btn1
 
 /*********************************************************/
 ---- activateCallback LeftPushButton callback made ----
@@ -45,8 +45,8 @@ TRACE:(5) ClickMB Btn1
 ---- Reason was XmCR_ACTIVATE ----
 /*********************************************************/
 
-TRACE:(6) LocatePointer Tpush  
-TRACE:(7) ClickMB Btn1 
+TRACE:(6) LocatePointer Tpush
+TRACE:(7) ClickMB Btn1
 
 /*********************************************************/
 ---- activateCallback TopPushButton callback made ----
@@ -54,8 +54,8 @@ TRACE:(7) ClickMB Btn1
 ---- Reason was XmCR_ACTIVATE ----
 /*********************************************************/
 
-TRACE:(8) LocatePointer BPush  
-TRACE:(9) ClickMB Btn1 
+TRACE:(8) LocatePointer BPush
+TRACE:(9) ClickMB Btn1
 
 /*********************************************************/
 ---- activateCallback BottomPushButton callback made ----
@@ -63,6 +63,6 @@ TRACE:(9) ClickMB Btn1
 ---- Reason was XmCR_ACTIVATE ----
 /*********************************************************/
 
-TRACE:(10) CompareVisual S_MAIN_WIDGET 
+TRACE:(10) CompareVisual S_MAIN_WIDGET
 TRACE:(11) Exit
 Exiting Test...Please Standby...

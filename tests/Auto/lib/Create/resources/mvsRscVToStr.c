@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsRscVToStr.c /main/7 1995/07/14 11:22:00 drk $"
@@ -77,27 +77,27 @@ MvsArgVal value;
     case RefGeneric:
         sprintf(str,"%lx",value);
         break;
-		    
+
     case RefXmString:
         tmp_str = mvsExtractString((XmString)value,
                                    widget_class_info->resource_info[i].name);
         sprintf(str,"%s", tmp_str);
         XtFree(tmp_str);
         break;
-		    
+
     case RefString:
         sprintf(str,"%s", (char *)value);
         break;
-		    
+
     case RefXmStringTable: /* until we know how to handle these */
         sprintf(str,"%ld",value);
         break;
-		    
+
     case RefCallbackList:
         {
             XtCallbackList cb_list = (XtCallbackList)value;
-            int k=0; 
- 
+            int k=0;
+
             if (cb_list != NULL) {
                 while (cb_list->callback != NULL) {
                     cb_list++;
@@ -107,13 +107,13 @@ MvsArgVal value;
         sprintf(str,"%d callbacks",k);
 	}
         break;
-		    
+
     default:
 	sprintf (msg_string,_AutoMessages[WARNMSG78],mvsTypeInfo[t].ref_type);
         AutoMessage(msg_string);
-                  
+
         sprintf(str,"%ld",value);
-        break; 
+        break;
     }
     return str;
 

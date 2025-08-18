@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ColorM1.c /main/8 1995/07/13 18:34:42 drk $"
@@ -33,29 +33,29 @@ static char toggle_flag = 'F';
 static unsigned long pixels_return2[5];
 static unsigned long plane_masks_return2[1];
 static MrmCode	 class ;
-static Widget color_main;           
-static char  *global_current_file;   
+static Widget color_main;
+static char  *global_current_file;
 
 static void default_colors ();
 static void initialize_coords();
 
-static void create_colorform(char *resourcestring, char *valuestring, 
+static void create_colorform(char *resourcestring, char *valuestring,
                              int item_to_adjust);
-static void destroy_colorform(Widget widget, XtPointer client_data, 
+static void destroy_colorform(Widget widget, XtPointer client_data,
 			      XtPointer call_data);
-static void color_selection_made(Widget widget, XtPointer client_data, 
+static void color_selection_made(Widget widget, XtPointer client_data,
 				 XtPointer call_data);
-static void colorlist_selection_made(Widget widget, XtPointer client_data, 
+static void colorlist_selection_made(Widget widget, XtPointer client_data,
 				 XtPointer call_data);
-static void scale_value_changed(Widget widget, XtPointer client_data, 
+static void scale_value_changed(Widget widget, XtPointer client_data,
 				XtPointer call_data);
-static void load_rgb_text(Widget widget, XtPointer client_data, 
+static void load_rgb_text(Widget widget, XtPointer client_data,
 			  XtPointer call_data);
-static void setcolor_button_pressed(Widget widget, XtPointer client_data, 
+static void setcolor_button_pressed(Widget widget, XtPointer client_data,
 				    XtPointer call_data);
-static void toggle_button_pressed(Widget widget, XtPointer client_data, 
+static void toggle_button_pressed(Widget widget, XtPointer client_data,
 				  XtPointer call_data);
-static void exit_color(Widget widget, XtPointer client_data, 
+static void exit_color(Widget widget, XtPointer client_data,
 		       XtPointer call_data);
 static void setcolor_colorform(Widget form, char *valuestring);
 static char *stringdup(const char *s);
@@ -91,7 +91,7 @@ typedef struct {
   char   redname[10];
   char   greenname[10];
   char   bluename[10];
-  XColor color; 
+  XColor color;
   unsigned long fg_pixel;/* foreground   */
   unsigned long bg_pixel;/* background   */
   unsigned long ts_pixel;/* topshadow    */
@@ -100,7 +100,7 @@ typedef struct {
 } ColorData, *ColorDataPtr;
 
 
-static void create_colorform(char *resourcestring, char *valuestring, 
+static void create_colorform(char *resourcestring, char *valuestring,
                              int item_to_adjust)
 
 {
@@ -236,7 +236,7 @@ static void create_colorform(char *resourcestring, char *valuestring,
 }
 
 
-static void destroy_colorform(Widget widget, XtPointer client_data, 
+static void destroy_colorform(Widget widget, XtPointer client_data,
 			      XtPointer call_data)
 {
   Arg arg[1];
@@ -250,7 +250,7 @@ static void destroy_colorform(Widget widget, XtPointer client_data,
 
 
 /* callback notified when selection is made */
-static void color_selection_made(Widget widget, XtPointer client_data, 
+static void color_selection_made(Widget widget, XtPointer client_data,
 				 XtPointer call_data)
 {
   char *color_string;
@@ -264,7 +264,7 @@ static void color_selection_made(Widget widget, XtPointer client_data,
 
 
 /* callback notified when selection is made */
-static void colorlist_selection_made(Widget widget, XtPointer client_data, 
+static void colorlist_selection_made(Widget widget, XtPointer client_data,
 				     XtPointer call_data)
 {
   char *color_string;
@@ -294,7 +294,7 @@ static void setcolor_colorform(Widget form, char *valuestring)
     XParseColor(dpy,cmap,valuestring,&(colordata->color));
     XStoreColor(dpy,cmap,&(colordata->color));
   }
-  else 
+  else
     XStoreNamedColor(dpy,cmap,valuestring,
 		     colordata->color.pixel,
 		     colordata->color.flags);
@@ -316,7 +316,7 @@ static void setcolor_colorform(Widget form, char *valuestring)
   XtSetArg(arg[0],XmNvalue,(int)(colordata->color.blue/COLOR_PCT_MULTIPLIER));
   XtSetValues(scale,arg,1);
   sprintf(colordata->bluename,"%4.4x",colordata->color.blue);
-    
+
   sprintf(colordata->colorname,valuestring);
   text = XmSelectionBoxGetChild(
 	    XtNameToWidget(form,"color_sb"),
@@ -376,7 +376,7 @@ static void scale_value_changed (Widget widget, XtPointer client_data,
   XmTextSetString(text_widget,colordata->colorname);
 }
 
-static void toggle_button_pressed(Widget widget, XtPointer client_data, 
+static void toggle_button_pressed(Widget widget, XtPointer client_data,
 				  XtPointer call_data)
 {
     XmToggleButtonCallbackStruct *callback_data;
@@ -387,7 +387,7 @@ static void toggle_button_pressed(Widget widget, XtPointer client_data,
 	toggle_flag = * (char *)client_data;
 }
 
-static void setcolor_button_pressed(Widget widget, XtPointer client_data, 
+static void setcolor_button_pressed(Widget widget, XtPointer client_data,
 				  XtPointer call_data)
 {
   Widget parent;
@@ -442,13 +442,13 @@ static void setcolor_button_pressed(Widget widget, XtPointer client_data,
 
 /* this routine is called when the color list is created */
 #define MAX_DEFINED_COLORS 500
-static void load_rgb_text(Widget widget, XtPointer client_data, 
+static void load_rgb_text(Widget widget, XtPointer client_data,
 			  XtPointer call_data)
 {
   Arg arg[2];
   FILE *rgb_text;
   int item_count;
-  XmString xms[MAX_DEFINED_COLORS]; 
+  XmString xms[MAX_DEFINED_COLORS];
   char buf[360];
 
   if(!(rgb_text=fopen(data.rgb_text_file,"r"))) {
@@ -507,7 +507,7 @@ static void default_colors()
      XmGetColors(XtScreen(widget), cmap, background, &r_foreground,
 			     &r_top_shadow, &r_bottom_shadow, &r_arm_color);
 
-     XtSetArg(args[n], XmNforeground, &foreground); 		n++; 
+     XtSetArg(args[n], XmNforeground, &foreground); 		n++;
      XtSetArg(args[n], XmNtopShadowColor, &top_shadow);		n++;
      XtSetArg(args[n], XmNbottomShadowColor, &bottom_shadow);	n++;
      XtSetArg(args[n], XmNarmColor, &arm_color);		n++;
@@ -573,7 +573,7 @@ int main (int argc, char **argv)
 			      0);
 
     /*
-     *  Define the Mrm.hierarchy 
+     *  Define the Mrm.hierarchy
      */
 
     if (MrmOpenHierarchy (num_uid_files,	            /* number of files	    */
@@ -588,7 +588,7 @@ int main (int argc, char **argv)
      }
 
     /*
-     * 	Register callback routines 
+     * 	Register callback routines
      */
 
     if (MrmRegisterNames (callbackvec, callbacknum)
@@ -611,7 +611,7 @@ int main (int argc, char **argv)
      */
 
     XtManageChild(color_main);
-    
+
     /*
      *  Realize the Shell1 widget.  This will cause the entire "managed"
      *  widget hierarchy to be displayed.
@@ -671,7 +671,7 @@ static void initialize_coords()
     x+=50;
     y+=50;
   }
- 
+
   arg[0].value = (XtPointer)(long)(int)x;
   arg[1].value = (XtPointer)(long)(int)y;
   if (MrmRegisterNames (arg, 2)
@@ -680,7 +680,7 @@ static void initialize_coords()
 
 }
 
-static void exit_color(Widget widget, XtPointer client_data, 
+static void exit_color(Widget widget, XtPointer client_data,
 		       XtPointer call_data)
 {
 	XFreeColors(dpy, cmap, pixels_return2, 5, plane_masks_return2[0]);

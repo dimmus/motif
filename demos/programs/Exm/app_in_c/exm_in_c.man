@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH exm_in_c 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -31,7 +31,7 @@
 .sE
 .SH DESCRIPTION
 \*Lexm_in_c\*O illustrates how to use all eight Exm demonstration widgets
-in a C application. 
+in a C application.
 .PP
-For details on the code, see the "OSF/Motif Widget 
+For details on the code, see the "OSF/Motif Widget
 Writer's Guide."

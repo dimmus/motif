@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetClassName.c /main/8 1995/07/14 11:16:17 drk $"
@@ -44,7 +44,7 @@ static char rcsid[] = "$XConsortium: GetClassName.c /main/8 1995/07/14 11:16:17 
 
             OUTPUTS
                 none
-  
+
             RETURNS
                 pointer to a statically declared string which names the
                 widget class
@@ -52,13 +52,13 @@ static char rcsid[] = "$XConsortium: GetClassName.c /main/8 1995/07/14 11:16:17 
 
 #include "mvslib.h"
 
-static char *mvsWidgetClassName[] = { 
+static char *mvsWidgetClassName[] = {
       /*  0 */ "vendorShellWidgetClass",
       /*  1 */ "xmArrowButtonWidgetClass",
-      /*  2 */ "xmArrowButtonGadgetClass", 
+      /*  2 */ "xmArrowButtonGadgetClass",
       /*  3 */ "xmBulletinBoardWidgetClass",
       /*  4 */ "xmCascadeButtonWidgetClass",
-      /*  5 */ "xmCascadeButtonGadgetClass", 
+      /*  5 */ "xmCascadeButtonGadgetClass",
       /*  6 */ "xmCommandWidgetClass",
       /*  7 */ "xmDesktopObjectClass",
       /*  8 */ "xmDrawingAreaWidgetClass",
@@ -79,7 +79,7 @@ static char *mvsWidgetClassName[] = {
       /* 23 */ "xmPanedWindowWidgetClass",
       /* 24 */ "xmPrimitiveWidgetClass",
       /* 25 */ "xmProtocolObjectClass",
-      /* 26 */ "xmPushButtonGadgetClass", 
+      /* 26 */ "xmPushButtonGadgetClass",
       /* 27 */ "xmRowColumnWidgetClass",
       /* 28 */ "xmSashWidgetClass",
       /* 29 */ "xmScaleWidgetClass",
@@ -87,7 +87,7 @@ static char *mvsWidgetClassName[] = {
       /* 31 */ "xmScrollBarWidgetClass",
       /* 32 */ "xmScrolledWindowWidgetClass",
       /* 33 */ "xmSelectionBoxWidgetClass",
-      /* 34 */ "xmSeparatorGadgetClass", 
+      /* 34 */ "xmSeparatorGadgetClass",
       /* 35 */ "xmSeparatorWidgetClass",
       /* 36 */ "xmShellExtObjectClass",
       /* 37 */ "xmTextWidgetClass",

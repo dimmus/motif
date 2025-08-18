@@ -20,8 +20,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -72,7 +72,7 @@ Continue
 
 LocatePointer ComboBox RComboBoxDropDownButton
 ClickMB Btn1
-LocatePointer List RVertScrollBarDownArrow 
+LocatePointer List RVertScrollBarDownArrow
 ClickMB Btn1
 ClickMB Btn1
 ClickMB Btn1
@@ -94,7 +94,7 @@ ClickMB Btn1
 ClickMB Btn1
 ClickMB Btn1
 CompareVisual ComboBox
-LocatePointer List RListItem 19 
+LocatePointer List RListItem 19
 ClickMB Btn1
 CompareVisual ComboBox
 
@@ -119,6 +119,3 @@ Continue
 
 
 Exit
-
-
-

@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText2.scr /main/6 1995/07/17 20:40:18 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  @) This test uses a Scrolled Text widget and a SingleLine Text widget
 #  to test various Text widget functions.  Almost all of the functions to
@@ -56,7 +56,7 @@ Continue
 
 #  #) The following functions are found on the popup menus.  Each one should be
 #  tested in both widgets and between the widgets where appropriate:
-#  !) 
+#  !)
 #      Cut            - cuts primary selection to clipboard
 #      Copy           - copies primary selection to clipboard
 #      Paste          - pastes from clipboard to current
@@ -75,9 +75,9 @@ Continue
 #      Scroll Down 3  - scrolls the text widget down 2 lines
 #      Toggle AddMode - toggles AddMode on and off
 #                       (I-beam should be stippled)
-#  
+#
 #                On the SingleLine Text widget only:
-#  
+#
 #      Switch Source  - toggles the text source between its
 #                       own original source and sharing the
 #                       source used for the Scrolled Text
@@ -441,7 +441,7 @@ ClickMB Btn1
 #  #endif	MOTIF1_2
 #  was positioned.
 LocatePointer Text1 RTextChar 1
-DragComponent Text1 RTextChar 30 <Alt> Btn2 
+DragComponent Text1 RTextChar 30 <Alt> Btn2
 CompareVisual Text1
 
 #  #) Now, verify that the window can scroll horizontally properly.
@@ -456,7 +456,7 @@ CompareVisual Text1
 #  C)
 Continue
 
-#  #) Pick the Switch Source button on the Single Line Text widget's 
+#  #) Pick the Switch Source button on the Single Line Text widget's
 #  popup menu such that it is sharing source with the Scrolled Text
 #  widget.
 LocatePointer Text2

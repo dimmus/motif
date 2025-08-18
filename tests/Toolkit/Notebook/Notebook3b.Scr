@@ -20,8 +20,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -31,7 +31,7 @@
 #  will be dynamically updated with the names of any widgets you create during
 #  the test.
 #  This test tests the 8 different visual configurations of the
-#  NoteBook, which depend on the values XmNorientation and 
+#  NoteBook, which depend on the values XmNorientation and
 #  XmNbackPagePlacement.
 
 CompareVisual Notebook
@@ -72,7 +72,7 @@ LocatePointer ChildPB1
 ReleaseMB Btn1
 
 #  A SelectionDialog will appear on your screen. Choose "XmMessageBox".
-#  from the list of choices. Click on the "OK" button of the 
+#  from the list of choices. Click on the "OK" button of the
 #  SelectionDialog.
 #  A MessageBox page will appear on the screen.
 
@@ -115,7 +115,7 @@ ReleaseMB Btn1
 
 
 #  A SelectionDialog will appear on your screen. Choose "XmPushButton"
-#  from the list of choices. Click on the "OK" button of the 
+#  from the list of choices. Click on the "OK" button of the
 #  SelectionDialog.
 #  A PushButton will appear on the right side of the Notebook. It
 #  will have the name "MajorTab1". This is the Major Tab child which
@@ -249,7 +249,7 @@ Continue
 #  Set "Orientation" to VERTICAL.
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Top
 # @)	- Major Tab : Bottom
 # @)	- Minor Tab : Right
@@ -288,7 +288,7 @@ Continue
 #  Set "Orientation" to HORIZONTAL
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Right
 # @)	- Major Tab : Left
 # @)	- Minor Tab : Bottom
@@ -325,7 +325,7 @@ Continue
 #  Set "Orientation" to VERTICAL.
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Top
 # @)	- Major Tab : Bottom
 # @)	- Minor Tab : Left
@@ -363,7 +363,7 @@ Continue
 #  Set "Orientation" to HORIZONTAL.
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Left
 # @)	- Major Tab : Right
 # @)	- Minor Tab : Top
@@ -399,7 +399,7 @@ Continue
 #  Set "Orientation" to VERTICAL.
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Bottom
 # @)	- Major Tab : Top
 # @)	- Minor Tab : Right
@@ -435,7 +435,7 @@ Continue
 #  Set "Orientation" to HORIZONTAL.
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Right
 # @)	- Major Tab : Left.
 # @)	- Minor Tab : Top
@@ -471,7 +471,7 @@ Continue
 #  Set "Orientation" to VERTICAL.
 #  Select "Set orientation" from the "Set Notebook Values" menu.
 #  The visual configuration of the NoteBook should be as follows:
-	
+
 # @)	- Binding : Bottom
 # @)	- Major Tab : Top
 # @)	- Minor Tab : Left
@@ -499,10 +499,3 @@ ReleaseMB Btn1
 CompareVisual Notebook
 
 Exit
-
-
-
-
-
-
-

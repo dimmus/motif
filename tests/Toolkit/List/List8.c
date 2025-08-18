@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List8.c /main/7 1995/07/13 18:21:19 drk $"
@@ -33,10 +33,10 @@ static char rcsid[] = "$XConsortium: List8.c /main/7 1995/07/13 18:21:19 drk $"
 
 #include <testlib.h>
 
-static void listCallback(list, p1, p2) 
+static void listCallback(list, p1, p2)
 Widget list;
 XtPointer p1;
-XtPointer p2; 
+XtPointer p2;
 {
     XmString	strs[10];
     Cardinal	i, n;
@@ -46,14 +46,14 @@ XtPointer p2;
     XtSetArg(args[0], XmNitemCount, &itemCnt);
     XtGetValues(list, args, 1);
 
-    if (itemCnt >= 10) 
+    if (itemCnt >= 10)
 	itemCnt = 1;
-    else 
+    else
 	itemCnt = 10;
 
     printf("Switching to %d items\n", itemCnt);
 
-    for (i = 0; i < itemCnt; ++i) 
+    for (i = 0; i < itemCnt; ++i)
 	strs[i] = XmStringCreateSimple("foobar is as foobar does");
 
     n = 0;
@@ -62,7 +62,7 @@ XtPointer p2;
     XtSetArg(args[n], XmNselectedItemCount, 0); 	n++;
     XtSetValues(list, args, n);
 
-    for (i = 0; i < itemCnt; ++i) 
+    for (i = 0; i < itemCnt; ++i)
 	XmStringFree(strs[i]);
 
 }
@@ -79,14 +79,14 @@ char	*argv[];
     Widget		parent;
     int			count;
     Dimension		h;
-    Boolean		manage_sooner = False; 
+    Boolean		manage_sooner = False;
 
     CommonTestInit(argc, argv);
 
-    if (UserData && (strcmp (UserData, "sooner") == 0)) 
+    if (UserData && (strcmp (UserData, "sooner") == 0))
 	manage_sooner = True;
 
-    for (i = 0; i < 10; ++i) 
+    for (i = 0; i < 10; ++i)
 	strs[i] = XmStringCreateSimple("foobar is as foobard does");
 
     n = 0;
@@ -114,14 +114,14 @@ char	*argv[];
     /* begin Test for  PIR 4014 */
 
     XtDestroyWidget (list);
-    
+
     n = 0;
     XtSetArg (args[n], XmNheight, 75); n++;
 /*    parent = XmCreateForm (Shell1, "parent", args, n); */
     parent = XmCreateBulletinBoard (Shell1, "parent", args, n);
-    if (manage_sooner) 
+    if (manage_sooner)
        XtManageChild (parent);
-    
+
     n = 0;
     XtSetArg(args[n], XmNitems, strs); 					n++;
     XtSetArg(args[n], XmNitemCount, 10); 				n++;
@@ -136,7 +136,7 @@ char	*argv[];
     n = 0;
     XtSetArg (args[n], XmNvisibleItemCount, &count); n++;
     XtGetValues (list, args, n);
-    printf ("Visible item count is %d\n", count); 
+    printf ("Visible item count is %d\n", count);
     n = 0;
     XtSetArg (args[n], XmNvisibleItemCount, count); n++;
     XtSetValues (list, args, n);
@@ -148,10 +148,10 @@ char	*argv[];
 
 
     CommonPause();
-  
+
     /* end test for PIR 4014 */
- 
-    for (i = 0; i < 10; ++i) 
+
+    for (i = 0; i < 10; ++i)
 	XmStringFree(strs[i]);
     XtAppMainLoop(app_context);
 }

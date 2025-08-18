@@ -1,5 +1,5 @@
 # $XConsortium: ScrollWin3.scr /main/5 1995/07/17 20:45:40 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,13 +20,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client containing a ScrolledWindow with no children will appear.
-#  The ScrolledWindow has its scrolledWindowMarginWidth/Height set to 20 
+#  The ScrolledWindow has its scrolledWindowMarginWidth/Height set to 20
 #  and has a translation installed on its clip window.
 
 CompareVisual ScrolledWindow2
@@ -40,10 +40,10 @@ ClickMB Btn1
 ClickKey Kt
 Continue
 
-# The ScrolledWindow will now contain a DrawingArea which will contain a 
-# Text widget. The DrawingArea will be green in color, while the 
-# ScrolledWindow will be AquaMarine.  The ScrolledWindow will have a 
-# scrollingPolicy of XmAPPLICATION_DEFINED, and the scrollbars will be 
+# The ScrolledWindow will now contain a DrawingArea which will contain a
+# Text widget. The DrawingArea will be green in color, while the
+# ScrolledWindow will be AquaMarine.  The ScrolledWindow will have a
+# scrollingPolicy of XmAPPLICATION_DEFINED, and the scrollbars will be
 # created independently.
 
 CompareVisual ScrolledWindow2
@@ -54,15 +54,15 @@ Continue
 #  the Text area, the Text widget will scroll to the right.
 
 LocatePointer ScrolledWindow2 RHorizScrollBarRightSliderArea
-ClickMB Btn1 
+ClickMB Btn1
 LocatePointer ScrolledWindow2 RHorizScrollBarRightSliderArea
-ClickMB Btn1 
+ClickMB Btn1
 LocatePointer ScrolledWindow2 RHorizScrollBarRightSliderArea
-ClickMB Btn1 
+ClickMB Btn1
 LocatePointer ScrolledWindow2 RHorizScrollBarRightSliderArea
-ClickMB Btn1 
+ClickMB Btn1
 LocatePointer ScrolledWindow2 RHorizScrollBarRightSliderArea
-ClickMB Btn1 
+ClickMB Btn1
 CompareVisual ScrolledWindow2
 
 # Click MB1 in the trough area of the vertical scrollbar. The cursor
@@ -115,7 +115,7 @@ ClickKey KUp
 ClickKey KUp
 ClickKey KUp
 ClickKey KUp
-ClickKey KUp 
+ClickKey KUp
 ClickKey KUp
 ClickKey KUp
 ClickKey KUp

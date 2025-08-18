@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #
 # This is the script to create links to a predefined subset of the
 # test suite (.c .dat and .scr files only) before any configuration RUN.
 #
 
-if ( "$1" == "-undo" ) then 
+if ( "$1" == "-undo" ) then
 	set mode = "-undo"
 else
 	set mode = "-do"
@@ -45,10 +45,10 @@ set LIST="../Menus Menu1 MenuBar1 OptionMenu1 PopupMenu1 -next \
 
 set DIR=""
 foreach i ( $LIST )
-	if ( "$DIR" == "" ) then 
+	if ( "$DIR" == "" ) then
 		set DIR = "$i"
 	else
-		if ( "$i" == "-next" ) then 
+		if ( "$i" == "-next" ) then
 			set DIR = ""
 		else
 			if ( "$mode" == "-do" ) then

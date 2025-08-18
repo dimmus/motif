@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,11 +36,11 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern XmGeoMatrix _XmMessageBoxGeoMatrixCreate( 
+extern XmGeoMatrix _XmMessageBoxGeoMatrixCreate(
                         Widget wid,
                         Widget instigator,
                         XtWidgetGeometry *desired) ;
-extern Boolean _XmMessageBoxNoGeoRequest( 
+extern Boolean _XmMessageBoxNoGeoRequest(
                         XmGeoMatrix geoSpec) ;
 
 /********    End Private Function Declarations    ********/

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BeginSession.c /main/7 1995/07/14 11:31:26 drk $"
@@ -38,9 +38,9 @@ static char rcsid[] = "$XConsortium: BeginSession.c /main/7 1995/07/14 11:31:26 
 	Calls:
 
 	Summary:
-            Initializes the input synthesis libraries local copies of display 
+            Initializes the input synthesis libraries local copies of display
         and application context pointers.  It also sets up local-globals for
-        the screen and the root_window, and establishes pointers to functions 
+        the screen and the root_window, and establishes pointers to functions
         which need to be defined external to this library.  This remote function
         referencing is necessary since this library has been designed to know
         nothing internally about the widget set which it interacts with.
@@ -61,7 +61,7 @@ static char rcsid[] = "$XConsortium: BeginSession.c /main/7 1995/07/14 11:31:26 
             trace_msg_func - a function which prints out a trace message
             warning_msg_func - a function which prints out a warning message
             error_msg_func - a function which prints out an error message
-        
+
         OUTPUTS:
             none
 
@@ -122,17 +122,17 @@ void (*error_msg_func)();
     if (display_in == 0) {
         sprintf (msg_string, _AutoMessages[WARNMSG115], routine_name);
         AutoError(msg_string);
-        
+
     }
     if (app_context_in == 0) {
         sprintf (msg_string, _AutoMessages[WARNMSG104], routine_name);
         AutoError(msg_string);
-        
+
     }
     if (generate_objects_func == 0) {
         sprintf (msg_string, _AutoMessages[WARNMSG108], routine_name);
         AutoError(msg_string);
-        
+
     }
     if (get_object_type_name_func == 0) {
         sprintf (msg_string, _AutoMessages[WARNMSG106], routine_name);
@@ -192,7 +192,7 @@ void (*error_msg_func)();
 
 
 
-static void 
+static void
 CvtVirtualToActualKeysym( dpy, virtKeysym, actualKeysymRtn, modifiersRtn )
      Display *dpy ;
      KeySym virtKeysym ;
@@ -251,8 +251,8 @@ Widget sh_widget ;
         (*xisTraceMsg)(" keycode number %2d: %s -> %d -> %d/%d --> %d \n",
                i,xisKeySymName[i].key_name,tmp_key,tmp_key2,
                       xisKeySymName[i].modifier,xisKeySymName[i].code) ;
-  
-       
+
+
         /* a key is undefined */
         if (( i != 0 ) && ( i != (_MaxKey-1) ))  {
            if (( tmp_key == NoSymbol ) || ( tmp_key2 == NoSymbol )) {
@@ -260,10 +260,10 @@ Widget sh_widget ;
 		      xisKeySymName[i].key_name) ;
              AutoMessage (msg_string);
 
-	   }   
+	   }
          }
       }
-    
+
          /* look for duplicate key bindings */
 
         collision = False ;
@@ -319,7 +319,7 @@ Modifiers	*new_mod;
     if (!( ks_list =
 	   XGetKeyboardMapping( dpy, min_keycode_rtn, keycode_count,
 				&keysyms_per_keycode_rtn ) ) )
-		return; 
+		return;
 
 /*
  * Fix for CR 5663 -- Since X11R5 made the display mode_switch

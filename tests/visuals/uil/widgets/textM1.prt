@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is textMl.uid ---- 
+---- The uid file to be opened is textMl.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer ttext  
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer ttext
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- motionVerifyCallback callback made ----
@@ -39,11 +39,11 @@ TRACE:(3) ClickMB Btn1
 TRACE:(4) InputString "This is a test"
 TRACE:(5) ClickKey KReturn
 TRACE:(6) InputString "This is another test"
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
+TRACE:(7) CompareVisual S_MAIN_WIDGET
 TRACE:(8) ClickKey KReturn
-TRACE:(9) LocatePointer ttext  
-TRACE:(10) ClickMB Btn1 
-TRACE:(11) CompareVisual S_MAIN_WIDGET 
+TRACE:(9) LocatePointer ttext
+TRACE:(10) ClickMB Btn1
+TRACE:(11) CompareVisual S_MAIN_WIDGET
 TRACE:(12) ClickMB Btn1 2
 
 /*********************************************************/
@@ -52,6 +52,6 @@ TRACE:(12) ClickMB Btn1 2
 ---- Reason was XmCR_MOVING_INSERT_CURSOR ----
 /*********************************************************/
 
-TRACE:(13) CompareVisual S_MAIN_WIDGET 
+TRACE:(13) CompareVisual S_MAIN_WIDGET
 TRACE:(14) Exit
 Exiting Test...Please Standby...

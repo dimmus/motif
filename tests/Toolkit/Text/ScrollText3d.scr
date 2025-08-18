@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText3d.scr /main/5 1995/07/17 20:40:43 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,28 +20,28 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #ifdef	MOTIF1_1
 #  #) Mouse-based primary selection:
-#  
+#
 #  @)    BSelect Click -- moves cursor and anchor, deselect selection
 #                      if in the same widget, does not take ownership
 #                      of the primary selection
-#  
+#
 #  @)    BSelect Drag  -- drags cursor, selects characters between press
 #                      and cursor, places anchor at press, cursor
 #                      at release, takes ownership of primary selection
-#  
+#
 #  #endif	MOTIF1_1
 #  #ifdef	MOTIF1_2
 #  @)    BSelect Click -- moves cursor, deselect selection if in the
 #  		    same widget, does not take ownership of the
 #  		    primary selection
-#  
+#
 #  @)    BSelect Drag  -- drags cursor, selects characters between press
 #                      and cursor, places cursor at release, takes
 #                      ownership of primary selection
@@ -73,14 +73,14 @@ CompareVisual Text4
 #  #ifdef	MOTIF1_1
 #  @)    Ctrl BSelect Click  -- moves cursor, leaves anchor and primary
 #                            selection alone
-#  
+#
 #  @)    Ctrl BSelect Drag   -- either no effect, or leaves cursor where
 #                            released
 #  #endif	MOTIF1_1
 #  #ifdef	MOTIF1_2
 #  @)    Ctrl BSelect Click  -- moves cursor, leaves primary selection
 #  		    untouched
-#  
+#
 #  @)    Ctrl BSelect Drag   -- either no effect, or leaves cursor where
 #                      pressed
 #  #endif	MOTIF1_2

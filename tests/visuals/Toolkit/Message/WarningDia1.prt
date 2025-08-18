@@ -22,28 +22,28 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual mbox 
-TRACE:(2) LocatePointer mbox RHelpButton 
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual mbox 
-TRACE:(5) LocatePointer mbox RCancelButton 
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) CompareVisual mbox 
-TRACE:(8) LocatePointer mbox RCancelButton 
-TRACE:(9) ClickMB Btn1 
-TRACE:(10) CompareVisual mbox 
-TRACE:(11) LocatePointer mbox ROkButton 
-TRACE:(12) ClickMB Btn1 
-TRACE:(13) CompareVisual mbox 
+TRACE:(1) CompareVisual mbox
+TRACE:(2) LocatePointer mbox RHelpButton
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual mbox
+TRACE:(5) LocatePointer mbox RCancelButton
+TRACE:(6) ClickMB Btn1
+TRACE:(7) CompareVisual mbox
+TRACE:(8) LocatePointer mbox RCancelButton
+TRACE:(9) ClickMB Btn1
+TRACE:(10) CompareVisual mbox
+TRACE:(11) LocatePointer mbox ROkButton
+TRACE:(12) ClickMB Btn1
+TRACE:(13) CompareVisual mbox
 TRACE:(14) Continue
-TRACE:(15) LocatePointer mbox RHelpButton 
-TRACE:(16) ClickMB Btn1 
-TRACE:(17) CompareVisual mbox 
-TRACE:(18) LocatePointer mbox RCancelButton 
-TRACE:(19) ClickMB Btn1 
-TRACE:(20) CompareVisual mbox 
-TRACE:(21) LocatePointer mbox RCancelButton 
-TRACE:(22) ClickMB Btn1 
-TRACE:(23) CompareVisual mbox 
+TRACE:(15) LocatePointer mbox RHelpButton
+TRACE:(16) ClickMB Btn1
+TRACE:(17) CompareVisual mbox
+TRACE:(18) LocatePointer mbox RCancelButton
+TRACE:(19) ClickMB Btn1
+TRACE:(20) CompareVisual mbox
+TRACE:(21) LocatePointer mbox RCancelButton
+TRACE:(22) ClickMB Btn1
+TRACE:(23) CompareVisual mbox
 TRACE:(24) Exit
 Exiting Test...Please Standby...

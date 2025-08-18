@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH earth 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -37,7 +37,7 @@ application and mwm.
 The speed argument is a number between -100,100.
 
 .SH X Defaults
-The class of this application is \fIXmdEarth\fR.  
+The class of this application is \fIXmdEarth\fR.
 
 Earth supports the following application resources:
       speed, background, foreground.

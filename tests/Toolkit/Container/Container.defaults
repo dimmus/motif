@@ -20,7 +20,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 ! This is the applications defaults file for the Container directory
@@ -40,7 +40,7 @@ Container1*selectColor:				aquamarine
 
 ! There are few sets of Container resources for the test. Which one is applied
 ! depends on the flag the user passes into the test, which determines the
-! Xt name of the Container.  
+! Xt name of the Container.
 
 Container1*Container1a.layoutType:		detail
 Container1*Container1a.detailOrderCount:	3
@@ -137,7 +137,7 @@ Container1*Container1m.marginWidth:		20
 Container1*Container1n.layoutType:		detail
 Container1*Container1n.detailOrderCount:	3
 Container1*Container1n.detailOrder:		3,1,2
-Container1*Container1n.outlineColumnWidth:	150	
+Container1*Container1n.outlineColumnWidth:	150
 Container1*Container1n.detailTabList:		+50,+200
 
 

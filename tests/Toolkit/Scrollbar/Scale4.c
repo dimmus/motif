@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scale4.c /main/6 1995/07/13 19:11:41 drk $"
@@ -58,7 +58,7 @@ char **argv;
    /*  Set up arglist and create the Scale1  */
 
    n = 0;
-   Scale1 = XmCreateScale(Shell1, "Scale1", args, n); 
+   Scale1 = XmCreateScale(Shell1, "Scale1", args, n);
    XtManageChild (Scale1);
    XtAddCallback (Scale1, XmNvalueChangedCallback, CommonGenericCB, NULL);
    XtAddCallback (Scale1, XmNvalueChangedCallback, ScaleCallback, NULL);

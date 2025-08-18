@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 #ifndef _XmDragController_h
 #define _XmDragController_h
@@ -78,7 +78,7 @@ enum{	XmDROP,				XmDROP_HELP,
 #define XmDROP_COPY	(1L << 1)
 #define XmDROP_LINK	(1L << 2)
 
-enum{	XmMOVE = XmDROP_MOVE,		XmCOPY = XmDROP_COPY, 
+enum{	XmMOVE = XmDROP_MOVE,		XmCOPY = XmDROP_COPY,
 	XmLINK = XmDROP_LINK,		XmOTHER
 	} ;
 
@@ -136,7 +136,7 @@ typedef struct _XmTopLevelLeaveCallbackStruct{
     Window		window;
 }XmTopLevelLeaveCallbackStruct, *XmTopLevelLeaveCallback;
 
-/* 
+/*
  * this message is sent from the receiver to the initiator to
  * indicate that the motion message with the associated timestamp has
  * caused a drop-site to be entered
@@ -151,7 +151,7 @@ typedef struct _XmDropSiteEnterCallbackStruct{
     Position		x, y;
 }XmDropSiteEnterCallbackStruct, *XmDropSiteEnterCallback;
 
-/* 
+/*
  * this message is sent from the receiver to the initiator to
  * indicate that the motion message with the associated timestamp has
  * caused a drop-site to be left
@@ -214,14 +214,14 @@ typedef struct _XmDragDropFinishCallbackStruct{
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmDragStart( 
+extern Widget XmDragStart(
                         Widget w,
                         XEvent *event,
                         ArgList args,
                         Cardinal numArgs) ;
-extern void XmDragCancel( 
+extern void XmDragCancel(
                         Widget dragContext) ;
-extern Boolean XmTargetsAreCompatible( 
+extern Boolean XmTargetsAreCompatible(
                         Display *dpy,
                         Atom *exportTargets,
                         Cardinal numExportTargets,

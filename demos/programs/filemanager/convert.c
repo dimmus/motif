@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -31,16 +31,16 @@
 #include <Xm/Transfer.h>
 #include "filemanager.h"
 
-void 
+void
 targetConvertCallback(Widget wid, XtPointer ignore,
 		      XmConvertCallbackStruct *cs)
 {
   Atom XA_TARGETS = XInternAtom(XtDisplay(wid), XmSTARGETS, False);
   Atom XA_FILE = XInternAtom(XtDisplay(wid), XmSFILE, False);
   Atom XA_FILENAME = XInternAtom(XtDisplay(wid), XmSFILE_NAME, False);
-  Atom XA_MOTIF_EXPORTS = 
+  Atom XA_MOTIF_EXPORTS =
     XInternAtom(XtDisplay(wid), XmS_MOTIF_EXPORT_TARGETS, False);
-  Atom XA_MOTIF_REQUIRED = 
+  Atom XA_MOTIF_REQUIRED =
     XInternAtom(XtDisplay(wid), XmS_MOTIF_CLIPBOARD_TARGETS, False);
   Atom XA_MOTIF_DROP =
     XInternAtom(XtDisplay(wid), XmS_MOTIF_DROP, False);
@@ -66,7 +66,7 @@ targetConvertCallback(Widget wid, XtPointer ignore,
       int i;
 
       /* First get list of selected items. */
-      XtVaGetValues(fileviewer, 
+      XtVaGetValues(fileviewer,
 		    XmNselectedObjects, &selected,
 		    XmNselectedObjectCount, &count,
 		    NULL, NULL);
@@ -108,10 +108,10 @@ targetConvertCallback(Widget wid, XtPointer ignore,
       cs -> type = XA_STRING;
       cs -> status = XmCONVERT_DONE;
     }
-  } 
+  }
 }
 
-void 
+void
 targetDestinationCallback(Widget w, XtPointer ignore,
 			  XmDestinationCallbackStruct *cs)
 {

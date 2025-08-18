@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -47,20 +47,20 @@
  *
  *********************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmDirectionDefault(Widget widget,
 		    int offset, /* unused */
 		    XrmValue *value )
 {
   static XmDirection direction;
-  
+
   value->addr = (XPointer) &direction;
 
   /* This is an ugly hack, but what to do when user sets stringDirection
      in resource file. Dependent on that stringDirection comes before
      layoutDirection in resource list. Part of the reason is that this is
      the same field. Yuck! */
-  if (XmIsManager(widget) && 
+  if (XmIsManager(widget) &&
       (((XmManagerWidget)widget)->manager.string_direction !=
        XmSTRING_DIRECTION_DEFAULT))
     direction =
@@ -71,35 +71,35 @@ _XmDirectionDefault(Widget widget,
 }
 
 /*ARGSUSED*/
-void 
+void
 _XmFromLayoutDirection(
         Widget wid,
         int resource_offset,	/* unused */
         XtArgVal *value )
-{   
+{
   if (XmIsManager(wid))
     *value = (XtArgVal)XmDirectionToStringDirection((XmDirection)*value);
   else if (XmIsLabel(wid) || XmIsLabelGadget(wid) || XmIsList(wid))
-    *value = 
+    *value =
       (XtArgVal)XmDirectionToStringDirection(_XmGetLayoutDirection(wid));
 }
 
 /*ARGSUSED*/
-XmImportOperator 
+XmImportOperator
 _XmToLayoutDirection(
         Widget wid,
         int resource_offset,	/* unused */
         XtArgVal *value )
-{   
+{
   if (XmIsManager(wid)) {
     *value = (XtArgVal)XmStringDirectionToDirection((XmStringDirection)*value);
     return XmSYNTHETIC_LOAD;
   } else if (XmIsLabel(wid) || XmIsList(wid)) {
-    XmPrim_layout_direction(((XmPrimitiveWidget)wid)) = 
+    XmPrim_layout_direction(((XmPrimitiveWidget)wid)) =
       XmStringDirectionToDirection((XmStringDirection)*value);
     return XmSYNTHETIC_NONE;
   } else if (XmIsLabelGadget(wid)) {
-    ((XmGadget)wid)->gadget.layout_direction = 
+    ((XmGadget)wid)->gadget.layout_direction =
       XmStringDirectionToDirection((XmStringDirection)*value);
     return XmSYNTHETIC_NONE;
   }
@@ -148,13 +148,13 @@ _XmGetLayoutDirection( Widget w )
     return layoutT->get_direction(w);
   else
     return XmLEFT_TO_RIGHT;
-} 
+}
 
 
 /* Handle compatibility with XmStringDirection */
 #define Fixdir(d) (((d) <= 1) ? (~((d)+1)) : ((d) | XmDIRECTION_IGNORED))
 
-Boolean 
+Boolean
 XmDirectionMatch(XmDirection d1,
 		 XmDirection d2)
 {
@@ -164,11 +164,10 @@ XmDirectionMatch(XmDirection d1,
 	  ((XmDirection)(d1 & d2) == (XmDirection)d2));
 }
 
-Boolean 
+Boolean
 XmDirectionMatchPartial(XmDirection d1,
 		 XmDirection d2,
 		 XmDirection dmask)
 {
   return XmDirectionMatch(d1 & dmask, d2 & dmask);
 }
-

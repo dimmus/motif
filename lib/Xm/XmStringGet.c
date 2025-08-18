@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -34,7 +34,7 @@
 #include "XmStringI.h"
 #include "XmI.h"
 
-XmStringComponentType 
+XmStringComponentType
 XmStringGetNextComponent(
         XmStringContext context,
         char **text,
@@ -47,7 +47,7 @@ XmStringGetNextComponent(
   XmStringComponentType type;
   unsigned int  	len;
   XtPointer		val;
-  
+
   _XmProcessLock();
   type = XmeStringGetComponent((_XmStringContext) context, True, True, &len, &val);
 
@@ -72,14 +72,14 @@ XmStringGetNextComponent(
     default:
       *unknown_tag = type;
       *unknown_length = len;
-      *unknown_value = (unsigned char *)val; 
+      *unknown_value = (unsigned char *)val;
       type = XmSTRING_COMPONENT_UNKNOWN;
     }
   _XmProcessUnlock();
   return(type);
 }
-      
-XmStringComponentType 
+
+XmStringComponentType
 XmStringPeekNextComponent(XmStringContext context)
 {
   unsigned int len;
@@ -92,7 +92,7 @@ XmStringPeekNextComponent(XmStringContext context)
  * fetch the first text 'segment' of the external TCS that matches the given
  * char set.
  */
-Boolean 
+Boolean
 XmStringGetLtoR(
   XmString string,
   XmStringTag tag,
@@ -100,10 +100,10 @@ XmStringGetLtoR(
 {
   XmStringContext context;
   char * t;
-  XmStringTag c, curtag = NULL; 
+  XmStringTag c, curtag = NULL;
   XmStringDirection d;
   Boolean s, is_local = FALSE, done = FALSE, is_default = FALSE;
-  
+
   _XmProcessLock();
   if (!string) {
 	_XmProcessUnlock();
@@ -113,13 +113,13 @@ XmStringGetLtoR(
 	_XmProcessUnlock();
 	return (FALSE);
   }
-  
-  if ((tag == XmFONTLIST_DEFAULT_TAG) || 
+
+  if ((tag == XmFONTLIST_DEFAULT_TAG) ||
       (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0))
-    is_local = TRUE; 
-  
+    is_local = TRUE;
+
   *text = NULL;				  /* pre-condition result */
-  
+
   if (!is_local)
     {
       if ((strcmp(tag, XmSTRING_DEFAULT_CHARSET) == 0))
@@ -129,17 +129,17 @@ XmStringGetLtoR(
 	}
       else curtag = tag;
     }
-  
+
   XmStringInitContext (&context, string);
-  
+
   while ( ! done)
     {
       if (XmStringGetNextSegment (context, &t, &c, &d, &s))
 	{
 	  if (c && ((d == XmSTRING_DIRECTION_L_TO_R) ||
 		    (d == XmSTRING_DIRECTION_UNSET)) &&
-	      (((is_local || is_default) && 
-		((c == XmFONTLIST_DEFAULT_TAG) || 
+	      (((is_local || is_default) &&
+		((c == XmFONTLIST_DEFAULT_TAG) ||
 		 (strcmp(c, XmFONTLIST_DEFAULT_TAG) == 0) ||
 		 (strcmp(c, _XmStringGetCurrentCharset()) == 0))) ||
 	       (curtag && (strcmp (c, curtag) == 0))))
@@ -149,16 +149,15 @@ XmStringGetLtoR(
 	    }
 	  else
 	    XtFree (t);			  /* not this text */
-	  
+
 	  if (c)
 	    XtFree (c);			  /* always dump charset */
 	}
       else
 	done = TRUE;
     }
-  
+
   XmStringFreeContext (context);
   _XmProcessUnlock();
   return (*text != NULL);
 }
-

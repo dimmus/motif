@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FreeWidInfo.c /main/8 1995/07/14 11:24:34 drk $"
@@ -61,7 +61,7 @@ MvsWidgetInfoRecord *widget_info;
 {
     int i;
     MvsWidgetInfoRecord *winfo;
-    
+
     if (widget_info == NULL || !widget_info->in_use) {
       AutoMessage(_AutoMessages[WARNMSG38]);
     }
@@ -73,18 +73,18 @@ MvsWidgetInfoRecord *widget_info;
               mvsFreeUniqueColor(widget_info, i);
             }
         }
-  
+
         if( (widget_info->parent == NULL) ||
             (widget_info->parent->first_child == NULL)) {
             AutoMessage(_AutoMessages[WARNMSG38]);
         }
-        else {        
+        else {
             winfo = widget_info->parent->first_child;
             if (winfo == widget_info) {
                 widget_info->parent->first_child = widget_info->next_sibling;
             }
             else {
-                while ( winfo->next_sibling != NULL && 
+                while ( winfo->next_sibling != NULL &&
                         winfo->next_sibling != widget_info )
                     winfo = winfo->next_sibling;
 
@@ -95,10 +95,10 @@ MvsWidgetInfoRecord *widget_info;
                     winfo->next_sibling = widget_info->next_sibling;
                 }
             }
-            for ( winfo=widget_info->first_child; 
-                  winfo != NULL; 
+            for ( winfo=widget_info->first_child;
+                  winfo != NULL;
                   winfo = winfo->next_sibling ) {
-                
+
                 mvsFreeWidgetInfo(winfo);
 	    }
 	} /* End if (parent == NULL) || parent->first_child == NULL)) */

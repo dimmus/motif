@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollWin1.c /main/8 1995/07/13 19:47:41 drk $"
@@ -48,20 +48,20 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
     XtSetValues(Shell1, args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);  n++;
     XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmAS_NEEDED);  n++;
     XtSetArg(args[n], XmNshadowThickness, 4);  n++;
-    ScrolledWindow1 = XmCreateScrolledWindow(Shell1, "ScrolledWindow1", 
+    ScrolledWindow1 = XmCreateScrolledWindow(Shell1, "ScrolledWindow1",
 	args, n);
 
-    if (ScrolledWindow1 != NULL) 
+    if (ScrolledWindow1 != NULL)
 	XtManageChild(ScrolledWindow1);
     else
 	printf ("ScrolledWindow zero\n");
@@ -69,7 +69,7 @@ void  main(argc, argv)
     XtRealizeWidget(Shell1);
 
     CommonPause();
- 
+
     n = 0;
     RowColumn2 = XmCreateRowColumn(ScrolledWindow1, "RowColumn2", args, n);
     XtManageChild(RowColumn2);

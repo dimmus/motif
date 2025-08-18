@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # You should see a DrawingArea with a TextField child.
@@ -250,7 +250,7 @@ ClickKey KMenu
 
 Continue
 
-# The following instruction panels test CUA menu enhancements. 
+# The following instruction panels test CUA menu enhancements.
 #   XmNpopupEnabled resource set to POPUP_AUTOMATIC.
 
 # Click BMenu over the Drawing Area. You should see the Popup. A
@@ -262,9 +262,9 @@ Continue
 
 # Now click BMenu over the Drawing Area again. You should see the
 #   first Popup and the Text Field's popup should have disappeared.
-#   The Drawing Area message will again be sent to stdout. 
+#   The Drawing Area message will again be sent to stdout.
 
-# Click BMenu again over the Drawing Area. No Popup should be 
+# Click BMenu again over the Drawing Area. No Popup should be
 #   visible. The message in stdout will say "DrawArea Unposting Popup."
 
 # Click BMenu over the Text Field. You should see its Popup.
@@ -342,7 +342,7 @@ ClickKey KMenu
 LocatePointer drawarea Off
 ClickKey KMenu
 CompareVisual drawarea
- 
+
 Continue
 
 # XmNpopupEnabled is now set to POPUP_AUTOMATIC_RECURSIVE.
@@ -355,10 +355,10 @@ Continue
 #   message in stdout is "TextField Posting Popup."
 
 # Now click BMenu over the Drawing Area again. You should see the
-#   first Popup and the Text Field's popup should have disappeared. 
-#   The Drawing Area message will again be sent to stdout. 
+#   first Popup and the Text Field's popup should have disappeared.
+#   The Drawing Area message will again be sent to stdout.
 
-# Click BMenu again over the Drawing Area. No Popup should be 
+# Click BMenu again over the Drawing Area. No Popup should be
 #   visible. The message in stdout will say "DrawArea Unposting Popup."
 
 # Click BMenu over the Text Field. You should see its Popup.
@@ -442,7 +442,7 @@ Continue
 # XmNpopupEnabled is now set to POPUP_DISABLED.
 
 # Click BMenu over the Drawing Area. You should see the Drawing
-#   Area Popup. 
+#   Area Popup.
 
 # Now click again BMenu over the Drawing Area. Now, the Popup
 #   will unpost and then repost.

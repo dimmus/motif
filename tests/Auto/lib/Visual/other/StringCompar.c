@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StringCompar.c /main/7 1995/07/14 11:45:02 drk $"
@@ -54,14 +54,14 @@ int mvsStringCompare(str1,str2)
 String str1,str2;
 {
     char *p1, *p2;
- 
-    for (p1=str1, p2=str2; 
+
+    for (p1=str1, p2=str2;
          *p1 && *p2 && tolower(*p1) == tolower(*p2);
          p1++, p2++);
 
     if (*p1 == *p2)
         return(0);
- 
+
     if ((*p2 == 0) || (*p1 > *p2))
         return(1);
     else

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: FileSelect1.c /main/10 1999/05/28 15:45:39 jff $"
@@ -55,12 +55,12 @@ void  main(argc, argv)
     }
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  			n++;
-    XtSetArg(args[n], XmNheight, 300);  			n++; 
+    XtSetArg(args[n], XmNheight, 300);  			n++;
     XtSetValues(Shell1, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
     tcs = XmStringCreateSimple(TARGET_DIR);
@@ -83,8 +83,8 @@ void  main(argc, argv)
     tcs = XmStringLtoRCreate("Look For:", XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
-    XtSetArg(args[n], XmNwidth, 350); 				n++; 
-    XtSetArg(args[n], XmNheight, 300); 				n++; 
+    XtSetArg(args[n], XmNwidth, 350); 				n++;
+    XtSetArg(args[n], XmNheight, 300); 				n++;
     XtSetArg(args[n], XmNresizePolicy, XmRESIZE_NONE);	n++;
     XtSetArg(args[n], XmNfilterLabelString, tcs);	n++;
     XtSetValues(FileSelectionBox1, args, n);
@@ -168,7 +168,7 @@ static void GoneCB(w, client_data, call_data )
     XtPointer call_data;
 {
     /* callback for when user clicks the cancel button */
-    
+
     Widget dad;
 
     dad = XtParent(w);		/* get parent of cancel button */
@@ -187,13 +187,13 @@ static void OkApplyHelpCB(w, client_data, call_data)
 
     reason = ((XmFileSelectionBoxCallbackStruct *)call_data)->reason;
     switch (reason) {
-	case XmCR_OK:	
+	case XmCR_OK:
 			printf("Ok Callback triggered: reason XmCR_OK\n");
 			break;
-	case XmCR_HELP:	
+	case XmCR_HELP:
 			printf("Help Callback triggered: reason XmCR_HELP\n");
 			break;
-	case XmCR_APPLY: 
+	case XmCR_APPLY:
 			printf("Apply Callback triggered: reason XmCR_APPLY\n");
 			break;
 	default:	printf("Invalid reason\n");

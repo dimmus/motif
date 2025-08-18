@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,8 +19,8 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
- 
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -64,7 +64,7 @@ static char rcsid[] = "$XConsortium: MrmIbuffer.c /main/16 1996/11/13 13:55:44 d
  *  TABLE OF CONTENTS
  *
  *	Idb__BM_InitBufferVector	- Allocates and initializes
- *					  the buffer vector 
+ *					  the buffer vector
  *
  *	Idb__BM_GetBuffer		- Acquire a free buffer
  *
@@ -151,7 +151,7 @@ static	long int		idb__buffer_activity_count = 1 ;
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_InitBufferVector (void)
 {
 
@@ -219,7 +219,7 @@ Idb__BM_InitBufferVector (void)
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_GetBuffer (IDBFile			file_id,
 		   IDBRecordBufferPtr		*buffer_return)
 {
@@ -337,7 +337,7 @@ Idb__BM_GetBuffer (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_MarkActivity (IDBRecordBufferPtr	buffer)
 {
 
@@ -377,7 +377,7 @@ Idb__BM_MarkActivity (IDBRecordBufferPtr	buffer)
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_MarkModified (IDBRecordBufferPtr	buffer)
 
 {
@@ -425,7 +425,7 @@ Idb__BM_MarkModified (IDBRecordBufferPtr	buffer)
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_GetRecord (IDBFile                     file_id,
 		   IDBRecordNumber             record,
 		   IDBRecordBufferPtr          *buffer_return)
@@ -478,7 +478,7 @@ Idb__BM_GetRecord (IDBFile                     file_id,
     result = MrmSUCCESS;
   }
   else
-    result = Idb__FU_GetBlock(file_id->lowlevel_id, record, 
+    result = Idb__FU_GetBlock(file_id->lowlevel_id, record,
 			      (char*)(*buffer_return)->IDB_record) ;
 
 
@@ -490,11 +490,11 @@ Idb__BM_GetRecord (IDBFile                     file_id,
   /*
    * Validate the record, this is the first routine that is called to read
    * from a newly opened file.  If the byte order is different, we find it
-   * here.  
+   * here.
    */
 
 
-  if ( (*buffer_return)->IDB_record->header.validation != 
+  if ( (*buffer_return)->IDB_record->header.validation !=
        IDBRecordHeaderValid ) {
     swapbytes( (*buffer_return)->IDB_record->header.validation );
     if ((*buffer_return)->IDB_record->header.validation == IDBRecordHeaderValid)
@@ -557,7 +557,7 @@ Idb__BM_GetRecord (IDBFile                     file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_InitRecord (IDBFile                     file_id,
 		    IDBRecordNumber             record,
 		    MrmType                     type,
@@ -608,14 +608,14 @@ Idb__BM_InitRecord (IDBFile                     file_id,
  *  PROCEDURE DESCRIPTION:
  *
  *	Idb__BM_InitDataRecord initializes a new data record for the file.
- *	A buffer is acquired, and the record number and record type set. 
+ *	A buffer is acquired, and the record number and record type set.
  *	The record number may be specified; if the record number given
  *	is <= 0, then the next available record is taken from the file
  *	header.  The next available record number is updated to the
  *	new record number if it is greater than the current value.  The
  *	record is marked for write access, and as modified.  It is not
  *	written to disk. The buffer's activity count is updated.  This
- *	routine is nearly identical to InitRecord. 
+ *	routine is nearly identical to InitRecord.
  *
  *  FORMAL PARAMETERS:
  *
@@ -637,7 +637,7 @@ Idb__BM_InitRecord (IDBFile                     file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_InitDataRecord (IDBFile			file_id,
 			IDBRecordBufferPtr	*buffer_return)
 {
@@ -707,7 +707,7 @@ Idb__BM_InitDataRecord (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_Decommit (IDBRecordBufferPtr		buffer)
 {
 
@@ -771,7 +771,7 @@ Idb__BM_Decommit (IDBRecordBufferPtr		buffer)
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__BM_DecommitAll (IDBFile		file_id)
 {
 
@@ -800,4 +800,3 @@ Idb__BM_DecommitAll (IDBFile		file_id)
   return MrmSUCCESS ;
 
 }
-

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -41,14 +41,14 @@
  *
  ***************************************************************************/
 
-void _XmDrawHighlight(Display *display, Drawable d, 
-			  GC gc, 
+void _XmDrawHighlight(Display *display, Drawable d,
+			  GC gc,
 #if NeedWidePrototypes
-                          int x, int y, 
+                          int x, int y,
 			  int width, int height,
 			  int highlight_thickness,
 #else
-                          Position x, Position y, 
+                          Position x, Position y,
 			  Dimension width, Dimension height,
 			  Dimension highlight_thickness,
 #endif /* NeedWidePrototypes */
@@ -62,7 +62,7 @@ void _XmDrawHighlight(Display *display, Drawable d,
    if (!d || !highlight_thickness || !width || !height) return ;
 
    /* the XmList dash case relies on this particular order of X segments */
-   
+
    seg[0].x1 = seg[2].x1 = x ;
    seg[0].y1 = seg[0].y2 = y + half_hl ;
    seg[0].x2 = x + width - highlight_thickness ;
@@ -79,15 +79,15 @@ void _XmDrawHighlight(Display *display, Drawable d,
 		GCLineWidth|GCLineStyle|GCCapStyle|GCJoinStyle,
 		&gcvalues);
    /* change them and draw the lines */
-   XSetLineAttributes(display, gc,  highlight_thickness, line_style, 
+   XSetLineAttributes(display, gc,  highlight_thickness, line_style,
 		      CapButt, JoinMiter);
    XDrawSegments (display, d, gc, seg, 4);
 
    /* put them back */
-   XSetLineAttributes(display, gc,  
-		      gcvalues.line_width, gcvalues.line_style, 
+   XSetLineAttributes(display, gc,
+		      gcvalues.line_width, gcvalues.line_style,
 		      gcvalues.cap_style, gcvalues.join_style);
-  
-   /** note that the above is a hack, a read-only GC shoudl not 
+
+   /** note that the above is a hack, a read-only GC shoudl not
      be modified, period */
 }

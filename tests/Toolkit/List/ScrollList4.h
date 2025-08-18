@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: ScrollList4.h /main/10 1995/07/13 18:24:46 drk $ */
 
 #define NITEMS	10
@@ -54,4 +54,3 @@ static void  ExtOrMulSelCB(Widget w, XtPointer client_data,
 			   XtPointer call_data);
 static void  DeleteSelected(Widget w, XtPointer client_data,
 			    XtPointer call_data);
-

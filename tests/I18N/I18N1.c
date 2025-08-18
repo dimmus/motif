@@ -35,8 +35,8 @@
  *  Declare global variables.
  */
 #define MY_OFFSET 30
-/* 
- *  Callback functions 
+/*
+ *  Callback functions
  */
 
 /*
@@ -72,7 +72,7 @@ void  main (argc, argv)
 
        free(UserData);
     }
-    
+
     sprintf(TestName, "I18N1%c", test_char);
 
     n = 0;
@@ -116,7 +116,7 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM );       n++;
     XtSetArg(args[n], XmNalignment, XmALIGNMENT_BEGINNING );    n++;
     TextLabel = XmCreateLabelGadget(Form1, "TextLabel", args, n );
-   
+
     XtManageChild(TextLabel);
 
     n = 0;
@@ -159,7 +159,7 @@ void  main (argc, argv)
 
     if (test_num == 2) {
 
-	/* Get the Text1 value, convert it to wide char and redisplay it 
+	/* Get the Text1 value, convert it to wide char and redisplay it
 	 * in Text2.
 	 */
 
@@ -179,14 +179,12 @@ void  main (argc, argv)
 	n = 0;
 	XtSetArg(args[n], XmNvalueWcs, text_wc_value); n++;
 	XtSetValues(Text2, args, n);
-	
+
 	CommonPause();
 
     }
 
     CommonPause();
- 
+
     XtAppMainLoop(app_context);
 }
-
-

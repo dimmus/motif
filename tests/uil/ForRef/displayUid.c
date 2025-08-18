@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,31 +19,31 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: displayUid.c /main/7 1995/07/13 20:30:17 drk $"
 #endif
 #endif
- 
+
 
   /*
    * This a "generic" routine that will display widgets that are
    * created in uil files. This routine assumes that a single
    * Hierarchy will be opened.
-   * 
+   *
    * Syntax - displayUid root_filename or
    * displayUid (and will ask you for the UID root filename)
-   * 
+   *
    * The uid file will be opened and the widget realized.
    */
-  
-  
+
+
 #include <stdio.h>
-  
+
 #define MAX_FILES	10
 #define MAX_CALLBACK	32
 #define MAX_LEN		255
@@ -51,26 +51,26 @@ static char rcsid[] = "$XConsortium: displayUid.c /main/7 1995/07/13 20:30:17 dr
 /*
  *  Set the number of CommonPauses for each uil test
  */
-  
+
 #define FOR_REF_CMN_PAUSES   1
 #define FOR_REF2_CMN_PAUSES  1
 #define FOR_REF3_CMN_PAUSES  1
 #define FOR_REF4_CMN_PAUSES  1
 
-#include <testlib.h> 
-#include <Mrm/MrmAppl.h>    
+#include <testlib.h>
+#include <Mrm/MrmAppl.h>
 #include <Xm/Xm.h>
 #include "reasons.h"
-  
+
   /* Callback routines */
-  
+
 static void exit_test();
 static void Report_Callback();
 static void popup_popup_menu();
 static void ProcessCommandArgs();
 
 static MrmHierarchy	s_MrmHierarchy;
-static char		*vec[MAX_FILES];   	
+static char		*vec[MAX_FILES];
 static MrmCode		class;
 static char             uidname[MAX_LEN];
 static int              num_common_pauses;
@@ -82,81 +82,81 @@ static MrmRegisterArg reglist[] = {
 };
 
 static int reglist_num = (sizeof (reglist) / sizeof (reglist[0]));
-     
+
 static XtActionsRec actions[] = {
   {"popup_popup_menu", (XtActionProc) popup_popup_menu}
 };
-     
+
 static int num_actions = sizeof(actions) / sizeof(XtActionsRec);
 
 
 Widget  TopManager = NULL;
-     
+
 /*
  *  Main program
  */
 int main(argc, argv)
      int argc;
      char **argv;
-     
+
 {
   Arg arglist[1];
   int i;
-  
-  
+
+
   /*
    *  Initialize the Mrm
    */
-  
+
   MrmInitialize ();
-  
+
   /*
    *  Initialize the toolkit.  This call returns the id of the "Shell1"
    *  widget.  The applications "main" widget must be the only child
    *  of this widget.
    */
-  
+
   CommonTestUilInit(argc, argv);
-  
+
   /*
    *  Process command args - put uid filename into uidname and
    *  determine which uil test is being run.
    */
-  
+
   ProcessCommandArgs();
-  
-  
+
+
   XtAddActions(actions, num_actions);
   /*
    *  Define the Mrm hierarchy (only 1 file)
    */
-  
+
   if (MrmOpenHierarchy (1,			    /* number of files	    */
 			vec, 			    /* files     	    */
 			NULL,			    /* os_ext_list (null)   */
 			&s_MrmHierarchy)	    /* ptr to returned id   */
-      != MrmSUCCESS) 
+      != MrmSUCCESS)
     {
       printf ("Can't open hierarchy\n");
       exit(1);
     }
-  
+
   /*
    *		Register all Mrm functions
-   */	
-  
-  
+   */
+
+
   if (MrmRegisterNames (reglist, reglist_num)
       != MrmSUCCESS)
     {
       printf("Can't register names\n");
       exit(1);
     }
-  
+
   /*
    *  Call Mrm to fetch the main widget
    */
-  
+
   if (MrmFetchWidget (s_MrmHierarchy,
 		      "TopManager",
 		      Shell1,
@@ -167,20 +167,20 @@ int main(argc, argv)
       printf("Can't fetch interface\n");
       exit(1);
     }
-  
+
   /*
    *  Make the Shell1 widget "manage" the main window (or whatever the
    *  the uil defines as the topmost widget).  This will
    *  cause it to be "realized" when the Shell1 widget is "realized"
    */
-  
+
   XtManageChild(TopManager);
-  
+
   /*
    *  Realize the Shell1 widget.  This will cause the entire "managed"
    *  widget hierarchy to be displayed
    */
-  
+
   XtRealizeWidget(Shell1);
 
 
@@ -199,11 +199,11 @@ int main(argc, argv)
   CommonPause();   /* Exit */
 
 
-  
+
   /*
    *  Loop and process events
    */
-  
+
   XtMainLoop();
 }
 
@@ -242,10 +242,10 @@ static void Report_Callback( widget, tag, callback_data )
   Arg args[5];
   XmString label_string;
   XmString *list_items;
-  
+
   reason_num = callback_data->reason;
   reason = REASONS[reason_num];
-  
+
   printf("\n");
   printf("/*********************************************************/\n");
   printf("---- %s callback made ----\n\n", tag);
@@ -285,9 +285,9 @@ static void popup_popup_menu(widget, event, params, num_params)
      int                         num_params;
 {
   static Widget fetched;
-  
+
   fetch("Popup_Menu",&fetched);
-  XmMenuPosition(fetched, event);  
+  XmMenuPosition(fetched, event);
   XtManageChild(fetched);
 }
 

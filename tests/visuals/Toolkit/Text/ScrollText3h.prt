@@ -23,29 +23,29 @@
 #
 # HISTORY
 TRACE:(1) LocatePointer Text4 RTextChar 5
-TRACE:(2) DragComponent Text4 RTextChar 7 
+TRACE:(2) DragComponent Text4 RTextChar 7
 TRACE:(3) LocatePointer Text4 RTextChar 22
-TRACE:(4) ClickMB Btn2 
-TRACE:(5) CompareVisual Text4 
+TRACE:(4) ClickMB Btn2
+TRACE:(5) CompareVisual Text4
 TRACE:(6) LocatePointer Text4 RTextChar 20
-TRACE:(7) ClickMB Btn2 
+TRACE:(7) ClickMB Btn2
 TRACE:(8) LocatePointer Text4 RTextChar 18
-TRACE:(9) ClickMB Btn2 
+TRACE:(9) ClickMB Btn2
 TRACE:(10) LocatePointer Text4 RTextChar 16
-TRACE:(11) ClickMB Btn2 
-TRACE:(12) CompareVisual Text4 
+TRACE:(11) ClickMB Btn2
+TRACE:(12) CompareVisual Text4
 TRACE:(13) Continue
 TRACE:(14) LocatePointer Text1 RTextChar 24
-TRACE:(15) ClickMB Btn1 
+TRACE:(15) ClickMB Btn1
 TRACE:(16) ClickKey <Ctrl> KTab
 TRACE:(17) ClickKey <Ctrl> KTab
 TRACE:(18) LocatePointer Text1 RTextChar 34
 TRACE:(19) DragComponent Text1 RTextChar 38 <Shift> Btn1
 TRACE:(20) InputString "New Text"
-TRACE:(21) CompareVisual Text1 
+TRACE:(21) CompareVisual Text1
 TRACE:(22) Continue
 TRACE:(23) LocatePointer Text1 RTextChar 3
-TRACE:(24) ClickMB Btn1 
+TRACE:(24) ClickMB Btn1
 TRACE:(25) ClickKey KSelect
 TRACE:(26) ClickKey KRight
 TRACE:(27) ClickKey KRight
@@ -54,9 +54,9 @@ TRACE:(29) ClickKey KRight
 TRACE:(30) ClickKey KRight
 TRACE:(31) ClickKey KExtend
 TRACE:(32) ClickKey KDelete
-TRACE:(33) CompareVisual Text1 
+TRACE:(33) CompareVisual Text1
 TRACE:(34) LocatePointer Text1 RTextChar 5
-TRACE:(35) ClickMB Btn1 
+TRACE:(35) ClickMB Btn1
 TRACE:(36) ClickKey KSelect
 TRACE:(37) ClickKey KRight
 TRACE:(38) ClickKey KRight
@@ -65,9 +65,9 @@ TRACE:(40) ClickKey KRight
 TRACE:(41) ClickKey KRight
 TRACE:(42) ClickKey KExtend
 TRACE:(43) ClickKey KBackSpace
-TRACE:(44) CompareVisual Text1 
+TRACE:(44) CompareVisual Text1
 TRACE:(45) LocatePointer Text1 RTextChar 0
-TRACE:(46) ClickMB Btn1 
+TRACE:(46) ClickMB Btn1
 TRACE:(47) ClickKey KSelect
 TRACE:(48) ClickKey KAddMode
 TRACE:(49) ClickKey KRight
@@ -77,9 +77,9 @@ TRACE:(52) ClickKey KRight
 TRACE:(53) ClickKey KRight
 TRACE:(54) ClickKey KExtend
 TRACE:(55) ClickKey KDelete
-TRACE:(56) CompareVisual Text1 
+TRACE:(56) CompareVisual Text1
 TRACE:(57) LocatePointer Text1 RTextChar 0
-TRACE:(58) ClickMB Btn1 
+TRACE:(58) ClickMB Btn1
 TRACE:(59) ClickKey KSelect
 TRACE:(60) ClickKey KAddMode
 TRACE:(61) ClickKey KRight
@@ -89,9 +89,9 @@ TRACE:(64) ClickKey KRight
 TRACE:(65) ClickKey KRight
 TRACE:(66) ClickKey KExtend
 TRACE:(67) ClickKey KBackSpace
-TRACE:(68) CompareVisual Text1 
+TRACE:(68) CompareVisual Text1
 TRACE:(69) LocatePointer Text1 RTextChar 7
-TRACE:(70) ClickMB Btn1 
+TRACE:(70) ClickMB Btn1
 TRACE:(71) ClickKey KSelect
 TRACE:(72) ClickKey KAddMode
 TRACE:(73) ClickKey KRight
@@ -108,45 +108,45 @@ TRACE:(83) ClickKey KRight
 TRACE:(84) ClickKey KRight
 TRACE:(85) ClickKey KRight
 TRACE:(86) ClickKey KDelete
-TRACE:(87) CompareVisual Text1 
+TRACE:(87) CompareVisual Text1
 TRACE:(88) ClickKey KBackSpace
-TRACE:(89) CompareVisual Text1 
+TRACE:(89) CompareVisual Text1
 TRACE:(90) Continue
 TRACE:(91) LocatePointer Text1 RTextChar 10
-TRACE:(92) ClickMB Btn1 
+TRACE:(92) ClickMB Btn1
 TRACE:(93) ClickKey Ka
-TRACE:(94) CompareVisual Text1 
+TRACE:(94) CompareVisual Text1
 TRACE:(95) LocatePointer Text2 RTextChar 10
-TRACE:(96) ClickMB Btn1 
+TRACE:(96) ClickMB Btn1
 TRACE:(97) ClickKey Ka
-TRACE:(98) CompareVisual Text2 
+TRACE:(98) CompareVisual Text2
 TRACE:(99) LocatePointer Text3 RTextChar 10
-TRACE:(100) ClickMB Btn1 
+TRACE:(100) ClickMB Btn1
 TRACE:(101) ClickKey Ka
-TRACE:(102) CompareVisual Text3 
+TRACE:(102) CompareVisual Text3
 TRACE:(103) LocatePointer Text4 RTextChar 10
-TRACE:(104) ClickMB Btn1 
+TRACE:(104) ClickMB Btn1
 TRACE:(105) ClickKey Ka
-TRACE:(106) CompareVisual Text4 
+TRACE:(106) CompareVisual Text4
 TRACE:(107) Continue
-TRACE:(108) LocatePointer Text1  
-TRACE:(109) ClickMB Btn1 
+TRACE:(108) LocatePointer Text1
+TRACE:(109) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_FOCUS
     Client Data:  ScrolledText
-TRACE:(110) LocatePointer Text2  
-TRACE:(111) ClickMB Btn1 
+TRACE:(110) LocatePointer Text2
+TRACE:(111) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_LOSING_FOCUS
     Client Data:  ScrolledText
 Generic Callback called:  Reason - XmCR_FOCUS
     Client Data:  SingleLine
-TRACE:(112) LocatePointer Text3  
-TRACE:(113) ClickMB Btn1 
+TRACE:(112) LocatePointer Text3
+TRACE:(113) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_LOSING_FOCUS
     Client Data:  SingleLine
 Generic Callback called:  Reason - XmCR_FOCUS
     Client Data:  MultiLine
-TRACE:(114) LocatePointer Text4  
-TRACE:(115) ClickMB Btn1 
+TRACE:(114) LocatePointer Text4
+TRACE:(115) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_LOSING_FOCUS
     Client Data:  MultiLine
 Generic Callback called:  Reason - XmCR_FOCUS
@@ -155,7 +155,7 @@ TRACE:(116) Continue
 Generic Callback called:  Reason - XmCR_LOSING_FOCUS
     Client Data:  TextField
 TRACE:(117) LocatePointer Text1 RTextChar 10
-TRACE:(118) ClickMB Btn1 
+TRACE:(118) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
     Client Data:  ScrolledText
 TRACE:(119) ClickKey KLeft
@@ -179,7 +179,7 @@ Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
     Client Data:  ScrolledText
 TRACE:(123) LocatePointer Text2 RTextChar 10
-TRACE:(124) ClickMB Btn1 
+TRACE:(124) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
     Client Data:  SingleLine
 TRACE:(125) ClickKey KLeft
@@ -203,7 +203,7 @@ Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
     Client Data:  SingleLine
 TRACE:(129) LocatePointer Text3 RTextChar 10
-TRACE:(130) ClickMB Btn1 
+TRACE:(130) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
     Client Data:  MultiLine
 TRACE:(131) ClickKey KLeft
@@ -227,7 +227,7 @@ Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
     Client Data:  MultiLine
 TRACE:(135) LocatePointer Text4 RTextChar 10
-TRACE:(136) ClickMB Btn1 
+TRACE:(136) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
     Client Data:  TextField
 TRACE:(137) ClickKey KLeft
@@ -251,14 +251,14 @@ Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
 Generic Callback called:  Reason - XmCR_VALUE_CHANGED
     Client Data:  TextField
 TRACE:(141) LocatePointer Text1 RTextChar 10
-TRACE:(142) ClickMB Btn1 
+TRACE:(142) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_MOVING_INSERT_CURSOR
     Client Data:  ScrolledText
 TRACE:(143) LocatePointer Text4 RTextChar 4
 TRACE:(144) DragComponent Text4 RTextChar 9 Btn2
 TRACE:(145) Continue
 TRACE:(146) LocatePointer Text1 RTextChar 10
-TRACE:(147) DragComponent Text1 RTextChar 6 
+TRACE:(147) DragComponent Text1 RTextChar 6
 Generic Callback called:  Reason - XmCR_GAIN_PRIMARY
     Client Data:  ScrolledText
 TRACE:(148) ClickKey KHelp
@@ -268,7 +268,7 @@ TRACE:(149) ClickKey KActivate
 Generic Callback called:  Reason - XmCR_ACTIVATE
     Client Data:  ScrolledText
 TRACE:(150) LocatePointer Text2 RTextChar 10
-TRACE:(151) DragComponent Text2 RTextChar 6 
+TRACE:(151) DragComponent Text2 RTextChar 6
 Generic Callback called:  Reason - XmCR_LOSE_PRIMARY
     Client Data:  ScrolledText
 Generic Callback called:  Reason - XmCR_GAIN_PRIMARY
@@ -280,7 +280,7 @@ TRACE:(153) ClickKey KActivate
 Generic Callback called:  Reason - XmCR_ACTIVATE
     Client Data:  SingleLine
 TRACE:(154) LocatePointer Text3 RTextChar 10
-TRACE:(155) DragComponent Text3 RTextChar 6 
+TRACE:(155) DragComponent Text3 RTextChar 6
 Generic Callback called:  Reason - XmCR_LOSE_PRIMARY
     Client Data:  SingleLine
 Generic Callback called:  Reason - XmCR_GAIN_PRIMARY
@@ -292,7 +292,7 @@ TRACE:(157) ClickKey KActivate
 Generic Callback called:  Reason - XmCR_ACTIVATE
     Client Data:  MultiLine
 TRACE:(158) LocatePointer Text4 RTextChar 10
-TRACE:(159) DragComponent Text4 RTextChar 6 
+TRACE:(159) DragComponent Text4 RTextChar 6
 Generic Callback called:  Reason - XmCR_LOSE_PRIMARY
     Client Data:  MultiLine
 Generic Callback called:  Reason - XmCR_GAIN_PRIMARY
@@ -305,36 +305,36 @@ Generic Callback called:  Reason - XmCR_ACTIVATE
     Client Data:  TextField
 TRACE:(162) Continue
 TRACE:(163) LocatePointer Text3 RTextChar 3
-TRACE:(164) ClickMB Btn1 
+TRACE:(164) ClickMB Btn1
 TRACE:(165) InputString "Pluto and "
-TRACE:(166) CompareVisual Text3 
+TRACE:(166) CompareVisual Text3
 TRACE:(167) LocatePointer Text3 RTextChar 15
-TRACE:(168) ClickMB Btn1 
+TRACE:(168) ClickMB Btn1
 TRACE:(169) ClickKey <Ctrl> Ki
 TRACE:(170) InputString "were"
-TRACE:(171) CompareVisual Text3 
+TRACE:(171) CompareVisual Text3
 TRACE:(172) ClickKey <Ctrl> Ki
 TRACE:(173) ClickKey KSpace
-TRACE:(174) CompareVisual Text3 
+TRACE:(174) CompareVisual Text3
 TRACE:(175) ClickKey <Ctrl> Ki
 TRACE:(176) InputString "walking"
-TRACE:(177) CompareVisual Text3 
+TRACE:(177) CompareVisual Text3
 TRACE:(178) ClickKey <Ctrl> Ki
 TRACE:(179) LocatePointer Text4 RTextChar 3
-TRACE:(180) ClickMB Btn1 
+TRACE:(180) ClickMB Btn1
 TRACE:(181) InputString "Pluto and "
-TRACE:(182) CompareVisual Text4 
+TRACE:(182) CompareVisual Text4
 TRACE:(183) LocatePointer Text4 RTextChar 15
-TRACE:(184) ClickMB Btn1 
+TRACE:(184) ClickMB Btn1
 TRACE:(185) ClickKey <Ctrl> Ki
 TRACE:(186) InputString "were"
-TRACE:(187) CompareVisual Text4 
+TRACE:(187) CompareVisual Text4
 TRACE:(188) ClickKey <Ctrl> Ki
 TRACE:(189) ClickKey KSpace
-TRACE:(190) CompareVisual Text4 
+TRACE:(190) CompareVisual Text4
 TRACE:(191) ClickKey <Ctrl> Ki
 TRACE:(192) InputString "walking"
-TRACE:(193) CompareVisual Text4 
+TRACE:(193) CompareVisual Text4
 TRACE:(194) ClickKey <Ctrl> Ki
 TRACE:(195) Exit
 Exiting Test...Please Standby...

@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/8 1995/07/13 19:53:01 drk $
 INCLUDES 	= -I. -I$(TESTCOMSRC)
 DEFINES 	= TestDefines
@@ -109,7 +109,7 @@ MComplexProgramTarget_2(FontListA, $(LOCAL_LIBRARIES),NullParameter)
 MComplexProgramTarget_3(StringComp, $(LOCAL_LIBRARIES),NullParameter)
 MComplexProgramTarget_4(StringCopy, $(LOCAL_LIBRARIES),NullParameter)
 MComplexProgramTarget_5(StringEmpty, $(LOCAL_LIBRARIES),NullParameter)
-MComplexProgramTarget_6(StringGLR, $(LOCAL_LIBRARIES),NullParameter) 
+MComplexProgramTarget_6(StringGLR, $(LOCAL_LIBRARIES),NullParameter)
 
 #ifdef UseVista
 ComplexVistaMapRule(FontListC, $(OBJS1))

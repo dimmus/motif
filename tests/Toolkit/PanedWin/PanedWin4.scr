@@ -19,19 +19,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
 
 #  A client with a Paned Window with three pushbuttons labeled
-#  PushButton1, PushButton2, and PushButton3 will appear. 
+#  PushButton1, PushButton2, and PushButton3 will appear.
 #  Press and hold MB1 on the top sash. Drag the pointer to the
 #   bottom of the client window.  Release MB1.
 #   - the top pane should expand.
 #   - the middle pane should contract.
 #   - the bottom pane should contract.
-#   - Pushbutton1 should be visible. 
+#   - Pushbutton1 should be visible.
 
 CompareVisual PanedWindow1
 LocatePointer PanedWindow1 RSash 0
@@ -42,7 +42,7 @@ LocatePointer PanedWindow1 RSash 0
 #   - the top pane should contract
 #   - the middle pane should expand
 #   - the bottom pane should be unchanged
-#   - Pushbutton2 should be visible. 
+#   - Pushbutton2 should be visible.
 #  Press and hold MB1 on the bottom sash.  Drag the pointer to the
 #   top of the client window.  Release MB1.
 #   - the top pane should be unchanged.
@@ -64,7 +64,7 @@ Continue
 #   bottom of the client window.  Release MB1.
 #   - the middle pane should expand
 #   - the bottom pane should contract
-#   - Pushbutton2 and PushButton3 should be visible. 
+#   - Pushbutton2 and PushButton3 should be visible.
 
 LocatePointer PanedWindow1 RSash 1
 DragXYRelative Down 50
@@ -76,7 +76,7 @@ CompareVisual PanedWindow1
 #   - the top pane should be unchanged.
 #   - the middle pane should contract.
 #   - the bottom pane should expand.
-#   - Pushbutton2 and Pushbutton3 should be visible. 
+#   - Pushbutton2 and Pushbutton3 should be visible.
 
 LocatePointer PanedWindow1 RSash 0
 DragXYRelative Up 35
@@ -91,7 +91,7 @@ Continue
 #  50 pixels.
 #  Resize each of the panes. Only the bottom pane should enforce a
 #  minimum size of 50.
-#  Resize the client. The bottom child should not change size 
+#  Resize the client. The bottom child should not change size
 #  (skipAdjust False).
 
 CompareVisual PanedWindow1
@@ -107,7 +107,7 @@ LocatePointer PanedWindow1 RSash 0
 DragXYRelative Down 55
 CompareVisual PanedWindow1
 
-WindowResize Shell1 South 25 
+WindowResize Shell1 South 25
 CompareVisual PanedWindow1
 
 Exit

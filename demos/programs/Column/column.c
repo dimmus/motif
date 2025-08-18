@@ -16,17 +16,17 @@ static unsigned char phone_bits[] = {
 
 static int done = 0;
 
-static void quitCB(Widget w, XtPointer client, XtPointer call) 
+static void quitCB(Widget w, XtPointer client, XtPointer call)
 {
 	done = 1;
 }
 
-static void pCB(Widget w, XtPointer client, XtPointer call) 
+static void pCB(Widget w, XtPointer client, XtPointer call)
 {
 	printf ("Widget '%s' got data not matching XmNpicture\n", XtName(w));
 }
 
-static void vCB(Widget w, XtPointer client, XtPointer call) 
+static void vCB(Widget w, XtPointer client, XtPointer call)
 {
 	XmDataFieldCallbackStruct *cbs = (XmDataFieldCallbackStruct*)call;
 	printf ("Widget '%s' got data %s\n", XtName(w),cbs->text);
@@ -52,7 +52,7 @@ static void createScreen(Widget parent)
 	Widget tab = XmCreateTabStack(top,"tab",NULL,0);
 
 	XtManageChild(XmCreateScrolledText(tab,"explanation",NULL,0));
-	
+
 	{
 	Widget column = XmCreateColumn(tab,"column",NULL,0);
 	Widget w;
@@ -91,30 +91,30 @@ static void createScreen(Widget parent)
 
 #define CLASS "Column"
 
-int 
+int
 main (int argc,char *argv[])
 {
 	XtAppContext app_context;
 	Widget app_shell;
 
-        XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+        XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);
 
-        app_shell = XtVaOpenApplication ( &app_context, 
-                                   CLASS, 
-                                   NULL, 
-                                   0, 
-                                   &argc, 
-                                   argv, 
-                                   NULL, 
-                                   sessionShellWidgetClass, 
+        app_shell = XtVaOpenApplication ( &app_context,
+                                   CLASS,
+                                   NULL,
+                                   0,
+                                   &argc,
+                                   argv,
+                                   NULL,
+                                   sessionShellWidgetClass,
                                    NULL );
- 
-       
+
+
 	XtVaSetValues(app_shell,XmNallowShellResize, True, NULL);
 
 	/* create application */
 	createScreen(app_shell);
-	
+
 	XtRealizeWidget(app_shell);
 
 	/*	Process events, unwrapping correctly.  */
@@ -129,4 +129,3 @@ main (int argc,char *argv[])
 	XtDestroyApplicationContext(app_context);
 	exit(0);
 }
-

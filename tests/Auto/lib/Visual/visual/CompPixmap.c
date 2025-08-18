@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CompPixmap.c /main/10 1996/10/07 14:57:02 drk $"
@@ -70,7 +70,7 @@ MvsWidgetInfoRecord  *widget_info;
 {
     int x,y,begin_x, begin_y, n;
     Arg args[1];
-    XImage *image = NULL;			
+    XImage *image = NULL;
     Pixmap bpack_pix = 0L;
     Widget widget;
     /* The length of the widget_name used to be 15 but in some
@@ -103,9 +103,9 @@ MvsWidgetInfoRecord  *widget_info;
     Window focus_window;
     Boolean possible_gad_color = False;
     Boolean first_fail_time = True;
-    struct _MvsUniqueColorAllocInfoRecord2 
+    struct _MvsUniqueColorAllocInfoRecord2
 			*widget_unique_color_info;
-    struct _MvsUniqueColorAllocInfoRecord2 
+    struct _MvsUniqueColorAllocInfoRecord2
 			*gad_unique_color_info;
     char msg_string[100];
     Pixmap back_pix=0L;
@@ -124,7 +124,7 @@ MvsWidgetInfoRecord  *widget_info;
     strcpy(widget_name, XtName(widget));
 
     winfo = widget_info;
- 
+
     done = 0;
     while (!done) {
 
@@ -147,7 +147,7 @@ MvsWidgetInfoRecord  *widget_info;
             winfo_stack[stack_top++] = winfo;
             winfo = (MvsWidgetInfoRecord *)winfo->first_child;
         }
-        else 
+        else
             if (winfo->next_sibling != NULL)
                 winfo = (MvsWidgetInfoRecord *)winfo->next_sibling;
             else {
@@ -158,10 +158,10 @@ MvsWidgetInfoRecord  *widget_info;
 
                 if (stack_top == 0)
                     done = 1;
-            } 
+            }
     } /* End while(!done) */
 
-    if (newhashid == mvsNumRecIds || 
+    if (newhashid == mvsNumRecIds ||
     			fseek(mvsImageFd,mvsFilePos[newhashid++],0) != 0)
         AutoMessage(_AutoMessages[WARNMSG11]);
 
@@ -181,13 +181,13 @@ MvsWidgetInfoRecord  *widget_info;
 
             if ((width != widget_info->width + 2*widget_info->border_width)||
                 (height != widget_info->height + 2*widget_info->border_width)) {
-	           sprintf (msg_string, _AutoMessages[VISMSG6], 
+	           sprintf (msg_string, _AutoMessages[VISMSG6],
 			    width,height,
 			    widget_info->width + 2*widget_info->border_width,
 			    widget_info->height + 2*widget_info->border_width,
 			    widget_name);
 		   AutoMessage (msg_string);
-                    
+
             }
             else {
                 mvsDecompressRead(mvsImageFd,mvsImageBuffer,width*height);
@@ -204,11 +204,11 @@ MvsWidgetInfoRecord  *widget_info;
                 }
 
                 if (checksum != checksum2) {
-		    sprintf (msg_string, _AutoMessages[WARNMSG121], 
+		    sprintf (msg_string, _AutoMessages[WARNMSG121],
 			     widget_name);
                     AutoMessage (msg_string);
 		    AutoMessage (_AutoMessages[WARNMSG123]);
-		    
+
 
                 }
                 else {
@@ -216,13 +216,13 @@ MvsWidgetInfoRecord  *widget_info;
 /*
    		    get border width and subtract from the the current
 		    x and y. In GenPixmap() this done through Translate
-    		    Coordinates. A better fix maybe to put this in 
+    		    Coordinates. A better fix maybe to put this in
 		    mvsGetSubObjects() so that x and y returned include
-		    the border_width. 
+		    the border_width.
 */
 
 		    border_width = widget_info->border_width;
-		  
+
                     x = widget_info->x - border_width;
                     y = widget_info->y - border_width;
 
@@ -233,10 +233,10 @@ MvsWidgetInfoRecord  *widget_info;
 		    begin_y = y;
 
                     if (image == 0) {
-		        sprintf (msg_string, _AutoMessages[VISMSG7], 
+		        sprintf (msg_string, _AutoMessages[VISMSG7],
 				 widget_name);
                         AutoError (msg_string);
-				 
+
 
                     }
 
@@ -260,14 +260,14 @@ MvsWidgetInfoRecord  *widget_info;
 				   sprintf (msg_string, _AutoMessages[VISMSG8],
 					     widget_name, x,y);
                                    AutoMessage(msg_string);
-                                    	    
+
 				   break;
 				}
 				else {
-				   
-				    sprintf(msg_string, 
+
+				    sprintf(msg_string,
 					   _AutoMessages[VISMSG34],
-					  widget_name); 
+					  widget_name);
 			    	   AutoMessage(msg_string);
 				   break;
 				}
@@ -278,7 +278,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 		    	    tmp_widget = tmp_object->id.widget;
 
-			    if (tmp_widget != NULL) 
+			    if (tmp_widget != NULL)
 			       widget_class_code  = mvsGetClassCode(tmp_widget);
 			    else {
 			       /* If the widget is NULL, we may be looking at
@@ -303,8 +303,8 @@ MvsWidgetInfoRecord  *widget_info;
 			       }
 			    }
 
-			    if (XmIsGadget(tmp_widget) && 
-				(widget_class_code 
+			    if (XmIsGadget(tmp_widget) &&
+				(widget_class_code
 					== mvsXmPushButtonGadgetClass ||
 				 widget_class_code
 					== mvsXmToggleButtonGadgetClass)) {
@@ -316,7 +316,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 			    /* If the object is a gadget then find parent
 			       of the gadget and use it */
-				
+
 			    while (XmIsGadget(tmp_widget) &&
 				   widget_class_code != mvsXmIconGadgetClass)
 				tmp_widget = XtParent(tmp_widget);
@@ -340,7 +340,7 @@ MvsWidgetInfoRecord  *widget_info;
 				       pixel of the offending widget will degrade
 				       performance too much. */
 				    no_widget_info = True;
-				    sprintf(msg_string, _AutoMessages[VISMSG47], 
+				    sprintf(msg_string, _AutoMessages[VISMSG47],
 					    XtName(tmp_widget));
 				    AutoMessage(msg_string);
 				    found_error = True; /* because we couldn't find
@@ -354,11 +354,11 @@ MvsWidgetInfoRecord  *widget_info;
 			    else
 			    {
 			      if (curpixel < MAX_UNIQUE_COLORS) {
-				widget_unique_color_info = 
+				widget_unique_color_info =
 				  tmp_info->widgetUniqueColorInfo;
-				
+
 				/* Convert to expected color "match_pixel" */
-				winfo2 = 
+				winfo2 =
 				  widget_unique_color_info[curpixel].widget_info;
 
 				if (winfo2 == NULL)
@@ -379,16 +379,16 @@ MvsWidgetInfoRecord  *widget_info;
 				      mvs_resources2[wcinfo2->res_color_ref[color_ref]];
 
 				}
-			      } 
+			      }
 			    }
 
 	       /* If you dont receive a match it may be that the widget
 		  does not have the highlight from the parent. If this
-		  is the case then use the background color of the parent 
+		  is the case then use the background color of the parent
 		  to satisfy the highlight color */
 
 
-                if (XGetPixel(image,x,y) != matchpixel && 
+                if (XGetPixel(image,x,y) != matchpixel &&
 		    (curpixel < MAX_UNIQUE_COLORS) &&
 		    focus_window != XtWindowOfObject(tmp_widget)) {
 			tmp_widget = XtParent(tmp_widget);
@@ -396,9 +396,9 @@ MvsWidgetInfoRecord  *widget_info;
 			if (tmp_info != NULL) {
                             widget_unique_color_info =
                                 tmp_info->widgetUniqueColorInfo;
-			    color_ref = 
+			    color_ref =
 				widget_unique_color_info[curpixel].color_ref;
-                            winfo2 = 
+                            winfo2 =
 				widget_unique_color_info[curpixel].widget_info;
 			}
 			else
@@ -406,10 +406,10 @@ MvsWidgetInfoRecord  *widget_info;
 						       enough info to fix the
 						       pixel */
 
-			/* 
+			/*
 			   If the current pixel cannot be found on the parent
 			   then we know that there is a failure within the
-			   widget itself. 
+			   widget itself.
 			*/
 
 			if (tmp_info != NULL && winfo2 != NULL) {
@@ -442,18 +442,18 @@ MvsWidgetInfoRecord  *widget_info;
 			}
 		}
 
-                if (XGetPixel(image,x,y) != matchpixel && 
+                if (XGetPixel(image,x,y) != matchpixel &&
 		    (curpixel < MAX_UNIQUE_COLORS) &&
 		    possible_gad_color) {
-			color_ref = 
+			color_ref =
 				gad_unique_color_info[curpixel].color_ref;
-                        winfo2 = 
+                        winfo2 =
 				gad_unique_color_info[curpixel].widget_info;
 
-			/* 
+			/*
 			   If the current pixel cannot be found on the parent
 			   then we know that there is a failure within the
-			   widget itself. 
+			   widget itself.
 			*/
 
 			if (winfo2 == NULL)
@@ -467,7 +467,7 @@ MvsWidgetInfoRecord  *widget_info;
 			    wcinfo2 = winfo2->widget_class_info;
 			    mvs_resources2 = winfo2->mvs_resources;
 			    num_colors = wcinfo2->num_res_colors;
-		       
+
 			    image_pixel = XGetPixel(image, x, y);
 
 			    for (k = 0; k < num_colors; k++) {
@@ -481,7 +481,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 			       if ((strcmp("selectColor", name) == 0 ||
 				    strcmp("unselectColor", name) == 0) &&
-				   widget_class_code == 
+				   widget_class_code ==
 				        mvsXmToggleButtonGadgetClass)
 				    if (image_pixel == (Pixel)
 				                       mvs_resources2[wcinfo2->res_color_ref[k]])
@@ -497,7 +497,7 @@ MvsWidgetInfoRecord  *widget_info;
 			}
 		}
 
-                            /* Compare expected "match_pixel" with 
+                            /* Compare expected "match_pixel" with
 			       actual pixel */
 
                             if (XGetPixel(image,x,y) != matchpixel) {
@@ -508,10 +508,10 @@ MvsWidgetInfoRecord  *widget_info;
 						DumpWindow(widget);
 						first_fail_time = False;
 					}
-					sprintf (msg_string, 
+					sprintf (msg_string,
 						 _AutoMessages[VISMSG10],
 						 widget_name, x,y,matchpixel,
-						 XGetPixel(image,x,y)); 
+						 XGetPixel(image,x,y));
 
                                 	AutoMessage(msg_string);
 
@@ -523,9 +523,9 @@ MvsWidgetInfoRecord  *widget_info;
                 }
             }
             if (found_error) {
-		sprintf(msg_string, 
+		sprintf(msg_string,
 			_AutoMessages[VISMSG35],
-			widget_name); 
+			widget_name);
                 AutoMessage(msg_string);
 	    }
             if (image != NULL)
@@ -561,7 +561,7 @@ Widget widget;
 		  window_string, file_string, XtName(widget));
 	AutoTraceMsg(trace_msg);
     }
-	
+
     AutoSystem("xwd", send_string);
 
 }
@@ -584,7 +584,7 @@ MvsWidgetInfoRecord  *widget_info;
 
     for (i = 0; i < num_res_colors; i++) {
 	if (res_color_ref[i] >= 0) {
-	    XtSetArg(color_args[num_args], 
+	    XtSetArg(color_args[num_args],
 		     resource_info[res_color_ref[i]].name,
 		     &widget_info->mvs_resources[res_color_ref[i]]);
 	    num_args++;

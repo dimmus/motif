@@ -75,7 +75,7 @@ unsigned char	dragOperations;
 XmString	default_str1, default_str2;
 XtTranslations  dnd_trans, prim_trans, sec_trans, clip_trans;
 
-static char dndTranslations[] = 
+static char dndTranslations[] =
 	"<Btn2Down>:		ProcessDrag()\n\
 	<EnterWindow>:		PrimitiveEnter()\n\
 	<LeaveWindow>:		PrimitiveLeave()\n\
@@ -84,7 +84,7 @@ static char dndTranslations[] =
 	<Key>osfCancel:		PrimitiveParentCancel()\n\
 	<Key>osfHelp:		PrimitiveHelp()";
 
-static char primaryTranslations[] = 
+static char primaryTranslations[] =
 	"<Btn1Down>:		StartHighlight()\n\
 	<Btn1Motion>:		ExtendHighlight()\n\
 	<Btn1Up>:		MakePrimSelection()\n\
@@ -98,7 +98,7 @@ static char primaryTranslations[] =
 	<Key>osfHelp:		PrimitiveHelp()";
 
 
-static char secondaryTranslations[] = 
+static char secondaryTranslations[] =
 	"<Btn1Down>:		StartUnderline()\n\
 	<Btn1Motion>:		ExtendUnderline()\n\
 	<Btn1Up>:		MakeSecSelection()\n\
@@ -112,7 +112,7 @@ static char secondaryTranslations[] =
 	<Key>osfCancel:		PrimitiveParentCancel()\n\
 	<Key>osfHelp:		PrimitiveHelp()";
 
-static char clipboardTranslations[] = 
+static char clipboardTranslations[] =
 	"<Btn1Down>:		StartClipSelect()\n\
 	<Btn1Motion>:		ExtendClipSelect()\n\
 	s <Btn1Up>:		ClipMoveSrc()\n\
@@ -128,7 +128,7 @@ static char clipboardTranslations[] =
 /*** define callbacks for setting up test cases ***/
 
 /*ARGSUSED*/
-static void DragAndDropCB(Widget w, XtPointer client_data, 
+static void DragAndDropCB(Widget w, XtPointer client_data,
 			  XtPointer call_data)
 {
 	int	n;
@@ -144,7 +144,7 @@ static void DragAndDropCB(Widget w, XtPointer client_data,
 }
 
 /*ARGSUSED*/
-static void PrimaryCB(Widget w, XtPointer client_data, 
+static void PrimaryCB(Widget w, XtPointer client_data,
 		      XtPointer call_data)
 {
 	int	n;
@@ -160,7 +160,7 @@ static void PrimaryCB(Widget w, XtPointer client_data,
 }
 
 /*ARGSUSED*/
-static void SecondaryCB(Widget w, XtPointer client_data, 
+static void SecondaryCB(Widget w, XtPointer client_data,
 			XtPointer call_data)
 {
 	int	n;
@@ -176,7 +176,7 @@ static void SecondaryCB(Widget w, XtPointer client_data,
 }
 
 /*ARGSUSED*/
-static void ClipboardCB(Widget w, XtPointer client_data, 
+static void ClipboardCB(Widget w, XtPointer client_data,
 			XtPointer call_data)
 {
 	int	n;
@@ -192,7 +192,7 @@ static void ClipboardCB(Widget w, XtPointer client_data,
 }
 
 /*ARGSUSED*/
-static void ResetCB(Widget w, XtPointer client_data, 
+static void ResetCB(Widget w, XtPointer client_data,
 			   XtPointer call_data)
 {
   int	i, n, status;
@@ -266,7 +266,7 @@ XErrorEvent	*ev;
 }
 
 
-int 
+int
 main (int argc, char **argv)
 {
   register int       n;
@@ -296,7 +296,7 @@ main (int argc, char **argv)
 	      argv[0]);
       exit(0);
     }
-  }    
+  }
 #endif
 
   XSetErrorHandler(ProtoError);
@@ -311,9 +311,9 @@ main (int argc, char **argv)
   /* Set the initiatorProtocolStyle and recieverProtocolStyle resources */
   n = 0;
   xmDisplay = XmGetXmDisplay(XtDisplay(Shell1));
-  XtSetArg(args[n], XmNdragInitiatorProtocolStyle, 
+  XtSetArg(args[n], XmNdragInitiatorProtocolStyle,
 	   initiatorProtocolStyle); n++;
-  XtSetArg(args[n], XmNdragReceiverProtocolStyle, 
+  XtSetArg(args[n], XmNdragReceiverProtocolStyle,
 	   receiverProtocolStyle); n++;
   XtSetValues(xmDisplay, args, n);
 
@@ -337,7 +337,7 @@ main (int argc, char **argv)
 
   n = 0;
   XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-  TestCase_Pulldown = XmCreatePulldownMenu(Shell1, "TestCase_Pulldown", 
+  TestCase_Pulldown = XmCreatePulldownMenu(Shell1, "TestCase_Pulldown",
 					    args, n);
 
   TC_DragAndDrop = CreatePushButton(TestCase_Pulldown, "DragAndDrop");
@@ -345,13 +345,13 @@ main (int argc, char **argv)
   TC_Secondary = CreatePushButton(TestCase_Pulldown, "Secondary");
   TC_Clipboard = CreatePushButton(TestCase_Pulldown, "Clipboard");
 
-  XtAddCallback(TC_DragAndDrop, XmNactivateCallback, 
+  XtAddCallback(TC_DragAndDrop, XmNactivateCallback,
 		DragAndDropCB, NULL);
-  XtAddCallback(TC_Primary, XmNactivateCallback, 
+  XtAddCallback(TC_Primary, XmNactivateCallback,
 		PrimaryCB, NULL);
-  XtAddCallback(TC_Secondary, XmNactivateCallback, 
+  XtAddCallback(TC_Secondary, XmNactivateCallback,
 		SecondaryCB, NULL);
-  XtAddCallback(TC_Clipboard, XmNactivateCallback, 
+  XtAddCallback(TC_Clipboard, XmNactivateCallback,
 		ClipboardCB, NULL);
 
   tcs = XmStringCreateLocalized("Test Case       ");
@@ -393,16 +393,16 @@ main (int argc, char **argv)
 				Shell1, args, n);
   n = 0;
   grid = XtVaCreateManagedWidget("Grid",
-				 exmGridWidgetClass, topLevel, 
+				 exmGridWidgetClass, topLevel,
 				 XmNheight, 100,
 				 XmNwidth, 200,
 				 XmNrows, 1,
 				 XmNcolumns, 2,
-				 NULL); 
+				 NULL);
 
   default_str1 = XmStringCreateLocalized("Widget ONE");
   stwid1 = XtVaCreateManagedWidget("STwid1",
-				   exmStringTransferWidgetClass, grid, 
+				   exmStringTransferWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   XmNalignment, XmALIGNMENT_CENTER,
@@ -430,7 +430,7 @@ main (int argc, char **argv)
 
   default_str2 = XmStringCreateLocalized("Widget TWO");
   stwid2 = XtVaCreateManagedWidget("STwid2",
-				   exmStringTransferWidgetClass, grid, 
+				   exmStringTransferWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   XmNalignment, XmALIGNMENT_CENTER,

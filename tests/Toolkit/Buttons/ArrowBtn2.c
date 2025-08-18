@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ArrowBtn2.c /main/9 1995/07/13 17:28:29 drk $"
@@ -51,14 +51,14 @@ char **argv;
   XmString           tcs;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
   XtSetArg(args[n],  XmNkeyboardFocusPolicy, XmPOINTER);  n++;
   XtSetValues(Shell1, args, n);
-  
+
   XtRealizeWidget(Shell1);
 
   n = 0;
@@ -106,14 +106,14 @@ char **argv;
   n = 0;
   XtSetArg (args[n], XmNorientation, XmVERTICAL); n++;
   parent1 = XmCreateRowColumn (Shell1, "parent1", args, n);
-  
+
   n = 0;
   ArrowButton1 = XmCreateArrowButton (parent1, "ArrowButton1", args, n);
   XtAddCallback (ArrowButton1, XmNactivateCallback, CommonGenericCB, NULL);
 
   n = 0;
   parent2 = XmCreateBulletinBoard (parent1, "parent2", args, n);
- 
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 200); n++;
   ArrowButton2 = XmCreateArrowButton (parent2, "ArrowButton2", args, n);
@@ -165,7 +165,7 @@ char *words[];
 	len += (n - 1);
 
 	buffer = (char *) malloc(len + 1);
-	if (buffer == NULL) 
+	if (buffer == NULL)
 		{
 		fprintf(stderr, "Out of Memory in concat_args()\n");
 		exit(1);
@@ -188,18 +188,9 @@ XEvent	*event;
 {
 exit(0);
 }
-	
+
 void myQuit()
 {
 	printf("Completed\n");
 	exit(0);
 }
-
-
-
-
-
-
-
-
-

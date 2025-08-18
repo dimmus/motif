@@ -27,7 +27,7 @@ setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Scrollbar
 else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Scrollbar
 endif
-# The following needed for Vista and Purify usage 
+# The following needed for Vista and Purify usage
 setenv TOP ../../..
 
 set Scale4 = 'Scale4 -xrm *XmScrollBar*initialDelay:250 -xrm *XmScrollBar*repeatDelay:50'
@@ -40,4 +40,3 @@ foreach test ( Scale1 Scale3 "$Scale4" Scale5 Scale6 Scale7 Scale8 \
 	"$Scrollbar1" Scrollbar2 Scrollbar3 Scrollbar4 \
 	Scrollbar5 Scrollbar6 Scrollbar7 Scrollbar8 Scrollbar9 Scrollbar10 \
 	Scrollbar11 "$Scrollbar12" )
-

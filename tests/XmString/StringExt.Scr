@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
-# @) StringExt tests the XmString functions which get dimension information 
+# @) StringExt tests the XmString functions which get dimension information
 # for displaying XmStrings. The values returned from the XmString functions
 # are compared against the values returned from the function XTextExtent().
 
@@ -38,10 +38,10 @@ CompareVisual DrawingArea
 # are the dimensions returned from XmStringExtent(). Verify that the rectangles
 # represent the smallest bounding box which encloses each string.
 # #) Tables have been printed to stdout which list the functions called
-# and the dimensions returned from each function for the given string. 
+# and the dimensions returned from each function for the given string.
 # A message will then be printed indicating whether each XmString function
 # passed or failed. If your term window is small, you may need to scroll
-# in order to see all the text. 
+# in order to see all the text.
 
 # C)
 Continue

@@ -29,16 +29,16 @@ static char rcsid[] = "$XConsortium: OpenHPD.c /main/5 1995/07/14 10:50:26 drk $
 #endif
 #endif
 
-#include <MrmTest.h> 
+#include <MrmTest.h>
 
-/* 
+/*
  * Data for summary
  */
 
 #define NUM_TESTS		9
 #define TEST_DESCRIP_LENGTH	60
 
-struct TestInfo OpenHierarchyInfo[NUM_TESTS] = 
+struct TestInfo OpenHierarchyInfo[NUM_TESTS] =
 {
     {"Open a valid hierarchy with complete relative pathname      ",
 				MrmSUCCESS,	0},
@@ -97,7 +97,7 @@ void continue_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
 
     String	msg_valid_tst1 = "There should now be four label widgets.\nThe first should say\n\"OpenH_vh is completed.\"\nThe next three should say\n\"OpenH_mf1 is completed.\"\n\"OpenH_mf2 is completed.\"\n\"OpenH_mf3 is completed.\"\n\nWARNING: The next phase of this test may perform\na VERY LARGE number of disk file operations.\nDO NOT CONTINUE if this will disrupt other people's work!\n\nPress the continue button to continue the test.";
 
@@ -124,20 +124,20 @@ void continue_proc(w, tag, reason)
     if(iteration == VALID_TEST1)
     {
 		iteration++;
-	
+
 	/*
 	 * Create top level shell widget as parent for test_box widget
 	 */
 		nargs = 0;
 		XtSetArg(args[nargs], XtNallowShellResize, TRUE); nargs++;
-	
+
 		test_top =
 		XtAppCreateShell("test_top",			/* application class */
 				 "TEST_TOP",					/* application name  */
 				 topLevelShellWidgetClass,		/* widget class	     */
 				 XtDisplay(widgetmain),			/* display		     */
 				 args, nargs);					/* arguments	     */
-	
+
 	/*
 	 * Fetch valid test_box widget
 	 */
@@ -148,7 +148,7 @@ void continue_proc(w, tag, reason)
 					test_top,
 					&test_box,
 					&class);
-	
+
 		XtManageChild(test_box);
 		XtRealizeWidget(test_top);
 
@@ -158,16 +158,16 @@ void continue_proc(w, tag, reason)
 		sprintf(uidname[0], "OpenH_vh");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
 			OH_test[OH_test_cnt] = NULL;
@@ -185,7 +185,7 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open a valid hierarchy from three different files
 	 */
@@ -196,16 +196,16 @@ void continue_proc(w, tag, reason)
 		OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
 		sprintf(uidname[2], "OpenH_mf3");
 		OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
 			OH_test[OH_test_cnt] = NULL;
@@ -247,13 +247,13 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Replace the instruction message with "valid test 1" message
 	 */
-	
+
 		message = XmStringCreateLtoR(msg_valid_tst1, XmSTRING_DEFAULT_CHARSET);
-	
+
 		nargs = 0;
 		XtSetArg(args[nargs], XmNmessageString, message); nargs++;
 		XtSetValues(widgetmain, args, nargs);
@@ -262,7 +262,7 @@ void continue_proc(w, tag, reason)
     else if(iteration == VALID_TEST2)
     {
 		iteration++;
-	
+
 	/*
 	 * Open a valid hierarchy using the environment variable UIDPATH to
 	 * help decipher the name.
@@ -270,14 +270,14 @@ void continue_proc(w, tag, reason)
 
 	/* set up the $UIDPATH var */
 		putenv("UIDPATH=./OpenHLang/%U\
-%S");			
+%S");
 
 		sprintf(uidname[0], "OpenH_vhev");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
@@ -309,14 +309,14 @@ void continue_proc(w, tag, reason)
 
   	 /* set up the $UIDPATH var */
 		putenv("UIDPATH=./OpenHLang/%U:./OpenHLang/%U\
-%S");	
+%S");
 
 		sprintf(uidname[0], "OpenH_evl");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
@@ -341,16 +341,16 @@ void continue_proc(w, tag, reason)
 		}
 		OH_info_cnt++;
 		putenv("UIDPATH=%U");	/* set up the $UIDPATH var */
-	
+
 	/*
 	 * Open a nonexistent filename
 	 */
 		sprintf(uidname[0], "OpenH_nef");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
@@ -362,16 +362,16 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open an invalid file (not a .uid file)
 	 */
 		sprintf(uidname[0], "OpenH_if");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
@@ -383,17 +383,17 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
-	 * Open a valid file/hierarchy by referring to it WITH a .uid suffix 
+	 * Open a valid file/hierarchy by referring to it WITH a .uid suffix
 	 * on the filename.
 	 */
 		sprintf(uidname[0], "OpenH_vhws.uid");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
@@ -417,7 +417,7 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open a hierarchy from three files with one bad .uid file
 	 */
@@ -428,16 +428,16 @@ void continue_proc(w, tag, reason)
 		OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
 		sprintf(uidname[2], "OpenH_mf3");
 		OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
 			message = XmStringCreateLtoR("OH_mf1 *A* is completed.  ",
@@ -506,7 +506,7 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open a hierarchy from three files with one nonexistent file
 	 */
@@ -517,21 +517,21 @@ void continue_proc(w, tag, reason)
 		OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
 		sprintf(uidname[2], "OpenH_mf3");
 		OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
-		OpenHierarchyInfo[OH_info_cnt].actual_return = 	
+		OpenHierarchyInfo[OH_info_cnt].actual_return =
 						MrmOpenHierarchyPerDisplay(
 							display,
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
-			/* 
-			 * For each widget, change the label string and the 
-			 * position so that it is visually distinguished from 
+			/*
+			 * For each widget, change the label string and the
+			 * position so that it is visually distinguished from
 			 * the other instances of the same widget.
 			 */
 			message = XmStringCreateLtoR("OH_mf1 *B* is completed.  ",
@@ -603,13 +603,13 @@ void continue_proc(w, tag, reason)
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Replace the instruction message with "valid test 2" message
 	 */
-	
+
 		message = XmStringCreateLtoR(msg_valid_tst2, XmSTRING_DEFAULT_CHARSET);
-	
+
 		nargs = 0;
 		XtSetArg(args[nargs], XmNmessageString, message); nargs++;
 		XtSetValues(widgetmain, args, nargs);
@@ -618,11 +618,11 @@ void continue_proc(w, tag, reason)
     else if(iteration == FINISH)
     {
 		iteration++;
-	
+
 	/*
 	 * Replace the instruction message with test end message
 	 */
-	
+
 		summary_msg = summary(NUM_TESTS,
 				      TEST_DESCRIP_LENGTH,
 				      OpenHierarchyInfo);
@@ -631,7 +631,7 @@ void continue_proc(w, tag, reason)
 
 		message = XmStringCreateLtoR(summary_msg, XmSTRING_DEFAULT_CHARSET);
 		XtFree(summary_msg);
-	
+
 		nargs = 0;
 		XtSetArg(args[nargs], XmNmessageString, message); nargs++;
 		XtSetValues(widgetmain, args, nargs);

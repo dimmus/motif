@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -60,42 +60,42 @@ static char rcsid[] = "$TOG: MenuUtil.c /main/16 1999/05/13 15:57:21 mgreess $"
 
 /********    Static Function Declarations    ********/
 
-static void MenuTraverse( 
+static void MenuTraverse(
                         Widget w,
                         XEvent *event,
                         XmTraversalDirection direction) ;
-static void GadgetCleanup( 
+static void GadgetCleanup(
                         XmRowColumnWidget rc,
                         XmGadget oldActiveChild) ;
-static Boolean WrapRight( 
+static Boolean WrapRight(
                         XmRowColumnWidget rc) ;
-static Boolean WrapLeft( 
+static Boolean WrapLeft(
                         XmRowColumnWidget rc) ;
-static void LocateChild( 
+static void LocateChild(
                         XmRowColumnWidget rc,
                         Widget wid,
                         XmTraversalDirection direction) ;
-static void MoveDownInMenuBar( 
+static void MoveDownInMenuBar(
                         XmRowColumnWidget rc,
                         Widget pw) ;
-static void MoveLeftInMenuBar( 
+static void MoveLeftInMenuBar(
                         XmRowColumnWidget rc,
                         Widget pw) ;
-static void MoveRightInMenuBar( 
+static void MoveRightInMenuBar(
                         XmRowColumnWidget rc,
                         Widget pw) ;
-static void FindNextMenuBarItem( 
+static void FindNextMenuBarItem(
                         XmRowColumnWidget menubar) ;
-static void FindPrevMenuBarItem( 
+static void FindPrevMenuBarItem(
                         XmRowColumnWidget menubar) ;
-static Boolean ValidateMenuBarItem( 
+static Boolean ValidateMenuBarItem(
                         Widget oldActiveChild,
                         Widget newActiveChild) ;
-static Boolean FindNextMenuBarCascade( 
+static Boolean FindNextMenuBarCascade(
                         XmRowColumnWidget menubar) ;
-static Boolean FindPrevMenuBarCascade( 
+static Boolean FindPrevMenuBarCascade(
                         XmRowColumnWidget menubar) ;
-static Boolean ValidateMenuBarCascade( 
+static Boolean ValidateMenuBarCascade(
                         Widget oldActiveChild,
                         Widget newMenuChild) ;
 
@@ -118,23 +118,23 @@ _XmIsActiveTearOff (
 /*
  * Call XtGrabPointer with retry
  */
-int 
+int
 _XmGrabPointer(
 	Widget widget,
-	Bool owner_events, 
-	unsigned int event_mask, 
-	int pointer_mode, 
-	int keyboard_mode, 
-	Window confine_to, 
-	Cursor cursor, 
+	Bool owner_events,
+	unsigned int event_mask,
+	int pointer_mode,
+	int keyboard_mode,
+	Window confine_to,
+	Cursor cursor,
 	Time time )
 {
    register int status = 0, retry;
 
    for (retry=0; retry < 5; retry++)
    {
-      if ((status = XtGrabPointer(widget, owner_events, event_mask, 
-         			  pointer_mode, keyboard_mode, confine_to, 
+      if ((status = XtGrabPointer(widget, owner_events, event_mask,
+         			  pointer_mode, keyboard_mode, confine_to,
 				  cursor, time)) == GrabSuccess)
 	 break;
 
@@ -149,19 +149,19 @@ _XmGrabPointer(
 /*
  * Call XtGrabKeyboard with retry
  */
-int 
+int
 _XmGrabKeyboard(
 	Widget widget,
-	Bool owner_events, 
+	Bool owner_events,
 	int pointer_mode,
-	int keyboard_mode, 
+	int keyboard_mode,
 	Time time )
 {
    register int status = 0, retry;
 
    for (retry=0; retry < 5; retry++)
    {
-      if ((status = XtGrabKeyboard(widget, owner_events, 
+      if ((status = XtGrabKeyboard(widget, owner_events,
          pointer_mode, keyboard_mode, time)) == GrabSuccess)
 	 break;
       XmeMicroSleep(1000);
@@ -173,7 +173,7 @@ _XmGrabKeyboard(
 }
 
 
-void 
+void
 _XmMenuSetInPMMode (
 	Widget wid,
 #if NeedWidePrototypes
@@ -219,7 +219,7 @@ _XmSetMenuTraversal(
 
 
 void
-_XmLeafPaneFocusOut( 
+_XmLeafPaneFocusOut(
 	Widget wid )
 {
    XEvent fo_event;
@@ -228,7 +228,7 @@ _XmLeafPaneFocusOut(
 
    /* find the leaf pane */
    while (RC_PopupPosted(rc))
-     rc = (XmRowColumnWidget) 
+     rc = (XmRowColumnWidget)
        ((XmMenuShellWidget)RC_PopupPosted(rc))->composite.children[0];
 
    fo_event.type = FocusOut;
@@ -270,7 +270,7 @@ _XmMenuHelp(
 
    if (!_XmIsEventUnique(event) ||
        (!RC_IsArmed(rc) && !((RC_Type(rc) == XmMENU_OPTION) ||
-			     (RC_Type(rc) == XmMENU_PULLDOWN)))) 
+			     (RC_Type(rc) == XmMENU_PULLDOWN))))
      return;
 
    if (!_XmGetInDragMode ((Widget)rc))
@@ -285,7 +285,7 @@ _XmMenuHelp(
    }
    else
    {
-     if ((gadget = (XmGadget) 
+     if ((gadget = (XmGadget)
 	  XmObjectAtPoint((Widget) rc, event->xkey.x, event->xkey.y)) != NULL)
         _XmDispatchGadgetInput( (Widget) gadget, event, XmHELP_EVENT);
      else
@@ -297,7 +297,7 @@ _XmMenuHelp(
    _XmRecordEvent(event);
 }
 
-static void 
+static void
 MenuTraverse(
         Widget w,
         XEvent *event,
@@ -317,7 +317,7 @@ MenuTraverse(
    else
       return;
 
-   if ((RC_Type(parent) == XmMENU_POPUP) || 
+   if ((RC_Type(parent) == XmMENU_POPUP) ||
        (RC_Type(parent) == XmMENU_PULLDOWN) ||
        (RC_Type(parent) == XmMENU_BAR))
    {
@@ -328,7 +328,7 @@ MenuTraverse(
 }
 
 /* ARGSUSED */
-void 
+void
 _XmMenuTraverseLeft(
         Widget wid,
         XEvent *event,
@@ -342,7 +342,7 @@ _XmMenuTraverseLeft(
 }
 
 /* ARGSUSED */
-void 
+void
 _XmMenuTraverseRight(
         Widget wid,
         XEvent *event,
@@ -356,7 +356,7 @@ _XmMenuTraverseRight(
 }
 
 /* ARGSUSED */
-void 
+void
 _XmMenuTraverseUp(
         Widget wid,
         XEvent *event,
@@ -370,7 +370,7 @@ _XmMenuTraverseUp(
 }
 
 /* ARGSUSED */
-void 
+void
 _XmMenuTraverseDown(
         Widget wid,
         XEvent *event,
@@ -384,7 +384,7 @@ _XmMenuTraverseDown(
 }
 
 /* ARGSUSED */
-void 
+void
 _XmMenuEscape(
         Widget w,
         XEvent *event,
@@ -414,7 +414,7 @@ _XmMenuEscape(
 	  menu_shell_class.popdownOne))(w, event, NULL, NULL);
 }
 
-void 
+void
 _XmRC_GadgetTraverseDown(
         Widget wid,
         XEvent *event,
@@ -428,7 +428,7 @@ _XmRC_GadgetTraverseDown(
       _XmMenuTraverseDown((Widget) gadget, event, param, num_param);
 }
 
-void 
+void
 _XmRC_GadgetTraverseUp(
         Widget wid,
         XEvent *event,
@@ -442,7 +442,7 @@ _XmRC_GadgetTraverseUp(
       _XmMenuTraverseUp((Widget) gadget, event, param, num_param);
 }
 
-void 
+void
 _XmRC_GadgetTraverseLeft(
         Widget wid,
         XEvent *event,
@@ -459,11 +459,11 @@ _XmRC_GadgetTraverseLeft(
     */
    if (gadget)
       _XmMenuTraverseLeft((Widget) gadget, event, param, num_param);
-   else 
+   else
       _XmMenuTraverseLeft((Widget) rc, event, param, num_param);
 }
 
-void 
+void
 _XmRC_GadgetTraverseRight(
         Widget wid,
         XEvent *event,
@@ -480,7 +480,7 @@ _XmRC_GadgetTraverseRight(
     */
    if (gadget)
       _XmMenuTraverseRight((Widget) gadget, event, param, num_param);
-   else 
+   else
       _XmMenuTraverseRight((Widget) rc, event, param, num_param);
 }
 
@@ -490,7 +490,7 @@ _XmRC_GadgetTraverseRight(
  * of the highlighting ourselves, since the gadget will not get a focus
  * event.
  */
-static void 
+static void
 GadgetCleanup(
         XmRowColumnWidget rc,
         XmGadget oldActiveChild )
@@ -543,15 +543,15 @@ WrapLeft (
    Widget oldActiveChild = rc->manager.active_child;
    Boolean done = False;
 
-   /* 
-    * If we're the topmost pulldown menupane from a menubar, then unpost 
-    * and move to the next available item in the menubar, and post its 
+   /*
+    * If we're the topmost pulldown menupane from a menubar, then unpost
+    * and move to the next available item in the menubar, and post its
     * submenu.
     */
    if (XmIsMenuShell(XtParent(rc)) &&
-       (RC_Type (rc) != XmMENU_POPUP) && RC_CascadeBtn(rc) && 
+       (RC_Type (rc) != XmMENU_POPUP) && RC_CascadeBtn(rc) &&
        (RC_Type (XtParent(RC_CascadeBtn(rc))) == XmMENU_BAR) &&
-       (FindPrevMenuBarCascade((XmRowColumnWidget) 
+       (FindPrevMenuBarCascade((XmRowColumnWidget)
                                       XtParent(RC_CascadeBtn(rc)))))
    {
       GadgetCleanup(rc, (XmGadget) oldActiveChild);
@@ -566,7 +566,7 @@ WrapLeft (
             XmIsMenuShell(XtParent(rc)))
    {
       (*(((XmMenuShellClassRec *)xmMenuShellWidgetClass)->
-                  menu_shell_class.popdownOne)) (XtParent(rc), NULL, NULL, 
+                  menu_shell_class.popdownOne)) (XtParent(rc), NULL, NULL,
                                                  NULL);
       done = True;
    }
@@ -587,7 +587,7 @@ LocateChild (
    Widget nextWidget;
 
    /* special case a popped up submenu with no traversable items */
-   if (XmIsRowColumn(wid) && 
+   if (XmIsRowColumn(wid) &&
        ((XmManagerWidget) wid)->manager.active_child == 0)
    {
      if (direction == XmTRAVERSE_LEFT)
@@ -615,14 +615,14 @@ LocateChild (
 	   (wid->core.y >= nextWidget->core.y + nextWidget->core.height))
 	 done = WrapRight(rc);
      }
-     
+
      if (!done)
        _XmMgrTraversal (nextWidget, XmTRAVERSE_CURRENT);
    }
 
 }
 
- void 
+ void
 _XmMenuTraversalHandler(
         Widget w,
         Widget pw,
@@ -642,19 +642,19 @@ _XmMenuTraversalHandler(
    if (RC_Type(rc) != XmMENU_BAR)
    {
       /* check for cascading into a submenu */
-      if (direction == XmTRAVERSE_RIGHT && 
-          XmIsCascadeButtonGadget(pw) && CBG_Submenu(pw)) 
+      if (direction == XmTRAVERSE_RIGHT &&
+          XmIsCascadeButtonGadget(pw) && CBG_Submenu(pw))
       {
          (*(((XmGadgetClassRec *)XtClass(pw))->gadget_class.
             arm_and_activate))( (Widget) pw, NULL, NULL, NULL);
       }
-      else if (direction == XmTRAVERSE_RIGHT && 
+      else if (direction == XmTRAVERSE_RIGHT &&
                XmIsCascadeButton(pw) && CB_Submenu(pw))
       {
          (*(((XmPrimitiveClassRec *)XtClass(pw))->primitive_class.
              arm_and_activate)) ((Widget) pw, NULL, NULL, NULL);
       }
-      
+
       else
          LocateChild (rc, pw, direction);
    }
@@ -670,7 +670,7 @@ _XmMenuTraversalHandler(
           }
 
           case XmTRAVERSE_LEFT:
-          {	
+          {
 	    MoveLeftInMenuBar(rc, pw);
 	    break;
           }
@@ -680,7 +680,7 @@ _XmMenuTraversalHandler(
 	    MoveRightInMenuBar(rc, pw);
 	    break;
           }
-	  
+
           case XmTRAVERSE_UP:
 	  default:
 	     break;
@@ -694,7 +694,7 @@ _XmMenuTraversalHandler(
  * cause us to post the menupane associated with the active cascade button
  * in the menubar.
  */
-static void 
+static void
 MoveDownInMenuBar(
         XmRowColumnWidget rc,
         Widget pw )
@@ -716,7 +716,7 @@ MoveDownInMenuBar(
     else if (XmIsGadget(pw))
     {
         XmGadgetClassRec * gad;
-      
+
 	CBG_SetTraverse (pw, TRUE);
         gad = (XmGadgetClassRec *)XtClass(pw);
         (*(gad->gadget_class.arm_and_activate)) ((Widget) pw, NULL,
@@ -726,7 +726,7 @@ MoveDownInMenuBar(
 }
 
 /* ARGSUSED */
-static void 
+static void
 MoveLeftInMenuBar(
         XmRowColumnWidget rc,
         Widget pw )
@@ -741,7 +741,7 @@ MoveLeftInMenuBar(
       /* Move to the previous item in the menubar */
       FindPrevMenuBarItem(rc);
    }
-   else 
+   else
    {
       /* Move to the previous item in the menubar */
       mst->MU_CurrentMenuChild = NULL;
@@ -749,13 +749,13 @@ MoveLeftInMenuBar(
    }
 }
 
-static void 
+static void
 MoveRightInMenuBar(
         XmRowColumnWidget rc,
         Widget pw )
 {
    XmMenuState mst = _XmGetMenuState((Widget)rc);
-   
+
    if ((rc->manager.active_child == NULL) &&
         ((XmIsCascadeButtonGadget(pw) && !CBG_Submenu(pw)) ||
         (XmIsCascadeButton(pw) && !CB_Submenu(pw))))
@@ -774,7 +774,7 @@ MoveRightInMenuBar(
 /*
  * Find the next cascade button in the menubar which can be traversed to.
  */
-static void 
+static void
 FindNextMenuBarItem(
         XmRowColumnWidget menubar )
 {
@@ -814,7 +814,7 @@ FindNextMenuBarItem(
 /*
  * Find the previous cascade button in the menubar which can be traversed to.
  */
-static void 
+static void
 FindPrevMenuBarItem(
         XmRowColumnWidget menubar )
 {
@@ -848,7 +848,7 @@ FindPrevMenuBarItem(
    }
 }
 
-static Boolean 
+static Boolean
 ValidateMenuBarItem (
 	Widget oldActiveChild,
         Widget newActiveChild)
@@ -888,7 +888,7 @@ ValidateMenuBarItem (
 /*
  * Find the next hierarchy in the menubar which can be traversed to.
  */
-static Boolean 
+static Boolean
 FindNextMenuBarCascade(
         XmRowColumnWidget menubar )
 {
@@ -933,7 +933,7 @@ FindNextMenuBarCascade(
 /*
  * Find the previous hierarchy in the menubar which can be traversed to.
  */
-static Boolean 
+static Boolean
 FindPrevMenuBarCascade(
         XmRowColumnWidget menubar )
 {
@@ -973,7 +973,7 @@ FindPrevMenuBarCascade(
 }
 
 /*ARGSUSED*/
-static Boolean 
+static Boolean
 ValidateMenuBarCascade (Widget oldActiveChild, /* unused */
 			Widget newMenuChild)
 {
@@ -1040,7 +1040,7 @@ ValidateMenuBarCascade (Widget oldActiveChild, /* unused */
   * don't post the menu! This will ensure grabs active during a posted menu.
   * This will help consistency by preventing simultaneously posted menus.
   */
-int 
+int
 _XmMenuGrabKeyboardAndPointer(
       Widget widget,
       Time time )

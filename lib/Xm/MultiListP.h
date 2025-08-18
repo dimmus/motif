@@ -130,7 +130,7 @@ typedef struct _XmI18ListPart {
     short num_rows;		/* number of rows in the list. */
     XmMultiListRowInfo *row_data;/* Data to put into each column. */
     Boolean first_col_pixmaps;	/* Should we put mini_icons in the first
-				   column of each entry? */		
+				   column of each entry? */
     XmFontList font_list;	/* This widget's font list. */
 
     Widget v_bar, h_bar;	/* Scrollbars that may be used
@@ -149,17 +149,17 @@ typedef struct _XmI18ListPart {
     unsigned char string_direction;
     unsigned char alignment;
 
-    /* 
+    /*
      * Private State
      */
 
     short * column_widths;	/* Width of each column. */
-    short end;			/* The non-anchor end point. */ 
-    short anchor;		/* The anchor point for the extended 
+    short end;			/* The non-anchor end point. */
+    short anchor;		/* The anchor point for the extended
 				   selection. */
 
     int sep_y;			/*location of the top of the separator line.*/
-    
+
     short title_row_height;	/* height of title row */
     short row_height;	/* height of all other data rows */
 
@@ -185,12 +185,12 @@ typedef struct _XmI18ListPart {
 
     Pixel entry_background_pixel;
     Boolean entry_background_use;
-    GC entry_background_gc;			
-    GC entry_background_fill_gc;			
-    GC entry_background_stippled_gc;		
-    GC entry_background_stippled_rev_gc;	
-    GC entry_background_inv_gc;			
-    GC entry_background_rev_gc;			
+    GC entry_background_gc;
+    GC entry_background_fill_gc;
+    GC entry_background_stippled_gc;
+    GC entry_background_stippled_rev_gc;
+    GC entry_background_inv_gc;
+    GC entry_background_rev_gc;
 
     Boolean check_set_render_table; /* used in CheckSetRenderTable */
 
@@ -275,7 +275,7 @@ typedef struct _XmI18ListRec	*XmI18ListWidget;
 extern XmMultiListClassRec xmMultiListClassRec;
 
 extern XmI18ListClassRec xiI18ListClassRec;
-extern WidgetClass xmI18ListWidgetClass; 
+extern WidgetClass xmI18ListWidgetClass;
 
 #if defined(__cplusplus)
 }

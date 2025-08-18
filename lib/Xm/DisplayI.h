@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDisplayI_h
 #define _XmDisplayI_h
 
@@ -45,17 +45,17 @@ typedef struct _XmDisplayEventQueryStruct {
 
 /********    Private Function Declarations    ********/
 
-extern XmDropSiteManagerObject _XmGetDropSiteManagerObject( 
+extern XmDropSiteManagerObject _XmGetDropSiteManagerObject(
                         XmDisplay xmDisplay) ;
-extern unsigned char _XmGetDragProtocolStyle( 
+extern unsigned char _XmGetDragProtocolStyle(
                         Widget w) ;
-extern unsigned char _XmGetDragTrackingMode( 
+extern unsigned char _XmGetDragTrackingMode(
                         Widget w) ;
-extern Widget _XmGetDragContextFromHandle( 
+extern Widget _XmGetDragContextFromHandle(
                         Widget w,
                         Atom iccHandle) ;
 extern WidgetClass _XmGetXmDisplayClass( void ) ;
-extern WidgetClass _XmSetXmDisplayClass( 
+extern WidgetClass _XmSetXmDisplayClass(
                         WidgetClass wc) ;
 
 /********    End Private Function Declarations    ********/
@@ -66,4 +66,3 @@ extern WidgetClass _XmSetXmDisplayClass(
 
 #endif /* _XmDisplayI_h */
 /* DON'T ADD STUFF AFTER THIS #endif */
-

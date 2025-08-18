@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Scrollbar9.c /main/8 1999/01/15 12:36:59 jff $"
@@ -50,7 +50,7 @@ Widget sbw;
    int maximum;
    int value;
    int slider_size;
-   
+
    n = 0;
    XtSetArg(args[n], XmNminimum, &minimum);	n++;
    XtSetArg(args[n], XmNmaximum, &maximum);	n++;
@@ -90,7 +90,7 @@ char **argv;
   DumpData(scrollbar);
 
   CommonPause();
-  XtDestroyWidget(scrollbar); 
+  XtDestroyWidget(scrollbar);
 
   printf("creating with the maximum to 50 and value to 60\n");
   n = 0;
@@ -106,7 +106,7 @@ char **argv;
   DumpData(scrollbar);
 
   CommonPause();
-  XtDestroyWidget(scrollbar); 
+  XtDestroyWidget(scrollbar);
 
   printf("creating with the value of 110\n");
   n = 0;
@@ -121,7 +121,7 @@ char **argv;
   DumpData(scrollbar);
 
   CommonPause();
-  XtDestroyWidget(scrollbar); 
+  XtDestroyWidget(scrollbar);
 
   printf("creating with the maximum of 5\n");
   n = 0;
@@ -136,7 +136,7 @@ char **argv;
   DumpData(scrollbar);
 
   CommonPause();
-  XtDestroyWidget(scrollbar); 
+  XtDestroyWidget(scrollbar);
 
   printf("creating with the value of 0 and the min of 10\n");
   n = 0;
@@ -152,7 +152,7 @@ char **argv;
   DumpData(scrollbar);
 
   CommonPause();
-  XtDestroyWidget(scrollbar); 
+  XtDestroyWidget(scrollbar);
 
   printf("creating with the min to 20\n");
   n = 0;
@@ -185,7 +185,7 @@ caddr_t call_data;
   Arg args[10];
   int n;
 
-  XmScrollBarCallbackStruct * call_value = 
+  XmScrollBarCallbackStruct * call_value =
     (XmScrollBarCallbackStruct *) call_data;
 
   reason = call_value -> reason;

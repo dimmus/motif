@@ -1,5 +1,5 @@
 # $XConsortium: TextWcs2.scr /main/5 1995/07/17 20:43:27 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,24 +20,24 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  @) A single line text widget with the string 'Sample Text' will appear in
-#     the test window. The text is red on a white background. 
+#     the test window. The text is red on a white background.
 #  #) Move the pointer into the text widget and press ANY key. No matter
-#     what key was pressed, an 'A' will appear. 
+#     what key was pressed, an 'A' will appear.
 LocatePointer Text1 RTextChar 5
 ClickKey Kr
 CompareVisual Text1
 
-#  #) Press another key. This time a 'B' will appear in the text widget. 
+#  #) Press another key. This time a 'B' will appear in the text widget.
 ClickKey Kp
 CompareVisual Text1
 
-#  #) Repeat this cycle and you will print out the entire alphabet. 
+#  #) Repeat this cycle and you will print out the entire alphabet.
 InputString "this text will never appear"
 CompareVisual Text1
 

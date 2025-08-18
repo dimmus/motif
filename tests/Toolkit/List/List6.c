@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List6.c /main/9 1995/07/13 18:19:32 drk $"
@@ -40,7 +40,7 @@ void  main (argc, argv)
     Arg                	args[MAX_ARGS];
     XmString           	tcs[1], ItemList[NITEMS],
     			ItemList2[NITEMS];
-    Widget		BulletinB, List2, sw, horiz_sb, vert_sb; 
+    Widget		BulletinB, List2, sw, horiz_sb, vert_sb;
     XmFontList         	newfontlist;
     Dimension		width;
 
@@ -48,7 +48,7 @@ void  main (argc, argv)
     static char translation_table[] = "<Key>d: DeleteMe()";
 
     CommonTestInit(argc, argv);
-    
+
     newfontlist = CommonGetFontList("9x15bold");
 
     n = 0;
@@ -79,17 +79,17 @@ void  main (argc, argv)
     List1 = XmCreateScrolledList(BulletinB, "List1", args, n);
     XtManageChild(List1);
 
-    XtAddCallback(List1, XmNmultipleSelectionCallback, 
+    XtAddCallback(List1, XmNmultipleSelectionCallback,
 		  (XtCallbackProc) MSelCB, NULL);
-    XtAddCallback(List1, XmNextendedSelectionCallback, 
+    XtAddCallback(List1, XmNextendedSelectionCallback,
 		  (XtCallbackProc) ESelCB, NULL);
-    XtAddCallback(List1, XmNdefaultActionCallback, 
+    XtAddCallback(List1, XmNdefaultActionCallback,
 		  (XtCallbackProc) DefACB, NULL);
-    XtAddCallback(List1, XmNsingleSelectionCallback, 
+    XtAddCallback(List1, XmNsingleSelectionCallback,
 		  (XtCallbackProc) SSelCB, NULL);
-    XtAddCallback(List1, XmNbrowseSelectionCallback, 
+    XtAddCallback(List1, XmNbrowseSelectionCallback,
 		  (XtCallbackProc) BSelCB, NULL);
-    XtAddCallback(List1, XmNhelpCallback, 
+    XtAddCallback(List1, XmNhelpCallback,
 		  (XtCallbackProc) HelpCB, NULL);
 
     n = 0;
@@ -113,7 +113,7 @@ void  main (argc, argv)
 
     printf("ScrolledWindow: width = %d\n", width);
 
-    XmListSetAddMode(List1, True);  
+    XmListSetAddMode(List1, True);
 
     CommonPause();
     CommonPause();
@@ -149,17 +149,17 @@ void  main (argc, argv)
     if (!XmProcessTraversal(List2, XmTRAVERSE_CURRENT))
 	printf("XmProcessTraversal (XmTRAVERSE_CURRENT) did not work\n");
 
-    XtAddCallback(List2, XmNmultipleSelectionCallback, 
+    XtAddCallback(List2, XmNmultipleSelectionCallback,
 		  (XtCallbackProc) MSelCB, NULL);
-    XtAddCallback(List2, XmNextendedSelectionCallback, 
+    XtAddCallback(List2, XmNextendedSelectionCallback,
 		  (XtCallbackProc) ESelCB, NULL);
-    XtAddCallback(List2, XmNdefaultActionCallback, 
+    XtAddCallback(List2, XmNdefaultActionCallback,
 		  (XtCallbackProc) DefACB, NULL);
-    XtAddCallback(List2, XmNsingleSelectionCallback, 
+    XtAddCallback(List2, XmNsingleSelectionCallback,
 		  (XtCallbackProc) SSelCB, NULL);
-    XtAddCallback(List2, XmNbrowseSelectionCallback, 
+    XtAddCallback(List2, XmNbrowseSelectionCallback,
 		  (XtCallbackProc) BSelCB, NULL);
-    XtAddCallback(List2, XmNhelpCallback, 
+    XtAddCallback(List2, XmNhelpCallback,
 		  (XtCallbackProc) HelpCB, NULL);
 
     CommonPause();
@@ -224,7 +224,7 @@ static XtCallbackProc ESelCB(Widget w, caddr_t client_data,
 }
 
 
-static void DeleteMe(Widget w, XEvent *event, String *params, 
+static void DeleteMe(Widget w, XEvent *event, String *params,
 		     Cardinal num_params)
 {
     XmString 	*sel_item;
@@ -237,7 +237,7 @@ static void DeleteMe(Widget w, XEvent *event, String *params,
     XtGetValues(w, args, n);
 
 
-    if ( sel_item_count != 0 ) 
+    if ( sel_item_count != 0 )
     	XmListDeleteItem(w, sel_item[0]);
     else
 	printf("No Seleted Items, please make a selection\n");

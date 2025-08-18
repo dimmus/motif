@@ -22,7 +22,7 @@
 #
 # HISTORY
 
-# 
+#
 #	This portion of the script will run the cutpaste2 test. Two
 #	copies of the client cutpaste2a will be invoked.  This
 #	will test cut/paste interaction between two clients.
@@ -50,4 +50,3 @@ kill -9 $PID2
 
 rm Cutpaste2a1
 rm Cutpaste2a2
-

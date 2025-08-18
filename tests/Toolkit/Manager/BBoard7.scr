@@ -1,5 +1,5 @@
 # $XConsortium: BBoard7.scr /main/6 1995/07/17 20:23:53 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,47 +20,46 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A BulletinBoard should appear on the screen.
-# The BulletinBoard contains four PushButton children: PushButton1 
-#  - PushButton4. 
-#  PushButton1 has coordinates (0,0); 
-#  PushButton2 has coordinates (0,100). 
-#  PushButton3 has coordinates (100,0); 
+# The BulletinBoard contains four PushButton children: PushButton1
+#  - PushButton4.
+#  PushButton1 has coordinates (0,0);
+#  PushButton2 has coordinates (0,100).
+#  PushButton3 has coordinates (100,0);
 #  PushButton4 has coordinates (100,100).
 
 CompareVisual BBoard
 Continue
 
-# The PushButtons should have new coordinates. 
-# PushButton1 should have its original coordinates of (0,0). 
-# PushButton2 should now have coordinates of (200,0). 
-# PushButton3 should now have coordinates of (0,200). 
+# The PushButtons should have new coordinates.
+# PushButton1 should have its original coordinates of (0,0).
+# PushButton2 should now have coordinates of (200,0).
+# PushButton3 should now have coordinates of (0,200).
 # PushButton4 should now have coordinates of (200,200).
 
 CompareVisual BBoard
 Continue
 
-# All of the PushButtons should have a new size. 
-# They should all have a width of 100 and a height of 100. 
+# All of the PushButtons should have a new size.
+# They should all have a width of 100 and a height of 100.
 
 CompareVisual BBoard
 Continue
 
-# PushButton4 should have a new size. 
-# It should have a width of 200 and a height of 200. 
+# PushButton4 should have a new size.
+# It should have a width of 200 and a height of 200.
 
 CompareVisual BBoard
 Continue
 
-# PushButton4 should have a new size. 
+# PushButton4 should have a new size.
 # It should have a width of 300 and a height of 300.
 
 CompareVisual Child1
 Continue
 Exit
-

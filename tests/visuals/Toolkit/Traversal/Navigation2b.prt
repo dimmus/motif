@@ -23,24 +23,24 @@
 #
 # HISTORY
 TRACE:(1) WindowFocus Shell1
-TRACE:(2) LocatePointer Green1  
-TRACE:(3) ClickMB Btn1 
+TRACE:(2) LocatePointer Green1
+TRACE:(3) ClickMB Btn1
 Focus on Green1
-TRACE:(4) CompareVisual Form2 
+TRACE:(4) CompareVisual Form2
 TRACE:(5) ClickKey KSpace
 Focus on Green2
 TRACE:(6) ClickKey KSpace
 Focus on Green3
 TRACE:(7) ClickKey KSpace
 Focus on Green4
-TRACE:(8) CompareVisual Form2 
+TRACE:(8) CompareVisual Form2
 TRACE:(9) ClickKey KTab
 TRACE:(10) ClickKey KDown
 TRACE:(11) ClickKey KSpace
 Focus on Blue4
-TRACE:(12) CompareVisual Form1 
-TRACE:(13) LocatePointer Magenta6  
-TRACE:(14) ClickMB Btn1 
+TRACE:(12) CompareVisual Form1
+TRACE:(13) LocatePointer Magenta6
+TRACE:(14) ClickMB Btn1
 Focus on Magenta6
 TRACE:(15) ClickKey KSpace
 Focus on Magenta7
@@ -60,7 +60,7 @@ TRACE:(22) ClickKey KSpace
 Focus on Magenta5
 TRACE:(23) ClickKey KSpace
 Focus on Brown1
-TRACE:(24) CompareVisual Form1 
+TRACE:(24) CompareVisual Form1
 TRACE:(25) ClickKey KTab
 TRACE:(26) ClickKey KTab
 TRACE:(27) ClickKey KTab
@@ -70,6 +70,6 @@ TRACE:(30) ClickKey KTab
 TRACE:(31) ClickKey KTab
 TRACE:(32) ClickKey KTab
 TRACE:(33) ClickKey <Shift> KTab
-TRACE:(34) CompareVisual Form 
+TRACE:(34) CompareVisual Form
 TRACE:(35) Exit
 Exiting Test...Please Standby...

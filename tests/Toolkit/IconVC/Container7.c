@@ -64,12 +64,12 @@ UnselectAll( Widget w )
 
     return;
 }
- 
+
 
   int
 main(int argc, char **argv)
 {
-    Widget              ScrollWin, Container, *IconGad;   
+    Widget              ScrollWin, Container, *IconGad;
     int			i;
     Cardinal		n;
     Arg			args[MAX_ARGS];
@@ -99,7 +99,7 @@ main(int argc, char **argv)
 
 	n = 0 ;
 	sprintf(IconName, "IconGad%d", i);
-	icon_name = XmStringGenerate(IconName, NULL, XmCHARSET_TEXT, NULL); 
+	icon_name = XmStringGenerate(IconName, NULL, XmCHARSET_TEXT, NULL);
 
    	/* make icons from pixmap files */
 
@@ -131,7 +131,7 @@ main(int argc, char **argv)
 
 	n = 0 ;
 	sprintf(LabelName, "LabelName%d", i);
-	label_name = XmStringGenerate(LabelName, NULL, XmCHARSET_TEXT, NULL); 
+	label_name = XmStringGenerate(LabelName, NULL, XmCHARSET_TEXT, NULL);
 
 	XtSetArg(args[n], XmNx, PIXEL_X(i) ); n++;
 	XtSetArg(args[n], XmNy, PIXEL_Y(i) ); n++;

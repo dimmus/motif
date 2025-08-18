@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol1.c /main/8 1995/07/13 18:33:07 drk $"
@@ -55,7 +55,7 @@ char **argv;
 {
   register int  n;
   Arg args[MAX_ARGS];
-  
+
   CommonTestInit(argc, argv);
 
   n = 0;
@@ -84,8 +84,8 @@ char **argv;
   CreateRowColumn(Shell1, args, n);
   CommonPause();
   DestroyRowColumn();
-  
-  XtRealizeWidget(Shell1);    
+
+  XtRealizeWidget(Shell1);
   XtAppMainLoop(app_context);
 }
 
@@ -101,19 +101,19 @@ int numRCArgs;
   static  short         flag = 1;
   Dimension width;
   char buf[16];
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 200);                                  n++;
   XtSetArg(args[n], XmNy, 200);                                  n++;
   XtSetArg(args[n], XmNallowShellResize, True);                  n++;
   Shell = XmCreateDialogShell(Shell1, "RowCol1", args, n);
-  
+
   RowColumn = XmCreateRowColumn(Shell, "RowColumn1", RCArgList, numRCArgs);
   XtAddCallback (RowColumn, XmNentryCallback, EntryCallbackProc, NULL);
   XtManageChild(RowColumn);
-  
 
-    { 
+
+    {
       for (i = 0; i <= 5; i++)
 	{
           n = 0;
@@ -123,9 +123,9 @@ int numRCArgs;
 	  flag = 2;
         }
     }
-    { 
+    {
       for (i = 0; i <= 5; i++)
-	{   
+	{
 	  n = 0;
 	  sprintf (buf, "Child%d", i);
 	  XtSetArg(ChildArgList[n], XmNwidth, WIDTH); n++;
@@ -137,12 +137,12 @@ int numRCArgs;
 	  n = 0;
 	  XtSetArg(ChildArgList[n], XmNwidth, &width); n++;
 	  XtGetValues (Child[i], ChildArgList, n);
-	  printf("Width returned by GetValues for child %d is %d\n", 
+	  printf("Width returned by GetValues for child %d is %d\n",
 		 i, (int)width);
 	  flag = 1;
         }
     }
-  
+
 
   XtRealizeWidget(Shell);
 }

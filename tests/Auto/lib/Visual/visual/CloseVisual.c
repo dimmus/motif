@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CloseVisual.c /main/7 1995/07/14 11:47:57 drk $"
@@ -40,8 +40,8 @@ static char rcsid[] = "$XConsortium: CloseVisual.c /main/7 1995/07/14 11:47:57 d
 
         INPUTS
             none
-  
-        OUTPUTS 
+
+        OUTPUTS
             none
 
         RETURNS
@@ -71,7 +71,7 @@ void mvsCloseVisual()
                 fwrite_long(mvsImageFd,mvsFilePos[i]);
                 fwrite(mvsRecIdTable[i],sizeof(char),mvsRecIdLength[i],mvsImageFd);
             }
-            if (fseek(mvsImageFd,mvsBeginningOfImageFile,0) != 0) 
+            if (fseek(mvsImageFd,mvsBeginningOfImageFile,0) != 0)
                 AutoMessage(_AutoMessages[VISMSG33]);
             else
                 fwrite_long(mvsImageFd,(unsigned long)end_of_image_file);

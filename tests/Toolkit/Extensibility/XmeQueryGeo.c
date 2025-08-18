@@ -51,7 +51,7 @@ Widget		butt1, butt2;
 Widget		xmDisplay;
 XmString	default_str1, default_str2;
 
-int 
+int
 main (int argc, char **argv)
 {
   register int       n;
@@ -74,16 +74,16 @@ main (int argc, char **argv)
   XtRealizeWidget(Shell1);
 
   grid = XtVaCreateManagedWidget("Grid",
-				 exmGridWidgetClass, Shell1, 
+				 exmGridWidgetClass, Shell1,
 				 XmNwidth,  50,
 				 XmNheight, 50,
 				 XmNrows, 1,
 				 XmNcolumns, 2,
-				 NULL); 
+				 NULL);
 
   default_str1 = XmStringCreateLocalized("ONE");
   butt1 = XtVaCreateManagedWidget("butt1",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 50,
 				   XmNheight, 50,
 				   XmNalignment, XmALIGNMENT_CENTER,
@@ -92,7 +92,7 @@ main (int argc, char **argv)
 
   default_str2 = XmStringCreateLocalized("TWO");
   butt2 = XtVaCreateManagedWidget("butt2",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 50,
 				   XmNheight, 50,
 				   ExmNcompoundString, default_str2,

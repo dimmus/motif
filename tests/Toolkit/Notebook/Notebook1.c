@@ -106,20 +106,20 @@ main (int argc, char **argv)
           a = 1;
 	else
 
-	if (match (UserData,"1")) 
+	if (match (UserData,"1"))
 	  a=1;
-	else if (match (UserData,"2")) 
+	else if (match (UserData,"2"))
 	  a=2;
-	else if (match (UserData,"3")) 
+	else if (match (UserData,"3"))
 	  a=3;
-	else if (match (UserData,"4")) 
+	else if (match (UserData,"4"))
 	  a=4;
-	else if (match (UserData,"5")) 
+	else if (match (UserData,"5"))
 	  a=5;
         else if (match (UserData, "6"))
           a=6;
 
-	
+
 	/* determine Xt Name of Parent and create Parent */
 	sprintf (buf, "Parent%d", a);
 	Parent = XmCreateFrame(Shell1, buf, NULL, 0);
@@ -131,7 +131,7 @@ main (int argc, char **argv)
 	sprintf (buf, "Notebook%d", a);
 	Notebook  = XmCreateNotebook (Parent, buf, NULL, 0);
 	XtManageChild (Notebook);
-	XtAddCallback (Notebook, XmNpageChangedCallback, PageChanged, 
+	XtAddCallback (Notebook, XmNpageChangedCallback, PageChanged,
 		       (XtPointer)NULL);
 
 
@@ -191,7 +191,7 @@ CreateGetValuesPanel()
   Widget GetValuesPB[8], Label1;
   int i,n;
   Arg args[10];
-  static char *get_values[] = { "backPageNumber", 
+  static char *get_values[] = { "backPageNumber",
                        "backPageSize",
 		       "bindingWidth",
 		       "frameShadowThickness",
@@ -226,11 +226,11 @@ CreateGetValuesPanel()
    XtManageChildren (GetValuesPB,8);
 
 
-  XtAddCallback (GetValuesPB[0], XmNactivateCallback, GetBackPageNumber, 
+  XtAddCallback (GetValuesPB[0], XmNactivateCallback, GetBackPageNumber,
 		 (XtPointer)NULL);
 
-  XtAddCallback (GetValuesPB[1], XmNactivateCallback, GetBackPageSize, 
-		 (XtPointer)NULL); 
+  XtAddCallback (GetValuesPB[1], XmNactivateCallback, GetBackPageSize,
+		 (XtPointer)NULL);
 
   XtAddCallback (GetValuesPB[2], XmNactivateCallback, GetBindingWidth,
 		 (XtPointer)NULL);
@@ -305,7 +305,7 @@ GetBindingWidth (Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 void
-GetFrameShadowThickness (Widget w, XtPointer client_data, 
+GetFrameShadowThickness (Widget w, XtPointer client_data,
 			 XtPointer call_data)
 {
   Dimension frame_shadow_thickness;
@@ -323,7 +323,7 @@ GetFrameShadowThickness (Widget w, XtPointer client_data,
 
 
 void
-GetInnerMarginWidth (Widget w, XtPointer client_data, 
+GetInnerMarginWidth (Widget w, XtPointer client_data,
 			 XtPointer call_data)
 {
   Dimension inner_margin_width;
@@ -340,7 +340,7 @@ GetInnerMarginWidth (Widget w, XtPointer client_data,
 }
 
 void
-GetInnerMarginHeight (Widget w, XtPointer client_data, 
+GetInnerMarginHeight (Widget w, XtPointer client_data,
 			 XtPointer call_data)
 {
   Dimension inner_margin_height;
@@ -358,7 +358,7 @@ GetInnerMarginHeight (Widget w, XtPointer client_data,
 
 
 void
-GetMinorTabSpacing (Widget w, XtPointer client_data, 
+GetMinorTabSpacing (Widget w, XtPointer client_data,
 			 XtPointer call_data)
 {
   Dimension minor_tab_spacing;
@@ -375,7 +375,7 @@ GetMinorTabSpacing (Widget w, XtPointer client_data,
 }
 
 void
-GetMajorTabSpacing (Widget w, XtPointer client_data, 
+GetMajorTabSpacing (Widget w, XtPointer client_data,
 			 XtPointer call_data)
 {
   Dimension major_tab_spacing;
@@ -437,6 +437,3 @@ PageChanged (Widget w, XtPointer client_data, XtPointer call_data)
     }
 
 }
-
-
-

@@ -18,9 +18,9 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
-! 
+!
 
 !!
 !!  DEFAULT Mwm 1.2 RESOURCE DESCRIPTION FILE (system.mwmrc)
@@ -110,7 +110,7 @@ Buttons DefaultButtonBindings
 	<Btn3Down>	icon|frame	f.post_wmenu
 	<Btn3Down>	root		f.menu	DefaultRootMenu
 }
- 
+
 Buttons ExplicitButtonBindings
 {
 	<Btn1Down>	frame|icon	f.raise
@@ -122,7 +122,7 @@ Buttons ExplicitButtonBindings
 !	Alt<Btn3Down>	window|icon	f.move
 
 }
- 
+
 Buttons PointerButtonBindings
 {
 	<Btn1Down>	frame|icon	f.raise

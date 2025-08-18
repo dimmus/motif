@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: wmlutils.c /main/8 1995/08/29 11:11:24 drk $"
@@ -132,7 +132,7 @@ void wmlResizeHList (listptr, new_size)
     DynamicHandleListDefPtr	listptr;
     int				new_size;
 
-{    
+{
 
 ObjectHandleDefPtr	new_vec;	/* reallocated vector */
 
@@ -160,7 +160,7 @@ return;
 void wmlClearHList (listptr)
     DynamicHandleListDefPtr	listptr;
 
-{    
+{
 
 int		ndx;		/* current index in list */
 
@@ -426,5 +426,3 @@ while ( childref != NULL )
 return NULL;
 
 }
-
-

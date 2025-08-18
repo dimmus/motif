@@ -24,12 +24,12 @@
 # HISTORY
 #
 
-#   $XConsortium: Scrollbar1.scr /main/4 1995/07/13 19:13:34 drk $ 
+#   $XConsortium: Scrollbar1.scr /main/4 1995/07/13 19:13:34 drk $
 
 
-# A client with a vertical scrollbar should appear. 
+# A client with a vertical scrollbar should appear.
 # Press and hold down MB1 on the bottom arrow.  The slider should
-#  move toward the bottom of the scrollbar.  Release MB1. 
+#  move toward the bottom of the scrollbar.  Release MB1.
 
 LocatePointer ScrollBar1 RDownOrRightArrow
 PressMB Btn1
@@ -38,7 +38,7 @@ ReleaseMB Btn1
 CompareVisual ScrollBar1
 
 # Press and hold down MB1 on the top arrow.  The slider should
-# move toward the top of the scrollbar.  Release MB1. 
+# move toward the top of the scrollbar.  Release MB1.
 
 LocatePointer ScrollBar1 RUpOrLeftArrow
 PressMB Btn1
@@ -48,7 +48,7 @@ CompareVisual ScrollBar1
 
 # Press and hold down MB1 in the trough below the slider.
 # The slider should move down until it reaches the end of the scrollbar.
-# Release MB1. 
+# Release MB1.
 
 LocatePointer ScrollBar1 RDownOrRightSliderArea
 PressMB Btn1
@@ -58,7 +58,7 @@ CompareVisual ScrollBar1
 
 # Press and hold down MB1 in the trough above the slider.
 # The slider should move up until it reaches the end of the scrollbar.
-# Release MB1. 
+# Release MB1.
 
 LocatePointer ScrollBar1 RUpOrLeftSliderArea
 PressMB Btn1
@@ -67,7 +67,7 @@ ReleaseMB Btn1
 CompareVisual ScrollBar1
 
 # Press and hold down MB1 on the slider.  Drag the pointer up and
-# down.  The slider should follow the pointer.  Release MB1. 
+# down.  The slider should follow the pointer.  Release MB1.
 
 LocatePointer ScrollBar1 RSlider
 DragSliderValue Down Max Btn1
@@ -76,26 +76,26 @@ DragSliderValue Up Min Btn1
 CompareVisual ScrollBar1
 
 # Move the pointer so it is not on the slider and click MB2.
-# The slider should move to the pointer. 
+# The slider should move to the pointer.
 
 LocatePointer ScrollBar1 RDownOrRightSliderArea
 ClickMB Btn2
 CompareVisual ScrollBar1
 Continue
 
-# The scrollbar should now have a thin slider and tiny arrows. 
+# The scrollbar should now have a thin slider and tiny arrows.
 
 CompareVisual ScrollBar1
 Continue
 
 # There should now be a horizontal scrollbar near the top of the
 # client window.  The new scrollbar should overlap the vertical
-# scrollbar. 
+# scrollbar.
 
 CompareVisual BulletinBoard1
 
 # Press and hold down MB1 on the right arrow.  The slider should
-# move to the right.  Release MB1. 
+# move to the right.  Release MB1.
 
 LocatePointer ScrollBar2 RDownOrRightArrow
 PressMB Btn1
@@ -104,7 +104,7 @@ ReleaseMB Btn1
 CompareVisual ScrollBar2
 
 # Press and hold down MB1 on the left arrow.  The slider should
-# move to the left.  Release MB1. 
+# move to the left.  Release MB1.
 
 LocatePointer ScrollBar2 RUpOrLeftArrow
 PressMB Btn1
@@ -114,7 +114,7 @@ CompareVisual ScrollBar2
 
 # Press and hold down MB1 in the trough to the right of
 # the slider.  The slider should move to the right until it reaches
-# the end of the scrollbar.  Release MB1. 
+# the end of the scrollbar.  Release MB1.
 
 LocatePointer ScrollBar2 RDownOrRightSliderArea
 PressMB Btn1
@@ -124,7 +124,7 @@ CompareVisual ScrollBar2
 
 # Press and hold down MB1 in the trough to the left of
 # the slider.  The slider should move to the left until it reaches
-# the end of the scrollbar.  Release MB1. 
+# the end of the scrollbar.  Release MB1.
 
 LocatePointer ScrollBar2 RUpOrLeftSliderArea
 PressMB Btn1
@@ -134,7 +134,7 @@ CompareVisual ScrollBar2
 
 # Press and hold down MB1 on the slider.  Drag the pointer to the
 # left and to the right.  The slider should follow the pointer.
-# Release MB1. 
+# Release MB1.
 
 LocatePointer ScrollBar2 RSlider
 DragSliderValue Right Max Btn1
@@ -143,17 +143,15 @@ DragSliderValue Left Min Btn1
 CompareVisual ScrollBar2
 Continue
 
-# The horizontal scrollbar should move to the right. 
+# The horizontal scrollbar should move to the right.
 
 CompareVisual BulletinBoard1
 Continue
 
 # A second horizontal scrollbar should appear near the bottom of
-# the client window. 
+# the client window.
 
 CompareVisual BulletinBoard1
 Continue
 
 Exit
-
-

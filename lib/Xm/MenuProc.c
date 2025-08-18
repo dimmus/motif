@@ -21,7 +21,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -51,7 +51,7 @@ static XtPointer menuProcEntry = NULL;
  * save the address of the menuProcedureEntry routine.
  */
 
-void 
+void
 _XmSaveMenuProcContext(
         XtPointer address )
 {
@@ -65,7 +65,7 @@ _XmSaveMenuProcContext(
  * menuProcedureEntry routine.  It is called by the buttons class init
  * routines.
  */
-XtPointer 
+XtPointer
 _XmGetMenuProcContext( void )
 {
    return menuProcEntry;
@@ -96,7 +96,7 @@ _XmSaveCoreClassTranslations(
     if (SaveTranslationsContext == 0)
 	SaveTranslationsContext = XUniqueContext();
 
-    XSaveContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext, 
+    XSaveContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext,
 	 	 (char *)(widget->core.widget_class->core_class.tm_table));
     _XmProcessUnlock();
 }
@@ -137,8 +137,8 @@ _XmRestoreCoreClassTranslations(
  *************************************************/
 
 /*ARGSUSED*/
-Time 
-_XmGetDefaultTime(Widget wid,	
+Time
+_XmGetDefaultTime(Widget wid,
 		  XEvent *event)
 {
   if (event == NULL)

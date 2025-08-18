@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /********************************************
  *
  *   No new fields need to be defined
@@ -66,14 +66,14 @@ externalref XmToggleButtonClassRec xmToggleButtonClassRec;
  ********************************************/
 
 typedef struct _XmToggleButtonPart
-{ 
+{
    unsigned char	ind_type;
    Boolean		visible;
    Dimension		spacing;
    Dimension		indicator_dim;
    Boolean		indicator_set;
-   Pixmap		on_pixmap; 
-   Pixmap		insen_pixmap; 
+   Pixmap		on_pixmap;
+   Pixmap		insen_pixmap;
    unsigned char	set;
    unsigned char	visual_set; /* used for visuals and does not reflect
                                         the true state of the button */
@@ -82,7 +82,7 @@ typedef struct _XmToggleButtonPart
    Pixel		select_color;
    GC			select_GC;
    GC			background_gc;
-   GC                   arm_GC;    /* used in menus when enableEtchedInMenu 
+   GC                   arm_GC;    /* used in menus when enableEtchedInMenu
 				      is set. */
    XtCallbackList 	value_changed_CB,
                         arm_CB,

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 /*
  * HISTORY
  */
@@ -51,15 +51,15 @@ extern void targetConvertCallback(Widget w, XtPointer ignore,
 				  XmConvertCallbackStruct *cs);
 extern void inputCallback(Widget w, XtPointer ignore,
 			  XmDrawingAreaCallbackStruct *cbstruct);
-extern void ListSelectItem(Widget w, XtPointer ignore, 
+extern void ListSelectItem(Widget w, XtPointer ignore,
 			   XmListCallbackStruct *listcb);
 extern void SetType(Widget w, char *in, XtPointer ignore);
 extern void SetFormat(Widget, char, XtPointer);
-extern void SetValue(Widget widget, char *ignore, 
+extern void SetValue(Widget widget, char *ignore,
 		     XmAnyCallbackStruct *callback_data);
-extern void RemoveValue(Widget widget, char *ignore, 
+extern void RemoveValue(Widget widget, char *ignore,
 		     XmAnyCallbackStruct *callback_data);
-extern void quitCB(Widget widget, char *ignore, 
+extern void quitCB(Widget widget, char *ignore,
 		     XmAnyCallbackStruct *callback_data);
 extern void setMode(Widget widget, int param, XmAnyCallbackStruct *);
 extern void cut(Widget widget, char *ignore, XmAnyCallbackStruct *);

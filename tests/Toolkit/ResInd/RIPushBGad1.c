@@ -60,25 +60,25 @@ char  **argv;
   XmString string;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
   XtSetValues(Shell1, args, n);
-  
+
   XtRealizeWidget(Shell1);
 
   n = 0;
-  Frame1 = XmCreateFrame(Shell1, "Frame1", args, n); 
+  Frame1 = XmCreateFrame(Shell1, "Frame1", args, n);
   XtManageChild(Frame1);
 
   n = 0;
   XtSetArg(args[n], XmNfillOnArm, False); n++;
   XtSetArg(args[n], XmNmultiClick, XmMULTICLICK_KEEP); n++;
   string = XmStringLtoRCreate("Push Gadget Here", XmSTRING_DEFAULT_CHARSET);
-  XtSetArg(args[n], XmNlabelType, XmSTRING); n++; 
-  XtSetArg(args[n], XmNlabelString, string); n++; 
+  XtSetArg(args[n], XmNlabelType, XmSTRING); n++;
+  XtSetArg(args[n], XmNlabelString, string); n++;
   PBGadget1 = XmCreatePushButtonGadget(Frame1, "PBGadget", args, n);
   XtManageChild(PBGadget1);
 
@@ -86,7 +86,7 @@ char  **argv;
   XtAddCallback(PBGadget1, XmNactivateCallback, ActCB_MC, NULL);
   XtAddCallback(PBGadget1, XmNarmCallback, ArmCB, NULL);
   XtAddCallback(PBGadget1, XmNdisarmCallback, DisarmCB, NULL);
-    
+
   /* Reset margins */
   n = 0;
   XtSetArg(args[n], XmNmarginHeight, 20); n++;
@@ -99,14 +99,14 @@ char  **argv;
   XtSetValues(PBGadget1, args, n);
 
   CommonPause();
-  
+
   XtRemoveCallback(PBGadget1, XmNactivateCallback, ActCB_MC, NULL);
   XtAddCallback(PBGadget1, XmNactivateCallback, ActCB, NULL);
 
   CommonPause();
 
   /* change so that button displays a pixmap */
-  gnumap = 
+  gnumap =
     XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				gnu_bits, gnu_width, gnu_height,
@@ -146,7 +146,7 @@ char  **argv;
   XtSetArg(args[n], XmNlabelType, XmSTRING);  n++;
   XtSetArg(args[n], XmNlabelString, tcs);  n++;
   XtSetValues(PBGadget1, args, n);
-    
+
   CommonPause();
 
   XmStringFree(tcs);
@@ -181,7 +181,7 @@ void  ActCB_MC(w, client_data, call_data)
     caddr_t  call_data;
 {
     printf("PushButtonGadget Activated\n");
-    printf ("Number of clicks is %d\n", 
+    printf ("Number of clicks is %d\n",
 	     ((XmPushButtonCallbackStruct*)call_data)->click_count);
     printf("*********************\n");
 }
@@ -213,4 +213,3 @@ void  DisarmCB(w, client_data, call_data)
     printf("PushButtonGadget Disarmed\n");
     printf("*********************\n");
 }
-

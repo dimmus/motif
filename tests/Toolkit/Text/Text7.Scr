@@ -1,5 +1,5 @@
 # $XConsortium: Text7.scr /main/6 1995/07/17 20:42:14 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Move the pointer into the Text widget and press the return key.
 #  You should see a message that an activate callback has been generated.

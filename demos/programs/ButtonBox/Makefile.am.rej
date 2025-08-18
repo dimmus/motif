@@ -6,5 +6,5 @@
  TOPDIR = ../../..
 -LDADD = $(TOPDIR)/lib/Xm/libXm.la
 +LDADD = $(TOPDIR)/lib/Xm/libXm.la -lXt
- 
- INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS} 
+
+ INCLUDES = -I$(TOPDIR)/lib -I$(srcdir)/$(TOPDIR)/lib ${X_CFLAGS}

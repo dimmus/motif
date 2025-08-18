@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Traits1.c /main/5 1995/07/13 19:39:47 drk $"
@@ -110,13 +110,13 @@ static WidgetStruct rendertablewidgets[] =
     {NULL, NULL, NULL}
 };
 
-static WidgetStruct takesdefaultwidgets [] = 
+static WidgetStruct takesdefaultwidgets [] =
 {
     {"PushButton", NULL, XmCreatePushButton},
     {NULL, NULL, NULL}
 };
 
-static WidgetStruct navwidgets[] = 
+static WidgetStruct navwidgets[] =
 {
     {"ScrollBar", NULL, XmCreateScrollBar},
     {"SpinBox", NULL, XmCreateSpinBox},
@@ -182,7 +182,7 @@ typedef struct
     Widget (*createfunction) ();
 } GadgetStruct;
 
-static GadgetStruct gadgets[] = 
+static GadgetStruct gadgets[] =
 {
     {"LabelGadget", NULL, XmCreateLabelGadget},
     {"CascadeButtonGadget", NULL, XmCreateCascadeButtonGadget},
@@ -201,13 +201,13 @@ static GadgetStruct activatablegadgets[] =
     {NULL, NULL, NULL}
 };
 
-static GadgetStruct takesdefaultgadgets [] = 
+static GadgetStruct takesdefaultgadgets [] =
 {
     {"PushButtonGadget", NULL, XmCreatePushButtonGadget},
     {NULL, NULL, NULL}
 };
 
-static GadgetStruct menusavvygadgets[] = 
+static GadgetStruct menusavvygadgets[] =
 {
     {"LabelGadget", NULL, XmCreateLabelGadget},
     {"CascadeButtonGadget", NULL, XmCreateCascadeButtonGadget},
@@ -237,31 +237,31 @@ char *argv[];
   /*
    * XmQTcareParentVisual test.
    * Loop through each manager widget and with each manager widget,
-   * loop through each primitive widget and then gadgets and test if 
+   * loop through each primitive widget and then gadgets and test if
    * the XmQTcareParentVisual trait exists
    */
 
   printf("Testing for XmQTcareParentVisual trait\n");
   for (i = 0; managerwidgets[i].name != NULL; i++)  {
-      managerwidgets[i].w = 
+      managerwidgets[i].w =
 	  managerwidgets[i].createfunction(Shell1,
 					   managerwidgets[i].name,
 					   NULL, 0 );
 
       for (j = 0; primitivewidgets[j].name != NULL; j++)  {
-	  primitivewidgets[j].w = 
-	      primitivewidgets[j].createfunction(managerwidgets[i].w, 
-						 primitivewidgets[j].name, 
+	  primitivewidgets[j].w =
+	      primitivewidgets[j].createfunction(managerwidgets[i].w,
+						 primitivewidgets[j].name,
 						 NULL, 0);
 	  /* loop through primitive widgets */
 	  if((XmCareVisualTrait) XmeTraitGet((XtPointer)
-					     XtClass(primitivewidgets[j].w), 
+					     XtClass(primitivewidgets[j].w),
 					     XmQTcareParentVisual) != NULL)  {
 	      printf("XmQTcareParentVisual trait found in %s, through %s\n",
 		     managerwidgets[i].name, primitivewidgets[j].name);
 	  }
 	  else
-	      printf("XmQTcareParentVisual trait NOT found in %s with %s\n", 
+	      printf("XmQTcareParentVisual trait NOT found in %s with %s\n",
 		     managerwidgets[i].name, primitivewidgets[j].name);
 	  XtDestroyWidget(primitivewidgets[j].w);
       }
@@ -275,14 +275,14 @@ char *argv[];
   /*
    * XmQTdialogShellSavvy trait test
    */
-    
+
   printf("Testing for XmQTdialogShellSavvy trait\n");
 
   DialogShell1 = XmCreateDialogShell(Shell1, "DialogShell1", NULL, 0);
 
   BulletinBoard1 = XmCreateBulletinBoard(DialogShell1, "BulletinBoard1", NULL, 0);
-	 
-  if((XmDialogSavvyTrait) XmeTraitGet((XtPointer)XtClass(BulletinBoard1), 
+
+  if((XmDialogSavvyTrait) XmeTraitGet((XtPointer)XtClass(BulletinBoard1),
 					     XmQTdialogShellSavvy) != NULL)  {
       printf("XmQTdialogSavvy trait found in BulletinBoard through DialogShell\n");
   }
@@ -291,7 +291,7 @@ char *argv[];
   }
   printf("\n\n");
   XtDestroyWidget(DialogShell1);
-  
+
 
   CommonPause();
 
@@ -304,24 +304,24 @@ char *argv[];
 
   printf("Testing for XmQTactivatable trait\n");
   for (i = 0; activatorwidgets[i].name != NULL; i++)  {
-      activatorwidgets[i].w = 
+      activatorwidgets[i].w =
 	  activatorwidgets[i].createfunction(Shell1,
-					   activatorwidgets[i].name, 
+					   activatorwidgets[i].name,
 					   NULL, 0 );
       for (j = 0; activatablewidgets[j].name != NULL; j++)  {
-	  activatablewidgets[j].w = 
-	      activatablewidgets[j].createfunction(activatorwidgets[i].w, 
-						 activatablewidgets[j].name, 
+	  activatablewidgets[j].w =
+	      activatablewidgets[j].createfunction(activatorwidgets[i].w,
+						 activatablewidgets[j].name,
 						 NULL, 0);
 	  /* loop through primitive widgets */
 	  if((XmActivatableTrait) XmeTraitGet((XtPointer)
-					     XtClass(activatablewidgets[j].w), 
+					     XtClass(activatablewidgets[j].w),
 					     XmQTactivatable) != NULL)  {
 	      printf("XmQTactivatable trait found in %s, through %s\n",
 		     activatablewidgets[j].name, activatorwidgets[i].name);
 	  }
 	  else  {
-	      printf("XmQTactivatable trait NOT found in %s through %s\n", 
+	      printf("XmQTactivatable trait NOT found in %s through %s\n",
 		     activatablewidgets[j].name, activatorwidgets[i].name);
 	  }
 	  XtDestroyWidget(activatablewidgets[j].w);
@@ -333,26 +333,26 @@ char *argv[];
   printf("\n");
   printf (" Testing XmQTactivatable trait using gadgets\n");
   for (i = 0; activatorwidgets[i].name != NULL; i++)  {
-      activatorwidgets[i].w = 
+      activatorwidgets[i].w =
 	  activatorwidgets[i].createfunction(Shell1,
-					   activatorwidgets[i].name, 
+					   activatorwidgets[i].name,
 					   NULL, 0 );
       /* loop through gadgets */
       for (j = 0; activatablegadgets[j].name != NULL; j++)  {
 
-	  activatablegadgets[j].g = 
-	      activatablegadgets[j].createfunction(activatorwidgets[i].w, 
-					 activatablegadgets[j].name, 
+	  activatablegadgets[j].g =
+	      activatablegadgets[j].createfunction(activatorwidgets[i].w,
+					 activatablegadgets[j].name,
 					 NULL, 0);
 
 	  if((XmActivatableTrait) XmeTraitGet((XtPointer)
-					     XtClass(activatablegadgets[j].g), 
+					     XtClass(activatablegadgets[j].g),
 					     XmQTactivatable) != NULL)  {
 	      printf("XmQTactivatable trait found in %s, through %s\n",
 		     activatablegadgets[j].name, activatorwidgets[i].name);
 	  }
 	  else  {
-	      printf("XmQTactivatable trait NOT found in %s through %s\n", 
+	      printf("XmQTactivatable trait NOT found in %s through %s\n",
 		     activatablegadgets[j].name, activatorwidgets[i].name);
 	  }
 	  XtDestroyWidget(activatablegadgets[j].g);
@@ -370,19 +370,19 @@ char *argv[];
 
   printf("Testing for XmQTspecifyRenderTable trait\n");
   for (j = 0; rendertablewidgets[j].name != NULL; j++)  {
-      rendertablewidgets[j].w = 
-	  rendertablewidgets[j].createfunction(Shell1, 
-						rendertablewidgets[j].name, 
+      rendertablewidgets[j].w =
+	  rendertablewidgets[j].createfunction(Shell1,
+						rendertablewidgets[j].name,
 						NULL, 0);
 
       if((XmRenderTable) XmeTraitGet((XtPointer)
-				     XtClass(rendertablewidgets[j].w), 
+				     XtClass(rendertablewidgets[j].w),
 				     XmQTspecifyRenderTable) != NULL)  {
 	  printf("XmQTspecifyRenderTable trait found in %s, through Shell1\n",
 		 rendertablewidgets[j].name);
       }
       else  {
-	  printf("XmQTspecifyRenderTable trait NOT found in %s through Shell1\n", 
+	  printf("XmQTspecifyRenderTable trait NOT found in %s through Shell1\n",
 		 rendertablewidgets[j].name);
       }
       XtDestroyWidget(rendertablewidgets[j].w);
@@ -390,7 +390,7 @@ char *argv[];
   printf("\n\n");
 
   CommonPause();
-  
+
   /*
    * XmQTtakesDefault test.
    */
@@ -400,18 +400,18 @@ char *argv[];
 					 "BulletinBoard1",
 					 NULL, 0 );
   for (j = 0; takesdefaultwidgets[j].name != NULL; j++)  {
-      takesdefaultwidgets[j].w = 
-	  takesdefaultwidgets[j].createfunction(BulletinBoard1, 
-						takesdefaultwidgets[j].name, 
+      takesdefaultwidgets[j].w =
+	  takesdefaultwidgets[j].createfunction(BulletinBoard1,
+						takesdefaultwidgets[j].name,
 						NULL, 0);
       if((XmTakesDefaultTrait) XmeTraitGet((XtPointer)
-					   XtClass(takesdefaultwidgets[j].w), 
+					   XtClass(takesdefaultwidgets[j].w),
 					   XmQTtakesDefault) != NULL)  {
 	  printf("XmQTtakesDefault trait found in %s, through BulletinBoard\n",
 		     takesdefaultwidgets[j].name);
       }
       else  {
-	  printf("XmQTtakesDefault trait NOT found in %s through BulletinBoard\n", 
+	  printf("XmQTtakesDefault trait NOT found in %s through BulletinBoard\n",
 		 takesdefaultwidgets[j].name);
       }
       XtDestroyWidget(takesdefaultwidgets[j].w);
@@ -420,18 +420,18 @@ char *argv[];
   printf (" Testing XmQTtakesDefault trait using gadgets\n");
   /* loop through gadgets */
   for (j = 0; takesdefaultgadgets[j].name != NULL; j++)  {
-      takesdefaultgadgets[j].g = 
-	  activatablegadgets[j].createfunction(BulletinBoard1, 
-					       takesdefaultgadgets[j].name, 
+      takesdefaultgadgets[j].g =
+	  activatablegadgets[j].createfunction(BulletinBoard1,
+					       takesdefaultgadgets[j].name,
 					       NULL, 0);
       if((XmActivatableTrait) XmeTraitGet((XtPointer)
-					  XtClass(takesdefaultgadgets[j].g), 
+					  XtClass(takesdefaultgadgets[j].g),
 					  XmQTactivatable) != NULL)  {
 	  printf("XmQTtakesdefault trait found in %s, through BulletinBoard\n",
 		 takesdefaultgadgets[j].name);
       }
       else  {
-	  printf("XmQTtakesdefault trait NOT found in %s through BulletinBoard\n", 
+	  printf("XmQTtakesdefault trait NOT found in %s through BulletinBoard\n",
 		 takesdefaultgadgets[j].name);
       }
   }
@@ -445,24 +445,24 @@ char *argv[];
    */
 
   for (i = 0; navigatorwidgets[i].name != NULL; i++)  {
-      navigatorwidgets[i].w = 
+      navigatorwidgets[i].w =
 	  navigatorwidgets[i].createfunction(Shell1,
-					   navigatorwidgets[i].name, 
+					   navigatorwidgets[i].name,
 					   NULL, 0 );
       for (j = 0; navwidgets[j].name != NULL; j++)  {
 
-	  navwidgets[j].w = 
-	      navwidgets[j].createfunction(navigatorwidgets[i].w, 
-					      navwidgets[j].name, 
+	  navwidgets[j].w =
+	      navwidgets[j].createfunction(navigatorwidgets[i].w,
+					      navwidgets[j].name,
 					      NULL, 0);
 	  if((XmNavigatorTrait) XmeTraitGet((XtPointer)
-					     XtClass(navwidgets[j].w), 
+					     XtClass(navwidgets[j].w),
 					     XmQTnavigator) != NULL)  {
 	      printf("XmQTnavigator trait found in %s, through %s\n",
 		     navigatorwidgets[i].name, navwidgets[j].name);
 	  }
 	  else  {
-	      printf("XmQTnavigator trait NOT found in %s through %s\n", 
+	      printf("XmQTnavigator trait NOT found in %s through %s\n",
 		     navigatorwidgets[i].name, navwidgets[j].name);
 	  }
 	  XtDestroyWidget(navwidgets[j].w);
@@ -480,19 +480,19 @@ char *argv[];
 
   printf("Testing for XmQTscrollFrame trait\n");
   for (i = 0; scrollframewidgets[i].name != NULL; i++)  {
-      scrollframewidgets[i].w = 
+      scrollframewidgets[i].w =
 	  scrollframewidgets[i].createfunction(Shell1,
-					       scrollframewidgets[i].name, 
+					       scrollframewidgets[i].name,
 					       NULL, 0 );
 
       if((XmScrollFrameTrait) XmeTraitGet((XtPointer)
-					  XtClass(scrollframewidgets[i].w), 
+					  XtClass(scrollframewidgets[i].w),
 					  XmQTscrollFrame) != NULL)  {
 	  printf("XmQTscrollFrame trait found in %s, through Shell1\n",
 		 scrollframewidgets[i].name);
       }
       else  {
-	  printf("XmQTscrollFrame trait NOT found in %s through Shell1\n", 
+	  printf("XmQTscrollFrame trait NOT found in %s through Shell1\n",
 		 scrollframewidgets[i].name);
       }
 
@@ -509,23 +509,23 @@ char *argv[];
 
   printf("Testing for XmQTaccessTextual trait\n");
   for (i = 0; accesswidgets[i].name != NULL; i++)  {
-      accesswidgets[i].w = 
+      accesswidgets[i].w =
 	  accesswidgets[i].createfunction(Shell1,
-					  accesswidgets[i].name, 
+					  accesswidgets[i].name,
 					  NULL, 0 );
       for (j = 0; accessablewidgets[j].name != NULL; j++)  {
-	  accessablewidgets[j].w = 
-	      accessablewidgets[j].createfunction(accesswidgets[i].w, 
-						  accessablewidgets[j].name, 
+	  accessablewidgets[j].w =
+	      accessablewidgets[j].createfunction(accesswidgets[i].w,
+						  accessablewidgets[j].name,
 						  NULL, 0);
 	  if((XmAccessTextualTrait) XmeTraitGet((XtPointer)
-					 XtClass(accessablewidgets[j].w), 
+					 XtClass(accessablewidgets[j].w),
 					 XmQTaccessTextual) != NULL)  {
 	      printf("XmQTaccesTextual trait found in %s, through %s\n",
 		     accessablewidgets[j].name, accesswidgets[i].name);
 	  }
 	  else  {
-	      printf("XmQTaccessTextual trait NOT found in %s through %s\n", 
+	      printf("XmQTaccessTextual trait NOT found in %s through %s\n",
 		     accessablewidgets[j].name, accesswidgets[i].name);
 	  }
 	  XtDestroyWidget(accessablewidgets[j].w);
@@ -546,27 +546,27 @@ char *argv[];
   RowColumn1 =  XmCreateRowColumn(Shell1, "RowColumn1", NULL, 0 );
 
   if((XmMenuSystemTrait) XmeTraitGet((XtPointer)
-				     XtClass(RowColumn1), 
-				     XmQTmenuSystem) != NULL)  
+				     XtClass(RowColumn1),
+				     XmQTmenuSystem) != NULL)
       printf("XmQTmenuSystem trait found in RowColumn, through Shell1 \n");
-  else 
-      printf("XmQTmenuSystem trait NOT found in RowColumn, through Shell1\n\n"); 
+  else
+      printf("XmQTmenuSystem trait NOT found in RowColumn, through Shell1\n\n");
 
 
   /* loop through widgets */
   for (j = 0; menusavvywidgets[j].name != NULL; j++)  {
-      menusavvywidgets[j].w = 
+      menusavvywidgets[j].w =
 	  menusavvywidgets[j].createfunction(RowColumn1,
-					     menusavvywidgets[j].name, 
+					     menusavvywidgets[j].name,
 					     NULL, 0);
       if((XmMenuSavvyTrait) XmeTraitGet((XtPointer)
-					 XtClass(menusavvywidgets[j].w), 
+					 XtClass(menusavvywidgets[j].w),
 					 XmQTmenuSavvy) != NULL)  {
 	  printf("XmQTmenuSavvy trait found in %s, through %s\n",
 		 menusavvywidgets[j].name, "RowColumn");
       }
       else  {
-	  printf("XmQTmenuSavvy trait NOT found in %s through %s\n", 
+	  printf("XmQTmenuSavvy trait NOT found in %s through %s\n",
 		 menusavvywidgets[j].name, "RowColumn");
       }
       XtDestroyWidget(menusavvywidgets[j].w);
@@ -575,18 +575,18 @@ char *argv[];
 
   /* loop through gadgets */
   for (j = 0; menusavvygadgets[j].name != NULL; j++)  {
-      menusavvygadgets[j].g = 
+      menusavvygadgets[j].g =
 	  menusavvygadgets[j].createfunction(RowColumn1,
-					     menusavvygadgets[j].name, 
+					     menusavvygadgets[j].name,
 					     NULL, 0);
       if((XmMenuSavvyTrait) XmeTraitGet((XtPointer)
-					 XtClass(menusavvygadgets[j].g), 
+					 XtClass(menusavvygadgets[j].g),
 					 XmQTmenuSavvy) != NULL)  {
 	  printf("XmQTmenuSavvy trait found in %s, through %s\n",
 		 menusavvygadgets[j].name, "RowColumn");
       }
       else  {
-	  printf("XmQTmenuSavvy trait NOT found in %s through %s\n", 
+	  printf("XmQTmenuSavvy trait NOT found in %s through %s\n",
 		 menusavvygadgets[j].name, "RowColumn");
       }
       XtDestroyWidget(menusavvygadgets[j].g);
@@ -599,5 +599,3 @@ char *argv[];
   CommonPause();
 
 }
-
-

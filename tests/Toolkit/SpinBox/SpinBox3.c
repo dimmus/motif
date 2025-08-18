@@ -1,7 +1,7 @@
 /* $XConsortium: SpinBox3.c /main/7 1996/04/30 13:56:24 schuldy $ */
 /*
- *  (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC. 
- *  ALL RIGHTS RESERVED 
+ *  (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC.
+ *  ALL RIGHTS RESERVED
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -49,7 +49,7 @@ main (int argc, char **argv)
     Widget NonFocusChild1;
     Arg args[32];
     int n,i;
-    
+
     char *Child, *Manager;
 
 
@@ -110,7 +110,7 @@ main (int argc, char **argv)
 
     for (i = 0; i < NUM_ITEMS; i++)
 	{
-	 TempLabelString = XmStringCreate (months[i], 
+	 TempLabelString = XmStringCreate (months[i],
 				    XmFONTLIST_DEFAULT_TAG);
 	 CSmonths[i] = TempLabelString;
 
@@ -124,7 +124,7 @@ main (int argc, char **argv)
     XtSetArg (args[n], XmNrepeatDelay,0); n++;
     SpinBox1 = XmCreateSpinBox (Parent, "SpinBox1", args, n);
     XtManageChild (SpinBox1);
-    
+
     XtAddCallback (SpinBox1, XmNvalueChangedCallback, ValueChangedCallback,
 		   (XtPointer)NULL);
     XtAddCallback (SpinBox1, XmNmodifyVerifyCallback, ModifyVerifyCallback,
@@ -190,7 +190,7 @@ main (int argc, char **argv)
 
 
         CommonPause();	/* TP 0 */
-       
+
         n=0;
         XtSetArg (args[n], XmNminimumValue, 3); n++;
         XtSetArg (args[n], XmNmaximumValue, 15); n++;
@@ -213,16 +213,16 @@ main (int argc, char **argv)
 	XtSetArg (args[n], XmNrepeatDelay,10000); n++;
 	XtSetValues (SpinBox1, args, n);
 
-	
+
     	n=0;
-	XtSetArg (args[n], XmNarrowSensitivity, 
+	XtSetArg (args[n], XmNarrowSensitivity,
                            XmARROWS_DECREMENT_SENSITIVE); n++;
         XtSetArg (args[n], XmNposition,5); n++;
 	XtSetValues (FocusChild[0], args, n);
-	
- 
+
+
         n=0;
-	XtSetArg (args[n], XmNarrowSensitivity, 
+	XtSetArg (args[n], XmNarrowSensitivity,
                            XmARROWS_INCREMENT_SENSITIVE); n++;
         XtSetArg (args[n], XmNposition, 6); n++;
 	XtSetArg (args[n], XmNminimumValue, 1); n++;
@@ -236,13 +236,13 @@ main (int argc, char **argv)
 
 
     	n=0;
-	XtSetArg (args[n], XmNarrowSensitivity, 
+	XtSetArg (args[n], XmNarrowSensitivity,
                            XmARROWS_DECREMENT_SENSITIVE); n++;
         XtSetValues (FocusChild[0], args, n);
-	
- 
+
+
         n=0;
-	XtSetArg (args[n], XmNarrowSensitivity, 
+	XtSetArg (args[n], XmNarrowSensitivity,
                            XmARROWS_INCREMENT_SENSITIVE); n++;
 	XtSetArg (args[n], XmNincrementValue, 10); n++;
 	XtSetArg (args[n], XmNposition, 0); n++;
@@ -259,13 +259,13 @@ main (int argc, char **argv)
 
 
     	n=0;
-	XtSetArg (args[n], XmNarrowSensitivity, 
+	XtSetArg (args[n], XmNarrowSensitivity,
                            XmARROWS_DEFAULT_SENSITIVITY); n++;
         XtSetValues (FocusChild[0], args, n);
-	
- 
+
+
         n=0;
-	XtSetArg (args[n], XmNarrowSensitivity, 
+	XtSetArg (args[n], XmNarrowSensitivity,
                            XmARROWS_DEFAULT_SENSITIVITY); n++;
         XtSetValues (FocusChild[1], args, n);
 
@@ -273,8 +273,8 @@ main (int argc, char **argv)
 	XtSetArg (args[n], XmNdefaultArrowSensitivity, XmARROWS_INSENSITIVE); n++;
 	XtSetArg (args[n], XmNarrowLayout, XmARROWS_FLAT_BEGINNING); n++;
 	XtSetValues (SpinBox1, args, n);
-	
-    	
+
+
         CommonPause();	/* TP 5 */
 
         n=0;
@@ -362,7 +362,7 @@ ValueChangedCallback(Widget w,XtPointer client_data,XtPointer call_data)
   int reason = ((XmSpinBoxCallbackStruct *) call_data)->reason;
 
   printf ("valueChanged callback invoked\n");
-  
+
   switch (reason)
     {
     case XmCR_OK:
@@ -393,7 +393,7 @@ ModifyVerifyCallback(Widget w,XtPointer client_data,XtPointer call_data)
   int reason = ((XmSpinBoxCallbackStruct *)call_data)->reason;
 
   printf ("modifyVerify callback invoked\n");
-  
+
   switch (reason)
     {
     case XmCR_OK:
@@ -413,8 +413,3 @@ ModifyVerifyCallback(Widget w,XtPointer client_data,XtPointer call_data)
     }
 
 }
-
-
-
-
-

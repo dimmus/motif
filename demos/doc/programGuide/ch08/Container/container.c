@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -32,9 +32,9 @@
 void   CreateContainer(Widget);
 void   MakeACall(Widget, XtPointer, XtPointer);
 extern void CreateMenus(Widget);
-extern void HelpCB(Widget, XtPointer, XtPointer); 
+extern void HelpCB(Widget, XtPointer, XtPointer);
 extern void QuitCB(Widget, XtPointer, XtPointer);
-Widget top_level; 
+Widget top_level;
 
 #define APP_CLASS "XmdContainer"
 
@@ -52,13 +52,13 @@ main(int    argc,
  Widget       main_window;
 
    XtSetLanguageProc(NULL, NULL, NULL);
-   top_level = XtVaOpenApplication(&app_context, APP_CLASS, 
-                                NULL, 0, &argc, argv, 
-                                fallbacks, 
+   top_level = XtVaOpenApplication(&app_context, APP_CLASS,
+                                NULL, 0, &argc, argv,
+                                fallbacks,
                                 sessionShellWidgetClass,
                                 NULL);
    XmdRegisterEditres(top_level);
-   main_window = XtVaCreateManagedWidget("main_window", 
+   main_window = XtVaCreateManagedWidget("main_window",
                                 xmMainWindowWidgetClass, top_level,
                                 NULL);
 
@@ -74,7 +74,7 @@ main(int    argc,
 
 void
 MakeACall(Widget        w,
-          XtPointer     client_data, 
+          XtPointer     client_data,
           XtPointer     call_data)
 {
   printf("Ring!\n");
@@ -85,7 +85,7 @@ void
 CreateContainer(Widget parent_of_container)
 {
  Widget  container1;
- Widget  president, vice_president, dir_of_sales, dir_of_rnd, dir_of_mfr; 
+ Widget  president, vice_president, dir_of_sales, dir_of_rnd, dir_of_mfr;
 
    container1 = XtVaCreateWidget("Container",
    			xmContainerWidgetClass, parent_of_container,

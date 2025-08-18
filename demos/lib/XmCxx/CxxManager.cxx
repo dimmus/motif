@@ -45,7 +45,7 @@
  *************************************/
 
 /************************************
- * Class declaration for CxxManager * 
+ * Class declaration for CxxManager *
  ************************************/
 
 externaldef (xmcxxmanagerclassrec)
@@ -87,7 +87,7 @@ WidgetClass xmCxxManagerWidgetClass = (WidgetClass) &xmCxxManagerClassRec;
  *   -  core_class.destroy (subclass destructors should be used instead)
  *   -  basically all function slots corresponding to a virtual function
  *	(subclasses should implement their own virtual function instead)
- *	
+ *
  *   -  TO BE CONTINUED...
  *
  * Some entries may be overriden by subclass constructors :
@@ -101,10 +101,10 @@ XmCxxManagerClass::XmCxxManagerClass(char*		name,
 				     XtResourceList	resources,
 				     Cardinal		num_resources,
 				     XtInitProc		cxx_cast) {
-    
-    XmBaseClassExt core_ext = 
+
+    XmBaseClassExt core_ext =
 	(XmBaseClassExt) XtMalloc(sizeof(XmBaseClassExtRec));
-    
+
     /*
      * Passed parameter initialization
      */
@@ -132,13 +132,13 @@ XmCxxManagerClass::XmCxxManagerClass(char*		name,
     core_class.callback_private		= NULL;
     core_class.tm_table			= XtInheritTranslations;
     core_class.extension		= core_ext;
-	
+
     /*
      * Core part class-methods
      * Subclasses : DO NOT OVERRIDE THESE ENTRIES !!
      */
     // Chained methods must be NULL for all classes but CxxManagerClass;
-    if (this == &xmCxxManagerClassRec) {	
+    if (this == &xmCxxManagerClassRec) {
 	core_class.class_part_initialize=
 	  		XmCxxManagerClass::ClassPartInitialize;
 	core_class.initialize		= XmCxxManager::Initialize;
@@ -166,7 +166,7 @@ XmCxxManagerClass::XmCxxManagerClass(char*		name,
     core_class.query_geometry		= XmCxxManager::QueryGeometry;
     core_class.display_accelerator	= XmCxxManager::DisplayAccelerator;
 
-    
+
     /*
      * Base class extension data
      */
@@ -220,7 +220,7 @@ XmCxxManagerClass::XmCxxManagerClass(char*		name,
     composite_class.insert_child	= XmCxxManager::InsertChild;
     composite_class.delete_child	= XmCxxManager::DeleteChild;
 
-    
+
     /*
      * Constraint part data :
      * .resources array and .num_resources should only be set for the class
@@ -238,7 +238,7 @@ XmCxxManagerClass::XmCxxManagerClass(char*		name,
      * Subclasses : DO NOT OVERRIDE THESE ENTRIES !
      */
     // Chained methods must be set to null for all classes but CxxManager;
-    if (this == &xmCxxManagerClassRec) {	
+    if (this == &xmCxxManagerClassRec) {
 	constraint_class.initialize = XmCxxManager::ConstraintInitialize;
 	constraint_class.destroy    = XmCxxManager::ConstraintDestroy;
 	constraint_class.set_values = XmCxxManager::ConstraintSetValues;
@@ -261,7 +261,7 @@ XmCxxManagerClass::XmCxxManagerClass(char*		name,
     manager_class.syn_constraint_resources	= NULL;
     manager_class.num_syn_constraint_resources	= 0;
     manager_class.extension			= mgr_ext;
-    
+
     /*
      * Manager part class-methods
      * Subclasses : DO NOT OVERRIDE THESE ENTRIES !
@@ -318,7 +318,7 @@ void* XmCxxManager::operator new(size_t, void* w /* = NULL */) {
 void XmCxxManager::operator delete(void*) {
 }
 
-    
+
 /*************************
  * convenience functions *
  *************************/
@@ -326,7 +326,7 @@ void XmCxxManager::operator delete(void*) {
 
 void XmCxxManagerClass::SetBaseClassExtensionQuark() {
     /*
-     * Set base_class extension record type. 
+     * Set base_class extension record type.
      * This cannot be done staticaly (quarks are not initialized then).
      * Make sure to get the right extension record...
      */
@@ -356,7 +356,7 @@ void XmCxxManagerClass::SetBaseClassExtensionQuark() {
  *
  * ClassInitialize
  *
- ********************************************************************/         
+ ********************************************************************/
 void XmCxxManagerClass::ClassInitialize() {
     /* initialize base_class extension quark */
     xmCxxManagerClassRec.SetBaseClassExtensionQuark();
@@ -379,7 +379,7 @@ void XmCxxManager::_MakeCxxWidget(Widget /*req_w*/, Widget new_w,
 void XmCxxManager::Destroy(Widget w) {
     // Upward chained;
     // call overloaded operator delete : no free, just call all destructors;
-    delete (XmCxxManagerWidget) w; 
+    delete (XmCxxManagerWidget) w;
 }
 
 
@@ -394,7 +394,7 @@ void XmCxxManager::Destroy(Widget w) {
  *   The static members are only defined for CxxManager and are stored
  *   in each class record, or for some of them (chained methods) only in
  *   the CxxManagerClass instance.
- *   
+ *
  *   Instead of overriding the function slot in the class record,
  *   new subclasses should (must) implement their version of the
  *   corresponding virtual function.
@@ -409,7 +409,7 @@ void XmCxxManager::Destroy(Widget w) {
  *
  *  class_part_initialize : virtual
  *     Downward chained Xt method :
- *     each class re-implementing class_part_initialize() should start by 
+ *     each class re-implementing class_part_initialize() should start by
  *     calling <superclass>::class_part_initialize()
  *
  ************************************************************************/
@@ -446,7 +446,7 @@ void XmCxxManager::Initialize(Widget req_w, Widget new_w,
  *
  *  initialize_hook : virtual
  *     Downward chained Xt method :
- *     each class re-implementing initialize_hook() should start by 
+ *     each class re-implementing initialize_hook() should start by
  *     calling <superclass>::initialize_hook()
  *
  ************************************************************************/
@@ -648,7 +648,7 @@ Boolean XmCxxManager::accept_focus(Time* t) {
 Boolean XmCxxManager::AcceptFocus(Widget w, Time* t) {
     return ((XmCxxManagerWidget) w)->accept_focus(t);
 }
-    
+
 
 
 /************************************************************************
@@ -1062,4 +1062,3 @@ Boolean XmCxxManager::TraversalChildren(Widget w, Widget** children,
     return ((XmCxxManagerWidget) w)->
 	traversal_children(children, num_children);
 }
-

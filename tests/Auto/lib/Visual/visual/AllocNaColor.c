@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AllocNaColor.c /main/7 1995/07/14 11:45:33 drk $"
@@ -41,14 +41,14 @@ static char rcsid[] = "$XConsortium: AllocNaColor.c /main/7 1995/07/14 11:45:33 
         NOTE: This routine, unlike mvsAllocColor() and mvsAllocColorStruct()
         does not add the pixel value to the mvsColorAllocInfo list.  So you
         must call mvsAllocColor() or mvsAllocColorStruct() after you return
-        with the pixel value from this routine.                            
+        with the pixel value from this routine.
 
         INPUTS
             name  - requested RGB color name (one of the mvsColorTable names)
 
         OUTPUTS
             pixel - pixel color index value returned
- 
+
         RETURNS
             Status where 0=failed, ~0=succeeded
 ************************************************************************/
@@ -70,17 +70,17 @@ Pixel *pixel;
 
     /* look up name in our color table */
 
-    for (i=0; i<mvsNumTableColors && 
+    for (i=0; i<mvsNumTableColors &&
               mvsStringCompare(name,mvsColorTable[i].name1) != 0 &&
               mvsStringCompare(name,mvsColorTable[i].name2) != 0    ;
          i++);
-    
+
     if (i == mvsNumTableColors) { /* if not found... */
         VIS_error("Color name '%s' not found in color table!\n",name);
         exit(1);
     }
 
-    /* look-up which mvsColorAllocInfo slot will be used when we alloc it 
+    /* look-up which mvsColorAllocInfo slot will be used when we alloc it
        later in mvsSetValuesNoCheck.                                       */
 
     nearest.red   = mvsColorTable[i].red<<8;
@@ -97,7 +97,7 @@ Pixel *pixel;
 
         AutoMessage(_AutoMessages[VISMSG18]);
 	AutoMessage(_AutoMessages[VISMSG19]);
-        
+
 
         /* find pixel in currently allocated set with nearest rgb */
 

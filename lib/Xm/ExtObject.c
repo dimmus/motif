@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ExtObject.c /main/13 1995/10/25 20:03:50 cde-sun $"
@@ -46,7 +46,7 @@ static void ClassPartInitPosthook(WidgetClass c);
 static void ClassPartInitialize(WidgetClass c);
 static void InitializePrehook(Widget req, Widget new_w,
 			      ArgList args, Cardinal *num_args);
-static void Initialize(Widget req, Widget new_w, 
+static void Initialize(Widget req, Widget new_w,
 		       ArgList args, Cardinal *num_args);
 static Boolean SetValuesPrehook(Widget req, Widget curr, Widget new_w,
 				ArgList args, Cardinal *num_args);
@@ -71,12 +71,12 @@ static void UseParent(Widget w, int offset, XrmValue *value);
 static XtResource extResources[] =
 {
   {
-    XmNlogicalParent, XmCLogicalParent, XmRWidget, 
+    XmNlogicalParent, XmCLogicalParent, XmRWidget,
     sizeof (Widget), Offset (logicalParent),
     XmRCallProc, (XtPointer)UseParent
   },
   {
-    XmNextensionType, XmCExtensionType, XmRExtensionType, 
+    XmNextensionType, XmCExtensionType, XmRExtensionType,
     sizeof (unsigned char), Offset (extensionType),
     XmRImmediate, (XtPointer)XmDEFAULT_EXTENSION
   }
@@ -116,59 +116,59 @@ static XmBaseClassExtRec myBaseClassExtRec = {
   NULL,				/* get_values posthook    */
   ClassPartInitPrehook,		/* class_part_prehook     */
   ClassPartInitPosthook,	/* class_part_posthook    */
-  NULL,				/* compiled_ext_resources */   
-  NULL,				/* ext_resources       	  */   
-  0,				/* resource_count     	  */   
+  NULL,				/* compiled_ext_resources */
+  NULL,				/* ext_resources       	  */
+  0,				/* resource_count     	  */
   FALSE				/* use_sub_resources	  */
 };
 
 externaldef(xmextclassrec)
 XmExtClassRec xmExtClassRec = {
-  {	
-    (WidgetClass) &objectClassRec,/* superclass 	 */   
-    "dynamic",			  /* class_name 	 */   
-    sizeof(XmExtRec),	 	  /* size 		 */   
-    ClassInitialize, 		  /* Class Initializer 	 */   
-    ClassPartInitialize,	  /* class_part_init 	 */ 
-    FALSE,			  /* Class init'ed ? 	 */   
-    Initialize,			  /* initialize          */   
-    NULL,			  /* initialize_notify   */ 
-    NULL,			  /* realize             */   
-    NULL,			  /* actions             */   
-    0,				  /* num_actions         */   
-    extResources,		  /* resources           */   
-    XtNumber(extResources),	  /* resource_count      */   
-    NULLQUARK, 			  /* xrm_class           */   
-    FALSE,			  /* compress_motion     */   
-    FALSE,			  /* compress_exposure   */   
-    FALSE,			  /* compress_enterleave */   
-    FALSE,			  /* visible_interest    */   
-    Destroy,			  /* destroy             */   
-    NULL,			  /* resize              */   
-    NULL,			  /* expose              */   
-    SetValues,	 		  /* set_values          */   
-    NULL,			  /* set_values_hook     */ 
-    NULL,			  /* set_values_almost   */ 
-    GetValuesHook,		  /* get_values_hook     */ 
-    NULL,			  /* accept_focus        */   
-    XtVersion, 			  /* intrinsics version  */   
-    NULL,			  /* callback offsets    */   
-    NULL,			  /* tm_table            */   
-    NULL,			  /* query_geometry      */ 
-    NULL,			  /* display_accelerator */ 
-    (XtPointer)&myBaseClassExtRec /* extension           */ 
-  },	
+  {
+    (WidgetClass) &objectClassRec,/* superclass 	 */
+    "dynamic",			  /* class_name 	 */
+    sizeof(XmExtRec),	 	  /* size 		 */
+    ClassInitialize, 		  /* Class Initializer 	 */
+    ClassPartInitialize,	  /* class_part_init 	 */
+    FALSE,			  /* Class init'ed ? 	 */
+    Initialize,			  /* initialize          */
+    NULL,			  /* initialize_notify   */
+    NULL,			  /* realize             */
+    NULL,			  /* actions             */
+    0,				  /* num_actions         */
+    extResources,		  /* resources           */
+    XtNumber(extResources),	  /* resource_count      */
+    NULLQUARK, 			  /* xrm_class           */
+    FALSE,			  /* compress_motion     */
+    FALSE,			  /* compress_exposure   */
+    FALSE,			  /* compress_enterleave */
+    FALSE,			  /* visible_interest    */
+    Destroy,			  /* destroy             */
+    NULL,			  /* resize              */
+    NULL,			  /* expose              */
+    SetValues,	 		  /* set_values          */
+    NULL,			  /* set_values_hook     */
+    NULL,			  /* set_values_almost   */
+    GetValuesHook,		  /* get_values_hook     */
+    NULL,			  /* accept_focus        */
+    XtVersion, 			  /* intrinsics version  */
+    NULL,			  /* callback offsets    */
+    NULL,			  /* tm_table            */
+    NULL,			  /* query_geometry      */
+    NULL,			  /* display_accelerator */
+    (XtPointer)&myBaseClassExtRec /* extension           */
+  },
   {
     NULL,			  /* synthetic resources */
     0				  /* num syn resources	 */
   }
 };
 
-externaldef(xmextobjectclass) 
+externaldef(xmextobjectclass)
 WidgetClass xmExtObjectClass = (WidgetClass) (&xmExtClassRec);
 
 /*ARGSUSED*/
-static void 
+static void
 UseParent(Widget w,
 	  int offset,		/* unused */
 	  XrmValue *value)
@@ -182,7 +182,7 @@ UseParent(Widget w,
  *
  ************************************************************************/
 
-static void 
+static void
 ClassInitialize(void)
 {
   myBaseClassExtRec.record_type = XmQmotif;
@@ -194,11 +194,11 @@ ClassInitialize(void)
  *
  ************************************************************************/
 
-static void 
+static void
 ClassPartInitPrehook(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
-  
+
   if ((WidgetClass)wc != xmExtObjectClass)
     {
       XmExtObjectClass sc = (XmExtObjectClass) c->core_class.superclass;
@@ -225,12 +225,12 @@ ClassPartInitPrehook(WidgetClass c)
  *
  ************************************************************************/
 
-static void 
+static void
 ClassPartInitPosthook(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
   XmBaseClassExt  *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-  
+
   if ((*wcePtr) && (*wcePtr)->use_sub_resources)
     {
       /*
@@ -250,11 +250,11 @@ ClassPartInitPosthook(WidgetClass c)
  *
  ************************************************************************/
 
-static void 
+static void
 ClassPartInitialize(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
-  
+
   if (wc == (XmExtObjectClass)xmExtObjectClass)
     return;
 
@@ -262,7 +262,7 @@ ClassPartInitialize(WidgetClass c)
 }
 
 /*ARGSUSED*/
-static void 
+static void
 InitializePrehook(Widget req,	/* unused */
 		  Widget new_w,
 		  ArgList args,
@@ -270,7 +270,7 @@ InitializePrehook(Widget req,	/* unused */
 {
   XmExtObjectClass ec = (XmExtObjectClass) XtClass(new_w);
   XmBaseClassExt  *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-  
+
   if ((*wcePtr)->use_sub_resources)
     {
       /*
@@ -284,7 +284,7 @@ InitializePrehook(Widget req,	/* unused */
 	{
 	  ec->object_class.resources = (*wcePtr)->compiled_ext_resources;
 	  ec->object_class.num_resources = (*wcePtr)->num_ext_resources;
-	  
+
 	  XtGetResourceList((WidgetClass) ec,
 			    &((*wcePtr)->ext_resources),
 			    &((*wcePtr)->num_ext_resources));
@@ -300,7 +300,7 @@ InitializePrehook(Widget req,	/* unused */
     }
 }
 
-static void 
+static void
 Initialize(Widget req,
 	   Widget new_w,
 	   ArgList args,
@@ -311,14 +311,14 @@ Initialize(Widget req,
   Widget           resParent = ne->ext.logicalParent;
   XmWidgetExtData  extData;
   XmBaseClassExt  *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-  
+
   if (!(*wcePtr)->use_sub_resources)
     {
       if (resParent)
 	{
 	  extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
 	  _XmPushWidgetExtData(resParent, extData, ne->ext.extensionType);
-	  
+
 	  extData->widget = new_w;
 	  _XmProcessLock();
 	  extData->reqWidget = (Widget)
@@ -326,7 +326,7 @@ Initialize(Widget req,
 	  memcpy((char *)extData->reqWidget, (char *)req,
 		 XtClass(new_w)->core_class.widget_size);
 	  _XmProcessUnlock();
-	  
+
 	  /*  Convert the fields from unit values to pixel values  */
 	  _XmExtImportArgs(new_w, args, num_args);
 	}
@@ -334,7 +334,7 @@ Initialize(Widget req,
 }
 
 /*ARGSUSED*/
-static Boolean 
+static Boolean
 SetValuesPrehook(Widget req,	/* unused */
 		 Widget curr,	/* unused */
 		 Widget new_w,
@@ -343,7 +343,7 @@ SetValuesPrehook(Widget req,	/* unused */
 {
   XmExtObjectClass ec = (XmExtObjectClass) XtClass(new_w);
   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-  
+
   if ((*wcePtr)->use_sub_resources)
     {
       _XmProcessLock();
@@ -357,14 +357,14 @@ SetValuesPrehook(Widget req,	/* unused */
   return False;
 }
 
-static void 
+static void
 GetValuesPrehook(Widget new_w,
 		 ArgList args,
 		 Cardinal *num_args)
 {
   XmExtObjectClass ec = (XmExtObjectClass) XtClass(new_w);
   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-  
+
   if ((*wcePtr)->use_sub_resources)
     {
       _XmProcessLock();
@@ -383,7 +383,7 @@ GetValuesPrehook(Widget new_w,
  ************************************************************************/
 
 /*ARGSUSED*/
-static Boolean 
+static Boolean
 SetValues(Widget old,
 	  Widget ref,
 	  Widget new_w,
@@ -399,22 +399,22 @@ SetValues(Widget old,
     {
 #ifdef DEBUG
         XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
-#endif    
+#endif
         return FALSE;
     }
-  
+
   if (resParent)
     {
       _XmProcessLock();
       extSize = XtClass(new_w)->core_class.widget_size;
-      
+
       ext->widget = new_w;
-      
+
       ext->oldWidget = (Widget) _XmExtObjAlloc(extSize);
-      memcpy((char *)ext->oldWidget, (char *)old, extSize); 
-      
+      memcpy((char *)ext->oldWidget, (char *)old, extSize);
+
       ext->reqWidget = (Widget) _XmExtObjAlloc(extSize);
-      memcpy((char *)ext->reqWidget, (char *)ref, extSize); 
+      memcpy((char *)ext->reqWidget, (char *)ref, extSize);
       _XmProcessUnlock();
 
       /* Convert the necessary fields from unit values to pixel values. */
@@ -430,7 +430,7 @@ SetValues(Widget old,
  *
  ************************************************************************/
 
-static void 
+static void
 GetValuesHook(Widget new_w,
 	      ArgList args,
 	      Cardinal *num_args)
@@ -438,7 +438,7 @@ GetValuesHook(Widget new_w,
   XmExtObject     ne = (XmExtObject) new_w;
   Widget          resParent = ne->ext.logicalParent;
   XmWidgetExtData ext;
-  
+
   if (resParent)
     {
       ext = _XmGetWidgetExtData(resParent, ne->ext.extensionType);
@@ -446,12 +446,12 @@ GetValuesHook(Widget new_w,
     {
 #ifdef DEBUG
         XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
-#endif    
+#endif
         return;
     }
-      
+
       ext->widget = new_w;
-      
+
       _XmExtGetValuesHook(new_w, args, num_args);
     }
 }
@@ -462,27 +462,27 @@ GetValuesHook(Widget new_w,
  *
  ************************************************************************/
 
-static void 
+static void
 Destroy(Widget wid)
 {
   XmExtObject extObj = (XmExtObject) wid;
   Widget      resParent = extObj->ext.logicalParent;
-  
+
   if (resParent)
     {
       XmWidgetExtData extData;
-      
+
       _XmPopWidgetExtData(resParent, &extData, extObj->ext.extensionType);
-      
+
       XtFree((char *) extData);
     }
 }
 
-char * 
+char *
 _XmExtObjAlloc(int size)
 {
   register int i;
-  
+
   if (size <= XmNUM_BYTES)
     {
       for (i = 0; i < XmNUM_ELEMENTS; i++)
@@ -492,35 +492,35 @@ _XmExtObjAlloc(int size)
 	    return extarray[i].cache.data;
 	  }
     }
-  
+
   return XtMalloc(size);
 }
 
-void 
+void
 _XmExtObjFree(XtPointer element)
 {
   register int i;
-  
+
   for (i = 0; i < XmNUM_ELEMENTS; i++)
     if (extarray[i].cache.data == (char*)element)
       {
 	extarray[i].cache.inuse = FALSE;
 	return;
       }
-  
+
   XtFree((char *) element);
 }
 
 /**********************************************************************
  *
  *  _XmBuildExtResources
- *	Build up the ext's synthetic 
- *	resource processing list by combining the super classes with 
+ *	Build up the ext's synthetic
+ *	resource processing list by combining the super classes with
  *	this class.
  *
  **********************************************************************/
 
-void 
+void
 _XmBuildExtResources(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
@@ -529,11 +529,11 @@ _XmBuildExtResources(WidgetClass c)
   _XmProcessLock();
   _XmInitializeSyntheticResources(wc->ext_class.syn_resources,
 				  wc->ext_class.num_syn_resources);
-  
+
   if (wc != (XmExtObjectClass) xmExtObjectClass)
     {
       sc = (XmExtObjectClass) wc->object_class.superclass;
-      
+
       _XmBuildResources (&(wc->ext_class.syn_resources),
 			 &(wc->ext_class.num_syn_resources),
 			 sc->ext_class.syn_resources,

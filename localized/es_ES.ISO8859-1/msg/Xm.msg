@@ -1,26 +1,26 @@
 $ $XConsortium: Xm.msg /main/9 1996/10/19 14:47:51 rws $
-$ 
+$
 $ Motif
-$ 
+$
 $ Copyright (c) 1987-2012, The Open Group. All rights reserved.
-$ 
+$
 $ These libraries and programs are free software; you can
 $ redistribute them and/or modify them under the terms of the GNU
 $ Lesser General Public License as published by the Free Software
 $ Foundation; either version 2 of the License, or (at your option)
 $ any later version.
-$ 
+$
 $ These libraries and programs are distributed in the hope that
 $ they will be useful, but WITHOUT ANY WARRANTY; without even the
 $ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 $ PURPOSE. See the GNU Lesser General Public License for more
 $ details.
-$ 
+$
 $ You should have received a copy of the GNU Lesser General Public
 $ License along with these librararies and programs; if not, write
 $ to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 $ Floor, Boston, MA 02110-1301 USA
-$ 
+$
 
 $ This message catalog contains messages issued by Motif toolkit library.
 $ Consult X-Window systems, OSF/MOTIF Programmer's Guide and OSF/MOTIF
@@ -30,8 +30,8 @@ $ Do not translate variables such as %s, %d %s ... etc.
 $ Do not translate Motif resource name, such as XmNlabelType.
 $ Special terms with capital letter(s) should not be translated.
 $ "False" and "True" are keywords. Do not translate.
- 
-$quote " 
+
+$quote "
 
 
 $set MS_ArrowButton
@@ -62,7 +62,7 @@ $ MSG_CascadeB_1000 message is obsolete - DO NOT localize this message.
 
 $ MSG_CascadeB_0001 "Solamente XmMENU_PULLDOWN XmRowColumnWidgets pueden ser submenús."
 MSG_CascadeB_0001 "Solamente widgets XmRowColumn de tipo XmMENU_PULLDOWN pueden ser submenus."
-$ please do not translate submenus. 
+$ please do not translate submenus.
 
 MSG_CascadeB_0002 "XmNmappingDelay debe ser mayor o igual que 0."
 
@@ -87,7 +87,7 @@ MSG_Command_0002 "XmString NULL o vacía."
 MSG_Command_0003 "Se ha enviado una XmString NULL o vacía a XmCommandAppendValue."
 
 MSG_Command_0004 "XmNmustMatch es siempre False para un widget Command."
-$ please do not translate False or Command. 
+$ please do not translate False or Command.
 
 MSG_Command_0005 "XmNhistoryMaxItems debe ser un entero positivo mayor que cero."
 
@@ -152,7 +152,7 @@ $ please do not translate Attachment
 
 MSG_Form_0002 "Dependencia circular de los hijos del widget Form.\n\
 Verifique si existen enlaces circulares entre los hijos."
-$ please do not translate Form. 
+$ please do not translate Form.
 
 MSG_Form_1006 "Borde conectado a un widget pero no se ha especificado ningún widget."
 $ MSG_Form_1006 message is obsolete - DO NOT localize this message.
@@ -370,7 +370,7 @@ $ MSG_PushB_1001 message is obsolete - DO NOT localize this message.
 
 $set MS_RowColumn
 
-$ In this set, do not translate the word that starts with "XmN" or "Xm". 
+$ In this set, do not translate the word that starts with "XmN" or "Xm".
 
 MSG_RowColumn_1001 "Intento de establecer la anchura en cero.\n\
 Establecida en el valor predeterminado 16."
@@ -725,9 +725,9 @@ $ MSG_XmIm_1003 message is obsolete - DO NOT localize this message.
 MSG_XmIm_1004 "XmIMMove invocado sin el foco de Método de Entrada."
 $ MSG_XmIm_1004 message is obsolete - DO NOT localize this message.
 
-  
+
 $set MS_Resources
-  
+
 MSG_Resource_0001 "OK"
 $ "OK" as in "Go ahead"/"Confirmed to proceed as instructed"/"Fine"
 
@@ -751,7 +751,7 @@ MSG_Resource_0007 "Archivos"
 $ ... as in "a list of the files"
 
 MSG_Resource_0008 "Directorios"
-$ ... as in "a list of the directories" 
+$ ... as in "a list of the directories"
 
 MSG_Resource_0009 "Elementos"
 $ ... as in "a list of things to choose from"
@@ -761,13 +761,13 @@ $ ... the verb "Filter", as in "To screen out some files"
 $ Note this has a slightly different semantics from MSG_Res_1006.
 $ In English, it is the same word, but MSG_Res_1006 means "a sifter", and
 $ MSG_Res_1010 means "Push this button to filter out some files"
-$ MSG_Res_1006 is a label indicating "entry below is qualifier to filter out" 
+$ MSG_Res_1006 is a label indicating "entry below is qualifier to filter out"
 $ files with
 
 MSG_Resource_0011 "Directorio"
 
 MSG_Resource_0012 ">"
-$ command-line prompt in the Command widget. 
+$ command-line prompt in the Command widget.
 
 
 $set MS_BaseClass
@@ -865,7 +865,7 @@ MSG_DragOverS_0001 "Anexo de icono desconocido."
 MSG_DragOverS_0002 "Estado de arrastrar desconocido."
 
 MSG_DragOverS_0003 "XmNblendModel desconocido."
-$ please do not translate XmNblendModel 
+$ please do not translate XmNblendModel
 
 
 $set MS_DragUnder
@@ -999,9 +999,9 @@ MSG_ColObj_0001 "No se ha podido asignar memoria para los datos de objeto de col
 
 MSG_ColObj_0002 "Error en el número de pantalla de selección de servidor de color."
 
- 
+
 $set MS_IG
- 
+
 MSG_IG_1 "Alineación incorrecta."
 $ MSG_IG_1 message is obsolete - DO NOT localize this message.
 

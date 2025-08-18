@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,16 +19,16 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 
 extern void CreateActiveIconTextWindow (WmScreenData *pSD);
 extern void DrawIconTitle (ClientData *pcd);
-extern void GetIconDimensions (WmScreenData *pSD, unsigned int *pWidth, 
-			       unsigned int *pLabelHeight, 
+extern void GetIconDimensions (WmScreenData *pSD, unsigned int *pWidth,
+			       unsigned int *pLabelHeight,
 			       unsigned int *pImageHeight);
 extern void GetIconTitleBox (ClientData *pcd, XRectangle *pBox);
 extern void HideActiveIconText (WmScreenData *pSD);
@@ -38,14 +38,12 @@ extern Boolean MakeIcon (WmWorkspaceData *pWS, ClientData *pcd);
 extern void MakeIconShadows (ClientData *pcd, int xOffset, int yOffset);
 extern void MoveActiveIconText (ClientData *pcd);
 extern void PaintActiveIconText (ClientData *pcd, Boolean erase);
-extern void PutBoxInIconBox (ClientData *pCD, int *px, int *py, 
+extern void PutBoxInIconBox (ClientData *pCD, int *px, int *py,
 			     unsigned int *width, unsigned int *height);
-extern void PutBoxOnScreen (int screen, int *px, int *py, unsigned int width, 
+extern void PutBoxOnScreen (int screen, int *px, int *py, unsigned int width,
 			    unsigned int height);
 extern void RedisplayIconTitle (ClientData *pcd);
 extern void ReparentIconWindow (ClientData *pcd, int xOffset, int yOffset);
 extern void ShowActiveIcon (ClientData *pcd);
 extern void ShowActiveIconText (ClientData *pcd);
 extern void ShowInactiveIcon (ClientData *pcd, Boolean refresh);
-
-

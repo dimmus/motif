@@ -39,35 +39,35 @@ static void CreateAnotherContainer();
 /*
  * Callbacks
  */
-static void PrintChildrenCB(Widget widget, XtPointer client_data, 
+static void PrintChildrenCB(Widget widget, XtPointer client_data,
 			    XtPointer call_data);
-static void ConvertCB(Widget widget, XtPointer client_data, 
+static void ConvertCB(Widget widget, XtPointer client_data,
 		      XtPointer call_data);
 static void DestinationCB(Widget widget, XtPointer client_data,
 			  XtPointer call_data);
 static void CutCB(Widget widget, XtPointer client_data, XtPointer call_data);
 static void CopyCB(Widget widget, XtPointer client_data, XtPointer call_data);
-static void CopyLinkCB(Widget widget, XtPointer client_data, 
+static void CopyLinkCB(Widget widget, XtPointer client_data,
 		       XtPointer call_data);
 static void PasteCB(Widget widget, XtPointer client_data, XtPointer call_data);
-static void PasteLinkCB(Widget widget, XtPointer client_data, 
+static void PasteLinkCB(Widget widget, XtPointer client_data,
 			XtPointer call_data);
 
 /*
  * Forward routines declaration
- */ 
+ */
 static int SIF_ErrorHandler(Display *display,XErrorEvent *event);
 static char *GetSafeAtom(Display *display,Atom a);
 static char *GetStringFrom(XtEnum operation);
 
-char	*ColumnHeadingText[NUM_COL] = { 
+char	*ColumnHeadingText[NUM_COL] = {
     "Icon",
     "Full Title",
     "Favorite Flavor",
     "Age"
     };
 
-char	*FullTitleText[NUM_OBJ] = { 
+char	*FullTitleText[NUM_OBJ] = {
     "The First Object",
     "2nd Object, but still important",
     "Show",
@@ -80,7 +80,7 @@ char	*FullTitleText[NUM_OBJ] = {
     "Last object"
     };
 
-char	*FlavorText[NUM_OBJ] = { 
+char	*FlavorText[NUM_OBJ] = {
     "Chocolate",
     "Raspberry",
     "Blueberry",
@@ -93,7 +93,7 @@ char	*FlavorText[NUM_OBJ] = {
     "Boysenberry"
     };
 
-char	*AgeText[NUM_OBJ] = { 
+char	*AgeText[NUM_OBJ] = {
     "42",
     "10",
     "4",
@@ -124,28 +124,28 @@ main(int argc, char **argv)
     int			test_num;
     char		test_char;
     char		ContainerName[NAME_LEN + 1];
-    
+
     ContainerName[0] = '\0';
     test_num = 0;
     test_char = '\0';
-    
+
     CommonTestInit(argc, argv);
 
     if (UserData != NULL) {
-	
-	if (strcmp(UserData, "a") == 0) 
+
+	if (strcmp(UserData, "a") == 0)
 	    test_num = 1;
-	else if (strcmp(UserData, "b") == 0) 
+	else if (strcmp(UserData, "b") == 0)
 	    test_num = 2;
-	else if (strcmp(UserData, "c") == 0) 
+	else if (strcmp(UserData, "c") == 0)
 	    test_num = 3;
-	else if (strcmp(UserData, "d") == 0) 
+	else if (strcmp(UserData, "d") == 0)
 	    test_num = 4;
-	
+
 	test_char = *UserData;
-	
+
 	free(UserData);
-	
+
     }
     sprintf(ContainerName, "Container4%c", test_char);
 
@@ -158,7 +158,7 @@ main(int argc, char **argv)
     XtManageChild(MainW1);
 
     /*
-     * Create a menu bar with a pulldown menu for interacting with the 
+     * Create a menu bar with a pulldown menu for interacting with the
      * clipboard
      */
 
@@ -168,7 +168,7 @@ main(int argc, char **argv)
 
     n = 0;
     pulldown1 = XmCreatePulldownMenu(menubar1, "pulldown1", args, n);
-    
+
     Label = XmStringCreate("Edit", XmSTRING_DEFAULT_CHARSET);
     n = 0;
     XtSetArg(args[n], XmNlabelString, Label);  n++;
@@ -216,9 +216,9 @@ main(int argc, char **argv)
     PasteLinkPB1= XmCreatePushButtonGadget(pulldown1, "PasteLinkPB1", args, n);
     XtManageChild(PasteLinkPB1);
     XmStringFree(Label);
-    
+
     /*
-     * Create the container 
+     * Create the container
      */
 
     ColumnHeadings = (XmStringTable) XtMalloc(NUM_COL * sizeof(XmString));
@@ -236,18 +236,18 @@ main(int argc, char **argv)
     Container4 = XmCreateContainer(MainW1, ContainerName, args, n);
 
     XtManageChild(Container4);
-    
+
     XtAddCallback(Container4, XmNdefaultActionCallback, PrintChildrenCB, NULL);
     XtAddCallback(Container4, XmNconvertCallback, ConvertCB, NULL);
     XtAddCallback(Container4, XmNdestinationCallback, DestinationCB, NULL);
 
     XtAddCallback(CutPB1, XmNactivateCallback, CutCB, (XtPointer) Container4);
     XtAddCallback(CopyPB1, XmNactivateCallback, CopyCB, (XtPointer)Container4);
-    XtAddCallback(CopyLinkPB1, XmNactivateCallback, CopyLinkCB, 
+    XtAddCallback(CopyLinkPB1, XmNactivateCallback, CopyLinkCB,
 		  (XtPointer) Container4);
-    XtAddCallback(PastePB1, XmNactivateCallback, PasteCB, 
+    XtAddCallback(PastePB1, XmNactivateCallback, PasteCB,
 		  (XtPointer) Container4);
-    XtAddCallback(PasteLinkPB1, XmNactivateCallback, PasteLinkCB, 
+    XtAddCallback(PasteLinkPB1, XmNactivateCallback, PasteLinkCB,
 		  (XtPointer) Container4);
 
     for (i=0; i<NUM_COL; i++)
@@ -255,7 +255,7 @@ main(int argc, char **argv)
     XtFree((XtPointer) ColumnHeadings);
 
     EntryDetails = (XmStringTable *) XtMalloc(NUM_OBJ * sizeof(XmStringTable));
-    
+
     for (i = 0; i < NUM_OBJ; i++) {
 	ColumnHeadings = (XmStringTable)XtMalloc((NUM_COL-1) * sizeof(XmString));
 	ColumnHeadings[0] = XmStringGenerate(FullTitleText[i],
@@ -278,101 +278,101 @@ main(int argc, char **argv)
     XtSetArg(args[n], XmNx, 100); n++;
     XtSetArg(args[n], XmNy, 100); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[0]); n++;
     IconGad1 = XmCreateIconGadget(Container4, "IconGad1", args, n);
     XtManageChild(IconGad1);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 200); n++;
     XtSetArg(args[n], XmNy, 200); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[1]); n++;
     IconGad2 = XmCreateIconGadget(Container4, "IconGad2", args, n);
     XtManageChild(IconGad2);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 300); n++;
     XtSetArg(args[n], XmNy, 100); n++;
     XtSetArg(args[n], XmNviewType, XmLARGE_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[2]); n++;
     IconGad3 = XmCreateIconGadget(Container4, "IconGad3", args, n);
     XtManageChild(IconGad3);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 50); n++;
     XtSetArg(args[n], XmNy, 400); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[3]); n++;
     IconGad4 = XmCreateIconGadget(Container4, "IconGad4", args, n);
     XtManageChild(IconGad4);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad3); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[4]); n++;
     IconGad31 = XmCreateIconGadget(Container4, "IconGad31", args, n);
     XtManageChild(IconGad31);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad3); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[5]); n++;
     IconGad32 = XmCreateIconGadget(Container4, "IconGad32", args, n);
     XtManageChild(IconGad32);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad32); n++;
     XtSetArg(args[n], XmNviewType, XmLARGE_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[6]); n++;
     IconGad321 = XmCreateIconGadget(Container4, "IconGad321", args, n);
     XtManageChild(IconGad321);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad321); n++;
     XtSetArg(args[n], XmNviewType, XmLARGE_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[7]); n++;
     IconGad3211 = XmCreateIconGadget(Container4, "IconGad3211", args, n);
     XtManageChild(IconGad3211);
-    
+
     n = 0;
     XtSetArg(args[n], XmNentryParent, IconGad3); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[8]); n++;
     IconGad33 = XmCreateIconGadget(Container4, "IconGad33", args, n);
     XtManageChild(IconGad33);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 70); n++;
     XtSetArg(args[n], XmNy, 420); n++;
     XtSetArg(args[n], XmNviewType, XmLARGE_ICON); n++;
-    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++; 
+    XtSetArg(args[n], XmNdetailCount, NUM_COL-1); n++;
     XtSetArg(args[n], XmNdetail, EntryDetails[9]); n++;
     IconGad5 = XmCreateIconGadget(Container4, "IconGad5", args, n);
     XtManageChild(IconGad5);
-    
+
     XmMainWindowSetAreas(MainW1, menubar1, NULL, NULL, NULL, Container4);
 
     for (i = 0; i < NUM_OBJ; i++) {
-	
+
 	ColumnHeadings = EntryDetails[i];
 	for (j = 0; j < NUM_COL-1; j++)
 	    XmStringFree(ColumnHeadings[j]);
 	XtFree((XtPointer)ColumnHeadings);
-	
+
     }
     XtFree((XtPointer)EntryDetails);
-    
+
     XtRealizeWidget(Shell1);
-    
+
     CommonPause();
 
     CommonPause();
@@ -398,9 +398,9 @@ main(int argc, char **argv)
     CommonPause();
 
     CommonPause();
-    
+
     XtAppMainLoop(app_context);
-    
+
 }
 
 static void TestContainerReorder()
@@ -448,7 +448,7 @@ static void CreateAnotherContainer()
     n = 0;
     XtSetArg(args[n], XtNgeometry, "=375x375+400+300"); n++;
     XtSetArg(args[n], XtNallowShellResize, True); n++;
-    PopupShell = XtCreatePopupShell("OtherContainer", 
+    PopupShell = XtCreatePopupShell("OtherContainer",
 				    topLevelShellWidgetClass, Shell1,
 				    args, n);
 
@@ -461,7 +461,7 @@ static void CreateAnotherContainer()
     XtManageChild(MainW2);
 
     /*
-     * Create a menu bar with a pulldown menu for interacting with the 
+     * Create a menu bar with a pulldown menu for interacting with the
      * clipboard
      */
 
@@ -471,7 +471,7 @@ static void CreateAnotherContainer()
 
     n = 0;
     pulldown2 = XmCreatePulldownMenu(menubar2, "pulldown2", args, n);
-    
+
     Label = XmStringCreate("Edit", XmSTRING_DEFAULT_CHARSET);
     n = 0;
     XtSetArg(args[n], XmNlabelString, Label);  n++;
@@ -519,9 +519,9 @@ static void CreateAnotherContainer()
     PasteLinkPB2= XmCreatePushButtonGadget(pulldown2, "PasteLinkPB2", args, n);
     XtManageChild(PasteLinkPB2);
     XmStringFree(Label);
-    
+
     /*
-     * Create the container 
+     * Create the container
      */
     n = 0;
     XtSetArg(args[n], XmNwidth, 450); n++;
@@ -532,20 +532,20 @@ static void CreateAnotherContainer()
     XtSetArg(args[n], XmNautomaticSelection, XmNO_AUTO_SELECT); n++;
     OtherContainer4 = XmCreateContainer(MainW2, "OtherContainer", args, n);
     XtManageChild(OtherContainer4);
-    
+
     XtAddCallback(OtherContainer4, XmNconvertCallback, ConvertCB, NULL);
-    XtAddCallback(OtherContainer4, XmNdestinationCallback, DestinationCB, 
+    XtAddCallback(OtherContainer4, XmNdestinationCallback, DestinationCB,
 		  NULL);
 
-    XtAddCallback(CutPB2, XmNactivateCallback, CutCB, 
+    XtAddCallback(CutPB2, XmNactivateCallback, CutCB,
 		  (XtPointer) OtherContainer4);
-    XtAddCallback(CopyPB2, XmNactivateCallback, CopyCB, 
+    XtAddCallback(CopyPB2, XmNactivateCallback, CopyCB,
 		  (XtPointer) OtherContainer4);
     XtAddCallback(CopyLinkPB2, XmNactivateCallback, CopyLinkCB,
 		  (XtPointer) OtherContainer4);
-    XtAddCallback(PastePB2, XmNactivateCallback, PasteCB, 
+    XtAddCallback(PastePB2, XmNactivateCallback, PasteCB,
 		  (XtPointer) OtherContainer4);
-    XtAddCallback(PasteLinkPB2, XmNactivateCallback, PasteLinkCB, 
+    XtAddCallback(PasteLinkPB2, XmNactivateCallback, PasteLinkCB,
 		  (XtPointer) OtherContainer4);
     n = 0;
     XtSetArg(args[n], XmNx, 50); n++;
@@ -553,35 +553,35 @@ static void CreateAnotherContainer()
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
     IconGad6 = XmCreateIconGadget(OtherContainer4, "IconGad6", args, n);
     XtManageChild(IconGad6);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 150); n++;
     XtSetArg(args[n], XmNy, 150); n++;
     XtSetArg(args[n], XmNviewType, XmLARGE_ICON); n++;
     IconGad7 = XmCreateIconGadget(OtherContainer4, "IconGad7", args, n);
     XtManageChild(IconGad7);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 50); n++;
     XtSetArg(args[n], XmNy, 300); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
     IconGad8 = XmCreateIconGadget(OtherContainer4, "IconGad8", args, n);
     XtManageChild(IconGad8);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 300); n++;
     XtSetArg(args[n], XmNy, 300); n++;
     XtSetArg(args[n], XmNviewType, XmSMALL_ICON); n++;
     IconGad9 = XmCreateIconGadget(OtherContainer4, "IconGad9", args, n);
     XtManageChild(IconGad9);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 200); n++;
     XtSetArg(args[n], XmNy, 50); n++;
     XtSetArg(args[n], XmNviewType, XmLARGE_ICON); n++;
     IconGad10 = XmCreateIconGadget(OtherContainer4, "IconGad10", args, n);
     XtManageChild(IconGad10);
-    
+
     XmMainWindowSetAreas(MainW2, menubar2, NULL, NULL, NULL, OtherContainer4);
 
     XtPopup(PopupShell, XtGrabNone);
@@ -600,10 +600,10 @@ PrintChildrenCB(Widget widget,XtPointer client_data, XtPointer call_data)
      return;
 
    for (i=0; i < cbs->selected_item_count; i++) {
-      num_children = XmContainerGetItemChildren (widget, 
+      num_children = XmContainerGetItemChildren (widget,
 						 cbs->selected_items[i],
 						 &children);
-      printf("Number of children for %s : %d\n", 
+      printf("Number of children for %s : %d\n",
 	     XtName(cbs->selected_items[i]), num_children);
 
       if (num_children != 0) {
@@ -643,13 +643,13 @@ ConvertCB(Widget widget,XtPointer client_data, XtPointer call_data)
 
    printf("        target    = %s\n", atom_name);
 
-   /* Only print the value of parm (which is the operation) when the 
+   /* Only print the value of parm (which is the operation) when the
       selection is CLIPBOARD */
 
-   if (selection_atom_name != NULL 
-       && strcmp(selection_atom_name, "CLIPBOARD") == 0 
-       && cbs->parm != (XtPointer) 0) 
-     printf("        parm      = %s\n", 
+   if (selection_atom_name != NULL
+       && strcmp(selection_atom_name, "CLIPBOARD") == 0
+       && cbs->parm != (XtPointer) 0)
+     printf("        parm      = %s\n",
 	    GetStringFrom((XtEnum) ((int) cbs->parm)));
 
    printf("\n");
@@ -691,7 +691,7 @@ CutCB(Widget widget,XtPointer client_data, XtPointer call_data)
 
    container = (Widget) client_data;
 
-   status = XmContainerCut(container, 
+   status = XmContainerCut(container,
 			   XtLastTimestampProcessed(XtDisplay(container)));
 
    printf("Return status of XmContainerCut function: %d\n\n", (int) status);
@@ -705,7 +705,7 @@ CopyCB(Widget widget,XtPointer client_data, XtPointer call_data)
 
    container = (Widget) client_data;
 
-   status = XmContainerCopy(container, 
+   status = XmContainerCopy(container,
 			    XtLastTimestampProcessed(XtDisplay(container)));
 
    printf("Return status of XmContainerCopy function: %d\n\n", (int) status);
@@ -720,10 +720,10 @@ CopyLinkCB(Widget widget, XtPointer client_data, XtPointer call_data)
 
    container = (Widget) client_data;
 
-   status = XmContainerCopyLink(container, 
+   status = XmContainerCopyLink(container,
 			XtLastTimestampProcessed(XtDisplay(container)));
 
-   printf("Return status of XmContainerCopyLink function: %d\n\n", 
+   printf("Return status of XmContainerCopyLink function: %d\n\n",
 	  (int) status);
 
 }
@@ -736,7 +736,7 @@ PasteCB(Widget widget,XtPointer client_data, XtPointer call_data)
 
    container = (Widget) client_data;
 
-   status = XmContainerPaste(container); 
+   status = XmContainerPaste(container);
 
    printf("Return status of XmContainerPaste function: %d\n\n", (int) status);
 
@@ -750,9 +750,9 @@ PasteLinkCB(Widget widget,XtPointer client_data, XtPointer call_data)
 
    container = (Widget) client_data;
 
-   status = XmContainerPasteLink(container); 
+   status = XmContainerPasteLink(container);
 
-   printf("Return status of XmContainerPasteLink function: %d\n\n", 
+   printf("Return status of XmContainerPasteLink function: %d\n\n",
 	  (int) status);
 
 }
@@ -760,7 +760,7 @@ PasteLinkCB(Widget widget,XtPointer client_data, XtPointer call_data)
 /* Error handler for XGetAtomName */
 
 static int SIF_ErrorFlag;
- 
+
 static int
 SIF_ErrorHandler(Display *display,XErrorEvent *event)
 {
@@ -798,7 +798,7 @@ GetStringFrom(XtEnum operation)
         case XmMOVE:
            returnvalue = "XmMOVE";
 	   break;
-	case XmCOPY: 
+	case XmCOPY:
 	   returnvalue = "XmCOPY";
 	   break;
         case XmLINK:

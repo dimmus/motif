@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: drawArea.uil /main/8 1995/07/13 20:44:31 drk $
 !******************************************************************************
 module Test
@@ -30,7 +30,7 @@ module Test
         names = case_sensitive
 
   include file "drawArea.msg";
-  
+
   procedure
           exit_test();
 	  Report_Callback(string);
@@ -41,7 +41,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -63,7 +63,7 @@ module Test
 		XmNbackgroundPixmap = palette;
             };
 	    callbacks {
-		XmNexposeCallback = procedure Report_Callback 
+		XmNexposeCallback = procedure Report_Callback
 				('exposeCallback');
 		XmNinputCallback = procedure Report_Callback
 				('inputCallback');
@@ -73,7 +73,7 @@ module Test
 
 object
 	explanation : XmBulletinBoardDialog {
-			arguments { 
+			arguments {
 				  XmNx = 500;
 				  XmNy  = 0;
 				  XmNdefaultPosition = false;
@@ -111,13 +111,13 @@ object
 				  XmNlabelString = compound_string("Explanation of Widget Displayed");
 				  };
 		};
-		
+
 
 object
 	text1 : XmText {
 			arguments {
 				  XmNx = 0;
-				  XmNy = 40;  
+				  XmNy = 40;
 				  XmNheight = 250;
 				  XmNwidth = 300;
 				  XmNwordWrap = true;
@@ -127,6 +127,6 @@ object
 				  XmNforeground = navy;
 				  XmNvalue = message;
 				  };
-				   
+
 		};
 end module;

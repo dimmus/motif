@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation2.c /main/6 1995/07/13 19:42:18 drk $"
@@ -43,7 +43,7 @@ static void DestroyForm();
 static void PushButtonCallback();
 static void CreateMatrix();
 static char *color_name[] = {
-  "Red",       "Green",       "Blue", 
+  "Red",       "Green",       "Blue",
   "Orange",    "Yellow",      "Pink",
   "Magenta",   "Brown",       "Violet",
 };
@@ -59,7 +59,7 @@ Widget frame;
 void main (argc, argv)
 unsigned int argc;
 char **argv;
-     
+
 {
   Display *display;
   int screen;
@@ -71,30 +71,30 @@ char **argv;
     CommonTestInit(argc, argv);
 
   if (UserData != NULL) {
-    if (strcmp (UserData, "unmap") == 0) 
+    if (strcmp (UserData, "unmap") == 0)
 	remove_mode = unmap;
     else if (strcmp (UserData, "unmanage") == 0)
 	remove_mode = unmanage;
     else if (strcmp (UserData, "insensitive") == 0)
  	remove_mode = insensitive;
-    else 
+    else
         remove_mode = destroy;
   }
   else {
     printf ("Test error: no mode specified\n", UserData);
     exit (1);
   }
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 1);               n++;
   XtSetArg (args[n], XmNheight, 1);              n++;
     XtSetValues(Shell1, args, n);
-    
+
   XtRealizeWidget (Shell1);
 
   RunTest(Shell1);
 
-  XtAppMainLoop(app_context);      
+  XtAppMainLoop(app_context);
 }
 
 
@@ -103,14 +103,14 @@ Widget Shell;
 {
   Arg      args[MAX_ARGS];
   unsigned int n;
- 
+
     n = 0;
     frame = XmCreateFrame(Shell, "frame", args, n);
 
 		/* Part 1 of Test */
 
     CreateForm(frame);
-    
+
     /*  Create the first Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	        n++;
@@ -119,7 +119,7 @@ Widget Shell;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     XtSetArg (args[n], XmNnumColumns, 3);				n++;
     Form1 = XmCreateRowColumn(Form, "Form1", args, n);
-    
+
     /*  Create the second Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -129,7 +129,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form2 = XmCreateRowColumn(Form, "Form2", args, n);
-    
+
     /*  Create the third Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -140,7 +140,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form3 = XmCreateRowColumn(Form, "Form3", args, n);
-    
+
     /*  Create the fourth Form.  */
     n = 0;
     XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET);	        n++;
@@ -150,7 +150,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form4 = XmCreateRowColumn(Form, "Form4", args, n);
-    
+
     /*  Create the fifth Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -161,7 +161,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form5 = XmCreateRowColumn(Form, "Form5", args, n);
-    
+
     /*  Create the sixth Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -173,7 +173,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form6 = XmCreateRowColumn(Form, "Form6", args, n);
-    
+
     /*  Create the seventh Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	        n++;
@@ -184,7 +184,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form7 = XmCreateRowColumn(Form, "Form7", args, n);
-    
+
     /*  Create the eigth Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -196,7 +196,7 @@ Widget Shell;
     XtSetArg (args[n], XmNnumColumns, 3);                                  n++;
     XtSetArg (args[n], XmNpacking, XmPACK_COLUMN);                      n++;
     Form8 = XmCreateRowColumn(Form, "Form8", args, n);
-    
+
     /*  Create the ninth Form.  */
     n = 0;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_WIDGET);	        n++;
@@ -233,7 +233,7 @@ Widget Shell;
     XtManageChild(Form9);
     XtManageChild(Form);
     XtManageChild (frame);
- 
+
     CommonPause();
 
     DestroyForm();
@@ -246,7 +246,7 @@ Widget Shell;
 {
   unsigned int n;
   Arg args[MAX_ARGS];
-  
+
   /*  The form creation. */
   n = 0;
   XtSetArg (args[n], XmNpacking, XmPACK_COLUMN); n++;
@@ -282,7 +282,7 @@ static void PushButtonCallback (pb, client_data, call_data)
     XtUnmanageChild(pb);
     break;
   case insensitive:
-    XtSetArg (args[0], XmNsensitive, False); 
+    XtSetArg (args[0], XmNsensitive, False);
     XtSetValues (pb, args, 1);
     break;
   case destroy:
@@ -308,7 +308,7 @@ static void CreateMatrix(form, color)
   Widget PushButton8;
   Widget PushButton9;
   char buf[256];
-  
+
   extern void PushButtonCallback();
 
 
@@ -320,7 +320,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   PushButton1 = XmCreatePushButton(form, buf, args, n);
-       
+
   /*  Create the second PushButton.  */
   strcpy (buf, color);
   strcat (buf, "2");
@@ -330,7 +330,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNrightWidget, PushButton1);		n++;
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
   PushButton2 = XmCreatePushButton(form, buf, args, n);
-  
+
   /*  Create the third PushButton.  */
   strcpy (buf, color);
   strcat (buf, "3");
@@ -351,7 +351,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopWidget, PushButton1);	        n++;
   XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	n++;
   PushButton4 = XmCreatePushButton(form, buf, args, n);
-       
+
   /*  Create the fifth PushButton.  */
   strcpy (buf, color);
   strcat (buf, "5");
@@ -374,7 +374,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopAttachment, XmATTACH_WIDGET);	n++;
   XtSetArg (args[n], XmNtopWidget, PushButton3);    		n++;
   PushButton6 = XmCreatePushButton(form, buf, args, n);
-  
+
   /*  Create the seventh PushButton.  */
   strcpy (buf, color);
   strcat (buf, "7");
@@ -385,7 +385,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopWidget, PushButton4);    		n++;
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
   PushButton7 = XmCreatePushButton(form, buf, args, n);
-       
+
   /*  Create the eigth PushButton.  */
   strcpy (buf, color);
   strcat (buf, "8");
@@ -397,7 +397,7 @@ static void CreateMatrix(form, color)
   XtSetArg (args[n], XmNtopWidget, PushButton5);        	n++;
   XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	n++;
   PushButton8 = XmCreatePushButton(form, buf, args, n);
-  
+
   /*  Create the ninth PushButton.  */
   strcpy (buf, color);
   strcat (buf, "9");

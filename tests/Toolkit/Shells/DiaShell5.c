@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DiaShell5.c /main/7 1995/07/13 19:20:15 drk $"
@@ -69,7 +69,7 @@ caddr_t client_data, call_data;
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 XmStringCreateSimple ("While this box is up, you should not be able to use its parent")); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
     XtSetArg (args[n], XmNhelpLabelString, XmStringCreateSimple ("Spawn Dialog Child")); n++;
@@ -108,7 +108,7 @@ caddr_t client_data, call_data;
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 XmStringCreateSimple ("While this box is up, you should not be able to use either Shell1 or Shell2 nor any other dialog box."
 )); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
@@ -198,19 +198,19 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNtitle, "Shell 2"); n++;
     Shell2 = XtCreatePopupShell("Shell 2", topLevelShellWidgetClass, Shell1,
 			      args, n);
-   
+
     /* Shell 1 children */
 
     n = 0;
     BB1 = XmCreateBulletinBoard (Shell1, "BB1", args, n);
     XtManageChild (BB1);
-    
+
     n = 0;
     XtSetArg (args[n], XmNx, 300); n++;
     XtSetArg (args[n], XmNy, 50); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Default Button")); n++;
-    DB = XmCreatePushButton (BB1, "DB", args, n);	  
+    DB = XmCreatePushButton (BB1, "DB", args, n);
     XtManageChild (DB);
 
     n = 0;
@@ -243,7 +243,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 100); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Primary Modal from Shell2")); n++;
-    test1 = XmCreatePushButton (BB1, "test1", args, n);	  
+    test1 = XmCreatePushButton (BB1, "test1", args, n);
     XtManageChild (test1);
     XtAddCallback (test1, XmNactivateCallback, PostPrimaryModalDialog, Shell2);
 
@@ -252,7 +252,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 150); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Primary Modal from Shell1")); n++;
-    test1a = XmCreatePushButton (BB1, "test1a", args, n);	  
+    test1a = XmCreatePushButton (BB1, "test1a", args, n);
     XtManageChild (test1a);
     XtAddCallback (test1a, XmNactivateCallback, PostPrimaryModalDialog, Shell1);
 
@@ -261,7 +261,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 200); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Full App Modal Dialog")); n++;
-    test2 = XmCreatePushButton (BB1, "test2", args, n);	  
+    test2 = XmCreatePushButton (BB1, "test2", args, n);
     XtManageChild (test2);
     XtAddCallback (test2,  XmNactivateCallback, PostFullAppModalDialog, Shell1);
 
@@ -270,7 +270,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 250); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create System Modal Dialog")); n++;
-    test3 = XmCreatePushButton (BB1, "test3", args, n);	  
+    test3 = XmCreatePushButton (BB1, "test3", args, n);
     XtManageChild (test3);
     XtAddCallback (test3, XmNactivateCallback, PostSystemModalDialog, Shell2);
 
@@ -278,7 +278,7 @@ void  main(argc, argv)
     /* Shell 2 children */
 
     n = 0;
-    BB2 = XmCreateBulletinBoard (Shell2, "BB2", args, n);    
+    BB2 = XmCreateBulletinBoard (Shell2, "BB2", args, n);
     XtManageChild (BB2);
 
     n = 0;
@@ -290,7 +290,7 @@ void  main(argc, argv)
     n = 0;
     XtSetArg (args[n], XmNdefaultButton, DB2); n++;
     XtSetValues (BB2, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
     XtRealizeWidget(Shell2);
@@ -437,5 +437,3 @@ static XtCallbackProc  QuitCB(w, client_data, call_data)
 	printf("Exiting...Please Standby...\n");
 	exit(0);
 }
-
-

@@ -19,12 +19,12 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH simpledrop 1X MOTIF "Demonstration programs"
 .SH NAME
-\*Lsimpledrop\*O\(emis a simple demonstration of the drag and drop 
+\*Lsimpledrop\*O\(emis a simple demonstration of the drag and drop
 system.  Unlike DNDDemo, simpledrop is a minimal example.
 .SH SYNOPSIS
 .sS
@@ -32,7 +32,5 @@ system.  Unlike DNDDemo, simpledrop is a minimal example.
 .sE
 .SH DESCRIPTION
 \*Lsimpledrop\*O
-shows off the most basic features in Motif Drag and Drop.  It also 
+shows off the most basic features in Motif Drag and Drop.  It also
 serves as a programming example.
-
-

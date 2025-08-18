@@ -19,16 +19,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # Two strings should be displayed in an italic font. One created using
 # XmStringCreate() and the other using XmStringCreateLocalized().
 # Verify that both strings begin at the same horizontal position.
-# 
+#
 CompareVisual Label1
 CompareVisual Label2
 
 # E)
 Exit
-

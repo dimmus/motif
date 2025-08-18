@@ -22,16 +22,16 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual XmVPanedWindow1 
+TRACE:(1) CompareVisual XmVPanedWindow1
 TRACE:(2) LocatePointer XmVPanedWindow1 RSash 0
 TRACE:(3) DragXYRelative Up 52 Btn1
-TRACE:(4) CompareVisual XmVPanedWindow1 
+TRACE:(4) CompareVisual XmVPanedWindow1
 TRACE:(5) LocatePointer XmVPanedWindow1 RSash 0
 TRACE:(6) DragXYRelative Down 104 Btn1
-TRACE:(7) CompareVisual XmVPanedWindow1 
+TRACE:(7) CompareVisual XmVPanedWindow1
 TRACE:(8) LocatePointer XmVPanedWindow1 RSash 1
 TRACE:(9) DragXYRelative Down 54 Btn1
-TRACE:(10) CompareVisual XmVPanedWindow1 
+TRACE:(10) CompareVisual XmVPanedWindow1
 TRACE:(11) Continue
 Current height of child is 146
 Using the setValues method...
@@ -55,7 +55,7 @@ TRACE:(16) LocatePointer XmVPanedWindow1 RSash 1
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
 TRACE:(17) DragXYRelative Down 10 Btn1
 TRACE:(18) Continue
-TRACE:(19) CompareVisual Shell1 
+TRACE:(19) CompareVisual Shell1
 TRACE:(20) Continue
 Current height of PushButton1 is 146
    Setting paneMimimum to 146
@@ -63,24 +63,24 @@ Current height of PushButton2 is 154
    Setting paneMimimum to 154
 Current height of PushButton3 is 100
    Setting paneMimimum to 100
-TRACE:(21) CompareVisual XmVPanedWindow1 
+TRACE:(21) CompareVisual XmVPanedWindow1
 TRACE:(22) Continue
 Current height of child is 37
 Using the queryGeometry method...
 Have set paneMinimum to 37 and paneMaximum to 37
 
-TRACE:(23) CompareVisual XmVPanedWindow1 
+TRACE:(23) CompareVisual XmVPanedWindow1
 TRACE:(24) Continue
 Current height of child is 31
 Using the queryGeometry method...
 Have set paneMinimum to 31 and paneMaximum to 31
 
-TRACE:(25) CompareVisual XmVPanedWindow1 
+TRACE:(25) CompareVisual XmVPanedWindow1
 TRACE:(26) Continue
 Current height of child is 31
 Using the queryGeometry method...
 Have set paneMinimum to 31 and paneMaximum to 31
 
-TRACE:(27) CompareVisual XmVPanedWindow1 
+TRACE:(27) CompareVisual XmVPanedWindow1
 TRACE:(28) Exit
 Exiting Test...Please Standby...

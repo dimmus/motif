@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DialogRes.c /main/8 1995/07/13 19:20:22 drk $"
@@ -137,9 +137,9 @@ XtPointer client_data, call_data;
 	XtSetArg(args[n], XmNset, &size_value); n++;
 	XtGetValues(Size, args, n);
 
-	n = 0; 
-	XtSetArg(args[n], XmNset, &move_value); n++; 
-	XtGetValues(Move, args, n); 
+	n = 0;
+	XtSetArg(args[n], XmNset, &move_value); n++;
+	XtGetValues(Move, args, n);
 
 	n = 0;
 	XtSetArg(args[n], XmNset, &iconify_value); n++;
@@ -204,7 +204,7 @@ XEvent		*ev;
 				printf("Close window message sent.\n");
 			}
 		}
-	
+
 	}
 }
 											/*End PIR2133*/
@@ -246,7 +246,7 @@ XtPointer client_data, call_data;
 	}
 	/*
 	 * If ApplyFunctions != NULL that means the control panel
-	 * has been extended to show the mwmFunctions related 
+	 * has been extended to show the mwmFunctions related
 	 * resource toggle buttons. So, unset them also.
 	 */
 	if (ApplyFunctions != NULL) {
@@ -290,11 +290,11 @@ XtPointer client_data, call_data;
     n = 0;
     /* message box resources */
     XtSetArg (args[n], XmNmessageString, label_string);
-			  
+
     /* dialog shell resources */
     XtSetArg (args[n], XmNtitle, "DialogShell1"); n++;
     XtSetArg (args[n], XmNdialogStyle, XmDIALOG_MODELESS); n++;
-    XtSetArg (args[n], XmNhelpLabelString, 
+    XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Destroy Me")); n++;
 	XtSetArg(args[n], XmNautoUnmanage, False); n++;
     Dialog1 = XmCreateMessageDialog(parent, "DialogShell1", args, n);
@@ -306,7 +306,7 @@ XtPointer client_data, call_data;
 	XtUnmanageChild(okButton);
 
     destroyButton = XmMessageBoxGetChild (Dialog1, XmDIALOG_HELP_BUTTON);
-    XtAddCallback (destroyButton, XmNactivateCallback, destroyDialogCB, 
+    XtAddCallback (destroyButton, XmNactivateCallback, destroyDialogCB,
 				   Dialog1);
 
     XtManageChild (Dialog1);
@@ -314,7 +314,7 @@ XtPointer client_data, call_data;
 	DialogShell1 = XtParent(Dialog1);
 
 											/*Begin PIR2133*/
-    XtAddEventHandler(DialogShell1, NoEventMask, True, 
+    XtAddEventHandler(DialogShell1, NoEventMask, True,
 			(XtEventHandler) CMEventHandler, (XtPointer) NULL);
 
 	/*
@@ -395,7 +395,7 @@ char	**argv;
     label_string = XmStringCreateSimple ("Post Dialog");
     n = 0;
 	XtSetArg(args[n], XmNlabelString,label_string); n++;
-			 
+
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNtopOffset, 5); n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
@@ -404,7 +404,7 @@ char	**argv;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
 	PostDialog = XmCreatePushButton (Form, "PostDialog", args, n);
     XtManageChild (PostDialog);
-    XtAddCallback (PostDialog, XmNactivateCallback, postDialogCB, 
+    XtAddCallback (PostDialog, XmNactivateCallback, postDialogCB,
 				   Shell1);
     XmStringFree (label_string);
 
@@ -465,7 +465,7 @@ char	**argv;
     XtSetArg(args[n], XmNsensitive, False); n++;
 	ApplyDecorations = XmCreatePushButton (Form, "ApplyDecorations", args, n);
     XtManageChild (ApplyDecorations);
-    XtAddCallback (ApplyDecorations, XmNactivateCallback, applyDecorationsCB, 
+    XtAddCallback (ApplyDecorations, XmNactivateCallback, applyDecorationsCB,
 				   Shell1);
 
 	XtRealizeWidget(Shell1);
@@ -531,7 +531,7 @@ char	**argv;
     XtSetArg(args[n], XmNlabelString, label_string); n++;
     ApplyFunctions = XmCreatePushButton (Form, "ApplyFunctions", args, n);
     XtManageChild (ApplyFunctions);
-    XtAddCallback (ApplyFunctions, XmNactivateCallback, applyFunctionsCB, 
+    XtAddCallback (ApplyFunctions, XmNactivateCallback, applyFunctionsCB,
 				   Shell1);
     XmStringFree (label_string);
 
@@ -546,4 +546,3 @@ char	**argv;
     XtAppMainLoop(app_context);
 
 }
-

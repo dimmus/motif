@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: FileSelect3.c /main/11 1999/05/28 15:46:09 jff $"
@@ -30,8 +30,8 @@ static char rcsid[] = "$TOG: FileSelect3.c /main/11 1999/05/28 15:46:09 jff $"
 #endif
 
 
-/* 
- * Create a file selection box with menu bar and button children, as 
+/*
+ * Create a file selection box with menu bar and button children, as
  *  detailed in the Motif 1.2 specification
  */
 
@@ -73,7 +73,7 @@ static XtCallbackRec help_cb[] = {
 static void OkCB(Widget w, caddr_t client_data, caddr_t call_data)
 {
   printf("OK Callback received\n");
-}	
+}
 
 /*-------------------------------------------------------------
 **      HelpCB        - callback for help button
@@ -91,7 +91,7 @@ void main (argc,argv)
 unsigned int argc;
 char **argv;
 {
-  Arg args[10]; 
+  Arg args[10];
   register int n;
   XmString tcs;
   Widget  Frame;
@@ -108,7 +108,7 @@ char **argv;
   /*  initialize toolkit */
 
   CommonTestInit(argc, argv);
-  
+
   n = 0;
   Frame = XmCreateFrame(Shell1, "Frame", args, n);
   XtManageChild(Frame);
@@ -143,7 +143,7 @@ char **argv;
   pushButton = XmCreatePushButton(fsbox, "PushMe1", args, n);
   XtManageChild(pushButton);
 
-  tcs = XmStringLtoRCreate("ToggleMe2", XmSTRING_DEFAULT_CHARSET); 
+  tcs = XmStringLtoRCreate("ToggleMe2", XmSTRING_DEFAULT_CHARSET);
 
   XtSetArg(args[n], XmNlabelString, tcs); 			n++;
   toggleButton = XmCreateToggleButton(fsbox, "ToggleMe2", args, n);

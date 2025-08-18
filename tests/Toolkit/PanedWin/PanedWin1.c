@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: PanedWin1.c /main/5 1999/08/04 13:17:23 mgreess $"
@@ -60,7 +60,7 @@ XtPointer client, call;
     XtManageChild(XmCreatePushButton(rc, str, args, n));
   }
   counter++;
-}	
+}
 
 
 void  main(argc, argv)
@@ -72,12 +72,12 @@ char **argv;
   XmString      tcs;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetValues(Shell1, args, n);
-    
+
   XtRealizeWidget(Shell1);
 
   printf("Paned Window created.\n");
@@ -108,14 +108,14 @@ char **argv;
   XtManageChild(PB3);
 
   CommonPause();
-  
+
   printf("Setting PB2's XmNmappedWhenManaged to true via XtSetValues.\n");
   n = 0;
   XtSetArg(args[n], XmNmappedWhenManaged,  True);  n++;
   XtSetValues(PB2, args, n);
 
   CommonPause();
-  
+
   XtSetMappedWhenManaged(PB1,FALSE);
   printf(
   "Setting PB1's XmNmappedWhenManaged to false via XtSetMappedWhenManaged.\n");
@@ -142,7 +142,7 @@ char **argv;
   XtSetArg(args[n], XmNheight, 30); n++;
   XtSetArg(args[n], XmNskipAdjust, True); n++;
   XtSetArg(args[n], XmNallowResize, False); n++;
-  XtSetArg(args[n], XmNpaneMinimum, 30); n++;	
+  XtSetArg(args[n], XmNpaneMinimum, 30); n++;
   XtSetArg(args[n], XmNpaneMaximum, 30); n++;
   XtSetValues (PB1, args, n);
   XtAddCallback(PB1, XmNactivateCallback, add_buttons, 0);
@@ -156,7 +156,7 @@ char **argv;
   XtManageChild(rc);
 
   CommonPause();
-  
+
   XtDestroyWidget(rc);
   XtDestroyWidget(PB3);
 
@@ -171,9 +171,9 @@ char **argv;
   n = 0;
   PB3 = XmCreatePushButton (PanedWindow1, "PB3", args, n);
   XtManageChild (PB3);
-  
+
   CommonPause();
-    
+
   /* end of test for PIR 3063 */
 
   XtDestroyWidget(PanedWindow1);
@@ -182,7 +182,7 @@ char **argv;
 
   PanedWindow1 = XmCreatePanedWindow(Shell1, "PanedWindow1", args, n);
   XtManageChild(PanedWindow1);
-    
+
   CommonPause();
 
   n = 0;
@@ -197,6 +197,3 @@ char **argv;
   XtAppMainLoop(app_context);
 
 }
-
-
-

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -31,10 +31,10 @@
 typedef XtPointer (*ConvertProc)(String value);
 static Widget	        CreateOptionMenu(Widget parent, Cardinal j);
 static Widget	        CreateResLine(Widget parent, Cardinal j);
-static Widget	        CreatePushButton(Widget parent, Cardinal j, 
+static Widget	        CreatePushButton(Widget parent, Cardinal j,
 					 Cardinal k);
 static void		CreateControlPanel(void );
-static void		ApplyCB(Widget wid, XtPointer client_data, 
+static void		ApplyCB(Widget wid, XtPointer client_data,
 				XtPointer call_data);
 static XtPointer        LabelStringConvert(String  value);
 static XtPointer        IconPixmapConvert(String  value);
@@ -173,7 +173,7 @@ static IconResInfo icon_res_info[] = {
 	XtNumber(ViewTypeValues),
 	ViewTypeConvert
     },
-    {	
+    {
 	XmNvisualEmphasis,
 	VisualEmphasisValues,
 	XtNumber(VisualEmphasisValues),
@@ -246,8 +246,8 @@ CreateControlPanel(void )
    n = 0;
    XtSetArg(args[n], XtNgeometry, "=+50+300"); n++;
    XtSetArg(args[n], XtNallowShellResize, True); n++;
-   PopupShell = XtCreatePopupShell("Icon Gadget Resources", 
-                                    topLevelShellWidgetClass, Shell1, 
+   PopupShell = XtCreatePopupShell("Icon Gadget Resources",
+                                    topLevelShellWidgetClass, Shell1,
                                     args, n);
 
    n = 0;
@@ -294,7 +294,7 @@ CreateControlPanel(void )
 
        sprintf(widget_name, "TB_IconGad%d", i+1);
        sprintf(name, "IconGad%d", i+1);
-       tcs = XmStringGenerate(name, XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, 
+       tcs = XmStringGenerate(name, XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT,
 			      NULL);
 
        n = 0;
@@ -316,13 +316,13 @@ CreateResLine(Widget parent, Cardinal j)
     Cardinal	n, k;
     char        toggle_name[30];
     XmString    tcs;
-    
+
     n = 0;
     XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
     RcResLine = XmCreateRowColumn(parent, "RcResLine", args, n);
     XtManageChild(RcResLine);
 
-    tcs = XmStringGenerate("", XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, 
+    tcs = XmStringGenerate("", XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT,
 			   NULL);
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -351,7 +351,7 @@ CreateResLine(Widget parent, Cardinal j)
     n = 0;
     XtSetArg(args[n], XmNsubMenuId, ResPulldown); n++;
     XtSetValues(OptRes, args, n);
-    
+
     return RcResLine ;
 }
 
@@ -364,7 +364,7 @@ ApplyCB(Widget wid, XtPointer client_data, XtPointer call_data)
     for (i=0; i < NUM_ICONG; i++) {
 	if (XmToggleButtonGetState(IconTog[i]))
 	    ProcessIcon(i);
-    }    
+    }
 }
 
 static void
@@ -392,15 +392,15 @@ ProcessRes(Cardinal i, Cardinal j)
     /* if the TogSet is On, process */
     sprintf(name, "TogSet_%s", icon_res_info[j].name);
     TogSet = XtNameToWidget(IconRes[j], name);
-    
+
     if (!XmToggleButtonGetState(TogSet)) return ;
 
     /* find the current value in the option */
     sprintf(name, "OM_%s", icon_res_info[j].name);
     OptRes = XtNameToWidget(IconRes[j], name);
-    
+
     XtVaGetValues(OptRes, XmNmenuHistory, &cur_pushb, NULL);
-    
+
     XtVaGetValues(cur_pushb, XmNuserData, &user_data, NULL);
     cur_k = (int) user_data ;
 
@@ -421,7 +421,7 @@ CreatePushButton(Widget parent, Cardinal j, Cardinal k)
     XmString        tcs;
     char            name[25];
 
-    /* Name of a push button in the pulldown has the form "resourcePBnumber" 
+    /* Name of a push button in the pulldown has the form "resourcePBnumber"
        where resource is the resource name, and number is the rang in the
        resource value array */
 
@@ -456,7 +456,7 @@ CreateOptionMenu(Widget parent, Cardinal j)
 
     sprintf(name, "OM_%s", icon_res_info[j].name);
 
-    tcs = XmStringGenerate(icon_res_info[j].name, XmFONTLIST_DEFAULT_TAG, 
+    tcs = XmStringGenerate(icon_res_info[j].name, XmFONTLIST_DEFAULT_TAG,
 			   XmCHARSET_TEXT, NULL);
 
     n = 0;
@@ -470,7 +470,7 @@ CreateOptionMenu(Widget parent, Cardinal j)
 
 }
 
-static XtPointer 
+static XtPointer
 LabelStringConvert(String value)
 
 {
@@ -482,7 +482,7 @@ LabelStringConvert(String value)
 }
 
 
-static XtPointer 
+static XtPointer
 IconPixmapConvert(String value)
 
 {
@@ -505,7 +505,7 @@ IconPixmapConvert(String value)
 }
 
 
-static XtPointer 
+static XtPointer
 IconMaskConvert(String value)
 
 {
@@ -520,13 +520,13 @@ IconMaskConvert(String value)
 }
 
 
-static XtPointer 
+static XtPointer
 DetailConvert(String value)
 
 {
     XmStringTable st;
     int           num_details, i;
-    
+
 
     if (strcmp(value, DetailValues[0]) == 0)
 	num_details = 1;
@@ -539,12 +539,12 @@ DetailConvert(String value)
 
     for (i = 0; i < num_details; i++)
 	st[i] = XmStringGenerate(DetailString[i], NULL, XmCHARSET_TEXT, NULL);
-    
+
     return (XtPointer)st ;
 }
 
 
-static XtPointer 
+static XtPointer
 CardinalConvert(String value)
 
 {
@@ -559,7 +559,7 @@ CardinalConvert(String value)
 }
 
 
-static XtPointer 
+static XtPointer
 ViewTypeConvert(String value)
 
 {
@@ -576,7 +576,7 @@ ViewTypeConvert(String value)
     return (return_value);
 }
 
-static XtPointer 
+static XtPointer
 VisualEmphasisConvert(String value)
 
 {

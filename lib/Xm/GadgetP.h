@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmGadgetP_h
 #define _XmGadgetP_h
 
@@ -79,7 +79,7 @@ typedef struct _XmGadgetCache
 
 /* A cache entry for each class which desires gadget caching */
 
-typedef struct _XmCacheClassPart 
+typedef struct _XmCacheClassPart
 {
    XmGadgetCache	cache_head;
    XmCacheCopyProc	cache_copy;
@@ -114,8 +114,8 @@ typedef struct _XmGadgetClassPart
    XtActionProc         arm_and_activate;
    XmWidgetDispatchProc input_dispatch;
    XmVisualChangeProc   visual_change;		/* unused in Motif 2.0 */
-   XmSyntheticResource * syn_resources;   
-   int                  num_syn_resources;   
+   XmSyntheticResource * syn_resources;
+   int                  num_syn_resources;
    XmCacheClassPartPtr	cache_part;
    XtPointer		extension;
 } XmGadgetClassPart;
@@ -173,8 +173,3 @@ typedef struct _XmGadgetRec
 
 #endif /* _XmGadgetP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-
-
-
-
-

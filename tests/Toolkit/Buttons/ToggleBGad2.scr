@@ -1,5 +1,5 @@
 # $XConsortium: ToggleBGad2.scr /main/6 1995/07/17 20:07:11 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,20 +20,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client with a toggleButton will appear. The toggle indicator
 #  should be set. The smiley pixmap should have black background
-#  and white foreground. 
+#  and white foreground.
 
 CompareVisual label1
 Continue
 
 # Press and Release MB1 in client window. Nothing should
-#  happen. 
+#  happen.
 
 LocatePointer label1
 ClickMB Btn1

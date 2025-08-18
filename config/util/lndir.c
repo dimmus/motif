@@ -2,7 +2,7 @@
 /* Create shadow link tree (after X11R4 script of the same name)
    Mark Reinhold (mbr@lcs.mit.edu)/3 January 1990 */
 
-/* 
+/*
 
  * Motif
  *
@@ -200,7 +200,7 @@ int rel;			/* if true, prepend "../" to fn before using */
     else
 	buf[0] = '\0';
     strcat (buf, fn);
-    
+
     if (!(df = opendir (buf))) {
 	msg ("%s: Cannot opendir", buf);
 	return 1;
@@ -223,7 +223,7 @@ int rel;			/* if true, prepend "../" to fn before using */
 #ifdef S_ISDIR
 	    if(S_ISDIR(sb.st_mode))
 #else
-	    if (sb.st_mode & S_IFDIR) 
+	    if (sb.st_mode & S_IFDIR)
 #endif
 	    {
 		/* directory */

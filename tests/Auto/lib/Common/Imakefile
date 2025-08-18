@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/11 1996/06/24 13:02:44 eheller $
 #define DoNormalLib	NormalLibACommon
 #define DoSharedLib	SharedLibACommon
@@ -47,7 +47,7 @@ SRCS =\
 	ExtraArgs.c \
 	TestInit.c \
 	TestMemory.c \
-	TestUilInit.c 
+	TestUilInit.c
 
 
 OBJS =\
@@ -63,7 +63,7 @@ OBJS =\
 	TestInit.o \
 	TestMemory.o
 
-UIL_OBJS = TestUilInit.o 
+UIL_OBJS = TestUilInit.o
 
 #if SharedDataSeparation
 UNSHAREDOBJS = TestInit.o
@@ -75,7 +75,7 @@ UNSHAREDOBJS = TestInit.o
 #define LibHeaders	NO
 #include <Library.tmpl>
 
-XCOMM A special library is made for TestUilInit, 
+XCOMM A special library is made for TestUilInit,
 XCOMM to prevent including Mrm references in libACommon.*
 NormalLibraryTarget(ACommonUil,$(UIL_OBJS))
 

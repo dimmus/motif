@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form4.c /main/4 1995/07/13 18:11:20 drk $"
@@ -36,7 +36,7 @@ static char rcsid[] = "$XConsortium: Form4.c /main/4 1995/07/13 18:11:20 drk $"
  *  and bottom of the form and the left edge of PushButton1.
  *  The third being attached to the form on the top and on the left, its
  *  attached on the bottom by PushButton2 and on the right by PushButton1.
- *  The fourth PushButton is attached to the form on the right, attached 
+ *  The fourth PushButton is attached to the form on the right, attached
  *  to the form on the bottom. It is attached to PushButton2 on the left and
  *  to PushButton1 on the top.
  */
@@ -165,15 +165,3 @@ caddr_t call_data;
       break;
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-

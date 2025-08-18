@@ -49,7 +49,7 @@ CompareVisual Shell1
 Continue
 
 # The XToolkit warning
-#       \"Widget hierarchy not appropriate for this XmRowColumnType: 
+#       \"Widget hierarchy not appropriate for this XmRowColumnType:
 #	defaulting to WorkArea\"
 #  will appear in the xterm window.  The client window will now
 #  contain the label \"Menu2\", a Separator, a PushButton and a
@@ -64,8 +64,8 @@ Continue
 
 CompareVisual Shell1
 
-# Use Mouse Button 3 to activate the PopupMenu.  \"PostPopup\" should 
-# appear in the terminal window. 
+# Use Mouse Button 3 to activate the PopupMenu.  \"PostPopup\" should
+# appear in the terminal window.
 
 LocatePointer PushButtonHere
 PressMB Btn3

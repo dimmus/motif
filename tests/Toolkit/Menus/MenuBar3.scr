@@ -1,5 +1,5 @@
 # $XConsortium: MenuBar3.scr /main/5 1995/07/17 20:26:39 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,12 +20,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-# A main window with a menubar appears with two pulldown menus.  
+# A main window with a menubar appears with two pulldown menus.
 
 # Verify that PIR 1851 works "If a menu mnemonic is the same as the mnemonic
 #  of the posting cascade button, the post gets cancelled", by pressing
@@ -66,9 +66,9 @@ ClickKey <Shift><Ctrl> Kn
 # Verify that focus appears correctly in pulldown menus which have one
 #  entry.  Use KMenuBar to get focus to the menubar.  Type KRight to
 #  move focus to 'Stuff'.  Type KDown to post the Pulldown menu.  Focus
-#  (highlight) should appear on the 'Nothing' pulldown menu.  Now type KLeft 
+#  (highlight) should appear on the 'Nothing' pulldown menu.  Now type KLeft
 #  to move focus to the pulldown menu Commands.  Focus should appear around
-#  'Exit'.  
+#  'Exit'.
 
 WindowFocus Shell1
 ClickKey KMenuBar

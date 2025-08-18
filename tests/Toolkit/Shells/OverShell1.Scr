@@ -19,10 +19,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-# An OverrideShell with a PushButton child should appear. No core dumps 
+# An OverrideShell with a PushButton child should appear. No core dumps
 # should occur
 
 CompareVisual popup

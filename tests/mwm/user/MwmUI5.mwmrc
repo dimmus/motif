@@ -18,12 +18,12 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 
 Menu MwmUI5WindowMenu
-{   
+{
 	"Raise"			f.raise
 	"Raise Within"  	f.raise within
 	"Raise freeFamily"	f.raise freeFamily

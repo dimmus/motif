@@ -3,7 +3,7 @@ XCOMM $XConsortium: scoLib.rules /main/2 1996/09/28 16:12:20 rws $
 /*
  * SharedLibraryTarget3 - generate rules to create a shared library;
  * build it into a different name so that we do not hose people by having
- * the library gone for long periods.  
+ * the library gone for long periods.
  *
  * Work around SCO sh enviroment size problem.
  */
@@ -39,4 +39,3 @@ clean::									@@\
         $(CC) -c $(CDEBUGFLAGS) $(THREADS_CFLAGS) $(ALLDEFINES) options $*.c @@\
         $(MV) $@ unshared/$@
 #endif
-

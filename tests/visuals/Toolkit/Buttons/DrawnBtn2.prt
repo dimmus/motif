@@ -22,32 +22,32 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual RowColumn1 
+TRACE:(1) CompareVisual RowColumn1
 TRACE:(2) Continue
-TRACE:(3) LocatePointer DrawnButton1  
-TRACE:(4) PressMB Btn1 
-TRACE:(5) CompareVisual DrawnButton1 
-TRACE:(6) LocatePointer RowColumn1  
-TRACE:(7) CompareVisual DrawnButton1 
-TRACE:(8) ReleaseMB Btn1 
-TRACE:(9) CompareVisual DrawnButton1 
-TRACE:(10) LocatePointer DrawnButton2  
-TRACE:(11) PressMB Btn1 
-TRACE:(12) CompareVisual DrawnButton2 
-TRACE:(13) ReleaseMB Btn1 
-TRACE:(14) CompareVisual DrawnButton2 
-TRACE:(15) LocatePointer DrawnButton3  
-TRACE:(16) PressMB Btn1 
-TRACE:(17) CompareVisual DrawnButton3 
-TRACE:(18) ReleaseMB Btn1 
-TRACE:(19) CompareVisual DrawnButton3 
+TRACE:(3) LocatePointer DrawnButton1
+TRACE:(4) PressMB Btn1
+TRACE:(5) CompareVisual DrawnButton1
+TRACE:(6) LocatePointer RowColumn1
+TRACE:(7) CompareVisual DrawnButton1
+TRACE:(8) ReleaseMB Btn1
+TRACE:(9) CompareVisual DrawnButton1
+TRACE:(10) LocatePointer DrawnButton2
+TRACE:(11) PressMB Btn1
+TRACE:(12) CompareVisual DrawnButton2
+TRACE:(13) ReleaseMB Btn1
+TRACE:(14) CompareVisual DrawnButton2
+TRACE:(15) LocatePointer DrawnButton3
+TRACE:(16) PressMB Btn1
+TRACE:(17) CompareVisual DrawnButton3
+TRACE:(18) ReleaseMB Btn1
+TRACE:(19) CompareVisual DrawnButton3
 TRACE:(20) WindowMove Shell1 100 100
-TRACE:(21) CompareVisual RowColumn1 
+TRACE:(21) CompareVisual RowColumn1
 TRACE:(22) Continue
 TRACE:(23) WindowIconify Shell1
 TRACE:(24) WindowDeiconify Shell1
 TRACE:(25) WindowResize Shell1 SouthEast 300 300
 Resized width & height is 290, 25
-TRACE:(26) CompareVisual RowColumn1 
+TRACE:(26) CompareVisual RowColumn1
 TRACE:(27) Exit
 Exiting Test...Please Standby...

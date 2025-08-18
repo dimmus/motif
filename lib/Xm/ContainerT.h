@@ -59,7 +59,7 @@ typedef struct _XmContainerDataRec {
 #define ContSelectColor          (1L<<4)
 
 
-typedef void (*XmContainerGetValuesProc)(Widget w, 
+typedef void (*XmContainerGetValuesProc)(Widget w,
 					XmContainerData contData);
 
 /* Version 0: initial release. */

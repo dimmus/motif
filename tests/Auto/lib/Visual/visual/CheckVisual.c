@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CheckVisual.c /main/8 1995/07/14 11:46:45 drk $"
@@ -36,12 +36,12 @@ static char rcsid[] = "$XConsortium: CheckVisual.c /main/8 1995/07/14 11:46:45 d
 	Calls:
 
 	Summary:
-            Called to either compare the visual pixmap against known-good pixmap 
-        record from file or to generate known-good pixmap. 
+            Called to either compare the visual pixmap against known-good pixmap
+        record from file or to generate known-good pixmap.
 
         INPUTS:
             widget - the widget whose image needs comparing or capturing
-        
+
         OUTPUTS:
             none
 
@@ -56,7 +56,7 @@ MvsWidgetInfoRecord *widget_info;
 {
 
     char msg_string[125];
-  
+
     if (XmIsGadget(widget_info->widget))
         widget_info = widget_info->parent;
 
@@ -75,7 +75,7 @@ MvsWidgetInfoRecord *widget_info;
 
         case VISUAL_MODE_GENERATE_PIXMAPS:
             mvsGeneratePixmap(widget_info);
-            break;        
+            break;
 
 	default:
 	    sprintf(msg_string, _AutoMessages[VISMSG45], mvsVisualMode);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageDia2.c /main/8 1995/07/13 19:02:36 drk $"
@@ -72,7 +72,7 @@ static XtCallbackRec help_cb[] = {
 
 
 /*#### OkCB ####*/
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -106,7 +106,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 
 
 /*#### CancelCB ####*/
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -133,7 +133,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 
 
 /*#### HelpCB ####*/
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -180,12 +180,12 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 10);                     n++;
     XtSetArg (args[n], XmNheight, 10);                    n++;
     XtSetValues(Shell1, args, n);
-    
+
     /* create compound string */
     str1 = XmStringLtoRCreate ("h", XmSTRING_DEFAULT_CHARSET);
     str2 = XmStringLtoRCreate ("longHelpLabelString", XmSTRING_DEFAULT_CHARSET);

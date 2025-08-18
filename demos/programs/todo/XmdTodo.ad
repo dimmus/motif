@@ -19,13 +19,13 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 !
 ! Sample application defaults file
 !
-! Optionally place this file in your system's app-defaults directory, 
+! Optionally place this file in your system's app-defaults directory,
 ! often found in /usr/lib/X11/app-defaults
 !
 
@@ -74,4 +74,3 @@
 ! *notebook*background:	SlateBlue
 ! *notebook*frameBackground:	SlateBlue
 ! *atab.highlightColor:	violetred1
-

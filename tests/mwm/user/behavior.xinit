@@ -22,7 +22,7 @@
 #
 # HISTORY
 
-# 
+#
 
 SYSTEM=`uname -a | awk -F' ' '{print $1}'`
 CURR_DIR=`pwd`

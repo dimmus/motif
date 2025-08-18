@@ -7,4 +7,3 @@ if MessageCatalog
 noinst_PROGRAMS = mkcatdefs
 
 endif
-

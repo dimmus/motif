@@ -1,5 +1,5 @@
 ! $XConsortium: German.uil /main/4 1996/07/15 15:14:32 drk $
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,8 +20,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 !
 ! Motif File Viewer -- main uil file
@@ -33,21 +33,20 @@ module mce
     names = case_sensitive
 
 value searchprompt : exported compound_string
-('Zeichenkette zum Suchen eingeben'); 
-value fatal_error : exported compound_string ('Fehler'); 	
+('Zeichenkette zum Suchen eingeben');
+value fatal_error : exported compound_string ('Fehler');
 value no_file : exported compound_string ('Keine Datei');
 value no_pane : exported compound_string ('Keine panel zu schliessen');
 value no_pattern : exported compound_string
 ('Zeichenkette zum Suchen eingeben');
 value no_search : exported compound_string
 ('Zeichenkette zu lang');
-value not_found : exported compound_string ('Zeichenkette nicht gefunden: '); 
+value not_found : exported compound_string ('Zeichenkette nicht gefunden: ');
 value empty_file : exported compound_string ('Leere Datei');
-value help_file	 : exported compound_string 
+value help_file	 : exported compound_string
 ('Im Menü Datei: Datei öffnen mit Öffnen, beenden mit Beenden');
-value help_view : exported compound_string 
+value help_view : exported compound_string
 ('Im Menü Sicht: Ausschnitt öffnen mit Erzeugen, schließen mit Schließen');
-value help_search : exported compound_string 
+value help_search : exported compound_string
 ('                Zeichenkette auffinden mit Suchen');
 end module;
-

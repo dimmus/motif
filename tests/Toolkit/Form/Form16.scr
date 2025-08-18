@@ -19,28 +19,28 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #) A client with three PushButtons labeled PushButton1, PushButton2
-#   and PushButton3 should appear in the Form. 
-#) Click MB1 on any one of the three PushButtons. 
-#) The PushButton clicked on should disappear. 
+#   and PushButton3 should appear in the Form.
+#) Click MB1 on any one of the three PushButtons.
+#) The PushButton clicked on should disappear.
 
 LocatePointer PushButton1
 ClickMB Btn1
 CompareVisual form
 Continue
 
-#) Click MB1 on either of the two remaining PushButtons. 
-#) The PushButton clicked on should disappear. 
+#) Click MB1 on either of the two remaining PushButtons.
+#) The PushButton clicked on should disappear.
 
 LocatePointer PushButton2
 ClickMB Btn1
 CompareVisual form
 Continue
 
-#) Click MB1 on the one remaining PushButton. 
-#) The remaining PushButton should disappear. 
+#) Click MB1 on the one remaining PushButton.
+#) The remaining PushButton should disappear.
 
 LocatePointer PushButton3
 ClickMB Btn1
@@ -76,5 +76,3 @@ Continue
 
 CompareVisual form
 Exit
-
-

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,8 +36,8 @@ main(int argc, char **argv)
   int n;
   Widget Frame, SpinBox, TextF;
 
-		     
-  
+
+
 
         CommonTestInit(argc,argv);
 

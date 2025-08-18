@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MwmUI1.c /main/5 1995/07/13 20:25:28 drk $"
@@ -31,7 +31,7 @@ static char rcsid[] = "$XConsortium: MwmUI1.c /main/5 1995/07/13 20:25:28 drk $"
 
 /*
  *	file: MwmUI1.c
- *	
+ *
  *	Program to test the basic UI of mwm.
  *
  */
@@ -92,10 +92,10 @@ char 			**argv;
 	if (fnt != NULL)
 		font4 = XmFontListCreate(fnt, cs);
 #else
-	fixed_font = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT, 
+	fixed_font = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT,
 							 	  	 XmFONTLIST_DEFAULT_TAG);
 
-	if ((fontEntry1 = XmFontListEntryLoad(display, "9x15bold", XmFONT_IS_FONT, 
+	if ((fontEntry1 = XmFontListEntryLoad(display, "9x15bold", XmFONT_IS_FONT,
 									 XmFONTLIST_DEFAULT_TAG)) == NULL) {
 
 		fprintf(stderr, "Cannot create FontEntry for 9x15bold\n");
@@ -120,7 +120,7 @@ char 			**argv;
 
 	}
         font2 = XmFontListAppendEntry( NULL, fontEntry2 );
-	if ((fontEntry3 = XmFontListEntryLoad(display, "6x12", XmFONT_IS_FONT, 
+	if ((fontEntry3 = XmFontListEntryLoad(display, "6x12", XmFONT_IS_FONT,
 									 XmFONTLIST_DEFAULT_TAG)) == NULL) {
 
 		fprintf(stderr, "Cannot create FontEntry for 6x12\n");
@@ -132,7 +132,7 @@ char 			**argv;
 
 	}
         font3 = XmFontListAppendEntry( NULL, fontEntry3 );
-	if ((fontEntry4 = XmFontListEntryLoad(display, "courb24", XmFONT_IS_FONT, 
+	if ((fontEntry4 = XmFontListEntryLoad(display, "courb24", XmFONT_IS_FONT,
 									 XmFONTLIST_DEFAULT_TAG)) == NULL) {
 
 		fprintf(stderr, "Cannot create FontEntry for courb24\n");
@@ -159,8 +159,8 @@ char 			**argv;
 	XtSetArg (args[n], XmNheight, 100 ); n++;
 	XtSetArg (args[n], XmNwidth, 100 ); n++;
 #endif
-	XtSetArg (args[n], XmNx, 10 ); n++; 
-	XtSetArg (args[n], XmNy, 50 ); n++;  
+	XtSetArg (args[n], XmNx, 10 ); n++;
+	XtSetArg (args[n], XmNy, 50 ); n++;
 	rowcolumn1 = XmCreateRowColumn(bboard, "rowcolumn1", args, n);
 	XtManageChild (rowcolumn1);
 

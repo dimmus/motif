@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.3
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -50,7 +50,7 @@ static char rcsid[] = "$TOG: WmProtocol.c /main/8 1997/06/18 17:31:34 samborn $"
 #include "WmKeyFocus.h"
 #include "WmMenu.h"
 #include "WmWinInfo.h"
-#ifndef NO_WMQUERY 
+#ifndef NO_WMQUERY
 #include "WmEvent.h"
 #endif /* NO_WMQUERY */
 #ifdef PANELIST
@@ -70,7 +70,7 @@ static char rcsid[] = "$TOG: WmProtocol.c /main/8 1997/06/18 17:31:34 samborn $"
 
 #include "WmProtocol.h"
 #ifndef NO_WMQUERY
-static Boolean wmq_convert (Widget w, Atom *pSelection, Atom *pTarget, 
+static Boolean wmq_convert (Widget w, Atom *pSelection, Atom *pTarget,
     Atom *pType_return, XtPointer *pValue_return, unsigned long *pLength_return,
     int *pFormat_return);
 static Boolean wmq_convert_all_clients (Widget w, int screen,
@@ -125,9 +125,9 @@ int curXids = 0;
 
 void SetupWmICCC (void)
 {
-    enum { 
+    enum {
 #if !defined WSM || defined MWM_QATS_PROTOCOL
-      	   XA_TARGETS, XA_MULTIPLE, XA_TIMESTAMP, 
+      	   XA_TARGETS, XA_MULTIPLE, XA_TIMESTAMP,
 #endif
 	   XA_WM_STATE, XA_WM_PROTOCOLS, XA_WM_CHANGE_STATE,
 	   XA_WM_SAVE_YOURSELF, XA_WM_DELETE_WINDOW,
@@ -142,13 +142,13 @@ void SetupWmICCC (void)
 	   XA_MOTIF_WM_REMOVE_COMMAND, XA_MOTIF_WM_ENABLE_COMMAND,
 	   XA_MOTIF_WM_DISABLE_COMMAND, XA_MOTIF_WM_RENAME_COMMAND,
 	   XA_MOTIF_WM_INVOKE_COMMAND, XA_MOTIF_WM_REQUEST_COMMAND,
-	   XA_MOTIF_WM_WINDOW_FLAGS, XA_MOTIF_WM_AUTOMATION, 
+	   XA_MOTIF_WM_WINDOW_FLAGS, XA_MOTIF_WM_AUTOMATION,
 #endif
 	   XA_COMPOUND_TEXT, NUM_ATOMS };
 
     static char *atom_names[] = {
 #if !defined WSM || defined MWM_QATS_PROTOCOL
-      	   _XA_TARGETS, _XA_MULTIPLE, _XA_TIMESTAMP, 
+      	   _XA_TARGETS, _XA_MULTIPLE, _XA_TIMESTAMP,
 #endif
 	   _XA_WM_STATE, _XA_WM_PROTOCOLS, _XA_WM_CHANGE_STATE,
 	   _XA_WM_SAVE_YOURSELF, _XA_WM_DELETE_WINDOW,
@@ -157,7 +157,7 @@ void SetupWmICCC (void)
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL) || !defined(NO_WMQUERY))
 # ifdef _XA_MOTIF_WM_CLIENT_WINDOW
 	   _XA_MOTIF_WM_CLIENT_WINDOW, _XA_MOTIF_WM_POINTER_WINDOW,
-	   _XA_MOTIF_WM_ALL_CLIENTS, 
+	   _XA_MOTIF_WM_ALL_CLIENTS,
 # else
 	   "_MOTIF_WM_CLIENT_WINDOW", "_MOTIF_WM_POINTER_WINDOW",
 	   "_MOTIF_WM_ALL_CLIENTS"
@@ -168,7 +168,7 @@ void SetupWmICCC (void)
 	   _XA_MOTIF_WM_REMOVE_COMMAND, _XA_MOTIF_WM_ENABLE_COMMAND,
 	   _XA_MOTIF_WM_DISABLE_COMMAND, _XA_MOTIF_WM_RENAME_COMMAND,
 	   _XA_MOTIF_WM_INVOKE_COMMAND, _XA_MOTIF_WM_REQUEST_COMMAND,
-	   _XA_MOTIF_WM_WINDOW_FLAGS, _XA_MOTIF_WM_AUTOMATION, 
+	   _XA_MOTIF_WM_WINDOW_FLAGS, _XA_MOTIF_WM_AUTOMATION,
 #endif
 	   "COMPOUND_TEXT"
     };
@@ -278,7 +278,7 @@ void SetupWmICCC (void)
 	    sizeList.max_width = wmGD.Screens[scr].iconImageMaximum.width;
 	    sizeList.max_height = wmGD.Screens[scr].iconImageMaximum.height;
 
-	    XSetIconSizes (DISPLAY, wmGD.Screens[scr].rootWindow, 
+	    XSetIconSizes (DISPLAY, wmGD.Screens[scr].rootWindow,
 		&sizeList, 1);
 	}
     }
@@ -354,7 +354,7 @@ void SendConfigureNotify (ClientData *pCD)
 	 */
 
 	XTranslateCoordinates (DISPLAY, pECD->winParent,
-	    ROOT_FOR_CLIENT(pCD), pCD->clientX, pCD->clientY, 
+	    ROOT_FOR_CLIENT(pCD), pCD->clientX, pCD->clientY,
 	    &rootX, &rootY, &wChild);
 
 	notifyEvent.x = rootX;
@@ -404,7 +404,7 @@ void SendConfigureNotify (ClientData *pCD)
  *
  *  This can be used by clients that map and unmap windows to help them
  *  work with the window manager to place the window in the same location
- *  when remapped. 
+ *  when remapped.
  *
  *  Inputs:
  *  ------
@@ -417,7 +417,7 @@ void SendClientOffsetMessage (ClientData *pCD)
     long borderWidth = (long)pCD->xBorderWidth;
     long offsetX = pCD->clientOffset.x;
     long offsetY = pCD->clientOffset.y;
-      
+
     XClientMessageEvent clientMsgEvent;
 
     clientMsgEvent.type = ClientMessage;
@@ -431,7 +431,7 @@ void SendClientOffsetMessage (ClientData *pCD)
      * position on the screen  without having to know the dimensions
      * of the decoration that mwm is adding.
      */
-    
+
     switch (pCD->windowGravity)
     {
       case NorthWestGravity:
@@ -441,56 +441,56 @@ void SendClientOffsetMessage (ClientData *pCD)
 	    clientMsgEvent.data.l[2] = offsetY;
 	    break;
 	}
-	
+
       case NorthGravity:
 	{
 	    clientMsgEvent.data.l[1] = borderWidth;
 	    clientMsgEvent.data.l[2] = offsetY;
 	    break;
 	}
-	
+
       case NorthEastGravity:
 	{
 	    clientMsgEvent.data.l[1] = -(offsetX - (2 * borderWidth));
 	    clientMsgEvent.data.l[2] = offsetY;
 	    break;
 	}
-	
+
       case EastGravity:
 	{
 	    clientMsgEvent.data.l[1] = -(offsetX - (2 * borderWidth));
 	    clientMsgEvent.data.l[2] = borderWidth + (offsetY - offsetX)/2;
 	    break;
 	}
-	
+
       case SouthEastGravity:
 	{
 	    clientMsgEvent.data.l[1] = -(offsetX - (2 * borderWidth));
 	    clientMsgEvent.data.l[2] = -(offsetX - (2 * borderWidth));
 	    break;
 	}
-	
+
       case SouthGravity:
 	{
 	    clientMsgEvent.data.l[1] = borderWidth;
 	    clientMsgEvent.data.l[2] = -(offsetX - (2 * borderWidth));
 	    break;
 	}
-	
+
       case SouthWestGravity:
 	{
 	    clientMsgEvent.data.l[1] = offsetX;
 	    clientMsgEvent.data.l[2] = -(offsetX - (2 * borderWidth));
 	    break;
 	}
-	
+
       case WestGravity:
 	{
 	    clientMsgEvent.data.l[1] = offsetX;
 	    clientMsgEvent.data.l[2] = borderWidth + (offsetY - offsetX)/2;
 	    break;
 	}
-	
+
       case CenterGravity:
 	{
 	    clientMsgEvent.data.l[2] = (offsetY - offsetX)/2;
@@ -561,8 +561,8 @@ void SendClientMsg (Window window, long type, long data0, Time time, long *pData
 	    clientMsgEvent.data.l[i] = pData[i];
         }
     }
-    
-    
+
+
     XSendEvent (DISPLAY, window, False, NoEventMask,
 	(XEvent *)&clientMsgEvent);
     XFlush(DISPLAY);
@@ -606,7 +606,7 @@ Boolean AddWmTimer (unsigned int timerType, unsigned long timerInterval, ClientD
     }
 
     /* !!! handle for XtAppAddTimeOut error !!! */
-    pWmTimer->timerId = XtAppAddTimeOut (wmGD.mwmAppContext, 
+    pWmTimer->timerId = XtAppAddTimeOut (wmGD.mwmAppContext,
 			    timerInterval, (XtTimerCallbackProc)TimeoutProc, (caddr_t)pCD);
     pWmTimer->timerCD = pCD;
     pWmTimer->timerType = timerType;
@@ -700,7 +700,7 @@ void TimeoutProc (caddr_t client_data, XtIntervalId *id)
     WmTimer *pPrevTimer;
     WmTimer *pWmTimer;
 
-    
+
     /*
      * Find out if the timer still needs to be serviced.
      */
@@ -736,7 +736,7 @@ void TimeoutProc (caddr_t client_data, XtIntervalId *id)
 		Boolean sameScreen;
 
 		if ((wmGD.keyboardFocus == pWmTimer->timerCD) &&
-		    (pWmTimer->timerCD->focusPriority == 
+		    (pWmTimer->timerCD->focusPriority ==
 			(PSD_FOR_CLIENT(pWmTimer->timerCD))->focusPriority) &&
 		    (wmGD.keyboardFocusPolicy == KEYBOARD_FOCUS_POINTER) &&
 		    (pWmTimer->timerCD == GetClientUnderPointer(&sameScreen)))
@@ -773,11 +773,11 @@ void TimeoutProc (caddr_t client_data, XtIntervalId *id)
 } /* END OF FUNCTION TimeoutProc */
 
 
-#ifndef NO_WMQUERY 
+#ifndef NO_WMQUERY
 
 /*************************************<->*************************************
  *
- *  Boolean wmq_convert (w, pSelection, pTarget, pType_return, 
+ *  Boolean wmq_convert (w, pSelection, pTarget, pType_return,
  *	pValue_return, pLength_return, pFormat_return)
  *
  *
@@ -854,7 +854,7 @@ wmq_convert (
 
 /*************************************<->*************************************
  *
- *  Boolean wmq_convert_all_clients (w, screen, pType_return, 
+ *  Boolean wmq_convert_all_clients (w, screen, pType_return,
  *	pValue_return, pLength_return, pFormat_return)
  *
  *
@@ -901,19 +901,19 @@ wmq_convert_all_clients (
      * Get all clients on the specified screen
      */
 
-    if (wmGD.Screens[screen].managed) 
+    if (wmGD.Screens[screen].managed)
     {
 	pSD = &wmGD.Screens[screen];
-	  
+
 	/*
 	 * Traverse the client list for this screen and
-	 * add to the list of window IDs 
+	 * add to the list of window IDs
 	 */
 	pEntry = pSD->clientList;
-	  
+
 	while (pEntry)
 	{
-	    /* 
+	    /*
 	     * Filter out entries for icons
 	     */
 	    if (pEntry->type != MINIMIZED_STATE)
@@ -945,7 +945,7 @@ wmq_convert_all_clients (
  *
  *  Description:
  *  -----------
- *  This function adds the windows in a transient subtree to the 
+ *  This function adds the windows in a transient subtree to the
  *  global window list
  *
  *  Inputs:
@@ -985,7 +985,7 @@ wmq_list_subtree (
     {
 	wmq_list_subtree(pCD->transientSiblings);
     }
-	
+
 } /* END OF FUNCTION wmq_list_subtree */
 
 
@@ -1103,7 +1103,7 @@ wmq_done (
  *
  *  Description:
  *  -----------
- *  This function allocates more xids in our local buffer 
+ *  This function allocates more xids in our local buffer
  *
  *  Inputs:
  *  ------
@@ -1126,7 +1126,7 @@ wmq_bump_xids ( void )
 
     if (pXids)
     {
-	if (!(px = (XID *) 
+	if (!(px = (XID *)
 	  XtRealloc ((char *) pXids, (numXids + 32) * (sizeof (XID)))))
 	{
 	  Warning (((char *)GETMESSAGE(56, 5, "Insufficient memory to convert _MOTIF_WM_QUERY_nn selection")));
@@ -1139,7 +1139,7 @@ wmq_bump_xids ( void )
     }
     else
     {
-	if (!(pXids = (XID *) 
+	if (!(pXids = (XID *)
 	  XtMalloc (32 * (sizeof (XID)))))
 	{
 	  Warning (((char *)GETMESSAGE(56, 5, "Insufficient memory to convert _MOTIF_WM_QUERY_nn selection")));
@@ -1168,35 +1168,35 @@ wmq_bump_xids ( void )
  *
  *  Inputs:
  *  ------
- *  
- *  
- *  
+ *
+ *
+ *
  *
  *  Outputs:
  *  ------
  *
  *  Comments:
  *  --------
- *  
+ *
  *
  *************************************<->***********************************/
 static void
 OwnWMSelections ( Time timestamp )
 {
   int scr;
-  
-  
+
+
   wmGD.xa_WM = (Atom *) XtMalloc (wmGD.numScreens * (sizeof (Atom)));
-  
+
   for (scr = 0; scr < wmGD.numScreens; scr++)
     {
       if (wmGD.Screens[scr].managed)
 	{
 	  char wm_scr[8];
-	  
+
  	  sprintf(wm_scr, "WM_S%d", DefaultScreen(DISPLAY));
 	  wmGD.xa_WM[scr] = XInternAtom (DISPLAY, wm_scr, False);
-	  
+
 #ifdef MWM_WSM
 	  /*
 	   * This registers the callback to be invoked when a request
@@ -1265,7 +1265,7 @@ WMiConvert (
   int      scr;
   Boolean  found = False;
 
-  
+
   /* set up some defaults. selection code doesn't like garbage! */
   *outputLen = 0;
   *output    = NULL;
@@ -1278,14 +1278,14 @@ WMiConvert (
 		"Got convert request from unmanaged screen")));
       found = False;
     }
-  
+
   else {
     if (target == wmGD.xa_TARGETS) {
       Atom *targs       = (Atom *)XtMalloc((unsigned) (28 * sizeof(Atom)));
       int   targetCount = 0;
-      
+
       *output = (XtPointer) targs;
-      
+
       /* required targets */
       *targs++ = wmGD.xa_TARGETS;				targetCount++;
       *targs++ = wmGD.xa_MULTIPLE;				targetCount++;
@@ -1300,7 +1300,7 @@ WMiConvert (
       *targs++ = _WSMReqTypeToTarget(DISPLAY, WSM_SET_STATE);	targetCount++;
       *targs++ = _WSMReqTypeToTarget(DISPLAY, WSM_REG_WINDOW);	targetCount++;
 #endif
-      
+
       /* menu command interface support */
       *targs++ = wmGD._MOTIF_WM_DEFINE_COMMAND;			targetCount++;
       *targs++ = wmGD._MOTIF_WM_INCLUDE_COMMAND;		targetCount++;
@@ -1321,15 +1321,15 @@ WMiConvert (
       /* automation support */
 
       *targs++ = wmGD._MOTIF_WM_AUTOMATION;			 targetCount++;
-      
+
       *outputType   = XA_ATOM;
       *outputLen = (targetCount * sizeof(Atom)) >> 2;
       *outputFmt = 32;
-      
+
       found = True;
     }
 
-#ifdef MWM_WSM    
+#ifdef MWM_WSM
     /* virtual screen support */
     else if (target == wmGD._MOTIF_WM_PAN)
       {
@@ -1347,7 +1347,7 @@ WMiConvert (
 	 */
 
 	SetPanPosition (ACTIVE_PSD->panDx, ACTIVE_PSD->panDy);
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_GOTO)
@@ -1361,11 +1361,11 @@ WMiConvert (
 
 	found = True;
       }
-    
+
     /*
      * Handle the workspace manager protocol targets...
      */
-    
+
     else if (WSMIsKnownTarget(w, target))
       {
 	/*
@@ -1378,17 +1378,17 @@ WMiConvert (
 			 outputType, output, outputLen, outputFmt);
       }
 #endif /* MWM_WSM */
-    
+
     /*
      *  Handle client-command interface targets.
      */
-    
+
     else if (target == wmGD._MOTIF_WM_DEFINE_COMMAND)
       {
 	PRINT("Convert request made for _MOTIF_WM_DEFINE_COMMAND.\n");
 	DefineCommand(w, target, (MessageData)input, inputLen, inputFmt);
 	PRINT("Returning from _MOTIF_WM_DEFINE_COMMAND.\n");
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_INCLUDE_COMMAND)
@@ -1396,35 +1396,35 @@ WMiConvert (
 	PRINT("Convert request made for _MOTIF_WM_INCLUDE_COMMAND.\n");
 	IncludeCommand(w, target, (MessageData)input, inputLen, inputFmt);
 	PRINT("Returning from _MOTIF_WM_INCLUDE_COMMAND.\n");
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_REMOVE_COMMAND)
       {
 	PRINT("Convert request made for _MOTIF_WM_REMOVE_COMMAND.\n");
 	RemoveCommand(w, target, (MessageData)input, inputLen, inputFmt);
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_ENABLE_COMMAND)
       {
 	PRINT("Convert request made for _MOTIF_WM_ENABLE_COMMAND.\n");
 	EnableCommand(w, target, (MessageData)input, inputLen, inputFmt);
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_DISABLE_COMMAND)
       {
 	PRINT("Convert request made for _MOTIF_WM_DISABLE_COMMAND.\n");
 	DisableCommand(w, target, (MessageData)input, inputLen, inputFmt);
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_RENAME_COMMAND)
       {
 	PRINT("Convert request made for _MOTIF_WM_RENAME_COMMAND.\n");
 	RenameCommand(w, target, (MessageData)input, inputLen, inputFmt);
-	
+
 	found = True;
       }
     else if (target == wmGD._MOTIF_WM_INVOKE_COMMAND)
@@ -1437,7 +1437,7 @@ WMiConvert (
     else if (target == wmGD._MOTIF_WM_WINDOW_FLAGS)
       {
       }
-    
+
     else if (target == wmGD._MOTIF_WM_AUTOMATION)
       {
 	/*
@@ -1453,8 +1453,8 @@ WMiConvert (
       Warning (((char *)GETMESSAGE(56, 8,
 		"Conversion request made for unknown target type")));
   }
-  
-  
+
+
   return (found);
 }
 
@@ -1490,7 +1490,7 @@ WMiConvertCB (
   Atom _MOTIF_LOSE_SELECTION =
     XInternAtom(DISPLAY, "_MOTIF_LOSE_SELECTION", False);
   int scr = XScreenNumberOfScreen(XtScreen(w));
-  
+
 
   /* Check to make sure we're dealing with the right selection.
    */

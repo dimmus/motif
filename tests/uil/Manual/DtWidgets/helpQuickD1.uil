@@ -22,7 +22,7 @@
 !
 !
 ! HISTORY
-! $XConsortium: helpQuickD1.uil /main/1 1996/08/12 15:44:43 jakku $ 
+! $XConsortium: helpQuickD1.uil /main/1 1996/08/12 15:44:43 jakku $
 !******************************************************************************
 module Test
         version = 'v1.0'
@@ -38,7 +38,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -67,7 +67,7 @@ module Test
 		XmNheight = 200;
 		XmNwidth = 200;
 		XmNdialogTitle = "DthelpQuickDialog Widget test";
-		
+
             };
         };
 

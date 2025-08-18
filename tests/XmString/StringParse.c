@@ -64,7 +64,7 @@ Cardinal	  num_output = 0;
 GC                gc;
 XmRenderTable     renderTable;
 
-void 
+void
 expose (Widget widget,
 	XtPointer closure,
 	XtPointer call_data)
@@ -77,7 +77,7 @@ expose (Widget widget,
   for (i = 0; i < num_output; i++)
     {
       XmStringExtent(renderTable, output[i], &width, &height);
-      XmStringDraw(XtDisplay(widget), XtWindow(widget), renderTable, 
+      XmStringDraw(XtDisplay(widget), XtWindow(widget), renderTable,
 		   output[i], gc, x, y, width, XmALIGNMENT_BEGINNING,
 		   XmSTRING_DIRECTION_L_TO_R, NULL);
       y += height + MARGIN;
@@ -85,7 +85,7 @@ expose (Widget widget,
 }
 
 XmIncludeStatus
-parseProc( XtPointer *text_in_out, XtPointer text_end, XmTextType type, 
+parseProc( XtPointer *text_in_out, XtPointer text_end, XmTextType type,
            XmStringTag tag, XmParseMapping entry, int pattern_length,
            XmString *str_include, XtPointer call_data )
 {
@@ -103,7 +103,7 @@ parseProc( XtPointer *text_in_out, XtPointer text_end, XmTextType type,
    XtSetArg( args[n], XmNclientData, &include_status ); n++;
    XmParseMappingGetValues( entry, args, n );
 
-   *string += pattern_length; 
+   *string += pattern_length;
 
    return( *include_status );
 }
@@ -170,7 +170,7 @@ main( int argc, char **argv )
                                XmFONTLIST_DEFAULT_TAG );
      fontList1 = XmFontListAppendEntry( NULL, fontEntry1 );
 
-  
+
      n = 0;
      XtSetArg(args[n], XmNforeground, &gcv.foreground); n++;
      XtSetArg(args[n], XmNbackground, &gcv.background); n++;
@@ -223,7 +223,7 @@ main( int argc, char **argv )
 
      position = 0;
      tabList = XmTabListInsertTabs( (XmTabList)0, &tab, 1, 0 );
-     
+
      XmTabFree( tab );
 
      n = 0;
@@ -235,18 +235,18 @@ main( int argc, char **argv )
      rendition = XmRenditionCreate( Shell1, "render_tag", args, n );
 
      XmTabListFree( tabList );
- 
+
      renderTable= XmRenderTableAddRenditions( (XmRenderTable)0, &rendition,
                     1, XmMERGE_REPLACE );
 
      XmRenditionFree( rendition );
 
 
-    /*  String is terminated after the first pattern is found. */ 
+    /*  String is terminated after the first pattern is found. */
      string =
-     XmStringParseText( (XtPointer)single_string, (XtPointer *)0, 
+     XmStringParseText( (XtPointer)single_string, (XtPointer *)0,
                         (XmStringTag)"render_tag", XmCHARSET_TEXT, parseTable,
-                        NUM_MAPPINGS, (XtPointer)0 ); 
+                        NUM_MAPPINGS, (XtPointer)0 );
 
     /*  Display the string. */
      output[num_output++] = XmStringCopy(string);
@@ -313,7 +313,7 @@ main( int argc, char **argv )
      unparse1 = XmStringUnparse( string, (XmStringTag)"render_tag",
                                  XmCHARSET_TEXT,
                                  XmCHARSET_TEXT, parseTable, NUM_MAPPINGS,
-                                 XmOUTPUT_ALL ); 
+                                 XmOUTPUT_ALL );
      XmStringFree( string );
 
      output[num_output++] = XmStringCreateLocalized("-- Original Text --");
@@ -323,7 +323,7 @@ main( int argc, char **argv )
 
      printf("XmStringUnparse() ");
      if ( strcmp( unparse1, single_string ) == 0 )
-          printf("succeeded."); 
+          printf("succeeded.");
      else
           printf("failed.");
      printf("\n\n");
@@ -405,7 +405,7 @@ main( int argc, char **argv )
 
      string = XmStringComponentCreate( XmSTRING_COMPONENT_DIRECTION,
                 sizeof(XmStringDirection), &direction1 );
- 
+
      i = 0;
      n = 0;
      XtSetArg( args[n], XmNincludeStatus, XmINSERT ); n++;
@@ -429,10 +429,10 @@ main( int argc, char **argv )
      XmStringFree( string );
 
      stringArray =
-     XmStringTableParseStringArray( (XtPointer)multi_strings, NUM_STRINGS, 
+     XmStringTableParseStringArray( (XtPointer)multi_strings, NUM_STRINGS,
                                     (XmStringTag)0, XmCHARSET_TEXT, parseTable,
-                                     NUM_MAPPINGS, (XtPointer)0 ); 
-             
+                                     NUM_MAPPINGS, (XtPointer)0 );
+
 
     /*  Display each of the strings. */
      renderTable = fontList1;
@@ -443,7 +443,7 @@ main( int argc, char **argv )
      *  Unparse the XmStrings converting them back into an array
      *  of strings.
      */
-     unparse2 = 
+     unparse2 =
      (char **)XmStringTableUnparse( stringArray, NUM_STRINGS, (XmStringTag)0,
                            XmCHARSET_TEXT, XmCHARSET_TEXT, parseTable,
                            NUM_MAPPINGS, XmOUTPUT_ALL );
@@ -451,7 +451,7 @@ main( int argc, char **argv )
     /*
      *  Verify whether the unparsed character strings match
      *  the original strings.
-     */ 
+     */
      match = True;
      for ( i = 0; i < NUM_STRINGS; i++ )
      {
@@ -471,7 +471,7 @@ main( int argc, char **argv )
      */
      for ( i = 0; i < NUM_STRINGS; i++ )
      {
-         XmStringFree(stringArray[i]); 
+         XmStringFree(stringArray[i]);
          XtFree((char*)unparse2[i]);
      }
      XtFree((char *)stringArray );
@@ -515,14 +515,14 @@ main( int argc, char **argv )
       XmStringInitContext( &context, string );
       for ( i = 0; i < NUM_STRINGS; i++ )
       {
-          comp_type = 
+          comp_type =
           XmStringGetNextComponent( context, &text, &char_set,
-            &direction, &unknown_tag, &unknown_length, &unknown_value ); 
- 
-         /*  
+            &direction, &unknown_tag, &unknown_length, &unknown_value );
+
+         /*
           *  Verify that the first component in each pair is a text
           *  component and that the text itself matches the original text.
-          */ 
+          */
           if ( comp_type == XmSTRING_COMPONENT_TEXT )
 	    {
 	      if ( strcmp( text, text_table[i] ) != 0 )
@@ -543,9 +543,9 @@ main( int argc, char **argv )
           */
           if ( i < NUM_STRINGS - 1 )
           {
-             comp_type = 
+             comp_type =
              XmStringGetNextComponent( context, &text, &char_set,
-               &direction, &unknown_tag, &unknown_length, &unknown_value ); 
+               &direction, &unknown_tag, &unknown_length, &unknown_value );
 
              if ( comp_type != XmSTRING_COMPONENT_SEPARATOR )
                 match = False;
@@ -585,14 +585,14 @@ main( int argc, char **argv )
        if ( match )
 	 {
 	   if ( ! XmStringCompare( stringTable[i], stringArray[i] ))
-	     match = False;  
+	     match = False;
 	 }
        else
            break;
      }
 
     /*
-     *  Report on the status of XmStringToXmStringTable(). 
+     *  Report on the status of XmStringToXmStringTable().
      */
      printf("XmStringToXmStringTable() ");
      if ( match )
@@ -616,5 +616,3 @@ main( int argc, char **argv )
         XmFontListFree( fontList1 );
      XtAppMainLoop( app_context );
 }
-
-

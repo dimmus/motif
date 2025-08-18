@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ToggleBtn2.c /main/11 1995/07/13 17:32:34 drk $"
@@ -280,7 +280,7 @@ char **argv;
   XtManageChild(w=XmCreateToggleButton(rc, "tb8", args,n));
   XtAddCallback(w, XmNvalueChangedCallback, swap, NULL);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNindicatorSize, 12); n++;
   XtSetArg(args[n], XmNindicatorOn, False); n++;
   XtSetArg(args[n], XmNlabelType, XmPIXMAP); n++;
@@ -300,9 +300,9 @@ char **argv;
   which_way=1;
   CommonPause();
 
-  /*  
+  /*
    * Test for PIR 4438; create 20 toggle buttons, update color, and
-   *  see if a core dump occurs due to GC's being freed too many times 
+   *  see if a core dump occurs due to GC's being freed too many times
    */
 
 #ifdef BESTCASE
@@ -380,7 +380,7 @@ char **argv;
 	XtSetValues (tb[i], args, 1);
      }
 
-  CommonPause();       
+  CommonPause();
 
   for (i = 0; i < 20; i++) {
 	XtSetArg (args[0], XmNborderWidth, widths[1]);
@@ -396,7 +396,7 @@ char **argv;
      }
 
   /* end test for CR 3466 */
- 
+
   CommonPause();
 
   CommonPause(); /* exit */
@@ -408,13 +408,13 @@ void GrowBW (Widget w, XtPointer client_data, XtPointer call_data)
    Dimension orig, new;
    Arg args[1];
 
-   XtSetArg (args[0], XmNborderWidth, &orig); 
+   XtSetArg (args[0], XmNborderWidth, &orig);
    XtGetValues (w, args, 1);
 
-   XtSetArg (args[0], XmNborderWidth, orig + 10); 
+   XtSetArg (args[0], XmNborderWidth, orig + 10);
    XtSetValues (w, args, 1);
 
-   XtSetArg (args[0], XmNborderWidth, &new); 
+   XtSetArg (args[0], XmNborderWidth, &new);
    XtGetValues (w, args, 1);
 
    printf ("Grow width of widget %s test %s\n", XtName (w),

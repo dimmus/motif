@@ -1,5 +1,5 @@
 /* $XConsortium: MrmIswap.c /main/7 1996/11/13 13:58:35 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -83,11 +83,11 @@
  *
  *--
  */
-     
-Cardinal 
+
+Cardinal
 Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
 {
-    
+
   /*
    *  Local variables
    */
@@ -101,42 +101,42 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
   IDBridMapRecordPtr	ridmap_rec; /* pointer to record type IDBrtRIDMap */
   IDBDataRecordPtr	data_rec;   /* pointer to record type IDBrtData */
   char			err_msg[300] ;
-    
+
   if ( ! Idb__BM_Valid(buffer) )
     return Urm__UT_Error("Idb__BM_MarkActivity", _MrmMMsg_0002,
 			 NULL, NULL, MrmNOT_VALID) ;
-    
+
   /* load pointers to the record and record header */
-    
+
   idb_record = (IDBDummyRecordPtr) buffer->IDB_record ;
   idb_header = (IDBRecordHeaderPtr)&idb_record->header ;
-    
-    
+
+
   /* swap the remaining record entries in IDBRecordHeader */
   swapbytes( idb_header->record_type ) ;
   swapbytes( idb_header->record_num ) ;
-    
+
   /*
    * Swap IDB record items based on record type
    */
-    
+
   switch ( idb_header->record_type )
-    {	
+    {
     case IDBrtHeader:
       header_rec = (IDBHeaderRecordPtr)buffer->IDB_record ;
       header_hdr = (IDBHeaderHdrPtr)&header_rec->header_hdr ;
-	
+
       /* swap the HeaderHdr first */
       swapbytes( header_hdr->index_root );
       swapbytes( header_hdr->num_indexed );
       swapbytes( header_hdr->num_RID );
       /* VAR check */
-#ifdef WORD64	
-      swap4bytes( header_hdr->next_RID.internal_id.map_rec ); 
-      swap4bytes( header_hdr->next_RID.internal_id.res_index ); 
+#ifdef WORD64
+      swap4bytes( header_hdr->next_RID.internal_id.map_rec );
+      swap4bytes( header_hdr->next_RID.internal_id.res_index );
 #else
-      swap2bytes( header_hdr->next_RID.internal_id.map_rec ); 
-      swap2bytes( header_hdr->next_RID.internal_id.res_index ); 
+      swap2bytes( header_hdr->next_RID.internal_id.map_rec );
+      swap2bytes( header_hdr->next_RID.internal_id.res_index );
 #endif
       swapbytes( header_hdr->last_record );
       swapbytes( header_hdr->last_data_record );
@@ -144,7 +144,7 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
 	swapbytes(header_hdr->group_counts[ndx]);
       for( ndx=0 ; ndx < IDBrtVecSize ; ndx++)
 	swapbytes(header_hdr->rt_counts[ndx]);
-	
+
       /* now swap the rest of the header */
       /* VAR check */
       for( ndx=0 ; ndx < IDBHeaderRIDMax ; ndx++)
@@ -157,49 +157,49 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       swapbytes( header_rec->free_ptr );
       swapbytes( header_rec->free_count );
       break;
-	
+
     case IDBrtIndexLeaf:
       leaf_rec = (IDBIndexLeafRecordPtr)buffer->IDB_record ;
       swapbytes( leaf_rec->leaf_header.parent );
       swapbytes( leaf_rec->leaf_header.index_count );
       swapbytes( leaf_rec->leaf_header.heap_start );
       swapbytes( leaf_rec->leaf_header.free_bytes );
-      for( ndx=0 ; ndx < leaf_rec->leaf_header.index_count ; ndx++ ) 
+      for( ndx=0 ; ndx < leaf_rec->leaf_header.index_count ; ndx++ )
 	{
-	  swapbytes( leaf_rec->index[ndx].index_stg );	
-	  swap2bytes( leaf_rec->index[ndx].data.internal_id.rec_no );	
-	  swap2bytes( leaf_rec->index[ndx].data.internal_id.item_offs );	
+	  swapbytes( leaf_rec->index[ndx].index_stg );
+	  swap2bytes( leaf_rec->index[ndx].data.internal_id.rec_no );
+	  swap2bytes( leaf_rec->index[ndx].data.internal_id.item_offs );
 	}
       break;
-	
+
     case IDBrtIndexNode:
       node_rec = (IDBIndexNodeRecordPtr)buffer->IDB_record ;
       swapbytes( node_rec->node_header.parent );
       swapbytes( node_rec->node_header.index_count );
       swapbytes( node_rec->node_header.heap_start );
       swapbytes( node_rec->node_header.free_bytes );
-      for( ndx=0 ; ndx < node_rec->node_header.index_count ; ndx++ ) 
+      for( ndx=0 ; ndx < node_rec->node_header.index_count ; ndx++ )
 	{
-	  swapbytes( node_rec->index[ndx].index_stg );	
-	  swap2bytes( node_rec->index[ndx].data.internal_id.rec_no );	
-	  swap2bytes( node_rec->index[ndx].data.internal_id.item_offs );	
-	  swapbytes( node_rec->index[ndx].LT_record );	
-	  swapbytes( node_rec->index[ndx].GT_record );	
+	  swapbytes( node_rec->index[ndx].index_stg );
+	  swap2bytes( node_rec->index[ndx].data.internal_id.rec_no );
+	  swap2bytes( node_rec->index[ndx].data.internal_id.item_offs );
+	  swapbytes( node_rec->index[ndx].LT_record );
+	  swapbytes( node_rec->index[ndx].GT_record );
 	}
       break;
-	
+
     case IDBrtRIDMap:
       ridmap_rec = (IDBridMapRecordPtr)buffer->IDB_record ;
       ndx = 0;
-      while ( (ndx < IDBridPtrVecMax) && 
+      while ( (ndx < IDBridPtrVecMax) &&
 	      (ridmap_rec->pointers[ndx].internal_id.rec_no != 0) )
 	{
-	  swap2bytes( ridmap_rec->pointers[ndx].internal_id.rec_no );	
+	  swap2bytes( ridmap_rec->pointers[ndx].internal_id.rec_no );
 	  swap2bytes( ridmap_rec->pointers[ndx].internal_id.item_offs );
 	  ndx++;
 	}
       break;
-	
+
     case IDBrtData:
       data_rec = (IDBDataRecordPtr)buffer->IDB_record ;
       swapbytes( data_rec->data_header.num_entry );
@@ -207,7 +207,7 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
       swapbytes( data_rec->data_header.free_ptr );
       swapbytes( data_rec->data_header.free_count );
       break;
-	
+
     default:
       sprintf(err_msg, _MrmMMsg_0020, idb_header->record_num,
 	      idb_header->record_type);
@@ -215,23 +215,23 @@ Idb__BM_SwapRecordBytes (IDBRecordBufferPtr		buffer)
 			    err_msg, NULL, NULL, MrmFAILURE) ;
     }
   return MrmSUCCESS ;
-} 
+}
 
-unsigned 
+unsigned
 Urm__SwapValidation (unsigned 		validation)
 {
   swapbytes(validation);
   return validation;
 }
 
-Cardinal 
+Cardinal
 Urm__SwapRGMResourceDesc (RGMResourceDescPtr	res_desc)
 {
   IDBridDesc  *idb_rid_ptr;
 
   swapbytes( res_desc->size );
   swapbytes( res_desc->annex1 );
-  if ( res_desc->type == URMrRID ) 
+  if ( res_desc->type == URMrRID )
     {
       idb_rid_ptr = (IDBridDesc *)&(res_desc->key.id);
 #ifdef WORD64
@@ -247,14 +247,14 @@ Urm__SwapRGMResourceDesc (RGMResourceDescPtr	res_desc)
   return MrmSUCCESS;
 }
 
-Cardinal 
+Cardinal
 Urm__SwapRGMCallbackDesc (RGMCallbackDescPtr	callb_desc,
 			  RGMWidgetRecordPtr	widget_rec)
 {
   Cardinal		ndx;	    /* inner loop index */
   RGMResourceDescPtr	res_desc;   /* resource description literal */
   char			err_msg[300];
-    
+
   swapbytes( callb_desc->validation );
   swapbytes( callb_desc->count );
   swapbytes( callb_desc->annex );
@@ -273,7 +273,7 @@ Urm__SwapRGMCallbackDesc (RGMCallbackDescPtr	callb_desc,
 	case MrmRtypeInteger:
 	case MrmRtypeBoolean:
 	  swapbytes( callb_desc->item[ndx].cb_item.datum.ival );
-	  break;	
+	  break;
 	case MrmRtypeSingleFloat:
 	  swapbytes( callb_desc->item[ndx].cb_item.datum.ival );
 	  _MrmOSIEEEFloatToHost((float *)
@@ -323,11 +323,11 @@ Urm__SwapRGMCallbackDesc (RGMCallbackDescPtr	callb_desc,
  *
  *--
  */
-     
-Cardinal 
+
+Cardinal
 Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
 {
-    
+
   /*
    *  Local variables
    */
@@ -339,9 +339,9 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
   IDBridDesc	  	*idb_rid_ptr;
   void			*offset;     	/* generic offset pointer */
   char			err_msg[300];
-    
+
   /* Swap the main part of the widget record */
-    
+
   swapbytes( widget_rec->size );
   swapbytes( widget_rec->access );
   swapbytes( widget_rec->lock );
@@ -354,11 +354,11 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
   swapbytes( widget_rec->creation_offs );
   swapbytes( widget_rec->variety );
   swapbytes( widget_rec->annex );
-    
+
   /* handle the argument list */
-    
+
   if (widget_rec->arglist_offs > 0)
-    {	
+    {
       arg_list = (RGMArgListDesc *)
 	((char *)widget_rec + widget_rec->arglist_offs);
       swapbytes( arg_list->count );
@@ -368,7 +368,7 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
 	  swapbytes( arg_list->args[ndx].tag_code );
 	  swapbytes( arg_list->args[ndx].stg_or_relcode.tag_offs );
 	  swapbytes( arg_list->args[ndx].arg_val.rep_type );
-	    
+
 	  switch( arg_list->args[ndx].arg_val.rep_type )
 	    {
 	    case MrmRtypeInteger:
@@ -383,12 +383,12 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
 	      swapbytes( arg_list->args[ndx].arg_val.datum.offset );
 	      break;
 	    }
-	    
+
 	  offset = ((char *)widget_rec+
 		    arg_list->args[ndx].arg_val.datum.offset);
-	    
+
 	  switch( arg_list->args[ndx].arg_val.rep_type )
-	    {	
+	    {
 	      /* these are immediate, do nothing special */
 	    case MrmRtypeInteger:
 	    case MrmRtypeBoolean:
@@ -440,9 +440,9 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
 	    }
 	}
     }
-    
+
   /* handle the child list */
-    
+
   if (widget_rec->children_offs > 0)
     {
       child_list = (RGMChildrenDesc *)
@@ -451,9 +451,9 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
       swapbytes( child_list->unused1 );
       swapbytes( child_list->annex1 );
       for ( ndx=0 ; ndx<child_list->count ; ndx++ )
-	{	
+	{
 	  swapbytes( child_list->child[ndx].annex1 );
-	  if (child_list->child[ndx].type ==  URMrRID ) 
+	  if (child_list->child[ndx].type ==  URMrRID )
 	    {
 	      idb_rid_ptr = (IDBridDesc *)&(child_list->child[ndx].key.id);
 #ifdef WORD64
@@ -468,15 +468,15 @@ Urm__SwapRGMWidgetRecord(RGMWidgetRecordPtr	widget_rec)
 	    swapbytes( child_list->child[ndx].key.index_offs );
 	}
     }
-    
+
   /* handle the creation callback, if any */
-    
+
   if (widget_rec->creation_offs > 0)
     {
       callb_desc = (RGMCallbackDesc * )
 	((char *)widget_rec + widget_rec->creation_offs);
       Urm__SwapRGMCallbackDesc( callb_desc, widget_rec );
     }
-    
+
   return MrmSUCCESS ;
 }

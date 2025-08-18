@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -219,7 +219,7 @@ Use the TextField to specify the size\n\
 *ComboBox*List.visibleItemCount:16
 
 
-! toggles specific 
+! toggles specific
 *RowColumn.RCChild1.indicatorOn:indicator_check
 *RowColumn.RCChild1.labelString:Check
 *RowColumn.RCChild2.indicatorOn:indicator_check_box
@@ -236,7 +236,7 @@ Use the TextField to specify the size\n\
 *RowColumn.RCChild31.labelString:Circular
 
 
-! scale specific 
+! scale specific
 *Scale.slidingMode:thermometer
 *Scale.scaleWidth:15
 *Scale.sliderVisual:FOREGROUND
@@ -250,7 +250,7 @@ Use the TextField to specify the size\n\
 *Scale.editable:true
 
 
-! misc 
+! misc
 *snapBackMultiple:5
 *FileSelectionBox*HorScrollBar.showArrows:min_side
 *FileSelectionBox*VertScrollBar.showArrows:max_side

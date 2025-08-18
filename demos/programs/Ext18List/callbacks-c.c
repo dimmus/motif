@@ -17,7 +17,7 @@
 
 extern PlayerData players[];
 extern Pixmap porsche_pix;
-extern Pixmap stopsign_pix; 
+extern Pixmap stopsign_pix;
 extern Pixmap crab_pix;
 extern Pixmap clown_pix;
 static int  NothingSort(short , XmMultiListRowInfo *, XmMultiListRowInfo *);
@@ -30,7 +30,7 @@ static int  ExtListDoubleSort(short , XmMultiListRowInfo *, XmMultiListRowInfo *
  *		CALLBACKS
  **************************************************************/
 /* ARGSUSED */
-Widget 
+Widget
 CreateExtListCB( Widget parent )
 {
 	XmString tcs;
@@ -51,7 +51,7 @@ CreateExtListCB( Widget parent )
 	"RBI",
 	NULL,
     };
-    Xm18SortFunction **sort_funcs = (Xm18SortFunction **) 
+    Xm18SortFunction **sort_funcs = (Xm18SortFunction **)
                  XtMalloc(sizeof(Xm18SortFunction *) * NUM_COLUMNS);
 
 
@@ -65,7 +65,7 @@ CreateExtListCB( Widget parent )
     row_info = (XmMultiListRowInfo *) XtMalloc(sizeof(XmMultiListRowInfo) * LINEUP_LIMIT);
 
     /*
-     * Each XmMultiListRowInfo contains an array of strings, which represent 
+     * Each XmMultiListRowInfo contains an array of strings, which represent
      * the column data.
      *
      * In this example, the following columns are:
@@ -78,7 +78,7 @@ CreateExtListCB( Widget parent )
      * 6 - "RBI"
      */
     for (i = 0; i < LINEUP_LIMIT; i++) {
-	row_info[i].values = (XmString *) 
+	row_info[i].values = (XmString *)
 	    XtMalloc(NUM_COLUMNS * sizeof(XmString));
 	for (j = 0; j < NUM_COLUMNS; j++)
 	    row_info[i].values[j] = NULL;
@@ -102,10 +102,10 @@ CreateExtListCB( Widget parent )
       default : sort_funcs[j] = (Xm18SortFunction *)ExtListIntSort;
       }
     }
-    /* These arguments set up the list with no elements. The 
+    /* These arguments set up the list with no elements. The
      *  row info will be added each time AddPlayer is done. Look
      *  at that code to see how the row information is initialized
-     */  
+     */
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNfirstColumnPixmaps, True); argcnt++;
@@ -117,17 +117,17 @@ CreateExtListCB( Widget parent )
     XtSetArg(args[argcnt], XmNsortFunctions, sort_funcs);        argcnt++;
     XtSetArg(args[argcnt], XmNselectionPolicy, XmSINGLE_SELECT);   argcnt++;
     XtSetArg(args[argcnt], XmNshowSash, False);   argcnt++;
-	retWid = XtCreateManagedWidget("ext18listWidget", 
-				  xmMultiListWidgetClass, 
-				  parent, args, argcnt);    
+	retWid = XtCreateManagedWidget("ext18listWidget",
+				  xmMultiListWidgetClass,
+				  parent, args, argcnt);
 
       XmStringFree(tcs);
-    for (j = 0; j < NUM_COLUMNS; j++) 
+    for (j = 0; j < NUM_COLUMNS; j++)
       XmStringFree(col_title_str[j]);
     XtFree((char*)col_title_str);
 
     return( retWid);
-    
+
 }
 
 
@@ -141,7 +141,7 @@ RemCB(Widget w, XtPointer client, XtPointer call )
     XmMultiListRowInfo *items = NULL, *new_items = NULL;
     short items_count = 0, new_items_count = 0;
     int i, j, k;
-    
+
     argcnt = 0;
     XtSetArg(args[argcnt], XmNentryData, &items); argcnt++;
     XtSetArg(args[argcnt], XmNnumRows, &items_count); argcnt++;
@@ -155,7 +155,7 @@ RemCB(Widget w, XtPointer client, XtPointer call )
 
     if (items_count == 0)
 	return;
-    
+
     /* Count how many were NOT selected */
     for (i = 0; i < items_count; i++)
 	if (!items[i].selected)
@@ -165,7 +165,7 @@ RemCB(Widget w, XtPointer client, XtPointer call )
     new_items = (XmMultiListRowInfo *) XtMalloc(sizeof(XmMultiListRowInfo) * LINEUP_LIMIT);
 
     for (i = 0; i < LINEUP_LIMIT; i++) {
-	new_items[i].values = (XmString *) 
+	new_items[i].values = (XmString *)
 	    XtMalloc(NUM_COLUMNS * sizeof(XmString));
 	for (j = 0; j < NUM_COLUMNS; j++)
 	    new_items[i].values[j] = NULL;
@@ -234,9 +234,9 @@ void
 UnselCB(Widget w, XtPointer client, XtPointer call )
 {
   DemoInfo demo_info = (DemoInfo)client;
- 
+
   XmMultiListUnselectAllItems( demo_info->extlist );
-  
+
 }
 
 /* ARGSUSED */
@@ -257,7 +257,7 @@ UpdateRemLabelStr(Widget w,XtPointer client, XtPointer call )
   Arg args[5];
   Cardinal argcnt;
   XmMultiListRowInfo *row_info = (XmMultiListRowInfo *)call;
-    
+
   if (row_info && row_info->values)
   {
       XtSetArg( args[0],  XmNlabelString, row_info->values[1] );
@@ -285,7 +285,7 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
     int i=0, playernum;
     char buf[BUFSIZ];
     Boolean found=False;
-    
+
     while ((i < NUM_PLAYERS) && (!found)){
       if (w == demo_info->player[i]) found = True;
       else i++;
@@ -297,24 +297,24 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
     XtSetArg(args[argcnt], XmNentryData, &row_info); argcnt++;
     XtSetArg(args[argcnt], XmNnumRows, &num_rows); argcnt++;
     XtGetValues(demo_info->extlist, args, argcnt);
-    
+
     if (num_rows == LINEUP_LIMIT) {
 	XmString xmstring;
 	static Widget info = NULL;
-	
+
 	if (info == NULL) {
 	    Arg args[5];
 	    Cardinal argcnt;
 	    Widget temp;
 
-	    xmstring = 
+	    xmstring =
 		XmStringCreateSimple("Cannot have more than nine players.");
-	    
+
 	    argcnt = 0;
 	    XtSetArg(args[argcnt], XmNtitle, "Error"); argcnt++;
 	    XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
 	    info = XmCreateErrorDialog(w, "error", args, argcnt);
-	    
+
 	    temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
 	    XtUnmanageChild(temp);
 	    temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
@@ -324,22 +324,22 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
 	XtManageChild(info);
 	return;
     }
-    
+
     for (i = 0; i < num_rows; i++) {
 	XmString xmstring;
 	static Widget info = NULL;
 
 	if ((int) row_info[i].data == playernum) {
-	    
+
 	    if (info == NULL) {
 		Arg args[5];
 		Cardinal argcnt;
 		Widget temp;
-		
+
 		argcnt = 0;
 		XtSetArg(args[argcnt], XmNtitle, "Error"); argcnt++;
 		info = XmCreateErrorDialog(w, "error", args, argcnt);
-		
+
 		temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
 		XtUnmanageChild(temp);
 		temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
@@ -352,7 +352,7 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
 	    argcnt = 0;
 	    XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
 	    XtSetValues(info, args, argcnt);
-	
+
 	    XtManageChild(info);
 	    XmStringFree(xmstring);
 	    return;
@@ -378,7 +378,7 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
 
     row_info[num_rows].selected = False;
 
-    row_info[num_rows].values[1] = 
+    row_info[num_rows].values[1] =
       XmStringCreateSimple(players[playernum].name);
 
 
@@ -393,20 +393,20 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
     XtFree((XtPointer) row_info[num_rows].values[4]);
     sprintf(buf, "%d", players[playernum].runs);
     row_info[num_rows].values[4] = XmStringCreateSimple(buf);
-    
+
     XtFree((XtPointer) row_info[num_rows].values[5]);
     sprintf(buf, "%d", players[playernum].hits);
     row_info[num_rows].values[5] = XmStringCreateSimple(buf);
 
-    XtFree((XtPointer) row_info[num_rows].values[6]);    
+    XtFree((XtPointer) row_info[num_rows].values[6]);
     sprintf(buf, "%d", players[playernum].home_runs);
     row_info[num_rows].values[6] = XmStringCreateSimple(buf);
 
-    XtFree((XtPointer) row_info[num_rows].values[7]);    
+    XtFree((XtPointer) row_info[num_rows].values[7]);
     sprintf(buf, "%d", players[playernum].rbi);
     row_info[num_rows].values[7] = XmStringCreateSimple(buf);
 
-    num_rows++; 
+    num_rows++;
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNentryData, row_info); argcnt++;
@@ -480,7 +480,7 @@ end ",
  *  Sort routines.
  *
  ************************************************************/
-static int 
+static int
 NothingSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *row2 )
 {
   return(0);
@@ -514,18 +514,18 @@ ExtListAlphaSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *ro
   String str2 = StringFromXmString(row2->values[column]);
 
   int ret_val;
-	
+
   if (str1 == NULL)
     ret_val = -1; /* str1 is empty. it must be less than str2 */
   else if (str2 == NULL)
     ret_val = 1; /* str2 is empty. str1 must be greater */
   else
     ret_val = strcmp(str1, str2);
-  
+
   /* clean up */
   if (str1 != NULL) XtFree((XtPointer) str1);
   if (str2 != NULL) XtFree((XtPointer) str2);
-  
+
   return (ret_val);
 }
 
@@ -542,7 +542,7 @@ ExtListIntSort( short column,  XmMultiListRowInfo *row1, XmMultiListRowInfo *row
   String str1 = StringFromXmString(row1->values[column]);
   String str2 = StringFromXmString(row2->values[column]);
   int ret_val;
-  
+
   if (str1 == NULL)
     ret_val = -1; /* str1 is empty. it must be less than str2 */
   else if (str2 == NULL)
@@ -550,10 +550,10 @@ ExtListIntSort( short column,  XmMultiListRowInfo *row1, XmMultiListRowInfo *row
   else
     {
       int i1, i2;
-      
+
       i1 = atoi(str1);
       i2 = atoi(str2);
-      
+
       if (i1 == i2)
 	ret_val = 0;
       else if (i1 < i2)
@@ -561,11 +561,11 @@ ExtListIntSort( short column,  XmMultiListRowInfo *row1, XmMultiListRowInfo *row
       else
 	ret_val = 1;
     };
-  
+
   /* clean up */
   if (str1 != NULL) XtFree((XtPointer) str1);
   if (str2 != NULL) XtFree((XtPointer) str2);
-  
+
   return(ret_val);
 }
 
@@ -582,7 +582,7 @@ ExtListDoubleSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *r
   String str1 = StringFromXmString(row1->values[column]);
   String str2 = StringFromXmString(row2->values[column]);
   int ret_val;
-  
+
   if (str1 == NULL)
     ret_val = -1; /* str1 is empty. it must be less than str2 */
   else if (str2 == NULL)
@@ -590,10 +590,10 @@ ExtListDoubleSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *r
   else
     {
       float i1, i2;
-      
+
       sscanf( str1, "%f", (float *)&i1 );
       sscanf( str2, "%f", (float *)&i2 );
-      
+
       if (i1 == i2)
 	ret_val = 0;
       else if (i1 < i2)
@@ -601,10 +601,10 @@ ExtListDoubleSort( short column, XmMultiListRowInfo *row1, XmMultiListRowInfo *r
       else
 	ret_val = 1;
     };
-  
+
   /* clean up */
   if (str1 != NULL) XtFree((XtPointer) str1);
   if (str2 != NULL) XtFree((XtPointer) str2);
-  
+
   return(ret_val);
 }

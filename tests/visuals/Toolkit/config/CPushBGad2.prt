@@ -22,14 +22,14 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual bboard 
-TRACE:(2) LocatePointer pushbutton  
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual pushbutton 
-TRACE:(5) LocatePointer pushbutton  
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) CompareVisual pushbutton 
+TRACE:(1) CompareVisual bboard
+TRACE:(2) LocatePointer pushbutton
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual pushbutton
+TRACE:(5) LocatePointer pushbutton
+TRACE:(6) ClickMB Btn1
+TRACE:(7) CompareVisual pushbutton
 TRACE:(8) Continue
-TRACE:(9) CompareVisual bboard 
+TRACE:(9) CompareVisual bboard
 TRACE:(10) Exit
 Exiting Test...Please Standby...

@@ -18,10 +18,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
-		
+
 !
 ! This file must be run through cpp to resolve the include files
 !
@@ -32,10 +32,10 @@
 
 !
 ! These lists will be appended to those defined in the motif.wml file
-! 
+!
 
 ControlList
-	AllWidgetsAndGadgets 
+	AllWidgetsAndGadgets
 		{
  		ExmSimple;
  		ExmString;
@@ -97,7 +97,7 @@ Class
 		};
 
 Resource
-	ExmNreportCallback : Reason 
+	ExmNreportCallback : Reason
                 { };
 	ExmNrubberBand : Argument
 		{ Type = boolean; };
@@ -242,4 +242,3 @@ Class
 			AllWidgetsAndGadgets;
 			};
 		};
-

@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/6 1996/07/15 14:22:36 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 AllWidgets
 PIRS No.:      4193
 Shell does not grow in size to fit a single manager child.
@@ -217,7 +217,7 @@ PIRS No.:      4457
 Resize handles draw outside their regions. It has been this
 way for a while; discovered using xmag.
 Version found in:	1.1.4
-Version fixed in:	
+Version fixed in:
 Assigned to:	MICHAEL YEE
 Priority:	7
 Status:		A
@@ -257,7 +257,7 @@ PIRS No.:      4362
 In Baseline2.c, when XmNentryVerticalAlignment is set to
 XmALIGNMENT_BASELINE_BOTTOM, the test doesn't show all widgets
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	0
 Status:		A
@@ -287,7 +287,7 @@ PIRS No.:      4368
 Display glitch appears when XmNentryVerticalAlignment changes
 to XmALIGNMENT_CONTENTS_BOTTOM and Text widget scrolls.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -367,7 +367,7 @@ PIRS No.:      2969
 After Btn1 is pressed or released or clicked, pressing SHIFT k
 ey will not activate inputCallback.
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	8
 Status:		A
@@ -397,7 +397,7 @@ PIRS No.:      4499
 Panel1 Frame1 always too small under automation; comes up okay
 when compiled manually. First frame/RC 5 pixels larger in 1.2.
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	5
 Status:		A
@@ -417,7 +417,7 @@ PIRS No.:      4499
 Panel1 Frame1 always too small under automation; comes up okay
 when compiled manually. First frame/RC 5 pixels larger in 1.2.
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	5
 Status:		A
@@ -437,7 +437,7 @@ PIRS No.:      4499
 Panel1 Frame1 always too small under automation; comes up okay
 when compiled manually. First frame/RC 5 pixels larger in 1.2.
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	5
 Status:		A
@@ -447,7 +447,7 @@ PIRS No.:      4499
 Panel1 Frame1 always too small under automation; comes up okay
 when compiled manually. First frame/RC 5 pixels larger in 1.2.
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	LIBBY HANNA
 Priority:	5
 Status:		A
@@ -557,7 +557,7 @@ PIRS No.:      3863
 Setting XmNpacking to NONE and then specifying x and y vals fo
 r row Column children yields broken behavior.
 Version found in:	1.1.4
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -587,7 +587,7 @@ PIRS No.:      4532
 RowCol doesn't relay out properly in response to SetValues
 XmNpacking changes as it did in 1.1.4. Panels 2 & 3 fail.
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	DANIEL DARDAILLER
 Priority:	0
 Status:		A

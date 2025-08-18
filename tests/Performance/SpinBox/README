@@ -4,9 +4,9 @@ XmSpinBox widget. Each test can be run automated.
 
 Set XFILESEARCHPATH to SpinBox.defaults.
 
-SpinBoxPerf - 
+SpinBoxPerf -
 -----------
-Measures the time elapsed to increment a Numeric SpinBox from 
+Measures the time elapsed to increment a Numeric SpinBox from
 its minimum to its maximum value and then to decrement the
 Numeric SpinBox from its maximum back to its minimum value.
 A file is created, SpinBoxPerf.prt, which lists the time.

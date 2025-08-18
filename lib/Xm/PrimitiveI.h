@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,77 +37,77 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmTraverseLeft( 
+extern void _XmTraverseLeft(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraverseRight( 
+extern void _XmTraverseRight(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraverseUp( 
+extern void _XmTraverseUp(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraverseDown( 
+extern void _XmTraverseDown(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraverseNext( 
+extern void _XmTraverseNext(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraversePrev( 
+extern void _XmTraversePrev(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraverseHome( 
+extern void _XmTraverseHome(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraverseNextTabGroup( 
+extern void _XmTraverseNextTabGroup(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmTraversePrevTabGroup( 
+extern void _XmTraversePrevTabGroup(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmPrimitiveHelp( 
+extern void _XmPrimitiveHelp(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmPrimitiveParentActivate( 
+extern void _XmPrimitiveParentActivate(
                         Widget pw,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmPrimitiveParentCancel( 
+extern void _XmPrimitiveParentCancel(
                         Widget pw,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmButtonTakeFocus( 
+extern void _XmButtonTakeFocus(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmMenuButtonTakeFocus( 
+extern void _XmMenuButtonTakeFocus(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmMenuButtonTakeFocusUp( 
+extern void _XmMenuButtonTakeFocusUp(
                         Widget wid,
                         XEvent *event,
                         String *params,

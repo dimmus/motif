@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,12 +36,12 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern int _XmArrowPixmapCacheCompare( 
+extern int _XmArrowPixmapCacheCompare(
                         XtPointer A,
                         XtPointer B) ;
-extern void _XmArrowPixmapCacheDelete( 
+extern void _XmArrowPixmapCacheDelete(
                         XtPointer data) ;
-extern void _XmCreateArrowPixmaps( 
+extern void _XmCreateArrowPixmaps(
                         Widget wid) ;
 
 /********    End Private Function Declarations    ********/

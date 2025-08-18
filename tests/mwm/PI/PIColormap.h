@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: PIColormap.h /main/6 1995/07/13 20:18:50 drk $ */
 
 /*  X headers  */
@@ -34,7 +34,7 @@
 #include <Xm/MwmUtil.h>
 
 
-/* 
+/*
  * Data for summary
  */
 
@@ -49,7 +49,7 @@
 #define			VALID_TEST3	3
 #define			FINISH		4
 
-struct TestInfo PIInfo[NUM_TESTS] = 
+struct TestInfo PIInfo[NUM_TESTS] =
 {
 	{"Check if def_cmap is initially installed WM_COLORMAP_WINDOWS",
 		True,	0},

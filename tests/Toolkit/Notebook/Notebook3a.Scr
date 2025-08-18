@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -28,13 +28,13 @@
 #  A NoteBook widget will appear on your screen. All resources will have been
 #  set by default.
 #  There will be an empty ScrolledList on the upper left of your screen. This
-#  will be dynamically updated with the names of any widgets you create 
+#  will be dynamically updated with the names of any widgets you create
 #  during the test.
 
 WindowMove Notebook 700 500
 
 CompareVisual Notebook
-Continue 
+Continue
 
 #  Set the value of the "Current Page Number" scale to 1.
 #  Select "Set Current Page Number" from the "Set Notebook Values" menu, to
@@ -56,7 +56,7 @@ LocatePointer NotebookScale2 RScaleSlider
 DragSliderValue Right 4
 LocatePointer NotebookCascade1
 PressMB Btn1
-LocatePointer ApplyScalePB2 
+LocatePointer ApplyScalePB2
 ReleaseMB Btn1
 
 
@@ -70,7 +70,7 @@ LocatePointer NotebookScale1 RScaleSlider
 DragSliderValue Right 2
 LocatePointer NotebookCascade1
 PressMB Btn1
-LocatePointer ApplyScalePB1 
+LocatePointer ApplyScalePB1
 ReleaseMB Btn1
 
 
@@ -78,10 +78,10 @@ Continue
 
 
 
-   
+
 
 #  Set  childType to PAGE.
-#  Select "Set Child Type" from the "Set Child Values" menu to set the 
+#  Select "Set Child Type" from the "Set Child Values" menu to set the
 #  childType resource to PAGE.
 
 LocatePointer TogglenotebookChildType0
@@ -95,7 +95,7 @@ ReleaseMB Btn1
 
 
 #  Set the value of the "Page Number" scale to 1.
-#  Select "Set Page Number" from the "Set Child Values" menu to set 
+#  Select "Set Page Number" from the "Set Child Values" menu to set
 #  the pageNumber resource to 1.
 
 LocatePointer PageNumberScale RScaleSlider
@@ -117,8 +117,8 @@ ReleaseMB Btn1
 #  A SelectionDialog will appear on your screen. Select "XmSelectionBox"
 #  from the list of choices. Click on the "OK" button of the SelectionDialog.
 #  Some resizing will take place, indicating creation of the SelectionBox,
-#  but no SelectionBox should be visible, even though currentPageNumber has 
-#  been set to 1. This is because the page number range is 2-4, as set in the 
+#  but no SelectionBox should be visible, even though currentPageNumber has
+#  been set to 1. This is because the page number range is 2-4, as set in the
 #  previous panel, and the page number of the SelectionBox just created is 1.
 
 
@@ -134,7 +134,7 @@ Continue
 
 
 #  Set  childType to PAGE.
-#  Select "Set Child Type" from the "Set Child Values" menu to set the 
+#  Select "Set Child Type" from the "Set Child Values" menu to set the
 #  childType resource to PAGE.
 
 LocatePointer TogglenotebookChildType0
@@ -146,7 +146,7 @@ LocatePointer notebookChildTypePB1
 ReleaseMB Btn1
 
 #  Set the value of the "Page Number" scale to 5.
-#  Select "Set Page Number" from the "Set Child Values" menu to set 
+#  Select "Set Page Number" from the "Set Child Values" menu to set
 #  the pageNumber resource to 5.
 
 
@@ -192,7 +192,7 @@ Continue
 
 
 # Set the value of the "Page Number" scale to 4.
-# Select "Set Page Number" from the "Set Child Values" menu to set 
+# Select "Set Page Number" from the "Set Child Values" menu to set
 # the pageNumber resource to 4.
 
 LocatePointer PageNumberScale RScaleSlider
@@ -232,7 +232,7 @@ Continue
 
 
 #  Set  childType to PAGE.
-#  Select "Set Child Type" from the "Set Child Values" menu to set the 
+#  Select "Set Child Type" from the "Set Child Values" menu to set the
 #  childType resource to PAGE.
 
 LocatePointer TogglenotebookChildType0
@@ -244,7 +244,7 @@ LocatePointer notebookChildTypePB1
 ReleaseMB Btn1
 
 #  Set the value of the "Page Number" scale to 2.
-#  Select "Set Page Number" from the "Set Child Values" menu to set 
+#  Select "Set Page Number" from the "Set Child Values" menu to set
 #  the pageNumber resource to 2.
 
 
@@ -336,7 +336,7 @@ Continue
 
 
 #  Set the value of the "Page Number" scale to 3.
-#  Select "Set Page Number" from the "Set Child Values" menu to set 
+#  Select "Set Page Number" from the "Set Child Values" menu to set
 #  the pageNumber resource to 3.
 
 
@@ -351,7 +351,7 @@ LocatePointer pageNumberPB1
 ReleaseMB Btn1
 
 
-#  Select "Page3" from the list of widgets created. 
+#  Select "Page3" from the list of widgets created.
 #  Select "Set Values Child" from the "Child" menu.
 
 
@@ -387,7 +387,7 @@ LocatePointer NotebookScale0 RScaleSlider
 DragSliderValue Right 2
 LocatePointer NotebookCascade1
 PressMB Btn1
-LocatePointer ApplyScalePB0 
+LocatePointer ApplyScalePB0
 ReleaseMB Btn1
 
 
@@ -400,7 +400,7 @@ Continue
 
 
 #  Set  childType to PAGE_SCROLLER.
-#  Select "Set Child Type" from the "Set Child Values" menu to set the 
+#  Select "Set Child Type" from the "Set Child Values" menu to set the
 #  childType resource to PAGE_SCROLLER.
 
 LocatePointer TogglenotebookChildType4
@@ -438,7 +438,7 @@ CompareVisual Notebook
 
 
 #  Set  childType to PAGE_SCROLLER.
-#  Select "Set Child Type" from the "Set Child Values" menu to set the 
+#  Select "Set Child Type" from the "Set Child Values" menu to set the
 #  childType resource to PAGE_SCROLLER.
 
 LocatePointer TogglenotebookChildType4
@@ -470,11 +470,3 @@ CompareVisual Notebook
 
 
 Exit
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: testlib.h /main/11 1995/07/14 12:00:02 drk $ */
 
 
@@ -107,8 +107,8 @@ extern void		CommonGenericCB(Widget w, XtPointer client_data,
 extern void		CommonGetOptions(int *argc, char **argv);
 extern void		CommonPause();
 extern void		CommonTestInit(int argc, char **argv);
-extern void		CommonTestI18NInit(int argc, char **argv, 
-					   XtLanguageProc proc, 
+extern void		CommonTestI18NInit(int argc, char **argv,
+					   XtLanguageProc proc,
 					   XtPointer client_data);
 extern void 		CommonDumpHierarchy(Widget w, FILE *file);
 extern char		*CommonCsToRs(XmString cs);
@@ -118,7 +118,7 @@ extern void             CommonExtraResources(Arg args[], Cardinal n);
 
 /* stubs for when NOT linking with malloc library */
 
-extern void             MallocInit(); 
+extern void             MallocInit();
 extern void             MallocExit();
 
 

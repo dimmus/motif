@@ -34,7 +34,7 @@
 void
 main(int argc, char **argv)
 {
-    
+
     Widget		ScrolledW, Frame, Container, *IconGad;
     int			i,j;
     Cardinal		n, N, num_obj;
@@ -46,9 +46,9 @@ main(int argc, char **argv)
 
     test_num = 0;
     num_obj = NUM_OBJ;
-    
+
     if (UserData != NULL) {
-	
+
 	if (strcmp(UserData, "noscroll") == 0)
 	    test_num = 1;
 	else {
@@ -58,12 +58,12 @@ main(int argc, char **argv)
 	}
 
 	free(UserData);
-	
+
     }
 
 
     /* We want a scrolledwindow because the container window
-       can potentially be huge. If we don't want a scrolled 
+       can potentially be huge. If we don't want a scrolled
        window run it with -u noscroll */
 
     if (test_num != 1) {
@@ -72,12 +72,12 @@ main(int argc, char **argv)
        XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC); n++;
        ScrolledW = XmCreateScrolledWindow(Shell1, "ScrolledW", args, n);
        XtManageChild(ScrolledW);
-    
+
        /* but we don't want interaction with the scrolling header */
        n = 0;
        Frame= XmCreateFrame(ScrolledW, "Frame", args, n);
        XtManageChild(Frame);
-    
+
        n = 0;
        Container= XmCreateContainer(Frame, "Container", args, n);
     }
@@ -85,12 +85,12 @@ main(int argc, char **argv)
        n = 0;
        Container= XmCreateContainer(Shell1, "Container", args, n);
     }
-      
+
     XtManageChild(Container);
-    
+
     /* take the cube root of num_obj and compute the real num_obj */
     N = (Cardinal) cbrt ((double)num_obj) ;
-    num_obj = N*N*N ; 
+    num_obj = N*N*N ;
     IconGad = (Widget*) XtMalloc(num_obj*sizeof(Widget));
 
 
@@ -110,19 +110,17 @@ main(int argc, char **argv)
 	    sprintf(IconName, "IconGad%d", i+1);
 	}
 
-	icon_name = XmStringCreate(IconName, XmSTRING_DEFAULT_CHARSET); 
+	icon_name = XmStringCreate(IconName, XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, icon_name); n++;
 	IconGad[i] = XmCreateIconGadget(Container, IconName, args, n);
     }
     XtManageChildren(IconGad,num_obj);
 
-    
+
     XtRealizeWidget(Shell1);
-    
+
     CommonPause();
 
     XtAppMainLoop(app_context);
-    
+
 }
-
-

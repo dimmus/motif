@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -145,7 +145,7 @@ CreateRenderTable()
 
 
 Boolean
-CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 ) 
+CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
 {
      XmRendition         *renditions1, *renditions2;
      XmStringTag         *tags1, *tags2;
@@ -159,16 +159,16 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
     /*
      *  Get renditions for the original renderTable.
      */
-     tag_count1 = XmRenderTableGetTags( renderTable1, &tags1 ); 
+     tag_count1 = XmRenderTableGetTags( renderTable1, &tags1 );
      renditions1 =
-     XmRenderTableGetRenditions( renderTable1, tags1, tag_count1 ); 
+     XmRenderTableGetRenditions( renderTable1, tags1, tag_count1 );
 
     /*
      *  Get renditions for the converted renderTable.
      */
-     tag_count2 = XmRenderTableGetTags( renderTable2, &tags2 ); 
+     tag_count2 = XmRenderTableGetTags( renderTable2, &tags2 );
      renditions2 =
-     XmRenderTableGetRenditions( renderTable2, tags2, tag_count2 ); 
+     XmRenderTableGetRenditions( renderTable2, tags2, tag_count2 );
 
      if ( tag_count1 != tag_count2 )
         status = False;
@@ -182,31 +182,31 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
            XtSetArg( args[n], XmNfont, &rendRes1.font ); n++;
            XtSetArg( args[n], XmNfontName, &rendRes1.font_name ); n++;
            XtSetArg( args[n], XmNfontType, &rendRes1.font_type ); n++;
-           XtSetArg( args[n], XmNrenditionForeground, 
+           XtSetArg( args[n], XmNrenditionForeground,
                      &rendRes1.rendition_foreground ); n++;
            XtSetArg( args[n], XmNloadModel, &rendRes1.load_model ); n++;
-           XtSetArg( args[n], XmNstrikethruType, 
+           XtSetArg( args[n], XmNstrikethruType,
                      &rendRes1.strikethru_type ); n++;
            XtSetArg( args[n], XmNtabList, &rendRes1.tabList ); n++;
            XtSetArg( args[n], XmNtag, &rendRes1.tag ); n++;
-           XtSetArg( args[n], XmNunderlineType, 
+           XtSetArg( args[n], XmNunderlineType,
                      &rendRes1.underline_type ); n++;
            XmRenditionRetrieve( renditions1[i], args, n );
-           
+
            n = 0;
            XtSetArg( args[n], XmNrenditionBackground,
                      &rendRes2.rendition_background ); n++;
            XtSetArg( args[n], XmNfont, &rendRes2.font ); n++;
            XtSetArg( args[n], XmNfontName, &rendRes2.font_name ); n++;
            XtSetArg( args[n], XmNfontType, &rendRes2.font_type ); n++;
-           XtSetArg( args[n], XmNrenditionForeground, 
+           XtSetArg( args[n], XmNrenditionForeground,
                      &rendRes2.rendition_foreground ); n++;
            XtSetArg( args[n], XmNloadModel, &rendRes2.load_model ); n++;
-           XtSetArg( args[n], XmNstrikethruType, 
+           XtSetArg( args[n], XmNstrikethruType,
                      &rendRes2.strikethru_type ); n++;
            XtSetArg( args[n], XmNtabList, &rendRes2.tabList ); n++;
            XtSetArg( args[n], XmNtag, &rendRes2.tag ); n++;
-           XtSetArg( args[n], XmNunderlineType, 
+           XtSetArg( args[n], XmNunderlineType,
                      &rendRes2.underline_type ); n++;
            XmRenditionRetrieve( renditions2[i], args, n );
 
@@ -214,9 +214,9 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
 	  if ((rendRes1.tag != rendRes2.tag) &&
 	      (strcmp(rendRes1.tag, rendRes2.tag) != 0))
 	    break;
-	   
+
           /*  Compare values of XmNrenditionBackground resource. */
-           if ( rendRes1.rendition_background != 
+           if ( rendRes1.rendition_background !=
                 rendRes2.rendition_background )
               break;
 
@@ -225,7 +225,7 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
                ( ((XFontStruct *)rendRes1.font)->fid !=
                    ((XFontStruct *)rendRes2.font)->fid ))
                  break;
-           
+
           /*  Compare values of XmNfontName resource. */
            if (( rendRes1.font_name != rendRes2.font_name ) &&
                ( strcmp( rendRes1.font_name, rendRes2.font_name ) != 0 ))
@@ -236,7 +236,7 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
               break;
 
           /*  Compare values of XmNrenditionForeground resource. */
-           if ( rendRes1.rendition_foreground != 
+           if ( rendRes1.rendition_foreground !=
                 rendRes2.rendition_foreground )
               break;
 
@@ -245,7 +245,7 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
               break;
 
           /*  Compare values of XmNstrikethruType resource. */
-           if ( rendRes1.strikethru_type != 
+           if ( rendRes1.strikethru_type !=
                 rendRes2.strikethru_type )
               break;
 
@@ -255,9 +255,9 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
 	     if ((rendRes1.tabList == (XtPointer)XmAS_IS) ||
 		 (rendRes2.tabList == (XtPointer)XmAS_IS))
 	       break;
-		 
-              tab_count1 = XmTabListTabCount( rendRes1.tabList ); 
-              tab_count2 = XmTabListTabCount( rendRes2.tabList ); 
+
+              tab_count1 = XmTabListTabCount( rendRes1.tabList );
+              tab_count2 = XmTabListTabCount( rendRes2.tabList );
               if ( tab_count1 != tab_count2 )
                  break;
 
@@ -268,12 +268,12 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
 
                  tabVal1.value =
                  XmTabGetValues( tab1, &tabVal1.units, &tabVal1.offset,
-                         &tabVal1.alignment, &tabVal1.decimal ); 
+                         &tabVal1.alignment, &tabVal1.decimal );
 /*                 sprintf( tabVal_int1, "%f", tabVal1.value ); */
 
                  tabVal2.value =
                  XmTabGetValues( tab2, &tabVal2.units, &tabVal2.offset,
-                         &tabVal2.alignment, &tabVal2.decimal ); 
+                         &tabVal2.alignment, &tabVal2.decimal );
 /*                 sprintf( tabVal_int2, "%f", tabVal2.value ); */
 
                  if ( tabVal1.value != tabVal2.value )
@@ -292,9 +292,9 @@ CompareRenderTables( XmRenderTable renderTable1, XmRenderTable renderTable2 )
                  break;
            }
 	   /* else both XmAS_IS */
-          
+
           /*  Compare values of XmNunderlineType resource. */
-           if ( rendRes1.underline_type != 
+           if ( rendRes1.underline_type !=
                 rendRes2.underline_type )
               break;
          }
@@ -327,7 +327,7 @@ main( int argc, char **argv )
         printf("XmRenderTableCvtToProp() returns\n");
         printf("String representation= %s\n", prop_return );
 
-        renderTable2 = 
+        renderTable2 =
         XmRenderTableCvtFromProp( Shell1, prop_return, length );
 
        /*
@@ -339,7 +339,7 @@ main( int argc, char **argv )
         printf("XmRenderTableCvtFromProp: ");
         if ( status )
            printf("PASSED");
-        else 
+        else
            printf("FAILED");
         printf("\n\n");
 

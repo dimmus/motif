@@ -22,32 +22,32 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Shell1 
-TRACE:(2) CompareVisual popupMenu 
-TRACE:(3) LocatePointer PushButton1  
-TRACE:(4) CompareVisual popupMenu 
-TRACE:(5) LocatePointer Toggle1  
-TRACE:(6) CompareVisual popupMenu 
-TRACE:(7) ClickMB Btn3 
-TRACE:(8) CompareVisual Shell1 
+TRACE:(1) CompareVisual Shell1
+TRACE:(2) CompareVisual popupMenu
+TRACE:(3) LocatePointer PushButton1
+TRACE:(4) CompareVisual popupMenu
+TRACE:(5) LocatePointer Toggle1
+TRACE:(6) CompareVisual popupMenu
+TRACE:(7) ClickMB Btn3
+TRACE:(8) CompareVisual Shell1
 TRACE:(9) Continue
-Warning: 
+Warning:
     Name: popupMenu2
     Class: XmRowColumn
     Widget hierarchy not appropriate for this XmNrowColumnType:
     defaulting to XmWORK_AREA
 
-TRACE:(10) CompareVisual Shell1 
+TRACE:(10) CompareVisual Shell1
 TRACE:(11) Continue
-TRACE:(12) CompareVisual Shell1 
-TRACE:(13) LocatePointer PushButtonHere  
-TRACE:(14) PressMB Btn3 
+TRACE:(12) CompareVisual Shell1
+TRACE:(13) LocatePointer PushButtonHere
+TRACE:(14) PressMB Btn3
 PostPopup
-TRACE:(15) CompareVisual Popups 
-TRACE:(16) LocatePointer button1  
-TRACE:(17) ReleaseMB Btn3 
+TRACE:(15) CompareVisual Popups
+TRACE:(16) LocatePointer button1
+TRACE:(17) ReleaseMB Btn3
 Callback button 1
 TRACE:(18) Continue
-TRACE:(19) CompareVisual Shell1 
+TRACE:(19) CompareVisual Shell1
 TRACE:(20) Exit
 Exiting Test...Please Standby...

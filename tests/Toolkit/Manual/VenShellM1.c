@@ -35,7 +35,7 @@ char *bool_str[2];
 char *result_str[2];
 
 static void
-Junk(Widget w, XtPointer client_data, XEvent *event, 
+Junk(Widget w, XtPointer client_data, XEvent *event,
 	 Boolean *continue_to_dispatch)
 {
 
@@ -80,12 +80,12 @@ ChangeNoResize(Widget w, XtPointer client_data,
 
     XtUnmapWidget(toplevelShell);
     XtMapWidget(toplevelShell);
-}   
+}
 
 
 
 /* for CR 1684 */
-static void 
+static void
 GetAndPrint(Boolean async_in, Boolean wfw_in, int wTo_in)
 {
   Boolean async_out;
@@ -124,15 +124,15 @@ main(unsigned int argc, char **argv)
 {
     Cardinal n;
     Arg      args[MAX_ARGS];
-    Boolean async_in;  
-    Boolean wfw_in;    
+    Boolean async_in;
+    Boolean wfw_in;
     int     wTo_in;
-  
+
 
     CommonTestInit(argc, argv);
-      
+
     /*
-     * test case for PIR 3058 
+     * test case for PIR 3058
      * Create a Shell with TWO children - only one is managed.  The
      * SubstructureNotify eventhandler on the shell confuses it when
      * the UNmanaged child is getting resized.  See report for details.
@@ -143,7 +143,7 @@ main(unsigned int argc, char **argv)
 
     PushButton1 = XmCreatePushButton(Shell1, "PushButton1", NULL, 0);
     XtManageChild(PushButton1);
-    
+
     XtAddCallback(PushButton1, XmNactivateCallback, activatePB, NULL);
     /* end of test case for PIR 3058 */
 
@@ -164,7 +164,7 @@ main(unsigned int argc, char **argv)
 
     PushButton1 = XmCreatePushButton(Shell1, "PushButton1", NULL, 0);
     XtManageChild(PushButton1);
-    
+
     XtAddCallback(PushButton1, XmNactivateCallback, activatePB, NULL);
 
     CommonPause();
@@ -210,11 +210,11 @@ main(unsigned int argc, char **argv)
   async_in = True;
   wfw_in = False;
   wTo_in = 0;
-  
+
   n=0;
   XtSetArg(args[n], XmNuseAsyncGeometry, async_in); n++;
   XtSetValues (Shell1, args, n);
-  
+
   n=0;
   BBoard1 = XmCreateBulletinBoard(Shell1, "BBoard1", args, n);
 
@@ -242,7 +242,7 @@ main(unsigned int argc, char **argv)
   n = 0;
   XtSetArg(args[n], XmNuseAsyncGeometry, async_in); n++;
   XtSetValues(Shell1, args, n);
- 
+
   printf("\nTest 3: Change UseAsyncGeo to True using SetValues\n");
   GetAndPrint(async_in, wfw_in, wTo_in);
 
@@ -288,7 +288,7 @@ main(unsigned int argc, char **argv)
   printf("\nTest 6: Change UseAsyncGeo to False to verify values loaded in Test 5 using SetValues\n");
   GetAndPrint(async_in, wfw_in, wTo_in);
 
-/* Test 7 - Using SetValues, change UseAsyncGeo to True. Then change WaitForWm 
+/* Test 7 - Using SetValues, change UseAsyncGeo to True. Then change WaitForWm
             to False and WmTimeout to 1000. */
   async_in = True;
   wfw_in = False;
@@ -305,7 +305,7 @@ main(unsigned int argc, char **argv)
   printf("\nTest 7: Change UseAsyncGeo to True.  Then change WaitForWm to False, and WmTimeout to 1000 afterwards\n");
   GetAndPrint(async_in, wfw_in, wTo_in);
 
-/* Test 8 - Using SetValues, change UseAsyncGeo to False to check the 
+/* Test 8 - Using SetValues, change UseAsyncGeo to False to check the
             previously loaded data */
   async_in = False;
   wfw_in = False;

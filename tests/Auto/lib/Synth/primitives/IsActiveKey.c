@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsActiveKey.c /main/7 1995/07/14 11:38:55 drk $"
@@ -41,7 +41,7 @@ static char rcsid[] = "$XConsortium: IsActiveKey.c /main/7 1995/07/14 11:38:55 d
 
         INPUTS:
             key_code - the key in question (KeySpace, KeyReturn, etc.)
-        
+
         OUTPUTS:
             none
 
@@ -60,7 +60,7 @@ int key_code;
     if (!xisInform.is_valid)
         AutoMessage(_AutoMessages[WARNMSG49]);
 
-    return ( (xisInform.key_code == key_code) && 
+    return ( (xisInform.key_code == key_code) &&
 	     (xisInform.modifier_key_status == modifier_keys) );
 
 } /* End xisIsActiveKey() */

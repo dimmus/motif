@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -73,7 +73,7 @@ static char rcsid[] = "$XConsortium: MrmIindex.c /main/13 1996/11/13 13:57:31 dr
  *
  *	Idb__INX_GetBTreeRecord		- Read a record in the B-tree
  *
- *	Idb__INX_FindResources		- Search the index for resources 
+ *	Idb__INX_FindResources		- Search the index for resources
  *					  matching the filter
  *
  */
@@ -126,7 +126,7 @@ static char rcsid[] = "$XConsortium: MrmIindex.c /main/13 1996/11/13 13:57:31 dr
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_ReturnItem (IDBFile			file_id,
 		     char			*index,
 		     IDBDataHandle		*data_entry)
@@ -226,7 +226,7 @@ Idb__INX_ReturnItem (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_FindIndex (IDBFile			file_id,
 		    char			*index,
 		    IDBRecordBufferPtr		*buffer_return,
@@ -317,7 +317,7 @@ Idb__INX_FindIndex (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_SearchIndex (IDBFile			file_id,
 		      char			*index,
 		      IDBRecordBufferPtr	buffer,
@@ -428,7 +428,7 @@ Idb__INX_SearchIndex (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_GetBtreeRecord ( IDBFile		file_id,
 			  IDBRecordBufferPtr	*buffer_return,
 			  MrmCount		entry_index,
@@ -516,7 +516,7 @@ Idb__INX_GetBtreeRecord ( IDBFile		file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__INX_FindResources (IDBFile			file_id,
 			IDBRecordNumber		recno,
 			MrmGroup		group_filter,
@@ -568,7 +568,7 @@ Idb__INX_FindResources (IDBFile			file_id,
 	  entry_data.item_offs =
 	    leaf_ndxvec[entndx].data.internal_id.item_offs;
 
-	  if ( Idb__DB_MatchFilter(file_id, entry_data, group_filter, 
+	  if ( Idb__DB_MatchFilter(file_id, entry_data, group_filter,
 				   type_filter) )
 	    UrmPlistAppendString (index_list,
 				  stgbase+leaf_ndxvec[entndx].index_stg) ;
@@ -624,4 +624,3 @@ Idb__INX_FindResources (IDBFile			file_id,
     }
 
 }
-

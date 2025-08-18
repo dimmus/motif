@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,24 +19,24 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scale10.c /main/8 1995/07/13 19:11:04 drk $"
 #endif
 #endif
 
-/* 
+/*
 	The problems: (Pirs 865, 902)
 
 	* setting scaleHeight of horizontal widget shrinks
-	  width down to 100; 
+	  width down to 100;
 
 	* setting scaleWidth of vertical widget shrinks
-	  height down to 100; 
+	  height down to 100;
 */
 
 
@@ -48,7 +48,7 @@ Arg args[MAX_ARGS];
 int	n;
 
 static void set_scale_height (Widget w, XtPointer client_data, XtPointer
-	call_data) 
+	call_data)
 {
    n = 0;
    XtSetArg(args[n], XmNscaleHeight, 50);  n++;
@@ -57,7 +57,7 @@ static void set_scale_height (Widget w, XtPointer client_data, XtPointer
 
 
 static void set_scale_width(Widget w, XtPointer client_data, XtPointer
-	call_data) 
+	call_data)
 {
    n = 0;
    XtSetArg(args[n], XmNscaleWidth, 50);  n++;
@@ -65,7 +65,7 @@ static void set_scale_width(Widget w, XtPointer client_data, XtPointer
 }
 
 static void valueChangedProc(Widget w, XtPointer client_data, XtPointer
-	call_data) 
+	call_data)
 {
 	XmScaleCallbackStruct *eventStruct;
 	static int oldValue = 0;
@@ -90,7 +90,7 @@ char **argv;
 
 
    CommonTestInit(argc, argv);
-    
+
 
    n=0;
    XtSetArg(args[n], XmNwidth, 455);  n++;
@@ -109,7 +109,7 @@ char **argv;
    scale1 = XmCreateScale(bb, "scale1", args, n);
    XtManageChild(scale1);
 
-   XtAddCallback(scale1, XmNvalueChangedCallback, 
+   XtAddCallback(scale1, XmNvalueChangedCallback,
 		 (XtCallbackProc) valueChangedProc, NULL);
 
    n = 0;

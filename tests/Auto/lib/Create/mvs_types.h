@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: mvs_types.h /main/7 1995/07/14 11:26:27 drk $ */
 /***********************************************************************
   	@(#)mvs_types.h	1.2.1.1	Date:1/22/91
@@ -41,7 +41,7 @@
 #define MVS_TYPES
 /**** Define the ubiquitous MvsArgVal ****/
 
-/* 
+/*
 This is the fundamental type of each resource. It is the longest of the
 following types: unsigned long, function pointer, char *.  This is defined
 by XtArgVal in Intrinsic.h.  Basically we use this type to hold all the
@@ -49,11 +49,11 @@ values and pointers to values and structures that are returned by XtGetValues.
 XtSetValues reads the 4+ byte value properly as is while XtGetValues returns
 a value the length of the type of the resource and does not properly zero out
 the rest of the bytes. Thus we must call a conversion routine to type cast
-each value returned by XGetValues to XtArgVal.  
+each value returned by XGetValues to XtArgVal.
 
 Note also that we (unlike with real resources) store the list of callback
 records assigned to the resource at creation time and subsequently in
-calls to mvsSetValues().  We had to store these somewhere, why not here? 
+calls to mvsSetValues().  We had to store these somewhere, why not here?
 By making mvsSetValues() call XAddCallback(s) for us, we can test callbacks
 just like any other resource in the resource info array (using the appropriate
 enum function to enumerate a series of valid values which can be stored in
@@ -142,12 +142,12 @@ typedef struct {
 
 /*
 This record is used to define the resource_info array in the widget specific
-module. It is indexed by the resource number starting with the highest 
+module. It is indexed by the resource number starting with the highest
 inheritence class down to the lowest most local class listed in the same
 order they are listed in the AES.
 
 It contains the name of each resource used by this widget, a type code
-which corresponds to the types listed previously in this file (i.e., 
+which corresponds to the types listed previously in this file (i.e.,
 T_xxx), a boolean code indicating the meaning of the next field, the
 default value which if needs_converting == True may be set instead to
 one of the codes define above,
@@ -198,9 +198,9 @@ typedef struct _MvsWidgetClassInfo {
 
 
 /**************************************************************************
-*                     WIDGET INFO 
+*                     WIDGET INFO
 **************************************************************************/
- 
+
   typedef struct _MvsWidgetInfoRecord {
     int                         in_use;      /* 0=free, 1=used               */
     int                         being_destroyed; /* 0=no, 1=yes              */

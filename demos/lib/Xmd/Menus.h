@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -38,7 +38,7 @@ typedef enum { FILE_MENU, EDIT_MENU, SELECTED_MENU, OPTIONS_MENU, VIEW_MENU,
 
 /* Free advice.  The menu elements are returned in arrays which can be
    used with XtManageChildren.  If you are going to use most of the
-   items,  then use XtManageChildren and unmanage and/or make 
+   items,  then use XtManageChildren and unmanage and/or make
    insensitive the few which are unused.  Otherwise use XtManageChild
    on each individual widget.
 
@@ -127,7 +127,7 @@ enum { HELP_OVERVIEW, HELP_SEP1, HELP_INDEX, HELP_TOC, HELP_TASKS,
 
 /* Returns cascade button for pulldown menu,  menu for popup menu,
    widgetlist returned in allocated storage in array. */
-extern Widget XmdCreateMenu(XmdMenuType, Widget parent,  
+extern Widget XmdCreateMenu(XmdMenuType, Widget parent,
 			    WidgetList *array, Cardinal *size);
 
 #endif /* _XmdMenus_h */

@@ -20,13 +20,13 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
  */
 #include <stdlib.h>
-#include <Xm/XmAll.h>        
+#include <Xm/XmAll.h>
 
 #define APP_CLASS "XmdHelloMotif"
 
@@ -44,7 +44,7 @@ static void Activate(
 
 
 /*
- * Fallbacks: font, label and position go together in this demo 
+ * Fallbacks: font, label and position go together in this demo
  */
 static String fallbacks[] = {
 "hellomotif_in_c.allowShellResize: True",
@@ -58,7 +58,7 @@ NULL
 
 
 /*
- *  Main program: create a shell, a pure bb with a label and a button 
+ *  Main program: create a shell, a pure bb with a label and a button
  *                underneath it. Attach a callback to the button.
  */
 int main(int argc, char *argv[])
@@ -67,12 +67,12 @@ int main(int argc, char *argv[])
     Widget              top_level, helloworld_main,
                         helloworld_label, helloworld_button ;
 
-    /* 
-     * Initialize Xt and create a resizable shell 
+    /*
+     * Initialize Xt and create a resizable shell
      */
 
-    top_level = XtVaAppInitialize(&app_context, APP_CLASS, 
-				  NULL, 0, &argc, argv, fallbacks, NULL); 
+    top_level = XtVaAppInitialize(&app_context, APP_CLASS,
+				  NULL, 0, &argc, argv, fallbacks, NULL);
 
     /*
      *  Create the widget tree: first the bb parent.
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     /* the label */
     helloworld_label = XtVaCreateManagedWidget ("helloworld_label",
 						xmLabelWidgetClass,
-						helloworld_main, 
+						helloworld_main,
 						NULL);
 
     /* the button underneath the label */
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 }
 
 
-static void 
+static void
 Activate(
         Widget	widget,
 	XtPointer tag,
@@ -126,9 +126,9 @@ Activate(
     /* First click: change the pushbutton label and recenter */
     if (first_time) {
 	XmString new_button_label = XmStringGenerate(NEW_BUTTON_LABEL,
-						     NULL, 
+						     NULL,
 						     XmCHARSET_TEXT, NULL);
-	XtVaSetValues(widget, 
+	XtVaSetValues(widget,
 		      XmNx, NEW_BUTTON_X,
 		      XmNlabelString, new_button_label,
 		      NULL);

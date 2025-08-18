@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -52,7 +52,7 @@ int main(int argc, String argv[])
   XmTabList tablist;
   Widget dismiss;
 
-  toplevel = XtVaAppInitialize(&app_context, "HelpOnHelp", NULL, 0, 
+  toplevel = XtVaAppInitialize(&app_context, "HelpOnHelp", NULL, 0,
 			       &argc, argv, NULL, NULL);
   n = 0;
   XtSetArg(args[n], XmdNhelpFile, "helpOn"); n++;
@@ -78,10 +78,10 @@ int main(int argc, String argv[])
   n = 0;
   XtSetArg(args[n], XmNfontName, "*courier-medium-r-*-12-*"); n++;
   XtSetArg(args[n], XmNfontType, XmFONT_IS_FONT); n++;
-  rend[i] = XmRenditionCreate(help, "program", args, n); i++; 
+  rend[i] = XmRenditionCreate(help, "program", args, n); i++;
   n = 0;
   XtSetArg(args[n], XmNunderlineType, XmSINGLE_LINE); n++;
-  rend[i] = XmRenditionCreate(help, "underline", args, n); i++; 
+  rend[i] = XmRenditionCreate(help, "underline", args, n); i++;
   /* Make a copy so that setvalues will work correctly */
   rt = XmRenderTableCopy(rt, NULL, 0);
   rt = XmRenderTableAddRenditions(rt, rend, i, XmMERGE_NEW);

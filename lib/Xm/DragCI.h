@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDragCI_h
 #define _XmDragCI_h
 
@@ -59,9 +59,9 @@ enum{	XmCR_DROP_SITE_TREE_ADD = _XmNUMBER_DND_CB_REASONS,
 	XmCR_DROP_SITE_TREE_REMOVE
 	} ;
 /*
- *  values for dragTrackingMode 
+ *  values for dragTrackingMode
  */
-enum { 
+enum {
   XmDRAG_TRACK_WM_QUERY, XmDRAG_TRACK_MOTION, XmDRAG_TRACK_WM_QUERY_PENDING
 };
 
@@ -141,9 +141,9 @@ typedef struct _XmAnimationData {
 
 /********    Private Function Declarations    ********/
 
-extern XmDragReceiverInfo _XmAllocReceiverInfo( 
+extern XmDragReceiverInfo _XmAllocReceiverInfo(
                         XmDragContext dc) ;
-extern unsigned char _XmGetActiveProtocolStyle( 
+extern unsigned char _XmGetActiveProtocolStyle(
                         Widget w) ;
 
 /********    End Private Function Declarations    ********/

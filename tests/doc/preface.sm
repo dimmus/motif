@@ -18,8 +18,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 # $XConsortium: preface.sm /main/3 1995/07/13 20:09:54 drk $
 ...\"  (c) Copyright 1992 OPEN SOFTWARE FOUNDATION, INC.
@@ -46,7 +46,7 @@ Users in the second category are more likely to break new ground. The
 automation test code thusfar has been used only with the small test clients
 shipped as part of QATS. While we believe that the automation libraries
 can be used effectively to test real OSF/Motif applications, this is as yet
-unproven. 
+unproven.
 .H 2 "Applicability"
 .P
 Currently, QATS is shipped bundled with the OSF/Motif Validation Test Suite (MVTS).
@@ -60,10 +60,10 @@ The QATS test suite is not yet fully automated. In other words, not all
 directories contain scripts, and visual files have not been recorded for
 all directories. Those directories which have been automated are listed
 in the file \f(CW$TOP/tests/General/dirsAuto\*O on the QATS tape, where
-\f(CW$TOP\*O corresponds to the root of your QATS tree. 
+\f(CW$TOP\*O corresponds to the root of your QATS tree.
 .P
 The next section contains the details of limitations in the current
-implementation which may necessitate modifications to your application, or to 
+implementation which may necessitate modifications to your application, or to
 the automation technology, before
 automated testing of your OSF/Motif-based client can begin.
 .H 2 "Purpose"
@@ -116,12 +116,12 @@ scripting language commands.
 .LE
 .H 2 "Related Documents"
 .P
-Users of this book may find the OSF/Motif documentation set useful, 
+Users of this book may find the OSF/Motif documentation set useful,
 particularly the \*LOSF/Motif Programmer's Reference\*O, \*LOSF/Motif
 Programmer's Guide\*O, and \*LOSF/Motif Style Guide\*O.
 .H 2 "Typographic and Keying Conventions"
 .P
-This document uses the following typographic conventions: 
+This document uses the following typographic conventions:
 .VL
 .LI "\*LBold\*O"
 \*LBold\*O
@@ -153,7 +153,7 @@ preceding item one or more times.
 .LE
 .P
 This document uses the following keying conventions:
-.VL 
+.VL
 .LI "\*L<Ctrl-\*Vx\*L>\*O\ or\ ^\*Vx\*O"
 .nL
 The notation \*L<Ctrl-\*Vx\*L>\*O or ^\*Vx\*O followed by
@@ -162,7 +162,7 @@ a control character sequence.
 For example, \*L<Ctrl-c>\*O means that you hold down
 the control key while pressing \*L<c>\*O.
 .LI "\*L<Return>\*O"
-The notation \*L<Return>\*O 
+The notation \*L<Return>\*O
 refers to the key on your terminal
 or workstation that is labeled with the word Return or Enter, or
 with a left arrow.
@@ -176,7 +176,7 @@ press \*L<Return>\*O.  For example, the instruction
 \*Lls\*O
 command" means that you type the
 \*Lls\*O
-command and then press \*L<Return>\*O 
+command and then press \*L<Return>\*O
 (enter = type command + press \*L<Return>\*O).
 .LE
 .P
@@ -188,7 +188,7 @@ PushButton.
 The Quality Assurance Test Suite provides a sophisticated test automation
 technology which, we hope, will be useful to all QATS licensees. The
 official status of the QATS is "unsupported", but we encourage you to
-report problems you find in the code or the documentation, 
+report problems you find in the code or the documentation,
 and advise us of ways you find to extend the
 usefulness of the QATS.
 .P
@@ -214,7 +214,7 @@ All licensees should feel free to discuss the QATS on the \*Lmotif-talk\*O
 or \*Lvts-talk\*O mailing lists, and to submit defects to \*Lmotif-defect@osf.org\*O. To find out about access to these mailing lists, contact
 \*Lmotif-request@osf.org\*O.
 .P
-Companies who plan to make significant improvements, extensions or 
+Companies who plan to make significant improvements, extensions or
 modifications to QATS, including any of the above possible futures,
 might consider contributing back their code to OSF for inclusion in
 future releases of QATS. To discuss joint development efforts, please contact
@@ -223,5 +223,5 @@ Libby Hanna, QA/VTS Manager (\*Llibby@osf.org\*O or (617) 621-8820).
 OSF members can be actively involved priority-setting for future work.
 Much of this guidance takes place in the UEC (User Environment
 Componenet) SIG (Special Interest Group) for
-OSF/Motif. Contact your company's OSF representative to get more information 
+OSF/Motif. Contact your company's OSF representative to get more information
 about involvement in UEC SIG activities.

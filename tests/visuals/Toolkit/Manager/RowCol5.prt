@@ -23,16 +23,16 @@
 #
 # HISTORY
 TRACE:(1) WindowRaise RowColumn
-TRACE:(2) CompareVisual RowColumn 
+TRACE:(2) CompareVisual RowColumn
 TRACE:(3) Continue
 TRACE:(4) WindowRaise RowColumn
-TRACE:(5) CompareVisual RowColumn 
+TRACE:(5) CompareVisual RowColumn
 TRACE:(6) Continue
 TRACE:(7) WindowRaise RowColumn
-TRACE:(8) CompareVisual RowColumn 
+TRACE:(8) CompareVisual RowColumn
 TRACE:(9) Continue
 TRACE:(10) WindowRaise RowColumn
-TRACE:(11) CompareVisual RowColumn 
+TRACE:(11) CompareVisual RowColumn
 TRACE:(12) Continue
 TRACE:(13) Exit
 Exiting Test...Please Standby...

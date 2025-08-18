@@ -84,7 +84,7 @@ static void
 ParseCmdLine(int argc, char **argv)
 {
     register int i;
-    
+
     if (argc == 1)
 	AppendFile(NULL);
     else
@@ -205,7 +205,7 @@ static Widget createMenuWidget(char *menuName, Boolean isTop)
 
     if (menu->menuWidget)
 	return (menu->menuWidget);
-    
+
     n = 0;
     XtSetArg (args[n], XmNshadowType, XmSHADOW_OUT);n++;
     XtSetArg (args[n], XmNshadowThickness, menuShadowThickness);n++;
@@ -230,7 +230,7 @@ static Widget createMenuWidget(char *menuName, Boolean isTop)
 	XtSetArg (args[n], XmNleftOffset, menuShadowThickness);n++;
 	XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);n++;
 	XtSetArg (args[n], XmNrightOffset, menuShadowThickness);n++;
-	
+
 	lastEntryRemoved = thisEntryRemoved;
 	if (entry->removed)
 	{
@@ -490,45 +490,44 @@ makeDecalPixmap(Widget w)
 
     gc = XtGetGC(w, GCForeground | GCBackground, &values);
 
-    bitmap = XCreateBitmapFromData(XtDisplay(w), 
+    bitmap = XCreateBitmapFromData(XtDisplay(w),
 					  RootWindowOfScreen(XtScreen(w)),
 					  decal_bits, decal_width, decal_height);
-    decalPixmap = XCreatePixmap(XtDisplay(w), 
+    decalPixmap = XCreatePixmap(XtDisplay(w),
 			       RootWindowOfScreen(XtScreen(w)),
 			       decal_width, decal_height,
 			       DefaultDepthOfScreen(XtScreen(w)));
 
-    XCopyPlane(XtDisplay(w), bitmap, decalPixmap, gc, 0, 0, 
-	       decal_width, decal_height, 0, 0, 1); 
+    XCopyPlane(XtDisplay(w), bitmap, decalPixmap, gc, 0, 0,
+	       decal_width, decal_height, 0, 0, 1);
 
     XFreePixmap(XtDisplay(w), bitmap);
 
-    bitmap = XCreateBitmapFromData(XtDisplay(w), 
+    bitmap = XCreateBitmapFromData(XtDisplay(w),
 					  RootWindowOfScreen(XtScreen(w)),
 					  arrow_bits, arrow_width, arrow_height);
-    arrowPixmap = XCreatePixmap(XtDisplay(w), 
+    arrowPixmap = XCreatePixmap(XtDisplay(w),
 			       RootWindowOfScreen(XtScreen(w)),
 			       arrow_width, arrow_height,
 			       DefaultDepthOfScreen(XtScreen(w)));
 
-    XCopyPlane(XtDisplay(w), bitmap, arrowPixmap, gc, 0, 0, 
-	       arrow_width, arrow_height, 0, 0, 1); 
+    XCopyPlane(XtDisplay(w), bitmap, arrowPixmap, gc, 0, 0,
+	       arrow_width, arrow_height, 0, 0, 1);
 
     XFreePixmap(XtDisplay(w), bitmap);
 
-    bitmap = XCreateBitmapFromData(XtDisplay(w), 
+    bitmap = XCreateBitmapFromData(XtDisplay(w),
 					  RootWindowOfScreen(XtScreen(w)),
 					  null_bits, null_width, null_height);
-    nullPixmap = XCreatePixmap(XtDisplay(w), 
+    nullPixmap = XCreatePixmap(XtDisplay(w),
 			       RootWindowOfScreen(XtScreen(w)),
 			       null_width, null_height,
 			       DefaultDepthOfScreen(XtScreen(w)));
 
-    XCopyPlane(XtDisplay(w), bitmap, nullPixmap, gc, 0, 0, 
-	       null_width, null_height, 0, 0, 1); 
+    XCopyPlane(XtDisplay(w), bitmap, nullPixmap, gc, 0, 0,
+	       null_width, null_height, 0, 0, 1);
 
     XFreePixmap(XtDisplay(w), bitmap);
 
     XtReleaseGC(w, gc);
 }
-

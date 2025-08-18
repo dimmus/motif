@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -35,16 +35,16 @@
 #define SPIN_BOX_HEIGHT 70
 #define CONTROL_PANEL_WIDTH 950
 #define CONTROL_PANEL_HEIGHT 600
-#define NUM_ARROW_LAYOUT_BTNS 3 
-#define NUM_ARROW_SIZE_BTNS 3 
-#define NUM_DEF_ARROW_SENS_BTNS 4 
-#define NUM_ARROW_SENS_BTNS 5 
+#define NUM_ARROW_LAYOUT_BTNS 3
+#define NUM_ARROW_SIZE_BTNS 3
+#define NUM_DEF_ARROW_SENS_BTNS 4
+#define NUM_ARROW_SENS_BTNS 5
 #define NUM_CHILD_TYPE_BTNS 2
 
 /*
  *  Structure definitions
  */
-typedef struct _ArrowSensCD { 
+typedef struct _ArrowSensCD {
 	Widget		textfield;
 	unsigned int	sensitivity;
 } ArrowSensCD;
@@ -55,11 +55,11 @@ typedef struct _ChildTypeCD {
 } ChildTypeCD;
 
 
-/* 
+/*
  *  Global variables.
  */
 Arg     	args[MAX_ARGS];
-int     	n;  
+int     	n;
 Widget          SpinBox1, SpinBox2, StringTextF, NumericTextF,
                 StringPositionTF, NumericPositionTF;
 ArrowSensCD  	string_arrow_sens_cd[NUM_ARROW_SENS_BTNS],
@@ -80,8 +80,8 @@ static char *arrow_size_strings[NUM_ARROW_SIZE_BTNS] = {
 
 static char *def_arrow_sens_strings[NUM_DEF_ARROW_SENS_BTNS] = {
        "Arrows Sensitive",
-       "Arrows Decrement Sensitive",  
-       "Arrows Increment Sensitive",  
+       "Arrows Decrement Sensitive",
+       "Arrows Increment Sensitive",
        "Arrows Insensitive" };
 
 static unsigned int def_arrow_sens[NUM_DEF_ARROW_SENS_BTNS] =
@@ -90,8 +90,8 @@ static unsigned int def_arrow_sens[NUM_DEF_ARROW_SENS_BTNS] =
 
 static char *arrow_sens_strings[NUM_ARROW_SENS_BTNS] = {
        "Arrows Sensitive",
-       "Arrows Decrement Sensitive",  
-       "Arrows Increment Sensitive",  
+       "Arrows Decrement Sensitive",
+       "Arrows Increment Sensitive",
        "Arrows Insensitive",
        "Arrows Default Sensitive" };
 
@@ -113,7 +113,7 @@ ArrowLayoutCB( Widget widget, XtPointer client_data, XtPointer call_data )
     unsigned int layout = *((unsigned int *)client_data);
 
     n = 0;
-    XtSetArg( args[n], XmNarrowLayout, layout ); n++; 
+    XtSetArg( args[n], XmNarrowLayout, layout ); n++;
     XtSetValues( SpinBox1, args, n );
     XtSetValues( SpinBox2, args, n );
 }
@@ -131,14 +131,14 @@ ArrowSizeCB( Widget widget, XtPointer client_data, XtPointer call_data )
     XtSetValues( SpinBox1, args, n );
     XtSetValues( SpinBox2, args, n );
 }
-    
+
 void
 DefArrowSensitiveCB( Widget widget, XtPointer client_data, XtPointer call_data )
 {
      unsigned int sensitivity = *((unsigned int *)client_data);
 
      n = 0;
-     XtSetArg( args[n], XmNdefaultArrowSensitivity, sensitivity ); n++; 
+     XtSetArg( args[n], XmNdefaultArrowSensitivity, sensitivity ); n++;
      XtSetValues( SpinBox1, args, n );
      XtSetValues( SpinBox2, args, n );
 }
@@ -187,7 +187,7 @@ ArrowSensCB( Widget widget, XtPointer client_data, XtPointer call_data )
     arrow_sens_cd = (ArrowSensCD *)client_data;
 
     n = 0;
-    XtSetArg( args[n], XmNarrowSensitivity, arrow_sens_cd->sensitivity ); n++; 
+    XtSetArg( args[n], XmNarrowSensitivity, arrow_sens_cd->sensitivity ); n++;
     XtSetValues( arrow_sens_cd->textfield, args, n );
 }
 
@@ -314,7 +314,7 @@ PositionCB( Widget widget, XtPointer client_data, XtPointer call_data )
 void
 ChildTypeCB( Widget widget, XtPointer client_data, XtPointer call_data )
 {
-    ChildTypeCD  *child_type_cd = (ChildTypeCD *)client_data; 
+    ChildTypeCD  *child_type_cd = (ChildTypeCD *)client_data;
 
     n = 0;
     XtSetArg( args[n], XmNspinBoxChildType, child_type_cd->child_type ); n++;
@@ -326,20 +326,20 @@ ChildTypeCB( Widget widget, XtPointer client_data, XtPointer call_data )
 }
 
 Widget
-CreateSpinBoxResourceControls( Widget parent, Widget top_widget, 
+CreateSpinBoxResourceControls( Widget parent, Widget top_widget,
                                Widget left_widget, Widget right_widget )
-                               
-                
+
+
 {
 	XmString 	string;
 	Widget  	SBResLabel, RowColumn;
-	Widget  	ArrowLayoutLabel, ArrowLayoutPulldown, 
-                        ArrowLayoutOptions, 
-                	ArrowLayoutPB[NUM_ARROW_LAYOUT_BTNS]; 
-	Widget  	ArrowSizeLabel, ArrowSizePulldown, ArrowSizeOptions, 
-                	ArrowSizePB[NUM_ARROW_SIZE_BTNS]; 
-	Widget  	DefArrowSensitiveLabel, DefArrowSensitivePulldown, 
-                	DefArrowSensitiveOptions, 
+	Widget  	ArrowLayoutLabel, ArrowLayoutPulldown,
+                        ArrowLayoutOptions,
+                	ArrowLayoutPB[NUM_ARROW_LAYOUT_BTNS];
+	Widget  	ArrowSizeLabel, ArrowSizePulldown, ArrowSizeOptions,
+                	ArrowSizePB[NUM_ARROW_SIZE_BTNS];
+	Widget  	DefArrowSensitiveLabel, DefArrowSensitivePulldown,
+                	DefArrowSensitiveOptions,
                 	DefArrowSensitivePB[NUM_DEF_ARROW_SENS_BTNS];
         Widget  	InitialDelayLabel, InitialDelayTF;
         Widget  	RepeatDelayLabel, RepeatDelayTF;
@@ -383,24 +383,24 @@ CreateSpinBoxResourceControls( Widget parent, Widget top_widget,
            sprintf( buffer, "ArrowLayoutPB%d", i );
            n = 0;
            XtSetArg( args[n], XmNlabelString, string ); n++;
-           ArrowLayoutPB[i] = 
+           ArrowLayoutPB[i] =
            XmCreatePushButton( ArrowLayoutPulldown, buffer, args, n );
            XmStringFree( string );
 
            XtAddCallback( ArrowLayoutPB[i], XmNactivateCallback,
-                          ArrowLayoutCB, (XtPointer)&arrow_layout[i] ); 
+                          ArrowLayoutCB, (XtPointer)&arrow_layout[i] );
         }
         XtManageChildren( ArrowLayoutPB, NUM_ARROW_LAYOUT_BTNS );
 
 
         n = 0;
-        XtSetArg( args[n], XmNmenuHistory, 
+        XtSetArg( args[n], XmNmenuHistory,
                   ArrowLayoutPB[NUM_ARROW_LAYOUT_BTNS - 1] ); n++;
         XtSetArg( args[n], XmNsubMenuId, ArrowLayoutPulldown ); n++;
         ArrowLayoutOptions =
         XmCreateOptionMenu( RowColumn, "ArrowLayoutOptions", args, n );
         XtManageChild( ArrowLayoutOptions );
-        
+
       /*
        *  Create label and option menu for XmNarrowSize resource.
        */
@@ -446,16 +446,16 @@ CreateSpinBoxResourceControls( Widget parent, Widget top_widget,
        */
         string = XmStringCreateLtoR("Default Arrow Sensitivity",
                    XmFONTLIST_DEFAULT_TAG );
-                   
+
         n = 0;
         XtSetArg( args[n], XmNlabelString, string ); n++;
-        DefArrowSensitiveLabel = 
+        DefArrowSensitiveLabel =
         XmCreateLabel( RowColumn, "DefArrowSensitiveLabel", args, n );
         XtManageChild( DefArrowSensitiveLabel );
         XmStringFree( string );
 
         n = 0;
-        DefArrowSensitivePulldown = 
+        DefArrowSensitivePulldown =
         XmCreatePulldownMenu(RowColumn, "DefArrowSensitivePulldown",
                              args, n);
 
@@ -496,8 +496,8 @@ CreateSpinBoxResourceControls( Widget parent, Widget top_widget,
 
         n = 0;
         XtSetArg( args[n], XmNvalue, "250" ); n++;
-        InitialDelayTF = 
-        XmCreateTextField( RowColumn, "InitialDelayTF", args, n );  
+        InitialDelayTF =
+        XmCreateTextField( RowColumn, "InitialDelayTF", args, n );
         XtManageChild( InitialDelayTF );
 
         XtAddCallback( InitialDelayTF, XmNactivateCallback,
@@ -523,7 +523,7 @@ CreateSpinBoxResourceControls( Widget parent, Widget top_widget,
 
         XtAddCallback( RepeatDelayTF, XmNactivateCallback,
                        RepeatDelayCB, (XtPointer)0 );
-     
+
      return( RowColumn );
 }
 
@@ -547,7 +547,7 @@ CreateConstraintResourceControls( Widget parent, Widget left_widget,
 	Widget          ValuesLabel, ValuesList;
 	char		buffer[30], buffer2[30];
 	Widget          client_widget;
-	int		i, j;	
+	int		i, j;
         XmStringTable   stringTable;
 
         client_widget = ( child_type == XmSTRING ) ? StringTextF :
@@ -593,23 +593,23 @@ CreateConstraintResourceControls( Widget parent, Widget left_widget,
 
            n = 0;
            XtSetArg( args[n], XmNlabelString, string ); n++;
-           ArrowSensPB[i] = 
+           ArrowSensPB[i] =
            XmCreatePushButton( ArrowSensPulldown, buffer, args, n );
            XmStringFree( string );
 
            if ( child_type == XmSTRING )
            {
-              string_arrow_sens_cd[i].textfield = client_widget; 
+              string_arrow_sens_cd[i].textfield = client_widget;
               string_arrow_sens_cd[i].sensitivity = arrow_sens[i];
               XtAddCallback( ArrowSensPB[i], XmNactivateCallback,
-                             ArrowSensCB, &string_arrow_sens_cd[i]); 
+                             ArrowSensCB, &string_arrow_sens_cd[i]);
            }
            else if ( child_type = XmNUMERIC )
            {
-              numeric_arrow_sens_cd[i].textfield = client_widget; 
+              numeric_arrow_sens_cd[i].textfield = client_widget;
               numeric_arrow_sens_cd[i].sensitivity = arrow_sens[i];
               XtAddCallback( ArrowSensPB[i], XmNactivateCallback,
-                             ArrowSensCB, &numeric_arrow_sens_cd[i]); 
+                             ArrowSensCB, &numeric_arrow_sens_cd[i]);
            }
         }
         XtManageChildren( ArrowSensPB, NUM_ARROW_SENS_BTNS );
@@ -620,7 +620,7 @@ CreateConstraintResourceControls( Widget parent, Widget left_widget,
              sprintf( buffer, "NumericArrowSensOptions", i );
 
         n = 0;
-        XtSetArg( args[n], XmNmenuHistory, 
+        XtSetArg( args[n], XmNmenuHistory,
                            ArrowSensPB[NUM_ARROW_SENS_BTNS - 1] ); n++;
         XtSetArg( args[n], XmNsubMenuId, ArrowSensPulldown ); n++;
         ArrowSensOptions =
@@ -928,19 +928,19 @@ CreateControlPanel()
 
         XmStringFree( string );
 
-        Manager1 = 
+        Manager1 =
         CreateSpinBoxResourceControls( Form1, SBResLabel, Form1, Form1 );
 
       /*
        *  Create SpinBox Constraint Resource Panel for an XmSTRING child
        *  type.
        */
-        Manager2 = CreateConstraintResourceControls( Form1, Form1, Form1, 
+        Manager2 = CreateConstraintResourceControls( Form1, Form1, Form1,
                           XmSTRING );
 
         string = XmStringCreateLtoR("SpinBox Constraint Resources - XmSTRING",
                      XmFONTLIST_DEFAULT_TAG );
-        n = 0; 
+        n = 0;
         XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
         XtSetArg( args[n], XmNtopWidget, Manager1 ); n++;
         XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++;

@@ -44,7 +44,7 @@ difference in the 'float' test section (variables named 'frizz...').
 
 
 BUGS SHOWN BY THESE TESTS
- 
+
 
 validator
 PIRS No.:      1610
@@ -59,7 +59,7 @@ Not allowed in published syntax.
 Version found in:      1.1
 
 CR No.:	4859
-UIL and MRM have I18N problems in handling localized strings, 
+UIL and MRM have I18N problems in handling localized strings,
 font lists, and wide-character strings.
 Version found in:      1.2.3
 
@@ -81,4 +81,3 @@ in string expression.
 Version found in:      1.2.3
 
 ENDBUGs
-

@@ -22,11 +22,11 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual rowcolumn1 
+TRACE:(1) CompareVisual rowcolumn1
 TRACE:(2) WindowMove Shell1 300 300
-TRACE:(3) LocatePointer bboard  
-TRACE:(4) ClickMB Btn1 
-TRACE:(5) CompareVisual menushell 
+TRACE:(3) LocatePointer bboard
+TRACE:(4) ClickMB Btn1
+TRACE:(5) CompareVisual menushell
 TRACE:(6) Continue
 TRACE:(7) Exit
 Exiting Test...Please Standby...

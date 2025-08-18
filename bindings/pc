@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 ! Generic OSF/Motif Style Guide bindings for PC keyboards
@@ -53,4 +53,3 @@ osfCopy		:	Ctrl	<Key>Insert
 osfPaste	:	Shift	<Key>Insert
 
 osfPrimaryPaste	:Meta	Ctrl	<Key>Insert
-

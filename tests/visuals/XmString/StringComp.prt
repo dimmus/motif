@@ -64,17 +64,17 @@ For each comparison, the expected and actual results are given.
       First   Second                                          Compare  Compare
 Test  String  String  Expect   Actual    Expect    Actual     Error    Error
 ----  ------  ------  -------- --------  --------- ---------  -------  -------
-   1      1       1    match    match     identical identical          
-   2      1       2    match    match     identical identical          
-   3      3       4    match    match     different different          
-   4      5      10    match    match     identical identical          
-   5     11      12    mismatch mismatch  different different          
-   6     13      14    mismatch mismatch  different different          
-   7     15      16    mismatch mismatch  different different          
-   8      1      17    mismatch mismatch  different different          
-   9     18      19    match    match     different different          
-  10     20      21    match    match     different different          
-  11      1      22    mismatch mismatch  different different          
+   1      1       1    match    match     identical identical
+   2      1       2    match    match     identical identical
+   3      3       4    match    match     different different
+   4      5      10    match    match     identical identical
+   5     11      12    mismatch mismatch  different different
+   6     13      14    mismatch mismatch  different different
+   7     15      16    mismatch mismatch  different different
+   8      1      17    mismatch mismatch  different different
+   9     18      19    match    match     different different
+  10     20      21    match    match     different different
+  11      1      22    mismatch mismatch  different different
 
 The XmStringCompare portion of this test passed.
 The XmStringByteCompare portion of this test passed.

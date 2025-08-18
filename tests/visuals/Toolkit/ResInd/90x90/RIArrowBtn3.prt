@@ -26,28 +26,28 @@ Setting the unit type to inches and size to (2000, 1000).
 Setting the unit type to inches
 width = 1998,   height = 999
 
-TRACE:(1) CompareVisual arrow 
+TRACE:(1) CompareVisual arrow
 TRACE:(2) Continue
-Expected	Returned	
+Expected	Returned
 1000  1500	999  1498
 2000  3000	1998  2997
 3000  4500	2997  4496
 4000  6000	3996  5995
 
-TRACE:(3) CompareVisual arrow 
+TRACE:(3) CompareVisual arrow
 TRACE:(4) Continue
 Setting the unit type to millimeters
-Expected	Returned	
+Expected	Returned
 1000  1500	2086  1494
 2000  3000	2086  2989
 3000  4500	2989  4483
 4000  6000	3976  5978
 
-TRACE:(5) CompareVisual arrow 
+TRACE:(5) CompareVisual arrow
 TRACE:(6) Continue
 Setting the size to (2000, 1000).
 width = 2086,   height = 987
 
-TRACE:(7) CompareVisual arrow 
+TRACE:(7) CompareVisual arrow
 TRACE:(8) Exit
 Exiting Test...Please Standby...

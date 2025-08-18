@@ -38,13 +38,13 @@ int argc;
 char *argv[];
 {
   CommonTestInit(argc, argv);
-  
+
   if(fork())
     ;
   else{
     execl("TranslationsXt","TranslationsXt",(char *)0);
   };
-  
+
   if(fork())
     ;
   else{
@@ -56,6 +56,6 @@ char *argv[];
   CommonPause ();
   CommonPause ();
   CommonPause ();
-  
+
   XtAppMainLoop(app_context);
 }

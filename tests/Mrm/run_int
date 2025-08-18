@@ -22,9 +22,9 @@
 #
 # HISTORY
 
-# 
-#	This shell script will run the interactive Mrm tests 
-#	CloseH, FetchCL, FetchIL, FetchSV, FetchW, 
+#
+#	This shell script will run the interactive Mrm tests
+#	CloseH, FetchCL, FetchIL, FetchSV, FetchW,
 #	FetchWO, OpenH, and RegisterC.
 #
 
@@ -85,8 +85,3 @@ echo ""
 #
 #  End Run script
 #
-
-
-
-
-

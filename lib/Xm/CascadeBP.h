@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef  _XmCascadeBP_h
 #define  _XmCascadeBP_h
 
@@ -32,7 +32,7 @@ extern "C" {
 
 /* The CascadeButton instance record */
 
-typedef	struct 
+typedef	struct
 {				/* resources */
     XtCallbackList	activate_callback;	/* widget fired callback */
     XtCallbackList	cascade_callback;	/* called when the menu is  */
@@ -75,7 +75,7 @@ typedef struct _XmCascadeButtonWidgetRec/* OBSOLETE (for compatibility only).*/
 
 /* CascadeButton class structure */
 
-typedef struct 
+typedef struct
 {
     XtPointer	extension;	/* Pointer to extension record */
 } XmCascadeButtonClassPart;
@@ -83,7 +83,7 @@ typedef struct
 
 /* Full class record declaration for CascadeButton class */
 
-typedef struct _XmCascadeButtonClassRec 
+typedef struct _XmCascadeButtonClassRec
 {
     CoreClassPart	    core_class;
     XmPrimitiveClassPart    primitive_class;
@@ -130,7 +130,7 @@ externalref XmCascadeButtonClassRec   xmCascadeButtonClassRec;
 			         (CB_Submenu(cb)))
 
 
-#define XmCB_ARMED_BIT	      (1 << 0)	
+#define XmCB_ARMED_BIT	      (1 << 0)
 #define XmCB_TRAVERSE_BIT     (1 << 1)
 #define XmCB_WAS_POSTED_BIT   (1 << 2)
 

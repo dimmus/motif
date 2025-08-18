@@ -226,10 +226,10 @@ extern "C" {
 
 /* Return values for DtHelpReturnSelectedWidgetId() */
 
-#define DtHELP_SELECT_ERROR   -1 
+#define DtHELP_SELECT_ERROR   -1
 #define DtHELP_SELECT_VALID    0
 #define DtHELP_SELECT_ABORT    1
-#define DtHELP_SELECT_INVALID  2 
+#define DtHELP_SELECT_INVALID  2
 
 
 /*

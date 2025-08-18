@@ -46,16 +46,15 @@ extern Widget MainW, list, target, labelV, labelN, typeOM;
 extern Widget OwnPrimLG, OwnSecLG;
 
 
-extern void ListSelectItemCB(Widget w, XtPointer client_data, 
+extern void ListSelectItemCB(Widget w, XtPointer client_data,
 			     XtPointer call_data);
 extern void SetTypeCB(Widget w, XtPointer client_data, XtPointer call_data);
-extern void TargetDestinationCB(Widget w, XtPointer ignore, 
+extern void TargetDestinationCB(Widget w, XtPointer ignore,
 				XtPointer call_data);
-extern void TargetConvertCB(Widget w, XtPointer ignore, 
+extern void TargetConvertCB(Widget w, XtPointer ignore,
 				XtPointer call_data);
 char *GetSafeAtom(Display *display, Atom a);
 char *GetStringFrom(XtEnum operation);
 
 
 #endif /* _Transfer_h */
-

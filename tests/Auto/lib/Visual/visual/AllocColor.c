@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AllocColor.c /main/7 1995/07/14 11:45:12 drk $"
@@ -41,13 +41,13 @@ static char rcsid[] = "$XConsortium: AllocColor.c /main/7 1995/07/14 11:45:12 dr
 	Summary:
             This file contains the function mvsAllocColor which
         allocates one unique RGB color from the local color cache.
-	      
+
         INPUTS
             pixel - X colormap index (pixel) value
 
         OUTPUTS
             none
- 
+
         RETURNS
             Status where 0=failed, ~0=succeeded
 ************************************************************************/

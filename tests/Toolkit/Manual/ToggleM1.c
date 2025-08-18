@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: ToggleM1.c /main/8 1997/04/10 13:26:12 dbl $"
@@ -130,7 +130,7 @@ char **argv;
   Pixmap pixOn, pixOff;
   GC      gc;
   XGCValues  values;
-  XtGCMask valueMask; 
+  XtGCMask valueMask;
   Drawable drawable;
   extern Pixel CommonGetColor();
 
@@ -138,9 +138,9 @@ char **argv;
 
   n = 0;
   bb = XmCreateBulletinBoard(Shell1, "bb", args, n);
- 
+
   screen = XtScreen(Shell1);
-  pic = XCreateImage(display, XDefaultVisualOfScreen(screen), 1, 
+  pic = XCreateImage(display, XDefaultVisualOfScreen(screen), 1,
 		     XYBitmap, 0, smileRaster, 64, 64,
 		     BitmapPad(display), 8);
 
@@ -150,9 +150,9 @@ char **argv;
 
   drawable = RootWindowOfScreen(XtScreen(Shell1));
   pixOn = XCreatePixmap(display, drawable, 64, 64,
-			DefaultDepthOfScreen(screen));    
+			DefaultDepthOfScreen(screen));
   pixOff = XCreatePixmap(display, drawable, 64, 64,
-			 DefaultDepthOfScreen(screen));    
+			 DefaultDepthOfScreen(screen));
 
   values.foreground = XBlackPixel(display, 0);
   values.background = XWhitePixel(display, 0);
@@ -160,20 +160,20 @@ char **argv;
 
   gc = XCreateGC(display, drawable, valueMask, &values);
   XPutImage(display, pixOn, gc, pic, 0, 0, 0, 0, 64, 64);
-    
+
   values.foreground = XWhitePixel(display, 0);
   values.background = XBlackPixel(display, 0);
   valueMask = GCForeground | GCBackground;
   XChangeGC(display, gc, valueMask, &values);
   XPutImage(display, pixOff, gc, pic, 0, 0, 0, 0, 64, 64);
-  
+
   n = 0;
   XtSetArg(args[n], XmNlabelType, XmPIXMAP);  n++;
-  XtSetArg(args[n], XmNlabelPixmap, pixOff);  n++;  
+  XtSetArg(args[n], XmNlabelPixmap, pixOff);  n++;
   XtSetArg(args[n], XmNselectPixmap, pixOn); n++;
-  XtSetArg(args[n], XmNlabelInsensitivePixmap, pixOn);  n++; 
-  XtSetArg(args[n], XmNselectInsensitivePixmap, pixOff);  n++; 
-  toggle = XmCreateToggleButton(bb, "toggle" , args, n); 
+  XtSetArg(args[n], XmNlabelInsensitivePixmap, pixOn);  n++;
+  XtSetArg(args[n], XmNselectInsensitivePixmap, pixOff);  n++;
+  toggle = XmCreateToggleButton(bb, "toggle" , args, n);
 
   XtManageChild (bb);
   XtManageChild (toggle);
@@ -218,7 +218,7 @@ char **argv;
   XtSetArg(args[n], XmNx, 125); n++;   /* add an offset */
   RowColumn2 = XmCreateRadioBox(bb, "RowColumn2", args, n);
   XtManageChild (RowColumn2);
-  
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNindicatorOn, True);  n++;
@@ -240,7 +240,7 @@ char **argv;
   XtManageChild(ToggleButtonG5);
   XtManageChild(ToggleButtonG3);
   XtManageChild(ToggleButtonG6);
-  
+
   /* Now change the colors of the second radiobox */
 
   n = 0;
@@ -254,8 +254,8 @@ char **argv;
   /* Begin Test Case for PIR 2963 */
 
   XtDestroyWidget(bb);
-  XtUnrealizeWidget(Shell1); 
-  
+  XtUnrealizeWidget(Shell1);
+
   n = 0;
   XtSetArg(args[n], XmNwidth, 100); n++;
   RowColumn1 = XmCreateRadioBox(Shell1, "RadioBox", args, n);
@@ -280,7 +280,7 @@ char **argv;
 
   XtSetArg(args[0], XmNmenuHistory, &history);
   XtGetValues(RowColumn1, args, 1);
-  printf("menuHistory after Shell's been realized = %ld\n", 
+  printf("menuHistory after Shell's been realized = %ld\n",
 	 (long int) history);
 
   CommonPause();
@@ -293,7 +293,7 @@ char **argv;
   XtDestroyWidget (ToggleButton2);
   ToggleButtonGadget1 = XmCreateToggleButtonGadget(RowColumn1, "ToggleButtonGadget1", NULL, 0);
   XtManageChild (ToggleButtonGadget1);
-  
+
   CommonPause();
 
   XtAppMainLoop(app_context);

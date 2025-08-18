@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TearOffM1.c /main/6 1995/07/13 18:41:05 drk $"
@@ -75,13 +75,13 @@ void tearOffDeactivate(Widget w, XtPointer closure, XtPointer call_data)
   printf("Tear off deactivate callback\n");
 }
 
-static XtCallbackRec toACallback[] = 
+static XtCallbackRec toACallback[] =
 {
   {tearOffActivate, (XtPointer) NULL},
   {NULL, (XtPointer) NULL}
 };
 
-static XtCallbackRec toDCallback[] = 
+static XtCallbackRec toDCallback[] =
 {
   {tearOffDeactivate, (XtPointer) NULL},
   {NULL, (XtPointer) NULL}
@@ -170,7 +170,7 @@ static Widget CreateCascade(char *label, KeySym mnemonic, Widget submenu,
   XtSetArg(args[n], XmNmnemonic,  mnemonic);  n++;
   if ((int)(long)submenu != 0)
     {
-      XtSetArg(args[n], XmNsubMenuId, submenu); 
+      XtSetArg(args[n], XmNsubMenuId, submenu);
       n++;
     }
   widget = XmCreateCascadeButton(parent, label, args,n);
@@ -250,7 +250,7 @@ char **argv;
   XtSetArg(args[n], XmNtearOffMenuActivateCallback, toACallback); n++;
   XtSetArg(args[n], XmNtearOffMenuDeactivateCallback, toDCallback); n++;
   PullDown1 = XmCreatePulldownMenu (MenuBar1, "pulldown1", args, n);
- 
+
   XtAddCallback(PullDown1, XmNmapCallback, MapCB, (XtPointer)1);
   XtAddCallback(PullDown1, XmNunmapCallback, UnmapCB, (XtPointer)1);
 
@@ -279,13 +279,13 @@ char **argv;
   MenuBtn3 = CreateCascade("MenuBtn3", '3', PullDown3, MenuBar1);
 
   XtRealizeWidget(Shell1);
-  
+
   /*
-   * Check to see if XmGetTearOffControl can get the widget id of 
+   * Check to see if XmGetTearOffControl can get the widget id of
    *  the tear off control
    */
 
-  tearOffWidget = XmGetTearOffControl(PullDown1); 
+  tearOffWidget = XmGetTearOffControl(PullDown1);
 
   /*
    * Menu1
@@ -405,15 +405,3 @@ char **argv;
   CommonPause();  /* Exit */
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-

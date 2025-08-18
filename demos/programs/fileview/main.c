@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: main.c /main/8 1997/03/31 13:54:57 dbl $"
@@ -60,7 +60,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
    Widget oss[MaxOS+1] ;
    int i, lang;
    Arg args[20];
-   int count; 
+   int count;
    int n;
    Widget os_panel;
    Widget lang_frame, os_frame;
@@ -81,7 +81,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
    n = 0;
    pick_form = XmCreateForm(select_box, "form", args, n);
    n = 0;
-   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++; 
+   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM) ; n++;
    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM) ; n++;
    lang_frame = XmCreateFrame(pick_form, "lang_frame", args, n);
@@ -104,10 +104,10 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
 	 if (i == French)
 	   def_lang = French;
 	 n = 0;
-	 XtSetArg(args[n], XmNlabelString, 
+	 XtSetArg(args[n], XmNlabelString,
 		  XmStringCreateSimple(LangList[i])); n++;
 	 XtSetArg(args[n], XmNuserData, i); n++;
-	 languages[count] = 
+	 languages[count] =
 	   XmCreateToggleButton(framed[1], LangList[i], args, n);
 	 ++count;
       }
@@ -119,13 +119,13 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
    XmToggleButtonSetState(languages[def_lang], True, True);
 
    n = 0;
-   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++; 
-   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++; 
-   XtSetArg(args[n], XmNtopWidget, lang_frame); n++; 
+   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
+   XtSetArg(args[n], XmNtopWidget, lang_frame); n++;
    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM) ; n++;
    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM) ; n++;
-   if (os < MaxOS) 
-     { 
+   if (os < MaxOS)
+     {
 	sprintf(s, "Your Operating System is %s", os_name);
 	msg = XmStringCreateSimple(s);
 	XtSetArg(args[n], XmNlabelString, msg); n++;
@@ -136,7 +136,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
       os_frame = XmCreateFrame(pick_form, "os_frame", args, n);
       n = 0;
       XtSetArg(args[n], XmNframeChildType, XmFRAME_TITLE_CHILD); n++;
-      XtSetArg(args[n], 
+      XtSetArg(args[n],
 	       XmNlabelString, XmStringCreateSimple("Operating System"));
       n++;
       framed[0] = XmCreateLabel(os_frame, "title", args, n);
@@ -150,18 +150,18 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
       framed[1] =
 	os_box = XmCreateRadioBox(os_frame, "os_box", args, n);
       n = 0;
-      XtSetArg(args[n], XmNlabelString, 
+      XtSetArg(args[n], XmNlabelString,
 	       XmStringCreateSimple(OSList[i])); n++;
       for (i = 0; i < MaxOS ; i++) {
 	 n = 0;
 	 XtSetArg(args[n], XmNuserData, i); n++;
-	 XtSetArg(args[n], XmNlabelString, 
+	 XtSetArg(args[n], XmNlabelString,
 		  XmStringCreateSimple(OSList[i])); n++;
 	 oss[i] = XmCreateToggleButton(framed[1], OSList[i], args, n);
       }
       n = 0;
       XtSetArg(args[n], XmNuserData, MaxOS); n++;
-      XtSetArg(args[n], XmNlabelString, 
+      XtSetArg(args[n], XmNlabelString,
 	       XmStringCreateSimple("Other"));
       n++;
       oss[MaxOS] = XmCreateToggleButton(framed[1],
@@ -181,7 +181,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
 static void SelectLocale(ViewPtr this, OS os, String os_name)
 {
    Widget select_box = NULL;
-   
+
    if (locale_box == NULL)
      select_box = CreateLocaleBox(this, os, os_name);
    XtManageChild(select_box);
@@ -190,7 +190,7 @@ static void SelectLocale(ViewPtr this, OS os, String os_name)
 
 /* ===============================================================
  *    Main: Initialize, create the application shell and loop
- * Check that the language specified is 
+ * Check that the language specified is
  * supported by fileview and libX and libC.
  */
 int main(int argc, char *argv[])
@@ -208,7 +208,7 @@ int main(int argc, char *argv[])
    char filename[255];
    Language l;
 
-/* 
+/*
  * init widget names
  */
    new_pane = "new_pane";
@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
    /* save argc and argv */
    save_argc = argc;
    save_argv = (char **) XtCalloc(argc, sizeof(char *));
-   for ( p1 = argv, p2 = save_argv, i = argc; i-- > 0 ; ) 
+   for ( p1 = argv, p2 = save_argv, i = argc; i-- > 0 ; )
      *p2++ = *p1++ ;
    /* alloc the object for the primary view */
    this = (ViewPtr) XtCalloc(sizeof(View), 1);
@@ -233,49 +233,49 @@ int main(int argc, char *argv[])
 	 break;
    CurrentOS = os;
    for (l = 1;  l < MaxLanguage; l++) {
-      if (setlocale(LC_ALL, LocaleTable[os][l]) == NULL 
+      if (setlocale(LC_ALL, LocaleTable[os][l]) == NULL
 	  ||  ! XSupportsLocale()) {
-	 sprintf(msg, "Locale `%s' not supported by C and/or X library", 
+	 sprintf(msg, "Locale `%s' not supported by C and/or X library",
 		 LocaleTable[os][l]);
 	 XtAppWarning(theContext, msg);
 	 SupportedLocale [CurrentOS][SelectedLocale] = False;
       }
    }
    setlocale(LC_ALL, "C");
-   theDisplay = XtOpenDisplay(theContext, NULL, myName, myClass, 
+   theDisplay = XtOpenDisplay(theContext, NULL, myName, myClass,
 			      NULL, 0, &argc, argv);
-   
+
    theWidgetRoot = XtAppCreateShell(myName, myClass,
 				    applicationShellWidgetClass,
 				    theDisplay, NULL, 0);
-   
+
    XtGetApplicationResources(theWidgetRoot, &FileViewResources,
-			     FileViewResourcesSpecs, 
+			     FileViewResourcesSpecs,
 			     XtNumber(FileViewResourcesSpecs),
 			     (ArgList) NULL, 0);
-   
+
    do {
       SelectLocale(this, os, os_def.sysname);
       do {
 	 XtAppNextEvent(theContext, &event);
 	 XtDispatchEvent(&event);
       } while (LocaleName == NULL);
-      new_locale = setlocale(LC_ALL, LocaleName); 
+      new_locale = setlocale(LC_ALL, LocaleName);
       if (new_locale == NULL ||  ! XSupportsLocale() )
 	{
 	   SupportedLocale [CurrentOS][SelectedLocale] = False;
-	   new_locale = NULL; 
+	   new_locale = NULL;
 	}
       else if (! XSetLocaleModifiers(""))
 	XtAppWarning(theContext,
 		     "X locale modifiers not supported, using default");
-      
+
    } while ( new_locale == NULL);
 
    XtDestroyWidget(theWidgetRoot);
    XtCloseDisplay(theDisplay);
-   XtSetLanguageProc(theContext, (XtLanguageProc) MyLanguageProc, theContext); 
-   theDisplay = XtOpenDisplay(theContext, NULL, myName, myClass, 
+   XtSetLanguageProc(theContext, (XtLanguageProc) MyLanguageProc, theContext);
+   theDisplay = XtOpenDisplay(theContext, NULL, myName, myClass,
 			      NULL, 0, &argc, argv);
 
    theWidgetRoot = XtAppCreateShell(myName, myClass,
@@ -308,7 +308,7 @@ int main(int argc, char *argv[])
    XtPopup(this->shell, XtGrabNone);
    /* XtRealizeWidget(this->text_source); */
    XtAppMainLoop(theContext);
-   
+
    return 0;    /* make compiler happy */
 }
 
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
  * Note: Xt guarantees that xnl is not NULL. No need to test it.
  * Return a language string usable by XtResolvePathname.
  */
-static String MyLanguageProc(Display * dpy, String xnl, 
+static String MyLanguageProc(Display * dpy, String xnl,
 			     XtAppContext theContext)
 {
    return setlocale(LC_CTYPE, NULL);
@@ -358,7 +358,7 @@ static ViewPtr NewFileShell(Widget parent, ViewPtr this,
    }
    this->shell = XtCreatePopupShell("primary", class, parent, args, n);
 /*
- * Create the main window, the menubar and the pane 
+ * Create the main window, the menubar and the pane
  * Store the view in userData for further use.
  */
    n = 0;
@@ -383,7 +383,7 @@ static ViewPtr NewFileShell(Widget parent, ViewPtr this,
    n++;
 
    (void) CreateMenuBarEntry(children[0], "file", names, procs, private, n);
-   
+
    n = 0;
    SetMenuEntry(n, new_pane, (XtCallbackProc) NewPaneCallback,
 		(XtPointer) this); n++;
@@ -391,12 +391,12 @@ static ViewPtr NewFileShell(Widget parent, ViewPtr this,
 		(XtPointer) this); n++;
    SetMenuEntry(n, search, (XtCallbackProc) FindCallback,
 		(XtPointer) this); n++;
-   this->view_cascade = 
+   this->view_cascade =
      CreateMenuBarEntry(children[0], "view", names, procs, private, n);
    SetSensitive(this->view_cascade, new_pane, False);
    SetSensitive(this->view_cascade, kill_pane, False);
    SetSensitive(this->view_cascade, search, False);
-   
+
    SetMenuEntry(0, "help_view", (XtCallbackProc) HelpCallback,
 		(XtPointer) this);
    entry = CreateMenuBarEntry(children[0], "help", names, procs, private, 1);
@@ -415,8 +415,8 @@ static ViewPtr NewFileShell(Widget parent, ViewPtr this,
    children[1] = XmCreateForm(mw, "work", args, n);
 
    n = 0;
-   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++; 
-   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++; 
+   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
+   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
    XtSetArg(args[n], XmNrightAttachment,  XmATTACH_FORM) ; n++;
    XtSetArg(args[n], XmNleftAttachment,  XmATTACH_FORM) ; n++;
    this->paned_window = XmCreatePanedWindow(children[1], "panes", args, n);
@@ -438,7 +438,7 @@ static ViewPtr NewFileShell(Widget parent, ViewPtr this,
 }
 
 /* ===============================================================
- *   Create a cascade and a pulldown entry into a menubar, 
+ *   Create a cascade and a pulldown entry into a menubar,
  * 	from a list of push button specs.
  *   If the label is NULL, create a separator instead of a push button.
  */
@@ -455,7 +455,7 @@ static Widget CreateMenuBarEntry(Widget menubar, String entry, String names[],
 
    n = 0;
    XtSetArg(args[n], XmNtearOffModel, XmTEAR_OFF_ENABLED); n++;
-   menu = XmCreatePulldownMenu(menubar, 
+   menu = XmCreatePulldownMenu(menubar,
 			       strcat(strcpy(menu_name, entry), "Menu"),
 			       args, n);
    for(i = 0; i < count; i++) {
@@ -531,15 +531,15 @@ static void HelpCallback(Widget	widget, ViewPtr this,
      Arg args[8];
      int n = 0;
      XmString help1, help2, help3, help_msg;
-     
+
      help1 = XmStringConcatAndFree(FetchString(this, "help_file"),
 				   XmStringSeparatorCreate());
      help2 = XmStringConcatAndFree(FetchString(this, "help_view"),
 				   XmStringSeparatorCreate());
-     help_msg = XmStringConcatAndFree(XmStringConcatAndFree(help1, help2), 
+     help_msg = XmStringConcatAndFree(XmStringConcatAndFree(help1, help2),
 				      FetchString(this, "help_search"));
 
-     XtSetArg(args[n], XmNmessageString, help_msg); 
+     XtSetArg(args[n], XmNmessageString, help_msg);
      n++;
      HelpDialog = XmCreateInformationDialog(this->shell,
 					    "helpdialog", args, n);
@@ -549,7 +549,7 @@ static void HelpCallback(Widget	widget, ViewPtr this,
 }
 
 /* ===============================================================
- *   The Open New Shell Callback. 
+ *   The Open New Shell Callback.
  * The primary View object is passed in the client_data
  *	Open a new shell and a new file selected by a file selection box.
  */
@@ -561,7 +561,7 @@ static void OpenNewShellCallback(Widget widget, ViewPtr this,
    ViewPtr view;
 
    view = NewFileShell(theWidgetRoot, NULL, 0, NULL);
-   XtPopup(view->shell, XtGrabNone); 
+   XtPopup(view->shell, XtGrabNone);
 }
 
 /* ===============================================================
@@ -592,7 +592,7 @@ static Widget CreateFileSelectionBox(ViewPtr this)
    Arg args[8];
    int n = 0;
    Widget fsb;
-   
+
    XtSetArg(args[n], XmNallowShellResize, True); n++;
    XtSetArg(args[n], XmNresizePolicy, XmRESIZE_GROW);  n++;
 /*
@@ -625,7 +625,7 @@ XmString FetchString(ViewPtr this, String name)
    XmString fetched;
 
    if (MrmFetchLiteral(theUIDdatabase, name, theDisplay,
-		       (XtPointer) &fetched, (MrmCode *) &code) == MrmSUCCESS) 
+		       (XtPointer) &fetched, (MrmCode *) &code) == MrmSUCCESS)
      return fetched;
 
    ViewError(this, XmStringCreateLocalized("Can't fetch from database: "),
@@ -647,7 +647,7 @@ void ViewError(ViewPtr this, XmString s1, XmString s2)
       Arg args[8];
       int n = 0;
 
-      XtSetArg(args[n], XmNdialogStyle, 
+      XtSetArg(args[n], XmNdialogStyle,
 	       XmDIALOG_FULL_APPLICATION_MODAL);
       n++;
       this->error_box = XmCreateErrorDialog(this->shell, "error", args, n);
@@ -671,10 +671,10 @@ void ViewWarning(ViewPtr this, XmString s1, XmString s2)
       Arg args[8];
       int n = 0;
 
-      XtSetArg(args[n], XmNdialogStyle, 
+      XtSetArg(args[n], XmNdialogStyle,
 	       XmDIALOG_FULL_APPLICATION_MODAL);
       n++;
-      this->warning_box = XmCreateWarningDialog(this->shell, 
+      this->warning_box = XmCreateWarningDialog(this->shell,
 						"warning", args, n);
    }
    XtVaSetValues(this->warning_box, XmNmessageString, msg, NULL);

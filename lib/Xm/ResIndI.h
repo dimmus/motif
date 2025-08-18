@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -35,19 +35,19 @@ extern "C" {
 #endif
 
 /********    Private Function Declarations for ResInd.c    ********/
-  
 
-extern int _XmConvertUnits( 
+
+extern int _XmConvertUnits(
                         Screen *screen,
                         int dimension,
                         register int from_type,
                         register int from_val,
                         register int to_type) ;
-extern void _XmUnitTypeDefault( 
+extern void _XmUnitTypeDefault(
                         Widget widget,
                         int offset,
                         XrmValue *value) ;
-extern unsigned char _XmGetUnitType( 
+extern unsigned char _XmGetUnitType(
                         Widget widget) ;
 extern int _XmConvertFloatUnitsToIntUnits(
   			int unitType,
@@ -65,7 +65,7 @@ extern int _XmConvertStringToUnits(
 extern void _XmStringDirectionDefault(Widget widget,
 				      int offset,
 				      XrmValue *value );
- 
+
 /********    End Private Function Declarations    ********/
 
 #ifdef __cplusplus

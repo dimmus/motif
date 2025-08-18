@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PINames.c /main/8 1995/07/13 20:22:48 drk $"
@@ -48,7 +48,7 @@ char	*argv[];
 
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
 	XtSetArg(args[n], XmNwidth, 200); n++;
 	XtSetArg(args[n], XmNheight, 50); n++;
@@ -66,7 +66,7 @@ char	*argv[];
 	 */
 	for (i = 0; i < NUM_TESTS; i++)
 		PIInfo[i].actual_return = False;
-    
+
 /*
  * Create top level shell widget as parent for test_button widgets
  */
@@ -103,13 +103,13 @@ char	*argv[];
  	 * Change the window name of a window (WM_NAME)
   	 */
 	test_atom = XmInternAtom(display, "WM_NAME", False);
-	XChangeProperty(display, test_wdw, test_atom, XA_STRING, 8, 
-					PropModeReplace, (unsigned char *)new_winname, 
+	XChangeProperty(display, test_wdw, test_atom, XA_STRING, 8,
+					PropModeReplace, (unsigned char *)new_winname,
 					strlen(new_winname));
-	XGetWindowProperty(display, test_wdw, test_atom, 0, 20, False, 
-					   AnyPropertyType, &new_type, &new_format, 
+	XGetWindowProperty(display, test_wdw, test_atom, 0, 20, False,
+					   AnyPropertyType, &new_type, &new_format,
 					   &new_nitems, &new_bytes_after, &new_data);
-	PIInfo[PIInfo_cnt].actual_return = 
+	PIInfo[PIInfo_cnt].actual_return =
 					!strcmp(new_winname, (char *) new_data);
 	PIInfo_cnt++;
 
@@ -117,7 +117,7 @@ char	*argv[];
  	 * Check for a ***** default name
   	 */
 	normal_wdw = XCreateSimpleWindow(display, rootWindow, 100, 300,
-								   	 200, 50, 10, 1, 
+								   	 200, 50, 10, 1,
 									 CommonGetColor("black"));
     XMapWindow(display, normal_wdw);
 	XSync(display, False);
@@ -138,10 +138,10 @@ char	*argv[];
 			/*
 			 * It must have found a class hint, using res_name
 			 */
-			printf("normal_wdw classhints, res_name=%s=\n", 
+			printf("normal_wdw classhints, res_name=%s=\n",
 				   class_hints.res_name);
-			PIInfo[PIInfo_cnt].actual_return = !strcmp(old_winname2, 
-													   class_hints.res_name);	
+			PIInfo[PIInfo_cnt].actual_return = !strcmp(old_winname2,
+													   class_hints.res_name);
 			PIInfo_cnt++;
 			XFree(class_hints.res_name);
 			XFree(class_hints.res_class);
@@ -153,7 +153,7 @@ char	*argv[];
 		 * It must have found a fetched name, using name returned
 		 */
 		printf("new_name=%s=\n", new_name);
-		PIInfo[PIInfo_cnt].actual_return = !strcmp(old_winname2, new_name);	
+		PIInfo[PIInfo_cnt].actual_return = !strcmp(old_winname2, new_name);
 		PIInfo_cnt++;
 		XFree(new_name);
 	}
@@ -164,26 +164,26 @@ char	*argv[];
  	* Change the icon name of a window (WM_ICON_NAME)
  	*/
 	test_atom = XmInternAtom(display, "WM_ICON_NAME", False);
-	XChangeProperty(display, test_wdw, test_atom, XA_STRING, 8, 
-					PropModeReplace, (unsigned char *)new_iconname, 
+	XChangeProperty(display, test_wdw, test_atom, XA_STRING, 8,
+					PropModeReplace, (unsigned char *)new_iconname,
 					strlen(new_iconname));
 
-	XGetWindowProperty(display, test_wdw, test_atom, 0, 20, False, 
-					   AnyPropertyType, &new_type, &new_format, 
+	XGetWindowProperty(display, test_wdw, test_atom, 0, 20, False,
+					   AnyPropertyType, &new_type, &new_format,
 					   &new_nitems, &new_bytes_after, &new_data);
-	PIInfo[PIInfo_cnt].actual_return = 
-						!strcmp(new_iconname, (char *) new_data);	
+	PIInfo[PIInfo_cnt].actual_return =
+						!strcmp(new_iconname, (char *) new_data);
 	PIInfo_cnt++;
 
 	ClientMsg_ev.type = ClientMessage;
 	ClientMsg_ev.window = test_wdw;
-	ClientMsg_ev.message_type = XmInternAtom(display, "WM_CHANGE_STATE", 
+	ClientMsg_ev.message_type = XmInternAtom(display, "WM_CHANGE_STATE",
 											 False);
 	ClientMsg_ev.format = 32;
 	ClientMsg_ev.data.l[0] = IconicState;
 
 	XSendEvent(display, rootWindow, False,
-			  (SubstructureNotifyMask|SubstructureRedirectMask), 
+			  (SubstructureNotifyMask|SubstructureRedirectMask),
 			  (XEvent *) &ClientMsg_ev);
 
 	/*
@@ -194,20 +194,20 @@ char	*argv[];
 	XtSetArg(args[n], XmNlabelString, message); n++;
 	XtSetValues(label_box, args, n);
 	XmStringFree(message);
-				       
+
 	/*
  	 * Change the window name of ***** (WM_NAME)
  	 */
 	test_atom = XmInternAtom(display, "WM_NAME", False);
-	XChangeProperty(display, normal_wdw, test_atom, XA_STRING, 8, 
-					PropModeReplace, (unsigned char *)new_winname2, 
+	XChangeProperty(display, normal_wdw, test_atom, XA_STRING, 8,
+					PropModeReplace, (unsigned char *)new_winname2,
 					strlen(new_winname2));
 
-	XGetWindowProperty(display, normal_wdw, test_atom, 0, 20, False, 
-					   AnyPropertyType, &new_type, &new_format, 
+	XGetWindowProperty(display, normal_wdw, test_atom, 0, 20, False,
+					   AnyPropertyType, &new_type, &new_format,
 					   &new_nitems, &new_bytes_after, &new_data);
-	PIInfo[PIInfo_cnt].actual_return = 
-						!strcmp(new_winname2, (char *) new_data);	
+	PIInfo[PIInfo_cnt].actual_return =
+						!strcmp(new_winname2, (char *) new_data);
 	PIInfo_cnt++;
 	XSync(display, False);
 
@@ -216,7 +216,7 @@ char	*argv[];
 	/*
  	 * Change the class name structure of a window (WM_CLASS)
  	 */
-	/* 
+	/*
 	 * put window from IconicState to WithdrawnState
 	 */
 	PIUnmapWindow(test_wdw);
@@ -235,10 +235,10 @@ char	*argv[];
 	strcpy(class_buf, new_class_name);
 	strcpy(&class_buf[l_name+1], new_class_class);
 	test_atom = XmInternAtom(display, "WM_CLASS", False);
-	XChangeProperty(display, test_wdw, test_atom, XA_STRING, 8, 
+	XChangeProperty(display, test_wdw, test_atom, XA_STRING, 8,
 					PropModeReplace, (unsigned char *)class_buf,
 					l_name+l_class+2);
-		
+
 	/*
 	 * revive from the WithdrawnState to NormalState
 	 */
@@ -249,9 +249,9 @@ char	*argv[];
 	XMoveWindow(display, test_wdw, 100, 100);
 
 	XGetClassHint(display, test_wdw, &class_hints);
-	PIInfo[PIInfo_cnt].actual_return = 
+	PIInfo[PIInfo_cnt].actual_return =
 		(!strcmp(new_class_name, class_hints.res_name) &&
-		!strcmp(new_class_class, class_hints.res_class));	
+		!strcmp(new_class_class, class_hints.res_class));
 	PIInfo_cnt++;
 
 /*************???????????????????????????*****************/
@@ -280,4 +280,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-

@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
-        message : 
+        message :
 	"This is a list widget with the following\ncharacteristics:" &
 	"\n\n   - width is 150, height is 200\n   - background is navy\n   " &
 	"- items are \n     item1, item2, item3, item4, item5\n   - itemCount" &

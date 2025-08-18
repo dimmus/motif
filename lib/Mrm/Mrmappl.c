@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -118,7 +118,7 @@ static char rcsid[] = "$XConsortium: Mrmappl.c /main/17 1996/11/13 13:59:58 drk 
  *--
  */
 
-Cardinal 
+Cardinal
 MrmOpenHierarchy (
 #if NeedWidePrototypes
 		  int			num_files,
@@ -179,7 +179,7 @@ MrmOpenHierarchy (
  *--
  */
 
-Cardinal 
+Cardinal
 MrmOpenHierarchyPerDisplay (Display		*display,
 #if NeedWidePrototypes
 			    int			num_files,
@@ -209,7 +209,7 @@ MrmOpenHierarchyPerDisplay (Display		*display,
   if (os_ext_list == NULL)
   {
     new_os_ext_list = (MrmOsOpenParamPtr *) XtMalloc(num_files * sizeof(MrmOsOpenParamPtr));
-    
+
     for (file_index = 0; file_index < num_files; file_index++)
     {
       new_os_ext_list[file_index] = (MrmOsOpenParamPtr) XtMalloc(sizeof(MrmOsOpenParam));
@@ -217,22 +217,22 @@ MrmOpenHierarchyPerDisplay (Display		*display,
     }
     os_ext_list = new_os_ext_list;
   }
-  
+
   result = Urm__OpenHierarchy(num_files, name_list, os_ext_list, hierarchy_id_return, FALSE, NULL);
-  
-  if (new_os_ext_list != NULL) 
+
+  if (new_os_ext_list != NULL)
   {
     for (file_index = 0; file_index < num_files; file_index++)
 	    XtFree((char *)new_os_ext_list[file_index]);
     XtFree((char *)new_os_ext_list);
-  }    
+  }
 #else
-  if (os_ext_list == NULL) 
+  if (os_ext_list == NULL)
     os_ext_list = (MrmOsOpenParamPtr *)&new_os_ext_list;
-      
+
   (*os_ext_list)->display = display;
-  
-  result = Urm__OpenHierarchy(num_files, name_list, os_ext_list, 
+
+  result = Urm__OpenHierarchy(num_files, name_list, os_ext_list,
 			      hierarchy_id_return, FALSE, NULL);
 #endif
   _MrmProcessUnlock();
@@ -279,7 +279,7 @@ MrmOpenHierarchyFromBuffer (unsigned char	*uid_buffer,
   Cardinal		result;
 
   _MrmProcessLock();
-  result = Urm__OpenHierarchy((MrmCount) 1, NULL, NULL, 
+  result = Urm__OpenHierarchy((MrmCount) 1, NULL, NULL,
 			      hierarchy_id_return, TRUE, uid_buffer);
   _MrmProcessUnlock();
   return result;
@@ -311,7 +311,7 @@ MrmOpenHierarchyFromBuffer (unsigned char	*uid_buffer,
  *--
  */
 
-Cardinal 
+Cardinal
 MrmCloseHierarchy (MrmHierarchy                hierarchy_id)
 {
 
@@ -365,13 +365,13 @@ MrmCloseHierarchy (MrmHierarchy                hierarchy_id)
  *--
  */
 
-Cardinal 
+Cardinal
 MrmRegisterNames (MrmRegisterArglist		reglist,
 #if NeedWidePrototypes
 		  int				num_reg
 #else
 		  MrmCount			num_reg
-#endif 
+#endif
 		  )
 {
 
@@ -439,14 +439,14 @@ MrmRegisterNames (MrmRegisterArglist		reglist,
  *--
  */
 
-Cardinal 
+Cardinal
 MrmRegisterNamesInHierarchy (MrmHierarchy		hierarchy_id,
 			     MrmRegisterArglist		reglist,
 #if NeedWidePrototypes
 			     int		num_reg
 #else
 			     MrmCount			num_reg
-#endif 
+#endif
 			     )
 {
 
@@ -526,7 +526,7 @@ MrmRegisterNamesInHierarchy (MrmHierarchy		hierarchy_id,
  */
 
 /*ARGSUSED*/
-Cardinal 
+Cardinal
 MrmFetchInterfaceModule (MrmHierarchy		hierarchy_id,
 			 char			*module_name,
 			 Widget			parent,
@@ -570,7 +570,7 @@ MrmFetchInterfaceModule (MrmHierarchy		hierarchy_id,
     }
 
   result = UrmGetResourceContext (NULL, NULL, 0, &mod_context);
-  if ( result != MrmSUCCESS ) 
+  if ( result != MrmSUCCESS )
     {
       _MrmProcessUnlock();
       _MrmAppUnlock(app);
@@ -699,7 +699,7 @@ MrmFetchInterfaceModule (MrmHierarchy		hierarchy_id,
  *--
  */
 
-Cardinal 
+Cardinal
 MrmFetchWidget (MrmHierarchy                hierarchy_id,
 		String                      index,
 		Widget                      parent,
@@ -763,7 +763,7 @@ MrmFetchWidget (MrmHierarchy                hierarchy_id,
  *--
  */
 
-Cardinal 
+Cardinal
 MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
 			String			index,
 			Widget			parent,
@@ -812,7 +812,7 @@ MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
     }
 
   result = UrmGetResourceContext (NULL, NULL, 300, &w_context);
-  if ( result != MrmSUCCESS ) 
+  if ( result != MrmSUCCESS )
     {
       _MrmProcessUnlock();
       _MrmAppUnlock(app);
@@ -845,7 +845,7 @@ MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
   /*
    * The following test breaks compatibility with the CDE1.0
    * version of Mrm and cannot be done for CDEnext.
-   * 
+   *
    *   if (widgetrec->access == URMaPrivate)
    *     {
    *       UrmFreeResourceContext (w_context);
@@ -863,11 +863,11 @@ MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
   Urm__CW_InitWRef (&wref_ctx);
   result = UrmCreateWidgetTree (w_context, parent, hierarchy_id, hfile_id,
 				ov_name, ov_args, ov_num_args,
-				URMrIndex, index, 0L, MrmManageDefault, 
-				(URMPointerListPtr *)&svlist, wref_ctx, 
+				URMrIndex, index, 0L, MrmManageDefault,
+				(URMPointerListPtr *)&svlist, wref_ctx,
 				w_return);
   UrmFreeResourceContext (w_context);
-  if ( result != MrmSUCCESS ) 
+  if ( result != MrmSUCCESS )
     {
       _MrmProcessUnlock();
       _MrmAppUnlock(app);
@@ -948,7 +948,7 @@ MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
  *--
  */
 
-Cardinal 
+Cardinal
 MrmFetchSetValues (MrmHierarchy                hierarchy_id,
 		   Widget                      w,
 		   ArgList                     args,

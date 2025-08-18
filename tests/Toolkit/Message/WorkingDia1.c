@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WorkingDia1.c /main/9 1995/07/13 19:03:51 drk $"
@@ -79,7 +79,7 @@ static XtCallbackRec help_cb[] = {
 
 
 /*#### OkCB ####*/
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -98,7 +98,7 @@ XtPointer     call_data;                   /*  data from widget class  */
 
 
 /*#### CancelCB ####*/
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -117,7 +117,7 @@ XtPointer     call_data;                   /*  data from widget class  */
 
 
 /*#### HelpCB ####*/
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer     client_data;                 /*  data from application   */
 XtPointer     call_data;                   /*  data from widget class  */
@@ -141,13 +141,13 @@ unsigned int argc;
 char **argv;
 {
     Arg             args[MAX_ARGS];
-    register int    n;            
+    register int    n;
     Widget	    Frame;
 
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 10);                     n++;
     XtSetArg (args[n], XmNheight, 10);                    n++;
@@ -156,7 +156,7 @@ char **argv;
     n = 0;
     Frame = XmCreateFrame(Shell1, "Frame1", args, n);
     XtManageChild(Frame);
-    
+
 
     /* create a pixmap */
     hourPix = CreatePixmap (XtScreen(Shell1), hourBits, 32, 32,
@@ -194,7 +194,7 @@ char **argv;
 /***********************************************************************
  *
  *  CreatePixmap - This routine will return a pixmap from the output
- *         of the bitmap editor.  The output pixmap will be 
+ *         of the bitmap editor.  The output pixmap will be
  *         the depth of the screen.  This is so that label can
  *         write it using its current foreground and background.
  *
@@ -233,7 +233,7 @@ Pixel   foreground_pixel, background_pixel;
     /* get a chunk of off-screen, display on root screen */
     /* 1 bit deep, this is still just bit data, not color pixel data */
     pixmap = XCreatePixmap (display, RootWindowOfScreen (screen),
-                image.width, image.height, 
+                image.width, image.height,
                 (unsigned) DefaultDepthOfScreen(screen));
     if (!pixmap)
     return (pixmap);
@@ -252,7 +252,7 @@ Pixel   foreground_pixel, background_pixel;
     return ((Pixmap) NULL);
 
     /* put bits into the pixmap */
-    XPutImage (display, pixmap, gc, &image, 0, 0, 
+    XPutImage (display, pixmap, gc, &image, 0, 0,
            0, 0, image.width, image.height);
 
     XFreeGC (display, gc);

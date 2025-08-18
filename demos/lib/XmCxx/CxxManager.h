@@ -51,7 +51,7 @@ class XmCxxManagerClass {
     friend class XmCxxManager;
 
   public:
-   
+
     XmCxxManagerClass(char*		name,
 		      WidgetClass	parent,
 		      Cardinal		widgetSize,
@@ -242,7 +242,7 @@ class XmCxxManager {
 					  ArgList, Cardinal*);
     static Boolean 		SetValuesHook(Widget, ArgList, Cardinal*);
     static void 		GetValuesHook(Widget, ArgList, Cardinal*);
-    
+
     static void			Realize(Widget, XtValueMask*,
 					XSetWindowAttributes*);
     static void			Destroy(Widget);
@@ -284,7 +284,7 @@ class XmCxxManager {
     static void			ChangeManaged(Widget w);
     static void			InsertChild(Widget child);
     static void			DeleteChild(Widget child);
-    
+
     // constraint class part;
     static void			ConstraintInitialize(Widget req_w,
 						     Widget new_w,

@@ -37,7 +37,7 @@ externalref XrmQuark XmQTactivatable;
 
 /* Trait structures and typedefs, place typedefs first */
 
-typedef void (*XmActivatableCallBackProc)(Widget w, 
+typedef void (*XmActivatableCallBackProc)(Widget w,
 					  XtCallbackProc activCB,
 					  XtPointer closure,
 					  Boolean setunset);

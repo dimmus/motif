@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: xis_protos.h /main/7 1995/07/14 11:43:40 drk $ */
 /***********************************************************************
   	@(#)xis_protos.h	1.4.1.1	Date:1/22/91
@@ -96,7 +96,7 @@ extern void xisSendEvent /* Sends 1 synthesized event to the specified window */
              int             ry,                 /* Y-coord of pntr in root  */
              unsigned int    state,              /* XServer modifier keys    */
              unsigned int    detail              /* Key,Button changed state */
-          )); 
+          ));
 
 
 /******************************************************************************
@@ -327,7 +327,7 @@ extern int xisArbitrary /* Returns arbitrary num between inclusive values
 
 extern void xisSetMultiClickTime /* Sets xis global min inter-click time
                                     interval */
-  
+
     PARAMS(( Time             time               /* Time in milliseconds    */
           ));
 
@@ -344,7 +344,7 @@ extern int xisWindowExists /* Returns True if window exists */
 
     PARAMS(( Window           window             /* Window in question */
           ));
-    
+
 
 
 /******************************************************************************

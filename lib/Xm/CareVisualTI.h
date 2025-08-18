@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,7 +36,7 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern Boolean _XmNotifyChildrenVisual( 
+extern Boolean _XmNotifyChildrenVisual(
 				       Widget cur,
 				       Widget new_w,
 				       Mask visual_flag) ;

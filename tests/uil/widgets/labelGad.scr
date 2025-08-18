@@ -19,15 +19,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
 #  This is a label gadget with the following characteristics:
-#   	- width is 200   
+#   	- width is 200
 #	- alignment is XmALIGNMENT_BEGINNING
 #	- fontList is variable
-#   	- height is 100  
+#   	- height is 100
 #	- marginTop is 20
 #	- marginBottom is 20
 #   	- labelString is "This is a Label Gadget"

@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH todo 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -32,7 +32,7 @@
 .SH DESCRIPTION
 \*LTodo\*O
 is a simple todo list manager.  It provides a demonstration of the
-XmNotebook widget.  To use 
+XmNotebook widget.  To use
 \*Ltodo\*O,  you should be able to simply run it
 from any directory.  By default it reads its database from your
 home directory,  but this can be overriden by \fIpathname\fR.

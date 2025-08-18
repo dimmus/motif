@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: HierN.c /main/8 1995/07/14 10:49:34 drk $"
@@ -66,7 +66,7 @@ void		error_proc();
 /*
  * Names registered globally
  */
-static MrmRegisterArg reglist_1[] = 
+static MrmRegisterArg reglist_1[] =
 {
     "test1_proc",	(caddr_t) test1_1_proc,
     "test5_var",	(caddr_t) 5
@@ -77,7 +77,7 @@ static int reglist_1_num =
 /*
  * Names registered in hierarchy 1
  */
-static MrmRegisterArg reglist_2[] = 
+static MrmRegisterArg reglist_2[] =
 {
     "test2_proc",	(caddr_t) test2_1_proc,
     "test3_var",	(caddr_t) 0
@@ -88,7 +88,7 @@ static int reglist_2_num =
 /*
  * Names registered in hierarchy 2
  */
-static MrmRegisterArg reglist_3[] = 
+static MrmRegisterArg reglist_3[] =
 {
     "test4_var",	(caddr_t) 4
 };
@@ -178,7 +178,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy1)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
 	{
 	error_proc("Can't open hierarchy 1\n");
 	}
@@ -186,7 +186,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy2)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
 	{
 	error_proc("Can't open hierarchy 2\n");
 	}
@@ -259,7 +259,7 @@ main(argc, argv)
     test2_1_called = 0;
     XtCallCallbacks(widgetmain_1, XmNactivateCallback, NULL);
     XtCallCallbacks(widgetmain_1, XmNarmCallback, NULL);
-    
+
 /*
  * See if test1_1_proc() and test2_1_proc() were called
  */
@@ -273,7 +273,7 @@ main(argc, argv)
 	errors++;
 	fprintf(stdout, "HierN: failed to properly register callback routine test2_1_proc() in hierarchy 1.\n");
 	}
-    
+
 /*
  * Call the callback routines for widgetmain_2. test1 should still exist,
  * and test2 should not.
@@ -282,7 +282,7 @@ main(argc, argv)
     test2_1_called = 0;
     XtCallCallbacks(widgetmain_2, XmNactivateCallback, NULL);
     XtCallCallbacks(widgetmain_2, XmNarmCallback, NULL);
-    
+
 /*
  * See if test1_1_proc() and test2_1_proc() were called
  */
@@ -296,7 +296,7 @@ main(argc, argv)
 	errors++;
 	fprintf(stdout, "HierN: failed to properly register callback routine test2_1_proc() in hierarchy 2.\n");
 	}
-    
+
 /*
  * Get the values associated with widgetmain_1 which were set using the
  * values of test[345]_var
@@ -307,7 +307,7 @@ main(argc, argv)
     XtSetArg(args[nargs], XmNmarginTop, &test4_1_return ); nargs++;
     XtSetArg(args[nargs], XmNmarginLeft, &test5_1_return ); nargs++;
     XtGetValues(widgetmain_1, args, nargs);
-	
+
 /*
  * See if the values were set correctly. test3 and test5 should have
  * been fetched.
@@ -318,7 +318,7 @@ main(argc, argv)
 	errors++;
 	fprintf(stdout,"HierN: failed to properly register literal test3_1_var.\n");
 	}
-    
+
     if(test4_1_return == test4_1_expect)
 	{
 	errors++;
@@ -361,7 +361,7 @@ void test1_1_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test1_1_called++;
 }
 
@@ -369,7 +369,7 @@ void test2_1_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test2_1_called++;
 }
 
@@ -377,7 +377,7 @@ void test1_2_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test1_2_called++;
 }
 
@@ -385,7 +385,7 @@ void test2_2_proc(w, tag, reason)
      Widget		w;
      int		*tag;
      unsigned long	*reason;
-{ 	
+{
     test2_2_called++;
 }
 
@@ -399,4 +399,3 @@ void error_proc(error_string)
     fprintf(stdout,"Mrm error: %s\n", error_string);
     fflush(stdout);
 }
-

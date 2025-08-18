@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.4
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -61,11 +61,11 @@ static char rcsid[] = "$XConsortium: WmError.c /main/6 1996/10/07 14:27:34 drk $
 #define NUM_E_STRINGS		5
 
 static char *pchErrorFormatNames [NUM_E_STRINGS] = {
-    "MajorCode", 
-    "MinorCode", 
-    "ResourceID", 
-    "ErrorSerial", 
-    "CurrentSerial" 
+    "MajorCode",
+    "MinorCode",
+    "ResourceID",
+    "ErrorSerial",
+    "CurrentSerial"
 };
 
 static char *pchDefaultErrorFormat [NUM_E_STRINGS] = {
@@ -112,8 +112,8 @@ WmInitErrorHandler (Display *display)
      */
     for (i = 0; i< NUM_E_STRINGS; i++)
     {
-	XGetErrorDatabaseText (display, "XlibMessage", 
-			       pchErrorFormatNames[i], 
+	XGetErrorDatabaseText (display, "XlibMessage",
+			       pchErrorFormatNames[i],
 			       pchDefaultErrorFormat[i], buffer, BUFSIZ);
 
 	if ((pchErrorFormat[i] = (char *) XtMalloc (1+strlen(buffer))) == NULL)
@@ -153,7 +153,7 @@ WmInitErrorHandler (Display *display)
  *
  *  errorEvent = pointer to a block of information describing the error
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  wmGD.errorFlag = set to True
@@ -177,7 +177,7 @@ WmXErrorHandler (Display *display, XErrorEvent *errorEvent)
 
     fprintf (stderr, pchErrorFormat[E_MAJOR_CODE], errorEvent->request_code);
     sprintf(message, "%d", errorEvent->request_code);
-    XGetErrorDatabaseText (display, "XRequest", message, 
+    XGetErrorDatabaseText (display, "XRequest", message,
 	" ", buffer, BUFSIZ);
     fprintf (stderr, " (%s)\n  ", buffer);
     fprintf (stderr, pchErrorFormat[E_MINOR_CODE], errorEvent->minor_code);
@@ -186,7 +186,7 @@ WmXErrorHandler (Display *display, XErrorEvent *errorEvent)
     fprintf (stderr, "\n  ");
     fprintf (stderr, pchErrorFormat[E_ERROR_SERIAL], errorEvent->serial);
     fprintf (stderr, "\n  ");
-    fprintf (stderr, pchErrorFormat[E_CURRENT_SERIAL], 
+    fprintf (stderr, pchErrorFormat[E_CURRENT_SERIAL],
 			LastKnownRequestProcessed(display));
     fprintf (stderr, "\n");
 #endif /* DEBUG */
@@ -231,14 +231,14 @@ WmXErrorHandler (Display *display, XErrorEvent *errorEvent)
  *  Inputs:
  *  ------
  *  display = X display on which the X IO error occurred
- * 
+ *
  *************************************<->***********************************/
 
 int
 WmXIOErrorHandler (Display *display)
 {
   char  err[100];
- 
+
   sprintf (err, "%s: %s\n", "I/O error on display:", XDisplayString(display));
   Warning(err);
 
@@ -290,7 +290,7 @@ WmXtErrorHandler (char *message)
  *  Inputs:
  *  ------
  *  message = pointer to a warning message
- * 
+ *
  *************************************<->***********************************/
 
 void
@@ -317,7 +317,7 @@ WmXtWarningHandler (char *message)
  *  Inputs:
  *  ------
  *  message = pointer to a message string
- * 
+ *
  *************************************<->***********************************/
 
 void
@@ -326,7 +326,7 @@ Warning (char *message)
 #ifdef WSM
     char pch[MAXWMPATH+1];
 
-    sprintf (pch, "%s: %s\n", 
+    sprintf (pch, "%s: %s\n",
 	GETMESSAGE(20, 1, "Workspace Manager"), message);
 
     _DtSimpleError (wmGD.mwmName, DtIgnore, NULL, pch, NULL);
@@ -353,7 +353,7 @@ Warning (char *message)
  *  Inputs:
  *  ------
  *  s0-s9 = pointers to message strings
- * 
+ *
  *  Comments:
  *  ------
  *  Caller must provide his/her own argv[0] to this function.

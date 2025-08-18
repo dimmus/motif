@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PrintEvent.c /main/7 1995/07/14 11:30:35 drk $"
@@ -37,10 +37,10 @@ static char rcsid[] = "$XConsortium: PrintEvent.c /main/7 1995/07/14 11:30:35 dr
 
 	Summary:
             Prints out a brief description of the event (mostly on one line)
-           
+
         INPUTS:
             event         - the event structure to be briefly printed out
-        
+
         OUTPUTS:
             none
 
@@ -57,7 +57,7 @@ XEvent *event;
     Window window;
     char msg_string[125];
 
-    static char *event_name[] = { 
+    static char *event_name[] = {
         "","","KeyPress","KeyRelease","ButtonPress","ButtonRelease",
         "MotionNotify","EnterNotify","LeaveNotify","FocusIn","FocusOut",
         "KeymapNotify","Expose","GraphicsExpose","NoExpose",
@@ -196,9 +196,9 @@ XEvent *event;
             sprintf(outbuf,"'%s'",buf);
         else if (iscntrl(buf[0]))
             sprintf(outbuf,"'^%c'",buf[0]+'A'-1);
-        else 
+        else
             sprintf(outbuf,"non-printable");
-            
+
         (*xisTraceMsg)("Keycode = %d (%s)\n",buf[0],outbuf);
     }
 

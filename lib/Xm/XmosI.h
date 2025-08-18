@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -43,14 +43,14 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern String _XmOSFindPatternPart( 
+extern String _XmOSFindPatternPart(
                         String fileSpec) ;
-extern void _XmOSQualifyFileSpec( 
+extern void _XmOSQualifyFileSpec(
                         String dirSpec,
                         String filterSpec,
                         String *pQualifiedDir,
                         String *pQualifiedPattern) ;
-extern void _XmOSGetDirEntries( 
+extern void _XmOSGetDirEntries(
                         String qualifiedDir,
                         String matchPattern,
 #if NeedWidePrototypes
@@ -65,7 +65,7 @@ extern void _XmOSGetDirEntries(
                         String **pEntries,
                         unsigned int *pNumEntries,
                         unsigned int *pNumAlloc) ;
-extern void _XmOSBuildFileList( 
+extern void _XmOSBuildFileList(
                         String dirPath,
                         String pattern,
 #if NeedWidePrototypes
@@ -76,10 +76,10 @@ extern void _XmOSBuildFileList(
                         String **pEntries,
                         unsigned int *pNumEntries,
                         unsigned int *pNumAlloc) ;
-extern int _XmOSFileCompare( 
+extern int _XmOSFileCompare(
                         XmConst void *sp1,
                         XmConst void *sp2) ;
-extern String _XmOSInitPath( 
+extern String _XmOSInitPath(
                         String file_name,
                         String env_pathname,
                         Boolean *user_path) ;
@@ -88,7 +88,7 @@ extern String _XmOSBuildFileName(
 			String path) ;
 extern int _XmOSPutenv(
 		       char *string);
-extern void _XmOSGenerateMaskName( 
+extern void _XmOSGenerateMaskName(
 				  String imageName,
 				  String	maskNameBuf) ;
 
@@ -105,10 +105,10 @@ extern XmDirection _XmOSGetCharDirection(XtPointer   character,
 extern int _XmOSKeySymToCharacter(KeySym keysym,
 				  char	 *locale,
 				  char	 *buffer);
-extern void _XmOSFindPathParts(String path, 
-			       String *filenameRtn, 
+extern void _XmOSFindPathParts(String path,
+			       String *filenameRtn,
 			       String *suffixRtn);
-extern Boolean _XmOSAbsolutePathName( 
+extern Boolean _XmOSAbsolutePathName(
                         String path,
                         String *pathRtn,
                         String buf) ;

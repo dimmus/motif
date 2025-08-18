@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: xmruler.c /main/6 1995/07/13 20:57:53 drk $"
@@ -192,7 +192,7 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
 
     screenWidth = WidthOfScreen(screen);
     screenHeight = HeightOfScreen(screen);
@@ -201,8 +201,8 @@ void  main(argc, argv)
     screenWidthInches = screenWidthMM / MM_PER_INCH;
     screenHeightInches = screenHeightMM / MM_PER_INCH;
 
-    pixel_width = pixel_height = 
-    mm_width = mm_height = 
+    pixel_width = pixel_height =
+    mm_width = mm_height =
     inch_width = inch_height = 0;
 
     /* Shell 1 children */
@@ -210,7 +210,7 @@ void  main(argc, argv)
     n = 0;
     Form1 = XmCreateForm (Shell1, "Form1", args, n);
     XtManageChild (Form1);
-    
+
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNtopOffset, 5); n++;
@@ -226,7 +226,7 @@ void  main(argc, argv)
 
     RowCol1 = XmCreateRowColumn(Form1, "RowCol1", args, n);
     XtManageChild(RowCol1);
-    
+
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNtopOffset, 5); n++;
@@ -244,83 +244,83 @@ void  main(argc, argv)
     XtManageChild(RowCol2);
 
     n = 0;
-    upper_left_Xlabel = XmCreateLabel (RowCol1, "UpperLeft_X: ", args, n);      
+    upper_left_Xlabel = XmCreateLabel (RowCol1, "UpperLeft_X: ", args, n);
     XtManageChild (upper_left_Xlabel);
-    
+
     n = 0;
-    upper_left_Ylabel = XmCreateLabel (RowCol1, "UpperLeft_Y: ", args, n);      
+    upper_left_Ylabel = XmCreateLabel (RowCol1, "UpperLeft_Y: ", args, n);
     XtManageChild (upper_left_Ylabel);
-    
+
     n = 0;
     lower_right_Xlabel = XmCreateLabel (RowCol1, "LowerRight_X: ", args, n);
     XtManageChild (lower_right_Xlabel);
-    
+
     n = 0;
     lower_right_Ylabel = XmCreateLabel (RowCol1, "LowerRight_Y: ", args, n);
     XtManageChild (lower_right_Ylabel);
-    
+
     n = 0;
     pixel_width_label = XmCreateLabel (RowCol1, "Width_In_Pixels: ", args, n);
     XtManageChild (pixel_width_label);
-    
+
     n = 0;
     pixel_height_label = XmCreateLabel (RowCol1, "Height_In_Pixels: ", args, n);
     XtManageChild (pixel_height_label);
-    
+
     n = 0;
-    mm_width_label = XmCreateLabel (RowCol1, "Width_In_MMs: ", args, n);      
+    mm_width_label = XmCreateLabel (RowCol1, "Width_In_MMs: ", args, n);
     XtManageChild (mm_width_label);
-    
+
     n = 0;
     mm_height_label = XmCreateLabel (RowCol1, "Height_In_MMs: ", args, n);
     XtManageChild (mm_height_label);
-    
+
     n = 0;
     inch_width_label = XmCreateLabel (RowCol1, "Width_In_Inches: ", args, n);
     XtManageChild (inch_width_label);
-    
+
     n = 0;
     inch_height_label = XmCreateLabel (RowCol1, "Height_In_Inches: ", args, n);
     XtManageChild (inch_height_label);
 
     n = 0;
-    upper_left_Xvalue = XmCreateLabel (RowCol2, "0", args, n);      
+    upper_left_Xvalue = XmCreateLabel (RowCol2, "0", args, n);
     XtManageChild (upper_left_Xvalue);
-    
+
     n = 0;
-    upper_left_Yvalue = XmCreateLabel (RowCol2, "0", args, n);      
+    upper_left_Yvalue = XmCreateLabel (RowCol2, "0", args, n);
     XtManageChild (upper_left_Yvalue);
-    
+
     n = 0;
-    lower_right_Xvalue = XmCreateLabel (RowCol2, "0", args, n);      
+    lower_right_Xvalue = XmCreateLabel (RowCol2, "0", args, n);
     XtManageChild (lower_right_Xvalue);
-    
+
     n = 0;
-    lower_right_Yvalue = XmCreateLabel (RowCol2, "0", args, n);      
+    lower_right_Yvalue = XmCreateLabel (RowCol2, "0", args, n);
     XtManageChild (lower_right_Yvalue);
-    
+
     n = 0;
-    width_in_pixels = XmCreateLabel (RowCol2, "0", args, n);      
+    width_in_pixels = XmCreateLabel (RowCol2, "0", args, n);
     XtManageChild (width_in_pixels);
-    
+
     n = 0;
-    height_in_pixels = XmCreateLabel (RowCol2, "0", args, n);      
+    height_in_pixels = XmCreateLabel (RowCol2, "0", args, n);
     XtManageChild (height_in_pixels);
-    
+
     n = 0;
-    width_in_mms = XmCreateLabel (RowCol2, "0.0", args, n);      
+    width_in_mms = XmCreateLabel (RowCol2, "0.0", args, n);
     XtManageChild (width_in_mms);
-    
+
     n = 0;
-    height_in_mms = XmCreateLabel (RowCol2, "0.0", args, n);      
+    height_in_mms = XmCreateLabel (RowCol2, "0.0", args, n);
     XtManageChild (height_in_mms);
-    
+
     n = 0;
-    width_in_inches = XmCreateLabel (RowCol2, "0.0", args, n);      
+    width_in_inches = XmCreateLabel (RowCol2, "0.0", args, n);
     XtManageChild (width_in_inches);
-    
+
     n = 0;
-    height_in_inches = XmCreateLabel (RowCol2, "0.0", args, n);      
+    height_in_inches = XmCreateLabel (RowCol2, "0.0", args, n);
     XtManageChild (height_in_inches);
 
     n = 0;
@@ -334,7 +334,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNbottomOffset, 5); n++;
     XtSetArg(args[n], XmNlabelString, XmStringCreateSimple ("Measure")); n++;
-    measure = XmCreatePushButton (Form1, "Measure", args, n);      
+    measure = XmCreatePushButton (Form1, "Measure", args, n);
     XtManageChild (measure);
     XtAddCallback (measure,  XmNactivateCallback, measureFunc, NULL);
 
@@ -349,10 +349,10 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNbottomOffset, 5); n++;
     XtSetArg (args[n], XmNlabelString, XmStringCreateSimple ("Quit")); n++;
-    quit = XmCreatePushButton (Form1, "Quit", args, n);      
+    quit = XmCreatePushButton (Form1, "Quit", args, n);
     XtManageChild (quit);
     XtAddCallback (quit,  XmNactivateCallback, quitCB, NULL);
-    
+
     XtRealizeWidget(Shell1);
 
     XtAppMainLoop(app_context);
@@ -442,16 +442,16 @@ static Boolean do_measure ()
                     first_y = event.xbutton.y_root;
                     XUngrabPointer (display, CurrentTime);
                     XFlush (display);
-                    if (XGrabPointer(display, rootWindow, False, 
-                                     ButtonReleaseMask, GrabModeAsync, 
-                                     GrabModeAsync, rootWindow, 
-                                     reversecrossCursor, CurrentTime) 
+                    if (XGrabPointer(display, rootWindow, False,
+                                     ButtonReleaseMask, GrabModeAsync,
+                                     GrabModeAsync, rootWindow,
+                                     reversecrossCursor, CurrentTime)
                                      != GrabSuccess) {
                         fprintf (stderr, "Unable to grab pointer :2\n");
                         exit (1);
                     }
                     done = True;
-        
+
                 }
 
                 break;
@@ -498,7 +498,7 @@ static Boolean do_measure ()
                 XFlush (display);
 
                 /* Get final pointer position */
-                XQueryPointer(display, rootWindow, &root_window, 
+                XQueryPointer(display, rootWindow, &root_window,
                               &child_window, &final_x, &final_y, &win_x,
                               &win_y, &mask);
                 XFlush(display);

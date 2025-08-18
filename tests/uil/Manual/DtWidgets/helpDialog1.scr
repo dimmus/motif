@@ -22,7 +22,7 @@
 # HISTORY
 # $XConsortium: helpDialog1.scr /main/1 1996/08/12 15:45:33 jakku $
 
-#) This uil test case is designed to test the resources of the 
+#) This uil test case is designed to test the resources of the
 #  DtHelpDialog wdiget. It tests the following resources:
 #)
 #)    Dt resources
@@ -38,15 +38,15 @@
 #	- XmNheight
 #)
 #)
-#) 
+#)
 #) The DtHelpDialog Widget should come up with the following values:
 #)
-#	- Width is 200. 
+#	- Width is 200.
 #	- Height is  200.
 #	- Help Volume /usr/dt/appconfig/help/C/Appmanager.sdl should be displayed.
 #	- Topic title should be "Application Manager help"
 # 	- Number of items displayed in the topic area of the widget should not be greater than 4.
 
 #	All other resources are set to their default values.
-CompareVisual S_MAIN_WIDGET 
+CompareVisual S_MAIN_WIDGET
 Exit

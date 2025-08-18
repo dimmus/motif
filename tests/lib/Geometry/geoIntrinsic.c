@@ -145,7 +145,7 @@ static void CallChangeManaged(widget)
 
     register CompositePtr cpPtr;
     register CompositePartPtr clPtr;
-   
+
     if (XtIsComposite (widget)) {
 	cpPtr = (CompositePtr)&((CompositeWidget) widget)->composite;
         clPtr = (CompositePartPtr)&((CompositeWidgetClass)
@@ -198,7 +198,7 @@ static Boolean ShouldMapAllChildren(cwp)
     for (i = 0; i < cwp->num_children; i++) {
 	child = children[i];
 	if (XtIsWidget(child)) {
-	    if (XtIsRealized(child) && (! (child->core.managed 
+	    if (XtIsRealized(child) && (! (child->core.managed
 					  && child->core.mapped_when_managed))){
 		    return False;
 	    }
@@ -250,7 +250,7 @@ static void RealizeWidget(widget)
  	XChangeProperty(XtDisplay(widget), window,
  			XInternAtom(XtDisplay(widget), "_MIT_OBJ_CLASS",
  				    False),
- 			XA_STRING, 8, PropModeReplace, (unsigned char *) s, 
+ 			XA_STRING, 8, PropModeReplace, (unsigned char *) s,
  			len_nm + len_cl + 2);
  	XtFree(s);
     }
@@ -969,7 +969,7 @@ static SubstitutionRec defaultSubs[] = {
     {'S', NULL},
     {'C', NULL},
     {'L', NULL},
-    {'l', NULL}, 
+    {'l', NULL},
     {'t', NULL},
     {'c', NULL}
 };
@@ -1018,7 +1018,7 @@ String XtResolvePathname(dpy, type, filename, suffix, path, substitutions,
 #else
 	path = "";	/* NULL would kill us later */
 #endif /* VMS */
-    }	
+    }
 
     if (filename == NULL) {
 	filename = XrmClassToString(pd->class);
@@ -1109,7 +1109,7 @@ String XtResolvePathname(dpy, type, filename, suffix, path, substitutions,
     if (merged_substitutions[5].substitution != NULL)
 	XtFree( (XtPointer)merged_substitutions[5].substitution );
 
-    if (merged_substitutions != defaultSubs) 
+    if (merged_substitutions != defaultSubs)
 	DEALLOCATE_LOCAL(merged_substitutions);
 
     if (pathMallocd)

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -78,28 +78,28 @@ typedef struct {
 /********    End Static Function Declarations    ********/
 
 
-externaldef(desktopobjectclass) WidgetClass 
+externaldef(desktopobjectclass) WidgetClass
       xmDesktopObjectClass = (WidgetClass) &xmDesktopClassRec;
 
-externaldef(displayobjectclass) WidgetClass 
+externaldef(displayobjectclass) WidgetClass
       xmDisplayObjectClass = (WidgetClass) (&xmDisplayClassRec);
 
-externaldef(screenobjectclass) WidgetClass 
+externaldef(screenobjectclass) WidgetClass
       xmScreenObjectClass = (WidgetClass) (&xmScreenClassRec);
 
-externaldef(worldobjectclass) WidgetClass 
+externaldef(worldobjectclass) WidgetClass
       xmWorldObjectClass = (WidgetClass) NULL;
 /* WorldP.h was defuncted for 2.0 , no more ref to (&xmWorldClassRec) */
 
 
-int 
+int
 XmTextFieldGetBaseLine(
         Widget w )
 {
   return XmTextFieldGetBaseline( w) ;
 }
 
-int 
+int
 XmTextGetBaseLine(
         Widget w )
 {
@@ -107,46 +107,46 @@ XmTextGetBaseLine(
 }
 
 /*ARGSUSED*/
-Boolean 
+Boolean
 _XmTestTraversability(
         Widget widget,
         XRectangle *visRect )	/* unused */
-{   
+{
   return XmIsTraversable( widget) ;
 }
 
 /*ARGSUSED*/
-void 
+void
 _XmClearTabGroup(
         Widget w )		/* unused */
 {
   return ;
 }
 
-Widget 
+Widget
 _XmFindTabGroup(
         Widget widget )
-{   
+{
   return XmGetTabGroup( widget) ;
 }
 
 /*ARGSUSED*/
-void 
+void
 _XmClearKbdFocus(
         Widget tabGroup )	/* unused */
 {
   return ;
 }
 
-Widget 
+Widget
 _XmGetTabGroup(
         Widget w )
-{   
+{
   return XmGetTabGroup( w) ;
 }
 
 /*ARGSUSED*/
-Boolean 
+Boolean
 _XmWidgetIsTraversable(
         Widget widget,
 #if NeedWidePrototypes
@@ -155,11 +155,11 @@ _XmWidgetIsTraversable(
         XmNavigationType navType, /* unused */
 #endif /* NeedWidePrototypes */
         XRectangle *visRect )	/* unused */
-{   
+{
   return XmIsTraversable( widget) ;
 }
 
-Boolean 
+Boolean
 _XmGetManagedInfo(
         Widget w )
 {
@@ -182,7 +182,7 @@ _XmGetManagedInfo(
       }
 }
 
-Boolean 
+Boolean
 _XmChangeNavigationType(
         Widget current,
 #if NeedWidePrototypes
@@ -190,7 +190,7 @@ _XmChangeNavigationType(
 #else
         XmNavigationType newNavType )
 #endif /* NeedWidePrototypes */
-{   
+{
   /* This is a convenience routine for widgets wanting to change
    * their navigation type without using XtSetValues().
    */
@@ -225,7 +225,7 @@ _XmChangeNavigationType(
 /********************************************************************/
 /* Following is the old code needed for subclasses already using it */
 /* They can either define the macro and change nothing (but suffer
-   the addition of code and the drawing performance) or adapt to the 
+   the addition of code and the drawing performance) or adapt to the
    new interface (better) */
 
 /************************************************************************
@@ -237,8 +237,8 @@ _XmChangeNavigationType(
  *
  ************************************************************************/
 
-void _XmDrawShadow (Display *display, Drawable d, 
-                    GC top_GC, GC bottom_GC, int size, int x, int y, 
+void _XmDrawShadow (Display *display, Drawable d,
+                    GC top_GC, GC bottom_GC, int size, int x, int y,
                     int width, int height)
 {
    static XRectangle * rects = NULL;
@@ -314,7 +314,7 @@ void _XmDrawShadow (Display *display, Drawable d,
  *
  ************************************************************************/
 
-void _XmEraseShadow (Display *display, Drawable d, int size, 
+void _XmEraseShadow (Display *display, Drawable d, int size,
                      int x, int y, int width, int height)
 {
    if (width > 0 && size > 0)
@@ -326,7 +326,7 @@ void _XmEraseShadow (Display *display, Drawable d, int size,
    if (size > 0 && height - (2 * size) > 0)
    {
       XClearArea (display, d, x, y + size, size, height - (2 * size), FALSE);
-      XClearArea (display, d, x + width - size, y + size, size, 
+      XClearArea (display, d, x + width - size, y + size, size,
                   height - (2 * size), FALSE);
    }
 }
@@ -370,15 +370,15 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
 
    /*  Get the size and allocate the rectangle lists  */
 
-   if (core_width > core_height) 
+   if (core_width > core_height)
    {
-      size = core_height - 2 - 
+      size = core_height - 2 -
              2 * (highlight_thickness + shadow_thickness);
       xOffset = (core_width - core_height) / 2;
    }
    else
    {
-      size = core_width - 2 - 
+      size = core_width - 2 -
              2 * (highlight_thickness + shadow_thickness);
       yOffset = (core_height - core_width) / 2;
    }
@@ -416,7 +416,7 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
       }
       else if (width == 2)
       {
-         if (size == 2 || 
+         if (size == 2 ||
              (direction == XmARROW_UP ||
               direction == XmARROW_LEFT))
          {
@@ -509,7 +509,7 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
       *bot_count = b;
    }
    else
-   {   
+   {
       tmp = *top;
       *top = *bot;
       *bot = tmp;
@@ -525,7 +525,7 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
    {
       case XmARROW_LEFT:
       {
-          register int i; 
+          register int i;
 
           i = -1;
           do
@@ -535,23 +535,23 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
              {
                 temp = (*top)[i].y; (*top)[i].y =
                     (*top)[i].x; (*top)[i].x = temp;
-                temp = (*top)[i].width; 
+                temp = (*top)[i].width;
                 (*top)[i].width = (*top)[i].height; (*top)[i].height = temp;
-             }             
+             }
              if (i < *bot_count)
              {
                 temp = (*bot)[i].y; (*bot)[i].y =
                     (*bot)[i].x; (*bot)[i].x = temp;
-                temp = (*bot)[i].width; 
+                temp = (*bot)[i].width;
                 (*bot)[i].width = (*bot)[i].height; (*bot)[i].height = temp;
-             }             
+             }
              if (i < *cent_count)
              {
                 temp = (*cent)[i].y; (*cent)[i].y =
                     (*cent)[i].x; (*cent)[i].x = temp;
-                temp = (*cent)[i].width; 
+                temp = (*cent)[i].width;
                 (*cent)[i].width = (*cent)[i].height; (*cent)[i].height = temp;
-             }             
+             }
           }
           while (i < *top_count || i < *bot_count || i < *cent_count);
       }
@@ -561,7 +561,7 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
       {
           register int h_right = core_height - 2;
           register int w_right = core_width - 2;
-          register int i; 
+          register int i;
 
           i = -1;
           do
@@ -569,26 +569,26 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
              i++;
              if (i < *top_count)
              {
-                temp = (*top)[i].y; (*top)[i].y = (*top)[i].x; 
-                (*top)[i].x = temp; 
-                temp = (*top)[i].width; (*top)[i].width = (*top)[i].height; 
+                temp = (*top)[i].y; (*top)[i].y = (*top)[i].x;
+                (*top)[i].x = temp;
+                temp = (*top)[i].width; (*top)[i].width = (*top)[i].height;
                 (*top)[i].height = temp;
                 (*top)[i].x = w_right - (*top)[i].x - (*top)[i].width + 2;
                 (*top)[i].y = h_right - (*top)[i].y - (*top)[i].height + 2;
-             }             
+             }
              if (i < *bot_count)
              {
-                temp = (*bot)[i].y; (*bot)[i].y = (*bot)[i].x; 
-                (*bot)[i].x = temp; 
-                temp = (*bot)[i].width; (*bot)[i].width = (*bot)[i].height; 
+                temp = (*bot)[i].y; (*bot)[i].y = (*bot)[i].x;
+                (*bot)[i].x = temp;
+                temp = (*bot)[i].width; (*bot)[i].width = (*bot)[i].height;
                 (*bot)[i].height = temp;
                 (*bot)[i].x = w_right - (*bot)[i].x - (*bot)[i].width + 2;
                 (*bot)[i].y = h_right - (*bot)[i].y - (*bot)[i].height + 2;
-             }             
+             }
              if (i < *cent_count)
              {
-                temp = (*cent)[i].y; (*cent)[i].y = (*cent)[i].x; 
-                (*cent)[i].x = temp; 
+                temp = (*cent)[i].y; (*cent)[i].y = (*cent)[i].x;
+                (*cent)[i].x = temp;
                 temp = (*cent)[i].width; (*cent)[i].width = (*cent)[i].height;
                 (*cent)[i].height = temp;
                 (*cent)[i].x = w_right - (*cent)[i].x - (*cent)[i].width + 2;
@@ -608,7 +608,7 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
       {
           register int w_down = core_width - 2;
           register int h_down = core_height - 2;
-          register int i; 
+          register int i;
 
           i = -1;
           do
@@ -640,12 +640,12 @@ void _XmGetArrowDrawRects (int highlight_thickness, int shadow_thickness, unsign
 /************************************************************************
  *
  *    ArrowBI:_XmOffsetArrow, become XmDrawArrow
- *  
+ *
  *      Offset the arrow drawing rectangles, if needed, by the difference
  *      of the current x, y and the saved x, y);
  *
  ************************************************************************/
- 
+
 void _XmOffsetArrow (int diff_x, int diff_y, XRectangle *top, XRectangle *cent, XRectangle *bot, int top_count, int cent_count, int bot_count)
 {
    register int i;
@@ -679,27 +679,27 @@ void _XmOffsetArrow (int diff_x, int diff_y, XRectangle *top, XRectangle *cent, 
  *
  *************************************<->***********************************/
 
-void _XmDrawSquareButton (Widget w, int x, int y, int size, GC topGC, GC bottomGC, GC centerGC, 
+void _XmDrawSquareButton (Widget w, int x, int y, int size, GC topGC, GC bottomGC, GC centerGC,
 #if NeedWidePrototypes
 int fill)
 #else
 Boolean fill)
 #endif /* NeedWidePrototypes */
 {
-   _XmDrawShadow (XtDisplay (w), XtWindow (w), 
+   _XmDrawShadow (XtDisplay (w), XtWindow (w),
                   topGC, bottomGC,
                   2, x, y, size, size);
 
    if (fill)
        if (size > 6)
-           XFillRectangle (XtDisplay ((Widget) w), 
+           XFillRectangle (XtDisplay ((Widget) w),
                            XtWindow ((Widget) w),
-                           centerGC, 
+                           centerGC,
                            ((fill) ? x+2 : x+3),
                            ((fill) ? y+2 : y+3),
                            ((fill) ? size-4 : size-6),
                            ((fill) ? size-4 : size-6));
-} 
+}
 
 /************************************************************************
  *
@@ -711,7 +711,7 @@ Boolean fill)
  ************************************************************************/
 
 
-void _XmDrawDiamondButton (Widget tw, int x, int y, int size, GC topGC, GC bottomGC, GC centerGC, 
+void _XmDrawDiamondButton (Widget tw, int x, int y, int size, GC topGC, GC bottomGC, GC centerGC,
 #if NeedWidePrototypes
 int fill )
 #else
@@ -838,7 +838,7 @@ Boolean fill)
 
 
        /*  The bottom shadow segments  */
-    
+
        seg[6].x1 = x;                   /*  9  */
        seg[6].y1 = midY - 1;
        seg[6].x2 = midX - 1;            /*  10  */
@@ -881,7 +881,7 @@ Boolean fill)
    XDrawSegments (XtDisplay ((Widget) tw), XtWindow ((Widget) tw),
                   topGC, &seg[0], 3);
 
-  
+
 /* For Fill */
    if (fill)
    {
@@ -956,7 +956,7 @@ register int pos_right)
 {
    register int i;
    register int offsetX2;
-   
+
    for (i = 0; i < max_i; i++, offset++)
    {
       offsetX2 = offset + offset;
@@ -1012,12 +1012,12 @@ register int height)
    int pos_top, pos_left, pos_bottom, pos_right;
 
    if (size <= 0) return;
-   if (size == 1) 
+   if (size == 1)
         {
       _XmDrawShadow (display, d,
          top_GC,  bottom_GC, size, x, y, width, height);
           return;
-        } 
+        }
 
    if (size > width / 2) size = width / 2;
    if (size > height / 2) size = height / 2;
@@ -1028,7 +1028,7 @@ register int height)
    half_size = size / 2;
    size2 = size + size;
    size3 = size2 + size;
-   
+
    if (rect_count == 0)
    {
       rects = (XRectangle *) XtMalloc (sizeof (XRectangle) * size * 4);
@@ -1046,7 +1046,7 @@ register int height)
    pos_bottom = size2;
    pos_right = size2 + half_size;
 
-   get_rects(half_size, 0, x, y, width, height, 
+   get_rects(half_size, 0, x, y, width, height,
              pos_top, pos_left, pos_bottom, pos_right);
 
    pos_top = size3;
@@ -1054,7 +1054,7 @@ register int height)
    pos_bottom = size;
    pos_right = size + half_size;
 
-   get_rects(half_size, half_size, x, y, width, height, 
+   get_rects(half_size, half_size, x, y, width, height,
                 pos_top, pos_left, pos_bottom, pos_right);
 
    XFillRectangles (display, d, bottom_GC, &rects[size2], size2);
@@ -1065,25 +1065,25 @@ register int height)
 /*****************************************************************
  * Manager:_XmDrawShadowType, become XmDrawShadow
  *****************************************************************/
- 
+
 void _XmDrawShadowType (Widget w, unsigned int shadow_type,
-#if NeedWidePrototypes 
-			int core_width, int core_height, 
-                        int shadow_thickness, int highlight_thickness, 
+#if NeedWidePrototypes
+			int core_width, int core_height,
+                        int shadow_thickness, int highlight_thickness,
 #else
-                        Dimension core_width, Dimension core_height, 
-                        Dimension shadow_thickness, Dimension highlight_thickness, 
+                        Dimension core_width, Dimension core_height,
+                        Dimension shadow_thickness, Dimension highlight_thickness,
 #endif
                         GC top_shadow_GC, GC bottom_shadow_GC)
 {
-   if (!XtIsRealized(w)) 
+   if (!XtIsRealized(w))
      return;
    switch (shadow_type)
    {
       case XmSHADOW_IN:
       case XmSHADOW_OUT:
          if (shadow_thickness > 0)
-            _XmDrawShadow (XtDisplay (w), XtWindow (w), 
+            _XmDrawShadow (XtDisplay (w), XtWindow (w),
              (shadow_type == XmSHADOW_IN) ? bottom_shadow_GC : top_shadow_GC,
              (shadow_type == XmSHADOW_IN) ? top_shadow_GC : bottom_shadow_GC,
               shadow_thickness,
@@ -1095,32 +1095,32 @@ void _XmDrawShadowType (Widget w, unsigned int shadow_type,
 
       case XmSHADOW_ETCHED_IN:
       case XmSHADOW_ETCHED_OUT:
-           XmDrawEtchedShadow (XtDisplay(w), XtWindow(w), 
+           XmDrawEtchedShadow (XtDisplay(w), XtWindow(w),
                  (shadow_type == XmSHADOW_ETCHED_IN) ?
                          bottom_shadow_GC : top_shadow_GC,
                  (shadow_type == XmSHADOW_ETCHED_IN) ?
                              top_shadow_GC : bottom_shadow_GC,
-                 shadow_thickness, 
+                 shadow_thickness,
                  highlight_thickness,
-                     highlight_thickness, 
+                     highlight_thickness,
                  core_width - 2 * highlight_thickness,
                  core_height - 2 * highlight_thickness);
-            
+
             break;
 
    }
 }
 
 /************************************************************************
- * Primitive:_XmDrawBorder, become XmDrawHighlight 
+ * Primitive:_XmDrawBorder, become XmDrawHighlight
  ************************************************************************/
- 
-void _XmDrawBorder ( Widget w, GC gc, 
+
+void _XmDrawBorder ( Widget w, GC gc,
 #if NeedWidePrototypes
-                                      int x, int y, 
+                                      int x, int y,
         int width, int height, int highlight_width)
 #else
-                                      Position x, Position y, 
+                                      Position x, Position y,
         Dimension width, Dimension height, Dimension highlight_width)
 #endif /* NeedWidePrototypes */
 
@@ -1153,19 +1153,19 @@ void _XmDrawBorder ( Widget w, GC gc,
 /***************************************************************
   All these functions were private but global in 1.1, so instead of
    just moving them static, we also provide the compatibility stuff.
-   They are just wrapping around the new static names 
+   They are just wrapping around the new static names
 ****************************************************************/
-void 
+void
 _XmFileSelectionBoxCreateFilterLabel(
         XmFileSelectionBoxWidget fsb )
 {
-  FS_FilterLabel( fsb) = _XmBB_CreateLabelG( (Widget) fsb, 
+  FS_FilterLabel( fsb) = _XmBB_CreateLabelG( (Widget) fsb,
 					      FS_FilterLabelString( fsb),
 					      "FilterLabel",
 					      XmFilterStringLoc) ;
 }
 
-void 
+void
 _XmFileSelectionBoxCreateDirListLabel(
         XmFileSelectionBoxWidget fsb )
 {
@@ -1175,7 +1175,7 @@ _XmFileSelectionBoxCreateDirListLabel(
 					       XmDirListStringLoc) ;
 }
 /*****************************************************************/
-void 
+void
 _XmFileSelectionBoxCreateDirList(
         XmFileSelectionBoxWidget fsb )
 {
@@ -1199,21 +1199,21 @@ _XmFileSelectionBoxCreateDirList(
     callbackProc = ((XmSelectionBoxWidgetClass) fsb->core.widget_class)
                                           ->selection_box_class.list_callback ;
     if(    callbackProc    )
-    {   
+    {
         XtAddCallback( FS_DirList( fsb), XmNsingleSelectionCallback,
                                                callbackProc, (XtPointer) fsb) ;
         XtAddCallback( FS_DirList( fsb), XmNbrowseSelectionCallback,
                                                callbackProc, (XtPointer) fsb) ;
         XtAddCallback( FS_DirList( fsb), XmNdefaultActionCallback,
                                                callbackProc, (XtPointer) fsb) ;
-        } 
+        }
     XtManageChild( FS_DirList( fsb)) ;
 
     return ;
 }
 
 /*****************************************************************/
-void 
+void
 _XmFileSelectionBoxCreateFilterText(
         XmFileSelectionBoxWidget fs )
 {
@@ -1234,11 +1234,11 @@ _XmFileSelectionBoxCreateFilterText(
         stext_value[0] = '\0' ;
         }
     argCount = 0 ;
-    XtSetArg( arglist[argCount], XmNcolumns, 
+    XtSetArg( arglist[argCount], XmNcolumns,
                                             SB_TextColumns( fs)) ; argCount++ ;
     XtSetArg( arglist[argCount], XmNresizeWidth, FALSE) ; argCount++ ;
     XtSetArg( arglist[argCount], XmNvalue, stext_value) ; argCount++ ;
-    XtSetArg( arglist[argCount], XmNnavigationType, 
+    XtSetArg( arglist[argCount], XmNnavigationType,
                                              XmSTICKY_TAB_GROUP) ; argCount++ ;
     FS_FilterText( fs) = XmCreateTextField( (Widget) fs, "FilterText",
                                                            arglist, argCount) ;
@@ -1263,7 +1263,7 @@ _XmFileSelectionBoxGetDirectory(
             XtArgVal *value)
 {
     XmString        data ;
-  
+
     data = XmStringCopy(FS_Directory(fs));
     *value = (XtArgVal) data ;
 }
@@ -1276,7 +1276,7 @@ _XmFileSelectionBoxGetNoMatchString(
             XtArgVal *value)
 {
     XmString        data ;
-  
+
     data = XmStringCopy(FS_NoMatchString(fs));
     *value = (XtArgVal) data ;
 }
@@ -1289,13 +1289,13 @@ _XmFileSelectionBoxGetPattern(
             XtArgVal *value)
 {
     XmString        data ;
-  
+
     data = XmStringCopy(FS_Pattern(fs));
     *value = (XtArgVal) data ;
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetFilterLabelString(
         Widget fs,
         int resource_offset,	/* unused */
@@ -1310,7 +1310,7 @@ _XmFileSelectionBoxGetFilterLabelString(
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetDirListLabelString(
         Widget fs,
         int resource_offset,	/* unused */
@@ -1325,7 +1325,7 @@ _XmFileSelectionBoxGetDirListLabelString(
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetDirListItems(
         Widget fs,
         int resource_offset,	/* unused */
@@ -1340,7 +1340,7 @@ _XmFileSelectionBoxGetDirListItems(
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetDirListItemCount(
         Widget fs,
         int resource_offset,	/* unused */
@@ -1355,7 +1355,7 @@ _XmFileSelectionBoxGetDirListItemCount(
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetListItems(
         Widget fs,
         int resource_offset,	/* unused */
@@ -1365,18 +1365,18 @@ _XmFileSelectionBoxGetListItems(
             Arg             al[1] ;
 
     if(    FS_StateFlags( fs) & XmFS_NO_MATCH    )
-    {   
+    {
         *value = (XtArgVal) NULL ;
-        } 
+        }
     else
     {   XtSetArg( al[0], XmNitems, &data) ;
         XtGetValues( SB_List( fs), al, 1) ;
         *value = (XtArgVal) data ;
-        } 
+        }
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetListItemCount(
         Widget fs,
         int resource_offset,	/* unused */
@@ -1387,23 +1387,23 @@ _XmFileSelectionBoxGetListItemCount(
 /****************/
 
     if(    FS_StateFlags( fs) & XmFS_NO_MATCH    )
-    {   
+    {
         *value = (XtArgVal) 0 ;
-        } 
+        }
     else
     {   XtSetArg( al[0], XmNitemCount, &data) ;
         XtGetValues( SB_List( fs), al, 1) ;
         *value = (XtArgVal) data ;
-        } 
+        }
 }
 /*****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxGetDirMask(
         Widget fs,
         int resource_offset,	/* unused */
         XtArgVal *value )
-{   
+{
             String          filterText ;
             XmString        data ;
 
@@ -1411,13 +1411,13 @@ _XmFileSelectionBoxGetDirMask(
     data = XmStringGenerate(filterText, XmFONTLIST_DEFAULT_TAG,
 			    XmCHARSET_TEXT, NULL) ;
     *value = (XtArgVal) data ;
-    XtFree( filterText) ; 
+    XtFree( filterText) ;
 
     return ;
 }
 
 /****************************************************************/
-static Widget 
+static Widget
 GetActiveText(
         XmFileSelectionBoxWidget fsb,
         XEvent *event )
@@ -1426,39 +1426,39 @@ GetActiveText(
 /****************/
 
     if(    _XmGetFocusPolicy( (Widget) fsb) == XmEXPLICIT    )
-    {   
+    {
         if(    (fsb->manager.active_child == SB_Text( fsb))
             || (fsb->manager.active_child == FS_FilterText( fsb))    )
-        {   
+        {
             activeChild = fsb->manager.active_child ;
-            } 
-        } 
+            }
+        }
     else
-    {   
+    {
         if(    SB_Text( fsb)
             && (XtWindow( SB_Text( fsb))
                                    == ((XKeyPressedEvent *) event)->window)   )
         {   activeChild = SB_Text( fsb) ;
-            } 
+            }
         else
         {   if(    FS_FilterText( fsb)
-                && (XtWindow( FS_FilterText( fsb)) 
+                && (XtWindow( FS_FilterText( fsb))
                                   ==  ((XKeyPressedEvent *) event)->window)   )
             {   activeChild = FS_FilterText( fsb) ;
-                } 
-            } 
-        } 
+                }
+            }
+        }
     return( activeChild) ;
     }
 /****************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmFileSelectionBoxUpOrDown(
         Widget wid,
         XEvent *event,
         String *argv,
         Cardinal *argc )	/* unused */
-{   
+{
             XmFileSelectionBoxWidget fsb = (XmFileSelectionBoxWidget) wid ;
             int	            visible ;
             int	            top ;
@@ -1473,22 +1473,22 @@ _XmFileSelectionBoxUpOrDown(
 
     if(    !(activeChild = GetActiveText( fsb, event))    )
     {   return ;
-        } 
+        }
     if(    activeChild == SB_Text( fsb)    )
-    {   
+    {
         if(    FS_StateFlags( fsb) & XmFS_NO_MATCH    )
         {   return ;
-            } 
+            }
         list = SB_List( fsb) ;
         position = &SB_ListSelectedItemPosition( fsb) ;
-        } 
+        }
     else /* activeChild == FS_FilterText( fsb) */
     {   list = fsb->file_selection_box.dir_list ;
         position = &FS_DirListSelectedItemPosition( fsb) ;
-        } 
+        }
     if(    !list    )
     {   return ;
-        } 
+        }
     ac = 0 ;
     XtSetArg( av[ac], XmNitemCount, &count) ; ++ac ;
     XtSetArg( av[ac], XmNtopItemPosition, &top) ; ++ac ;
@@ -1497,14 +1497,14 @@ _XmFileSelectionBoxUpOrDown(
 
     if(    !count    )
     {   return ;
-        } 
+        }
     key_pressed = atoi( *argv) ;
 
     if(    *position == 0    )
     {   /*  No selection, so select first item.
         */
         XmListSelectPos( list, ++*position, True) ;
-        } 
+        }
     else
     {   if(    !key_pressed && (*position > 1)    )
         {   /*  up  */
@@ -1516,43 +1516,43 @@ _XmFileSelectionBoxUpOrDown(
             {   /*  down  */
                 XmListDeselectPos( list, *position) ;
                 XmListSelectPos( list, ++*position, True) ;
-                } 
+                }
             else
             {   if(    key_pressed == 2    )
                 {   /*  home  */
                     XmListDeselectPos( list, *position) ;
                     *position = 1 ;
                     XmListSelectPos( list, *position, True) ;
-                    } 
+                    }
                 else
                 {   if(    key_pressed == 3    )
                     {   /*  end  */
                         XmListDeselectPos( list, *position) ;
                         *position = count ;
                         XmListSelectPos( list, *position, True) ;
-                        } 
-                    } 
-                } 
+                        }
+                    }
+                }
             }
-        } 
+        }
     if(    top > *position    )
     {   XmListSetPos( list, *position) ;
-        } 
+        }
     else
     {   if(    (top + visible) <= *position    )
         {   XmListSetBottomPos( list, *position) ;
-            } 
-        } 
+            }
+        }
     return ;
 }
 /****************************************************************/
-void 
+void
 _XmFileSelectionBoxRestore(
         Widget wid,
         XEvent *event,
         String *argv,
         Cardinal *argc )
-{   
+{
             XmFileSelectionBoxWidget fsb = (XmFileSelectionBoxWidget) wid ;
             String          itemString ;
             String          dir ;
@@ -1564,20 +1564,20 @@ _XmFileSelectionBoxRestore(
 
     if(    !(activeChild = GetActiveText( fsb, event))    )
     {   return ;
-        } 
+        }
     if(    activeChild == SB_Text( fsb)    )
     {   _XmSelectionBoxRestore( (Widget) fsb, event, argv, argc) ;
-        } 
+        }
     else /* activeChild == FS_FilterText( fsb) */
     {   /* Should do this stuff entirely with XmStrings when the text
         *   widget supports it.
         */
         if(    (dir = _XmStringGetTextConcat( FS_Directory( fsb))) != NULL    )
-        {   
+        {
             dirLen = strlen( dir) ;
 
             if(   (mask = _XmStringGetTextConcat( FS_Pattern( fsb))) != NULL   )
-            {   
+            {
                 maskLen = strlen( mask) ;
                 itemString = XtMalloc( dirLen + maskLen + 1) ;
                 strcpy( itemString, dir) ;
@@ -1587,14 +1587,14 @@ _XmFileSelectionBoxRestore(
 			    XmTextFieldGetLastPosition( FS_FilterText( fsb))) ;
                 XtFree( itemString) ;
                 XtFree( mask) ;
-                } 
+                }
             XtFree( dir) ;
             }
-        } 
+        }
     return ;
 }
 /*****************************************************************/
-XmGeoMatrix 
+XmGeoMatrix
 _XmFileSBGeoMatrixCreate(
         Widget wid,
         Widget instigator,
@@ -1604,30 +1604,30 @@ _XmFileSBGeoMatrixCreate(
 	                      .geo_matrix_create))( wid, instigator, desired) ;
 }
 /****************************************************************/
-Boolean 
+Boolean
 _XmFileSelectionBoxNoGeoRequest(
         XmGeoMatrix geoSpec )
 {
 
     if(    BB_InSetValues( geoSpec->composite)
         && (XtClass( geoSpec->composite) == xmFileSelectionBoxWidgetClass)    )
-    {   
+    {
         return( TRUE) ;
-        } 
+        }
     return( FALSE) ;
 }
 /****************************************************************/
-void 
+void
 _XmFileSelectionBoxFocusMoved(
         Widget wid,
         XtPointer client_data,
         XtPointer data )
-{            
+{
   (*(xmFileSelectionBoxClassRec.bulletin_board_class.focus_moved_proc))(
 						      wid, client_data, data );
 }
 
-XmHeap 
+XmHeap
 _XmHeapCreate(
         int segment_size )
 {
@@ -1640,7 +1640,7 @@ _XmHeapCreate(
     return heap;
 }
 
-char * 
+char *
 _XmHeapAlloc(
         XmHeap heap,
         Cardinal bytes )
@@ -1681,7 +1681,7 @@ _XmHeapAlloc(
     return heap_loc;
 }
 
-void 
+void
 _XmHeapFree(
         XmHeap heap )
 {
@@ -1706,7 +1706,7 @@ typedef struct {
     unsigned char *navigation_type;
 }*WidgetNavigPtrs;
 
-void 
+void
 _XmGetWidgetNavigPtrs(
         Widget widget,
         WidgetNavigPtrs np )
@@ -1755,7 +1755,7 @@ _XmGetWidgetNavigPtrs(
       }
 }
 
-void 
+void
 GetWidgetNavigPtrs(
         Widget widget,
         WidgetNavigPtrs np )
@@ -1763,7 +1763,7 @@ GetWidgetNavigPtrs(
   _XmGetWidgetNavigPtrs( widget, np) ;
 }
 
-Boolean 
+Boolean
 _XmFindTraversablePrim(
         CompositeWidget tabGroup )
 {
@@ -1780,7 +1780,7 @@ typedef enum {
 } XmNavigTestType;
 
 /*ARGSUSED*/
-Boolean 
+Boolean
 _XmPathIsTraversable(
         Widget widget,
 #if NeedWidePrototypes
@@ -1795,7 +1795,7 @@ _XmPathIsTraversable(
 }
 
 /*ARGSUSED*/
-void 
+void
 SetMwmStuff(
         XmVendorShellExtObject ove, /* unused */
         XmVendorShellExtObject nve ) /* unused */
@@ -1817,15 +1817,15 @@ _XmBB_GetDialogTitle(
   *value = (XtArgVal) data ;
 }
 
-static Boolean 
+static Boolean
 _isISO(
         String charset )
 {
   register int	i;
-  
-  if (strlen(charset) == 5) 
+
+  if (strlen(charset) == 5)
     {
-      for (i = 0; i < 5; i++) 
+      for (i = 0; i < 5; i++)
 	{
 	  if (!isdigit((unsigned char)charset[i])) return (False);
 	}
@@ -1834,18 +1834,18 @@ _isISO(
   else return (False);
 }
 
-char * 
+char *
 _XmCharsetCanonicalize(
         String charset )
 {
   String	new_s;
   int		len;
-  
+
   /* ASCII -> ISO8859-1 */
   if (!strcmp(charset, "ASCII"))
     {
       len = strlen(XmSTRING_ISO8859_1);
-      
+
       new_s = XtMalloc(len + 1);
       strcpy(new_s, XmSTRING_ISO8859_1);
     }
@@ -1862,7 +1862,7 @@ _XmCharsetCanonicalize(
     /* Anything else is copied but not modified. */
     {
       len = strlen(charset);
-      
+
       new_s = XtMalloc(len + 1);
       strcpy(new_s, charset);
     }
@@ -1871,7 +1871,7 @@ _XmCharsetCanonicalize(
 
 /*ARGSUSED*/
 Widget
-_XmGetDisplayObject(Widget shell, 
+_XmGetDisplayObject(Widget shell,
 		    ArgList args, /* unused */
 		    Cardinal *num_args)	/* unused */
 {
@@ -1880,7 +1880,7 @@ _XmGetDisplayObject(Widget shell,
 
 /*ARGSUSED*/
 Widget
-_XmGetScreenObject(Widget shell, 
+_XmGetScreenObject(Widget shell,
 		   ArgList args, /* unused */
 		   Cardinal *num_args) /* unused */
 {
@@ -1896,7 +1896,7 @@ _XmGetWrapperData (WidgetClass w_class)	/* unused */
   return (XmWrapperData) XtCalloc( 1, sizeof( XmWrapperDataRec)) ;
 }
 
-void 
+void
 _XmLowerCase(
          register char *source,
          register char *dest )
@@ -2025,7 +2025,7 @@ _XmRC_GetMnemonicCharSet(
       XtGetValues(label, al, n);
       *value = (XtArgVal) data ;
     }
-  else 
+  else
     {
       *value = (XtArgVal) NULL;
     }
@@ -2042,7 +2042,7 @@ _XmScaleGetTitleString(
 
   if (scale->scale.title == NULL) {
     *value = (XtArgVal) NULL ;
-  } else { 
+  } else {
     Arg           al[1] ;
 
     XtSetArg (al[0], XmNlabelString, value);
@@ -2063,7 +2063,7 @@ _XmTextFieldDestinationVisible(
   return ;
 }
 
-int 
+int
 _XmTextGetBaseLine(
         Widget widget )
 {
@@ -2089,7 +2089,7 @@ _XmConst char *_XmTextEventBindings3 = _XmTextIn_XmTextEventBindings3 ;
  *      DD; was in Manager.c but not used anywhere.
  ************************************************************************/
 /*ARGSUSED*/
-void 
+void
 _XmDoGadgetTraversal(
         XmManagerWidget mw,
         XEvent *event,		/* unused */
@@ -2110,12 +2110,12 @@ _XmDoGadgetTraversal(
  *
  *  _XmBuildManagerResources
  *	Build up the manager's synthetic and constraint synthetic
- *	resource processing list by combining the super classes with 
+ *	resource processing list by combining the super classes with
  *	this class.
  *  DD: This one should is now static in Manager.c
  *
  **********************************************************************/
-void 
+void
 _XmBuildManagerResources(
         WidgetClass c )
 {
@@ -2148,7 +2148,7 @@ _XmBuildManagerResources(
 /** Gadget synthetic hook from Manager.c. Are not static in Gadget.c **/
 
 /*ARGSUSED*/
-void 
+void
 _XmGetHighlightColor(
         Widget w,
 	int offset,  /* unused */
@@ -2160,7 +2160,7 @@ _XmGetHighlightColor(
 }
 
 /*ARGSUSED*/
-void 
+void
 _XmGetTopShadowColor(
         Widget w,
 	int offset,  /* unused */
@@ -2172,7 +2172,7 @@ _XmGetTopShadowColor(
 }
 
 /*ARGSUSED*/
-void 
+void
 _XmGetBottomShadowColor(
         Widget w,
 	int offset,  /* unused */
@@ -2193,34 +2193,34 @@ _XmGetBottomShadowColor(
  *
  ************************************************************************/
 
-void 
+void
 _XmHighlightBorder(
         Widget w )
 {
-    if(    XmIsPrimitive( w)    ) {   
+    if(    XmIsPrimitive( w)    ) {
         (*(xmPrimitiveClassRec.primitive_class.border_highlight))( w) ;
-    }  else  {   
-	if(    XmIsGadget( w)    ) {   
+    }  else  {
+	if(    XmIsGadget( w)    ) {
 	    (*(xmGadgetClassRec.gadget_class.border_highlight))( w) ;
-	} 
-    } 
+	}
+    }
     return ;
-} 
+}
 
-void 
+void
 _XmUnhighlightBorder(
         Widget w )
 {
     if(    XmIsPrimitive( w)    )
-    {   
+    {
         (*(xmPrimitiveClassRec.primitive_class.border_unhighlight))( w) ;
-        } 
+        }
     else
     {   if(    XmIsGadget( w)    )
-        {   
+        {
             (*(xmGadgetClassRec.gadget_class.border_unhighlight))( w) ;
-            } 
-        } 
+            }
+        }
     return ;
     }
 
@@ -2230,7 +2230,7 @@ _XmUnhighlightBorder(
  *
  ************************************************************************/
 
-void 
+void
 _XmBuildPrimitiveResources(
         WidgetClass c )
 {
@@ -2249,5 +2249,3 @@ _XmBuildPrimitiveResources(
 		sc->primitive_class.syn_resources,
 		sc->primitive_class.num_syn_resources);
 }
-
-

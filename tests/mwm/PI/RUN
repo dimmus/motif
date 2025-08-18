@@ -61,5 +61,3 @@ foreach test ($TESTS)
 end
 
 ./run_PINames
-
-

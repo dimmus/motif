@@ -11,9 +11,9 @@ tab(%);
 l l.
 .TE
 .PP
-The Color Selector widget allows users to choose a color by using either a set of RGB 
-sliders or choosing from a list of all colors available in the rgb database. The name or 
-rgb value, as well as the color selected, are dynamically displayed to the user as they 
+The Color Selector widget allows users to choose a color by using either a set of RGB
+sliders or choosing from a list of all colors available in the rgb database. The name or
+rgb value, as well as the color selected, are dynamically displayed to the user as they
 pick and choose different colors.
 .PP
 .SH Normal Resources
@@ -49,19 +49,19 @@ The string appearing for the label of the color list toggle
 .PP
 .SH colorMode
 .PP
-The color list can be used in either slider or list mode. Acceptable values are 
-XmListMode and XmScaleMode. This resource allows the application to determine 
-the mode that the color selector should use when it is created. After this point, the 
-user may freely change modes by utilizing a pair of radio buttons in the color 
-selector. A type converter is registered to convert the strings "ScaleMode" and 
+The color list can be used in either slider or list mode. Acceptable values are
+XmListMode and XmScaleMode. This resource allows the application to determine
+the mode that the color selector should use when it is created. After this point, the
+user may freely change modes by utilizing a pair of radio buttons in the color
+selector. A type converter is registered to convert the strings "ScaleMode" and
 "ListMode" to color modes for use with the resource database.
 .PP
 .SH colorName
 .PP
-This resource controls the color name that is currently displayed to the user. This 
-value can be modified to change the color displayed in the color selector or 
-queried to find the color the user has selected. The string returned here is either a 
-color name or a pound sign (#) followed by a set of rgb values as specified in the 
+This resource controls the color name that is currently displayed to the user. This
+value can be modified to change the color displayed in the color selector or
+queried to find the color the user has selected. The string returned here is either a
+color name or a pound sign (#) followed by a set of rgb values as specified in the
 Xlib specification.
 .PP
 .SH fileReadError
@@ -76,7 +76,7 @@ The string appearing for the label of the green slider
 .PP
 .SH marginWidth
 .PP
-This is the amount of space left between each of the children in the color selector 
+This is the amount of space left between each of the children in the color selector
 and between the outside children and the edge of the color selector widget.
 .PP
 .SH noCellError
@@ -88,8 +88,8 @@ This resource controls the message which is displayed in the sample color field 
 The string appearing for the label of the red slider
 .PP
 .SH rgbFile
-This is the name of the file to be loaded, which contains the valid color names. 
-Each of these names is sorted and the duplicates removed before being shown to 
+This is the name of the file to be loaded, which contains the valid color names.
+Each of these names is sorted and the duplicates removed before being shown to
 the user.
 .PP
 .SH sliderTogLabel
@@ -98,27 +98,27 @@ The string appearing for the label of the color slider toggle
 .PP
 .SH Convenience Routine
 .PP
-.SH 
+.SH
 .HP 5
-.SH XmCreateColorSelector  - Widget creation convenience routine 
+.SH XmCreateColorSelector  - Widget creation convenience routine
 .nf
 
-Widget XmCreateColorSelector( 
+Widget XmCreateColorSelector(
 	Widget parent,     /* Widget id of parent for ColorSelector */
 	String name,       /* Name of the created widget */
 	ArgList args,      /* argument list */
 	Cardinal num_args  /* number of items in argument list */
-	)				 
+	)
 
 .nf
 .PP
 .SH Children
 .PP
-The color selector is composed of many sub-widgets. As with all widgets, most values 
-are passed to this widget through the argument list at creation time or via set values 
-and are passed to each of this widget's children, although get values requests must be 
-made on a child-by-child basis. The children of 
-the color selector are listed below. The documentation for each of the children should 
+The color selector is composed of many sub-widgets. As with all widgets, most values
+are passed to this widget through the argument list at creation time or via set values
+and are passed to each of this widget's children, although get values requests must be
+made on a child-by-child basis. The children of
+the color selector are listed below. The documentation for each of the children should
 be consulted for a list of resources for each child.
 .ta 5,10,15,20,25,30,35
 .df
@@ -150,7 +150,7 @@ XmColorSelector	<named by application>
 
 		XmFrame	colorFrame
 
-			XmLabel	colorWindow 
+			XmLabel	colorWindow
 .fi
 .PP
 .SH COPYRIGHT

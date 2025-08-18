@@ -1,8 +1,8 @@
 /*********************************************************/
----- The uid file to be opened is iconGad.uid ---- 
+---- The uid file to be opened is iconGad.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) Exit
 AUTOWARNING** : selection value is NULL!
 Exiting Test...Please Standby...

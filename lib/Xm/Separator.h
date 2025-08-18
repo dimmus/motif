@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /*  Separator Widget  */
 #ifndef _XmSeparator_h
 #define _XmSeparator_h
@@ -42,7 +42,7 @@ typedef struct _XmSeparatorRec      * XmSeparatorWidget;
 
 /********    Public Function Declarations    ********/
 
-Widget XmCreateSeparator( 
+Widget XmCreateSeparator(
                         Widget parent,
                         char *name,
                         ArgList arglist,

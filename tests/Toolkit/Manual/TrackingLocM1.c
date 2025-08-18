@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: TrackingLocM1.c /main/9 1999/11/22 18:16:36 jff $"
@@ -56,16 +56,16 @@ void  main(argc, argv)
     XmString      tcs;
     Pixel         colorVal;
     XmString      list_items[2];
-    
+
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 400); n++;
     XtSetArg (args[n], XmNheight, 500); n++;
     XtSetArg (args[n], XmNmappedWhenManaged, False); n++;
     XtSetValues(Shell1, args, n);
-    
+
     XtRealizeWidget(Shell1);
 
     n = 0;
@@ -132,7 +132,7 @@ void  main(argc, argv)
     Arrow3 = XmCreateArrowButton(PanedW, "Arrow3", args, n);
     XtManageChild(Arrow3);
 
-    tcs = XmStringCreateLtoR("Push To Turn on Tracking Locate", 
+    tcs = XmStringCreateLtoR("Push To Turn on Tracking Locate",
 			XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -170,7 +170,7 @@ static void TrackCB(w, client_data, call_data)
     XtPointer  call_data;
 {
     Cursor 	cursor;
-	
+
 
     switch (cur_num) {
 	case 1: 	cursor = XCreateFontCursor (display, XC_pirate);
@@ -193,7 +193,7 @@ static void TrackCB(w, client_data, call_data)
        Help(w_id);
     else {
       if (w_id)
-        XtCallActionProc (w_id, "Help", 
+        XtCallActionProc (w_id, "Help",
 			  ((XmAnyCallbackStruct *)call_data)->event, NULL, 0);
     }
 

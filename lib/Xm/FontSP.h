@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef	_XmFontSelectorP_h
@@ -202,14 +202,14 @@ typedef struct _XmFontSelectorClassRec
 } XmFontSelectorClassRec;
 
 typedef struct _XmFontSelectorPart
-{	
+{
     /* Resources */
     String		current_font;   /* The currently shown font. */
 
     Boolean 		show_font_name;	/* show the font name window? */
     Boolean		iso_fonts_only;	/* show only iso fonts? */
     Boolean		use_scaling;    /* use font scaling? */
-    
+
     Dimension		text_rows; 	/* The number of text rows to display*/
 
     XtCallbackList	font_changed_callback; /* when font changes. */
@@ -245,12 +245,12 @@ typedef struct _XmFontSelectorPart
 				   current_font. */
     String encoding;		/* The encoding, may change. */
 
-    /* 
+    /*
      * The previously set font_data, free when font changed, or widget
-     * destroyed. 
+     * destroyed.
      */
 
-    XmFontList old_fontlist;	
+    XmFontList old_fontlist;
     XFontStruct * old_fontdata;
 
     /*

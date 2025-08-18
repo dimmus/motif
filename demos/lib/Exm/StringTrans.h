@@ -78,4 +78,3 @@ extern Widget ExmCreateStringTransfer(Widget    parent,
 
 #endif /* _ExmStringTrans_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-

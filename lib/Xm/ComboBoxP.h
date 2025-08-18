@@ -29,7 +29,7 @@
 #define _XmComboBoxP_H
 
 #include <Xm/ManagerP.h>
-#include <Xm/ComboBox.h> 
+#include <Xm/ComboBox.h>
 
 
 #ifdef __cplusplus
@@ -43,7 +43,7 @@ typedef struct _XmComboBoxClassPart {
 } XmComboBoxClassPart;
 
 
-/* Full class record declaration. */	
+/* Full class record declaration. */
 typedef struct _XmComboBoxClassRec {
   CoreClassPart		core_class;
   CompositeClassPart	composite_class;
@@ -55,7 +55,7 @@ typedef struct _XmComboBoxClassRec {
 externalref XmComboBoxClassRec xmComboBoxClassRec;
 
 /*
- * New fields for the ComboBox widget record.	
+ * New fields for the ComboBox widget record.
  */
 
 typedef struct _XmComboBoxPart {
@@ -73,9 +73,9 @@ typedef struct _XmComboBoxPart {
   XmFontList		render_table;
 
   /* Internal data */
-  Widget		list_shell; 
+  Widget		list_shell;
   Widget		list;		/* Now accessible as a resource */
-  Widget		scrolled_w; 
+  Widget		scrolled_w;
   Widget		vsb;
   Widget		hsb;
   int 			ideal_ebheight;
@@ -88,7 +88,7 @@ typedef struct _XmComboBoxPart {
   Boolean		scrolling;
   XtEnum		shell_state;
   /* NOTE that text_changed is also used for MT_safe resolution of
-   * the XmNRenderTable, XmNFontList resource settings 
+   * the XmNRenderTable, XmNFontList resource settings
    */
   Boolean		text_changed;
 
@@ -103,7 +103,7 @@ typedef struct _XmComboBoxPart {
 } XmComboBoxPart;
 
 
-/* Full instance record declaration. */	
+/* Full instance record declaration. */
 
 typedef struct _XmComboBoxRec {
   CorePart		core;

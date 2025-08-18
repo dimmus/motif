@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Label6.c /main/8 1995/07/13 19:09:18 drk $"
@@ -42,7 +42,7 @@ void main (argc, argv)
 unsigned int argc;
 char **argv;
 
-{ 	
+{
   Widget separator, menushell, bboard, bboard2, rowcolumn1, rowcolumn2;
   Widget rowcolumn3, label[15];
   Arg args[10];
@@ -72,8 +72,8 @@ char **argv;
   XtSetArg (args[n], XmNheight, 100 ); n++;
   XtSetArg (args[n], XmNwidth, 100 ); n++;
   XtSetArg (args[n], XmNdefaultFontList, font1);   n++;
-  XtSetArg (args[n], XmNx, 300 ); n++; 
-  XtSetArg (args[n], XmNy, 300 ); n++;  
+  XtSetArg (args[n], XmNx, 300 ); n++;
+  XtSetArg (args[n], XmNy, 300 ); n++;
   menushell= XmCreateMenuShell (bboard, "menushell", args, n);
   XtAddEventHandler(bboard, ButtonPressMask, FALSE, post_menu_handler,
 		    menushell);
@@ -81,8 +81,8 @@ char **argv;
   n = 0;
   XtSetArg (args[n], XmNheight, 100 ); n++;
   XtSetArg (args[n], XmNwidth, 100 ); n++;
-  XtSetArg (args[n], XmNx, 10 ); n++; 
-  XtSetArg (args[n], XmNy, 50 ); n++;  
+  XtSetArg (args[n], XmNx, 10 ); n++;
+  XtSetArg (args[n], XmNy, 50 ); n++;
   rowcolumn1 = XmCreateRowColumn(bboard, "rowcolumn1", args, n);
   XtManageChild (rowcolumn1);
 
@@ -148,7 +148,7 @@ char **argv;
   XtSetArg(args[n], XmNwidth, 100 ); n++;
   bboard2 = XmCreateBulletinBoard(rowcolumn1, "bboard2", args, n);
   XtManageChild(bboard2);
-    
+
   n = 0;
   XtSetArg(args[n], XmNheight, 100 ); n++;
   XtSetArg(args[n], XmNwidth, 100 ); n++;
@@ -210,12 +210,3 @@ XEvent *event;
    XmMenuPosition (menu, (XButtonPressedEvent *)event);
    XtManageChild(menu);
  }
-
-
-
-
-
-
-
-
-

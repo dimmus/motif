@@ -23,18 +23,18 @@
 #
 # HISTORY
 TRACE:(1) WindowResize Shell1 SouthEast 450 130
-TRACE:(2) CompareVisual Shell1 
+TRACE:(2) CompareVisual Shell1
 TRACE:(3) Continue
-TRACE:(4) CompareVisual Shell1 
+TRACE:(4) CompareVisual Shell1
 TRACE:(5) Continue
-TRACE:(6) CompareVisual Shell1 
+TRACE:(6) CompareVisual Shell1
 TRACE:(7) Continue
-TRACE:(8) CompareVisual Shell1 
+TRACE:(8) CompareVisual Shell1
 TRACE:(9) WindowResize Shell1 SouthEast 500 400
-TRACE:(10) CompareVisual Shell1 
+TRACE:(10) CompareVisual Shell1
 TRACE:(11) WindowResize Shell1 SouthEast 200 200
-TRACE:(12) CompareVisual Shell1 
+TRACE:(12) CompareVisual Shell1
 TRACE:(13) WindowResize Shell1 SouthEast 300 300
-TRACE:(14) CompareVisual Shell1 
+TRACE:(14) CompareVisual Shell1
 TRACE:(15) Exit
 Exiting Test...Please Standby...

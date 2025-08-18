@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SetFocusMode.c /main/7 1995/07/14 11:43:14 drk $"
@@ -39,7 +39,7 @@ static char rcsid[] = "$XConsortium: SetFocusMode.c /main/7 1995/07/14 11:43:14 
             Sets the xis focus mode to either natural or controlled.  Natural
         lets the window manager focus policy dictate which window is in
         keyboard focus.  Controlled mode fights with the window manager to
-        control the focus window by periodically checking the current 
+        control the focus window by periodically checking the current
         shell that is in focus and if different then where we last set it,
         it puts it back to where we last explicitly set it.
 

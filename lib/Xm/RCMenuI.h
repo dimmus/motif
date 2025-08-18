@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -49,10 +49,10 @@ extern void _XmMenuBtnDown(
 extern void _XmHandleMenuButtonPress(
 				     Widget wid,
 				     XEvent *event);
-extern Boolean _XmMatchBDragEvent( 
+extern Boolean _XmMatchBDragEvent(
 				    Widget wid,
 				    XEvent *event);
-extern Boolean _XmMatchBSelectEvent( 
+extern Boolean _XmMatchBSelectEvent(
 				    Widget wid,
 				    XEvent *event);
 extern void _XmGetActiveTopLevelMenu(
@@ -63,7 +63,7 @@ extern void _XmMenuFocus(
 			 int operation,
 			 Time _time );
 extern void _XmSetSwallowEventHandler(
-				      Widget widget, 
+				      Widget widget,
 #if NeedWidePrototypes
 				      int add_handler );
 #else
@@ -82,23 +82,23 @@ extern void _XmSetPopupMenuClick(
 #else
                                  Boolean popupMenuClick);
 #endif /* NeedWidePrototypes */
-extern void _XmRC_DoProcessMenuTree( 
+extern void _XmRC_DoProcessMenuTree(
                         Widget w,
                         int mode) ;
 
-extern void _XmRC_ProcessSingleWidget( 
+extern void _XmRC_ProcessSingleWidget(
                         Widget w,
                         int mode) ;
-extern void _XmRC_AddToPostFromList( 
+extern void _XmRC_AddToPostFromList(
                         XmRowColumnWidget m,
                         Widget widget) ;
-extern void _XmRC_UpdateOptionMenuCBG( 
+extern void _XmRC_UpdateOptionMenuCBG(
                         Widget cbg,
                         Widget memWidget) ;
-extern void _XmRC_SetMenuHistory( 
+extern void _XmRC_SetMenuHistory(
                         XmRowColumnWidget m,
                         RectObj child) ;
-extern void _XmRC_SetOptionMenuHistory( 
+extern void _XmRC_SetOptionMenuHistory(
                         XmRowColumnWidget m,
                         RectObj child) ;
 extern void _XmRCMenuProcedureEntry(
@@ -113,17 +113,17 @@ extern void _XmRCArmAndActivate(
 extern void _XmRCGetTopManager(
 			       Widget w,
 			       Widget *topManager ) ;
-extern void _XmMenuFocusOut( 
+extern void _XmMenuFocusOut(
                         Widget cb,
                         XEvent *event,
                         String *param,
                         Cardinal *num_param) ;
-extern void _XmMenuFocusIn( 
+extern void _XmMenuFocusIn(
                         Widget wid,
                         XEvent *event,
                         String *param,
                         Cardinal *num_param) ;
-extern void _XmGetMenuKidMargins( 
+extern void _XmGetMenuKidMargins(
                         XmRowColumnWidget m,
                         Dimension *width,
                         Dimension *height,
@@ -131,12 +131,12 @@ extern void _XmGetMenuKidMargins(
                         Dimension *right,
                         Dimension *top,
                         Dimension *bottom) ;
-extern void _XmMenuUnmap( 
+extern void _XmMenuUnmap(
                         Widget wid,
                         XEvent *event,
                         String *param,
                         Cardinal *num_param) ;
-extern void _XmMenuBarGadgetSelect( 
+extern void _XmMenuBarGadgetSelect(
                         Widget wid,
                         XEvent *event,
                         String *params,
@@ -160,15 +160,15 @@ extern int _XmRC_PopupMenuHandler(Widget, XEvent*);
 
 extern Boolean _XmRC_PostTimeOut( XtPointer wid );
 
-extern void _XmRC_RemoveHandlersFromPostFromWidget( 
+extern void _XmRC_RemoveHandlersFromPostFromWidget(
                         Widget popup,
                         Widget widget) ;
-extern void _XmRC_AddPopupEventHandlers( 
+extern void _XmRC_AddPopupEventHandlers(
                         XmRowColumnWidget pane) ;
-extern void _XmRC_RemovePopupEventHandlers( 
+extern void _XmRC_RemovePopupEventHandlers(
                         XmRowColumnWidget pane) ;
 
-void _XmRC_RemoveFromPostFromList( 
+void _XmRC_RemoveFromPostFromList(
                         XmRowColumnWidget m,
                         Widget widget) ;
 

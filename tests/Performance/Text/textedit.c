@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: textedit.c /main/7 1995/07/13 17:26:33 drk $"
@@ -166,12 +166,12 @@ char **argv;
 
 	/*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
 	XtSetArg(args[n], XtNwidth, 800);  n++;
 	XtSetArg(args[n], XtNheight, 450);  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
 	/* create main form */
 	n = 0;
@@ -270,7 +270,7 @@ int		first;
 	for (i = NUM_INDX,j = 0; j < len ; i++, j++)
 		buffer[i] = new[j];
 
-	if (len < MAX_NUM_SPACE) 
+	if (len < MAX_NUM_SPACE)
 		for (j = 0; j < MAX_NUM_SPACE - len; j++)
 			buffer[i++] = ' ';
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SimpleM1.c /main/6 1995/07/13 18:39:06 drk $"
@@ -48,8 +48,8 @@ Widget simple_pulldown = NULL,
   second_pulldown = NULL, alternate_simple_pulldown = NULL;
 
 /*
- * Toggle the option menu's associated pulldown between 
- * two different pulldown menus 
+ * Toggle the option menu's associated pulldown between
+ * two different pulldown menus
  */
 
 void change_option_menu(Widget widget, XtPointer option_menu,
@@ -59,7 +59,7 @@ void change_option_menu(Widget widget, XtPointer option_menu,
  XtSetArg(args[0],XmNsubMenuId,alternate_simple_pulldown);
  XtSetValues((Widget) option_menu,args,1);
 
- /* 
+ /*
   * Desensitize the push button
   */
 
@@ -83,7 +83,7 @@ void pop_handler(Widget widget, XtPointer client_data, XEvent *the_event,
   printf("button = %d\n", the_event->xbutton.button);
 
   if (the_event->xbutton.button == 3)
-    {	
+    {
       XmMenuPosition(client_data, (XButtonPressedEvent *)the_event);
       XtManageChild((Widget) client_data);
     }
@@ -94,14 +94,14 @@ void pop_handler(Widget widget, XtPointer client_data, XEvent *the_event,
 void pop(Widget widget, XtPointer client_data, XtPointer call_data)
 {
   printf("Callback Proc called\n");
-  XmMenuPosition((Widget) client_data, 
+  XmMenuPosition((Widget) client_data,
 	   (XButtonPressedEvent *) ((XmAnyCallbackStruct *)call_data)->event);
   XtManageChild((Widget) client_data);
 }
 
 /* add a cascade button gadget to the menubar passed as client_data */
 
-void add_cascade_gadget(Widget widget, XtPointer client_data, 
+void add_cascade_gadget(Widget widget, XtPointer client_data,
 			XtPointer call_data)
 {
   Arg args[2];
@@ -113,7 +113,7 @@ void add_cascade_gadget(Widget widget, XtPointer client_data,
   n=0;
   XtSetArg(args[n], XmNpostFromButton, 3); n++;
   XtSetArg(args[n], XmNbuttonCount, 3); n++;
-  second_pulldown = XmCreateSimplePulldownMenu((Widget) client_data, 
+  second_pulldown = XmCreateSimplePulldownMenu((Widget) client_data,
 					       "second", args, n);
 }
 
@@ -185,7 +185,7 @@ void main(int argc, char **argv)
   XtSetArg(args[n], XmNbuttons, alternate_xmsarray); n++;
   XtSetArg(args[n], XmNbuttonCount, 3); n++;
   XtSetArg(args[n], XmNsimpleCallback, simple_activation); n++;
-  alternate_simple_pulldown = 
+  alternate_simple_pulldown =
     XmCreateSimplePulldownMenu(bboard, "alternate_simple", args, n);
 
   n=0;
@@ -197,7 +197,7 @@ void main(int argc, char **argv)
 
   n=0;
   XtSetArg(args[n], XmNy, 60); n++;
-  XtManageChild(pb=XmCreatePushButton(bboard, "Pop Simple Popup Menu 1", 
+  XtManageChild(pb=XmCreatePushButton(bboard, "Pop Simple Popup Menu 1",
 				      args, n));
 
   n=0;
@@ -219,7 +219,7 @@ void main(int argc, char **argv)
   n=0;
   XtSetArg(args[n], XmNx, 420); n++;
   XtSetArg(args[n], XmNy, 60); n++;
-  XtManageChild(pb=XmCreatePushButton(bboard, 
+  XtManageChild(pb=XmCreatePushButton(bboard,
 				      "Add CascGadget to Menubar", args, n));
   XtAddCallback(pb, XmNactivateCallback, add_cascade_gadget, menubar);
 
@@ -269,14 +269,3 @@ void main(int argc, char **argv)
 
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-

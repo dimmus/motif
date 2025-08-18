@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: List10.h /main/8 1995/07/13 18:15:17 drk $ */
 
 
@@ -78,7 +78,7 @@ static void  	BrSiDeSelCB(Widget w, caddr_t client_data, caddr_t call_data);
 static void  	ExtSelCB(Widget w, caddr_t client_data, caddr_t call_data);
 static void  	MulSelCB(Widget w, caddr_t client_data, caddr_t call_data);
 static void  	ChangeFontCB(Widget w, caddr_t client_data, caddr_t call_data);
-static void  	CHSPolicyCB(Widget w, unsigned char client_data, 
+static void  	CHSPolicyCB(Widget w, unsigned char client_data,
 			    caddr_t call_data);
 static void  	UpdateCB(Widget w, caddr_t client_data, caddr_t call_data);
 static void  	SelectedCB(Widget w, caddr_t client_data, caddr_t call_data);
@@ -93,4 +93,3 @@ static void 	CreateCallbackInfo();
 static void 	ChangeLabel(Widget w, char string[50]);
 static Widget   CreateToggleButton(Widget parent, char *label);
 static Widget   CreatePushButton(Widget parent, char *label);
-

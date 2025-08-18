@@ -19,9 +19,9 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-#  This widget is a Command widget with the following characteritics:   
+#  This widget is a Command widget with the following characteritics:
 #	- width and height are 178
 #	- borderWidth is 20
 #	- borderColor is Forest Green

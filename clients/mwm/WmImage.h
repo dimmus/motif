@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,15 +19,15 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.2
-*/ 
+*/
 
 extern char  *BitmapPathName (char *string);
 #ifdef WSM
-extern int    GetBitmapIndex (WmScreenData *pSD, 
-				char *name, 
+extern int    GetBitmapIndex (WmScreenData *pSD,
+				char *name,
 				Boolean bReportError);
 #else /* WSM */
 extern int    GetBitmapIndex (WmScreenData *pSD, char *name);

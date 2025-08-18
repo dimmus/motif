@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 ! This is the applications defaults file for the Performance Container directory
@@ -42,7 +42,7 @@ PerfCntnr1*outlineState:		expanded
 
 ! There are few sets of Container resources for the test. Which one is applied
 ! depends on the flag the user passes into the test, which determines the
-! Xt name of the Container.  
+! Xt name of the Container.
 
 PerfCntnr1*entryViewType:		large_icon
 PerfCntnr1*layoutType:			outline
@@ -60,7 +60,7 @@ PerfCntnr2*outlineState:		expanded
 
 ! There are few sets of Container resources for the test. Which one is applied
 ! depends on the flag the user passes into the test, which determines the
-! Xt name of the Container.  
+! Xt name of the Container.
 
 PerfCntnr2*layoutType:			outline
 
@@ -79,5 +79,3 @@ PerfCntnr3*largeIconPixmap:		../../Toolkit/bitmaps/LargeIcon
 PerfCntnr3*highlightColor:		red
 
 PerfCntnr3*spatialResizeModel:		grow_balanced
-
-

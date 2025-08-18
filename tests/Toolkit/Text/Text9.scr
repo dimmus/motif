@@ -1,5 +1,5 @@
 # $XConsortium: Text9.scr /main/6 1995/07/17 20:42:26 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  @) The left side of this test contains a MultiLine Text widget and
 #     the right, a SingleLine Text widget.  Each set of widgets
@@ -160,7 +160,7 @@ CompareVisual Text3
 Continue
 
 #  @) Now do all of the tests again on the SingleLine Text widget.
-#  #) The SingleLine Text widget should have \"s wife could eat no\" 
+#  #) The SingleLine Text widget should have \"s wife could eat no\"
 #     displayed in the window.
 #  #) Click MB1 right before the word \"could\" in the SingleLine
 #     Text widget.  The I-beam cursor should now be at that position.
@@ -259,7 +259,7 @@ Continue
 #     menu. When you make a new selection, both text widgets will be altered.
 #  #) Try each selection in the option menu and confirm that a double click
 #     selects the correct amount of text in both widgets.
-#  !) 
+#  !)
 #          Position    means double click just sets the
 #                      cursor and nothing is selected.
 LocatePointer selectionOption1 ROptionButton
@@ -275,7 +275,7 @@ System sleep 1
 ClickMB Btn1 2
 CompareVisual Text3
 
-#          Word        selects a word. 
+#          Word        selects a word.
 LocatePointer selectionOption1 ROptionButton
 PressMB Btn1
 LocatePointer Word
@@ -294,7 +294,7 @@ CompareVisual Text3
 #                     Each of the output lines which
 #                     correspond to one source line
 #                     will be selected. )
- 
+
 LocatePointer selectionOption1 ROptionButton
 PressMB Btn1
 LocatePointer Line

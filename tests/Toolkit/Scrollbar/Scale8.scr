@@ -19,16 +19,16 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-#  @) A client with a vertical scale widget will appear.  
+#  @) A client with a vertical scale widget will appear.
 #     The scale will
 #     have a title labeled "Affected", and will have the
 #     slider value shown to the left of the slider.  The font will be
-#     variable and the shadowThickness will be 8 pixels initially. 
+#     variable and the shadowThickness will be 8 pixels initially.
 #  #ifdef MOTIF1_2
 #  /* test case for PIR 3158 */
-#  #) Click on the "horizontal" orientation togglebutton.  This will alter 
+#  #) Click on the "horizontal" orientation togglebutton.  This will alter
 #  the orientation of the "Affected" scale.
 LocatePointer horizontal
 ClickMB Btn1
@@ -59,7 +59,7 @@ ClickKey KLeft
 CompareVisual Scale1
 
 #  #) Using MB1, drag the "scaleWidth" slider out to about 80.  The "Affected"
-#  scale should grow in width.  Drag "scaleWidth" slider in to about 35.  The 
+#  scale should grow in width.  Drag "scaleWidth" slider in to about 35.  The
 #  "Affected" scale should shrink in width.
 LocatePointer widthScale RScaleSlider
 DragSliderValue Right 80
@@ -67,7 +67,7 @@ CompareVisual Scale1
 DragSliderValue Left 35
 CompareVisual Scale1
 
-#  #) Using the osfRight arrow key, raise the "scaleWidth" value a few 
+#  #) Using the osfRight arrow key, raise the "scaleWidth" value a few
 #  numbers and verify that the "Affected" scale is growing accordingly.
 #  /* end of test case for PIR 3158 */
 ClickKey KRight
@@ -84,7 +84,7 @@ Continue
 
 #  #endif MOTIF1_2
 #  /* test case for PIR 3157 */
-#  #) Click on the "vertical" orientation togglebutton.  This will alter 
+#  #) Click on the "vertical" orientation togglebutton.  This will alter
 #  the orientation of the "Affected" scale.
 LocatePointer vertical
 ClickMB Btn1
@@ -118,7 +118,7 @@ ClickKey KLeft
 CompareVisual Scale1
 
 #  #) Press the osfLeft key one more time and observe that the
-#  "Affected" scale is shrinking normally.  
+#  "Affected" scale is shrinking normally.
 ClickKey KLeft
 CompareVisual Scale1
 

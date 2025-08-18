@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,13 +19,13 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: xislib.h /main/10 1996/10/30 11:34:43 drk $ */
 /***********************************************************************
-  	@(#)xislib.h	1.46     Date:03/18/91                        
+  	@(#)xislib.h	1.46     Date:03/18/91
   	Author: TAT
 	History:
             01/05/89 TAT Initial implementation
@@ -49,28 +49,28 @@
 	Summary:
             Follows below
 ************************************************************************/
-/*************************************************************     
+/*************************************************************
     MOTIF INPUT SYNTHESIS UTILITIES DEFINITIONS (INCLUDE FILE)
 
 *************************************************************/
 /************************************************************
-    
+
   DESCRIPTION:
 
     This module contains structure definitions preprocessor
     definitions and globals which are defined for use with
     the xislib.c module.
 
-    In xislib.c the preprocessor constant 
+    In xislib.c the preprocessor constant
     DECLARE_XISLIB_GLOBALS_HERE is defined which causes the
     generation of storage defining code for globals here
-    where in all other places that this file is included 
+    where in all other places that this file is included
     which does not define this constant only references to
     these globals are made.
 
     Also, it is assumed that your C compiler handles ANSI-C
     prototype function declarations (where additional type
-    checking can be done on your parameters). Where this 
+    checking can be done on your parameters). Where this
     is not the case, precede inclusion of this file with
     NOT_ANSI_C defined or just put its definition in your
     cc command line.
@@ -89,12 +89,12 @@
 
 #include <X11/Intrinsic.h>
 
-#include "mvs_defines.h" 
+#include "mvs_defines.h"
 
 /************* define xisGLOBAL, xisINIT, PARAMS *****************************/
 
 #ifdef DECLARE_XISLIB_GLOBALS_HERE
-#define xisGLOBAL  
+#define xisGLOBAL
 #define xisINIT(x) = x
 #else
 #define xisGLOBAL extern
@@ -124,22 +124,22 @@
   xisGLOBAL Window xisDummyFocusWindow xisINIT(0L);
                                             /* Used to set focus away from app*/
 
-  xisGLOBAL Time xisLastEventTime xisINIT(0);          
+  xisGLOBAL Time xisLastEventTime xisINIT(0);
                                             /* X-server most recent event time*/
 
-  xisGLOBAL Time xisLastButtonPressTime xisINIT(0);    
+  xisGLOBAL Time xisLastButtonPressTime xisINIT(0);
                                             /* X-server most recent b.prs time*/
 
-  xisGLOBAL Time xisMultiClickTime xisINIT(0);         
+  xisGLOBAL Time xisMultiClickTime xisINIT(0);
                                             /* Max time between button clicks */
 
-  xisGLOBAL short xisUseSyntheticTime xisINIT(0);          
+  xisGLOBAL short xisUseSyntheticTime xisINIT(0);
                                             /* True = synthesize event times  */
 
   xisGLOBAL Time xisSyntheticTime xisINIT(0);
                                             /* Fake X-server time in millisecs*/
 
-  xisGLOBAL void (*xisTraceMsg)(  )  xisINIT(NULL); 
+  xisGLOBAL void (*xisTraceMsg)(  )  xisINIT(NULL);
                                             /* Trace message func like printf */
 
   xisGLOBAL void (*xisWarningMsg)() xisINIT(NULL);
@@ -165,7 +165,7 @@
                                              /* under root, else set to    */
                                              /* same window as in id.window*/
 
-      /* From here to end of record is for XQueryTree info caching */ 
+      /* From here to end of record is for XQueryTree info caching */
 
       Window            root_window;       /* For multi-screen tests */
       Window            parent_window;
@@ -212,7 +212,7 @@
 /* xis state querying commands can access this information without explicitly*/
 /* passing it as a parameter (each routine needs only a portion of all these */
 /* fields).                                                                  */
- 
+
 typedef struct _XisInformRecord {
     /* These fields are always valid */
     int             is_valid;           /* True when info here is valid      */
@@ -271,11 +271,11 @@ xisGLOBAL XisInformRecord xisInform;
 /* POSSIBLE BUTTON NUM CODES */
 
   /*
-     Use those already defined in X.h: 
-     
+     Use those already defined in X.h:
+
      Button1, Button2, Button3, Button4, Button5
-  */ 
- 
+  */
+
 
 /* POSSIBLE EDGE CODE VALUES */
 
@@ -305,14 +305,14 @@ xisGLOBAL XisInformRecord xisInform;
 #ifndef DECLARE_XISLIB_GLOBALS_HERE
   xisGLOBAL unsigned int xisMouseButtonMask[]; /* Maps button num to mask */
 #else
-  xisGLOBAL unsigned int xisMouseButtonMask[6] = 
+  xisGLOBAL unsigned int xisMouseButtonMask[6] =
     { 0, Button1Mask, Button2Mask, Button3Mask, Button4Mask, Button5Mask };
 #endif
 
 #ifndef DECLARE_XISLIB_GLOBALS_HERE
   xisGLOBAL unsigned int xisMouseButtonDetail[]; /* Maps button num to detail */
-#else 
-  xisGLOBAL unsigned int xisMouseButtonDetail[6] = 
+#else
+  xisGLOBAL unsigned int xisMouseButtonDetail[6] =
     { 0, Button1, Button2, Button3, Button4, Button5 };
 #endif
 
@@ -412,11 +412,11 @@ xisGLOBAL XisInformRecord xisInform;
 #define _Key9			(_Key8+1)
 #define _Key0			(_Key9+1)
 
-#define _MaxKey   	        (_Key0+1) 
+#define _MaxKey   	        (_Key0+1)
 
 
 #define NoModifierKeys 0
- 
+
 #define KeyNone		NoModifierKeys,		_KeyNone
 #define KeyActivate	NoModifierKeys,		_KeyActivate
 #define KeyAddMode	NoModifierKeys,		_KeyAddMode
@@ -541,9 +541,9 @@ xisGLOBAL XisInformRecord xisInform;
 #define ShiftBtn5   	ShiftMask, 		Button5
 
 
-/* Here is where we define the special combinations of shifted and 
-   control keys. The cases here are enough the cover all of the 
-   text and list widgets. 
+/* Here is where we define the special combinations of shifted and
+   control keys. The cases here are enough the cover all of the
+   text and list widgets.
 */
 
 

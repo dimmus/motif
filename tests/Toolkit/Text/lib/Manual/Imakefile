@@ -70,4 +70,3 @@ $(SRCS):
 
 clean::
 	$(RM) $(SRCS)
-

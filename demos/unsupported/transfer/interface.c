@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
-/* 
+/*
  * HISTORY
  */
 
@@ -104,7 +104,7 @@ Widget mainwindow, menubar, form, optionmenu,
 static Widget get_constraint_widget(Widget child, Widget parent)
 {
   Widget w;
-  
+
   w = child;
   while (XtParent(w) != parent)
     w = XtParent(w);
@@ -142,7 +142,7 @@ Widget create_mainWindow_widget(char    * name,
   XColor target_color, exact_color;
 #endif /* USE_CMS */
   Pixel target_color_pixel;
-  XtTranslations toggle_button_trans = 
+  XtTranslations toggle_button_trans =
     XtParseTranslationTable(TB_NO_USER_INPUT);
   XmRendition rend[1];
   XmRenderTable listRT;
@@ -152,7 +152,7 @@ Widget create_mainWindow_widget(char    * name,
   Cardinal count;
 
   /* RenderTable */
-  tabs[0] = XmTabCreate(3.0, XmINCHES, XmABSOLUTE, 
+  tabs[0] = XmTabCreate(3.0, XmINCHES, XmABSOLUTE,
 			XmALIGNMENT_BEGINNING, NULL);
   listTabs = XmTabListInsertTabs(NULL, tabs, 1, 0);
   XmTabFree(tabs[0]);
@@ -170,28 +170,28 @@ Widget create_mainWindow_widget(char    * name,
   if (DefaultDepthOfScreen(XtScreen(parent)) > 1 &&
       /* XcmsLookupColor(XtDisplay(parent),
 	 DefaultColormapOfScreen(XtScreen(parent)),
-	 "CIEuvY:0.0/0.0/1.0", 
+	 "CIEuvY:0.0/0.0/1.0",
 	 &exact_color, &target_color,
 	 XcmsUndefinedFormat) == XcmsSuccess &&
-	 XcmsAllocColor(XtDisplay(parent), 
+	 XcmsAllocColor(XtDisplay(parent),
 	 DefaultColormapOfScreen(XtScreen(parent)),
 	 &target_color,
 	 XcmsUndefinedFormat) == XcmsSuccess) */
-      
+
       XLookupColor(XtDisplay(parent),
 		   DefaultColormapOfScreen(XtScreen(parent)),
 		   "red", &exact_color, &target_color) != 0 &&
-      XAllocColor(XtDisplay(parent), 
+      XAllocColor(XtDisplay(parent),
 		  DefaultColormapOfScreen(XtScreen(parent)),
 		  &target_color) != 0)
     target_color_pixel = target_color.pixel;
   else
     target_color_pixel = WhitePixelOfScreen(XtScreen(parent));
-  
+
   mainwindow = XmCreateMainWindow(parent, name, NULL, 0);
-  
+
   menubar = XmCreateMenuBar(mainwindow, "menuBar", NULL, 0);
-  
+
   pulldown = XmdCreateMenu(SELECTED_MENU, menubar, &menu, &count);
   XtVaSetValues(pulldown, XmNtearOffModel, XmTEAR_OFF_ENABLED,
 		NULL, NULL);
@@ -200,28 +200,28 @@ Widget create_mainWindow_widget(char    * name,
   XtManageChild(menu[SELECTED_NEW]);
   XtUnmanageChild(menu[SELECTED_SEP1]);
   XtManageChild(menu[SELECTED_DELETE]);
-  XtAddCallback(menu[SELECTED_DELETE], XmNactivateCallback, 
+  XtAddCallback(menu[SELECTED_DELETE], XmNactivateCallback,
 		(XtCallbackProc) RemoveValue, NULL);
-  XtAddCallback(menu[SELECTED_NEW], XmNactivateCallback, 
+  XtAddCallback(menu[SELECTED_NEW], XmNactivateCallback,
 		(XtCallbackProc) manageCB, (XtPointer) editBox);
-  XtAddCallback(menu[SELECTED_PROPERTIES], XmNactivateCallback, 
+  XtAddCallback(menu[SELECTED_PROPERTIES], XmNactivateCallback,
 		(XtCallbackProc) manageCB, (XtPointer) editBox);
-  XtAddCallback(menu[SELECTED_NEW], XmNactivateCallback, 
+  XtAddCallback(menu[SELECTED_NEW], XmNactivateCallback,
 		(XtCallbackProc) EditItem, (XtPointer) 0);
-  XtAddCallback(menu[SELECTED_PROPERTIES], XmNactivateCallback, 
+  XtAddCallback(menu[SELECTED_PROPERTIES], XmNactivateCallback,
 		(XtCallbackProc) EditItem, (XtPointer) 1);
 
-  XtAddCallback(menu[SELECTED_EXIT], XmNactivateCallback, 
+  XtAddCallback(menu[SELECTED_EXIT], XmNactivateCallback,
 		(XtCallbackProc) quitCB, NULL);
 
   pulldown = XmdCreateMenu(EDIT_MENU, menubar, &menu, &count);
   XtVaSetValues(pulldown, XmNtearOffModel, XmTEAR_OFF_ENABLED,
 		NULL, NULL);
-  XtAddCallback(menu[EDIT_CUT],	XmNactivateCallback, 
+  XtAddCallback(menu[EDIT_CUT],	XmNactivateCallback,
 		(XtCallbackProc) cut, NULL);
   XtAddCallback(menu[EDIT_COPY], XmNactivateCallback,
 		(XtCallbackProc) copy, NULL);
-  XtAddCallback(menu[EDIT_PASTE], XmNactivateCallback, 
+  XtAddCallback(menu[EDIT_PASTE], XmNactivateCallback,
 		(XtCallbackProc) paste, NULL);
   xms = XmStringCreateLocalized("Paste and Delete");
   XtVaSetValues(menu[EDIT_PASTE_SPECIAL],
@@ -231,7 +231,7 @@ Widget create_mainWindow_widget(char    * name,
 		(XtCallbackProc) pasteMove, NULL);
   XtManageChild(menu[EDIT_PASTE_SPECIAL]);
   XtUnmanageChild(menu[EDIT_DELETE]);
-  
+
   /*********** Create the help menu and help text *********/
   helpMenu = XmCreatePulldownMenu(menubar, "helpMenu", NULL, 0);
 
@@ -386,17 +386,17 @@ Widget create_mainWindow_widget(char    * name,
   XtSetValues(optionmenu, args, n);
 
 
-  XtAddCallback(primary, XmNactivateCallback, 
+  XtAddCallback(primary, XmNactivateCallback,
 		(XtCallbackProc) setMode, (XtPointer) Mprimary);
   XtManageChild(primary);
 
   XtAddCallback(secondary,
-		XmNactivateCallback, 
+		XmNactivateCallback,
 		(XtCallbackProc) setMode, (XtPointer) Msecondary);
   XtManageChild(secondary);
 
   XtAddCallback(clipboard,
-		XmNactivateCallback, 
+		XmNactivateCallback,
 		(XtCallbackProc) setMode, (XtPointer) Mclipboard);
   XtManageChild(clipboard);
 
@@ -511,7 +511,7 @@ Widget create_editbox_widget(char    * name,
   n = 0;
   button = XmCreatePushButtonGadget(dialog, "Apply", args, n);
   XtManageChild(button);
-  XtAddCallback(button, XmNactivateCallback, 
+  XtAddCallback(button, XmNactivateCallback,
 		(XtCallbackProc) SetValue, dialog);
 
   /***************** frame1 : XmFrame *****************/
@@ -663,7 +663,7 @@ Widget create_editbox_widget(char    * name,
   n = 0;
   xms = XmStringCreateLocalized("COMPOUND_TEXT");
   XtSetArg(args[n], XmNlabelString, xms); n++;
-  b_compound_text = 
+  b_compound_text =
     XmCreatePushButtonGadget(typepulldown, "b_COMPOUND_TEXT", args, n);
   if (xms) XmStringFree(xms);
 
@@ -692,7 +692,7 @@ Widget create_editbox_widget(char    * name,
   n = 0;
   xms = XmStringCreateLocalized("LOCALE_TEXT");
   XtSetArg(args[n], XmNlabelString, xms); n++;
-  b_locale_text = 
+  b_locale_text =
     XmCreatePushButtonGadget(typepulldown, "b_LOCALE_TEXT", args, n);
   if (xms) XmStringFree(xms);
 
@@ -700,8 +700,8 @@ Widget create_editbox_widget(char    * name,
   n = 0;
   xms = XmStringCreateLocalized("MOTIF COMPOUND STRING");
   XtSetArg(args[n], XmNlabelString, xms); n++;
-  b__motif_compound_string = 
-    XmCreatePushButtonGadget(typepulldown, 
+  b__motif_compound_string =
+    XmCreatePushButtonGadget(typepulldown,
 			     "b__MOTIF_COMPOUND_STRING", args, n);
   if (xms) XmStringFree(xms);
 
@@ -709,7 +709,7 @@ Widget create_editbox_widget(char    * name,
   n = 0;
   xms = XmStringCreateLocalized("unknown");
   XtSetArg(args[n], XmNlabelString, xms); n++;
-  unknown_button = XmCreatePushButtonGadget(typepulldown, "b_unknown", 
+  unknown_button = XmCreatePushButtonGadget(typepulldown, "b_unknown",
 					    args, n);
   if (xms) XmStringFree(xms);
 
@@ -737,7 +737,7 @@ Widget create_editbox_widget(char    * name,
   XtSetArg(args[n], XmNlabelString, xms); n++;
   defer = XmCreateToggleButtonGadget(buttons, "Defer", args, n);
   XtManageChild(defer);
-  XtAddCallback(defer, XmNvalueChangedCallback, 
+  XtAddCallback(defer, XmNvalueChangedCallback,
 		(XtCallbackProc) deferCB, NULL);
   if (xms) XmStringFree(xms);
 
@@ -781,11 +781,11 @@ Widget create_editbox_widget(char    * name,
   XtManageChild(text2);
   XtManageChild(field2);
 
-  XtAddCallback(format_s, XmNactivateCallback, 
+  XtAddCallback(format_s, XmNactivateCallback,
 		(XtCallbackProc) SetFormat, (XtPointer) 'S');
   XtManageChild(format_s);
 
-  XtAddCallback(format_l, XmNactivateCallback, 
+  XtAddCallback(format_l, XmNactivateCallback,
 		(XtCallbackProc) SetFormat, (XtPointer) 'L');
   XtManageChild(format_l);
 
@@ -793,15 +793,15 @@ Widget create_editbox_widget(char    * name,
 		(XtCallbackProc) SetFormat, (XtPointer) 'T');
   XtManageChild(format_t);
 
-  XtAddCallback(format_cs, XmNactivateCallback, 
+  XtAddCallback(format_cs, XmNactivateCallback,
 		(XtCallbackProc) SetFormat, (XtPointer) 'C');
   XtManageChild(format_cs);
 
-  XtAddCallback(format_id, XmNactivateCallback, 
+  XtAddCallback(format_id, XmNactivateCallback,
 		(XtCallbackProc) SetFormat, (XtPointer) 'D');
   XtManageChild(format_id);
 
-  XtAddCallback(format_ih, XmNactivateCallback, 
+  XtAddCallback(format_ih, XmNactivateCallback,
 		(XtCallbackProc) SetFormat, (XtPointer) 'H');
   XtManageChild(format_ih);
   XtManageChild(format_om);
@@ -836,52 +836,52 @@ Widget create_editbox_widget(char    * name,
   XtManageChild(text1);
   XtManageChild(field1);
 
-  XtAddCallback(b_atom,	XmNactivateCallback, 
+  XtAddCallback(b_atom,	XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "ATOM");
   XtManageChild(b_atom);
 
-  XtAddCallback(b_drawable, XmNactivateCallback, 
+  XtAddCallback(b_drawable, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "DRAWABLE");
   XtManageChild(b_drawable);
 
-  XtAddCallback(b_window, XmNactivateCallback, 
+  XtAddCallback(b_window, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "WINDOW");
   XtManageChild(b_window);
 
-  XtAddCallback(b_colormap, XmNactivateCallback, 
+  XtAddCallback(b_colormap, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "COLORMAP");
   XtManageChild(b_colormap);
 
-  XtAddCallback(b_integer, XmNactivateCallback, 
+  XtAddCallback(b_integer, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "INTEGER");
   XtManageChild(b_integer);
 
-  XtAddCallback(b_pixel, XmNactivateCallback, 
+  XtAddCallback(b_pixel, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "PIXEL");
   XtManageChild(b_pixel);
 
-  XtAddCallback(b_compound_text, XmNactivateCallback, 
+  XtAddCallback(b_compound_text, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "COMPOUND_TEXT");
   XtManageChild(b_compound_text);
 
-  XtAddCallback(b_string, XmNactivateCallback, 
+  XtAddCallback(b_string, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "STRING");
   XtManageChild(b_string);
 
-  XtAddCallback(b_locale, XmNactivateCallback, 
+  XtAddCallback(b_locale, XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "");
   XtManageChild(b_locale);
 
-  XtAddCallback(b_span,	XmNactivateCallback, 
+  XtAddCallback(b_span,	XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "SPAN");
   XtManageChild(b_span);
 
-  XtAddCallback(b__motif_compound_string, XmNactivateCallback, 
+  XtAddCallback(b__motif_compound_string, XmNactivateCallback,
 		(XtCallbackProc) SetType,
 		(XtPointer) "_MOTIF_COMPOUND_STRING");
   XtManageChild(b__motif_compound_string);
 
-  XtAddCallback(unknown_button,	XmNactivateCallback, 
+  XtAddCallback(unknown_button,	XmNactivateCallback,
 		(XtCallbackProc) SetType, (XtPointer) "NONE");
 
   XtManageChild(unknown_button);
@@ -932,10 +932,10 @@ Widget CreateHelpDialog(parent, name)
   n = 0;
   XtSetArg(args[n], XmNfontName, "*courier-medium-r-*-12-*"); n++;
   XtSetArg(args[n], XmNfontType, XmFONT_IS_FONT); n++;
-  rend[i] = XmRenditionCreate(help, "program", args, n); i++; 
+  rend[i] = XmRenditionCreate(help, "program", args, n); i++;
   n = 0;
   XtSetArg(args[n], XmNunderlineType, XmSINGLE_LINE); n++;
-  rend[i] = XmRenditionCreate(help, "underline", args, n); i++; 
+  rend[i] = XmRenditionCreate(help, "underline", args, n); i++;
   /* Make a copy so that setvalues will work correctly */
   rt = XmRenderTableCopy(rt, NULL, 0);
   rt = XmRenderTableAddRenditions(rt, rend, i, XmMERGE_NEW);
@@ -964,4 +964,3 @@ void unmanageCB( widget, w_to_unmanage, callback_data)
   if (w_to_unmanage != (Widget) NULL)
     XtUnmanageChild(w_to_unmanage);
 }
-

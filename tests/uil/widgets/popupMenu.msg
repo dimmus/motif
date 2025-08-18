@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This is a PopupMenu with the following\ncharacteristics:\n\n" &
@@ -34,4 +34,3 @@
 		  "   - background for popup_menu is \n     forest green\n\n" &
 		  "You should be able to traverse the popup\nmenu via the keyboard.\n" &
 		  "\nAll other resources are set by default\n";
-

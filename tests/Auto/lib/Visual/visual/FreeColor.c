@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FreeColor.c /main/7 1995/07/14 11:49:33 drk $"
@@ -47,7 +47,7 @@ Pixel pixel;
     int j;
     Pixel pixels[1];
     char msg_string[125];
- 
+
     for (j=0; j<MAX_COLORS && mvsColorAllocInfo[j].pixel != pixel; j++);
 
     if (j < MAX_COLORS && j > 1 /* first 2 are black and white */) {
@@ -62,7 +62,6 @@ Pixel pixel;
             XFreeColors(visDisplay,mvsVisualInfo.colormap_id,pixels,1,0);
         }
     }
-   
+
 
 } /* End mvsFreeColor() */
-

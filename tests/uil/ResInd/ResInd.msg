@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,12 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "The following test is for Resolution Independent units:\n\n" &
 	"  - leftmost is a navy colored bulletin board, 10 pixels wide and 100 tall\n " &
 	"  - right of that, a orange bulletin board, 1 inch wide and 4 inches tall\n " &
 	"  - right of that, a red bulletin board, 10 millimeters wide and 1 mm tall ";
-
-

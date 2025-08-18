@@ -106,7 +106,7 @@ GetTimestamp (Display *dpy)
  |                              SelectionProc                           |
  | This is invoked when a message is finished and the reply is received.|
  *----------------------------------------------------------------------*/
-void 
+void
 SelectionProc (Widget w, XtPointer clientData, XtPointer callData)
 {
 
@@ -120,7 +120,7 @@ SelectionProc (Widget w, XtPointer clientData, XtPointer callData)
  | This is invoked when the last message is finished and the reply is   |
  | received.                                                            |
  *----------------------------------------------------------------------*/
-void 
+void
 LastSelectionProc (Widget w, XtPointer clientData, XtPointer callData)
 {
     Display *dsp = XtDisplay(w);
@@ -136,7 +136,7 @@ LastSelectionProc (Widget w, XtPointer clientData, XtPointer callData)
 /*----------------------------------------------------------------------*
  |                             SendMessage                              |
  *----------------------------------------------------------------------*/
-void 
+void
 SendMessage(RType rtype, XtPointer msg, int len, Time time)
 {
   XtCallbackProc s_proc;
@@ -176,7 +176,7 @@ SendMessage(RType rtype, XtPointer msg, int len, Time time)
     case INLINE:
     case MAXTOGGLES:
       /* Not handled cases */
-      break;  
+      break;
     }
 
   UTMSendMessage(utmShell, WM_S0, target,
@@ -190,7 +190,7 @@ SendMessage(RType rtype, XtPointer msg, int len, Time time)
 /*----------------------------------------------------------------------*
  |                                SendEnable                            |
  *----------------------------------------------------------------------*/
-void 
+void
 SendEnableCommand (Window window, CARD32 commandID)
 {
 #ifndef _NO_DISABLE
@@ -218,9 +218,9 @@ SendEnableCommand (Window window, CARD32 commandID)
 
   PRINT("EnableCommand #%d on window %x (%u).\n",
 	  commandID, window, window);
-  
+
   SendMessage(ENABLE, save, size, time);
-  
+
 #endif
 }
 
@@ -229,7 +229,7 @@ SendEnableCommand (Window window, CARD32 commandID)
 /*----------------------------------------------------------------------*
  |                                 SendDisable                            |
  *----------------------------------------------------------------------*/
-void 
+void
 SendDisableCommand (Window window, CARD32 commandID)
 {
 #ifndef _NO_DISABLE
@@ -257,7 +257,7 @@ SendDisableCommand (Window window, CARD32 commandID)
 
   PRINT("DisableCommand #%d on window %x (%u).\n",
 	  commandID, window, window);
-  
+
   SendMessage(DISABLE, save, size, time);
 #endif
 }
@@ -267,9 +267,9 @@ SendDisableCommand (Window window, CARD32 commandID)
 /*----------------------------------------------------------------------*
  |                                 SendInclude                           |
  *----------------------------------------------------------------------*/
-void 
+void
 SendIncludeCommand(Window window, int commID, Boolean is_in_line)
-{	
+{
   Time time;
   XtPointer msg, save;
   CARD32  commandID = 0L;
@@ -283,10 +283,10 @@ SendIncludeCommand(Window window, int commID, Boolean is_in_line)
 
   commandID += commID;
   selection += atoms.own_selection;
-  if (is_in_line) 
+  if (is_in_line)
     {
       in_line = 1L;
-    }	
+    }
   time = GetTimestamp(dsp);
   /*
    *  Fixup the window id receiving the client command.
@@ -316,7 +316,7 @@ SendIncludeCommand(Window window, int commID, Boolean is_in_line)
   msg = PackCARD32(msg, (CARD32)selection);
   msg = PackCARD32(msg, (CARD32)count);
   msg = PackCARD32(msg, (CARD32)window);
-  
+
   PRINT("IncludeCommand #%d on window %x (%u).\n", commandID, window, window);
 
   SendMessage(INCLUDE, save, size, time);
@@ -327,9 +327,9 @@ SendIncludeCommand(Window window, int commID, Boolean is_in_line)
 /*----------------------------------------------------------------------*
  |                                 SendRemove                         |
  *----------------------------------------------------------------------*/
-void 
+void
 SendRemoveCommand(Window window, CARD32 commandID)
-{	
+{
   Time time;
   XtPointer msg,save;
   CARD32  selection = 0L;
@@ -367,7 +367,7 @@ SendRemoveCommand(Window window, CARD32 commandID)
   msg = PackCARD32(msg, (CARD32) commandID);
   msg = PackCARD32(msg, (CARD32) count);
   msg = PackCARD32(msg, (CARD32) window);
-  
+
   PRINT("RemoveCommand #%d on window %x (%u).\n", commandID, window, window);
 
   SendMessage(REMOVE, save, size, time);
@@ -377,7 +377,7 @@ SendRemoveCommand(Window window, CARD32 commandID)
 /*----------------------------------------------------------------------*
   |                                 SendDefineCommand                     |
  *----------------------------------------------------------------------*/
-void 
+void
 SendDefineCommand (int parID, int commID, char *cmdName, char *cmdDefault)
 {
   Time    time;
@@ -400,7 +400,7 @@ SendDefineCommand (int parID, int commID, char *cmdName, char *cmdDefault)
 
   save = msg = (XtPointer) XtMalloc(size);
 
-  
+
   msg = PackCARD32(msg, (CARD32) commandID);
   msg = PackCARD32(msg, (CARD32) selection);
   msg = PackCARD32(msg, (CARD32) parentID);
@@ -412,15 +412,15 @@ SendDefineCommand (int parID, int commID, char *cmdName, char *cmdDefault)
   SendMessage(DEFINE, save, size, time);
 
 
-}	
+}
 
 
 /*----------------------------------------------------------------------*
  |                                 SendRename                           |
  *----------------------------------------------------------------------*/
-void 
+void
 SendRenameCommand(Window window, int commID, char *new_name)
-{	
+{
   Time time;
   XtPointer msg, save;
   CARD32  commandID = 0L;
@@ -459,7 +459,7 @@ SendRenameCommand(Window window, int commID, char *new_name)
   msg = PackString(msg, (String) new_name);
   msg = PackCARD32(msg, (CARD32)count);
   msg = PackCARD32(msg, (CARD32)window);
-  
+
   PRINT("RenameCommand #%d to %s on window %x (%u).\n", commandID,
 	new_name, window, window);
 
@@ -533,7 +533,7 @@ GetCSFromSpaceID(int i)
   CommandSpace *cs;
   cs = command_space_list;
   if (cs == NULL) return NULL;
-  
+
   for (j = 0; j < i; j++)
     {
       if (cs == NULL)
@@ -653,14 +653,14 @@ CreateCommandSpace(Space *space,CARD32 copy_id, CARD32 link_id,CARD32 switch_id)
 /*----------------------------------------------------------------------*
  |                                InvokeCommand                      |
  *----------------------------------------------------------------------*/
-void 
+void
 InvokeCommand (
      Widget         w,
      Atom           target,
      MessageData    data,
      unsigned long  len,
      int            fmt)
-{	
+{
   CARD32      	commandID;
   Window  	windowID;
   WorkWindow *w_window;
@@ -710,16 +710,16 @@ InvokeCommand (
     {
       PRINT("remove id\n");
       w_window = GetWorkWindow(windowID);
-      if (w_window != 0)	
+      if (w_window != 0)
 	{
 	  if (w_window->s_list->next != NULL && w_window->window != None &&
-	      _WSMGetConfigFormatType(w_window->window) != WSM_ICON_FMT)	      
+	      _WSMGetConfigFormatType(w_window->window) != WSM_ICON_FMT)
 	    DeleteWindow(w_window,current_space);
       }
     }
   else if ((cs = GetCSFromSwitchID(commandID)) != NULL)
     {
-      PRINT("SendLeaveRoom(%s)\n",cs->space->name);	
+      PRINT("SendLeaveRoom(%s)\n",cs->space->name);
       XmToggleButtonSetState(wsm_ui->space_button[GetSpaceID(cs->space)],True,True);
     }
   else if ((cs = GetCSFromCopyID(commandID)) != NULL)
@@ -741,9 +741,9 @@ InvokeCommand (
 	  PRINT(" %s\n",cs->space->name);
 	  LinkWindow(w_window,current_space, cs->space);
 	}
-    }	
-  
-  
+    }
+
+
 }
 
 
@@ -751,11 +751,11 @@ InvokeCommand (
   |                              GenerateSwitchMenu
   |
  *----------------------------------------------------------------------*/
-void 
+void
 GenerateSwitchMenu(void)
 {
   CommandSpace *cspace;
-  
+
   switch_id = GET_COMMAND_ID(dsp);
 
   SendDefineCommand(0,switch_id, "_WSM_SWITCH_WORKSPACE", "Switch Workspace");
@@ -772,7 +772,7 @@ GenerateSwitchMenu(void)
   |                              SetInitialCommands
   |
  *----------------------------------------------------------------------*/
-void 
+void
 SetInitialCommands(void)
 {
   Space *space;
@@ -809,7 +809,7 @@ SetInitialCommands(void)
   SendIncludeCommand(0x3fffffff,remove_id, True);
   SendIncludeCommand(0x00000000,switch_id, False);
   SendIncludeCommand(0x00000000,show_id,   True);
-  
+
 }
 
 
@@ -817,7 +817,7 @@ SetInitialCommands(void)
  |                               AddWindow
  | This will add commands to a new window
  *----------------------------------------------------------------------*/
-void 
+void
 AddWindow(Window win)
 {
     SendIncludeCommand(win,occupy_id,   True);
@@ -841,9 +841,9 @@ ShowWsmCommand(void)
 
 /*----------------------------------------------------------------------*
  |                               AddSpaceCommand                        |
- | This will add a new workspace name to the "Switch" root menu command.  
+ | This will add a new workspace name to the "Switch" root menu command.
  *----------------------------------------------------------------------*/
-void 
+void
 AddSpaceCommand(Space *space)
 {
   CommandSpace *cs =
@@ -865,7 +865,7 @@ AddSpaceCommand(Space *space)
 /*----------------------------------------------------------------------*
  |                               RemoveSpaceCommand                      |
  *----------------------------------------------------------------------*/
-void 
+void
 RemoveSpaceCommand(int i)
 {
   CommandSpace *cs = GetCSFromSpaceID(i);
@@ -879,7 +879,7 @@ RemoveSpaceCommand(int i)
   SendRemoveCommand(0x00000000,show_id);
 
   GenerateSwitchMenu();
-  
+
   SendIncludeCommand(0x00000000,switch_id, False);
   SendIncludeCommand(0x00000000,show_id, True);
 }
@@ -890,7 +890,7 @@ RemoveSpaceCommand(int i)
 /*----------------------------------------------------------------------*
  |                           ChangeSpaceCommandName                     |
  *----------------------------------------------------------------------*/
-void 
+void
 ChangeSpaceCommandName(Space *space)
 {
   CommandSpace *cs = GetCSFromSpace(space);
@@ -907,7 +907,7 @@ ChangeSpaceCommandName(Space *space)
  *----------------------------------------------------------------------*/
 void
 DisableDeleteCommand(Window window)
-{	
+{
   if (remove_id != 0)
     {
       SendDisableCommand(window,remove_id);
@@ -934,7 +934,7 @@ EnableDeleteCommand(Window window)
 /*----------------------------------------------------------------------*
  |                          RemoveAllCommandsAndExit                    |
  *----------------------------------------------------------------------*/
-void 
+void
 RemoveAllCommandsAndExit()
 {
   Window rootWindow = XRootWindowOfScreen(XtScreen(shell));
@@ -953,7 +953,7 @@ RemoveAllCommandsAndExit()
 /*----------------------------------------------------------------------*
  |                              InternStuff                             |
  *----------------------------------------------------------------------*/
-void 
+void
 InternStuff (Display *dsp)
 {
   WM_S0                      = XInternAtom(dsp, "WM_S0", False);
@@ -964,4 +964,3 @@ InternStuff (Display *dsp)
   _MOTIF_WM_INVOKE_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_INVOKE_COMMAND", False);
   _MOTIF_WM_REMOVE_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_REMOVE_COMMAND", False);
   _MOTIF_WM_RENAME_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_RENAME_COMMAND", False);}
-

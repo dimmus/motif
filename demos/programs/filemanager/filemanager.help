@@ -17,4 +17,3 @@ the application.
 The xpm files supplied can be installed in your normal bitmap/pixmap
 repository and note that you can customize this for Motif by using
 the XBMLANGPATH environment variable.
-

@@ -67,7 +67,7 @@ UIL_29 "Compilazione interrotta - Correggere gli errori precedenti"
 
 UIL_30 "Errore interno - Inviare un rapporto difetti"
 
-UIL_31  
+UIL_31
 
 UIL_32 "%s mancante dopo l'opzione \"%s\" "
 
@@ -187,4 +187,3 @@ UIL_ERR "Errore: "
 $ UIL_SEV "Severe: "
 UIL_SEV "Errore grave: "
 UIL_MISC_0 "\t\t riga: %d  file: %s"
-

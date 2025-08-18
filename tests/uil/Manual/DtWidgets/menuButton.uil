@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 !******************************************************************************
 module Test
         version = 'v1.0'
@@ -36,13 +36,13 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
               };
     	      controls {
-		  
+
                   DtMenuButton			Menu_Button;
 		  unmanaged XmPopupMenu		Popup_menu;
     	      };
@@ -72,7 +72,7 @@ module Test
             };
         };
 
-  object 
+  object
 	Popup_menu :  XmPopupMenu {
        	    arguments {
 		!XmNwhichButton = 1;
@@ -144,6 +144,6 @@ object
                 };
         };
 
-	
-  
+
+
 end module;

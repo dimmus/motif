@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CommandLine.c /main/10 1995/07/14 11:57:59 drk $"
@@ -88,7 +88,7 @@ char		 *CompleteTestName;			/* Complete Name of this test */
 void CommonUsage(char *test_name)
 
 {
-    fprintf(stdout, 
+    fprintf(stdout,
 	    "Usage: %s:\n", test_name);
     fprintf(stdout,
 	    "          [-I <instruction_file_name>] [-l <no_instructions>]\n");
@@ -141,7 +141,7 @@ extern int optind, opterr;
 
 void  CommonGetOptions (int *argc, char **argv)
 
-{ 
+{
      int c;
      char 	*char_val;
      Boolean    name_given = False;
@@ -244,18 +244,18 @@ void  CommonGetOptions (int *argc, char **argv)
           case 'w':
 			pause_len = atoi (optarg);
 			if (!pause_len) {
-			  printf 
+			  printf
 			    ("Illegal or zero value provided for width.\n");
 			  printf ("Using default %d.\n, PAUSE_LEN");
 			  pause_len = PAUSE_LEN;
 			}
 			break;
 
-	  case 's': 
+	  case 's':
 			startup_time = True;
 			break;
 
-	  case 'z': 
+	  case 'z':
 			startup_time = True;
 			startup_exit = True;
 			break;
@@ -277,12 +277,12 @@ void  CommonGetOptions (int *argc, char **argv)
        if (optind >= *argc) break;
      } /* while getopt */
    } /* if *argc >= 1 */
-     
+
     if (errflag) {
       CommonUsage(test_name);
       exit (1);
     }
-     		
+
     if (!name_given) {
 	instruct_file_name = (char *) malloc((sizeof (char)) *
 			      MAX_FILE);
@@ -295,10 +295,10 @@ void  CommonGetOptions (int *argc, char **argv)
         strcat (instruct_file_name_orig, ".dat");
     }
 
-    if (!default_font_used) 
+    if (!default_font_used)
 	strcpy(default_font, DEFAULT_FONT);
 
-    if (!test_font_used) 
+    if (!test_font_used)
 	strcpy(test_font, TEST_FONT);
 
     if (pause_len == 0)

@@ -22,19 +22,19 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual RowCol 
-TRACE:(2) LocatePointer ShortMenu  
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual RowCol
+TRACE:(2) LocatePointer ShortMenu
+TRACE:(3) ClickMB Btn1
 TRACE:(4) WindowMenuPost Shell1
 TRACE:(5) WindowMenuSelect Shell1 entry_1
 entry 1 selected
-TRACE:(6) LocatePointer ShortMenu  
-TRACE:(7) ClickMB Btn1 
+TRACE:(6) LocatePointer ShortMenu
+TRACE:(7) ClickMB Btn1
 TRACE:(8) WindowMenuPost Shell1
 TRACE:(9) WindowMenuSelect Shell1 entry_1
 TRACE:(10) Continue
-TRACE:(11) LocatePointer LongMenu  
-TRACE:(12) ClickMB Btn1 
+TRACE:(11) LocatePointer LongMenu
+TRACE:(12) ClickMB Btn1
 TRACE:(13) WindowMenuPost Shell1
 TRACE:(14) WindowMenuSelect Shell1 entry_2
 entry 2 selected
@@ -42,8 +42,8 @@ TRACE:(15) WindowMenuPost Shell1
 TRACE:(16) WindowMenuSelect Shell1 entry_3
 entry 3 selected
 TRACE:(17) Continue
-TRACE:(18) LocatePointer LongMenu  
-TRACE:(19) ClickMB Btn1 
+TRACE:(18) LocatePointer LongMenu
+TRACE:(19) ClickMB Btn1
 TRACE:(20) WindowMenuPost Shell1
 TRACE:(21) WindowMenuSelect Shell1 entry_1
      SCRWARNING** : Menu item 8 (entry_1) insensitive.
@@ -53,8 +53,8 @@ TRACE:(23) WindowMenuSelect Shell1 entry_2
 TRACE:(24) WindowMenuPost Shell1
 TRACE:(25) WindowMenuSelect Shell1 entry_3
      SCRWARNING** : Menu item 10 (entry_3) insensitive.
-TRACE:(26) LocatePointer LongMenu  
-TRACE:(27) ClickMB Btn1 
+TRACE:(26) LocatePointer LongMenu
+TRACE:(27) ClickMB Btn1
 TRACE:(28) WindowMenuPost Shell1
 TRACE:(29) WindowMenuSelect Shell1 entry_1
 entry 1 selected
@@ -65,8 +65,8 @@ TRACE:(32) WindowMenuPost Shell1
 TRACE:(33) WindowMenuSelect Shell1 entry_3
 entry 3 selected
 TRACE:(34) Continue
-TRACE:(35) LocatePointer NoMenu  
-TRACE:(36) ClickMB Btn1 
+TRACE:(35) LocatePointer NoMenu
+TRACE:(36) ClickMB Btn1
 TRACE:(37) WindowMenuPost Shell1
 TRACE:(38) WindowMenuSelect Shell1 entry_1
      SCRWARNING** : Menu item entry_1 NOT present in the WindowMenu.
@@ -82,16 +82,16 @@ TRACE:(42) WindowMenuSelect Shell1 entry_3
 TRACE:(43) Continue
 TRACE:(44) WindowMenuPost Shell1
 TRACE:(45) WindowMenuSelect Shell1 Close
-TRACE:(46) LocatePointer Shell1  
+TRACE:(46) LocatePointer Shell1
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
 TRACE:(47) Continue
-TRACE:(48) LocatePointer Shell1  
+TRACE:(48) LocatePointer Shell1
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
 TRACE:(49) WindowIconify Shell1
 TRACE:(50) IconMenuPost Shell1
 TRACE:(51) IconMenuSelect Shell1 Close
 TRACE:(52) Continue
-TRACE:(53) LocatePointer Shell1  
+TRACE:(53) LocatePointer Shell1
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
 TRACE:(54) Continue
 TRACE:(55) Exit

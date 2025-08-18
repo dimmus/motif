@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MenuBar3.c /main/7 1995/07/13 18:47:32 drk $"
@@ -47,8 +47,8 @@ char **argv;
 {
 
   static Arg args[50];
-  static int n;	
-  
+  static int n;
+
   CommonTestInit(argc, argv);
 
   /*
@@ -82,19 +82,19 @@ char **argv;
 
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, pd1); 			n++;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Commands")); 			n++;
   XtSetArg(args[n], XmNmnemonic, 'C'); 				n++;
   cb1 = XmCreateCascadeButton(mb, "cb1", args, n);
   XtManageChild (cb1);
 
   n = 0;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Exit")); 			n++;
   XtSetArg(args[n], XmNmnemonic, 'E'); 				n++;
   XtSetArg(args[n], XmNborderWidth, 0); 			n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>e"); 		n++;
-  XtSetArg(args[n], XmNacceleratorText, 
+  XtSetArg(args[n], XmNacceleratorText,
 	   XmStringCreateSimple("Ctrl+E")); 			n++;
   pb11 = XmCreatePushButton(pd1, "pb11", args, n);
   XtManageChild (pb11);
@@ -110,19 +110,19 @@ char **argv;
 
   n = 0;
   XtSetArg(args[n], XmNsubMenuId, pd2); 			n++;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Stuff")); 			n++;
   XtSetArg(args[n], XmNmnemonic, 'S'); 				n++;
   cb2 = XmCreateCascadeButton(mb, "cb2", args, n);
   XtManageChild (cb2);
 
   n = 0;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Nothing")); 	  		n++;
   XtSetArg(args[n], XmNmnemonic, 'N'); 				n++;
   XtSetArg(args[n], XmNborderWidth, 0);				n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl Shift<Key>n"); 	n++;
-  XtSetArg(args[n], XmNacceleratorText, 
+  XtSetArg(args[n], XmNacceleratorText,
 	   XmStringCreateSimple("Ctrl+Shift+N")); 		n++;
   pb21 = XmCreatePushButton(pd2, "pb21", args, n);
   XtManageChild(pb21);
@@ -130,12 +130,12 @@ char **argv;
   XtAddCallback(pb21, XmNactivateCallback, donothing, (XtPointer) 1);
 
   n = 0;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Something")); 			n++;
   XtSetArg(args[n], XmNmnemonic, 'S'); 				n++;
   XtSetArg(args[n], XmNborderWidth, 0);				n++;
   XtSetArg(args[n], XmNaccelerator, "Shift Ctrl<Key>s"); 	n++;
-  XtSetArg(args[n], XmNacceleratorText, 
+  XtSetArg(args[n], XmNacceleratorText,
 	   XmStringCreateSimple("Shift+Ctrl+S")); 		n++;
   pb22 = XmCreatePushButton(pd2, "pb22", args, n);
   XtManageChild(pb22);
@@ -145,12 +145,12 @@ char **argv;
 
 
   n = 0;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Cookies")); 			n++;
   XtSetArg(args[n], XmNmnemonic, 'C'); 				n++;
   XtSetArg(args[n], XmNborderWidth, 0); 			n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>c"); 		n++;
-  XtSetArg(args[n], XmNacceleratorText, 
+  XtSetArg(args[n], XmNacceleratorText,
 	   XmStringCreateSimple("Ctrl+C"));			n++;
   pb23 = XmCreatePushButton(pd2, "pb23", args, n);
   XtManageChild(pb23);
@@ -160,12 +160,12 @@ char **argv;
  /* test case for CR 5201 */
 
   n = 0;
-  XtSetArg(args[n], XmNlabelString, 
+  XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("Help")); 			n++;
   XtSetArg(args[n], XmNmnemonic, 'C'); 				n++;
   XtSetArg(args[n], XmNborderWidth, 0); 			n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>osfHelp"); 		n++;
-  XtSetArg(args[n], XmNacceleratorText, 
+  XtSetArg(args[n], XmNacceleratorText,
 	   XmStringCreateSimple("Ctrl+osfHelp"));			n++;
   pb24 = XmCreatePushButton(pd2, "pb24", args, n);
   XtManageChild(pb24);
@@ -187,16 +187,16 @@ char **argv;
   XtAppMainLoop(app_context);
 }
 
-static void doexit(Widget widget, caddr_t tag, 
+static void doexit(Widget widget, caddr_t tag,
 		    XmAnyCallbackStruct *callback_data)
 {
-    
+
   printf ("Exiting...\n");
   exit (1);
 
 }
 
-static void donothing(Widget widget, XtPointer tag, 
+static void donothing(Widget widget, XtPointer tag,
 		    XmAnyCallbackStruct *callback_data)
 {
   printf ("Doin Nothing\n");
@@ -210,14 +210,14 @@ static void dosomething(Widget widget, XtPointer tag,
   return;
 }
 
-static void docookies(Widget widget, XtPointer tag, 
+static void docookies(Widget widget, XtPointer tag,
 		       XmAnyCallbackStruct *callback_data)
 {
   printf ("I want COOKIES!!!!!!!!!!\n");
   return;
 }
 
-static void dohelp(Widget widget, XtPointer tag, 
+static void dohelp(Widget widget, XtPointer tag,
 		       XmAnyCallbackStruct *callback_data)
 {
   printf ("Help?!? HA!!!!!!!!!!\n");

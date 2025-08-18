@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-#!) This is a test of traversal behaviors.  
+#!) This is a test of traversal behaviors.
 #) The five boxed frames are tab groups explicitly set to XmNONE.  You can move
-# between the groups by hitting the left/right up/down arrow keys. 
+# between the groups by hitting the left/right up/down arrow keys.
 #) Use the return or space key to activate (depress) the buttons.
 
 WindowFocus Shell1

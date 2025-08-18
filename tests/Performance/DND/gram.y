@@ -73,13 +73,13 @@ spec	: INCLUDE string
 		if ($6 != NULL);
 		{
 		    register struct menu *menu;
-		    
+
 		    menu = FindMenu($2, TRUE);
 		    /* if the menu already existed, add new items to end */
 		    if (menu->firstMenuEntry)
 		    {
 			struct menuEntry *tlast;
-			
+
 			menu->lastMenuEntry->next = $6;
 			$6->prev->next = NULL;
 			tlast = menu->lastMenuEntry;
@@ -105,7 +105,7 @@ spec	: INCLUDE string
 #endif /* TCMENU */
 		}
 	    }
-		
+
 	| REMOVE string
 	    {
 		RemoveMenuEntry($2, NULL);
@@ -220,5 +220,3 @@ char *s;
 {
     FileError("%s\n",s);
 }
-
-    

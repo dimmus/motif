@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1c.Dat -u c".
 # C)
-# 
+#
 # #) The container widget should be displayed in its SMALL_ICON view,
 #    with an OUTLINE layoutType.
 # #) Four IconGadgets with the pixmap part displaying a "S" within
@@ -41,7 +41,7 @@
 Continue
 CompareVisual Container1c
 Continue
- 
+
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
 #    of the item "IconGad3".
 # #) The pixmap should change to showing the letter "E", indicating that
@@ -66,7 +66,7 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container1c
 Continue
- 
+
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
 #    of the item "IconGad32".
 # #) The pixmap should change to showing the letter "E", indicating that
@@ -90,7 +90,7 @@ LocatePointer IconGad32 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container1c
 Continue
- 
+
 # #) Click BSelect on the collapsedState pixmap "C" displayed to the left
 #    of the item "IconGad321".
 # #) The pixmap should change to showing the letter "E", indicating that
@@ -129,7 +129,7 @@ Continue
 LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container1c
-PressMB Btn1 
+PressMB Btn1
 LocatePointer IconGad2 Right
 LocatePointer IconGad3 Right
 LocatePointer IconGad32

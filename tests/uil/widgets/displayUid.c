@@ -1,5 +1,5 @@
 /* $XConsortium: displayUid.c /main/8 1995/07/15 21:14:34 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 
 /*
 
@@ -45,7 +45,7 @@
 #define MAX_CALLBACK	32
 #define MAX_LEN		255
 
-#include <Mrm/MrmAppl.h>    
+#include <Mrm/MrmAppl.h>
 #include <Xm/Xm.h>
 #include "reasons.h"
 
@@ -60,7 +60,7 @@ static void ProcessCommandArgs();
 
 
 static MrmHierarchy	s_MrmHierarchy;
-static char		*vec[MAX_FILES];   	
+static char		*vec[MAX_FILES];
 static MrmCode		class;
 
 
@@ -114,7 +114,7 @@ char **argv;
     ProcessCommandArgs();
 
     XtAppAddActions(app_context, actions, num_actions);
-    
+
     /*
      *  Define the Mrm hierarchy (only 1 file)
      */
@@ -123,7 +123,7 @@ char **argv;
 			vec, 			    /* files     	    */
 			NULL,			    /* os_ext_list (null)   */
 			&s_MrmHierarchy)	    /* ptr to returned id   */
-			!= MrmSUCCESS) 
+			!= MrmSUCCESS)
 			{
 				printf ("Can't open hierarchy\n");
      				exit(1);
@@ -131,7 +131,7 @@ char **argv;
 
     /*
      *		Register all Mrm functions
-     */	
+     */
 
 
     if (MrmRegisterNames (reglist, reglist_num)
@@ -163,7 +163,7 @@ char **argv;
      */
 
     XtManageChild(widgetmain);
-    
+
     /*
      *  Realize the Shell1 widget.  This will cause the entire "managed"
      *  widget hierarchy to be displayed
@@ -291,7 +291,7 @@ int                         num_params;
     static Widget fetched;
 
     fetch("Popup_Menu",&fetched);
-    XmMenuPosition(fetched, event);  
+    XmMenuPosition(fetched, event);
     XtManageChild(fetched);
 }
 
@@ -310,7 +310,7 @@ static int flag = 0;
     XtSetArg (args[n], XmNbackground, CommonGetColor("white")); n++;
     XtSetValues (XtParent(widget), args, n);
     flag = 1;
-  } 
+  }
   else {
     n = 0;
     XtSetArg (args[n], XmNbackground, CommonGetColor("blue")); n++;
@@ -348,7 +348,5 @@ static void ProcessCommandArgs()
   printf("/*********************************************************/\n");
   printf("---- The uid file to be opened is %s ---- \n", uidname);
   printf("/*********************************************************/\n\n");
-  vec[0] = XtNewString(uidname); 
+  vec[0] = XtNewString(uidname);
 }
-
-

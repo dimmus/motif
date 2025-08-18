@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 #  A client with a Paned Window with three pushbuttons labeled
-#  PushButton1, PushButton2, and PushButton3 will appear. 
+#  PushButton1, PushButton2, and PushButton3 will appear.
 #  The Paned Window should be horizontal.
 #  The space on all 4 sides between the PanedWindow and its children should
 #  be 20 pixels.
@@ -42,19 +42,19 @@ Continue
 #  - the leftmost pane should expand.
 #  - the middle pane should contract.
 #  - the rightmost pane should contract.
-#  - Pushbutton1 should be visible. 
+#  - Pushbutton1 should be visible.
 
 
 LocatePointer PanedWindow1 RSash 0
 DragXYRelative Right 100
 CompareVisual PanedWindow1
- 
+
 #  Press and hold MB1 on the leftmost sash.  Drag the pointer to the
 #  left extreme of the client window.  Release MB1.
 #    - the leftmost pane should contract
 #    - the middle pane should expand
 #    - the rightmost pane should be unchanged
-#    - Pushbutton2 should be visible. 
+#    - Pushbutton2 should be visible.
 
 
 
@@ -67,7 +67,7 @@ CompareVisual PanedWindow1
 #    - the leftmost pane should be unchanged.
 #    - the middle pane should contract.
 #    - the rightmost pane should expand.
-#    - Pushbutton3 should be visible. 
+#    - Pushbutton3 should be visible.
 
 LocatePointer PanedWindow1 RSash 1
 DragXYRelative Right 100
@@ -106,4 +106,3 @@ Continue
 WindowRaise Shell1
 CompareVisual PanedWindow1
 Exit
-

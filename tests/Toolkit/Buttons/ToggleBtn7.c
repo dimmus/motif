@@ -41,8 +41,8 @@ static char *indicator_on_strings[NUM_INDICATOR_ON_VALUES] = {
         "XmINDICATOR_BOX",
 	"XmINDICATOR_CHECK",
 	"XmINDICATOR_CHECK_BOX",
-	"XmINDICATOR_CROSS", 
-	"XmINDICATOR_CROSS_BOX" 
+	"XmINDICATOR_CROSS",
+	"XmINDICATOR_CROSS_BOX"
      };
 
 static char *indicator_type_strings[NUM_INDICATOR_TYPE_VALUES] = {
@@ -58,15 +58,15 @@ static unsigned int indicator_on[NUM_INDICATOR_ON_VALUES] = {
         XmINDICATOR_BOX,
 	XmINDICATOR_CHECK,
 	XmINDICATOR_CHECK_BOX,
-	XmINDICATOR_CROSS, 
-	XmINDICATOR_CROSS_BOX }; 
-	
+	XmINDICATOR_CROSS,
+	XmINDICATOR_CROSS_BOX };
+
 static unsigned int indicator_type[NUM_INDICATOR_TYPE_VALUES] = {
         XmN_OF_MANY,
 	XmONE_OF_MANY,
 	XmONE_OF_MANY_ROUND,
 	XmONE_OF_MANY_DIAMOND };
- 
+
 Widget ToggleButton[NUM_TOGGLE_BUTTONS];
 Widget ToggleButtonGadget[NUM_TOGGLE_BUTTONS];
 Widget IndicatorOnOptions, IndicatorTypeOptions;
@@ -124,7 +124,7 @@ unsigned char	indicatorType;
              printf("*** an invalid value *** \n");
      }
 
-     printf("XmNindicatorType = "); 
+     printf("XmNindicatorType = ");
      switch( indicatorType )
      {
         case XmN_OF_MANY:
@@ -153,7 +153,7 @@ void IndicatorOnCB( Widget widget, XtPointer client_data, XtPointer call_data )
 	n = 0;
 	XtSetArg( args[n], XmNindicatorOn, indicator_on ); n++;
 	for ( i = 0; i < NUM_TOGGLE_BUTTONS; i++ )
-        { 
+        {
 		XtSetValues( ToggleButton[i], args, n );
 		XtSetValues( ToggleButtonGadget[i], args, n );
 	}
@@ -166,7 +166,7 @@ void IndicatorTypeCB( Widget widget, XtPointer client_data, XtPointer call_data 
 	n = 0;
 	XtSetArg( args[n], XmNindicatorType, indicator_type ); n++;
 	for ( i = 0; i < NUM_TOGGLE_BUTTONS; i++ )
-        { 
+        {
 		XtSetValues( ToggleButton[i], args, n );
 		XtSetValues( ToggleButtonGadget[i], args, n );
 	}
@@ -201,13 +201,13 @@ char		buffer[25];
         XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
         XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
         RowColumn = XmCreateRowColumn( Form, "RowColumn", args, n );
-        XtManageChild( RowColumn ); 
+        XtManageChild( RowColumn );
 
        /*
         *  Create label and option menu for XmNindicatorOn
         *  resource settings.
         */
-	string = XmStringCreateLtoR("XmNindicatorOn:", 
+	string = XmStringCreateLtoR("XmNindicatorOn:",
 	         XmFONTLIST_DEFAULT_TAG );
 
 	n = 0;
@@ -217,7 +217,7 @@ char		buffer[25];
 	XmStringFree( string );
 
 	n = 0;
-	Pulldown1 = XmCreatePulldownMenu(RowColumn, "Pulldown1", 
+	Pulldown1 = XmCreatePulldownMenu(RowColumn, "Pulldown1",
                    args, n );
 
 	for ( i = 0; i < NUM_INDICATOR_ON_VALUES; i++ )
@@ -225,13 +225,13 @@ char		buffer[25];
 	    string = XmStringCreateLtoR( indicator_on_strings[i],
 		     XmFONTLIST_DEFAULT_TAG );
             n = 0;
-	    sprintf( buffer, "IndicatorOnPB%d", i ); 
+	    sprintf( buffer, "IndicatorOnPB%d", i );
 	    XtSetArg( args[n], XmNlabelString, string ); n++;
-            IndicatorOnPB[i] = 
-               XmCreatePushButton( Pulldown1, buffer, args, n ); 
-            XmStringFree( string );	
+            IndicatorOnPB[i] =
+               XmCreatePushButton( Pulldown1, buffer, args, n );
+            XmStringFree( string );
 	    XtAddCallback( IndicatorOnPB[i], XmNactivateCallback,
-	                   IndicatorOnCB, (XtPointer)&indicator_on[i] ); 
+	                   IndicatorOnCB, (XtPointer)&indicator_on[i] );
         }
 	XtManageChildren( IndicatorOnPB, NUM_INDICATOR_ON_VALUES );
 
@@ -247,7 +247,7 @@ char		buffer[25];
         *  Create label and option menu for XmNindicatorType
         *  resource settings.
         */
-	string = XmStringCreateLtoR("XmNindicatorType:", 
+	string = XmStringCreateLtoR("XmNindicatorType:",
 	         XmFONTLIST_DEFAULT_TAG );
 
 	n = 0;
@@ -257,7 +257,7 @@ char		buffer[25];
 	XmStringFree( string );
 
 	n = 0;
-	Pulldown2 = XmCreatePulldownMenu(RowColumn, "Pulldown2", 
+	Pulldown2 = XmCreatePulldownMenu(RowColumn, "Pulldown2",
                    args, n );
 
 	for ( i = 0; i < NUM_INDICATOR_TYPE_VALUES; i++ )
@@ -265,13 +265,13 @@ char		buffer[25];
 	    string = XmStringCreateLtoR( indicator_type_strings[i],
 		     XmFONTLIST_DEFAULT_TAG );
             n = 0;
-	    sprintf( buffer, "IndicatorTypePB%d", i ); 
+	    sprintf( buffer, "IndicatorTypePB%d", i );
 	    XtSetArg( args[n], XmNlabelString, string ); n++;
-            IndicatorTypePB[i] = 
-               XmCreatePushButton( Pulldown2, buffer, args, n ); 
-            XmStringFree( string );	
+            IndicatorTypePB[i] =
+               XmCreatePushButton( Pulldown2, buffer, args, n );
+            XmStringFree( string );
 	    XtAddCallback( IndicatorTypePB[i], XmNactivateCallback,
-	                   IndicatorTypeCB, (XtPointer)&indicator_type[i] ); 
+	                   IndicatorTypeCB, (XtPointer)&indicator_type[i] );
         }
 	XtManageChildren( IndicatorTypePB, NUM_INDICATOR_TYPE_VALUES );
 
@@ -281,7 +281,7 @@ char		buffer[25];
         XtSetArg( args[n], XmNsubMenuId, Pulldown2 ); n++;
         IndicatorTypeOptions =
         XmCreateOptionMenu( RowColumn, "IndicatorTypeOptions", args, n );
-        XtManageChild( IndicatorTypeOptions ); 
+        XtManageChild( IndicatorTypeOptions );
 
 
 	XtPopup( PopupShell, XtGrabNone );
@@ -327,7 +327,7 @@ Widget		Manager1, RadioBox;
      		XtSetArg( args[n], XmNtopWidget, ToggleButton[i-1] ); n++;
         }
      	XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++;
-        ToggleButton[i] = 
+        ToggleButton[i] =
            XmCreateToggleButton( Manager1, buffer, args, n );
         XtManageChild( ToggleButton[i] );
      }
@@ -354,7 +354,7 @@ Widget		Manager1, RadioBox;
 	}
      	XtSetArg( args[n], XmNleftAttachment, XmATTACH_WIDGET ); n++;
      	XtSetArg( args[n], XmNleftWidget, ToggleButton[i] ); n++;
-     	ToggleButtonGadget[i] = 
+     	ToggleButtonGadget[i] =
           XmCreateToggleButtonGadget( Manager1, buffer, args, n );
      	XtManageChild( ToggleButtonGadget[i] );
       }
@@ -368,17 +368,17 @@ Widget		Manager1, RadioBox;
      XtRealizeWidget( Shell1 );
 
 
-     CommonPause(); 
+     CommonPause();
 
     /*
-     *  Print the default values of the XmNindicatorOn and 
+     *  Print the default values of the XmNindicatorOn and
      *  XmNindicatorType resource values for the ToggleButton
      *  and ToggleButtonGadget.
      */
      PrintIndicatorValues( ToggleButton[0] );
      PrintIndicatorValues( ToggleButtonGadget[0] );
 
-     CommonPause(); 
+     CommonPause();
 
     /*
      *  Destroy the ToggleButton and ToggleButtonGadget widgets, so that
@@ -413,14 +413,14 @@ Widget		Manager1, RadioBox;
      XtSetArg( args[n], XmNbottomAttachment, XmATTACH_FORM ); n++;
      XtSetArg( args[n], XmNorientation, XmHORIZONTAL ); n++;
      XtSetArg( args[n], XmNnumColumns, 2 ); n++;
-     RadioBox = XmCreateRadioBox( Manager1, "RadioBox", args, n ); 
+     RadioBox = XmCreateRadioBox( Manager1, "RadioBox", args, n );
 
     /*
-     *  Create XmToggleButtons and XmToggleButtonGadgets, 
+     *  Create XmToggleButtons and XmToggleButtonGadgets,
      *  with default resource values, and a children of
      *  a XmRadioBox widget.
      */
-     for ( i = 0; i < NUM_TOGGLE_BUTTONS; i++ ) 
+     for ( i = 0; i < NUM_TOGGLE_BUTTONS; i++ )
      {
 	sprintf( buffer, "ToggleButton%d", i );
 
@@ -440,8 +440,8 @@ Widget		Manager1, RadioBox;
      PrintIndicatorValues( ToggleButton[0] );
      PrintIndicatorValues( ToggleButtonGadget[0] );
 
-     CommonPause(); 
-     CommonPause(); 
+     CommonPause();
+     CommonPause();
 
      XtAppMainLoop( app_context );
 }

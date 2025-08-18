@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,17 +19,17 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ErrorD.c /main/8 1995/07/14 11:03:09 drk $"
 #endif
 #endif
 /*      @(#)instance	1.2     Date:02/12/91                              */
-/**************************************************************************                                                           
+/**************************************************************************
     TEST: XmErrorDialog
     AUTHOR: Automatic generation.
     DATE: Wed Oct  9 16:40:08 EDT 1991
@@ -276,7 +276,7 @@ static MvsWidgetClassInfo mvXmErrorDialogWidgetClass = {
   /* short                 num_resources;                */
                           sizeof(Wresource_info)/sizeof(MvsResourceInfoRecord),
   /* MvsIntResInfoRecord   *intres_info;  */                NULL,
-  /* short                 num_intres;                   */ 
+  /* short                 num_intres;                   */
                            0,
   /* Arg                   common_args[20];              */
       { {"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},
@@ -293,4 +293,3 @@ static MvsWidgetClassInfo mvXmErrorDialogWidgetClass = {
 };
 
 MvsWidgetClassInfo *iXmErrorDialogWidgetClass = &mvXmErrorDialogWidgetClass;
-

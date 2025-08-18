@@ -18,10 +18,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
-        message : 
+        message :
 	"This is a Message Box in a Dialog Shell with\nthe following characteristics:\n\n" &
 	"   - XmNx is 50\n   - XmNy is 50\n   - XmNallowShellResize is true\n" &
 	"   - background color (MessageBox) is yellow\n" &

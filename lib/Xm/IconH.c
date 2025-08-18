@@ -43,7 +43,7 @@ static Widget GetContainerParent(Widget);
 
 /********    End Static Function Declarations    ********/
 
-static	XtResource		resources[] = 
+static	XtResource		resources[] =
 	{
 		{
 		XmNcontainerID,XmCContainerID,XmRWidget,
@@ -69,7 +69,7 @@ static XmGadgetClassExtRec GadClassExtRec = {
 
 externaldef( xmiconheaderclassrec) XmIconHeaderClassRec	xmIconHeaderClassRec =
 {	/* RectObjClassPart */
-	{	
+	{
 		(WidgetClass) &xmIconGadgetClassRec, /* superclass	*/
 		"XmIconHeader",			/* class_name		*/
 		sizeof (XmIconHeaderRec),	/* widget_size		*/
@@ -170,7 +170,7 @@ GetContainerParent(
 -------------------*/
 /************************************************************************
  * XmCreateIconHeader
- * 
+ *
  * Create an instance of a xmIconHeaderClass widget and
  * return it's id.
  ************************************************************************/

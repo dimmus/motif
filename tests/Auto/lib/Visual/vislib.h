@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: vislib.h /main/9 1996/10/30 11:34:49 drk $ */
 /***********************************************************************
   	@(#)vislib.h	1.4.1.1	Date:1/22/91
@@ -113,13 +113,13 @@
     unsigned int mvsTempImageWidth;
     unsigned int mvsTempImageHeight;
     struct mvsTempImageRec *next;
-  }; 
+  };
 
 extern  struct mvsTempImageRec *mvsTempImageRecHead, *mvsTempImageRecTail;
 
 
 /* Byte Order Test Macro */
- 
+
   visGLOBAL short mvsByteOrderTestWord visINIT(1);
 # define LEAST_SIGNIFICANT_BYTE_FIRST (*(char *)&mvsByteOrderTestWord)
 

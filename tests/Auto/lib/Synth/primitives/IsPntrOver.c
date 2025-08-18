@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsPntrOver.c /main/7 1995/07/14 11:39:44 drk $"
@@ -46,7 +46,7 @@ static char rcsid[] = "$XConsortium: IsPntrOver.c /main/7 1995/07/14 11:39:44 dr
 
         INPUTS:
             none
-        
+
         OUTPUTS:
             none
 
@@ -76,7 +76,7 @@ int object_type_in;
 
         tmp = cum_object_type / xisNumObjectTypes;
         object_type = cum_object_type - (tmp*xisNumObjectTypes);
-     
+
         if (object->id.object_type != object_type) { /* Does not match */
             succeed = 0;
             break;

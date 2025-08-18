@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PIProto.c /main/8 1995/07/13 20:23:29 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: PIProto.c /main/8 1995/07/13 20:23:29 drk $
 #include	<testlib.h>
 #include	<PITests.h>
 
-#include	"PIProto.h" 
+#include	"PIProto.h"
 #include	"btn1.bmp"
 #include	"btn2.bmp"
 
@@ -47,7 +47,7 @@ ErrorHandle(Display *disp, XErrorEvent *err)
 
 
 static void
-CMEventHandler(Widget w, XtPointer client_data, XEvent *ev, 
+CMEventHandler(Widget w, XtPointer client_data, XEvent *ev,
 			   Boolean *continue_to_dispatch)
 {
 	XClientMessageEvent	*cm_ev;
@@ -66,7 +66,7 @@ CMEventHandler(Widget w, XtPointer client_data, XEvent *ev,
 				 */
 				PIInfo[PIInfo_DW1].actual_return = (w == test_top);
 			}
-	
+
 #ifdef	DONT
 			if (cm_ev->data.l[0] == savylf_atom)
 			{
@@ -209,7 +209,7 @@ main(unsigned int argc, char **argv)
 	XtRealizeWidget(Shell1);
 
     CommonPause();
-    
+
 	XSetErrorHandler(ErrorHandle);
 	/*
  	 * Initialize the PIInfo data values
@@ -313,7 +313,7 @@ main(unsigned int argc, char **argv)
 		takfoc_atom = XmInternAtom(display, "WM_TAKE_FOCUS", False);
 		/* change it on test_wdw2 */
 		XChangeProperty(display, test_wdw2,
-			proto_atom, 
+			proto_atom,
 			proto_atom, 32, PropModeReplace,
 			(unsigned char *)&takfoc_atom, 1);
 #endif	/* DONT */
@@ -337,8 +337,8 @@ main(unsigned int argc, char **argv)
 	/* add to the menu with the _MOTIF_WM_MENU property */
 	strcpy(menu_item, send_msg1);
 	menu_atom = XmInternAtom(display, "_MOTIF_WM_MENU", False);
-	XChangeProperty(display, test_wdw2, menu_atom, menu_atom, 8, 
-					PropModeReplace, (unsigned char *)menu_item, 
+	XChangeProperty(display, test_wdw2, menu_atom, menu_atom, 8,
+					PropModeReplace, (unsigned char *)menu_item,
 					strlen(menu_item) + 1);
     /* add a message acceptance to widget */
 	motif_msg_atom = XmInternAtom(display, "_MOTIF_WM_MESSAGES", False);
@@ -363,7 +363,7 @@ main(unsigned int argc, char **argv)
 	 * Unmap the window to change state
 	 */
 	PIUnmapWindow(test_wdw2);
-	/* 
+	/*
 	 * Map the window into iconic state
 	 */
 	wm_set_hints.flags = (StateHint);
@@ -382,8 +382,8 @@ main(unsigned int argc, char **argv)
   	 */
 	/* add to the menu with the _MOTIF_WM_MENU property */
 	strcpy(menu_item2, send_msg2);
-	XChangeProperty(display, test_wdw2, menu_atom, menu_atom, 8, 
-					PropModeAppend, (unsigned char *)menu_item2, 
+	XChangeProperty(display, test_wdw2, menu_atom, menu_atom, 8,
+					PropModeAppend, (unsigned char *)menu_item2,
 					strlen(menu_item2) + 1);
 	/*
  	 * Turn on acceptance of send_message2
@@ -408,8 +408,8 @@ main(unsigned int argc, char **argv)
   	 */
 	/* add to the menu with the _MOTIF_WM_MENU property */
 	strcpy(menu_item2, send_msg3);
-	XChangeProperty(display, test_wdw2, menu_atom, menu_atom, 8, 
-					PropModeReplace, (unsigned char *)menu_item2, 
+	XChangeProperty(display, test_wdw2, menu_atom, menu_atom, 8,
+					PropModeReplace, (unsigned char *)menu_item2,
 					strlen(menu_item2) + 1);
 #ifndef P899
 	/*
@@ -443,4 +443,3 @@ main(unsigned int argc, char **argv)
 	XtAppMainLoop(app_context);
 
 }
-

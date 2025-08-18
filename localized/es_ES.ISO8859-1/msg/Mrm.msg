@@ -1,26 +1,26 @@
 $ $XConsortium: Mrm.msg /main/3 1996/10/19 14:47:45 rws $
-$ 
+$
 $ Motif
-$ 
+$
 $ Copyright (c) 1987-2012, The Open Group. All rights reserved.
-$ 
+$
 $ These libraries and programs are free software; you can
 $ redistribute them and/or modify them under the terms of the GNU
 $ Lesser General Public License as published by the Free Software
 $ Foundation; either version 2 of the License, or (at your option)
 $ any later version.
-$ 
+$
 $ These libraries and programs are distributed in the hope that
 $ they will be useful, but WITHOUT ANY WARRANTY; without even the
 $ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 $ PURPOSE. See the GNU Lesser General Public License for more
 $ details.
-$ 
+$
 $ You should have received a copy of the GNU Lesser General Public
 $ License along with these librararies and programs; if not, write
 $ to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 $ Floor, Boston, MA 02110-1301 USA
-$ 
+$
 
 $ This message catalog contains messages issued by Motif Mrm library.
 $ Consult X-Window systems, OSF/MOTIF Programmer's Guide and OSF/MOTIF
@@ -30,7 +30,7 @@ $ Do not translate variables such as %s, %d %s ... etc.
 $ Do not translate Motif resource name, such as XmNlabelType.
 $ Special terms with capital letter(s) should not be translated.
 $ "False" and "True" are keywords. Do not translate.
- 
+
 $quote "
 
 $set MS_Mrm
@@ -276,4 +276,3 @@ MSG__0117 "El archivo UID contiene la cadena de versión g %s no válida. No se pu
 MSG__0118 "La versión %s de Mrm es mayor que la versión del archivo %s.\nPor favor vuelva a compilar el archivo UIL."
 
 MSG__0119 "El objeto '%s' se ha declarado como PRIVATE."
-

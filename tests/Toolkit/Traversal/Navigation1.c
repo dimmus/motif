@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation1.c /main/9 1995/07/13 19:40:16 drk $"
@@ -76,7 +76,7 @@ void PrintName_2(rc, client_data, data)
 
 {
      XmRowColumnCallbackStruct	*rc_data=(XmRowColumnCallbackStruct*)data;
-    fprintf(stdout, "Widget %s was activated\n", 
+    fprintf(stdout, "Widget %s was activated\n",
 	    XrmQuarkToString(rc_data->widget->core.xrm_name));
 }
 
@@ -107,7 +107,7 @@ XtPointer client_data, call_data;
   char buf[16];
   static int counter = 1;
   Arg args[1];
-  
+
   sprintf (buf, "victim%d", counter);
   counter++;
 
@@ -117,8 +117,8 @@ XtPointer client_data, call_data;
 
 }
 
-Widget CreateManagedKid (Widget parent, 
-		       char *name, 
+Widget CreateManagedKid (Widget parent,
+		       char *name,
 		       XmNavigationType navMode,
 		       int numKids)
 
@@ -138,7 +138,7 @@ Widget CreateManagedKid (Widget parent,
   XtSetArg (args[n], XmNpacking, XmPACK_COLUMN); n++;
   kid = XmCreateRowColumn (parent, name, args, n);
 
-  /* alloc space to create subkids */  
+  /* alloc space to create subkids */
 
   subkids = (Widget *) XtMalloc (sizeof (Widget) * numKids);
 
@@ -170,7 +170,7 @@ void main (argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
 /*
  * case 1: 1.1 Paned Window parent, child of shell
  */
@@ -180,7 +180,7 @@ void main (argc, argv)
     XtManageChild(manager1);
 
     CreateButtons(manager1);
-    
+
     XtRealizeWidget (Shell1);
 
     CommonPause();
@@ -200,14 +200,14 @@ void main (argc, argv)
 
     n = 0;
     manager1 = XmCreatePanedWindow(mainWindow, "manager1", (ArgList) args, n);
-   
+
     XmAddTabGroup (manager1);
 
     CreateButtons(manager1);
 
     n = 0;
     rc2 = XmCreateRowColumn(mainWindow, "rc2", (ArgList) args, n);
-    
+
     n = 0;
     pb1 = XmCreatePushButton(rc2, "pb1", args, n);
     pb2 = XmCreatePushButton(rc2, "pb2", args, n);
@@ -257,7 +257,7 @@ void main (argc, argv)
  *             mainWindow (RC)
  *      manager1 (1.1 PW)    rc2 (1.1 RC)
  */
-    
+
     XmRemoveTabGroup (rc1);
     XtDestroyWidget (rc1);
     XmRemoveTabGroup (rc2);
@@ -271,12 +271,12 @@ void main (argc, argv)
     n = 0;
     manager1 = XmCreatePanedWindow(mainWindow, "manager1", (ArgList) args, n);
     XtManageChild(manager1);
-   
+
     CreateButtons(manager1);
 
     n = 0;
     rc2 = XmCreateRowColumn(mainWindow, "rc2", (ArgList) args, n);
-    
+
     n = 0;
     pb1 = XmCreatePushButton(rc2, "pb1", args, n);
     pb2 = XmCreatePushButton(rc2, "pb2", args, n);
@@ -304,7 +304,7 @@ void main (argc, argv)
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
     manager1 = XmCreatePanedWindow(mainWindow, "manager1", (ArgList) args, n);
     XtManageChild(manager1);
-   
+
     XmAddTabGroup (manager1);
 
     CreateButtons(manager1);
@@ -313,7 +313,7 @@ void main (argc, argv)
     XtSetArg(args[n], XmNtopWidget, manager1); n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
     rc2 = XmCreateRowColumn(mainWindow, "rc2", (ArgList) args, n);
-    
+
     n = 0;
     pb1 = XmCreatePushButton(rc2, "pb1", args, n);
     pb2 = XmCreatePushButton(rc2, "pb2", args, n);
@@ -327,7 +327,7 @@ void main (argc, argv)
 
     CommonPause();
 
-/*  
+/*
  *  case 5:  Note, we are keeping mainWindow this time.
  *           shell
  *         mainWindow (Form)
@@ -346,7 +346,7 @@ void main (argc, argv)
     XtManageChild(manager1);
 
     CreateButtons(manager1);
-    
+
     CommonPause();
 
 /*
@@ -358,10 +358,10 @@ void main (argc, argv)
       XtDestroyWidget (button[i]);
 
     CreateButtons (manager1);
-    
+
     CommonPause();
 
-/* 
+/*
  *  case 7: same thing, except make callback for buttons
  *          "traversal-indifferent"
  */

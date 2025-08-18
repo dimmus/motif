@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 #  A SpinBox with XmNspinBoxChildType = XmSTRING has been created.
@@ -32,7 +32,7 @@
 
 #  Click MB1 on the right-pointing arrow.  The test should not
 #  crash.
-# 
+#
 #  Click MB1 on the left-pointing arrow.  The test should not
 #  crash.
 LocatePointer SpinBox RIncrementBtn
@@ -46,4 +46,3 @@ Continue
 
 # E)
 Exit
-

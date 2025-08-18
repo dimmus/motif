@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: instances.h /main/8 1995/07/14 11:25:48 drk $ */
 
 /*******************************************************************************
@@ -96,7 +96,7 @@ extern MvsWidgetClassInfo *iXmSeparatorWidgetClass;
 extern MvsWidgetClassInfo *iXmSpinBoxWidgetClass;
 extern MvsWidgetClassInfo *iXmTemplateDialogWidgetClass;
 extern MvsWidgetClassInfo *iXmTextWidgetClass;
-extern MvsWidgetClassInfo *iXmTextFieldWidgetClass; 
+extern MvsWidgetClassInfo *iXmTextFieldWidgetClass;
 extern MvsWidgetClassInfo *iXmToggleButtonWidgetClass;
 extern MvsWidgetClassInfo *iXmToggleButtonGadgetClass;
 extern MvsWidgetClassInfo *iXmWarningDialogWidgetClass;

@@ -70,7 +70,7 @@ extern	void	XmContainerRelayout(
 extern	void	XmContainerReorder(
 			Widget		wid,
 			WidgetList	cwid_list,
-			int		cwid_count);	
+			int		cwid_count);
 extern  Boolean XmContainerCut(
                         Widget  wid,
                         Time    timestamp);

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -72,7 +72,7 @@ typedef struct _XmColorObjPart {
     Boolean         	useColorObj;  /* read only resource variable */
     Boolean             useText;        /* use text color set id for text? */
     Boolean             useTextForList; /* use text color set id for lists? */
-    
+
     Boolean		useMask;
     Boolean		useMultiColorIcons;
     Boolean		useIconFileCache;
@@ -92,7 +92,7 @@ typedef struct _XmColorObjClassPart {
     XtPointer        extension;
 } XmColorObjClassPart;
 
-/* 
+/*
  * we make it a appShell subclass so it can have it's own instance
  * hierarchy
  */
@@ -129,7 +129,7 @@ typedef struct _XmColorObjRec      *XmColorObj;
 
 /********    Private Function Declarations    ********/
 
-extern Boolean XmeGetIconControlInfo( 
+extern Boolean XmeGetIconControlInfo(
                         Screen *screen,
                         Boolean *useMaskRtn,
                         Boolean *useMultiColorIconsRtn,
@@ -150,10 +150,10 @@ extern Boolean XmeGetColorObjData(
 		   short *text_id) ;
 
 extern Boolean XmeGetDesktopColorCells (
-                         Screen * screen, 
-			 Colormap colormap, 
-			 XColor * colors,  
-			 int n_colors,     
+                         Screen * screen,
+			 Colormap colormap,
+			 XColor * colors,
+			 int n_colors,
 			 int * ncolors_returns) ;
 
 extern Boolean XmeGetPixelData (
@@ -173,4 +173,3 @@ extern Boolean XmeGetPixelData (
 #endif
 
 #endif /* _XmColorObjP_h */
-

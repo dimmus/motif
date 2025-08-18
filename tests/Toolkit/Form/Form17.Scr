@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #) A client with three PushButtons labeled PushButton1,
-#) PushButton2 and PushButton3 should appear in the Form. 
-#) Click MB1 on any of the three PushButtons. 
-#) The PushButton clicked on should disappear. 
+#) PushButton2 and PushButton3 should appear in the Form.
+#) Click MB1 on any of the three PushButtons.
+#) The PushButton clicked on should disappear.
 
 
 WindowResize Shell1 SouthEast 300 300
@@ -34,26 +34,26 @@ ClickMB Btn1
 CompareVisual Form
 Continue
 
-#) Click MB1 on either of the two remaining PushButtons. 
-#) The PushButton clicked on should disappear. 
+#) Click MB1 on either of the two remaining PushButtons.
+#) The PushButton clicked on should disappear.
 
 LocatePointer PushButton2
 ClickMB Btn1
 CompareVisual Form
 Continue
 
-#) Click MB1 on the one remaining PushButton. 
-#) The remaining PushButton should disappear. 
+#) Click MB1 on the one remaining PushButton.
+#) The remaining PushButton should disappear.
 
 LocatePointer PushButton3
 ClickMB Btn1
 CompareVisual Form
 Continue
 
-#) A 3x3 matrix of PushButtons should appear in the form. 
-#) Click MB1 on the PushButtons; they should disappear. 
-#) Click MB1 on the PushButtons until they all go away. 
-#) The Form should now have a width and height of 1x1. 
+#) A 3x3 matrix of PushButtons should appear in the form.
+#) Click MB1 on the PushButtons; they should disappear.
+#) Click MB1 on the PushButtons until they all go away.
+#) The Form should now have a width and height of 1x1.
 
 WindowResize Shell1 SouthEast 300 300
 
@@ -87,10 +87,10 @@ ClickMB Btn1
 CompareVisual Form
 Continue
 
-#) Nine Forms should appear within a Form. 
-#) Each child Form should contain a 3x3 matrix of PushButtons. 
-#) Click MB1 on the PushButtons; they should disappear. 
-#) Click MB1 on the PushButtons until they all go away. 
+#) Nine Forms should appear within a Form.
+#) Each child Form should contain a 3x3 matrix of PushButtons.
+#) Click MB1 on the PushButtons; they should disappear.
+#) Click MB1 on the PushButtons until they all go away.
 
 WindowResize Shell1 SouthEast 450 450
 
@@ -354,14 +354,3 @@ ClickMB Btn1
 CompareVisual Form
 
 Exit
-
-
-
-
-
-
-
-
-
-
-

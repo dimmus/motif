@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: OptionMenu1.c /main/9 1995/07/13 18:48:46 drk $"
@@ -63,7 +63,7 @@ static Widget CreateLabel(char *label, Widget parent, char *name)
   tcs = XmStringLtoRCreate(label, XmSTRING_DEFAULT_CHARSET);
 
   n = 0;
-  XtSetArg(args[n], XmNfontList, newfontlist);  	n++;  
+  XtSetArg(args[n], XmNfontList, newfontlist);  	n++;
   XtSetArg(args[n], XmNlabelString, tcs);  		n++;
   widget = XmCreateLabel(parent, name, args, n);
   XtManageChild(widget);
@@ -81,11 +81,11 @@ static Widget CreatePushButton(char *label, char mnemonic, char *accel,
     XmString tcs, tcs2;
 
     tcs  = XmStringLtoRCreate(label, XmSTRING_DEFAULT_CHARSET);
-    tcs2 = XmStringLtoRCreate(accelText, XmSTRING_DEFAULT_CHARSET); 
+    tcs2 = XmStringLtoRCreate(accelText, XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
-    XtSetArg(args[n], XmNbackground, CommonGetColor("red")); 	n++; 
-    XtSetArg(args[n], XmNfontList, newfontlist);  		n++;  
+    XtSetArg(args[n], XmNbackground, CommonGetColor("red")); 	n++;
+    XtSetArg(args[n], XmNfontList, newfontlist);  		n++;
     XtSetArg(args[n], XmNaccelerator, accel); 			n++;
     XtSetArg(args[n], XmNacceleratorText, tcs2);		n++;
     XtSetArg(args[n], XmNlabelString, tcs);  			n++;
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     char *char_set;
 
     CommonTestInit(argc, argv);
-    
+
     if ((newfont = XLoadQueryFont(display, "8x13bold")) == NULL)
       {
 	fprintf(stderr, "Exiting, font 8X13 Bold not available\n");
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 
 
     /* just for fun, put another manager in between */
-    
+
     n = 0;
     bboard2 = XmCreateBulletinBoard(bboard, "bboard2", args, n);
     XtManageChild(bboard2);
@@ -193,10 +193,10 @@ int main(int argc, char **argv)
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);         n++;
     XtSetArg(args[n], XmNsubMenuId,   PullDown1);   n++;
-    XtSetArg(args[n], XmNmenuHistory, PushBtn2);    n++; 
+    XtSetArg(args[n], XmNmenuHistory, PushBtn2);    n++;
     XtSetArg(args[n], XmNwhichButton, 3);	    n++;
     XtSetArg(args[n], XmNmnemonicCharSet, char_set); n++;
-    XtSetArg(args[n], XmNfontList, newfontlist);     n++;  
+    XtSetArg(args[n], XmNfontList, newfontlist);     n++;
     OptionMenu1 = XmCreateOptionMenu(bboard, "optionMenu", args, n);
     XtManageChild(OptionMenu1);
 
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
     fflush(stdout);
 
     /* End Test Code for PIR 2695 */
-    
+
     /*
      * Test Code for PIR 2911 and 2915
      *
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
     PushBtn1 = CreatePushButton("PushButton1", 'P', "Ctrl<Key>P",
 				"Ctrl-P",PullDown1, "PushBtn1");
 
-    PushBtn6 = CreatePushButton("*********PushButton6**********", 
+    PushBtn6 = CreatePushButton("*********PushButton6**********",
 				's', "Ctrl<Key>S", "Ctrl-S",
 				PullDown1, "PushBtn6");
 
@@ -273,7 +273,7 @@ int main(int argc, char **argv)
     n = 0;
     XtSetArg(args[n], XmNorientation, XmVERTICAL); n++;
     XtSetValues(OptionMenu1, args, n);
-    
+
     CommonPause();
 
 #endif
@@ -295,5 +295,5 @@ int main(int argc, char **argv)
     CommonPause();
 
     XtAppMainLoop(app_context);
-    
+
 }

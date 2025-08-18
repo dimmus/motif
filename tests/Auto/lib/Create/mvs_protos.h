@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: mvs_protos.h /main/7 1995/07/14 11:26:13 drk $ */
 /***********************************************************************
   	@(#)mvs_protos.h	1.31.1.1	Date:1/22/91
@@ -170,7 +170,7 @@ extern void mvsGetWidgetGeometry PARAMS((Widget widget, int *x, int *y,
                                          int *width, int *height,
                                          int *border_width));
 
-extern XisObjectRecord *mvsGetSubObjects PARAMS((XisObjectRecord *parent_obj, 
+extern XisObjectRecord *mvsGetSubObjects PARAMS((XisObjectRecord *parent_obj,
                                                 Widget widget,
                                                 int object_type, int instance,
 						int PreDefComposite));
@@ -185,18 +185,18 @@ extern void mvsCompareResources PARAMS((MvsWidgetInfoRecord *widget_info));
 extern MvsArgVal mvsConvertToType PARAMS((MvsArgVal value, int type));
 
 extern void mvsCopyReplace1Arg PARAMS((MvsWidgetClassInfo *widget_class_info,
-				Arg orig_args[],int *orig_argcnt, 
-                                char new_arg_name[], MvsArgVal new_arg_value)); 
+				Arg orig_args[],int *orig_argcnt,
+                                char new_arg_name[], MvsArgVal new_arg_value));
 
 extern void mvsCopyReplaceArgs PARAMS((MvsWidgetClassInfo *widget_class_info,
-				Arg orig_args[], Cardinal *orig_argcnt, 
-                                Arg new_args[], Cardinal new_arg_cnt)); 
+				Arg orig_args[], Cardinal *orig_argcnt,
+                                Arg new_args[], Cardinal new_arg_cnt));
 
 extern MvsArgVal mvsCopyResource PARAMS((MvsWidgetClassInfo *widget_class_info,
                                          MvsArgVal src_resource, int i));
 
 extern void mvsCopyResources PARAMS((MvsWidgetClassInfo *widget_class_info,
-                                     MvsArgVal dst_resources[], 
+                                     MvsArgVal dst_resources[],
                                      MvsArgVal src_resources[]));
 
 extern int mvsFindCorrespondingResource PARAMS((MvsWidgetClassInfo *wc_info,
@@ -225,8 +225,8 @@ extern int mvsGetResNumInArgs PARAMS((Arg args[], int nargs,
                                      char resource_name[]));
 
 extern void commonLoadResources PARAMS((MvsWidgetInfoRecord *widget_info,
-                                     MvsArgVal resources[], 
-				     int num_resources, 
+                                     MvsArgVal resources[],
+				     int num_resources,
 				     MvsResourceInfoRecord *resource_info));
 
 extern void mvsLoadResources PARAMS((MvsWidgetInfoRecord *widget_info,
@@ -239,7 +239,7 @@ extern char *mvsResourceValueToString PARAMS((
                                      MvsWidgetClassInfo *widget_class_info,
                                      int i, MvsArgVal value));
 
-extern void mvsSetLocalConstraints PARAMS((MvsWidgetInfoRecord *widget_info, 
+extern void mvsSetLocalConstraints PARAMS((MvsWidgetInfoRecord *widget_info,
                                            MvsArgVal resources[],
                                            ArgList args, Cardinal nargs));
 
@@ -263,7 +263,7 @@ extern void mvsSetValues PARAMS((MvsWidgetInfoRecord *widget_info,
 extern void mvsSetValuesNoCheck PARAMS((MvsWidgetInfoRecord *widget_info,
                                         ArgList args, Cardinal nargs));
 
-extern MvsArgVal mvsGetResourceValue PARAMS(( Widget widget, 
+extern MvsArgVal mvsGetResourceValue PARAMS(( Widget widget,
                                               char *resource_name,
                                               int type ));
 
@@ -292,17 +292,17 @@ extern void mvsSetLocalIntResValues PARAMS(( MvsWidgetInfoRecord *widget_info,
 extern int mvsAssignRes PARAMS(( MvsWidgetInfoRecord     *widget_info,
 					char dest_res[], char src_res[] ));
 
-extern int mvsAssignVal PARAMS(( MvsWidgetInfoRecord *widget_info, 
+extern int mvsAssignVal PARAMS(( MvsWidgetInfoRecord *widget_info,
 					char dest_res[], MvsArgVal val ));
 
-extern int mvsAssignParentVal PARAMS(( MvsWidgetInfoRecord *widget_info, 
+extern int mvsAssignParentVal PARAMS(( MvsWidgetInfoRecord *widget_info,
 					char dest_res[], MvsArgVal val ));
 
-extern int mvsAssignResInWidget PARAMS(( MvsWidgetInfoRecord *widget_info, 
+extern int mvsAssignResInWidget PARAMS(( MvsWidgetInfoRecord *widget_info,
 					char widget_res[],
 					char dest_res[], char src_res[] ));
 
-extern int mvsAssignValInWidget PARAMS(( MvsWidgetInfoRecord *widget_info, 
+extern int mvsAssignValInWidget PARAMS(( MvsWidgetInfoRecord *widget_info,
 					char widget_res[],
 					char dest_res[], MvsArgVal val ));
 
@@ -322,7 +322,7 @@ extern int mvsIncrOrDecrVal PARAMS(( MvsWidgetInfoRecord *widget_info,
 					char dest_res[], MvsArgVal src_val,
 					int opr ));
 
-extern void mvsIncrRes PARAMS(( MvsWidgetInfoRecord *widget_info, 
+extern void mvsIncrRes PARAMS(( MvsWidgetInfoRecord *widget_info,
 					char dest_res[], char src_res[] ));
 
 extern void mvsDecrRes PARAMS(( MvsWidgetInfoRecord *widget_info,
@@ -355,7 +355,7 @@ extern MvsWidgetInfoRecord *mvsCreateManageWidget PARAMS((
                                         MvsWidgetClassInfo *widget_class_info,
                                         MvsWidgetInfoRecord *parent_info,
 					char *name,
-                                        int use_common, Arg args[], 
+                                        int use_common, Arg args[],
                                         Cardinal nargs, int manage,
   				        WidgetClass xtclass));
 
@@ -363,7 +363,7 @@ extern MvsWidgetInfoRecord *mvsCreateWidget PARAMS((
                                         MvsWidgetClassInfo *widget_class_info,
                                         MvsWidgetInfoRecord *parent_info,
 					char *name,
-                                        int use_common, Arg args[], 
+                                        int use_common, Arg args[],
                                         Cardinal nargs,
  					WidgetClass xtclass));
 
@@ -371,7 +371,7 @@ extern MvsWidgetInfoRecord *mvsCreateNotManageWidget PARAMS((
                                         MvsWidgetClassInfo *widget_class_info,
                                         MvsWidgetInfoRecord *parent_info,
 					char *name,
-                                        int use_common, Arg args[], 
+                                        int use_common, Arg args[],
                                         Cardinal nargs,
 					WidgetClass xtclass));
 
@@ -401,14 +401,14 @@ extern int mvsAllocCallback PARAMS(( MvsWidgetInfoRecord *widget_info,
 
 extern void mvsCallbackFunc PARAMS(( Widget w, caddr_t cd1, caddr_t cd2 ));
 
-extern void mvsCheckCallbacksAndVisual PARAMS(( 
+extern void mvsCheckCallbacksAndVisual PARAMS((
                                      MvsWidgetInfoRecord *widget_info ));
 
 extern void mvsCheckCallbacks PARAMS(( void ));
 
 extern void mvsClearCallbacks PARAMS(( void ));
 
-extern void mvsCreateCallbacks PARAMS(( MvsWidgetInfoRecord *widget_info )); 
+extern void mvsCreateCallbacks PARAMS(( MvsWidgetInfoRecord *widget_info ));
 
 extern void mvsDeleteCallback PARAMS(( int cb_num, int resource_num ));
 extern void mvsDeleteCallbacks PARAMS(( MvsWidgetInfoRecord *widget_info ));
@@ -488,7 +488,7 @@ extern MvsWidgetInfoRecord *CreateMenuWidget PARAMS((
 extern void Post1 PARAMS(( Widget w, Widget popup, XEvent *event));
 extern void Post2 PARAMS(( Widget w, Widget popup, XEvent *event));
 extern ClassRef *ChooseClass PARAMS((int rc_type, int num_children, int level,
-				int child_created, Arg cargs[], int *pcn, 
+				int child_created, Arg cargs[], int *pcn,
 				int flag));
 
 extern int mvsIsSubMenuPosted PARAMS(( MvsWidgetInfoRecord *widget_info));

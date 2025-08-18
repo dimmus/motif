@@ -1,26 +1,26 @@
 $ $XConsortium: Xm.msg /main/8 1996/10/19 14:28:54 rws $
-$ 
+$
 $ Motif
-$ 
+$
 $ Copyright (c) 1987-2012, The Open Group. All rights reserved.
-$ 
+$
 $ These libraries and programs are free software; you can
 $ redistribute them and/or modify them under the terms of the GNU
 $ Lesser General Public License as published by the Free Software
 $ Foundation; either version 2 of the License, or (at your option)
 $ any later version.
-$ 
+$
 $ These libraries and programs are distributed in the hope that
 $ they will be useful, but WITHOUT ANY WARRANTY; without even the
 $ implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 $ PURPOSE. See the GNU Lesser General Public License for more
 $ details.
-$ 
+$
 $ You should have received a copy of the GNU Lesser General Public
 $ License along with these librararies and programs; if not, write
 $ to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 $ Floor, Boston, MA 02110-1301 USA
-$ 
+$
 
 $ This message catalog contains messages issued by Motif toolkit library.
 $ Consult X-Window systems, OSF/MOTIF Programmer's Guide and OSF/MOTIF
@@ -30,8 +30,8 @@ $ Do not translate variables such as %s, %d %s ... etc.
 $ Do not translate Motif resource name, such as XmNlabelType.
 $ Special terms with capital letter(s) should not be translated.
 $ "False" and "True" are keywords. Do not translate.
- 
-$quote " 
+
+$quote "
 
 
 $set MS_ArrowButton
@@ -62,7 +62,7 @@ $ MSG_CascadeB_1000 message is obsolete - DO NOT localize this message.
 
 $ MSG_CascadeB_0001 "Nur XmMENU_PULLDOWN XmRowColumnWidgets können Submenüs sein."
 MSG_CascadeB_0001 "Nur XmRowColumn Widgets des Typs XmMENU_PULLDOWN können submenus sein."
-$ please do not translate submenus. 
+$ please do not translate submenus.
 
 MSG_CascadeB_0002 "XmNmappingDelay muß größer oder gleich 0 sein."
 
@@ -87,7 +87,7 @@ MSG_Command_0002 "NULL oder leere XmString."
 MSG_Command_0003 "NULL oder leere XmString an XmCommandAppendValue übertragen."
 
 MSG_Command_0004 "XmNmustMatch ist immer False (unwahr) für ein Befehls-Widget."
-$ please do not translate False or Command. 
+$ please do not translate False or Command.
 
 MSG_Command_0005 "XmNhistoryMaxItems muß eine positive Ganzzahl größer Null sein."
 
@@ -153,7 +153,7 @@ $ please do not translate Attachment
 
 MSG_Form_0002 "Kreisförmige Abhängigkeit in den Children des Form Widget.\n\
 Auf kreisförmige Anhänge zwischen den Children prüfen."
-$ please do not translate Form. 
+$ please do not translate Form.
 
 MSG_Form_1006 "Rand ist einem Widget zugeordnet, das nicht angegeben wurde."
 $ MSG_Form_1006 message is obsolete - DO NOT localize this message.
@@ -372,7 +372,7 @@ $ MSG_PushB_1001 message is obsolete - DO NOT localize this message.
 
 $set MS_RowColumn
 
-$ In this set, do not translate the word that starts with "XmN" or "Xm". 
+$ In this set, do not translate the word that starts with "XmN" or "Xm".
 
 MSG_RowColumn_1001 "Versuch die Breite auf Null zu setzen.\n\
 Wird auf Standardwert 16 gesetzt."
@@ -698,7 +698,7 @@ MSG_VendorE_0000 "String to no-op conversion needs no extra arguments"
 $ MSG_VendorE_0000 message is obsolete - DO NOT localize this message.
 
 MSG_VendorE_0005 "FetchUnitType ohne einen Widget als Referenz aufgerufen."
-$ Do not translate FetchUnitType. 
+$ Do not translate FetchUnitType.
 $ please do not translate FetchUnitType.
 $ MSG_VendorE_0005 message is obsolete - DO NOT localize this message.
 
@@ -732,9 +732,9 @@ $ MSG_XmIm_1003 message is obsolete - DO NOT localize this message.
 MSG_XmIm_1004 "XmIMMove ohne Fokus für Art der Eingabe aufgerufen ."
 $ MSG_XmIm_1004 message is obsolete - DO NOT localize this message.
 
-  
+
 $set MS_Resources
-  
+
 MSG_Resource_0001 "OK"
 $ "OK" as in "Go ahead"/"Confirmed to proceed as instructed"/"Fine"
 
@@ -758,7 +758,7 @@ MSG_Resource_0007 "Dateien"
 $ ... as in "a list of the files"
 
 MSG_Resource_0008 "Verzeichnisse"
-$ ... as in "a list of the directories" 
+$ ... as in "a list of the directories"
 
 MSG_Resource_0009 "Elemente"
 $ ... as in "a list of things to choose from"
@@ -768,13 +768,13 @@ $ ... the verb "Filter", as in "To screen out some files"
 $ Note this has a slightly different semantics from MSG_Res_1006.
 $ In English, it is the same word, but MSG_Res_1006 means "a sifter", and
 $ MSG_Res_1010 means "Push this button to filter out some files"
-$ MSG_Res_1006 is a label indicating "entry below is qualifier to filter out" 
+$ MSG_Res_1006 is a label indicating "entry below is qualifier to filter out"
 $ files with
 
 MSG_Resource_0011 "Verzeichnis"
 
 MSG_Resource_0012 ">"
-$ command-line prompt in the Command widget. 
+$ command-line prompt in the Command widget.
 
 
 $set MS_BaseClass
@@ -872,7 +872,7 @@ MSG_DragOverS_0001 "Unbekannte Anlage (Attachment) zum Symbol."
 MSG_DragOverS_0002 "Unbekannter Status zum Ziehen."
 
 MSG_DragOverS_0003 "Unbekanntes XmNblendModel."
-$ please do not translate XmNblendModel 
+$ please do not translate XmNblendModel
 
 
 $set MS_DragUnder
@@ -1010,9 +1010,9 @@ MSG_ColObj_0001 "Speicherzuordnung für Farbobjektdaten nicht möglich."
 
 MSG_ColObj_0002 "Ungültige Zahl der Anzeige von der Auswahl des Farb-Servers."
 
- 
+
 $set MS_IG
- 
+
 MSG_IG_1 "Ausrichtung nicht korrekt."
 $ MSG_IG_1 message is obsolete - DO NOT localize this message.
 

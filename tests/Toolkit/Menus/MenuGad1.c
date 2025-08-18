@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MenuGad1.c /main/9 1995/07/13 18:48:11 drk $"
@@ -170,12 +170,12 @@ int main(int argc, char **argv)
   XmString tcs;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  200);  n++;
   XtSetArg(args[n], XmNheight, 40);   n++;
   XtSetValues(Shell1, args, n);
-  
+
   XtRealizeWidget(Shell1);
 
   /*
@@ -299,17 +299,3 @@ int main(int argc, char **argv)
 
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: PINames.h /main/6 1995/07/13 20:23:15 drk $ */
 
 /*  X headers  */
@@ -34,14 +34,14 @@
 #include <Xm/MwmUtil.h>
 
 
-/* 
+/*
  * Data for summary
  */
 
 #define NUM_TESTS		5
 #define TEST_DESCRIP_LENGTH	60
 
-struct TestInfo PIInfo[NUM_TESTS] = 
+struct TestInfo PIInfo[NUM_TESTS] =
 {
 	{"Change the window name of a window (WM_NAME)          ",
 		True,	0},

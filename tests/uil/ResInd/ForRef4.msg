@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
-        message : 
+        message :
 	"This is a label widget with the \nfollowing charcteristics:\n\n" &
 	"   - unitType is Xm1000TH_INCHES\n   - width is 2000\n" &
 	"   - borderWidth is 10\n   - background color is blue\n   - traversalOn is true\n   -" &

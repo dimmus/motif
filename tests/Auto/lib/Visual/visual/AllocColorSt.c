@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AllocColorSt.c /main/7 1995/07/14 11:45:23 drk $"
@@ -44,7 +44,7 @@ static char rcsid[] = "$XConsortium: AllocColorSt.c /main/7 1995/07/14 11:45:23 
 
         OUTPUTS
             none
- 
+
         RETURNS
             Status where 0=failed, ~0=succeeded
 ************************************************************************/
@@ -56,7 +56,7 @@ XColor color;
 {
     int i;
     Status status;
-    
+
     /* record pixel choice in current_color_info array */
     /* see if pixel is already in color_alloc array */
 
@@ -94,16 +94,3 @@ XColor color;
     return status;
 
 } /* End mvsAllocColorStruct() */
-
-
-
-
-
-
-
-
-
-
-
-
-

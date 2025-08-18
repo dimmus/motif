@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -41,7 +41,7 @@
  *  XmIsMotifWMRunning
  *
  ************************************************************************/
-Boolean 
+Boolean
 XmIsMotifWMRunning(
 	 Widget shell )
 {
@@ -53,7 +53,7 @@ XmIsMotifWMRunning(
     Window	root = RootWindowOfScreen(XtScreen(shell));
 
     _XmWidgetToAppContext(shell);
- 
+
     _XmAppLock(app);
 
     motif_wm_info_atom = XInternAtom(XtDisplay(shell),
@@ -61,7 +61,7 @@ XmIsMotifWMRunning(
 				       FALSE);
     _XmProcessLock();
 
-    XGetWindowProperty (XtDisplay(shell), 
+    XGetWindowProperty (XtDisplay(shell),
 			 root,
 			 motif_wm_info_atom,
 			 0, (long)PROP_MOTIF_WM_INFO_ELEMENTS,
@@ -91,7 +91,7 @@ XmIsMotifWMRunning(
 			  root, &top, &parent,
 			  &children, &num_children))
 	     {
-		 i = 0; 
+		 i = 0;
 		 while ((i < num_children) && (children[i] != wm_window))
 		   i++;
 		 returnVal =  (i == num_children) ? FALSE : TRUE;

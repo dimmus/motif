@@ -19,12 +19,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-#) A series of Forms should appear. 
-#) Each Form should have four PushButton children. 
-#) The children should be layed out in a horizontal fashion. 
+#) A series of Forms should appear.
+#) Each Form should have four PushButton children.
+#) The children should be layed out in a horizontal fashion.
 
 WindowRaise Case0
 CompareVisual Case0
@@ -46,8 +46,8 @@ CompareVisual Case5
 Continue
 
 
-#) All of the children should now be layed out in a vertical fashion. 
-#) The children should be layed out in the following order: A, B, C and D. 
+#) All of the children should now be layed out in a vertical fashion.
+#) The children should be layed out in the following order: A, B, C and D.
 
 
 WindowRaise Case0
@@ -68,4 +68,3 @@ CompareVisual Case4
 WindowRaise Case5
 CompareVisual Case5
 Exit
-

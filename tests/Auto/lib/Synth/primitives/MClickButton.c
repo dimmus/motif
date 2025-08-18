@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MClickButton.c /main/7 1995/07/14 11:41:26 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: MClickButton.c /main/7 1995/07/14 11:41:26 
             modifier_keys - ShiftMask, LockMask, ControlMask, Mod1Mask, etc.
             button_num    - Mouse button number 1 through 5
             num_clicks    - Number of times to click the mouse button
-        
+
         OUTPUTS:
             none
 

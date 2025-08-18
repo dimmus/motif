@@ -17,7 +17,7 @@ extern "C" {
 #define XmDropDown_UP 		((unsigned char) 0)
 #define XmDropDown_UNPOSTED	XmDropDown_UP
 #define XmDropDown_DOWN        	((unsigned char) 1)
-#define XmDropDown_POSTED		XmDropDown_DOWN        	
+#define XmDropDown_POSTED		XmDropDown_DOWN
 #define XmDropDown_IN_PROGRESS 	((unsigned char) 2)
 #define XmDropDown_BEGIN_POPUP_FROM_TEXT  ((unsigned char) 3)
 #ifdef FIX_1446
@@ -72,7 +72,7 @@ extern "C" {
 
 
 /* Should return True to ignore invalid entry warning. Combination Box
- *  does not currently use this. Presumes do it in subclasses 
+ *  does not currently use this. Presumes do it in subclasses
  */
 typedef Boolean (*XmDropDownTextProc)(Widget w, char *text);
 
@@ -150,12 +150,12 @@ typedef struct {
     Widget list;		/* List contained in the popup shell. */
 
     Widget label;		/* The three children of the combo box. */
-    Widget text; 
+    Widget text;
     Widget arrow;
 
     int visible_items;		/* only to set/get XmNvisibleItemCount, which is
 				** a sop for non-customized combobox users */
-    
+
     Boolean new_visual_style;
 
     Boolean autoTraversal;	/* traverse next on return */

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: postSW3.c /main/7 1995/07/14 12:03:32 drk $"
@@ -61,7 +61,7 @@ void  main(argc, argv)
     Arg           args[MAX_ARGS];
 	Widget		  pb;
 
-    
+
     CommonTestInit(argc, argv);
 
 	n = 0;
@@ -94,6 +94,6 @@ void  main(argc, argv)
     XtManageChild(ArrowB1);
 
     XtRealizeWidget(Shell1);
- 
+
     XtAppMainLoop(app_context);
 }

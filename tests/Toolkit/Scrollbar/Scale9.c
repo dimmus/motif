@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scale9.c /main/6 1995/07/13 19:13:08 drk $"
@@ -63,7 +63,7 @@ char **argv;
    /*  Set up arglist and create the scale  */
 
    n = 0;
-   scale = XmCreateScale(Shell1, "scaleWidget", args, n); 
+   scale = XmCreateScale(Shell1, "scaleWidget", args, n);
    XtManageChild (scale);
 
    /* Get Maximum value of slider */
@@ -116,7 +116,7 @@ char **argv;
 
    XtAppMainLoop(app_context);
 }
-                                   
+
 
 static void ButtonCallback1 (sw, closure, call_data)
 Widget sw;

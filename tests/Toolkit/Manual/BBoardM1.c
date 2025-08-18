@@ -32,7 +32,7 @@ static char rcsid[] = "$TOG: BBoardM1.c /main/5 1997/11/14 17:31:58 csn $"
 
 /**************************************************************************
  *
- *  Create an arrow using inches and setting the width and height. 
+ *  Create an arrow using inches and setting the width and height.
  *  Reset the size, change the unit type, set the size again.
  *
  **************************************************************************/
@@ -53,7 +53,7 @@ Widget w;
    Position x, y;
    int n;
    Arg args[5];
-   
+
    n = 0;
    XtSetArg (args[n], XmNwidth, &width); n++;
    XtSetArg (args[n], XmNheight, &height); n++;
@@ -85,7 +85,7 @@ char **argv;
 
    /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
    n = 0;
    XtSetArg(args[n], XmNx, 100); n++;
    XtSetArg(args[n], XmNy, 100); n++;
@@ -164,7 +164,7 @@ char **argv;
    XtSetArg (args[n], XmNheight, 1000); n++;
    arrow = XmCreateArrowButton (board, "arrow", args, n);
    XtManageChild (arrow);
-   
+
    /*  Get the size of the widget in unit values  */
    n = 0;
    XtSetArg (args[n], XmNunitType, &unit);               n++;
@@ -233,7 +233,7 @@ int UnitType;
 {
 
 switch (UnitType) {
-	case 0:	
+	case 0:
    		printf ("unitType of the Arrow Button is %s\n\n", "XmPIXELS");
 		break;
 	case 1:
@@ -245,7 +245,7 @@ switch (UnitType) {
 	case 3:
    		printf ("unitType of the Arrow Button is %s\n\n", "Xm100TH_POINTS");
 		break;
-	case 4: 
+	case 4:
 		printf ("unitType of the Arrow Button is %s\n\n", "Xm100TH_FONT_UNITS");
 		break;
 	default:
@@ -264,17 +264,3 @@ int delay;
    }
    sleep(delay);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -109,7 +109,7 @@ void PageChangedCB(Widget w, XtPointer client_data, XtPointer call_data)
 	  return;
 	  }
 	if (cb->reason == XmCR_PAGE_SCROLLER_DECREMENT)
-          {     
+          {
           if (flip_bwd_time[0].tv_sec == 0)
                 {
                 gettimeofday(&flip_bwd_time[0],&tz);
@@ -117,7 +117,7 @@ void PageChangedCB(Widget w, XtPointer client_data, XtPointer call_data)
                 }
           if ((cb->page_number == 1)
              && (flip_bwd_time[1].tv_sec == 0))
-                {       
+                {
                 gettimeofday(&flip_bwd_time[1],&tz);
                 return;
                 }
@@ -139,18 +139,18 @@ main (int argc, char **argv)
   Widget MajorTab[NUM_MAJOR_TAB];
   Widget MinorTab[NUM_MINOR_TAB];
   Widget PageScroller;
-  int page_no;  
+  int page_no;
   char name[16];
 
   int num_widgets = XtNumber (WidgetStruct);  /* Number of widgets. */
   int w;
-  
+
   Arg args[10];
   int n,i;
 
   CommonTestInit(argc,argv);
 
-  
+
 
 
   n=0;
@@ -173,22 +173,22 @@ main (int argc, char **argv)
 		  Page[i] = XmCreateFrame (Notebook1, name, args, n);
 	      }
 
-	
+
       }
 
   else
       {
         w=0;
-	while (strcmp (UserData, WidgetStruct[w].name) != 0 && 
+	while (strcmp (UserData, WidgetStruct[w].name) != 0 &&
 	       (w < num_widgets))
 	    w++;
 
-	if (w == num_widgets) 
+	if (w == num_widgets)
 	    {
 		printf ("Not a valid widget!\n");
 		exit(0);
 	    }
-  
+
 	for (i=0; i < NUM_PAGES; i++)
 	    {
 		sprintf (name, "Page%d", i+1);
@@ -205,7 +205,7 @@ main (int argc, char **argv)
 
 
   /* Create major tabs with page numbers in the following sequence: 10,20,30...
-     These will be updated later to show a performance problem with changing 
+     These will be updated later to show a performance problem with changing
      the page numbers of tabs. */
 
   for (i=0; i < NUM_MAJOR_TAB; i++)
@@ -275,12 +275,7 @@ main (int argc, char **argv)
 
   CommonPause();
   CommonPause();
-  
+
   XtAppMainLoop(app_context);
 
 }
-  
-
-
-
-

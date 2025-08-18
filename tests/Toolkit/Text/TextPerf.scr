@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 CompareVisual Text1
 Continue
@@ -31,11 +31,11 @@ LocatePointer Text1 RVertScrollBarSlider
 DragSliderValue Up Min
 CompareVisual Text1
 Continue
-LocatePointer Text1 RVertScrollBarDownArrow 
+LocatePointer Text1 RVertScrollBarDownArrow
 # Click till you reach the bottom of the text
 ClickMB Btn1 7420
 CompareVisual Text1
-LocatePointer Text1 RVertScrollBarUpArrow 
+LocatePointer Text1 RVertScrollBarUpArrow
 # Click till you reach the top of the text
 ClickMB Btn1 7420
 CompareVisual Text1

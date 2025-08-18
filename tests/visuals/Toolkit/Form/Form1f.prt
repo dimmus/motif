@@ -22,24 +22,24 @@
 #
 #
 # HISTORY
-TRACE:(1) LocatePointer sides0  
-TRACE:(2) ClickMB Btn1 
-TRACE:(3) LocatePointer attaches3  
-TRACE:(4) ClickMB Btn1 
-TRACE:(5) LocatePointer button1  
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) LocatePointer sides3  
-TRACE:(8) ClickMB Btn1 
-TRACE:(9) LocatePointer attaches6  
-TRACE:(10) ClickMB Btn1 
-TRACE:(11) LocatePointer button2  
-TRACE:(12) ClickMB Btn1 
-TRACE:(13) LocatePointer target0  
-TRACE:(14) ClickMB Btn1 
-TRACE:(15) LocatePointer widthText  
-TRACE:(16) ClickMB Btn1 
+TRACE:(1) LocatePointer sides0
+TRACE:(2) ClickMB Btn1
+TRACE:(3) LocatePointer attaches3
+TRACE:(4) ClickMB Btn1
+TRACE:(5) LocatePointer button1
+TRACE:(6) ClickMB Btn1
+TRACE:(7) LocatePointer sides3
+TRACE:(8) ClickMB Btn1
+TRACE:(9) LocatePointer attaches6
+TRACE:(10) ClickMB Btn1
+TRACE:(11) LocatePointer button2
+TRACE:(12) ClickMB Btn1
+TRACE:(13) LocatePointer target0
+TRACE:(14) ClickMB Btn1
+TRACE:(15) LocatePointer widthText
+TRACE:(16) ClickMB Btn1
 TRACE:(17) InputString "400"
 TRACE:(18) ClickKey KReturn
-TRACE:(19) CompareVisual form 
+TRACE:(19) CompareVisual form
 TRACE:(20) Exit
 Exiting Test...Please Standby...

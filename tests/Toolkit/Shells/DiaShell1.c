@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: DiaShell1.c /main/9 1999/03/26 14:47:46 jff $"
@@ -103,10 +103,10 @@ CreateFirstFormDialog(Widget w, XtPointer client_data, XtPointer call_data)
 	XtSetArg(args[n], XmNleftOffset, 5); n++;
 	XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
 	XtSetArg(args[n], XmNrightOffset, 5); n++;
-   	Post_FormDialog2 = XmCreatePushButton(FormDialog1, "Post_FormDialog2", 
+   	Post_FormDialog2 = XmCreatePushButton(FormDialog1, "Post_FormDialog2",
 										  args, n);
 	XtManageChild(Post_FormDialog2);
-   	XtAddCallback (Post_FormDialog2, XmNactivateCallback, 
+   	XtAddCallback (Post_FormDialog2, XmNactivateCallback,
 				   PostSecondFormDialog, FormDialog1);
 
 }
@@ -165,7 +165,7 @@ main(unsigned int argc, char **argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     /*  Load some fonts */
 
 
@@ -178,7 +178,7 @@ main(unsigned int argc, char **argv)
     XtSetArg(args[n], XmNheight, 100);  n++;
     XtSetValues(Shell1, args, n);
 
-    tcs = XmStringCreateLtoR("DialogStyle Unmanaged Test", 
+    tcs = XmStringCreateLtoR("DialogStyle Unmanaged Test",
 						 XmFONTLIST_DEFAULT_TAG);
     tcs2 = XmStringCreateLtoR("UnManage", XmFONTLIST_DEFAULT_TAG);
 
@@ -234,7 +234,7 @@ main(unsigned int argc, char **argv)
     XmStringFree (tcs);
 
     tcs = XmStringCreateLtoR("Error!! File Exists!", XmFONTLIST_DEFAULT_TAG);
-        
+
     n = 0;
     XtSetArg(args[n], XmNmessageString, tcs );  n++;
     XtSetArg(args[n], XmNwidth, 270); n++;
@@ -252,7 +252,7 @@ main(unsigned int argc, char **argv)
     XtSetArg(args[n], XmNcancelLabelString, tcs); n++;
     XtSetValues(MessageBox2,args,n);
     XmStringFree (tcs);
-    
+
     tcs = XmStringCreateLtoR("Do you want to go on?", XmFONTLIST_DEFAULT_TAG);
 
     n = 0;
@@ -281,8 +281,8 @@ main(unsigned int argc, char **argv)
 
 											/* Begin PIR3228 */
     n = 0;
-    Dialog1 = XmCreateDialogShell(Shell1, "Dialog1", args, n); 
-    BulletinBoard = XmCreateBulletinBoard(Dialog1, "BulletinBoard", args, n); 
+    Dialog1 = XmCreateDialogShell(Shell1, "Dialog1", args, n);
+    BulletinBoard = XmCreateBulletinBoard(Dialog1, "BulletinBoard", args, n);
 
     tcs = XmStringCreateLtoR("fixed", XmFONTLIST_DEFAULT_TAG);
 
@@ -318,7 +318,7 @@ main(unsigned int argc, char **argv)
     XmStringFree(tcs);
 
     XtManageChild(BulletinBoard);
-    XtManageChild(Dialog1); 
+    XtManageChild(Dialog1);
 											/* End PIR3228 */
 
     CommonPause();

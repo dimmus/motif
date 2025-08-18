@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,8 +19,8 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
- 
+ */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -101,7 +101,7 @@ static char rcsid[] = "$XConsortium: MrmIentry.c /main/13 1996/11/13 13:56:11 dr
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__DB_GetDataEntry (IDBFile			file_id,
 		      IDBDataHandle		data_entry,
 		      URMResourceContextPtr	context_id)
@@ -133,7 +133,7 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
    * handle this request if the entry is there.
    */
   record_number = data_entry.rec_no;
-  if ( record_number == IDBHeaderRecordNumber ) 
+  if ( record_number == IDBHeaderRecordNumber )
     return Idb__HDR_GetDataEntry (file_id, data_entry, context_id);
 
   /*
@@ -251,7 +251,7 @@ Idb__DB_GetDataEntry (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 Idb__DB_PutDataEntry (IDBFile			file_id,
 		      URMResourceContextPtr	context_id,
 		      IDBDataHandle		*data_entry)
@@ -358,7 +358,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
 
       /*
        * Set the return value to the data pointer for this entry
-       */	
+       */
       data_entry->rec_no = _IdbBufferRecordNumber (curbuf) ;
       data_entry->item_offs = dataheader->free_ptr;
 
@@ -433,7 +433,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
 	   * last record, then the chain is updated.  If it is the last
 	   * record, then the free pointer is set.  This code assumes
 	   * that acquiring a new data record does not free/reuse the
-	   * current buffer. 
+	   * current buffer.
 	   */
 	  overflowdata->segment_size = cursiz ;
 	  overflowdata->segment_count = num_recs ;
@@ -447,7 +447,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
 
 	  Idb__BM_MarkModified (curbuf) ;
 
-	  if ( cur_rec == num_recs ) 
+	  if ( cur_rec == num_recs )
 	    {
 	      overflowdata->next_segment.internal_id.rec_no = 0 ;
 	      overflowdata->next_segment.internal_id.item_offs = 0 ;
@@ -508,7 +508,7 @@ Idb__DB_PutDataEntry (IDBFile			file_id,
  *--
  */
 
-Boolean 
+Boolean
 Idb__DB_MatchFilter (IDBFile 		file_id,
 		     IDBDataHandle	data_entry,
 		     MrmCode 		group_filter,
@@ -558,4 +558,3 @@ Idb__DB_MatchFilter (IDBFile 		file_id,
   return TRUE ;
 
 }
-

@@ -3,17 +3,17 @@
 /*************************************************************************
  * Export list for libUil
  * This list *must* be updated whenever a change is made to the libUil API.
- * 
+ *
  * The syntax for the symbol declarations in this list is as follows:
  * 	public       sym => Public   C   symbol, i.e., publicized API
  * 	private      sym => Private  C   symbol, i.e., unpublicized API
  * 	internal     sym => Internal C   symbol, i.e., not part of API
- *  
+ *
  **************************************************************************/
 
 
 /**************************************************************************
- * libUil public symbols -- available to developers 
+ * libUil public symbols -- available to developers
  **************************************************************************/
 
 public Uil
@@ -70,7 +70,7 @@ public uil_widget_names
 
 
 /********************************************************************
- * libUil private symbols -- Undocumented APIs that are exported 
+ * libUil private symbols -- Undocumented APIs that are exported
  *	for backward compatibilty.
  ********************************************************************/
 

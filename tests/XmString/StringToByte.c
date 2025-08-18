@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -45,11 +45,11 @@ main( int argc, char **argv )
      *  Verify that the converted XmString is the same as the
      *  original.
      */
-     string1 = XmStringCreateLtoR("Original", XmFONTLIST_DEFAULT_TAG ); 
+     string1 = XmStringCreateLtoR("Original", XmFONTLIST_DEFAULT_TAG );
 
      length1 = XmCvtXmStringToByteStream( string1, &byte_stream );
 
-     string2 = XmCvtByteStreamToXmString( byte_stream ); 
+     string2 = XmCvtByteStreamToXmString( byte_stream );
 
      same = XmStringCompare( string1, string2 );
 
@@ -77,7 +77,7 @@ main( int argc, char **argv )
 
      printf("\n\n");
 
-     length3 = XmStringByteStreamLength( byte_stream );  
+     length3 = XmStringByteStreamLength( byte_stream );
 
      printf("XmStringByteStreamLength: ");
      if ( length1 == length3 )

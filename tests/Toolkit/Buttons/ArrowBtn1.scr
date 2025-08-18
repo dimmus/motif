@@ -1,5 +1,5 @@
 # $XConsortium: ArrowBtn1.scr /main/6 1995/07/17 20:06:02 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,32 +20,32 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-# The button contains an arrow pointing up.   
-#  Move the pointer into the arrow button's window and use   
-#  mouse button 1 to click on the arrow button. It should appear   
-#  to be pressed in, then popped out.  
-#  Use the MINIMIZE button on the window frame to iconify the window.   
-#  Then normalize the window.  
+# The button contains an arrow pointing up.
+#  Move the pointer into the arrow button's window and use
+#  mouse button 1 to click on the arrow button. It should appear
+#  to be pressed in, then popped out.
+#  Use the MINIMIZE button on the window frame to iconify the window.
+#  Then normalize the window.
 
 LocatePointer ArrowButton1
 PressMB Btn1
 CompareVisual ArrowButton1
-ReleaseMB Btn1 
+ReleaseMB Btn1
 CompareVisual ArrowButton1
 WindowIconify Shell1
 WindowDeiconify Shell1
 Continue
 
-# Arrow is now pointing down. Pull one of the resize handles on  
-#  the bottom of the window way down. The arrow should grow. Resize  
-#  the window to the left. The arrow should grow again.  
-#  Resize the right edge of the window toward the left and the arrow  
-#  should grow smaller. Move the window using the mouse.  
+# Arrow is now pointing down. Pull one of the resize handles on
+#  the bottom of the window way down. The arrow should grow. Resize
+#  the window to the left. The arrow should grow again.
+#  Resize the right edge of the window toward the left and the arrow
+#  should grow smaller. Move the window using the mouse.
 
 WindowMove Shell1 40 40
 CompareVisual ArrowButton1
@@ -59,8 +59,8 @@ WindowMove Shell1 200 200
 CompareVisual ArrowButton1
 Continue
 
-# Arrow is now pointing left. Size the window as small as possible,  
-#  then resize back to 300 by 300.  
+# Arrow is now pointing left. Size the window as small as possible,
+#  then resize back to 300 by 300.
 
 CompareVisual ArrowButton1
 WindowResize Shell1 SouthEast 10 10
@@ -69,9 +69,9 @@ WindowResize Shell1 SouthEast 300 300
 CompareVisual ArrowButton1
 Continue
 
-# Arrow is now pointing right. Resize the window as small as possible  
-#  horizontally.  
-#  Then resize the window to 200 by 200.  
+# Arrow is now pointing right. Resize the window as small as possible
+#  horizontally.
+#  Then resize the window to 200 by 200.
 
 CompareVisual ArrowButton1
 WindowResize Shell1 East 1
@@ -79,49 +79,49 @@ CompareVisual ArrowButton1
 WindowResize Shell1 SouthEast 200 200
 Continue
 
-# Arrow is now pointing up.  
+# Arrow is now pointing up.
 
 CompareVisual ArrowButton1
 Continue
 
-# An error message appears in the xterm window.  
+# An error message appears in the xterm window.
 
 Continue
 
-# Arrow is now pointing down.  
+# Arrow is now pointing down.
 
 CompareVisual ArrowButton1
 Continue
 
-# An error message appears in the xterm window.  
+# An error message appears in the xterm window.
 
 Continue
 
-# Click on the arrow button.  
-#  ACTIVATED should appear in the xterm window.  
+# Click on the arrow button.
+#  ACTIVATED should appear in the xterm window.
 
 LocatePointer ArrowButton1
 ClickMB Btn1
 Continue
 
-# Click mouse button one down on arrow button and hold.  
-#  ARMED should appear in xterm window.  
-#  Then release mouse button one.  
-#  ACTIVATED should appear in the xterm window.  
+# Click mouse button one down on arrow button and hold.
+#  ARMED should appear in xterm window.
+#  Then release mouse button one.
+#  ACTIVATED should appear in the xterm window.
 
 LocatePointer ArrowButton1
 PressMB Btn1
 ReleaseMB Btn1
 Continue
 
-# Press mouse button one down on the arrow button and hold.  
-#  ARMED should appear in the xterm window.  
-#  Release mouse button one.  
-#  ACTIVATED and DISARMED should appear in xterm window.  
-#  Press mouse button one down on the arrow button and hold.  
-#  ARMED should appear in the xterm window.  
-#  Move sprite out of window and release mouse button 1.  
-#  DISARMED should appear in xterm window.  
+# Press mouse button one down on the arrow button and hold.
+#  ARMED should appear in the xterm window.
+#  Release mouse button one.
+#  ACTIVATED and DISARMED should appear in xterm window.
+#  Press mouse button one down on the arrow button and hold.
+#  ARMED should appear in the xterm window.
+#  Move sprite out of window and release mouse button 1.
+#  DISARMED should appear in xterm window.
 
 LocatePointer ArrowButton1
 PressMB Btn1
@@ -132,7 +132,7 @@ LocatePointer Shell1 Off
 ReleaseMB Btn1
 Continue
 
-# Press Exit to end the test.  
+# Press Exit to end the test.
 #  Goodbye.
 
 Exit

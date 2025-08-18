@@ -27,7 +27,7 @@
 
 #include <X11/IntrinsicI.h>
 #include <X11/StringDefs.h>
-  
+
 #include "geoTattler.h"
 
 /*
@@ -143,11 +143,11 @@ void XtSetValues(w, args, num_args)
     Boolean	    hasConstraints;
     Cardinal i ;
 
-    /* Editres hack: 
+    /* Editres hack:
        editres uses XtGetResourceList to get the resource list of a widget,
        and geoTattler can't be in the list, so we use "traversalOn", which
-       is in all Motif subclasses. 
-    
+       is in all Motif subclasses.
+
     for (i = 0 ; i < num_args ; i++) {
 	if (strcmp(args[i].name, "traversalOn") == 0) {
 	    _GeoChangeCache(w, (Boolean)args[i].value);
@@ -189,12 +189,12 @@ void XtSetValues(w, args, num_args)
 	    constraintSize = cwc->constraint_class.constraint_size;
 	else constraintSize = 0;
     } else constraintSize = 0;
-	
+
     if (constraintSize) {
 	/* Allocate and copy current constraints into oldw */
 	oldw->core.constraints = XtStackAlloc(constraintSize, oldcCache);
 	reqw->core.constraints = XtStackAlloc(constraintSize, reqcCache);
-	bcopy((char *) w->core.constraints, 
+	bcopy((char *) w->core.constraints,
 		(char *) oldw->core.constraints, (int) constraintSize);
 
 	/* Set constraint values */
@@ -239,7 +239,7 @@ void XtSetValues(w, args, num_args)
 	    w->core.border_width    = oldw->core.border_width;
 	    geoReq.request_mode	    |= CWBorderWidth;
 	}
-    
+
 	if (geoReq.request_mode != 0) {
  	    /* Pass on any requests for unchanged geometry values */
  	    if (geoReq.request_mode !=
@@ -274,7 +274,7 @@ void XtSetValues(w, args, num_args)
 	    _GeoTabTrace();
 
 	    do {
-		result = _XtMakeGeometryRequest(w, &geoReq, &geoReply, 
+		result = _XtMakeGeometryRequest(w, &geoReq, &geoReply,
 						&cleared_rect_obj);
 		if (result == XtGeometryYes || result == XtGeometryDone)
 		    break;
@@ -292,7 +292,7 @@ void XtSetValues(w, args, num_args)
 		if (result == XtGeometryNo) geoReply.request_mode = 0;
 
 		_GeoPrintTrace(w,"calling SetValuesAlmost.\n");
-	    
+
 		(*(wc->core_class.set_values_almost))
 		    (oldw, w, &geoReq, &geoReply);
 	    } while (geoReq.request_mode != 0);
@@ -305,7 +305,7 @@ void XtSetValues(w, args, num_args)
 
 		_GeoPrintTrace(w,"XtSetValues calls \"%s\"'s resize proc.\n",
 			    XtName(w));
-		
+
 		if (wc->core_class.resize) (*(wc->core_class.resize))(w);
 	    }
 
@@ -321,7 +321,7 @@ void XtSetValues(w, args, num_args)
             if (redisplay && XtIsRealized(w) && !w->core.being_destroyed) {
 
 		_GeoPrintTrace(w,"XtSetValues calls ClearArea on \"%s\".\n",XtName(w));
-		
+
                 XClearArea (XtDisplay(w), XtWindow(w), 0, 0, 0, 0, TRUE);
 	    }
         } else { /*non-window object */
@@ -333,7 +333,7 @@ void XtSetValues(w, args, num_args)
 
 		  _GeoPrintTrace(w,"XtSetValues calls ClearArea on \"%s\"'s parent \"%s\".\n",
 			      XtName(w),XtName(pw));
-		
+
 		  XClearArea (XtDisplay (pw), XtWindow (pw),
 		      r->rectangle.x, r->rectangle.y,
 		      r->rectangle.width + bw2,r->rectangle.height + bw2,TRUE);

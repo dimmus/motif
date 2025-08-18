@@ -23,22 +23,22 @@
 #
 # HISTORY
 TRACE:(1) WindowFocus Shell1
-TRACE:(2) LocatePointer List1 RVertScrollBarSlider 
-TRACE:(3) ClickMB Btn1 
+TRACE:(2) LocatePointer List1 RVertScrollBarSlider
+TRACE:(3) ClickMB Btn1
 The VertSB got that press event
-TRACE:(4) LocatePointer List1 RVertScrollBarDownOrRightSliderArea 
+TRACE:(4) LocatePointer List1 RVertScrollBarDownOrRightSliderArea
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
-TRACE:(5) ClickMB Btn1 
+TRACE:(5) ClickMB Btn1
 The VertSB got that press event
-TRACE:(6) LocatePointer List1 RVertScrollBarUpOrLeftArrow 
-TRACE:(7) ClickMB Btn1 
+TRACE:(6) LocatePointer List1 RVertScrollBarUpOrLeftArrow
+TRACE:(7) ClickMB Btn1
 The VertSB got that press event
-TRACE:(8) CompareVisual Form 
+TRACE:(8) CompareVisual Form
 TRACE:(9) Continue
-TRACE:(10) LocatePointer Form  
-TRACE:(11) CompareVisual Form 
+TRACE:(10) LocatePointer Form
+TRACE:(11) CompareVisual Form
 TRACE:(12) Continue
-TRACE:(13) LocatePointer Form  
-TRACE:(14) CompareVisual Form 
+TRACE:(13) LocatePointer Form
+TRACE:(14) CompareVisual Form
 TRACE:(15) Exit
 Exiting Test...Please Standby...

@@ -18,8 +18,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 # $XConsortium: ch01.sm /main/3 1995/07/13 20:08:16 drk $
 ...\"  (c) Copyright 1992 OPEN SOFTWARE FOUNDATION, INC.
@@ -65,11 +65,11 @@ the automation libraries.
 Clients that implement their own event loops are not automatable.
 .H 3 "Resolution Independent Units"
 .P
-Test clients that use resolution independent units 
-(for example, \*LXm1000TH_INCHES\*O) 
+Test clients that use resolution independent units
+(for example, \*LXm1000TH_INCHES\*O)
 should only record and play back on the same screen, or on screens of the same pixel resolution. Simply, a one-inch wide button might be rendered with
 97 pixels on one monitor, but require 100 pixels on another monitor. The
-visual comparison code 
+visual comparison code
 would report a "wrong size" error in this case.
 .H 3 "The uil-Based Application"
 .P
@@ -93,11 +93,11 @@ multiple screens of a single machine.
 .H 2 "Automation Files and Directories"
 .P
 An automated test must be linked with the automation libraries. In addition,
-supporting script and instruction files will be required, and a 
+supporting script and instruction files will be required, and a
 naming convention for these supporting files is described.
 .H 3 "Libraries and Supporting Files"
 .P
-There are five libraries that support automation. 
+There are five libraries that support automation.
 .sp
 .in +3
 .VL 2.25i
@@ -219,7 +219,7 @@ that will build, run, and then clean each test directory before moving on
 to the next.
 .P
 If the scripts for any tests contain Window Manager commands (which
-start with the word \*LWindow\*O or \*LIcon\*O), 
+start with the word \*LWindow\*O or \*LIcon\*O),
 it will be necessary to use a
 OSF/Motif Window Manager (\*Lmwm\*O) built for automation. The only difference
 between a default \*Lmwm\*O and one built for automation is that the latter
@@ -231,7 +231,7 @@ The following restrictions about the window manager commands should be
 noted:
 .BL
 .LI
-For version 1.2, the mwm client and the server should be run on 
+For version 1.2, the mwm client and the server should be run on
 the same machine, or on machines using
 the same byte order.
 .LI

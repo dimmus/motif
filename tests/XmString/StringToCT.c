@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -95,7 +95,7 @@ CvtSeparatorToString( Boolean separator )
 {
     return(( ( separator ) ? "True" : "False" ));
 }
- 
+
 static Boolean
 PrintXmStringComponents( string, compare )
 	XmString	string;
@@ -172,7 +172,7 @@ PrintXmStringComponents( string, compare )
                       components[i].type = XmSTRING_COMPONENT_DIRECTION;
                       components[i].direction = direction;
                    }
-                   else if (( components[i].type != 
+                   else if (( components[i].type !=
                               XmSTRING_COMPONENT_DIRECTION ) ||
                             ( components[i].direction != direction ))
                       passed = False;
@@ -182,11 +182,11 @@ PrintXmStringComponents( string, compare )
 
 	      case XmSTRING_COMPONENT_SEPARATOR:
                    if ( !compare )
-                      components[i].type = XmSTRING_COMPONENT_SEPARATOR;  
+                      components[i].type = XmSTRING_COMPONENT_SEPARATOR;
                    else if (components[i].type != XmSTRING_COMPONENT_SEPARATOR )
                       passed = False;
-                   printf("%s: True\n", 
-                          CvtCompTypeToString(comp_type)); 
+                   printf("%s: True\n",
+                          CvtCompTypeToString(comp_type));
                 break;
 
 	      case XmSTRING_COMPONENT_UNKNOWN:
@@ -196,12 +196,12 @@ PrintXmStringComponents( string, compare )
                         if ( !compare )
                         {
                            components[i].type = XmSTRING_COMPONENT_CHARSET;
-                           sprintf( components[i].charset, "%s", 
+                           sprintf( components[i].charset, "%s",
                                     (char *)unknown_value );
                         }
-                        else if ((components[i].type != 
+                        else if ((components[i].type !=
                                   XmSTRING_COMPONENT_CHARSET ) ||
-                            ( strcmp( components[i].charset, 
+                            ( strcmp( components[i].charset,
                                   (char *)unknown_value )))
                            passed = False;
                         printf("%s: %s\n", CvtCompTypeToString(unknown_tag),
@@ -213,12 +213,12 @@ PrintXmStringComponents( string, compare )
                         if ( !compare )
                         {
                            components[i].type = XmSTRING_COMPONENT_TEXT;
-                           sprintf( components[i].text, "%s", 
+                           sprintf( components[i].text, "%s",
                                     (char*)unknown_value );
                         }
-                        else if (( components[i].type != 
+                        else if (( components[i].type !=
                                    XmSTRING_COMPONENT_TEXT ) ||
-                                 ( strcmp( components[i].text, 
+                                 ( strcmp( components[i].text,
                                    (char *)unknown_value )))
                            passed = False;
                         printf("%s: %s\n", CvtCompTypeToString(unknown_tag),
@@ -231,34 +231,34 @@ PrintXmStringComponents( string, compare )
                         if ( !compare )
                         {
                            components[i].type = XmSTRING_COMPONENT_DIRECTION;
-                           components[i].direction = 
+                           components[i].direction =
                                       *((XmStringDirection *)unknown_value );
                         }
-                        else if (( components[i].type != 
+                        else if (( components[i].type !=
                                   XmSTRING_COMPONENT_DIRECTION ) ||
-                                ( components[i].direction != 
+                                ( components[i].direction !=
                                   *((XmStringDirection *)unknown_value )))
                            passed = False;
-                        printf("%s: %s\n", 
-                          CvtCompTypeToString(unknown_tag), 
-                          CvtDirectionToString( 
-                          *((XmStringDirection *)unknown_value ))); 
+                        printf("%s: %s\n",
+                          CvtCompTypeToString(unknown_tag),
+                          CvtDirectionToString(
+                          *((XmStringDirection *)unknown_value )));
                         XtFree((char *)unknown_value );
                         unknown_value = NULL;
                      break;
 
 	           case XmSTRING_COMPONENT_SEPARATOR:
                         if ( !compare )
-                           components[i].type = XmSTRING_COMPONENT_SEPARATOR;  
-                        else if ( components[i].type != 
+                           components[i].type = XmSTRING_COMPONENT_SEPARATOR;
+                        else if ( components[i].type !=
                                   XmSTRING_COMPONENT_SEPARATOR )
                            passed = False;
-                        printf("%s: True", 
-                          CvtCompTypeToString(unknown_tag)); 
+                        printf("%s: True",
+                          CvtCompTypeToString(unknown_tag));
                      break;
                    default:
                         components[i].type = XmSTRING_COMPONENT_UNKNOWN;
-                        printf("Unknown component encountered.\n"); 
+                        printf("Unknown component encountered.\n");
                   }
                 break;
              }
@@ -356,7 +356,7 @@ char            *argv[];
     printf("------------------------------------------------------------\n");
 
     XmStringFree( finalString );
-    finalString = XmCvtCTToXmString( text ); 
+    finalString = XmCvtCTToXmString( text );
     compare = True;
     passed = PrintXmStringComponents( finalString, compare );
 
@@ -371,4 +371,3 @@ char            *argv[];
     CommonPause();
     XtAppMainLoop( app_context );
 }
-

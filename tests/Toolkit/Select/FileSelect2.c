@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: FileSelect2.c /main/10 1999/05/28 15:45:55 jff $"
@@ -131,15 +131,15 @@ void check_out()
 
 #ifdef DEBUG
 
-    printf ("Dir: %s, Pat: %s, dirCount: %i, fileCount: %i,\n", 
-             CommonCsToRs(mymask), CommonCsToRs(myspec), 
+    printf ("Dir: %s, Pat: %s, dirCount: %i, fileCount: %i,\n",
+             CommonCsToRs(mymask), CommonCsToRs(myspec),
 	     mydircount, myfilecount);
 
     printf ("Is fileSearchProc NULL? ");
 
-    if (!search_proc) 
+    if (!search_proc)
 	printf (" Yes.\n");
-    else 
+    else
 	printf (" No, address is %d\n", search_proc);
 
 #endif
@@ -184,7 +184,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNpattern, tcs2); 			n++;
     XtSetArg(args[n], XmNwidth, 400);				n++;
     XtSetArg(args[n], XmNresizePolicy, XmRESIZE_NONE);          n++;
-    FileSelectionBox1 = XmCreateFileSelectionBox(Frame, "FileSelectionBox1", 
+    FileSelectionBox1 = XmCreateFileSelectionBox(Frame, "FileSelectionBox1",
 						 args, n);
     XtManageChild(FileSelectionBox1);
 
@@ -319,7 +319,7 @@ void  main(argc, argv)
     check_out();
 
     /* End Test for Pir2985 */
-    
+
     printf("That's All Folks\n");
 
     CommonPause();
@@ -334,7 +334,7 @@ void GoneCB(w, client_data, call_data )
     XtPointer call_data;
 {
     /* callback for when user clicks the cancel button */
-    
+
     Widget dad;
 
     dad = XtParent(w);      /* get parent of cancel button */

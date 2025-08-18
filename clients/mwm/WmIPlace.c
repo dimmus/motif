@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.1
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -81,7 +81,7 @@ extern Position clipY;
  *  ------
  *  pWS = pointer to workspace data
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  IconPlacmementData
@@ -139,14 +139,14 @@ void InitIconPlacement (WmWorkspaceData *pWS)
 	{
 	    if (useMargin)
 	    {
-	        iSpaceX = 
+	        iSpaceX =
 		    (sW - (2 * pWS->pSD->iconPlacementMargin) -
 			  (pWS->IPData.placementCols * pWS->pSD->iconWidth)) /
 			      (pWS->IPData.placementCols - 1);
 	    }
 	    else
 	    {
-	        iSpaceX = 
+	        iSpaceX =
 		    (sW - (pWS->IPData.placementCols * pWS->pSD->iconWidth)) /
 			       pWS->IPData.placementCols;
 	    }
@@ -167,7 +167,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
 	    }
 	    else
 	    {
-	        iSpaceY = 
+	        iSpaceY =
 		    (sH - (pWS->IPData.placementRows * pWS->pSD->iconHeight)) /
 					    pWS->IPData.placementRows;
 	    }
@@ -185,9 +185,9 @@ void InitIconPlacement (WmWorkspaceData *pWS)
     placementW = pWS->IPData.placementCols * pWS->IPData.iPlaceW;
     placementH = pWS->IPData.placementRows * pWS->IPData.iPlaceH;
 
-    pWS->IPData.placeIconX = 
+    pWS->IPData.placeIconX =
 	((pWS->IPData.iPlaceW - pWS->pSD->iconWidth) + 1) / 2;
-    pWS->IPData.placeIconY = 
+    pWS->IPData.placeIconY =
         ((pWS->IPData.iPlaceH - pWS->pSD->iconHeight) + 1) / 2;
 
     /*
@@ -230,25 +230,25 @@ void InitIconPlacement (WmWorkspaceData *pWS)
 	}
 	else
 	{
-	    xMargin = (sW - placementW + 
+	    xMargin = (sW - placementW +
 		((pWS->IPData.iPlaceW - pWS->pSD->iconWidth) & 1)) / 2;
 	    extraXSpace = 0;
-	    yMargin = (sH - placementH + 
+	    yMargin = (sH - placementH +
 		((pWS->IPData.iPlaceH - pWS->pSD->iconHeight) & 1))/ 2;
 	    extraYSpace = 0;
 
 	    if (pWS->IPData.iconPlacement & ICON_PLACE_RIGHT_PRIMARY)
 	    {
 		xMargin = sW - placementW - xMargin;
-		pWS->IPData.placeIconX = pWS->IPData.iPlaceW - 
-					 pWS->pSD->iconWidth - 
+		pWS->IPData.placeIconX = pWS->IPData.iPlaceW -
+					 pWS->pSD->iconWidth -
 					 pWS->IPData.placeIconX;
 	    }
 	    if (pWS->IPData.iconPlacement & ICON_PLACE_BOTTOM_PRIMARY)
 	    {
 		yMargin = sH - placementH - yMargin;
-		pWS->IPData.placeIconY = pWS->IPData.iPlaceH - 
-					 pWS->pSD->iconHeight - 
+		pWS->IPData.placeIconY = pWS->IPData.iPlaceH -
+					 pWS->pSD->iconHeight -
 					 pWS->IPData.placeIconY;
 	    }
 	}
@@ -279,7 +279,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
     pWS->IPData.placementRowY[0] = yMargin;
     for (i = 1; i <= pWS->IPData.placementRows; i++)
     {
-	pWS->IPData.placementRowY[i] = pWS->IPData.placementRowY[i - 1] + 
+	pWS->IPData.placementRowY[i] = pWS->IPData.placementRowY[i - 1] +
 	    pWS->IPData.iPlaceH;
 	if ((extraYSpace > 0) && (i >= extraPY))
 	{
@@ -291,7 +291,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
     pWS->IPData.placementColX[0] = xMargin;
     for (i = 1; i <= pWS->IPData.placementCols; i++)
     {
-	pWS->IPData.placementColX[i] = pWS->IPData.placementColX[i - 1] + 
+	pWS->IPData.placementColX[i] = pWS->IPData.placementColX[i - 1] +
 	    pWS->IPData.iPlaceW;
 	if ((extraXSpace > 0) && (i >= extraPX))
 	{
@@ -305,7 +305,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
      * Setup an array of icon places.
      */
 
-    pWS->IPData.totalPlaces = 
+    pWS->IPData.totalPlaces =
 	pWS->IPData.placementRows * pWS->IPData.placementCols;
 
     if ((pWS->IPData.placeList =
@@ -319,7 +319,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
 	return;
     }
 
-    memset ((char *)pWS->IPData.placeList, 0, 
+    memset ((char *)pWS->IPData.placeList, 0,
 	pWS->IPData.totalPlaces * sizeof (IconInfo));
 
     pWS->IPData.onRootWindow = True;
@@ -338,7 +338,7 @@ void InitIconPlacement (WmWorkspaceData *pWS)
  *  -----------
  *  This function identifies and returns the next free icon grid place.
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  Return = next free place (index)
@@ -386,13 +386,13 @@ int GetNextIconPlace (IconPlacementData *pIPD)
  *
  *  wmGD = (iconPlacement ...)
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  pX = pointer to icon place X location
  *
  *  pY = pointer to icon place Y location
- * 
+ *
  *************************************<->***********************************/
 
 void CvtIconPlaceToPosition (IconPlacementData *pIPD, int place, int *pX, int *pY)
@@ -429,7 +429,7 @@ void CvtIconPlaceToPosition (IconPlacementData *pIPD, int place, int *pX, int *p
 	*pX = pIPD->placementColX[col] + pIPD->placeIconX;
 	*pY = pIPD->placementRowY[row] + pIPD->placeIconY;
     }
-    else 
+    else
     {
 	*pX = col * pIPD->iPlaceW;
 	*pY = row * pIPD->iPlaceH;
@@ -458,7 +458,7 @@ void CvtIconPlaceToPosition (IconPlacementData *pIPD, int place, int *pX, int *p
  *
  *  y = desired y location of icon place
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  Return = icon place (index)
@@ -471,7 +471,7 @@ void CvtIconPlaceToPosition (IconPlacementData *pIPD, int place, int *pX, int *p
  *  from the postion passed in.  If those positions are taken look at
  *  positions that are +- one half icon placement width/height from the
  *  position passed in.
- * 
+ *
  *************************************<->***********************************/
 
 int FindIconPlace (ClientData *pCD, IconPlacementData *pIPD, int x, int y)
@@ -509,7 +509,7 @@ int FindIconPlace (ClientData *pCD, IconPlacementData *pIPD, int x, int y)
 	if (!ExtendIconList (P_ICON_BOX(pCD), amt))
 	{
 	    Warning (((char *)GETMESSAGE(34, 4, "Insufficient memory to create icon box data")));
-	    return (NO_ICON_PLACE);            
+	    return (NO_ICON_PLACE);
 	}
     }
     /*
@@ -645,20 +645,20 @@ int FindIconPlace (ClientData *pCD, IconPlacementData *pIPD, int x, int y)
 	    if (P_ICON_BOX(pCD))
 	    {
 		GetClipDimensions(pCD, False);
-		if (altX < clipX) 
+		if (altX < clipX)
 		{
 		    return (NO_ICON_PLACE);
 		}
-		if (altY < clipY) 
+		if (altY < clipY)
 		{
 		    return (NO_ICON_PLACE);
 		}
-		if (((int)altX) > ((int)clipX + 
-			(int)clipWidth - ((int)ICON_WIDTH(pCD)))) 
+		if (((int)altX) > ((int)clipX +
+			(int)clipWidth - ((int)ICON_WIDTH(pCD))))
 		{
 		    return (NO_ICON_PLACE);
 		}
-		if (((int)altY) > ((int)clipY + 
+		if (((int)altY) > ((int)clipY +
 			(int)clipHeight - ((int)ICON_HEIGHT(pCD))))
 		{
 		    return (NO_ICON_PLACE);
@@ -702,7 +702,7 @@ int FindIconPlace (ClientData *pCD, IconPlacementData *pIPD, int x, int y)
  *
  *  x,y = location to be converted into an icon place
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  Return = icon place (index)
@@ -718,7 +718,7 @@ int CvtIconPositionToPlace (IconPlacementData *pIPD, int x, int y)
     if (pIPD->onRootWindow)
     {
 	/*
-	 * Scan through the root window row/column arrays and find the 
+	 * Scan through the root window row/column arrays and find the
 	 * placement position.
 	 */
 
@@ -754,7 +754,7 @@ int CvtIconPositionToPlace (IconPlacementData *pIPD, int x, int y)
     }
     else
     {
-	/* 
+	/*
 	 * convert icon box coords
 	 */
 	col = x / pIPD->iPlaceW;
@@ -771,7 +771,7 @@ int CvtIconPositionToPlace (IconPlacementData *pIPD, int x, int y)
     {
 	return ((col * pIPD->placementRows) + row);
     }
-    
+
 
 } /* END OF FUNCTION CvtIconPositionToPlace */
 
@@ -791,7 +791,7 @@ int CvtIconPositionToPlace (IconPlacementData *pIPD, int x, int y)
  *
  *  Inputs:
  *  ------
- * 
+ *
  *  Outputs:
  *  -------
  *
@@ -810,8 +810,8 @@ void PackRootIcons (void)
     WsClientData *pWsc;
 #endif /* WSM */
 
-    /* 
-     * find context of the activeIconTextWin to get pCD and then 
+    /*
+     * find context of the activeIconTextWin to get pCD and then
      * if it is the same as this client, hide it.
      */
 
@@ -821,19 +821,19 @@ void PackRootIcons (void)
 	hasActiveText = 0;
     }
 
-    /* 
+    /*
      *  Traverse the list and pack them together
      */
 
     if (wmGD.iconAutoPlace)
     {
-	for (iOld = iNew = 0; iOld < ACTIVE_WS->IPData.totalPlaces; 
+	for (iOld = iNew = 0; iOld < ACTIVE_WS->IPData.totalPlaces;
 	    iOld++, iNew++)
 	{
 	    if (ACTIVE_WS->IPData.placeList[iOld].pCD == NULL)
 	    {
 		/* advance to next non-null entry */
-		while (++iOld < ACTIVE_WS->IPData.totalPlaces && 
+		while (++iOld < ACTIVE_WS->IPData.totalPlaces &&
 		       !ACTIVE_WS->IPData.placeList[iOld].pCD)
 		    ;
 	    }
@@ -848,11 +848,11 @@ void PackRootIcons (void)
 #ifdef WSM
 		pWsc = GetWsClientData (ACTIVE_WS, pCD);
 		pWsc->iconPlace = iNew;
-		CvtIconPlaceToPosition (&ACTIVE_WS->IPData, 
+		CvtIconPlaceToPosition (&ACTIVE_WS->IPData,
 		    pWsc->iconPlace, &pWsc->iconX, &pWsc->iconY);
 #else /* WSM */
 		pCD->iconPlace = iNew;
-		CvtIconPlaceToPosition (&ACTIVE_WS->IPData, 
+		CvtIconPlaceToPosition (&ACTIVE_WS->IPData,
 		    pCD->iconPlace, &pCD->iconX, &pCD->iconY);
 #endif /* WSM */
 
@@ -861,10 +861,10 @@ void PackRootIcons (void)
 		    /* hide activeIconTextWin first */
 		    HideActiveIconText ((WmScreenData *)NULL);
 #ifdef WSM
-		    XMoveWindow (DISPLAY, pWsc->iconFrameWin, pWsc->iconX, 
+		    XMoveWindow (DISPLAY, pWsc->iconFrameWin, pWsc->iconX,
 			     pWsc->iconY);
 #else /* WSM */
-		    XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD), pCD->iconX, 
+		    XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD), pCD->iconX,
 			     pCD->iconY);
 #endif /* WSM */
 		    ShowActiveIconText (pCD);
@@ -872,10 +872,10 @@ void PackRootIcons (void)
 		else
 		{
 #ifdef WSM
-		    XMoveWindow (DISPLAY, pWsc->iconFrameWin, pWsc->iconX, 
+		    XMoveWindow (DISPLAY, pWsc->iconFrameWin, pWsc->iconX,
 			     pWsc->iconY);
 #else /* WSM */
-		    XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD), pCD->iconX, 
+		    XMoveWindow (DISPLAY, ICON_FRAME_WIN(pCD), pCD->iconX,
 			     pCD->iconY);
 #endif /* WSM */
 		}
@@ -901,13 +901,13 @@ void PackRootIcons (void)
  *  pIPD	- ptr to icon placement data
  *  p1		- placement index 1 (source)
  *  p2		- placement index 2 (destination)
- * 
+ *
  *  Outputs:
  *  -------
  *
  *  Comments:
  *  --------
- * 
+ *
  *************************************<->***********************************/
 
 void MoveIconInfo (IconPlacementData *pIPD, int p1, int p2)

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form21.c /main/4 1995/07/13 18:06:43 drk $"
@@ -50,15 +50,15 @@ char    **argv;
 {
   register int  n;
   Arg args[MAX_ARGS];
-  
+
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth,  50);                               n++;
   XtSetArg (args[n], XmNheight, 25);                               n++;
   XtSetValues(Shell1, args, n);
-    
-  XtRealizeWidget(Shell1);    
+
+  XtRealizeWidget(Shell1);
 
   RunTest(Shell1);
 
@@ -74,13 +74,13 @@ Widget Shell;
 
   CreateForm(Shell);
   CommonPause();
-    
+
   for (i = 0; i < MAXTEXT; i++) XtUnmapWidget(Text[i]);
   CommonPause();
-    
+
   for (i = 0; i < MAXTEXT; i++) XtMapWidget(Text[i]);
   CommonPause();
-    
+
   DestroyForm();
   CommonPause();
 
@@ -92,16 +92,16 @@ Widget Shell;
 
   XtUnmanageChild(Text[1]);
   CommonPause();
-    
+
   XtUnmanageChild(Text[2]);
   CommonPause();
 
   XtUnmanageChild(Text[3]);
   CommonPause();
-    
+
   for (i = 0; i < MAXTEXT; i++) XtManageChild(Text[i]);
   CommonPause();
-    
+
   DestroyForm();
 }
 
@@ -112,7 +112,7 @@ Widget w;
   Arg          args[MAX_ARGS];
   Position     x, y;
   Dimension    width, height;
-  
+
   n = 0;
   XtSetArg(args[n], XmNx,      &x);            n++;
   XtSetArg(args[n], XmNy,      &y);            n++;
@@ -122,7 +122,7 @@ Widget w;
 
   printf("\n\tX: %d Y: %d W: %d H: %d\n", x, y, width, height);
 
-  if ( XtIsManaged(w) ) 
+  if ( XtIsManaged(w) )
     printf("The Widget is Managed.\n");
   else
     printf("The Widget is NOT Managed.\n");
@@ -143,11 +143,11 @@ Widget Shell;
   XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);            n++;
   XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmSTATIC);        n++;
   ScrollWin = XmCreateScrolledWindow(DialogShell, "ScrollWin", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_GROW);             n++;
   Form = XmCreateForm(ScrollWin, "Form", args, n);
-  
+
   for (i = 0; i < MAXTEXT; i++) {
     n = 0;
     XtSetArg(args[n], XmNeditMode, XmMULTI_LINE_EDIT);                 n++;

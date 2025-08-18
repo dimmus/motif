@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,20 +19,20 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FetchWO.c /main/9 1995/07/14 10:49:00 drk $"
 #endif
 #endif
 
-#include <MrmTest.h> 
+#include <MrmTest.h>
 #include <testlib.h>
 
-/* 
+/*
  * Data for summary
  */
 
@@ -53,7 +53,7 @@ extern String		summary();
  * Local declarations.
  */
 
-struct TestInfo FetchWidgetOverrideInfo[NUM_TESTS] = 
+struct TestInfo FetchWidgetOverrideInfo[NUM_TESTS] =
 {
     {"Fetch valid parent widget, override width                 ",
 				MrmSUCCESS,	0},
@@ -79,7 +79,7 @@ struct TestInfo FetchWidgetOverrideInfo[NUM_TESTS] =
 void main(argc,argv)
      int argc;
      char **argv;
-{ 	
+{
 /*
  * External declarations
  */
@@ -125,7 +125,7 @@ void main(argc,argv)
                         filename_vec,           /* files                */
                         NULL,                   /* os_ext_list (null)   */
                         &s_MrmHierarchy)        /* ptr to returned id   */
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
         printf("Can't open hierarchy\n");
     }
@@ -207,7 +207,7 @@ void main(argc,argv)
 	XtRealizeWidget(Shell1);
 
     CommonPause();
-			       
+
 /*
  * Fetch nonexistent widget, override name, pixmap
  */
@@ -226,7 +226,7 @@ void main(argc,argv)
 						&badwidget1,
 						&class);
 	FWO_info_cnt++;
-	
+
 /*
  * Try to fetch a widget which has already been fetched, and override
  * it's pixmap
@@ -234,14 +234,14 @@ void main(argc,argv)
  */
 	badwidget1 = NULL;
 	badwidget1 = XtNameToWidget(test_box, "button1");
-	
+
 	FetchWidgetOverrideInfo[FWO_info_cnt].actual_return =
 		MrmFetchWidgetOverride(
 						s_MrmHierarchy,
 						"button1",
 						test_box,
 						NULL,
-						args, 
+						args,
 						nargs,
 						&badwidget1,
 						&class);
@@ -299,7 +299,7 @@ void main(argc,argv)
 	XtManageChildren(&buttons[2], 2);
 
         CommonPause();
-	
+
         /*
 	 * Generate summary message.
 	 */
@@ -312,5 +312,5 @@ void main(argc,argv)
 
         CommonPause();
 
-    
+
 }

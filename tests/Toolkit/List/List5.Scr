@@ -1,5 +1,5 @@
 # $XConsortium: List5.scr /main/5 1995/07/17 20:21:56 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List5.scr	1.1  91/10/11
 
@@ -103,7 +103,7 @@ ClickKey KReturn
 CompareVisual List1
 
 # Press KSelect twice very quickly. The message \"ExtendedSelection Callback
-# called\" should be printed in the term window. No 
+# called\" should be printed in the term window. No
 # \"DefaultAction Callback called\" message should appear.
 
 ClickKey KSelect
@@ -117,7 +117,7 @@ CompareVisual List1
 
 # Press and hold MB1 on Item4 and move the selection to Item10. Items 4
 # through   10 should be selected. Before you let go of MB1 press
-# KCancel. The selection of Item4 through 10 should be deleted 
+# KCancel. The selection of Item4 through 10 should be deleted
 # and Item4 should be the only item selected. Release MB1.
 
 LocatePointer List1 RListItem 3
@@ -219,7 +219,7 @@ ClickKey <Ctrl> KSlash
 CompareVisual List1
 
 # Press the <Return> key. The message \"DefaultAction Callback called\"
-# should be printed in the term window. The selected items should not 
+# should be printed in the term window. The selected items should not
 # change.
 
 ClickKey KReturn
@@ -229,7 +229,7 @@ CompareVisual List1
 
 Continue
 
-# Press KHelp in the List. The message \"Help Callback called\" should be 
+# Press KHelp in the List. The message \"Help Callback called\" should be
 # printed in the term window.
 
 LocatePointer List1 RListItem 0
@@ -282,13 +282,13 @@ Continue
 LocatePointer List1 RListItem 0
 CompareVisual List1
 
-# Double click on Item1. An Information Dialog should appear.  
+# Double click on Item1. An Information Dialog should appear.
 # The Information dialog will be XmDIALOG_FULL_APPLICATION_MODAL.
 
 ClickMB Btn1 2
 CompareVisual List1
 
-# Move the pointer the above the list. The list should not scroll. 
+# Move the pointer the above the list. The list should not scroll.
 
 LocatePointer List1 Up
 CompareVisual List1

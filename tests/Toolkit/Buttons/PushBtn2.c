@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PushBtn2.c /main/9 1995/07/13 17:30:29 drk $"
@@ -42,19 +42,19 @@ Widget pushbutton, widget, rc, gadget, pushbutton1, pushbutton2;
 void activate_msg(w, client_data, call_data)
 Widget w;
 XtPointer client_data;
-XtPointer call_data; 
+XtPointer call_data;
 {
   int n;
   short show_as_default;
   Arg args[20];
 
   n=0;
-  XtSetArg(args[n], XmNshowAsDefault, &show_as_default);  n++; 
+  XtSetArg(args[n], XmNshowAsDefault, &show_as_default);  n++;
   XtGetValues(w, args, n);
 
   n=0;
   if (show_as_default == 5) {
-      XtSetArg(args[n], XmNshowAsDefault, 10);  n++; 
+      XtSetArg(args[n], XmNshowAsDefault, 10);  n++;
     }
   else
     {  XtSetArg(args[n], XmNshowAsDefault, 5);  n++;  }
@@ -66,15 +66,15 @@ Widget w;
 XtPointer client_data;
 XtPointer call_data;
 {
-  if ((int)client_data == 1) 
+  if ((int)client_data == 1)
     printf("Run push button hit\n" );
   else
     printf("Walk push button hit\n");
-     
+
 }
 
 static void generic_callback(widget, tag, callback_data)
-Widget widget; 
+Widget widget;
 XtPointer tag;
 XtPointer callback_data;
 {
@@ -92,7 +92,7 @@ static void multiClickCB(w, client_data, call_data)
 Widget w;
 XtPointer client_data,call_data;
 {
-  printf ("Number of clicks is %d\n", 
+  printf ("Number of clicks is %d\n",
 	  ((XmPushButtonCallbackStruct*)call_data)->click_count);
   printf ("*************************\n");
 }
@@ -125,7 +125,7 @@ char **argv;
   widget = XmCreatePushButton(rc, "button_widget", &arg, 1);
 
   XtManageChild(widget);
-  
+
   XtSetArg(arg, XmNdefaultButtonShadowThickness, 2);
   gadget = XmCreatePushButtonGadget(rc, "button_gadget", &arg, 1);
   XtManageChild(gadget);
@@ -140,20 +140,20 @@ char **argv;
   XtDestroyWidget(rc);
 
   n=0;
-  XtSetArg(args[n], XmNmarginWidth, 20);  n++; 
-  XtSetArg(args[n], XmNmarginHeight, 20);  n++; 
+  XtSetArg(args[n], XmNmarginWidth, 20);  n++;
+  XtSetArg(args[n], XmNmarginHeight, 20);  n++;
   bboard = XmCreateFrame(Shell1, "bboard", args, n);
 
   n=0;
-  XtSetArg(args[n], XmNwidth, 100);  n++; 
-  XtSetArg(args[n], XmNheight, 100);  n++; 
+  XtSetArg(args[n], XmNwidth, 100);  n++;
+  XtSetArg(args[n], XmNheight, 100);  n++;
   string = XmStringLtoRCreate("Push Here", XmSTRING_DEFAULT_CHARSET);
-  XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++; 
-  XtSetArg(args[n], XmNlabelType, XmSTRING);  n++; 
-  XtSetArg(args[n], XmNlabelString, string);  n++; 
+  XtSetArg(args[n], XmNactivateCallback, activateCBs);  n++;
+  XtSetArg(args[n], XmNlabelType, XmSTRING);  n++;
+  XtSetArg(args[n], XmNlabelString, string);  n++;
   XtSetArg(args[n], XmNmultiClick, XmMULTICLICK_KEEP); n++;
 
-  pushbutton = XmCreatePushButton(bboard, "pushbutton", args, n); 
+  pushbutton = XmCreatePushButton(bboard, "pushbutton", args, n);
 
   XtAddCallback(pushbutton, XmNactivateCallback, multiClickCB, NULL);
 
@@ -221,7 +221,7 @@ char **argv;
     }
 
   /* End test for PIR 2404 */
-  
+
   CommonPause();
 
   XtDestroyWidget(pan);

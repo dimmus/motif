@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
-# Scroll down to the end using the arrow down 
+# Scroll down to the end using the arrow down
 
 LocatePointer ScrolledW RVertScrollBarDownArrow
 AutoPerformMonitor On
@@ -37,21 +37,21 @@ AutoPerformMonitor On
 ClickMB Btn1 10
 AutoPerformMonitor Off
 
-# Scroll down one increment using the arrow down 
+# Scroll down one increment using the arrow down
 
 LocatePointer ScrolledW RVertScrollBarDownArrow
 AutoPerformMonitor On
-ClickMB Btn1 
+ClickMB Btn1
 AutoPerformMonitor Off
 
 # Scroll one increment using the arrow up
 
 LocatePointer ScrolledW RVertScrollBarUpArrow
 AutoPerformMonitor On
-ClickMB Btn1 
+ClickMB Btn1
 AutoPerformMonitor Off
 
-# Scroll down to the end using the slider 
+# Scroll down to the end using the slider
 
 LocatePointer ScrolledW RVertScrollBarSlider
 AutoPerformMonitor On

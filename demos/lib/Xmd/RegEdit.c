@@ -20,14 +20,14 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
  */
 #include <stdio.h>
-#include <Xm/XmP.h>		
-#include <X11/ShellP.h>		
+#include <Xm/XmP.h>
+#include <X11/ShellP.h>
 #include "RegEdit.h"
 #include "RegEditI.h"
 
@@ -44,14 +44,14 @@ static Boolean _XEditResGet8();
 static Boolean _XEditResGet16();
 static Boolean _XEditResGetSigned16();
 static Boolean _XEditResGet32();
-static Boolean _XEditResGetString8(); 
+static Boolean _XEditResGetString8();
 static Boolean _XEditResGetWidgetInfo();
 
 /* the only entry point here */
-void 
+void
 XmdRegisterEditres(Widget toplevel)
 {
-    XtAddEventHandler(toplevel, (EventMask) 0, TRUE, 
+    XtAddEventHandler(toplevel, (EventMask) 0, TRUE,
 		      _XEditResCheckMessages, NULL);
 }
 
@@ -63,7 +63,7 @@ XmdRegisterEditres(Widget toplevel)
  *
  ************************************************************/
 
-#define _XEditResPutBool _XEditResPut8	
+#define _XEditResPutBool _XEditResPut8
 #define _XEditResPutResourceType _XEditResPut8
 
 /************************************************************
@@ -258,7 +258,7 @@ unsigned long length;
 
     (void) _XEditResGet8(stream, &temp);
     if (temp != ident)		/* Id's don't match, ignore request. */
-	return(NULL);		
+	return(NULL);
 
     event = (EditresEvent *) XtCalloc(sizeof(EditresEvent), 1);
 
@@ -266,18 +266,18 @@ unsigned long length;
     event->any_event.type = (EditresCommand) temp;
     (void) _XEditResGet32(stream, &(stream->size));
     stream->top = stream->current; /* reset stream to top of value.*/
-	
+
     /*
      * Now retrieve the data segment.
      */
-    
+
     switch(event->any_event.type) {
     case SendWidgetTree:
 	break;			/* no additional info */
     case SetValues:
         {
 	    SetValuesEvent * sv_event = (SetValuesEvent *) event;
-	    
+
 	    if ( !(_XEditResGetString8(stream, &(sv_event->name)) &&
 		   _XEditResGetString8(stream, &(sv_event->res_type))))
 	    {
@@ -292,12 +292,12 @@ unsigned long length;
 	    if (!_XEditResGet16(stream, &(sv_event->value_len)))
 		goto done;
 
-	    sv_event->value = XtMalloc(sizeof(char) * 
+	    sv_event->value = XtMalloc(sizeof(char) *
 				       (sv_event->value_len + 1));
 
 	    for (i = 0; i < sv_event->value_len; i++) {
-		if (!_XEditResGet8(stream, 
-				   (unsigned char *) sv_event->value + i)) 
+		if (!_XEditResGet8(stream,
+				   (unsigned char *) sv_event->value + i))
 		{
 		    goto done;
 		}
@@ -309,7 +309,7 @@ unsigned long length;
 
 	    sv_event->widgets = (WidgetInfo *)
 		XtCalloc(sizeof(WidgetInfo), sv_event->num_entries);
-	    
+
 	    for (i = 0; i < sv_event->num_entries; i++) {
 		if (!_XEditResGetWidgetInfo(stream, sv_event->widgets + i))
 		    goto done;
@@ -319,8 +319,8 @@ unsigned long length;
     case FindChild:
         {
 	    FindChildEvent * find_event = (FindChildEvent *) event;
-	    
-	    find_event->widgets = (WidgetInfo *) 
+
+	    find_event->widgets = (WidgetInfo *)
 		                  XtCalloc(sizeof(WidgetInfo), 1);
 
 	    if (!(_XEditResGetWidgetInfo(stream, find_event->widgets) &&
@@ -328,7 +328,7 @@ unsigned long length;
 		  _XEditResGetSigned16(stream, &(find_event->y))))
 	    {
 		goto done;
-	    }	    				
+	    }
 
 	}
 	break;
@@ -336,14 +336,14 @@ unsigned long length;
     case GetResources:
         {
 	    GenericGetEvent * get_event = (GenericGetEvent *) event;
-	    
+
 	    if (!_XEditResGet16(stream, &(get_event->num_entries)))
 		goto done;
-		
+
 	    get_event->widgets = (WidgetInfo *)
 		XtCalloc(sizeof(WidgetInfo), get_event->num_entries);
 	    for (i = 0; i < get_event->num_entries; i++) {
-		if (!_XEditResGetWidgetInfo(stream, get_event->widgets + i)) 
+		if (!_XEditResGetWidgetInfo(stream, get_event->widgets + i))
 		    goto done;
 	    }
 	}
@@ -351,7 +351,7 @@ unsigned long length;
     default:
 	{
 	    char buf[BUFSIZ];
-	    
+
 	    sprintf(buf, "Unknown Protocol request %d.",event->any_event.type);
 	    SendFailure(w, sel, ident, buf);
 	    return(NULL);
@@ -364,7 +364,7 @@ unsigned long length;
     SendFailure(w, sel, ident, ERROR_MESSAGE);
     FreeEvent(event);
     return(NULL);
-}    
+}
 
 /*	Function Name: FreeEvent
  *	Description: Frees the event structure and any other pieces
@@ -386,7 +386,7 @@ EditresEvent * event;
 	XtFree(event->set_values_event.name);     /* XtFree does not free if */
 	XtFree(event->set_values_event.res_type); /* value is NULL. */
     }
-	
+
     XtFree((char *)event);
 }
 
@@ -420,7 +420,7 @@ int * format;
 }
 
 /*	Function Name: ExecuteCommand
- *	Description: Executes a command string received from the 
+ *	Description: Executes a command string received from the
  *                   resource editor.
  *	Arguments: w       - a widget.
  *                 command - the command to execute.
@@ -430,7 +430,7 @@ int * format;
  * NOTES:  munges str
  */
 
-/* ARGSUSED */    
+/* ARGSUSED */
 static void
 ExecuteCommand(w, sel, ident, event)
 Widget w;
@@ -442,13 +442,13 @@ EditresEvent * event;
     char * str;
 
     if (globals.block == BlockAll) {
-	SendFailure(w, sel, ident, 
+	SendFailure(w, sel, ident,
 		    "This client has blocked all Editres commands.");
 	return;
     }
-    else if ((globals.block == BlockSetValues) && 
+    else if ((globals.block == BlockSetValues) &&
 	(event->any_event.type == SetValues)) {
-	SendFailure(w, sel, ident, 
+	SendFailure(w, sel, ident,
 		    "This client has blocked all SetValues requests.");
 	return;
     }
@@ -469,7 +469,7 @@ EditresEvent * event;
     case GetResources:
 	func = DoGetResources;
 	break;
-    default: 
+    default:
         {
 	    char buf[BUFSIZ];
 	    sprintf(buf,"Unknown Protocol request %d.",event->any_event.type);
@@ -498,7 +498,7 @@ EditresEvent * event;
  *                 format_ret - the format the selection is in.
  *	Returns: True if conversion was sucessful.
  */
-    
+
 /* ARGSUSED */
 static Boolean
 ConvertReturnCommand(w, selection, target,
@@ -535,7 +535,7 @@ static void
 CommandDone(widget, selection, target)
 Widget widget;
 Atom *selection;
-Atom *target;    
+Atom *target;
 {
     /* Keep the toolkit from automaticaly freeing the selection value */
 }
@@ -550,7 +550,7 @@ Atom *target;
  */
 
 static void
-SendFailure(w, sel, ident, str) 
+SendFailure(w, sel, ident, str)
 Widget w;
 Atom sel;
 ResIdent ident;
@@ -577,25 +577,25 @@ ProtocolStream * stream;
 {
     long old_alloc, old_size;
     unsigned char * old_current;
-    
+
     /*
      * We have cleverly keep enough space at the top of the header
      * for the return protocol stream, so all we have to do is
      * fill in the space.
      */
 
-    /* 
+    /*
      * Fool the insert routines into putting the header in the right
      * place while being damn sure not to realloc (that would be very bad.
      */
-    
+
     old_current = stream->current;
     old_alloc = stream->alloc;
     old_size = stream->size;
 
     stream->current = stream->real_top;
-    stream->alloc = stream->size + (2 * HEADER_SIZE);	
-    
+    stream->alloc = stream->size + (2 * HEADER_SIZE);
+
     _XEditResPut8(stream, ident);
     _XEditResPut8(stream, (unsigned char) command);
     _XEditResPut32(stream, old_size);
@@ -603,9 +603,9 @@ ProtocolStream * stream;
     stream->alloc = old_alloc;
     stream->current = old_current;
     stream->size = old_size;
-    
+
     return((XtPointer) stream->real_top);
-}    
+}
 
 /*	Function Name: SendCommand
  *	Description: Builds a return command line.
@@ -626,7 +626,7 @@ EditresCommand command;
 ProtocolStream * stream;
 {
     BuildReturnPacket(ident, command, stream);
-    globals.command_stream = stream;	
+    globals.command_stream = stream;
 
 /*
  * I REALLY want to own the selection.  Since this was not triggered
@@ -661,33 +661,33 @@ Boolean normal, popup;
 {
     CompositeWidget cw = (CompositeWidget) parent;
     int i, num_children, current = 0;
-    
+
     num_children = 0;
 
     if (XtIsWidget(parent) && popup)
 	num_children += parent->core.num_popups;
-	
-    if (XtIsComposite(parent) && normal) 
-	num_children += cw->composite.num_children; 
 
-    if (num_children == 0) {	
-	*children = NULL; 
+    if (XtIsComposite(parent) && normal)
+	num_children += cw->composite.num_children;
+
+    if (num_children == 0) {
+	*children = NULL;
 	return(0);
     }
 
     *children =(Widget*) XtMalloc((Cardinal) sizeof(Widget) * num_children);
 
     if (XtIsComposite(parent) && normal)
-	for (i = 0; i < cw->composite.num_children; i++,current++) 
-	    (*children)[current] = cw->composite.children[i]; 
+	for (i = 0; i < cw->composite.num_children; i++,current++)
+	    (*children)[current] = cw->composite.children[i];
 
     if (XtIsWidget(parent) && popup)
-	for ( i = 0; i < parent->core.num_popups; i++, current++) 
+	for ( i = 0; i < parent->core.num_popups; i++, current++)
 	    (*children)[current] = parent->core.popup_list[i];
 
     return(num_children);
 }
-		
+
 /*	Function Name: IsChild
  *	Description: check to see of child is a child of parent.
  *	Arguments: top - the top of the tree.
@@ -726,7 +726,7 @@ Widget top, parent, child;
  *	Returns: an error message or NULL.
  */
 
-static char * 
+static char *
 VerifyWidget(w, info)
 Widget w;
 WidgetInfo *info;
@@ -744,7 +744,7 @@ WidgetInfo *info;
     count = 0;
 
     while (TRUE) {
-	if (!IsChild(top, parent, (Widget) *child)) 
+	if (!IsChild(top, parent, (Widget) *child))
 	    return(XtNewString("This widget no longer exists in the client."));
 
 	if (++count == info->num_widgets)
@@ -782,7 +782,7 @@ ProtocolStream * stream;
     register unsigned i;
     unsigned short count = 0;
     SetValuesEvent * sv_event = (SetValuesEvent *) event;
-    
+
     _XEditResPut16(stream, count); /* insert 0, will be overwritten later. */
 
     for (i = 0 ; i < sv_event->num_entries; i++) {
@@ -792,8 +792,8 @@ ProtocolStream * stream;
 	    XtFree(str);
 	    count++;
 	}
-	else 
-	    ExecuteSetValues(sv_event->widgets[i].real_widget, 
+	else
+	    ExecuteSetValues(sv_event->widgets[i].real_widget,
 			     sv_event, sv_event->widgets + i, stream, &count);
     }
 
@@ -822,31 +822,31 @@ HandleToolkitErrors(name, type, class, msg, params, num_params)
 String name, type, class, msg, *params;
 Cardinal * num_params;
 {
-    SVErrorInfo * info = &globals.error_info;	
+    SVErrorInfo * info = &globals.error_info;
     char buf[BUFSIZ];
 
-    if ( streq(name, "unknownType") ) 
-	sprintf(buf, "The `%s' resource is not used by this widget.", 
-		info->event->name); 
-    else if ( streq(name, "noColormap") ) 
+    if ( streq(name, "unknownType") )
+	sprintf(buf, "The `%s' resource is not used by this widget.",
+		info->event->name);
+    else if ( streq(name, "noColormap") )
 	sprintf(buf, msg, params[0]);
     else if (streq(name, "conversionFailed") || streq(name, "conversionError"))
     {
 	if (streq(info->event->value, XtRString))
-	    sprintf(buf, 
+	    sprintf(buf,
 		    "Could not convert the string '%s' for the `%s' resource.",
-		    (char*)info->event->value, info->event->name);   
+		    (char*)info->event->value, info->event->name);
 	else
 	    sprintf(buf, "Could not convert the `%s' resource.",
 		    info->event->name);
     }
-    else 
+    else
 	sprintf(buf, "Name: %s, Type: %s, Class: %s, Msg: %s",
 		name, type, class, msg);
 
     /*
      * Insert this info into the protocol stream, and update the count.
-     */ 
+     */
 
     (*(info->count))++;
     _XEditResPutWidgetInfo(info->stream, info->entry);
@@ -870,8 +870,8 @@ ProtocolStream * stream;
 unsigned short * count;
 {
     XtErrorMsgHandler old;
-    
-    SVErrorInfo * info = &globals.error_info;	
+
+    SVErrorInfo * info = &globals.error_info;
     info->event = sv_event;	/* No data can be passed to */
     info->stream = stream;	/* an error handler, so we */
     info->count = count;	/* have to use a global, YUCK... */
@@ -905,19 +905,19 @@ unsigned short * count;
  */
 
 /* ARGSUSED */
-static char * 
+static char *
 DumpWidgets(w, event, stream)
 Widget w;
 EditresEvent * event;		/* UNUSED */
 ProtocolStream * stream;
 {
     unsigned short count = 0;
-        
+
     /* Find Tree's root. */
     for ( ; XtParent(w) != NULL; w = XtParent(w)) {}
-    
+
     /*
-     * hold space for count, overwritten later. 
+     * hold space for count, overwritten later.
      */
 
     _XEditResPut16(stream, (unsigned int) 0);
@@ -975,7 +975,7 @@ unsigned short *count;
     char * class;
 
     (*count)++;
-	
+
     InsertWidget(stream, w);       /* Insert the widget into the stream. */
 
     _XEditResPutString8(stream, XtName(w)); /* Insert name */
@@ -1002,7 +1002,7 @@ unsigned short *count;
      */
 
     num_children = FindChildren(w, &children, TRUE, TRUE);
-    for (i = 0; i < num_children; i++) 
+    for (i = 0; i < num_children; i++)
 	DumpChildren(children[i], stream, count);
 
     XtFree((char *)children);
@@ -1031,13 +1031,13 @@ ProtocolStream * stream;
     unsigned i;
     char * str;
     GetGeomEvent * geom_event = (GetGeomEvent *) event;
-    
+
     _XEditResPut16(stream, geom_event->num_entries);
 
     for (i = 0 ; i < geom_event->num_entries; i++) {
 
-	/* 
-	 * Send out the widget id. 
+	/*
+	 * Send out the widget id.
 	 */
 
 	_XEditResPutWidgetInfo(stream, &(geom_event->widgets[i]));
@@ -1046,7 +1046,7 @@ ProtocolStream * stream;
 	    _XEditResPutString8(stream, str);	/* set message. */
 	    XtFree(str);
 	}
-	else 
+	else
 	    ExecuteGetGeometry(geom_event->widgets[i].real_widget, stream);
     }
     return(NULL);
@@ -1070,7 +1070,7 @@ ProtocolStream * stream;
     Arg args[8];
     Cardinal num_args = 0;
     Position x, y;
-    
+
     if ( !XtIsRectObj(w) || (XtIsWidget(w) && !XtIsRealized(w)) ) {
 	_XEditResPutBool(stream, False); /* no error. */
 	_XEditResPutBool(stream, False); /* not visable. */
@@ -1088,12 +1088,12 @@ ProtocolStream * stream;
 
     if (!(XtIsManaged(w) && mapped_when_man) && XtIsWidget(w)) {
 	XWindowAttributes attrs;
-	
-	/* 
+
+	/*
 	 * The toolkit does not maintain mapping state, we have
 	 * to go to the server.
 	 */
-	
+
 	if (XGetWindowAttributes(XtDisplay(w), XtWindow(w), &attrs) != 0) {
 	    if (attrs.map_state != IsViewable) {
 		_XEditResPutBool(stream, False); /* no error. */
@@ -1157,7 +1157,7 @@ int x, y;
     XtSetArg(args[num], XtNy, &child_y); num++;
     XtSetArg(args[num], XtNborderWidth, &border_width); num++;
     XtGetValues(child, args, num);
- 
+
     /*
      * The only way we will know of the widget is mapped is to see if
      * mapped when managed is True and this is a managed child.  Otherwise
@@ -1167,7 +1167,7 @@ int x, y;
     if (XtIsWidget(child) && !(mapped_when_managed && XtIsManaged(child)) ) {
 	XWindowAttributes attrs;
 
-	if (XGetWindowAttributes(XtDisplay(child), 
+	if (XGetWindowAttributes(XtDisplay(child),
 				 XtWindow(child), &attrs) != 0) {
 	    /* oops */
 	}
@@ -1185,12 +1185,12 @@ int x, y;
  *	Description: Finds the child that actually contatians the point shown.
  *	Arguments: parent - a widget that is known to contain the point
  *                 	    specified.
- *                 x, y - The point in coordinates relative to the 
+ *                 x, y - The point in coordinates relative to the
  *                        widget specified.
  *	Returns: none.
  */
 
-static Widget 
+static Widget
 _FindChild(parent, x, y)
 Widget parent;
 int x, y;
@@ -1203,7 +1203,7 @@ int x, y;
 
 	if (PositionInChild(children[i], x, y)) {
 	    Widget child = children[i];
-	    
+
 	    XtFree((char *)children);
 	    return(_FindChild(child, x - child->core.x, y - child->core.y));
 	}
@@ -1232,15 +1232,15 @@ ProtocolStream * stream;
     Widget parent, child;
     Position parent_x, parent_y;
     FindChildEvent * find_event = (FindChildEvent *) event;
-    
-    if ((str = VerifyWidget(w, find_event->widgets)) != NULL) 
+
+    if ((str = VerifyWidget(w, find_event->widgets)) != NULL)
 	return(str);
 
     parent = find_event->widgets->real_widget;
 
     XtTranslateCoords(parent, (Position) 0, (Position) 0,
 		      &parent_x, &parent_y);
-    
+
     child = _FindChild(parent, find_event->x - (int) parent_x,
 		       find_event->y - (int) parent_y);
 
@@ -1271,12 +1271,12 @@ ProtocolStream * stream;
     unsigned int i;
     char * str;
     GetResEvent * res_event = (GetResEvent *) event;
-    
+
     _XEditResPut16(stream, res_event->num_entries); /* number of replys */
 
     for (i = 0 ; i < res_event->num_entries; i++) {
-	/* 
-	 * Send out the widget id. 
+	/*
+	 * Send out the widget id.
 	 */
 	_XEditResPutWidgetInfo(stream, &(res_event->widgets[i]));
 	if ((str = VerifyWidget(w, &(res_event->widgets[i]))) != NULL) {
@@ -1309,19 +1309,19 @@ ProtocolStream * stream;
     Cardinal num_norm, num_cons;
     register int i;
 
-    /* 
-     * Get Normal Resources. 
+    /*
+     * Get Normal Resources.
      */
 
     XtGetResourceList(XtClass(w), &norm_list, &num_norm);
 
-    if (XtParent(w) != NULL) 
+    if (XtParent(w) != NULL)
 	XtGetConstraintResourceList(XtClass(XtParent(w)),&cons_list,&num_cons);
     else
 	num_cons = 0;
 
     _XEditResPut16(stream, num_norm + num_cons); /* how many resources. */
-    
+
     /*
      * Insert all the normal resources.
      */
@@ -1375,7 +1375,7 @@ Widget w;
     for (temp = w, i = 0; temp != 0; temp = XtParent(temp), i++) {}
 
     num_widgets = i;
-    widget_list = (unsigned long *) 
+    widget_list = (unsigned long *)
 	                XtMalloc(sizeof(unsigned long) * num_widgets);
 
     /*
@@ -1383,13 +1383,13 @@ Widget w;
      * make sure that they are inserted in the list from parent -> child.
      */
 
-    for (i--, temp = w; temp != NULL; temp = XtParent(temp), i--) 
+    for (i--, temp = w; temp != NULL; temp = XtParent(temp), i--)
 	widget_list[i] = (unsigned long) temp;
-	
+
     _XEditResPut16(stream, num_widgets);	/* insert number of widgets. */
     for (i = 0; i < num_widgets; i++) /* insert Widgets themselves. */
 	_XEditResPut32(stream, widget_list[i]);
-    
+
     XtFree((char *)widget_list);
 }
 
@@ -1476,7 +1476,7 @@ unsigned long value;
 {
     int i;
 
-    for (i = 3; i >= 0; i--) 
+    for (i = 3; i >= 0; i--)
 	_XEditResPut8(stream, (value >> (XER_NBBY*i)) & BYTE_MASK);
 }
 
@@ -1495,7 +1495,7 @@ WidgetInfo * info;
     unsigned int i;
 
     _XEditResPut16(stream, info->num_widgets);
-    for (i = 0; i < info->num_widgets; i++) 
+    for (i = 0; i < info->num_widgets; i++)
 	_XEditResPut32(stream, info->ids[i]);
 }
 
@@ -1504,7 +1504,7 @@ WidgetInfo * info;
  * Code for retrieving values from the protocol stream.
  *
  ************************************************************/
-    
+
 /*	Function Name: _XEditResResetStream
  *	Description: resets the protocol stream
  *	Arguments: stream - the stream to reset.
@@ -1527,7 +1527,7 @@ ProtocolStream * stream;
 }
 
 /*
- * NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE 
+ * NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE
  *
  * The only modified field if the "current" field.
  *
@@ -1548,7 +1548,7 @@ _XEditResGet8(stream, val)
 ProtocolStream * stream;
 unsigned char * val;
 {
-    if (stream->size < (stream->current - stream->top)) 
+    if (stream->size < (stream->current - stream->top))
 	return(FALSE);
 
     *val = *((stream->current)++);
@@ -1572,7 +1572,7 @@ unsigned short * val;
 
     if ( !(_XEditResGet8(stream, &temp1) && _XEditResGet8(stream, &temp2)) )
 	return(FALSE);
-    
+
     *val = (((unsigned short) temp1 << XER_NBBY) + ((unsigned short) temp2));
     return(TRUE);
 }
@@ -1593,13 +1593,13 @@ short * val;
 
     if ( !(_XEditResGet8(stream, &temp1) && _XEditResGet8(stream, &temp2)) )
 	return(FALSE);
-    
+
     if (temp1 & (1 << (XER_NBBY - 1))) { /* If the sign bit is active. */
 	*val = -1;		 /* store all 1's */
 	*val &= (temp1 << XER_NBBY); /* Now and in the MSB */
 	*val &= temp2;		 /* and LSB */
     }
-    else 
+    else
 	*val = (((unsigned short) temp1 << XER_NBBY) + ((unsigned short) temp2));
 
     return(TRUE);
@@ -1622,8 +1622,8 @@ unsigned long * val;
 
     if ( !(_XEditResGet16(stream, &temp1) && _XEditResGet16(stream, &temp2)) )
 	return(FALSE);
-    
-    *val = (((unsigned short) temp1 << (XER_NBBY * 2)) + 
+
+    *val = (((unsigned short) temp1 << (XER_NBBY * 2)) +
 	    ((unsigned short) temp2));
     return(TRUE);
 }
@@ -1675,7 +1675,7 @@ WidgetInfo * info;
 {
     unsigned int i;
 
-    if (!_XEditResGet16(stream, &(info->num_widgets))) 
+    if (!_XEditResGet16(stream, &(info->num_widgets)))
 	return(FALSE);
 
     info->ids = (unsigned long *) XtMalloc(sizeof(long) * (info->num_widgets));
@@ -1689,7 +1689,7 @@ WidgetInfo * info;
     }
     return(TRUE);
 }
-	    
+
 /************************************************************
  *
  * Code for Loading the EditresBlock resource.
@@ -1719,13 +1719,13 @@ XtPointer * converter_data;
     static EditresBlock block;
 
 /*    XmuCopyISOLatin1Lowered(ptr, from_val->addr);*/
-    
 
-    if (streq(ptr, "none")) 
+
+    if (streq(ptr, "none"))
 	block = BlockNone;
-    else if (streq(ptr, "setvalues")) 
+    else if (streq(ptr, "setvalues"))
 	block = BlockSetValues;
-    else if (streq(ptr, "all")) 
+    else if (streq(ptr, "all"))
 	block = BlockAll;
     else {
 	Cardinal num_params = 1;
@@ -1746,13 +1746,13 @@ XtPointer * converter_data;
 	}
 	*(EditresBlock *)(to_val->addr) = block;
     }
-    else 
+    else
 	to_val->addr = (XtPointer) block;
 
     to_val->size = sizeof(EditresBlock);
     return(TRUE);
 }
-    
+
 #define XtREditresBlock ("EditresBlock")
 
 /*	Function Name: LoadResources
@@ -1771,7 +1771,7 @@ Widget w;
 	 XtOffsetOf(Globals, block), XtRImmediate, (XtPointer) BlockNone}
     };
 
-    for (; XtParent(w) != NULL; w = XtParent(w)) {} 
+    for (; XtParent(w) != NULL; w = XtParent(w)) {}
 
     XtAppSetTypeConverter(XtWidgetToApplicationContext(w),
 			  XtRString, XtREditresBlock, CvtStringToBlock,
@@ -1780,5 +1780,3 @@ Widget w;
     XtGetApplicationResources( w, (caddr_t) &globals, resources,
 			      XtNumber(resources), NULL, (Cardinal) 0);
 }
-
-    

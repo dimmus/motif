@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin6.c /main/4 1995/07/13 19:07:23 drk $"
@@ -43,19 +43,19 @@ char  **argv;
     register int  	n, i;
     Arg			args[MAX_ARGS];
     Widget		PW, PB1, PB2, PB3;
-    
+
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNgeometry, "50x50+0+0");  n++;
-    XtSetValues(Shell1, args, n); 
+    XtSetValues(Shell1, args, n);
     XtRealizeWidget(Shell1);
 
     n = 0;
     PW = XmCreatePanedWindow(Shell1, "PW", args, n);
     XtManageChild (PW);
 
-    
+
     n = 0;
     PB1 = XmCreatePushButton(PW, "PB1", args, n);
     XtManageChild(PB1);
@@ -74,18 +74,15 @@ char  **argv;
 
 
     /* Begin test for CR 4886 */
-   
+
     n=0;
     XtSetArg (args[n], XmNsashWidth, 30); n++;
     XtSetArg (args[n], XmNsashHeight, 30); n++;
-    XtSetValues (PW, args, n);   
+    XtSetValues (PW, args, n);
 
     /* End test for CR 4886 */
 
     CommonPause();
-    
+
     XtAppMainLoop(app_context);
 }
-
-
-

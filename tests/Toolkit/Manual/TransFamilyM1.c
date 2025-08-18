@@ -45,11 +45,11 @@ XtAppContext app_context;
 #define	MAX_DIALOGS	50
 #define	NAME_LEN	255
 
-char	*ModelessMsg = 
+char	*ModelessMsg =
 	"While this box is up, you should be able to use all other shells";
-char	*PrimaryMsg = 
+char	*PrimaryMsg =
 	"While this box is up, you should not be able to use its parent";
-char	*FullAppMsg = 
+char	*FullAppMsg =
 	"While this box is up, you should not be able to use either TopShell1 \
 or TopShell2 or any other dialog box.";
 char	*SystemMsg =
@@ -172,8 +172,8 @@ PostModelessDialog(Widget w, XtPointer client_data, XtPointer call_data)
     parent = (Widget) client_data;
 
 #ifndef MOTIF1_1
-	if (Test1_2) 
-		{ 
+	if (Test1_2)
+		{
 		while (!XtIsTopLevelShell(parent))
 			parent = XtParent(parent);
 		}
@@ -181,9 +181,9 @@ PostModelessDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple (ModelessMsg)); n++;
-    XtSetArg (args[n], XmNhelpLabelString, 
+    XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
 
     /* dialog shell resources */
@@ -206,25 +206,25 @@ PostModelessDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
 #endif /* MOTIF1_1 */
 
-    ModelessDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title, 
+    ModelessDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title,
 															 args, n);
 
 /* make HELP button spawn a child */
-    spawnButton = XmMessageBoxGetChild (ModelessDia[DialogCount].Dialog, 
+    spawnButton = XmMessageBoxGetChild (ModelessDia[DialogCount].Dialog,
 										XmDIALOG_HELP_BUTTON);
-    XtAddCallback (spawnButton, XmNactivateCallback, 
+    XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostModelessDialog, ModelessDia[DialogCount].Dialog);
 
-    okButton = XmMessageBoxGetChild (ModelessDia[DialogCount].Dialog, 
+    okButton = XmMessageBoxGetChild (ModelessDia[DialogCount].Dialog,
 									 XmDIALOG_OK_BUTTON);
-    cancelButton = XmMessageBoxGetChild (ModelessDia[DialogCount].Dialog, 
+    cancelButton = XmMessageBoxGetChild (ModelessDia[DialogCount].Dialog,
 									 	 XmDIALOG_CANCEL_BUTTON);
-    XtAddCallback (okButton, XmNactivateCallback, 
-				   DestroyModelessDialog, 
+    XtAddCallback (okButton, XmNactivateCallback,
+				   DestroyModelessDialog,
 				   (XtPointer) &ModelessDia[DialogCount]);
 #if 1
-    XtAddCallback (cancelButton, XmNactivateCallback, 
-				   DestroyModelessDialog, 
+    XtAddCallback (cancelButton, XmNactivateCallback,
+				   DestroyModelessDialog,
 				   (XtPointer) &ModelessDia[DialogCount]);
 #endif
 
@@ -324,9 +324,9 @@ PostPrimaryModalDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple (PrimaryMsg)); n++;
-    XtSetArg (args[n], XmNhelpLabelString, 
+    XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
 
     /* dialog shell resources */
@@ -350,24 +350,24 @@ PostPrimaryModalDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
 #endif /* MOTIF1_1 */
 
-    PrimaryDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title, 
+    PrimaryDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title,
 															 args, n);
 
 /* make HELP button spawn a child */
-    spawnButton = XmMessageBoxGetChild (PrimaryDia[DialogCount].Dialog, 
+    spawnButton = XmMessageBoxGetChild (PrimaryDia[DialogCount].Dialog,
 										XmDIALOG_HELP_BUTTON);
-    XtAddCallback (spawnButton, XmNactivateCallback, 
+    XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostPrimaryModalDialog, PrimaryDia[DialogCount].Dialog);
 
-    okButton = XmMessageBoxGetChild (PrimaryDia[DialogCount].Dialog, 
+    okButton = XmMessageBoxGetChild (PrimaryDia[DialogCount].Dialog,
 									 XmDIALOG_OK_BUTTON);
-    cancelButton = XmMessageBoxGetChild (PrimaryDia[DialogCount].Dialog, 
+    cancelButton = XmMessageBoxGetChild (PrimaryDia[DialogCount].Dialog,
 									 	 XmDIALOG_CANCEL_BUTTON);
-    XtAddCallback (okButton, XmNactivateCallback, 
-				   DestroyPrimaryDialog, 
+    XtAddCallback (okButton, XmNactivateCallback,
+				   DestroyPrimaryDialog,
 				   (XtPointer) &PrimaryDia[DialogCount]);
-    XtAddCallback (cancelButton, XmNactivateCallback, 
-				   DestroyPrimaryDialog, 
+    XtAddCallback (cancelButton, XmNactivateCallback,
+				   DestroyPrimaryDialog,
 				   (XtPointer) &PrimaryDia[DialogCount]);
 
     XtManageChild (PrimaryDia[DialogCount].Dialog);
@@ -469,9 +469,9 @@ PostFullAppModalDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple (FullAppMsg)); n++;
-    XtSetArg (args[n], XmNhelpLabelString, 
+    XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
 
     /* dialog shell resources */
@@ -488,24 +488,24 @@ PostFullAppModalDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
 #endif /* MOTIF1_1 */
 
-    FullAppDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title, 
+    FullAppDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title,
 															 args, n);
 
 /* make HELP button spawn a child */
-    spawnButton = XmMessageBoxGetChild (FullAppDia[DialogCount].Dialog, 
+    spawnButton = XmMessageBoxGetChild (FullAppDia[DialogCount].Dialog,
 										XmDIALOG_HELP_BUTTON);
-    XtAddCallback (spawnButton, XmNactivateCallback, 
+    XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostFullAppModalDialog, FullAppDia[DialogCount].Dialog);
 
-    okButton = XmMessageBoxGetChild (FullAppDia[DialogCount].Dialog, 
+    okButton = XmMessageBoxGetChild (FullAppDia[DialogCount].Dialog,
 									 XmDIALOG_OK_BUTTON);
-    cancelButton = XmMessageBoxGetChild (FullAppDia[DialogCount].Dialog, 
+    cancelButton = XmMessageBoxGetChild (FullAppDia[DialogCount].Dialog,
 									 	 XmDIALOG_CANCEL_BUTTON);
-    XtAddCallback (okButton, XmNactivateCallback, 
-				   DestroyFullAppDialog, 
+    XtAddCallback (okButton, XmNactivateCallback,
+				   DestroyFullAppDialog,
 				   (XtPointer) &FullAppDia[DialogCount]);
-    XtAddCallback (cancelButton, XmNactivateCallback, 
-				   DestroyFullAppDialog, 
+    XtAddCallback (cancelButton, XmNactivateCallback,
+				   DestroyFullAppDialog,
 				   (XtPointer) &FullAppDia[DialogCount]);
 
     XtManageChild (FullAppDia[DialogCount].Dialog);
@@ -602,9 +602,9 @@ PostSystemModalDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple (SystemMsg)); n++;
-    XtSetArg (args[n], XmNhelpLabelString, 
+    XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
 
     /* dialog shell resources */
@@ -621,24 +621,24 @@ PostSystemModalDialog(Widget w, XtPointer client_data, XtPointer call_data)
 
 #endif /* MOTIF1_1 */
 
-    SystemDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title, 
+    SystemDia[DialogCount].Dialog= XmCreateMessageDialog(parent, title,
 															 args, n);
 
 /* make HELP button spawn a child */
-    spawnButton = XmMessageBoxGetChild (SystemDia[DialogCount].Dialog, 
+    spawnButton = XmMessageBoxGetChild (SystemDia[DialogCount].Dialog,
 										XmDIALOG_HELP_BUTTON);
-    XtAddCallback (spawnButton, XmNactivateCallback, 
+    XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostSystemModalDialog, SystemDia[DialogCount].Dialog);
 
-    okButton = XmMessageBoxGetChild (SystemDia[DialogCount].Dialog, 
+    okButton = XmMessageBoxGetChild (SystemDia[DialogCount].Dialog,
 									 XmDIALOG_OK_BUTTON);
-    cancelButton = XmMessageBoxGetChild (SystemDia[DialogCount].Dialog, 
+    cancelButton = XmMessageBoxGetChild (SystemDia[DialogCount].Dialog,
 									 	 XmDIALOG_CANCEL_BUTTON);
-    XtAddCallback (okButton, XmNactivateCallback, 
-				   DestroySystemDialog, 
+    XtAddCallback (okButton, XmNactivateCallback,
+				   DestroySystemDialog,
 				   (XtPointer) &SystemDia[DialogCount]);
-    XtAddCallback (cancelButton, XmNactivateCallback, 
-				   DestroySystemDialog, 
+    XtAddCallback (cancelButton, XmNactivateCallback,
+				   DestroySystemDialog,
 				   (XtPointer) &SystemDia[DialogCount]);
 
     XtManageChild (SystemDia[DialogCount].Dialog);
@@ -686,7 +686,7 @@ main(unsigned int argc, char  **argv)
     XtSetArg(args[n], XmNmappedWhenManaged, True);  n++;
     XtSetArg(args[n], XmNallowShellResize, True);  n++;
     XtSetArg(args[n], XmNtitle, "TopShell1"); n++;
-    TopShell1 = XtCreatePopupShell("TopShell1", topLevelShellWidgetClass, 
+    TopShell1 = XtCreatePopupShell("TopShell1", topLevelShellWidgetClass,
 								   Shell1, args, n);
 
     n = 0;
@@ -694,9 +694,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg(args[n], XmNallowShellResize, True);  n++;
     XtSetArg(args[n], XmNtitle, "TopShell2");         n++;
     XtSetArg(args[n], XtNgeometry, "+10+500");       n++;
-    TopShell2 = XtCreatePopupShell("TopShell2", topLevelShellWidgetClass, 
+    TopShell2 = XtCreatePopupShell("TopShell2", topLevelShellWidgetClass,
 								   Shell1, args, n);
-   
+
 	/* The following is for while running under automation */
 	if (XtIsRealized(TopShell1)) {
 		XtUnmapWidget(TopShell1);
@@ -708,16 +708,16 @@ main(unsigned int argc, char  **argv)
     n = 0;
     BB1 = XmCreateBulletinBoard (TopShell1, "BB1", args, n);
     XtManageChild (BB1);
-    
+
     n = 0;
     XtSetArg (args[n], XmNx, 10); n++;
     XtSetArg (args[n], XmNy, 100); n++;
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create Primary Modal from TopShell1"));
 			  n++;
-    PrimaryButton1 = XmCreatePushButton (BB1, "PrimaryButton1", args, n);	  
+    PrimaryButton1 = XmCreatePushButton (BB1, "PrimaryButton1", args, n);
     XtManageChild (PrimaryButton1);
-    XtAddCallback (PrimaryButton1, XmNactivateCallback, 
+    XtAddCallback (PrimaryButton1, XmNactivateCallback,
 				   PostPrimaryModalDialog, TopShell1);
 
     n = 0;
@@ -726,9 +726,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create Full App Modal from TopShell1"));
 			  n++;
-    FullAppButton1 = XmCreatePushButton (BB1, "FullAppButton1", args, n);	  
+    FullAppButton1 = XmCreatePushButton (BB1, "FullAppButton1", args, n);
     XtManageChild (FullAppButton1);
-    XtAddCallback (FullAppButton1,  XmNactivateCallback, 
+    XtAddCallback (FullAppButton1,  XmNactivateCallback,
 				   PostFullAppModalDialog, TopShell1);
 
     n = 0;
@@ -737,9 +737,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create System Modal from TopShell1"));
 			  n++;
-    SystemButton1 = XmCreatePushButton (BB1, "SystemButton1", args, n);	  
+    SystemButton1 = XmCreatePushButton (BB1, "SystemButton1", args, n);
     XtManageChild (SystemButton1);
-    XtAddCallback (SystemButton1, XmNactivateCallback, PostSystemModalDialog, 
+    XtAddCallback (SystemButton1, XmNactivateCallback, PostSystemModalDialog,
 				   TopShell1);
 
     n = 0;
@@ -748,15 +748,15 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create Modeless Dialog from TopShell1"));
 			  n++;
-    ModelessButton1 = XmCreatePushButton (BB1, "ModelessButton1", args, n);	  
+    ModelessButton1 = XmCreatePushButton (BB1, "ModelessButton1", args, n);
     XtManageChild (ModelessButton1);
-    XtAddCallback (ModelessButton1, XmNactivateCallback, PostModelessDialog, 
+    XtAddCallback (ModelessButton1, XmNactivateCallback, PostModelessDialog,
 				   TopShell1);
 
     /* Shell 2 children */
 
     n = 0;
-    BB2 = XmCreateBulletinBoard (TopShell2, "BB2", args, n);    
+    BB2 = XmCreateBulletinBoard (TopShell2, "BB2", args, n);
     XtManageChild (BB2);
 
     n = 0;
@@ -765,9 +765,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create Primary Modal from TopShell2"));
 			  n++;
-    PrimaryButton2 = XmCreatePushButton (BB2, "PrimaryButton2", args, n);	  
+    PrimaryButton2 = XmCreatePushButton (BB2, "PrimaryButton2", args, n);
     XtManageChild (PrimaryButton2);
-    XtAddCallback (PrimaryButton2, XmNactivateCallback, PostPrimaryModalDialog, 
+    XtAddCallback (PrimaryButton2, XmNactivateCallback, PostPrimaryModalDialog,
 				   TopShell2);
 
     n = 0;
@@ -776,9 +776,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create Full App Modal from TopShell2"));
 			  n++;
-    FullAppButton2 = XmCreatePushButton (BB2, "FullAppButton2", args, n);	  
+    FullAppButton2 = XmCreatePushButton (BB2, "FullAppButton2", args, n);
     XtManageChild (FullAppButton2);
-    XtAddCallback (FullAppButton2,  XmNactivateCallback, 
+    XtAddCallback (FullAppButton2,  XmNactivateCallback,
 				   PostFullAppModalDialog, TopShell2);
 
     n = 0;
@@ -787,9 +787,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create System Modal from TopShell2"));
 			  n++;
-    SystemButton2 = XmCreatePushButton (BB2, "SystemButton2", args, n);	  
+    SystemButton2 = XmCreatePushButton (BB2, "SystemButton2", args, n);
     XtManageChild (SystemButton2);
-    XtAddCallback (SystemButton2,  XmNactivateCallback, PostSystemModalDialog, 
+    XtAddCallback (SystemButton2,  XmNactivateCallback, PostSystemModalDialog,
 				   TopShell2);
 
     n = 0;
@@ -798,9 +798,9 @@ main(unsigned int argc, char  **argv)
     XtSetArg (args[n], XmNlabelString,
 	      	  XmStringCreateSimple ("Create Modeless Dialog from TopShell2"));
 			  n++;
-    ModelessButton2 = XmCreatePushButton (BB2, "ModelessButton2", args, n);	  
+    ModelessButton2 = XmCreatePushButton (BB2, "ModelessButton2", args, n);
     XtManageChild (ModelessButton2);
-    XtAddCallback (ModelessButton2, XmNactivateCallback, PostModelessDialog, 
+    XtAddCallback (ModelessButton2, XmNactivateCallback, PostModelessDialog,
 				   TopShell2);
 
     XtRealizeWidget(TopShell1);

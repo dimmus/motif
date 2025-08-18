@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PromptDia1.c /main/8 1995/07/13 19:18:56 drk $"
@@ -52,12 +52,12 @@ void  main(argc, argv)
     XmString	  cs1, cs2;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth, 10);		   n++;
     XtSetArg(args[n], XmNheight, 10);		   n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 
@@ -132,7 +132,7 @@ void  main(argc, argv)
 
     if (!XtIsManaged (PromptDia))
 	     XtManageChild (PromptDia);
-    else 
+    else
 	     printf ("Test error: Dialog was managed at wrong time\n");
 
     CommonPause();
@@ -141,7 +141,7 @@ void  main(argc, argv)
 
     if (!XtIsManaged (PromptDia))
 	     XtManageChild (PromptDia);
-    else 
+    else
 	     printf ("Test error: Dialog was managed at wrong time");
 
 
@@ -157,7 +157,7 @@ XtPointer client_data, call_data;
 {
   if ( ((XmSelectionBoxCallbackStruct *)call_data)->reason == XmCR_MAP)
      XmProcessTraversal (force_focus, XmTRAVERSE_CURRENT);
-}      
+}
 
 
 static void  OkCB(w, client_data, call_data)
@@ -176,7 +176,7 @@ static void  OkCB(w, client_data, call_data)
     XtManageChild(Apply);
 
 
-    
+
 }
 
 
@@ -214,7 +214,7 @@ static void  HelpCB(w, client_data, call_data)
     Arg args[10];
     XmString tcs;
 
-    tcs = XmStringLtoRCreate("Help!!!! - Has now arrived", 
+    tcs = XmStringLtoRCreate("Help!!!! - Has now arrived",
 				XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -240,7 +240,7 @@ static void  ApplyCB(w, client_data, call_data)
     Arg args[10];
     XmString tcs;
 
-    tcs = XmStringLtoRCreate("Pick a Dialog, Any Dialog", 
+    tcs = XmStringLtoRCreate("Pick a Dialog, Any Dialog",
 				XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -251,7 +251,7 @@ static void  ApplyCB(w, client_data, call_data)
     XtSetArg(args[n], XmNmessageString, tcs);		n++;
     if (strcmp(dia_type,"QuestionDialog") == 0)
     	ApplyW = XmCreateQuestionDialog(Shell1, "ApplyQuestion", args, n);
-    else  
+    else
     if (strcmp(dia_type,"WorkingDialog") == 0)
 	ApplyW = XmCreateWorkingDialog(Shell1, "ApplyWorking", args, n);
     else
@@ -273,7 +273,7 @@ static void  ApplyCB(w, client_data, call_data)
 
 	return;
     }
-	
+
     XtManageChild (ApplyW);
     XmStringFree (tcs);
 }

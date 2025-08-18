@@ -9,4 +9,4 @@ tooltips_SOURCES = tooltips.c
 data_DATA = $(tooltips_SOURCES) $(EXTRA_DIST)
 LDADD = ../../../lib/Xm/libXm.la -lXt
 
-AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS}

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CreateWidget.c /main/7 1995/07/14 11:38:03 drk $"
@@ -45,7 +45,7 @@ static char rcsid[] = "$XConsortium: CreateWidget.c /main/7 1995/07/14 11:38:03 
         OUTPUTS
             none
 
-        RETURNS 
+        RETURNS
             nothing
 ************************************************************************/
 
@@ -67,7 +67,7 @@ Widget widget;
       AutoMessage(_AutoMessages[WARNMSG94]);
 
     /* Call all relavent InformExpectedActions functions for EventExpose */
-  
+
     current_object = object;
     xisInform.is_valid = 1;
     xisInform.action_obj = object;
@@ -83,7 +83,7 @@ Widget widget;
 
         if (current_object->proc_InformExpectedActions != NULL) {
             xisInform.current_obj = current_object;
-            (*current_object->proc_InformExpectedActions)(EventExpose); 
+            (*current_object->proc_InformExpectedActions)(EventExpose);
         }
         current_object = current_object->parent;
     }

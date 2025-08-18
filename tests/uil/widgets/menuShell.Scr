@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
@@ -31,19 +31,19 @@
 #		- XmNheight is 5
 #		- XmNallowShellResize is true
 #		- XmNoverrideRedirect is true
-	
+
 
 #	Other Widget resources:
 #	 	- RowColumn consists of four pushbuttons.
 #		- menuAccelerator is <Ctrl>P
 #		- fontList is variable
 #		- activateCallback is associated with the pushbuttons.
-#		- The activation of a pushbutton will change the color of the 
-#		  next pushButton to yellow. This is done by passing the 
-#		  widget ID in the callback. Activating the last 
-#		  pushButton will change the color of the first 
+#		- The activation of a pushbutton will change the color of the
+#		  next pushButton to yellow. This is done by passing the
+#		  widget ID in the callback. Activating the last
+#		  pushButton will change the color of the first
 #		  pushButton.
-#		- You should be able to traverse the popup menu via the 
+#		- You should be able to traverse the popup menu via the
 #		  keyboard. All other resources are set by default.
 
 
@@ -59,44 +59,3 @@ CompareVisual S_MAIN_WIDGET
 ClickKey KReturn
 CompareVisual S_MAIN_WIDGET
 Exit
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

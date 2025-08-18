@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: testlib.h /main/11 1995/07/14 10:57:53 drk $ */
 
 
@@ -114,7 +114,7 @@ extern void		CommonGenericCB(Widget w, XtPointer client_data,
 extern void		CommonGetOptions(int *argc, char **argv);
 extern void		CommonPause();
 extern void		CommonTestInit(int argc, char **argv);
-extern void		CommonTestI18NInit(int argc, char **argv, 
+extern void		CommonTestI18NInit(int argc, char **argv,
 					   XtLanguageProc proc,
 					   XtPointer client_data);
 extern void 		CommonDumpHierarchy(Widget w, FILE *file);
@@ -125,7 +125,7 @@ extern void		CommonExtraResources(Arg args[], Cardinal n);
 
 /* stubs for when NOT linking with malloc library */
 
-extern void             MallocInit(); 
+extern void             MallocInit();
 extern void             MallocExit();
 
 
@@ -217,336 +217,334 @@ enum             WHICH_TIME { START_TIME, END_TIME };
 #define XmCreateToggleButtonGadget	ToggleButtonGadgetCreate
 #define XmCreateWarningDialog		WarningDialogCreate
 #define XmCreateWorkArea		WorkAreaCreate
-#define XmCreateWorkingDialog		WorkingDialogCreate 
+#define XmCreateWorkingDialog		WorkingDialogCreate
 #define XtAppCreateShell		AppShellCreate
 #define XtCreatePopupShell		PopupShellCreate
-#define XtAppMainLoop			AppMainLoop 
+#define XtAppMainLoop			AppMainLoop
 #define XtSetValues			SetValues
 #define XtDestroyWidget			DestroyWidget
 
 
 
-extern Widget ArrowButtonCreate( 
+extern Widget ArrowButtonCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ArrowButtonGadgetCreate( 
+extern Widget ArrowButtonGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget BulletinBoardCreate( 
+extern Widget BulletinBoardCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget BulletinBoardDialogCreate( 
+extern Widget BulletinBoardDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget CascadeButtonCreate( 
+extern Widget CascadeButtonCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget CascadeButtonGadgetCreate( 
+extern Widget CascadeButtonGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget CommandCreate( 
+extern Widget CommandCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ComboBoxCreate( 
+extern Widget ComboBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget DropDownComboBoxCreate( 
+extern Widget DropDownComboBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget DropDownListComboBoxCreate( 
+extern Widget DropDownListComboBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ContainerCreate( 
+extern Widget ContainerCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget DialogShellCreate( 
+extern Widget DialogShellCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget DrawingAreaCreate( 
+extern Widget DrawingAreaCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget DrawnButtonCreate( 
+extern Widget DrawnButtonCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ErrorDialogCreate( 
+extern Widget ErrorDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget FileSelectionBoxCreate( 
+extern Widget FileSelectionBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget FileSelectionDialogCreate( 
+extern Widget FileSelectionDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget FormCreate( 
+extern Widget FormCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget FormDialogCreate( 
+extern Widget FormDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget FrameCreate( 
+extern Widget FrameCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget InformationDialogCreate( 
+extern Widget InformationDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget IconGadgetCreate( 
+extern Widget IconGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget LabelCreate( 
+extern Widget LabelCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget LabelGadgetCreate( 
+extern Widget LabelGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ListCreate( 
+extern Widget ListCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget MainWindowCreate( 
+extern Widget MainWindowCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget MenuBarCreate( 
+extern Widget MenuBarCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget MenuShellCreate( 
+extern Widget MenuShellCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget MessageBoxCreate( 
+extern Widget MessageBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget MessageDialogCreate( 
+extern Widget MessageDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget NotebookCreate( 
+extern Widget NotebookCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget OptionMenuCreate( 
+extern Widget OptionMenuCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PanedWindowCreate( 
+extern Widget PanedWindowCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PopupMenuCreate( 
+extern Widget PopupMenuCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PromptDialogCreate( 
+extern Widget PromptDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PulldownMenuCreate( 
+extern Widget PulldownMenuCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PushButtonCreate( 
+extern Widget PushButtonCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PushButtonGadgetCreate( 
+extern Widget PushButtonGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget QuestionDialogCreate( 
+extern Widget QuestionDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget RadioBoxCreate( 
+extern Widget RadioBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget RowColumnCreate( 
+extern Widget RowColumnCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ScaleCreate( 
+extern Widget ScaleCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ScrollBarCreate( 
+extern Widget ScrollBarCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ScrolledListCreate( 
+extern Widget ScrolledListCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ScrolledTextCreate( 
+extern Widget ScrolledTextCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ScrolledWindowCreate( 
+extern Widget ScrolledWindowCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget SelectionBoxCreate( 
+extern Widget SelectionBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget SelectionDialogCreate( 
+extern Widget SelectionDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget SeparatorCreate( 
+extern Widget SeparatorCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget SeparatorGadgetCreate( 
+extern Widget SeparatorGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget SpinBoxCreate( 
+extern Widget SpinBoxCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget TemplateDialogCreate( 
+extern Widget TemplateDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget TextCreate( 
+extern Widget TextCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget TextFieldCreate( 
+extern Widget TextFieldCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ToggleButtonCreate( 
+extern Widget ToggleButtonCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget ToggleButtonGadgetCreate( 
+extern Widget ToggleButtonGadgetCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget WarningDialogCreate( 
+extern Widget WarningDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget WorkingDialogCreate( 
+extern Widget WorkingDialogCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget WorkAreaCreate( 
+extern Widget WorkAreaCreate(
                         Widget p,
                         char *name,
                         ArgList args,
                         Cardinal n);
-extern Widget PopupShellCreate( 
+extern Widget PopupShellCreate(
                         String name,
                         WidgetClass widget_class,
                         Widget parent,
                         ArgList args,
                         Cardinal num_args);
-extern Widget AppShellCreate( 
+extern Widget AppShellCreate(
                         String app_name,
                         String app_class,
                         WidgetClass widget_class,
                         Display *display_in,
                         ArgList args,
                         Cardinal num_args);
-extern void AppMainLoop( 
+extern void AppMainLoop(
                         XtAppContext app);
-extern void SetValues( 
+extern void SetValues(
                         register Widget w,
                         ArgList args,
                         Cardinal num_args);
-extern void DestroyWidget( 
+extern void DestroyWidget(
                         Widget widget);
 
 
-extern void UTMDestinationProc( 
+extern void UTMDestinationProc(
                         Widget widget,
 			XtPointer client_data,
 			XtPointer call_data);
-
-

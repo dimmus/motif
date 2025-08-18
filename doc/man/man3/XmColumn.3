@@ -10,12 +10,12 @@
 .fi
 .SH "DESCRIPTION"
 .PP
-\fBXmColumn\fP displays its children stacked in a column, each with an optional associated 
-label: labels appear in one column, and children in another. This is useful for displaying, for 
-example, labeled data-entry fields.  It can also display all label-child pairs in a horizontal 
-orientation.This widget offers several constraint resources that allow specification of 
+\fBXmColumn\fP displays its children stacked in a column, each with an optional associated
+label: labels appear in one column, and children in another. This is useful for displaying, for
+example, labeled data-entry fields.  It can also display all label-child pairs in a horizontal
+orientation.This widget offers several constraint resources that allow specification of
 characteristics of the label, such as displaying text or a pixmap, alignment of text, font to use, and so forth. It also offers several resources for setting defaults for children that specify no specic values.
-.SH Classes 
+.SH Classes
 .PP
 \fBXmColumn\fP inherits behavior and resources from Core, Composite, Constraint, XmManager, and XmBulletinBoard.
 .PP
@@ -57,37 +57,37 @@ _^_^_^_^_^
 .TE
 .IP "\fBXmNdefaultEntryLabelAlignment\fP" 10
 Specifies the default XmNentryLabelAlignment to use when a child specifies no significant value.
-Resources that specify Alignment have values of XmALIGNMENT_BEGINNING, 
+Resources that specify Alignment have values of XmALIGNMENT_BEGINNING,
 .br
-.B XmALIGNMENT_CENTER, XmALIGNMENT_END, and XmALIGNMENT_UNSPECIFIED. 
-Valid string values that can be used in a resources file are: alignment_unspecified, unspecified, 
-alignment_beginning, beginning, alignment_center, center, alignment_end, end. 
+.B XmALIGNMENT_CENTER, XmALIGNMENT_END, and XmALIGNMENT_UNSPECIFIED.
+Valid string values that can be used in a resources file are: alignment_unspecified, unspecified,
+alignment_beginning, beginning, alignment_center, center, alignment_end, end.
 .IP "\fBXmNdefaultEntryLabelFontList\fP" 10
-Specifies the default XmNentryLabelFontList to use when a child specifies no significant value. If 
+Specifies the default XmNentryLabelFontList to use when a child specifies no significant value. If
 unspecified, uses XmNlabelFontList resource of the XmBulletinBoard.
 .IP "\fBXmNdefaultFillStyle\fP" 10
-Specifies the default XmNfillStyle to use when a child specifies no significant value. 
+Specifies the default XmNfillStyle to use when a child specifies no significant value.
 .IP "\fBXmNdistribution\fP" 10
-Specifies whether the spacing between each pair of rows should be increased equally 
-(XmDISTRIBUTE_SPREAD) or remain constant (XmDISTRIBUTE_TIGHT) when the column is 
-resized vertically to be larger than its natural size. This resource has no effect if any child has its 
+Specifies whether the spacing between each pair of rows should be increased equally
+(XmDISTRIBUTE_SPREAD) or remain constant (XmDISTRIBUTE_TIGHT) when the column is
+resized vertically to be larger than its natural size. This resource has no effect if any child has its
 .br
 .B XmNstretchable resource set to True. This resource is valid only when the orientation is vertical.
 .IP "\fBXmNitemSpacing\fP" 10
-Specifies the spacing between each pair of rows (in vertical orientation) or between pairs of labels 
+Specifies the spacing between each pair of rows (in vertical orientation) or between pairs of labels
 and children (in horizontal orientation).
 .IP "\fBXmNlabelSpacing\fP" 10
-Specifies the spacing between the column containing the labels and the column containing the 
+Specifies the spacing between the column containing the labels and the column containing the
 XmColumn's children.
 .IP "\fBXmNorientation\fP" 10
-Specifies the layout direction of the XmColumn. When XmVERTICAL, the widgets and their 
-associated labels are laid out in two vertical columns. When XmHORIZONTAL, the widgets and 
+Specifies the layout direction of the XmColumn. When XmVERTICAL, the widgets and their
+associated labels are laid out in two vertical columns. When XmHORIZONTAL, the widgets and
 their associated labels are laid out in a single row.
 .IP "" 10
 .PP
-The visual appearance of columns is affected by setting constraint resources on the children of 
+The visual appearance of columns is affected by setting constraint resources on the children of
 the XmColumn.
-These resources are derived from those supported by XmLabel; see the manual page for XmLabel 
+These resources are derived from those supported by XmLabel; see the manual page for XmLabel
 for valid values and usage.
 .PP
 .TS
@@ -117,7 +117,7 @@ XmNstretchable^XmCStretchable^Boolean^False^CG
 _^_^_^_^_^
 .TE
 .IP "\fBXmNentryLabelAlignment\fP" 10
-Specifies justification of text within the child's associated label. Valid values are the same as 
+Specifies justification of text within the child's associated label. Valid values are the same as
 those for XmNdefaultEntryLabelAlignment.
 .IP "\fBmNentryLabelFontList\fP" 10
 Specifies fontList used to render the text within the child's associated label.
@@ -126,17 +126,17 @@ Specifies the pixmap used in the child's associated label.
 .IP "\fBXmNentryLabelString\fP" 10
 Specifies the text used in the child's associated label.
 .IP "\fBXmNentryLabelType\fP" 10
-Specifies whether to display a string (XmSTRING) or a pixmap (XmPIXMAP) in the child's 
-associated label. 
+Specifies whether to display a string (XmSTRING) or a pixmap (XmPIXMAP) in the child's
+associated label.
 .IP "\fBXmNfillStyle\fP" 10
-Specifies whether the child should be displayed at its natural size (XmFILL_RAGGED) or 
-stretched to fill the entire width of the column it is displayed within (XmFILL_FLUSH). 
+Specifies whether the child should be displayed at its natural size (XmFILL_RAGGED) or
+stretched to fill the entire width of the column it is displayed within (XmFILL_FLUSH).
 .br
 .B XmFILL_UNSPECIFIED uses the value of the XmColumn's XmNdefaultFillStyle.
 .IP "\fBXmNshowEntryLabel\fP" 10
 Specifies whether or not to display the child's associated label.
 .IP "\fBXmNstretchable\fP" 10
-Specifies whether the child should expand in size proportionately when the XmColumn is resized 
+Specifies whether the child should expand in size proportionately when the XmColumn is resized
 vertically to be larger than its natural size.
 .SH "RELATED"
 .PP

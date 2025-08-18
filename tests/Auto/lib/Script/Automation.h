@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: Automation.h /main/10 1996/10/30 11:34:39 drk $ */
 
 #define 	CommandSize		20
@@ -53,13 +53,13 @@ extern Boolean  AutoManualMode;
 extern Boolean  MonitorOn;              /* performance monitor switch */
 extern Boolean  Command_In_Progress;    /* performance monitor status switch */
 
-extern struct   timeval  Start_Time, End_Time; 
+extern struct   timeval  Start_Time, End_Time;
 
 /* extern enum     Which_Time { START_TIME, END_TIME }; */
 
-/* 
+/*
    Structure containing one command. All fields in this structure
-   may not be valid for every command. When a field is not valid 
+   may not be valid for every command. When a field is not valid
    for a particular command, that field is NULLed.
 */
 
@@ -99,73 +99,73 @@ extern void AutoParseAndGenerateCommands(void);
 extern void InitTestAutomation(
                         int argc,
                         char **argv);
-extern void AutoMoveMaxOrMinText( 
+extern void AutoMoveMaxOrMinText(
                         Widget widget,
                         int location);
-extern int AutoGetMaxListPosition( 
+extern int AutoGetMaxListPosition(
                         Widget widget);
-extern void AutoSystem( 
+extern void AutoSystem(
                         char *command_name,
                         char **command_args);
 extern void AutoExit( void );
 extern void AutoProcessAllEvents( void );
-extern void AutoProcessKey( 
+extern void AutoProcessKey(
                         int key,
                         int mask,
                         int func_type);
-extern void AutoInputString( 
+extern void AutoInputString(
                         char *istring);
-extern void AutoContinueOrEnd( 
+extern void AutoContinueOrEnd(
                         Widget widget,
                         int Component);
-extern void AutoDrag( 
+extern void AutoDrag(
                         Widget widget,
                         int Component,
                         int Location,
                         int mask,
                         int XButton);
-extern void AutoDragAbs( 
+extern void AutoDragAbs(
                         int XCoord,
                         int YCoord,
                         int mask,
                         int XButton);
-extern void AutoDragRelative( 
+extern void AutoDragRelative(
                         int location,
                         int XCoord,
                         int YCoord,
                         int mask,
                         int XButton);
-extern void AutoDragSliderValue( 
+extern void AutoDragSliderValue(
                         int location,
                         int XCoord,
                         int YCoord,
                         int mask,
                         int XButton);
-extern void AutoPressMB( 
+extern void AutoPressMB(
                         int mask,
                         int XButton);
-extern void AutoReleaseMB( 
+extern void AutoReleaseMB(
                         int mask,
                         int XButton);
-extern void AutoClickMB( 
+extern void AutoClickMB(
                         int mask,
                         int XButton,
                         int multi_click);
-extern void AutoSetFocus( 
+extern void AutoSetFocus(
                         Widget widget,
                         int Component);
-extern void AutoCompareVisual( 
+extern void AutoCompareVisual(
                         MvsWidgetInfoRecord *w_info);
-extern void AutoLocatePointerAbs( 
+extern void AutoLocatePointerAbs(
                         int XCoord,
                         int YCoord);
-extern void AutoLocatePointerRel( 
+extern void AutoLocatePointerRel(
                         Widget widget,
                         int Component,
                         int Location,
                         int XCoord,
                         int YCoord);
-extern void AutoLocatePointer( 
+extern void AutoLocatePointer(
                         Widget widget,
                         int Component,
                         int Location,
@@ -175,15 +175,15 @@ extern void AutoDelayCycle(
 extern void AutoGoManual( void );
 extern void AutoWait(int count);
 
-extern void BuildFlowCommand( 
+extern void BuildFlowCommand(
 			int flowCommand);
-extern void BuildMouseCommand( 
+extern void BuildMouseCommand(
                         int command,
-                        int mask[5], 
+                        int mask[5],
 			int num_mask,
                         int button,
                         int count);
-extern void BuildKeyCommand( 
+extern void BuildKeyCommand(
                         int command,
                         int mask[5],
 			int num_mask,
@@ -191,30 +191,30 @@ extern void BuildKeyCommand(
 extern void BuildPerformCommand(
 				int command,
 				int on_off_switch);
-extern void BuildPointerCommand( 
+extern void BuildPointerCommand(
                         int command,
                         char *widget,
                         int component,
                         int location);
-extern void BuildAbsCommand( 
+extern void BuildAbsCommand(
                         int command,
                         int XCoord,
                         int YCoord,
                         int mask[5],
                         int num_mask,
                         int button);
-extern void BuildRelCommand( 
+extern void BuildRelCommand(
                         int command,
                         char *widget,
                         int component,
                         int XCoord,
                         int YCoord);
-extern void BuildSystemCommand( 
+extern void BuildSystemCommand(
                         int command,
                         char *sys_command,
                         char *sys_args[5],
                         int number_args);
-extern void BuildCompareCommand( 
+extern void BuildCompareCommand(
                         int command,
                         char *widget,
                         int component);
@@ -223,11 +223,11 @@ extern void BuildStoreCommand(
 			char *widget,
 			int component,
 			char *identifier);
-extern void BuildFocusCommand( 
+extern void BuildFocusCommand(
                         int command,
                         char *widget,
                         int component);
-extern void BuildDragCommand( 
+extern void BuildDragCommand(
                         int command,
                         int Xcoord,
                         int Ycoord,
@@ -237,39 +237,39 @@ extern void BuildDragCommand(
                         int button,
                         int mask[5],
 			int num_mask);
-extern void BuildInputCommand( 
+extern void BuildInputCommand(
                         int command,
                         char *istringdata);
-extern void BuildWindowCommand( 
+extern void BuildWindowCommand(
                         int command,
                         char *widget);
-extern void BuildWindowCheckCommand( 
+extern void BuildWindowCheckCommand(
                         int command,
                         char *widget,
                         int group,
                         char *iname);
-extern void BuildWindowSelectCommand( 
+extern void BuildWindowSelectCommand(
                         int command,
                         char *widget,
                         char *name,
                         int count,
 			int keyboard);
-extern void BuildPostCommand( 
+extern void BuildPostCommand(
                         int command,
                         char *widget,
 			int keyboard);
-extern void BuildResizeCommand( 
+extern void BuildResizeCommand(
                         int command,
                         char *widget,
                         int gravity,
                         int width,
                         int height);
-extern void BuildMoveCommand( 
+extern void BuildMoveCommand(
                         int command,
                         char *widget,
                         int xcoord,
                         int ycoord);
-extern void BuildWaitCommand( 
+extern void BuildWaitCommand(
                         int command,
 			int count);
 
@@ -277,20 +277,20 @@ extern void AutoError(char *error_string);
 extern void AutoWarning(char *warning_string);
 extern void AutoTraceMsg(char *trace_string);
 
-extern void AutoTraceButtonAction( 
+extern void AutoTraceButtonAction(
                         int button,
                         int mask[5],
 			int num_mask,
                         int multi_click,
                         int func_type,
                         int line);
-extern void AutoTraceKeyAction( 
+extern void AutoTraceKeyAction(
                         int key,
                         int mask[5],
 			int num_mask,
                         int func_type,
                         int line);
-extern void AutoTraceLocateAction( 
+extern void AutoTraceLocateAction(
                         char *widget,
                         int component,
                         int instance,
@@ -298,31 +298,31 @@ extern void AutoTraceLocateAction(
                         int y,
                         int func_type,
                         int line);
-extern void AutoTraceCompareAction( 
+extern void AutoTraceCompareAction(
                         char *widget,
                         int component,
                         int line);
-extern void AutoTraceSystemAction( 
+extern void AutoTraceSystemAction(
                         char *command,
                         char *args[CommandSize],
                         int num_args,
                         int line);
-extern void AutoTraceInputStringAction( 
+extern void AutoTraceInputStringAction(
                         char *string,
                         int line);
-extern void AutoTraceWindowAction( 
+extern void AutoTraceWindowAction(
                         char *widget,
                         int func_type,
                         int line);
-extern void AutoTracePostAction( 
+extern void AutoTracePostAction(
                         char *widget,
 			int keyboard,
                         int func_type,
                         int line);
-extern void AutoTraceControlAction( 
+extern void AutoTraceControlAction(
                         int func_type,
                         int line);
-extern void AutoTraceDragAction( 
+extern void AutoTraceDragAction(
                         int mask[5],
                         int num_mask,
                         char *widget,
@@ -334,14 +334,14 @@ extern void AutoTraceDragAction(
                         int value,
                         int func_type,
                         int line);
-extern void AutoTraceMoveAction( 
+extern void AutoTraceMoveAction(
                         char *widget,
                         int x,
                         int y,
                         int gravity,
                         int func_type,
                         int line);
-extern void AutoTraceSelectAction( 
+extern void AutoTraceSelectAction(
                         char *widget,
                         int item_num,
                         char *item_name,
@@ -351,5 +351,3 @@ extern void AutoTraceSelectAction(
 extern void AutoTraceWaitAction(
 			int count,
 			int line);
-
-

@@ -14,7 +14,6 @@ RegEdit.h RegEditI.h
 
 LDADD = libXmd.a ../../../lib/Xm/libXm.la -lXt
 
-AM_CPPFLAGS = -I$(top_builddir)/lib -I$(srcdir)/../../../lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(top_builddir)/lib -I$(srcdir)/../../../lib ${X_CFLAGS}
 
 EXTRA_DIST =
-

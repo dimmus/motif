@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #) Use arrow keys to traverse between the pushbutton, scrollbar and text.
@@ -63,7 +63,7 @@ CompareVisual parent
 Continue
 
 #) Tab behavior should be as before.
-#) Click on the scroll bar/scale and on other widgets. 
+#) Click on the scroll bar/scale and on other widgets.
 #) In no case should the focus move anywhere other than where you
 #  place the focus.
 
@@ -181,7 +181,7 @@ Continue
 #) The list remains an EXCLUSIVE_TAB_GROUP.
 #) The list should remain a tab group. The other children should be
 #	traversable via the arrow keys.
-#) The traversal order within the first tab group should be: button; 
+#) The traversal order within the first tab group should be: button;
 #  scale/scrollbar; the three children of the row column; text.
 #) The second tab group is the scrolled list.
 
@@ -220,14 +220,3 @@ CompareVisual parent
 
 Continue
 Exit
-
-
-
-
-
-
-
-
-
-
-

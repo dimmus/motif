@@ -45,7 +45,7 @@ typedef struct _XmGrabShellWidgetRec      * XmGrabShellWidget;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateGrabShell( 
+extern Widget XmCreateGrabShell(
                         Widget parent,
                         char *name,
                         ArgList al,

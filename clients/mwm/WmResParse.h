@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 #include <stdio.h>
 
@@ -35,15 +35,15 @@ extern void ProcessWmFile (WmScreenData *pSD);
 extern void ProcessCommandLine (int argc,  char *argv[]);
 extern void ProcessMotifBindings (void);
 #ifdef WSM
-extern Boolean         FindDtSessionMatch(int commandArgc, 
-					   char **commandArgv, 
-					   ClientData *pCD, 
-					   WmScreenData *pSD, 
+extern Boolean         FindDtSessionMatch(int commandArgc,
+					   char **commandArgv,
+					   ClientData *pCD,
+					   WmScreenData *pSD,
 					   char **pWorkSpaceList,
 					   char *clientMachine);
-extern void            WmDtGetHelprgs(char *args, 
-				       unsigned char** volume, 
-				       unsigned char** topic, 
+extern void            WmDtGetHelprgs(char *args,
+				       unsigned char** volume,
+				       unsigned char** topic,
 				       int *argsCount);
 extern void GetActionIndex (int tableSize, int *actionIndex);
 extern void            GetFunctionTableValues (int *execIndex, int *nopIndex,
@@ -101,16 +101,16 @@ extern void		SyncModifierStrings(void);
 extern void DeleteTempConfigFileIfAny (void);
 extern Boolean ParseWmFunctionArg (
 		unsigned char **linePP,
-		int ix, 
-		WmFunction wmFunc, 
+		int ix,
+		WmFunction wmFunc,
 		void **ppArg,
 		String sClientName,
 		String sTitle);
-extern Boolean ParseWmFuncMaybeStrArg (unsigned char **linePP, 
+extern Boolean ParseWmFuncMaybeStrArg (unsigned char **linePP,
 				       WmFunction wmFunction, String *pArgs);
-extern Boolean ParseWmFuncStrArg (unsigned char **linePP, 
+extern Boolean ParseWmFuncStrArg (unsigned char **linePP,
 				       WmFunction wmFunction, String *pArgs);
-extern Boolean ParseWmFuncActionArg (unsigned char **linePP, 
+extern Boolean ParseWmFuncActionArg (unsigned char **linePP,
 				  WmFunction wmFunction, String *pArgs);
 #endif /* PANELIST */
 #ifdef WSM

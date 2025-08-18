@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PushBtn1.c /main/9 1995/07/13 17:30:13 drk $"
@@ -92,20 +92,20 @@ char  **argv;
   int		     width, height, x_hot, y_hot;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
   XtSetValues(Shell1, args, n);
-    
+
   XtRealizeWidget(Shell1);
 
   n = 0;
   XtSetArg(args[n], XmNfillOnArm, False);  n++;
   PushButton1 = XmCreatePushButton(Shell1, "PushButton1", args, n);
   XtManageChild(PushButton1);
-  
+
   CommonPause();
 
   n = 0;
@@ -120,20 +120,20 @@ char  **argv;
   XtAddCallback(PushButton1, XmNactivateCallback, ActPB, NULL);
   XtAddCallback(PushButton1, XmNarmCallback, ArmPB, NULL);
   XtAddCallback(PushButton1, XmNdisarmCallback, DisarmPB, NULL);
-    
+
   CommonPause();
 
   /* change so that button displays a pixmap on arm */
 
   px_disarm =
-    XCreatePixmapFromBitmapData(display, 
+    XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				mtn_bits, mtn_width, mtn_height,
 				WhitePixel(display,DefaultScreen(display)),
 				BlackPixel(display,DefaultScreen(display)),
 				DefaultDepth(display,DefaultScreen(display)));
-  px_armed = 
-    XCreatePixmapFromBitmapData(display, 
+  px_armed =
+    XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				gnu_bits, gnu_width, gnu_height,
 				WhitePixel(display,DefaultScreen(display)),
@@ -155,9 +155,9 @@ char  **argv;
 
   fg = BlackPixel(display, DefaultScreen(display));
   bg = WhitePixel(display, DefaultScreen(display));
-  pixmap1 = XCreatePixmapFromBitmapData(display, 
+  pixmap1 = XCreatePixmapFromBitmapData(display,
 		   XDefaultRootWindow(display), wwang_bits,
-		   16, 16, fg, bg, 
+		   16, 16, fg, bg,
 		   DefaultDepth(display, DefaultScreen(display)));
 
   n = 0;
@@ -168,7 +168,7 @@ char  **argv;
   XtManageChild(da);
 
   n = 0;
-  string = XmStringCreate("Push to change to XmUNSPECIFIED_PIXMAP", 
+  string = XmStringCreate("Push to change to XmUNSPECIFIED_PIXMAP",
 			  XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, string); n++;
   XtSetArg(args[n], XmNx, 10); n++;
@@ -281,5 +281,3 @@ void  DisarmPB(w, client_data, call_data)
 {
     printf("PushButton Disarmed\n");
 }
-
-

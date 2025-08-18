@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmRowColumn_h
 #define _XmRowColumn_h
 
@@ -41,49 +41,49 @@ typedef struct _XmRowColumnRec      * XmRowColumnWidget;
 
 /********    Public Function Declarations    ********/
 
-extern void XmMenuPosition( 
+extern void XmMenuPosition(
                         Widget p,
                         XButtonPressedEvent *event) ;
-extern Widget XmCreateRowColumn( 
+extern Widget XmCreateRowColumn(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateWorkArea( 
+extern Widget XmCreateWorkArea(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateRadioBox( 
+extern Widget XmCreateRadioBox(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateOptionMenu( 
+extern Widget XmCreateOptionMenu(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmOptionLabelGadget( 
+extern Widget XmOptionLabelGadget(
                         Widget m) ;
-extern Widget XmOptionButtonGadget( 
+extern Widget XmOptionButtonGadget(
                         Widget m) ;
-extern Widget XmCreateMenuBar( 
+extern Widget XmCreateMenuBar(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreatePopupMenu( 
+extern Widget XmCreatePopupMenu(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreatePulldownMenu( 
+extern Widget XmCreatePulldownMenu(
                         Widget p,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmGetPostedFromWidget( 
+extern Widget XmGetPostedFromWidget(
                         Widget menu) ;
 extern Widget XmGetTearOffControl(
 			Widget menu) ;

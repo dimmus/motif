@@ -3,7 +3,7 @@
 DESCRIPTION:
 
 This directory contains the test of the UIL national language extensions.
-This test is noninteractive, and prints result messages to stdout.  
+This test is noninteractive, and prints result messages to stdout.
 The script run_NL will run the test.
 
 
@@ -50,4 +50,4 @@ To run this test sequence, type
 BUGS SHOWN BY THESE TESTS
 
 
-ENDBUGS 
+ENDBUGS

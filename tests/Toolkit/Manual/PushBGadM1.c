@@ -40,7 +40,7 @@ static void DisarmCB(Widget, XtPointer, XtPointer);
 static void ActCB(Widget, XtPointer, XtPointer);
 
 
-void  
+void
 main (int argc, char **argv)
 {
 
@@ -50,12 +50,12 @@ main (int argc, char **argv)
   XmString string;
 
   CommonTestInit(argc, argv);
-    
-  
+
+
 
 
   n = 0;
-  Frame1 = XmCreateFrame(Shell1, "Frame1", args, n); 
+  Frame1 = XmCreateFrame(Shell1, "Frame1", args, n);
   XtManageChild(Frame1);
 
   /* tests for CR 4891, 5130 */
@@ -63,10 +63,10 @@ main (int argc, char **argv)
   n = 0;
   XtSetArg(args[n], XmNfillOnArm, False); n++;
   string = XmStringLtoRCreate("Push Gadget Here", XmSTRING_DEFAULT_CHARSET);
-  XtSetArg(args[n], XmNlabelType, XmSTRING); n++; 
-  XtSetArg(args[n], XmNlabelString, string); n++; 
-  XtSetArg(args[n], XmNheight, 200); n++; 
-  XtSetArg(args[n], XmNwidth, 200); n++; 
+  XtSetArg(args[n], XmNlabelType, XmSTRING); n++;
+  XtSetArg(args[n], XmNlabelString, string); n++;
+  XtSetArg(args[n], XmNheight, 200); n++;
+  XtSetArg(args[n], XmNwidth, 200); n++;
   XtSetArg (args[n], XmNhighlightThickness, 25); n++;
   PBGadget1 = XmCreatePushButtonGadget(Frame1, "PBGadget", args, n);
   XtManageChild(PBGadget1);
@@ -77,7 +77,7 @@ main (int argc, char **argv)
   XtAddCallback(PBGadget1, XmNdisarmCallback, DisarmCB, NULL);
 
   XtRealizeWidget(Shell1);
- 
+
   CommonPause();
   CommonPause();
 
@@ -88,10 +88,10 @@ main (int argc, char **argv)
   n = 0;
   XtSetArg(args[n], XmNfillOnArm, False); n++;
   string = XmStringLtoRCreate("Push Widget Here", XmSTRING_DEFAULT_CHARSET);
-  XtSetArg(args[n], XmNlabelType, XmSTRING); n++; 
-  XtSetArg(args[n], XmNlabelString, string); n++; 
-  XtSetArg(args[n], XmNheight, 200); n++; 
-  XtSetArg(args[n], XmNwidth, 200); n++; 
+  XtSetArg(args[n], XmNlabelType, XmSTRING); n++;
+  XtSetArg(args[n], XmNlabelString, string); n++;
+  XtSetArg(args[n], XmNheight, 200); n++;
+  XtSetArg(args[n], XmNwidth, 200); n++;
   XtSetArg (args[n], XmNhighlightThickness, 25); n++;
   PBWidget1 = XmCreatePushButton(Frame1, "PBWidget", args, n);
   XtManageChild(PBWidget1);
@@ -103,14 +103,14 @@ main (int argc, char **argv)
 
 }
 
-static void  
+static void
 ActCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     printf("PushButtonGadget Activated\n");
 }
 
 
-static void  
+static void
 ArmCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     printf("PushButtonGadget Armed\n");
@@ -118,10 +118,9 @@ ArmCB(Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-static void  
+static void
 DisarmCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     printf("PushButtonGadget Disarmed\n");
     printf("*********************\n");
 }
-

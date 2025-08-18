@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupMenu4.c /main/9 1996/02/28 15:39:27 schuldy $"
@@ -54,7 +54,7 @@ void menu_handler(Widget w, XtPointer tag, XEvent *event, Boolean *c)
       XmMenuPosition(popup32, (XButtonPressedEvent *) event);
       XtManageChild(popup32);
       break;
-    }    
+    }
 }
 
 void main(argc, argv)
@@ -135,9 +135,5 @@ char *argv[];
 
   CommonPause();   /* Exit */
 
-  XtAppMainLoop(app_context); 
+  XtAppMainLoop(app_context);
 }
-
-
-
-

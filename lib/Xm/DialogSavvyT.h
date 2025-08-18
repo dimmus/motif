@@ -35,12 +35,12 @@ extern "C" {
 
 externalref XrmQuark XmQTdialogShellSavvy;
 /* This trait also requires a resource named "defaultPosition".
-   If the child has the trait, the resource will be get and set by 
+   If the child has the trait, the resource will be get and set by
    the DialogShell ChangeManaged */
-   
+
 /* Trait structures and typedefs, place typedefs first */
 
-typedef void (*XmDialogSavvyMapUnmapProc)(Widget wid, 
+typedef void (*XmDialogSavvyMapUnmapProc)(Widget wid,
 					  Boolean map_unmap);
 
 
@@ -59,7 +59,7 @@ typedef struct _XmDialogSavvyTraitRec	 {
    Xt does not see a change and therefore not trigerred a geometry request.
    So BB (or any dialogShellSavvy child) has to catch this case
    and change the position request to use a special value in its
-   SetValues method, XmDIALOG_SAVVY_FORCE_ORIGIN, to notify the Dialog that 
+   SetValues method, XmDIALOG_SAVVY_FORCE_ORIGIN, to notify the Dialog that
    it really wants to move in 0 */
 
 #define XmDIALOG_SAVVY_FORCE_ORIGIN ((Position)~0L)

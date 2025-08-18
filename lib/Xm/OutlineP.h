@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef _XmOutlineP_h
@@ -81,7 +81,7 @@ extern "C" {
 
 typedef void (*XmOutlineCalcLocationProc)(Widget, Boolean);
 typedef int (*XmOutlineMaxWidthProc)(Widget);
-    
+
 typedef struct {
     /*Calculates the maximum width of the outline.*/
     XmOutlineMaxWidthProc calc_max_width;
@@ -133,7 +133,7 @@ typedef struct _OutlineConstraintRec {
 typedef struct _OutlinePart {
     /* Resources */
     Dimension indent_space;	/* The number of pixels to indent each level */
- 
+
     /* Private State */
 
     OutlineConstraints top_node_of_display;
@@ -146,7 +146,7 @@ typedef struct _OutlinePart {
 
     /* more resources */
     Boolean constrain_width;
-    Boolean connect_nodes; 
+    Boolean connect_nodes;
 
     /* more private */
     GC draw_gc;

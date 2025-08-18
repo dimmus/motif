@@ -19,24 +19,24 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-#   This is a Row Column with the following characteristics: 
-#   - this widget has 9 children: A label, a PushButton, 
-#     a pushButtonGadget, a ToggleButton, a ToggleButtonGadget, 
-#     a Scale, a scrollBar, an arrowButton, and a arrowButton gadget. 
-#   - background is steelblue 
-#   - foreground is black   
-#   - borderWidth is 1   
-#   - resizeWidth is false 
-#   - width is 300, height is 400   
-#   - packing is XmTIGHT 
-#   - resizeHeight is false   
-#   - marginHeight is 30   
-#   - marginWidth is 30   
-#   - spacing is 20   
-#   - entryborder is 4   
+#   This is a Row Column with the following characteristics:
+#   - this widget has 9 children: A label, a PushButton,
+#     a pushButtonGadget, a ToggleButton, a ToggleButtonGadget,
+#     a Scale, a scrollBar, an arrowButton, and a arrowButton gadget.
+#   - background is steelblue
+#   - foreground is black
+#   - borderWidth is 1
+#   - resizeWidth is false
+#   - width is 300, height is 400
+#   - packing is XmTIGHT
+#   - resizeHeight is false
+#   - marginHeight is 30
+#   - marginWidth is 30
+#   - spacing is 20
+#   - entryborder is 4
 #   - entryCallback is ON
 #   - All other resources are set by default.
 

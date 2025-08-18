@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TextWcs1.c /main/8 1995/07/13 19:37:27 drk $"
@@ -370,7 +370,7 @@ char	**argv;
 	XtFree((char *)starting_wchar);
 
 	XtAddCallback(StatText, XmNactivateCallback, ApplyCB, NULL);
-		
+
 	tcs = XmStringCreateLtoR("Status/Input", XmSTRING_DEFAULT_CHARSET);
 
 	n = 0;
@@ -664,7 +664,7 @@ static void ApplyCB(Widget w, XtPointer client_data,
 			{
 			/* loop to count wchars in selection */
 			for (num_chars=0, i=0; *tmp_wstr != (wchar_t)NULL;
-				num_chars++, tmp_wstr++); 
+				num_chars++, tmp_wstr++);
 			if (c_d->event != NULL)
 				XmTextSetSelection(Text1,
 					tmp_pos, tmp_pos + num_chars,

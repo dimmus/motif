@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -140,7 +140,7 @@ static char rcsid[] = "$XConsortium: Mrmwcrwr.c /main/14 1996/11/13 14:06:42 drk
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRInit (URMResourceContextPtr	context_id,
 	    String			name,
 	    MrmCode			access,
@@ -166,7 +166,7 @@ UrmCWRInit (URMResourceContextPtr	context_id,
    */
   if ( UrmRCSize(context_id) <= _FULLWORD(RGMWidgetRecordHdrSize) )
     {
-      result = UrmResizeResourceContext (context_id, 
+      result = UrmResizeResourceContext (context_id,
 					 _FULLWORD(RGMWidgetRecordHdrSize)) ;
       if ( result != MrmSUCCESS ) return result ;
     }
@@ -237,7 +237,7 @@ UrmCWRInit (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetClass (URMResourceContextPtr	context_id,
 		MrmCode			type,
 		String			class,
@@ -320,7 +320,7 @@ UrmCWRSetClass (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRInitArglist (URMResourceContextPtr	context_id,
 		   Cardinal			nargs)
 {
@@ -352,7 +352,7 @@ UrmCWRInitArglist (URMResourceContextPtr	context_id,
    * preallocated in the descriptor.
    */
   descsiz = sizeof(RGMArgListDesc) + (nargs-1)*sizeof(RGMArgument) ;
-  result = UrmCWR__GuaranteeSpace (context_id, descsiz, &offset, 
+  result = UrmCWR__GuaranteeSpace (context_id, descsiz, &offset,
 				   (char **)&argdesc) ;
   if ( result != MrmSUCCESS ) return result ;
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
@@ -415,7 +415,7 @@ UrmCWRInitArglist (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetCompressedArgTag (URMResourceContextPtr	context_id,
 			   Cardinal			arg_ndx,
 			   MrmCode			tag,
@@ -485,7 +485,7 @@ UrmCWRSetCompressedArgTag (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
 			     Cardinal			arg_ndx ,
 			     String			tag )
@@ -547,7 +547,7 @@ UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
  *
  *	MrmRtypeChar8 (reference):	arg_val is CAST to a pointer to a
  *	MrmRtypeAddrName (reference):	string
- *	MrmRtypeTransTable (reference):	
+ *	MrmRtypeTransTable (reference):
  *	MrmRtypeClassRecName (reference):
  *	MrmRtypeKeysym(reference):
  *
@@ -571,7 +571,7 @@ UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
  *	arg_ndx		the 0-based index of the argument in the arglist
  *	type		the representation type for the value, from RGMrType...
  *	arg_val		a longword which will be CAST and used as required to
- *			access the value to be stored (copied) into the widget 
+ *			access the value to be stored (copied) into the widget
  *			record.
  *
  *  IMPLICIT INPUTS:
@@ -592,7 +592,7 @@ UrmCWRSetUncompressedArgTag (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetArgValue (URMResourceContextPtr	context_id,
 		   Cardinal			arg_ndx,
 		   MrmCode			type,
@@ -678,21 +678,21 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
       result = UrmCWR__GuaranteeSpace
 	(context_id, sizeof(double), &offset, (char **) &dblptr) ;
       if ( result != MrmSUCCESS ) return result ;
- 
+
 #ifdef USE_ORIGINAL_MOTIF_CODE
       /* This is necessary for machines (such as hp9000) that require
 	 doubles to be aligned on 8 byte boundaries. */
       diff = ((long)dblptr % 8);
-       
+
       if (diff != 0)
 	{
 	  result = UrmCWR__GuaranteeSpace
 	    (context_id, diff, &dumoff, &dumaddr) ;
 	  if ( result != MrmSUCCESS ) return result ;
-	}         
+	}
       dblptr = (double *)((char *)dblptr + diff);
 #endif
-       
+
       *dblptr = *((double *) arg_val) ;
       _MrmOSHostDoubleToIEEE(dblptr);
       UrmCWR__BindArgPtrs
@@ -902,7 +902,7 @@ UrmCWRSetArgChar8Vec (URMResourceContextPtr	context_id,
    * One item is already allocated, so num_stg additional entries are needed.
    */
   vecsiz = sizeof(RGMTextVector) + (num_stg)*sizeof(RGMTextEntry) ;
-  result = UrmCWR__GuaranteeSpace (context_id, vecsiz, &vecoffs, 
+  result = UrmCWR__GuaranteeSpace (context_id, vecsiz, &vecoffs,
 				   (char **)&vecptr) ;
   if ( result != MrmSUCCESS ) return result ;
 
@@ -1015,7 +1015,7 @@ UrmCWRSetArgCStringVec (URMResourceContextPtr	context_id,
    * One item is already allocated, so num_cstg additional entries are needed.
    */
   vecsiz = sizeof(RGMTextVector) + (num_cstg)*sizeof(RGMTextEntry) ;
-  result = UrmCWR__GuaranteeSpace (context_id, vecsiz, &vecoffs, 
+  result = UrmCWR__GuaranteeSpace (context_id, vecsiz, &vecoffs,
 				   (char **)&vecptr) ;
   if ( result != MrmSUCCESS ) return result ;
 
@@ -1130,7 +1130,7 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
 			  NULL, context_id, MrmTOO_MANY) ;
 
   descsiz = sizeof(RGMCallbackDesc) + (nitems)*sizeof(RGMCallbackItem) ;
-  result = UrmCWR__GuaranteeSpace (context_id, descsiz, &offset, 
+  result = UrmCWR__GuaranteeSpace (context_id, descsiz, &offset,
 				   (char **)&cbdesc) ;
   if ( result != MrmSUCCESS ) return result ;
 
@@ -1183,7 +1183,7 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
  *			is allocated).
  *	item_ndx	the 0-based index of the item in the callback list
  *	routine		routine name associated with this item
- *	type		the representation type for the tag value, from 
+ *	type		the representation type for the tag value, from
  *			RGMrType...
  *	itm_val		a longword which will be CAST and used as required to
  *			access the value to be stored (copied) into the widget
@@ -1208,7 +1208,7 @@ UrmCWRSetArgCallback (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
 		       MrmOffset		cb_offs,
 		       Cardinal			item_ndx,
@@ -1377,7 +1377,7 @@ UrmCWRSetCallbackItem (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetCallbackItemRes (URMResourceContextPtr		context_id,
 			  MrmOffset			cb_offs,
 			  Cardinal			item_ndx,
@@ -1475,7 +1475,7 @@ UrmCWRSetCallbackItemRes (URMResourceContextPtr		context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetExtraArgs (URMResourceContextPtr	context_id ,
 		    Cardinal			nextra )
 {
@@ -1535,7 +1535,7 @@ UrmCWRSetExtraArgs (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRInitChildren (URMResourceContextPtr	context_id ,
 		    Cardinal			nchildren )
 {
@@ -1635,7 +1635,7 @@ UrmCWRInitChildren (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetChild (URMResourceContextPtr	context_id,
 		Cardinal		child_ndx,
 		Boolean			manage,
@@ -1805,7 +1805,7 @@ Cardinal UrmCWRSetComment (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWRSetCreationCallback (URMResourceContextPtr	context_id ,
 			   Cardinal			nitems ,
 			   MrmOffset			*cb_offs_return )
@@ -1837,7 +1837,7 @@ UrmCWRSetCreationCallback (URMResourceContextPtr	context_id ,
 			  NULL, context_id, MrmTOO_MANY) ;
 
   descsiz = sizeof(RGMCallbackDesc) + (nitems)*sizeof(RGMCallbackItem) ;
-  result = UrmCWR__GuaranteeSpace (context_id, descsiz, &offset, 
+  result = UrmCWR__GuaranteeSpace (context_id, descsiz, &offset,
 				   (char **)&cbdesc) ;
   if ( result != MrmSUCCESS ) return result ;
 
@@ -1900,7 +1900,7 @@ UrmCWRSetCreationCallback (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__AppendString (URMResourceContextPtr	context_id ,
 		      String			stg ,
 		      MrmOffset			*offset )
@@ -1964,7 +1964,7 @@ UrmCWR__AppendString (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__AppendCString (URMResourceContextPtr	context_id ,
 		       XmString			cstg ,
 		       MrmOffset		*offset )
@@ -2019,7 +2019,7 @@ UrmCWR__AppendCString (URMResourceContextPtr	context_id ,
  *  FORMAL PARAMETERS:
  *
  *	context_id	context containing the widget record
- *	wcs		the wide character string to append. 
+ *	wcs		the wide character string to append.
  *			Nothing is done if empty.
  *	offset		To return offset in record. 0 is returned if
  *			the string is empty.
@@ -2037,7 +2037,7 @@ UrmCWR__AppendCString (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__AppendWcharString (URMResourceContextPtr	context_id ,
 			   wchar_t			*wcs ,
 			   MrmOffset			*offset )
@@ -2100,7 +2100,7 @@ UrmCWR__AppendWcharString (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__GuaranteeSpace (URMResourceContextPtr	context_id,
 			MrmSize			delta,
 			MrmOffset		*offset,
@@ -2171,7 +2171,7 @@ UrmCWR__GuaranteeSpace (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__AppendResource (URMResourceContextPtr	context_id,
 			MrmCode			access,
 			MrmCode			group,
@@ -2266,7 +2266,7 @@ UrmCWR__AppendResource (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__ValidateContext (URMResourceContextPtr	context_id ,
 			 String			routine )
 {
@@ -2323,7 +2323,7 @@ UrmCWR__ValidateContext (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__BindArgPtrs (URMResourceContextPtr	context_id ,
 		     String			routine ,
 		     Cardinal			argndx ,
@@ -2395,7 +2395,7 @@ UrmCWR__BindArgPtrs (URMResourceContextPtr	context_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmCWR__BindCallbackPtrs (URMResourceContextPtr		context_id,
 			  String			routine,
 			  MrmOffset			descoffs,
@@ -2433,4 +2433,3 @@ UrmCWR__BindCallbackPtrs (URMResourceContextPtr		context_id,
   return MrmSUCCESS ;
 
 }
-

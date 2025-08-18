@@ -22,14 +22,14 @@
 #
 #
 # HISTORY
-Warning: 
+Warning:
     Name: arrow
     Class: XmArrowButtonGadget
     Illegal value (18) for rep type XmRUnitType
 
-TRACE:(1) CompareVisual drawarea 
-TRACE:(2) LocatePointer arrow  
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual drawarea 
+TRACE:(1) CompareVisual drawarea
+TRACE:(2) LocatePointer arrow
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual drawarea
 TRACE:(5) Exit
 Exiting Test...Please Standby...

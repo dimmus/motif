@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmManagerP_h
 #define _XmManagerP_h
 
@@ -67,7 +67,7 @@ typedef Widget (*XmObjectAtPointProc)(Widget, Position, Position) ;
 
 /*  Structure used for storing accelerator and mnemonic information.  */
 
-typedef struct 
+typedef struct
 {
    unsigned int eventType;
    KeySym       keysym;
@@ -95,10 +95,10 @@ typedef struct {
 typedef struct _XmManagerClassPart
 {
    String               translations;
-   XmSyntheticResource * syn_resources;   
-   int                  num_syn_resources;   
-   XmSyntheticResource * syn_constraint_resources;   
-   int                  num_syn_constraint_resources;   
+   XmSyntheticResource * syn_resources;
+   int                  num_syn_resources;
+   XmSyntheticResource * syn_constraint_resources;
+   int                  num_syn_constraint_resources;
    XmParentProcessProc  parent_process;
    XtPointer            extension;
 } XmManagerClassPart;
@@ -135,7 +135,7 @@ typedef struct _XmManagerPart
    Boolean traversal_on;
    unsigned char unit_type;
    XmNavigationType navigation_type;
-   
+
    Boolean event_handler_added;
    Widget  active_child;
    Widget  highlighted_widget;

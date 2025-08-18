@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,17 +19,17 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: CallUil.c /main/5 1999/11/23 16:50:58 jff $"
 #endif
 #endif
 #include "CallUil.h"
-				
+
 static MrmCode		class;
 
 /* Register all callbacks */
@@ -117,7 +117,7 @@ char **argv;
 			vec, 			    /* files     	    */
 			NULL,			    /* os_ext_list (null)   */
 			&s_MrmHierarchy)	    /* ptr to returned id   */
-			!= MrmSUCCESS) 
+			!= MrmSUCCESS)
 			{
 				printf ("Can't open hierarchy\n");
      				exit(1);
@@ -125,7 +125,7 @@ char **argv;
 
     /*
      *		Register all Mrm functions
-     */	
+     */
 
 
     if (MrmRegisterNames (reglist, reglist_num)
@@ -157,7 +157,7 @@ char **argv;
      */
 
     XtManageChild(widgetmain);
-    
+
     /*
      *  Realize the toplevel widget.  This will cause the entire "managed"
      *  widget hierarchy to be displayed
@@ -246,13 +246,13 @@ void			(*handler_check)();
 
 /* Call uil compiler with appropriate paramters */
 
-	compile_stat = Uil(&command_desc, 
-		     &compile_desc, 
-		     MessageCB, 
+	compile_stat = Uil(&command_desc,
+		     &compile_desc,
+		     MessageCB,
 		     (char *) &user_mess_data,
-		     StatusCB, 
+		     StatusCB,
 		     (char *)&user_stat_data);
-	
+
   	sprintf(tmp, "\nThe version of the compiler is %d\n", compile_desc.compiler_version);
 	strcat(mess_string, tmp);
 	sprintf(tmp, "The version number of the structures is %d\n\n", compile_desc.data_version);
@@ -400,7 +400,7 @@ static void Get_Text()
 		exit(0);
 	}
     XtSetArg(args[0], XmNvalue, value_string);
-    XtSetValues(widget, args, 1); 
+    XtSetValues(widget, args, 1);
 }
 
 /*****************************************************************************/
@@ -435,7 +435,7 @@ Widget widget2 = NULL;
 	printf("Font not available\n");
     font1 = XmFontListCreate(fnt, XmSTRING_DEFAULT_CHARSET);
     XtSetArg(args[0], XmNfontList, font1);
-    XtSetValues(widget2, args, 1); 
+    XtSetValues(widget2, args, 1);
 }
 
 /****************************************************************************/
@@ -553,7 +553,7 @@ Widget widget = NULL;
 	}
     position = Hunt(string);
     XtSetArg(args[0], XmNcursorPosition, position);
-    XtSetValues(widget, args, 1); 
+    XtSetValues(widget, args, 1);
 }
 
 /*****************************************************************************/
@@ -584,7 +584,7 @@ if (argc == 2)
 else
 	printf("No file name specified - Use Open File..\n");
 }
-	
+
 /*****************************************************************************/
 /*	Procedure Get_Text_Input_New - will get info from a file specified   */
 /*	in the File Selection Box.					     */
@@ -630,7 +630,7 @@ max_size_ms = strlen(string);
 i = cur_pos;
 while (cur_pos < max_size_vs)
 	{
-	while (string[index] == value_string[cur_pos]) 
+	while (string[index] == value_string[cur_pos])
 		{
 		cur_pos++;
 		index++;

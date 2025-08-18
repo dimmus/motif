@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 
 !
@@ -42,12 +42,12 @@ value SimpleHelpCS :
         compound_string ("ExmString displays one compound string.");
       TransferHelpCS :
         compound_string ("ExmStringTransfer acts as ExmString,", separate = true) &
-        compound_string ("except that the string inside an,", separate = true) & 
-        compound_string ("ExmStringTransfer can be transferred", separate = true) & 
-        compound_string ("via primary, clipboard, or drag and drop.", separate = true); 
+        compound_string ("except that the string inside an,", separate = true) &
+        compound_string ("ExmStringTransfer can be transferred", separate = true) &
+        compound_string ("via primary, clipboard, or drag and drop.", separate = true);
       CommandHelpCS :
         compound_string ("ExmCommandButton displays a compound string.", separate = true) &
-        compound_string ("This widget can serve as a button inside a dialog box."); 
+        compound_string ("This widget can serve as a button inside a dialog box.");
       GridHelpCS :
         compound_string ("ExmGrid is a sample Manager widget.", separate = true) &
         compound_string ("In this application, ExmGrid manages", separate = true) &
@@ -71,8 +71,8 @@ value SimpleHelpCS :
         compound_string ("The widget can serve as a button inside", separate = true) &
         compound_string ("a menu.", separate = true);
       DanceCS :
-        compound_string ("No, I want to", separate = true) & 
-        compound_string ("dance instead", separate = true); 
+        compound_string ("No, I want to", separate = true) &
+        compound_string ("dance instead", separate = true);
       DanceHelpCS :
         compound_string ("Everybody dance now!");
      a_compound_string :
@@ -84,7 +84,7 @@ value SimpleHelpCS :
      transfer_cstring_2 :
         compound_string ("ExmStringTransfer 2");
      tab_button_string  :
-	compound_string ("Tab But");       
+	compound_string ("Tab But");
 
 !***********************************************************************
 object appMain : XmMainWindow {
@@ -113,148 +113,148 @@ object appMain : XmMainWindow {
 
 !***********************************************************************
 object menuBar : XmMenuBar {
-    arguments 
-       { XmNmenuHelpWidget = XmCascadeButton helpCascade; 
+    arguments
+       { XmNmenuHelpWidget = XmCascadeButton helpCascade;
        };
-    controls 
+    controls
        { XmCascadeButton fileCascade;
          XmCascadeButton helpCascade;
        };
 };
 
 object fileCascade : XmCascadeButton {
-    arguments 
-       { XmNlabelString ="File"; 
-         XmNmnemonic = keysym("F"); 
+    arguments
+       { XmNlabelString ="File";
+         XmNmnemonic = keysym("F");
        };
-    controls 
-       { XmPulldownMenu 
-            { controls 
+    controls
+       { XmPulldownMenu
+            { controls
                 { ExmMenuButton exitButton;
-                }; 
-            }; 
+                };
+            };
        };
 };
 
 object exitButton : ExmMenuButton {
-    arguments 
-       { ExmNcompoundString = "Exit"; 
-         XmNmnemonic = keysym("E"); 
+    arguments
+       { ExmNcompoundString = "Exit";
+         XmNmnemonic = keysym("E");
        };
-    callbacks 
-       { XmNactivateCallback = procedure ManageCb("*ExitQueryDialog"); 
+    callbacks
+       { XmNactivateCallback = procedure ManageCb("*ExitQueryDialog");
        };
 };
 
 
 !*************************************************************
-! Design Help Pulldown 
+! Design Help Pulldown
 !*************************************************************
 object helpCascade : XmCascadeButton {
-    arguments 
-       { XmNlabelString ="Help"; 
-         XmNmnemonic = keysym("H"); 
+    arguments
+       { XmNlabelString ="Help";
+         XmNmnemonic = keysym("H");
        };
-    controls 
-       { XmPulldownMenu 
-           { controls 
-               { ExmMenuButton SimpleHelpButton; 
-                 ExmMenuButton StringHelpButton; 
-                 ExmMenuButton TransferHelpButton; 
-                 ExmMenuButton CommandHelpButton; 
-                 ExmMenuButton TabHelpButton; 
-                 ExmMenuButton PannerHelpButton; 
-                 ExmMenuButton MenuHelpButton; 
-                 ExmMenuButton GridHelpButton; 
-               }; 
-           }; 
+    controls
+       { XmPulldownMenu
+           { controls
+               { ExmMenuButton SimpleHelpButton;
+                 ExmMenuButton StringHelpButton;
+                 ExmMenuButton TransferHelpButton;
+                 ExmMenuButton CommandHelpButton;
+                 ExmMenuButton TabHelpButton;
+                 ExmMenuButton PannerHelpButton;
+                 ExmMenuButton MenuHelpButton;
+                 ExmMenuButton GridHelpButton;
+               };
+           };
        };
 };
 
 object SimpleHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmSimple";
-	  XmNmnemonic = keysym("E"); 
+	  XmNmnemonic = keysym("E");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*SimpleHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*SimpleHelpDialog");
 	};
 };
 
 
 object StringHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmString";
-	  XmNmnemonic = keysym("S"); 
+	  XmNmnemonic = keysym("S");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*StringHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*StringHelpDialog");
 	};
 };
 
 
 object TransferHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmStringTransfer";
-	  XmNmnemonic = keysym("T"); 
+	  XmNmnemonic = keysym("T");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*TransferHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*TransferHelpDialog");
 	};
 };
 
 
 object CommandHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmCommand";
-	  XmNmnemonic = keysym("C"); 
+	  XmNmnemonic = keysym("C");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*CommandHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*CommandHelpDialog");
 	};
 };
 
 
 object TabHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmTabButton";
-	  XmNmnemonic = keysym("B"); 
+	  XmNmnemonic = keysym("B");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*TabHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*TabHelpDialog");
 	};
 };
 
 
 object PannerHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmPanner";
-	  XmNmnemonic = keysym("P"); 
+	  XmNmnemonic = keysym("P");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*PannerHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*PannerHelpDialog");
 	};
 };
 
 
 object MenuHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmMenuButton";
-	  XmNmnemonic = keysym("M"); 
+	  XmNmnemonic = keysym("M");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*MenuHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*MenuHelpDialog");
 	};
 };
 
 
 object GridHelpButton : ExmMenuButton {
-    arguments 
+    arguments
 	{ ExmNcompoundString = "ExmGrid";
-	  XmNmnemonic = keysym("G"); 
+	  XmNmnemonic = keysym("G");
 	};
-    callbacks 
-	{ XmNactivateCallback = procedure ManageCb("*GridHelpDialog"); 
+    callbacks
+	{ XmNactivateCallback = procedure ManageCb("*GridHelpDialog");
 	};
 };
 
@@ -376,7 +376,7 @@ object GridHelpDialog : XmInformationDialog {
 
 
 !***********************************************************************
-! Exit Callback 
+! Exit Callback
 !***********************************************************************
 object ExitQueryDialog : XmTemplateDialog {
     arguments {
@@ -384,7 +384,7 @@ object ExitQueryDialog : XmTemplateDialog {
 	XmNmessageString = "Do you really want to quit?";
     };
     controls {
-	ExmCommandButton YesCommand; 
+	ExmCommandButton YesCommand;
 	ExmCommandButton NoCommand;
 	ExmCommandButton DanceCommand;
 	ExmCommandButton HelpCommand;
@@ -392,8 +392,8 @@ object ExitQueryDialog : XmTemplateDialog {
 };
 
 object YesCommand : ExmCommandButton {
-    arguments { 
-	ExmNcompoundString = "Yes"; 
+    arguments {
+	ExmNcompoundString = "Yes";
 	};
     callbacks {
         XmNactivateCallback = procedure ExitCb();
@@ -402,28 +402,28 @@ object YesCommand : ExmCommandButton {
 
 
 object NoCommand : ExmCommandButton {
-    arguments { 
-	ExmNcompoundString = "No"; 
+    arguments {
+	ExmNcompoundString = "No";
 	};
 };
 
 
 object DanceCommand : ExmCommandButton {
-    arguments { 
-	ExmNcompoundString = DanceCS; 
+    arguments {
+	ExmNcompoundString = DanceCS;
 	};
     callbacks {
-        XmNactivateCallback = procedure ManageCb("*DanceHelpDialog"); 
+        XmNactivateCallback = procedure ManageCb("*DanceHelpDialog");
 	};
 };
 
 
 object HelpCommand : ExmCommandButton {
-    arguments { 
-	ExmNcompoundString = "Help"; 
+    arguments {
+	ExmNcompoundString = "Help";
 	};
     callbacks {
-	XmNactivateCallback = procedure ManageCb("*CommandHelpDialog"); 
+	XmNactivateCallback = procedure ManageCb("*CommandHelpDialog");
 	};
 };
 
@@ -477,10 +477,10 @@ object grid : ExmGrid {
 };
 
 
-object Simple1 : ExmSimple { 
+object Simple1 : ExmSimple {
 };
 
-object Simple2 : ExmSimple { 
+object Simple2 : ExmSimple {
     arguments {
 	ExmNsimpleShape = ExmSHAPE_RECTANGLE;
 	XmNunitType = Xm100TH_MILLIMETERS;
@@ -493,18 +493,18 @@ object Simple2 : ExmSimple {
 
 object String1 : ExmString {
     arguments {
-	ExmNcompoundString = a_compound_string; 
+	ExmNcompoundString = a_compound_string;
     };
 };
 
 object String2 : ExmString {
     arguments {
-   	ExmNcompoundString = a_compound_string; 
+   	ExmNcompoundString = a_compound_string;
 	XmNalignment = XmALIGNMENT_BEGINNING;
     };
 };
 
-object StringTransfer1 : ExmStringTransfer { 
+object StringTransfer1 : ExmStringTransfer {
     arguments {
 	ExmNcompoundString = transfer_cstring_1;
         XmNalignment = XmALIGNMENT_END;
@@ -517,13 +517,13 @@ object StringTransfer2 : ExmStringTransfer {
     };
 };
 
-object Notebook1 : XmNotebook { 
+object Notebook1 : XmNotebook {
     controls {
         ExmTabButton TabButton1;
     };
 };
 
-object TabButton1 : ExmTabButton { 
+object TabButton1 : ExmTabButton {
     arguments {
         ExmNcompoundString = tab_button_string;
     };

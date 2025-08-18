@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WindowExists.c /main/7 1995/07/14 11:37:16 drk $"
@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: WindowExists.c /main/7 1995/07/14 11:37:16 
 
         INPUTS:
             window - window which may or may not exist
-        
+
         OUTPUTS:
             none
 
@@ -61,7 +61,7 @@ XErrorEvent *err_event;
   if ((display_in == xisDisplay)&&(err_event->request_code == X_GetGeometry)&&
       ((err_event->error_code == BadDrawable)||(err_event->error_code == BadWindow)) )
       weBadWindowFlag = 1;
-        
+
 } /* End weErrorHandler() */
 
 /**** WINDOW_EXISTS *****/

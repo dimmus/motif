@@ -82,8 +82,8 @@ set totalVista = false
 #     -fu     - Log only Freed and Uninintialized Memory access errors
 #     -fa     - Log only Freed and Array Bound Memory access errors
 #     -ua     - Log only Uninintialized and Array Bound Memory access errors
-#     -nocopy - Don't copy a .purify file in your current directory. If you 
-#	        have a customized .purify in your current directory, it will 
+#     -nocopy - Don't copy a .purify file in your current directory. If you
+#	        have a customized .purify in your current directory, it will
 #		use it, else it will act as -all.
 #
 # All of the above will have memory leak information along with the
@@ -216,7 +216,7 @@ set noglob
 # remember all arguments MUST be a single word (ie no spaces)
 # use single quotes around the right side.
 
-# START CUSTOMIZE # 
+# START CUSTOMIZE #
 
 # $XConsortium: RUN.custom /main/6 1996/10/24 16:10:17 jakku $
 # Motif
@@ -296,7 +296,7 @@ set displayUid36 = 'displayUid -u radioBox -I radioBox.Dat -S radioBox.Scr -O ra
 set displayUid37 = 'displayUid -u rowCol -I rowCol.Dat -S rowCol.Scr -O rowCol.prt -V rowCol.vis'
 set displayUid38 = 'displayUid -u scaleHorz -I scaleHorz.Dat -S scaleHorz.Scr -O scaleHorz.prt -V scaleHorz.vis'
 set displayUid39 = 'displayUid -u scaleVert -I scaleVert.Dat -S scaleVert.Scr -O scaleVert.prt -V scaleVert.vis'
-set displayUid40 = 'displayUid -u scrollLis2 -I scrollLis2.Dat  -S scrollLis2.Scr -O scrollLis2.prt -V scrollLis2.vis' 
+set displayUid40 = 'displayUid -u scrollLis2 -I scrollLis2.Dat  -S scrollLis2.Scr -O scrollLis2.prt -V scrollLis2.vis'
 
 set displayUid41 = 'displayUid -u scrollList -I scrollList.Dat -S scrollList.Scr -O scrollList.prt -V scrollList.vis'
 set displayUid42 = 'displayUid -u scrollText -I scrollText.Dat -S scrollText.Scr -O scrollText.prt -V scrollText.vis'
@@ -337,7 +337,7 @@ foreach test ("$displayUid1" "$displayUid2" "$displayUid4" "$displayUid5" "$disp
 
 
 # END CUSTOMIZE #
-    
+
 if ($count == 0 && $Purifyrun == true) then
     if (-e .purify.bak) then
         rm -f .purify.bak
@@ -386,7 +386,7 @@ endif
 
     set test =($test)
 	@ Total_Test_Num++
-    
+
     foreach word ($test)
         if ($?name_flag) then
             set test_output = $word
@@ -460,7 +460,7 @@ endif
             endif
             echo "failure in test: "$test[1] >> RUN_failures
             echo "FAILURE IN TEST: "$test[1] >> RUN_output
-            echo "FAILURE IN TEST: "$test[1] 
+            echo "FAILURE IN TEST: "$test[1]
         else if ($Vistarun == true && $totalVista == false) then
             if (-e hits) then
                 mv hits ${HIT_FILE}
@@ -523,7 +523,7 @@ end
 
 unset noglob
 #
-# if totalVista is true, generate the overall coverage report for the 
+# if totalVista is true, generate the overall coverage report for the
 # directory
 #
 if ($Vistarun == true && $totalVista == true) then
@@ -550,10 +550,10 @@ if ($mode == compare) then
         set prts_there = `ls -l $AUTOVPATH/*.prt | wc -l`
         if ($prts_here > $prts_there) then
             echo "There are .prt files missing in " $AUTOVPATH >> RUN_failures
-            echo "There are .prt files missing in " $AUTOVPATH 
+            echo "There are .prt files missing in " $AUTOVPATH
         else if ($prts_there > $prts_here) then
             echo "There are .prt files missing in " $cwd >> RUN_failures
-            echo "There are .prt files missing in " $cwd 
+            echo "There are .prt files missing in " $cwd
         endif
         foreach file ($AUTOVPATH/*.prt)
             if (-e $cwd/$file:t) then
@@ -561,7 +561,7 @@ if ($mode == compare) then
                     mv $file:t.diff $file:t.err
 	    else
                 echo "No "$file:t file found in $AUTOVPATH >> RUN_output
-                echo "No "$file:t file found in $AUTOVPATH 
+                echo "No "$file:t file found in $AUTOVPATH
             endif
         end
     endif
@@ -634,6 +634,6 @@ if (pathExists == true) then
 else
 	unsetenv XFILESEARCHPATH
 endif
-	
 
-exit 0 
+
+exit 0

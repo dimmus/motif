@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,16 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This is a Warning Dialog with the \nfollowing characteristics:\n\n" &
 "   - okCallback is ON\n   - cancelCallback is ON\n   - helpCallback is ON\n   - autoUnmanage is false\n" &
 "   - message string is \"MessageLabel\"\n\n" &
 "All resources are set by default.\n";
-
-
-
-
-
-

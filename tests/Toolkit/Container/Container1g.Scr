@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1g.Dat -u g".
 # C)
-# 
+#
 # #) The container widget should be displayed in its LARGE_ICON view.
 # #) Four IconGadgets with the pixmap part displaying a "L" within
 #    a black box, and the label part displaying the strings "IconGad1",
@@ -34,7 +34,7 @@
 #    "IconGad3" and "IconGad4" should be on the "second" row.
 # #) The layoutType is XmSPATIAL, the spatialStyle is XmCELLS, and
 #    the spatialSnapModel is XmSNAP_TO_GRID, the spatialIncludeModel is XmAPPEND,
-#    largeCellHeight is 50, largeCellWidth is 50, marginHeight is 20, and 
+#    largeCellHeight is 50, largeCellWidth is 50, marginHeight is 20, and
 #    marginWidth is 20.
 # C)
 
@@ -53,7 +53,7 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 0
 #       Names of items selected:
-# 
+#
 # #) Press BSelect on "IconGad1"
 # #) "IconGad1" gets selected.
 # #) With BSelect pressed, drag the pointer over item "IconGad4", touching
@@ -65,7 +65,7 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 3
 #       Names of items selected: IconGad1 IconGad3 IconGad4
-# 
+#
 # #) Click BSelect in the background of Container where there is no item.
 #    All selected items should get deselected.
 # C)
@@ -101,7 +101,7 @@ Continue
 #       Reason for SelectionCallback: CR_EXTENDED_SELECT
 #       Number of items selected: 2
 #       Names of items selected: IconGad1 IconGad3
-# 
+#
 # #) Click BSelect in the background of the Container outside of all the
 #    items. All the selected items should get deselected. You should also
 #    see the following message in the term window:
@@ -123,9 +123,9 @@ LocatePointerXYRel Container1g 10 10
 ClickMB Btn1
 CompareVisual Container1g
 Continue
- 
+
 # #) Double Click Btn1 on any of the gadgets.
-# #) "IconGad5" should appear on the "third" row. The Container should resize 
+# #) "IconGad5" should appear on the "third" row. The Container should resize
 #    itself.
 # C)
 

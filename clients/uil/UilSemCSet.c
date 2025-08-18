@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilSemCSet.c /main/10 1997/03/12 15:21:53 dbl $"
@@ -133,11 +133,11 @@ charset = sem_map_subclass_to_charset (l_charset);
 switch ( charset )
     {
     case sym_k_fontlist_default_tag:
-      return XmFONTLIST_DEFAULT_TAG;      
+      return XmFONTLIST_DEFAULT_TAG;
     case sym_k_userdefined_charset:
         /*
-	 ** If the charset is user-defined, then fetch info from the symbol 
-	 ** table entry for it.						   
+	 ** If the charset is user-defined, then fetch info from the symbol
+	 ** table entry for it.
 	 */
 	_assert (az_charset_entry!=NULL, "null userdefined charset entry");
 	return az_charset_entry->value.c_value;
@@ -194,13 +194,13 @@ int			*sixteen_bit;
 {
 
 int		charset;	/* mapped character set */
-    
+
 charset = sem_map_subclass_to_charset (l_charset);
-switch (charset) 
+switch (charset)
     {
     /*
-     ** If the charset is user-defined, then fetch info from the symbol 
-     ** table entry for it.						   
+     ** If the charset is user-defined, then fetch info from the symbol
+     ** table entry for it.
      */
     case sym_k_userdefined_charset:
         {
@@ -253,7 +253,7 @@ switch (charset)
 **      0	no match - character set not found
 **	>0	character set code from sym_k_..._charset.
 **		sym_k_userdefined_charset is never returned.
-**		
+**
 **
 **  SIDE EFFECTS:
 **
@@ -285,5 +285,3 @@ for ( ndx=0 ; ndx<(int)charset_lang_table_max ; ndx++ )
 return 0;
 
 }
-
-

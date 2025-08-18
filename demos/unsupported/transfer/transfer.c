@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 
 #ifdef REV_INFO
 #ifndef lint
@@ -39,10 +39,10 @@ void setMode(Widget widget, int param, XmAnyCallbackStruct *callback_data);
 void cut(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data);
 void copy(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data);
 void paste(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data);
-void pasteMove(Widget widget, char *ignore, 
+void pasteMove(Widget widget, char *ignore,
 	       XmAnyCallbackStruct *callback_data);
 
-static void NOP(Widget widget, XEvent *event, 
+static void NOP(Widget widget, XEvent *event,
 		String *params, Cardinal *num_params);
 static int ErrorHandler(Display *display, XErrorEvent *event);
 
@@ -87,13 +87,13 @@ Widget toplevel, mainW, editBox;
  *  Main program
  */
 
-int 
+int
 main(int argc, String *argv)
 {
     Arg	args[10];
     int n;
 
-    toplevel = XtVaAppInitialize(&app_context, "XmdTransfer", NULL, 0, 
+    toplevel = XtVaAppInitialize(&app_context, "XmdTransfer", NULL, 0,
 				 &argc, argv, NULL, 0);
 
     /* Add the NOP actions */
@@ -118,31 +118,31 @@ main(int argc, String *argv)
 
     /* Add the UTM callbacks on the drawing area */
 
-    XtAddCallback(target, XmNdestinationCallback, 
+    XtAddCallback(target, XmNdestinationCallback,
 		  (XtCallbackProc) targetDestinationCallback, NULL);
-    XtAddCallback(target, XmNconvertCallback, 
+    XtAddCallback(target, XmNconvertCallback,
 		  (XtCallbackProc) targetConvertCallback, NULL);
 
     /* Add other callbacks on the drawing area */
     XtAddCallback(target, XmNinputCallback,
 		  (XtCallbackProc) inputCallback, NULL);
-    
+
     XtRealizeWidget(toplevel);
 
     XtAppMainLoop(app_context);
 }
 
 /***************************************************
- * function setMode				  
+ * function setMode
  * Set the mode to PRIMARY, SECONDARY or CLIPBOARD
  ***************************************************/
-void 
+void
 setMode(Widget widget, int param, XmAnyCallbackStruct *callback_data)
 {
   Tmode = param;
 }
 
-void 
+void
 quitCB(Widget widget, char *tag, XmAnyCallbackStruct *callback_data)
 {
   exit(0);
@@ -157,7 +157,7 @@ quitCB(Widget widget, char *tag, XmAnyCallbackStruct *callback_data)
  * of where the widget writing API should be used by app. developers
  ******************************************************************/
 
-void 
+void
 cut(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 {
   if (Tmode == Mprimary) {
@@ -168,8 +168,8 @@ cut(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
     XmToggleButtonSetState(onamed, True, False);
   } else if (Tmode == Msecondary) {
     XmeSecondarySource(target, 0);
-    XmeSecondaryTransfer(target, 
-			 XInternAtom(XtDisplay(target), 
+    XmeSecondaryTransfer(target,
+			 XInternAtom(XtDisplay(target),
 				     "COMPOUND_TEXT", False),
 			 XmMOVE, 0);
   } else if (Tmode == Mclipboard)
@@ -177,26 +177,26 @@ cut(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 }
 
 
-void 
+void
 copy(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 {
   if (Tmode == Mprimary) {
     XmePrimarySource(target, 0);
-    XmToggleButtonSetState(op, True, False); 
+    XmToggleButtonSetState(op, True, False);
   } else if (Tmode == Mnamed) {
     XmeNamedSource(target, XInternAtom(XtDisplay(target), _NAMED, False), 0);
     XmToggleButtonSetState(onamed, True, False);
   } else if (Tmode == Msecondary) {
     XmeSecondarySource(target, 0);
-    XmeSecondaryTransfer(target, 
-			 XInternAtom(XtDisplay(target), 
+    XmeSecondaryTransfer(target,
+			 XInternAtom(XtDisplay(target),
 				     "COMPOUND_TEXT", False),
 			 XmCOPY, 0);
   } else if (Tmode == Mclipboard)
     XmeClipboardSource(target, XmCOPY, 0, generic_label);
 }
 
-void 
+void
 paste(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 {
   if (Tmode == Mprimary) {
@@ -211,7 +211,7 @@ paste(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
     XmeClipboardSink(target, XmCOPY, 0);
 }
 
-void 
+void
 pasteMove(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 {
   if (Tmode == Mprimary) {
@@ -229,7 +229,7 @@ pasteMove(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 
 /* Error handler for X protocol errors.  Display error text in text1,2 */
 
-static int 
+static int
 ErrorHandler(Display *display, XErrorEvent *event)
 {
   char buffer[80];
@@ -254,7 +254,7 @@ ErrorHandler(Display *display, XErrorEvent *event)
   return 0;
 }
 
-void 
+void
 inputCallback(Widget w, XtPointer ignore, XmDrawingAreaCallbackStruct *cbstruct)
 {
   XEvent *event = cbstruct -> event;
@@ -265,9 +265,8 @@ inputCallback(Widget w, XtPointer ignore, XmDrawingAreaCallbackStruct *cbstruct)
   }
 }
 
-static void 
+static void
 NOP(Widget widget, XEvent *event, String *params, Cardinal *num_params)
 {
   /* We do nothing in the action. */
 }
-

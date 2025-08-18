@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ABrowse.c /main/8 1995/07/14 10:44:50 drk $"
@@ -107,7 +107,7 @@ static XtResource	resources[] =
 	XtRString,
 	"White",
     },
-    
+
     {
 	XtNimageForeground,
 	XtCForeground,
@@ -127,7 +127,7 @@ static XtResource	resources[] =
 	XtRString,
 	"White",
     },
-    
+
     {
 	XtNbuttonForeground,
 	XtCForeground,
@@ -229,7 +229,7 @@ ABrowseClassRec	abrowseClassRec =
 /*
  * ConstraintClassPart
  */
-    
+
     {
 	NULL,				/* constraint resource  	*/
 	0,				/* number of constraints	*/
@@ -317,10 +317,10 @@ static Boolean SetValues(current, request, new)
 {
     Arg	args[2];
     int	nargs;
-  
+
 /*
  * If image or button colors have changed, call XtSetValues to make the change
- */    
+ */
 
     if((new->abrowse.image_background != current->abrowse.image_background) ||
        (new->abrowse.image_foreground != current->abrowse.image_foreground))
@@ -336,7 +336,7 @@ static Boolean SetValues(current, request, new)
 	    XtSetValues(new->abrowse.image, args, nargs);
 	}
     }
-    
+
     if((new->abrowse.button_background !=
 	current->abrowse.button_background) ||
        (new->abrowse.button_foreground != current->abrowse.button_foreground))
@@ -371,7 +371,7 @@ static Boolean SetValues(current, request, new)
 /*
  * If images have changed, place first image in image label widget
  */
-    
+
     if(new->abrowse.images != current->abrowse.images)
     {
 	new->abrowse.current_image = -1;
@@ -381,7 +381,7 @@ static Boolean SetValues(current, request, new)
 	    ChangeImage(new->abrowse.image, NEXT, NULL);
 	}
     }
-    
+
     return(FALSE);
 }
 
@@ -413,7 +413,7 @@ CreateChildren(parent)
     nargs = 0;
     XtSetArg(args[nargs], XtNfromVert, NULL); nargs++;
     XtSetArg(args[nargs], XtNfromHoriz, NULL); nargs++;
-	
+
     parent->abrowse.image = XtCreateWidget("Image",		/* name	     */
 					   labelWidgetClass,	/* class     */
 					   parent,		/* parent    */
@@ -424,7 +424,7 @@ CreateChildren(parent)
     {
 	ChangeImage(parent->abrowse.image, NEXT, NULL);
     }
-    
+
 
 /*
  * Prev: PushButton
@@ -433,7 +433,7 @@ CreateChildren(parent)
     nargs = 0;
     XtSetArg(args[nargs], XtNfromVert, parent->abrowse.image); nargs++;
     XtSetArg(args[nargs], XtNfromHoriz, NULL); nargs++;
-	
+
     parent->abrowse.prev = XtCreateWidget("Prev",		/* name	     */
 					  commandWidgetClass,	/* class     */
 					  parent,		/* parent    */
@@ -452,7 +452,7 @@ CreateChildren(parent)
     nargs = 0;
     XtSetArg(args[nargs], XtNfromVert, parent->abrowse.image); nargs++;
     XtSetArg(args[nargs], XtNfromHoriz, parent->abrowse.prev); nargs++;
-	
+
     parent->abrowse.next = XtCreateWidget("Next",		/* name	     */
 					  commandWidgetClass,	/* class     */
 					  parent,		/* parent    */
@@ -478,7 +478,7 @@ CreateChildren(parent)
     {
 	left_att = parent->abrowse.next;
     }
-    
+
 
 /*
  * Help: PushButton
@@ -487,7 +487,7 @@ CreateChildren(parent)
     nargs = 0;
     XtSetArg(args[nargs], XtNfromVert, NULL); nargs++;
     XtSetArg(args[nargs], XtNfromHoriz, left_att); nargs++;
-	
+
     parent->abrowse.help = XtCreateWidget("Help",		/* name	     */
 					  commandWidgetClass,	/* class     */
 					  parent,		/* parent    */
@@ -506,7 +506,7 @@ CreateChildren(parent)
     nargs = 0;
     XtSetArg(args[nargs], XtNfromVert, parent->abrowse.help); nargs++;
     XtSetArg(args[nargs], XtNfromHoriz, left_att); nargs++;
-	
+
     parent->abrowse.quit = XtCreateWidget("Quit",		/* name	     */
 					  commandWidgetClass,	/* class     */
 					  parent,		/* parent    */
@@ -548,7 +548,7 @@ ChangeImage(w, which, call_data)
 	if(*current_image < num_images - 1)
 	{
 	    (*current_image)++;
-	    
+
 	    nargs = 0;
 	    XtSetArg(args[nargs], XtNbitmap,
 		     parent->abrowse.images[*current_image]); nargs++;
@@ -591,7 +591,7 @@ ButtonCallback (w, parent, call_data)
 			XtNquitCallback,
 			NULL);
     }
-    
+
 }
 
 /*******************

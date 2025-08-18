@@ -19,18 +19,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-#  This is a pushButton gadget with the following characteristics:    
+#  This is a pushButton gadget with the following characteristics:
 #	- width is 150
-#	- height is 50   
-#	- fillOnArm is true   
-#	- armColor is Green   
-#	- ShowAsDefault is 5   
-#	- activateCallback is ON   
-#	- armCallback is ON   
+#	- height is 50
+#	- fillOnArm is true
+#	- armColor is Green
+#	- ShowAsDefault is 5
+#	- activateCallback is ON
+#	- armCallback is ON
 #	- disarmCallback is ONAll other resources are set by default.
 
 CompareVisual S_MAIN_WIDGET
@@ -43,5 +43,3 @@ LocatePointer Push_Button_Gadget Off
 ReleaseMB Btn1
 CompareVisual S_MAIN_WIDGET
 Exit
-
-

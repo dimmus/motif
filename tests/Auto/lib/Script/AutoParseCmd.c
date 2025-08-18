@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AutoParseCmd.c /main/12 1995/07/14 11:28:20 drk $"
@@ -60,7 +60,7 @@ static void 	AutoUpdateWindow(void);
 
 
 
-/* 
+/*
   Go through the Command List and Generate the appropriate
   Automation command to execute the commmand.
   */
@@ -68,7 +68,7 @@ static void 	AutoUpdateWindow(void);
 void
 AutoParseAndGenerateCommands( void )
 {
-  
+
   MvsWidgetInfoRecord		*w_info;
   XisObjectRecord   		*object;
   char			        *item_name;
@@ -88,28 +88,28 @@ AutoParseAndGenerateCommands( void )
   register int                  n;
   Arg                           args[MAX_ARGS];
   int                           PerformanceOnOff;
-  
+
   /* Parse input, creating command structure */
-  
+
   if (!parsed) {
     yyparse();
     parsed = True;
-    if (AutoCommandRoot->next == NULL) 
+    if (AutoCommandRoot->next == NULL)
       AutoError(_AutoMessages[WARNMSG88]);
     else
       Command = AutoCommandRoot->next;
   }
 
   Command_In_Progress = FALSE;
-  
+
   while (MoreInput) {
 
-    /* 
+    /*
       Wait until the previous command is not in progress
-      when doing performance measurment 
+      when doing performance measurment
      */
     while (Command_In_Progress == True);
-    
+
     switch (Command->CommandName) {
     case PRESSMB:
       if (AutoTrace)
@@ -180,7 +180,7 @@ AutoParseAndGenerateCommands( void )
       break;
     case LOCATEPOINTERABS:
       if (AutoTrace)
-	AutoTraceLocateAction(NULL, 0, 0, 
+	AutoTraceLocateAction(NULL, 0, 0,
 			      Command->XCoord,
 			      Command->YCoord,
 			      LOCATEPOINTERABS,
@@ -218,38 +218,38 @@ AutoParseAndGenerateCommands( void )
       Component = GetComponent(Command->WidgetComponent);
       location = Command->Location;
       switch (location) {
-      case OFF: 
-	direction = MoveAny; 
+      case OFF:
+	direction = MoveAny;
 	Location = 0;
 	null_move = True;
 	break;
-      case RIGHT: 
-	direction = MoveRight; 
+      case RIGHT:
+	direction = MoveRight;
 	Location = 0;
 	null_move = True;
 	break;
       case LEFT:
-	direction = MoveLeft; 
+	direction = MoveLeft;
 	Location = 0;
 	null_move = True;
 	break;
       case UP:
-	direction = MoveUp; 
+	direction = MoveUp;
 	Location = 0;
 	null_move = True;
 	break;
       case DOWN:
-	direction = MoveDown; 
+	direction = MoveDown;
 	Location = 0;
 	null_move = True;
 	break;
       case AUTOMIN:
 	Location = 0;
 	break;
-      case -1:  
+      case -1:
 	Location = 0;
 	break;
-      default:  
+      default:
 	Location = location;
 	break;
       }
@@ -264,18 +264,18 @@ AutoParseAndGenerateCommands( void )
 			       location == AUTOMIN))
 		AutoError (_AutoMessages[WARNMSG89]);
 	else {
-	  if (location == AUTOMAX || 
-	      location == AUTOMIN) 
-	    widget_class_code  = 
+	  if (location == AUTOMAX ||
+	      location == AUTOMIN)
+	    widget_class_code  =
 	      mvsGetClassCode
 		(object->id.widget);
 	}
       }
-      if (location == AUTOMAX && widget_class_code == 
+      if (location == AUTOMAX && widget_class_code ==
 	  mvsXmListWidgetClass) {
 	if (use_object)  {
 	  AutoInvokePerformMonitor();
-	  Location = 
+	  Location =
 	    AutoGetMaxListPosition
 	      (object->id.widget);
 	}
@@ -287,11 +287,11 @@ AutoParseAndGenerateCommands( void )
 	}
       }
       AutoInvokePerformMonitor();
-      if ((location == AUTOMAX  || location == AUTOMIN) && 
+      if ((location == AUTOMAX  || location == AUTOMIN) &&
 	  (widget_class_code == mvsXmTextWidgetClass ||
 	   widget_class_code == mvsXmTextFieldWidgetClass)) {
 	if (use_object)  {
-	  AutoMoveMaxOrMinText(object->id.widget, 
+	  AutoMoveMaxOrMinText(object->id.widget,
 			       location);
 	}
 	else  {
@@ -300,7 +300,7 @@ AutoParseAndGenerateCommands( void )
       }
       else {
 	if (! null_move)  {
-	  AutoLocatePointer(widget, Component, 
+	  AutoLocatePointer(widget, Component,
 			    Location, MoveAny);
 	}
 	else  {
@@ -321,7 +321,7 @@ AutoParseAndGenerateCommands( void )
       while (XmIsGadget(widget))
 	widget = XtParent(widget);
       w_info = mvsWidgetToWidgetInfo(widget);
-      /* 
+      /*
 	If widget is a ScrolledText or a ScrolledList
 	widget, compare the ScrolledWindow parent and
 	not the List or Text widget. This way, scrollbars
@@ -330,9 +330,9 @@ AutoParseAndGenerateCommands( void )
       widget_class_code = mvsGetClassCode(w_info->widget);
       if (widget_class_code == mvsXmTextWidgetClass ||
 	  widget_class_code == mvsXmListWidgetClass) {
-	widget_class_code = 
+	widget_class_code =
 	  mvsGetClassCode(w_info->parent->widget);
-	if (widget_class_code == 
+	if (widget_class_code ==
 	    mvsXmScrolledWindowWidgetClass)
 	  w_info = w_info->parent;
       }
@@ -350,7 +350,7 @@ AutoParseAndGenerateCommands( void )
       while (XmIsGadget(widget))
 	widget = XtParent(widget);
       w_info = mvsWidgetToWidgetInfo(widget);
-      /* 
+      /*
 	If widget is a ScrolledText or a ScrolledList
 	widget, compare the ScrolledWindow parent and
 	not the List or Text widget. This way, scrollbars
@@ -359,9 +359,9 @@ AutoParseAndGenerateCommands( void )
       widget_class_code = mvsGetClassCode(w_info->widget);
       if (widget_class_code == mvsXmTextWidgetClass ||
 	  widget_class_code == mvsXmListWidgetClass) {
-	widget_class_code = 
+	widget_class_code =
 	  mvsGetClassCode(w_info->parent->widget);
-	if (widget_class_code == 
+	if (widget_class_code ==
 	    mvsXmScrolledWindowWidgetClass)
 	  w_info = w_info->parent;
       }
@@ -379,7 +379,7 @@ AutoParseAndGenerateCommands( void )
       while (XmIsGadget(widget))
 	widget = XtParent(widget);
       w_info = mvsWidgetToWidgetInfo(widget);
-      /* 
+      /*
 	If widget is a ScrolledText or a ScrolledList
 	widget, compare the ScrolledWindow parent and
 	not the List or Text widget. This way, scrollbars
@@ -388,9 +388,9 @@ AutoParseAndGenerateCommands( void )
       widget_class_code = mvsGetClassCode(w_info->widget);
       if (widget_class_code == mvsXmTextWidgetClass ||
 	  widget_class_code == mvsXmListWidgetClass) {
-	widget_class_code = 
+	widget_class_code =
 	  mvsGetClassCode(w_info->parent->widget);
-	if (widget_class_code == 
+	if (widget_class_code ==
 	    mvsXmScrolledWindowWidgetClass)
 	  w_info = w_info->parent;
       }
@@ -404,7 +404,7 @@ AutoParseAndGenerateCommands( void )
 			      Command->SystemNumArgs,
 			      command_num);
       sysargs[0] = Command->SystemCommand;
-      for (i = 1; i <= Command->SystemNumArgs; i++) 
+      for (i = 1; i <= Command->SystemNumArgs; i++)
 	sysargs[i] =  Command->SystemArgs[i - 1];
       i++;
       sysargs[i] = (char *) 0;
@@ -430,7 +430,7 @@ AutoParseAndGenerateCommands( void )
       case AUTOMIN:
       case -1:	Location = 0;
 	break;
-      case AUTOMAX:	Location = 
+      case AUTOMAX:	Location =
 	AutoGetMaxListPosition(widget);
 	break;
       default:	Location = location;
@@ -438,7 +438,7 @@ AutoParseAndGenerateCommands( void )
       }
       if (Command->ButtonNumber != 0)
 	XButton = GetButton(Command->ButtonNumber);
-      else 
+      else
 	XButton = Button1;
       Component = GetComponent(Command->WidgetComponent);
       AutoInvokePerformMonitor();
@@ -451,19 +451,19 @@ AutoParseAndGenerateCommands( void )
       location = Command->Location;
       if (Command->ButtonNumber != 0)
 	XButton = GetButton(Command->ButtonNumber);
-      else 
+      else
 	XButton = Button1;
       XCoord = Command->XCoord;
       YCoord = Command->YCoord;
       switch (Command->CommandName) {
-      case DRAGSLIDERVAL:	
+      case DRAGSLIDERVAL:
 	if (AutoTrace)
 	  AutoTraceDragAction(
 			      Command->Mask,
 			      Command->NumMask,
 			      NULL, 0, location,
 			      Command->ButtonNumber,
-			      0, 0, XCoord, 
+			      0, 0, XCoord,
 			      DRAGSLIDERVAL,
 			      command_num);
 	AutoInvokePerformMonitor();
@@ -497,7 +497,7 @@ AutoParseAndGenerateCommands( void )
 			      0, DRAGABS,
 			      command_num);
 	AutoInvokePerformMonitor();
-	AutoDragAbs(XCoord, YCoord, mask, 
+	AutoDragAbs(XCoord, YCoord, mask,
 		    XButton);
 	break;
       }
@@ -550,7 +550,7 @@ AutoParseAndGenerateCommands( void )
                               command_num);
       widget = GetWidgetID(Command->WidgetName);
       window = XtWindowOfObject(GetTopShell(widget));
-      /* call AutoWmMaximize() - same operation to 
+      /* call AutoWmMaximize() - same operation to
          normalize a window */
       AutoInvokePerformMonitor();
 #ifndef AUTOMATION
@@ -710,10 +710,10 @@ AutoParseAndGenerateCommands( void )
         keyboard = True;
       AutoInvokePerformMonitor();
 #ifndef AUTOMATION
-      AutoWmMenuSelect(window, item_number, 
+      AutoWmMenuSelect(window, item_number,
                              item_name, keyboard);
 #else
-      if (! AutoWmMenuSelect(window, item_number, 
+      if (! AutoWmMenuSelect(window, item_number,
                              item_name, keyboard))
         AutoMessage(_AutoMessages[SCRMSG32]);
 #endif
@@ -761,11 +761,11 @@ AutoParseAndGenerateCommands( void )
       AutoInvokePerformMonitor();
 #ifndef AUTOMATION
       AutoWmResize(window, gravity, XCoord, YCoord);
-        
+
 #else
       if (! AutoWmResize(window, gravity, XCoord, YCoord))
         AutoMessage(_AutoMessages[SCRMSG34]);
-        
+
 #endif
       AutoUpdateWindow();
     break;
@@ -790,7 +790,7 @@ AutoParseAndGenerateCommands( void )
 #endif
       AutoUpdateWindow();
       break;
-    
+
     case WINDOWICHECK:
     widget = GetWidgetID(Command->WidgetName);
       window = XtWindowOfObject(GetTopShell(widget));
@@ -899,32 +899,32 @@ AutoParseAndGenerateCommands( void )
 	AutoMessage(_AutoMessages[WARNMSG3]);
       break;
     }
-    
+
     if (Command->next == NULL || NextScreen) {
       MoreInput = False;
       if (Command->next != NULL)
 	Command = Command->next;
     }
-    else 
+    else
       Command = Command->next;
-    
+
     AutoProcessAllEvents();
-    
+
     if (AutoDelay)
       AutoDelayCycle(AutoDelayCycles);
-    
+
     command_num++;
   }
 }
 
 
-static int 
+static int
 GetMask(int num_mask, int mask_array[5])
 {
-  
+
   int 	i;
   int 	mask;
-  
+
   if (num_mask == 0)
     return(NoModifierKeys);
   else {
@@ -933,7 +933,7 @@ GetMask(int num_mask, int mask_array[5])
       mask = mask | GetXMask(mask_array[i]);
     return(mask);
   }
-  
+
 }
 
 
@@ -941,9 +941,9 @@ static int
 GetXMask(
 	 int mask )
 {
-  
+
   int XMask;
-  
+
   switch (mask) {
   case SHIFTMASK:
     XMask = ShiftMask;
@@ -979,9 +979,9 @@ GetXMask(
     AutoMessage(_AutoMessages[WARNMSG4]);
     break;
   }
-  
+
   return(XMask);
-  
+
 }
 
 
@@ -989,9 +989,9 @@ static int
 GetButton(
 	  int button )
 {
-  
+
   int XButton;
-  
+
   switch (button) {
   case BTN1:
     XButton = Button1;
@@ -1012,9 +1012,9 @@ GetButton(
     AutoWarning("GetButton: Unknown Button");
     break;
   }
-  
+
   return(XButton);
-  
+
 }
 
 
@@ -1022,12 +1022,12 @@ static int
 GetComponent(
 	     int component )
 {
-  
+
   int Component;
-  
+
   if (component == -1)
     return(oUserDefined);
-  
+
   switch (component) {
   case SEPARATOR:
     Component = oSeparator;
@@ -1351,9 +1351,9 @@ GetComponent(
     AutoWarning("GetComponent: Unknown component");
     break;
   }
-  
+
   return(Component);
-  
+
 }
 
 
@@ -1361,24 +1361,24 @@ static Widget
 GetWidgetID(
 	    char *widget_string )
 {
-  
+
   Widget 	widget;
   char		matchstring[25];
   char		err_string[100];
-  
+
   if (strcmp(widget_string, "Shell1") == 0)
     return(Shell1);
   sprintf(matchstring, "*%s", widget_string);
   widget = XtNameToWidget(Shell1, matchstring);
   if (widget == NULL) {
-    sprintf(err_string, 
+    sprintf(err_string,
 	    _AutoMessages[SCRMSG21], matchstring);
     AutoError(err_string);
     return(NULL);
   }
   else
     return(widget);
-  
+
 }
 
 
@@ -1386,9 +1386,9 @@ static Widget
 GetTopShell(
 	    Widget widget )
 {
-  
+
   Widget topWidget;
-  
+
   topWidget = widget;
   while (!XtIsShell(topWidget))
     topWidget = XtParent(topWidget);
@@ -1400,7 +1400,7 @@ static void
 CheckKey(
 	 int key )
 {
-  /* 
+  /*
     Check to see if the key to be clicked, pressed, or released is
     one that needs to be sent to the clipWindow of the ScrolledWindow.
     If it is set SendToClipWindow.
@@ -1417,7 +1417,7 @@ CheckKey(
   case HELP:		SendToClipWindow = HaveScrolledWindow;
     break;
   default:		break;
-    
+
   }
 }
 
@@ -1425,8 +1425,8 @@ CheckKey(
 static void
 AutoUpdateWindow( void )
 {
-  
+
   xisProcessObjects();
   xisUpdateObjectAttributes();
-  
+
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: focus_icon.c /main/7 1995/07/14 12:02:11 drk $"
@@ -142,7 +142,7 @@ char	*argv[];
 
 		/* Move left to right first */
 		for (x_pos = min_x; x_pos <= max_xpos; x_pos += x_step) {
-			XWarpPointer(display, None, root_win, 0, 0, root_width, 
+			XWarpPointer(display, None, root_win, 0, 0, root_width,
 						 root_height, x_pos, y_pos);
 			XFlush(display);
 			count++;
@@ -150,7 +150,7 @@ char	*argv[];
 
 		/* And then move right to left */
 		for (x_pos = max_xpos; x_pos >= min_x; x_pos -= x_step) {
-			XWarpPointer(display, None, root_win, 0, 0, root_width, 
+			XWarpPointer(display, None, root_win, 0, 0, root_width,
 						 root_height, x_pos, y_pos);
 			XFlush(display);
 			count++;
@@ -159,7 +159,7 @@ char	*argv[];
 	}
 #ifdef	DEBUG
 	printf ("no. of warps = %d\n", count);
-	XQueryPointer(display, root_win, &root, &child, &root_x, &root_y, 
+	XQueryPointer(display, root_win, &root, &child, &root_x, &root_y,
 				  &win_x, &win_y, &key_buttons);
 
 	printf("root_x = %d root_y = %d win_x = %d win_y = %d key_buttons = %d\n",

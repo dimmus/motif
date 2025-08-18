@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PIConfig.c /main/6 1995/07/13 20:19:23 drk $"
@@ -45,9 +45,9 @@ static char rcsid[] = "$XConsortium: PIConfig.c /main/6 1995/07/13 20:19:23 drk 
 Widget	TestTop1, TestTop2, Test1Btn1, Test2Btn1;
 Pixmap	Test1Btn1Icon, Test2Btn1Icon;
 
-Widget	NoResizeShell, NoMaximizeShell, NoMinMaxShell, 
+Widget	NoResizeShell, NoMaximizeShell, NoMinMaxShell,
 		JustBorderShell, NoDecorShell;
-Widget	NoResizeBtn, NoMaximizeBtn, NoMinMaxBtn, JustBorderBtn, 
+Widget	NoResizeBtn, NoMaximizeBtn, NoMinMaxBtn, JustBorderBtn,
 		NoDecorBtn;
 Window	TestTop1Wdw, TestTop2Wdw, Shell1Wdw;
 
@@ -73,7 +73,7 @@ char	*argv[];
 	XtRealizeWidget(Shell1);
 
     CommonPause();
-    
+
 /*
  * Create top level shell widget as parent for test_button widgets
  */
@@ -155,7 +155,7 @@ char	*argv[];
  */
 	n = 0;
 	XtSetArg(args[n], XtNallowShellResize, TRUE); n++;
-	XtSetArg(args[n], XmNmwmDecorations, 
+	XtSetArg(args[n], XmNmwmDecorations,
 			 MWM_DECOR_BORDER | MWM_DECOR_TITLE |
 			 MWM_DECOR_MENU | MWM_DECOR_MINIMIZE |
 			 MWM_DECOR_MAXIMIZE); n++;
@@ -166,7 +166,7 @@ char	*argv[];
 		 						args, n);				/* arguments */
 
 	n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 			  XmStringCreateSimple ("No_ResizeH")); n++;
 	NoResizeBtn = XmCreatePushButton(NoResizeShell, "NoResizeBtn", args, n);
 	XtManageChild(NoResizeBtn);
@@ -179,7 +179,7 @@ char	*argv[];
  */
 	n = 0;
 	XtSetArg(args[n], XtNallowShellResize, TRUE); n++;
-	XtSetArg(args[n], XmNmwmDecorations, 
+	XtSetArg(args[n], XmNmwmDecorations,
 			 MWM_DECOR_BORDER | MWM_DECOR_TITLE |
 			 MWM_DECOR_MENU | MWM_DECOR_MINIMIZE |
 			 MWM_DECOR_RESIZEH); n++;
@@ -190,9 +190,9 @@ char	*argv[];
 		 						args, n);
 
 	n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 			  XmStringCreateSimple ("No_Maximize")); n++;
-	NoMaximizeBtn = XmCreatePushButton(NoMaximizeShell, "NoMaximizeBtn", 
+	NoMaximizeBtn = XmCreatePushButton(NoMaximizeShell, "NoMaximizeBtn",
 										 args, n);
 	XtManageChild(NoMaximizeBtn);
 	XtRealizeWidget(NoMaximizeShell);
@@ -204,7 +204,7 @@ char	*argv[];
  */
 	n = 0;
 	XtSetArg(args[n], XtNallowShellResize, TRUE); n++;
-	XtSetArg(args[n], XmNmwmDecorations, 
+	XtSetArg(args[n], XmNmwmDecorations,
 			 MWM_DECOR_BORDER | MWM_DECOR_TITLE |
 			 MWM_DECOR_MENU | MWM_DECOR_RESIZEH); n++;
 	NoMinMaxShell = XtAppCreateShell("NoMinMaxShell",
@@ -214,7 +214,7 @@ char	*argv[];
 		 						args, n);
 
 	n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 			  XmStringCreateSimple ("No_Minmax")); n++;
 	NoMinMaxBtn = XmCreatePushButton(NoMinMaxShell, "NoMinMaxBtn", args, n);
 	XtManageChild(NoMinMaxBtn);
@@ -235,9 +235,9 @@ char	*argv[];
 		 						args, n);
 
 	n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 			  XmStringCreateSimple ("Just_border")); n++;
-	JustBorderBtn = XmCreatePushButton(JustBorderShell, "JustBorderBtn", 
+	JustBorderBtn = XmCreatePushButton(JustBorderShell, "JustBorderBtn",
 										 args, n);
 	XtManageChild(JustBorderBtn);
 	XtRealizeWidget(JustBorderShell);
@@ -257,9 +257,9 @@ char	*argv[];
 		 						args, n);
 
 	n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 			  XmStringCreateSimple ("No_decor")); n++;
-	NoDecorBtn = XmCreatePushButton(NoDecorShell, "NoDecorBtn", 
+	NoDecorBtn = XmCreatePushButton(NoDecorShell, "NoDecorBtn",
 										 args, n);
 	XtManageChild(NoDecorBtn);
 	XtRealizeWidget(NoDecorShell);
@@ -279,4 +279,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-

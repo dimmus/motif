@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # Set XmNallowShellResize to false. Set scale value to 250.
-# Resize PB1. 
+# Resize PB1.
 
 LocatePointer tb1
 ClickMB Btn1
@@ -57,12 +57,12 @@ DragSliderValue Left 200 Btn1
 LocatePointer pb1
 ClickMB Btn1
 CompareVisual form
- 
+
 
 
 
 # Set XmNallowShellResize to true. Resize PB1 to 200.
-	
+
 LocatePointer tb1
 ClickMB Btn1
 CompareVisual form

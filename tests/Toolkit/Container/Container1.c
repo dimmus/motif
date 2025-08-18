@@ -44,14 +44,14 @@ Widget	IconGad31,IconGad32,IconGad321,IconGad3211,IconGad33;
 Widget	IconGad5;
 Widget  Container1;
 
-char	*ColumnHeadingText[NUM_COL] = { 
+char	*ColumnHeadingText[NUM_COL] = {
 	"Icon",
     "Full Title",
     "Favorite Flavor",
     "Age"
 };
 
-char	*FullTitleText[NUM_OBJ] = { 
+char	*FullTitleText[NUM_OBJ] = {
 	"The First Object",
     "2nd Object, but still important",
     "Show",
@@ -64,7 +64,7 @@ char	*FullTitleText[NUM_OBJ] = {
     "Last object"
 };
 
-char	*FlavorText[NUM_OBJ] = { 
+char	*FlavorText[NUM_OBJ] = {
 	"Chocolate",
     "Raspberry",
     "Blueberry",
@@ -77,7 +77,7 @@ char	*FlavorText[NUM_OBJ] = {
     "Boysenberry"
 };
 
-char	*AgeText[NUM_OBJ] = { 
+char	*AgeText[NUM_OBJ] = {
 	"42",
 	"10",
 	"4",
@@ -150,13 +150,13 @@ main(int argc, char **argv)
 	sprintf(ContainerName, "Container1%c", test_char);
 
 	CollapsedStatePixmap = XCreatePixmapFromBitmapData(display, rootWindow,
-				  collapsedState_bits, collapsedState_width, 
+				  collapsedState_bits, collapsedState_width,
 				  collapsedState_height, CommonGetColor("black"),
 				  CommonGetColor("white"),
 				  XDefaultDepth(display, XDefaultScreen(display)));
 
 	ExpandedStatePixmap = XCreatePixmapFromBitmapData(display, rootWindow,
-				  expandedState_bits, expandedState_width, 
+				  expandedState_bits, expandedState_width,
 				  expandedState_height, CommonGetColor("white"),
 				  CommonGetColor("black"),
 				  XDefaultDepth(display, XDefaultScreen(display)));
@@ -312,7 +312,7 @@ main(int argc, char **argv)
 ****/
 
 	IconGad5 = (Widget) 0;
-	
+
 
 	for (i = 0; i < NUM_OBJ-1; i++) {
 
@@ -347,11 +347,11 @@ main(int argc, char **argv)
 	   CommonPause();
 
 	   n = 0;
-	   XtSetArg(args[n], XmNselectedObjectCount, &SelectedObjectCount); 
+	   XtSetArg(args[n], XmNselectedObjectCount, &SelectedObjectCount);
 	   n++;
 	   XtSetArg(args[n], XmNselectedObjects, &SelectedObjects); n++;
 	   XtGetValues(Container1, args, n);
-	   printf("SelectedObjectCount from GetValues: %d\n", 
+	   printf("SelectedObjectCount from GetValues: %d\n",
 		  SelectedObjectCount);
 	   printf("SelectedObjects from GetValues: ");
 	   for (i = 0; i < SelectedObjectCount; i++)
@@ -405,7 +405,7 @@ main(int argc, char **argv)
 
 	}
 	if (test_num == 9) {
-	   
+
 	    CommonPause();
 	    CommonPause();
 
@@ -460,9 +460,9 @@ DefaultActionCB(Widget wid,XtPointer client_data, XtPointer call_data)
 	Cardinal		n;
 	int                     j;
 	Arg			args[MAX_ARGS];
-/****/	
+/****/
 	XmContainerSelectCallbackStruct	*cbs;
-	
+
 	cbs = (XmContainerSelectCallbackStruct *)call_data;
 	printf("\nXmNdefaultActionCallback called\n\n");
 
@@ -473,7 +473,7 @@ DefaultActionCB(Widget wid,XtPointer client_data, XtPointer call_data)
 ****/
 
 	if (IconGad5 == (Widget) 0) {
-		
+
 	    n = 0;
 	    XtSetArg(args[n], XmNx, 70); n++;
 	    XtSetArg(args[n], XmNy, 420); n++;
@@ -489,7 +489,7 @@ DefaultActionCB(Widget wid,XtPointer client_data, XtPointer call_data)
 
 	    XtFree((XtPointer)EntryDetails);
 	}
-	
+
 
 /****/
 
@@ -546,7 +546,7 @@ OutlineCB(Widget wid,XtPointer client_data, XtPointer call_data)
 {
 
 	XmContainerOutlineCallbackStruct *cbs;
-	
+
 	cbs = (XmContainerOutlineCallbackStruct *)call_data;
 	printf("XmNoutlineChangedCallback ");
 	if (cbs->reason == XmCR_COLLAPSED)

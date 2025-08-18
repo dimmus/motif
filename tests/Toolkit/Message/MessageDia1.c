@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageDia1.c /main/8 1995/07/13 19:02:20 drk $"
@@ -159,7 +159,7 @@ static XtCallbackRec help_cb[] = {
 /*-------------------------------------------------------------
 **      OkCB        - callback for ok button
 */
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -185,7 +185,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      CancelCB        - callback for cancel button
 */
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -211,7 +211,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      HelpCB        - callback for help button
 */
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -246,12 +246,12 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 10);                     n++;
     XtSetArg (args[n], XmNheight, 10);                    n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     /* create the pixmaps */
     hourPix = CreatePixmap (XtScreen(Shell1), hourBits, 32, 32,
@@ -287,7 +287,7 @@ char **argv;
     XtRealizeWidget (Shell1);
     XtManageChild ((Widget) mbox);
 
-    CommonPause(); 
+    CommonPause();
 
     /*  process events  */
     XtAppMainLoop(app_context);
@@ -297,7 +297,7 @@ char **argv;
 /***********************************************************************
  *
  *  CreatePixmap - This routine will return a pixmap from the output
- *         of the bitmap editor.  The output pixmap will be 
+ *         of the bitmap editor.  The output pixmap will be
  *         the depth of the screen.  This is so that label can
  *         write it using its current foreground and background.
  *
@@ -336,7 +336,7 @@ Pixel   foreground_pixel, background_pixel;
     /* get a chunk of off-screen, display on root screen */
     /* 1 bit deep, this is still just bit data, not color pixel data */
     pixmap = XCreatePixmap (display, RootWindowOfScreen (screen),
-                image.width, image.height, 
+                image.width, image.height,
                 (unsigned) DefaultDepthOfScreen(screen));
     if (!pixmap)
     return (pixmap);
@@ -355,7 +355,7 @@ Pixel   foreground_pixel, background_pixel;
     return ((Pixmap) NULL);
 
     /* put bits into the pixmap */
-    XPutImage (display, pixmap, gc, &image, 0, 0, 
+    XPutImage (display, pixmap, gc, &image, 0, 0,
            0, 0, image.width, image.height);
 
     XFreeGC (display, gc);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FindString.c /main/7 1995/07/14 11:15:50 drk $"
@@ -39,7 +39,7 @@ static char rcsid[] = "$XConsortium: FindString.c /main/7 1995/07/14 11:15:50 dr
             Finds a substring in a string
 
             INPUTS
-                in_string     - The string to search in 
+                in_string     - The string to search in
                 search_string - The string to match in in_string
 
             OUTPUTS
@@ -56,8 +56,8 @@ char in_string[],search_string[];
     char *save_ch = in_string;
 
     while (*sch && *save_ch) {
-        for (ch=save_ch, sch=search_string; 
-             *sch && *ch && *ch == *sch; 
+        for (ch=save_ch, sch=search_string;
+             *sch && *ch && *ch == *sch;
              ch++, sch++);
         if (*sch)
             save_ch++;

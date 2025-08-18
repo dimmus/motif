@@ -22,63 +22,63 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual command 
-TRACE:(2) LocatePointer command  
+TRACE:(1) CompareVisual command
+TRACE:(2) LocatePointer command
 TRACE:(3) ClickKey KReturn
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     Dialog type cannot be modified.
 
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     mustMatch is always False for a Command widget.
 
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     historyMaxItems must be a positive integer greater than zero.
 
-TRACE:(4) CompareVisual command 
-TRACE:(5) LocatePointer command RSelectionText 
-TRACE:(6) ClickMB Btn1 
+TRACE:(4) CompareVisual command
+TRACE:(5) LocatePointer command RSelectionText
+TRACE:(6) ClickMB Btn1
 TRACE:(7) InputString "Hello"
 TRACE:(8) ClickKey KReturn
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     Invalid child type, Command widget does not have this child.
 
-TRACE:(9) CompareVisual command 
+TRACE:(9) CompareVisual command
 TRACE:(10) Continue
-TRACE:(11) LocatePointer command  
+TRACE:(11) LocatePointer command
 TRACE:(12) ClickKey KTab
 TRACE:(13) ClickKey KReturn
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     Invalid XmString, check for invalid charset.
 
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     Invalid XmString, check for invalid charset.
 
-TRACE:(14) CompareVisual command 
-TRACE:(15) LocatePointer command RSelectionText 
-TRACE:(16) ClickMB Btn1 
+TRACE:(14) CompareVisual command
+TRACE:(15) LocatePointer command RSelectionText
+TRACE:(16) ClickMB Btn1
 TRACE:(17) InputString "Goodbye"
 TRACE:(18) ClickKey KReturn
-TRACE:(19) CompareVisual command 
-TRACE:(20) LocatePointer command RSelectionText 
-TRACE:(21) ClickMB Btn1 
+TRACE:(19) CompareVisual command
+TRACE:(20) LocatePointer command RSelectionText
+TRACE:(21) ClickMB Btn1
 TRACE:(22) ClickKey Ka
-Warning: 
+Warning:
     Name: command
     Class: XmCommand
     Invalid XmString, check for invalid charset.
 
-TRACE:(23) CompareVisual command 
+TRACE:(23) CompareVisual command
 TRACE:(24) Exit
 Exiting Test...Please Standby...

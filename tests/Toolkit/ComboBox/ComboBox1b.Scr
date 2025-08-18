@@ -19,25 +19,25 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
 #  This test should have been run with the flag "-u 2".
 #  The XtName of the ComboBox created in this test is CB2.
 #  All resources for this ComboBox are contained in the defaults
-#  file ./ComboBox.defaults. 
+#  file ./ComboBox.defaults.
 #  There should be no warnings on the term window indicating uninstalled or
 #  incorrect resource converters.
-#  The ComboBox should be of type DROP_DOWN_COMBO_BOX. 
+#  The ComboBox should be of type DROP_DOWN_COMBO_BOX.
 #  The arrowSize of the ComboBox should be 15 pixels.
 #  The arrowSpacing of the ComboBox should be 10 pixels.
-#  Post the list of the ComboBox. It has 6 items, all of which should be 
+#  Post the list of the ComboBox. It has 6 items, all of which should be
 #  visible.
-#  The items in the list should be displayed with stringDirection 
+#  The items in the list should be displayed with stringDirection
 #  Right_To_Left.
 #  Type "leaves" into the Text widget. The item "leaves" should be selected.
-#  Post the list of the ComboBox again. Click on the item "dew". 
+#  Post the list of the ComboBox again. Click on the item "dew".
 #  "dew" should appear in the Text widget.
 
 
@@ -54,4 +54,3 @@ LocatePointer CB2 RComboBoxDropDownButton
 ClickMB Btn1
 CompareVisual CB2
 Exit
-

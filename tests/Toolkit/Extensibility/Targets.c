@@ -51,12 +51,12 @@ static void Initialize(
                         Cardinal *num_args );
 static void Destroy (
                         Widget w );
-static void StartHighlight( 
+static void StartHighlight(
                         Widget w,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void ExtendHighlight( 
+static void ExtendHighlight(
                         Widget w,
                         XEvent *event,
                         String *params,
@@ -71,7 +71,7 @@ static void PrimCopy(
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void RegisterDropSite( 
+static void RegisterDropSite(
                         Widget w);
 static void ConvertProc(
 			Widget w,
@@ -135,7 +135,7 @@ static XtActionsRec actionsList[] = {
 };
 
 /* Resources for the ExmTargets widget. */
-static XtResource resources[] = 
+static XtResource resources[] =
 {
   {
     XmNdestinationCallback,
@@ -153,7 +153,7 @@ static XtResource resources[] =
 
 externaldef (exmtargetsclassrec)
      ExmTargetsClassRec exmTargetsClassRec = {
-  {    
+  {
     /* superclass */                 (WidgetClass)&exmStringClassRec,
     /* class_name */                 "ExmTargets",
     /* widget_size */                sizeof(ExmTargetsRec),
@@ -186,17 +186,17 @@ externaldef (exmtargetsclassrec)
     /* query_geometry */             XtInheritQueryGeometry,
     /* display_accelerator */        NULL,
     /* extension */                  NULL,
-  },    
-  { /* XmPrimitive */        
+  },
+  { /* XmPrimitive */
     /* border_highlight */           XmInheritBorderHighlight,
     /* border_unhighlight */         XmInheritBorderUnhighlight,
     /* translations */               XtInheritTranslations,
     /* arm_and_activate */           NULL,
-    /* syn_resources */              NULL, 
-    /* num_syn_resources */          0, 
+    /* syn_resources */              NULL,
+    /* num_syn_resources */          0,
     /* extension */                  NULL,
-  },    
-  { /* ExmSimple */                  
+  },
+  { /* ExmSimple */
     /* draw_visual */                ExmInheritDrawVisual,
     /* draw_shadow */                ExmInheritDrawShadow,
     /* create_text_gc */             ExmInheritCreateGC,
@@ -206,15 +206,15 @@ externaldef (exmtargetsclassrec)
     /* calc_widget_size */           ExmInheritCalcWidgetSize,
     /* reconfigure */                ExmInheritReconfigure,
     /* extension */                  NULL,
-  },    
-  { /* ExmString */  
+  },
+  { /* ExmString */
     /* default_render_table_type */  XmLABEL_RENDER_TABLE,
     /* extension */                  NULL,
   },
   { /* ExmTargets */
     /* extension */		     NULL,
   },
-};    
+};
 
 /* Establish the widget class name as an externally accessible symbol.
    Use the "externaldef" macro rather than the "extern" keyword. */
@@ -259,7 +259,7 @@ ClassPartInitialize(
  *      Called by the Intrinsics whenever this widget is deallocated.
  *
  *****************************************************************************/
-static void 
+static void
 Destroy (
        Widget w
         )
@@ -361,7 +361,7 @@ Initialize (
  *
  *****************************************************************************/
 static void
-StartHighlight( 
+StartHighlight(
      Widget w,
      XEvent *event,
      String *params,
@@ -382,7 +382,7 @@ StartHighlight(
  *
  *****************************************************************************/
 static void
-ExtendHighlight( 
+ExtendHighlight(
      Widget w,
      XEvent *event,
      String *params,
@@ -447,7 +447,7 @@ PrimCopy(
 
 /*******************************************************************************
  *
- *  Trait Methods: 
+ *  Trait Methods:
  *      Provide the code for two methods defined by the
  *      Transfer trait.
  *
@@ -721,9 +721,9 @@ ConvertProc(
     if (cstatus == XmCONVERT_DONE) {
       converted = True;
     }
-  }   
+  }
 
-  if (converted) {  
+  if (converted) {
     /* Converted */
     int i, num_targets;
     Boolean found = False;
@@ -748,7 +748,7 @@ ConvertProc(
       }
       if (!found)
 	printf("ERROR: XmeConvertMerge - not all targets found\n");
-      
+
       XtFree((char *) value);
     } else {
       /* Fill in the callback struct members. */
@@ -1137,9 +1137,9 @@ DestinationProc(
   }
 
   if (ds -> selection == XA_MOTIF_DROP) {
-    XmDropProcCallbackStruct *cb = 
+    XmDropProcCallbackStruct *cb =
       (XmDropProcCallbackStruct *) ds -> destination_data;
-      
+
     /* No support for drop help. */
     if (cb -> dropAction == XmDROP_HELP ||
 	cb -> operation == XmDROP_NOOP) {

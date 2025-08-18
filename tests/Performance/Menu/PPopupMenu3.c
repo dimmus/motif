@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PPopupMenu3.c /main/7 1995/07/14 12:01:49 drk $"
@@ -312,7 +312,7 @@ static Widget  CreatePullDown(parent)
 	Widget parent ;
 {
     Widget  widget;
-    
+
 
     widget = XmCreatePulldownMenu (parent, "pulldown", NULL, 0);
 
@@ -371,12 +371,12 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  200);  n++;
     XtSetArg(args[n], XmNheight, 40);   n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 
@@ -443,5 +443,3 @@ static XtCallbackProc  quitCB(w, client_data, call_data)
 	printf("Exiting...Please Standby...\n");
 	exit(0);
 }
-
-

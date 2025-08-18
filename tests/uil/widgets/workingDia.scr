@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #  This is a Working Dialog with the following characteristics:
-#	- okCallback is ON   
-#	- cancelCallback is ON   
-#	- helpCallback is ON   
+#	- okCallback is ON
+#	- cancelCallback is ON
+#	- helpCallback is ON
 #	- autoUnmanage is true
 #	- message string is "MessageLabel"
 #	- All resources are set by default.
@@ -35,4 +35,3 @@ LocatePointer Working_Dialog ROkButton
 ClickMB Btn1
 CompareVisual Working_Dialog
 Exit
-

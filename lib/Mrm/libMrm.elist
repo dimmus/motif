@@ -3,17 +3,17 @@
 /*************************************************************************
  * Export list for libMrm
  * This list *must* be updated whenever a change is made to the libMrm API.
- * 
+ *
  * The syntax for the symbol declarations in this list is as follows:
  * 	public       sym => Public   C   symbol, i.e., publicized API
  * 	private      sym => Private  C   symbol, i.e., unpublicized API
  * 	internal     sym => Internal C   symbol, i.e., not part of API
- *  
+ *
  **************************************************************************/
 
 
 /**************************************************************************
- * libMrm public symbols -- available to developers 
+ * libMrm public symbols -- available to developers
  **************************************************************************/
 
 public MrmCloseHierarchy
@@ -157,7 +157,7 @@ public _MrmMsg_0119
 
 
 /********************************************************************
- * libMrm private symbols -- Undocumented APIs that are exported 
+ * libMrm private symbols -- Undocumented APIs that are exported
  *	for backward compatibilty.
  ********************************************************************/
 

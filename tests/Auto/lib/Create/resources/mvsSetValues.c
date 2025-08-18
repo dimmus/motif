@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsSetValues.c /main/7 1995/07/14 11:23:35 drk $"
@@ -101,7 +101,7 @@ Cardinal nargs;
 	    /* Don't change colors on Gadgets that are not ready in
 	       automation for these when recording or comparing */
 	    if ((mvsGetVisualMode() != VISUAL_MODE_DONT_CHECK) &&
-		(XmIsGadget(widget) && 
+		(XmIsGadget(widget) &&
 		(mvsGetClassCode(widget) != mvsXmIconGadgetClass) &&
 		(strcmp(args[i].name, "background") == 0 ||
 		 strcmp(args[i].name, "foreground") == 0 ||
@@ -146,7 +146,7 @@ Cardinal nargs;
 		new_args[i].value != (XtArgVal) None) {
 
 		NormalizePixmap(widget_info, new_args[i].value);
-	 
+
 	    }
 	}
     }
@@ -159,7 +159,7 @@ Cardinal nargs;
 /* Don't change colors on gadgets until automation is really updated to 2.0
    and supports colors on gadgets */
     else
-	if (XmIsGadget(widget) &&  
+	if (XmIsGadget(widget) &&
 	    (mvsGetClassCode(widget) != mvsXmIconGadgetClass))
 	    XtSetValues(widget, new_args, new_nargs);
         else

@@ -27,11 +27,11 @@
 
 #include <testlib.h>
 
-Widget    MainWindow; 
+Widget    MainWindow;
 Widget    MenuBar;
 Widget	  Pulldown1, Pulldown2, Pulldown3;
 Widget    MenuBtn1, MenuBtn2, MenuBtn3;
-Widget    CommandWindow, WorkRegion; 
+Widget    CommandWindow, WorkRegion;
 Widget    Button;
 Widget    Separator;
 Widget    VScrollBar, HScrollBar;
@@ -48,13 +48,13 @@ void  main(argc, argv)
     register int  i;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
     XtSetArg(args[n], XtNgeometry, "+0+0");  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     n = 0;
     XtSetArg(args[n], XmNunitType, Xm1000TH_INCHES);  n++;
@@ -328,7 +328,7 @@ void  main(argc, argv)
 
     XtDestroyWidget(MainWindow);
 
-    
+
     CommonPause();
 
     XtAppMainLoop(app_context);

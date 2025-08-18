@@ -196,4 +196,3 @@ typedef struct _XmNotebookRec
 #endif
 
 #endif /* _XmNotebookP_h */
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Text10.c /main/10 1995/07/13 19:25:40 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: Text10.c /main/10 1995/07/13 19:25:40 drk $
 #endif
 #include <testlib.h>
 
-void 
+void
 main (int argc, char **argv)
 {
 	main_text10( argc, argv );

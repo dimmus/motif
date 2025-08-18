@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 !
 !------------------------------------------------------------------------
@@ -34,12 +34,10 @@ I18N1*TextFieldLabel.labelString:	¥Ø¥ë¥× OSF Motif!
 
 I18N1*TextField1.value:			¤Ì ÉÙ»Î
 
-I18N1*TextLabel.labelString:		²Ö ÆüËÜ XmText 
+I18N1*TextLabel.labelString:		²Ö ÆüËÜ XmText
 
 I18N1*Text1.value:			\307\245 \245\243 CS2 \216\242 ÅÆ´Ö ÅÙ Íå
 
 I18N1*CSTextLabel.labelString:		\263\364 \262\361\274\322
 
 I18N1*CSText1.cstextValue:		You know what? I'm happy! \263\364 \262\361\274\322
-
-

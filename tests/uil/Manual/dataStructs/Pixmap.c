@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Pixmap.c /main/4 1995/07/13 20:34:09 drk $"
@@ -34,7 +34,7 @@ static char rcsid[] = "$XConsortium: Pixmap.c /main/4 1995/07/13 20:34:09 drk $"
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
     int		i, j, k,
     		errors = 0,
     		data_errors = 0,
@@ -67,7 +67,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -160,36 +160,36 @@ main(argc, argv)
 /*
  * Compare fields of XImage structures and construct error message
  */
-	
+
 	errors = 0;
 
 	if(X_image->width != UIL_image->width)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "width            \t%8d\t%8d\n",
 		    X_image->width, UIL_image->width);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->height != UIL_image->height)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "height           \t%8d\t%8d\n",
 		    X_image->height, UIL_image->height);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->xoffset != UIL_image->xoffset)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "xoffset          \t%8d\t%8d\n",
 		    X_image->xoffset, UIL_image->xoffset);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->format != UIL_image->format)
 	{
 	    errors++;
@@ -198,66 +198,66 @@ main(argc, argv)
 		    format[X_image->format], format[UIL_image->format]);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->byte_order != UIL_image->byte_order)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "byte_order       \t%8s\t%8s\n",
 		    byte_order[X_image->byte_order],
 		    byte_order[UIL_image->byte_order]);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->bitmap_unit != UIL_image->bitmap_unit)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "bitmap_unit      \t%8d\t%8d\n",
 		    X_image->bitmap_unit, UIL_image->bitmap_unit);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->bitmap_bit_order != UIL_image->bitmap_bit_order)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "bitmap_bit_order \t%8d\t%8d\n",
 		    X_image->bitmap_bit_order, UIL_image->bitmap_bit_order);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->bitmap_pad != UIL_image->bitmap_pad)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "bitmap_pad       \t%8d\t%8d\n",
 		    X_image->bitmap_pad, UIL_image->bitmap_pad);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->depth != UIL_image->depth)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "depth            \t%8d\t%8d\n",
 		    X_image->depth, UIL_image->depth);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->bytes_per_line != UIL_image->bytes_per_line)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "bytes_per_line   \t%8d\t%8d\n",
 		    X_image->bytes_per_line, UIL_image->bytes_per_line);
 	    strcat(error_message, err_msg);
 	}
-	    
+
 	if(X_image->bits_per_pixel != UIL_image->bits_per_pixel)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "bits_per_pixel   \t%8d\t%8d\n",
 		    X_image->bits_per_pixel, UIL_image->bits_per_pixel);
 	    strcat(error_message, err_msg);
@@ -268,25 +268,25 @@ main(argc, argv)
 	    if(X_image->red_mask != UIL_image->red_mask)
 	    {
 		errors++;
-	    
+
 		sprintf(err_msg, "red_mask         \t%8u\t%8u\n",
 			X_image->red_mask, UIL_image->red_mask);
 		strcat(error_message, err_msg);
 	    }
-	    
+
 	    if(X_image->green_mask != UIL_image->green_mask)
 	    {
 		errors++;
-	    
+
 		sprintf(err_msg, "green_mask       \t%8u\t%8u\n",
 			X_image->green_mask, UIL_image->green_mask);
 		strcat(error_message, err_msg);
 	    }
-	    
+
 	    if(X_image->blue_mask != UIL_image->blue_mask)
 	    {
 		errors++;
-	    
+
 		sprintf(err_msg, "blue_mask        \t%8u\t%8u\n",
 			X_image->blue_mask, UIL_image->blue_mask);
 		strcat(error_message, err_msg);
@@ -297,7 +297,7 @@ main(argc, argv)
 	if(X_image->f.create_image != UIL_image->f.create_image)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "f.create_image() \t   different addresses\n");
 	    strcat(error_message, err_msg);
 	}
@@ -305,7 +305,7 @@ main(argc, argv)
 	if(X_image->f.destroy_image != UIL_image->f.destroy_image)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "f.destroy_image()\t   different addresses\n");
 	    strcat(error_message, err_msg);
 	}
@@ -313,7 +313,7 @@ main(argc, argv)
 	if(X_image->f.put_pixel != UIL_image->f.put_pixel)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "f.put_pixel()    \t   different addresses\n");
 	    strcat(error_message, err_msg);
 	}
@@ -321,7 +321,7 @@ main(argc, argv)
 	if(X_image->f.get_pixel != UIL_image->f.get_pixel)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "f.get_pixel()    \t   different addresses\n");
 	    strcat(error_message, err_msg);
 	}
@@ -329,7 +329,7 @@ main(argc, argv)
 	if(X_image->f.sub_image != UIL_image->f.sub_image)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "f.sub_image()    \t   different addresses\n");
 	    strcat(error_message, err_msg);
 	}
@@ -337,7 +337,7 @@ main(argc, argv)
 	if(X_image->f.add_pixel != UIL_image->f.add_pixel)
 	{
 	    errors++;
-	    
+
 	    sprintf(err_msg, "f.add_pixel()    \t   different addresses\n");
 	    strcat(error_message, err_msg);
 	}
@@ -347,7 +347,7 @@ main(argc, argv)
  */
 
 	data_errors = 0;
-	
+
 	for(j=0 ; j<bitmap_height ; j++)
 	{
 	    for(k=0 ; k<bitmap_width ; k++)
@@ -391,7 +391,7 @@ main(argc, argv)
 	    fprintf(stdout,"images generated by the CreatePixmapFromBitmap()");
 	    fprintf(stdout," Xlib\nfunction and the %s function ", which[i]);
 	    fprintf(stdout,"in UIL, both using the same bitmap.\n\n");
-	
+
 	    fprintf(stdout, "                \t  Xlib  \t  UIL\n");
 	    fprintf(stdout, "Field           \t Value  \t Value\n");
 	    fprintf(stdout, "----------------\t--------\t--------\n\n");

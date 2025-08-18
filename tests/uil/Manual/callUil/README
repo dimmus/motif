@@ -3,13 +3,13 @@
 CALLABLE UIL TEST:
 
 This test will test the Callable Uil compiler portion of UIL. It is designed
-to be user interactive, with on-line user instructions for each part of the 
+to be user interactive, with on-line user instructions for each part of the
 test. This test consists of 5 files, 3 Uil files testing various compilation
 states(success, error, and warning), the main C file to do the compilations
 and create an example list utility, and an associated header file. The test
 will first compile the UIL file with the error and display to the user all
 relevant information. It will then compile the UIL file with the warning,
-again giving the user useful information. Finally the correct UIL file will 
+again giving the user useful information. Finally the correct UIL file will
 be compiled and its associated UID file used in an example list utility.
 
 
@@ -38,7 +38,7 @@ SYNTAX:
 % run
 
 BUGS SHOWN BY THESE TESTS
- 
+
 
 CallUil
 PIRS No.:      4579

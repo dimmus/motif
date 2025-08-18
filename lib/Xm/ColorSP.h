@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef	_XmColorSelectorP_h
@@ -32,7 +32,7 @@
 /************************************************************
  *      INCLUDE FILES
  *************************************************************/
-		
+
 #include <Xm/ManagerP.h>
 #include <Xm/ColorS.h>
 
@@ -60,7 +60,7 @@ typedef struct _ColorInfo {
 } ColorInfo;
 
 typedef struct _ColorSelectorClassPart {
-    XtPointer 		extension; 
+    XtPointer 		extension;
 } ColorSelectorClassPart;
 
 typedef struct _XmColorSelectorClassRec
@@ -77,7 +77,7 @@ typedef struct _XmColorSelectorPart
     /* resources */
 
     XmColorMode		color_mode;		/* selector mode	   */
-    char	       *color_name;		/* the colorname we select */ 
+    char	       *color_name;		/* the colorname we select */
     String	        rgb_file;      		/* where to look for	   */
     Dimension		margin_width;           /* for geom management     */
     Dimension		margin_height;	        /* for geom management	   */

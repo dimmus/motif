@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # This is a cascadeButton widget with the following characteristics:
@@ -28,7 +28,7 @@
 #	- child with an attached submenu.
 #   	- borderWidth is 8
 #	- shadowThickness is 5
-#	- marginWidth, marginHeight,marginRight, marginLeft, marginTop, and 
+#	- marginWidth, marginHeight,marginRight, marginLeft, marginTop, and
 #	  marginBottom are 8
 #	- mappingDelay is 1000
 #	- activateCallback is ON, but you should see only the

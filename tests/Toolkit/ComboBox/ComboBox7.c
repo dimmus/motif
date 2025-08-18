@@ -9,7 +9,7 @@
 #define NUM_STRINGS 3
 
 static char *strings[NUM_STRINGS] = {
-	"Apples", 
+	"Apples",
   	"Blueberries",
 	"Cherries" };
 
@@ -61,7 +61,7 @@ ResetWidgets()
   XtSetArg( args[n], XmNitemCount, NUM_STRINGS ); n++;
   XtSetArg( args[n], XmNvisibleItemCount, NUM_STRINGS ); n++;
   XtSetValues( ComboBox, args, n );
-  
+
   /* Reset the Position scale to one */
   n = 0;
   XtSetArg( args[n], XmNvalue, 1 ); n++;
@@ -69,8 +69,8 @@ ResetWidgets()
 
   return;
 }
-  
-	
+
+
   int
 main( int argc, char **argv )
 {
@@ -112,7 +112,7 @@ unsigned char	combo_box_type;
   }
 
   n = 0;
-  Form = XmCreateForm( Shell1, "Form", args, n ); 
+  Form = XmCreateForm( Shell1, "Form", args, n );
   XtManageChild( Form );
 
   (void)sprintf( buffer, "ComboBox%d", instance );
@@ -128,11 +128,11 @@ unsigned char	combo_box_type;
   XtSetArg( args[n], XmNitems, list_items ); n++;
   XtSetArg( args[n], XmNitemCount, NUM_STRINGS ); n++;
   XtSetArg( args[n], XmNvisibleItemCount, NUM_STRINGS ); n++;
-  ComboBox = XmCreateComboBox( Form, buffer, args, n ); 
+  ComboBox = XmCreateComboBox( Form, buffer, args, n );
   XtManageChild( ComboBox );
 
   /* Don't free the strings: ResetWidgets uses them. */
-  
+
   /* Make the Separator */
   n = 0;
   XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
@@ -171,8 +171,8 @@ unsigned char	combo_box_type;
   DelStringPB = XmCreatePushButton( Form, "DelStringPB", args, n );
   XtManageChild( DelStringPB );
   XmStringFree( string );
-  XtAddCallback( DelStringPB, XmNactivateCallback, DelStringCB, 
-                 ( XtPointer )NULL ); 
+  XtAddCallback( DelStringPB, XmNactivateCallback, DelStringCB,
+                 ( XtPointer )NULL );
 
   XtRealizeWidget( Shell1 );
 
@@ -182,19 +182,19 @@ unsigned char	combo_box_type;
   CommonPause();
   PrintNumItems();
   ResetWidgets();
- 
+
   /* TP 2 */
   (void)printf( "Test Purpose 2\n" );
   XtSetArg( args[0], XmNvisibleItemCount, NUM_STRINGS-1 );
   XtSetValues( ComboBox, args, 1 );
   CommonPause();
   /* Don't reset the widgets: the next test uses it as is */
- 
+
   /* TP 3 */
   (void)printf( "Test Purpose 3\n" );
   CommonPause();
   /* Don't reset the widgets: the next test uses it as is */
- 
+
   /* TP 4 */
   (void)printf( "Test Purpose 4\n" );
   /* Delete the last item from the ComboBox */

@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: xlistError.uil /main/4 1995/07/13 20:33:08 drk $
 !******************************************************************************
 !*	This Module contains an error on the last line in the file.
@@ -92,7 +92,7 @@ module xlistError
 	File_Button:	XmCascadeButton {
 		arguments {
 			XmNlabelString = compound_string("File");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		controls {
 			XmPulldownMenu 	File_Menu;
@@ -103,7 +103,7 @@ module xlistError
 	Option_Button:	XmCascadeButton {
 		arguments {
 			XmNlabelString = compound_string("Option");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		controls {
 			XmPulldownMenu 	Option_Menu;
@@ -115,7 +115,7 @@ module xlistError
 !/*		    and exit the editor.
 !/****************************************************************************
 
-   object 
+   object
 	File_Menu:	XmPulldownMenu {
 		arguments {
 			XmNbackground = forest_green;
@@ -131,19 +131,19 @@ module xlistError
 	Open_Button:	XmPushButton  {
 		arguments {
 			XmNlabelString = compound_string("Open File ..");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		callbacks {
 			XmNactivateCallback = procedure Place_FsBox();
 		};
 	};
-  
+
 
   object
 	Quit_Button:	XmPushButton  {
 		arguments {
 			XmNlabelString = compound_string("Quit");
-			XmNfontList = variable;	
+			XmNfontList = variable;
 		};
 		callbacks {
 			XmNactivateCallback = procedure exit_test();
@@ -153,7 +153,7 @@ module xlistError
 !/****************************************************************************
 !/*	Option Menu - To Give the user the ability to chose options
 !/****************************************************************************
-	
+
   object
 	Option_Menu:	XmPulldownMenu {
 		arguments {
@@ -188,8 +188,8 @@ module xlistError
 			XmPushButton font4;
 		};
 	};
-			
-		
+
+
    object
 	font1:	XmPushButton {
 		arguments {
@@ -198,7 +198,7 @@ module xlistError
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('fixed');	
+					('fixed');
 		};
 	};
 
@@ -211,7 +211,7 @@ module xlistError
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('variable');	
+					('variable');
 		};
 	};
 
@@ -224,7 +224,7 @@ module xlistError
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('8x13bold');	
+					('8x13bold');
 		};
 	};
 
@@ -237,7 +237,7 @@ module xlistError
 		};
 		callbacks {
 			XmNactivateCallback = procedure Change_Font
-					('6x12');	
+					('6x12');
 		};
 	};
 
@@ -253,9 +253,9 @@ module xlistError
 		};
 	};
 !/****************************************************************************
-!/*	Text Area - Define The actual Text area 
+!/*	Text Area - Define The actual Text area
 !/****************************************************************************
-   object 
+   object
 	ScrolledWin:	XmScrolledWindow {
 		arguments {
 			XmNx = 0;
@@ -298,7 +298,7 @@ module xlistError
 	};
 
 !/**************************************************************************/
-!/*	A File Selection Box to be used to open a file for viewing       
+!/*	A File Selection Box to be used to open a file for viewing
 !/**************************************************************************/
 
    object

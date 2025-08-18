@@ -12,6 +12,6 @@ EXTRA_DIST = exm_in_c.man
 AM_CPPFLAGS = -I$(srcdir)/../../../../lib \
            -I$(srcdir)/../../../lib \
            -I$(top_builddir)/lib \
-            ${X_CFLAGS} 
+            ${X_CFLAGS}
 LDADD = ../../../lib/Exm/libExm.a \
 	../../../../lib/Xm/libXm.la -lXt -lXext -lX11

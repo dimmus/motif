@@ -22,7 +22,7 @@
 #
 # HISTORY
 
-# 
+#
 #	This shell script will run all test in test/uil/Syntax directory.
 #
 #
@@ -61,10 +61,10 @@ echo "This Test should not give a segmentation violation"
 set makestatus = $status
 
 if ($makestatus == 1) then
-   echo "ProcDef test PASSES" 
+   echo "ProcDef test PASSES"
 endif
 if (($makestatus == 0) || (($makestatus <= 4) && ($makestatus > 1))) then
-        echo "ProcDef test FAILS" 
+        echo "ProcDef test FAILS"
 endif
 
 #

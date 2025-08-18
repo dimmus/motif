@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $TOG: Text12.h /main/10 1997/09/18 11:00:08 csn $ */
 
 
@@ -121,4 +121,3 @@ static void  Scale3CB(Widget w, XtPointer client_data,
 static void  ForBCB(Widget w, XtPointer client_data,
 					XtPointer call_data);
 #endif	/* MOTIF1_1 */
-

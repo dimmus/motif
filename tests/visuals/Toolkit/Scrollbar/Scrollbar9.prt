@@ -23,7 +23,7 @@
 #
 # HISTORY
 creating with the slider size to 40 and value to 70
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -31,10 +31,10 @@ Warning:
 
 min = 0,   max = 100,   value = 0,  slider size = 40
 
-TRACE:(1) CompareVisual scrollbar 
+TRACE:(1) CompareVisual scrollbar
 TRACE:(2) Continue
 creating with the maximum to 50 and value to 60
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -42,10 +42,10 @@ Warning:
 
 min = 0,   max = 50,   value = 0,  slider size = 5
 
-TRACE:(3) CompareVisual scrollbar 
+TRACE:(3) CompareVisual scrollbar
 TRACE:(4) Continue
 creating with the value of 110
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is greater than the maximum
@@ -53,15 +53,15 @@ Warning:
 
 min = 0,   max = 100,   value = 0,  slider size = 10
 
-TRACE:(5) CompareVisual scrollbar 
+TRACE:(5) CompareVisual scrollbar
 TRACE:(6) Continue
 creating with the maximum of 5
 min = 0,   max = 5,   value = 0,  slider size = 1
 
-TRACE:(7) CompareVisual scrollbar 
+TRACE:(7) CompareVisual scrollbar
 TRACE:(8) Continue
 creating with the value of 0 and the min of 10
-Warning: 
+Warning:
     Name: scrollbar
     Class: XmScrollBar
     The specified scrollbar value is less than the minimum
@@ -69,12 +69,12 @@ Warning:
 
 min = 10,   max = 100,   value = 10,  slider size = 9
 
-TRACE:(9) CompareVisual scrollbar 
+TRACE:(9) CompareVisual scrollbar
 TRACE:(10) Continue
 creating with the min to 20
 min = 20,   max = 100,   value = 20,  slider size = 8
 
-TRACE:(11) CompareVisual scrollbar 
+TRACE:(11) CompareVisual scrollbar
 TRACE:(12) Continue
 TRACE:(13) Exit
 Exiting Test...Please Standby...

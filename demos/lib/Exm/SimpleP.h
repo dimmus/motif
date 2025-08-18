@@ -28,7 +28,7 @@
 /*******************************************************************************
  *
  * SimpleP.h: The widget private header file for the ExmSimple demonstration
- *            widget. 
+ *            widget.
  *
  ******************************************************************************/
 
@@ -44,9 +44,9 @@
 /* Allow for C++ compilation. */
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
-/* Make the following seven methods inheritable by subclasses of ExmSimple. */ 
+/* Make the following seven methods inheritable by subclasses of ExmSimple. */
 #define ExmInheritDrawVisual	 ((XtWidgetProc) _XtInherit)
 #define ExmInheritDrawShadow	 ((XtWidgetProc) _XtInherit)
 #define ExmInheritCreateGC	 ((XtWidgetProc) _XtInherit)
@@ -75,7 +75,7 @@ typedef struct _ExmSimpleClassPart
 	ExmSelectGCProc		select_gc;
 	XtWidgetProc		calc_visual_size;
 	XtWidgetProc		calc_widget_size;
-        ExmReconfigureProc      reconfigure; 
+        ExmReconfigureProc      reconfigure;
 	XtPointer		extension;
 } ExmSimpleClassPart;
 
@@ -110,11 +110,11 @@ typedef struct _ExmSimplePart
     when the value of XmNsensitive is False. */
 	GC			insensitive_gc;
 
- /* pref_width holds an integral value representing the widget's 
+ /* pref_width holds an integral value representing the widget's
     current preferred width. */
 	Dimension		pref_width;
 
- /* pref_width holds an integral value representing the widget's 
+ /* pref_width holds an integral value representing the widget's
     current preferred height. */
 	Dimension		pref_height;
 
@@ -127,14 +127,14 @@ typedef struct _ExmSimplePart
 	Boolean			need_to_compute_height;
 
  /* visual is an XRectangle value representing the bounding box of the
-    widget's visual. */ 
+    widget's visual. */
 	XRectangle              visual;
 
  /* need_to_reconfigure is a flag.  If its value is True, then the widget
-    needs to call the reconfigure method. */ 
+    needs to call the reconfigure method. */
 	Boolean			need_to_reconfigure;
 
- /* saved_foreground is used for the management of the selected state */ 
+ /* saved_foreground is used for the management of the selected state */
 	Pixel			saved_foreground;
 } ExmSimplePart;
 
@@ -147,7 +147,7 @@ typedef struct _ExmSimpleRec
 	ExmSimplePart		simple;
 } ExmSimpleRec;
 
-/* Allow for C++ compilation. */ 
+/* Allow for C++ compilation. */
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

@@ -49,7 +49,7 @@ Brief description of various commandline options for DND tests :
 
 	   (i)    init_proto is the initiatorProtocolStyle that the user can
 		      specify and can any one of the following values:
-   
+
 		      P  - for PREREGISTER
 		      D  - for DYNAMIC
 		      N  - for NONE
@@ -60,7 +60,7 @@ Brief description of various commandline options for DND tests :
 
 	   (ii)   receiver_proto is the receiverProtocolStyle that the user can
 		      specify and can any one of the following values:
- 
+
 		      P  - for PREREGISTER
 		      D  - for DYNAMIC
 		      N  - for NONE

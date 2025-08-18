@@ -22,16 +22,16 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual RowColumn1 
+TRACE:(1) CompareVisual RowColumn1
 TRACE:(2) Continue
 TRACE:(3) WindowIconify Shell1
 TRACE:(4) WindowDeiconify Shell1
 TRACE:(5) WindowResize Shell1 SouthEast 400 400
 TRACE:(6) Continue
-TRACE:(7) CompareVisual RowColumn1 
+TRACE:(7) CompareVisual RowColumn1
 TRACE:(8) Continue
-TRACE:(9) CompareVisual RowColumn1 
+TRACE:(9) CompareVisual RowColumn1
 TRACE:(10) Continue
-TRACE:(11) CompareVisual RowColumn1 
+TRACE:(11) CompareVisual RowColumn1
 TRACE:(12) Exit
 Exiting Test...Please Standby...

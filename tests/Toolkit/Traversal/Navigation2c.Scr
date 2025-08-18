@@ -1,5 +1,5 @@
 # $XConsortium: Navigation2c.scr /main/4 1995/07/17 20:44:34 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,19 +20,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
-#Each child Form should contain a 3x3 matrix of PushButtons. 
-#) Pressing the TAB or Shift-TAB will result on the focus moving 
-#from one form to another. 
-#) Pressing the up/down left/right arrow keys will result in traversal 
-#within the current form. 
-#) Clicking MB1 on the PushButtons should make them disappear. Click MB1 
-#on the PushButtons of any of the Forms until they all go away. 
+#Each child Form should contain a 3x3 matrix of PushButtons.
+#) Pressing the TAB or Shift-TAB will result on the focus moving
+#from one form to another.
+#) Pressing the up/down left/right arrow keys will result in traversal
+#within the current form.
+#) Clicking MB1 on the PushButtons should make them disappear. Click MB1
+#on the PushButtons of any of the Forms until they all go away.
 #) Try TABbing between the remaining Forms.
 
 WindowFocus Shell1
@@ -71,5 +71,3 @@ ClickKey <Shift> KTab
 CompareVisual Form
 
 Exit
-
-

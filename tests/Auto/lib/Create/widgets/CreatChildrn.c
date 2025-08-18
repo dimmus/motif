@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CreatChildrn.c /main/8 1995/07/14 11:24:23 drk $"
@@ -123,7 +123,7 @@ MvsWidgetInfoRecord *widget_info;
     Arg args[4];
 
     if (widget_info->parent != NULL && widget_info->parent->widget != NULL)
-    	if (mvsGetClassCode(widget_info->parent->widget) 
+    	if (mvsGetClassCode(widget_info->parent->widget)
 				== mvsXmPanedWindowWidgetClass)
 		UpdatePanes(widget_info->parent);
 
@@ -169,7 +169,7 @@ MvsWidgetInfoRecord *widget_info;
 	    if(strcmp (widget_info->parent->widget_class_info->class_name,
 		       "XmContainer") == 0)  {
 
-	    	/* 
+	    	/*
 	     	* Get the Container constraint part from the IconGadget
 	     	* and get the outline button widget from the constraint part
 	     	*/
@@ -177,7 +177,7 @@ MvsWidgetInfoRecord *widget_info;
 	    	child = containerConstraint->related_cwid;
 
 	    	/*
-	     	* Set the Outline Button as an mvs child of 
+	     	* Set the Outline Button as an mvs child of
 	     	* the IconGadget, although it is a child of
 	     	* the Container widget
 	     	*/
@@ -232,7 +232,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XtNameToWidget(widget,"MajorTabScrollerNext");
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmArrowButtonGadgetClass);
                 else
@@ -242,7 +242,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XtNameToWidget(widget,"MajorTabScrollerPrevious");
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmArrowButtonGadgetClass);
                 else
@@ -252,7 +252,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XtNameToWidget(widget,"MinorTabScrollerNext");
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmArrowButtonGadgetClass);
                 else
@@ -262,7 +262,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XtNameToWidget(widget,"MinorTabScrollerPrevious");
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmArrowButtonGadgetClass);
                 else
@@ -290,10 +290,10 @@ MvsWidgetInfoRecord *widget_info;
 		}
             }
 
- 
+
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_APPLY_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -303,7 +303,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child =XmFileSelectionBoxGetChild(widget,XmDIALOG_CANCEL_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -313,7 +313,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_FILTER_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
@@ -326,10 +326,10 @@ MvsWidgetInfoRecord *widget_info;
                 child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                    iXmTextWidgetClass);
             }
-            
+
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_HELP_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -345,17 +345,17 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_FILE_LIST_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelWidgetClass);
 	    }
-            
+
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_OK_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -365,7 +365,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_SEPARATOR);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmSeparatorGadgetClass);
                 else
@@ -375,7 +375,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_SELECTION_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
@@ -389,7 +389,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmFileSelectionBoxGetChild(widget,XmDIALOG_DIR_LIST_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
@@ -437,7 +437,7 @@ MvsWidgetInfoRecord *widget_info;
             }
             child = XmMainWindowSep1(widget);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmSeparatorGadgetClass);
                 else
@@ -447,7 +447,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMainWindowSep2(widget);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmSeparatorGadgetClass);
                 else
@@ -457,7 +457,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMainWindowSep3(widget);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmSeparatorGadgetClass);
                 else
@@ -471,7 +471,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMessageBoxGetChild(widget,XmDIALOG_CANCEL_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -481,7 +481,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMessageBoxGetChild(widget,XmDIALOG_HELP_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -491,7 +491,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMessageBoxGetChild(widget,XmDIALOG_MESSAGE_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
@@ -501,7 +501,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMessageBoxGetChild(widget,XmDIALOG_OK_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -511,7 +511,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMessageBoxGetChild(widget,XmDIALOG_SEPARATOR);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmSeparatorGadgetClass);
                 else
@@ -521,7 +521,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmMessageBoxGetChild(widget,XmDIALOG_SYMBOL_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
@@ -639,7 +639,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_APPLY_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                      iXmPushButtonGadgetClass);
                 else
@@ -649,7 +649,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_CANCEL_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                      iXmPushButtonGadgetClass);
                 else
@@ -659,7 +659,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_HELP_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                      iXmPushButtonGadgetClass);
                 else
@@ -677,7 +677,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_LIST_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else
@@ -687,7 +687,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_OK_BUTTON);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                       iXmPushButtonGadgetClass);
                 else
@@ -697,7 +697,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_SEPARATOR);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmSeparatorGadgetClass);
                 else
@@ -707,7 +707,7 @@ MvsWidgetInfoRecord *widget_info;
 
             child = XmSelectionBoxGetChild(widget,XmDIALOG_SELECTION_LABEL);
             if (child != NULL) {
-                if (XmIsGadget(child)) 
+                if (XmIsGadget(child))
                     child_info = mvsSetupNewWidgetInfo(widget_info,child,
                                                        iXmLabelGadgetClass);
                 else

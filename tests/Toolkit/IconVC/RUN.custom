@@ -35,4 +35,3 @@ set IconGad2a = 'IconGad2 -I IconGad2a.Dat -S IconGad2a.Scr -V IconGad2a.vis -O 
 set IconGad2b = 'IconGad2 -I IconGad2b.Dat -S IconGad2b.Scr -V IconGad2b.vis -O IconGad2b.prt -xrm "*IconGad2.layoutDirection:RIGHT_TO_LEFT"'
 
 foreach test ("$IconGad2a" "$IconGad2b" Container7)
-

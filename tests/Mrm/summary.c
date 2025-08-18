@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: summary.c /main/9 1995/07/14 10:54:37 drk $"
@@ -46,7 +46,7 @@ String	result_choice[2] =
  * Possible Mrm errors
  */
 
-struct ReturnInfo retstr[63] = 
+struct ReturnInfo retstr[63] =
 {
     {"MrmFAILURE        ", 0},
     {"MrmSUCCESS        ", 1},
@@ -118,7 +118,7 @@ struct ReturnInfo retstr[63] =
  * summary() will return a String formed by formatting the test results
  * together with some other verbage to make a nice pretty results display.
  *
- * The String that summary() returns to the calling routine is allocated 
+ * The String that summary() returns to the calling routine is allocated
  * within this routine.  It is the calling routine's responsibility to
  * ***FREE THE STRING THAT IS RETURNED***
  * after it is used in the calling routine.
@@ -152,7 +152,7 @@ summary(num_tests, description_length, test_info)
 			temp_padded_str;
 
     int		i,
-			padding_len,	/* amount of padding to get "Test" out to 
+			padding_len,	/* amount of padding to get "Test" out to
 								description_length size */
 			testline_len;	/* length of a full test description line */
 
@@ -164,7 +164,7 @@ summary(num_tests, description_length, test_info)
 					strlen(header_exp) +
 					strlen(header_act) +
 					strlen(header_rslt);
-	/* 
+	/*
 	 * Yes, I know I haven't accounted for the extra space occupied by
 	 * the %s's and the \ in the \n in testline, but that's okay.  So,
 	 * we allocate a few extra bytes - it will allow for things like
@@ -220,7 +220,7 @@ summary(num_tests, description_length, test_info)
 			retstr[(*test_info).actual_return].name,
 			((*test_info).actual_return == (*test_info).expected_return) ?
 			result_choice[PASSED] : result_choice[FAILED]);
-	
+
 		strcat(retval, result_this_test);
 		*test_info++;
     }
@@ -229,8 +229,6 @@ summary(num_tests, description_length, test_info)
  * Add closing message
  */
     strcat(retval, trailer);
-    
+
     return(retval);
 }
-
-

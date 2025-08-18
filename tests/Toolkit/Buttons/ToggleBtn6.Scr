@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # @) Six toggle buttons should be displayed above the horizontal separator.
 # The label of each toggle button indicates the value
 # of the XmNindicatorOn resource for that toggle. The unselect color for
 # the toggle buttons is gray and the select color is red.
-# 
+#
 # #) Verify that the indicator of the toggle button labelled \"Indicator Fill\"
 # is colored gray. The toggle buttons labelled \"Indicator CheckBox\" and
 # \"Indicator CrossBox\" should display empty boxes.
@@ -154,8 +154,8 @@ CompareVisual Indicator7
 # state of the toggle buttons should change from \"Indeterminate\" to
 # \"Unset\".  Verify that the toggle buttons return to the correct visuals
 # for their \"Unset\" state. The background of the \"Indicator None\"
-# toggle should display in the unselect colo, gray. 3-D buttons indicators 
-# should be raised and displayed in the unselect color. Check marks and crosses 
+# toggle should display in the unselect colo, gray. 3-D buttons indicators
+# should be raised and displayed in the unselect color. Check marks and crosses
 # should no longer be displayed.
 LocatePointer PushB0
 ClickMB Btn1
@@ -183,7 +183,7 @@ ClickMB Btn1
 # Verify that the toggle button indicators are displaying the correct
 # visuals for their \"Indeterminate\" state. The \"Indicator Fill\" toggle
 # should display a stippled flat box.  \"Indicator Check\" should display a
-# stippled check mark. \"Indicator CheckBox\" should display a stippled 
+# stippled check mark. \"Indicator CheckBox\" should display a stippled
 # check mark and stippled flat box. \"Indicator Cross\" should display a
 # stippled cross. \"Indicator CrossBox\" should display a stippled cross and
 # stippled, flat box.
@@ -231,8 +231,8 @@ CompareVisual Indicator7
 # state of the toggle buttons should change from \"Indeterminate\" to
 # \"Unset\".  Verify that the toggle buttons return to the correct visuals
 # for their \"Unset\" state. The background of the \"Indicator None\"
-# toggle should display in the unselect color, gray. 3-D buttons indicators 
-# should be raised and displayed in the unselect color. Check marks and crosses 
+# toggle should display in the unselect color, gray. 3-D buttons indicators
+# should be raised and displayed in the unselect color. Check marks and crosses
 # should no longer be displayed. The \"Indicator CheckBox\" and \"Indicator
 # CrossBox\" toggles should display boxes in the foreground color.
 LocatePointer PushB0

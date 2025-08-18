@@ -190,12 +190,12 @@ processFile (char *name, char *includeName)
     {
 	strcpy(LANG, getenv ("LANG"));
     }
-    
+
 
     /*
      * A file name was passed in.
      * Interpret "~/.." as relative to the user's home directory.
-     * Use the LANG variable if set and .chestrc is in $HOME/$LANG/.chestrc  
+     * Use the LANG variable if set and .chestrc is in $HOME/$LANG/.chestrc
      */
 
     if ((name != NULL) && (*name != '\0'))
@@ -215,11 +215,11 @@ processFile (char *name, char *includeName)
 		return (result);
 	    else
 	    {
-		/* 
+		/*
 		 * Try it without $LANG
 		 */
 		strcpy(fileName, getenv ("HOME"));
-		strncat(fileName, &(name[1]), 
+		strncat(fileName, &(name[1]),
 			PATH_MAX-strlen(fileName));
 		if ((result = checkProcessFile(fileName)) != NULL)
 		    return (result);
@@ -234,7 +234,7 @@ processFile (char *name, char *includeName)
 	    if (includeName && name[0] != '/')
 	    {
 		register char *slash;
-		
+
 		strcpy (fileName, includeName);
 		slash = strrchr(fileName, '/');
 		if (slash)
@@ -268,7 +268,7 @@ processFile (char *name, char *includeName)
 	return (result);
     else
     {
-	/* 
+	/*
 	 * Just try $HOME/.chestrc
 	 */
 	strcpy(fileName, getenv ("HOME"));

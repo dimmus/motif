@@ -1,7 +1,7 @@
 XCOMM!/bin/sh
 XCOMM
 XCOMM $TOG: mergelib.cpp /main/5 1998/02/06 11:24:31 kaleb $
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -22,9 +22,9 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
+XCOMM
 XCOMM Author:  Jim Fulton, MIT X Consortium
-XCOMM 
+XCOMM
 XCOMM mergelib - merge one library into another; this is commonly used by X
 XCOMM     to add the extension library into the base Xlib.
 XCOMM
@@ -53,7 +53,7 @@ fi
 
 
 XCOMM
-XCOMM Create a temp directory, and figure out how to reference the 
+XCOMM Create a temp directory, and figure out how to reference the
 XCOMM object files from it (i.e. relative vs. absolute path names).
 XCOMM
 
@@ -96,6 +96,3 @@ ARCMD ${upto}$tolib *.o
 RANLIB ${upto}$tolib
 cd $origdir
 rm -rf $tmpdir
-
-
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ToggleBGad3.c /main/8 1995/07/13 17:31:30 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: ToggleBGad3.c /main/8 1995/07/13 17:31:30 d
 #endif
 
 
- 
+
 
 /****************************************
 *   Automatic test program generation   *
@@ -61,7 +61,7 @@ Boolean mywait;
 
 void toggleGCB();
 
-static XtCallbackRec 
+static XtCallbackRec
   valuechangedCR[] =  {{ toggleGCB, (caddr_t)NULL}, {NULL, NULL},},
   armCR[] = {{ toggleGCB, (caddr_t)NULL}, {NULL, NULL},},
   disarmCR[] = {{ toggleGCB, (caddr_t)NULL}, {NULL, NULL},};
@@ -73,17 +73,17 @@ caddr_t call_data;
 {
   printf("ToggleG Callback Structure:\n    Reason:   ");
   switch( ((XmToggleButtonCallbackStruct*)call_data)->reason) {
-  case XmCR_VALUE_CHANGED: 
-    printf("XmCR_VALUE_CHANGED\n"); 
+  case XmCR_VALUE_CHANGED:
+    printf("XmCR_VALUE_CHANGED\n");
     break;
-  case XmCR_ARM: 		
-    printf("XmCR_ARM\n"); 
+  case XmCR_ARM:
+    printf("XmCR_ARM\n");
     break;
-  case XmCR_DISARM: 	
-    printf("XmCR_DISARM\n"); 
+  case XmCR_DISARM:
+    printf("XmCR_DISARM\n");
     break;
-  default: 		
-    printf("Oops - unknown callback reason!\n"); 
+  default:
+    printf("Oops - unknown callback reason!\n");
     break;
   }
 }
@@ -100,12 +100,12 @@ char **argv;
   XmFontList newfontlist;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, 400);  n++;
   XtSetArg(args[n], XmNheight,300);  n++;
   XtSetValues(Shell1, args, n);
-   
+
   XmRegisterConverters();
 
   XtRealizeWidget(Shell1);
@@ -166,14 +166,14 @@ char **argv;
   XtManageChild(ToggleButtonG4);
 
   px_unselect =
-    XCreatePixmapFromBitmapData(display, 
+    XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				XBMu_BITS, XBMu_WIDTH,XBMu_HEIGHT,
 				WhitePixel(display,DefaultScreen(display)),
 				BlackPixel(display,DefaultScreen(display)),
 				DefaultDepth(display,DefaultScreen(display)));
-  px_select = 
-    XCreatePixmapFromBitmapData(display, 
+  px_select =
+    XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				XBMs_BITS, XBMs_WIDTH,XBMs_HEIGHT,
 				WhitePixel(display,DefaultScreen(display)),
@@ -200,15 +200,15 @@ char **argv;
   XtSetValues(ToggleButtonG2, args, n);
   if(tcs) XmStringFree(tcs);
 
-  printf("ToggleG1 state = %d\n", 
+  printf("ToggleG1 state = %d\n",
 	 XmToggleButtonGadgetGetState(ToggleButtonG1));
   XmToggleButtonGadgetSetState(ToggleButtonG1, TRUE, FALSE);
 
-  printf("ToggleG1 state = %d\n", 
+  printf("ToggleG1 state = %d\n",
 	 XmToggleButtonGadgetGetState(ToggleButtonG1));
   XmToggleButtonGadgetSetState(ToggleButtonG1, FALSE, TRUE);
 
-  printf("ToggleG1 state = %d\n", 
+  printf("ToggleG1 state = %d\n",
 	 XmToggleButtonGadgetGetState(ToggleButtonG1));
 
   CommonPause();                       /* ONE_OF_MANY */
@@ -235,7 +235,7 @@ char **argv;
   XtDestroyWidget(ToggleButtonG5);
   XtDestroyWidget(ToggleButtonG6);
   XtDestroyWidget(RowColumn1);
-  
+
   /*
    *  Create a test for PIR 2430
    */
@@ -250,7 +250,7 @@ char **argv;
   XtSetArg(args[n], XmNx, 125); n++;   /* add an offset */
   RowColumn2 = XmCreateRadioBox(Form, "RowColumn2", args, n);
   XtManageChild (RowColumn2);
-  
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNindicatorOn, True);  n++;
@@ -272,7 +272,7 @@ char **argv;
   XtManageChild(ToggleButtonG5);
   XtManageChild(ToggleButtonG3);
   XtManageChild(ToggleButtonG6);
-  
+
   /* Now change the colors of the second radiobox */
 
   n = 0;
@@ -289,4 +289,3 @@ char **argv;
   XtAppMainLoop(app_context);
 
 }
-

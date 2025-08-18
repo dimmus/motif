@@ -1,5 +1,5 @@
 # $XConsortium: TextField2.scr /main/5 1995/07/17 20:42:51 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  @) This test uses a MultiLine Text widget and a TextField widget to test
 #  various TextField widget functions.  Almost all of the functions to
@@ -81,7 +81,7 @@ Continue
 #     SetValue String - sets the text's string to
 #                       \"new_string\", try after making a
 #                       long primary selection (uses XtSetValues)
-#  
+#
 #                On the TextField widget only:
 #     Show Pos 3      - adjusts the text string position so
 #                       that character at position 3 is
@@ -318,7 +318,7 @@ LocatePointer Set_String_Orig2
 ReleaseMB Btn3
 
 #  #) Click MB1 in the TextField widget.  Use the osfBeginLine key to
-#  move the insertion cursor to the very beginning of the text.  
+#  move the insertion cursor to the very beginning of the text.
 LocatePointer Text2
 ClickMB Btn1
 ClickKey KBeginLine
@@ -336,8 +336,8 @@ ClickKey KRight
 ClickKey KRight
 CompareVisual Text2
 
-#  #) Select the "SetValue String" item off the popup menu for the 
-#  TextField widget.  This will change the string in the widget to 
+#  #) Select the "SetValue String" item off the popup menu for the
+#  TextField widget.  This will change the string in the widget to
 #  be read "new string".  Move the mouse pointer over the TextField widget.
 #  The insertion cursor should be located before the first
 #  "n" in "new string" with no other cursors visible in this widget.

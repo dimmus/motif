@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AutoBuildCmd.c /main/10 1995/07/14 11:27:03 drk $"
@@ -135,7 +135,7 @@ BuildMouseCommand(
     MouseCommand->next = NULL;
 
     InsertPointer->next = MouseCommand;
-    
+
 }
 
 
@@ -216,9 +216,9 @@ BuildPerformCommand(
   PerformanceCommand->Location = -1;
   PerformanceCommand->Gravity = 0;
   PerformanceCommand->Identifier = NULL;
-  
+
   PerformanceCommand->next = NULL;
-  
+
   InsertPointer->next = PerformanceCommand;
 }
 
@@ -726,7 +726,7 @@ BuildWindowCheckCommand(
     while (InsertPointer->next != NULL)
 	InsertPointer = InsertPointer->next;
 
-    WindowCheckCommand = 
+    WindowCheckCommand =
 		(AutoCommandStructPtr) malloc(sizeof(AutoCommandStruct));
 
     WindowCheckCommand->CommandName = command;
@@ -772,7 +772,7 @@ BuildWindowSelectCommand(
     while (InsertPointer->next != NULL)
 	InsertPointer = InsertPointer->next;
 
-    WindowSelectCommand = (AutoCommandStructPtr) 
+    WindowSelectCommand = (AutoCommandStructPtr)
 				malloc(sizeof(AutoCommandStruct));
 
     WindowSelectCommand->CommandName = command;

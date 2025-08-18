@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -99,7 +99,7 @@ static char rcsid[] = "$XConsortium: Mrmlwrite.c /main/11 1996/11/13 14:02:48 dr
  *--
  */
 
-Cardinal 
+Cardinal
 UrmPutIndexedLiteral (IDBFile			file_id ,
 		      String			index ,
 		      URMResourceContextPtr	context_id )
@@ -149,7 +149,7 @@ UrmPutIndexedLiteral (IDBFile			file_id ,
  *
  *	file_id		file into which to write record
  *	resource_id	resource id for the record
- *	context_id	resource context containing literal 
+ *	context_id	resource context containing literal
  *
  *  IMPLICIT INPUTS:
  *
@@ -166,7 +166,7 @@ UrmPutIndexedLiteral (IDBFile			file_id ,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmPutRIDLiteral (IDBFile		file_id ,
 		  MrmResource_id	resource_id ,
 		  URMResourceContextPtr	context_id )
@@ -201,4 +201,3 @@ UrmPutRIDLiteral (IDBFile		file_id ,
   return result ;
 
 }
-

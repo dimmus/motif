@@ -38,19 +38,19 @@ externalref XrmQuark XmQTscrollFrame;
 
 /* Trait structures and typedefs, place typedefs first */
 
-typedef void (*XmScrollFrameInitProc)(Widget sf, 
+typedef void (*XmScrollFrameInitProc)(Widget sf,
 				      XtCallbackProc moveCB,
 				      Widget scrollable);
 typedef Boolean  (*XmScrollFrameGetInfoProc)(Widget sf,
 					     Cardinal * dimension,
 					     Widget ** nav_list,
 					     Cardinal * num_nav_list);
-typedef void (*XmScrollFrameAddNavigatorProc)(Widget sf, 
+typedef void (*XmScrollFrameAddNavigatorProc)(Widget sf,
 					      Widget nav,
 					      Mask dimMask);
-typedef void (*XmScrollFrameRemoveNavigatorProc)(Widget sf, 
+typedef void (*XmScrollFrameRemoveNavigatorProc)(Widget sf,
 						 Widget nav);
-typedef void (*XmScrollFrameUpdateOrigGeomProc)(Widget sf, 
+typedef void (*XmScrollFrameUpdateOrigGeomProc)(Widget sf,
 						Widget child,
 						XtWidgetGeometry *geom);
 
@@ -59,8 +59,8 @@ typedef void (*XmScrollFrameUpdateOrigGeomProc)(Widget sf,
 
 typedef struct _XmScrollFrameTraitRec {
   int				    version;		/* 1 */
-  XmScrollFrameInitProc		    init;       
-  XmScrollFrameGetInfoProc	    getInfo; 
+  XmScrollFrameInitProc		    init;
+  XmScrollFrameGetInfoProc	    getInfo;
   XmScrollFrameAddNavigatorProc     addNavigator;
   XmScrollFrameRemoveNavigatorProc  removeNavigator;
   XmScrollFrameUpdateOrigGeomProc   updateOrigGeom;

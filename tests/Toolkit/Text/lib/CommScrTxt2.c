@@ -122,8 +122,8 @@ static void PrimaryCB(Widget w, XtPointer client_data,
 #define	TW_REMOVE	7
 #define	TW_CURSPOS	8
 #define	TW_HILINORM	9
-#define	TW_HILISELECT   10	
-#define	TW_HILISECOND   11	
+#define	TW_HILISELECT   10
+#define	TW_HILISECOND   11
 #define	TW_SCROLLUP	12
 #define	TW_SCROLLDN	13
 #define	TW_CHGSOURCE	14
@@ -149,10 +149,10 @@ static void PopupCB(Widget w, XtPointer client_data,
 		printf("SingleLine Text widget: ");
 		}
 
-	if	(XmTextGetSelectionPosition(client_fwp->w, &leftpos, 
+	if	(XmTextGetSelectionPosition(client_fwp->w, &leftpos,
 					    &rightpos))
 		{
-		printf("Selection Position left: %d, right: %d\n", leftpos, 
+		printf("Selection Position left: %d, right: %d\n", leftpos,
 		       rightpos);
 		}
 	else
@@ -162,7 +162,7 @@ static void PopupCB(Widget w, XtPointer client_data,
 
 	switch (client_fwp->flag)
 	{
-		case TW_CUT: 
+		case TW_CUT:
 			{
 			if	(!XmTextCut(client_fwp->w, bev->time))
 				printf("Cut failed!\n");
@@ -297,7 +297,7 @@ void main_scrtext2(argc, argv)
 
         /* initialize toolkit */
         CommonTestInit(argc, argv);
-    
+
         /* create unmanaged text widget to store Source in */
         HiddenText = XmCreateText(Shell1, "HiddenText", NULL, 0);
 
@@ -308,10 +308,10 @@ void main_scrtext2(argc, argv)
 
         /* create scrolled text widget */
         n = 0;
-        tmp_string = XmStringCreateLtoR("Scrolled Text widget", 
-				XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Scrolled Text widget",
+				XmSTRING_DEFAULT_CHARSET);
         XtSetArg(args[n], XmNlabelString,tmp_string); n++;
-		 
+
         Label1 = XmCreateLabel(BBoard1, "Label1", args, n);
         XtManageChild(Label1);
         XmStringFree (tmp_string);
@@ -350,7 +350,7 @@ void main_scrtext2(argc, argv)
 	ndx = 0;
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Text Functions", 
+        tmp_string = XmStringCreateLtoR("Text Functions",
 				    XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
         Popup1Btn[ndx++] = XmCreateLabelGadget(Popup1, "Title1",
@@ -359,11 +359,11 @@ void main_scrtext2(argc, argv)
 
 	n = 0;
 	Popup1Btn[ndx++] = XmCreateSeparatorGadget(Popup1, "separator1",
-						args, n); 
+						args, n);
 
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Cut", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Cut", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Cut1",
 						args, n);
@@ -375,9 +375,9 @@ void main_scrtext2(argc, argv)
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Copy1",
 						args, n);
         XmStringFree (tmp_string);
-	
+
         n = 0;
-        tmp_string = XmStringCreateLtoR("Paste", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Paste", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Paste1",
 						args, n);
@@ -398,14 +398,14 @@ void main_scrtext2(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string =  XmStringCreateLtoR("Remove", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string =  XmStringCreateLtoR("Remove", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Remove1",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("HiLi Normal", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("HiLi Normal", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString,tmp_string); n++;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "HiLi_Normal1",
 						args, n);
@@ -414,7 +414,7 @@ void main_scrtext2(argc, argv)
 	n = 0;
         tmp_string=XmStringCreateLtoR("HiLi Selected", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-        Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "HiLi_Selected1", 
+        Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "HiLi_Selected1",
 						args, n);
 
         XmStringFree(tmp_string);
@@ -422,7 +422,7 @@ void main_scrtext2(argc, argv)
 
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("HiLi Secondary", 
+        tmp_string = XmStringCreateLtoR("HiLi Secondary",
 				    XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string);	n++;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "HiLi_Secondary1",
@@ -447,15 +447,15 @@ void main_scrtext2(argc, argv)
 	n = 0;
         tmp_string= XmStringCreateLtoR("Scroll Down 3", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-        Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Scroll_Down_31", 
+        Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Scroll_Down_31",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Toggle AddMode", 
+        tmp_string = XmStringCreateLtoR("Toggle AddMode",
 				    XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string);n++;
-	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Toggle_AddMode1", 
+	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Toggle_AddMode1",
 						args, n);
         XmStringFree (tmp_string);
 
@@ -501,14 +501,14 @@ void main_scrtext2(argc, argv)
 
 	/* create singleline text widget */
 	n = 0;
-        tmp_string = XmStringCreateLtoR("SingleLine Text widget", 	
-				XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("SingleLine Text widget",
+				XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNy, 160); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Label2 = XmCreateLabel(BBoard1, "Label2", args, n);
 	XtManageChild(Label2);
         XmStringFree (tmp_string);
-	
+
         n = 0;
 	XtSetArg(args[n], XmNy, 180); n++;
 	XtSetArg(args[n], XmNwidth, 350); n++;
@@ -535,7 +535,7 @@ void main_scrtext2(argc, argv)
 	Source2 = XmTextGetSource(Text2);
 	/*
 	 * save the current source of Text 2
-	 * so it doesn't get freed 
+	 * so it doesn't get freed
 	 */
 	saveSource2 = Source2;
 	XmTextSetSource(HiddenText, saveSource2, 0, 0);
@@ -546,8 +546,8 @@ void main_scrtext2(argc, argv)
 	ndx = 0;
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Text Functions", 
-				    XmSTRING_DEFAULT_CHARSET);        
+        tmp_string = XmStringCreateLtoR("Text Functions",
+				    XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup2Btn[ndx++] = XmCreateLabelGadget(Popup2, "Title2",
 						args, n);
@@ -555,25 +555,25 @@ void main_scrtext2(argc, argv)
 
 	n = 0;
 	Popup2Btn[ndx++] = XmCreateSeparatorGadget(Popup2, "separator2",
-						args, n); 
+						args, n);
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Cut", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Cut", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Cut2",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Copy", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Copy", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Copy2",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreateLtoR("Paste", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Paste", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Paste2",
 						args, n);
         XmStringFree (tmp_string);
@@ -593,62 +593,62 @@ void main_scrtext2(argc, argv)
                                                 args, n);
         XmStringFree (tmp_string);
 
-	
+
         n = 0;
-        tmp_string = XmStringCreateLtoR("Remove", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("Remove", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Remove2",
-						args, n); 
+						args, n);
         XmStringFree (tmp_string);
-       
+
 	n = 0;
-        tmp_string = XmStringCreateLtoR("HiLi Normal", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreateLtoR("HiLi Normal", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
-	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Normal2", 
+
+	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Normal2",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
         tmp_string =XmStringCreateLtoR("HiLi Selected", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Selected2", 
+	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Selected2",
 						args, n);
         XmStringFree (tmp_string);
-        
+
 	n = 0;
         tmp_string=XmStringCreateLtoR("HiLi Secondary", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Secondary2", 
+	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Secondary2",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
         tmp_string = XmStringCreateLtoR("Scroll Up 2", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Scroll_Up_22", 
+	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Scroll_Up_22",
 						args, n);
         XmStringFree (tmp_string);
 
 	n = 0;
         tmp_string=XmStringCreateLtoR("Scroll Down 3", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Scroll_Down_32", 
+	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Scroll_Down_32",
 						args, n);
         XmStringFree (tmp_string);
-        
+
 	n = 0;
         tmp_string=XmStringCreateLtoR("Toggle AddMode", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Toggle_AddMode2", 
+	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Toggle_AddMode2",
 						args, n);
         XmStringFree (tmp_string);
-	
+
         n = 0;
         tmp_string=XmStringCreateLtoR("Switch Source", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	SwitchSourcePB = Popup2Btn[ndx++] =
-              XmCreatePushButtonGadget(Popup2, "Switch_Source2", 
+              XmCreatePushButtonGadget(Popup2, "Switch_Source2",
 						args, n);
         XmStringFree (tmp_string);
 
@@ -756,7 +756,3 @@ void main_scrtext2(argc, argv)
         CommonPause();
 	XtAppMainLoop(app_context);
 }
-
-
-
-

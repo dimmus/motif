@@ -1,27 +1,27 @@
-/* 
+/*
  *  @OPENGROUP_COPYRIGHT@
  *  COPYRIGHT NOTICE
  *  Copyright (c) 1990, 1991, 1992, 1993, 1998 The Open Group, Inc.
  *  ALL RIGHTS RESERVED (MOTIF). See the file named COPYRIGHT.MOTIF for
  *  the full copyright text.
- *  
+ *
  *  This software is subject to an open license. It may only be
  *  used on, with or for operating systems which are themselves open
  *  source systems. You must contact The Open Group for a license
  *  allowing distribution and sublicensing of this software on, with,
  *  or for operating systems which are not Open Source programs.
- *  
+ *
  *  See http://www.opengroup.org/openmotif/license for full
  *  details of the license agreement. Any use, reproduction, or
  *  distribution of the program constitutes recipient's acceptance of
  *  this agreement.
- *  
+ *
  *  EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, THE PROGRAM IS
  *  PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  *  KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY
  *  WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY
  *  OR FITNESS FOR A PARTICULAR PURPOSE
- *  
+ *
  *  EXCEPT AS EXPRESSLY SET FORTH IN THIS AGREEMENT, NEITHER RECIPIENT
  *  NOR ANY CONTRIBUTORS SHALL HAVE ANY LIABILITY FOR ANY DIRECT,
  *  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
@@ -36,10 +36,10 @@
  * (c) Copyright 1996 Hewlett-Packard Company.
  * (c) Copyright 1996 International Business Machines Corp.
  * (c) Copyright 1996 Sun Microsystems, Inc.
- * (c) Copyright 1996 Novell, Inc. 
+ * (c) Copyright 1996 Novell, Inc.
  * (c) Copyright 1996 FUJITSU LIMITED.
  * (c) Copyright 1996 Hitachi.
- */ 
+ */
 XCOMM $TOG: Motif.tmpl /main/6 1999/05/19 17:00:05 mgreess $
 
 /* Include the X11 project template file. */
@@ -175,9 +175,9 @@ LANGINFO_DEFS=
 #endif
 #if Automation
 # define TestExtraFilesToClean *.Dat *.Scr PurifyFilesToClean
-#else 
+#else
 # define TestExtraFilesToClean *.Dat PurifyFilesToClean
-#endif 
+#endif
 
 #ifndef UsrIncDir
 # define UsrIncDir IncRoot
@@ -390,7 +390,7 @@ LANGINFO_DEFS=
 # endif
 #endif
 
-#ifndef MrmClientLibs 
+#ifndef MrmClientLibs
 # if UseXprint
 #  define MrmClientLibs $(MRESOURCELIB) $(XMLIB) $(XTOOLLIB) $(XPLIB) $(XLIB) $(XMEXTRA_LIBS)
 # else
@@ -485,7 +485,7 @@ TOP_MOTIF_INCLUDES = -I$(MINCLUDESRC) XtExtraDefines
 # define BuildMessageCatalog	NO
 # define MessageCatalogDefines	-DNO_MESSAGE_CATALOG
 #else
-# define BuildMessageCatalog	YES 
+# define BuildMessageCatalog	YES
 # define MessageCatalogDefines	/**/
 #endif
 #ifndef MessageCatalogRule

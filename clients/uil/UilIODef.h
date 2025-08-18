@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 /*
 **++
@@ -30,7 +30,7 @@
 **  ABSTRACT:
 **
 **      This include file defines the interface to the operating system
-**	io facilities.  
+**	io facilities.
 **
 **--
 **/
@@ -49,7 +49,7 @@
 #define NULL 0L
 #endif
 
-typedef struct  
+typedef struct
 {
     FILE	*az_file_ptr;
     char	*c_buffer;

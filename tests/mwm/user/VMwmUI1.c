@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -29,24 +29,24 @@
 
 
 
-void 
+void
 main (unsigned int argc, char **argv)
 {
 
-	Widget TestShell1, TestShell2; 
+	Widget TestShell1, TestShell2;
         Widget PB1, PB2;
         Arg args[10];
         int n;
-    
+
         CommonTestInit (argc, argv);
 	XtRealizeWidget (Shell1);
-	
 
-   
+
+
         n=0;
         XtSetArg (args[n], XtNheight, 200);n++;
         XtSetArg (args[n], XtNwidth, 200);n++;
-        TestShell1=XtCreatePopupShell("TestWindow1", 
+        TestShell1=XtCreatePopupShell("TestWindow1",
 				      topLevelShellWidgetClass,
 				      Shell1,args,n);
 
@@ -61,42 +61,41 @@ main (unsigned int argc, char **argv)
 
 
 
- 
+
         n=0;
         XtSetArg (args[n], XtNheight, 200);n++;
         XtSetArg (args[n], XtNwidth, 200);n++;
-        TestShell2=XtCreatePopupShell ("TestWindow2", 
+        TestShell2=XtCreatePopupShell ("TestWindow2",
 				       topLevelShellWidgetClass,
 				       Shell1,args,n);
 
 
 
 
-        
+
         n=0;
         PB2 = XmCreatePushButton (TestShell2, "PB2", args, n);
         XtManageChild(PB2);
         XtPopup(TestShell2, XtGrabNone);
 
-    
-	CommonPause();
-	CommonPause();
-	CommonPause();
-        CommonPause();
-        CommonPause();
-	CommonPause();
-	CommonPause();
-	CommonPause();
-        CommonPause();
-        CommonPause();
-	CommonPause();
-        CommonPause();
-        CommonPause();
-	
 
-        
-        
+	CommonPause();
+	CommonPause();
+	CommonPause();
+        CommonPause();
+        CommonPause();
+	CommonPause();
+	CommonPause();
+	CommonPause();
+        CommonPause();
+        CommonPause();
+	CommonPause();
+        CommonPause();
+        CommonPause();
+
+
+
+
        	XtAppMainLoop(app_context);
 
 }
-

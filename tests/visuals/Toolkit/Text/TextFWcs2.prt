@@ -23,11 +23,11 @@
 #
 # HISTORY
 TRACE:(1) LocatePointer Text1 RTextChar Max
-TRACE:(2) ClickMB Btn1 
+TRACE:(2) ClickMB Btn1
 TRACE:(3) ClickKey Kf
 TRACE:(4) ClickKey Ky
-TRACE:(5) CompareVisual Text1 
+TRACE:(5) CompareVisual Text1
 TRACE:(6) InputString "this string has how many"
-TRACE:(7) CompareVisual Text1 
+TRACE:(7) CompareVisual Text1
 TRACE:(8) Exit
 Exiting Test...Please Standby...

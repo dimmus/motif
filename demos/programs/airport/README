@@ -40,7 +40,7 @@ of the latest outgoing flight.
 On the right side of the main window, you can see the detailed status
 of an incoming flight.
 
-At the bottom of the main window is a message area displaying 
+At the bottom of the main window is a message area displaying
 status of the flights.
 
 On the Departure Side:
@@ -83,7 +83,7 @@ On the Arrival Side:
 The traffic is initially: No Traffic
 
 When a plane is approaching the airport, the status is: Radar Echo.
-At this point, on every mouse movement the airport tracks are 
+At this point, on every mouse movement the airport tracks are
 highlighted, providing a blinking feedback to the pilot.
 
 If a drop occurs, the state is set to: Landing.

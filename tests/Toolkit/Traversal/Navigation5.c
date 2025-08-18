@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation5.c /main/7 1995/07/13 19:43:39 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: Navigation5.c /main/7 1995/07/13 19:43:39 d
 
 /*
  *  This test tests the XmNtraverseObsuredCallback and the XmScrollVisible
- *    function.  
+ *    function.
  */
 
 
@@ -47,7 +47,7 @@ static int margin = 0;
 
 #ifndef MOTIF1_1
 
-void traverse_cb(Widget w, XtPointer closure, 
+void traverse_cb(Widget w, XtPointer closure,
 		 XtPointer data)
 {
     XmTraverseObscuredCallbackStruct *call_data = (XmTraverseObscuredCallbackStruct *)data ;
@@ -129,27 +129,27 @@ char **argv;
   XmString tcs;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  200);  n++;
   XtSetArg(args[n], XmNheight, 200);  n++;
   XtSetValues(Shell1, args, n);
-    
+
 #ifndef MOTIF1_1
   n = 0;
   XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC);  n++;
   XtSetArg(args[n], XmNscrollBarDisplayPolicy, XmAS_NEEDED);  n++;
   XtSetArg(args[n], XmNvisualPolicy, XmCONSTANT); n++;
   XtSetArg(args[n], XmNshadowThickness, 4);  n++;
-  ScrolledWindow1 = XmCreateScrolledWindow(Shell1, "ScrolledWindow1", 
+  ScrolledWindow1 = XmCreateScrolledWindow(Shell1, "ScrolledWindow1",
 					   args, n);
 
-  XtAddCallback(ScrolledWindow1, XmNtraverseObscuredCallback, 
+  XtAddCallback(ScrolledWindow1, XmNtraverseObscuredCallback,
 		traverse_cb, NULL);
 
   XtManageChild(ScrolledWindow1);
   XtRealizeWidget(Shell1);
- 
+
   n = 0;
   RowColumn1 = XmCreateRowColumn(ScrolledWindow1, "RowColumn1", args, n);
   XtManageChild(RowColumn1);
@@ -227,7 +227,7 @@ char **argv;
   XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
   XtSetArg(args[n], XmNnumColumns, 4); n++;
   XtSetValues(RowColumn1, args, n);
-  
+
   CommonPause();
 
   /*
@@ -239,7 +239,7 @@ char **argv;
 
   n = 0;
   XtSetArg(args[n], XmNborderWidth, 1); n++;
-  Toggle1 = XmCreateToggleButton(RowColumn1, "Toggle1Button", args, n); 
+  Toggle1 = XmCreateToggleButton(RowColumn1, "Toggle1Button", args, n);
   XtManageChild(Toggle1);
 
   n = 0;

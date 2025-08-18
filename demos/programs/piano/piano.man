@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH piano 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -36,7 +36,7 @@ keyboard are provided.  Piano is a musical demo that allows multiple
 voices to be played by connecting to other displays.  It also provides
 the capability to save and restore voices.
 .PP
-When running the program, you can either play the keyboard directly 
+When running the program, you can either play the keyboard directly
 by 'tickling the ivories' using Button1, or you can enter notes by
 pressing Button 1 on the staff and depositing the active note
 specified by the cursor.  To change the active note, select another
@@ -62,23 +62,23 @@ with this staff.  It contains the following items:
 .br
                         another display to a new staff.
 .br
-                        After selecting this command, you 
+                        After selecting this command, you
 .br
-                        will be prompted for the display 
+                        will be prompted for the display
 .br
                         to connect.  Any music written in
 .br
-                        the new staff will play to this 
+                        the new staff will play to this
 .br
-                        display.  Note that pressing the 
+                        display.  Note that pressing the
 .br
-                        right mouse button on the new staff 
+                        right mouse button on the new staff
 .br
-                        will show the name of the display 
+                        will show the name of the display
 .br
-                        in the menu's title.In addition, 
+                        in the menu's title.In addition,
 .br
-                        this menu's commands will relate 
+                        this menu's commands will relate
 .br
                         to this staff.
 .br
@@ -94,27 +94,27 @@ with this staff.  It contains the following items:
 .br
                         score.  There is no undo for this
 .br
-                        command; all music written in this 
+                        command; all music written in this
 .br
                         staff will be deleted.
 .PP
-\fBClear Voice\fR               Removes all notes in a 
+\fBClear Voice\fR               Removes all notes in a
 .br
-                        staff.  This will not effect the 
+                        staff.  This will not effect the
 .br
                         display connection.
 .PP
-\fBPlay Voice\fR                Plays the notes in the selected 
+\fBPlay Voice\fR                Plays the notes in the selected
 .br
-                        staff.  If the resource, 
+                        staff.  If the resource,
 .br
-                        \fBuseKeyboard\fR, is set to True, 
+                        \fBuseKeyboard\fR, is set to True,
 .br
-                        which is the default, the keyboard 
+                        which is the default, the keyboard
 .br
                         will play along.
 .PP
-\fBPlay All\fR          Plays all voices in the score 
+\fBPlay All\fR          Plays all voices in the score
 .br
                         together.
 .PP
@@ -124,7 +124,7 @@ with this staff.  It contains the following items:
 .br
                         displayed to prompt for the name of
 .br
-                        the file in which to save the voice.  
+                        the file in which to save the voice.
 .br
                         The display connection information
 .br
@@ -132,19 +132,19 @@ with this staff.  It contains the following items:
 .PP
 \fBLoad Voice\fR                Loads a voice from a file. This will
 .br
-                        append to any existing notes 
+                        append to any existing notes
 .br
                         in the voice.
 .PP
 Piano also supports the following resources:
 .PP
-\fBbaseDuration\fR              Sets the duration of a quarter note 
+\fBbaseDuration\fR              Sets the duration of a quarter note
 .br
                         (in msec).
 .br
                         Default value = 200
 .PP
-\fBbaseFrequency\fR             Sets the frequency of bottom note 
+\fBbaseFrequency\fR             Sets the frequency of bottom note
 .br
                         (in Hz).
 .br
@@ -156,7 +156,7 @@ Piano also supports the following resources:
 .br
                         Default value = True
 .PP
-\fBwkeyCount\fR         Is the number of white keys on the 
+\fBwkeyCount\fR         Is the number of white keys on the
 .br
                         keyboard.
 .br
@@ -168,7 +168,7 @@ Piano also supports the following resources:
 .br
                         Default value = 160
 .PP
-\fBkeyWidth\fR          Is the initial width in pixels of 
+\fBkeyWidth\fR          Is the initial width in pixels of
 .br
                         the white keys.
 .br

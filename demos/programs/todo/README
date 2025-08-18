@@ -9,7 +9,7 @@ directory.
 
 You can use the example.todo file in this directory to see some of
 the features.  Just type "./todo -todoFile example.todo" to start
-this way. 
+this way.
 
 Regards,
 

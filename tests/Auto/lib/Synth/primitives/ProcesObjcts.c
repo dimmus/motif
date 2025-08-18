@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ProcesObjcts.c /main/7 1995/07/14 11:42:18 drk $"
@@ -82,6 +82,6 @@ void xisProcessObjects()
 
     /* Then call function to re-generate all the objects */
 
-    (*xisGenerateObjects)(&xisObjects[0]);    
+    (*xisGenerateObjects)(&xisObjects[0]);
 
 } /* End xisProcessObjects() */

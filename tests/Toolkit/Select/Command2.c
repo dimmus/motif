@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Command2.c /main/8 1995/07/13 19:16:48 drk $"
@@ -58,7 +58,7 @@ static void EnterCB (w, client_data, call_data)
     {
 	str = XmStringLtoRCreate("setValue", XmSTRING_DEFAULT_CHARSET);
     }
-    
+
     if(str2 == NULL)
     {
 	str2 = XmStringLtoRCreate("errorValue", XmSTRING_DEFAULT_CHARSET);
@@ -81,7 +81,7 @@ static void EnterCB (w, client_data, call_data)
 	break;
 
       case 1:
-	
+
         noChild = XmCommandGetChild(w, XmDIALOG_OK_BUTTON);
 	break;
 
@@ -93,8 +93,8 @@ static void EnterCB (w, client_data, call_data)
 
       case 3:
 
-        XmCommandError (w, NULL); 
-        XmCommandError (w, badString); 
+        XmCommandError (w, NULL);
+        XmCommandError (w, badString);
 	change_count = 1;
 	break;
     }
@@ -118,7 +118,7 @@ static void ChangeCB (w, client_data, call_data)
     static XmString	str = NULL,
     			badStr = NULL;
 
-    if (str == NULL) 
+    if (str == NULL)
         str = XmStringLtoRCreate("addValue", XmSTRING_DEFAULT_CHARSET);
 
     if (badStr == NULL)
@@ -153,7 +153,7 @@ char **argv;
     Frame = XmCreateFrame(Shell1, "Frame1", args, n);
     XtManageChild(Frame);
 
-/* 
+/*
  * set up XmStrings for list
  */
 

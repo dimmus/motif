@@ -22,15 +22,15 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual BBoard 
+TRACE:(1) CompareVisual BBoard
 TRACE:(2) Continue
 TRACE:(3) WindowIconify BBoard
 TRACE:(4) WindowDeiconify BBoard
-TRACE:(5) CompareVisual BBoard 
+TRACE:(5) CompareVisual BBoard
 TRACE:(6) Continue
-TRACE:(7) CompareVisual Separator1 
+TRACE:(7) CompareVisual Separator1
 TRACE:(8) Continue
-TRACE:(9) CompareVisual BBoard 
+TRACE:(9) CompareVisual BBoard
 TRACE:(10) Continue
 TRACE:(11) Exit
 Exiting Test...Please Standby...

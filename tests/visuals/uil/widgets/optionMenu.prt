@@ -23,17 +23,17 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is optionMenu.uid ---- 
+---- The uid file to be opened is optionMenu.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Option_Menu  
-TRACE:(3) PressMB Btn1 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Option_Menu
+TRACE:(3) PressMB Btn1
+TRACE:(4) CompareVisual S_MAIN_WIDGET
 TRACE:(5) ClickKey KDown
 TRACE:(6) ClickKey KDown
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
-TRACE:(8) ReleaseMB Btn1 
-TRACE:(9) CompareVisual S_MAIN_WIDGET 
+TRACE:(7) CompareVisual S_MAIN_WIDGET
+TRACE:(8) ReleaseMB Btn1
+TRACE:(9) CompareVisual S_MAIN_WIDGET
 TRACE:(10) Exit
 Exiting Test...Please Standby...

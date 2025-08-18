@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ToggleBtn1.c /main/9 1995/07/13 17:32:22 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: ToggleBtn1.c /main/9 1995/07/13 17:32:22 dr
 #endif
 
 
- 
+
 
 /****************************************
 *   Automatic test program generation   *
@@ -54,7 +54,7 @@ Pixmap px_unselect;
 
 void toggleCB();
 
-static XtCallbackRec 
+static XtCallbackRec
   valuechangedCR[] = {{ toggleCB, NULL}, {NULL, NULL},},
   armCR[] = {{ toggleCB, NULL},  {NULL, NULL},},
   disarmCR[] = {{ toggleCB, NULL}, {NULL, NULL},};
@@ -81,19 +81,19 @@ caddr_t  client_data;
 caddr_t  call_data;
 {
   printf("Toggle Callback Structure:\n    Reason:   ");
-  
+
   switch( ((XmToggleButtonCallbackStruct*)call_data)->reason) {
-  case XmCR_VALUE_CHANGED: 
-    printf("XmCR_VALUE_CHANGED\n"); 
+  case XmCR_VALUE_CHANGED:
+    printf("XmCR_VALUE_CHANGED\n");
     break;
-  case XmCR_ARM: 		
-    printf("XmCR_ARM\n"); 
+  case XmCR_ARM:
+    printf("XmCR_ARM\n");
     break;
-  case XmCR_DISARM: 	
-    printf("XmCR_DISARM\n"); 
+  case XmCR_DISARM:
+    printf("XmCR_DISARM\n");
     break;
-  default: 		
-    printf("Oops - unknown callback reason!\n"); 
+  default:
+    printf("Oops - unknown callback reason!\n");
     break;
     }
 }
@@ -103,12 +103,12 @@ int     argc;
 char  **argv;
 {
 
-  XmFontList fontlist; 
+  XmFontList fontlist;
   XmStringCharSet  cset = "isolatin6";
   XFontStruct *newfont;
-  
+
   CommonTestInit(argc, argv);
-    
+
   XmRegisterConverters();
 
   newfont = XLoadQueryFont (display, "9x15");
@@ -154,14 +154,14 @@ char  **argv;
   XtManageChild(ToggleButton4);
 
   px_unselect =
-    XCreatePixmapFromBitmapData(display, 
+    XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				XBMu_BITS, XBMu_WIDTH,XBMu_HEIGHT,
 				WhitePixel(display,DefaultScreen(display)),
 				BlackPixel(display,DefaultScreen(display)),
 				DefaultDepth(display,DefaultScreen(display)));
-  px_select = 
-    XCreatePixmapFromBitmapData(display, 
+  px_select =
+    XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				XBMs_BITS, XBMs_WIDTH,XBMs_HEIGHT,
 				WhitePixel(display,DefaultScreen(display)),
@@ -175,7 +175,7 @@ char  **argv;
   ToggleButton5 = XmCreateToggleButton(VPaned1, "ToggleButton5",
 				       args, n);
   XtManageChild(ToggleButton5);
-  
+
   n = 0;
   XtSetArg(args[n], XmNindicatorOn, False);  n++;
   XtSetArg(args[n], XmNshadowThickness, 4); n++;
@@ -197,7 +197,7 @@ char  **argv;
   XtRealizeWidget(Shell1);
 
   for (n = 0; n < 5; n++)
-    CommonPause();                  
+    CommonPause();
 
   XmToggleButtonSetState(ToggleButton5, TRUE, FALSE);
   CommonPause();
@@ -223,4 +223,3 @@ char  **argv;
 
   XtAppMainLoop(app_context);
 }
-

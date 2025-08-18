@@ -1,14 +1,14 @@
 STARTFONT 2.1
 COMMENT $XConsortium: helvB12.bdf /main/2 1996/07/23 13:06:13 drk $
-COMMENT 
+COMMENT
 COMMENT  Copyright 1984, 1987 Adobe Systems, Inc.
 COMMENT  Portions Copyright 1988 Digital Equipment Corporation
-COMMENT 
-COMMENT  Helvetica is a registered trademark of Linotype.  Adobe is a 
+COMMENT
+COMMENT  Helvetica is a registered trademark of Linotype.  Adobe is a
 COMMENT  registered trademark of Adobe Systems, Inc.  Permission to use
 COMMENT  these trademarks is hereby granted only in association with the
 COMMENT  images described in this file.
-COMMENT 
+COMMENT
 COMMENT  Permission to use, copy, modify, and distribute this software and
 COMMENT  its documentation for any purpose and without fee is hereby granted,
 COMMENT  provided that the above copyright notices appear in all copies and
@@ -20,7 +20,7 @@ COMMENT  specific, written prior permission.  Adobe Systems and Digital
 COMMENT  Equipment Corporation make no representations about the suitability
 COMMENT  of this software for any purpose.  It is provided "as is" without
 COMMENT  express or implied warranty.
-COMMENT 
+COMMENT
 COMMENT  ADOBE SYSTEMS AND DIGITAL EQUIPMENT CORPORATION DISCLAIM ALL
 COMMENT  WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED
 COMMENT  WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL ADOBE
@@ -29,8 +29,8 @@ COMMENT  INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 COMMENT  RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
 COMMENT  CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 COMMENT  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-COMMENT 
-COMMENT 
+COMMENT
+COMMENT
 FONT -Adobe-Helvetica-Bold-R-Normal--12-120-75-75-P-70-ISO8859-1
 SIZE 12 75 75
 FONTBOUNDINGBOX 14 15 -1 -3

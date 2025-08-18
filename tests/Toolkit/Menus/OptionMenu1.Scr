@@ -1,5 +1,5 @@
 # $XConsortium: OptionMenu1.scr /main/6 1995/07/17 20:26:51 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client window containing an OptionMenu will appear.  The OptionMenu
@@ -61,7 +61,7 @@ ReleaseMB Btn3
 CompareVisual optionMenu
 Continue
 
-# Press and hold MB3 on the Selection Area (PushButton1).  The menu will 
+# Press and hold MB3 on the Selection Area (PushButton1).  The menu will
 #  appear.
 
 LocatePointer optionMenu ROptionButton
@@ -128,7 +128,7 @@ LocatePointer optionMenu ROptionButton
 ClickKey <Alt> Ko
 
 # Press the 'o' key.  The PulldownMenu will disappear and "PushButton4" will
-#  be in the Selection Area. 
+#  be in the Selection Area.
 
 ClickKey Ko
 CompareVisual optionMenu
@@ -169,7 +169,7 @@ ReleaseMB Btn3
 
 
 
-Continue 
+Continue
 
 # Popup the option menu, and it is now vertical.  Select any item.
 #  The item should appear in the selected area.
@@ -184,7 +184,7 @@ Continue
 
 #  The OptionMenu and the selected area should shrink.  Popup the
 #  option menu.  It should have shrunk as well.
-# 
+#
 CompareVisual optionMenu
 LocatePointer optionMenu ROptionButton
 PressMB Btn3

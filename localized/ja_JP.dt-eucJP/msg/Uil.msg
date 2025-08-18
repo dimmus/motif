@@ -32,7 +32,7 @@ UIL_27 %s %s はすでにこの %s %s で指定されています。
 UIL_28 %s アイテムは %s %s で許されません。
 UIL_29 編集を終了しました。- 以前のエラーは修正しました。
 UIL_30 内部エラー - 欠陥の報告を提出してください。
-UIL_31  
+UIL_31
 UIL_32 %s は以下の \"%s\" オプションがありません。
 UIL_33 リストしているファイル %s を開く時のエラーです。: %s
 UIL_34 リストしているファイルに書き込む時のエラーです。: %s
@@ -89,9 +89,9 @@ UIL_VAL_1 ** 未知 **
 
 $set UIL_SET_MISC
 
-UIL_INF 情報: 
-UIL_WAR 警告: 
-UIL_ERR エラー: 
-UIL_SEV 厳密: 
+UIL_INF 情報:
+UIL_WAR 警告:
+UIL_ERR エラー:
+UIL_SEV 厳密:
 UIL_MISC_0 \t\t 行: %d  ファイル: %s
 UIL_MISC_1 \t\t 行: %d  位置: %d  ファイル: %s

@@ -43,14 +43,14 @@ unsigned int num_datums = 0;
 
 /*******************************************************************
  * UpdateList
- * 
+ *
  * This takes the transfered items and updates the displayed list
  * with the transferred target names.  Note that we call a version of
  * XGetAtomName with an installed error handler.  This prevents an
- * app. exit if the Atom id is illegal.  
+ * app. exit if the Atom id is illegal.
  *******************************************************************/
 
-static void 
+static void
 UpdateList(Widget w, XtEnum ignore, XmTransferDoneCallbackStruct *data)
 {
   int i;
@@ -70,7 +70,7 @@ UpdateList(Widget w, XtEnum ignore, XmTransferDoneCallbackStruct *data)
       else {
         temp = XmStringCreateLocalized("Illegal atom");
       }
-    } 
+    }
     else {
       temp = XmStringCreateLocalized("Bad target");
       if (name != NULL) XFree(name);
@@ -92,7 +92,7 @@ UpdateList(Widget w, XtEnum ignore, XmTransferDoneCallbackStruct *data)
  * these targets.
  ********************************************************************/
 
-static void 
+static void
 ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
 {
   if (data -> target != XInternAtom(XtDisplay(w), XmSTARGETS, False)) {
@@ -115,7 +115,7 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
     }
 
     /* This doneProc is performed after all transfers have completed. */
-    XmeTransferAddDoneProc(data -> transfer_id, 
+    XmeTransferAddDoneProc(data -> transfer_id,
                            (XmSelectionFinishedProc) UpdateList);
 
     DELETE = XInternAtom(XtDisplay(w), XmSDELETE, False);
@@ -139,7 +139,7 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
 	  dlist[i] != LINK_SELECTION &&
           dlist[i] != TARGETS &&
 	  dlist[i] != None) {
-        XmTransferValue(data -> transfer_id, dlist[i], 
+        XmTransferValue(data -> transfer_id, dlist[i],
                         (XtCallbackProc) ReceiveData, NULL, 0);
       }
     }
@@ -155,7 +155,7 @@ ReceiveData(Widget w, XtPointer ignore, XmSelectionCallbackStruct *data)
  * rest.
  *****************************************************************/
 
-void 
+void
 TargetDestinationCB(Widget w, XtPointer ignore, XtPointer call_data)
 {
   XmDestinationCallbackStruct *cs;
@@ -171,21 +171,21 @@ TargetDestinationCB(Widget w, XtPointer ignore, XtPointer call_data)
   printf("        selection = %s\n", selection_atom_name);
   printf("        operation = %s\n\n", GetStringFrom(cs->operation));
 
-  XmTransferValue(cs -> transfer_id, 
+  XmTransferValue(cs -> transfer_id,
                   XInternAtom(XtDisplay(w), XmSTARGETS, False),
                   (XtCallbackProc) ReceiveData, NULL, 0);
 }
 
-void 
+void
 TargetConvertCB(Widget w, XtPointer ignore, XtPointer call_data)
 {
   XmConvertCallbackStruct *cs;
   char *selection_atom_name, *target_atom_name;
 
- 
+
   Atom TARGETS = XInternAtom(XtDisplay(w), XmSTARGETS, False);
   Atom ME_TARGETS = XInternAtom(XtDisplay(w), XmS_MOTIF_EXPORT_TARGETS, False);
-  Atom MC_TARGETS = XInternAtom(XtDisplay(w), 
+  Atom MC_TARGETS = XInternAtom(XtDisplay(w),
                                 XmS_MOTIF_CLIPBOARD_TARGETS, False);
   Atom DELETE = XInternAtom(XtDisplay(w), XmSDELETE, False);
   Atom LS = XInternAtom(XtDisplay(w), XmS_MOTIF_LOSE_SELECTION, False);
@@ -204,7 +204,7 @@ TargetConvertCB(Widget w, XtPointer ignore, XtPointer call_data)
   printf("Convert Callback of drawing area called with: \n");
   printf("        selection         = %s\n", selection_atom_name);
   printf("        conversion target = %s\n\n", target_atom_name);
-  
+
 
   if (cs -> target == ME_TARGETS ||
       cs -> target == MC_TARGETS) {
@@ -221,7 +221,7 @@ TargetConvertCB(Widget w, XtPointer ignore, XtPointer call_data)
         targs[count++] = datums[i].target;
       }
     }
-    
+
     if (count > 0) {
       cs -> value = (XtPointer) targs;
       cs -> length = count;
@@ -253,14 +253,14 @@ TargetConvertCB(Widget w, XtPointer ignore, XtPointer call_data)
       XtUnmanageChild(OwnPrimLG);
     else if (cs -> selection == MDEST)
       XtUnmanageChild(OwnSecLG);
-  } 
+  }
 
  else {
     /* Try and find the right target,  otherwise fail */
     int i = 0;
-    
+
     while(i < num_datums &&
-          datums[i].target != cs -> target) 
+          datums[i].target != cs -> target)
       i++;
 
     if (i >= num_datums /* Not found */ ||
@@ -294,8 +294,8 @@ TargetConvertCB(Widget w, XtPointer ignore, XtPointer call_data)
 /* Error handler for XGetAtomName */
 
 static int SIF_ErrorFlag;
- 
-static int 
+
+static int
 SIF_ErrorHandler(Display *display, XErrorEvent *event)
 {
   SIF_ErrorFlag = event -> type;
@@ -303,7 +303,7 @@ SIF_ErrorHandler(Display *display, XErrorEvent *event)
   return 0;
 }
 
-char * 
+char *
 GetSafeAtom(Display *display, Atom a)
 {
   XErrorHandler old_Handler;
@@ -332,7 +332,7 @@ GetStringFrom(XtEnum operation)
         case XmMOVE:
            returnvalue = "XmMOVE";
            break;
-        case XmCOPY: 
+        case XmCOPY:
            returnvalue = "XmCOPY";
            break;
         case XmLINK:

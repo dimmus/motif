@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Baseline1.c /main/7 1995/07/13 18:28:00 drk $"
@@ -76,7 +76,7 @@ void  main (argc, argv)
     XmStringFree(tcs);
 
     XtRealizeWidget(Shell1);
-    
+
     CommonPause();
 
     tcs = XmStringCreateSimple("Another Label");
@@ -94,9 +94,9 @@ void  main (argc, argv)
 
     XtDestroyWidget(Label2);
 
-    /* 
+    /*
        reset the original label to be XmFRAME_TITLE_CHILD, it was
-       reset when Label2 was set as XmFRAME_TITLE_CHILD. 
+       reset when Label2 was set as XmFRAME_TITLE_CHILD.
     */
 
     n = 0;
@@ -131,7 +131,7 @@ void  main (argc, argv)
 
     CommonPause();
 
-    tcs = XmStringLtoRCreate("Motif\nScrolled Text Widget", 
+    tcs = XmStringLtoRCreate("Motif\nScrolled Text Widget",
 			     XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -170,7 +170,7 @@ void  main (argc, argv)
 void CreateChangeDialog(widget)
     Widget widget;
 
-{ 
+{
     int 	n;
     Arg 	args[MAX_ARGS];
     Widget 	Toggle1, Toggle2, Toggle3,
@@ -213,7 +213,7 @@ void CreateChangeDialog(widget)
     Toggle1 = XmCreateToggleButton(RadioBox1, "Toggle1", args, n);
     XtManageChild(Toggle1);
 
-    XtAddCallback(Toggle1, XmNarmCallback, (XtCallbackProc) ChangeVertAlign, 
+    XtAddCallback(Toggle1, XmNarmCallback, (XtCallbackProc) ChangeVertAlign,
 		  (XtPointer) XmALIGNMENT_BASELINE_BOTTOM);
 
     XmStringFree(tcs);
@@ -225,7 +225,7 @@ void CreateChangeDialog(widget)
     Toggle2 = XmCreateToggleButton(RadioBox1, "Toggle2", args, n);
     XtManageChild(Toggle2);
 
-    XtAddCallback(Toggle2, XmNarmCallback, (XtCallbackProc) ChangeVertAlign, 
+    XtAddCallback(Toggle2, XmNarmCallback, (XtCallbackProc) ChangeVertAlign,
 		  (XtPointer)  XmALIGNMENT_BASELINE_TOP);
 
     XmStringFree(tcs);
@@ -249,11 +249,11 @@ void CreateChangeDialog(widget)
     Toggle4 = XmCreateToggleButton(RadioBox1, "Toggle4", args, n);
     XtManageChild(Toggle4);
 
-    XtAddCallback(Toggle4, XmNarmCallback, (XtCallbackProc) ChangeVertAlign, 
+    XtAddCallback(Toggle4, XmNarmCallback, (XtCallbackProc) ChangeVertAlign,
 		  (XtPointer) XmALIGNMENT_CENTER);
 
     XmStringFree(tcs);
-	
+
     tcs = XmStringCreateSimple("XmALIGNMENT_WIDGET_BOTTOM");
 
     n = 0;
@@ -261,7 +261,7 @@ void CreateChangeDialog(widget)
     Toggle5 = XmCreateToggleButton(RadioBox1, "Toggle5", args, n);
     XtManageChild(Toggle5);
 
-    XtAddCallback(Toggle5, XmNarmCallback, (XtCallbackProc) ChangeVertAlign, 
+    XtAddCallback(Toggle5, XmNarmCallback, (XtCallbackProc) ChangeVertAlign,
 		  (XtPointer) XmALIGNMENT_WIDGET_BOTTOM);
 
     XmStringFree(tcs);
@@ -289,7 +289,7 @@ void CreateChangeDialog(widget)
     Toggle2a = XmCreateToggleButton(RadioBox2, "Toggle2a", args, n);
     XtManageChild(Toggle2a);
 
-    XtAddCallback(Toggle2a, XmNarmCallback, (XtCallbackProc) ChangeShadowType, 
+    XtAddCallback(Toggle2a, XmNarmCallback, (XtCallbackProc) ChangeShadowType,
 		  (XtPointer) XmSHADOW_OUT);
 
     XmStringFree(tcs);
@@ -301,7 +301,7 @@ void CreateChangeDialog(widget)
     Toggle3a = XmCreateToggleButton(RadioBox2, "Toggle3a", args, n);
     XtManageChild(Toggle3a);
 
-    XtAddCallback(Toggle3a, XmNarmCallback, (XtCallbackProc) ChangeShadowType, 
+    XtAddCallback(Toggle3a, XmNarmCallback, (XtCallbackProc) ChangeShadowType,
 		  (XtPointer) XmSHADOW_ETCHED_IN);
 
     XmStringFree(tcs);
@@ -313,7 +313,7 @@ void CreateChangeDialog(widget)
     Toggle4a = XmCreateToggleButton(RadioBox2, "Toggle4a", args, n);
     XtManageChild(Toggle4a);
 
-    XtAddCallback(Toggle4a, XmNarmCallback, ChangeShadowType, 
+    XtAddCallback(Toggle4a, XmNarmCallback, ChangeShadowType,
 		  (XtPointer) XmSHADOW_ETCHED_OUT);
 
     XmStringFree(tcs);
@@ -329,7 +329,7 @@ void CreateChangeDialog(widget)
     Toggle1b = XmCreateToggleButton(RadioBox3, "Toggle1b", args, n);
     XtManageChild(Toggle1b);
 
-    XtAddCallback(Toggle1b, XmNarmCallback, (XtCallbackProc) ChangeHorizAlign, 
+    XtAddCallback(Toggle1b, XmNarmCallback, (XtCallbackProc) ChangeHorizAlign,
 		  (XtPointer) XmALIGNMENT_BEGINNING);
 
     XmStringFree(tcs);
@@ -341,7 +341,7 @@ void CreateChangeDialog(widget)
     Toggle2b = XmCreateToggleButton(RadioBox3, "Toggle2b", args, n);
     XtManageChild(Toggle2b);
 
-    XtAddCallback(Toggle2b, XmNarmCallback, (XtCallbackProc) ChangeHorizAlign, 
+    XtAddCallback(Toggle2b, XmNarmCallback, (XtCallbackProc) ChangeHorizAlign,
 		  (XtPointer) XmALIGNMENT_CENTER);
 
     XmStringFree(tcs);
@@ -353,7 +353,7 @@ void CreateChangeDialog(widget)
     Toggle3b = XmCreateToggleButton(RadioBox3, "Toggle3b", args, n);
     XtManageChild(Toggle3b);
 
-    XtAddCallback(Toggle3b, XmNarmCallback, (XtCallbackProc) ChangeHorizAlign, 
+    XtAddCallback(Toggle3b, XmNarmCallback, (XtCallbackProc) ChangeHorizAlign,
 		  (XtPointer) XmALIGNMENT_END);
 
     XmStringFree(tcs);
@@ -389,7 +389,7 @@ void CreateChangeDialog(widget)
 
     XmStringFree(tcs);
 
-    XtAddCallback(Scale1, XmNvalueChangedCallback, 
+    XtAddCallback(Scale1, XmNvalueChangedCallback,
 		  (XtCallbackProc) ChangeShadowThickness, NULL);
 
     XtManageChild(PopupS);
@@ -496,4 +496,3 @@ static void SetAlignmentString(w, client_data, call_data)
     XmStringFree (cs);
 
  }
-    

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: wmlsynbld.c /main/9 1995/08/29 11:11:12 drk $"
@@ -518,22 +518,22 @@ switch ( attrid )
     {
     case SUPERCLASS:
         cdesc->superclass = wmlAllocateString (val);
-	break;	
+	break;
     case PARENTCLASS:
         cdesc->parentclass = wmlAllocateString (val);
-	break;	
+	break;
     case INTERNALLITERAL:
         cdesc->int_lit = wmlAllocateString (val);
-	break;	
+	break;
     case CONVFUNC:
         cdesc->convfunc = wmlAllocateString (val);
-	break;	
+	break;
     case DOCNAME:
         cdesc->docname = wmlAllocateString (val);
-	break;	
+	break;
     case WIDGETCLASS:
         cdesc->widgetclass = wmlAllocateString (val);
-	break;	
+	break;
     case DIALOGCLASS:
 	switch ( (long)val )
 	    {
@@ -541,10 +541,10 @@ switch ( attrid )
 	        cdesc->dialog = TRUE;
 		break;
 	    }
-	break;	
+	break;
     case CTRLMAPSRESOURCE:
         cdesc->ctrlmapto = wmlAllocateString (val);
-	break;	
+	break;
     case ALIAS:
 	if ( cdesc->alias_cnt == 0 )
 	    synlist = (char **) malloc (sizeof(char *));
@@ -576,7 +576,7 @@ void wmlAddClassControl (name)
     char			*name;
 
 {
-    
+
 WmlSynClassDefPtr	cdesc;		/* the class descriptor */
 WmlSynClassCtrlDefPtr	ctrlelm;	/* controls element */
 
@@ -630,7 +630,7 @@ void wmlAddClassResource (name)
     char			*name;
 
 {
-    
+
 WmlSynClassDefPtr	cdesc;		/* the class descriptor */
 WmlSynClassResDefPtr	rdesc;		/* the resource reference descriptor */
 
@@ -687,7 +687,7 @@ void wmlAddClassChild (name)
     char			*name;
 
 {
-    
+
 WmlSynClassDefPtr	cdesc;		/* the class descriptor */
 WmlSynClassChildDefPtr	chdesc;		/* the child reference descriptor */
 
@@ -850,25 +850,25 @@ switch ( attrid )
     {
     case TYPE:
         rdesc->datatype = wmlAllocateString (val);
-	break;	
+	break;
     case INTERNALLITERAL:
         rdesc->int_lit = wmlAllocateString (val);
-	break;	
+	break;
     case RESOURCELITERAL:
         rdesc->resliteral = wmlAllocateString (val);
-	break;	
+	break;
     case ENUMERATIONSET:
         rdesc->enumset = wmlAllocateString (val);
-	break;	
+	break;
     case DOCNAME:
         rdesc->docname = wmlAllocateString (val);
-	break;	
+	break;
     case RELATED:
         rdesc->related = wmlAllocateString (val);
-	break;	
+	break;
     case DEFAULT:
         rdesc->dflt = wmlAllocateString (val);
-	break;	
+	break;
     case XRMRESOURCE:
 	xrmval = (long) val;
 	switch ( xrmval )
@@ -953,10 +953,10 @@ switch ( attrid )
     {
     case INTERNALLITERAL:
         ddesc->int_lit = wmlAllocateString (val);
-	break;	
+	break;
     case DOCNAME:
         ddesc->docname = wmlAllocateString (val);
-	break;	
+	break;
     case XRMRESOURCE:
 	xrmval = (long) val;
 	switch ( xrmval )
@@ -999,7 +999,7 @@ void wmlAddCtrlListControl (name)
     char			*name;
 
 {
-    
+
 WmlSynCtrlListDefPtr	cdesc;		/* the controls list descriptor */
 WmlSynClassCtrlDefPtr	ctrlelm;	/* controls element */
 
@@ -1130,7 +1130,7 @@ switch ( attrid )
     {
     case ENUMLITERAL:
         evdesc->enumlit = wmlAllocateString (val);
-	break;	
+	break;
     default:
 	printf ("\nwmlAddEnumValueAttribute: unknown attrid %d", attrid);
 	return;
@@ -1189,7 +1189,7 @@ switch ( attrid )
     {
     case INTERNALLITERAL:
         ddesc->int_lit = wmlAllocateString (val);
-	break;	
+	break;
     case ALIAS:
 	if ( ddesc->alias_cnt == 0 )
 	    synlist = (char **) malloc (sizeof(char *));
@@ -1203,7 +1203,7 @@ switch ( attrid )
 	break;
     case XMSTRINGCHARSETNAME:
         ddesc->xms_name = wmlAllocateString (val);
-	break;	
+	break;
     case DIRECTION:
 	atrval = (long) val;
 	switch ( atrval )
@@ -1221,7 +1221,7 @@ switch ( attrid )
 		return;
 		break;
 	    }
-	break;	
+	break;
     case PARSEDIRECTION:
 	atrval = (long) val;
 	switch ( atrval )
@@ -1239,7 +1239,7 @@ switch ( attrid )
 		return;
 		break;
 	    }
-	break;	
+	break;
     case CHARACTERSIZE:
 	atrval = (long) val;
 	switch ( atrval )
@@ -1260,7 +1260,7 @@ switch ( attrid )
 		return;
 		break;
 	    }
-	break;	
+	break;
     default:
 	printf ("\nwmlAddCharsetAttribute: unknown attrid %d", attrid);
 	return;

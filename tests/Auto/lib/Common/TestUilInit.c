@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 
 #ifdef REV_INFO
 #ifndef lint
@@ -34,8 +34,8 @@ static char rcsid[] = "$XConsortium: TestUilInit.c /main/7 1995/07/14 10:57:36 d
 #include <signal.h>
 #include <X11/IntrinsicP.h>
 #include "testlib.h"
-  
-/* This is used for checking Synchronization 
+
+/* This is used for checking Synchronization
    used with performance testing */
 #ifdef DEBUG
 typedef struct {
@@ -77,42 +77,42 @@ if (synchronous == False)  {
  *************************************************************************/
 
 void CommonTestUilInit(int argc, char **argv)
-     
+
 {
 
   CommonTestInit(argc, argv);
 
-  MrmRegisterClass(0, NULL, "XmCreateArrowButton", 
+  MrmRegisterClass(0, NULL, "XmCreateArrowButton",
 		   ArrowButtonCreate,
 		   (WidgetClass)&xmArrowButtonWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateArrowButtonGadget", 
+  MrmRegisterClass(0, NULL, "XmCreateArrowButtonGadget",
 		   ArrowButtonGadgetCreate,
 		   (WidgetClass)&xmArrowButtonGadgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateBulletinBoard", 
+  MrmRegisterClass(0, NULL, "XmCreateBulletinBoard",
 		   BulletinBoardCreate,
 		   (WidgetClass)&xmBulletinBoardWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateBulletinBoardDialog", 
+  MrmRegisterClass(0, NULL, "XmCreateBulletinBoardDialog",
 		   BulletinBoardDialogCreate,
 		   (WidgetClass)&xmBulletinBoardWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateCascadeButton", 
+  MrmRegisterClass(0, NULL, "XmCreateCascadeButton",
 		   CascadeButtonCreate,
 		   (WidgetClass)&xmCascadeButtonWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateCascadeButtonGadget", 
+  MrmRegisterClass(0, NULL, "XmCreateCascadeButtonGadget",
 		   CascadeButtonGadgetCreate,
 		   (WidgetClass)&xmCascadeButtonGadgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateCommand", 
+  MrmRegisterClass(0, NULL, "XmCreateCommand",
 		   CommandCreate,
 		   (WidgetClass)&xmCommandWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateDialogShell", 
+  MrmRegisterClass(0, NULL, "XmCreateDialogShell",
 		   DialogShellCreate,
 		   (WidgetClass)&xmDialogShellWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateDrawingArea", 
+  MrmRegisterClass(0, NULL, "XmCreateDrawingArea",
 		   DrawingAreaCreate,
 		   (WidgetClass)&xmDrawingAreaWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateDrawnButton", 
+  MrmRegisterClass(0, NULL, "XmCreateDrawnButton",
 		   DrawnButtonCreate,
 		   (WidgetClass)&xmDrawnButtonWidgetClass);
-  MrmRegisterClass(0, NULL, "XmCreateErrorDialog", 
+  MrmRegisterClass(0, NULL, "XmCreateErrorDialog",
 		   ErrorDialogCreate,
 		   (WidgetClass)&xmMessageBoxWidgetClass);
   MrmRegisterClass(0, NULL, "XmCreateMessageBox",
@@ -237,29 +237,29 @@ void CommonTestUilInit(int argc, char **argv)
 		   (WidgetClass)&xmToggleButtonWidgetClass);
   MrmRegisterClass(0, NULL, "XmCreateToggleButtonGadget",
 		   ToggleButtonGadgetCreate,
-		   (WidgetClass)&xmToggleButtonGadgetClass);  
+		   (WidgetClass)&xmToggleButtonGadgetClass);
   MrmRegisterClass(0, NULL, "XmCreateComboBoxWidgetClass",
 		   ComboBoxCreate,
-		   (WidgetClass)&xmComboBoxWidgetClass);  
+		   (WidgetClass)&xmComboBoxWidgetClass);
   MrmRegisterClass(0, NULL, "XmCreateSpinBoxWidgetClass",
 		   SpinBoxCreate,
- 		   (WidgetClass)&xmSpinBoxWidgetClass);  
+ 		   (WidgetClass)&xmSpinBoxWidgetClass);
   MrmRegisterClass(0, NULL, "XmCreateNotebookWidgetClass",
 		   NotebookCreate,
-		   (WidgetClass)&xmNotebookWidgetClass);  
+		   (WidgetClass)&xmNotebookWidgetClass);
   MrmRegisterClass(0, NULL, "XmCreateContainerWidgetClass",
 		   ContainerCreate,
-		   (WidgetClass)&xmContainerWidgetClass);  
+		   (WidgetClass)&xmContainerWidgetClass);
   MrmRegisterClass(0, NULL, "XmCreateIconGadgetClass",
 		   IconGadgetCreate,
-		   (WidgetClass)&xmIconGadgetClass);  
+		   (WidgetClass)&xmIconGadgetClass);
 
 
 /* The may be useful for checking Synchronization
    use with performance testing */
 #ifdef DEBUG
 
-     XtGetApplicationResources(Shell1, (XtPointer) &Synch, 
+     XtGetApplicationResources(Shell1, (XtPointer) &Synch,
 			       resources,
 			       XtNumber(resources), (Arg *) NULL, 0 );
 
@@ -268,7 +268,3 @@ void CommonTestUilInit(int argc, char **argv)
 #endif /* DEBUG */
 
 }
-
-
-
-

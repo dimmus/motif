@@ -1,4 +1,4 @@
-Instructions for creating Motif RPMS.  
+Instructions for creating Motif RPMS.
 --------------------------------------------
 Written by Jonathan Nierenburg (jon@ics.com)
 Modified by Oleksiy Chernyavskyy (ochern@ics.com)
@@ -17,7 +17,7 @@ Initial Release: 03/17/2004
 	$ make
 	$ make dist
     You should now have an motif-x.x.x.tar.gz file in your motif
-    directory.  
+    directory.
 
 2. Create RPMROOT directory ~/rpmbuild and subdirs:
    mkdir -p ~/rpmbuild
@@ -51,4 +51,3 @@ Initial Release: 03/17/2004
    rpm -ba motif.spec
 
 The RPMS will be placed automatically into $RPMROOT/RPMS/$DEFAULT_ARCH/ and the source RPM will be placed in $RPMROOT/SRPMS.
-

@@ -23,6 +23,6 @@
 #
 # HISTORY
 TRACE:(1) Continue
-TRACE:(2) CompareVisual drawArea 
+TRACE:(2) CompareVisual drawArea
 TRACE:(3) Exit
 Exiting Test...Please Standby...

@@ -1,5 +1,5 @@
 .\" $TOG: mkdirhier.man /main/10 1998/02/06 11:24:42 kaleb $
-.\" 
+.\"
 .\" Motif
 .\"
 .\" Copyright (c) 1987-2012, The Open Group. All rights reserved.

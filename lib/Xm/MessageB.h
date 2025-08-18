@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmMessage_h
 #define _XmMessage_h
 
@@ -39,52 +39,52 @@ typedef struct _XmMessageBoxRec      * XmMessageBoxWidget;
 /* fast XtIsSubclass define */
 #ifndef XmIsMessageBox
 #define XmIsMessageBox(w) XtIsSubclass (w, xmMessageBoxWidgetClass)
-#endif 
+#endif
 
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateMessageBox( 
+extern Widget XmCreateMessageBox(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateMessageDialog( 
+extern Widget XmCreateMessageDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateErrorDialog( 
+extern Widget XmCreateErrorDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateInformationDialog( 
+extern Widget XmCreateInformationDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateQuestionDialog( 
+extern Widget XmCreateQuestionDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateWarningDialog( 
+extern Widget XmCreateWarningDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateWorkingDialog( 
+extern Widget XmCreateWorkingDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmCreateTemplateDialog( 
+extern Widget XmCreateTemplateDialog(
                         Widget parent,
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-extern Widget XmMessageBoxGetChild( 
+extern Widget XmMessageBoxGetChild(
                         Widget widget,
 #if NeedWidePrototypes
                         unsigned int child) ;

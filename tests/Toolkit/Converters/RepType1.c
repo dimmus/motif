@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: RepType1.c /main/8 1999/02/12 17:15:05 jff $"
@@ -37,8 +37,8 @@ static char rcsid[] = "$TOG: RepType1.c /main/8 1999/02/12 17:15:05 jff $"
  *  Select approximately 25+ resources from various widgets
  *  (at least one in each, several in complicated widgets like
  *  RowColumn) (which fits the criteria of being a string-to-
- *  enumerated value) and attempt to convert them.  The idea is to 
- *  verify that the developers have put in the necessary hooks for 
+ *  enumerated value) and attempt to convert them.  The idea is to
+ *  verify that the developers have put in the necessary hooks for
  *  each of the widgets to allow the conversions.
  */
 
@@ -56,7 +56,7 @@ typedef struct
 } RepTypeVal;
 
 static RepTypeVal reptypedata[] =
-{ 
+{
   {XmRAlignment, 3},
   {XmRArrowDirection, 4},
   {XmRAttachment, 7},
@@ -151,11 +151,11 @@ static ConvertVal convert_set[] =
   { "alignment_widget_bottom", XmALIGNMENT_WIDGET_BOTTOM},
   { "alignment_child_top", XmALIGNMENT_CHILD_TOP},
   { "alignment_child_bottom", XmALIGNMENT_CHILD_BOTTOM},
-  
+
   /* XmRCommandWindowLocation */
   { "command_above_workspace", XmCOMMAND_ABOVE_WORKSPACE},
   { "command_below_workspace", XmCOMMAND_BELOW_WORKSPACE},
-  
+
   /* XmRDefaultButtonType */
   { "dialog_none", XmDIALOG_NONE},
   { "dialog_cancel_button", XmDIALOG_CANCEL_BUTTON},
@@ -169,7 +169,7 @@ static ConvertVal convert_set[] =
   { "dialog_application_modal", XmDIALOG_APPLICATION_MODAL},
   { "dialog_full_application_modal", XmDIALOG_FULL_APPLICATION_MODAL},
   { "dialog_system_modal", XmDIALOG_SYSTEM_MODAL},
-  
+
   /* XmRDialogType */
   { "dialog_template", XmDIALOG_TEMPLATE},
   { "dialog_error", XmDIALOG_ERROR},
@@ -178,7 +178,7 @@ static ConvertVal convert_set[] =
   { "dialog_question", XmDIALOG_QUESTION},
   { "dialog_warning", XmDIALOG_WARNING},
   { "dialog_working", XmDIALOG_WORKING},
-  
+
   /* XmREditMode */
   { "multi_line_edit", XmMULTI_LINE_EDIT},
   { "single_line_edit", XmSINGLE_LINE_EDIT},
@@ -239,7 +239,7 @@ static ConvertVal convert_set[] =
   { "menu_pulldown", XmMENU_PULLDOWN},
   { "menu_popup", XmMENU_POPUP},
   { "menu_option", XmMENU_OPTION},
-  
+
   /* XmRScrollBarDisplayPolicy */
   { "static", XmSTATIC},
   { "as_needed", XmAS_NEEDED},
@@ -291,7 +291,7 @@ static ConvertVal convert_set[] =
   /* XmRTearOffModel */
   { "tear_off_enabled", XmTEAR_OFF_ENABLED},
   { "tear_off_disabled", XmTEAR_OFF_DISABLED},
-  
+
   /* XmRUnpostBehavior */
   { "unpost", XmUNPOST},
   { "unpost_and_replay", XmUNPOST_AND_REPLAY},
@@ -384,7 +384,7 @@ char *argv[];
       /*
        * Diagnose the answers
        */
-      
+
       if (reptypedata[i].num_of_tests != rep_type->num_values)
 	{
 	  printf("\n   FAILED: Discrepancy in returned number of values\n");
@@ -405,7 +405,7 @@ char *argv[];
 	      error_counter++;
 	    }
 
-	  if (strcmp(rep_type->value_names[k], 
+	  if (strcmp(rep_type->value_names[k],
 		     convert_set[value_counter].from_string) != 0)
 	    {
 	      printf("\n   Error: Discrepancy in name returned \n");

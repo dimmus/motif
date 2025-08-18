@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This test should be displayed on both a color and a monochrome screen for full coverage.\n\n" &
@@ -28,6 +28,3 @@
 	"  - in the middle right, a yellow board with a gray and blue line pattern.\n" &
 	"  - in the lower left, a red board with the same pallette icon as in the first board.\n\n" &
 	"When displayed on a monochrome system, the two palette icons should appear the same.\n";
-
-
-

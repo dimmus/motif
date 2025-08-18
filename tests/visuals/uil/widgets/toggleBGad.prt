@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is toggleBGad.uid ---- 
+---- The uid file to be opened is toggleBGad.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Toggle_Button_Gadget  
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Toggle_Button_Gadget
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- valueChangedCallback callback made ----
@@ -36,6 +36,6 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_VALUE_CHANGED ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
+TRACE:(4) CompareVisual S_MAIN_WIDGET
 TRACE:(5) Exit
 Exiting Test...Please Standby...

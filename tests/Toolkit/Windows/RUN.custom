@@ -27,11 +27,10 @@ setenv AUTOVPATH $MOTIF_HOME/tests/visuals/Toolkit/Windows
 else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Windows
 endif
-# The following needed for Vista and Purify usage 
+# The following needed for Vista and Purify usage
 setenv TOP ../../..
 
 set ScrollWin1a = 'ScrollWin1 -I ScrollWin1a.Dat -S ScrollWin1a.Scr -V ScrollWin1a.vis -O ScrollWin1a.prt -xrm *ScrollWin1.layoutDirection:RIGHT_TO_LEFT'
 
 foreach test ( MainWin2 ScrollWin1 "$ScrollWin1a" ScrollWin2 ScrollWin3 \
 	       ScrollWin4 ScrollWin5 ScrollWin6 ScrollWin7 )
-

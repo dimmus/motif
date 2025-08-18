@@ -37,7 +37,7 @@ externalref XrmQuark XmQTtakesDefault;
 
 /* Trait structures and typedefs, place typedefs first */
 
-typedef void (*XmTakesDefaultNotifyProc)(Widget w, 
+typedef void (*XmTakesDefaultNotifyProc)(Widget w,
 					 XtEnum state);
 
 /* Version 0: initial release. */

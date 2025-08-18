@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmArrowGadgetP_h
 #define _XmArrowGadgetP_h
 
@@ -71,26 +71,26 @@ typedef struct _XmArrowButtonGadgetPart
   Position	 old_y;
 
   GC		 arrow_GC;
-  XtIntervalId	 timer;	
+  XtIntervalId	 timer;
   unsigned char	 multiClick;	/* KEEP/DISCARD resource */
   int		 click_count;
   GC		 insensitive_GC;
 
-   
+
   GC		 background_GC;
   GC		 top_shadow_GC;
   GC		 bottom_shadow_GC;
   GC		 highlight_GC;
-   
+
   Pixel		 foreground;
   Pixel		 background;
-   
+
   Pixel		 top_shadow_color;
   Pixmap	 top_shadow_pixmap;
-   
+
   Pixel		 bottom_shadow_color;
   Pixmap	 bottom_shadow_pixmap;
-   
+
   Pixel		 highlight_color;
   Pixmap	 highlight_pixmap;
 

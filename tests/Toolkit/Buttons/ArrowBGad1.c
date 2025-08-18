@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ArrowBGad1.c /main/7 1995/07/13 17:27:08 drk $"
@@ -33,7 +33,7 @@ static char rcsid[] = "$XConsortium: ArrowBGad1.c /main/7 1995/07/13 17:27:08 dr
 #include <testlib.h>
 #include "Xm/XmP.h"
 
-Widget PanedWindow1, ArrowButton1, ArrowButtonGadget1; 
+Widget PanedWindow1, ArrowButton1, ArrowButtonGadget1;
 Widget ArrowButtonGadget2, ArrowButtonGadget3, ArrowButtonGadget4;
 
 void main(argc, argv)
@@ -45,7 +45,7 @@ char **argv;
   XmString tcs;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
@@ -68,7 +68,7 @@ char **argv;
   CommonPause();
 
   n = 0;
-  ArrowButtonGadget1 = 
+  ArrowButtonGadget1 =
     XmCreateArrowButtonGadget(PanedWindow1,
 			      "ArrowButtonGadget1", args, n);
   XtManageChild(ArrowButtonGadget1);
@@ -76,7 +76,7 @@ char **argv;
 
   n = 0;
   XtSetArg(args[n], XmNarrowDirection, XmARROW_DOWN);  n++;
-  ArrowButtonGadget2 = 
+  ArrowButtonGadget2 =
     XmCreateArrowButtonGadget(PanedWindow1,
 			      "ArrowButtonGadget2", args, n);
   XtManageChild(ArrowButtonGadget2);
@@ -84,7 +84,7 @@ char **argv;
 
   n = 0;
   XtSetArg(args[n], XmNarrowDirection, XmARROW_LEFT);  n++;
-  ArrowButtonGadget3 = 
+  ArrowButtonGadget3 =
     XmCreateArrowButtonGadget(PanedWindow1,
 			      "ArrowButtonGadget3", args, n);
   XtManageChild(ArrowButtonGadget3);
@@ -92,7 +92,7 @@ char **argv;
 
   n = 0;
   XtSetArg(args[n], XmNarrowDirection, XmARROW_RIGHT);  n++;
-  ArrowButtonGadget4 = 
+  ArrowButtonGadget4 =
     XmCreateArrowButtonGadget(PanedWindow1,
 			      "ArrowButtonGadget4", args, n);
   XtManageChild(ArrowButtonGadget4);

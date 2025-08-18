@@ -23,13 +23,13 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is pushBtn.uid ---- 
+---- The uid file to be opened is pushBtn.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Push_Button  
-TRACE:(3) CompareVisual S_MAIN_WIDGET 
-TRACE:(4) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Push_Button
+TRACE:(3) CompareVisual S_MAIN_WIDGET
+TRACE:(4) ClickMB Btn1
 
 /*********************************************************/
 ---- armCallback callback made ----
@@ -44,8 +44,8 @@ TRACE:(4) ClickMB Btn1
 ---- Reason was XmCR_DISARM ----
 /*********************************************************/
 
-TRACE:(5) CompareVisual S_MAIN_WIDGET 
-TRACE:(6) PressMB Btn1 
+TRACE:(5) CompareVisual S_MAIN_WIDGET
+TRACE:(6) PressMB Btn1
 
 /*********************************************************/
 ---- armCallback callback made ----
@@ -53,9 +53,9 @@ TRACE:(6) PressMB Btn1
 ---- Reason was XmCR_ARM ----
 /*********************************************************/
 
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
+TRACE:(7) CompareVisual S_MAIN_WIDGET
 TRACE:(8) LocatePointer Push_Button  Off
-TRACE:(9) ReleaseMB Btn1 
+TRACE:(9) ReleaseMB Btn1
 
 /*********************************************************/
 ---- disarmCallback callback made ----
@@ -63,6 +63,6 @@ TRACE:(9) ReleaseMB Btn1
 ---- Reason was XmCR_DISARM ----
 /*********************************************************/
 
-TRACE:(10) CompareVisual S_MAIN_WIDGET 
+TRACE:(10) CompareVisual S_MAIN_WIDGET
 TRACE:(11) Exit
 Exiting Test...Please Standby...

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Label2.c /main/8 1999/01/29 11:07:07 jff $"
@@ -55,9 +55,9 @@ char **argv;
   int n;
 
   CommonTestInit(argc, argv);
-    
+
   /*  The drawing area creation.  Contained in an outer frame.  */
-  
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 400);	n++;
   XtSetArg (args[n], XmNheight, 400);	n++;

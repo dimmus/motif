@@ -11,8 +11,8 @@ tests and test output.
 Throughout this README, we use the path ./tests/XmString to
 identify the top directory of the XmString tests.  The ./
 indicates the testing tree root and is not an actual path
-designation.  For example, if you installed the Motif software 
-at /source/Motif, then ./tests/XmString translates to 
+designation.  For example, if you installed the Motif software
+at /source/Motif, then ./tests/XmString translates to
 /source/Motif/tests/XmString at your site.
 
 4.1  Overview and Directory Structure
@@ -28,7 +28,7 @@ consists of several files:
    * Files with the suffixes .c and .h are the source files
      for the tests.
 
-   * Files with the .dat suffix contain the instructions for 
+   * Files with the .dat suffix contain the instructions for
      the tests.
 
    * Files with the .scr suffix are used for automated testing.
@@ -50,7 +50,7 @@ StringCopy        Tests XmString copy operations.
 
 StringDisp        Tests display of hebrew and kanji strings drawn
                   left-to-right and right-to-left. Also tests
-                  XmeStringValid.  
+                  XmeStringValid.
 
 StringDraw        Tests clipping of strings drawn with XmStringDraw().
 
@@ -64,11 +64,11 @@ StringGLR         Tests the use of different combinations of character
                   sets when calling XmStringCreateLtoR and then
                   XmStringGetLtoR.
 
-StringNext        Tests those functions which retrieve information about 
+StringNext        Tests those functions which retrieve information about
                   the next component or next segment in an XmString.
 
 StringParse       Tests XmStringParse, XmParseMapping and XmStringTable
-                  API.  
+                  API.
 
 StringRend        Tests the display of XmStrings using renditions.
 
@@ -96,7 +96,7 @@ All the tests must be compiled before you can run them.
      initial global build process, you can build the tests
      now by running make testsMakefile from the top of the
      Motif source tree, followed by the make Makefiles from
-     the top of the tests source tree, and followed by 
+     the top of the tests source tree, and followed by
      make all command from the ./tests/XmString directory.
 
 The compiled tests use a large amount of disk space.  You
@@ -125,5 +125,5 @@ XmStringWidth returns wrong value after concatenating a few
 direction segments to an existing XmString.
 Version found in:      1.2
 
- 
+
 ENDBUGS

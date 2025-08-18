@@ -1,5 +1,5 @@
 # $XConsortium: ScrollWin4.scr /main/6 1995/07/17 20:45:46 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,104 +20,104 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A Scrolled Window with horizontal and vertical scrollbars should
 #  appear. The scrollbars should be on top and on the left. The background
 #  of the ScrolledWindow should be white. The work area of the ScrolledWindow
 #  should contain a DrawingArea with two ArrowButtons. The ArrowButtons
 #  should have coral and violet backgrounds respectively. XmNspacing should
-#  be set at 20 for the ScrolledWindow. 
+#  be set at 20 for the ScrolledWindow.
 
 CompareVisual ScrolledWindow1
 
 # Move the slider on the vertical scrollbar until the second violet colored
-#  ArrowButton appears. 
+#  ArrowButton appears.
 
 LocatePointer ScrolledWindow1 RVertScrollBarSlider
 DragSliderValue Down Max
 
-# Press Shift <Tab> until the hightlight is in the work area with the 
-#  Arrow Buttons. 
+# Press Shift <Tab> until the hightlight is in the work area with the
+#  Arrow Buttons.
 
 ClickKey <Shift> KTab
 ClickKey <Shift> KTab
 
 # Press the KSelect key (Space Bar). An Activate Callback message should be
-#  printed in the term window. 
+#  printed in the term window.
 
 ClickKey KSelect
 
 # Press the Down Arrow Key. Then press KSelect again. Another message should
-#  be printed in the term window. 
+#  be printed in the term window.
 
 ClickKey KDown
 ClickKey KSelect
 
 # Move the horizontal scrollbars slider all the way to the right. The Drawing
-#  Area and it's contents should scroll to the right. 
+#  Area and it's contents should scroll to the right.
 
 LocatePointer ScrolledWindow1 RHorizScrollBarSlider
 DragSliderValue Right Max
 Continue
 
 # The size of the ArrowButtons should have been increased to 500x500 for
-#  each PushButton. 
+#  each PushButton.
 
 CompareVisual ScrolledWindow1
 
 # Move the slider on the vertical scrollbar until the second PushButton
-#  is visible. 
+#  is visible.
 
 LocatePointer ScrolledWindow1 RVertScrollBarSlider
 DragSliderValue Down 51
 
 # Press MB1 in PushButton1 (Coral colored). An activate Callback message
-#  should be printed in the term window. 
+#  should be printed in the term window.
 
 LocatePointer ArrowButton1
 ClickMB Btn1
 
 # Press Shift <Tab> until the hightlight is in the work area with the Arrow
-#  Buttons. 
+#  Buttons.
 
 ClickKey <Shift> KTab
 ClickKey <Shift> KTab
 ClickKey <Shift> KTab
 
-# Press <KBeginData>. The ScrolledWindow should scroll all the way to the top. 
+# Press <KBeginData>. The ScrolledWindow should scroll all the way to the top.
 
 ClickKey KBeginData
 
-# Press <KEndData>. The ScrolledWindow should scroll to the end of the window. 
+# Press <KEndData>. The ScrolledWindow should scroll to the end of the window.
 
 ClickKey KEndData
 Continue
 
-# PushButton1 (Coral) should now be Unmanaged and should not be visible. 
+# PushButton1 (Coral) should now be Unmanaged and should not be visible.
 
 CompareVisual ScrolledWindow1
 
-# Use the vertical scrollbars to scroll to the Violet PushButton. 
+# Use the vertical scrollbars to scroll to the Violet PushButton.
 
 LocatePointer ScrolledWindow1 RVertScrollBarSlider
 DragSliderValue Down Max
 Continue
 
 # PushButton2 (Violet) and the DrawingArea should now be Unmanaged and
-#  nothing should be visible. 
+#  nothing should be visible.
 
 CompareVisual ScrolledWindow1
 Continue
 
-# All widgets should be managed again, and everthing should be visible. 
+# All widgets should be managed again, and everthing should be visible.
 
 CompareVisual ScrolledWindow1
 
-# Use the scrollbars to \"Look At\" all of the widgets. 
+# Use the scrollbars to \"Look At\" all of the widgets.
 
 LocatePointer ScrolledWindow1 RHorizScrollBarSlider
 DragSliderValue Right Max
@@ -125,27 +125,27 @@ LocatePointer ScrolledWindow1 RVertScrollBarSlider
 DragSliderValue Down Max
 
 # Press Shift <Tab> until the hightlight is in the work area with the Arrow
-#  Buttons. 
+#  Buttons.
 
 ClickKey <Shift> KTab
 ClickKey <Shift> KTab
 
-# Press KPageUp. The ScrolledWindow should scroll upwards one page. 
+# Press KPageUp. The ScrolledWindow should scroll upwards one page.
 
 ClickKey KPageUp
 
-# Press KPageDown. The ScrolledWindow should scroll downwards one page. 
+# Press KPageDown. The ScrolledWindow should scroll downwards one page.
 
 ClickKey KPageDown
 
 Continue
 
 # The width and the height of the ArrowButtons should now change to 175.
-#  This should cause the horizontal scrollbar to disappear. 
+#  This should cause the horizontal scrollbar to disappear.
 
 CompareVisual ScrolledWindow1
 
-# Use the vertical scrollbar to  \"Look At\" all of the widgets. 
+# Use the vertical scrollbar to  \"Look At\" all of the widgets.
 
 LocatePointer ScrolledWindow1 RVertScrollBarSlider
 DragSliderValue Down Max
@@ -153,10 +153,10 @@ DragSliderValue Up Min
 Continue
 
 # The width and height of the ScrolledWindow should now be 125. This
-#  should cause the window to shrink and the horizontal scrollbar to reappear. 
+#  should cause the window to shrink and the horizontal scrollbar to reappear.
 
-# Use the horizontal and vertical scrollbars to \"Look At\" all of 
-#  the widgets. 
+# Use the horizontal and vertical scrollbars to \"Look At\" all of
+#  the widgets.
 
 CompareVisual ScrolledWindow1
 LocatePointer ScrolledWindow1 RVertScrollBarSlider
@@ -170,30 +170,30 @@ Continue
 
 # The width and height of the ScrolledWindow should now be 250. This
 #  should cause the window to expand to the point that no scrollbars should
-#  be present. 
+#  be present.
 
 CompareVisual ScrolledWindow1
 
 # Press Kselect. An Activate Callback message will be printed in the term
-#  window. 
+#  window.
 
 ClickKey KSelect
 
 # Press the Down Arrow Key. Then press KSelect. Another Activate Callback
-#  message will be printed in the term window. 
+#  message will be printed in the term window.
 
 ClickKey KDown
 ClickKey KSelect
 Continue
 
 # The Drawing Area should have been UnMapped. No widgets
-#   should be visible. 
+#   should be visible.
 
 CompareVisual Shell1
 Continue
 
 # The Drawing Area should have been Mapped again. All widgets
-#   should be visible. 
+#   should be visible.
 
 CompareVisual Shell1
 Continue
@@ -213,7 +213,7 @@ DragSliderValue Right Max
 DragSliderValue Left Min
 CompareVisual Shell1
 
-# Press KTab.  Nothing should happen. 
+# Press KTab.  Nothing should happen.
 ClickKey KTab
 CompareVisual Shell1
 

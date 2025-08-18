@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: FetchCL.uil /main/9 1995/07/14 10:47:19 drk $
 !******************************************************************************
 
@@ -35,7 +35,7 @@ module FetchCL
 ! Contains color table and icons
 !
 
-include file 'pixmaps.uil';  
+include file 'pixmaps.uil';
 
 !
 ! Nonexported color to test error return
@@ -71,8 +71,8 @@ object
 			XmNlabelString		= "Button1";
 			XmNbackground		= red;
 			XmNforeground		= yellow;
-			XmNleftAttachment	= XmATTACH_FORM; 
-			XmNtopAttachment	= XmATTACH_FORM; 
+			XmNleftAttachment	= XmATTACH_FORM;
+			XmNtopAttachment	= XmATTACH_FORM;
 		};
 	};
 
@@ -85,12 +85,10 @@ object
 			XmNbackground		= blue;
 			XmNforeground		= white;
 			XmNleftAttachment	= XmATTACH_FORM;
-			XmNtopAttachment	= XmATTACH_FORM; 
+			XmNtopAttachment	= XmATTACH_FORM;
 			XmNleftOffset		= 130;
 			XmNtopOffset		= 60;
 		};
 	};
 
 end module;
-
-

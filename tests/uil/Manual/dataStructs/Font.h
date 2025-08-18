@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: Font.h /main/4 1995/07/13 20:33:53 drk $ */
 
 #include <stdio.h>
@@ -72,7 +72,7 @@ Widget		toplevel,
 Display		*dsp;
 
 XFontStruct	*X_font = NULL,
-		*UIL_font[4] = 
+		*UIL_font[4] =
 		{
 		    NULL,
 		    NULL,

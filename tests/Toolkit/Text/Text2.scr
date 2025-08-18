@@ -1,5 +1,5 @@
 # $XConsortium: Text2.scr /main/6 1995/07/17 20:41:44 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,19 +20,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) This text widget has defined a number of different translations, which are
 #  listed below.  Try each translation and verify that the correct action is
-#  performed.  The fontList for this text widget is variable. If you 
+#  performed.  The fontList for this text widget is variable. If you
 #  need to add more text to the example, do so.
 LocatePointer Text1 RTextChar 20
 ClickMB Btn1
 
-#  !) 
+#  !)
 #     Ctrl<Key>g                 beep
 ClickKey <Ctrl> Kg
 
@@ -112,19 +112,19 @@ Continue
 # #  #) Select any word in the text by double clicking MB1 on it.
 # LocatePointer Text1 RTextChar 25
 # ClickMB Btn1 2
-# 
+#
 # #  #) Press the Backspace key to kill the selection.
 # ClickKey KBackSpace
 # CompareVisual Text1
-# 
+#
 # #  #) Click MB1 somewhere else in the text.
 # LocatePointer Text1 RTextChar 40
-# 
+#
 # #  #) Press Ctrl<Key>u to unkill the selection and paste it at the
 # #  insertion cursor position.
 # ClickKey <Ctrl> Ku
 # CompareVisual Text1
-# 
+#
 # #  #) Perform the same sequence of select word, kill and unkill using
 # #  the kill-next-word ( Ctrl<Key>k ) action.
 # LocatePointer Text1 RTextChar 15
@@ -133,7 +133,7 @@ Continue
 # LocatePointer Text1 RTextChar 30
 # ClickKey <Ctrl> Ku
 # CompareVisual Text1
-# 
+#
 # #  #) Once again, perform the sequence using the kill-previous-word
 # #  ( Meta<Key>k ) action.
 # LocatePointer Text1 RTextChar 20
@@ -142,12 +142,12 @@ Continue
 # LocatePointer Text1 RTextChar 45
 # ClickKey <Ctrl> Ku
 # CompareVisual Text1
-# 
+#
 # #  C)
 # Continue
 #
 #  /* end of test case for PIR 3520 */
-  
+
 #  Test case for CR 8029  - should not get an infinite loop
 LocatePointer Text1
 ClickMB Btn1

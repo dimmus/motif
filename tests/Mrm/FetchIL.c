@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FetchIL.c /main/9 1995/07/14 10:47:29 drk $"
@@ -51,7 +51,7 @@ extern String		summary();
 /*
  * Local declarations
  */
-   struct TestInfo FetchIconLiteralInfo[NUM_TESTS] = 
+   struct TestInfo FetchIconLiteralInfo[NUM_TESTS] =
 {
     {"Fetch non-exported icon              ", MrmNOT_FOUND,	0},
     {"Fetch nonexistent icon               ", MrmNOT_FOUND,	0},
@@ -67,7 +67,7 @@ extern String		summary();
 void main (argc, argv)
 int argc;
 char **argv;
-{ 	
+{
 
 
     Arg		args[2];
@@ -91,7 +91,7 @@ char **argv;
     MrmCount	filename_num = 0;
 
     char	uidname[80];
-    		
+
 
     MrmHierarchy	s_MrmHierarchy;
     MrmType	        class;
@@ -130,7 +130,7 @@ char **argv;
                         filename_vec,           /* files                */
                         NULL,                   /* os_ext_list (null)   */
                         &s_MrmHierarchy)        /* ptr to returned id   */
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
         printf("Can't open hierarchy\n");
     }
@@ -142,7 +142,7 @@ char **argv;
 /*
  * Get screen
  */
-	
+
 	screen = DefaultScreenOfDisplay(display);
 
 /*
@@ -151,12 +151,12 @@ char **argv;
 
 	white = WhitePixel(display, DefaultScreen(display));
 	black = BlackPixel(display, DefaultScreen(display));
-	
+
 /*
  * Try to fetch an icon which is not exported
  */
 
-	FetchIconLiteralInfo[0].actual_return = 
+	FetchIconLiteralInfo[0].actual_return =
 	MrmFetchIconLiteral(s_MrmHierarchy,	/* id of uid hierarchy	*/
 			    "bad_test1_icon",	/* uil name of widget	*/
 			    screen,		/* screen		*/
@@ -164,7 +164,7 @@ char **argv;
 			    white,		/* foreground color	*/
 			    black,		/* background color	*/
 			    &bad_pix);		/* pixmap		*/
-	
+
 /*
  * Try to fetch an icon which is nonexistent
  */
@@ -177,7 +177,7 @@ char **argv;
 			    white,
 			    black,
 			    &bad_pix);
-	
+
 /*
  * Try to fetch an icon from a NULL hierarchy
  */
@@ -192,7 +192,7 @@ char **argv;
 			    &bad_pix);
 
 
-  
+
 
 
 
@@ -240,12 +240,12 @@ char **argv;
 	XtSetArg(args[nargs], XmNbackground, &btn1_bg_color ); nargs++;
 	XtSetArg(args[nargs], XmNforeground, &btn1_fg_color ); nargs++;
 	XtGetValues(button1, args, nargs);
-	
+
 	nargs = 0;
 	XtSetArg(args[nargs], XmNbackground, &btn2_bg_color ); nargs++;
 	XtSetArg(args[nargs], XmNforeground, &btn2_fg_color ); nargs++;
 	XtGetValues(button2, args, nargs);
-	
+
 /*
  * Fetch the icons for each button for valid test 1
  */
@@ -258,7 +258,7 @@ char **argv;
 			    btn1_fg_color,
 			    btn1_bg_color,
 			    &btn1_pix);
-	
+
 	FetchIconLiteralInfo[4].actual_return =
 	MrmFetchIconLiteral(s_MrmHierarchy,
 			    "test1_btn2_icon",
@@ -267,7 +267,7 @@ char **argv;
 			    btn2_fg_color,
 			    btn2_bg_color,
 			    &btn2_pix);
-	
+
 
 /*
  * Replace the labels for both buttons with the valid test 1 icons
@@ -276,11 +276,11 @@ char **argv;
 	nargs = 0;
 	XtSetArg(args[nargs], XmNlabelPixmap, btn1_pix); nargs++;
 	XtSetValues(button1, args, nargs);
-			       
+
 	nargs = 0;
 	XtSetArg(args[nargs], XmNlabelPixmap, btn2_pix); nargs++;
 	XtSetValues(button2, args, nargs);
-			       
+
 
 	CommonPause();
 
@@ -296,7 +296,7 @@ char **argv;
 			    btn1_fg_color,
 			    btn1_bg_color,
 			    &btn1_pix);
-	
+
 	FetchIconLiteralInfo[6].actual_return =
 	MrmFetchIconLiteral(s_MrmHierarchy,
 			    "test2_btn2_icon",
@@ -305,7 +305,7 @@ char **argv;
 			    btn2_fg_color,
 			    btn2_bg_color,
 			    &btn2_pix);
-	
+
 /*
  * Replace the labels for both buttons with the valid test 1 icons
  */
@@ -313,12 +313,12 @@ char **argv;
 	nargs = 0;
 	XtSetArg(args[nargs], XmNlabelPixmap, btn1_pix); nargs++;
 	XtSetValues(button1, args, nargs);
-			       
+
 	nargs = 0;
 	XtSetArg(args[nargs], XmNlabelPixmap, btn2_pix); nargs++;
 	XtSetValues(button2, args, nargs);
-			       
-	
+
+
     CommonPause();
 
 
@@ -331,4 +331,3 @@ char **argv;
    CommonPause();
 
 }
-

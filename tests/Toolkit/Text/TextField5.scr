@@ -1,5 +1,5 @@
 # $XConsortium: TextField5.scr /main/5 1995/07/17 20:43:09 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,19 +20,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-#  @) A client with a list of functions, a control panel and a TextField to 
+#  @) A client with a list of functions, a control panel and a TextField to
 #  be acted upon should appear.
 #  #) Drag MB1 in the Action TextField widget to make a small selection.
 WindowRaise Shell1
 LocatePointer TextF1 RTextChar 5
 DragComponent TextF1 RTextChar 9
 
-#  #) Select XmTextFieldGetSelectionPosition() and call the function. 
+#  #) Select XmTextFieldGetSelectionPosition() and call the function.
 #  The left and right end positions
 #  of the selection will
 #  correspond to the values shown in the Status/Input widget.
@@ -61,7 +61,7 @@ DragSliderValue Right 2
 LocatePointer Scale2 RScaleSlider
 DragSliderValue Right 7
 
-#  Click Call Function.  The characters selected in the Action TextField will 
+#  Click Call Function.  The characters selected in the Action TextField will
 #  correspond to the range between Num Arg 1 and Num Arg 2.
 LocatePointer ApplyB
 ClickMB Btn1
@@ -103,7 +103,7 @@ ClickMB Btn1
 InputString "NEW"
 
 #  #) Click the Call Function PushButton.  The string in the Status/Input
-#  widget should get inserted after the third character in the Action TextField 
+#  widget should get inserted after the third character in the Action TextField
 #  widget.
 LocatePointer ApplyB
 ClickMB Btn1
@@ -156,7 +156,7 @@ ClickMB Btn1
 CompareVisual TextF1
 
 #  #) Again, traverse to the Action TextField widget and then move around with
-#  the arrow keys.  Assuming the selection was still there when focus 
+#  the arrow keys.  Assuming the selection was still there when focus
 #  arrived in the Action TextField widget, the arrow keys should have now
 #  deselected the selection.
 ClickKey KTab
@@ -192,11 +192,11 @@ CompareVisual StatText
 LocatePointer ClearB
 ClickMB Btn1
 
-#  #) Select the XmTextFieldSetString() function.  
+#  #) Select the XmTextFieldSetString() function.
 LocatePointer List1 RListItem 1
 ClickMB Btn1
 
-#  #) Click in the Status/Input widget and type "Here is a new string". 
+#  #) Click in the Status/Input widget and type "Here is a new string".
 LocatePointer StatText
 ClickMB Btn1
 InputString "Here is a new string"

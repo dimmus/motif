@@ -1,5 +1,5 @@
 # $XConsortium: RowCol1.scr /main/6 1995/07/17 20:28:18 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,13 +20,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A row column with two push buttons should appear.  The labels, 'button1'
-#  and 'button2' should appear centered in the buttons.  
+#  and 'button2' should appear centered in the buttons.
 
 # Press button1.  The label should change to 'a' and still be centered in the
 #  button.
@@ -43,12 +43,12 @@ ClickMB Btn1
 CompareVisual RowColumn1
 Continue
 
-# A RowColumn widget should be displayed, with an arrowbutton and 
+# A RowColumn widget should be displayed, with an arrowbutton and
 #   'Label1' directly below it.
 CompareVisual RowColumn1
 Continue
 
-# 'Label1' will now be to the right of the arrowbutton and 'PushButton1' 
+# 'Label1' will now be to the right of the arrowbutton and 'PushButton1'
 #   will appear below the arrowbutton.
 
 CompareVisual RowColumn1
@@ -70,28 +70,28 @@ Continue
 
 CompareVisual RowColumn1
 
-# Click on the arrowbutton - it should appear depressed. 
+# Click on the arrowbutton - it should appear depressed.
 
 LocatePointer ArrowButton1
 PressMB Btn1
 CompareVisual ArrowButton1
 ReleaseMB Btn1
 
-# Click on 'Label1' - nothing should happen. 
+# Click on 'Label1' - nothing should happen.
 
 LocatePointer Label1
 PressMB Btn1
 CompareVisual Label1
 ReleaseMB Btn1
 
-# Click on 'ToggleButton1' - the indicator should appear filled in. 
+# Click on 'ToggleButton1' - the indicator should appear filled in.
 
 LocatePointer ToggleButton1
 ClickMB Btn1
 CompareVisual ToggleButton1
 
 # Press and hold MB1 on 'PushButton1' - the background color
-#   of the pushbutton should change. 
+#   of the pushbutton should change.
 
 LocatePointer PushButton1
 PressMB Btn1
@@ -105,14 +105,14 @@ CompareVisual RowColumn1
 
 # Click in the border of the arrow button. The button should appear
 #   pressed in and out, and an "Activation Callback"
-#   message should appear in the standard out window. 
+#   message should appear in the standard out window.
 
 LocatePointer ArrowButton1
 PressMB Btn1
 CompareVisual ArrowButton1
 ReleaseMB Btn1
 
-# Repeat for the push button. 
+# Repeat for the push button.
 
 LocatePointer PushButton1
 PressMB Btn1
@@ -124,7 +124,7 @@ ReleaseMB Btn1
 #  "Activation callback", the message should say a "Value changed"
 #  callback was received.  Also verify that the state printed in the message
 #  matches the visible state of the toggle button. (A filled-in indicator is
-#  ON, a raised indicator is OFF.) 
+#  ON, a raised indicator is OFF.)
 
 LocatePointer ToggleButton1
 PressMB Btn1
@@ -138,7 +138,7 @@ WindowRaise Shell1
 CompareVisual RowColumn1
 
 # Resize the lower right corner of the client window to
-#  240 x 180. Only the arrowbutton and 'Label1' should be visible. 
+#  240 x 180. Only the arrowbutton and 'Label1' should be visible.
 
 WindowResize Shell1 SouthEast 240 180
 WindowRaise Shell1
@@ -151,7 +151,7 @@ CompareVisual RowColumn1
 Continue
 
 # Resize the window several times. The buttons should grow or shrink
-#   to fit the window. 
+#   to fit the window.
 
 WindowResize Shell1 SouthEast 200 200
 WindowRaise Shell1

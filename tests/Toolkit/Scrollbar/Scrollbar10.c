@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Scrollbar10.c /main/8 1999/01/15 12:37:25 jff $"
@@ -51,7 +51,7 @@ Widget sbw;
    int maximum;
    int value;
    int slider_size;
-   
+
    n = 0;
    XtSetArg(args[n], XmNminimum, &minimum);	n++;
    XtSetArg(args[n], XmNmaximum, &maximum);	n++;
@@ -135,7 +135,7 @@ char **argv;
   XtAddCallback(scrollbar, XmNhelpCallback,          ScrollCallback, NULL);
 
   CommonPause();
-  
+
   XtDestroyWidget(scrollbar);
   XtDestroyWidget(frame);
   CommonPause();
@@ -153,7 +153,7 @@ caddr_t call_data;
   Arg args[10];
   int n;
 
-  XmScrollBarCallbackStruct * call_value = 
+  XmScrollBarCallbackStruct * call_value =
     (XmScrollBarCallbackStruct *) call_data;
 
   reason = call_value -> reason;

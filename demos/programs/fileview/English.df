@@ -18,7 +18,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 Fileview*fontList :  *-helvetica-bold-r-normal--24-*-iso8859-1:
 *main.menubar*fontList :  *-helvetica-bold-r-normal--24-*-iso8859-1:
@@ -56,4 +56,3 @@ Fileview*fontList :  *-helvetica-bold-r-normal--24-*-iso8859-1:
 *search_box.form.dir_frame*title.labelString : Direction
 *search_box.form.dir_frame*forward.labelString: Forward
 *search_box.form.dir_frame*backward.labelString: Backward
-

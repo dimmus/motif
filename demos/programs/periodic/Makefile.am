@@ -9,7 +9,7 @@ periodic_SOURCES = periodic.c
 data_DATA = $(EXTRA_DIST) $(periodic_SOURCES) periodic.uid
 LDADD = ../../../lib/Xm/libXm.la ../../../lib/Mrm/libMrm.la -lXt -lX11
 
-AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS} 
+AM_CPPFLAGS = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS}
 
 all: periodic.uid
 
@@ -18,5 +18,3 @@ periodic.uid: periodic.uil
 
 clean-local:
 	$(RM) periodic.uid
-
-    

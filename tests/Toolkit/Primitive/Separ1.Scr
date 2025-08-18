@@ -1,5 +1,5 @@
 # $XConsortium: Separ1.scr /main/5 1995/07/17 20:34:30 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client with a BulletinBoard containing four Labels and four Separators
@@ -36,7 +36,7 @@ Continue
 # The second separator will have changed to double-line.
 # The third separator will have changed to double-dashed-line.
 # The fourth separator will have changed to single-dashed-line.
-# Iconify and Normalize the client window. 
+# Iconify and Normalize the client window.
 
 WindowIconify BBoard
 WindowDeiconify BBoard
@@ -53,5 +53,5 @@ Continue
 
 CompareVisual BBoard
 Continue
-	
+
 Exit

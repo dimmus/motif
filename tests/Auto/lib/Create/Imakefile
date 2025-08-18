@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/11 1995/07/14 09:55:46 drk $
 
 #define DoNormalLib	NormalLibCreate
@@ -45,7 +45,7 @@ SUBDIRS = $(GEOMETRY_DIR) $(INSTANCE_DIR) $(OTHER_DIR) $(RESOURCE_DIR) \
 
 GEOMETRY_OBJS =	$(GEOMETRY_DIR)/GenObjects.o \
     		$(GEOMETRY_DIR)/GetGeometry.o \
-    		$(GEOMETRY_DIR)/GetSubObjcts.o 
+    		$(GEOMETRY_DIR)/GetSubObjcts.o
 
 INSTANCE_OBJS =	$(INSTANCE_DIR)/ApplicationS.o \
 		$(INSTANCE_DIR)/ArrowB.o \
@@ -126,7 +126,7 @@ OTHER_OBJS = 	$(OTHER_DIR)/AlwaysTrue.o \
     		$(OTHER_DIR)/WidToWidgInf.o \
     		$(OTHER_DIR)/msg.o \
     		$(OTHER_DIR)/mvsAssertion.o \
-    		$(OTHER_DIR)/mvsGetRsnNam.o 
+    		$(OTHER_DIR)/mvsGetRsnNam.o
 
 RESOURCE_OBJS = $(RESOURCE_DIR)/mvsConToType.o \
     		$(RESOURCE_DIR)/mvsCpRep1Arg.o \
@@ -146,7 +146,7 @@ RESOURCE_OBJS = $(RESOURCE_DIR)/mvsConToType.o \
     		$(RESOURCE_DIR)/mvsSetUpGlob.o \
     		$(RESOURCE_DIR)/mvsSetValues.o \
     		$(RESOURCE_DIR)/mvsSetValNCk.o \
-    		$(RESOURCE_DIR)/mvsUtils.o 
+    		$(RESOURCE_DIR)/mvsUtils.o
 
 SPECIFIC_OBJS = $(SPECIFIC_DIR)/CreateShell.o
 
@@ -160,7 +160,7 @@ WIDGET_OBJS = 	$(WIDGET_DIR)/AllocWidInfo.o \
 
 GEOMETRY_SRCS =	$(GEOMETRY_DIR)/GenObjects.c \
     		$(GEOMETRY_DIR)/GetGeometry.c \
-    		$(GEOMETRY_DIR)/GetSubObjcts.c 
+    		$(GEOMETRY_DIR)/GetSubObjcts.c
 
 INSTANCE_SRCS =	$(INSTANCE_DIR)/ApplicationS.c \
 		$(INSTANCE_DIR)/ArrowB.c \
@@ -240,7 +240,7 @@ OTHER_SRCS = 	$(OTHER_DIR)/AlwaysTrue.c \
     		$(OTHER_DIR)/WidToWidgInf.c \
     		$(OTHER_DIR)/msg.c \
     		$(OTHER_DIR)/mvsAssertion.c \
-    		$(OTHER_DIR)/mvsGetRsnNam.c 
+    		$(OTHER_DIR)/mvsGetRsnNam.c
 
 RESOURCE_SRCS = $(RESOURCE_DIR)/mvsConToType.c \
     		$(RESOURCE_DIR)/mvsCpRep1Arg.c \
@@ -260,9 +260,9 @@ RESOURCE_SRCS = $(RESOURCE_DIR)/mvsConToType.c \
     		$(RESOURCE_DIR)/mvsSetUpGlob.c \
     		$(RESOURCE_DIR)/mvsSetValues.c \
     		$(RESOURCE_DIR)/mvsSetValNCk.c \
-    		$(RESOURCE_DIR)/mvsUtils.c 
+    		$(RESOURCE_DIR)/mvsUtils.c
 
-SPECIFIC_SRCS = $(SPECIFIC_DIR)/CreateShell.c 
+SPECIFIC_SRCS = $(SPECIFIC_DIR)/CreateShell.c
 
 WIDGET_SRCS = 	$(WIDGET_DIR)/AllocWidInfo.c \
     		$(WIDGET_DIR)/CreatChildrn.c \
@@ -278,7 +278,7 @@ OBJS = 	$(CALLBACK_OBJS) \
 	$(OTHER_OBJS) 	\
 	$(RESOURCE_OBJS) \
 	$(SPECIFIC_OBJS) \
-	$(WIDGET_OBJS) 
+	$(WIDGET_OBJS)
 
 SRCS = 	$(CALLBACK_SRCS) \
 	$(GEOMETRY_SRCS) \
@@ -286,7 +286,7 @@ SRCS = 	$(CALLBACK_SRCS) \
 	$(OTHER_SRCS) 	\
 	$(RESOURCE_SRCS) \
 	$(SPECIFIC_SRCS) \
-	$(WIDGET_SRCS) 
+	$(WIDGET_SRCS)
 
 #if DoNormalLib && DoSharedLib && SeparateSharedCompile
 MakeShadowTree(unshared,$(SUBDIRS))

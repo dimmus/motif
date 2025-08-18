@@ -1,5 +1,5 @@
 # $XConsortium: ToggleBGad4.scr /main/6 1995/07/17 20:07:23 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,14 +20,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-# The toggle buttons in this test are part of the same tab group.  Put 
+# The toggle buttons in this test are part of the same tab group.  Put
 # the pointer over the top toggle button. Press the space bar to activate it.
-# The pixmap changes and the indicator fills. 
+# The pixmap changes and the indicator fills.
 
 LocatePointer TButton1
 ClickKey KSpace
@@ -38,19 +38,19 @@ CompareVisual TButton1
 Continue
 
 
-# Press the down arrow key twice so Toggle 3 is highlighted. 
+# Press the down arrow key twice so Toggle 3 is highlighted.
 
 LocatePointer TButton1
 ClickKey KDown
 ClickKey KDown
 
-# Hit the spacebar key (in Toggle 3). A new button will appear. 
-# Its highlightThickness will be 4. 
+# Hit the spacebar key (in Toggle 3). A new button will appear.
+# Its highlightThickness will be 4.
 
 ClickKey KSpace
 CompareVisual PanedWindow1
 
-# Resize the window larger so you can see the entire button label. 
+# Resize the window larger so you can see the entire button label.
 
 WindowResize Shell1 SouthEast 300 200
 CompareVisual PanedWindow1
@@ -59,22 +59,22 @@ CompareVisual PanedWindow1
 
 Continue
 
-# Hit the tab key to move to the More Widgets... button. 
+# Hit the tab key to move to the More Widgets... button.
 
 LocatePointer TButton3
 ClickKey KTab
 
 # Hit the spacebar key, and two things should happen:  The button's label
-# changes to Toggle Gadget States and Toggle Widgets 1 and 2 appear in 
-# a new pane. Toggle Widget 2 will have a highlightThickness of 4. 
+# changes to Toggle Gadget States and Toggle Widgets 1 and 2 appear in
+# a new pane. Toggle Widget 2 will have a highlightThickness of 4.
 
 ClickKey KSpace
 CompareVisual StateButton1
 
-# The push button will now reset the state of the toggle buttons in 
+# The push button will now reset the state of the toggle buttons in
 # the top pane. Use the spacebar key to activate the button.
 # Each time you press the Toggle States button, the toggle buttons which
-# were ON will switch OFF and vice-versa. 
+# were ON will switch OFF and vice-versa.
 
 CompareVisual WidgetRC
 ClickKey KSpace
@@ -88,7 +88,7 @@ Continue
 
 
 # Hit the tab key twice to get to the bottom pane. Press the down arrow
-# key and use the spacebar key to depress the Toggle Widget 2 button. 
+# key and use the spacebar key to depress the Toggle Widget 2 button.
 
 LocatePointer TButton3
 ClickKey KTab
@@ -97,19 +97,19 @@ ClickKey KDown
 ClickKey KSpace
 CompareVisual ToggleW2
 
-# Use the up arrow key to return to Toggle Widget 1. Hit the spacebar key. 
+# Use the up arrow key to return to Toggle Widget 1. Hit the spacebar key.
 
 ClickKey KUp
 ClickKey KSpace
 CompareVisual StateButton2
 
-# A new button called Toggle Widget States... has appeared. 
+# A new button called Toggle Widget States... has appeared.
 
 CompareVisual StateButton2
 
 # Hit the Shift-tab key to reach the bottom pane. You can
-# use this button to toggle the states of the widgets in the 
-# pane just above it, as you did earlier. 
+# use this button to toggle the states of the widgets in the
+# pane just above it, as you did earlier.
 
 ClickKey <Shift> KTab
 ClickKey KSpace
@@ -118,7 +118,7 @@ CompareVisual ToggleW1
 # C)
 
 Continue
-	
+
 # E)
 
 Exit

@@ -1,5 +1,5 @@
 # $XConsortium: ScrollText1.scr /main/6 1995/07/17 20:40:05 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Click MB1 anywhere in the text widget.
 LocatePointer Text1
@@ -47,7 +47,7 @@ CompareVisual info_box
 LocatePointer info_box ROkButton
 ClickMB Btn1
 
-#  C)	
+#  C)
 Continue
 
 #  /* test case for PIR 2574 */
@@ -127,7 +127,7 @@ CompareVisual BBoard1
 DragSliderValue Up Min
 CompareVisual BBoard1
 
-#  #) Click on the togglebutton again to switch the EditMode back to 
+#  #) Click on the togglebutton again to switch the EditMode back to
 #  XmSINGLE_LINE_EDIT.  The vertical scrollbar should disappear and the text
 #  widget should return to only displaying 1 line.
 LocatePointer ToggleB1

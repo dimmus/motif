@@ -685,11 +685,11 @@ $(FONTDIR)/100dpi/,$(FONTDIR)/75dpi/
 #define ForceNormalLib (HasGcc && !HasGcc2)
 #endif
 
-#ifndef ResourceConfigurationManagement 
+#ifndef ResourceConfigurationManagement
 #define ResourceConfigurationManagement YES
 #endif
 
-#ifndef XtPopdownConformance 
+#ifndef XtPopdownConformance
 #define XtPopdownConformance YES
 #endif
 
@@ -777,7 +777,7 @@ XCOMM X Window System make variables; these need to be coordinated with rules
        XENVLIBDIR = X11BuildLibPath
    CLIENTENVSETUP = BuildLibPathVar=BuildLibPath
 #else
-   CLIENTENVSETUP = 
+   CLIENTENVSETUP =
 #endif
 
 #ifndef ShLibIncludeFile
@@ -1355,7 +1355,7 @@ InstallFontObjs($(OBJS),dest)
 
 
 /*
- * InstallFontAliases - generate rules to install font aliases databases. 
+ * InstallFontAliases - generate rules to install font aliases databases.
  */
 #ifndef InstallFontAliases
 #define InstallFontAliases(dest)					@@\

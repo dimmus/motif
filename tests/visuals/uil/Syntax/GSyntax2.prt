@@ -23,11 +23,11 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is GSyntax2.uid ---- 
+---- The uid file to be opened is GSyntax2.uid ----
 /*********************************************************/
 
 Reason # for MrmNcreateCallback is 43
 TRACE:(1) WindowRaise S_MAIN_WIDGET
-TRACE:(2) CompareVisual S_MAIN_WIDGET 
+TRACE:(2) CompareVisual S_MAIN_WIDGET
 TRACE:(3) Exit
 Exiting Test...Please Standby...

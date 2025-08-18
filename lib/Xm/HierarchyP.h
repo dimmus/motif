@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 
 #ifndef _XmHierarchyP_h
@@ -89,10 +89,10 @@ typedef struct _HierarchyConstraintRec {
 
 typedef void	(*XmHierarchyNodeProc)(HierarchyConstraints);
 typedef void	(*XmHierarchyExtraNodeProc)(Widget, HierarchyConstraints);
-typedef void	(*XmHierarchyBuildTableProc)(Widget, 
+typedef void	(*XmHierarchyBuildTableProc)(Widget,
 					     HierarchyConstraints, Cardinal *);
 typedef void	(*XmHierarchyResetButtonProc)(Widget, HierarchyConstraints);
-    
+
 typedef struct {
     /* Class function for changing node state. */
     XmHierarchyNodeProc		change_node_state;
@@ -108,7 +108,7 @@ typedef struct {
     /* Toggles state of a node. */
     XtCallbackProc 		toggle_node_state;
     /* Just in case we need it later. */
-    XtPointer 			extension;	
+    XtPointer 			extension;
 } HierarchyClassPart;
 
 typedef struct _XmHierarchyClassRec {
@@ -142,7 +142,7 @@ typedef struct _HierarchyPart {
     /* private state */
 
     HierarchyConstraintRec ** node_table;
-    HierarchyConstraints top_node; 
+    HierarchyConstraints top_node;
     Cardinal num_nodes, alloc_nodes;
     Pixmap def_open_folder, def_close_folder; /* Default folder button Images*/
 

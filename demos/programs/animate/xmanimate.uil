@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 
 !***************************************************************
@@ -34,17 +34,17 @@ module motifanim
     names = case_sensitive
 
 procedure
-    p_motifanim_start();    
-    p_motifanim_stop();    
+    p_motifanim_start();
+    p_motifanim_stop();
     p_motifanim_step();
     p_motifanim_speed(integer);
     p_motifanim_exit();
     p_motifanim_help();
-    p_motifanim_draw(integer);	
+    p_motifanim_draw(integer);
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! The main is a big Form that try to manage its children 
+! The main is a big Form that try to manage its children
 ! as well as possible...
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -58,7 +58,7 @@ object
 
 object
     motifanim_form : XmForm {
-	arguments { 
+	arguments {
 	    XmNdefaultButton = motifanim_start ;
 	};
 	controls {
@@ -72,7 +72,7 @@ object
     };
 
 !-------------------------------------------------------
-! As a geometry starting point, we fix the bottom line of 
+! As a geometry starting point, we fix the bottom line of
 ! PushButtons (start, stop..) to the Form bottom and sides
 ! and the menubar to the top
 !-------------------------------------------------------
@@ -82,7 +82,7 @@ object
 	arguments {
 	    XmNmenuHelpWidget = XmCascadeButton help_entry;
          };
-         controls {                              
+         controls {
             XmCascadeButton file_menu_entry;
             XmCascadeButton help_entry;
          };
@@ -93,7 +93,7 @@ object
             arguments {
                 XmNlabelString = compound_string('File') ;
 		XmNmnemonic = keysym("F");
-            };                                            
+            };
             controls {
                 XmPulldownMenu file_menu;
             };
@@ -103,7 +103,7 @@ object
             arguments {
                 XmNlabelString = compound_string('Help') ;
 		XmNmnemonic = keysym("H");
-            };                                            
+            };
             controls {
                 XmPulldownMenu help_menu;
             };
@@ -124,73 +124,73 @@ object
 
 object
     motifanim_quit : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNlabelString = compound_string('Quit');
  	    XmNmnemonic = keysym("Q");
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure p_motifanim_exit();
 	};
     };
 object
     motifanim_help : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNlabelString = compound_string('Overview');
  	    XmNmnemonic = keysym("O");
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure p_motifanim_help();
 	};
     };
 
 object
     motifanim_start : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNlabelString = compound_string('Start');
 	    XmNbottomAttachment = XmATTACH_FORM ;
 	    XmNleftAttachment = XmATTACH_FORM ;
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure p_motifanim_start();
 	};
     };
 
 object
     motifanim_stop : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNlabelString = compound_string('Stop');
 	    XmNbottomAttachment = XmATTACH_FORM ;
 	    XmNleftAttachment = XmATTACH_WIDGET ;
 	    XmNleftWidget = XmPushButton motifanim_start ;
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure p_motifanim_stop();
 	};
     };
 
 object
     motifanim_step : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNlabelString = compound_string('One step');
 	    XmNbottomAttachment = XmATTACH_FORM ;
 	    XmNleftAttachment = XmATTACH_WIDGET ;
 	    XmNleftWidget = XmPushButton motifanim_stop ;
 	};
-	callbacks { 
+	callbacks {
 	    XmNactivateCallback = procedure p_motifanim_step();
 	};
     };
 
 object
     motifanim_speed : XmScale {
-	arguments { 
+	arguments {
 	    XmNtitleString = compound_string('Speed');
 	    XmNorientation = XmHORIZONTAL ;
 	    XmNbottomAttachment = XmATTACH_FORM ;
 	    XmNleftAttachment = XmATTACH_WIDGET ;
 	    XmNleftWidget = XmPushButton motifanim_step ;
 	};
-	callbacks { 
+	callbacks {
 	    MrmNcreateCallback = procedure p_motifanim_speed(0);
 	    XmNdragCallback = procedure p_motifanim_speed(1);
 	    XmNvalueChangedCallback = procedure p_motifanim_speed(2);
@@ -243,7 +243,7 @@ value
 
 object
     view_anim : XmDrawingArea {
-	arguments { 
+	arguments {
 	    XmNwidth = anim_width ;
 	    XmNheight = anim_height ;
 	    XmNbackground = anim_backcolor ;
@@ -255,5 +255,3 @@ object
     };
 
 end module;
-
-

@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 
 .TH autopopups 1X MOTIF "Demonstration programs"
@@ -33,6 +33,5 @@
 .SH DESCRIPTION
 \*Lautopopups\*O
 demonstrates the use of the new automatic popup features in 2.0.  Note
-the different popup menus which are posted as you press button3 on the 
+the different popup menus which are posted as you press button3 on the
 different objects.  Press the Quit button to exit.
-

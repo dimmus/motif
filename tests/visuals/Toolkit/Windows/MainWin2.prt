@@ -22,10 +22,10 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual main 
+TRACE:(1) CompareVisual main
 TRACE:(2) Continue
-TRACE:(3) CompareVisual main 
+TRACE:(3) CompareVisual main
 TRACE:(4) Continue
-TRACE:(5) CompareVisual main 
+TRACE:(5) CompareVisual main
 TRACE:(6) Exit
 Exiting Test...Please Standby...

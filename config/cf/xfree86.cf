@@ -151,7 +151,7 @@ XCOMM $TOG: xfree86.cf /main/38 1997/10/22 13:01:59 kaleb $
 #endif
 
 #ifndef XF98GANBWAPServer
-# define XF98GANBWAPServer	NO	
+# define XF98GANBWAPServer	NO
 #endif
 
 #ifndef XF98NEC480Server
@@ -163,11 +163,11 @@ XCOMM $TOG: xfree86.cf /main/38 1997/10/22 13:01:59 kaleb $
 #endif
 
 #ifndef XF98WABSServer
-# define XF98WABSServer		NO	
+# define XF98WABSServer		NO
 #endif
 
 #ifndef XF98SVGAServer
-# define XF98SVGAServer		NO	
+# define XF98SVGAServer		NO
 #endif
 
 #ifndef XF98TGUIServer
@@ -179,7 +179,7 @@ XCOMM $TOG: xfree86.cf /main/38 1997/10/22 13:01:59 kaleb $
 #endif
 
 #ifndef XF98NECS3Server
-# define XF98NECS3Server	NO	
+# define XF98NECS3Server	NO
 #endif
 
 #ifndef XF98PWSKBServer

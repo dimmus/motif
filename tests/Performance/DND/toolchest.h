@@ -71,9 +71,9 @@ struct menu
 #ifdef TCMENU
     struct menuEntry *activeEntry;
     Widget menuWidget;
-#endif    
+#endif
 };
-    
+
 
 extern int lineno;
 extern char *progName;

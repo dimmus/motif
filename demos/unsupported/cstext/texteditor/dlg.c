@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: dlg.c /main/6 1995/07/14 09:43:54 drk $"
@@ -91,7 +91,7 @@ static void (*continuation)();
       /* Tell the interface to display the current file name
          surrounded by asterisks if it is modified */
 
-static void 
+static void
 DlgUpdateStatus(char *nam, int mod)
 {
     static char curnam[128] = "";
@@ -165,7 +165,7 @@ static void DlgSave()
 {
     char *txt;
     size_t numchars;
-    
+
     if ( AppOpenSaveFile() ) {
       numchars = TkTextRetrieve(&txt, TkTextFormat());
 	AppSaveFile(txt, numchars);
@@ -184,7 +184,7 @@ static void DlgSaveAndContinue()
 {
     char *txt;
     size_t numchars;
-    
+
     TkDoneAskingSave();
     if ( AppOpenSaveFile() ) {
       numchars = TkTextRetrieve(&txt, TkTextFormat());
@@ -206,7 +206,7 @@ static void DlgSaveAs()
     char *txt;
     char *bufnam;
     size_t numchars;
-    
+
       /* Note: DlgSaveAs, DlgCopyTo, and DlgMoveTo should be fixed to
          request confirmation if the destination files already exist */
 
@@ -232,7 +232,7 @@ void DlgCopyTo()
 {
     char *txt;
     size_t numchars;
-    
+
     if ( AppOpenTransferFile( fileSelected ) ) {
       numchars = TkTextRetrieve(&txt, TkTextFormat());
         AppTransferFile(txt, numchars);
@@ -254,7 +254,7 @@ void DlgMoveTo()
     char *bufnam;
     int result;
     size_t numchars;
-    
+
     if ( AppOpenTransferFile( fileSelected ) ) {
       numchars = TkTextRetrieve(&txt, TkTextFormat());
         AppTransferFile(txt, numchars);
@@ -289,11 +289,11 @@ void DlgRemove()
 ============================================================*/
 
 /************************************************************
- * User specified if file selection dialogue should 
+ * User specified if file selection dialogue should
  * remain available
  ************************************************************/
 
-void 
+void
 DlgKeepFileDialogueCB(int val)
 {
     keep_file_dialogue = val;
@@ -304,7 +304,7 @@ DlgKeepFileDialogueCB(int val)
  * after selecting a file
  ************************************************************/
 
-void 
+void
 DlgRevertToOpenCB(int val)
 {
     revert_to_open = val;
@@ -320,7 +320,7 @@ void DlgNoteJustChangedCB()
 }
 
 /************************************************************
- * User's first modification of current file since saving it 
+ * User's first modification of current file since saving it
  * or refusing to save it when asked
  ************************************************************/
 
@@ -362,7 +362,7 @@ void DlgSaveCancelCB()
  * User cancelled operation when asked if file should be saved
  ************************************************************/
 
-void 
+void
 DlgWarnCancelCB(enum warn_reasons reason)
 {
     if ( reason != warn_remove )
@@ -373,7 +373,7 @@ DlgWarnCancelCB(enum warn_reasons reason)
  * User specified a file to open
  ************************************************************/
 
-void 
+void
 DlgSelectOpenCB(char *filnam)
 {
     strcpy( fileSelected, filnam );
@@ -393,7 +393,7 @@ DlgSelectOpenCB(char *filnam)
  * User specified a file to save as
  ************************************************************/
 
-void 
+void
 DlgSelectSaveCB(char *filnam)
 {
     strcpy( fileSelected, filnam );
@@ -404,7 +404,7 @@ DlgSelectSaveCB(char *filnam)
  * User specified a file to copy to
  ************************************************************/
 
-void 
+void
 DlgSelectCopyCB(char *filnam)
 {
     strcpy( fileSelected, filnam );
@@ -415,7 +415,7 @@ DlgSelectCopyCB(char *filnam)
  * User selected a file to move to
  ************************************************************/
 
-void 
+void
 DlgSelectMoveCB(char *filnam)
 {
     strcpy( fileSelected, filnam );
@@ -458,7 +458,7 @@ DlgPrintCB(Widget w, char *ignore, XmdPrintCallbackStruct *cb)
 {
   char *tmp_nam;
   char *txt;
-  
+
   TkTextRetrieve(&txt, TkTEXT_ONLY);
   tmp_nam = FileSaveTemp(txt);
   XmdPrintDocument(tmp_nam, cb);
@@ -555,4 +555,3 @@ void DlgExitCB()
 	}
     else TkExit();
 }
-

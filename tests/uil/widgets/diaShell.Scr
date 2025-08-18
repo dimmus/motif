@@ -19,9 +19,9 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-#  This is a Message Box in a Dialog Shell with the following 
+#  This is a Message Box in a Dialog Shell with the following
 #  characteristics:
 #   	- XmNx is 50
 #	- XmNy is 50

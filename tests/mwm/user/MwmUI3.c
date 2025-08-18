@@ -27,10 +27,10 @@
 
 #include <testlib.h>
 
-void 
+void
 PushButtonCallback (Widget, XtPointer, XtPointer);
 
-void 
+void
 main (unsigned int argc, char **argv)
 {
 
@@ -40,7 +40,7 @@ main (unsigned int argc, char **argv)
         Arg args[10];
         int n;
 
-    
+
         CommonTestInit (argc, argv);
 
 	/* cautionary message to user */
@@ -49,7 +49,7 @@ main (unsigned int argc, char **argv)
 
 
         /* Create 4 top level shells */
-   
+
         n=0;
         XtSetArg (args[n], XmNheight, 100);n++;
         XtSetArg (args[n], XmNwidth, 160);n++;
@@ -64,7 +64,7 @@ main (unsigned int argc, char **argv)
         XtRealizeWidget (TestShell1);
 
 
-        
+
 	n=0;
         XtSetArg (args[n], XmNheight, 100);n++;
         XtSetArg (args[n], XmNwidth, 160);n++;
@@ -74,12 +74,12 @@ main (unsigned int argc, char **argv)
 
 
 
-        
+
         n=0;
         PB2 = XmCreatePushButton (TestShell2, "PB2", args, n);
         XtManageChild(PB2);
         XtAddCallback (PB2, XmNactivateCallback, PushButtonCallback, NULL);
-         
+
         XtRealizeWidget (TestShell2);
 
 
@@ -92,7 +92,7 @@ main (unsigned int argc, char **argv)
 
 
 
-        
+
         n=0;
         PB3 = XmCreatePushButton (TestShell3, "PB3", args, n);
         XtManageChild(PB3);
@@ -112,7 +112,7 @@ main (unsigned int argc, char **argv)
         PB4 = XmCreatePushButton (TestShell4, "PB4", args, n);
         XtManageChild(PB4);
 
-         
+
         XtRealizeWidget (TestShell4);
 
         CommonPause();
@@ -123,20 +123,20 @@ main (unsigned int argc, char **argv)
         MesDialog1=XmCreateMessageDialog (TestShell3, "MesDialog1", args, n);
         XtManageChild (MesDialog1);
 
-    
+
         CommonPause();
         CommonPause();
         CommonPause();
-        CommonPause(); 
-        CommonPause();      
-        CommonPause();      
-        CommonPause();      
+        CommonPause();
+        CommonPause();
+        CommonPause();
+        CommonPause();
 
        	XtAppMainLoop(app_context);
 
 }
 
-void 
+void
 PushButtonCallback (Widget w, XtPointer client_data, XtPointer call_data)
 {
     fprintf (stdout, "The button press event has been passed to the client\n");

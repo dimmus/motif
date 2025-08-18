@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ToggleBGad4.c /main/9 1995/07/13 17:31:50 drk $"
@@ -88,7 +88,7 @@ static char mtn_bits[] = {
 static XtCallbackProc activate_msg(w, client_data, call_data)
 Widget w;
 caddr_t client_data;
-caddr_t call_data; 
+caddr_t call_data;
 {
   printf("activate callback\n");
 }
@@ -114,7 +114,7 @@ Widget widget;
 {
   Boolean state;
   state = XmToggleButtonGadgetGetState(widget);
-  if (state == True) 
+  if (state == True)
     XmToggleButtonGadgetSetState(widget, False, False);
   else
     XmToggleButtonGadgetSetState(widget, True, False);
@@ -124,7 +124,7 @@ void ToggleWStates (w)
 Widget w;
 {
   Boolean state;
-   
+
   state = XmToggleButtonGetState(w);
   if (state == True)
     XmToggleButtonSetState (w, False, False);
@@ -148,18 +148,18 @@ caddr_t client_data, call_data;
   int n;
   Arg args[1];
 
-  if (!XtIsManaged (WidgetRC)) 
-    {  
-      tcs = 
+  if (!XtIsManaged (WidgetRC))
+    {
+      tcs =
 	XmStringCreateLtoR ("Toggle Gadget States", XmSTRING_DEFAULT_CHARSET);
       n = 0;
       XtSetArg (args[n], XmNlabelString, tcs); n++;
       XtSetValues (StateButton1, args, n);
       XtManageChild (WidgetRC);
     }
-  else 
+  else
     {
-      ToggleGStates(TButton1); 
+      ToggleGStates(TButton1);
       ToggleGStates(TButton2);
       ToggleGStates(TButton3);
     }
@@ -215,7 +215,7 @@ XmTextVerifyCallbackStruct *call_data;
      XmTextVerifyCallbackStruct *cb;
 
      cb = call_data;
-      
+
      printf("losingFocusCallback Recieved.\n");
 }
 
@@ -235,7 +235,7 @@ char **argv;
    /*  initialize toolkit  */
     CommonTestInit(argc, argv);
 
-   pixmap = 
+   pixmap =
      XCreatePixmapFromBitmapData(display,
 				 DefaultRootWindow (display),
 				 mtn_bits, mtn_width, mtn_height,
@@ -253,7 +253,7 @@ char **argv;
 
    n = 0;
    XtSetArg(args[n], XmNwidth, 300); n++;
-   PanedWindow1 = 
+   PanedWindow1 =
      XmCreatePanedWindow(Shell1, "PanedWindow1", args, n);
    XtManageChild(PanedWindow1);
 
@@ -277,7 +277,7 @@ char **argv;
    TButton1 = XmCreateToggleButtonGadget(RowColumn1, "TButton1", args, n);
    XtManageChild (TButton1);
 
-   XtAddCallback(TButton1, XmNvalueChangedCallback, 
+   XtAddCallback(TButton1, XmNvalueChangedCallback,
 		 (XtCallbackProc) activate_msg, (caddr_t) NULL);
    XtAddCallback(TButton1, XmNarmCallback, (XtCallbackProc) arm_msg,
                  (caddr_t) NULL);
@@ -285,8 +285,8 @@ char **argv;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
    XtSetArg(args[n], XmNtraversalOn, True); n++;
    TButton2 = XmCreateToggleButtonGadget(RowColumn1, "TButton2", args, n);
-   XtManageChild (TButton2); 
-   XtAddCallback(TButton2, XmNvalueChangedCallback, 
+   XtManageChild (TButton2);
+   XtAddCallback(TButton2, XmNvalueChangedCallback,
 		 (XtCallbackProc) activate_msg, (caddr_t) NULL);
    XtAddCallback(TButton2, XmNarmCallback, (XtCallbackProc) arm_msg,
                  (caddr_t) NULL);
@@ -295,7 +295,7 @@ char **argv;
    XtSetArg(args[n], XmNhighlightThickness, 2); n++;
    XtSetArg(args[n], XmNtraversalOn, True); n++;
    TButton3 = XmCreateToggleButtonGadget(RowColumn1, "TButton3", args, n);
-   XtAddCallback(TButton3, XmNvalueChangedCallback, 
+   XtAddCallback(TButton3, XmNvalueChangedCallback,
 		 (XtCallbackProc) ManageSB1, (caddr_t) NULL);
    XtManageChild(TButton3);
    XmAddTabGroup(RowColumn1);
@@ -312,7 +312,7 @@ char **argv;
    StateButton1 = XmCreatePushButton(PanedWindow1, "StateButton1", args, n);
    if (XtIsManaged(StateButton1))
 	XtUnmanageChild(StateButton1);
-   XtAddCallback(StateButton1, XmNactivateCallback, 
+   XtAddCallback(StateButton1, XmNactivateCallback,
 		 (XtCallbackProc) ManageWidgetRC, (caddr_t) NULL);
 
    /* and this will manage a row column with the following Toggle widgets */
@@ -321,7 +321,7 @@ char **argv;
    WidgetRC = XmCreateRadioBox(PanedWindow1, "WidgetRC", args, n);
    if (XtIsManaged(WidgetRC))
 	XtUnmanageChild(WidgetRC);
-   
+
    tcs = XmStringCreateLtoR ("Toggle Widget 1", XmSTRING_DEFAULT_CHARSET);
    n = 0;
    XtSetArg (args[n], XmNlabelString, tcs); n++;
@@ -346,7 +346,7 @@ char **argv;
    XtManageChild (ToggleW2);
 
    /* button 1 above manages StateButton2*/
-   tcs = 
+   tcs =
      XmStringCreateLtoR ("Toggle Widget States...", XmSTRING_DEFAULT_CHARSET);
    n = 0;
    XtSetArg (args[n], XmNlabelString, tcs); n++;
@@ -359,13 +359,13 @@ char **argv;
    StateButton2 = XmCreatePushButton(PanedWindow1, "StateButton2", args, n);
    if (XtIsManaged(StateButton2))
 	XtUnmanageChild(StateButton2);
-   XtAddCallback(StateButton2, XmNactivateCallback, 
+   XtAddCallback(StateButton2, XmNactivateCallback,
 		 (XtCallbackProc) ToggleWidgets, (caddr_t) NULL);
    XmAddTabGroup (StateButton2);
-	
+
    XmAddTabGroup (WidgetRC);
    XmAddTabGroup (PanedWindow1);
-   
+
    XtRealizeWidget(Shell1);
 
    CommonPause();                             /* tab group */
@@ -383,13 +383,3 @@ char **argv;
 
    XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/6 1996/07/15 14:22:14 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 List1
 PIRS No.:      2674
 XmList does not generate appropriate callbacks for deselectall
@@ -47,7 +47,7 @@ PIRS No.:      4009
 .motifbind binidings will not be used on systems where an
 entry is present in Transltns.c.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	ALASTAIR GOURLAY
 Priority:	5
 Status:		A
@@ -97,7 +97,7 @@ PIRS No.:      2782
 When changing TopItemPosition, and then changing FontList,
 the TopItemPosition is not preserved.
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -107,7 +107,7 @@ PIRS No.:      2783
 Destroying and recreating a List within a Form can result
 in corrupting VisibleItemCount and other resources of List.
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -157,7 +157,7 @@ PIRS No.:      4392
 The toggleButton which controls automaticSelection is created
 string is center aligned, when string changes it is left align
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	5
 Status:		A
@@ -227,7 +227,7 @@ PIRS No.:      3985
 Document that the "add cursor" encompasses all visible items
 in a list, to show list has the focus when no list item does.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	DOC
 Priority:	7
 Status:		A
@@ -267,7 +267,7 @@ PIRS No.:      3705
 Reseting Form attachments to add new widgets in the Form
 works improperly (or at least is not documented).
 Version found in:	1.1.3
-Version fixed in:	
+Version fixed in:
 Assigned to:	DANIEL DARDAILLER
 Priority:	7
 Status:		A

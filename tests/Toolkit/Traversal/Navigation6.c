@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation6.c /main/6 1995/07/13 19:43:58 drk $"
@@ -100,14 +100,14 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     bb = XmCreateBulletinBoard(Shell1, "bb", (ArgList) args, 0);
     XtManageChild(bb);
 
      /* We want to test navigation across different widgets on the Bulletin
 	Board as well as Navigation within the Frames within the BB, thus
 	we are creating a set of three frames within the Bulleting Board,
-	and they will each have a set of buttons within them.  
+	and they will each have a set of buttons within them.
      */
 
 	 n = 0;
@@ -353,7 +353,7 @@ char **argv;
     CommonPause ();
 
     /* begin test for PIR 2188 */
-    
+
     XmProcessTraversal (btn42, XmTRAVERSE_CURRENT);
     CommonPause();
 
@@ -372,7 +372,7 @@ char **argv;
     /* navigationType is XmTAB_GROUP by default */
     text1 = XmCreateText (Form1, "text1", args, n);
 
-    XtAddCallback (text1, XmNlosingFocusCallback, CheckString, NULL); 
+    XtAddCallback (text1, XmNlosingFocusCallback, CheckString, NULL);
     XtAddCallback (btn42, XmNactivateCallback, ForceFocusOnText1, text1);
 
     n = 0;
@@ -422,7 +422,7 @@ char **argv;
     n = 0;
     XtSetArg (args[n], XmNvalue, "Text 2"); n++;
     XtSetValues (text2, args, n);
-  
+
     XtAddCallback (text1, XmNlosingFocusCallback, CheckString, NULL);
     XtAddCallback (text2, XmNlosingFocusCallback, CheckString, NULL);
 
@@ -452,7 +452,7 @@ char **argv;
 
     if (!XtIsSensitive (text1))
       printf ("Hey! I wasn't set sensitive!\n");
-    else 
+    else
       printf ("text1 is sensitive\n");
 
     XtAddCallback        (text1,XmNlosingFocusCallback ,focusoutCB,text1);
@@ -461,7 +461,7 @@ char **argv;
     XtAddCallback        (text4,XmNlosingFocusCallback ,focusoutCB,text1);
 
     CommonPause();
-    
+
     /* end test for PIR 2446 */
 
     XtAppMainLoop(app_context);
@@ -490,7 +490,7 @@ XtPointer client_data, call_data;
 
   if (strcmp (input, "insensitive") == 0)
     XtSetSensitive (w, False);
-    
+
   if (strcmp (input, "meow") != 0) {
     XmProcessTraversal (w, XmTRAVERSE_CURRENT);
     printf ("%d: You didn't guess the password.\n", ++counter);
@@ -586,7 +586,7 @@ XmAnyCallbackStruct* call;
 				create_error_msg(w, "Error!", "This field is mandatory!");
 			}
 	}
-	
+
 }
 
 static void focusout(w, client, call)
@@ -623,9 +623,9 @@ static void STO(widget, status)
     XtSetValues(widget, args, 1);
   }
 }
-     
+
 static void SetTraversalOn(status)
   Boolean status;
 {
   STO(bb, status);
-} 
+}

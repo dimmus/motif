@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: mvs_defines.h /main/8 1995/07/14 11:25:59 drk $ */
 /***********************************************************************
   	@(#)mvs_defines.h	1.11.1.1	Date:1/22/91
@@ -59,7 +59,7 @@
 
 /* Automation Added */
 /* NOTE: MAX_UNIQUE_COLORS is the maximum number of unique
- * normalized colors automation can hold per widget. 
+ * normalized colors automation can hold per widget.
  */
 
 #define  MAX_UNIQUE_COLORS 10
@@ -122,11 +122,10 @@
 #define SET_SECT        (1<<2)
 #define BEHAVIOR_SECT   (1<<3)
 
-/************ Level of message detail *****************/    
+/************ Level of message detail *****************/
 
 #define FAILURE   (1<<1)
 #define ERROR     (1<<2)
 #define WARNING   (1<<3)
 #define INFO      (1<<4)
 #define TRACE     (1<<5)
-

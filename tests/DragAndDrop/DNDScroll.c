@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -90,7 +90,7 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
 
     XtRealizeWidget(Shell1);
 
@@ -141,4 +141,3 @@ void  main(argc, argv)
 
     XtAppMainLoop(app_context);
 }
-

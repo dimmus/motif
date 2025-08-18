@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Label1.c /main/7 1995/07/13 19:08:18 drk $"
@@ -57,12 +57,12 @@ char  **argv;
   XEvent             DummyEvent;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  400);  n++;
   XtSetArg(args[n], XmNheight, 300);  n++;
   XtSetValues(Shell1, args, n);
-    
+
   XtRealizeWidget(Shell1);
 
   /* create and realize a rowcolumn container widget */
@@ -85,9 +85,9 @@ char  **argv;
   n = 0;
   Separator1 = XmCreateSeparator(RowColumn1, "Separator1", args, n);
   XtManageChild(Separator1);
-  
+
   /* stick in a pixmap label widget. 1st create the pixmap */
-  gnumap = 
+  gnumap =
     XCreatePixmapFromBitmapData(display,
 				DefaultRootWindow(display),
 				gnu_bits, gnu_width, gnu_height,
@@ -105,16 +105,16 @@ char  **argv;
   XtManageChild(Label2);
   XmStringFree(tcs);
 
-  /* 
+  /*
    * try to force contained widget to change size - do a SetValues
    * without changing anything
    */
-  
+
   n = 0;
   XtSetValues(Label2,args,n);
 
   CommonPause();
-  CommonPause(); 
+  CommonPause();
   CommonPause();
 
   XtDestroyWidget(Label2);
@@ -125,20 +125,3 @@ char  **argv;
 
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -69,7 +69,7 @@ uil_CFLAGS = $(AM_CFLAGS)
 
 libUil_la_SOURCES = $(SRCS)
 libUil_la_DEPENDENCIES = UilDBDef.h UilParser.lo
-     
+
 UilDBDef.h:
 	$(LN_S) $(srcdir)/../../tools/wml/UilDBDef.h UilDBDef.h
 
@@ -85,4 +85,3 @@ $(CAT_FILES): Uil.msg
 	gencat Uil.cat $(top_builddir)/localized/C/msg/Uil.msg
 
 endif
-

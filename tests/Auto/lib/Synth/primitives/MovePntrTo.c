@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MovePntrTo.c /main/8 1995/07/14 11:41:58 drk $"
@@ -41,11 +41,11 @@ static char rcsid[] = "$XConsortium: MovePntrTo.c /main/8 1995/07/14 11:41:58 dr
 
 	Summary:
             Simulates a user moving the mouse such that the pointer ends up
-        "over" or on top of the specified widget's instance of an object. 
+        "over" or on top of the specified widget's instance of an object.
 
         INPUTS:
-            widget      - Xt widget 
-            object_type - Object type code 
+            widget      - Xt widget
+            object_type - Object type code
             instance    - occurance number of char, item, or sash (start with 0)
             direction   - MoveAny, MoveUp, MoveDown, MoveLeft, MoveRight
 
@@ -89,7 +89,7 @@ int direction;
     curr_object = xisFindObjectAtLocation(curr_x,curr_y);
 
     /* Get target pointer object and location */
- 
+
     if (widget != NULL)
     	class_code = mvsGetClassCode(widget);
 
@@ -112,7 +112,7 @@ int direction;
         AutoMessage(_AutoMessages[SCRMSG11]);
         return;
     }
-    
+
     /* When the object being moved to is not an ancestor of the current   */
     /* object, try for the center of the object we are interested in. If  */
     /* this location is not the object we want (it may be obscured by     */
@@ -213,7 +213,7 @@ int direction;
                 region_y = target_object->y;
                 region_width = curr_object->width;
                 region_height = curr_object->y - region_y;
-   
+
                 half_width = region_width/2;
                 for (y=region_y+region_height; !done && y>region_y; y--) {
                     for (i=0; i<half_width; i++) {
@@ -239,7 +239,7 @@ int direction;
                 region_x = curr_object->x;
                 region_y = curr_object->y + curr_object->height;
                 region_width = curr_object->width;
-                region_height = target_object->y + target_object->height 
+                region_height = target_object->y + target_object->height
                                 - region_y;
                 half_width = region_width/2;
                 for (y=region_y; !done && y<region_y+region_height; y++) {
@@ -330,5 +330,5 @@ int direction;
     } /* End if (!xisIsAncestorObject()) */
 
     xisCMovePointer(curr_object, curr_x, curr_y, target_x, target_y);
-    
+
 } /* End xisMovePointerTo() */

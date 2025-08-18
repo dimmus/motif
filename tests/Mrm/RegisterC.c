@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RegisterC.c /main/9 1995/07/14 10:52:08 drk $"
@@ -59,7 +59,7 @@ extern void	nyi_proc();
  * Names to register with MrmRegisterNames
  */
 
-static MrmRegisterArg reglist[] = 
+static MrmRegisterArg reglist[] =
 {
     "browse_help_proc",		(caddr_t) browse_help_proc,
     "browse_quit_proc",		(caddr_t) browse_quit_proc,
@@ -70,7 +70,7 @@ static MrmRegisterArg reglist[] =
  */
 
 
-struct TestInfo RegisterClassInfo[NUM_TESTS] = 
+struct TestInfo RegisterClassInfo[NUM_TESTS] =
   {
     {"Register valid Motif widget class                ", MrmSUCCESS, 0},
     {"Fetch user-defined Motif widget (of valid class) ", MrmSUCCESS, 0},
@@ -93,7 +93,7 @@ Widget CreateDummy()
 void main (argc,argv)
 int argc;
 char **argv;
-{ 	
+{
 
     Arg		args[2];
     int		nargs;
@@ -109,7 +109,7 @@ char **argv;
     int		num_images = 5;
     int		i;
 
-    
+
     Pixel	image_background,
                 image_foreground;
 
@@ -151,7 +151,7 @@ char **argv;
                         filename_vec,           /* files                */
                         NULL,                   /* os_ext_list (null)   */
                         &s_MrmHierarchy)        /* ptr to returned id   */
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
         printf("Can't open hierarchy\n");
     }
@@ -171,20 +171,20 @@ char **argv;
 /*
  * Register the names of the Browse widget callback routines with Mrm
  */
-    
+
 	if(MrmRegisterNames(reglist,		/* list of names	*/
 			    reglist_num)	/* number of names	*/
 	   != MrmSUCCESS)
 	{
 	    printf("Can't register Browse widget callbacks\n");
 	}
-    
+
 /*
  * Get display, screen, colormap
  */
 
 	display = XtDisplay(Shell1);
-	
+
 	screen = DefaultScreenOfDisplay(display);
 
 	cmap = DefaultColormap(display, DefaultScreen(display));
@@ -201,7 +201,7 @@ char **argv;
 	{
 	    printf("can't fetch the color yellow");
 	}
-    
+
 	if(MrmFetchColorLiteral(s_MrmHierarchy,
 				"red",
 				display,
@@ -210,11 +210,11 @@ char **argv;
 	{
 	    printf("can't fetch the color red");
 	}
-    
+
 /*
  * Fetch images (pixmaps)
  */
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "blank_icon",
 			       screen,
@@ -225,7 +225,7 @@ char **argv;
 	{
 	    printf("can't fetch blank_icon");
 	}
-    
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test1_btn1_icon",
 			       screen,
@@ -236,7 +236,7 @@ char **argv;
 	{
 	    printf("can't fetch test1_btn1_icon");
 	}
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test1_btn2_icon",
 			       screen,
@@ -247,7 +247,7 @@ char **argv;
 	{
 	    printf("can't fetch test1_btn2_icon");
 	}
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test2_btn1_icon",
 			       screen,
@@ -258,7 +258,7 @@ char **argv;
 	{
 	    printf("can't fetch test2_btn1_icon");
 	}
-	
+
 	if(MrmFetchIconLiteral(s_MrmHierarchy,
 			       "test2_btn2_icon",
 			       screen,
@@ -269,7 +269,7 @@ char **argv;
 	{
 	    printf("can't fetch test2_btn2_icon");
 	}
-	
+
 /*
  * Try to fetch Browse widget
  */
@@ -294,7 +294,7 @@ char **argv;
  */
 
 	XtManageChild(browse);
-    
+
 /*
  * Realize top level shell widget
  */
@@ -306,8 +306,8 @@ char **argv;
     summary_msg = summary(NUM_TESTS,
 			      TEST_DESCRIP_LENGTH,
 			      RegisterClassInfo);
-    
-    fprintf (stdout, summary_msg); 
+
+    fprintf (stdout, summary_msg);
 
     CommonPause();
 
@@ -324,7 +324,7 @@ char **argv;
 
 
     CommonPause();
-	
+
 }
 
 /*

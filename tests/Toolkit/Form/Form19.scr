@@ -20,7 +20,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
@@ -28,8 +28,8 @@
 #) when doing a CompareVisual.
 
 
-#) A series of Forms should appear on your screen. 
-#) Each Form should have four PushButton children. 
+#) A series of Forms should appear on your screen.
+#) Each Form should have four PushButton children.
 
 WindowRaise Case0
 CompareVisual Case0
@@ -51,32 +51,8 @@ CompareVisual Case5
 
 Continue
 
-#) All of the A children should now have a new width and height of 75. 
+#) All of the A children should now have a new width and height of 75.
 
-
-WindowRaise Case0
-CompareVisual Case0
-
-WindowRaise Case1
-CompareVisual Case1
-
-WindowRaise Case2
-CompareVisual Case2
-
-WindowRaise Case3
-CompareVisual Case3
-
-WindowRaise Case4
-CompareVisual Case4
-
-WindowRaise Case5
-CompareVisual Case5
-
-Continue
-
-
-
-#) All of the A children should now have an x and y position of 75. 
 
 WindowRaise Case0
 CompareVisual Case0
@@ -99,13 +75,37 @@ CompareVisual Case5
 Continue
 
 
-#) All of the Forms should now be destroyed. 
+
+#) All of the A children should now have an x and y position of 75.
+
+WindowRaise Case0
+CompareVisual Case0
+
+WindowRaise Case1
+CompareVisual Case1
+
+WindowRaise Case2
+CompareVisual Case2
+
+WindowRaise Case3
+CompareVisual Case3
+
+WindowRaise Case4
+CompareVisual Case4
+
+WindowRaise Case5
+CompareVisual Case5
+
+Continue
+
+
+#) All of the Forms should now be destroyed.
 
 CompareVisual Shell1
 Continue
 
-#) A series of Forms should appear on your screen. 
-#) Each Form should have four PushButton children. 
+#) A series of Forms should appear on your screen.
+#) Each Form should have four PushButton children.
 
 
 WindowRaise Case0
@@ -129,7 +129,7 @@ CompareVisual Case5
 Continue
 
 
-#) All of the B children should now have a new width and height of 75. 
+#) All of the B children should now have a new width and height of 75.
 
 
 WindowRaise Case0
@@ -153,7 +153,7 @@ CompareVisual Case5
 Continue
 
 
-#) All of the B children should now have an x and y position of 75. 
+#) All of the B children should now have an x and y position of 75.
 
 
 
@@ -178,14 +178,14 @@ CompareVisual Case5
 Continue
 
 
-#) All of the Forms should now be destroyed. 
+#) All of the Forms should now be destroyed.
 
 CompareVisual Shell1
 Continue
 
 
-#) A series of Forms should appear on your screen. 
-#) Each Form should have four PushButton children. 
+#) A series of Forms should appear on your screen.
+#) Each Form should have four PushButton children.
 
 WindowRaise Case0
 CompareVisual Case0
@@ -209,7 +209,7 @@ Continue
 
 
 
-#) All of the A and B children should now have a new width and height of 75. 
+#) All of the A and B children should now have a new width and height of 75.
 
 
 WindowRaise Case0
@@ -234,7 +234,7 @@ Continue
 
 
 #) All of the A children should now have an x and y position of 75;
-#  all of the B children should have an x of 200 and a y position of 50. 
+#  all of the B children should have an x of 200 and a y position of 50.
 
 
 WindowRaise Case0
@@ -258,4 +258,3 @@ CompareVisual Case5
 
 
 Exit
-

@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: mesBox.msg /main/7 1995/07/13 20:48:53 drk $
 !OSF/Motif: @(#)mesBox.msg	3.3  92/01/31
 !******************************************************************************
@@ -55,8 +55,8 @@
 	  orange : color('orange',background);
 	  violet : color('violet',background);
 	  red    : color('red',background);
-	
-  value 
+
+  value
 	colors_8 : color_table(black = ' ',
        			       white='x',
         		       red='r',

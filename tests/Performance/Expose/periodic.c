@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: periodic.c /main/7 1995/07/14 12:00:23 drk $"
@@ -152,11 +152,11 @@ char **argv;
      */
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XtNallowShellResize, FALSE) ; n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     /*
      *  Define the Mrm.hierarchy (only 1 file)
@@ -167,12 +167,12 @@ char **argv;
 			NULL,			    /* os_ext_list (null)   */
 			&s_MrmHierarchy)    /* ptr to returned id   */
 			!= MrmSUCCESS) {
-		printf ("can't open hierarchy\n"); 
+		printf ("can't open hierarchy\n");
 		exit(1);
 	}
 
     /*
-     * 	Register our callback routines so that the resource manager can 
+     * 	Register our callback routines so that the resource manager can
      * 	resolve them at widget-creation time.
      */
 
@@ -198,7 +198,7 @@ char **argv;
      */
 
     XtManageChild(periodic_table_main);
-    
+
     /*
      *  Realize the Shell1 widget.  This will cause the entire "managed"
      *  widget hierarchy to be displayed
@@ -272,25 +272,25 @@ static void create_callback(w, tag, reason)
      *  since we use these all the time, this method if more efficient.
      */
     switch (*tag) {
-        case K_scale_widget: 
+        case K_scale_widget:
 	    Scale_1 = w;
             break;
-        case K_drawnbutton_widget: 
+        case K_drawnbutton_widget:
 	    Drawnbutton_1 = w;
             break;
-        case K_togglebutton_widget: 
+        case K_togglebutton_widget:
 	    Togglebutton_1 = w;
             break;
-        case K_vtext1_widget: 
+        case K_vtext1_widget:
 	    VText_1 = w;
             break;
-        case K_vtext2_widget: 
+        case K_vtext2_widget:
 	    VText_2 = w;
             break;
-        case K_popup_menu_widget: 
+        case K_popup_menu_widget:
 	    PopMenu_1 = w;
             break;
-        default: 
+        default:
             break;
     }
 }

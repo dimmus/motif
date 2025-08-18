@@ -25,8 +25,8 @@
  * HISTORY
  */
 /*
- * (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC. 
- * ALL RIGHTS RESERVED 
+ * (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC.
+ * ALL RIGHTS RESERVED
  */
 
 #ifndef _XmClipWindowTI_H
@@ -52,4 +52,3 @@ typedef struct _XmClipWindowTraitRec {
 #endif
 
 #endif /* _XmClipWindowTI_H */
-

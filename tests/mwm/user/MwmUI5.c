@@ -154,5 +154,3 @@ static void test_dialog_unmanage (the_dialog)
     */
     XtUnmanageChild(the_dialog->form_dialog);
 }
-
-

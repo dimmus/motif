@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BBoard4.c /main/7 1995/07/13 18:26:11 drk $"
@@ -33,10 +33,10 @@ static char rcsid[] = "$XConsortium: BBoard4.c /main/7 1995/07/13 18:26:11 drk $
 
 
 #include <testlib.h>
- 
+
 Widget       Bb, Sel,Button, Dial;
 
- 
+
 void act (Widget, XtPointer, XtPointer);
 int SelExists;
 
@@ -48,23 +48,23 @@ main(int argc, char *argv[])
     int         n;
 
 
-    CommonTestInit (argc, argv); 
+    CommonTestInit (argc, argv);
 
     n = 0;
     XtSetArg(args[n], XmNwidth, 400); n++;
     XtSetArg(args[n], XmNheight, 400); n++;
     Bb = XmCreateBulletinBoard(Shell1, "Bb", args, n);
     XtManageChild(Bb);
- 
+
     n = 0;
     Sel = XmCreateSelectionBox(Bb, "Sel", args, n);
     XtManageChild(Sel);
     SelExists = 1;
- 
+
     n = 0;
     XtSetArg(args[n], XmNautoUnmanage, False); n++;
     Dial = XmCreateFormDialog(Shell1, "Dial", args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
@@ -90,14 +90,14 @@ void act(Widget w,XtPointer client_data, XtPointer call_data)
   Arg args[10];
   int n;
 
-  if (SelExists) 
+  if (SelExists)
     {
 	printf("Destroying selection box\n");
 	XtDestroyWidget(Sel);
 	new_button = "Create";
 	SelExists = 0;
     }
-  else 
+  else
     {
 	printf("Creating selection box\n");
 	n = 0;
@@ -106,12 +106,11 @@ void act(Widget w,XtPointer client_data, XtPointer call_data)
 	new_button = "Destroy";
 	SelExists = 1;
     }
-    
+
    xms = XmStringCreateSimple(new_button);
-  
+
    n=0;
    XtSetArg (args[n], XmNlabelString, xms); n++;
    XtSetValues(w, args, n);
    XmStringFree(xms);
 }
-

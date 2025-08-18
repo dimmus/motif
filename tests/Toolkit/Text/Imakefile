@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,8 +19,8 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
 XCOMM
 XCOMM   $TOG: Imakefile /main/12 1997/09/18 10:59:30 csn $
@@ -138,6 +138,6 @@ SRCS=  \
 	TextFWcs1.c \
 	TextFWcs2.c \
         TextPerf.c
-		  
-DependTarget () 
+
+DependTarget ()
 DependSubdirs($(SUBDIRS))

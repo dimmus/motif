@@ -433,4 +433,3 @@ png_msb(unsigned long u32val)
     }
     return i;
 }
-

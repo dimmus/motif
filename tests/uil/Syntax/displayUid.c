@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: displayUid.c /main/7 1995/07/13 20:41:25 drk $"
@@ -48,7 +48,7 @@ static char rcsid[] = "$XConsortium: displayUid.c /main/7 1995/07/13 20:41:25 dr
 #define MAX_CALLBACK	32
 #define MAX_LEN		255
 
-#include <Mrm/MrmAppl.h>    
+#include <Mrm/MrmAppl.h>
 #include <Xm/Xm.h>
 #include "reasons.h"
 
@@ -60,7 +60,7 @@ static void popup_popup_menu();
 static void CreateCallback();
 
 static MrmHierarchy	s_MrmHierarchy;
-static char		*vec[MAX_FILES];   	
+static char		*vec[MAX_FILES];
 static MrmCode		class;
 char                    uidname[MAX_LEN];
 
@@ -81,7 +81,7 @@ static XtActionsRec actions[] = {
 static int num_actions = sizeof(actions) / sizeof(XtActionsRec);
 
 
-Widget toplevel = NULL;                    
+Widget toplevel = NULL;
 Widget  widgetmain = NULL;
 
 
@@ -125,7 +125,7 @@ char **argv;
 			vec, 			    /* files     	    */
 			NULL,			    /* os_ext_list (null)   */
 			&s_MrmHierarchy)	    /* ptr to returned id   */
-			!= MrmSUCCESS) 
+			!= MrmSUCCESS)
 			{
 				printf ("Can't open hierarchy\n");
      				exit(1);
@@ -133,7 +133,7 @@ char **argv;
 
     /*
      *		Register all Mrm functions
-     */	
+     */
 
 
     if (MrmRegisterNames (reglist, reglist_num)
@@ -165,7 +165,7 @@ char **argv;
      */
 
     XtManageChild(widgetmain);
-    
+
     /*
      *  Realize the Shell1 widget.  This will cause the entire "managed"
      *  widget hierarchy to be displayed
@@ -263,7 +263,7 @@ int                         num_params;
     static Widget fetched;
 
     fetch("Popup_Menu",&fetched);
-    XmMenuPosition(fetched, event);  
+    XmMenuPosition(fetched, event);
     XtManageChild(fetched);
 }
 
@@ -281,7 +281,7 @@ XmAnyCallbackStruct *callback_data;
 
 }
 
-     
+
 void ProcessCommandArgs()
 
 {
@@ -310,5 +310,3 @@ void ProcessCommandArgs()
   vec[0] = uidname;
 
 }
-
-

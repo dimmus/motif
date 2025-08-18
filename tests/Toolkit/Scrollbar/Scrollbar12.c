@@ -100,9 +100,9 @@ void main ( int argc, char **argv )
   XtSetArg(args[n], XmNheight, CLIENT_HEIGHT - 2 * MARGINS );  n++;
   XtSetArg(args[n], XmNorientation, XmVERTICAL);  n++;
   XtSetArg(args[n], XmNseparatorType, XmSHADOW_ETCHED_OUT);  n++;
-  Separator1 = XmCreateSeparator( BulletinBoard1, "Separator1", args, n ); 
+  Separator1 = XmCreateSeparator( BulletinBoard1, "Separator1", args, n );
   XtManageChild( Separator1 );
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, sb_xcoord + 2 * SCROLLBAR_WIDTH ); n++;
   XtSetArg(args[n], XmNy,  0 );  n++;
@@ -110,7 +110,7 @@ void main ( int argc, char **argv )
   XtSetArg(args[n], XmNheight, CLIENT_HEIGHT - 2 * MARGINS );  n++;
   XtSetArg(args[n], XmNorientation, XmVERTICAL);  n++;
   XtSetArg(args[n], XmNseparatorType, XmSHADOW_ETCHED_OUT);  n++;
-  Separator2 = XmCreateSeparator( BulletinBoard1, "Separator2", args, n ); 
+  Separator2 = XmCreateSeparator( BulletinBoard1, "Separator2", args, n );
   XtManageChild( Separator2 );
 
  /*
@@ -120,7 +120,7 @@ void main ( int argc, char **argv )
   XtSetArg(args[n], XmNwidth,  CLIENT_WIDTH);  n++;
   XtSetArg(args[n], XmNheight, CLIENT_HEIGHT);  n++;
   XtSetValues( BulletinBoard1, args, n );
-  
+
   CommonPause();
 
  /*
@@ -140,7 +140,7 @@ void main ( int argc, char **argv )
   n = 0;
   XtSetArg(args[n], XmNx, sb_xcoord - 2 * SCROLLBAR_WIDTH );  n++;
   XtSetValues( Separator1, args, n );
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, sb_xcoord + 3 * SCROLLBAR_WIDTH );  n++;
   XtSetValues( Separator2, args, n );
@@ -174,7 +174,7 @@ void main ( int argc, char **argv )
 
  /*
   *  Unmanage the separators.
-  */ 
+  */
   XtUnmanageChild( Separator1 );
   XtUnmanageChild( Separator2 );
 
@@ -189,23 +189,23 @@ void main ( int argc, char **argv )
   CommonPause();
 
  /*
-  *  XmNsnapBackMultiple = 0 
+  *  XmNsnapBackMultiple = 0
   */
   n = 0;
   XtSetArg(args[n], XmNsnapBackMultiple,  0);  n++;
   XtSetValues( Scrollbar1, args, n );
-  
+
   CommonPause();
 
  /*
-  *  XmNsnapBackMultiple = 1 
+  *  XmNsnapBackMultiple = 1
   *  Place separators above and below the scrollbar at the distance
   *  of one scrollbar width.
   */
   n = 0;
   XtSetArg(args[n], XmNsnapBackMultiple,  1);  n++;
   XtSetValues( Scrollbar1, args, n );
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, sb_xcoord );  n++;
   XtSetArg(args[n], XmNy, sb_ycoord - SCROLLBAR_WIDTH );  n++;

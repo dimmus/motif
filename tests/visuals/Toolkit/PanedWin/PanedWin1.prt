@@ -23,39 +23,39 @@
 #
 # HISTORY
 Paned Window created.
-TRACE:(1) CompareVisual PanedWindow1 
+TRACE:(1) CompareVisual PanedWindow1
 TRACE:(2) Continue
 Creating push button PB1 with XmNmappedWhenManaged set to true.
-TRACE:(3) CompareVisual PanedWindow1 
+TRACE:(3) CompareVisual PanedWindow1
 TRACE:(4) Continue
 Creating push button PB2 with XmNmappedWhenManaged set to false.
-TRACE:(5) CompareVisual PanedWindow1 
+TRACE:(5) CompareVisual PanedWindow1
 TRACE:(6) Continue
 Creating push button PB3 with XmNmappedWhenManaged set to true.
-TRACE:(7) CompareVisual PanedWindow1 
+TRACE:(7) CompareVisual PanedWindow1
 TRACE:(8) Continue
 Setting PB2's XmNmappedWhenManaged to true via XtSetValues.
-TRACE:(9) CompareVisual PanedWindow1 
+TRACE:(9) CompareVisual PanedWindow1
 TRACE:(10) Continue
 Setting PB1's XmNmappedWhenManaged to false via XtSetMappedWhenManaged.
-TRACE:(11) CompareVisual PanedWindow1 
+TRACE:(11) CompareVisual PanedWindow1
 TRACE:(12) Continue
 Setting PB1's XmNmappedWhenManaged to true via XtSetValues.
-TRACE:(13) CompareVisual PanedWindow1 
+TRACE:(13) CompareVisual PanedWindow1
 TRACE:(14) Continue
-TRACE:(15) LocatePointer PB1  
-TRACE:(16) ClickMB Btn1 
-TRACE:(17) CompareVisual PanedWindow1 
+TRACE:(15) LocatePointer PB1
+TRACE:(16) ClickMB Btn1
+TRACE:(17) CompareVisual PanedWindow1
 TRACE:(18) Continue
-TRACE:(19) CompareVisual rc 
-TRACE:(20) CompareVisual PB3 
-TRACE:(21) LocatePointer PB1  
-TRACE:(22) ClickMB Btn1 
-TRACE:(23) CompareVisual rc 
+TRACE:(19) CompareVisual rc
+TRACE:(20) CompareVisual PB3
+TRACE:(21) LocatePointer PB1
+TRACE:(22) ClickMB Btn1
+TRACE:(23) CompareVisual rc
 TRACE:(24) Continue
-TRACE:(25) CompareVisual PanedWindow1 
+TRACE:(25) CompareVisual PanedWindow1
 TRACE:(26) Continue
-TRACE:(27) CompareVisual ScrollText 
+TRACE:(27) CompareVisual ScrollText
 TRACE:(28) Continue
 X Error of failed request:  BadWindow (invalid Window parameter)
   Major opcode of failed request:  15 (X_QueryTree)

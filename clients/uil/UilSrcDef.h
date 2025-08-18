@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 /*
 **++
@@ -121,12 +121,12 @@ typedef struct  _src_machine_code_type
 typedef struct  _src_source_record_type
 {
     struct _src_source_record_type  *az_next_source_record;
-    src_message_item_type	    *az_message_list;    
+    src_message_item_type	    *az_message_list;
     unsigned short		    w_line_number;
     unsigned char		    b_file_number;
     unsigned char		    b_flags;
     z_key			    z_access_key;
-    src_machine_code_type	    *az_machine_code_list;    
+    src_machine_code_type	    *az_machine_code_list;
     unsigned short		    w_machine_code_cnt;
 } src_source_record_type;
 

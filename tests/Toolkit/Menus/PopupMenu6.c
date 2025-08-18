@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupMenu6.c /main/8 1995/07/13 18:53:32 drk $"
@@ -111,7 +111,7 @@ char *argv[];
   popup = XmCreatePopupMenu(rc, "popup", args, n);
 
   XtAddEventHandler(rc, ButtonPressMask, False, PostWhich3, popup);
-/*  
+/*
   XtAddEventHandler(label, ButtonPressMask, False, PostWhich2, popup);
   XtAddEventHandler(text, ButtonPressMask, False, PostWhich2, popup);
 */
@@ -130,7 +130,7 @@ char *argv[];
 
   XtRealizeWidget(Shell1);
 
-  CommonPause();  
+  CommonPause();
 
   /* Pause 2 */
 
@@ -198,10 +198,10 @@ char *argv[];
 
   /* Pause 4 */
 
-  /*  
-   *  Create a drawing area with a drawing area child, and a push 
+  /*
+   *  Create a drawing area with a drawing area child, and a push
    *   button child.  Associate a popupmenu with the parent drawing
-   *   area and the child drawing area, and a different one with the 
+   *   area and the child drawing area, and a different one with the
    *   push button drawing area.
    */
 
@@ -227,9 +227,9 @@ char *argv[];
   XtSetArg(args[n], XmNx, 300); n++;
   XtSetArg(args[n], XmNy, 50); n++;
   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_GROW); n++;
-  drawAreaChild = XmCreateDrawingArea(drawAreaParent, 
+  drawAreaChild = XmCreateDrawingArea(drawAreaParent,
 				      "DrawAreaParent", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 25); n++;
   XtSetArg(args[n], XmNy, 25); n++;
@@ -243,11 +243,11 @@ char *argv[];
   /* Create 2 different popups */
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup2 = XmCreatePopupMenu(drawAreaParent, "popup2", args, n);
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup3 = XmCreatePopupMenu(pushChild, "popup3", args, n);
 
   XtManageChild(n1 = XmCreatePushButton(popup2, "DrawChild1", NULL, 0));
@@ -268,10 +268,10 @@ char *argv[];
 
   /* Pause 5 */
 
-  /*  
-   *  Create a drawing area with a drawing area child, and a push 
+  /*
+   *  Create a drawing area with a drawing area child, and a push
    *   button child.  Associate a popupmenu with the parent drawing
-   *   area and the child drawing area, and a different one with the 
+   *   area and the child drawing area, and a different one with the
    *   push button drawing area.
    */
 
@@ -297,9 +297,9 @@ char *argv[];
   XtSetArg(args[n], XmNx, 300); n++;
   XtSetArg(args[n], XmNy, 50); n++;
   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_GROW); n++;
-  drawAreaChild = XmCreateDrawingArea(drawAreaParent, 
+  drawAreaChild = XmCreateDrawingArea(drawAreaParent,
 				      "DrawAreaParent", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 25); n++;
   XtSetArg(args[n], XmNy, 25); n++;
@@ -313,11 +313,11 @@ char *argv[];
   /* Create 2 different popups */
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup2 = XmCreatePopupMenu(drawAreaParent, "popup2", args, n);
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup3 = XmCreatePopupMenu(pushChild, "popup3", args, n);
 
   XtManageChild(n1 = XmCreatePushButton(popup2, "DrawChild1", NULL, 0));
@@ -340,8 +340,8 @@ char *argv[];
 
   /* Begin Test case for PIR 3436 */
 
-  /*  
-   *  Create a drawing area with a drawing area child, and a push 
+  /*
+   *  Create a drawing area with a drawing area child, and a push
    *   button child.  Three different popup menus get created as children
    *   of the three widgets.
    */
@@ -366,9 +366,9 @@ char *argv[];
   XtSetArg(args[n], XmNx, 300); n++;
   XtSetArg(args[n], XmNy, 50); n++;
   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_GROW); n++;
-  drawAreaChild = XmCreateDrawingArea(drawAreaParent, 
+  drawAreaChild = XmCreateDrawingArea(drawAreaParent,
 				      "DrawAreaParent", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 25); n++;
   XtSetArg(args[n], XmNy, 25); n++;
@@ -382,15 +382,15 @@ char *argv[];
   /* Create 3 different popups */
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup1 = XmCreatePopupMenu(drawAreaParent, "popup1", args, n);
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup2 = XmCreatePopupMenu(drawAreaChild, "popup2", args, n);
 
   n = 0;
-  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++; 
+  XtSetArg(args[n], XmNmenuPost, "<Btn3Down>"); n++;
   popup3 = XmCreatePopupMenu(pushChild, "popup3", args, n);
 
   XtManageChild(m1 = XmCreatePushButton(popup1, "Parent1", NULL, 0));
@@ -419,5 +419,5 @@ char *argv[];
 
   CommonPause(); /* exit */
 
-  XtAppMainLoop(app_context); 
+  XtAppMainLoop(app_context);
 }

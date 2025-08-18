@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MapWidget.c /main/7 1995/07/14 11:41:35 drk $"
@@ -41,7 +41,7 @@ static char rcsid[] = "$XConsortium: MapWidget.c /main/7 1995/07/14 11:41:35 drk
 
         INPUTS:
             widget - the widget to map.
-        
+
         OUTPUTS:
             none
 
@@ -58,7 +58,7 @@ Widget widget;
     XisObjectRecord *object;
     XisObjectRecord *current_object;
 
-    if (widget == NULL) 
+    if (widget == NULL)
         AutoMessage(_AutoMessages[WARNMSG16]);
 
     else {
@@ -66,11 +66,11 @@ Widget widget;
 
         (*xisTraceMsg)("Got send_event_request = MapWidget for %s\n",
                        xisGetObjectName(object));
-    
+
         /* Call all relavent InformExpectedActions functions */
-  
+
         current_object = object;
-    
+
         xisInform.is_valid = 1;
         xisInform.action_obj = current_object;
         xisInform.modifier_key_status = 0;
@@ -84,7 +84,7 @@ Widget widget;
 
             if (current_object->proc_InformExpectedActions != NULL) {
                 xisInform.current_obj = current_object;
-                (*current_object->proc_InformExpectedActions)(EventMap); 
+                (*current_object->proc_InformExpectedActions)(EventMap);
             }
             current_object = current_object->parent;
 	}

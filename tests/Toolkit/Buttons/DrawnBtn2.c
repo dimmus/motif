@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DrawnBtn2.c /main/8 1995/07/13 17:29:03 drk $"
@@ -59,7 +59,7 @@ XGCValues dbgcv;
 
 void ReSizeCB( w, client_data, call_data)
 Widget  w;
-XtPointer client_data; 
+XtPointer client_data;
 XtPointer call_data;
 {
   Arg    wargs[MAX_ARGS];
@@ -90,12 +90,12 @@ char  **argv;
   void      quit();
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  200);  n++;
   XtSetArg(args[n], XmNheight, 400);  n++;
   XtSetValues(Shell1, args, n);
-  
+
 
   XtRealizeWidget(Shell1);
 
@@ -121,7 +121,7 @@ char  **argv;
   XtSetArg(args[n], XmNseparatorType, XmDOUBLE_DASHED_LINE);  n++;
   Separator1 = XmCreateSeparator(RowColumn1, "Separator1", args, n);
   XtManageChild(Separator1);
-  
+
   n = 0;
   XtSetArg(args[n], XmNwidth, 150);  n++;
   XtSetArg(args[n], XmNheight, 25);  n++;
@@ -150,7 +150,7 @@ char  **argv;
 
   /* add resize callback */
   XtAddCallback(DrawnButton1,XmNresizeCallback,ReSizeCB,NULL);
-  XtManageChild(RowColumn1); 
+  XtManageChild(RowColumn1);
 
   CommonPause();
   CommonPause();
@@ -163,4 +163,3 @@ char  **argv;
   XtDestroyWidget(Separator1);
   XtDestroyWidget(Separator2);
 }
-

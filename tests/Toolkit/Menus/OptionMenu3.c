@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: OptionMenu3.c /main/8 1995/07/13 18:49:46 drk $"
@@ -36,7 +36,7 @@ static char rcsid[] = "$XConsortium: OptionMenu3.c /main/8 1995/07/13 18:49:46 d
 Widget RC;
 Widget RC_children[NUM_RC_CHILDREN];
 
-static char *RC_children_names[] = { 
+static char *RC_children_names[] = {
   "Himalyan",  "Siamese",
   "Domestic Shorthair",  "Maine Coon Cat",
   "Burmese",  "Exotic Shorthair",
@@ -67,7 +67,7 @@ void FromWhere(Widget w, XtPointer client_data, XtPointer call_data)
 
   whichWidget = XmGetPostedFromWidget ((Widget) client_data);
 
-  XtSetArg(args[0], XmNshadowThickness, 4); 
+  XtSetArg(args[0], XmNshadowThickness, 4);
   XtSetValues ((XmOptionButtonGadget(whichWidget)), args, 1);
 
   fnt = XLoadQueryFont(XtDisplay(Shell1), "8x13bold");
@@ -81,7 +81,7 @@ void FromWhere(Widget w, XtPointer client_data, XtPointer call_data)
 
 /*********** Callback for the Pushbuttons ***********************/
 
-void ButtonCB (w, client_data, call_data) 
+void ButtonCB (w, client_data, call_data)
 Widget	w;		/*  widget id		*/
 XtPointer	client_data;	/*  data from application   */
 XtPointer	call_data;	/*  data from widget class  */
@@ -104,7 +104,7 @@ char **argv;
     Widget SharedMenu2, temp_widget;
     Widget option, menu, pb[3], items[4];
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  200);  n++;
     XtSetArg(args[n], XmNheight, 40);   n++;
@@ -120,7 +120,7 @@ char **argv;
 
     n = 0;
     XtSetArg(args[n], XmNpacking, XmPACK_COLUMN); n++;
-    XtSetArg(args[n], XmNnumColumns, 3); n++; 
+    XtSetArg(args[n], XmNnumColumns, 3); n++;
     XtSetArg(args[n], XmNadjustLast, False); n++;
     XtSetArg(args[n], XmNrowColumnType, XmWORK_AREA); n++;
 
@@ -133,7 +133,7 @@ char **argv;
     /* create a regular menupane for another button */
     n = 0;
     regularPane = XmCreatePulldownMenu(RC, "regularPane", args, n);
-    
+
     n = 0;
     tcs = XmStringCreateSimple("Black");
     XtSetArg (args[n], XmNlabelString,  tcs); n++;
@@ -160,7 +160,7 @@ char **argv;
     /* put the nine cascadebutton children of RC into an array */
 
     for (i = 0; i <= (NUM_RC_CHILDREN - 1); i++)
-      {  
+      {
          n = 0;
          sprintf (buf, "OptionMenu%d", i);
 	 tcs = XmStringCreate(RC_children_names[i],
@@ -182,7 +182,7 @@ char **argv;
     /* first, put together the widget list for subMenuId */
 
     n = 0;
-    XtSetArg(args[n], XmNrowColumnType, XmMENU_PULLDOWN); n++; 
+    XtSetArg(args[n], XmNrowColumnType, XmMENU_PULLDOWN); n++;
     SharedMenu = XmCreatePulldownMenu(RC, "SharedMenu", args, n);
 
     n = 0;
@@ -218,11 +218,11 @@ char **argv;
      */
 
     n = 0;
-    XtSetArg(args[n], XmNrowColumnType, XmMENU_PULLDOWN); n++; 
+    XtSetArg(args[n], XmNrowColumnType, XmMENU_PULLDOWN); n++;
     SharedMenu2 = XmCreatePulldownMenu(RC, "SharedMenu", args, n);
 
     tcs = XmStringCreate("Chocolate Point", XmSTRING_DEFAULT_CHARSET);
-    XtSetArg(args[0], XmNlabelString, tcs); 
+    XtSetArg(args[0], XmNlabelString, tcs);
     XtManageChild(XmCreatePushButton(SharedMenu2, "PushBtn3", args, 1));
     XmStringFree(tcs);
 
@@ -245,7 +245,7 @@ char **argv;
     CommonPause();
 
     /*  Begin Test For PIR 3049 */
-    
+
     XtDestroyWidget(RC);
 
     RC = XmCreateRowColumn(Shell1, "rc", NULL, 0);
@@ -277,7 +277,7 @@ char **argv;
     /*  End test For PIR 3049 */
 
     CommonPause();
- 
+
     /*  Begin test for PIR 2732 */
 
     XtDestroyWidget(RC);
@@ -321,7 +321,7 @@ char **argv;
 
     n = 0;
     tcs = XmStringCreate("A-option",XmSTRING_DEFAULT_CHARSET);
-    XtSetArg(args[n], XmNlabelString, tcs); n++; 
+    XtSetArg(args[n], XmNlabelString, tcs); n++;
     XtSetArg(args[n], XmNmnemonic, 'A'); n++;
     options2[0] = XmCreatePushButtonGadget(pulldown2, "option2a", args, n);
     XtAddCallback(options2[0], XmNactivateCallback, ButtonCB, (XtPointer) "2A");
@@ -379,17 +379,3 @@ char **argv;
 
     XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

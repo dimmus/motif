@@ -64,10 +64,10 @@ int main( int argc, char **argv)
     Boolean      argok=False;
     Widget   topLevelShell;
     Widget   form;
-    
+
     /* Begin user code block <declarations> */
     /* End user code block <declarations> */
-    
+
     /*
      * The applicationShell is created as an unrealized
      * parent for multiple topLevelShells.  The topLevelShells
@@ -75,56 +75,56 @@ int main( int argc, char **argv)
      * This is a recommendation of Paul Asente & Ralph Swick in
      * _X_Window_System_Toolkit_ p. 677.
      */
-    
-    parent = XtVaOpenApplication (  &app, 
-                                    BX_APP_CLASS, 
-                                    NULL, 
-                                    0, 
-                                    &argc, 
-                                    argv, 
-                                    NULL, 
+
+    parent = XtVaOpenApplication (  &app,
+                                    BX_APP_CLASS,
+                                    NULL,
+                                    0,
+                                    &argc,
+                                    argv,
+                                    NULL,
                                     sessionShellWidgetClass,
                                     NULL );
-    
+
     RegisterBxConverters(app);
-#if (XmVersion >= 1002) 
+#if (XmVersion >= 1002)
     XmRepTypeInstallTearOffModelConverter();
 #endif
-    
+
     /* Begin user code block <create_shells> */
     /* End user code block <create_shells> */
-    
+
     /*
-     * Create classes and widgets used in this program. 
+     * Create classes and widgets used in this program.
      */
-    
+
     ac = 0;
     XtSetArg(args[ac], XmNx, 333); ac++;
     XtSetArg(args[ac], XmNy, 277); ac++;
     XtSetArg(args[ac], XmNwidth, 839); ac++;
     XtSetArg(args[ac], XmNheight, 508); ac++;
-    XtSetArg(args[ac], XmNbackground, 
-        CONVERT(parent, "#ccc", 
+    XtSetArg(args[ac], XmNbackground,
+        CONVERT(parent, "#ccc",
         XmRPixel, 0, &argok)); if (argok) ac++;
     topLevelShell = XtCreatePopupShell("topLevelShell",
         topLevelShellWidgetClass,
         parent,
-        args, 
+        args,
         ac);
     form = (Widget)Createform(topLevelShell);
     XtManageChild(form);
     XtPopup(XtParent(form), XtGrabNone);
-    
+
     /* Begin user code block <app_procedures> */
     /* End user code block <app_procedures> */
-    
+
     /* Begin user code block <main_loop> */
     /* End user code block <main_loop> */
-    
+
     XtAppMainLoop(app);
-    
+
     /*
-     * A return value even though XtAppMainLoop never ends. 
+     * A return value even though XtAppMainLoop never ends.
      */
-     return(0); 
+     return(0);
 }

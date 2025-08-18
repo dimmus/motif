@@ -36,7 +36,7 @@
 #define VITEMS 20
 
 
-void  
+void
 main (int argc, char **argv)
 {
 
@@ -55,48 +55,48 @@ main (int argc, char **argv)
 static char *CharItems[] = {
     "Item1",
     "btest1",
-    "btest1b", 
-    "btest2", 
+    "btest1b",
+    "btest2",
     "btest3",
-    "decor00", 
-    "decor01", 
-    "decor02", 
-    "decor03", 
-    "decor04", 
+    "decor00",
+    "decor01",
+    "decor02",
+    "decor03",
+    "decor04",
     "decor05",
-    "decor06", 
-    "decor07", 
-    "decor08", 
+    "decor06",
+    "decor07",
+    "decor08",
     "decor09",
-    "func00", 
-    "func01", 
-    "func02", 
-    "func03", 
+    "func00",
+    "func01",
+    "func02",
+    "func03",
     "func04",
-    "func05", 
-    "func06", 
-    "func07", 
-    "func08", 
+    "func05",
+    "func06",
+    "func07",
+    "func08",
     "func09",
-    "func10", 
-    "func11", 
-    "func12", 
-    "func13", 
+    "func10",
+    "func11",
+    "func12",
+    "func13",
     "func14",
-    "iplac00", 
-    "iplac01", 
-    "iplac02", 
-    "iplac05", 
-    "menu00", 
-    "menu04", 
-    "mtest1", 
+    "iplac00",
+    "iplac01",
+    "iplac02",
+    "iplac05",
+    "menu00",
+    "menu04",
+    "mtest1",
     "parse00",
-    "prop00", 
+    "prop00",
     "rstest1"
     };
 
     CommonTestInit(argc, argv);
-    
+
     /* Create a ComboBox */
 
     if (UserData == NULL)
@@ -132,13 +132,13 @@ static char *CharItems[] = {
 
     XtRealizeWidget (Shell1);
 
-    
- 
 
-    /* Create the list */   
+
+
+    /* Create the list */
     for (i=0; i<NITEMS; i++)
 	{
-	    TempLabelString = XmStringCreate(CharItems[i], 
+	    TempLabelString = XmStringCreate(CharItems[i],
 				    XmSTRING_DEFAULT_CHARSET);
 	    ItemList[i] = TempLabelString;
 
@@ -170,13 +170,13 @@ static char *CharItems[] = {
 
 
     CommonPause();
-    
+
 /* Add an Item */
 
     TempLabelString = XmStringCreate ("ExtraItem", XmSTRING_DEFAULT_CHARSET);
     XmListAddItem (XtNameToWidget(ComboBox,"*List"), TempLabelString, NITEMS+1);
     XmStringFree (TempLabelString);
- 
+
     CommonPause();
 
     /* Test for XmComboBoxUpdate */
@@ -186,14 +186,10 @@ static char *CharItems[] = {
     XmComboBoxUpdate (ComboBox);
     XmStringFree (TempLabelString);
 
-    
+
 
     CommonPause();
     CommonPause();
 
     XtAppMainLoop(app_context);
 }
-
-
-
-

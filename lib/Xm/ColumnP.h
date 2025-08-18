@@ -57,7 +57,7 @@ typedef struct _XmColumnConstraintPart {
 
     Boolean		show_label;
     Boolean		stretchable;
-    
+
     Pixmap              label_pixmap;
     XmString		label_string;
 
@@ -79,14 +79,14 @@ typedef struct _XmColumnConstraintRec {
 } XmColumnConstraintRec, * XmColumnConstraintPtr;
 
 typedef struct _XmColumnPart {
-    
+
     /* Public */
 
     unsigned char default_label_alignment;
     unsigned char default_fill_style;
     unsigned char orientation;
     unsigned char distribution;
-    
+
     Dimension	  item_spacing;
     Dimension	  label_spacing;
 

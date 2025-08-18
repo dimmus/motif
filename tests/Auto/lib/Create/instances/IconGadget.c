@@ -169,7 +169,7 @@ static MvsWidgetClassInfo mvXmIconGadgetClass = {
   /* short                 num_resources;                */
                           sizeof(Wresource_info)/sizeof(MvsResourceInfoRecord),
   /* MvsIntResInfoRecord   *intres_info;  */                NULL,
-  /* short                 num_intres;                   */ 
+  /* short                 num_intres;                   */
                           0,
   /* Arg                   common_args[20];              */
       { {"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},
@@ -186,5 +186,3 @@ static MvsWidgetClassInfo mvXmIconGadgetClass = {
 };
 
 MvsWidgetClassInfo *iXmIconGadgetClass = &mvXmIconGadgetClass;
-
-

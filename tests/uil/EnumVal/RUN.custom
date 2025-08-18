@@ -39,4 +39,3 @@ endif
 
 foreach test ("$displayUid1" \
 			  "$displayUid4" "$displayUid5" "$displayUid6" )
-

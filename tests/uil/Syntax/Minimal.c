@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Minimal.c /main/7 1995/07/13 20:40:19 drk $"
@@ -104,7 +104,7 @@ char **argv;
      }
 
     /*
-     * 	Register our callback routines so that the resource manager can 
+     * 	Register our callback routines so that the resource manager can
      * 	resolve them at widget-creation time.
      */
 
@@ -131,7 +131,7 @@ char **argv;
      */
 
     XtManageChild(hellominimalmain);
-    
+
     /*
      *  Realize the toplevel widget.  This will cause the entire "managed"
      *  widget hierarchy to be displayed

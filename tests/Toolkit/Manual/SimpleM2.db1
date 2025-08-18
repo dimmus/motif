@@ -27,4 +27,3 @@
 XMcommon*PullDownMB*buttonCount: 2
 XMcommon*PullDownMB*buttonAccelerators:	Ctrl<Key>F1, Ctrl<Key>F2
 XMcommon*PullDownMB*buttonAcceleratorText: Ctrl+F1, Ctrl+F2
-

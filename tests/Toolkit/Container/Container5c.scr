@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is Container5 running with the option "-u c"
@@ -32,15 +32,15 @@ LocatePointer Container5c
 CompareVisual Container5c
 Continue
 
-# #) 9 Icon Gadgets are added to the Container. They should be placed in the 
+# #) 9 Icon Gadgets are added to the Container. They should be placed in the
 #    Container relatively to their X and Y values.
 # C)
 
 LocatePointer Container5c
 CompareVisual Container5c
 Continue
- 
-# #) The spatialStyle is changed to XmGRID, with an IncludeModel set to 
+
+# #) The spatialStyle is changed to XmGRID, with an IncludeModel set to
 #    CLOSEST, and a SnapModel set to SNAP_TO_GRID.
 # #) The Icon gadgets should slighlty move to have their top left corner
 #    attached to the top left corner of the cell they occupied.
@@ -53,17 +53,17 @@ Continue
 LocatePointer Container5c
 CompareVisual Container5c
 Continue
- 
-# #) A new Icon Gadget is added to the Container. 
+
+# #) A new Icon Gadget is added to the Container.
 # #) It should be placed under IconGad4 to the left of IconGad6.
 # C)
 
 LocatePointer Container5c
 CompareVisual Container5c
 Continue
- 
+
 # #) The spatialIncludeModel is now set to FIRST_FIT.
-# #) A new Icon Gadget is added to the Container. It should be included 
+# #) A new Icon Gadget is added to the Container. It should be included
 #    in the first empty cell in the Container, that is it should be placed
 #    under IconGad1 to the right of IconGad4.
 # E)
@@ -71,4 +71,3 @@ Continue
 LocatePointer Container5c
 CompareVisual Container5c
 Exit
-

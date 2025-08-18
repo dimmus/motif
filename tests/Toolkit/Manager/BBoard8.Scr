@@ -1,5 +1,5 @@
 # $XConsortium: BBoard8.scr /main/4 1995/07/17 20:24:01 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -21,9 +21,9 @@
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
 #
-# 
+#
 # HISTORY
-# 
+#
 
 # A BulletinBoard is created with a pulldown menu.
 
@@ -80,4 +80,3 @@ CompareVisual BulletinBoard1
 Continue
 
 Exit
-

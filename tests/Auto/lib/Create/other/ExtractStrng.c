@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ExtractStrng.c /main/7 1995/07/14 11:15:34 drk $"
@@ -66,7 +66,7 @@ char *resource_name;
     if (!XmStringInitContext(&context,(XmString)in_string)) {
         sprintf (msg_string, _AutoMessages[WARNMSG23], resource_name);
 	AutoMessage(msg_string);
-	
+
 #define EXTRACT_STRING_ERROR_MESS "ERROR"
 
         string = XtMalloc(sizeof(EXTRACT_STRING_ERROR_MESS)+1) ;
@@ -80,7 +80,7 @@ char *resource_name;
             length += strlen(string);
             if (length > MAX_STRING_LENGTH) {
 	    /*
-	       sprintf (msg_string, _AutoMessages[WARNMSG24], resource_name, 
+	       sprintf (msg_string, _AutoMessages[WARNMSG24], resource_name,
 	                                   length - strlen(string));
 
 	       AutoMessage (msg_string);
@@ -102,10 +102,3 @@ char *resource_name;
     }
 
 } /* End mvsExtractString() */
-
-
-
-
-
-
-

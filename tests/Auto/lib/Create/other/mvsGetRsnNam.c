@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,21 +19,21 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsGetRsnNam.c /main/7 1995/07/14 11:19:08 drk $"
 #endif
 #endif
 /***********************************************************************
-	@(#)mvsGetRsnNam.c	1.6.1.1 ver 1/22/91 rel 1 
+	@(#)mvsGetRsnNam.c	1.6.1.1 ver 1/22/91 rel 1
   	Author: PSN
 	History:
             05/24/90 PSN add to SCCS
-            05/30/90 PSN For time being fix it, even if it is susceptible to 
+            05/30/90 PSN For time being fix it, even if it is susceptible to
 			 motif reason define changes.
             08/14/90 SJS fill in "missing" reasons
 	Calls:
@@ -47,7 +47,7 @@ static char rcsid[] = "$XConsortium: mvsGetRsnNam.c /main/7 1995/07/14 11:19:08 
 
             OUTPUTS
                 none
-  
+
             RETURNS
                 pointer to a statically declared string which names the
             reason
@@ -59,7 +59,7 @@ static char rcsid[] = "$XConsortium: mvsGetRsnNam.c /main/7 1995/07/14 11:19:08 
  *  Callback reasons  from <Xm/Xm.h>
  ****************************************************************************/
 
-static char *mvsReasonName[] = { 
+static char *mvsReasonName[] = {
 	/* XmCR_NONE           		0 */	"XmCR_NONE",
 	/* XmCR_HELP           		1 */	"XmCR_HELP",
 	/* XmCR_VALUE_CHANGED		2 */	"XmCR_VALUE_CHANGED",

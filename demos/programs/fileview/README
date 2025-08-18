@@ -7,9 +7,9 @@ This demo only works if your Operating System supports setlocale()
 and Xlib supports the same locale as your OS.
 
 The program MUST be executed through the sh script "xmfile"
-This script is a Korn Shell script currently running on 
-	ULTRIX 4.1 or ULTRIX 4.2 
-	HPUX 8.05 
+This script is a Korn Shell script currently running on
+	ULTRIX 4.1 or ULTRIX 4.2
+	HPUX 8.05
 	OSF1.0.4
 
 You may have to do some work for running on your OS and your shell.
@@ -23,7 +23,7 @@ Steps to follow:
 	between languages and locales names
 	For example if you want to run in French, and the name
 	of the french locale on your system is FROG_REDMEAT
-	then 
+	then
 	1) make sure that the variable $sysname contains
 		the name of your OS
 	2) add a case in the case statement for french under your OS
@@ -34,12 +34,12 @@ Steps to follow:
 	3) The UID files are searched in the directory named with
 	the language name.
 
-	
+
 	4) If you want to add a new language
 	add a case branch for the language.
 	create a directory of that name. Go into this directory.
 	Create adequate X resource files and uil files.
-	compile the uil file 
+	compile the uil file
 
 	5) Come back to the xmfile directory
 	Execute "xmfile language".
@@ -48,7 +48,7 @@ Steps to follow:
 
 	Of course you may only view files in the specified language
 
-	If you execute "xmfile" with no argument, 
+	If you execute "xmfile" with no argument,
 		the default language is French.
 
 
@@ -62,7 +62,7 @@ the Primary shell. Others are Secondary.
 
 Each top level shell is parent of a Main Window, the work area
 of which is a PanedWindow.
- 
+
 The menu bar has entries
 	File for opening/closing file, exiting
 	View for controlling the panes in the pane window
@@ -75,17 +75,17 @@ The Open menu:
  	On selecting Open/File in the menu bar, a file selection box
 	is mapped to choose the file.
 
-	If OpenFile is successful, close first the current file opened, 
+	If OpenFile is successful, close first the current file opened,
       destroy all existing panes, and display the new file.
 
  	Close: this entry only exists on the secondary windows.
 	It destroys the top level shell and closes the file.
-	
+
 	Exit: this entry only exists on the primary shell
 	 closes the file and the shell.
 
 The View menu:
-  	
+
 	New Pane: Creates a new pane in the paned window
 	Delete Pane: delete the current pane.
 	Search: pops a dialogue box for searching text in the file
@@ -93,5 +93,3 @@ The View menu:
 		search the string.
 		if found show in current pane
 		else pop up dialogue box again.
-
-

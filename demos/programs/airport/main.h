@@ -33,13 +33,13 @@
  *
  * The airport demo is a totally useless program to illustrate
  * Drag and Drop in Motif 1.2.
- * It consists of an airport containing 
+ * It consists of an airport containing
  *	- plane icons that can be dragged
  *	- tracks where planes can be dropped (land)
  *	- a radio box that shows current state of outcoming flights
  *	- a raido box that shows current state of incoming flights
  *	- a message area that lists successive interesting messages.
- *	
+ *
  * The demo is more interesting when two instances of this program
  * are run simultaneously.
  *
@@ -47,7 +47,7 @@
  * and the plane is announced to leave in the message area.
  *
  * Each time a plane is dropped onto an airport, if a gate is available,
- * the plane is taxi-ed to this gate. The data transferred between the 
+ * the plane is taxi-ed to this gate. The data transferred between the
  * source airport and the destination airport is the flight number.
  * The arriving flight is announced in the message area.
  * If the destination airport is saturated (no gate available) the drop
@@ -58,7 +58,7 @@
  *
  *    Created: Vania JOLOBOFF / May 1992
  * ======================================================================
- * 
+ *
  */
 
 #define DECLAREGLOBAL
@@ -73,7 +73,7 @@
  *  Constants
  */
 
-#define MIN_TRACK_SIZE	16 
+#define MIN_TRACK_SIZE	16
 
 /*
  * The flying plane icon
@@ -127,9 +127,9 @@ static unsigned char plane_bits[] = {
 static XtResource AirportResourcesSpecs[] =
 {
    { "tooSmall", XtCString, XtRString, sizeof(String),
-       XtOffsetOf( struct _AirportResources, too_small), XtRImmediate, 
+       XtOffsetOf( struct _AirportResources, too_small), XtRImmediate,
        (XtPointer) "Window too small, enlarge please" },
-   { 
+   {
       "trackBackground", XmCBackground, XmRPixel, sizeof (Pixel),
       XtOffsetOf( struct _AirportResources, track_background),
       XtRString, (XtPointer)"XtDefaultBackground"
@@ -139,7 +139,7 @@ static XtResource AirportResourcesSpecs[] =
       XtOffsetOf( struct _AirportResources, spot_background),
       XtRString, (XtPointer)"XtDefaultBackground"
      },
-   {	
+   {
       "flyingBackground", XmCBackground, XmRPixel, sizeof (Pixel),
       XtOffsetOf( struct _AirportResources, flight_background),
       XtRString, (XtPointer)"XtDefaultBackground"

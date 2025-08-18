@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PIMwmInfo.c /main/8 1995/07/13 20:22:11 drk $"
@@ -90,8 +90,8 @@ char	*argv[];
 	 */
 	test_atom = XmInternAtom(display, "_MOTIF_WM_INFO", False);
 
-	XGetWindowProperty(display, rootWindow, test_atom, 0, 100, False, 
-					   AnyPropertyType, &new_type, &new_format, 
+	XGetWindowProperty(display, rootWindow, test_atom, 0, 100, False,
+					   AnyPropertyType, &new_type, &new_format,
 					   &new_nitems, &new_bytes_after,
 					   (unsigned char **)(&mwm_get_info));
 
@@ -110,7 +110,7 @@ char	*argv[];
 	/* Proper result here is TRUE */
 	if (mwm_get_info->wm_window) {
 		/*
-		 * If XRaiseWindow() succeeds, then the property's 
+		 * If XRaiseWindow() succeeds, then the property's
 		 * function IS working - the window SHOULD be valid
 		 * while the window manager is running.
 		 *
@@ -131,7 +131,7 @@ char	*argv[];
 	}
 	XSync(display, False);
 	PIInfo_cnt++;
-    
+
     CommonPause();
 /*
  * Put up a message box with the results of the test.
@@ -147,4 +147,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-

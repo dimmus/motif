@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -36,7 +36,7 @@ extern "C" {
 
 /********    Private Function Declarations for DragOverS.c    ********/
 
-extern void _XmDragOverHide( 
+extern void _XmDragOverHide(
                         Widget w,
 #if NeedWidePrototypes
                         int clipOriginX,
@@ -46,7 +46,7 @@ extern void _XmDragOverHide(
                         Position clipOriginY,
 #endif /* NeedWidePrototypes */
                         XmRegion clipRegion) ;
-extern void _XmDragOverShow( 
+extern void _XmDragOverShow(
                         Widget w,
 #if NeedWidePrototypes
                         int clipOriginX,
@@ -56,7 +56,7 @@ extern void _XmDragOverShow(
                         Position clipOriginY,
 #endif /* NeedWidePrototypes */
                         XmRegion clipRegion) ;
-extern void _XmDragOverMove( 
+extern void _XmDragOverMove(
                         Widget w,
 #if NeedWidePrototypes
                         int x,
@@ -65,14 +65,14 @@ extern void _XmDragOverMove(
                         Position x,
                         Position y) ;
 #endif /* NeedWidePrototypes */
-extern void _XmDragOverChange( 
+extern void _XmDragOverChange(
                         Widget w,
 #if NeedWidePrototypes
                         unsigned int dropSiteStatus) ;
 #else
                         unsigned char dropSiteStatus) ;
 #endif /* NeedWidePrototypes */
-extern void _XmDragOverFinish( 
+extern void _XmDragOverFinish(
                         Widget w,
 #if NeedWidePrototypes
                         unsigned int completionStatus) ;

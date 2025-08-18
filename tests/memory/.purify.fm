@@ -18,10 +18,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #
-# This suppresses all the errors from Purify output except Freed Memory 
+# This suppresses all the errors from Purify output except Freed Memory
 # access and memory leaks.
 #
 suppress umr *

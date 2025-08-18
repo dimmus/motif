@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin4.c /main/4 1995/07/13 19:06:57 drk $"
@@ -51,13 +51,13 @@ char  **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth, 400);  n++;
     XtSetArg(args[n], XmNheight,300);  n++;
     XtSetArg(args[n], XmNgeometry, "+0+0");  n++;
     XtSetValues(Shell1, args, n);
-  
+
     XmRegisterConverters();
 #ifdef  SYNCHRONIZE
     XSynchronize(display, 1);
@@ -143,10 +143,10 @@ char  **argv;
     XtSetArg (args[n], XmNskipAdjust, True); n++;
     PushButton3 = XmCreatePushButton(PanedWindow1, "PushButton3",
                     args, n);
-    XtManageChild(PushButton3);    
+    XtManageChild(PushButton3);
 
     CommonPause();
-  
+
     XtAppMainLoop(app_context);
 }
 

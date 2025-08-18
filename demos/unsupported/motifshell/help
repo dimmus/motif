@@ -1,6 +1,6 @@
 This is the help screen.
 
-One of the unique elements of this screen is 
+One of the unique elements of this screen is
 the ability for Motif to envoke other windows
 which act as children of the main window.
 
@@ -9,5 +9,3 @@ as a child of the application shell.
 
 
 HELP FOLLOWS:
-
-

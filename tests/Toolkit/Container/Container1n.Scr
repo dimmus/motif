@@ -19,20 +19,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1n.Dat -u n".
 # C)
 
-Continue 
+Continue
 
 # #) The container widget should be displayed in its ANY_ICON view,
 #    with a DETAIL layoutType.
-# #) There should be 4 columns in the following order: Icon, Age, 
+# #) There should be 4 columns in the following order: Icon, Age,
 #    Full Title and Favorite Flavor.
-# #) The outlineColumnWidth has been set to 150, and the TabList is 
+# #) The outlineColumnWidth has been set to 150, and the TabList is
 #    +50, +200.
 # #) Move the pointer into the "Container1" window, and expand
 #    successively "IconGad3" and "IconGad32", by clicking on the Outline
@@ -49,6 +49,6 @@ LocatePointer Container1n
 WindowRaise Container1n
 CompareVisual Container1n
 Continue
- 
+
 # E)
 Exit

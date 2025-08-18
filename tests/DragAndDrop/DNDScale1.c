@@ -72,14 +72,14 @@ int                     *format ;
 
                         ok = 0;
 
-                        ok = XmbTextPropertyToTextList(display, &tmp_prop, 
+                        ok = XmbTextPropertyToTextList(display, &tmp_prop,
                                  &tmp_value, &num_vals);
 
                         if (num_vals && (ok == Success || ok > 0)) {
 
                                 for (i = 0; i < num_vals; i++)
                                         malloc_size += strlen(*tmp_value + i);
-                                total_tmp_value = 
+                                total_tmp_value =
                                   XtMalloc ((unsigned) malloc_size + 1);
                                 total_tmp_value[0] = '\0';
                                 for (i = 0; i < num_vals ; i++)
@@ -123,12 +123,12 @@ ListExports( Widget w, XtPointer client_data, XtPointer call_data )
 
    for ( i = 0; i < numExportTargets; i++ )
    {
-     if ( exportTargets[i] == STRING ) 
+     if ( exportTargets[i] == STRING )
      {
         printf("STRING is a Supported Target for Scale.\n");
         transferEntries[0].target = STRING;
      }
-     if ( exportTargets[i] == COMPOUND_TEXT ) 
+     if ( exportTargets[i] == COMPOUND_TEXT )
      {
         printf("COMPOUND_TEXT is a Supported Target for Scale.\n");
         transferEntries[0].target = COMPOUND_TEXT;
@@ -194,9 +194,9 @@ char	**argv;
     XtSetArg(args[n], XmNimportTargets, &STRING);  n++;
     XtSetArg(args[n], XmNnumImportTargets, 1);  n++;
     XmDropSiteUpdate( Text1, args, n );
-   
+
     CommonPause();
-    
+
    /*  Test whether COMPOUND_TEXT target is supported by Scale widget. */
     COMPOUND_TEXT = XmInternAtom(display, "COMPOUND_TEXT", False);
 
@@ -211,4 +211,3 @@ char	**argv;
 
     XtAppMainLoop(app_context);
 }
-

@@ -28,7 +28,7 @@
 #	To run this program type 'nohup behavior_test'
 #
 #	Related files forthis test are:
-#	
+#
 #		./behavior.xinit
 #		./behavior.Xdefs
 #		./behavior.mwmrc

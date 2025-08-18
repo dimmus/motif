@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This is a spinBox with the \nfollowing characteristics:\n\n   - arrowLayout is" &
@@ -30,18 +30,3 @@
 "   - incrementValue is 1\n   - maximumValue is 100\n   - minimumValue" &
 " is -100\n   - position is 0\n\n\nAll other resources are set by " &
 "default.\n";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

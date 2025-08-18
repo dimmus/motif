@@ -180,6 +180,3 @@ typedef struct _XmSpinBoxRec
 
 #endif  /* _SpinBP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-
-
-

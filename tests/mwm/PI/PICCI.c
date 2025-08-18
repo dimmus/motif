@@ -112,46 +112,46 @@ SendMessage (RType rtype, XtPointer msg, int len, Time time)
     case DEFINE:
       {
 	target = _MOTIF_WM_DEFINE_COMMAND;
-	XmeNamedSink (DrawingArea, WM_S0, 
+	XmeNamedSink (DrawingArea, WM_S0,
 				   XmCOPY,
-				   (XtPointer)msg, 
+				   (XtPointer)msg,
 				   time);
 	break;
       }
     case INCLUDE:
       {
 	target = _MOTIF_WM_INCLUDE_COMMAND;
-	XmeNamedSink (DrawingArea, WM_S0, 
+	XmeNamedSink (DrawingArea, WM_S0,
 				   XmCOPY,
-				   (XtPointer)msg, 
+				   (XtPointer)msg,
 				   time);
 	break;
       }
     case REMOVE:
       {
 	target = _MOTIF_WM_REMOVE_COMMAND;
-        XmeNamedSink (DrawingArea, WM_S0, 
+        XmeNamedSink (DrawingArea, WM_S0,
 				   XmCOPY,
-				   (XtPointer)msg, 
+				   (XtPointer)msg,
 				   time);
        break;
       }
     case ENABLE:
       {
       target = _MOTIF_WM_ENABLE_COMMAND;
-      XmeNamedSink (DrawingArea, WM_S0, 
+      XmeNamedSink (DrawingArea, WM_S0,
 				   XmCOPY,
-				   (XtPointer)msg, 
+				   (XtPointer)msg,
 				   time);
        break;
       }
     case DISABLE:
       {
         target = _MOTIF_WM_DISABLE_COMMAND;
-	XmeNamedSink (DrawingArea, WM_S0, 
-				   
+	XmeNamedSink (DrawingArea, WM_S0,
+
 		                   XmCOPY,
-				   (XtPointer)msg, 
+				   (XtPointer)msg,
 				   time);
        break;
 
@@ -173,7 +173,7 @@ SendCB (Widget w, XtPointer clientData, XtPointer callData)
   char   *cmdName, *cmdDefault, *buf;
   MessageData msg, fulldata;
   int     size=0, i;
-  
+
 
   time = ((XButtonEvent *) ((XmPushButtonCallbackStruct *)callData)->event)->time;
 
@@ -197,9 +197,9 @@ SendCB (Widget w, XtPointer clientData, XtPointer callData)
       size += sizeof(CARD32);  /* command_set id */
       size += sizeof(CARD16) + strlen(cmdName) + 1;
       size += sizeof(CARD16) + strlen(cmdDefault) + 1;
-	
+
       msg = fulldata = (MessageData) XtMalloc(sizeof(CARD8) * size);
-	
+
       msg = PackCARD32(msg, commandID);
       msg = PackCARD32(msg, MY_PRETTY_ATOM);
       msg = PackCARD32(msg, parentID);
@@ -255,7 +255,7 @@ SendCB (Widget w, XtPointer clientData, XtPointer callData)
 	  in_line = 1L;
       }
 
-      size += 5 * sizeof(CARD32); 
+      size += 5 * sizeof(CARD32);
       msg = fulldata = (MessageData) XtMalloc(sizeof(CARD8) * size);
 
       msg = PackCARD32(msg, in_line);
@@ -296,7 +296,7 @@ SendCB (Widget w, XtPointer clientData, XtPointer callData)
       if (XmToggleButtonGetState(toggle[WIN]))
 	window |= windowBit;
 
-      size += 5 * sizeof(CARD32); 
+      size += 5 * sizeof(CARD32);
       msg = fulldata = (MessageData) XtMalloc(sizeof(CARD8) * size);
 
       msg = PackCARD32(msg, commandID);
@@ -336,7 +336,7 @@ SendCB (Widget w, XtPointer clientData, XtPointer callData)
       if (XmToggleButtonGetState(toggle[WIN]))
 	window |= windowBit;
 
-      size += 5 * sizeof(CARD32); 
+      size += 5 * sizeof(CARD32);
       msg = fulldata = (MessageData) XtMalloc(sizeof(CARD8) * size);
 
       msg = PackCARD32(msg, commandID);
@@ -376,7 +376,7 @@ SendCB (Widget w, XtPointer clientData, XtPointer callData)
       if (XmToggleButtonGetState(toggle[WIN]))
 	window |= windowBit;
 
-      size += 5 * sizeof(CARD32); 
+      size += 5 * sizeof(CARD32);
       msg = fulldata = (MessageData) XtMalloc(sizeof(CARD8) * size);
 
       msg = PackCARD32(msg, commandID);
@@ -410,25 +410,25 @@ predefined_command (Widget w, XtPointer which_predefine, XtPointer callData)
       XmTextFieldSetString(field[NAME], "OCCUPY");
       XmTextFieldSetString(field[DEFAULT], "Occupy");
       SendCB(w, NULL, callData);
-      
+
       XmTextFieldSetString(field[PARENT], "1");
       XmTextFieldSetString(field[ID], "2");
       XmTextFieldSetString(field[NAME], "ONE");
       XmTextFieldSetString(field[DEFAULT], "One");
       SendCB(w, NULL, callData);
-      
+
       XmTextFieldSetString(field[PARENT], "1");
       XmTextFieldSetString(field[ID], "3");
       XmTextFieldSetString(field[NAME], "TWO");
       XmTextFieldSetString(field[DEFAULT], "Two");
       SendCB(w, NULL, callData);
-      
+
       XmTextFieldSetString(field[PARENT], "1");
       XmTextFieldSetString(field[ID], "4");
       XmTextFieldSetString(field[NAME], "THREE");
       XmTextFieldSetString(field[DEFAULT], "Three");
       SendCB(w, NULL, callData);
-      
+
       XmToggleButtonSetState(toggle[INCLUDE], True, True);
       XmTextFieldSetString(field[PARENT], "0");
       XmTextFieldSetString(field[ID], "1");
@@ -445,25 +445,25 @@ predefined_command (Widget w, XtPointer which_predefine, XtPointer callData)
       XmTextFieldSetString(field[NAME], "OCCUPY");
       XmTextFieldSetString(field[DEFAULT], "Occupy");
       SendCB(w, NULL, callData);
-      
+
       XmTextFieldSetString(field[PARENT], "1");
       XmTextFieldSetString(field[ID], "2");
       XmTextFieldSetString(field[NAME], "ONE");
       XmTextFieldSetString(field[DEFAULT], "One");
       SendCB(w, NULL, callData);
-      
+
       XmTextFieldSetString(field[PARENT], "1");
       XmTextFieldSetString(field[ID], "3");
       XmTextFieldSetString(field[NAME], "TWO");
       XmTextFieldSetString(field[DEFAULT], "Two");
       SendCB(w, NULL, callData);
-      
+
       XmTextFieldSetString(field[PARENT], "1");
       XmTextFieldSetString(field[ID], "4");
       XmTextFieldSetString(field[NAME], "THREE");
       XmTextFieldSetString(field[DEFAULT], "Three");
       SendCB(w, NULL, callData);
-      
+
       XmToggleButtonSetState(toggle[INCLUDE], True, True);
       XmTextFieldSetString(field[PARENT], "0");
       XmTextFieldSetString(field[ID], "1");
@@ -499,14 +499,14 @@ CreateBulletinBoard (Widget parent)
 
 
   XmRegisterConverters();
-  
+
   n = 0;
   bulletinBoard = XtCreateManagedWidget("form",
 				 xmFormWidgetClass,
 				 parent,
 				 args,
 				 n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); ++n;
   XtSetArg(args[n], XmNtopOffset, 10); ++n;
@@ -519,7 +519,7 @@ CreateBulletinBoard (Widget parent)
 			  bulletinBoard,
 			  args,
 			  n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); ++n;
   XtSetArg(args[n], XmNtopOffset, 10); ++n;
@@ -548,7 +548,7 @@ CreateBulletinBoard (Widget parent)
 			 bulletinBoard,
 			 args,
 			 n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); ++n;
   XtSetArg(args[n], XmNtopWidget, cmd_frame); ++n;
@@ -563,7 +563,7 @@ CreateBulletinBoard (Widget parent)
 			args,
 			n);
   XtAddCallback(send, XmNactivateCallback, SendCB, NULL);
-    
+
   n = 0;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); ++n;
   XtSetArg(args[n], XmNbottomOffset, 10); ++n;
@@ -611,16 +611,16 @@ CreateBulletinBoard (Widget parent)
 					 xmRowColumnWidgetClass,
 					 window_frame,
 					 args, n);
-  
-  
 
-  
-  
+
+
+
+
   toggle[ROOT] = XtCreateManagedWidget("Root (Ignores Other Toggles)",
 					 xmToggleButtonWidgetClass,
 					 windowRC,
 					 NULL,0);
-  
+
 
   toggle[ALL]  = XtCreateManagedWidget("All Windows &/^ Icons",
 					 xmToggleButtonWidgetClass,
@@ -631,7 +631,7 @@ CreateBulletinBoard (Widget parent)
 
 
 
-  
+
   XtVaCreateManagedWidget("separator", xmSeparatorWidgetClass, windowRC,
 			  XmNorientation, XmHORIZONTAL, NULL);
 
@@ -639,7 +639,7 @@ CreateBulletinBoard (Widget parent)
   toggle[ICON] = XtCreateManagedWidget("Icon",
 					 xmToggleButtonWidgetClass,
 					 windowRC,
-					 NULL,0); 
+					 NULL,0);
 
 
   toggle[WIN]  = XtCreateManagedWidget("Window",
@@ -674,7 +674,7 @@ CreateBulletinBoard (Widget parent)
 			      argWin,
 			      args,
 			      n);
-  
+
 
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET); n++;
@@ -690,7 +690,7 @@ CreateBulletinBoard (Widget parent)
 				args,
 				n);
 
-  
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
   XtSetArg(args[n], XmNtopWidget, field[PARENT]); n++;
@@ -720,7 +720,7 @@ CreateBulletinBoard (Widget parent)
 				 args,
 				 n);
 
-  
+
 
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
@@ -736,7 +736,7 @@ CreateBulletinBoard (Widget parent)
 				     argWin,
 				     args,
 				     n);
-  
+
 
 
   n = 0;
@@ -753,7 +753,7 @@ CreateBulletinBoard (Widget parent)
 			  args,
 			  n);
 
-  
+
 
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
@@ -786,7 +786,7 @@ CreateBulletinBoard (Widget parent)
 				 args,
 				 n);
 
-  
+
   n = 0;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
   XtSetArg(args[n], XmNtopWidget, field[DEFAULT]); n++;
@@ -802,7 +802,7 @@ CreateBulletinBoard (Widget parent)
 					 args,
 					 n);
 
-  
+
   /************************************************************************/
 
   n = 0;
@@ -818,8 +818,8 @@ CreateBulletinBoard (Widget parent)
 				     cmd_frame,
 				     args,
 				     n);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
@@ -838,8 +838,8 @@ CreateBulletinBoard (Widget parent)
 					 msgRC,
 					 args,
 					 n);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
@@ -853,7 +853,7 @@ CreateBulletinBoard (Widget parent)
 					  msgRC,
 					  args,
 					  n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
@@ -866,7 +866,7 @@ CreateBulletinBoard (Widget parent)
 					 msgRC,
 					 args,
 					 n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNshadowThickness, 2); n++;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
@@ -908,8 +908,8 @@ CreateBulletinBoard (Widget parent)
 				   predef_frame,
 				   args,
 				   n);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
   XtSetArg(args[n], XmNrecomputeSize, False); n++;
@@ -920,8 +920,8 @@ CreateBulletinBoard (Widget parent)
 				 n);
   XtAddCallback(predef, XmNactivateCallback, predefined_command,
 		(XtPointer) 1);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
   XtSetArg(args[n], XmNrecomputeSize, False); n++;
@@ -932,8 +932,8 @@ CreateBulletinBoard (Widget parent)
 				 n);
   XtAddCallback(predef, XmNactivateCallback, predefined_command,
 		(XtPointer) 2);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
   XtSetArg(args[n], XmNrecomputeSize, False); n++;
@@ -944,8 +944,8 @@ CreateBulletinBoard (Widget parent)
 				 n);
   XtAddCallback(predef, XmNactivateCallback, predefined_command,
 		(XtPointer) 3);
-  
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER); n++;
   XtSetArg(args[n], XmNrecomputeSize, False); n++;
@@ -988,7 +988,7 @@ PackString(XtPointer data, String str)
     register int i, len = strlen(str);
 
     data = PackCARD16(data, len);
-    for (i = 0; i < len; i++, str++) 
+    for (i = 0; i < len; i++, str++)
 	data = PackCARD8(data, *str);
 
     return(data);
@@ -1039,11 +1039,11 @@ PackCARD8 (XtPointer data, CARD8 val)
 void
 main (int argc, char **argv)
 {
-  
+
   CommonTestInit (argc,argv);
   InternStuff(display);
-  
-  shell_ui = XtVaAppCreateShell("cmd", "Cmd", applicationShellWidgetClass, 
+
+  shell_ui = XtVaAppCreateShell("cmd", "Cmd", applicationShellWidgetClass,
 				display, NULL);
   CreateBulletinBoard(shell_ui);
 
@@ -1060,5 +1060,3 @@ main (int argc, char **argv)
 
   XtAppMainLoop(app_context);
 }
-
-

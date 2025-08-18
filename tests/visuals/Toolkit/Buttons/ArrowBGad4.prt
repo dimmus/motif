@@ -22,13 +22,13 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual drawarea 
+TRACE:(1) CompareVisual drawarea
 TRACE:(2) Continue
-TRACE:(3) CompareVisual drawarea 
-TRACE:(4) LocatePointer arrowButtonGadget16  
-TRACE:(5) CompareVisual arrowButtonGadget16 
+TRACE:(3) CompareVisual drawarea
+TRACE:(4) LocatePointer arrowButtonGadget16
+TRACE:(5) CompareVisual arrowButtonGadget16
 TRACE:(6) WindowIconify Shell1
 TRACE:(7) WindowDeiconify Shell1
-TRACE:(8) CompareVisual drawarea 
+TRACE:(8) CompareVisual drawarea
 TRACE:(9) Exit
 Exiting Test...Please Standby...

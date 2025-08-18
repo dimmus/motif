@@ -1,5 +1,5 @@
 # $XConsortium: Menu5.scr /main/6 1995/07/17 20:26:10 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,27 +20,27 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client window will appear with a radio box widget with two
-#   children, "toggle1" and "toggle2". 
+#   children, "toggle1" and "toggle2".
 
 CompareVisual rc2
 
 # Move the pointer into the client window and Press MB3.  A popup
-#   menu will appear.  The cursor will change to a picture of a man. 
+#   menu will appear.  The cursor will change to a picture of a man.
 
 LocatePointer rc2
-PressMB Btn3 
+PressMB Btn3
 LocatePointer option1
 CompareVisual popup
 
 # Drag the cursor down through the popup menu.  Several nested
-#   popup menus will appear. 
+#   popup menus will appear.
 
 LocatePointer option2
 LocatePointer option3
@@ -55,7 +55,7 @@ LocatePointer option1o
 
 # Release MB3.  The popup menu will disappear.  A message indicating
 #   which pushbutton was activated will be printed to the xterm
-#   window. 
+#   window.
 
 ReleaseMB Btn3
 

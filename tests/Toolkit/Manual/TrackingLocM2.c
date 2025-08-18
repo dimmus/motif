@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TrackingLocM2.c /main/6 1995/07/13 18:42:17 drk $"
@@ -54,7 +54,7 @@ void  main(argc, argv)
     Arg           args[MAX_ARGS];
     XmString      tcs;
     Pixel         colorVal;
-    
+
     CommonTestInit(argc, argv);
 
     n = 0;
@@ -135,7 +135,7 @@ XtPointer  call_data;
     XmString	tcs;
     Widget 	MessageB;
     Widget	widget;
-	
+
 
     cursor = XCreateFontCursor (display, XC_pirate);
 
@@ -145,7 +145,7 @@ XtPointer  call_data;
     	widget = XmTrackingLocate(Shell1, cursor, False);
 
     if (widget != NULL)
-    { 
+    {
     	strcpy(to, begin);
     	strcat(to, XtName(widget));
     	tcs = XmStringCreateLtoR(to, XmSTRING_DEFAULT_CHARSET);

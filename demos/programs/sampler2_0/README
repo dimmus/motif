@@ -4,7 +4,7 @@ A 2.0-features oriented demo.
 -----------------------------
 
 Sampler2_0 provides a demonstration of almost all the new visible
-features/widgets the OSF/Motif 2.0 release.  
+features/widgets the OSF/Motif 2.0 release.
 
 It uses a Notebook as its main component and each page demonstrates
 one or more different new functionalities:
@@ -22,4 +22,3 @@ Do something like:
 
 
 - Daniel Dardailler
-

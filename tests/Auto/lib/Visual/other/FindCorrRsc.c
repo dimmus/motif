@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FindCorrRsc.c /main/7 1995/07/14 11:44:44 drk $"
@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: FindCorrRsc.c /main/7 1995/07/14 11:44:44 d
         resource that is refered to by index i in the widget's
         resource_info array.
 
-	The index of the corresponding resource in the resource_info 
+	The index of the corresponding resource in the resource_info
         array is returned if found. Otherwise, return (-1)
 ************************************************************************/
 #include "vislib.h"

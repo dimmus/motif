@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 /********************************************
  *
@@ -49,7 +49,7 @@ typedef struct _XmToggleButtonGCacheObjClassPart
 } XmToggleButtonGCacheObjClassPart;
 
 
-typedef struct _XmToggleButtonGCacheObjClassRec 
+typedef struct _XmToggleButtonGCacheObjClassRec
 {
 	ObjectClassPart                     object_class;
         XmExtClassPart                      ext_class;
@@ -61,19 +61,19 @@ externalref XmToggleButtonGCacheObjClassRec xmToggleButtonGCacheObjClassRec;
 
 
 typedef struct _XmToggleButtonGCacheObjPart
-{ 
+{
    unsigned char	ind_type;
    Boolean		visible;
    Dimension		spacing;
    Dimension		indicator_dim;
-   Pixmap		on_pixmap; 
-   Pixmap		insen_pixmap; 
+   Pixmap		on_pixmap;
+   Pixmap		insen_pixmap;
    unsigned char	ind_on;
    Boolean		fill_on_select;
    Pixel		select_color;
    GC			select_GC;
    GC			background_gc;
-   GC                   arm_GC;    /* used in menus when enableEtchedInMenu 
+   GC                   arm_GC;    /* used in menus when enableEtchedInMenu
 				      is set. */
    unsigned char        toggle_mode;
    Boolean		reversed_select;
@@ -122,7 +122,7 @@ externalref XmToggleButtonGadgetClassRec xmToggleButtonGadgetClassRec;
 
 
 typedef struct _XmToggleButtonGadgetPart
-{ 
+{
    Boolean		indicator_set;
    unsigned char	set;
    unsigned char      	visual_set; /* used for visuals and does not reflect
@@ -158,7 +158,7 @@ typedef struct _XmToggleButtonGadgetRec {
 /**********/
 /* MACROS */
 /**********/
- 
+
 /* Macros for cached instance fields */
 
 #define TBG_IndType(w)		\

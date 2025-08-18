@@ -80,10 +80,10 @@ extern "C" {
 #ifndef DtCBlinkRate
 #define DtCBlinkRate            	XmCBlinkRate
 #endif
-#ifndef DtNbuttonFontList  
+#ifndef DtNbuttonFontList
 #define DtNbuttonFontList             	XmNbuttonFontList
 #endif
-#ifndef DtCFontList 
+#ifndef DtCFontList
 #define DtCFontList             	XmCFontList
 #endif
 #ifndef DtNcenterToggleLabel
@@ -140,10 +140,10 @@ extern "C" {
 #ifndef DtCDialogTitle
 #define DtCDialogTitle          	XmCDialogTitle
 #endif
-#ifndef DtNeditable  
+#ifndef DtNeditable
 #define DtNeditable             	XmNeditable
 #endif
-#ifndef DtCEditable 
+#ifndef DtCEditable
 #define DtCEditable             	XmCEditable
 #endif
 #ifndef DtNfindButtonLabel
@@ -191,7 +191,7 @@ extern "C" {
 #ifndef DtNinsertLabel
 #define DtNinsertLabel		       	"insertLabel"
 #endif
-#ifndef DtCInsertLabel 
+#ifndef DtCInsertLabel
 #define DtCInsertLabel       		"InsertLabel"
 #endif
 #ifndef DtNjustifyToggleLabel
@@ -200,34 +200,34 @@ extern "C" {
 #ifndef DtCJustifyToggleLabel
 #define DtCJustifyToggleLabel       	"JustifyToggleLabel"
 #endif
-#ifndef DtNlabelFontList  
+#ifndef DtNlabelFontList
 #define DtNlabelFontList             	XmNlabelFontList
 #endif
 #ifndef DtNleftAlignToggleLabel
 #define DtNleftAlignToggleLabel       	"leftAlignToggleLabel"
 #endif
-#ifndef DtCLeftAlignToggleLabel 
+#ifndef DtCLeftAlignToggleLabel
 #define DtCLeftAlignToggleLabel       	"LeftAlignToggleLabel"
 #endif
 #ifndef DtNleftMarginFieldLabel
 #define DtNleftMarginFieldLabel       	"leftMarginFieldLabel"
 #endif
-#ifndef DtCLeftMarginFieldLabel 
+#ifndef DtCLeftMarginFieldLabel
 #define DtCLeftMarginFieldLabel       	"LeftMarginFieldLabel"
 #endif
-#ifndef DtNmaxLength  
+#ifndef DtNmaxLength
 #define DtNmaxLength             	XmNmaxLength
 #endif
-#ifndef DtCMaxLength  
+#ifndef DtCMaxLength
 #define DtCMaxLength             	XmCMaxLength
 #endif
 #ifndef DtNmisspelledListLabel
 #define DtNmisspelledListLabel       	"misspelledListLabel"
 #endif
-#ifndef DtCMisspelledListLabel 
+#ifndef DtCMisspelledListLabel
 #define DtCMisspelledListLabel       	"MisspelledListLabel"
 #endif
-#ifndef DtNoverstrike 
+#ifndef DtNoverstrike
 #define DtNoverstrike			"overstrike"
 #endif
 #ifndef DtCOverstrike
@@ -236,43 +236,43 @@ extern "C" {
 #ifndef DtNoverstrikeLabel
 #define DtNoverstrikeLabel       	"overstrikeLabel"
 #endif
-#ifndef DtCOverstrikeLabel 
+#ifndef DtCOverstrikeLabel
 #define DtCOverstrikeLabel       	"OverstrikeLabel"
 #endif
 #ifndef DtNrightAlignToggleLabel
 #define DtNrightAlignToggleLabel       	"rightAlignToggleLabel"
 #endif
-#ifndef DtCRightAlignToggleLabel 
+#ifndef DtCRightAlignToggleLabel
 #define DtCRightAlignToggleLabel       	"RightAlignToggleLabel"
 #endif
 #ifndef DtNrightMarginFieldLabel
 #define DtNrightMarginFieldLabel       	"rightMarginFieldLabel"
 #endif
-#ifndef DtCRightMarginFieldLabel 
+#ifndef DtCRightMarginFieldLabel
 #define DtCRightMarginFieldLabel       	"RightMarginFieldLabel"
 #endif
-#ifndef DtNrows 
+#ifndef DtNrows
 #define DtNrows            		XmNrows
 #endif
 #ifndef DtCRows
 #define DtCRows  		        XmCRows
 #endif
-#ifndef DtNscrollHorizontal 
+#ifndef DtNscrollHorizontal
 #define DtNscrollHorizontal		XmNscrollHorizontal
 #endif
 #ifndef DtCScroll
 #define DtCScroll          		XmCScroll
 #endif
-#ifndef DtNscrollLeftSide 
+#ifndef DtNscrollLeftSide
 #define DtNscrollLeftSide		XmNscrollLeftSide
 #endif
 #ifndef DtCScrollSide
 #define DtCScrollSide          		XmCScrollSide
 #endif
-#ifndef DtNscrollTopSide 
+#ifndef DtNscrollTopSide
 #define DtNscrollTopSide		XmNscrollTopSide
 #endif
-#ifndef DtNscrollVertical 
+#ifndef DtNscrollVertical
 #define DtNscrollVertical		XmNscrollVertical
 #endif
 #ifndef DtNshowStatusLine
@@ -293,62 +293,62 @@ extern "C" {
 #ifndef DtCSpellFilter
 #define DtCSpellFilter			"SpellFilter"
 #endif
-#ifndef DtNtextBackground 
+#ifndef DtNtextBackground
 #define DtNtextBackground   		"textBackground"
 #endif
-#ifndef DtCBackground 
+#ifndef DtCBackground
 #define DtCBackground   		XmCBackground
 #endif
-#ifndef DtNtextDeselectCallback 
+#ifndef DtNtextDeselectCallback
 #define DtNtextDeselectCallback 	"textDeselectCallback"
 #endif
-#ifndef DtNtextFontList  
+#ifndef DtNtextFontList
 #define DtNtextFontList             	XmNtextFontList
 #endif
-#ifndef DtNtextForeground 
+#ifndef DtNtextForeground
 #define DtNtextForeground   		"textForeground"
 #endif
-#ifndef DtCForeground 
+#ifndef DtCForeground
 #define DtCForeground   		XmCForeground
 #endif
-#ifndef DtNtextSelectCallback 
+#ifndef DtNtextSelectCallback
 #define DtNtextSelectCallback   	"textSelectCallback"
 #endif
-#ifndef DtNtextTranslations 
+#ifndef DtNtextTranslations
 #define DtNtextTranslations   		XmNtextTranslations
 #endif
-#ifndef DtCTranslations 
+#ifndef DtCTranslations
 #define DtCTranslations   		XmCTranslations
 #endif
-#ifndef DtCCallback 
+#ifndef DtCCallback
 #define DtCCallback   			XmCCallback
 #endif
-#ifndef DtNtopCharacter 
+#ifndef DtNtopCharacter
 #define DtNtopCharacter			XmNtopCharacter
 #endif
-#ifndef DtCTopCharacter  
+#ifndef DtCTopCharacter
 #define DtCTopCharacter			XmCTopCharacter
 #endif
 #ifndef DtNtotalLineCountLabel
 #define DtNtotalLineCountLabel       	"totalLineCountLabel"
 #endif
-#ifndef DtCTotalLineCountLabel 
+#ifndef DtCTotalLineCountLabel
 #define DtCTotalLineCountLabel       	"TotalLineCountLabel"
 #endif
-#ifndef DtNwordWrap 
+#ifndef DtNwordWrap
 #define DtNwordWrap			XmNwordWrap
 #endif
-#ifndef DtCWordWrap  
+#ifndef DtCWordWrap
 #define DtCWordWrap			XmCWordWrap
 #endif
 
 #ifndef DtEditorHelpCallbackStruct
-#define DtEditorHelpCallbackStruct XmAnyCallbackStruct 
+#define DtEditorHelpCallbackStruct XmAnyCallbackStruct
 #endif
-#ifndef DtEditorSelectCallbackStruct 
+#ifndef DtEditorSelectCallbackStruct
 #define DtEditorSelectCallbackStruct	XmAnyCallbackStruct
 #endif
-#ifndef DtEditorDeselectCallbackStruct 
+#ifndef DtEditorDeselectCallbackStruct
 #define DtEditorDeselectCallbackStruct	XmAnyCallbackStruct
 #endif
 
@@ -358,7 +358,7 @@ extern "C" {
 enum {
 	DtEDITOR_CURRENT_SELECTION,
 	DtEDITOR_NEXT_OCCURRENCE,
-	DtEDITOR_ALL_OCCURRENCES 
+	DtEDITOR_ALL_OCCURRENCES
 };
 
 /* Used with DtEditorFormat() */
@@ -520,7 +520,7 @@ extern Boolean DtEditorFind(
 extern DtEditorErrorCode DtEditorFormat(
 		Widget		widget,
 		DtEditorFormatSettings	*formatSettings,
-		unsigned int	amountToFormat); 
+		unsigned int	amountToFormat);
 
 extern DtEditorErrorCode DtEditorGetContents(
 		Widget		widget,

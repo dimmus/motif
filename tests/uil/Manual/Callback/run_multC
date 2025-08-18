@@ -22,7 +22,7 @@
 #
 # HISTORY
 
-# 
+#
 #	This shell script will run the UIL Multiple Callbacks test
 #	and redirect the output to the file 'multC.out'
 #

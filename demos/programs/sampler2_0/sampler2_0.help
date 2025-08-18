@@ -2,7 +2,7 @@
 <bold>Sampler2_0 demo: A 2.0-features oriented demo</bold>
 
 Sampler2_0 provides a demonstration of almost all the new visible
-features/widgets the OSF/Motif 2.0 release.  
+features/widgets the OSF/Motif 2.0 release.
 
 It uses a Notebook as its main component and each page demonstrate s
 one or more different new functionalities:
@@ -19,9 +19,9 @@ Files:
       XFILESEARCHPATH=XmdSampler2_0 sampler2_0.
 
 X Defaults:
-      The class of this application is XmdSampler2_0.  
+      The class of this application is XmdSampler2_0.
 
-Editres: 
+Editres:
       Sampler2_0 is Editres aware, so you can use 'editres' to see the
       names of the widgets in the instance hierarchy.
 

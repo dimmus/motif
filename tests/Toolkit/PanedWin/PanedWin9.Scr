@@ -19,18 +19,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # Note: seemingly random resizings (that don't reflect the instructions)
-# are an attempt to return the panes to reasonable sizes after 
+# are an attempt to return the panes to reasonable sizes after
 # resizings that obey the instructions.
 
 #  A client with a Paned Window with three pushbuttons will appear.
 #  The panes should be 100 pixels wide and 50 pixels high.
 #  No constraints have been set, so all possible resizings should
 #  be allowed.
-#  Return the panes to reasonable sizes and continue for more testing. 
+#  Return the panes to reasonable sizes and continue for more testing.
 
 CompareVisual PW
 LocatePointer PW RSash 0
@@ -145,7 +145,7 @@ DragXYRelative Down 50
 Continue
 
 #  The minimum size of the third pane has been reset to the default.
-#  An attempt was made to set the minimum of the first pane to a 
+#  An attempt was made to set the minimum of the first pane to a
 #  value less than zero.  An error message should have been displayed
 #  on the xterm window and the minimum set to the default value.
 #  Verify this by resizing the panes.
@@ -164,7 +164,7 @@ DragXYRelative Down 50
 
 Continue
 
-# An attempt was made to set the minimum of the second pane to a 
+# An attempt was made to set the minimum of the second pane to a
 # value less than zero.  An error message should have been displayed
 # on the xterm window and the minimum set to the default value.
 # Verify this by resizing the panes.
@@ -187,7 +187,7 @@ CompareVisual PW
 
 Continue
 
-#  An attempt was made to set the minimum of the third pane to a 
+#  An attempt was made to set the minimum of the third pane to a
 #  value less than zero.  An error message should have been displayed
 #  on the xterm window and the minimum set to the default value.
 #  Verify this by resizing the panes.
@@ -339,7 +339,7 @@ CompareVisual PW
 Continue
 
 
-#  The maximum and minimum for the first pane were both set to 100 
+#  The maximum and minimum for the first pane were both set to 100
 #  pixels.  There should be no sash on the seperator at the bottom of
 #  this pane.
 #  Verify that this pane cannot be resized.
@@ -350,7 +350,7 @@ Continue
 
 #  The maximum and minimum for the first pane were reset to their
 #  default values.
-#  The maximum and minimum for the second pane were both set to 100 
+#  The maximum and minimum for the second pane were both set to 100
 #  pixels.  There should be no sash on the seperator at the bottom of
 #  this pane.
 #  Verify that this pane cannot be resized.
@@ -369,7 +369,7 @@ Continue
 
 #  The maximum and minimum for the second pane were reset to their
 #  default values.
-#  The maximum and minimum for the third pane were both set to 100 
+#  The maximum and minimum for the third pane were both set to 100
 #  pixels.
 #  Verify that this pane cannot be resized.
 
@@ -386,10 +386,9 @@ CompareVisual PW
 Continue
 
 
-#  The maximum and minimum for all the panes have been set to 100 
+#  The maximum and minimum for all the panes have been set to 100
 #  pixels.  There should be no sash on any of the seperators.
 #  Verify that no panes can be resized.
 
 CompareVisual PW
 Exit
-

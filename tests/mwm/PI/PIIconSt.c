@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PIIconSt.c /main/10 1995/07/13 20:20:41 drk $"
@@ -33,7 +33,7 @@ static char rcsid[] = "$XConsortium: PIIconSt.c /main/10 1995/07/13 20:20:41 drk
 #include	<X11/Xatom.h>
 #include	<PITests.h>
 
-#include	"PIIconSt.h" 
+#include	"PIIconSt.h"
 #include	"btn1.bmp"
 
 
@@ -54,8 +54,8 @@ main(unsigned int argc, char **argv)
 
 
     CommonTestInit(argc, argv);
-	
-    /* 
+
+    /*
      * allocate icon_size structure
      */
 
@@ -76,7 +76,7 @@ main(unsigned int argc, char **argv)
 		PIInfo[i].actual_return = False;
 
 /*
-    
+
 /*
  * Create top level shell widget as parent for test_button widget
  */
@@ -141,8 +141,8 @@ main(unsigned int argc, char **argv)
   	 */
 	XSync(display, False);      /* make sure all windows are mapped */
 	test_atom = XmInternAtom(display, "WM_STATE", False);
-	XGetWindowProperty(display, test_wdw, test_atom, 0, 100, False, 
-					   AnyPropertyType, &new_type, &new_format, 
+	XGetWindowProperty(display, test_wdw, test_atom, 0, 100, False,
+					   AnyPropertyType, &new_type, &new_format,
 					   &new_nitems, &new_bytes_after,
 					   (unsigned char **)(&state_info));
 	PIInfo[PIInfo_cnt].actual_return = (
@@ -256,4 +256,3 @@ main(unsigned int argc, char **argv)
 	XtAppMainLoop(app_context);
 
 }
-

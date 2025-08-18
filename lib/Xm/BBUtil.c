@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -101,7 +101,7 @@ GetLabelString(
 
 
 /****************************************************************/
-Widget 
+Widget
 _XmBB_CreateButtonG(
         Widget bb,
         XmString l_string,
@@ -125,15 +125,15 @@ _XmBB_CreateButtonG(
 						      XmFONTLIST_DEFAULT_TAG);
 	    XtSetArg( al[ac], XmNlabelString, default_label_string_loc); ac++;
 	}
-	    
+
     XtSetArg( al[ac], XmNstringDirection, BB_StringDirection( bb)) ; ac++ ;
 
     button = XmCreatePushButtonGadget( (Widget) bb, name, al, ac) ;
 
     trait_default = (XmTakesDefaultTrait) XmeTraitGet((XtPointer)
-						      XtClass(button), 
+						      XtClass(button),
 						      XmQTtakesDefault) ;
-    if (trait_default) 
+    if (trait_default)
 	trait_default->showAsDefault  (button, XmDEFAULT_READY);
 
     if (default_label_string_loc)
@@ -143,7 +143,7 @@ _XmBB_CreateButtonG(
 }
 
 /****************************************************************/
-Widget 
+Widget
 _XmBB_CreateLabelG(
         Widget bb,
         XmString l_string,
@@ -178,6 +178,5 @@ _XmBB_CreateLabelG(
 	XmStringFree(default_label_string_loc);
 
     return( label ) ;
-	
-}
 
+}

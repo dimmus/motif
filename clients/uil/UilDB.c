@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
@@ -44,7 +44,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
 
 /*
  * This file contains routines which change the internal tables of UIL based on
- * a binary data base parameter in the command line 
+ * a binary data base parameter in the command line
  */
 
 
@@ -90,7 +90,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
  */
 #define _check_read( __number_returned ) \
 	if (( (__number_returned) != 1) || (feof(dbfile)) || (ferror(dbfile)) ) \
-	{  diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column ); } 
+	{  diag_issue_diagnostic( d_bad_database, diag_k_no_source, diag_k_no_column ); }
 
 
 
@@ -187,10 +187,10 @@ void db_incorporate()
     uil_max_child = globals.uil_max_child;
     num_bits = (uil_max_object +7) / 8;
 
-    if (globals.version > DB_Compiled_Version) 
+    if (globals.version > DB_Compiled_Version)
 	diag_issue_diagnostic( d_future_version, diag_k_no_source, diag_k_no_column );
 
-    for (;;) 
+    for (;;)
 	{
 	return_num_items = fread (&header, sizeof(_db_header), 1, dbfile);
 	if (feof(dbfile)) break;
@@ -199,7 +199,7 @@ void db_incorporate()
 	    {
 	    case Constraint_Tab:
 		constraint_tab = (unsigned char *) XtMalloc (header.table_size);
-		return_num_items = fread (constraint_tab, 
+		return_num_items = fread (constraint_tab,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
 		_check_read (return_num_items);
@@ -218,30 +218,30 @@ void db_incorporate()
 		/*
 		 * NOTE: The first entry is not used but we copy it anyway
 		 */
-		child_class_table = 
+		child_class_table =
 		  (unsigned char *) XtMalloc (header.table_size);
-		return_num_items = 
+		return_num_items =
 		  fread (child_class_table,
 			 sizeof(unsigned char) * header.num_items, 1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Charset_Wrdirection_Table:
 		charset_writing_direction_table = (unsigned char *) XtMalloc (header.table_size);
-		return_num_items = fread (charset_writing_direction_table, 
+		return_num_items = fread (charset_writing_direction_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Charset_Parsdirection_Table:
 		charset_parsing_direction_table = (unsigned char *) XtMalloc (header.table_size);
-		return_num_items = fread (charset_parsing_direction_table, 
+		return_num_items = fread (charset_parsing_direction_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Charset_Charsize_Table:
 		charset_character_size_table = (unsigned char *) XtMalloc (header.table_size);
-		return_num_items = fread (charset_character_size_table, 
+		return_num_items = fread (charset_character_size_table,
 					     sizeof(unsigned char) * header.num_items,
 					     1, dbfile);
 		_check_read (return_num_items);
@@ -271,42 +271,42 @@ void db_incorporate()
 		break;
 	    case Charset_Lang_Codes_Table:
 		charset_lang_codes_table = (unsigned short int *) XtMalloc (header.table_size);
-		return_num_items = fread (charset_lang_codes_table, 
+		return_num_items = fread (charset_lang_codes_table,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Argument_Enum_Set_Table:
 		argument_enumset_table = (unsigned short int *) XtMalloc (header.table_size);
-		return_num_items = fread (argument_enumset_table, 
+		return_num_items = fread (argument_enumset_table,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Related_Argument_Table:
 		related_argument_table = (unsigned short int *) XtMalloc (header.table_size);
-		return_num_items = fread (related_argument_table, 
+		return_num_items = fread (related_argument_table,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Uil_Gadget_Funcs:
 		uil_gadget_variants = (unsigned short int *) XtMalloc (header.table_size);
-		return_num_items = fread (uil_gadget_variants, 
+		return_num_items = fread (uil_gadget_variants,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Uil_Urm_Nondialog_Class:
 		uil_urm_nondialog_class = (unsigned short int *) XtMalloc (header.table_size);
-		return_num_items = fread (uil_urm_nondialog_class, 
+		return_num_items = fread (uil_urm_nondialog_class,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
 		break;
 	    case Uil_Urm_Subtree_Resource:
 		uil_urm_subtree_resource = (unsigned short int *) XtMalloc (header.table_size);
-		return_num_items = fread (uil_urm_subtree_resource, 
+		return_num_items = fread (uil_urm_subtree_resource,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
@@ -316,7 +316,7 @@ void db_incorporate()
 		break;
 	    case Enumval_Values_Table:
 		enumval_values_table = (int *) XtMalloc (header.table_size);
-		return_num_items = fread (enumval_values_table, 
+		return_num_items = fread (enumval_values_table,
 					     header.table_size,
 					     1, dbfile);
 		_check_read (return_num_items);
@@ -339,7 +339,7 @@ void db_read_ints_and_string(header)
  *
  *  PROCEDURE DESCRIPTION:
  *
- *	This routine reads in tables of integers and one string unsigned chars and places them into 
+ *	This routine reads in tables of integers and one string unsigned chars and places them into
  *	memory. It will Malloc new space for the table. The tables supported
  *	this routine are:
  *
@@ -372,7 +372,7 @@ void db_read_ints_and_string(header)
 	int			return_num_items, i, string_size=0;
 	key_keytable_entry_type	*table = NULL;
 	char			*string_table;
-	 
+
 	switch (header->table_id)
 	    {
 	    /*
@@ -391,8 +391,8 @@ void db_read_ints_and_string(header)
 		diag_issue_internal_error ("Bad table_id in db_read_ints_and_string");
 	    }
 
-	/* 
-	 * Get the entire table with one read. 
+	/*
+	 * Get the entire table with one read.
 	 * Then loop through the table and up the length of the strings.
 	 * Get all the strings with one read.
 	 * Reassign the addresses
@@ -409,7 +409,7 @@ void db_read_ints_and_string(header)
 	    };
 
 	string_table = XtMalloc (sizeof (char) * string_size);
-	return_num_items = fread(string_table, 
+	return_num_items = fread(string_table,
 				    sizeof(unsigned char) * string_size,
 				    1, dbfile);
 	_check_read (return_num_items);
@@ -417,7 +417,7 @@ void db_read_ints_and_string(header)
 	for ( i=0 ; i<header->num_items; i++)
 	    {
 	    table[i].at_name = string_table;
-	    string_table +=  table[i].b_length + 1; 
+	    string_table +=  table[i].b_length + 1;
 	    };
 
 	return;
@@ -433,7 +433,7 @@ void db_read_char_table(header)
  *
  *  PROCEDURE DESCRIPTION:
  *
- *	This routine reads in tables of unsigned chars and places them into 
+ *	This routine reads in tables of unsigned chars and places them into
  *	memory. It will Malloc new space for the table. The tables supported
  *	this routine are:
  *
@@ -468,7 +468,7 @@ void db_read_char_table(header)
 	unsigned char	**ptr = NULL;
 	int		return_num_items, i;
 	unsigned char	*table;
-	 
+
 	switch (header->table_id)
 	    {
 	    /*
@@ -480,7 +480,7 @@ void db_read_char_table(header)
 		ptr = allowed_argument_table;
 		break;
 	    case Allowed_Child_Table:
-		allowed_child_table = 
+		allowed_child_table =
 		  (unsigned char **) XtCalloc (1, header->table_size);
 		ptr = allowed_child_table;
 		break;
@@ -501,7 +501,7 @@ void db_read_char_table(header)
 	 * Then go through the table and set the addresses
 	 */
 	table = (unsigned char *) XtMalloc (sizeof (unsigned char) * header->num_items * num_bits);
-	return_num_items = fread(table, 
+	return_num_items = fread(table,
 				    sizeof(char) * num_bits * header->num_items,
 				    1, dbfile);
 	_check_read (return_num_items);
@@ -524,7 +524,7 @@ void db_read_length_and_string(header)
  *
  *  PROCEDURE DESCRIPTION:
  *
- *	This routine reads in length and strings of unsigned chars and places them into 
+ *	This routine reads in length and strings of unsigned chars and places them into
  *	memory. It will Malloc new space for the table. The tables supported
  *	this routine are:
  *
@@ -567,7 +567,7 @@ void db_read_length_and_string(header)
 	int		*lengths;
 	char		*string_table;
 	char		**table = NULL;
-	 
+
 	switch (header->table_id)
 	    {
 	    /*
@@ -624,19 +624,19 @@ void db_read_length_and_string(header)
 		diag_issue_internal_error ("Bad table_id in db_read_length_and_string");
 	    }
 
-	/* 
-	 * Get the lengths of all the strings with one read.  
+	/*
+	 * Get the lengths of all the strings with one read.
 	 * Then loop through the table and up the length of the strings.
-	 * Get all the strings with one read. 
+	 * Get all the strings with one read.
 	 * Reassign the addresses using the length table and string table.
 	 * Cleanup by Freeing length table.
-	 * 
+	 *
 	 * NOTE: In some tables the counting starts at 1 not 0 so you
 	 *	 have to be carefull.
 	 */
 
 	lengths = (int *) XtMalloc (sizeof (int) * (header->num_items + 1));
-	return_num_items = fread(lengths, 
+	return_num_items = fread(lengths,
 				    sizeof(int) * (header->num_items + 1),
 				    1, dbfile);
 	_check_read (return_num_items);
@@ -652,7 +652,7 @@ void db_read_length_and_string(header)
 	    }
 
 	string_table = XtMalloc (sizeof (unsigned char) * string_size);
-	return_num_items = fread(string_table, 
+	return_num_items = fread(string_table,
 				    sizeof(unsigned char) * string_size,
 				    1, dbfile);
 	_check_read (return_num_items);
@@ -685,8 +685,8 @@ void db_read_int_and_shorts(header)
  *
  *  PROCEDURE DESCRIPTION:
  *
- *	This routine reads in a structure consisting of one integer and a 
- *	pointer to a table of integer and places them into 
+ *	This routine reads in a structure consisting of one integer and a
+ *	pointer to a table of integer and places them into
  *	memory. It will Malloc new space for the table. The tables supported
  *	this routine are:
  *
@@ -718,7 +718,7 @@ void db_read_int_and_shorts(header)
 	int			return_num_items, i, int_table_size=0;
 	UilEnumSetDescDef	*table = NULL;
 	unsigned short int 	*int_table;
-	 
+
 	switch (header->table_id)
 	    {
 	    case Enum_Set_Table:
@@ -729,8 +729,8 @@ void db_read_int_and_shorts(header)
 		diag_issue_internal_error ("Bad table_id in db_read_int_shorts");
 	    }
 
-	/* 
-	 * Get the entire table with one read. 
+	/*
+	 * Get the entire table with one read.
 	 * Then loop through the table and add up the number of ints in each int table.
 	 * Get all the integer tables with one read.
 	 * Reassign the addresses of the tables.
@@ -743,7 +743,7 @@ void db_read_int_and_shorts(header)
 	    }
 
 	int_table = (unsigned short int *) XtCalloc (1, sizeof (short) * int_table_size);
-	return_num_items = fread(int_table, 
+	return_num_items = fread(int_table,
 				    sizeof(short) * int_table_size,
 				    1, dbfile);
 	_check_read (return_num_items);
@@ -811,7 +811,7 @@ void db_open_file ()
 	 * $LANG in the path string. If such support was deamed necessary, the %L, %l,
 	 * %t, %c values would be set up as subs here using globals from the fetch of
 	 * LANG variable used to determine the default codeset (or vice versa depending
-	 * on which is called first) 
+	 * on which is called first)
 	 *
 	 * If the last 4 characters of the file name are not .bdb
 	 * then pass in the suffix of .bdb. If a file isn't found with the suffix passed
@@ -837,7 +837,7 @@ void db_open_file ()
 	 * resolve the pathname with .wmd suffix first. If that fails or the suffix is
 	 * already on the file then just try to resolve the pathname.
 	 */
-	if ( strcmp (&Uil_cmd_z_command.ac_database[strlen(Uil_cmd_z_command.ac_database)-4],".wmd") != 0 ) 
+	if ( strcmp (&Uil_cmd_z_command.ac_database[strlen(Uil_cmd_z_command.ac_database)-4],".wmd") != 0 )
 		resolvedname = XtFindFile(wmdPath,
 					      subs,
 					      XtNumber(subs),
@@ -848,7 +848,7 @@ void db_open_file ()
 	 * Try without the suffix.
 	 */
 	subs[2].substitution = "";
-	if (resolvedname == 0) 
+	if (resolvedname == 0)
 		resolvedname = XtFindFile(wmdPath,
 					      subs,
 					      XtNumber(subs),
@@ -887,13 +887,13 @@ String get_root_dir_name()
 
 	if (ptr == NULL)
 	{
-	if((ptr = (char *)getenv("HOME")) == NULL) 
+	if((ptr = (char *)getenv("HOME")) == NULL)
 	    {
-	    if((ptr = (char *)getenv(USER_VAR)) != NULL) 
+	    if((ptr = (char *)getenv(USER_VAR)) != NULL)
 		{
 		pwd_value = _XGetpwnam(ptr, pwd_buf);
 		}
-	    else 
+	    else
 		{
 		uid = getuid();
 		pwd_value = _XGetpwuid(uid, pwd_buf);
@@ -902,7 +902,7 @@ String get_root_dir_name()
 		{
 		ptr = pwd_value->pw_dir;
 		}
-	    else 
+	    else
 		{
 		 ptr = "";
 		}
@@ -912,7 +912,7 @@ String get_root_dir_name()
 	outptr = XtMalloc (strlen(ptr) + 2);
 	strcpy (outptr, ptr);
 	strcat (outptr, "/");
-	return outptr; 
+	return outptr;
 }
 
 /*
@@ -980,24 +980,24 @@ String init_wmd_path(filename)
     else
 	{
 	path = (char *)getenv ("WMDPATH");
-	if (path  == NULL) 
+	if (path  == NULL)
 	    {
 	    homedir = get_root_dir_name();
 	    old_path = (char *)getenv ("XAPPLRESDIR");
-	    if (old_path == NULL) 
+	    if (old_path == NULL)
 		{
 		wmd_path = XtCalloc(1, 2*strlen(homedir) +
 				 strlen(libdir) + strlen(incdir) +
 				 strlen(WMDPATH_DEFAULT));
 		sprintf( wmd_path, WMDPATH_DEFAULT,
 			 homedir, homedir, libdir, incdir);
-		} 
-	    else 
+		}
+	    else
 		{
 		wmd_path = XtCalloc(1, 1*strlen(old_path) + 2*strlen(homedir) +
 				 strlen(libdir) + strlen(incdir) +
 				 strlen(XAPPLRES_DEFAULT));
-		sprintf(wmd_path, XAPPLRES_DEFAULT, 
+		sprintf(wmd_path, XAPPLRES_DEFAULT,
 			old_path,
 			homedir, homedir, libdir, incdir);
 		}

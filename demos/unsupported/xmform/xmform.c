@@ -25,7 +25,7 @@
  * HISTORY
  */
 /**---------------------------------------------------------------------
-***	
+***
 ***	file:		xmform.c
 ***
 ***	project:	Motif Widgets example programs
@@ -35,7 +35,7 @@
 ***
 ***	description:	This program demonstrates the possibilities of
 ***                     the Motif form widget.
-***                     It can display a string of letters made from buttons 
+***                     It can display a string of letters made from buttons
 ***	                and arrows (resizable using Form attachments).
 ***
 ***	defaults:	xmform looks nicer with these defaults:
@@ -61,7 +61,7 @@ static void FillItPlease();
 static void NearlyEvenSpread();
 static Widget AddStem() ;
 
-int main(argc, argv) 
+int main(argc, argv)
 int argc; char **argv;
 {
     XtAppContext app_context;
@@ -82,14 +82,14 @@ int argc; char **argv;
     len_word = strlen(word);
     forms = (Widget*)calloc(len_word,sizeof(Widget));
     s[1] = 0 ;  /* string used for the subform widget name */
-    for (p = 0 ; p < len_word; p++) { 
+    for (p = 0 ; p < len_word; p++) {
 	s[0] = word[p] ;  /* subform  names are the letters themselves */
-	forms[p] = XmCreateForm(topform, s, NULL, 0); 
+	forms[p] = XmCreateForm(topform, s, NULL, 0);
 	FillItPlease(forms[p], word[p]);
     }
 
     /* evenly spread out the forms with some spacing in between */
-    NearlyEvenSpread(forms, p, 
+    NearlyEvenSpread(forms, p,
 		     2,          /* horizontal spacing */
 		     9) ;        /* vertical margin */
 
@@ -101,7 +101,7 @@ int argc; char **argv;
 }
 
 
-static void NearlyEvenSpread(child_list, num_child, 
+static void NearlyEvenSpread(child_list, num_child,
 			     hor_spacing, ver_spacing)
 Widget * child_list;
 Cardinal num_child;
@@ -120,10 +120,10 @@ Dimension ver_spacing;
     for (i = 0 ; i < num_child ; i++) {
 	n = 0 ;
 	XtSetArg(args[n], XmNleftAttachment, XmATTACH_POSITION); n++ ;
-	XtSetArg(args[n], XmNleftPosition, 
+	XtSetArg(args[n], XmNleftPosition,
 		 hor_child_room*i + hor_spacing); n++ ;
 	XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION); n++ ;
-	XtSetArg(args[n], XmNrightPosition, 
+	XtSetArg(args[n], XmNrightPosition,
 		 hor_child_room*(i+1) - hor_spacing); n++ ;
 	XtSetArg(args[n], XmNtopAttachment, XmATTACH_POSITION); n++ ;
 	XtSetArg(args[n], XmNtopPosition, ver_spacing); n++ ;
@@ -137,7 +137,7 @@ static void FillItPlease(form, letter)
 Widget form ;
 char letter ;
 {
-    /* This routine only handle the "MOTIF" letters, it's up 
+    /* This routine only handle the "MOTIF" letters, it's up
        to you to implement the rest, good luck for K,N,R,V,X,Y,Z... */
 
     Cardinal n = 0, p = 0 ;
@@ -198,7 +198,7 @@ Dimension top, right, bottom, left;
 int type ;
 {
     /* create an object, either a button or an arrow, using
-       positionnal attachment everywhere, instead of possibly 
+       positionnal attachment everywhere, instead of possibly
        form attachment or widget attachment */
 
     Cardinal n = 0 ;
@@ -213,8 +213,7 @@ int type ;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_POSITION); n++;
     XtSetArg(args[n], XmNleftPosition, left); n++;
     if (type == XmPUSHBUTTON)
-	return XmCreatePushButton(form, "", args, n); 
-    else 
-	return XmCreateArrowButton(form, "", args, n); 
+	return XmCreatePushButton(form, "", args, n);
+    else
+	return XmCreateArrowButton(form, "", args, n);
 }
-

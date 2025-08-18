@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form3.c /main/4 1995/07/13 18:10:55 drk $"
@@ -58,7 +58,7 @@ char **argv;
 
    /*  initialize toolkit  */
    CommonTestInit(argc, argv);
-    
+
    /*  The form creation.  Contained in an outer frame.  */
 
    n = 0;
@@ -104,7 +104,7 @@ caddr_t closure;
       n = 0;
       XtSetArg (args[n], XmNfractionBase, n);		n++;
       XtSetValues (form, args, n);
-   }      
+   }
    else if (count == 1)
    {
       printf ("Changing the size of the form to (200, 300).\n");
@@ -124,24 +124,3 @@ caddr_t closure;
 
    count++;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

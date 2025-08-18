@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,7 +37,7 @@ Widget  PushButton3 = NULL;
  * This is a test for Horizontal PanedWindow
  */
 
-void  
+void
 main (int argc, char **argv)
 {
     int  n;
@@ -45,18 +45,18 @@ main (int argc, char **argv)
     XmString           tcs = NULL;
 
 
-    /*  
-     * initialize toolkit  
+    /*
+     * initialize toolkit
      */
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth, 400);  n++;
     XtSetArg(args[n], XmNheight,300);  n++;
     XtSetArg(args[n], XmNgeometry, "+0+0");  n++;
     XtSetValues(Shell1, args, n);
-  
+
 
     n = 0;
     XtSetArg (args[n], XmNorientation, XmHORIZONTAL); n++;
@@ -68,8 +68,8 @@ main (int argc, char **argv)
     XtSetArg (args[n], XmNsashShadowThickness, 5); n++;
     XtSetArg (args[n], XmNseparatorOn, True); n++;
     XtSetArg (args[n], XmNspacing, 25); n++;
-    
-    
+
+
     PanedWindow1 = XmCreatePanedWindow(Shell1, "PanedWindow1",
                     args, n);
     XtManageChild(PanedWindow1);
@@ -122,4 +122,3 @@ main (int argc, char **argv)
 
     XtAppMainLoop(app_context);
   }
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsDstroyWid.c /main/7 1995/07/14 11:25:35 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: mvsDstroyWid.c /main/7 1995/07/14 11:25:35 
 #endif
   /***********************************************************************
     Calls:
-    
+
     Summary:
     This function results in the destruction of the current widget.
     The allocated colors are released and the widget info record is also
@@ -38,9 +38,9 @@ static char rcsid[] = "$XConsortium: mvsDstroyWid.c /main/7 1995/07/14 11:25:35 
     Formerly, the callbacks were deleted, but this can not be
     done because the widget is already destroyed in Xt.
     ************************************************************************/
-  
+
 #include "mvslib.h"
-  
+
 void mvsDestroyWidget(widget_info,check_callbacks)
 MvsWidgetInfoRecord *widget_info;
 int check_callbacks;
@@ -55,20 +55,20 @@ int check_callbacks;
   int widget_class_code, widget_class_code_2;
   Widget child = NULL;
   int PAGESCROLLER = 0;
-  
-  /* 
+
+  /*
     Determine if the parent of the widget you are destroying
     is a PanedWindow. If it is and the next child is a sash
     followed by a separator gadget, then the Toolkit is going
     to destroy the sash and the separator. Take care of destroying
     the sash and the separator.
     */
-  
+
   if (widget_info->parent->widget == NULL)
     widget_class_code = -1;
-  else 
+  else
     widget_class_code = mvsGetClassCode(widget_info->parent->widget);
-  
+
   if (widget_class_code == mvsXmPanedWindowWidgetClass) {
     if (widget_info->next_sibling != NULL) {
       if (mvsGetClassCode(widget_info->next_sibling->widget) ==
@@ -81,14 +81,14 @@ int check_callbacks;
 	      mvsXmSeparatorGadgetClass) {
 	    xisDestroyWidget
 	      (widget_info->next_sibling->next_sibling->widget);
-	    widget_info->next_sibling->next_sibling->being_destroyed 
+	    widget_info->next_sibling->next_sibling->being_destroyed
 	      = TRUE;
 	  }
 	}
       }
     }
   }
-  
+
   class_info = widget_info->widget_class_info;
 
   /* See if the widget to be destroyed is a Notebook PageScroller
@@ -96,7 +96,7 @@ int check_callbacks;
    */
   if (strcmp (XtName(widget_info->widget), "PageScroller") == 0)
     PAGESCROLLER = 1;
-  
+
   if (XtIsRealized(widget_info->widget) || (PAGESCROLLER == 1)) {
     if (mvsGetVisualMode() != VISUAL_MODE_GENERATE_PIXMAPS) {
       for (i=0; i<class_info->num_res_colors; i++) {
@@ -104,7 +104,7 @@ int check_callbacks;
 	  mvsFreeColor(widget_info->mvs_resources[class_info->res_color_ref[i]]);
       }
     }
-    
+
     if(widget_info->c_parent) {
       if(widget_info->next_sibling)
 	widget_info->next_sibling->being_destroyed = TRUE;
@@ -134,16 +134,16 @@ int check_callbacks;
     }
     /* Perform Depth-First Search */
     mvsDepthDestroy(descendant);
-    
+
     /* Free widget_info and all its children widget_info's */
-    
+
     if ((widget_info->c_parent) && mvsOnlyChild(widget_info->parent)) {
-      mvsFreeWidgetInfo(widget_info->parent); 
+      mvsFreeWidgetInfo(widget_info->parent);
     }
     else {
       /*
 	Same as earlier, when you have an automatically destroyed
-	widget (sash and separator in PanedWindow, you need to 
+	widget (sash and separator in PanedWindow, you need to
 	free the memory associated with the sash and separator.
 	*/
       if (widget_class_code == mvsXmPanedWindowWidgetClass) {
@@ -164,18 +164,18 @@ int check_callbacks;
       }
       mvsFreeWidgetInfo(widget_info);
     }
-    
+
     /* Don't destroy the widget if it is a Notebook PageScroller
      * since the Notebook destroys the widget itself
      */
     if (PAGESCROLLER != 1)
 	XtDestroyWidget(widget_info->widget);
-    
+
     xisProcessEvents(NULL, 0);
-    
+
     xisProcessObjects();
   } /* End if(XtIsRealized(widget_info->widget)) */
-  
+
 } /* End mvsDestroyWidget() */
 
 
@@ -184,7 +184,7 @@ int check_callbacks;
   History:
   08/20/90 SJS re-use depth-first search code.
   Calls:
-  
+
   Summary:
   This function marks the passed in widget info and all
   of its descendants as being destroyed. The current Motif
@@ -201,7 +201,7 @@ void mvsDepthDestroy(w_info)
   MvsWidgetInfoRecord *descendant;
   MvsWidgetInfoRecord *object_stack[MAX_NUM_OBJECTS];
   int stack_top=0;
-  
+
   descendant = w_info;
   /* Perform Depth-First Search */
   while (descendant) {
@@ -219,7 +219,7 @@ void mvsDepthDestroy(w_info)
       descendant = NULL;
       while (stack_top > 0 && descendant == NULL)
 	descendant = object_stack[--stack_top]->next_sibling;
-    }       
+    }
   } /* End while() */
 } /* End mvsDepthDestroy() */
 
@@ -229,7 +229,7 @@ void mvsDepthDestroy(w_info)
   History:
   08/21/90 SJS Create for menus
   Calls:
-  
+
   Summary:
   This function checks to see if the 'Convenience'
   created parent has had any other children assigned to it.
@@ -239,7 +239,7 @@ int mvsOnlyChild(w_info)
      MvsWidgetInfoRecord *w_info;
 {
   MvsWidgetInfoRecord *tmp_info;
-  
+
   if(w_info->first_child != (MvsWidgetInfoRecord *)NULL) {
     tmp_info = w_info->first_child->next_sibling;
     while(tmp_info != (MvsWidgetInfoRecord *)NULL) {
@@ -250,5 +250,5 @@ int mvsOnlyChild(w_info)
     }
   }
   return(TRUE);
-  
+
 } /* End mvsOnlyChild() */

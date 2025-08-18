@@ -23,7 +23,7 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is drawArea.uid ---- 
+---- The uid file to be opened is drawArea.uid ----
 /*********************************************************/
 
 
@@ -33,6 +33,6 @@
 ---- Reason was XmCR_EXPOSE ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) Exit
 Exiting Test...Please Standby...

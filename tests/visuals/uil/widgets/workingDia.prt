@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is workingDia.uid ---- 
+---- The uid file to be opened is workingDia.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual Working_Dialog 
-TRACE:(2) LocatePointer Working_Dialog ROkButton 
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual Working_Dialog
+TRACE:(2) LocatePointer Working_Dialog ROkButton
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- okCallback callback made ----
@@ -36,6 +36,6 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_OK ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual Working_Dialog 
+TRACE:(4) CompareVisual Working_Dialog
 TRACE:(5) Exit
 Exiting Test...Please Standby...

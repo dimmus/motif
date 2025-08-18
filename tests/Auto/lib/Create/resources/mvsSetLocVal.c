@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsSetLocVal.c /main/8 1995/07/14 11:22:30 drk $"
@@ -86,7 +86,7 @@ Cardinal *nargs;
 		    else
 			mvs_resources[j] = (MvsArgVal)args[i].value;
                     break;
-   
+
                 case RefXmString:
                     if((char *)mvs_resources[j] != (char *)NULL) {
                         XtFree( (char *)mvs_resources[j]);
@@ -144,10 +144,10 @@ Cardinal *nargs;
 		}
 
 	        default:
-		   sprintf(msg_string, _AutoMessages[WARNMSG119], 
+		   sprintf(msg_string, _AutoMessages[WARNMSG119],
 			   mvsTypeInfo[resource_info[j].type_code].ref_type);
                    AutoMessage(msg_string);
-                             
+
                    break;
 	    }
 	}

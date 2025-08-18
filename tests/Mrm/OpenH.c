@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: OpenH.c /main/10 1995/07/14 10:49:58 drk $"
@@ -30,16 +30,16 @@ static char rcsid[] = "$XConsortium: OpenH.c /main/10 1995/07/14 10:49:58 drk $"
 #endif
 
 #include <testlib.h>
-#include <MrmTest.h> 
+#include <MrmTest.h>
 
-/* 
+/*
  * Data for summary
  */
 
 #define NUM_TESTS		9
 #define TEST_DESCRIP_LENGTH	60
 
-struct TestInfo OpenHierarchyInfo[NUM_TESTS] = 
+struct TestInfo OpenHierarchyInfo[NUM_TESTS] =
 {
     {"Open a valid hierarchy with complete relative pathname      ",
 				MrmSUCCESS,	0},
@@ -86,7 +86,7 @@ FILE	*OH_logfile;
 void main (argc,argv)
 int argc;
 char **argv;
-{ 	
+{
 
 
 
@@ -116,7 +116,7 @@ char **argv;
 	MrmCount        filename_num = 0;
 
         String          testname;
-       
+
 
 
 
@@ -125,7 +125,7 @@ char **argv;
 
 	testname=argv[0];
 
-       /* 
+       /*
 	* Open the Mrm hierarchy
 	*/
 
@@ -136,7 +136,7 @@ char **argv;
                               filename_vec,       /* files                */
                               NULL,               /* os_ext_list (null)   */
                               &s_MrmHierarchy)    /* ptr to returned id   */
-          != MrmSUCCESS) 
+          != MrmSUCCESS)
          {
             printf("Can't open hierarchy\n");
          }
@@ -151,8 +151,8 @@ char **argv;
 		        Shell1,
 		        &test_box,
 		        &class);
-	
-	
+
+
          XtManageChild(test_box);
 	 XtRealizeWidget(Shell1);
 
@@ -162,14 +162,14 @@ char **argv;
 	 sprintf(uidname[0], "OpenH_vh");
 	 OH_filename_num = 0;
 	 OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 	 OpenHierarchy[0] = NULL;
 	 OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 	  if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 	      {
 		OH_test[OH_test_cnt] = NULL;
@@ -187,7 +187,7 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open a valid hierarchy from three different files
 	 */
@@ -198,14 +198,14 @@ char **argv;
 		OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
 		sprintf(uidname[2], "OpenH_mf3");
 		OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
 			OH_test[OH_test_cnt] = NULL;
@@ -247,10 +247,10 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
-    
+
+
     CommonPause();
-	
+
 	/*
 	 * Open a valid hierarchy using the environment variable UIDPATH to
 	 * help decipher the name.
@@ -258,12 +258,12 @@ char **argv;
 
 	/* set up the $UIDPATH var */
 		putenv("UIDPATH=./OpenHLang/%U\
-%S");			
+%S");
 
 		sprintf(uidname[0], "OpenH_vhev");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
@@ -295,12 +295,12 @@ char **argv;
 
   	 /* set up the $UIDPATH var */
 		putenv("UIDPATH=./OpenHLang/%U:./OpenHLang/%U\
-%S");	
+%S");
 
 		sprintf(uidname[0], "OpenH_evl");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
@@ -325,14 +325,14 @@ char **argv;
 		}
 		OH_info_cnt++;
 		putenv("UIDPATH=%U");	/* set up the $UIDPATH var */
-	
+
 	/*
 	 * Open a nonexistent filename
 	 */
 		sprintf(uidname[0], "OpenH_nef");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
@@ -344,14 +344,14 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open an invalid file (not a .uid file)
 	 */
 		sprintf(uidname[0], "OpenH_if");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
@@ -363,15 +363,15 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
-	 * Open a valid file/hierarchy by referring to it WITH a .uid suffix 
+	 * Open a valid file/hierarchy by referring to it WITH a .uid suffix
 	 * on the filename.
 	 */
 		sprintf(uidname[0], "OpenH_vhws.uid");
 		OH_filename_num = 0;
 		OH_filename_vec[OH_filename_num] = uidname[0]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
@@ -395,7 +395,7 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open a hierarchy from three files with one bad .uid file
 	 */
@@ -406,14 +406,14 @@ char **argv;
 		OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
 		sprintf(uidname[2], "OpenH_mf3");
 		OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
 			message = XmStringCreateLtoR("OH_mf1 *A* is completed.  ",
@@ -482,7 +482,7 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
 	/*
 	 * Open a hierarchy from three files with one nonexistent file
 	 */
@@ -493,19 +493,19 @@ char **argv;
 		OH_filename_vec[OH_filename_num] = uidname[1]; OH_filename_num++;
 		sprintf(uidname[2], "OpenH_mf3");
 		OH_filename_vec[OH_filename_num] = uidname[2]; OH_filename_num++;
-	
+
 		OpenHierarchy[0] = NULL;
 		OpenHierarchyInfo[OH_info_cnt].actual_return = MrmOpenHierarchy(
 							OH_filename_num,
 							OH_filename_vec,
 							NULL,
 							&OpenHierarchy[0]);
-	
+
 		if (OpenHierarchyInfo[OH_info_cnt].actual_return == MrmSUCCESS)
 		{
-			/* 
-			 * For each widget, change the label string and the 
-			 * position so that it is visually distinguished from 
+			/*
+			 * For each widget, change the label string and the
+			 * position so that it is visually distinguished from
 			 * the other instances of the same widget.
 			 */
 			message = XmStringCreateLtoR("OH_mf1 *B* is completed.  ",
@@ -577,9 +577,9 @@ char **argv;
 			MrmCloseHierarchy(OpenHierarchy[0]);
 		}
 		OH_info_cnt++;
-	
+
            CommonPause();
-	
+
 		summary_msg = summary(NUM_TESTS,
 				      TEST_DESCRIP_LENGTH,
 				      OpenHierarchyInfo);

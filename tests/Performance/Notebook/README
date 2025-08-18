@@ -14,7 +14,7 @@ line.
 To run the test automated, build the Makefile for automation,
 and type 'PNotebook1 -u <XmWidget> -c -T' on the command line. This
 will run the test with the nocompare and TRACE options.
-Running the test automated will generate a PNotebook1.prt file, which will 
+Running the test automated will generate a PNotebook1.prt file, which will
 contain output from the automation performance monitor, as explained below.
 NOTE : For performance testing purposes, run the test with 'XmFrame' as
 the 'XmWidget' option.
@@ -24,9 +24,9 @@ These are the user actions tested in the script file:
 
 1. Resizing the Notebook
 2. Scrolling through the major tabs once. (i.e, one click on the tab scroller)
-3. Scrolling forwards through all pages of the Notebook using the page 
+3. Scrolling forwards through all pages of the Notebook using the page
    scroller.
-4. Scrolling backwards through all pages of the Notebook using the page 
+4. Scrolling backwards through all pages of the Notebook using the page
    scroller.
 5. Clicking on a major tab that will display page 100.
 6. Traversing from one tab group to the next. (specifically, from the major tab
@@ -44,12 +44,3 @@ Notebook caused within the test.  You will get 8 sets of
 numbers for the test. Each sets corresponds to one of the actions/changes
 in the list above. The list above gives test actions in order, so
 just match any set of numbers with the corresponding item in the list.
-
-
-
-
-
-
-
-
-

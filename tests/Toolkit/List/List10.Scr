@@ -1,5 +1,5 @@
 # $XConsortium: List10.scr /main/5 1995/07/17 20:21:14 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,20 +20,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # Move the pointer into the Text field widget labeled \"Add String to Selected
 # List:\" and click MB1.
 
 WindowRaise Shell1
 
-LocatePointer TextF_AddSL 
+LocatePointer TextF_AddSL
 ClickMB Btn1
 
-# Type the string NewWidget and hit return. NewWidget should be added 
+# Type the string NewWidget and hit return. NewWidget should be added
 # to the list's selected items list.
 
 InputString "NewWidget"
@@ -73,7 +73,7 @@ WindowRaise Shell1
 LocatePointer TextF_AddSL
 ClickMB Btn1
 
-# Type the string NewerWidget and hit return. NewerWidget should be added 
+# Type the string NewerWidget and hit return. NewerWidget should be added
 # to the list's selected items list.
 
 InputString "NewerWidget"
@@ -112,7 +112,7 @@ Continue
 
 WindowRaise Shell1
 
-# Click MB1 on the ToggleButton labeled \"Dont Add Item Unselected\". It 
+# Click MB1 on the ToggleButton labeled \"Dont Add Item Unselected\". It
 # should toggle to \"Add Item Unselected\".
 
 LocatePointer Toggle_Selected

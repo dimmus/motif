@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SelectBox1.c /main/9 1995/07/13 19:19:18 drk $"
@@ -78,12 +78,12 @@ void  main(argc, argv)
     Widget	  help_child;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  10);  			n++;
     XtSetArg(args[n], XmNheight, 10);  			n++;
     XtSetValues(Shell1, args, n);
-  
+
     XtRealizeWidget(Shell1);
 
     tcs = XmStringLtoRCreate("test: ", XmSTRING_DEFAULT_CHARSET);
@@ -136,7 +136,7 @@ void  main(argc, argv)
 
     tcs = XmStringCreateSimple("Measure");
 
-    n = 0; 
+    n = 0;
     XtSetArg(args[n], XmNsensitive, True);			n++;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetValues(help_child, args, n);
@@ -146,7 +146,7 @@ void  main(argc, argv)
     XtAddCallback(help_child, XmNactivateCallback, PostDialog, NULL);
 
     XmStringFree(tcs);
- 
+
     CommonPause(); /* measure */
 
     /* unmanage text and make all button children disappear on activate */
@@ -201,7 +201,7 @@ void GetResources ()
 					      args, n);
 
     n = 0;
-    tcs = XmStringCreateSimple ("Width"); 
+    tcs = XmStringCreateSimple ("Width");
     XtSetArg (args[n], XmNorientation, XmHORIZONTAL); 			n++;
     XtSetArg (args[n], XmNshowValue, True); 				n++;
     XtSetArg (args[n], XmNminimum, 1); 					n++;
@@ -218,23 +218,23 @@ void GetResources ()
     XtSetArg (args[n], XmNshowValue, True); 			 	n++;
     XtSetArg (args[n], XmNminimum, 1); 					n++;
     XtSetArg (args[n], XmNmaximum, 132); 				n++;
-    XtSetArg (args[n], XmNtitleString, tcs );				n++; 
+    XtSetArg (args[n], XmNtitleString, tcs );				n++;
     XtSetArg (args[n], XmNy, 100); 					n++;
     XtSetArg (args[n], XmNx, 10); 					n++;
     ScaleColumns = XmCreateScale (ScaleDialog, "ScaleColumns", args, n);
     XmStringFree(tcs);
 
     n = 0;
-    tcs = XmStringCreateSimple ("OK"); 	
+    tcs = XmStringCreateSimple ("OK");
     XtSetArg (args[n], XmNx, 100); 					n++;
     XtSetArg (args[n], XmNy, 200); 					n++;
     XtSetArg (args[n], XmNlabelString, tcs );			 	n++;
     ScaleOK = XmCreatePushButtonGadget (ScaleDialog, "ScaleOK", args, n);
     XmStringFree(tcs);
 
-    XtAddCallback 
+    XtAddCallback
         (ScaleOK, XmNactivateCallback, ApplyToSelectionBox, scaleWidgets);
-    
+
     XtManageChild (ScaleOK);
     XtManageChild (ScaleWidth);
     XtManageChild (ScaleColumns);
@@ -248,7 +248,7 @@ void UpdateScale (scale, value)
     Arg args[2];
     int min, max;
     int n;
- 
+
     n = 0;
     XtSetArg (args[n], XmNminimum, &min); 		n++;
     XtSetArg (args[n], XmNmaximum, &max); 		n++;
@@ -279,7 +279,7 @@ static void PostDialog(w, client_data, call_data)
     XtSetArg (args[n], XmNtextColumns, &col) ; 				n++;
     XtSetArg (args[n], XmNwidth, &width); 				n++;
     XtGetValues (SelectionBox1, args, n);
-    
+
     UpdateScale (ScaleColumns, col);
     UpdateScale (ScaleWidth, width);
 
@@ -312,13 +312,13 @@ static void ApplyToSelectionBox(w, client_data, call_data)
         		n = 0;
         		XtSetArg (args[n], XmNwidth, value); 	n++;
         		XtSetValues (SelectionBox1, args, n);
-      		} 
-		else 
+      		}
+		else
 			if (strcmp(*widgetList, "ScaleColumns") == 0) {
         			n = 0;
         			XtSetArg (args[n], XmNtextColumns, value); n++;
         			XtSetValues (SelectionBox1, args, n);
-      			} 
+      			}
     	} /*if whichScale */
    	widgetList++;
     } /* while */

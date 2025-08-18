@@ -13,6 +13,6 @@ EXTRA_DIST = simpleDemo.man README
 AM_CPPFLAGS = -I$(srcdir)/../../../../lib \
            -I$(srcdir)/../../../lib \
            -I$(top_builddir)/lib \
-           ${X_CFLAGS} 
+           ${X_CFLAGS}
 LDADD = ../../../../lib/Xm/libXm.la \
         ../../../lib/Exm/libExm.a -lXt -lX11

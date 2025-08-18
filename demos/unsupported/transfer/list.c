@@ -1,5 +1,5 @@
 /* $XConsortium: list.c /main/5 1995/07/15 20:46:14 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 /*
  * HISTORY
  */
@@ -54,7 +54,7 @@ static int current_selected_item = -1;
 
 static Atom type = None;
 
-void 
+void
 SetType(Widget w, char *in, XtPointer ignore)
 {
   if (strlen(in) == 0)
@@ -67,14 +67,14 @@ SetType(Widget w, char *in, XtPointer ignore)
 
 /*******************************************************************
  * FindRightButton
- * 
+ *
  * picks the correct button for the type option menu to display
- * note that the names are ATOMNAME_button,  so it prepends a 
+ * note that the names are ATOMNAME_button,  so it prepends a
  * '*' in front and '_button' after the name before looking up
  * the button.
  ******************************************************************/
 
-static Widget 
+static Widget
 FindRightButton(char* atom_string)
 {
   char buffer[80];
@@ -87,22 +87,22 @@ FindRightButton(char* atom_string)
 
 /*********************************************************************
  * ListSelectItem
- * 
+ *
  * this is called when the user selects an item in the list.  It takes
  * the type of the item and decides how to display it in the CSText
  * widget
  *********************************************************************/
 
-void 
+void
 ListSelectItem(Widget w, XtPointer ignore, XmListCallbackStruct *listcb)
 {
   int index = listcb -> item_position;
   Atom XA_COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False),
        XA_PIXEL = XInternAtom(XtDisplay(w), "PIXEL", False),
        XA_LOCALE_TEXT = XmeGetEncodingAtom(w),
-       XA_MOTIF_CS = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_CS = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_COMPOUND_STRING, False),
-       XA_MOTIF_RT = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_RT = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_RENDER_TABLE, False);
   Widget mem = (Widget) NULL;
   char *targetname, *typename;
@@ -157,21 +157,21 @@ ListSelectItem(Widget w, XtPointer ignore, XmListCallbackStruct *listcb)
 
 /*********************************************************************
  * EditItem
- * 
+ *
  * This is called from the Properties or New menu item.  If param
  * is 0 then this is a new item.
  *********************************************************************/
 
-void 
+void
 EditItem(Widget w, int param, XtPointer ignore)
 {
   int index = current_selected_item;
   Atom XA_COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False),
        XA_PIXEL = XInternAtom(XtDisplay(w), "PIXEL", False),
        XA_LOCALE_TEXT = XmeGetEncodingAtom(w),
-       XA_MOTIF_CS = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_CS = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_COMPOUND_STRING, False),
-       XA_MOTIF_RT = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_RT = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_RENDER_TABLE, False);
   Widget mem = (Widget) NULL;
   char *targetname;
@@ -191,7 +191,7 @@ EditItem(Widget w, int param, XtPointer ignore)
   if (param != 0) {
     /* Put name of target into display field */
     targetname = GetSafeAtom(XtDisplay(w), datums[index].target);
-    
+
     if (targetname == NULL) targetname = XtNewString("Unknown");
 
     tmp = XmStringCreateLocalized(targetname);
@@ -216,15 +216,15 @@ EditItem(Widget w, int param, XtPointer ignore)
 
 }
 
-static char 
+static char
 GetDisplayFormatFromType(Widget w, Atom type)
 {
   Atom XA_COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False),
        XA_PIXEL = XInternAtom(XtDisplay(w), "PIXEL", False),
        XA_LOCALE_TEXT = XmeGetEncodingAtom(w),
-       XA_MOTIF_CS = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_CS = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_COMPOUND_STRING, False),
-       XA_MOTIF_RT = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_RT = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_RENDER_TABLE, False);
 
   if (type == XA_ATOM ||
@@ -256,9 +256,9 @@ SetDisplayTypeFromType(Widget w, Atom type)
   Atom XA_COMPOUND_TEXT = XInternAtom(XtDisplay(w), XmSCOMPOUND_TEXT, False),
        XA_PIXEL = XInternAtom(XtDisplay(w), "PIXEL", False),
        XA_LOCALE_TEXT = XmeGetEncodingAtom(w),
-       XA_MOTIF_CS = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_CS = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_COMPOUND_STRING, False),
-       XA_MOTIF_RT = XInternAtom(XtDisplay(w), 
+       XA_MOTIF_RT = XInternAtom(XtDisplay(w),
 				 XmS_MOTIF_RENDER_TABLE, False);
   Widget mem;
 
@@ -342,14 +342,14 @@ char *output_buffer = NULL;
 int output_buffer_max = 0;
 int output_buffer_current = 0;
 
-void ClearOB() 
+void ClearOB()
 {
   output_buffer_current = 0;
   if (output_buffer_max > 0)
     output_buffer[0] = 0;
 }
 
-void 
+void
 AppendOB(char *str)
 {
   int len;
@@ -374,7 +374,7 @@ AppendOB(char *str)
   output_buffer_current += len;
 }
 
-void 
+void
 SetFormat(Widget w, char in, XtPointer ignore)
 {
   int byte_length;
@@ -383,7 +383,7 @@ SetFormat(Widget w, char in, XtPointer ignore)
   global_read_format_spec = in;
 }
 
-static 
+static
 XmString GetItemValue(Widget w)
 {
   int byte_length;
@@ -410,7 +410,7 @@ XmString GetItemValue(Widget w)
     /* Decimal display */
     int count, i;
 
-    count = byte_length / 4; 
+    count = byte_length / 4;
     ClearOB();
     for(i = 0; i < count; i++) {
       char buf[32];
@@ -423,7 +423,7 @@ XmString GetItemValue(Widget w)
     /* Decimal display */
     int count, i;
 
-    count = byte_length / 4; 
+    count = byte_length / 4;
     ClearOB();
     for(i = 0; i < count; i++) {
       char buf[32];
@@ -458,17 +458,17 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
   int index;
   int base;
   Atom target;
-  
+
   target_name = XmCSTextGetString(text2);
   value = XmCSTextGetString(text1);
-  
+
   if (global_set_type_spec == None) return;
 
   /* Get the target string from the XmString */
   target_string = ConvertXmStringToString(target_name);
   target = XInternAtom(XtDisplay(widget), target_string, False);
   XtFree(target_string);
-  
+
   /* Find the index of this target,  or add it to the end */
   for(index = 0; index < num_datums; index++)
     if (datums[index].target == target) break;
@@ -503,7 +503,7 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
   }
 
   datums[index].type = global_set_type_spec;
-  
+
   /* Convert the value */
   if (global_read_format_spec == 'S') {
     datums[index].value = ConvertXmStringToString(value);
@@ -516,7 +516,7 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
   } else if (global_read_format_spec == 'L') {
     char *ctext;
     char *ltext = NULL;
-    Atom COMPOUND_TEXT = XInternAtom(XtDisplay(widget), 
+    Atom COMPOUND_TEXT = XInternAtom(XtDisplay(widget),
 				     XmSCOMPOUND_TEXT, False);
     XTextProperty text_prop;
     int status;
@@ -537,7 +537,7 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 
     XtFree(ctext);
 
-    if (num_values) { 
+    if (num_values) {
       for (i = 0; i < num_values ; i++)
 	malloc_size += strlen(values[i]);
 
@@ -562,8 +562,8 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
     }
     datums[index].format = 8;
   } else if (global_read_format_spec == 'C') {
-    datums[index].length = 
-      XmCvtXmStringToByteStream(value, 
+    datums[index].length =
+      XmCvtXmStringToByteStream(value,
 				(unsigned char **) &datums[index].value);
     datums[index].format = 8;
   } else if (global_read_format_spec == 'D' ||
@@ -577,7 +577,7 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
     char *current;
     char *end;
     Boolean done = False;
-    
+
     convert = ConvertXmStringToString(value);
     current = convert;
 
@@ -598,7 +598,7 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
       if (current == end || errno == ERANGE) {
 	done = True;
 	count--;
-      } else 
+      } else
 	current = end;
     }
 
@@ -617,7 +617,7 @@ SetValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
  *
  * This removes an element from the data array.
  *******************************************************************/
-void 
+void
 RemoveValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
 {
   if (current_selected_item < 0 ||
@@ -644,7 +644,7 @@ RemoveValue(Widget widget, char *ignore, XmAnyCallbackStruct *callback_data)
   }
 }
 
-void 
+void
 deferCB(Widget widget, char *ignore,
 	XmToggleButtonCallbackStruct *callback_data)
 {
@@ -686,7 +686,7 @@ ConvertXmStringToString(XmString xmstr)
     XmStringFree(tmp);
   }
 
-  rvalue = (char *) XmStringUnparse(xmstr, NULL, 
+  rvalue = (char *) XmStringUnparse(xmstr, NULL,
 				    XmMULTIBYTE_TEXT, XmMULTIBYTE_TEXT,
 				    table, table_size, XmOUTPUT_ALL);
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StringGLR.c /main/7 1995/07/13 19:55:57 drk $"
@@ -63,7 +63,7 @@ String  Creation Routine          Text                 Character Set
     fprintf(stdout, "Character Set\n");
     fprintf(stdout, "------  ----------------          -------------------  ");
     fprintf(stdout, "-------------\n");
-    
+
     fprintf(stdout, "   1    XmStringCreateLtoR        \"String3 here\"     ");
 #ifndef MOTIF1_1
     fprintf(stdout, "  XmFONTLIST_DEFAULT_TAG  \n");
@@ -87,7 +87,7 @@ String  Creation Routine          Text                 Character Set
     fprintf(stdout, "set as arguments.  For each call,\nthe expected and");
     fprintf(stdout, " actual returns are given, as well as the test");
     fprintf(stdout, " segment\nreturned, where applicable.\n");
-    
+
 /*
                                        XmStringGetLtoR
                                        Expected Actual
@@ -103,15 +103,15 @@ Test String  Character Set             Return   Return  Text Return       Error
     fprintf(stdout, "Return   Return  Text Return       Error\n");
     fprintf(stdout, "---- ------  ------------------------  ");
     fprintf(stdout, "-------- ------  ----------------  -----\n");
-    
+
 /*
  * Test 1: Create a compound string and get the text from it
  */
 
     text_num++;
-    
+
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -143,7 +143,7 @@ Test String  Character Set             Return   Return  Text Return       Error
     string_num++;
     charset_num = charset_num + 2;
     test_num++;
-    
+
 /*
  * Test 2: Get the text from a string with the wrong character set
  */
@@ -151,7 +151,7 @@ Test String  Character Set             Return   Return  Text Return       Error
     fprintf(stdout, " %2d     %1d    %24s  False    ", test_num+1,
 	    	string_num, charsetname[charset_num]);
 
-    if (XmStringGetLtoR(string[string_num-1], charset[charset_num], 
+    if (XmStringGetLtoR(string[string_num-1], charset[charset_num],
 						&get_text)) {
 		errors++;
 		fprintf(stdout, "True    %16s    *\n", get_text);
@@ -165,19 +165,19 @@ Test String  Character Set             Return   Return  Text Return       Error
     text_num = text_num + 2;
     charset_num = charset_num + 2;
     test_num++;
-    
+
 /*
  * Test 3: Create a compound string with the fallback
  *         charset and get it with the default charset
  */
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     fprintf(stdout, " %2d     %1d    %24s  True     ", test_num+1,
 	    	string_num+1, charsetname[0]);
 
@@ -204,19 +204,19 @@ Test String  Character Set             Return   Return  Text Return       Error
     charset_num = charset_num - 1;
     string_num++;
     test_num++;
-    
+
 /*
  * Test 4: Create a compound string with a non-default
  *         charset and get it with the same charset
  */
 
     if ((string[string_num] = XmStringCreateLtoR(text[text_num],
-												 charset[charset_num])) 
+												 charset[charset_num]))
 												 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     fprintf(stdout, " %2d     %1d    %24s  True     ", test_num+1,
 	    	string_num+1, charsetname[charset_num]);
 
@@ -243,7 +243,7 @@ Test String  Character Set             Return   Return  Text Return       Error
     charset_num++;
     string_num++;
     test_num++;
-    
+
 /*
  * Test 5: Create a compound string with 2 text components where the first text
  *         component has the fallback charset and the second text component
@@ -251,12 +251,12 @@ Test String  Character Set             Return   Return  Text Return       Error
  */
 
     if ((string[string_num] = XmStringConcat(string[string_num-2],
-					    					 string[string_num-3])) 
+					    					 string[string_num-3]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     fprintf(stdout, " %2d     %1d    %24s  True     ", test_num+1,
 	    	string_num+1, charsetname[0]);
 
@@ -290,7 +290,7 @@ Test String  Character Set             Return   Return  Text Return       Error
     fprintf(stdout, " %2d     %1d    %24s  True     ", test_num+1,
 	    	string_num+1, charsetname[charset_num]);
 
-    if (!XmStringGetLtoR(string[string_num], charset[charset_num], 
+    if (!XmStringGetLtoR(string[string_num], charset[charset_num],
 						 &get_text)) {
 		errors++;
 		fprintf(stdout, "False                     *\n");
@@ -321,12 +321,12 @@ Test String  Character Set             Return   Return  Text Return       Error
  */
 
     if ((string[string_num] = XmStringConcat(string[string_num-2],
-					    					 string[string_num-3])) 
+					    					 string[string_num-3]))
 											 == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
     }
-    
+
     fprintf(stdout, " %2d     %1d    %24s  True     ", test_num+1,
 	    	string_num+1, charsetname[0]);
 
@@ -360,7 +360,7 @@ Test String  Character Set             Return   Return  Text Return       Error
     fprintf(stdout, " %2d     %1d    %24s  True     ", test_num+1,
 	    	string_num+1, charsetname[charset_num]);
 
-    if (!XmStringGetLtoR(string[string_num], charset[charset_num], 
+    if (!XmStringGetLtoR(string[string_num], charset[charset_num],
 		&get_text)) {
 		errors++;
 		fprintf(stdout, "False                     *\n");
@@ -387,7 +387,7 @@ Test String  Character Set             Return   Return  Text Return       Error
  * Test 9: Get the text component from a direction
  */
 
-    if ((string[string_num] = 
+    if ((string[string_num] =
 		 XmStringDirectionCreate(XmSTRING_DIRECTION_L_TO_R)) == NULL) {
 		sprintf(error_string, "Can't create string%d", string_num);
 		error_proc(error_string);
@@ -408,7 +408,7 @@ Test String  Character Set             Return   Return  Text Return       Error
 
     string_num++;
     test_num++;
-    
+
 /*
  * Test 10: Get the text component from a separator
  */

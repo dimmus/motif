@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmBulletinBoard_h
 #define _XmBulletinBoard_h
 
@@ -45,12 +45,12 @@ typedef struct _XmBulletinBoardRec      * XmBulletinBoardWidget;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreateBulletinBoard( 
+extern Widget XmCreateBulletinBoard(
                         Widget p,
                         String name,
                         ArgList args,
                         Cardinal n) ;
-extern Widget XmCreateBulletinBoardDialog( 
+extern Widget XmCreateBulletinBoardDialog(
                         Widget ds_p,
                         String name,
                         ArgList bb_args,

@@ -1,5 +1,5 @@
 # $XConsortium: Text1.scr /main/6 1995/07/17 20:41:14 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #   @) The text widget's contents read "Some Text."  If Adobe fonts are
 #   installed on your system, then the text widget
@@ -31,7 +31,7 @@
 #   Otherwise the default font will be used.
 #   #) Select a few letters in the middle of the text by dragging
 #      MB1.  Now, cut the selection using by pressing the osfCut key.
-#      The remaining text should be free of any garbage pixels in 
+#      The remaining text should be free of any garbage pixels in
 #      the area where the selection was.
 LocatePointer Text1 RTextChar 1
 DragComponent Text1 RTextChar 5 Btn1
@@ -114,7 +114,7 @@ CompareVisual Text1
 # C)
 Continue
 
-# 
+#
 # @) The following test is concerned about using MCtrlKUp and MCtrlKDown
 # to move the cursor back and forth between paragraphs, which was
 # reported as a bug (# 3145).
@@ -122,7 +122,7 @@ Continue
 # #) Move the cursor to the end of the line. Enlarge the window in order
 #    to see ten or more lines. Type the following lines, typing a space
 #    where the instructions indicate \"_\".
-LocatePointer Text1 RTextChar Max 
+LocatePointer Text1 RTextChar Max
 ClickMB Btn1
 InputString "\n\na\n\n x \nb"
 

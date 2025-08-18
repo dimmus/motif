@@ -18,8 +18,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 # $XConsortium: ch03.sm /main/3 1995/07/13 20:08:54 drk $
 ...\"  (c) Copyright 1992 OPEN SOFTWARE FOUNDATION, INC.
@@ -31,10 +31,10 @@ This section describes the runtime environment for automated testing.
 The automation code does make some assumptions about key bindings, window
 manager modes, and the like. Shipped with the test suite is an entire home
 directory for a test user, which we refer to as the \*Lqauser\*O environment.
-Test environments should use the 
+Test environments should use the
 \*L.Xdefaults\*O, \*L.mwmrc\*O and \*L.motifbind\*O files
-from this environment in their testing. The \*L.motifbind\*O 
-file may need modification for hardware platforms 
+from this environment in their testing. The \*L.motifbind\*O
+file may need modification for hardware platforms
 other than the reference machines used by OSF.
 Consult the \*LVirtual Bindings\*O man page for more information.
 .H 2 "RUN Scripts"
@@ -47,14 +47,14 @@ command:
 make RUN
 .iE
 .P
-The RUN script is "made" by substituting the unique \*LRUN.custom\*O 
+The RUN script is "made" by substituting the unique \*LRUN.custom\*O
 section into
-the appropriate place in the standard template 
-\*L$TOP/tests/General/RUN_template\*O. 
+the appropriate place in the standard template
+\*L$TOP/tests/General/RUN_template\*O.
 In addition to the flags specified in the customization file,
 additional flags may be passed to all tests by passing those flags to the
-\*LRUN\*O script. 
-For example, to run all the tests in Trace mode (\*L-T\*O), 
+\*LRUN\*O script.
+For example, to run all the tests in Trace mode (\*L-T\*O),
 the following command would be used:
 .iS
 RUN -T
@@ -73,14 +73,14 @@ Denotes a specific script file.
 .LI "\*L-V\*O"
 Denotes a specific visuals file.
 .LI "\*L-O\*O"
-Denotes a specific output (stdout) file. 
+Denotes a specific output (stdout) file.
 .LI "\*L-u\*O"
 User data, often used by tests to support different modes.
 .LE
 .in -3
 .P
 By default, a test named \*LTraversal1\*O will read in an instruction
-file \*LTraversal1.Dat\*O, a script file \*LTraversal1.Scr\*O, 
+file \*LTraversal1.Dat\*O, a script file \*LTraversal1.Scr\*O,
 redirect standard output and standard error
 to a file \*LTraversal1.prt\*O, and store in
 or read images from a file \*LTraversal1.vis\*O. If a test supports two
@@ -124,7 +124,7 @@ available through \*L-help\*O.
 .P
 .H 3 "Record mode"
 .P
-As stated earlier, the purpose of a regression test is to compare the 
+As stated earlier, the purpose of a regression test is to compare the
 appearance and behavior of one, stable version of software, against a newer,
 less stable version. Thus, one must first \*Erecord\*O an automated test.
 .P
@@ -152,13 +152,13 @@ this package to retest implementations of OSF/Motif might choose to use OSF's
 visuals rather than record their own.
 .P
 Tests being recorded look quite odd while they are running. This is because
-the automation code must take control of the colors used in order to 
+the automation code must take control of the colors used in order to
 notice certain variations in widgets between record
 and execution. Do not be concerned about the strange appearance of the
 tests being recorded.
 .H 3 "Batch Mode"
 .P
-Batch mode can also be called comparison, playback or execution mode. 
+Batch mode can also be called comparison, playback or execution mode.
 In this mode,
 which is the default, visuals located in the the \*LAUTOVPATH\*O directory are compared with the visuals of the currently executing test. Failures are
 listed in the output file. There is a flag, \*L-b\*O, for batch mode,
@@ -174,7 +174,7 @@ complete!
 The flag \*L-c\*O lets tests be run without any visual comparisons.
 This mode is useful as one is debugging a script, since eliminating
 visual comparisons speeds
-execution. It is also useful when, 
+execution. It is also useful when,
 for whatever reason, one might wish to verify the
 test output without considering visual differences. Its speed advantages
 can also be useful if one is linked with utility libraries which
@@ -182,7 +182,7 @@ seriously impede performance. Possible examples are memory analysis
 tools, performance profilers, test coverage analyzers.
 .H 3 "Interactive mode"
 .P
-Interactive mode is the most useful mode for debugging. 
+Interactive mode is the most useful mode for debugging.
 In this mode, a DialogBox
 is popped up whenever a visual difference is encountered. The dialog
 box shows the recorded image and the current image side-by-side,

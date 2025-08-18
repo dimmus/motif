@@ -1,5 +1,5 @@
 /* $XConsortium: ScrollList5.c /main/5 1995/07/15 21:05:42 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /*
  * HISTORY
  */
@@ -33,7 +33,7 @@ static void SelCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     char **text;
     XmString tcs;
-    
+
     printf("Type of Selection was ");
     switch (((XmListCallbackStruct*)call_data)->auto_selection_type) {
 	case XmAUTO_BEGIN   : printf("Auto Begin\n");
@@ -190,7 +190,7 @@ char	**argv;
     XtSetArg(args[n], XmNautomaticSelection, True);		n++;
     XtSetArg(args[n], XmNselectionPolicy, XmBROWSE_SELECT);	n++;
     XtSetValues(List1, args, n);
-    
+
     XtAddCallback(List1, XmNbrowseSelectionCallback, SelCB, NULL);
 
     CommonPause();
@@ -205,7 +205,7 @@ char	**argv;
     n = 0;
     XtSetArg(args[n], XmNselectionPolicy, XmEXTENDED_SELECT);	n++;
     XtSetValues(List1, args, n);
-    
+
     XtRemoveAllCallbacks(List1, XmNbrowseSelectionCallback);
     XtAddCallback(List1, XmNextendedSelectionCallback, SelCB, NULL);
 
@@ -220,7 +220,7 @@ char	**argv;
     XtSetArg(args[n], XmNselectionPolicy, XmSINGLE_SELECT);	n++;
     XtSetArg(args[n], XmNprimaryOwnership, XmOWN_NEVER);	n++;
     XtSetValues(List1, args, n);
-    
+
     XtRemoveAllCallbacks(List1, XmNextendedSelectionCallback);
 
     /* Select an item. */
@@ -246,7 +246,7 @@ char	**argv;
     n = 0;
     XtSetArg(args[n], XmNprimaryOwnership, XmOWN_ALWAYS);	n++;
     XtSetValues(List1, args, n);
-    
+
     /* Select an item. */
 
     CommonPause();
@@ -319,7 +319,7 @@ char	**argv;
     XtSetArg(args[n], XmNselectionPolicy, XmEXTENDED_SELECT);	n++;
     XtSetArg(args[n], XmNprimaryOwnership, XmOWN_NEVER);	n++;
     XtSetValues(List1, args, n);
-    
+
     /* Select some items. */
 
     CommonPause();
@@ -343,7 +343,7 @@ char	**argv;
     n = 0;
     XtSetArg(args[n], XmNprimaryOwnership, XmOWN_ALWAYS);	n++;
     XtSetValues(List1, args, n);
-    
+
     /* Select some items. */
 
     CommonPause();
@@ -367,7 +367,7 @@ char	**argv;
     n = 0;
     XtSetArg(args[n], XmNprimaryOwnership, XmOWN_MULTIPLE);	n++;
     XtSetValues(List1, args, n);
-    
+
     /* Panel 21		*/
     /* Select one item */
 
@@ -392,7 +392,7 @@ char	**argv;
     n = 0;
     XtSetArg(args[n], XmNprimaryOwnership, XmOWN_POSSIBLE_MULTIPLE);	n++;
     XtSetValues(List1, args, n);
-    
+
     /* Select some items. */
 
     CommonPause();
@@ -428,7 +428,7 @@ char	**argv;
 	printf("PASSED: The list owns the primary selection.\n");
     else
 	printf("FAILED: The list should own the primary selection, but doesn't.\n");
-    
+
     CommonPause();
 
     /* Clean up if need be. */

@@ -14,8 +14,8 @@ To measure any distance:
   1. click on "Measure" button. The shell is unmapped, the pointer is grabbed,
      and the cursor changes to "cross".
 
-  2. Select the first point by clicking MB1. As soon as you select the 
-     first point, the cursor changes to "reverse cross", and the grab is 
+  2. Select the first point by clicking MB1. As soon as you select the
+     first point, the cursor changes to "reverse cross", and the grab is
      still on. (This will be eventually changed to a rubberbanding cursor).
 
   3. Select the second point. The pointer is ungrabbed, the shell remapped,

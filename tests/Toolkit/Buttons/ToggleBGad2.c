@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ToggleBGad2.c /main/8 1995/07/13 17:31:11 drk $"
@@ -128,15 +128,15 @@ char **argv;
   Pixmap pixOn, pixOff;
   GC gc;
   XGCValues values;
-  XtGCMask valueMask; 
+  XtGCMask valueMask;
   Drawable drawable;
   Window win;
 
   CommonTestInit(argc, argv);
-  
+
   n = 0;
   bb = XmCreateBulletinBoard(Shell1, "bb", args, n);
- 
+
   screen=XtScreen(Shell1);
   pic = XCreateImage(display, (Visual *) screen, 1, XYBitmap, 0, smileRaster, 64, 64,
 		     BitmapPad(display), 8);
@@ -146,29 +146,29 @@ char **argv;
   pic->bitmap_unit = 8;
 
   drawable = RootWindowOfScreen(XtScreen(Shell1));
-  pixOn = XCreatePixmap(display, drawable, 64, 64, 
-			DefaultDepthOfScreen(screen));    
-  pixOff = XCreatePixmap(display, drawable, 64, 64, 
-			 DefaultDepthOfScreen(screen));    
+  pixOn = XCreatePixmap(display, drawable, 64, 64,
+			DefaultDepthOfScreen(screen));
+  pixOff = XCreatePixmap(display, drawable, 64, 64,
+			 DefaultDepthOfScreen(screen));
   values.foreground = XBlackPixel(display, 0);
   values.background = XWhitePixel(display, 0);
   valueMask = GCForeground | GCBackground;
   gc = XCreateGC(display, drawable, valueMask, &values);
-    
+
   XPutImage(display, pixOn, gc, pic, 0, 0, 0, 0, 64, 64);
   values.foreground = XWhitePixel(display, 0);
   values.background = XBlackPixel(display, 0);
   valueMask = GCForeground | GCBackground;
   XChangeGC(display, gc, valueMask, &values);
   XPutImage(display, pixOff, gc, pic, 0, 0, 0, 0, 64, 64);
-  
+
   n = 0;
   XtSetArg(args[n], XmNlabelType, XmPIXMAP); n++;
-  XtSetArg(args[n], XmNlabelPixmap, pixOff); n++;  
-  XtSetArg(args[n], XmNlabelInsensitivePixmap, pixOn); n++; 
+  XtSetArg(args[n], XmNlabelPixmap, pixOff); n++;
+  XtSetArg(args[n], XmNlabelInsensitivePixmap, pixOn); n++;
   XtSetArg(args[n], XmNset, True); n++;
   XtSetArg(args[n], XmNsensitive, False); n++;
-  toggle = XmCreateToggleButtonGadget(bb, "label1", args, n); 
+  toggle = XmCreateToggleButtonGadget(bb, "label1", args, n);
 
   XtManageChild (bb);
   XtManageChild (toggle);
@@ -181,9 +181,3 @@ char **argv;
   XtDestroyWidget(bb);
   XtDestroyWidget(toggle);
 }
-
-
-
-
-
-

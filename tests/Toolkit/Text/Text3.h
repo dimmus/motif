@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $TOG: Text3.h /main/10 1997/09/18 11:00:29 csn $ */
 
 
@@ -44,7 +44,7 @@ static char starting_string_text[] = "This is the starting string";
 #ifndef MOTIF1_1
 #define	GetBaseline		7
 #define	XYToPos			8
-#define	PosToXY		        9	
+#define	PosToXY		        9
 #define	GetTopCharacter		10
 #define	SetTopCharacter		11
 #else
@@ -108,4 +108,3 @@ static void Scale2CB(Widget w, XtPointer client_data,
 			       		XtPointer call_data);
 static void TorFCB(Widget w, XtPointer client_data,
 			       		XtPointer call_data);
-

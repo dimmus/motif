@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageBox5.c /main/8 1995/07/13 19:00:10 drk $"
@@ -69,7 +69,7 @@ static XtCallbackRec help_cb[] = {
 
 
 /*#### OkCB ####*/
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -94,7 +94,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 
 
 /*#### CancelCB ####*/
-static void CancelCB (w, client_data, call_data) 
+static void CancelCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -118,7 +118,7 @@ XtPointer   call_data;                   /*  data from widget class  */
     }
     else {
         child = XmMessageBoxGetChild (w, XmDIALOG_OK_BUTTON);
-        if (child) 
+        if (child)
             if (destroy) XtDestroyWidget (child);
             else XtUnmanageChild (child);
         n=0;
@@ -130,7 +130,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 
 
 /*#### HelpCB ####*/
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -149,7 +149,7 @@ XtPointer   call_data;                   /*  data from widget class  */
     }
     else {
         child = XmMessageBoxGetChild (w, XmDIALOG_MESSAGE_LABEL);
-        if (child) 
+        if (child)
             if (destroy) XtDestroyWidget (child);
             else XtUnmanageChild (child);
     }
@@ -161,8 +161,8 @@ void main (argc,argv)
 unsigned int argc;
 char **argv;
 {
-    Arg             args[20];          
-    register int    n;           
+    Arg             args[20];
+    register int    n;
     Widget	    Frame;
 
     /*  initialize toolkit  */

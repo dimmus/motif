@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,14 +19,14 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: pulldown2.msg /main/4 1995/07/13 20:50:56 drk $
-!  
+!
 
-! 
+!
 !  Created by RAS Group for HaL Computers.  Based on software by OSF, Inc.
 !
  value
@@ -38,4 +38,3 @@
 "   - entryAlignment is \n     XmALIGNMENT_CENTER\n   - spacing is 5\n" &
 "   - map and unmap Callbacks are ON\n   - Callbacks are on for the\n     pushbuttons and togglebuttons\n" &
 "\nAll other resources are set by default.\n";
-

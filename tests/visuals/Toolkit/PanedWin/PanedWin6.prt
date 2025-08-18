@@ -22,21 +22,21 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual PW 
+TRACE:(1) CompareVisual PW
 TRACE:(2) Continue
-TRACE:(3) LocatePointer PW  
-TRACE:(4) CompareVisual PW 
+TRACE:(3) LocatePointer PW
+TRACE:(4) CompareVisual PW
 TRACE:(5) LocatePointerXYAbs 200 200
 TRACE:(6) LocatePointer PW RSash 0
-TRACE:(7) CompareVisual PW 
+TRACE:(7) CompareVisual PW
 TRACE:(8) LocatePointerXYAbs 200 200
 TRACE:(9) LocatePointer PW RSash 0
-TRACE:(10) CompareVisual PW 
+TRACE:(10) CompareVisual PW
 TRACE:(11) LocatePointerXYAbs 200 200
 TRACE:(12) LocatePointer PW RSash 1
-TRACE:(13) CompareVisual PW 
+TRACE:(13) CompareVisual PW
 TRACE:(14) LocatePointerXYAbs 200 200
 TRACE:(15) LocatePointer PW RSash 1
-TRACE:(16) CompareVisual PW 
+TRACE:(16) CompareVisual PW
 TRACE:(17) Exit
 Exiting Test...Please Standby...

@@ -27,8 +27,7 @@ X Defaults:
       XmDTodo*text.background:      white
 
 <title>About printing</title>
-Todo outputs a text file with partially formatted data.  
+Todo outputs a text file with partially formatted data.
 
-Each page is headed by a underlined subject line.  Otherwise 
+Each page is headed by a underlined subject line.  Otherwise
 the text from the page is printed as is.
-

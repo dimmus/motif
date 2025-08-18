@@ -24,7 +24,7 @@
 /*
  * HISTORY
  */
-/* 
+/*
  * Original History:
  *
  * Revision 1.6.4.2  1993/05/05  14:17:10  shobana
@@ -34,11 +34,11 @@
  * Revision 1.6.2.2  1992/05/05  17:59:34  qauser
  * 	Shows PIR 3514 is still open
  * 	[1992/05/04  17:22:09  qauser]
- * 
+ *
  * Revision 1.6  1992/03/13  17:20:18  devsrc
  * 	Converted to ODE
- * 
-*/ 
+ *
+*/
 /*
  *  Create a push button in a form.  Add a callback to the push button
  *  which resizes it.  See what the form does.
@@ -51,7 +51,7 @@
 
 extern void PushBCallback();
 static void activate_callback();
-void CreateSrc();	
+void CreateSrc();
 static void activateCB_pushButton1();
 
 Widget form, drawingArea1_shell, drawingArea1, pushButton1;
@@ -69,7 +69,7 @@ char **argv;
 
   /*  initialize toolkit  */
   CommonTestInit(argc, argv);
-    
+
   XtSetArg(args[0], XmNallowShellResize, True);
   XtSetValues(Shell1, args, 1);
 
@@ -105,7 +105,7 @@ char **argv;
   XtSetArg(args[n], XmNunitType, XmPIXELS); n++;
   form = XmCreateForm(drawingArea1, "form", args, n);
   XtManageChild(form);
-  
+
   n = 0;
   tcs = XmStringCreateLtoR("Create Option Menu", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -146,7 +146,7 @@ char **argv;
    XtAddCallback (pushb, XmNactivateCallback, PushBCallback, NULL);
 
    n = 0;
-   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_NONE); n++; 
+   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_NONE); n++;
    XtSetValues(form, args, n);
 
    CommonPause();
@@ -158,7 +158,7 @@ char **argv;
    n = 0;
    form = XmCreateForm(Shell1, "form", args, n);
    XtManageChild(form);
-    
+
    /* upper left widget */
    n = 0;
    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); 	n++;
@@ -181,7 +181,7 @@ char **argv;
    n = 0;
    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); 	n++;
    XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); 		n++;
-   XtSetArg(args[n], XmNwidth, 100); 				n++; 
+   XtSetArg(args[n], XmNwidth, 100); 				n++;
    Push1 = XmCreatePushButton(form, "Push1", args, n);
    XtManageChild(Push1);
 
@@ -190,8 +190,8 @@ char **argv;
    n = 0;
    XtSetArg(args[n], XmNallowShellResize, False);		n++;
    XtSetValues(Shell1, args, n);
-    
-   CommonPause(); 
+
+   CommonPause();
 
    /* End Test for Pir2389 */
   CommonPause();  /* Exit */
@@ -215,14 +215,14 @@ void PushBCallback(Widget pw, caddr_t closure, caddr_t call_data)
       firstTime = 0;
     }
 
-  printf ("GetValues  --  width = %d,    height = %d\n", 
+  printf ("GetValues  --  width = %d,    height = %d\n",
 	  width, height);
-  printf ("Setting Values to  --  width = %d,    height = %d\n\n", 
+  printf ("Setting Values to  --  width = %d,    height = %d\n\n",
 	  width + 20, height + 20);
 
   width += 20;
   height += 20;
- 
+
   n = 0;
   XtSetArg (args[n], XmNwidth, width); n++;
   XtSetArg (args[n], XmNheight, height); n++;
@@ -243,7 +243,7 @@ static void activate_callback(Widget widget, XtPointer tag,
 /* ARGSUSED */
 
 static void
-activateCB_pushButton1(Widget UxWidget, XtPointer UxClientData, 
+activateCB_pushButton1(Widget UxWidget, XtPointer UxClientData,
 		       XtPointer UxCallbackArg)
 {
   CreateSrc(form);
@@ -275,4 +275,3 @@ void CreateSrc(Widget frm)
   XtRealizeWidget (menu);
   XtManageChild(menu);
 }
-

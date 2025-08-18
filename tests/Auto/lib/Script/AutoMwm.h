@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: AutoMwm.h /main/11 1996/10/30 11:34:34 drk $ */
 /*
  *	File: AutoMwm.h
@@ -230,11 +230,11 @@ typedef struct {
   CARD32 right_arrow_y;
   CARD32 left_arrow_x;
   CARD32 left_arrow_y;
-  CARD32 top_arrow_x; 
-  CARD32 top_arrow_y; 
+  CARD32 top_arrow_x;
+  CARD32 top_arrow_y;
   CARD32 bottom_arrow_x;
   CARD32 bottom_arrow_y;
-  CARD32 icon_box_x; 
+  CARD32 icon_box_x;
   CARD32 icon_box_y;
   CARD32 icon_box_width;
   CARD32 icon_box_height;
@@ -286,14 +286,14 @@ typedef struct _DataQueueRec {
 #define WINDOW_MENU_ITEM_SELECT            5
 #define WINDOW_DEICONIFY                   6
 #define WINDOW_NORMALIZE                   7
-#define WINDOW_MENU_POST                   8       
+#define WINDOW_MENU_POST                   8
 #define WINDOW_FOCUS                       9
 #define WINDOW_MENU_UNPOST                 10
 #define WINDOW_ITEM_CHECK                  11
 #define ICON_MOVE                          12
-#define ICON_MENU_POST                     13     
-#define ICON_MENU_UNPOST                   14    
-#define ICON_MENU_ITEM_SELECT              15     
+#define ICON_MENU_POST                     13
+#define ICON_MENU_UNPOST                   14
+#define ICON_MENU_ITEM_SELECT              15
 
 
 
@@ -305,57 +305,57 @@ typedef struct _DataQueueRec {
 #ifndef AUTOMATION
 
 
-extern void AutoWmRaise( 
+extern void AutoWmRaise(
                         Window window);
-extern void AutoWmIconify( 
+extern void AutoWmIconify(
 		    Window window);
-extern void AutoWmDeIconify( 
+extern void AutoWmDeIconify(
                         Window window);
-extern void AutoWmMaximize( 
+extern void AutoWmMaximize(
                         Window window);
-extern void AutoWmMenuPost( 
-                        Window window, 
+extern void AutoWmMenuPost(
+                        Window window,
 			Boolean keyboard);
-extern void AutoWmMenuUnpost( 
+extern void AutoWmMenuUnpost(
                         Window window);
-extern void AutoWmMenuSelect( 
+extern void AutoWmMenuSelect(
                         Window window,
                         int item_num,
-                        char *item_name, 
+                        char *item_name,
 			Boolean keyboard);
-extern void AutoWmMove( 
+extern void AutoWmMove(
                         Window window,
                         int x,
                         int y);
-extern void AutoWmResize( 
+extern void AutoWmResize(
                         Window window,
                         int gravity,
                         int width,
                         int height);
-extern void AutoWmFocus( 
+extern void AutoWmFocus(
                         Window window);
-extern void AutoWmIconMenuPost( 
-                        Window window, 
+extern void AutoWmIconMenuPost(
+                        Window window,
 			Boolean keyboard);
-extern void AutoWmIconMenuUnpost( 
+extern void AutoWmIconMenuUnpost(
                         Window window);
-extern void AutoWmIconMenuSelect( 
+extern void AutoWmIconMenuSelect(
                         Window window,
                         int item_num,
-                        char *item_name, 
+                        char *item_name,
 			Boolean keyboard);
-extern void AutoWmIconMove( 
+extern void AutoWmIconMove(
                         Window window,
                         int x,
                         int y);
-extern void AutoWmItemCheck( 
+extern void AutoWmItemCheck(
                         Window window,
                         int group,
                         char *item_name);
 extern void AutoWmNormalize (
                         Window window);
 
-extern void LocatePtr( 
+extern void LocatePtr(
                         Window window,
                         int dest_x,
                         int dest_y);
@@ -367,54 +367,54 @@ extern void AutoSwapBytes(PropMwmFrameIconInfo *window_prop);
 
 
 
-extern Boolean AutoWmRaise( 
+extern Boolean AutoWmRaise(
                         Window window);
-extern Boolean AutoWmIconify( 
+extern Boolean AutoWmIconify(
 		    Window window);
-extern Boolean AutoWmDeIconify( 
+extern Boolean AutoWmDeIconify(
                         Window window);
-extern Boolean AutoWmMaximize( 
+extern Boolean AutoWmMaximize(
                         Window window);
-extern Boolean AutoWmMenuPost( 
-                        Window window, 
+extern Boolean AutoWmMenuPost(
+                        Window window,
 						Boolean keyboard);
-extern Boolean AutoWmMenuUnpost( 
+extern Boolean AutoWmMenuUnpost(
                         Window window);
-extern Boolean AutoWmMenuSelect( 
+extern Boolean AutoWmMenuSelect(
                         Window window,
                         int item_num,
-                        char *item_name, 
+                        char *item_name,
 						Boolean keyboard);
-extern Boolean AutoWmMove( 
+extern Boolean AutoWmMove(
                         Window window,
                         int x,
                         int y);
-extern Boolean AutoWmResize( 
+extern Boolean AutoWmResize(
                         Window window,
                         int gravity,
                         int width,
                         int height);
-extern Boolean AutoWmFocus( 
+extern Boolean AutoWmFocus(
                         Window window);
-extern Boolean AutoWmIconMenuPost( 
-                        Window window, 
+extern Boolean AutoWmIconMenuPost(
+                        Window window,
 						Boolean keyboard);
-extern Boolean AutoWmIconMenuUnpost( 
+extern Boolean AutoWmIconMenuUnpost(
                         Window window);
-extern Boolean AutoWmIconMenuSelect( 
+extern Boolean AutoWmIconMenuSelect(
                         Window window,
                         int item_num,
-                        char *item_name, 
+                        char *item_name,
 						Boolean keyboard);
-extern Boolean AutoWmIconMove( 
+extern Boolean AutoWmIconMove(
                         Window window,
                         int x,
                         int y);
-extern Boolean AutoWmItemCheck( 
+extern Boolean AutoWmItemCheck(
                         Window window,
                         int group,
                         char *item_name);
-extern void LocatePtr( 
+extern void LocatePtr(
                         Window window,
                         int dest_x,
                         int dest_y);
@@ -429,5 +429,3 @@ extern void AutoSwapBytes(PropMwmFrameIconInfo *window_prop);
 
 
 #endif /* _AutoMwm_h_ */
-
-

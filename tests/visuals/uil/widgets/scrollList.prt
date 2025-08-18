@@ -23,22 +23,22 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is scrollList.uid ---- 
+---- The uid file to be opened is scrollList.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) LocatePointer Scrolled_List RListItem 0
-TRACE:(3) CompareVisual S_MAIN_WIDGET 
+TRACE:(3) CompareVisual S_MAIN_WIDGET
 TRACE:(4) LocatePointer Scrolled_List RListItem 3
-TRACE:(5) CompareVisual S_MAIN_WIDGET 
-TRACE:(6) LocatePointer Scrolled_List RVertScrollBarDownOrRightArrow 
-TRACE:(7) ClickMB Btn1 
-TRACE:(8) ClickMB Btn1 
-TRACE:(9) ClickMB Btn1 
-TRACE:(10) CompareVisual S_MAIN_WIDGET 
-TRACE:(11) LocatePointer Scrolled_List RVertScrollBarSlider 
-TRACE:(12) DragSliderValue Up Min 
-TRACE:(13) DragSliderValue Down Max 
-TRACE:(14) CompareVisual S_MAIN_WIDGET 
+TRACE:(5) CompareVisual S_MAIN_WIDGET
+TRACE:(6) LocatePointer Scrolled_List RVertScrollBarDownOrRightArrow
+TRACE:(7) ClickMB Btn1
+TRACE:(8) ClickMB Btn1
+TRACE:(9) ClickMB Btn1
+TRACE:(10) CompareVisual S_MAIN_WIDGET
+TRACE:(11) LocatePointer Scrolled_List RVertScrollBarSlider
+TRACE:(12) DragSliderValue Up Min
+TRACE:(13) DragSliderValue Down Max
+TRACE:(14) CompareVisual S_MAIN_WIDGET
 TRACE:(15) Exit
 Exiting Test...Please Standby...

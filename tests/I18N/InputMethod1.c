@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -77,15 +77,15 @@ static XtResource resources[] = {
 };
 
 static char *BackgroundColor[4] = {
-    "black", 
-    "yellow", 
-    "green", 
+    "black",
+    "yellow",
+    "green",
     "blue"
 };
 
 static char *ForegroundColor[3] = {
-    "white", 
-    "red", 
+    "white",
+    "red",
     "grey"
 };
 
@@ -127,15 +127,15 @@ void  main (argc, argv)
                test_style = ROOT;
 	       XtSetArg(args[n], XmNpreeditType, "Root"); n++;
         }
-	
+
 	XtSetArg(args[n], XmNinputPolicy, XmPER_SHELL);
 	XtSetValues(Shell1, args, n);
-       
+
 	test_char = *UserData;
 
 	free(UserData);
     }
-    
+
     sprintf(TestName, "InputMethod1%c", test_char);
 
     CommonPause();
@@ -152,7 +152,7 @@ void  main (argc, argv)
     else
 	printf("\nInput method opened successfully for locale %s.\n\n",
 	       XLocaleOfIM(XIM_object));
-    
+
     CommonPause();
 
     /* Query the input method to see what input styles it supports. */
@@ -170,14 +170,14 @@ void  main (argc, argv)
 	unsigned short i;
 	Boolean proceed = FALSE;
 
-	printf("Number of supported input styles: %d\n\n", 
+	printf("Number of supported input styles: %d\n\n",
 	       XIM_styles->count_styles);
 
 	IM_style_count = (unsigned short) 0;
-	for (i = 0; i < XIM_styles->count_styles; i++) 
-	    proceed = proceed || 
+	for (i = 0; i < XIM_styles->count_styles; i++)
+	    proceed = proceed ||
 		      GetSupportedStyle(XIM_styles->supported_styles[i], i);
-	
+
 	XFree(XIM_styles);
 	if (!proceed) {
 	    printf("No known styles supported by this input method.\n");
@@ -190,8 +190,8 @@ void  main (argc, argv)
 	else {
 	    printf("Input Method and Application don't support the same input style.\n");
 	    printf("No reason to continue this test.\n");
-	    exit(0);	
-        }    
+	    exit(0);
+        }
     }
 
     CommonPause();
@@ -201,22 +201,22 @@ void  main (argc, argv)
     XtGetApplicationResources(Shell1, &my_data, resources,
 			      XtNumber(resources), NULL, 0);
 
-    small_fontlist = XmFontListAppendEntry(NULL, 
-			    XmFontListEntryLoad(XtDisplay(Shell1), 
+    small_fontlist = XmFontListAppendEntry(NULL,
+			    XmFontListEntryLoad(XtDisplay(Shell1),
 						my_data.small_font,
-						XmFONT_IS_FONTSET, 
+						XmFONT_IS_FONTSET,
 						XmFONTLIST_DEFAULT_TAG));
 
-/*    medium_fontlist = XmFontListAppendEntry(NULL, 
+/*    medium_fontlist = XmFontListAppendEntry(NULL,
 			    XmFontListEntryLoad(XtDisplay(Shell1),
 						my_data.medium_font,
-						XmFONT_IS_FONTSET, 
+						XmFONT_IS_FONTSET,
 						XmFONTLIST_DEFAULT_TAG));
 
-    big_fontlist = XmFontListAppendEntry(NULL, 
+    big_fontlist = XmFontListAppendEntry(NULL,
 			    XmFontListEntryLoad(XtDisplay(Shell1),
 						my_data.big_font,
-						XmFONT_IS_FONTSET, 
+						XmFONT_IS_FONTSET,
 						XmFONTLIST_DEFAULT_TAG));
 */
     n = 0;
@@ -240,7 +240,7 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNeditMode, XmMULTI_LINE_EDIT); 		n++;
     XtSetArg(args[n], XmNwordWrap, True); 			n++;
     XtSetArg(args[n], XmNvalue, "Testing");                     n++;
-    XtSetArg(args[n], XmNfontList, small_fontlist);             n++; 
+    XtSetArg(args[n], XmNfontList, small_fontlist);             n++;
     Text1 = XmCreateScrolledText(Form1, "Text1", args, n);
 
     XtManageChild(Text1);
@@ -258,7 +258,7 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM );      n++;
     XtSetArg(args[n], XmNvalue, "Input Method with ");          n++;
 /*    XtSetArg(args[n], XmNfontList, medium_fontlist);            n++; */
-    XtSetArg(args[n], XmNfontList, small_fontlist);            n++; 
+    XtSetArg(args[n], XmNfontList, small_fontlist);            n++;
     Text2 = XmCreateText(Form1, "Text2", args, n);
 
     XtManageChild(Text2);
@@ -276,7 +276,7 @@ void  main (argc, argv)
     XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM );     n++;
     XtSetArg(args[n], XmNvalue, "shared Input Context.");       n++;
 /*    XtSetArg(args[n], XmNfontList, big_fontlist);               n++; */
-    XtSetArg(args[n], XmNfontList, small_fontlist);            n++; 
+    XtSetArg(args[n], XmNfontList, small_fontlist);            n++;
     TextField1 = XmCreateTextField(Form1, "TextField1", args, n);
 
     XtManageChild(TextField1);
@@ -286,7 +286,7 @@ void  main (argc, argv)
     /* Test Input Context with different attributes */
 
     CreatePanel();
-    
+
     CommonPause();
     CommonPause();
 
@@ -294,7 +294,7 @@ void  main (argc, argv)
 
     XIC_Text1 = XmImGetXIC(Text1, XmINHERIT_POLICY, NULL, (Cardinal) 0);
     XIC_Text2 = XmImGetXIC(Text2, XmINHERIT_POLICY, NULL, (Cardinal) 0);
-    XIC_TextField1 = XmImGetXIC(TextField1, XmINHERIT_POLICY, NULL, 
+    XIC_TextField1 = XmImGetXIC(TextField1, XmINHERIT_POLICY, NULL,
 				(Cardinal) 0);
 
     if ((XIC_Text1 == XIC_Text2) && (XIC_Text1 == XIC_TextField1))
@@ -310,7 +310,7 @@ void  main (argc, argv)
     CommonPause();
 
     CommonPause();
- 
+
     XtAppMainLoop(app_context);
 }
 
@@ -350,8 +350,8 @@ GetSupportedStyle(XIMStyle supported_style, unsigned short i)
 
     else if ((supported_style & XIMPreeditNone) &&
 	(supported_style & XIMStatusNone)) {
-	printf("None\n"); 
-	return_status = FALSE;    
+	printf("None\n");
+	return_status = FALSE;
     }
     else {
 	printf("Unknown composed of: ");
@@ -366,30 +366,30 @@ GetSupportedStyle(XIMStyle supported_style, unsigned short i)
 static void
 PrintSupportedStyle(XIMStyle supported_style)
 {
-    if (supported_style & XIMPreeditArea) 
+    if (supported_style & XIMPreeditArea)
 	printf("XIMPreeditArea ");
-    if (supported_style & XIMPreeditCallbacks) 
+    if (supported_style & XIMPreeditCallbacks)
 	printf("XIMPreeditCallbacks ");
-    if (supported_style & XIMPreeditPosition) 
+    if (supported_style & XIMPreeditPosition)
 	printf("XIMPreeditPosition ");
-    if (supported_style & XIMPreeditNothing) 
+    if (supported_style & XIMPreeditNothing)
 	printf("XIMPreeditNothing ");
-    if (supported_style & XIMPreeditNone) 
+    if (supported_style & XIMPreeditNone)
 	printf("XIMPreeditNone ");
 
-    if (supported_style & XIMStatusArea) 
+    if (supported_style & XIMStatusArea)
 	printf("XIMStatusArea ");
-    if (supported_style & XIMStatusCallbacks) 
+    if (supported_style & XIMStatusCallbacks)
 	printf("XIMStatusCallbacks ");
-    if (supported_style & XIMStatusNothing) 
+    if (supported_style & XIMStatusNothing)
 	printf("XIMStatusNothing ");
-    if (supported_style & XIMStatusNone) 
+    if (supported_style & XIMStatusNone)
 	printf("XIMStatusNone ");
 
     return;
 }
 
-static void 
+static void
 CreatePanel(void )
 {
     Arg		args[15];
@@ -408,31 +408,31 @@ CreatePanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNhorizontalSpacing, 5); n++;
-    XtSetArg(args[n], XmNverticalSpacing, 5); n++;    
+    XtSetArg(args[n], XmNverticalSpacing, 5); n++;
     FormDialog = XmCreateFormDialog(Shell1, "FormDialog", args, n);
     XtManageChild(FormDialog);
 
     if (test_style == OVERTHESPOT)
-	tcs = XmStringCreateLtoR("Input Style: Over The Spot", 
+	tcs = XmStringCreateLtoR("Input Style: Over The Spot",
 				 XmFONTLIST_DEFAULT_TAG);
     else if (test_style == OFFTHESPOT)
-	tcs = XmStringCreateLtoR("Input Style: Off The Spot", 
+	tcs = XmStringCreateLtoR("Input Style: Off The Spot",
 				 XmFONTLIST_DEFAULT_TAG);
     else if (test_style == ROOT)
-	tcs = XmStringCreateLtoR("Input Style: Root", 
+	tcs = XmStringCreateLtoR("Input Style: Root",
 				 XmFONTLIST_DEFAULT_TAG);
 
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs); n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
-    InputStyleLabel = XmCreateLabelGadget(FormDialog, "InputStyleLabel", 
+    InputStyleLabel = XmCreateLabelGadget(FormDialog, "InputStyleLabel",
 					  args, n);
     XtManageChild(InputStyleLabel);
     XmStringFree(tcs);
 
     n = 0;
-    Background_Pulldown = XmCreatePulldownMenu(FormDialog, 
+    Background_Pulldown = XmCreatePulldownMenu(FormDialog,
 					       "Background_Pulldown",
 					       args, n);
     Black = CreatePushButton(Background_Pulldown, "Black");
@@ -440,13 +440,13 @@ CreatePanel(void )
     Green = CreatePushButton(Background_Pulldown, "Green");
     Blue = CreatePushButton(Background_Pulldown, "Blue");
 
-    XtAddCallback(Black, XmNactivateCallback, BackgroundCB, 
+    XtAddCallback(Black, XmNactivateCallback, BackgroundCB,
 		  (XtPointer) BackgroundColor[0]);
-    XtAddCallback(Yellow, XmNactivateCallback, BackgroundCB, 
+    XtAddCallback(Yellow, XmNactivateCallback, BackgroundCB,
 		  (XtPointer) BackgroundColor[1]);
-    XtAddCallback(Green, XmNactivateCallback, BackgroundCB, 
+    XtAddCallback(Green, XmNactivateCallback, BackgroundCB,
 		  (XtPointer) BackgroundColor[2]);
-    XtAddCallback(Blue, XmNactivateCallback, BackgroundCB, 
+    XtAddCallback(Blue, XmNactivateCallback, BackgroundCB,
 		  (XtPointer) BackgroundColor[3]);
 
     tcs = XmStringCreateLtoR("Background ", XmFONTLIST_DEFAULT_TAG);
@@ -456,20 +456,20 @@ CreatePanel(void )
     XtSetArg(args[n], XmNtopWidget, InputStyleLabel); n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNlabelString, tcs); n++;
-    XtSetArg(args[n], XmNmenuHistory, Black); n++;    
+    XtSetArg(args[n], XmNmenuHistory, Black); n++;
     XtSetArg(args[n], XmNsubMenuId, Background_Pulldown); n++;
     Background_Option = XmCreateOptionMenu(FormDialog, "Background_Option",
-					   args, n);    
+					   args, n);
     XtManageChild(Background_Option);
     XmStringFree(tcs);
 
     n = 0;
-    BackPixmap_Pulldown = XmCreatePulldownMenu(FormDialog, 
+    BackPixmap_Pulldown = XmCreatePulldownMenu(FormDialog,
 					       "BackPixmap_Pulldown",
 					       args, n);
     star_pixmap = MakePixmap(Shell1, (char *) star_bits,
 			     star_width, star_height);
-    xlogo_pixmap = MakePixmap(Shell1, (char *) xlogo16_bits, 
+    xlogo_pixmap = MakePixmap(Shell1, (char *) xlogo16_bits,
 			      xlogo16_width, xlogo16_height);
 
     n = 0;
@@ -478,17 +478,17 @@ CreatePanel(void )
     Pix_star = XmCreatePushButton(BackPixmap_Pulldown, "Pix_star", args, n);
     XtManageChild(Pix_star);
 
-    XtAddCallback(Pix_star, XmNactivateCallback, BackPixmapCB, 
+    XtAddCallback(Pix_star, XmNactivateCallback, BackPixmapCB,
 		  (XtPointer) &star_pixmap);
 
     n = 0;
     XtSetArg(args[n], XmNlabelType, XmPIXMAP); n++;
     XtSetArg(args[n], XmNlabelPixmap, xlogo_pixmap); n++;
-    Pix_xlogo16 = XmCreatePushButton(BackPixmap_Pulldown, "Pix_xlogo16", 
+    Pix_xlogo16 = XmCreatePushButton(BackPixmap_Pulldown, "Pix_xlogo16",
 				     args, n);
     XtManageChild(Pix_xlogo16);
 
-    XtAddCallback(Pix_xlogo16, XmNactivateCallback, BackPixmapCB, 
+    XtAddCallback(Pix_xlogo16, XmNactivateCallback, BackPixmapCB,
 		  (XtPointer) &xlogo_pixmap);
 
     tcs = XmStringCreateLtoR("Background Pixmap ", XmFONTLIST_DEFAULT_TAG);
@@ -500,23 +500,23 @@ CreatePanel(void )
     XtSetArg(args[n], XmNlabelString, tcs); n++;
     XtSetArg(args[n], XmNsubMenuId, BackPixmap_Pulldown); n++;
     BackPixmap_Option = XmCreateOptionMenu(FormDialog, "BackPixmap_Option",
-					args, n);    
+					args, n);
     XtManageChild(BackPixmap_Option);
     XmStringFree(tcs);
 
     n = 0;
-    Foreground_Pulldown = XmCreatePulldownMenu(FormDialog, 
+    Foreground_Pulldown = XmCreatePulldownMenu(FormDialog,
 					       "Foreground_Pulldown",
 					       args, n);
     White = CreatePushButton(Foreground_Pulldown, "White");
     Red = CreatePushButton(Foreground_Pulldown, "Red");
     Grey = CreatePushButton(Foreground_Pulldown, "Grey");
 
-    XtAddCallback(White, XmNactivateCallback, ForegroundCB, 
+    XtAddCallback(White, XmNactivateCallback, ForegroundCB,
 		  (XtPointer) ForegroundColor[0]);
-    XtAddCallback(Red, XmNactivateCallback, ForegroundCB, 
+    XtAddCallback(Red, XmNactivateCallback, ForegroundCB,
 		  (XtPointer) ForegroundColor[1]);
-    XtAddCallback(Grey, XmNactivateCallback, ForegroundCB, 
+    XtAddCallback(Grey, XmNactivateCallback, ForegroundCB,
 		  (XtPointer) ForegroundColor[2]);
 
     tcs = XmStringCreateLtoR("Foreground ", XmFONTLIST_DEFAULT_TAG);
@@ -526,10 +526,10 @@ CreatePanel(void )
     XtSetArg(args[n], XmNtopWidget, BackPixmap_Option); n++;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNlabelString, tcs); n++;
-    XtSetArg(args[n], XmNmenuHistory, White); n++;    
+    XtSetArg(args[n], XmNmenuHistory, White); n++;
     XtSetArg(args[n], XmNsubMenuId, Foreground_Pulldown); n++;
     Foreground_Option = XmCreateOptionMenu(FormDialog, "Foreground_Option",
-					   args, n);    
+					   args, n);
     XtManageChild(Foreground_Option);
     XmStringFree(tcs);
 
@@ -553,7 +553,7 @@ CreatePanel(void )
 
     XtManageChild(ChoiceLabel);
     XmStringFree(tcs);
-    
+
     n = 0;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET);  n++;
     XtSetArg(args[n], XmNtopWidget, Separator);            n++;
@@ -566,7 +566,7 @@ CreatePanel(void )
     XtSetArg(args[n], XmNborderWidth, 2);                  n++;
     ChoiceRadioBox = XmCreateRadioBox(FormDialog, "ChoiceRadioBox", args, n);
     XtManageChild(ChoiceRadioBox);
- 
+
     tcs = XmStringCreateLtoR("Scrolled Text", XmFONTLIST_DEFAULT_TAG);
 
     n = 0;
@@ -577,7 +577,7 @@ CreatePanel(void )
 
     XtManageChild(STextTB);
     XmStringFree(tcs);
-    XtAddCallback(STextTB, XmNvalueChangedCallback, ChoiceCB, 
+    XtAddCallback(STextTB, XmNvalueChangedCallback, ChoiceCB,
 		  (XtPointer) &Text1);
 
     tcs = XmStringCreateLtoR("Text", XmFONTLIST_DEFAULT_TAG);
@@ -588,7 +588,7 @@ CreatePanel(void )
 
     XtManageChild(TextTB);
     XmStringFree(tcs);
-    XtAddCallback(TextTB, XmNvalueChangedCallback, ChoiceCB, 
+    XtAddCallback(TextTB, XmNvalueChangedCallback, ChoiceCB,
 		  (XtPointer) &Text2);
 
 
@@ -600,7 +600,7 @@ CreatePanel(void )
 
     XtManageChild(TextFTB);
     XmStringFree(tcs);
-    XtAddCallback(TextFTB, XmNvalueChangedCallback, ChoiceCB, 
+    XtAddCallback(TextFTB, XmNvalueChangedCallback, ChoiceCB,
 		  (XtPointer) &TextField1);
 
     return;
@@ -653,7 +653,7 @@ MakePixmap(Widget toplevel, char bits[], int width, int height)
                            DefaultDepthOfScreen(XtScreen(toplevel)));
 }
 
-static void 
+static void
 BackgroundCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     Arg  args[1];
@@ -664,7 +664,7 @@ BackgroundCB(Widget w, XtPointer client_data, XtPointer call_data)
     return;
 }
 
-static void 
+static void
 BackPixmapCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     Arg  args[1];
@@ -675,7 +675,7 @@ BackPixmapCB(Widget w, XtPointer client_data, XtPointer call_data)
     return;
 }
 
-static void 
+static void
 ForegroundCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     Arg  args[1];
@@ -686,16 +686,16 @@ ForegroundCB(Widget w, XtPointer client_data, XtPointer call_data)
     return;
 }
 
-static void 
+static void
 ChoiceCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     Arg  args[1];
     unsigned char value;
-    
+
     XtSetArg(args[0], XmNset, &value);
     XtGetValues(w, args, 1);
 
-    if (value == XmSET) 
+    if (value == XmSET)
 	current_text = * (Widget *) client_data;
 
     return;

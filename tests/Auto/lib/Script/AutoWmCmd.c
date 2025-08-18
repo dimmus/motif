@@ -1,5 +1,5 @@
 /* $TOG: AutoWmCmd.c /main/13 1999/02/24 17:39:34 mgreess $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,15 +20,15 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 
 /*
  *    File:    AutoWmCmd.c
  *
- *    Contains routines related with window manipulation.  
+ *    Contains routines related with window manipulation.
  *
  *
  */
@@ -81,20 +81,20 @@ extern void AutoError();
 
 
 
-static Boolean CheckWindowMenuItem( 
+static Boolean CheckWindowMenuItem(
                         Window window,
                         char *item_name);
 
-static Boolean CheckIconMenuItem( 
+static Boolean CheckIconMenuItem(
                         Window window,
                         char *item_name);
 
-static Boolean CheckWindowDecoration( 
+static Boolean CheckWindowDecoration(
                         Window window,
                         char *item_name,
                         Boolean *illegal);
 
-static void GetIconPosition( 
+static void GetIconPosition(
                         Window window,
                         IconRectInfo *icon_rect,
                         int *window_x,
@@ -102,19 +102,19 @@ static void GetIconPosition(
                         int *root_x,
                         int *root_y);
 
-static Boolean GetMwmFrameIconProp( 
+static Boolean GetMwmFrameIconProp(
                         Window window);
 
-static void SetMwmFrameIconProp( 
+static void SetMwmFrameIconProp(
                         Window window);
 
-static void DragPtr( 
+static void DragPtr(
                         Window window,
                         int button,
                         int dest_x,
                         int dest_y);
 
-static void PressMouseButton( 
+static void PressMouseButton(
                         Window window,
                         int button,
                         unsigned int button_state,
@@ -124,7 +124,7 @@ static void PressMouseButton(
                         int root_y,
                         Time time);
 
-static void ReleaseMouseButton( 
+static void ReleaseMouseButton(
                         Window window,
                         int button,
                         unsigned int button_state,
@@ -134,7 +134,7 @@ static void ReleaseMouseButton(
                         int root_y,
                         Time time);
 
-static void ClickMouseButton( 
+static void ClickMouseButton(
                         Window window,
                         int button,
                         unsigned int click_count,
@@ -143,11 +143,11 @@ static void ClickMouseButton(
                         int root_x,
                         int root_y);
 
-static void GetNewButtonState( 
+static void GetNewButtonState(
                         int button,
                         int *button_state);
 
-static void PressKey( 
+static void PressKey(
                         Window window,
                         int keycode,
                         unsigned int key_state,
@@ -158,7 +158,7 @@ static void PressKey(
                         Time time,
 			Boolean postSystemMenu);
 
-static void ReleaseKey( 
+static void ReleaseKey(
                         Window window,
                         int keycode,
                         unsigned int key_state,
@@ -169,7 +169,7 @@ static void ReleaseKey(
                         Time time,
 			Boolean postSystemMenu);
 
-static void ClickKey( 
+static void ClickKey(
                         Window window,
                         KeySym keysym,
                         int click_count,
@@ -180,35 +180,35 @@ static void ClickKey(
                         int root_y,
 			Boolean postSystemMenu);
 
-static void GetKeyButtonState( 
+static void GetKeyButtonState(
                         Window window,
                         int *key_state,
                         int *button_state);
 
-static void GetPointerLocation( 
+static void GetPointerLocation(
                         Window window,
                         int *window_x,
                         int *window_y,
                         int *root_x,
                         int *root_y);
 
-static Boolean GetWindowGeometry( 
+static Boolean GetWindowGeometry(
                         Window window,
                         int *window_x,
                         int *window_y,
                         unsigned int *window_width,
                         unsigned int *window_height);
 
-static void GetCurrentTime( 
+static void GetCurrentTime(
                         Window window,
                         Time *time);
 
-static Boolean IsMenuItemSensitive( 
+static Boolean IsMenuItemSensitive(
                         Window window,
                         int item_num,
                         char *item_name);
 
-static void GetMenuItemLocation( 
+static void GetMenuItemLocation(
                         Window window,
                         int item_num,
                         int total_items,
@@ -216,12 +216,12 @@ static void GetMenuItemLocation(
                         int *item_y,
 			MenuInfo *menu_info);
 
-static Boolean GetMenuItemNum( 
+static Boolean GetMenuItemNum(
                         Window window,
                         char *item_name,
                         int *item_num);
 
-static Boolean GetNumClicks( 
+static Boolean GetNumClicks(
                         Window window,
                         int item_num,
                         int *num_clicks);
@@ -230,14 +230,14 @@ static void do_nothing( void );
 
 static void RefreshWindow( void );
 static void WindowMenuUnpost(
-			     Window frameWin, 
+			     Window frameWin,
 			     Window menuWin);
 static void IconMenuUnpost(
-			     Window iconFrameWin, 
-			     Window menuWin, 
-			     int window_x, 
-			     int window_y, 
-			     int root_x, 
+			     Window iconFrameWin,
+			     Window menuWin,
+			     int window_x,
+			     int window_y,
+			     int root_x,
 			     int root_y);
 
 #ifndef AUTOMATION
@@ -260,7 +260,7 @@ static Boolean DoMove(
 static Boolean DoResize(
 			 Window window,
 			 XtPointer data);
-		       
+
 
 
 static Boolean DoMenuItemSelect(
@@ -270,7 +270,7 @@ static Boolean DoMenuItemSelect(
 static Boolean DoIconMenuItemSelect(
 			 Window window,
 			 XtPointer data);
-		         
+
 static Boolean DoMenuPost(
 			 Window window,
 			 XtPointer data);
@@ -283,26 +283,26 @@ static Boolean DoMenuUnpost(
 static Boolean DoDeconify(
 			  Window window,
 			  XtPointer data);
-			  
+
 static Boolean DoIconMove(
 			  Window window,
 			  XtPointer data);
-			  
+
 static Boolean DoIconMenuPost(
 			  Window window,
 			  XtPointer data);
-			  
+
 static Boolean DoIconMenuUnpost(
 			  Window window,
 			  XtPointer data);
-			  
+
 static void SendMessage(
 			ClientData *client_data,
 			XtPointer data,
 			int function,
 			Time time);
 
-static void SendUTMMessage (              
+static void SendUTMMessage (
 		   Widget requestor,
 		   Atom selection,
 		   Atom target,
@@ -314,13 +314,13 @@ static void SendUTMMessage (
 		   Time time
 		   );
 
-void UTMDestinationProc (              
+void UTMDestinationProc (
 				Widget w,
 				XtPointer call_data,
 				XtPointer client_data);
 
 static void SelectionValueReceived (
-			   Widget w, 
+			   Widget w,
 			   XtPointer clientData,
 			   XtPointer callData);
 
@@ -335,7 +335,7 @@ static XtPointer PackCARD32(
 			    CARD32 val);
 static XtPointer PackCARD16(
 			    XtPointer data,
-			    CARD16 val);	
+			    CARD16 val);
 static XtPointer PackCARD8(
 			   XtPointer data,
 			   CARD8 val);
@@ -345,7 +345,7 @@ static XtPointer PackString(
 
 static CARD32 UnpackCARD32(
 			    XtPointer *data);
-			   
+
 static CARD16 UnpackCARD16(
 			    XtPointer *data);
 
@@ -463,7 +463,7 @@ AutoWmRaise(
 
 
 
-    
+
 
 } /* AutoWmRaise */
 
@@ -506,7 +506,7 @@ AutoWmDeIconify(
 
   icon_rect = &frame_icon_prop.iconInfo;
 
-    
+
 
   GetIconPosition(window, icon_rect, &window_x, &window_y, &root_x, &root_y);
 
@@ -600,7 +600,7 @@ AutoWmIconify(
 
     event_window = frame_icon_prop.frameWin;
 
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -661,7 +661,7 @@ AutoWmIconify(
 } /* AutoWmIconify */
 
 
-   
+
 
 
 
@@ -671,7 +671,7 @@ AutoWmIconify(
 #ifdef AUTOMATION
 Boolean
 #else
-void 
+void
 #endif /* AUTOMATION */
 AutoWmMaximize(
         Window window )
@@ -713,7 +713,7 @@ AutoWmMaximize(
     event_window = frame_icon_prop.frameWin;
     old_state = frame_icon_prop.iconInfo.clientState;
 
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -747,7 +747,7 @@ AutoWmMaximize(
     XtPointer msg,save;
     int size = 0;
     Time time;
-    
+
 
     time = GetTimestamp(display);
 
@@ -786,7 +786,7 @@ WindowMenuUnpost(
 
     GetPointerLocation(frameWin, &window_x, &window_y, &root_x, &root_y);
 
-    ClickKey(menuWin, XK_Escape, 1, 0, window_x, window_y, root_x, root_y, 
+    ClickKey(menuWin, XK_Escape, 1, 0, window_x, window_y, root_x, root_y,
 			 False);
 
     GetCurrentTime(frameWin, &time);
@@ -834,7 +834,7 @@ AutoWmMenuPost(
 
 	if (keyboard == True) {
 
-    	if (GetWindowGeometry(frame_icon_prop.frameWin, &frame_x, &frame_y, 
+    	if (GetWindowGeometry(frame_icon_prop.frameWin, &frame_x, &frame_y,
                           	  &window_width, &window_height) == False)
         	return(False);
 
@@ -853,7 +853,7 @@ AutoWmMenuPost(
 		}
 
 		else {
-			
+
 			window_x = window_width / 2;
 			window_y = window_height / 2;
 			root_x = frame_x + window_x;
@@ -863,7 +863,7 @@ AutoWmMenuPost(
 
     	LocatePtr(frame_icon_prop.frameWin, root_x, root_y);
 		GetCurrentTime(frame_icon_prop.frameWin, &time);
-    	ClickKey(frame_icon_prop.frameWin, XK_space, 1, 
+    	ClickKey(frame_icon_prop.frameWin, XK_space, 1,
 				 Mod1Mask, window_x, window_y, root_x, root_y, True);
 
 		GetCurrentTime(frame_icon_prop.frameWin, &time);
@@ -877,7 +877,7 @@ AutoWmMenuPost(
 
     event_window = frame_icon_prop.frameWin;
 
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -888,7 +888,7 @@ AutoWmMenuPost(
     root_y = frame_y + window_y;
     LocatePtr(event_window, root_x, root_y);
     GetCurrentTime(frame_icon_prop.frameWin, &time);
-    PressMouseButton(frame_icon_prop.frameWin, Button1, 0, 
+    PressMouseButton(frame_icon_prop.frameWin, Button1, 0,
                       window_x, window_y, root_x, root_y, time);
 
     GetCurrentTime(frame_icon_prop.frameWin, &time);
@@ -918,7 +918,7 @@ AutoWmMenuPost(
     cdata.window = window;
 
     window_menu_post_data.keyboard = keyboard;
-    
+
 
     SendMessage (&cdata, save, size, time);
 
@@ -1007,7 +1007,7 @@ AutoWmMenuUnpost(
  *    item_num is -1, and item_name is not present in the menu,
  *    item_num is -1, and item_name is insensitive.
  *
- * Otherwise, 
+ * Otherwise,
  *
  *	  it calculates the position of the item in the menu window
  *	  it moves the pointer to that position
@@ -1028,7 +1028,7 @@ void
 AutoWmMenuSelect(
         Window window,
         int item_num,
-        char *item_name, 
+        char *item_name,
 		Boolean keyboard )
 {
 
@@ -1058,14 +1058,14 @@ AutoWmMenuSelect(
     if (GetMwmFrameIconProp(window) == False)
                 retval = False;
 
-    if (item_num > frame_icon_prop.menuItemCount || 
+    if (item_num > frame_icon_prop.menuItemCount ||
         item_num > MAX_MENU_ITEMS) {
  if (item_num > frame_icon_prop.menuItemCount)
-                        sprintf(warn_buf, 
+                        sprintf(warn_buf,
                         _AutoMessages[SCRMSG13],
                         item_num, frame_icon_prop.menuItemCount);
     else
-                        sprintf(warn_buf, 
+                        sprintf(warn_buf,
                         _AutoMessages[SCRMSG14],
                         item_num, MAX_MENU_ITEMS);
                 AutoMessage(warn_buf);
@@ -1081,7 +1081,7 @@ AutoWmMenuSelect(
                         retval = False;
         if (GetMenuItemNum(window, item_name, &current_num) == False) {
 
-                        sprintf(warn_buf, 
+                        sprintf(warn_buf,
                                 _AutoMessages[SCRMSG15],
                                         item_name);
                         AutoMessage(warn_buf);
@@ -1114,12 +1114,12 @@ AutoWmMenuSelect(
                 return(retval);
         }
 
-    GetMenuItemLocation(frame_icon_prop.menuWin, current_num, 
+    GetMenuItemLocation(frame_icon_prop.menuWin, current_num,
                         frame_icon_prop.menuItemCount, &item_x, &item_y,
                                                 &frame_icon_prop.windowMenu[current_num - 1]);
 
     LocatePtr(frame_icon_prop.frameWin, item_x, item_y);
-    GetPointerLocation(frame_icon_prop.menuWin, &window_x, &window_y, 
+    GetPointerLocation(frame_icon_prop.menuWin, &window_x, &window_y,
                        &root_x, &root_y);
     ClickMouseButton(frame_icon_prop.menuWin, Button1, 1, window_x, window_y,
                      root_x, root_y);
@@ -1162,9 +1162,9 @@ AutoWmMenuSelect(
 
     cdata.operation = WINDOW_MENU_ITEM_SELECT;
     cdata.window = window;
-    
 
-    
+
+
     SendMessage (&cdata,save, size, time);
 
 
@@ -1224,7 +1224,7 @@ AutoWmMove(
         return(False);
 
     event_window = frame_icon_prop.frameWin;
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -1238,9 +1238,9 @@ AutoWmMove(
                 NULL :
                 &frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect;
 
-    window_x = frame_icon_prop.windowX + title_rect->x + 
+    window_x = frame_icon_prop.windowX + title_rect->x +
                (title_rect->width / 2);
-    window_y = frame_icon_prop.windowY + title_rect->y + 
+    window_y = frame_icon_prop.windowY + title_rect->y +
                (title_rect->height / 2);
 
     /*
@@ -1271,7 +1271,7 @@ AutoWmMove(
     DragPtr(frame_icon_prop.frameWin, Button1, dest_x, dest_y);
 
 	RefreshWindow();
-        
+
     return(True);
 
 #else
@@ -1298,7 +1298,7 @@ AutoWmMove(
     cdata.operation = WINDOW_MOVE;
     cdata.window = window;
 
-    
+
     SendMessage (&cdata,save, size, time);
 
 #endif  /* AUTOMATION */
@@ -1311,7 +1311,7 @@ AutoWmMove(
 /*
  * Resize the window by locating the pointer at one of the resize handles,
  * and dragging the pointer to make the size of the window (width x height).
- * A valid  width argument is mandatory, whereas the height argument may be 
+ * A valid  width argument is mandatory, whereas the height argument may be
  * -1 if it is not to be considered. If the gravity specified is NORTH or
  * SOUTH, the width argument will be treated as height. If the gravity
  * specified is NORTHEAST, NORTHWEST, SOUTHEAST, or SOUTHWEST, and if
@@ -1374,12 +1374,12 @@ AutoWmResize(
     if (frame_icon_prop.resizeGadgets[gravity].id == -1)
         return(False);
   event_window = frame_icon_prop.frameWin;
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
     title_rect = &frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect;
-    title_height = (frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id != -1) ? 
+    title_height = (frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id != -1) ?
                     title_rect->height : 0;
 
     /*
@@ -1390,7 +1390,7 @@ AutoWmResize(
     x_incr = (frame_icon_prop.resizeGadgets[WM_EAST].id != -1) ?
              frame_icon_prop.resizeGadgets[WM_EAST].rect.width :
              frame_icon_prop.lowerBorderWidth;
-    y_incr = title_height + frame_icon_prop.lowerBorderWidth + 
+    y_incr = title_height + frame_icon_prop.lowerBorderWidth +
              frame_icon_prop.upperBorderWidth;
     act_width = width + (2 * x_incr);
     act_height = height + y_incr;
@@ -1482,7 +1482,7 @@ AutoWmResize(
     root_x = frame_x + window_x;
     root_y = frame_y + window_y;
 
-    /* 
+    /*
      * Compute the destination x, y depending on gravity,
      * and the computed x_incr, y_incr values (+ve or -ve).
      */
@@ -1601,7 +1601,7 @@ AutoWmResize(
      XSync(display, False);
 
     DragPtr(frame_icon_prop.frameWin, Button1, dest_x, dest_y);
-        
+
     GetCurrentTime(frame_icon_prop.frameWin, &time);
 
         RefreshWindow();
@@ -1616,7 +1616,7 @@ AutoWmResize(
     int size = 0;
     Time time;
 
-  
+
     time = GetTimestamp(display);
 
     size += sizeof(CARD32);          /* this is window id */
@@ -1723,7 +1723,7 @@ AutoWmFocus(
         return(False);
 
     event_window = frame_icon_prop.frameWin;
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -1737,7 +1737,7 @@ AutoWmFocus(
     ClickMouseButton(frame_icon_prop.frameWin, Button1, 1, window_x, window_y,
                      root_x, root_y);
 
-    return(True); 
+    return(True);
 
 #else
 
@@ -1802,7 +1802,7 @@ AutoWmIconMenuPost(
 
 	}
 
-	/* 
+	/*
 	 * If icon is inside an IconBox, iconMenu can not be posted via
 	 * keyboard.
 	 */
@@ -1826,7 +1826,7 @@ AutoWmIconMenuPost(
 	if (keyboard == True) {
 
 		GetCurrentTime(event_window, &time);
-    	ClickKey(event_window, XK_space, 1, 
+    	ClickKey(event_window, XK_space, 1,
 				 Mod1Mask, window_x, window_y, root_x, root_y, False);
 
 		GetCurrentTime(event_window, &time);
@@ -1862,7 +1862,7 @@ AutoWmIconMenuPost(
     cdata.window = window;
 
     icon_menu_post_data.keyboard = keyboard;
-    
+
 
     SendMessage (&cdata, save, size, time);
 
@@ -1872,7 +1872,7 @@ AutoWmIconMenuPost(
 
 
 static void
-IconMenuUnpost(Window iconFrameWin, Window menuWin, 
+IconMenuUnpost(Window iconFrameWin, Window menuWin,
 			   int window_x, int window_y, int root_x, int root_y)
 {
 
@@ -1880,7 +1880,7 @@ IconMenuUnpost(Window iconFrameWin, Window menuWin,
 	Time	time;
 
 
-    ClickKey(menuWin, XK_Escape, 1, 0, window_x, window_y, root_x, root_y, 
+    ClickKey(menuWin, XK_Escape, 1, 0, window_x, window_y, root_x, root_y,
 			 False);
 
 	GetCurrentTime(iconFrameWin, &time);
@@ -1925,7 +1925,7 @@ AutoWmIconMenuUnpost(
 
    	GetIconPosition(window, icon_rect, &window_x, &window_y, &root_x, &root_y);
 
-	IconMenuUnpost(icon_rect->iconFrameWin, frame_icon_prop.menuWin, 
+	IconMenuUnpost(icon_rect->iconFrameWin, frame_icon_prop.menuWin,
 				   window_x, window_y, root_x, root_y);
 
 	return(True);
@@ -1977,7 +1977,7 @@ AutoWmIconMenuUnpost(
  *    item_num is -1, and item_name is not present in the menu,
  *    item_num is -1, and item_name is insensitive.
  *
- * Otherwise, 
+ * Otherwise,
  *
  *    it generates the necessary number of DownArrow click events
  *     to select the specified item, and returns True.
@@ -1996,7 +1996,7 @@ void
 AutoWmIconMenuSelect(
         Window window,
         int item_num,
-        char *item_name, 
+        char *item_name,
 		Boolean keyboard )
 {
 #ifdef AUTOMATION
@@ -2013,7 +2013,7 @@ AutoWmIconMenuSelect(
     XWindowAttributes	        wattrs;
     IconRectInfo    	        *icon_rect;
 
-    
+
     retval = True;
 
     /*
@@ -2072,7 +2072,7 @@ AutoWmIconMenuSelect(
 	if (retval == False) {
 
 		icon_rect = &frame_icon_prop.iconInfo;
-		GetIconPosition(window, icon_rect, &window_x, &window_y, 
+		GetIconPosition(window, icon_rect, &window_x, &window_y,
 						&root_x, &root_y);
 		IconMenuUnpost(icon_rect->iconFrameWin, frame_icon_prop.menuWin,
 					   window_x, window_y, root_x, root_y);
@@ -2137,9 +2137,9 @@ AutoWmIconMenuSelect(
 
     cdata.operation = ICON_MENU_ITEM_SELECT;
     cdata.window = window;
-    
 
-    
+
+
     SendMessage (&cdata,save, size, time);
 
 
@@ -2211,7 +2211,7 @@ AutoWmIconMove(
 	LocatePtr(event_window, root_x, root_y);
 	DragPtr(event_window, Button1, dest_x, dest_y);
 
-	frame_icon_atom = XmInternAtom(display, 
+	frame_icon_atom = XmInternAtom(display,
 				"_MOTIF_WM_FRAME_ICON_INFO", False);
 
 	frame_icon_prop.iconInfo.X = x;
@@ -2230,7 +2230,7 @@ AutoWmIconMove(
 
     time = GetTimestamp(display);
 
-    
+
 
     size += sizeof(CARD32);          /* this is window id */
     size += sizeof(CARD32);          /* this is the mask we are passing in */
@@ -2270,15 +2270,15 @@ AutoWmItemCheck(
 	Boolean	illegal;
 
 
-	switch(group) 
+	switch(group)
 	    {
 	      case SYSTEM_MENU:
-	      if (CheckWindowMenuItem(window, item_name) == False) 
+	      if (CheckWindowMenuItem(window, item_name) == False)
 		  {
 		      fprintf(stdout, "%s NOT present as part of WindowSystemMenu\n", item_name);
 
 		  }
-	      else 
+	      else
 		  {
 		      fprintf(stdout, "%s IS present as part of WindowSystemMenu\n", item_name);
 
@@ -2288,12 +2288,12 @@ AutoWmItemCheck(
 	      break;
 
 	      case ICON_MENU:
-	      if (CheckIconMenuItem(window, item_name) == False) 
+	      if (CheckIconMenuItem(window, item_name) == False)
 		  {
 		      fprintf(stdout, "%s NOT present as part of IconMenu\n", item_name);
 
 		  }
-	      else 
+	      else
 		  {
 
 		      fprintf(stdout, "%s IS present as part of IconMenu\n", item_name);
@@ -2307,16 +2307,16 @@ AutoWmItemCheck(
 		  {
 		      if (illegal == True)
 			  retval = False;
-		      else 
+		      else
 			  {
 			      fprintf(stdout, "%s NOT present as part of decorations\n", item_name);
-							
+
 			      retval = True;
 
 			   }
 
 		  }
-	       else 
+	       else
 		   {
 
 		      fprintf(stdout, "%s IS present as part of decorations\n",item_name);
@@ -2484,7 +2484,7 @@ CheckWindowDecoration(
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -2495,7 +2495,7 @@ CheckWindowDecoration(
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state == IconicState)
 	    {
@@ -2596,12 +2596,12 @@ GetIconPosition(
             rx = icon_box_rect->iconboxX + wx;
             ry = icon_box_rect->iconboxY + wy;
             XTranslateCoordinates(display, icon_box_rect->iconShellWin,
-                                  event_window, wx, wy, 
+                                  event_window, wx, wy,
                                   &new_x, &new_y, &dummy_child);
             wx = new_x;
             wy = new_y;
             LocatePtr(event_window, rx, ry);
-            ClickMouseButton(event_window, Button1, vert_inc_needed, 
+            ClickMouseButton(event_window, Button1, vert_inc_needed,
                              wx, wy, rx, ry);
 
         }
@@ -2614,12 +2614,12 @@ GetIconPosition(
             rx = icon_box_rect->iconboxX + wx;
             ry = icon_box_rect->iconboxY + wy;
             XTranslateCoordinates(display, icon_box_rect->iconShellWin,
-                                  event_window, wx, wy, 
+                                  event_window, wx, wy,
                                   &new_x, &new_y, &dummy_child);
             wx = new_x;
             wy = new_y;
             LocatePtr(event_window, rx, ry);
-            ClickMouseButton(event_window, Button1, vert_inc_needed, 
+            ClickMouseButton(event_window, Button1, vert_inc_needed,
                              wx, wy, rx, ry);
 
         }
@@ -2631,12 +2631,12 @@ GetIconPosition(
             rx = icon_box_rect->iconboxX + wx;
             ry = icon_box_rect->iconboxY + wy;
             XTranslateCoordinates(display, icon_box_rect->iconShellWin,
-                                  event_window, wx, wy, 
+                                  event_window, wx, wy,
                                   &new_x, &new_y, &dummy_child);
             wx = new_x;
             wy = new_y;
             LocatePtr(event_window, rx, ry);
-            ClickMouseButton(event_window, Button1, horiz_inc_needed, 
+            ClickMouseButton(event_window, Button1, horiz_inc_needed,
                              wx, wy, rx, ry);
 
         }
@@ -2649,12 +2649,12 @@ GetIconPosition(
             rx = icon_box_rect->iconboxX + wx;
             ry = icon_box_rect->iconboxY + wy;
             XTranslateCoordinates(display, icon_box_rect->iconShellWin,
-                                  event_window, wx, wy, 
+                                  event_window, wx, wy,
                                   &new_x, &new_y, &dummy_child);
             wx = new_x;
             wy = new_y;
             LocatePtr(event_window, rx, ry);
-            ClickMouseButton(event_window, Button1, horiz_inc_needed, 
+            ClickMouseButton(event_window, Button1, horiz_inc_needed,
                              wx, wy, rx, ry);
 
         }
@@ -2669,13 +2669,13 @@ GetIconPosition(
 
 		if (vert_inc_needed != 0 || horiz_inc_needed != 0) {
 
-			frame_icon_atom = XmInternAtom(display, 
+			frame_icon_atom = XmInternAtom(display,
 									   	   "_MOTIF_WM_FRAME_ICON_INFO", False);
 
 			frame_icon_prop.iconBoxInfo.horiz_inc_needed =
 			frame_icon_prop.iconBoxInfo.vert_inc_needed = 0;
 			SetMwmFrameIconProp(window);
-	
+
 		}
 #endif /* AUTOMATION */
 
@@ -2729,7 +2729,7 @@ LocatePtr(
         dist = sqrt((double)(a*a + b*b));/* Calc current distance betw points */
 
         if (dist < PTR_MOVE_INCREMENT) { /* If within incr range set to end pt*/
-            x = dest_x;            
+            x = dest_x;
             y = dest_y;
         }
         else {                           /* Otherwise calc new x,y along line */
@@ -2780,7 +2780,7 @@ DragPtr(
 
     GetPointerLocation(window, &window_x, &window_y, &root_x, &root_y);
     GetCurrentTime(window, &time);
-    PressMouseButton(window, button, button_state, 
+    PressMouseButton(window, button, button_state,
                      window_x, window_y, root_x, root_y, time);
 
     /*
@@ -2794,7 +2794,7 @@ DragPtr(
 	XSync(display, False);
 
     GetNewButtonState(button, &button_state);
-    event_mask = (button == 1) ? Button1MotionMask : 
+    event_mask = (button == 1) ? Button1MotionMask :
                  ((button == 2) ? Button2MotionMask : Button3MotionMask);
     /* Move in increments */
     /* loop until position of mouse hotspot is over the destination */
@@ -2813,7 +2813,7 @@ DragPtr(
         dist = sqrt((double)(a*a + b*b));/* Calc current distance betw points */
 
         if (dist < PTR_MOVE_INCREMENT) { /* If within incr range set to end pt*/
-            x = dest_x;            
+            x = dest_x;
             y = dest_y;
         }
         else {                           /* Otherwise calc new x,y along line */
@@ -2851,7 +2851,7 @@ DragPtr(
 
     GetPointerLocation(window, &window_x, &window_y, &root_x, &root_y);
     GetCurrentTime(window, &time);
-    ReleaseMouseButton(window, button, button_state, 
+    ReleaseMouseButton(window, button, button_state,
                        window_x, window_y, root_x, root_y, time);
     XSync(display, False);
 
@@ -2954,11 +2954,11 @@ ClickMouseButton(
     for (i =0; i < click_count; i++) {
 
         button_state = 0;
-        PressMouseButton(window, button, button_state, 
+        PressMouseButton(window, button, button_state,
                          wx, wy, root_x, root_y, time);
         time += 1;
         GetNewButtonState(button, &button_state);
-        ReleaseMouseButton(window, button, button_state, 
+        ReleaseMouseButton(window, button, button_state,
                            wx, wy, root_x, root_y, time);
         XSync(display, False);
 
@@ -3155,7 +3155,7 @@ GetKeyButtonState(
                   &dummy_rootx, &dummy_rooty, &window_x, &window_y,
                   &key_buttons);
 
-    *button_state = key_buttons & (Button1Mask | Button2Mask | 
+    *button_state = key_buttons & (Button1Mask | Button2Mask |
                      Button3Mask | Button4Mask | Button5Mask);
     *key_state = key_buttons & (ShiftMask | LockMask | ControlMask |
                  Mod1Mask | Mod2Mask | Mod3Mask | Mod4Mask | Mod5Mask);
@@ -3178,7 +3178,7 @@ GetPointerLocation(
     int     rx, ry, wx, wy;
     unsigned int    key_buttons;
 
-    XQueryPointer(display, window, &root, &child, &rx, &ry, 
+    XQueryPointer(display, window, &root, &child, &rx, &ry,
                   &wx, &wy, &key_buttons);
     *root_x = rx;
     *root_y = ry;
@@ -3203,8 +3203,8 @@ GetWindowGeometry(
     int                 win_x, win_y;
     unsigned int        win_width, win_height, border_width, depth;
 
-    if (XGetGeometry(display, window, &root, &win_x, &win_y, 
-                     &win_width, &win_height, 
+    if (XGetGeometry(display, window, &root, &win_x, &win_y,
+                     &win_width, &win_height,
                      &border_width, &depth) == 0) {
 
         fprintf(stderr, "Error: Unable to get window geometry\n");
@@ -3248,10 +3248,10 @@ GetCurrentTime(
     my_property = XInternAtom(display,"my property",False);
     property_type  = XInternAtom(display,"INTEGER",True);
 
-    XChangeProperty(display, syncWindow, my_property, property_type, 
+    XChangeProperty(display, syncWindow, my_property, property_type,
                     8, PropModeReplace, &property_value, 1);
 
-    while(XCheckTypedWindowEvent(display, syncWindow, PropertyNotify, 
+    while(XCheckTypedWindowEvent(display, syncWindow, PropertyNotify,
                                  &event) == False)
        ;
 
@@ -3304,13 +3304,13 @@ GetMenuItemLocation(
 		do_nothing();
 
 	XGetWindowAttributes(display, window, &w_attrs);
-	XTranslateCoordinates(display, window, rootWindow, w_attrs.x, w_attrs.y, 
+	XTranslateCoordinates(display, window, rootWindow, w_attrs.x, w_attrs.y,
 					  	  &new_x, &new_y, &child);
 
 #ifdef DEBUG
 	fprintf(stderr, "Inside GetMenuItemLocation: \n");
 	fprintf(stderr, "x = %d y = %d width = %d height = %d border_width = %d\n",
-			w_attrs.x, w_attrs.y, w_attrs.width, w_attrs.height, 
+			w_attrs.x, w_attrs.y, w_attrs.width, w_attrs.height,
 			w_attrs.border_width);
 	fprintf(stderr, "new_x = %d new_y = %d\n", new_x, new_y);
 	fflush(stderr);
@@ -3477,7 +3477,7 @@ DoResize(
 
 
 
-    /* 
+    /*
      * data needed to do the resize
      */
 
@@ -3485,7 +3485,7 @@ DoResize(
     height = resize_data.height;
     gravity = resize_data.gravity;
 
-    if (width < 0) 
+    if (width < 0)
       {
         AutoMessage(_AutoMessages[SCRMSG4]);
         return False;
@@ -3494,11 +3494,11 @@ DoResize(
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
-    if (state_info->state == IconicState) 
+    if (state_info->state == IconicState)
       {
 
    	for (i = 0; i < 10; i++)
@@ -3506,9 +3506,9 @@ DoResize(
         XSync(display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
-        if (state_info->state == IconicState) 
+        if (state_info->state == IconicState)
 	  return False;
       }
 
@@ -3517,32 +3517,32 @@ DoResize(
     /* Unpack the data here */
 
 	/* resizeGadgets[WM_EAST].id */
-	frame_icon_prop.resizeGadgets[WM_EAST].id = UnpackCARD32(&data);    
-  
-	/* resizeGadgets[WM_EAST].rect.width */  
-       frame_icon_prop.resizeGadgets[WM_EAST].rect.width = UnpackCARD32(&data); 
+	frame_icon_prop.resizeGadgets[WM_EAST].id = UnpackCARD32(&data);
+
+	/* resizeGadgets[WM_EAST].rect.width */
+       frame_icon_prop.resizeGadgets[WM_EAST].rect.width = UnpackCARD32(&data);
 
 	/* resizeGadgets[WM_WEST].id */
-       frame_icon_prop.resizeGadgets[WM_WEST].id = UnpackCARD32(&data);    
-	
-  
-	/* resizeGadgets[WM_WEST].rect.width */  
-      frame_icon_prop.resizeGadgets[WM_WEST].rect.width = UnpackCARD32(&data); 
+       frame_icon_prop.resizeGadgets[WM_WEST].id = UnpackCARD32(&data);
 
-      frame_icon_prop.resizeGadgets[gravity].id = UnpackCARD32(&data);    
-      frame_icon_prop.resizeGadgets[gravity].rect.x = UnpackCARD32(&data); 
-      frame_icon_prop.resizeGadgets[gravity].rect.y = UnpackCARD32(&data); 
-      frame_icon_prop.resizeGadgets[gravity].rect.width = UnpackCARD32(&data); 
-      frame_icon_prop.resizeGadgets[gravity].rect.height = UnpackCARD32(&data); 
+
+	/* resizeGadgets[WM_WEST].rect.width */
+      frame_icon_prop.resizeGadgets[WM_WEST].rect.width = UnpackCARD32(&data);
+
+      frame_icon_prop.resizeGadgets[gravity].id = UnpackCARD32(&data);
+      frame_icon_prop.resizeGadgets[gravity].rect.x = UnpackCARD32(&data);
+      frame_icon_prop.resizeGadgets[gravity].rect.y = UnpackCARD32(&data);
+      frame_icon_prop.resizeGadgets[gravity].rect.width = UnpackCARD32(&data);
+      frame_icon_prop.resizeGadgets[gravity].rect.height = UnpackCARD32(&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.x = UnpackCARD32 (&data);
-  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y = UnpackCARD32 (&data);    
+  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.width = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.height = UnpackCARD32 (&data);
-  
-    frame_icon_prop.upperBorderWidth = UnpackCARD32(&data);         
-    frame_icon_prop.lowerBorderWidth = UnpackCARD32(&data);         
-    frame_icon_prop.frameWin = UnpackCARD32(&data);         
+
+    frame_icon_prop.upperBorderWidth = UnpackCARD32(&data);
+    frame_icon_prop.lowerBorderWidth = UnpackCARD32(&data);
+    frame_icon_prop.frameWin = UnpackCARD32(&data);
 
 
 
@@ -3554,12 +3554,12 @@ DoResize(
 
     event_window = frame_icon_prop.frameWin;
 
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
     title_rect = &frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect;
-    
+
 
     if (frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id == INVALID)
       title_height = 0;
@@ -3574,12 +3574,12 @@ DoResize(
      */
 
 
-    
+
     if (frame_icon_prop.resizeGadgets[WM_EAST].id == INVALID)
       x_incr = frame_icon_prop.lowerBorderWidth;
     else
       x_incr = frame_icon_prop.resizeGadgets[WM_EAST].rect.width;
-	
+
     y_incr = title_height + frame_icon_prop.lowerBorderWidth +
              frame_icon_prop.upperBorderWidth;
 
@@ -3676,7 +3676,7 @@ DoResize(
     root_x = frame_x + window_x;
     root_y = frame_y + window_y;
 
-    /* 
+    /*
      * Compute the destination x, y depending on gravity,
      * and the computed x_incr, y_incr values (+ve or -ve).
      */
@@ -3803,7 +3803,7 @@ DoResize(
 
 
     DragPtr(event_window, Button1, dest_x, dest_y);
-        
+
     GetCurrentTime(event_window, &time);
 
 	RefreshWindow();
@@ -3844,7 +3844,7 @@ DoDeiconify(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -3855,7 +3855,7 @@ DoDeiconify(Window window, XtPointer data)
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state != IconicState)
 	    return False;
@@ -3882,17 +3882,17 @@ DoDeiconify(Window window, XtPointer data)
 	icon_box_info.v_slider_area_height = UnpackCARD32 (&data);
 	icon_box_info.v_slider_y = UnpackCARD32 (&data);
 	icon_box_info.v_slider_area_y = UnpackCARD32 (&data);
-	icon_box_info.right_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.right_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.right_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.left_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.left_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.left_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.top_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.top_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.top_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.bottom_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_x = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_x = UnpackCARD32 (&data);
 	icon_box_info.icon_box_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_width = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_width = UnpackCARD32 (&data);
 	icon_box_info.icon_box_height = UnpackCARD32 (&data);
 	icon_box_info.icon_shell_win = UnpackCARD32 (&data);
 	icon_box_info.frame_win = UnpackCARD32 (&data);
@@ -3910,7 +3910,7 @@ DoDeiconify(Window window, XtPointer data)
     icon_y = frame_icon_prop.iconInfo.X;
 
     if (frame_icon_prop.iconInfo.useIconBox)
-        
+
     FillIconBoxInfo (&frame_icon_prop, &icon_box_info,icon_x,icon_y);
 
     icon_rect = &frame_icon_prop.iconInfo;
@@ -3929,7 +3929,7 @@ DoDeiconify(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 
     while (state_info->state == IconicState)
@@ -3938,7 +3938,7 @@ DoDeiconify(Window window, XtPointer data)
 	XSync (display,False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
       }
 
@@ -3978,7 +3978,7 @@ DoMenuPost(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -3989,7 +3989,7 @@ DoMenuPost(Window window, XtPointer data)
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state == IconicState)
 	    return False;
@@ -3997,17 +3997,17 @@ DoMenuPost(Window window, XtPointer data)
       }
 
     /*
-     * Unpack data from UTM 
+     * Unpack data from UTM
      */
   frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.x = UnpackCARD32 (&data);
-  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y = UnpackCARD32 (&data);    
+  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.width = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.height = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].id = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.x = UnpackCARD32 (&data);
-  frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.y = UnpackCARD32 (&data);    
+  frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.y = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.width = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.height = UnpackCARD32 (&data);
   frame_icon_prop.frameWin = UnpackCARD32 (&data);
@@ -4016,7 +4016,7 @@ DoMenuPost(Window window, XtPointer data)
     keyboard = window_menu_post_data.keyboard;
 	if (keyboard == True) {
 
-    	if (GetWindowGeometry(frame_icon_prop.frameWin, &frame_x, &frame_y, 
+    	if (GetWindowGeometry(frame_icon_prop.frameWin, &frame_x, &frame_y,
                           	  &window_width, &window_height) == False)
         	return(False);
 
@@ -4035,7 +4035,7 @@ DoMenuPost(Window window, XtPointer data)
 		}
 
 		else {
-			
+
 			window_x = window_width / 2;
 			window_y = window_height / 2;
 			root_x = frame_x + window_x;
@@ -4045,7 +4045,7 @@ DoMenuPost(Window window, XtPointer data)
 
     	LocatePtr(frame_icon_prop.frameWin, root_x, root_y);
 	GetCurrentTime(frame_icon_prop.frameWin, &time);
-    	ClickKey(frame_icon_prop.frameWin, XK_space, 1, 
+    	ClickKey(frame_icon_prop.frameWin, XK_space, 1,
 		 Mod1Mask, window_x, window_y, root_x, root_y, True);
 
 		GetCurrentTime(frame_icon_prop.frameWin, &time);
@@ -4059,7 +4059,7 @@ DoMenuPost(Window window, XtPointer data)
 
     event_window = frame_icon_prop.frameWin;
 
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -4070,7 +4070,7 @@ DoMenuPost(Window window, XtPointer data)
     root_y = frame_y + window_y;
     LocatePtr(event_window, root_x, root_y);
     GetCurrentTime(frame_icon_prop.frameWin, &time);
-    PressMouseButton(frame_icon_prop.frameWin, Button1, 0, 
+    PressMouseButton(frame_icon_prop.frameWin, Button1, 0,
                       window_x, window_y, root_x, root_y, time);
 
     GetCurrentTime(frame_icon_prop.frameWin, &time);
@@ -4134,7 +4134,7 @@ DoFocus(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -4145,7 +4145,7 @@ DoFocus(Window window, XtPointer data)
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state == IconicState)
 	    return False;
@@ -4158,10 +4158,10 @@ DoFocus(Window window, XtPointer data)
   frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.x = UnpackCARD32 (&data);
-  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y = UnpackCARD32 (&data);    
+  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y = UnpackCARD32 (&data);
   frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.width = UnpackCARD32 (&data);
-  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.height = UnpackCARD32 (&data);    
-frame_icon_prop.frameWin = UnpackCARD32 (&data);    
+  frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.height = UnpackCARD32 (&data);
+frame_icon_prop.frameWin = UnpackCARD32 (&data);
 
 
     if (frame_icon_prop.titleGadgetCount <= 0 ||
@@ -4169,7 +4169,7 @@ frame_icon_prop.frameWin = UnpackCARD32 (&data);
         return(False);
 
     event_window = frame_icon_prop.frameWin;
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
         return(False);
 
@@ -4183,7 +4183,7 @@ frame_icon_prop.frameWin = UnpackCARD32 (&data);
     ClickMouseButton(frame_icon_prop.frameWin, Button1, 1, window_x, window_y,
                      root_x, root_y);
 
-    return(True); 
+    return(True);
 
   }
 
@@ -4203,10 +4203,10 @@ DoWindowItemCheck(Window window, XtPointer data)
     group = item_check_data.group;
     strcpy (item_name,item_check_data.item_name);
     /*
-     * Unpack data from UTM 
+     * Unpack data from UTM
      */
 
-     
+
      frame_icon_prop.iconInfo.clientState = UnpackCARD32 (&data);
      frame_icon_prop.menuWin = UnpackCARD32 (&data);
      frame_icon_prop.menuItemCount = UnpackCARD32 (&data);
@@ -4215,7 +4215,7 @@ DoWindowItemCheck(Window window, XtPointer data)
 	     temp_string = (char *)UnpackString(&data);
 	     strcpy (frame_icon_prop.windowMenu[i].item_name, temp_string);
 	 }
-     
+
      frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data);
      frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id = UnpackCARD32 (&data);
      frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].id = UnpackCARD32 (&data);
@@ -4224,22 +4224,22 @@ DoWindowItemCheck(Window window, XtPointer data)
      frame_icon_prop.resizeGadgets[WM_NORTHWEST].id = UnpackCARD32 (&data);
      frame_icon_prop.upperBorderWidth = UnpackCARD32 (&data);
      frame_icon_prop.lowerBorderWidth = UnpackCARD32 (&data);
-		                            
 
 
 
 
-    switch(group) 
+
+    switch(group)
 	{
 	  case SYSTEM_MENU:
 
 
-	    if (CheckWindowMenuItem(window, item_name) == False) 
+	    if (CheckWindowMenuItem(window, item_name) == False)
 		{
 		    fprintf(stdout, "%s NOT present as part of WindowSystemMenu\n", item_name);
 
 		 }
-	    else 
+	    else
 		 {
 		    fprintf(stdout, "%s IS present as part of WindowSystemMenu\n", item_name);
 
@@ -4248,15 +4248,15 @@ DoWindowItemCheck(Window window, XtPointer data)
 
 	    break;
 
-	
+
 	  case ICON_MENU:
 
-	    if (CheckIconMenuItem(window, item_name) == False) 
+	    if (CheckIconMenuItem(window, item_name) == False)
 		{
 		    fprintf(stdout, "%s NOT present as part of IconMenu\n",item_name);
 
 		}
-	    else 
+	    else
 		{
 
 	            fprintf(stdout, "%s IS present as part of IconMenu\n", item_name);
@@ -4265,23 +4265,23 @@ DoWindowItemCheck(Window window, XtPointer data)
 	      retval = True;
 	      break;
 
-	    
+
 	  case WINDOW_DECORATION:
 
 	    if (CheckWindowDecoration(window, item_name, &illegal) == False)
 		{
 		    if (illegal == True)
 			retval = False;
-		     else 
+		     else
 			  {
 			      fprintf(stdout, "%s NOT present as part of decorations\n", item_name);
-							
+
 			      retval = True;
 
 			   }
 
 		  }
-	       else 
+	       else
 		   {
 
 		      fprintf(stdout, "%s IS present as part of decorations\n", item_name);
@@ -4333,7 +4333,7 @@ DoIconMenuPost(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -4346,7 +4346,7 @@ DoIconMenuPost(Window window, XtPointer data)
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state != IconicState)
 	    return False;
@@ -4375,17 +4375,17 @@ DoIconMenuPost(Window window, XtPointer data)
 	icon_box_info.v_slider_area_height = UnpackCARD32 (&data);
 	icon_box_info.v_slider_y = UnpackCARD32 (&data);
 	icon_box_info.v_slider_area_y = UnpackCARD32 (&data);
-	icon_box_info.right_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.right_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.right_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.left_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.left_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.left_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.top_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.top_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.top_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.bottom_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_x = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_x = UnpackCARD32 (&data);
 	icon_box_info.icon_box_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_width = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_width = UnpackCARD32 (&data);
 	icon_box_info.icon_box_height = UnpackCARD32 (&data);
 	icon_box_info.icon_shell_win = UnpackCARD32 (&data);
 	icon_box_info.frame_win = UnpackCARD32 (&data);
@@ -4403,10 +4403,10 @@ DoIconMenuPost(Window window, XtPointer data)
     icon_y = frame_icon_prop.iconInfo.X;
 
     if (frame_icon_prop.iconInfo.useIconBox)
-        
+
 	FillIconBoxInfo (&frame_icon_prop, &icon_box_info,icon_x,icon_y);
 
- 	/* 
+ 	/*
 	 * If icon is inside an IconBox, iconMenu can not be posted via
 	 * keyboard.
 	 */
@@ -4430,7 +4430,7 @@ DoIconMenuPost(Window window, XtPointer data)
 	if (keyboard == True) {
 
 		GetCurrentTime(event_window, &time);
-    	ClickKey(event_window, XK_space, 1, 
+    	ClickKey(event_window, XK_space, 1,
 				 Mod1Mask, window_x, window_y, root_x, root_y, False);
 
 		GetCurrentTime(event_window, &time);
@@ -4489,7 +4489,7 @@ DoIconMenuUnpost(
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -4520,17 +4520,17 @@ DoIconMenuUnpost(
 	icon_box_info.v_slider_area_height = UnpackCARD32 (&data);
 	icon_box_info.v_slider_y = UnpackCARD32 (&data);
 	icon_box_info.v_slider_area_y = UnpackCARD32 (&data);
-	icon_box_info.right_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.right_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.right_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.left_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.left_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.left_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.top_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.top_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.top_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.bottom_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_x = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_x = UnpackCARD32 (&data);
 	icon_box_info.icon_box_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_width = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_width = UnpackCARD32 (&data);
 	icon_box_info.icon_box_height = UnpackCARD32 (&data);
 	icon_box_info.icon_shell_win = UnpackCARD32 (&data);
 	icon_box_info.frame_win = UnpackCARD32 (&data);
@@ -4548,7 +4548,7 @@ DoIconMenuUnpost(
     icon_y = frame_icon_prop.iconInfo.X;
 
     if (frame_icon_prop.iconInfo.useIconBox)
-        
+
 	FillIconBoxInfo (&frame_icon_prop, &icon_box_info,icon_x,icon_y);
 
 
@@ -4560,7 +4560,7 @@ DoIconMenuUnpost(
 
    	GetIconPosition(window, icon_rect, &window_x, &window_y, &root_x, &root_y);
 
-	IconMenuUnpost(icon_rect->iconFrameWin, frame_icon_prop.menuWin, 
+	IconMenuUnpost(icon_rect->iconFrameWin, frame_icon_prop.menuWin,
 				   window_x, window_y, root_x, root_y);
 
 	return(True);
@@ -4599,7 +4599,7 @@ DoIconMove(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -4610,7 +4610,7 @@ DoIconMove(Window window, XtPointer data)
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state != IconicState)
 	    return False;
@@ -4659,7 +4659,7 @@ DoIconMove(Window window, XtPointer data)
 	      do_nothing();
 	XSync(display, False);
 
-        
+
 	DragPtr(event_window, Button1, dest_x, dest_y);
 
 	RefreshWindow();
@@ -4733,7 +4733,7 @@ DoIconify(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
@@ -4744,13 +4744,13 @@ DoIconify(Window window, XtPointer data)
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			    AnyPropertyType, &new_type, &new_format,
-			    &new_items, &new_bytes_after, 
+			    &new_items, &new_bytes_after,
 			    (unsigned char **)(&state_info));
 	if (state_info->state == IconicState)
 	    return False;
 
       }
-	
+
 
 
 
@@ -4762,7 +4762,7 @@ DoIconify(Window window, XtPointer data)
     frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data); /* cound of mwm gadgets */
 
     frame_icon_prop.titleGadgets[MWM_FRAME_MINIMIZE].id = UnpackCARD32 (&data);                 /* id, e.g FRAME_MINIMIZE */
-    
+
     frame_icon_prop.titleGadgets[MWM_FRAME_MINIMIZE].rect.x = UnpackCARD32 (&data);             /* x location */
 
     frame_icon_prop.titleGadgets[MWM_FRAME_MINIMIZE].rect.y = UnpackCARD32 (&data);             /* y location */
@@ -4781,7 +4781,7 @@ DoIconify(Window window, XtPointer data)
 
 
 
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
       return False;
 
@@ -4795,7 +4795,7 @@ DoIconify(Window window, XtPointer data)
                      root_x, root_y);
 
 
-     
+
 
     XSync(display, False);
 
@@ -4805,16 +4805,16 @@ DoIconify(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
-		        (unsigned char **)(&state_info));    
+			&new_items, &new_bytes_after,
+		        (unsigned char **)(&state_info));
     while (state_info->state != IconicState)
       {
 	do_nothing();
 	XSync (display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
-		        (unsigned char **)(&state_info));    
+			&new_items, &new_bytes_after,
+		        (unsigned char **)(&state_info));
       }
 
     return True;
@@ -4853,11 +4853,11 @@ DoIconMenuItemSelect(Window window, XtPointer data)
 
     item_num = icon_item_select_data.item_num;
     keyboard = icon_item_select_data.keyboard;
-   
+
     if (item_num == -1)
           strcpy (item_name,icon_item_select_data.item_name);
-    
-    
+
+
 
 
 
@@ -4877,7 +4877,7 @@ DoIconMenuItemSelect(Window window, XtPointer data)
 
 
     /*
-     * Unpack data from UTM 
+     * Unpack data from UTM
      */
 
 
@@ -4886,7 +4886,7 @@ DoIconMenuItemSelect(Window window, XtPointer data)
     frame_icon_prop.sensitiveItemCount = UnpackCARD32 (&data);
     frame_icon_prop.menuWin = UnpackCARD32 (&data);
     frame_icon_prop.frameWin = UnpackCARD32 (&data);
-    
+
 
     for (i=0; i < frame_icon_prop.menuItemCount && i < MAX_MENU_ITEMS; i++)
       {
@@ -4915,17 +4915,17 @@ DoIconMenuItemSelect(Window window, XtPointer data)
 	icon_box_info.v_slider_area_height = UnpackCARD32 (&data);
 	icon_box_info.v_slider_y = UnpackCARD32 (&data);
 	icon_box_info.v_slider_area_y = UnpackCARD32 (&data);
-	icon_box_info.right_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.right_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.right_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.left_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.left_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.left_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.top_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.top_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.top_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.bottom_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_x = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_x = UnpackCARD32 (&data);
 	icon_box_info.icon_box_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_width = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_width = UnpackCARD32 (&data);
 	icon_box_info.icon_box_height = UnpackCARD32 (&data);
 	icon_box_info.icon_shell_win = UnpackCARD32 (&data);
 	icon_box_info.frame_win = UnpackCARD32 (&data);
@@ -4939,7 +4939,7 @@ DoIconMenuItemSelect(Window window, XtPointer data)
 
       }
     if (frame_icon_prop.iconInfo.useIconBox)
-        
+
 	FillIconBoxInfo (&frame_icon_prop, &icon_box_info,icon_x,icon_y);
 
 
@@ -4986,7 +4986,7 @@ DoIconMenuItemSelect(Window window, XtPointer data)
 	if (retval == False) {
 
 		icon_rect = &frame_icon_prop.iconInfo;
-		GetIconPosition(window, icon_rect, &window_x, &window_y, 
+		GetIconPosition(window, icon_rect, &window_x, &window_y,
 						&root_x, &root_y);
 		IconMenuUnpost(icon_rect->iconFrameWin, frame_icon_prop.menuWin,
 					   window_x, window_y, root_x, root_y);
@@ -5036,7 +5036,7 @@ DoMenuItemSelect(Window window, XtPointer data)
 
 {
 
-  
+
 
 
     char    current_item[MAX_NAME_LEN + 1];
@@ -5058,11 +5058,11 @@ DoMenuItemSelect(Window window, XtPointer data)
 
     item_num = item_select_data.item_num;
     keyboard = item_select_data.keyboard;
-   
+
     if (item_num == -1)
           strcpy (item_name,item_select_data.item_name);
-    
-    
+
+
 
         retval = True;
 
@@ -5077,14 +5077,14 @@ DoMenuItemSelect(Window window, XtPointer data)
 
 
     /*
-     * Unpack data from UTM 
+     * Unpack data from UTM
      */
 
     frame_icon_prop.menuItemCount = UnpackCARD32 (&data);
     frame_icon_prop.sensitiveItemCount = UnpackCARD32 (&data);
     frame_icon_prop.menuWin = UnpackCARD32 (&data);
     frame_icon_prop.frameWin = UnpackCARD32 (&data);
-    
+
 
     for (i=0; i < frame_icon_prop.menuItemCount && i < MAX_MENU_ITEMS; i++)
       {
@@ -5114,17 +5114,17 @@ DoMenuItemSelect(Window window, XtPointer data)
 	icon_box_info.v_slider_area_height = UnpackCARD32 (&data);
 	icon_box_info.v_slider_y = UnpackCARD32 (&data);
 	icon_box_info.v_slider_area_y = UnpackCARD32 (&data);
-	icon_box_info.right_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.right_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.right_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.left_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.left_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.left_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.top_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.top_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.top_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);	
+	icon_box_info.bottom_arrow_x = UnpackCARD32 (&data);
 	icon_box_info.bottom_arrow_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_x = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_x = UnpackCARD32 (&data);
 	icon_box_info.icon_box_y = UnpackCARD32 (&data);
-	icon_box_info.icon_box_width = UnpackCARD32 (&data);	
+	icon_box_info.icon_box_width = UnpackCARD32 (&data);
 	icon_box_info.icon_box_height = UnpackCARD32 (&data);
 	icon_box_info.icon_shell_win = UnpackCARD32 (&data);
 	icon_box_info.frame_win = UnpackCARD32 (&data);
@@ -5139,17 +5139,17 @@ DoMenuItemSelect(Window window, XtPointer data)
       }
 
 
-    
 
-    if (item_num > frame_icon_prop.menuItemCount || 
+
+    if (item_num > frame_icon_prop.menuItemCount ||
         item_num > MAX_MENU_ITEMS) {
 
 		if (item_num > frame_icon_prop.menuItemCount)
-			sprintf(warn_buf, 
+			sprintf(warn_buf,
 	    "Item no. specified (%d) is > than total no. of menu items (%d)\n",
 	     item_num, frame_icon_prop.menuItemCount);
 		else
-	      sprintf(warn_buf, 
+	      sprintf(warn_buf,
 			_AutoMessages[SCRMSG14],
 			item_num, MAX_MENU_ITEMS);
 		AutoMessage(warn_buf);
@@ -5165,7 +5165,7 @@ DoMenuItemSelect(Window window, XtPointer data)
 			retval = False;
         if (GetMenuItemNum(window, item_name, &current_num) == False) {
 
-			sprintf(warn_buf, 
+			sprintf(warn_buf,
 				_AutoMessages[SCRMSG15],
 					item_name);
 			AutoMessage(warn_buf);
@@ -5189,7 +5189,7 @@ DoMenuItemSelect(Window window, XtPointer data)
 	if ((strcmp(current_item, "Size") == 0) ||
 		(strcmp(current_item, "Move") == 0)) {
 
-		
+
 		AutoMessage(_AutoMessages[SCRMSG17]);
 		retval = False;
 
@@ -5200,12 +5200,12 @@ DoMenuItemSelect(Window window, XtPointer data)
 		return(retval);
 	}
 
-    GetMenuItemLocation(frame_icon_prop.menuWin, current_num, 
+    GetMenuItemLocation(frame_icon_prop.menuWin, current_num,
                         frame_icon_prop.menuItemCount, &item_x, &item_y,
 			&frame_icon_prop.windowMenu[current_num - 1]);
 
     LocatePtr(frame_icon_prop.frameWin, item_x, item_y);
-    GetPointerLocation(frame_icon_prop.menuWin, &window_x, &window_y, 
+    GetPointerLocation(frame_icon_prop.menuWin, &window_x, &window_y,
                        &root_x, &root_y);
     ClickMouseButton(frame_icon_prop.menuWin, Button1, 1, window_x, window_y,
                      root_x, root_y);
@@ -5274,11 +5274,11 @@ DoMaximize(Window window, XtPointer data)
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
-    if (state_info->state == IconicState) 
+    if (state_info->state == IconicState)
       {
 
    	for (i = 0; i < 10; i++)
@@ -5286,9 +5286,9 @@ DoMaximize(Window window, XtPointer data)
         XSync(display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
-        if (state_info->state == IconicState) 
+        if (state_info->state == IconicState)
 	    return False;
 
       }
@@ -5299,23 +5299,23 @@ DoMaximize(Window window, XtPointer data)
       old_height = w_attributes.height;
 
     /*
-     * Assumed order of data is id, gadget count, x, y, width, height, event 
+     * Assumed order of data is id, gadget count, x, y, width, height, event
      * window
      */
-    
-    frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data);          
 
-    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].id = 
-      UnpackCARD32 (&data);            
-    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.x = 
+    frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data);
+
+    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].id =
+      UnpackCARD32 (&data);
+    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.x =
                            UnpackCARD32 (&data);         /* x location */
-    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.y 
+    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.y
                           = UnpackCARD32 (&data);         /* x location */
-    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.width 
+    frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.width
                           = UnpackCARD32 (&data);         /* x location */
     frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect.height
                           = UnpackCARD32 (&data);         /* x location */
-    frame_icon_prop.frameWin = UnpackCARD32 (&data);          
+    frame_icon_prop.frameWin = UnpackCARD32 (&data);
 
 
     rect = &frame_icon_prop.titleGadgets[MWM_FRAME_MAXIMIZE].rect;
@@ -5323,8 +5323,8 @@ DoMaximize(Window window, XtPointer data)
     event_window =  frame_icon_prop.frameWin;
 
 
-	
-     if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+
+     if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
        return False;
 
@@ -5334,7 +5334,7 @@ DoMaximize(Window window, XtPointer data)
      root_x = frame_x + window_x;
      root_y = frame_y + window_y;
      LocatePtr(event_window, root_x, root_y);
-     ClickMouseButton(event_window, Button1, 1, window_x, 
+     ClickMouseButton(event_window, Button1, 1, window_x,
 			     window_y,root_x, root_y);
 
      GetCurrentTime(event_window, &time);
@@ -5356,9 +5356,9 @@ DoMaximize(Window window, XtPointer data)
         new_width = w_attributes.width;
         new_height = w_attributes.height;
       }
-    
+
     RefreshWindow();
-	
+
     return True;
 
   }
@@ -5373,7 +5373,7 @@ DoMove(
 
         Window window,
         XtPointer data)
-        
+
 {
 
     AutoRectangle *title_rect, *menu_rect;
@@ -5403,11 +5403,11 @@ DoMove(
 
     XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
 
 
-    if (state_info->state == IconicState) 
+    if (state_info->state == IconicState)
       {
 
    	for (i = 0; i < 10; i++)
@@ -5415,16 +5415,16 @@ DoMove(
         XSync(display, False);
         XGetWindowProperty (display, window, wm_state, 0, 100, False,
 			AnyPropertyType, &new_type, &new_format,
-			&new_items, &new_bytes_after, 
+			&new_items, &new_bytes_after,
 			(unsigned char **)(&state_info));
-        if (state_info->state == IconicState) 
+        if (state_info->state == IconicState)
 	    return False;
 
       }
 
 
 
-    
+
 
 
 
@@ -5439,32 +5439,32 @@ DoMove(
 
     frame_icon_prop.titleGadgetCount = UnpackCARD32 (&data);
 
-    frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id  
-                       = UnpackCARD32 (&data);        
+    frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].id
+                       = UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.x =
-      UnpackCARD32 (&data);           
+      UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.y =
-      UnpackCARD32 (&data);           
+      UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.width =
-      UnpackCARD32 (&data);           
+      UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect.height =
-      UnpackCARD32 (&data);           
-    frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].id     
-                       = UnpackCARD32 (&data);             
+      UnpackCARD32 (&data);
+    frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].id
+                       = UnpackCARD32 (&data);
 
     frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.x =
-      UnpackCARD32 (&data);         
+      UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.y =
-      UnpackCARD32 (&data);           
+      UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.width =
-      UnpackCARD32 (&data);           
+      UnpackCARD32 (&data);
     frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect.height =
-      UnpackCARD32 (&data);           
+      UnpackCARD32 (&data);
     frame_icon_prop.upperBorderWidth = UnpackCARD32 (&data);
     frame_icon_prop.lowerBorderWidth = UnpackCARD32 (&data);
-    frame_icon_prop.windowX = UnpackCARD32 (&data);         
-    frame_icon_prop.windowY = UnpackCARD32 (&data);         
-    frame_icon_prop.frameWin = UnpackCARD32 (&data);           
+    frame_icon_prop.windowX = UnpackCARD32 (&data);
+    frame_icon_prop.windowY = UnpackCARD32 (&data);
+    frame_icon_prop.frameWin = UnpackCARD32 (&data);
 
     title_rect = &frame_icon_prop.titleGadgets[MWM_FRAME_TITLE].rect;
     menu_rect = &frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect;
@@ -5477,28 +5477,28 @@ DoMove(
       return False;
 
     event_window = frame_icon_prop.frameWin;
-	
-    if (GetWindowGeometry(event_window, &frame_x, &frame_y, 
+
+    if (GetWindowGeometry(event_window, &frame_x, &frame_y,
                           &window_width, &window_height) == False)
       return False;
-	
 
 
 
-	    
+
+
      window_x = title_rect->x + (title_rect->width / 2);
      window_y = title_rect->y + (title_rect->height / 2);
      root_x = frame_x + window_x;
      root_y = frame_y + window_y;
 
-     if (frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].id == INVALID)   
+     if (frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].id == INVALID)
        menu_rect = NULL;
     else menu_rect = &frame_icon_prop.titleGadgets[MWM_FRAME_SYSTEM].rect;
-	   
 
-     window_x = frame_icon_prop.windowX + title_rect->x + 
+
+     window_x = frame_icon_prop.windowX + title_rect->x +
 	       (title_rect->width / 2);
-     window_y = frame_icon_prop.windowX + title_rect->y + 
+     window_y = frame_icon_prop.windowX + title_rect->y +
                (title_rect->height / 2);
 
     /*
@@ -5506,7 +5506,7 @@ DoMove(
      * width, height of menu rectangle, and title rectangle, compute
      * the actual destination x, y to which the pointer should be moved.
      */
-    if (menu_rect == NULL) 
+    if (menu_rect == NULL)
        x_incr = 0;
     else
        x_incr = menu_rect->width;
@@ -5518,7 +5518,7 @@ DoMove(
        dest_y = y + y_incr;
 
        LocatePtr(event_window, root_x, root_y);
-  
+
         /*
 	 * The following 4 lines of code are here to overcome a
 	 * peculiar delay problem in mwm under either heavy load
@@ -5529,7 +5529,7 @@ DoMove(
 	      do_nothing();
 	XSync(display, False);
 
-        
+
 	DragPtr(event_window, Button1, dest_x, dest_y);
 
 	RefreshWindow();
@@ -5566,25 +5566,25 @@ SendUTMMessage (
 
   /* queue up the data which is pulled off in the UTMDestinationProc */
 
-   EnqueueUtmData (pUtmData);  
+   EnqueueUtmData (pUtmData);
 
 
   /* This causes the DestinationCB to be invoked. This is where the
      param data is transferred. */
 
 
-  if (!XmeNamedSink (w,         
+  if (!XmeNamedSink (w,
 		     selection,
 		     XmCOPY,
 		     (XtPointer)NULL,
 		     time))
     fprintf (stderr, "UTM Error: UTMSendMessage failed.\n");
-  
+
 }
 
 
 
-void 
+void
 UTMDestinationProc (Widget w, XtPointer client_data, XtPointer call_data)
 {
 
@@ -5592,13 +5592,13 @@ UTMDestinationProc (Widget w, XtPointer client_data, XtPointer call_data)
 
 
    /* pull off the real client data */
-  UTMPackageRec *pUtmData = (UTMPackageRec *)DequeueUtmData(); 
+  UTMPackageRec *pUtmData = (UTMPackageRec *)DequeueUtmData();
 
 
-  
+
 
   /* if no UTMData, then transfer can't be done.*/
-  
+
   if (pUtmData == NULL)
     return;
 
@@ -5611,7 +5611,7 @@ UTMDestinationProc (Widget w, XtPointer client_data, XtPointer call_data)
 			   dcs->selection); /* not used */
  /* make the transfer. This invokes the selection owner's ConvertCB.
     When done, UTMReplyReceived callback proc is called. */
-   
+
   XmTransferValue (dcs->transfer_id,
 		   pUtmData->target, /* target to convert against */
 		   pUtmData->doneProc, /* proc to call when done */
@@ -5664,7 +5664,7 @@ DequeueUtmData()
         ptr->prev->next = NULL;
       else
         dataQueue = NULL;
- 
+
       dataPtr = ptr->data;
       XtFree((char*)ptr);
     }
@@ -5676,7 +5676,7 @@ DequeueUtmData()
 
 
 
-static void 
+static void
 SendMessage(ClientData *client_data, XtPointer msg, int len, Time time)
 {
 
@@ -5690,15 +5690,15 @@ SendMessage(ClientData *client_data, XtPointer msg, int len, Time time)
 
 /*
  * These functions are called when the data becomes available
- */ 
-
-
-/*
- * This is the function that is called for all WM operations. 
  */
 
 
-static void 
+/*
+ * This is the function that is called for all WM operations.
+ */
+
+
+static void
 SelectionValueReceived (Widget w, XtPointer clientData, XtPointer callData)
 {
 
@@ -5716,7 +5716,7 @@ SelectionValueReceived (Widget w, XtPointer clientData, XtPointer callData)
 
 
 
-  
+
 
   /* Get the value of the selection by accessing the appropriate field in
      the callData structure */
@@ -5732,7 +5732,7 @@ SelectionValueReceived (Widget w, XtPointer clientData, XtPointer callData)
 
   win = ((ClientData *)clientData)->window;
   op =  ((ClientData *)clientData)->operation;
-  
+
 
 
   switch (op)
@@ -5829,7 +5829,7 @@ SelectionValueReceived (Widget w, XtPointer clientData, XtPointer callData)
 
 
     }
-  
+
 }
 
 
@@ -5883,7 +5883,7 @@ PackCARD32(XtPointer data, CARD32 val)
 
 
 
-    
+
 static XtPointer
 PackCARD16(XtPointer data, CARD16 val)
 {
@@ -5902,7 +5902,7 @@ PackCARD16(XtPointer data, CARD16 val)
  *	Returns: data - A pointer into the next empty location in the
  *                      data stream.
  */
-    
+
 static XtPointer
 PackCARD8(XtPointer data, CARD8 val)
 {
@@ -5924,7 +5924,7 @@ PackString(XtPointer data, String str)
     register int i, len = strlen(str);
 
     data = PackListNum(data, len);
-    for (i = 0; i < len; i++, str++) 
+    for (i = 0; i < len; i++, str++)
         data = PackCARD8(data, *str);
 
     return(data);
@@ -5936,7 +5936,7 @@ UnpackString(XtPointer *data_ptr)
     register int i;
     int len = UnpackListNum(data_ptr);
     char *str, *top = XtMalloc((len + 1) * sizeof(char));
-    
+
     for (str = top, i = 0; i < len; i++, str++) {
         *str = (char) UnpackCARD8(data_ptr);
     }
@@ -5994,8 +5994,8 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
         int                 sliderX, sliderY, slider_area_x, slider_area_y;
     int                 lastRow, lastCol;
 
-    
-    
+
+
     lastCol = ib->last_col;
     lastRow = ib->last_row;
     iPlaceW = ib->i_place_w;
@@ -6017,12 +6017,12 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
     visible_last_col = visible_first_col + num_visible_cols - 1;
     current_icon_col = iconX / iPlaceW;
   if ((visible_first_col == 0 && visible_last_col == lastCol) ||
-        (current_icon_col >= visible_first_col && 
+        (current_icon_col >= visible_first_col &&
          current_icon_col <= visible_last_col)) {
-        
+
         horiz_inc_needed = 0;
         if (num_visible_cols > 1)
-            pointerX = slider_area_x + (current_icon_col * iPlaceW) + 
+            pointerX = slider_area_x + (current_icon_col * iPlaceW) +
                        (iPlaceW / 2);
         else
             pointerX = slider_area_x + (iPlaceW / 2);
@@ -6037,7 +6037,7 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
     else if (current_icon_col > visible_last_col) {
 
         horiz_inc_needed = current_icon_col - visible_last_col;
-        pointerX = slider_area_x + 
+        pointerX = slider_area_x +
     ((visible_last_col - visible_first_col) * iPlaceW) +
                    (iPlaceW / 2);
 
@@ -6050,7 +6050,7 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
     vert_slider_inc = (iPlaceH * vslider_area_height) / (maxval - minval);
     sliderY = ib->v_slider_y;
     slider_area_y = ib->v_slider_area_y;
-    visible_first_row = round_quotient((sliderY - slider_area_y), 
+    visible_first_row = round_quotient((sliderY - slider_area_y),
                                        vert_slider_inc);
     num_visible_rows = round_quotient((vslider_area_height * (lastRow + 1)),
                                       (maxval - minval));
@@ -6058,11 +6058,11 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
     current_icon_row = iconY / iPlaceH;
 
     if ((visible_first_row == 0 && visible_last_row == lastRow) ||
-        (current_icon_row >= visible_first_row && 
+        (current_icon_row >= visible_first_row &&
          current_icon_row <= visible_last_row)) {
      vert_inc_needed = 0;
         if (num_visible_rows > 1)
-            pointerY = slider_area_y + (current_icon_row * iPlaceH) + 
+            pointerY = slider_area_y + (current_icon_row * iPlaceH) +
                        (iPlaceH / 2);
         else
             pointerY = slider_area_y + (iPlaceH / 2);
@@ -6077,7 +6077,7 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
     else if (current_icon_row > visible_last_row) {
 
         vert_inc_needed = current_icon_row - visible_last_row;
-        pointerY = slider_area_y + 
+        pointerY = slider_area_y +
                    ((visible_last_row - visible_first_row) * iPlaceH) +
                    (iPlaceH / 2);
 
@@ -6092,16 +6092,16 @@ static void FillIconBoxInfo(PropMotifWmFrameIconInfo *frame_icon_prop,
     frame_icon_prop->iconBoxInfo.iconShellWin = ib->icon_shell_win;
     frame_icon_prop->iconBoxInfo.left_arrowX = ib->left_arrow_x;
     frame_icon_prop->iconBoxInfo.left_arrowY = ib->left_arrow_y;
-    frame_icon_prop->iconBoxInfo.right_arrowX = ib->right_arrow_x; 
-    frame_icon_prop->iconBoxInfo.right_arrowY = ib->right_arrow_y; 
+    frame_icon_prop->iconBoxInfo.right_arrowX = ib->right_arrow_x;
+    frame_icon_prop->iconBoxInfo.right_arrowY = ib->right_arrow_y;
     frame_icon_prop->iconBoxInfo.top_arrowX = ib->top_arrow_x;
     frame_icon_prop->iconBoxInfo.top_arrowY = ib->top_arrow_y;
     frame_icon_prop->iconBoxInfo.bottom_arrowX = ib->bottom_arrow_x;
     frame_icon_prop->iconBoxInfo.bottom_arrowY = ib->bottom_arrow_y;
     frame_icon_prop->iconBoxInfo.iconFrameWin = ib->frame_win;
-     frame_icon_prop->iconBoxInfo.iconScrollWin = ib->scroll_win;  
-    frame_icon_prop->iconBoxInfo.hScrollWin = ib->h_scroll_win;  
-    frame_icon_prop->iconBoxInfo.vScrollWin = ib->v_scroll_win;  
+     frame_icon_prop->iconBoxInfo.iconScrollWin = ib->scroll_win;
+    frame_icon_prop->iconBoxInfo.hScrollWin = ib->h_scroll_win;
+    frame_icon_prop->iconBoxInfo.vScrollWin = ib->v_scroll_win;
 
 }
 
@@ -6153,8 +6153,8 @@ GetMwmFrameIconProp(
     unsigned long    new_nitems, new_bytes_after;
 
     frame_icon_atom = XmInternAtom(display, "_MOTIF_WM_FRAME_ICON_INFO", False);
-    XGetWindowProperty(display, window, frame_icon_atom, 0L, 
-                       PROP_MWM_FRAME_ICON_INFO_ELEMENTS, False, 
+    XGetWindowProperty(display, window, frame_icon_atom, 0L,
+                       PROP_MWM_FRAME_ICON_INFO_ELEMENTS, False,
                        AnyPropertyType, &new_type, &new_format,
                        &new_nitems, &new_bytes_after,
                        (unsigned char **)&ret_data);
@@ -6194,10 +6194,10 @@ SetMwmFrameIconProp(
 
 	Atom	frame_icon_atom;
 
-    frame_icon_atom = XmInternAtom(display, "_MOTIF_WM_FRAME_ICON_INFO", 
+    frame_icon_atom = XmInternAtom(display, "_MOTIF_WM_FRAME_ICON_INFO",
 								   False);
 	frame_icon_prop.byte_order = AutoByteOrderChar;
-    XChangeProperty(display, window, frame_icon_atom, frame_icon_atom, 
+    XChangeProperty(display, window, frame_icon_atom, frame_icon_atom,
 					8, PropModeReplace, (unsigned char *)&frame_icon_prop,
                     PROP_MWM_FRAME_ICON_INFO_ELEMENTS);
     XSync(display, False);
@@ -6205,6 +6205,3 @@ SetMwmFrameIconProp(
 } /* SetMwmFrameIconProp */
 
 #endif /* AUTOMATION */
-
-
-

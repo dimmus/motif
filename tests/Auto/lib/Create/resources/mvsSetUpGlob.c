@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,17 +19,17 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsSetUpGlob.c /main/7 1995/07/14 11:23:04 drk $"
 #endif
 #endif
 /***********************************************************************
-  	@(#)mvsSetUpGlob.c	1.11.1.2     Date:2/13/91                                 
+  	@(#)mvsSetUpGlob.c	1.11.1.2     Date:2/13/91
   	Author: SJS
 	History:
             05/08/90 SJS Create
@@ -73,9 +73,9 @@ MvsWidgetClassInfo *widget_class_info;
            (widget_class_info == iXmScrolledTextWidgetClass)) {
 
          	if(mvsGetResourceNum(widget_class_info,XmNfontList)
-							!= NON_EXISTENT) 
+							!= NON_EXISTENT)
 	        {
-                	XtSetArg(widget_class_info->common_args[n], 
+                	XtSetArg(widget_class_info->common_args[n],
 						XmNfontList, font_list);
                 	n++;
 	 	}

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TextField2.c /main/9 1995/07/13 19:34:38 drk $"
@@ -150,7 +150,7 @@ static void PopupCB1(Widget w, XtPointer client_data,
 
 	switch (client_fwp->flag)
 	{
-	case TW_CUT: 
+	case TW_CUT:
 		{
 		if	(!XmTextCut(client_fwp->w, bev->time))
 			printf("Cut failed!\n");
@@ -260,7 +260,7 @@ static void PopupCB2(Widget w, XtPointer client_data,
 
 	switch (client_fwp->flag)
 	{
-	case TW_CUT: 
+	case TW_CUT:
 		{
 		if	(!XmTextFieldCut(client_fwp->w, bev->time))
 			printf("Cut failed!\n");
@@ -378,7 +378,7 @@ char **argv;
 
 	/* initialize toolkit */
 	CommonTestInit(argc, argv);
-    
+
 	n = 0;
 	BBoard1 = XmCreateBulletinBoard(Shell1, "BBoard1", args, n);
 	XtManageChild(BBoard1);
@@ -388,7 +388,7 @@ char **argv;
 	tmp_string = XmStringCreate("MultiLine Text widget",
 		     XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 	Label1 = XmCreateLabel(BBoard1, "Label1", args, n);
 	XtManageChild(Label1);
         XmStringFree (tmp_string);
@@ -421,7 +421,7 @@ char **argv;
 		}
 
 	Popup1 = XmCreatePopupMenu(Text1, "Popup1", NULL, 0);
-	XtAddEventHandler(Text1, ButtonPressMask, False, PostIt, 
+	XtAddEventHandler(Text1, ButtonPressMask, False, PostIt,
 			  (XtPointer) Popup1);
 
 	ndx = 0;
@@ -431,7 +431,7 @@ char **argv;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup1Btn[ndx++] = XmCreateLabelGadget(Popup1, "Title1",
 		args, n);
-        XmStringFree (tmp_string);		
+        XmStringFree (tmp_string);
 
 
 
@@ -441,8 +441,8 @@ char **argv;
 	n = 0;
         tmp_string = XmStringCreate("Cut", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
-	
+
+
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Cut1",
 		args, n);
         XmStringFree (tmp_string);
@@ -468,13 +468,13 @@ char **argv;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Remove1",
 		           args, n);
         XmStringFree (tmp_string);
-	
+
         n = 0;
         tmp_string = XmStringCreate("HiLi Normal", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
         Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "HiLi_Normal1",
 	  	  args, n);
-        XmStringFree (tmp_string); 
+        XmStringFree (tmp_string);
 
 	n = 0;
         tmp_string = XmStringCreate("HiLi Selected", XmSTRING_DEFAULT_CHARSET);
@@ -489,7 +489,7 @@ char **argv;
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "HiLi_Secondary1",
 		args, n);
         XmStringFree (tmp_string);
-	
+
         n = 0;
         tmp_string=XmStringCreate("Toggle AddMode", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
@@ -498,11 +498,11 @@ char **argv;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("Set String NULL", 
+        tmp_string = XmStringCreate("Set String NULL",
                                      XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
-	
+
+
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "Set_String_NULL1",
 		args, n);
         XmStringFree (tmp_string);
@@ -529,7 +529,7 @@ char **argv;
 	n = 0;
         tmp_string=XmStringCreate("SetValue String", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 	/* test for PIR2806 */
 	Popup1Btn[ndx++] = XmCreatePushButtonGadget(Popup1, "SetValue_String1",
 		args, n);
@@ -578,7 +578,7 @@ char **argv;
 
 	/* create text field widget */
 	n = 0;
-        tmp_string = XmStringCreate("TextField widget", 
+        tmp_string = XmStringCreate("TextField widget",
                                      XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	XtSetArg(args[n], XmNy, 120); n++;
@@ -615,7 +615,7 @@ char **argv;
 		XmTextFieldGetBaseline(Text2));
 
 	Popup2 = XmCreatePopupMenu(Text2, "Popup2", NULL, 0);
-	XtAddEventHandler(Text2, ButtonPressMask, False, PostIt, 
+	XtAddEventHandler(Text2, ButtonPressMask, False, PostIt,
 			  (XtPointer) Popup2);
 
 	ndx = 0;
@@ -641,7 +641,7 @@ char **argv;
 	n = 0;
         tmp_string = XmStringCreate("Copy", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Copy2",
 		args, n);
@@ -662,7 +662,7 @@ char **argv;
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Remove2",
 		args, n);
         XmStringFree (tmp_string);
-	
+
         n = 0;
         tmp_string = XmStringCreate("HiLi Normal", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
@@ -685,13 +685,13 @@ char **argv;
         Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "HiLi_Secondary2",
 		 args, n);
         XmStringFree (tmp_string);
-        
+
 
 	n = 0;
-        tmp_string = XmStringCreate("Toggle AddMode", 
+        tmp_string = XmStringCreate("Toggle AddMode",
                                      XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Toggle_AddMode2",
 		args, n);
         XmStringFree (tmp_string);
@@ -700,11 +700,11 @@ char **argv;
 
 
 	n = 0;
-        tmp_string = XmStringCreate("Set String NULL", 
+        tmp_string = XmStringCreate("Set String NULL",
                                      XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
-	
+
+
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Set_String_NULL2",
 		args, n);
         XmStringFree (tmp_string);
@@ -718,7 +718,7 @@ char **argv;
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("Set String Orig", 
+        tmp_string = XmStringCreate("Set String Orig",
                                      XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Set_String_Orig2",
@@ -730,7 +730,7 @@ char **argv;
 	n = 0;
         tmp_string=XmStringCreate("SetValue String", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 
 	/* test for PIR2806 */
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "SetValue_String2",
@@ -740,7 +740,7 @@ char **argv;
 	n = 0;
         tmp_string=XmStringCreate("Show Pos 3", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 	Popup2Btn[ndx++] = XmCreatePushButtonGadget(Popup2, "Show_Pos_32",
 		args, n);
         XmStringFree (tmp_string);

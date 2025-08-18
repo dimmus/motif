@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StringDisp.c /main/6 1995/07/13 19:54:34 drk $"
@@ -77,22 +77,22 @@ char 			**argv;
 
 #ifdef MOTIF1_1
 
-	fnt = XLoadQueryFont(XtDisplay(Shell1), 
+	fnt = XLoadQueryFont(XtDisplay(Shell1),
 		 	"-Misc-Fixed-Medium-R-Normal--13-120-75-75-C-80-ISO8859-8");
 	if (fnt != NULL)
 		font1 = XmFontListCreate(fnt, "ISO8859-8");
 
-	fnt = XLoadQueryFont(XtDisplay(Shell1), 
+	fnt = XLoadQueryFont(XtDisplay(Shell1),
 		 	"-k14-screen-medium-r-normal--14-140-75-75-m-140-jisx0208.1983-1");
 	if (fnt != NULL)
 		font2 = XmFontListCreate(fnt, "jisx0208.1983-1");
 
 #else
 
-	fixed_font = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT, 
+	fixed_font = XmFontListEntryLoad(display, "fixed", XmFONT_IS_FONT,
 							 	  	 XmFONTLIST_DEFAULT_TAG);
 
-	if ((fontEntry1 = XmFontListEntryLoad(display, 
+	if ((fontEntry1 = XmFontListEntryLoad(display,
 					"-Misc-Fixed-Medium-R-Normal--13-120-75-75-C-80-ISO8859-8",
 					XmFONT_IS_FONT, "ISO8859-8")) == NULL) {
 
@@ -107,7 +107,7 @@ char 			**argv;
 	}
 	font1 = XmFontListAppendEntry(NULL, fontEntry1);
 
-	if ((fontEntry2 = XmFontListEntryLoad(display, 
+	if ((fontEntry2 = XmFontListEntryLoad(display,
 			"-k14-screen-medium-r-normal--14-140-75-75-m-140-jisx0208.1983-1",
 			XmFONT_IS_FONT, "jisx0208.1983-1")) == NULL) {
 
@@ -141,8 +141,8 @@ char 			**argv;
 	XtSetArg (args[n], XmNwidth, 100 ); n++;
 #endif
 
-	XtSetArg (args[n], XmNx, 10 ); n++; 
-	XtSetArg (args[n], XmNy, 50 ); n++;  
+	XtSetArg (args[n], XmNx, 10 ); n++;
+	XtSetArg (args[n], XmNy, 50 ); n++;
 	rowcolumn1 = XmCreateRowColumn(bboard, "rowcolumn1", args, n);
 	XtManageChild (rowcolumn1);
 
@@ -210,12 +210,12 @@ char 			**argv;
 
 	/* Begin XmeStringValid test */
 
-	if (XmeStringIsValid(not_an_XmString) == False) 
+	if (XmeStringIsValid(not_an_XmString) == False)
 	    fprintf(stderr, "XmeStringValid PASSED with an invalid string.\n");
 	else
 	    fprintf(stderr, "XmeStringValid FAILED with an invalid string.\n");
 
-	if (XmeStringIsValid(tcs) == True) 
+	if (XmeStringIsValid(tcs) == True)
 	    fprintf(stderr, "XmeStringValid PASSED with a valid string.\n");
 	else
 	    fprintf(stderr, "XmeStringValid FAILED with a valid string.\n");

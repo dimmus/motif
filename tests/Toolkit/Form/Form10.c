@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form10.c /main/4 1995/07/13 18:00:48 drk $"
@@ -49,7 +49,7 @@ char  **argv;
     XmString      tcs;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
@@ -95,7 +95,7 @@ char  **argv;
 
     CommonPause();
 
-   /* 
+   /*
       Note: either unmanaging and remanaging the Form, or unrealizing
       and realizing the Shell, will fix the ugly Shell sizing problem
       shown herein, PIR 1581.
@@ -113,13 +113,13 @@ char  **argv;
     XtSetValues(Form1, args, n);
 
     CommonPause();
-  
+
     XtDestroyWidget (ArrowBtn1);
 
     n = 0;
     XtSetArg(args[n], XmNfractionBase, 100);  n++;
     XtSetValues(Form1, args, n);
-   
+
    n = 0;
    XtSetArg (args[n], XmNleftAttachment, XmATTACH_POSITION);	n++;
    XtSetArg (args[n], XmNleftPosition, 10);			n++;
@@ -162,16 +162,3 @@ char  **argv;
 
    XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

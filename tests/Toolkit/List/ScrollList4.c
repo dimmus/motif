@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollList4.c /main/10 1995/07/13 18:24:32 drk $"
@@ -86,7 +86,7 @@ void  main (argc, argv)
     CommonPause();
 
     /*
-       Testing XmListItemPos() with valid and non-valid input 
+       Testing XmListItemPos() with valid and non-valid input
     */
 
     tcs = XmStringLtoRCreate("Item5", XmSTRING_DEFAULT_CHARSET);
@@ -106,10 +106,10 @@ void  main (argc, argv)
     XmStringFree(tcs);
 
     fflush(stdout);
- 
+
     CommonPause();
 
-    /* 
+    /*
        Add another Item1 to the List
     */
 
@@ -119,14 +119,14 @@ void  main (argc, argv)
 
     CommonPause();
 
-    /* 
-       Testing XmListGetMatchPos() with valid and invalid input 
+    /*
+       Testing XmListGetMatchPos() with valid and invalid input
     */
 
     printf("Determining what Positions Item1 is in....\n");
     if (XmListGetMatchPos(List1, tcs, &position_list, &position_count))
     {
-	printf("    - Item1 was found in %d slots ( slots ", position_count); 
+	printf("    - Item1 was found in %d slots ( slots ", position_count);
 	for (i = 0 ; i < position_count; i++)
 		printf("%d, ", position_list[i]);
 	printf(")\n");
@@ -135,12 +135,12 @@ void  main (argc, argv)
 	printf("    - No match for Item1 in the List\n");
 
     fflush(stdout);
-	
+
     tcs = XmStringLtoRCreate("Item10", XmSTRING_DEFAULT_CHARSET);
     printf("Determining what Positions Item10 is in....\n");
     if (XmListGetMatchPos(List1, tcs, &position_list, &position_count))
     {
-	printf("    - Item10 is found in %d slots ( slots ", position_count); 
+	printf("    - Item10 is found in %d slots ( slots ", position_count);
 	for (i = 0 ; i < position_count; i++)
 		printf("%d, ", position_list[i]);
 	printf(")\n\n");
@@ -154,7 +154,7 @@ void  main (argc, argv)
     CommonPause();
 
     /*
-       Testing XmListGetSelectedPos() with valid and invalid input 
+       Testing XmListGetSelectedPos() with valid and invalid input
     */
 
     position_count = 0;
@@ -170,7 +170,7 @@ void  main (argc, argv)
 	printf("    - No Items were found to be selected\n");
 
     fflush(stdout);
-    	
+
     CommonPause();
 
     printf("\n");
@@ -185,7 +185,7 @@ void  main (argc, argv)
     }
     else
 	printf("    - No Items were found to be selected\n");
-    	
+
     fflush(stdout);
     printf("\n");
 
@@ -253,9 +253,9 @@ static void ExtOrMulSelCB(Widget w, XtPointer client_data,
     XmString *selectedItems;
     int i, num_selected = 0;
 
-    selectedItemPos = 
+    selectedItemPos =
 		((XmListCallbackStruct*)call_data)->selected_item_positions;
-    selectedItems = 
+    selectedItems =
 		((XmListCallbackStruct*)call_data)->selected_items;
     num_selected = ((XmListCallbackStruct*)call_data)->selected_item_count;
     printf("%d items found to be selected.\n", num_selected);

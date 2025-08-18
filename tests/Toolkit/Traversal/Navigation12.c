@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation12.c /main/8 1995/07/13 19:41:16 drk $"
@@ -81,7 +81,7 @@ void  main (argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
 
     newfont = XLoadQueryFont(display, "9x15");
     newfontlist = XmFontListCreate(newfont, XmSTRING_DEFAULT_CHARSET);
@@ -120,24 +120,24 @@ void  main (argc, argv)
     XtSetArg (args[n], XmNverticalScrollBar, &vertSB); n++;
     XtGetValues ((XtParent(List1)), args, n);
 
-    XtAddEventHandler (vertSB, ButtonPressMask, FALSE, WarnMe, 
-			(XtPointer) NULL); 
+    XtAddEventHandler (vertSB, ButtonPressMask, FALSE, WarnMe,
+			(XtPointer) NULL);
 
     XtManageChild(List1);
- 
+
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);	n++;
     XtSetArg(args[n], XmNleftWidget, List1);                    n++;
     RowCol = XmCreateWorkArea(Form, "RowCol", args, n);
 
     n = 0;
-    PB1 = XmCreatePushButton (RowCol, "PB1", args, n); 
-    PB2 = XmCreatePushButton (RowCol, "PB2", args, n); 
-    PB3 = XmCreatePushButton (RowCol, "PB3", args, n); 
+    PB1 = XmCreatePushButton (RowCol, "PB1", args, n);
+    PB2 = XmCreatePushButton (RowCol, "PB2", args, n);
+    PB3 = XmCreatePushButton (RowCol, "PB3", args, n);
     XtManageChild (PB1);
     XtManageChild (PB2);
     XtManageChild (PB3);
-    
+
     XmAddTabGroup (RowCol);
     XtManageChild (RowCol);
 
@@ -218,21 +218,6 @@ void WarnMe (Widget w,
              XEvent *event,
              Boolean *continue_to_dispatch)
 {
-	printf ("The VertSB got that press event\n"); 
+	printf ("The VertSB got that press event\n");
 	fflush (stdout);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

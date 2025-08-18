@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Command1.c /main/7 1995/07/13 19:16:34 drk $"
@@ -112,7 +112,7 @@ void  main(argc, argv)
     ChildW = XmCommandGetChild(Command1,XmDIALOG_PROMPT_LABEL);
     printf("Prompt Label Child Name - %s\n", XtName(ChildW));
 
-    ChildW = XmCommandGetChild(Command1,XmDIALOG_COMMAND_TEXT); 
+    ChildW = XmCommandGetChild(Command1,XmDIALOG_COMMAND_TEXT);
     printf("Command Text Child Name - %s\n", XtName(ChildW));
 
     ChildW = XmCommandGetChild(Command1,XmDIALOG_HISTORY_LIST);
@@ -134,6 +134,6 @@ void  main(argc, argv)
     CommonPause();
     CommonPause();
     CommonPause();
-    
+
     XtAppMainLoop(app_context);
 }

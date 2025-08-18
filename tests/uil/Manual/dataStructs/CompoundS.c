@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CompoundS.c /main/4 1995/07/13 20:33:27 drk $"
@@ -40,7 +40,7 @@ static Boolean	no_dump = True;
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
     int		i, j,
     		errors = 0,
     		total_errors = 0;
@@ -75,7 +75,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -98,7 +98,7 @@ main(argc, argv)
 
     fprintf(stdout,"\nThe following table lists the X-generated ");
     fprintf(stdout,"compound strings\nand their creation methods:\n\n");
-    
+
     fprintf(stdout,"Number\tCreation Method\n");
     fprintf(stdout,"------\t---------------\n\n");
 
@@ -106,10 +106,10 @@ main(argc, argv)
     {
 	fprintf(stdout,"   %1d  \t%s\n", i+1, X_method[i]);
     }
-    
+
     fprintf(stdout,"\n\nThe following table lists the UIL-generated ");
     fprintf(stdout,"compound strings\nand their creation methods:\n\n");
-    
+
     fprintf(stdout,"Number\tCreation Method\n");
     fprintf(stdout,"------\t---------------\n\n");
 
@@ -117,7 +117,7 @@ main(argc, argv)
     {
 	fprintf(stdout,"   %1d  \t%s\n", i+1, UIL_method[i]);
     }
-    
+
 /*
  * Part 1
  */
@@ -164,7 +164,7 @@ main(argc, argv)
     fprintf(stdout,"Part 1: X-generated compound strings\n");
     fprintf(stdout,"------                vs\n");
     fprintf(stdout,"        UIL-generated compound strings\n\n");
-    
+
     fprintf(stdout,"\n");
     fprintf(stdout,"         \t   X    \t   X\n");
     fprintf(stdout,"Identical\tCreation\tCreation\n");
@@ -178,10 +178,10 @@ main(argc, argv)
     else
     {
 	errors++;
-	
+
 	fprintf(stdout,"   NO    \t    1   \t    2   \t  *\n");
-    }	
-		
+    }
+
     fprintf(stdout,"\n");
     fprintf(stdout,"         \t  UIL   \t  UIL\n");
     fprintf(stdout,"Identical\tCreation\tCreation\n");
@@ -199,7 +199,7 @@ main(argc, argv)
 	else
 	{
 	    errors++;
-	    
+
 	    fprintf(stdout,"   NO   \t    %1d   \t    %1d   \t  *\n", i+1,
 		    ((i+1)%3)+1);
 	}
@@ -223,7 +223,7 @@ main(argc, argv)
 	    else
 	    {
 		errors++;
-		
+
 		fprintf(stdout,"   NO    \t    %1d   \t    %1d   \t  *\n", i+1,
 			j+1);
 	    }
@@ -238,7 +238,7 @@ main(argc, argv)
 	{
 	    fprintf(stdout, "\n");
 	    fprintf(stdout, "--------- Error diagnostic report ---------\n\n");
-	
+
 	    fprintf(stdout, "The following table lists the individual");
 	    fprintf(stdout, " components\nof the X-generated compound");
 	    fprintf(stdout," strings:\n\n");
@@ -331,7 +331,7 @@ main(argc, argv)
     fprintf(stdout,"------                                vs\n");
     fprintf(stdout,"       UIL-generated compound strings fetched from ");
     fprintf(stdout,"UIL-generated widgets\n\n");
-    
+
     fprintf(stdout,"\n");
     fprintf(stdout,"         \t   X    \t   X\n");
     fprintf(stdout,"Identical\tCreation\tCreation\n");
@@ -345,10 +345,10 @@ main(argc, argv)
     else
     {
 	errors++;
-    
+
 	fprintf(stdout,"   NO    \t    1   \t    2   \t  *\n");
-    }	
-		
+    }
+
     fprintf(stdout,"\n");
     fprintf(stdout,"         \t  UIL   \t  UIL\n");
     fprintf(stdout,"Identical\tCreation\tCreation\n");
@@ -366,7 +366,7 @@ main(argc, argv)
 	else
 	{
 	    errors++;
-	    
+
 	    fprintf(stdout,"   NO    \t    %1d   \t    %1d   \t  *\n", i+1,
 		    ((i+1)%3)+1);
 	}
@@ -390,7 +390,7 @@ main(argc, argv)
 	    else
 	    {
 		errors++;
-		
+
 		fprintf(stdout,"   NO    \t    %1d   \t    %1d   \t  *\n", i+1,
 			j+1);
 	    }
@@ -405,7 +405,7 @@ main(argc, argv)
 	{
 	    fprintf(stdout, "\n");
 	    fprintf(stdout, "--------- Error diagnostic report ---------\n\n");
-	
+
 	    fprintf(stdout, "The following table lists the individual");
 	    fprintf(stdout, " components\nof the X-generated compound");
 	    fprintf(stdout," strings:\n\n");
@@ -435,7 +435,7 @@ main(argc, argv)
  */
 /*
  * Create the XStrings with XmStringSegmentCreate with the direction set
- * appropriately. The strings as we have set them up have already been 
+ * appropriately. The strings as we have set them up have already been
  * parsed so they may look differently than the uil representation but
  * the XmStrings themselves should be the same.
  */
@@ -474,7 +474,7 @@ main(argc, argv)
     fprintf(stdout,"Part 3: X-generated compound strings\n");
     fprintf(stdout,"------                vs\n");
     fprintf(stdout,"        UIL-generated compound strings\n\n");
-    
+
     fprintf(stdout,"\n");
     fprintf(stdout,"         \t  UIL\n");
     fprintf(stdout,"Identical\tCS String\n");
@@ -503,7 +503,7 @@ main(argc, argv)
 	{
 	    fprintf(stdout, "\n");
 	    fprintf(stdout, "--------- Error diagnostic report ---------\n\n");
-	
+
 	    fprintf(stdout, "The following table lists the individual");
 	    fprintf(stdout, " components\nof the X-generated compound");
 	    fprintf(stdout," strings:\n\n");
@@ -542,7 +542,7 @@ main(argc, argv)
     {
 	fprintf(stdout,"\nCompound String: all tests passed\n\n");
     }
-    
+
 /*
  * Close Mrm Hierarchy
  */
@@ -601,7 +601,7 @@ void dump_strings(string, n)
 	}
 	else
 	{
-	    segment = XmStringGetNextSegment(context, &text, charset, 
+	    segment = XmStringGetNextSegment(context, &text, charset,
 					     &direction, &separator);
 
 	    segment_number = 0;
@@ -681,7 +681,7 @@ void print_segment(segment, segment_number, text, charset, direction,
 
 {
     int	i, j;
-    
+
     fprintf(stdout,"                              Segment %d\n",
 	    segment_number);
 
@@ -703,7 +703,7 @@ void print_segment(segment, segment_number, text, charset, direction,
 	    fprintf(stdout, "                               ");
 	}
     }
-    
+
     fprintf(stdout,"\ncharset  :");
 
     for(i=0 ; i<=1 ; i++)
@@ -722,7 +722,7 @@ void print_segment(segment, segment_number, text, charset, direction,
 	    fprintf(stdout, "                               ");
 	}
     }
-    
+
     fprintf(stdout,"\ndirection:");
 
     for(i=0 ; i<=1 ; i++)
@@ -749,7 +749,7 @@ void print_segment(segment, segment_number, text, charset, direction,
 	{
 	    fprintf(stdout, "                               ");
 	}
-    }    
+    }
 
     fprintf(stdout, "\nseparator:");
 
@@ -772,4 +772,3 @@ void print_segment(segment, segment_number, text, charset, direction,
 	}
     }
 }
-    

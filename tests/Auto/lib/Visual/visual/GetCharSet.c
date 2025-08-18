@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetCharSet.c /main/7 1995/07/14 11:50:14 drk $"
@@ -64,14 +64,14 @@ char *requested_char_set;
     if (i == mvsNumLoadedFonts) {
        sprintf(msg_string, _AutoMessages[VISMSG38], requested_char_set,mvsFontInfo[0].char_set_name);
        AutoMessage(msg_string);
-                    
+
         i = 0;
     }
 
     if ((i < mvsNumFonts) && (mvsFontInfo[i].font_struct == NULL)) {
         sprintf (msg_string, _AutoMessages[VISMSG39], requested_char_set);
 	AutoMessage(msg_string);
-                    
+
         for (i=0; i<mvsNumFonts; i++) {
             if (mvsFontInfo[i].font_struct != NULL)
                 break;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Label4.c /main/8 1999/03/18 11:39:27 jff $"
@@ -54,14 +54,14 @@ char **argv;
 
   /*  initialize toolkit  */
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 400); n++;
   XtSetArg (args[n], XmNheight, 400); n++;
   XtSetValues(Shell1, args, n);
 
   /*  The drawing area creation.  Contained in an outer frame.  */
-  
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 400);	n++;
   XtSetArg (args[n], XmNheight, 400);	n++;
@@ -156,7 +156,7 @@ char **argv;
     printf ("XmDestroy should have failed.\n");
 
   CommonPause();
-   
+
   /* End */
   XtDestroyWidget(label3);
   XtDestroyWidget(label2);

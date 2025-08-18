@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -32,7 +32,7 @@ static 	void  OkCB();
 static  void  FocusCB();
 static  void  PrintMessage();
 Widget  shell;
-Widget  mbox; 
+Widget  mbox;
 
 void main (argc,argv)
 unsigned int argc;
@@ -49,14 +49,14 @@ char **argv;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg (args[n], XmNwidth, 400);                     n++;
     XtSetArg (args[n], XmNheight, 400);                    n++;
     XtSetValues(Shell1, args, n);
-    
 
-    tcs = XmStringCreateLtoR("DialogStyle Unmanaged Test", 
+
+    tcs = XmStringCreateLtoR("DialogStyle Unmanaged Test",
 			     XmSTRING_DEFAULT_CHARSET);
     tcs2 = XmStringCreateLtoR("UnManage", XmSTRING_DEFAULT_CHARSET);
 
@@ -64,7 +64,7 @@ char **argv;
     newfontlist = XmFontListCreate(newfont, XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
-    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_MODELESS);	  n++; 
+    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_MODELESS);	  n++;
     XtSetArg (args[n], XmNmessageString, tcs);			  n++;
     XtSetArg (args[n], XmNokLabelString, tcs2);			  n++;
     XtSetArg (args[n], XmNautoUnmanage, False);                   n++;
@@ -91,7 +91,7 @@ char **argv;
     XtRemoveCallback(mbox, XmNfocusCallback, FocusCB, NULL);
 
     n = 0;
-    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_SYSTEM_MODAL);	  n++; 
+    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_SYSTEM_MODAL);	  n++;
     XtSetValues (mbox, args, n);
 
     XtManageChild(mbox);
@@ -101,7 +101,7 @@ char **argv;
     tcs = XmStringCreateLtoR(" DialogType Unmanaged Test ", XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
-    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL);  n++; 
+    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL);  n++;
     XtSetArg (args[n], XmNmessageString, tcs);			n++;
     XtSetArg (args[n], XmNdialogType, XmDIALOG_QUESTION);	n++;
     XtSetValues (mbox, args, n);
@@ -117,7 +117,7 @@ char **argv;
 
     db = XmMessageBoxGetChild (mbox, XmDIALOG_DEFAULT_BUTTON);
 
-    if (db != NULL) 
+    if (db != NULL)
       printf ("The default button is %s\n", XtName (db));
     else {
       printf ("There is no default button! I am setting one.\n");
@@ -136,7 +136,7 @@ char **argv;
     XtSetValues (XmMessageBoxGetChild (mbox, XmDIALOG_CANCEL_BUTTON), args, n);
 
     n = 0;
-    XtSetArg (args[n], XmNlabelString, 
+    XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("does nothing")); n++;
     XtSetValues (XmMessageBoxGetChild (mbox, XmDIALOG_OK_BUTTON), args, n);
 
@@ -146,7 +146,7 @@ char **argv;
     XmStringFree(tcs2);
 
     n = 0;
-    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_MODELESS);	  n++; 
+    XtSetArg (args[n], XmNdialogStyle, XmDIALOG_MODELESS);	  n++;
     XtSetValues (mbox, args, n);
     XtManageChild (mbox);
 
@@ -157,7 +157,7 @@ char **argv;
 
     db = XmMessageBoxGetChild (mbox, XmDIALOG_DEFAULT_BUTTON);
 
-    if (db != NULL) 
+    if (db != NULL)
       printf ("The default button is %s\n", XtName (db));
     else {
       printf ("There is no default button! I am setting one.\n");

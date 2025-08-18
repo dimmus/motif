@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsAction.c /main/7 1995/07/14 11:38:34 drk $"
@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: IsAction.c /main/7 1995/07/14 11:38:34 drk 
 
         INPUTS:
             none
-        
+
         OUTPUTS:
             none
 
@@ -61,7 +61,7 @@ int object_type_in;
     int succeed = 1;
 
     if (!xisInform.is_valid)
-        AutoMessage(_AutoMessages[WARNMSG127]); 
+        AutoMessage(_AutoMessages[WARNMSG127]);
 
     if (object == NULL)
         return 0;
@@ -69,9 +69,9 @@ int object_type_in;
     while (object != NULL && cum_object_type > 0) {
 
         tmp = cum_object_type / xisNumObjectTypes;
-        
+
         object_type = cum_object_type - (tmp*xisNumObjectTypes);
-     
+
         if (object->id.object_type != object_type) {
             succeed = 0;
             break;

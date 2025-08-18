@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This is a cascadeButton widget with\nthe following characteristics:\n\n" &
@@ -31,6 +31,4 @@
 "ight, marginLeft,\n     marginTop, and marginBottom\n     are 8\n   - mappingDelay " &
 "is 1000\n   - activateCallback is ON, but you\n     should see only the\n     cascadingCallback message.\n" &
 "   - cascadingCallback is ON\n" &
-"\nAll other resources are set by default.\n"; 
-
-
+"\nAll other resources are set by default.\n";

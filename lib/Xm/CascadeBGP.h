@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef  _XmCascadeBGP_h
 #define  _XmCascadeBGP_h
 
@@ -117,7 +117,7 @@ typedef struct _XmCascadeButtonGadgetRec
 
 /* CascadeButton class structure */
 
-typedef struct 
+typedef struct
 {
   XtPointer	extension;	/* Pointer to extension record */
 } XmCascadeButtonGadgetClassPart;
@@ -125,7 +125,7 @@ typedef struct
 
 /* Full class record declaration for CascadeButton class */
 
-typedef struct _XmCascadeButtonGadgetClassRec 
+typedef struct _XmCascadeButtonGadgetClassRec
 {
   RectObjClassPart               rect_class;
   XmGadgetClassPart              gadget_class;
@@ -192,7 +192,7 @@ externalref XmCascadeButtonGadgetClassRec   xmCascadeButtonGadgetClassRec;
 					    XmCBG_WAS_POSTED_BIT, v)
 
 
-				  
+
 /* Access macro definitions  for Cached fields*/
 
 #define CBG_CascadePixmap(cb)   (((XmCascadeButtonGadget)                    \

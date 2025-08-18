@@ -32,7 +32,7 @@ $set 1
 29 %s item not allowed in %s %s
 30 compilation terminated - please fix previous errors
 31 internal error - please submit defect report
-32  
+32
 33 %s missing following \"%s\" option
 34 error opening listing file: %s
 35 error writing to listing file: %s
@@ -89,9 +89,9 @@ $set 2
 
 $set 3
 
-1 Info: 
-2 Warning: 
-3 Error: 
-4 Severe: 
+1 Info:
+2 Warning:
+3 Error:
+4 Severe:
 5 \t\t line: %d  file: %s
 6 \t\t line: %d  position: %d  file: %s

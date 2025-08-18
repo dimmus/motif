@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -39,11 +39,11 @@
 
 /*********************************************************************
  *
- *  XmChangeColor - change set of colors for existing widget, given 
+ *  XmChangeColor - change set of colors for existing widget, given
  *                  background color
  *
  *********************************************************************/
-void 
+void
 XmChangeColor(
 	      Widget w,
 	      Pixel background )
@@ -53,7 +53,7 @@ XmChangeColor(
   Pixel foreground_ret;
   Pixel topshadow_ret;
   Pixel bottomshadow_ret;
-  Pixel select_ret; 
+  Pixel select_ret;
   Pixel use_background = background;
   Pixel gadget_background;
   Arg args[5];
@@ -83,21 +83,21 @@ XmChangeColor(
 	      &bottomshadow_ret, NULL );
 
   if ( (XmIsManager(w)) ||  (XmIsPrimitive(w)) || (XmIsGadget(w)) )
-    { 
+    {
       XtSetArg (args[0], XmNbackground, (XtArgVal) use_background);
       XtSetArg (args[1], XmNforeground, (XtArgVal) foreground_ret);
       XtSetArg (args[2], XmNtopShadowColor, (XtArgVal) topshadow_ret);
       XtSetArg (args[3], XmNbottomShadowColor, (XtArgVal) bottomshadow_ret);
       XtSetArg (args[4], XmNhighlightColor, (XtArgVal) foreground_ret);
-      
+
       XtSetValues (w, args, 5);
-      
+
       if (XmIsPrimitive(w) || XmIsGadget(w))
 	{
 	  if ( (XmIsScrollBar(w)) ||
 	       (XmIsPushButton(w)) || (XmIsPushButtonGadget(w)) ||
 	       (XmIsToggleButton(w)) || (XmIsToggleButtonGadget(w)) )
-	    { 
+	    {
 	      XmGetColors( windowed_ancestor->core.screen,
 			   windowed_ancestor->core.colormap,
 			   background, NULL, NULL, NULL, &select_ret);
@@ -121,6 +121,3 @@ XmChangeColor(
     }
   _XmAppUnlock(app);
 }
-
-
-

@@ -1,5 +1,5 @@
 # $XConsortium: TextField1.scr /main/5 1995/07/17 20:42:45 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,13 +20,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 WindowRaise Shell1
-#  @) A client with a list of functions, control panel and TextField widget to 
+#  @) A client with a list of functions, control panel and TextField widget to
 #  be acted upon should appear.
 #  #) Select the XmTextFieldGetEditable() function from the Functions List by
 #  clicking MB1 on it.
@@ -91,7 +91,7 @@ CompareVisual StatText
 
 #  #) Select the XmTextFieldSetMaxLength() function from the list.
 #  Set the Numerical Arg 1 Scale to 30.  Click the Call Function PushButton.
-#  Now select the XmTextFieldGetMaxLength() function.  The Status widget should 
+#  Now select the XmTextFieldGetMaxLength() function.  The Status widget should
 #  read 30.
 #  You should be able to add text to the Action
 #  TextField widget until it's length is 30.

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -29,12 +29,12 @@
 /*
  *	file: TextWorst.c
  *
- *	Has a Multi line Scrolled Text widget under Form. The XmNcolumns resource 
+ *	Has a Multi line Scrolled Text widget under Form. The XmNcolumns resource
  *	and XmNrows resource are being set to fill in the entire screen. The
  *  wordWrap is off. By default, the text buffer is filled with the character
  *  'n' in "6x10" font if available, otherwise in "fixed" font.
  *
- *	Once the buffer is filled in, through the controls provided, the 
+ *	Once the buffer is filled in, through the controls provided, the
  *  buffer can be filled into the Text widget, it can be scrolled to the
  *  end, and then scrolled back to the beginning. For each of these
  *  operations, time taken is measured, and reported into the file
@@ -290,7 +290,7 @@ caddr_t  call_data;
 	if (Text1 == NULL)
 		return;
 
-	fprintf(outfp, "Total Number of Lines in the textfile : %d\n\n", 
+	fprintf(outfp, "Total Number of Lines in the textfile : %d\n\n",
 			total_lines);
 
 	gettimeofday(&act_time1, &zone_time1);
@@ -370,7 +370,7 @@ int num_lines;
 int num_columns;
 int num_pages;
 {
-	
+
     int	i, j, k;
     char	*temp_string;
 
@@ -381,18 +381,18 @@ int num_pages;
 
     text_string = XtMalloc((num_lines * num_columns * num_pages) + 1);
     temp_string = text_string;
-    
+
     for (i = 0; i < num_pages; i++) {
 	for (j = 0; j < num_lines; j++) {
 	    for (k = 0; k < num_columns - 1; k++) {
-			
+
 		*temp_string++ = C_CHAR;
 	    }
 	    *temp_string++ = '\n';
 	    total_lines++;
 	}
 	*temp_string++ = '\n';
-	total_lines++;      
+	total_lines++;
     }
     *temp_string = '\0';
 
@@ -451,4 +451,3 @@ int     *spaces;
     *spaces = space_count;
 
 }
-

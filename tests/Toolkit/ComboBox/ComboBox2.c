@@ -43,7 +43,7 @@ main (int argc, char **argv)
   Parent = XmCreateFrame (Shell1, "Parent", args, n);
   XtManageChild(Parent);
 
-  n=0; 
+  n=0;
   XtSetArg(args[n], XmNcomboBoxType, XmDROP_DOWN_COMBO_BOX); n++;
   ComboBox = XmCreateComboBox (Parent,"ComboBox",args,n);
   XtManageChild (ComboBox);

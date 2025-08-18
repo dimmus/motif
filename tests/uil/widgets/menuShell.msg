@@ -18,7 +18,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !
  value
         message : "This is a RowColumn inside a MenuShell with\nthe following characteristics:\n\n" &
@@ -38,4 +38,3 @@
 		  "will change the color of the first pushButton\n\n" &
 		  "You should be able to traverse the popup\nmenu via the keyboard.\n\n" &
 		  "All other resources are set by default\n";
-

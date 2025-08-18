@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MovePntrRel.c /main/7 1995/07/14 11:41:49 drk $"
@@ -68,7 +68,7 @@ int delta_x, delta_y;
     /* Get current pointer location and current object over */
 
     xisGetPointerLocation(&curr_x,&curr_y);
-    
+
     curr_object = xisFindObjectAtLocation(curr_x,curr_y);
 
 /* Automation Added */
@@ -80,11 +80,11 @@ int delta_x, delta_y;
 	valid = False;
     }
     /*
-    else 
+    else
    	if (curr_object != end_obj)
 	     AutoMessage(_AutoMessages[WARNMSG18]);
     */
-	
+
     if (valid)
     	xisCMovePointer(curr_object, curr_x, curr_y,
 			curr_x + delta_x, curr_y + delta_y);

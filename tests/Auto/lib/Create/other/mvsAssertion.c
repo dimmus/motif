@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsAssertion.c /main/7 1995/07/14 11:18:49 drk $"
@@ -35,7 +35,7 @@ static char rcsid[] = "$XConsortium: mvsAssertion.c /main/7 1995/07/14 11:18:49 
 	   04/13/90 SJS create
 	   08/07/90 SJS add Failure counting in behavior
 	   09/23/90 SJS add check for same assertion
-	   11/13/90 PSN print label ASSERT in the beginning of each assertion 
+	   11/13/90 PSN print label ASSERT in the beginning of each assertion
 			line being printed
 	   11/19/90 PSN print different assertion messages for test/create test
 

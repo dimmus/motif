@@ -1,9 +1,9 @@
 STARTFONT 2.1
 COMMENT $XConsortium: 10x20.bdf /main/2 1996/07/23 12:57:16 drk $
-COMMENT  
+COMMENT
 COMMENT  Copyright 1989 Network Computing Devices, Inc.
 COMMENT  NCD is a registered trademark of Network Computing Devices, Inc.
-COMMENT  
+COMMENT
 COMMENT  Permission to use, copy, modify, and distribute this software and
 COMMENT  its documentation for any purpose and without fee is hereby
 COMMENT  granted, provided that the above copyright notice appear in all
@@ -14,7 +14,7 @@ COMMENT  distribution of the software without specific, written prior
 COMMENT  permission.  NCD makes no representations about the
 COMMENT  suitability of this software for any purpose.  It is provided "as
 COMMENT  is" without express or implied warranty.
-COMMENT  
+COMMENT
 COMMENT  NCD DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
 COMMENT  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
 COMMENT  NO EVENT SHALL NCD BE LIABLE FOR ANY SPECIAL, INDIRECT OR
@@ -22,8 +22,8 @@ COMMENT  CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
 COMMENT  OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 COMMENT  NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 COMMENT  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-COMMENT  
-COMMENT  
+COMMENT
+COMMENT
 FONT -Misc-Fixed-Medium-R-Normal--20-200-75-75-C-100-ISO8859-1
 SIZE 20 75 75
 FONTBOUNDINGBOX 10 20 0 -4

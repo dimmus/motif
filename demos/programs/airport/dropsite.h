@@ -31,7 +31,7 @@
  * Airport Drop Site / Receiver Header File
  * The drop site module contains all functions that relate to the
  * drop site operations.
- * 
+ *
  * The MakeAirportDropSite functions registers the airport as a drop site.
  *
  * The drag callback sets the toggle button

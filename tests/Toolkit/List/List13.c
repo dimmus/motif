@@ -30,13 +30,13 @@
 #define NUM_ITEMS 3
 #define MGR_WIDTH 400
 #define MGR_HEIGHT 150
-#define LIST_WIDTH 3 * MGR_WIDTH / 4 
+#define LIST_WIDTH 3 * MGR_WIDTH / 4
 #define BUTTON_WIDTH MGR_WIDTH / 4
 
 static char *items[] = {
-  "Seeing Red", 
+  "Seeing Red",
   "Green with Envy",
-  "Sad and Blue" }; 
+  "Sad and Blue" };
 
 static char *tags[] = {
   "first", "second", "third" };
@@ -45,7 +45,7 @@ Arg	  args[25];
 int       i, n;
 Widget    DisplayObj, Manager, List1, ToggleB1, ToggleB2;
 XmRendition  render[NUM_ITEMS];
-XmString  RendComp0, RendComp1, RendComp2, TextComp, TempString1, 
+XmString  RendComp0, RendComp1, RendComp2, TextComp, TempString1,
           TempString2, ListItems[NUM_ITEMS];
 
 /*
@@ -59,11 +59,11 @@ void LoadFont( Widget w, XtPointer client_data, XtPointer call_data )
     {
        printf("XmNnoFontCallback called. \n");
 
-      /*  Assign a font to the rendition. */ 
+      /*  Assign a font to the rendition. */
        n = 0;
        XtSetArg( args[n], XmNfontName, "10x20" ); n++;
        XtSetArg( args[n], XmNfontType, XmFONT_IS_FONT ); n++;
-       XmRenditionUpdate( cb->rendition, args, n ); 
+       XmRenditionUpdate( cb->rendition, args, n );
 
     }
 }
@@ -104,14 +104,14 @@ void Underline( Widget w, XtPointer client_data, XtPointer call_data )
   XtSetArg( args[n], XmNrenderTable, &RenderTable ); n++;
   XtGetValues( List1, args, n );
 
-  RenderTable = XmRenderTableCopy(RenderTable, NULL, 0); 
+  RenderTable = XmRenderTableCopy(RenderTable, NULL, 0);
 
     tags = XmRenderTableGetTags( RenderTable, &tag_list );
 
    /*  Update Renditions with new values for XmNunderlineType resource. */
     for ( i = 0; i < tags; i++ )
     {
-       rendition = XmRenderTableGetRendition( RenderTable, tag_list[i] );  
+       rendition = XmRenderTableGetRendition( RenderTable, tag_list[i] );
 
        n = 0;
        XtSetArg( args[n], XmNunderlineType, &underline ); n++;
@@ -123,7 +123,7 @@ void Underline( Widget w, XtPointer client_data, XtPointer call_data )
        else if ( underline == XmSINGLE_LINE )
              underline = XmNO_LINE;
 
-       n = 0; 
+       n = 0;
        XtSetArg( args[n], XmNunderlineType, underline ); n++;
        XmRenditionUpdate( rendition, args, n );
 
@@ -139,7 +139,7 @@ void Underline( Widget w, XtPointer client_data, XtPointer call_data )
 
     XmRenderTableFree(RenderTable);
 }
-          
+
 void StrikeThru( Widget w, XtPointer client_data, XtPointer call_data )
 {
    unsigned char  strikethru;
@@ -153,13 +153,13 @@ void StrikeThru( Widget w, XtPointer client_data, XtPointer call_data )
   XtSetArg( args[n], XmNrenderTable, &RenderTable ); n++;
   XtGetValues( List1, args, n );
 
-  RenderTable = XmRenderTableCopy(RenderTable, NULL, 0); 
+  RenderTable = XmRenderTableCopy(RenderTable, NULL, 0);
 
   tags = XmRenderTableGetTags( RenderTable, &tag_list );
 
     for ( i = 0; i < tags; i++ )
     {
-       rendition = XmRenderTableGetRendition( RenderTable, tag_list[i] );  
+       rendition = XmRenderTableGetRendition( RenderTable, tag_list[i] );
 
        n = 0;
        XtSetArg( args[n], XmNstrikethruType, &strikethru ); n++;
@@ -199,7 +199,7 @@ char	**argv;
         DisplayObj = XmGetXmDisplay( display );
 
         XtAddCallback( DisplayObj, XmNnoFontCallback, LoadFont, NULL );
-        XtAddCallback( DisplayObj, XmNnoRenditionCallback, 
+        XtAddCallback( DisplayObj, XmNnoRenditionCallback,
                                       LoadRendition, NULL );
 
         n = 0;
@@ -219,56 +219,56 @@ char	**argv;
         XtManageChild(List1);
 
         n = 0;
-        XtSetArg( args[n], XmNrenditionForeground, 
+        XtSetArg( args[n], XmNrenditionForeground,
                   CommonGetColor("Red")); n++;
-        Renditions[0] = XmRenditionCreate( List1, 
+        Renditions[0] = XmRenditionCreate( List1,
                                            (XmStringTag)tags[0],
                                            args, n );
 
         n = 0;
-        XtSetArg( args[n], XmNrenditionForeground, 
+        XtSetArg( args[n], XmNrenditionForeground,
                   CommonGetColor("Green")); n++;
-        Renditions[1] = XmRenditionCreate( List1, 
+        Renditions[1] = XmRenditionCreate( List1,
                                            (XmStringTag)tags[1],
                                            args, n );
- 
+
         n = 0;
-        XtSetArg( args[n], XmNrenditionForeground, 
+        XtSetArg( args[n], XmNrenditionForeground,
                            CommonGetColor("Blue")); n++;
-        Renditions[2] = XmRenditionCreate( List1, 
+        Renditions[2] = XmRenditionCreate( List1,
                                            (XmStringTag)tags[2],
                                            args, n );
 
-        RenderTable = XmRenderTableAddRenditions( RenderTable, 
+        RenderTable = XmRenderTableAddRenditions( RenderTable,
                         Renditions, NUM_ITEMS, XmMERGE_REPLACE );
 
 	for ( i = 0; i < NUM_ITEMS; i++ )
             XmRenditionFree( Renditions[i] );
-  
+
         n = 0;
         XtSetArg( args[n], XmNrenderTable, RenderTable ); n++;
         XtSetValues( List1, args, n );
 
 	XmRenderTableFree( RenderTable );
 
-        /* 
+        /*
          *  Use a rendition component in XmString which does
          *  not have a matching render_tag in the render table.
-         *  This should result in the XmNnoRenditionCallback 
+         *  This should result in the XmNnoRenditionCallback
          *  getting called.
          */
          RendComp0 = XmStringComponentCreate(
                        XmSTRING_COMPONENT_RENDITION_BEGIN,
                        strlen( "Background" ), "Background" );
- 
+
 
 	/*  Create strings for List widget using the renditions. */
         for ( i = 0; i < NUM_ITEMS; i++ )
         {
-            RendComp1 = XmStringComponentCreate( 
+            RendComp1 = XmStringComponentCreate(
                           XmSTRING_COMPONENT_RENDITION_BEGIN,
                           strlen( tags[i] ), tags[i] );
-            RendComp2 = XmStringComponentCreate( 
+            RendComp2 = XmStringComponentCreate(
                           XmSTRING_COMPONENT_RENDITION_END,
                           strlen( tags[i] ), tags[i] );
             TextComp = XmStringComponentCreate( XmSTRING_COMPONENT_TEXT,
@@ -313,7 +313,7 @@ char	**argv;
         ToggleB1 = XmCreateToggleButton( Manager, "ToggleB1", args, n );
         XtManageChild(ToggleB1);
 
-        XtAddCallback( ToggleB1, XmNvalueChangedCallback, Underline, NULL ); 
+        XtAddCallback( ToggleB1, XmNvalueChangedCallback, Underline, NULL );
         XmStringFree(TempString1);
 
        /*
@@ -333,7 +333,7 @@ char	**argv;
         ToggleB2 = XmCreateToggleButton( Manager, "ToggleB2", args, n );
         XtManageChild(ToggleB2);
 
-        XtAddCallback( ToggleB2, XmNvalueChangedCallback, StrikeThru, NULL ); 
+        XtAddCallback( ToggleB2, XmNvalueChangedCallback, StrikeThru, NULL );
         XmStringFree(TempString1);
 
         XtRealizeWidget(Shell1);

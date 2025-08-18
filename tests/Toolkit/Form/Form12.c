@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form12.c /main/4 1995/07/13 18:01:39 drk $"
@@ -60,7 +60,7 @@ char **argv;
 
    /*  initialize toolkit  */
    CommonTestInit(argc, argv);
-   
+
    frame = XmCreateFrame(Shell1, "frame",  NULL, 0);
    XtManageChild(frame);
 
@@ -89,7 +89,7 @@ char **argv;
    XtManageChild(scrollbar1);
 
    XtRealizeWidget (Shell1);
-  
+
    CommonPause();
 
    /* begin test for PIR 2756 */
@@ -139,15 +139,3 @@ caddr_t call_data;
       break;
    }
 }
-
-
-
-
-
-
-
-
-
-
-
-

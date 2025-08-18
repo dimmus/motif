@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cutpaste3.c /main/7 1995/07/13 17:55:51 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: Cutpaste3.c /main/7 1995/07/13 17:55:51 drk
 Widget Text3;
 Arg args[20];
 
-/* 
+/*
  * function to exit gracefully
  */
 
@@ -56,7 +56,7 @@ Widget button;
 XtPointer client_data, call_data;
 {
     Widget w = (Widget) client_data;
-    XmAnyCallbackStruct *cb = (XmAnyCallbackStruct *) call_data; 
+    XmAnyCallbackStruct *cb = (XmAnyCallbackStruct *) call_data;
     char *selected_string = NULL;
     int num_tries = 0, status = 0;
     long item_id = 0;
@@ -115,14 +115,14 @@ Widget button;
 XtPointer client_data, call_data;
 {
     Widget w = (Widget) client_data;
-    XmAnyCallbackStruct *cb = (XmAnyCallbackStruct *) call_data; 
+    XmAnyCallbackStruct *cb = (XmAnyCallbackStruct *) call_data;
     char buffer[1000];
     unsigned long outlength = 0;
     long private_id = 0;
     int num_tries = 0, status = 0;
 
     while (status != ClipboardSuccess && num_tries < 10) {
-      status = XmClipboardStartRetrieve(XtDisplay(w), XtWindow(w), 
+      status = XmClipboardStartRetrieve(XtDisplay(w), XtWindow(w),
 					cb->event->xbutton.time);
 
       if (num_tries == 10) {
@@ -136,8 +136,8 @@ XtPointer client_data, call_data;
     status = num_tries = 0;
 
     while (status != ClipboardSuccess && num_tries < 10) {
-      status = XmClipboardRetrieve (XtDisplay(w), XtWindow(w), 
-				    "STRING", buffer, 1000, 
+      status = XmClipboardRetrieve (XtDisplay(w), XtWindow(w),
+				    "STRING", buffer, 1000,
 				    &outlength, &private_id);
 
       if (num_tries == 10) {
@@ -185,14 +185,14 @@ char **argv;
    XtSetArg(args[n], XmNnumColumns, 3); n++;
    RowColumn = XmCreateRowColumn(Shell1, "RowColumn", args, n);
    XtManageChild(RowColumn);
-   
+
    n = 0;
    XtSetArg(args[n], XmNlabelString,
 	    XmStringCreateLtoR("Copy From Text1", XmSTRING_DEFAULT_CHARSET));
    n++;
    PushButton1 = XmCreatePushButton(RowColumn, "PushButton1", args, n);
    XtManageChild(PushButton1);
- 
+
    n = 0;
    XtSetArg(args[n], XmNresizeWidth, False);  n++;
    XtSetArg(args[n], XmNresizeHeight, False);  n++;
@@ -229,17 +229,17 @@ char **argv;
    Text3 = XmCreateText(RowColumn, "Text3", args, n);
    XtManageChild(Text3);
 
-   XtAddCallback (PushButton1, XmNactivateCallback, CopyToClipboard, 
+   XtAddCallback (PushButton1, XmNactivateCallback, CopyToClipboard,
 		  (XtPointer) Text1);
-   XtAddCallback (PushButton2, XmNactivateCallback, CopyToClipboard, 
+   XtAddCallback (PushButton2, XmNactivateCallback, CopyToClipboard,
 		  (XtPointer) Text2);
-   XtAddCallback (PushButton3, XmNactivateCallback, CopyFromClipboard, 
+   XtAddCallback (PushButton3, XmNactivateCallback, CopyFromClipboard,
 		  (XtPointer) Text1);
 
    XtRealizeWidget(Shell1);
 
    CommonPause();
    CommonPause();
-   
+
    XtAppMainLoop(app_context);
 }

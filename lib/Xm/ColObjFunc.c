@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -42,7 +42,7 @@
 /**           problem with the color server or color object.         **/
 /**                                                                  **/
 /**********************************************************************/
-Boolean 
+Boolean
 XmeUseColorObj( void )
 {
     XmColorObj tmpColorObj = _XmDefaultColorObj;
@@ -67,7 +67,7 @@ XmeUseColorObj( void )
  **       obsolete module later                                      **/
 /**                                                                  **/
 /**********************************************************************/
-Boolean 
+Boolean
 _XmGetPixelData(
         int screen,
         int *colorUse,
@@ -80,20 +80,19 @@ _XmGetPixelData(
     return XmeGetPixelData( screen, colorUse, pixelSet, a, i, p, s );
 }
 
-Boolean 
+Boolean
 _XmGetIconControlInfo(
         Screen  *screen,
 	Boolean *useMaskRtn,
         Boolean *useMultiColorIconsRtn,
         Boolean *useIconFileCacheRtn)
 {
-    return XmeGetIconControlInfo(screen, useMaskRtn, 
+    return XmeGetIconControlInfo(screen, useMaskRtn,
 			  useMultiColorIconsRtn, useIconFileCacheRtn);
 }
 
-Boolean 
+Boolean
 _XmUseColorObj( void )
 {
     return XmeUseColorObj();
 }
-

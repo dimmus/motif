@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,112 +37,112 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmGadgetTraverseCurrent( 
+extern void _XmGadgetTraverseCurrent(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraversePrevTabGroup( 
+extern void _XmGadgetTraversePrevTabGroup(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseNextTabGroup( 
+extern void _XmGadgetTraverseNextTabGroup(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseLeft( 
+extern void _XmGadgetTraverseLeft(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseRight( 
+extern void _XmGadgetTraverseRight(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseUp( 
+extern void _XmGadgetTraverseUp(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseDown( 
+extern void _XmGadgetTraverseDown(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseNext( 
+extern void _XmGadgetTraverseNext(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraversePrev( 
+extern void _XmGadgetTraversePrev(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetTraverseHome( 
+extern void _XmGadgetTraverseHome(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetSelect( 
+extern void _XmGadgetSelect(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmManagerParentActivate( 
+extern void _XmManagerParentActivate(
                         Widget mw,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmManagerParentCancel( 
+extern void _XmManagerParentCancel(
                         Widget mw,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetButtonMotion( 
+extern void _XmGadgetButtonMotion(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetKeyInput( 
+extern void _XmGadgetKeyInput(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetArm( 
+extern void _XmGadgetArm(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetDrag( 
+extern void _XmGadgetDrag(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetActivate( 
+extern void _XmGadgetActivate(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmManagerHelp( 
+extern void _XmManagerHelp(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetMultiArm( 
+extern void _XmGadgetMultiArm(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-extern void _XmGadgetMultiActivate( 
+extern void _XmGadgetMultiActivate(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
- 
+
 /********    End Private Function Declarations    ********/
 
 

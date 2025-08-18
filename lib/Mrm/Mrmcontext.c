@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -37,7 +37,7 @@ static char rcsid[] = "$XConsortium: Mrmcontext.c /main/12 1996/11/13 14:00:18 d
  *  FACILITY:
  *
  *      UIL Resource Manager (URM):
- *	
+ *
  *	URM context routines
  *
  *  ABSTRACT:
@@ -108,7 +108,7 @@ static char rcsid[] = "$XConsortium: Mrmcontext.c /main/12 1996/11/13 14:00:18 d
  *--
  */
 
-Cardinal 
+Cardinal
 UrmGetResourceContext (char			*((*alloc_func) ()),
 		       void			(*free_func) (),
 		       MrmSize			size,
@@ -196,7 +196,7 @@ UrmGetResourceContext (char			*((*alloc_func) ()),
  *--
  */
 
-Cardinal 
+Cardinal
 UrmResizeResourceContext (URMResourceContextPtr	context_id,
 			  int			size)
 
@@ -289,7 +289,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmFreeResourceContext (URMResourceContextPtr	context_id)
 {
 

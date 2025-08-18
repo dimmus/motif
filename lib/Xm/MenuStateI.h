@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -39,9 +39,9 @@ extern "C" {
 
 extern Widget _XmGetRC_PopupPosted (
                          Widget wid) ;
-extern Boolean _XmGetInDragMode( 
+extern Boolean _XmGetInDragMode(
                         Widget widget) ;
-extern void _XmSetInDragMode( 
+extern void _XmSetInDragMode(
                         Widget widget,
 #if NeedWidePrototypes
                         int mode) ;

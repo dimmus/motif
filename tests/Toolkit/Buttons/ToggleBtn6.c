@@ -33,15 +33,15 @@
  *  Defines
  */
 #define NUM_INDICATORS   6
-#define NUM_TOGGLES      NUM_INDICATORS + 2 
+#define NUM_TOGGLES      NUM_INDICATORS + 2
 #define NUM_PUSHBUTTONS  2
 #define NUM_STATES       3
-#define WIDGET_WIDTH     150 
-#define TOGGLE_WIDTH     WIDGET_WIDTH 
+#define WIDGET_WIDTH     150
+#define TOGGLE_WIDTH     WIDGET_WIDTH
 #define TOGGLE_HEIGHT    50
 #define PUSHB_WIDTH      WIDGET_WIDTH
 #define PUSHB_HEIGHT     25
-#define MGR_WIDTH        175 
+#define MGR_WIDTH        175
 #define MGR_HEIGHT       650
 
 #define BM1_WIDTH  gnu_width
@@ -93,7 +93,7 @@ int      CurrentState = XmUNSET;
  */
 void SelectAll( Widget w, XtPointer client_data, XtPointer call_data )
 {
-     
+
      for ( i = 0; i < NUM_INDICATORS; i++ )
      {
         n = 0;
@@ -145,7 +145,7 @@ void ToggleMode( Widget w, XtPointer client_data, XtPointer call_data )
         Label = XmStringCreateLtoR("Toggle Boolean",
                         XmFONTLIST_DEFAULT_TAG );
      }
-                         
+
 
    /*  Change the toggle mode for all appropriate toggle buttons. */
      for ( i = 0; i < NUM_TOGGLES; i++ )
@@ -212,13 +212,13 @@ void SetState( Widget w, XtPointer client_data, XtPointer call_data )
   /* Determine whether valueChangedCallback should be called. */
    n = 0;
    XtSetArg( args[n], XmNset, &value ); n++;
-   XtGetValues( ToggleB2, args, n ); 
+   XtGetValues( ToggleB2, args, n );
 
    notify = ( value == XmSET ) ? True : False;
 
    for ( i = 0; i < NUM_TOGGLES; i++ )
    {
-      XmToggleButtonSetValue( Indicators[i], state, notify ); 
+      XmToggleButtonSetValue( Indicators[i], state, notify );
    }
 }
 
@@ -226,21 +226,21 @@ void ValueChanged( Widget w, XtPointer client_data, XtPointer call_data )
 {
    char  *name;
 
-      name = (char *)client_data;   
+      name = (char *)client_data;
       printf("XmNvalueChangedCallback called for %s\n", name);
 }
-           
+
 /*
  * Main
  */
 void main ( int argc, char **argv )
 {
      CommonTestInit( argc, argv );
- 
+
      n = 0;
      XtSetArg( args[n], XmNwidth, MGR_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, MGR_HEIGHT ); n++;
-     Manager1 = XmCreateBulletinBoard( Shell1, "Manager1", args, n ); 
+     Manager1 = XmCreateBulletinBoard( Shell1, "Manager1", args, n );
      XtManageChild( Manager1 );
 
     /*  Set select and unselect colors. */
@@ -263,11 +263,11 @@ void main ( int argc, char **argv )
        XtSetArg( args[n], XmNselectColor, SelectColor); n++;
        XtSetArg( args[n], XmNunselectColor, UnselectColor); n++;
        XtSetArg( args[n], XmNfillOnSelect, False); n++;
-       Indicators[i] = XmCreateToggleButton( Manager1, name, args, n ); 
+       Indicators[i] = XmCreateToggleButton( Manager1, name, args, n );
        XtManageChild(Indicators[i]);
        XmStringFree(Label);
 
-       XtAddCallback( Indicators[i], XmNvalueChangedCallback, 
+       XtAddCallback( Indicators[i], XmNvalueChangedCallback,
                       ValueChanged, toggle_labels[i] );
 
        y_coord += TOGGLE_HEIGHT;
@@ -276,23 +276,23 @@ void main ( int argc, char **argv )
      /*  Set indicatorOn type for each toggle button. */
        i = 0;
        XtSetArg( args[0], XmNindicatorOn, XmINDICATOR_NONE );
-       XtSetValues( Indicators[i++], args, 1); 
+       XtSetValues( Indicators[i++], args, 1);
 
        XtSetArg( args[0], XmNindicatorOn, XmINDICATOR_FILL );
-       XtSetValues( Indicators[i++], args, 1); 
-      
+       XtSetValues( Indicators[i++], args, 1);
+
        XtSetArg( args[0], XmNindicatorOn, XmINDICATOR_CHECK );
-       XtSetValues( Indicators[i++], args, 1); 
-      
+       XtSetValues( Indicators[i++], args, 1);
+
        XtSetArg( args[0], XmNindicatorOn, XmINDICATOR_CHECK_BOX );
-       XtSetValues( Indicators[i++], args, 1); 
-      
+       XtSetValues( Indicators[i++], args, 1);
+
        XtSetArg( args[0], XmNindicatorOn, XmINDICATOR_CROSS );
-       XtSetValues( Indicators[i++], args, 1); 
-      
+       XtSetValues( Indicators[i++], args, 1);
+
        XtSetArg( args[0], XmNindicatorOn, XmINDICATOR_CROSS_BOX );
-       XtSetValues( Indicators[i++], args, 1); 
-      
+       XtSetValues( Indicators[i++], args, 1);
+
      pixmap1 = XCreatePixmapFromBitmapData(display, DefaultRootWindow(display),
                                  BM1_BITS, BM1_WIDTH, BM1_HEIGHT,
                                  WhitePixel(display, DefaultScreen(display)),
@@ -317,11 +317,11 @@ void main ( int argc, char **argv )
      XtSetArg( args[n], XmNindeterminatePixmap, pixmap2 ); n++;
      XtSetArg( args[n], XmNselectColor, SelectColor ); n++;
      XtSetArg( args[n], XmNunselectColor, UnselectColor ); n++;
-     Indicators[NUM_INDICATORS] = 
+     Indicators[NUM_INDICATORS] =
          XmCreateToggleButton( Manager1, name, args, n );
-     XtAddCallback( Indicators[NUM_INDICATORS], XmNvalueChangedCallback, 
+     XtAddCallback( Indicators[NUM_INDICATORS], XmNvalueChangedCallback,
                     ValueChanged, toggle_labels[NUM_INDICATORS] );
- 
+
      y_coord += ( 1.5 * TOGGLE_HEIGHT );
 
      Label = XmStringCreateLtoR("One Of Many", XmFONTLIST_DEFAULT_TAG );
@@ -336,9 +336,9 @@ void main ( int argc, char **argv )
      XtSetArg( args[n], XmNindicatorType, XmONE_OF_MANY ); n++;
      XtSetArg( args[n], XmNselectColor, SelectColor ); n++;
      XtSetArg( args[n], XmNunselectColor, UnselectColor ); n++;
-     Indicators[NUM_INDICATORS + 1] = 
+     Indicators[NUM_INDICATORS + 1] =
          XmCreateToggleButton( Manager1, name, args, n );
-     XtAddCallback( Indicators[NUM_INDICATORS + 1], XmNvalueChangedCallback, 
+     XtAddCallback( Indicators[NUM_INDICATORS + 1], XmNvalueChangedCallback,
                     ValueChanged, toggle_labels[NUM_INDICATORS + 1] );
 
      XmStringFree(Label);
@@ -355,7 +355,7 @@ void main ( int argc, char **argv )
      XtManageChild(Separator1);
 
      y_coord += PUSHB_HEIGHT;
-     
+
      for ( i = 0; i < NUM_PUSHBUTTONS; i++ )
      {
         sprintf( name, "PushB%d", i );
@@ -367,7 +367,7 @@ void main ( int argc, char **argv )
         XtSetArg( args[n], XmNwidth, PUSHB_WIDTH ); n++;
         XtSetArg( args[n], XmNheight, PUSHB_HEIGHT ); n++;
         XtSetArg( args[n], XmNlabelString, Label ); n++;
-        PushB[i] = XmCreatePushButton( Manager1, name, args, n ); 
+        PushB[i] = XmCreatePushButton( Manager1, name, args, n );
         XtManageChild(PushB[i]);
 
         XmStringFree(Label);
@@ -389,12 +389,12 @@ void main ( int argc, char **argv )
      XtSetArg( args[n], XmNheight, TOGGLE_HEIGHT ); n++;
      XtSetArg( args[n], XmNlabelString, Label ); n++;
      ToggleB1 = XmCreateToggleButton( Manager1, "ToggleB1", args, n );
-     XtManageChild( ToggleB1 ); 
+     XtManageChild( ToggleB1 );
 
      XtAddCallback( ToggleB1, XmNvalueChangedCallback, FillOnSelect, NULL );
      XmStringFree(Label);
-     
-     XtRealizeWidget(Shell1);       
+
+     XtRealizeWidget(Shell1);
 
      CommonPause();
      CommonPause();
@@ -403,14 +403,14 @@ void main ( int argc, char **argv )
      XtManageChild( Indicators[NUM_INDICATORS + 1] );
 
     /*  Change the first push button for setting the next toggle state. */
-     XtRemoveCallback( PushB[0], XmNactivateCallback, SelectAll, NULL ); 
-     
+     XtRemoveCallback( PushB[0], XmNactivateCallback, SelectAll, NULL );
+
      Label = XmStringCreateLtoR("Set Next State", XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
      XtSetArg( args[n], XmNlabelString, Label ); n++;
-     XtSetValues( PushB[0], args, n ); 
-     XtAddCallback( PushB[0], XmNactivateCallback, SetNextState, TextField1 ); 
+     XtSetValues( PushB[0], args, n );
+     XtAddCallback( PushB[0], XmNactivateCallback, SetNextState, TextField1 );
 
      XmStringFree(Label);
 
@@ -418,7 +418,7 @@ void main ( int argc, char **argv )
      XtUnmanageChild( PushB[1] );
 
      y_coord -= TOGGLE_HEIGHT;
-     
+
      Label = XmStringCreateLtoR("State:", XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
@@ -444,15 +444,15 @@ void main ( int argc, char **argv )
      x_coord = 0;
 
     /*  Change ToggleB1 for setting the toggle mode. */
-     XtRemoveCallback( ToggleB1, XmNvalueChangedCallback, FillOnSelect, NULL ); 
+     XtRemoveCallback( ToggleB1, XmNvalueChangedCallback, FillOnSelect, NULL );
 
      Label = XmStringCreateLtoR("Toggle Boolean", XmFONTLIST_DEFAULT_TAG );
      n = 0;
      XtSetArg( args[n], XmNlabelString, Label ); n++;
      XtSetArg( args[n], XmNset, XmUNSET ); n++;
-     XtSetValues( ToggleB1, args, n ); 
+     XtSetValues( ToggleB1, args, n );
 
-     XtAddCallback( ToggleB1, XmNvalueChangedCallback, ToggleMode, NULL ); 
+     XtAddCallback( ToggleB1, XmNvalueChangedCallback, ToggleMode, NULL );
      XmStringFree(Label);
 
      CommonPause();
@@ -460,10 +460,10 @@ void main ( int argc, char **argv )
 
      y_coord -= ( 2 * PUSHB_HEIGHT );
 
-     XtUnmanageChild( PushB[0] ); 
-     XtUnmanageChild( Label1 ); 
-     XtUnmanageChild( TextField1 ); 
-      
+     XtUnmanageChild( PushB[0] );
+     XtUnmanageChild( Label1 );
+     XtUnmanageChild( TextField1 );
+
      n = 0;
      XtSetArg( args[n], XmNx, x_coord ); n++;
      XtSetArg( args[n], XmNy, y_coord ); n++;
@@ -479,14 +479,14 @@ void main ( int argc, char **argv )
 
        n = 0;
        XtSetArg( args[n], XmNlabelString, Label ); n++;
-       OptionPB[i] = XmCreatePushButton( PullDown, name, args, n );  
+       OptionPB[i] = XmCreatePushButton( PullDown, name, args, n );
 
-       XtAddCallback( OptionPB[i], XmNactivateCallback, SetState, NULL ); 
+       XtAddCallback( OptionPB[i], XmNactivateCallback, SetState, NULL );
        XmStringFree( Label );
      }
 
      XtManageChildren( OptionPB, NUM_STATES );
-     
+
      Label = XmStringCreateLtoR("State", XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
@@ -504,7 +504,7 @@ void main ( int argc, char **argv )
 
      y_coord += ( 2 * PUSHB_HEIGHT );
 
-     Label = XmStringCreateLtoR("valueChangedCallback", 
+     Label = XmStringCreateLtoR("valueChangedCallback",
                XmFONTLIST_DEFAULT_TAG );
 
      n = 0;
@@ -526,6 +526,5 @@ void main ( int argc, char **argv )
      CommonPause();
 
      XtAppMainLoop( app_context );
- 
+
 }
-      

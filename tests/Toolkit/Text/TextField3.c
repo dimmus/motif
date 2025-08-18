@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TextField3.c /main/8 1995/07/13 19:35:15 drk $"
@@ -48,7 +48,7 @@ static void ModifyVerifyCB(Widget w, XtPointer client_data,
 	if (modify_verify->event == NULL)
 		printf("Null event in ModifyVerify callback\n");
 
-	if (modify_verify->text->ptr != NULL) 
+	if (modify_verify->text->ptr != NULL)
 	{  /* Make sure that it is not a BS */
 		modify_verify->startPos = position++;
 		modify_verify->endPos = modify_verify->startPos;
@@ -91,7 +91,7 @@ static void ChangeString2(Widget w, XtPointer client_data,
 {
 	static Boolean toggle = False;
 	int n = 0;
-	
+
 	if (!toggle)
 	{
 		XmTextFieldSetString((Widget)client_data,
@@ -113,10 +113,10 @@ char **argv;
 	Widget Text1 = NULL;
         String str;
 	int n = 0;
-	
+
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-	
+
 	/* test case for PIR 4031 */
 	n = 0;
 	XtSetArg(args[n], XmNwidth, 10); n++;
@@ -124,7 +124,7 @@ char **argv;
 	XtSetValues(Shell1, args, n);
 	XtRealizeWidget(Shell1);
 	/* end of test case for PIR 4031 */
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNfontList, CommonGetFontList("fixed"));  n++;
 	XtSetArg(args[n], XmNcursorPosition, 12);  n++;
@@ -132,29 +132,29 @@ char **argv;
 	XtSetArg(args[n], XmNforeground, CommonGetColor("Red"));  n++;
 	XtSetArg(args[n], XmNbackground, CommonGetColor("White"));  n++;
 	Text1 = XmCreateTextField(Shell1, "Text1", args, n);
-	
+
 	XtManageChild(Text1);
 	XtRealizeWidget(Shell1);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNresizeWidth, False);  n++;
 	XtSetArg(args[n], XmNcolumns, 40);  n++;
 	XtSetValues(Text1, args, n);
-	
+
 	CommonPause();
-	
+
 	/* Begin test for PIR 2959 */
 	XtAddCallback(Text1, XmNmodifyVerifyCallback, ModifyVerifyCB, NULL);
-	
+
 	CommonPause();
 	/* End test for PIR 2959 *
-	
+
 	/* Begin Test for PIR 2663 */
 	XtRemoveAllCallbacks (Text1, XmNmodifyVerifyCallback);
 	XtAddCallback(Text1, XmNactivateCallback, ChangeString, NULL);
 	CommonPause();
 	/* End Test for PIR 2663 */
-	
+
 	/* Begin Test for PIR 2942, 4077 */
 	XtRemoveAllCallbacks(Text1, XmNactivateCallback);
 	XtAddCallback(Text1, XmNactivateCallback, ChangeString2, Text1);
@@ -216,10 +216,10 @@ char **argv;
 	XtSetArg (args[n], XmNvalue, str); n++;
 	Text1 = XmCreateTextField(Shell1, "Text1", args, n);
 	XtManageChild(Text1);
- 
+
  /* end test for CR 5258 */
        CommonPause();
        CommonPause();
-	
+
 	XtAppMainLoop(app_context);
 }

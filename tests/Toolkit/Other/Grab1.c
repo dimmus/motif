@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Grab1.c /main/8 1995/07/13 19:05:13 drk $"
@@ -87,7 +87,7 @@ void PrintName_2 (rc, client_data, d)
 
 {
    XmRowColumnCallbackStruct * rc_data = (XmRowColumnCallbackStruct *) d;
-    printf ("Widget %s was activated\n", 
+    printf ("Widget %s was activated\n",
              XrmQuarkToString(rc_data->widget->core.xrm_name));
 }
 
@@ -136,8 +136,8 @@ char **argv;
 
 /* Set new translations	*/
    XtAppAddActions(app_context, actions, XtNumber(actions));
-   Xlations = XtParseTranslationTable(translations); 
-   BXlations = XtParseTranslationTable(b_translations); 
+   Xlations = XtParseTranslationTable(translations);
+   BXlations = XtParseTranslationTable(b_translations);
 
     n = 0;
     XtSetArg (args[0], XtNallowShellResize, True);		n++;
@@ -240,14 +240,14 @@ char **argv;
    arrow11 = XmCreatePushButton(rc1, "Button6", args, n);
    XtManageChild(arrow11);
 /*
-   XtOverrideTranslations(arrow11, BXlations); 
+   XtOverrideTranslations(arrow11, BXlations);
 */
 
-   AddAllTabGroups(); 
+   AddAllTabGroups();
 
    XtRealizeWidget (Shell1);
 
-   XtOverrideTranslations(Shell1, Xlations); 
+   XtOverrideTranslations(Shell1, Xlations);
 
    /* Grab 'q' key for quiting	*/
    keycode = XKeysymToKeycode(XtDisplay(arrow11), 'q');

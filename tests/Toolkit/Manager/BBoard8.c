@@ -19,20 +19,20 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BBoard8.c /main/4 1995/07/13 18:27:35 drk $"
 #endif
 #endif
-    
+
 #include <testlib.h>
 
 Widget option;
-    
+
 static int caseNumber = 0;
 
 static void DoCase(w)
@@ -69,7 +69,7 @@ Widget w;
 	break;
       defaults:
 	exit(0);
-    }	
+    }
     caseNumber++;
 }
 
@@ -84,29 +84,29 @@ char *argv[];
     char str[8];
 
     CommonTestInit(argc, argv);
-        
+
     n=0;
     XtSetArg(args[n],XmNallowShellResize, True);	n++;
     XtSetArg(args[n],XmNwidth, 400); 			n++;
     XtSetArg(args[n],XmNheight, 300); 			n++;
     XtSetValues(Shell1, args, n);
-    
+
     n=0;
     BulletinBoard1 = XmCreateBulletinBoard(Shell1, "BulletinBoard1", args, n);
-    
+
     n=0;
     Pulldown1 = XmCreatePulldownMenu(BulletinBoard1, "Pulldown1", args, n);
     for (i = 0; i < 3; i++)  {
 	n = 0;
 	sprintf(str, "PUSH%d", i+1);
 	pb[i] = XmCreatePushButtonGadget(Pulldown1, str, args, n);
-    }	
+    }
     XtManageChildren(pb, 3);
-    
+
     n=0;
     XtSetArg(args[n], XmNsubMenuId, Pulldown1);		n++;
     option = XmCreateOptionMenu(BulletinBoard1, "option", args, n);
-    
+
     XtManageChild(BulletinBoard1);
     XtManageChild(option);
 

@@ -22,28 +22,28 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual ArrowButton2 
+TRACE:(1) CompareVisual ArrowButton2
 TRACE:(2) Continue
-TRACE:(3) LocatePointer ArrowButton2  
-TRACE:(4) CompareVisual Shell1 
+TRACE:(3) LocatePointer ArrowButton2
+TRACE:(4) CompareVisual Shell1
 TRACE:(5) Continue
-TRACE:(6) CompareVisual ArrowButton2 
+TRACE:(6) CompareVisual ArrowButton2
 TRACE:(7) Continue
-TRACE:(8) CompareVisual ArrowButton2 
+TRACE:(8) CompareVisual ArrowButton2
 TRACE:(9) Continue
-TRACE:(10) CompareVisual ArrowButton2 
+TRACE:(10) CompareVisual ArrowButton2
 TRACE:(11) Continue
-TRACE:(12) LocatePointer ArrowButton1  
-TRACE:(13) ClickMB Btn1 
+TRACE:(12) LocatePointer ArrowButton1
+TRACE:(13) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_ACTIVATE
-TRACE:(14) LocatePointer ArrowButton2  
-TRACE:(15) ClickMB Btn1 
+TRACE:(14) LocatePointer ArrowButton2
+TRACE:(15) ClickMB Btn1
 Generic Callback called:  Reason - XmCR_ACTIVATE
 TRACE:(16) Continue
-TRACE:(17) LocatePointer ArrowButton1  
-TRACE:(18) ClickMB Btn1 
-TRACE:(19) LocatePointer ArrowButton2  
-TRACE:(20) ClickMB Btn1 
-TRACE:(21) CompareVisual parent1 
+TRACE:(17) LocatePointer ArrowButton1
+TRACE:(18) ClickMB Btn1
+TRACE:(19) LocatePointer ArrowButton2
+TRACE:(20) ClickMB Btn1
+TRACE:(21) CompareVisual parent1
 TRACE:(22) Exit
 Exiting Test...Please Standby...

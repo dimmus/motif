@@ -22,22 +22,22 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual mbox 
-TRACE:(2) LocatePointer mbox RCancelButton 
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual mbox 
-TRACE:(5) LocatePointer mbox RHelpButton 
-TRACE:(6) ClickMB Btn1 
-TRACE:(7) CompareVisual mbox 
+TRACE:(1) CompareVisual mbox
+TRACE:(2) LocatePointer mbox RCancelButton
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual mbox
+TRACE:(5) LocatePointer mbox RHelpButton
+TRACE:(6) ClickMB Btn1
+TRACE:(7) CompareVisual mbox
 TRACE:(8) Continue
-TRACE:(9) LocatePointer mbox ROkButton 
-TRACE:(10) ClickMB Btn1 
-TRACE:(11) CompareVisual mbox 
-TRACE:(12) LocatePointer mbox RCancelButton 
-TRACE:(13) ClickMB Btn1 
-TRACE:(14) CompareVisual mbox 
-TRACE:(15) LocatePointer mbox RHelpButton 
-TRACE:(16) ClickMB Btn1 
-TRACE:(17) CompareVisual mbox 
+TRACE:(9) LocatePointer mbox ROkButton
+TRACE:(10) ClickMB Btn1
+TRACE:(11) CompareVisual mbox
+TRACE:(12) LocatePointer mbox RCancelButton
+TRACE:(13) ClickMB Btn1
+TRACE:(14) CompareVisual mbox
+TRACE:(15) LocatePointer mbox RHelpButton
+TRACE:(16) ClickMB Btn1
+TRACE:(17) CompareVisual mbox
 TRACE:(18) Exit
 Exiting Test...Please Standby...

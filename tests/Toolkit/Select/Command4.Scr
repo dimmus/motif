@@ -1,5 +1,5 @@
 # $XConsortium: Command4.scr /main/8 1995/07/17 20:37:36 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)Command4.scr	1.4  92/02/14
 
@@ -39,7 +39,7 @@ CompareVisual Command1
 LocatePointer Scale2 RScaleSlider
 DragSliderValue Right 5
 
-# Press the Populate List button. The comand list should 
+# Press the Populate List button. The comand list should
 # now contain 5 items. (ListItem0 .. ListItem4)
 
 LocatePointer PopB

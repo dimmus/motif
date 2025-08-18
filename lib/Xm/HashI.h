@@ -27,7 +27,7 @@
 
 #ifndef _XmHashI_h
 #define _XmHashI_h
- 
+
 #include <Xm/XmP.h>
 
 #ifdef __cplusplus

@@ -1,5 +1,5 @@
 # $XConsortium: TextField4.scr /main/5 1995/07/17 20:43:03 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,18 +20,18 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  @) The client window should have two TextField widgets and
 #  one Text widget.
 #  The first TextField has XmNresizeWidth set to False.  The second has
 #  it set to True.  The Text widget also has it set to True.
-#  #) Type "all the king's horses and all the king's men" into the first 
+#  #) Type "all the king's horses and all the king's men" into the first
 #  TextField widget.  For each character typed that exceeds the width
-#  of the TextField, the text should shift to the left one character 
+#  of the TextField, the text should shift to the left one character
 #  to keep the newly typed character in view.
 LocatePointer TextF1
 ClickMB Btn1

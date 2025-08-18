@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: OptionMenu2.c /main/10 1995/07/13 18:49:15 drk $"
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 
     CommonTestInit(argc, argv);
 
-    if (UserData) 
+    if (UserData)
 	num_buttons = atoi(UserData);
     else
 	num_buttons = MAX_BUTTONS;
@@ -231,17 +231,17 @@ int main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, tcs);         n++;
     XtSetArg(args[n], XmNmnemonic,    'o');         n++;
     XtSetArg(args[n], XmNsubMenuId,   PullDown1);   n++;
-    XtSetArg(args[n], XmNmenuHistory, HackBtn3);    n++; 
+    XtSetArg(args[n], XmNmenuHistory, HackBtn3);    n++;
     XtSetArg(args[n], XmNwhichButton, 3);	    n++;
     OptionMenu1 = XmCreateOptionMenu(bboard, "optionMenu", args, n);
     XtManageChild(OptionMenu1);
     XmStringFree(tcs);
-    
+
     CommonPause();   /* now change some buttons to pixmaps */
-   
+
     XtUnmanageChild(MediumBtn2);
     XtUnmanageChild(ShortBtn1);
- 
+
     pixmap =XCreatePixmapFromBitmapData(display,
 			     DefaultRootWindow(display),
 			     XBMu_BITS, XBMu_WIDTH,XBMu_HEIGHT,
@@ -320,7 +320,7 @@ int main(int argc, char **argv)
     Separator3  = CreateSeparator(PullDown1, "Separator3");
 
     /* just for fun, put another manager in between */
-    
+
     n = 0;
     bboard2 = XmCreateBulletinBoard (bboard, "bboard2", args, n);
     XtManageChild(bboard2);
@@ -335,12 +335,12 @@ int main(int argc, char **argv)
     XtSetArg(args[n], XmNlabelString, tcs);         	n++;
     XtSetArg(args[n], XmNmnemonic,    'O');         	n++;
     XtSetArg(args[n], XmNsubMenuId,   PullDown1);   	n++;
-    XtSetArg(args[n], XmNmenuHistory, push_btns1[1]);  	n++; 
+    XtSetArg(args[n], XmNmenuHistory, push_btns1[1]);  	n++;
     XtSetArg(args[n], XmNwhichButton, 3);	    	n++;
     OptionMenu1 = XmCreateOptionMenu(bboard2, "optionMenu", args, n);
     XtManageChild(OptionMenu1);
     XmStringFree(tcs);
-    
+
     PushBtn1      = CreatePushButton("PushButton1", 't', PullDown1);
 
     PushBtn3      = CreatePushButton("*********PushButton3**********", '*',

@@ -81,7 +81,7 @@ typedef struct {
 } TransferContextRec, *TransferContext;
 
 enum{ TC_NONE = 0, TC_FLUSHED = 1, TC_CALLED_WIDGET = 2,
-      TC_CALLED_CALLBACKS = 4, TC_EXITED_DH = 8, 
+      TC_CALLED_CALLBACKS = 4, TC_EXITED_DH = 8,
       TC_DID_DELETE = 16, TC_IN_MULTIPLE = 32 };
 
 /****************************************************************/
@@ -116,8 +116,8 @@ extern char * _XmTextToLocaleText(Widget, XtPointer, Atom, int,
 
 extern void _XmConvertHandlerSetLocal(void);
 
-extern Boolean _XmConvertHandler(Widget wid, Atom *selection, Atom *target, 
-			  Atom *type, XtPointer *value, 
+extern Boolean _XmConvertHandler(Widget wid, Atom *selection, Atom *target,
+			  Atom *type, XtPointer *value,
 			  unsigned long *size, int *fmt);
 
 extern Boolean _XmDestinationHandler(Widget wid, Atom selection, XtEnum op,
@@ -125,7 +125,7 @@ extern Boolean _XmDestinationHandler(Widget wid, Atom selection, XtEnum op,
 			      XtPointer location_data, Time time,
 			      XSelectionRequestEvent *event);
 
-extern void _XmConvertComplete(Widget wid, XtPointer value, 
+extern void _XmConvertComplete(Widget wid, XtPointer value,
 			unsigned long size, int format, Atom type,
 			XmConvertCallbackStruct *cs);
 
@@ -137,4 +137,3 @@ extern XmDestinationCallbackStruct
 #endif
 
 #endif /* _XmTransferI_H */
-

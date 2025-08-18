@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 !
 !------------------------------------------------------------------------
@@ -32,7 +32,7 @@ I18N1.I18N1b*fontList: helvR12
 
 I18N1*TextFieldLabel.labelString: Testons un \350x\350me champ de texte
 
-I18N1*TextField1.value:		 \311videmment, c'est facile pour moi. 
+I18N1*TextField1.value:		 \311videmment, c'est facile pour moi.
 
 I18N1*TextLabel.labelString:	 \312tre ou ne pas \352tre
 
@@ -44,4 +44,3 @@ I18N1*I18N1a.CSText1.renderTable:	 medium
 I18N1*I18N1a.CSText1.renderTable.fontName: helvR12
 I18N1*I18N1a.CSText1.renderTable.medium.fontName: helvR12
 I18N1*CSText1.cstextValue:	 "You know what? I'm happy!"\n Ce serait bien domage de traduire \347a
-

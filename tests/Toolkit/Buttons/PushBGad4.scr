@@ -1,5 +1,5 @@
 # $XConsortium: PushBGad4.scr /main/6 1995/07/17 20:06:47 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client with a MenuBar, a PushButton, and a PushButtonGadget all
@@ -32,7 +32,7 @@
 #  Maroon background. The MenuBar will contain a single CascadeButton
 #  labeled "Cascade1". It's background color will be the default
 #  background color. PushButton will be highlighted with an OrangeRed
-#  highlight. 
+#  highlight.
 
 CompareVisual Form1
 Continue
@@ -40,12 +40,12 @@ Continue
 # Click MB1 in the PushButtonGadget. The background color of the Form
 #  and the PushButtonGadget should change to yellow. The background color
 #  of the PushButton should not change. A Message to this effect will be
-#  printed in the term window. 
+#  printed in the term window.
 
 # Click MB1 in the PushButton. The background color of the PushButton
 #  should change to Green, but the background color of the form and
 #  the PushButtonGadget should not change. A Message to this effect will
-#  be printed in the term window. 
+#  be printed in the term window.
 
 LocatePointer PBGadget1
 ClickMB Btn1
@@ -56,16 +56,16 @@ CompareVisual Form1
 Continue
 
 # Click MB1 in the Menubar on the "Cascade1" button. A Pulldown
-#  menu should appear. It should contain three PushButtons. 
+#  menu should appear. It should contain three PushButtons.
 
 # Select the "Destroy PushButton" button. PushButton should disappear
-#  and the highlight should now be on PushButtonGadget. 
+#  and the highlight should now be on PushButtonGadget.
 
 # Select the "Destroy PushButtonGadget" button from the Menu.
-#  PushButtonGadget should disappear and no highlight should be visible. 
+#  PushButtonGadget should disappear and no highlight should be visible.
 
 # Select the "Destroy Form" button from the Menu. The Form should be
-#  destroyed and an empty shell should be left. 
+#  destroyed and an empty shell should be left.
 
 LocatePointer Cascade1
 ClickMB Btn1
@@ -85,10 +85,3 @@ ClickMB Btn1
 CompareVisual Shell1
 
 Exit
-
-
-
-
-
-
-

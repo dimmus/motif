@@ -50,7 +50,7 @@ char 	**argv;
      }
 
      XtSetArg(args[n], XmNallowShellResize, True);  	n++;
-     Shell1 = XtAppCreateShell(argv[0], "XMauto", 
+     Shell1 = XtAppCreateShell(argv[0], "XMauto",
 		               applicationShellWidgetClass, display, args, n);
 
      CreateLayout();
@@ -73,7 +73,7 @@ static void CreateLayout()
     Widget Frame0, Frame1, Frame2, Frame3;
     Widget Frame4, Frame5;
     Widget Frame1Title, Frame2Title, Frame3Title;
-    Widget Frame4Title, Frame5Title; 
+    Widget Frame4Title, Frame5Title;
     Widget RowCol1, RowCol2, RowCol3;
     Widget PushVisualFile, PushDataFile, PushScriptFile;
     Widget PushInstructions, PushFailColor, PushExtra;
@@ -82,7 +82,7 @@ static void CreateLayout()
 
     XmString tcs;
 
-    n = 0; 
+    n = 0;
     Frame0 = XmCreateFrame(Shell1, "Frame0", args, n);
     XtManageChild(Frame0);
 
@@ -91,7 +91,7 @@ static void CreateLayout()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);	n++;
-    XtSetArg(args[n], XmNchildHorizontalAlignment, 
+    XtSetArg(args[n], XmNchildHorizontalAlignment,
 	     XmALIGNMENT_CENTER);				n++;
     Frame1Title = XmCreateLabel(Frame0, "Frame1Title", args, n);
     XtManageChild(Frame1Title);
@@ -104,7 +104,7 @@ static void CreateLayout()
     Form = XmCreateForm(Frame0, "Form", args, n);
     XtManageChild(Form);
 
-    n = 0; 
+    n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);	n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
     Frame1 = XmCreateFrame(Form, "Frame1", args, n);
@@ -115,7 +115,7 @@ static void CreateLayout()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);	n++;
-    XtSetArg(args[n], XmNchildHorizontalAlignment, 
+    XtSetArg(args[n], XmNchildHorizontalAlignment,
 	     XmALIGNMENT_CENTER);				n++;
     Frame1Title = XmCreateLabel(Frame1, "Frame1Title", args, n);
     XtManageChild(Frame1Title);
@@ -144,7 +144,7 @@ static void CreateLayout()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);	n++;
-    XtSetArg(args[n], XmNchildHorizontalAlignment, 
+    XtSetArg(args[n], XmNchildHorizontalAlignment,
 	     XmALIGNMENT_BEGINNING);				n++;
     Frame2Title = XmCreateLabel(Frame2, "Frame2Title", args, n);
     XtManageChild(Frame2Title);
@@ -187,7 +187,7 @@ static void CreateLayout()
 
     XtAddCallback(ToggleCompare, XmNarmCallback, SimpleCB, COMPARE);
 
-    XmStringFree(tcs); 
+    XmStringFree(tcs);
 
     tcs = XmStringCreateSimple("Ignore Comparsions");
 
@@ -199,7 +199,7 @@ static void CreateLayout()
     XtAddCallback(ToggleIgnore, XmNarmCallback, SimpleCB, IGNORE);
 
     XmStringFree(tcs);
-    
+
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);	n++;
     XtSetArg(args[n], XmNleftWidget, Frame2);			n++;
@@ -214,7 +214,7 @@ static void CreateLayout()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);	n++;
-    XtSetArg(args[n], XmNchildHorizontalAlignment, 
+    XtSetArg(args[n], XmNchildHorizontalAlignment,
 	     XmALIGNMENT_BEGINNING);				n++;
     Frame3Title = XmCreateLabel(Frame3, "Frame3Title", args, n);
     XtManageChild(Frame3Title);
@@ -274,7 +274,7 @@ static void CreateLayout()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);	n++;
-    XtSetArg(args[n], XmNchildHorizontalAlignment, 
+    XtSetArg(args[n], XmNchildHorizontalAlignment,
 	     XmALIGNMENT_BEGINNING);				n++;
     Frame4Title = XmCreateLabel(Frame4, "Frame4Title", args, n);
     XtManageChild(Frame4Title);
@@ -320,7 +320,7 @@ static void CreateLayout()
     PushInstructions = XmCreatePushButton(RowCol2, "PushInstructions", args, n);
     XtManageChild(PushInstructions);
 
-    XtAddCallback(PushInstructions, XmNactivateCallback, 
+    XtAddCallback(PushInstructions, XmNactivateCallback,
 		  FileSelectCB, INSTRUCT);
 
     XmStringFree(tcs);
@@ -385,7 +385,7 @@ static void CreateLayout()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);			n++;
     XtSetArg(args[n], XmNchildType, XmFRAME_TITLE_CHILD);	n++;
-    XtSetArg(args[n], XmNchildHorizontalAlignment, 
+    XtSetArg(args[n], XmNchildHorizontalAlignment,
 	     XmALIGNMENT_BEGINNING);				n++;
     Frame5Title = XmCreateLabel(Frame5, "Frame5Title", args, n);
     XtManageChild(Frame5Title);
@@ -493,7 +493,7 @@ static void CreateDialogs()
     n = 0;
     XtSetArg(args[n], XmNdirectory, NULL);			n++;
     XtSetArg(args[n], XmNautoUnmanage, True);			n++;
-    FileSelectBox = 
+    FileSelectBox =
 		XmCreateFileSelectionDialog(Shell1, "FileSelectBox", args, n);
 
     n = 0;
@@ -551,12 +551,12 @@ static void GetTestNameCB(w, client_data, call_data)
 Widget w;
 XtPointer client_data, call_data;
 {
-    XmFileSelectionBoxCallbackStruct *FSBStruct = 
+    XmFileSelectionBoxCallbackStruct *FSBStruct =
 			((XmFileSelectionBoxCallbackStruct *)call_data);
     int length, i;
     String value;
 
-    for (i = 0 ; i < strlen(CurrentTestString) ; i++) 
+    for (i = 0 ; i < strlen(CurrentTestString) ; i++)
 	CurrentTestString[i] = ' ';
     XmStringGetLtoR(FSBStruct->value, XmSTRING_DEFAULT_CHARSET, &value);
     length = strlen(value);
@@ -763,7 +763,7 @@ XtPointer client_data, call_data;
 	if ((int) client_data == WRITE)
 		XtAddCallback(FileSelectBox, XmNokCallback, WriteOutCB, NULL);
 	else
-    		XtAddCallback(FileSelectBox, XmNokCallback, ChangeFileCB, 
+    		XtAddCallback(FileSelectBox, XmNokCallback, ChangeFileCB,
 			      client_data);
 
     XtManageChild(FileSelectBox);
@@ -774,7 +774,7 @@ static void ChangeFileCB(w, client_data, call_data)
 Widget w;
 XtPointer client_data, call_data;
 {
-    XmFileSelectionBoxCallbackStruct *FSBStruct = 
+    XmFileSelectionBoxCallbackStruct *FSBStruct =
 			((XmFileSelectionBoxCallbackStruct *)call_data);
     String value;
     int type;
@@ -801,14 +801,14 @@ XtPointer client_data, call_data;
     strcat(arguments, " ");
 
     BuildTestString(False);
-    
+
 }
 
 static void WriteOutCB(w, client_data, call_data)
 Widget w;
 XtPointer client_data, call_data;
 {
-    XmFileSelectionBoxCallbackStruct *FSBStruct = 
+    XmFileSelectionBoxCallbackStruct *FSBStruct =
 			((XmFileSelectionBoxCallbackStruct *)call_data);
     String value;
     Arg args[2];
@@ -818,7 +818,7 @@ XtPointer client_data, call_data;
     FILE *fp;
 
     XmStringGetLtoR(FSBStruct->value, XmSTRING_DEFAULT_CHARSET, &value);
-    if (! (fp = fopen(value, "w"))) 
+    if (! (fp = fopen(value, "w")))
 	printf("xmAuto (warning): cannot open %s for writing\n", value);
     else {
 	n = 0;
@@ -840,7 +840,7 @@ static void ReadInCB(w, client_data, call_data)
 Widget w;
 XtPointer client_data, call_data;
 {
-    XmFileSelectionBoxCallbackStruct *FSBStruct = 
+    XmFileSelectionBoxCallbackStruct *FSBStruct =
 			((XmFileSelectionBoxCallbackStruct *)call_data);
     String value;
     String str_value;
@@ -852,11 +852,11 @@ XtPointer client_data, call_data;
 
     itemCount = 0;
     XmStringGetLtoR(FSBStruct->value, XmSTRING_DEFAULT_CHARSET, &value);
-    if (! (fp = fopen(value, "r"))) 
+    if (! (fp = fopen(value, "r")))
 	printf("xmAuto (warning): cannot open %s for reading\n", value);
     else {
 	str_value = (char *)malloc(MAXLINE * sizeof(char));
-	while (fgets(str_value, MAXLINE, fp) != NULL) 
+	while (fgets(str_value, MAXLINE, fp) != NULL)
 		items[itemCount++] = XmStringCreateSimple(str_value);
 	XtFree(str_value);
 
@@ -875,7 +875,7 @@ static void BrowseCB(w, client_data, call_data)
 Widget w;
 XtPointer client_data, call_data;
 {
-    XmListCallbackStruct *ListStruct = 
+    XmListCallbackStruct *ListStruct =
 			((XmListCallbackStruct *)call_data);
     String value;
     Boolean into_arg = False;
@@ -928,7 +928,7 @@ XtPointer client_data, call_data;
 
     CurrentTestString[0] = '\0';
     arguments[0] =  '\0';
-	
+
     XmListSetHorizPos(List1, 200);
 
 }

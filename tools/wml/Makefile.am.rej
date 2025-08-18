@@ -3,9 +3,8 @@
 @@ -30,7 +30,7 @@
  wml_LDADD = -L. -lwml
  wml_DEPENDENCIES = libwml.a
- 
+
 -wmldbcreate_LDADD = ../../lib/Xm/libXm.la
 +wmldbcreate_LDADD = ../../lib/Xm/libXm.la -lXt
- 
- INCLUDES = -I../../lib -I$(srcdir)/../../lib -I$(srcdir)/../../include ${X_CFLAGS} 
- 
+
+ INCLUDES = -I../../lib -I$(srcdir)/../../lib -I$(srcdir)/../../include ${X_CFLAGS}

@@ -22,26 +22,26 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Form1 
+TRACE:(1) CompareVisual Form1
 TRACE:(2) Continue
-TRACE:(3) CompareVisual Form1 
+TRACE:(3) CompareVisual Form1
 TRACE:(4) Continue
-TRACE:(5) CompareVisual Form1 
+TRACE:(5) CompareVisual Form1
 TRACE:(6) Continue
-TRACE:(7) CompareVisual Form1 
+TRACE:(7) CompareVisual Form1
 TRACE:(8) Continue
 TRACE:(9) WindowRaise Shell1
-TRACE:(10) CompareVisual Form1 
+TRACE:(10) CompareVisual Form1
 TRACE:(11) WindowRaise Shell1
-TRACE:(12) CompareVisual Form1 
+TRACE:(12) CompareVisual Form1
 TRACE:(13) WindowResize Shell1 SouthEast 400 400
-TRACE:(14) CompareVisual Form1 
+TRACE:(14) CompareVisual Form1
 TRACE:(15) WindowResize Shell1 SouthEast 200 200
-TRACE:(16) CompareVisual Form1 
+TRACE:(16) CompareVisual Form1
 TRACE:(17) WindowResize Shell1 NorthWest 100 100
-TRACE:(18) CompareVisual Form1 
+TRACE:(18) CompareVisual Form1
 TRACE:(19) WindowIconify Shell1
 TRACE:(20) WindowDeiconify Shell1
-TRACE:(21) CompareVisual Form1 
+TRACE:(21) CompareVisual Form1
 TRACE:(22) Exit
 Exiting Test...Please Standby...

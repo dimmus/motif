@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 
 ! This is the defaults file for the Text directory.
@@ -38,7 +38,7 @@ CSText14*CSText6.layoutDirection: RIGHT_TO_LEFT
 
 CSText14*ScrollCSText7.layoutDirection: RIGHT_TO_LEFT
 CSText14*CSText7.layoutDirection: RIGHT_TO_LEFT
- 
+
 # Resource definitions _MOTIF_DEFAULT_LOCALE rendition.
 CSText16*renderTable.fontName: 8x13bold
 CSText16*renderTable.fontType: FONT_IS_FONT
@@ -48,26 +48,26 @@ CSText16*Label1.labelString: Hello World
 CSText16*Label1.renderTable: first second third
 CSText16*Label1.renderTable.first.renditionForeground: red
 CSText16*Label1.renderTable.first.underlineType: DOUBLE_LINE
-CSText16*Label1.renderTable.first.tabList: 1in, +2.5in  
+CSText16*Label1.renderTable.first.tabList: 1in, +2.5in
 CSText16*Label1.renderTable.second.renditionForeground: purple
 CSText16*Label1.renderTable.second.underlineType: NO_LINE
 CSText16*Label1.renderTable.second.strikethruType: SINGLE_DASHED_LINE
-CSText16*Label1.renderTable.second.tabList: 1cm, +2in  
+CSText16*Label1.renderTable.second.tabList: 1cm, +2in
 CSText16*Label1.renderTable.third.renditionForeground: green
 CSText16*Label1.renderTable.third.underlineType: AS_IS
 CSText16*Label1.renderTable.third.strikethruType: SINGLE_LINE
 CSText16*Label1.renderTable.third.tabList: 0in, +100pixels
 
 # Resource definitions for CSText1.
-CSText16*CSText1.cstextValue: Hello World 
-CSText16*CSText1.renderTable: first second third 
+CSText16*CSText1.cstextValue: Hello World
+CSText16*CSText1.renderTable: first second third
 CSText16*CSText1.renderTable.first.renditionForeground: red
 CSText16*CSText1.renderTable.first.underlineType: DOUBLE_LINE
-CSText16*CSText1.renderTable.first.tabList: 1in, +2.5in  
+CSText16*CSText1.renderTable.first.tabList: 1in, +2.5in
 CSText16*CSText1.renderTable.second.renditionForeground: purple
 CSText16*CSText1.renderTable.second.underlineType: NO_LINE
 CSText16*CSText1.renderTable.second.strikethruType: SINGLE_DASHED_LINE
-CSText16*CSText1.renderTable.second.tabList: 1cm, +2in  
+CSText16*CSText1.renderTable.second.tabList: 1cm, +2in
 CSText16*CSText1.renderTable.third.renditionForeground: green
 CSText16*CSText1.renderTable.third.underlineType: AS_IS
 CSText16*CSText1.renderTable.third.strikethruType: SINGLE_LINE

@@ -18,30 +18,30 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: OpenHPD.uil /main/5 1995/07/14 10:50:42 drk $
 !
-!  
+!
 !  	THIS SOFTWARE IS FURNISHED UNDER A LICENSE AND MAY BE USED
 !  AND COPIED ONLY IN ACCORDANCE WITH THE TERMS OF SUCH LICENSE AND
 !  WITH THE INCLUSION OF THE ABOVE COPYRIGHT NOTICE.  THIS SOFTWARE OR
 !  ANY OTHER COPIES THEREOF MAY NOT BE PROVIDED OR OTHERWISE MADE
 !  AVAILABLE TO ANY OTHER PERSON.  NO TITLE TO AND OWNERSHIP OF THE
 !  SOFTWARE IS HEREBY TRANSFERRED.
-!  
+!
 !  	THE INFORMATION IN THIS SOFTWARE IS SUBJECT TO CHANGE WITHOUT
 !  NOTICE AND SHOULD NOT BE CONSTRUED AS A COMMITMENT BY OPEN SOFTWARE
-!  
-!  
-!  
-!  
-!  
-!  
-!  
-!  
-!  
+!
+!
+!
+!
+!
+!
+!
+!
+!
 !
 
 module OpenH
@@ -54,7 +54,7 @@ module OpenH
 !
 
 include file 'main.uil';
-  
+
 include file 'pixmaps.uil';
 !
 ! Contains color table and icons
@@ -88,8 +88,8 @@ object
 		{
 			XmNlabelType		= XmSTRING;
 			XmNlabelString		= default_label;
-			XmNleftAttachment	= XmATTACH_FORM; 
-			XmNtopAttachment	= XmATTACH_FORM; 
+			XmNleftAttachment	= XmATTACH_FORM;
+			XmNtopAttachment	= XmATTACH_FORM;
 		};
 	};
 
@@ -100,8 +100,8 @@ object
 		{
 			XmNlabelType		= XmPIXMAP;
 			XmNlabelPixmap		= test1_btn1_icon;
-			XmNleftAttachment	= XmATTACH_FORM; 
-			XmNtopAttachment	= XmATTACH_FORM; 
+			XmNleftAttachment	= XmATTACH_FORM;
+			XmNtopAttachment	= XmATTACH_FORM;
 		};
 	};
 

@@ -1,5 +1,5 @@
 # $XConsortium: List3.scr /main/5 1995/07/17 20:21:44 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List3.scr	1.1  91/10/11
 # Screen 1
 # A client containing a List should appear. The List should have the
 # following resources set:
 #    1) Should have 6 items (Item1 - Item6).
-#    2) Should have 3 Selected Items (Item1, Item3, and Item6). 
+#    2) Should have 3 Selected Items (Item1, Item3, and Item6).
 #    3) Background should be wheat and foreground navy.
 #    4) The font should be variable.
 #    5) ListMarginWidth and listMarginHeight should be 20.

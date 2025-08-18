@@ -26,4 +26,3 @@
 set ScrollPerf = 'ScrollPerf -c -T -xrm ScrollPerf*repeatDelay:50 -xrm ScrollPerf*initialDelay: 250'
 
 foreach test ("$ScrollPerf")
-

@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,11 +37,11 @@ extern "C" {
 /********    Private Function Declarations for PixConv.c    ********/
 
 extern void _XmRegisterPixmapConverters( void ) ;
-extern void _XmTopShadowPixmapDefault( 
+extern void _XmTopShadowPixmapDefault(
                         Widget widget,
                         int offset,
                         XrmValue *value) ;
-extern void _XmHighlightPixmapDefault( 
+extern void _XmHighlightPixmapDefault(
                         Widget widget,
                         int offset,
                         XrmValue *value) ;

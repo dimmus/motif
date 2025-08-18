@@ -1,5 +1,5 @@
 # $XConsortium: ScrollList3.scr /main/5 1995/07/17 20:22:45 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)ScrollList3.scr	1.2  91/10/31
 
@@ -39,7 +39,7 @@ CompareVisual List1
 
 # Click MB1 in the scrollbar below the slider. Item <Five> should
 # now the be first item in the List, and Items Five - Nine should
-# be visible. 
+# be visible.
 
 LocatePointer List1 RVertScrollBarDownSliderArea
 ClickMB Btn1
@@ -52,23 +52,23 @@ Continue
 
 # Select the first visible Item (Five). The last Item (Ten) should be
 # deleted from the List. There should be no visible change to the List,
-# but the scrollbar should fill downwards. 
+# but the scrollbar should fill downwards.
 
 LocatePointer List1 RListItem 0
 ClickMB Btn1
 
 # Select the first Item from the List again (Item5). The last item
-# should be deleted from the List and the List should scroll up one item. 
+# should be deleted from the List and the List should scroll up one item.
 
 LocatePointer List1 RListItem 0
 ClickMB Btn1
 
-# Continue this process until no items are left in the List. 
+# Continue this process until no items are left in the List.
 
-# When item <Six> is deleted, the vertical scrollbar will disappear. 
+# When item <Six> is deleted, the vertical scrollbar will disappear.
 
 # When the last item is deleted from the list a message will be
-# printed in the term window. 
+# printed in the term window.
 
 LocatePointer List1 RListItem 0
 ClickMB Btn1
@@ -98,7 +98,7 @@ ClickMB Btn1
 
 Continue
 
-# All ten items will be replaced, and items Six through Ten should be visible. 
+# All ten items will be replaced, and items Six through Ten should be visible.
 
 LocatePointer List1 RListItem 0
 CompareVisual List1
@@ -107,13 +107,13 @@ CompareVisual List1
 
 Continue
 
-# The List should shrink to a height of 0. No items should be visible. 
+# The List should shrink to a height of 0. No items should be visible.
 
 # C)
 
 Continue
 
-# The List should grow to a height of 500. All items should be visible. 
+# The List should grow to a height of 500. All items should be visible.
 
 LocatePointer List1 RListItem 0
 CompareVisual List1
@@ -145,7 +145,7 @@ LocatePointer List1 RVertScrollBarSlider
 DragSliderValue Down Max
 
 # Now press \"Push to Delete and Add\". The List should contain 1 item
-# \"Yet Another\". 
+# \"Yet Another\".
 
 LocatePointer Push1
 ClickMB Btn1
@@ -177,7 +177,7 @@ LocatePointer List1 RVertScrollBarSlider
 DragSliderValue Down Max
 
 # Now press \"Push to Delete and Add\". The List should contain 1 item
-# \"Yet Another\". 
+# \"Yet Another\".
 
 LocatePointer Push1
 ClickMB Btn1
@@ -209,7 +209,7 @@ LocatePointer List1 RVertScrollBarSlider
 DragSliderValue Down Max
 
 # Now press \"Push to Delete and Add\". The List should contain 1 item
-# \"Yet Another\". 
+# \"Yet Another\".
 
 LocatePointer Push1
 ClickMB Btn1

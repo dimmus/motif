@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,17 +19,17 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: dogs.uil /main/5 1995/07/14 10:07:35 drk $
 !******************************************************************************
 
 !******************************************************************************
-!* 
+!*
 !*  dogs.uil - Square & Dog widget demo, application UIL file.
-!* 
+!*
 !******************************************************************************
 
 module squares
@@ -45,7 +45,7 @@ procedure
 	create_cb(integer);
 	bark_cb(integer);
 	tb_cb(integer);
-	scale_cb(integer);	
+	scale_cb(integer);
 	help_cb(compound_string);
 	exit_cb();
 
@@ -347,4 +347,3 @@ object tb3 : XmToggleButton {
 };
 
 end module;
-

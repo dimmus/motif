@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 bmdir = @INCDIR@/bitmaps
 

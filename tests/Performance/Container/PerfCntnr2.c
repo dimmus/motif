@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -65,7 +65,7 @@ void Quit(Widget w, XtPointer client_data, XtPointer call_data)
 void
 main(int argc, char **argv)
 {
-    
+
     Widget		ScrolledW, Frame, Container, *IconGad;
     int			i,j;
     Cardinal		n, num_obj;
@@ -80,9 +80,9 @@ main(int argc, char **argv)
 
     test_num = 0;
     num_obj = NUM_OBJ;
-    
+
     if (UserData != NULL) {
-	
+
 	if (strcmp(UserData, "noscroll") == 0)
 	    test_num = 1;
 	else {
@@ -92,7 +92,7 @@ main(int argc, char **argv)
 	}
 
 	free(UserData);
-	
+
     }
 
     n = 0;
@@ -101,7 +101,7 @@ main(int argc, char **argv)
     XtSetValues(Shell1, args, n);
 
     /* We want a scrolledwindow because the container window
-       can potentially be huge. If we don't want a scrolled 
+       can potentially be huge. If we don't want a scrolled
        window run it with -u noscroll */
 
     if (test_num != 1) {
@@ -110,12 +110,12 @@ main(int argc, char **argv)
        XtSetArg(args[n], XmNscrollingPolicy, XmAUTOMATIC); n++;
        ScrolledW = XmCreateScrolledWindow(Shell1, "ScrolledW", args, n);
        XtManageChild(ScrolledW);
-    
+
        /* but we don't want interaction with the scrolling header */
        n = 0;
        Frame= XmCreateFrame(ScrolledW, "Frame", args, n);
        XtManageChild(Frame);
-    
+
        n = 0;
        Container= XmCreateContainer(Frame, "Container", args, n);
 	   VertScrollB = XtNameToWidget(ScrolledW, "VertScrollBar");
@@ -130,24 +130,24 @@ main(int argc, char **argv)
        n = 0;
        Container= XmCreateContainer(Shell1, "Container", args, n);
     }
-      
+
     XtManageChild(Container);
 	XtAddCallback(Container, XmNselectionCallback, Quit, NULL);
-    
+
     IconGad = (Widget*) XtMalloc(num_obj*sizeof(Widget));
 
     /* this one creates a binary tree labelled 0, 00 01, etc */
     sprintf(IconName,"IconGad0");
     for (i = 0; i < num_obj; i++) {
-	
+
 	n = 0 ;
 	j = (i+1)/2 - 1 ;
 	if (i) {
 	    XtSetArg(args[n], XmNentryParent, IconGad[j]); n++;
 	    sprintf(IconName,"%s%d", XtName(IconGad[j]), i%2);
-	} 
-	
-	icon_name = XmStringCreate(IconName, XmSTRING_DEFAULT_CHARSET); 
+	}
+
+	icon_name = XmStringCreate(IconName, XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, icon_name); n++;
 	IconGad[i] = XmCreateIconGadget(Container, IconName, args, n);
 	XmStringFree(icon_name);
@@ -165,7 +165,7 @@ main(int argc, char **argv)
     CommonPause();
 
     XtAppMainLoop(app_context);
-    
+
 }
 
 void IncrBottomCB(Widget w, XtPointer client_data, XtPointer call_data)

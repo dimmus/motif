@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ArrowB.c /main/16 1995/10/25 19:50:57 cde-sun $"
@@ -49,74 +49,74 @@ static char rcsid[] = "$XConsortium: ArrowB.c /main/16 1995/10/25 19:50:57 cde-s
 
 /********    Static Function Declarations    ********/
 
-static void ClassPartInitialize( 
+static void ClassPartInitialize(
                         WidgetClass wc);
-static void Initialize( 
+static void Initialize(
                         Widget rw,
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args);
-static void GetArrowGC( 
+static void GetArrowGC(
                         XmArrowButtonWidget aw);
-static void Redisplay( 
+static void Redisplay(
                         Widget wid,
                         XEvent *event,
                         Region region);
-static void Destroy( 
+static void Destroy(
                         Widget w);
-static Boolean SetValues( 
+static Boolean SetValues(
                         Widget cw,
                         Widget rw,
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args);
-static void Arm( 
+static void Arm(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void MultiArm( 
+static void MultiArm(
                         Widget aw,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void Activate( 
+static void Activate(
                         Widget wid,
                         XEvent *buttonEvent,
                         String *params,
                         Cardinal *num_params);
-static void MultiActivate( 
+static void MultiActivate(
                         Widget wid,
                         XEvent *buttonEvent,
                         String *params,
                         Cardinal *num_params);
-static void ActivateCommon( 
+static void ActivateCommon(
                         Widget wid,
                         XEvent *buttonEvent);
-static void ArmAndActivate( 
+static void ArmAndActivate(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void ArmTimeout( 
+static void ArmTimeout(
                         XtPointer closure,
                         XtIntervalId *id);
-static void Disarm( 
+static void Disarm(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void Enter( 
+static void Enter(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void Leave( 
+static void Leave(
                         Widget wid,
                         XEvent *event,
                         String *params,
                         Cardinal *num_params);
-static void ChangeCB(Widget w, 
+static void ChangeCB(Widget w,
 		     XtCallbackProc activCB,
 		     XtPointer closure,
 		     Boolean setunset);
@@ -147,19 +147,19 @@ static XtActionsRec actionsList[] =
 
 /*  Resource list for ArrowButton  */
 
-static XtResource resources[] = 
+static XtResource resources[] =
 {
   {
-    XmNmultiClick, XmCMultiClick, XmRMultiClick, 
+    XmNmultiClick, XmCMultiClick, XmRMultiClick,
     sizeof(unsigned char),
-    XtOffsetOf( struct _XmArrowButtonRec, arrowbutton.multiClick), 
+    XtOffsetOf( struct _XmArrowButtonRec, arrowbutton.multiClick),
     XmRImmediate, (XtPointer) XmMULTICLICK_KEEP
   },
 
   {
-    XmNarrowDirection, XmCArrowDirection, XmRArrowDirection, 
+    XmNarrowDirection, XmCArrowDirection, XmRArrowDirection,
     sizeof(unsigned char),
-    XtOffsetOf( struct _XmArrowButtonRec, arrowbutton.direction), 
+    XtOffsetOf( struct _XmArrowButtonRec, arrowbutton.direction),
     XmRImmediate, (XtPointer) XmARROW_UP
   },
 
@@ -182,7 +182,7 @@ static XtResource resources[] =
   },
    {
      XmNdetailShadowThickness, XmCShadowThickness, XmRHorizontalDimension,
-     sizeof (Dimension), 
+     sizeof (Dimension),
      XtOffsetOf(XmArrowButtonRec, arrowbutton.detail_shadow_thickness),
      XmRCallProc, (XtPointer) _XmSetThickness
    }
@@ -204,32 +204,32 @@ static XmSyntheticResource syn_resources[] =
 externaldef (xmarrowbuttonclassrec) XmArrowButtonClassRec xmArrowButtonClassRec=
 {
   { /* Core fields */
-    (WidgetClass) &xmPrimitiveClassRec, /* superclass            */	
-    "XmArrowButton",			/* class_name	         */	
-    sizeof(XmArrowButtonRec),		/* widget_size	         */	
-    (XtProc)NULL,			/* class_initialize      */    
+    (WidgetClass) &xmPrimitiveClassRec, /* superclass            */
+    "XmArrowButton",			/* class_name	         */
+    sizeof(XmArrowButtonRec),		/* widget_size	         */
+    (XtProc)NULL,			/* class_initialize      */
     ClassPartInitialize,		/* class_part_initialize */
-    FALSE,				/* class_inited          */	
-    Initialize,				/* initialize	         */	
+    FALSE,				/* class_inited          */
+    Initialize,				/* initialize	         */
     (XtArgsProc)NULL,			/* initialize_hook       */
-    XtInheritRealize,			/* realize	         */	
-    actionsList,			/* actions               */	
-    XtNumber(actionsList),		/* num_actions    	 */	
-    resources,				/* resources	         */	
-    XtNumber(resources),		/* num_resources         */	
-    NULLQUARK,				/* xrm_class	         */	
-    TRUE,				/* compress_motion       */	
-    XtExposeCompressMaximal,		/* compress_exposure     */	
+    XtInheritRealize,			/* realize	         */
+    actionsList,			/* actions               */
+    XtNumber(actionsList),		/* num_actions    	 */
+    resources,				/* resources	         */
+    XtNumber(resources),		/* num_resources         */
+    NULLQUARK,				/* xrm_class	         */
+    TRUE,				/* compress_motion       */
+    XtExposeCompressMaximal,		/* compress_exposure     */
     TRUE,				/* compress_enterleave   */
-    FALSE,				/* visible_interest      */	
-    Destroy,				/* destroy               */	
+    FALSE,				/* visible_interest      */
+    Destroy,				/* destroy               */
     (XtWidgetProc)NULL,			/* resize                */
-    Redisplay,				/* expose                */	
-    SetValues,				/* set_values	         */	
+    Redisplay,				/* expose                */
+    SetValues,				/* set_values	         */
     (XtArgsFunc)NULL,			/* set_values_hook       */
     XtInheritSetValuesAlmost,		/* set_values_almost     */
     (XtArgsProc)NULL,			/* get_values_hook       */
-    (XtAcceptFocusProc)NULL,		/* accept_focus	         */	
+    (XtAcceptFocusProc)NULL,		/* accept_focus	         */
     XtVersion,				/* version               */
     (XtPointer)NULL,			/* callback private      */
     defaultTranslations,		/* tm_table              */
@@ -258,7 +258,7 @@ externaldef(xmarrowbuttonwidgetclass) WidgetClass xmArrowButtonWidgetClass =
 
 
 /* Trait record for arrowButton */
-static XmConst XmActivatableTraitRec arrowButtonAT = 
+static XmConst XmActivatableTraitRec arrowButtonAT =
 {
   0,				/* version	*/
   ChangeCB			/* changeCB	*/
@@ -271,7 +271,7 @@ static XmConst XmActivatableTraitRec arrowButtonAT =
  *
  ************************************************************************/
 
-static void 
+static void
 ClassPartInitialize(
         WidgetClass wc )
 {
@@ -280,7 +280,7 @@ ClassPartInitialize(
   /* Install the activatable trait for all subclasses */
   XmeTraitSet((XtPointer)wc, XmQTactivatable, (XtPointer) &arrowButtonAT);
 }
-      
+
 /************************************************************************
  *
  *  Initialize
@@ -289,7 +289,7 @@ ClassPartInitialize(
  ************************************************************************/
 
 /*ARGSUSED*/
-static void 
+static void
 Initialize(
         Widget rw,
         Widget nw,
@@ -298,29 +298,29 @@ Initialize(
 {
   XmArrowButtonWidget request = (XmArrowButtonWidget) rw;
   XmArrowButtonWidget new_w = (XmArrowButtonWidget) nw;
-  
+
   /*
    *  Check the data put into the new widget from .Xdefaults
    *  or through the arg list.
    */
-  if (!XmRepTypeValidValue(XmRID_ARROW_DIRECTION, 
+  if (!XmRepTypeValidValue(XmRID_ARROW_DIRECTION,
 			   new_w->arrowbutton.direction, (Widget) new_w))
     {
       new_w->arrowbutton.direction = XmARROW_UP;
     }
-  
-  
+
+
   /*  Set up a geometry for the widget if it is currently 0.  */
-  if (request->core.width == 0) 
+  if (request->core.width == 0)
     new_w->core.width += 15;
-  if (request->core.height == 0) 
+  if (request->core.height == 0)
     new_w->core.height += 15;
-  
-  
+
+
   /*  Set the internal arrow variables  */
   new_w->arrowbutton.timer = 0;
   new_w->arrowbutton.selected = False;
-  
+
   /*  Get the drawing graphics contexts.  */
   GetArrowGC (new_w);
 }
@@ -332,29 +332,29 @@ Initialize(
  *
  ************************************************************************/
 
-static void 
+static void
 GetArrowGC(
         XmArrowButtonWidget aw )
 {
   XGCValues values;
   XtGCMask  valueMask, unusedMask;
-  
+
   valueMask = GCForeground | GCBackground | GCGraphicsExposures;
   unusedMask = GCClipXOrigin | GCClipYOrigin | GCFont;
 
   values.foreground = aw->primitive.foreground;
   values.background = aw->core.background_pixel;
   values.graphics_exposures = False;
-  
+
   aw->arrowbutton.arrow_GC = XtAllocateGC((Widget) aw, 0, valueMask, &values,
 					  GCClipMask, unusedMask);
-  
+
   valueMask |= GCFillStyle | GCStipple;
   values.fill_style = FillOpaqueStippled;
   values.stipple = _XmGetInsensitiveStippleBitmap((Widget) aw);
-  
-  aw->arrowbutton.insensitive_GC = XtAllocateGC((Widget) aw, 0, valueMask, 
-						&values, GCClipMask, 
+
+  aw->arrowbutton.insensitive_GC = XtAllocateGC((Widget) aw, 0, valueMask,
+						&values, GCClipMask,
 						unusedMask);
 }
 
@@ -365,7 +365,7 @@ GetArrowGC(
  *
  ************************************************************************/
 
-static void 
+static void
 Redisplay(
         Widget wid,
         XEvent *event,
@@ -374,10 +374,10 @@ Redisplay(
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
   int iwidth, iheight;
   XtExposeProc expose;
-  
+
   iwidth = (int) aw->core.width - 2 * aw->primitive.highlight_thickness;
   iheight = (int) aw->core.height - 2 * aw->primitive.highlight_thickness;
-  
+
   /*  Draw the arrow  */
   if ((iwidth > 0) && (iheight > 0))
     {
@@ -391,7 +391,7 @@ Redisplay(
 		       aw->core.height - 2 * aw->primitive.highlight_thickness,
 		       aw->primitive.shadow_thickness,
 		       XmSHADOW_OUT);
-      
+
       if (aw->arrowbutton.selected && XtIsSensitive(wid))
 	DrawArrow(aw, aw->primitive.bottom_shadow_GC,
 		  aw->primitive.top_shadow_GC, aw->arrowbutton.arrow_GC);
@@ -401,11 +401,11 @@ Redisplay(
 		  (XtIsSensitive(wid) ?
 		   aw->arrowbutton.arrow_GC : aw->arrowbutton.insensitive_GC));
     }
-  
+
   /* Envelop our superclass expose method */
   _XmProcessLock();
   expose = xmPrimitiveClassRec.core_class.expose;
-  _XmProcessUnlock(); 
+  _XmProcessUnlock();
   (*(expose)) ((Widget) aw, event, region);
 }
 
@@ -416,15 +416,15 @@ Redisplay(
  *
  ************************************************************************/
 
-static void 
+static void
 Destroy(
         Widget w )
 {
   XmArrowButtonWidget aw = (XmArrowButtonWidget) w;
-  
+
   if (aw->arrowbutton.timer)
     XtRemoveTimeOut(aw->arrowbutton.timer);
-  
+
   XtReleaseGC(w, aw->arrowbutton.arrow_GC);
   XtReleaseGC(w, aw->arrowbutton.insensitive_GC);
 }
@@ -436,7 +436,7 @@ Destroy(
  ************************************************************************/
 
 /*ARGSUSED*/
-static Boolean 
+static Boolean
 SetValues(
         Widget cw,
         Widget rw,
@@ -446,18 +446,18 @@ SetValues(
 {
   XmArrowButtonWidget current = (XmArrowButtonWidget) cw;
   XmArrowButtonWidget new_w = (XmArrowButtonWidget) nw;
-  
+
   Boolean returnFlag = FALSE;
-  
+
   /*  Check the data put into the new widget.  */
-  
-  if (!XmRepTypeValidValue(XmRID_ARROW_DIRECTION, 
+
+  if (!XmRepTypeValidValue(XmRID_ARROW_DIRECTION,
 			   new_w->arrowbutton.direction, (Widget) new_w))
     {
       new_w->arrowbutton.direction = current->arrowbutton.direction;
     }
-  
-  
+
+
   /*  See if the GC's need to be regenerated and widget redrawn.  */
   if (new_w->core.background_pixel != current->core.background_pixel ||
       new_w->primitive.foreground != current->primitive.foreground)
@@ -467,7 +467,7 @@ SetValues(
       XtReleaseGC ((Widget) new_w, new_w->arrowbutton.insensitive_GC);
       GetArrowGC (new_w);
     }
-  
+
   if (new_w->arrowbutton.direction != current->arrowbutton.direction ||
       XtIsSensitive(nw) != XtIsSensitive(cw) ||
       new_w->primitive.highlight_thickness !=
@@ -476,7 +476,7 @@ SetValues(
     {
       returnFlag = TRUE;
     }
-  
+
   return (returnFlag);
 }
 
@@ -488,7 +488,7 @@ SetValues(
  ************************************************************************/
 
 /*ARGSUSED*/
-static void 
+static void
 Arm(
         Widget wid,
         XEvent *event,
@@ -497,28 +497,28 @@ Arm(
 {
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
   XmArrowButtonCallbackStruct call_value;
-  
+
   (void) XmProcessTraversal((Widget) aw, XmTRAVERSE_CURRENT);
-  
+
   aw->arrowbutton.selected = True;
   aw->arrowbutton.armTimeStamp = event->xbutton.time; /* see MultiActivate */
-  
+
   DrawArrow(aw, aw->primitive.bottom_shadow_GC,
 	    aw->primitive.top_shadow_GC, NULL);
-  
+
   if (aw->arrowbutton.arm_callback)
     {
       XFlush(XtDisplay(aw));
-      
+
       call_value.reason = XmCR_ARM;
       call_value.event = event;
-      XtCallCallbackList((Widget) aw, 
-			 aw->arrowbutton.arm_callback, 
+      XtCallCallbackList((Widget) aw,
+			 aw->arrowbutton.arm_callback,
 			 &call_value);
     }
 }
 
-static void 
+static void
 MultiArm(
         Widget aw,
         XEvent *event,
@@ -539,7 +539,7 @@ MultiArm(
  ************************************************************************/
 
 /*ARGSUSED*/
-static void 
+static void
 Activate(
         Widget wid,
         XEvent *buttonEvent,
@@ -547,15 +547,15 @@ Activate(
         Cardinal *num_params)	/* unused */
 {
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
-  
+
   if (aw->arrowbutton.selected == False)
     return;
-  
+
   aw->arrowbutton.click_count = 1;
   ActivateCommon((Widget) aw, buttonEvent);
 }
 
-static void 
+static void
 MultiActivate(
         Widget wid,
         XEvent *buttonEvent,
@@ -567,43 +567,43 @@ MultiActivate(
    * new/separate activate.
    */
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
-  
+
   if (aw->arrowbutton.multiClick == XmMULTICLICK_KEEP)
     {
-      if ((buttonEvent->xbutton.time - aw->arrowbutton.armTimeStamp) > 
+      if ((buttonEvent->xbutton.time - aw->arrowbutton.armTimeStamp) >
 	  XtGetMultiClickTime(XtDisplay(aw)))
 	aw->arrowbutton.click_count = 1;
       else
 	aw->arrowbutton.click_count++;
-      
+
       ActivateCommon((Widget) aw, buttonEvent);
       Disarm ((Widget) aw, buttonEvent, params, num_params);
     }
 }
 
-static void 
+static void
 ActivateCommon(
         Widget wid,
         XEvent *buttonEvent)
 {
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
   XmArrowButtonCallbackStruct call_value;
-  
+
   aw->arrowbutton.selected = False;
-  
+
   DrawArrow(aw, aw->primitive.top_shadow_GC,
 	    aw->primitive.bottom_shadow_GC, NULL);
-  
+
   /* CR 9181: Consider clipping when testing visibility. */
-  if (((buttonEvent->xany.type == ButtonPress) || 
+  if (((buttonEvent->xany.type == ButtonPress) ||
        (buttonEvent->xany.type == ButtonRelease)) &&
-      _XmGetPointVisibility(wid, 
-			    buttonEvent->xbutton.x_root, 
+      _XmGetPointVisibility(wid,
+			    buttonEvent->xbutton.x_root,
 			    buttonEvent->xbutton.y_root) &&
       (aw->arrowbutton.activate_callback))
     {
       XFlush(XtDisplay(aw));
-      
+
       call_value.reason = XmCR_ACTIVATE;
       call_value.event = buttonEvent;
       call_value.click_count = aw->arrowbutton.click_count;
@@ -612,8 +612,8 @@ ActivateCommon(
 	  (call_value.click_count > 1))
 	return;
 
-      XtCallCallbackList((Widget) aw, 
-			 aw->arrowbutton.activate_callback, 
+      XtCallCallbackList((Widget) aw,
+			 aw->arrowbutton.activate_callback,
 			 &call_value);
     }
 }
@@ -625,7 +625,7 @@ ActivateCommon(
  ************************************************************************/
 
 /*ARGSUSED*/
-static void 
+static void
 ArmAndActivate(
         Widget wid,
         XEvent *event,
@@ -635,35 +635,35 @@ ArmAndActivate(
   XmArrowButtonWidget ab = (XmArrowButtonWidget) wid;
   XmArrowButtonCallbackStruct call_value;
   XtExposeProc expose;
-  
+
   ab->arrowbutton.selected = TRUE;
   _XmProcessLock();
   expose = ab->core.widget_class->core_class.expose;
   _XmProcessUnlock();
   (*(expose)) ((Widget) ab, event, FALSE);
-  
+
   XFlush (XtDisplay (ab));
-  
+
   if (ab->arrowbutton.arm_callback)
     {
       call_value.reason = XmCR_ARM;
       call_value.event = event;
       XtCallCallbackList((Widget)ab, ab->arrowbutton.arm_callback, &call_value);
     }
-  
+
   call_value.reason = XmCR_ACTIVATE;
   call_value.event = event;
   call_value.click_count = 1;	/* always 1 in kselect */
-  
+
   if (ab->arrowbutton.activate_callback)
     {
       XFlush (XtDisplay (ab));
       XtCallCallbackList((Widget)ab,ab->arrowbutton.activate_callback,
 			 &call_value);
     }
-  
+
   ab->arrowbutton.selected = FALSE;
-  
+
   if (ab->arrowbutton.disarm_callback)
     {
       XFlush (XtDisplay (ab));
@@ -671,11 +671,11 @@ ArmAndActivate(
       XtCallCallbackList((Widget) ab, ab->arrowbutton.disarm_callback,
 			 &call_value);
     }
-  
+
   /* If the button is still around, show it released after a short delay */
   if (ab->core.being_destroyed == False)
     {
-      ab->arrowbutton.timer = 
+      ab->arrowbutton.timer =
 	XtAppAddTimeOut(XtWidgetToApplicationContext((Widget)ab),
 			(unsigned long) DELAY_DEFAULT,
 			ArmTimeout, (XtPointer)ab);
@@ -692,10 +692,10 @@ ArmTimeout(
 
   ab->arrowbutton.timer = 0;
 
-  if (XtIsRealized((Widget)ab) && XtIsManaged((Widget)ab)) 
+  if (XtIsRealized((Widget)ab) && XtIsManaged((Widget)ab))
     {
       XtExposeProc expose;
-	
+
       _XmProcessLock();
       expose = ab->core.widget_class->core_class.expose;
       _XmProcessUnlock();
@@ -712,7 +712,7 @@ ArmTimeout(
  ************************************************************************/
 
 /*ARGSUSED*/
-static void 
+static void
 Disarm(
         Widget wid,
         XEvent *event,
@@ -721,12 +721,12 @@ Disarm(
 {
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
   XmArrowButtonCallbackStruct call_value;
-  
+
   aw->arrowbutton.selected = False;
-  
+
   DrawArrow(aw, aw->primitive.top_shadow_GC,
 	    aw->primitive.bottom_shadow_GC, NULL);
-  
+
   call_value.reason = XmCR_DISARM;
   call_value.event = event;
   XtCallCallbackList((Widget) aw, aw->arrowbutton.disarm_callback, &call_value);
@@ -738,7 +738,7 @@ Disarm(
  *
  ************************************************************************/
 
-static void 
+static void
 Enter(
         Widget wid,
         XEvent *event,
@@ -748,7 +748,7 @@ Enter(
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
 
   _XmPrimitiveEnter (wid, event, params, num_params);
-  
+
   if (aw->arrowbutton.selected && XtIsSensitive(wid))
     DrawArrow(aw, aw->primitive.bottom_shadow_GC,
 	      aw->primitive.top_shadow_GC, NULL);
@@ -760,7 +760,7 @@ Enter(
  *
  ************************************************************************/
 
-static void 
+static void
 Leave(
         Widget wid,
         XEvent *event,
@@ -770,7 +770,7 @@ Leave(
   XmArrowButtonWidget aw = (XmArrowButtonWidget) wid;
 
   _XmPrimitiveLeave (wid, event, params, num_params);
-  
+
   if (aw->arrowbutton.selected && XtIsSensitive(wid))
     DrawArrow(aw, aw->primitive.top_shadow_GC,
 	      aw->primitive.bottom_shadow_GC, NULL);
@@ -780,12 +780,12 @@ Leave(
  *
  *  ChangeCB
  *	add or remove the activate callback list.
- *      
+ *
  ************************************************************************/
 
-static void 
+static void
 ChangeCB(
-	 Widget w, 
+	 Widget w,
 	 XtCallbackProc activCB,
 	 XtPointer closure,
 	 Boolean setunset)
@@ -803,18 +803,18 @@ ChangeCB(
  *
  ************************************************************************/
 
-Widget 
+Widget
 XmCreateArrowButton(
         Widget parent,
         char *name,
         ArgList arglist,
         Cardinal argcount )
 {
-  return XtCreateWidget(name, xmArrowButtonWidgetClass, parent, 
+  return XtCreateWidget(name, xmArrowButtonWidgetClass, parent,
 			arglist, argcount);
 }
 
-Widget 
+Widget
 XmVaCreateArrowButton(
         Widget parent,
         char *name,
@@ -823,22 +823,22 @@ XmVaCreateArrowButton(
     register Widget w;
     va_list var;
     int count;
-    
+
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
 
-    
+
     Va_start(var, name);
-    w = XmeVLCreateWidget(name, 
-                         xmArrowButtonWidgetClass, 
-                         parent, False, 
+    w = XmeVLCreateWidget(name,
+                         xmArrowButtonWidgetClass,
+                         parent, False,
                          var, count);
-    va_end(var);   
+    va_end(var);
     return w;
-    
+
 }
-Widget 
+Widget
 XmVaCreateManagedArrowButton(
         Widget parent,
         char *name,
@@ -847,19 +847,19 @@ XmVaCreateManagedArrowButton(
     Widget w = NULL;
     va_list var;
     int count;
-    
+
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-    
+
     Va_start(var, name);
-    w = XmeVLCreateWidget(name, 
-                         xmArrowButtonWidgetClass, 
-                         parent, True, 
+    w = XmeVLCreateWidget(name,
+                         xmArrowButtonWidgetClass,
+                         parent, True,
                          var, count);
-    va_end(var);   
+    va_end(var);
     return w;
-    
+
 }
 
 /* Wrapper around XmeDrawArrow to calculate sizes. */
@@ -871,9 +871,9 @@ DrawArrow(XmArrowButtonWidget aw,
 {
   Position x, y;
   Dimension width, height;
-  Dimension margin = (aw->primitive.highlight_thickness + 
+  Dimension margin = (aw->primitive.highlight_thickness +
 			  aw->primitive.shadow_thickness);
-  
+
   /* Don't let large margins cause confusion. */
   if (margin <= (aw->core.width / 2))
     {
@@ -885,7 +885,7 @@ DrawArrow(XmArrowButtonWidget aw,
       x = aw->core.width / 2;
       width = 0;
     }
-  
+
   if (margin <= (aw->core.height / 2))
     {
       y = margin;
@@ -896,12 +896,12 @@ DrawArrow(XmArrowButtonWidget aw,
       y = aw->core.height / 2;
       height = 0;
     }
-  
-  /* The way we currently handle 1 shadowThickness in XmeDrawArrow 
+
+  /* The way we currently handle 1 shadowThickness in XmeDrawArrow
      is by drawing the center a little bit bigger, so the center_gc has
      to be present. Kinda hacky... */
-  if (!center_gc && 
-      aw->arrowbutton.detail_shadow_thickness == 1) 
+  if (!center_gc &&
+      aw->arrowbutton.detail_shadow_thickness == 1)
       center_gc = aw->arrowbutton.arrow_GC ;
 
   if (center_gc)
@@ -909,7 +909,7 @@ DrawArrow(XmArrowButtonWidget aw,
 
   XmeDrawArrow (XtDisplay ((Widget) aw), XtWindow ((Widget) aw),
 		top_gc, bottom_gc, center_gc,
-		x, y, width, height, 
-		aw->arrowbutton.detail_shadow_thickness, 
+		x, y, width, height,
+		aw->arrowbutton.detail_shadow_thickness,
 		aw->arrowbutton.direction);
 }

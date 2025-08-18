@@ -39,7 +39,7 @@ echo "System is "${SYSTEM}
 	echo "completion, the original \"mwm\" will be restarted with it's"
 	echo "original resource database intact."
 	echo
-	echo "It is assumed the original \"mwm\" running was ${TEST_MWM}," 
+	echo "It is assumed the original \"mwm\" running was ${TEST_MWM},"
 	echo "and, therefore, that is what will be restarted."
 	echo
 
@@ -115,7 +115,7 @@ if [ -s /tmp/oldxdef$$ ]
 then
 	xrdb /tmp/oldxdef$$
 else
-	xrdb -remove	
+	xrdb -remove
 fi
 
 # remove all leading whitespace and replace multiple tabs/spaces with 1 space

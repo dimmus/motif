@@ -1,5 +1,5 @@
 # $XConsortium: Text4.scr /main/6 1995/07/17 20:41:56 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,16 +20,16 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Give the test window the focus. A red border appears around the
 #     top text widget.
 #     The insertion cursor appears but does not blink.
 #  /* this shows PIR 3143 */
-#  #) Hold down the Shift key, and press the down arrow three times. 
+#  #) Hold down the Shift key, and press the down arrow three times.
 #  This creates a
 #  primary selection.
 LocatePointer Text1 RTextChar 5
@@ -49,7 +49,7 @@ CompareVisual Text1
 #  C)
 Continue
 
-#  #) Press the Ctrl-<Tab>. The focus moves to 
+#  #) Press the Ctrl-<Tab>. The focus moves to
 #     the bottom text widget and a red border appears around it.
 #     Another message "losingFocusCallback Received" appears in the xterm window
 #     By now, there should be at least two such messages.

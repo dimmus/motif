@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
@@ -36,7 +36,7 @@ Continue
 #  The major tabs are associated with the page numers in the following
 #  sequence : 5,10,15....
 #  The minor tabs are associated with pages 1-10.
-#  Resize the window containing the Notebook. 
+#  Resize the window containing the Notebook.
 #  Click on MajorTab1. Page 10 should be pulled to the top
 #  MinorTab5, MinorTab6, MinorTab7, MinorTab8, MinorTab9 should become visible.
 #  (You might have to scroll through the tab scrollers to see them)
@@ -91,4 +91,3 @@ Continue
 
 
 Exit
-

@@ -26,14 +26,14 @@
  */
 #include <testlib.h>
 
-static char string1[] =	"One fish\nTwo fish\nRed fish\nBlue fish"; 
+static char string1[] =	"One fish\nTwo fish\nRed fish\nBlue fish";
 static char string2[] = "1234567890";
 
 static void ShowPosition( Widget w, XtPointer client_data,
                                 XtPointer call_data)
 {
   printf ("The new cursor position is %d\n",
-	  ((XmTextVerifyCallbackStruct *)call_data)->newInsert); 
+	  ((XmTextVerifyCallbackStruct *)call_data)->newInsert);
 }
 
 
@@ -52,7 +52,7 @@ void main_text4 (argc, argv)
 
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-	 
+
 	n = 0;
 	PanedWindow1 = XmCreatePanedWindow(Shell1, "PanedWindow1", args, n);
 	XtManageChild(PanedWindow1);
@@ -89,7 +89,7 @@ void main_text4 (argc, argv)
 	XtManageChild(Text2);
 
 	XtAddCallback(Text2, XmNlosingFocusCallback, CommonGenericCB, NULL);
-	XtAddCallback(Text2, XmNmotionVerifyCallback, ShowPosition, 
+	XtAddCallback(Text2, XmNmotionVerifyCallback, ShowPosition,
                              NULL);
 
 	n = 0;

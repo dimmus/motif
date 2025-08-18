@@ -1,5 +1,5 @@
 /* $XConsortium: XmeString.c /main/5 1996/06/11 17:25:46 pascale $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 /*
  * HISTORY
  */
@@ -54,7 +54,7 @@ char **argv;
   Colormap           cmap;
   XColor             color, unused;
   Pixel              pixel_color;
-  XmRenderTable      RenderTable=(XmRenderTable)NULL, 
+  XmRenderTable      RenderTable=(XmRenderTable)NULL,
                      render_table_value=(XmRenderTable)NULL;
   XFontStruct        * fs = (XFontStruct *) NULL;
   Font               default_font;
@@ -84,7 +84,7 @@ char **argv;
     printf("ERROR: XLoadFont failed: BadName\n");
 
   /* Create a rendition for this test */
-  XtVaGetValues(Shell1, 
+  XtVaGetValues(Shell1,
 		XmNcolormap, &cmap,
 		NULL);
 
@@ -123,7 +123,7 @@ char **argv;
   XtManageChild(bboard);
 
   /* get the default render table for the bboard widget */
-/* 
+/*
  *** commented out because this test case core dumps ***
 printf("call XmeGetDefaultRenderTable\n");
   render_table_value = XmeGetDefaultRenderTable(label, XmLABEL_RENDER_TABLE);
@@ -138,10 +138,10 @@ printf("call XmeGetDefaultRenderTable\n");
   XtManageChild(label);
 
   target = XmStringCreateLocalized("Test String");
-  xme_str = XmeGetLocalizedString((char *)NULL, label, 
+  xme_str = XmeGetLocalizedString((char *)NULL, label,
 				  XmNlabelString, "Test String");
 
-  if (!XmStringCompare(target, xme_str)) 
+  if (!XmStringCompare(target, xme_str))
     printf("ERROR: creating localized string\n");
 
   n = 0;

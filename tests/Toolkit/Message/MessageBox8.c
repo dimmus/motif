@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageBox8.c /main/8 1995/07/13 19:01:56 drk $"
@@ -61,7 +61,7 @@ static XtCallbackRec help_cb[] = {
 /*-------------------------------------------------------------
 **      OkCB        - callback for ok button
 */
-static void OkCB (w, client_data, call_data) 
+static void OkCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -92,7 +92,7 @@ XtPointer   call_data;                   /*  data from widget class  */
 /*-------------------------------------------------------------
 **      HelpCB        - callback for help button
 */
-static void HelpCB (w, client_data, call_data) 
+static void HelpCB (w, client_data, call_data)
 Widget      w;                           /*  widget id           */
 XtPointer   client_data;                 /*  data from application   */
 XtPointer   call_data;                   /*  data from widget class  */
@@ -102,11 +102,11 @@ XtPointer   call_data;                   /*  data from widget class  */
     XtWidgetGeometry intended;
     XtWidgetGeometry result;
 
-    if (flag) { 
+    if (flag) {
         XtQueryGeometry (w, NULL, &result);
         printf("query with NULL\n");
-        printf("      result is (mode, x, y, w, h) %d %d %d %d %d\n", 
-                result.request_mode, result.x, result.y, 
+        printf("      result is (mode, x, y, w, h) %d %d %d %d %d\n",
+                result.request_mode, result.x, result.y,
                 result.width, result.height);
         printf("      current is %d %d %d %d\n", w->core.x, w->core.y,
                 w->core.width, w->core.height);
@@ -120,8 +120,8 @@ XtPointer   call_data;                   /*  data from widget class  */
         intended.height = 500;
         XtQueryGeometry (w, &intended, &result);
         printf("query with 50, 75, 300, 500\n");
-        printf("      result is (mode, x, y, w, h) %d %d %d %d %d\n", 
-                result.request_mode, result.x, result.y, 
+        printf("      result is (mode, x, y, w, h) %d %d %d %d %d\n",
+                result.request_mode, result.x, result.y,
                 result.width, result.height);
         printf("               current is  %d %d %d %d\n", w->core.x, w->core.y,
                 w->core.width, w->core.height);
@@ -136,13 +136,13 @@ unsigned int argc;
 char **argv;
 {
     Arg             args[10];
-    register int    n;      
+    register int    n;
     Widget 	    Frame;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
 
-    n = 0; 
+    n = 0;
     Frame = XmCreateFrame(Shell1, "Frame1", args, n);
     XtManageChild(Frame);
 
@@ -162,7 +162,7 @@ char **argv;
 
     mbox = (XmMessageBoxWidget) XmCreateMessageBox (Frame, "mbox", args, n);
 
-    XtUnmanageChild(XmMessageBoxGetChild((Widget) mbox, 
+    XtUnmanageChild(XmMessageBoxGetChild((Widget) mbox,
 		    XmDIALOG_CANCEL_BUTTON));
     XtManageChild ((Widget) mbox);
 

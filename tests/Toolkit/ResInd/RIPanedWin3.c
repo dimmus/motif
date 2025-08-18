@@ -65,7 +65,7 @@ Widget w;
    printf ("shadow = %d,   highlight = %d\n", shadowThickness, highlightThickness);
    printf ("margin width = %d,   margin height = %d\n\n",
             marginWidth, marginHeight);
-   
+
 }
 
 /*  main  */
@@ -82,7 +82,7 @@ char **argv;
 
    /*  initialize toolkit  */
    CommonTestInit(argc, argv);
-    
+
    /*  The vpaned creation.  */
 
    n = 0;
@@ -113,7 +113,7 @@ char **argv;
    XtSetArg (args[n], XmNshadowThickness, 50);	n++;
    XtSetArg (args[n], XmNhighlightThickness, 100);	n++;
    XtSetArg (args[n], XmNhighlightOnEnter, True);	n++;
-   pbuttons[0] = 
+   pbuttons[0] =
       XmCreatePushButtonGadget(vpane, "pushbuttongadget1", args, n);
    XtManageChild(pbuttons[0]);
 
@@ -129,7 +129,7 @@ char **argv;
    /*  Create a set of buttons as children of the vpane  */
 
    n = 0;
-   XtSetArg (args[n], XmNunitType, Xm100TH_FONT_UNITS);	n++;  
+   XtSetArg (args[n], XmNunitType, Xm100TH_FONT_UNITS);	n++;
    XtSetArg (args[n], XmNwidth, 3000);       	n++;
    XtSetArg (args[n], XmNheight, 750);		n++;
    XtSetArg (args[n], XmNshadowThickness, 50);	n++;
@@ -137,7 +137,7 @@ char **argv;
    XtSetArg (args[n], XmNhighlightOnEnter, True);	n++;
    XtSetArg (args[n], XmNmarginWidth, 3000);       	n++;
    XtSetArg (args[n], XmNmarginHeight, 100);	        n++;
-   pbuttons[1] = 
+   pbuttons[1] =
       XmCreatePushButtonGadget(vpane, "pushbuttongadget2", args, n);
    XtManageChild(pbuttons[1]);
 
@@ -154,7 +154,7 @@ char **argv;
    XtSetArg (args[n], XmNshadowThickness, 50);	n++;
    XtSetArg (args[n], XmNhighlightThickness, 100);	n++;
    XtSetArg (args[n], XmNhighlightOnEnter, True);	n++;
-   pbuttons[2] = 
+   pbuttons[2] =
       XmCreatePushButtonGadget(vpane, "pushbuttongadget3", args, n);
    XtManageChild (pbuttons[2]);
 
@@ -165,13 +165,13 @@ char **argv;
    /*  Create a set of buttons as children of the vpane  */
 
    n = 0;
-   XtSetArg (args[n], XmNunitType, Xm100TH_FONT_UNITS);	n++;  
+   XtSetArg (args[n], XmNunitType, Xm100TH_FONT_UNITS);	n++;
    XtSetArg (args[n], XmNwidth, 3000);       	n++;
    XtSetArg (args[n], XmNheight, 1000);	        n++;
    XtSetArg (args[n], XmNshadowThickness, 50);	n++;
    XtSetArg (args[n], XmNhighlightThickness, 100);	n++;
    XtSetArg (args[n], XmNhighlightOnEnter, True);	n++;
-   pbuttons[3] = 
+   pbuttons[3] =
       XmCreatePushButtonGadget(vpane, "pushbuttongadget4", args, n);
    XtManageChild (pbuttons[3]);
    DumpButtonData(pbuttons[3]);
@@ -190,4 +190,3 @@ int delay;
    }
    sleep(delay);
 }
-

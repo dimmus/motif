@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmTextP_h
 #define _XmTextP_h
 
@@ -106,7 +106,7 @@ typedef struct _OnTheSpotDataTW {
 
 
 /*
- * Structure for main text info. 
+ * Structure for main text info.
  */
 
 typedef struct _XmTextPart {
@@ -116,9 +116,9 @@ typedef struct _XmTextPart {
     XtCallbackList losing_focus_callback;  /* Losing focus callback. */
     XtCallbackList value_changed_callback; /* Value changed callback. */
     XtCallbackList modify_verify_callback; /* Verify value to change callback.*/
-    XtCallbackList wcs_modify_verify_callback; /* Verify value to change 
+    XtCallbackList wcs_modify_verify_callback; /* Verify value to change
 						* callback.*/
-    XtCallbackList motion_verify_callback; /* Insert cursor position 
+    XtCallbackList motion_verify_callback; /* Insert cursor position
 					      change callback. */
     XtCallbackList gain_primary_callback; /* Gained ownership of Primary
 					     Selection */
@@ -202,7 +202,7 @@ typedef struct _XmTextPart {
     int          hsbar_scrolling;/* scroring using the horizontal scrollbar */
 
     OnTheSpotDataTW onthespot;  /* On the spot preedit style support. */
-    
+
     XtTranslations tm_table;
 } XmTextPart;
 

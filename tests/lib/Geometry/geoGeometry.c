@@ -56,11 +56,11 @@ static void ClearRectObjAreas(r, old)
  * Returns more data than the public interface.  Does not convert
  * XtGeometryDone to XtGeometryYes.
  *
- * clear_rect_obj - *** RETURNED ***  
+ * clear_rect_obj - *** RETURNED ***
  *		    TRUE if the rect obj has been cleared, false otherwise.
  */
 
-XtGeometryResult 
+XtGeometryResult
 _XtMakeGeometryRequest (widget, request, reply, clear_rect_obj)
     Widget widget;
     XtWidgetGeometry *request, *reply;
@@ -270,7 +270,7 @@ _XtMakeGeometryRequest (widget, request, reply, clear_rect_obj)
      * If Unrealized, not a XtGeometryYes, or a query-only then we are done.
      */
 
-    if ((returnCode != XtGeometryYes) || 
+    if ((returnCode != XtGeometryYes) ||
 	(changeMask & XtCWQueryOnly) || !XtIsRealized(widget)) {
 
 	switch(returnCode){
@@ -295,7 +295,7 @@ _XtMakeGeometryRequest (widget, request, reply, clear_rect_obj)
 			   (reply)?reply->width:junk.width,
 			   (reply)?reply->height:junk.height);
 	    _GeoUnTabTrace();
-	    
+
             /* check for no change */
             break ;
 	case XtGeometryYes:
@@ -319,10 +319,10 @@ _XtMakeGeometryRequest (widget, request, reply, clear_rect_obj)
     _GeoPrintTrace(widget,"\"%s\" returns XtGeometryYes.\n",
 		   (XtParent(widget))?XtName(XtParent(widget)):"Root");
 
-    
+
     if (XtIsWidget(widget)) {	/* reconfigure the window (if needed) */
 
-	if (rgm) return returnCode;	
+	if (rgm) return returnCode;
 
 	if (changes.x != widget->core.x) {
  	    changeMask |= CWX;
@@ -461,7 +461,7 @@ void XtConfigureWidget(w, x, y, width, height, borderWidth)
     _GeoPrintTrace(w,"\"%s\" is being configured by its parent \"%s\"\n",
 		XtName(w), XtName(XtParent(w)));
     _GeoTabTrace();
-    
+
     if ((old.x = w->core.x) != x) {
 	_GeoPrintTrace(w,"x move from %d to %d\n",w->core.x, x);
 	changes.x = w->core.x = x;
@@ -516,7 +516,7 @@ void XtConfigureWidget(w, x, y, width, height, borderWidth)
 	} else {
 	    _GeoPrintTrace(w,"Resize proc is not called.\n");
 	}
-	    
+
     } else {
 	_GeoPrintTrace(w,"No change in configuration\n");
     }
@@ -540,7 +540,7 @@ void XtResizeWidget(w, width, height, borderWidth)
 #endif
 {
     XtConfigureWidget(w, w->core.x, w->core.y, width, height, borderWidth);
-    
+
 } /* XtResizeWidget */
 
 
@@ -558,7 +558,7 @@ void XtMoveWidget(w, x, y)
 {
     XtConfigureWidget(w, x, y, w->core.width, w->core.height,
 		      w->core.border_width);
-    
+
 } /* XtMoveWidget */
 
 #if NeedFunctionPrototypes
@@ -625,7 +625,7 @@ XtGeometryResult XtQueryGeometry(widget, intended, reply)
 	    intended = &null_intended;
 
 	    _GeoPrintTrace(widget,"without any constraint.\n");
-	    
+
 	} else {
 	    _GeoPrintTrace(widget,"with the following constraints:\n");
 
@@ -663,7 +663,7 @@ XtGeometryResult XtQueryGeometry(widget, intended, reply)
 	} else {\
 	      _GeoPrintTrace(widget," replied %s = %d\n", str_field,\
 			                           reply->field);\
-	} 
+	}
 
     FillIn(CWX, x, "x");
     FillIn(CWY, y, "y");
@@ -683,6 +683,6 @@ XtGeometryResult XtQueryGeometry(widget, intended, reply)
 		     ((result == XtGeometryNo)?"XtGeometryNo":
 		      "XtGeometryAlmost"),
 		     (XtParent(widget))?XtName(XtParent(widget)):"Root");
-		     
+
     return result;
   }

@@ -1,5 +1,5 @@
 # $XConsortium: Menu2.scr /main/6 1995/07/17 20:25:52 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client window will appear with four row column widgets.  The
 #  first will contain four pushbuttons, the next two will each
@@ -32,7 +32,7 @@
 
 CompareVisual Shell1
 
-# Give focus to the client window. 
+# Give focus to the client window.
 
 WindowFocus Shell1
 
@@ -43,29 +43,29 @@ ClickMB Btn1
 CompareVisual button1
 
 #  The text on top of the button next to the label "OptionMenu1
-#  (called the menu history) will change to read "option2a". 
+#  (called the menu history) will change to read "option2a".
 
 CompareVisual option_menu1
 
 # Click and hold down MB1 on the button next to the label
 #  "OptionMenu2".  Note that the "3" in "option3b" is
-#  underlined (indicating a mnemonic).  Release MB1. 
+#  underlined (indicating a mnemonic).  Release MB1.
 
 LocatePointer option_menu2 ROptionButton
 PressMB Btn1
 CompareVisual submenu2
 ReleaseMB Btn1
 
-# Select "button2" with MB1. 
+# Select "button2" with MB1.
 
 LocatePointer button2
 ClickMB Btn1
 
 # Again click and hold down MB1 on the button next to the label
 #  "OptionMenu2".  Note that the "3" in "option3b" is no
-#  longer underlined. 
+#  longer underlined.
 # Subsequent selections of button2 will alternate between the two
-#  states described above. 
+#  states described above.
 
 LocatePointer option_menu2 ROptionButton
 PressMB Btn1
@@ -74,19 +74,19 @@ ReleaseMB Btn1
 
 Continue
 
-# Give focus to the client window. 
+# Give focus to the client window.
 
 WindowFocus Shell1
 
 # Select "button3" with MB1.  The option menu "OptionMenu1" will
-#   become insensitive. 
+#   become insensitive.
 
 LocatePointer button3
 ClickMB Btn1
 CompareVisual option_menu1
 
 # Again, select "button3" with MB1.  The option menu
-#  "OptionMenu1" will be set sensitive. 
+#  "OptionMenu1" will be set sensitive.
 
 LocatePointer button3
 ClickMB Btn1
@@ -94,7 +94,7 @@ CompareVisual option_menu1
 
 # Select "button4" with MB1.  The button will be set insensitive.
 #   The label for the option menu "OptionMenu4" will be changed to
-#   "NewMenulabel". 
+#   "NewMenulabel".
 
 LocatePointer button4
 ClickMB Btn1
@@ -103,7 +103,7 @@ CompareVisual option_menu4 RLabel
 # Press and Hold MB1 on the Pixmap to the right of "NewMenuLabel". An
 #  Option Menu should appear with two Pixmaps. Move the pointer into
 #   the Smile Face Pixmap and release MB1. The Smile Face Pixmap should now
-#   be in the Selection area for "NewMenuLabel". 
+#   be in the Selection area for "NewMenuLabel".
 
 LocatePointer option_menu4 ROptionButton
 PressMB Btn1

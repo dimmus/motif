@@ -1,14 +1,14 @@
 XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 /*
  * To add support for another platform:
- * 
- *     1.  Identify a machine-specific cpp symbol.  If your preprocessor 
+ *
+ *     1.  Identify a machine-specific cpp symbol.  If your preprocessor
  *         does not have any built in, you will need to add the symbol to the
  *         cpp_argv table in config/imake/imakemdep.h and rebuild imake with
  *         the BOOTSTRAPCFLAGS variable set (see the macII for an example).
  *
  *     2.  Add all machine-specific cpp symbols (either defined by you or by
- *         the preprocessor or compiler) to the predefs table in 
+ *         the preprocessor or compiler) to the predefs table in
  *         config/imake/imakemdep.h.
  *
  *     3.  But a new #ifdef block below that defines MacroIncludeFile and
@@ -323,7 +323,7 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 #ifdef MOTOROLA
 # define MacroIncludeFile <moto.cf>
 # define MacroFile moto.cf
-# undef MOTOROLA	
+# undef MOTOROLA
 # ifdef SYSV
 #  define MotoR3Architecture
 # endif
@@ -414,7 +414,7 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # define Win32Architecture
 #endif /* WIN32 */
 
-#ifdef linux 
+#ifdef linux
 # define MacroIncludeFile <linux.cf>
 # define MacroFile linux.cf
 # undef linux

@@ -43,7 +43,7 @@ static char font_name3[] = "variable";
 static char render_tag[] = "render1";
 
 
-static void UpdateVerifyCBStruct( XEvent *event, XmTextPosition *startPos, 
+static void UpdateVerifyCBStruct( XEvent *event, XmTextPosition *startPos,
                                   XmTextPosition *endPos, char *text )
 {
      static char    c = 'A';
@@ -87,7 +87,7 @@ static void ModifyVerifyCB (Widget w, XtPointer client_data,
      modify_verify->text->length = 1;
 }
 
-static void UpdateVerifyCBStruct2( XmTextPosition *startPos, 
+static void UpdateVerifyCBStruct2( XmTextPosition *startPos,
                                    XmTextPosition *endPos, char **text )
 {
     static char c[] =
@@ -102,7 +102,7 @@ static void UpdateVerifyCBStruct2( XmTextPosition *startPos,
     *endPos = *startPos;
     *text=XtMalloc(c_length+1);
     strcpy(*text, c);
-    
+
 
     *c += 1;
     if (*c > 'Z')
@@ -252,20 +252,20 @@ void main_text5 (argc, argv)
 
 	CommonPause();
 
-	XtAddCallback(Text1, XmNmodifyVerifyCallback, ModifyVerifyCB, 
+	XtAddCallback(Text1, XmNmodifyVerifyCallback, ModifyVerifyCB,
                              (XtPointer)0);
 
 	CommonPause();
 
 	XtRemoveAllCallbacks (Text1, XmNmodifyVerifyCallback);
-	XtAddCallback(Text1, XmNactivateCallback, ChangeString, 
+	XtAddCallback(Text1, XmNactivateCallback, ChangeString,
                              (XtPointer)0);
 
 	CommonPause();
 
 	/* test case for PIR 2230 */
 	XtRemoveAllCallbacks (Text1, XmNactivateCallback);
-	XtAddCallback(Text1, XmNmodifyVerifyCallback, ModifyVerifyCB2, 
+	XtAddCallback(Text1, XmNmodifyVerifyCallback, ModifyVerifyCB2,
                              (XtPointer)0);
 
 	CommonPause();

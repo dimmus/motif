@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GenObjects.c /main/7 1995/07/14 10:58:23 drk $"
@@ -33,7 +33,7 @@ static char rcsid[] = "$XConsortium: GenObjects.c /main/7 1995/07/14 10:58:23 dr
   	Author: TAT
 	History:
             05/21/90 SJS Add tp sccs
-            06/15/90 SJS fix propagation of events problem (call to 
+            06/15/90 SJS fix propagation of events problem (call to
                          mvsGetSubObjects()
             06/22/90 SJS Really do a depth first search to generate
 	Calls:
@@ -45,7 +45,7 @@ static char rcsid[] = "$XConsortium: GenObjects.c /main/7 1995/07/14 10:58:23 dr
                 root_obj - Pointer to the root object
 
             OUTPUTS
-                root_obj - Pointer to the root object with new hierarchy 
+                root_obj - Pointer to the root object with new hierarchy
 
             RETURNS
                 none
@@ -85,6 +85,6 @@ XisObjectRecord *root_obj;
             while (stack_top > 0 && winfo == NULL) {
                 winfo = object_stack[--stack_top]->next_sibling;
             }
-        }       
+        }
     }
 } /* End mvsGenerateObjects() */

@@ -69,14 +69,14 @@ typedef struct _XmNavigatorDataRec {
 
 
 
-typedef void (*XmNavigatorMoveCBProc)(Widget nav, 
+typedef void (*XmNavigatorMoveCBProc)(Widget nav,
 				      XtCallbackProc moveCB,
 				      XtPointer closure,
 				      Boolean setunset);
-typedef void (*XmNavigatorSetValueProc)(Widget nav, 
+typedef void (*XmNavigatorSetValueProc)(Widget nav,
 					XmNavigatorData nav_data,
 					Boolean notify);
-typedef void (*XmNavigatorGetValueProc)(Widget nav, 
+typedef void (*XmNavigatorGetValueProc)(Widget nav,
 					XmNavigatorData nav_data);
 
 
@@ -91,8 +91,8 @@ typedef struct _XmNavigatorTraitRec {
 } XmNavigatorTraitRec, *XmNavigatorTrait;
 
 
-#define NavigDimensionX			(1L<<0)  
-#define NavigDimensionY			(1L<<1)  
+#define NavigDimensionX			(1L<<0)
+#define NavigDimensionY			(1L<<1)
 
 /* convenience Macros */
 #define ACCESS_DIM(mask,field) ((mask & NavigDimensionX)?(field.x):(field.y))

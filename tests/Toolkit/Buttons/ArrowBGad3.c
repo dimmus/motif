@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: ArrowBGad3.c /main/8 1997/11/12 14:07:46 csn $"
@@ -57,7 +57,7 @@ char **argv;
   Pixel top_shadow_color;
 
   CommonTestInit(argc, argv);
-    
+
   /*  The drawing area creation.  Contained in an outer frame.  */
 
   n = 0;
@@ -111,4 +111,3 @@ int delay;
    }
    sleep(delay);
 }
-

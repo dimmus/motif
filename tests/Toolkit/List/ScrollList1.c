@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollList1.c /main/9 1995/07/13 18:22:42 drk $"
@@ -57,13 +57,13 @@ void  main (argc, argv)
     XmString           tcs, ItemList[NITEMS];
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  150);  			n++;
     XtSetArg(args[n], XmNheight, 300);  			n++;
     XtSetArg(args[n], XtNgeometry, "+0+0");  			n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 
@@ -88,13 +88,13 @@ void  main (argc, argv)
     XtManageChild(List1);
 
     /* Add Callbacks */
-    XtAddCallback(List1, XmNsingleSelectionCallback, SinSelCB, 
+    XtAddCallback(List1, XmNsingleSelectionCallback, SinSelCB,
 		  (XtPointer) NULL);
-    XtAddCallback(List1, XmNmultipleSelectionCallback, MulSelCB, 
+    XtAddCallback(List1, XmNmultipleSelectionCallback, MulSelCB,
 		  (XtPointer) NULL);
-    XtAddCallback(List1, XmNextendedSelectionCallback, ExtSelCB, 
+    XtAddCallback(List1, XmNextendedSelectionCallback, ExtSelCB,
 		  (XtPointer) NULL);
-    XtAddCallback(List1, XmNbrowseSelectionCallback, SinSelCB, 
+    XtAddCallback(List1, XmNbrowseSelectionCallback, SinSelCB,
 		  (XtPointer) NULL);
 
     CommonPause();
@@ -136,7 +136,7 @@ static void SinSelCB(Widget w, XtPointer client_data,
 {
     char **text;
     XmString tcs;
-    
+
     printf("One item selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. %d\n", ((XmListCallbackStruct*)call_data)->item_position);
@@ -149,7 +149,7 @@ static void MulSelCB(Widget w, XtPointer client_data,
 {
     char **text;
     XmString tcs;
-    
+
     printf("One or more items selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. of items is %d\n",
@@ -165,7 +165,7 @@ static void ExtSelCB(Widget w, XtPointer client_data,
 {
     char **text;
     XmString tcs;
-    
+
     printf("One or more items selected : ");
     tcs = ((XmListCallbackStruct*)call_data)->item;
     printf("no. of items is %d\n",

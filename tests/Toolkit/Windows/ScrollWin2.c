@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ScrollWin2.c /main/8 1995/07/13 19:48:29 drk $"
@@ -33,11 +33,11 @@ static char rcsid[] = "$XConsortium: ScrollWin2.c /main/8 1995/07/13 19:48:29 dr
 #include <testlib.h>
 
 Widget	ScrolledWindow1, RowColumn1,
-	PushButtonGadget1, PushButtonGadget2, PushButtonGadget3, 
-	PushButtonGadget4, PushButtonGadget5, PushButtonGadget6, 
-        ScrolledWindow1, DrawingArea1, 
+	PushButtonGadget1, PushButtonGadget2, PushButtonGadget3,
+	PushButtonGadget4, PushButtonGadget5, PushButtonGadget6,
+        ScrolledWindow1, DrawingArea1,
 #ifdef NOCODE
-	PushButtonGadget7, PushButtonGadget8, PushButtonGadget9, 
+	PushButtonGadget7, PushButtonGadget8, PushButtonGadget9,
 	PushButtonGadget10,PushButtonGadget11,PushButtonGadget12,
 	PushButtonGadget13,PushButtonGadget14,PushButtonGadget15,
 #endif
@@ -79,7 +79,7 @@ char **argv;
 
     n = 0;
     DrawingArea1 =
-	XmCreateDrawingArea(ScrolledWindow1, "DrawingArea1", args, n); 
+	XmCreateDrawingArea(ScrolledWindow1, "DrawingArea1", args, n);
 
     XmScrolledWindowSetAreas (ScrolledWindow1, NULL, NULL, DrawingArea1);
 

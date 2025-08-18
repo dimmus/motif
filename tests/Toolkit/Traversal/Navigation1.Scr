@@ -1,5 +1,5 @@
 # $XConsortium: Navigation1.scr /main/5 1995/07/17 20:43:33 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # Case 1
 #) A 1.1 Paned Window with buttons. Depress each button
@@ -52,7 +52,7 @@ Continue
 
 # Case 2
 #) A 1.0 Paned Window with buttons. Focus should go to
-#   next button in the paned window. 
+#   next button in the paned window.
 #) Make every button insensitive,
 #   then resize slightly to see everything. Note carefully
 #   where the focus goes after each button is un-sensitized.
@@ -71,7 +71,7 @@ CompareVisual manager1
 CompareVisual rc2
 Continue
 
-# CASE 2a 
+# CASE 2a
 # A 1.1 Paned Window with EXCLUSIVE_TAB_GROUP manager children.
 # Use the Tab key to move the focus from one tab group to another,
 # and the arrow keys to move between the children in the row columns.
@@ -89,7 +89,7 @@ CompareVisual manager1
 Continue
 
 # Case 3
-#) Execute this test just like the previous one. The only difference is 
+#) Execute this test just like the previous one. The only difference is
 #   that this Paned Window
 #   is a 1.1-style widget. Make each button insensitive and check
 #   where the focus goes.
@@ -185,4 +185,3 @@ CompareVisual manager1
 Continue
 
 Exit
-

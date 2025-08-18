@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form22.c /main/4 1995/07/13 18:07:07 drk $"
@@ -49,15 +49,15 @@ char **argv;
 {
   register int  n;
   Arg args[MAX_ARGS];
-  
+
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth,  50);                               n++;
   XtSetArg (args[n], XmNheight, 25);                               n++;
   XtSetValues(Shell1, args, n);
-    
-  XtRealizeWidget(Shell1);    
+
+  XtRealizeWidget(Shell1);
 
   RunTest(Shell1);
 
@@ -70,7 +70,7 @@ Widget Shell;
   register int  i;
   register int  n;
   Arg args[MAX_ARGS];
-  
+
   CreateForm(Shell);
   CommonPause();
 
@@ -109,7 +109,7 @@ Widget Shell;
     sprintf(label, "Item: %d", i);
     items[i] = XmStringCreate(label, XmSTRING_DEFAULT_CHARSET);
   }
-  
+
   n = 0;
   XtSetArg(args[n], XmNautoUnmanage, False);                           n++;
   XtSetArg(args[n], XmNallowShellResize, True);                        n++;

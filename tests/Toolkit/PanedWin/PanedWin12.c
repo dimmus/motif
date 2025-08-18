@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PanedWin12.c /main/5 1995/08/29 15:22:48 drk $"
@@ -73,24 +73,24 @@ char  **argv;
     PW = XmCreatePanedWindow(Shell1, "PW", args, n);
 
     XtSetValues(PW, args, n); 	/* Ignored at creation? */
-	
-    for (i = 0; i < BUTTONS; i++) 
+
+    for (i = 0; i < BUTTONS; i++)
       {
 	b_value = rand() % RANGE;
 	sprintf(name, "PB%2d:%3d", i, b_value);
-	    
+
 	n = 0;
 	XtSetArg(args[n], XmNuserData, b_value); n++;
 	XtSetArg(args[n], XmNwidth, 150); n++;
 	PB = XmCreatePushButton(PW, name, args, n);
 	XtManageChild(PB);
       }
-	
+
     XtManageChild(PW);
     CommonPause();
     XtDestroyWidget(PW);
 
-    /* 
+    /*
      * Add tests for 1.2 XmNpositionIndex functionality
      */
 
@@ -98,11 +98,11 @@ char  **argv;
 
     n = 0;
     PW = XmCreatePanedWindow(Shell1, "PW", args, n);
-    
+
     /*
      * Put some children in it
      */
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth, 100); n++;
     PB1 = XmCreatePushButton(PW, "PB1", args, n);
@@ -125,19 +125,19 @@ char  **argv;
     /*
      * Change the last child first
      */
-    
+
     n = 0;
     XtSetArg(args[n], XmNpositionIndex, 0); n++;
     XtSetValues(PB4, args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNpositionIndex, &get_val); n++;
     XtGetValues(PB4, args, n);
     printf("Value of PB4 XmNpositionIndex = %d\n", get_val);
-     
+
     CommonPause();
 
-    
+
     /*
      * Mix up the middle ones
      */
@@ -155,7 +155,7 @@ char  **argv;
     /*
      * Add a new child to the end
      */
-    
+
     n = 0;
     XtSetArg(args[n], XmNpositionIndex, XmLAST_POSITION); n++;
     XtSetArg(args[n], XmNwidth, 100); n++;
@@ -172,7 +172,7 @@ char  **argv;
     /*
      *  Set an illegal value for XmNpositionIndex and see if it ralphs
      */
-    
+
     n = 0;
     XtSetArg(args[n], XmNpositionIndex, 7); n++;
     XtSetValues(PB5, args, n);
@@ -216,7 +216,7 @@ char  **argv;
  *   new child is an ordinary child (not a subclass of XmSashWidget)
  *   the position returned will cause it to be inserted sorted based on the
  *   value of XmNuserData within the other
- *   ordinary children but before any Sashs; if the new child is a 
+ *   ordinary children but before any Sashs; if the new child is a
  *   sash the position returned will cause it to be inserted at the
  *   end of the list.  This procedure does not examine the arglist.
  *
@@ -229,7 +229,7 @@ Widget w;         /* Composite widget being inserted into */
    CompositeWidget cw = (CompositeWidget) XtParent(w);
    Cardinal i=0;
 
-   if (XmIsSash(w) || XmIsSeparatorGadget(w)) 
+   if (XmIsSash(w) || XmIsSeparatorGadget(w))
      {
        while ((i < cw->composite.num_children) &&
 	      (! XmIsSash(cw->composite.children[i])) &&
@@ -239,7 +239,7 @@ Widget w;         /* Composite widget being inserted into */
    else
      {
        while ((i < cw->composite.num_children) &&
-	      ((long) ((XmPrimitiveWidget) w)->primitive.user_data < 
+	      ((long) ((XmPrimitiveWidget) w)->primitive.user_data <
 	       (long) ((XmPrimitiveWidget)
 		      (cw->composite.children[i]))->primitive.user_data) &&
 	      (! XmIsSash(cw->composite.children[i])) &&
@@ -256,16 +256,11 @@ static void ReportSize (w)
   register int	n;
   Arg		args[2];
   Dimension	width, height;
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth, &width); n++;
   XtSetArg(args[n], XmNheight, &height); n++;
   XtGetValues(w, args, n);
-  
+
   printf("%dX%d\n", (int)width, (int)height);
 }
-
-
-
-
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDList1.c /main/9 1995/07/14 11:54:15 drk $"
@@ -76,7 +76,7 @@ char	**argv;
 
     /* convert the plain strings to fancy Xstrings */
     for (n = 0; n < NITEMS; n++)
-		ItemList[n] = XmStringLtoRCreate(Istrings[n], 
+		ItemList[n] = XmStringLtoRCreate(Istrings[n],
 										 XmSTRING_DEFAULT_CHARSET);
 
     n = 0;

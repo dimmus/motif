@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AutoInit.c /main/10 1995/07/14 11:27:45 drk $"
@@ -78,9 +78,9 @@ InitTestAutomation(
 
     /* Setup the Root node of the Comand Structures */
 
-    AutoCommandRoot = (AutoCommandStructPtr) 
+    AutoCommandRoot = (AutoCommandStructPtr)
 				malloc(sizeof(AutoCommandStruct));
-    
+
     AutoCommandRoot->CommandName = -1;
     AutoCommandRoot->Mask[0] = 0;
     AutoCommandRoot->NumMask = 0;

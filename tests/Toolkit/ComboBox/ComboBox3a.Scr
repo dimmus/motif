@@ -20,8 +20,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 #  A ComboBox will appear on your screen. It will have the type specified
@@ -63,7 +63,7 @@ LocatePointer ComboScale3 RScaleSlider
 DragSliderValue Right 50
 LocatePointer ComboCascade1
 PressMB Btn1
-LocatePointer ComboSetPB3 
+LocatePointer ComboSetPB3
 ReleaseMB Btn1
 CompareVisual ComboBox
 
@@ -79,7 +79,7 @@ Continue
 
 
 #  Post the "Set Font" menu.
-#  Select each of the available fonts. 
+#  Select each of the available fonts.
 #  The font in the List should change to the selected font. If
 #  the ComboBox is of type COMBO_BOX or DROP_DOWN_COMBO_BOX, type
 #  in the Text widget. The font should be what was selected.
@@ -152,7 +152,7 @@ Continue
 #  Set the value of the "Selected Position" scale to 3.
 #  Select "Set Selected Position" from the "Set ComboBox Values" menu.
 #  The 3rd item of the list should be selected.
-#  There will be a message in the term window indicating the the 
+#  There will be a message in the term window indicating the the
 #  selectionCallback has been called. The reason should be XmCR_SELECT.
 #  Click on an item in the list. The selection callback should be invoked.
 #  The name of the item should appear in the Text field.

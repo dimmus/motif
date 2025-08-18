@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is label.uid ---- 
+---- The uid file to be opened is label.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Label  
-TRACE:(3) ClickMB Btn3 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Label
+TRACE:(3) ClickMB Btn3
 
 /*********************************************************/
 ---- help is here callback made ----
@@ -36,6 +36,6 @@ TRACE:(3) ClickMB Btn3
 ---- Reason was XmCR_HELP ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
+TRACE:(4) CompareVisual S_MAIN_WIDGET
 TRACE:(5) Exit
 Exiting Test...Please Standby...

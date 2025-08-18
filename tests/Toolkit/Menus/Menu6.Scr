@@ -1,5 +1,5 @@
 # $XConsortium: Menu6.scr /main/7 1995/07/17 20:26:16 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # Press F10.  The "File" menu button is armed.
@@ -113,14 +113,14 @@ Continue
 
 # This test confirms that the Label Widget/Gadgets subclasses correctly
 # resize narrower after the XmNacceleratorText resource is changed to NULL.
-# You should see a small window with several menus in it. 
+# You should see a small window with several menus in it.
 
 CompareVisual mainWindow
 
-# Pop up each menu; note that the selectable items have acceleratorText 
-#  displayed. 
-# For each item, select the item; doing so sets acceleratorText to NULL. 
-#  Confirm that the item has shrunk in horizontal size appropriately by 
+# Pop up each menu; note that the selectable items have acceleratorText
+#  displayed.
+# For each item, select the item; doing so sets acceleratorText to NULL.
+#  Confirm that the item has shrunk in horizontal size appropriately by
 #  popping up the menu again.
 
 LocatePointer Menu1
@@ -166,8 +166,8 @@ ReleaseMB Btn1
 Continue
 
 # For each item, select the item again; doing so resets the acceleratorText
-# to a non-NULL string larger than the original. 
-# Confirm that some value for acceleratorText has reappeared and that the 
+# to a non-NULL string larger than the original.
+# Confirm that some value for acceleratorText has reappeared and that the
 # widget has grown in horizontal size appropriately.
 
 
@@ -215,11 +215,11 @@ Continue
 Exit
 
 
-# Bring up the Arrange menu. It is a 2-dimensional menu with a cascade 
+# Bring up the Arrange menu. It is a 2-dimensional menu with a cascade
 #  button. Use the arrow keys to move down to the cascade button and press
 #  return.  The submenu should pop up. Use the left arrow key to unpost the
 #  submenu. Post it again. Hit ESC to unpost the last menu.
-#   (HINT: try this on an R3 server!)   Use the up-arrow key to move off 
+#   (HINT: try this on an R3 server!)   Use the up-arrow key to move off
 #  the cascade button.
 
 LocatePointer CascadeBtn3
@@ -228,16 +228,16 @@ ClickKey KDown
 ClickKey KDown
 ClickKey KDown
 
-ClickKey KReturn    
+ClickKey KReturn
 ClickKey KLeft
 
 ClickKey KReturn
 ClickKey KCancel
 ClickKey KUp
 
-# Use the right arrow key and the Layout Menu should popup. This is a 
-#  horizontal menu which has the buttons very close together.  Left and 
-#  right arrow keys should move you between the buttons in this menu. 
+# Use the right arrow key and the Layout Menu should popup. This is a
+#  horizontal menu which has the buttons very close together.  Left and
+#  right arrow keys should move you between the buttons in this menu.
 #  Up and down arrows should move you to the Arrange Menu.
 
 ClickKey KRight
@@ -277,21 +277,21 @@ Continue
 
 #  This test confirms that the Label Widget/Gadgets subclasses correctly
 #   resize narrower after the XmNacceleratorText resource is changed to NULL.
-#  You should see a small window with several menus in it. 
+#  You should see a small window with several menus in it.
 
-# Pop up each menu; note that the selectable items have acceleratorText 
-#  displayed. 
-# For each item, select the item; doing so sets acceleratorText to NULL. 
-# Confirm that the item has shrunk in horizontal size appropriately by popping 
+# Pop up each menu; note that the selectable items have acceleratorText
+#  displayed.
+# For each item, select the item; doing so sets acceleratorText to NULL.
+# Confirm that the item has shrunk in horizontal size appropriately by popping
 # up the menu again.
 
 
 CompareVisual Shell1
 
-# Pop up each menu; note that the selectable items have acceleratorText 
-#  displayed. 
-# For each item, select the item; doing so sets acceleratorText to NULL. 
-#  Confirm that the item has shrunk in horizontal size appropriately by 
+# Pop up each menu; note that the selectable items have acceleratorText
+#  displayed.
+# For each item, select the item; doing so sets acceleratorText to NULL.
+#  Confirm that the item has shrunk in horizontal size appropriately by
 #  popping up the menu again.
 
 LocatePointer Menu1
@@ -337,8 +337,8 @@ ReleaseMB Btn1
 Continue
 
 # For each item, select the item again; doing so resets the acceleratorText
-# to a non-NULL string larger than the original. 
-# Confirm that some value for acceleratorText has reappeared and that the 
+# to a non-NULL string larger than the original.
+# Confirm that some value for acceleratorText has reappeared and that the
 # widget has grown in horizontal size appropriately.
 
 

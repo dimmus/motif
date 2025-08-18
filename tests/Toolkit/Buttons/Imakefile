@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -109,9 +109,5 @@ SRCS=  \
 	ToggleBtn6.c \
         ToggleBtn7.c \
 	Button1.c
-	 
-DependTarget () 
 
-
-
-
+DependTarget ()

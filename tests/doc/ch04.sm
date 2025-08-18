@@ -18,8 +18,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 # $XConsortium: ch04.sm /main/3 1995/07/13 20:09:16 drk $
 ...\"  (c) Copyright 1992 OPEN SOFTWARE FOUNDATION, INC.
@@ -167,14 +167,14 @@ we have provided a scripting language command \*LManual\*O which tells
 the automation code to suspend its normal event handling and return control
 to the user, until the user clicks the Continue button on the
 Manual mode DialogBox. At that point the
-test will resume. This gives you an opportunity to examine closely what 
+test will resume. This gives you an opportunity to examine closely what
 happens at very specific points during the test.
 .P
 To use \*LManual\*O, simply add the command at the appropriate point in
 the test's \*L.scr\*O file and remake the \*L.Scr\*O file. When the
 Manual command is reached, a special dialog box will appear and you may
 exercise the test client normally. At this point, you can also invoke
-other useful X debugging clients, such as \*Lxmag\*O, \*Lxwininfo\*O, 
+other useful X debugging clients, such as \*Lxmag\*O, \*Lxwininfo\*O,
 or the OSF/Motif test tool \*Lxmruler\*O.
 .H 3 "Delay Mode"
 If you need the playback slowed enough for a human tester to watch the
@@ -182,8 +182,8 @@ changes occurring, but don't actually require the suspension of the event
 loop provided by \*LManual\*O, the \*L-D\*O or \*LDelay\*O mode
 might be helpful. Run with \*L-D \*Vseconds\*O, the code "sleeps" for the
 requested number of seconds before executing the next instruction.
-The Delay flag can also be used when very fast workstations execute 
-instructions before the visuals have "caught up". 
+The Delay flag can also be used when very fast workstations execute
+instructions before the visuals have "caught up".
 .H 3 "Trace Mode"
 The \*L-T\*O or \*LTrace\*O mode is useful in many debugging situations.
 In Trace mode, the scripting instructions are echoed to the output file
@@ -196,6 +196,4 @@ currently executing.
 .H 3 "The \*Lxmruler\*O Tool"
 The tool \*Lxmruler\*O is provided in the directory \*L$TOP/tests/tools\*O.
 This client allows the user to "measure" widgets on screen which claim to
-be a certain size. 
-
-
+be a certain size.

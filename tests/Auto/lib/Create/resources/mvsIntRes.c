@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsIntRes.c /main/7 1995/07/14 11:21:40 drk $"
@@ -52,11 +52,11 @@ static char rcsid[] = "$XConsortium: mvsIntRes.c /main/7 1995/07/14 11:21:40 drk
 *   based on its type and a pointer/value is returned.                  *
 ************************************************************************/
 
-MvsArgVal mvsCopyIntRes (widget_class_info, src_resource, i) 
+MvsArgVal mvsCopyIntRes (widget_class_info, src_resource, i)
 MvsWidgetClassInfo 	*widget_class_info;
-MvsArgVal 		src_resource; 
+MvsArgVal 		src_resource;
 int 			i;
-{ 
+{
     MvsArgVal 		dst_resource;
     MvsIntResInfoRecord *intres_info;
     char msg_string[125];
@@ -66,52 +66,52 @@ int 			i;
     switch (mvsTypeInfo[intres_info[i].type_code].ref_type) {
 
             case RefXmStringTable: /* becomes clear */
-	    case RefValue: 	 
+	    case RefValue:
             case RefGeneric:
-            case RefBoolean: 
-                dst_resource = src_resource; 
+            case RefBoolean:
+                dst_resource = src_resource;
                 break;
 
 	    case RefXmString:
-	    case RefString: 
-            { 
-                char *str = (char *)src_resource; 
-                if (str != NULL) { 
+	    case RefString:
+            {
+                char *str = (char *)src_resource;
+                if (str != NULL) {
                     dst_resource = (MvsArgVal)XtMalloc(strlen(str)+1);
-                    strcpy( (char *)dst_resource,str); 
-                } 
-                else dst_resource = 0L; 
-                break; 	 
+                    strcpy( (char *)dst_resource,str);
+                }
+                else dst_resource = 0L;
+                break;
             }
 
-	    case RefCallbackList: 	 
-            { 
-                XtCallbackList cb_list = (XtCallbackList)src_resource; 
-                int j=0; 
-                if (cb_list != NULL) { 
-                    while (cb_list->callback != NULL) { 
-                        cb_list++; j++; 
-                    } 
-                    cb_list = (XtCallbackList)src_resource; 
+	    case RefCallbackList:
+            {
+                XtCallbackList cb_list = (XtCallbackList)src_resource;
+                int j=0;
+                if (cb_list != NULL) {
+                    while (cb_list->callback != NULL) {
+                        cb_list++; j++;
+                    }
+                    cb_list = (XtCallbackList)src_resource;
                     dst_resource = (MvsArgVal)XtMalloc(sizeof(XtCallbackRec)*(j+1));
                     memcpy((char *)dst_resource,cb_list,sizeof(XtCallbackRec)*(j+1));
                 }
                 else dst_resource = 0L;
                 break;
-   	    } 
+   	    }
 
-	    default: 
-                dst_resource = src_resource; 
+	    default:
+                dst_resource = src_resource;
 		sprintf (msg_string, _AutoMessages[WARNMSG67], mvsTypeInfo[intres_info[i].type_code].ref_type);
                 AutoMessage(msg_string);
-                          
+
                 break;
     }
 
     return (dst_resource);
 } /* End mvsCopyIntRes () */
 
- 
+
 
 /*************************************************************************
 *  This function copies all resources. The entire list of resources is   *
@@ -120,8 +120,8 @@ int 			i;
 
 void mvsCopyIntResources(widget_class_info, dst_resource,src_resource)
 MvsWidgetClassInfo 	*widget_class_info;
-MvsArgVal 		dst_resource[], src_resource[]; 
-{ 
+MvsArgVal 		dst_resource[], src_resource[];
+{
     int 		i;
 
     for ( i=0 ; i<widget_class_info->num_intres ; i++ )
@@ -129,7 +129,7 @@ MvsArgVal 		dst_resource[], src_resource[];
 
 } /* End mvsCopyIntResources () */
 
- 
+
 
 /***********************************************************************
   	Author: PSN
@@ -138,8 +138,8 @@ MvsArgVal 		dst_resource[], src_resource[];
 	Calls:
 
 	Summary:
-		This function frees up all the internal resources associated 
-	with the current widget state. Only the internal resources which are 
+		This function frees up all the internal resources associated
+	with the current widget state. Only the internal resources which are
 	pointers require any processing. The memory pointed to by the internal
 	resources must be freed because it is dynamically allocated as each new
 	widget state is entered.
@@ -176,12 +176,12 @@ int 			i;
 	default:
             sprintf (msg_string, _AutoMessages[WARNMSG71], mvsTypeInfo[intres_info[i].type_code].ref_type);
             AutoMessage(msg_string);
-                       
+
             break;
     }
 
 } /* End mvsFreeIntRes () */
- 
+
 
 /***********************************************************************
   	Author: PSN
@@ -190,8 +190,8 @@ int 			i;
 	Calls:
 
 	Summary:
-		This function frees up all the internal resources associated 
-	with the current widget state. Only the internal resources which are 
+		This function frees up all the internal resources associated
+	with the current widget state. Only the internal resources which are
 	pointers require any processing. The memory pointed to by the internal
 	resources must be freed because it is dynamically allocated as each new
 	widget state is entered.
@@ -204,14 +204,14 @@ MvsArgVal 		resources[];
     int 		i;
     short 		num_intres;
     char                msg_string[125];
-    
+
     num_intres = widget_class_info->num_intres;
 
     for (i=0; i<num_intres; i++)
         mvsFreeIntRes (widget_class_info, &(resources[i]), i);
 
 } /* End mvsFreeIntResources () */
- 
+
 
 /***********************************************************************
   	Author: PSN
@@ -220,8 +220,8 @@ MvsArgVal 		resources[];
 	Calls:
 
 	Summary
-		This function obtains the value of an internal resource 
-	according to what MVS believes it currently to be. This may be 
+		This function obtains the value of an internal resource
+	according to what MVS believes it currently to be. This may be
 	different than what is really true.
 ************************************************************************/
 
@@ -246,7 +246,7 @@ char 			resource_name[];
         return(0);
     }
 
-    return( widget_info->int_resources[i] );        
+    return( widget_info->int_resources[i] );
 
 } /* End mvsGetInternalResource () */
 
@@ -256,7 +256,7 @@ char 			resource_name[];
         History:
            07/20/90 PSN First draft.
         Calls:
- 
+
         Summary:
            Get parent internal resource.
 ************************************************************************/
@@ -304,9 +304,9 @@ char 			resource_name[];
     for (j=0 ; j<num_intres && strcmp(resource_name,intres_info[j].name) ; j++);
 
     return ( j < num_intres ? j : (NON_EXISTENT) );
-        
+
 } /* End mvsGetIntResNum () */
- 
+
 
 /***********************************************************************
   	Author: PSN
@@ -336,7 +336,7 @@ Cardinal 		nargs;
     int_resources = widget_info->int_resources;
 
     for ( i=0 ; i<nargs ; i++ ) {
-        for ( j=0 ; j<num_intres && 
+        for ( j=0 ; j<num_intres &&
 		    strcmp ( args[i].name, intres_info[j].name ) ; j++ );
         if ( j >= num_intres )
             AutoMessage("%s Bad arg name '%s'\n", routine_name, args[i].name);
@@ -347,7 +347,7 @@ Cardinal 		nargs;
                 case RefGeneric:
                     int_resources[j] = (MvsArgVal)args[i].value;
                     break;
-   
+
 	        case RefString:
                     if(int_resources[j]) {
                         XtFree((char *)(int_resources[j]));
@@ -401,7 +401,7 @@ Cardinal 		nargs;
 		}
 
 	        default:
-		    
+
                     AutoMessage("%s Bad type code=%d\n", routine_name,
                               mvsTypeInfo[intres_info[j].type_code].ref_type);
                     break;
@@ -444,5 +444,5 @@ MvsWidgetInfoRecord 	*widget_info;
                                        intres_info[j].default_value, j);
         }
     }
-        
+
 } /* End mvsSetIntToDefaults() */

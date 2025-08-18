@@ -23,7 +23,7 @@
 #
 # HISTORY
 TRACE:(1) Continue
-     Resource Type                Result   
+     Resource Type                Result
     -----------------          -------------
             XmRBoolean           Passed
             XmRBoolean           Passed

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: CommandLine.c /main/11 1995/07/14 10:55:39 drk $"
@@ -117,7 +117,7 @@ char             default_font[MAX_FONT_LEN];	/* Default Font for failures */
 void CommonUsage(char *test_name)
 
 {
-    fprintf(stdout, 
+    fprintf(stdout,
 	    "Usage: %s:\n", test_name);
     fprintf(stdout,
 	    "          [-I <instruction_file_name>] [-l <no_instructions>]\n");
@@ -206,7 +206,7 @@ extern int optind, opterr;
 
 void  CommonGetOptions (int *argc, char **argv)
 
-{ 
+{
      int c;
      char 	*char_val;
      char	test_name[MAX_FILE];
@@ -255,7 +255,7 @@ void  CommonGetOptions (int *argc, char **argv)
 			alternate_output = True;
 			strcpy (output_file_name, optarg);
 			break;
-	  case 'V':	
+	  case 'V':
 			if (strlen (optarg) >= (MAX_FILE - 1)) {
 			  printf ("Error: file name %s too long\n",
 				  optarg);
@@ -267,14 +267,14 @@ void  CommonGetOptions (int *argc, char **argv)
 			break;
 	  case 'C':	strcpy (AutoFailColor, optarg);
 			break;
-	  case 'D':	
+	  case 'D':
 			AutoDelay = True;
 			AutoDelayCycles = atoi(optarg);
 			break;
-	  case 'T':	
+	  case 'T':
 			AutoTrace = True;
 			break;
-	  case 'W':	
+	  case 'W':
 			AutoWindowDumps = True;
 			break;
 	  case 'r':
@@ -289,7 +289,7 @@ void  CommonGetOptions (int *argc, char **argv)
 			AutoNoCheck = True;
 			AutoBatch = False;
 			break;
-	  case 'a':	
+	  case 'a':
 			AutoFullOutput = True;
 			break;
 	  case 'p':
@@ -316,7 +316,7 @@ void  CommonGetOptions (int *argc, char **argv)
 			strcpy (instruct_file_name, optarg);
 			break;
 
-	  case 'f':	
+	  case 'f':
 			if (strlen (optarg) >= MAX_FONT_LEN) {
 			  printf ("Error: file name %s too long\n",
 				  optarg);
@@ -327,7 +327,7 @@ void  CommonGetOptions (int *argc, char **argv)
 			strcpy (default_font, optarg);
 			break;
 
-	  case 'u':	
+	  case 'u':
 			if (strlen (optarg) >= USER_DATA_LEN) {
 			  printf ("Error: file name %s too long\n",
 				  optarg);
@@ -349,7 +349,7 @@ void  CommonGetOptions (int *argc, char **argv)
 	  case 'w':
 			pause_len = atoi (optarg);
 			if (!pause_len) {
-			  printf 
+			  printf
 			    ("Illegal or zero value provided for width.\n");
 			  printf ("Using default %d.\n, PAUSE_LEN");
 			  pause_len = PAUSE_LEN;
@@ -360,12 +360,12 @@ void  CommonGetOptions (int *argc, char **argv)
        if (optind >= *argc) break;
      } /* while getopt */
    } /* if *argc >= 1 */
-     
+
     if (errflag) {
       CommonUsage(test_name);
       exit (1);
     }
-     		
+
     if (!name_given) {
 	instruct_file_name = (char *) malloc((sizeof (char)) *
 			      MAX_FILE);
@@ -378,10 +378,10 @@ void  CommonGetOptions (int *argc, char **argv)
         strcat (instruct_file_name_orig, ".dat");
     }
 
-    if (!default_font_used) 
+    if (!default_font_used)
 	strcpy(default_font, DEFAULT_FONT);
 
-    if (!test_font_used) 
+    if (!test_font_used)
 	strcpy(test_font, TEST_FONT);
 
     if (pause_len == 0)
@@ -434,16 +434,16 @@ void  CommonGetOptions (int *argc, char **argv)
     if (input == NULL) {
 	input = freopen(script_file_name_orig, "r", stdin);
 	if (input == NULL) {
-		fprintf(stderr, 
+		fprintf(stderr,
 			"Redefine of STDIN to %s failed\n", script_file_name);
-		fprintf(stderr, 
+		fprintf(stderr,
 			"   - check validity of %s - Exiting...\n",
 							    script_file_name);
 		exit(1);
 	}
 	else
 		fprintf(stdout,
-			"Using %s, please create a %s file\n", 
+			"Using %s, please create a %s file\n",
 			script_file_name_orig, script_file_name);
     }
 

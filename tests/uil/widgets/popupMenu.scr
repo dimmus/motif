@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
@@ -29,13 +29,13 @@
 CompareVisual S_MAIN_WIDGET
 LocatePointer label2
 ClickKey <Ctrl>Kz
-ClickKey <Ctrl>Ka      
+ClickKey <Ctrl>Ka
 CompareVisual S_MAIN_WIDGET
-ClickKey <Ctrl>Kb      
+ClickKey <Ctrl>Kb
 CompareVisual S_MAIN_WIDGET
-ClickKey <Ctrl>Kc      
+ClickKey <Ctrl>Kc
 CompareVisual S_MAIN_WIDGET
-ClickKey <Ctrl>Kd      
+ClickKey <Ctrl>Kd
 CompareVisual S_MAIN_WIDGET
 ClickKey KUp
 ClickKey KUp

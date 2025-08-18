@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmBaseClassP_h
 #define _XmBaseClassP_h
 
@@ -88,17 +88,17 @@ typedef Cardinal (*XmGetSecResDataFunc)( WidgetClass,
 					    XmSecondaryResourceData **);
 
 typedef struct _XmObjectClassExtRec{
-    XtPointer 		next_extension;	
-    XrmQuark 		record_type;	
-    long 		version;	
-    Cardinal 		record_size;	
+    XtPointer 		next_extension;
+    XrmQuark 		record_type;
+    long 		version;
+    Cardinal 		record_size;
 } XmObjectClassExtRec, *XmObjectClassExt;
 
 typedef struct _XmGenericClassExtRec{
-    XtPointer 		next_extension;	
-    XrmQuark 		record_type;	
-    long 		version;	
-    Cardinal 		record_size;	
+    XtPointer 		next_extension;
+    XrmQuark 		record_type;
+    long 		version;
+    Cardinal 		record_size;
 } XmGenericClassExtRec, *XmGenericClassExt;
 
 typedef struct _XmWrapperDataRec{
@@ -125,10 +125,10 @@ typedef struct _XmWrapperDataRec{
 } XmWrapperDataRec, *XmWrapperData;
 
 typedef struct _XmBaseClassExtRec{
-    XtPointer 		next_extension;	
-    XrmQuark 		record_type;	
-    long 		version;	
-    Cardinal 		record_size;	
+    XtPointer 		next_extension;
+    XrmQuark 		record_type;
+    long 		version;
+    Cardinal 		record_size;
     XtInitProc		initializePrehook;
     XtSetValuesFunc 	setValuesPrehook;
     XtInitProc		initializePosthook;
@@ -160,11 +160,11 @@ typedef struct _XmWidgetExtDataRec{
 externalref XrmQuark	     XmQmotif;
 externalref int		     _XmInheritClass;
 externalref XmBaseClassExt * _Xm_fastPtr;
-  
+
 /********    Private Function Declarations    ********/
 
 
-extern XmGenericClassExt * _XmGetClassExtensionPtr( 
+extern XmGenericClassExt * _XmGetClassExtensionPtr(
                         XmGenericClassExt *listHeadPtr,
                         XrmQuark owner) ;
 extern Boolean _XmIsSubclassOf(WidgetClass wc, WidgetClass sc);

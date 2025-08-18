@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,22 +19,22 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: editor.c /main/8 1995/07/14 12:04:07 drk $"
 #endif
 #endif
 /**---------------------------------------------------------------------
-***	
+***
 ***	file:		editor.c
-***	description:	This program demonstrates the Motif text, 
+***	description:	This program demonstrates the Motif text,
 *** main_parent window, and dialog widgets, as well as the cut and paste
 ***	functions.
-***	
+***
 ***	defaults:	editor.c depends on these defaults:
 ***
 #
@@ -167,7 +167,7 @@ int   width, height;
 
 /*-------------------------------------------------------------
 **	OpenFile
-**		Open the present file.  Returns true if file 
+**		Open the present file.  Returns true if file
 **  exists and open is sucessful.
 */
 Boolean OpenFile()
@@ -176,7 +176,7 @@ Boolean OpenFile()
    int file_length;		/* Length of file. 	  */
    char * file_string;		/* Contents of file. 	  */
    FILE *fp = NULL;		/* Pointer to open file   */
-   
+
    if ((fp = fopen(filename, "r+")) == NULL)
 	if ((fp = fopen(filename, "r")) != NULL) {
 	    fprintf(stderr, "Warning: file opened read only.\n");
@@ -200,7 +200,7 @@ Boolean OpenFile()
    XmTextSetString(text, file_string);
 
    file_saved = True; /* intialize to True */
-	 
+
    /* make appropriate item sensitive */
    XtSetSensitive(text, True);
    XtSetSensitive(cut_button, True);
@@ -224,7 +224,7 @@ Boolean SaveFile()
     char   *tempname = (char *)XtMalloc(25); /* Temporary file name. 	   */
 
     strcpy(tempname, "/tmp/xmeditXXXXXX");
-    
+
     if ((tfp = fopen(mktemp(tempname), "w")) == NULL) {
        fprintf(stderr, "Warning: unable to open temp file, text not saved.\n");
        return(False);;
@@ -256,7 +256,7 @@ Boolean SaveFile()
         XtFree(tempname);
         return(False);
     }
-           
+
     XtFree(tempname);
     return(True);
 }
@@ -387,9 +387,9 @@ void PasteItemFromClipboard()
 	break;
      }
    }
-			
+
    if (length == 0) {
-	fprintf(stderr, "Warning: paste failed, no items to paste.\n");	
+	fprintf(stderr, "Warning: paste failed, no items to paste.\n");
 	return;
    }
 
@@ -398,10 +398,10 @@ void PasteItemFromClipboard()
 
    status = XmClipboardRetrieve (XtDisplay(text), XtWindow(text), "STRING",
 				 buffer, length, &outlength, &private_id);
-			
+
    /* Dialogs need to be added to indicate errors in pasting */
    if (status != ClipboardSuccess) {
-	fprintf(stderr, "Warning: paste failed, status = %d\n", status);	
+	fprintf(stderr, "Warning: paste failed, status = %d\n", status);
 	return;
    }
 
@@ -409,7 +409,7 @@ void PasteItemFromClipboard()
    n = 0;
    XtSetArg(args[n], XmNcursorPosition, &cursorPos); n++;
    XtGetValues(text, args, n);
-			
+
    /* add new text */
    XmTextReplace(text, cursorPos, cursorPos, buffer);
 }
@@ -418,7 +418,7 @@ void PasteItemFromClipboard()
 **	FileChangedCB
 **		Process callback from Text.
 */
-void FileChangedCB (w, client_data, call_data) 
+void FileChangedCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -434,7 +434,7 @@ XtPointer		call_data;	/*  data from widget class  */
 **	MenuCB
 **		Process callback from PushButtons in PulldownMenus.
 */
-void MenuCB (w, client_data, call_data) 
+void MenuCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -448,7 +448,7 @@ XtPointer		call_data;	/*  data from widget class  */
 		case MENU_OPEN:
 		case MENU_NEW:
 
-			/*	
+			/*
 			 * Create Text if not already created.
 			 */
 			if (text_first == True) {
@@ -496,7 +496,7 @@ XtPointer		call_data;	/*  data from widget class  */
 			if (!file_saved)
 			   XtManageChild(print_warning);
 			else if (filename != NULL) {
-				/* malloc space for the command name. 
+				/* malloc space for the command name.
 			   	   Note: command = size of the filename +
 			   	   "lp " + null terminator */
 				command = XtMalloc(strlen(filename) + 4);
@@ -575,7 +575,7 @@ XtPointer		call_data;	/*  data from widget class  */
 **	DialogApplyCB
 **		Process callback from Dialog apply actions.
 */
-static void DialogApplyCB (w, client_data, call_data) 
+static void DialogApplyCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -586,7 +586,7 @@ XtPointer		call_data;	/*  data from widget class  */
 	{
 		case DIALOG_PRINT:
 			if (filename != NULL) {
-			       /* malloc space for the command name. 
+			       /* malloc space for the command name.
 			          Note: command = size of the filename +
 			          "lp " + null terminator */
 				command = XtMalloc(strlen(filename) + 4);
@@ -603,7 +603,7 @@ XtPointer		call_data;	/*  data from widget class  */
 		case DIALOG_XWARNING:
 			CloseFile();
 			exit(0);
-			break;		
+			break;
 
 		default:
 			/* unknown client_data was recieved and
@@ -618,7 +618,7 @@ XtPointer		call_data;	/*  data from widget class  */
 **	DialogCancelCB
 **		Process callback from Dialog cancel actions.
 */
-static void DialogCancelCB (w, client_data, call_data) 
+static void DialogCancelCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -652,7 +652,7 @@ XtPointer		call_data;	/*  data from widget class  */
 **	DialogAcceptCB
 **		Process callback from Dialog actions.
 */
-static void DialogAcceptCB (w, client_data, call_data) 
+static void DialogAcceptCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -717,7 +717,7 @@ XtPointer		call_data;	/*  data from widget class  */
 			if (SaveFile()) {
 			   CloseFile(); /* close the file */
 			} else
-			   fprintf(stderr, 
+			   fprintf(stderr,
 			       "Warning: unable to save file, file not closed");
 			break;
 
@@ -739,7 +739,7 @@ XtPointer		call_data;	/*  data from widget class  */
 			   /* get the filename string from the file
 			      selection box */
 			   XmStringGetLtoR(scb->value, charset, &filename);
-			
+
 			   SaveFile();
 
 			   XtUnmanageChild (save_dialog);
@@ -750,7 +750,7 @@ XtPointer		call_data;	/*  data from widget class  */
 			/* save the file */
 			if (SaveFile()) {
 			   if (filename != NULL) {
-			       /* malloc space for the command name. 
+			       /* malloc space for the command name.
 			          Note: command = size of the filename +
 			          "lp " + null terminator */
 				command = XtMalloc(strlen(filename) + 4);
@@ -760,7 +760,7 @@ XtPointer		call_data;	/*  data from widget class  */
 				XtFree(command);
 				}
 			} else
-			   fprintf(stderr, 
+			   fprintf(stderr,
 			      "Warning: unable to save file, file not printed");
 			break;
 
@@ -833,7 +833,7 @@ int		argcount;
 
         apply_button = XmSelectionBoxGetChild (warning_dialog,
 							 XmDIALOG_APPLY_BUTTON);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNlabelString,
 		 XmStringCreateLtoR("Discard", charset)); n++;
@@ -847,7 +847,7 @@ int		argcount;
 		 XmStringCreateLtoR("Save", charset)); n++;
 	XtSetValues(ok_button, args, n);
 
-	
+
         /*      Unmanage unneeded children.
         */
         i = 0;
@@ -860,7 +860,7 @@ int		argcount;
 }
 
 
-static void CreateFileMenuCB (w, client_data, call_data) 
+static void CreateFileMenuCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -891,7 +891,7 @@ Widget	file_button;
 
     image = CreateDefaultImage (warningBits, 32, 32);
     XmInstallImage (image, "warning_image");
-					
+
 	n = 0;
 	XtSetArg(args[n], XmNlabelString,
 		 XmStringCreateLtoR("Open", charset)); n++;
@@ -1011,7 +1011,7 @@ Widget	file_button;
 }
 
 
-static void CreateEditMenuCB (w, client_data, call_data) 
+static void CreateEditMenuCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -1025,7 +1025,7 @@ XtPointer		call_data;	/*  data from widget class  */
 }
 
 
-CreateEditMenu (edit_button) 
+CreateEditMenu (edit_button)
 Widget		edit_button;
 
 {
@@ -1158,7 +1158,7 @@ Widget		parent;
 	XtSetArg (args[n], XmNmenuHelpWidget, cascade);  n++;
 	XtSetValues (menu_bar, args, n);
 
-	/*	
+	/*
 	 * Create "Create File Menu" button if File menu not created at
 	 * startup time.
 	 */
@@ -1168,13 +1168,13 @@ Widget		parent;
 
 		n = 0;
 		cascade = XmCreateCascadeButton (menu_bar, "Create File Menu", args, n);
-		XtAddCallback (cascade, XmNactivateCallback, CreateFileMenuCB, 
+		XtAddCallback (cascade, XmNactivateCallback, CreateFileMenuCB,
 				   	    (XtPointer) file_cascade);
 		XtManageChild (cascade);
 
 	}
 
-	/*	
+	/*
 	 * Create "Create Edit Menu" button if Edit menu not created at
 	 * startup time.
 	 */
@@ -1185,7 +1185,7 @@ Widget		parent;
 
 		n = 0;
 		cascade = XmCreateCascadeButton (menu_bar, "Create Edit Menu", args, n);
-		XtAddCallback (cascade, XmNactivateCallback, CreateEditMenuCB, 
+		XtAddCallback (cascade, XmNactivateCallback, CreateEditMenuCB,
 				   	    (XtPointer) edit_cascade);
 		XtManageChild (cascade);
 
@@ -1293,7 +1293,7 @@ char 		**argv;
 	/*	Initialize toolkit and open display.
 	*/
     CommonTestInit(argc, argv);
-    
+
 
 
 	/*	Create MainWindow.

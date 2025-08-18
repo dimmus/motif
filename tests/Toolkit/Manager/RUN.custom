@@ -45,6 +45,4 @@ foreach test ("$BBoard1" BBoard3 "$BBoard5a_1" \
 	      Frame1 Frame2 Frame3 Frame4 \
 	      #RowCol1 RowCol3 RowCol5 \
 	      RowCol3 RowCol5 \
-	      Baseline1 "$Baseline1a" Baseline2 Visual1) 
-
-
+	      Baseline1 "$Baseline1a" Baseline2 Visual1)

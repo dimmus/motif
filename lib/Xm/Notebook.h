@@ -99,4 +99,3 @@ extern Widget XmVaCreateManagedNotebook(
 #endif
 
 #endif /* _XmNotebook_h  */
-

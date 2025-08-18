@@ -3,17 +3,17 @@
 /*************************************************************************
  * Export list for libXm
  * This list *must* be updated whenever a change is made to the libXm API.
- * 
+ *
  * The syntax for the symbol declarations in this list is as follows:
  * 	public       sym => Public   C   symbol, i.e., publicized API
  * 	private      sym => Private  C   symbol, i.e., unpublicized API
  * 	internal     sym => Internal C   symbol, i.e., not part of API
- *  
+ *
  **************************************************************************/
 
 
 /********************************************************************
- * libXm public symbols -- available to developers 
+ * libXm public symbols -- available to developers
  ********************************************************************/
 
 public XmActivateProtocol
@@ -498,7 +498,7 @@ public XmUpdateDisplay
 /*
 * Public functions with out VA versions
 * when the VA version is added please remove the name from this list
-* and add the correct name below, in order. 
+* and add the correct name below, in order.
 *
 *public XmCreateBulletinBoard
 *public XmCreateBulletinBoardDialog
@@ -810,7 +810,7 @@ force mblen
 
 
 /********************************************************************
- * libXm private symbols -- Undocumented APIs that are exported 
+ * libXm private symbols -- Undocumented APIs that are exported
  *	because widget-writers may have used them in old releases.
  ********************************************************************/
 
@@ -1844,7 +1844,7 @@ internal _XmVirtKeys_tekFallbackBindingString
 /*
  * Misc. symbols that were unspecified in CDE 1.0 and so are now
  * assumed to be internal.
- */ 
+ */
 internal _Xm_MOTIF_DRAG_AND_DROP_MESSAGE
 internal _XmdefaultTextActionsTable
 internal _XmdefaultTextActionsTableSize
@@ -3032,4 +3032,3 @@ internal _regcmp
 internal ____loc1
 internal regcmp
 #endif
-

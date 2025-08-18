@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol3.c /main/8 1995/07/13 18:33:28 drk $"
@@ -53,13 +53,13 @@ char  **argv;
 {
   register int  n;
   Arg           args[MAX_ARGS];
-  
-  
+
+
   CommonTestInit(argc, argv);
 
   RunTest(Shell1);
 
-  XtRealizeWidget(Shell1);    
+  XtRealizeWidget(Shell1);
   XtAppMainLoop(app_context);
 }
 
@@ -70,41 +70,41 @@ Widget Shell1;
   register int  n;
   Arg           args[MAX_ARGS];
   char          label[80];
-  
-    
+
+
     CreateRowColumn(Shell1);
-    
+
     CommonPause();
     n = 0;
     XtSetArg(args[n], XmNpacking, XmPACK_TIGHT);                  n++;
     XtSetValues(RowColumn, args, n);
-    
+
     for (i = 0; i < MAXKID; i++) {
       n = 0;
       XtSetArg(args[n], XmNx,  100);                              n++;
       XtSetValues(Kid[i], args, n);
     }
-   
-    PrintWidgetSize(RowColumn); 
+
+    PrintWidgetSize(RowColumn);
     CommonPause();
     n = 0;
     XtSetArg(args[n], XmNpacking, XmPACK_COLUMN);                 n++;
     XtSetArg(args[n], XmNnumColumns, 4);                          n++;
     XtSetValues(RowColumn, args, n);
-    
+
     for (i = 0; i < MAXKID; i++) {
       n = 0;
       XtSetArg(args[n], XmNwidth,  100);                          n++;
       XtSetArg(args[n], XmNheight, 100);                          n++;
       XtSetValues(Kid[i], args, n);
     }
-    
-    PrintWidgetSize(RowColumn); 
+
+    PrintWidgetSize(RowColumn);
     CommonPause();
-    
-    
+
+
     DestroyRowColumn();
-  
+
 }
 
 static void CreateRowColumn(Shell1)
@@ -124,17 +124,17 @@ Widget Shell1;
   XtSetArg(args[n], XmNnumColumns, 30);                          n++;
   XtSetArg (args[n], XmNtraversalOn, True); 			 n++;
   RowColumn = XmCreateRowColumn(BBoard, "RowColumn", args, n);
-  
+
   for (i = 0; i < MAXKID; i++) {
     sprintf(label, "Child%d", i);
     Kid[i] = XmCreatePushButton(RowColumn, label, NULL, 0);
   }
-  
+
   XtManageChildren(Kid, MAXKID);
-  
+
   XtManageChild(RowColumn);
   XtManageChild(BBoard);
-  PrintWidgetSize(BBoard); 
+  PrintWidgetSize(BBoard);
 }
 
 static void DestroyRowColumn()
@@ -150,23 +150,15 @@ static void DestroyRowColumn()
 static void PrintWidgetSize (widget)
 Widget widget;
 
-{	
+{
 	Dimension w, h;
  	Arg args[2];
 
-	XtSetArg (args[0], XmNwidth, &w); 
+	XtSetArg (args[0], XmNwidth, &w);
 	XtSetArg (args[1], XmNheight, &h);
 	XtGetValues (widget, args, 2);
 
-	printf ("%s    width: %d, height: %d\n", XtName (widget), 
+	printf ("%s    width: %d, height: %d\n", XtName (widget),
 						 (int) w, (int) h);
 
 }
-
-
-
-
-
-
-
-

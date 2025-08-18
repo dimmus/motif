@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is pulldown2.uid ---- 
+---- The uid file to be opened is pulldown2.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Cascade_Button  
-TRACE:(3) PressMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Cascade_Button
+TRACE:(3) PressMB Btn1
 
 /*********************************************************/
 ---- mapCallback callback made ----
@@ -36,8 +36,8 @@ TRACE:(3) PressMB Btn1
 ---- Reason was XmCR_MAP ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
-TRACE:(5) LocatePointer p_btn1  
+TRACE:(4) CompareVisual S_MAIN_WIDGET
+TRACE:(5) LocatePointer p_btn1
 
 /*********************************************************/
 ---- armCallback - Push_Button1 callback made ----
@@ -45,7 +45,7 @@ TRACE:(5) LocatePointer p_btn1
 ---- Reason was XmCR_ARM ----
 /*********************************************************/
 
-TRACE:(6) LocatePointer p_btn2  
+TRACE:(6) LocatePointer p_btn2
 
 /*********************************************************/
 ---- armCallback - PushButton2 callback made ----
@@ -53,8 +53,8 @@ TRACE:(6) LocatePointer p_btn2
 ---- Reason was XmCR_ARM ----
 /*********************************************************/
 
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
-TRACE:(8) ReleaseMB Btn1 
+TRACE:(7) CompareVisual S_MAIN_WIDGET
+TRACE:(8) ReleaseMB Btn1
 
 /*********************************************************/
 ---- unmapCallback callback made ----
@@ -62,6 +62,6 @@ TRACE:(8) ReleaseMB Btn1
 ---- Reason was XmCR_UNMAP ----
 /*********************************************************/
 
-TRACE:(9) CompareVisual S_MAIN_WIDGET 
+TRACE:(9) CompareVisual S_MAIN_WIDGET
 TRACE:(10) Exit
 Exiting Test...Please Standby...

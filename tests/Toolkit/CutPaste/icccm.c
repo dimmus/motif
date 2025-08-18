@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: icccm.c /main/7 1995/07/13 17:57:34 drk $"
@@ -98,7 +98,7 @@ main(argc, argv)
 
    /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
     if (MrmOpenHierarchy (1, mrm_vec, NULL, &mrm_id) != MrmSUCCESS) exit(0);
     if (MrmRegisterNames (regvec, regnum) != MrmSUCCESS) exit(0);
     if (MrmFetchWidget (mrm_id, "app_main", Shell1, &app_main, &mrm_class)
@@ -213,7 +213,7 @@ static void print_targets_notify(target, property)
 	printf ("  TARGETS:\n");
 	for (i=0; i<nitems; i++) {
 	    printf("    ");print_atom(display, data[i]); printf ("\n");
-		
+
 	}
 	ntargets = nitems;
 	if (target_atoms != NULL) XFree(target_atoms);
@@ -257,7 +257,7 @@ static void print_multiple_notify(target, property)
 	    printf("    ");print_atom(display, data[i]);
 	    printf (" = ");print_atom(display, data[i+1]);
 	    printf ("\n");
-	    if (data[i+1] != None) print_generic_notify(data[i],data[i+1]);		
+	    if (data[i+1] != None) print_generic_notify(data[i],data[i+1]);
 	}
 	XFree(data);
     }
@@ -332,7 +332,7 @@ static void init_multiple_prop(property)
     }
     XChangeProperty(display, window, property, XA_ATOM, 32,
 	PropModeReplace, (unsigned char *)data, ntargets*2);
-    XtFree((char *) data); 
+    XtFree((char *) data);
 }
 
 static char *get_window_property(property, nitems)
@@ -361,7 +361,7 @@ static char *get_window_property(property, nitems)
 	return(NULL);
     }
     *nitems = items;
-    return((char *) data);			
+    return((char *) data);
 }
 
 
@@ -434,7 +434,7 @@ static void handle_request(event)
     else {
 	se.property=None;
     }
-    XSendEvent(event->display, event->requestor, False, 
+    XSendEvent(event->display, event->requestor, False,
 	       (EventMask)0, (XEvent *) &se);
 }
 
@@ -527,7 +527,7 @@ static void quit_proc(widget, tag, cb)
 }
 
 
-/* This error handler prints the error information and then simply 
+/* This error handler prints the error information and then simply
    continues */
 static int protocol_error_handler(display, event)
      Display *display;
@@ -553,7 +553,7 @@ Boolean atoms_inited = False;
 Boolean in_use[100];
 Atom atoms[100];
 
-static Atom get_request_atom() 
+static Atom get_request_atom()
 {
   int i;
 
@@ -568,7 +568,7 @@ static Atom get_request_atom()
   /* Find the first not in use and return it */
   i = 0;
   while(i < 100 && in_use[i]) i++;
-  
+
   if (i >= 100) return(None);
 
   if (atoms[i] == 0) {

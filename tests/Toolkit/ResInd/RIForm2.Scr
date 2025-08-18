@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #) Press the pushbutton Create Option Menu.  An option menu should be
@@ -32,12 +32,12 @@ CompareVisual form
 Continue
 
 #) A client with a form should appear. The form should
-#) contain one pushbutton labeled 'pushB'. 
+#) contain one pushbutton labeled 'pushB'.
 #) Select the pushbutton several times. Selecting the pushbutton
 #) will invoke a callback that will print the current width and
 #) height of the pushbutton and will increase the width and height
 #) of the pushbutton. The form disallows this increase, so the form
-#) should not grow. 
+#) should not grow.
 
 LocatePointer pushb
 ClickMB Btn1
@@ -48,7 +48,7 @@ CompareVisual form
 Continue
 
 #) The original form should be destroyed, and in its place a form
-#)   which contains three PushButtons should appear. Push0 should be 
+#)   which contains three PushButtons should appear. Push0 should be
 #)   located in the top left corner, Push1 should be located in the
 #)   top right corner, and Push2 should be located across the bottom
 #)   of the form.
@@ -64,4 +64,3 @@ CompareVisual form
 Continue
 
 Exit
-

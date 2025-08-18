@@ -1,5 +1,5 @@
 # $XConsortium: List6.scr /main/5 1995/07/17 20:22:02 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List6.scr	1.2  91/10/23
 
@@ -209,10 +209,10 @@ CompareVisual List2
 # Press the Space Bar, an Extended Selection message will be
 # printed in the term window.
 
-ClickKey KSpace 
+ClickKey KSpace
 CompareVisual List2
 
-# Continue selecting and deleting the first item in the list until all are 
+# Continue selecting and deleting the first item in the list until all are
 # gone; confirm that the highlighting moves to the next item and that
 # the application remains stable.
 

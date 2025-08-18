@@ -24,7 +24,7 @@
 /*
  * HISTORY
  */
-/* 
+/*
  * Original History:
  *
  * Revision 1.4.2.4  1992/12/08  15:26:56  shobana
@@ -34,15 +34,15 @@
  * Revision 1.4.2.3  1992/12/07  17:58:48  shobana
  * 	changed code to compile on Sun platform
  * 	[1992/12/07  17:58:31  shobana]
- * 
+ *
  * Revision 1.4.2.2  1992/10/11  18:28:37  shobana
  * 	Incorporated test for CR 5209
  * 	[1992/10/11  18:28:08  shobana]
- * 
+ *
  * Revision 1.4  92/03/13  17:03:19  devsrc
  * 	Converted to ODE
- * 
-*/ 
+ *
+*/
 
 #include <testlib.h>
 
@@ -57,7 +57,7 @@ Widget FormDialog1;
 
 int SelExists;
 
- 
+
 void act ();
 
 
@@ -71,7 +71,7 @@ void  main(argc, argv)
     XmString      tcs;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
@@ -141,7 +141,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNunitType, XmPIXELS);  n++;
     XtSetArg(args[n], XmNwidth, 120);  n++;
     XtSetValues(PushButton2, args, n);
-   
+
     CommonPause();
 
     XtDestroyWidget (PushButton1);
@@ -151,30 +151,30 @@ void  main(argc, argv)
     /* Begin test for CR 5209 */
 
     n = 0;
-    FileSelect1 = XmCreateSelectionBox(BulletinBoard1, 
+    FileSelect1 = XmCreateSelectionBox(BulletinBoard1,
 				       "FileSelect1", args, n);
     XtManageChild(FileSelect1);
     SelExists = 1;
- 
+
     n = 0;
     XtSetArg(args[n], XmNautoUnmanage, False); n++;
-    FormDialog1 = XmCreateFormDialog(Shell1, "FormDialog1", 
+    FormDialog1 = XmCreateFormDialog(Shell1, "FormDialog1",
 				     args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNlabelString, 
+    XtSetArg(args[n], XmNlabelString,
 	     XmStringCreateSimple("Destroy")); n++;
-    PushButton3 = XmCreatePushButton(FormDialog1, 
+    PushButton3 = XmCreatePushButton(FormDialog1,
 				     "PushButton3", args, n);
     XtAddCallback(PushButton3, XmNactivateCallback, act, NULL);
 
     XtManageChild(PushButton3);
     XtManageChild(FormDialog1);
-    
+
     XtManageChild (BulletinBoard1);
 
     CommonPause();
@@ -195,32 +195,28 @@ XtPointer client_data;
   Arg args[10];
   int n;
 
-  if (SelExists) 
+  if (SelExists)
     {
 	printf("Destroying selection box\n");
 	XtDestroyWidget(FileSelect1);
 	new_button = "Create";
 	SelExists = 0;
     }
-  else 
+  else
     {
 	printf("Creating selection box\n");
 	n = 0;
-	FileSelect1 = XmCreateSelectionBox(BulletinBoard1, "FileSelect1", 
+	FileSelect1 = XmCreateSelectionBox(BulletinBoard1, "FileSelect1",
 	                                   args, n);
 	XtManageChild(FileSelect1);
 	new_button = "Destroy";
 	SelExists = 1;
     }
-    
+
    xms = XmStringCreateSimple(new_button);
-  
+
    n=0;
    XtSetArg (args[n], XmNlabelString, xms); n++;
    XtSetValues(w, args, n);
    XmStringFree(xms);
 }
-
-
-
-

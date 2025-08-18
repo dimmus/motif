@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
-# #) This is Container2 testing MULTIPLE_SELECT selectionPolicy in OUTLINE 
+# #) This is Container2 testing MULTIPLE_SELECT selectionPolicy in OUTLINE
 #    layoutType.
 # #) Select "MultipleSelect" from the "Selection Policy" option menu.
 # #) Iconify the Control Panel.
@@ -39,7 +39,7 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) This panel is testing the Range Click, Toggle Mode technique.
 # #) Click Btn1 on "IconGad1". It should become selected.
 # #) You should see the following in your term window:
@@ -47,15 +47,15 @@ Continue
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad1
-# 
+#
 # #) Notice that the location cursor is a dashed line rectangle.
 # #) Click again on "IconGad1". It should become deselected.
 # #) You should see the following in your term window:
 # !)
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 0
-#           Names of items selected: 
-# 
+#           Names of items selected:
+#
 # C)
 
 LocatePointer IconGad1
@@ -65,7 +65,7 @@ LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Press Btn1 on "IconGad2", move the pointer over "IconGad3" and
 #    release Btn1.
 # #) As soon as you press Btn1 on "IconGad2", it gets selected.
@@ -76,14 +76,14 @@ Continue
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 2
 #           Names of items selected: IconGad2 IconGad3
-# 
-# #) Repeat the same action. This time the icon gadgets are getting 
+#
+# #) Repeat the same action. This time the icon gadgets are getting
 #    deselected, and you should see in your term window:
 # !)
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 0
-#           Names of items selected: 
-# 
+#           Names of items selected:
+#
 # C)
 
 LocatePointer IconGad2
@@ -103,24 +103,24 @@ Continue
 # #) Click BToggle on "IconGad2". It gets selected.
 # #) Press BToggle on "IconGad3", move over "IconGad31" and release.
 #    They also become selected. The location cursor stay on "IconGad3".
-# #) When you release on "IconGad31", the following appears in your term 
+# #) When you release on "IconGad31", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 3
 #           Names of items selected: IconGad2 IconGad3 IconGad31
-# 
+#
 # #) Repeat the previous action to unselect "IconGad3" and "IconGad31".
-#    "IconGad2" should stay selected. The location cursor stay on 
+#    "IconGad2" should stay selected. The location cursor stay on
 #    "IconGad3".
-# #) When you release on "IconGad31", the following appears in your term 
+# #) When you release on "IconGad31", the following appears in your term
 #    window:
 # !)
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 1
-#           Names of items selected: IconGad2 
+#           Names of items selected: IconGad2
 # C)
- 
+
 LocatePointer IconGad2
 ClickMB <Ctrl> Btn1
 CompareVisual Container2
@@ -135,7 +135,7 @@ LocatePointer IconGad31
 ReleaseMB <Ctrl> Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Click osfSelect. "IconGad3" gets selected. It is now the anchor
 #    cursor.
 # #) Move your pointer over "IconGad32" and click BExtend.
@@ -146,13 +146,13 @@ Continue
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 4
 #           Names of items selected: IconGad2 IconGad3 IconGad31 IconGad32
-# 
-# #) Press BExtend and move over "IconGad4" without releasing. 
+#
+# #) Press BExtend and move over "IconGad4" without releasing.
 # #) As you move over "IconGad4", "IconGad33" and "IconGad4" get selected.
 # #) Move back over "IconGad32", and release.
 # #) As you move back, "IconGad33" and "IconGad4" get deselected.
 # C)
- 
+
 LocatePointer Container2
 ClickKey KSelect
 CompareVisual Container2
@@ -166,11 +166,11 @@ LocatePointer IconGad32
 ReleaseMB <Shift> Btn1
 CompareVisual Container2
 Continue
- 
-# #) Using osfDown key, move the location cursor on "IconGad33". The 
+
+# #) Using osfDown key, move the location cursor on "IconGad33". The
 #    selection should not move with the location cursor.
 # #) Using osfUp key, move the location cursor back on "IconGad32".
-# 
+#
 # C)
 
 LocatePointer Container2
@@ -179,7 +179,7 @@ CompareVisual Container2
 ClickKey KUp
 CompareVisual Container2
 Continue
- 
+
 # #) Click osfSelect. "IconGad32" gets deselected. It is now the anchor
 #    cursor.
 # #) Move your pointer over "IconGad3" and click BExtend.
@@ -190,7 +190,7 @@ Continue
 #           Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad2
-# 
+#
 # C)
 
 LocatePointer Container2
@@ -200,11 +200,11 @@ LocatePointer IconGad3
 ClickMB <Shift> Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Using osfUp, move the location cursor on "IconGad2".
 #    "IconGad2" stays selected.
 # #) Using osfDown, move the location cursor back on "IconGad3".
-# #) Now with the <Shift> key pressed, move the location cursor on 
+# #) Now with the <Shift> key pressed, move the location cursor on
 #    "IconGad2". It becomes deselected.
 # E)
 

@@ -72,4 +72,3 @@ int ExmMrmInitialize()
 			exmPannerWidgetClass);
     return (0);
 }
-

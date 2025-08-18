@@ -19,20 +19,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 
-#   This is a Message Dialog with the following characteristics:   
+#   This is a Message Dialog with the following characteristics:
 #	- width is 250
 #	- autoUnmanage is false
 #	- messageString is \"Alignment Center\"
-#	- messageAlignment is XmALIGNMENT_CENTER   
-#	- okCallback is ON   
-#	- cancelCallback is ON   
+#	- messageAlignment is XmALIGNMENT_CENTER
+#	- okCallback is ON
+#	- cancelCallback is ON
 #	- helpCallback is ON
 #	- All other resources are set by default
-	
+
 
 CompareVisual Message_Dialog
 LocatePointer Message_Dialog RCancelButton
@@ -40,4 +40,3 @@ LocatePointer Message_Dialog ROkButton
 LocatePointer Message_Dialog RHelpButton
 CompareVisual Message_Dialog
 Exit
-

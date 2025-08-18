@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: List2.h /main/9 1995/07/13 18:17:08 drk $ */
 
 
@@ -134,4 +134,3 @@ static void	  	Init_Resources();
 static void 	       	ChangeLabel(Widget w, char string[50]);
 
 static Widget          	CreatePushButton(Widget parent, char *label);
-

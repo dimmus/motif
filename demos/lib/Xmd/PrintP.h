@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -31,7 +31,7 @@
 #define _XmdPrintP_h
 
 /* Include appropriate files. */
-#include "Print.h" 
+#include "Print.h"
 #include <Xm/FormP.h>
 
 /* Allow for C++ compilation. */
@@ -124,4 +124,3 @@ typedef struct _XmdPrintConstraintRec
 
 /* Ensure that the file be included only once. */
 #endif /* _XmdPrintP_h */
-

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Synchronize.c /main/7 1995/07/14 11:31:08 drk $"
@@ -73,34 +73,34 @@ XIS SYNCHRONIZE
   terminates at a controlled point in the event processing stream
   when it determines that all events that are going to be returned have
   indeed been returned and processed.  In otherwords, it uses the idea that
-  any one primitive input device input event (mouse button press/release, 
+  any one primitive input device input event (mouse button press/release,
   mouse motion, or key press/release) will result in 0 or more response events
   from the server up to some finite number.  Once all the events related to
-  this one primitive action have come back, the system will return to a 
-  quiesent (quiet) state.  
+  this one primitive action have come back, the system will return to a
+  quiesent (quiet) state.
 
-  With this theory of operation in mind, it is intended that this function 
-  be used by calling it after each fundamental input synthesis command or 
-  action (such as move pointer, press mouse button, and press keyboard key) 
-  to cause Xt and ultimately Xm to react in whatever way they see fit and to 
+  With this theory of operation in mind, it is intended that this function
+  be used by calling it after each fundamental input synthesis command or
+  action (such as move pointer, press mouse button, and press keyboard key)
+  to cause Xt and ultimately Xm to react in whatever way they see fit and to
   return after the total toolkit-intrinsic-server reaction is complete.
 
-  One would think that it would be as simple as calling XSync() to 
+  One would think that it would be as simple as calling XSync() to
   flush the output buffer of all unsent requests and just read the
-  event input queue via XNextEvent() until there remains no additional 
+  event input queue via XNextEvent() until there remains no additional
   incomming events.  Afterall, the X Window System Protocol specification by
   Robert Sheifler in the last section (just before the appendicies) called
-  Flow Control and Concurrency states: 
+  Flow Control and Concurrency states:
 
-      Whether or not a server is implemented with internal concurrency, 
-      the overall effect must be as if individual requests are executed to 
-      completion in some serial order, and requests from a given connection 
-      must be executed in delivery order (that is, the total execution order 
-      is a shuffle of the individual streams).  The execution of a request 
-      includes validating all arguments, collecting all data for any reply, 
+      Whether or not a server is implemented with internal concurrency,
+      the overall effect must be as if individual requests are executed to
+      completion in some serial order, and requests from a given connection
+      must be executed in delivery order (that is, the total execution order
+      is a shuffle of the individual streams).  The execution of a request
+      includes validating all arguments, collecting all data for any reply,
       and generating and queueing all required events.
 
-  Note that he says "queueing" and not necessarily sending of the events.  
+  Note that he says "queueing" and not necessarily sending of the events.
   In most multitasking systems, the communications drivers and/or pipe
   managers are usually run from a separate task so that the server code has
   no direct control over when the return replies and events are sent beyond
@@ -108,23 +108,23 @@ XIS SYNCHRONIZE
   He reinforces this notion by going on to say:
 
       However, it [the execution of a request] does not include the actual
-      transmission of the reply and the events.  
+      transmission of the reply and the events.
 
   Thus unless we do something to force the flushing of the events from the
-  server side (i.e., force the queued up ones to be sent across the wire), 
+  server side (i.e., force the queued up ones to be sent across the wire),
   the replies and event packets which are recieved (by the client) will
-  appear to show up in an asyncronous manner with respect to the requests 
+  appear to show up in an asyncronous manner with respect to the requests
   which are sent out from server.
 
   Fortunately the spec goes on to say the following which clears this matter
   up:
 
-      In addition, the effect of any other cause that can generate multiple 
-      events (for example, activation of a grab or pointer motion) must 
-      effectively generate and queue all required events indivisibly with 
-      respect to all other causes and requests.  For a request from a given 
-      client, any events destined for that client that are caused by 
-      executing the request must be sent to the client before any reply or 
+      In addition, the effect of any other cause that can generate multiple
+      events (for example, activation of a grab or pointer motion) must
+      effectively generate and queue all required events indivisibly with
+      respect to all other causes and requests.  For a request from a given
+      client, any events destined for that client that are caused by
+      executing the request must be sent to the client before any reply or
       error is sent.
 
   And, knowing that an XSync() call is nothing more than an alias for a call
@@ -132,11 +132,11 @@ XIS SYNCHRONIZE
   synchronous reply (both send and reply packets are very short and simple
   which is ideal for XSync() which serves simply to "sync-up" both the
   client and server wire's send/receive queues), we see by the above statement
-  that we are justified in using the XSync() command to reliably send back 
+  that we are justified in using the XSync() command to reliably send back
   all events related to a given request.
 
   But we have greatly oversimplified the distributed model here by leaving
-  out the effects introduced by a 2nd client - namely the window manager. 
+  out the effects introduced by a 2nd client - namely the window manager.
   Our physical model is as shown below:
 
 
@@ -157,23 +157,23 @@ XIS SYNCHRONIZE
 
   The effect of the window manager is to potentially place arbitrary delays
   between the test-client and the server via the structure control events
-  (see section 8.4.7 of the Xlib spec), which include CirculateRequest, 
+  (see section 8.4.7 of the Xlib spec), which include CirculateRequest,
   ConfigureRequest, MapRequest, and ResizeRequest events.  These events
   are often times requested by window managers and act to divert any normal
   XMapRequest() calls, for example, to the window manager instead of passing
-  them to the server to be processed.  Actually, the request is sent to 
-  the server first which redirects it to the window manager client without 
-  further processing. Then the window manager takes these requests, and does 
-  something to them according to their behavior policy, and possible sends 
+  them to the server to be processed.  Actually, the request is sent to
+  the server first which redirects it to the window manager client without
+  further processing. Then the window manager takes these requests, and does
+  something to them according to their behavior policy, and possible sends
   them back to the server in some alternate form.
 
   This gives us a worst-case data-flow model which looks something like this:
 
                       +-----------+
-                      |           | 
+                      |           |
                       |   TEST    |
               +------>|  CLIENT   |
-              |       |           | 
+              |       |           |
               |       +-----+-----+
               |             |  Request
               |             V
@@ -196,7 +196,7 @@ XIS SYNCHRONIZE
   in the worst case (3 machines), we must be aware of the availability of
   3 independent computer nodes and 3 independent communication paths.  Each
   node and communication path may vary dramatically from one another in terms
-  of throughput performance.  So to depend purely on a timeout method of 
+  of throughput performance.  So to depend purely on a timeout method of
   syncronization would be tenuous at best and would certainly not be very
   forgiving of any intermediate system/channel load variations.
 
@@ -208,14 +208,14 @@ XIS SYNCHRONIZE
   to the window manager.  Though few in number, they are amoung the most often
   used commands during the setup of a typical widget. They include XMapWindow(),
   XUnmapWindow(), XConfigureWindow(), and XResizeWindow().  The window manager
-  wants to know about any top level window's change configuration state (size, 
+  wants to know about any top level window's change configuration state (size,
   visibility state (in terms of mapped/unmapped), and stacking order) in order
   that it can do the correct thing with window border decoration, keyboard
-  focus, and global stacking orders whenever one of these commands occurs.  
-  Once it gets the info about the request which was sent (but not acted on by 
-  the server) it turns around and re-sends it to the server in a way that 
-  conforms to its window management policy (by re-positioning it and re-sizing 
-  it accordingly).  And finally, the server turns around and sends back the 
+  focus, and global stacking orders whenever one of these commands occurs.
+  Once it gets the info about the request which was sent (but not acted on by
+  the server) it turns around and re-sends it to the server in a way that
+  conforms to its window management policy (by re-positioning it and re-sizing
+  it accordingly).  And finally, the server turns around and sends back the
   appropriate configure or map notify to the test-client which closes the loop.
 
   So to syncronize these three tasks, we must send one of these requests and
@@ -226,9 +226,9 @@ XIS SYNCHRONIZE
   remaining events and window manager requests in the system.
 
   Unlike the Sync() command which waits for a syncronous reply to a simple
-  X request, our sync operation will depend on the setting up of an invisible 
-  (never mapped) top level window (totally separate from our widgets under 
-  test) which we will use to periodically re-configure and wait for the 
+  X request, our sync operation will depend on the setting up of an invisible
+  (never mapped) top level window (totally separate from our widgets under
+  test) which we will use to periodically re-configure and wait for the
   resulting configuration event back from the server before proceeding.
   While waiting for our special sync event, we will get back all other events
   which were previously queued up in the system.
@@ -238,9 +238,9 @@ XIS SYNCHRONIZE
   flush all requests internally prior to waiting for events to process.
 
   This solution is nice since it also satisfies the following additional 2
-  requirements:  (1) that the server screen should in no way be altered from 
+  requirements:  (1) that the server screen should in no way be altered from
   the way it would normally look when running motif without the input synthesis
-  tools, and (2) that the method should work equally well with or without 
+  tools, and (2) that the method should work equally well with or without
   a window manager.
 
   Now I will cover how to use this syncronization method.
@@ -256,9 +256,9 @@ XIS SYNCHRONIZE
       4. Do another primitive mouse/keyboard command
 
       5. Process all events related to that command
- 
+
          etc.
-  
+
       N. Destroy Widget
 
   This produces a chain of requests and events in the following order:
@@ -280,27 +280,27 @@ XIS SYNCHRONIZE
       2. While (True) do the following 3 steps
 
          3. XtAppNextEvent(xt_application_context,&event) - get next event
- 
+
          4. If done (received sync event), leave loop
 
          5. XtDispatchEvent(&event) - let Xt and Xm process event
 
       6. Return to caller
 
-  For one input synthesis command, this produces a chain of requests and 
+  For one input synthesis command, this produces a chain of requests and
   events in the following order:
 
       P S E E E... R
 
   At first look, it appears that all we have to do is to send the primitive
   sync request, then "wrap" a sync around its response by sending a sync
-  request, and in the process of waiting for its response, scoop up all 
+  request, and in the process of waiting for its response, scoop up all
   intermediate events generated from the original event. Then when we receive
   the sync event return control to the caller.
 
   However, this does not take into account the fact that an intermediate
   event when sent to XtDispatch() for processing by Xt and Xm may result
-  in a request which generates more intermediate events.  So now it appears 
+  in a request which generates more intermediate events.  So now it appears
   that in order to catch ALL resultant events, we must resend a sync command
   after each call of XtDispatch() in case it sent any additional requests that
   produced events.  Then when we get back the last sync event out of all of
@@ -313,7 +313,7 @@ XIS SYNCHRONIZE
       2. While (True) do the following 4 steps
 
          3. XtAppNextEvent(xt_application_context,&event) - get next event
- 
+
          4. If done (received last sync event), leave loop
 
          5. XtDispatchEvent(&event) - let Xt and Xm process event
@@ -322,30 +322,30 @@ XIS SYNCHRONIZE
 
       7. Return to caller
 
-  For one input synthesis command, this produces a chain of requests and 
+  For one input synthesis command, this produces a chain of requests and
   events in the following order:
 
       P S E S E S E... R R R <- last sync response
 
   In reality, very few of the calls to XtDispatch() result in requests which
   generate more events.  So monitoring the events would indicate that we
-  end up flooding the data flow path with a stream of many unnecessary 
+  end up flooding the data flow path with a stream of many unnecessary
   sync events.
 
   Another way of looking at the solution is this: we send out a request
-  which guarantees the return of at least 1 event;  thus we can call 
+  which guarantees the return of at least 1 event;  thus we can call
   XtAppNextEvent() without worrying about getting blocked indefinitely.
   If nothing else arrives, we will at least get back our 1 sync event.
 
   From this point of view, we need to inject new sync requests into
   the system only upon the completion of our previous sync event but prior
   to calling the XtAppNextEvent() wait loop again in order to gaurantee no
-  blocking will occur.  The end of one ping starts the next ping in a 
+  blocking will occur.  The end of one ping starts the next ping in a
   sort of rythmic fashion which forms a kind of "heartbeart" for controlling
-  the rest of event processing. And if you think about it, it turns out that 
-  our termination condition occurs when we receive two sync events in a row 
-  without any intermediate events in between.  This indicates that the system 
-  is settled back to a quiet state and can no longer generate any additional 
+  the rest of event processing. And if you think about it, it turns out that
+  our termination condition occurs when we receive two sync events in a row
+  without any intermediate events in between.  This indicates that the system
+  is settled back to a quiet state and can no longer generate any additional
   events.
 
   Now the modified algorithm looks like this:
@@ -355,14 +355,14 @@ XIS SYNCHRONIZE
       2. While (True) do the following 4 steps
 
          3. XtAppNextEvent(xt_application_context,&event) - get next event
- 
+
          4. If received sync event,
 
              5. If no intermediate events since last sync event
                     Leave loop
- 
+
              6. Else Send another sync request
-                    
+
          7. Else XtDispatchEvent(&event) - let Xt and Xm process event
 
       8. Return to caller
@@ -372,7 +372,7 @@ XIS SYNCHRONIZE
       P S E E E... R-S E E E... R-S E E E... R-S R <- last sync response
 
   This algorithm plan covers us 95% of the time, but still we need one
-  more refinement to make it complete.  
+  more refinement to make it complete.
 
   Some widgets (such as XmArrowButton) employ internal delays to give the
   effect of action-delay-action.  In XmArrowButton this happens when a user
@@ -380,9 +380,9 @@ XIS SYNCHRONIZE
   visual appearance of the button goes in immediately when the key is pressed
   (along with the invocation of the arm callbacks), then it waits for about
   1/2 second, and then it gets redrawn unpressed (along with the invocation of
-  the activate callbacks). Notice that the time when the user releases the 
+  the activate callbacks). Notice that the time when the user releases the
   return key is irrelevant to the visual release time of the arrow button.
-  
+
   To cover this case, we need to sync on the callbacks directly.  The first
   part of the processing with the "heartbeat" sync loop is done as previously
   stated.  Once we receive the dual sync indicating completion of the first
@@ -435,16 +435,16 @@ static void HandleConfig(shell, data, event, keep_going)
     Boolean *keep_going;
 {
     SyncValues *syncvalues = (SyncValues *) data;
-    
-    if (event->type == ConfigureNotify && 
+
+    if (event->type == ConfigureNotify &&
 	event->xconfigure.window == xisSyncWindow) {
-	
+
 	/** absorb one sync event **/
-	
+
 	if (syncvalues->serviced_sync &&
 	    (!XtAppPending(xisAppContext) & XtIMXEvent))
 	  syncvalues->done = 1;
-	
+
 	else {
 	    /* Grab all the consecutive configure notify events
 	       for this window. This prevents us from getting in an
@@ -474,15 +474,15 @@ static void HandleConfig(shell, data, event, keep_going)
 	XSync(xisDisplay,False);
     }
 }
-      
+
 /***************************************************************************/
 
 static void CreateSyncWindow()
 {
-    xisSyncWindow = 
+    xisSyncWindow =
       XCreateSimpleWindow(xisDisplay, xisRootWindow,
 			  400, 400, 10, 10, 0, 0, 0);
-    
+
     XSelectInput(xisDisplay, xisSyncWindow,
 		 StructureNotifyMask | PropertyChangeMask | KeyPressMask);
 }
@@ -510,7 +510,7 @@ void xisResetSyncWindow()
     XDestroyWindow(xisDisplay, xisSyncWindow);
     xisSyncWindow = (Window) NULL;
     xisSyncWindow = XtWindow(shell);
-    
+
     /* Add an event handler on the shell to look for configure notify
        events. */
     XtAddEventHandler(shell, StructureNotifyMask, False, HandleConfig,
@@ -551,7 +551,7 @@ int xisSynchronize()
         XSync(xisDisplay,False);
         XtAppNextEvent(xisAppContext,&event);  /** read event **/
 
-        /***** If it is really necessary, then uncomment this: 
+        /***** If it is really necessary, then uncomment this:
             xisProcessObjects();
             xisPrintEvent(&event);
         *****/
@@ -562,7 +562,7 @@ int xisSynchronize()
 	    HandleConfig((Widget) NULL, (XtPointer)(&syncvalues),
 			 &event, (Boolean *) NULL);
 	}
-	else if ((event.type == CirculateNotify || 
+	else if ((event.type == CirculateNotify ||
                   event.type == DestroyNotify ||
                   event.type == ReparentNotify ||
                   event.type == GravityNotify) &&
@@ -579,8 +579,8 @@ int xisSynchronize()
                   event.xbutton.send_event = 0;
                   event.xbutton.state = xisState.mod_button_state &
                                    (~xisMouseButtonMask[event.xbutton.button]);
-		  if (!xisUseCurrentTime || 
-		      (xisInform.event_code == EventMouseButtonMultiClick && 
+		  if (!xisUseCurrentTime ||
+		      (xisInform.event_code == EventMouseButtonMultiClick &&
 		       xisInform.num_clicks > 1) )
                      xisLastButtonPressTime = event.xbutton.time;
                   break;
@@ -656,16 +656,13 @@ int xisSynchronize()
         }
     } /* End while(!done) */
 
-    if ((MonitorOn == True) && (SyncWidgetCreated == True) && 
+    if ((MonitorOn == True) && (SyncWidgetCreated == True) &&
 	(SyncWidgetPoppedup == True))  {
 	XtPopdown (SyncWidget);
 	SyncWidgetPoppedup = False;
 	xisSynchronize();
-    }   	 
+    }
 
     return(called_dispatch);
 
 } /* End xisSynchronize() */
-
-
-

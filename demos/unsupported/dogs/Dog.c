@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Dog.c /main/7 1997/05/02 10:11:08 dbl $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$TOG: Dog.c /main/7 1997/05/02 10:11:08 dbl $"
 /*****************************************************************************
 *
 *  Dog.c - Dog widget source file
-*  
+*
 ******************************************************************************/
 
 #include <stdio.h>
@@ -365,17 +365,17 @@ static Boolean DifferentBackground(w, p)
      Widget w;
      Widget p;
 {
-  if (XmIsPrimitive(w) && XmIsManager(p)) 
+  if (XmIsPrimitive(w) && XmIsManager(p))
     {
       Pixel w_bg, p_bg;
       Pixmap w_px, p_px;
-      
+
       XtVaGetValues(w, XmNbackground, &w_bg, XmNbackgroundPixmap, &w_px, NULL);
       XtVaGetValues(p, XmNbackground, &p_bg, XmNbackgroundPixmap, &p_px, NULL);
-      
+
       return ((w_bg == p_bg) && (w_px == p_px));
     }
-  
+
   return (False);
 }
 
@@ -386,7 +386,7 @@ static void Redisplay(w, event, region)
 {
     if (XtIsRealized(w)) {
 	XmeDrawShadows(XtDisplay (w), XtWindow (w),
-		       TopShadowGC(w), BottomShadowGC(w), 
+		       TopShadowGC(w), BottomShadowGC(w),
 		       HighlightThickness(w), HighlightThickness(w),
 		       Width(w) - 2 * HighlightThickness(w),
 		       Height(w) - 2 * HighlightThickness(w),
@@ -424,13 +424,13 @@ static Boolean SetValues(current, request, new)
 	destroy_pixmaps(new);
 	create_pixmaps(new);
 	switch (CurrPx(new)) {
-	    case(UpPx) : 
+	    case(UpPx) :
 		SetPixmap(new,UpPx,UpPixmap(new),up_width,up_height);
 		break;
-	    case(DownPx) : 
+	    case(DownPx) :
 		SetPixmap(new,DownPx,DownPixmap(new),down_width,down_height);
 		break;
-	    case(BarkPx) : 
+	    case(BarkPx) :
 		SetPixmap(new,BarkPx,BarkPixmap(new),bark_width,bark_height);
 		break;
 	}
@@ -545,4 +545,3 @@ static void do_wag(w, t)
     XtAppAddTimeOut (XtWidgetToApplicationContext((Widget)dw),
 		     WagTime(dw), do_wag, dw);
 }
-

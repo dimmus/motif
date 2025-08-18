@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -74,7 +74,7 @@ static char rcsid[] = "$TOG: Mrmwvalues.c /main/12 1999/04/16 09:42:44 mgreess $
  *
  *	UrmFetchSetValues is the internal routine which will
  *	modify a widget via XtSetValues on an argument list whose values
- *	are evaluated literals from a URM hierarchy. 
+ *	are evaluated literals from a URM hierarchy.
  *
  *	The args list has ordinary Strings as each tag name. Each value
  *	is interpreted as a String whose value is the index of a literal
@@ -111,7 +111,7 @@ static char rcsid[] = "$TOG: Mrmwvalues.c /main/12 1999/04/16 09:42:44 mgreess $
  *--
  */
 
-Cardinal 
+Cardinal
 UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
 		   Widget		w ,
 		   ArgList		args ,
@@ -152,7 +152,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
   Pixel			fgint = (Pixel) -1 ; /* fg for pixmaps. */
   Pixel			bgint = (Pixel) -1 ; /* background for pixmaps */
   Pixmap		pixmap ;	/* pixmap created from icon */
-  Boolean		swap_needed = FALSE; 
+  Boolean		swap_needed = FALSE;
 
   /*
    * Create local arglist and pointer list for contexts.
@@ -186,7 +186,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
       locargs[num_used].name = args[ndx].name ;
       strcpy (resptr->key.index, (char*)args[ndx].value) ;
       result = Urm__CW_ReadLiteral (resptr, hierarchy_id, NULL,
-				    ptrlist, &reptype, &val, &vec_count, 
+				    ptrlist, &reptype, &val, &vec_count,
 				    &file_id, &vec_size) ;
       if ( result == MrmSUCCESS )
 	num_succ += 1;
@@ -222,18 +222,18 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
 	      RGMFontListPtr fontlist = (RGMFontListPtr)
 		XtMalloc(sizeof(RGMFontList) +
 			 (sizeof(RGMFontItem) * (count - 1)));
-	      result = Urm__CW_FixupValue((long)fontlist, reptype, 
+	      result = Urm__CW_FixupValue((long)fontlist, reptype,
 					  (XtPointer)val, file_id,
 					  &swap_needed);
 	      XtFree((char *)val);
 	      val = (long)fontlist;
 	    }
 	  else
-	    result = Urm__CW_FixupValue (val, reptype, (XtPointer)val, 
+	    result = Urm__CW_FixupValue (val, reptype, (XtPointer)val,
 					 file_id, &swap_needed) ;
 
 	default:
-	  result = 
+	  result =
 	    Urm__CW_FixupValue (val, reptype, (XtPointer)val, file_id,
 				&swap_needed) ;
 	  if ( result != MrmSUCCESS )
@@ -246,7 +246,7 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
 	    display = XtDisplay(w);
 	  else
 	    display = XtDisplay(XtParent(w));
-	    
+
 	  result = Urm__CW_ConvertValue (XtParent(w), &val, reptype, (MrmType)0,
 					 display, hierarchy_id,  NULL) ;
 	  if ( result != MrmSUCCESS )
@@ -330,4 +330,3 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
     return MrmFAILURE;
 
 }
-

@@ -86,7 +86,7 @@ Tcedit*showDecal:		TRUE
 *XmPushButton*marginHeight: 	4
 *XmPushButton*marginWidth: 	7
 
-! option menu buttons shouldn't look "cramped" either 
+! option menu buttons shouldn't look "cramped" either
 ! but need to be a bit smaller than regular buttons and the
 ! same as the menu bar
 *optionMenu*marginHeight: 	0
@@ -103,7 +103,7 @@ Tcedit*showDecal:		TRUE
 ! move the text in lists slightly right to improve legibility
 *XmList*listMarginWidth:        3
 
-! height of menuBar should be 22 pixels 
+! height of menuBar should be 22 pixels
 *menuBar*marginHeight: 		1
 *menuBar.marginHeight: 		0
 *menuBar*marginLeft:  		1
@@ -170,7 +170,3 @@ Tcedit*showDecal:		TRUE
 
 !! no need for anything else to highlight itself
 *highlightThickness:	0
-
-
-
-

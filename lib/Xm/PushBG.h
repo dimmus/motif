@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 /***********************************************************************
  *
  * PushButton Widget
@@ -48,20 +48,20 @@ typedef struct _XmPushButtonGCacheObjRec     *XmPushButtonGCacheObject;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmCreatePushButtonGadget( 
+extern Widget XmCreatePushButtonGadget(
                         Widget parent,
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
 
 extern Widget XmVaCreatePushButtonGadget(
-			Widget parent, 
-			char *name, 
+			Widget parent,
+			char *name,
 			...);
 
 extern Widget XmVaCreateManagedPushButtonGadget(
-			Widget parent, 
-			char *name, 
+			Widget parent,
+			char *name,
 			...);
 
 /********    End Public Function Declarations    ********/

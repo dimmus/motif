@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -38,7 +38,7 @@
 
 
 /* Include appropriate files. */
-#include <Exm/Container.h>  /* public header file for ExmContainer */ 
+#include <Exm/Container.h>  /* public header file for ExmContainer */
 #include <Exm/GridP.h>      /* private header file for Grid */
 
 

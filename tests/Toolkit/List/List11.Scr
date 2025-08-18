@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-# A List and a Text widget contained in a Paned Window should appear. 
+# A List and a Text widget contained in a Paned Window should appear.
 # The Font should be:
 # !)
 #    -adobe-helvetica-bold-r-normal--14-140-75-75-p-82-iso8859-1
-# The application's keyboardFocusPolicy is pointer. When you move into 
+# The application's keyboardFocusPolicy is pointer. When you move into
 # the winoow you should get focus on the widget you are over.
 
 LocatePointer List1

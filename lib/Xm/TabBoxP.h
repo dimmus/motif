@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 #ifndef _XmTabBoxP_h_
 #define _XmTabBoxP_h_
@@ -76,7 +76,7 @@ typedef struct _XmTabBoxPart {
     int			traversal_index;
 
     Boolean		stacked_effect;
-    
+
     XtCallbackList      select_callback;
     XtCallbackList      unselect_callback;
 
@@ -92,7 +92,7 @@ typedef struct _XmTabBoxPart {
     int		     _keyboard;
 
     int		     _armed_tab;
-    
+
     int              _scroll_x;
     XRectangle	     _scroll_rect;
 
@@ -102,7 +102,7 @@ typedef struct _XmTabBoxPart {
     int		     _num_rows;
 
     /*
-     * The following data memebers are used for the rotation of 
+     * The following data memebers are used for the rotation of
      * the pixmap and the text.
      */
     int              _bitmap_width;
@@ -120,7 +120,7 @@ typedef struct _XmTabBoxPart {
 
     struct _XmCache *_cache;
     int              _cache_size;
-    
+
     Boolean		check_set_render_table;
 } XmTabBoxPart;
 

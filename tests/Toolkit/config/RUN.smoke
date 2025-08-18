@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #
 # RUN.smoke
@@ -139,7 +139,7 @@ foreach test ($tests_to_run)
 #echo "Current test " $test
     set test =($test)
 #echo "Current test1 " $test
-    
+
     foreach word ($test)
         if ($?name_flag) then
             set test_output = $word
@@ -170,13 +170,13 @@ foreach test ($tests_to_run)
             endif
             echo "failure in test: "$test[1] >> RUN.smoke.failures
             echo "FAILURE IN TEST: "$test[1] >> RUN.smoke.output
-            echo "FAILURE IN TEST: "$test[1] 
+            echo "FAILURE IN TEST: "$test[1]
         endif
     else
         echo "Error - Test " $test " does not exist."
         echo "Error - Test " $test " does not exist" >> RUN.smoke.output
         echo "FAILURE IN TEST: "$test[1] >> RUN.smoke.output
-        echo "FAILURE IN TEST: "$test[1] 
+        echo "FAILURE IN TEST: "$test[1]
         continue
     endif
 
@@ -221,6 +221,6 @@ if (pathExists == true) then
 else
 	unsetenv XFILESEARCHPATH
 endif
-	
 
-exit 0 
+
+exit 0

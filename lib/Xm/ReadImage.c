@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -40,14 +40,14 @@ static char rcsid[] = "$XConsortium: ReadImage.c /main/15 1996/10/21 11:40:15 cd
  *	Given a filename, extract and create an image from the file data.
  *      This one takes a Display.
  ************************************************************************/
-XImage * 
+XImage *
 _XmReadImageAndHotSpotFromFile(
         Display * display,
         char *filename,
-	int *hot_x, 
+	int *hot_x,
 	int *hot_y)
 {
-   unsigned int width; 
+   unsigned int width;
    unsigned int height;
    unsigned char * data;
 
@@ -62,5 +62,3 @@ _XmReadImageAndHotSpotFromFile(
 
    return (NULL);
 }
-
-

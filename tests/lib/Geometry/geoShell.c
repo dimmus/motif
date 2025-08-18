@@ -99,7 +99,7 @@ static XtResource shellResources[]=
 	{ XtNallowShellResize, XtCAllowShellResize, XtRBoolean,
 	    sizeof(Boolean), Offset(shell.allow_shell_resize),
 	    XtRImmediate, (XtPointer)False},
-	{ XtNgeometry, XtCGeometry, XtRString, sizeof(String), 
+	{ XtNgeometry, XtCGeometry, XtRString, sizeof(String),
 	    Offset(shell.geometry), XtRString, (XtPointer)NULL},
 	{ XtNcreatePopupChildProc, XtCCreatePopupChildProc, XtRFunction,
 	    sizeof(XtCreatePopupChildProc), Offset(shell.create_popup_child_proc),
@@ -143,7 +143,7 @@ externaldef(shellclassrec) ShellClassRec shellClassRec = {
     /* class_part_initialize*/	ClassPartInitialize,
     /* Class init'ed ?	  */	FALSE,
     /* initialize	  */	Initialize,
-    /* initialize_notify  */	NULL,		
+    /* initialize_notify  */	NULL,
     /* realize		  */	Realize,
     /* actions		  */	NULL,
     /* num_actions	  */	0,
@@ -158,9 +158,9 @@ externaldef(shellclassrec) ShellClassRec shellClassRec = {
     /* resize		  */	Resize,
     /* expose		  */	NULL,
     /* set_values	  */	SetValues,
-    /* set_values_hook	  */	NULL,			
-    /* set_values_almost  */	XtInheritSetValuesAlmost,  
-    /* get_values_hook	  */	GetValuesHook,			
+    /* set_values_hook	  */	NULL,
+    /* set_values_almost  */	XtInheritSetValuesAlmost,
+    /* get_values_hook	  */	GetValuesHook,
     /* accept_focus	  */	NULL,
     /* intrinsics version */	XtVersion,
     /* callback offsets	  */	NULL,
@@ -205,7 +205,7 @@ externaldef(overrideshellclassrec) OverrideShellClassRec overrideShellClassRec =
     /* class_part_initialize*/	NULL,
     /* Class init'ed ?    */	FALSE,
     /* initialize         */    NULL,
-    /* initialize_notify    */	NULL,		
+    /* initialize_notify    */	NULL,
     /* realize            */    XtInheritRealize,
     /* actions            */    NULL,
     /* num_actions        */    0,
@@ -220,9 +220,9 @@ externaldef(overrideshellclassrec) OverrideShellClassRec overrideShellClassRec =
     /* resize             */    XtInheritResize,
     /* expose             */    NULL,
     /* set_values         */    NULL,
-    /* set_values_hook      */	NULL,			
-    /* set_values_almost    */	XtInheritSetValuesAlmost,  
-    /* get_values_hook      */	NULL,			
+    /* set_values_hook      */	NULL,
+    /* set_values_almost    */	XtInheritSetValuesAlmost,
+    /* get_values_hook      */	NULL,
     /* accept_focus       */    NULL,
     /* intrinsics version */	XtVersion,
     /* callback offsets   */    NULL,
@@ -243,7 +243,7 @@ externaldef(overrideshellclassrec) OverrideShellClassRec overrideShellClassRec =
   }
 };
 
-externaldef(overrideshellwidgetclass) WidgetClass overrideShellWidgetClass = 
+externaldef(overrideshellwidgetclass) WidgetClass overrideShellWidgetClass =
 	(WidgetClass) (&overrideShellClassRec);
 
 /***************************************************************************
@@ -351,7 +351,7 @@ externaldef(wmshellclassrec) WMShellClassRec wmShellClassRec = {
     /* class_part_initialize*/	NULL,
     /* Class init'ed ?    */	FALSE,
     /* initialize         */    WMInitialize,
-    /* initialize_notify    */	NULL,		
+    /* initialize_notify    */	NULL,
     /* realize            */    XtInheritRealize,
     /* actions            */    NULL,
     /* num_actions        */    0,
@@ -366,9 +366,9 @@ externaldef(wmshellclassrec) WMShellClassRec wmShellClassRec = {
     /* resize             */    XtInheritResize,
     /* expose             */    NULL,
     /* set_values         */    WMSetValues,
-    /* set_values_hook      */	NULL,			
-    /* set_values_almost    */	XtInheritSetValuesAlmost,  
-    /* get_values_hook      */	NULL,			
+    /* set_values_hook      */	NULL,
+    /* set_values_almost    */	XtInheritSetValuesAlmost,
+    /* get_values_hook      */	NULL,
     /* accept_focus       */    NULL,
     /* intrinsics version */	XtVersion,
     /* callback offsets   */    NULL,
@@ -422,7 +422,7 @@ externaldef(transientshellclassrec) TransientShellClassRec transientShellClassRe
     /* class_part_initialize*/	NULL,
     /* Class init'ed ?	  */	FALSE,
     /* initialize	  */	NULL,
-    /* initialize_notify  */	NULL,		
+    /* initialize_notify  */	NULL,
     /* realize		  */	TransientRealize,
     /* actions		  */	NULL,
     /* num_actions	  */	0,
@@ -437,9 +437,9 @@ externaldef(transientshellclassrec) TransientShellClassRec transientShellClassRe
     /* resize		  */	XtInheritResize,
     /* expose		  */	NULL,
     /* set_values	  */	TransientSetValues,
-    /* set_values_hook	  */	NULL,			
-    /* set_values_almost  */	XtInheritSetValuesAlmost,  
-    /* get_values_hook	  */	NULL,			
+    /* set_values_hook	  */	NULL,
+    /* set_values_almost  */	XtInheritSetValuesAlmost,
+    /* get_values_hook	  */	NULL,
     /* accept_focus	  */	NULL,
     /* intrinsics version */	XtVersion,
     /* callback offsets	  */	NULL,
@@ -500,7 +500,7 @@ externaldef(toplevelshellclassrec) TopLevelShellClassRec topLevelShellClassRec =
     /* class_part_initialize*/	NULL,
     /* Class init'ed ?    */	FALSE,
     /* initialize         */    TopLevelInitialize,
-    /* initialize_notify    */	NULL,		
+    /* initialize_notify    */	NULL,
     /* realize            */    XtInheritRealize,
     /* actions            */    NULL,
     /* num_actions        */    0,
@@ -515,9 +515,9 @@ externaldef(toplevelshellclassrec) TopLevelShellClassRec topLevelShellClassRec =
     /* resize             */    XtInheritResize,
     /* expose             */    NULL,
     /* set_values         */    TopLevelSetValues,
-    /* set_values_hook      */	NULL,			
-    /* set_values_almost    */	XtInheritSetValuesAlmost,  
-    /* get_values_hook      */	NULL,			
+    /* set_values_hook      */	NULL,
+    /* set_values_almost    */	XtInheritSetValuesAlmost,
+    /* get_values_hook      */	NULL,
     /* accept_focus       */    NULL,
     /* intrinsics version */	XtVersion,
     /* callback offsets   */    NULL,
@@ -557,7 +557,7 @@ externaldef(toplevelshellwidgetclass) WidgetClass topLevelShellWidgetClass =
 static XtResource applicationResources[]=
 {
 	{ XtNargc, XtCArgc, XtRInt, sizeof(int),
-	    Offset(application.argc), XtRImmediate, (XtPointer)0}, 
+	    Offset(application.argc), XtRImmediate, (XtPointer)0},
 	{ XtNargv, XtCArgv, XtRStringArray, sizeof(String*),
 	    Offset(application.argv), XtRPointer, (XtPointer) NULL}
 };
@@ -584,7 +584,7 @@ externaldef(applicationshellclassrec) ApplicationShellClassRec applicationShellC
     /* class_part_initialize*/	NULL,
     /* Class init'ed ?    */	FALSE,
     /* initialize         */    ApplicationInitialize,
-    /* initialize_notify  */	NULL,		
+    /* initialize_notify  */	NULL,
     /* realize            */    XtInheritRealize,
     /* actions            */    NULL,
     /* num_actions        */    0,
@@ -599,9 +599,9 @@ externaldef(applicationshellclassrec) ApplicationShellClassRec applicationShellC
     /* resize             */    XtInheritResize,
     /* expose             */    NULL,
     /* set_values         */    NULL,
-    /* set_values_hook    */	NULL,			
+    /* set_values_hook    */	NULL,
     /* set_values_almost  */	XtInheritSetValuesAlmost,
-    /* get_values_hook    */	NULL,			
+    /* get_values_hook    */	NULL,
     /* accept_focus       */    NULL,
     /* intrinsics version */	XtVersion,
     /* callback offsets   */    NULL,
@@ -920,7 +920,7 @@ static void ApplicationInitialize(req, new, args, num_args)
 static void Resize(w)
     Widget w;
 {
-    register ShellWidget sw = (ShellWidget)w;    
+    register ShellWidget sw = (ShellWidget)w;
     Widget childwid;
     int i;
     for(i = 0; i < sw->composite.num_children; i++) {
@@ -972,8 +972,8 @@ static void Realize(wid, vmask, attr)
 			    w->core.background_pixmap =
 				(*childP)->core.background_pixmap;
 		    } else {
-			attr->background_pixel = 
-			    w->core.background_pixel = 
+			attr->background_pixel =
+			    w->core.background_pixel =
 				(*childP)->core.background_pixel;
 		    }
 		    break;
@@ -1296,14 +1296,14 @@ static void EventHandler(wid, closure, event, continue_to_dispatch)
 			wmshell->wm.wait_for_wm = TRUE;
 		    }
 #undef EQ
-		}		    
+		}
 		break;
 
 	    case ClientMessage:
 		if( event->xclient.message_type == WM_CONFIGURE_DENIED(wid)
 		    && XtIsWMShell(wid)) {
 
-		    /* 
+		    /*
 		     * UT Oh! the window manager has come back alive
 		     * This means either I didn't wait long enough or
 		     * The WM is sick.
@@ -1322,7 +1322,7 @@ static void EventHandler(wid, closure, event, continue_to_dispatch)
 		    (void) XGetGeometry(XtDisplay(w), XtWindow(w), &tmproot,
 			    &tmpx, &tmpy, &width, &height, &border_width,
 			    &tmpdepth);
-		    (void) XTranslateCoordinates(XtDisplay(w), XtWindow(w), 
+		    (void) XTranslateCoordinates(XtDisplay(w), XtWindow(w),
 			    tmproot, (int) tmpx, (int) tmpy,
 			    &tmp2x, &tmp2y, &tmpchild);
 		    w->core.x = tmp2x;
@@ -1342,7 +1342,7 @@ static void EventHandler(wid, closure, event, continue_to_dispatch)
 		    w->core.y  = event->xclient.data.s[1];
 		    if (XtIsWMShell((Widget)w)) {
 			WMShellWidget wmshell = (WMShellWidget) w;
-			/* Any window manager which sends this must be 
+			/* Any window manager which sends this must be
 			   good guy.  Let's reset our flag. */
 			wmshell->wm.wait_for_wm = TRUE;
 		    }
@@ -1363,9 +1363,9 @@ static void EventHandler(wid, closure, event, continue_to_dispatch)
  		    XtPerDisplayInput	pdi;
  		    XtDevice		device;
  		    Widget		p;
- 
+
  		    pdi = _XtGetPerDisplayInput(event->xunmap.display);
- 
+
  		    device = &pdi->pointer;
  		    if (device->grabType == XtPassiveServerGrab) {
  			p = device->grab.widget;
@@ -1374,7 +1374,7 @@ static void EventHandler(wid, closure, event, continue_to_dispatch)
  			if (p == wid)
  			    device->grabType = XtNoServerGrab;
  		    }
- 
+
  		    device = &pdi->keyboard;
  		    if (IsEitherPassiveGrab(device->grabType)) {
  			p = device->grab.widget;
@@ -1385,15 +1385,15 @@ static void EventHandler(wid, closure, event, continue_to_dispatch)
  			    pdi->activatingKey = 0;
  			}
  		    }
- 
+
  		    return;
  		}
 
 	      default:
 		 return;
-	 } 
+	 }
 
-	 if (sizechanged && 
+	 if (sizechanged &&
                  XtClass(wid)->core_class.resize != (XtWidgetProc) NULL) {
 	     _GeoPrintTrace((Widget)w,"Shell \"%s\" is being resized to %d %d.\n", XtName(wid), wid->core.width, wid->core.height );
 	     (*(XtClass(wid)->core_class.resize))(wid);
@@ -1542,7 +1542,7 @@ static void ChangeManaged(wid)
 	    break;		/* there can only be one of them! */
 	}
     }
-        
+
     if (!XtIsRealized (wid))	/* then we're about to be realized... */
 	GetGeometry(wid, child);
 
@@ -1555,7 +1555,7 @@ static void ChangeManaged(wid)
 	XtWidgetGeometry child_reply;
 
 	(void) XtQueryGeometry (child, NULL, &child_reply);
-	(void) XtMakeResizeRequest(w, child_reply.width, child_reply.height, 
+	(void) XtMakeResizeRequest(w, child_reply.width, child_reply.height,
 				   NULL, NULL);
     }
 */
@@ -1571,7 +1571,7 @@ static void ChangeManaged(wid)
  * it is possible that some time in the future the request will be
  * asynchronusly denied and the window reverted to it's old size/shape.
  */
- 
+
 /*ARGSUSED*/
 static XtGeometryResult GeometryManager( wid, request, reply )
 	Widget wid;
@@ -1611,7 +1611,7 @@ static XtGeometryResult GeometryManager( wid, request, reply )
 	     * so, whatever the WM sized us to (if the Shell requested
 	     * only one of the two) is now the correct child size
 	     */
-	    
+
 	    wid->core.width = shell->core.width;
 	    wid->core.height = shell->core.height;
 	    if (request->request_mode & CWBorderWidth) {
@@ -1689,7 +1689,7 @@ static _wait_for_response(w, event, request_num)
 	q.w = (Widget) w;
 	q.request_num = request_num;
 	q.done = FALSE;
-	
+
 	for(;;) {
  	    /*
  	     * look for match event and discard all prior configures
@@ -1723,7 +1723,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
     unsigned long request_num;
 
     _GeoTabTrace();
-    
+
     if (XtIsWMShell(gw)) {
 	wm = True;
 	hintp = &((WMShellWidget)w)->wm.size_hints;
@@ -1735,7 +1735,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
    	hintp->height = w->core.height;
     } else
 	wm = False;
-    
+
     oldx = w->core.x;
     oldy = w->core.y;
     oldwidth = w->core.width;
@@ -1811,7 +1811,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
     if (!XtIsRealized((Widget)w)) {
 
 	_GeoPrintTrace((Widget)w,
-		       "Shell \"%s\" is not realized, return XtGeometryYes.\n", 
+		       "Shell \"%s\" is not realized, return XtGeometryYes.\n",
 		       XtName((Widget)w));
     	_GeoUnTabTrace();
 	return XtGeometryYes;
@@ -1827,7 +1827,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
     if (mask & CWHeight) { _GeoPrintTrace((Widget)w,"height = %d\n",values.height);}
     if (mask & CWBorderWidth) { _GeoPrintTrace((Widget)w,"border_width = %d\n",values.border_width);}
     _GeoUnTabTrace();
-    
+
 
     XConfigureWindow(XtDisplay((Widget)w), XtWindow((Widget)w), mask,&values);
 
@@ -1849,7 +1849,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
 
     if (wm && ((WMShellWidget)w)->wm.wait_for_wm == FALSE) {
 	    /* the window manager is sick
-	     * so I will do the work and 
+	     * so I will do the work and
 	     * say no so if a new WM starts up,
 	     * or the current one recovers
 	     * my size requests will be visible
@@ -1865,7 +1865,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
 	/* got an event */
 	if (event.type == ConfigureNotify) {
 
-#define NEQ(x, msk) ((mask & msk) && (values.x != event.xconfigure.x))	
+#define NEQ(x, msk) ((mask & msk) && (values.x != event.xconfigure.x))
 	    if (NEQ(x, CWX) ||
 		NEQ(y, CWY) ||
 		NEQ(width, CWWidth) ||
@@ -1873,21 +1873,21 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
 		NEQ(border_width, CWBorderWidth)) {
 
 		if (NEQ(x, CWX)) {
-		    _GeoPrintTrace((Widget)w,"received Configure X %d\n", 
+		    _GeoPrintTrace((Widget)w,"received Configure X %d\n",
 					event.xconfigure.x);}
 		if (NEQ(y, CWY)) {
-		    _GeoPrintTrace((Widget)w,"received Configure Y %d\n", 
+		    _GeoPrintTrace((Widget)w,"received Configure Y %d\n",
 					event.xconfigure.y);}
 		if (NEQ(width, CWWidth)) {
-		    _GeoPrintTrace((Widget)w,"received Configure Width %d\n", 
+		    _GeoPrintTrace((Widget)w,"received Configure Width %d\n",
 					event.xconfigure.width);}
 		if (NEQ(height, CWHeight)) {
-		    _GeoPrintTrace((Widget)w,"received Configure Height %d\n", 
+		    _GeoPrintTrace((Widget)w,"received Configure Height %d\n",
 					event.xconfigure.height);}
 		if (NEQ(border_width, CWBorderWidth)) {
-		    _GeoPrintTrace((Widget)w,"received Configure BorderWidth %d\n", 
+		    _GeoPrintTrace((Widget)w,"received Configure BorderWidth %d\n",
 					event.xconfigure.border_width);}
-		
+
 #undef NEQ
 		XPutBackEvent(XtDisplay(w), &event);
 		PutBackGeometry();
@@ -1941,7 +1941,7 @@ static XtGeometryResult RootGeometryManager(gw, request, reply)
 			       "internalError", "shell", XtCXtToolkitError,
 			       "Shell's window manager interaction is broken",
 			       (String *)NULL, (Cardinal *)NULL);
-    } else if (wm) { /* no event */ 
+    } else if (wm) { /* no event */
 	((WMShellWidget)w)->wm.wait_for_wm = FALSE; /* timed out; must be broken */
     }
     PutBackGeometry();
@@ -2061,7 +2061,7 @@ static Boolean WMSetValues(old, ref, new, args, num_args)
  	if (set_prop && nwmshell->wm.transient != owmshell->wm.transient) {
  	    if (nwmshell->wm.transient) {
 		if (!XtIsTransientShell(new) &&
-		    nwmshell->wm.wm_hints.window_group != 
+		    nwmshell->wm.wm_hints.window_group !=
 		       XtUnspecifiedWindowGroup)
 		    XSetTransientForHint(XtDisplay(new), XtWindow(new),
 					 nwmshell->wm.wm_hints.window_group);
@@ -2069,7 +2069,7 @@ static Boolean WMSetValues(old, ref, new, args, num_args)
  	    else XDeleteProperty(XtDisplay(new), XtWindow(new),
  				 XA_WM_TRANSIENT_FOR);
  	}
-	
+
 	return FALSE;
 }
 
@@ -2081,7 +2081,7 @@ static Boolean TransientSetValues(oldW, refW, newW, args, num_args)
 {
     TransientShellWidget old = (TransientShellWidget)oldW;
     TransientShellWidget new = (TransientShellWidget)newW;
-    
+
     if (XtIsRealized(newW)
 	&& ((new->transient.transient_for != old->transient.transient_for)
 	    || (new->transient.transient_for == NULL
@@ -2164,7 +2164,7 @@ void _XtShellGetCoordinates( widget, x, y)
     if (!(w->shell.client_specified & _XtShellPositionValid)) {
 	int tmpx, tmpy;
 	Window tmpchild;
-	(void) XTranslateCoordinates(XtDisplay(w), XtWindow(w), 
+	(void) XTranslateCoordinates(XtDisplay(w), XtWindow(w),
 				     RootWindowOfScreen(XtScreen(w)),
 				     (int) -w->core.border_width,
 				     (int) -w->core.border_width,
@@ -2204,7 +2204,7 @@ static void GetValuesHook(widget, args, num_args)
 	}
     }
 }
-  
+
 static void ApplicationShellInsertChild(widget)
     Widget widget;
 {

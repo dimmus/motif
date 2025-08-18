@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BeginVisual.c /main/7 1995/07/14 11:46:32 drk $"
@@ -44,7 +44,7 @@ static char rcsid[] = "$XConsortium: BeginVisual.c /main/7 1995/07/14 11:46:32 d
             trace_msg_func - a function which prints out a trace message
             warning_msg_func - a function which prints out a warning message
             error_msg_func - a function which prints out an error message
-        
+
         OUTPUTS:
             none
 
@@ -73,7 +73,7 @@ void (*error_msg_func)();
     visErrorMsg = error_msg_func;
 
     if (error_msg_func == 0) {
-      
+
         fprintf(stderr, "%s called with NULL error_msg_func\n", routine_name);
         exit(-1);
     }
@@ -81,7 +81,7 @@ void (*error_msg_func)();
     if (display_in == 0) {
         sprintf (msg_string, _AutoMessages[VISMSG3], routine_name);
 	AutoError(msg_string);
-        
+
     }
     if (trace_msg_func == 0) {
         sprintf (msg_string, _AutoMessages[VISMSG4], routine_name);

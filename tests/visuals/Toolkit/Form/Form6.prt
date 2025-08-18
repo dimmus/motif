@@ -23,8 +23,8 @@
 #
 # HISTORY
 TRACE:(1) WindowFocus Shell1
-TRACE:(2) LocatePointer Form1  
+TRACE:(2) LocatePointer Form1
 TRACE:(3) Continue
-TRACE:(4) CompareVisual Shell1 
+TRACE:(4) CompareVisual Shell1
 TRACE:(5) Exit
 Exiting Test...Please Standby...

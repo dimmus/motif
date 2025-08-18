@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsCpRep1Arg.c /main/7 1995/07/14 11:19:44 drk $"
@@ -68,7 +68,7 @@ MvsArgVal 		new_arg_value;
         ;
 
     if (j < *orig_argcnt) {
-	mvsFreeResource(w_class_info, &(orig_args[j].value), 
+	mvsFreeResource(w_class_info, &(orig_args[j].value),
 		    mvsGetResourceNum(w_class_info, orig_args[j].name));
     }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FetchL.c /main/9 1995/07/14 10:47:50 drk $"
@@ -59,7 +59,7 @@ extern void	return_summary();
 #define NUM_TESTS		9
 #define TEST_DESCRIP_LENGTH	33
 
-struct TestInfo FetchLiteralInfo[NUM_TESTS] = 
+struct TestInfo FetchLiteralInfo[NUM_TESTS] =
 {
     {"Fetch literal from NULL hierarchy", MrmBAD_HIERARCHY,	0},
     {"Fetch non-exported literal       ", MrmNOT_FOUND,		0},
@@ -84,7 +84,7 @@ String	result_choice[2] =
  * Possible Mrm errors
  */
 
-struct ReturnInfo retval[63] = 
+struct ReturnInfo retval[63] =
 {
     {"MrmFAILURE       ", 0},
     {"MrmSUCCESS       ", 1},
@@ -185,7 +185,7 @@ String		string_literal,
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
 
 /*
  * Initialize Mrm
@@ -209,7 +209,7 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
@@ -230,7 +230,7 @@ main(argc, argv)
 							(XtPointer)
 							&bad_literal,
 							&type);
-    
+
 /*
  * Try to fetch nonexported literal
  */
@@ -375,13 +375,13 @@ void return_summary(num_tests, description_length, test_info)
     		header4 = "--------           ------             ------\n",
     		header5 = "Test",
     		header6 = "----";
-    
+
 
     int		i;
 
     String	padding,
     		ptr;
-    
+
     padding = calloc(description_length - 2, 1);
 
 /*
@@ -403,7 +403,7 @@ void return_summary(num_tests, description_length, test_info)
     fprintf(stdout,"    %s%s", padding, header2);
     fprintf(stdout,"%s%s%s", header5, padding, header3);
     fprintf(stdout,"%s%s%s", header6, padding, header4);
-    
+
 /*
  * Print description of, and results from, each individual test
  */

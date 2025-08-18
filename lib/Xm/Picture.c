@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -60,7 +60,7 @@ XmParsePicture(char *input)
 
     picture->start_node = root_node->index;
     picture->final_node = end_node->index;
-    
+
     return picture;
 }
 
@@ -133,7 +133,7 @@ XmPictureProcessCharacter(XmPictureState state, char in, Boolean *is_finished)
     /*
      * For each node in the state set, try to follow all transitions
      * (recursing on NullTransitions of course)
-     */    
+     */
     for(i=0; i<state->picture->num_nodes; i++) {
 	if(_XmPictureGetState(state->state, i)) {
 	    _XmPictureFollowTransitions(state, in, state->picture->nodes[i]);
@@ -306,53 +306,53 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	case HEXDIGIT:
 	    newnode = _XiGetNewNode(picture);
 	    newtrans = _XiGetNewTransition(HexDigit,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	case OCTALDIGIT:
 	    newnode = _XiGetNewNode(picture);
 	    newtrans = _XiGetNewTransition(OctalDigit,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	case NONCASELETTER:
 	    newnode = _XiGetNewNode(picture);
 	    newtrans = _XiGetNewTransition(AnyLetter,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	case UPCASELETTER:
 	    newnode = _XiGetNewNode(picture);
 	    newtrans = _XiGetNewTransition(UpCaseLetter,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	case NONCASECHAR:
 	    newnode = _XiGetNewNode(picture);
 	    newtrans = _XiGetNewTransition(AnyCharacter,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	case UPCASECHAR:
 	    newnode = _XiGetNewNode(picture);
 	    newtrans = _XiGetNewTransition(UpCaseCharacter,
 					   current_node, newnode);
 	    current_node = newnode;
 	    break;
-	    
+
 	    /*
 	     * The weird stuff.
 	     */
-	    
+
 	    /*
 	     * Read a numeric specifier, if it exists, then read the
 	     * next _single_ R.E. (i.e., not a string of concatenated
@@ -365,7 +365,7 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 			character going to be display */
 	    count = strtol(*in_string, &endcount, 0);
 	    if(count)
-		*in_string = endcount;		
+		*in_string = endcount;
 	    _XmPictureParseNode(picture, in_string,
 				&start_node_2, &current_node_2,
 				True);
@@ -380,11 +380,11 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 					       current_node_2, start_node_2);
 		newtrans = _XiGetNewTransition(NullTransition,
 					       current_node, current_node_2);
-		
+
 		current_node = current_node_2;
 	    }
 	    break;
-	    
+
 	    /*
 	     * Read the next (NOT singleton, this time) R.E.; create a _new_
 	     * initial state which has null-transitions to both the
@@ -402,7 +402,7 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 		start_node_2->transitions;
             current_node = current_node_2;
 	    break;
-	    
+
 	    /*
 	     * This actually is a special case of ALTERNATIVE.  The
 	     * stuff inside the brackets becomes one chain, and a
@@ -413,7 +413,7 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 	    _XmPictureParseNode(picture, in_string,
 				&start_node_2, &current_node_2,
 				False);
-	    
+
 	    newtrans = _XiGetNewTransition(NullTransition,
 					   current_node, current_node_2);
 	    newtrans = _XiGetNewTransition(NullTransition,
@@ -422,7 +422,7 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 	    current_node = current_node_2;
 
 	    break;
-	    
+
 	    /*
 	     * The easiest special case to handle.  Just read a
 	     * non-singleton R.E. until the close-brace and stick it
@@ -435,11 +435,11 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 
 	    newtrans = _XiGetNewTransition(NullTransition,
 					   current_node, start_node_2);
-	    
+
 	    current_node = current_node_2;
 
 	    break;
-	    
+
 	    /*
 	     * Deal with both end-of-subexpression tokens in the same
 	     * way.  This will accept stuff like {...] and [...}, but that's
@@ -452,7 +452,7 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
 	case RBRACKET:
 	    returnNOW = True;
 	    break;
-	    
+
 	    /*
 	     * Special case handling for the ';' escape character.
 	     * Make sure dumb users haven't escaped the end of the string
@@ -680,7 +680,7 @@ _XmPictureCopySubGraph(XmPictureRec *picture, int n,
      * Bail if the user did a repeat count of 1
      */
     if(n < 1) return end;
-    
+
     /*
      * First allocate a pointer array of the same size as the current
      * picture.  This will hold NULL for nodes not in the subgraph and
@@ -691,7 +691,7 @@ _XmPictureCopySubGraph(XmPictureRec *picture, int n,
 	    XtMalloc(tablesize * sizeof(XmPictureNode*));
     for(i=0; i<picture->num_nodes; i++)
 	table[i] = NULL;
-    
+
     /*
      * Now recursively tag the ones in our subgraph with non-NULL
      * values
@@ -737,7 +737,7 @@ _XmPictureCopySubGraph(XmPictureRec *picture, int n,
 	_XiGetNewTransition(NullTransition, end, table[start->index]);
 	end = table[end_index];
     }
-    
+
     XtFree((void*)table);
 
     return end;

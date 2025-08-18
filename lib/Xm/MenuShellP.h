@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmMenuShellP_h
 #define _XmMenuShellP_h
 
@@ -33,7 +33,7 @@ extern "C" {
 
 /* The MenuShell instance record */
 
-typedef struct 
+typedef struct
 {
     unsigned char	    focus_policy;
     XmFocusData		    focus_data;
@@ -48,7 +48,7 @@ typedef struct
 
 /* Full instance record declaration */
 
-typedef  struct _XmMenuShellRec 
+typedef  struct _XmMenuShellRec
 {
     CorePart		    core;
     CompositePart	    composite;
@@ -70,7 +70,7 @@ typedef  struct _XmMenuShellWidgetRec /* OBSOLETE (for compatibility only).*/
 
 /* MenuShell class structure */
 
-typedef struct 
+typedef struct
 {
     XtActionProc    popdownOne;	     /* unpost portion or all of menu */
     XtActionProc    popdownEveryone; /* unpost portion of menu */
@@ -83,7 +83,7 @@ typedef struct
 
 /* Full class record declaration */
 
-typedef struct _XmMenuShellClassRec 
+typedef struct _XmMenuShellClassRec
 {
     CoreClassPart	    core_class;
     CompositeClassPart	    composite_class;

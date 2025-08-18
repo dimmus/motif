@@ -1,5 +1,5 @@
 /* $XConsortium: XmeCursor.c /main/4 1995/07/15 21:04:21 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 /*
  * HISTORY
  */
@@ -75,7 +75,7 @@ XtPointer client_data, cbs;
     stop += 60;
   duration = stop - start;
 
-  if (duration != 4 && duration !=5) 
+  if (duration != 4 && duration !=5)
     printf("ERROR: sleep duration is not in the correct range\n");
   else
     printf("OK: sleep test passes\n");

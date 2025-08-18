@@ -1,5 +1,5 @@
 # $XConsortium: Notebook4.prt /main/2 1996/07/18 16:18:27 drk $
-TRACE:(1) CompareVisual Notebook1 
+TRACE:(1) CompareVisual Notebook1
 TRACE:(2) Continue
 Expected : PAGE_FOUND, Actual : PAGE_FOUND
 TRACE:(3) Continue

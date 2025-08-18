@@ -6,7 +6,7 @@
 #endif
 
 
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -27,10 +27,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.4
-*/ 
+*/
 
 /* ANSI C definitions,  This should be the first thing in WmGlobal.h */
 #ifdef __STDC__
@@ -142,7 +142,7 @@ extern Pixel		FPselectcolor;
 # define _XA_MOTIF_WM_CLIENT_WINDOW		"_MOTIF_WM_CLIENT_WINDOW"
 # define _XA_MOTIF_WM_POINTER_WINDOW		"_MOTIF_WM_POINTER_WINDOW"
 # define _XA_MOTIF_WM_ALL_CLIENTS		"_MOTIF_WM_ALL_CLIENTS"
-	  
+
 /* menu command interface support */
 # define _XA_MOTIF_WM_DEFINE_COMMAND		"_MOTIF_WM_DEFINE_COMMAND"
 # define _XA_MOTIF_WM_INCLUDE_COMMAND		"_MOTIF_WM_INCLUDE_COMMAND"
@@ -257,22 +257,22 @@ extern Pixel		FPselectcolor;
 #define NUM_MATTE_BS_RECTS	(6)
 
 #define NUM_IMAGE_TOP_RECTS	\
-	    ((2*ICON_EXTERNAL_SHADOW_WIDTH)+(2*ICON_INTERNAL_SHADOW_WIDTH)) 
+	    ((2*ICON_EXTERNAL_SHADOW_WIDTH)+(2*ICON_INTERNAL_SHADOW_WIDTH))
 
 
 #define NUM_IMAGE_BOTTOM_RECTS	\
-	    ((2*ICON_EXTERNAL_SHADOW_WIDTH)+(2*ICON_INTERNAL_SHADOW_WIDTH)) 
+	    ((2*ICON_EXTERNAL_SHADOW_WIDTH)+(2*ICON_INTERNAL_SHADOW_WIDTH))
 
 
 #define NUM_LABEL_TOP_RECTS	(2*ICON_EXTERNAL_SHADOW_WIDTH)
 #define NUM_LABEL_BOTTOM_RECTS	(2*ICON_EXTERNAL_SHADOW_WIDTH)
 
 #define NUM_BOTH_TOP_RECTS	\
-	    ((3*ICON_EXTERNAL_SHADOW_WIDTH)+(3*ICON_INTERNAL_SHADOW_WIDTH)) 
+	    ((3*ICON_EXTERNAL_SHADOW_WIDTH)+(3*ICON_INTERNAL_SHADOW_WIDTH))
 
 
 #define NUM_BOTH_BOTTOM_RECTS	\
-	    ((3*ICON_EXTERNAL_SHADOW_WIDTH)+(3*ICON_INTERNAL_SHADOW_WIDTH)) 
+	    ((3*ICON_EXTERNAL_SHADOW_WIDTH)+(3*ICON_INTERNAL_SHADOW_WIDTH))
 
 
 #define NUM_STATIC_TOP_RECTS	(2*ICON_INTERNAL_SHADOW_WIDTH)
@@ -306,7 +306,7 @@ extern Pixel		FPselectcolor;
 #define STRETCH_NORTH		1
 #define STRETCH_NORTH_EAST	2
 #define STRETCH_EAST		3
-#define STRETCH_SOUTH_EAST	4 
+#define STRETCH_SOUTH_EAST	4
 #define STRETCH_SOUTH 		5
 #define STRETCH_SOUTH_WEST	6
 #define STRETCH_WEST		7
@@ -449,7 +449,7 @@ typedef Atom WorkspaceID;
  *  Description:
  *  -----------
  *  These data structures are used in saving button and key
- *  specifications that are used in processing events that are used to do 
+ *  specifications that are used in processing events that are used to do
  *  window manager functions (e.g., set the colormap focus).
  *
  *************************************<->***********************************/
@@ -507,7 +507,7 @@ typedef struct _ButtonSpec
 
 
 /*
- * context field mark for catching menu recursion 
+ * context field mark for catching menu recursion
  *   (tied to F_CONTEXT_... values):
  */
 
@@ -728,7 +728,7 @@ typedef struct _WsPresenceData *PtrWsPresenceData;
 
 #ifdef PANELIST
 /*
- * Specific data for top level help dialog 
+ * Specific data for top level help dialog
  */
 
 typedef struct _WsDtHelpData
@@ -781,7 +781,7 @@ typedef struct _SessionGeom
     int          clientHeight;
 } SessionGeom;
 
-/*      
+/*
  *  Status of Session Manager Contention Management
  */
 #define  SM_UNITIALIZED			 0
@@ -815,7 +815,7 @@ typedef struct _SessionGeom
 enum { TOP_SEPARATOR, BOTTOM_SEPARATOR };
 
 /*
- * Used to denote what kind of change to make to a client command. 
+ * Used to denote what kind of change to make to a client command.
  */
 typedef enum { ENABLE, DISABLE, REMOVE, RENAME } CmdModifier;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
@@ -888,7 +888,7 @@ typedef struct _MenuSpec
 #if !defined WSM || defined MWM_QATS_PROTOCOL
     MenuExclusion *exclusions;      /* list of client commands to be
 				       excluded from this menu. */
-    Boolean        clientLocal;     /* this menu is owned by a client and not 
+    Boolean        clientLocal;     /* this menu is owned by a client and not
 				       shared with any other clients */
     CARD32         commandID;       /* if this is a client command, then this
 				       its id value - globally unique. */
@@ -1024,8 +1024,8 @@ typedef struct _RList
  *  Description:
  *  -----------
  *  This structure is used to hold component appearance data for client,
- *  icon, and feedback subparts. 
- * 
+ *  icon, and feedback subparts.
+ *
  *************************************<->***********************************/
 
 
@@ -1139,7 +1139,7 @@ typedef struct _IconBoxData
     Widget	vScrollBar;
     Widget	hScrollBar;
     Widget      bBoardWidget;
-    Widget	clipWidget; 
+    Widget	clipWidget;
     int		numberOfIcons;
     int		currentRow;
     int		currentCol;
@@ -1156,8 +1156,8 @@ typedef struct _IconBoxData
 typedef struct _IconBoxData *PtrIconBoxData;
 
 #define IB_SPACING		0
-#define IB_MARGIN_HEIGHT	3 
-#define IB_MARGIN_WIDTH		3 
+#define IB_MARGIN_HEIGHT	3
+#define IB_MARGIN_WIDTH		3
 #define IB_HIGHLIGHT_BORDER	3
 
 
@@ -1213,7 +1213,7 @@ typedef struct _BitmapCache
  *  This structure provides the data for an entry in the client window list.
  *  The client window list has an entry for each non-transient client
  *  window and each non-iconbox icon.
- * 
+ *
  ******************************<->***********************************/
 
 typedef struct _ClientListEntry
@@ -1234,9 +1234,9 @@ typedef struct _ClientListEntry
  *
  *  Description:
  *  -----------
- *  This structure contains geometry information for the window manager 
+ *  This structure contains geometry information for the window manager
  *  frame.
- * 
+ *
  *************************************<->***********************************/
 
 typedef struct _FrameInfo
@@ -1341,7 +1341,7 @@ typedef struct _WmScreenData
     GC		fadeIconTextGC;
 
 #ifdef WSM
-    
+
     /* per screen configuration outline windows */
     Window	woN;		/* North outline window */
     Window	woS;		/* South outline window */
@@ -1479,7 +1479,7 @@ typedef struct _WmScreenData
 typedef struct _WmScreenData *PtrScreenData;
 
 
-/* 
+/*
  * Convenience macros for data access
  */
 #define ROOT_FOR_CLIENT(pcd) ((pcd)->pSD->rootWindow)
@@ -1535,7 +1535,7 @@ typedef struct _WmScreenData *PtrScreenData;
  *  Description:
  *  -----------
  *  This structure hold information for the workspace background
- * 
+ *
  *************************************<->***********************************/
 
 typedef struct _WmBackdropData
@@ -1572,10 +1572,10 @@ typedef enum _SlideDirection
     SLIDE_NOT, SLIDE_NORTH, SLIDE_EAST, SLIDE_SOUTH, SLIDE_WEST
 } SlideDirection;
 
-/* 
+/*
  * Slide out record for subpanels
  */
-typedef struct _SlideOutRec 
+typedef struct _SlideOutRec
 {
     struct _ClientData	*pCD;
     Window		coverWin;
@@ -1603,7 +1603,7 @@ typedef struct _WmActionArg {
 
 #endif /* PANELIST */
 #endif /* WSM */
- 
+
 
 
 /*************************************<->*************************************
@@ -1613,10 +1613,10 @@ typedef struct _WmActionArg {
  *
  *  Description:
  *  -----------
- *  This is the structure for holding the workspace specific data. 
- *  (This has been broken out in anticipation of possible future 
+ *  This is the structure for holding the workspace specific data.
+ *  (This has been broken out in anticipation of possible future
  *  enhancements.)
- * 
+ *
  *************************************<->***********************************/
 
 typedef struct _WmWorkspaceData
@@ -1700,7 +1700,7 @@ typedef struct _WmWorkspaceData *PtrWorkspaceData;
  *
  *  ClientData is instantiated at the time a client window is intially
  *  managed and is destroyed when the client window is withdrawn from
- *  window management (the ClientData may not be destroyed when a 
+ *  window management (the ClientData may not be destroyed when a
  *  client window is withdrawn if frame/icons are cached).
  *
  *************************************<->***********************************/
@@ -1901,7 +1901,7 @@ typedef struct _ClientData
     int		numWorkspaceHints;	/* size of pWorkspaceHints */
     Boolean	putInAll;		/* persistent window flag */
     long	dtwmFunctions;		/* _DT_WM_HINTS */
-    long	dtwmBehaviors;		/* _DT_WM_HINTS */	
+    long	dtwmBehaviors;		/* _DT_WM_HINTS */
     Window	attachWindow;		/* _DT_WM_HINTS */
 #ifdef PANELIST
     SlideDirection	slideDirection;	/* slide-up direction */
@@ -2013,7 +2013,7 @@ typedef struct _ClientData *PtrClientData;
 
 #define PIXMAP_IS_VALID(pix) \
   ((pix) != XmUNSPECIFIED_PIXMAP && (pix) != None && (pix) != (Pixmap)NULL)
-  
+
 #ifdef WSM
 
 /*************************************<->*************************************
@@ -2023,9 +2023,9 @@ typedef struct _ClientData *PtrClientData;
  *
  *  Description:
  *  -----------
- *  This datum compartmentalizes client data that must be replicated 
+ *  This datum compartmentalizes client data that must be replicated
  *  on a per workspace basis.
- * 
+ *
  *************************************<->***********************************/
 typedef struct _WsClientData
 {
@@ -2060,14 +2060,14 @@ typedef enum _FrameStyle
  *  This is the main data structure for holding the window manager's
  *  global data. There is one instantiation of the structure for
  *  the window manager.
- * 
+ *
  *************************************<->***********************************/
 
 typedef struct _WmGlobalData
 {
     int		dataType;
     char	**argv;			/* command line argument vector */
-    char	**environ;		/* environment vector */	
+    char	**environ;		/* environment vector */
     char	*mwmName;		/* name of our executable */
     Widget	topLevelW;
 #ifdef WSM
@@ -2191,7 +2191,7 @@ typedef struct _WmGlobalData
     Atom	_MOTIF_WM_CLIENT_WINDOW;
     Atom	_MOTIF_WM_POINTER_WINDOW;
     Atom	_MOTIF_WM_ALL_CLIENTS	;
-	  
+
     /* menu command interface support */
     Atom	_MOTIF_WM_DEFINE_COMMAND;
     Atom	_MOTIF_WM_INCLUDE_COMMAND;
@@ -2322,7 +2322,7 @@ typedef struct _WmGlobalData
     Dimension	iconExternalShadowWidth;	/* resource */
     Dimension	frameExternalShadowWidth;	/* resource */
     int		marqueeSelectGranularity;	/* resource */
-    XButtonEvent evLastButton;			/* for detecting replayed 
+    XButtonEvent evLastButton;			/* for detecting replayed
 						   button events */
     Boolean	bReplayedButton;		/* true if button replayed */
     Boolean	bSuspendSecondaryRestack;	/* overrides transient
@@ -2345,7 +2345,7 @@ typedef struct _WmGlobalData
     XEnterWindowEvent savedEnterEvent;
 
     unsigned int lockingModMask;	/* mask of locking modifier keys */
-    unsigned int *pLockMaskSequence;	
+    unsigned int *pLockMaskSequence;
 
     unsigned char tmpBuffer[MAXBUF];	/* replaces static buffers used */
 					/* for large return values */
@@ -2376,7 +2376,7 @@ typedef struct _WmGlobalData
 /* absent map behavior policy values (absentMapBehavior): */
 #define AMAP_BEHAVIOR_ADD       0
 #define AMAP_BEHAVIOR_MOVE      1
-#define AMAP_BEHAVIOR_IGNORE    2 
+#define AMAP_BEHAVIOR_IGNORE    2
 #endif /* WSM */
 
 /* colormap focus policy values (colormapFocus): */

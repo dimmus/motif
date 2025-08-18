@@ -19,10 +19,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
-#!) This is a simple test of traversal behaviors.  
-#) The five boxed groups of widgets are tab groups. 
+#!) This is a simple test of traversal behaviors.
+#) The five boxed groups of widgets are tab groups.
 #) Put the focus on the test client by clicking on the window border.
 #) The button which is colored red should also have the focus and
 #location cursor, as well as the default highlight.
@@ -33,14 +33,14 @@ LocatePointer btn33
 CompareVisual btn33
 Continue
 
-#) You can move between the groups by hitting TAB or Shift-TAB. 
+#) You can move between the groups by hitting TAB or Shift-TAB.
 #) Each time you tab into the frame with the red button, the focus
 #should go to that button, even if you use the arrow keys to move
 #within that tab group.
-#) Within each group, move between the buttons by using the up/down and 
-#left/right arrow keys. 
-#) Use the space key to activate (depress) the buttons. 
-#) Try moving amongst the buttons and back and forth between the tab groups. 
+#) Within each group, move between the buttons by using the up/down and
+#left/right arrow keys.
+#) Use the space key to activate (depress) the buttons.
+#) Try moving amongst the buttons and back and forth between the tab groups.
 #) The default button is btn1. When the focus is on a push button, that
 #button will have the defaultButton shadow as well. But when the focus is
 #moved to a non-push button, the defaultButton shadow moves back to btn1.

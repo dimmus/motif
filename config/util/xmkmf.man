@@ -1,5 +1,5 @@
 .\" $TOG: xmkmf.man /main/9 1998/02/06 11:25:04 kaleb $
-.\" 
+.\"
 .\" Motif
 .\"
 .\" Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -34,7 +34,7 @@ xmkmf \- create a Makefile from an Imakefile
 The
 .I xmkmf
 command is the normal way to create a
-.I Makefile 
+.I Makefile
 from an
 .I Imakefile
 shipped with third-party software.
@@ -62,7 +62,7 @@ and ``make depend'' for you.
 This is the normal way to configure software that is outside
 the X Consortium build tree.
 .PP
-If working inside the X Consortium build tree (unlikely unless you 
+If working inside the X Consortium build tree (unlikely unless you
 are an X developer, and even then this option is never really used), the
 .I topdir
 argument should be specified as the relative pathname from the

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDropSMgr_h
 #define _XmDropSMgr_h
 
@@ -117,36 +117,36 @@ typedef struct _XmDropSiteManagerRec *XmDropSiteManagerObject;
 
 /********    Public Function Declarations    ********/
 
-extern void XmDropSiteRegister( 
+extern void XmDropSiteRegister(
                         Widget widget,
                         ArgList args,
                         Cardinal argCount) ;
-extern void XmDropSiteUnregister( 
+extern void XmDropSiteUnregister(
                         Widget widget) ;
 extern Boolean XmDropSiteRegistered(
                           Widget widget) ;
-extern void XmDropSiteStartUpdate( 
+extern void XmDropSiteStartUpdate(
                         Widget refWidget) ;
-extern void XmDropSiteUpdate( 
+extern void XmDropSiteUpdate(
                         Widget enclosingWidget,
                         ArgList args,
                         Cardinal argCount) ;
-extern void XmDropSiteEndUpdate( 
+extern void XmDropSiteEndUpdate(
                         Widget refWidget) ;
-extern void XmDropSiteRetrieve( 
+extern void XmDropSiteRetrieve(
                         Widget enclosingWidget,
                         ArgList args,
                         Cardinal argCount) ;
-extern int XmDropSiteQueryStackingOrder( 
+extern int XmDropSiteQueryStackingOrder(
                         Widget widget,
                         Widget *parent_rtn,
                         Widget **children_rtn,
                         Cardinal *num_children_rtn) ;
-extern void XmDropSiteConfigureStackingOrder( 
+extern void XmDropSiteConfigureStackingOrder(
                         Widget widget,
                         Widget sibling,
                         Cardinal stack_mode) ;
-extern XmDropSiteVisuals XmDropSiteGetActiveVisuals( 
+extern XmDropSiteVisuals XmDropSiteGetActiveVisuals(
                         Widget widget) ;
 
 /********    End Public Function Declarations    ********/

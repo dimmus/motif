@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UilSarExp.c /main/11 1995/07/14 09:37:03 drk $"
@@ -39,7 +39,7 @@ static char rcsid[] = "$XConsortium: UilSarExp.c /main/11 1995/07/14 09:37:03 dr
 **
 **  ABSTRACT:
 **
-**      This module supports value expressions in UIL.  
+**      This module supports value expressions in UIL.
 **
 **--
 **/
@@ -192,16 +192,16 @@ yystype	    *op2_frame;
     ** just point to the referenced value node.
     */
     if ((op1_frame->b_flags & sym_m_forward_ref) != 0)
-	sym_make_value_forward_ref (op1_frame, 
+	sym_make_value_forward_ref (op1_frame,
 	(char*)&(res_entry->az_exp_op1), sym_k_patch_add);
-    else    
+    else
 	res_entry->az_exp_op1 =
 	    (sym_value_entry_type *) op1_frame->value.az_symbol_entry;
 
     if ((op2_frame->b_flags & sym_m_forward_ref) != 0)
-	sym_make_value_forward_ref (op2_frame, 
+	sym_make_value_forward_ref (op2_frame,
 	(char*)&(res_entry->az_exp_op2), sym_k_patch_add);
-    else    
+    else
 	res_entry->az_exp_op2 =
 	    (sym_value_entry_type *) op2_frame->value.az_symbol_entry;
 
@@ -305,25 +305,24 @@ yystype	    *op1_frame;
 
     res_entry = (sym_value_entry_type *)
 	sem_allocate_node (sym_k_value_entry, sym_k_value_entry_size);
-    
+
     res_entry->b_expr_opr = operator;
     /* Begin fixing OSF CR 5691 */
-    res_entry->b_type = operator; 
-    /* End fixing OSF CR 5691 */    
+    res_entry->b_type = operator;
+    /* End fixing OSF CR 5691 */
     res_entry->az_exp_op1 =
 	(sym_value_entry_type *) op1_frame->value.az_symbol_entry;
     res_entry->obj_header.b_flags = sym_m_builtin | sym_m_private;
     if (operator == sym_k_coerce_op)
 	res_entry->b_type = res_type;
-    
+
     _sar_save_source_pos (&res_entry->header, op1_frame );
 
     operator_frame->b_tag = sar_k_value_frame;
     operator_frame->b_type = res_entry->b_type;
     operator_frame->b_flags = res_entry->obj_header.b_flags;
     operator_frame->value.az_symbol_entry = (sym_entry_type *) res_entry;
-    
+
     return;
 
 }
-

@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # @) The following panels tests the XmParseMapping and XmStringParse API.
@@ -29,26 +29,26 @@
 # C)
 Continue
 
-# #) In this first panel, the character string \"One./Two/>Tab\" is parsed 
-# replacing the patterns \"/" with a separator and \">" with a tab. 
+# #) In this first panel, the character string \"One./Two/>Tab\" is parsed
+# replacing the patterns \"/" with a separator and \">" with a tab.
 
 # #) XmStringParse() is called with XmNincludeStatus = XmTERMINATE for
 # each of the XmParseMapping entries of the XmParseTable.
 # The XmString should terminate after the first pattern is encountered.
 # Verify that the XmString displayed matches the text below:
 
-# @) One. 
+# @) One.
 
 # #) XmStringParse() is called with XmNincludeStatus = XmINSERT for
 # each of the XmParseMapping entries and the delimiter is a \".\".
-# The XmString should terminate prior to the \".\" character. 
+# The XmString should terminate prior to the \".\" character.
 # Verify that the XmString displayed matches the text below:
- 
-# @) One 
+
+# @) One
 
 # #) XmStringParse() is called with XmNincludeStatus = XmINSERT for
 # each of the XmParseMapping entries and no delimiter is specified.
-# The XmString should terminate after the entire character string is parsed. 
+# The XmString should terminate after the entire character string is parsed.
 # Verify that the XmString displayed matches the text below, where the word
 # \"Tab\" is indented by one inch:
 
@@ -83,7 +83,7 @@ CompareVisual DrawArea
 Continue
 
 # #) When XmStringParse() is called, the XmString should terminate at
-# the end of the character string. 
+# the end of the character string.
 # Verify that the XmString displayed matches the text below:
 
 # @) One. String
@@ -99,8 +99,8 @@ Continue
 # with an XmString direction component with direction set to
 # XmSTRING_DIRECTION_L_TO_R and replaces the pattern \"<\" with
 # the an XmString direction component with direction set to
-# XmSTRING_DIRECTION_R_TO_L. 
-# XmStringTableParseStringArray() is called to parse an array 
+# XmSTRING_DIRECTION_R_TO_L.
+# XmStringTableParseStringArray() is called to parse an array
 # of character strings containing these patterns and returns
 # a table of XmStrings.
 # The following strings should be displayed:
@@ -108,7 +108,7 @@ Continue
 # @) Left To Right
 # @) Right To Left
 # @) Left To Right
-# @) Right To Left 
+# @) Right To Left
 
 # #)  Call XmStringTableUnparse() to retrieve the original character string
 # which was parsed to create the XmStrings.
@@ -128,11 +128,11 @@ Continue
 # XmStringTableToXmString() was successful in building the one XmString.
 
 # #) XmStringToXmStringTable() is then called to convert the one XmString
-# back to a table of XmStrings. Each XmString in the returned table is 
+# back to a table of XmStrings. Each XmString in the returned table is
 # compared with its corresponding XmString in the original table.
 # If all the XmStrings match, the function was successful.
 # A message will be printed to the terminal indicating whether or not
-# XmStringToXmStringTable() was successful or not. 
+# XmStringToXmStringTable() was successful or not.
 
 # C)
 Continue

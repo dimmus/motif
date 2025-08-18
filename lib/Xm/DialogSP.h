@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmDialogShellP_h
 #define _XmDialogShellP_h
 
@@ -33,7 +33,7 @@ extern "C" {
 
 /* The DialogShell instance record */
 
-typedef struct 
+typedef struct
 {
     /* internal fields */
     XtGrabKind 		grab_kind;
@@ -43,8 +43,8 @@ typedef struct
 
 /* Full instance record declaration */
 
-typedef  struct _XmDialogShellRec 
-{	
+typedef  struct _XmDialogShellRec
+{
     CorePart		    core;
     CompositePart	    composite;
     ShellPart		    shell;
@@ -55,7 +55,7 @@ typedef  struct _XmDialogShellRec
 } XmDialogShellRec;
 
 typedef  struct _XmDialogShellWidgetRec /* OBSOLETE (for compatibility only).*/
-{	
+{
     CorePart		    core;
     CompositePart	    composite;
     ShellPart		    shell;
@@ -69,7 +69,7 @@ typedef  struct _XmDialogShellWidgetRec /* OBSOLETE (for compatibility only).*/
 
 /* DialogShell class structure */
 
-typedef struct 
+typedef struct
 {
     XtPointer			extension;	 /* Pointer to extension record */
 } XmDialogShellClassPart;
@@ -77,7 +77,7 @@ typedef struct
 
 /* Full class record declaration */
 
-typedef struct _XmDialogShellClassRec 
+typedef struct _XmDialogShellClassRec
 {
     CoreClassPart 		core_class;
     CompositeClassPart 		composite_class;

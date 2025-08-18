@@ -21,7 +21,7 @@
 ! Floor, Boston, MA 02110-1301 USA
 !
 !
-! 
+!
 ! HISTORY
 ! $XConsortium: helpDialog.uil /main/1 1996/08/12 15:44:27 jakku $
 !******************************************************************************
@@ -37,7 +37,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;

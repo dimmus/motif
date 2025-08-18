@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation10.c /main/6 1995/07/13 19:40:36 drk $"
@@ -46,7 +46,7 @@ static void PushButtonCallback();
 static void CreateMatrix();
 extern char *optarg;
 static char *color_name[] = {
-  "Red",       "Green",       "Blue", 
+  "Red",       "Green",       "Blue",
   "Orange",    "Yellow",      "Pink",
   "Magenta",   "Brown",       "Violet",
 };
@@ -68,21 +68,21 @@ void main (argc, argv)
   /*  initialize toolkit  */
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg (args[n], XmNwidth, 1);               n++;
   XtSetArg (args[n], XmNheight, 1);              n++;
   XtSetValues(Shell1, args, n);
-    
+
 
   if (UserData != NULL) {
-      if (strcmp (UserData, "unmap") == 0) 
+      if (strcmp (UserData, "unmap") == 0)
 	remove_mode = unmap;
       else if (strcmp (UserData, "unmanage") == 0)
 	remove_mode = unmanage;
       else if (strcmp (UserData, "nochange") == 0)
 	remove_mode = nochange;
-      else 
+      else
 	remove_mode = destroy;
     }
   else {
@@ -92,7 +92,7 @@ void main (argc, argv)
 
   RunTest(Shell1);
 
-  XtAppMainLoop(app_context);      
+  XtAppMainLoop(app_context);
 }
 
 
@@ -101,10 +101,10 @@ Widget Shell1;
 {
   Arg      args[MAX_ARGS];
   unsigned int n;
- 
+
 				/* Part 1 of Test */
     CreateForm(Shell1);
-    
+
     /*  Create the first Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -112,7 +112,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form1 = XmCreateBulletinBoard(Form, "Form1", args, n);
-    
+
     /*  Create the second Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -121,7 +121,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form2 = XmCreateBulletinBoard(Form, "Form2", args, n);
-    
+
     /*  Create the third Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -131,7 +131,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNtopAttachment, XmATTACH_FORM);		n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form3 = XmCreateBulletinBoard(Form, "Form3", args, n);
-    
+
     /*  Create the fourth Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -140,7 +140,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNrightAttachment, XmATTACH_FORM);	        n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form4 = XmCreateBulletinBoard(Form, "Form4", args, n);
-    
+
     /*  Create the fifth Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -150,7 +150,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNtopWidget, Form2);        	                n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form5 = XmCreateBulletinBoard(Form, "Form5", args, n);
-    
+
     /*  Create the sixth Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -161,7 +161,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNtopWidget, Form3);    	                n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form6 = XmCreateBulletinBoard(Form, "Form6", args, n);
-    
+
     /*  Create the seventh Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -171,7 +171,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	        n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form7 = XmCreateBulletinBoard(Form, "Form7", args, n);
-    
+
     /*  Create the eigth Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -182,7 +182,7 @@ Widget Shell1;
     XtSetArg (args[n], XmNbottomAttachment, XmATTACH_FORM);	        n++;
     XtSetArg (args[n], XmNresizePolicy, XmRESIZE_GROW);                 n++;
     Form8 = XmCreateBulletinBoard(Form, "Form8", args, n);
-    
+
     /*  Create the ninth Form.  */
     n = 0;
     XtSetArg (args[n], XmNallowOverlap, False);                         n++;
@@ -220,7 +220,7 @@ Widget Shell1;
 
     XtRealizeWidget (Shell1);
 
-    
+
     CommonPause();
 
     DestroyForm();
@@ -232,10 +232,10 @@ Widget Shell1;
 {
   unsigned int n;
   Arg args[MAX_ARGS];
-  
+
   /*  The form creation. */
   n = 0;
-  XtSetArg (args[n], XmNallowOverlap, False);                          n++;  
+  XtSetArg (args[n], XmNallowOverlap, False);                          n++;
   Form = XmCreateForm ((Widget) Shell1, "Form", args, n);
 }
 
@@ -281,7 +281,7 @@ static void CreateMatrix(form, color)
   extern void PushButtonCallback();
   char buf[32];
 
- 
+
   for (i = 0; i <= 8; i++) {
 
           /* Create all nine children, lined in up columns of three and
@@ -294,15 +294,15 @@ static void CreateMatrix(form, color)
 	  XtSetArg (args[n], XmNbackground, CommonGetColor(color));     n++;
 
           if ((i%3) == 0) {   /* left column */
-		XtSetArg (args[n], XmNx, 1); n++; 
+		XtSetArg (args[n], XmNx, 1); n++;
           }
 
 	  if ((i%3) == 1)  {   /* middle column */
 		XtSetArg (args[n], XmNx, 75); n++;
           }
- 
+
 	  if ((i%3) == 2)   {	/* right column */
-		XtSetArg (args[n], XmNx, 150); n++; 
+		XtSetArg (args[n], XmNx, 150); n++;
 	  }
 
 	  /* now the y coordinates */
@@ -316,8 +316,8 @@ static void CreateMatrix(form, color)
 	  if ((i >= 6) && (i <= 8))  { XtSetArg (args[n], XmNy, 60); n++;  }
 
 	  PushButton[i] = XmCreatePushButton(form, buf, args, n);
-       
-	  XtAddCallback(PushButton[i], XmNactivateCallback, 
+
+	  XtAddCallback(PushButton[i], XmNactivateCallback,
 			PushButtonCallback, (XtPointer) NULL);
   }
 

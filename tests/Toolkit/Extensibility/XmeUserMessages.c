@@ -48,7 +48,7 @@ char **argv;
   String             dirname;
 
   CommonTestInit(argc, argv);
-    
+
   n = 0;
   XtSetArg(args[n], XmNwidth,  200);  n++;
   XtSetArg(args[n], XmNheight, 200);  n++;
@@ -62,7 +62,7 @@ char **argv;
   printf("home directory name: %s\n",dirname);
   CommonPause();
 
-  /* The following test checks XmeWarning by printing a warning 
+  /* The following test checks XmeWarning by printing a warning
      message and verifying it at runtime */
   n = 0;
   Btn1 = XmCreateArrowButton(Shell1,"button1", args, n);

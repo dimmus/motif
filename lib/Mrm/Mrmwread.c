@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -105,7 +105,7 @@ static char rcsid[] = "$XConsortium: Mrmwread.c /main/11 1996/11/13 14:07:06 drk
  *--
  */
 
-Cardinal 
+Cardinal
 UrmHGetWidget (MrmHierarchy		hierarchy_id,
 	       String			index,
 	       URMResourceContextPtr	context_id,
@@ -129,7 +129,7 @@ UrmHGetWidget (MrmHierarchy		hierarchy_id,
    * Validate the widget record in the context
    */
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
-  if ( UrmWRValid(widgetrec) ) 
+  if ( UrmWRValid(widgetrec) )
     return MrmSUCCESS ;
   else
     {
@@ -175,7 +175,7 @@ UrmHGetWidget (MrmHierarchy		hierarchy_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmGetIndexedWidget (IDBFile			file_id,
 		     String			index,
 		     URMResourceContextPtr	context_id)
@@ -202,7 +202,7 @@ UrmGetIndexedWidget (IDBFile			file_id,
    * Validate the widget record in the context
    */
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
-  if ( UrmWRValid(widgetrec) ) 
+  if ( UrmWRValid(widgetrec) )
     return MrmSUCCESS ;
   else
     {
@@ -248,7 +248,7 @@ UrmGetIndexedWidget (IDBFile			file_id,
  *--
  */
 
-Cardinal 
+Cardinal
 UrmGetRIDWidget (IDBFile		file_id,
 		 MrmResource_id		resource_id,
 		 URMResourceContextPtr	context_id)
@@ -275,7 +275,7 @@ UrmGetRIDWidget (IDBFile		file_id,
    * Validate the widget record in the context
    */
   widgetrec = (RGMWidgetRecordPtr) UrmRCBuffer (context_id) ;
-  if ( UrmWRValid(widgetrec) ) 
+  if ( UrmWRValid(widgetrec) )
     return MrmSUCCESS ;
   else
     {
@@ -290,4 +290,3 @@ UrmGetRIDWidget (IDBFile		file_id,
 		       NULL, context_id, MrmBAD_WIDGET_REC) ;
 
 }
-

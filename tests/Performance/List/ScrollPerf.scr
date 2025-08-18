@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #
 
@@ -40,7 +40,7 @@ AutoPerformMonitor Off
 Continue
 
 # Testing the performance of scrolling in the large list widget.  First
-# scroll from top to botton and then from bottom to top. 
+# scroll from top to botton and then from bottom to top.
 
 LocatePointer List1 RVertScrollBarSlider
 AutoPerformMonitor On
@@ -86,7 +86,7 @@ AutoPerformMonitor On
 Continue
 
 # Testing the performance of deleting one item from the bottom of the
-# list when the bottom is visable. 
+# list when the bottom is visable.
 
 AutoPerformMonitor Off
 

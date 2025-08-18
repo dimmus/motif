@@ -35,7 +35,7 @@
 
 
 /*
- *	Swap the byte order 
+ *	Swap the byte order
  */
 
 #define	swap4bytes(l) {\
@@ -65,7 +65,7 @@ AutoSwapBytes(PropMwmFrameIconInfo *window_prop)
 {
 
 	int	i;
-		
+
 
 	if (window_prop->byte_order == AutoByteOrderChar)
 		return;

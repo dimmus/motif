@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Navigation4.c /main/6 1995/07/13 19:43:22 drk $"
@@ -41,7 +41,7 @@ extern Widget InstructionBox;
 
 Widget bb;
 Widget Frame1, Frame2, Frame3, Frame4, Frame5, Frame6, Frame7;
-Widget Draw1, Draw2; 
+Widget Draw1, Draw2;
 Widget rc1, rc2, rc3, rc4, rc5, rc6, rc7;
 Widget btn1, btn2, btn3;
 Widget toggle1;
@@ -78,11 +78,11 @@ char **argv;
     int n;
     Widget child[20];
     XmString tcs;
-    Boolean flag;  
+    Boolean flag;
 
     /*  initialize toolkit  */
     CommonTestInit(argc, argv);
- 
+
     bb = XmCreateBulletinBoard(Shell1, "bb", (ArgList) args, 0);
     XtManageChild(bb);
 
@@ -299,7 +299,7 @@ char **argv;
 	Draw1 = XmCreateArrowButton (Frame5,"Draw1", args, n);
 	XtManageChild (Draw1);
 
-	
+
 
 /* Now lets make two more RCs with nothing on them! */
 
@@ -335,16 +335,16 @@ char **argv;
 
     XtRealizeWidget (Shell1);
     CommonPause ();   /* just tabbing around */
-    
+
     /* fire up Help button on Pause dialog to help us test */
-  
+
     help_button = XmMessageBoxGetChild (InstructionBox, XmDIALOG_HELP_BUTTON);
     XtSetSensitive (help_button, True);
     n = 0;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Traverse")); n++;
     XtSetValues (help_button, args, n);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_DOWN);
 
     CommonPause ();  /* TRAVERSE_DOWN anywhere*/
@@ -356,7 +356,7 @@ char **argv;
     CommonPause ();  /* programmatic DOWN on rc2 parent of misc2 */
 
     XtSetSensitive (help_button, True);
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_DOWN);
     XtAddCallback (help_button, XmNactivateCallback,
 		      MoveFocusOnParent, (XtPointer) XmTRAVERSE_DOWN);
@@ -372,53 +372,53 @@ char **argv;
     CommonPause ();  /* programmatic down on btn3 */
 
     XtSetSensitive (help_button, True);
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocusOnParent, (XtPointer) XmTRAVERSE_DOWN);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_HOME);
     CommonPause ();  /* TRAVERSE_HOME */
 
     XmProcessTraversal (bb, XmTRAVERSE_HOME);
-    CommonPause ();  /* programmatic DOWN on bb */  
+    CommonPause ();  /* programmatic DOWN on bb */
 
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_HOME);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_LEFT);
-    CommonPause ();  /* TRAVERSE_LEFT */  
+    CommonPause ();  /* TRAVERSE_LEFT */
 
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_LEFT);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_NEXT);
     CommonPause ();  /* TRAVERSE_NEXT */
-  
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_NEXT);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_NEXT_TAB_GROUP);
     CommonPause ();  /* TRAVERSE_NEXT_TAB_GROUP */
 
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_NEXT_TAB_GROUP);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_PREV_TAB_GROUP);
     CommonPause ();  /* TRAVERSE_PREV_TAB_GROUP */
 
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_PREV_TAB_GROUP);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_RIGHT);
     CommonPause ();  /* TRAVERSE_RIGHT */
 
-    XtRemoveCallback (help_button, XmNactivateCallback, 
+    XtRemoveCallback (help_button, XmNactivateCallback,
 		      MoveFocus, (XtPointer) XmTRAVERSE_RIGHT);
-    XtAddCallback (help_button, XmNactivateCallback, 
+    XtAddCallback (help_button, XmNactivateCallback,
 		   MoveFocus, (XtPointer) XmTRAVERSE_UP);
     CommonPause ();  /* TRAVERSE_UP */
 
     XtSetSensitive (help_button, False);
-  
+
     CommonPause ();  /* exit */
 
 

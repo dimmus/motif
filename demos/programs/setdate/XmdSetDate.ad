@@ -19,14 +19,14 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 
 !
 ! Sample application defaults file
 !
-! Optionally place this file in your system's app-defaults directory, 
+! Optionally place this file in your system's app-defaults directory,
 ! often found in /usr/lib/X11/app-defaults
 !
 
@@ -42,6 +42,6 @@
 *XmSpinBox.alignment:		XmALIGNMENT_END
 *XmSpinBox.arrowLayout:	XmARROWS_SPLIT
 
-! This can be changed to run the date command to update the 
+! This can be changed to run the date command to update the
 ! system date/time.  Usually this must be run as superuser
 *dateCommand:		echo "Date is now: %s in date command format"

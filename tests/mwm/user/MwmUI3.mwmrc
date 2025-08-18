@@ -18,7 +18,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 
 
@@ -37,7 +37,7 @@ Menu RootMenu
 !for testing purposes
 
 Menu AnotherTestMenu
-{   
+{
      "    CR5707Menu    "	f.title
      no-label			f.separator
      "Do Nothing"		f.nop
@@ -45,7 +45,7 @@ Menu AnotherTestMenu
 
 
 Menu TestMenu
-{   
+{
      "TestMenu"		    f.title
      no-label		    f.separator
      "Shuffle Up"           f.circle_up

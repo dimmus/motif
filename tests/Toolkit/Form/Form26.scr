@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
-  
+
 #  A client containing a Scrolled Text widget in a form should appear.
 #  The ScrolledText should be attached to the Form on the top, bottom, right
 #  and left and should be forest green in color. There also should
-#  be a Message Dialog located at (0,500). 
+#  be a Message Dialog located at (0,500).
 
 CompareVisual form
 Continue

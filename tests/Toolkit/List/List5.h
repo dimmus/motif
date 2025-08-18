@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: List5.h /main/9 1995/07/13 18:19:20 drk $ */
 
 
@@ -67,4 +67,3 @@ static void  PushBCB(Widget w, XtPointer client_data,
 static void  SensitiveCB(Widget w, XtPointer client_data,
 		      	      XtPointer call_data);
 static XtTimerCallbackProc PopupDown(XtPointer client_data);
-

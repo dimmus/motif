@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AllocWidInfo.c /main/7 1995/07/14 11:24:11 drk $"
@@ -50,7 +50,7 @@ static char rcsid[] = "$XConsortium: AllocWidInfo.c /main/7 1995/07/14 11:24:11 
                 parent_widget_info - Pointer to the parent widget info record
 
                 widget             - The Xt widget id
-  
+
             OUTPUTS
                 none
 
@@ -104,14 +104,14 @@ Widget widget;
 
             if (wc_info != NULL) {
                 for (j=0; j<wc_info->num_res_colors; j++) {
-                    mvsWidgetInfos[i].unique_color_ref[j] 
+                    mvsWidgetInfos[i].unique_color_ref[j]
                         	= mvsAllocUniqueColor(&mvsWidgetInfos[i],j);
 /* Automation Added */
-		    mvsWidgetInfos[i].widgetUniqueColorInfo[j].in_use 
+		    mvsWidgetInfos[i].widgetUniqueColorInfo[j].in_use
 				= True;
-		    mvsWidgetInfos[i].widgetUniqueColorInfo[j].widget_info 
+		    mvsWidgetInfos[i].widgetUniqueColorInfo[j].widget_info
 				= &mvsWidgetInfos[i];
-		    mvsWidgetInfos[i].widgetUniqueColorInfo[j].color_ref 
+		    mvsWidgetInfos[i].widgetUniqueColorInfo[j].color_ref
 				= j;
 /* End Automation Added */
 		}

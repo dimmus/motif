@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !*******************************************************************************
 
 module validator
@@ -43,7 +43,7 @@ procedure
 
 value  toggle_icon_Y     : imported icon;
 value  toggle_icon_N     : imported icon;
-				  
+
 object
 Gbutton1    : XmToggleButton {
       arguments {
@@ -86,7 +86,7 @@ Gbutton3 : XmToggleButton {
 	comments which can span multiple lines */
 !	this also, as we've seen!
 !
-!	invalid		
+!	invalid
 !
 /*	nested /* comments */ are out */
 ;
@@ -201,7 +201,7 @@ value
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffoo : 7442;
 
 ! even a comment can do it ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffoo : 7442;
-	
+
 ! end of test for PIR 2812
 
 ! test for PIR 2580, very long C-style comment
@@ -317,7 +317,7 @@ fonttable1 : font_table
 ! valid example from documentation
 object file_privileges :
 	XmList
-	{ arguments	
+	{ arguments
 		{ XmNitems = string_table ('owner read',
 					'owner write',
 					'group read',
@@ -327,11 +327,11 @@ object file_privileges :
 		};
 	};
 
-!	invalid 
+!	invalid
 value sticky_dessert : compound_string (#iso_greek"baklava");
 object	dessert_tray :
 	XmList
-	{ arguments	
+	{ arguments
 		{ XmNitems = string_table ( sticky_dessert,
 					 'wrong punctuation,
 					 'cheesecake');
@@ -374,12 +374,12 @@ value 	bizz1	:	'zoo';
 	bizz12	:	bizz10 & bizz8;
 
 !	the following definition will issue an error
-!	because bizz13 is subsequently referenced (in defining foop1)	
+!	because bizz13 is subsequently referenced (in defining foop1)
 	bizz13	:	exported compound_string (#iso_greek"secret");
 
 	bizz14	:	'bearer';
 
-value	
+value
 	foop1	:	bizz13 & bizz9;
 !
 !	invalid test
@@ -389,7 +389,7 @@ value
 !
 !       BEGIN MOTIF ERRORS TESTS
 !
-		
+
 !
 ! Invalid Motif resources test
 !
@@ -430,7 +430,7 @@ object label1: XmLabelGadget
 ! PIR 2831, defining class names
 
 value	cb_class_name : class_rec_name ('XmCascadeButtonGadget');
-	
+
 object
 	row_column_1 : XmRowColumn {
 		arguments {  XmNentryClass = cb_class_name;
@@ -438,7 +438,7 @@ object
 		};
 
 	row_column_2 : XmRowColumn {
-		arguments {  
+		arguments {
 			  XmNentryClass = class_rec_name ('XmTextWidget');
 			  };
 		};
@@ -460,12 +460,12 @@ object	foofoo : XmForm {
 
 value
 chan_foo:	argument('chan_foo', FLOAT);
-	
+
 procedure
 chantestcreate;
-		
+
 object
-chantest : 
+chantest :
 user_defined procedure chantestcreate {
 	arguments {
 		chan_foo = 100.0;
@@ -514,9 +514,3 @@ value wc : wide_character ('abcd');
 
 
 end module;
-
-
-
-
-
-

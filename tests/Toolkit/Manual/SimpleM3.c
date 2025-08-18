@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SimpleM3.c /main/6 1995/07/13 18:40:41 drk $"
@@ -42,7 +42,7 @@ void PostIt(Widget w, XtPointer p, XEvent *event, Boolean *cont)
   Arg args[1];
   unsigned int whichButton;
   Widget popup = (Widget) p;
- 
+
   XtSetArg (args[0], XmNwhichButton, &whichButton);
   XtGetValues (popup, args, 1);
 
@@ -74,7 +74,7 @@ char **argv;
   Widget form;
   Widget bar, option, popup, radio_box, check_box;
   Widget pd0, pd1, pd2;
-  Arg args[10]; 
+  Arg args[10];
   register int n;
 
   XmNULL = cs("");
@@ -90,8 +90,8 @@ char **argv;
   XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_NONE); n++;
-  XtSetArg(args[n], XmNbuttonCount, 3); n++; 
-  bar = XmVaCreateSimpleMenuBar(form, "bar", 
+  XtSetArg(args[n], XmNbuttonCount, 3); n++;
+  bar = XmVaCreateSimpleMenuBar(form, "bar",
 				XmVaCASCADEBUTTON, cs("File"), (int) 'F',
 				XmVaCASCADEBUTTON, cs("Edit"), (int) 'E',
 				XmVaCASCADEBUTTON, cs("Help"), (int) 'H',
@@ -99,7 +99,7 @@ char **argv;
   XtSetValues(bar, args, n);
   XtManageChild(bar);
 
-  pd0 = 
+  pd0 =
     XmVaCreateSimplePulldownMenu(bar, "pd0", 0, SimpleCallbackProc,
 	      XmVaTITLE, cs("This is the Title"),
 	      XmVaDOUBLE_SEPARATOR,
@@ -111,20 +111,20 @@ char **argv;
 	      XmVaPUSHBUTTON, cs("Exit"), (int) 'E', "", XmNULL, NULL);
 
   pd1 = XmVaCreateSimplePulldownMenu(bar, "pd1", 1, SimpleCallbackProc,
-				     XmVaPUSHBUTTON, cs("Cut"), 
+				     XmVaPUSHBUTTON, cs("Cut"),
 				     (int) 'C', "", XmNULL,
-				     XmVaPUSHBUTTON, cs("Copy"), 	
+				     XmVaPUSHBUTTON, cs("Copy"),
 				     (int) 'p', "", XmNULL,
-				     XmVaPUSHBUTTON, cs("Paste"), 
+				     XmVaPUSHBUTTON, cs("Paste"),
 				     (int) 'e', "", XmNULL,
 				     NULL);
 
   pd2 = XmVaCreateSimplePulldownMenu(bar, "pd2", 2, (XtPointer) NULL,
-				     XmVaPUSHBUTTON, cs("On Context..."), 
+				     XmVaPUSHBUTTON, cs("On Context..."),
 				     (int) ' ', "", XmNULL,
-				     XmVaCHECKBUTTON, cs("On Help..."), 
+				     XmVaCHECKBUTTON, cs("On Help..."),
 				     (int) ' ', "", XmNULL,
-				     XmVaRADIOBUTTON, cs("On Keys"), 
+				     XmVaRADIOBUTTON, cs("On Keys"),
 				     (int) ' ', "", XmNULL,
 				     NULL);
 
@@ -134,16 +134,16 @@ char **argv;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
   XtSetArg(args[n], XmNtopWidget, bar); n++;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_NONE); n++;
-  option = XmVaCreateSimpleOptionMenu(form, "option", cs("MyLabel"), 
+  option = XmVaCreateSimpleOptionMenu(form, "option", cs("MyLabel"),
 				      (KeySym) 'M', 1, SimpleCallbackProc,
-				      XmVaPUSHBUTTON, cs("Red"), (int) 'R', 
+				      XmVaPUSHBUTTON, cs("Red"), (int) 'R',
 				      "", XmNULL,
 				      XmVaCASCADEBUTTON, cs("Help"), (int) 'H',
 				      XmVaSEPARATOR,
-				      XmVaPUSHBUTTON, cs("Green"), (int) 'G', 
+				      XmVaPUSHBUTTON, cs("Green"), (int) 'G',
 				      "", XmNULL,
 				      XmVaSEPARATOR,
-				      XmVaPUSHBUTTON, cs("Blue"), (int) 'B', 
+				      XmVaPUSHBUTTON, cs("Blue"), (int) 'B',
 				      "", XmNULL,
 				      NULL);
   XtSetValues(option, args, n);
@@ -155,15 +155,15 @@ char **argv;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
   XtSetArg(args[n], XmNtopWidget, option); n++;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_NONE); n++;
-  radio_box = XmVaCreateSimpleRadioBox(form, "radio_box", 2, 
+  radio_box = XmVaCreateSimpleRadioBox(form, "radio_box", 2,
 				       SimpleCallbackProc,
-				       XmVaTOGGLEBUTTON, cs("Variable"), 
+				       XmVaTOGGLEBUTTON, cs("Variable"),
 				       (int) 'V', "", XmNULL,
-				       XmVaTOGGLEBUTTON, cs("Fixed"), 
+				       XmVaTOGGLEBUTTON, cs("Fixed"),
 				       (int) 'F', "", XmNULL,
-				       XmVaTOGGLEBUTTON, cs("Times"), 
+				       XmVaTOGGLEBUTTON, cs("Times"),
 				       (int) 'T', "", XmNULL,
-				       XmVaTOGGLEBUTTON, cs("Courier"), 
+				       XmVaTOGGLEBUTTON, cs("Courier"),
 				       (int) 'C', "", XmNULL,
 				       NULL);
 
@@ -177,13 +177,13 @@ char **argv;
   XtSetArg(args[n], XmNtopWidget, radio_box); n++;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
   check_box = XmVaCreateSimpleCheckBox(form, "check_box", SimpleCallbackProc,
-				       XmVaTOGGLEBUTTON, cs("Burgers"), 
+				       XmVaTOGGLEBUTTON, cs("Burgers"),
 				       (int) 'B', "", XmNULL,
-				       XmVaTOGGLEBUTTON, cs("Fries"), 
+				       XmVaTOGGLEBUTTON, cs("Fries"),
 				       (int) 'F', "", XmNULL,
-				       XmVaTOGGLEBUTTON, cs("Shake"), 
+				       XmVaTOGGLEBUTTON, cs("Shake"),
 				       (int) 'S', "", XmNULL,
-				       XmVaTOGGLEBUTTON, cs("Coke"), 
+				       XmVaTOGGLEBUTTON, cs("Coke"),
 				       (int) 'C', "", XmNULL,
 				       NULL);
 
@@ -194,13 +194,13 @@ char **argv;
   popup = XmVaCreateSimplePopupMenu(form, "popup", SimpleCallbackProc,
 				    XmVaTITLE, cs("This is the Title"),
 				    XmVaDOUBLE_SEPARATOR,
-				    XmVaPUSHBUTTON, cs("push1"), (int) 'B', 
+				    XmVaPUSHBUTTON, cs("push1"), (int) 'B',
 				    "", XmNULL,
-				    XmVaPUSHBUTTON, cs("push2"), (int) 'F', 
+				    XmVaPUSHBUTTON, cs("push2"), (int) 'F',
 				    "", XmNULL,
-				    XmVaCHECKBUTTON, cs("check1"), (int) 'S', 
+				    XmVaCHECKBUTTON, cs("check1"), (int) 'S',
 				    "", XmNULL,
-				    XmVaRADIOBUTTON, cs("radio1"), (int) 'C', 
+				    XmVaRADIOBUTTON, cs("radio1"), (int) 'C',
 				    "", XmNULL,
 				    NULL);
 
@@ -213,4 +213,3 @@ char **argv;
 
   XtAppMainLoop(app_context);
 }
-

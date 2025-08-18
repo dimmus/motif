@@ -285,4 +285,3 @@ Widget parent;
 
     return( retval );
 }
-

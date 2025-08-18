@@ -50,10 +50,10 @@ static int ProtoError();
 
 Widget		butt1, butt2, butt3, butt4, butt5, butt6;
 Widget		xmDisplay;
-XmString	default_str1, default_str2, default_str3, 
+XmString	default_str1, default_str2, default_str3,
   default_str4, default_str5, default_str6;
 
-int 
+int
 main (int argc, char **argv)
 {
   register int       n;
@@ -75,7 +75,7 @@ main (int argc, char **argv)
 	      argv[0]);
       exit(0);
     }
-  }    
+  }
 #endif
 
   XSetErrorHandler(ProtoError);
@@ -89,14 +89,14 @@ main (int argc, char **argv)
 
   n = 0;
   grid = XtVaCreateManagedWidget("Grid",
-				 exmGridWidgetClass, Shell1, 
+				 exmGridWidgetClass, Shell1,
 				 XmNrows, 2,
 				 XmNcolumns, 3,
-				 NULL); 
+				 NULL);
 
   default_str1 = XmStringCreateLocalized("ONE");
   butt1 = XtVaCreateManagedWidget("butt1",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   XmNalignment, XmALIGNMENT_CENTER,
@@ -105,7 +105,7 @@ main (int argc, char **argv)
 
   default_str2 = XmStringCreateLocalized("TWO");
   butt2 = XtVaCreateManagedWidget("butt2",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   ExmNcompoundString, default_str2,
@@ -114,7 +114,7 @@ main (int argc, char **argv)
 
   default_str3 = XmStringCreateLocalized("THREE");
   butt3 = XtVaCreateManagedWidget("butt3",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   ExmNcompoundString, default_str3,
@@ -123,7 +123,7 @@ main (int argc, char **argv)
 
   default_str4 = XmStringCreateLocalized("FOUR");
   butt4 = XtVaCreateManagedWidget("butt4",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   ExmNcompoundString, default_str4,
@@ -132,7 +132,7 @@ main (int argc, char **argv)
 
   default_str5 = XmStringCreateLocalized("FIVE");
   butt5 = XtVaCreateManagedWidget("butt5",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   ExmNcompoundString, default_str5,
@@ -141,7 +141,7 @@ main (int argc, char **argv)
 
   default_str6 = XmStringCreateLocalized("SIX");
   butt6 = XtVaCreateManagedWidget("butt6",
-				   exmCommandButtonWidgetClass, grid, 
+				   exmCommandButtonWidgetClass, grid,
 				   XmNwidth, 100,
 				   XmNheight, 100,
 				   ExmNcompoundString, default_str6,

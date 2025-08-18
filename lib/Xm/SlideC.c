@@ -142,17 +142,17 @@ XmSlideContextClassRec xmSlideContextClassRec = {
 
 WidgetClass xmSlideContextWidgetClass = (WidgetClass)&xmSlideContextClassRec;
 
-static void 
+static void
 class_initialize(void)
 {
 }
 
-static void 
+static void
 class_part_initialize(WidgetClass widget_class)
 {
 }
 
-static void 
+static void
 initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args)
 {
     /*
@@ -163,7 +163,7 @@ initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args)
 
     if (Slide_Widget(new_w) == NULL)
     {
-	_XmWarningMsg(new_w, 
+	_XmWarningMsg(new_w,
 	    "Invalid parameter",
 	    XmNslideWidget " must be specified during creation",
 	    NULL, 0);
@@ -194,7 +194,7 @@ initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args)
     }
 }
 
-static void 
+static void
 destroy(Widget w)
 {
     if (Slide_Id(w) != (XtIntervalId)NULL)
@@ -205,7 +205,7 @@ destroy(Widget w)
     XtRemoveCallback(Slide_Widget(w), XmNdestroyCallback, (XtCallbackProc)targetDestroy, w);
 }
 
-static Boolean 
+static Boolean
 set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num_args)
 {
     if (Slide_Widget(old) != Slide_Widget(new_w))
@@ -216,7 +216,7 @@ set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num
     return(False);
 }
 
-static void 
+static void
 get_values_hook(Widget w, ArgList args, Cardinal *num_args)
 {
 }

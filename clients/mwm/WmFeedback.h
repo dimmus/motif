@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,22 +19,21 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2
-*/ 
+*/
 
 
 extern void ConfirmAction (WmScreenData *pSD, int nbr);
 extern void HideFeedbackWindow (WmScreenData *pSD);
 extern void InitCursorInfo (void);
 extern void PaintFeedbackWindow (WmScreenData *pSD);
-extern void ShowFeedbackWindow (WmScreenData *pSD, int x, int y, 
-				unsigned int width, unsigned int height, 
+extern void ShowFeedbackWindow (WmScreenData *pSD, int x, int y,
+				unsigned int width, unsigned int height,
 				unsigned long style);
 extern void ShowWaitState (Boolean flag);
-extern void UpdateFeedbackInfo (WmScreenData *pSD, int x, int y, 
+extern void UpdateFeedbackInfo (WmScreenData *pSD, int x, int y,
 				unsigned int width, unsigned int height);
-extern void UpdateFeedbackText (WmScreenData *pSD, int x, int y, 
+extern void UpdateFeedbackText (WmScreenData *pSD, int x, int y,
 				unsigned int width, unsigned int height);
-

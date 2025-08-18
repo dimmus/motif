@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cutpaste4b.c /main/7 1995/07/13 17:57:00 drk $"
@@ -75,7 +75,7 @@ static void PasteCallBack(w, closure, selection, type, value, length, format)
     {
 	fprintf(stdout, "Incorrect selection type\n");
     }
-} 
+}
 
 
 static void GetCBSelection (button, client_data, call_data)
@@ -133,12 +133,12 @@ char **argv;
     Text = XmCreateText(PanedWindow, "Text", args, n);
     XtManageChild(Text);
 
-    XtAddCallback (PushButton1, XmNactivateCallback, GetCBSelection, 
+    XtAddCallback (PushButton1, XmNactivateCallback, GetCBSelection,
 		   (XtPointer) Text);
 
     XtRealizeWidget(Shell1);
 
-    XtSetSelectionTimeout(20000); 
+    XtSetSelectionTimeout(20000);
 
     XtAppMainLoop(app_context);
 }

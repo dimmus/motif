@@ -27,5 +27,4 @@ else
 	set TestFile = ${testfile}.Scr
 endif
 
-cat $TestFile | awk 'BEGIN{FS="\n"} ($1 !~ /#.*/) && ($1 !~ /^$/) {n++; if (n >= '"$startline"' && n <= '"$endline"') printf("%d %s\n", n, $1)}' 
-
+cat $TestFile | awk 'BEGIN{FS="\n"} ($1 !~ /#.*/) && ($1 !~ /^$/) {n++; if (n >= '"$startline"' && n <= '"$endline"') printf("%d %s\n", n, $1)}'

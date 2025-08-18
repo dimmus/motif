@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/5 1996/07/15 14:17:08 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 PMenuBar1
 PIRS No.:      3346
 Getting warnings about Tearoff being enabled on a shared
@@ -17,7 +17,7 @@ PIRS No.:      2706
 When the length of submenu for an OptionMenu is greater than
 screen height, position on screen of posted menu incorrect.
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A

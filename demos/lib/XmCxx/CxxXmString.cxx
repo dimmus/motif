@@ -21,7 +21,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-/* 
+/*
  * HISTORY
 */
 
@@ -46,22 +46,22 @@ XmCxxString& operator+(XmCxxString &x, char *y) {
 }
 
 Dimension XmCxxString::baseline(XmRenderTable tab) {
-    return XmStringBaseline(tab, internal); 
+    return XmStringBaseline(tab, internal);
 }
 
-void XmCxxString::draw(Widget w, XmRenderTable r, GC gc, 
-		       Position x, Position y, Dimension width, 
+void XmCxxString::draw(Widget w, XmRenderTable r, GC gc,
+		       Position x, Position y, Dimension width,
 		       unsigned char alignment, unsigned char layout_dir,
 		       XRectangle *clip) {
-  XmStringDraw(XtDisplay(w), XtWindow(w), r, internal, gc, 
+  XmStringDraw(XtDisplay(w), XtWindow(w), r, internal, gc,
 	       x, y, width, alignment, layout_dir, clip);
 }
 
-void XmCxxString::draw(Display *d, Window w, XmRenderTable r, GC gc, 
-		       Position x, Position y, Dimension width, 
+void XmCxxString::draw(Display *d, Window w, XmRenderTable r, GC gc,
+		       Position x, Position y, Dimension width,
 		       unsigned char alignment, unsigned char layout_dir,
 		       XRectangle *clip) {
-  XmStringDraw(d, w, r, internal, gc, 
+  XmStringDraw(d, w, r, internal, gc,
 	       x, y, width, alignment, layout_dir, clip);
 }
 

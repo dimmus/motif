@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: BBoard7.c /main/8 1995/07/13 18:27:13 drk $"
@@ -50,12 +50,12 @@ void  main(argc, argv)
 {
   register int  n;
   Arg           args[MAX_ARGS];
-  
+
   CommonTestInit(argc, argv);
 
   RunTest(Shell1);
 
-  XtRealizeWidget(Shell1);    
+  XtRealizeWidget(Shell1);
 
   XtAppMainLoop(app_context);
 }
@@ -66,32 +66,32 @@ Widget Shell1;
   register int  i;
   register int  n;
   Arg           args[MAX_ARGS];
-  
-    
+
+
     CreateBulletinBoard(Shell1);
-    
+
     CommonPause();
 
     n = 0;
     XtSetArg(args[n], XmNx, 0);                                    n++;
     XtSetArg(args[n], XmNy, 0);                                    n++;
     XtSetValues(Child1, args, n);
-        
+
     n = 0;
     XtSetArg(args[n], XmNx, 200);                                  n++;
     XtSetArg(args[n], XmNy, 0);                                    n++;
     XtSetValues(Child2, args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 0);                                    n++;
     XtSetArg(args[n], XmNy, 200);                                  n++;
     XtSetValues(Child3, args, n);
-    
+
     n = 0;
     XtSetArg(args[n], XmNx, 200);                                  n++;
     XtSetArg(args[n], XmNy, 200);                                  n++;
     XtSetValues(Child4, args, n);
-    
+
     CommonPause();
 
     n = 0;
@@ -110,10 +110,10 @@ Widget Shell1;
     XtSetValues(Child3, args, n);
 
     n = 0;
-    XtSetArg(args[n], XmNwidth, 100);                              n++; 
+    XtSetArg(args[n], XmNwidth, 100);                              n++;
     XtSetArg(args[n], XmNheight, 100);                             n++;
     XtSetValues(Child4, args, n);
-    
+
     CommonPause();
 
     n = 0;
@@ -135,13 +135,13 @@ Widget Shell1;
     XtSetArg(args[n], XmNwidth, 200);                              n++;
     XtSetArg(args[n], XmNheight, 200);                             n++;
     XtSetValues(Child4, args, n);
-    
+
     CommonPause();
 
     n = 0;
     XtSetArg(args[n], XmNwidth, 300);                              n++;
     XtSetArg(args[n], XmNheight, 300);                             n++;
-    XtSetValues(Child1, args, n); 
+    XtSetValues(Child1, args, n);
 
     n = 0;
     XtSetArg(args[n], XmNwidth, 300);                              n++;
@@ -157,13 +157,13 @@ Widget Shell1;
     XtSetArg(args[n], XmNwidth, 300);                              n++;
     XtSetArg(args[n], XmNheight, 300);                             n++;
     XtSetValues(Child4, args, n);
-    
+
     CommonPause();
 
     CommonPause();
 
     DestroyBulletinBoard();
-  
+
 }
 
 static void CreateBulletinBoard(Shell1)
@@ -171,13 +171,13 @@ Widget Shell1;
 {
   register int  n;
   Arg           args[MAX_ARGS];
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 200);                                  n++;
   XtSetArg(args[n], XmNy, 200);                                  n++;
   XtSetArg(args[n], XmNallowShellResize, True);                  n++;
   Shell = XmCreateDialogShell(Shell1, "BBoard7", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNwidth, 200);                              n++;
   XtSetArg(args[n], XmNheight, 200);                             n++;
@@ -185,7 +185,7 @@ Widget Shell1;
   XtSetArg(args[n], XmNresizePolicy, XmRESIZE_ANY);              n++;
   XtSetArg(args[n], XmNallowOverlap, False);                     n++;
   BulletinBoard = XmCreateBulletinBoard(Shell, "BBoard", args, n);
-  
+
   n = 0;
   XtSetArg(args[n], XmNx, 0);                                    n++;
   XtSetArg(args[n], XmNy, 0);                                    n++;
@@ -205,12 +205,12 @@ Widget Shell1;
   XtSetArg(args[n], XmNx, 100);                                  n++;
   XtSetArg(args[n], XmNy, 100);                                  n++;
   Child4 = XmCreatePushButton(BulletinBoard, "Child4", args, n);
-  
+
   XtManageChild(Child1);
   XtManageChild(Child2);
   XtManageChild(Child3);
   XtManageChild(Child4);
-  
+
   XtManageChild(BulletinBoard);
   XtRealizeWidget(Shell);
 }

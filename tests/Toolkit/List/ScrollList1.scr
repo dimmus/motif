@@ -1,5 +1,5 @@
 # $XConsortium: ScrollList1.scr /main/5 1995/07/17 20:22:33 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)ScrollList1.scr	1.2  91/11/05
 
@@ -49,7 +49,7 @@ CompareVisual List1
 # Click on one item in the list. The item should be highlighted
 # and a message should appear in the term window.
 
-LocatePointer List1 RListItem 3 
+LocatePointer List1 RListItem 3
 ClickMB Btn1
 
 CompareVisual List1
@@ -181,7 +181,7 @@ CompareVisual List1
 # Move the list down one position by clicking once on the down arrow of
 # the vertical scroll bar. Item "btest1b" must be the first visible item.
 # Double click on any visible list entry.
-# This should not result in a core dump. But, the vertical scrollbar 
+# This should not result in a core dump. But, the vertical scrollbar
 # should disappear and only the first 20 items must be visible.
 
 Continue

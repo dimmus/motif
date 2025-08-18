@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsCreateWid.c /main/10 1995/07/14 11:25:25 drk $"
@@ -46,7 +46,7 @@ static char rcsid[] = "$XConsortium: mvsCreateWid.c /main/10 1995/07/14 11:25:25
 	Calls:
 
 	Summary:
-            Creates the specified widget and sets up the widget info record 
+            Creates the specified widget and sets up the widget info record
             associated with it. It returns a pointer to the widget info record.
 
             INPUTS
@@ -76,8 +76,8 @@ static char rcsid[] = "$XConsortium: mvsCreateWid.c /main/10 1995/07/14 11:25:25
                 Pointer to newly alloc'ed widget info record.
 ************************************************************************/
 
-#include "mvslib.h" 
-#include "xislib.h" 
+#include "mvslib.h"
+#include "xislib.h"
 #include <AutoMessages.h>
 #include <Xm/DialogS.h>
 #include <Xm/MenuShell.h>
@@ -144,7 +144,7 @@ WidgetClass xtclass;
     nargs = nargs_in;
 
     /* Allocate and setup widget info record */
-    widget_info = mvsAllocWidgetInfo(widget_class_info, parent_info, 
+    widget_info = mvsAllocWidgetInfo(widget_class_info, parent_info,
                                      (Widget)NULL                    );
 
     /* Then if in generate mode, append "hard-wired" color settings */
@@ -160,7 +160,7 @@ WidgetClass xtclass;
 	    }
         }
 
-        mvsCopyReplaceArgs(widget_class_info, args, &nargs, color_args, 
+        mvsCopyReplaceArgs(widget_class_info, args, &nargs, color_args,
 			   num_color_args);
     }
 
@@ -174,7 +174,7 @@ WidgetClass xtclass;
 
     widget_info->window = 0;
 
-    /* 
+    /*
        Manage widget if it is not a shell, or a child of a MenuShell,
        (Pulldown, Popup), also, do not manage if parent is a Dialog
        Shell (ErrorDialog, FormDialog...).
@@ -200,8 +200,8 @@ WidgetClass xtclass;
      * If the widget being created is a Notebook, we need
      * to test if the default PageScroller has been created
      */
-    if ((widget_info->parent->widget != NULL ) && 
-	(mvsGetClassCode(widget_info->parent->widget) 
+    if ((widget_info->parent->widget != NULL ) &&
+	(mvsGetClassCode(widget_info->parent->widget)
 		== mvsXmNotebookWidgetClass)) {
 	child = XtNameToWidget(widget_info->parent->widget, "PageScroller");
 	/*
@@ -222,7 +222,7 @@ WidgetClass xtclass;
 	n = 0;
 	XtSetArg(args[n], XmNnotebookChildType, &nb_child_type);	n++;
 	XtGetValues(widget_info->widget, args, n);
-	if ((nb_child_type == XmPAGE_SCROLLER) && 
+	if ((nb_child_type == XmPAGE_SCROLLER) &&
 	    (orig_page_scroller_destroyed == False) &&
 	    (created_page_scroller == True))  {
 	    /*
@@ -233,7 +233,7 @@ WidgetClass xtclass;
 	}
     }
 
-    /* 
+    /*
 	For Pixmap resources do the following:
 
 	1) Find proper background and foreground pixel values. If
@@ -255,54 +255,54 @@ WidgetClass xtclass;
     */
 
     /* Get the Pixmap resources and see if they need to be normalized.
-       They can have been set through the resource file, in that case 
-       add them to the arg list so that we don't reload them when 
+       They can have been set through the resource file, in that case
+       add them to the arg list so that we don't reload them when
        loading the default resources */
 
-    
+
     for (i =0; i< num_res_colors; i++) {
 	if (res_pixmap_ref[i] >= 0) {
 	    Arg pixmap_args[1];
 	    Pixmap value_pixmap;
 
 	    /* Check if this pixmap needs to be normalized */
-	    
+
 	    XtSetArg(pixmap_args[0],
 		     resource_info[res_pixmap_ref[i]].name,
 		     &value_pixmap);
-	    
+
 	    XtGetValues(widget_info->widget, pixmap_args, 1);
-	    
+
 	    if ((value_pixmap != XmUNSPECIFIED_PIXMAP) &&
 		(value_pixmap != None)) {
 
 		/* Normalize the pixmap only when in record or compare mode */
-		
+
 		if (mvsGetVisualMode() != VISUAL_MODE_DONT_CHECK)
 		    NormalizePixmap(widget_info, value_pixmap);
-		
-		if (strcmp(resource_info[res_pixmap_ref[i]].name, 
+
+		if (strcmp(resource_info[res_pixmap_ref[i]].name,
 			       "backgroundPixmap") == 0) {
-	           
+
 		    Mask    window_mask;
 		    XSetWindowAttributes attributes;
 
 		    window_mask = CWBackPixmap;
 		    attributes.background_pixmap = value_pixmap;
-						 
-		    XChangeWindowAttributes(mvsDisplay, 
-					    XtWindow(widget_info->widget), 
+
+		    XChangeWindowAttributes(mvsDisplay,
+					    XtWindow(widget_info->widget),
 					    window_mask, &attributes);
 		}
 
 		/* Check if this needs to be added to the list of args */
 
-		for (j = 0; j < nargs && 
+		for (j = 0; j < nargs &&
 		    strcmp(args[j].name,resource_info[res_pixmap_ref[i]].name);
 		    j++);
 
-		if (j == nargs) 
-		    mvsCopyReplace1Arg(widget_class_info, args, &nargs, 
+		if (j == nargs)
+		    mvsCopyReplace1Arg(widget_class_info, args, &nargs,
 				       pixmap_args[0].name, value_pixmap);
 
 	    }
@@ -335,11 +335,11 @@ WidgetClass xtclass;
     tmp_widget = XtParent(widget_info->widget);
     if( tmp_widget != parent_info->widget) {
 
-        save_widget = tmp_widget; 
+        save_widget = tmp_widget;
         while ( (tmp_widget != NULL) &&
               (tmp_widget != parent_info->widget)) {
 
-            save_widget = tmp_widget; 
+            save_widget = tmp_widget;
             tmp_widget = XtParent(tmp_widget);
         }
         if(tmp_widget == NULL) {
@@ -413,7 +413,7 @@ WidgetClass xtclass;
 
             /* Allocate and setup widget info record */
 
-            widget_info = mvsAllocWidgetInfo(widget_class_info, new_info, 
+            widget_info = mvsAllocWidgetInfo(widget_class_info, new_info,
                                                  (Widget)NULL);
             widget_info->widget = created_widget;
             widget_info->window = 0;
@@ -453,13 +453,13 @@ WidgetClass xtclass;
 
         if ((mvsGetClassCode(widget_info->widget) == mvsXmTextWidgetClass ||
        	     mvsGetClassCode(widget_info->widget) == mvsXmListWidgetClass) &&
-	     mvsGetClassCode(XtParent(widget_info->widget)) == 
+	     mvsGetClassCode(XtParent(widget_info->widget)) ==
 						mvsXmScrolledWindowWidgetClass)
     		mvsCreateChildren(widget_info->parent);
     }
-		
+
     mvsCreateChildren(widget_info);
-    
+
     /* Set up callback checking code if in behavior test set */
 
     XSync(mvsDisplay,0);
@@ -472,7 +472,7 @@ WidgetClass xtclass;
 
     /* Make sure that window manager recognizes color map of this widget */
     wattr.colormap = mvsVisualInfo.colormap_id;
-    XChangeWindowAttributes(mvsDisplay, XtWindowOfObject(widget_info->widget), 
+    XChangeWindowAttributes(mvsDisplay, XtWindowOfObject(widget_info->widget),
                             CWColormap,&wattr);
 
     /* Process all events through expose event */
@@ -506,10 +506,10 @@ WidgetClass xtclass;
 {
 /**Debug**
     return(mvsCreateManageWidget(widget_class_info, parent_info, name,
-    				 use_common, args_in, nargs_in, TRUE));	
+    				 use_common, args_in, nargs_in, TRUE));
 **/
     return(mvsCreateManageWidget(widget_class_info, parent_info, name,
-    				 use_common, args_in, nargs_in, TRUE, xtclass));	
+    				 use_common, args_in, nargs_in, TRUE, xtclass));
 
 } /* End mvsCreateWidget() */
 
@@ -521,7 +521,7 @@ WidgetClass xtclass;
 		Create but do not manage widget
 ***********************************************************************/
 
-MvsWidgetInfoRecord *mvsCreateNotManageWidget(widget_class_info, parent_info, 
+MvsWidgetInfoRecord *mvsCreateNotManageWidget(widget_class_info, parent_info,
 					 name, use_common, args_in, nargs_in,
 					 xtclass)
 
@@ -553,21 +553,21 @@ Pixmap value_pixmap;
     XImage *pix_image = NULL;
     Pixel pixel1, pixel2;
     GC gc;
-    
+
     if (XtParent(widget_info->widget) == NULL) {
 	printf("mvsCreateWidget: NULL parent in visuals\n");
 	exit(0);
     }
 
     num_color_args = 0;
-    XtSetArg(color_args[num_color_args], XmNbackground, &background); 
+    XtSetArg(color_args[num_color_args], XmNbackground, &background);
     num_color_args++;
-    XtSetArg(color_args[num_color_args], XmNforeground, &foreground); 
+    XtSetArg(color_args[num_color_args], XmNforeground, &foreground);
     num_color_args++;
-    if (XmIsGadget(widget_info->widget) && 
-	(mvsGetClassCode(widget_info->widget) != mvsXmIconGadgetClass)) 
+    if (XmIsGadget(widget_info->widget) &&
+	(mvsGetClassCode(widget_info->widget) != mvsXmIconGadgetClass))
 	if (XtParent(widget_info->widget) != Shell1)
-	    XtGetValues(XtParent(widget_info->widget), color_args, 
+	    XtGetValues(XtParent(widget_info->widget), color_args,
 			num_color_args);
 	else
 	    AutoMessage(_AutoMessages[WARNMSG100]);
@@ -601,7 +601,7 @@ Pixmap value_pixmap;
 
     for (y=0; y<pix_height; y++) {
 	for (x=0; x<pix_width; x++) {
-	    if (XGetPixel(pix_image,x,y) == pixel1) 
+	    if (XGetPixel(pix_image,x,y) == pixel1)
 		XPutPixel(pix_image, x, y, background);
 	    else
 		/*  if (XGetPixel(pix_image,x,y) == pixel2)    */

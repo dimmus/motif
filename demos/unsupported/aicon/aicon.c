@@ -20,16 +20,16 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
  */
 #include <stdlib.h>
 #include <Xm/XmAll.h>
-#include <Xmd/AdjView.h>   
-#include <Xmd/RegEdit.h>   
-#include <Xmd/Help.h>   
+#include <Xmd/AdjView.h>
+#include <Xmd/RegEdit.h>
+#include <Xmd/Help.h>
 #ifdef SYS_DIR
 #include <sys/dir.h>
 #else
@@ -43,7 +43,7 @@
 #define APP_CLASS "XmdAIcon"
 
 
- 
+
 typedef struct {
   String icon_dir;
   String valid_extensions;
@@ -60,7 +60,7 @@ static XtResource resources[] = {
   { NiconDir, CIconDir, XmRString, sizeof(String),
 	XtOffset(ApplicationDataPtr, icon_dir), XmRString, "." },
   { NvalidExtensions, CValidExtensions, XmRString, sizeof(String),
-	XtOffset(ApplicationDataPtr, valid_extensions), XmRString, 
+	XtOffset(ApplicationDataPtr, valid_extensions), XmRString,
 	"xbm,xpm,bm,pm" },
 };
 
@@ -74,24 +74,24 @@ NULL
 };
 
 
-static void 
-HelpCB (Widget w, XtPointer client_data, XtPointer call_data) 
+static void
+HelpCB (Widget w, XtPointer client_data, XtPointer call_data)
 {
     static Widget help_widget = NULL ;
 
     if (!help_widget)
 	help_widget = XmdCreateHelpDialog(w, "help_manager", NULL, 0);
 
-    XtManageChild(help_widget);   
+    XtManageChild(help_widget);
 }
 
-static void 
+static void
 DefCB(
         Widget	widget,
 	XtPointer tag,
 	XtPointer data)
 {
-    XmContainerSelectCallbackStruct *cbs = 
+    XmContainerSelectCallbackStruct *cbs =
 	(XmContainerSelectCallbackStruct*)data;
     Pixmap pix ;
     Window root;
@@ -103,10 +103,10 @@ DefCB(
 	XGetGeometry(XtDisplay(widget), pix, &root, &x, &y,
 		     &loc_width, &loc_height, &border_width, &loc_depth);
 	if (loc_depth == DefaultDepthOfScreen(XtScreen(widget))) {
-	    XSetWindowBackgroundPixmap(XtDisplay(widget), 
-				       DefaultRootWindow(XtDisplay(widget)), 
+	    XSetWindowBackgroundPixmap(XtDisplay(widget),
+				       DefaultRootWindow(XtDisplay(widget)),
 				       pix);
-	    XClearWindow(XtDisplay(widget), 
+	    XClearWindow(XtDisplay(widget),
 			 DefaultRootWindow(XtDisplay(widget)));
 	}
     }
@@ -116,7 +116,7 @@ static void
 AppModalDialogWarning (w, str)
 Widget w;
 String str;
-{	
+{
     static Widget warning_dialog = NULL ;
     XmString message_string ;
 
@@ -136,7 +136,7 @@ String str;
 
 
 
-static void 
+static void
 PopulateContainer(cont, dir)
 Widget cont ;
 String dir ;
@@ -152,12 +152,12 @@ String dir ;
     Cardinal num_children, i;
     Widget * children ;
     int dir_len ;
-    DIR	*dirp;		
+    DIR	*dirp;
 
     dir_len = strlen(dir) ;
     /* let's remove the FSB added * pattern */
     if (dir[dir_len-1] == '*') dir[--dir_len] = '\0';
-    
+
     /*  try to open the icons directory  */
     if (!(dirp = opendir (dir))) {
 	char s[256] ;
@@ -167,7 +167,7 @@ String dir ;
     }
 
     /* first destroy current set of icons (if any) */
-    XtVaGetValues(cont, XmNnumChildren, &num_children, 
+    XtVaGetValues(cont, XmNnumChildren, &num_children,
 		  XmNchildren, &children, NULL);
     XtUnmanageChildren(children, num_children);
     for (i=0; i < num_children; i++) XtDestroyWidget(children[i]);
@@ -176,11 +176,11 @@ String dir ;
     icon_fullname[dir_len] = '/' ;
 
     /* turn Container (back) to CELLS. Also ask for natural cell sizes */
-    XtVaSetValues (cont, XmNspatialStyle, XmCELLS, 
-		   XmNlargeCellWidth, 0, XmNlargeCellHeight, 0, NULL);  
+    XtVaSetValues (cont, XmNspatialStyle, XmCELLS,
+		   XmNlargeCellWidth, 0, XmNlargeCellHeight, 0, NULL);
 
     /*  read one entry each time through the loop  */
-    for (item = readdir (dirp), i = 0;  item != NULL;  
+    for (item = readdir (dirp), i = 0;  item != NULL;
 	 item = readdir (dirp)) {
 
 	/* reset the fullname every time */
@@ -203,7 +203,7 @@ String dir ;
 
 	if (i >= n_icong) {
 	    n_icong += 500 ;
-	    icong = (Widget*)XtRealloc((char*)icong, 
+	    icong = (Widget*)XtRealloc((char*)icong,
 				       n_icong * sizeof(Widget*));
 	}
 	icong[i] = XtVaCreateWidget(item->d_name, xmIconGadgetClass, cont,
@@ -215,18 +215,18 @@ String dir ;
     XtManageChildren(icong, i);
 
     /* turn Container back to NONE */
-    XtVaSetValues (cont, XmNspatialStyle, XmNONE, NULL);  
+    XtVaSetValues (cont, XmNspatialStyle, XmNONE, NULL);
 }
 
 
-static void QuitCB (w, client_data, call_data) 
+static void QuitCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
 {
     exit(0);
 }
-static void UnMapCB (w, client_data, call_data) 
+static void UnMapCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -234,7 +234,7 @@ XtPointer		call_data;	/*  data from widget class  */
     XtUnmanageChild(w);
 }
 
-static void OKCB (w, client_data, call_data) 
+static void OKCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -248,13 +248,13 @@ XtPointer		call_data;	/*  data from widget class  */
     XtVaGetValues(w, XmNpathMode, &path_mode, NULL);
     if (path_mode != XmPATH_MODE_RELATIVE)
 	dir = XmTextGetString(XtNameToWidget(w, "FilterText"));
-    else 
+    else
 	dir = XmTextGetString(XtNameToWidget(w, "DirText"));
 
     PopulateContainer(cont, dir);
 }
 
-static void OpenCB (w, client_data, call_data) 
+static void OpenCB (w, client_data, call_data)
 Widget		w;		/*  widget id		*/
 XtPointer		client_data;	/*  data from application   */
 XtPointer		call_data;	/*  data from widget class  */
@@ -262,15 +262,15 @@ XtPointer		call_data;	/*  data from widget class  */
     static Widget fsb_box = NULL ;
 
     if (!fsb_box) {
-	Arg		args[2];	
-	Cardinal	n;	
+	Arg		args[2];
+	Cardinal	n;
 	XmString dir ;
 
 	dir = XmStringGenerate((XtPointer) AppData.icon_dir,
 			       NULL, XmCHARSET_TEXT, NULL);
 	n = 0;
 	XtSetArg (args[n], XmNdirectory, dir);  n++;
-	fsb_box = XmCreateFileSelectionDialog (w, "Open Icon Dir", 
+	fsb_box = XmCreateFileSelectionDialog (w, "Open Icon Dir",
 					       args, n);
 	XtAddCallback (fsb_box, XmNhelpCallback, HelpCB, NULL);
 	XmStringFree(dir);
@@ -278,7 +278,7 @@ XtPointer		call_data;	/*  data from widget class  */
 	XtAddCallback (fsb_box, XmNcancelCallback, UnMapCB, client_data);
 	XtUnmanageChild(XtNameToWidget(fsb_box, "Selection"));
 	XtUnmanageChild(XtNameToWidget(fsb_box, "Text"));
-    }    
+    }
 
     XtManageChild (fsb_box);
 }
@@ -288,29 +288,29 @@ Widget toplevel ;
 XtPointer client_data ;
 {
     Widget	main_window, menu_bar, menu_pane, cascade, button ;
-    
-    Arg		args[20];	
-    Cardinal	n;		
-    
+
+    Arg		args[20];
+    Cardinal	n;
+
 
     /*	Create MainWindow.
      */
     n = 0;
     main_window = XmCreateMainWindow (toplevel, "main_window", args, n);
     XtManageChild (main_window);
-    
-    
+
+
     /*	Create MenuBar in MainWindow.
      */
     n = 0;
-    menu_bar = XmCreateMenuBar (main_window, "menu_bar", args, n); 
+    menu_bar = XmCreateMenuBar (main_window, "menu_bar", args, n);
     XtManageChild (menu_bar);
-    
+
     /*	Create "File" PulldownMenu.
      */
     n = 0;
     menu_pane = XmCreatePulldownMenu (menu_bar, "menu_pane", args, n);
-    
+
     n = 0;
     button = XmCreatePushButton (menu_pane, "Open...", args, n);
     XtManageChild (button);
@@ -319,23 +319,23 @@ XtPointer client_data ;
     button = XmCreatePushButton (menu_pane, "Exit", args, n);
     XtManageChild (button);
     XtAddCallback (button, XmNactivateCallback, QuitCB, NULL);
-      
+
     n = 0;
     XtSetArg (args[n], XmNsubMenuId, menu_pane);  n++;
     cascade = XmCreateCascadeButton (menu_bar, "File", args, n);
     XtManageChild (cascade);
-    
-    
+
+
     /*	Create "Help" PulldownMenu.
      */
     n = 0;
     menu_pane = XmCreatePulldownMenu (menu_bar, "menu_pane3", args, n);
-    
+
     n = 0;
     button = XmCreatePushButton (menu_pane, "Overview", args, n);
     XtManageChild (button);
     XtAddCallback (button, XmNactivateCallback, HelpCB, NULL);
-    
+
     n = 0;
     XtSetArg (args[n], XmNsubMenuId, menu_pane);  n++;
     cascade = XmCreateCascadeButton (menu_bar, "Help", args, n);
@@ -343,17 +343,17 @@ XtPointer client_data ;
     n = 0;
     XtSetArg (args[n], XmNmenuHelpWidget, cascade);  n++;
     XtSetValues (menu_bar, args, n);
-    
-    return main_window ;    
+
+    return main_window ;
 }
 
 
 
- 
+
 int
 main(int argc, char **argv)
 {
-    
+
     XtAppContext app_context;
     Widget		toplevel, sw, cont, mainw ;
 
@@ -372,13 +372,13 @@ main(int argc, char **argv)
 
     mainw = CreateMainWindowWithMenuBar(toplevel, &cont);
     XtManageChild(mainw);
- 
+
     /* we want a scrolledwindow because the container window
        can potentially be huge */
     sw = XtVaCreateManagedWidget("sw", xmScrolledWindowWidgetClass, mainw,
 			   XmNscrollingPolicy, XmAUTOMATIC, NULL);
-    
-    cont = XtVaCreateManagedWidget("cont", xmContainerWidgetClass, sw, 
+
+    cont = XtVaCreateManagedWidget("cont", xmContainerWidgetClass, sw,
 			       XmNspatialResizeModel, XmGROW_BALANCED, NULL);
     XtAddCallback(cont, XmNdefaultActionCallback, DefCB, NULL);
 
@@ -388,8 +388,8 @@ main(int argc, char **argv)
     XtRealizeWidget(toplevel);
 
     PopulateContainer(cont, AppData.icon_dir);
-    
+
     XtAppMainLoop(app_context);
-    
+
    return 0;    /* make compiler happy */
 }

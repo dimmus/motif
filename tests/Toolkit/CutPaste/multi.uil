@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
-! 
+!
 !   $XConsortium: multi.uil /main/7 1995/07/13 17:58:27 drk $
 !******************************************************************************
 module test
@@ -116,7 +116,7 @@ object text_value : XmLabel widget {
 	XmNrightOffset = 10;
 	XmNlabelString = " ";
 	XmNfontList = app_font;
-!	XmNshadowThickness = 4;	
+!	XmNshadowThickness = 4;
 	XmNborderWidth = 1;
     };
     callbacks {
@@ -152,7 +152,7 @@ object int_value : XmLabel widget {
 	XmNrightOffset = 10;
 	XmNlabelString = " ";
 	XmNfontList = app_font;
-!	XmNshadowThickness = 4;	
+!	XmNshadowThickness = 4;
 	XmNborderWidth = 1;
     };
     callbacks {
@@ -189,7 +189,7 @@ object pixmap_value : XmLabel widget {
 	XmNwidth = 220;
 	XmNlabelType = XmPIXMAP;
 	XmNfontList = app_font;
-!	XmNshadowThickness = 4;	
+!	XmNshadowThickness = 4;
 	XmNborderWidth = 1;
     };
     callbacks {

@@ -81,7 +81,7 @@ for dir in "${DIR_LIST[@]}"; do
 	fi
 	imake -DUseInstalled -DAUTOMATION -I"$TESTS_HOME/../config/cf" -TMotif.tmpl -TImake.tmpl -DTOPDIR="$TESTS_HOME/.."
 	make Makefiles
-	make -i 
+	make -i
 	# Use the generated RUN script to run all of the tests
 
 	if [[ -e "RUN.$DIR" ]]; then
@@ -96,4 +96,4 @@ for dir in "${DIR_LIST[@]}"; do
 	# Clean up the directory before leaving
 	make clean
 
-done 
+done

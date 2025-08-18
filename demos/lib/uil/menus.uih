@@ -18,8 +18,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 
 include file 'menu_strings.uih';
@@ -38,7 +38,7 @@ object fileButton: XmCascadeButton {
 object editButton: XmCascadeButton {
     arguments {
         XmNlabelString = editString;
-        XmNmnemonic = editMnemonic; 
+        XmNmnemonic = editMnemonic;
     };
     controls {
         XmPulldownMenu editMenu;
@@ -48,7 +48,7 @@ object editButton: XmCascadeButton {
 object viewButton: XmCascadeButton {
     arguments {
         XmNlabelString = viewString;
-        XmNmnemonic = viewMnemonic; 
+        XmNmnemonic = viewMnemonic;
     };
     controls {
         XmPulldownMenu viewMenu;
@@ -58,7 +58,7 @@ object viewButton: XmCascadeButton {
 object helpButton: XmCascadeButton {
     arguments {
         XmNlabelString = helpString;
-        XmNmnemonic = helpMnemonic; 
+        XmNmnemonic = helpMnemonic;
     };
     controls {
         XmPulldownMenu helpMenu;
@@ -89,7 +89,7 @@ object fileMenu: XmPulldownMenu {
 object newButton: XmPushButton {
     arguments {
         XmNlabelString = newString;
-        XmNmnemonic = newMnemonic; 
+        XmNmnemonic = newMnemonic;
 	XmNaccelerator = "Ctrl<Key>N";
 	XmNacceleratorText = "Ctrl+N";
     };
@@ -109,7 +109,7 @@ object openButton: XmPushButton {
 object saveButton: XmPushButton {
     arguments {
         XmNlabelString = saveString;
-        XmNmnemonic = saveMnemonic; 
+        XmNmnemonic = saveMnemonic;
 	XmNaccelerator = "Ctrl<Key>S";
 	XmNacceleratorText = "Ctrl+S";
     };
@@ -119,7 +119,7 @@ object saveButton: XmPushButton {
 object saveAsButton: XmPushButton {
     arguments {
         XmNlabelString = saveAsString;
-        XmNmnemonic = saveAsMnemonic; 
+        XmNmnemonic = saveAsMnemonic;
     };
     callbacks saveAs_cbs;
 };
@@ -162,7 +162,7 @@ object dragButton: XmPushButton {
 object printButton: XmPushButton {
     arguments {
         XmNlabelString = printString;
-        XmNmnemonic = printMnemonic; 
+        XmNmnemonic = printMnemonic;
     };
     callbacks print_cbs;
 };
@@ -170,7 +170,7 @@ object printButton: XmPushButton {
 object printSetupButton: XmPushButton {
     arguments {
         XmNlabelString = printSetupString;
-        XmNmnemonic = printSetupMnemonic; 
+        XmNmnemonic = printSetupMnemonic;
     };
     callbacks printSetup_cbs;
 };
@@ -564,7 +564,3 @@ object aboutButton: XmPushButton {
 
 object sep: XmSeparator {
 };
-
-
-
-

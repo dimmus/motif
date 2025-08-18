@@ -23,9 +23,9 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is drawnBtn.uid ---- 
+---- The uid file to be opened is drawnBtn.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
 TRACE:(2) Exit
 Exiting Test...Please Standby...

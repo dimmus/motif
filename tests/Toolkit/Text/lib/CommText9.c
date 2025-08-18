@@ -71,10 +71,10 @@ static void HelpCB(Widget w, XtPointer client_data,
 {
 	Arg args[MAX_ARGS];
 	int n;
-	
+
 	Widget info_box = NULL;
 	XmString helpString, titleString, okString;
-	 
+
 	helpString = XmStringCreateLtoR("Help has arrived!",
 		XmSTRING_DEFAULT_CHARSET);
 	titleString = XmStringCreateLtoR("Info box", XmSTRING_DEFAULT_CHARSET);
@@ -143,7 +143,7 @@ static void cursScaleCB(Widget w, XtPointer client_data,
 	XmScaleCallbackStruct *scale_calldata =
 		(XmScaleCallbackStruct *)call_data;
 
-	XmTextSetInsertionPosition((Widget)client_data, 
+	XmTextSetInsertionPosition((Widget)client_data,
                                  scale_calldata->value);
 }
 
@@ -164,17 +164,17 @@ static void fontTBCB(Widget w, XtPointer client_data,
 		{
 		curr_pos = XmTextGetInsertionPosition(fwp_clientdata->w);
 		n = 0;
- 
+
 		XtSetArg(args[n], XmNfontList,
 			CommonGetFontList(fwp_clientdata->font));  n++;
 		XtSetValues(fwp_clientdata->w, args, n);
 		XmTextSetInsertionPosition(fwp_clientdata->w, curr_pos);
 
-		sprintf(baseval, "%d", 
-                    XmTextGetBaseline(fwp_clientdata->w)); 
+		sprintf(baseval, "%d",
+                    XmTextGetBaseline(fwp_clientdata->w));
                 tmp_string=XmStringCreate(baseval, XmSTRING_DEFAULT_CHARSET);
 		XtSetArg(args[0], XmNlabelString, tmp_string);
-			
+
 		if (fwp_clientdata->w == Text1)
 			{
 			XtSetValues(basevalue1, args, 1);
@@ -195,10 +195,10 @@ int n;
 	char	lengthval[5];
         XmString tmp_string;
 
-	sprintf(lengthval, "%d", XmTextGetLastPosition((Widget)client_data)); 
+	sprintf(lengthval, "%d", XmTextGetLastPosition((Widget)client_data));
         tmp_string = XmStringCreate(lengthval, XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[0], XmNlabelString, tmp_string);
-		
+
 	if (((Widget)client_data) == Text2)
 		{
 		XtSetValues(lengthvalue2, args, 1);
@@ -333,7 +333,7 @@ main_text9(argc, argv)
 
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-    
+
 	ParseUserData(UserData, &show_pir3701);
 
 	if (show_pir3701)
@@ -356,7 +356,7 @@ main_text9(argc, argv)
 	*/
 	Manager1 = XmCreateBulletinBoard(Shell1, "Manager1", args, n);
 	XtManageChild(Manager1);
-		
+
         n = 0;
         XtSetArg(args[n], XmNfontName, font_name1);  n++;
         XtSetArg(args[n], XmNfontType, XmFONT_IS_FONT );  n++;
@@ -366,7 +366,7 @@ main_text9(argc, argv)
         renderTab = XmRenderTableAddRenditions( renderTab, &rendition, 1,
                       XmMERGE_REPLACE );
 
-        XmRenditionFree( rendition ); 
+        XmRenditionFree( rendition );
 
 	/* create scrolledtext widget */
 	n = 0;
@@ -388,7 +388,7 @@ main_text9(argc, argv)
         if (tmp_string) XmStringFree(tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("verifyBell", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("verifyBell", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y); n++;
 	XtSetArg(args[n], XmNset, True); n++;
@@ -400,20 +400,20 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("doit flag", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("doit flag", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y + 40); n++;
 	XtSetArg(args[n], XmNset, False); n++;
 	XtSetArg(args[n], XmNshadowThickness, 2); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	doitTB1 = XmCreateToggleButton(Manager1, "doitTB1", args, n);
-	XtAddCallback(doitTB1, XmNvalueChangedCallback, doitTBCB, 
+	XtAddCallback(doitTB1, XmNvalueChangedCallback, doitTBCB,
 		      (XtPointer) Text1);
 	XtManageChild(doitTB1);
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("text length", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("text length", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X + 110); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y + 20); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
@@ -424,8 +424,8 @@ main_text9(argc, argv)
 
 
         n = 0;
-	sprintf(lengthval, "%d", XmTextGetLastPosition(Text1)); 
-        tmp_string = XmStringCreate(lengthval, XmSTRING_DEFAULT_CHARSET); 
+	sprintf(lengthval, "%d", XmTextGetLastPosition(Text1));
+        tmp_string = XmStringCreate(lengthval, XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X + 140); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y + 35); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
@@ -434,8 +434,8 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("top character", 
-				XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("top character",
+				XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y + 85); n++;
 	XtSetArg(args[n], XmNhighlightThickness, 2); n++;
@@ -448,7 +448,7 @@ main_text9(argc, argv)
 	XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
 	XtSetArg(args[n], XmNtitleString, tmp_string); n++;
 	topScale1 = XmCreateScale(Manager1, "topScale1", args, n);
-	XtAddCallback(topScale1, XmNvalueChangedCallback, topScaleCB, 
+	XtAddCallback(topScale1, XmNvalueChangedCallback, topScaleCB,
 		      (XtPointer) Text1);
 	XtManageChild(topScale1);
         XmStringFree (tmp_string);
@@ -465,8 +465,8 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("cursor position", 
-				XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("cursor position",
+				XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y + 170); n++;
 	XtSetArg(args[n], XmNhighlightThickness, 2); n++;
@@ -500,12 +500,12 @@ main_text9(argc, argv)
 	fontRB1 = XmCreateRadioBox(Manager1, "fontRB1", args, n);
 
 	n = 0;
-        tmp_string = XmStringCreate("6x12", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("6x12", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[0] = XmCreateToggleButtonGadget(fontRB1, "RB1_6x12", args, n);
         XmStringFree (tmp_string);
-        
-	
+
+
 
         n = 0;
         tmp_string = XmStringCreate("8x13", XmSTRING_DEFAULT_CHARSET);
@@ -513,8 +513,8 @@ main_text9(argc, argv)
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB1[1] = XmCreateToggleButtonGadget(fontRB1, "RB1_8x13", args, n);
         XmStringFree (tmp_string);
-	
-        
+
+
         n = 0;
         tmp_string = XmStringCreate("9x15", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
@@ -542,12 +542,12 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-	sprintf(baseval, "%d", XmTextGetBaseline(Text1)); 
+	sprintf(baseval, "%d", XmTextGetBaseline(Text1));
         tmp_string = XmStringCreate(baseval, XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT1_X + 110); n++;
 	XtSetArg(args[n], XmNy, TEXT1_Y + 270); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		 
+
 	basevalue1 = XmCreateLabel(Manager1, "basevalue", args, n);
 	XtManageChild(basevalue1);
         XmStringFree (tmp_string);
@@ -555,7 +555,7 @@ main_text9(argc, argv)
 
 	optionString = XmStringCreateSimple("Double click selects...");
 
-/* test case for PIR 3635 - MenuShell created with BBoard parent 
+/* test case for PIR 3635 - MenuShell created with BBoard parent
    and no fontlist specified */
 	pd_menu = XmCreatePulldownMenu(Manager1, "pd_menu", NULL, 0);
 
@@ -618,14 +618,14 @@ main_text9(argc, argv)
 	XtSetArg(args[n], XmNset, False); n++;
 	XtSetArg(args[n], XmNshadowThickness, 2); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		
+
 	veriTB2 = XmCreateToggleButton(Manager1, "veriTB2", args, n);
 	XtAddCallback(veriTB2, XmNvalueChangedCallback, veriTBCB, Text2);
 	XtManageChild(veriTB2);
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("doit flag", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("doit flag", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT2_X); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 40); n++;
 	XtSetArg(args[n], XmNset, False); n++;
@@ -649,7 +649,7 @@ main_text9(argc, argv)
         n = 0;
 	XtSetArg(args[n], XmNx, TEXT2_X + 140); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 35); n++;
-	sprintf(lengthval, "%d", XmTextGetLastPosition(Text2)); 
+	sprintf(lengthval, "%d", XmTextGetLastPosition(Text2));
         tmp_string = XmStringCreate(lengthval, XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	lengthvalue2 = XmCreateLabel(Manager1, "lengthvalue", args, n);
@@ -657,7 +657,7 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("top character", 
+        tmp_string = XmStringCreate("top character",
 				XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT2_X); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 85); n++;
@@ -676,7 +676,7 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("show position", 
+        tmp_string = XmStringCreate("show position",
 				XmSTRING_DEFAULT_CHARSET); n++;
 	XtSetArg(args[n], XmNx, TEXT2_X); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 145); n++;
@@ -688,7 +688,7 @@ main_text9(argc, argv)
         XmStringFree (tmp_string);
 
 	n = 0;
-        tmp_string = XmStringCreate("cursor position", 
+        tmp_string = XmStringCreate("cursor position",
 				XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT2_X); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 170); n++;
@@ -730,14 +730,14 @@ main_text9(argc, argv)
 
 
         n = 0;
-        tmp_string = XmStringCreate("8x13", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("8x13", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNset, True); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB2[1] = XmCreateToggleButtonGadget(fontRB2, "RB2_8x13", args, n);
 	XmStringFree (tmp_string);
 
         n = 0;
-        tmp_string = XmStringCreate("9x15", XmSTRING_DEFAULT_CHARSET); 
+        tmp_string = XmStringCreate("9x15", XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	fontTB2[2] = XmCreateToggleButtonGadget(fontRB2, "RB2_9x15", args, n);
         XmStringFree (tmp_string);
@@ -753,20 +753,20 @@ main_text9(argc, argv)
 	XtManageChildren(fontTB2, TB_COUNT);
 
 	n = 0;
-        tmp_string = XmStringCreate("text baseline", 
+        tmp_string = XmStringCreate("text baseline",
 				XmSTRING_DEFAULT_CHARSET);
 	XtSetArg(args[n], XmNx, TEXT2_X + 70); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 255); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
-		 
+
 	baselabel2 = XmCreateLabel(Manager1, "baselabel", args, n);
 	XtManageChild(baselabel2);
         XmStringFree (tmp_string);
-  
+
 	n = 0;
 	XtSetArg(args[n], XmNx, TEXT2_X + 110); n++;
 	XtSetArg(args[n], XmNy, TEXT2_Y + 270); n++;
-	sprintf(baseval, "%d", XmTextGetBaseline(Text2)); 
+	sprintf(baseval, "%d", XmTextGetBaseline(Text2));
         tmp_string = XmStringCreate(baseval, XmSTRING_DEFAULT_CHARSET); n++;
 	XtSetArg(args[n], XmNlabelString, tmp_string); n++;
 	basevalue2 = XmCreateLabel(Manager1, "basevalue", args, n);
@@ -801,13 +801,13 @@ main_text9(argc, argv)
 	XtAddCallback(Text3, XmNvalueChangedCallback, ModifyCB,
 				 (XtPointer) Text3);
 
-        /* 
-         *  Remove topScaleCB from topScale, 
+        /*
+         *  Remove topScaleCB from topScale,
          *  replace with new client data, Text3.
          */
-	XtRemoveCallback(topScale1, XmNvalueChangedCallback, topScaleCB, 
+	XtRemoveCallback(topScale1, XmNvalueChangedCallback, topScaleCB,
 		      (XtPointer) Text1);
-	XtAddCallback(topScale1, XmNvalueChangedCallback, topScaleCB, 
+	XtAddCallback(topScale1, XmNvalueChangedCallback, topScaleCB,
 		      (XtPointer) Text3);
 	XtManageChild(Text3);
 
@@ -834,7 +834,7 @@ main_text9(argc, argv)
 
 	CommonPause();
 
-      /*  
+      /*
        *  Assign the same font to the XmScreen object as
        *  to the Text/CSText widget to test that tabs
        *  inserted into an XmText widget are the same

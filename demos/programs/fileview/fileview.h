@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: fileview.h /main/5 1995/07/14 10:03:05 drk $ */
 
 #include <stdlib.h>
@@ -42,19 +42,19 @@
 #endif
 
 #if (defined DECLAREGLOBAL)
-#define global 
+#define global
 #else
 #define global extern
 #endif
 
 /*
  * The "more" program Motif-ied
- * 
+ *
  *	Allow a user to view files in separate windows.
  * 	There is one top level shell created per file opened.
  * 	Each top level shell is parent of a Main Window, the work area
  * 	of which is a PanedWindow.
- * 
+ *
  *
  * The File menu contains commands Open, and Exit or Close
  * In the primary top level shell, Exit exits the client
@@ -64,17 +64,17 @@
  * 	On selecting Open/File in the menu bar, a file selection box
  *	is mapped to choose the file.
  *
- *	If OpenFile is successful, close first the current file opened, 
+ *	If OpenFile is successful, close first the current file opened,
  *      destroy all existing panes, and display the new file.
  *
  * 	Close: this entry only exists on the secondary windows.
  *	It destroys the top level shell and closes the file.
- *	
+ *
  *	Exit: this entry only exists on the primary window
  *	 closes the file and exits.
  *
  * The View menu:
- *  	
+ *
  *	New Pane: Creates a new pane in the paned window
  *	Delete Pane: delete the current pane.
  *	Search: pops a dialogue box for searching text in the file
@@ -91,12 +91,12 @@
  * There is a data structure of type View that encapsulates
  * all information relative to each top level shell in the application
  * A View contains: the shell id, the panedwindow id, the file descriptor,
- * the number of panes, the file selection box id, 
- * 
+ * the number of panes, the file selection box id,
+ *
  * This data structure is allocated at shell creation time
  * and passed around as client data to the callbacks or as the userdata
  * of the widgets.
- * 
+ *
  * For each pane in the paned window, there is one Pane data structure.
  * THIS PROGRAM IS NOT REALLY INTERNATONALIZED.
  *  LABELS ARE IN ENNGLISH
@@ -131,7 +131,7 @@ typedef struct {
  * Global variables, initialized in main.c
  */
 
-global XtAppContext theContext; 
+global XtAppContext theContext;
 global Display * theDisplay;
 global Widget theWidgetRoot;
 global Widget thePrimaryShell;

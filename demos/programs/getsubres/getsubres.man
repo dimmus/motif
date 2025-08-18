@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH getsubres 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -40,22 +40,21 @@ line by using the syntax "getsubres <name>" with one of those names:
   Object, RectObj, Widget, Core, Composite, Constraint,
   Primitive, ScrollBar, ArrowB, List, Separator, TextF,
   Label, DrawnB, PushB, ToggleB, CascadeB, Text,
-  Gadget, ArrowBG, SeparatorG, LabelG, PushBG, ToggleBG, 
-  CascadeBG, Manager, BulletinB, DrawingA, Frame, MainW, 
-  Form, RowCol, ScrolledW, PanedW, SelectionB, FileSB, 
-  MessageB, Scale, Command, Display, Screen, DragContext, 	
+  Gadget, ArrowBG, SeparatorG, LabelG, PushBG, ToggleBG,
+  CascadeBG, Manager, BulletinB, DrawingA, Frame, MainW,
+  Form, RowCol, ScrolledW, PanedW, SelectionB, FileSB,
+  MessageB, Scale, Command, Display, Screen, DragContext,
   DragIcon, DropSiteMgr, DropTransfer, DragOverS,
   Shell, OverrideShell, WMShell, MenuShell, VendorS,
-  ToplevelShell, ApplicationShell, TransientShell, 
-  DialogShell, Container, IconGadget, Notebook, ComboBox, 
+  ToplevelShell, ApplicationShell, TransientShell,
+  DialogShell, Container, IconGadget, Notebook, ComboBox,
   SpinBox. (default is Widget)
 
 Or you can use "getsubres All".
 
 .SH X Defaults
-The class of this application is \fIXmdGetsubres\fR.  
+The class of this application is \fIXmdGetsubres\fR.
 
-.SH Editres: 
+.SH Editres:
 Getsubres is Editres aware, so you can use 'editres' to see the
 names of the widgets in the instance hierarchy.
-

@@ -29,7 +29,7 @@
 /*
  *  Defines
  */
-#define NUM_RENDITIONS 5 
+#define NUM_RENDITIONS 5
 #define DISPLAY_WIDTH  300
 #define DISPLAY_HEIGHT 400
 #define DISPLAY_MARGIN 10
@@ -57,11 +57,11 @@ typedef struct _RendResources {
  */
 static char *text[] = {
   "Begin - Rendition 1",
-  "Begin - Rendition 2", 
+  "Begin - Rendition 2",
   "Begin - Rendition 3",
-  "Begin - Rendition 4 - End", 
+  "Begin - Rendition 4 - End",
   "Begin - Rendition 5 - End",
-  "End - Rendition 2", 
+  "End - Rendition 2",
   "Rendition 3 - End",
   "End - Rendition 1" };
 
@@ -71,8 +71,8 @@ static char *text[] = {
 static char *resources[] = {
   "Tag", "FontName", "FontType",
   "LoadModel", "Font", "TabList",
-  "Background", "Foreground", 
-  "UnderlineType", "StrikethruType" }; 
+  "Background", "Foreground",
+  "UnderlineType", "StrikethruType" };
 
 static char *font_types[] = {
   "AS_IS", "FONT_IS_FONT", "FONT_IS_FONTSET" };
@@ -84,11 +84,11 @@ static char *line_types[] = {
   "AS_IS", "NO_LINE", "SINGLE_LINE",
   "DOUBLE_LINE", "SINGLE_DASHED_LINE", "DOUBLE_DASHED_LINE" };
 
-#define NUM_STRINGS      ( sizeof(text) / sizeof( text[0] )) 
+#define NUM_STRINGS      ( sizeof(text) / sizeof( text[0] ))
 #define NUM_RESOURCES    ( sizeof( resources ) / sizeof( resources[0] ))
-#define NUM_FONT_TYPES   ( sizeof( font_types ) / sizeof( font_types[0] )) 
-#define NUM_LOAD_MODELS  ( sizeof( load_models ) / sizeof( load_models[0] )) 
-#define NUM_LINE_TYPES   ( sizeof( line_types ) / sizeof( line_types[0] )) 
+#define NUM_FONT_TYPES   ( sizeof( font_types ) / sizeof( font_types[0] ))
+#define NUM_LOAD_MODELS  ( sizeof( load_models ) / sizeof( load_models[0] ))
+#define NUM_LINE_TYPES   ( sizeof( line_types ) / sizeof( line_types[0] ))
 
 
 /*
@@ -96,8 +96,8 @@ static char *line_types[] = {
  */
 XmRenderTable renderTable, origRenderTable;
 RendResources   rendResources;
-Widget drawingArea, RenderTagList; 
-Widget MergePB, RemovePB, ModifyPB; 
+Widget drawingArea, RenderTagList;
+Widget MergePB, RemovePB, ModifyPB;
 Widget MergePopup, ModifyPopup;
 Widget ApplyPB, CancelPB, QuitPB;
 XmStringTag   *tag_list;
@@ -175,7 +175,7 @@ CvtStringToLineType( char *string )
 }
 
 static void
-CreateRenditions( XmRendition *renditions )  
+CreateRenditions( XmRendition *renditions )
 {
    int           n, i;
    Arg           args[25];
@@ -193,14 +193,14 @@ CreateRenditions( XmRendition *renditions )
     XtSetArg( args[n], XmNfontName, "8x13" ); n++;
     XtSetArg( args[n], XmNfontType, XmFONT_IS_FONT ); n++;
     XtSetArg( args[n], XmNloadModel, XmLOAD_IMMEDIATE ); n++;
-    sprintf( tag, "render%d", i+1 ); 
-    renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n ); 
+    sprintf( tag, "render%d", i+1 );
+    renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n );
 
     n = 0;
     XtSetArg( args[n], XmNrenditionBackground, CommonGetColor("blue")); n++;
     XtSetArg( args[n], XmNunderlineType, XmSINGLE_LINE ); n++;
-    sprintf( tag, "render%d", i+1 ); 
-    renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n ); 
+    sprintf( tag, "render%d", i+1 );
+    renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n );
 
     tab1 = XmTabCreate( 1.0, XmCENTIMETERS, XmABSOLUTE, XmALIGNMENT_BEGINNING,
                         (char *)0 );
@@ -213,8 +213,8 @@ CreateRenditions( XmRendition *renditions )
     XtSetArg( args[n], XmNfontName, "8x13bold" ); n++;
     XtSetArg( args[n], XmNfontType, XmFONT_IS_FONT ); n++;
     XtSetArg( args[n], XmNloadModel, XmLOAD_IMMEDIATE ); n++;
-    sprintf( tag, "render%d", i+1 ); 
-    renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n ); 
+    sprintf( tag, "render%d", i+1 );
+    renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n );
 
     tab2 = XmTabCreate( 2.0, XmCENTIMETERS, XmABSOLUTE, XmALIGNMENT_BEGINNING,
                         (char *)0 );
@@ -245,7 +245,7 @@ CreateRenditions( XmRendition *renditions )
     renditions[i++] = XmRenditionCreate( Shell1, (XmStringTag)tag, args, n );
 
    /*
-    *  Create rendition table. 
+    *  Create rendition table.
     */
     renderTable =
       XmRenderTableAddRenditions( (XmRenderTable)0, renditions, NUM_RENDITIONS,
@@ -259,7 +259,7 @@ CreateRenditions( XmRendition *renditions )
     *  Keep a copy of the original render table so that rendition resource
     *  values can be restored..
     */
-    origRenderTable = XmRenderTableCopy( renderTable, tag_list, 
+    origRenderTable = XmRenderTableCopy( renderTable, tag_list,
                                          NUM_RENDITIONS );
   return;
 }
@@ -282,17 +282,17 @@ CreateStrings( XmStringTag *tag_list )
 
   /*
    *  Create the XmString text components for each of the remaining
-   *  XmStrings to be displayed. 
+   *  XmStrings to be displayed.
    */
    for ( j = 0; j < NUM_STRINGS; j++ )
-       textComponents[j] = XmStringComponentCreate( XmSTRING_COMPONENT_TEXT, 
+       textComponents[j] = XmStringComponentCreate( XmSTRING_COMPONENT_TEXT,
                              strlen( text[j]), text[j] );
 
 /*  The first rendition begins with the first string. */
    i = 0;
-   rendComponent = 
+   rendComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_BEGIN,
-                                strlen(tag_list[i]), tag_list[i] ); 
+                                strlen(tag_list[i]), tag_list[i] );
    string = XmStringConcat( rendComponent, textComponents[i] );
    XmStringFree( rendComponent );
 
@@ -305,10 +305,10 @@ CreateStrings( XmStringTag *tag_list )
 
 /*  The second rendition begins with the second string. */
    i++;
-   rendComponent = 
+   rendComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_BEGIN,
-                                strlen(tag_list[i]), tag_list[i] ); 
-    
+                                strlen(tag_list[i]), tag_list[i] );
+
    temp = string;
    string = XmStringConcat( temp, rendComponent );
    XmStringFree( temp );
@@ -323,16 +323,16 @@ CreateStrings( XmStringTag *tag_list )
    string = XmStringConcat( temp, separator );
    XmStringFree( temp );
    XmStringFree( separator );
-   
+
 
 /*  The third rendition begins with the third string which includes a tab. */
    i++;
-   rendComponent = 
+   rendComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_BEGIN,
-                                strlen(tag_list[i]), tag_list[i] ); 
-   tabComponent = 
+                                strlen(tag_list[i]), tag_list[i] );
+   tabComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_TAB,
-                                0, (XmStringTag)0 ); 
+                                0, (XmStringTag)0 );
 
    temp = string;
    string = XmStringConcat( temp, rendComponent );
@@ -355,7 +355,7 @@ CreateStrings( XmStringTag *tag_list )
    XmStringFree( separator );
 
 /*
- *  The fourth rendition begins and ends with the fourth string 
+ *  The fourth rendition begins and ends with the fourth string
  *  which includes a tab.
  */
    i++;
@@ -366,9 +366,9 @@ CreateStrings( XmStringTag *tag_list )
    buffer = strcat( buffer, text[i] );
 
    temp = string;
-   string = 
+   string =
      XmStringGenerate( buffer, XmSTRING_DEFAULT_CHARSET, XmCHARSET_TEXT,
-                       tag_list[i] );  
+                       tag_list[i] );
    XtFree( buffer );
 
    temp2 = XmStringConcat( temp, string );
@@ -404,9 +404,9 @@ CreateStrings( XmStringTag *tag_list )
    rendComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_END,
                                 strlen(tag_list[1]), tag_list[1] );
-   tabComponent = 
+   tabComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_TAB,
-                                0, (XmStringTag)0 ); 
+                                0, (XmStringTag)0 );
    temp = string;
    string = XmStringConcat( temp, rendComponent );
    XmStringFree( temp );
@@ -432,9 +432,9 @@ CreateStrings( XmStringTag *tag_list )
    rendComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_RENDITION_END,
                                 strlen(tag_list[2]), tag_list[2] );
-   tabComponent = 
+   tabComponent =
        XmStringComponentCreate( XmSTRING_COMPONENT_TAB,
-                                0, (XmStringTag)0 ); 
+                                0, (XmStringTag)0 );
    temp = string;
    string = XmStringConcat( temp, tabComponent );
    XmStringFree( temp );
@@ -486,7 +486,7 @@ CreateStrings( XmStringTag *tag_list )
 
 static void
 DisplayStrings()
-{ 
+{
    Position        x_coord, y_coord;
    Dimension       width, height;
    int             n, i;
@@ -510,9 +510,9 @@ DisplayStrings()
 
     /*  Display XmString with tabs and renditions. */
     XmStringExtent( renderTable, finalString, &width, &height );
-    XmStringDrawImage( display, window, renderTable, finalString, gc, 
+    XmStringDrawImage( display, window, renderTable, finalString, gc,
                        x_coord, y_coord, width, XmALIGNMENT_BEGINNING,
-                       XmSTRING_DIRECTION_L_TO_R, (XRectangle *)0 ); 
+                       XmSTRING_DIRECTION_L_TO_R, (XRectangle *)0 );
 }
 
 static void
@@ -524,10 +524,10 @@ SetMergeMode( Widget widget, XtPointer client_data, XtPointer call_data )
 
       n = 0;
       XtSetArg( args[n], XmNmenuHistory, pb ); n++;
-      XtSetValues( MergeOptions, args, n );   
+      XtSetValues( MergeOptions, args, n );
 }
 
-static void 
+static void
 GetRendResources( XmStringTag render_tag )
 {
 	Arg		args[25];
@@ -537,7 +537,7 @@ GetRendResources( XmStringTag render_tag )
         XmTabList       tabList;
 
     /*
-     *  Get the rendition resource values. 
+     *  Get the rendition resource values.
      */
      rendition = XmRenderTableGetRendition( renderTable, render_tag );
 
@@ -550,9 +550,9 @@ GetRendResources( XmStringTag render_tag )
      XtSetArg( args[n], XmNrenditionBackground, &rendResources.background ); n++;
      XtSetArg( args[n], XmNrenditionForeground, &rendResources.foreground ); n++;
      XtSetArg( args[n], XmNunderlineType, &rendResources.underlineType ); n++;
-     XtSetArg( args[n], XmNstrikethruType, 
+     XtSetArg( args[n], XmNstrikethruType,
                               &rendResources.strikethruType ); n++;
-     XmRenditionRetrieve( rendition, args, n ); 
+     XmRenditionRetrieve( rendition, args, n );
 
      if ( (int)string == XmAS_IS )
         sprintf( rendResources.fontName, "%s", "XmAS_IS" );
@@ -569,8 +569,8 @@ GetRendResources( XmStringTag render_tag )
    return;
 }
 
-    
-static void 
+
+static void
 SetRendResources( XmStringTag render_tag )
 {
 	Arg		args[25];
@@ -578,7 +578,7 @@ SetRendResources( XmStringTag render_tag )
 	XmRendition	rendition;
 
     /*
-     *  Set the latest resource values to the given rendition. 
+     *  Set the latest resource values to the given rendition.
      */
      rendition = XmRenderTableGetRendition( renderTable, render_tag );
 
@@ -586,7 +586,7 @@ SetRendResources( XmStringTag render_tag )
      if ( strcmp( rendResources.fontName, "XmAS_IS" ) == 0 )
      {
        XtSetArg( args[n], XmNfontName, XmAS_IS ); n++;
-     } 
+     }
      else
      {
        XtSetArg( args[n], XmNfontName, rendResources.fontName ); n++;
@@ -594,15 +594,15 @@ SetRendResources( XmStringTag render_tag )
      XtSetArg( args[n], XmNfontType, rendResources.fontType ); n++;
      XtSetArg( args[n], XmNloadModel, &rendResources.loadModel ); n++;
     /*
-     *  Don't reset Font or TabList - leave as is. 
+     *  Don't reset Font or TabList - leave as is.
      XtSetArg( args[n], XmNfont, &rendResources.font ); n++;
      XtSetArg( args[n], XmNtabList, &rendResources.tabList ); n++;
-     */ 
+     */
      XtSetArg( args[n], XmNrenditionBackground, &rendResources.background ); n++;
      XtSetArg( args[n], XmNrenditionForeground, &rendResources.foreground ); n++;
      XtSetArg( args[n], XmNunderlineType, &rendResources.underlineType ); n++;
      XtSetArg( args[n], XmNstrikethruType, &rendResources.strikethruType ); n++;
-     XmRenditionUpdate( rendition, args, n ); 
+     XmRenditionUpdate( rendition, args, n );
      XmRenditionFree( rendition );
 
      if ( rendResources.tabList )
@@ -621,9 +621,9 @@ DisplayRendResources( char *render_tag )
     /*
      *  Assign the rendition resource values to their corresponding
      *  text field widget for display.
-     */ 
+     */
      i = 0;
-     
+
     /*  XmNtag */
      n = 0;
      XtSetArg( args[n], XmNvalue, render_tag ); n++;
@@ -766,7 +766,7 @@ DisplayRendResources( char *render_tag )
      XtSetValues( StrikethruOptions, args, n );
 }
 
-static void 
+static void
 MergeRendResources( XmStringTag render_tag,
 		  XmMergeMode merge_mode )
 {
@@ -777,13 +777,13 @@ MergeRendResources( XmStringTag render_tag,
         int             num_tags;
 
     /*
-     *  Set the rendition resource values. 
+     *  Set the rendition resource values.
      */
      n = 0;
      if ( strcmp( rendResources.fontName, "XmAS_IS" ) == 0 )
      {
        XtSetArg( args[n], XmNfontName, XmAS_IS ); n++;
-     } 
+     }
      else
      {
        XtSetArg( args[n], XmNfontName, rendResources.fontName ); n++;
@@ -829,13 +829,13 @@ ModifyRendResources( XmStringTag render_tag )
      rendition = XmRenderTableGetRendition( renderTable, render_tag );
 
     /*
-     *  Set the rendition resource values. 
+     *  Set the rendition resource values.
      */
      n = 0;
      if ( strcmp( rendResources.fontName, "XmAS_IS" ) == 0 )
      {
        XtSetArg( args[n], XmNfontName, XmAS_IS ); n++;
-     } 
+     }
      else
      {
        XtSetArg( args[n], XmNfontName, rendResources.fontName ); n++;
@@ -865,9 +865,9 @@ ModifyRendResources( XmStringTag render_tag )
      XmRenditionUpdate( rendition, args, n );
 
      renderTable =
-     XmRenderTableAddRenditions( renderTable, &rendition, 1, XmMERGE_REPLACE ); 
+     XmRenderTableAddRenditions( renderTable, &rendition, 1, XmMERGE_REPLACE );
      XmRenditionFree( rendition );
-  
+
    return;
 }
 
@@ -880,7 +880,7 @@ CreateMergeOptions( Widget parent, Dimension width, Dimension height )
 	Widget		MergeLabel, MergeOptions, MergePulldown;
 
      n = 0;
-     MergePulldown = XmCreatePulldownMenu( parent, "MergePulldown", 
+     MergePulldown = XmCreatePulldownMenu( parent, "MergePulldown",
                                            args, n );
     /*
      *  Create pushbuttons for each merge option.
@@ -894,7 +894,7 @@ CreateMergeOptions( Widget parent, Dimension width, Dimension height )
      XtManageChild( ReplacePB );
      XmStringFree(string);
 
-     XtAddCallback( ReplacePB, XmNactivateCallback, SetMergeMode, 
+     XtAddCallback( ReplacePB, XmNactivateCallback, SetMergeMode,
                     (XtPointer)ReplacePB );
 
      string = XmStringCreateLtoR("Merge Old", XmFONTLIST_DEFAULT_TAG );
@@ -906,7 +906,7 @@ CreateMergeOptions( Widget parent, Dimension width, Dimension height )
      XtManageChild( MergeOldPB );
      XmStringFree(string);
 
-     XtAddCallback( MergeOldPB, XmNactivateCallback, SetMergeMode, 
+     XtAddCallback( MergeOldPB, XmNactivateCallback, SetMergeMode,
                     (XtPointer)MergeOldPB );
 
      string = XmStringCreateLtoR("Merge New", XmFONTLIST_DEFAULT_TAG );
@@ -918,7 +918,7 @@ CreateMergeOptions( Widget parent, Dimension width, Dimension height )
      XtManageChild( MergeNewPB );
      XmStringFree(string);
 
-     XtAddCallback( MergeNewPB, XmNactivateCallback, SetMergeMode, 
+     XtAddCallback( MergeNewPB, XmNactivateCallback, SetMergeMode,
                     (XtPointer)MergeNewPB );
 
      string = XmStringCreateLtoR("Skip", XmFONTLIST_DEFAULT_TAG );
@@ -930,12 +930,12 @@ CreateMergeOptions( Widget parent, Dimension width, Dimension height )
      XtManageChild( SkipPB );
      XmStringFree(string);
 
-     XtAddCallback( SkipPB, XmNactivateCallback, SetMergeMode, 
+     XtAddCallback( SkipPB, XmNactivateCallback, SetMergeMode,
                     (XtPointer)SkipPB );
 
     /*
      *  Create option menu.
-     */ 
+     */
      string = XmStringCreateLtoR("Merge Mode:", XmFONTLIST_DEFAULT_TAG );
      n = 0;
      XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM); n++;
@@ -978,8 +978,8 @@ GetDisplayResources( XmStringTag render_tag )
 
    /*  XmNfontName */
     n = 0;
-    XtSetArg( args[n], XmNvalue, &value ); n++; 
-    XtGetValues( FontNameTF, args, n ); 
+    XtSetArg( args[n], XmNvalue, &value ); n++;
+    XtGetValues( FontNameTF, args, n );
 
     if ( ! ( strcmp( value, "XmAS_IS" ) == 0 ) ||
          ! ( strcmp( value, "" ) == 0 ))
@@ -987,9 +987,9 @@ GetDisplayResources( XmStringTag render_tag )
 
    /*  XmNfontType */
     n = 0;
-    XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++; 
-    XtGetValues( FontTypeOptions, args, n ); 
-   
+    XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++;
+    XtGetValues( FontTypeOptions, args, n );
+
     if ( widgetID == FontTypePB[0] )
        rendResources.fontType = XmAS_IS;
     else if ( widgetID == FontTypePB[1] )
@@ -999,8 +999,8 @@ GetDisplayResources( XmStringTag render_tag )
 
    /*  XmNloadModel */
     n = 0;
-    XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++; 
-    XtGetValues( LoadModelOptions, args, n ); 
+    XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++;
+    XtGetValues( LoadModelOptions, args, n );
 
     if ( widgetID == LoadModelPB[0] )
        rendResources.loadModel = XmAS_IS;
@@ -1008,30 +1008,30 @@ GetDisplayResources( XmStringTag render_tag )
        rendResources.loadModel = XmLOAD_IMMEDIATE;
     else if ( widgetID == LoadModelPB[2] )
        rendResources.loadModel = XmLOAD_DEFERRED;
- 
+
    /*  XmNfont */
     n = 0;
-    XtSetArg( args[n], XmNvalue, &value ); n++; 
-    XtGetValues( FontTF, args, n ); 
+    XtSetArg( args[n], XmNvalue, &value ); n++;
+    XtGetValues( FontTF, args, n );
 
     if ( ! strcmp( value, "Non-Null" ) == 0 )
          rendResources.font = NULL;
 
-   /*  XmNtabList 
+   /*  XmNtabList
     *
     *  For now, tabList resource is displayed as either Null or Non-Null.
     *  The actual value of tabList is left untouched in rendResources
     *  structure.
     */
     n = 0;
-    XtSetArg( args[n], XmNvalue, &value ); n++; 
-    XtGetValues( TabListTF, args, n ); 
+    XtSetArg( args[n], XmNvalue, &value ); n++;
+    XtGetValues( TabListTF, args, n );
 
-                            
+
    /*  XmNrenditionBackground */
     n = 0;
-    XtSetArg( args[n], XmNvalue, &value ); n++; 
-    XtGetValues( BackgroundTF, args, n ); 
+    XtSetArg( args[n], XmNvalue, &value ); n++;
+    XtGetValues( BackgroundTF, args, n );
 
     if ( strcmp( value, "UNSPECIFIED_PIXEL") == 0 )
        rendResources.background = XmUNSPECIFIED_PIXEL;
@@ -1040,8 +1040,8 @@ GetDisplayResources( XmStringTag render_tag )
 
    /*  XmNrenditionForeground */
     n = 0;
-    XtSetArg( args[n], XmNvalue, &value ); n++; 
-    XtGetValues( ForegroundTF, args, n ); 
+    XtSetArg( args[n], XmNvalue, &value ); n++;
+    XtGetValues( ForegroundTF, args, n );
 
     if ( strcmp( value, "UNSPECIFIED_PIXEL") == 0 )
        rendResources.foreground = XmUNSPECIFIED_PIXEL;
@@ -1051,20 +1051,20 @@ GetDisplayResources( XmStringTag render_tag )
    /*  XmNunderlineType */
     n = 0;
     XtSetArg( args[n], XmNmenuHistory, &widgetID ); n++;
-    XtGetValues( UnderlineOptions, args, n ); 
+    XtGetValues( UnderlineOptions, args, n );
 
     if ( widgetID == UnderlinePB[0] )
-       rendResources.underlineType = XmAS_IS; 
+       rendResources.underlineType = XmAS_IS;
     else if ( widgetID == UnderlinePB[1] )
-       rendResources.underlineType = XmNO_LINE; 
+       rendResources.underlineType = XmNO_LINE;
     else if ( widgetID == UnderlinePB[2] )
-       rendResources.underlineType = XmSINGLE_LINE; 
+       rendResources.underlineType = XmSINGLE_LINE;
     else if ( widgetID == UnderlinePB[3] )
-       rendResources.underlineType = XmDOUBLE_LINE; 
+       rendResources.underlineType = XmDOUBLE_LINE;
     else if ( widgetID == UnderlinePB[4] )
-       rendResources.underlineType = XmSINGLE_DASHED_LINE; 
+       rendResources.underlineType = XmSINGLE_DASHED_LINE;
     else if ( widgetID == UnderlinePB[5] )
-       rendResources.underlineType = XmDOUBLE_DASHED_LINE; 
+       rendResources.underlineType = XmDOUBLE_DASHED_LINE;
 
    /*  XmNstrikethruType */
     n = 0;
@@ -1096,25 +1096,25 @@ MergeApply( Widget widget, XtPointer client_data, XtPointer call_data )
 
    /*
     *  Get the current rendition resource values from the merge
-    *  panel. 
+    *  panel.
     */
     GetDisplayResources( render_tag );
 
    /*
     *  Get the current merge mode from the merge
     *  option menu and merge the new rendition
-    *  values with the current render table. 
+    *  values with the current render table.
     */
     n = 0;
     XtSetArg( args[n], XmNmenuHistory, &mergePB ); n++;
     XtGetValues( MergeOptions, args, n );
     if ( mergePB == ReplacePB )
          merge_mode = XmMERGE_REPLACE;
-    else if ( mergePB == MergeOldPB ) 
+    else if ( mergePB == MergeOldPB )
          merge_mode = XmMERGE_OLD;
-    else if ( mergePB == MergeNewPB ) 
+    else if ( mergePB == MergeNewPB )
          merge_mode = XmMERGE_NEW;
-    else if ( mergePB == SkipPB ) 
+    else if ( mergePB == SkipPB )
          merge_mode = XmSKIP;
 
     MergeRendResources( render_tag, merge_mode );
@@ -1138,7 +1138,7 @@ ModifyApply( Widget widget, XtPointer client_data, XtPointer call_data )
    /*
     *  Update the rendition with the new rendition values.
     */
-    ModifyRendResources( render_tag );   
+    ModifyRendResources( render_tag );
 
   /*  Redisplay XmString. */
    DisplayStrings();
@@ -1147,7 +1147,7 @@ ModifyApply( Widget widget, XtPointer client_data, XtPointer call_data )
 static void
 MergeCancel( Widget widget, XtPointer client_data, XtPointer call_data )
 {
-	char            *render_tag = (XmStringTag)client_data; 
+	char            *render_tag = (XmStringTag)client_data;
         int             n;
         Arg             args[5];
 
@@ -1156,7 +1156,7 @@ MergeCancel( Widget widget, XtPointer client_data, XtPointer call_data )
       */
       n = 0;
       XtSetArg( args[n], XmNmenuHistory, ReplacePB ); n++;
-      XtSetValues( MergeOptions, args, n );   
+      XtSetValues( MergeOptions, args, n );
 
      /*
       *  Redisplay the current rendition resource values.
@@ -1183,7 +1183,7 @@ static void
 MergeQuit( Widget widget, XtPointer client_data, XtPointer call_data )
 {
 
-    /*  
+    /*
      *  Upon quitting from a Merge Panel, reset the other pushbuttons
      *  from the resource panel back to being sensitive.
      */
@@ -1216,8 +1216,8 @@ ModifyQuit( Widget widget, XtPointer client_data, XtPointer call_data )
 
 
 static Widget
-CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord, 
-                     Position y_coord, Widget top_attach ) 
+CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
+                     Position y_coord, Widget top_attach )
 {
 	Arg     args[20];
         int     i, n;
@@ -1252,7 +1252,7 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         n = 0;
         XtSetArg( args[n], XmNlabelString, string ); n++;
         sprintf( buffer, "Label%d", i );
-        ResourceLabels[i] = 
+        ResourceLabels[i] =
           XmCreateLabel( ResourcePanel, buffer, args, n );
         XtManageChild(ResourceLabels[i]);
         XmStringFree(string);
@@ -1265,7 +1265,7 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         XtSetArg( args[n], XmNeditable, False ); n++;
         XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
         RenderTagTF = XmCreateTextField( ResourcePanel, "RenderTagTF",
-				args, n ); 
+				args, n );
         XtManageChild(RenderTagTF);
 
        /*
@@ -1274,9 +1274,9 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         n = 0;
         XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
         FontNameTF = XmCreateTextField( ResourcePanel, "FontNameTF",
-				args, n ); 
+				args, n );
         XtManageChild(FontNameTF);
-        
+
        /*
         *  XmNfontType
         */
@@ -1328,7 +1328,7 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         XtSetArg(args[n], XmNsubMenuId,   LoadModelPullDown);   n++;
         XtSetArg(args[n], XmNmenuHistory, LoadModelPB[0]);    n++;
         XtSetArg(args[n], XmNforeground, CommonGetColor("white"));    n++;
-        LoadModelOptions = XmCreateOptionMenu( ResourcePanel, 
+        LoadModelOptions = XmCreateOptionMenu( ResourcePanel,
                              "LoadModelOptions", args, n );
         XtManageChild( LoadModelOptions );
 
@@ -1338,9 +1338,9 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         n = 0;
         XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
         FontTF = XmCreateTextField( ResourcePanel, "FontTF",
-				args, n ); 
+				args, n );
         XtManageChild( FontTF );
-        
+
        /*
         *  XmNtabList
         */
@@ -1348,16 +1348,16 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         XtSetArg( args[n], XmNeditable, False); n++;
         XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
         TabListTF = XmCreateTextField( ResourcePanel, "TabListTF",
-				args, n ); 
+				args, n );
         XtManageChild( TabListTF );
-                                           
+
        /*
         *  XmNrenditionBackground
         */
         n = 0;
         XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
         BackgroundTF = XmCreateTextField( ResourcePanel, "BackgroundTF",
-				args, n ); 
+				args, n );
         XtManageChild( BackgroundTF );
 
        /*
@@ -1366,7 +1366,7 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
         n = 0;
         XtSetArg( args[n], XmNforeground, CommonGetColor("white")); n++;
         ForegroundTF = XmCreateTextField( ResourcePanel, "ForegroundTF",
-				args, n ); 
+				args, n );
         XtManageChild( ForegroundTF );
 
         n = 0;
@@ -1426,7 +1426,7 @@ CreateResourcePanel( XmStringTag render_tag, Widget parent, Position x_coord,
      */
      GetRendResources( render_tag );
 
-    /* 
+    /*
      *  Display resources values in rendition resource panel.
      */
      DisplayRendResources( render_tag );
@@ -1450,7 +1450,7 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
     /*
      *  Determine which rendition tag was selected from the List
      *  in the Render Tag Panel.
-     */  
+     */
      n = 0;
      XtSetArg( args[n], XmNselectedItems, &selectedItems ); n++;
      XtGetValues( RenderTagList, args, n );
@@ -1459,9 +1459,9 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
          if ( XmStringCompare( listItems[n], selectedItems[0] ))
             break;
 
-     renderTag = tag_list[n];   
+     renderTag = tag_list[n];
 
-    /*  
+    /*
      *  Once Merge pushbutton is selected from the Render Tag Panel,
      *  set the other pushbuttons to be insensitive as well as the
      *  RenderTagList.
@@ -1475,9 +1475,9 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
      *  an existing rendition.
      */
      n = 0;
-     XtSetArg( args[n], XmNx, 0 ); n++; 
-     XtSetArg( args[n], XmNy, DISPLAY_HEIGHT ); n++; 
-     XtSetArg( args[n], XmNwidth, RESOURCE_PANEL_WIDTH ); n++; 
+     XtSetArg( args[n], XmNx, 0 ); n++;
+     XtSetArg( args[n], XmNy, DISPLAY_HEIGHT ); n++;
+     XtSetArg( args[n], XmNwidth, RESOURCE_PANEL_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, RESOURCE_PANEL_HEIGHT + 2 * button_height );
      n++;
      MergePopup = XtCreatePopupShell("Merge Panel",
@@ -1486,12 +1486,12 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
      XtManageChild( MergePopup );
 
      n = 0;
-     MergeForm = XmCreateForm( MergePopup, "MergeForm", args, n ); 
+     MergeForm = XmCreateForm( MergePopup, "MergeForm", args, n );
      XtManageChild( MergeForm );
 
     /*
      *  Create option menu containing the merge options.
-     */ 
+     */
      MergeOptions = CreateMergeOptions( MergeForm,
                        RESOURCE_PANEL_WIDTH, button_height );
      XtManageChild(MergeOptions);
@@ -1507,8 +1507,8 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
      XtManageChild( ResourcePanel );
 
 
-    /* 
-     *  Create pushbuttons to be displayed below the resource values. 
+    /*
+     *  Create pushbuttons to be displayed below the resource values.
      */
      string = XmStringCreateLtoR("Apply", XmFONTLIST_DEFAULT_TAG );
 
@@ -1519,11 +1519,11 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
      XtSetArg( args[n], XmNwidth, button_width ); n++;
      XtSetArg( args[n], XmNheight, button_height ); n++;
      XtSetArg( args[n], XmNlabelString, string ); n++;
-     ApplyPB = XmCreatePushButton( MergeForm, "ApplyPB", args, n ); 
+     ApplyPB = XmCreatePushButton( MergeForm, "ApplyPB", args, n );
      XtManageChild( ApplyPB );
      XmStringFree( string );
 
-     XtAddCallback( ApplyPB, XmNactivateCallback, MergeApply, 
+     XtAddCallback( ApplyPB, XmNactivateCallback, MergeApply,
                     (XtPointer)renderTag );
 
      x_coord += button_width;
@@ -1542,9 +1542,9 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
      XtManageChild( CancelPB );
      XmStringFree( string );
 
-     XtAddCallback( CancelPB, XmNactivateCallback, MergeCancel, 
+     XtAddCallback( CancelPB, XmNactivateCallback, MergeCancel,
                     (XtPointer)renderTag );
-                    
+
 
      x_coord += button_width;
 
@@ -1562,13 +1562,13 @@ MergePanel( Widget widget, XtPointer client_data, XtPointer call_data )
      XtManageChild( QuitPB );
      XmStringFree( string );
 
-     XtAddCallback( QuitPB, XmNactivateCallback, MergeQuit, 
+     XtAddCallback( QuitPB, XmNactivateCallback, MergeQuit,
                     (XtPointer)renderTag );
-                    
+
 
      XtPopup( MergePopup, XtGrabNone );
 }
-  
+
 static void
 ModifyPanel( Widget widget, XtPointer client_data, XtPointer call_data )
 {
@@ -1610,8 +1610,8 @@ ModifyPanel( Widget widget, XtPointer client_data, XtPointer call_data )
      *  an existing rendition.
      */
      n = 0;
-     XtSetArg( args[n], XmNx, 0 ); n++; 
-     XtSetArg( args[n], XmNy, DISPLAY_HEIGHT ); n++; 
+     XtSetArg( args[n], XmNx, 0 ); n++;
+     XtSetArg( args[n], XmNy, DISPLAY_HEIGHT ); n++;
      XtSetArg( args[n], XmNwidth, RESOURCE_PANEL_WIDTH ); n++;
      XtSetArg( args[n], XmNheight, RESOURCE_PANEL_HEIGHT + button_height );
      n++;
@@ -1687,7 +1687,7 @@ ModifyPanel( Widget widget, XtPointer client_data, XtPointer call_data )
      XtManageChild( QuitPB );
      XmStringFree( string );
 
-     XtAddCallback( QuitPB, XmNactivateCallback, ModifyQuit, 
+     XtAddCallback( QuitPB, XmNactivateCallback, ModifyQuit,
                     (XtPointer)renderTag );
 
      XtPopup( ModifyPopup, XtGrabNone );
@@ -1725,11 +1725,11 @@ Remove( Widget widget, XtPointer client_data, XtPointer call_data )
     /*
      *  Remove the selected item from the render tag list.
      */
-     XmListDeleteItem( RenderTagList, selectedItems[0] ); 
+     XmListDeleteItem( RenderTagList, selectedItems[0] );
 
     /* Redisplay XmString. */
      DisplayStrings();
-   
+
    return;
 }
 
@@ -1767,25 +1767,25 @@ DisplayRenderTagPanel()
        *  each of these widgets.
        */
        button_height = RENDER_PANEL_HEIGHT / 4;
-       button_width = RENDER_PANEL_WIDTH / 3; 
+       button_width = RENDER_PANEL_WIDTH / 3;
        list_height = RENDER_PANEL_HEIGHT - button_height;
 
        x_coord = y_coord = DISPLAY_MARGIN;
 
-      /*  
+      /*
        *  Create List widget which displays the render tags
        *  of the current renditions in the render table.
        */
        n = 0;
-       XtSetArg( args[n], XmNx, x_coord ); n++; 
-       XtSetArg( args[n], XmNy, y_coord ); n++; 
-       XtSetArg( args[n], XmNwidth, RENDER_PANEL_WIDTH ); n++; 
-       XtSetArg( args[n], XmNheight, RENDER_PANEL_HEIGHT ); n++; 
-       XtSetArg( args[n], XmNtopAttachment, XmATTACH_FORM ); n++; 
-       XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++; 
-       XtSetArg( args[n], XmNrightAttachment, XmATTACH_FORM ); n++; 
-       XtSetArg( args[n], XmNselectionPolicy, XmSINGLE_SELECT ); n++; 
-       XtSetArg( args[n], XmNvisibleItemCount, 5 ); n++; 
+       XtSetArg( args[n], XmNx, x_coord ); n++;
+       XtSetArg( args[n], XmNy, y_coord ); n++;
+       XtSetArg( args[n], XmNwidth, RENDER_PANEL_WIDTH ); n++;
+       XtSetArg( args[n], XmNheight, RENDER_PANEL_HEIGHT ); n++;
+       XtSetArg( args[n], XmNtopAttachment, XmATTACH_FORM ); n++;
+       XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++;
+       XtSetArg( args[n], XmNrightAttachment, XmATTACH_FORM ); n++;
+       XtSetArg( args[n], XmNselectionPolicy, XmSINGLE_SELECT ); n++;
+       XtSetArg( args[n], XmNvisibleItemCount, 5 ); n++;
        RenderTagList = XmCreateList( Form, "RendList", args, n );
        XtManageChild(RenderTagList);
 
@@ -1797,25 +1797,25 @@ DisplayRenderTagPanel()
        listItems = (XmStringTable)XtMalloc( num_tags * sizeof( XmString ));
        for ( i = 0; i < num_tags; i++ )
          listItems[i] = XmStringCreateLtoR( tag_list[i],
-                          XmFONTLIST_DEFAULT_TAG ); 
+                          XmFONTLIST_DEFAULT_TAG );
        n = 0;
        XtSetArg( args[n], XmNitemCount, num_tags ); n++;
        XtSetArg( args[n], XmNitems, listItems ); n++;
        XtSetValues( RenderTagList, args, n );
-       
+
        string = XmStringCreateLtoR("Merge", XmFONTLIST_DEFAULT_TAG );
 
        y_coord = list_height + 1;
 
        n = 0;
-       XtSetArg( args[n], XmNx, x_coord ); n++; 
-       XtSetArg( args[n], XmNy, list_height + 1 ); n++; 
-       XtSetArg( args[n], XmNwidth, button_width ); n++; 
-       XtSetArg( args[n], XmNheight, button_height ); n++; 
-       XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++; 
-       XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++; 
-       XtSetArg( args[n], XmNtopWidget, RenderTagList ); n++; 
-       XtSetArg( args[n], XmNlabelString, string ); n++; 
+       XtSetArg( args[n], XmNx, x_coord ); n++;
+       XtSetArg( args[n], XmNy, list_height + 1 ); n++;
+       XtSetArg( args[n], XmNwidth, button_width ); n++;
+       XtSetArg( args[n], XmNheight, button_height ); n++;
+       XtSetArg( args[n], XmNleftAttachment, XmATTACH_FORM ); n++;
+       XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
+       XtSetArg( args[n], XmNtopWidget, RenderTagList ); n++;
+       XtSetArg( args[n], XmNlabelString, string ); n++;
        MergePB = XmCreatePushButton( Form, "MergePB", args, n );
        XtManageChild(MergePB);
 
@@ -1832,18 +1832,18 @@ DisplayRenderTagPanel()
        XtSetArg( args[n], XmNy, list_height + 1 ); n++;
        XtSetArg( args[n], XmNwidth, button_width ); n++;
        XtSetArg( args[n], XmNheight, button_height ); n++;
-       XtSetArg( args[n], XmNleftAttachment, XmATTACH_WIDGET ); n++; 
-       XtSetArg( args[n], XmNleftWidget, MergePB ); n++; 
-       XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++; 
-       XtSetArg( args[n], XmNtopWidget, RenderTagList ); n++; 
+       XtSetArg( args[n], XmNleftAttachment, XmATTACH_WIDGET ); n++;
+       XtSetArg( args[n], XmNleftWidget, MergePB ); n++;
+       XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
+       XtSetArg( args[n], XmNtopWidget, RenderTagList ); n++;
        XtSetArg( args[n], XmNlabelString, string ); n++;
        ModifyPB = XmCreatePushButton( Form, "ModifyPB", args, n );
        XtManageChild(ModifyPB);
 
        XmStringFree( string );
 
-       XtAddCallback( ModifyPB, XmNactivateCallback, ModifyPanel, 
-                      (XtPointer)0 ); 
+       XtAddCallback( ModifyPB, XmNactivateCallback, ModifyPanel,
+                      (XtPointer)0 );
 
        x_coord += button_width;
 
@@ -1854,19 +1854,19 @@ DisplayRenderTagPanel()
        XtSetArg( args[n], XmNy, list_height + 1 ); n++;
        XtSetArg( args[n], XmNwidth, button_width ); n++;
        XtSetArg( args[n], XmNheight, button_height ); n++;
-       XtSetArg( args[n], XmNleftAttachment, XmATTACH_WIDGET ); n++; 
-       XtSetArg( args[n], XmNleftWidget, ModifyPB ); n++; 
-       XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++; 
-       XtSetArg( args[n], XmNtopWidget, RenderTagList ); n++; 
+       XtSetArg( args[n], XmNleftAttachment, XmATTACH_WIDGET ); n++;
+       XtSetArg( args[n], XmNleftWidget, ModifyPB ); n++;
+       XtSetArg( args[n], XmNtopAttachment, XmATTACH_WIDGET ); n++;
+       XtSetArg( args[n], XmNtopWidget, RenderTagList ); n++;
        XtSetArg( args[n], XmNlabelString, string ); n++;
        RemovePB = XmCreatePushButton( Form, "RemovePB", args, n );
        XtManageChild(RemovePB);
 
-       XtAddCallback( RemovePB, XmNactivateCallback, Remove, (XtPointer)0 ); 
+       XtAddCallback( RemovePB, XmNactivateCallback, Remove, (XtPointer)0 );
 
        XmStringFree( string );
 
-       XtPopup( RenderTagPopup, XtGrabNone ); 
+       XtPopup( RenderTagPopup, XtGrabNone );
 }
 
 
@@ -1891,31 +1891,31 @@ void main( int argc, char **argv )
    XtRealizeWidget(Shell1);
 
    n = 0;
-   XtSetArg( args[n], XmNwidth, DISPLAY_WIDTH ); n++; 
-   XtSetArg( args[n], XmNheight, DISPLAY_HEIGHT ); n++; 
-   bulletinBoard = 
+   XtSetArg( args[n], XmNwidth, DISPLAY_WIDTH ); n++;
+   XtSetArg( args[n], XmNheight, DISPLAY_HEIGHT ); n++;
+   bulletinBoard =
      XmCreateBulletinBoard( Shell1, "bulletinBoard", args, n );
    XtManageChild( bulletinBoard );
 
 
-   CreateRenditions( renditions ); 
+   CreateRenditions( renditions );
 
    num_tags = XmRenderTableGetTags( renderTable, &tag_list );
 
-   finalString = CreateStrings( tag_list ); 
+   finalString = CreateStrings( tag_list );
 
 
   /*  Create Drawing Area. */
    n = 0;
-   XtSetArg( args[n], XmNx, 0 ); n++; 
-   XtSetArg( args[n], XmNy, 0 ); n++; 
-   XtSetArg( args[n], XmNwidth, DISPLAY_WIDTH ); n++; 
-   XtSetArg( args[n], XmNheight, DISPLAY_HEIGHT ); n++; 
-   XtSetArg( args[n], XmNforeground, CommonGetColor("red")); n++; 
-   XtSetArg( args[n], XmNbackground, CommonGetColor("red")); n++; 
+   XtSetArg( args[n], XmNx, 0 ); n++;
+   XtSetArg( args[n], XmNy, 0 ); n++;
+   XtSetArg( args[n], XmNwidth, DISPLAY_WIDTH ); n++;
+   XtSetArg( args[n], XmNheight, DISPLAY_HEIGHT ); n++;
+   XtSetArg( args[n], XmNforeground, CommonGetColor("red")); n++;
+   XtSetArg( args[n], XmNbackground, CommonGetColor("red")); n++;
    drawingArea = XmCreateDrawingArea( bulletinBoard, "DrawArea", args, n );
    XtManageChild( drawingArea );
- 
+
   /*
    *  Draw blank drawing area prior to displaying strings.
    *  Need to have an expose event in order for strings to

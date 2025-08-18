@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: CompoundS.h /main/4 1995/07/13 20:33:36 drk $ */
 
 #include <stdio.h>
@@ -132,7 +132,7 @@ String          UIL_direction_names[9] =
 
 
 
-String		X_method[2] = 
+String		X_method[2] =
 {
     "XmStringCreate(string, charset)    ",
     "XmStringCreateLtoR(string, charset)",
@@ -149,4 +149,3 @@ char	err_msg[80],
     	error_message[12000];
 
 int	errors;
-

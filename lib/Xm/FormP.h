@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmFormP_h
 #define _XmFormP_h
 
@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 
-/* define index constants which are used to access attribute array of Form 
+/* define index constants which are used to access attribute array of Form
  * so that subclass of Form can make use of them.
  */
 
@@ -41,7 +41,7 @@ extern "C" {
 #define _XmFORM_BOTTOM  3
 
 
-typedef struct _XmFormAttachmentRec 
+typedef struct _XmFormAttachmentRec
 {
    unsigned char type;
    Widget w;

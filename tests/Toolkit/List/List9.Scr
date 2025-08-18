@@ -1,5 +1,5 @@
 # $XConsortium: List9.scr /main/5 1995/07/17 20:22:27 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)List9.scr	1.2  91/10/25
 
@@ -41,7 +41,7 @@ CompareVisual List2
 LocatePointer Scale RScaleSlider
 DragSliderValue Right 0
 
-# Select XmListPosSelected() from the Functions List. 
+# Select XmListPosSelected() from the Functions List.
 
 LocatePointer List1 RListItem 2
 ClickMB Btn1
@@ -244,7 +244,7 @@ Continue
 
 WindowRaise Shell1
 
-# Select XmListPosToBounds() from the Functions List. 
+# Select XmListPosToBounds() from the Functions List.
 
 LocatePointer List1 RListItem 2
 ClickMB Btn1
@@ -313,7 +313,7 @@ LocatePointer List2 RListItem 3
 DragComponent List2 RListItem 7
 
 # Then toggle select by pressing Ctrl-Btn1 on item 3 and dragging to item 10,
-# but don't release the mouse button yet. Items 3, 9 and 10 have now been 
+# but don't release the mouse button yet. Items 3, 9 and 10 have now been
 # toggled to on.
 
 LocatePointer List2 RListItem 2
@@ -321,7 +321,7 @@ DragComponent List2 RListItem 9 <Ctrl> Btn1
 CompareVisual List2
 
 # Without releasing the mouse on item 10, drag back to item 3 and then release.
-# Items 9 and 10 should have correctly been reverted back to an unselected 
+# Items 9 and 10 should have correctly been reverted back to an unselected
 # state. But items 4 through 8 should remain selected. If not, the
 # test for OSF CR 5676 fails.
 
@@ -329,7 +329,7 @@ DragComponent List2 RListItem 2 <Ctrl> Btn1
 CompareVisual List2
 
 
-# @) End of the test for OSF CR 5676 
+# @) End of the test for OSF CR 5676
 
 # C)
 
@@ -337,9 +337,9 @@ Continue
 
 WindowRaise Shell1
 
-# All items should be deleted. 
+# All items should be deleted.
 
-LocatePointer List2 
+LocatePointer List2
 CompareVisual List2
 
 # Select XmListGetKbdItemPos() from the Functions List.

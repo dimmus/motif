@@ -19,14 +19,14 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 ! HISTORY
 !
 !
 ! "HaL" server for a Sun type 4 keyboard
 !
 osfCancel	:	<Key>Escape
-osfLeft		:	<Key>Left 
+osfLeft		:	<Key>Left
 osfUp		:	<Key>Up
 osfRight	:	<Key>Right
 osfDown		:	<Key>Down
@@ -44,4 +44,4 @@ osfMenuBar	:	<Key>F10
 osfCopy		:	<Key>F16
 osfCut		:	<Key>F20
 osfPaste	:	<Key>F18
-osfUndo		:	<Key>F14 
+osfUndo		:	<Key>F14

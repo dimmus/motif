@@ -23,7 +23,7 @@
 ! resources for picture definitions
 *state.picture:				&&
 *zip.picture:				#####-####
-*phone.picture:				###-###-#### 
+*phone.picture:				###-###-####
 
 ! resources for the pop-up tips
 *column.XmTextField.toolTip.tipEnabled:	True
@@ -58,6 +58,3 @@ a particular format.\n\
 This demo also shows use of the pop-up help library.\n\
 The "tool tips" appear near widgets to provide extra\n\
 help or hints in data entry.
-
-
-

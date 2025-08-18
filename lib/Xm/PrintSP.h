@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 #ifndef _XmPrintShellP_h
 #define _XmPrintShellP_h
 
@@ -32,14 +32,14 @@
 extern "C" {
 #endif
 
-/* 
+/*
  * we make it a appShell subclass so it can have it's own instance
  * hierarchy
  */
 
 typedef struct {
-    XmSyntheticResource * syn_resources;   
-    int                   num_syn_resources;   
+    XmSyntheticResource * syn_resources;
+    int                   num_syn_resources;
     XtPointer             extension;
 } XmPrintShellClassPart;
 
@@ -87,4 +87,3 @@ externalref XmPrintShellClassRec 	xmPrintShellClassRec;
 
 #endif /* _XmPrintShellP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */
-

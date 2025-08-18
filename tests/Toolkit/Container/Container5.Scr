@@ -19,13 +19,13 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) A Container will appear empty.
 # #) It has been created only with defaults, so layoutType is Spatial,
-#    spatialStyle is XmGRID, and viewType is ANY_ICON, and 
+#    spatialStyle is XmGRID, and viewType is ANY_ICON, and
 #    spatialResizeModel is GROW_MINOR.
 # #) A margin width of 20 has been set.
 # C)
@@ -38,7 +38,7 @@ Continue
 # #) The Container is only growing vertically, so all the icon gadgets
 #    should be in one column.
 # #) "IconGad0", "IconGad1", "IconGad3", "IconGad4" and "IconGad9" are
-#    displayed in their large icon view. The other ones are displayed in 
+#    displayed in their large icon view. The other ones are displayed in
 #    their small icon view.
 # C)
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Command.c /main/8 1995/07/14 11:01:50 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: Command.c /main/8 1995/07/14 11:01:50 drk $
 #endif
 /*      @(#)instance	1.2     Date:02/12/91                              */
 /*************************************************************************
-	
+
     TEST: XmCommand
     AUTHOR: Automatic generation.
     DATE: Wed Oct  9 16:39:40 EDT 1991
@@ -283,7 +283,7 @@ static MvsWidgetClassInfo mvXmCommandWidgetClass = {
   /* short                 num_resources;                */
                           sizeof(Wresource_info)/sizeof(MvsResourceInfoRecord),
   /* MvsIntResInfoRecord   *intres_info;  */                NULL,
-  /* short                 num_intres;                   */ 
+  /* short                 num_intres;                   */
                            0,
   /* Arg                   common_args[20];              */
       { {"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},{"",0},
@@ -300,4 +300,3 @@ static MvsWidgetClassInfo mvXmCommandWidgetClass = {
 };
 
 MvsWidgetClassInfo *iXmCommandWidgetClass = &mvXmCommandWidgetClass;
-

@@ -6,7 +6,7 @@ For instructions on using these tests, read the README in ./tests/Toolkit.
 
 
 BUGS SHOWN BY THESE TESTS
- 
+
 Label1
 PIRS No.:      4223
 Label not getting cenetred when the window is resized. This is

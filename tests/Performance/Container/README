@@ -1,5 +1,5 @@
 /* $XConsortium: README /main/3 1996/07/15 14:15:53 drk $ */
-There is 3 tests in that directory. 
+There is 3 tests in that directory.
 
 	PerfCntnr1: Creates a 3 level depth outline layout.
 	PerfCntnr2: Creates a binary tree outline layout.
@@ -10,21 +10,21 @@ Before running these tests:
  	setenv XFILESEARCHPATH ./PerfCntnr.defaults
 
 To run them:
-	
+
 	PerfCntnr1 : create a large icon view Container in an outline layout
 		     type with 700 icon gadgets.
 	             The Container is in a scrolled window.
 
-	PerfCntnr1 -u noscroll : 
+	PerfCntnr1 -u noscroll :
 		     create a large icon view Container in an outline layout
 		     type with 700 icon gadgets.
 
 	PerfCntnr1 -u nnn :
-		     create a large icon view Container in an outline layout 
+		     create a large icon view Container in an outline layout
   		     type with nnn icon gadgets (max is 700).
 		     The Container is in a scrolled window.
 
-Same for PerfCntnr2, but in this test the max number of IconGadgets cannot 
+Same for PerfCntnr2, but in this test the max number of IconGadgets cannot
 exceed 500.
 
 Same for PerfCntnr3, but in this test the max number of IconGadgets is
@@ -38,10 +38,10 @@ you need to run the test with a smaller number of icon gadgets.
 
 =============================================================================
 
-For measuring the startup time, these tests should be run in Manual mode, 
+For measuring the startup time, these tests should be run in Manual mode,
 with any of the following options:
 
-     -s for measuring the startup time 
+     -s for measuring the startup time
      -z for measuring the startup time then exiting.
 
 =============================================================================
@@ -77,5 +77,3 @@ PerfCntnr3 is measuring:
 	   o Resizing the window back
 	   o Resizing the window to show one more row
 	   o Resizing the window to show one more column
-
-

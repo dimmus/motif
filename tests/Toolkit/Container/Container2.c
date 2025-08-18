@@ -37,43 +37,43 @@
 
 
 static void		CreateControlPanel(void );
-static void		SelectCB(Widget wid, XtPointer client_data, 
+static void		SelectCB(Widget wid, XtPointer client_data,
 				 XtPointer call_data);
-static void		OutlineCB(Widget wid, XtPointer client_data, 
+static void		OutlineCB(Widget wid, XtPointer client_data,
 				  XtPointer call_data);
-static void		SetColumnsCB(Widget wid, XtPointer client_data, 
+static void		SetColumnsCB(Widget wid, XtPointer client_data,
 				     XtPointer call_data);
 static Widget	        CreatePushButton(Widget parent, char *label);
-static void		AutoSelectionCB(Widget wid, XtPointer client_data, 
+static void		AutoSelectionCB(Widget wid, XtPointer client_data,
 					XtPointer call_data);
-static void		EntryViewTypeCB(Widget wid, XtPointer client_data, 
+static void		EntryViewTypeCB(Widget wid, XtPointer client_data,
 					XtPointer call_data);
-static void		LayoutTypeCB(Widget wid, XtPointer client_data, 
+static void		LayoutTypeCB(Widget wid, XtPointer client_data,
 				     XtPointer call_data);
-static void		PrimaryOwnerShipCB(Widget wid, XtPointer client_data, 
+static void		PrimaryOwnerShipCB(Widget wid, XtPointer client_data,
 					   XtPointer call_data);
-static void		SelectionPolicyCB(Widget wid, XtPointer client_data, 
+static void		SelectionPolicyCB(Widget wid, XtPointer client_data,
 					  XtPointer call_data);
-static void		ShowColumnHeadingCB(Widget wid, XtPointer client_data, 
+static void		ShowColumnHeadingCB(Widget wid, XtPointer client_data,
 					    XtPointer call_data);
 static void		SelectionTechniqueCB(Widget wid, XtPointer client_data,
 					     XtPointer call_data);
-static void		IncludeModelCB(Widget wid, XtPointer client_data, 
+static void		IncludeModelCB(Widget wid, XtPointer client_data,
 				       XtPointer call_data);
-static void		OutlineLineStyleCB(Widget wid, XtPointer client_data, 
+static void		OutlineLineStyleCB(Widget wid, XtPointer client_data,
 					   XtPointer call_data);
-static void		OutlineButtonPolicyCB(Widget wid, 
-					      XtPointer client_data, 
+static void		OutlineButtonPolicyCB(Widget wid,
+					      XtPointer client_data,
 					      XtPointer call_data);
 static void             IndentationCB(Widget wid, XtPointer client_data,
 				      XtPointer call_data);
 static void             ColumnWidthCB(Widget wid, XtPointer client_data,
 				      XtPointer call_data);
-static void		PlaceStyleCB(Widget wid, XtPointer client_data, 
+static void		PlaceStyleCB(Widget wid, XtPointer client_data,
 				     XtPointer call_data);
-static void		SnapModelCB(Widget wid, XtPointer client_data, 
+static void		SnapModelCB(Widget wid, XtPointer client_data,
 				    XtPointer call_data);
-static void		ResizeModelCB(Widget wid, XtPointer client_data, 
+static void		ResizeModelCB(Widget wid, XtPointer client_data,
 				      XtPointer call_data);
 static void             LargeCellWidthCB(Widget wid, XtPointer client_data,
 					 XtPointer call_data);
@@ -92,14 +92,14 @@ Widget  IndentationScale, ColumnWidthScale;
 Widget  LargeCellWidthScale, LargeCellHeightScale;
 Widget  SmallCellWidthScale, SmallCellHeightScale;
 
-char	*ColumnHeadingText[NUM_COL] = { 
+char	*ColumnHeadingText[NUM_COL] = {
 	"Icon",
     "Full Title",
     "Favorite Flavor",
     "Age"
 };
 
-char	*FullTitleText[NUM_OBJ] = { 
+char	*FullTitleText[NUM_OBJ] = {
 	"The First Object",
     "2nd Object, but still important",
     "Show",
@@ -111,7 +111,7 @@ char	*FullTitleText[NUM_OBJ] = {
     "Cat Lives"
 };
 
-char	*FlavorText[NUM_OBJ] = { 
+char	*FlavorText[NUM_OBJ] = {
 	"Chocolate",
     "Raspberry",
     "Blueberry",
@@ -123,7 +123,7 @@ char	*FlavorText[NUM_OBJ] = {
     "Lemon"
 };
 
-char	*AgeText[NUM_OBJ] = { 
+char	*AgeText[NUM_OBJ] = {
 	"42",
 	"10",
 	"4",
@@ -135,33 +135,33 @@ char	*AgeText[NUM_OBJ] = {
 
 static Cardinal NumColumns[NUM_COL] = { 0, 1, 2, 3 };
 
-static unsigned int	AutomaticSelection[2] = { XmAUTO_SELECT, 
+static unsigned int	AutomaticSelection[2] = { XmAUTO_SELECT,
 						  XmNO_AUTO_SELECT };
-static unsigned int	EntryViewType[3] = { XmLARGE_ICON, XmSMALL_ICON, 
+static unsigned int	EntryViewType[3] = { XmLARGE_ICON, XmSMALL_ICON,
 					     XmANY_ICON };
 static unsigned int	LayoutType[3] = { XmOUTLINE, XmSPATIAL, XmDETAIL };
 static unsigned int	PrimaryOwnerShip[4] = { XmOWN_NEVER, XmOWN_ALWAYS,
 						XmOWN_MULTIPLE,
 						XmOWN_POSSIBLE_MULTIPLE };
-static unsigned int	SelectionPolicy[4] = { XmSINGLE_SELECT, 
+static unsigned int	SelectionPolicy[4] = { XmSINGLE_SELECT,
 					       XmMULTIPLE_SELECT,
-					       XmEXTENDED_SELECT, 
+					       XmEXTENDED_SELECT,
 					       XmBROWSE_SELECT };
 
 static Boolean ShowColumnHeading[2] = { True, False };
 
-static unsigned int	SelectionTechnique[5] = { XmMARQUEE, 
+static unsigned int	SelectionTechnique[5] = { XmMARQUEE,
 						  XmMARQUEE_EXTEND_START,
 						  XmMARQUEE_EXTEND_BOTH,
 						  XmTOUCH_ONLY,
 						  XmTOUCH_OVER };
 static unsigned char OutlineLineStyle[2] = { XmNO_LINE, XmSINGLE };
-static unsigned char OutlineButtonPolicy[2] = { XmOUTLINE_BUTTON_PRESENT, 
+static unsigned char OutlineButtonPolicy[2] = { XmOUTLINE_BUTTON_PRESENT,
 					        XmOUTLINE_BUTTON_ABSENT };
 static unsigned char IncludeModel[3] = { XmAPPEND, XmCLOSEST, XmFIRST_FIT };
 static unsigned char PlaceStyle[3] = { XmNONE, XmGRID, XmCELLS };
 static unsigned char SnapModel[3] = { XmNONE, XmSNAP_TO_GRID, XmCENTER };
-static unsigned char ResizeModel[3] = { XmGROW_MINOR, XmGROW_MAJOR, 
+static unsigned char ResizeModel[3] = { XmGROW_MINOR, XmGROW_MAJOR,
 					XmGROW_BALANCED };
 
 
@@ -208,14 +208,14 @@ main(int argc, char **argv)
 	}
 	sprintf(ContainerName, "Container2%c", test_char);
 
-	CollapsedStatePixmap = 
+	CollapsedStatePixmap =
 	  XCreatePixmapFromBitmapData(display, rootWindow,
-		collapsedState_bits, collapsedState_width, 
+		collapsedState_bits, collapsedState_width,
 		collapsedState_height, CommonGetColor("black"),
-		CommonGetColor("white"), 
+		CommonGetColor("white"),
 		XDefaultDepth(display, XDefaultScreen(display)));
 
-	ExpandedStatePixmap = 
+	ExpandedStatePixmap =
 	  XCreatePixmapFromBitmapData(display, rootWindow,
 		expandedState_bits, expandedState_width, expandedState_height,
 		CommonGetColor("white"), CommonGetColor("black"),
@@ -247,12 +247,12 @@ main(int argc, char **argv)
 	XtAddCallback(Container2, XmNselectionCallback, SelectCB, NULL);
 	XtAddCallback(Container2, XmNoutlineChangedCallback, OutlineCB, NULL);
 
-	EntryDetails = (XmStringTable *) XtMalloc(NUM_OBJ * 
+	EntryDetails = (XmStringTable *) XtMalloc(NUM_OBJ *
 						  sizeof(XmStringTable));
 
 	for (i = 0; i < NUM_OBJ; i++) {
 
-	     ColumnDetails = (XmStringTable)XtMalloc((NUM_COL-1) * 
+	     ColumnDetails = (XmStringTable)XtMalloc((NUM_COL-1) *
 							sizeof(XmString));
 	     ColumnDetails[0] = XmStringGenerate(FullTitleText[i],
 						 NULL,
@@ -456,8 +456,8 @@ CreateControlPanel(void )
    n = 0;
    XtSetArg(args[n], XtNgeometry, "=10x10+0+200"); n++;
    XtSetArg(args[n], XtNallowShellResize, True); n++;
-   PopupShell = XtCreatePopupShell("Container Resources", 
-                                    topLevelShellWidgetClass, Shell1, 
+   PopupShell = XtCreatePopupShell("Container Resources",
+                                    topLevelShellWidgetClass, Shell1,
                                     args, n);
 
    n = 0;
@@ -500,18 +500,18 @@ CreateControlPanel(void )
 
    n = 0;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-   LayoutType_Pulldown = XmCreatePulldownMenu(RowColumn1, 
+   LayoutType_Pulldown = XmCreatePulldownMenu(RowColumn1,
 					      "LayoutType_Pulldown",
                                               args, n);
    Spatial = CreatePushButton(LayoutType_Pulldown, "Spatial");
    Outline = CreatePushButton(LayoutType_Pulldown, "Outline");
    Detail = CreatePushButton(LayoutType_Pulldown, "Detail");
 
-   XtAddCallback(Outline, XmNactivateCallback, LayoutTypeCB, 
+   XtAddCallback(Outline, XmNactivateCallback, LayoutTypeCB,
 		 (XtPointer ) &LayoutType[0]);
-   XtAddCallback(Spatial, XmNactivateCallback, LayoutTypeCB, 
+   XtAddCallback(Spatial, XmNactivateCallback, LayoutTypeCB,
 		 (XtPointer ) &LayoutType[1]);
-   XtAddCallback(Detail, XmNactivateCallback, LayoutTypeCB, 
+   XtAddCallback(Detail, XmNactivateCallback, LayoutTypeCB,
 		 (XtPointer ) &LayoutType[2]);
 
    tcs = XmStringGenerate("Layout Type             ",
@@ -519,18 +519,18 @@ CreateControlPanel(void )
 
    n = 0;
    XtSetArg(args[n], XmNlabelString, tcs); n++;
-   XtSetArg(args[n], XmNmenuHistory, Outline); n++;    
+   XtSetArg(args[n], XmNmenuHistory, Outline); n++;
    XtSetArg(args[n], XmNsubMenuId, LayoutType_Pulldown); n++;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
    LayoutType_Option = XmCreateOptionMenu(RowColumn1, "LayoutType_Option",
-                                          args, n);    
+                                          args, n);
    XtManageChild(LayoutType_Option);
 
    XmStringFree(tcs);
 
    n = 0;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-   EntryViewType_Pulldown = XmCreatePulldownMenu(RowColumn1, 
+   EntryViewType_Pulldown = XmCreatePulldownMenu(RowColumn1,
 						 "EntryViewType_Pulldown",
                                               	 args, n);
    LargeIcon = CreatePushButton(EntryViewType_Pulldown, "LargeIcon");
@@ -552,7 +552,7 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNmenuHistory, AnyIcon); n++;
    XtSetArg(args[n], XmNsubMenuId, EntryViewType_Pulldown); n++;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-   EntryViewType_Option = XmCreateOptionMenu(RowColumn1, 
+   EntryViewType_Option = XmCreateOptionMenu(RowColumn1,
 					     "EntryViewType_Option",
 					     args, n);
    XtManageChild(EntryViewType_Option);
@@ -561,13 +561,13 @@ CreateControlPanel(void )
 
    n = 0;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-   PrimaryOwnerShip_Pulldown = XmCreatePulldownMenu(RowColumn1, 
+   PrimaryOwnerShip_Pulldown = XmCreatePulldownMenu(RowColumn1,
 						   "PrimaryOwnerShip_Pulldown",
 						    args, n);
    NeverOwn = CreatePushButton(PrimaryOwnerShip_Pulldown, "NeverOwn");
    AlwaysOwn = CreatePushButton(PrimaryOwnerShip_Pulldown, "AlwaysOwn");
    Multiple = CreatePushButton(PrimaryOwnerShip_Pulldown, "Multiple");
-   Possible_Multiple = CreatePushButton(PrimaryOwnerShip_Pulldown, 
+   Possible_Multiple = CreatePushButton(PrimaryOwnerShip_Pulldown,
 					"Possible_Multiple");
 
    XtAddCallback(NeverOwn, XmNactivateCallback,
@@ -587,7 +587,7 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNmenuHistory, Possible_Multiple); n++;
    XtSetArg(args[n], XmNsubMenuId, PrimaryOwnerShip_Pulldown); n++;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-   PrimaryOwnerShip_Option = XmCreateOptionMenu(RowColumn1, 
+   PrimaryOwnerShip_Option = XmCreateOptionMenu(RowColumn1,
 						"PrimaryOwnerShip_Option",
                                           	args, n);
    XtManageChild(PrimaryOwnerShip_Option);
@@ -596,7 +596,7 @@ CreateControlPanel(void )
 
    n = 0;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-   AutoSelection_Pulldown = XmCreatePulldownMenu(RowColumn1, 
+   AutoSelection_Pulldown = XmCreatePulldownMenu(RowColumn1,
 						 "AutoSelection_Pulldown",
                                               	 args, n);
    NoAutoSelect = CreatePushButton(AutoSelection_Pulldown, "NoAutoSelect");
@@ -615,7 +615,7 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNmenuHistory, AutoSelect); n++;
    XtSetArg(args[n], XmNsubMenuId, AutoSelection_Pulldown); n++;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-   AutoSelection_Option = XmCreateOptionMenu(RowColumn1, 
+   AutoSelection_Option = XmCreateOptionMenu(RowColumn1,
 					     "AutoSelection_Option",
 					     args, n);
    XtManageChild(AutoSelection_Option);
@@ -624,13 +624,13 @@ CreateControlPanel(void )
 
    n = 0;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-   SelectionPolicy_Pulldown = XmCreatePulldownMenu(RowColumn1, 
+   SelectionPolicy_Pulldown = XmCreatePulldownMenu(RowColumn1,
 						   "SelectionPolicy_Pulldown",
 						   args, n);
    SingleSelect = CreatePushButton(SelectionPolicy_Pulldown, "SingleSelect");
-   MultipleSelect = CreatePushButton(SelectionPolicy_Pulldown, 
+   MultipleSelect = CreatePushButton(SelectionPolicy_Pulldown,
 				     "MultipleSelect");
-   ExtendedSelect = CreatePushButton(SelectionPolicy_Pulldown, 
+   ExtendedSelect = CreatePushButton(SelectionPolicy_Pulldown,
 				     "ExtendedSelect");
    BrowseSelect = CreatePushButton(SelectionPolicy_Pulldown, "BrowseSelect");
 
@@ -651,7 +651,7 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNmenuHistory, ExtendedSelect); n++;
    XtSetArg(args[n], XmNsubMenuId, SelectionPolicy_Pulldown); n++;
    XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-   SelectionPolicy_Option = XmCreateOptionMenu(RowColumn1, 
+   SelectionPolicy_Option = XmCreateOptionMenu(RowColumn1,
 					       "SelectionPolicy_Option",
 					       args, n);
    XtManageChild(SelectionPolicy_Option);
@@ -660,11 +660,11 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    SelectionTechnique_Pulldown = XmCreatePulldownMenu(RowColumn1, 
+    SelectionTechnique_Pulldown = XmCreatePulldownMenu(RowColumn1,
 						"SelectionTechnique_Pulldown",
                                                 args, n);
     Marquee = CreatePushButton(SelectionTechnique_Pulldown, "Marquee");
-    MarqueeStart = CreatePushButton(SelectionTechnique_Pulldown, 
+    MarqueeStart = CreatePushButton(SelectionTechnique_Pulldown,
 				    "MarqueeStart");
     MarqueeBoth = CreatePushButton(SelectionTechnique_Pulldown, "MarqueeBoth");
     TouchOnly = CreatePushButton(SelectionTechnique_Pulldown, "TouchOnly");
@@ -689,7 +689,7 @@ CreateControlPanel(void )
     XtSetArg(args[n], XmNmenuHistory, TouchOver); n++;
     XtSetArg(args[n], XmNsubMenuId, SelectionTechnique_Pulldown); n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-    SelectionTechnique_Option = XmCreateOptionMenu(RowColumn1, 
+    SelectionTechnique_Option = XmCreateOptionMenu(RowColumn1,
 						   "SelectionTechnique_Option",
 						   args, n);
     XtManageChild(SelectionTechnique_Option);
@@ -733,7 +733,7 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    OutlineLineStyle_Pulldown = XmCreatePulldownMenu(RowColumn2, 
+    OutlineLineStyle_Pulldown = XmCreatePulldownMenu(RowColumn2,
 						   "OutlineLineStyle_Pulldown",
 						   args, n);
     XmNo_line = CreatePushButton(OutlineLineStyle_Pulldown, "XmNO_LINE");
@@ -752,7 +752,7 @@ CreateControlPanel(void )
     XtSetArg(args[n], XmNmenuHistory, XmSingle); n++;
     XtSetArg(args[n], XmNsubMenuId, OutlineLineStyle_Pulldown); n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-    OutlineLineStyle_Option = XmCreateOptionMenu(RowColumn2, 
+    OutlineLineStyle_Option = XmCreateOptionMenu(RowColumn2,
 						 "OutlineLineStyle_Option",
 						 args, n);
     XtManageChild(OutlineLineStyle_Option);
@@ -761,12 +761,12 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    OutlineButtonPolicy_Pulldown = XmCreatePulldownMenu(RowColumn2, 
+    OutlineButtonPolicy_Pulldown = XmCreatePulldownMenu(RowColumn2,
 					  "OutlineButtonPolicy_Pulldown",
 					  args, n);
-    XmPresent = CreatePushButton(OutlineButtonPolicy_Pulldown, 
+    XmPresent = CreatePushButton(OutlineButtonPolicy_Pulldown,
 				 "XmOUTLINE_BUTTON_PRESENT");
-    XmAbsent = CreatePushButton(OutlineButtonPolicy_Pulldown, 
+    XmAbsent = CreatePushButton(OutlineButtonPolicy_Pulldown,
 				"XmOUTLINE_BUTTON_ABSENT");
 
     XtAddCallback(XmPresent, XmNactivateCallback,
@@ -782,14 +782,14 @@ CreateControlPanel(void )
     XtSetArg(args[n], XmNmenuHistory, XmPresent); n++;
     XtSetArg(args[n], XmNsubMenuId, OutlineButtonPolicy_Pulldown); n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-    OutlineButtonPolicy_Option = XmCreateOptionMenu(RowColumn2, 
+    OutlineButtonPolicy_Option = XmCreateOptionMenu(RowColumn2,
 						 "OutlineButtonPolicy_Option",
 						 args, n);
     XtManageChild(OutlineButtonPolicy_Option);
 
     XmStringFree(tcs);
 
-   tcs = XmStringGenerate("Outline Indentation", 
+   tcs = XmStringGenerate("Outline Indentation",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
 
    n = 0;
@@ -805,13 +805,13 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNtitleString, tcs); n++;
    IndentationScale = XmCreateScale(RowColumn2, "IndentationScale", args, n);
    XtManageChild(IndentationScale);
-   
-   XtAddCallback(IndentationScale, XmNvalueChangedCallback, IndentationCB, 
+
+   XtAddCallback(IndentationScale, XmNvalueChangedCallback, IndentationCB,
 		 NULL);
-   
+
    XmStringFree(tcs);
 
-   tcs = XmStringGenerate("Outline ColumnWidth", 
+   tcs = XmStringGenerate("Outline ColumnWidth",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
 
    n = 0;
@@ -826,8 +826,8 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNtitleString, tcs); n++;
    ColumnWidthScale = XmCreateScale(RowColumn2, "ColumnWidthScale", args, n);
    XtManageChild(ColumnWidthScale);
-   
-   XtAddCallback(ColumnWidthScale, XmNvalueChangedCallback, ColumnWidthCB, 
+
+   XtAddCallback(ColumnWidthScale, XmNvalueChangedCallback, ColumnWidthCB,
 		 NULL);
 
    XmStringFree(tcs);
@@ -887,7 +887,7 @@ CreateControlPanel(void )
 
    tcs = XmStringGenerate("Number of Columns       ",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
-                         
+
    n = 0;
    XtSetArg(args[n], XmNlabelString, tcs); n++;
    XtSetArg(args[n], XmNmenuHistory, ZeroColumn); n++;
@@ -901,7 +901,7 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    ShowColumnHeading_Pulldown = XmCreatePulldownMenu(RowColumn3, 
+    ShowColumnHeading_Pulldown = XmCreatePulldownMenu(RowColumn3,
 						  "ShowColumnHeading_Pulldown",
                                               	  args, n);
     Show = CreatePushButton(ShowColumnHeading_Pulldown, "YES");
@@ -920,7 +920,7 @@ CreateControlPanel(void )
     XtSetArg(args[n], XmNmenuHistory, Show); n++;
     XtSetArg(args[n], XmNsubMenuId, ShowColumnHeading_Pulldown); n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-    ShowColumnHeading_Option = XmCreateOptionMenu(RowColumn3, 
+    ShowColumnHeading_Option = XmCreateOptionMenu(RowColumn3,
 						  "ShowColumnHeading_Option",
 						  args, n);
     XtManageChild(ShowColumnHeading_Option);
@@ -940,8 +940,8 @@ CreateControlPanel(void )
     XtSetArg(args[n], XmNleftOffset, 5); n++;
     XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
     XtSetArg(args[n], XmNrightOffset, 5); n++;
-    SpatialResources = XmCreateLabel(FormDialog, 
-				     "SpatialResources", 
+    SpatialResources = XmCreateLabel(FormDialog,
+				     "SpatialResources",
 				     args, n);
     XtManageChild(SpatialResources);
 
@@ -964,7 +964,7 @@ CreateControlPanel(void )
     RowColumn4 = XmCreateRowColumn(FormDialog, "RowColumn4", args, n);
     XtManageChild(RowColumn4);
 
-   tcs = XmStringGenerate("LargeCell Width", 
+   tcs = XmStringGenerate("LargeCell Width",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
 
    n = 0;
@@ -978,13 +978,13 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNvalue, 100); n++;
    XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
    XtSetArg(args[n], XmNtitleString, tcs); n++;
-   LargeCellWidthScale = XmCreateScale(RowColumn4, "LargeCellWidthScale", 
+   LargeCellWidthScale = XmCreateScale(RowColumn4, "LargeCellWidthScale",
 				       args, n);
    XtManageChild(LargeCellWidthScale);
-   
-   XtAddCallback(LargeCellWidthScale, XmNvalueChangedCallback, 
+
+   XtAddCallback(LargeCellWidthScale, XmNvalueChangedCallback,
 		 LargeCellWidthCB, NULL);
-   
+
    XmStringFree(tcs);
 
    tcs = XmStringGenerate("LargeCell Height",
@@ -1001,16 +1001,16 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNvalue, 100); n++;
    XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
    XtSetArg(args[n], XmNtitleString, tcs); n++;
-   LargeCellHeightScale = XmCreateScale(RowColumn4, "LargeCellHeightScale", 
+   LargeCellHeightScale = XmCreateScale(RowColumn4, "LargeCellHeightScale",
 				        args, n);
    XtManageChild(LargeCellHeightScale);
-   
-   XtAddCallback(LargeCellHeightScale, XmNvalueChangedCallback, 
+
+   XtAddCallback(LargeCellHeightScale, XmNvalueChangedCallback,
 		 LargeCellHeightCB, NULL);
-   
+
    XmStringFree(tcs);
 
-   tcs = XmStringGenerate("SmallCell Width", 
+   tcs = XmStringGenerate("SmallCell Width",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
 
    n = 0;
@@ -1024,16 +1024,16 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNvalue, 50); n++;
    XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
    XtSetArg(args[n], XmNtitleString, tcs); n++;
-   SmallCellWidthScale = XmCreateScale(RowColumn4, "SmallCellWidthScale", 
+   SmallCellWidthScale = XmCreateScale(RowColumn4, "SmallCellWidthScale",
 				       args, n);
    XtManageChild(SmallCellWidthScale);
-   
-   XtAddCallback(SmallCellWidthScale, XmNvalueChangedCallback, 
+
+   XtAddCallback(SmallCellWidthScale, XmNvalueChangedCallback,
 		 SmallCellWidthCB, NULL);
-   
+
    XmStringFree(tcs);
 
-   tcs = XmStringGenerate("SmallCell Height", 
+   tcs = XmStringGenerate("SmallCell Height",
                           XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, NULL);
 
    n = 0;
@@ -1047,18 +1047,18 @@ CreateControlPanel(void )
    XtSetArg(args[n], XmNvalue, 50); n++;
    XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
    XtSetArg(args[n], XmNtitleString, tcs); n++;
-   SmallCellHeightScale = XmCreateScale(RowColumn4, "SmallCellHeightScale", 
+   SmallCellHeightScale = XmCreateScale(RowColumn4, "SmallCellHeightScale",
 				        args, n);
    XtManageChild(SmallCellHeightScale);
-   
-   XtAddCallback(SmallCellHeightScale, XmNvalueChangedCallback, 
+
+   XtAddCallback(SmallCellHeightScale, XmNvalueChangedCallback,
 		 SmallCellHeightCB, NULL);
-   
+
    XmStringFree(tcs);
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    IncludeModel_Pulldown = XmCreatePulldownMenu(RowColumn4, 
+    IncludeModel_Pulldown = XmCreatePulldownMenu(RowColumn4,
 						 "IncludeModel_Pulldown",
 						 args, n);
     Append = CreatePushButton(IncludeModel_Pulldown, "Append");
@@ -1080,7 +1080,7 @@ CreateControlPanel(void )
     XtSetArg(args[n], XmNmenuHistory, Append); n++;
     XtSetArg(args[n], XmNsubMenuId, IncludeModel_Pulldown); n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen")); n++;
-    IncludeModel_Option = XmCreateOptionMenu(RowColumn4, 
+    IncludeModel_Option = XmCreateOptionMenu(RowColumn4,
 					     "IncludeModel_Option",
 					     args, n);
     XtManageChild(IncludeModel_Option);
@@ -1089,7 +1089,7 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    PlaceStyle_Pulldown = XmCreatePulldownMenu(RowColumn4, 
+    PlaceStyle_Pulldown = XmCreatePulldownMenu(RowColumn4,
 					       "PlaceStyle_Pulldown",
                                                args, n);
     PSNone = CreatePushButton(PlaceStyle_Pulldown, "XmNONE");
@@ -1119,7 +1119,7 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    SnapModel_Pulldown = XmCreatePulldownMenu(RowColumn4, 
+    SnapModel_Pulldown = XmCreatePulldownMenu(RowColumn4,
 					      "SnapModel_Pulldown",
                                               args, n);
     SMNone = CreatePushButton(SnapModel_Pulldown, "XmNONE");
@@ -1149,7 +1149,7 @@ CreateControlPanel(void )
 
     n = 0;
     XtSetArg(args[n], XmNbackground, CommonGetColor("darkgreen"));  n++;
-    ResizeModel_Pulldown = XmCreatePulldownMenu(RowColumn4, 
+    ResizeModel_Pulldown = XmCreatePulldownMenu(RowColumn4,
 					      "ResizeModel_Pulldown",
                                               args, n);
     RMMinor = CreatePushButton(ResizeModel_Pulldown, "XmGROW_MINOR");
@@ -1192,7 +1192,7 @@ CreatePushButton(Widget parent, char *label)
     Arg             args[MAX_ARGS];
     XmString        tcs;
 
-    tcs = XmStringGenerate(label, XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT, 
+    tcs = XmStringGenerate(label, XmFONTLIST_DEFAULT_TAG, XmCHARSET_TEXT,
 			   NULL);
 
     n = 0;
@@ -1286,7 +1286,7 @@ LayoutTypeCB(Widget wid, XtPointer client_data, XtPointer call_data)
 	    XtGetValues(Container2, args, n);
 
 	    if (value == XmNONE) {
-		
+
 		n = 0;
 		XtSetArg(args[n], XmNx, 100); n++;
 		XtSetArg(args[n], XmNy, 100); n++;
@@ -1296,7 +1296,7 @@ LayoutTypeCB(Widget wid, XtPointer client_data, XtPointer call_data)
 		XtSetArg(args[n], XmNx, 200); n++;
 		XtSetArg(args[n], XmNy, 200); n++;
 		XtSetValues(IconGad2, args, n);
-	
+
 		n = 0;
 		XtSetArg(args[n], XmNx, 300); n++;
 		XtSetArg(args[n], XmNy, 100); n++;
@@ -1570,7 +1570,7 @@ OutlineCB(Widget wid, XtPointer client_data, XtPointer call_data)
 {
 
 	XmContainerOutlineCallbackStruct *cbs;
-	
+
 	cbs = (XmContainerOutlineCallbackStruct *)call_data;
 	printf("XmNoutlineChangedCallback ");
 	if (cbs->reason == XmCR_COLLAPSED)
@@ -1655,5 +1655,3 @@ SmallCellHeightCB(Widget wid, XtPointer client_data, XtPointer call_data)
 	XtSetValues(Container2, args, n);
 
 }
-
-

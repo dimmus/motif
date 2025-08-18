@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDtestGad1.c /main/7 1996/10/07 15:15:30 drk $"
@@ -82,8 +82,8 @@ Quit ()
 
 
 /*ARGSUSED*/
-static Boolean DragConvertProc(w, selection, target, typeRtn, valueRtn, 
-							  lengthRtn, formatRtn, max_lengthRtn, 
+static Boolean DragConvertProc(w, selection, target, typeRtn, valueRtn,
+							  lengthRtn, formatRtn, max_lengthRtn,
 							  client_data, request_id)
 Widget              w;
 Atom                *selection;
@@ -107,11 +107,11 @@ XtRequestId			*request_id;
 	if (*target == COMPOUND_TEXT) {
 
 		ok = 0;
-		ok = XmbTextListToTextProperty(display, &string, 1, 
+		ok = XmbTextListToTextProperty(display, &string, 1,
 									   XCompoundTextStyle, &tmp_prop);
 		if (ok != Success)
 			return(False);
-		
+
 		*valueRtn = (char *) tmp_prop.value;
 		*lengthRtn = tmp_prop.nitems;
 		*typeRtn = COMPOUND_TEXT;
@@ -148,7 +148,7 @@ XtPointer	client_data, call_data;
 	fprintf(outfp, "operation = %d\n", DragMotion->operation);
 	/* begin test for CR 5754 */
 	/* NB: only this one uses INVALID, the rest use VALID */
-	fprintf(outfp, "dropSiteStatusValid? = %s\n", 
+	fprintf(outfp, "dropSiteStatusValid? = %s\n",
 		        (DragMotion->dropSiteStatus == XmDROP_SITE_INVALID) ?
 		        " NO" : " YES");
 	/* end test for CR 5754 */
@@ -207,7 +207,7 @@ XtPointer	client_data, call_data;
 	fprintf(outfp, "Drop Finish! \n");
 	fprintf(outfp, "operation = %d\n", DropFinish->operation);
 	/* begin test for CR 5754 */
-	fprintf(outfp, "dropSiteStatusValid? = %s\n", 
+	fprintf(outfp, "dropSiteStatusValid? = %s\n",
 		        (DropFinish->dropSiteStatus == XmDROP_SITE_VALID) ?
 		        " YES" : " NO");
 	/* end test for CR 5754 */
@@ -229,7 +229,7 @@ XtPointer	client_data, call_data;
 	fprintf(outfp, "Drop Site Enter! \n");
 	fprintf(outfp, "operation = %d\n", DropSiteEnter->operation);
 	/* begin test for CR 5754 */
-	fprintf(outfp, "dropSiteStatusValid? = %s\n", 
+	fprintf(outfp, "dropSiteStatusValid? = %s\n",
 		        (DropSiteEnter->dropSiteStatus == XmDROP_SITE_VALID) ?
 		        " YES" : " NO");
 	/* end test for CR 5754 */
@@ -267,7 +267,7 @@ XtPointer	client_data, call_data;
 	fprintf(outfp, "Drop Start! \n");
 	fprintf(outfp, "operation = %d\n", DropStart->operation);
 	/* begin test for CR 5754 */
-	fprintf(outfp, "dropSiteStatusValid? = %s\n", 
+	fprintf(outfp, "dropSiteStatusValid? = %s\n",
 		        (DropStart->dropSiteStatus == XmDROP_SITE_VALID) ?
 		        " YES" : " NO");
 	/* end test for CR 5754 */
@@ -322,49 +322,49 @@ XEvent	*event;
 	Arg		args[MAX_ARGS];
 	Cardinal	n;
 	Atom	exportList[1];
-	static XtCallbackRec DragMotionCB[2] = 
+	static XtCallbackRec DragMotionCB[2] =
 	{
 		{DragMotionCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DnDFinishCB[2] = 
+	static XtCallbackRec DnDFinishCB[2] =
 	{
 		{DnDFinishCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropFinishCB[2] = 
+	static XtCallbackRec DropFinishCB[2] =
 	{
 		{DropFinishCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropSiteEnterCB[2] = 
+	static XtCallbackRec DropSiteEnterCB[2] =
 	{
 		{DropSiteEnterCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropSiteLeaveCB[2] = 
+	static XtCallbackRec DropSiteLeaveCB[2] =
 	{
 		{DropSiteLeaveCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropStartCB[2] = 
+	static XtCallbackRec DropStartCB[2] =
 	{
 		{DropStartCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec TopLEnterCB[2] = 
+	static XtCallbackRec TopLEnterCB[2] =
 	{
 		{TopLEnterCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec TopLLeaveCB[2] = 
+	static XtCallbackRec TopLLeaveCB[2] =
 	{
 		{TopLLeaveCallback,NULL},
 		{NULL, NULL}
@@ -405,7 +405,7 @@ XtPointer	client_data, call_data;
 	fprintf(outfp, "x = %d\n", DragProc->x);
 	fprintf(outfp, "y = %d\n", DragProc->y);
 	/* begin test for CR 5754 */
-	fprintf(outfp, "dropSiteStatusValid? = %s\n", 
+	fprintf(outfp, "dropSiteStatusValid? = %s\n",
 		        (DragProc->dropSiteStatus == XmDROP_SITE_VALID) ?
 		        " YES" : " NO");
 	/* end test for CR 5754 */
@@ -414,7 +414,7 @@ XtPointer	client_data, call_data;
 }
 
 
-static void DropTransferCallback(w, closure, seltype, type, value, 
+static void DropTransferCallback(w, closure, seltype, type, value,
 								 length, format)
 Widget 			w;
 XtPointer 		closure ;
@@ -462,7 +462,7 @@ int 			*format ;
 				actual_length = strlen(total_tmp_value);
 #ifdef DEBUG
 				fprintf(stderr, "the transfer value is : %s\n", actual_value);
-				fprintf(stderr, "the length of transfer is : %d\n", 
+				fprintf(stderr, "the length of transfer is : %d\n",
 						actual_length);
 #endif
 				XFreeStringList(tmp_value);
@@ -532,7 +532,7 @@ XtPointer	client_data, call_data;
 	fprintf(outfp, "x = %d\n", DropProc->x);
 	fprintf(outfp, "y = %d\n", DropProc->y);
 	/* begin test for CR 5754 */
-	fprintf(outfp, "dropSiteStatusValid? = %s\n", 
+	fprintf(outfp, "dropSiteStatusValid? = %s\n",
 		        (DropProc->dropSiteStatus == XmDROP_SITE_VALID) ?
 		        " YES" : " NO");
 	/* end test for CR 5754 */
@@ -548,15 +548,15 @@ XtPointer	client_data, call_data;
 		XtSetArg(args[n], XmNnumDropTransfers, 0); n++;
 	}
 	else {
-		if (DropProc->operation & XmDROP_MOVE || 
+		if (DropProc->operation & XmDROP_MOVE ||
 			DropProc->operation & XmDROP_COPY) {
-		
+
 			transferList = transferEntries;
 			numTransfers = 1;
 			XtSetArg(args[n], XmNdropTransfers, transferList); n++;
 			XtSetArg(args[n], XmNnumDropTransfers, numTransfers); n++;
 
-		} 
+		}
 		else {
 			XtSetArg(args[n], XmNtransferStatus, XmTRANSFER_FAILURE); n++;
 			XtSetArg(args[n], XmNnumDropTransfers, 0); n++;
@@ -569,7 +569,7 @@ XtPointer	client_data, call_data;
 }
 
 
-static char translations[] = 
+static char translations[] =
 "#override \
   Ctrl<Key>t: XtDisplayTranslations()\n\
   Ctrl<Key>a: XtDisplayAccelerators()\n\
@@ -618,22 +618,22 @@ typedef struct _AppDataRec{
 
 XtResource	appResources[] = {
 	{
-	"xlations1", XtCTranslations, XtRString, 
+	"xlations1", XtCTranslations, XtRString,
 	sizeof(String), XtOffset(AppData, xlation1.str),
 	XtRString, (XtPointer)translations,
 	},
 	{
-	"xlations1", XtCTranslations, XtRTranslationTable, 
+	"xlations1", XtCTranslations, XtRTranslationTable,
 	sizeof(XtTranslations), XtOffset(AppData, xlation1.xlation),
 	XtRString, (XtPointer)translations,
 	},
 	{
-	"xlations2", XtCTranslations, XtRString, 
+	"xlations2", XtCTranslations, XtRString,
 	sizeof(String), XtOffset(AppData, xlation2.str),
 	XtRString, (XtPointer)dragTranslations,
 	},
 	{
-	"xlations2", XtCTranslations, XtRTranslationTable, 
+	"xlations2", XtCTranslations, XtRTranslationTable,
 	sizeof(XtTranslations), XtOffset(AppData, xlation2.xlation),
 	XtRString, (XtPointer)dragTranslations,
 	},
@@ -679,9 +679,9 @@ int	root_y;
 
 	for (i = 0; i < numGadgets; i++) {
 
-		if ((x >= gadgetRects[i].x && 
+		if ((x >= gadgetRects[i].x &&
 			x <= (gadgetRects[i].x + gadgetRects[i].width)) &&
-			(y >= gadgetRects[i].y && 
+			(y >= gadgetRects[i].y &&
 			y <= (gadgetRects[i].y + gadgetRects[i].height))) {
 			retval = True;
 			break;
@@ -744,11 +744,11 @@ char **argv;
 	sprintf(name, "%s.out", argv[0]);
 	if ((outfp = fopen(name, "w+")) == NULL) {
 
-		fprintf(stderr, "Can not open output file %s.out. Trying in /tmp\n", 
+		fprintf(stderr, "Can not open output file %s.out. Trying in /tmp\n",
 				argv[0]);
 		sprintf(name, "/tmp/%s.out", argv[0]);
 		if ((outfp = fopen(name, "w+")) == NULL) {
-			fprintf(stderr, "Can not open output file /tmp/%s.out. Exiting\n", 
+			fprintf(stderr, "Can not open output file /tmp/%s.out. Exiting\n",
 					argv[0]);
 			exit(0);
 		}
@@ -764,7 +764,7 @@ char **argv;
 
 	XtAppAddActions(app_context, (XtActionList)myactions, XtNumber(myactions));
 
-	XtGetApplicationResources(Shell1, (XtPointer)appData, 
+	XtGetApplicationResources(Shell1, (XtPointer)appData,
 							  appResources, XtNumber(appResources), NULL, 0);
 
 	/* try out stuffing the translations directly in */
@@ -785,7 +785,7 @@ char **argv;
 
 		sprintf(name, "topLevel%d",i);
 		n = 0;
-		topLevel = XtCreatePopupShell(name, topLevelShellWidgetClass, Shell1, 
+		topLevel = XtCreatePopupShell(name, topLevelShellWidgetClass, Shell1,
 								   args, n);
 
 		sprintf(name, "BulletinB%d",i);
@@ -793,7 +793,7 @@ char **argv;
 		BulletinB = XmCreateBulletinBoard(topLevel, name, args, n);
 		XtManageChild(BulletinB);
 
-		XtAddEventHandler(BulletinB, ButtonPressMask, False, 
+		XtAddEventHandler(BulletinB, ButtonPressMask, False,
 						  BBEventHandler, NULL);
 
 		/* Create numRows x numColumns number of pushButtons */
@@ -806,15 +806,15 @@ char **argv;
 				XtSetArg(args[n], XtNwidth, CHILD_WIDTH); n++;
 				XtSetArg(args[n], XtNheight, CHILD_HEIGHT); n++;
 				if (appData->applyOverrides) {
-					XtSetArg(args[n], XtNtranslations, 
+					XtSetArg(args[n], XtNtranslations,
 							 appData->xlation2.xlation); n++;
 				}
 				sprintf(name, "PushBtnG%d", (j * appData->numRows) + k);
 				if (j == 1)
-					PushBtnG = XmCreateArrowButtonGadget(BulletinB, name, 
+					PushBtnG = XmCreateArrowButtonGadget(BulletinB, name,
 														 args, n);
 				else
-					PushBtnG = XmCreatePushButtonGadget(BulletinB, name, 
+					PushBtnG = XmCreatePushButtonGadget(BulletinB, name,
 														args, n);
 				XtManageChild(PushBtnG);
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: KeyPress.c /main/8 1995/07/14 11:40:57 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: KeyPress.c /main/8 1995/07/14 11:40:57 drk 
 
         INPUTS:
             key - key code (i.e., KeyReturn, KeyUp, KeyRight, KeySpace, etc.)
-        
+
         OUTPUTS:
             none
 
@@ -54,7 +54,7 @@ static char rcsid[] = "$XConsortium: KeyPress.c /main/8 1995/07/14 11:40:57 drk 
 #include <Xm/ScrolledW.h>
 
 /*
-  When an X-server gets a key press from the real keyboard, this is how it 
+  When an X-server gets a key press from the real keyboard, this is how it
   determines the appropriate event window to send it to:
 
     If ActiveGrabInProgress (keyboard)
@@ -62,24 +62,24 @@ static char rcsid[] = "$XConsortium: KeyPress.c /main/8 1995/07/14 11:40:57 drk 
 
     Else
         Search visible ancestors of window from root down for a key grab
-        If found, 
+        If found,
             Activate grab (call XGrabKeyboard) on that window (pg 144 Xlib)
             Send event to that same window
 
         Else If focus_window = None
             Ignore Event
- 
-        Else If focus_window = PointerRoot    
+
+        Else If focus_window = PointerRoot
             Starting from lowest ancestor window containing pointer, go up tree
-               (up meaning to ancestors) looking for window that has this event 
+               (up meaning to ancestors) looking for window that has this event
                selected.
             Send event to that window (with subwindow set to child in direction
                of window containing pointer).
 
         Else (focus_window = some specific window)
             If the lowest window containing the pointer is an inferior of
-            the focus_window, 
-                Start searching from there up the hierarchy for a window that 
+            the focus_window,
+                Start searching from there up the hierarchy for a window that
                 has selected this event
             Else
                 Start searching from the focus window up the hierarchy for a
@@ -87,19 +87,19 @@ static char rcsid[] = "$XConsortium: KeyPress.c /main/8 1995/07/14 11:40:57 drk 
 
   For keypress and keyrelease events, basically keyboard grabs preside overall.
   These can be actively set via a call to XGrabKeyboard or passively set via
-  a call to XGrabKey followed by the key press action (staying grabbed for the 
+  a call to XGrabKey followed by the key press action (staying grabbed for the
   duration of the keypress).
 
-  If there are no active or passive grabs, then the focus settings come into 
-  play. These are either set to None, PointerRoot, or to a specific window.  
+  If there are no active or passive grabs, then the focus settings come into
+  play. These are either set to None, PointerRoot, or to a specific window.
   Basically, if the window manager has a pointer-driven approach to input focus
-  it will call XSetInputFocus with a PointerRoot mode setting which means to 
-  let the input focus go to which ever window the pointer is currently in.  
+  it will call XSetInputFocus with a PointerRoot mode setting which means to
+  let the input focus go to which ever window the pointer is currently in.
   If it has an explicit keyboard focus policy (meaning a "click-to-type" style)
-  than it calls XSetInputFocus with the application window which the pointer 
-  is in only when the primary mouse button is pressed.  If for some reason 
-  either the window manager or the application calls XSetInputFocus with the 
-  window set to None, then all subsequent keyboard events are ignored until 
+  than it calls XSetInputFocus with the application window which the pointer
+  is in only when the primary mouse button is pressed.  If for some reason
+  either the window manager or the application calls XSetInputFocus with the
+  window set to None, then all subsequent keyboard events are ignored until
   the focus is changed.
 
   For our purposes (like with button presses) we have no way of knowing which
@@ -107,12 +107,12 @@ static char rcsid[] = "$XConsortium: KeyPress.c /main/8 1995/07/14 11:40:57 drk 
   knowing whether a current grab is in effect or not.
 */
 
-extern Boolean SendToClipWindow;	/* 
+extern Boolean SendToClipWindow;	/*
 					   Calculated in Script lib to see
 					   if the event should be possibly
-					   passed to clip window. This is 
+					   passed to clip window. This is
 					   because of the Grabs going on
-					   in the ScrolledWindow code. 
+					   in the ScrolledWindow code.
 					 */
 
 static XisObjectRecord *GetClipWindowObject();
@@ -132,7 +132,7 @@ int key_code;
 
     (*xisTraceMsg)("Got send_event_request = %s\n",xisGetKeyName(key_code));
 
-    focus_object = xisGetFocusObject();    
+    focus_object = xisGetFocusObject();
     xisUpdateObjectAttributes();
 
     /* If it exists and is known to this application context... */
@@ -172,7 +172,7 @@ int key_code;
 
         while (send_object != NULL) {
 
-            if ((send_object->your_event_mask&KeyPressMask) && 
+            if ((send_object->your_event_mask&KeyPressMask) &&
                 (send_object->visibility_state != IsUnmapped)             ) {
                 pursue = 1;
                 break;
@@ -188,7 +188,7 @@ int key_code;
 
             send_object = send_object->parent;
         }
- 
+
         if (!subwindow)
             subwindow = None;
 
@@ -200,7 +200,7 @@ int key_code;
 	    }
 
 	    xisLastEventTime += 500;
-            time = xisGetServerTime(0); 
+            time = xisGetServerTime(0);
 
             xisGetPointerLocation(&root_x,&root_y);
 

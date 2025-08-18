@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #) Attach Child2 (yellow)'s RIGHT to FORM.
 
@@ -140,7 +140,7 @@ InputString "500"
 ClickKey KReturn
 CompareVisual form
 
-#) Test for CR 4854 
+#) Test for CR 4854
 #) Clear Child1 and Child2.  The result should be the same as at the
 #) beginning of this screen.
 
@@ -248,8 +248,3 @@ LocatePointer WHButton
 ClickMB Btn1
 
 Exit
-
-
-
-
-

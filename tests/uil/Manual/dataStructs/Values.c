@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Values.c /main/4 1995/07/13 20:35:28 drk $"
@@ -89,7 +89,7 @@ static int reglist_num = (sizeof (reglist) / sizeof (reglist[0]));
 main(argc, argv)
      int argc;
      char *argv[];
-{ 	
+{
     int	i,
     	errors = 0;
 
@@ -115,14 +115,14 @@ main(argc, argv)
 			filename_vec,		/* files		*/
 			NULL,			/* os_ext_list (null)	*/
 			&s_MrmHierarchy)	/* ptr to returned id	*/
-       != MrmSUCCESS) 
+       != MrmSUCCESS)
     {
 	error_proc("Can't open hierarchy\n");
     }
 
     /*
      *		Register all Mrm functions
-     */	
+     */
 
 
     if (MrmRegisterNames (reglist, reglist_num)
@@ -203,7 +203,7 @@ int x;
 
 x =  *(int *)client_data;
 
-fprintf (stdout, "%13s\t%13d\t%13d\t%s", "Comparison", EXPECTED_VALUE, x, 
+fprintf (stdout, "%13s\t%13d\t%13d\t%s", "Comparison", EXPECTED_VALUE, x,
                           ((EXPECTED_VALUE == x) ? "Passed\n" : "Failed\n"));
 
 }
@@ -218,8 +218,7 @@ int x;
 
 x = (int) client_data;
 
-fprintf (stdout, "%13s\t%13d\t%13d\t%s", "Comparison", EXPECTED_IDENTIFIER, x, 
+fprintf (stdout, "%13s\t%13d\t%13d\t%s", "Comparison", EXPECTED_IDENTIFIER, x,
                        ((EXPECTED_IDENTIFIER == x) ? "Passed\n" : "Failed\n"));
 
 }
-

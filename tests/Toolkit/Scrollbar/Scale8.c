@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scale8.c /main/6 1995/07/13 19:12:51 drk $"
@@ -83,10 +83,10 @@ Widget w;
 XtPointer client_data;
 XtPointer data ;
 {
-    XmToggleButtonCallbackStruct *call_data = 
+    XmToggleButtonCallbackStruct *call_data =
                                   (XmToggleButtonCallbackStruct *) data;
 
-    if (call_data->set == XmSET) {  
+    if (call_data->set == XmSET) {
 	n = 0;
 	XtSetArg(args[n], XmNorientation, client_data); n++;
 	XtSetValues(Scale1, args, n);
@@ -98,7 +98,7 @@ Widget w;
 XtPointer client_data;
 XtPointer data ;
 {
-        XmPushButtonCallbackStruct *call_data = 
+        XmPushButtonCallbackStruct *call_data =
 					(XmPushButtonCallbackStruct *) data ;
 	Dimension	scale1_width = 0;
 	Dimension	scale1_height = 0;
@@ -107,12 +107,12 @@ XtPointer data ;
 	n = 0;
 	XtSetArg(args[n], XmNx, 20); n++;
 	XtSetArg(args[n], XmNy, 10);  n++;
-	XtSetArg(args[n], XmNtitleString, string);  n++; 
-	XtSetArg(args[n], XmNfontList, CommonGetFontList("variable"));  n++; 
-	XtSetArg(args[n], XmNshowValue, True);  n++; 
+	XtSetArg(args[n], XmNtitleString, string);  n++;
+	XtSetArg(args[n], XmNfontList, CommonGetFontList("variable"));  n++;
+	XtSetArg(args[n], XmNshowValue, True);  n++;
 	XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_BOTTOM);  n++;
 	XtSetArg(args[n], XmNshadowThickness, INITIAL_SHADOWTHICKNESS);  n++;
-	Scale1 = XmCreateScale(BBoard1, "Scale1", args, n); 
+	Scale1 = XmCreateScale(BBoard1, "Scale1", args, n);
 	XtRealizeWidget(Scale1);
 	XtManageChild(Scale1);
 
@@ -147,7 +147,7 @@ char **argv;
 
 	/*  initialize toolkit  */
 	 CommonTestInit(argc, argv);
-    
+
 	n = 0;
 	XtSetArg(args[n], XmNmarginHeight, 20);  n++;
 	XtSetArg(args[n], XmNmarginWidth, 20);  n++;
@@ -164,12 +164,12 @@ char **argv;
 	n = 0;
 	XtSetArg(args[n], XmNx, 10); n++;
 	XtSetArg(args[n], XmNy, 10);  n++;
-	XtSetArg(args[n], XmNtitleString, string);  n++; 
-	XtSetArg(args[n], XmNfontList, CommonGetFontList("variable"));  n++; 
-	XtSetArg(args[n], XmNshowValue, True);  n++; 
+	XtSetArg(args[n], XmNtitleString, string);  n++;
+	XtSetArg(args[n], XmNfontList, CommonGetFontList("variable"));  n++;
+	XtSetArg(args[n], XmNshowValue, True);  n++;
 	XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_BOTTOM);  n++;
 	XtSetArg(args[n], XmNshadowThickness, INITIAL_SHADOWTHICKNESS);  n++;
-	Scale1 = XmCreateScale(BBoard1, "Scale1", args, n); 
+	Scale1 = XmCreateScale(BBoard1, "Scale1", args, n);
 
 	XtManageChild(Scale1);
 
@@ -185,7 +185,7 @@ char **argv;
 	XtSetArg(args[n], XmNshowValue, True); n++;
 	XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
 	XtSetArg(args[n], XmNtitleString,
-		 XmStringCreate("shadowThickness", 
+		 XmStringCreate("shadowThickness",
 				XmSTRING_DEFAULT_CHARSET)); n++;
 	shadowScale = XmCreateScale(BBoard1, "shadowScale", args, n);
 	XtAddCallback(shadowScale, XmNvalueChangedCallback,
@@ -208,7 +208,7 @@ char **argv;
 	XtSetArg(args[n], XmNshowValue, True); n++;
 	XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
 	XtSetArg(args[n], XmNtitleString,
-		 XmStringCreate("scaleWidth", 
+		 XmStringCreate("scaleWidth",
 				XmSTRING_DEFAULT_CHARSET)); n++;
 	widthScale = XmCreateScale(BBoard1, "widthScale", args, n);
 	XtAddCallback(widthScale, XmNvalueChangedCallback,
@@ -231,7 +231,7 @@ char **argv;
 	XtSetArg(args[n], XmNshowValue, True); n++;
 	XtSetArg(args[n], XmNprocessingDirection, XmMAX_ON_RIGHT); n++;
 	XtSetArg(args[n], XmNtitleString,
-		 XmStringCreate("scaleHeight", 
+		 XmStringCreate("scaleHeight",
 				XmSTRING_DEFAULT_CHARSET)); n++;
 	heightScale = XmCreateScale(BBoard1, "heightScale", args, n);
 	XtAddCallback(heightScale, XmNvalueChangedCallback,
@@ -273,7 +273,7 @@ char **argv;
 	XtSetArg(args[n], XmNy, 505); n++;
 	XtSetArg(args[n], XmNshadowThickness, 2); n++;
 	XtSetArg(args[n], XmNlabelString,
-		 XmStringCreate("set defaults", 
+		 XmStringCreate("set defaults",
 				XmSTRING_DEFAULT_CHARSET)); n++;
 	defaultPB = XmCreatePushButton(BBoard1, "defaultPB", args, n);
 	XtAddCallback(defaultPB, XmNactivateCallback, defaultCB, NULL);

@@ -1,5 +1,5 @@
 # $XConsortium: TextField3.scr /main/5 1995/07/17 20:42:57 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,15 +20,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  @) A Text Field widget with the string 'Sample Text' will appear in
-#     the test window. The text is red on a white background. 
+#     the test window. The text is red on a white background.
 #  #) Move the pointer into the Text Field and press the return key.
-#     It should have no effect. 
+#     It should have no effect.
 LocatePointer Text1 RTextChar Max
 ClickMB Btn1
 ClickKey KReturn
@@ -38,16 +38,16 @@ CompareVisual Text1
 Continue
 
 #  #) Move the pointer into the Text Field and press ANY key. No matter
-#     what key was pressed, a 'A' will appear. 
+#     what key was pressed, a 'A' will appear.
 LocatePointer Text1 RTextChar Max
 ClickMB Btn1
 ClickKey Kf
 
-#  #) Press another key. This time a 'B' will appear in the text widget. 
+#  #) Press another key. This time a 'B' will appear in the text widget.
 ClickKey Ky
 CompareVisual Text1
 
-#  #) Repeat this cycle and you will print out the entire alphabet. 
+#  #) Repeat this cycle and you will print out the entire alphabet.
 InputString "this string has how many"
 CompareVisual Text1
 
@@ -55,7 +55,7 @@ CompareVisual Text1
 Continue
 
 #  #) Move the pointer into the Text Field, and again press Return.
-#     The text will change to the name of your server vendor. 
+#     The text will change to the name of your server vendor.
 LocatePointer Text1
 ClickMB Btn1
 ClickKey KReturn
@@ -65,7 +65,7 @@ CompareVisual Text1
 Continue
 
 #  /* test case for PIR 2492, 4077 */
-#  #) Type some text into the text field.  Press return.  The text 
+#  #) Type some text into the text field.  Press return.  The text
 #     will be replaced with a long string that overflows the display.
 LocatePointer Text1 RTextChar Max
 ClickMB Btn1
@@ -116,11 +116,10 @@ Continue
 # #) The sentence \"The cursor should be here.  If not, an error occurred.\"
 # should be displayed in the widget.  The insertion position has been set to
 # position immediately after the first sentence.
-# 
+#
 # #) Verify that the insertion cursor is located after
 # \"The cursor should be here.\".
 # /* end test for CR 5258 */
 CompareVisual Text1
 
 Continue
-

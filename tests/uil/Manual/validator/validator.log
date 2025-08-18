@@ -55,7 +55,7 @@
 (0)		comments which can span multiple lines */
 (0)	!	this also, as we've seen!
 (0)	!
-(0)	!	invalid		
+(0)	!	invalid
 (0)	!
 (0)	/*	nested /* comments */ are out */
 		  	                          1
@@ -114,7 +114,7 @@ Error:  (1) unexpected NAME token seen - parsing resumes after ";"
 (0)	!			invalid
 (0)		foo4		:	2147483648;
 			    		 	1
-Error:  (1) value of integer is out of range  
+Error:  (1) value of integer is out of range
 
 (0)		foo5		:	9 0;
 			    		 	  1
@@ -267,7 +267,7 @@ Error:  (1) boolean type is not valid for add operator
 Error:  (1) unexpected SEMICOLON token seen - parsing resumes after ";"
 
 (0)	! test for PIR 2812, very long names
-(0)	ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffoo 
+(0)	ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffoo
 Error:  (0) line truncated at 132 characters
 
 (0)	: 7442;
@@ -406,7 +406,7 @@ Error:  (2) found ** error ** value when expecting string value
 (0)	! valid example from documentation
 (0)	object file_privileges :
 (0)		XmList
-(0)		{ arguments	
+(0)		{ arguments
 (0)			{ XmNitems = string_table ('owner read',
 (0)						'owner write',
 (0)						'group read',
@@ -415,11 +415,11 @@ Error:  (2) found ** error ** value when expecting string value
 (0)						'other write');
 (0)			};
 (0)		};
-(0)	!	invalid 
+(0)	!	invalid
 (0)	value sticky_dessert : compound_string (#iso_greek"baklava");
 (0)	object	dessert_tray :
 (0)		XmList
-(0)		{ arguments	
+(0)		{ arguments
 (0)			{ XmNitems = string_table ( sticky_dessert,
 (0)						 'wrong punctuation,
 							                   1
@@ -461,13 +461,13 @@ Error:  (1) character string not terminated before end of line
 (0)		bizz11	:	bizz4 & bizz10;
 (0)		bizz12	:	bizz10 & bizz8;
 (0)	!	the following definition will issue an error
-(0)	!	because bizz13 is subsequently referenced (in defining foop1)	
+(0)	!	because bizz13 is subsequently referenced (in defining foop1)
 (0)		bizz13	:	exported compound_string (#iso_greek"secret");
 			      	 	                                             1
 Error:  (1) value used in this context must be private
 
 (0)		bizz14	:	'bearer';
-(0)	value	
+(0)	value
 (0)		foop1	:	bizz13 & bizz9;
 (0)	!
 (0)	!	invalid test
@@ -532,7 +532,7 @@ Error:  (1) unexpected NAME token seen - parsing resumes after ";"
 (0)				  };
 (0)			};
 (0)		row_column_2 : XmRowColumn {
-(0)			arguments {  
+(0)			arguments {
 (0)				  XmNentryClass = class_rec_name ('XmTextWidget');
 (0)				  };
 (0)			};
@@ -556,7 +556,7 @@ Error:  (1) unexpected NAME token seen - parsing resumes after ";"
 (0)	procedure
 (0)	chantestcreate;
 (0)	object
-(0)	chantest : 
+(0)	chantest :
 (0)	user_defined procedure chantestcreate {
 (0)		arguments {
 (0)			chan_foo = 100.0;
@@ -572,4 +572,3 @@ Severe:  (0) compilation terminated - fix previous errors
 
 
 File (0)   validator.uil
-

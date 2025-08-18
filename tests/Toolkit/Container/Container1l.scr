@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # #) This is the Container1 Test run with option "-I Container1l.Dat -u l".
 # C)
-# 
-# #) The container widget should be displayed in its LARGE_ICON view, 
+#
+# #) The container widget should be displayed in its LARGE_ICON view,
 #    with a DETAIL layoutType.
 # #) There should not be any column header.
 #    There should be only one column displayed.
@@ -40,12 +40,12 @@
 #    the focus, highlighted with a red dashed border around it.
 # C)
 
-Continue 
+Continue
 CompareVisual Container1l
 LocatePointer Container1l
 CompareVisual Container1l
-Continue 
- 
+Continue
+
 # #) The selectionPolicy is MULTIPLE_SELECT. Row 1 is already selected.
 # #) Click BSelect on row 1. Row 1 should get deselected.
 # #) Press BSelect on row 1 and drag to row 3.
@@ -57,7 +57,7 @@ Continue
 #       Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #       Number of items selected: 3
 #       Names of items selected: IconGad1 IconGad2 IconGad3
-# 
+#
 # #) The location cursor should stay on row 1.
 # #) Now click BSelect on row 3. Location cursor should move to row 3
 #    and row 3 should get deselected.
@@ -78,30 +78,30 @@ ReleaseMB Btn1
 CompareVisual Container1l
 ClickMB Btn1
 CompareVisual Container1l
-Continue 
- 
-# #) Click BSelect on row 1. Row 1 should get deselected and you should 
+Continue
+
+# #) Click BSelect on row 1. Row 1 should get deselected and you should
 #    see the following message on the term window:
 # !)
 #       Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #       Number of items selected: 1
 #       Names of items selected: IconGad2
-# 
+#
 # #) Click BSelect on row 2. Row 2 should get deselected and you should
 #    see the following message on the term window:
 # !)
 #       Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #       Number of items selected: 0
-#       Names of items selected: 
-# 
-# #) Click BSelect on row 1. Location cursor should move to row 1, row 1 
+#       Names of items selected:
+#
+# #) Click BSelect on row 1. Location cursor should move to row 1, row 1
 #    should get selected and you should see the following message on the
 #    term window:
 # !)
 #       Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #       Number of items selected: 1
 #       Names of items selected: IconGad1
-# 
+#
 # #) Move the pointer over row 3. With <Shift> key pressed, click BSelect.
 # #) Rows 1, 2 and 3 should get selected and you should
 #    see the following message on the term window:
@@ -109,7 +109,7 @@ Continue
 #       Reason for SelectionCallback: CR_MULTIPLE_SELECT
 #       Number of items selected: 3
 #       Names of items selected: IconGad1 IconGad2 IconGad3
-# 
+#
 # #) The location cursor should move to row 3.
 # C)
 
@@ -163,6 +163,6 @@ LocatePointer IconGad1
 ReleaseMB Btn1
 CompareVisual Container1l
 Continue
- 
+
 # E)
 Exit

@@ -22,15 +22,15 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual Child1 
+TRACE:(1) CompareVisual Child1
 TRACE:(2) Continue
-TRACE:(3) CompareVisual Child2 
+TRACE:(3) CompareVisual Child2
 TRACE:(4) Continue
-TRACE:(5) CompareVisual Child3 
+TRACE:(5) CompareVisual Child3
 TRACE:(6) Continue
-TRACE:(7) CompareVisual Child4 
+TRACE:(7) CompareVisual Child4
 TRACE:(8) Continue
 Margin width of bulletin board is 10
-TRACE:(9) CompareVisual Child1 
+TRACE:(9) CompareVisual Child1
 TRACE:(10) Exit
 Exiting Test...Please Standby...

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,15 +19,15 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.3
 */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
- 
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: WmImage.c /main/7 1996/11/14 13:50:30 rswiston $"
@@ -48,9 +48,9 @@ static char rcsid[] = "$XConsortium: WmImage.c /main/7 1996/11/14 13:50:30 rswis
 #include <pwd.h>
 #define MATCH_CHAR 'P'		/* Default match character - defined in Xmos.p */
 #else
-#include <Xm/XmosP.h> 
+#include <Xm/XmosP.h>
 /* Copied from XmosI.h */
-extern String _XmOSInitPath( 
+extern String _XmOSInitPath(
                         String file_name,
                         String env_pathname,
                         Boolean *user_path) ;
@@ -86,8 +86,8 @@ extern char    *getenv ();
  *
  *  Description:
  *  -----------
- *  This function takes a client supplied icon image pixmap and mask 
- *  bitmap and makes it into a colored pixmap suitable for use as an 
+ *  This function takes a client supplied icon image pixmap and mask
+ *  bitmap and makes it into a colored pixmap suitable for use as an
  *  icon image.
  *
  *
@@ -95,10 +95,10 @@ extern char    *getenv ();
  *  ------
  *  pCD = pointer to client data (icon colors and tiles)
  *
- *  iconBitmap = icon bitmap 
+ *  iconBitmap = icon bitmap
  *  iconMask   = mask bitmap
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  RETURN = icon pixmap (NULL if error)
@@ -106,8 +106,8 @@ extern char    *getenv ();
  ******************************<->***********************************/
 
 Pixmap MakeClientIconPixmap (
-	ClientData *pCD, 
-	Pixmap iconBitmap, 
+	ClientData *pCD,
+	Pixmap iconBitmap,
 	Pixmap iconMask)
 {
   Window root;
@@ -123,11 +123,11 @@ Pixmap MakeClientIconPixmap (
     pSD = pCD->pSD;
   else
     pSD = wmGD.pActiveSD;
-    
+
   /*
    * Get pixmap attributes and ensure that it is usable.
    */
-   
+
   if (!XGetGeometry (DISPLAY, iconBitmap, &root, &x, &y,
       &bitmapWidth, &bitmapHeight, &border, &depth))
   {
@@ -138,7 +138,7 @@ Pixmap MakeClientIconPixmap (
   /*
    * Color the bitmap, center it in a pixmap ....
    */
-  return (MakeIconPixmap (pCD, iconBitmap, iconMask, 
+  return (MakeIconPixmap (pCD, iconBitmap, iconMask,
 			  bitmapWidth, bitmapHeight, depth));
 
 } /* END OF FUNCTION MakeClientIconPixmap */
@@ -160,11 +160,11 @@ Pixmap MakeClientIconPixmap (
  *  ------
  *  iconName = pointer to the icon name (bitmap file path name or NULL)
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  RETURN = icon pixmap or XmUNSPECIFIED_PIXMAP
- * 
+ *
  *************************************<->***********************************/
 
 Pixmap GetNamedPixmap (Screen *scr, String iconName,
@@ -182,17 +182,17 @@ Pixmap GetNamedPixmap (Screen *scr, String iconName,
     if ((iconName[0] != '/') && (wmGD.bitmapDirectory))
       {
 	char *fullPathName;
-	
-	
+
+
 	fullPathName = (char*) XtMalloc(strlen(wmGD.bitmapDirectory) +
 					strlen(iconName) + 2);
 	sprintf(fullPathName, "%s/%s", wmGD.bitmapDirectory, iconName);
-	
+
 	pixmap = XmGetPixmapByDepth(scr, fullPathName, fg, bg, depth);
-	
+
 	XtFree(fullPathName);
       }
-    
+
     /*
      * If failed to get pixmap with bitmapDirectory, try
      * using XBMLANGPATH.
@@ -204,7 +204,7 @@ Pixmap GetNamedPixmap (Screen *scr, String iconName,
      * Warning message handling on error left to the calling routine.
      */
   }
-  
+
   return (pixmap);
 }
 
@@ -226,11 +226,11 @@ Pixmap GetNamedPixmap (Screen *scr, String iconName,
  *  pCD      = (nonNULL) pointer to client data
  *  iconName = pointer to the icon name (bitmap file path name or NULL)
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  RETURN = icon pixmap or NULL
- * 
+ *
  *************************************<->***********************************/
 
 Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
@@ -245,9 +245,9 @@ Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
       pixmap = GetNamedPixmap (ScreenOfDisplay(DISPLAY, pCD->pSD->screen),
 			       iconName,
 			       pCD->iconImageForeground,
-			       pCD->iconImageBackground, 
+			       pCD->iconImageBackground,
 			       DefaultDepth(DISPLAY, pCD->pSD->screen));
-      
+
       if (!PIXMAP_IS_VALID( pixmap ))
 	{
 	  Warning (((char *)GETMESSAGE(38, 1, "Invalid icon pixmap")));
@@ -257,7 +257,7 @@ Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
 	  XmeGetPixmapData(ScreenOfDisplay(DISPLAY, pCD->pSD->screen), pixmap,
 			   NULL, &depth, NULL, NULL, NULL, NULL,
 			   &width, &height);
-      
+
 	  pixmap = MakeIconPixmap (pCD, pixmap, XmUNSPECIFIED_PIXMAP,
 				   width, height, depth);
 	}
@@ -273,7 +273,7 @@ Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
       pixmap = MakeIconPixmap (pCD, pCD->pSD->builtinIconPixmap, XmUNSPECIFIED_PIXMAP,
 			       iImage_width, iImage_height, 1);
     }
-  
+
 
   return (pixmap);
 
@@ -301,7 +301,7 @@ Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
  *  height	- pixel height of bitmap
  *  depth	- depth of bitmap (pixmap, really)
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  RETURN 	- icon pixmap or NULL
@@ -310,7 +310,7 @@ Pixmap MakeNamedIconPixmap (ClientData *pCD, String iconName)
  *  Comments:
  *  --------
  *  o "mask" is not used.
- * 
+ *
  *************************************<->***********************************/
 Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int width, unsigned int height, unsigned int depth)
 {
@@ -333,8 +333,8 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     static RList *bot_rects = NULL;
     WmScreenData	*pSD;
 
-    if ((top_rects == NULL) && 
-	(top_rects = AllocateRList 
+    if ((top_rects == NULL) &&
+	(top_rects = AllocateRList
 	((unsigned)2 * ICON_INTERNAL_SHADOW_WIDTH)) == NULL)
     {
 	/* Out of memory! */
@@ -343,7 +343,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     }
 
     if ((bot_rects == NULL) &&
-	(bot_rects = AllocateRList 
+	(bot_rects = AllocateRList
 	((unsigned)2 * ICON_INTERNAL_SHADOW_WIDTH)) == NULL)
     {
 	/* Out of memory! */
@@ -355,7 +355,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     {
 	pSD = pCD->pSD;
     }
-    else 
+    else
     {
 	pSD = wmGD.pActiveSD;
     }
@@ -369,7 +369,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 	return ((Pixmap)NULL);
     }
 #ifndef NO_CLIP_CENTER
-    
+
     /* copy the center of the icon if too big */
     if (width > pSD->iconImageMaximum.width)
     {
@@ -393,7 +393,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
      * SLAB frameStyle adds a single pixel of background color around
      * the image to set it off from the beveling.
      */
-    imageWidth = pSD->iconImageMaximum.width + 
+    imageWidth = pSD->iconImageMaximum.width +
 		  2 * ICON_INTERNAL_SHADOW_WIDTH +
 		  ((wmGD.frameStyle == WmSLAB) ? 2 : 0);
     imageHeight = pSD->iconImageMaximum.height +
@@ -402,7 +402,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 
     /* create a pixmap (to be returned) */
 
-    iconPixmap = XCreatePixmap (DISPLAY, pSD->rootWindow, 
+    iconPixmap = XCreatePixmap (DISPLAY, pSD->rootWindow,
 		     imageWidth, imageHeight,
 		     DefaultDepth(DISPLAY, pSD->screen));
 
@@ -440,8 +440,8 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 	    /* set fg to bg color to clear it first */
 	    gcv.foreground = ICON_APPEARANCE(pCD).background;
 	}
-    } 
-    else 
+    }
+    else
     {
 	gcv.foreground = bg;	/* clear it first! */
 	gcv.background = bg;
@@ -459,12 +459,12 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 #endif /* WSM */
 
     /*
-     * Format the image. 
+     * Format the image.
      */
 
     /* fill in background */
 
-    XFillRectangle(DISPLAY, iconPixmap, imageGC, 0, 0, 
+    XFillRectangle(DISPLAY, iconPixmap, imageGC, 0, 0,
 		   imageWidth, imageHeight);
 
     /* center the image */
@@ -510,7 +510,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 	gcv.clip_y_origin = dest_y;
 #endif /* NO_CLIP_CENTER */
 	gc_mask |= GCClipXOrigin | GCClipYOrigin | GCClipMask;
-    } 
+    }
 
     XChangeGC (DISPLAY, imageGC, gc_mask, &gcv);
 #else /* WSM */
@@ -534,10 +534,10 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
     else
 #endif /* DISALLOW_DEEP_ICONS */
 #ifndef NO_CLIP_CENTER
-    XCopyPlane (DISPLAY, bitmap, iconPixmap, imageGC, src_x, src_y, width, 
+    XCopyPlane (DISPLAY, bitmap, iconPixmap, imageGC, src_x, src_y, width,
 		height, dest_x, dest_y, 1L);
 #else /* NO_CLIP_CENTER */
-    XCopyPlane (DISPLAY, bitmap, iconPixmap, imageGC, 0, 0, width, height, 
+    XCopyPlane (DISPLAY, bitmap, iconPixmap, imageGC, 0, 0, width, height,
 		dest_x, dest_y, 1L);
 #endif /* NO_CLIP_CENTER */
 
@@ -562,11 +562,11 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 	else
 	{
 #endif /* WSM */
-	topGC = GetHighlightGC (pSD, pCD->iconImageTopShadowColor, 
+	topGC = GetHighlightGC (pSD, pCD->iconImageTopShadowColor,
 				  pCD->iconImageBackground,
 				  pCD->iconImageTopShadowPixmap);
 
-	botGC = GetHighlightGC (pSD, pCD->iconImageBottomShadowColor, 
+	botGC = GetHighlightGC (pSD, pCD->iconImageBottomShadowColor,
 				  pCD->iconImageBackground,
 				  pCD->iconImageBottomShadowPixmap);
 #ifdef WSM
@@ -584,8 +584,8 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 	top_rects->used = 0;	/* reset count */
 	bot_rects->used = 0;
 
-	BevelRectangle (top_rects, 
-			bot_rects, 
+	BevelRectangle (top_rects,
+			bot_rects,
 			0, 0,
 			imageWidth, imageHeight,
 			ICON_INTERNAL_SHADOW_WIDTH,
@@ -593,7 +593,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
 			ICON_INTERNAL_SHADOW_WIDTH,
 			ICON_INTERNAL_SHADOW_WIDTH);
 
-	XFillRectangles (DISPLAY, iconPixmap, topGC, top_rects->prect, 
+	XFillRectangles (DISPLAY, iconPixmap, topGC, top_rects->prect,
 							top_rects->used);
 	XFillRectangles (DISPLAY, iconPixmap, botGC, bot_rects->prect,
 							bot_rects->used);
@@ -621,7 +621,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
  *  menuW = menu widget (for foreground and background colors)
  *  bitmapIndex = bitmap cache index
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  Return = label pixmap or NULL.
@@ -630,7 +630,7 @@ Pixmap MakeIconPixmap (ClientData *pCD, Pixmap bitmap, Pixmap mask, unsigned int
  *  Comments:
  *  --------
  *  Assumes bitmapIndex is valid.
- * 
+ *
  *************************************<->***********************************/
 
 Pixmap MakeCachedLabelPixmap (WmScreenData *pSD, Widget menuW, int bitmapIndex)
@@ -674,17 +674,17 @@ Pixmap MakeCachedLabelPixmap (WmScreenData *pSD, Widget menuW, int bitmapIndex)
     }
 
     if (!pixmap)
-    /* 
+    /*
      * A matching pixmap was not found in the pixmap cache for this bitmap.
      * Create and save the label pixmap with appropriate colors.
      */
     {
-        /* 
+        /*
          * Create a pixmap of the appropriate size, root, and depth.
          * Only BadAlloc error possible; BadDrawable and BadValue are avoided.
          */
 
-        pixmap = XCreatePixmap (DISPLAY, pSD->rootWindow, 
+        pixmap = XCreatePixmap (DISPLAY, pSD->rootWindow,
 				bitmapc->width, bitmapc->height,
                                 DefaultDepth (DISPLAY, pSD->screen));
 
@@ -697,9 +697,9 @@ Pixmap MakeCachedLabelPixmap (WmScreenData *pSD, Widget menuW, int bitmapIndex)
         gcv.background = bg;
 	gcv.graphics_exposures = False;
         gc = XCreateGC(DISPLAY, pixmap, (GCForeground|GCBackground), &gcv);
-   
+
         /*
-	 * Fill in the background, set the foreground, copy the bitmap to the 
+	 * Fill in the background, set the foreground, copy the bitmap to the
          * pixmap, and free the gc.
          */
 
@@ -750,7 +750,7 @@ Pixmap MakeCachedLabelPixmap (WmScreenData *pSD, Widget menuW, int bitmapIndex)
  *  bitmapCacheSize
  *  bitmapCacheCount
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  bitmapCache[]
@@ -762,7 +762,7 @@ Pixmap MakeCachedLabelPixmap (WmScreenData *pSD, Widget menuW, int bitmapIndex)
  *  Comments:
  *  --------
  *  None
- * 
+ *
  *************************************<->***********************************/
 
 #define BITMAP_CACHE_INC 5
@@ -787,7 +787,7 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
 	 n++, bitmapc++)
     {
         if ((!path && !bitmapc->path) ||
-            (path && bitmapc->path && 
+            (path && bitmapc->path &&
 	     !strcmp (path, bitmapc->path)))
         {
 	    return (n);
@@ -796,7 +796,7 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
 
     /*
      * The bitmap path name was not found in bitmapCache.
-     * Find the next BitmapCache entry, creating or enlarging bitmapCache if 
+     * Find the next BitmapCache entry, creating or enlarging bitmapCache if
      * necessary.
      */
     if (pSD->bitmapCacheSize == 0)
@@ -810,8 +810,8 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
     /* enlarge */
     {
         pSD->bitmapCacheSize += BITMAP_CACHE_INC;
-        pSD->bitmapCache = (BitmapCache *) 
-	    XtRealloc ((char*)pSD->bitmapCache, 
+        pSD->bitmapCache = (BitmapCache *)
+	    XtRealloc ((char*)pSD->bitmapCache,
 		     pSD->bitmapCacheSize * sizeof (BitmapCache));
     }
 
@@ -841,8 +841,8 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
         }
         strcpy (bitmapc->path, path);
 
-        if (XReadBitmapFile (DISPLAY, pSD->rootWindow, path, 
-			     &bitmapc->width, &bitmapc->height, 
+        if (XReadBitmapFile (DISPLAY, pSD->rootWindow, path,
+			     &bitmapc->width, &bitmapc->height,
 			     &bitmapc->bitmap, &x, &y)
             != BitmapSuccess)
         {
@@ -900,7 +900,7 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
  *  XBMLANGPATH
  *  XAPPLRESDIR
  *
- * 
+ *
  *  Outputs:
  *  -------
  *  Return = string containing the bitmap file pathname or NULL.
@@ -910,7 +910,7 @@ int GetBitmapIndex (WmScreenData *pSD, char *name)
  *  --------
  *  If the bitmap file does not exist, searches using XBMLANGPATH.
  *  Returns NULL path name for a NULL file name.
- * 
+ *
  *************************************<->***********************************/
 
 char *BitmapPathName (string)
@@ -938,8 +938,8 @@ char *BitmapPathName (string)
      */
 
     if ((string[0] == '~') && (string[1] == '/'))
-    /* 
-     * Handle "~/.." 
+    /*
+     * Handle "~/.."
      */
     {
 #ifdef MOTIF_ONE_DOT_ONE
@@ -1000,7 +1000,7 @@ char *BitmapPathName (string)
 	subs[0].match = user_path ? MATCH_XBM : MATCH_CHAR;
 	subs[0].substitution = string;
 	retname = XtResolvePathname(DISPLAY, "bitmaps", NULL, NULL,
-				    search_path, subs, XtNumber(subs), 
+				    search_path, subs, XtNumber(subs),
 					(XtFilePredicate)NULL);
 	XtFree(search_path);
 

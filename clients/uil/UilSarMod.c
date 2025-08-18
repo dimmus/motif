@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: UilSarMod.c /main/13 1997/03/12 15:21:36 dbl $"
@@ -84,7 +84,7 @@ extern   yystype			yylval;
 
 externaldef(uil_comp_glbl) src_source_record_type
 	*src_az_module_source_record;
-externaldef(uil_comp_glbl) unsigned short int	
+externaldef(uil_comp_glbl) unsigned short int
 	*uil_urm_variant = NULL;
 externaldef(uil_comp_glbl) unsigned short int
 	*uil_arg_compr = NULL;
@@ -136,7 +136,7 @@ unsigned int	module_clauses;
 **
 **  SIDE EFFECTS:
 **
-**      global variables are initialized 
+**      global variables are initialized
 **
 **--
 **/
@@ -179,7 +179,7 @@ if ( uil_child_compr == NULL )
  **	Loop throught the array of object variants and set them all to NULL.
  */
 for (i = 0; i<uil_max_object+1; i++)
-    uil_urm_variant[i] = 0;   
+    uil_urm_variant[i] = 0;
 
 /*
  ** Initialize all compression vectors
@@ -328,7 +328,7 @@ yystype	    *module_frame;
     _sar_save_source_pos (&sym_az_module_entry->header, module_frame);
 
     /* preserve module header comments */
-    sar_assoc_comment ((sym_obj_entry_type *)sym_az_module_entry);  
+    sar_assoc_comment ((sym_obj_entry_type *)sym_az_module_entry);
 
     /*
     ** Hang the module entry off the root entry
@@ -360,8 +360,8 @@ yystype	    *module_frame;
     */
 
     if (Uil_cmd_z_command.v_listing_file)
-	sprintf(Uil_lst_c_title2, 
-		"Module: %s", 
+	sprintf(Uil_lst_c_title2,
+		"Module: %s",
 		name_entry->c_text );
 
     /*
@@ -431,7 +431,7 @@ yystype	    *start_frame;
 
     else
 	{
-	value_entry = (sym_value_entry_type *) 
+	value_entry = (sym_value_entry_type *)
 	    value_frame->value.az_symbol_entry;
 
 	if (value_entry->w_length > 31)
@@ -460,8 +460,8 @@ yystype	    *start_frame;
     */
 
     if (Uil_cmd_z_command.v_listing_file)
-	sprintf(Uil_lst_c_title2, 
-		"Module: %s \t Version: %s", 
+	sprintf(Uil_lst_c_title2,
+		"Module: %s \t Version: %s",
 		sym_az_module_entry->obj_header.az_name->c_text,
 		value_entry->value.c_value );
 
@@ -614,7 +614,7 @@ yystype	    *start_frame;
 				 token_frame->value.az_keyword_entry->b_length, sym_k_char_8_value );
 	    break;
 	    }
-     
+
 	case sar_k_value_frame:
 	    {
 	    Uil_lex_l_user_default_charset = lex_k_userdefined_charset;
@@ -626,7 +626,7 @@ yystype	    *start_frame;
 
     /* If charset specified for module, then localized strings not allowed */
     Uil_lex_l_localized = FALSE;
-    
+
     module_clauses |= m_charset_clause;
     sym_az_module_entry->az_character_set = value_entry;
 
@@ -686,7 +686,7 @@ void	sar_save_module_source ()
 **
 **  FORMAL PARAMETERS:
 **
-**      object_frame	ptr to token frame for "OBJECT" 
+**      object_frame	ptr to token frame for "OBJECT"
 **
 **  IMPLICIT INPUTS:
 **

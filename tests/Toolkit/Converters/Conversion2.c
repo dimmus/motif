@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 static char rcsid[] = "$TOG: Conversion2.c /main/10 1999/12/03 18:40:25 jff $"
 #endif
@@ -185,8 +185,8 @@ Boolean passed;
     }  /* !passed */
 
   /*
-   * Print the results of the conversion and check to see what has to 
-   *  be done according to the size of the data being extracted from 
+   * Print the results of the conversion and check to see what has to
+   *  be done according to the size of the data being extracted from
    *  the result structure.
    */
 
@@ -208,12 +208,12 @@ Boolean passed;
 	    }
 	}
     }
-  else 
+  else
     if (result->size == 2)
       {
 	if (correct_value == UNKNOWN)
 	  {
-	    fprintf(stdout, "        FAILED\n"); 
+	    fprintf(stdout, "        FAILED\n");
 	  }
 	else
 	  {
@@ -223,9 +223,9 @@ Boolean passed;
 	      fprintf(stdout,"        FAILED\n");
 	  }
       }
-    else 
+    else
       {
-	if (correct_value == VARIABLE)  
+	if (correct_value == VARIABLE)
 	  {
 	    /*
 	     * Returning some sort of font id, can't detect this, so
@@ -234,7 +234,7 @@ Boolean passed;
 
 	    fprintf(stdout,"        Passed\n");
 	  }
-	else 
+	else
 	  {
 	    if (correct_value == UNKNOWN)
 	      {
@@ -309,7 +309,7 @@ char *argv[];
 		convert_set[i].type,	/* destination type		*/
 		&to_return);		/* converted value		*/
 
-      PrintToVal(convert_set[i].type, &from, &to_return, 
+      PrintToVal(convert_set[i].type, &from, &to_return,
 		 convert_set[i].correct_value);
 
 #else   /* No workaround, shows Intrinsics bug in convert */
@@ -320,7 +320,7 @@ char *argv[];
 		convert_set[i].type,	/* destination type	*/
 		&to_return);	  	/* converted value	*/
 
-      PrintToVal(convert_set[i].type, &from, &to_return, 
+      PrintToVal(convert_set[i].type, &from, &to_return,
 		 convert_set[i].correct_value, passed);
 #endif
 
@@ -341,14 +341,14 @@ char *argv[];
 
 #ifdef WORKAROUND
 
-      PrintToVal("String", &widgetname, &to_return, 
+      PrintToVal("String", &widgetname, &to_return,
 		 MessageDia);
 #else
 
-      PrintToVal("String", &widgetname, &to_return, 
+      PrintToVal("String", &widgetname, &to_return,
 		 MessageDia, TRUE);
 #endif
- 
+
       fflush (stdout);
 
   CommonPause();

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: GetSubObjcts.c /main/11 1995/07/14 10:58:57 drk $"
@@ -176,7 +176,7 @@ int PreDefComposite;
     int user_min, user_max, user_value;
     int arrow_size,arrow_length,crunched_arrow_size;
     int trough_length,trough_x,trough_y,trough_breadth;
-    float trueSize, userSize, factor, slideStart, slideSize; 
+    float trueSize, userSize, factor, slideStart, slideSize;
     int slider_x,slider_y,slider_width,slider_height,slider_offset;
 
     /* mvsXmListWidgetClass */
@@ -304,7 +304,7 @@ int PreDefComposite;
         widget_class_code = mvsVendorShellWidgetClass;
     else
         widget_class_code = mvsGetClassCode(widget);
- 
+
     switch (widget_class_code) {
         case mvsVendorShellWidgetClass:
         case mvsXmBulletinBoardWidgetClass:
@@ -346,7 +346,7 @@ int PreDefComposite;
 
                     child_obj = mvsGetSubObjects(object,children[i],
                                                  oUserDefined,
-                                                 user_defined_num++,False);         
+                                                 user_defined_num++,False);
                 }
             }
             break;
@@ -382,7 +382,7 @@ int PreDefComposite;
             child[i] = XmCommandGetChild(widget,XmDIALOG_PROMPT_LABEL);
             child_obj = mvsGetSubObjects(object,child[i],oLabel,0,True);
             i++;
-            
+
             child[i] = XmCommandGetChild(widget,XmDIALOG_HISTORY_LIST);
             child_obj = mvsGetSubObjects(object,child[i],
                                          oSelectionList,0,True);
@@ -410,7 +410,7 @@ int PreDefComposite;
                     continue;
 
                 child_obj = mvsGetSubObjects(object,children[i],oUserDefined,
-                                             user_defined_num++,True);         
+                                             user_defined_num++,True);
             }
             break;
 
@@ -420,25 +420,25 @@ int PreDefComposite;
 	    i = 0;
 
 	    child[i] = XtNameToWidget(widget,"MajorTabScrollerNext");
-	    child_obj = mvsGetSubObjects(object, child[i], 
+	    child_obj = mvsGetSubObjects(object, child[i],
 					 oMajorTabScrollerNext,0,True);
 	    i++;
 
 	    child[i] = XtNameToWidget(widget,"MajorTabScrollerPrev");
-	    child_obj = mvsGetSubObjects(object, child[i], 
+	    child_obj = mvsGetSubObjects(object, child[i],
 					 oMajorTabScrollerPrev,0,True);
 	    i++;
 
 	    child[i] = XtNameToWidget(widget,"MinorTabScrollerNext");
-	    child_obj = mvsGetSubObjects(object, child[i], 
+	    child_obj = mvsGetSubObjects(object, child[i],
 					 oMinorTabScrollerNext,0,True);
 	    i++;
 
 	    child[i] = XtNameToWidget(widget,"MinorTabScrollerPrev");
-	    child_obj = mvsGetSubObjects(object, child[i], 
+	    child_obj = mvsGetSubObjects(object, child[i],
 					 oMinorTabScrollerPrev,0,True);
 	    i++;
-            
+
 	    separator_num = 0;
             user_defined_num = 0;
             num_predefined = i;
@@ -458,7 +458,7 @@ int PreDefComposite;
 
                 /* Any other user defined children */
                 child_obj= mvsGetSubObjects(object,children[i],oUserDefined,
-                                            user_defined_num++,False);  
+                                            user_defined_num++,False);
             }
             break;
 
@@ -636,11 +636,11 @@ int PreDefComposite;
 	    XtGetValues (widget, args, n);
 	    if (pathMode == XmPATH_MODE_RELATIVE)  {
 		child[i] = XtNameToWidget(widget,"DirText");
-		child_obj = mvsGetSubObjects(object,child[i], 
+		child_obj = mvsGetSubObjects(object,child[i],
 					     oDirFilterText,0,True);
 		i++;
 		child[i] = XtNameToWidget(widget,"DirL");
-		child_obj = mvsGetSubObjects(object,child[i], 
+		child_obj = mvsGetSubObjects(object,child[i],
 					     oDirFilterLabel,0,True);
 		i++;
 	    }
@@ -660,7 +660,7 @@ int PreDefComposite;
             child[i] = XmFileSelectionBoxGetChild(widget,XmDIALOG_FILTER_TEXT);
             child_obj=mvsGetSubObjects(object,child[i], oFileFilterText,0,True);
             i++;
-            
+
             child[i] = XmFileSelectionBoxGetChild(widget,XmDIALOG_HELP_BUTTON);
             child_obj = mvsGetSubObjects(object,child[i], oHelpButton,0,True);
             i++;
@@ -687,7 +687,7 @@ int PreDefComposite;
                                                   XmDIALOG_FILE_LIST_LABEL);
             child_obj = mvsGetSubObjects(object,child[i],oFileListLabel,0,True);
             i++;
-            
+
             child[i] = XmFileSelectionBoxGetChild(widget,XmDIALOG_OK_BUTTON);
             child_obj = mvsGetSubObjects(object,child[i], oOkButton,0,True);
             i++;
@@ -701,7 +701,7 @@ int PreDefComposite;
             child_obj = mvsGetSubObjects(object,child[i],
                                          oFileSelectionLabel,0,True);
             i++;
-            
+
             child[i] = XmFileSelectionBoxGetChild(widget,XmDIALOG_TEXT);
             child_obj = mvsGetSubObjects(object,child[i],
                                          oFileSelectionText,0,True);
@@ -730,7 +730,7 @@ int PreDefComposite;
                     continue;
 
                 class_code = mvsGetClassCode(children[i]);
-                
+
                 if (class_code == mvsXmSeparatorGadgetClass)
                     child_obj = mvsGetSubObjects(object,children[i],
                                                  oSeparator,
@@ -739,7 +739,7 @@ int PreDefComposite;
                 /* Any other user defined children */
                 else
                     child_obj= mvsGetSubObjects(object,children[i],oUserDefined,
-                                                 user_defined_num++,False);  
+                                                 user_defined_num++,False);
             }
             break;
 
@@ -758,13 +758,13 @@ int PreDefComposite;
             	children = (Widget *)mvsGetResourceValue(widget,XmNchildren,
                                                      T_WidgetList);
 
-                user_defined_num = 0; 
+                user_defined_num = 0;
 		num_predefined = 0;
 
             	for (i=num_children-1; i>=0; i--) {
                     /* Any user defined children */
                     child_obj= mvsGetSubObjects(object,children[i],oUserDefined,
-                                                user_defined_num++,False);  
+                                                user_defined_num++,False);
                 }
 
 		/* Create increment arrow object */
@@ -796,7 +796,7 @@ int PreDefComposite;
 		SBDecrementBtn->width = arrowSize;
 		SBDecrementBtn->height = sb_height;
 
-		/* 
+		/*
 		 * Calculate the location for the
 		 * Increment and Decrement arrows
 		 */
@@ -829,7 +829,7 @@ int PreDefComposite;
 		    	SBIncrementBtn->x = (sb_x + sb_width + border_width) -
 					    (2 * arrowSize);
 		    	SBDecrementBtn->x = (sb_x + sb_width + border_width) -
-					    arrowSize; 
+					    arrowSize;
 		    }
 		    else  {  /* arrowLayout == XmARROWS_END */
 		    	SBIncrementBtn->x = sb_x + border_width;
@@ -853,13 +853,13 @@ int PreDefComposite;
 		cb_width = object->width;
 
 		i = 0;
-		combobox_type=(unsigned char) 
-				mvsGetResourceValue(widget, 
+		combobox_type=(unsigned char)
+				mvsGetResourceValue(widget,
 						    XmNcomboBoxType,
 						    T_unsigned_char);
 		child[i] = XtNameToWidget(widget,"*List");
 		if(combobox_type != XmCOMBO_BOX)  {  /* need to create it */
-		    child_obj = mvsGetSubObjects(object,child[i], 
+		    child_obj = mvsGetSubObjects(object,child[i],
 						 oSelectionList,0,False);
 		    if(child_obj != NULL) {
 			child_obj->parent->id.object_type = oScrolledWindow;
@@ -868,7 +868,7 @@ int PreDefComposite;
 		    }
 		}
 		else  {
-		    child_obj = mvsGetSubObjects(object,child[i], 
+		    child_obj = mvsGetSubObjects(object,child[i],
 						 oSelectionList,0,True);
 		    if(child_obj != NULL) {
 			child_obj->parent->id.object_type = oScrolledWindow;
@@ -922,11 +922,11 @@ int PreDefComposite;
 				  cb_shadowThickness + cb_highlightThickness;
 
 		if (stringDirection == XmSTRING_DIRECTION_L_TO_R)
-		    CBDropDwnBtn->x = cb_x + cb_width - 
-				      (cb_highlightThickness + border_width + 
+		    CBDropDwnBtn->x = cb_x + cb_width -
+				      (cb_highlightThickness + border_width +
 				      cb_marginWidth + arrowSize +
 				      cb_shadowThickness);
-		    /*CBDropDwnBtn->x = cb_x + cb_width + border_width - 
+		    /*CBDropDwnBtn->x = cb_x + cb_width + border_width -
 				      arrowSize;*/
 		else  /* XmSTRING_DIRECTION_R_TO_L */
 		    CBDropDwnBtn->x = cb_x + cb_highlightThickness +
@@ -982,7 +982,7 @@ int PreDefComposite;
                     continue;
 
                 child_obj = mvsGetSubObjects(object,children[i],oUserDefined,
-                                             user_defined_num++,False);             
+                                             user_defined_num++,False);
             }
             break;
 
@@ -1035,11 +1035,11 @@ int PreDefComposite;
 
 
         case mvsXmRowColumnWidgetClass:
-	    { 
+	    {
 
                user_defined_num = 0;
                num_predefined = 0;
-   
+
                num_children = (int)mvsGetResourceValue(widget,XmNnumChildren,
                                                     T_Cardinal);
                children = (Widget *)mvsGetResourceValue(widget,XmNchildren,
@@ -1056,7 +1056,7 @@ int PreDefComposite;
 						     oTearOffButton, 0, True);
 
 #endif /* MOTIF1_1 */
-			
+
                for (i=num_children-1; i>=0; i--) {
                    for (j=0; j<num_predefined; j++) {
                        if (children[i] == child[j])
@@ -1064,7 +1064,7 @@ int PreDefComposite;
                    }
                    if (j < num_predefined)
                        continue;
-   
+
                    if (rc_type == XmMENU_OPTION) {
 			class_code = mvsGetClassCode(children[i]);
 
@@ -1080,7 +1080,7 @@ int PreDefComposite;
                                                  oUserDefined,
                                                  user_defined_num++,False);
 		   } else
-                        child_obj = mvsGetSubObjects(object,children[i], 
+                        child_obj = mvsGetSubObjects(object,children[i],
 						oUserDefined,
 						user_defined_num++, False);
                }
@@ -1297,7 +1297,7 @@ int PreDefComposite;
             child_obj =
                    mvsGetSubObjects(object,child[i],oSelectionListLabel,0,True);
             i++;
-            
+
             child[i] = XmSelectionBoxGetChild(widget,XmDIALOG_OK_BUTTON);
             child_obj = mvsGetSubObjects(object,child[i],oOkButton,0,True);
             i++;
@@ -1309,7 +1309,7 @@ int PreDefComposite;
             child[i] = XmSelectionBoxGetChild(widget,XmDIALOG_SELECTION_LABEL);
             child_obj= mvsGetSubObjects(object,child[i],oSelectionLabel,0,True);
             i++;
-            
+
             child[i] = XmSelectionBoxGetChild(widget,XmDIALOG_TEXT);
             child_obj = mvsGetSubObjects(object,child[i],oSelectionText,0,True);
             i++;
@@ -1336,11 +1336,11 @@ int PreDefComposite;
             }
             break;
 
-        case mvsXmScrollBarWidgetClass: 
+        case mvsXmScrollBarWidgetClass:
 	    {
-                sb_x = object->x; 
+                sb_x = object->x;
 				sb_y = object->y;
-                sb_w = object->width; 
+                sb_w = object->width;
 				sb_h = object->height;
                 w = widget;
                 showArrows = (int)mvsGetResourceValue(w,XmNshowArrows,
@@ -1349,10 +1349,10 @@ int PreDefComposite;
 													  T_unsigned_char);
                 sliderSize = (int)mvsGetResourceValue(w,XmNsliderSize,
 													  T_Integer);
-                processingDirection = (int)mvsGetResourceValue(w, 
+                processingDirection = (int)mvsGetResourceValue(w,
 				            XmNprocessingDirection,
 					    T_unsigned_char);
-                hl = (int)mvsGetResourceValue(w,XmNhighlightThickness, 
+                hl = (int)mvsGetResourceValue(w,XmNhighlightThickness,
 					      T_Dimension);
                 sh = (int)mvsGetResourceValue(w,XmNshadowThickness,T_Dimension);
                 user_min = (int)mvsGetResourceValue(w,XmNminimum,T_Integer);
@@ -1385,16 +1385,16 @@ int PreDefComposite;
                         arrow[0]->width = arrow[0]->height =
                         arrow[1]->width = arrow[1]->height = arrow_size;
 
-                        crunched_arrow_size 
-                          = (sb_h - 
+                        crunched_arrow_size
+                          = (sb_h -
 			     (MIN_SLIDER_SIZE + 2 + 2*(hl+sh+border_width)))/2;
 
                         if (crunched_arrow_size < arrow_size)
-                            arrow[0]->height = arrow[1]->height = 
+                            arrow[0]->height = arrow[1]->height =
 							crunched_arrow_size;
                         arrow_length = arrow[0]->height;
 
-                        arrow[0]->x = arrow[1]->x = sb_x +  hl + 
+                        arrow[0]->x = arrow[1]->x = sb_x +  hl +
 						    sh + border_width;
 
                         trough_length = sb_h - 2 * ( arrow[0]->height + hl + sh
@@ -1407,7 +1407,7 @@ int PreDefComposite;
 			/* Starting point for trough_y and arrow Y's */
 			trough_y = arrow[0]->y = arrow[1]->y
 			  = sb_y + hl + sh + border_width;
-     
+
 			if (showArrows == XmEACH_SIDE) {
 			  trough_y += arrow[0]->height+1;
 			  arrow[0]->y += arrow[0]->height+1 + trough_length+1;
@@ -1440,29 +1440,29 @@ int PreDefComposite;
                         arrow[0]->width = arrow[0]->height =
                         arrow[1]->width = arrow[1]->height = arrow_size;
 
-                        crunched_arrow_size 
-                           = (sb_w - 
+                        crunched_arrow_size
+                           = (sb_w -
 			      (MIN_SLIDER_SIZE + 2 + 2*(hl+sh+border_width)))/2;
 
                         if (crunched_arrow_size < arrow_size)
-                            arrow[0]->width = arrow[1]->width = 
+                            arrow[0]->width = arrow[1]->width =
 							crunched_arrow_size;
                         arrow_length = arrow[0]->width;
 
-                        arrow[0]->y = arrow[1]->y = sb_y + hl + 
+                        arrow[0]->y = arrow[1]->y = sb_y + hl +
 						    sh + border_width;
 
-                        trough_length = sb_w - 2*(arrow[0]->width + hl + sh 
+                        trough_length = sb_w - 2*(arrow[0]->width + hl + sh
 						  + border_width);
 
                         trough_breadth = arrow_size;
 
                         trough_y = arrow[0]->y;
-     
+
 			/* Starting point for trough_x and arrow X's */
 			trough_x = arrow[0]->x = arrow[1]->x
 			  = sb_x + hl + sh + border_width;
-     
+
 			if (showArrows == XmEACH_SIDE) {
 			  trough_x += arrow[0]->width+1;
 			  arrow[0]->x += arrow[0]->width+1 + trough_length+1;
@@ -1506,14 +1506,14 @@ int PreDefComposite;
                     trough_x = sb_x + hl + sh + border_width;
                     trough_y = sb_y + hl + sh + border_width;
                 }
-                    
+
                 trueSize = trough_length;
                 userSize = user_max - user_min;
 
                 if (arrow_length == 0)
                     arrow_length = (-1);
 
-                factor = trueSize / userSize; 
+                factor = trueSize / userSize;
 
 		slider_offset = hl + sh + border_width;
 
@@ -1537,17 +1537,17 @@ int PreDefComposite;
 		  break;
 		}
 
-  		if ( processingDirection == XmMAX_ON_BOTTOM || 
+  		if ( processingDirection == XmMAX_ON_BOTTOM ||
 			processingDirection == XmMAX_ON_RIGHT )
 		    slideStart = (float)(user_value - user_min) * factor +
-				(orientation == XmVERTICAL ? sb_y : sb_x) + 
+				(orientation == XmVERTICAL ? sb_y : sb_x) +
 				slider_offset;
 		else
 		    slideStart = (float)(user_max - user_value - sliderSize)
-				 * factor + 
-				 (orientation == XmVERTICAL ? sb_y : sb_x) + 
+				 * factor +
+				 (orientation == XmVERTICAL ? sb_y : sb_x) +
 				slider_offset;
-  
+
                 slideSize = (float)(sliderSize)*factor;
 
                 if (orientation == XmVERTICAL) {
@@ -1565,14 +1565,14 @@ int PreDefComposite;
 
                 if (slider_width < MIN_SLIDER_SIZE) {
                     slider_width = MIN_SLIDER_SIZE;
-                    if ( orientation == XmHORIZONTAL && 
+                    if ( orientation == XmHORIZONTAL &&
                          slider_x + slider_width > trough_x + trough_length )
                         slider_x = trough_x + trough_length - slider_width;
                 }
 
                 if (slider_height < MIN_SLIDER_SIZE) {
                     slider_height = MIN_SLIDER_SIZE;
-                    if ( orientation == XmVERTICAL && 
+                    if ( orientation == XmVERTICAL &&
                          slider_y + slider_height > trough_y + trough_length )
                         slider_y = trough_y + trough_length - slider_height;
                 }
@@ -1581,7 +1581,7 @@ int PreDefComposite;
                 slider->y = slider_y;
                 slider->width = slider_width;
                 slider->height = slider_height;
-                
+
                 if (orientation == XmVERTICAL) {
                     trough[1]->x = trough_x;
                     trough[1]->y = trough_y;
@@ -1590,7 +1590,7 @@ int PreDefComposite;
                     trough[0]->x = trough_x;
                     trough[0]->y = slider_y + slider_height + 1;
                     trough[0]->width = trough_breadth;
-                    trough[0]->height = trough_y + trough_length 
+                    trough[0]->height = trough_y + trough_length
                                             - (slider_y + slider_height) - 1;
                 }
                 else { /* XmHORIZONTAL */
@@ -1600,16 +1600,16 @@ int PreDefComposite;
                     trough[1]->height = trough_breadth;
                     trough[0]->x = slider_x + slider_width + 1;
                     trough[0]->y = trough_y;
-                    trough[0]->width = trough_x + trough_length 
+                    trough[0]->width = trough_x + trough_length
                                             - (slider_x + slider_width) - 1;
                     trough[0]->height = trough_breadth;
                 }
 	    }
             break;
 
-        case mvsXmListWidgetClass: 
+        case mvsXmListWidgetClass:
 		{
-            l_x = object->x; 
+            l_x = object->x;
 			l_y = object->y;
             l_w = object->width;
 			l_h = object->height;
@@ -1679,11 +1679,11 @@ int PreDefComposite;
 			t_h = object->height;
             w = widget;
 
-	    /* 
+	    /*
 	     * Added to get the font from text width's
 	     * fontlist.
 	     */
-            fontList = (XmFontList)mvsGetResourceValue(w,XmNfontList, 
+            fontList = (XmFontList)mvsGetResourceValue(w,XmNfontList,
 						       T_XmFontList);
 	    if (XmFontListInitFontContext(&font_context, fontList) == True) {
 		if (XmFontListGetNextFont(font_context, &charset, &fs) == False)
@@ -1759,13 +1759,13 @@ int PreDefComposite;
                                                           T_Dimension);
              int lineHeight;
              int start_x,curr_y,curr_x,i;
- 
 
-	     /* 
+
+	     /*
 	      * Added to get the font from text field width's
 	      * fontlist.
 	      */
-             fontList = (XmFontList)mvsGetResourceValue(w,XmNfontList, 
+             fontList = (XmFontList)mvsGetResourceValue(w,XmNfontList,
 	  					        T_XmFontList);
 	     if (XmFontListInitFontContext(&font_context, fontList) == True) {
 		if (XmFontListGetNextFont(font_context, &charset, &fs) == False)
@@ -1784,7 +1784,7 @@ int PreDefComposite;
 
              curr_x = start_x = t_x + marginWidth + shadowThickness+ borderWidth;
              curr_y = t_y + marginHeight + shadowThickness + highlightThickness;
- 
+
              for (i=0; i<stringLength; i++) {
                  child_obj = xisAllocObject(object,widget,oTextChar,i);
                  child_obj->id_code = next_avail_id_code++;
@@ -1793,7 +1793,7 @@ int PreDefComposite;
                  child_obj->y = curr_y;
                  child_obj->height = lineHeight;
                  child_obj->width = XTextWidth(fs,&string[i],1);
- 
+
                  curr_x += child_obj->width;
                  if (string[i] == '\n') {
                      curr_x = start_x;

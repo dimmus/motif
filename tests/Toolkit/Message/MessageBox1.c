@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MessageBox1.c /main/8 1995/07/13 18:58:39 drk $"
@@ -60,7 +60,7 @@ void  main(argc, argv)
     XmString      tcs2;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
@@ -188,12 +188,12 @@ void  main(argc, argv)
     XtAddCallback(MessageBox6,XmNhelpCallback, HelpCB, NULL);
 
     XtManageChild(RowColumn1);
-        
+
     CommonPause();
     CommonPause();
     CommonPause();
     CommonPause();
-    
+
     XtAppMainLoop(app_context);
 }
 
@@ -216,15 +216,3 @@ void HelpCB(widget, client_data, call_data)
   fflush (stdout);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

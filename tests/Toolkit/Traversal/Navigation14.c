@@ -58,7 +58,7 @@ main (int argc, char ** argv)
 
    pkids = (Widget *) XtMalloc(sizeof(Widget) * 4);
 
-   if ((UserData != NULL)  && (strcmp (UserData, "scale_child") == 0)) 
+   if ((UserData != NULL)  && (strcmp (UserData, "scale_child") == 0))
 	use_scale = 1;
    else use_scale = 0;
 
@@ -66,11 +66,11 @@ main (int argc, char ** argv)
    XtSetArg (args[n], XmNheight, 300); n++;
    XtSetArg (args[n], XmNwidth, 300); n++;
    parent = XmCreateBulletinBoard (Shell1, "parent", args, n);
-  
+
    n = 0;
-   pkids[0] = XmCreatePushButton (parent, "DefaultButton", args, n); 
+   pkids[0] = XmCreatePushButton (parent, "DefaultButton", args, n);
    XtAddCallback (pkids[0], XmNactivateCallback, CommonGenericCB, NULL);
-  
+
    n = 0;
    XtSetArg (args[n], XmNy, 75); n++;
    XtSetArg (args[n], XmNx, 0); n++;
@@ -79,10 +79,10 @@ main (int argc, char ** argv)
    XtSetArg (args[n], XmNtraversalOn, True); n++;
    XtSetArg (args[n], XmNhighlightOnEnter, True); n++;
    XtSetArg (args[n], XmNhighlightThickness, 2); n++;
-   if (use_scale) 
-   	pkids[1] = XmCreateScale (parent, "ScrollBar", args, n); 
+   if (use_scale)
+   	pkids[1] = XmCreateScale (parent, "ScrollBar", args, n);
    else
-        pkids[1] = XmCreateScrollBar (parent, "ScrollBar", args, n); 
+        pkids[1] = XmCreateScrollBar (parent, "ScrollBar", args, n);
 
    XtOverrideTranslations (pkids[1], XtParseTranslationTable (arrow_transl));
 
@@ -122,11 +122,11 @@ main (int argc, char ** argv)
    XtSetArg (args[n], XmNhighlightOnEnter, True); n++;
    XtSetArg (args[n], XmNhighlightThickness, 2); n++;
    if (use_scale) {
-   	pkids[1] = XmCreateScale (parent, "ScrollBar", args, n); 
+   	pkids[1] = XmCreateScale (parent, "ScrollBar", args, n);
 	XtRealizeWidget (pkids[1]);
    }
    else
-        pkids[1] = XmCreateScrollBar (parent, "ScrollBar", args, n); 
+        pkids[1] = XmCreateScrollBar (parent, "ScrollBar", args, n);
 
    XtManageChild (pkids[1]);
 
@@ -145,7 +145,7 @@ main (int argc, char ** argv)
    n = 0;
    XtSetArg (args[n], XmNnavigationType, XmTAB_GROUP); n++;
    XtSetArg (args[n], XmNtraversalOn, True); n++;
-   
+
    for (i = 0; i <= 3; i++)
      XtSetValues (pkids[i], args, n);
 
@@ -155,7 +155,7 @@ main (int argc, char ** argv)
    /* the reason for the funky order is so that we end up with a traversal
       order reminiscent of counter-clockwise once the EXCLUSIVE_TAB_GROUP
       list is added in the next panel */
-   
+
    n = 0;
    XtSetArg (args[n], XmNnavigationType, XmSTICKY_TAB_GROUP); n++;
    XtSetValues (pkids[0], args, n);
@@ -187,14 +187,14 @@ main (int argc, char ** argv)
 
    CommonPause();
 
-   /* restore the Text and Button pkids to XmNONE and change the 
+   /* restore the Text and Button pkids to XmNONE and change the
       BB parent to an EXCLUSIVE_TAB_GROUP. Notably, do this
       setting out of child order. */
    /* also, set the ScrollBar/Scale and RowColumn back to default TAB_GROUPs*/
 
    n = 0;
    XtSetArg (args[n], XmNnavigationType, XmNONE); n++;
-   XtSetValues (pkids[3], args, n); 
+   XtSetValues (pkids[3], args, n);
    XtSetValues (pkids[0], args, n);
 
    n = 0;
@@ -211,6 +211,3 @@ main (int argc, char ** argv)
 
    XtAppMainLoop (app_context);
 }
-
-
-

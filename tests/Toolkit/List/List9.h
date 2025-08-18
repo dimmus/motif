@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: List9.h /main/8 1995/07/13 18:22:24 drk $ */
 
 #define NITEMS	 4
@@ -81,21 +81,20 @@ int       position = 0;
 /*  Private Functions  */
 
 
-static void 	SSelCB_List1(Widget w, XtPointer client_data, 
+static void 	SSelCB_List1(Widget w, XtPointer client_data,
 						XtPointer call_data);
-static void  	ApplyCB(Widget w, XtPointer client_data, 
+static void  	ApplyCB(Widget w, XtPointer client_data,
 						XtPointer call_data);
-static void  	ClearCB(Widget w, XtPointer client_data, 
+static void  	ClearCB(Widget w, XtPointer client_data,
 						XtPointer call_data);
-static void  	ScaleCB(Widget w, XtPointer client_data, 
+static void  	ScaleCB(Widget w, XtPointer client_data,
 						XtPointer call_data);
-static void  	NotifyCB(Widget w, XtPointer client_data, 
+static void  	NotifyCB(Widget w, XtPointer client_data,
 						XtPointer call_data);
-static void  	AddModeCB(Widget w, XtPointer client_data, 
+static void  	AddModeCB(Widget w, XtPointer client_data,
 						XtPointer call_data);
-static void  	CHSPolicyCB(Widget w, unsigned char client_data, 
+static void  	CHSPolicyCB(Widget w, unsigned char client_data,
 			    			XtPointer call_data);
-static void  	MulSelCB_List2(Widget w, XtPointer client_data, 
+static void  	MulSelCB_List2(Widget w, XtPointer client_data,
 			    			XtPointer call_data);
 static Widget	CreateToggle(Widget parent, char *label);
-

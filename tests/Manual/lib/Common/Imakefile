@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 XCOMM   $XConsortium: Imakefile /main/12 1996/06/24 15:41:22 eheller $
 
 #define DoNormalLib NormalLibMCommon
@@ -76,7 +76,7 @@ UNSHAREDOBJS = TestInit.o
 #define LibHeaders	NO
 #include <Library.tmpl>
 
-XCOMM A special library is made for TestUilInit, 
+XCOMM A special library is made for TestUilInit,
 XCOMM to prevent including Mrm references in libCommon.*
 NormalLibraryTarget(MCommonUil,$(UIL_OBJS))
 

@@ -1,5 +1,5 @@
 # $XConsortium: Form9.scr /main/4 1995/07/17 20:20:54 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,25 +20,25 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # A client with a form should appear. The form should be about
 # 200x200 pixels and have a scrollbar along the right edge
 # extending halfway down the form.  It should also have a
 # scrollbar along the bottom edge extending to the x location
-# of the vertical scrollbar. 
+# of the vertical scrollbar.
 # Resize the client window several times.  You should see the
 # vertical scrollbar remain on the right edge of the form and
 # maintain its original height.  The horizontal scrollbar should
 # remain on the bottom edge of the form, but grow horizontally
 # so that its right edge always extends to the x location of the
-# vertical scrollbar. 
+# vertical scrollbar.
 # Press the osfHelp key.
 # Iconify and Normalize the client.  The scrollbars should reappear
-# when the client is normalized. 
+# when the client is normalized.
 
 
 
@@ -58,12 +58,12 @@ Continue
 
 
 # A client with a form should appear. The form should
-# contain a scrollbar. 
+# contain a scrollbar.
 # Resize the client window. You should see the scrollbar
 # grow to the size of the window minus some horizontal and
 # vertical spacing.
 # Iconify and Normalize the client window. You should see
-# the scollbar. 
+# the scollbar.
 
 
 CompareVisual form

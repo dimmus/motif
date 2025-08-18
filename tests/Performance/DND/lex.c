@@ -231,6 +231,3 @@ UnquoteString(char *string)
     /* unquoted string, return it */
     return (string);
 }
-
-	       
-	

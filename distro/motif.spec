@@ -180,7 +180,7 @@ rm -rf $RPM_BUILD_ROOT
 - patched ltmain.sh to link properly
 
 * Wed May 22 2002 Harald Hoyer <harald@redhat.de> 2.2.2-6
-- specified libraries by full name in files section 
+- specified libraries by full name in files section
   (libMrm was missing on alpha)
 
 * Tue Mar 26 2002 Than Ngo <than@redhat.com> 2.2.2-5
@@ -226,7 +226,7 @@ rm -rf $RPM_BUILD_ROOT
 - rebuild for ExtraBinge 7.2
 
 * Thu May 03 2001 Than Ngo <than@redhat.com>
-- add 3 official motif patches 
+- add 3 official motif patches
 - add rm -rf $RPM_BUILD_ROOT in install section
 - remove some old patches which are now in official patches
 

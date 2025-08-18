@@ -19,8 +19,8 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
-! 
+!
+!
 ! HISTORY
 !
 !------------------------------------------------------------------------
@@ -30,7 +30,7 @@
 I18N1.I18N1a*fontList: 8x13;k14-1;rkana14:
 I18N1.I18N1b*fontList: 8x13;k14-1;rkana14:
 
-I18N1.*TextFieldLabel.labelString:	»iQÌÅ©½¢wvðTµÄA»ÌðIðµÄ­¾³¢B 
+I18N1.*TextFieldLabel.labelString:	»iQÌÅ©½¢wvðTµÄA»ÌðIðµÄ­¾³¢B
 
 I18N1.*TextField1.value:			»iQÉÎ·éwvÌXgð\¦·éÉÍA»Ì(ºüªø©ê½eLXg) àµ­ÍACRðIðµÄ­¾³¢B Any value you want!
 
@@ -40,6 +40,4 @@ I18N1.*Text1.value:ÈºÉñµ½^CgÍ±ÌVXeÉCXg[³êAÜ½ICEwvªo^³êÄ¢é»iQ</>ð\µÄ¢Ü·B^Cg(¨æÑAC
 
 I18N1.*CSTextLabel.labelString:		This is an XmCSText
 
-I18N1.*CSText1.cstextValue:		You know what? I'm happy!\n»iQÉÎ·éwvÌXgð\¦·éÉÍA»Ì(ºüªø©ê½eLXg) àµ­ÍACRðIðµÄ­¾³¢B 
-
-
+I18N1.*CSText1.cstextValue:		You know what? I'm happy!\n»iQÉÎ·éwvÌXgð\¦·éÉÍA»Ì(ºüªø©ê½eLXg) àµ­ÍACRðIðµÄ­¾³¢B

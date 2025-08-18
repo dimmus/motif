@@ -19,20 +19,20 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # @)  This is the StringRend test used to test the display of
-# rendition components when drawing with XmString functions. 
+# rendition components when drawing with XmString functions.
 # Currently a blank drawing area widget should be displayed.
 
-# C) 
+# C)
 Continue
 
-# @) Eight strings should be displayed.  
-# The contents of the strings help to indicate which rendition 
-# components are currently active. 
+# @) Eight strings should be displayed.
+# The contents of the strings help to indicate which rendition
+# components are currently active.
 CompareVisual DrawArea
 
 # #)  The first string which reads \"Begin - Rendition 1\" should
@@ -56,12 +56,12 @@ CompareVisual DrawArea
 # C)
 Continue
 
-# #)  The third string, \"Begin - Rendition 3\", should be displayed 
+# #)  The third string, \"Begin - Rendition 3\", should be displayed
 # with the attributes:
 # @)  Background:  blue
 # @)  Foreground:  white
 # @)  Font:        8x13bold
-# @)  Tabs:        1 cm 
+# @)  Tabs:        1 cm
 # @)  Underline:   No
 # @)  Strikethru:  No
 
@@ -71,7 +71,7 @@ Continue
 # @)  Background:  blue
 # @)  Foreground:  yellow
 # @)  Font:        9x15
-# @)  Tabs:        2 cm 
+# @)  Tabs:        2 cm
 # @)  Underline:   No
 # @)  Strikethru:  Yes ( Single Dashed Line )
 
@@ -82,20 +82,20 @@ Continue
 # set to XmAS_IS. Its rendition resources should default to the resource
 # values of a previously active rendition which is Rendition 3. This string
 # should have the same display attributes as the third string.
-# with the attributes: 
+# with the attributes:
 # @)  Background:  blue
 # @)  Foreground:  white
 # @)  Font:        8x13bold
-# @)  Tabs:        1 cm 
+# @)  Tabs:        1 cm
 # @)  Underline:   No
 # @)  Strikethru:  No
 
-# #)  The sixth string, \"End - Rendition 2\", should be displayed with 
-# the following attributes: 
+# #)  The sixth string, \"End - Rendition 2\", should be displayed with
+# the following attributes:
 # @)  Background:  black
 # @)  Foreground:  white
 # @)  Font:        8x13bold
-# @)  Tabs:        1 cm 
+# @)  Tabs:        1 cm
 # @)  Underline:   No
 # @)  Strikethru:  No
 
@@ -107,12 +107,12 @@ Continue
 # @)  Background:  black
 # @)  Foreground:  white
 # @)  Font:        8x13bold
-# @)  Tabs:        1 cm 
+# @)  Tabs:        1 cm
 # @)  Underline:   No
 # @)  Strikethru:  No
 
 # #)  The eighth string, \"End - Rendition 1\", should be displayed with
-# the following attributes: 
+# the following attributes:
 # @)  Background:  black
 # @)  Foreground:  white
 # @)  Font:        8x13
@@ -130,7 +130,7 @@ Continue
 # #)  Select \"render2\" from the list in the \"Renditions\" window.
 # Select the \"Merge\" pushbutton. A popup window labelled \"Merge Panel\"
 # will be displayed.  The \"Merge Panel\" will list the current resource
-# values corresponding to the rendition selected.    
+# values corresponding to the rendition selected.
 LocatePointer RendList RListItem 1
 ClickMB Btn1
 LocatePointer MergePB
@@ -142,12 +142,12 @@ PressMB Btn1
 LocatePointer UnderlinePB1
 ReleaseMB Btn1
 
-# Set the \"Merge Mode\" to \"Replace\". Select the \"Apply\" pushbutton. 
+# Set the \"Merge Mode\" to \"Replace\". Select the \"Apply\" pushbutton.
 # When \"Apply\" is selected, a new rendition is created using the same
 # render tag as the render tag selected in the \"Renditions\" window.
 # The new rendition is then added to the current render table with
 # the merge mode as XmREPLACE. Verify that there is no longer an underline
-# drawn beneath the second string in the \"Display Strings\" window. 
+# drawn beneath the second string in the \"Display Strings\" window.
 #LocatePointer MergeOptions ROptionButton
 #PressMB Btn1
 #LocatePointer ReplacePB
@@ -165,15 +165,15 @@ ClickMB Btn1
 # C)
 Continue
 
-# #)  Select \"render4\" from the \"Renditions\" window and then 
+# #)  Select \"render4\" from the \"Renditions\" window and then
 # select the \"Merge\" pushbutton. The \"Merge Panel\" will be displayed
-# listing the current rendition resource values for the render tag selected. 
+# listing the current rendition resource values for the render tag selected.
 # Select \"AS_IS\" from the \"StrikethruType\" option menu.
 # Select \"Merge New\" from the \"Merge Mode\" option menu.
-# Select the \"Apply\" pushbutton. Any unspecified resource values in the 
+# Select the \"Apply\" pushbutton. Any unspecified resource values in the
 # new rendition will be replaced with the values specified in the old
 # rendition. Verify that a single dashed line is still displayed through
-# the fourth string in the \"Display Strings\" window. 
+# the fourth string in the \"Display Strings\" window.
 LocatePointer RendList RListItem 3
 ClickMB Btn1
 LocatePointer MergePB
@@ -209,13 +209,13 @@ Continue
 # Since the merge mode is XmMERGE_OLD, any unspecified resource values from the
 # old rendition will be overwritten with a specified resource in the new
 # rendition.  Verify that the font is changed from 8x13bold to fixed in
-# the fifth string displayed in the \"Display Strings\" window. 
+# the fifth string displayed in the \"Display Strings\" window.
 LocatePointer RendList RListItem 4
 ClickMB Btn1
 LocatePointer MergePB
 ClickMB Btn1
 
-LocatePointer FontNameTF RTextChar Max 
+LocatePointer FontNameTF RTextChar Max
 ClickMB Btn1
 ClickKey KBackSpace
 ClickKey KBackSpace
@@ -256,7 +256,7 @@ Continue
 # Since the merge mode is XmSKIP, the new rendition resource values should
 # be ignored.  Verify that the foreground color remains yellow and the
 # strikethru line is still a single dashed line in the fourth string
-# displayed in the \"Display Strings\" window. 
+# displayed in the \"Display Strings\" window.
 LocatePointer RendList RListItem 3
 ClickMB Btn1
 LocatePointer MergePB
@@ -345,7 +345,7 @@ LocatePointer RemovePB
 ClickMB Btn1
 
 CompareVisual DrawArea
- 
+
 # C)
 Continue
 

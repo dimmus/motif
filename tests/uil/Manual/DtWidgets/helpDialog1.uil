@@ -22,7 +22,7 @@
 !
 !
 ! HISTORY
-! $XConsortium: helpDialog1.uil /main/1 1996/08/12 15:44:33 jakku $ 
+! $XConsortium: helpDialog1.uil /main/1 1996/08/12 15:44:33 jakku $
 !******************************************************************************
 module Test
         version = 'v1.0'
@@ -37,7 +37,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -65,7 +65,7 @@ module Test
                 XmNbackground =  turquoise;
 		XmNheight = 200;
 		XmNwidth = 200;
-		
+
             };
 	    callbacks {
 		DtNhyperLinkCallback = procedure Report_Dtcallback();

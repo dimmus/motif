@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmosP_h
 #define _XmosP_h
 
@@ -27,7 +27,7 @@
 #include <Xm/Xmfuncs.h>		/* for bzero et al */
 
 /*
- * Fix for 8975 - using LOGNAME instead of USER on SYSV and SVR4 
+ * Fix for 8975 - using LOGNAME instead of USER on SYSV and SVR4
 */
 
 #ifndef USER_VAR
@@ -162,7 +162,7 @@ extern "C" {
 #endif
 
 
-#define MATCH_CHAR 'P'  /* referenced in InitPath strings and in the files 
+#define MATCH_CHAR 'P'  /* referenced in InitPath strings and in the files
 			 that uses it (ImageCache.c and Mrmhier.c) */
 
 /* OS-dependent file info for VirtKeys */

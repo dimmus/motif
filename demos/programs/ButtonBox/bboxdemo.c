@@ -36,9 +36,9 @@ void Explain(Widget w, XtPointer client, XtPointer call);
 static String fallbacks[] = {
     /*
      * General fallback resources.
-     */ 
+     */
 
-    "*background: grey", 
+    "*background: grey",
     "*bbox*background: white",
     "*bform.height: 575",
     "*bbox.width: 450",
@@ -82,7 +82,7 @@ void Equal(Widget w, XtPointer client, XtPointer call)
     Cardinal argcnt;
     Boolean equal;
 
-    if ((int)client == 1) 
+    if ((int)client == 1)
         equal = True;
     else
         equal = False;
@@ -289,36 +289,36 @@ main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;
-    Widget top, bboxframe, infoframe, infolabel, resframe, resform, 
-           bboxSizeRC, boxSizeLabel, togl_btn1, togl_btn2, pushButton, radioRC, 
-           fillOptionRC, fillOptionLabel, fillOptionMenu, nonePB, minorPB, 
-           majorPB, allPB, menuShell, pulldownMenu, pushButton1,widRC, 
-           widLabel, widText, htRC, htLabel, htText, pushButton2, orientRC, 
-           orientLabel, pushButton3, pushButton4, quitPB, bbox_PB1, bbox_PB2, 
+    Widget top, bboxframe, infoframe, infolabel, resframe, resform,
+           bboxSizeRC, boxSizeLabel, togl_btn1, togl_btn2, pushButton, radioRC,
+           fillOptionRC, fillOptionLabel, fillOptionMenu, nonePB, minorPB,
+           majorPB, allPB, menuShell, pulldownMenu, pushButton1,widRC,
+           widLabel, widText, htRC, htLabel, htText, pushButton2, orientRC,
+           orientLabel, pushButton3, pushButton4, quitPB, bbox_PB1, bbox_PB2,
            bbox_PB3, bbox_PB4, togl_btn3, togl_btn4, orientRadio, bform;
 
     XtAppContext app;
 
     XmString xmstring;
-    
-    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL); 
+
+    XtSetLanguageProc(NULL, (XtLanguageProc) NULL, NULL);
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Button Box Demo"); argcnt++;
     XtSetArg(args[argcnt], XmNallowShellResize, True); argcnt++;
     top = XtOpenApplication(
-            &app, 
-            "Buttonbox", 
-            NULL, 
-            0, 
-            &argc, 
-            argv, 
-            fallbacks, 
+            &app,
+            "Buttonbox",
+            NULL,
+            0,
+            &argc,
+            argv,
+            fallbacks,
             sessionShellWidgetClass,
-            args, 
+            args,
             argcnt);
 
-    bform = XtVaCreateManagedWidget("bform", xmFormWidgetClass, top, 
+    bform = XtVaCreateManagedWidget("bform", xmFormWidgetClass, top,
                           XmNresizePolicy, XmRESIZE_GROW, NULL);
 
     bboxframe = XtVaCreateManagedWidget("bboxframe", xmFrameWidgetClass,bform,
@@ -335,7 +335,7 @@ main(int argc, char **argv)
 /*
  *
  *  Take Note:
- * 
+ *
  *  Creation of the widget being demoed.
  *
  */
@@ -367,10 +367,10 @@ main(int argc, char **argv)
 
     bbox_PB2 = XmVaCreateManagedPushButton(bbox, "SecondButton",
                 NULL);
- 
+
     bbox_PB3 = XmVaCreateManagedPushButton(bbox, "ThirdButton",
                 NULL);
- 
+
     bbox_PB4 = XtCreateManagedWidget("LastButton",
                 xmPushButtonWidgetClass,
                 bbox,
@@ -450,7 +450,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNrowColumnType, XmWORK_AREA,
                                NULL);
 
-    fillOptionRC = XtVaCreateManagedWidget("fillOptionRC", 
+    fillOptionRC = XtVaCreateManagedWidget("fillOptionRC",
                                xmRowColumnWidgetClass, resform,
                                XmNorientation, XmHORIZONTAL,
                                XmNpacking, XmPACK_TIGHT,
@@ -490,7 +490,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNrowColumnType, XmWORK_AREA,
                                NULL);
 
-    orientRC = XtVaCreateManagedWidget("orientRC", xmRowColumnWidgetClass, 
+    orientRC = XtVaCreateManagedWidget("orientRC", xmRowColumnWidgetClass,
                                resform,
                                XmNtopAttachment, XmATTACH_WIDGET,
                                XmNtopWidget, htRC,
@@ -528,7 +528,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                XmNx, 265, XmNy, 3,
                                NULL);
 
-    fillOptionLabel = XtVaCreateManagedWidget("fillOptionLabel", 
+    fillOptionLabel = XtVaCreateManagedWidget("fillOptionLabel",
                                xmLabelWidgetClass, fillOptionRC,
                                XmNx, 3, XmNy, 3,
                                NULL);
@@ -536,7 +536,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
     argcnt = 0;
     XtSetArg(args[argcnt], XmNx, 100); argcnt++;
     XtSetArg(args[argcnt], XmNy, 3); argcnt++;
-    fillOptionMenu = XmCreateOptionMenu(fillOptionRC, "fillOptionMenu", 
+    fillOptionMenu = XmCreateOptionMenu(fillOptionRC, "fillOptionMenu",
                                args, argcnt);
     XtManageChild(fillOptionMenu);
 
@@ -555,7 +555,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
     pulldownMenu = XtCreateWidget("pulldownMenu", xmRowColumnWidgetClass,
                 menuShell, args, argcnt);
 
-    nonePB = XtVaCreateManagedWidget("nonePB", xmPushButtonWidgetClass, 
+    nonePB = XtVaCreateManagedWidget("nonePB", xmPushButtonWidgetClass,
                 pulldownMenu, NULL);
 
     minorPB = XtVaCreateManagedWidget("minorPB", xmPushButtonWidgetClass,
@@ -632,7 +632,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
                                xmPushButtonWidgetClass, orientRC,
                                XmNx, 82, XmNy, 3,
                                NULL);
-                           
+
     XtAddCallback(quitPB, XmNactivateCallback, Exit, (XtPointer)0);
 
     XtAddCallback(pushButton, XmNactivateCallback, Explain, (XtPointer)1);
@@ -670,7 +670,7 @@ Press the \"Explain...\" button to find out more about a particular resource.",
     XtRealizeWidget(top);
 
     XtAppMainLoop(app);
-    
+
     /* appease compiler warning god */
-    return (0); 
+    return (0);
 }

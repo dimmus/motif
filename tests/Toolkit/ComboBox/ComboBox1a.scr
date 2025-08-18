@@ -19,19 +19,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 #  This test should have been run with the flag "-u 1".
 #  The XtName of the ComboBox created in this test is CB1.
 #  All resources for this ComboBox are contained in the defaults
-#  file ./ComboBox.defaults. 
+#  file ./ComboBox.defaults.
 #  There should be no warnings on the term window indicating uninstalled
 #  resource converters.
-#  The ComboBox should be of type COMBO_BOX. 
+#  The ComboBox should be of type COMBO_BOX.
 #  The list of the ComboBox has 6 items, all of which should be visible.
 #  The font should be 8x13bold.
-#  The items in the list should be displayed with stringDirection 
+#  The items in the list should be displayed with stringDirection
 #  Left_To_Right.
 #  The highlightThickness is 10 pixels.
 #  The marginWidth is 12 pixels.

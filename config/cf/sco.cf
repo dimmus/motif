@@ -29,8 +29,8 @@ XCOMM platform:  $XConsortium: sco.cf /main/5 1996/12/04 10:12:36 swick $
 #define ServerOSDefines		-DDDXTIME -DDDXOSINIT -DSERVER_LOCK
 #define ToolkitStringsABIOptions -intelabi
 #define XawI18nDefines		-DHAS_WCHAR_H -DHAS_ISW_FUNCS
-#define ExtraLibraries		-lsocket 
-#define ExtraLoadOptions   	-b elf 
+#define ExtraLibraries		-lsocket
+#define ExtraLoadOptions   	-b elf
 #define ThreadedX		NO
 #define HasThreadSafeAPI	NO
 #define HasNdbm                 YES
@@ -40,13 +40,13 @@ XCOMM platform:  $XConsortium: sco.cf /main/5 1996/12/04 10:12:36 swick $
 
 
 XCOMM Uncomment the following line to build static COFF libraries
-XCOMM #define ForceNormalLib		YES 
+XCOMM #define ForceNormalLib		YES
 #define SharedLibXmu		NO
 
 #define XnestServer		YES
 
 #define SystemV			YES
-#define LdCombineFlags		-r 
+#define LdCombineFlags		-r
 
 #define HasLdRunPath		YES
 #define HasPoll			YES

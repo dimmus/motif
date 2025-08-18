@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,39 +37,39 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmTearOffBtnDownEventHandler( 
+extern void _XmTearOffBtnDownEventHandler(
                         Widget reportingWidget,
                         XtPointer data,
                         XEvent *event,
                         Boolean *cont) ;
-extern void _XmTearOffBtnUpEventHandler( 
+extern void _XmTearOffBtnUpEventHandler(
                         Widget reportingWidget,
                         XtPointer data,
                         XEvent *event,
                         Boolean *cont) ;
-extern void _XmDestroyTearOffShell( 
+extern void _XmDestroyTearOffShell(
                         Widget wid) ;
-extern void _XmDismissTearOff( 
+extern void _XmDismissTearOff(
                         Widget shell,
                         XtPointer closure,
                         XtPointer call_data) ;
-extern void _XmTearOffInitiate( 
+extern void _XmTearOffInitiate(
                         Widget wid,
                         XEvent *event) ;
-extern void _XmAddTearOffEventHandlers( 
+extern void _XmAddTearOffEventHandlers(
                         Widget wid) ;
-extern Boolean _XmIsTearOffShellDescendant( 
+extern Boolean _XmIsTearOffShellDescendant(
                         Widget wid) ;
 extern void _XmLowerTearOffObscuringPoppingDownPanes(
 			Widget ancestor,
 			Widget tearOff ) ;
-extern void _XmRestoreExcludedTearOffToToplevelShell( 
+extern void _XmRestoreExcludedTearOffToToplevelShell(
                         Widget wid,
                         XEvent *event) ;
-extern void _XmRestoreTearOffToToplevelShell( 
+extern void _XmRestoreTearOffToToplevelShell(
                         Widget wid,
                         XEvent *event) ;
-extern void _XmRestoreTearOffToMenuShell( 
+extern void _XmRestoreTearOffToMenuShell(
                         Widget wid,
                         XEvent *event) ;
 

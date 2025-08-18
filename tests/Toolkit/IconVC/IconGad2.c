@@ -89,7 +89,7 @@ DBG
   sleep (5);
 
 DBG
- 
+
   CommonPause();	/* TP 1 */
 
   CommonPause(); 	/* TP 2 */

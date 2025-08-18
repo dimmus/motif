@@ -9,7 +9,7 @@ For information on using these tests, read the README under ./tests/Toolkit.
 
 
 BUGS SHOWN BY THESE TESTS
- 
+
 ArrowBGad1
 PIRS No.:      3268
 Resize a pane smallest so button not visible. Resize larger.
@@ -45,7 +45,7 @@ PIRS No.:      3864
 Changing units to font units at setValues time yield incorrect
 GetValues of dimensions of ArrowBtn.
 Version found in:	1.1.3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -65,7 +65,7 @@ PIRS No.:      4495
 Label.SetValues results in unnecessary and wrong resizing.
 Break from 1.1
 Version found in:	1.2S4
-Version fixed in:	
+Version fixed in:
 Assigned to:	DAniel DArdAiller
 Priority:	0
 Status:		A
@@ -75,7 +75,7 @@ PIRS No.:      1139
 When changing the background color of the parent of a
 push button gadget, armColor and shadowColor do not change
 Version found in:	1.0.A
-Version fixed in:	
+Version fixed in:
 Assigned to:	DANIEL DARDAILLER
 Priority:	9
 Status:		A
@@ -95,7 +95,7 @@ PIRS No.:      2870
 No type converter available for String to MultiClick conversio
 n.
 Version found in:	1.1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -135,7 +135,7 @@ PIRS No.:      4153
 Setting XmNmultiClick to XmMULTICLICK_KEEP will not return
 click_count more that 1.
 Version found in:	1.2S3
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A

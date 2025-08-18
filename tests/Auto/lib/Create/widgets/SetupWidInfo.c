@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SetupWidInfo.c /main/7 1995/07/14 11:25:11 drk $"
@@ -93,7 +93,7 @@ MvsWidgetClassInfo *class_info;
     nargs = 0;
     if (mvsGetVisualMode() == VISUAL_MODE_GENERATE_PIXMAPS) {
         for (j=0; j<num_res_colors; j++) {
-            if (res_pixmap_ref[j] >= 0 && 
+            if (res_pixmap_ref[j] >= 0 &&
                 mvs_resources[res_pixmap_ref[j]] != XmUNSPECIFIED_PIXMAP) {
 /* Automation Fix */
 /*                XtSetArg(args[nargs],resource_info[res_pixmap_ref[j]].name,
@@ -120,7 +120,7 @@ MvsWidgetClassInfo *class_info;
 		    AutoMessage(_AutoMessages[WARNMSG39]);
 		}
         }
-    }    
+    }
 
     return widget_info;
 

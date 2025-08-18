@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmMainWindowP_h
 #define _XmMainWindowP_h
 
@@ -34,7 +34,7 @@ extern "C" {
 
 #define DEFAULT_HEIGHT 20
 #define DEFAULT_WIDTH 20
-  
+
 /* Constraint part record for MainWindow widget */
 typedef struct _XmMainWindowConstraintPart
 {
@@ -80,7 +80,7 @@ typedef struct {
    XmSeparatorGadget       Sep1,Sep2,Sep3;
    Boolean	ManagingSep;
    Boolean	ShowSep;
-   
+
 } XmMainWindowPart;
 
 

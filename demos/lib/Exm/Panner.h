@@ -87,16 +87,16 @@ typedef struct _ExmPannerRec      *ExmPannerWidget;
 /* Define an IsSubclass macro. */
 #ifndef ExmIsPanner
 #define ExmIsPanner(w)	XtIsSubclass(w, exmPannerWidgetClass)
-#endif 
+#endif
 
 /********    Public Function Declarations    ********/
 
-extern Widget ExmCreatePanner( 
+extern Widget ExmCreatePanner(
                         Widget parent,
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
-extern void ExmPannerSetValues( 
+extern void ExmPannerSetValues(
                         Widget w,
                         int hvalue,
                         int vvalue,

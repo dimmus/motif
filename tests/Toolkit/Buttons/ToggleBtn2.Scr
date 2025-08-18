@@ -1,5 +1,5 @@
 # $XConsortium: ToggleBtn2.scr /main/6 1995/07/17 20:07:41 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,19 +20,19 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # This test confirms that ToggleButton widgets and gadgets locate the toggle
 #  indicators centered vertically regardless of the XmNlabelType
-#  of the toggle and the indicator size, when XmNindicatorOn is true. 
+#  of the toggle and the indicator size, when XmNindicatorOn is true.
 #  You should see 8 pairs of toggle buttons, alternatively text and pixmap,
 #  with the pairs each composed of a toggle widget and a toggle gadget.
 
-# The first pair (string) should appear with a large indicator matched 
-#  to the size of the font. 
+# The first pair (string) should appear with a large indicator matched
+#  to the size of the font.
 
 # Confirm that the indicator is centered vertically.
 
@@ -59,7 +59,7 @@ Continue
 
 # Now click on each button. The XmNlabelType should change. Confirm that
 #  no widget suddenly adds an indicator where one should not be and that no
-#  indicator disappears. 
+#  indicator disappears.
 #  Also confirm that the indicator is centered vertically for those widgets in
 #  and gadgets in which it appears.
 
@@ -127,7 +127,7 @@ LocatePointer tbg8
 ClickMB Btn1
 CompareVisual tbg8
 
-# Repeat to change them back. The main window should appear as it did 
+# Repeat to change them back. The main window should appear as it did
 #  initially.
 
 LocatePointer tb1
@@ -196,7 +196,7 @@ CompareVisual tbg8
 
 Continue
 
-# 20 toggle Buttons should appear with different background colors 
+# 20 toggle Buttons should appear with different background colors
 # starting with yellow.
 
 CompareVisual rc2

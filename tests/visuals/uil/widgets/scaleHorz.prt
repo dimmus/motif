@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is scaleHorz.uid ---- 
+---- The uid file to be opened is scaleHorz.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Scale RScrollBarSlider 
-TRACE:(3) DragSliderValue Left 46 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Scale RScrollBarSlider
+TRACE:(3) DragSliderValue Left 46
 
 /*********************************************************/
 ---- dragCallback scale_horz callback made ----
@@ -36,6 +36,6 @@ TRACE:(3) DragSliderValue Left 46
 ---- Reason was XmCR_DRAG ----
 /*********************************************************/
 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
+TRACE:(4) CompareVisual S_MAIN_WIDGET
 TRACE:(5) Exit
 Exiting Test...Please Standby...

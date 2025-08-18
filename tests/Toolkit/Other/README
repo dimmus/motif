@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/6 1996/07/15 14:24:23 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 Font1
 PIRS No.:      3231
 BulletinBoard does not resize unless XtRealizeWidget comes

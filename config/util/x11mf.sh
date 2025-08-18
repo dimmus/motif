@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# 
+#
 # generate a Makefile within the build tree
-# 
+#
 # usage:  x11mf [treedir]
-# 
+#
 
 if [ x$1 != x ]; then
 	tree=$1

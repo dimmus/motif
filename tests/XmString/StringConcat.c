@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -80,7 +80,7 @@ String get_component_string( XmStringComponentType type )
 {
    	int 	i;
 	String  string;
-	
+
 
    for ( i = 0; i < NUM_COMPONENT_TYPES; i++ )
        if ( type == comp_strings[i].type )
@@ -105,7 +105,7 @@ void set_args( Components *comp, unsigned int *length, char **value )
                  *value = render_tag;
                  break;
                case XmSTRING_COMPONENT_LOCALE:
-                 *length = strlen(_MOTIF_DEFAULT_LOCALE); 
+                 *length = strlen(_MOTIF_DEFAULT_LOCALE);
                  *value = _MOTIF_DEFAULT_LOCALE;
                  break;
                default:
@@ -117,7 +117,7 @@ void set_args( Components *comp, unsigned int *length, char **value )
       return;
 }
 
-       
+
 main ( unsigned int argc, char *argv[] )
 {
 
@@ -135,7 +135,7 @@ main ( unsigned int argc, char *argv[] )
     */
      for ( i = 0; i < NUM_COMPONENT_TYPES; i++ )
      {
-        for ( j = 0; j < NUM_COMPONENT_TYPES; j++ ) 
+        for ( j = 0; j < NUM_COMPONENT_TYPES; j++ )
         {
            set_args( &components[i], &length, &value );
            comp1 = XmStringComponentCreate( components[i].type,
@@ -144,12 +144,12 @@ main ( unsigned int argc, char *argv[] )
            set_args( &components[j], &length, &value );
            comp2 = XmStringComponentCreate( components[j].type,
                                             length, value );
-           
+
            printf("XmStringConcatAndFree(%s, \n",
                   get_component_string( components[i].type ));
            printf("                      %s):",
                   get_component_string( components[j].type ));
-                 
+
            string = XmStringConcatAndFree( comp1, comp2 );
 
            if ( string )

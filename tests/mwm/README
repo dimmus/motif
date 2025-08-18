@@ -261,7 +261,7 @@ Additional Test in 1.1.2:
 
 behavior_test tests that mwm does not dump core while handling an
 empty clientlist. This test kills the current X session, starts a new
-X session using the files behavior.xinit, behavior.Xdefs, and 
+X session using the files behavior.xinit, behavior.Xdefs, and
 behavior.mwmrc. To run this test you have to type 'nohup behavior_test'.
 
 Additional Test in 1.1.4:

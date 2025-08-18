@@ -22,28 +22,28 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual form 
+TRACE:(1) CompareVisual form
 TRACE:(2) WindowResize Shell1 SouthEast 400 300
-TRACE:(3) CompareVisual form 
+TRACE:(3) CompareVisual form
 TRACE:(4) WindowResize Shell1 South 400
-TRACE:(5) CompareVisual form 
+TRACE:(5) CompareVisual form
 TRACE:(6) WindowResize Shell1 East 400
-TRACE:(7) CompareVisual form 
+TRACE:(7) CompareVisual form
 TRACE:(8) WindowFocus form
 TRACE:(9) ClickKey KHelp
 TRACE:(10) WindowIconify Shell1
 TRACE:(11) WindowDeiconify Shell1
-TRACE:(12) CompareVisual form 
+TRACE:(12) CompareVisual form
 TRACE:(13) Continue
-TRACE:(14) CompareVisual form 
+TRACE:(14) CompareVisual form
 TRACE:(15) WindowResize Shell1 SouthEast 400 300
-TRACE:(16) CompareVisual form 
+TRACE:(16) CompareVisual form
 TRACE:(17) WindowResize Shell1 South 400
-TRACE:(18) CompareVisual form 
+TRACE:(18) CompareVisual form
 TRACE:(19) WindowResize Shell1 East 400
-TRACE:(20) CompareVisual form 
+TRACE:(20) CompareVisual form
 TRACE:(21) WindowIconify Shell1
 TRACE:(22) WindowDeiconify Shell1
-TRACE:(23) CompareVisual form 
+TRACE:(23) CompareVisual form
 TRACE:(24) Exit
 Exiting Test...Please Standby...

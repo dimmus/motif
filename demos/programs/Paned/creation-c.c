@@ -513,4 +513,3 @@ Widget parent;
 
     return( retval );
 }
-

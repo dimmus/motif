@@ -22,43 +22,43 @@
 #
 #
 # HISTORY
-Warning: 
+Warning:
     Name: mbox
     Class: XmMessageBox
     Illegal value (88) for rep type XmRAlignment
 
-TRACE:(1) CompareVisual mbox 
-TRACE:(2) LocatePointer mbox RCancelButton 
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual mbox 
-TRACE:(5) LocatePointer mbox RCancelButton 
-TRACE:(6) ClickMB Btn1 
-Warning: 
+TRACE:(1) CompareVisual mbox
+TRACE:(2) LocatePointer mbox RCancelButton
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual mbox
+TRACE:(5) LocatePointer mbox RCancelButton
+TRACE:(6) ClickMB Btn1
+Warning:
     Name: mbox
     Class: XmMessageBox
     Illegal value (88) for rep type XmRDialogType
 
-Warning: 
+Warning:
     Name: mbox
     Class: XmMessageBox
     Illegal value (88) for rep type XmRAlignment
 
-Warning: 
+Warning:
     Name: mbox
     Class: XmMessageBox
     Illegal value (88) for rep type XmRDefaultButtonType
 
-TRACE:(7) CompareVisual mbox 
-TRACE:(8) LocatePointer mbox RHelpButton 
-TRACE:(9) ClickMB Btn1 
-TRACE:(10) CompareVisual mbox 
-TRACE:(11) LocatePointer mbox ROkButton 
-TRACE:(12) ClickMB Btn1 
-Warning: 
+TRACE:(7) CompareVisual mbox
+TRACE:(8) LocatePointer mbox RHelpButton
+TRACE:(9) ClickMB Btn1
+TRACE:(10) CompareVisual mbox
+TRACE:(11) LocatePointer mbox ROkButton
+TRACE:(12) ClickMB Btn1
+Warning:
     Name: mbox
     Class: XmMessageBox
     Invalid child type; widget does not have this child
 
-TRACE:(13) CompareVisual mbox 
+TRACE:(13) CompareVisual mbox
 TRACE:(14) Exit
 Exiting Test...Please Standby...

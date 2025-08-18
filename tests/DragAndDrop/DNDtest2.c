@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: DNDtest2.c /main/9 1996/10/07 15:16:21 drk $"
@@ -70,8 +70,8 @@ Quit ()
 
 
 /*ARGSUSED*/
-static Boolean DragConvertProc(w, selection, target, typeRtn, valueRtn, 
-							  lengthRtn, formatRtn, max_lengthRtn, 
+static Boolean DragConvertProc(w, selection, target, typeRtn, valueRtn,
+							  lengthRtn, formatRtn, max_lengthRtn,
 							  client_data, request_id)
 Widget              w;
 Atom                *selection;
@@ -95,11 +95,11 @@ XtRequestId			*request_id;
 	if (*target == COMPOUND_TEXT) {
 
 		ok = 0;
-		ok = XmbTextListToTextProperty(display, &string, 1, 
+		ok = XmbTextListToTextProperty(display, &string, 1,
 									   XCompoundTextStyle, &tmp_prop);
 		if (ok != Success)
 			return(False);
-		
+
 		*valueRtn = (char *) tmp_prop.value;
 		*lengthRtn = tmp_prop.nitems;
 		*typeRtn = COMPOUND_TEXT;
@@ -308,49 +308,49 @@ XEvent	*event;
 	Arg		args[MAX_ARGS];
 	Cardinal	n;
 	Atom	exportList[1];
-	static XtCallbackRec DragMotionCB[2] = 
+	static XtCallbackRec DragMotionCB[2] =
 	{
 		{DragMotionCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DnDFinishCB[2] = 
+	static XtCallbackRec DnDFinishCB[2] =
 	{
 		{DnDFinishCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropFinishCB[2] = 
+	static XtCallbackRec DropFinishCB[2] =
 	{
 		{DropFinishCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropSiteEnterCB[2] = 
+	static XtCallbackRec DropSiteEnterCB[2] =
 	{
 		{DropSiteEnterCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropSiteLeaveCB[2] = 
+	static XtCallbackRec DropSiteLeaveCB[2] =
 	{
 		{DropSiteLeaveCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec DropStartCB[2] = 
+	static XtCallbackRec DropStartCB[2] =
 	{
 		{DropStartCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec TopLEnterCB[2] = 
+	static XtCallbackRec TopLEnterCB[2] =
 	{
 		{TopLEnterCallback,NULL},
 		{NULL, NULL}
 	};
 
-	static XtCallbackRec TopLLeaveCB[2] = 
+	static XtCallbackRec TopLLeaveCB[2] =
 	{
 		{TopLLeaveCallback,NULL},
 		{NULL, NULL}
@@ -397,7 +397,7 @@ XtPointer	client_data, call_data;
 }
 
 
-static void DropTransferCallback(w, closure, seltype, type, value, 
+static void DropTransferCallback(w, closure, seltype, type, value,
 								 length, format)
 Widget 			w;
 XtPointer 		closure ;
@@ -445,7 +445,7 @@ int 			*format ;
 				actual_length = strlen(total_tmp_value);
 #ifdef DEBUG
 				fprintf(stderr, "the transfer value is : %s\n", actual_value);
-				fprintf(stderr, "the length of transfer is : %d\n", 
+				fprintf(stderr, "the length of transfer is : %d\n",
 						actual_length);
 #endif
 				XFreeStringList(tmp_value);
@@ -528,15 +528,15 @@ XtPointer	client_data, call_data;
 	}
 	else {
 
-		if (DropProc->operation & XmDROP_MOVE || 
+		if (DropProc->operation & XmDROP_MOVE ||
 			DropProc->operation & XmDROP_COPY) {
-		
+
 			transferList = transferEntries;
 			numTransfers = 1;
 			XtSetArg(args[n], XmNdropTransfers, transferList); n++;
 			XtSetArg(args[n], XmNnumDropTransfers, numTransfers); n++;
 
-		} 
+		}
 		else {
 			XtSetArg(args[n], XmNtransferStatus, XmTRANSFER_FAILURE); n++;
 			XtSetArg(args[n], XmNnumDropTransfers, 0); n++;
@@ -549,7 +549,7 @@ XtPointer	client_data, call_data;
 }
 
 
-static char translations[] = 
+static char translations[] =
 "#override \
   Ctrl<Key>t: XtDisplayTranslations()\n\
   Ctrl<Key>a: XtDisplayAccelerators()\n\
@@ -598,22 +598,22 @@ typedef struct _AppDataRec{
 
 XtResource	appResources[] = {
 	{
-	"xlations1", XtCTranslations, XtRString, 
+	"xlations1", XtCTranslations, XtRString,
 	sizeof(String), XtOffset(AppData, xlation1.str),
 	XtRString, (XtPointer)translations,
 	},
 	{
-	"xlations1", XtCTranslations, XtRTranslationTable, 
+	"xlations1", XtCTranslations, XtRTranslationTable,
 	sizeof(XtTranslations), XtOffset(AppData, xlation1.xlation),
 	XtRString, (XtPointer)translations,
 	},
 	{
-	"xlations2", XtCTranslations, XtRString, 
+	"xlations2", XtCTranslations, XtRString,
 	sizeof(String), XtOffset(AppData, xlation2.str),
 	XtRString, (XtPointer)dragTranslations,
 	},
 	{
-	"xlations2", XtCTranslations, XtRTranslationTable, 
+	"xlations2", XtCTranslations, XtRTranslationTable,
 	sizeof(XtTranslations), XtOffset(AppData, xlation2.xlation),
 	XtRString, (XtPointer)dragTranslations,
 	},
@@ -669,11 +669,11 @@ char **argv;
 	sprintf(name, "%s.out", argv[0]);
 	if ((outfp = fopen(name, "w+")) == NULL) {
 
-		fprintf(stderr, "Can not open output file %s.out. Trying in /tmp\n", 
+		fprintf(stderr, "Can not open output file %s.out. Trying in /tmp\n",
 				argv[0]);
 		sprintf(name, "/tmp/%s.out", argv[0]);
 		if ((outfp = fopen(name, "w+")) == NULL) {
-			fprintf(stderr, "Can not open output file /tmp/%s.out. Exiting\n", 
+			fprintf(stderr, "Can not open output file /tmp/%s.out. Exiting\n",
 					argv[0]);
 			exit(0);
 		}
@@ -689,7 +689,7 @@ char **argv;
 
 	XtAppAddActions(app_context, (XtActionList)myactions, XtNumber(myactions));
 
-	XtGetApplicationResources(Shell1, (XtPointer)appData, 
+	XtGetApplicationResources(Shell1, (XtPointer)appData,
 							  appResources, XtNumber(appResources), NULL, 0);
 
 	/* try out stuffing the translations directly in */
@@ -708,7 +708,7 @@ char **argv;
 
 		sprintf(name, "topLevel%d",i);
 		n = 0;
-		topLevel = XtCreatePopupShell(name, topLevelShellWidgetClass, Shell1, 
+		topLevel = XtCreatePopupShell(name, topLevelShellWidgetClass, Shell1,
 								   args, n);
 
 		sprintf(name, "BulletinB%d",i);
@@ -726,7 +726,7 @@ char **argv;
 				XtSetArg(args[n], XtNwidth, 90); n++;
 				XtSetArg(args[n], XtNheight, 90); n++;
 				if (appData->applyOverrides) {
-					XtSetArg(args[n], XtNtranslations, 
+					XtSetArg(args[n], XtNtranslations,
 							 appData->xlation2.xlation); n++;
 				}
 				sprintf(name, "PushBtn%d", (j * appData->numRows) + k);

@@ -26,7 +26,7 @@
 #   entries, size in characters of the entries, and border width can
 #   be specified.  Specify various settings and then select Set'em
 #   up, Joe.  Try this several times and make sure that the menu
-#   bar is created correctly.  
+#   bar is created correctly.
 
 WindowMove BBD 300 300
 

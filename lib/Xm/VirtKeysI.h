@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -37,14 +37,14 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmVirtKeysInitialize( 
+extern void _XmVirtKeysInitialize(
                         Widget widget) ;
-extern void _XmVirtKeysDestroy( 
+extern void _XmVirtKeysDestroy(
                         Widget widget) ;
-extern void _XmVirtKeysStoreBindings( 
+extern void _XmVirtKeysStoreBindings(
                         Widget shell,
                         String binding) ;
-extern Boolean _XmVirtKeysLoadFileBindings( 
+extern Boolean _XmVirtKeysLoadFileBindings(
                         char *fileName,
                         String *binding) ;
 extern int _XmVirtKeysLoadFallbackBindings(

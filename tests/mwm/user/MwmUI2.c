@@ -28,7 +28,7 @@
 
 void PushButtonCallback (Widget, XtPointer, XtPointer);
 
-void 
+void
 main (unsigned int argc, char **argv)
 {
 
@@ -37,16 +37,16 @@ main (unsigned int argc, char **argv)
         Widget Text1;
         Arg args[10];
         int n;
-    
+
         CommonTestInit (argc, argv);
 	XtRealizeWidget (Shell1);
-	
+
         CommonPause();
-   
+
         n=0;
         XtSetArg (args[n], XtNheight, 200);n++;
         XtSetArg (args[n], XtNwidth, 200);n++;
-        TestShell1=XtCreatePopupShell("TestWindow1", 
+        TestShell1=XtCreatePopupShell("TestWindow1",
 				      topLevelShellWidgetClass,
 				      Shell1,args,n);
 
@@ -61,26 +61,26 @@ main (unsigned int argc, char **argv)
         CommonPause();
 
 
- 
+
         n=0;
         XtSetArg (args[n], XtNheight, 200);n++;
         XtSetArg (args[n], XtNwidth, 200);n++;
-        TestShell2=XtCreatePopupShell ("TestWindow2", 
+        TestShell2=XtCreatePopupShell ("TestWindow2",
 				       topLevelShellWidgetClass,
 				       Shell1,args,n);
 
 
 
 
-        
+
         n=0;
         PB2 = XmCreatePushButton (TestShell2, "PB2", args, n);
         XtManageChild(PB2);
         XtAddCallback (PB2, XmNactivateCallback, PushButtonCallback, NULL);
-         
+
 	XtPopup(TestShell2, XtGrabNone);
 
-    
+
         CommonPause();
         CommonPause();
         CommonPause();
@@ -101,12 +101,12 @@ main (unsigned int argc, char **argv)
         Text1 = XmCreateText (TestShell3, "Text1", args, n);
         XtManageChild(Text1);
 
-         
+
 	XtPopup (TestShell3, XtGrabNone);
 
-        CommonPause(); 
-        CommonPause();      
-        
+        CommonPause();
+        CommonPause();
+
        	XtAppMainLoop(app_context);
 
 }

@@ -1,5 +1,5 @@
 /* $XConsortium: wsmSend.h /main/5 1995/07/15 20:46:36 drk $ */
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 
 #ifndef wsmSend_h
 #define wsmSend_h
@@ -48,7 +48,7 @@ WSMRequest *request
 				    );
 
 extern void GetChangeSpaceRequest(
-Space*, 
+Space*,
 WSMRequest*
 );
 
@@ -69,7 +69,7 @@ Boolean
 );
 
 extern void RemoveWindow(
-Window 
+Window
 );
 
 

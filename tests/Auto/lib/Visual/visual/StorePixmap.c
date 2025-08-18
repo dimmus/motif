@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
-/* 
+ */
+/*
  * HISTORY
- */ 
+ */
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: StorePixmap.c /main/5 1995/07/14 11:51:22 drk $"
@@ -81,14 +81,14 @@ char *identifier;
     /* NOT COMPLETELY IMPLEMENTED YET, SO RETURN AND DO NOTHING */
     /* if is added only to suppres compiler warning		*/
     if (first_time != 1) return;
-      
+
     tmpbuf = (unsigned char *)XtMalloc(MAX_IMAGE_DIMENSION*MAX_IMAGE_DIMENSION);
 
     widget = widget_info->widget;
 
     if (first_time) {
         first_time = 0;
-	mvsTempImageRecHead = (struct mvsTempImageRec *) 
+	mvsTempImageRecHead = (struct mvsTempImageRec *)
 	    malloc(sizeof(struct mvsTempImageRec));
 	current_rec = mvsTempImageRecHead;
 	mvsTempImageRecTail = mvsTempImageRecHead;
@@ -138,9 +138,9 @@ char *identifier;
     for (y=0; y<height; y++) {
 	for (x=0; x<width; x++) {
 	    *bp = XGetPixel(image,x,y);
-	    
-	    /* Automation - dont look at color. Would require a 
-	       lookup of widget ID and then conversion to correct pixel 
+
+	    /* Automation - dont look at color. Would require a
+	       lookup of widget ID and then conversion to correct pixel
 	     */
 	    bp++;
 	    n++;
@@ -149,9 +149,9 @@ char *identifier;
 
     strcpy ((char *)current_rec->mvsTempImageBuffer, (char *)tmpbuf);
 
-    if (image != NULL) 
+    if (image != NULL)
 	XDestroyImage(image);
-    
+
     /* store the name, width and height of the image */
     strcpy (current_rec->mvsTempImageName, identifier);
     current_rec->mvsTempImageWidth = width;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: PopupMenu3.c /main/9 1995/07/13 18:52:17 drk $"
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     void ButtonCB();
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  200);  n++;
     XtSetArg(args[n], XmNheight, 40);   n++;
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 
     CommonPause();
     XtDestroyWidget(PopupMenu1);
-    
+
     n =0;
     XtSetArg(args[n], XmNrowColumnType, XmMENU_POPUP); n++;
     PopupMenu2 = XmCreateRowColumn(Shell1, "popupMenu2", args, n);
@@ -165,14 +165,14 @@ int main(int argc, char **argv)
     XtSetArg(args[n], XmNx, 10); n++;
     XtSetArg(args[n], XmNy, 30); n++;
     MainButton = XmCreatePushButton(testingArea, "button0", args, n);
-    XtAddCallback(MainButton, XmNactivateCallback, ButtonCB, (XtPointer) 0); 
+    XtAddCallback(MainButton, XmNactivateCallback, ButtonCB, (XtPointer) 0);
     XtManageChild(MainButton);
 
     popup = XmCreatePopupMenu(testingArea, "Popups", NULL, 0);
     XtAddEventHandler(testingArea, ButtonPressMask, FALSE, PostPopup, popup);
-    
+
     XmAddToPostFromList(popup, MainButton);
-    
+
     push = XmCreatePushButton(popup, "button1", NULL, 0);
     XtAddCallback(push, XmNactivateCallback, ButtonCB, (XtPointer) 1);
     XtManageChild(push);
@@ -184,9 +184,9 @@ int main(int argc, char **argv)
     push = XmCreatePushButton(popup, "button3", NULL, 0);
     XtAddCallback(push, XmNactivateCallback, ButtonCB, (XtPointer) 3);
     XtManageChild(push);
-    
+
     XtManageChild(testingArea);
-    
+
     CommonPause();
 
     XtDestroyWidget(testingArea);

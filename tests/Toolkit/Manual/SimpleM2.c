@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: SimpleM2.c /main/8 1995/07/13 18:39:29 drk $"
@@ -60,7 +60,7 @@ char **argv;
    *  Initialize Xrm and save the current database to a file so we
    *    can reset our changes.
    */
-  
+
   XrmInitialize();
 #ifdef MOTIF1_1
   XrmPutFileDatabase(display->db, "SimpleM2.savdb");
@@ -79,7 +79,7 @@ char **argv;
   XtRealizeWidget(Shell1);
   XtAppMainLoop(app_context);
 }
-static void 
+static void
 CreateControlPanel()
 {
   Widget controlpanel, mainParent, coredump4;
@@ -95,7 +95,7 @@ CreateControlPanel()
 
   n = 0;
   mainParent = XmCreateRowColumn(controlpanel, "mainParent", args, n);
- 
+
   n = 0;
   tcs = XmStringCreateLtoR("Show Missing String to StringTable Converter Bug",
 			   XmSTRING_DEFAULT_CHARSET);
@@ -135,7 +135,7 @@ CreateControlPanel()
   n = 0;
   tcs = XmStringCreateLtoR("Show button count syntax core dump",
 			   XmSTRING_DEFAULT_CHARSET);
-  
+
 /* This case is only testing the syntax for buttonCount, */
 /* if buttonCount > number of buttons, it's OK to crash! */
   XtSetArg(args[n], XmNlabelString, tcs); n++;
@@ -152,7 +152,7 @@ CreateControlPanel()
   XtAddCallback(destroy, XmNactivateCallback, destroyWidgetsCB, NULL);
   XmStringFree(tcs);
   XtManageChild(destroy);
-  
+
   XtManageChild(mainParent);
   XtManageChild(controlpanel);
 
@@ -172,10 +172,10 @@ destroyWidgetsCB(Widget w, XtPointer client, XtPointer call)
 
 /* ARGSUSED */
 
-static void 
+static void
 StringTableCB(Widget w, XtPointer client, XtPointer call)
 {
-  /* 
+  /*
    * This callback demonstrates the missing string-to-string table converter
    */
 
@@ -223,7 +223,7 @@ StringTableCB(Widget w, XtPointer client, XtPointer call)
 
 /* ARGSUSED */
 
-static void 
+static void
 Error1CB(Widget w, XtPointer client, XtPointer call)
 {
 
@@ -326,7 +326,7 @@ CoreDump2CB(Widget w, XtPointer client, XtPointer call)
 
 /* ARGSUSED */
 
-static void 
+static void
 CoreDump3CB(Widget w, XtPointer client, XtPointer call)
 {
   XrmDatabase new_db, sav_db;
@@ -372,7 +372,7 @@ CoreDump3CB(Widget w, XtPointer client, XtPointer call)
 
 /* ARGSUSED */
 
-static void 
+static void
 CoreDump4CB(Widget w, XtPointer client, XtPointer call)
 {
   XrmDatabase new_db, sav_db;
@@ -436,13 +436,13 @@ void buttonCB(Widget w, XtPointer client, XtPointer call)
 
   XmStringGetLtoR(label, XmSTRING_DEFAULT_CHARSET, &s);
   printf("%s is pressed\n", s);
-  
+
   return;
 }
 
 /* ARGSUSED */
 
-void 
+void
 PostMenu(Widget w, Widget popup, XButtonEvent *event)
 {
   if (event->button != Button3)
@@ -451,4 +451,3 @@ PostMenu(Widget w, Widget popup, XButtonEvent *event)
   XmMenuPosition(popup, event);
   XtManageChild(popup);
 }
-

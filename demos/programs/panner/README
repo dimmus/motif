@@ -68,7 +68,7 @@ associated window is not pinned, and "make unpinned" when it is
 pinned.  You can specify a new set of labels or pixmaps using the
 following resources:
 
-	
+
 	pinStateLabelType
 		This specifies the label type.
 
@@ -101,5 +101,3 @@ following resources:
 
 Enjoy,
 Andrew deBlois
-
-

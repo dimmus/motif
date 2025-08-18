@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,7 +20,7 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
-/* 
+/*
  * HISTORY
  */
 
@@ -53,7 +53,7 @@ AutoGetTime(enum WHICH_TIME time_to_get)
     if (gettimeofday(&StartTime, &zone_time) != 0)
       AutoMessage(_AutoMessages[WARNMSG126]);
   }
-  else 
+  else
     if (time_to_get == END_TIME)  {
       if (gettimeofday(&EndTime, &zone_time) != 0)
 	  printf("AUTOWARNING** : Could not gettimeofday\n");
@@ -71,7 +71,7 @@ AutoGetTime(enum WHICH_TIME time_to_get)
 
 
 void
-AutoPrintDurationTime(struct timeval *start_time, 
+AutoPrintDurationTime(struct timeval *start_time,
 		      struct timeval *end_time)
 {
 
@@ -92,7 +92,6 @@ AutoPrintDurationTime(struct timeval *start_time,
   /*  COMMENTED OUT UNTIL REPORT GEN BUG IS FIXED
   sprintf(msg_string, _AutoMessages[PERFORMANCE1],
 	  lapsed.tv_sec, lapsed.tv_usec%1000000);
-  AutoMessage(msg_string); 
+  AutoMessage(msg_string);
    */
 }
-

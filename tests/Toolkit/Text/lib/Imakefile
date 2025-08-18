@@ -19,13 +19,13 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
+XCOMM
 XCOMM HISTORY
 
 #define IHaveSubdirs
 #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
 
-SUBDIRS = Auto Manual 
+SUBDIRS = Auto Manual
 
 MakeSubdirs($(SUBDIRS))
 DependSubdirs($(SUBDIRS))

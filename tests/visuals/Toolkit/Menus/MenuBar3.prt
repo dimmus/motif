@@ -25,7 +25,7 @@
 TRACE:(1) WindowFocus Shell1
 TRACE:(2) ClickKey KMenuBar
 TRACE:(3) ClickKey Ks
-TRACE:(4) CompareVisual pd2 
+TRACE:(4) CompareVisual pd2
 TRACE:(5) ClickKey Ks
 Doin Something
 TRACE:(6) ClickKey KCancel
@@ -41,13 +41,13 @@ TRACE:(13) WindowFocus Shell1
 TRACE:(14) ClickKey KMenuBar
 TRACE:(15) ClickKey KRight
 TRACE:(16) ClickKey KDown
-TRACE:(17) CompareVisual pd2 
+TRACE:(17) CompareVisual pd2
 TRACE:(18) ClickKey KUp
 TRACE:(19) ClickKey KLeft
-TRACE:(20) CompareVisual mb 
+TRACE:(20) CompareVisual mb
 TRACE:(21) ClickKey KRight
-TRACE:(22) CompareVisual pd1 
-TRACE:(23) CompareVisual mb 
+TRACE:(22) CompareVisual pd1
+TRACE:(23) CompareVisual mb
 TRACE:(24) ClickKey KCancel
 TRACE:(25) Continue
 TRACE:(26) Exit

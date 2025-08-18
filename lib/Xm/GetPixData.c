@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -47,7 +47,7 @@
  *   and True if it had to fetch it to the server first.
  *
  *******************************************************************/
-Boolean 
+Boolean
 XmeGetPixmapData(
     Screen *screen,
     Pixmap pixmap,
@@ -69,11 +69,11 @@ XmeGetPixmapData(
     unsigned int loc_width = 0;
     unsigned int loc_height;
     XtAppContext app;
-    
+
     app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
-    
+
     _XmAppLock(app);
-    
+
     /* support passed NULL argument */
     if (!image_name) image_name = &loc_image_name ;
     if (!depth) depth = &loc_depth ;
@@ -90,7 +90,7 @@ XmeGetPixmapData(
 	return True ;
     }
 
-    
+
     /* not in the cache, generate an incomplete entry in the pixmap cache */
     /* Use a magic name, which will have _XmCachePixmap not cache this
        one in the pixmap_data name based cache */
@@ -105,4 +105,3 @@ XmeGetPixmapData(
 
     return (False);
 }
-

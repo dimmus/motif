@@ -22,7 +22,7 @@
 !
 !
 ! HISTORY
-! $XConsortium: term.uil /main/1 1996/08/12 15:45:08 jakku $ 
+! $XConsortium: term.uil /main/1 1996/08/12 15:45:08 jakku $
 !******************************************************************************
 module Test
         version = 'v1.0'
@@ -37,7 +37,7 @@ module Test
 
   object                                  ! The main window widget.
           S_MAIN_WIDGET : XmBulletinBoard {
-  
+
               arguments {
                   XmNx = 0;
                   XmNy = 0;
@@ -53,7 +53,7 @@ module Test
         black: color ('black');
         violet: color ('violet');
 
-  object 
+  object
 	Scroll_bar:  XmScrollBar {
 		arguments {
 			XmNheight = 310;
@@ -63,12 +63,12 @@ module Test
 			XmNincrement = 3;
 	  };
 	};
-		
+
 
   object
         Term:	  DtTerm {
             arguments {
-		DtNblinkRate = 100;	
+		DtNblinkRate = 100;
 		DtNbaseHeight = 100;
 		DtNbaseWidth = 100;
 		DtNc132 = false;
@@ -85,7 +85,7 @@ module Test
 !		DtNautoWrap = true;
 !		DtNappKeypadDefault = false;
 !		DtNappCursorDefault = false;
-		DtNverticalScrollBar = Scroll_bar;		
+		DtNverticalScrollBar = Scroll_bar;
 		DtNjumpScroll = true;
 
             };

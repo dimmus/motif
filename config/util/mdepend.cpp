@@ -72,7 +72,7 @@ do
 
 	    *)
 		if [ "$endmarker"x = x ]; then
-		    case "$1" in 	
+		    case "$1" in
 			-w)
 			    width="$2"
 			    shift
@@ -93,7 +93,7 @@ do
 			    objsuffix="$2"
 			    shift
 			    ;;
-			
+
 			--*)
 			    echo "$1" | sed 's/^\-\-//' >${TMP}end
 			    endmarker="`cat ${TMP}end`"
@@ -153,7 +153,7 @@ case "$makefile" in
 	;;
 esac
 
-if [ "$verbose"x = "y"x ]; then 
+if [ "$verbose"x = "y"x ]; then
     cat $CPPCMD
 fi
 

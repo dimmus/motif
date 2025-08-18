@@ -7,14 +7,14 @@ Animate demonstrates the following Motif features:
      - use of the Motif form widget.
      - background procedure running while the client process
        is waiting for inputs (Xt intrinsics feature).
-     
+
 The pixmaps are not fixed by animate but instead read at startup from
-existing UID files. 
+existing UID files.
 
 The syntax of all the 'animation.uid' files follows some simple rules and
 one can easily add a new set of pixmap to be animated using animate.
 
-dog.uil, plane.uil and superman.uil are tree examples of animation data 
+dog.uil, plane.uil and superman.uil are tree examples of animation data
 files. (superman<N>.xbm are referenced in superman.uil). The default animation
 is 'dog'. To run the demo with the other animations, use the command:
 
@@ -22,7 +22,7 @@ is 'dog'. To run the demo with the other animations, use the command:
 
 % animate -anim superman
 
-motiflogo.uil, animate.uil and animate.c are the core components 
+motiflogo.uil, animate.uil and animate.c are the core components
 of the program.
 
 speed_factor is a number between 0 and 100.
@@ -33,8 +33,8 @@ Files:
       XENVIRONMENT=XmdAnimate animate
 
 X Defaults:
-      The class of this application is XmdAnimate.  
+      The class of this application is XmdAnimate.
 
-Editres: 
+Editres:
       Animate_0 is Editres aware, so you can use 'editres' to see the
       names of the widgets in the instance hierarchy.

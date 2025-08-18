@@ -1,5 +1,5 @@
 # $XConsortium: Protocol.scr /main/5 1995/07/17 20:38:47 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 CompareVisual  RowCol
@@ -41,7 +41,7 @@ Continue
 
 #
 # Click MB1 on 'LongMenu'.  Two more entries, 'entry_2' and
-# 'entry_3', should be added to the window menu. 
+# 'entry_3', should be added to the window menu.
 #
 
 LocatePointer  LongMenu
@@ -55,7 +55,7 @@ Continue
 
 #
 # Click MB1 on 'LongMenu' again.  The three added entries in
-# the window menu should be deactivated (no longer boldface.) 
+# the window menu should be deactivated (no longer boldface.)
 #
 
 LocatePointer  LongMenu
@@ -69,7 +69,7 @@ WindowMenuSelect  Shell1  entry_3
 
 #
 # Click MB1 on LongMenu again.  The three added entries in
-# the window menu should be reactivated (boldface.) 
+# the window menu should be reactivated (boldface.)
 #
 
 LocatePointer  LongMenu
@@ -85,7 +85,7 @@ Continue
 
 #
 # Click MB1 on 'NoMenu'.
-# The three added entries in the window menu will disappear. 
+# The three added entries in the window menu will disappear.
 #
 
 LocatePointer  NoMenu

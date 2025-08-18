@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Command3.c /main/8 1995/07/13 19:17:02 drk $"
@@ -53,7 +53,7 @@ static void EnterCB (w, client_data, call_data)
     {
 	str = XmStringLtoRCreate("setValue", XmSTRING_DEFAULT_CHARSET);
     }
-    
+
     if(str2 == NULL)
     {
 	str2 = XmStringLtoRCreate("errorValue", XmSTRING_DEFAULT_CHARSET);
@@ -67,8 +67,8 @@ static void EnterCB (w, client_data, call_data)
 	break;
 
       case 3:
-	
-        XmCommandError (w, str2); 
+
+        XmCommandError (w, str2);
 	break;
 
       case 4:
@@ -94,7 +94,7 @@ static void ChangeCB (w, client_data, call_data)
 {
     static XmString	str = NULL;
 
-    if(str == NULL) 
+    if(str == NULL)
         str = XmStringLtoRCreate("addValue", XmSTRING_DEFAULT_CHARSET);
 
     if(change_count)
@@ -117,7 +117,7 @@ char **argv;
 {
     Widget        command, Frame;
     Arg           args[10];
-    register int  n;      
+    register int  n;
     Widget        unManageList[5];
     XmString      stringList[15];
     XmString      commandString;
@@ -184,7 +184,7 @@ char **argv;
     XtSetArg (args[n], XmNcommand, testString);                 n++;
     XtSetValues(command, args, n);
     CommonPause();
-    
+
 /*
  * process events
  */

@@ -22,10 +22,10 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual RowColumn1 
+TRACE:(1) CompareVisual RowColumn1
 TRACE:(2) Continue
-TRACE:(3) CompareVisual RowColumn1 
+TRACE:(3) CompareVisual RowColumn1
 TRACE:(4) Continue
-TRACE:(5) CompareVisual RowColumn1 
+TRACE:(5) CompareVisual RowColumn1
 TRACE:(6) Exit
 Exiting Test...Please Standby...

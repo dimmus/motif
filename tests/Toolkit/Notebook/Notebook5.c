@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -40,12 +40,12 @@ void ValueHasChanged();
 
 #define APPLY 1
 
-/* global declarations 
+/* global declarations
  *
  */
 
-/* 
- * These widgets are used by several routines. 
+/*
+ * These widgets are used by several routines.
  */
 
 
@@ -71,7 +71,7 @@ Widget RCKid[4];
 Widget BBKid[4];
 Widget PWKid[4];
 
-/* 
+/*
  * for indicating if values have changed
  */
 
@@ -109,11 +109,11 @@ main (int argc, char **argv)
 
   CommonTestInit (argc, argv);
 
-  /* 
-   * Create the parent. 
+  /*
+   * Create the parent.
    */
 
-  if (UserData != NULL)  
+  if (UserData != NULL)
   if (strcmp (UserData,"early") == 0)
     XtRealizeWidget (Shell1);
 
@@ -126,7 +126,7 @@ main (int argc, char **argv)
   Notebook = XmCreateNotebook (Parent, "Notebook", args, n);
   XtManageChild (Notebook);
 
-    
+
   for (i=0; i< 2; i++)
     {
       n=0;
@@ -134,7 +134,7 @@ main (int argc, char **argv)
       MajorTab[i] = XmCreatePushButton (Notebook,buf,args,n);
       XtManageChild(MajorTab[i]);
     }
-            
+
 
 
   for (i=0; i< 2; i++)
@@ -143,13 +143,13 @@ main (int argc, char **argv)
        MinorTab[i] = XmCreatePushButton (Notebook,buf,args,n);
        XtManageChild(MinorTab[i]);
     }
-        
+
 
   for (i=0; i< 5; i++)
      {
        n=0;
        sprintf (buf,"Page%d", i+1);
-       PBLabel = XmStringCreate (buf, XmFONTLIST_DEFAULT_TAG); 
+       PBLabel = XmStringCreate (buf, XmFONTLIST_DEFAULT_TAG);
        XtSetArg (args[n], XmNlabelString, PBLabel); n++;
        StatusArea[i] = XmCreateLabel (Notebook, buf, args,n);
        XmStringFree (PBLabel);
@@ -236,7 +236,7 @@ main (int argc, char **argv)
   ScrollList1 = XmCreateScrolledList(BBDialog1, "ScrollList1", args, n);
   XtManageChild (ScrollList1);
 
-  XtAddCallback (ScrollList1, XmNbrowseSelectionCallback, SetWidgetValues, 
+  XtAddCallback (ScrollList1, XmNbrowseSelectionCallback, SetWidgetValues,
 		 (XtPointer)APPLY);
 
   if ((UserData == NULL) || (strcmp (UserData,"late") == 0))
@@ -244,7 +244,7 @@ main (int argc, char **argv)
 
   CreateGeoPanel();
 
-  
+
 
 
 
@@ -260,10 +260,10 @@ main (int argc, char **argv)
   CommonPause();
   CommonPause();
   XtAppMainLoop (app_context);
-    
+
 }
 
-  
+
 
 
 
@@ -283,7 +283,7 @@ CreateGeoPanel()
 
 
 
-  static char *geo_labels[] = 
+  static char *geo_labels[] =
                          { "Set Width",
 			   "Set Height",
 			   "Set x",
@@ -301,7 +301,7 @@ CreateGeoPanel()
 				 Shell1, args, n);
 
 
-  
+
 
   n=0;
   GeoForm1 = XmCreateFormDialog (GeoShell1, "GeoForm1", args, n);
@@ -388,7 +388,7 @@ CreateGeoPanel()
    (XtPointer)NULL);
 
    n=0;
-   LabelString = XmStringCreate ("Resource Value", XmFONTLIST_DEFAULT_TAG); 
+   LabelString = XmStringCreate ("Resource Value", XmFONTLIST_DEFAULT_TAG);
    XtSetArg (args[n],XmNlabelString,LabelString); n++;
    ValueLabel = XmCreateLabel (TextRC1, "ValueLabel", args, n);
    XtManageChild (ValueLabel);
@@ -397,7 +397,7 @@ CreateGeoPanel()
    n=0;
    ValueText = XmCreateTextField (TextRC1, "ValueText", args, n);
    XtManageChild (ValueText);
-   XtAddCallback (ValueText, XmNactivateCallback, ValueHasChanged, 
+   XtAddCallback (ValueText, XmNactivateCallback, ValueHasChanged,
                   (XtPointer)NULL);
 
    XtPopup (GeoShell1, XtGrabNone);
@@ -412,7 +412,7 @@ CreateGeoPanel()
 
 
 
-void 
+void
 SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
 {
   int value;
@@ -427,7 +427,7 @@ SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
   char *NameOfWidget = NULL;
   char name[32];
   Widget wid;
-  
+
 
   int cdata = (int) client_data;
 
@@ -437,7 +437,7 @@ SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
 
 
   n=0;
-     
+
       if (WidthChanged)
 	{
 	  XmScaleGetValue(GeoScale[Width],&value);
@@ -490,10 +490,10 @@ SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
     {
       XtSetArg(nargs[0], XmNselectedItems, &ListItem);
       XtGetValues (ScrollList1, nargs, 1);
-      if (ListItem != NULL) 
+      if (ListItem != NULL)
       XmStringGetLtoR (ListItem[0], XmFONTLIST_DEFAULT_TAG,&NameOfWidget);
     }
-  
+
 
 
    if (NameOfWidget != NULL)
@@ -523,17 +523,17 @@ SetWidgetValues(Widget w,XtPointer client_data, XtPointer call_data)
 
 
 /* set of functions which resets flags */
- 
+
 void
 WidthHasChanged()
 {
-  
+
   WidthChanged = True;
 
 }
 
 
-void 
+void
 HeightHasChanged()
 {
 
@@ -542,7 +542,7 @@ HeightHasChanged()
 }
 
 
-void 
+void
 XHasChanged()
 
 {
@@ -552,7 +552,7 @@ XHasChanged()
 }
 
 
-void 
+void
 YHasChanged()
 
 {
@@ -562,7 +562,7 @@ YHasChanged()
 }
 
 
-void 
+void
 BWHasChanged()
 
 {
@@ -572,7 +572,7 @@ BWHasChanged()
 }
 
 
-void 
+void
 ResourceHasChanged()
 
 {
@@ -584,7 +584,7 @@ ResourceHasChanged()
 
 
 
-void 
+void
 ValueHasChanged()
 
 {
@@ -592,11 +592,3 @@ ValueHasChanged()
   ValueChanged = True;
 
 }
-
-
-
-
-
-
-
-

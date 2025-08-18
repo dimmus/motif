@@ -8,10 +8,10 @@ XCOMM rules:  $TOG: Imake.rules /main/227 1998/02/02 12:07:57 kaleb $
  * Warning, when defining rules: make sure you do not include both a trailing
  * backslash and double ampersand backslash or else you will get an extra
  * backslash in the Makefile.
- * 
+ *
  * The following macros are defined for the various templates and Imakefiles
  * (for a list of the applicable make variables, see the template files):
- * 
+ *
  * Concat			(a,b)
  * Concat3			(a,b,c)
  * Concat4			(a,b,c,d)
@@ -170,7 +170,7 @@ XCOMM rules:  $TOG: Imake.rules /main/227 1998/02/02 12:07:57 kaleb $
  * SharedLibraryDataTarget	(libname,rev,salist)
  * InstallSharedLibrary		(libname,rev,dest)
  * InstallSharedLibraryData	(libname,rev,dest)
- * 
+ *
  */
 
 #define NullParameter
@@ -358,7 +358,7 @@ clean clean.sentinel::							@@\
 #endif /* SentinelProgramTarget */
 
 /*
- * SentinelCplusplusProgramTarget - generate rules to make Sentinel image 
+ * SentinelCplusplusProgramTarget - generate rules to make Sentinel image
  */
 #ifndef SentinelCplusplusProgramTarget
 #if HasSentinel
@@ -565,7 +565,7 @@ $(CXXLINK) -o program options objects libraries $(EXTRA_LOAD_FLAGS)
 #endif /* CplusplusLinkRule */
 
 /*
- * NormalProgramTarget - generate rules to compile and link the indicated 
+ * NormalProgramTarget - generate rules to compile and link the indicated
  * program; since it does not use any default object files, it may be used for
  * multiple programs in the same Imakefile.
  */
@@ -619,7 +619,7 @@ NormalProgramTarget(program,objects,NullParameter,locallibs,syslibs)
 
 /*
  * SimpleProgramTarget - generate rules for compiling and linking programs
- * that only have one C source file.  It should only be used in Imakefiles 
+ * that only have one C source file.  It should only be used in Imakefiles
  * that describe a single program.
  */
 #ifndef SimpleProgramTarget
@@ -669,9 +669,9 @@ InstallManPage(program,$(MANDIR))
 #endif /* CplusplusProgramTargetHelper */
 
 /*
- * ComplexProgramTarget - generate rules for compiling and linking the 
+ * ComplexProgramTarget - generate rules for compiling and linking the
  * program specified by $(OBJS) and $(SRCS), installing the program and its
- * man page, and generating dependencies.  It should only be used in 
+ * man page, and generating dependencies.  It should only be used in
  * Imakefiles that describe a single program.
  */
 #ifndef ComplexProgramTarget
@@ -708,7 +708,7 @@ clean::									@@\
  * ComplexProgramTarget_1 - generate rules for compiling and linking the
  * program specified by $(OBJS1) and $(SRCS1), installing the program and its
  * man page, and generating dependencies for it and any programs described
- * by $(SRCS2) throgh $(SRCS10).  It should be used to build the primary 
+ * by $(SRCS2) throgh $(SRCS10).  It should be used to build the primary
  * program in Imakefiles that describe multiple programs.
  */
 #ifndef ComplexProgramTarget_1
@@ -750,7 +750,7 @@ clean::									@@\
 /*
  * ComplexProgramTarget_2 - generate rules for compiling and linking the
  * program specified by $(OBJS2) and $(SRCS2) and installing the program and
- * man page.  It should be used to build the second program in Imakefiles 
+ * man page.  It should be used to build the second program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_2
@@ -766,7 +766,7 @@ CplusplusProgramTargetHelper(program,SRCS2,OBJS2,DEPLIBS2,locallib,syslib)
 /*
  * ComplexProgramTarget_3 - generate rules for compiling and linking the
  * program specified by $(OBJS3) and $(SRCS3) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_3
@@ -782,7 +782,7 @@ CplusplusProgramTargetHelper(program,SRCS3,OBJS3,DEPLIBS3,locallib,syslib)
 /*
  * ComplexProgramTarget_4 - generate rules for compiling and linking the
  * program specified by $(OBJS4) and $(SRCS4) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_4
@@ -798,7 +798,7 @@ CplusplusProgramTargetHelper(program,SRCS4,OBJS4,DEPLIBS4,locallib,syslib)
 /*
  * ComplexProgramTarget_5 - generate rules for compiling and linking the
  * program specified by $(OBJS5) and $(SRCS5) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_5
@@ -814,7 +814,7 @@ CplusplusProgramTargetHelper(program,SRCS5,OBJS5,DEPLIBS5,locallib,syslib)
 /*
  * ComplexProgramTarget_6 - generate rules for compiling and linking the
  * program specified by $(OBJS6) and $(SRCS6) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_6
@@ -830,7 +830,7 @@ CplusplusProgramTargetHelper(program,SRCS6,OBJS6,DEPLIBS6,locallib,syslib)
 /*
  * ComplexProgramTarget_7 - generate rules for compiling and linking the
  * program specified by $(OBJS7) and $(SRCS7) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_7
@@ -846,7 +846,7 @@ CplusplusProgramTargetHelper(program,SRCS7,OBJS7,DEPLIBS7,locallib,syslib)
 /*
  * ComplexProgramTarget_8 - generate rules for compiling and linking the
  * program specified by $(OBJS8) and $(SRCS8) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_8
@@ -862,7 +862,7 @@ CplusplusProgramTargetHelper(program,SRCS8,OBJS8,DEPLIBS8,locallib,syslib)
 /*
  * ComplexProgramTarget_9 - generate rules for compiling and linking the
  * program specified by $(OBJS9) and $(SRCS9) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_9
@@ -878,7 +878,7 @@ CplusplusProgramTargetHelper(program,SRCS9,OBJS9,DEPLIBS9,locallib,syslib)
 /*
  * ComplexProgramTarget_10 - generate rules for compiling and linking the
  * program specified by $(OBJS10) and $(SRCS10) and installing the program and
- * man page.  It should be used to build the third program in Imakefiles 
+ * man page.  It should be used to build the third program in Imakefiles
  * describing more than one program.
  */
 #ifndef ComplexProgramTarget_10
@@ -1050,7 +1050,7 @@ InstallTarget(install.ln,Concat(llib-l,libname.ln),$(INSTLIBFLAGS),dest)
  * InstallManPageLong - generate rules to install the indicated manual page,
  * giving it an alternate name.  This is used for installing man pages whose
  * base name without the .man suffix would normally be longer than 8 characters
- * (the limit for using source code control systems on files systems with 
+ * (the limit for using source code control systems on files systems with
  * short file names).
  */
 #ifndef InstallManPageLong
@@ -1225,9 +1225,9 @@ step:: list								@@\
  * LinkVarDirectory
  *
  * Make links from $LIBDIR (<ProjectRoot>/lib/X11) to /var/X11/
- * For example /usr/X11R6/lib/X11/xdm ==> /var/X11/xdm so that X 
+ * For example /usr/X11R6/lib/X11/xdm ==> /var/X11/xdm so that X
  * binaries can be mounted from a read-only volume like a CD-ROM;
- * but files that may need to be edited can be stored locally on 
+ * but files that may need to be edited can be stored locally on
  * read-write media. If someone has an existing installation, be
  * careful and move existing files to the new location in /var.
  */
@@ -1254,7 +1254,7 @@ install::								@@\
 
 /*
  * InstallMultipleDestFlags - generate rules to install multiple files at
- * once during a particular step in the build using a specific set of install 
+ * once during a particular step in the build using a specific set of install
  * flags.
  */
 #ifndef InstallMultipleDestFlags
@@ -1270,7 +1270,7 @@ step:: list								@@\
 
 /*
  * InstallMultipleDest - generate rules to install multiple files at once
- * during a particular step in the build using any install flags set in 
+ * during a particular step in the build using any install flags set in
  * $(INSTDATFLAGS).
  */
 #ifndef InstallMultipleDest
@@ -1279,8 +1279,8 @@ InstallMultipleDestFlags(step,list,dest,$(INSTDATFLAGS))
 #endif /* InstallMultipleDest */
 
 /*
- * InstallMultiple - generate rules to install multiple files at once 
- * during the install step of the build using any install flags set in 
+ * InstallMultiple - generate rules to install multiple files at once
+ * during the install step of the build using any install flags set in
  * $(INSTALLFLAGS).
  */
 #ifndef InstallMultiple
@@ -1340,7 +1340,7 @@ depend:: ProgramTargetName($(DEPEND))
 #endif
 
 /*
- * DependDependency - generate rules to build the makedepend program if 
+ * DependDependency - generate rules to build the makedepend program if
  * this Imakefile is within the source tree.
  */
 #ifndef DependDependency
@@ -1977,7 +1977,7 @@ clean::									@@\
 
 /*
  * NormalRelocatableTarget - generate rules to produce a relocatable object
- * file instead of a library.  
+ * file instead of a library.
  */
 #ifndef NormalRelocatableTarget
 #define	NormalRelocatableTarget(objname,objlist)			@@\
@@ -2005,7 +2005,7 @@ Concat(objname,_p.Osuf): objlist $(EXTRALIBRARYDEPS)			@@\
 
 
 /*
- * DebuggedRelocatableTarget - generate rules to produce a debuggable 
+ * DebuggedRelocatableTarget - generate rules to produce a debuggable
  * relocatable object file instead of a library.
  */
 #ifndef DebuggedRelocatableTarget
@@ -2132,7 +2132,7 @@ name::									@@\
  * NamedMakeSubdirs - generate rules to do makes in the given subdirectories.
  * If you want CDEBUGFLAGS passed along to subdirectories, provide a line like
  * the following in the appropriate Imakefile
- * 
+ *
  *         #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
  */
 #ifndef LangNamedMakeSubdirs
@@ -2166,7 +2166,7 @@ name::									@@\
  * NamedMakeSubdirs - generate rules to do makes in the given subdirectories.
  * If you want CDEBUGFLAGS passed along to subdirectories, provide a line like
  * the following in the appropriate Imakefile
- * 
+ *
  *         #define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
  */
 #ifndef NamedMakeSubdirs
@@ -2269,7 +2269,7 @@ NamedTagSubdirs(tags,dirs)
 #endif
 
 /*
- * MakeLintSubdirs - generate rules to recursively lint directories as part 
+ * MakeLintSubdirs - generate rules to recursively lint directories as part
  * of the named step.
  */
 #ifndef MakeLintSubdirs
@@ -2279,7 +2279,7 @@ NamedTargetSubdirs(target,dirs,"linting" for target and subtarget,DESTDIR=$(DEST
 
 
 /*
- * LintSubdirs - generate rules to recursively lint directories as part of 
+ * LintSubdirs - generate rules to recursively lint directories as part of
  * the make lint step.
  */
 #ifndef LintSubdirs
@@ -2299,8 +2299,8 @@ MakeLintSubdirs(dirs,lintlib,lintlib)
 
 /*
  * MakeMakeSubdirs - generate rules to recursively recreate Makefiles as part
- * of the specified step in the build.  If $(TOP) is set to an absolute path, 
- * do not prepend the ../ prefix.  This makes running things outside of the 
+ * of the specified step in the build.  If $(TOP) is set to an absolute path,
+ * do not prepend the ../ prefix.  This makes running things outside of the
  * source tree much easier.
  * $(ONESUBDIR)/Makefile exists as a separate, explicit target so that
  * clearmake will know what its goal is and do wink-in.

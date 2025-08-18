@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Cache.c /main/12 1995/07/14 10:12:26 drk $"
@@ -49,7 +49,7 @@ static char rcsid[] = "$XConsortium: Cache.c /main/12 1995/07/14 10:12:26 drk $"
  *	cache record itself!
  *
  ************************************************************************/
-void 
+void
 _XmCacheDelete(
         XtPointer data )
 {
@@ -67,10 +67,10 @@ _XmCacheDelete(
 /************************************************************************
  *
  *  _XmCacheCopy
- *	Copy <size> bytes from <src> to <dest>. 
+ *	Copy <size> bytes from <src> to <dest>.
  *
  ************************************************************************/
-void 
+void
 _XmCacheCopy(
         XtPointer src,
         XtPointer dest,
@@ -83,38 +83,38 @@ _XmCacheCopy(
  *
  *  _XmCachePart
  *	Pass in a pointer, <cpart>, to <size> bytes of a temporary Cache
- *	record.  
+ *	record.
  *	- If the Class cache head is NULL (no entries yet!), allocate a new
- *	  cache record, copy in temporary Cache bytes, append it to the 
+ *	  cache record, copy in temporary Cache bytes, append it to the
  *	  class-cache linked list, and return the address.
  *	- Else, run through the class linked list.
- *	  = If a match is found, increment the ref_count and return the 
+ *	  = If a match is found, increment the ref_count and return the
  *	    address.
  *	  = Else, allocate a new cache record, copy in temporary Cache bytes,
  *	    append it to the class-cache linked list, and return the address.
  *
  ************************************************************************/
-XtPointer 
+XtPointer
 _XmCachePart(
         XmCacheClassPartPtr cp,
         XtPointer cpart,
         size_t size )
 {
     XmGadgetCachePtr ptr, last;
-    
+
     if (ClassCacheHead(cp).next == NULL)       /* First one */
     {
-	ClassCacheHead(cp).next = 
-	  (struct _XmGadgetCache *)XtMalloc( size + 
+	ClassCacheHead(cp).next =
+	  (struct _XmGadgetCache *)XtMalloc( size +
 					    XtOffsetOf(XmGadgetCacheRef, data));
         ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
 
-        ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size );  
+        ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size );
 	ptr-> ref_count = 1;
         ptr-> next = NULL;
 	ptr-> prev = (struct _XmGadgetCache *)&ClassCacheHead(cp);
         return (CacheDataPtr(ptr));
-    }    
+    }
     ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
     do
     {
@@ -130,9 +130,9 @@ _XmCachePart(
             ptr = (XmGadgetCachePtr)ptr->next;
         }
     } while (ptr);
-    
+
     /* Malloc a new rec off of last, fill it out*/
-    ptr = (XmGadgetCachePtr)XtMalloc( size + 
+    ptr = (XmGadgetCachePtr)XtMalloc( size +
 				     XtOffsetOf(XmGadgetCacheRef, data) );
     last->next = (struct _XmGadgetCache *)ptr;
     ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size);
@@ -141,4 +141,3 @@ _XmCachePart(
     ptr-> prev = last;
     return (CacheDataPtr(ptr));
 }
-

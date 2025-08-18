@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Scale7.c /main/8 1995/07/13 19:12:34 drk $"
@@ -41,11 +41,11 @@ static char rcsid[] = "$XConsortium: Scale7.c /main/8 1995/07/13 19:12:34 drk $"
 
 static int first_drag = 1;
 
-static void 
+static void
 ScaleValueChangedCB (Widget sw, XtPointer client_data, XtPointer data)
 {
    XmScaleCallbackStruct *call_data = (XmScaleCallbackStruct *) data ;
-   
+
    printf ("Test valueChangedCallback called\n");
    printf ("    Value = %d\n", call_data->value);
 
@@ -53,7 +53,7 @@ ScaleValueChangedCB (Widget sw, XtPointer client_data, XtPointer data)
        first_drag = 1;
 }
 
-static void 
+static void
 ScaleDragCB (Widget sw, XtPointer client_data, XtPointer data)
 {
    if (first_drag == 1) {
@@ -63,7 +63,7 @@ ScaleDragCB (Widget sw, XtPointer client_data, XtPointer data)
 }
 
 
-void 
+void
 main (unsigned int argc, char **argv)
 {
    Widget Scale1;
@@ -75,13 +75,13 @@ main (unsigned int argc, char **argv)
 
    /*  initialize toolkit  */
     CommonTestInit(argc, argv);
-    
+
    /*  Set up arglist and create the scale  */
 
    n = 0;
    XtSetArg (args[n], XmNprocessingDirection, XmMAX_ON_BOTTOM);		n++;
    XtSetArg (args[n], XmNshowValue, True); n++;
-   Scale1 = XmCreateScale(Shell1, "Scale1", args, n); 
+   Scale1 = XmCreateScale(Shell1, "Scale1", args, n);
    XtManageChild (Scale1);
    XtAddCallback (Scale1, XmNvalueChangedCallback, CommonGenericCB, NULL);
    XtAddCallback (Scale1, XmNvalueChangedCallback, ScaleValueChangedCB, NULL);

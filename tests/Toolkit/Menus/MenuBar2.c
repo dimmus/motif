@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MenuBar2.c /main/8 1995/07/13 18:47:08 drk $"
@@ -30,7 +30,7 @@ static char rcsid[] = "$XConsortium: MenuBar2.c /main/8 1995/07/13 18:47:08 drk 
 #endif
 
 
-#include <signal.h>    
+#include <signal.h>
 
 #include <X11/Xlib.h>
 #include <X11/StringDefs.h>
@@ -48,7 +48,7 @@ Widget	menu1 = NULL, submenu1 = NULL, submenu2 = NULL,
         pb1 = NULL, pb2 = NULL, toggle_RC = NULL, toggle_MS = NULL,
     	toggle_CB = NULL, toggle_CBG = NULL;
 Widget  LabelScale, BorderScale, ChildrenScale;
-   
+
 XmStringCharSet	CharSet = (XmStringCharSet) XmSTRING_DEFAULT_CHARSET;
 
 void PrintMe(Widget w, XtPointer client_data, XtPointer call_data)
@@ -84,7 +84,7 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
   n = 0;
   XtSetArg(args[n], XmNvalue, &num_children); n++;
   XtGetValues(ChildrenScale, args, n);
-   
+
   n = 0;
   XtSetArg (args[n], XmNborderWidth, border); n++;
   menubar = XmCreateMenuBar(BB, "menubar", args, n);
@@ -92,15 +92,15 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
   /*
    * XmPulldownMenu: submenu1
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu1 = XmCreatePulldownMenu(menubar, "submenu1", args, n);
 
   /*
    * XmPulldownMenu: submenu2
    */
-   
-  n = 0; 
+
+  n = 0;
   submenu2 = XmCreatePulldownMenu(menubar, "submenu2", args, n);
 
 
@@ -108,9 +108,9 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
    * XmPushButton: toggle_MS
    */
 
-  LabelString1 = XmStringLtoRCreate("Toggle MenuShell", CharSet); 
+  LabelString1 = XmStringLtoRCreate("Toggle MenuShell", CharSet);
   LabelString2 = XmStringCreate("Ctrl-M", XmSTRING_DEFAULT_CHARSET);
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNlabelString,LabelString1); n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>M"); n++;
   XtSetArg(args[n], XmNacceleratorText,LabelString2); n++;
@@ -118,19 +118,19 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
   XtAddCallback (toggle_MS, XmNactivateCallback, PrintMe, NULL);
 
   XtManageChild(toggle_MS);
-  XmStringFree (LabelString1); 
-  XmStringFree (LabelString2); 
+  XmStringFree (LabelString1);
+  XmStringFree (LabelString2);
   /*
    * XmPushButton: toggle_RC
    */
 
-  n = 0; 
-  LabelString1 = XmStringLtoRCreate("Toggle RowColumn", CharSet); 
+  n = 0;
+  LabelString1 = XmStringLtoRCreate("Toggle RowColumn", CharSet);
   LabelString2 = XmStringCreate("Ctrl-R", XmSTRING_DEFAULT_CHARSET);
   XtSetArg(args[n], XmNlabelString, LabelString1); n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>R"); n++;
   XtSetArg(args[n], XmNacceleratorText, LabelString2); n++;
-	   
+
   toggle_RC = XmCreatePushButton(submenu1, "toggle_RC", args, n);
 
   XtManageChild(toggle_RC);
@@ -140,21 +140,21 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
    * XmPushButton: toggle_CB
    */
 
-  n = 0; 
+  n = 0;
   toggle_CB = XmCreatePushButton(submenu1, "toggle_CB", args, n);
   XtManageChild(toggle_CB);
-   
+
   /*
    * XmPushButton: toggle_CBG
    */
 
   LabelString1 = XmStringLtoRCreate("Toggle CascadeButtonGadget", CharSet);
-  LabelString2 = XmStringCreate("Ctrl-G", XmSTRING_DEFAULT_CHARSET); 
-  n = 0; 
+  LabelString2 = XmStringCreate("Ctrl-G", XmSTRING_DEFAULT_CHARSET);
+  n = 0;
   XtSetArg(args[n], XmNlabelString, LabelString1); n++;
   XtSetArg(args[n], XmNaccelerator, "Ctrl<Key>G"); n++;
   XtSetArg(args[n], XmNacceleratorText, LabelString2); n++;
-	 
+
   toggle_CBG = XmCreatePushButton(submenu1, "toggle_CBG", args, n);
   XtManageChild(toggle_CBG);
   XmStringFree (LabelString1);
@@ -169,8 +169,8 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
   pb2 = XmCreatePushButtonGadget (submenu2, "pb2", args, n);
   XtManageChild (pb1);
   XtManageChild (pb2);
- 
-  printf ("num_children is %d\n", num_children); 
+
+  printf ("num_children is %d\n", num_children);
 
   /* We need several button children, let's try this */
   for (i = 0; i <= (num_children - 1); i++)
@@ -179,10 +179,10 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
 	buf[n] = '+';
       buf[n] = '\0';
 
-      LabelString1 =  XmStringCreate (&buf[0], XmSTRING_DEFAULT_CHARSET); 
+      LabelString1 =  XmStringCreate (&buf[0], XmSTRING_DEFAULT_CHARSET);
       n = 0;
       XtSetArg(args[n], XmNlabelString, LabelString1); n++;
-	      
+
       if (i%2)
 	{
 	  XtSetArg(args[n], XmNsubMenuId, submenu1); n++;
@@ -190,7 +190,7 @@ void DoItJoe(Widget w, XtPointer client_data, XtPointer call_data)
       else
 	{
 	  XtSetArg(args[n], XmNsubMenuId, submenu2); n++;
-	}	
+	}
       sprintf(buf2, "CascadeButton%d", i);
       printf ("I am creating child %d\n", i);
 
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
   int border;
 
   CommonTestInit(argc, argv);
-    
+
   /* create a dialog shell to run things */
   /* a scale for border width, a scale for number of chars in label */
   /* and an okay button to make things go! */
@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
   BorderScale = XmCreateScale (BBD, "BorderScale", args, n);
   XmStringFree(tcs);
   XtManageChild (BorderScale);
-   
+
   n = 0;
   XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
   XtSetArg(args[n], XmNshowValue, True); n++;
@@ -299,16 +299,6 @@ int main(int argc, char *argv[])
   XtRealizeWidget(Shell1);
 
   CommonPause();
- 
+
   XtAppMainLoop(app_context);
 }
-
-
-
-
-
-
-
-
-
-

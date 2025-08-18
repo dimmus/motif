@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
@@ -33,14 +33,14 @@ static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
 #include <Xm/AtomMgr.h>
 #include <Xm/XmP.h>
 #include <X11/Xresource.h>
-  
+
 /*****************************************************************************
  *
  *  XmInternAtom()
  *
  ****************************************************************************/
 
-Atom 
+Atom
 XmInternAtom(
         Display *display,
         String name,
@@ -60,8 +60,8 @@ XmInternAtom(
  *  XmGetAtomName()
  *
  ****************************************************************************/
-    
-String 
+
+String
 XmGetAtomName(
         Display *display,
         Atom atom )
@@ -69,4 +69,4 @@ XmGetAtomName(
   /* While not yet obsolete, this routine is not in favor.  Use */
   /* XGetAtomName directly. */
   return XGetAtomName(display, atom);
-}    
+}

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Pause.c /main/10 1995/07/14 11:59:23 drk $"
@@ -49,7 +49,7 @@ extern Boolean startup_time;
 extern char		*CompleteTestName;
 
 
-Widget        	InstructionBox; 	/* Global Widget for Instruction 
+Widget        	InstructionBox; 	/* Global Widget for Instruction
 					   MessageBox */
 FILE     	*output_file;  		/* Global summary output file */
 static Widget	ContinuePopup = NULL;   /* Shell to contain MessageBox */
@@ -167,14 +167,14 @@ void  FlushEvents()
 
      /* change for Pir 2478 - blocking select() */
 
-if (startup_time) 
+if (startup_time)
      do {
         XtAppNextEvent(app_context, &event);
         CommonCheckEvent(&event, Shell1);
         XtDispatchEvent(&event);
     } while (XtAppPending(app_context));
 
-  else 
+  else
      do {
         XtAppNextEvent(app_context, &event);
         XtDispatchEvent(&event);
@@ -222,18 +222,18 @@ static Widget CreateContinuePopup()
     continue_string = XmStringCreateLtoR("Pass",
     				   XmFONTLIST_DEFAULT_TAG);
 #else
-    continue_string = XmStringCreateLtoR("Continue", 
+    continue_string = XmStringCreateLtoR("Continue",
     				   XmFONTLIST_DEFAULT_TAG);
 #endif /* REGRESSION */
 
-    exit_string = XmStringCreateLtoR("Exit", 
+    exit_string = XmStringCreateLtoR("Exit",
     				   XmFONTLIST_DEFAULT_TAG);
 
     n = 0;
     XtSetArg(args[n], XtNgeometry, "+500+0"); 			n++;
     XtSetArg(args[n], XtNallowShellResize, True);		n++;
-    PopupShell = XtCreatePopupShell("Test Instructions", 
-				    topLevelShellWidgetClass, Shell1, 
+    PopupShell = XtCreatePopupShell("Test Instructions",
+				    topLevelShellWidgetClass, Shell1,
 				    args, n);
 
     n = 0;
@@ -274,16 +274,16 @@ static Widget CreateContinuePopup()
     XtSetArg (args[n], XmNuserData, 1); n++;
     XtSetValues (continue_button, args, n);
 
-    XtAddCallback(continue_button, XmNactivateCallback, 
+    XtAddCallback(continue_button, XmNactivateCallback,
  		  (XtCallbackProc)ContinueCBWrapper, InstructionBox);
-    XtAddCallback(FailButton, XmNactivateCallback, 
+    XtAddCallback(FailButton, XmNactivateCallback,
  		  (XtCallbackProc)ContinueCBWrapper, InstructionBox);
 #else
-    XtAddCallback(continue_button, XmNactivateCallback, 
+    XtAddCallback(continue_button, XmNactivateCallback,
  		  (XtCallbackProc)ContinueCB, InstructionBox);
 #endif /* REGRESSION */
 
-    XtAddCallback(exit_button, XmNactivateCallback, 
+    XtAddCallback(exit_button, XmNactivateCallback,
  		  (XtCallbackProc)QuitCB, InstructionBox);
 
     n = 0;
@@ -308,7 +308,7 @@ static Widget CreateContinuePopup()
 *									 *
 *************************************************************************/
 
-static void ContinueCB(Widget w, caddr_t client_data, 
+static void ContinueCB(Widget w, caddr_t client_data,
 		       caddr_t call_data)
 
 {
@@ -328,7 +328,7 @@ static void ContinueCB(Widget w, caddr_t client_data,
 *									 *
 *************************************************************************/
 
-static void ContinueCBWrapper (Widget w, caddr_t client_data, 
+static void ContinueCBWrapper (Widget w, caddr_t client_data,
 		       caddr_t call_data)
 
 {
@@ -342,14 +342,14 @@ static void ContinueCBWrapper (Widget w, caddr_t client_data,
 
      /* the userData of w tells which button it was */
 
-     XtSetArg (args[0], XmNuserData, &id); 
+     XtSetArg (args[0], XmNuserData, &id);
      XtGetValues (w, args, 1);
 
      if (id) 	/* then we passed */
 	num_panels_passed++;
      else num_panels_failed++;
 #endif /* REGRESSION */
-     
+
      /* regular ContinueCB stuff */
      if (!last_panel_flag) {
      	event_wait = False;
@@ -375,7 +375,7 @@ static void QuitCB(Widget w, caddr_t client_data,
 
   XmAnyCallbackStruct *cbs;
   XEvent *xevent;
-  
+
   if (call_data != NULL) {
 	cbs = (XmAnyCallbackStruct *) call_data;
   	if (cbs) xevent = (XEvent *)cbs->event;
@@ -393,13 +393,13 @@ static void QuitCB(Widget w, caddr_t client_data,
 
 #ifdef REGRESSION
   if (num_panels) {
-	
+
 
         /* dump summary */
         fprintf (output_file, "------------------------------------\n");
         fprintf (output_file, "   Test results: %s             \n", CompleteTestName);
         fprintf (output_file, "   Passed        Failed      Total  \n");
-        fprintf (output_file, "     %d            %d          %d   \n", 
+        fprintf (output_file, "     %d            %d          %d   \n",
 						       num_panels_passed,
       						       num_panels_failed,
 	                                               num_panels);
@@ -451,7 +451,7 @@ static void QuitCB(Widget w, caddr_t client_data,
 *			      case number.				 *
 *			!)  : No format. No formatting except width 	 *
 *			      formatting will be performed.		 *
-*									 *	
+*									 *
 *    	Returns:	One "Frame" of instructions.			 *
 *									 *
 *	Note:		One "Frame" of instructions must not exceed more *
@@ -503,9 +503,9 @@ static char *GetInstructionsFromFile()
 
      if (((c  =  (char) fgetc(instruct_file)) == EOF) || end_data) {
 	fprintf(stderr, "Pause information exhausted\n");
-	exit(-1); 
+	exit(-1);
      }
-  
+
      end_line = False;
      Bextended = False;
      no_format = False;
@@ -588,7 +588,7 @@ static char *GetInstructionsFromFile()
 				}
 				break;
 		/* Strip newlines, let second pass format */
-		case '\n':	if (no_format) 
+		case '\n':	if (no_format)
 					line[array_index++] = '\n';
 				else {
 					c2 = ' ';
@@ -627,7 +627,7 @@ static char *GetInstructionsFromFile()
 					sprintf(temp_s, "%c", c);
 					line[array_index++] = temp_s[0];
 				}
-				else 
+				else
 					line[array_index++] = c;
 				break;
 	}
@@ -659,18 +659,18 @@ static char *GetInstructionsFromFile()
 			count += 2;
 			line_format[array_index_format++] =
 						line[array_index - 1];
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index++];
 		}
 	}
 	else  {
 		if (line[array_index - 1] == '\n') {
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index - 1];
 			count = 1;
 		}
 		else {
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index - 1];
 			count++;
 		}
@@ -679,7 +679,7 @@ static char *GetInstructionsFromFile()
 	        while (array_index < line_length &&
 		        line[array_index] != ' ' &&
 			line[array_index] != '\n') {
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index++];
 		}
 		if ((line[array_index + 1] != '\n' ) &&
@@ -690,7 +690,7 @@ static char *GetInstructionsFromFile()
 			line_format[array_index_format++] = ' ';
 			array_index++;
 		}
-       	}		
+       	}
      }
 
      line_format[array_index_format] = '\n';

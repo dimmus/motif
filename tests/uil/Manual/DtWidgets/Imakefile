@@ -1,4 +1,4 @@
-XCOMM 
+XCOMM
 XCOMM Motif
 XCOMM
 XCOMM Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,13 +19,13 @@ XCOMM You should have received a copy of the GNU Lesser General Public
 XCOMM License along with these librararies and programs; if not, write
 XCOMM to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 XCOMM Floor, Boston, MA 02110-1301 USA
-XCOMM 
-XCOMM 
+XCOMM
+XCOMM
 XCOMM HISTORY
-XCOMM 
+XCOMM
 INCLUDES  	= -I./. -I$(INCLUDESRC) -I$(MINCLUDESRC) -I$(TESTCOMSRC)
 DEFINES         = TestDefines
-DEPLIBS         = TestUilClientDepLibs 
+DEPLIBS         = TestUilClientDepLibs
 LOCAL_LIBRARIES = TestUilClientLibs -L/proj/cde/exports/lib -lDtMrm -lDtTerm
 LOCAL_UILFLAGS_1 = -s
 
@@ -56,10 +56,3 @@ TestPPTarget(printSetupD)
 MSimpleUidTarget(term)
 TestPPTarget(term)
 DependTarget()
-
-
-
-
-
-
-

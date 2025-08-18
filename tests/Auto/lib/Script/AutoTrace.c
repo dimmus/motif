@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AutoTrace.c /main/9 1996/10/07 15:01:12 drk $"
@@ -52,7 +52,7 @@ AutoTraceButtonAction(
         int func_type,
         int line )
 {
-    
+
     switch (func_type) {
 	case PRESSMB:		printf("TRACE:(%d) PressMB", line);
 				break;
@@ -426,10 +426,10 @@ AutoTraceLocateAction(
 {
 
     switch (func_type) {
-	case LOCATEPOINTERABS:	printf("TRACE:(%d) LocatePointerXYAbs %d %d\n", 
+	case LOCATEPOINTERABS:	printf("TRACE:(%d) LocatePointerXYAbs %d %d\n",
 				       line, x, y);
 				return;
-	case LOCATEPOINTERREL:	printf("TRACE:(%d) LocatePointerXYRel %d %d ", 
+	case LOCATEPOINTERREL:	printf("TRACE:(%d) LocatePointerXYRel %d %d ",
 				       line, x, y);
 				break;
 	case LOCATEPOINTER:	printf("TRACE:(%d) LocatePointer ", line);
@@ -451,7 +451,7 @@ AutoTraceLocateAction(
 
 void
 AutoPerformanceAction(
-		      int on_off_switch, 
+		      int on_off_switch,
 		      int line)
 {
 
@@ -476,7 +476,7 @@ AutoPerformanceAction(
        break;
      }
    }
-   
+
 
 
 void
@@ -610,7 +610,7 @@ AutoTracePostAction(
 
     if (keyboard != -1)
 	printf(" Keyboard\n");
-    else 
+    else
 	printf("\n");
 
 }
@@ -649,7 +649,7 @@ AutoTraceDragAction(
 {
 
     switch (func_type) {
-	case DRAG:	
+	case DRAG:
 			printf("TRACE:(%d) DragComponent %s ", line, widget);
 			AutoTraceComponent(component); printf(" ");
 			AutoTraceInstance(dest); printf(" ");
@@ -817,10 +817,10 @@ AutoTraceInstance(
 {
 
     switch (instance) {
-	case OFF: 
+	case OFF:
 		printf("Off");
 		break;
-	case RIGHT: 
+	case RIGHT:
 		printf("Right");
 		break;
 	case LEFT:
@@ -838,9 +838,9 @@ AutoTraceInstance(
 	case AUTOMAX:
 		printf("Max");
 		break;
-	case -1:  
+	case -1:
 		break;
-	default:  
+	default:
 		printf("%d", instance);
 		break;
     }
@@ -1242,7 +1242,7 @@ AutoTraceComponent(
 	case SLVSBSLIDER:
 		printf("RSelectionListVertScrollBarSlider");
 		break;
-	case -1: 
+	case -1:
 		break;
 	default:
 		break;

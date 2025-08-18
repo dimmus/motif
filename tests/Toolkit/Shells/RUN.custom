@@ -28,7 +28,7 @@ else
 setenv AUTOVPATH /proj/motif/tests/visuals/Toolkit/Shells
 endif
 
-# The following needed for Vista usage 
+# The following needed for Vista usage
 setenv TOP ../../..
 
 set Display1 = 'Display -I Display.Dat -S Display.Scr -O Display1.prt -V Display1.vis -xrm "*enableThinThickness: False"'

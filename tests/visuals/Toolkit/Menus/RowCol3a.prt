@@ -23,7 +23,7 @@
 #
 # HISTORY
 TRACE:(1) WindowFocus mainParent
-TRACE:(2) LocatePointer textf1  
+TRACE:(2) LocatePointer textf1
 TRACE:(3) ClickKey Kn
 TRACE:(4) ClickKey Ke
 TRACE:(5) ClickKey Kw
@@ -34,13 +34,13 @@ TRACE:(9) ClickKey Kl
 TRACE:(10) ClickKey Ku
 TRACE:(11) ClickKey Ke
 TRACE:(12) ClickKey KReturn
-TRACE:(13) CompareVisual parent 
-TRACE:(14) LocatePointer scale1  
+TRACE:(13) CompareVisual parent
+TRACE:(14) LocatePointer scale1
 TRACE:(15) ClickKey KRight
 TRACE:(16) ClickKey KRight
 TRACE:(17) ClickKey KRight
 TRACE:(18) ClickKey KRight
-TRACE:(19) CompareVisual parent 
+TRACE:(19) CompareVisual parent
 TRACE:(20) Continue
 TRACE:(21) Continue
 TRACE:(22) Continue

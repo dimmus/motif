@@ -12,7 +12,7 @@ Throughout this README, we use the path ./tests/Mrm to
 identify the top directory of the Resource Manager tests.
 The ./ indicates the testing tree root and is not an actual
 path designation.  For example, if you installed the Motif
-software at /source/Motif, then ./tests/Mrm translates to 
+software at /source/Motif, then ./tests/Mrm translates to
 /source/Motif/tests/Mrm at your site.
 
 2.1  Overview and Directory Structure
@@ -119,8 +119,8 @@ All the tests must be compiled before you can run them.
    * If you did not include the test suite files in your
      initial global build process, you can build the tests
      using the make all command from the ./tests/Mrm directory.
-     Prior to building the tests you need to make Makefile in 
-     the current directory. 
+     Prior to building the tests you need to make Makefile in
+     the current directory.
 
 Neither RegisterCA nor FetchWloop.uil will be compiled
 using either of the global compiling methods previously
@@ -251,7 +251,7 @@ was lost.  You can look in the log files for detailed infor-
 mation about when the memory was lost and how much was lost.
 
 BUGS SHOWN BY THESE TESTS
- 
+
 OpenH
 PIRS No.:      3890
 MrmOpenHierarchy fails if UIDPATH is set at all.  Other Mrm

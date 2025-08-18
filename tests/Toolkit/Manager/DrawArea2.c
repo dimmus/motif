@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: DrawArea2.c /main/11 1999/12/01 17:53:00 jff $"
@@ -61,12 +61,12 @@ XtPointer client_data, call_data;
 	XtSetValues ((Widget) client_data, args, n);
 
 }
-	
+
 
 void DrawStuff(widget, client_data, call_data)
 Widget widget;
 XtPointer client_data, call_data;
-{ 
+{
   XEvent *callingEvent;
   XmDrawingAreaCallbackStruct *inputCallback;
   static drawKeepStruct fromStruct = {0, 0, 1};
@@ -89,7 +89,7 @@ XtPointer client_data, call_data;
 
   drawingWidget = (Widget) DrawingArea1;
   myWindow = XtWindow(drawingWidget);
-  if (myWindow == NULL) 
+  if (myWindow == NULL)
     {  printf ("Null window, dummy.\n");
        exit (1);
      };
@@ -104,23 +104,23 @@ XtPointer client_data, call_data;
   callingEvent = (XEvent *) inputCallback->event;
 
   if (callingEvent != NULL)
-    { 
+    {
       /* do the work on a release only */
       if (callingEvent->xbutton.type == ButtonRelease)
-	{ 
+	{
 	  /* ok, we're gonna fill out the toStruct with info from event*/
 	  toStruct.xpos = callingEvent->xkey.x;
 	  toStruct.ypos = callingEvent->xkey.y;
 	  toStruct.whichButton = callingEvent->xbutton.button;
-   
+
 	  /* if it's a button1 event, draw the line */
 	  if (toStruct.whichButton == 1)
 	    {
-	      XDrawLine (display, myWindow, myGC, fromStruct.xpos, 
+	      XDrawLine (display, myWindow, myGC, fromStruct.xpos,
 			 fromStruct.ypos,
 			 toStruct.xpos,
 			 toStruct.ypos);
-	    }      
+	    }
 	  fromStruct.xpos = toStruct.xpos;
 	  fromStruct.ypos = toStruct.ypos;
 	  fromStruct.whichButton = toStruct.whichButton;
@@ -151,7 +151,7 @@ Cardinal *num_params;
 
 {
   static XmDrawingAreaCallbackStruct cb;
-  
+
   cb.reason = XmCR_INPUT;
   cb.event = event;
   cb.window = XtWindow(w);
@@ -159,7 +159,7 @@ Cardinal *num_params;
   DrawStuff (w, NULL, &cb);
 
 }
- 
+
 void ExposeRoutine(w,d1,d2)
 	Widget w;
 	XtPointer d1;
@@ -191,7 +191,7 @@ if ((((XmDrawingAreaCallbackStruct *) call_data)->event) == NULL)
   printf ("The event is NULL. This is expected.\n");
 else printf ("The event is not NULL! This is an ERROR.\n");
 /* begin test for PIR 4107 */
-if (widget == NULL) 
+if (widget == NULL)
   printf ("The widget is NULL! This is an ERROR.\n");
 else
   printf ("The widget value is not NULL. This is expected.\n");
@@ -237,7 +237,7 @@ void  main (argc, argv)
 
     n = 0;
     PushButton = XmCreatePushButton (BulletinBoard, "PushButton", args, n);
-   
+
     n = 0;
     XtSetArg(args[n], XmNshadowType, XmSHADOW_ETCHED_IN); n++;
     XtSetArg(args[n], XmNshadowThickness, 1); n++;
@@ -270,7 +270,7 @@ void  main (argc, argv)
     XtManageChild(PushButton);
     XtManageChild(BulletinBoard);
     XtRealizeWidget(Shell1);
-    
+
     CommonPause(); /* list instructions */
 
     XtRemoveCallback(DrawingArea1, XmNinputCallback, DrawStuff, NULL);
@@ -278,7 +278,7 @@ void  main (argc, argv)
 
     XtAppAddActions(app_context, actions, 1);
     XtOverrideTranslations(DrawingArea1,
-			   XtParseTranslationTable(translation_table));    
+			   XtParseTranslationTable(translation_table));
 
     CommonPause();
 
@@ -296,12 +296,12 @@ void  main (argc, argv)
 				       Shell1, args, n);
 
     n = 0;
-    DrawingArea2 = XmCreateDrawingArea (popupshell, "DrawingArea2", 
+    DrawingArea2 = XmCreateDrawingArea (popupshell, "DrawingArea2",
 					args, n);
 
     n = 0;
     XtSetArg(args[n], XmNlabelString,
-	   XmStringCreate("Put the focus in this window.", 
+	   XmStringCreate("Put the focus in this window.",
 			  XmSTRING_DEFAULT_CHARSET)); n++;
 /* test for P3062 */
 

@@ -62,11 +62,11 @@ main (int argc, char **argv)
 	    exit(1);
 	  }
 
-	if (match (UserData,"1")) 
+	if (match (UserData,"1"))
 	  a=1;
-	else if (match (UserData,"2")) 
+	else if (match (UserData,"2"))
 	  a=2;
-	else if (match (UserData,"3")) 
+	else if (match (UserData,"3"))
 	  a=3;
 	else if (match (UserData, "4"))
 	  a=4;
@@ -86,10 +86,3 @@ main (int argc, char **argv)
 
 	XtAppMainLoop (app_context);
       }
-
-
-
-
-
-
-

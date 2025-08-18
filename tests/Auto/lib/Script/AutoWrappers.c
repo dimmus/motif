@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AutoWrappers.c /main/11 1995/07/14 11:29:16 drk $"
@@ -71,8 +71,8 @@ CreateWidget(
     if (w_info == NULL)
 	AutoMessage(_AutoMessages[WARNMSG7]);
 
-    widget_info = mvsCreateWidget(class, w_info, name, DontUseCommonArgs, 
-       				  args, n, NULL);	
+    widget_info = mvsCreateWidget(class, w_info, name, DontUseCommonArgs,
+       				  args, n, NULL);
     return(widget_info->widget);
 }
 
@@ -739,11 +739,11 @@ PopupShellCreate(
 
     w_info = mvsWidgetToWidgetInfo(parent);
 
-    if (w_info == NULL) 
+    if (w_info == NULL)
 	AutoMessage(_AutoMessages[WARNMSG8]);
 
     widget_info = mvsCreateWidget(iXmPopupShellWidgetClass, w_info, name,
-                                  DontUseCommonArgs, args, num_args, 
+                                  DontUseCommonArgs, args, num_args,
 				  widget_class);
 
     return(widget_info->widget);
@@ -765,7 +765,7 @@ AppShellCreate(
     mvsRootWidgetInfo2 = mvsInitRootWidgetInfo();
 
     widget_info = mvsCreateWidget(iXmApplicationShellWidgetClass,
-				  mvsRootWidgetInfo2, 
+				  mvsRootWidgetInfo2,
 				  app_name, DontUseCommonArgs, args, num_args,
 				  widget_class);
 
@@ -795,7 +795,7 @@ SetValues(
 
     w_info = mvsWidgetToWidgetInfo(w);
 
-    if (w_info == NULL && w == NULL) 
+    if (w_info == NULL && w == NULL)
 	AutoMessage(_AutoMessages[WARNMSG9]);
 
     if (w != NULL && w_info == NULL) {

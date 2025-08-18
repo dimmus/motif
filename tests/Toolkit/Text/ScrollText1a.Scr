@@ -19,7 +19,7 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 
 # #) This ScrolledText widget was created with its layout direction set
@@ -48,7 +48,7 @@ CompareVisual info_box
 LocatePointer info_box ROkButton
 ClickMB Btn1
 
-#  C)	
+#  C)
 Continue
 
 #  #) Give the text window the focus.  Click MB1 after the last word in the
@@ -123,7 +123,7 @@ CompareVisual BBoard1
 DragSliderValue Up Min
 CompareVisual BBoard1
 
-#  #) Click on the togglebutton again to switch the EditMode back to 
+#  #) Click on the togglebutton again to switch the EditMode back to
 #  XmSINGLE_LINE_EDIT.  The vertical scrollbar should disappear and the text
 #  widget should return to only displaying 1 line.
 LocatePointer ToggleB1

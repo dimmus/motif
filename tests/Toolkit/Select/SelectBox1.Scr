@@ -1,5 +1,5 @@
 # $XConsortium: SelectBox1.scr /main/8 1995/07/17 20:38:11 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,23 +20,23 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # OSF/Motif: @(#)SelectBox1.scr	1.4  92/02/14
 
 # A client with a SelectionBox will appear. The SelectionBox
 # should consist of the following items:
 #
-#     a) a list, labeled \"Pick a Test\", with twenty 
+#     a) a list, labeled \"Pick a Test\", with twenty
 #        items visible,
 #     b) a scrollbar to the right of the list,
-#     c) a selection text widget , labeled \"test:\", 
+#     c) a selection text widget , labeled \"test:\",
 #        below the list, and
-#     d) four pushbuttons at the bottom, labeled 
-#        \"OK\", \"Apply\", \"Cancel\", and \"Help\". 
+#     d) four pushbuttons at the bottom, labeled
+#        \"OK\", \"Apply\", \"Cancel\", and \"Help\".
 
 LocatePointer SelectionBox1
 CompareVisual SelectionBox1
@@ -47,7 +47,7 @@ Continue
 
 # Click MB1 on the item \"decor00\" in the list.  The selected item
 # should be highlighted, and \"decor00\" should appear in the
-# selection text widget \"test:\". 
+# selection text widget \"test:\".
 
 LocatePointer SelectionBox1 RSelectionListItem 4
 ClickMB Btn1
@@ -56,7 +56,7 @@ CompareVisual SelectionBox1
 
 # Click MB1 on the item \"func04\" in the list.   The selected item
 # should be highlighted, and \"func04\" should appear in the
-# selection text widget \"test:\". 
+# selection text widget \"test:\".
 
 LocatePointer SelectionBox1 RSelectionListItem 18
 ClickMB Btn1
@@ -66,15 +66,15 @@ CompareVisual SelectionBox1
 # Press and hold down MB1 on \"btest3\" in the list.  \"btest3
 # should be highlighted.  Drag the pointer down to \"decor07\".
 # The item under the pointer should always be highlighted.  Release
-# MB1.  \"decor07\" should appear in the selection text widget \"test:\". 
+# MB1.  \"decor07\" should appear in the selection text widget \"test:\".
 
 LocatePointer SelectionBox1 RSelectionListItem 3
 DragComponent SelectionBox1 RSelectionListItem 11
 
 # Click MB1 on the \"OK\" button.  \"ok: decor07\" should appear in
-# the xterm window. 
+# the xterm window.
 
-LocatePointer SelectionBox1 ROkButton 
+LocatePointer SelectionBox1 ROkButton
 ClickMB Btn1
 
 # C)
@@ -82,7 +82,7 @@ ClickMB Btn1
 Continue
 
 # Move the client window.  Iconify the client window.  Normalize
-# the client window.  Resize the client window. 
+# the client window.  Resize the client window.
 
 WindowMove SelectionBox1 50 50
 WindowIconify Shell1
@@ -94,7 +94,7 @@ WindowDeiconify Shell1
 # bottom arrow of the scrollbar.  The slider should move down and
 # the list should scroll.  Release MB1.  Press and hold down MB1 on
 # the scrollbar slider.  Drag the slider to the bottom of the
-# scrollbar.  The list should scroll.  Release MB1. 
+# scrollbar.  The list should scroll.  Release MB1.
 
 LocatePointer SelectionBox1 RSelectionText
 ClickMB Btn1
@@ -122,7 +122,7 @@ CompareVisual SelectionBox1
 # should appear in the xterm window.  Double click MB1 on \"parse00\"
 # in the list.  \"parse00\" should be highlighted, and \"parse00\"
 # should appear in the \"test:\" selection text widget.  \"ok: parse00\"
-# should also appear in the xterm window. 
+# should also appear in the xterm window.
 
 LocatePointer SelectionBox1 RSelectionText
 ClickMB Btn1
@@ -143,7 +143,7 @@ Continue
 
 # Move the pointer into the client window.  Press the backspace key
 # once.  Type \"3\".  Press the return key.  \"ok: parse03\" should
-# appear in the xterm window. 
+# appear in the xterm window.
 
 LocatePointer SelectionBox1 RSelectionText
 ClickMB Btn1
@@ -155,7 +155,7 @@ CompareVisual SelectionBox1
 
 # Press and hold down MB1 on the \"OK\" button.  The button should
 # appear pressed in.  Drag the pointer off of the \"OK\" button.
-# The button should appear popped out.  Release MB1. 
+# The button should appear popped out.  Release MB1.
 
 LocatePointer SelectionBox1 ROkButton
 PressMB Btn1
@@ -165,7 +165,7 @@ ReleaseMB Btn1
 CompareVisual SelectionBox1
 
 # Click MB1 on the \"Apply\" button.  \"apply: parse03\" should
-# appear in the xterm window.  
+# appear in the xterm window.
 
 LocatePointer SelectionBox1 RApplyButton
 ClickMB Btn1
@@ -173,14 +173,14 @@ ClickMB Btn1
 CompareVisual SelectionBox1
 
 # Click MB1 on the \"Cancel\" button.  \"cancel: parse03\" should
-# appear in the xterm window.  
+# appear in the xterm window.
 
 LocatePointer SelectionBox1 RCancelButton
 ClickMB Btn1
 
 CompareVisual SelectionBox1
 
-# Click MB1 on the \"Help\" button. 
+# Click MB1 on the \"Help\" button.
 
 LocatePointer SelectionBox1 RHelpButton
 ClickMB Btn1
@@ -193,7 +193,7 @@ Continue
 
 # Move the pointer into the \"test:\" selection text widget.  Press
 # the backspace key twice.  Type \"25\".  Click MB1 on the \"OK
-# button.  \"noMatch: parse25\" should appear in the xterm window. 
+# button.  \"noMatch: parse25\" should appear in the xterm window.
 
 LocatePointer SelectionBox1 RSelectionText
 ClickMB Btn1
@@ -208,7 +208,7 @@ CompareVisual SelectionBox1
 
 # Move pointer out of the client window.  Press and hold down MB1.
 # Move pointer back into the client window.  Move the pointer out
-# of the client window.  Release MB1. 
+# of the client window.  Release MB1.
 
 LocatePointer SelectionBox1 Off
 PressMB Btn1
@@ -228,7 +228,7 @@ Continue
 # Press the Measure button. A new dialog appears which allows
 # you to examine the relationship between textColumns and width.
 # Everytime the dialog pops up, the values displayed
-# are the current values for those resources of the SelectionBox. 
+# are the current values for those resources of the SelectionBox.
 
 LocatePointer InstructionBox RHelpButton
 ClickMB Btn1
@@ -245,7 +245,7 @@ ClickMB Btn1
 CompareVisual SelectionBox1
 
 # Try setting the width larger and smaller, pressing OK to actually
-# apply the change. 
+# apply the change.
 
 LocatePointer InstructionBox RHelpButton
 ClickMB Btn1
@@ -261,7 +261,7 @@ ClickMB Btn1
 
 CompareVisual SelectionBox1
 
-# Now set the number of columns larger and smaller. 
+# Now set the number of columns larger and smaller.
 
 LocatePointer InstructionBox RHelpButton
 ClickMB Btn1
@@ -281,11 +281,11 @@ CompareVisual SelectionBox1
 
 Continue
 
-# The text area of the selection box has been unmanaged. 
+# The text area of the selection box has been unmanaged.
 
 CompareVisual SelectionBox1
 
-# Try changing width and textColumns again. 
+# Try changing width and textColumns again.
 
 LocatePointer InstructionBox RHelpButton
 ClickMB Btn1
@@ -303,7 +303,7 @@ CompareVisual SelectionBox1
 
 # If you click on any of the buttons in the SelectionBox, that button will be
 # unmanaged. Unmanage each button in turn and observe the
-# effect on width and textColumns. 
+# effect on width and textColumns.
 
 LocatePointer SelectionBox1  ROkButton
 ClickMB Btn1

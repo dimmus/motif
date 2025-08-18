@@ -1,5 +1,5 @@
 .\" $TOG: makeg.man /main/2 1998/02/06 11:24:05 kaleb $
-.\" 
+.\"
 .\" Motif
 .\"
 .\" Copyright (c) 1987-2012, The Open Group. All rights reserved.

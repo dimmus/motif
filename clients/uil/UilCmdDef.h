@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 
 /*
 **++
@@ -45,7 +45,7 @@
 **/
 
 
-typedef struct  
+typedef struct
 {
     char	    *ac_source_file;
     char	    *ac_resource_file;
@@ -62,7 +62,7 @@ typedef struct
     unsigned	    v_report_warn_msg: 1;
     unsigned	    v_parse_tree: 1;	    /* generate parse tree	    */
     unsigned        v_issue_summary: 1;
-    
+
     unsigned int    status_update_delay;    /* Number of times a status	    */
 					    /* point is passed before	    */
 					    /* calling statusCB routine	    */

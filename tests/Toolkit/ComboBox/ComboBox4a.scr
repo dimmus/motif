@@ -20,15 +20,15 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 # A ComboBox of the type COMBO_BOX is displayed. This type of ComboBox
 # always displays its list. Verify that a List is displayed with 20
 # visible items.
 # The spacing between list items should be 5.
-# The height and width of the margin between the list border and the 
+# The height and width of the margin between the list border and the
 # items should be 2.
 # Click on the 2nd item in the list. That item should be displayed in
 # the edit box.
@@ -81,7 +81,7 @@ ClickMB Btn1
 ClickMB Btn1
 ClickMB Btn1
 CompareVisual ComboBox
-LocatePointer List RListItem 19 
+LocatePointer List RListItem 19
 ClickMB Btn1
 CompareVisual ComboBox
 
@@ -99,6 +99,3 @@ Continue
 
 
 Exit
-
-
-

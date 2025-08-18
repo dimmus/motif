@@ -67,7 +67,7 @@ NewCommand (
      CARD32  notifyWindow,
      char   *name,
      char   *defaultName)
-	    
+
 {
   CmdTree *ptr = (CmdTree *) XtMalloc(sizeof(CmdTree));
 
@@ -76,7 +76,7 @@ NewCommand (
 
   if (name != NULL) ptr->name = XtNewString(name);
   else              ptr->name = XtNewString("");
-    
+
   if (defaultName != NULL) ptr->defaultName = XtNewString(defaultName);
   else                     ptr->defaultName = NULL;
 
@@ -254,7 +254,7 @@ DeleteCommand (
 	      *pmenuTree = tmp->next;
 	    else
 	      prev->next = tmp->next;
-	    
+
 	    if (tmp->name != NULL)
 	      XtFree((char*)tmp->name);
 	    XtFree((char *)tmp);
@@ -308,7 +308,7 @@ DefineCommand (
 
   PRINT("Define command: %d, %d, '%s', '%s'\n",
 	commandID, commandSet, name, defaultLabel);
-  
+
   /*
    *  Add command to menu structure.
    */
@@ -330,7 +330,7 @@ DefineCommand (
      * be any other entries with the same name since matching with
      * the mwm resource file is done on names.  If a duplicate is
      * found, remove it first and any menu spec if it is a command
-     * set. 
+     * set.
      */
     if ((duplicateID = FindDuplicateName(CCI_TREE(w), name)) != 0)
       {
@@ -422,7 +422,7 @@ IncludeCommand (
 	  activeContext = 0L;
 	  if (windowIDs[0] &   ICON_ONLY) activeContext |= F_CONTEXT_ICON;
 	  if (windowIDs[0] & WINDOW_ONLY) activeContext |= F_CONTEXT_WINDOW;
-      
+
 	  pNext = tPtr->next;
 	  tPtr->next = NULL;
 	  InsertTreeOnAllClients (ACTIVE_PSD, tPtr, selection,
@@ -430,7 +430,7 @@ IncludeCommand (
 	  tPtr->next = pNext;
 
 	  PRINT("Inserted commandID %d on all windows.\n", commandID);
-	  
+
 	  ShowWaitState (FALSE);
 	}
       else
@@ -450,7 +450,7 @@ IncludeCommand (
 	  for (i=0; i<count; i++)
 	    {
 	      ClientData *pCD;
-	      
+
 	      activeContext = 0L;
 	      if (windowIDs[i] &   ICON_ONLY)
 		activeContext |= F_CONTEXT_ICON;
@@ -549,7 +549,7 @@ EnableCommand (
 	  activeContext = 0L;
 	  if (windowIDs[0] &   ICON_ONLY) activeContext |= F_CONTEXT_ICON;
 	  if (windowIDs[0] & WINDOW_ONLY) activeContext |= F_CONTEXT_WINDOW;
-      
+
 	  pNext = tPtr->next;
 	  tPtr->next = NULL;
 	  ModifyClientCommandTree (ACTIVE_PSD, NULL, ALL, tPtr, ENABLE,
@@ -579,7 +579,7 @@ EnableCommand (
 		activeContext |= F_CONTEXT_ICON;
 	      if (windowIDs[i] & WINDOW_ONLY)
 		activeContext |= F_CONTEXT_WINDOW;
-	      
+
 	      pCD = GetPCD(ScrNum(w), windowIDs[i] & WINDOW_MASK);
 	      if (pCD != NULL)
 	      {
@@ -671,7 +671,7 @@ DisableCommand (
 	  activeContext = 0L;
 	  if (windowIDs[0] &   ICON_ONLY) activeContext |= F_CONTEXT_ICON;
 	  if (windowIDs[0] & WINDOW_ONLY) activeContext |= F_CONTEXT_WINDOW;
-      
+
 	  pNext = tPtr->next;
 	  tPtr->next = NULL;
 	  ModifyClientCommandTree (ACTIVE_PSD, NULL, ALL, tPtr,
@@ -701,7 +701,7 @@ DisableCommand (
 		activeContext |= F_CONTEXT_ICON;
 	      if (windowIDs[i] & WINDOW_ONLY)
 		activeContext |= F_CONTEXT_WINDOW;
-	      
+
 	      pCD = GetPCD(ScrNum(w), windowIDs[i] & WINDOW_MASK);
 	      if (pCD != NULL)
 	      {
@@ -795,7 +795,7 @@ RenameCommand (
 	  activeContext = 0L;
 	  if (windowIDs[0] &   ICON_ONLY) activeContext |= F_CONTEXT_ICON;
 	  if (windowIDs[0] & WINDOW_ONLY) activeContext |= F_CONTEXT_WINDOW;
-      
+
 	  pNext = tPtr->next;
 	  tPtr->next = NULL;
 	  ModifyClientCommandTree (ACTIVE_PSD, NULL, ALL, tPtr,
@@ -825,7 +825,7 @@ RenameCommand (
 		activeContext |= F_CONTEXT_ICON;
 	      if (windowIDs[i] & WINDOW_ONLY)
 		activeContext |= F_CONTEXT_WINDOW;
-	      
+
 	      pCD = GetPCD(ScrNum(w), windowIDs[i] & WINDOW_MASK);
 	      if (pCD != NULL)
 	      {
@@ -917,7 +917,7 @@ RemoveCommand (
 	  activeContext = 0L;
 	  if (windowIDs[0] &   ICON_ONLY) activeContext |= F_CONTEXT_ICON;
 	  if (windowIDs[0] & WINDOW_ONLY) activeContext |= F_CONTEXT_WINDOW;
-      
+
 	  pNext = tPtr->next;
 	  tPtr->next = NULL;
 	  ModifyClientCommandTree (ACTIVE_PSD, NULL, ALL, tPtr, REMOVE,
@@ -941,7 +941,7 @@ RemoveCommand (
 	  for (i=0; i<count; i++)
 	  {
 	      ClientData *pCD;
-	      
+
 	      activeContext = 0L;
 	      if (windowIDs[i] &   ICON_ONLY)
 		activeContext |= F_CONTEXT_ICON;
@@ -1137,33 +1137,33 @@ GetMinimizeInfo(ClientData *pcd, XtPointer reply)
   Window frameWin;
   Boolean minFound = False;
 
-      
+
 
 
 
 
    filledCount = pcd->cTitleGadgets;
    frameWin = pcd->clientFrameWin;
-      
-	
+
+
    for (i=0; i < filledCount; i++)
  	if (pcd->pTitleGadgets[i].id == FRAME_MINIMIZE)
 	   {
-	        CopyMwmGadget (&(pcd->pTitleGadgets[i]), &minimize_button); 
+	        CopyMwmGadget (&(pcd->pTitleGadgets[i]), &minimize_button);
 		minFound = True;
 	   }
 
    if (minFound == False)
 	FillInvalidInfo (&minimize_button);
-	
-		
+
+
 
       reply = PackCARD32 (reply, (CARD32)filledCount);
       reply = PackCARD32(reply, (CARD32)minimize_button.id);
       reply = PackCARD32 (reply, (CARD32)minimize_button.rect.x);
       reply = PackCARD32 (reply, (CARD32)minimize_button.rect.y);
       reply = PackCARD32 (reply, (CARD32)minimize_button.rect.width);
-      reply = PackCARD32 (reply, (CARD32)minimize_button.rect.height); 
+      reply = PackCARD32 (reply, (CARD32)minimize_button.rect.height);
       reply = PackCARD32 (reply, (CARD32)frameWin);
 
 }
@@ -1201,7 +1201,7 @@ GetMaximizeInfo(ClientData *pcd, XtPointer reply)
           maxFound = True;
         }
       }
-      
+
       if (maxFound == False)
 	      FillInvalidInfo (&maximize_button);
 
@@ -1229,23 +1229,23 @@ GetIconInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box)
    XmScrollBarWidget  hScrollBar, vScrollBar;
    Widget frameWidget, scrollWidget, shellWidget;
 
-   
+
 
    CARD32 iconX, iconY, iconWidth, iconHeight ;
    CARD32 hMin, hMax, hSliderAreaWidth, hSliderX, hSliderAreaX,
           vMin, vMax, vSliderAreaHeight, vSliderY, vSliderAreaY;
-   CARD32 rightArrowX, rightArrowY, leftArrowX, leftArrowY, 
+   CARD32 rightArrowX, rightArrowY, leftArrowX, leftArrowY,
           topArrowX, topArrowY, bottomArrowX, bottomArrowY;
    CARD32 iconBoxX, iconBoxY, iconBoxWidth, iconBoxHeight;
    Window frameWin, scrollWin, hScrollWin, vScrollWin, iconShellWin, iconFrameWin;
    CARD32 lastRow, lastCol;
    CARD32 iPlaceW, iPlaceH;
    CARD32 useIconBox;
-   
-   
+
+
    icon_box = pcd->pIconBox;
    useIconBox = pcd->pSD->useIconBox;
-   
+
 
 
 
@@ -1261,10 +1261,10 @@ GetIconInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box)
 	   hSliderAreaWidth = hScrollBar->scrollBar.slider_area_width;
 	   hSliderX = hScrollBar->scrollBar.slider_x;
 	   hSliderAreaX = hScrollBar->scrollBar.slider_area_x;
-	   leftArrowX = hScrollBar->core.x + 
+	   leftArrowX = hScrollBar->core.x +
 	                  hScrollBar->scrollBar.arrow1_x +
 	                  (hScrollBar->scrollBar.arrow_width/2);
-	   leftArrowY = hScrollBar->core.y + 
+	   leftArrowY = hScrollBar->core.y +
 	                  hScrollBar->scrollBar.arrow1_y +
 	                  (hScrollBar->scrollBar.arrow_height/2);
 
@@ -1292,7 +1292,7 @@ GetIconInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box)
 	                  + (hScrollBar->scrollBar.arrow_height/2);
 
 
-	   
+
 
 	   shellWidget = icon_box->shellWidget;
 
@@ -1309,10 +1309,10 @@ GetIconInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box)
 
 	   scrollWidget = icon_box->scrolledWidget;
 	   scrollWin = XtWindow (scrollWidget);
-	   
+
 	   hScrollWin = XtWindow (hScrollBar);
 	   vScrollWin = XtWindow (vScrollBar);
-	   
+
 	   lastCol = icon_box->lastCol;
 	   lastRow = icon_box->lastRow;
 	   iPlaceW = icon_box->IPD.iPlaceW;
@@ -1374,7 +1374,7 @@ GetIconInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box)
 	   reply = PackCARD32 (reply,(CARD32)lastRow);
 	   reply = PackCARD32 (reply,(CARD32)iPlaceH);
 	   reply = PackCARD32 (reply,(CARD32)iPlaceW);
-	   
+
 	}
 
 }
@@ -1426,7 +1426,7 @@ GetMoveInfo(ClientData *pcd, XtPointer reply)
 
     if (system_found == False)
       FillInvalidInfo (&menu);
-			  
+
 
     reply = PackCARD32 (reply, (CARD32)filledCount);
     reply = PackCARD32 (reply, (CARD32)title.id);
@@ -1462,7 +1462,7 @@ GetResizeInfo(ClientData *pcd, XtPointer reply, int dir)
     Window frameWin;
     int filledCount;
     Boolean titleFound = False;
-    
+
     filledCount = pcd->cTitleGadgets;
 
     if (!(pcd->decor & MWM_DECOR_RESIZEH))
@@ -1524,7 +1524,7 @@ GetWindowMenuUnpostInfo(ClientData *pcd, XtPointer reply)
     CARD32 frameWin;
 
     menuSpec = pcd->systemMenuSpec;
-    
+
 
     clientState = pcd->clientState;
     menuWin = XtWindow (menuSpec->menuWidget);
@@ -1533,7 +1533,7 @@ GetWindowMenuUnpostInfo(ClientData *pcd, XtPointer reply)
     reply = PackCARD32 (reply,clientState);
     reply = PackCARD32 (reply,menuWin);
     reply = PackCARD32 (reply,frameWin);
-    
+
 }
 
 /*----------------------------------------------------------------------*
@@ -1551,7 +1551,7 @@ GetFocusInfo(ClientData *pcd, XtPointer reply)
   Window frameWin;
   Boolean titleFound = False;
 
-      
+
 
       filledCount = pcd->cTitleGadgets;
       frameWin = pcd->clientFrameWin;
@@ -1569,8 +1569,8 @@ GetFocusInfo(ClientData *pcd, XtPointer reply)
 
    if (titleFound == False)
 	FillInvalidInfo (&title);
-	
-		
+
+
 
       reply = PackCARD32 (reply, (CARD32)filledCount);
       reply = PackCARD32(reply, (CARD32)title.id);
@@ -1661,14 +1661,14 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
    IconBoxData *icon_box;
    XmScrollBarWidget  hScrollBar, vScrollBar;
    Widget frameWidget, scrollWidget, shellWidget;
-  
+
   MenuButton              *NewMenuButton;
   MenuItem                *NewMenuItem;
   int n;
   CARD32 iconX, iconY, iconWidth, iconHeight;
   CARD32 hMin, hMax, hSliderAreaWidth, hSliderX, hSliderAreaX,
           vMin, vMax, vSliderAreaHeight, vSliderY, vSliderAreaY;
-  CARD32 rightArrowX, rightArrowY, leftArrowX, leftArrowY, 
+  CARD32 rightArrowX, rightArrowY, leftArrowX, leftArrowY,
           topArrowX, topArrowY, bottomArrowX, bottomArrowY;
   CARD32 iconBoxX, iconBoxY, iconBoxWidth, iconBoxHeight;
   Window scrollWin, hScrollWin, vScrollWin, iconShellWin, iconFrameWin;
@@ -1720,7 +1720,7 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
 	}
 
 
-  
+
 
 
        if (use_icon_box == True)
@@ -1731,10 +1731,10 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
 	   hSliderAreaWidth = hScrollBar->scrollBar.slider_area_width;
 	   hSliderX = hScrollBar->scrollBar.slider_x;
 	   hSliderAreaX = hScrollBar->scrollBar.slider_area_x;
-	   leftArrowX = hScrollBar->core.x + 
+	   leftArrowX = hScrollBar->core.x +
 	                  hScrollBar->scrollBar.arrow1_x +
 	                  (hScrollBar->scrollBar.arrow_width/2);
-	   leftArrowY = hScrollBar->core.y + 
+	   leftArrowY = hScrollBar->core.y +
 	                  hScrollBar->scrollBar.arrow1_y +
 	                  (hScrollBar->scrollBar.arrow_height/2);
 
@@ -1762,7 +1762,7 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
 	                  + (hScrollBar->scrollBar.arrow_height/2);
 
 
-	   
+
 
 	   shellWidget = icon_box->shellWidget;
 
@@ -1779,10 +1779,10 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
 
 	   scrollWidget = icon_box->scrolledWidget;
 	   scrollWin = XtWindow (scrollWidget);
-	   
+
 	   hScrollWin = XtWindow (hScrollBar);
 	   vScrollWin = XtWindow (vScrollBar);
-	   
+
 	   lastCol = icon_box->lastCol;
 	   lastRow = icon_box->lastRow;
 	   iPlaceW = icon_box->IPD.iPlaceW;
@@ -1810,8 +1810,8 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
       for (n=0; n < menuItemCount && n < MAX_MENU_ITEMS; n++)
 	{
 	  reply = PackCARD32 (reply, (CARD32)sensitive[n]);
-	  reply = PackCARD32 (reply, (CARD32)itemY[n]);	
-	  reply = PackString (reply, (String)itemName[n]);		
+	  reply = PackCARD32 (reply, (CARD32)itemY[n]);
+	  reply = PackString (reply, (String)itemName[n]);
 	}
 
        reply = PackCARD32 (reply,(CARD32)use_icon_box);
@@ -1854,7 +1854,7 @@ GetIconMenuItemSelectInfo(ClientData *pcd, XtPointer reply, Boolean use_icon_box
 	   reply = PackCARD32 (reply,(CARD32)lastRow);
 	   reply = PackCARD32 (reply,(CARD32)iPlaceH);
 	   reply = PackCARD32 (reply,(CARD32)iPlaceW);
-	   
+
 	}
 
 }
@@ -1875,7 +1875,7 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
   CARD32 sensitive[MAX_MENU_ITEMS];
   CARD32 itemY[MAX_MENU_ITEMS];
   char itemName[MAX_MENU_ITEMS][MAX_NAME_LEN + 1];
-  
+
   MenuButton              *NewMenuButton;
   MenuItem                *NewMenuItem;
   int n;
@@ -1923,8 +1923,8 @@ GetWindowItemSelectInfo(ClientData *pcd, XtPointer reply)
       for (n=0; n < menuItemCount && n < MAX_MENU_ITEMS; n++)
 	{
 	  reply = PackCARD32 (reply, (CARD32)sensitive[n]);
-	  reply = PackCARD32 (reply, (CARD32)itemY[n]);	
-	  reply = PackString (reply, (String)itemName[n]);		
+	  reply = PackCARD32 (reply, (CARD32)itemY[n]);
+	  reply = PackString (reply, (String)itemName[n]);
 	}
 
 }
@@ -1945,7 +1945,7 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
   int upperBorderWidth, lowerBorderWidth;
   Window menuWin;
   char itemName[MAX_MENU_ITEMS][MAX_NAME_LEN + 1];
-  
+
   MenuButton              *NewMenuButton;
   MenuItem                *NewMenuItem;
   int i,filledCount;
@@ -1959,7 +1959,7 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
   menuItemCount = menuSpec->menuButtonCount;
 
   for (i = 0; i < menuItemCount && i < MAX_MENU_ITEMS; i++)
-      itemName[i][0] = '\0'; 
+      itemName[i][0] = '\0';
 
   menuWin = XtWindow (menuSpec->menuWidget);
 
@@ -1980,7 +1980,7 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
       for (i=0; i < filledCount; i++)
         {
           if (pcd->pTitleGadgets[i].id == FRAME_TITLE)
-	      { 
+	      {
 		  titleId = FRAME_TITLE;
 		  titleFound = True;
 	      }
@@ -2023,7 +2023,7 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
 
   upperBorderWidth = pcd->frameInfo.upperBorderWidth;
   lowerBorderWidth = pcd->frameInfo.lowerBorderWidth;
-      	
+
 
 
 
@@ -2033,15 +2033,15 @@ GetItemCheckInfo(ClientData *pcd, XtPointer reply)
   reply = PackCARD32 (reply, (CARD32)menuWin);
   reply = PackCARD32 (reply, (CARD32)menuItemCount);
   for (i=0; i < menuItemCount && i < MAX_MENU_ITEMS; i++)
-      reply = PackString (reply, (String)itemName[i]);		
+      reply = PackString (reply, (String)itemName[i]);
   reply = PackCARD32 (reply, (CARD32)filledCount);
   reply = PackCARD32 (reply, (CARD32)titleId);
-  reply = PackCARD32 (reply, (CARD32)systemId);	
-  reply = PackCARD32 (reply, (CARD32)minimizeId);	  
-  reply = PackCARD32 (reply, (CARD32)maximizeId);	
-  reply = PackCARD32 (reply, (CARD32)northwestId);	
-  reply = PackCARD32 (reply, (CARD32)upperBorderWidth);	
-  reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);	
+  reply = PackCARD32 (reply, (CARD32)systemId);
+  reply = PackCARD32 (reply, (CARD32)minimizeId);
+  reply = PackCARD32 (reply, (CARD32)maximizeId);
+  reply = PackCARD32 (reply, (CARD32)northwestId);
+  reply = PackCARD32 (reply, (CARD32)upperBorderWidth);
+  reply = PackCARD32 (reply, (CARD32)lowerBorderWidth);
 }
 
 
@@ -2066,8 +2066,8 @@ GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigne
 {
   ClientData *pcd;
   CARD32 infoWanted;
-  
-  Window winId;  
+
+  Window winId;
   XtPointer reply;
   int size;
 
@@ -2082,7 +2082,7 @@ GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigne
   infoWanted    = UnpackCARD32(&input);
 
 
-  
+
   /*
    * Get client data associated with window if the widget making the request.
    */
@@ -2198,7 +2198,7 @@ GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigne
 	 *output = (XtPointer)XtMalloc(sizeof(CARD8) * size);
 	  GetWindowItemSelectInfo(pcd,*output);
 	  break;
-      
+
 	case WINDOW_DEICONIFY_INFO:
 	  if (pcd->pSD->useIconBox == True)
 	      {
@@ -2314,6 +2314,5 @@ GetAutomationData (XtPointer input, Atom *outputType, XtPointer *output, unsigne
 
 	*outputLen = (unsigned long)size;
 	*outputFmt = WSM_PROTO_FMT;
-	
-}
 
+}

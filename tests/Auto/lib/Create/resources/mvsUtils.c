@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsUtils.c /main/7 1995/07/14 11:23:52 drk $"
@@ -41,8 +41,8 @@ static char rcsid[] = "$XConsortium: mvsUtils.c /main/7 1995/07/14 11:23:52 drk 
 	Calls:
 
 	Summary:
-		This file contains utility functions that used in MDL 
-	description to manipulate local copy of the resources. The method 
+		This file contains utility functions that used in MDL
+	description to manipulate local copy of the resources. The method
 	of copying is based on the type of each resource.
 ************************************************************************/
 
@@ -54,8 +54,8 @@ static char rcsid[] = "$XConsortium: mvsUtils.c /main/7 1995/07/14 11:23:52 drk 
 	Calls:
 
 	Summary
-		This function assigs the value of the source resource to 
-	the destination resource. 
+		This function assigs the value of the source resource to
+	the destination resource.
 ************************************************************************/
 
 #define mvsRESOURCE	1
@@ -84,7 +84,7 @@ char 			src_res[], dest_res[];
 	    s_typ = mvsINTRES;
         }
         else {
-	    sprintf (msg_string, _AutoMessages[WARNMSG81], routine_name, 
+	    sprintf (msg_string, _AutoMessages[WARNMSG81], routine_name,
 		     src_res);
 	    AutoMessage(msg_string);
 	    return(-1);
@@ -114,7 +114,7 @@ char 			src_res[], dest_res[];
 	return(-1);
     }
     else {
-	*dest_val = ( s_typ == mvsRESOURCE ? 
+	*dest_val = ( s_typ == mvsRESOURCE ?
 		      mvsCopyResource (widget_class_info, *src_val, src_id) :
 		      mvsCopyIntRes (widget_class_info, *src_val, src_id) );
         return(0);
@@ -133,8 +133,8 @@ char 			src_res[], dest_res[];
 	Calls:
 
 	Summary
-		This function assigns the constant value to the destination 
-	resource. 
+		This function assigns the constant value to the destination
+	resource.
 ************************************************************************/
 
 int mvsAssignVal(widget_info, dest_res, val)
@@ -167,7 +167,7 @@ MvsArgVal 		val;
         else {
 	    sprintf (msg_string,_AutoMessages[WARNMSG84],routine_name,dest_res);
 	    AutoMessage(msg_string);
-                      
+
 	    return(-1);
         }
 
@@ -217,7 +217,7 @@ MvsArgVal 		val;
 	Calls:
 
 	Summary
-            Assign resource to a parent's resource 
+            Assign resource to a parent's resource
 ***********************************************************************/
 
 int mvsAssignParentRes(widget_info, dest_res, src_res)
@@ -380,8 +380,8 @@ int			opr;
 	Calls:
 
 	Summary
-		This function adds the value of the source resource to 
-	the destination resource. 
+		This function adds the value of the source resource to
+	the destination resource.
 ************************************************************************/
 
 void mvsIncrRes (widget_info, dest_res, src_res)
@@ -399,8 +399,8 @@ char 			src_res[], dest_res[];
 	Calls:
 
 	Summary
-		This function subtracts the value of the source resource from 
-	the destination resource. 
+		This function subtracts the value of the source resource from
+	the destination resource.
 ************************************************************************/
 
 void mvsDecrRes (widget_info, dest_res, src_res)
@@ -418,8 +418,8 @@ char 			src_res[], dest_res[];
 	Calls:
 
 	Summary
-		This function adds the source value to the destination 
-	resource. 
+		This function adds the source value to the destination
+	resource.
 ************************************************************************/
 
 void mvsIncrVal (widget_info, dest_res, src_val)
@@ -438,8 +438,8 @@ MvsArgVal 		src_val;
 	Calls:
 
 	Summary
-		This function subtracts the source value from the destination 
-	resource. 
+		This function subtracts the source value from the destination
+	resource.
 ************************************************************************/
 
 void mvsDecrVal (widget_info, dest_res, src_val)
@@ -458,8 +458,8 @@ MvsArgVal		src_val;
 	Calls:
 
 	Summary
-		This function copies the source resource to the the destination 
-	resource in the widget referred to by widget_res in current widget. 
+		This function copies the source resource to the the destination
+	resource in the widget referred to by widget_res in current widget.
 ************************************************************************/
 
 int mvsAssignResInWidget (widget_info, widget_res, dest_res, src_res)
@@ -469,7 +469,7 @@ char 			widget_res[], src_res[], dest_res[];
     Widget		widget;
     char                msg_string[100];
 
-    widget = (Widget)mvsGetResourceValue(widget_info->widget, widget_res, 
+    widget = (Widget)mvsGetResourceValue(widget_info->widget, widget_res,
                                          T_Widget_ref);
 
     if (widget == NULL) {
@@ -490,8 +490,8 @@ char 			widget_res[], src_res[], dest_res[];
 	Calls:
 
 	Summary
-		This function copies the source value to the the destination 
-	resource in the widget referred to by widget_res in current widget. 
+		This function copies the source value to the the destination
+	resource in the widget referred to by widget_res in current widget.
 ************************************************************************/
 
 int mvsAssignValInWidget (widget_info, widget_res, dest_res, val)
@@ -523,9 +523,9 @@ MvsArgVal 		val;
 	Calls:
 
 	Summary
-		This function copies the source value to the the destination 
+		This function copies the source value to the the destination
 	resource in the widget referred to by widget_res in the parent of the
-	current widget. 
+	current widget.
 ************************************************************************/
 
 int mvsAssignValInParentWidget (widget_info, widget_res, dest_res, val)
@@ -573,9 +573,9 @@ MvsArgVal 		val;
 	Calls:
 
 	Summary
-		This function copies the source value to the the destination 
+		This function copies the source value to the the destination
 	resource in the widget referred to by widget_res in the widget referred
-	to by the resource widget_ref in the current widget. 
+	to by the resource widget_ref in the current widget.
 ************************************************************************/
 
 int mvsAssignValInWidRefWidget (widget_info, widget_ref, widget_res, dest_res, val)
@@ -622,7 +622,7 @@ MvsArgVal 		val;
                                                       widget_res)) != NULL))
            break;
 
-	if (widget == NULL) 
+	if (widget == NULL)
 	   break;
 
 	return(mvsAssignVal(mvsWidgetToWidgetInfo(widget), dest_res, val));

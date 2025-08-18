@@ -7,4 +7,3 @@ into wml for use with uil.
 Note that this directory also contains a modified copy of wmldbcreate.c
 which is necessary for the creation of the wml output file (.wmd) for
 use with uil.
-

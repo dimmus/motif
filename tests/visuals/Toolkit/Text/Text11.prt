@@ -23,46 +23,46 @@
 #
 # HISTORY
 TRACE:(1) WindowRaise Shell1
-TRACE:(2) LocatePointer bboard  
+TRACE:(2) LocatePointer bboard
 TRACE:(3) ClickKey <Mod1> Kq
-TRACE:(4) CompareVisual bboard 
+TRACE:(4) CompareVisual bboard
 TRACE:(5) Continue
 TRACE:(6) WindowRaise Shell1
-TRACE:(7) LocatePointer bboard  
+TRACE:(7) LocatePointer bboard
 TRACE:(8) ClickKey KTab
 TRACE:(9) ClickKey <Mod1> Kq
-TRACE:(10) CompareVisual bboard 
+TRACE:(10) CompareVisual bboard
 TRACE:(11) LocatePointer text1 RTextChar 10
-TRACE:(12) ClickMB Btn1 
+TRACE:(12) ClickMB Btn1
 TRACE:(13) ClickKey <Mod1> Kq
-TRACE:(14) CompareVisual bboard 
+TRACE:(14) CompareVisual bboard
 TRACE:(15) Continue
 TRACE:(16) LocatePointer text1 RTextChar 10
-TRACE:(17) ClickMB Btn1 
+TRACE:(17) ClickMB Btn1
 TRACE:(18) ClickKey <Ctrl> KTab
-TRACE:(19) CompareVisual bboard 
+TRACE:(19) CompareVisual bboard
 TRACE:(20) ClickKey <Mod1> Kq
-TRACE:(21) CompareVisual bboard 
+TRACE:(21) CompareVisual bboard
 TRACE:(22) Continue
-TRACE:(23) LocatePointer EDITOR  
-TRACE:(24) ClickMB Btn1 
+TRACE:(23) LocatePointer EDITOR
+TRACE:(24) ClickMB Btn1
 TRACE:(25) InputString "Some text"
-TRACE:(26) LocatePointer pushbutton  
-TRACE:(27) ClickMB Btn1 
+TRACE:(26) LocatePointer pushbutton
+TRACE:(27) ClickMB Btn1
 Add insert handler
-TRACE:(28) LocatePointer EDITOR  
-TRACE:(29) ClickMB Btn1 
+TRACE:(28) LocatePointer EDITOR
+TRACE:(29) ClickMB Btn1
 TRACE:(30) InputString "Even more text"
-TRACE:(31) CompareVisual EDITOR 
+TRACE:(31) CompareVisual EDITOR
 TRACE:(32) Continue
-TRACE:(33) LocatePointer EDITOR  
-TRACE:(34) ClickMB Btn1 
+TRACE:(33) LocatePointer EDITOR
+TRACE:(34) ClickMB Btn1
 TRACE:(35) InputString "Some text"
-TRACE:(36) LocatePointer pushbutton  
-TRACE:(37) ClickMB Btn1 
+TRACE:(36) LocatePointer pushbutton
+TRACE:(37) ClickMB Btn1
 Add insert handler
-TRACE:(38) LocatePointer EDITOR  
-TRACE:(39) ClickMB Btn1 
+TRACE:(38) LocatePointer EDITOR
+TRACE:(39) ClickMB Btn1
 TRACE:(40) InputString "Even more text"
 TRACE:(41) ClickKey KLeft
 TRACE:(42) ClickKey KLeft
@@ -72,7 +72,7 @@ TRACE:(45) ClickKey KLeft
 TRACE:(46) ClickKey KRight
 TRACE:(47) ClickKey KRight
 TRACE:(48) ClickKey KRight
-TRACE:(49) CompareVisual EDITOR 
+TRACE:(49) CompareVisual EDITOR
 TRACE:(50) Continue
 TRACE:(51) Exit
 Exiting Test...Please Standby...

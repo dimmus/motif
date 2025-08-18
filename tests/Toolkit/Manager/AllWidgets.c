@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: AllWidgets.c /main/8 1995/07/13 18:25:04 drk $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$XConsortium: AllWidgets.c /main/8 1995/07/13 18:25:04 dr
 /*
  *	file:	AllWidgets.c
  *
- *	Program to create different manager widgets with/without children to 
+ *	Program to create different manager widgets with/without children to
  *	compare among other things, visuals between 1.1 and 1.2.
  *
  *	This test shows the following PIRS:
@@ -156,7 +156,7 @@ void main(int argc, char **argv)
 	XtDestroyWidget(weegee);
 
 	CommonPause();
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, XmStringCreateSimple("Label")); n++;
 	weegee = XmCreateLabel(manager, "Label", args, n);
@@ -169,7 +169,7 @@ void main(int argc, char **argv)
 	CommonPause();
 
 	n = 0;
-	XtSetArg(args[n], XmNlabelString, 
+	XtSetArg(args[n], XmNlabelString,
 			 XmStringCreateSimple("LabelGadget")); n++;
 	weegee = XmCreateLabelGadget(manager, "LabelG", args, n);
 	XtManageChild(weegee);
@@ -206,7 +206,7 @@ void main(int argc, char **argv)
 	CommonPause();
 
 	n = 0;
-	XtSetArg(args[n], XmNlabelString, 
+	XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("PushButtonGadget")); n++;
 	weegee = XmCreatePushButtonGadget(manager, "PushButtonG", args, n);
 	XtManageChild(weegee);
@@ -245,7 +245,7 @@ void main(int argc, char **argv)
 	XtDestroyWidget(weegee);
 
 	CommonPause();
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNrows, 2);	n++;
 	XtSetArg(args[n], XmNscrollVertical, True);	n++;
@@ -316,7 +316,7 @@ void main(int argc, char **argv)
 	CommonPause();
 
 	n = 0;
-	XtSetArg(args[n], XmNlabelString, 
+	XtSetArg(args[n], XmNlabelString,
 			 XmStringCreateSimple("ToggleButton")); n++;
 	weegee = XmCreateToggleButton(manager, "ToggleButton", args, n);
 	XtManageChild(weegee);
@@ -328,7 +328,7 @@ void main(int argc, char **argv)
 	CommonPause();
 
 	n = 0;
-	XtSetArg(args[n], XmNlabelString, 
+	XtSetArg(args[n], XmNlabelString,
 	   XmStringCreateSimple("ToggleButtonGadget")); n++;
 	weegee = XmCreateToggleButtonGadget(manager, "ToggleBG", args, n);
 	XtManageChild(weegee);

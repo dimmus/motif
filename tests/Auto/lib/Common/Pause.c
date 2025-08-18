@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Pause.c /main/10 1995/07/14 10:57:01 drk $"
@@ -40,7 +40,7 @@ extern void    AutoProcessAllEvents();
 #define END_STRING      " Test Finished -- Exit Please."
 
 
-Widget        	InstructionBox; 	/* Global Widget for Instruction 
+Widget        	InstructionBox; 	/* Global Widget for Instruction
 					   MessageBox */
 
 static Widget	ContinuePopup = NULL;   /* Shell to contain MessageBox */
@@ -191,17 +191,17 @@ static Widget CreateContinuePopup()
     Widget	  PopupShell;
 
     fontlist = CommonGetFontList(test_font);
-    
-    continue_string = XmStringCreateLtoR("Continue", 
+
+    continue_string = XmStringCreateLtoR("Continue",
     				   XmFONTLIST_DEFAULT_TAG);
-    exit_string = XmStringCreateLtoR("Exit", 
+    exit_string = XmStringCreateLtoR("Exit",
     				   XmFONTLIST_DEFAULT_TAG);
 
     n = 0;
     XtSetArg(args[n], XtNgeometry, "=10x10+500+0");		n++;
     XtSetArg(args[n], XtNallowShellResize, True);		n++;
-    PopupShell = XtCreatePopupShell("Test Instructions", 
-				    topLevelShellWidgetClass, Shell1, 
+    PopupShell = XtCreatePopupShell("Test Instructions",
+				    topLevelShellWidgetClass, Shell1,
 				    args, n);
 
     n = 0;
@@ -223,9 +223,9 @@ static Widget CreateContinuePopup()
     exit_button = XmMessageBoxGetChild(InstructionBox, XmDIALOG_CANCEL_BUTTON);
     help_button = XmMessageBoxGetChild(InstructionBox, XmDIALOG_HELP_BUTTON);
 
-    XtAddCallback(continue_button, XmNactivateCallback, 
+    XtAddCallback(continue_button, XmNactivateCallback,
 		  (XtCallbackProc)ContinueCB, InstructionBox);
-    XtAddCallback(exit_button, XmNactivateCallback, 
+    XtAddCallback(exit_button, XmNactivateCallback,
 		  (XtCallbackProc)QuitCB, InstructionBox);
 
     n = 0;
@@ -250,7 +250,7 @@ static Widget CreateContinuePopup()
 *									 *
 *************************************************************************/
 
-static void ContinueCB(Widget w, caddr_t client_data, 
+static void ContinueCB(Widget w, caddr_t client_data,
 		       caddr_t call_data)
 
 {
@@ -331,7 +331,7 @@ static void QuitCB(Widget w, caddr_t client_data,
 *			      case number.				 *
 *			!)  : No format. No formatting except width 	 *
 *			      formatting will be performed.		 *
-*									 *	
+*									 *
 *    	Returns:	One "Frame" of instructions.			 *
 *									 *
 *	Note:		One "Frame" of instructions must not exceed more *
@@ -372,7 +372,7 @@ static char *GetInstructionsFromFile()
 		instruction_opened = True;
 	    }
 	  }
-          else 
+          else
      	    instruction_opened = True;
      }
 
@@ -384,7 +384,7 @@ static char *GetInstructionsFromFile()
 	fprintf(stderr, "Pause information exhausted\n");
 	exit(-1);
      }
-  
+
      end_line = False;
      Bextended = False;
      no_format = False;
@@ -466,7 +466,7 @@ static char *GetInstructionsFromFile()
 				}
 				break;
 		/* Strip newlines, let second pass format */
-		case '\n':	if (no_format) 
+		case '\n':	if (no_format)
 					line[array_index++] = '\n';
 				else {
 					c2 = ' ';
@@ -505,7 +505,7 @@ static char *GetInstructionsFromFile()
 					sprintf(temp_s, "%c", c);
 					line[array_index++] = temp_s[0];
 				}
-				else 
+				else
 					line[array_index++] = c;
 				break;
 	}
@@ -537,18 +537,18 @@ static char *GetInstructionsFromFile()
 			count += 2;
 			line_format[array_index_format++] =
 						line[array_index - 1];
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index++];
 		}
 	}
 	else  {
 		if (line[array_index - 1] == '\n') {
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index - 1];
 			count = 1;
 		}
 		else {
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index - 1];
 			count++;
 		}
@@ -557,7 +557,7 @@ static char *GetInstructionsFromFile()
 	        while (array_index < line_length &&
 		        line[array_index] != ' ' &&
 			line[array_index] != '\n') {
-			line_format[array_index_format++] = 
+			line_format[array_index_format++] =
 						line[array_index++];
 		}
 		if ((line[array_index + 1] != '\n' ) &&
@@ -568,7 +568,7 @@ static char *GetInstructionsFromFile()
 			line_format[array_index_format++] = ' ';
 			array_index++;
 		}
-       	}		
+       	}
      }
 
      line_format[array_index_format] = '\n';

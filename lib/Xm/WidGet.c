@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -57,27 +57,27 @@ XmWidgetGetBaselines(
       {
 	  XmPrimitiveClassExt              *wcePtr;
 	  WidgetClass   wc = XtClass(wid);
-	  
+
 	  wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
-	  
+
 	  if (*wcePtr && (*wcePtr)->widget_baseline)
 	      {
 		_XmAppUnlock(app);
-		return( (*((*wcePtr)->widget_baseline)) 
+		return( (*((*wcePtr)->widget_baseline))
 			 (wid, baselines, line_count)) ;
-	      } 
+	      }
       }
   else if (XmIsGadget(wid))
       {
 	  XmGadgetClassExt              *wcePtr;
 	  WidgetClass   wc = XtClass(wid);
-	  
+
 	  wcePtr = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
-	  
+
 	  if (*wcePtr && (*wcePtr)->widget_baseline)
 	      {
 		_XmAppUnlock(app);
-		return( (*((*wcePtr)->widget_baseline)) 
+		return( (*((*wcePtr)->widget_baseline))
 			 (wid, baselines, line_count)) ;
 	      }
       }
@@ -104,9 +104,9 @@ XmWidgetGetDisplayRect(
 	{
 	    XmPrimitiveClassExt              *wcePtr;
 	    WidgetClass   wc = XtClass(wid);
-	    
+
 	    wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
-	    
+
 	    if (*wcePtr && (*wcePtr)->widget_display_rect)
 		(*((*wcePtr)->widget_display_rect)) (wid, displayrect);
 	    _XmAppUnlock(app);
@@ -116,9 +116,9 @@ XmWidgetGetDisplayRect(
 	{
 	    XmGadgetClassExt              *wcePtr;
 	    WidgetClass   wc = XtClass(wid);
-	    
+
 	    wcePtr = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
-	    
+
 	    if (*wcePtr && (*wcePtr)->widget_display_rect)
 		(*((*wcePtr)->widget_display_rect)) (wid, displayrect);
 	    _XmAppUnlock(app);

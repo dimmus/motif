@@ -1,7 +1,7 @@
 /* $XConsortium: README /main/6 1996/07/15 14:26:57 drk $ */
 
 BUGS SHOWN BY THESE TESTS
- 
+
 DiaShell1
 PIRS No.:      3006
 Pop-ups from pop-ups don't remanage
@@ -27,7 +27,7 @@ PIRS No.:      1686
 You should get a beep if you click in non-descendent dialog
 when a FULL_APP modal dialog is posted.
 Version found in:	1.1S8
-Version fixed in:	
+Version fixed in:
 Assigned to:	MICHAEL YEE
 Priority:	7
 Status:		A
@@ -37,7 +37,7 @@ PIRS No.:      2440
 Non-modal windows in an application with a modal get keyboard
 focus. Also see P1686, and P2754.
 Version found in:	1.1
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	8
 Status:		A
@@ -97,7 +97,7 @@ PIRS No.:      4379
 Seg fault when attempting to manage a PRIMARY_MODAL dialog
 through a callback.
 Version found in:	1.2
-Version fixed in:	
+Version fixed in:
 Assigned to:	HP
 Priority:	5
 Status:		A
@@ -117,7 +117,7 @@ PIRS No.:      3175
 Investigate interaction between VendorSh and child, especially
 with multiple children and/or no manager children.
 Version found in:	1.1.2
-Version fixed in:	
+Version fixed in:
 Assigned to:	M.S. RAMESH
 Priority:	7
 Status:		A

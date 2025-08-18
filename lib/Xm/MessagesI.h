@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifndef _XmMessagesI_h
 #define _XmMessagesI_h
 
@@ -302,8 +302,8 @@ externalref _XmConst char *_XmMsgXmRenderT_0002 ;
 externalref _XmConst char *_XmMsgXmRenderT_0003 ;
 externalref _XmConst char *_XmMsgXmRenderT_0004 ;
 externalref _XmConst char *_XmMsgXmRenderT_0005 ;
-externalref _XmConst char *_XmMsgXmString_0000 ; 
-externalref _XmConst char *_XmMsgXmTabList_0000 ; 
+externalref _XmConst char *_XmMsgXmString_0000 ;
+externalref _XmConst char *_XmMsgXmTabList_0000 ;
 externalref _XmConst char *_XmMsgScrollFrameT_0000 ;
 externalref _XmConst char *_XmMsgScrollFrameT_0001 ;
 externalref _XmConst char *_XmMsgTransfer_0000 ;

@@ -26,21 +26,21 @@ TRACE:(1) Continue
 TRACE:(2) WindowFocus Shell1
 A FocusIn Event happened for textfield1
 A FocusIn Event happened for textfield1
-TRACE:(3) LocatePointer textfield1  
-TRACE:(4) ClickMB Btn1 
-TRACE:(5) CompareVisual textfield1 
+TRACE:(3) LocatePointer textfield1
+TRACE:(4) ClickMB Btn1
+TRACE:(5) CompareVisual textfield1
 TRACE:(6) ClickKey KTab
 A FocusIn Event happened for textfield2
-TRACE:(7) CompareVisual textfield2 
+TRACE:(7) CompareVisual textfield2
 TRACE:(8) ClickKey KTab
 A FocusIn Event happened for drawarea2
-TRACE:(9) CompareVisual form 
+TRACE:(9) CompareVisual form
 TRACE:(10) ClickKey KTab
 A FocusIn Event happened for textfield1
-TRACE:(11) CompareVisual form 
+TRACE:(11) CompareVisual form
 TRACE:(12) ClickKey KTab
 A FocusIn Event happened for textfield2
-TRACE:(13) CompareVisual textfield2 
+TRACE:(13) CompareVisual textfield2
 TRACE:(14) ClickKey KTab
 A FocusIn Event happened for drawarea2
 TRACE:(15) Continue
@@ -49,12 +49,12 @@ A FocusIn Event happened for drawarea1
 A FocusIn Event happened for drawarea1
 TRACE:(17) ClickKey KTab
 A FocusIn Event happened for drawarea2
-TRACE:(18) CompareVisual form 
+TRACE:(18) CompareVisual form
 TRACE:(19) ClickKey KTab
 A FocusIn Event happened for drawarea1
-TRACE:(20) CompareVisual form 
+TRACE:(20) CompareVisual form
 TRACE:(21) ClickKey KTab
 A FocusIn Event happened for drawarea2
-TRACE:(22) CompareVisual form 
+TRACE:(22) CompareVisual form
 TRACE:(23) Exit
 Exiting Test...Please Standby...

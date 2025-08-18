@@ -8,9 +8,9 @@ XCOMM $TOG: X11.rules /main/4 1997/04/30 15:23:24 kaleb $
 # define X11IsTopLevelProject	NO
 #endif
 
-/* 
+/*
  * If no clues are given assume X11 is in the tree, otherwise
- * UseInstalled overrides UseImports.  Do not do both. 
+ * UseInstalled overrides UseImports.  Do not do both.
  */
 #ifndef UseInstalledX11
 # define UseInstalledX11	NO

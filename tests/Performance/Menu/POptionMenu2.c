@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: POptionMenu2.c /main/8 1995/07/14 12:01:19 drk $"
@@ -278,7 +278,7 @@ static Widget  CreatePullDown(parent)
 Widget parent;
 {
     Widget  widget;
-    
+
 
     widget = XmCreatePulldownMenu (parent, "pulldown", NULL, 0);
 
@@ -300,13 +300,13 @@ void  main(argc, argv)
 
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  200);  n++;
     XtSetArg(args[n], XmNheight, 40);   n++;
     XtSetArg(args[n], XtNgeometry, "+0+50");  n++;
     XtSetValues(Shell1, args, n);
-    
+
 
     XtRealizeWidget(Shell1);
 
@@ -333,7 +333,7 @@ void  main(argc, argv)
 
 
 /* just for fun, put another manager in between */
-    
+
     n = 0;
     Frame = XmCreateBulletinBoard (Shell1, "Frame", args, n);
     XtManageChild (Frame);
@@ -346,18 +346,16 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNlabelString, tcs);         n++;
     XtSetArg(args[n], XmNmnemonic,    'O');         n++;
     XtSetArg(args[n], XmNsubMenuId,   PullDown1);   n++;
-    XtSetArg(args[n], XmNmenuHistory, PushBtn2);    n++; 
+    XtSetArg(args[n], XmNmenuHistory, PushBtn2);    n++;
     XtSetArg(args[n], XmNwhichButton, 2);	    n++;
     OptionMenu1 = XmCreateOptionMenu(Frame, "optionMenu", args, n);
     XtManageChild(OptionMenu1);
     XmStringFree(tcs);
-    
+
     PushBtn1      = CreatePushButton("PushButton1", PullDown1);
 
-    PushBtn3      = CreatePushButton("*********PushButton3**********", 
+    PushBtn3      = CreatePushButton("*********PushButton3**********",
 				     PullDown1);
 
     XtAppMainLoop(app_context);
 }
-
-

@@ -23,9 +23,9 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is frame.uid ---- 
+---- The uid file to be opened is frame.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual Frame 
+TRACE:(1) CompareVisual Frame
 TRACE:(2) Exit
 Exiting Test...Please Standby...

@@ -66,12 +66,12 @@ void main_text7(argc, argv)
 
 	/*  initialize toolkit  */
 	CommonTestInit(argc, argv);
-	 
+
 	n = 0;
 	XtSetArg (args[n], XmNwidth, 50); n++;
 	XtSetArg (args[n], XmNheight, 50); n++;
 	XtSetValues(Shell1, args, n);
-	 
+
 	XtRealizeWidget(Shell1);
 
 	n = 0;

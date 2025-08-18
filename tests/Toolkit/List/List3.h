@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: List3.h /main/9 1995/07/13 18:17:51 drk $ */
 
 #define NITEMS 6
@@ -50,4 +50,3 @@ static void  MulSelCB(Widget w, caddr_t client_data,
 				caddr_t call_data);
 static void  HowMany(Widget w, XtPointer client_data,
 			       XtPointer call_data);
-

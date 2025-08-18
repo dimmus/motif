@@ -13,7 +13,7 @@ owner=""
 mode=""
 
 while [ x$1 != x ]; do
-    case $1 in 
+    case $1 in
 	-c) shift
 	    continue;;
 
@@ -38,7 +38,7 @@ while [ x$1 != x ]; do
 	    shift
 	    continue;;
 
-	*)  if [ x$src = x ] 
+	*)  if [ x$src = x ]
 	    then
 		src=$1
 	    else
@@ -61,13 +61,13 @@ case "$mode" in
 	;;
 esac
 
-if [ x$src = x ] 
+if [ x$src = x ]
 then
 	echo "$0:  no input file specified"
 	exit 1
 fi
 
-if [ x$dst = x ] 
+if [ x$dst = x ]
 then
 	echo "$0:  no destination specified"
 	exit 1
@@ -100,7 +100,7 @@ fi
 
 srcbase=`basename $src`
 
-if [ "$src" != "$srcbase" ] && [ "$src" != "./$srcbase" ] 
+if [ "$src" != "$srcbase" ] && [ "$src" != "./$srcbase" ]
 then
 	cp $src /tmp/$srcbase
 	src=$srcbase
@@ -133,4 +133,3 @@ fi
 # and clean up
 
 $rmcmd
-

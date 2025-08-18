@@ -45,9 +45,9 @@ typedef struct _Segments {
 	XmDirection		push_before;
 	Boolean			pop_after;
 	Boolean			separator;
-	unsigned char		num_tabs; 	
+	unsigned char		num_tabs;
 } Segments;
-	
+
 
 /*
  *  Global variables.
@@ -59,7 +59,7 @@ Components components[NUM_COMPONENTS] = {
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)0 },
     { XmSTRING_COMPONENT_TEXT, 0, (XtPointer)"Howdy" },
     { XmSTRING_COMPONENT_SEPARATOR, 0, (XtPointer)0 },
-    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)0 },  
+    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)0 },
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)0 },
     { XmSTRING_COMPONENT_TEXT, 0, (XtPointer)"Doody" },
     { XmSTRING_COMPONENT_SEPARATOR, 0, (XtPointer)0 },
@@ -87,48 +87,48 @@ Segments segments[NUM_SEGMENTS] = {
 
 Components ordered_comp[NUM_ORDERED_STRINGS][NUM_ORDERED_COMPONENTS] = {
    {
-    { XmSTRING_COMPONENT_LAYOUT_PUSH, 0, (XtPointer)"XmLEFT_TO_RIGHT" }, 
-    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag1" }, 
-    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag2" }, 
-    { XmSTRING_COMPONENT_TAG, 0, (XtPointer)XmSTRING_ISO8859_1 }, 
-    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)NULL }, 
+    { XmSTRING_COMPONENT_LAYOUT_PUSH, 0, (XtPointer)"XmLEFT_TO_RIGHT" },
+    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag1" },
+    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag2" },
+    { XmSTRING_COMPONENT_TAG, 0, (XtPointer)XmSTRING_ISO8859_1 },
+    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)NULL },
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)"XmSTRING_DIRECTION_L_TO_R" },
-    { XmSTRING_COMPONENT_TEXT, 0, (XtPointer)"Hello World" }, 
-    { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag2 " }, 
-    { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag1 " }, 
-    { XmSTRING_COMPONENT_LAYOUT_POP, 0, (XtPointer)NULL }, 
-    { XmSTRING_COMPONENT_SEPARATOR, 0, (XtPointer)NULL } 
+    { XmSTRING_COMPONENT_TEXT, 0, (XtPointer)"Hello World" },
+    { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag2 " },
+    { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag1 " },
+    { XmSTRING_COMPONENT_LAYOUT_POP, 0, (XtPointer)NULL },
+    { XmSTRING_COMPONENT_SEPARATOR, 0, (XtPointer)NULL }
    },
    {
-    { XmSTRING_COMPONENT_LAYOUT_PUSH, 0, (XtPointer)"XmLEFT_TO_RIGHT" }, 
-    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag2" }, 
-    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag1" }, 
-    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)NULL }, 
+    { XmSTRING_COMPONENT_LAYOUT_PUSH, 0, (XtPointer)"XmLEFT_TO_RIGHT" },
+    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag2" },
+    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag1" },
+    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)NULL },
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)"XmSTRING_DIRECTION_R_TO_L" },
-    { XmSTRING_COMPONENT_LOCALE_TEXT, 0, (XtPointer)"Hello World" }, 
+    { XmSTRING_COMPONENT_LOCALE_TEXT, 0, (XtPointer)"Hello World" },
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)"XmSTRING_DIRECTION_L_TO_R" },
     { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag2" },
-    { XmSTRING_COMPONENT_LAYOUT_POP, 0, (XtPointer)NULL }, 
-    { XmSTRING_COMPONENT_SEPARATOR, 0, (XtPointer)NULL }, 
+    { XmSTRING_COMPONENT_LAYOUT_POP, 0, (XtPointer)NULL },
+    { XmSTRING_COMPONENT_SEPARATOR, 0, (XtPointer)NULL },
     { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag1" }
    },
    {
-    { XmSTRING_COMPONENT_LAYOUT_PUSH, 0, (XtPointer)"XmRIGHT_TO_LEFT" }, 
-    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag2" }, 
+    { XmSTRING_COMPONENT_LAYOUT_PUSH, 0, (XtPointer)"XmRIGHT_TO_LEFT" },
+    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag2" },
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)"XmSTRING_DIRECTION_R_TO_L" },
-    { XmSTRING_COMPONENT_WIDECHAR_TEXT, 0, "Hi " }, 
-    { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag2" }, 
-    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag1" }, 
-    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)NULL }, 
+    { XmSTRING_COMPONENT_WIDECHAR_TEXT, 0, "Hi " },
+    { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag2" },
+    { XmSTRING_COMPONENT_RENDITION_BEGIN, 0, (XtPointer)"render_tag1" },
+    { XmSTRING_COMPONENT_TAB, 0, (XtPointer)NULL },
     { XmSTRING_COMPONENT_DIRECTION, 0, (XtPointer)"XmSTRING_DIRECTION_L_TO_R" },
-    { XmSTRING_COMPONENT_TEXT, 0, "World" }, 
+    { XmSTRING_COMPONENT_TEXT, 0, "World" },
     { XmSTRING_COMPONENT_RENDITION_END, 0, (XtPointer)"render_tag1" },
     { XmSTRING_COMPONENT_LAYOUT_POP, 0, (XtPointer)NULL }
    }};
 
 #define NUM_CANONICAL_COMPONENTS 13
 
-XmStringComponentType canonical_order[NUM_CANONICAL_COMPONENTS] = { 
+XmStringComponentType canonical_order[NUM_CANONICAL_COMPONENTS] = {
   XmSTRING_COMPONENT_LAYOUT_PUSH,
   XmSTRING_COMPONENT_RENDITION_BEGIN,
   XmSTRING_COMPONENT_TAG,
@@ -142,14 +142,14 @@ XmStringComponentType canonical_order[NUM_CANONICAL_COMPONENTS] = {
   XmSTRING_COMPONENT_LAYOUT_POP,
   XmSTRING_COMPONENT_SEPARATOR,
   XmSTRING_COMPONENT_END };
-  
+
 #define DISPLAY_WIDTH 250
 #define DISPLAY_HEIGHT 50
-        
+
 XmStringDirection     stringdir_ltor = XmSTRING_DIRECTION_L_TO_R;
 XmStringDirection     stringdir_rtol = XmSTRING_DIRECTION_R_TO_L;
-XmDirection           dir_ltor = XmLEFT_TO_RIGHT; 
-XmDirection           dir_rtol = XmRIGHT_TO_LEFT; 
+XmDirection           dir_ltor = XmLEFT_TO_RIGHT;
+XmDirection           dir_rtol = XmRIGHT_TO_LEFT;
 XmString              draw_string;
 Widget                bboard, drawingArea;
 GC                    gc;
@@ -157,18 +157,18 @@ XGCValues             gcv;
 XFontStruct           *fontStruct;
 XmRenderTable         renderTable;
 
-void 
+void
 DrawString( Widget w, XtPointer client_data, XtPointer call_data )
 {
 
     /*  Display XmString with tabs and renditions. */
-    XmStringDrawImage( display, XtWindow( drawingArea ), renderTable, 
-                       draw_string, gc, 0, 0, DISPLAY_WIDTH, 
+    XmStringDrawImage( display, XtWindow( drawingArea ), renderTable,
+                       draw_string, gc, 0, 0, DISPLAY_WIDTH,
                        XmALIGNMENT_BEGINNING,
                        XmSTRING_DIRECTION_L_TO_R, (XRectangle *)0 );
 }
 
-static char * 
+static char *
 CvtCompTypeToString( XmStringComponentType comp_type )
 {
    char *comp_string;
@@ -177,43 +177,43 @@ CvtCompTypeToString( XmStringComponentType comp_type )
       {
          case XmSTRING_COMPONENT_DIRECTION:
               comp_string = "XmSTRING_COMPONENT_DIRECTION";
-              break; 
+              break;
          case XmSTRING_COMPONENT_END:
               comp_string = "XmSTRING_COMPONENT_END";
-              break; 
+              break;
          case XmSTRING_COMPONENT_LAYOUT_POP:
               comp_string = "XmSTRING_COMPONENT_LAYOUT_POP";
-              break; 
+              break;
          case XmSTRING_COMPONENT_LAYOUT_PUSH:
               comp_string = "XmSTRING_COMPONENT_LAYOUT_PUSH";
-              break; 
+              break;
          case XmSTRING_COMPONENT_LOCALE:
               comp_string = "XmSTRING_COMPONENT_LOCALE";
-              break; 
+              break;
          case XmSTRING_COMPONENT_LOCALE_TEXT:
               comp_string = "XmSTRING_COMPONENT_LOCALE_TEXT";
-              break; 
+              break;
          case XmSTRING_COMPONENT_RENDITION_BEGIN:
               comp_string = "XmSTRING_COMPONENT_RENDITION_BEGIN";
-              break; 
+              break;
          case XmSTRING_COMPONENT_RENDITION_END:
               comp_string = "XmSTRING_COMPONENT_RENDITION_END";
-              break; 
+              break;
          case XmSTRING_COMPONENT_SEPARATOR:
               comp_string = "XmSTRING_COMPONENT_SEPARATOR";
-              break; 
+              break;
          case XmSTRING_COMPONENT_TAB:
               comp_string = "XmSTRING_COMPONENT_TAB";
-              break; 
+              break;
          case XmSTRING_COMPONENT_TAG:
               comp_string = "XmSTRING_COMPONENT_TAG";
-              break; 
+              break;
          case XmSTRING_COMPONENT_TEXT:
               comp_string = "XmSTRING_COMPONENT_TEXT";
-              break; 
+              break;
          case XmSTRING_COMPONENT_WIDECHAR_TEXT:
               comp_string = "XmSTRING_COMPONENT_WIDECHAR_TEXT";
-              break; 
+              break;
        }
 
      return( comp_string );
@@ -228,15 +228,15 @@ BuildOrderedString( Components *comp, int num_comp )
 
      for ( j = 0, current_comp = comp; j < num_comp; j++, current_comp++ )
      {
-         switch( current_comp->type ) 
+         switch( current_comp->type )
          {
              case XmSTRING_COMPONENT_LAYOUT_PUSH:
-               if ( strcmp( (char *)current_comp->value, 
+               if ( strcmp( (char *)current_comp->value,
                             "XmLEFT_TO_RIGHT" ) == 0 )
                   string = XmStringComponentCreate( current_comp->type,
                                            sizeof( XmDirection ),
                                            &dir_ltor );
-               else if ( strcmp( (char *)current_comp->value, 
+               else if ( strcmp( (char *)current_comp->value,
                             "XmRIGHT_TO_LEFT" ) == 0 )
                   string = XmStringComponentCreate( current_comp->type,
                                            sizeof( XmDirection ),
@@ -244,28 +244,28 @@ BuildOrderedString( Components *comp, int num_comp )
                break;
 
 	     case XmSTRING_COMPONENT_DIRECTION:
-               if ( strcmp( (char *)current_comp->value, 
+               if ( strcmp( (char *)current_comp->value,
                             "XmSTRING_DIRECTION_L_TO_R" ) == 0 )
                   string = XmStringComponentCreate( current_comp->type,
                                            sizeof( XmStringDirection ),
                                            &stringdir_ltor );
-               else if ( strcmp( (char *)current_comp->value, 
+               else if ( strcmp( (char *)current_comp->value,
                             "XmSTRING_DIRECTION_R_TO_L" ) == 0 )
                   string = XmStringComponentCreate( current_comp->type,
                                            sizeof( XmStringDirection ),
                                            &stringdir_rtol );
 	       break;
 
-	     case XmSTRING_COMPONENT_RENDITION_BEGIN: 
-	     case XmSTRING_COMPONENT_RENDITION_END: 
-	     case XmSTRING_COMPONENT_TAG: 
-	     case XmSTRING_COMPONENT_LOCALE: 
-	     case XmSTRING_COMPONENT_TEXT: 
-	     case XmSTRING_COMPONENT_LOCALE_TEXT: 
-	     case XmSTRING_COMPONENT_WIDECHAR_TEXT: 
-                  string = XmStringComponentCreate( current_comp->type, 
-                                           strlen( (char *)current_comp->value ), 
-                                           current_comp->value ); 
+	     case XmSTRING_COMPONENT_RENDITION_BEGIN:
+	     case XmSTRING_COMPONENT_RENDITION_END:
+	     case XmSTRING_COMPONENT_TAG:
+	     case XmSTRING_COMPONENT_LOCALE:
+	     case XmSTRING_COMPONENT_TEXT:
+	     case XmSTRING_COMPONENT_LOCALE_TEXT:
+	     case XmSTRING_COMPONENT_WIDECHAR_TEXT:
+                  string = XmStringComponentCreate( current_comp->type,
+                                           strlen( (char *)current_comp->value ),
+                                           current_comp->value );
                break;
 
 
@@ -273,20 +273,20 @@ BuildOrderedString( Components *comp, int num_comp )
 	     case XmSTRING_COMPONENT_LAYOUT_POP:
              case XmSTRING_COMPONENT_SEPARATOR:
              case XmSTRING_COMPONENT_END:
-                  string = XmStringComponentCreate( current_comp->type, 
-                                           current_comp->length, 
-                                           current_comp->value ); 
+                  string = XmStringComponentCreate( current_comp->type,
+                                           current_comp->length,
+                                           current_comp->value );
                break;
         }
 
-        temp = finalString; 
+        temp = finalString;
         finalString = XmStringConcatAndFree( temp, string );
 
      }
 
   return( finalString );
 }
-   
+
 Boolean
 CheckCanonicalOrder( XmStringComponentType *compList )
 {
@@ -295,14 +295,14 @@ CheckCanonicalOrder( XmStringComponentType *compList )
                                 numText, numSeparator, numEnd, numSegments;
         Boolean                 status = True;
         Boolean                 new_segment;
-        
+
 
         numPush = 0;
         numTag = 0;
-        numLocale = 0; 
+        numLocale = 0;
         numDir = 0;
         numText = 0;
-        numSeparator = 0; 
+        numSeparator = 0;
         numEnd = 0;
 
         i = 0;
@@ -310,11 +310,11 @@ CheckCanonicalOrder( XmStringComponentType *compList )
         while ( compList[i] != NULL )
         {
            for ( j = 0; j < NUM_CANONICAL_COMPONENTS; j++ )
-           { 
+           {
                if ( compList[i] == canonical_order[j] )
                {
                   switch( compList[i] )
-                  { 
+                  {
                     case XmSTRING_COMPONENT_LAYOUT_PUSH:
                     case XmSTRING_COMPONENT_TAG:
                     case XmSTRING_COMPONENT_LOCALE:
@@ -344,9 +344,9 @@ CheckCanonicalOrder( XmStringComponentType *compList )
 
     return( status );
 }
- 
+
 int
-GetStringSegmentsByComp( XmString string, int num_comps, 
+GetStringSegmentsByComp( XmString string, int num_comps,
                    XmStringComponentType ***compTable )
 {
 	XmStringContext         context;
@@ -361,10 +361,10 @@ GetStringSegmentsByComp( XmString string, int num_comps,
 
         numPush = 0;
         numTag = 0;
-        numLocale = 0; 
+        numLocale = 0;
         numDir = 0;
         numText = 0;
-        numSeparator = 0; 
+        numSeparator = 0;
         numEnd = 0;
         numSegments = 0;
         maxComps = 0;
@@ -376,22 +376,22 @@ GetStringSegmentsByComp( XmString string, int num_comps,
         *  segment.
         */
 	XmStringInitContext( &context, string );
-	compType = XmStringGetNextTriple( context, &length, &value );  
+	compType = XmStringGetNextTriple( context, &length, &value );
 
         new_segment = False;
-        for ( i = 0; i < num_comps; i++ ) 
+        for ( i = 0; i < num_comps; i++ )
         {
            switch( compType )
            {
              case XmSTRING_COMPONENT_LAYOUT_PUSH:
                numPush++;
-               if ( numPush > 0 ) 
+               if ( numPush > 0 )
                   new_segment = True;
                break;
 
              case XmSTRING_COMPONENT_TAG:
                numTag++;
-               if ( numTag > 1 ) 
+               if ( numTag > 1 )
                   new_segment = True;
                break;
 
@@ -416,19 +416,19 @@ GetStringSegmentsByComp( XmString string, int num_comps,
                break;
 
              case XmSTRING_COMPONENT_SEPARATOR:
-               numSeparator++; 
-               if ( numSeparator > 1 ) 
+               numSeparator++;
+               if ( numSeparator > 1 )
                   new_segment = True;
-               break; 
-             case XmSTRING_COMPONENT_END: 
-               numEnd++; 
-               if ( numEnd > 1 ) 
+               break;
+             case XmSTRING_COMPONENT_END:
+               numEnd++;
+               if ( numEnd > 1 )
                   new_segment = True;
-               break; 
-           } 
-      
-         if ( value ) XtFree( value ); 
-         value = NULL; 
+               break;
+           }
+
+         if ( value ) XtFree( value );
+         value = NULL;
 
          if ( new_segment )
          {
@@ -439,9 +439,9 @@ GetStringSegmentsByComp( XmString string, int num_comps,
          }
          new_segment = False;
          numComps++;
-            
-         compType = XmStringGetNextTriple( context, &length, &value );  
-        } 
+
+         compType = XmStringGetNextTriple( context, &length, &value );
+        }
         if ( value ) XtFree( value );
 
         XmStringFreeContext( context );
@@ -461,22 +461,22 @@ GetStringSegmentsByComp( XmString string, int num_comps,
 
         numPush = 0;
         numTag = 0;
-        numLocale = 0; 
+        numLocale = 0;
         numDir = 0;
         numText = 0;
-        numSeparator = 0; 
+        numSeparator = 0;
         numEnd = 0;
 
         finalString = NULL;
 
 	XmStringInitContext( &context, string );
-	compType = XmStringGetNextTriple( context, &length, &value );  
+	compType = XmStringGetNextTriple( context, &length, &value );
 
         j = -1;
         k = 0;
         new_segment = False;
         value = NULL;
-        for ( i = 0; i < num_comps; i++ ) 
+        for ( i = 0; i < num_comps; i++ )
         {
            switch( compType )
            {
@@ -528,11 +528,11 @@ GetStringSegmentsByComp( XmString string, int num_comps,
            if ( new_segment )
            {
              /*  Increment segment index. */
-              j++; 
+              j++;
 
              /*
-              * Terminate the list of XmStringComponentTypes from  
-              * the previous segment. 
+              * Terminate the list of XmStringComponentTypes from
+              * the previous segment.
               */
               if ( k > 0 )
                  (*compTable)[j][k+1] = NULL;
@@ -544,13 +544,13 @@ GetStringSegmentsByComp( XmString string, int num_comps,
            }
 
            /*
-            *  Add the latest component to the component list. 
+            *  Add the latest component to the component list.
             */
             else
               (*compTable)[j][k] = compType;
 
             if ( value ) XtFree( value );
-            compType = XmStringGetNextTriple( context, &length, &value );  
+            compType = XmStringGetNextTriple( context, &length, &value );
 
           /*  Increment component index. */
            k++;
@@ -567,7 +567,7 @@ void
 #ifdef _NO_PROTO
 PrintComponentTypes( compList )
 	XmStringComponentType	*compList;
-#else 
+#else
 PrintComponentTypes( XmStringComponentType *compList )
 #endif
 {
@@ -594,14 +594,14 @@ PrintComponentTypes( XmString string )
 
         do
         {
-	    compType = XmStringGetNextTriple( context, &length, &value );  
+	    compType = XmStringGetNextTriple( context, &length, &value );
             printf("%s - ", CvtCompTypeToString( compType ));
             switch( compType )
             {
                case XmSTRING_COMPONENT_LAYOUT_PUSH:
                  if ( XmDirectionMatch(*(XmDirection *)value, XmLEFT_TO_RIGHT ))
                       printf("XmLEFT_TO_RIGHT");
-                 else if ( XmDirectionMatch( *(XmDirection *)value, 
+                 else if ( XmDirectionMatch( *(XmDirection *)value,
                            XmRIGHT_TO_LEFT ))
                       printf("XmRIGHT_TO_LEFT");
                  printf("\n");
@@ -646,10 +646,10 @@ PrintComponentTypes( XmString string )
 
     return;
 }
-               
-           
 
-      
+
+
+
 void
 main( int argc, char **argv )
 {
@@ -677,7 +677,7 @@ main( int argc, char **argv )
    XmTabList             tabList;
    Boolean		 status;
    int                   numSegments;
-   XmStringComponentType **compTable;         
+   XmStringComponentType **compTable;
 
    CommonTestInit( argc, argv );
 
@@ -686,7 +686,7 @@ main( int argc, char **argv )
    */
    for ( i = 0; i < NUM_COMPONENTS; i++ )
    {
-        comp = &components[i]; 
+        comp = &components[i];
 
        /*
         *  Compute the length and value of the components where necessary.
@@ -700,7 +700,7 @@ main( int argc, char **argv )
               break;
            case XmSTRING_COMPONENT_DIRECTION:
              comp->length = sizeof( XmStringDirection );
-             comp->value = ( one_dir ) ? (XtPointer)&stringdir_rtol : 
+             comp->value = ( one_dir ) ? (XtPointer)&stringdir_rtol :
                            (XtPointer)&stringdir_ltor;
              one_dir = True;
               break;
@@ -714,7 +714,7 @@ main( int argc, char **argv )
            stringComp =
     	   XmStringComponentCreate( comp->type, comp->length, comp->value );
            temp = majorString;
-           majorString = XmStringConcat( temp, stringComp ); 
+           majorString = XmStringConcat( temp, stringComp );
            XmStringFree( temp );
            XmStringFree( stringComp );
         }
@@ -722,16 +722,16 @@ main( int argc, char **argv )
 
   /*
    *  Retrieve each of the components in the XmString by
-   *  calling XmStringPeekNextTriple() and XmStringGetNextTriple(). 
+   *  calling XmStringPeekNextTriple() and XmStringGetNextTriple().
    */
-   XmStringInitContext( &context, majorString ); 
+   XmStringInitContext( &context, majorString );
    for ( i = 0; i < NUM_COMPONENTS; i++ )
    {
-        comp = &components[i]; 
+        comp = &components[i];
         comp_string = CvtCompTypeToString( comp->type );
         printf("Component #%d, Component Type = %s\n", i+1, comp_string );
-	type = XmStringPeekNextTriple( context );	
-        printf("XmStringPeekNextTriple() - "); 
+	type = XmStringPeekNextTriple( context );
+        printf("XmStringPeekNextTriple() - ");
         if ( type == comp->type )
            printf("PASSED.");
         else
@@ -741,8 +741,8 @@ main( int argc, char **argv )
         passed = True;
 
 	type = XmStringGetNextTriple( context, &length, &value );
-        printf("XmStringGetNextTriple() - "); 
-        if ( type == comp->type ) 
+        printf("XmStringGetNextTriple() - ");
+        if ( type == comp->type )
            if ( length == comp->length )
            {
               switch( type )
@@ -752,7 +752,7 @@ main( int argc, char **argv )
                 case XmSTRING_COMPONENT_RENDITION_END:
                   if (( value &&
                        ( strcmp( (char *)value, (char *)comp->value ) != 0 )) ||
-                       ( !value && comp->value )) 
+                       ( !value && comp->value ))
                        passed = False;
                   break;
                 case XmSTRING_COMPONENT_SEPARATOR:
@@ -762,9 +762,9 @@ main( int argc, char **argv )
                      passed = False;
                   break;
                 case XmSTRING_COMPONENT_DIRECTION:
-                  if (( value && ( *((XmStringDirection *)value) != 
+                  if (( value && ( *((XmStringDirection *)value) !=
                         *((XmStringDirection *)comp->value ))) ||
-                        ( !value && comp->value )) 
+                        ( !value && comp->value ))
                      passed = False;
                   break;
                }
@@ -786,7 +786,7 @@ main( int argc, char **argv )
 
            printf("\n\n");
    }
-    XmStringFreeContext( context ); 
+    XmStringFreeContext( context );
     printf("\n\n\n");
 
    CommonPause();
@@ -796,10 +796,10 @@ main( int argc, char **argv )
    *  again, this time calling XmStringPeekNextComponent() and
    *  XmStringGetNextComponent().
    */
-   XmStringInitContext( &context, majorString ); 
+   XmStringInitContext( &context, majorString );
    for ( i = 0; i < NUM_COMPONENTS; i++ )
    {
-        comp = &components[i]; 
+        comp = &components[i];
         comp_string = CvtCompTypeToString( comp->type );
         printf("Component #%d, Component Type = %s\n", i+1, comp_string );
 
@@ -830,7 +830,7 @@ main( int argc, char **argv )
                 if ( text ) XtFree( text );
                 break;
              case XmSTRING_COMPONENT_DIRECTION:
-               if ( direction != *((XmStringDirection *)comp->value )) 
+               if ( direction != *((XmStringDirection *)comp->value ))
                   passed = False;
                break;
              case XmSTRING_COMPONENT_SEPARATOR:
@@ -838,18 +838,18 @@ main( int argc, char **argv )
                 break;
              case XmSTRING_COMPONENT_UNKNOWN:
                 switch( unknown_tag )
-                { 
+                {
                   case XmSTRING_COMPONENT_RENDITION_BEGIN:
                   case XmSTRING_COMPONENT_RENDITION_END:
-                    if ( unknown_value && 
-                       ( strcmp( (char *)unknown_value, 
+                    if ( unknown_value &&
+                       ( strcmp( (char *)unknown_value,
                        (char *)comp->value ) != 0 ) ||
                        ( !unknown_value && comp->value ))
                       passed = False;
                     if ( passed &&
                          unknown_length != comp->length )
                       passed = False;
-                    break;                         
+                    break;
                   case XmSTRING_COMPONENT_TAB:
                     if ( (XtPointer)unknown_value != comp->value )
                       passed = False;
@@ -878,7 +878,7 @@ main( int argc, char **argv )
            }
       }
 
-    XmStringFreeContext( context ); 
+    XmStringFreeContext( context );
     XmStringFree( majorString );
 
    CommonPause();
@@ -887,7 +887,7 @@ main( int argc, char **argv )
 
 
    /*
-    *  Build XmString from segments defined in Segments structure. 
+    *  Build XmString from segments defined in Segments structure.
     */
     j = 0;
     for ( i = 0; i < NUM_SEGMENTS; i++ )
@@ -895,11 +895,11 @@ main( int argc, char **argv )
        segment = &segments[i];
        if ( i == 0 )
          majorString = XmStringSegmentCreate( segment->text, segment->tag,
-                     segment->direction, segment->separator );      
+                     segment->direction, segment->separator );
        else if ( i > 0 )
        {
          stringSeg = XmStringSegmentCreate( segment->text, segment->tag,
-                     segment->direction, segment->separator );      
+                     segment->direction, segment->separator );
          temp = majorString;
          majorString = XmStringConcat( temp, stringSeg );
          XmStringFree( temp );
@@ -908,22 +908,22 @@ main( int argc, char **argv )
      }
 
     /*
-     *  Retrieve segments from the XmString using XmStringGetNextSegment(). 
+     *  Retrieve segments from the XmString using XmStringGetNextSegment().
      */
     text = (char *)0;
     tag = (XmStringTag)0;
-    XmStringInitContext( &context, majorString ); 
+    XmStringInitContext( &context, majorString );
     for ( i = 0; i < NUM_SEGMENTS; i++ )
     {
        segment = &segments[i];
        printf("Segment #%d\n", i+1 );
        printf("XmStringGetNextSegment() - ");
-       if ( XmStringGetNextSegment( context, &text, &tag, 
-              &direction, &separator )) 
+       if ( XmStringGetNextSegment( context, &text, &tag,
+              &direction, &separator ))
        {
          passed = True;
          if (( text && ( strcmp( text, segment->text )) != 0 ) ||
-             ( !text && text != segment->text )) 
+             ( !text && text != segment->text ))
              passed = False;
 
          if ( passed && ( tag && ( strcmp( tag, segment->tag ) != 0 )) ||
@@ -938,7 +938,7 @@ main( int argc, char **argv )
        }
        else
          passed = False;
-    
+
        if ( text ) {
           XtFree((char *) text );
           text = (char *)0;
@@ -1018,7 +1018,7 @@ main( int argc, char **argv )
     rendition = XmRenditionCreate( drawingArea, "render_tag2", args, n );
 
     renderTable = XmRenderTableAddRenditions( renderTable, &rendition, 1, XmMERGE_REPLACE );
-    
+
     XmRenditionFree( rendition );
     XmTabListFree( tabList );
 
@@ -1034,13 +1034,13 @@ main( int argc, char **argv )
       majorString =
         BuildOrderedString( &ordered_comp[i][0], NUM_ORDERED_COMPONENTS );
       draw_string = XmStringCopy( majorString );
-      XClearArea(XtDisplay(drawingArea), XtWindow(drawingArea), 
+      XClearArea(XtDisplay(drawingArea), XtWindow(drawingArea),
                  0, 0, 0, 0, TRUE);
       XmStringFree( draw_string );
-      PrintComponentTypes( majorString ); 
+      PrintComponentTypes( majorString );
 /**
       numSegments = GetStringSegmentsByComp( majorString, NUM_ORDERED_COMPONENTS,
-                    &compTable ); 
+                    &compTable );
       printf("XmString contains %d segments\n", numSegments );
       for ( j = 0; j < numSegments; j++ )
       {

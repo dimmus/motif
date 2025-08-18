@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -45,7 +45,7 @@ StartDrag (Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-void  
+void
 main (int argc, char **argv)
 {
 
@@ -65,13 +65,13 @@ main (int argc, char **argv)
     xmDisplay = XmGetXmDisplay (display);
 
     XtAddCallback (xmDisplay,XmNdragStartCallback,StartDrag,(XtPointer)NULL);
-    
+
     n = 0;
     Frame1 = XmCreateFrame(Shell1, "Frame1", args, n);
     XtManageChild(Frame1);
 
 
-    
+
     n = 0;
     tcs = XmStringCreate("Non-draggable label", XmFONTLIST_DEFAULT_TAG);
     XtSetArg(args[n], XmNlabelString, tcs);  n++;
@@ -90,5 +90,3 @@ main (int argc, char **argv)
     XtAppMainLoop(app_context);
 
   }
-
-

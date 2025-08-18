@@ -1,4 +1,4 @@
-! 
+!
 ! Motif
 !
 ! Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
 ! License along with these librararies and programs; if not, write
 ! to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ! Floor, Boston, MA 02110-1301 USA
-! 
+!
 !******************************************************************************
 
 module case
@@ -39,12 +39,12 @@ object
 
 OBJECT
     HELLOworld_buTTon : XmPushButton {
-	arguments { 
+	arguments {
 	    XmNx = 45;
 	    XmNy = 90;
 	    XmNlabelString = compound_string('Hello',separate=true) & 'Minimal!';
 	};
-	callBACKS { 
+	callBACKS {
 	    XmNactivateCallback = procedure heLLOWORld_button_activate();
 	};
     };

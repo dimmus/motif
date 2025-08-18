@@ -1,5 +1,5 @@
 # $XConsortium: ArrowBGad3.scr /main/6 1995/07/17 20:05:50 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client with a drawing area should appear. The shell
 #  will than grow to contain a 4x4 matrix of arrowButtonGadgets.
 #  The arrows should each display with a foreground the same color
-#  as the light shadow color. 
-# Iconify and Normalize the client window. 
+#  as the light shadow color.
+# Iconify and Normalize the client window.
 
 CompareVisual drawarea
 WindowIconify Shell1

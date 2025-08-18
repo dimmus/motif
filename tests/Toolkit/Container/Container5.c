@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -35,7 +35,7 @@
 void
 main(int argc, char **argv)
 {
-    Widget              Container5, *IconGad;   
+    Widget              Container5, *IconGad;
     int			i, num_obj;
     Cardinal		n;
     Arg			args[MAX_ARGS];
@@ -52,7 +52,7 @@ main(int argc, char **argv)
     num_obj = 10;
 
     if (UserData != NULL) {
-	
+
 	if (strcmp(UserData, "a") == 0) {
 	    num_obj = 4;
 	    test_num = 1;
@@ -62,26 +62,26 @@ main(int argc, char **argv)
 	    num_obj = 5;
 	    test_num = 2;
 	}
-	
+
 	if (strcmp(UserData, "c") == 0) {
 	    num_obj = 9;
 	    test_num = 3;
 	}
-	
+
 	if (strcmp(UserData, "d") == 0) {
 	    num_obj = 20;
 	    test_num = 4;
 	}
-	
+
 	if (strcmp(UserData, "e") == 0) {
 	    num_obj = 4;
 	    test_num = 5;
 	}
-	
+
 	test_char = *UserData;
-	
+
 	free(UserData);
-	
+
     }
     sprintf(ContainerName, "Container5%c", test_char);
 
@@ -104,7 +104,7 @@ main(int argc, char **argv)
 
 	n = 0 ;
 	sprintf(IconName, "IconGad%d", i);
-	icon_name = XmStringGenerate(IconName, NULL, XmCHARSET_TEXT, NULL); 
+	icon_name = XmStringGenerate(IconName, NULL, XmCHARSET_TEXT, NULL);
 	XtSetArg(args[n], XmNlabelString, icon_name); n++;
 	IconGad[i] = XmCreateIconGadget(Container5, IconName, args, n);
         XtManageChild(IconGad[i]);
@@ -115,7 +115,7 @@ main(int argc, char **argv)
     CommonPause();
 
     if (test_num == 0 || test_num == 1) {
-    
+
 	/* Set the Spatial Style to None */
 
 	n = 0;
@@ -127,7 +127,7 @@ main(int argc, char **argv)
 	/* Unmanage all the children - Change the ResizeModel - and Remanage */
 
 	XtUnmanageChildren(IconGad, num_obj);
-    
+
 	n = 0;
 	XtSetArg(args[n], XmNspatialStyle, XmGRID); n++;
 	XtSetArg(args[n], XmNspatialResizeModel, XmGROW_BALANCED); n++;
@@ -159,7 +159,7 @@ main(int argc, char **argv)
 
 	XtManageChildren(&IconGad[num_obj], new_obj);
 	num_obj = num_obj + new_obj;
-	
+
 	CommonPause();
 
 	new_obj = 5;
@@ -181,7 +181,7 @@ main(int argc, char **argv)
 
 	XtManageChildren(&IconGad[num_obj], new_obj);
 	num_obj = num_obj + new_obj;
-	
+
 	CommonPause();
 
 	n = 0;
@@ -202,7 +202,7 @@ main(int argc, char **argv)
 
 	XtManageChildren(&IconGad[num_obj], new_obj);
 	num_obj = num_obj + new_obj;
-	
+
     }
 
     if (test_num == 3) {
@@ -217,7 +217,7 @@ main(int argc, char **argv)
 
 	CommonPause();
 
-	/* Test the spatialIncludeModel 
+	/* Test the spatialIncludeModel
 	   Add some children and check where they go */
 
 	i = num_obj;
@@ -245,7 +245,7 @@ main(int argc, char **argv)
 	IconGad[i] = XmCreateIconGadget(Container5, IconName, args, n);
 	XmStringFree(icon_name);
 	XtManageChild(IconGad[i]);
-	
+
     }
 
     CommonPause();
@@ -253,4 +253,3 @@ main(int argc, char **argv)
     XtAppMainLoop(app_context);
 
 }
-

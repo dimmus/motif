@@ -44,12 +44,12 @@ int     count = 0;
 											/* Begin CR4909 */
 char	*first_msg =
 	"This is here to show CR 4909. This is a Primary Modal.\nWhen this window is up, TopShell2 should accept input.\n Otherwise, the bug is not fixed. Click on Cancel to destroy this.";
-char	*second_msg = 
+char	*second_msg =
 	"This is here just to show that CR 4909 is a problem only the first time. Click on Cancel button.";
 											/* End CR4909 */
-char	*primary_msg = 
+char	*primary_msg =
 	"While this box is up, you should not be able to use its parent";
-char	*full_msg = 
+char	*full_msg =
 	"While this box is up, you should not be able to use either Shell1 \
 or Shell2 nor any other dialog box.";
 char	*system_msg =
@@ -77,10 +77,10 @@ XtPointer client_data, call_data;
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple (primary_msg)); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
-    XtSetArg (args[n], XmNhelpLabelString, 
+    XtSetArg (args[n], XmNhelpLabelString,
 			  XmStringCreateSimple ("Spawn Dialog Child")); n++;
     /* dialog shell resources */
     XtSetArg (args[n], XmNtitle, "Primary Application Modal Dialog"); n++;
@@ -90,9 +90,9 @@ XtPointer client_data, call_data;
 
 /* make HELP button spawn a child */
     spawnButton = XmMessageBoxGetChild (Dialog1, XmDIALOG_HELP_BUTTON);
-    XtAddCallback (spawnButton, XmNactivateCallback, 
+    XtAddCallback (spawnButton, XmNactivateCallback,
 				   PostPrimaryModalDialog, Dialog1);
-    if (delay) 
+    if (delay)
 		sleep (delay);
     XtManageChild (Dialog1);
 	if (parent == ParentShell2 && count == 0) {
@@ -128,7 +128,7 @@ XtPointer client_data, call_data;
     XtSetArg (args[n], XmNdialogStyle, XmDIALOG_FULL_APPLICATION_MODAL);
               n++;
     Dialog2 = XmCreateMessageDialog(parent, "Dialog1", args, n);
-    if (delay) 
+    if (delay)
 		sleep (delay);
     XtManageChild (Dialog2);
 
@@ -153,14 +153,14 @@ XtPointer client_data, call_data;
 
     n = 0;
     /* message box resources */
-    XtSetArg (args[n], XmNmessageString, 
+    XtSetArg (args[n], XmNmessageString,
 			  XmStringCreateSimple (system_msg)); n++;
     XtSetArg (args[n], XmNautoUnmanage, True); n++;
     /* dialog shell resources */
     XtSetArg (args[n], XmNtitle, "System Modal Dialog"); n++;
     XtSetArg (args[n], XmNdialogStyle, XmDIALOG_SYSTEM_MODAL); n++;
     Dialog3 = XmCreateMessageDialog(parent, "Dialog1", args, n);
-    if (delay) 
+    if (delay)
 		sleep (delay);
     XtManageChild (Dialog3);
 
@@ -266,7 +266,7 @@ XtPointer client_data, call_data;
 
 }
 
-/* End CR 3622 */		   
+/* End CR 3622 */
 
 
 void  main(argc, argv)
@@ -280,7 +280,7 @@ void  main(argc, argv)
     Widget        TopShell1, TopShell2;
     Widget        BulletinBoard1, BulletinBoard2;
     Widget        DefaultButton1, DefaultButton2;
-    Widget        PrimaryModal1, PrimaryModal2, 
+    Widget        PrimaryModal1, PrimaryModal2,
 				  FullAppModal1, FullAppModal2, SystemModal1, SystemModal2;
 	Widget        Iconify2, Popdown2, Popup2;        /*PIR2839*/
 	Widget        Unmanage2, Manage2;  /*PIR2362*/
@@ -292,7 +292,7 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNmappedWhenManaged, True);  n++;
     XtSetArg(args[n], XmNallowShellResize, True);  n++;
     XtSetArg(args[n], XmNtitle, "TopShell1"); n++;
-    TopShell1 = XtCreatePopupShell("TopShell1", topLevelShellWidgetClass, 
+    TopShell1 = XtCreatePopupShell("TopShell1", topLevelShellWidgetClass,
 								   Shell1, args, n);
 	ParentShell1 = TopShell1;
 
@@ -302,24 +302,24 @@ void  main(argc, argv)
     XtSetArg(args[n], XmNmappedWhenManaged, True);  n++;
     XtSetArg(args[n], XmNtitle, "TopShell2");         n++;
     XtSetArg(args[n], XtNgeometry, "+500+0");       n++;
-    TopShell2 = XtCreatePopupShell("TopShell2", topLevelShellWidgetClass, 
+    TopShell2 = XtCreatePopupShell("TopShell2", topLevelShellWidgetClass,
 								   Shell1, args, n);
 	ParentShell2 = TopShell2;
-   
+
     /* Shell 1 children */
 
     n = 0;
-    BulletinBoard1 = XmCreateBulletinBoard (TopShell1, "BulletinBoard1", 
+    BulletinBoard1 = XmCreateBulletinBoard (TopShell1, "BulletinBoard1",
 											args, n);
     XtManageChild (BulletinBoard1);
-    
+
     n = 0;
     XtSetArg (args[n], XmNx, 300); n++;
     XtSetArg (args[n], XmNy, 50); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("DefaultButton")); n++;
-    DefaultButton1 = XmCreatePushButton (BulletinBoard1, "DefaultButton1", 
-										 args, n);	  
+    DefaultButton1 = XmCreatePushButton (BulletinBoard1, "DefaultButton1",
+										 args, n);
     XtManageChild (DefaultButton1);
 
     n = 0;
@@ -345,10 +345,10 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 100); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Primary Modal from TopShell1")); n++;
-    PrimaryModal1 = XmCreatePushButton (BulletinBoard1, "PrimaryModal1", 
-										args, n);	  
+    PrimaryModal1 = XmCreatePushButton (BulletinBoard1, "PrimaryModal1",
+										args, n);
     XtManageChild (PrimaryModal1);
-    XtAddCallback (PrimaryModal1, XmNactivateCallback, PostPrimaryModalDialog, 
+    XtAddCallback (PrimaryModal1, XmNactivateCallback, PostPrimaryModalDialog,
 				   TopShell1);
 
     n = 0;
@@ -356,10 +356,10 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 150); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Primary Modal from TopShell2")); n++;
-    PrimaryModal2 = XmCreatePushButton (BulletinBoard1, "PrimaryModal2", 
-										args, n);	  
+    PrimaryModal2 = XmCreatePushButton (BulletinBoard1, "PrimaryModal2",
+										args, n);
     XtManageChild (PrimaryModal2);
-    XtAddCallback (PrimaryModal2, XmNactivateCallback, PostPrimaryModalDialog, 
+    XtAddCallback (PrimaryModal2, XmNactivateCallback, PostPrimaryModalDialog,
 				   TopShell2);
 
     n = 0;
@@ -367,10 +367,10 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 200); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Full App Modal from TopShell1")); n++;
-    FullAppModal1 = XmCreatePushButton (BulletinBoard1, "FullAppModal1", 
-										args, n);	  
+    FullAppModal1 = XmCreatePushButton (BulletinBoard1, "FullAppModal1",
+										args, n);
     XtManageChild (FullAppModal1);
-    XtAddCallback (FullAppModal1,  XmNactivateCallback, PostFullAppModalDialog, 
+    XtAddCallback (FullAppModal1,  XmNactivateCallback, PostFullAppModalDialog,
 				   TopShell1);
 
     n = 0;
@@ -378,10 +378,10 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 250); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create Full App Modal from TopShell2")); n++;
-    FullAppModal2 = XmCreatePushButton (BulletinBoard1, "FullAppModal2", 
-										args, n);	  
+    FullAppModal2 = XmCreatePushButton (BulletinBoard1, "FullAppModal2",
+										args, n);
     XtManageChild (FullAppModal2);
-    XtAddCallback (FullAppModal2,  XmNactivateCallback, PostFullAppModalDialog, 
+    XtAddCallback (FullAppModal2,  XmNactivateCallback, PostFullAppModalDialog,
 				   TopShell2);
 
     n = 0;
@@ -389,10 +389,10 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 300); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create System Modal from TopShell1")); n++;
-    SystemModal1 = XmCreatePushButton (BulletinBoard1, "SystemModal1", 
-									   args, n);	  
+    SystemModal1 = XmCreatePushButton (BulletinBoard1, "SystemModal1",
+									   args, n);
     XtManageChild (SystemModal1);
-    XtAddCallback (SystemModal1, XmNactivateCallback, PostSystemModalDialog, 
+    XtAddCallback (SystemModal1, XmNactivateCallback, PostSystemModalDialog,
 				   TopShell1);
 
     n = 0;
@@ -400,10 +400,10 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 350); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Create System Modal from TopShell2")); n++;
-    SystemModal2 = XmCreatePushButton (BulletinBoard1, "SystemModal2", 
-									   args, n);	  
+    SystemModal2 = XmCreatePushButton (BulletinBoard1, "SystemModal2",
+									   args, n);
     XtManageChild (SystemModal2);
-    XtAddCallback (SystemModal2, XmNactivateCallback, PostSystemModalDialog, 
+    XtAddCallback (SystemModal2, XmNactivateCallback, PostSystemModalDialog,
 				   TopShell2);
 
 										/*Begin PIR2839*/
@@ -412,7 +412,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 400); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Iconify TopShell2 by XIconifyWindow")); n++;
-    Iconify2 = XmCreatePushButton (BulletinBoard1, "Iconify2", args, n);	  
+    Iconify2 = XmCreatePushButton (BulletinBoard1, "Iconify2", args, n);
     XtManageChild (Iconify2);
     XtAddCallback (Iconify2, XmNactivateCallback, IconifyShell, TopShell2);
 
@@ -421,7 +421,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 450); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Popdown TopShell2 by XtPopdown")); n++;
-    Popdown2 = XmCreatePushButton (BulletinBoard1, "Popdown2", args, n);	  
+    Popdown2 = XmCreatePushButton (BulletinBoard1, "Popdown2", args, n);
     XtManageChild (Popdown2);
     XtAddCallback (Popdown2, XmNactivateCallback, PopdownShell, TopShell2);
 
@@ -430,7 +430,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 500); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Popup TopShell2 by XtPopup")); n++;
-    Popup2 = XmCreatePushButton (BulletinBoard1, "Popup2", args, n);	  
+    Popup2 = XmCreatePushButton (BulletinBoard1, "Popup2", args, n);
     XtManageChild (Popup2);
     XtAddCallback (Popup2, XmNactivateCallback, PopupShell, TopShell2);
 
@@ -443,7 +443,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 550); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Unmanage TopShell2 by XtUnmanage")); n++;
-    Unmanage2 = XmCreatePushButton (BulletinBoard1, "Unmanage2", args, n);	  
+    Unmanage2 = XmCreatePushButton (BulletinBoard1, "Unmanage2", args, n);
     XtManageChild (Unmanage2);
     XtAddCallback (Unmanage2, XmNactivateCallback, UnmanageShell, TopShell2);
 
@@ -452,7 +452,7 @@ void  main(argc, argv)
     XtSetArg (args[n], XmNy, 600); n++;
     XtSetArg (args[n], XmNlabelString,
 	      XmStringCreateSimple ("Manage TopShell2 by XtManage")); n++;
-    Manage2 = XmCreatePushButton (BulletinBoard1, "Manage2", args, n);	  
+    Manage2 = XmCreatePushButton (BulletinBoard1, "Manage2", args, n);
     XtManageChild (Manage2);
     XtAddCallback (Manage2, XmNactivateCallback, ManageShell, TopShell2);
 										/*End PIR2362*/
@@ -482,21 +482,21 @@ void  main(argc, argv)
     /* Shell 2 children */
 
     n = 0;
-    BulletinBoard2 = XmCreateBulletinBoard (TopShell2, "BulletinBoard2", 
-											args, n);    
+    BulletinBoard2 = XmCreateBulletinBoard (TopShell2, "BulletinBoard2",
+											args, n);
     XtManageChild (BulletinBoard2);
 
     n = 0;
     XtSetArg (args[n], XmNx, 200); n++;
     XtSetArg (args[n], XmNy, 50); n++;
-    DefaultButton2 = XmCreatePushButtonGadget (BulletinBoard2, 
+    DefaultButton2 = XmCreatePushButtonGadget (BulletinBoard2,
 											   "DefaultButton2", args, n);
     XtManageChild (DefaultButton2);
 
     n = 0;
     XtSetArg (args[n], XmNdefaultButton, DefaultButton2); n++;
     XtSetValues (BulletinBoard2, args, n);
-    
+
     XtRealizeWidget(TopShell1);
     XtPopup(TopShell1, XtGrabNone);
     XtRealizeWidget(TopShell2);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ProcesEvents.c /main/7 1995/07/14 11:30:48 drk $"
@@ -47,8 +47,8 @@ static char rcsid[] = "$XConsortium: ProcesEvents.c /main/7 1995/07/14 11:30:48 
         routine.
 
         INPUTS:
-            done_func           - external function which determines if the 
-                                  processing is done yet based on external 
+            done_func           - external function which determines if the
+                                  processing is done yet based on external
                                   environment conditions which are known to it
                                   (i.e., callbacks, etc.).
 
@@ -68,7 +68,7 @@ static char rcsid[] = "$XConsortium: ProcesEvents.c /main/7 1995/07/14 11:30:48 
 
 static XtIntervalId interval_timer_id=0;
 
-static void timer_expire_callback(client_data,timer_id) 
+static void timer_expire_callback(client_data,timer_id)
 XtPointer client_data;
 XtIntervalId *timer_id;
 {
@@ -96,10 +96,10 @@ int max_wait_time;
         if ((*done_func)() == 0) {
             interval_timer_id = 0;
             interval_timer_id = XtAppAddTimeOut(xisAppContext,max_wait_time,
-                                                timer_expire_callback, 
+                                                timer_expire_callback,
 						(XtPointer) 0);
             while (!done) {
-                if ((XtAppPending(xisAppContext)&XtIMTimer) > 0) 
+                if ((XtAppPending(xisAppContext)&XtIMTimer) > 0)
                     XtAppProcessEvent(xisAppContext,XtIMTimer);
 
                 if (interval_timer_id == 0) {
@@ -126,7 +126,7 @@ int max_wait_time;
         focus_window != xisState.focus_window) {
 
         (*xisTraceMsg)("WARNING..Window manager changed focus window; changing back\n");
-        if (!xisState.focus_window || 
+        if (!xisState.focus_window ||
              xisState.focus_window == xisRootWindow ||
             !xisWindowExists(xisState.focus_window) ||
             !xisIsMapped(xisState.focus_window)   ) {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: Tables.h /main/4 1995/07/13 20:34:45 drk $ */
 
 #include <Mrm/MrmAppl.h>
@@ -73,7 +73,7 @@ void		compare_fonts();
  * Names to register with MrmRegisterNames
  */
 
-static MrmRegisterArg reglist[] = 
+static MrmRegisterArg reglist[] =
 {
     "integer_table_proc",		(caddr_t) integer_table_proc,
     "compound_string_table_proc",	(caddr_t) compound_string_table_proc,
@@ -103,7 +103,7 @@ Widget		toplevel = NULL,
 		    NULL, NULL, NULL, NULL, NULL, NULL
 		};
 
-String		UIL_widget_names[NUM_TESTS] = 
+String		UIL_widget_names[NUM_TESTS] =
 		{
 		    "widget5",
 		    "widget5a",
@@ -123,7 +123,7 @@ String		test_result_headers[NUM_TESTS] =
 		    "Identifier"
 		};
 
-int		X_integer_table[5] = 
+int		X_integer_table[5] =
 		{
 		    628,
 		    0,
@@ -139,7 +139,7 @@ String		X_compound_string_table[3] =
 		    "Third string"
 		};
 
-String		X_asciz_string_table[4] = 
+String		X_asciz_string_table[4] =
 		{
 		    "a_string",
 		    "ThiS_stRing2",
@@ -147,7 +147,7 @@ String		X_asciz_string_table[4] =
 		    "String_4_U"
 		};
 
-String		X_font_names[3] = 
+String		X_font_names[3] =
 		{
 		    "fixed",
 		    "6x10",

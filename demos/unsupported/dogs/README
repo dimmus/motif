@@ -42,7 +42,7 @@ It has one resource:
 	SquareNmajorDimension - determines which dimension will be used
 				for the new size of the child. Values are
 				SquareWIDTH or SquareHEIGHT.
-	
+
 It has one constraint resource:
 
 	SquareNmakeSquare -	determines whether the child is forced
@@ -60,4 +60,3 @@ resources.
 
 If you have a machine with any sound generation features at all, you may
 want to change the bark callback to something better than XBell().
-

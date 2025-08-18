@@ -32,7 +32,7 @@ CompareVisual form
 # Pop up the option menu. The set of items should be "Label Gadget", "Label",
 # "Push Button Gadget", "Push Button", "Toggle Button Gadget", "Toggle Button".
 # The labels correspond to the items' widget classes.
-# (These values were set programmatically on the widgets after the menu was 
+# (These values were set programmatically on the widgets after the menu was
 # created and realized and before any user interaction occurred.)
 
 LocatePointer option_menu ROptionButton
@@ -50,7 +50,7 @@ Continue
 # Select any of the buttons on the left which say "Change pulldown entry #n".
 # This changes the XmNlabelString of the corresponding item in the menu.
 # The XmNlabelString for the pulldown is set to one of set of strings that
-# indicates how many times you have done this ("1st in series", "second in 
+# indicates how many times you have done this ("1st in series", "second in
 # series" -- items of different length), modulo the number of strings.
 
 LocatePointer entry0
@@ -65,8 +65,8 @@ ReleaseMB Btn1
 
 Continue
 
-# Do the following for each of the selectable items in the 
-# menu (the "Push Button Gadget", 
+# Do the following for each of the selectable items in the
+# menu (the "Push Button Gadget",
 # "Push Button", "Toggle Button Gadget", "Toggle Button") in order
 # to make sure that changing the menu item which is currently displayed
 # as the option's choice # results in the XmOptionButtonGadget changing:
@@ -112,11 +112,11 @@ Continue
 # Now confirm that changing the value of menu-item changes the displayed
 # value in the XmOptionButtonGadget even when the menu it insensitive.
 
-# Change the sensitivity of the option menu to false by pressing the 
-# toggle button so labeled. 
+# Change the sensitivity of the option menu to false by pressing the
+# toggle button so labeled.
 
 # Choose the button "Change pulldown entry #n" corresponding to the
-# menu item currently being displayed. 
+# menu item currently being displayed.
 
 # Confirm that the display of the XmOptionButtonGadget immediately reflects
 # a new value.
@@ -159,7 +159,7 @@ Continue
 # behave similarly.
 # The initial value of XmNlabelPixmap for each entry is the target bitmap.
 # As you change the pulldown entries, the XmNlabelPixmap resource is set to
-# one of a set of pixmaps, in sequence: 
+# one of a set of pixmaps, in sequence:
 # star opendot black boxes icon xlogo16 xlogo32 wide_weave
 
 # Set the XmNlabelType of the menu-items to XmPIXMAP by pressing the toggle

@@ -19,8 +19,8 @@
 .\" License along with these librararies and programs; if not, write
 .\" to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 .\" Floor, Boston, MA 02110-1301 USA
-...\" 
-...\" 
+...\"
+...\"
 ...\" HISTORY
 .TH i18ninput 1X MOTIF "Demonstration programs"
 .SH NAME
@@ -33,15 +33,15 @@
 \*Li18ninput\*O
 is a demo fully enabled to interact with input methods. It shows the effect
 of different colors and fonts in widgets that interact with input methods.
-The "Input Method" help item provides some information on the active input 
+The "Input Method" help item provides some information on the active input
 method.
 
-This demo is also fully internationalized. It has only been localized to 
-english. All localization information is contained in the application 
+This demo is also fully internationalized. It has only been localized to
+english. All localization information is contained in the application
 resource file.
 
 .SH X Defaults
-The class of this application is \fIXmdI18nInput\fR. See the application 
+The class of this application is \fIXmdI18nInput\fR. See the application
 resource file for interesting resources to change.
 
 To set a specific resource in your \fI.Xdefaults\fR file,  you specify the

@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsLoadRscs.c /main/7 1995/07/14 11:21:50 drk $"
@@ -47,12 +47,12 @@ static char rcsid[] = "$XConsortium: mvsLoadRscs.c /main/7 1995/07/14 11:21:50 d
 #include <AutoMessages.h>
 #include "mvslib.h"
 
-void commonLoadResources(widget_info, resources, num_resources, resource_info) 
-MvsWidgetInfoRecord  *widget_info; 
+void commonLoadResources(widget_info, resources, num_resources, resource_info)
+MvsWidgetInfoRecord  *widget_info;
 MvsArgVal resources[];
 int num_resources;
 MvsResourceInfoRecord *resource_info;
-{ 
+{
     Arg args[MAX_RESOURCES];
     Widget widget;
     int i,j;
@@ -71,7 +71,7 @@ MvsResourceInfoRecord *resource_info;
 
     	XtGetValues(widget,args,j);
 
-    	for (i=0; i<num_resources; i++) 
+    	for (i=0; i<num_resources; i++)
         	resources[i] =
 		      mvsConvertToType(resources[i],resource_info[i].type_code);
 
@@ -81,11 +81,11 @@ MvsResourceInfoRecord *resource_info;
 
             	case RefXmStringTable: /* Here until handling of compound string
                                       tables is determined */
-	    	case RefValue: 	 
+	    	case RefValue:
             	case RefGeneric:
-            	case RefBoolean: 
-	    	case RefString: 
-               		 /* Do nothing since it already copied the value */ 
+            	case RefBoolean:
+	    	case RefString:
+               		 /* Do nothing since it already copied the value */
                 break;
 
 	    	case RefXmString:
@@ -105,13 +105,13 @@ MvsResourceInfoRecord *resource_info;
                 	resources[i] = 0; /* can't get this resource this way */
                 	break;
 
-	    	default: 
-		        sprintf (msg_string, _AutoMessages[WARNMSG117], 
-			    mvsTypeInfo[resource_info[i].type_code].ref_type); 
+	    	default:
+		        sprintf (msg_string, _AutoMessages[WARNMSG117],
+			    mvsTypeInfo[resource_info[i].type_code].ref_type);
                 	AutoMessage(msg_string);
-                             
-                	break; 	
-        	} 
+
+                	break;
+        	}
     	}  /* End for(i<num_resources) */
     }
 
@@ -130,10 +130,10 @@ MvsResourceInfoRecord *resource_info;
  	    Make mvsLoadResources() do the right thing
 ***********************************************************************/
 
-void mvsLoadResources(widget_info, resources) 
-MvsWidgetInfoRecord  *widget_info; 
+void mvsLoadResources(widget_info, resources)
+MvsWidgetInfoRecord  *widget_info;
 MvsArgVal resources[];
-{ 
+{
     int num_resources;
     MvsResourceInfoRecord *resource_info;
 
@@ -157,9 +157,9 @@ MvsArgVal resources[];
 ***********************************************************************/
 
 MvsArgVal mvsLoadResource(widget_info, res_name)
-MvsWidgetInfoRecord  	*widget_info; 
+MvsWidgetInfoRecord  	*widget_info;
 char			res_name[];
-{ 
+{
     int 	res_index;
     MvsArgVal	resource;
     MvsResourceInfoRecord *resource_info;
@@ -178,6 +178,6 @@ char			res_name[];
 
     return (resource); 	/* WARNING: since commonLoadResources() does */
 			/* not return error code on failure this will */
-			/* return unspecified value!? */ 
+			/* return unspecified value!? */
 
 } /* End mvsLoadResource() */

@@ -122,7 +122,7 @@ to run the PINames test, run the script as follow:
 
 
 BUGS SHOWN BY THESE TESTS
- 
+
 PIHints
 PIRS No.:      4215
 mwm teStatus:		don't test for change in transient characteristic, w
@@ -148,7 +148,7 @@ PIRS No.:      3720
 <CR> character in an icon label, results in the label getting
 wiped out completely.
 Version found in:	1.1.4
-Version fixed in:	
+Version fixed in:
 Assigned to:	MICHAEL YEE
 Priority:	3
 Status:		A

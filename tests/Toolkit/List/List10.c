@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: List10.c /main/8 1995/07/13 18:14:46 drk $"
@@ -107,15 +107,15 @@ void  main (argc, argv)
 
     /* Add Action ListCallbacks */
 
-    XtAddCallback(List1, XmNsingleSelectionCallback, 
+    XtAddCallback(List1, XmNsingleSelectionCallback,
 		  (XtCallbackProc) BrSiDeSelCB, NULL);
-    XtAddCallback(List1, XmNmultipleSelectionCallback, 
+    XtAddCallback(List1, XmNmultipleSelectionCallback,
 		  (XtCallbackProc) MulSelCB, NULL);
-    XtAddCallback(List1, XmNextendedSelectionCallback, 
+    XtAddCallback(List1, XmNextendedSelectionCallback,
 		  (XtCallbackProc) ExtSelCB, NULL);
-    XtAddCallback(List1, XmNbrowseSelectionCallback, 
+    XtAddCallback(List1, XmNbrowseSelectionCallback,
 		  (XtCallbackProc) BrSiDeSelCB, NULL);
-    XtAddCallback(List1, XmNdefaultActionCallback, 
+    XtAddCallback(List1, XmNdefaultActionCallback,
 		  (XtCallbackProc) BrSiDeSelCB, NULL);
 
     /* Create Panel of Selected Items */
@@ -212,13 +212,13 @@ static void CreateOptions()
     XtSetArg(args[n], XmNset, True);				n++;
     XtSetValues(Browse, args, n);
 
-    XtAddCallback(Single, XmNvalueChangedCallback, 
+    XtAddCallback(Single, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmSINGLE_SELECT);
-    XtAddCallback(Multiple, XmNvalueChangedCallback, 
+    XtAddCallback(Multiple, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmMULTIPLE_SELECT);
-    XtAddCallback(Browse, XmNvalueChangedCallback, 
+    XtAddCallback(Browse, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmBROWSE_SELECT);
-    XtAddCallback(Extended, XmNvalueChangedCallback, 
+    XtAddCallback(Extended, XmNvalueChangedCallback,
 		  (XtCallbackProc) CHSPolicyCB, (XtPointer) XmEXTENDED_SELECT);
 
     tcs = XmStringCreateSimple("Dont Add Item Unselected");
@@ -232,12 +232,12 @@ static void CreateOptions()
     XtManageChild(Toggle_Selected);
     XmStringFree(tcs);
 
-    XtAddCallback(Toggle_Selected, XmNvalueChangedCallback, 
+    XtAddCallback(Toggle_Selected, XmNvalueChangedCallback,
 		  (XtCallbackProc) ToggleCB, NULL);
 
     tcs = XmStringCreateSimple("Add String to Selected List:");
 
-    n = 0; 
+    n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("forestgreen"));	n++;
     XtSetArg(args[n], XmNfontList, CommonGetFontList("8x13"));		n++;
@@ -251,12 +251,12 @@ static void CreateOptions()
     TextF_AddSL = XmCreateTextField(RowCol1, "TextF_AddSL", args, n);
     XtManageChild(TextF_AddSL);
 
-    XtAddCallback(TextF_AddSL, XmNactivateCallback, 
+    XtAddCallback(TextF_AddSL, XmNactivateCallback,
 		  (XtCallbackProc) AddSLCB, NULL);
 
     tcs = XmStringCreateSimple("Add String to Items List:");
 
-    n = 0; 
+    n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("forestgreen"));	n++;
     XtSetArg(args[n], XmNfontList, CommonGetFontList("8x13"));		n++;
@@ -270,10 +270,10 @@ static void CreateOptions()
     TextF_AddIL = XmCreateTextField(RowCol1, "TextF_AddIL", args, n);
     XtManageChild(TextF_AddIL);
 
-    XtAddCallback(TextF_AddIL, XmNactivateCallback, 
+    XtAddCallback(TextF_AddIL, XmNactivateCallback,
 		  (XtCallbackProc) AddILCB, NULL);
 
-    tcs = XmStringCreateLtoR("Call XmListUpdateSelectedList", 
+    tcs = XmStringCreateLtoR("Call XmListUpdateSelectedList",
 			     XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -284,7 +284,7 @@ static void CreateOptions()
     XtManageChild(PushB_Update);
     XmStringFree(tcs);
 
-    XtAddCallback(PushB_Update, XmNactivateCallback, 
+    XtAddCallback(PushB_Update, XmNactivateCallback,
 		  (XtCallbackProc) UpdateCB, NULL);
 
     tcs = XmStringCreateLtoR("Get SelectedItems", XmSTRING_DEFAULT_CHARSET);
@@ -293,12 +293,12 @@ static void CreateOptions()
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("ForestGreen"));	n++;
     XtSetArg(args[n], XmNfontList, CommonGetFontList("8x13"));		n++;
-    PushB_GetSelected = XmCreatePushButton(RowCol1, "PushB_GetSelected", 
+    PushB_GetSelected = XmCreatePushButton(RowCol1, "PushB_GetSelected",
 					   args, n);
     XtManageChild(PushB_GetSelected);
     XmStringFree(tcs);
 
-    XtAddCallback(PushB_GetSelected, XmNactivateCallback, 
+    XtAddCallback(PushB_GetSelected, XmNactivateCallback,
 		  (XtCallbackProc) SelectedCB, NULL);
 
     tcs = XmStringCreateLtoR("Selected Items:", XmSTRING_DEFAULT_CHARSET);
@@ -387,7 +387,7 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Item Length = <Not Set>", 
+    tcs = XmStringCreateLtoR("Item Length = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -398,7 +398,7 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Item Position = <Not Set>", 
+    tcs = XmStringCreateLtoR("Item Position = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -409,7 +409,7 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Selection Type = <Not Set>", 
+    tcs = XmStringCreateLtoR("Selection Type = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
@@ -420,13 +420,13 @@ static void CreateCallbackInfo()
 
     XmStringFree(tcs);
 
-    tcs = XmStringCreateLtoR("Selected Item Count = <Not Set>", 
+    tcs = XmStringCreateLtoR("Selected Item Count = <Not Set>",
 					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("cyan"));		n++;
-    Label_Selected_Count = XmCreateLabel(RowCol2, "Label_Selected_Count", 
+    Label_Selected_Count = XmCreateLabel(RowCol2, "Label_Selected_Count",
 						args, n);
     XtManageChild(Label_Selected_Count);
 
@@ -438,7 +438,7 @@ static void CreateCallbackInfo()
     n = 0;
     XtSetArg(args[n], XmNlabelString, tcs);				n++;
     XtSetArg(args[n], XmNbackground, CommonGetColor("cyan"));		n++;
-    Label_Selected_Items = XmCreateLabel(RowCol2, "Label_Selected_Items", 
+    Label_Selected_Items = XmCreateLabel(RowCol2, "Label_Selected_Items",
 						args, n);
     XtManageChild(Label_Selected_Items);
 
@@ -738,7 +738,7 @@ static void Update_selected_items(XmString *item_list, int item_count,
     char	tmp_string[50];
     XmString	item_list2[NITEMS];
 
-    /* Append to the end of the item string. The Items postion from 
+    /* Append to the end of the item string. The Items postion from
        the callback field selected_item_position */
 
 
@@ -800,7 +800,7 @@ static void ChangeLabel(Widget widget, char string[50])
 static void UpdateCB(Widget w, caddr_t client_data, caddr_t call_data)
 
 {
-    XmListUpdateSelectedList(List1); 
+    XmListUpdateSelectedList(List1);
 }
 
 
@@ -812,7 +812,7 @@ static void SelectedCB(Widget w, caddr_t client_data, caddr_t call_data)
     XmString	*strings, tcs;
     char  	tmp_str[20];
     int		selected_count;
-	
+
     XmListDeleteAllItems(Selected_ListSV);
 
     n = 0;
@@ -853,7 +853,7 @@ static void AddSLCB(Widget w, caddr_t client_data, caddr_t call_data)
     XtSetArg(args[n], XmNselectedItemCount, &selected_item_count);	n++;
     XtGetValues(List1, args, n);
 
-    new_selected_items = (XmString *) 
+    new_selected_items = (XmString *)
 		XtMalloc(sizeof(XmString) * selected_item_count + 1);
 
     for (i = 0 ; i < selected_item_count; i++)
@@ -877,7 +877,7 @@ static void AddILCB(Widget w, caddr_t client_data, caddr_t call_data)
     string = XmTextFieldGetString(w);
     item = XmStringCreateSimple(string);
 
-    if (Add_Unselected)	
+    if (Add_Unselected)
     	XmListAddItemUnselected(List1, item , 1);
     else
     	XmListAddItem(List1, item , 1);
@@ -895,7 +895,7 @@ static void ToggleCB(Widget w, caddr_t client_data, caddr_t call_data)
 
     Add_Unselected = ((XmToggleButtonCallbackStruct*)call_data)->set;
 
-    if (Add_Unselected) 
+    if (Add_Unselected)
 	XtSetArg(args[0], XmNlabelString, tcs);
     else
 	XtSetArg(args[0], XmNlabelString, tcs2);

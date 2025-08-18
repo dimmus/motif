@@ -60,7 +60,7 @@ Representation Type = TearOffModel,   Test PASSED
 Representation Type = UnpostBehavior,   Test PASSED
 Representation Type = VerticalAlignment,   Test PASSED
 Representation Type = VisualPolicy,   Test PASSED
-TRACE:(2) LocatePointer Shell1  
+TRACE:(2) LocatePointer Shell1
      SCRWARNING** : Can't move over object! Will ignore xisMovePointerTo()
 TRACE:(3) Exit
 Exiting Test...Please Standby...

@@ -27,7 +27,7 @@
 
 /**************************************************************************
  *
- *  Create an arrow using inches and setting the width and height. 
+ *  Create an arrow using inches and setting the width and height.
  *  Reset the size, change the unit type, set the size again.
  *
  **************************************************************************/
@@ -40,7 +40,7 @@
 
 static void flushEvents();
 
-unsigned char UnitType[4] = { Xm1000TH_INCHES, 
+unsigned char UnitType[4] = { Xm1000TH_INCHES,
 			      Xm100TH_POINTS,
   			      Xm100TH_MILLIMETERS,
 			      Xm100TH_FONT_UNITS };
@@ -60,7 +60,7 @@ char **argv;
 
    /*  initialize toolkit  */
   CommonTestInit(argc, argv);
-    
+
 
   n = 0;
   XtSetArg(args[n], XmNwidth, 100);		n++;
@@ -111,7 +111,7 @@ int UnitType;
 {
 
   switch (UnitType) {
-  case 0:	
+  case 0:
     printf ("unitType = %s\n", "XmPIXELS");
     break;
   case 1:
@@ -123,7 +123,7 @@ int UnitType;
   case 3:
     printf ("unitType = %s\n", "Xm100TH_POINTS");
     break;
-  case 4: 
+  case 4:
     printf ("unitType = %s\n", "Xm100TH_FONT_UNITS");
     break;
   default:

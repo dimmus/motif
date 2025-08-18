@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: wmloutmm.c /main/9 1995/08/29 11:10:59 drk $"
@@ -238,7 +238,7 @@ while ( rsnref!=NULL )
 	wmlInsertInHList (mm_rsn_ptr,
 			  rsnref->act_resource->syndef->name,
 			  (ObjectPtr)rsnref);
-	
+
 	rsnref = rsnref->next;
 	}
     }
@@ -270,7 +270,7 @@ while ( rsnndx<mm_rsn_ptr->cnt || ctlndx<mm_ctl_ptr->cnt )
 	}
     else
 	fprintf (outfil, "@");
-    
+
     if ( rsnndx < mm_rsn_ptr->cnt )
 	{
 	rsnref = (WmlClassResDefPtr) mm_rsn_ptr->hvec[rsnndx].objptr;
@@ -314,12 +314,9 @@ while ( argndx < mm_arg_ptr->cnt )
 	}
 	else
 	    fprintf (outfil, "  \n");
-    }    
+    }
     argndx += 1;
     }
 fprintf (outfil, "%s", canned4);
 
 }
-
-
-

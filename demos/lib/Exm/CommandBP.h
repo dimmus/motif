@@ -27,7 +27,7 @@
 
 /*******************************************************************************
  *
- * CommandBP.h: The widget private header file for the ExmCommandButton 
+ * CommandBP.h: The widget private header file for the ExmCommandButton
  *              demonstration widget.
  *
  ******************************************************************************/
@@ -48,7 +48,7 @@ extern "C" {
 /* Don't define any inheritable methods. */
 
 
-/* Define the widget class part. */ 
+/* Define the widget class part. */
 typedef struct _ExmCommandButtonClassPart
 {
         XtPointer		extension;
@@ -79,11 +79,11 @@ typedef struct _ExmCommandButtonPart
 	Boolean			armed;
 
  /* visual_armed is a flag.  If its value is True, then the widget is to
-    visually represent its armed state by drawing a certain kind of shadow. */ 
+    visually represent its armed state by drawing a certain kind of shadow. */
 	Boolean			visual_armed;
 
  /* visual_timer holds an integral value representing the time (in milliseconds)
-    between when armed is set to True and visual_armed is set to True. */ 
+    between when armed is set to True and visual_armed is set to True. */
 	XtIntervalId		visual_timer;
 } ExmCommandButtonPart;
 

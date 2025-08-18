@@ -1,5 +1,5 @@
 # $XConsortium: ArrowBtn2.scr /main/6 1995/07/17 20:06:08 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,12 +20,12 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
-# A client with an Arrow Button pointing upwards should appear. 
+# A client with an Arrow Button pointing upwards should appear.
 
 CompareVisual ArrowButton2
 Continue
@@ -41,7 +41,7 @@ Continue
 CompareVisual ArrowButton2
 Continue
 
-# The shadow thickness should have increased. The Top Shadow should be 
+# The shadow thickness should have increased. The Top Shadow should be
 #  pink and the Arrow should point to the right.
 
 CompareVisual ArrowButton2
@@ -64,5 +64,3 @@ LocatePointer ArrowButton2
 ClickMB Btn1
 CompareVisual parent1
 Exit
-
-

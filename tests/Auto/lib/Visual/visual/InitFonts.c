@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: InitFonts.c /main/7 1995/07/14 11:50:52 drk $"
@@ -44,7 +44,7 @@ static char rcsid[] = "$XConsortium: InitFonts.c /main/7 1995/07/14 11:50:52 drk
 #include <AutoMessages.h>
 #include "mvslib.h"
 
-/* 
+/*
  * Reduced the size of the font_info array to just 1 for the final fallback
  * font for automation.
  */
@@ -63,13 +63,13 @@ void mvsInitFonts()
     if (mvsFontInfo[0].font_struct == NULL) {
         sprintf (msg_string, _AutoMessages[VISMSG41], mvsFontInfo[0].font_name);
         AutoMessage(msg_string);
-                    
+
         AutoError (_AutoMessages[VISMSG13]);
 
 	}
 	else {
 
-    	mvsNumLoadedFonts = 1; 
+    	mvsNumLoadedFonts = 1;
     	font_list = XmFontListCreate(mvsFontInfo[0].font_struct,
                                  	 mvsFontInfo[0].char_set_name);
     	mvsFontList = font_list;

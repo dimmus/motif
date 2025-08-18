@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: postSW1.c /main/7 1995/07/14 12:03:11 drk $"
@@ -50,7 +50,7 @@ XtPointer cld;
 	XtManageChild(dialog);
 }
 
-main(argc, argv) 
+main(argc, argv)
 int argc;
 char *argv[];
 {
@@ -59,8 +59,8 @@ char *argv[];
 	int n;
 
     CommonTestInit(argc, argv);
-    
-	
+
+
 	n = 0;
 	pb = XmCreatePushButton(Shell1, "pb", args, n);
 	XtManageChild(pb);
@@ -95,4 +95,3 @@ char *argv[];
 
 	XtAppMainLoop(app_context);
 }
-

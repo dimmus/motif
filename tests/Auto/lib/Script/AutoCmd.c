@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: AutoCmd.c /main/14 1999/04/23 18:21:47 jff $"
@@ -75,8 +75,8 @@ Boolean AutoTimeOut;
 static Pixel GetColor(
 			char *colorstr);
 static void UnPostDialogCB(
-			Widget widget, 
-			XtPointer call_data, 
+			Widget widget,
+			XtPointer call_data,
 			XtPointer client_data);
 static void CalcSliderRect(
                         XmScrollBarWidget sbw,
@@ -111,7 +111,7 @@ AutoMoveMaxOrMinText(
     xisProcessObjects();
     xisUpdateObjectAttributes();
 
-    
+
 
     widget_class_code  = mvsGetClassCode(widget);
     if (widget_class_code != mvsXmTextWidgetClass &&
@@ -136,9 +136,9 @@ AutoMoveMaxOrMinText(
     XtGetValues(widget, args, n);
 
     if (location == AUTOMAX) {
-    	move_x = (x + width) 
+    	move_x = (x + width)
 			- (shadow + border + highlight + margin_width) - 1;
-    	move_y = (y + height) 
+    	move_y = (y + height)
 			- (shadow + border + highlight + margin_height) - 1;
     }
     else {
@@ -168,9 +168,9 @@ AutoGetMaxListPosition(
     switch (widget_class_code) {
 	case mvsXmTextWidgetClass:	break;
 	case mvsXmListWidgetClass:	n = 0;
-					XtSetArg(args[n], XmNvisibleItemCount, 
+					XtSetArg(args[n], XmNvisibleItemCount,
 						 &visible_count);	n++;
-					XtSetArg(args[n], XmNitemCount, 
+					XtSetArg(args[n], XmNitemCount,
 						 &item_count);	n++;
 					XtGetValues(widget, args, n);
 					if (item_count < visible_count)
@@ -183,7 +183,7 @@ AutoGetMaxListPosition(
 }
 
 
-/* 
+/*
    Need to do system process manually and not call system() directly
    because some systems still use old fork() process of coping entire
    image. vfork() will use pointers to process.
@@ -204,7 +204,7 @@ AutoSystem(
 #endif
 	if (chl_pid == -1)
 		AutoError(_AutoMessages[WARNMSG1]);
-	else 
+	else
 	{
 		if (!(chl_pid))
 		{ /* 0 return is child process image */
@@ -213,7 +213,7 @@ AutoSystem(
 #endif
 			if (execvp(command_name, command_args) == -1) {
 				sprintf(msg_string, _AutoMessages[WARNMSG122], errno);
-				  
+
 				AutoMessage(msg_string);
 				exit(1);
 			}
@@ -230,7 +230,7 @@ AutoSystem(
 		}
 	}
 }
-    
+
 
 void
 AutoExit( void )
@@ -278,9 +278,9 @@ PopdownSyncCallBack(
   SyncWidgetPoppedup = False;
 }
 
-static XtCallbackRec PopdownCR[] = 
-{ 
-  {PopdownSyncCallBack, NULL}, 
+static XtCallbackRec PopdownCR[] =
+{
+  {PopdownSyncCallBack, NULL},
   {NULL, NULL}
 };
 
@@ -800,7 +800,7 @@ AutoInputString(
     }
 
 }
-		
+
 
 void
 AutoContinueOrEnd(
@@ -880,7 +880,7 @@ AutoDragRelative(
 			AutoMessage(_AutoMessages[SCRMSG2]);
 			break;
     }
-		
+
     if (!invalid) {
 	xisPressMouseButton(mask, XButton);
 	xisMovePointerRelative(x, y);
@@ -962,7 +962,7 @@ AutoDragSliderValue(
     	widget_class_code  = mvsGetClassCode((Widget) sb_widget);
     	if (widget_class_code != mvsXmScrollBarWidgetClass)
 		AutoError(_AutoMessages[SCRMSG20]);
-		     
+
 
     	CalcScrollBarData((XmScaleWidget)widget, value, &value1, &slider_size);
     	CalcScrollBarData((XmScaleWidget)widget, XCoord, &value2, &slider_size);
@@ -971,9 +971,9 @@ AutoDragSliderValue(
     	CalcSliderRect(sb_widget, &s_x2, &s_y2, &s_width2, &s_height2, value2);
     }
     else {
-	CalcSliderRect((XmScrollBarWidget)widget, &s_x1, &s_y1, 
+	CalcSliderRect((XmScrollBarWidget)widget, &s_x1, &s_y1,
 			&s_width1, &s_height1, value);
-    	CalcSliderRect((XmScrollBarWidget)widget, &s_x2, &s_y2, 
+    	CalcSliderRect((XmScrollBarWidget)widget, &s_x2, &s_y2,
 			&s_width2, &s_height2, XCoord);
     }
 
@@ -1163,7 +1163,7 @@ AutoDelayCycle(
 
     AutoWait(delay_num);
 
-} 
+}
 
 
 void
@@ -1290,7 +1290,7 @@ CalcSliderRect(
    if (arrowWidth == 0)
       arrowWidth -= 1;
 
-   arrowWidth += sbw->primitive.highlight_thickness + 
+   arrowWidth += sbw->primitive.highlight_thickness +
                  sbw->primitive.shadow_thickness + 1;
 
 
@@ -1323,9 +1323,9 @@ CalcSliderRect(
    {
       *slider_width = minSliderWidth;
       if (sbw->scrollBar.orientation == XmHORIZONTAL &&
-          *slider_x + *slider_width > 
+          *slider_x + *slider_width >
           sbw->scrollBar.slider_area_x + sbw->scrollBar.slider_area_width)
-         *slider_x = sbw->scrollBar.slider_area_x + 
+         *slider_x = sbw->scrollBar.slider_area_x +
                      sbw->scrollBar.slider_area_width - *slider_width;
    }
 
@@ -1333,9 +1333,9 @@ CalcSliderRect(
    {
       *slider_height = minSliderHeight;
       if (sbw->scrollBar.orientation == XmVERTICAL &&
-          *slider_y + *slider_height > 
+          *slider_y + *slider_height >
           sbw->scrollBar.slider_area_y + sbw->scrollBar.slider_area_height)
-         *slider_y = sbw->scrollBar.slider_area_y + 
+         *slider_y = sbw->scrollBar.slider_area_y +
                      sbw->scrollBar.slider_area_height - *slider_height;
    }
 }
@@ -1391,9 +1391,9 @@ CalcScrollBarData(
 	}
 
 
-	sb_value = (float) (valuein - sw->scale.minimum) / 
+	sb_value = (float) (valuein - sw->scale.minimum) /
 		(float) (sw->scale.maximum - sw->scale.minimum);
-	sb_value = sb_value * 
+	sb_value = sb_value *
 		(float) (SCROLLBAR_MAX - *slider_size - SCROLLBAR_MIN);
 
 	*value = (int) sb_value;

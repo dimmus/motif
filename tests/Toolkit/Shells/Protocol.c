@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Protocol.c /main/8 1995/07/13 19:20:41 drk $"
@@ -88,7 +88,7 @@ XtPointer	call_data;
     atoms[0] = (Atom)ENTRY_1;
 
 	shell = ShellAncestor(w);
-	
+
 	n = 0;
 	XtSetArg(args[n], XmNmwmMenu, menu); n++;
 	XtSetValues(Shell1, args, n);
@@ -98,7 +98,7 @@ XtPointer	call_data;
   		case 0:
 			XmAddProtocols(Shell1, mwm_messages, atoms, XtNumber(atoms));
 
-			XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_1, 
+			XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_1,
 								  EntrySelected, (XtPointer) ENTRY_1);
 
 			if (XtIsRealized(Shell1)) {
@@ -107,15 +107,15 @@ XtPointer	call_data;
 			}
 			status = 1;
 			break;
-	
+
 		case 1:
-			XmRemoveProtocolCallback(Shell1, mwm_messages, ENTRY_1, 
+			XmRemoveProtocolCallback(Shell1, mwm_messages, ENTRY_1,
 									 EntrySelected, (XtPointer) ENTRY_1);
 			status = 2;
 			break;
-	
+
 		case 2:
-			XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_1, 
+			XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_1,
 								  EntrySelected, (XtPointer) ENTRY_1);
 			status = 1;
 			break;
@@ -137,7 +137,7 @@ XtPointer   call_data;
 
     Widget		shell;
     Arg			arg;
-    static String	menu = 
+    static String	menu =
       "entry_1	f.send_msg  1 \n\
        entry_2	f.send_msg  2 \n\
        entry_3	f.send_msg  3";
@@ -154,16 +154,16 @@ XtPointer   call_data;
     	case 0:
     		XmAddProtocols(Shell1, mwm_messages, atoms, XtNumber(atoms));
 
-    		XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_1, 
+    		XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_1,
 								  EntrySelected, (XtPointer) ENTRY_1);
-    		XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_2, 
+    		XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_2,
 								  EntrySelected, (XtPointer) ENTRY_2);
-    		XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_3, 
+    		XmAddProtocolCallback(Shell1, mwm_messages, ENTRY_3,
 								  EntrySelected, (XtPointer) ENTRY_3);
-        
+
     		status = 1;
 			break;
-	
+
     	case 1:
 			XmDeactivateWMProtocol(Shell1, mwm_messages);
 
@@ -201,7 +201,7 @@ XtPointer     call_data;
 	int		n;
 
     shell = ShellAncestor(w);
-	 
+
 	n = 0;
     XtSetArg(args[n], XmNmwmMenu, ""); n++;
     XtSetValues(Shell1, args, n);
@@ -224,7 +224,7 @@ char **argv;
 
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNallowShellResize, True); n++;
 	XtSetValues(Shell1, args, n);
@@ -244,7 +244,7 @@ char **argv;
     RowCol = XmCreateRowColumn(Shell1, "RowCol", args, n);
     XtManageChild(RowCol);
 
-    n = 0;    
+    n = 0;
 #ifdef MOTIF1_1
     text = XmStringCreateLtoR("ShortMenu", XmSTRING_DEFAULT_CHARSET);
 #else
@@ -257,7 +257,7 @@ char **argv;
     XtManageChild(ShortMenu);
 	XtAddCallback (ShortMenu, XmNactivateCallback, addShortMenu, NULL);
 
-    n = 0;    
+    n = 0;
 #ifdef MOTIF1_1
     text = XmStringCreateLtoR("LongMenu", XmSTRING_DEFAULT_CHARSET);
 #else
@@ -269,8 +269,8 @@ char **argv;
     LongMenu = XmCreatePushButton(RowCol, "LongMenu", args, n);
     XtManageChild(LongMenu);
 	XtAddCallback (LongMenu, XmNactivateCallback, addLongMenu, NULL);
-    
-    n = 0;    
+
+    n = 0;
 #ifdef MOTIF1_1
     text = XmStringCreateLtoR("NoMenu", XmSTRING_DEFAULT_CHARSET);
 #else

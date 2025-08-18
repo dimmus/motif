@@ -23,16 +23,16 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is cascBtn.uid ---- 
+---- The uid file to be opened is cascBtn.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer CascadeButton1  
-TRACE:(3) PressMB Btn1 
-TRACE:(4) CompareVisual S_MAIN_WIDGET 
-TRACE:(5) LocatePointer Push_button1  
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
-TRACE:(7) ReleaseMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer CascadeButton1
+TRACE:(3) PressMB Btn1
+TRACE:(4) CompareVisual S_MAIN_WIDGET
+TRACE:(5) LocatePointer Push_button1
+TRACE:(6) CompareVisual S_MAIN_WIDGET
+TRACE:(7) ReleaseMB Btn1
 
 /*********************************************************/
 ---- Save button activateCallback callback made ----
@@ -40,11 +40,11 @@ TRACE:(7) ReleaseMB Btn1
 ---- Reason was XmCR_ACTIVATE ----
 /*********************************************************/
 
-TRACE:(8) LocatePointer CascadeButton1  
-TRACE:(9) PressMB Btn1 
-TRACE:(10) LocatePointer Push_button1  
-TRACE:(11) CompareVisual S_MAIN_WIDGET 
-TRACE:(12) ReleaseMB Btn1 
+TRACE:(8) LocatePointer CascadeButton1
+TRACE:(9) PressMB Btn1
+TRACE:(10) LocatePointer Push_button1
+TRACE:(11) CompareVisual S_MAIN_WIDGET
+TRACE:(12) ReleaseMB Btn1
 
 /*********************************************************/
 ---- Save button activateCallback callback made ----

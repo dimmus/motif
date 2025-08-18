@@ -74,7 +74,7 @@ XEvent event;
   drawarea = XmCreateDrawingArea(Shell1, "drawarea", args, n);
   XtManageChild(drawarea);
 
-  n = 0; 
+  n = 0;
   XtSetArg(args[n], XmNx, 175); n++;
   XtSetArg(args[n], XmNy, 100); n++;
   XtSetArg(args[n], XmNwidth, 50); n++;
@@ -95,7 +95,7 @@ XEvent event;
   XmStringFree(str);
 
   CommonPause();
- 
+
   n = 0;
   XtSetArg(args[n], XmNpopupEnabled, XmPOPUP_AUTOMATIC); n++;
   XtSetValues(popup1, args, n);
@@ -159,7 +159,7 @@ n = 0;
 drawarea = XmCreateDrawingArea(Shell1, "drawarea", args, n);
 XtManageChild(drawarea);
 
-n = 0; 
+n = 0;
 XtSetArg(args[n], XmNx, 175); n++;
 XtSetArg(args[n], XmNy, 100); n++;
 XtSetArg(args[n], XmNwidth, 50); n++;

@@ -82,4 +82,3 @@ extern Widget ExmCreateString(Widget    parent,
 /* Ensure that the file be included only once. */
 #endif /* _ExmString_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */
-

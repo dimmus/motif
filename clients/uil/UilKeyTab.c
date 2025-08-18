@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UilKeyTab.c /main/11 1995/07/14 09:34:29 drk $"
@@ -136,23 +136,23 @@ unsigned int	symbol_length;
 char		* symbol_ptr;
 
 {
-    
+
     int
 	lower_limit,
 	upper_limit;
-    
+
 /*    Check the arguments.    */
 
     if (symbol_length > key_k_keyword_max_length)
 	return NULL;
 
 /*    Initialize region to search.    */
-    
+
     lower_limit = 0;
     upper_limit = key_k_keyword_count-1;
-    
+
 /*    Perform binary search on keyword index.    */
-    
+
     do {
 	int		mid_point, result;
 
@@ -226,5 +226,4 @@ void
 	key_keytable_ptr = key_table_case_ins;
     }
 
-}    
-
+}

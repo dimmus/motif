@@ -3,11 +3,11 @@ Begin Test
 Creating ComboBox1 of type COMBO_BOX
 CommonPause 1
 XmNcolumns = 20
-TRACE:(1) CompareVisual ComboBox1 
+TRACE:(1) CompareVisual ComboBox1
 TRACE:(2) Continue
 CommonPause 2
 XmNcolumns = 10
-TRACE:(3) CompareVisual ComboBox1 
+TRACE:(3) CompareVisual ComboBox1
 TRACE:(4) Continue
 CommonPause 3
 XmNcolumns = 30

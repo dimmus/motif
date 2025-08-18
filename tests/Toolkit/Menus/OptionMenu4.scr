@@ -1,5 +1,5 @@
 # $XConsortium: OptionMenu4.scr /main/5 1995/07/17 20:27:09 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,10 +20,10 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 
 # A client window containing a Form widget with nine OptionMenu
@@ -31,7 +31,7 @@
 #  from the top left corner of the display.  Click on the buttons
 #  labeled 'Himalayan', 'Siamese', and 'Exotic Shorthair' and
 #  you'll see the same (shared) menu pane.
-#     Note: there should be no warning messages in the xterm window. 
+#     Note: there should be no warning messages in the xterm window.
 
 WindowRaise Shell1
 
@@ -57,8 +57,8 @@ ReleaseMB Btn1
 #  the buttons in the following order:
 #     Himalayan, Siamese, Domestic Shorthair
 #     Maine Coon Cat, Burmese
-#     Exotic Shorthair, Turkish Van, Persian, 
-#     Russian Blue. 
+#     Exotic Shorthair, Turkish Van, Persian,
+#     Russian Blue.
 
 LocatePointer OptionMenu0 ROptionButton
 PressMB Btn1
@@ -86,26 +86,26 @@ Continue
 # The client window will now contain 3 OptionMenu children.
 #  The three OptionMenu children share the same PulldownMenu.  OptionMenu1
 #  sets XmNmenuHistory to Button1, OptionMenu2 sets XmNmenuHistory to
-#  Button2, and OptionMenu3 sets XmNmenuHistory to Button3. 
-#  Verify the defaults are set correctly. 
+#  Button2, and OptionMenu3 sets XmNmenuHistory to Button3.
+#  Verify the defaults are set correctly.
 
 CompareVisual RC2
 Continue
 
 # The client window will now contain one OptionMenu child.  The
-#  selection area should be initialized to A Long Item. 
+#  selection area should be initialized to A Long Item.
 
 # Verify that the OptionMenu indicator (a little rectangular button) appears
-#  to the right of the A Long Item label. 
+#  to the right of the A Long Item label.
 
 CompareVisual RC3
 Continue
 
 # The client window will now be empty.  A menu shell will
-#  appear that contains one OptionMenu child. 
+#  appear that contains one OptionMenu child.
 
 # The Button Label should read: Button Label:
-#  The contents of the OptionMenu should read: new long Text.  
+#  The contents of the OptionMenu should read: new long Text.
 
 CompareVisual mb1
 

@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
+#
 # HISTORY
 #
 
-if ($#argv < 1) then  
+if ($#argv < 1) then
 Help:
 	echo "usage: "$0" -DMOTIF1_1 ... -DMotif1_n <TestName>.dat ||"
 	echo "usage: "$0" -DMOTIF1_1 ... -DMotif1_n <TestName>.scr"
@@ -60,7 +60,7 @@ if (-e $root$output_extension) then
 	rm $root$output_extension
 endif
 
-# create sed file to delete ifdef's and endif's corresponding to 
+# create sed file to delete ifdef's and endif's corresponding to
 # the defines passed in from DEFINES.
 
 foreach define ($argv[*])

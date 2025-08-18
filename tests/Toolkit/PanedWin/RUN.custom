@@ -32,5 +32,3 @@ set TOP = ../../..
 
 
 foreach test (PanedWin1 PanedWin4 PanedWin5 PanedWin6 PanedWin7 PanedWin8 PanedWin9 PanedWin10 PanedWin11 PanedWin12 PanedWin13 PanedWin14 HorPanedWin1)
-
-

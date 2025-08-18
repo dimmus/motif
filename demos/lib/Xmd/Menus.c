@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -44,9 +44,9 @@ typedef struct _menu_info {
   Boolean is_separator;
 } menu_info;
 
-static Widget CreateMenuButton(Widget, char*, char, char*, char*, 
+static Widget CreateMenuButton(Widget, char*, char, char*, char*,
 			       WidgetClass wc);
-static Widget CreatePulldown(char* name, char mnemonic, Widget, 
+static Widget CreatePulldown(char* name, char mnemonic, Widget,
 			     menu_info*, WidgetList, Cardinal);
 
 menu_info file_pulldown[] = {
@@ -111,7 +111,7 @@ menu_info edit_pulldown[] = {
   {"Delete",	'D',	"<Key>osfDelete", "Delete",	True,	False},
   {"Select All",'S',	"Ctrl<Key>a",	"Ctrl+a",	False,	False},
   {"separator4", 0,	NULL,  		NULL,		False,	True},
-  {"Unselect All",     
+  {"Unselect All",
      		0,	"Ctrl<Key>\\",	"Ctrl+\\",	False,	False},
   {"Select Pasted",
      		0,	NULL,		NULL,		False,	False},
@@ -149,7 +149,7 @@ menu_info help_pulldown[] = {
 };
 
 Widget
-XmdCreateMenu(XmdMenuType type, Widget parent, 
+XmdCreateMenu(XmdMenuType type, Widget parent,
 	      WidgetList *array, Cardinal *size)
 {
   Widget retval = NULL;
@@ -162,7 +162,7 @@ XmdCreateMenu(XmdMenuType type, Widget parent,
     case FILE_MENU:
       *array = (WidgetList) XtMalloc(sizeof(Widget) * XtNumber(file_pulldown));
       *size = XtNumber(file_pulldown);
-      retval = CreatePulldown("File", 'F', 
+      retval = CreatePulldown("File", 'F',
 			    parent, file_pulldown, *array, *size);
       break;
     case EDIT_MENU:
@@ -172,7 +172,7 @@ XmdCreateMenu(XmdMenuType type, Widget parent,
 			    parent, edit_pulldown, *array, *size);
       break;
     case SELECTED_MENU:
-      *array = (WidgetList) XtMalloc(sizeof(Widget) * 
+      *array = (WidgetList) XtMalloc(sizeof(Widget) *
 				     XtNumber(selected_pulldown));
       *size = XtNumber(selected_pulldown);
       retval = CreatePulldown("Selected", 'S',
@@ -225,7 +225,7 @@ CreateMenuButton(Widget menu, char* label, char mnemonic,
     if (acc_text != NULL) {
       tmp2 = XmStringCreateLocalized(acc_text);
       XtSetArg(args[n], XmNacceleratorText, tmp2); n++;
-    }      
+    }
   }
 
   tmp = XtCreateWidget(label, wc, menu, args, n);
@@ -238,7 +238,7 @@ CreateMenuButton(Widget menu, char* label, char mnemonic,
 
 static Widget
 CreatePulldown(char* name, char mnemonic,
-	       Widget parent, menu_info *info, 
+	       Widget parent, menu_info *info,
 	       WidgetList array, Cardinal size)
 {
   int i;
@@ -251,7 +251,7 @@ CreatePulldown(char* name, char mnemonic,
 
   i = 0;
   if (mnemonic != 0) {
-    XtSetArg(args[i], XmNmnemonic, mnemonic); 
+    XtSetArg(args[i], XmNmnemonic, mnemonic);
     i++;
   }
   XtSetArg(args[i], XmNsubMenuId, pulldown); i++;
@@ -261,18 +261,18 @@ CreatePulldown(char* name, char mnemonic,
   if (strcmp(name, "Help") == 0)
     XtVaSetValues(parent, XmNmenuHelpWidget, cascade_button, NULL, NULL);
 
-  /* Create menu items,  special exception for the first item 
+  /* Create menu items,  special exception for the first item
      in the View menu,  which is a cascadebutton*/
   for(i = 0; i < size; i++) {
     if (info[i].is_separator)
       array[i] = XmCreateSeparatorGadget(pulldown, info[i].label, NULL, 0);
     else
-      array[i] = CreateMenuButton(pulldown, info[i].label, 
+      array[i] = CreateMenuButton(pulldown, info[i].label,
 				  info[i].mnemonic,
 				  info[i].accelerator,
 				  info[i].acc_text,
-				  (info != view_pulldown && i != 0) 
-				  ? xmPushButtonGadgetClass : 
+				  (info != view_pulldown && i != 0)
+				  ? xmPushButtonGadgetClass :
 				    xmCascadeButtonGadgetClass
 				  );
 
@@ -282,4 +282,3 @@ CreatePulldown(char* name, char mnemonic,
 
   return(pulldown);
 }
-

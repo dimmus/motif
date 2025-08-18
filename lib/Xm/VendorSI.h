@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -40,7 +40,7 @@ extern "C" {
 
 /********    Private Function Declarations    ********/
 
-extern void _XmAddGrab( 
+extern void _XmAddGrab(
                         Widget wid,
 #if NeedWidePrototypes
                         int exclusive,
@@ -49,7 +49,7 @@ extern void _XmAddGrab(
                         Boolean exclusive,
                         Boolean spring_loaded) ;
 #endif /* NeedWidePrototypes */
-extern void _XmRemoveGrab( 
+extern void _XmRemoveGrab(
                         Widget wid) ;
 extern void _XmDefaultVisualResources(Widget widget) ;
 

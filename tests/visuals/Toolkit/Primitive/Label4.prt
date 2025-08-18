@@ -22,7 +22,7 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual drawarea 
+TRACE:(1) CompareVisual drawarea
 TRACE:(2) Continue
 TRACE:(3) WindowIconify Shell1
 TRACE:(4) WindowDeiconify Shell1

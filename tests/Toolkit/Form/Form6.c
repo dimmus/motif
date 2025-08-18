@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Form6.c /main/4 1995/07/13 18:11:42 drk $"
@@ -59,12 +59,12 @@ char  **argv;
     Widget	  pb;
 
     CommonTestInit(argc, argv);
-    
+
     n = 0;
     XtSetArg(args[n], XmNwidth,  400);  n++;
     XtSetArg(args[n], XmNheight, 300);  n++;
     XtSetValues(Shell1, args, n);
-    
+
     n = 0;
     XtSetArg (args[n], XmNbackground, CommonGetColor("magenta"));	n++;
     XtSetValues (Shell1, args, n);
@@ -88,10 +88,10 @@ char  **argv;
     XtAddCallback(Form1, XmNunmapCallback, formCB, NULL);
 
 #ifdef MOTIF1_1
-    /* The destroyCallback is currently handled by Xt so no widget 
+    /* The destroyCallback is currently handled by Xt so no widget
        information is placed into the call data.  For this reason, formCB
        may have a NULL pointer reference and cause an unexpected abort.
-       This has been logged as an enhancement request for a later release. 
+       This has been logged as an enhancement request for a later release.
     */
     XtAddCallback(Form1, XmNdestroyCallback, formCB, NULL);
 #endif
@@ -206,15 +206,3 @@ int  reason_code;
 
     return(reason);
 }
-
-
-
-
-
-
-
-
-
-
-
-

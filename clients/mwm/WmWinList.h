@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,15 +19,15 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * Motif Release 1.2.3
-*/ 
+*/
 
 
-extern void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD, 
+extern void AddClientToList (WmWorkspaceData *pWS, ClientData *pCD,
 			     Boolean onTop);
-extern void AddEntryToList (WmWorkspaceData *pWS, ClientListEntry *pEntry, 
+extern void AddEntryToList (WmWorkspaceData *pWS, ClientListEntry *pEntry,
 			    Boolean onTop, ClientListEntry *pStackEntry);
 extern void AddTransient (WmWorkspaceData *pWS, ClientData *pCD);
 #ifdef WSM
@@ -40,13 +40,13 @@ extern Boolean CheckIfClientObscuringAny (ClientData *pcd);
 extern Boolean CheckIfObscuring (ClientData *pcdA, ClientData *pcdB);
 extern int CountTransientChildren (ClientData *pcd);
 extern void DeleteClientFromList (WmWorkspaceData *pWS, ClientData *pCD);
-extern void DeleteEntryFromList (WmWorkspaceData *pWS, 
+extern void DeleteEntryFromList (WmWorkspaceData *pWS,
 				 ClientListEntry *pListEntry);
-extern void DeleteFullAppModalChildren (ClientData *pcdLeader, 
+extern void DeleteFullAppModalChildren (ClientData *pcdLeader,
 					ClientData *pCD);
 extern void DeleteTransient (ClientData *pCD);
-extern ClientListEntry *FindClientNameMatch (ClientListEntry *pEntry, 
-					     Boolean toNext, 
+extern ClientListEntry *FindClientNameMatch (ClientListEntry *pEntry,
+					     Boolean toNext,
 					     String clientName,
 					     unsigned long types);
 #ifdef WSM
@@ -55,18 +55,18 @@ extern ClientData *FindSubLeaderToTop (ClientData *pcd);
 extern ClientData *FindTransientFocus (ClientData *pcd);
 extern ClientData *FindTransientOnTop (ClientData *pcd);
 extern ClientData *FindTransientTreeLeader (ClientData *pcd);
-extern void FixupFullAppModalCounts (ClientData *pcdLeader, 
+extern void FixupFullAppModalCounts (ClientData *pcdLeader,
 				     ClientData *pcdDelete);
 #ifdef WSM
 extern Boolean LeaderOnTop (ClientData *pcdLeader);
 extern Window LowestWindowInTransientFamily (ClientData *pcdLeader);
-extern void MakeTransientFamilyStackingList (Window *windows, 
+extern void MakeTransientFamilyStackingList (Window *windows,
 					    ClientData *pcdLeader);
 #endif /* WSM */
 extern Window *MakeTransientWindowList (Window *windows, ClientData *pcd);
 extern void MarkModalSubtree (ClientData *pcdTree, ClientData *pcdAvoid);
 extern void MarkModalTransient (ClientData *pcdLeader, ClientData *pCD);
-extern void MoveEntryInList (WmWorkspaceData *pWS, ClientListEntry *pEntry, 
+extern void MoveEntryInList (WmWorkspaceData *pWS, ClientListEntry *pEntry,
 			     Boolean onTop, ClientListEntry *pStackEntry);
 #ifdef WSM
 extern Boolean NormalizeTransientTreeStacking (ClientData *pcdLeader);
@@ -77,10 +77,9 @@ extern void RestackTransients (ClientData *pcd);
 extern void RestackTransientsAtWindow (ClientData *pcd);
 extern void SetupSystemModalState (ClientData *pCD);
 extern void StackTransientWindow (ClientData *pcd);
-extern void StackWindow (WmWorkspaceData *pWS, ClientListEntry *pEntry, 
+extern void StackWindow (WmWorkspaceData *pWS, ClientListEntry *pEntry,
 			 Boolean onTop, ClientListEntry *pStackEntry);
-extern void UnMarkModalTransient (ClientData *pcdModee, int modalCount, 
+extern void UnMarkModalTransient (ClientData *pcdModee, int modalCount,
 				  ClientData *pcdModal);
 extern void UndoSystemModalState (void);
 extern void UpdateScreenClientList (WmScreenData *pSD);
-

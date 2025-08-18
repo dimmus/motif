@@ -36,17 +36,17 @@
 /* Allow for compilation by a C++ compiler. */
 #ifdef __cplusplus
 
-// Include appropriate header files. 
+// Include appropriate header files.
 #include <XmCxx/CxxPrimiti.h>
 #include <Xm/ContItemT.h>   	// header file for XmQTcontainerItem trait
 #include <Xm/ContainerT.h>  	// header file for XmQTcontainer trait
 #include <Xm/CareVisualT.h> 	// header file for XmQTcareParentVisual trait
 
-// Define the widget initialization class. 
+// Define the widget initialization class.
 class ExmCxxSimpleClass : public XmCxxPrimitiveClass {
   friend class ExmCxxSimple;
 public:
- // define class constructor 
+ // define class constructor
   ExmCxxSimpleClass( char*		name,
 		    WidgetClass	        parent,
 		    Cardinal		widgetSize,
@@ -59,7 +59,7 @@ public:
 
   // virtual chained class methods
   virtual void		class_part_initialize();
-    
+
   // define static class methods
   static void		ClassInitialize();
 protected:
@@ -67,7 +67,7 @@ protected:
 };
 
 
-// Define the widget instance part. 
+// Define the widget instance part.
 typedef struct _exmCxxSimplePart
 {
   	// Provide space for the three resources of ExmSimple.
@@ -82,29 +82,29 @@ typedef struct _exmCxxSimplePart
  	// insensitive_gc holds a Graphics Context for rendering the vis
 	// when the value of XmNsensitive is False.
 	GC			insensitive_gc;
-	// pref_width holds an integral value representing the widget's 
+	// pref_width holds an integral value representing the widget's
         // current preferred width.
 	Dimension		pref_width;
-	// pref_height holds an integral value representing the widget's 
+	// pref_height holds an integral value representing the widget's
         // current preferred width.
 	Dimension		pref_height;
-	// need_to_compute_width is a flag.  If its value is True, 
+	// need_to_compute_width is a flag.  If its value is True,
         // then the widget needs to renegotiate its width.
 	Boolean			need_to_compute_width;
-	// need_to_compute_height is a flag.  If its value is True, 
+	// need_to_compute_height is a flag.  If its value is True,
         // then the widget needs to renegotiate its height.
 	Boolean			need_to_compute_height;
 	// visual is an XRectangle value representing the bounding box of the
         // widget's visual.
 	XRectangle		visual;
-	// need_to_reconfigure is a flag.  If its value is True, 
+	// need_to_reconfigure is a flag.  If its value is True,
         // then the widget needs to call the reconfigure method.
 	Boolean			need_to_reconfigure;
 	// saved_foreground is used for the management of the selected state
 	Pixel			saved_foreground;
 } ExmCxxSimplePart;
 
-// Define the widget class. 
+// Define the widget class.
 class ExmCxxSimple : public XmCxxPrimitive {
   friend class ExmCxxSimpleClass;
   friend class ExmCxxSimpleActions;
@@ -125,11 +125,11 @@ public:
 					  XtWidgetGeometry*);
 
   // primitive class methods provided by this widget.
-  // none 
+  // none
 
   // primitive class extension methods provided by this widget.
   virtual Boolean widget_display_rect(XRectangle*);
-    
+
   // simple class methods
   virtual void draw_visual(void);
   virtual void draw_shadow(void);
@@ -141,16 +141,16 @@ public:
   virtual void reconfigure(WidgetClass, Widget);
 
   // define trait static class methods
-  static void 		ContItemSetValues(Widget w, 
+  static void 		ContItemSetValues(Widget w,
 					  XmContainerItemData contItemData);
-  static void		ContItemGetValues(Widget w, 
+  static void		ContItemGetValues(Widget w,
 					  XmContainerItemData contItemData);
-  static Boolean	HandleRedraw (Widget kid, 
+  static Boolean	HandleRedraw (Widget kid,
 				      Widget cur_parent,
 				      Widget new_parent,
 				      Mask visual_flag);
   static void		SetSelectedVisual (Widget wid) ;
-  
+
   // static class-methods: passed as parameter to class_rec static constructor.
   static void  _MakeCxxWidget(Widget, Widget new_w, ArgList, Cardinal*);
 };
@@ -161,7 +161,7 @@ typedef class ExmCxxSimple          *ExmCxxSimpleWidget;
 
 externalref   ExmCxxSimpleClass      exmCxxSimpleClassRec;
 
-// Define an IsSubclass macro. 
+// Define an IsSubclass macro.
 #ifndef XmIsCxxSimple
 #define XmIsCxxSimple(w)          XtIsSubclass(w, exmCxxSimpleWidgetClass)
 #endif  /* IsSubclass macro. */
@@ -184,7 +184,7 @@ externalref WidgetClass exmCxxSimpleWidgetClass;
 #define ExmCSimpleShape "SimpleShape"
 #define ExmRSimpleShape "SimpleShape"
 
-// Specify new enumerated constants for resources. 
+// Specify new enumerated constants for resources.
 enum { ExmSHAPE_OVAL=0, ExmSHAPE_RECTANGLE=1 };
 
 #endif /* _ExmCxxSimple_h */

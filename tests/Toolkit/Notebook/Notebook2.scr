@@ -19,14 +19,14 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 
 
 #  This test tests default translations for Notebook.
-#  A Notebook will appear on your screen. 
+#  A Notebook will appear on your screen.
 
 CompareVisual Notebook
 Continue
@@ -63,7 +63,7 @@ ClickKey KDown
 CompareVisual Notebook
 
 
-Continue 
+Continue
 
 
 # Click on MajorTab1. MinorTab1, MinorTab2, MinorTab3 should become visible.
@@ -103,7 +103,7 @@ CompareVisual Notebook
 ClickKey KSelect
 CompareVisual Notebook
 
-Continue 
+Continue
 
 
 #  Set the focus on Page3.
@@ -148,12 +148,3 @@ Continue
 
 
 Exit
-
-
-
-
-
-
-
-
-

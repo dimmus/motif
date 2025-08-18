@@ -19,8 +19,8 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
 #  An XmString is created with direction, charset, text and separator
@@ -46,7 +46,7 @@ Continue
 
 #  The function XmCvtXmStringToCT() is called to convert the
 #  XmString to a (char *) string in compound text format.
-#  The converted string should be printed to stdout. 
+#  The converted string should be printed to stdout.
 
 #  Verify that the following string is printed:
 

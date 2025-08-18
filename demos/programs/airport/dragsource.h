@@ -31,7 +31,7 @@
  * Airport Drag Source / Initiator Header File
  * The dragsource module contains all functions that relate to the
  * drag operation.
- * 
+ *
  * The TakeOff functions starts the drag and creates the drag context.
  *
  * Most callbacks are one line source code to set the toggle button

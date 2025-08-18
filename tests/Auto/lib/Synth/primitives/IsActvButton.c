@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: IsActvButton.c /main/7 1995/07/14 11:39:12 drk $"
@@ -42,7 +42,7 @@ static char rcsid[] = "$XConsortium: IsActvButton.c /main/7 1995/07/14 11:39:12 
 
         INPUTS:
             button_num - the mouse button in question (Button1, Button2, etc.)
-        
+
         OUTPUTS:
             none
 
@@ -61,7 +61,7 @@ int button_num;
     if (!xisInform.is_valid)
         AutoMessage(_AutoMessages[WARNMSG51]);
 
-    return ( (xisInform.button_num == button_num) && 
+    return ( (xisInform.button_num == button_num) &&
 	     (xisInform.modifier_key_status == modifier_keys) );
 
 } /* End xisIsActiveMouseButton() */

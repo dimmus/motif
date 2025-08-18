@@ -15,22 +15,22 @@ XCOMM platform:  $TOG: sun.cf /main/176 1997/12/09 17:27:51 kaleb $
 XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVersion)
 
 /*
- * Compiler setup.  This sun.cf file knows what options to use with 
- * certain compilers, including Sun C, CenterLine C, and gcc.  It 
+ * Compiler setup.  This sun.cf file knows what options to use with
+ * certain compilers, including Sun C, CenterLine C, and gcc.  It
  * also understands how to set some of the options for various C++
  * compilers, including Sun C++ and CenterLine C++.
  *
  * === C Compiler Setup ==========================================
  *
- * For SunPro C, define HasSunC to YES in site.def.  
+ * For SunPro C, define HasSunC to YES in site.def.
  * For CenterLine C, define HasCenterLineC to YES in site.def
  * For gcc or gcc2, define HasGcc or HasGcc2 to YES in site.def
- * For other compilers, define HasSunC to NO in site.def, then 
+ * For other compilers, define HasSunC to NO in site.def, then
  *    provide appropriate values for the various compiler related
  *    configuration varibles used here.
- * 
- * If you don't tell us which C compiler you have, we assume you have 
- * the SunPro C compiler under Solaris 2.x, and the bundled /bin/cc 
+ *
+ * If you don't tell us which C compiler you have, we assume you have
+ * the SunPro C compiler under Solaris 2.x, and the bundled /bin/cc
  * under SunOS 4.1.x
  *
  * === C++ Compiler Setup ==========================================
@@ -38,14 +38,14 @@ XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVe
  * For SunPro C++, define HasSunCplusplus to YES in site.def
  * For CenterLine C++, define HasCenterLineCplusplus to YES in site.def
  * For Gnu g++ 2.6.x, define HasGcc2ForCplusplus to YES in site.def
- * For other compilers, define HasCplusplus to YES in site.def, and 
+ * For other compilers, define HasCplusplus to YES in site.def, and
  *    check to see if you need to provide values for CplusplusOptions
  *    and/or DefaultCplusplusOptions.
  *
  * In any case, you may also need to set CplusplusDependIncludes.
  *
- * If you say you have the SunPro C++ compiler, we assume you have 
- * version 3.0.x of the compiler.  If you have version 4.0.x instead, 
+ * If you say you have the SunPro C++ compiler, we assume you have
+ * version 3.0.x of the compiler.  If you have version 4.0.x instead,
  * define CplusplusCompilerMajorVersion as 4 in site.def.
  *
  */
@@ -58,7 +58,7 @@ XCOMM operating system:  OSName (OSMajorVersion./**/OSMinorVersion./**/OSTeenyVe
 # endif
 #endif
 
-#if HasSunC 
+#if HasSunC
 # ifndef CCompilerMajorVersion
 #  define CCompilerMajorVersion DefaultSunProCCompilerMajorVersion
 # endif
@@ -114,7 +114,7 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 # define XawI18nDefines		-DUSE_XWCHAR_STRING -DUSE_XMBTOWC
 #endif
 
-#if OSMajorVersion == 4 
+#if OSMajorVersion == 4
 # if OSMinorVersion == 1
 #  define HasPoll		YES
 # endif
@@ -143,7 +143,7 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 #if OSMajorVersion > 4
 #define ConnectionFlags		-DTCPCONN -DUNIXCONN -DLOCALCONN
 #if HasSunC
-/* 
+/*
  * Assume /opt/SUNWspro/bin/ contains symlinks to the appropriate tools
  */
 #ifndef  CcCmd
@@ -290,8 +290,8 @@ XCOMM SunPro C++ CplusplusCompilerMajorVersion./**/CplusplusCompilerMinorVersion
 #    ifndef DefaultCCOptions
 #     define DefaultCCOptions -Xa
 #    endif
-#   endif	
-#  endif	
+#   endif
+#  endif
 # endif
 
 /* Set compiler-dependent options for CenterLine C */

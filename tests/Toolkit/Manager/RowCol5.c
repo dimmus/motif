@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: RowCol5.c /main/6 1995/07/13 18:33:55 drk $"
@@ -49,11 +49,11 @@ char **argv;
   register int i;
   Arg args[MAX_ARGS];
   char label[80];
-    
+
   CommonTestInit(argc, argv);
 
   CreateRowColumn(Shell1);
-  XtRealizeWidget(Shell1);    
+  XtRealizeWidget(Shell1);
 
   CommonPause();
 
@@ -61,9 +61,9 @@ char **argv;
   XtSetArg(args[n], XmNpositionIndex, XmLAST_POSITION); n++;
   for (i = MAXKID - 2; i >= 0; i--)
     XtSetValues(Kid[i], args, n);
-    
+
   CommonPause();
-	
+
 
   n = 0;
   XtSetArg(args[n], XmNpositionIndex, 3); n++;
@@ -73,8 +73,8 @@ char **argv;
   XtSetArg(args[n], XmNpositionIndex, 9); n++;
   newKid2 = XmCreatePushButton(RowColumn, "NewKid2", args, n);
   CommonPause();
-    
-  
+
+
   n = 0;
   XtSetArg(args[n], XmNpositionIndex, 0); n++;
   XtSetValues(newKid1, args, n);
@@ -90,7 +90,7 @@ char **argv;
   CommonPause();
 
   XtDestroyWidget(RowColumn);
-  
+
   CommonPause();
 
   XtAppMainLoop(app_context);
@@ -115,20 +115,14 @@ static void CreateRowColumn(Widget Shell1)
   XtSetArg (args[n], XmNtraversalOn, True); n++;
   RowColumn = XmCreateRowColumn(BBoard, "RowColumn", args, n);
 
-  n = 0;  
+  n = 0;
   for (i = 0; i < MAXKID; i++) {
     sprintf(label, "Child%d", i);
     Kid[i] = XmCreatePushButton(RowColumn, label, args, n);
   }
-  
+
   XtManageChildren(Kid, MAXKID);
-  
+
   XtManageChild(RowColumn);
   XtManageChild(BBoard);
 }
-
-
-
-
-
-

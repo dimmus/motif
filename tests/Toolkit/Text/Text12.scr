@@ -1,5 +1,5 @@
 # $XConsortium: Text12.scr /main/6 1995/07/17 20:41:32 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,17 +20,17 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 #  #) Drag MB1 in the Action Text widget to make a small selection.
 WindowRaise Shell1
 LocatePointer Text1 RTextChar 5
 DragComponent Text1 RTextChar 9
 
-#  #) Select XmTextGetSelectionPosition() and call the function. 
+#  #) Select XmTextGetSelectionPosition() and call the function.
 #  The left and right end positions
 #  of the selection will
 #  correspond to the values shown in the Status/Input widget.
@@ -59,7 +59,7 @@ DragSliderValue Right 2
 LocatePointer Scale2 RScaleSlider
 DragSliderValue Right 7
 
-#  Click Call Function.  The characters selected in the Action Text will 
+#  Click Call Function.  The characters selected in the Action Text will
 #  correspond to the range between Num Arg 1 and Num Arg 2.
 LocatePointer ApplyB
 ClickMB Btn1
@@ -101,7 +101,7 @@ ClickMB Btn1
 InputString "NEW"
 
 #  #) Click the Call Function PushButton.  The string in the Status/Input
-#  widget should get inserted after the third character in the Action Text 
+#  widget should get inserted after the third character in the Action Text
 #  widget.
 LocatePointer ApplyB
 ClickMB Btn1
@@ -156,7 +156,7 @@ ClickMB Btn1
 CompareVisual Text1
 
 #  #) Again, traverse to the Action Text widget and then move around with
-#  the arrow keys.  Assuming the selection was still there when focus 
+#  the arrow keys.  Assuming the selection was still there when focus
 #  arrived in the Action Text widget, the arrow keys should have now
 #  deselected the selection.
 ClickKey KTab
@@ -192,11 +192,11 @@ CompareVisual StatText
 LocatePointer ClearB
 ClickMB Btn1
 
-#  #) Select the XmTextSetString() function.  
+#  #) Select the XmTextSetString() function.
 LocatePointer List1 RListItem 1
 ClickMB Btn1
 
-#  #) Click in the Status/Input widget and type "Here is a new string". 
+#  #) Click in the Status/Input widget and type "Here is a new string".
 LocatePointer StatText
 ClickMB Btn1
 InputString "Here is a new string"
@@ -272,7 +272,7 @@ ClickMB Btn1
 InputString "Hey wheres a new string"
 LocatePointer ApplyB
 ClickMB Btn1
- 
+
 
 #  /* end of test case for PIR 2878 */
 
@@ -447,7 +447,7 @@ CompareVisual Text1
 LocatePointer List1 RListItem 7
 ClickMB Btn1
 
-#  #) Click in the Status/Input widget and type "This won't show up". 
+#  #) Click in the Status/Input widget and type "This won't show up".
 LocatePointer StatText
 ClickMB Btn1
 InputString "This won't show up"

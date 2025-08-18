@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,14 +19,14 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- */ 
+ */
 
 #ifndef _XmPrintShell_h
 #define _XmPrintShell_h
 
 #include <Xm/Xm.h>
 #include <X11/extensions/Print.h>
-  
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -54,9 +54,9 @@ extern Widget XmPrintSetup(
 
 extern void XmRedisplayWidget(Widget widget) ;
 
-extern XtEnum XmPrintToFile(Display *dpy, 
+extern XtEnum XmPrintToFile(Display *dpy,
 			    char *file_name,
-			    XPFinishProc finish_proc, 
+			    XPFinishProc finish_proc,
 			    XPointer client_data) ;
 
 extern XtEnum XmPrintPopupPDM(Widget print_shell,

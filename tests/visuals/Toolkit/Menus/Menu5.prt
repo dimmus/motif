@@ -22,24 +22,24 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual rc2 
-TRACE:(2) LocatePointer rc2  
-TRACE:(3) PressMB Btn3 
-TRACE:(4) LocatePointer option1  
-TRACE:(5) CompareVisual popup 
-TRACE:(6) LocatePointer option2  
-TRACE:(7) LocatePointer option3  
-TRACE:(8) LocatePointer pdbtn3  
-TRACE:(9) LocatePointer option1h  
-TRACE:(10) LocatePointer option2h  
-TRACE:(11) LocatePointer pdbtn2  
-TRACE:(12) LocatePointer option1n  
-TRACE:(13) LocatePointer option2n  
-TRACE:(14) LocatePointer pdbtn1  
-TRACE:(15) LocatePointer option1o  
-TRACE:(16) ReleaseMB Btn3 
+TRACE:(1) CompareVisual rc2
+TRACE:(2) LocatePointer rc2
+TRACE:(3) PressMB Btn3
+TRACE:(4) LocatePointer option1
+TRACE:(5) CompareVisual popup
+TRACE:(6) LocatePointer option2
+TRACE:(7) LocatePointer option3
+TRACE:(8) LocatePointer pdbtn3
+TRACE:(9) LocatePointer option1h
+TRACE:(10) LocatePointer option2h
+TRACE:(11) LocatePointer pdbtn2
+TRACE:(12) LocatePointer option1n
+TRACE:(13) LocatePointer option2n
+TRACE:(14) LocatePointer pdbtn1
+TRACE:(15) LocatePointer option1o
+TRACE:(16) ReleaseMB Btn3
 Widget option1o was activated
-TRACE:(17) LocatePointer rc2  
+TRACE:(17) LocatePointer rc2
 TRACE:(18) ClickKey KMenu
 TRACE:(19) ClickKey KDown
 TRACE:(20) ClickKey KDown

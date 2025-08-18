@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: wmlouth.c /main/8 1995/08/29 11:10:46 drk $"
@@ -156,7 +156,7 @@ wmlOutputUilSymCSet ();
  *	bit masks for table access
  *
  *	sym_k_<reason>_reason
- *		literals specifying all reasons, lexicographically ordered 
+ *		literals specifying all reasons, lexicographically ordered
  *
  *	sym_k_<argument>_arg
  *		literals for all arguments, lexicographically ordered.
@@ -628,7 +628,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
     synobj = clsobj->syndef;
     if ( synobj->int_lit != NULL )
 	fprintf (outfil, "  \"%s\",\n", synobj->convfunc);
-    else 
+    else
 	fprintf (outfil, "  \"%s\",\t\n", synobj->convfunc);
     }
 fprintf (outfil, "%s", canned2);
@@ -644,13 +644,13 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
     synobj = clsobj->syndef;
     if ( varobj==NULL || synobj->type==WmlClassTypeGadget )
 	fprintf (outfil, "  0,\n");
-    else 
+    else
 	{
 	synobj = varobj->syndef;
 	if ( synobj->int_lit != NULL )
 	    fprintf (outfil, "  sym_k_%s_object,\n",
 		     synobj->int_lit);
-	else 
+	else
 	    fprintf (outfil, "  sym_k_%s_object,\n",
 		     synobj->name);
 	}
@@ -674,7 +674,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
 	if ( synobj->int_lit != NULL )
 	    fprintf (outfil, "  sym_k_%s_object,\n",
 		     synobj->int_lit);
-	else 
+	else
 	    fprintf (outfil, "  sym_k_%s_object,\n",
 		     synobj->name);
 	}
@@ -1697,7 +1697,7 @@ fclose (outfil);
  *		o the sym_k_..._charset code for each entry
  *		o a variable giving the number of entries in the table
  *
- * All tables are accessed by the sym_k_..._charset 
+ * All tables are accessed by the sym_k_..._charset
  *
  */
 
@@ -1954,5 +1954,3 @@ printf ("\nCreated UilSymCSet.h");
 fclose (outfil);
 
 }
-
-

@@ -23,16 +23,16 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is errorDia.uid ---- 
+---- The uid file to be opened is errorDia.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual Error_Dialog 
-TRACE:(2) LocatePointer Error_Dialog ROkButton 
-TRACE:(3) ClickMB Btn1 
-TRACE:(4) CompareVisual Error_Dialog 
-TRACE:(5) LocatePointer Error_Dialog RHelpButton 
-TRACE:(6) CompareVisual Error_Dialog 
-TRACE:(7) LocatePointer Error_Dialog RCancelButton 
-TRACE:(8) CompareVisual Error_Dialog 
+TRACE:(1) CompareVisual Error_Dialog
+TRACE:(2) LocatePointer Error_Dialog ROkButton
+TRACE:(3) ClickMB Btn1
+TRACE:(4) CompareVisual Error_Dialog
+TRACE:(5) LocatePointer Error_Dialog RHelpButton
+TRACE:(6) CompareVisual Error_Dialog
+TRACE:(7) LocatePointer Error_Dialog RCancelButton
+TRACE:(8) CompareVisual Error_Dialog
 TRACE:(9) Exit
 Exiting Test...Please Standby...

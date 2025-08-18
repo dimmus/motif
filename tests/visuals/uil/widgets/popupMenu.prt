@@ -23,24 +23,24 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is popupMenu.uid ---- 
+---- The uid file to be opened is popupMenu.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer label2  
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer label2
 TRACE:(3) ClickKey <Ctrl> Kz
 TRACE:(4) ClickKey <Ctrl> Ka
-TRACE:(5) CompareVisual S_MAIN_WIDGET 
+TRACE:(5) CompareVisual S_MAIN_WIDGET
 TRACE:(6) ClickKey <Ctrl> Kb
-TRACE:(7) CompareVisual S_MAIN_WIDGET 
+TRACE:(7) CompareVisual S_MAIN_WIDGET
 TRACE:(8) ClickKey <Ctrl> Kc
-TRACE:(9) CompareVisual S_MAIN_WIDGET 
+TRACE:(9) CompareVisual S_MAIN_WIDGET
 TRACE:(10) ClickKey <Ctrl> Kd
-TRACE:(11) CompareVisual S_MAIN_WIDGET 
+TRACE:(11) CompareVisual S_MAIN_WIDGET
 TRACE:(12) ClickKey KUp
 TRACE:(13) ClickKey KUp
 TRACE:(14) ClickKey KDown
-TRACE:(15) CompareVisual S_MAIN_WIDGET 
+TRACE:(15) CompareVisual S_MAIN_WIDGET
 TRACE:(16) ClickKey KReturn
 TRACE:(17) Exit
 Exiting Test...Please Standby...

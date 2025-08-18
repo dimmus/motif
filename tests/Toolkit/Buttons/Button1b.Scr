@@ -1,5 +1,5 @@
 # $XConsortium: Button1b.scr /main/6 1995/07/17 20:06:21 drk $
-# 
+#
 # Motif
 #
 # Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -20,16 +20,16 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
-# 
+#
 
 # This test ensures that the ArrowButton, PushButton, and ToggleButton
 #   correctly change visually and stay in the correct state after calls
 #   to the widgets' action procs.
 # The instructions that follow assume you are running with a keyboardFocus
-#   Policy (not Window Manager Focus) of XmEXPLICIT. If you are running in 
+#   Policy (not Window Manager Focus) of XmEXPLICIT. If you are running in
 #   XmPOINTER focus policy, the instructions are not applicible.
 # A window with an ArrowButton, a PushButton and a ToggleButton should
 #   be visible.  They should be in a 'disarmed' state.
@@ -77,4 +77,3 @@ Continue
 
 CompareVisual bulletin
 Exit
-

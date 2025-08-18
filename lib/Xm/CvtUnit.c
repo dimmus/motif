@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -38,10 +38,10 @@
  *	Convert a string to resolution independent unit type.
  *  This routine is obsolete, the converter is now available
  *  by default. We just call it here.
- *  
+ *
  ************************************************************************/
 /*ARGSUSED*/
-void 
+void
 XmCvtStringToUnitType(
         XrmValuePtr args,	/* unused */
         Cardinal *num_args,	/* unused */

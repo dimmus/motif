@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 /*   $XConsortium: WMShellGeom.h /main/8 1995/07/13 19:21:38 drk $ */
 
 /*
@@ -114,19 +114,18 @@ Bool	no_adjust = False;
 /*  Private Functions  */
 
 
-static void  	Application_ShellCB(Widget w, XtPointer client_data, 
+static void  	Application_ShellCB(Widget w, XtPointer client_data,
 									XtPointer call_data);
-static void  	Top_ShellCB(Widget w, XtPointer client_data, 
+static void  	Top_ShellCB(Widget w, XtPointer client_data,
 						   XtPointer call_data);
-static void  	Dialog_ShellCB(Widget w, XtPointer client_data, 
+static void  	Dialog_ShellCB(Widget w, XtPointer client_data,
 							   XtPointer call_data);
-static void  	All_ShellsCB(Widget w, XtPointer client_data, 
+static void  	All_ShellsCB(Widget w, XtPointer client_data,
 							 XtPointer call_data);
-	
+
 static void 	CreateWMShellResources(Widget w);
 
 static void 	GetWMShellResources();
 static void 	SetWMShellResources(Widget widget);
 
 static Widget  	CreatePushButton(Widget parent, char *label);
-

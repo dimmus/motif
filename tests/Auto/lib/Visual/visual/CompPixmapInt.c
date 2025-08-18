@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: CompPixmapInt.c /main/9 1999/02/05 18:11:56 jff $"
@@ -60,7 +60,7 @@ static char rcsid[] = "$TOG: CompPixmapInt.c /main/9 1999/02/05 18:11:56 jff $"
 static XImage *image_comb = NULL;
 static XImage *image_screen = NULL;
 static XImage *image_orig = NULL;
-static XImage *image = NULL;			
+static XImage *image = NULL;
 
 #define DIFFER  0
 #define ORIG	1
@@ -99,7 +99,7 @@ extern  void	AutoTraceMsg();
 extern  void    mvsGetWidgetColors();
 
 static  Boolean	AutoMoveOn = False;
-static  int	Which_Expose = DIFFER; 
+static  int	Which_Expose = DIFFER;
 short   found_error = False;
 short   no_widget_info = False;
 
@@ -138,9 +138,9 @@ MvsWidgetInfoRecord  *widget_info;
     Window focus_window;
     Boolean possible_gad_color = False;
     Boolean first_fail_time = True;
-    struct _MvsUniqueColorAllocInfoRecord2 
+    struct _MvsUniqueColorAllocInfoRecord2
 			*widget_unique_color_info;
-    struct _MvsUniqueColorAllocInfoRecord2 
+    struct _MvsUniqueColorAllocInfoRecord2
 			*gad_unique_color_info;
     char msg_string[125];
     Boolean foreign_obj = False;
@@ -165,7 +165,7 @@ MvsWidgetInfoRecord  *widget_info;
     strcpy(widget_name, XtName(widget));
 
     winfo = widget_info;
- 
+
     done = 0;
     while (!done) {
 
@@ -181,14 +181,14 @@ MvsWidgetInfoRecord  *widget_info;
         winfo->height = temp_height;
         winfo->width = temp_width;
         winfo->border_width = temp_bw;
-        
+
         mvsGetWidgetColors(winfo);
 
         if (winfo->first_child != NULL) {
             winfo_stack[stack_top++] = winfo;
             winfo = (MvsWidgetInfoRecord *)winfo->first_child;
         }
-        else 
+        else
             if (winfo->next_sibling != NULL)
                 winfo = (MvsWidgetInfoRecord *)winfo->next_sibling;
             else {
@@ -199,10 +199,10 @@ MvsWidgetInfoRecord  *widget_info;
 
                 if (stack_top == 0)
                     done = 1;
-            } 
+            }
     } /* End while(!done) */
 
-    if (newhashid == mvsNumRecIds || 
+    if (newhashid == mvsNumRecIds ||
     			fseek(mvsImageFd,mvsFilePos[newhashid++],0) != 0)
         AutoMessage (_AutoMessages[WARNMSG11]);
 
@@ -222,13 +222,13 @@ MvsWidgetInfoRecord  *widget_info;
 
             if ((width != widget_info->width + 2*widget_info->border_width)||
                 (height != widget_info->height + 2*widget_info->border_width)) {
-             
+
 	      sprintf (msg_string, _AutoMessages[VISMSG6], width,height,
                     widget_info->width + 2*widget_info->border_width,
                     widget_info->height + 2*widget_info->border_width,
 		    widget_name);
                 AutoMessage(msg_string);
-                    
+
 
 		different_size = True;
 
@@ -237,11 +237,11 @@ MvsWidgetInfoRecord  *widget_info;
 		bp = (&mvsImageBuffer[0]);
 
 		CreateInterActiveWindow(widget, (int) width, (int) height,
-					(int) (widget_info->width + 
+					(int) (widget_info->width +
 					2*widget_info->border_width),
 					(int) (widget_info->height +
 					2*widget_info->border_width));
-		
+
 		for (y=0; y<height; y++) {
                         for (x=0; x<width; x++) {
                             XPutPixel(image_orig, x, y, *bp);
@@ -268,25 +268,25 @@ MvsWidgetInfoRecord  *widget_info;
                 }
 
                 if (checksum != checksum2) {
-		    sprintf (msg_string, _AutoMessages[WARNMSG121], 
+		    sprintf (msg_string, _AutoMessages[WARNMSG121],
 			     widget_name);
 		    AutoMessage(msg_string);
 		    AutoMessage(_AutoMessages[WARNMSG123]);
-                    
-			
+
+
                 }
                 else {
 
 		    /*
    		    get border width and subtract from the the current
 		    x and y. In GenPixmap() this done through Translate
-    		    Coordinates. A better fix maybe to put this in 
+    		    Coordinates. A better fix maybe to put this in
 		    mvsGetSubObjects() so that x and y returned include
-		    the border_width. 
+		    the border_width.
  		    */
 
 		    border_width = widget_info->border_width;
-		  
+
                     x = widget_info->x - border_width;
                     y = widget_info->y - border_width;
 
@@ -297,7 +297,7 @@ MvsWidgetInfoRecord  *widget_info;
 		    begin_y = y;
 
                     if (image == 0) {
-		        sprintf (msg_string, _AutoMessages[VISMSG7], 
+		        sprintf (msg_string, _AutoMessages[VISMSG7],
 				 widget_name);
 			AutoError (msg_string);
                         exit(1);
@@ -308,7 +308,7 @@ MvsWidgetInfoRecord  *widget_info;
                     bp = (&mvsImageBuffer[0]);
 
 		    CreateInterActiveWindow(widget, (int) width, (int) height,
-					    (widget_info->width + 
+					    (widget_info->width +
 					    2*widget_info->border_width),
 					    (widget_info->height +
 					    2*widget_info->border_width));
@@ -340,9 +340,9 @@ MvsWidgetInfoRecord  *widget_info;
 				   break;
 				}
 				else {
-				       sprintf(msg_string, 
+				       sprintf(msg_string,
 					   _AutoMessages[VISMSG34],
-					  widget_name); 
+					  widget_name);
 			    	   AutoMessage(msg_string);
 				   break;
 				}
@@ -353,7 +353,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 		    	    tmp_widget = tmp_object->id.widget;
 
-			    if (tmp_widget != NULL) 
+			    if (tmp_widget != NULL)
 			       widget_class_code  = mvsGetClassCode(tmp_widget);
 			    else {
 			       /* If the widget is NULL, we may be looking at
@@ -379,8 +379,8 @@ MvsWidgetInfoRecord  *widget_info;
 			       }
 			    }
 
-			    if (XmIsGadget(tmp_widget) && 
-				(widget_class_code 
+			    if (XmIsGadget(tmp_widget) &&
+				(widget_class_code
 					== mvsXmPushButtonGadgetClass ||
 				 widget_class_code
 					== mvsXmToggleButtonGadgetClass)) {
@@ -392,7 +392,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 			    /* If the object is a gadget then find parent
 			       of the gadget and use it */
-				
+
 			    while (XmIsGadget(tmp_widget) &&
 				   widget_class_code != mvsXmIconGadgetClass)
 				tmp_widget = XtParent(tmp_widget);
@@ -401,11 +401,11 @@ MvsWidgetInfoRecord  *widget_info;
 
 			    curpixel = *bp;
 			    if (curpixel >= MAX_UNIQUE_COLORS) {
-				sprintf(msg_string, _AutoMessages[VISMSG9], 
+				sprintf(msg_string, _AutoMessages[VISMSG9],
 					curpixel,x,y);
 			        found_error = True;
 			    }
-				
+
 			    if (tmp_info == NULL)
 			    {
 				if (no_widget_info == False)
@@ -415,7 +415,7 @@ MvsWidgetInfoRecord  *widget_info;
 				       pixel of the offending widget will degrade
 				       performance too much. */
 				    no_widget_info = True;
-				    sprintf(msg_string, _AutoMessages[VISMSG47], 
+				    sprintf(msg_string, _AutoMessages[VISMSG47],
 					    XtName(tmp_widget));
 				    AutoMessage(msg_string);
 				    found_error = True; /* because we couldn't find
@@ -429,11 +429,11 @@ MvsWidgetInfoRecord  *widget_info;
 			    else
 			    {
 			     if (curpixel < MAX_UNIQUE_COLORS) {
-				widget_unique_color_info = 
+				widget_unique_color_info =
 				  tmp_info->widgetUniqueColorInfo;
-				
+
 				/* Convert to expected color "match_pixel" */
-				winfo2 = 
+				winfo2 =
 				  widget_unique_color_info[curpixel].widget_info;
 
 				if (winfo2 == NULL)
@@ -455,14 +455,14 @@ MvsWidgetInfoRecord  *widget_info;
 				}
 			      }
 			    }
-			      
+
 	       /* If you dont receive a match it may be that the widget
 		  does not have the highlight from the parent. If this
-		  is the case then use the background color of the parent 
+		  is the case then use the background color of the parent
 		  to satisfy the highlight color */
 
 
-                if (XGetPixel(image,x,y) != matchpixel && 
+                if (XGetPixel(image,x,y) != matchpixel &&
 		    curpixel < MAX_UNIQUE_COLORS &&
 		    focus_window != XtWindowOfObject(tmp_widget)) {
 			tmp_widget = XtParent(tmp_widget);
@@ -470,9 +470,9 @@ MvsWidgetInfoRecord  *widget_info;
 			if (tmp_info != NULL) {
                             widget_unique_color_info =
                                 tmp_info->widgetUniqueColorInfo;
-			    color_ref = 
+			    color_ref =
 				widget_unique_color_info[curpixel].color_ref;
-                            winfo2 = 
+                            winfo2 =
 				widget_unique_color_info[curpixel].widget_info;
 			}
 			else
@@ -480,10 +480,10 @@ MvsWidgetInfoRecord  *widget_info;
 						   enough info to fix the
 						   pixel */
 
-			/* 
+			/*
 			   If the current pixel cannot be found on the parent
 			   then we know that there is a failure within the
-			   widget itself. 
+			   widget itself.
 			*/
 
 			if (tmp_info != NULL && winfo2 != NULL) {
@@ -516,25 +516,25 @@ MvsWidgetInfoRecord  *widget_info;
 			}
 		}
 
-                if (XGetPixel(image,x,y) != matchpixel && 
+                if (XGetPixel(image,x,y) != matchpixel &&
 		    curpixel < MAX_UNIQUE_COLORS &&
 		    possible_gad_color) {
-			color_ref = 
+			color_ref =
 				gad_unique_color_info[curpixel].color_ref;
-                        winfo2 = 
+                        winfo2 =
 				gad_unique_color_info[curpixel].widget_info;
 
-			/* 
+			/*
 			   If the current pixel cannot be found on the parent
 			   then we know that there is a failure within the
-			   widget itself. 
+			   widget itself.
 			*/
 
 			if (winfo2 == NULL)
 				found_error = True; /* because we couldn't find
 						       enough info to fix the
 						       pixel */
-	
+
 			else {
 			    int k, num_colors;
 			    Pixel image_pixel;
@@ -542,7 +542,7 @@ MvsWidgetInfoRecord  *widget_info;
 			    wcinfo2 = winfo2->widget_class_info;
 			    mvs_resources2 = winfo2->mvs_resources;
 			    num_colors = wcinfo2->num_res_colors;
-		       
+
 			    image_pixel = XGetPixel(image, x, y);
 
 			    for (k = 0; k < num_colors; k++) {
@@ -556,7 +556,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 			       if ((strcmp("selectColor", name) == 0 ||
 				    strcmp("unselectColor", name) == 0) &&
-				   widget_class_code == 
+				   widget_class_code ==
 				        mvsXmToggleButtonGadgetClass)
 				    if (image_pixel == (Pixel)
 				                       mvs_resources2[wcinfo2->res_color_ref[k]])
@@ -572,7 +572,7 @@ MvsWidgetInfoRecord  *widget_info;
 			}
 		}
 
-                            /* Compare expected "match_pixel" with 
+                            /* Compare expected "match_pixel" with
 			       actual pixel */
 
                             if (XGetPixel(image,x,y) != matchpixel) {
@@ -584,10 +584,10 @@ MvsWidgetInfoRecord  *widget_info;
 						DumpWindow(widget);
 						first_fail_time = False;
 					}
-					sprintf(msg_string, 
+					sprintf(msg_string,
 						_AutoMessages[VISMSG10],
 						widget_name, x,y,matchpixel,
-						XGetPixel(image,x,y)); 
+						XGetPixel(image,x,y));
 					AutoMessage(msg_string);
 				}
                             }
@@ -599,9 +599,9 @@ MvsWidgetInfoRecord  *widget_info;
                 }
             }
             if (found_error) {
-		sprintf(msg_string, 
+		sprintf(msg_string,
 			_AutoMessages[VISMSG35],
-			widget_name); 
+			widget_name);
                 AutoMessage(msg_string);
 	    }
             if (image != NULL)
@@ -620,7 +620,7 @@ MvsWidgetInfoRecord  *widget_info;
 	    save_y = xisSavePointerY;
 	    xisSavePointer();
 
-	/* 
+	/*
 	   Put an image out to the Drawing Area which represents the changes
 	   between the image on the screen and the image saved in the .vis file
 	*/
@@ -628,11 +628,11 @@ MvsWidgetInfoRecord  *widget_info;
 	    XFlush(mvsDisplay);
 	    xisSynchronize();
  	    if (!different_size)
-	    	XPutImage(mvsDisplay, XtWindow(DrawA), 
+	    	XPutImage(mvsDisplay, XtWindow(DrawA),
 			  DefaultGC(mvsDisplay, DefaultScreen(mvsDisplay)),
 			  image_comb, 0, 0, 0, 0, width, height);
 	    else
-	    	XPutImage(mvsDisplay, XtWindow(DrawA), 
+	    	XPutImage(mvsDisplay, XtWindow(DrawA),
 			  DefaultGC(mvsDisplay, DefaultScreen(mvsDisplay)),
 			  image_orig, 0, 0, 0, 0, width, height);
 	    xisSynchronize();
@@ -643,7 +643,7 @@ MvsWidgetInfoRecord  *widget_info;
 
 	    XmProcessTraversal(RowColumn, XmTRAVERSE_CURRENT);
 
-	/* 
+	/*
 	   Input callback from the Drawing area will force AutoMoveOn to
 	   True and you will continue with Automation
 	*/
@@ -662,9 +662,9 @@ MvsWidgetInfoRecord  *widget_info;
     	xisProcessObjects();
     	xisUpdateObjectAttributes();
 
-    	/* 
-          Restore the original (X,Y) location of the pointer before you 
-          clicked on the Drawing Area for continuation. 
+    	/*
+          Restore the original (X,Y) location of the pointer before you
+          clicked on the Drawing Area for continuation.
         */
 
     	xisRestorePointer();
@@ -673,8 +673,8 @@ MvsWidgetInfoRecord  *widget_info;
     	xisSavePointerY = save_y;
     }
 
-    /* 
-   	Destroy this image which contained the differences and 
+    /*
+   	Destroy this image which contained the differences and
    	original and screen images
     */
 
@@ -734,7 +734,7 @@ Widget widget;
     	      window_string, file_string, XtName(widget));
         AutoTraceMsg(trace_msg);
     }
-        
+
     AutoSystem("xwd", send_string);
 
 }
@@ -745,7 +745,7 @@ static void CreateInterActiveWindow(widget, width, height, actual_width,
 Widget widget;
 int width, height;
 int actual_width, actual_height;
-{  
+{
     Arg args[50];
     int n;
     static Boolean first_time = True;		/* only create Interactive
@@ -763,39 +763,39 @@ int actual_width, actual_height;
     */
 
 
-    /* 
+    /*
        Create a XImage which contain the differences between the
        image on the screen and the image contained in the .vis file.
        If the original image and the screen image are different
-       sizes, only allocate size for the original image. 
+       sizes, only allocate size for the original image.
     */
 
     if (different_size == False) {
-    	image_comb = XCreateImage(mvsDisplay, 
-    	         	          DefaultVisual(mvsDisplay, 
+    	image_comb = XCreateImage(mvsDisplay,
+    	         	          DefaultVisual(mvsDisplay,
 						DefaultScreen(mvsDisplay)),
-    	         		  DefaultDepth(mvsDisplay, 
+    	         		  DefaultDepth(mvsDisplay,
 						DefaultScreen(mvsDisplay)),
     	         		  ZPixmap, 0, NULL, width, height,
     	         		  BitmapPad(mvsDisplay), 0);
 
-    	image_screen = XCreateImage(mvsDisplay, 
+    	image_screen = XCreateImage(mvsDisplay,
     	         		    DefaultVisual(mvsDisplay,
 						  DefaultScreen(mvsDisplay)),
-    	         		    DefaultDepth(mvsDisplay, 
+    	         		    DefaultDepth(mvsDisplay,
 						 DefaultScreen(mvsDisplay)),
     	         		    ZPixmap, 0, NULL, width, height,
     	      	 		    BitmapPad(mvsDisplay), 0);
     }
 
-    image_orig = XCreateImage(mvsDisplay, 
+    image_orig = XCreateImage(mvsDisplay,
     	         DefaultVisual(mvsDisplay, DefaultScreen(mvsDisplay)),
     	         DefaultDepth(mvsDisplay, DefaultScreen(mvsDisplay)),
     	         ZPixmap, 0, NULL, width, height,
     	      	 BitmapPad(mvsDisplay), 0);
 
     /*
-       Allocate space for the three images, if original image and 
+       Allocate space for the three images, if original image and
        the screen image are different size, only allocate space for
        the original image.
     */
@@ -807,7 +807,7 @@ int actual_width, actual_height;
       if (!image_comb->data || !image_screen->data)
         {
           AutoError(_AutoMessages[WARNMSG14]);
-          
+
         }
     }
 
@@ -816,12 +816,12 @@ int actual_width, actual_height;
       if (!image_orig->data)
         {
           AutoError(_AutoMessages[WARNMSG14]);
-          
+
          }
     }
     else {
        AutoError(_AutoMessages[WARNMSG15]);
-      
+
     }
 
     if  (first_time) {     		/* Create interactive window once */
@@ -969,7 +969,7 @@ int actual_width, actual_height;
         n = 0;
         XtSetArg(args[n], XmNy, 80);					n++;
         XtSetArg(args[n], XmNx, 0);					n++;
-        XtSetArg(args[n], XmNshadowType, 
+        XtSetArg(args[n], XmNshadowType,
     				XmSHADOW_ETCHED_OUT);			n++;
         XtSetArg(args[n], XmNshadowThickness, 4);			n++;
         Inter_Frame = XmCreateFrame(BBoard, "InteractiveFrame", args, n);
@@ -984,31 +984,31 @@ int actual_width, actual_height;
         DrawA = XmCreateDrawingArea(Inter_Frame, "InteractiveDrawA", args, n);
         XtRealizeWidget(DrawA);
         XtManageChild(DrawA);
-    
+
         XtAddCallback(DrawA, XmNexposeCallback, ExposeCB, NULL);
 
         first_time = False; 			/* once and only once */
 
     }
 
-    /* 
-       If this not the first time then just set size of the drawing 
+    /*
+       If this not the first time then just set size of the drawing
     */
 
-    else  {  
+    else  {
     	n = 0;
 	XtSetArg(args[n], XmNwidth, width);				n++;
 	XtSetArg(args[n], XmNheight, height);				n++;
 	XtSetValues(DrawA, args, n);
     }
-    /* 
+    /*
        If original image and screen image are different, make the Diffs
        button and the OverlayScreen option insensitive becuase images
        have not been created and are useless. Also print out the recorded
        size and the actual size to use as comparisons.
     */
 
-    if (different_size) {  
+    if (different_size) {
   	XtSetSensitive(Overlay_screen, False);
     	XtSetSensitive(Diffs, False);
 
@@ -1020,7 +1020,7 @@ int actual_width, actual_height;
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, tcs);				n++;
 	XtSetValues(Size_Label, args, n);
- 	
+
 	XmStringFree(tcs);
     }
     else {
@@ -1031,7 +1031,7 @@ int actual_width, actual_height;
 
 	n = 0;
 	XtSetArg(args[n], XmNlabelString, tcs);				n++;
-	XtSetValues(Size_Label, args, n);	
+	XtSetValues(Size_Label, args, n);
 
 	XmStringFree(tcs);
     }
@@ -1043,10 +1043,10 @@ int status;
 int x,y;
 
 {
-    /* 
-       This routine will put a black pixel out to the image on the 
-       Drawing Area if the comparison failed. It will put out a 
-       white pixel if it passed. 
+    /*
+       This routine will put a black pixel out to the image on the
+       Drawing Area if the comparison failed. It will put out a
+       white pixel if it passed.
     */
 
     Pixel pixel;
@@ -1066,7 +1066,7 @@ Widget widget;
 XtPointer cld, cd;
 {
 
-    /* 
+    /*
        This routine will choose the proper image to redisplay in the
        drawing area when an expose event is recognized by the drawing
        area.
@@ -1074,22 +1074,22 @@ XtPointer cld, cd;
 
     switch (Which_Expose) {
     	case DIFFER:
-       			XPutImage(mvsDisplay, XtWindow(DrawA), 
-              			  DefaultGC(mvsDisplay, 
+       			XPutImage(mvsDisplay, XtWindow(DrawA),
+              			  DefaultGC(mvsDisplay,
     			          	    DefaultScreen(mvsDisplay)),
     	  			  image_comb, 0, 0, 0, 0,
     				  width, height);
     			break;
     	case ORIG:
         		XPutImage(mvsDisplay, XtWindow(DrawA),
-          			  DefaultGC(mvsDisplay, 
+          			  DefaultGC(mvsDisplay,
     				            DefaultScreen(mvsDisplay)),
           		          image_orig, 0, 0, 0, 0,
     				  width, height);
     			break;
     	case SCREEN:
         		XPutImage(mvsDisplay, XtWindow(DrawA),
-          			  DefaultGC(mvsDisplay, 
+          			  DefaultGC(mvsDisplay,
     				            DefaultScreen(mvsDisplay)),
           		          image_screen, 0, 0, 0, 0,
     				  width, height);
@@ -1136,7 +1136,7 @@ XtPointer cld, cd;
 		if (XGetPixel(image_comb, x, y) == fail)
 			XPutPixel(image_screen, x, y, fail);
 		else
-			XPutPixel(image_screen, x, y, 
+			XPutPixel(image_screen, x, y,
  				  XGetPixel(image_screen, x, y));
 
 	}
@@ -1209,4 +1209,3 @@ char *fontstr;
     return(fontlist);
 
 }
-

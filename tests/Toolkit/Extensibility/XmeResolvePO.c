@@ -59,7 +59,7 @@ DoQuit(Widget w, XtPointer ignore, XtPointer cbstruct)
 }
 
 
-int 
+int
 main (int argc, char **argv)
 {
   register int       n;
@@ -67,7 +67,7 @@ main (int argc, char **argv)
   Display	     *display;
   Widget       	     tab_button, mainWindow;
   XtEnum	     open_side;
-  
+
 
   CommonTestInit(argc, argv);
 

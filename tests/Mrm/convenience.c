@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: convenience.c /main/8 1995/07/14 10:53:23 drk $"
@@ -98,7 +98,7 @@ void nyi_proc(w, tag, reason)
     char	buf[80];
     XmString	message;
     Widget	nyi = NULL;
-    
+
     sprintf(buf, "The %s utility is not yet implemented", tag);
     message = XmStringCreateLtoR(buf, XmSTRING_DEFAULT_CHARSET);
 

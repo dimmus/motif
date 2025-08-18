@@ -16,13 +16,13 @@ Command Line Options:
 --------------------
 
 
--l 	     :	Disable displaying of the MessageBox for user 
+-l 	     :	Disable displaying of the MessageBox for user
 		instructions (Ignore CommonPause())
 
--w #	     :	Specify width of MessageBox for user instructions. 
+-w #	     :	Specify width of MessageBox for user instructions.
 		Default is 60.
 
--u <string>  :	Specify a string which will be available to the 
+-u <string>  :	Specify a string which will be available to the
 		test writer as the global variable UserData.
 
 -I <file>    :	Read an alternative instruction file. The default is
@@ -47,7 +47,7 @@ void CommonGetOptions( int argc, char **argv )
 Input  	: 	argc, argv
 Output 	: 	None
 
-Purpose : 	This function will read the command line options and 
+Purpose : 	This function will read the command line options and
 		set the appropriate flags to represent those options.
 		Called from CommonTestInit() always.
 
@@ -59,7 +59,7 @@ void CommonTestInit( int argc, char **argv )
 Input	:	argc, argv
 Output	:	None
 
-Purpose :	This function will do the following:	
+Purpose :	This function will do the following:
 
 			1) Will set up SIGNAL handlers for four "popular"
 			   signals (SIGHUP, SIGINT, SIGQUIT, and SIGKILL).
@@ -67,7 +67,7 @@ Purpose :	This function will do the following:
 			   signal happended and then exit the program.
 			2) Will call CommonGetOptions() which will get all the
 			   command line options.
-			3) Will call XtToolkitInitialize() which will 
+			3) Will call XtToolkitInitialize() which will
 			   initialize the Intrinsics.
 			4) Will create a Application context.
 			4) Will make a connection to the display by calling
@@ -83,7 +83,7 @@ Globals :	display, Shell1, rootWindow, and screen are initialized.
 
 
 
-XtCallbackProc CommonGenericCB( Widget w, caddr_t client_data, 
+XtCallbackProc CommonGenericCB( Widget w, caddr_t client_data,
 			  XmAnyCallbackStruct *call_data )
 
 Input	:	Normal callback parameters
@@ -100,7 +100,7 @@ Purpose	:	This is a "generic" callback routine that will simply
 Pixel CommonGetColor( char *ColorString )
 
 Input	:	A character string corresponding to a valid color in
-		the rgb.txt file on your system. 
+		the rgb.txt file on your system.
 Output	:	A color cell entry corresponding to the passed color
 		string. If the color does not exsist, NULL will be
 		returned.
@@ -113,7 +113,7 @@ Purpose	:	This routine will convert a string representation of
 
 XmFontList CommonGetFontList( char *FontString )
 
-Input	:	A character string corresponding to a font. 
+Input	:	A character string corresponding to a font.
 Output	:	A XmFontList corresponding to the character input.
 
 Purpose	:	This routine will convert a string representation of
@@ -141,7 +141,7 @@ Input	:	None
 Output	:	None
 
 Purpose	:	This function will place on the screen at (500, 0)
-		an MesageBox contained in a PopupShell will contains 
+		an MesageBox contained in a PopupShell will contains
 		instructions that the test writer wants the user to execute.
 		One call to CommonPause() corresponds to one screen of
 		information.  The CommonPause() function will read it's
@@ -191,7 +191,7 @@ a file with the name <Test_Name>.dat or using the command line option
 file will contain special formatting characters that will be used to
 determine the format of the MessageBox's  message string. This file
 will be read by the test program and displayed in the MessageBox when
-the CommonPause() function is called. The following is a list of the 
+the CommonPause() function is called. The following is a list of the
 special formatting characters that can be used in the instruction file:
 
 #)	- Format the associated data as one single line of instructions.
@@ -212,7 +212,7 @@ special formatting characters that can be used in the instruction file:
 	  possible, try to keep the width of the non formatted line to
 	  60 characters.
 
-C)	- End of one "Panel". Specifies the end of one panel of 
+C)	- End of one "Panel". Specifies the end of one panel of
 	  instructions. When this format is read, the test program
 	  knows that it needs to display the Information Dialog with
 	  all data between the last panel and these format characters.
@@ -224,7 +224,7 @@ E)	- End of instructions. Tells the test program that it is done
 	  message so that the user knows that the test is finished.
 
 
-\<char>	- Escape the next character. This a way of allowing all 
+\<char>	- Escape the next character. This a way of allowing all
 	  combinations of characters in the data stream.
 
 
@@ -269,7 +269,7 @@ Screen 1:
 	2) Drag the slider to the top of the scrollbar (with
 	   key #).
 
-	   Note the slider will not take any input because 
+	   Note the slider will not take any input because
 	   it is insensitive.
 
         Press the Continue Button for more testing.

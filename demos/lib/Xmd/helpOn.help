@@ -1,15 +1,15 @@
 <title>Overview</title>
 This help file describes the facilities available in
-<emphasis>libUtil.a</emphasis>, which is a utility library 
+<emphasis>libUtil.a</emphasis>, which is a utility library
 used in the demonstration programs.  Included are a help widget,
 a style-guide compliant menu generator and a print widget.
 
 <title>Help Widget</title>
-The help widget provides a means for the demo applications to 
-present help to the user in a easy to navigate form.  
+The help widget provides a means for the demo applications to
+present help to the user in a easy to navigate form.
 
 <bold>UxmCreateHelp</bold>
-<program>Widget UxmCreateHelp(Widget parent, char* name, 
+<program>Widget UxmCreateHelp(Widget parent, char* name,
 		ArgList args, Cardinal num_args)</program>
 
 <bold>Description:</bold>
@@ -43,7 +43,7 @@ the arguments are the same as for any XtCallbackProc.
 
 <subtitle>Widget Resources</subtitle>
 <bold>UxmNhelpFile</bold>
-The filename of the help file.  The suffix .help can be omitted.		
+The filename of the help file.  The suffix .help can be omitted.
 
 <bold>UxmNhelpPath</bold>
 This is the pathname to use to search for the help
@@ -100,7 +100,7 @@ About App.	A
 
 <title>Menu generator</title>
 The menu generator is quite simple.  You call it with a description
-value (obtained from Menus.h) and it returns a widget list of the 
+value (obtained from Menus.h) and it returns a widget list of the
 menu items.  It manages the <bold>required</bold> elements from the
 style guide.
 
@@ -108,7 +108,7 @@ style guide.
 The print dialog widget provides a concise dialog to obtain information
 for printing.
 
-The dialog consist of a number of fields which the user can specify. 
+The dialog consist of a number of fields which the user can specify.
 The application writer can specify the initial values of the fields
 and can reset them through XtSetValues.
 
@@ -139,5 +139,4 @@ UxmNnumberOfCopies		Integer
 UxmCNumberOfCopies		1
 
 UxmNprintCallback		CallbackList
-XmCCallback		NULL 
-
+XmCCallback		NULL

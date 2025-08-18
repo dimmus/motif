@@ -16,16 +16,16 @@
 .fi
 SlideContext can be used to change a widgets geometry over a period of
 time.
-.PP 
+.PP
 Next paragraph
-.PP 
+.PP
 Next paragraph
 .SS "Classes"
 SlideContext inherits behavior and resources from the
 \fIObject\fP class.
-.PP 
+.PP
 The class pointer is \fIXmSlideContextWidgetClass\fP.
-.PP 
+.PP
 The class name is \fIXmSlideContext\fP.
 .SS "New Resources"
 The following table defines a set of widget resources used by the programmer
@@ -40,11 +40,11 @@ The codes in the access column indicate if the given resource can be
 set at creation time (C),
 set by using \fIXtSetValues\fP (S),
 retrieved by using \fIXtGetValues\fP (G), or is not applicable (N/A).
-.P 
+.P
 .sp 1
 .in 0
 .KS
-.TS 
+.TS
 center;
 cBp7 ssss
 lBp6 lBp6 lBp6 lBp6 lBp6
@@ -96,11 +96,11 @@ The widget to alter. This _must_ be specified during creation.
 SlideContext inherits behavior and resources from the following
 superclasses.  For a complete description of each resource, refer to the
 man page for that superclass.
-.P 
+.P
 .sp 1
 .in 0
 .KS
-.TS 
+.TS
 center;
 cBp7 ssss
 lBp6 lBp6 lBp6 lBp6 lBp6
@@ -117,7 +117,7 @@ XmNscreen	XmCScreen	Screen *	dynamic	CG
 .in
 .sp 1
 .wH
-.in  
+.in
 ...\" **
 ...\" .SS "Callback Information"
 ...\" A pointer to the following structure is passed to each callback:
@@ -139,7 +139,7 @@ XmNscreen	XmCScreen	Screen *	dynamic	CG
 XmSlideContext behavior is described below:
 XmSlideContext installs an Xt timer that is called every XmNslideInterval
 miliseconds. At each call of the timer proc the XmNslideWidget geometry is
-adjusted such that the X/Y/Width/Height are 10 percent closer to the 
+adjusted such that the X/Y/Width/Height are 10 percent closer to the
 final values. The XmSlideContext is automatically destroyed when the
 XmNslideWidget reaches its destination. If the XmNslideWidget is destroyed
 before the slide is finished, the XmSlideContext is destroyed.

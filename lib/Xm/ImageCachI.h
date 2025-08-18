@@ -19,7 +19,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -42,16 +42,16 @@ extern "C" {
 
 /********    Private Function Declarations for ImageCache.c    ********/
 
-extern Boolean _XmInstallImage( 
+extern Boolean _XmInstallImage(
                         XImage *image,
                         char *image_name,
                         int hot_x,
                         int hot_y) ;
-extern Boolean _XmGetImage( 
+extern Boolean _XmGetImage(
                         Screen *screen,
                         char *image_name,
                         XImage **image) ;
-extern Boolean _XmCachePixmap( 
+extern Boolean _XmCachePixmap(
 			      Pixmap pixmap,
 			      Screen *screen,
 			      char *image_name,
@@ -97,7 +97,7 @@ extern Pixmap _XmGetScaledPixmap(
 #endif /* NeedWidePrototypes */
     double scaling_ratio);
 
-extern void _XmPutScaledImage (    
+extern void _XmPutScaledImage (
     Display*		 display ,
     Drawable		 d ,
     GC			 gc ,
@@ -107,7 +107,7 @@ extern void _XmPutScaledImage (
     int			 dest_x ,
     int			 dest_y ,
     unsigned int	 src_width ,
-    unsigned int	 src_height, 
+    unsigned int	 src_height,
     unsigned int	 dest_width ,
     unsigned int	 dest_height);
 

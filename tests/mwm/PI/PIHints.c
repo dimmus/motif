@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: PIHints.c /main/10 1997/05/02 16:02:30 dbl $"
@@ -32,7 +32,7 @@ static char rcsid[] = "$TOG: PIHints.c /main/10 1997/05/02 16:02:30 dbl $"
 #include	<testlib.h>
 #include	<PITests.h>
 
-#include	"PIHints.h" 
+#include	"PIHints.h"
 #include	"btn1.bmp"
 
 
@@ -66,7 +66,7 @@ char	*argv[];
 		PIInfo[i].actual_return = False;
 
 
-    
+
 /*
  * Create top level shell widget as parent for test1_btn1 widget
  */
@@ -77,10 +77,10 @@ char	*argv[];
 		 		     "Test_top",  /* application class */
 		 		   topLevelShellWidgetClass, /* widget class */
 		 		   display,		     /* display */
-		 	           args, n);		  /* arguments */      
-	
-			
-		  
+		 	           args, n);		  /* arguments */
+
+
+
 
 /*
  * Create button1 widget
@@ -135,31 +135,31 @@ char	*argv[];
      * Unmap and remap the window to change state
      */
 
-	PIUnmapWindow(test_wdw); 
+	PIUnmapWindow(test_wdw);
 	wm_set_hints.flags = (StateHint);
         wm_set_hints.initial_state = NormalState;
 	XSetWMHints(display, test_wdw, &wm_set_hints);
 	XMapWindow(display, test_wdw);
-        XMoveWindow(display, test_wdw, 100, 100);  
+        XMoveWindow(display, test_wdw, 100, 100);
 
 
-	
+
 
 	XGetWMNormalHints (display, test_wdw, wm_get_size, &supplied_return);
 	/*
  	 * Get Normal Size Hints - position, size (WM_NORMAL_HINTS)
   	 */
 	PIInfo[PIInfo_cnt].actual_return = ((wm_get_size->x ==  wm_set_size.x)
-					   &&(wm_get_size->y == wm_set_size.y) 
-			       && (wm_get_size->width == wm_set_size.width) 
+					   &&(wm_get_size->y == wm_set_size.y)
+			       && (wm_get_size->width == wm_set_size.width)
 			      &&  (wm_get_size->height == wm_set_size.height));
 
         PIInfo_cnt++;
-	
+
 	/*
  	 * Get Normal Hints - mins/maxs width/height
   	 */
-	PIInfo[PIInfo_cnt].actual_return = 
+	PIInfo[PIInfo_cnt].actual_return =
 		(
 		(wm_get_size->min_width == wm_set_size.min_width) &&
                 (wm_get_size->min_height == wm_set_size.min_height) &&
@@ -185,7 +185,7 @@ char	*argv[];
 	/*
  	 * Change WM Hints - icon pixmap for window WM_HINTS
  	 */
-	hints_icon_pm = XCreatePixmapFromBitmapData(display, 
+	hints_icon_pm = XCreatePixmapFromBitmapData(display,
 						    rootWindow,
 						    PIIcon_bits, PIIcon_width,
 						    PIIcon_height, 1, 0, 1);
@@ -203,8 +203,8 @@ char	*argv[];
 	wm_set_hints.icon_pixmap = hints_icon_pm;
 	wm_set_hints.icon_mask = hints_icon_msk_pm;
 	XSetWMHints (display, hints_wdw, &wm_set_hints);
-	
-	/* 
+
+	/*
 	 * Map the window into iconic state
 	 */
 	XMapWindow(display, hints_wdw);
@@ -216,7 +216,7 @@ char	*argv[];
 		(wm_get_hints->icon_mask == wm_set_hints.icon_mask));
 	PIInfo_cnt++;
 
-	CommonPause();	
+	CommonPause();
 
 	/*
  	 * Change Normal Hints - width/height increments
@@ -270,13 +270,13 @@ char	*argv[];
 		(wm_get_size->max_aspect.x == wm_set_size.max_aspect.x) &&
 		(wm_get_size->max_aspect.y == wm_set_size.max_aspect.y));
 	PIInfo_cnt++;
-	/* 
+	/*
  	 * Change WM Hints - icon window for window            WM_HINTS
  	 */
-	hints_icon_wdw = XCreateSimpleWindow(display, rootWindow, 0, 0, 50, 
+	hints_icon_wdw = XCreateSimpleWindow(display, rootWindow, 0, 0, 50,
 					     50,5, 1, CommonGetColor("black"));
 
-	/* 
+	/*
 	 * put window from IconicState to WithdrawnState
 	 */
 
@@ -300,10 +300,10 @@ char	*argv[];
 #ifdef	DONT
 	CommonPause();
 
-	/* 
+	/*
  	 * Change WM Hints - input focus for window            WM_HINTS
  	 */
-	/* 
+	/*
 	 * put window from IconicState to WithdrawnState
 	 */
 	PIUnmapWindow(hints_wdw);
@@ -415,12 +415,3 @@ char	*argv[];
 	XtAppMainLoop(app_context);
 
 }
-
-
-
-
-
-
-
-
-

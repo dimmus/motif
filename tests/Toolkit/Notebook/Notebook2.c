@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -69,9 +69,9 @@ Widget PWKid[4];
 
 
 
-  
-  /* 
-   * Create the parent. 
+
+  /*
+   * Create the parent.
    */
 
   n=0;
@@ -82,7 +82,7 @@ Widget PWKid[4];
   Notebook = XmCreateNotebook (Parent, "Notebook", args, n);
   XtManageChild (Notebook);
 
-    
+
   for (i=0; i< 3; i++)
     {
       n=0;
@@ -90,7 +90,7 @@ Widget PWKid[4];
       MajorTab[i] = XmCreatePushButton (Notebook,buf,args,n);
       XtManageChild(MajorTab[i]);
     }
-            
+
 
 
   for (i=0; i< 3; i++)
@@ -99,7 +99,7 @@ Widget PWKid[4];
        MinorTab[i] = XmCreatePushButton (Notebook,buf,args,n);
        XtManageChild(MinorTab[i]);
     }
-        
+
 
   for (i=0; i< 7; i++)
      {
@@ -199,8 +199,8 @@ Widget PWKid[4];
   XtDestroyWidget (Notebook);
   CommonPause();
 
-  /* 
-   * destroy the widget 
+  /*
+   * destroy the widget
    */
 
 
@@ -208,13 +208,5 @@ Widget PWKid[4];
   CommonPause();
 
   XtAppMainLoop (app_context);
-    
+
 }
-
-  
-
-
-
-
-
-

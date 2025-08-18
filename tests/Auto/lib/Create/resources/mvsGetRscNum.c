@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: mvsGetRscNum.c /main/7 1995/07/14 11:21:14 drk $"
@@ -34,7 +34,7 @@ static char rcsid[] = "$XConsortium: mvsGetRscNum.c /main/7 1995/07/14 11:21:14 
 	History:
 	   03/30/90 SJS Add to sccs tree
 	   05/29/90 SJS Changes for composites
-	   06/15/90 PSN add function to get index of given resnam from given 
+	   06/15/90 PSN add function to get index of given resnam from given
 			args array.
 	   09/20/90 SJS use constant NON_EXISTENT
 	Calls:
@@ -63,7 +63,7 @@ char resource_name[];
          (j<num_resources)&&strcmp(resource_name,resource_info[j].name); j++);
 
     return (j<num_resources ? j : (NON_EXISTENT));
-        
+
 } /* End mvsGetResourceNum() */
 
 int mvsGetResNumInArgs(args, nargs, resource_name)
@@ -77,5 +77,5 @@ char	resource_name[];
 	;
 
     return (j<nargs ? j : (-1));
-        
+
 } /* End mvsGetResNumInArgs() */

@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -76,10 +76,10 @@ typedef enum {WSM_CONNECT, WSM_EXTENSIONS, WSM_CONFIG_FMT, WSM_GET_STATE,
 
 typedef enum {WSM_WORKSPACE_MANAGER, WSM_WINDOW_MANAGER} WSMClientType;
 
-typedef enum {WSM_GLOBAL_FMT = 0, 
+typedef enum {WSM_GLOBAL_FMT = 0,
 	      WSM_WINDOW_FMT = 1, WSM_ICON_FMT = 2} WSMConfigFormatType;
 
-typedef enum {WSM_VALUE_DATA, WSM_CHAR_LIST_DATA, 
+typedef enum {WSM_VALUE_DATA, WSM_CHAR_LIST_DATA,
 	      WSM_SHORT_LIST_DATA, WSM_LONG_LIST_DATA, WSM_NONE} WSMDataType;
 
 typedef enum {WSM_SUCCESS, WSM_ERROR_INTERNAL, WSM_ERROR_CONVERSION_FAILED,
@@ -157,9 +157,9 @@ typedef struct _WSMAnyRequestOrReply {
 typedef struct _WSMConnect {
     WSMRequestType type;	/* Type of event, do not move or change. */
 
-    /* 
-     * Packlib allocated the data, do not move. 
-     * If True will free the known_versions ptr. 
+    /*
+     * Packlib allocated the data, do not move.
+     * If True will free the known_versions ptr.
      */
 
     Boolean allocated;
@@ -169,14 +169,14 @@ typedef struct _WSMConnect {
 
 typedef struct _WSMExtensions {
     WSMRequestType type;	/* Type of event, do not move or change. */
-    
+
     /*
-     * Packlib allocated the data, do not move. 
+     * Packlib allocated the data, do not move.
      * If True will free each string on the extension_suggestions list
      * as well as the extension_suggestions ptr itself.
      */
 
-    Boolean allocated;		
+    Boolean allocated;
     String *extension_suggestions;
     int num_extensions;
 } WSMExtensions;
@@ -194,12 +194,12 @@ typedef struct _WSMSetState {
     WSMRequestType type;	/* Type of event, do not move or change. */
 
     /*
-     * Packlib allocated the data, do not move. 
-     * If True will free the win_data list in each element on the 
+     * Packlib allocated the data, do not move.
+     * If True will free the win_data list in each element on the
      * win_info_list. as well as the win_info_list ptr itself.
      */
 
-    Boolean allocated;		
+    Boolean allocated;
     WSMWinInfo *win_info_list;
     int num_win_info_list;
 } WSMSetState;
@@ -270,12 +270,12 @@ typedef struct _WSMExtensionsReply {
     WSMRequestType type;	/* Type of event, do not move or change. */
 
     /*
-     * Packlib allocated the data, do not move. 
+     * Packlib allocated the data, do not move.
      * If True will free each string on the extensions list
      * as well as the extensions ptr itself.
      */
 
-    Boolean allocated;	
+    Boolean allocated;
     String *extensions;
     int num_extensions;
 } WSMExtensionsReply;
@@ -296,12 +296,12 @@ typedef struct _WSMGetStateReply {
     WSMRequestType type;	/* Type of event, do not move or change. */
 
     /*
-     * Packlib allocated the data, do not move. 
-     * If True will free the win_data list in each element on the 
+     * Packlib allocated the data, do not move.
+     * If True will free the win_data list in each element on the
      * win_info_list. as well as the win_info_list ptr itself.
      */
 
-    Boolean allocated;		
+    Boolean allocated;
     WSMWinInfo *win_info_list;
     int num_win_info_list;
 } WSMGetStateReply;
@@ -312,11 +312,11 @@ typedef struct _WSMRegisterWindowReply {
     WSMRequestType type;	/* Type of event, do not move or change. */
 
     /*
-     * Packlib allocated the data, do not move. 
+     * Packlib allocated the data, do not move.
      * If True will free the window_data pointer.
      */
 
-    Boolean allocated;		
+    Boolean allocated;
     WSMWinData * window_data;
     int num_window_data;
 } WSMRegisterWindowReply;

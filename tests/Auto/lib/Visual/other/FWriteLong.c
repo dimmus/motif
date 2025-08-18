@@ -1,4 +1,4 @@
-/* 
+/*
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,10 +19,10 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/ 
-/* 
+*/
+/*
  * HISTORY
-*/ 
+*/
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: FWriteLong.c /main/7 1995/07/14 11:44:27 drk $"
@@ -64,6 +64,6 @@ unsigned long value;
     /* force into most signif byte first format */
 
     fwrite_short(fd,(unsigned int)value1); /* most sig word first */
-    fwrite_short(fd,(unsigned int)value2); 
+    fwrite_short(fd,(unsigned int)value2);
 
 } /* End fwrite_long() */

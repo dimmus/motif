@@ -22,9 +22,9 @@
 
 */
 
-/* 
+/*
  * HISTORY
-*/ 
+*/
 /*  $XConsortium: DtdisplayUid.c /main/2 1996/08/20 11:37:46 jakku $ */
 /*
 
@@ -45,7 +45,7 @@
 #define MAX_CALLBACK	32
 #define MAX_LEN		255
 
-#include <Mrm/MrmAppl.h>    
+#include <Mrm/MrmAppl.h>
 #include <Xm/Xm.h>
 #include "reasons.h"
 
@@ -61,7 +61,7 @@ static void Report_Dtcallback();
 
 
 static MrmHierarchy	s_MrmHierarchy;
-static char		*vec[MAX_FILES];   	
+static char		*vec[MAX_FILES];
 static MrmCode		class;
 
 
@@ -108,7 +108,7 @@ char **argv;
      */
 
     /*  Initialize DtTerm if testing DtTerm widget */
-    
+
     if (!strcmp("term", argv[2])) {
     	DtTermInitialize();
 		}
@@ -125,7 +125,7 @@ char **argv;
     ProcessCommandArgs();
 
     XtAppAddActions(app_context, actions, num_actions);
-    
+
     /*
      *  Define the Mrm hierarchy (only 1 file)
      */
@@ -134,7 +134,7 @@ char **argv;
 			vec, 			    /* files     	    */
 			NULL,			    /* os_ext_list (null)   */
 			&s_MrmHierarchy)	    /* ptr to returned id   */
-			!= MrmSUCCESS) 
+			!= MrmSUCCESS)
 			{
 				printf ("Can't open hierarchy\n");
      				exit(1);
@@ -142,7 +142,7 @@ char **argv;
 
     /*
      *		Register all Mrm functions
-     */	
+     */
 
 
     if (MrmRegisterNames (reglist, reglist_num)
@@ -317,7 +317,7 @@ int                         num_params;
     static Widget fetched;
 
     fetch("Popup_Menu",&fetched);
-    XmMenuPosition(fetched, event);  
+    XmMenuPosition(fetched, event);
     XtManageChild(fetched);
 }
 
@@ -336,7 +336,7 @@ static int flag = 0;
     XtSetArg (args[n], XmNbackground, CommonGetColor("white")); n++;
     XtSetValues (XtParent(widget), args, n);
     flag = 1;
-  } 
+  }
   else {
     n = 0;
     XtSetArg (args[n], XmNbackground, CommonGetColor("blue")); n++;
@@ -374,7 +374,5 @@ static void ProcessCommandArgs()
   printf("/*********************************************************/\n");
   printf("---- The uid file to be opened is %s ---- \n", uidname);
   printf("/*********************************************************/\n\n");
-  vec[0] = XtNewString(uidname); 
+  vec[0] = XtNewString(uidname);
 }
-
-

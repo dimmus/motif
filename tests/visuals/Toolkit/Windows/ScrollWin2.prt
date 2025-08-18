@@ -22,24 +22,24 @@
 #
 #
 # HISTORY
-TRACE:(1) CompareVisual ScrolledWindow1 
+TRACE:(1) CompareVisual ScrolledWindow1
 TRACE:(2) Continue
 TRACE:(3) WindowMove Shell1 0 0
 TRACE:(4) WindowResize Shell1 South 800
-TRACE:(5) CompareVisual ScrolledWindow1 
+TRACE:(5) CompareVisual ScrolledWindow1
 TRACE:(6) Continue
 TRACE:(7) WindowResize Shell1 East 100
-TRACE:(8) CompareVisual ScrolledWindow1 
-TRACE:(9) LocatePointer ScrolledWindow1 RHorizScrollBarSlider 
-TRACE:(10) DragSliderValue Right Max 
-TRACE:(11) CompareVisual ScrolledWindow1 
+TRACE:(8) CompareVisual ScrolledWindow1
+TRACE:(9) LocatePointer ScrolledWindow1 RHorizScrollBarSlider
+TRACE:(10) DragSliderValue Right Max
+TRACE:(11) CompareVisual ScrolledWindow1
 TRACE:(12) Continue
 TRACE:(13) WindowResize ScrolledWindow1 South 400
-TRACE:(14) CompareVisual ScrolledWindow1 
-TRACE:(15) LocatePointer ScrolledWindow1 RVertScrollBarSlider 
-TRACE:(16) DragSliderValue Down Max 
-TRACE:(17) LocatePointer ScrolledWindow1 RHorizScrollBarSlider 
-TRACE:(18) DragSliderValue Left 50 
+TRACE:(14) CompareVisual ScrolledWindow1
+TRACE:(15) LocatePointer ScrolledWindow1 RVertScrollBarSlider
+TRACE:(16) DragSliderValue Down Max
+TRACE:(17) LocatePointer ScrolledWindow1 RHorizScrollBarSlider
+TRACE:(18) DragSliderValue Left 50
 TRACE:(19) WindowIconify Shell1
 TRACE:(20) WindowDeiconify Shell1
 TRACE:(21) Exit

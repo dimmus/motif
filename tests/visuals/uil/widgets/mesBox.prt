@@ -23,12 +23,12 @@
 #
 # HISTORY
 /*********************************************************/
----- The uid file to be opened is mesBox.uid ---- 
+---- The uid file to be opened is mesBox.uid ----
 /*********************************************************/
 
-TRACE:(1) CompareVisual S_MAIN_WIDGET 
-TRACE:(2) LocatePointer Message_Box RHelpButton 
-TRACE:(3) ClickMB Btn1 
+TRACE:(1) CompareVisual S_MAIN_WIDGET
+TRACE:(2) LocatePointer Message_Box RHelpButton
+TRACE:(3) ClickMB Btn1
 
 /*********************************************************/
 ---- helpCallback callback made ----
@@ -36,8 +36,8 @@ TRACE:(3) ClickMB Btn1
 ---- Reason was XmCR_HELP ----
 /*********************************************************/
 
-TRACE:(4) LocatePointer Message_Box RCancelButton 
-TRACE:(5) ClickMB Btn1 
+TRACE:(4) LocatePointer Message_Box RCancelButton
+TRACE:(5) ClickMB Btn1
 
 /*********************************************************/
 ---- cancelCallback callback made ----
@@ -45,6 +45,6 @@ TRACE:(5) ClickMB Btn1
 ---- Reason was XmCR_CANCEL ----
 /*********************************************************/
 
-TRACE:(6) CompareVisual S_MAIN_WIDGET 
+TRACE:(6) CompareVisual S_MAIN_WIDGET
 TRACE:(7) Exit
 Exiting Test...Please Standby...

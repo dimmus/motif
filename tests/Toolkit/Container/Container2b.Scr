@@ -19,11 +19,11 @@
 # License along with these librararies and programs; if not, write
 # to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 # Floor, Boston, MA 02110-1301 USA
-# 
-# 
+#
+#
 # HISTORY
 
-# #) This is Container2 testing BROWSE_SELECT selectionPolicy in OUTLINE 
+# #) This is Container2 testing BROWSE_SELECT selectionPolicy in OUTLINE
 #    layoutType.
 # #) Select "BrowseSelect" from the "Selection Policy" option menu.
 # #) Iconify the Control Panel.
@@ -39,7 +39,7 @@ LocatePointer IconGad3 ROutlineBtn
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) This panel is testing the Point Click, Select Mode technique.
 # #) Click Btn1 on "IconGad1". It should become selected.
 # #) You should see the following in your term window:
@@ -47,11 +47,11 @@ Continue
 #           Reason for SelectionCallback: CR_BROWSE_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad1
-# 
+#
 # #) Notice that the location cursor is a plain line rectangle.
 # #) Click again on "IconGad1". It should stay selected.
 # C)
- 
+
 LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container2
@@ -59,19 +59,19 @@ LocatePointer IconGad1
 ClickMB Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Press Btn1 on "IconGad2", move the pointer over "IconGad3" and
 #    release Btn1.
 # #) As soon as you press Btn1 on "IconGad2", it gets selected.
 # #) When moving over "IconGad3", the selection moves to "IconGad3", the
 #    location cursor is still on "IconGad2".
-# #) When you release on "IconGad3", the location cursor moves to 
+# #) When you release on "IconGad3", the location cursor moves to
 #    "IconGad3", and the following appears in your term window:
 # !)
 #           Reason for SelectionCallback: CR_BROWSE_SELECT
 #           Number of items selected: 1
 #           Names of items selected: IconGad3
-# 
+#
 # #) Only "IconGad3" should get selected.
 # C)
 
@@ -98,12 +98,12 @@ LocatePointer IconGad31
 ReleaseMB <Ctrl> Btn1
 CompareVisual Container2
 Continue
- 
+
 # #) Select "IconGad2".
-# #) Using osfDown key, move the location cursor on "IconGad4". The 
+# #) Using osfDown key, move the location cursor on "IconGad4". The
 #    selection should move with the location cursor, and you would
 #    see the SelectionCallback in your term window.
-# #) Using osfUp key, move the location cursor on "IconGad3". The 
+# #) Using osfUp key, move the location cursor on "IconGad3". The
 #    selection is also moving on "IconGad3".
 # C)
 
@@ -126,6 +126,6 @@ CompareVisual Container2
 ClickKey KSelect
 CompareVisual Container2
 Continue
- 
+
 # E)
 Exit

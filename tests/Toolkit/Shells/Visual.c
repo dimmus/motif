@@ -20,7 +20,7 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
- * 
+ *
  */
 /*
  * HISTORY
@@ -70,7 +70,7 @@ doit()
     args[1].addr = (XPointer) &depth;
     args[1].size = sizeof(int);
     num_args++;
-    sprintf(buf, 
+    sprintf(buf,
 	    "\nVisual Class\tVisual Found\n------------\t------------\n\n");
     for (i = 0; i < 6; i++) {
 	strcpy(string, XrmQuarkToString(XrmStringToQuark(visual_class[i])));
@@ -137,7 +137,7 @@ main (int argc, char **argv)
   XtRealizeWidget (Shell1);
 
   CommonPause();
-  
+
   doit();
 
   CommonPause();
@@ -146,10 +146,3 @@ main (int argc, char **argv)
   XtAppMainLoop (app_context);
 
 }
-
-
-
-
-
-
-

@@ -24,17 +24,17 @@
 # HISTORY
 TRACE:(1) LocatePointer Text1 RTextChar 5
 TRACE:(2) ClickKey Kr
-TRACE:(3) CompareVisual Text1 
+TRACE:(3) CompareVisual Text1
 TRACE:(4) ClickKey Kp
-TRACE:(5) CompareVisual Text1 
+TRACE:(5) CompareVisual Text1
 TRACE:(6) InputString "this text will never appear"
-TRACE:(7) CompareVisual Text1 
+TRACE:(7) CompareVisual Text1
 TRACE:(8) Continue
 TRACE:(9) LocatePointer Text1 RTextChar 5
 TRACE:(10) ClickKey Kp
-TRACE:(11) CompareVisual Text1 
+TRACE:(11) CompareVisual Text1
 TRACE:(12) ClickKey Kr
-TRACE:(13) CompareVisual Text1 
+TRACE:(13) CompareVisual Text1
 TRACE:(14) InputString "no show"
 TRACE:(15) ClickKey KDown
 TRACE:(16) ClickKey KDown
@@ -45,8 +45,8 @@ TRACE:(20) ClickKey KDown
 TRACE:(21) ClickKey KDown
 TRACE:(22) ClickKey KDown
 TRACE:(23) ClickKey KDown
-TRACE:(24) CompareVisual Text1 
+TRACE:(24) CompareVisual Text1
 TRACE:(25) ClickKey KEndData
-TRACE:(26) CompareVisual Text1 
+TRACE:(26) CompareVisual Text1
 TRACE:(27) Exit
 Exiting Test...Please Standby...
