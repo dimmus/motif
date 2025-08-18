@@ -1,14 +1,14 @@
 dnl
 dnl This file provides the following macros
 dnl
-dnl     LT_LIB_XTHREADS
-dnl	AM_FUNC_VOID_SPRINTF
-dnl	WEAK_ALIAS_SUPPORT
+dnl AX_LT_LIB_XTHREADS
+dnl	AX_FUNC_VOID_SPRINTF
+dnl	AX_WEAK_ALIAS_SUPPORT
 dnl
 
 dnl This should be the canonical approach to check for XTHREADS.
 dnl (see "man XtToolkitThreadInitialize")
-AC_DEFUN([LT_LIB_XTHREADS],
+AC_DEFUN([AX_LT_LIB_XTHREADS],
 [AC_REQUIRE([AC_PATH_X])
 AC_CACHE_CHECK(whether libXt was compiled with -DXTHREADS, lt_cv_xthreads,
 [lt_save_CFLAGS="$CFLAGS"
@@ -47,7 +47,7 @@ fi
 ])
 
 dnl This test is not very reliable probably ...
-AC_DEFUN([AM_FUNC_VOID_SPRINTF],
+AC_DEFUN([AX_FUNC_VOID_SPRINTF],
 [AC_CACHE_CHECK(whether sprintf returns void, ac_cv_func_void_sprintf,
 [AC_COMPILE_IFELSE([#include <stdio.h>
 int sprintf(); main() { exit(sprintf(".")); }],
@@ -59,7 +59,7 @@ fi
 ])
 
 dnl This tests whether weak aliases are supported.
-AC_DEFUN([WEAK_ALIAS_SUPPORT],
+AC_DEFUN([AX_WEAK_ALIAS_SUPPORT],
 [AC_CACHE_CHECK(whether weak aliases are supported, ac_cv_weak_alias_support,
 [AC_COMPILE_IFELSE([
 int get_value(int *value) {
@@ -70,8 +70,8 @@ int get_value_alias(int *high) __attribute__((__weak__,alias("get_value")));
 [],
 ac_cv_weak_alias_support=yes,
 ac_cv_weak_alias_support=no)])
-if test $ac_cv_weak_alias_support = no; then
-  AC_DEFINE(NO_WEAK_ALIASES,1,[Define if weak aliases are not supported])
+if test x$ac_cv_weak_alias_support = xyes; then
+  AC_DEFINE(HAVE_WEAK_ALIASES,1,[Define if weak aliases are supported])
 fi
 ])
 
