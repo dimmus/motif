@@ -33,6 +33,7 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 
 #include <string.h>
 #include <stdio.h>
+#include <wctype.h>
 #include <X11/Xatom.h>
 #include <Xm/XmosP.h>
 #include "XmI.h"
@@ -71,10 +72,11 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include "ToolTipI.h"
 #include <Xm/XmP.h>
 
+#define FIX_1210	1
 #define FIX_1390	1
 #define FIX_1365	1
 #define FIX_1362	1
-#define FIX_1636    1
+#define FIX_1636  1
 
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
@@ -7493,36 +7495,47 @@ ListQuickNavigate(Widget wid,
   /* If there is more data than we can handle, bail out. */
   if (((status_return == XLookupChars) || (status_return == XLookupBoth)) &&
       (input_length > 0))
+  {
+    if (lw->list.itemCount > 0)
     {
-      if (lw->list.itemCount > 0)
-	{
-	  /* Convert input to a wchar_t for easy comparison. */
-	  (void) mbtowc(&input_char, NULL, 0);
-	  (void) mbtowc(&input_char, input_string, input_length);
+      /* Convert input to a wchar_t for easy comparison. */
+      (void) mbtowc(&input_char, NULL, 0);
+      (void) mbtowc(&input_char, input_string, input_length);
 
-	  /* Search forward from the current position. */
-	  for (i = lw->list.CurrentKbdItem + 1; i < lw->list.itemCount; i++)
-	    if (CompareCharAndItem(lw, input_char, i))
-	      {
-		found = True;
-		break;
-	      }
+#ifdef FIX_1210	  
+      if (iswprint((wint_t)input_char))
+      {
+#endif
+	      /* Search forward from the current position. */
+	      for (i = lw->list.CurrentKbdItem + 1; i < lw->list.itemCount; i++)
+          if (CompareCharAndItem(lw, input_char, i))
+          {
+            found = True;
+            break;
+          }
 
-	  /* Wrap around to the start of the list if necessary. */
-	  if (!found)
-	    {
-	      for (i = 0; i <= lw->list.CurrentKbdItem; i++)
-		if (CompareCharAndItem(lw, input_char, i))
-		  {
-		    found = True;
-		    break;
-		  }
-	    }
-	}
-
-      if (!found)
-	XBell(XtDisplay(wid), 0);
+	      /* Wrap around to the start of the list if necessary. */
+	      if (!found)      
+        {
+		    for (i = 0; i <= lw->list.CurrentKbdItem; i++)
+          if (CompareCharAndItem(lw, input_char, i))
+          {
+            found = True;
+            break;
+          }
+        }
+#ifdef FIX_1210
+ 	    }
+#endif
     }
+
+      if (!found
+#ifdef FIX_1210
+          && iswprint((wint_t)input_char)
+#endif
+      )
+	      XBell(XtDisplay(wid), 0);
+  }
 }
 
 /***************************************************************************
