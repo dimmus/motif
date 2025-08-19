@@ -2938,7 +2938,6 @@ Destroy(
 	 XtFree((char *) ext);
     }
 
-#ifdef FIX_1388
     {
         XmToolTipConfigTrait        ttp;           /* ToolTip pointer */
 
@@ -2948,7 +2947,6 @@ Destroy(
             XtFree((char *)ttp);
         }
     }
-#endif
 
     /*
      * If all VendorShells have been destroyed, destroy the XmDisplay object

@@ -207,7 +207,6 @@ _XmConst char _XmContainer_traversalTranslations[] = "\
 ~s ~m ~a <Key>Tab:	ManagerGadgetNextTabGroup()";
 
 /*** GrabShell.c ***/
-#ifdef FIX_1445
 externaldef(translations) _XmConst char _XmGrabShell_translations [] = "\
 <Btn4Down>:		GrabShellMouseWheel()\n\
 <Btn4Up>:		GrabShellMouseWheel()\n\
@@ -215,12 +214,6 @@ externaldef(translations) _XmConst char _XmGrabShell_translations [] = "\
 <Btn5Up>:		GrabShellMouseWheel()\n\
 <BtnUp>:		GrabShellBtnUp()\n\
 <BtnDown>:		GrabShellBtnDown()";
-#else
-externaldef(translations) _XmConst char _XmGrabShell_translations [] = "\
-<BtnUp>:		GrabShellBtnUp()\n\
-<BtnDown>:		GrabShellBtnDown()";
-#endif
-
 
 /*** Notebook.c ***/
 externaldef(translations) _XmConst char _XmNotebook_TabAccelerators[] = "\

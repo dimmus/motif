@@ -61,8 +61,6 @@ static char rcsid[] = "$TOG: PushB.c /main/29 1999/01/27 16:08:33 mgreess $"
 #define XmINVALID_MULTICLICK	255
 #define DELAY_DEFAULT		100
 
-#define FIX_1516
-
 /********    Static Function Declarations    ********/
 
 static void Arm(
@@ -2042,9 +2040,7 @@ SetPushButtonSize(
 
   if (newpb->pushbutton.arm_pixmap != XmUNSPECIFIED_PIXMAP)
     {
-#ifdef FIX_1516
       if (newpb->label.pixmap != XmUNSPECIFIED_PIXMAP)
-#endif
       XmeGetPixmapData(XtScreen(newpb), newpb->label.pixmap,
 		     NULL, NULL, NULL, NULL, NULL, NULL,
 		     &onW, &onH);
@@ -2348,9 +2344,7 @@ ArmAndActivate(
   /* if the parent is menu system able, notify it about the select */
   if (menuSTrait != NULL)
     menuSTrait->entryCallback(XtParent(pb), (Widget)pb, &call_value);
-#ifdef FIX_1375
 	pb->label.pixmap = pb->pushbutton.unarm_pixmap;
-#endif
   if ((! pb->label.skipCallback) && (pb->pushbutton.activate_callback))
     {
       XFlush (XtDisplay (pb));

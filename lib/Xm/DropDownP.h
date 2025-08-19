@@ -12,17 +12,13 @@
 extern "C" {
 #endif
 
-#define FIX_1446
-
 #define XmDropDown_UP 		((unsigned char) 0)
 #define XmDropDown_UNPOSTED	XmDropDown_UP
 #define XmDropDown_DOWN        	((unsigned char) 1)
 #define XmDropDown_POSTED		XmDropDown_DOWN
 #define XmDropDown_IN_PROGRESS 	((unsigned char) 2)
 #define XmDropDown_BEGIN_POPUP_FROM_TEXT  ((unsigned char) 3)
-#ifdef FIX_1446
 #define XmDropDown_AFTER_UNPOST 	((unsigned char) 4)
-#endif
 #define XmDropDown_h_space(w)   (((XmDropDownWidget)(w))->combo.h_space)
 #define XmDropDown_v_space(w)   (((XmDropDownWidget)(w))->combo.v_space)
 #define XmDropDown_popup_offset(w)  \

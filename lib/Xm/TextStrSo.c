@@ -31,8 +31,6 @@ static char rcsid[] = "$XConsortium: TextStrSo.c /main/14 1996/10/23 16:05:21 cd
 #endif
 #endif
 
-#define FIX_1320
-
 #include <ctype.h>
 #include <limits.h>
 #include <X11/Xatom.h>
@@ -1225,9 +1223,7 @@ Scan(XmTextSource source,
 	  c = Look(data, position, dir);
 	  if (c && isspace((unsigned char)*c)) {
 	    if (whiteSpace < 0) whiteSpace = position;
-#ifdef FIX_1320
 	    if (*c == '\n') break;
-#endif
 	  } else if (whiteSpace >= 0)
 	    break;
 	  position += ddir;

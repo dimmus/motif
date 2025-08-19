@@ -2772,13 +2772,8 @@ DrawToggle(
 	  break;
 
 	case XmONE_OF_MANY_ROUND:
-#ifdef FIX_1402
 	  XmeDrawCircle(dpy, drawable, top_gc, bot_gc, fill_gc, x, y,
 			edge, edge, w->toggle.detail_shadow_thickness, margin);
-#else
-	  XmeDrawCircle(dpy, drawable, top_gc, bot_gc, fill_gc, x, y,
-			edge, edge, w->toggle.detail_shadow_thickness, 1);
-#endif
 	  break;
 	}
     }
@@ -4282,10 +4277,8 @@ DrawEtchedInMenu(
   int fh = tb->rectangle.height - 2 * margin;
   Boolean restore_gc = False;
   GC tmp_gc = NULL;
-#ifdef FIX_1395
   Boolean restore_bgc = False;
   GC tmp_bgc = NULL;
-#endif
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay((Widget) tb));
   Boolean etched_in = dpy->display.enable_etched_in_menu;
 
@@ -4321,7 +4314,6 @@ DrawEtchedInMenu(
 	      restore_gc = True;
 	  }
 
-#ifdef FIX_1395
 	  {
 	    XGCValues values;
 	    /* Fetch the select_color GetGC() actually used. */
@@ -4338,7 +4330,6 @@ DrawEtchedInMenu(
 		restore_bgc = True;
 	    }
 	 }
-#endif
     }
 
   {
@@ -4356,12 +4347,10 @@ DrawEtchedInMenu(
       LabG_NormalGC(tb) = tmp_gc;
     }
 
-#ifdef FIX_1395
   if (restore_bgc)
   {
       LabG_BackgroundGC(tb) = tmp_bgc;
   }
-#endif
 }
 
 /*

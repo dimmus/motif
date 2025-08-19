@@ -117,9 +117,7 @@ typedef struct {
 
     Boolean label_from_name;
     Boolean check_set_render_table;
-#ifdef FIX_1381
-		GC shadow_gc;			/* GC to use shadow for text. */
-#endif
+	GC shadow_gc;			/* GC to use shadow for text. */
 
 
 } XmIconButtonPart;
@@ -154,17 +152,13 @@ typedef struct {
 #define XmIconButton_fill_gc(w) (((XmIconButtonWidget)(w))->icon.fill_gc)
 #define XmIconButton_pixmap_fill_gc(w) (((XmIconButtonWidget)(w))->icon.pixmap_fill_gc)
 #define XmIconButton_stippled_text_gc(w) (((XmIconButtonWidget)(w))->icon.stippled_text_gc)
-#ifdef FIX_1381
 #define XmIconButton_insensitive_text_gc(w) (((XmIconButtonWidget)(w))->icon.stippled_text_gc)
-#endif
 #define XmIconButton_stippled_set_text_gc(w) (((XmIconButtonWidget)(w))->icon.stippled_set_text_gc)
 #define XmIconButton_stippled_set_gc(w) (((XmIconButtonWidget)(w))->icon.stippled_set_gc)
 #define XmIconButton_stippled_unset_gc(w) (((XmIconButtonWidget)(w))->icon.stippled_unset_gc)
 #define XmIconButton_time(w) (((XmIconButtonWidget)(w))->icon.time)
 #define XmIconButton_label_from_name(w) (((XmIconButtonWidget)(w))->icon.label_from_name)
-#ifdef FIX_1381
 #define XmIconButton_shadow_gc(w) (((XmIconButtonWidget)(w))->icon.shadow_gc)
-#endif
 typedef struct _XmIconButtonRec {
     CorePart		core;
     XmPrimitivePart	primitive;

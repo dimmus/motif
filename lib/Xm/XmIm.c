@@ -47,14 +47,8 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 #include "XmImI.h"
 #include <X11/Xlib.h>
 
-#define FIX_1534
-
 # include <stdarg.h>
 # define Va_start(a,b) va_start(a,b)
-
-#define FIX_1510
-#define FIX_1129
-#define FIX_1196
 
 #ifdef NO_XICPROC
 typedef Bool (*XICProc)( XIC, XPointer, XPointer);
@@ -474,9 +468,7 @@ XmImSetFocusValues(Widget w,
           im_info->current_widget = w;
           XtVaGetValues(w, XmNbackground, &bg, NULL);
           XtVaSetValues(p, XmNbackground, bg, NULL);
-#ifdef FIX_1129
           ImGeoReq(p);
-#endif
           draw_separator(p);
         }
     }
@@ -853,12 +845,8 @@ _XmImFreeShellData(Widget     widget,
   assert(im_info->shell_xic == NULL);
 
   /* Delete the dummy widget. */
-#ifdef FIX_1534
   if (im_info->im_widget != NULL &&
       !widget->core.being_destroyed)
-#else
-  if (im_info->im_widget != NULL)
-#endif
     {
       XtDestroyWidget(im_info->im_widget);
       im_info->im_widget = NULL;
@@ -1263,14 +1251,12 @@ set_values(Widget w,
     if (va_vlist)
     {
       icp->xic = XCreateIC(xim_info->xim, XNVaNestedList, va_vlist, NULL);
-#ifdef FIX_1510
       if (icp->xic == NULL)
       {
         icp->input_style = XIMPreeditNothing | XIMStatusNothing;
         icp->xic = XCreateIC(xim_info->xim, XNInputStyle, icp->input_style,
             XNClientWindow, XtWindow(p), XNFocusWindow, XtWindow(p), NULL);
       }
-#endif
     }
     else
       icp->xic = XCreateIC(xim_info->xim, NULL);
@@ -1291,9 +1277,7 @@ set_values(Widget w,
       XtAddEventHandler(p, (EventMask)mask, False, null_proc, NULL);
     }
     if (XtIsRealized(p)) {
-#ifdef FIX_1129
       im_info->current_widget = w;
-#endif
       if (XmIsDialogShell(p)) {
 	for (i = 0;
 	     i < ((CompositeWidget)p)->composite.num_children;
@@ -1304,9 +1288,6 @@ set_values(Widget w,
 	  }
       } else
 	ImGeoReq(p);
-#ifndef FIX_1129
-      im_info->current_widget = w;
-#endif
     }
     /* Is this new XIC supposed to be shared? */
     switch (input_policy)
@@ -1404,14 +1385,12 @@ set_values(Widget w,
       if (va_vlist)
       {
 	icp->xic = XCreateIC(xim_info->xim, XNVaNestedList, va_vlist, NULL);
-#ifdef FIX_1510
         if (icp->xic == NULL)
         {
           icp->input_style = XIMPreeditNothing | XIMStatusNothing;
           icp->xic = XCreateIC(xim_info->xim, XNInputStyle, icp->input_style,
               XNClientWindow, XtWindow(p), XNFocusWindow, XtWindow(p), NULL);
         }
-#endif
       }
       else
 	icp->xic = XCreateIC(xim_info->xim, NULL);
@@ -2094,7 +2073,6 @@ ImSetGeo(Widget  vw,
         } else if ((use_plist = (icp->input_style & XIMPreeditPosition)) != 0)
         {
           unsigned int  margin;
-#ifdef FIX_1129
         /*
          * im_info->current_widget can contains NULL,
          * for example, when widget having XIC focus is disposed.
@@ -2102,7 +2080,6 @@ ImSetGeo(Widget  vw,
          */
           if (im_info->current_widget == NULL)
             break;
-#endif
           margin = ((XmPrimitiveWidget)im_info->current_widget)
                   ->primitive.shadow_thickness
               + ((XmPrimitiveWidget)im_info->current_widget)
@@ -2527,10 +2504,8 @@ unset_current_xic(XmImXICInfo	  xic_info,
   assert(xim_info->current_xics != (XContext) 0);
   (void) XDeleteContext(XtDisplay(widget), (XID) widget,
 			xim_info->current_xics);
-#ifdef FIX_1196
   if (im_info->current_widget == widget)
     im_info->current_widget = NULL;
-#endif
   /* Remove this widget as a reference to this XIC. */
   if (remove_ref(&xic_info->widget_refs, widget) == 0)
     {
@@ -2542,10 +2517,6 @@ unset_current_xic(XmImXICInfo	  xic_info,
 	    *ptr = xic_info->next;
 	    break;
 	  }
-#ifndef FIX_1196
-      if (im_info->current_widget == widget)
-	im_info->current_widget = NULL;
-#endif
       /* Don't let anyone share this XIC. */
       if (xic_info->source != NULL)
 	*(xic_info->source) = NULL;

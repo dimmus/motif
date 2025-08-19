@@ -59,8 +59,6 @@
 
 #include <Xm/SpinBP.h>
 
-#define FIX_1519
-
 static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass classPart);
 static void Initialize(Widget req, Widget w,
@@ -2836,9 +2834,7 @@ XmSpinBoxValidatePosition(Widget text_field, int *position)
   int			iPosition;
   int			positionOffset =
 				XtOffset(XmSpinBoxConstraint, position);
-#ifdef FIX_1519
   int           iOffset;
-#endif
   String		string;
   XmAccessTextualTrait  textT;
   XmSpinBoxConstraint	wc;
@@ -2912,23 +2908,15 @@ XmSpinBoxValidatePosition(Widget text_field, int *position)
       return(XmMAXIMUM_VALUE);
     }
 
-#ifdef FIX_1519
   iOffset = iPosition - SB_ChildMinimumPositionValue(wc);
 
   if ((iOffset % wc->increment_value) != 0)
-#else
-  if ((iPosition % wc->increment_value) != 0)
-#endif
     {
       int	iValue = wc->increment_value;
 
       if (position)
 	{
-#ifdef FIX_1519
 	  XtArgVal external_position = SB_ChildMinimumPositionValue(wc) + (iOffset / iValue) * iValue;
-#else
-	  XtArgVal external_position = (iPosition / iValue) * iValue;
-#endif
           GetPositionValue(text_field, positionOffset, &external_position);
           *position = (int)external_position;
 	}

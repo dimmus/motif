@@ -881,9 +881,7 @@ ArmAndActivate(
     menuSTrait->entryCallback (XtParent(pb), (Widget) pb, &call_value);
 
 
-#ifdef FIX_1375
   LabG_Pixmap(pb) = PBG_UnarmPixmap(pb);	/*Added for fix bug 1375*/
-#endif
   if ((! LabG_SkipCallback(pb)) && (PBG_ActivateCallback(pb)))
     {
       XFlush (XtDisplay (pb));

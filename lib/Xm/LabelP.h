@@ -113,9 +113,7 @@ typedef struct _XmLabelPart
 
   XRectangle	  PixmapRect;   /* The bounding box of the pixmap in TextRect */
   XRectangle	  StringRect;   /* The bounding box of the string in TextRect */
-#ifdef FIX_1381
   GC		  shadow_GC;
-#endif
 } XmLabelPart;
 
 

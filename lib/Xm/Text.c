@@ -58,8 +58,6 @@ static char rcsid[] = "$TOG: Text.c /main/47 1999/01/26 15:18:26 mgreess $"
 #include "XmI.h"
 #include "XmStringI.h"
 
-#define FIX_1367
-#define FIX_1147
 /* Resolution independence conversion functions */
 
 #define MESSAGE2	_XmMMsgText_0000
@@ -1720,7 +1718,6 @@ _XmTextUpdateLineTable(Widget widget,
     if (tw->text.table_index > tw->text.total_lines)
       tw->text.table_index = tw->text.total_lines;
 
-#ifdef FIX_1367
     if (tw->text.on_or_off == on) {
       XmTextPosition cursorPos = tw->text.cursor_position;
       if (start < tw->text.cursor_position) {
@@ -1737,21 +1734,6 @@ _XmTextUpdateLineTable(Widget widget,
         _XmTextShowPosition((Widget)tw, cursorPos);
       }
     }
-#else
-    if (start < tw->text.cursor_position && tw->text.on_or_off == on) {
-      XmTextPosition cursorPos = tw->text.cursor_position;
-      if (tw->text.cursor_position < end) {
-	if (tw->text.cursor_position - start <= block_num_chars)
-	  cursorPos = tw->text.cursor_position;
-	else
-	  cursorPos = start + block_num_chars;
-      } else {
-	cursorPos = tw->text.cursor_position - (end - start) +
-	  block_num_chars;
-      }
-      _XmTextSetCursorPosition(widget, cursorPos);
-    }
-#endif
   }
 }
 
@@ -2934,35 +2916,19 @@ _XmTextEnableRedisplay(XmTextWidget widget)
     if (XmDirectionMatch(XmPrim_layout_direction(widget),
 			 XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
       if (widget->text.output->data->scrollvertical &&
-#ifdef FIX_1147
 	  XmIsScrolledWindow(XtParent(widget)))
-#else
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
-#endif
 	_XmRedisplayVBar(widget);
       if (widget->text.output->data->scrollhorizontal &&
-#ifdef FIX_1147
 	  XmIsScrolledWindow(XtParent(widget)) &&
-#else
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
-#endif
 	  !widget->text.hsbar_scrolling)
 	_XmChangeHSB(widget);
     } else {
       if (widget->text.output->data->scrollvertical &&
-#ifdef FIX_1147
 	  XmIsScrolledWindow(XtParent(widget)) &&
-#else
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass &&
-#endif
 	  !widget->text.vsbar_scrolling)
 	_XmChangeVSB(widget);
       if (widget->text.output->data->scrollhorizontal &&
-#ifdef FIX_1147
 	  XmIsScrolledWindow(XtParent(widget)))
-#else
-	  XtClass(widget->core.parent) == xmScrolledWindowWidgetClass)
-#endif
 	_XmRedisplayHBar(widget);
     }
   }

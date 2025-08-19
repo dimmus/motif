@@ -44,9 +44,6 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
 
-#define FIX_1299
-#define FIX_1612
-
 #define MESSAGE1	_XmMMsgForm_0000
 #define MESSAGE5	_XmMMsgForm_0002
 #define MESSAGE7 	_XmMMsgForm_0003
@@ -70,14 +67,12 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #define SIBLINGS(w,s)	(((w != NULL) && (s != NULL)) &&\
 			 (XtParent(w) == XtParent(s)))
 
-#ifdef FIX_1299
 #define ATTACHED_WIDGET(cons, j) \
   (cons->att[j].w)
 
 #define IS_ATTACHED_WIDGET(cons, j) \
   ((cons->att[j].type == XmATTACH_WIDGET || cons->att[j].type == XmATTACH_OPPOSITE_WIDGET) \
   && cons->att[j].w != (Widget) NULL)
-#endif /* FIX_1299 */
 
 /* convenient magic numbers */
 
@@ -149,7 +144,6 @@ static void Redisplay(
                         Widget fw,
                         XEvent *event,
                         Region region) ;
-#ifdef FIX_1299
 static void UpdateAttachments(
                         XmFormWidget fw,
                         Widget wid,
@@ -160,7 +154,6 @@ static void PlaceChild(
                         Widget child,
                         Widget instigator,
                         XtWidgetGeometry* inst_geometry);
-#endif /* FIX_1299 */
 static void PlaceChildren(
                         XmFormWidget fw,
                         Widget instigator,
@@ -281,12 +274,10 @@ static int GetFormOffset(
                         XmFormWidget fw,
                         int which,
                         XmFormAttachment a) ;
-#ifdef FIX_1612
 static Boolean IsWidgetAttachedOneHorizontalSide(
                         Widget w);
 static Boolean IsWidgetAttachedOneVerticalSide(
                         Widget w);
-#endif
 
 /********    End Static Function Declarations    ********/
 
@@ -1091,7 +1082,6 @@ GeometryManager(
 		/* we haden't changed anything else, just return No */
 		reply = XtGeometryNo;
 
-#ifdef FIX_1612
                 if (((IsWidgetAttachedOneHorizontalSide(w)) &&
                      (desired->request_mode & CWWidth)) ||
                     ((IsWidgetAttachedOneVerticalSide(w)) &&
@@ -1099,7 +1089,6 @@ GeometryManager(
 		  { PlaceChildren (fw, w, desired);
 		    reply = XtGeometryYes;
 		  }
-#endif
 	    }
 	} else {
 	    /* ok, we got a Yes form the Form's parent, let's relayout
@@ -1297,7 +1286,6 @@ PlaceChildren(
 {
     Widget child;
 
-#ifdef FIX_1299
     for (child = fw->form.first_child;
         child != NULL;
         child = (GetFormConstraint(child))->next_sibling) {
@@ -1308,71 +1296,8 @@ PlaceChildren(
        * according to the placement of a child */
       UpdateAttachments(fw, child, instigator, inst_geometry);
     }
-#else
-    register XmFormConstraint c;
-    int height, width;
-    Dimension border_width;
-    int near_edge;
-
-    for (child = fw->form.first_child;
-	 child != NULL;
-	 child = c->next_sibling) {
-	if (!XtIsManaged(child))
-	    break;
-
-	c = GetFormConstraint(child);
-
-	CalcEdgeValues(child, TRUE, instigator, inst_geometry,
-		       NULL, NULL);
-
-	if ((child == instigator) &&
-	    (inst_geometry->request_mode & CWBorderWidth))
-	    border_width = inst_geometry->border_width;
-	else
-	    border_width = ((RectObj) child)->rectangle.border_width;
-
-        if (LayoutIsRtoLM(fw)) {
-	  /* switch the meanings of left and right attachements */
-	  width = c->att[LEFT].value - c->att[RIGHT].value - (2 * border_width);
-	  near_edge = RIGHT;
-	} else {
-	  width = c->att[RIGHT].value - c->att[LEFT].value - (2 * border_width);
-	  near_edge = LEFT;
-	}
-	height = c->att[BOTTOM].value - c->att[TOP].value
-	    - (2 * border_width);
-
-	if (width <= 0) width = 1;
-	if (height <= 0) height = 1;
-
-	if ((c->att[near_edge].value != ((RectObj) child)->rectangle.x) ||
-	    (c->att[TOP].value != ((RectObj) child)->rectangle.y)  ||
-	    (width != ((RectObj) child)->rectangle.width)          ||
-	    (height != ((RectObj) child)->rectangle.height)        ||
-	    (border_width != ((RectObj) child)->rectangle.border_width)) {
-
-	  /* Yes policy everywhere, so don't resize the instigator */
-	  if (child != instigator) {
-	    XmeConfigureObject(child,
-			       c->att[near_edge].value,
-			       c->att[TOP].value,
-			       width, height, border_width);
-	  } else {
-	    XmeConfigureObject(child,
-			       c->att[near_edge].value,
-			       c->att[TOP].value,
-			       child->core.width, child->core.height,
-			       child->core.border_width);
-	    child->core.width = width ;
-	    child->core.height = height ;
-	    child->core.border_width = border_width ;
-	  }
-	}
-      }
-#endif /* FIX_1299 */
 }
 
-#ifdef FIX_1299
 static void
 UpdateAttachments(
     XmFormWidget fw,
@@ -1457,7 +1382,6 @@ PlaceChild(
 	  }
 	}
 }
-#endif /* FIX_1299 */
 
 /************************************************************************
  *
@@ -2190,20 +2114,8 @@ SortChildren(
 			last_child = child;
 			c->sorted = True;
 		}
-#ifndef FIX_1299
-
-		else
-		{
-			/*  We failed to find a sortable child, there must be  */
-			/*  a circular dependency.                             */
-
-			XmeWarning( (Widget) fw, MESSAGE5);
-			return;
-		}
-#endif
 	}
 
-#ifdef FIX_1299
   /*Add other children that haven't been sorted*/
 	for (i = 0; i < fw->composite.num_children; i++)
 	{
@@ -2231,11 +2143,7 @@ SortChildren(
 			c->sorted = True;
 		}
   }
-#endif
-
 }
-
-
 
 
 /************************************************************************
@@ -3488,9 +3396,6 @@ XmCreateFormDialog(
 				parent, name, arglist, argcount) ;
 }
 
-
-
-#ifdef FIX_1612
 /************************************************************************
  *
  *  IsWidgetAttachedOneHorizontalSide
@@ -3524,5 +3429,3 @@ static Boolean IsWidgetAttachedOneVerticalSide(Widget w)
       }
     return False;
   }
-
-#endif

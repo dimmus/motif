@@ -651,11 +651,7 @@ Destroy(
    XmGadget g = (XmGadget)w;
 
    _XmNavigDestroy(w);
-#ifdef FIX_1388
    _XmToolTipRemove(w);
-#else
-   _XmToolTipLeave(w, NULL, NULL, NULL);
-#endif
 }
 
 

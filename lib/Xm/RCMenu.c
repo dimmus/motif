@@ -86,8 +86,6 @@ static char *rcsid = "$TOG: RCMenu.c /main/25 1999/05/24 18:06:57 samborn $";
 #include "UniqueEvnI.h"
 #include "VendorSI.h"
 
-#define FIX_1535
-
 static void SwallowEventHandler(
 				   Widget widget,
 				   XtPointer client_data,
@@ -1068,12 +1066,8 @@ _XmMenuFocus(
 	    mst->RC_menuFocus.oldTime = _time;
 	    if (tmpWindow != mst->RC_menuFocus.oldFocus)
 	    {
-#ifdef FIX_1535
 	      if (mst->RC_menuFocus.oldFocus != (Window) NULL &&
 		  mst->RC_menuFocus.oldWidget != NULL)
-#else
-	      if (mst->RC_menuFocus.oldWidget != NULL)
-#endif
 		XtRemoveCallback(mst->RC_menuFocus.oldWidget,
 				 XtNdestroyCallback,
 				 (XtCallbackProc)InvalidateOldFocus,
@@ -1892,7 +1886,6 @@ _XmGetActiveTopLevelMenu(
    * topLevel = w;
 }
 
-#ifdef FIX_345
 static void
 GrabKeyWithLockMask (
         Widget widget,
@@ -1943,7 +1936,7 @@ UngrabKeyWithLockMask (
     XtUngrabKey(widget, keycode, modifiers|ScrollLockMask|NumLockMask);
     XtUngrabKey(widget, keycode, modifiers|LockMask|ScrollLockMask|NumLockMask);
 }
-#endif
+
 /*
  * set up the grabs on the appropriate assoc widgets.  For a popup, this
  * is all of the widgets on the postFromList.  For a menubar and option
@@ -1967,24 +1960,14 @@ GrabKeyOnAssocWidgets(
    if (IsPopup(rowcol))
    {
       for (i=0; i < rowcol->row_column.postFromCount; i++)
-#ifdef FIX_345
          GrabKeyWithLockMask (rowcol->row_column.postFromList[i], detail, modifiers,
             False, GrabModeAsync, GrabModeAsync);
-#else
-         XtGrabKey(rowcol->row_column.postFromList[i], detail, modifiers,
-            False, GrabModeAsync, GrabModeAsync);
-#endif
    }
    else if (IsBar(rowcol) || IsOption(rowcol))
    {
       _XmRCGetTopManager ((Widget) rowcol, &topManager);
-#ifdef FIX_345
       GrabKeyWithLockMask (topManager, detail, modifiers, False,
 	 GrabModeAsync, GrabModeAsync);
-#else
-      XtGrabKey(topManager, detail, modifiers, False,
-	 GrabModeAsync, GrabModeAsync);
-#endif
    }
    else if (IsPulldown(rowcol))
    {
@@ -2015,22 +1998,14 @@ UngrabKeyOnAssocWidgets(
       {
 	 assocWidget = rowcol->row_column.postFromList[i];
 	 if (!assocWidget->core.being_destroyed)
-#ifdef FIX_345
 	    UngrabKeyWithLockMask (assocWidget, detail, modifiers);
-#else
-	    XtUngrabKey(assocWidget, detail, modifiers);
-#endif
       }
    }
    else if (IsBar(rowcol) || IsOption(rowcol))
    {
       _XmRCGetTopManager ((Widget) rowcol, &assocWidget);
       if (!assocWidget->core.being_destroyed)
-#ifdef FIX_345
          UngrabKeyWithLockMask (assocWidget, detail, modifiers);
-#else
-         XtUngrabKey(assocWidget, detail, modifiers);
-#endif
    }
    else if (IsPulldown(rowcol))
    {

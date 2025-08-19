@@ -87,8 +87,6 @@ extern "C" {
 #define _XmRendRefcountInc(r)	++(((_XmRendition)*(r))->refcount)
 #define _XmRendRefcountDec(r)	--(((_XmRendition)*(r))->refcount)
 
-
-#define  FIX_1415
 typedef struct __XmRenditionRec
 {
   /* flag indicating _XmFontRenditionRec */
@@ -277,9 +275,7 @@ void _XmXftSetClipRectangles(Display *display, Window window, Position x, Positi
 
 XftColor _XmXftGetXftColor(Display *display, Pixel color);
 
-#ifdef  FIX_1415
 void _XmXftFontAverageWidth(Widget w, XtPointer f, int *width);
-#endif
 
 #endif
 

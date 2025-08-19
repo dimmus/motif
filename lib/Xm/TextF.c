@@ -80,8 +80,6 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #endif
 #include <Xm/XmP.h>
 
-#define FIX_1409
-
 #if (defined(__FreeBSD__) && (__FreeBSD__ < 4)) || \
     (defined(__APPLE__) || defined(__NetBSD__) || defined(__OpenBSD__))
 /*
@@ -240,10 +238,8 @@ static void SetNormGC(XmTextFieldWidget tf,
                         Boolean stipple);
 #endif /* NeedWidePrototypes */
 
-#ifdef FIX_1381
 static void SetShadowGC(XmTextFieldWidget tf,
                         GC gc);
-#endif
 
 static void SetInvGC(XmTextFieldWidget tf,
 		       GC gc);
@@ -1472,7 +1468,6 @@ _XmTextFToggleCursorGC(Widget widget)
 
   if (!XtIsRealized(widget)) return;
 
-#ifdef FIX_1501
   if (!XtIsSensitive((Widget)tf)) {
     valueMask = GCForeground|GCBackground|GCFillStyle|GCStipple|GCFunction;
     values.foreground = _XmAssignInsensitiveColor((Widget)tf);
@@ -1489,8 +1484,7 @@ _XmTextFToggleCursorGC(Widget widget)
       values.function = GXcopy;
     }
   } else {
-#endif
-  if (tf->text.overstrike) {
+    if (tf->text.overstrike) {
     valueMask = GCFillStyle|GCFunction|GCForeground|GCBackground;
     if (!tf->text.add_mode && XtIsSensitive(widget) &&
 	(tf->text.has_focus || tf->text.has_destination)) {
@@ -1533,9 +1527,7 @@ _XmTextFToggleCursorGC(Widget widget)
       values.background = tf->core.background_pixel;
     }
   }
-#ifdef FIX_1501
   }
-#endif
   XSetClipMask(XtDisplay(widget), tf->text.save_gc, None);
   XChangeGC(XtDisplay(widget), tf->text.image_gc, valueMask, &values);
 }
@@ -1720,7 +1712,6 @@ PaintCursor(XmTextFieldWidget tf)
           cursor_width = (tf->core.width -
                                  (tf->primitive.shadow_thickness +
                                  tf->primitive.highlight_thickness)) - x;
-#ifdef FIX_1501
         if (cursor_width > 0 && cursor_height > 0) {
           if (!XtIsSensitive((Widget) tf)) {
             SetShadowGC(tf, tf->text.image_gc);
@@ -1728,14 +1719,9 @@ PaintCursor(XmTextFieldWidget tf)
                            (unsigned int) cursor_width, (unsigned int) cursor_height);
           }
           _XmTextFToggleCursorGC((Widget) tf);
-#else
-           if ( cursor_width > 0 && cursor_height > 0 )
-#endif
     		XFillRectangle(XtDisplay(tf), XtWindow(tf), tf->text.image_gc, x, y,
 		   cursor_width, cursor_height);
-#ifdef FIX_1501
 	    }
-#endif
   } else {
         Position src_x = 0;
         if ((int)(x + tf->text.cursor_width) > (int)(tf->core.width -
@@ -1982,15 +1968,9 @@ SetNormGC(XmTextFieldWidget tf,
   if (change_stipple) {
     valueMask |= GCFillStyle;
     if (stipple) {
-#ifdef FIX_1381
       /*generally gray insensitive foreground (instead stipple)*/
 		  values.foreground = _XmAssignInsensitiveColor((Widget)tf);
     	  values.fill_style = FillSolid;
-#else
-      values.fill_style = FillStippled;
-      valueMask |= GCStipple;
-      values.stipple = tf->text.stipple_tile;
-#endif
     } else
       values.fill_style = FillSolid;
   }
@@ -1998,7 +1978,6 @@ SetNormGC(XmTextFieldWidget tf,
   XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
 
-#ifdef FIX_1381
 static void
 SetShadowGC(XmTextFieldWidget tf, GC gc)
 {
@@ -2010,7 +1989,6 @@ SetShadowGC(XmTextFieldWidget tf, GC gc)
 
   XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
-#endif
 
 static void
 SetInvGC(XmTextFieldWidget tf,
@@ -2205,7 +2183,6 @@ DrawTextSegment(XmTextFieldWidget tf,
 		   TextF_FontAscent(tf) + TextF_FontDescent(tf));
     SetNormGC(tf, tf->text.gc, True, stipple);
   }
-#ifdef FIX_1381
 if (stipple){
     /*Draw shadow for insensitive text*/
     SetShadowGC(tf, tf->text.gc);
@@ -2218,8 +2195,6 @@ if (stipple){
     }
     SetNormGC(tf, tf->text.gc, True, stipple);
 }
-#endif
-
 
   if (tf->text.max_char_size != 1) {
     DrawText(tf, tf->text.gc, *x, y, (char*) (TextF_WcValue(tf) + seg_start),
@@ -6924,11 +6899,7 @@ LoadFontMetrics(XmTextFieldWidget tf)
       fs_extents->max_logical_extent.y;
 #ifdef USE_XFT
   } else if (TextF_UseXft(tf)) {
-#ifdef FIX_1415
 	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), (int *)&charwidth);
-#else
-    charwidth = TextF_XftFont(tf)->max_advance_width;
-#endif
     TextF_FontAscent(tf) = TextF_XftFont(tf)->ascent;
     TextF_FontDescent(tf) = TextF_XftFont(tf)->descent;
 #endif
@@ -8213,21 +8184,8 @@ SetValues(Widget old,
 			   new_tf->text.max_char_size);
 	if (ret_val < 0) temp[0] = '\0';
 
-/* Fixed bug #1214. ModifyVerify needs wchar_t*, not char*. */
-/* old code:
-	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos, &temp,
-				   &new_tf->text.string_length, &newInsert,
-				   &free_insert);
-*/
-#ifdef FIX_1409
 	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos,
 	                           &temp, &ret_val, &newInsert, &free_insert);
-#else
-	mod_ver_ret = ModifyVerify(new_tf, NULL, &fromPos, &toPos,
-	                           (char**)&TextF_WcValue(new_tf),
-				   &ret_val, &newInsert, &free_insert);
-#endif
-/* end if fix of bug #1214 */
 
 	if (old != temp) XtFree (old);
       }

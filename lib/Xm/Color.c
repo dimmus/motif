@@ -43,11 +43,7 @@
 #include "MessagesI.h"
 #include "ScreenI.h"
 #include "XmI.h"
-#ifdef FIX_1381
 #include <Xm/XpmP.h>
-#endif
-
-#define FIX_1500
 
 /* Warning and Error messages */
 
@@ -106,10 +102,8 @@ static XmColorData * GetColors(
                         Screen *screen,
                         Colormap color_map,
                         Pixel background) ;
-#ifdef FIX_1381
 static unsigned int FromColorToBlackAndWhite(
                         char *col) ;
-#endif
 
 
 /********    End Static Function Declarations    ********/
@@ -1243,7 +1237,6 @@ _XmSelectColorDefault(
    XmeGetDefaultPixel (widget, XmSELECT, offset, value);
 }
 
-#ifdef FIX_1381
 static
 unsigned int
 FromColorToBlackAndWhite(char *col)
@@ -1269,16 +1262,12 @@ _XmConvertToBW(Widget w, Pixmap pm)
    unsigned int bw = 0, bw2 = 0;
    char *col = NULL, *col2 = NULL;
    Pixmap bw_pixmap = XmUNSPECIFIED_PIXMAP;
-#ifdef FIX_1500
    char *data_before = NULL, *data_after = NULL;
-#endif
 
    if (pm == XmUNSPECIFIED_PIXMAP)
 	   return bw_pixmap;
 
-#ifdef FIX_1500
    XpmCreateBufferFromPixmap(XtDisplay(w), &data_before, pm, 0, NULL);
-#endif
    XpmCreateXpmImageFromPixmap(XtDisplay(w), pm, 0, &im, NULL);
    if (im.ncolors > 0) {
 	   if (im.ncolors <= 2) {
@@ -1323,7 +1312,6 @@ _XmConvertToBW(Widget w, Pixmap pm)
 	   }
    }
    XpmCreatePixmapFromXpmImage(XtDisplay(w), pm, &im, &bw_pixmap, 0, NULL);
-#ifdef FIX_1500
    if (bw_pixmap)
 	   XpmCreateBufferFromPixmap(XtDisplay(w), &data_after, bw_pixmap, 0, NULL);
 
@@ -1334,13 +1322,7 @@ _XmConvertToBW(Widget w, Pixmap pm)
 	   XpmFree(data_before);
    if (data_after)
 	   XpmFree(data_after);
-#endif
    XpmFreeXpmImage(&im);
 
-#ifdef FIX_1505
    return (bw_pixmap) ? bw_pixmap : pm;
-#else
-   return bw_pixmap;
-#endif
 }
-#endif

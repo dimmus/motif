@@ -26,13 +26,7 @@
 
 #include <Xm/ExtP.h>
 
-#define FIX_1371
-#define FIX_1486
-#define FIX_1170
-
-#ifdef FIX_1486
 #include "MenuShellI.h"
-#endif
 
 /*
  * NOTE:  I use the same syntax for popup and popdown that Xt Uses.
@@ -673,12 +667,10 @@ SetValues(Widget current, Widget request, Widget set,
     }
     XtFree((char *) f_args);
 
-#ifdef FIX_1170
     if (XtIsSensitive((Widget)set_cbw) != XtIsSensitive((Widget)old_cbw))
     {
 	retval = True;
     }
-#endif
 
     if (place_children)
 	{
@@ -904,7 +896,6 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
  * Actions and Callbacks.
  *
  ************************************************************/
-#ifdef FIX_1446
 /*	Function Name: CheckUnpost
  *	Description:   This is called when the arrow button is armed.
  *	Arguments:     w - the arrow button widget.
@@ -922,7 +913,7 @@ CheckUnpost(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	if (gs && arrow && arrow->event->xbutton.time == gs->grab_shell.unpost_time)
 		XmDropDown_list_state(cbw) = XmDropDown_AFTER_UNPOST;
 }
-#endif
+
 /*	Function Name: ArrowClicked
  *	Description:   This is called when the arrow button is selected.
  *	Arguments:     w - the arrow button widget.
@@ -948,12 +939,10 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     if (XmDropDown_list_state(cbw) == XmDropDown_IN_PROGRESS)
 	return;
 
-#ifdef FIX_1446
 	if (XmDropDown_list_state(cbw) == XmDropDown_AFTER_UNPOST ) {
 		XmDropDown_list_state(cbw) = XmDropDown_POSTED;
 		return;
 	}
-#endif
     /*
      * DANGER:  Do not return early from this function w/o setting
      *          XmDropDown_list_state(cbw) back to either XmDropDown_UNPOSTED or XmDropDown_POSTED or
@@ -971,9 +960,7 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmDropDown_list_state(cbw) = XmDropDown_IN_PROGRESS;
 
     if (is_unposted) {
-#ifndef FIX_1371
 	if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
-#endif
 	    PopdownList((Widget) cbw);
 
 	if (!XmDropDown_customized_combo_box(cbw))
@@ -1030,7 +1017,6 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	XmDropDown_list_state(cbw) = XmDropDown_UNPOSTED;
 }
 
-#ifdef FIX_1446
 /*	Function Name: PopdownDone
  *	Description:   This is called when the popup_shell is poped down.
  *	Arguments:     w - the popup_shell widget.
@@ -1048,7 +1034,6 @@ PopdownDone(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 
     ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
 }
-#endif
 
 /*	Function Name: CheckExtensions
  *	Description:   Verifies that the extension is of the correct
@@ -1298,14 +1283,6 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
 
 	return;
     }
-
-    /*
-     * Same thing happens as when the arrow is clicked.
-     */
-
-#ifndef FIX_1446
-    ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
-#endif
 }
 
 /*	Function Name: ShellButtonEvent
@@ -1413,10 +1390,6 @@ LoseFocusHandler(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
     {
 	return;
     }
-
-#ifndef FIX_1446
-    ArrowClicked(XmDropDown_arrow(cbw), cbw_ptr, NULL);
-#endif
 }
 
 /*	Function Name: ComboUnpost
@@ -1967,9 +1940,7 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
     XtAddCallback(XmDropDown_arrow(cbw), XmNactivateCallback,
 		  ArrowClicked, (XtPointer) w);
 
-#ifdef FIX_1446
     XtAddCallback(XmDropDown_arrow(cbw), XmNarmCallback, CheckUnpost, (XtPointer) w);
-#endif
 }
 
 /*
@@ -2042,9 +2013,7 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 						num_largs + num_args);
     XtFree((char *) new_list);
 
-#ifdef FIX_1446
    	XtAddCallback(XmDropDown_popup_shell(cbw), XmNpopdownCallback, PopdownDone , (XtPointer) w);
-#endif
     /*
      * Set the visible item count of the list child widget
      */
@@ -2101,25 +2070,9 @@ PopdownList(Widget w)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
 
-#ifdef FIX_1371
 	Widget gs = XmDropDown_popup_shell(cbw);
   	if (gs && XmIsGrabShell(gs) && (XmDropDown_list_state(cbw) != XmDropDown_POSTED))
 	XtCallActionProc(gs, "GrabShellPopdown", NULL, NULL, 0);
-#else
-    if (XmDropDown_popup_shell(cbw) != NULL) {
-	XSetInputFocus(XtDisplay(w), XmDropDown_focus_owner(cbw),
-		       XmDropDown_focus_state(cbw),
-		       XtLastTimestampProcessed(XtDisplay(w)));
-
-	/*
-	 * The order is important here to keep from generating Xt Errors.
-	 */
-	if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
-	    XtRemoveGrab(XmDropDown_arrow(cbw));
-	XtUngrabKeyboard(w, XtLastTimestampProcessed(XtDisplay(w)));
-	XtPopdown(XmDropDown_popup_shell(cbw));
-    }
-#endif
     else {
 	XmeWarning(w, XmNnoComboShellMsg);
     }
@@ -2273,11 +2226,7 @@ PopupList(Widget w)
         XSetInputFocus(XtDisplay(shell), XtWindow((Widget) cbw), RevertToParent,
 		   XtLastTimestampProcessed(XtDisplay(w)) - 1);
 
-#ifdef FIX_1486
     _XmPopupSpringLoaded(shell);
-#else
-    XtPopupSpringLoaded(shell);
-#endif
 
     if (!XmIsGrabShell(shell)) {
         ret = XtGrabPointer(shell, True,

@@ -37,11 +37,7 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#define FIX_1529
-#ifdef FIX_1529
 #include <X11/Xmd.h>		/* for CARD32 */
-#endif
 
 #define XMERROR(key, message)                                            \
     XtErrorMsg (key, "xmClipboardError", "XmToolkitError", message, NULL, NULL)
@@ -1052,12 +1048,10 @@ ClipboardFindItem(
     	return ClipboardFail;
     }
 
-#ifdef FIX_1529
     if( itemid == XM_HEADER_ID && ptr )
     {
     	ptr->header.selectionTimestamp = (CARD32)ptr->header.selectionTimestamp;
     }
-#endif
     return ClipboardSuccess;
 }
 

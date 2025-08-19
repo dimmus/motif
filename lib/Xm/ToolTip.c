@@ -36,7 +36,6 @@
 #include "ToolTipI.h"
 #include "XmI.h"
 
-#ifdef FIX_1388
 static void ToolTipLabelDestroyCallback(Widget w, XtPointer client_data, XtPointer call_data)
 {
     XmToolTipConfigTrait ttcp;
@@ -51,7 +50,6 @@ static void ToolTipLabelDestroyCallback(Widget w, XtPointer client_data, XtPoint
 	    XtDestroyWidget(shell);
 	}
 }
-#endif /* FIX_1388 */
 
 static XmToolTipConfigTrait
 ToolTipGetData (Widget w)
@@ -76,9 +74,7 @@ ToolTipGetData (Widget w)
 
       ttp->label = XmCreateLabel (shell, "TipLabel", NULL, 0);
       XtManageChild (ttp->label);
-#ifdef FIX_1388
       XtAddCallback(top, XmNdestroyCallback, (XtCallbackProc) ToolTipLabelDestroyCallback, (XtPointer) NULL);
-#endif
    }
    return ttp;
 }
@@ -304,7 +300,6 @@ _XmToolTipLeave (Widget w,
 
 }
 
-#ifdef FIX_1388
 void _XmToolTipRemove(Widget w)
 {
     XmToolTipTrait ttp;
@@ -317,7 +312,6 @@ void _XmToolTipRemove(Widget w)
 	XtFree((char*)ttp);
     }
 }
-#endif /* FIX_1388 */
 
 Widget
 XmToolTipGetLabel(Widget wid)

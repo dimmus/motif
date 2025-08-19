@@ -898,11 +898,7 @@ Destroy(
    XmPrimitiveWidget pw = (XmPrimitiveWidget) w ;
 
    _XmNavigDestroy(w);
-#ifdef FIX_1388
    _XmToolTipRemove(w);
-#else
-   _XmToolTipLeave(w, NULL, NULL, NULL);
-#endif
    XtReleaseGC( w, pw->primitive.top_shadow_GC);
    XtReleaseGC( w, pw->primitive.bottom_shadow_GC);
    XtReleaseGC( w, pw->primitive.highlight_GC);

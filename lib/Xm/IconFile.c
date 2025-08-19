@@ -64,8 +64,6 @@
 
 #include "ImageCachI.h"
 
-#define FIX_1427
-
 /**************** vendor dependant defaults ********/
 /* All this stuff (cached dir) should be moved and possibly merged
    in Xmos.c, where it belongs */
@@ -711,21 +709,17 @@ XmGetIconFileName(
 		memmove(&fileName[0],
 	      		iNameEntry->dirName,
 			dirLen);
-#ifdef FIX_1427
 		if (dirLen == 0) {
 			memmove(&fileName[dirLen], iNameEntry->leafName, leafLen);
 			fileName[dirLen + leafLen] = '\0';
 		} else {
-#endif
 		fileName[dirLen] = '/';
 		memmove(&fileName[dirLen + 1],
 	      		iNameEntry->leafName,
 			leafLen);
 
 		fileName[dirLen + leafLen + 1] = '\0';
-#ifdef FIX_1427
 		}
-#endif
 	    }
 	}
 

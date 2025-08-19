@@ -1997,11 +1997,7 @@ ValidateInputs(
     if (new_w->scrollBar.value == current->scrollBar.value) {
 	if (PROCESS_DIR_INVERSED(new_w))
 	    /* use new for value since that's the one getting changed below */
-#ifdef FIX_1396
 	    value = INVERSED_VALUE(new_w);
-#else
-	    value = INVERSED_VALUE(current);
-#endif
 	else
 	    value = new_w->scrollBar.value ;
     } else

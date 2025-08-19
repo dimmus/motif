@@ -36,9 +36,6 @@
 extern "C" {
 #endif
 
-#define FIX_345
-
-#ifdef FIX_345
 extern Boolean _init_modifiers;
 extern unsigned int NumLockMask;
 extern unsigned int ScrollLockMask;
@@ -52,7 +49,6 @@ void _XmInitModifiers (void);
 	    _init_modifiers = FALSE; 					\
 	}								\
     }
-#endif
 
 #ifndef DEBUG
 # define assert(assert_exp)
@@ -275,22 +271,7 @@ extern void (*_XtProcessLock)();
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 
-#define FIX_1396
-
-#ifdef FIX_1381
 extern Pixel _XmAssignInsensitiveColor(Widget w);
-#endif
-
-#define FIX_1375
-#define FIX_1395
-#define FIX_1388
-#define FIX_1398
-#define FIX_1402
-#define FIX_1445
-#define FIX_1474
-#define FIX_1501
-#define FIX_1521
-#define FIX_1505
 
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

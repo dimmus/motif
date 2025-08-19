@@ -51,9 +51,6 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include "XmRenderTI.h"
 #include "XmStringI.h"
 
-
-#define FIX_1252
-
 /*
  * Data structure macros for fontlist access
  */
@@ -660,14 +657,9 @@ _XmGetFirstFont(
       XFontStruct **font_struct_list;
       char **font_name_list;
 
-#ifdef FIX_1252
       if (XFontsOfFontSet((XFontSet)font,
 			  &font_struct_list, &font_name_list)
 	  && font_struct_list[0]->fid != 0)
-#else
-      if (XFontsOfFontSet((XFontSet)font,
-			  &font_struct_list, &font_name_list))
-#endif
 	font_struct = font_struct_list[0];
       else
 	font_struct = NULL;

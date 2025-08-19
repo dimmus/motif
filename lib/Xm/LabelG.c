@@ -29,8 +29,6 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#define FIX_1517
-#define FIX_1654
 
 #include <string.h>
 #include <stdio.h>
@@ -77,14 +75,10 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #include <Xm/XpmP.h>
 #include <string.h>
 #include <Xm/XmP.h>
-#ifdef FIX_1381
 #include <Xm/ColorI.h>
-#endif
-#ifdef FIX_1521
 #ifdef USE_XFT
 #include "XmRenderTI.h"
 #include <X11/Xft/Xft.h>
-#endif
 #endif
 
 #define Pix(w)      LabG_Pixmap(w)
@@ -1242,27 +1236,16 @@ SetNormalGC(XmLabelGadget lw)
     LabG_NormalGC(lw) = XtAllocateGC((Widget) mw, 0, valueMask, &values,
         dynamicMask, 0);
 
-#ifdef FIX_1381
     /*generally gray insensitive foreground (instead stipple)*/
     values.foreground = _XmAssignInsensitiveColor((Widget)lw);
     values.background = LabG_Background(lw);
-#else
-    valueMask |= GCFillStyle | GCStipple;
-    values.foreground = LabG_Background(lw);
-    values.background = LabG_Foreground(lw);
-    values.fill_style = FillOpaqueStippled;
-    values.stipple = _XmGetInsensitiveStippleBitmap((Widget) lw);
-#endif
 
     LabG_InsensitiveGC(lw) = XtAllocateGC((Widget) mw, 0, valueMask, &values,
         dynamicMask, 0);
-#ifdef FIX_1381
     /*light shadow for insensitive text (instead stipple)*/
     values.foreground = LabG_TopShadowColor(lw);
     LabG_ShadowGC(lw)  = XtAllocateGC((Widget) mw, 0, valueMask, &values,
 	dynamicMask, 0);
-#endif
-
 }
 
 
@@ -2180,9 +2163,7 @@ Destroy(Widget w)
 
     XtReleaseGC (XtParent(w), LabG_NormalGC(w));
     XtReleaseGC (XtParent(w), LabG_InsensitiveGC(w));
-#ifdef FIX_1381
 	XtReleaseGC (XtParent(w), LabG_ShadowGC(w));
-#endif
     XtReleaseGC (XtParent(w), LabG_BackgroundGC(w));
     XtReleaseGC (XtParent(w), LabG_HighlightGC(w));
     XtReleaseGC (XtParent(w), LabG_TopShadowGC(w));
@@ -2321,23 +2302,18 @@ LRectangle *background_box)
             clip_rect.height = 0;
 
         XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
-#ifdef FIX_1521
 #ifdef USE_XFT
         _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), 0, 0, &clip_rect, 1);
-#endif
 #endif
     } else
     {
     XSetClipMask (XtDisplay (lw), clipgc, None);
-#ifdef FIX_1521
 #ifdef USE_XFT
 	XftDraw	*draw = _XmXftDrawCreate(XtDisplay(lw), XtWindow(lw));
 	XftDrawSetClip(draw, NULL);
 #endif
-#endif
     }
 
-#ifdef FIX_1517
 #ifdef USE_XFT
     {
     int width, height;
@@ -2348,25 +2324,16 @@ LRectangle *background_box)
     if (LabG_StringRect(lw).width < availW - marginal_width)
     	width = LabG_StringRect(lw).width;
     else
-#ifdef FIX_1654
     	width = availW - marginal_width;
-#else
-    	width = availW - marginal_width - x;
-#endif
 
     if (LabG_StringRect(lw).height < availH - marginal_height)
     	height = LabG_StringRect(lw).height;
     else
-#ifdef FIX_1654
     	height = availH - marginal_height;
-#else
-    	height = availH - marginal_height - y;
-#endif
 
     XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_BackgroundGC(lw),
 		x, y, width, height);
     }
-#endif
 #endif
 
     /*  Draw the pixmap or text  */
@@ -2409,11 +2376,8 @@ LRectangle *background_box)
             Pixmap pix_use = Pix_insen (lw) ;
 
             if (pix_use == XmUNSPECIFIED_PIXMAP)
-#ifdef FIX_1381
-		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
-#else
-		pix_use = Pix(lw);
-#endif
+        		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
+
             if (pix_use != XmUNSPECIFIED_PIXMAP)
             {
                 gc = LabG_InsensitiveGC(lw);
@@ -2436,24 +2400,6 @@ LRectangle *background_box)
                             lw->rectangle.y + LabG_TextRect(lw).y + LabG_PixmapRect(lw).y,
 			    1);
 
-#ifndef FIX_1381
-                /* if no insensitive pixmap but a regular one, we need
-                to do the stipple manually, since copyarea doesn't */
-				if (pix_use == Pix(lw))		{
-                    /* need fill stipple, not opaque */
-                    XSetFillStyle(XtDisplay(lw), gc, FillStippled);
-                    XFillRectangle(XtDisplay(lw), XtWindow(lw),
-                        gc,
-			lw->rectangle.x + LabG_TextRect(lw).x +
-				LabG_PixmapRect(lw).x,
-                        lw->rectangle.y + LabG_TextRect(lw).y +
-				LabG_PixmapRect(lw).y,
-                        LabG_PixmapRect(lw).width,
-                        LabG_PixmapRect(lw).height);
-                    XSetFillStyle(XtDisplay(lw), gc, FillOpaqueStippled);
-                }
-#endif
-#ifdef FIX_1505
                 if (pix_use == Pix(lw)) {
                     XSetFillStyle(XtDisplay(lw), gc, FillStippled);
                     XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap((Widget)lw));
@@ -2466,7 +2412,6 @@ LRectangle *background_box)
                        LabG_PixmapRect(lw).height);
                     XSetFillStyle(XtDisplay(lw), gc, FillSolid);
                 }
-#endif
             }
         }
     }
@@ -2484,7 +2429,6 @@ LRectangle *background_box)
 
             tmp[_XmOSKeySymToCharacter(LabG_Mnemonic(lw), NULL, tmp)] = '\0';
             underline = XmStringCreate(tmp, LabG_MnemonicCharset(lw));
-#ifdef FIX_1381
 			if (XtIsSensitive(wid) )
 			{
 				/*Draw normal text*/
@@ -2515,21 +2459,9 @@ LRectangle *background_box)
 						LabG_StringRect(lw).width, LabG_Alignment(lw),
 						LayoutG(lw), NULL, underline);
 			}
-#else
-            XmStringDrawUnderline(XtDisplay(lw), XtWindow(lw),
-                LabG_Font(lw), LabG__label(lw),
-                (XtIsSensitive(wid) ?
-                LabG_NormalGC(lw) : LabG_InsensitiveGC(lw)),
-                lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
-                lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
-                LabG_StringRect(lw).width, LabG_Alignment(lw),
-                LayoutG(lw), NULL, underline);
-
-#endif
             XmStringFree(underline);
         }
         else
-#ifdef FIX_1381
 		{
 			if (XtIsSensitive(wid) )
 			{
@@ -2562,32 +2494,6 @@ LRectangle *background_box)
 						LabG_Alignment(lw), LayoutG(lw), NULL);
 			}
 		}
-#else
-            XmStringDraw (XtDisplay(lw), XtWindow(lw),
-                LabG_Font(lw), LabG__label(lw),
-                (XtIsSensitive(wid) ?
-                LabG_NormalGC(lw) : LabG_InsensitiveGC(lw)),
-            lw->rectangle.x + LabG_TextRect(lw).x + LabG_StringRect(lw).x,
-            lw->rectangle.y + LabG_TextRect(lw).y + LabG_StringRect(lw).y,
-            LabG_StringRect(lw).width,
-            LabG_Alignment(lw), LayoutG(lw), NULL);
-#endif
-
-#ifndef FIX_1381
-#ifdef USE_XFT
-        if (!XtIsSensitive(wid)) {
-          XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillStippled);
-          XFillRectangle(XtDisplay(lw), XtWindow(lw), LabG_InsensitiveGC(lw),
-			lw->rectangle.x + LabG_TextRect(lw).x +
-				LabG_StringRect(lw).x,
-                        lw->rectangle.y + LabG_TextRect(lw).y +
-				LabG_StringRect(lw).y,
-                        LabG_StringRect(lw).width,
-                        LabG_StringRect(lw).height);
-          XSetFillStyle(XtDisplay(lw), LabG_InsensitiveGC(lw), FillOpaqueStippled);
-        }
-#endif
-#endif
     }
 
     if (LabG__acceleratorText(lw) != NULL)
@@ -2604,7 +2510,6 @@ LRectangle *background_box)
             LabG_MarginLeft(lw) + LabG_TextRect(lw).width +
             LabG_MarginRight(lw)))
         {
-#ifdef FIX_1381
 			if (XtIsSensitive(wid) )
 			{
 				/*Draw normal text*/
@@ -2635,16 +2540,6 @@ LRectangle *background_box)
 						LabG_AccTextRect(lw).width, XmALIGNMENT_END,
 						LayoutG(lw), NULL);
 			}
-#else
-            XmStringDraw (XtDisplay(lw), XtWindow(lw),
-                LabG_Font(lw), LabG__acceleratorText(lw),
-                (XtIsSensitive(wid) ?
-                LabG_NormalGC(lw) : LabG_InsensitiveGC(lw)),
-                lw->rectangle.x + LabG_AccTextRect(lw).x,
-                lw->rectangle.y + LabG_AccTextRect(lw).y,
-                LabG_AccTextRect(lw).width, XmALIGNMENT_END,
-                LayoutG(lw), NULL);
-#endif
         }
     }
 

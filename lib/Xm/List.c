@@ -72,12 +72,6 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include "ToolTipI.h"
 #include <Xm/XmP.h>
 
-#define FIX_1210	1
-#define FIX_1390	1
-#define FIX_1365	1
-#define FIX_1362	1
-#define FIX_1636  1
-
 #define	BUTTONDOWN	1
 #define	SHIFTDOWN	2
 #define	CTRLDOWN	4
@@ -1473,9 +1467,7 @@ SetValues(Widget old,
   XmListWidget oldlw = (XmListWidget) old;
   XmListWidget newlw = (XmListWidget) new_w;
   Boolean new_size = FALSE;
-#ifdef FIX_1474
   Boolean new_size_viz = FALSE;
-#endif
   Boolean reset_max = FALSE;
   Boolean redraw = FALSE;
   Boolean reset_select = FALSE;
@@ -1609,28 +1601,17 @@ SetValues(Widget old,
       else if (newlw->list.visibleItemCount == 0)
 	{
 	  /* CR 6014, 8655, 9604: Stop forcing list size. */
-#ifdef FIX_1474
 	  new_size_viz = TRUE;
-#else
-	  new_size = TRUE;
-#endif
 	  newlw->list.LastSetVizCount = 0;
 	  newlw->list.visibleItemCount = ComputeVizCount(newlw);
 	}
       else
         {
-#ifdef FIX_1474
 	  new_size_viz = TRUE;
 	  newlw->list.LastSetVizCount = newlw->list.visibleItemCount;
 	  newlw->list.visibleItemCount = oldlw->list.visibleItemCount;
-#else
-	  new_size = TRUE;
-	  newlw->list.LastSetVizCount = newlw->list.visibleItemCount;
-#endif
         }
-#ifdef FIX_1474
       redraw = TRUE;
-#endif
     }
 
   if (XtIsSensitive(new_w) != XtIsSensitive(old))
@@ -1900,11 +1881,7 @@ SetValues(Widget old,
 	}
     }
 
-#ifdef FIX_1474
   if (new_size || new_size_viz)
-#else
-  if (new_size)
-#endif
     {
       redraw = TRUE;
       SetDefaultSize(newlw, &width, &height, reset_max, reset_max);
@@ -1916,13 +1893,8 @@ SetValues(Widget old,
 	newlw->list.HighlightThickness +
 	  newlw->primitive.shadow_thickness;
 
-#ifdef FIX_1474
       if (((newlw->list.SizePolicy != XmCONSTANT) ||
 	  !(newlw->core.width)) && new_size)
-#else
-      if ((newlw->list.SizePolicy != XmCONSTANT) ||
-	  !(newlw->core.width))
-#endif
 	newlw->core.width = width;
       newlw->core.height = height;
     }
@@ -2068,12 +2040,7 @@ QueryProc(Widget wid,
     {
       viz = lw->list.visibleItemCount;
       /* BEGIN OSF Fix CR 6014 */
-#ifdef FIX_1474
       lw->list.LastSetVizCount = lw->list.visibleItemCount;
-#else
-      if (lw->list.LastSetVizCount)
-	lw->list.visibleItemCount = lw->list.LastSetVizCount;
-#endif
       /* END OSF Fix CR 6014 */
       SetDefaultSize(lw, &MyWidth, &MyHeight, True, True);
       lw->list.visibleItemCount = viz;
@@ -2470,26 +2437,17 @@ DrawItems(XmListWidget lw,
       XFillRectangle(XtDisplay(lw), XtWindow(lw),
 		     ((lw->list.InternalList[pos]->selected) ?
 		      lw->list.NormalGC : lw->list.InverseGC),
-#ifdef FIX_1365
 			  lw->list.BaseX, y - 1,
 			  width + 1, lw->list.MaxItemHeight + 1);
-#else
-		     lw->list.BaseX, y,
-		     width + 1, lw->list.MaxItemHeight);
-#endif
 
       if (XtIsSensitive((Widget)lw))
 	gc = ((lw->list.InternalList[pos]->selected) ?
 	      lw->list.InverseGC : lw->list.NormalGC);
       else
-#ifdef FIX_1381
 	  {
 		gc = lw->list.InsensitiveGC;
 		_XmRendFG(lw->list.scratchRend) = _XmAssignInsensitiveColor((Widget)lw);
 	  }
-#else
-	gc = lw->list.InsensitiveGC;
-#endif
 
       /* CR 7281: Set rendition background too. */
       if ((lw->list.InternalList[pos]->selected) &&
@@ -2502,20 +2460,12 @@ DrawItems(XmListWidget lw,
 	      _XmRendBG(lw->list.scratchRend) = lw->primitive.foreground;
 	    }
 	  else
-#ifdef FIX_1381
 	      _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
-#else
-	    {
-	      _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
-	      _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
-	    }
-#endif
 	  _XmRendFGState(lw->list.scratchRend) = XmFORCE_COLOR;
 	  _XmRendBGState(lw->list.scratchRend) = XmFORCE_COLOR;
 	}
       else
 	{
-#ifdef FIX_1381
 	  if (XtIsSensitive((Widget)lw))
 	  {
 		  _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
@@ -2525,12 +2475,6 @@ DrawItems(XmListWidget lw,
 	  }
 	  else
 		  _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
-#else
-	  _XmRendFG(lw->list.scratchRend) = lw->primitive.foreground;
-	  _XmRendFGState(lw->list.scratchRend) = XmAS_IS;
-	  _XmRendBG(lw->list.scratchRend) = lw->core.background_pixel;
-	  _XmRendBGState(lw->list.scratchRend) = XmAS_IS;
-#endif
 	}
 
       _XmRendGC(lw->list.scratchRend) = gc;
@@ -2539,7 +2483,6 @@ DrawItems(XmListWidget lw,
           _XmXftGetXftColor(XtDisplay(lw), _XmRendFG(lw->list.scratchRend));
 #endif
 
-#ifdef FIX_1381
 if (!XtIsSensitive((Widget)lw))
 {
 	/*Draw shadow for insensitive text*/
@@ -2559,7 +2502,6 @@ if (!XtIsSensitive((Widget)lw))
 		      lw->list.StrDir);
 	_XmRendFG(lw->list.scratchRend) = p;
 }
-#endif
       /* CR 9204: Let _XmStringRender handle right-to-left drawing. */
       _XmStringRender(XtDisplay(lw),
 		      XtWindow(lw),
@@ -2828,15 +2770,8 @@ MakeGC(XmListWidget lw)
 				    valueMask, &values, modifyMask, 0);
 
   values.background = lw->core.background_pixel;
-#ifdef FIX_1381
   /*generally gray insensitive foreground (instead stipple)*/
   values.foreground = _XmAssignInsensitiveColor((Widget)lw);
-#else
-  values.foreground = lw->primitive.foreground;
-  valueMask |= GCStipple | GCFillStyle;
-  values.fill_style = FillOpaqueStippled;
-  values.stipple = _XmGetInsensitiveStippleBitmap((Widget) lw);
-#endif
 
   lw->list.InsensitiveGC = XtAllocateGC((Widget) lw, lw->core.depth,
 					valueMask, &values, modifyMask, 0);
@@ -3721,9 +3656,7 @@ ReplaceItem(XmListWidget lw,
   XmStringFree(lw->list.items[pos]);
   lw->list.items[pos] = XmStringCopy(item);
   /*Selected items should be replaced also*/
-#ifdef FIX_1390
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
-#endif
   for(i=0; i<lw->list.selectedItemCount; i++)
   {
       if(lw->list.selectedPositions[i]==pos+1) {
@@ -7502,10 +7435,8 @@ ListQuickNavigate(Widget wid,
       (void) mbtowc(&input_char, NULL, 0);
       (void) mbtowc(&input_char, input_string, input_length);
 
-#ifdef FIX_1210
       if (iswprint((wint_t)input_char))
       {
-#endif
 	      /* Search forward from the current position. */
 	      for (i = lw->list.CurrentKbdItem + 1; i < lw->list.itemCount; i++)
           if (CompareCharAndItem(lw, input_char, i))
@@ -7524,15 +7455,10 @@ ListQuickNavigate(Widget wid,
             break;
           }
         }
-#ifdef FIX_1210
  	    }
-#endif
     }
 
-      if (!found
-#ifdef FIX_1210
-          && iswprint((wint_t)input_char)
-#endif
+      if (!found && iswprint((wint_t)input_char)
       )
 	      XBell(XtDisplay(wid), 0);
   }
@@ -8521,10 +8447,8 @@ XmListDeleteAllItems(Widget w)
 
   if (lw->list.items && (lw->list.itemCount > 0))
     {
-#ifdef FIX_1636
       XmListDeselectAllItems(w);
       SetSelectionParams(lw);
-#endif
 
       Dimension old_max_height = lw->list.MaxItemHeight;
 
@@ -8695,15 +8619,11 @@ APIReplaceItemsPos(Widget w,
 	(lw->list.InternalList[position - 1]->height == old_max_height);
 
       ReplaceItem(lw, new_items[i], position);
-#ifdef FIX_1362
 	  if (lw->list.selectedItems && lw->list.selectedItemCount > 0)
 	  {
 		  BuildSelectedList(lw,TRUE);
 		  nsel += ReplaceInternalElement(lw, position, select);
 	  }
-#else
-      nsel += ReplaceInternalElement(lw, position, select);
-#endif
     }
 
   if (select || (nsel != lw->list.selectedPositionCount))

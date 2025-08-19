@@ -67,11 +67,9 @@ extern Boolean _XmSearchColorCache(
                         XmColorData **ret) ;
 extern XmColorData * _XmAddToColorCache(
                         XmColorData *new_rec) ;
-#ifdef FIX_1381
 extern Pixmap _XmConvertToBW(
                         Widget w,
                         Pixmap pm) ;
-#endif
 /********    End Private Function Declarations    ********/
 
 #ifdef __cplusplus

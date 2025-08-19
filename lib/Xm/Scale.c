@@ -92,8 +92,6 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include "TraversalI.h"
 #include "XmI.h"
 
-#define FIX_1528
-
 #define state_flags last_value
 
 #define MESSAGE1	_XmMMsgScale_0000
@@ -2121,13 +2119,8 @@ MajorTrailPad(
 	    tmp2 = ((int)ValueTroughHeight(sw) / 2) - (int)TrailYTic(sb, sw);
     }
 
-#ifdef FIX_1528
     tmp2 += (sb->primitive.highlight_thickness
 	     + sb->primitive.shadow_thickness);
-#else
-    tmp2 -= (sb->primitive.highlight_thickness
-	     + sb->primitive.shadow_thickness);
-#endif
 
     ASSIGN_MAX(tmp1, 0);
     ASSIGN_MAX(tmp2, 0);
@@ -2187,11 +2180,7 @@ ScrollWidth(
 		    XmScrollBarWidget sb = (XmScrollBarWidget)
 			sw->composite.children[1];
 
-#ifdef FIX_1528
 		    tmp = MAX((num_managed - 2)* MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
-#else
-		    tmp = (num_managed - 2)* MaxLabelWidth(sw);
-#endif
 
 		    tic = sb->primitive.highlight_thickness
 			+ sb->primitive.shadow_thickness
@@ -2203,11 +2192,7 @@ ScrollWidth(
 		    if (diff > 0) tmp+= (2 * diff);
 		}
 		else
-#ifdef FIX_1528
 			tmp = MAX(MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
-#else
-		    tmp = MaxLabelWidth(sw);
-#endif
 	    }
 	}
 
@@ -2240,7 +2225,6 @@ ScrollHeight(
 			tmp = (int)sw->core.height
 			    - (MajorLeadPad(sw) + MajorTrailPad(sw));
 		    else
-#ifdef FIX_1528
 		    {
 			    int tmp1, tmp2;
 			    XmScrollBarWidget sb = (XmScrollBarWidget)
@@ -2255,9 +2239,6 @@ ScrollHeight(
 			    ASSIGN_MAX(tmp2, 0);
 			    tmp = (int)sw->core.height - tmp1 - tmp2;
 		    }
-#else
-			tmp = sw->core.height;
-#endif
 		}
 	}
 
@@ -2273,11 +2254,7 @@ ScrollHeight(
 			XmScrollBarWidget sb = (XmScrollBarWidget)
 			    sw->composite.children[1];
 
-#ifdef FIX_1528
 			tmp = MAX((num_managed - 2)* MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
-#else
-			tmp = (num_managed - 2)* MaxLabelHeight(sw);
-#endif
 
 			tic = sb->primitive.highlight_thickness
 			    + sb->primitive.shadow_thickness
@@ -2289,11 +2266,7 @@ ScrollHeight(
 			if (diff > 0) tmp+= (2 * diff);
 		    }
 		else
-#ifdef FIX_1528
 		    tmp = MAX(MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
-#else
-		    tmp = MaxLabelHeight(sw);
-#endif
 	    }
 	}
 
@@ -2940,18 +2913,11 @@ ShowValue(
 
     if (sw->scale.orientation == XmHORIZONTAL) {
 #if USE_XFT
-#ifdef FIX_1528
 	x = scrollbar->core.x
 	    + scrollbar->scrollBar.slider_x
 	    + ((sw->scale.sliding_mode)?
 	    scrollbar->scrollBar.slider_width: 0)
 	    - (width - SLIDER_SIZE( sw)) / 2;
-#else
-	x = scrollbar->core.x
-		+ scrollbar->scrollBar.slider_x
-		+ scrollbar->scrollBar.slider_width / 2
-		- width / 2;
-#endif
 	if (sw->scale.show_value == XmNEAR_BORDER)
 		/*tmp: should store the max */
 		y = scrollbar->core.y - MaxLabelHeight(sw) - height - 3;
@@ -2986,18 +2952,10 @@ ShowValue(
 	    if (LayoutIsRtoLM(sw))
 		x = scrollbar->core.x + scrollbar->core.width;
 	    else
-#ifdef FIX_1528
 #if USE_XFT
 		x = scrollbar->core.x - sw->scale.show_value_width - SCALE_VALUE_MARGIN;
 #else
 		x = scrollbar->core.x - width_return.rbearing - SCALE_VALUE_MARGIN;
-#endif
-#else
-#if USE_XFT
-		x = scrollbar->core.x - sw->scale.show_value_width;
-#else
-		x = scrollbar->core.x - width_return.rbearing;
-#endif
 #endif
 	}
 #if USE_XFT

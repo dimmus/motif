@@ -915,21 +915,15 @@ _XmMatchKeyEvent(
         unsigned int key,
         Modifiers modifiers )
 {
-#ifdef FIX_345
    register Modifiers state, mods;
 
    _XmCheckInitModifiers();
 
    state = event->xkey.state & ~(LockMask|ScrollLockMask|NumLockMask);
    mods  = modifiers & ~(LockMask|ScrollLockMask|NumLockMask);
-#endif
    if ((event->type == eventType) &&
        (event->xkey.keycode == key) &&
-#ifdef FIX_345
        (state == mods))
-#else
-       (event->xkey.state == modifiers))
-#endif
       return (TRUE);
    else
       return (FALSE);

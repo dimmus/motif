@@ -48,8 +48,6 @@ static char rcsid[] = "$TOG: TraversalI.c /main/13 1997/10/13 11:28:33 cshi $"
 #include "TraversalI.h"
 #include "XmI.h"
 
-#define FIX_1272
-
 #define XmTRAV_LIST_ALLOC_INCREMENT	 16
 #define XmTAB_LIST_ALLOC_INCREMENT	  8
 #define STACK_SORT_LIMIT		128
@@ -1640,11 +1638,7 @@ Sort(XmTraversalNode *list,
 
 	  /* Else if this node is dominant backtrack and try again. */
 	  else if ((row_len > 1) && might_overlap &&
-#ifdef FIX_1272
 		   NodeDominates(node, rows[row].items[row_len-1],
-#else
-		   NodeDominates(node, rows[row].items[rows[row].num_items-1],
-#endif
 				 horizontal, layout))
 	    row_len--;
 

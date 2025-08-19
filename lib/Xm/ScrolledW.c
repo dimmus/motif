@@ -2968,12 +2968,10 @@ XtWidgetGeometry *reply )
         /* else it's for real */
         retval = _XmMakeGeometryRequest((Widget) sw, &parent_request);
 
-#ifdef FIX_1474
         if (retval == XtGeometryNo && !(request->request_mode & CWWidth)) {
             parent_request.request_mode = CWHeight;
             retval = _XmMakeGeometryRequest((Widget) sw, &parent_request);
         }
-#endif
         if (retval == XtGeometryYes)
         {
             XtWidgetProc resize;
@@ -3093,18 +3091,12 @@ Widget wid )
             desired.height = 0 ;
         }
 
-#ifdef FIX_1474
         GetVariableSize(sw, &desired.width, &desired.height);
         desired.request_mode = CWWidth;
         (void) _XmMakeGeometryRequest(wid, &desired);
 
         desired.request_mode = CWHeight;
         (void) _XmMakeGeometryRequest(wid, &desired);
-#else
-        GetVariableSize(sw, &desired.width, &desired.height);
-        desired.request_mode = (CWWidth | CWHeight);
-        (void) _XmMakeGeometryRequest(wid, &desired);
-#endif
     }
 
     _XmProcessLock();

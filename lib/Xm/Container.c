@@ -68,10 +68,6 @@
 #include "ClipWindTI.h"
 #include <Xm/XmosP.h>                /* for bzero et al */
 
-#define FIX_1384
-#define FIX_1401
-#define FIX_1425
-
 #define	ZERO_DIM	0
 #define	DEFAULT_INDENTATION	40
 #define	NO_CELL	-1
@@ -634,9 +630,7 @@ static void			ScrollProc(
 					XtPointer	closure,
 					XtIntervalId*   id);
 static void 			ContainerResetDepths (XmContainerConstraint c);
-#ifdef FIX_1425
 static void FindMaxDepths (XmContainerConstraint c, Widget cw);
-#endif
 static Boolean			ContainerIsDescendant (Widget containerChild, Widget newEntryParent);
 static void			ContainerResequenceNodes(XmContainerWidget cw, Widget entryParent);
 
@@ -2302,14 +2296,10 @@ SetValues(
 	ncw->container.ideal_width = 0;
 	ncw->container.ideal_height = 0;
 	GetSize(nw,&ncw->container.ideal_width,&ncw->container.ideal_height);
-#ifdef FIX_1401
 	if (ncw->container.ideal_width && ncw->container.ideal_height && GetFirstNode(ncw)) {
-#endif
 	ncw->core.width = ncw->container.ideal_width;
 	ncw->core.height = ncw->container.ideal_height;
-#ifdef FIX_1401
 	}
-#endif
 	Layout(nw);
 
 	/*
@@ -3102,9 +3092,7 @@ ConstraintDestroy(
 	if (!CtrICON(cwid))
 	    return;
 
-#ifdef FIX_1384
 		cw->container.icon_header = NULL;
-#endif
 	{
 		CwidNode 	node = c->node_ptr->child_ptr;
 		while (node)
@@ -3233,11 +3221,7 @@ ConstraintSetValues(
             nc->depth = pc->depth +1;
 	    ContainerResetDepths(nc);
 
-#ifdef FIX_1425
 		FindMaxDepths(cc, (Widget)cw);
-#else
-	    cw->container.max_depth = MAX(cw->container.max_depth,nc->depth);
-#endif
             if (pc->outline_state == XmEXPANDED)
             	nc->visible_in_outline = pc->visible_in_outline;
 	    else
@@ -7172,7 +7156,6 @@ static void ContainerResetDepths
 	}
 }
 
-#ifdef FIX_1425
 static void FindMaxDepths(XmContainerConstraint	c, Widget w)
 {
 	XmContainerWidget cw = (XmContainerWidget)w;
@@ -7185,7 +7168,7 @@ static void FindMaxDepths(XmContainerConstraint	c, Widget w)
 		node = node->next_ptr;
 	}
 }
-#endif
+
 /* true if newEntryParent (or any other widget) is a descendant of the target;
 ** determine by looking upward in the tree for a match. Returns True for the
 ** widget itself.

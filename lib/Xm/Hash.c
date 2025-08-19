@@ -33,8 +33,6 @@
 #include "XmI.h"
 #include "HashI.h"
 
-#define FIX_1264
-
 /* Private data structures */
 
 typedef struct _XmHashBucketRec {
@@ -188,9 +186,7 @@ _XmResizeHashTable(XmHashTable table, Cardinal new_size)
 	  table -> buckets[index] = current;
 	}
       }
-#ifdef FIX_1264
       else last = current;
-#endif
       current = next;
     }
   }

@@ -97,10 +97,8 @@ static void SetNormGC(XmTextWidget tw,
                         Boolean stipple);
 #endif /* NeedWidePrototypes */
 
-#ifdef FIX_1381
 static void SetShadowGC(XmTextWidget tw,
 		       GC gc);
-#endif
 static void InvertImageGC(XmTextWidget tw);
 static void SetInvGC(XmTextWidget tw,
 		       GC gc);
@@ -610,15 +608,9 @@ SetNormGC(XmTextWidget tw,
   if (change_stipple) {
     valueMask |= GCFillStyle;
     if (stipple) {
-#ifdef FIX_1381
 		/*generally gray insensitive foreground (instead stipple)*/
 		values.foreground = _XmAssignInsensitiveColor((Widget)tw);
 	    values.fill_style = FillSolid;
-#else
-      values.fill_style = FillStippled;
-      valueMask |= GCStipple;
-      values.stipple = data->stipple_tile;
-#endif
 
     } else
       values.fill_style = FillSolid;
@@ -627,7 +619,6 @@ SetNormGC(XmTextWidget tw,
   XChangeGC(XtDisplay(tw), gc, valueMask, &values);
 }
 
-#ifdef FIX_1381
 static void
 SetShadowGC(XmTextWidget tf, GC gc)
 {
@@ -642,9 +633,6 @@ SetShadowGC(XmTextWidget tf, GC gc)
 
   XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
-#endif
-
-
 
 static void
 InvertImageGC(XmTextWidget tw)
@@ -2628,7 +2616,6 @@ Draw(XmTextWidget tw,
 	    int wx, wy;
 
 	    wx = x - data->hoffset;
-#ifdef FIX_1381
 	    if (stipple)
 	      {
 	        /*Draw shadow for insensitive text*/
@@ -2639,7 +2626,6 @@ Draw(XmTextWidget tw,
 	        wx+1, y - data->voffset+1, block.ptr, length);
 	        SetNormGC(tw, data->gc, True, stipple);
 	      }
-#endif
 
 	    XmbDrawString(XtDisplay(tw),
 			  XtWindow(tw->text.inner_widget),
@@ -2647,7 +2633,6 @@ Draw(XmTextWidget tw,
 			  wx, y - data->voffset, block.ptr, length);
 #ifdef USE_XFT
 	  } else if (data->use_xft) {
-#ifdef FIX_1381
 	    if (stipple)
 	      {
 	        /*Draw shadow for insensitive text*/
@@ -2658,7 +2643,6 @@ Draw(XmTextWidget tw,
 			  block.ptr, length);
 	        SetNormGC(tw, data->gc, True, stipple);
 	      }
-#endif
 
 	    _XmXftDrawString2(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 			      data->gc, (XftFont*) data->font, 1,
@@ -2682,7 +2666,6 @@ Draw(XmTextWidget tw,
 	      if (_XmIsISO10646(XtDisplay(tw), data->font)) {
 	        size_t ucsstr_len = 0;
 		XChar2b *ucsstr = _XmUtf8ToUcs2(p, csize, &ucsstr_len);
-#ifdef FIX_1381
 		if (stipple)
 		{
 		  /*Draw shadow for insensitive text*/
@@ -2691,12 +2674,10 @@ Draw(XmTextWidget tw,
 		  		data->gc, orig_x+1, orig_y+1, ucsstr, ucsstr_len);
 		  SetNormGC(tw, data->gc, True, stipple);
 		}
-#endif
 		XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 				data->gc, orig_x, orig_y, ucsstr, ucsstr_len);
 		XFree(ucsstr);
 	      } else {
-#ifdef FIX_1381
 		if (stipple)
 		{
 		  /*Draw shadow for insensitive text*/
@@ -2706,7 +2687,6 @@ Draw(XmTextWidget tw,
 		  		orig_x+1, orig_y+1, p, csize);
 		  SetNormGC(tw, data->gc, True, stipple);
 		}
-#endif
 	      XDrawString(XtDisplay(tw),
 			  XtWindow(tw->text.inner_widget), data->gc,
 			  orig_x, orig_y, p, csize);
@@ -2977,7 +2957,6 @@ Draw(XmTextWidget tw,
 	}
 	SetNormGC(tw, data->gc, True, stipple);
 	if (data->use_fontset) {
-#ifdef FIX_1381
 	  if (stipple)
 	    {
 	      /*Draw shadow for insensitive text*/
@@ -2988,14 +2967,12 @@ Draw(XmTextWidget tw,
 	      x - data->hoffset+1, y+1, block.ptr, length);
 	      SetNormGC(tw, data->gc, True, stipple);
 	    }
-#endif
 	  XmbDrawString(XtDisplay(tw),
 			XtWindow(tw->text.inner_widget),
 			(XFontSet) data->font, data->gc,
 			x - data->hoffset, y, block.ptr, length);
 #ifdef USE_XFT
 	} else if (data->use_xft) {
-#ifdef FIX_1381
 	  if (stipple)
 	    {
 	      /*Draw shadow for insensitive text*/
@@ -3005,7 +2982,6 @@ Draw(XmTextWidget tw,
 	      x - data->hoffset+1, y+1, block.ptr, length);
 	      SetNormGC(tw, data->gc, True, stipple);
 	    }
-#endif
 	  _XmXftDrawString2(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 			    data->gc, (XftFont*) data->font, 1,
 			    x - data->hoffset, y, block.ptr, length);
@@ -3014,7 +2990,6 @@ Draw(XmTextWidget tw,
 	  if (_XmIsISO10646(XtDisplay(tw), data->font)) {
 	    size_t ucsstr_len = 0;
 	    XChar2b *ucsstr = _XmUtf8ToUcs2(block.ptr, length, &ucsstr_len);
-#ifdef FIX_1381
 	    if (stipple)
 	      {
 	        /*Draw shadow for insensitive text*/
@@ -3024,7 +2999,6 @@ Draw(XmTextWidget tw,
 	        ucsstr_len);
 	        SetNormGC(tw, data->gc, True, stipple);
 	      }
-#endif
 
 	    XDrawString16(XtDisplay(tw), XtWindow(tw->text.inner_widget),
 				data->gc, x - data->hoffset, y, ucsstr,
@@ -3032,7 +3006,6 @@ Draw(XmTextWidget tw,
 	    XFree(ucsstr);
 	  } else
 	  {
-#ifdef FIX_1381
 	    if (stipple)
 	      {
 	        /*Draw shadow for insensitive text*/
@@ -3042,7 +3015,6 @@ Draw(XmTextWidget tw,
 	        x - data->hoffset+1, y+1, block.ptr, length);
 		SetNormGC(tw, data->gc, True, stipple);
 	      }
-#endif
 	  XDrawString(XtDisplay(tw),
 		      XtWindow(tw->text.inner_widget), data->gc,
 		      x - data->hoffset, y, block.ptr, length);
@@ -3231,7 +3203,6 @@ PaintCursor(XmTextWidget tw)
 	     cursor_width = (tw->text.inner_widget->core.width -
 			(tw->primitive.shadow_thickness +
 			tw->primitive.highlight_thickness)) - x;
-#ifdef FIX_1501
 	  if ( cursor_width > 0 && cursor_height > 0 ) {
 	    if (!XtIsSensitive((Widget)tw)) {
 		SetShadowGC(tw, data->imagegc);
@@ -3242,16 +3213,11 @@ PaintCursor(XmTextWidget tw)
 	    }
 
 	    _XmTextToggleCursorGC((Widget)tw);
-#else
-	  if ( cursor_width > 0 && cursor_height > 0 )
-#endif
 		XFillRectangle(XtDisplay((Widget)tw), XtWindow((Widget)tw),
 			data->imagegc, x, y,
 			(unsigned int )cursor_width,
 			(unsigned int )cursor_height);
-#ifdef FIX_1501
 	  }
-#endif
     } else {
         Position src_x = 0;
         if (x + data->cursorwidth > tw->text.inner_widget->core.width -
@@ -4784,9 +4750,7 @@ NotifyResized(Widget w,
     {
       int local_total, new_size;
       XmNavigatorDataRec nav_data;
-#ifdef FIX_1396
       int new_voffset = 0;
-#endif
 
       if(XmDirectionMatch(XmPrim_layout_direction(tw),
 			  XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
@@ -4794,17 +4758,11 @@ NotifyResized(Widget w,
 	  - (data->topmargin + data->bottommargin);
 	if (new_size < 1) new_size = 1;
 	if (new_size > data->scrollheight) new_size = data->scrollheight;
-#ifdef FIX_1396
         new_voffset = data->voffset;
         if (new_voffset > data->scrollheight - new_size)
     	    new_voffset = data->scrollheight - new_size;
-#endif
 	data->ignorevbar = True;
-#ifdef FIX_1396
 	nav_data.value.y = new_voffset;
-#else
-	nav_data.value.y = data->voffset;
-#endif
 	nav_data.minimum.y = 0;
 	nav_data.maximum.y = data->scrollheight;
 	nav_data.slider_size.y = new_size;
@@ -4847,9 +4805,7 @@ NotifyResized(Widget w,
       XmNavigatorDataRec nav_data;
       int new_size = 0;
       int local_total = 0;
-#ifdef FIX_1396
       int new_hoffset = 0;
-#endif
       if(XmDirectionMatch(XmPrim_layout_direction(tw),
 			  XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) {
 	data->ignorehbar = True;
@@ -4878,17 +4834,11 @@ NotifyResized(Widget w,
 	- (data->leftmargin + data->rightmargin);
       if (new_size < 1) new_size = 1;
       if (new_size > data->scrollwidth) new_size = data->scrollwidth;
-#ifdef FIX_1396
       new_hoffset = data->hoffset;
       if (new_hoffset > data->scrollwidth - new_size)
         new_hoffset = data->scrollwidth - new_size;
-#endif
       data->ignorehbar = True;
-#ifdef FIX_1396
       nav_data.value.x = new_hoffset;
-#else
-      nav_data.value.x = data->hoffset;
-#endif
       nav_data.minimum.x = 0;
       nav_data.maximum.x = data->scrollwidth;
       nav_data.slider_size.x = new_size;
@@ -6121,7 +6071,6 @@ _XmTextToggleCursorGC(Widget w)
 
   _XmTextResetClipOrigin(tw, tw->text.cursor_position, False);
 
-#ifdef FIX_1501
   if (!XtIsSensitive((Widget)tw)) {
     valueMask = GCForeground|GCBackground|GCFillStyle|GCStipple|GCFunction;
     values.foreground = _XmAssignInsensitiveColor((Widget)tw);
@@ -6138,7 +6087,6 @@ _XmTextToggleCursorGC(Widget w)
       values.function = GXcopy;
     }
   } else {
-#endif
   if (i_data->overstrike) {
     valueMask = GCFillStyle|GCFunction|GCForeground|GCBackground;
     if (XtIsSensitive(w) && !tw->text.add_mode &&
@@ -6182,9 +6130,7 @@ _XmTextToggleCursorGC(Widget w)
     values.fill_style = FillStippled;
     values.function = GXcopy;
   }
-#ifdef FIX_1501
   }
-#endif
 
   XSetClipMask(XtDisplay(tw), data->save_gc, None);
   XChangeGC(XtDisplay(tw), data->imagegc, valueMask, &values);

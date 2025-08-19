@@ -1449,7 +1449,5 @@ extern void _XmDestroyParentCallback(
 #  define XM_ALIAS(sym)
 #endif
 
-#define FIX_1381
-
 #endif /* _XmP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

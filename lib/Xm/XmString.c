@@ -61,10 +61,6 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 
 # include <stdarg.h>
 
-#define FIX_1434
-#define FIX_1488
-#define FIX_1532
-
 # define Va_start(a,b) va_start(a,b)
 
 /* Warning Messages */
@@ -380,9 +376,7 @@ static void _calc_align_and_clip(
                         Dimension width,
 #endif /* NeedWidePrototypes */
                         int line_width,
-#ifdef FIX_1488
                         int line_height,
-#endif
 #if NeedWidePrototypes
                         unsigned int lay_dir,
 #else
@@ -4915,9 +4909,7 @@ _calc_align_and_clip(
         Dimension width,
 #endif /* NeedWidePrototypes */
         int line_width,
-#ifdef FIX_1488
         int line_height,
-#endif
 #if NeedWidePrototypes
         unsigned int lay_dir,
 #else
@@ -4955,25 +4947,15 @@ _calc_align_and_clip(
 
     if ((clip != NULL) && ( ! *restore))
 
-#ifdef FIX_1488
         if (((*x) <= clip->x + clip->width) &&
             (clip->x <= (*x) + line_width) &&
             (y - line_height + descender <= clip->y + clip->height) &&
             (clip->y <= y + descender))
-#else
-/* BEGIN OSF Fix CR 5106 */
-        if ((line_width > clip->width) ||
-/* END OSF Fix CR 5106 */
-	     (y + descender) > (clip->y + clip->height))
-#endif
 	{
 	    *restore = TRUE;
 #ifdef USE_XFT
             if (font_type == XmFONT_IS_XFT)
 	      _XmXftSetClipRectangles(d, w, 0, 0, clip, 1);
-#ifndef FIX_1532
-	    else
-#endif
 #endif
             XSetClipRectangles (d, gc, 0, 0, clip, 1, YXBanded);
 	}
@@ -5093,16 +5075,8 @@ _render(Display *d,
           {
             draw_x = base_x ; /* most left position */
             _calc_align_and_clip( d, w, gc, &draw_x, y, width, line_width,
-#ifdef FIX_1488
                                 line_height, lay_dir, clip, align, descender,
-#else
-                                lay_dir, clip, align, descender,
-#endif
-#ifdef FIX_1521
                                 &restore_clip, _XmRendFontType(rend2));
-#else
-                                &restore_clip, _XmRendFontType(rend));
-#endif
 
             DrawLine(d, w, &screen, draw_x, y, (_XmStringEntry)string,
 		     &rend2, rend, rendertable, lay_dir, image,
@@ -5132,11 +5106,7 @@ _render(Display *d,
 	  }
 
 	/* width, height, ascent, descent of this line */
-#ifdef FIX_1521
 	LineMetrics(line, rendertable, &rend1, rend, lay_dir,
-#else
-	LineMetrics(line, rendertable, &rend2, rend, lay_dir,
-#endif
 		    &line_width, &line_height, &ascender, &descender);
 
 	y += ascender;
@@ -5146,16 +5116,8 @@ _render(Display *d,
 	    draw_x = base_x;			  /* most left position */
 
 	    _calc_align_and_clip(d, w, gc, &draw_x, y, width, line_width,
-#ifdef FIX_1488
 	            line_height, direction, clip, align, descender,
-#else
-				 direction, clip, align, descender,
-#endif
-#ifdef FIX_1521
 				 &restore_clip, _XmRendFontType(rend1));
-#else
-				 &restore_clip, _XmRendFontType(rend));
-#endif
 
 	    DrawLine(d, w, &screen, draw_x, y, line, &rend1, rend,
 		     rendertable, lay_dir, image, &underline,
@@ -5171,13 +5133,11 @@ _render(Display *d,
       }
   }
   if (restore_clip) {
-#ifdef FIX_1521
 #ifdef USE_XFT
 	  if (_XmRendFontType((_XmStrOptimized(string)) ? rend2 : rend1) == XmFONT_IS_XFT) {
 		  XftDraw *draw = _XmXftDrawCreate(d, w);
 		  XftDrawSetClip(draw, NULL);
 	  } else
-#endif
 #endif
 		  XSetClipMask (d, gc, None);
   }
@@ -6257,11 +6217,7 @@ ComputeMetrics(XmRendition rend,
 
       if (two_byte_font(font_struct))
 	{
-#ifdef FIX_1434
 	  if (byte_count >= 2 || utf8)
-#else
-	  if (byte_count >= 2)
-#endif
 	    {
 	      if (utf8)
 		{
@@ -8079,10 +8035,8 @@ XmStringParseText(XtPointer    text,
 	      parse_unmatched(&result, &prev_ptr, type, ptr - prev_ptr);
 	      advanced = parse_pattern(&result, &ptr, end_ptr, tag,
 				       type, pat, len, call_data, &halt);
-#ifdef FIX_1398
 	      /* Insert the charset component after pattern insertion */
 	      result = XmStringConcatAndFree(result, XmStringComponentCreate(tag_type, strlen(tag), (XtPointer) tag));
-#endif
 	    }
 	}
 

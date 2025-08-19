@@ -29,7 +29,6 @@
 #include <config.h>
 #endif
 
-
 #include "XmI.h"
 #include "MessagesI.h"
 #include <Xm/PrimitiveP.h>
@@ -37,10 +36,7 @@
 #include <Xm/GadgetP.h>
 #include <Xm/IconGP.h>
 #include <Xm/LabelGP.h>
-#ifdef FIX_345
 #include <X11/keysym.h>
-#endif
-
 
 /**************************************************************************
  *   This is Xm.c
@@ -53,8 +49,7 @@
  *   here because they are not used by everybody.
  *************************************************************************/
 
-#ifdef FIX_345
-Boolean _init_modifiers = TRUE;
+ Boolean _init_modifiers = TRUE;
 unsigned int NumLockMask = 0;
 unsigned int ScrollLockMask = 0;
 
@@ -127,7 +122,6 @@ _XmInitModifiers (void)
     if (keymap)
 	XFree (keymap);
 }
-#endif
 
 
 /**************************************************************************
@@ -493,7 +487,6 @@ XmObjectAtPoint(
     return return_wid;
 }
 
-#ifdef FIX_1381
 /************************************************************************
  *
  *  _XmAssignInsensitiveColor
@@ -527,4 +520,3 @@ _XmAssignInsensitiveColor(Widget w)
 
 	return p;
 }
-#endif

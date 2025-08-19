@@ -2344,13 +2344,8 @@ DrawToggle
 	  break;
 
 	case XmONE_OF_MANY_ROUND:
-#ifdef FIX_1402
 	  XmeDrawCircle(dpy, drawable, top_gc, bot_gc, fill_gc, x, y,
 			edge, edge, w->toggle.detail_shadow_thickness, margin);
-#else
-	  XmeDrawCircle(dpy, drawable, top_gc, bot_gc, fill_gc, x, y,
-			edge, edge, w->toggle.detail_shadow_thickness, 1);
-#endif
 	  break;
 	}
     }
@@ -3568,22 +3563,18 @@ DrawToggleLabel(
   {
 
 	XtExposeProc expose;
-#ifdef FIX_1395
        Pixel tmpc = tb->core.background_pixel; /* Save bg color */
 
        /* Changing label background color if button toggled */
        if (tb->toggle.visual_set == XmSET && !Lab_IsMenupane(tb))
         XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tb->toggle.select_color);
-#endif
         _XmProcessLock();
         expose = xmLabelClassRec.core_class.expose;
         _XmProcessUnlock();
         (* expose) ((Widget) tb, NULL, NULL);
-#ifdef FIX_1395
 	/* restore default bg color */
 	if (tb->toggle.visual_set == XmSET && !Lab_IsMenupane(tb) )
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
-#endif
    }
 
   if (restore_gc)
@@ -3652,7 +3643,6 @@ DrawEtchedInMenu(
 
   {
        XtExposeProc expose;
-#ifdef FIX_1395
 	if (tb->toggle.Armed)
 	{
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), select_pix);
@@ -3661,7 +3651,6 @@ DrawEtchedInMenu(
 	{
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tb->core.background_pixel);
 	}
-#endif
 	_XmProcessLock();
 	expose = xmLabelClassRec.core_class.expose;
 	_XmProcessUnlock();

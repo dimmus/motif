@@ -27,18 +27,13 @@
 #include <config.h>
 #endif
 
-#define FIX_1400
-#define FIX_1181
-
 #include "XmI.h"
 #include "ColorObjI.h"
 #include <Xm/VendorSEP.h>
 #include "CallbackI.h"
 #include "ColorI.h"
 #include "MessagesI.h"
-#ifdef FIX_1400
 #include <X11/Xlibint.h>
-#endif
 
 #if defined(__cplusplus) || defined(c_plusplus)
 #define  OBJ_CLASS(w)   (((ApplicationShellWidget)(w))->application.c_class)
@@ -49,9 +44,7 @@
 #define WARNING1	_XmMMsgColObj_0001
 #define WARNING2	_XmMMsgColObj_0002
 
-#ifdef FIX_1400
 static int trap_XCloseDisplay(Display *disp, XExtCodes *codes);
-#endif
 
 /** default should not be killed unless application is dying **/
 externaldef (colorobj) XmColorObj _XmDefaultColorObj = NULL;
@@ -395,17 +388,13 @@ Initialize(
 {
     XmColorObj new_obj = (XmColorObj) nw ;
     int      i, nscreens;
-#ifdef FIX_1181
     Boolean  init_first_time = False;
-#endif
     Atom     tmpAtom = 0;
     unsigned long savetimeout = (unsigned long)-1 ;
     /* window id of the selection owner */
     Window SelectionOwner ;
     int result, isNotNews ;
-#ifdef FIX_1400
     XExtCodes *xExt;
-#endif
 
     /* Ideally, we'd like check if we have a visual (like TrueColor)
        or colormap (non default) that would invalidate the use of
@@ -430,16 +419,11 @@ Initialize(
     _XmProcessLock();
     if (!_XmColorObjCache) _XmColorObjCache = XUniqueContext();
 
-#ifdef FIX_1400
     if (_XmColorObjCacheDisplay == NULL) {
         _XmColorObjCacheDisplay = new_obj->color_obj.display;
         xExt = XAddExtension(_XmColorObjCacheDisplay);
         XESetCloseDisplay(_XmColorObjCacheDisplay, xExt->extension, trap_XCloseDisplay);
     }
-#else
-    if (_XmColorObjCacheDisplay == NULL)
-        _XmColorObjCacheDisplay = new_obj->color_obj.display;
-#endif
 
     if (_XmDefaultColorObj == NULL)
         _XmDefaultColorObj = new_obj;
@@ -577,12 +561,8 @@ Initialize(
 		       */
 
 		      /* certain thing we have to do only once for all screens */
-#ifdef FIX_1181
 		      if (init_first_time == False) {
 			  init_first_time = True;
-#else
-		      if (i == 0) {
-#endif
 
 			  if(!XtIsRealized((Widget) new_obj))
 			      XtRealizeWidget((Widget) new_obj);
@@ -1529,11 +1509,9 @@ XmeGetDesktopColorCells (Screen * screen,
 	return True;
 }
 
-#ifdef FIX_1400
 static int trap_XCloseDisplay(Display *disp, XExtCodes *codes)
 {
     if (disp == _XmColorObjCacheDisplay)
     	_XmColorObjCacheDisplay = NULL;
     return 0;
 }
-#endif

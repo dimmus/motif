@@ -78,9 +78,6 @@ static char rcsid[] = "$TOG: RowColumn.c /main/25 1998/07/22 15:41:49 mgreess $"
 #include "UniqueEvnI.h"
 #include "RCHookI.h"
 
-#define FIX_1351
-#define FIX_1410
-
 /********    Static Function Declarations    ********/
 
 static void Destroy(
@@ -1152,11 +1149,8 @@ InsertChild(
      * either of those classes are allowed.  3) if the entry class is
      * PushButton or PushButtonGadget, either of those classes are allowed.
      */
-    if (XtIsRectObj(w) && RC_IsHomogeneous(m) &&
-#ifdef 	FIX_1410
-		RC_EntryClass(m) &&
-#endif
-	(RC_EntryClass(m) != XtClass(w)))
+    if (XtIsRectObj(w) && RC_IsHomogeneous(m) && RC_EntryClass(m) &&
+	    (RC_EntryClass(m) != XtClass(w)))
     {
       /* CR 7807: using _XmIsFastSubclass checks is subtly wrong???
        *	If an application asks for a specific subclass of
@@ -2359,17 +2353,13 @@ GeometryManager(
       {
        case XtGeometryAlmost:
        case XtGeometryNo:
- /*
-  * Fix 5579 - If XtGeometryNo is returned, but the requested height and the
-  *            requested width are less that the current, allow the children
-  *            to shrink if they want to while maintaining our own size.
-  */
-#ifdef FIX_1474
+        /*
+         * If XtGeometryNo is returned, but the requested height and the
+         * requested width are less that the current, allow the children
+         * to shrink if they want to while maintaining our own size.
+         */
           if (((XtWidth(m) < w) && desired->request_mode & CWWidth) \
 		  || ((XtHeight(m) < h) && desired->request_mode & CWHeight))
-#else
-          if ((XtWidth(m) < w) || (XtHeight(m) < h))
-#endif
           return (XtGeometryNo);
           break;
        default: /* fall out */
@@ -3222,9 +3212,7 @@ create(
             XtSetArg (s_al[s_ac], XmNheight,        5);     s_ac++;
             XtSetArg (s_al[s_ac], XmNallowShellResize, TRUE);   s_ac++;
             XtSetArg (s_al[s_ac], XtNoverrideRedirect, TRUE);   s_ac++;
-#ifdef FIX_1351
             XtSetArg (s_al[s_ac], XtNancestorSensitive, TRUE);  s_ac++;
-#endif
 
 	    b = XtMalloc(strlen(POPUP_PREFIX) + strlen(name) + 1);
             sprintf (b, POPUP_PREFIX, name);

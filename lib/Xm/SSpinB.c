@@ -57,8 +57,6 @@
 
 #include <Xm/SSpinBP.h>
 
-#define FIX_1530
-
 static void	Initialize(
 			Widget		req,
 			Widget		w,
@@ -551,7 +549,6 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
   switch (offset)
    {
      case Offset(arrow_sensitivity):
-#ifdef FIX_1530
       {
         unsigned char new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -559,14 +556,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNarrowSensitivity, (unsigned char *) value,
-		     NULL);
-#endif
        break;
      case Offset(columns):
-#ifdef FIX_1530
       {
         short new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -574,14 +565,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNcolumns, (short *) value,
-		     NULL);
-#endif
        break;
      case Offset(decimal_points):
-#ifdef FIX_1530
       {
         short new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -589,14 +574,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNdecimalPoints, (short *) value,
-		     NULL);
-#endif
        break;
      case Offset(editable):
-#ifdef FIX_1530
       {
         Boolean new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -604,14 +583,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNeditable, (Boolean *) value,
-		     NULL);
-#endif
        break;
      case Offset(increment_value):
-#ifdef FIX_1530
       {
         short new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -619,14 +592,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNincrementValue, (short *) value,
-		     NULL);
-#endif
        break;
      case Offset(minimum_value):
-#ifdef FIX_1530
       {
         int new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -634,15 +601,9 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNminimumValue, (int *) value,
-		     NULL);
-#endif
 
        break;
      case Offset(maximum_value):
-#ifdef FIX_1530
       {
         int new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -650,14 +611,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNmaximumValue, (int *) value,
-		     NULL);
-#endif
        break;
      case Offset(num_values):
-#ifdef FIX_1530
       {
         int new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -665,14 +620,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNnumValues, (int *) value,
-		     NULL);
-#endif
        break;
      case Offset(position):
-#ifdef FIX_1530
       {
         int new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -680,14 +629,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNposition, (int *) value,
-		     NULL);
-#endif
        break;
      case Offset(position_type):
-#ifdef FIX_1530
       {
         unsigned char new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -695,14 +638,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNpositionType, (unsigned char *) value,
-		     NULL);
-#endif
        break;
      case Offset(sb_child_type):
-#ifdef FIX_1530
       {
         unsigned char new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -710,14 +647,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNspinBoxChildType, (unsigned char *) value,
-		     NULL);
-#endif
        break;
      case Offset(values):
-#ifdef FIX_1530
       {
         XmStringTable new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -725,14 +656,8 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNvalues, (XmStringTable *) value,
-		     NULL);
-#endif
        break;
      case Offset(wrap):
-#ifdef FIX_1530
       {
         Boolean new_value;
         XtVaGetValues(ssb_w->simpleSpinBox.text_field,
@@ -740,11 +665,6 @@ SyntheticGetValue(Widget widget, int offset, XtArgVal *value)
 		      NULL);
         *value = (XtArgVal)new_value;
       }
-#else
-       XtVaGetValues(ssb_w->simpleSpinBox.text_field,
-		     XmNwrap, (Boolean *) value,
-		     NULL);
-#endif
        break;
      default:
        fprintf(stderr,

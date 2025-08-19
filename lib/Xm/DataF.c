@@ -73,7 +73,6 @@
 
 #include "MessagesI.h"
 
-#define FIX_1531
 /*
  * Stuff from various internal motif headers that we need to declare
  */
@@ -185,9 +184,7 @@ static void df_XmSetFullGC() ;
 static void df_XmSetMarginGC() ;
 static void df_XmResetSaveGC() ;
 static void df_XmSetNormGC() ;
-#ifdef FIX_1381
 static void df_XmSetShadowGC() ;
-#endif
 static void df_XmSetInvGC() ;
 static void df_DrawText() ;
 static int df_FindPixelLength() ;
@@ -409,11 +406,9 @@ static void df_XmSetNormGC(
                         Boolean stipple) ;
 #endif /* NeedWidePrototypes */
 
-#ifdef FIX_1381
 static void df_XmSetShadowGC(
                         XmDataFieldWidget tf,
                         GC gc);
-#endif
 
 static void df_XmSetInvGC(
                         XmDataFieldWidget tf,
@@ -1927,7 +1922,6 @@ _XmDataFToggleCursorGC(
 
     if (!XmTextF_has_rect(tf)) _XmDataFieldSetClipRect(tf);
 
-#ifdef FIX_1501
     if (!XtIsSensitive(widget)) {
       valuemask = GCForeground|GCBackground|GCFillStyle|GCStipple|GCFunction;
       values.foreground = _XmAssignInsensitiveColor((Widget)tf);
@@ -1944,7 +1938,6 @@ _XmDataFToggleCursorGC(
         values.function = GXcopy;
       }
     } else {
-#endif
     if (XmTextF_overstrike(tf)) {
       if (!XmTextF_add_mode(tf) && XtIsSensitive(widget) &&
 	  (XmTextF_has_focus(tf) || XmTextF_has_destination(tf))) {
@@ -1975,9 +1968,7 @@ _XmDataFToggleCursorGC(
       }
       valuemask |= GCStipple;
     }
-#ifdef FIX_1501
     }
-#endif
     XChangeGC(XtDisplay(widget), XmTextF_image_gc(tf), valuemask, &values);
 }
 
@@ -2228,14 +2219,12 @@ df_PaintCursor(
     }
 
     if ((XmTextF_cursor_on(tf) >= 0) && XmTextF_blink_on(tf)) {
-#ifdef FIX_1501
        if (!XtIsSensitive((Widget) tf)) {
           df_XmSetShadowGC(tf, XmTextF_image_gc(tf));
           XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_image_gc(tf), x + 1, y + 1,
                          XmTextF_cursor_width(tf), XmTextF_cursor_height(tf));
        }
        _XmDataFToggleCursorGC((Widget) tf);
-#endif
        XFillRectangle(XtDisplay(tf), XtWindow(tf), XmTextF_image_gc(tf), x, y,
 		      XmTextF_cursor_width(tf), XmTextF_cursor_height(tf));
     } else {
@@ -2588,25 +2577,17 @@ df_XmSetNormGC(
     values.foreground = tf->primitive.foreground;
     values.background = tf->core.background_pixel;
     if (change_stipple) {
-#ifdef FIX_1381
        valueMask |= GCFillStyle;
        if (stipple) {
           /*generally gray insensitive foreground (instead stipple)*/
           values.foreground = _XmAssignInsensitiveColor((Widget)tf);
           values.fill_style = FillSolid;
        } else values.fill_style = FillSolid;
-#else
-       valueMask |= GCTile | GCFillStyle;
-       values.tile = XmTextF_stipple_tile(tf);
-       if (stipple) values.fill_style = FillTiled;
-       else values.fill_style = FillSolid;
-#endif
     }
 
     XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
 
-#ifdef FIX_1381
 static void
 #ifdef _NO_PROTO
 df_XmSetShadowGC( tf, gc )
@@ -2626,7 +2607,6 @@ df_XmSetShadowGC(
 
     XChangeGC(XtDisplay(tf), gc, valueMask, &values);
 }
-#endif
 
 static void
 #ifdef _NO_PROTO
@@ -2878,7 +2858,6 @@ df_DrawTextSegment(
        df_XmSetNormGC(tf, XmTextF_gc(tf), True, stipple);
     }
 
-#ifdef FIX_1381
     if (stipple) {
        /*Draw shadow for insensitive text*/
        df_XmSetShadowGC(tf, XmTextF_gc(tf));
@@ -2891,7 +2870,6 @@ df_DrawTextSegment(
        }
        df_XmSetNormGC(tf, XmTextF_gc(tf), True, stipple);
     }
-#endif
 
     if (XmTextF_max_char_size(tf) != 1) {
        df_DrawText(tf, XmTextF_gc(tf), *x, y, (char*) (XmTextF_wc_value(tf) + seg_start),
@@ -8795,15 +8773,9 @@ df_LoadFontMetrics(
                                fs_extents->max_ink_extent.y;
 #ifdef USE_XFT
     } else if (XmTextF_use_xft(tf)) {
-#ifdef FIX_1415
 	  _XmXftFontAverageWidth((Widget) tf, TextF_XftFont(tf), (int *)&charwidth);
-#else
-        charwidth = XmTextF_xft_font(tf)->max_advance_width;
-#endif
-#ifdef FIX_1531
         XmTextF_font_ascent(tf) = TextF_XftFont(tf)->ascent;
         XmTextF_font_descent(tf) = TextF_XftFont(tf)->descent;
-#endif /* FIX_1531 */
 #endif
     } else {
        font = XmTextF_font(tf);

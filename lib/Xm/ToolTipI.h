@@ -42,9 +42,7 @@ void _XmToolTipLeave(Widget wid,
                      String *params,
                      Cardinal *num_params);
 
-#ifdef FIX_1388
 void _XmToolTipRemove(Widget wid);
-#endif
 
 XmString XmGetToolTipString (Widget w);
 

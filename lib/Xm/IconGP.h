@@ -109,9 +109,7 @@ typedef struct _XmIconGCacheObjPart
    Dimension        spacing;
    Dimension        margin_width;
    Dimension        margin_height;
-#ifdef FIX_1381
    GC               shadow_GC;
-#endif
 } XmIconGCacheObjPart;
 
 typedef struct _XmIconGCacheObjRec
@@ -234,10 +232,8 @@ typedef struct _XmIconGadgetRec
 				 icong.cache->background_GC)
 #define	IG_InsensitiveGC(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->insensitive_GC)
-#ifdef FIX_1381
 #define	IG_ShadowGC(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->shadow_GC)
-#endif
 #define	IG_TopShadowGC(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->top_shadow_GC)
 #define	IG_BottomShadowGC(w)	(((XmIconGadget)(w))-> \
