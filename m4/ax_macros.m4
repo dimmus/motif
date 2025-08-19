@@ -17,7 +17,7 @@ lt_save_LIBS="$LIBS"
 LIBS="$X_LIBS -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $LIBS"
 CFLAGS="$X_CFLAGS $CFLAGS"
 CPPFLAGS="$X_CFLAGS $CPPFLAGS"
-AC_COMPILE_IFELSE([
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <X11/Intrinsic.h>
 int main() {
 Boolean brc;
@@ -27,7 +27,7 @@ if (True==brc)
 else
   exit(1);
 }
-],
+]])],
 lt_cv_xthreads=yes,
 lt_cv_xthreads=no,
 lt_cv_xthreads=dunno)
@@ -49,8 +49,11 @@ fi
 dnl This test is not very reliable probably ...
 AC_DEFUN([AX_FUNC_VOID_SPRINTF],
 [AC_CACHE_CHECK(whether sprintf returns void, ac_cv_func_void_sprintf,
-[AC_COMPILE_IFELSE([#include <stdio.h>
-int sprintf(); main() { exit(sprintf(".")); }],
+[AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+#include <stdio.h>
+int sprintf(); 
+int main() { exit(sprintf(".")); }
+]])],
   ac_cv_func_void_sprintf=no, ac_cv_func_void_sprintf=yes, ac_cv_func_void_sprintf=yes)])
 if test $ac_cv_func_void_sprintf = no; then
   AC_DEFINE(VOID_SPRINTF,1,
@@ -61,12 +64,12 @@ fi
 dnl This tests whether weak aliases are supported.
 AC_DEFUN([AX_WEAK_ALIAS_SUPPORT],
 [AC_CACHE_CHECK(whether weak aliases are supported, ac_cv_weak_alias_support,
-[AC_COMPILE_IFELSE([
+[AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 int get_value(int *value) {
   return *value;
 }
 int get_value_alias(int *high) __attribute__((__weak__,alias("get_value")));
-],
+]])],
 [],
 ac_cv_weak_alias_support=yes,
 ac_cv_weak_alias_support=no)])
