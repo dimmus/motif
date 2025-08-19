@@ -1,4 +1,4 @@
-AC_DEFUN([AC_FIND_XFT],
+AC_DEFUN([AX_FIND_XFT],
 [
 AH_TEMPLATE([HAVE_FREETYPE], [We have the FreeType library])
 AH_TEMPLATE([HAVE_FONTCONFIG], [We have the fontconfig library])
