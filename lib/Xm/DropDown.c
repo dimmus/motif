@@ -937,7 +937,7 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
      * Do Nothing...
      */
     if (XmDropDown_list_state(cbw) == XmDropDown_IN_PROGRESS)
-	return;
+	    return;
 
 	if (XmDropDown_list_state(cbw) == XmDropDown_AFTER_UNPOST ) {
 		XmDropDown_list_state(cbw) = XmDropDown_POSTED;
