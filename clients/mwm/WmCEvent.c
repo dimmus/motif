@@ -660,13 +660,11 @@ Boolean HandleEventsOnClientWindow (ClientData *pCD, XEvent *pEvent)
 {
     Boolean doXtDispatchEvent = True;
 
-#ifndef NO_SHAPE
     if (pEvent->type == (wmGD.shapeEventBase+ShapeNotify))
     {
         HandleCShapeNotify (pCD, (XShapeEvent *)pEvent);
     }
     else
-#endif /* NO_SHAPE */
     switch (pEvent->type)
     {
 	case ColormapNotify:
@@ -2598,8 +2596,6 @@ void HandleClientMessage (ClientData *pCD, XClientMessageEvent *clientEvent)
 } /* END OF FUNCTION HandleClientMessage */
 
 
-#ifndef NO_SHAPE
-
 /*************************************<->*************************************
  *
  *  HandleCShapeNotify (pCD, shapeEvent)
@@ -2630,7 +2626,6 @@ HandleCShapeNotify (ClientData *pCD,  XShapeEvent *shapeEvent)
 	SetFrameShape (pCD);
     }
 } /* END OF FUNCTION HandleCShapeNotify */
-#endif /* NO_SHAPE */
 
 
 /*************************************<->*************************************

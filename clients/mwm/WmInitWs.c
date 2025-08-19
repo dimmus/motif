@@ -759,11 +759,9 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 #ifndef NO_OL_COMPAT
 		    InitOLCompat();
 #endif /* NO_OL_COMPAT */
-#ifndef NO_SHAPE
 		    wmGD.hasShape = XShapeQueryExtension (DISPLAY,
 							  &wmGD.shapeEventBase,
 							  &wmGD.shapeErrorBase);
-#endif /*  NO_SHAPE  */
 
                     wmGD.replayEnterEvent = False;
 		    wmGD.menuActive = NULL;

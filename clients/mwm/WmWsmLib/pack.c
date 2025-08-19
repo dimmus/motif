@@ -125,7 +125,7 @@ _WSMPackRequest(Display *dpy, int screen_num, WSMRequest *request,
 		unsigned long *msg_data_len, WSMErrorCode *error)
 {
     MessageData data, save;
-    int i;
+    int i, j;
     long size;
     WSMWinInfo *win_info;
     WSMConfigFormatData *global_attrs, *win_attrs, *icon_attrs;
@@ -261,8 +261,6 @@ _WSMPackRequest(Display *dpy, int screen_num, WSMRequest *request,
 	break;
     case WSM_WM_WINDOWS:
 	{
-	  int i, j;
-
 	  data = PackCARD32(data, request->wm_windows.location_flag);
 	  data = PackListNum(data, request->wm_windows.num_window_properties);
 	  for (i=0; i<request->wm_windows.num_window_properties; i++)
@@ -492,7 +490,7 @@ void
 _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 		  unsigned long len, WSMRequestType type, WSMRequest *request)
 {
-    register int i;
+    register int i, j, num;
     request->any.type = type;	/* Save the type. */
     request->any.allocated = False;
 
@@ -507,7 +505,6 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 	break;
     case WSM_EXTENSIONS:
         {
-	    register int num;
 	    register String *ptr;
 
 	    num = request->extensions.num_extensions = UnpackListNum(&data);
@@ -526,7 +523,7 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 	break;
     case WSM_SET_STATE:
         {
-	    int num = UnpackListNum(&data);
+	    num = UnpackListNum(&data);
 
 	    request->set_state.num_win_info_list = num;
 	    request->set_state.win_info_list =
@@ -550,8 +547,6 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 	break;
     case WSM_WM_WINDOWS:
 	{
-	  int num, i, j;
-
 	  request->extensions.allocated = True;
 	  request->wm_windows.location_flag = UnpackCARD32(&data);
 

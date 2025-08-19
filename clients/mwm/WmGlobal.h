@@ -48,9 +48,7 @@
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifndef NO_SHAPE
 #include <X11/extensions/shape.h>
-#endif /* NO_SHAPE  */
 #include <X11/IntrinsicP.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -1908,13 +1906,11 @@ typedef struct _ClientData
     SlideOutRec	*pSOR;			/* slide-out record */
 #endif /* PANELIST */
 #endif /* WSM */
-#ifndef NO_SHAPE
-    short       wShaped;                /* this window has a bounding shape */
-#endif /* NO_SHAPE  */
+    short       wShaped;        /* this window has a bounding shape */
 
     int		usePPosition;		/* indicate whether to use PPosition */
 
-    long	window_status;			/* used for Tear-off Menus */
+    long	window_status;		/* used for Tear-off Menus */
 
 } ClientData;
 
@@ -2335,10 +2331,8 @@ typedef struct _WmGlobalData
     Window	attributesWindow;
     XWindowAttributes	windowAttributes;
 
-#ifndef NO_SHAPE
     Boolean     hasShape;                /* server supports Shape extension */
     int         shapeEventBase, shapeErrorBase;
-#endif /* NO_SHAPE */
     /* Need to replay enter notify events on windows with the
        pointer that used to be modalized.  This is for pointer focus. */
     int         replayEnterEvent;
