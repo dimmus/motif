@@ -1088,12 +1088,12 @@ PurgeAllWindowConfiguration(Widget w,
   if (room_list != NULL)
     XtFree((XtPointer)room_list);
 
-  if ((del_db = tempnam(NULL, "wsmD")) == NULL)
+  if ((del_db = mkstemp("wsmD")) == NULL)
   {
       del_db = ".wsmDelDB";
       free_del = False;
   }
-  if ((save_db = tempnam(NULL, "wsmS")) == NULL)
+  if ((save_db = mkstemp("wsmS")) == NULL)
   {
       save_db = ".wsmSaveDB";
       free_save = False;
@@ -1196,12 +1196,12 @@ PurgeWindowConfiguration(Widget w,
 			  &value);
     }
 
-  if ((del_db = tempnam(NULL, "wsmD")) == NULL)
+  if ((del_db = mkstemp("wsmD")) == NULL)
   {
       del_db = ".wsmDelDB";
       free_del = False;
   }
-  if ((save_db = tempnam(NULL, "wsmS")) == NULL)
+  if ((save_db = mkstemp("wsmS")) == NULL)
   {
       save_db = ".wsmSaveDB";
       free_save = False;
