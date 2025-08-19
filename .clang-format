@@ -1,5 +1,232 @@
+# This configuration file can be used to auto-format the code base.
+# Not all guidelines specified in CODING_STYLE are followed, so the
+# result MUST NOT be committed indiscriminately, but each automated
+# change should be reviewed and only the appropriate ones committed.
+#
+# The easiest way to apply the formatting to your changes ONLY,
+# is to use the git-clang-format script (usually installed with clang-format).
+#
+# -  Fix up formatting before committing
+# 1. Edit and stage your files.
+# 2. Run `git clang-format`.
+# 3. Verify + correct + (un)stage changes.
+# 4. Commit.
+#
+# -  Fix up formatting after committing
+# 1. Commit your changes.
+# 2. Run `git clang-format HEAD~` - Refer the commit *before* your changes here.
+# 3. Verify + correct changes, `git difftool -d` can help here.
+# 4. Stage + commit, potentially with `--amend` (means to fixup the last commit).
+#
+# To run clang-format on all sourcefiles, use the following line:
+# $ git ls-files 'src/*.[ch]' 'src/*.cc' | xargs clang-format -i -style=file
+# =============================
+# Tested to work with version: 16.
+#
+# Introduction: https://clang.llvm.org/docs/ClangFormat.html
+# Supported options: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# See as well https://wiki.apertis.org/Guidelines/Coding_conventions#Code_formatting
 BasedOnStyle: GNU
-AlwaysBreakAfterDefinitionReturnType: All
-BreakBeforeBinaryOperations: None
-SpaceAfterCStyleCast: true
-ColumnLimit: 0
+
+Language: Cpp
+Standard: Latest
+
+# Line width (don't exceed 100).
+ColumnLimit: 80
+
+# Note: TabWidth and IndentWidth must be the same, or strange things happen.
+UseTab: Never
+TabWidth: 2
+IndentWidth: 2
+
+PPIndentWidth: 2
+ContinuationIndentWidth: 2
+
+LineEnding: LF
+InsertNewlineAtEOF: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+
+IndentCaseLabels: true
+IndentCaseBlocks: true
+IndentGotoLabels: false
+IndentPPDirectives: AfterHash
+IndentWrappedFunctionNames: false
+
+# This causes parameters on continuations to align to the opening brace.
+#   like_this_long_name(parameter_one,
+#                       parameter_two,
+#                       parameter_three);
+AlignAfterOpenBracket: Align
+
+AlignArrayOfStructures: Right
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignConsecutiveAssignments:
+    Enabled:          true
+    AcrossEmptyLines: false
+    AcrossComments:   false
+# false: mem = p->last;
+#        p->last += pool->item_alloc;
+# true:  mem      = p->last;
+#        p->last += pool->item_alloc;
+    AlignCompound:    true
+    PadOperators:     false
+AlignConsecutiveBitFields:
+    Enabled:          true
+    AcrossEmptyLines: false
+    AcrossComments:   false
+AlignConsecutiveDeclarations:
+    Enabled:          true
+    AcrossEmptyLines: false
+    AcrossComments:   false
+AlignConsecutiveMacros:
+    Enabled:          true
+    AcrossEmptyLines: false
+    AcrossComments:   true
+AlignTrailingComments:
+    Kind:           Leave
+    OverEmptyLines: 0
+
+# These two settings trigger stacking of parameters in most cases; this is
+# easier to read and also makes diffs easier to read (since an added or removed
+# parameter is obvious). For example, function calls will look like this:
+#   like_this_long_name(parameter_one,
+#                       parameter_two,
+#                       parameter_three,
+#                       parameter_four,
+#                       parameter_five,
+#                       parameter_six);
+# Instead of:
+#   like_this_long_name(parameter_one, parameter_two, parameter_three, parameter_four,
+#                       parameter_five, parameter_six);
+BinPackArguments: false
+BinPackParameters: false
+
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+
+# Disallow short functions on one line; break them up.
+AllowShortBlocksOnASingleLine: Never
+
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: false
+
+# Always break:
+#   const char *foo = "multi"
+#                     "line";
+# Instead of:
+#   const char *foo =
+#       "multi"
+#       "line";
+AlwaysBreakAfterReturnType: AllDefinitions
+AlwaysBreakBeforeMultilineStrings: false
+
+# This tries to match EFL's style as much as possible.
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterCaseLabel:        true
+    AfterControlStatement: true
+    AfterEnum:             true
+    AfterExternBlock:      false
+    AfterFunction:         true
+    AfterStruct:           true
+    AfterUnion:            false
+    BeforeElse:            true
+    BeforeWhile:           true
+    IndentBraces:          false
+    SplitEmptyFunction:    false
+    SplitEmptyRecord:      false
+BreakAfterAttributes: Never
+BreakBeforeBinaryOperators: None
+BreakBeforeInlineASMColon: OnlyMultiline
+BreakBeforeTernaryOperators: true
+
+DerivePointerAlignment: false
+PointerAlignment: Right
+
+QualifierAlignment: Custom
+QualifierOrder: ["static", "inline", "volatile", "restrict", "const", "type"]
+
+ReflowComments: false
+BreakStringLiterals: true
+RemoveSemicolon: true
+# RemoveParentheses: ReturnStatement # no in clang-fromat 16
+InsertBraces: false
+SeparateDefinitionBlocks: Always
+
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAroundPointerQualifiers: Default
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: false
+
+# Use "if (...)" instead of "if(...)", but have function calls like foo().
+SpaceBeforeParens: ControlStatementsExceptForEachMacros
+SpaceInEmptyParentheses: false
+
+BitFieldColonSpacing: Both
+SpaceInEmptyBlock: false
+
+# Use two spaces before trailing comments, for example
+#   foo = bar;  // comment
+# Note that this doesn't work for C-style comments.
+SpacesBeforeTrailingComments: 2
+
+SpaceBeforeSquareBrackets: false
+SpacesInSquareBrackets: false
+SpacesInLineCommentPrefix:
+    Minimum: 1
+    Maximum: -1
+
+SortIncludes: Never
+IncludeBlocks: Preserve
+IncludeIsMainRegex: ""
+IncludeCategories:
+    - {Regex: "<.*>",   Priority: -2, CaseSensitive: true}
+    - {Regex: "\".*\"", Priority: -1, CaseSensitive: true}
+
+AttributeMacros: ["__capability"]
+StatementAttributeLikeMacros: []
+StatementMacros: []
+
+SkipMacroDefinitionBody: true # clang-fromat >= 18
+
+# ForEachMacros:
+    # - EINA_LIST_FOREACH
+    # - EINA_INLIST_FOREACH
+    # - EINA_INLIST_FOREACH_SAFE
+    # - EINA_INLIST_REVERSE_FOREACH
+    # - EINA_INLIST_REVERSE_FOREACH_FROM
+    # - EINA_ITERATOR_FOREACH
+    # - EINA_ACCESSOR_FOREACH
+    # - EINA_INARRAY_FOREACH
+    # - EINA_VALUE_ARRAY_FOREACH
+
+# Avoid having function calls broken onto a new line:
+#
+#   int a = foo(
+#       long, list, of, many, params);
+#
+# Instead of:
+#
+#   int a =
+#       foo(long, list, of, many, params);
+#
+# PenaltyBreakAssignment: 200
+
+# PenaltyBreakBeforeFirstCallParameter: 19
+# PenaltyBreakComment: 300
+# PenaltyBreakFirstLessLess: 120
+# PenaltyBreakOpenParenthesis: 0
+
+# We don't want literal strings to break,
+# however clang-format seems to ignore this (sigh).
+# PenaltyBreakString: 1000000
+
+# PenaltyExcessCharacter: 10
+# PenaltyIndentedWhitespace: 0
+# PenaltyReturnTypeOnItsOwnLine: 60

@@ -35,3 +35,6 @@ SUBDIRS	= bindings \
             clients \
             doc \
             $(MAYBE_DEMOS)
+
+format:
+	git ls-files 'lib/Xm/*.[ch]' 'lib/Xm/*.cc' | xargs clang-format -i -style=file
