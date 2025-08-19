@@ -58,7 +58,7 @@ static char rcsid[] = "$TOG: TextOut.c /main/41 1999/08/12 11:37:30 vipin $"
 #include "TextOutI.h"
 #include "TraversalI.h"
 #include "XmI.h"
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 #include <Xm/PrintSP.h>         /* for XmIsPrintShell */
 #endif
 #ifdef USE_XFT

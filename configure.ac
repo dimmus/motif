@@ -145,38 +145,6 @@ AC_CACHE_VAL(ac_cv_type_signal,
 
 AC_DEFINE_UNQUOTED([RETSIGTYPE], [$ac_cv_type_signal], [Define as the return type of signal handlers (`int' or `void').])
 
-# if test x$enable_themes = x
-# then
-#     enable_themes="yes"
-# fi
-# AC_ARG_ENABLE(themes, [  --enable-themes         Enable themes (default=no)])
-# if test "$enable_themes" = "yes"
-# then
-#     if test -f $srcdir/lib/Xm/Theme.h
-#     then
-#       AC_DEFINE(USE_XMTHEMES, 1, "Use XmThemes")
-#       XMTHEME_DIST = "Theme.h ThemeP.h DynLibP.h Theme.c DynLib.c"
-#     else
-#       AC_MSG_WARN([--enable-themes specified, but I do not have the code. Disabled])
-#       enable_themes="no"
-#     fi
-# fi
-# AC_SUBST(XMTHEME_DIST)
-# AM_CONDITIONAL(OM_XMTHEMES, test "$enable_themes" = "yes")
-
-# if test x$enable_debug_themes = x
-# then
-#     enable_debug_themes="yes"
-# fi
-# AC_ARG_ENABLE(debug-themes, [  --enable-debug-themes   Enable themes debugging (default=no)])
-# if test "$enable_themes" = "yes"
-# then
-#     if test "$enable_debug_themes" = "yes"
-#     then
-# 	    AC_DEFINE(DEBUGTHEMES, 1, "Debug Themes")
-#     fi
-# fi
-
 if test x$GCC = xyes
 then
     CFLAGS="$CFLAGS -std=$C_STD -Wall -g -fno-strict-aliasing \
@@ -203,18 +171,24 @@ AC_SUBST(XMBINDDIR_FALLBACK, "${libdir}/X11/bindings")
 dnl config/*.cf and tests
 AC_SUBST(RM, "rm -f")
 
-AC_ARG_ENABLE([debug],
-  [AS_HELP_STRING(
-      [--enable-debug],
-      [enable debugging support])
-	], [enable_debug=$enableval], [enable_debug=no]
-)
+dnl Image formats
+AC_ARG_WITH([jpeg],
+	[AS_HELP_STRING([--with-jpeg], [Enable jpeg support])],
+	[with_jpeg=$withval], [with_jpeg=yes])
+
+AC_ARG_WITH([png],
+	[AS_HELP_STRING([--with-png], [Enable png support])],
+	[with_png=$withval], [with_png=yes])
+
+AC_ARG_WITH([xft],
+	[AS_HELP_STRING([--with-xft], [Enable xft support])],
+	[with_xft=$withval], [with_xft=yes])
+
+AS_IF([test "x$with_jpeg" == "xyes"],[PKG_CHECK_MODULES([JPEG], [libjpeg])])
+AS_IF([test "x$with_png"  == "xyes"],[PKG_CHECK_MODULES([PNG],  [libpng])])
+AS_IF([test "x$with_xft"  == "xyes"],[PKG_CHECK_MODULES([XFT],  [xft >= 2])])
 
 dnl UTF8
-# if test x$enable_utf8 = x
-# then
-#     enable_utf8="yes"
-# fi
 
 # if test "$enable_utf8" = "yes"
 # then
@@ -222,6 +196,20 @@ dnl UTF8
 #   AC_SEARCH_LIBS([iconv_open], [iconv], ,
 #     AC_SEARCH_LIBS([libiconv_open], [iconv]))
 # fi
+
+AC_ARG_ENABLE([debug],
+  [AS_HELP_STRING(
+      [--enable-debug],
+      [enable debugging support])
+	], [enable_debug=$enableval], [enable_debug=no]
+)
+
+AC_ARG_ENABLE([demos],
+  [AS_HELP_STRING(
+      [--disable-demos],
+      [disable building demos])
+	], [enable_demos=$enableval], [enable_demos=yes]
+)
 
 AC_ARG_ENABLE([utf8],
   [AS_HELP_STRING(
@@ -250,57 +238,36 @@ AC_ARG_ENABLE([message-catalog],
   [enable_message_catalog=no]
 )
 
-dnl Printing
+AC_ARG_ENABLE([printing],
+	[AS_HELP_STRING(
+		[--enable-printing],
+		[enable printing support])
+	], [enable_printing=$enableval], [enable_printing=no]
+)
 
-AC_ARG_ENABLE(printing, [  --disable-printing
-                       Disable printing support])
+dnl Printing support relies on the X print protocol
+AS_IF([test "x$enable_printing" == "xyes"],[
+	PKG_CHECK_MODULES([XP], [xp], [], [enable_printing=no])
+	AS_IF([test "x$enable_printing" == "xno"], [AC_MSG_FAILURE([libXp not found])])
+])
 
-if test x$enable_printing = x
-then
-    enable_printing="yes"
-fi
-
-if test "$enable_printing" = "yes"
-then
-  AC_MSG_CHECKING([for libXp])
-  AC_CHECK_HEADERS(X11/extensions/Print.h,
-    AC_CHECK_LIB(Xp, XpCreateContext, ,enable_printing="no"),
-  enable_printing="no")
-fi
-
-if test "$enable_printing" = "yes"
-then
-  LIB_XP=-lXp
-  AC_DEFINE([PRINTING_SUPPORTED], [1], [Printing is supported])
-  PRINTING_SUPPORTED_FALSE=!
-  PRINTING_SUPPORTED_TRUE=
-else
-  LIB_XP=
-  PRINTING_SUPPORTED_FALSE=
-  PRINTING_SUPPORTED_TRUE=!
-fi
-AC_SUBST(PRINTING_SUPPORTED_FALSE)
-AC_SUBST(PRINTING_SUPPORTED_TRUE)
-
-AC_SUBST(LIB_XP)
-
-case "$host_os" in
-    freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";
-        LDFLAGS="$LDFLAGS -L/usr/local/lib";;
-    cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
-    solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
-        if test x$enable_utf8 = x
-        then
-            enable_utf8="no"
-        fi;
-        if test x$enable_xft = x
-        then
-            enable_xft="no"
-        fi;;
-esac
+# case "$host_os" in
+#     freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";
+#         LDFLAGS="$LDFLAGS -L/usr/local/lib";;
+#     cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
+#     solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
+#         if test x$enable_utf8 = x
+#         then
+#             enable_utf8="no"
+#         fi;
+#         if test x$enable_xft = x
+#         then
+#             enable_xft="no"
+#         fi;;
+# esac
 
 AC_FIND_XFT
-AC_IMAGE_SUPPORT
+# AC_IMAGE_SUPPORT
 
 dnl Debug builds (assert, etc.)
 # AS_IF([test "x$enable_debug" == "xyes"],[
@@ -320,7 +287,6 @@ AC_SUBST([XM_VERSION], [XM_VERSION])
 dnl Automake substitutions
 AC_SUBST([ABI_VERSION], [ABI_VERSION])
 AM_CONDITIONAL(MessageCatalog, test "x$enable_message_catalog" = "xyes")
-AM_CONDITIONAL(PRINTING,       test "x$enable_printing" = "xyes")
 AM_CONDITIONAL(OM_XMU,         test "x$X_XMU" != "x")
 AM_CONDITIONAL([XM_PRINTING],  test "x$enable_printing" == "xyes")
 AM_CONDITIONAL([XM_WITH_JPEG], test "x$with_jpeg" == "xyes")
@@ -331,6 +297,24 @@ dnl Substitutions for lib/Xm/Xm.h
 AC_SUBST([XM_MAJOR], [XM_MAJOR])
 AC_SUBST([XM_MINOR], [XM_MINOR])
 AC_SUBST([XM_PATCH], [XM_PATCH])
+
+AC_DEFINE_UNQUOTED(
+	[XM_PRINTING],
+	$(test "x$enable_printing" != "xyes"; echo $?),
+	[1 if Motif was built with printing support]
+)
+
+AC_DEFINE_UNQUOTED(
+	[XM_WITH_JPEG],
+	$(test "x$with_jpeg" != "xyes" ; echo $?),
+	[1 if Motif was built with JPEG support]
+)
+
+AC_DEFINE_UNQUOTED(
+	[XM_WITH_PNG],
+	$(test "x$with_png"  != "xyes" ; echo $?),
+	[1 if Motif was built with PNG support]
+)
 
 AC_DEFINE_UNQUOTED(
 	[XM_UTF8],
@@ -345,12 +329,7 @@ AC_DEFINE_UNQUOTED(
 )
 
 # Option to disable building of demos
-AC_ARG_ENABLE([demos],
-  [AS_HELP_STRING(
-      [--disable-demos],
-      [disable building demos])
-	], [enable_demos=$enableval], [enable_demos=yes]
-)
+
 
 AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
 AC_CONFIG_FILES([Makefile \
@@ -480,11 +459,11 @@ AC_OUTPUT
 
 echo ""
 echo "The following optional features will be used:"
-echo "  Enable message catalog:    $enable_message_catalog"
 echo "  Enable demos:              $enable_demos"
-# echo "  Enable themes:             $enable_themes"
-# echo "  Enable themes debugging:   $enable_debug_themes"
-echo "  Enable UTF-8 support:      $enable_utf8"
+echo "  Enable JPG support:        $with_jpeg"
+echo "  Enable PNG support:        $with_png"
 echo "  Enable XFT support:        $enable_xft"
+echo "  Enable UTF8 support:       $enable_utf8"
 echo "  Enable printing support:   $enable_printing"
+echo "  Enable message catalog:    $enable_message_catalog"
 echo ""

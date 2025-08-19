@@ -5910,12 +5910,12 @@ DragProcCallback(Widget w,
 		 XtPointer call)
 {
   enum { XmACOMPOUND_TEXT, XmATEXT,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
       XmAUTF8_STRING,
 #endif
       NUM_ATOMS };
   static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
       XmSUTF8_STRING
 #endif
       };
@@ -5935,7 +5935,7 @@ DragProcCallback(Widget w,
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
   targets[4] = atoms[XmAUTF8_STRING];
 #endif
 
@@ -5948,7 +5948,7 @@ DragProcCallback(Widget w,
 
   switch(cb->reason) {
   case XmCR_DROP_SITE_ENTER_MESSAGE:
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     if (XmTargetsAreCompatible(XtDisplay(drag_cont), exp_targets,
 			       num_exp_targets, targets, 5))
 #else
@@ -5980,12 +5980,12 @@ static void
 RegisterDropSite(Widget w)
 {
   enum { XmACOMPOUND_TEXT, XmATEXT,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
       XmAUTF8_STRING,
 #endif
       NUM_ATOMS };
   static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
       XmSUTF8_STRING
 #endif
       };
@@ -6002,13 +6002,13 @@ RegisterDropSite(Widget w)
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
   targets[4] = atoms[XmAUTF8_STRING];
 #endif
 
   n = 0;
   XtSetArg(args[n], XmNimportTargets, targets); n++;
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
   XtSetArg(args[n], XmNnumImportTargets, 5); n++;
 #else
   XtSetArg(args[n], XmNnumImportTargets, 4); n++;

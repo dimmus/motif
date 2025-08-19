@@ -42,7 +42,7 @@ extern char * _XmConvertCSToString(
 extern Boolean _XmCvtXmStringToCT(
                         XrmValue *from,
                         XrmValue *to) ;
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 extern Boolean _XmCvtXmStringToUTF8String(
                         XrmValue *from,
                         XrmValue *to) ;

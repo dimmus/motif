@@ -37,7 +37,7 @@
 #endif
 #include <string.h>
 #include <ctype.h>
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 #include <iconv.h>
 #endif
 #include <errno.h>
@@ -221,7 +221,7 @@ static XmConst Octet CTEXT_SET_KSC5601_0[] = "\033\044\050\103\033\044\051\103";
 static XmConst Octet CTEXT_SET_IR_111[] = "\033\050\102\033\055\100";
 #define CTEXT_SET_IR_111_LEN		sizeof(CTEXT_SET_IR_111)-1
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 static XmConst char UTF8_NEWLINESTRING[] = "\012";
 #define UTF8_NEWLINESTRING_LEN		sizeof(UTF8_NEWLINESTRING)-1
 
@@ -345,7 +345,7 @@ static Boolean processCharsetAndText(XmStringCharSet tag,
 				     OctetPtr	*outc,
 				     unsigned int	*outlen,
 				     ct_Charset	*prev);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 static Boolean processCharsetAndTextUtf8(XmStringCharSet tag,
 				     OctetPtr	ctext,
 #if NeedWidePrototypes
@@ -452,7 +452,7 @@ static OctetPtr ctextConcat(
                         const_OctetPtr str2,
                         unsigned int str2len) ;
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 static Boolean  cvtXmStringToUTF8String(
         XrmValue *from,
         XrmValue *to ) ;
@@ -2003,7 +2003,7 @@ XmCvtXmStringToCT(
   return( (char *) to_val.addr) ;
   }
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 /************************************************************************
  *
  *  XmCvtXmStringToUTF8String
@@ -2067,7 +2067,7 @@ _XmCvtXmStringToCT(
     return (cvtXmStringToText( from, to ));
 }
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 /***************************************************************************
  *									   *
  * _XmCvtXmStringToUTF8String - public wrapper for the widgets to use.	   *
@@ -2115,7 +2115,7 @@ XmCvtXmStringToText(
     return(ok);
 }
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 /************************************************************************
  *
  *  cvtXmStringToUTF8String
@@ -2430,7 +2430,7 @@ cvtXmStringToText(
   return(True);
 }
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 static Boolean
 processCharsetAndTextUtf8(XmStringCharSet tag,
 		      OctetPtr		ctext,
@@ -2802,7 +2802,7 @@ ctextConcat(
 	return(str1);
 }
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 char*
 Convert(const char     *str,
         unsigned int    len,

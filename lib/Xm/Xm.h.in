@@ -25,21 +25,25 @@
 #ifndef _Xm_h
 #define _Xm_h
 
-#ifndef JPEG_SUPPORTED
-#undef JPEG_SUPPORTED
-#endif
+/**
+ * 1 if Motif was built with JPEG support
+ */
+#undef XM_WITH_JPEG
 
-#ifndef PNG_SUPPORTED
-#undef PNG_SUPPORTED
-#endif
+/**
+ * 1 if Motif was built with PNG support
+ */
+#undef XM_WITH_PNG
 
-#ifndef UTF8_SUPPORTED
-#undef UTF8_SUPPORTED
-#endif
+/**
+ * 1 if Motif was built with UTF-8 support
+ */
+#undef XM_UTF8
 
-#ifndef PRINTING_SUPPORTED
-#undef PRINTING_SUPPORTED
-#endif
+/**
+ * 1 if Motif was built with printing support
+ */
+#undef XM_PRINTING
 
 #ifndef USE_XFT
 #undef USE_XFT
@@ -54,7 +58,7 @@
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
 #include <X11/Xatom.h>
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 #include <X11/extensions/Print.h>
 #endif
 #include <Xm/XmStrDefs.h>
@@ -834,7 +838,7 @@ typedef struct
     XmStringTag		tag;
 } XmDisplayCallbackStruct;
 
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 typedef struct
 {
     int		reason;	   /* XmCR_START_JOB, XmCR_END_JOB, XmCR_PAGE_SETUP */
@@ -843,7 +847,7 @@ typedef struct
     Boolean	last_page; /* in_out */
     XtPointer	detail;
 } XmPrintShellCallbackStruct;
-#endif /* PRINTING_SUPPORTED */
+#endif /* XM_PRINTING */
 
 /************************************************************************
  *  PushButton defines
@@ -1489,7 +1493,7 @@ extern Boolean XmCvtXmStringToText(
                         XrmValue *from_val,
                         XrmValue *to_val,
                         XtPointer *converter_data) ;
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 extern char * XmCvtXmStringToUTF8String(
                         XmString string) ;
 #endif

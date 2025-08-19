@@ -7058,7 +7058,7 @@ df_StartDrag(
                                         */
     if (tmp_prop.value != NULL) XFree((char *)tmp_prop.value);
 
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     targets[num_targets++] = XmInternAtom(XtDisplay(w), "UTF8_STRING", False);
 #endif
     targets[num_targets++] = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
@@ -7278,7 +7278,7 @@ df_DoStuff(
        }
 
        if (*type == XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False) ||
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
            *type == XmInternAtom(XtDisplay(w), "UTF8_STRING", False) ||
 #endif
            *type == XA_STRING) {
@@ -7657,7 +7657,7 @@ df_HandleTargets(
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     Atom CS_OF_LOCALE; /* to be initialized by XmbTextListToTextProperty */
     Atom COMPOUND_TEXT = XmInternAtom(XtDisplay(w),"COMPOUND_TEXT", False);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     Atom UTF8_STRING = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 #endif
     XmTextPosition left, right;
@@ -7703,7 +7703,7 @@ df_HandleTargets(
       }
       if (*atom_ptr == COMPOUND_TEXT)
          supports_CT = True;
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
       if (*atom_ptr == UTF8_STRING)
          supports_utf8_string = True;
 #endif
@@ -7745,7 +7745,7 @@ df_HandleTargets(
    if (supports_locale_data)
       prim_select->target = targets[0] = XmInternAtom(XtDisplay(w), "TEXT",
 						      False);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
    else if (supports_utf8_string)
        prim_select->target = targets[0] = UTF8_STRING;
 #endif
@@ -9637,7 +9637,7 @@ df_DropTransferCallback(
     _XmTextDropTransferRec *transfer_rec = (_XmTextDropTransferRec *) closure;
     XmDataFieldWidget tf = (XmDataFieldWidget) transfer_rec->widget;
     Atom COMPOUND_TEXT = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     Atom UTF8_STRING = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 #endif
     Atom CS_OF_LOCALE;
@@ -9691,7 +9691,7 @@ df_DropTransferCallback(
     if (tmp_prop.value != NULL) XFree((char *)tmp_prop.value);
 
     if (!value || (*type != CS_OF_LOCALE && *type != COMPOUND_TEXT
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
                    && *type != XA_STRING && *type != UTF8_STRING
 #endif
     )) {
@@ -9709,7 +9709,7 @@ df_DropTransferCallback(
     insertPosLeft = insertPosRight = transfer_rec->insert_pos;
 
     if (*type == XA_STRING || *type == COMPOUND_TEXT
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
             || *type == UTF8_STRING
 #endif
     ) {
@@ -9864,7 +9864,7 @@ df_HandleDrop(
        XmDropTransferEntryRec *transferList = NULL;
        Atom TEXT = XmInternAtom(display, "TEXT", False);
        Atom COMPOUND_TEXT = XmInternAtom(display, "COMPOUND_TEXT", False);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
        Atom UTF8_STRING = XmInternAtom(display, "UTF8_STRING", False);
 #endif
        Atom CS_OF_LOCALE;
@@ -9917,7 +9917,7 @@ df_HandleDrop(
 	   break;
 	 }
 	 if (exportTargets[n] == COMPOUND_TEXT) c_text_found = True;
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 	 if (exportTargets[n] == UTF8_STRING) utf8_string_found = True;
 #endif
 	 if (exportTargets[n] == XA_STRING) string_found = True;
@@ -9927,7 +9927,7 @@ df_HandleDrop(
        n = 0;
        if (locale_found || c_text_found || string_found || text_found) {
 	 if (!locale_found) {
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
            if (utf8_string_found)
 	     transferEntries[0].target = UTF8_STRING;
 	   else
@@ -10000,7 +10000,7 @@ df_DragProcCallback(
     targets[1] = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
     targets[2] = XA_STRING;
     targets[3] = XmInternAtom(XtDisplay(w), "TEXT", False);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     targets[4] = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 #endif
 
@@ -10014,7 +10014,7 @@ df_DragProcCallback(
     switch(cb->reason) {
       case XmCR_DROP_SITE_ENTER_MESSAGE:
 	  if (XmTargetsAreCompatible(XtDisplay(drag_cont), exp_targets,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 			      	     num_exp_targets, targets, 4))
 #else
 			      	     num_exp_targets, targets, 3))
@@ -10093,13 +10093,13 @@ df_RegisterDropSite(
     targets[1] = XmInternAtom(XtDisplay(w), "COMPOUND_TEXT", False);
     targets[2] = XA_STRING;
     targets[3] = XmInternAtom(XtDisplay(w), "TEXT", False);
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     targets[4] = XmInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 #endif
 
     n = 0;
     XtSetArg(args[n], XmNimportTargets, targets); n++;
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     XtSetArg(args[n], XmNnumImportTargets, 4); n++;
 #else
     XtSetArg(args[n], XmNnumImportTargets, 3); n++;
@@ -12279,7 +12279,7 @@ XmDataFieldPaste(
 					  &length);
 	if (status == ClipboardNoData || length == 0)
 	{
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
           status = XmClipboardInquireLength(display, window,
                                             XmSUTF8_STRING, &length);
 #endif
@@ -12302,7 +12302,7 @@ XmDataFieldPaste(
        status = XmClipboardRetrieve(display, window, "STRING", buffer,
 				    length, &outlength, &private_id);
    }
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
    else if (!get_ct && get_us) {
        status = XmClipboardRetrieve(display, window, XmSUTF8_STRING, buffer,
 				    length, &outlength, &private_id);

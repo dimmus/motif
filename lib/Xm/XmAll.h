@@ -68,7 +68,7 @@
 #include <Xm/PanedW.h>
 #include <Xm/Paned.h>
 #include <Xm/Primitive.h>
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 #include <Xm/Print.h>
 #endif
 #include <Xm/Protocols.h>

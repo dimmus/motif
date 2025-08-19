@@ -40,15 +40,15 @@ static char rcsid[] = "$TOG: ImageCache.c /main/44 1998/10/06 17:26:25 samborn $
 #include <Xm/AccColorT.h>       /* for new _XmGetColoredPixmap API */
 #include <Xm/ColorObjP.h>       /* for Xme Color Obj access API */
 #include <Xm/IconFile.h>        /* XmGetIconFileName */
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 #include <Xm/PrintSP.h>         /* for pixmap resolution */
 #endif
 #include <Xm/XpmP.h>
 #include <X11/Xresource.h>
-#ifdef JPEG_SUPPORTED
+#ifdef XM_WITH_JPEG
 #include "JpegI.h"
 #endif
-#ifdef PNG_SUPPORTED
+#ifdef XM_WITH_PNG
 #include "PngI.h"
 #endif
 
@@ -855,7 +855,7 @@ GetImage(
     ImageData *entry;
     char *file_name;
     XtEnum return_value;
-#if defined (PNG_SUPPORTED) || defined (JPEG_SUPPORTED)
+#if defined (XM_WITH_PNG) || defined (XM_WITH_JPEG)
     FILE *infile;
     int rc;
 #endif
@@ -920,18 +920,18 @@ GetImage(
         return FALSE;
     }
 
-#if defined (JPEG_SUPPORTED) || defined (PNG_SUPPORTED)
+#if defined (XM_WITH_JPEG) || defined (XM_WITH_PNG)
     if (!(infile = fopen(file_name, "rb"))) {
         return FALSE;
     }
 
-#ifdef JPEG_SUPPORTED
+#ifdef XM_WITH_JPEG
     rc = _XmJpegGetImage(screen, infile, image);
 #endif
-#if defined (JPEG_SUPPORTED) && defined (PNG_SUPPORTED)
+#if defined (XM_WITH_JPEG) && defined (XM_WITH_PNG)
     if (rc == 1) { /* not a jpeg file */
 #endif
-#ifdef PNG_SUPPORTED
+#ifdef XM_WITH_PNG
         Pixel background;
 
         if (acc_color)
@@ -942,13 +942,13 @@ GetImage(
         if (background == XmUNSPECIFIED_PIXEL)
             background = 0; /* XXX is if OK? */
 #endif
-#if defined (JPEG_SUPPORTED) && defined (PNG_SUPPORTED)
+#if defined (XM_WITH_JPEG) && defined (XM_WITH_PNG)
         rewind(infile);
 #endif
-#ifdef PNG_SUPPORTED
+#ifdef XM_WITH_PNG
         rc = _XmPngGetImage(screen, infile, background, image);
 #endif
-#if defined (JPEG_SUPPORTED) && defined (PNG_SUPPORTED)
+#if defined (XM_WITH_JPEG) && defined (XM_WITH_PNG)
     }
 #endif
 
@@ -963,7 +963,7 @@ GetImage(
         return_value =
             GetXpmImage(screen, image_name, file_name, acc_color,
                     image, pixmap_resolution, pixels, npixels);
-#if defined (JPEG_SUPPORTED) || defined (PNG_SUPPORTED)
+#if defined (XM_WITH_JPEG) || defined (XM_WITH_PNG)
     }
 #endif
 
@@ -1327,7 +1327,7 @@ _XmGetScaledPixmap(
 	pix_data.print_shell = XtParent(pix_data.print_shell);
     /* pix_data.print_shell might be NULL here */
 
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
     /* scaling_ratio == 0 means use print_resolution and pixmap_resolution
        in scaling - so first find out the print_resolution, since it
        is used in caching */
@@ -1379,13 +1379,13 @@ _XmGetScaledPixmap(
 	       in which case, the print shell default resolution
 	       for pixmap is used */
 
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 	    if (pix_data.print_shell)
 		pixmap_resolution =
 		    ((XmPrintShellWidget)pix_data.print_shell)
 			->print.default_pixmap_resolution ;
 	    else
-#endif /* PRINTING_SUPPORTED */
+#endif /* XM_PRINTING */
 		pixmap_resolution = 100 ;
 	}
 
@@ -2058,7 +2058,7 @@ void _XmPutScaledImage (
     ratio_x = (double)dest_width / (double)src_width;
     ratio_y = (double)dest_height / (double)src_height;
 
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
     int xp_event, xp_error;
     /*
      * Check that we have uniform scaling, and that the print extension
@@ -2095,7 +2095,7 @@ void _XmPutScaledImage (
 	    }
 	}
     }
-#endif /* PRINTING_SUPPORTED */
+#endif /* XM_PRINTING */
 
     src_max_x = src_x + src_width;
 

@@ -3776,7 +3776,7 @@ ListConvert(Widget w, XtPointer client_data,
 		}
 	    }
 	}
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 	else if (cs->target == atoms[XmAUTF8_STRING])
 	{
 	    type = atoms[XmAUTF8_STRING];

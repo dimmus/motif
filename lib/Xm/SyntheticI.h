@@ -56,7 +56,7 @@ extern void _XmManagerGetValuesHook(
                         Widget w,
                         ArgList args,
                         Cardinal *num_args) ;
-#ifdef PRINTING_SUPPORTED
+#if XM_PRINTING
 extern void _XmPrintShellGetValuesHook(
                         Widget w,
                         ArgList args,

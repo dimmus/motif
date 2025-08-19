@@ -4526,7 +4526,7 @@ XmClipboardRegisterFormat(
 	    RegIfMatch(display, format_name, XmICLASS, XM_TEXT) ||
 	    RegIfMatch(display, format_name, XmINAME, XM_TEXT) ||
 	    RegIfMatch(display, format_name, XmSCLIENT_WINDOW, XM_WINDOW)
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
 	    || RegIfMatch(display, format_name, XmSUTF8_STRING, XM_UTF8_STRING)
 #endif
 	     )  {
@@ -4565,7 +4565,7 @@ GetTypeFromTarget(Display *display, Atom target)
     XmA_MOTIF_CLIPBOARD_TARGETS, XmA_MOTIF_DEFERRED_CLIPBOARD_TARGETS,
     XmA_MOTIF_ENCODING_REGISTRY, XmA_MOTIF_EXPORT_TARGETS,
     XmA_MOTIF_RENDER_TABLE,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     XmAUTF8_STRING,
 #endif
     NUM_ATOMS };
@@ -4580,7 +4580,7 @@ GetTypeFromTarget(Display *display, Atom target)
     XmS_MOTIF_CLIPBOARD_TARGETS, XmS_MOTIF_DEFERRED_CLIPBOARD_TARGETS,
     XmS_MOTIF_ENCODING_REGISTRY, XmS_MOTIF_EXPORT_TARGETS,
     XmS_MOTIF_RENDER_TABLE,
-#ifdef UTF8_SUPPORTED
+#if XM_UTF8
     XmSUTF8_STRING
 #endif
     };
