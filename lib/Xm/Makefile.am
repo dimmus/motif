@@ -13,7 +13,7 @@ AM_CPPFLAGS = -I.. -I$(srcdir)/.. \
 xmdir = $(includedir)/Xm
 
 libXm_la_LDFLAGS = -version-info @ABI_VERSION@
-libXm_la_LIBADD = $(XFT_LIBS) ${X_LIBS} ${X_XMU} -lXt -lXext -lX11 ${X_EXTRA_LIBS} # ${LIB_XP}
+libXm_la_LIBADD = $(XFT_LIBS) ${X_LIBS} -lXt -lXext -lX11 ${X_EXTRA_LIBS}
 
 lib_LTLIBRARIES = libXm.la
 
@@ -44,8 +44,10 @@ EXTRA_SRCS = XmExtUtil.c \
 SLIDE_HDRS = SlideC.h SlideCP.h
 SLIDE_SRCS = SlideC.c
 
-if OM_XMU
+if XM_WITH_XMU
 EDITRES_SRCS = EditresCom.c
+# AM_CPPFLAGS     += $(XMU_CFLAGS)
+libXm_la_LIBADD += $(XMU_LIBS)
 else
 EDITRES_SRCS =
 endif
