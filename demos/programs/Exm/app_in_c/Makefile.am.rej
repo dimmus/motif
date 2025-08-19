@@ -1,8 +1,0 @@
---- demos/programs/Exm/app_in_c/Makefile.am
-+++ demos/programs/Exm/app_in_c/Makefile.am
-@@ -14,4 +14,4 @@
-            -I$(top_builddir)/lib \
-             ${X_CFLAGS}
- LDADD = ../../../lib/Exm/libExm.a \
--	../../../../lib/Xm/libXm.la
-+	../../../../lib/Xm/libXm.la -lXt -lXext -lX11

@@ -1,8 +1,0 @@
---- demos/programs/workspace/Makefile.am
-+++ demos/programs/workspace/Makefile.am
-@@ -11,4 +11,4 @@
-               wsm.h wsmSend.h wsmStruct.h wsm_ui.h xrmLib.h
- data_DATA = $(wsm_SOURCES) $(EXTRA_DIST)
- INCLUDES = -I$(srcdir)/../../../lib -I$(srcdir)/../../lib -I$(top_builddir)/lib ${X_CFLAGS}
--LDADD = ../../../lib/Xm/libXm.la -L../../lib/Wsm -lWsm
-+LDADD = ../../../lib/Xm/libXm.la -L../../lib/Wsm -lWsm -lXt -lX11

@@ -1,9 +1,0 @@
---- demos/programs/airport/Makefile.am
-+++ demos/programs/airport/Makefile.am
-@@ -8,5 +8,5 @@
-                   dragsource.h dropsite.h main.h
- EXTRA_DIST = Imakefile XmdAirport.ad README
- data_DATA = $(airport_SOURCES) $(EXTRA_DIST)
--LDADD = ../../../lib/Xm/libXm.la
-+LDADD = ../../../lib/Xm/libXm.la -lXt -lX11
- INCLUDES = -I$(srcdir)/../../../lib -I$(top_builddir)/lib ${X_CFLAGS}
