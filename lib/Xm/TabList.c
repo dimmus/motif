@@ -383,7 +383,7 @@ XmTabbedStackListInsert(tab_list, position, mask, attributes)
 	newTab->background_pixmap = attributes->background_pixmap;
     }
 
-    if( mask * XmTAB_SENSITIVE )
+    if( mask & XmTAB_SENSITIVE )
     {
 	newTab->sensitive = attributes->sensitive;
     }
