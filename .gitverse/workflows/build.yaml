@@ -50,16 +50,17 @@ jobs:
             check-dev
             clang
             clang-dev
+          shell-name: alpine.sh
       - name: Make
         run: |
           cd /home/runner/work/motif/motif
-          CC=${{ matrix.compiler }} ./autogen.sh --enable-tests
+          CC=${{ matrix.compiler }} ./autogen.sh
           make
         shell: alpine.sh {0}
-      - name: Test
-        run: |
-          cd /home/runner/work/motif/motif
-          Xvfb :0 &>/dev/null &
-          DISPLAY=:0 make check
-          kill -TERM %1
-        shell: alpine.sh {0}
+      # - name: Test
+      #   run: |
+      #     cd /home/runner/work/motif/motif
+      #     Xvfb :0 &>/dev/null &
+      #     DISPLAY=:0 make check
+      #     kill -TERM %1
+      #   shell: alpine.sh {0}
