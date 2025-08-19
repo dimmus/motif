@@ -2364,10 +2364,7 @@ void RegenerateClientFrame (ClientData *pcd)
     {
         SetFrameShape (pcd);
     }
-
 } /* END OF FUNCTION  RegenerateClientFrame  */
-
-
 
 
 /*************************************<->*************************************

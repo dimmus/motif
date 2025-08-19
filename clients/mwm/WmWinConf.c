@@ -286,11 +286,7 @@ void HandleClientFrameMove (ClientData *pcd, XEvent *pev)
 	    {
 		  keyMultiplier++;
 	    }
-#ifdef FIX_1611
 	    keysym = WmKeycodeToKeysym (DISPLAY, pev->xkey.keycode);
-#else
-	    keysym = XKeycodeToKeysym (DISPLAY, pev->xkey.keycode, 0);
-#endif
 	    control = (pev->xkey.state & ControlMask) != 0;
 	    tmpX = tmpY = 0;
 
@@ -703,11 +699,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 	  keyMult++;
     }
 
-#ifdef FIX_1611
     keysym = WmKeycodeToKeysym (DISPLAY, pev->xkey.keycode);
-#else
-    keysym = XKeycodeToKeysym (DISPLAY, pev->xkey.keycode, 0);
-#endif
     control = (pev->xkey.state & ControlMask) != 0;
 
     switch (keysym) {
@@ -4469,7 +4461,6 @@ Boolean HandleMarqueeKeyPress (WmScreenData *pSD, XEvent *pev)
  *  Used insted of depricated function of Xlib XKeycodeToKeysym.
  *
  *************************************<->***********************************/
-#ifdef FIX_1611
 KeySym WmKeycodeToKeysym(Display *display, KeyCode keycode)
  { int keysyms_per_keycode = 0;
    int min_keycode = 0;
@@ -4487,4 +4478,3 @@ KeySym WmKeycodeToKeysym(Display *display, KeyCode keycode)
      }
    return keysym;
  }
-#endif /* FIX_1611 */

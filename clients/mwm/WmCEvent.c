@@ -2726,7 +2726,6 @@ void DetermineActiveScreen (XEvent *pEvent)
 
 } /* END OF FUNCTION DetermineActiveScreen */
 
-
 /*************************************<->*************************************
  *
  *  GetScreenForWindow (win)

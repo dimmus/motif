@@ -1809,11 +1809,7 @@ void SyncModifierStrings(void)
 	{
 	    if (map->modifiermap[k])
 	    {
-#ifdef FIX_1611
 		KeySym ks = WmKeycodeToKeysym(DISPLAY, map->modifiermap[k]);
-#else
-		KeySym ks = XKeycodeToKeysym(DISPLAY, map->modifiermap[k], 0);
-#endif
 		char *nm = XKeysymToString(ks);
 
 		/* Compare, ignoring the trailing '_L' or '_R' in keysym */
