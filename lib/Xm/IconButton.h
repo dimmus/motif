@@ -72,11 +72,7 @@ typedef struct _XmIconButtonCallbackInfo {
  *	Returns: The Widget created.
  */
 
-Widget XmCreateIconButton(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreateIconButton(Widget, String, ArgList, Cardinal);
 
 extern WidgetClass xmIconButtonWidgetClass;
 

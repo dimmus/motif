@@ -1283,11 +1283,7 @@ XmRepTypeRegister(
         String rep_type_name,
         String *value_names,
         unsigned char *values,
-#if NeedWidePrototypes
-        unsigned int num_values)
-#else
         unsigned char num_values)
-#endif /* NeedWidePrototypes */
 {
     XmRepTypeEntry NewRecord ;
     XtConvertArgRec convertArg;
@@ -1334,11 +1330,7 @@ XmRepTypeRegister(
 
 void
 XmRepTypeAddReverse(
-#if NeedWidePrototypes
-     int rep_type_id)
-#else
      XmRepTypeId rep_type_id)
-#endif
 {
 
     XtConvertArgRec convertArg;
@@ -1363,13 +1355,8 @@ XmRepTypeAddReverse(
 
 Boolean
 XmRepTypeValidValue(
-#if NeedWidePrototypes
-     int rep_type_id,
-     unsigned int test_value,
-#else
      XmRepTypeId rep_type_id,
      unsigned char test_value,
-#endif
      Widget enable_default_warning)
 {
     XmRepTypeEntry Record;
@@ -1458,11 +1445,7 @@ XmRepTypeGetRegistered( void )
 
 XmRepTypeEntry
 XmRepTypeGetRecord(
-#if NeedWidePrototypes
-        int rep_type_id)
-#else
         XmRepTypeId rep_type_id)
-#endif
 {
     XmRepTypeEntry Record;
     XmRepTypeEntry OutputRecord ;
@@ -1531,13 +1514,8 @@ XmRepTypeGetId(
 
 String *
 XmRepTypeGetNameList(
-#if NeedWidePrototypes
-        int rep_type_id,
-        int use_uppercase_format)
-#else
         XmRepTypeId rep_type_id,
         Boolean use_uppercase_format)
-#endif /* NeedWidePrototypes */
 {
     XmRepTypeEntry Record;
     String *name_list = NULL;
@@ -1554,7 +1532,6 @@ XmRepTypeGetNameList(
 
 
 
-/*ARGSUSED*/
 static Boolean
 ConvertRepType(
         Display *disp,
@@ -1608,7 +1585,6 @@ ConvertRepType(
     return( FALSE) ;
 }
 
-/*ARGSUSED*/
 static Boolean
 ReverseConvertRepType(
         Display *disp,

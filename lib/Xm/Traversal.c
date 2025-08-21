@@ -1137,9 +1137,11 @@ _XmSetRect(
   /* Initialize the rectangle structure to the specified values.
    * The widget must be realized.
    */
+   Widget p;
    Position x, y;
 
-   XtTranslateCoords(XtParent(w), w->core.x, w->core.y, &x, &y);
+   p = XtParent(w);
+   XtTranslateCoords(p ? p : w, w->core.x, w->core.y, &x, &y);
    rect->x = x + w->core.border_width;
    rect->y = y + w->core.border_width;
    rect->width = w->core.width;

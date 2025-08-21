@@ -26,6 +26,7 @@
 #include <config.h>
 #endif
 
+#include <stdarg.h>
 #include <Xm/ColumnP.h>
 #include <Xm/RowColumn.h>
 #include <Xm/Label.h>
@@ -431,18 +432,10 @@ ClassInitialize(void)
 /*
  * ClassPartInitialize sets up the fast subclassing for the widget.
  */
-static void
-#ifdef _NO_PROTO
-ClassPartInitialize(w_class)
-        WidgetClass w_class ;
-#else
-ClassPartInitialize(WidgetClass w_class)
-#endif /* _NO_PROTO */
+static void ClassPartInitialize(WidgetClass w_class)
 {
     _XmFastSubclassInit (w_class, XmCOLUMN_BIT);
 }
-
-
 
 /*
  * Function:
@@ -459,7 +452,6 @@ ClassPartInitialize(WidgetClass w_class)
  * Output:
  *	None.
  */
-/* ARGSUSED */
 static void
 Initialize(Widget request, Widget set, ArgList arg_list, Cardinal *arg_cnt)
 {
@@ -492,7 +484,6 @@ Initialize(Widget request, Widget set, ArgList arg_list, Cardinal *arg_cnt)
  * Output:
  *	None.
  */
-/* ARGSUSED */
 static void
 Destroy(Widget widget)
 {
@@ -546,7 +537,6 @@ Resize(Widget widget)
  * Output:
  *	Boolean - True if the Column needs redisplayed, else False.
  */
-/* ARGSUSED */
 static Boolean
 SetValues(Widget current, Widget request, Widget set, ArgList arg_list,
 	  Cardinal *arg_cnt)
@@ -1071,7 +1061,6 @@ ChangeManaged(Widget widget)
  * Output:
  *	None.
  */
-/* ARGSUSED */
 static void
 ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list,
 		     Cardinal *arg_cnt)
@@ -1200,7 +1189,6 @@ ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list,
  * Output:
  *	Boolean - True if the child needs to be redisplayed, else False.
  */
-/* ARGSUSED */
 static Boolean
 ConstraintSetValues(Widget current, Widget request, Widget new_w,
 		    ArgList arg_list, Cardinal *arg_cnt)
@@ -1475,7 +1463,6 @@ CvtStringToLabelPosition(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
  * Output:
  *	Boolean - True if the conversion was successful else False.
  */
-/* ARGSUSED */
 static Boolean
 CvtStringToXiAlignment(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 		       XrmValue *from, XrmValue *to, XtPointer data)
@@ -1529,7 +1516,6 @@ CvtStringToXiAlignment(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
  * Output:
  *	Boolean - True if the conversion was successful else False.
  */
-/* ARGSUSED */
 static Boolean
 CvtStringToFillStyle(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 		     XrmValue *from, XrmValue *to, XtPointer data)
@@ -1577,7 +1563,6 @@ CvtStringToFillStyle(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
  * Output:
  *	Boolean - True if the conversion was successful else False.
  */
-/* ARGSUSED */
 static Boolean
 CvtStringToDistribution(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
 			XrmValue *from, XrmValue *to, XtPointer data)
@@ -1618,7 +1603,6 @@ CvtStringToDistribution(Display *dpy, XrmValue *args, Cardinal *arg_cnt,
  * Output:
  *	None.
  */
-/* ARGSUSED */
 static void
 VerifyResources(XmColumnWidget request, XmColumnWidget current,
 		XmColumnWidget new_w)
@@ -2360,7 +2344,6 @@ VerticalLayout(XmColumnWidget cw, Widget child, XtWidgetGeometry *child_size,
  * Output:
  *	None.
  */
-/* ARGSUSED */
 static void
 VerifyConstraints(Widget request, Widget current, Widget set)
 {
@@ -2686,7 +2669,6 @@ CompareGeometryToWidget(XtWidgetGeometry *geom, Widget widget)
  * otherwise leave it alone.
  */
 
-/*ARGSUSED*/
 static void
 CheckSetEntryLabelRenderTable(Widget wid, int offs, XrmValue *value)
 {
@@ -2709,7 +2691,6 @@ CheckSetEntryLabelRenderTable(Widget wid, int offs, XrmValue *value)
  * otherwise leave it alone.
  */
 
-/*ARGSUSED*/
 static void
 CheckSetDefaultEntryLabelRenderTable(Widget wid, int offs, XrmValue *value)
 {
@@ -2739,7 +2720,6 @@ CheckSetDefaultEntryLabelRenderTable(Widget wid, int offs, XrmValue *value)
  * Output:
  *	None.
  */
-/* ARGSUSED */
 static void
 XmColumnLabelDestroyedCallback(Widget widget, XtPointer client,
 			       XtPointer cbdata)
@@ -2749,7 +2729,6 @@ XmColumnLabelDestroyedCallback(Widget widget, XtPointer client,
     XiC(field)->label_widget = NULL;
 }
 
-/* ARGSUSED */
 static void Get_entryLabelString (Widget widget, int offset, XtArgVal *value)
 {
     (*value) = (XtArgVal) XmStringCopy(XiC(widget)->label_string);

@@ -62,12 +62,7 @@ typedef struct _XmOutlineRec		*XmOutlineWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
-Widget XmCreateOutline(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreateOutline(Widget, String, ArgList, Cardinal);
 
 extern WidgetClass xmOutlineWidgetClass;
 

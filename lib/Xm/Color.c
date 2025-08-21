@@ -102,9 +102,7 @@ static XmColorData * GetColors(
                         Screen *screen,
                         Colormap color_map,
                         Pixel background) ;
-static unsigned int FromColorToBlackAndWhite(
-                        char *col) ;
-
+static unsigned int FromColorToBlackAndWhite(char *col) ;
 
 /********    End Static Function Declarations    ********/
 

@@ -40,11 +40,7 @@ extern unsigned short _XmGetFocusFlag(
 extern void _XmSetFocusFlag(
 			Widget w,
 			unsigned int mask,
-#if NeedWidePrototypes
-        		int value ) ;
-#else
         		Boolean value ) ;
-#endif /* NeedWidePrototypes */
 extern void _XmTrackShellFocus(
                         Widget widget,
                         XtPointer client_data,

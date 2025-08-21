@@ -64,11 +64,7 @@ extern Pixmap _XmGetColoredPixmap(Screen *screen,
 				  char *image_name,
 				  XmAccessColorData acc_color,
 				  int depth,
-#if NeedWidePrototypes
-				  int only_if_exists) ;
-#else
 				  Boolean only_if_exists) ;
-#endif /* NeedWidePrototypes */
 
 extern Boolean _XmGetPixmapData(
 		   Screen *screen,
@@ -90,26 +86,14 @@ extern Pixmap _XmGetScaledPixmap(
     char *image_name,
     XmAccessColorData acc_color,
     int depth,
-#if NeedWidePrototypes
-    int only_if_exists,
-#else
     Boolean only_if_exists,
-#endif /* NeedWidePrototypes */
-    double scaling_ratio);
+    double scaling_ratio,
+    int desired_w,
+    int desired_h);
 
-extern void _XmPutScaledImage (
-    Display*		 display ,
-    Drawable		 d ,
-    GC			 gc ,
-    XImage*		 src_image ,
-    int			 src_x ,
-    int			 src_y ,
-    int			 dest_x ,
-    int			 dest_y ,
-    unsigned int	 src_width ,
-    unsigned int	 src_height,
-    unsigned int	 dest_width ,
-    unsigned int	 dest_height);
+extern void _XmPutScaledImage(Screen *screen, Display *display, Drawable d,
+                              int depth, GC gc, XImage *src, int sx, int sy,
+                              int sw, int sh, int dx, int dy, int dw, int dh);
 
 extern void _XmCleanPixmapCache(Screen * screen, Widget shell);
 
@@ -129,4 +113,3 @@ extern Pixmap XmGetScaledPixmap(
 #endif
 
 #endif /* _XmImageCacheI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

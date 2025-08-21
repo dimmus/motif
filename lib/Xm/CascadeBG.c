@@ -30,7 +30,6 @@ static char rcsid[] = "$TOG: CascadeBG.c /main/28 1999/02/01 18:47:11 mgreess $"
 #include <config.h>
 #endif
 
-
 #include <string.h>
 #include "XmI.h"
 #include <X11/ShellP.h>
@@ -60,6 +59,7 @@ static char rcsid[] = "$TOG: CascadeBG.c /main/28 1999/02/01 18:47:11 mgreess $"
 #include "MenuStateI.h"
 #include "MenuUtilI.h"
 #include "RCMenuI.h"
+#include "ScreenI.h"
 #include "SyntheticI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
@@ -128,11 +128,7 @@ static void ArmAndActivate(
                         Cardinal *num_params) ;
 static void Disarm(
                         XmCascadeButtonGadget cb,
-#if NeedWidePrototypes
-                        int unpost) ;
-#else
                         Boolean unpost) ;
-#endif /* NeedWidePrototypes */
 static void PostTimeout(
                         XtPointer closure,
                         XtIntervalId *id) ;
@@ -148,11 +144,7 @@ static void StartDrag(
 static void Select(
                         XmCascadeButtonGadget cb,
                         XEvent *event,
-#if NeedWidePrototypes
-                        int doCascade) ;
-#else
                         Boolean doCascade) ;
-#endif /* NeedWidePrototypes */
 static void DoSelect(
                         XmCascadeButtonGadget cb,
                         XEvent *event) ;
@@ -171,13 +163,8 @@ static void size_cascade(
                         XmCascadeButtonGadget cascadebtn) ;
 static void setup_cascade(
                         XmCascadeButtonGadget cascadebtn,
-#if NeedWidePrototypes
-                        int adjustWidth,
-                        int adjustHeight) ;
-#else
                         Boolean adjustWidth,
                         Boolean adjustHeight) ;
-#endif /* NeedWidePrototypes */
 static void Destroy(
                         Widget wid) ;
 static void Resize(
@@ -565,7 +552,6 @@ ClassPartInitialize(
 *  SecondaryObjectCreate
 *
 ************************************************************************/
-/* ARGSUSED */
 static void
 SecondaryObjectCreate(
         Widget req,
@@ -634,7 +620,6 @@ SecondaryObjectCreate(
  *  InitializePosthook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 InitializePrehook(
         Widget req,
@@ -652,7 +637,6 @@ InitializePrehook(
  *  InitializePosthook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 InitializePosthook(
         Widget req,
@@ -1063,6 +1047,7 @@ Redisplay(
 		tmpGC = LabG_NormalGC(cb);
 		LabG_NormalGC(cb) = CBG_BackgroundGC(cb);
 	    }
+
 	    /* Fetch the select_color GetGC() actually used. */
 	    XGetGCValues(XtDisplay(cb), LabG_BackgroundGC(cb), GCBackground, &values);
 	    if (values.background != select_pix)
@@ -1272,7 +1257,6 @@ ArmAndPost(
 /*
  * class function to cause the cascade button to be armed and selected
  */
-/*ARGSUSED*/
 static void
 ArmAndActivate(
         Widget wid,
@@ -1434,11 +1418,7 @@ ArmAndActivate(
 static void
 Disarm(
         XmCascadeButtonGadget cb,
-#if NeedWidePrototypes
-        int unpost )
-#else
         Boolean unpost )
-#endif /* NeedWidePrototypes */
 {
    Widget rowcol = XtParent(cb);
 
@@ -1493,7 +1473,6 @@ Disarm(
 /*
  * called when the post delay timeout occurs.
  */
-/*ARGSUSED*/
 static void
 PostTimeout(
 	XtPointer closure,
@@ -1641,11 +1620,7 @@ static void
 Select(
         XmCascadeButtonGadget cb,
         XEvent *event,
-#if NeedWidePrototypes
-        int doCascade )
-#else
         Boolean doCascade )
-#endif /* NeedWidePrototypes */
 {
    XmAnyCallbackStruct cback;
    XmMenuSystemTrait menuSTrait;
@@ -1872,7 +1847,7 @@ MenuBarSelect(
 	    {
 	       Cursor cursor;
 
-	       cursor = XmGetMenuCursor(XtDisplay(cb));
+	       cursor = _XmGetMenuCursorByScreen(XtScreen(cb));
 
                _XmGrabPointer(XtParent(cb), True, EVENTS,
                   GrabModeAsync, GrabModeAsync, None, cursor, _time);
@@ -2162,13 +2137,8 @@ size_cascade(
 static void
 setup_cascade(
         XmCascadeButtonGadget cascadebtn,
-#if NeedWidePrototypes
-        int adjustWidth,
-        int adjustHeight )
-#else
         Boolean adjustWidth,
         Boolean adjustHeight )
-#endif /* NeedWidePrototypes */
 {
    Dimension delta;
 
@@ -2321,7 +2291,6 @@ Resize(
  *  SetValuesPrehook
  *
  ************************************************************************/
-/* ARGSUSED */
 static Boolean
 SetValuesPrehook(
         Widget oldParent,
@@ -2410,7 +2379,6 @@ SetValuesPrehook(
  *  GetValuesPrehook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 GetValuesPrehook(
         Widget newParent,
@@ -2483,7 +2451,6 @@ GetValuesPrehook(
  *  GetValuesPosthook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 GetValuesPosthook(
         Widget new_w,
@@ -2506,7 +2473,6 @@ GetValuesPosthook(
  *  SetValuesPosthook
  *
  ************************************************************************/
-/* ARGSUSED */
 static Boolean
 SetValuesPosthook(
         Widget current,
@@ -2561,12 +2527,9 @@ SetValuesPosthook(
   return FALSE;
 }
 
-
-
 /*
  * Set Values
  */
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -2774,7 +2737,6 @@ GetBackgroundGC(
 
   CBG_BackgroundGC(cb) = XtGetGC( (Widget) mw, valueMask, &values);
 }
-
 
 /*
  * Initialize
@@ -2989,11 +2951,7 @@ XmVaCreateManagedCascadeButtonGadget(
 void
 XmCascadeButtonGadgetHighlight(
         Widget wid,
-#if NeedWidePrototypes
-        int highlight )
-#else
         Boolean highlight )
-#endif /* NeedWidePrototypes */
 {
    XmCascadeButtonGadget cb  = (XmCascadeButtonGadget) wid;
    _XmWidgetToAppContext(wid);
@@ -3019,7 +2977,6 @@ XmCascadeButtonGadgetHighlight(
  *    Put the pointers to these records in an array of pointers;
  *    Return the pointer to the array of pointers.
  */
-/*ARGSUSED*/
 static Cardinal
 GetCascadeBGClassSecResData(
         WidgetClass w_class,
@@ -3046,7 +3003,6 @@ GetCascadeBGClassSecResData(
  * GetCascadeBGClassResBase ()
  *   retrun the address of the base of resources.
  */
-/*ARGSUSED*/
 static XtPointer
 GetCascadeBGClassSecResBase(
         Widget widget,

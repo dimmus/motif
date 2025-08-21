@@ -1616,6 +1616,6 @@ externaldef(messages) _XmConst char *_XmMsgDataFWcs_0001 =
  */
 externaldef(messages) _XmConst char *XME_WARNING="XmeWarning";
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 externaldef(messages) nl_catd Xm_catd = NULL;
 #endif

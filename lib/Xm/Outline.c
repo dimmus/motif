@@ -1098,6 +1098,7 @@ LayoutChildren(Widget w, Widget assign_child)
     register int cur_node, v_margin;
     int oc_x = 0, oc_y = 0;
     Boolean register_workproc = True;
+    Widget _w;
 
     if (!XmHierarchy_refigure_mode(ow))
 	return;
@@ -1126,7 +1127,6 @@ LayoutChildren(Widget w, Widget assign_child)
 
     {
 	XmHierarchyExtraNodeProc unmap_all_extra_nodes;
-
 	_XmProcessLock();
 	unmap_all_extra_nodes = oc->hierarchy_class.unmap_all_extra_nodes;
 	_XmProcessUnlock();
@@ -1153,31 +1153,27 @@ LayoutChildren(Widget w, Widget assign_child)
 	   (XmOutline_connect_nodes(ow) || ((int)cur_y < (int)ow->core.height) )
 		)
     {
-	register Widget w;
 	OutlineConstraints node = (OutlineConstraints) *node_table;
 
 	if (XmHierarchyC_open_close_button(node) != NULL) {
 	    Position offset;
-	    Widget w;
 
-	    w = XmHierarchyC_open_close_button(node);
+	    _w = XmHierarchyC_open_close_button(node);
 	    offset = (XmOutlineC_height(node) -
-		      (w->core.height + 2 * w->core.border_width));
+		      (_w->core.height + 2 * _w->core.border_width));
 
 	    oc_x = XmOutlineC_open_close_x(node);
 	    oc_y = cur_y + offset/2;
 	}
 
-	w = XmHierarchyC_widget(node);
+	_w = XmHierarchyC_widget(node);
 	if (assign_child == w) {
-	    w->core.x = XmOutlineC_widget_x(node);
-	    w->core.y = cur_y;
+	    _w->core.x = XmOutlineC_widget_x(node);
+	    _w->core.y = cur_y;
 	}
 
 	MoveNode(ow, node, XmOutlineC_widget_x(node), cur_y, oc_x, oc_y, True);
-
 	cur_y += XmOutlineC_height(node) + v_margin;
-
 	cur_node++;
 	node_table++;
     }

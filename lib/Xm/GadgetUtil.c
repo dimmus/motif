@@ -85,19 +85,11 @@ _XmInputForGadget(
 void
 XmeConfigureObject(
         Widget wid,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        int height,
-        int border_width )
-#else
         Position x,
         Position y,
         Dimension width,
         Dimension height,
         Dimension border_width )
-#endif /* NeedWidePrototypes */
 {
     _XmWidgetToAppContext(wid);
     XmDropSiteStartUpdate(wid);

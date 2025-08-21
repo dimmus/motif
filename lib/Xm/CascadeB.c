@@ -30,7 +30,6 @@ static char rcsid[] = "$TOG: CascadeB.c /main/27 1999/08/11 14:26:35 mgreess $"
 #include <config.h>
 #endif
 
-
 #include "XmI.h"		/* ShellP.h doesn't define externalref. */
 #include <X11/ShellP.h>
 #include <X11/keysymdef.h>
@@ -57,6 +56,7 @@ static char rcsid[] = "$TOG: CascadeB.c /main/27 1999/08/11 14:26:35 mgreess $"
 #include "MessagesI.h"
 #include "PrimitiveI.h"
 #include "RCMenuI.h"
+#include "ScreenI.h"
 #include "TearOffI.h"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
@@ -102,11 +102,7 @@ static void ArmAndActivate(
                         Cardinal *num_params) ;
 static void Disarm(
                         register XmCascadeButtonWidget cb,
-#if NeedWidePrototypes
-                        int unpost) ;
-#else
                         Boolean unpost) ;
-#endif /* NeedWidePrototypes */
 static void PostTimeout(
                         XtPointer closure,
                         XtIntervalId *id) ;
@@ -128,11 +124,7 @@ static void StartDrag(
 static void Select(
                         register XmCascadeButtonWidget cb,
                         XEvent *event,
-#if NeedWidePrototypes
-                        int doCascade) ;
-#else
                         Boolean doCascade) ;
-#endif /* NeedWidePrototypes */
 static void DoSelect(
                         Widget wid,
                         XEvent *event,
@@ -177,13 +169,8 @@ static void position_cascade(
                         XmCascadeButtonWidget cascadebtn) ;
 static void setup_cascade(
                         XmCascadeButtonWidget cascadebtn,
-#if NeedWidePrototypes
-                        int adjustWidth,
-                        int adjustHeight) ;
-#else
                         Boolean adjustWidth,
                         Boolean adjustHeight) ;
-#endif /* NeedWidePrototypes */
 static void Destroy(
                         Widget wid) ;
 static void Resize(
@@ -590,6 +577,7 @@ Redisplay(
         Region region )
 {
     Pixel tmpc;
+
     if (XtIsRealized (cb))
     {
 	XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(cb));
@@ -604,7 +592,7 @@ Redisplay(
 		else
 	        XClearArea(XtDisplay(cb), XtWindow(cb),
 				0, 0, cb->core.width, cb->core.height, False);
-#ifdef USE_XFT
+#if USE_XFT
 	} else if (Lab_MenuType(cb) != XmWORK_AREA) { /* adeed with XFT support */
         XClearArea(XtDisplay(cb), XtWindow(cb),
 			0, 0, cb->core.width, cb->core.height, False);
@@ -625,25 +613,15 @@ Redisplay(
 		((XmCascadeButtonWidget)cb)->label.normal_GC =
 		    CB_BackgroundGC(cb);
 	    }
-	    /*
-	     By default (if not etched and not armed) window (widget) have
-	     background color that used to draw widget bg. When widget is
-	     etched, background selected correctly (as selected color),
-	     but label exposr method will use default background color
-	     to fill area bellow lable text. Result is ugly menus.
-	     We should replace colors before expose from label
-	     and change it back after repainting.
-	    */
-            tmpc = cb->core.background_pixel;
-            XSetWindowBackground(XtDisplay(cb), XtWindow(cb), select_pix);
+
+        tmpc = cb->core.background_pixel;
+        XSetWindowBackground(XtDisplay(cb), XtWindow(cb), select_pix);
 
 	    _XmProcessLock();
 	    expose = xmLabelClassRec.core_class.expose;
 	    _XmProcessUnlock();
 	    (*expose)((Widget) cb, event, region);
-	    /*
-	     Set correct window background (label is repainted, role back)
-	    */
+
 	    XSetWindowBackground(XtDisplay(cb), XtWindow(cb), tmpc);
 	    if (cb->core.background_pixmap != XmUNSPECIFIED_PIXMAP)
 	    	XSetWindowBackgroundPixmap(XtDisplay(cb), XtWindow(cb),
@@ -858,11 +836,7 @@ ArmAndActivate(
 static void
 Disarm(
         register XmCascadeButtonWidget cb,
-#if NeedWidePrototypes
-        int unpost )
-#else
         Boolean unpost )
-#endif /* NeedWidePrototypes */
 {
    Widget rowcol = XtParent (cb);
 
@@ -1097,11 +1071,7 @@ static void
 Select(
         register XmCascadeButtonWidget cb,
         XEvent *event,
-#if NeedWidePrototypes
-        int doCascade )
-#else
         Boolean doCascade )
-#endif /* NeedWidePrototypes */
 {
    XmAnyCallbackStruct cback;
    XmMenuSystemTrait menuSTrait;
@@ -1336,7 +1306,7 @@ MenuBarSelect(
 
                _XmGrabPointer(XtParent(cb), True, EVENTS,
                   GrabModeAsync, GrabModeAsync, None,
-		  XmGetMenuCursor(XtDisplay(cb)), _time);
+		  _XmGetMenuCursorByScreen(XtScreen(cb)), _time);
 
 	       RC_SetBeingArmed(XtParent(cb), False);
 	    }
@@ -1567,11 +1537,7 @@ void
 _XmCascadingPopup(
         Widget cb,
         XEvent *event,
-#if NeedWidePrototypes
-        int doCascade )
-#else
         Boolean doCascade )
-#endif /* NeedWidePrototypes */
 {
    /* We must make sure the tear off to menushell restoration/callbacks are
     * called before the cascading callback.  Exclude the pane in case Popup()
@@ -1888,13 +1854,8 @@ position_cascade(
 static void
 setup_cascade(
         XmCascadeButtonWidget cascadebtn,
-#if NeedWidePrototypes
-        int adjustWidth,
-        int adjustHeight )
-#else
         Boolean adjustWidth,
         Boolean adjustHeight )
-#endif /* NeedWidePrototypes */
 {
    Dimension delta;
 
@@ -2438,7 +2399,6 @@ Initialize(
 
 }
 
-
 /*
  *************************************************************************
  *
@@ -2514,11 +2474,7 @@ XmVaCreateManagedCascadeButton(
 void
 XmCascadeButtonHighlight(
         Widget cb,
-#if NeedWidePrototypes
-        int highlight )
-#else
         Boolean highlight )
-#endif /* NeedWidePrototypes */
 {
   XtAppContext app;
 

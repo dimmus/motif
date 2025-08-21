@@ -41,10 +41,7 @@ static char rcsid[] = "$TOG: Command.c /main/21 1999/01/26 18:12:51 mgreess $"
 #include "XmStringI.h"
 
 #include <string.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
-
 
 #define ARG_LIST_CNT 25
 
@@ -337,7 +334,6 @@ ClassPartInitialize(
 /****************************************************************
  * Set attributes of a command widget
  ****************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,		/* unused */
@@ -405,7 +401,6 @@ Initialize(
 /****************************************************************
  * Process callback from the List in a SelectionBox.
  ****************/
-/*ARGSUSED*/
 static void
 ListCallback(
         Widget w,		/* unused */
@@ -520,7 +515,6 @@ ListCallback(
 /****************************************************************
  * Callback for Text ValueChanged callback
  ****************/
-/*ARGSUSED*/
 static void
 CommandCallback(
         Widget w,		/* unused */
@@ -582,7 +576,6 @@ CommandParentProcess(
 /****************************************************************
  * Return function to "complete" text entry
  ****************/
-/*ARGSUSED*/
 void
 _XmCommandReturn(
         Widget wid,
@@ -651,7 +644,6 @@ _XmCommandReturn(
     return ;
 }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmCommandUpOrDown(
         Widget wid,
@@ -788,7 +780,6 @@ Resize(Widget wid)
 /****************************************************************
  * Set attributes of a command widget
  ****************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget ow,
@@ -944,11 +935,7 @@ XmVaCreateManagedCommand(
 Widget
 XmCommandGetChild(
         Widget widget,
-#if NeedWidePrototypes
-        unsigned int child )
-#else
         unsigned char child )
-#endif /* NeedWidePrototypes */
 {
     XmCommandWidget   w = (XmCommandWidget)widget;
     Widget ret_widget = NULL;

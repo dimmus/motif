@@ -65,17 +65,9 @@ static char rcsid[] = "$XConsortium: Region.c /main/10 1995/07/13 17:46:45 drk $
 
 typedef void (*XmOverlapProc)( XmRegion, XmRegionBox *, XmRegionBox *,
 			       XmRegionBox *, XmRegionBox *,
-#if NeedWidePrototypes
-                               int, int) ;
-#else
                                short, short) ;
-#endif /* NeedWidePrototypes */
 typedef void (*XmNonOverlapProc)( XmRegion, XmRegionBox *, XmRegionBox *,
-#if NeedWidePrototypes
-                               int, int) ;
-#else
                                short, short) ;
-#endif /* NeedWidePrototypes */
 
 
 /********    Static Function Declarations    ********/
@@ -95,13 +87,8 @@ static void miIntersectO(
                         XmRegionBox *r1End,
                         register XmRegionBox *r2,
                         XmRegionBox *r2End,
-#if NeedWidePrototypes
-                        int y1,
-                        int y2) ;
-#else
                         short y1,
                         short y2) ;
-#endif /* NeedWidePrototypes */
 static void miRegionCopy(
                         register XmRegion dstrgn,
                         register XmRegion rgn) ;
@@ -120,50 +107,30 @@ static void miUnionNonO(
                         register XmRegion pReg,
                         register XmRegionBox *r,
                         XmRegionBox *rEnd,
-#if NeedWidePrototypes
-                        register int y1,
-                        register int y2) ;
-#else
                         register short y1,
                         register short y2) ;
-#endif /* NeedWidePrototypes */
 static void miUnionO(
                         register XmRegion pReg,
                         register XmRegionBox *r1,
                         XmRegionBox *r1End,
                         register XmRegionBox *r2,
                         XmRegionBox *r2End,
-#if NeedWidePrototypes
-                        register int y1,
-                        register int y2) ;
-#else
                         register short y1,
                         register short y2) ;
-#endif /* NeedWidePrototypes */
 static void miSubtractNonO1(
                         register XmRegion pReg,
                         register XmRegionBox *r,
                         XmRegionBox *rEnd,
-#if NeedWidePrototypes
-                        register int y1,
-                        register int y2) ;
-#else
                         register short y1,
                         register short y2) ;
-#endif /* NeedWidePrototypes */
 static void miSubtractO(
                         register XmRegion pReg,
                         register XmRegionBox *r1,
                         XmRegionBox *r1End,
                         register XmRegionBox *r2,
                         XmRegionBox *r2End,
-#if NeedWidePrototypes
-                        register int y1,
-                        register int y2) ;
-#else
                         register short y1,
                         register short y2) ;
-#endif /* NeedWidePrototypes */
 static void CreateLeftShadow(
                         XmRegionBox *here,
                         unsigned long mask,
@@ -177,26 +144,16 @@ static void CreateRightShadow(
                         int *segmc,
                         int *segmi) ;
 static void CreateTopShadow(
-#if NeedWidePrototypes
-                        int start_x,
-                        int end_x,
-#else
                         Position start_x,
                         Position end_x,
-#endif /* NeedWidePrototypes */
                         XmRegionBox *here,
                         unsigned long mask,
                         XSegment **segml,
                         int *segmc,
                         int *segmi) ;
 static void CreateBottomShadow(
-#if NeedWidePrototypes
-                        int start_x,
-                        int end_x,
-#else
                         Position start_x,
                         Position end_x,
-#endif /* NeedWidePrototypes */
                         XmRegionBox *here,
                         unsigned long mask,
                         XSegment **segml,
@@ -1082,13 +1039,8 @@ miIntersectO(
     XmRegionBox  	  	*r1End,
     register XmRegionBox	*r2,
     XmRegionBox  	  	*r2End,
-#if NeedWidePrototypes
-    int    	  		y1,
-    int    	  		y2 )
-#else
     short    	  		y1,
     short    	  		y2 )
-#endif /* NeedWidePrototypes */
 {
     register short  		x1;
     register short  		x2;
@@ -1231,13 +1183,8 @@ miUnionNonO(
     XmRegion		pReg,
     register XmRegionBox	*r,
     XmRegionBox    		*rEnd,
-#if NeedWidePrototypes
-    register int  		y1,
-    register int  		y2 )
-#else
     register short  		y1,
     register short  		y2 )
-#endif /* NeedWidePrototypes */
 {
     register XmRegionBox	*pNextRect;
 
@@ -1284,13 +1231,8 @@ miUnionO(
     XmRegionBox  	  	*r1End,
     register XmRegionBox	*r2,
     XmRegionBox  	  	*r2End,
-#if NeedWidePrototypes
-    register int		y1,
-    register int		y2 )
-#else
     register short		y1,
     register short		y2 )
-#endif /* NeedWidePrototypes */
 {
     register XmRegionBox	*pNextRect;
 
@@ -1470,13 +1412,8 @@ miSubtractNonO1(
     XmRegion		pReg,
     register XmRegionBox	*r,
     XmRegionBox  	  	*rEnd,
-#if NeedWidePrototypes
-    register int  		y1,
-    register int   		y2 )
-#else
     register short  		y1,
     register short   		y2 )
-#endif /* NeedWidePrototypes */
 {
     register XmRegionBox	*pNextRect;
 
@@ -1522,13 +1459,8 @@ miSubtractO(
     XmRegionBox  	  	*r1End,
     register XmRegionBox	*r2,
     XmRegionBox  	  	*r2End,
-#if NeedWidePrototypes
-    register int  		y1,
-    register int  		y2 )
-#else
     register short  		y1,
     register short  		y2 )
-#endif /* NeedWidePrototypes */
 {
     register XmRegionBox	*pNextRect;
     register int  		x1;
@@ -1921,13 +1853,8 @@ CreateRightShadow(
 
 static void
 CreateTopShadow(
-#if NeedWidePrototypes
-    int			start_x,
-    int			end_x,
-#else
     Position		start_x,
     Position		end_x,
-#endif /* NeedWidePrototypes */
     XmRegionBox		*here,
     unsigned long	mask,
     XSegment		**segml,
@@ -1965,13 +1892,8 @@ CreateTopShadow(
 
 static void
 CreateBottomShadow(
-#if NeedWidePrototypes
-    int			start_x,
-    int			end_x,
-#else
     Position		start_x,
     Position		end_x,
-#endif /* NeedWidePrototypes */
     XmRegionBox		*here,
     unsigned long	mask,
     XSegment		**segml,
@@ -2043,13 +1965,8 @@ _XmRegionDrawShadow(
     GC			top_gc,
     GC			bottom_gc,
     XmRegion		region,
-#if NeedWidePrototypes
-    int			border_thick,
-    int			shadow_thick,
-#else
     Dimension		border_thick,
     Dimension		shadow_thick,
-#endif /* NeedWidePrototypes */
     unsigned int	shadow_type )
 {
     XmRegion		workReg;

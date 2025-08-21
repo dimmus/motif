@@ -30,13 +30,15 @@ static char rcsid[] = "$TOG: CutPaste.c /main/27 1999/05/26 17:42:48 samborn $"
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "XmI.h"		/* for MAX */
 #include <Xm/CutPaste.h>
 #include "MessagesI.h"
 #include "CutPasteI.h"
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <X11/Xmd.h>		/* for CARD32 */
 
 #define XMERROR(key, message)                                            \
@@ -319,11 +321,7 @@ static int GetWindowProperty(
                         unsigned long *outlength,
                         Atom *type,
                         int *format,
-#if NeedWidePrototypes
-                        int delete_flag) ;
-#else
                         Boolean delete_flag) ;
-#endif /* NeedWidePrototypes */
 static int ClipboardRetrieveItem(
                         Display *display,
                         itemId itemid,
@@ -342,11 +340,7 @@ static void ClipboardReplaceItem(
                         unsigned long length,
                         int mode,
                         int format,
-#if NeedWidePrototypes
-                        int free_flag,
-#else
                         Boolean free_flag,
-#endif /* NeedWidePrototypes */
   			Atom type);
 static Atom ClipboardGetAtomFromId(
                         Display *display,
@@ -443,11 +437,7 @@ static int ClipboardLock(
 static int ClipboardUnlock(
                         Display *display,
                         Window window,
-#if NeedWidePrototypes
-                        int all_levels) ;
-#else
                         Boolean all_levels) ;
-#endif /* NeedWidePrototypes */
 static int ClipboardSearchForWindow(
                         Display *display,
                         Window parentwindow,
@@ -637,8 +627,6 @@ ClipboardGetByNameItem(Display* dpy, Window win,
   return(dataok != 0);
 }
 
-
-/*ARGSUSED*/
 static Boolean
 ClipboardConvertProc(Widget wid,
 		     Atom *selection, /* unused */
@@ -903,7 +891,6 @@ ClipboardError(
 }
 
 /*---------------------------------------------*/
-/* ARGSUSED */
 static void
 ClipboardEventHandler(
         Widget widget,
@@ -1052,9 +1039,9 @@ ClipboardFindItem(
     {
     	ptr->header.selectionTimestamp = (CARD32)ptr->header.selectionTimestamp;
     }
+
     return ClipboardSuccess;
 }
-
 
 /*---------------------------------------------*/
 static int
@@ -1066,11 +1053,7 @@ GetWindowProperty(
         unsigned long *outlength,
         Atom *type,
         int *format,
-#if NeedWidePrototypes
-        int delete_flag )
-#else
         Boolean delete_flag )
-#endif /* NeedWidePrototypes */
 {
 
     int ret_value;
@@ -1256,11 +1239,7 @@ ClipboardReplaceItem(
         unsigned long length,
         int mode,
         int format,
-#if NeedWidePrototypes
-        int free_flag,
-#else
         Boolean free_flag,
-#endif /* NeedWidePrototypes */
         Atom type)
 {
     Window rootwindow;
@@ -1852,7 +1831,6 @@ ClipboardDeleteFormats(
 }
 
 /*---------------------------------------------*/
-/* ARGSUSED */
  static void
 ClipboardDeleteItemLabel(
         Display *display,
@@ -1885,7 +1863,6 @@ ClipboardDeleteItemLabel(
  }
 
 /*---------------------------------------------*/
-/* ARGSUSED */
 static unsigned long
 ClipboardIsMarkedForDelete(
         Display *display,
@@ -2046,7 +2023,6 @@ ClipboardDeleteItem(
 
     /* Cleanup any callback information for ByName */
     {
-      int i;
       Boolean found = False;
 
       _XmProcessLock();
@@ -2099,7 +2075,6 @@ ClipboardDeleteMarked(
     }
 }
 /*---------------------------------------------*/
-/* ARGSUSED */
 static void
 ClipboardMarkItem(
         Display *display,
@@ -2292,7 +2267,6 @@ ClipboardDataIsReady(
 /* This function is currently unused. */
 
 /*---------------------------------------------*/
-/* ARGSUSED */
 static int
 ClipboardRequestorIsReady(
         Display *display,
@@ -2410,7 +2384,6 @@ ClipboardGetSelection(Display *display,
     return TRUE;
 }
 
-/*ARGSUSED*/
 static void
 ClipboardReceiveData(Widget dest, /* unused */
 		     XtPointer client_data,
@@ -2554,7 +2527,6 @@ ClipboardRequestDataAndWait(
     return 1;
 }
 
-/*ARGSUSED*/
 static void
 ClipboardTimeout(XtPointer client_data,
 		 XtIntervalId* timer) /* unused */
@@ -2727,11 +2699,7 @@ static int
 ClipboardUnlock(
         Display *display,
         Window window,
-#if NeedWidePrototypes
-        int all_levels )
-#else
         Boolean all_levels )
-#endif /* NeedWidePrototypes */
 {
     unsigned long length;
     ClipboardLockPtr lockptr;
@@ -3604,7 +3572,6 @@ XmClipboardCopyByName(
     return ClipboardSuccess;
 }
 
-
 /*---------------------------------------------*/
 int
 XmClipboardUndoCopy(
@@ -3710,17 +3677,12 @@ XmClipboardLock(
     return ret_val;
 }
 
-
 /*---------------------------------------------*/
 int
 XmClipboardUnlock(
         Display *display,
         Window window,  /* specifies window owning lock, must match window */
-#if NeedWidePrototypes  /* passed to clipboardlock */
-        int all_levels )
-#else
         Boolean all_levels )
-#endif /* NeedWidePrototypes */
 {
     int ret_val;
     _XmDisplayToAppContext(display);
@@ -4462,7 +4424,6 @@ XmClipboardInquirePendingItems(
     _XmAppUnlock(app);
     return status;
 }
-
 
 /*---------------------------------------------*/
 int

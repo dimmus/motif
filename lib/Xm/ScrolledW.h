@@ -43,11 +43,13 @@ typedef struct _XmScrolledWindowRec      * XmScrolledWindowWidget;
 
 /********    Public Function Declarations    ********/
 
+XM_ALTERNATIVE(Use the XmNscrolledWindowChildType resource of XmScrolledWindow instead)
 extern void XmScrolledWindowSetAreas(
                         Widget w,
                         Widget hscroll,
                         Widget vscroll,
-                        Widget wregion) ;
+                        Widget wregion);
+
 extern Widget XmCreateScrolledWindow(
                         Widget parent,
                         char *name,

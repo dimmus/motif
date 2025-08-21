@@ -36,10 +36,8 @@ static char *rcsid = "$XConsortium: RCLayout.c /main/6 1995/10/25 20:14:15 cde-s
 #endif
 
 #include <stdio.h>
-#include <ctype.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
+#include <ctype.h>
 #include <Xm/CascadeBGP.h>
 #include <Xm/CascadeBP.h>
 #include <Xm/GadgetP.h>
@@ -65,24 +63,13 @@ static void CalcHelp(
                         XmRowColumnWidget m,
                         Dimension *m_width,
                         Dimension *m_height,
-#if NeedWidePrototypes
-                        int b,
-                        int max_x,
-                        int max_y,
-#else
                         Dimension b,
                         Position max_x,
                         Position max_y,
-#endif /* NeedWidePrototypes */
                         Position *x,
                         Position *y,
-#if NeedWidePrototypes
-                        int w,
-                        int h) ;
-#else
                         Dimension w,
                         Dimension h) ;
-#endif /* NeedWidePrototypes */
 
 static void GetMaxValues(
                         XmRowColumnWidget m,
@@ -100,26 +87,12 @@ static void GetMaxValues(
 static void AdjustLast(
                         XmRowColumnWidget m,
                         int start_i,
-#if NeedWidePrototypes
-                        int w,
-                        int h) ;
-#else
                         Dimension w,
                         Dimension h) ;
-#endif /* NeedWidePrototypes */
 static void SetAsking(
                         XmRowColumnWidget m,
                         Dimension *m_width,
                         Dimension *m_height,
-#if NeedWidePrototypes
-                        int b,
-                        int max_x,
-                        int max_y,
-                        int x,
-                        int y,
-                        int w,
-                        int h) ;
-#else
                         Dimension b,
                         Position max_x,
                         Position max_y,
@@ -127,22 +100,12 @@ static void SetAsking(
                         Position y,
                         Dimension w,
                         Dimension h) ;
-#endif /* NeedWidePrototypes */
 static void FindLargestOption(
                         XmRowColumnWidget submenu,
                         Dimension *c_width,
                         Dimension *c_height) ;
 static void TopOrBottomAlignment(
                         XmRowColumnWidget m,
-#if NeedWidePrototypes
-                        int h,
-                        int shadow,
-                        int highlight,
-                        int baseline,
-                        int margin_top,
-                        int margin_height,
-                        int text_height,
-#else
                         Dimension h,
                         Dimension shadow,
                         Dimension highlight,
@@ -150,33 +113,21 @@ static void TopOrBottomAlignment(
                         Dimension margin_top,
                         Dimension margin_height,
                         Dimension text_height,
-#endif /* NeedWidePrototypes */
                         Dimension *new_height,
                         int start_i,
                         int end_i) ;
 static void BaselineAlignment(
                         XmRowColumnWidget m,
-#if NeedWidePrototypes
-                        int h,
-                        int shadow,
-                        int highlight,
-                        int baseline,
-#else
                         Dimension h,
                         Dimension shadow,
                         Dimension highlight,
                         Dimension baseline,
-#endif /* NeedWidePrototypes */
                         Dimension *new_height,
                         int start_i,
                         int end_i) ;
 static void CenterAlignment(
                         XmRowColumnWidget m,
-#if NeedWidePrototypes
-                        int h,
-#else
                         Dimension h,
-#endif /* NeedWidePrototypes */
                         int start_i,
                         int end_i) ;
 static void ComputeTearOffHeight(
@@ -209,11 +160,7 @@ static void LayoutOptionAndSize(
                         Dimension *height,
                         Widget instigator,
                         XtWidgetGeometry *request,
-#if NeedWidePrototypes
-                        int calcMenuDimension) ;
-#else
                         Boolean calcMenuDimension) ;
-#endif /* NeedWidePrototypes */
 static void GetMenuKidMargins(
 				 XmRowColumnWidget m,
 				 Dimension *width,
@@ -254,24 +201,13 @@ CalcHelp(
         XmRowColumnWidget m,
         Dimension *m_width,     /* if 0 then caller's asking */
         Dimension *m_height,    /* if 0 then caller's asking */
-#if NeedWidePrototypes
-        int b,
-        int max_x,
-        int max_y,
-#else
         Dimension b,
         Position max_x,
         Position max_y,
-#endif /* NeedWidePrototypes */
         Position *x,
         Position *y,
-#if NeedWidePrototypes
-        int w,
-        int h )
-#else
         Dimension w,
         Dimension h )
-#endif /* NeedWidePrototypes */
 {
    register Dimension subtrahend;
 
@@ -386,13 +322,8 @@ static void
 AdjustLast(
         XmRowColumnWidget m,
         int start_i,
-#if NeedWidePrototypes
-        int w,
-        int h )
-#else
         Dimension w,
         Dimension h )
-#endif /* NeedWidePrototypes */
 {
    XmRCKidGeometry kg = RC_Boxes (m);
    XtWidgetGeometry *b;
@@ -455,15 +386,6 @@ SetAsking(
         XmRowColumnWidget m,
         Dimension *m_width,     /* if 0 then caller's asking */
         Dimension *m_height,    /* if 0 then caller's asking */
-#if NeedWidePrototypes
-        int b,
-        int max_x,
-        int max_y,
-        int x,
-        int y,
-        int w,
-        int h )
-#else
         Dimension b,
         Position max_x,
         Position max_y,
@@ -471,7 +393,6 @@ SetAsking(
         Position y,
         Dimension w,
         Dimension h )
-#endif /* NeedWidePrototypes */
 {
     long iheight;
     long iwidth;
@@ -637,19 +558,9 @@ _XmRC_CheckAndSetOptionCascade(
 }
 
 
-/*ARGSUSED*/
 static void
 TopOrBottomAlignment(
 	XmRowColumnWidget m,
-#if NeedWidePrototypes
-	int h,
-	int shadow,
-	int highlight,
-	int baseline,		/* unused */
-	int margin_top,
-	int margin_height,
-	int text_height,
-#else
         Dimension h,
         Dimension shadow,
         Dimension highlight,
@@ -657,7 +568,6 @@ TopOrBottomAlignment(
         Dimension margin_top,
         Dimension margin_height,
         Dimension text_height,
-#endif /* NeedWidePrototypes */
 	Dimension *new_height,
         int start_i,
         int end_i)
@@ -713,21 +623,13 @@ TopOrBottomAlignment(
   }
 }
 
-/*ARGSUSED*/
 static void
 BaselineAlignment(
 	XmRowColumnWidget m,
-#if NeedWidePrototypes
-	int h,
-	int shadow,		/* unused */
-	int highlight,		/* unused */
-	int baseline,
-#else
         Dimension h,
         Dimension shadow,	/* unused */
         Dimension highlight,	/* unused */
         Dimension baseline,
-#endif /* NeedWidePrototypes */
 	Dimension *new_height,
         int start_i,
         int end_i)
@@ -783,11 +685,7 @@ BaselineAlignment(
 static void
 CenterAlignment(
         XmRowColumnWidget m,
-#if NeedWidePrototypes
-        int h,
-#else
         Dimension h,
-#endif /* NeedWidePrototypes */
         int start_i,
         int end_i)
 {
@@ -1400,7 +1298,6 @@ LayoutNone(
  * If the instigator is the label or the cascabebuttongadget, then the
  * dimensions are honored if they are large enough.
  */
-/* ARGSUSED */
 static void
 LayoutOptionAndSize (
         register XmRowColumnWidget menu,
@@ -1408,11 +1305,7 @@ LayoutOptionAndSize (
         Dimension *height,
         Widget instigator,
         XtWidgetGeometry *request,
-#if NeedWidePrototypes
-        int calcMenuDimension )
-#else
         Boolean calcMenuDimension )
-#endif /* NeedWidePrototypes */
 {
    XtWidgetGeometry    *label_box = NULL, *button_box = NULL;
    Dimension c_width;
@@ -1931,11 +1824,7 @@ _XmRCAdaptToSize(
 void
 _XmRC_SetOrGetTextMargins(
         Widget wid,
-#if NeedWidePrototypes
-        unsigned int op,
-#else
         unsigned char op,
-#endif /* NeedWidePrototypes */
         XmBaselineMargins *textMargins )
 {
   WidgetClass wc = XtClass(wid);
@@ -1973,18 +1862,13 @@ _XmRC_SetOrGetTextMargins(
  * Returns a list of records, last one has a 'kid' field of NULL.  This memory
  *   for this list should eventually be freed with a call to XtFree().
  ****************/
-/*ARGSUSED*/
 XmRCKidGeometry
 _XmRCGetKidGeo(
         Widget wid,                     /* Widget w/ children. */
         Widget instigator,              /* May point to a child who */
         XtWidgetGeometry *request,      /*   is asking to change. */
         int uniform_border,             /* T/F, enforce it. */
-#if NeedWidePrototypes
-        int border,
-#else
         Dimension border,               /* Value to use if enforcing.*/
-#endif /* NeedWidePrototypes */
         int uniform_width_margins,      /* unused, T/F, enforce it. */
         int uniform_height_margins,     /* unused, T/F, enforce it. */
         Widget help,                    /* May point to a help kid. */
@@ -2101,7 +1985,7 @@ _XmRCGetKidGeo(
 }
 
 
-/**************************************************************** ARGSUSED
+/****************************************************************
  * Take the kid geometry array and change each kid to match them.
  *   remember not to do the resize of the instigator.
  * The kid geometry "kg" is assumed to be fully specified.
@@ -2133,7 +2017,6 @@ _XmRCSetKidGeo(
     }
     return ;
 }
-
 
 
 

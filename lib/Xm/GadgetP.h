@@ -166,7 +166,6 @@ typedef struct _XmGadgetRec
    XmGadgetPart gadget;
 } XmGadgetRec;
 
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

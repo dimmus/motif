@@ -438,13 +438,7 @@ ClassInit()
 /*
  * ClassPartInitialize sets up the fast subclassing for the widget.
  */
-static void
-#ifdef _NO_PROTO
-ClassPartInitialize(w_class)
-        WidgetClass w_class ;
-#else
-ClassPartInitialize(WidgetClass w_class)
-#endif /* _NO_PROTO */
+static void ClassPartInitialize(WidgetClass w_class)
 {
     _XmFastSubclassInit (w_class, XmICONBUTTON_BIT );
 
@@ -1760,6 +1754,7 @@ static void
 	     */
 	    XSetClipRectangles(XtDisplay(w), text_gc,
 			       0, 0, &clip, 1, Unsorted);
+
 		/*Draw shadow for insensitive text*/
 		if (!XtIsSensitive(w)) {
 			XmStringDraw(XtDisplay(w), XtWindow(w), XmIconButton_font_list(iw),
@@ -1768,6 +1763,7 @@ static void
 				XmIconButton_max_text_width(iw), XmIconButton_alignment(iw),
 				XmPrim_layout_direction(iw), NULL);
 		}
+
 	    XmStringDraw(XtDisplay(w), XtWindow(w), XmIconButton_font_list(iw),
 			 XmIconButton_label_string(iw), text_gc,
 			 XmIconButton_text_x(iw), XmIconButton_text_y(iw),

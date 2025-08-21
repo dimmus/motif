@@ -46,48 +46,24 @@ extern void _XmReCacheLabG(
                         Widget wid) ;
 extern void _XmAssignLabG_MarginHeight(
                         XmLabelGadget lw,
-#if NeedWidePrototypes
-                        int value) ;
-#else
                         Dimension value) ;
-#endif /* NeedWidePrototypes */
 extern void _XmLabelGCalcTextRect(
                         Widget wid) ;
 extern void _XmAssignLabG_MarginWidth(
                         XmLabelGadget lw,
-#if NeedWidePrototypes
-                        int value) ;
-#else
                         Dimension value) ;
-#endif /* NeedWidePrototypes */
 extern void _XmAssignLabG_MarginLeft(
                         XmLabelGadget lw,
-#if NeedWidePrototypes
-                        int value) ;
-#else
                         Dimension value) ;
-#endif /* NeedWidePrototypes */
 extern void _XmAssignLabG_MarginRight(
                         XmLabelGadget lw,
-#if NeedWidePrototypes
-                        int value) ;
-#else
                         Dimension value) ;
-#endif /* NeedWidePrototypes */
 extern void _XmAssignLabG_MarginTop(
                         XmLabelGadget lw,
-#if NeedWidePrototypes
-                        int value) ;
-#else
                         Dimension value) ;
-#endif /* NeedWidePrototypes */
 extern void _XmAssignLabG_MarginBottom(
                         XmLabelGadget lw,
-#if NeedWidePrototypes
-                        int value) ;
-#else
                         Dimension value) ;
-#endif /* NeedWidePrototypes */
 extern void _XmProcessDrag(
                         Widget w,
                         XEvent *event,
@@ -115,4 +91,3 @@ extern void _XmLabelGCalcTextRect(Widget wid);
 #endif
 
 #endif /* _XMLABELGI_H */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

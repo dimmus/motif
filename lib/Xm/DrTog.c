@@ -183,19 +183,11 @@ DrawCross(Display *display,
 /*ARGSUSED*/
 void XmeDrawDiamond(Display *display, Drawable d,
                     GC top_gc, GC bottom_gc, GC center_gc,
-#if NeedWidePrototypes
-                    int x, int y,
-                    int width,
-		    int height, /* unused */
-                    int shadow_thick,
-		    int margin)
-#else
                     Position x, Position y,
                     Dimension width,
        		    Dimension height, /* unused */
                     Dimension shadow_thick,
 	            Dimension margin)
-#endif /* NeedWidePrototypes */
 {
    XSegment seg[12];
    XPoint   pt[4];
@@ -321,17 +313,10 @@ void
 XmeDrawIndicator(Display *display,
 		 Drawable d,
 		 GC gc,
-#if NeedWidePrototypes
-		 int x, int y,
-		 int width, int height,
-		 int margin,
-		 int type)
-#else
                  Position x, Position y,
                  Dimension width, Dimension height,
                  Dimension margin,
                  XtEnum type)
-#endif /* NeedWidePrototypes */
 {
   _XmDisplayToAppContext(display);
 
@@ -355,21 +340,12 @@ XmeDrawCircle(Display *display,
 	      GC top_gc,
 	      GC bottom_gc,
 	      GC center_gc,
-#if NeedWidePrototypes
-	      int x,
-	      int y,
-	      int width,
-	      int height,
-	      int shadow_thick,
-	      int margin)
-#else
 	      Position x,
 	      Position y,
 	      Dimension width,
 	      Dimension height,
 	      Dimension shadow_thick,
 	      Dimension margin)
-#endif /* NeedWidePrototypes */
 {
   int line_width = MIN(shadow_thick, MIN(width, height) / 2);
   _XmDisplayToAppContext(display);
@@ -415,9 +391,7 @@ XmeDrawCircle(Display *display,
 
       XChangeGC(display, top_gc, mask, &top_values);
       XChangeGC(display, bottom_gc, mask, &bottom_values);
-    }
-
-  else {
+    } else {
 	  if (center_gc != NULL) {
 		  int delta = MIN(line_width + margin, MIN(width, height) / 2);
 		  XFillArc(display, d, center_gc,

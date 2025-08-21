@@ -81,52 +81,26 @@ extern void XmeDrawShadows(
                         Drawable d,
                         GC top_gc,
                         GC bottom_gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int shad_thick,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension shad_thick,
-#endif /* NeedWidePrototypes */
                         unsigned int shad_type);
 extern void XmeClearBorder(
                         Display *display,
                         Window w,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int shadow_thick);
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension shadow_thick);
-#endif /* NeedWidePrototypes */
 extern void XmeDrawSeparator(
                         Display *display,
                         Drawable d,
                         GC top_gc,
                         GC bottom_gc,
                         GC separator_gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int shadow_thick,
-                        int margin,
-                        unsigned int orientation,
-                        unsigned int separator_type);
-#else
                         Position x,
                         Position y,
                         Dimension width,
@@ -135,28 +109,18 @@ extern void XmeDrawSeparator(
                         Dimension margin,
                         unsigned char orientation,
                         unsigned char separator_type);
-#endif /* NeedWidePrototypes */
 extern void XmeDrawDiamond(
                         Display *display,
                         Drawable d,
                         GC top_gc,
                         GC bottom_gc,
                         GC center_gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int shadow_thick,
-                        int margin);
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension shadow_thick,
                         Dimension margin);
-#endif /* NeedWidePrototypes */
 
 extern void XmeDrawCircle(
                         Display *display,
@@ -164,39 +128,22 @@ extern void XmeDrawCircle(
                         GC top_gc,
                         GC bottom_gc,
                         GC center_gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int shadow_thick,
-                        int margin);
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension shadow_thick,
                         Dimension margin);
-#endif /* NeedWidePrototypes */
 
 extern void XmeDrawHighlight(
                         Display *display,
                         Drawable d,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int highlight_thick
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension highlight_thick
-#endif /* NeedWidePrototypes */
                         );
 extern void XmeDrawArrow(
                         Display *display,
@@ -204,21 +151,12 @@ extern void XmeDrawArrow(
                         GC top_gc,
                         GC bot_gc,
                         GC cent_gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int shadow_thick,
-                        unsigned int direction);
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension shadow_thick,
                         unsigned char direction);
-#endif /* NeedWidePrototypes */
 
 extern void XmeDrawPolygonShadow(
 		      Display *dpy,
@@ -227,28 +165,16 @@ extern void XmeDrawPolygonShadow(
 		      GC bottomGC,
 		      XPoint *points,
 		      int n_points,
-#if NeedWidePrototypes
-		      int shadowThickness,
-		      unsigned int shadowType);
-#else
 		      Dimension shadowThickness,
 		      unsigned char shadowType);
-#endif /* NeedWidePrototypes */
 
 extern void XmeDrawIndicator(Display *display,
 		 Drawable d,
 		 GC gc,
-#if NeedWidePrototypes
-		 int x, int y,
-		 int width, int height,
-		 int margin,
-		 int type);
-#else
                  Position x, Position y,
                  Dimension width, Dimension height,
 		 Dimension margin,
                  XtEnum type);
-#endif /* NeedWidePrototypes */
 
 /********    End Private Function Declarations    ********/
 
@@ -256,5 +182,4 @@ extern void XmeDrawIndicator(Display *display,
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDrawP_h */

@@ -45,24 +45,15 @@ extern void _XmTextFToggleCursorGC(
                         Widget widget) ;
 extern void _XmTextFieldDrawInsertionPoint(
                         XmTextFieldWidget tf,
-#if NeedWidePrototypes
-                        int turn_on) ;
-#else
                         Boolean turn_on) ;
-#endif /* NeedWidePrototypes */
 extern void _XmTextFieldSetClipRect(
                         XmTextFieldWidget tf) ;
 extern void _XmTextFieldSetCursorPosition(
                         XmTextFieldWidget tf,
                         XEvent *event,
                         XmTextPosition position,
-#if NeedWidePrototypes
-                        int adjust_flag,
-                        int call_cb) ;
-#else
                         Boolean adjust_flag,
                         Boolean call_cb) ;
-#endif /* NeedWidePrototypes */
 extern Boolean _XmTextFieldReplaceText(
                         XmTextFieldWidget tf,
                         XEvent *event,
@@ -70,18 +61,10 @@ extern Boolean _XmTextFieldReplaceText(
                         XmTextPosition replace_next,
                         char *insert,
                         int insert_length,
-#if NeedWidePrototypes
-                        int move_cursor) ;
-#else
                         Boolean move_cursor) ;
-#endif /* NeedWidePrototypes */
 extern void _XmTextFieldDeselectSelection(
                         Widget w,
-#if NeedWidePrototypes
-                        int disown,
-#else
                         Boolean disown,
-#endif /* NeedWidePrototypes */
                         Time sel_time) ;
 extern Boolean _XmTextFieldSetDestination(
                         Widget w,
@@ -96,11 +79,7 @@ extern void _XmTextFieldSetSel2(
                         Widget w,
                         XmTextPosition left,
                         XmTextPosition right,
-#if NeedWidePrototypes
-                        int disown,
-#else
                         Boolean disown,
-#endif /* NeedWidePrototypes */
                         Time sel_time) ;
 extern void _XmTextFieldHandleSecondaryFinished(Widget w,
 						XEvent *event);
@@ -116,4 +95,3 @@ extern int _XmTextFieldCountCharacters(XmTextFieldWidget tf,
 #endif
 
 #endif /* _XmTextFI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

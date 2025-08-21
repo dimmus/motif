@@ -1,11 +1,17 @@
+/**
+ * Motif
+ *
+ * Copyright (c) 2025 Tim Hentenaar.
+ * Copyright (c) 1987 - 2012 The Open Group.
+ * Licensed under the LGPL 2.1 license.
+ */
+
 #ifndef _XmPngI_h
 #define _XmPngI_h
 
 #include <stdio.h>
 #include <X11/Xlib.h>
-#include <X11/Intrinsic.h>
 
-int _XmPngGetImage(Screen * screen, FILE * infile, Pixel background,
-                   XImage ** ximage);
+int _XmPngGetImage(FILE *infile, XColor *bg, XImage **ximage);
 
 #endif

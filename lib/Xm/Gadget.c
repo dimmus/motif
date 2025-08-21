@@ -644,18 +644,13 @@ Initialize(
  *	Clean up allocated resources when the widget is destroyed.
  *
  ************************************************************************/
-static void
-Destroy(
-        Widget w )
+static void Destroy(Widget w)
 {
    XmGadget g = (XmGadget)w;
 
    _XmNavigDestroy(w);
    _XmToolTipRemove(w);
 }
-
-
-
 
 /************************************************************************
  *

@@ -68,11 +68,7 @@ typedef struct _XmIconBoxDropData {
  *	Returns:       Returns true if this cell is unused.
  */
 
-Boolean XmIconBoxIsCellEmpty(
-#ifndef _NO_PROTO
-Widget, Position, Position, Widget
-#endif
-);
+Boolean XmIconBoxIsCellEmpty(Widget, Position, Position, Widget);
 
 /*	Function Name: XmCreateIconBox
  *	Description: Creation Routine for UIL and ADA.
@@ -82,11 +78,7 @@ Widget, Position, Position, Widget
  *	Returns: The Widget created.
  */
 
-Widget XmCreateIconBox(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreateIconBox(Widget, String, ArgList, Cardinal);
 
 /************************************************************
 *	EXTERNAL DECLARATIONS

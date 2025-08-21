@@ -30,14 +30,10 @@ static char rcsid[] = "$XConsortium: GeoUtils.c /main/13 1996/08/15 17:11:25 pas
 #include <config.h>
 #endif
 
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include "XmI.h"
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
-
 
 /********    Static Function Declarations    ********/
 
@@ -52,38 +48,18 @@ static XtGeometryResult QueryNonePolicy(
                         XtWidgetGeometry *parentRequestRtn) ;
 static Dimension _XmGeoStretchVertical(
                         XmGeoMatrix geoSpec,
-#if NeedWidePrototypes
-                        int actualH,
-                        int desiredH) ;
-#else
                         Dimension actualH,
                         Dimension desiredH) ;
-#endif /* NeedWidePrototypes */
 static Dimension _XmGeoFillVertical(
                         XmGeoMatrix geoSpec,
-#if NeedWidePrototypes
-                        int actualH,
-                        int desiredH) ;
-#else
                         Dimension actualH,
                         Dimension desiredH) ;
-#endif /* NeedWidePrototypes */
 static void _XmGeoCalcFill(
-#if NeedWidePrototypes
-                        int fillSpace,
-                        int margin,
-#else
                         Dimension fillSpace,
                         Dimension margin,
-#endif /* NeedWidePrototypes */
                         unsigned int numBoxes,
-#if NeedWidePrototypes
-                        int endSpec,
-                        int betweenSpec,
-#else
                         Dimension endSpec,
                         Dimension betweenSpec,
-#endif /* NeedWidePrototypes */
                         Dimension *pEndSpace,
                         Dimension *pBetweenSpace) ;
 static int boxWidthCompare(
@@ -92,34 +68,17 @@ static int boxWidthCompare(
 static void FitBoxesAveraging(
                         XmKidGeometry rowPtr,
                         unsigned int numBoxes,
-#if NeedWidePrototypes
-                        int boxWidth,
-#else
                         Dimension boxWidth,
-#endif /* NeedWidePrototypes */
                         int amtOffset) ;
 static void FitBoxesProportional(
                         XmKidGeometry rowPtr,
                         unsigned int numBoxes,
-#if NeedWidePrototypes
-                        int boxWidth,
-#else
                         Dimension boxWidth,
-#endif /* NeedWidePrototypes */
                         int amtOffset) ;
 static void SegmentFill(
                         XmKidGeometry rowBoxes,
                         unsigned int numBoxes,
                         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-                        int x,
-                        int width,
-                        int marginW,
-                        int endX,
-                        int maxX,
-                        int endSpace,
-                        int betweenSpace) ;
-#else
                         Position x,
                         Dimension width,
                         Dimension marginW,
@@ -127,19 +86,9 @@ static void SegmentFill(
                         Position maxX,
                         Dimension endSpace,
                         Dimension betweenSpace) ;
-#endif /* NeedWidePrototypes */
 static Position _XmGeoLayoutWrap(
                         XmKidGeometry rowPtr,
                         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int endSpace,
-                        int betweenSpace,
-                        int maxX,
-                        int width,
-                        int marginW) ;
-#else
                         Position x,
                         Position y,
                         Dimension endSpace,
@@ -147,39 +96,22 @@ static Position _XmGeoLayoutWrap(
                         Position maxX,
                         Dimension width,
                         Dimension marginW) ;
-#endif /* NeedWidePrototypes */
 static Position _XmGeoLayoutSimple(
                         XmKidGeometry rowPtr,
                         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int maxX,
-                        int endSpace,
-                        int betweenSpace) ;
-#else
                         Position x,
                         Position y,
                         Position maxX,
                         Dimension endSpace,
                         Dimension betweenSpace) ;
-#endif /* NeedWidePrototypes */
 static Position _XmGeoArrangeList(
                         XmKidGeometry rowBoxes,
                         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int marginW,
-                        int marginH) ;
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension marginW,
                         Dimension marginH) ;
-#endif /* NeedWidePrototypes */
 
 /********    End Static Function Declarations    ********/
 
@@ -201,11 +133,7 @@ _XmHandleQueryGeometry(
         Widget widget,
         XtWidgetGeometry *intended,
         XtWidgetGeometry *desired,
-#if NeedWidePrototypes
-        unsigned int resize_policy,
-#else
         unsigned char resize_policy,
-#endif /* NeedWidePrototypes */
         XmGeoCreateProc createMatrix)
 {
     Dimension       width = 0 ;
@@ -253,11 +181,7 @@ _XmHandleGeometryManager(
         Widget instigator,
         XtWidgetGeometry *desired,
         XtWidgetGeometry *allowed,
-#if NeedWidePrototypes
-        unsigned int policy,
-#else
         unsigned char policy,
-#endif /* NeedWidePrototypes */
         XmGeoMatrix *cachePtr,
         XmGeoCreateProc createMatrix)
 {
@@ -693,11 +617,7 @@ QueryNonePolicy(
 void
 _XmHandleSizeUpdate(
         Widget wid,
-#if NeedWidePrototypes
-        unsigned int policy,
-#else
         unsigned char policy,
-#endif /* NeedWidePrototypes */
         XmGeoCreateProc createMatrix)
 {
             XmGeoMatrix     geoSpec ;
@@ -1186,13 +1106,8 @@ _XmGeoGetDimensions(
 static Dimension
 _XmGeoStretchVertical(
         XmGeoMatrix geoSpec,
-#if NeedWidePrototypes
-        int actualH,
-        int desiredH )
-#else
         Dimension actualH,
         Dimension desiredH )
-#endif /* NeedWidePrototypes */
 {
     register XmGeoRowLayout  layoutPtr ;
     register XmKidGeometry   rowPtr ;
@@ -1298,13 +1213,8 @@ _XmGeoStretchVertical(
 static Dimension
 _XmGeoFillVertical(
         XmGeoMatrix geoSpec,
-#if NeedWidePrototypes
-        int actualH,
-        int desiredH )
-#else
         Dimension actualH,
         Dimension desiredH )
-#endif /* NeedWidePrototypes */
 {
     register XmGeoRowLayout  layoutPtr ;
     register XmKidGeometry   rowPtr ;
@@ -1397,21 +1307,11 @@ _XmGeoFillVertical(
  ****************/
 static void
 _XmGeoCalcFill(
-#if NeedWidePrototypes
-        int fillSpace,
-        int margin,
-#else
         Dimension fillSpace,        /* Fill space, including margins.*/
         Dimension margin,           /* Margin (included in fillSpace).*/
-#endif /* NeedWidePrototypes */
         unsigned int numBoxes,
-#if NeedWidePrototypes
-        int endSpec,
-        int betweenSpec,
-#else
         Dimension endSpec,
         Dimension betweenSpec,
-#endif /* NeedWidePrototypes */
         Dimension *pEndSpace,       /* Receives end spacing.*/
         Dimension *pBetweenSpace )  /* Receives between spacing.*/
 {
@@ -1464,13 +1364,8 @@ _XmGeoCalcFill(
 void
 _XmGeoArrangeBoxes(
         XmGeoMatrix geoSpec,        /* Array of box lists (rows).*/
-#if NeedWidePrototypes
-        int x,
-        int y,
-#else
         Position x,                 /* X coordinate of composite.*/
         Position y,                 /* Y coordinate of composite.*/
-#endif /* NeedWidePrototypes */
         Dimension *pW,              /* Initial value is minimum width.*/
         Dimension *pH )             /* Initial value is minimum height.*/
 {
@@ -1607,11 +1502,7 @@ static void
 FitBoxesAveraging(
         XmKidGeometry rowPtr,
         unsigned int numBoxes,
-#if NeedWidePrototypes
-        int boxWidth,
-#else
         Dimension boxWidth,
-#endif /* NeedWidePrototypes */
         int amtOffset )
 {
             unsigned int    Index ;
@@ -1689,11 +1580,7 @@ static void
 FitBoxesProportional(
         XmKidGeometry rowPtr,
         unsigned int numBoxes,
-#if NeedWidePrototypes
-        int boxWidth,
-#else
         Dimension boxWidth,
-#endif /* NeedWidePrototypes */
         int amtOffset )
 {
             int             deltaX ;
@@ -1747,15 +1634,6 @@ SegmentFill(
         XmKidGeometry rowBoxes,
         unsigned int numBoxes,
         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-        int x,
-        int width,
-        int marginW,
-        int endX,
-        int maxX,
-        int endSpace,
-        int betweenSpace )
-#else
         Position x,
         Dimension width,
         Dimension marginW,
@@ -1763,7 +1641,6 @@ SegmentFill(
         Position maxX,
         Dimension endSpace,
         Dimension betweenSpace )
-#endif /* NeedWidePrototypes */
 {
             Widget          holdEnd ;
             Dimension       spacedWidth ;
@@ -1806,19 +1683,9 @@ SegmentFill(
             else
             {   totalFill = marginW << 1 ;
                 }
-            {   /* This little exercise is needed for when NeedWidePrototypes
-                *   has value 1 which causes endSpace and betweenSpace to
-                *   become "int"s, and a pointer to an int cannot be passed
-                *   as an argument where a pointer to a dimension is required.
-                */
-                        Dimension eSpace ;
-                        Dimension bSpace ;
-                _XmGeoCalcFill( totalFill, marginW, numBoxes,
-                                layoutPtr->space_end, layoutPtr->space_between,
-                                                            &eSpace, &bSpace) ;
-                endSpace = eSpace ;
-                betweenSpace = bSpace ;
-                }
+                _XmGeoCalcFill(totalFill, marginW, numBoxes,
+                               layoutPtr->space_end, layoutPtr->space_between,
+                               &endSpace, &betweenSpace) ;
             break ;
             }
         case XmGEO_PACK:
@@ -1861,15 +1728,6 @@ static Position
 _XmGeoLayoutWrap(
         XmKidGeometry rowPtr,
         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int endSpace,
-        int betweenSpace,
-        int maxX,
-        int width,
-        int marginW )
-#else
         Position x,
         Position y,
         Dimension endSpace,
@@ -1877,7 +1735,6 @@ _XmGeoLayoutWrap(
         Position maxX,
         Dimension width,
         Dimension marginW )
-#endif /* NeedWidePrototypes */
 {
             Position        rowX ;
             Dimension       rowH ;
@@ -1962,19 +1819,11 @@ static Position
 _XmGeoLayoutSimple(
         XmKidGeometry rowPtr,
         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int maxX,
-        int endSpace,
-        int betweenSpace )
-#else
         Position x,
         Position y,
         Position maxX,
         Dimension endSpace,
         Dimension betweenSpace )
-#endif /* NeedWidePrototypes */
 {
             Position        rowX ;
             Position        newX ;
@@ -2015,24 +1864,15 @@ _XmGeoLayoutSimple(
  * This routines lays out the boxes in this row according to the specified
  *   paramaters and the policies specified in the layout record at layoutPtr.
  ****************/
-/*ARGSUSED*/
 static Position
 _XmGeoArrangeList(
         XmKidGeometry rowBoxes,
         XmGeoRowLayout layoutPtr,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        int marginW,
-        int marginH )		/* unused */
-#else
         Position x,
         Position y,
         Dimension width,
         Dimension marginW,
         Dimension marginH )	/* unused */
-#endif /* NeedWidePrototypes */
 {
             Dimension       sumW ;
             unsigned int    numBoxes ;
@@ -2128,11 +1968,7 @@ _XmGeoArrangeList(
 Dimension
 _XmGeoBoxesSameWidth(
         XmKidGeometry rowPtr,
-#if NeedWidePrototypes
-        int width )
-#else
         Dimension width )
-#endif /* NeedWidePrototypes */
 {
     register XmKidGeometry   boxPtr ;
     register Dimension       useW ;
@@ -2174,11 +2010,7 @@ _XmGeoBoxesSameWidth(
 Dimension
 _XmGeoBoxesSameHeight(
         XmKidGeometry rowPtr,
-#if NeedWidePrototypes
-        int height )
-#else
         Dimension height )
-#endif /* NeedWidePrototypes */
 {
     register XmKidGeometry   boxPtr ;
     register Dimension       useH ;
@@ -2210,12 +2042,11 @@ _XmGeoBoxesSameHeight(
     return( useH) ;
     }
 
-/**************************************************************** ARGSUSED
+/****************************************************************
  * This routine is a fixup routine which can be used for rows which consist
  *   of a single separator widget.  The effect of this routine is to have
  *   the separator ignore the margin width.
  ****************/
-/*ARGSUSED*/
 void
 _XmSeparatorFix(
         XmGeoMatrix geoSpec,
@@ -2260,12 +2091,11 @@ _XmSeparatorFix(
     }
 
 
-/**************************************************************** ARGSUSED
+/****************************************************************
  * This routine is a fixup routine which can be used for rows which consist
  *   of a single MenuBar RowColumn.  The effect of this routine is to have
  *   the RowColumn ignore the margin width and height.
  ****************/
-/*ARGSUSED*/
 void
 _XmMenuBarFix(
         XmGeoMatrix geoSpec,
@@ -2377,24 +2207,19 @@ _XmGeoCount_kids(
     return( n) ;
     }
 
-/**************************************************************** ARGSUSED
+/****************************************************************
  * Assemble a kid box for each child widget and gadget, fill in data about
  *   each widget and optionally set up uniform border widths.
  * Returns a list of records, last one has a 'kid' field of NULL.  This memory
  *   for this list should eventually be freed with a call to XtFree().
  ****************/
-/*ARGSUSED*/
 XmKidGeometry
 _XmGetKidGeo(
         Widget wid,                     /* Widget w/ children. */
         Widget instigator,              /* May point to a child who */
         XtWidgetGeometry *request,      /*   is asking to change. */
         int uniform_border,             /* T/F, enforce it. */
-#if NeedWidePrototypes
-        int border,
-#else
         Dimension border,               /* Value to use if enforcing.*/
-#endif /* NeedWidePrototypes */
         int uniform_width_margins,      /* unused.  T/F, enforce it. */
         int uniform_height_margins,     /* unused.  T/F, enforce it. */
         Widget help,                    /* May point to a help kid. */
@@ -2468,13 +2293,12 @@ _XmGeoClearRectObjAreas(
     return ;
     }
 
-/**************************************************************** ARGSUSED
+/****************************************************************
  * Take the kid geometry array and change each kid to match them.
  *   remember not to do the resize of the instigator.
  * The kid geometry "kg" is assumed to be fully specified.
  ****************/
-void
-_XmSetKidGeo(
+void _XmSetKidGeo(
         XmKidGeometry kg,
         Widget instigator )
 {
@@ -2635,7 +2459,6 @@ _XmGeometryEqual(
  *   specified geometries of "response" and are equal to them.
  * The XtCWQueryOnly bit is ignored.
  ****************/
-/*ARGSUSED*/
 Boolean
 _XmGeoReplyYes(
         Widget wid,		/* unused */
@@ -2717,7 +2540,6 @@ _XmMakeGeometryRequest(
     }
   return answer ;
 }
-
 
 /****************************************************************/
 #ifdef DEBUG_GEOUTILS

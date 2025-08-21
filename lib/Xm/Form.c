@@ -30,10 +30,7 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #include <config.h>
 #endif
 
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>		/* for abs, float operation... */
-#endif
 #include <Xm/DrawP.h>
 #include <Xm/FormP.h>
 #include <Xm/DialogS.h>
@@ -47,7 +44,6 @@ static char rcsid[] = "$TOG: Form.c /main/19 1998/03/25 12:24:56 csn $"
 #define MESSAGE1	_XmMMsgForm_0000
 #define MESSAGE5	_XmMMsgForm_0002
 #define MESSAGE7 	_XmMMsgForm_0003
-
 
 /*  Useful macros  */
 
@@ -204,70 +200,36 @@ static void SortChildren(
                         register XmFormWidget fw) ;
 static void CalcEdgeValues(
                         Widget w,
-#if NeedWidePrototypes
-                        int really,
-#else
                         Boolean really,
-#endif /* NeedWidePrototypes */
                         Widget instigator,
                         XtWidgetGeometry *inst_geometry,
                         Dimension *form_width,
                         Dimension *form_height) ;
 static float CheckBottomBase(
                         Widget sibling,
-#if NeedWidePrototypes
-                        int opposite) ;
-#else
                         Boolean opposite) ;
-#endif /* NeedWidePrototypes */
 static float CheckRightBase(
                         Widget sibling,
-#if NeedWidePrototypes
-                        int opposite) ;
-#else
                         Boolean opposite) ;
-#endif /* NeedWidePrototypes */
 static float CheckLeftBase(
                         Widget sibling,
-#if NeedWidePrototypes
-                        int opposite) ;
-#else
                         Boolean opposite) ;
-#endif /* NeedWidePrototypes */
 static void CalcEdgeValue(
                         XmFormWidget fw,
                         Widget w,
-#if NeedWidePrototypes
-                        int size,
-                        int border_width,
-#else
                         Dimension size,
                         Dimension border_width,
-#endif /* NeedWidePrototypes */
                         int which,
-#if NeedWidePrototypes
-                        int really,
-#else
                         Boolean really,
-#endif /* NeedWidePrototypes */
                         Dimension *fwidth,
                         Dimension *fheight) ;
 static void ComputeAttachment(
 			XmFormWidget fw,
                         Widget w,
-#if NeedWidePrototypes
-                        int size,
-                        int border_width,
-#else
                         Dimension size,
                         Dimension border_width,
-#endif /* NeedWidePrototypes */
                         int which,
-#if NeedWidePrototypes
-                        int really,
-#else
                         Boolean really,
-#endif /* NeedWidePrototypes */
                         Dimension *fwidth,
                         Dimension *fheight) ;
 static int GetFormOffset(
@@ -1466,7 +1428,7 @@ ChangeManaged(
     if (!XtIsRealized((Widget)fw))
 	{
 	    /* First time through */
-	    Dimension w = 0, h = 0;
+	    Dimension x = 0, h = 0;
 
 	    g.request_mode = 0;
 	    g.width = (fw->core.width ? fw->core.width : 1);
@@ -1474,8 +1436,8 @@ ChangeManaged(
 
 	    if (!XtWidth(fw) && XtHeight(fw))
 		{
-		    CalcFormSize(fw, &w, NULL);
-		    g.width = w;
+		    CalcFormSize(fw, &x, NULL);
+		    g.width = x;
 		    g.request_mode |= CWWidth;
 		}
 	    else if (XtWidth(fw) && !XtHeight(fw))
@@ -1486,8 +1448,8 @@ ChangeManaged(
 		}
 	    else if (!XtWidth(fw) && !XtHeight(fw))
 		{
-		    CalcFormSize(fw, &w, &h);
-		    g.width = w;
+		    CalcFormSize(fw, &x, &h);
+		    g.width = x;
 		    g.height = h;
 		    g.request_mode |= (CWWidth | CWHeight);
 		}
@@ -1620,7 +1582,6 @@ DeleteChild(
  *  SetValues
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -1691,7 +1652,6 @@ SetValues(
 	return(returnFlag);
 }
 
-/*ARGSUSED*/
 static void
 SetValuesAlmost(
         Widget cw,		/* unused */
@@ -1716,7 +1676,6 @@ SetValuesAlmost(
  *	If any values change, what we do is place everything again.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 ConstraintSetValues(
         register Widget old,
@@ -1814,7 +1773,6 @@ ConstraintSetValues(
  *	The form widget specific initialization.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,		/* unused */
@@ -1848,7 +1806,6 @@ Initialize(
  *  ConstraintInitialize
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 ConstraintInitialize(
         Widget req,		/* unused */
@@ -2146,6 +2103,8 @@ SortChildren(
 }
 
 
+
+
 /************************************************************************
  *
  *  CalcEdgeValues
@@ -2154,11 +2113,7 @@ SortChildren(
 static void
 CalcEdgeValues(
         Widget w,
-#if NeedWidePrototypes
-        int really,
-#else
         Boolean really,
-#endif /* NeedWidePrototypes */
         Widget instigator,
         XtWidgetGeometry *inst_geometry,
         Dimension *form_width,
@@ -2280,11 +2235,7 @@ CalcEdgeValues(
 static float
 CheckBottomBase(
         Widget sibling,
-#if NeedWidePrototypes
-        int opposite )
-#else
         Boolean opposite )
-#endif /* NeedWidePrototypes */
 {
 	XmFormWidget fw = (XmFormWidget) sibling->core.parent;
 	XmFormConstraint c = GetFormConstraint(sibling);
@@ -2386,11 +2337,7 @@ CheckBottomBase(
 static float
 CheckRightBase(
         Widget sibling,
-#if NeedWidePrototypes
-        int opposite )
-#else
         Boolean opposite )
-#endif /* NeedWidePrototypes */
 {
 	XmFormWidget fw = (XmFormWidget) sibling->core.parent;
 	XmFormConstraint c = GetFormConstraint(sibling);
@@ -2491,11 +2438,7 @@ CheckRightBase(
 static float
 CheckLeftBase(
         Widget sibling,
-#if NeedWidePrototypes
-        int opposite )
-#else
         Boolean opposite )
-#endif /* NeedWidePrototypes */
 {
 	XmFormWidget fw = (XmFormWidget) sibling->core.parent;
 	XmFormConstraint c = GetFormConstraint(sibling);
@@ -2596,24 +2539,14 @@ CheckLeftBase(
  *     matter of switching right and left in the computing.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 CalcEdgeValue(
         XmFormWidget fw,
         Widget w,
-#if NeedWidePrototypes
-        int size,
-        int border_width,	/* unused */
-#else
         Dimension size,
         Dimension border_width,	/* unused */
-#endif /* NeedWidePrototypes */
         int which,
-#if NeedWidePrototypes
-        int really,
-#else
         Boolean really,
-#endif /* NeedWidePrototypes */
         Dimension *fwidth,
         Dimension *fheight )
 {
@@ -3146,24 +3079,14 @@ CalcEdgeValue(
  *     matter of switching right and left in the computing.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 ComputeAttachment(
         XmFormWidget fw,
         Widget w,
-#if NeedWidePrototypes
-        int size,
-        int border_width,	/* unused */
-#else
         Dimension size,
         Dimension border_width,	/* unused */
-#endif /* NeedWidePrototypes */
         int which,
-#if NeedWidePrototypes
-        int really,
-#else
         Boolean really,
-#endif /* NeedWidePrototypes */
         Dimension *fwidth,
         Dimension *fheight )
 {

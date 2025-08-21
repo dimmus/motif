@@ -39,26 +39,14 @@ extern "C" {
 extern void _XmPushWidgetExtData(
                         Widget widget,
                         XmWidgetExtData data,
-#if NeedWidePrototypes
-                        unsigned int extType) ;
-#else
                         unsigned char extType) ;
-#endif /* NeedWidePrototypes */
 extern void _XmPopWidgetExtData(
                         Widget widget,
                         XmWidgetExtData *dataRtn,
-#if NeedWidePrototypes
-                        unsigned int extType) ;
-#else
                         unsigned char extType) ;
-#endif /* NeedWidePrototypes */
 extern XmWidgetExtData _XmGetWidgetExtData(
                         Widget widget,
-#if NeedWidePrototypes
-                        unsigned int extType) ;
-#else
                         unsigned char extType) ;
-#endif /* NeedWidePrototypes */
 extern void _XmInitializeExtensions( void ) ;
 extern void _XmTransformSubResources(
                         XtResourceList comp_resources,
@@ -79,6 +67,4 @@ extern Cardinal _XmSecondaryResourceData(
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmBaseClassI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

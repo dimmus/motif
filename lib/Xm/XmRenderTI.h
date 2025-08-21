@@ -29,7 +29,7 @@
 #define _XmRenderTI_h
 
 #include <Xm/XmP.h>
-#ifdef	USE_XFT
+#if USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
 
@@ -112,7 +112,7 @@ typedef struct __XmRenditionRec
   unsigned char backgroundState;
   unsigned char foregroundState;
 
-#ifdef	USE_XFT
+#if USE_XFT
 	char *fontStyle,
 /*			*family,	Use font_name instead. */
 	*fontFoundry, *fontEncoding;
@@ -166,15 +166,9 @@ typedef struct __XmRenderTableRec
 
 extern XmRendition _XmRenderTableFindRendition(XmRenderTable table,
 					       XmStringTag tag,
-#if NeedWidePrototypes
-					       int cached_tag,
-					       int need_font,
-					       int call,
-#else
 					       Boolean cached_tag,
 					       Boolean need_font,
 					       Boolean call,
-#endif /* NeedWidePrototypes */
 					       short *index);
 extern XmRendition _XmRenditionCreate(Display *display,
 				      Widget widget,
@@ -187,11 +181,7 @@ extern XmRendition _XmRenditionCreate(Display *display,
 extern XmRendition _XmRenderTableGetMerged(XmRenderTable rt,
 					   XmStringTag base,
 					   XmStringTag *tags,
-#if NeedWidePrototypes
-					   unsigned int tag_count
-#else
-                                           unsigned short tag_count
-#endif /* NeedWidePrototypes */
+                       unsigned short tag_count
 					   );
 extern XmRendition _XmRenditionMerge(Display *d,
 				     XmRendition *scr,
@@ -199,13 +189,8 @@ extern XmRendition _XmRenditionMerge(Display *d,
 				     XmRenderTable rt,
 				     XmStringTag base_tag,
 				     XmStringTag *tags,
-#if NeedWidePrototypes
-				     unsigned int tag_count,
-                                     unsigned int copy
-#else
 				     unsigned short tag_count,
-                                     Boolean copy
-#endif /* NeedWidePrototypes */
+                     Boolean copy
 				     );
 extern Widget _XmCreateRenderTable(Widget parent,
 				   String name,
@@ -220,11 +205,7 @@ extern XmRendition _XmRenditionCopy(XmRendition rend,
 				    Boolean shared);
 extern Boolean _XmRenderTableFindFallback(XmRenderTable ,
 					  XmStringTag tag,
-#if NeedWidePrototypes
-					  int cached_tag,
-#else
 					  Boolean cached_tag,
-#endif /* NeedWidePrototypes */
 					  short *indx,
 					  XmRendition *rend_ptr) ;
 extern Boolean _XmRenderTableFindFirstFont(XmRenderTable rendertable,
@@ -233,15 +214,11 @@ extern Boolean _XmRenderTableFindFirstFont(XmRenderTable rendertable,
 extern XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
 						    XmStringTag *tags,
 						    int tag_count,
-#if NeedWidePrototypes
-						    int chk_font,
-#else
 						    Boolean chk_font,
-#endif /* NeedWidePrototypes */
 						    XmFontType type,
 						    XtPointer font);
 
-#ifdef	USE_XFT
+#if USE_XFT
 /*
  * XftDraw cache functions, implemented in lib/Xm/FontList.c
  */
@@ -250,25 +227,13 @@ XftDraw * _XmXftDrawCreate(Display *display, Window window);
 void _XmXftDrawDestroy(Display *display, Window window, XftDraw *d);
 
 void _XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
-#if NeedWidePrototypes
-                      int x, int y,
-#else
                       Position x, Position y,
-#endif				/* NeedWidePrototypes */
                       char *s, int len,
-#if NeedWidePrototypes
-                      int image
-#else
                       Boolean image
-#endif				/* NeedWidePrototypes */
 		     );
 
 void _XmXftDrawString2(Display *display, Window window, GC gc, XftFont *font, int bpc,
-#if NeedWidePrototypes
-                int x, int y,
-#else
                 Position x, Position y,
-#endif
                 char *s, int len);
 
 void _XmXftSetClipRectangles(Display *display, Window window, Position x, Position y, XRectangle *rects, int n);
@@ -276,7 +241,6 @@ void _XmXftSetClipRectangles(Display *display, Window window, Position x, Positi
 XftColor _XmXftGetXftColor(Display *display, Pixel color);
 
 void _XmXftFontAverageWidth(Widget w, XtPointer f, int *width);
-
 #endif
 
 /********    End Private Function Declarations    ********/

@@ -45,11 +45,7 @@ extern void _XmCBHelp(
 extern void _XmCascadingPopup(
                         Widget cb,
                         XEvent *event,
-#if NeedWidePrototypes
-                        int doCascade) ;
-#else
                         Boolean doCascade) ;
-#endif /* NeedWidePrototypes */
 
 /********    End Private Function Declarations    ********/
 
@@ -59,4 +55,3 @@ extern void _XmCascadingPopup(
 #endif
 
 #endif /* _XmCascadeBI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

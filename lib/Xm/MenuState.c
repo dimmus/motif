@@ -70,11 +70,7 @@ _XmGetInDragMode (
 void
 _XmSetInDragMode(
         Widget widget,
-#if NeedWidePrototypes
-        int mode )
-#else
         Boolean mode )
-#endif
 {
   (_XmGetMenuState(widget))->MU_InDragMode = mode;
 }
@@ -129,7 +125,6 @@ _XmGetMenuState(
    return menu_state;
 }
 
-/*ARGSUSED*/
 static void
 ScreenDestroyCallback
 	( Widget w,

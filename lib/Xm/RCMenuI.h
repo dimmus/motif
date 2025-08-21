@@ -64,11 +64,7 @@ extern void _XmMenuFocus(
 			 Time _time );
 extern void _XmSetSwallowEventHandler(
 				      Widget widget,
-#if NeedWidePrototypes
-				      int add_handler );
-#else
                                       Boolean add_handler );
-#endif /* NeedWidePrototypes */
 extern void _XmMenuPopDown(
 			   Widget w,
 			   XEvent *event,
@@ -77,11 +73,7 @@ extern Boolean _XmGetPopupMenuClick(
 				    Widget wid );
 extern void _XmSetPopupMenuClick(
 				 Widget wid,
-#if NeedWidePrototypes
-				 int popupMenuClick);
-#else
                                  Boolean popupMenuClick);
-#endif /* NeedWidePrototypes */
 extern void _XmRC_DoProcessMenuTree(
                         Widget w,
                         int mode) ;
@@ -180,4 +172,3 @@ void _XmRC_RemoveFromPostFromList(
 #endif
 
 #endif /* _XmRCMenuI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

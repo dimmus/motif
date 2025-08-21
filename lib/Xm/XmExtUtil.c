@@ -25,7 +25,6 @@
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-#include <stdio.h>
 #include <stdarg.h>
 #include <X11/IntrinsicP.h>
 
@@ -207,7 +206,6 @@ _XmGadgetWarning(Widget w)
  *	Returns:       none.
  */
 
-/* ARGSUSED */
 void
 _XmGetFocus(Widget w, XEvent * event, String * params, Cardinal * num_params)
 {
@@ -322,7 +320,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
     XmStringDirection   	direction; /* dummy			*/
     XmStringComponentType	u_tag;	   /* is newline		*/
     int				length;    /* length of string		*/
-    unsigned short		u_length;  /* bogus length		*/
+    unsigned int		u_length;  /* bogus length		*/
     unsigned char		*u_value;  /* bogus value		*/
     XmStringComponentType 	type;	   /* type			*/
     Boolean			done, separator; /* done with it	*/
@@ -337,7 +335,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
      * First path to get length.
      */
     length = 0;
-    if ( XmStringPeekNextComponent(context) == XmSTRING_COMPONENT_UNKNOWN ) {
+    if (XmStringPeekNextTriple(context) == XmSTRING_COMPONENT_UNKNOWN) {
       XmStringFree(xmstr);
       XmStringFreeContext(context);
       return(NULL);
@@ -346,12 +344,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
     done = False;
     while( !done )
     {
-	newText = NULL;		/* By source code inspection I have */
-	charset = NULL;		/* Determined that this will make sure */
-	u_value = NULL;		/* that no memory is leaked (I hope). */
-
-	type = XmStringGetNextComponent( context, &newText, &charset,
-		&direction, &u_tag, &u_length, &u_value );
+	type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText);
 
         switch( type )
 	{
@@ -364,7 +357,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
 	    break;
 	case XmSTRING_COMPONENT_USER_BEGIN:
 	case XmSTRING_COMPONENT_USER_END:
-	case XmSTRING_COMPONENT_CHARSET:
+	case XmSTRING_COMPONENT_TAG:
 	case XmSTRING_COMPONENT_DIRECTION:
 	    break;
 	case XmSTRING_COMPONENT_END:
@@ -372,40 +365,22 @@ _XmGetMBStringFromXmString(XmString xmstr)
 	    done = True;
 	}
 
-	XtFree((XtPointer) newText);
-	XtFree((XtPointer) charset);
-	XtFree((XtPointer) u_value);
+	XtFree((XtPointer)newText);
    }
 
-    /*
-     * If XmStringGetNextComponent() fails on the current xmstring,
-     * try by using XmStringGetNextSegment(). AIX 4.3.2 currently
-     * fails to obtain the compound string from
-     * XmStringGetNextComponent. (Change Reguest: CR03841)
-     */
+    if (!length && (type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText))) {
+	    text = XtMalloc(u_length + 2);
+	    text[0] = '\0';
+	    strncat(text, newText, u_length);
 
-    if(length == 0) {
-	while ( XmStringGetNextSegment(context, &newText, &charset,
-				       &direction, &separator) ) {
+	    if (type == XmSTRING_COMPONENT_SEPARATOR) {
+		    text[u_length] = '\n';
+		    text[u_length + 1] = '\0';
+	    }
 
-	length = strlen(newText);
-	if (separator == True) {
-	  length += 1;     ;
-	}
-
-	text = XtMalloc( length + 1 );
-	text[0] = '\0';
-	strcat(text, newText);
-
-	if (separator == True) {
-	  strcat(text, "\n");
-	}
-
-	XtFree(newText);
-	XmStringFreeContext(context);
-
-	return (text);
-      }
+	    XtFree(newText);
+	    XmStringFreeContext(context);
+	    return text;
     }
 
     /*
@@ -425,12 +400,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
     done = False;
     while( !done )
     {
-	newText = NULL;		/* By source code inspection I have */
-	charset = NULL;		/* Determined that this will make sure */
-	u_value = NULL;		/* that no memory is leaked (I hope). */
-
-	type = XmStringGetNextComponent( context, &newText, &charset,
-		&direction, &u_tag, &u_length, &u_value );
+	type = XmStringGetNextTriple(context, &u_length, (XtPointer *)&newText);
         switch( type )
 	{
     	case XmSTRING_COMPONENT_TEXT:
@@ -442,7 +412,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
 	    break;
 	case XmSTRING_COMPONENT_USER_BEGIN:
 	case XmSTRING_COMPONENT_USER_END:
-	case XmSTRING_COMPONENT_CHARSET:
+	case XmSTRING_COMPONENT_TAG:
 	case XmSTRING_COMPONENT_DIRECTION:
 	    break;
 	case XmSTRING_COMPONENT_END:
@@ -450,9 +420,7 @@ _XmGetMBStringFromXmString(XmString xmstr)
 	    done = True;
 	}
 
-	XtFree((XtPointer) newText);
-	XtFree((XtPointer) charset);
-	XtFree((XtPointer) u_value);
+	XtFree((XtPointer)newText);
    }
 
     XmStringFreeContext(context);
@@ -543,12 +511,8 @@ _XmConfigureWidget(Widget w, Position x, Position y,
  *            ( 1) -> first > second
  */
 int
-#ifndef _NO_PROTO
-XmCompareISOLatin1(char *first, char *second)
-#else
 XmCompareISOLatin1(first, second)
     char *first, *second;
-#endif
 {
     register unsigned char *ap, *bp;
 
@@ -779,12 +743,12 @@ IsSubclassOf(
 	WidgetClass p = wc;
 
     _XmProcessLock();
-	for(; (p) && (p != sc); p = p->core_class.superclass);
+    while (p && sc && p != sc)
+    	p = p->core_class.superclass;
     _XmProcessUnlock();
 
-	return (p == sc);
+	return p == sc;
 }
-
 
 #define XtIsConstraintClass(wc) IsSubclassOf(wc, constraintWidgetClass)
 /*

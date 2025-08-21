@@ -132,7 +132,7 @@ typedef struct _OutputDataRec {
     int tabheight;		/* Number of pixels for a tab. */
     Dimension linewidth;	/* Number of pixels per line (when vw). */
     Boolean suspend_voffset;	/* temporarily suspend horizontal scrolling */
-#ifdef USE_XFT
+#if USE_XFT
     Boolean use_xft;            /* True if font to be used is XftFont */
 #endif
 } OutputDataRec, *OutputData;
@@ -154,13 +154,8 @@ typedef void (*OutputCreateProc)(
 
 typedef XmTextPosition (*XYToPosProc)(
 			XmTextWidget,
-#if NeedWidePrototypes
-			int,
-			int) ;
-#else
 			Position,	/* These are relative to the */
 			Position) ;	/* innerwindow returned above. */
-#endif
 
 /*
  * Return the (x,y) coordinate corresponing to the given position.  If this

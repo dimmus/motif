@@ -30,15 +30,9 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 #include <config.h>
 #endif
 
-
-#include <Xm/XmosP.h>
-
-#include "XmI.h"
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
-
+#include <Xm/XmosP.h>
+#include "XmI.h"
 #include "RepTypeI.h"
 #include <Xm/FileSBP.h>
 #include <Xm/GadgetP.h>
@@ -75,7 +69,6 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 
 #define IsButton(w) \
 (((XtPointer) XmeTraitGet((XtPointer) XtClass((w)), XmQTactivatable) != NULL))
-
 
 #define IsAutoButton(fsb, w) (		\
       w == SB_OkButton(fsb) ||		\
@@ -661,7 +654,6 @@ ClassPartInitialize(
  *   which are of an allocated type are set to NULL after they are used, since
  *   the memory identified by them is not owned by the File Selection Box.
  ****************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,		/* unused */
@@ -1146,7 +1138,6 @@ FSBCreateDirTextLabel(
 }
 
 /****************************************************************/
-/*ARGSUSED*/
 static void
 FilterFix(
         XmGeoMatrix geoSpec,
@@ -1509,7 +1500,6 @@ FileSelectionBoxNoGeoRequest(
  * This routine saves the geometry pointers of the list labels so that they
  *   can be altered as appropriate by the ListFix routine.
  ****************/
-/*ARGSUSED*/
 static void
 ListLabelFix(
         XmGeoMatrix geoSpec,
@@ -2534,7 +2524,6 @@ ListCallback(
  *   of a widget, when a difference is found the
  *   appropriate action is taken.
  ****************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -2716,7 +2705,6 @@ SetValues(
     }
 
 /****************************************************************/
-/*ARGSUSED*/
 static void
 FSBGetDirSpec(
             Widget fs,
@@ -2741,13 +2729,12 @@ FSBGetDirSpec(
     return;
 }
 /****************************************************************/
-/*ARGSUSED*/
 static void
 FSBGetDirectory(
             Widget fs,
             int resource,	/* unused */
             XtArgVal *value)
-/****************           ARGSUSED
+/****************
  * This does get values hook magic to keep the
  * user happy.
  ****************/
@@ -2761,13 +2748,12 @@ FSBGetDirectory(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 static void
 FSBGetNoMatchString(
             Widget fs,
             int resource,	/* unused */
             XtArgVal *value)
-/****************           ARGSUSED
+/****************
  * This does get values hook magic to keep the
  * user happy.
  ****************/
@@ -2781,13 +2767,12 @@ FSBGetNoMatchString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 static void
 FSBGetPattern(
             Widget fs,
             int resource,	/* unused */
             XtArgVal *value)
-/****************           ARGSUSED
+/****************
  * This does get values hook magic to keep the
  * user happy.
  ****************/
@@ -2803,7 +2788,6 @@ FSBGetPattern(
 /****************************************************************
  * This does get values hook magic to keep the user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetFilterLabelString(
         Widget fs,
@@ -2823,7 +2807,6 @@ FSBGetFilterLabelString(
 /****************************************************************
  * This does get values hook magic to keep the user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetDirListLabelString(
         Widget fs,
@@ -2843,7 +2826,6 @@ FSBGetDirListLabelString(
 /****************************************************************
  * This does get values hook magic to keep the user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetDirListItems(
         Widget fs,
@@ -2863,7 +2845,6 @@ FSBGetDirListItems(
 /****************************************************************
  * This does get values hook magic to keep the user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetDirListItemCount(
         Widget fs,
@@ -2883,7 +2864,6 @@ FSBGetDirListItemCount(
 /****************************************************************
  * This does get values hook magic to keep the user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetListItems(
         Widget fs,
@@ -2908,7 +2888,6 @@ FSBGetListItems(
 /****************************************************************
  * This does get values hook magic to keep the user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetListItemCount(
         Widget fs,
@@ -2935,7 +2914,6 @@ FSBGetListItemCount(
  * This does get values hook magic to keep the
  * user happy.
  ****************/
-/*ARGSUSED*/
 static void
 FSBGetDirMask(
         Widget fs,
@@ -2999,7 +2977,6 @@ GetActiveText(
 
 
 /****************************************************************/
-/*ARGSUSED*/
 static void
 FileSelectionBoxUpOrDown(
         Widget wid,
@@ -3397,17 +3374,9 @@ FileSelectionPB(
  * This function returns the widget id of the
  *   specified SelectionBox child widget.
  ****************/
-Widget
-XmFileSelectionBoxGetChild(
-        Widget fs,
-#if NeedWidePrototypes
-        unsigned int which )
-#else
-        unsigned char which )
-#endif /* NeedWidePrototypes */
+Widget XmFileSelectionBoxGetChild(Widget fs, unsigned char which)
 {
-            Widget          child ;
-/****************/
+     Widget child ;
 
     _XmWidgetToAppContext(fs);
     _XmAppLock(app);
@@ -3431,12 +3400,11 @@ XmFileSelectionBoxGetChild(
             break ;
             }
         default:
-        {   child = XmSelectionBoxGetChild( fs, which) ;
+            child = _XmSelectionBoxGetChild(fs, which) ;
             break ;
-            }
         }
     _XmAppUnlock(app);
-    return( child) ;
+    return child;
     }
 
 /****************************************************************/

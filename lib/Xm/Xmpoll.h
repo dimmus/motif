@@ -28,11 +28,10 @@ from The Open Group.
 #ifndef _XPOLL_H_
 #define _XPOLL_H_
 
-#ifndef WIN32
-
-#ifndef USE_POLL
-
 #include <X11/Xos.h>
+
+#ifndef WIN32
+#ifndef USE_POLL
 #if !defined(DGUX)
 #if (defined(SVR4) || defined(CRAY) || defined(AIXV3)) && !defined(FD_SETSIZE)
 #include <sys/select.h>

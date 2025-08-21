@@ -74,7 +74,7 @@ ToolTipGetData (Widget w)
 
       ttp->label = XmCreateLabel (shell, "TipLabel", NULL, 0);
       XtManageChild (ttp->label);
-      XtAddCallback(top, XmNdestroyCallback, (XtCallbackProc) ToolTipLabelDestroyCallback, (XtPointer) NULL);
+      XtAddCallback(top, XmNdestroyCallback, (XtCallbackProc) ToolTipLabelDestroyCallback, NULL);
    }
    return ttp;
 }

@@ -491,8 +491,6 @@ externaldef(xmcomboboxwidgetclass) WidgetClass xmComboBoxWidgetClass =
  * Initialize()
  *	Called by the Intrinsics when a new ComboBox is created.
  */
-
-/*ARGSUSED*/
 static void
 Initialize(Widget    request,	/* unused */
 	   Widget    new_w,
@@ -678,8 +676,6 @@ InsertChild(Widget child)
  * SetValues()
  *	Called by Intrinsics when XtSetValues is called on the ComboBox.
  */
-
-/*ARGSUSED*/
 static Boolean
 SetValues(Widget    current,
 	  Widget    request,	/* unused */
@@ -923,8 +919,6 @@ SetValues(Widget    current,
  *	Called from ChangeManaged when some resources need to be
  * diminished in order to satisfy a resource request.
  */
-
-/*ARGSUSED*/
 static Boolean
 ReduceResources(Widget     widget,
 		Dimension *width,
@@ -1260,8 +1254,6 @@ GeometryManager(Widget		  mychild,
  * Redisplay()
  *	General redisplay function called on exposure events.
  */
-
-/*ARGSUSED*/
 static void
 Redisplay(Widget widget,
 	  XEvent *event,	/* unused */
@@ -1474,8 +1466,6 @@ ComboBoxParentProcess(Widget		  wid,
  * TextChangedCB()
  *	Callback function invoked when the edit box value is changed.
  */
-
-/*ARGSUSED*/
 static void
 TextChangedCB(Widget    widget,	/* unused */
 	      XtPointer client_data,
@@ -1491,8 +1481,6 @@ TextChangedCB(Widget    widget,	/* unused */
  * ListSelectionCB()
  *	Callback function called when an item is selected from the list.
  */
-
-/*ARGSUSED*/
 static void
 ListSelectionCB(Widget widget,	/* unused */
 		XtPointer client_data,
@@ -1549,8 +1537,6 @@ ListSelectionCB(Widget widget,	/* unused */
  * ShellPopupCB()
  *	Called when the grab shell is posted.  Fixup focus.
  */
-
-/*ARGSUSED*/
 static void
 ShellPopupCB(Widget    widget,	/* unused */
 	     XtPointer client_data,
@@ -1567,8 +1553,6 @@ ShellPopupCB(Widget    widget,	/* unused */
  * ShellPopdownCB()
  *	Called when the grab shell is unposted.
  */
-
-/*ARGSUSED*/
 static void
 ShellPopdownCB(Widget    widget,    /* unused */
 	       XtPointer client_data,
@@ -1611,8 +1595,6 @@ ShellPopdownCB(Widget    widget,    /* unused */
  * FocusMovedCB()
  *	Called from VendorShell every time focus moves.
  */
-
-/*ARGSUSED*/
 static void
 FocusMovedCB(Widget    widget,	/* unused */
 	     XtPointer client_data,
@@ -1682,8 +1664,6 @@ FocusMovedCB(Widget    widget,	/* unused */
  * is in an arrow, otherwise ignore the event.  If it is in an arrow,
  * then supply visual feedback and perform the appropriate action.
  */
-
-/*ARGSUSED*/
 static void
 CBArmAndDropDownList(Widget widget,
 		     XEvent *event,
@@ -1723,8 +1703,6 @@ CBArmAndDropDownList(Widget widget,
  * CBDisarm()
  *	Handle button up action and undo CBArmAndDropDownList.
  */
-
-/*ARGSUSED*/
 static void
 CBDisarm(Widget widget,
 	 XEvent *event,		/* unused */
@@ -1830,8 +1808,6 @@ CBDropDownList(Widget    widget,
  * CBFocusIn()
  *	Action routine to draw focus highlighting.
  */
-
-/*ARGSUSED*/
 static void
 CBFocusIn(Widget    widget,
 	  XEvent   *event,	/* unused */
@@ -1853,8 +1829,6 @@ CBFocusIn(Widget    widget,
  * CBFocusOut()
  *	Action routine to erase focus highlighting.
  */
-
-/*ARGSUSED*/
 static void
 CBFocusOut(Widget    widget,
 	   XEvent   *event,
@@ -1879,8 +1853,6 @@ CBFocusOut(Widget    widget,
  * CBTextFocusOut()
  *	Action routine to fake the text field cursor into blinking.
  */
-
-/*ARGSUSED*/
 static void
 CBTextFocusOut(Widget    widget,
 	       XEvent   *event,
@@ -2099,8 +2071,6 @@ PopdownList(Widget cb,
  * PopupEH()
  *	An XtEventHandler for the popup shell (the drop-down list).
  */
-
-/*ARGSUSED*/
 static void
 PopupEH(Widget    widget,	/* unused */
 	XtPointer client_data,
@@ -2153,8 +2123,6 @@ PopupEH(Widget    widget,	/* unused */
  * to transfer the grab to the scrollbar and SBBtnUpEH will cause
  * the grab to return to the grab shell.
  */
-
-/*ARGSUSED*/
 static void
 SBBtnDownEH(Widget    w,
 	    XtPointer client_data,
@@ -2168,7 +2136,6 @@ SBBtnDownEH(Widget    w,
 		None, shell->grab_shell.cursor, event->xbutton.time);
 }
 
-/*ARGSUSED*/
 static void
 SBBtnUpEH(Widget    w,		/* unused */
 	  XtPointer client_data,
@@ -2248,8 +2215,6 @@ CallSelectionCallbacks(Widget  widget,
  * this function has been called twice on same widget -> implying that
  * resource needs to be set NULL, otherwise leave it alone.
  */
-
-/*ARGSUSED*/
 static void
 CheckSetRenderTable(Widget wid,
 		    int offset,
@@ -2275,8 +2240,6 @@ CheckSetRenderTable(Widget wid,
  * called and children have been created.  Make sure children have
  * been created before doing anything.
  */
-
-/*ARGSUSED*/
 static XmImportOperator
 CBSetSelectedItem(Widget    widget,
 		  int       offset, /* unused */
@@ -2312,8 +2275,6 @@ CBSetSelectedItem(Widget    widget,
  * CBGetSelectedItem()
  *	A synthetic resource export procedure.
  */
-
-/*ARGSUSED*/
 static void
 CBGetSelectedItem(Widget    widget,
 		  int       offset, /* unused */
@@ -2326,8 +2287,6 @@ CBGetSelectedItem(Widget    widget,
  * CBSetSelectedPos()
  *	A synthetic resource import procedure.
  */
-
-/*ARGSUSED*/
 static XmImportOperator
 CBSetSelectedPos(Widget    widget,
 		 int       offset, /* unused */
@@ -2370,8 +2329,6 @@ CBSetSelectedPos(Widget    widget,
  * CBGetSelectedPos()
  *	A synthetic resource export procedure.
  */
-
-/*ARGSUSED*/
 static void
 CBGetSelectedPos(Widget    widget,
 		 int       offset, /* unused */
@@ -2402,8 +2359,6 @@ CBGetSelectedPos(Widget    widget,
  * CBGetColumns()
  *	A synthetic resource export procedure.
  */
-
-/*ARGSUSED*/
 static void
 CBGetColumns(Widget    widget,
 	     int       offset,	/* unused */
@@ -2430,8 +2385,6 @@ CBGetColumns(Widget    widget,
  * CBGetItems()
  *	A synthetic resource export procedure.
  */
-
-/*ARGSUSED*/
 static void
 CBGetItems(Widget    widget,
 	   int       offset,	/* unused */
@@ -2458,8 +2411,6 @@ CBGetItems(Widget    widget,
  * CBGetItemCount()
  *	A synthetic resource export procedure.
  */
-
-/*ARGSUSED*/
 static void
 CBGetItemCount(Widget    widget,
 	       int       offset, /* unused */
@@ -2486,8 +2437,6 @@ CBGetItemCount(Widget    widget,
  * CBGetVisibleItemCount()
  *	A synthetic resource export procedure.
  */
-
-/*ARGSUSED*/
 static void
 CBGetVisibleItemCount(Widget    widget,
 		      int       offset, /* unused */
@@ -3138,8 +3087,6 @@ CreateEditBox(Widget    parent,
  *	Creates the pulldown shell for the list if the ComboBox is
  * a XmDROP_DOWN_COMBO_BOX or a XmDROP_DOWN_LIST.
  */
-
-/*ARGSUSED*/
 static Widget
 CreatePulldown(Widget    parent,
 	       String    name,

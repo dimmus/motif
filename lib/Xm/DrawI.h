@@ -41,19 +41,11 @@ extern void _XmDrawHighlight(
                         Display *display,
                         Drawable d,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int highlight_thick,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension highlight_thick,
-#endif /* NeedWidePrototypes */
                         int line_style) ;
 
 /********    End Private Function Declarations    ********/
@@ -64,4 +56,3 @@ extern void _XmDrawHighlight(
 #endif
 
 #endif /* _XmDrawI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

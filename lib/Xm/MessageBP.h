@@ -88,7 +88,7 @@ typedef struct
     Widget                  help_button;
 
     Widget                  separator;
-
+    Dimension               baseline;
 } XmMessageBoxPart;
 
 

@@ -50,16 +50,13 @@ typedef struct _XmFileSelectionBoxRec      * XmFileSelectionBoxWidget;
 #define XmIsFileSelectionBox(w) (XtIsSubclass((w),xmFileSelectionBoxWidgetClass))
 #endif
 
-
 /********    Public Function Declarations    ********/
 
+XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmFileSelectionBoxGetChild(
                         Widget fs,
-#if NeedWidePrototypes
-                        unsigned int which) ;
-#else
-                        unsigned char which) ;
-#endif /* NeedWidePrototypes */
+                        unsigned char which);
+
 extern void XmFileSelectionDoSearch(
                         Widget fs,
                         XmString dirmask) ;
@@ -90,4 +87,3 @@ extern Widget XmVaCreateManagedFileSelectionBox(
 #endif
 
 #endif /* _XmFSelect_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

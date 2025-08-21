@@ -43,11 +43,7 @@ extern Boolean _XmGetInDragMode(
                         Widget widget) ;
 extern void _XmSetInDragMode(
                         Widget widget,
-#if NeedWidePrototypes
-                        int mode) ;
-#else
                         Boolean mode) ;
-#endif /* NeedWidePrototypes */
 
 extern XmMenuState _XmGetMenuState(
                         Widget widget) ;
@@ -59,4 +55,3 @@ extern XmMenuState _XmGetMenuState(
 #endif
 
 #endif /* _XmMenuStateI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

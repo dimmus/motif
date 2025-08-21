@@ -110,19 +110,11 @@ extern void XmListReplacePositions(
 extern void XmListSelectItem(
                         Widget w,
                         XmString item,
-#if NeedWidePrototypes
-                        int notify) ;
-#else
                         Boolean notify) ;
-#endif /* NeedWidePrototypes */
 extern void XmListSelectPos(
                         Widget w,
                         int pos,
-#if NeedWidePrototypes
-                        int notify) ;
-#else
                         Boolean notify) ;
-#endif /* NeedWidePrototypes */
 extern void XmListDeselectItem(
                         Widget w,
                         XmString item) ;
@@ -145,11 +137,7 @@ extern void XmListSetBottomItem(
                         XmString item) ;
 extern void XmListSetAddMode(
                         Widget w,
-#if NeedWidePrototypes
-                        int add_mode) ;
-#else
                         Boolean add_mode) ;
-#endif /* NeedWidePrototypes */
 extern Boolean XmListItemExists(
                         Widget w,
                         XmString item) ;
@@ -163,7 +151,7 @@ extern Boolean XmListSetKbdItemPos(
                         int    pos ) ;
 extern int XmListYToPos(
                         Widget w,
-                        Position y) ; /* NeedWidePrototypes ????? */
+                        Position y) ;
 extern Boolean XmListPosToBounds(
                         Widget w,
                         int         position,
@@ -174,10 +162,6 @@ extern Boolean XmListPosToBounds(
 extern Boolean XmListGetMatchPos(
                         Widget w,
                         XmString item,
-                        int **pos_list,
-                        int *pos_count) ;
-extern Boolean XmListGetSelectedPos(
-                        Widget w,
                         int **pos_list,
                         int *pos_count) ;
 extern void XmListSetHorizPos(
@@ -206,6 +190,13 @@ extern Widget XmVaCreateManagedList(
                         Widget parent,
                         char *name,
                         ...);
+
+XM_ALTERNATIVE(Use XtGetValues for XmNselectedPositions and XmNselectedPositionCount instead)
+extern Boolean XmListGetSelectedPos(
+                        Widget w,
+                        int **pos_list,
+                        int *pos_count);
+
 /********    End Public Function Declarations    ********/
 
 
@@ -214,4 +205,3 @@ extern Widget XmVaCreateManagedList(
 #endif
 
 #endif /* _XmList_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

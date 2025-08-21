@@ -24,17 +24,13 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: TraversalI.c /main/13 1997/10/13 11:28:33 cshi $"
 #endif
 #endif
 
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
-
 #include <Xm/BaseClassP.h>
 #include <Xm/ClipWindowP.h>
 #include <Xm/GadgetP.h>
@@ -52,10 +48,8 @@ static char rcsid[] = "$TOG: TraversalI.c /main/13 1997/10/13 11:28:33 cshi $"
 #define XmTAB_LIST_ALLOC_INCREMENT	  8
 #define STACK_SORT_LIMIT		128
 
-
 /* Type of sort comparison function. */
 typedef int (*Comparator)(XmConst void *, XmConst void *);
-
 
 /********    Static Function Declarations    ********/
 
@@ -606,11 +600,7 @@ InitializeCurrent(XmTravGraph list,
 Widget
 _XmTraverseAway(XmTravGraph list,
 		Widget wid,
-#if NeedWidePrototypes
-		int wid_is_control)
-#else
 		Boolean wid_is_control)
-#endif /* NeedWidePrototypes */
 {
   /* This routine traverses away from the reference widget.  The routine
    * tries to return the widget that would be the next one traversed due
@@ -1057,7 +1047,6 @@ _XmTravGraphAdd(XmTravGraph tgraph,
     _XmFreeTravGraph(tgraph);
 }
 
-/*ARGSUSED*/
 void
 _XmTravGraphUpdate(XmTravGraph tgraph,
 		   Widget wid)	/* unused */
@@ -1638,8 +1627,7 @@ Sort(XmTraversalNode *list,
 
 	  /* Else if this node is dominant backtrack and try again. */
 	  else if ((row_len > 1) && might_overlap &&
-		   NodeDominates(node, rows[row].items[row_len-1],
-				 horizontal, layout))
+		   NodeDominates(node, rows[row].items[row_len-1], horizontal, layout))
 	    row_len--;
 
 	  /* Try the next row. */

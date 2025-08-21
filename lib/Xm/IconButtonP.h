@@ -118,8 +118,6 @@ typedef struct {
     Boolean label_from_name;
     Boolean check_set_render_table;
 	GC shadow_gc;			/* GC to use shadow for text. */
-
-
 } XmIconButtonPart;
 
 #define XmIconButton_label(w) (((XmIconButtonWidget)(w))->icon.label)
@@ -159,6 +157,7 @@ typedef struct {
 #define XmIconButton_time(w) (((XmIconButtonWidget)(w))->icon.time)
 #define XmIconButton_label_from_name(w) (((XmIconButtonWidget)(w))->icon.label_from_name)
 #define XmIconButton_shadow_gc(w) (((XmIconButtonWidget)(w))->icon.shadow_gc)
+
 typedef struct _XmIconButtonRec {
     CorePart		core;
     XmPrimitivePart	primitive;

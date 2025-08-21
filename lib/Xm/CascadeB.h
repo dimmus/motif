@@ -49,11 +49,7 @@ extern Widget XmCreateCascadeButton(
                         Cardinal ac) ;
 extern void XmCascadeButtonHighlight(
                         Widget cb,
-#if NeedWidePrototypes
-                        int highlight) ;
-#else
                         Boolean highlight) ;
-#endif /* NeedWidePrototypes */
 
 /*
  * Variable argument list functions
@@ -73,6 +69,4 @@ extern Widget XmVaCreateManagedCascadeButton(
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmCascadeB_h */
-/* DON'T ADD STUFF AFTER THIS #endif */

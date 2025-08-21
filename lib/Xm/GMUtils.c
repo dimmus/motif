@@ -53,13 +53,8 @@ static char rcsid[] = "$XConsortium: GMUtils.c /main/11 1995/09/19 23:03:32 cde-
  ****************/
 void
 _XmGMCalcSize(XmManagerWidget manager,
-#if NeedWidePrototypes
-            int margin_width,
-            int margin_height,
-#else
             Dimension margin_width,
             Dimension margin_height,
-#endif /* NeedWidePrototypes */
             Dimension *replyWidth,
             Dimension *replyHeight )
 {
@@ -94,19 +89,10 @@ _XmGMCalcSize(XmManagerWidget manager,
  ****************/
 Boolean
 _XmGMDoLayout(XmManagerWidget manager,
-#if NeedWidePrototypes
-            int margin_width,
-            int margin_height,
-#else
             Dimension margin_width,
             Dimension margin_height,
-#endif /* NeedWidePrototypes */
             int resize_policy,
-#if NeedWidePrototypes
-            int queryonly
-#else
             Boolean queryonly
-#endif /* NeedWidePrototypes */
 )
 {
     /* return:
@@ -209,15 +195,9 @@ _XmGMDoLayout(XmManagerWidget manager,
 /* Enforce margins for children if margins are non-zero */
 void
 _XmGMEnforceMargin(XmManagerWidget manager,
-#if NeedWidePrototypes
-                 int margin_width,
-                 int margin_height,
-                 int setvalue
-#else
                  Dimension margin_width,
                  Dimension margin_height,
                  Boolean setvalue
-#endif /* NeedWidePrototypes */
 )
 {
     int i ;
@@ -264,13 +244,8 @@ XtGeometryResult
 _XmGMHandleQueryGeometry(Widget widget,
                        XtWidgetGeometry * intended,
                        XtWidgetGeometry * desired,
-#if NeedWidePrototypes
-                       int margin_width,
-                       int margin_height,
-#else
                        Dimension margin_width,
                        Dimension margin_height,
-#endif /* NeedWidePrototypes */
                        int resize_policy)
 {
     Dimension width, height ;
@@ -395,13 +370,8 @@ XtGeometryResult
 _XmGMHandleGeometryManager(Widget parent, Widget w,
                          XtWidgetGeometry * request,
                          XtWidgetGeometry * reply,
-#if NeedWidePrototypes
-                         int margin_width,
-                         int margin_height,
-#else
                          Dimension margin_width,
                          Dimension margin_height,
-#endif /* NeedWidePrototypes */
                          int resize_policy,
                          int allow_overlap)
 {

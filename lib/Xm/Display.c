@@ -95,11 +95,7 @@ static void DisplayDestroy(
 static XmDragContext FindDC(
                         XmDisplay xmDisplay,
                         Time time,
-#if NeedWidePrototypes
-                        int sourceIsExternal) ;
-#else
                         Boolean sourceIsExternal) ;
-#endif /* NeedWidePrototypes */
 static int isMine(
                         Display *dpy,
                         register XEvent *event,
@@ -388,7 +384,6 @@ DisplayClassInitialize( void )
 		XmMakeCanonicalString("_MOTIF_DRAG_AND_DROP_MESSAGE");
 }
 
-/*ARGSUSED*/
 static void
 SetDragReceiverInfo(
         Widget w,
@@ -410,7 +405,6 @@ SetDragReceiverInfo(
  * this routine is registered on the XmNtreeUpdateProc resource of the
  * dropSiteManager.  It is called whenever the tree is changed.
  */
-/*ARGSUSED*/
 static void
 TreeUpdateHandler(
         Widget w,
@@ -468,7 +462,6 @@ TreeUpdateHandler(
  *  DisplayInitialize
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 DisplayInitialize(
         Widget requested_widget,
@@ -643,7 +636,6 @@ DisplayDeleteChild(
  *  DisplayDestroy
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 DisplayDestroy(
         Widget w )
@@ -675,7 +667,6 @@ DisplayDestroy(
     XDeleteContext( XtDisplay( w), None, context) ;
 }
 
-/*ARGSUSED*/
 XmDropSiteManagerObject
 _XmGetDropSiteManagerObject(
         XmDisplay xmDisplay )
@@ -720,6 +711,9 @@ _XmGetDragProtocolStyle(
 	  case XmDRAG_PREFER_PREREGISTER:
 	  case XmDRAG_PREREGISTER:
 	    style = XmDRAG_PREREGISTER;
+	    break;
+	  case XmDRAG_XDND:
+	    style = XmDRAG_XDND;
 	    break;
 	  default:
 	    style = XmDRAG_NONE;
@@ -784,11 +778,7 @@ static XmDragContext
 FindDC(
         XmDisplay xmDisplay,
         Time time,
-#if NeedWidePrototypes
-        int sourceIsExternal )
-#else
         Boolean sourceIsExternal )
-#endif /* NeedWidePrototypes */
 {
 	XmDragContext	dc = NULL;
 	Cardinal			i;
@@ -805,7 +795,6 @@ FindDC(
 	return(NULL);
 }
 
-/*ARGSUSED*/
 static int
 isMine(
         Display *dpy,
@@ -889,7 +878,6 @@ isMine(
  * this handler is used to catch messages from external drag
  * contexts that want to map motion or drop events
  */
-/*ARGSUSED*/
 static void
 ReceiverShellExternalSourceHandler(
         Widget w,
@@ -907,6 +895,8 @@ ReceiverShellExternalSourceHandler(
     XmDisplay			dd = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
     XmDragContext			dc;
     XmDropSiteManagerObject		dsm = _XmGetDropSiteManagerObject( dd);
+    XmDropStartCallback     dsCallback = &dropStartCB;
+    XmTopLevelEnterCallback teCallback = &enterCB;
 
     /*
      * If dd has an active dc then we are the initiator.  We shouldn't
@@ -978,25 +968,22 @@ ReceiverShellExternalSourceHandler(
 	 */
 	if (q.hasEnter || q.hasDropStart) {
 	    if (!q.dc) {
-		Arg		args[4];
+		Arg		args[6];
 		Cardinal	i = 0;
 		Time		timeStamp;
 		Window		window;
 		Atom		iccHandle;
 
 		if (q.hasDropStart) {
-		    XmDropStartCallback	dsCallback = &dropStartCB;
-
 		    timeStamp = dsCallback->timeStamp;
 		    window = dsCallback->window;
 		    iccHandle = dsCallback->iccHandle;
-		}
-		else {
-		    XmTopLevelEnterCallback teCallback = &enterCB;
-
+		} else {
 		    timeStamp = teCallback->timeStamp;
 		    window = teCallback->window;
 		    iccHandle = teCallback->iccHandle;
+		    XtSetArg(args[i], XmNexportTargets, teCallback->targets); i++;
+		    XtSetArg(args[i], XmNnumExportTargets, teCallback->n_targets); i++;
 		}
 		XtSetArg(args[i], XmNsourceWindow, window);i++;
 		XtSetArg(args[i], XmNsourceIsExternal,True);i++;
@@ -1004,7 +991,7 @@ ReceiverShellExternalSourceHandler(
 		XtSetArg(args[i], XmNiccHandle, iccHandle);i++;
 		dc = (XmDragContext) XtCreateWidget("dragContext",
 			dd->display.dragContextClass, (Widget)dd, args, i);
-		_XmReadInitiatorInfo((Widget)dc);
+
 		/*
 		 * force in value for dropTransfer to use in selection
 		 * calls.
@@ -1014,7 +1001,11 @@ ReceiverShellExternalSourceHandler(
 		dc->drag.currReceiverInfo->shell = shell;
                 dc->drag.currReceiverInfo->dragProtocolStyle =
 			                  dd->display.dragReceiverProtocolStyle;
+		if (!q.hasDropStart && teCallback->dragProtocolStyle == XmDRAG_XDND)
+			dc->drag.currReceiverInfo->dragProtocolStyle = XmDRAG_XDND;
+		_XmReadInitiatorInfo((Widget)dc);
 	    }
+
 	    topClientData.destShell = shell;
 	    topClientData.xOrigin = XtX(shell);
 	    topClientData.yOrigin = XtY(shell);
@@ -1028,6 +1019,11 @@ ReceiverShellExternalSourceHandler(
 
 	if (q.hasDropStart) {
 	    dc->drag.dragFinishTime = dropStartCB.timeStamp;
+	    if (dropStartCB.x == -1 || dropStartCB.y == -1) {
+	        dropStartCB.x = dc->drag.currReceiverInfo->xLast;
+	        dropStartCB.y = dc->drag.currReceiverInfo->yLast;
+	    }
+
 	    _XmDSMUpdate(dsm,
 			 (XtPointer)&topClientData,
 			 (XtPointer)&dropStartCB);
@@ -1044,6 +1040,12 @@ ReceiverShellExternalSourceHandler(
 	    XmDragMotionCallback	callback = &motionCB;
 	    XmDragMotionClientDataStruct	motionData;
 
+	    /**
+	     * Xdnd doesn't give us position info for certain events, so we'll track
+	     * the last position we got in the drag context for later.
+	     */
+	    dc->drag.currReceiverInfo->xLast = callback->x;
+	    dc->drag.currReceiverInfo->yLast = callback->y;
 	    motionData.window = XtWindow(w);
 	    motionData.dragOver = NULL;
 	    _XmDSMUpdate(dsm, (XtPointer)&motionData, (XtPointer)callback);

@@ -40,31 +40,19 @@ extern XtGeometryResult _XmHandleQueryGeometry(
                         Widget wid,
                         XtWidgetGeometry *intended,
                         XtWidgetGeometry *desired,
-#if NeedWidePrototypes
-                        unsigned int policy,
-#else
                         unsigned char policy,
-#endif /* NeedWidePrototypes */
                         XmGeoCreateProc createMatrix) ;
 extern XtGeometryResult _XmHandleGeometryManager(
                         Widget wid,
                         Widget instigator,
                         XtWidgetGeometry *desired,
                         XtWidgetGeometry *allowed,
-#if NeedWidePrototypes
-                        unsigned int policy,
-#else
                         unsigned char policy,
-#endif /* NeedWidePrototypes */
                         XmGeoMatrix *cachePtr,
                         XmGeoCreateProc createMatrix) ;
 extern void _XmHandleSizeUpdate(
                         Widget wid,
-#if NeedWidePrototypes
-                        unsigned int policy,
-#else
                         unsigned char policy,
-#endif /* NeedWidePrototypes */
                         XmGeoCreateProc createMatrix) ;
 extern XmGeoMatrix _XmGeoMatrixAlloc(
                         unsigned int numRows,
@@ -86,29 +74,16 @@ extern void _XmGeoGetDimensions(
                         XmGeoMatrix geoSpec) ;
 extern void _XmGeoArrangeBoxes(
                         XmGeoMatrix geoSpec,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-#else
                         Position x,
                         Position y,
-#endif /* NeedWidePrototypes */
                         Dimension *pW,
                         Dimension *pH) ;
 extern Dimension _XmGeoBoxesSameWidth(
                         XmKidGeometry rowPtr,
-#if NeedWidePrototypes
-                        int width) ;
-#else
                         Dimension width) ;
-#endif /* NeedWidePrototypes */
 extern Dimension _XmGeoBoxesSameHeight(
                         XmKidGeometry rowPtr,
-#if NeedWidePrototypes
-                        int height) ;
-#else
                         Dimension height) ;
-#endif /* NeedWidePrototypes */
 extern void _XmSeparatorFix(
                         XmGeoMatrix geoSpec,
                         int action,
@@ -132,11 +107,7 @@ extern XmKidGeometry _XmGetKidGeo(
                         Widget instigator,
                         XtWidgetGeometry *request,
                         int uniform_border,
-#if NeedWidePrototypes
-                        int border,
-#else
                         Dimension border,
-#endif /* NeedWidePrototypes */
                         int uniform_width_margins,
                         int uniform_height_margins,
                         Widget help,
@@ -166,4 +137,3 @@ extern XtGeometryResult _XmMakeGeometryRequest(
 #endif
 
 #endif /* _XmGeoUtilsI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

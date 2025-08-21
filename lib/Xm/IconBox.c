@@ -261,7 +261,6 @@ ClassInitialize()
   /* do nothing */
 }
 
-/*ARGSUSED*/
 static void
 Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 {
@@ -318,7 +317,6 @@ Resize(Widget w)
  *	Returns:       none
  */
 
-/*ARGSUSED*/
 static Boolean
 SetValues(Widget current, Widget request, Widget set,
 	  ArgList args, Cardinal * num_args)
@@ -383,7 +381,6 @@ QueryGeometry(Widget w,XtWidgetGeometry *intended, XtWidgetGeometry *preferred)
  *	Returns:       status.
  */
 
-/*ARGSUSED*/
 static XtGeometryResult
 GeometryManager(Widget w, XtWidgetGeometry * request,
 		XtWidgetGeometry * result)
@@ -610,17 +607,10 @@ ChangeManaged(Widget w)
 /*
  * ClassPartInitialize sets up the fast subclassing for the widget.
  */
-static void
-#ifdef _NO_PROTO
-ClassPartInitialize(w_class)
-        WidgetClass w_class ;
-#else
-ClassPartInitialize(WidgetClass w_class)
-#endif /* _NO_PROTO */
+static void ClassPartInitialize(WidgetClass w_class)
 {
     _XmFastSubclassInit (w_class, XmICONBOX_BIT);
 }
-
 
 /*	Function Name: ConstraintInitialize
  *	Description:   Called when a childs constriaints need initializing.
@@ -630,7 +620,6 @@ ClassPartInitialize(WidgetClass w_class)
  *	Returns:       none.
  */
 
-/*ARGSUSED*/
 static void
 ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 {
@@ -650,7 +639,6 @@ ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
  *	Returns:       none
  */
 
-/*ARGSUSED*/
 static Boolean
 ConstraintSetValues(Widget current, Widget request, Widget set,
 		    ArgList args, Cardinal * num_args)

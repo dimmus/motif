@@ -24,7 +24,6 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: ToggleBG.c /main/46 1999/12/06 18:10:15 samborn $"
@@ -1401,7 +1400,7 @@ Enter(
           _XmGetInDragMode((Widget)w))
 	{
 	  XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay((Widget) w));
-	  Boolean etched_in = dpy->display.enable_etched_in_menu;
+	  etched_in = dpy->display.enable_etched_in_menu;
 
 	  if (TBG_Armed(w))
 	    return;
@@ -3893,13 +3892,8 @@ XmToggleButtonGadgetGetState(
 void
 XmToggleButtonGadgetSetState(
         Widget w,
-#if NeedWidePrototypes
-        int bnewstate,
-        int notify )
-#else
         Boolean bnewstate,
         Boolean notify )
-#endif /* NeedWidePrototypes */
 {
   XmToggleButtonGadget tg = (XmToggleButtonGadget) w;
   XmMenuSystemTrait menuSTrait;
@@ -3970,13 +3964,8 @@ XmToggleButtonGadgetSetState(
 Boolean
 XmToggleButtonGadgetSetValue(
         Widget w,
-#if NeedWidePrototypes
-        int newstate,
-        int notify )
-#else
         XmToggleButtonState newstate,
         Boolean notify )
-#endif /* NeedWidePrototypes */
 {
   XmToggleButtonGadget tg = (XmToggleButtonGadget) w;
   XmMenuSystemTrait menuSTrait;

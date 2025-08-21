@@ -58,11 +58,7 @@ extern XmRCKidGeometry _XmRCGetKidGeo(
                         Widget instigator,
                         XtWidgetGeometry *request,
                         int uniform_border,
-#if NeedWidePrototypes
-                        int border,
-#else
                         Dimension border,
-#endif /* NeedWidePrototypes */
                         int uniform_width_margins,
                         int uniform_height_margins,
                         Widget help,
@@ -74,11 +70,7 @@ extern void _XmRCSetKidGeo(
 
 extern void _XmRC_SetOrGetTextMargins(
                         Widget wid,
-#if NeedWidePrototypes
-                        unsigned int op,
-#else
                         unsigned char op,
-#endif /* NeedWidePrototypes */
                         XmBaselineMargins *textMargins) ;
 
 /********    End Private Function Declarations    ********/
@@ -89,4 +81,3 @@ extern void _XmRC_SetOrGetTextMargins(
 #endif
 
 #endif /* _XmRCLayoutI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

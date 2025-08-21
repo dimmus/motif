@@ -43,7 +43,6 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char *rcsid = "$TOG: RCMenu.c /main/25 1999/05/24 18:06:57 samborn $";
@@ -116,11 +115,7 @@ static Boolean SearchMenu(
                         XmRowColumnWidget *parent_m,
                         RectObj child,
                         Widget *w,
-#if NeedWidePrototypes
-                        int setHistory) ;
-#else
                         Boolean setHistory) ;
-#endif /* NeedWidePrototypes */
 static void PrepareToCascade(
                         XmRowColumnWidget submenu,
                         Widget cb,
@@ -157,25 +152,15 @@ static void ProcessMenuTree(
 static void AddToKeyboardList(
                         Widget w,
                         char *kbdEventStr,
-#if NeedWidePrototypes
-                        int needGrab,
-                        int isMnemonic) ;
-#else
                         Boolean needGrab,
                         Boolean isMnemonic) ;
-#endif /* NeedWidePrototypes */
 static void _AddToKeyboardList(
                         Widget w,
                         unsigned int eventType,
                         KeySym keysym,
                         unsigned int modifiers,
-#if NeedWidePrototypes
-                        int needGrab,
-                        int isMnemonic) ;
-#else
                         Boolean needGrab,
                         Boolean isMnemonic) ;
-#endif /* NeedWidePrototypes */
 static void AddKeycodeToKeyboardList(
                         Widget w,
                         unsigned int eventType,
@@ -188,40 +173,23 @@ static void RemoveFromKeyboardList(
                         Widget w) ;
 static void GrabKeyOnAssocWidgets(
                         XmRowColumnWidget rowcol,
-#if NeedWidePrototypes
-                        int detail,
-#else
                         KeyCode detail,
-#endif /* NeedWidePrototypes */
                         unsigned int modifiers) ;
 static void UngrabKeyOnAssocWidgets(
                         XmRowColumnWidget rowcol,
-#if NeedWidePrototypes
-                        int detail,
-#else
                         KeyCode detail,
-#endif /* NeedWidePrototypes */
                         unsigned int modifiers) ;
 static Boolean InSharedMenupaneHierarchy(
                         XmRowColumnWidget m) ;
 static void SetCascadeField(
                         XmRowColumnWidget m,
                         Widget cascadeBtn,
-#if NeedWidePrototypes
-                        int attach) ;
-#else
                         Boolean attach) ;
-#endif /* NeedWidePrototypes */
 static void BtnDownInRowColumn(
                         Widget rc,
                         XEvent *event,
-#if NeedWidePrototypes
-                        int x_root,
-                        int y_root) ;
-#else
                         Position x_root,
                         Position y_root) ;
-#endif /* NeedWidePrototypes */
 static void CheckUnpostAndReplay(
                         Widget rc,
                         XEvent *event) ;
@@ -231,11 +199,7 @@ static Boolean VerifyMenuButton(
 static Boolean UpdateMenuHistory(
                         XmRowColumnWidget menu,
                         Widget child,
-#if NeedWidePrototypes
-                        int updateOnMemWidgetMatch) ;
-#else
                         Boolean updateOnMemWidgetMatch) ;
-#endif /* NeedWidePrototypes */
 static void RadioBehaviorAndMenuHistory(
                         XmRowColumnWidget m,
                         Widget w) ;
@@ -526,7 +490,6 @@ PrepareToCascade(
    GetLastSelectToplevel(submenu);
 }
 
-/* ARGSUSED */
 static void
 LocatePulldown(
         XmRowColumnWidget root,
@@ -644,11 +607,7 @@ LocatePulldown(
 void
 _XmSetPopupMenuClick(
         Widget wid,
-#if NeedWidePrototypes
-	int popupMenuClick)
-#else
 	Boolean popupMenuClick)
-#endif /* NeedWidePrototypes */
 {
    if (wid && XmIsRowColumn(wid))
       RC_popupMenuClick(wid) = popupMenuClick;
@@ -790,7 +749,6 @@ _XmMenuPopDown(
  * allows traversal to work in menubar while its submenus have the "real"
  * focus.
  */
-/*ARGSUSED*/
 static void
 SwallowEventHandler(
 	Widget widget,		/* unused */
@@ -817,11 +775,7 @@ SwallowEventHandler(
 void
 _XmSetSwallowEventHandler(
 	Widget widget,
-#if NeedWidePrototypes
-        int add_handler )
-#else
 	Boolean add_handler )
-#endif
 {
    EventMask           eventMask;
 
@@ -834,12 +788,9 @@ _XmSetSwallowEventHandler(
          SwallowEventHandler, NULL);
 }
 
-
 /*
  * Action routines specific to traversal.
  */
-
-/* ARGSUSED */
 void
 _XmMenuUnmap(
         Widget wid,
@@ -857,7 +808,6 @@ _XmMenuUnmap(
       _XmPrimitiveUnmap( (Widget) cb, event, NULL, NULL);
 }
 
-/* ARGSUSED */
 void
 _XmMenuFocusOut(
         Widget cb,
@@ -883,7 +833,6 @@ _XmMenuFocusOut(
  * operation is happening.  Since we are part of the transient operation,
  * and we still want focus to work, we need to use the internal function.
  */
-/* ARGSUSED */
 void
 _XmMenuFocusIn(
         Widget wid,
@@ -908,7 +857,6 @@ MenuBarCleanup(
     _XmMenuSetInPMMode ((Widget)rc, False);
 }
 
-/*ARGSUSED*/
 static int
 SIF_ErrorHandler(Display *display, /* unused */
 		 XErrorEvent* event)
@@ -931,7 +879,6 @@ SetInputFocus(Display *display, Window focus, int revert_to, Time time)
   XSetErrorHandler(old_Handler);
 }
 
-/* ARGSUSED */
 void
 _XmMenuFocus(
         Widget w,
@@ -1575,13 +1522,8 @@ static void
 AddToKeyboardList(
         Widget w,
         char *kbdEventStr,
-#if NeedWidePrototypes
-        int needGrab,
-        int isMnemonic )
-#else
         Boolean needGrab,
         Boolean isMnemonic )
-#endif /* NeedWidePrototypes */
 {
   int          *eventTypes;
   KeySym       *keysyms;
@@ -1630,13 +1572,8 @@ _AddToKeyboardList(
         unsigned int eventType,
         KeySym keysym,
         unsigned int modifiers,
-#if NeedWidePrototypes
-        int needGrab,
-        int isMnemonic )
-#else
         Boolean needGrab,
         Boolean isMnemonic )
-#endif /* NeedWidePrototypes */
 {
    KeyCode keycode = 1;  /* Keycodes lie in the range 8 - 255 */
    int i;
@@ -1947,11 +1884,7 @@ UngrabKeyWithLockMask (
 static void
 GrabKeyOnAssocWidgets(
         XmRowColumnWidget rowcol,
-#if NeedWidePrototypes
-        int detail,
-#else
         KeyCode detail,
-#endif /* NeedWidePrototypes */
         unsigned int modifiers )
 {
    Widget topManager;
@@ -1982,11 +1915,7 @@ GrabKeyOnAssocWidgets(
 static void
 UngrabKeyOnAssocWidgets(
         XmRowColumnWidget rowcol,
-#if NeedWidePrototypes
-        int detail,
-#else
         KeyCode detail,
-#endif /* NeedWidePrototypes */
         unsigned int modifiers )
 {
    Widget assocWidget;
@@ -2043,7 +1972,6 @@ _XmRC_AddToPostFromList(
 		    (XtPointer)m);
 }
 
-/*ARGSUSED*/
 void
 _XmRC_RemoveFromPostFromListOnDestroyCB (
 	Widget w,
@@ -2145,11 +2073,7 @@ static void
 SetCascadeField(
         XmRowColumnWidget m,
         Widget cascadeBtn,
-#if NeedWidePrototypes
-        int attach )
-#else
         Boolean attach )
-#endif /* NeedWidePrototypes */
 {
    int mode;
 
@@ -2279,13 +2203,8 @@ static void
 BtnDownInRowColumn(
         Widget rc,
         XEvent *event,
-#if NeedWidePrototypes
-	int x_root,
-        int y_root)
-#else
 	Position x_root,
 	Position y_root	   )
-#endif /* NeedWidePrototypes */
 {
    XmGadget gadget;
 
@@ -2424,7 +2343,6 @@ _XmHandleMenuButtonPress(
 /*
  * Button Action Procs
  */
-/*ARGSUSED*/
 void
 _XmMenuBtnDown(
         Widget wid,
@@ -2506,7 +2424,6 @@ _XmMenuBtnDown(
 }
 
 
-/*ARGSUSED*/
 void
 _XmMenuBtnUp(
         Widget wid,
@@ -2730,7 +2647,6 @@ ShouldDispatchFocusOut(
    return (True);
 }
 
-/* ARGSUSED */
 void
 _XmMenuBarGadgetSelect(
         Widget wid,
@@ -2752,7 +2668,6 @@ _XmMenuBarGadgetSelect(
    }
 }
 
-/* ARGSUSED */
 void
 _XmMenuGadgetTraverseCurrent(
         Widget wid,
@@ -2782,7 +2697,6 @@ _XmMenuGadgetTraverseCurrent(
     }
 }
 
-/* ARGSUSED */
 void
 _XmMenuGadgetTraverseCurrentUp(
         Widget wid,
@@ -2993,11 +2907,7 @@ SearchMenu(
         XmRowColumnWidget *parent_m,
         RectObj child,
         Widget *w,
-#if NeedWidePrototypes
-	int setHistory )
-#else
 	Boolean setHistory )
-#endif /* NeedWidePrototypes */
 {
     register Widget *q;
     register int i;
@@ -3172,11 +3082,7 @@ static Boolean
 UpdateMenuHistory(
         XmRowColumnWidget menu,
         Widget child,
-#if NeedWidePrototypes
-	int updateOnMemWidgetMatch)
-#else
 	Boolean updateOnMemWidgetMatch)
-#endif /* NeedWidePrototypes */
 {
    int i;
    Widget cb;
@@ -3657,7 +3563,6 @@ TearOffArm(
    }
 }
 
-/*ARGSUSED*/
 static void
 InvalidateOldFocus(
 	Widget oldWidget,	/* unused */
@@ -3666,7 +3571,6 @@ InvalidateOldFocus(
 {
   *poldFocus = NULL;
 }
-
 
 /*
  * Return the widget which the menu was posted from.

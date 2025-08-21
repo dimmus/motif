@@ -46,12 +46,7 @@ typedef struct _XmColorSelectorRec *XmColorSelectorWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
-Widget XmCreateColorSelector(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreateColorSelector(Widget, String, ArgList, Cardinal);
 
 /*
  * Variable argument list functions
@@ -76,4 +71,4 @@ extern WidgetClass       xmColorSelectorWidgetClass;
 #include <X11/apienvrst.h>
 #endif
 
-#endif /* _XmColorSelect_h DON'T ADD STUFF AFTER THIS #endif */
+#endif /* _XmColorSelect_h */

@@ -27,7 +27,6 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: TextIn.c /main/36 1999/01/27 16:10:29 mgreess $"
@@ -66,7 +65,8 @@ static char rcsid[] = "$TOG: TextIn.c /main/36 1999/01/27 16:10:29 mgreess $"
 #include "TextStrSoI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
-#ifdef USE_XFT
+
+#if USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
 
@@ -112,11 +112,7 @@ static Boolean DeleteOrKill(XmTextWidget tw,
 			    XEvent *event,
 			    XmTextPosition from,
 			    XmTextPosition to,
-#if NeedWidePrototypes
-			    int kill,
-#else
                             Boolean kill,
-#endif /* NeedWidePrototypes */
 			    XmTextPosition *cursorPos);
 
 static void StuffFromBuffer(XmTextWidget tw,
@@ -132,11 +128,7 @@ static void RemoveCurrentSelection(Widget w,
                                    XEvent *event,
                                    String *params,
                                    Cardinal *num_params,
-#if NeedWidePrototypes
-                                   int kill);
-#else
                                    Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void DeleteCurrentSelection(Widget w,
 				   XEvent *event,
@@ -198,20 +190,12 @@ static void SetNavigationAnchor(XmTextWidget tw,
 				XmTextPosition old_position,
 				XmTextPosition new_position,
 				Time time,
-#if NeedWidePrototypes
-				int extend);
-#else
                                 Boolean extend);
-#endif /* NeedWidePrototypes */
 
 static void CompleteNavigation(XmTextWidget tw,
 			       XmTextPosition position,
 			       Time time,
-#if NeedWidePrototypes
-			       int extend);
-#else
                                Boolean extend);
-#endif /* NeedWidePrototypes */
 
 static void SimpleMovement(Widget w,
 			   XEvent *event,
@@ -219,11 +203,7 @@ static void SimpleMovement(Widget w,
 			   Cardinal *num_params,
 			   XmTextScanDirection dir,
 			   XmTextScanType type,
-#if NeedWidePrototypes
-			   int include);
-#else
                            Boolean include);
-#endif /* NeedWidePrototypes */
 
 static void MoveForwardChar(Widget w,
 			    XEvent *event,
@@ -269,11 +249,7 @@ static void _MoveNextLine(Widget w,
 			  XEvent *event,
 			  String *params,
 			  Cardinal *num_params,
-#if NeedWidePrototypes
-			  int pendingoff);
-#else
                           Boolean pendingoff);
-#endif /* NeedWidePrototypes */
 
 static void MoveNextLine(Widget w,
 			 XEvent *event,
@@ -284,11 +260,7 @@ static void _MovePreviousLine(Widget w,
 			      XEvent *event,
 			      String *params,
 			      Cardinal *num_params,
-#if NeedWidePrototypes
-			      int pendingoff);
-#else
                               Boolean pendingoff);
-#endif /* NeedWidePrototypes */
 
 static void MovePreviousLine(Widget w,
 			     XEvent *event,
@@ -352,11 +324,7 @@ static void ScrollCursorVertically(Widget w,
 
 static void AddNewLine(Widget w,
 		       XEvent *event,
-#if NeedWidePrototypes
-		       int move_cursor);
-#else
                        Boolean move_cursor);
-#endif /* NeedWidePrototypes */
 
 static void InsertNewLine(Widget w,
 			  XEvent *event,
@@ -402,11 +370,7 @@ static void RemoveBackwardChar(Widget w,
 			       XEvent *event,
 			       String *params,
 			       Cardinal *num_params,
-#if NeedWidePrototypes
-			       int kill);
-#else
                                Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void DeleteBackwardChar(Widget w,
 			       XEvent *event,
@@ -422,11 +386,7 @@ static void RemoveForwardWord(Widget w,
 			      XEvent *event,
 			      String *params,
 			      Cardinal *num_params,
-#if NeedWidePrototypes
-			      int kill);
-#else
                               Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void DeleteForwardWord(Widget w,
 			      XEvent *event,
@@ -442,11 +402,7 @@ static void RemoveBackwardWord(Widget w,
 			       XEvent *event,
 			       String *params,
 			       Cardinal *num_params,
-#if NeedWidePrototypes
-			       int kill);
-#else
                                Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void DeleteBackwardWord(Widget w,
 			       XEvent *event,
@@ -462,11 +418,7 @@ static void RemoveForwardChar(Widget w,
 			      XEvent *event,
 			      String *params,
 			      Cardinal *num_params,
-#if NeedWidePrototypes
-			      int kill);
-#else
                               Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void KillForwardChar(Widget w,
 			    XEvent *event,
@@ -482,21 +434,13 @@ static void RemoveToEndOfLine(Widget w,
 			      XEvent *event,
 			      String *params,
 			      Cardinal *num_params,
-#if NeedWidePrototypes
-			      int kill);
-#else
                               Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void RemoveToStartOfLine(Widget w,
 				XEvent *event,
 				String *params,
 				Cardinal *num_params,
-#if NeedWidePrototypes
-				int kill);
-#else
                                 Boolean kill);
-#endif /* NeedWidePrototypes */
 
 static void DeleteToStartOfLine(Widget w,
 				XEvent *event,
@@ -528,13 +472,8 @@ static void SetSelectionHint(Widget w,
 			     Cardinal *num_params);
 
 static void a_Selection(XmTextWidget tw,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-#else
                         Position x,
                         Position y,
-#endif /* NeedWidePrototypes */
                         Time sel_time,
 			int set_empty_selection);
 
@@ -854,19 +793,11 @@ static void DragProcCallback(Widget w,
 static void RegisterDropSite(Widget w);
 
 static XmTextPosition XtoPosInLine(XmTextWidget tw,
-#if NeedWidePrototypes
-				   int x,
-#else
 				   Position x,
-#endif /* NeedWidePrototypes */
 				   LineNum line);
 
 static XmTextPosition YtoPosInLine(XmTextWidget tw,
-#if NeedWidePrototypes
-				   int y,
-#else
 				   Position y,
-#endif /* NeedWidePrototypes */
 				   LineNum line);
 
 /********    End Static Function Declarations    ********/
@@ -966,21 +897,12 @@ _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
 }
 
 
-/* ARGSUSED */
 /*
  * static void
- * #ifdef _NO_PROTO
- * CheckSync(w, tmp, event, cont)
- *      Widget w;
- *      XtPointer tmp;
- *      XEvent *event;
- *      Boolean *cont;
- * #else
  * CheckSync(Widget w,
  * 	  XtPointer tmp,
  * 	  XEvent *event,
  * 	  Boolean *cont)
- * #endif
  * {
  *   XmTextWidget tw = (XmTextWidget) w;
  *   InputData data = tw->text.input->data;
@@ -1006,7 +928,6 @@ _XmTextNeedsPendingDeleteDis(XmTextWidget tw,
  * }
  */
 
-/* ARGSUSED */
 static void
 RingBell(Widget w,
 	 XEvent *event,
@@ -1033,11 +954,7 @@ _XmTextHasDestination(Widget w)
 Boolean
 _XmTextSetDestinationSelection(Widget w,
 			       XmTextPosition position,
-#if NeedWidePrototypes
-			       int disown,
-#else
 			       Boolean disown,
-#endif /* NeedWidePrototypes */
 			       Time set_time)
 {
   XmTextWidget tw = (XmTextWidget) w;
@@ -1083,11 +1000,7 @@ DeleteOrKill(XmTextWidget tw,
 	     XEvent *event,
 	     XmTextPosition from,
 	     XmTextPosition to,
-#if NeedWidePrototypes
-	     int kill,
-#else
              Boolean kill,
-#endif /* NeedWidePrototypes */
              XmTextPosition *cursorPos)
 {
   XmTextBlockRec block, newblock;
@@ -1113,7 +1026,7 @@ DeleteOrKill(XmTextWidget tw,
     if ((*tw->text.source->Replace)(tw, NULL, &from,
 				    &to, &newblock, False) != EditDone) {
       _XmTextEnableRedisplay(tw);
-      RingBell((Widget)tw, (XEvent *) NULL, (String *) NULL, (Cardinal) 0);
+      RingBell((Widget)tw, NULL, NULL, NULL);
       if (freeBlock && newblock.ptr) XtFree(newblock.ptr);
       return FALSE;
     } else {
@@ -1125,7 +1038,7 @@ DeleteOrKill(XmTextWidget tw,
     if (freeBlock && newblock.ptr) XtFree(newblock.ptr);
   } else {
     _XmTextEnableRedisplay(tw);
-    RingBell((Widget)tw, (XEvent *) NULL, (String *) NULL, (Cardinal) 0);
+    RingBell((Widget)tw, NULL, NULL, NULL);
     return FALSE;
   }
   return TRUE;
@@ -1150,7 +1063,7 @@ StuffFromBuffer(XmTextWidget tw,
 			  &cursorPos, &block, &newblock, &freeBlock)) {
     if ((*tw->text.source->Replace)(tw, NULL, &from_pos, &to_pos,
 				    &newblock, False) != EditDone) {
-      RingBell((Widget)tw, (XEvent *) NULL, (String *) NULL, (Cardinal) 0);
+      RingBell((Widget)tw, NULL, NULL, NULL);
     } else {
       _XmTextSetCursorPosition((Widget)tw, cursorPos);
       _XmTextSetDestinationSelection((Widget)tw, tw->text.cursor_position,
@@ -1159,12 +1072,11 @@ StuffFromBuffer(XmTextWidget tw,
     }
     if (freeBlock && newblock.ptr) XtFree(newblock.ptr);
   } else {
-    RingBell((Widget)tw, (XEvent *) NULL, (String *) NULL, (Cardinal) 0);
+    RingBell((Widget)tw, NULL, NULL, NULL);
   }
   if (block.ptr) XtFree(block.ptr);
 }
 
-/* ARGSUSED */
 static void
 UnKill(Widget w,
        XEvent *event,
@@ -1177,17 +1089,12 @@ UnKill(Widget w,
   StuffFromBuffer(tw, event, 0);
 }
 
-/* ARGSUSED */
 static void
 RemoveCurrentSelection(Widget w,
 		       XEvent *event,
 		       String *params,
 		       Cardinal *num_params,
-#if NeedWidePrototypes
-		       int kill)
-#else
                        Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, cursorPos, left, right;
@@ -1286,17 +1193,11 @@ PrintableString(XmTextWidget tw,
     return True;
   } else {
     /* tw->text.char_size > 1 */
-#ifdef HAS_WIDECHAR_FUNCTIONS
     int i, csize;
     wchar_t wc;
-#ifndef NO_MULTIBYTE
     for (i = 0, csize = mblen(str, tw->text.char_size);
 	 i < n;
 	 i += csize, csize=mblen(&(str[i]), tw->text.char_size))
-#else
-    for (i = 0, csize = *str ? 1 : 0; i < n;
-	 i += csize, csize = str[i] ? 1 : 0)
-#endif
       {
 	if (csize < 0)
 	  return False;
@@ -1306,35 +1207,13 @@ PrintableString(XmTextWidget tw,
 	  return False;
 	}
       }
-#else /* HAS_WIDECHAR_FUNCTIONS */
-    /*
-     * This will only check if any single-byte characters are non-
-     * printable. Better than nothing...
-     */
-    int i, csize;
-#ifndef NO_MULTIBYTE
-    for (i = 0, csize = mblen(str, tw->text.char_size);
-	 i < n;
-	 i += csize, csize=mblen(&(str[i]), tw->text.char_size))
-#else
-    for (i = 0, csize = *str ? 1 : 0; i < n;
-	 i += csize, csize = str[i] ? 1 : 0)
-#endif
-      {
-	if (csize < 0)
-	  return False;
-	if (csize == 1 && !isprint((unsigned char)str[i])) {
-	  return False;
-	}
-      }
-#endif /* HAS_WIDECHAR_FUNCTIONS */
     return True;
   }
 #else /* SUPPORT_ZERO_WIDTH */
   OutputData o_data = tw->text.output->data;
   if (o_data->use_fontset) {
     return (XmbTextEscapement((XFontSet)o_data->font, str, n) != 0);
-#ifdef USE_XFT
+#if USE_XFT
   } else if (o_data->use_xft) {
     XGlyphInfo ext;
     XftTextExtentsUtf8(XtDisplay(tw), (XftFont*)o_data->font, (_Xconst FcChar8 *)str, n, &ext);
@@ -1564,7 +1443,6 @@ ProcessVerticalParams(Widget w,
   }
 }
 
-/* ARGSUSED */
 static void
 ProcessHorizontalParams(Widget w,
 			XEvent *event,
@@ -1618,7 +1496,6 @@ ProcessHorizontalParams(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 ProcessSelectParams(Widget w,
 		    XEvent *event,
@@ -1690,10 +1567,9 @@ KeySelection(Widget w,
   (*tw->text.source->GetSelection)(tw->text.source,
 				   &(data->origLeft), &(data->origRight));
 
-    cursorPos = tw->text.cursor_position;
-  position = cursorPos;
+  position = cursorPos = tw->text.cursor_position;
 
-   data->selectionHint.x = data->selectionHint.y = 0;
+  data->selectionHint.x = data->selectionHint.y = 0;
   data->extending = TRUE;
 
   EraseInsertionPoint(tw);
@@ -1850,11 +1726,7 @@ SetNavigationAnchor(XmTextWidget tw,
 		    XmTextPosition old_position,
 		    XmTextPosition new_position,
 		    Time time,
-#if NeedWidePrototypes
-		    int extend)
-#else
                     Boolean extend)
-#endif /* NeedWidePrototypes */
 {
   XmTextPosition left = old_position, right = old_position;
   InputData data = tw->text.input->data;
@@ -1901,11 +1773,7 @@ static void
 CompleteNavigation(XmTextWidget tw,
 		   XmTextPosition position,
 		   Time time,
-#if NeedWidePrototypes
-		   int extend)
-#else
                    Boolean extend)
-#endif /* NeedWidePrototypes */
 {
   XmTextPosition left, right;
   InputData data = tw->text.input->data;
@@ -1933,7 +1801,6 @@ CompleteNavigation(XmTextWidget tw,
   _XmTextSetCursorPosition((Widget)tw, position);
 }
 
-/* ARGSUSED */
 static void
 SimpleMovement(Widget w,
 	       XEvent *event,
@@ -1941,11 +1808,7 @@ SimpleMovement(Widget w,
 	       Cardinal *num_params ,
 	       XmTextScanDirection dir,
 	       XmTextScanType type,
-#if NeedWidePrototypes
-	       int include)
-#else
                Boolean include)
-#endif /* NeedWidePrototypes */
 {
   XmTextPosition cursorPos, newPos;
   XmTextWidget tw = (XmTextWidget) w;
@@ -1979,7 +1842,6 @@ SimpleMovement(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MoveForwardChar(Widget w,
 		XEvent *event,
@@ -1993,7 +1855,6 @@ MoveForwardChar(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveBackwardChar(Widget w,
 		 XEvent *event,
@@ -2007,7 +1868,6 @@ MoveBackwardChar(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveForwardWord(Widget w,
 		XEvent *event,
@@ -2065,7 +1925,6 @@ MoveForwardWord(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveBackwardWord(Widget w,
 		 XEvent *event,
@@ -2110,7 +1969,6 @@ MoveBackwardWord(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveForwardParagraph(Widget w,
 		     XEvent *event,
@@ -2127,7 +1985,6 @@ MoveForwardParagraph(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveBackwardParagraph(Widget w,
 		      XEvent *event,
@@ -2144,7 +2001,6 @@ MoveBackwardParagraph(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveToLineStart(Widget w,
 		XEvent *event,
@@ -2188,7 +2044,6 @@ MoveToLineStart(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 MoveToLineEnd(Widget w,
 	      XEvent *event,
@@ -2239,17 +2094,12 @@ MoveToLineEnd(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 _MoveNextLine(Widget w,
 	      XEvent *event,
 	      String *params,
 	      Cardinal *num_params,
-#if NeedWidePrototypes
-	      int pendingoff)
-#else
               Boolean pendingoff)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   LineNum line;
@@ -2353,17 +2203,12 @@ MoveNextLine(Widget w,
   _MoveNextLine(w, event, params, num_params, True);
 }
 
-/* ARGSUSED */
 static void
 _MovePreviousLine(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params,
-#if NeedWidePrototypes
-		  int pendingoff)
-#else
                   Boolean pendingoff)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   LineNum line;
@@ -2457,7 +2302,6 @@ MovePreviousLine(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MoveNextPage(Widget w,
 	     XEvent *event,
@@ -2522,7 +2366,6 @@ MoveNextPage(Widget w,
 
 
 
-/* ARGSUSED */
 static void
 MovePreviousPage(Widget w,
 		 XEvent *event,
@@ -2576,7 +2419,6 @@ MovePreviousPage(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MovePageLeft(Widget w,
 	     XEvent *event,
@@ -2623,7 +2465,6 @@ MovePageLeft(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MovePageRight(Widget w,
 	      XEvent *event,
@@ -2670,7 +2511,6 @@ MovePageRight(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MovePageUp(Widget w,
 	     XEvent *event,
@@ -2715,7 +2555,6 @@ MovePageUp(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MovePageDown(Widget w,
 	      XEvent *event,
@@ -2760,7 +2599,6 @@ MovePageDown(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 MoveBeginningOfFile(Widget w,
 		    XEvent *event,
@@ -2777,7 +2615,6 @@ MoveBeginningOfFile(Widget w,
 
 
 
-/* ARGSUSED */
 static void
 MoveEndOfFile(Widget w,
 	      XEvent *event,
@@ -2792,10 +2629,6 @@ MoveEndOfFile(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-
-
-
-/* ARGSUSED */
 static void
 ScrollOneLineUp(Widget w,
 		XEvent *event,
@@ -2809,7 +2642,6 @@ ScrollOneLineUp(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 ScrollOneLineDown(Widget w,
 		  XEvent *event,
@@ -2823,7 +2655,6 @@ ScrollOneLineDown(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 ScrollCursorVertically(Widget w,
 		       XEvent *event,
@@ -2865,11 +2696,7 @@ ScrollCursorVertically(Widget w,
 static void
 AddNewLine(Widget w,
 	   XEvent *event,
-#if NeedWidePrototypes
-	   int move_cursor)
-#else
            Boolean move_cursor)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition cursorPos, beginPos, nextPos, left, right;
@@ -2919,9 +2746,6 @@ AddNewLine(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-
-
-/* ARGSUSED */
 static void
 InsertNewLine(Widget w,
 	      XEvent *event,
@@ -2936,8 +2760,6 @@ InsertNewLine(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-
-/* ARGSUSED */
 static void
 InsertNewLineAndBackup(Widget w,
 		       XEvent *event,
@@ -3011,7 +2833,6 @@ InsertNewLineAndIndent(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 RedrawDisplay(Widget w,
 	      XEvent *event,
@@ -3024,7 +2845,6 @@ RedrawDisplay(Widget w,
   _XmTextInvalidate(tw, top, top, NODELTA);
 }
 
-/* ARGSUSED */
 static void
 Activate(Widget w,
 	 XEvent *event,
@@ -3048,7 +2868,6 @@ Activate(Widget w,
   (void) _XmParentProcess(XtParent(tw), (XmParentProcessData) &p_event);
 }
 
-/* ARGSUSED */
 static void
 ToggleOverstrike(Widget w,
 		 XEvent *event,
@@ -3074,7 +2893,6 @@ ToggleOverstrike(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 ToggleAddMode(Widget w,
 	      XEvent *event,
@@ -3099,7 +2917,6 @@ ToggleAddMode(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 SetCursorPosition(Widget w,
 		  XEvent *event,
@@ -3119,11 +2936,7 @@ RemoveBackwardChar(Widget w,
 		   XEvent *event,
 		   String *params,
 		   Cardinal *num_params,
-#if NeedWidePrototypes
-		   int kill)
-#else
      Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, cursorPos, nextPos, left, right;
@@ -3183,11 +2996,7 @@ RemoveForwardWord(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params,
-#if NeedWidePrototypes
-		  int kill)
-#else
                   Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, left, right;
@@ -3249,11 +3058,7 @@ RemoveBackwardWord(Widget w,
 		   XEvent *event,
 		   String *params,
 		   Cardinal *num_params,
-#if NeedWidePrototypes
-		   int kill)
-#else
                    Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, left, right;
@@ -3320,11 +3125,7 @@ RemoveForwardChar(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params,
-#if NeedWidePrototypes
-		  int kill)
-#else
                   Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, cursorPos, nextPos, left, right;
@@ -3380,11 +3181,7 @@ RemoveToEndOfLine(Widget w,
 		  XEvent *event,
 		  String *params,
 		  Cardinal *num_params,
-#if NeedWidePrototypes
-		  int kill)
-#else
                   Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, left, right;
@@ -3429,11 +3226,7 @@ RemoveToStartOfLine(Widget w,
 		    XEvent *event,
 		    String *params,
 		    Cardinal *num_params,
-#if NeedWidePrototypes
-		    int kill)
-#else
                     Boolean kill)
-#endif /* NeedWidePrototypes */
 {
   XmTextWidget tw = (XmTextWidget) w;
   XmTextPosition newCursorPos, left, cursorPos, right;
@@ -3637,7 +3430,6 @@ _XmTextGetSel2(XmTextWidget tw,
   }
 }
 
-/* ARGSUSED */
 static void
 SetSelectionHint(Widget w,
 		 XEvent *event,
@@ -3663,13 +3455,8 @@ SetSelectionHint(Widget w,
  */
 static void
 a_Selection(XmTextWidget tw,
-#if NeedWidePrototypes
-	    int x,
-	    int y,
-#else
 	    Position x,
 	    Position y,
-#endif
 	    Time sel_time,
 	    int set_empty_selection)
 {
@@ -3713,7 +3500,6 @@ a_Selection(XmTextWidget tw,
   data->origRight = newRight;
 }
 
-/* ARGSUSED */
 static void
 SetAnchor(Widget w,
 	  XEvent *event,
@@ -3735,7 +3521,6 @@ SetAnchor(Widget w,
   }
 }
 
-/* ARGSUSED */
 static void
 DoSelection(Widget w,
 	    XEvent *event,
@@ -3807,7 +3592,6 @@ StartPrimary(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 StartSecondary(Widget w,
 	       XEvent *event,
@@ -3844,7 +3628,6 @@ StartSecondary(Widget w,
   if (status != GrabSuccess) XmeWarning(w, GRABKBDERROR);
 }
 
-/* ARGSUSED */
 static void
 StartDrag(Widget w,
 	  XEvent *event,
@@ -3871,7 +3654,6 @@ StartDrag(Widget w,
 }
 
 
-/*ARGSUSED*/
 static	void
 DragStart(XtPointer data,
 	  XtIntervalId *id)	/* unused */
@@ -3886,7 +3668,6 @@ DragStart(XtPointer data,
 }
 
 
-/* ARGSUSED */
 static void
 ProcessBDrag(Widget w,
 	     XEvent *event,
@@ -3927,7 +3708,6 @@ ProcessBDragEvent(Widget w,
     XtCallActionProc(w, params[1], event, NULL, 0);
 }
 
-/* ARGSUSED */
 static Boolean
 InSelection(Widget w,
 	    XEvent *event)
@@ -3957,7 +3737,6 @@ InSelection(Widget w,
 	      x < right_x)));
 }
 
-/* ARGSUSED */
 static void
 ProcessBSelect(Widget w,
 	       XEvent *event,
@@ -4078,7 +3857,6 @@ dragged(SelectionHint selectionHint,
     return FALSE;
 }
 
-/* ARGSUSED */
 static void
 DoExtendedSelection(Widget w,
 		    Time ev_time)
@@ -4168,7 +3946,6 @@ DoExtendedSelection(Widget w,
   _XmTextEnableRedisplay(tw);
 }
 
-/* ARGSUSED */
 static void
 DoSecondaryExtend(Widget w,
 		  Time ev_time)
@@ -4210,7 +3987,6 @@ DoSecondaryExtend(Widget w,
  *              released, call the standard click stuff.                *
  *                                                                      *
  ************************************************************************/
-/* ARGSUSED */
 static void
 BrowseScroll(XtPointer closure,
 	     XtIntervalId *id)
@@ -4245,7 +4021,6 @@ BrowseScroll(XtPointer closure,
 }
 
 
-/* ARGSUSED */
 static Boolean
 CheckTimerScrolling(Widget w,
 		    XEvent *event)
@@ -4342,7 +4117,6 @@ CheckTimerScrolling(Widget w,
   return False;
 }
 
-/* ARGSUSED */
 static void
 StartExtendSelection(Widget w,
 		     XEvent *event,
@@ -4358,7 +4132,6 @@ StartExtendSelection(Widget w,
   ExtendSelection(w, event, params, num_params);
 }
 
-/* ARGSUSED */
 static void
 ExtendSelection(Widget w,
 		XEvent *event,
@@ -4395,7 +4168,6 @@ ExtendSelection(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 ExtendSecondary(Widget w,
 		XEvent *event,
@@ -4481,7 +4253,6 @@ ExtendEnd(Widget w,
   if (!data->sel_start) data->cancel = True;
 }
 
-/* ARGSUSED */
 static void
 DoGrabFocus(Widget w,
 	    XEvent *event,
@@ -4553,7 +4324,6 @@ DoGrabFocus(Widget w,
   data->stuffpos = tw->text.cursor_position;
 }
 
-/* ARGSUSED */
 static void
 MoveDestination(Widget w,
 		XEvent *event,
@@ -4589,7 +4359,6 @@ MoveDestination(Widget w,
 
 /* This function make the request to do a primary paste */
 
-/* ARGSUSED */
 static void
 Stuff(Widget w,
       XEvent *event,
@@ -4631,7 +4400,6 @@ Stuff(Widget w,
 		   event_time);
 }
 
-/* ARGSUSED */
 void
 _XmTextHandleSecondaryFinished(Widget w,
 			       XEvent *event)
@@ -4676,7 +4444,7 @@ _XmTextHandleSecondaryFinished(Widget w,
 			  &cursorPos, &block, &newblock, &freeBlock)) {
     if ((*tw->text.source->Replace)(tw, NULL, &left, &right,
 				    &newblock, False) != EditDone) {
-      RingBell(w, NULL, (String *) NULL, (Cardinal) 0);
+      RingBell((Widget)w, NULL, NULL, NULL);
     } else {
       int count;
       count = _XmTextCountCharacters(newblock.ptr, newblock.length);
@@ -4708,12 +4476,11 @@ _XmTextHandleSecondaryFinished(Widget w,
     }
     if (freeBlock && newblock.ptr) XtFree(newblock.ptr);
   } else {
-    RingBell(w, NULL, (String *) NULL, (Cardinal) 0);
+    RingBell(w, NULL, NULL, NULL);
   }
 }
 
 /* Send a client message to perform the quick cut/copy and paste */
-/* ARGSUSED */
 static void
 SecondaryNotify(Widget w,
 		XEvent *event,
@@ -4787,7 +4554,6 @@ SecondaryNotify(Widget w,
 			 XmCOPY, event_time);
 }
 
-/* ARGSUSED */
 static void
 VoidAction(Widget w,
 	   XEvent *event,
@@ -4849,7 +4615,6 @@ ExtendSecondaryEnd(Widget w,
 /*
  * This Action Proc selects all of the text.
  */
-/* ARGSUSED */
 static void
 SelectAll(Widget w,
 	  XEvent *event,
@@ -4877,7 +4642,6 @@ SelectAll(Widget w,
 /*
  * This Action Proc deselects all of the text.
  */
-/* ARGSUSED */
 static void
 DeselectAll(Widget w,
 	    XEvent *event,
@@ -4904,7 +4668,6 @@ DeselectAll(Widget w,
 /*
  * This Action Proc replaces the primary selection with spaces
  */
-/* ARGSUSED */
 static void
 ClearSelection(Widget w,
 	       XEvent *event,
@@ -5127,7 +4890,6 @@ LinkPrimary(Widget w,
   DisplayInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 static void
 CutClipboard(Widget w,
 	     XEvent *event,
@@ -5150,7 +4912,6 @@ CutClipboard(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 CopyClipboard(Widget w,
 	      XEvent *event,
@@ -5174,7 +4935,6 @@ CopyClipboard(Widget w,
 }
 
 
-/* ARGSUSED */
 static void
 PasteClipboard(Widget w,
 	       XEvent *event,
@@ -5212,7 +4972,6 @@ VerifyLeave(Widget w,
   return(cbdata.doit);
 }
 
-/* ARGSUSED */
 static void
 TextLeave(Widget w,
 	  XEvent *event,
@@ -5225,7 +4984,6 @@ TextLeave(Widget w,
   _XmPrimitiveLeave(w, event, params, num_params);
 }
 
-/* ARGSUSED */
 static void
 TextFocusIn(Widget w,
 	    XEvent *event,
@@ -5244,7 +5002,6 @@ TextFocusIn(Widget w,
   _XmPrimitiveFocusIn(w, event, params, num_params);
 }
 
-/* ARGSUSED */
 static void
 TextFocusOut(Widget w,
 	     XEvent *event,
@@ -5264,7 +5021,6 @@ TextFocusOut(Widget w,
   _XmPrimitiveFocusOut(w, event, params, num_params);
 }
 
-/* ARGSUSED */
 static void
 TraverseDown(Widget w,
 	     XEvent *event,
@@ -5282,7 +5038,6 @@ TraverseDown(Widget w,
   }
 }
 
-/* ARGSUSED */
 static void
 TraverseUp(Widget w,
 	   XEvent *event,
@@ -5299,7 +5054,6 @@ TraverseUp(Widget w,
   }
 }
 
-/* ARGSUSED */
 static void
 TraverseHome(Widget w,
 	     XEvent *event,
@@ -5316,7 +5070,6 @@ TraverseHome(Widget w,
   }
 }
 
-/* ARGSUSED */
 static void
 TraverseNextTabGroup(Widget w,
 		     XEvent *event,
@@ -5340,7 +5093,6 @@ TraverseNextTabGroup(Widget w,
   }
 }
 
-/* ARGSUSED */
 static void
 TraversePrevTabGroup(Widget w,
 		     XEvent *event,
@@ -5364,13 +5116,11 @@ TraversePrevTabGroup(Widget w,
   }
 }
 
-
 /***************************************************************************
  * Functions to process text tw in multi-line edit mode versus single      *
  * line edit mode.                                                         *
  ***************************************************************************/
 
-/* ARGSUSED */
 static void
 ProcessCancel(Widget w,
 	      XEvent *event,
@@ -5762,7 +5512,6 @@ externaldef(nonvisible) Cardinal _XmdefaultTextActionsTableSize =
 #define _XmTextEventBindings3	_XmTextIn_XmTextEventBindings3
 #define _XmTextVEventBindings	_XmTextIn_XmTextVEventBindings
 
-/* ARGSUSED */
 static void
 Invalidate(XmTextWidget tw,
 	   XmTextPosition position,
@@ -5785,7 +5534,6 @@ InputGetValues(Widget wid,
 		 input_resources, XtNumber(input_resources), args, num_args);
 }
 
-/* ARGSUSED */
 static void
 InputSetValues(Widget oldw,
 	       Widget reqw,
@@ -5869,7 +5617,6 @@ InputDestroy(Widget w)
   XmImUnregister(w);
 }
 
-/* ARGSUSED */
 static XtPointer
 InputBaseProc(Widget widget,
 	      XtPointer client_data)
@@ -5884,7 +5631,6 @@ InputBaseProc(Widget widget,
 }
 
 
-/* ARGSUSED */
 void
 _XmTextInputGetSecResData(XmSecondaryResourceData *secResDataRtn)
 {
@@ -5903,19 +5649,18 @@ _XmTextInputGetSecResData(XmSecondaryResourceData *secResDataRtn)
   *secResDataRtn = secResData;
 }
 
-/* ARGSUSED */
 static void
 DragProcCallback(Widget w,
 		 XtPointer client,
 		 XtPointer call)
 {
   enum { XmACOMPOUND_TEXT, XmATEXT,
-#if XM_UTF8
+#ifdef XM_UTF8
       XmAUTF8_STRING,
 #endif
       NUM_ATOMS };
   static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT,
-#if XM_UTF8
+#ifdef XM_UTF8
       XmSUTF8_STRING
 #endif
       };
@@ -5935,7 +5680,7 @@ DragProcCallback(Widget w,
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
-#if XM_UTF8
+#ifdef XM_UTF8
   targets[4] = atoms[XmAUTF8_STRING];
 #endif
 
@@ -5948,7 +5693,7 @@ DragProcCallback(Widget w,
 
   switch(cb->reason) {
   case XmCR_DROP_SITE_ENTER_MESSAGE:
-#if XM_UTF8
+#ifdef XM_UTF8
     if (XmTargetsAreCompatible(XtDisplay(drag_cont), exp_targets,
 			       num_exp_targets, targets, 5))
 #else
@@ -5980,12 +5725,12 @@ static void
 RegisterDropSite(Widget w)
 {
   enum { XmACOMPOUND_TEXT, XmATEXT,
-#if XM_UTF8
+#ifdef XM_UTF8
       XmAUTF8_STRING,
 #endif
       NUM_ATOMS };
   static char *atom_names[] = { XmSCOMPOUND_TEXT, XmSTEXT,
-#if XM_UTF8
+#ifdef XM_UTF8
       XmSUTF8_STRING
 #endif
       };
@@ -6002,13 +5747,13 @@ RegisterDropSite(Widget w)
   targets[1] = atoms[XmACOMPOUND_TEXT];
   targets[2] = XA_STRING;
   targets[3] = atoms[XmATEXT];
-#if XM_UTF8
+#ifdef XM_UTF8
   targets[4] = atoms[XmAUTF8_STRING];
 #endif
 
   n = 0;
   XtSetArg(args[n], XmNimportTargets, targets); n++;
-#if XM_UTF8
+#ifdef XM_UTF8
   XtSetArg(args[n], XmNnumImportTargets, 5); n++;
 #else
   XtSetArg(args[n], XmNnumImportTargets, 4); n++;
@@ -6109,11 +5854,7 @@ _XmTextInputCreate(Widget wid,
 
 static XmTextPosition
 XtoPosInLine(XmTextWidget tw,
-#if NeedWidePrototypes
-	     int x,
-#else
 	     Position x,
-#endif /* NeedWidePrototypes */
 	     LineNum line)
 {
   OutputData data = tw->text.output->data;
@@ -6133,11 +5874,7 @@ XtoPosInLine(XmTextWidget tw,
 
 static XmTextPosition
 YtoPosInLine(XmTextWidget tw,
-#if NeedWidePrototypes
-	     int y,
-#else
 	     Position y,
-#endif /* NeedWidePrototypes */
 	     LineNum line)
 {
   OutputData data = tw->text.output->data;

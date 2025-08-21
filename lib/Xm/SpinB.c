@@ -481,7 +481,6 @@ ClassPartInitialize(WidgetClass classPart)
 
 }
 
-/*ARGSUSED*/
 static void
 Initialize(Widget req,		/* unused */
 	   Widget new_w,
@@ -577,7 +576,6 @@ Resize(Widget w)
      XClearArea(XtDisplay(w), XtWindow(w), 0, 0, 0, 0, True);			/*  Force Redisplay */
 }
 
-/*ARGSUSED*/
 static void
 Redisplay(Widget w,
 	  XEvent *event,	/* unused */
@@ -620,7 +618,6 @@ Redisplay(Widget w,
 
 }
 
-/*ARGSUSED*/
 static Boolean
 SetValues(Widget old,
 	  Widget req,
@@ -696,7 +693,6 @@ QueryGeometry(Widget w, XtWidgetGeometry *req, XtWidgetGeometry *rep)
   return(XmeReplyToQueryGeometry(w, req, rep));
 }
 
-/*ARGSUSED*/
 static XtGeometryResult
 GeometryManager(Widget w,
 		XtWidgetGeometry *req,
@@ -837,7 +833,6 @@ InsertChild(Widget newChild)
   XtInstallAccelerators(newChild, (Widget)spinW);
 }
 
-/*ARGSUSED*/
 
 static void
 ConstraintInitialize(Widget req,
@@ -935,7 +930,6 @@ ConstraintDestroy(
     }
 }
 
-/*ARGSUSED*/
 static Boolean
 ConstraintSetValues(Widget   old,
 		    Widget   req,
@@ -1077,7 +1071,6 @@ ConstraintSetValues(Widget   old,
  *   Event Handler for Focus Change.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinChildFocusChange(Widget focusWidget,
 		     XtPointer focusClient,
@@ -1180,7 +1173,6 @@ SpinBLeave(Widget widget, XEvent *event, String *params, Cardinal *num_params)
  *	Action for BSelect Down.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBArm(Widget armWidget,
 	 XEvent *armEvent,
@@ -1201,7 +1193,6 @@ SpinBArm(Widget armWidget,
  *	Action for BSelect Up.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBDisarm(Widget   disarmWidget,
 	    XEvent   *disarmEvent,
@@ -1241,7 +1232,6 @@ SpinBDisarm(Widget   disarmWidget,
  *	Action for BeginData Key.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBFirst(Widget   firstWidget,
 	   XEvent   *firstEvent,
@@ -1282,7 +1272,6 @@ SpinBFirst(Widget   firstWidget,
  *	Action for EndOfData Key.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBLast(Widget lastWidget,
 	  XEvent *lastEvent,
@@ -1338,7 +1327,6 @@ SpinBLeft(Widget   leftWidget, XEvent   *leftEvent,
  *	Action for UpArrow Key.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBNext(Widget nextWidget,
 	  XEvent *nextEvent,	/* unused */
@@ -1353,7 +1341,6 @@ SpinBNext(Widget nextWidget,
  *	Action for DownArrow Key.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBPrior(Widget   priorWidget,
 	   XEvent   *priorEvent, /* unused */
@@ -1584,7 +1571,6 @@ GetArrowDirection(Widget w, int spinDir)
 
 typedef XmSpinBoxRec MySpinBoxRec;
 
-/*ARGSUSED*/
 static void
 LayoutSpinBox(Widget w,
 	      XtWidgetGeometry *spinG,
@@ -1793,7 +1779,6 @@ LayoutSpinBox(Widget w,
  *   Convert Number to String to Be Displayed in Child
  *****************************************************************************/
 
-/* ARGSUSED */
 static void
 NumToString(char **buffer, int min, int max, int decimal, int value)
 {
@@ -2043,7 +2028,6 @@ ArrowWasHit(Widget arrowW, int arrowType, XEvent *arrowEvent)
  *	Function Called by TimeOut.
  *****************************************************************************/
 
-/*ARGSUSED*/
 static void
 SpinBArrow(XtPointer spinData,
 	   XtIntervalId *spinInterval) /* unused */
@@ -2727,8 +2711,6 @@ ValidatePositionValue(XmSpinBoxConstraint sc, int *position)
   return(err);
 }
 
-
-/*ARGSUSED*/
 static Boolean
 CvtStringToPositionValue(
         Display *display,
@@ -2755,7 +2737,6 @@ CvtStringToPositionValue(
 }
 
 
-
 /*
  *
  * Public API
@@ -2775,11 +2756,8 @@ XmCreateSpinBox(Widget parent, String name,
   return(XtCreateWidget(name, xmSpinBoxWidgetClass, parent,
 			arglist, argcount));
 }
-Widget
-XmVaCreateSpinBox(
-        Widget parent,
-        char *name,
-        ...)
+
+Widget XmVaCreateSpinBox(Widget parent, char *name, ...)
 {
     register Widget w;
     va_list var;
@@ -2799,11 +2777,8 @@ XmVaCreateSpinBox(
     return w;
 
 }
-Widget
-XmVaCreateManagedSpinBox(
-        Widget parent,
-        char *name,
-        ...)
+
+Widget XmVaCreateManagedSpinBox(Widget parent, char *name, ...)
 {
     Widget w = NULL;
     va_list var;
@@ -2820,8 +2795,8 @@ XmVaCreateManagedSpinBox(
                          var, count);
     va_end(var);
     return w;
-
 }
+
 /************************************************************************
  *  XmSpinBoxValidatePosition
  *	Validate the position value specified in string.
@@ -2909,7 +2884,6 @@ XmSpinBoxValidatePosition(Widget text_field, int *position)
     }
 
   iOffset = iPosition - SB_ChildMinimumPositionValue(wc);
-
   if ((iOffset % wc->increment_value) != 0)
     {
       int	iValue = wc->increment_value;

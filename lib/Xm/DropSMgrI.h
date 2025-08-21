@@ -598,11 +598,7 @@ extern void _XmDSISwapChildren(
                         Cardinal position2) ;
 extern void _XmDSIDestroy(
                         XmDSInfo info,
-#if NeedWidePrototypes
-                        int substructures) ;
-#else
                         Boolean substructures) ;
-#endif /* NeedWidePrototypes */
 extern Dimension _XmDSIGetBorderWidth(
                         XmDSInfo info) ;
 
@@ -624,4 +620,3 @@ externalref Cardinal _XmNumDSResources;
 #endif
 
 #endif /* _XmDropSMgrI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

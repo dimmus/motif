@@ -67,7 +67,6 @@ static char rcsid[] = "$TOG: Text.c /main/47 1999/01/26 15:18:26 mgreess $"
 #define TABLE_INCREMENT		1024
 #define XmDYNAMIC_BOOL		 255
 
-
 /* Change ChangeVSB() and RedisplayHBar from TextOut.c to non-static functions;
  * they are needed for updating the scroll bars after re-enable redisplay.
  * DisableRedisplay prohibits the visuals of the widget from being updated
@@ -98,22 +97,14 @@ static XmTextStatus NullReplace(XmTextWidget tw,
 				XmTextPosition *start,
 				XmTextPosition *end,
 				XmTextBlock block,
-#if NeedWidePrototypes
-				int call_callbacks);
-#else
                                 Boolean call_callbacks);
-#endif /* NeedsWidePrototypes */
 
 static XmTextPosition NullScan(XmTextSource source,
                                XmTextPosition position,
                                XmTextScanType sType,
                                XmTextScanDirection dir,
 			       int n,
-#if NeedWidePrototypes
-			       int include);
-#else
                                Boolean include);
-#endif /* NeedWidePrototypes */
 
 static Boolean NullGetSelection(XmTextSource source,
                                 XmTextPosition *start,
@@ -548,21 +539,18 @@ externaldef(xmtextwidgetclass) WidgetClass xmTextWidgetClass =
  *
  ****************************************************************/
 
-/* ARGSUSED */
 static void
 NullAddWidget(XmTextSource source,
 	      XmTextWidget tw)
 {
 }
 
-/* ARGSUSED */
 static void
 NullRemoveWidget(XmTextSource source,
 		 XmTextWidget tw)
 {
 }
 
-/* ARGSUSED */
 static XmTextPosition
 NullRead(XmTextSource source,
 	 XmTextPosition position,
@@ -576,39 +564,28 @@ NullRead(XmTextSource source,
   return 0;
 }
 
-/* ARGSUSED */
 static XmTextStatus
 NullReplace(XmTextWidget tw,
 	    XEvent * event,
 	    XmTextPosition *start,
 	    XmTextPosition *end,
 	    XmTextBlock block,
-#if NeedWidePrototypes
-	    int call_callbacks)
-#else
             Boolean call_callbacks)
-#endif
 {
   return EditError;
 }
 
-/* ARGSUSED */
 static XmTextPosition
 NullScan(XmTextSource source,
 	 XmTextPosition position,
 	 XmTextScanType sType,
 	 XmTextScanDirection dir,
 	 int n,
-#if NeedWidePrototypes
-	 int include)
-#else
          Boolean include)
-#endif /* NeedWidePrototypes */
 {
   return 0;
 }
 
-/* ARGSUSED */
 static Boolean
 NullGetSelection(XmTextSource source,
 		 XmTextPosition *start,
@@ -617,7 +594,6 @@ NullGetSelection(XmTextSource source,
   return FALSE;
 }
 
-/* ARGSUSED */
 static void
 NullSetSelection(XmTextSource source,
 		 XmTextPosition start,
@@ -629,14 +605,15 @@ NullSetSelection(XmTextSource source,
 static void
 _XmCreateCutBuffers(Widget w)
 {
-  static XContext context = (XContext)NULL;
+  static XContext context = 0;
   char * tmp = NULL;
   Display *dpy = XtDisplay(w);
   Screen *screen = XtScreen(w);
   XContext local_context;
 
   _XmProcessLock();
-  if (context == (XContext)NULL) context = XUniqueContext();
+  if (!context)
+    context = XUniqueContext();
 
   local_context = context;
   _XmProcessUnlock();
@@ -686,7 +663,6 @@ _XmCreateCutBuffers(Widget w)
  *  GetSecResData
  *
  ************************************************************************/
-/* ARGSUSED */
 static Cardinal
 GetSecResData(WidgetClass w_class,
 	      XmSecondaryResourceData **secResDataRtn)
@@ -1189,7 +1165,6 @@ RefigureLines(XmTextWidget tw)
  *      cur_line - pointer to the start of the lines to be removed.
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 RemoveLines(XmTextWidget tw,
 	    int num_lines,
@@ -1403,11 +1378,7 @@ _XmTextUpdateLineTable(Widget widget,
 		       XmTextPosition start,
 		       XmTextPosition end,
 		       XmTextBlock block,
-#if NeedWidePrototypes
-		       int update)
-#else
                        Boolean update)
-#endif /* NeedWidePrototypes */
 {
   register unsigned int cur_index;
   register unsigned int begin_index;
@@ -1620,12 +1591,8 @@ _XmTextUpdateLineTable(Widget widget,
       }
     } else {
       while (length--) {
-#ifndef NO_MULTIBYTE
 	char_size = mblen(ptr, tw->text.char_size);
 	if (char_size < 0) break; /* error */
-#else
-	char_size = *ptr ? 1 : 0;
-#endif
 	cur_start++;
 	if (char_size == 1 && *ptr == '\012') {
 	  ptr++;
@@ -2086,7 +2053,6 @@ InsertHighlight(XmTextWidget tw,
  * width, use request values and reset height and width to original
  * height and width state.
  */
-/* ARGSUSED */
 static void
 Initialize(Widget rw,
 	   Widget nw,
@@ -2531,7 +2497,6 @@ LosingFocus(XmTextWidget tw)
   tw->text.source->data->take_selection = True;
 }
 
-/* ARGSUSED */
 static Boolean
 SetValues(Widget oldw,
 	  Widget reqw,
@@ -2889,14 +2854,9 @@ _XmTextSetCursorPosition(Widget widget,
   TextDrawInsertionPoint(tw);
 }
 
-/* ARGSUSED */
 void
 _XmTextDisableRedisplay(XmTextWidget widget,
-#if NeedWidePrototypes
-			int losesbackingstore)
-#else
                         Boolean losesbackingstore)
-#endif /* NeedWidePrototypes */
 {
   widget->text.disable_depth++;
   EraseInsertionPoint(widget);
@@ -2951,9 +2911,7 @@ _XmTextCountCharacters(char *str,
   if (num_count_bytes <= 0)
     return 0;
 
-#ifndef NO_MULTIBYTE
   if (MB_CUR_MAX == 1 || MB_CUR_MAX == 0) /* Sun sets MB_CUR_MAX to 0, Argg!!*/
-#endif
     return num_count_bytes;
 
   for (bptr = str; num_count_bytes > 0; count++, bptr+= char_size) {
@@ -2966,11 +2924,7 @@ _XmTextCountCharacters(char *str,
 
 void
 _XmTextSetEditable(Widget widget,
-#if NeedWidePrototypes
-		  int editable)
-#else
                   Boolean editable)
-#endif /* NeedWidePrototypes */
 {
   Arg args[20];
   XIMCallback xim_cb[4];
@@ -2982,7 +2936,7 @@ _XmTextSetEditable(Widget widget,
   if (!tw->text.editable && editable) {
     OutputData o_data = tw->text.output->data;
 
-    XmImRegister(widget, (unsigned int) NULL);
+    XmImRegister(widget, 0);
 
     (*tw->text.output->PosToXY)(tw, tw->text.cursor_position,
 				&xmim_point.x, &xmim_point.y);
@@ -3205,7 +3159,6 @@ TextSetValue(Widget w,
   }
 }
 
-/*ARGSUSED*/
 static int
 TextPreferredValue(Widget w)	/* unused */
 {
@@ -4260,5 +4213,4 @@ XmVaCreateManagedText(
                          var, count);
     va_end(var);
     return w;
-
 }

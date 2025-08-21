@@ -64,11 +64,7 @@ extern void XmScrollBarSetValues(
                         int slider_size,
                         int increment,
                         int page_increment,
-#if NeedWidePrototypes
-                        int notify) ;
-#else
                         Boolean notify) ;
-#endif /* NeedWidePrototypes */
 
 /*
  * Variable argument list functions
@@ -90,4 +86,3 @@ extern Widget XmVaCreateManagedScrollBar(
 #endif
 
 #endif /* _XmScrollBar_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

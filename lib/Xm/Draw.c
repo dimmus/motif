@@ -120,20 +120,14 @@ DrawSimpleShadow (Display *display,
   _XmProcessUnlock();
 }
 
-
 /**************************** Public functions *************************/
 /***********************************************************************/
 
 /****************************XmeDrawShadows****************************/
 void XmeDrawShadows(Display *display, Drawable d,
                   GC top_gc, GC bottom_gc,
-#if NeedWidePrototypes
-                                           int x, int y,
-                  int width, int height, int shad_thick,
-#else
                                            Position x, Position y,
                   Dimension width, Dimension height, Dimension shad_thick,
-#endif
                   unsigned int shad_type)
 {
     GC  tmp_gc ;
@@ -168,13 +162,8 @@ void XmeDrawShadows(Display *display, Drawable d,
 
 /*****************************XmeClearBorder*********************************/
 void XmeClearBorder (Display *display, Window w,
-#if NeedWidePrototypes
-                                                 int x, int y,
-                    int width, int height, int shadow_thick)
-#else
                                                  Position x, Position y,
                     Dimension width, Dimension height, Dimension shadow_thick)
-#endif /* NeedWidePrototypes */
 {
     XtAppContext app;
 
@@ -199,15 +188,9 @@ void XmeClearBorder (Display *display, Window w,
 /****************************XmeDrawHighlight*************************/
 void XmeDrawHighlight(Display *display, Drawable d,
 			    GC gc,
-#if NeedWidePrototypes
-			    int x, int y,
-			    int width, int height,
-			    int highlight_thickness)
-#else
                             Position x, Position y,
                             Dimension width, Dimension height,
                             Dimension highlight_thickness)
-#endif /* NeedWidePrototypes */
 {
     XRectangle rect[4] ;
     XtAppContext app;
@@ -238,20 +221,11 @@ void XmeDrawHighlight(Display *display, Drawable d,
 /******************************XmeDrawSeparator**********************/
 void XmeDrawSeparator(Display *display, Drawable d,
                      GC top_gc, GC bottom_gc, GC separator_gc,
-#if NeedWidePrototypes
-                     int x, int y,
-                     int width, int height,
-                     int shadow_thick,
-                     int margin, unsigned int orientation,
-                     unsigned int separator_type)
-#else
                      Position x, Position y,
                      Dimension width, Dimension height,
                      Dimension shadow_thick,
                      Dimension margin, unsigned char orientation,
                      unsigned char separator_type)
-#endif /* NeedWidePrototypes */
-
 {
    Position center;
    XSegment segs[2];

@@ -87,45 +87,25 @@ static XtGeometryResult QueryGeometry(
                         XtWidgetGeometry *ret) ;
 static void CalcFrameSize(
                         XmFrameWidget fw,
-#if NeedWidePrototypes
-                        int titleWidth,
-                        int titleHeight,
-                        int titleBorder,
-                        int workWidth,
-                        int workHeight,
-                        int workBorder,
-#else
                         Dimension titleWidth,
                         Dimension titleHeight,
                         Dimension titleBorder,
                         Dimension workWidth,
                         Dimension workHeight,
                         Dimension workBorder,
-#endif /* NeedWidePrototypes */
                         Dimension *fwWidth,
                         Dimension *fwHeight) ;
 static void CalcWorkAreaSize(
                         XmFrameWidget fw,
                         Dimension *workWidth,
                         Dimension *workHeight,
-#if NeedWidePrototypes
-                        int workBorder,
-                        int fwWidth,
-                        int fwHeight) ;
-#else
                         Dimension workBorder,
                         Dimension fwWidth,
                         Dimension fwHeight) ;
-#endif /* NeedWidePrototypes */
 static void CalcTitleExtent(
                         XmFrameWidget fw,
-#if NeedWidePrototypes
-                        int titleHeight,
-                        int titleBorder,
-#else
                         Dimension titleHeight,
                         Dimension titleBorder,
-#endif /* NeedWidePrototypes */
 			Dimension *titleExtent,
 			Position *titleY,
 			Dimension *shadowWidth,
@@ -327,7 +307,6 @@ externaldef(xmframewidgetclass) WidgetClass xmFrameWidgetClass =
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 CheckSetChildType(Widget wid,
 		    int offset,
@@ -546,7 +525,6 @@ ClassPartInitialize(
  *	Ensure that the width and height are not 0.
  *
  *************************************<->***********************************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,
@@ -909,7 +887,6 @@ ChangeManaged(
  *	changes.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -1031,21 +1008,12 @@ QueryGeometry(
 static void
 CalcFrameSize(
         XmFrameWidget fw,
-#if NeedWidePrototypes
-        int titleWidth,
-        int titleHeight,
-        int titleBorder,
-        int workWidth,
-        int workHeight,
-        int workBorder,
-#else
         Dimension titleWidth,
         Dimension titleHeight,
         Dimension titleBorder,
         Dimension workWidth,
         Dimension workHeight,
         Dimension workBorder,
-#endif /* NeedWidePrototypes */
         Dimension *fwWidth,
         Dimension *fwHeight )
 {
@@ -1089,15 +1057,9 @@ CalcWorkAreaSize(
         XmFrameWidget fw,
         Dimension *workWidth,
         Dimension *workHeight,
-#if NeedWidePrototypes
-        int workBorder,
-        int fwWidth,
-        int fwHeight )
-#else
         Dimension workBorder,
         Dimension fwWidth,
         Dimension fwHeight )
-#endif /* NeedWidePrototypes */
 {
    Widget title = fw->frame.title_area;
    Dimension shadowThickness = fw->manager.shadow_thickness;
@@ -1139,13 +1101,8 @@ CalcWorkAreaSize(
 static void
 CalcTitleExtent(
         XmFrameWidget fw,
-#if NeedWidePrototypes
-        int titleHeight,
-        int titleBorder,
-#else
         Dimension titleHeight,
         Dimension titleBorder,
-#endif /* NeedWidePrototypes */
         Dimension *titleExtent,
         Position *titleY,
         Dimension *shadowHeight,
@@ -1219,7 +1176,6 @@ CalcTitleExtent(
  *  Constraint Initialize
  *
  *************************************<->***********************************/
-/*ARGSUSED*/
 static void
 ConstraintInitialize(
         Widget rw,		/* unused */
@@ -1286,7 +1242,6 @@ ConstraintInitialize(
  *  Constraint SetValues
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 ConstraintSetValues(
         Widget cw,

@@ -13,9 +13,7 @@
 #include "XmI.h"
 #include <Xm/VaSimpleP.h>
 #include <Xm/DrawP.h>
-
 #include <Xm/DropDownP.h>
-
 #include <X11/Shell.h>
 #include <Xm/ArrowB.h>
 #include <Xm/Label.h>
@@ -23,9 +21,7 @@
 #include <Xm/Text.h>
 #include <Xm/List.h>
 #include <Xm/GrabShellP.h>
-
 #include <Xm/ExtP.h>
-
 #include "MenuShellI.h"
 
 /*
@@ -409,10 +405,7 @@ ClassInitialize()
  *	Arguments:     w_class - the widget class.
  *	Returns:       nothing
  */
-
-/*ARGSUSED*/
-static void
-ClassPartInitialize(WidgetClass w_class)
+static void ClassPartInitialize(WidgetClass w_class)
 {
       _XmFastSubclassInit (w_class, XmDROP_DOWN_BIT);
 }
@@ -735,8 +728,6 @@ Destroy(Widget w)
  *                     return - what we will allow if this is an almost.
  *	Returns:       status.
  */
-
-/*ARGSUSED*/
 static XtGeometryResult
 GeometryManager(Widget w, XtWidgetGeometry * request,
 		XtWidgetGeometry * result)
@@ -853,7 +844,6 @@ ChangeManaged(Widget w)
  *                     event - The expose event in question
  *                     r - The region to be exposed
  */
-/*ARGSUSED*/
 static void
 ExposeMethod(Widget wid, XEvent *event, Region r)
 {
@@ -896,6 +886,7 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
  * Actions and Callbacks.
  *
  ************************************************************/
+
 /*	Function Name: CheckUnpost
  *	Description:   This is called when the arrow button is armed.
  *	Arguments:     w - the arrow button widget.
@@ -903,7 +894,6 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
  *                     info_ptr - a pointer to the arrow button info.
  *	Returns:       none.
  */
-/* ARGSUSED */
 static void
 CheckUnpost(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 {
@@ -921,8 +911,6 @@ CheckUnpost(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
  *                     info_ptr - a pointer to the arrow button info.
  *	Returns:       none.
  */
-
-/* ARGSUSED */
 static void
 ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 {
@@ -937,12 +925,13 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
      * Do Nothing...
      */
     if (XmDropDown_list_state(cbw) == XmDropDown_IN_PROGRESS)
-	    return;
+	return;
 
 	if (XmDropDown_list_state(cbw) == XmDropDown_AFTER_UNPOST ) {
 		XmDropDown_list_state(cbw) = XmDropDown_POSTED;
 		return;
 	}
+
     /*
      * DANGER:  Do not return early from this function w/o setting
      *          XmDropDown_list_state(cbw) back to either XmDropDown_UNPOSTED or XmDropDown_POSTED or
@@ -960,7 +949,6 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     XmDropDown_list_state(cbw) = XmDropDown_IN_PROGRESS;
 
     if (is_unposted) {
-	if (!XmIsGrabShell(XmDropDown_popup_shell(cbw)))
 	    PopdownList((Widget) cbw);
 
 	if (!XmDropDown_customized_combo_box(cbw))
@@ -1024,9 +1012,6 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
  *                     info_ptr - a pointer to the popup_shell info.
  *	Returns:       none.
  */
-
-/* ARGSUSED */
-
 static void
 PopdownDone(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 {
@@ -1043,7 +1028,6 @@ PopdownDone(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
  *	Returns:       returns a valid extension as a
  *                     XmDropDownClassPartExtension pointer
  */
-
 static XmDropDownClassPartExtension *
 CheckExtensions( XmDropDownWidgetClass combo )
 {
@@ -1983,7 +1967,6 @@ SBBtnUpEH(Widget    w,		/* unused */
     XAllowEvents(XtDisplay(shell), SyncPointer, event->xbutton.time);
 }
 
-
 /*	Function Name: CreatePopup
  *	Description:   Create the popup shell that contains the list.
  *	Arguments:     w - the combo box.
@@ -2012,8 +1995,8 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 						new_list,
 						num_largs + num_args);
     XtFree((char *) new_list);
-
    	XtAddCallback(XmDropDown_popup_shell(cbw), XmNpopdownCallback, PopdownDone , (XtPointer) w);
+
     /*
      * Set the visible item count of the list child widget
      */
@@ -2078,7 +2061,6 @@ PopdownList(Widget w)
     }
 }
 
-/* ARGSUSED */
 static void
 TextButtonPress(Widget w , XtPointer client, XEvent *event, Boolean *go_on)
 {
@@ -2227,7 +2209,6 @@ PopupList(Widget w)
 		   XtLastTimestampProcessed(XtDisplay(w)) - 1);
 
     _XmPopupSpringLoaded(shell);
-
     if (!XmIsGrabShell(shell)) {
         ret = XtGrabPointer(shell, True,
 			ButtonPressMask | ButtonReleaseMask,

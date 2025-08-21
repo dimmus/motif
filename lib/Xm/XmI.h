@@ -53,11 +53,13 @@ void _XmInitModifiers (void);
 #ifndef DEBUG
 # define assert(assert_exp)
 #elif (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
+#include <stdlib.h>
 # define assert(assert_exp)						\
   (((assert_exp) ? (void) 0 :						\
     (void) (fprintf(stderr, "assert(%s) failed at line %d in %s\n",	\
                     #assert_exp, __LINE__, __FILE__), abort())))
 #else
+#include <stdlib.h>
 # define assert(assert_exp)						\
   (((assert_exp) ? 0 :							\
     (void) (fprintf(stderr, "assert(%s) failed at line %d in %s\n",	\
@@ -203,17 +205,10 @@ extern Boolean _XmParentProcess(
                         XmParentProcessData data) ;
 extern void _XmClearShadowType(
                         Widget w,
-#if NeedWidePrototypes
-                        int old_width,
-                        int old_height,
-                        int old_shadow_thickness,
-                        int old_highlight_thickness) ;
-#else
                         Dimension old_width,
                         Dimension old_height,
                         Dimension old_shadow_thickness,
                         Dimension old_highlight_thickness) ;
-#endif /* NeedWidePrototypes */
 #ifdef NO_XM_1_2_BC
 extern void _XmDestroyParentCallback(
                         Widget w,
@@ -233,6 +228,7 @@ extern Boolean _XmIsISO10646(Display *dpy,
 extern XChar2b* _XmUtf8ToUcs2(char *draw_text,
                               size_t seg_len,
 			      size_t *ret_str_len);
+extern Pixel _XmAssignInsensitiveColor(Widget w);
 
 /********    End Private Function Declarations    ********/
 
@@ -271,7 +267,6 @@ extern void (*_XtProcessLock)();
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 
-extern Pixel _XmAssignInsensitiveColor(Widget w);
 
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

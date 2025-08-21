@@ -34,19 +34,12 @@
 #include "XmI.h"
 #include <Xm/DrawP.h>
 
-
 /****************************XmeDrawArrow**********************************/
 void XmeDrawArrow(Display *display, Drawable d,
                   GC top_gc, GC bot_gc, GC cent_gc,
-#if NeedWidePrototypes
-                  int x, int y,
-                  int width, int height, int shadow_thick,
-                  unsigned int direction)
-#else
                   Position x, Position y,
                   Dimension width, Dimension height, Dimension shadow_thick,
                   unsigned char direction)
-#endif /* NeedWidePrototypes */
 {
    /* cent_gc might be NULL, which means don't draw anything on the center,
       but if shadow_thick is 1, then center is not NULL, see in ArrowB */

@@ -27,13 +27,13 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 #endif
 #endif
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <Xm/DisplayP.h>
 #include <Xm/DrawP.h>
@@ -47,10 +47,7 @@ static char rcsid[] = "$TOG: XmIm.c /main/28 1997/10/13 14:57:31 cshi $"
 #include "XmImI.h"
 #include <X11/Xlib.h>
 
-# include <stdarg.h>
-# define Va_start(a,b) va_start(a,b)
-
-#ifdef NO_XICPROC
+#if !HAVE_XICPROC
 typedef Bool (*XICProc)( XIC, XPointer, XPointer);
 #endif
 
@@ -185,11 +182,7 @@ static ArgList ImCreateArgList(va_list var,
 static XmImXICInfo create_xic_info(Widget	   shell,
 				   XmImDisplayInfo xim_info,
 				   XmImShellInfo   im_info,
-#if NeedWidePrototypes
-				   unsigned int    input_policy);
-#else
                                    XmInputPolicy   input_policy);
-#endif /*NeedWidePrototypes*/
 static XmImXICInfo recreate_xic_info(XIC		xic,
                                      Widget		shell,
 				     XmImDisplayInfo xim_info,
@@ -197,11 +190,7 @@ static XmImXICInfo recreate_xic_info(XIC		xic,
 static void set_values(Widget w,
 		       ArgList args,
 		       Cardinal num_args,
-#if NeedWidePrototypes
-		       unsigned int  policy);
-#else
                        XmInputPolicy policy);
-#endif /*NeedWidePrototypes*/
 
 static XmImXICInfo get_current_xic(XmImDisplayInfo xim_info,
 				   Widget 	   widget);
@@ -297,7 +286,6 @@ static XmImResListRec XmImResList[] = {
 
 #define MSG1	_XmMMsgXmIm_0000
 
-/*ARGSUSED*/
 void
 XmImRegister(Widget w,
 	     unsigned int reserved) /* unused */
@@ -626,11 +614,7 @@ XmImMbLookupString(Widget w,
 
 XIC
 XmImGetXIC(Widget 	 w,
-#if NeedWidePrototypes
-	   unsigned int  input_policy,
-#else
 	   XmInputPolicy input_policy,
-#endif /*NeedWidePrototypes*/
 	   ArgList 	 args,
 	   Cardinal 	 num_args)
 {
@@ -1038,11 +1022,7 @@ static XmImXICInfo
 create_xic_info(Widget		shell,
 		XmImDisplayInfo xim_info,
 		XmImShellInfo   im_info,
-#if NeedWidePrototypes
-		unsigned int 	input_policy)
-#else
                 XmInputPolicy	input_policy)
-#endif /*NeedWidePrototypes*/
 {
   XIMStyle style = 0;
   char tmp[BUFSIZ];
@@ -1127,8 +1107,6 @@ create_xic_info(Widget		shell,
       break;
 
     case XmPER_WIDGET:
-      break;
-
     case XmINHERIT_POLICY:
       break;
 
@@ -1151,11 +1129,7 @@ static void
 set_values(Widget w,
 	   ArgList args,
 	   Cardinal num_args,
-#if NeedWidePrototypes
-	   unsigned int  input_policy )
-#else
            XmInputPolicy input_policy )
-#endif /*NeedWidePrototypes*/
 {
   register XmImXICInfo icp;
   XmImDisplayInfo xim_info;
@@ -1298,6 +1272,7 @@ set_values(Widget w,
 	break;
 
       case XmPER_WIDGET:
+      case XmINHERIT_POLICY:
 	break;
       default:
 	assert(False);
@@ -1447,10 +1422,7 @@ ImPreeditStartCallback(XIC xic,
   XICProc proc;
   Widget real = NULL;
 
-  if (!client_data){
-    assert(False);
-  }
-
+  assert(client_data);
   proc = get_real_callback((Widget)client_data, PREEDIT_START, &real);
   if (proc)
     (*proc)(xic, (XPointer)real, call_data);
@@ -1469,10 +1441,7 @@ ImPreeditDoneCallback(XIC xic,
   XmImXICInfo icp;
   Widget real = NULL;
 
-  if (!client_data){
-    assert(False);
-  }
-
+  assert(client_data);
   if ((im_info = get_im_info(w, False)) == NULL)
     return;
   if ((icp = im_info->shell_xic) == NULL)
@@ -1506,9 +1475,7 @@ ImPreeditDrawCallback(XIC xic,
   wchar_t *wchar;
   Widget real = NULL;
 
-  if (!client_data){
-    assert(False);
-  }
+  assert(client_data);
 
   /* update the preedit buffer */
   if ((im_info = get_im_info(w, False)) == NULL)
@@ -1630,9 +1597,7 @@ ImPreeditCaretCallback(XIC xic,
 		(XIMPreeditCaretCallbackStruct *) call_data;
   Widget real = NULL;
 
-  if (!client_data){
-    assert(False);
-  }
+  assert(client_data);
 
 /* update the preedit buffer */
   if ((im_info = get_im_info(w, False)) == NULL)
@@ -1688,10 +1653,8 @@ get_real_callback(Widget w,
       break;
     }
   }
-  if (target == refs.num_refs){
-    assert(False);
-  }
 
+  assert(target < refs.num_refs);
   if (refs.callbacks[target])
     return (XICProc)refs.callbacks[target][swc];
   else
@@ -1859,8 +1822,6 @@ move_preedit_string(XmImXICInfo icp,
 }
 
 
-
-/*ARGSUSED*/
 static int
 add_sp(String name,
        XPointer value,
@@ -1874,7 +1835,6 @@ add_sp(String name,
   return BG_CHG;
 }
 
-/*ARGSUSED*/
 static int
 add_p(String name,
       XPointer value,
@@ -1888,7 +1848,6 @@ add_p(String name,
 }
 
 
-/*ARGSUSED*/
 static int
 add_fs(String name,
        XPointer value,
@@ -2359,7 +2318,6 @@ draw_separator(Widget vw )
 		   XmSHADOW_ETCHED_IN); /* separator.separator_type */
 }
 
-/*ARGSUSED*/
 static void
 null_proc(Widget w,		/* unused */
 	  XtPointer ptr,		/* unused */
@@ -2386,11 +2344,11 @@ XmImVaSetFocusValues(Widget w,
   _XmWidgetToAppContext(w);
 
   _XmAppLock(app);
-  Va_start(var,w);
+  va_start(var,w);
   ImCountVaList(var, &total_count);
   va_end(var);
 
-  Va_start(var,w);
+  va_start(var,w);
   args  = ImCreateArgList(var, total_count);
   va_end(var);
 
@@ -2410,11 +2368,11 @@ void
   _XmWidgetToAppContext(w);
 
   _XmAppLock(app);
-  Va_start(var,w);
+  va_start(var,w);
   ImCountVaList(var, &total_count);
   va_end(var);
 
-  Va_start(var,w);
+  va_start(var,w);
   args  = ImCreateArgList(var, total_count);
   va_end(var);
 
@@ -2487,7 +2445,7 @@ set_current_xic(XmImXICInfo 	xic_info,
   (void) add_ref(&xic_info->widget_refs, widget);
 
   /* Set the current XIC for this widget. */
-  if (xim_info->current_xics == (XContext) NULL)
+  if (!xim_info->current_xics)
     xim_info->current_xics = XUniqueContext();
   (void) XSaveContext(XtDisplay(widget), (XID) widget,
 		      xim_info->current_xics, (XPointer) xic_info);
@@ -2506,6 +2464,7 @@ unset_current_xic(XmImXICInfo	  xic_info,
 			xim_info->current_xics);
   if (im_info->current_widget == widget)
     im_info->current_widget = NULL;
+
   /* Remove this widget as a reference to this XIC. */
   if (remove_ref(&xic_info->widget_refs, widget) == 0)
     {
@@ -2517,6 +2476,7 @@ unset_current_xic(XmImXICInfo	  xic_info,
 	    *ptr = xic_info->next;
 	    break;
 	  }
+
       /* Don't let anyone share this XIC. */
       if (xic_info->source != NULL)
 	*(xic_info->source) = NULL;

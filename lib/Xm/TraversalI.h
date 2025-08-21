@@ -244,11 +244,7 @@ extern Widget _XmGetActiveTabGroup(
 extern Widget _XmTraverseAway(
                         XmTravGraph list,
                         Widget wid,
-#if NeedWidePrototypes
-                        int wid_is_control) ;
-#else
                         Boolean wid_is_control) ;
-#endif /* NeedWidePrototypes */
 extern Widget _XmTraverse(
                         XmTravGraph list,
                         XmTraversalDirection action,

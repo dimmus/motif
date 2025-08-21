@@ -44,11 +44,7 @@ Atom
 XmInternAtom(
         Display *display,
         String name,
-#if NeedWidePrototypes
-        int only_if_exists )
-#else
         Boolean only_if_exists )
-#endif /* NeedWidePrototypes */
 {
   /* While not yet obsolete, this routine is not in favor.  Use */
   /* XInternAtom directly. */

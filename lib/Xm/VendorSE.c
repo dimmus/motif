@@ -36,10 +36,7 @@ static char rcsid[] = "$TOG: VendorSE.c /main/21 1997/10/13 14:58:18 cshi $"
 
 /* Make sure all wm properties can make it out of the resource manager */
 
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include <string.h>
 #include <Xm/Xm.h>		/* To make cpp on Sun happy. CR 5943 */
 #include <X11/IntrinsicP.h>
@@ -457,9 +454,6 @@ XmVendorShellExtClassRec xmVendorShellExtClassRec = {
 externaldef(xmVendorShellExtobjectclass) WidgetClass
        xmVendorShellExtObjectClass = (WidgetClass) (&xmVendorShellExtClassRec);
 
-
-
-/* ARGSUSED */
 static Boolean
 CvtStringToHorizontalInt(
         Display *display,
@@ -488,7 +482,6 @@ CvtStringToHorizontalInt(
         _XM_CONVERTER_DONE( to, int, tmpPix, ; )
 }
 
-/* ARGSUSED */
 static Boolean
 CvtStringToVerticalInt(
         Display *display,
@@ -578,7 +571,6 @@ ClassPartInitialize(
  *  DeleteWindowHandler
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 DeleteWindowHandler(
         Widget wid,
@@ -620,7 +612,6 @@ DeleteWindowHandler(
  *     OffsetHandler
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 OffsetHandler(
         Widget shell,		/* unused */
@@ -760,7 +751,6 @@ Destroy(
  * function has been called twice on same widget and resource offset, thus
  * resource needs to be set NULL, otherwise leave it alone.
  */
-/* ARGSUSED */
 static void
 CheckSetRenderTables(Widget wid,
 		     int offset,
@@ -854,7 +844,6 @@ _XmGetAudibleWarning(Widget w)
 }
 
 /****************************************************************/
-/*ARGSUSED*/
 static void
 GetMWMFunctionsFromProperty(
         Widget wid,

@@ -553,7 +553,7 @@ ExtTypeToContext(
   static ExtToContextRec extToContextMap[16];
   Cardinal		 i;
   ExtToContext		 curr;
-  XContext		 context = (XContext) NULL;
+  XContext		 context = 0;
 
   _XmProcessLock();
   for (i = 0, curr = &extToContextMap[0];
@@ -585,11 +585,7 @@ void
 _XmPushWidgetExtData(
         Widget widget,
         XmWidgetExtData data,
-#if NeedWidePrototypes
-        unsigned int extType )
-#else
         unsigned char extType )
-#endif /* NeedWidePrototypes */
 {
   XmAssocData  newData;
   XmAssocData  assocData = NULL;
@@ -619,11 +615,7 @@ void
 _XmPopWidgetExtData(
         Widget widget,
         XmWidgetExtData *dataRtn,
-#if NeedWidePrototypes
-        unsigned int extType )
-#else
         unsigned char extType )
-#endif /* NeedWidePrototypes */
 {
   XmAssocData  assocData = NULL;
   XmAssocData *assocDataPtr;
@@ -661,11 +653,7 @@ _XmPopWidgetExtData(
 XmWidgetExtData
 _XmGetWidgetExtData(
         Widget widget,
-#if NeedWidePrototypes
-        unsigned int extType )
-#else
         unsigned char extType )
-#endif /* NeedWidePrototypes */
 {
   XmAssocData  assocData = NULL;
   XmAssocData *assocDataPtr;
@@ -1938,12 +1926,9 @@ InitializeLeafWrapper(
 		/* We're home ! */
 	   	XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 		init_proc = wrapperData->initializeLeaf;
-		post_proc = (*wcePtr)->initializePosthook;
-
-		if (post_proc) {
+		if ((post_proc = (*wcePtr)->initializePosthook)) {
 		    if ((--(wrapperData->initializeLeafCount)) == 0)
-			wc->core_class.initialize =
-				wrapperData->initializeLeaf;
+			wc->core_class.initialize = wrapperData->initializeLeaf;
 		}
 	   }
 	}
@@ -1989,9 +1974,7 @@ CInitializeLeafWrapper(
 		wrapperData = GetWrapperData((WidgetClass) cwc);
 
 		init_proc = wrapperData->constraintInitializeLeaf;
-		post_proc = (*wcePtr)->initializePosthook;
-
-		if (post_proc) {
+		if ((post_proc = (*wcePtr)->initializePosthook)) {
 		    if ((--(wrapperData->constraintInitializeLeafCount)) ==0)
 			cwc->constraint_class.initialize =
 				wrapperData->constraintInitializeLeaf;
@@ -2261,9 +2244,7 @@ SetValuesLeafWrapper(
 		/* We're home ! */
 	   	XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 		setvalues_proc = wrapperData->setValuesLeaf;
-		post_proc = (*wcePtr)->setValuesPosthook;
-
-		if (post_proc) {
+		if (!(post_proc = (*wcePtr)->setValuesPosthook)) {
 		    if ((--(wrapperData->setValuesLeafCount)) ==0)
 			wc->core_class.set_values =
 				wrapperData->setValuesLeaf;
@@ -2316,10 +2297,8 @@ CSetValuesLeafWrapper(
 	if (leafDepth == depth) {
 		XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 		wrapperData = GetWrapperData((WidgetClass) cwc);
-
 		setvalues_proc = wrapperData->constraintSetValuesLeaf;
-		post_proc = (*wcePtr)->setValuesPosthook;
-		if (post_proc) {
+		if ((post_proc = (*wcePtr)->setValuesPosthook)) {
 		    if ((--(wrapperData->constraintSetValuesLeafCount)) ==0)
 			cwc->constraint_class.set_values =
 				wrapperData->constraintSetValuesLeaf;
@@ -2565,9 +2544,7 @@ GetValuesLeafWrapper(
 
 	   wrapperData = GetWrapperData(wc);
 	   getvalues_proc = wrapperData->getValuesLeaf;
-	   post_proc = ((*wcePtr)->getValuesPosthook);
-
-	   if (post_proc) {
+	   if ((post_proc = ((*wcePtr)->getValuesPosthook))) {
 	    if ((--(wrapperData->getValuesLeafCount)) == 0)
 		wc->core_class.get_values_hook =
 			wrapperData->getValuesLeaf;
@@ -2664,13 +2641,7 @@ GetDepth(WidgetClass wc)
  * those applications recognize non MT-safe libraries is a different
  * issue.
  */
-#ifndef XTHREADS
-# undef _XmFastSubclassInit
-# undef _XmIsFastSubclass
-#endif
-
-void
-_XmFastSubclassInit(WidgetClass wc, unsigned int bit)
+inline void _XmFastSubclassInit(WidgetClass wc, unsigned int bit)
 {
 	XmBaseClassExt *basePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 
@@ -2678,7 +2649,7 @@ _XmFastSubclassInit(WidgetClass wc, unsigned int bit)
 		_XmSetFlagsBit(((*basePtr)->flags), bit);
 }
 
-Boolean
+Boolean inline
 _XmIsFastSubclass(WidgetClass wc, unsigned int bit)
 {
 	XmBaseClassExt *basePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);

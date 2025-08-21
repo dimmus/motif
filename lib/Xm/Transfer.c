@@ -29,7 +29,6 @@
 #include <config.h>
 #endif
 
-
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DragDrop.h>
@@ -38,13 +37,11 @@
 #include <Xm/VendorSP.h>
 #include <Xm/XmosP.h>
 #include "CutPasteI.h"
-#include "DragBSI.h"
 #include "HashI.h"
 #include "MessagesI.h"
 #include "ResEncodI.h"
 #include "TransferI.h"
 #include "XmI.h"
-
 
 typedef enum { DoXFree, DoFree } FreeType;
 #define FreeSafeAtomName(val,how) if (1) { if (DoXFree==how) XFree(val); else free(val); }
@@ -322,7 +319,6 @@ static int secondary_lock = 0;
 /* mechanism which requires a spinlock.				    */
 /********************************************************************/
 
-/*ARGSUSED*/
 static void
 SecondaryConvertHandler(Widget w,
 			XtPointer ignored, /* unused */
@@ -432,7 +428,6 @@ SecondaryConvertHandler(Widget w,
   cs -> status = XmCONVERT_DONE;
 }
 
-/*ARGSUSED*/
 static void
 ReleaseSecondaryLock(Widget w,	/* unused */
 		     XtEnum a,	/* unused */
@@ -492,7 +487,6 @@ LoseProc(Widget w, Atom *selection)
 /* This gets run to disown the selection if the widget is destroyed */
 /********************************************************************/
 
-/*ARGSUSED*/
 static void
 DisownCallback(Widget w,
 	       XtPointer ignore, /* unused */
@@ -675,7 +669,6 @@ XmeSecondaryTransfer(Widget w, Atom target, XtEnum op, Time time)
 /* This also callback to a widget supplied routine to deal with  */
 /* issues surrounding the success or failure of the transfer     */
 /*****************************************************************/
-/*ARGSUSED*/
 static void
 SecondaryDone(Widget wid,
 	      XtPointer client_data, /* unused */
@@ -759,8 +752,6 @@ XmeClipboardSource(Widget w, XtEnum op, Time time)
      code. */
   clipboard_owner = XGetSelectionOwner(display, atoms[XmACLIPBOARD_MANAGER]);
   if (clipboard_owner != None) {
-    int status;
-
     if (op == XmMOVE) {
       /* We call a special lose proc for move which will call
 	 _XmConvertHandler to delete the selection */
@@ -1047,7 +1038,6 @@ XmeDragSource(Widget w, XtPointer location_data, XEvent *event,
   return(dragContext);
 }
 
-
 /****************************************************************/
 /* Destination section						*/
 /* 								*/
@@ -1249,7 +1239,6 @@ FinishTransfer(Widget wid, TransferContext tc)
 /* in the drop							*/
 /****************************************************************/
 
-/*ARGSUSED*/
 static void
 DeleteDropCBStruct(Widget w,	/* unused */
 		   XtEnum ignored_status, /* unused */
@@ -1261,7 +1250,6 @@ DeleteDropCBStruct(Widget w,	/* unused */
   XtFree((char*) tc -> callback_struct -> destination_data);
 }
 
-/*ARGSUSED*/
 static void
 DropDestinationHandler(Widget w,
 		       XtPointer client_data, /* unused */
@@ -1369,7 +1357,7 @@ void
 XmeDropSink(Widget w, ArgList in_args, Cardinal in_arg_count)
 {
   Arg *args;
-  int arg_count;
+  Cardinal arg_count;
   _XmWidgetToAppContext(w);
 
   _XmAppLock(app);
@@ -1389,7 +1377,6 @@ XmeDropSink(Widget w, ArgList in_args, Cardinal in_arg_count)
   XtFree((char*) args);
   _XmAppUnlock(app);
 }
-
 
 /*************************************************************/
 /* Transfer routine section                                  */
@@ -2059,7 +2046,6 @@ XmeStandardTargets(Widget w, int count, int *tcount)
  * target.  It should be called last in most convert procs.
  */
 
-/*ARGSUSED*/
 void
 XmeStandardConvert(Widget w,
 		   XtPointer ignore, /* unused */
@@ -2352,7 +2338,6 @@ _XmTransferGetDestinationCBStruct(XtPointer tid)
 
 static int SIF_ErrorFlag;
 
-/*ARGSUSED*/
 static int
 SIF_ErrorHandler(
      Display *display,		/* unused */

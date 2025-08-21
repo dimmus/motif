@@ -24,7 +24,6 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Xmos.c /main/33 1998/01/21 11:07:25 csn $"
@@ -41,37 +40,34 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 } /* Close scope of 'extern "C"' declaration */
 #endif /* __cplusplus */
 
-#include <X11/Xos.h>
-#ifndef NEED_XPOLL_H
+#if HAVE_X11_XPOLL_H
 #include <X11/Xpoll.h>
 #else
 #include <Xm/Xmpoll.h>
 #endif
 
-#ifndef X_NOT_STDC_ENV
-#include <stdlib.h>
-#include <unistd.h>
+#if HAVE_NANOSLEEP
+#include <time.h>
+#elif HAVE_SYS_TIME_H
+#include <sys/time.h>
 #endif
 
+#include <stdlib.h>
+#include <unistd.h>
 #include <ctype.h>		/* for isspace() */
 
-#include <sys/time.h>		/* For declaration of select(). */
-
-#if defined(NO_REGCOMP) && !defined(NO_REGEX)
-# ifdef __sgi
-extern char *regcmp();
-extern int regex();
-# elif defined(SVR4)
+#if HAVE_REGEX && !HAVE_REGCOMP
+# if defined(SVR4)
 #  include <libgen.h>
 # elif defined(SYSV)
 extern char *regcmp();
 extern int regex();
 # endif
-#endif /* NO_REGEX */
+#endif /* HAVE_REGEX && !HAVE_REGCOMP */
 
-#ifndef NO_REGCOMP
-# include <regex.h>
-#endif /* NO_REGCOMP */
+#if HAVE_REGCOMP
+#include <regex.h>
+#endif
 
 #include <sys/stat.h>
 
@@ -79,7 +75,7 @@ extern int regex();
 #define X_INCLUDE_DIRENT_H
 #define XOS_USE_XT_LOCKING
 
-#ifndef NEED_XOS_R_H
+#if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h>
 #else
 #include <Xm/Xmos_r.h>
@@ -88,7 +84,7 @@ extern int regex();
 #include "XmosI.h"
 #include "XmI.h"
 
-#ifdef USE_GETWD
+#if !HAVE_GETCWD && HAVE_GETWD
 # include <sys/param.h>
 # define MAX_DIR_PATH_LEN    MAXPATHLEN
 # define getcwd(buf, len)   ((char *) getwd(buf))
@@ -411,12 +407,8 @@ _XmOSFindPatternPart(String fileSpec)
 	  }
 	prev2Char = prevChar;
 	prevChar = *lookAheadPtr;
-#ifndef NO_MULTIBYTE
 	lookAheadPtr += ((MB_CUR_MAX > 1) ?
 			 abs(mblen(lookAheadPtr, MB_CUR_MAX)) : 1);
-#else
-	lookAheadPtr++;
-#endif
       }
   } while (!hasWildcards  &&  *lookAheadPtr++);
 
@@ -557,11 +549,7 @@ GetFixedMatchPattern(String pattern)
   bufPtr = outputBuf;
   *bufPtr++ = '^';
 
-#ifndef NO_MULTIBYTE
   while ((len = mblen(pattern, MB_CUR_MAX)) > 0)
-#else
-  while ((len = *pattern ? 1 : 0))
-#endif
     {
       if (len <= 1)
 	{
@@ -615,15 +603,9 @@ GetFixedMatchPattern(String pattern)
 void
      _XmOSGetDirEntries(String          qualifiedDir,
 			String          matchPattern,
-#if NeedWidePrototypes
-			unsigned int fileType,
-			int matchDotsLiterally,
-			int listWithFullPath,
-#else
 			unsigned char fileType,
 			Boolean matchDotsLiterally,
 			Boolean listWithFullPath,
-#endif /* NeedWidePrototypes */
 			String * *      pEntries, /* Cannot be NULL. */
 			unsigned int *  pNumEntries, /* Cannot be NULL. */
 			unsigned int *  pNumAlloc) /* Cannot be NULL. */
@@ -659,10 +641,10 @@ void
   Boolean         loadCache = FALSE;
   unsigned        readCacheIndex = 0;
   unsigned char   dirFileType = 0;
-#ifndef NO_REGCOMP
+#if HAVE_REGCOMP
   regex_t         preg;
   int             comp_status = 0;
-#elif !defined(NO_REGEX)
+#elif HAVE_REGEX
   char *          compiledRE = NULL;
 #endif /* NO_REGCOMP */
 /****************/
@@ -686,13 +668,13 @@ void
 	}
       else
 	{
-#ifndef NO_REGCOMP
+#if HAVE_REGCOMP
 	  comp_status = regcomp(&preg, fixedMatchPattern, REG_NOSUB);
 	  if (comp_status)
-#elif !defined(NO_REGEX)
+#elif HAVE_REGEX
             compiledRE = (char *)regcmp(fixedMatchPattern, (char *) NULL);
 	  if (!compiledRE)
-#else
+#else /* Obsolete BSD re_comp */
           if (re_comp(fixedMatchPattern))
 #endif
 	    {
@@ -811,15 +793,13 @@ void
 	    }
 	  if (fixedMatchPattern)
 	    {
-#ifndef NO_REGCOMP
+#if HAVE_REGCOMP
 	      if (regexec(&preg, dirName, 0, NULL, 0))
-#else /* NO_REGCOMP */
-#  ifndef NO_REGEX
+#elif HAVE_REGEX
               if (!regex(compiledRE, dirName))
-#  else
+#else /* obsolete BSD re_exec */
               if (!re_exec(dirName))
-#  endif
-#endif /* NO_REGCOMP */
+#endif
 		continue;
 	    }
 	  if (matchDotsLiterally &&
@@ -889,18 +869,16 @@ void
       if (!useCache)
 	closedir(dirStream);
     }
-#ifndef NO_REGCOMP
+#if HAVE_REGCOMP
   if (!comp_status)
     regfree(&preg);
-#else /* NO_REGCOMP */
-#  ifndef NO_REGEX
+#elif !HAVE_REGEX
   if (compiledRE)
     {
       /* Use free instead of XtFree since malloc is inside of regex(). */
       free(compiledRE);
     }
-#  endif
-#endif /* NO_REGCOMP */
+#endif
   XtFree(fixedMatchPattern);
 
   if (!loadCache)
@@ -923,11 +901,7 @@ void
 void
 _XmOSBuildFileList(String          dirPath,
 		   String          pattern,
-#if NeedWidePrototypes
-		   unsigned int typeMask,
-#else
 		   unsigned char typeMask,
-#endif /* NeedWidePrototypes */
 		   String * *      pEntries,       /* Cannot be NULL. */
 		   unsigned int *  pNumEntries,    /* Cannot be NULL. */
 		   unsigned int *  pNumAlloc)      /* Cannot be NULL. */
@@ -977,10 +951,10 @@ _XmOSBuildFileList(String          dirPath,
  ****************************************************************/
 
 int
-_XmOSFileCompare(XmConst void *sp1,
-		 XmConst void *sp2)
+_XmOSFileCompare(const void *sp1,
+		 const void *sp2)
 {
-  return strcmp(*((XmConst String *) sp1), *((XmConst String *) sp2));
+  return strcmp(*((const String *) sp1), *((const String *) sp2));
 }
 
 /*************************************************************************
@@ -1041,9 +1015,16 @@ XmeGetHomeDirName(void)
 #ifndef INCDIR
 #define INCDIR "/usr/include/X11"
 #endif
+#ifndef DATADIR
+#define DATADIR "/usr/share"
+#endif
+#ifndef PACKAGE_NAME
+#define PACKAGE_NAME "motif"
+#endif
 
-static XmConst char libdir[] = LIBDIR;
-static XmConst char incdir[] = INCDIR;
+static const char libdir[]  = LIBDIR;
+static const char incdir[]  = INCDIR;
+static const char datadir[] = DATADIR;
 
 /*************************************************************************
  *
@@ -1059,7 +1040,7 @@ static XmConst char incdir[] = INCDIR;
  *
  *************************************************************************/
 
-static XmConst char XAPPLRES_DEFAULT[] = "\
+static const char XAPPLRES_DEFAULT[] = "\
 %%P\
 %%S:\
 %s/%%L/%%T/%%N/%%P\
@@ -1077,6 +1058,50 @@ static XmConst char XAPPLRES_DEFAULT[] = "\
 %s/%%l/%%T/%%P\
 %%S:\
 %s/%%T/%%P\
+%%S:\
+%s/%%T/%s/%%P%%S:\
+%s/%s/%%T/%%P%%S:\
+%s/%%T/%%P\
+%%S:\
+%s/%%P\
+%%S:\
+%s/%%L/%%T/%%N/%%P\
+%%S:\
+%s/%%l_%%t/%%T/%%N/%%P\
+%%S:\
+%s/%%l/%%T/%%N/%%P\
+%%S:\
+%s/%%T/%%N/%%P\
+%%S:\
+%s/%%L/%%T/%%P\
+%%S:\
+%s/%%l_%%t/%%T/%%P\
+%%S:\
+%s/%%l/%%T/%%P\
+%%S:\
+%s/%%T/%%P\
+%%S:\
+%s/%%T/%%P\
+%%S";
+
+static const char PATH_DEFAULT[] = "\
+%%P\
+%%S:\
+%s/%%T/%s/%%P%%S:\
+%s/%s/%%T/%%P%%S:\
+%s/%%L/%%T/%%N/%%P\
+%%S:\
+%s/%%l_%%t/%%T/%%N/%%P\
+%%S:\
+%s/%%l/%%T/%%N/%%P\
+%%S:\
+%s/%%T/%%N/%%P\
+%%S:\
+%s/%%L/%%T/%%P\
+%%S:\
+%s/%%l_%%t/%%T/%%P\
+%%S:\
+%s/%%l/%%T/%%P\
 %%S:\
 %s/%%T/%%P\
 %%S:\
@@ -1101,47 +1126,7 @@ static XmConst char XAPPLRES_DEFAULT[] = "\
 %s/%%T/%%P\
 %%S";
 
-static XmConst char PATH_DEFAULT[] = "\
-%%P\
-%%S:\
-%s/%%L/%%T/%%N/%%P\
-%%S:\
-%s/%%l_%%t/%%T/%%N/%%P\
-%%S:\
-%s/%%l/%%T/%%N/%%P\
-%%S:\
-%s/%%T/%%N/%%P\
-%%S:\
-%s/%%L/%%T/%%P\
-%%S:\
-%s/%%l_%%t/%%T/%%P\
-%%S:\
-%s/%%l/%%T/%%P\
-%%S:\
-%s/%%T/%%P\
-%%S:\
-%s/%%P\
-%%S:\
-%s/%%L/%%T/%%N/%%P\
-%%S:\
-%s/%%l_%%t/%%T/%%N/%%P\
-%%S:\
-%s/%%l/%%T/%%N/%%P\
-%%S:\
-%s/%%T/%%N/%%P\
-%%S:\
-%s/%%L/%%T/%%P\
-%%S:\
-%s/%%l_%%t/%%T/%%P\
-%%S:\
-%s/%%l/%%T/%%P\
-%%S:\
-%s/%%T/%%P\
-%%S:\
-%s/%%T/%%P\
-%%S";
-
-static XmConst char ABSOLUTE_PATH[] = "\
+static const char ABSOLUTE_PATH[] = "\
 %P\
 %S";
 
@@ -1244,22 +1229,23 @@ _XmOSInitPath(String   file_name,
 	  if (old_path == NULL)
 	    {
 	      path = XtCalloc(1, (9*strlen(homedir) + strlen(PATH_DEFAULT) +
-				  8*strlen(libdir) + strlen(incdir) + 1));
-	      sprintf(path, PATH_DEFAULT, homedir, homedir, homedir,
-		      homedir, homedir, homedir, homedir, homedir, homedir,
-		      libdir, libdir, libdir, libdir, libdir, libdir, libdir,
-		      libdir, incdir);
+				  8*strlen(libdir) + strlen(incdir) + 2*strlen(datadir) +
+				  2*strlen(PACKAGE_NAME) + 1));
+	      sprintf(path, PATH_DEFAULT, datadir, PACKAGE_NAME, datadir,
+	              PACKAGE_NAME, homedir, homedir, homedir, homedir, homedir,
+	              homedir, homedir, homedir, homedir, libdir, libdir, libdir,
+	              libdir, libdir, libdir, libdir, libdir, incdir);
 	    }
 	  else
 	    {
 	      path = XtCalloc(1, (8*strlen(old_path) + 2*strlen(homedir) +
 				  strlen(XAPPLRES_DEFAULT) + 8*strlen(libdir) +
-				  strlen(incdir) + 1));
+				  strlen(incdir) + 2*strlen(datadir) + 2*strlen(PACKAGE_NAME) + 1));
 	      sprintf(path, XAPPLRES_DEFAULT,
 		      old_path, old_path, old_path, old_path, old_path,
-		      old_path, old_path, old_path, homedir, homedir,
-		      libdir, libdir, libdir, libdir, libdir, libdir, libdir,
-		      libdir, incdir);
+		      old_path, old_path, old_path, datadir, PACKAGE_NAME, datadir,
+		      PACKAGE_NAME, homedir, homedir, libdir, libdir, libdir, libdir,
+		      libdir, libdir, libdir, libdir, incdir);
 	    }
 	}
       else
@@ -1276,13 +1262,21 @@ _XmOSInitPath(String   file_name,
 int
 XmeMicroSleep(long usecs)
 {
+#if HAVE_NANOSLEEP
+	struct timespec ts;
+	ts.tv_sec  = usecs / 1e6;
+	ts.tv_nsec = (usecs - ts.tv_sec * 1e6) * 1000;
+	return nanosleep(&ts, NULL);
+#elif defined(USE_POLL)
+	return poll(NULL, 0, usecs / 1000);
+#else
   struct timeval      timeoutVal;
 
   /* split the micro seconds in seconds and remainder */
   timeoutVal.tv_sec = usecs/1000000;
   timeoutVal.tv_usec = usecs - timeoutVal.tv_sec*1000000;
-
   return Select(0, NULL, NULL, NULL, &timeoutVal);
+#endif
 }
 
 /************************************************************************
@@ -1297,7 +1291,6 @@ XmeMicroSleep(long usecs)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 XmString
 XmeGetLocalizedString(char *reserved,		/* unused */
 		      Widget widget,		/* unused */
@@ -1402,7 +1395,8 @@ _XmOSFindPathParts(String  path,
 void
 _XmOSGenerateMaskName(
     String	imageName,
-    String	maskNameBuf)
+    String	maskNameBuf,
+    size_t	buf_len)
 {
     String 	file, suffix;
     int		len;
@@ -1417,18 +1411,12 @@ _XmOSGenerateMaskName(
     else
       len = strlen(imageName);
 
-    strncpy(maskNameBuf, imageName, len);
-    maskNameBuf += len;
-    strcpy(maskNameBuf, "_m");
-    if (suffix)
-      strcpy(maskNameBuf+2, suffix);
-    else
-      maskNameBuf[2] = '\0';
+    snprintf(maskNameBuf, buf_len, "%s_m%s",
+            imageName, suffix ? suffix : "");
 }
 
 
 
-/*ARGSUSED*/
 Status
 _XmOSGetInitialCharsDirection(XtPointer     characters,
 			      XmTextType    type,
@@ -1457,7 +1445,6 @@ _XmOSGetInitialCharsDirection(XtPointer     characters,
     }
 }
 
-/*ARGSUSED*/
 XmDirection
 _XmOSGetCharDirection(XtPointer   character, /* unused */
 		      XmTextType  type,
@@ -1517,7 +1504,6 @@ static XmOSMethodEntry method_table[] = {
  *   get the function that implements the requested method.
  ****************************************************************/
 
-/*ARGSUSED*/
 XmOSMethodStatus
 XmOSGetMethod(Widget w,		/* unused */
 	      String method_id,
@@ -1581,7 +1567,6 @@ XmOSGetMethod(Widget w,		/* unused */
  *	The number of bytes written into the buffer.
  */
 
-/*ARGSUSED*/
 int
 _XmOSKeySymToCharacter(KeySym keysym,
 		       char  *locale,

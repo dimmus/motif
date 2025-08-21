@@ -66,10 +66,13 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include "TraversalI.h"
 #include "XmImI.h"
 #include "VendorSI.h"
-#include "EditresComI.h"
 #include "XmI.h"
 
-#ifndef NO_MESSAGE_CATALOG
+#if HAVE_LIBXMU
+#include <X11/Xmu/Editres.h>
+#endif
+
+#if XM_MSGCAT
 #if !defined(NL_CAT_LOCALE)
 #define NL_CAT_LOCALE	0
 #endif
@@ -108,21 +111,12 @@ static void SetMwmStuff(
 static void AddGrab(
                         XmVendorShellExtObject ve,
                         Widget shell,
-#if NeedWidePrototypes
-                        int exclusive,
-                        int springLoaded,
-#else
                         Boolean exclusive,
                         Boolean springLoaded,
-#endif /* NeedWidePrototypes */
                         XmVendorShellExtObject origKid) ;
 static void RemoveGrab(
                         XmVendorShellExtObject ve,
-#if NeedWidePrototypes
-                        int being_destroyed,
-#else
                         Boolean being_destroyed,
-#endif /* NeedWidePrototypes */
                         Widget shell) ;
 static void RemoveGrabCallback(
                         Widget w,
@@ -734,7 +728,7 @@ ClassInitialize( void )
 
    XtFree((char *)uncompiled);
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
     Xm_catd = catopen("Xm", NL_CAT_LOCALE);
 #endif
 }
@@ -905,13 +899,8 @@ SetMwmStuff(
 void
 _XmAddGrab(
         Widget wid,
-#if NeedWidePrototypes
-        int exclusive,
-        int spring_loaded)
-#else
         Boolean exclusive,
         Boolean spring_loaded)
-#endif /* NeedWidePrototypes */
 {
   AddGrab( NULL, wid, exclusive, spring_loaded, NULL) ;
 }
@@ -927,13 +916,8 @@ static void
 AddGrab(
         XmVendorShellExtObject ve,
         Widget shell,
-#if NeedWidePrototypes
-        int exclusive,
-        int springLoaded,
-#else
         Boolean exclusive,
         Boolean springLoaded,
-#endif /* NeedWidePrototypes */
         XmVendorShellExtObject origKid )
 {
     Cardinal		     	position;
@@ -989,11 +973,7 @@ AddGrab(
 static void
 RemoveGrab(
         XmVendorShellExtObject ve,
-#if NeedWidePrototypes
-        int being_destroyed,
-#else
 	Boolean being_destroyed,
-#endif /* NeedWidePrototypes */
 	Widget shell)
 {
     XmDisplay			xmDisplay;
@@ -1580,8 +1560,8 @@ InitializePrehook(
         ttp->post_delay = 5000;
         ttp->post_duration = 5000;
         ttp->enable = False;
-        ttp->timer = (int) NULL;
-        ttp->duration_timer = (int) NULL;
+        ttp->timer = 0;
+        ttp->duration_timer = 0;
         ttp->leave_time = 0;
         ttp->slider = ttp->label = NULL;
 
@@ -1888,7 +1868,7 @@ Initialize(
 	 xmDisplay->display.shellCount += 1;
 
 #ifdef HAVE_LIBXMU
-	XtAddEventHandler(new_w, (EventMask)0, True, (XtEventHandler)_XmEditResCheckMessages, NULL);
+	XtAddEventHandler(new_w, (EventMask)0, True, (XtEventHandler)_XEditResCheckMessages, NULL);
 #endif
 
     }

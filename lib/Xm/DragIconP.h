@@ -36,11 +36,7 @@ typedef void (*XmCloneVisualProc) (XmDragIconObject, Widget, Widget);
 typedef void (*XmMovePixmapProc)  (XmDragIconObject,
 				   XmDragIconObject,
 				   XmDragIconObject,
-#if NeedWidePrototypes
-				   int, int);
-#else
 				   Position, Position);
-#endif /* NeedWidePrototypes */
 
 typedef struct {
   XtPointer		extension;
@@ -76,5 +72,4 @@ typedef struct _XmDragIconRec{
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDragIconP_h */

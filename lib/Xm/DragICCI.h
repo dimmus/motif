@@ -486,11 +486,7 @@ externalref unsigned char _XmByteOrderChar;
 extern unsigned char _XmReasonToMessageType(
                         int reason) ;
 extern unsigned int _XmMessageTypeToReason(
-#if NeedWidePrototypes
-                        unsigned int messageType) ;
-#else
                         unsigned char messageType) ;
-#endif /* NeedWidePrototypes */
 extern void _XmICCCallbackToICCEvent(
                         Display *display,
                         Window window,
@@ -500,6 +496,8 @@ extern void _XmICCCallbackToICCEvent(
 extern void _XmSendICCCallback(
                         Display *display,
                         Window window,
+                        Window src_window,
+                        int protocol_style,
                         XmICCCallback callback,
                         XmICCEventType type) ;
 extern Boolean _XmICCEventToICCCallback(
@@ -508,20 +506,12 @@ extern Boolean _XmICCEventToICCCallback(
                         XmICCEventType type) ;
 extern CARD16 _XmReadDragBuffer(
                         xmPropertyBuffer propBuf,
-#if NeedWidePrototypes
-                        int which,
-#else
                         BYTE which,
-#endif /* NeedWidePrototypes */
                         BYTE *ptr,
                         CARD32 size) ;
 extern CARD16 _XmWriteDragBuffer(
                         xmPropertyBuffer propBuf,
-#if NeedWidePrototypes
-                        int which,
-#else
                         BYTE which,
-#endif /* NeedWidePrototypes */
                         BYTE *ptr,
                         CARD32 size) ;
 extern void _XmWriteInitiatorInfo(
@@ -557,5 +547,4 @@ extern void _XmInitByteOrderChar( void ) ;
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDragICCI_h */

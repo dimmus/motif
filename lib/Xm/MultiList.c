@@ -21,6 +21,8 @@
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
+#define BUG_FIX_1385 1
+
 #define H_MARGIN 5
 #define V_MARGIN 5
 
@@ -136,6 +138,97 @@ static XtResource resources[] =
     sizeof(int), XtOffsetOf(XmMultiListRec, ext_list.visible_rows),
     XmRImmediate, (XtPointer) XmMultiList_DEFAULT_VISIBLE_COUNT
   },
+#ifndef BUG_FIX_1385
+  {
+    XmNnumColumns, XmCNumColumns, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNnumRows, XmCNumRows, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNselectedColumn, XmCSelectedColumn, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNcolumnTitles, XmCColumnTitles, XmRXmStringTable,
+    sizeof(XmString *), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNentryData, XmCEntryData, XmRPointer,
+    sizeof(XtPointer), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNentryBackground, XmCBackground, XtRPixel,
+    sizeof(Pixel), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstColumnPixmaps, XmCFirstColumnPixmaps, XmRBoolean,
+    sizeof(Boolean), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfontList, XmCFontList, XmRFontList,
+    sizeof(XmFontList), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNrenderTable, XmCRenderTable, XmRRenderTable,
+    sizeof(XmRenderTable), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNverticalScrollBar, XmCScrollBar, XmRWidget,
+    sizeof(Widget), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNhorizontalScrollBar, XmCScrollBar, XmRWidget,
+    sizeof(Widget), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstRow, XmCFirstLocation, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNfirstColumn, XmCFirstLocation, XmRShort,
+    sizeof(short), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNsortFunctions, XmCFunction, XmRFunction,
+    sizeof(Xm18SortFunction **), 0,
+    NULL, (XtPointer) NULL
+  },
+
+  {
+    XmNselectionPolicy, XmCSelectionPolicy, XmRSelectionPolicy,
+    sizeof(unsigned char), 0,
+    NULL, (XtPointer) NULL
+  }
+#endif
 };
 
 static XmSyntheticResource syn_resources[] =
@@ -495,7 +588,7 @@ SetValues(Widget current, Widget request, Widget set,
 
     if (XmMultiList_find_label(e_old) != XmMultiList_find_label(e_set))
     {
-	Arg args[1];
+	Arg _args[1];
 
 	redisplay = True;
 	XmStringFree(XmMultiList_find_label(e_old));
@@ -507,8 +600,8 @@ SetValues(Widget current, Widget request, Widget set,
 	    XmMultiList_find_label(e_set) =
 		XmStringCreateLocalized(FIND_STRING);
 
-	XtSetArg(args[0], XmNlabelString, XmMultiList_find_label(e_set));
-	XtSetValues(XmMultiList_find(e_set), args, 1);
+	XtSetArg(_args[0], XmNlabelString, XmMultiList_find_label(e_set));
+	XtSetValues(XmMultiList_find(e_set), _args, 1);
     }
 
     /*

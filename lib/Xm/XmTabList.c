@@ -34,9 +34,7 @@ static char rcsid[] = "$TOG: XmTabList.c /main/9 1999/04/27 17:49:59 samborn $"
 #endif
 #endif
 
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include <string.h>
 #include <ctype.h>
 
@@ -199,7 +197,6 @@ XmTabListInsertTabs(XmTabList oldlist,
   return(tl);
 }
 
-/*ARGSUSED*/
 Widget
 _XmCreateTabList(Widget parent,
 		 String name,	/* unused */
@@ -331,7 +328,7 @@ XmTabListGetTab(XmTabList tablist,
 {
    XmTab ret_val;
   _XmProcessLock();
-  if (tablist == NULL || abs(position) >= _XmTabLCount(tablist)) {
+  if (tablist == NULL || position >= _XmTabLCount(tablist)) {
 	_XmProcessUnlock();
 	return((XmTab)NULL);
   }
@@ -523,7 +520,6 @@ XmTabCreate(float value,
   return(tab);
 }
 
-/*ARGSUSED*/
 Widget
 _XmCreateTab(Widget parent,
 	     String name,	/* unused */

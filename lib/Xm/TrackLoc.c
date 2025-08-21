@@ -25,7 +25,6 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: TrackLoc.c /main/12 1995/10/25 20:24:41 cde-sun $"
@@ -43,13 +42,8 @@ static char rcsid[] = "$XConsortium: TrackLoc.c /main/12 1995/10/25 20:24:41 cde
 
 static Widget _XmInputInWidget(
                         Widget w,
-#if NeedWidePrototypes
-                        int x,
-                        int y) ;
-#else
                         Position x,
                         Position y) ;
-#endif /* NeedWidePrototypes */
 
 /********    End Static Function Declarations    ********/
 
@@ -61,13 +55,8 @@ static Widget _XmInputInWidget(
 static Widget
 _XmInputInWidget(
         Widget w,
-#if NeedWidePrototypes
-        int x,
-        int y)
-#else
         Position x,
         Position y)
-#endif /* NeedWidePrototypes */
 {
    int i;
    Widget child;
@@ -101,11 +90,7 @@ Widget
 XmTrackingEvent(
         Widget widget,
         Cursor cursor,
-#if NeedWidePrototypes
-        int confineTo,
-#else
         Boolean confineTo,
-#endif /* NeedWidePrototypes */
 	XEvent * pev)
 {
     Window      w, confine_to = None;
@@ -210,11 +195,7 @@ Widget
 XmTrackingLocate(
         Widget widget,
         Cursor cursor,
-#if NeedWidePrototypes
-        int confineTo )
-#else
         Boolean confineTo )
-#endif /* NeedWidePrototypes */
 {
     XEvent ev ;
 

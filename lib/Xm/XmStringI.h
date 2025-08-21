@@ -888,19 +888,11 @@ extern void _XmStringDraw(
                         XmFontList fontlist,
                         _XmString string,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        unsigned int align,
-                        unsigned int lay_dir,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         unsigned char align,
                         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
                         XRectangle *clip) ;
 extern void _XmStringDrawImage(
                         Display *d,
@@ -908,19 +900,11 @@ extern void _XmStringDrawImage(
                         XmFontList fontlist,
                         _XmString string,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        unsigned int align,
-                        unsigned int lay_dir,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         unsigned char align,
                         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
                         XRectangle *clip) ;
 extern void _XmStringDrawUnderline(
                         Display *d,
@@ -928,19 +912,11 @@ extern void _XmStringDrawUnderline(
                         XmFontList f,
                         _XmString s,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        unsigned int align,
-                        unsigned int lay_dir,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         unsigned char align,
                         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
                         XRectangle *clip,
                         _XmString u) ;
 extern void _XmStringDrawMnemonic(
@@ -949,19 +925,11 @@ extern void _XmStringDrawMnemonic(
                         XmFontList fontlist,
                         _XmString string,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        unsigned int align,
-                        unsigned int lay_dir,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         unsigned char align,
                         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
                         XRectangle *clip,
                         String mnemonic,
                         XmStringCharSet charset) ;
@@ -970,19 +938,11 @@ extern void _XmStringRender(Display *d,
                             XmRenderTable rendertable,
                             XmRendition rend,
                             _XmString string,
-#if NeedWidePrototypes
-                            int x,
-                            int y,
-                            int width,
-                            unsigned int align,
-                            unsigned int lay_dir
-#else
                             Position x,
                             Position y,
                             Dimension width,
                             unsigned char align,
                             unsigned char lay_dir
-#endif	/* NeedWidePrototypes */
                             ) ;
 extern _XmString _XmStringCreate(
                         XmString cs) ;
@@ -1032,31 +992,16 @@ extern XtPointer _XmStringUngenerate (XmString string,
 
 extern void _XmStringDrawSegment(Display *d,
 				 Drawable w,
-#if NeedWidePrototypes
-				 int x,
-				 int y,
-				 int width,
-				 int height,
-#else
 				 Position x,
 				 Position y,
 				 Dimension width,
 				 Dimension height,
-#endif /* NeedWidePrototypes */
 				 _XmStringNREntry seg,
 				 XmRendition rend,
 				 XmRenderTable rendertable,
-#if NeedWidePrototypes
-				 int image,
-#else
 				 Boolean image,
-#endif /* NeedWidePrototypes */
 				 XmString *underline,
-#if NeedWidePrototypes
-				 unsigned int descender
-#else
 				 Dimension descender
-#endif /* NeedWidePrototypes */
 				 );
 extern void _XmStringDrawLining(Display *d,
 				Drawable w,
@@ -1080,11 +1025,7 @@ extern Boolean _XmStringSegmentExtents(_XmStringEntry entry,
 				       Dimension *descent);
 
 extern void _XmStringLayout(_XmString string,
-#if NeedWidePrototypes
-			    int direction
-#else
                             XmDirection direction
-#endif /* NeedWidePrototypes */
 			    );
 extern _XmString _XmStringOptToNonOpt(_XmStringOpt string);
 extern XmString _XmStringCvtOptToMulti(XmString str);
@@ -1103,18 +1044,10 @@ extern _XmStringCache _XmStringCacheGet(_XmStringCache caches,
 					int type);
 extern void _XmStringCacheFree(_XmStringCache caches);
 extern XtPointer _XmScanningCacheGet(_XmStringNREntry entry,
-#if NeedWidePrototypes
-				     int d,
-#else
 				     XmDirection d,
-#endif /* NeedWidePrototypes */
 				     int field);
 extern void      _XmScanningCacheSet(_XmStringNREntry entry,
-#if NeedWidePrototypes
-				     int d,
-#else
 				     XmDirection d,
-#endif /* NeedWidePrototypes */
 				     int field,
 				     XtPointer value);
 /* Rendering cache */
@@ -1198,4 +1131,3 @@ extern void _Xm_dump_internal(_XmString string) ;
 #endif
 
 #endif /* _XmStringI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

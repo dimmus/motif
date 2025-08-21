@@ -214,13 +214,8 @@ extern void _XmRegionDrawShadow(
 			GC top_gc,
 			GC bottom_gc,
 			XmRegion region,
-#if NeedWidePrototypes
-			int border_thick,
-			int shadow_thick,
-#else
 			Dimension border_thick,
 			Dimension shadow_thick,
-#endif /* NeedWidePrototypes */
 			unsigned int shadow_type ) ;
 
 extern XmRegion _XmRegionFromImage(
@@ -233,4 +228,3 @@ extern XmRegion _XmRegionFromImage(
 #endif
 
 #endif /* _XmRegionI_h */
-/* DON'T ADD STUFF AFTER THIS #endif */

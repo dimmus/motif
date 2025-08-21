@@ -7,15 +7,14 @@ EXTRA_DIST = xmstring.list Xm.msg \
 
 AM_CPPFLAGS = -I.. -I$(srcdir)/.. \
               -DXMBINDDIR_FALLBACK=\"@XMBINDDIR_FALLBACK@\" \
-              -DINCDIR=\"@INCDIR@\" \
-              -DLIBDIR=\"@LIBDIR@\" \
+              -DINCDIR=\"@INCDIR@\" -DLIBDIR=\"@LIBDIR@\"   \
+              -DDATADIR=\"@DATADIR@\" \
               $(XFT_CFLAGS) ${X_CFLAGS}
 xmdir = $(includedir)/Xm
 
 libXm_la_LDFLAGS = -version-info @ABI_VERSION@
-libXm_la_LIBADD = $(XFT_LIBS) ${X_LIBS} -lXt -lXext -lX11 ${X_EXTRA_LIBS}
-
-lib_LTLIBRARIES = libXm.la
+libXm_la_LIBADD  = $(XFT_LIBS) ${X_LIBS}
+lib_LTLIBRARIES  = libXm.la
 
 TIP_SRCS = ToolTip.c
 TIP_HDRS = ToolTipI.h
@@ -43,14 +42,6 @@ EXTRA_SRCS = XmExtUtil.c \
 
 SLIDE_HDRS = SlideC.h SlideCP.h
 SLIDE_SRCS = SlideC.c
-
-if XM_WITH_XMU
-EDITRES_SRCS = EditresCom.c
-# AM_CPPFLAGS     += $(XMU_CFLAGS)
-libXm_la_LIBADD += $(XMU_LIBS)
-else
-EDITRES_SRCS =
-endif
 
 if XM_WITH_JPEG
 JPEG_SRCS = Jpeg.c
@@ -123,6 +114,8 @@ MenuStateI.h \
 MenuUtilI.h \
 MessageBI.h \
 MessagesI.h \
+nanosvg.h \
+nanosvgrast.h \
 PixConvI.h \
 PrimitiveI.h \
 PrintSI.h \
@@ -142,6 +135,7 @@ ScrollFramTI.h \
 ScrolledWI.h \
 SelectioBI.h \
 SeparatoGI.h \
+SvgI.h \
 SyntheticI.h \
 TearOffI.h \
 TextDIconI.h \
@@ -171,7 +165,6 @@ XmStringI.h \
 XmTabListI.h \
 XmosI.h \
 XpmI.h \
-EditresComI.h \
 $(JPEG_HDRS) \
 $(PNG_HDRS) \
 $(TIP_HDRS)
@@ -223,7 +216,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         UnitTypeT.h     TxtPropCv.h     MenuProcP.h     MenuStateP.h\
         ColorObjP.h     TravConT.h      UnhighlightT.h  PointInT.h \
         Print.h         PrintSP.h       XpmP.h		Xmfuncs.h \
-        ${SLIDE_HDRS}	${EXTRA_HDRS}
+        deprecated.h obsolete.h version.h ${SLIDE_HDRS} ${EXTRA_HDRS}
 
 nodist_xm_HEADERS = Xm.h
 
@@ -238,9 +231,9 @@ SRCS1 = XmStrDefs.c ArrowB.c        ArrowBG.c       BulletinB.c     CallbackI.c 
         List.c          MainW.c         MapEvents.c     MenuShell.c \
         MenuUtil.c      MessageB.c      PanedW.c        PushB.c \
         PushBG.c        ReadImage.c     Region.c        ResConvert.c \
-        ResInd.c        RowColumn.c     Sash.c          \
-        Scale.c         ScrollBar.c     ScrolledW.c     SelectioB.c \
-        SeparatoG.c     Separator.c     Simple.c        Text.c \
+        ResInd.c        RowColumn.c     Sash.c          Scale.c \
+        ScrollBar.c     ScrolledW.c     SelectioB.c     SeparatoG.c \
+        Separator.c     Simple.c        Svg.c           Text.c \
         TextIn.c        TextOut.c       TextStrSo.c     TextSel.c \
         ToggleB.c       ToggleBG.c      TrackLoc.c      UniqueEvnt.c \
         VaSimple.c      VirtKeys.c      XmString.c      ResEncod.c\
@@ -257,7 +250,7 @@ SRCS2 = Desktop.c       Messages.c      Transltns.c     RepType.c \
         Hash.c          ScrollFrameT.c  \
         XmTabList.c     Resolve.c       XmStringFunc.c \
         XmRenderT.c     PixConv.c       Color.c         Xm.c \
-        CareVisualT.c   Direction.c     XmStringObso.c  XmStringGet.c \
+        CareVisualT.c   Direction.c     XmStringObso.c \
         IsMwmRun.c      MenuProc.c      MenuState.c     TextFind.c \
         TextFunc.c      ColorObj.c      IconFile.c      RCHook.c \
         GetRes.c        BBUtil.c        ChColor.c       ColObjFunc.c \
@@ -277,10 +270,10 @@ XPM_SRCS = \
 
 NEW_WID_SRCS =         IconH.c        Container.c     IconG.c  \
         Notebook.c     ComboBox.c     GrabShell.c     SpinB.c  \
-        SSpinB.c       TxtPropCv.c    XmStringSeg.c   TranslNew.c
+        SSpinB.c       TxtPropCv.c    TranslNew.c
 
 libXm_la_SOURCES = $(SRCS1) $(SRCS2) $(OBSO_SRCS) $(XPM_SRCS) $(NEW_WID_SRCS) $(SLIDE_SRCS) \
-        $(TIP_SRCS) $(EDITRES_SRCS) $(EXTRA_SRCS) $(JPEG_SRCS) $(PNG_SRCS)
+        $(TIP_SRCS) $(EXTRA_SRCS) $(JPEG_SRCS) $(PNG_SRCS)
 
 EXTRA_libXm_la_SOURCES = $(SLIDE_SRCS) $(TIP_SRCS)
 
@@ -291,7 +284,9 @@ BUILT_SOURCES = $(STRING_FILES) $(CAT_FILES)
 $(top_builddir)/config/util/makestrs:
 	( cd $(top_builddir)/config/util && $(MAKE) $(AM_MAKEFLAGS) makestrs )
 
-$(STRING_FILES): Makefile $(XMSTRING_LIST) XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/config/util/makestrs
+XmStrDefs.h XmStrDefs22.h XmStrDefs23.h XmStrDefsI.h: XmStrDefs.c
+
+XmStrDefs.c: Makefile $(XMSTRING_LIST) XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/config/util/makestrs
 	test -f $(XMSTRING_LIST) || $(LN_S) $(srcdir)/$(XMSTRING_LIST) $(XMSTRING_LIST)
 	test -f XmStrDefs.ht || $(LN_S) $(srcdir)/XmStrDefs.ht XmStrDefs.ht
 	test -f XmStrDefs22.ht || $(LN_S) $(srcdir)/XmStrDefs22.ht XmStrDefs22.ht
@@ -300,20 +295,11 @@ $(STRING_FILES): Makefile $(XMSTRING_LIST) XmStrDefs.ht XmStrDefsI.ht XmStrDefs.
 	test -f XmStrDefs.ct || $(LN_S) $(srcdir)/XmStrDefs.ct XmStrDefs.ct
 	$(top_builddir)/config/util/makestrs -f $(XMSTRING_LIST) >XmStrDefs.c
 
-if MessageCatalog
-
+if XM_MSGCAT
 CAT_FILES = Xm.cat XmMsgCatI.h
 
 $(CAT_FILES): Xm.msg
 	$(mkinstalldirs) $(top_builddir)/localized/C/msg
 	$(top_builddir)/localized/util/mkcatdefs XmMsgCatI.h $(srcdir)/Xm.msg >$(top_builddir)/localized/C/msg/Xm.msg
 	gencat Xm.cat $(top_builddir)/localized/C/msg/Xm.msg
-    SPLINT_EXTRAFLAGS = -I/usr/include -I. +posixlib -nestcomment
-else
-    SPLINT_EXTRAFLAGS = -I/usr/include -I. -DNO_MESSAGE_CATALOG +posixlib -nestcomment
 endif
-
-splint: $(STRING_FILES)
-	$(SPLINT) $(AM_CPPFLAGS) $(SPLINT_EXTRAFLAGS) $(top_srcdir)/lib/Xm/*.c
-
-#include $(srcdir)/check_headers.am

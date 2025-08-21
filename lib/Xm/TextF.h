@@ -99,22 +99,14 @@ void XmTextFieldInsertWcs(
                  wchar_t *wcstring);
 void XmTextFieldSetAddMode(
                         Widget w,
-#if NeedWidePrototypes
-                        int state);
-#else
                         Boolean state);
-#endif /* NeedWidePrototypes */
 Boolean XmTextFieldGetAddMode(
                  Widget w);
 Boolean XmTextFieldGetEditable(
                  Widget w);
 void XmTextFieldSetEditable(
                         Widget w,
-#if NeedWidePrototypes
-                        int editable);
-#else
                         Boolean editable);
-#endif /* NeedWidePrototypes */
 int XmTextFieldGetMaxLength(
                  Widget w);
 void XmTextFieldSetMaxLength(
@@ -163,13 +155,8 @@ void XmTextFieldSetSelection(
                  Time sel_time);
 XmTextPosition XmTextFieldXYToPos(
                         Widget w,
-#if NeedWidePrototypes
-                        int x,
-                        int y);
-#else
                         Position x,
                         Position y);
-#endif /* NeedWidePrototypes */
 Boolean XmTextFieldPosToXY(
                  Widget w,
                  XmTextPosition position,
@@ -207,4 +194,3 @@ Widget XmVaCreateManagedTextField(
 #endif
 
 #endif /* _XmTextF_h */
-/* DON'T ADD STUFF AFTER THIS #endif */

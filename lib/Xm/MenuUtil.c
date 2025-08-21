@@ -46,6 +46,7 @@ static char rcsid[] = "$TOG: MenuUtil.c /main/16 1999/05/13 15:57:21 mgreess $"
 #include "MenuUtilI.h"
 #include "MessagesI.h"
 #include "RCMenuI.h"
+#include "ScreenI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
@@ -176,11 +177,7 @@ _XmGrabKeyboard(
 void
 _XmMenuSetInPMMode (
 	Widget wid,
-#if NeedWidePrototypes
-	int flag )
-#else
 	Boolean flag )
-#endif /* NeedWidePrototypes */
 {
    _XmGetMenuState((Widget)wid)->MU_InPMMode = flag;
 }
@@ -192,11 +189,7 @@ _XmMenuSetInPMMode (
 void
 _XmSetMenuTraversal(
         Widget wid,
-#if NeedWidePrototypes
-        int traversalOn )
-#else
         Boolean traversalOn )
-#endif /* NeedWidePrototypes */
 {
    if (traversalOn)
    {
@@ -257,7 +250,6 @@ _XmLeafPaneFocusOut(
    }
 }
 
-/*ARGSUSED*/
 void
 _XmMenuHelp(
         Widget wid,
@@ -327,7 +319,6 @@ MenuTraverse(
    }
 }
 
-/* ARGSUSED */
 void
 _XmMenuTraverseLeft(
         Widget wid,
@@ -341,7 +332,6 @@ _XmMenuTraverseLeft(
    }
 }
 
-/* ARGSUSED */
 void
 _XmMenuTraverseRight(
         Widget wid,
@@ -355,7 +345,6 @@ _XmMenuTraverseRight(
    }
 }
 
-/* ARGSUSED */
 void
 _XmMenuTraverseUp(
         Widget wid,
@@ -369,7 +358,6 @@ _XmMenuTraverseUp(
    }
 }
 
-/* ARGSUSED */
 void
 _XmMenuTraverseDown(
         Widget wid,
@@ -383,7 +371,6 @@ _XmMenuTraverseDown(
    }
 }
 
-/* ARGSUSED */
 void
 _XmMenuEscape(
         Widget w,
@@ -725,7 +712,6 @@ MoveDownInMenuBar(
     }
 }
 
-/* ARGSUSED */
 static void
 MoveLeftInMenuBar(
         XmRowColumnWidget rc,
@@ -972,7 +958,6 @@ FindPrevMenuBarCascade(
     return False;
 }
 
-/*ARGSUSED*/
 static Boolean
 ValidateMenuBarCascade (Widget oldActiveChild, /* unused */
 			Widget newMenuChild)
@@ -1056,7 +1041,7 @@ _XmMenuGrabKeyboardAndPointer(
       return(status);
 
    status = _XmGrabPointer(widget, True, EVENTS, GrabModeSync,
-       GrabModeAsync, None, XmGetMenuCursor(XtDisplay(widget)), time) !=
+       GrabModeAsync, None, _XmGetMenuCursorByScreen(XtScreen(widget)), time) !=
          GrabSuccess;
 
    if (status)

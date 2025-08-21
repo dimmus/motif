@@ -84,13 +84,11 @@ extern Widget XmCreateTemplateDialog(
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
+
+XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmMessageBoxGetChild(
                         Widget widget,
-#if NeedWidePrototypes
-                        unsigned int child) ;
-#else
-                        unsigned char child) ;
-#endif /* NeedWidePrototypes */
+                        unsigned char child);
 
 /*
  * Variable argument list functions
@@ -113,4 +111,3 @@ extern Widget XmVaCreateManagedMessageBox(
 #endif
 
 #endif /* _XmMessage_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

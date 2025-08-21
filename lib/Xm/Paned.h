@@ -55,11 +55,9 @@ typedef struct _XmPanedRec	*XmPanedWidget;
  */
 
 extern int XmPanedGetPanes(
-#ifndef _NO_PROTO
     Widget			/* w */,
     WidgetList *		/* panes */,
     int *			/* num */
-#endif
 );
 
 /*	Function Name: XmCreatePaned
@@ -70,11 +68,7 @@ extern int XmPanedGetPanes(
  *	Returns: The Widget created.
  */
 
-Widget XmCreatePaned(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreatePaned(Widget, String, ArgList, Cardinal);
 
 /* Class record constant */
 extern WidgetClass xmPanedWidgetClass;

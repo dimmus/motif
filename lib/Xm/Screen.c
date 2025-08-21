@@ -403,7 +403,6 @@ GetUnitFromFont(
  *  ScreenInitialize
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 Initialize(
         Widget requested_widget,
@@ -481,7 +480,6 @@ Initialize(
  *  SetValues
  *
  ************************************************************************/
-/* ARGSUSED */
 static Boolean
 SetValues(
         Widget current,
@@ -622,7 +620,6 @@ SetValues(
  *  Destroy
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 Destroy(
         Widget widget )
@@ -796,11 +793,7 @@ FreePixmap(XmHashKey k, XtPointer p, XtPointer client_data)
 XmDragIconObject
 _XmScreenGetOperationIcon(
         Widget w,
-#if NeedWidePrototypes
-        unsigned int operation )
-#else
         unsigned char operation )
-#endif /* NeedWidePrototypes */
 {
     XmScreen		xmScreen = (XmScreen) XmGetXmScreen(XtScreenOfObject(w));
     XrmQuark		nameQuark = NULLQUARK;
@@ -855,11 +848,7 @@ _XmScreenGetOperationIcon(
 XmDragIconObject
 _XmScreenGetStateIcon(
         Widget w,
-#if NeedWidePrototypes
-        unsigned int state )
-#else
         unsigned char state )
-#endif /* NeedWidePrototypes */
 {
     XmScreen		xmScreen = (XmScreen) XmGetXmScreen(XtScreenOfObject(w));
     XrmQuark		nameQuark = NULLQUARK;
@@ -967,15 +956,9 @@ HashPixmap(XmHashKey k)
 Pixmap
 _XmAllocScratchPixmap(
         XmScreen xmScreen,
-#if NeedWidePrototypes
-        unsigned int depth,
-        int width,
-        int height )
-#else
         Cardinal depth,
         Dimension width,
         Dimension height )
-#endif /* NeedWidePrototypes */
 {
     XmHashTable		scratchTable =
       (XmHashTable) xmScreen->screen.scratchPixmaps;
@@ -1233,11 +1216,7 @@ _XmGetUnpostBehavior(
  *    then be used later to process the font unit conversions.
  *
  **********************************************************************/
-void
-XmSetFontUnits(
-        Display *display,
-        int h_value,
-        int v_value )
+static void _XmSetFontUnits(Display *display, int h_value, int v_value)
 {
     XmScreen          xmScreen;
     Screen            *scr;
@@ -1263,15 +1242,19 @@ XmSetFontUnits(
 }
 
 /* DEPRECATED */
+void XmSetFontUnits(Display *display, int h_value, int v_value)
+{
+	_XmSetFontUnits(display, h_value, v_value);
+}
+
+/* DEPRECATED */
 void
 XmSetFontUnit(
         Display *display,
         int value )
 {
-    XmSetFontUnits(display, value, value);
+    _XmSetFontUnits(display, value, value);
 }
-
-
 
 /**********************************************************************
  *
@@ -1392,7 +1375,6 @@ _XmGetDefaultGlyphPixmap(
  *
  *********************************************************************/
 
-/* ARGSUSED */
 Widget
 XmGetXmScreen(
         Screen *screen )

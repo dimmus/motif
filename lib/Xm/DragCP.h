@@ -71,6 +71,7 @@ typedef struct {
     unsigned char	flags;
     unsigned char	dragProtocolStyle;
     int			xOrigin, yOrigin;
+    Position	xLast, yLast;
     unsigned int	width, height;
     unsigned int	depth;
     XtPointer		iccInfo;

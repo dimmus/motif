@@ -70,7 +70,8 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #include <string.h>
 #include <Xm/XmP.h>
 #include <Xm/ColorI.h>
-#ifdef USE_XFT
+
+#if USE_XFT
 #include "XmRenderTI.h"
 #include <X11/Xft/Xft.h>
 #endif
@@ -684,6 +685,7 @@ SetNormalGC(XmLabelWidget lw)
 
   lw->label.insensitive_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
 					  dynamicMask, 0);
+
   /*light shadow for insensitive text (instead stipple)*/
   values.foreground = lw->primitive.top_shadow_color;
   lw->label.shadow_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
@@ -704,6 +706,7 @@ _XmCalcLabelDimensions(Widget wid)
 {
   XmLabelWidget newlw = (XmLabelWidget) wid;
   XmLabelPart  *lp = &(newlw->label);
+  Dimension dw, dh;
   unsigned int  w = 0, h = 0;
 
 
@@ -761,14 +764,12 @@ _XmCalcLabelDimensions(Widget wid)
 
   if (Lab_IsText(newlw) || Lab_IsPixmapAndText(newlw))
     {
-      Dimension w, h;
-
       if (!XmStringEmpty (lp->_label))
 	{
 	  /* If we have a string then size it. */
-	  XmStringExtent(lp->font, lp->_label, &w, &h);
-	  lp->StringRect.width = (unsigned short)w;
-	  lp->StringRect.height = (unsigned short)h;
+	  XmStringExtent(lp->font, lp->_label, &dw, &dh);
+	  lp->StringRect.width = (unsigned short)dw;
+	  lp->StringRect.height = (unsigned short)dh;
 	}
     }
 
@@ -776,14 +777,12 @@ _XmCalcLabelDimensions(Widget wid)
 
  if (lp->_acc_text != NULL)
    {
-     Dimension w, h;
-
      /* If we have a string then size it. */
      if (!XmStringEmpty (lp->_acc_text))
        {
-         XmStringExtent(lp->font, lp->_acc_text, &w, &h);
-         lp->acc_TextRect.width = (unsigned short)w;
-         lp->acc_TextRect.height = (unsigned short)h;
+         XmStringExtent(lp->font, lp->_acc_text, &dw, &dh);
+         lp->acc_TextRect.width = (unsigned short)dw;
+         lp->acc_TextRect.height = (unsigned short)dh;
        }
    }
 }
@@ -1429,19 +1428,19 @@ Redisplay(
 	clip_rect.height = 0;
 
       XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
-#ifdef USE_XFT
+#if USE_XFT
       _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), 0, 0, &clip_rect, 1);
 #endif
     } else
     {
       XSetClipMask (XtDisplay (lw), clipgc, None);
-#ifdef USE_XFT
+#if USE_XFT
       XftDraw* draw = _XmXftDrawCreate(XtDisplay(lw), XtWindow(lw));
       XftDrawSetClip(draw, NULL);
 #endif
     }
 
-#ifdef USE_XFT
+#if USE_XFT
     /* it is needed to clear anti-aliased text before draw it again */
     if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)
 		&& lp->TextRect.width > 0 && lp->TextRect.height > 0)
@@ -1486,7 +1485,7 @@ Redisplay(
 	  Pixmap pix_use = Pix_insen (lw) ;
 
 	  if (pix_use == XmUNSPECIFIED_PIXMAP)
-		  Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
+		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
 	  if (pix_use != XmUNSPECIFIED_PIXMAP)
 	    {
 	      gc = lp->insensitive_GC;
@@ -1855,6 +1854,7 @@ SetValues(Widget cw,
     {
       new_w->label.label_type = current->label.label_type;
     }
+
   if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, new_w->label.pixmap_placement,
 			   (Widget) new_w))
     {
@@ -1874,7 +1874,6 @@ SetValues(Widget cw,
       flag = TRUE;
     }
 
-  /* ValidateInputs(new_w); */
   _XmCalcLabelDimensions((Widget) new_w);
   Boolean pixmap_size_changed = ((newlp->PixmapRect.width
       != curlp->PixmapRect.width) || (newlp->PixmapRect.height
@@ -1886,16 +1885,11 @@ SetValues(Widget cw,
       ((Lab_IsPixmap(new_w) || Lab_IsPixmapAndText(new_w)) &&
        ((newlp->pixmap != curlp->pixmap) ||
 	(newlp->pixmap_insen  != curlp->pixmap_insen) ||
-	/* When you have different sized pixmaps for sensitive and */
-	/* insensitive states and sensitivity changes, */
-	/* the right size is chosen. (osfP2560) */
 	(XtIsSensitive(nw) != XtIsSensitive(cw))) && pixmap_size_changed) ||
       (Lab_IsPixmapAndText(new_w) &&
 	(newlp->pixmap_placement != curlp->pixmap_placement)) ||
       (newlp->label_type != curlp->label_type))
     {
-      /* CR 9179: Redo CR 5419 changes. */
-
       if (newlp->recompute_size)
 	{
 	  if (req->core.width == current->core.width)
@@ -1905,7 +1899,6 @@ SetValues(Widget cw,
 	}
 
       Call_Resize = True;
-
       flag = True;
     }
     /* Consider a case when new Pixmap has same size */

@@ -31,9 +31,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 
 #include <Xm/AtomMgr.h>
 #include <Xm/ClipWindowP.h>
@@ -1057,7 +1055,6 @@ typedef struct _DragIconInfo {
 /************************************************************************
  * GetDetailHeader
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 GetDetailHeader(
 	Widget		wid,
@@ -1110,7 +1107,6 @@ GetDetailHeader(
 /************************************************************************
  * GetDetailHeaderCount
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 GetDetailHeaderCount(
 	Widget		wid,
@@ -1140,7 +1136,6 @@ GetDetailHeaderCount(
 /************************************************************************
  * GetOutlineColumnWidth
  ************************************************************************/
-/*ARGSUSED*/
 static  void
 GetOutlineColumnWidth(
         Widget          wid,
@@ -1199,7 +1194,6 @@ ClassPartInitialize(
  * Initialize (Core Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 Initialize(
         Widget          rw,
@@ -1601,7 +1595,6 @@ Redisplay(
  * SetValues (Core Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static 	Boolean
 SetValues(
     Widget          cw,
@@ -2347,7 +2340,6 @@ SetValues(
  * leave it alone.
  */
 
-/*ARGSUSED*/
 static void
 CheckSetRenderTable(Widget wid,
 		    int offset,
@@ -2370,7 +2362,6 @@ CheckSetRenderTable(Widget wid,
  */
 
 
-/*ARGSUSED*/
 static void
 DefaultCollapsedPixmap(Widget wid,
 		       int offset,
@@ -2546,7 +2537,6 @@ GetSize (
  * GeometryManager (Composite Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static XtGeometryResult
 GeometryManager(
     Widget 		cwid,
@@ -2992,7 +2982,6 @@ RequestSpatialGrowth(
  * ConstraintInitialize (Constraint Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 ConstraintInitialize(
        Widget 		rcwid,		/* unused */
@@ -3125,7 +3114,6 @@ ConstraintDestroy(
  * ConstraintSetValues (Constraint Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static Boolean
 ConstraintSetValues(
 	Widget		ccwid,
@@ -3593,7 +3581,6 @@ GetSpatialSize (
  * PlaceItemNone (Private Function)
  ************************************************************************/
 
-/*ARGSUSED*/
 static 	void
 PlaceItemNone(
     Widget      wid,
@@ -4118,7 +4105,6 @@ ContainerStartTransfer(
  * ContainerEndTransfer (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerEndTransfer(
         Widget          wid,
@@ -4157,7 +4143,6 @@ ContainerEndTransfer(
  * ContainerPrimaryCopy (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerPrimaryCopy(
         Widget          wid,
@@ -4182,7 +4167,6 @@ ContainerPrimaryCopy(
  * ContainerPrimaryLink (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerPrimaryLink(
         Widget          wid,
@@ -4207,7 +4191,6 @@ ContainerPrimaryLink(
  * ContainerPrimaryMove (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerPrimaryMove(
         Widget          wid,
@@ -4237,7 +4220,6 @@ ContainerPrimaryMove(
  * If there is a second parameter,  it is COPY, MOVE or LINK.
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 ContainerNoop(
         Widget          wid,	/* unused */
@@ -4888,7 +4870,6 @@ ContainerSelect(
  * ContainerExtend (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerExtend(
         Widget          wid,
@@ -4974,7 +4955,6 @@ ContainerExtendCursor(
  * ContainerToggleMode (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerToggleMode(
         Widget          wid,
@@ -5029,7 +5009,6 @@ ContainerSelectAll(
  * ContainerDeselectAll (Action Proc)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerDeselectAll(
         Widget          wid,
@@ -5302,7 +5281,6 @@ ContainerConvertProc(
  * ContainerDestinationProc (Trait Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerDestinationProc(
         Widget          wid,
@@ -5356,7 +5334,6 @@ ContainerDestinationProc(
  * ContainerDestPrehookProc (Trait Method)
  ************************************************************************/
 
-/*ARGSUSED*/
 static  void
 ContainerDestPrehookProc(
         Widget          wid,
@@ -5389,7 +5366,6 @@ ContainerDestPrehookProc(
  * Free data allocated for destination callback
  ************************************************/
 
-/*ARGSUSED*/
 static 	void
 FreeLocationData(Widget wid,	/* unused */
 		 XtEnum ignore_op, /* unused */
@@ -7336,7 +7312,6 @@ StartSelect(
 }
 
 
-/*ARGSUSED*/
 static  Boolean
 SetupDrag(Widget wid,
 	  XEvent *event,
@@ -7380,7 +7355,6 @@ SetupDrag(Widget wid,
 /************************************************************************
  * ProcessButtonMotion (Private Function)
  ************************************************************************/
-/*ARGSUSED*/
 static  Boolean
 ProcessButtonMotion(
         Widget          wid,
@@ -7990,7 +7964,6 @@ DrawMarquee(
 /************************************************************************
  * KBSelect (Private Function)
  ************************************************************************/
-/*ARGSUSED*/
 static  void
 KBSelect(
 	Widget		wid,
@@ -8821,7 +8794,6 @@ GetSelectedCwids(
 /************************************************************************
  * GetSelectedItems (Private Synthetic Resource Function)
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 GetSelectedItems(
 	Widget		wid,
@@ -8903,7 +8875,6 @@ GainPrimary(
 /************************************************************************
  * ConvertRefuse (Private Function)
  ************************************************************************/
-/*ARGSUSED*/
 static  void
 ConvertRefuse(
         Widget          wid,		/* unused */
@@ -8919,7 +8890,6 @@ ConvertRefuse(
 /************************************************************************
  * DragStart (Private Function)
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 DragStart(
     XtPointer	data,
@@ -8997,7 +8967,7 @@ DragStart(
       Pixmap cross_m;
       GC tempgc;
       Arg args[10];
-      int n, midpoint = DRAG_STATE_SIZE / 2, farpoint = DRAG_STATE_SIZE;
+      int midpoint = DRAG_STATE_SIZE / 2, farpoint = DRAG_STATE_SIZE;
 
       dragIconInfo = (DragIconInfo) XtMalloc(sizeof(DragIconInfoRec));
       XSaveContext(XtDisplay(cw), None, dragIconInfoContext,
@@ -9097,7 +9067,6 @@ DragStart(
 /************************************************************************
  * OutlineButtonCallback (Private Callback Function)
  ************************************************************************/
-/*ARGSUSED*/
 static  void
 OutlineButtonCallback(
         Widget          pbwid,	/* unused */
@@ -9118,7 +9087,6 @@ OutlineButtonCallback(
 /************************************************************************
  * OutlineButtonAction (Private Callback Function)
  ************************************************************************/
-/*ARGSUSED*/
 static void
 OutlineButtonAction(
         Widget          cwid,
@@ -9303,7 +9271,6 @@ MoveItemCallback(
 /************************************************************************
  * DropDoneCallback (Private Callback Function)
  ************************************************************************/
-/*ARGSUSED*/
 static  void
 DropDoneCallback(
         Widget          wid,		/* unused */
@@ -9322,7 +9289,6 @@ DropDoneCallback(
  *									*
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 EnterHandler(
 	Widget wid,
@@ -9339,7 +9305,6 @@ EnterHandler(
     }
 }
 
-
 /************************************************************************
  *									*
  * LeaveHandler - If the user leaves in Marquee Select mode set up a    *
@@ -9347,7 +9312,6 @@ EnterHandler(
  *									*
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 LeaveHandler(
 	Widget wid,
@@ -9390,7 +9354,6 @@ LeaveHandler(
  *									*
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 ScrollProc(
 	XtPointer closure,

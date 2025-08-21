@@ -56,11 +56,7 @@ typedef struct _XmTreeRec		*XmTreeWidget;
  *	Returns: The Widget created.
  */
 
-Widget XmCreateTree(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreateTree(Widget, String, ArgList, Cardinal);
 
 extern WidgetClass xmTreeWidgetClass;
 

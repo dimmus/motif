@@ -76,7 +76,8 @@ static char rcsid[] = "$TOG: LabelG.c /main/24 1999/01/26 15:31:18 mgreess $"
 #include <string.h>
 #include <Xm/XmP.h>
 #include <Xm/ColorI.h>
-#ifdef USE_XFT
+
+#if USE_XFT
 #include "XmRenderTI.h"
 #include <X11/Xft/Xft.h>
 #endif
@@ -713,7 +714,6 @@ XmLabelGadgetClassRec xmLabelGadgetClassRec =
 externaldef(xmlabelgadgetclass) WidgetClass xmLabelGadgetClass =
 (WidgetClass) &xmLabelGadgetClassRec;
 
-/*ARGSUSED*/
 static Pixmap
 GetTopShadowPixmapDefault(Widget widget)
 {
@@ -737,7 +737,6 @@ GetTopShadowPixmapDefault(Widget widget)
 }
 
 
-/*ARGSUSED*/
 static Pixmap
 GetLabelHighlightPixmapDefault(Widget widget)
 {
@@ -888,7 +887,6 @@ ClassPartInitialize(WidgetClass cl)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 SecondaryObjectCreate(Widget req,
 Widget new_w,
@@ -947,7 +945,6 @@ Cardinal *num_args)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 InitializePosthook(Widget req,
 Widget new_w,
@@ -992,7 +989,6 @@ Cardinal *num_args)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static Boolean
 SetValuesPrehook(Widget oldParent,
 Widget refParent,
@@ -1057,7 +1053,6 @@ Cardinal *num_args)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 GetValuesPrehook(Widget newParent,
 ArgList args,
@@ -1111,7 +1106,6 @@ Cardinal *num_args)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 GetValuesPosthook(Widget new_w,
 ArgList args,
@@ -1135,7 +1129,6 @@ Cardinal *num_args)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static Boolean
 SetValuesPosthook(Widget current,
 Widget req,
@@ -1239,9 +1232,9 @@ SetNormalGC(XmLabelGadget lw)
     /*generally gray insensitive foreground (instead stipple)*/
     values.foreground = _XmAssignInsensitiveColor((Widget)lw);
     values.background = LabG_Background(lw);
-
     LabG_InsensitiveGC(lw) = XtAllocateGC((Widget) mw, 0, valueMask, &values,
         dynamicMask, 0);
+
     /*light shadow for insensitive text (instead stipple)*/
     values.foreground = LabG_TopShadowColor(lw);
     LabG_ShadowGC(lw)  = XtAllocateGC((Widget) mw, 0, valueMask, &values,
@@ -1326,7 +1319,8 @@ void
 _XmCalcLabelGDimensions(Widget wid)
 {
     XmLabelGadget newlw = (XmLabelGadget) wid;
-    unsigned int  w = 0 , h = 0;
+    Dimension dw, dh;
+    unsigned int w = 0 , h = 0;
 
     /* initialize TextRect width and height to 0, reset if needed */
 
@@ -1376,14 +1370,12 @@ _XmCalcLabelGDimensions(Widget wid)
 
     if (LabG_IsText (newlw) || LabG_IsPixmapAndText(newlw))
     {
-        Dimension w, h;
-
         /* If we have a string then size it.  */
         if (!XmStringEmpty (LabG__label(newlw)))
         {
-            XmStringExtent (LabG_Font(newlw), LabG__label(newlw), &w, &h);
-            LabG_StringRect(newlw).width = (unsigned short)w;
-            LabG_StringRect(newlw).height = (unsigned short)h;
+            XmStringExtent (LabG_Font(newlw), LabG__label(newlw), &dw, &dh);
+            LabG_StringRect(newlw).width = (unsigned short)dw;
+            LabG_StringRect(newlw).height = (unsigned short)dh;
         }
     }
 
@@ -1392,14 +1384,12 @@ _XmCalcLabelGDimensions(Widget wid)
     if (LabG__acceleratorText(newlw) != NULL)
     {
         /* If we have a string then size it. */
-        Dimension w,h;
-
         if (!XmStringEmpty (LabG__acceleratorText(newlw)))
         {
             XmStringExtent(LabG_Font(newlw),
-                    LabG__acceleratorText(newlw), &w, &h);
-            LabG_AccTextRect(newlw).width = (unsigned short)w;
-            LabG_AccTextRect(newlw).height = (unsigned short)h;
+                    LabG__acceleratorText(newlw), &dw, &dh);
+            LabG_AccTextRect(newlw).width = (unsigned short)dw;
+            LabG_AccTextRect(newlw).height = (unsigned short)dh;
         }
     }
 }
@@ -1671,7 +1661,6 @@ Resize(Widget wid)
  *	setable resource.
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 Initialize(Widget req,
 Widget new_w,
@@ -2176,7 +2165,6 @@ Destroy(Widget w)
 }
 
 
-/*ARGSUSED*/
 static void
 LabelDrawBackground(Widget wid,
 XEvent *event,                                    /* unused */
@@ -2302,19 +2290,19 @@ LRectangle *background_box)
             clip_rect.height = 0;
 
         XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
-#ifdef USE_XFT
+#if USE_XFT
         _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), 0, 0, &clip_rect, 1);
 #endif
     } else
     {
     XSetClipMask (XtDisplay (lw), clipgc, None);
-#ifdef USE_XFT
+#if USE_XFT
 	XftDraw	*draw = _XmXftDrawCreate(XtDisplay(lw), XtWindow(lw));
 	XftDrawSetClip(draw, NULL);
 #endif
     }
 
-#ifdef USE_XFT
+#if USE_XFT
     {
     int width, height;
 
@@ -2376,8 +2364,7 @@ LRectangle *background_box)
             Pixmap pix_use = Pix_insen (lw) ;
 
             if (pix_use == XmUNSPECIFIED_PIXMAP)
-        		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
-
+		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
             if (pix_use != XmUNSPECIFIED_PIXMAP)
             {
                 gc = LabG_InsensitiveGC(lw);
@@ -2562,7 +2549,6 @@ LRectangle *background_box)
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static Boolean
 SetValues(Widget cw,
 Widget rw,
@@ -3186,7 +3172,6 @@ XEvent *event)
  *
  ***********************************************************************/
 
-/*ARGSUSED*/
 static void
 GetLabelString(Widget wid,
 int offset,
@@ -3209,7 +3194,6 @@ XtArgVal *value)
  *
  ***********************************************************************/
 
-/*ARGSUSED*/
 static void
 GetAccelerator(Widget wid,
 int offset,
@@ -3232,7 +3216,6 @@ XtArgVal *value)
  *
  ***********************************************************************/
 
-/*ARGSUSED*/
 static void
 GetAcceleratorText(Widget wid,
 int offset,
@@ -3270,7 +3253,6 @@ _XmStringCharsetCreate(XmStringCharSet stringcharset)
  *
  ***********************************************************************/
 
-/*ARGSUSED*/
 static void
 GetMnemonicCharset(Widget wid,
 int resource,                                     /* unused */
@@ -3328,9 +3310,7 @@ QualifyLabelLocalCache(XmLabelGadget w)
  * of Label's cached fields.
  *
  ************************************************************************/
-
-void
-_XmReCacheLabG(Widget wid)
+void _XmReCacheLabG(Widget wid)
 {
     XmLabelGadget lw = (XmLabelGadget) wid;
 
@@ -3350,13 +3330,7 @@ _XmReCacheLabG(Widget wid)
 }
 
 
-void
-_XmAssignLabG_MarginHeight(XmLabelGadget lw,
-#if NeedWidePrototypes
-int value)
-#else
-Dimension value)
-#endif                                            /* NeedWidePrototypes */
+void _XmAssignLabG_MarginHeight(XmLabelGadget lw, Dimension value)
 {
     _XmProcessLock();
         QualifyLabelLocalCache(lw);
@@ -3365,13 +3339,7 @@ Dimension value)
 }
 
 
-void
-_XmAssignLabG_MarginWidth(XmLabelGadget lw,
-#if NeedWidePrototypes
-int value)
-#else
-Dimension value)
-#endif                                            /* NeedWidePrototypes */
+void _XmAssignLabG_MarginWidth(XmLabelGadget lw, Dimension value)
 {
     _XmProcessLock();
         QualifyLabelLocalCache(lw);
@@ -3380,13 +3348,7 @@ Dimension value)
 }
 
 
-void
-_XmAssignLabG_MarginLeft(XmLabelGadget lw,
-#if NeedWidePrototypes
-int value)
-#else
-Dimension value)
-#endif                                            /* NeedWidePrototypes */
+void _XmAssignLabG_MarginLeft(XmLabelGadget lw, Dimension value)
 {
     _XmProcessLock();
         QualifyLabelLocalCache(lw);
@@ -3394,14 +3356,7 @@ Dimension value)
         _XmProcessUnlock();
 }
 
-
-void
-_XmAssignLabG_MarginRight(XmLabelGadget lw,
-#if NeedWidePrototypes
-int value)
-#else
-Dimension value)
-#endif                                            /* NeedWidePrototypes */
+void _XmAssignLabG_MarginRight(XmLabelGadget lw, Dimension value)
 {
     _XmProcessLock();
         QualifyLabelLocalCache(lw);
@@ -3409,14 +3364,7 @@ Dimension value)
         _XmProcessUnlock();
 }
 
-
-void
-_XmAssignLabG_MarginTop(XmLabelGadget lw,
-#if NeedWidePrototypes
-int value)
-#else
-Dimension value)
-#endif                                            /* NeedWidePrototypes */
+void _XmAssignLabG_MarginTop(XmLabelGadget lw, Dimension value)
 {
     _XmProcessLock();
         QualifyLabelLocalCache(lw);
@@ -3424,21 +3372,13 @@ Dimension value)
         _XmProcessUnlock();
 }
 
-
-void
-_XmAssignLabG_MarginBottom(XmLabelGadget lw,
-#if NeedWidePrototypes
-int value)
-#else
-Dimension value)
-#endif                                            /* NeedWidePrototypes */
+void _XmAssignLabG_MarginBottom(XmLabelGadget lw, Dimension value)
 {
     _XmProcessLock();
         QualifyLabelLocalCache(lw);
         local_cache.margin_bottom = value;
         _XmProcessUnlock();
 }
-
 
 /************************************************************************
  *
@@ -3450,10 +3390,7 @@ Dimension value)
  * entryCallback of the parent.
  *
  ************************************************************************/
-
-static void
-SetGadgetActivateCallbackState(Widget wid,
-XmActivateState state)
+static void SetGadgetActivateCallbackState(Widget wid, XmActivateState state)
 {
     XmLabelGCacheObjPart localCache;
 
@@ -3483,11 +3420,7 @@ XmActivateState state)
  * do their activate callbacks, instead the RowColumn callbacks are called
  * by RowColumn.
  ************************************************************************/
-
-/*ARGSUSED*/
-static void
-SetOverrideCallback(
-Widget w)
+static void SetOverrideCallback(Widget w)
 {
     XmLabelGCacheObjPart localCache;
 
@@ -3495,7 +3428,6 @@ Widget w)
         localCache.skipCallback= True;
         _XmReCacheLabG_r(&localCache, (XmLabelGadget)w);
 }
-
 
 /************************************************************************
  *
@@ -3506,20 +3438,12 @@ Widget w)
  *	Externally accessable function for creating a label gadget.
  *
  ************************************************************************/
-
-Widget
-XmCreateLabelGadget(Widget parent,
-char *name,
-Arg *arglist,
-Cardinal argCount)
+Widget XmCreateLabelGadget(Widget parent, char *name, Arg *arglist, Cardinal argCount)
 {
     return XtCreateWidget(name, xmLabelGadgetClass, parent, arglist, argCount);
 }
-Widget
-XmVaCreateLabelGadget(
-        Widget parent,
-        char *name,
-        ...)
+
+Widget XmVaCreateLabelGadget(Widget parent, char *name, ...)
 {
     register Widget w;
     va_list var;
@@ -3539,11 +3463,7 @@ XmVaCreateLabelGadget(
     return w;
 
 }
-Widget
-XmVaCreateManagedLabelGadget(
-        Widget parent,
-        char *name,
-        ...)
+Widget XmVaCreateManagedLabelGadget(Widget parent, char *name, ...)
 {
     Widget w = NULL;
     va_list var;
@@ -3568,11 +3488,7 @@ XmVaCreateManagedLabelGadget(
  *    Class function to be called to copy secondary resource for external
  *  use.  i.e. copy the cached resources and send it back.
  */
-
-/*ARGSUSED*/
-static Cardinal
-GetLabelBGClassSecResData(WidgetClass w_class,
-XmSecondaryResourceData **data_rtn)
+static Cardinal GetLabelBGClassSecResData(WidgetClass w_class, XmSecondaryResourceData **data_rtn)
 {
     int        arrayCount;
         XmBaseClassExt bcePtr;
@@ -3592,17 +3508,13 @@ XmSecondaryResourceData **data_rtn)
         return arrayCount;
 }
 
-
 /*
  * GetLabelClassResBase ()
  *   retrun the address of the base of resources.
  *   - Not yet implemented.
  */
-
-/*ARGSUSED*/
-static XtPointer
-GetLabelClassResBase(Widget widget,
-XtPointer client_data)                            /* unused */
+static XtPointer GetLabelClassResBase(Widget widget,
+                                      XtPointer client_data) /* unused */
 {
     XtPointer widgetSecdataPtr;
         int       labg_cache_size = sizeof(XmLabelGCacheObjPart);
@@ -3621,13 +3533,10 @@ XtPointer client_data)                            /* unused */
         return widgetSecdataPtr;
 }
 
-
-/*ARGSUSED*/
-static void
-SetValuesAlmost(Widget cw,                        /* unused */
-Widget nw,
-XtWidgetGeometry *request,
-XtWidgetGeometry *reply)
+static void SetValuesAlmost(Widget cw, /* unused */
+                            Widget nw,
+                            XtWidgetGeometry *request,
+                            XtWidgetGeometry *reply)
 {
     XmLabelGadget new_w = (XmLabelGadget) nw;
         XtWidgetProc resize;
@@ -3642,9 +3551,7 @@ XtWidgetGeometry *reply)
 }
 
 
-static void
-GetColors(Widget w,
-XmAccessColorData color_data)
+static void GetColors(Widget w, XmAccessColorData color_data)
 {
     if (LabG_Cache(w))
     {
@@ -3662,7 +3569,6 @@ XmAccessColorData color_data)
     }
 }
 
-
 /************************************************************************
  *
  * XmLabelGadgetGetBaselines
@@ -3673,11 +3579,7 @@ XmAccessColorData color_data)
  * being passed in.
  *
  ************************************************************************/
-
-static Boolean
-XmLabelGadgetGetBaselines(Widget wid,
-Dimension **baselines,
-int *line_count)
+static Boolean XmLabelGadgetGetBaselines(Widget wid, Dimension **baselines, int *line_count)
 {
     XmLabelGadget lw = (XmLabelGadget)wid;
         Cardinal count;
@@ -3721,7 +3623,6 @@ int *line_count)
         return True;
 }
 
-
 /************************************************************************
  *
  * XmLabelGadgetGetDisplayRect
@@ -3733,10 +3634,7 @@ int *line_count)
  * the text or pixmap. This is assigned to the variable being passed in
  *
  ***********************************************************************/
-
-static Boolean
-XmLabelGadgetGetDisplayRect(Widget w,
-XRectangle *displayrect)
+static Boolean XmLabelGadgetGetDisplayRect(Widget w, XRectangle *displayrect)
 {
     XmLabelGadget wid = (XmLabelGadget) w;
 
@@ -3748,17 +3646,12 @@ XRectangle *displayrect)
         return TRUE;
 }
 
-
 /************************************************************************
  *
  * XmLabelGadgetMarginsProc
  *
  ***********************************************************************/
-
-/* ARGSUSED */
-static void
-XmLabelGadgetMarginsProc(Widget w,
-XmBaselineMargins *margins_rec)
+static void XmLabelGadgetMarginsProc(Widget w, XmBaselineMargins *margins_rec)
 {
     XmLabelGCacheObjPart localCache;
 
@@ -3780,9 +3673,7 @@ XmBaselineMargins *margins_rec)
     }
 }
 
-
-static Widget
-GetPixmapDragIcon(Widget w)
+static Widget GetPixmapDragIcon(Widget w)
 {
     XmLabelGadget lw = (XmLabelGadget) w;
         Arg args[10];
@@ -3814,13 +3705,7 @@ GetPixmapDragIcon(Widget w)
         return drag_icon;
 }
 
-
-/*ARGSUSED*/
-void
-_XmProcessDrag(Widget w,
-XEvent *event,
-String *params,
-Cardinal *num_params)
+void _XmProcessDrag(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
     XmLabelGadget lw = (XmLabelGadget) w;
         Widget drag_icon;
@@ -3866,19 +3751,13 @@ Cardinal *num_params)
         (void) XmeDragSource(w, NULL, event, args, n);
 }
 
-
 /*
  * XmRCallProc routine for checking label.font before setting it to NULL
  * If "check_set_render_table" is True, then function has
  * been called twice on same widget, thus resource needs to be set NULL,
  * otherwise leave it alone.
  */
-
-/*ARGSUSED*/
-static void
-CheckSetRenderTable(Widget wid,
-int offset,
-XrmValue *value)
+static void CheckSetRenderTable(Widget wid, int offset, XrmValue *value)
 {
     XmLabelGadget lw = (XmLabelGadget)wid;
 
@@ -3900,9 +3779,7 @@ XrmValue *value)
  *  widget - the icon button widget.
  *  offset, value - passed to correct function based on orientation.
  **************************************************************************/
-
-static void
-FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
+static void FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
 {
     switch(LabG_PixmapPlacement(widget)) {
     case XmPIXMAP_TOP:
@@ -3924,9 +3801,7 @@ FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
  *  offset, value - passed to correct function based on orientation.
  * Returns the import order from _XmTo{Horizontal, Vertical}Pixels.
  **************************************************************************/
-
-static XmImportOperator
-ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
+static XmImportOperator ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
 {
     switch(LabG_PixmapPlacement(widget)) {
     case XmPIXMAP_TOP:
@@ -3937,9 +3812,7 @@ ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
     }
 }
 
-
-static char*
-GetLabelGadgetAccelerator(Widget w)
+static char *GetLabelGadgetAccelerator(Widget w)
 {
     if (XtClass(w) == xmLabelGadgetClass)
         return NULL;
@@ -3947,9 +3820,7 @@ GetLabelGadgetAccelerator(Widget w)
         return LabG_Accelerator(w);
 }
 
-
-static KeySym
-GetLabelGadgetMnemonic(Widget w)
+static KeySym GetLabelGadgetMnemonic(Widget w)
 {
     if (XtClass(w) == xmLabelGadgetClass)
         return XK_VoidSymbol;
@@ -3957,32 +3828,28 @@ GetLabelGadgetMnemonic(Widget w)
         return LabG_Mnemonic(w);
 }
 
-
-void
-_XmQualifyLabelLocalCache(
-XmLabelGCacheObjPart *local_cache,
-XmLabelGadget w)
+void _XmQualifyLabelLocalCache(XmLabelGCacheObjPart *_local_cache,
+                               XmLabelGadget w)
 {
     _XmProcessLock();
         ClassCacheCopy(LabG_ClassCachePart(w))
         (LabG_Cache(w),
-        local_cache,
+        _local_cache,
         sizeof(XmLabelGCacheObjPart)
         );
         _XmProcessUnlock();
 }
 
 
-void
-_XmReCacheLabG_r(XmLabelGCacheObjPart *local_cache, XmLabelGadget w)
+void _XmReCacheLabG_r(XmLabelGCacheObjPart *_local_cache, XmLabelGadget w)
 {
     _XmProcessLock();
-        if (!_XmLabelCacheCompare(local_cache, (XtPointer)LabG_Cache(w)))
+        if (!_XmLabelCacheCompare(_local_cache, (XtPointer)LabG_Cache(w)))
     {
         _XmCacheDelete((XtPointer)LabG_Cache(w));
             LabG_Cache(w) = (XmLabelGCacheObjPart *)_XmCachePart(
             LabG_ClassCachePart(w),
-            local_cache,
+            _local_cache,
             sizeof(XmLabelGCacheObjPart));
     }
     _XmProcessUnlock();

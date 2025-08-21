@@ -88,11 +88,7 @@ static void _XmFastPopdown(
 static void PostMenuShell(
                         XmMenuShellWidget menuShell,
                         XtGrabKind grab_kind,
-#if NeedWidePrototypes
-                        int spring_loaded) ;
-#else
                         Boolean spring_loaded) ;
-#endif /* NeedWidePrototypes */
 static void ClassInitialize( void ) ;
 static void ClassPartInitialize(
                         WidgetClass wc) ;
@@ -528,11 +524,7 @@ static void
 PostMenuShell(
         XmMenuShellWidget menuShell,
         XtGrabKind grab_kind,
-#if NeedWidePrototypes
-        int spring_loaded )
-#else
         Boolean spring_loaded )
-#endif /* NeedWidePrototypes */
 {
    XEvent event;
    XEvent *lastEvent;
@@ -608,7 +600,6 @@ ClassPartInitialize(
 /*
  * Initialize routine
  */
-/* ARGSUSED */
 static void
 Initialize(
         Widget req,
@@ -683,7 +674,6 @@ Initialize(
 
 }
 
-/* ARGSUSED */
 static void
 StructureNotifyHandler(
         Widget wid,
@@ -709,7 +699,6 @@ StructureNotifyHandler(
  *
  * Don't allow the allowShellResize flag to be set false
  */
-/* ARGSUSED */
 static Boolean
 SetValues(
         Widget cw,
@@ -802,7 +791,7 @@ DeleteChild(
    XmMenuShellWidget parent = (XmMenuShellWidget)XtParent(widget);
 
    /* Remove the child as our tab group */
-   XmRemoveTabGroup(widget);
+   XtVaSetValues(widget, XmNnavigationType, XmNONE, NULL);
 
    /* Let composite class finish the work */
    (*(((CompositeWidgetClass)compositeWidgetClass)->composite_class.
@@ -988,6 +977,7 @@ ForceMenuPaneOnScreen(
    if (bottomEdgeOfMenu >= (Position)dispHeight)
    {
       if (pulldown_button && XtParent(pulldown_button) &&
+		XmIsRowColumn(XtParent(pulldown_button)) &&
 	  (RC_Type(XtParent(pulldown_button)) == XmMENU_BAR))
       {
 	 Position y_temp = *y;
@@ -1768,7 +1758,6 @@ SkipPopdown(
  * event handler for entering on a row column widget.  The widget must
  * be either a pulldown or popup menu.
  */
-/* ARGSUSED */
 void
 _XmEnterRowColumn(
         Widget widget,
@@ -1905,7 +1894,6 @@ PopdownOne(
  *
  * called from ChangeManaged and PopdownDone
  */
-/*ARGSUSED*/
 static void
 PopdownEveryone(
         Widget widget,
@@ -2091,7 +2079,6 @@ PopdownDone(
     XtUngrabPointer((Widget) ms, _time);
 }
 
-/*ARGSUSED*/
 static void
 ClearTraversalInternal(
         XmMenuShellWidget menushell,
@@ -2146,7 +2133,6 @@ PushB and ToggleB and ???
  * function has been called twice on same widget and resource offset, thus
  * resource needs to be set NULL, otherwise leave it alone.
  */
-/* ARGSUSED */
 static void
 CheckSetRenderTables(Widget wid,
 		     int offset,
@@ -2204,7 +2190,6 @@ GetTable(
 /*
  * Clear traversal in the associated menu hierarchy
  */
-/*ARGSUSED*/
 void
 _XmClearTraversal(
         Widget wid,
@@ -2250,7 +2235,6 @@ _XmClearTraversal(
     else
        XAllowEvents(XtDisplay(ms), SyncPointer, CurrentTime);
 }
-
 
 /*
  * Public Routine
@@ -2345,7 +2329,6 @@ _XmMenuPopupAction(
     else _XmPopupI(popup_shell, XtGrabNonexclusive, FALSE);
 }
 
-/*ARGSUSED*/
 static void
 _XmMenuPopdownAction(
     Widget widget,

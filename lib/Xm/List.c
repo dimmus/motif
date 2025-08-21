@@ -30,10 +30,8 @@ static char rcsid[] = "$TOG: List.c /main/47 1999/10/12 16:58:17 mgreess $"
 #include <config.h>
 #endif
 
-
-#include <string.h>
 #include <stdio.h>
-#include <wctype.h>
+#include <string.h>
 #include <X11/Xatom.h>
 #include <Xm/XmosP.h>
 #include "XmI.h"
@@ -462,8 +460,6 @@ static void ListScrollDown(Widget wid,
 
 /********    End Static Function Declarations    ********/
 
-
-
 /**************
  *
  *  Translation tables for List. These are used to drive the selections
@@ -478,7 +474,6 @@ static void ListScrollDown(Widget wid,
  *  Actions Lists
  *
  ****************/
-
 
 static XtActionsRec ListActions[] = {
   { "ListButtonMotion",		  VerifyMotion		},
@@ -863,9 +858,6 @@ static XmConst XmTransferTraitRec ListTransfer = {
   (XmDestinationCallbackProc) ListPreDestProc,	/* destinationPreHookProc */
 };
 
-
-
-/*ARGSUSED*/
 static void
 NullRoutine(Widget wid)		/* unused */
 {
@@ -878,8 +870,6 @@ NullRoutine(Widget wid)		/* unused */
  *  Callback for the value changes of navigators.	                *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 SliderMove(Widget w,
 	   XtPointer closure,
@@ -948,8 +938,6 @@ ClassPartInitialize(WidgetClass wc)
  * Initialize - initialize the instance.				*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 Initialize(Widget request,
 	   Widget w,
@@ -1313,8 +1301,6 @@ Initialize(Widget request,
  * ReDisplay - draw the visible list items.				*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 Redisplay(Widget wid,
 	  XEvent *event,
@@ -1455,8 +1441,6 @@ ComputeVizCount(XmListWidget lw)
  * SetValues - change the instance data					*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static Boolean
 SetValues(Widget old,
 	  Widget request,
@@ -2039,9 +2023,7 @@ QueryProc(Widget wid,
   if (request->request_mode == 0)
     {
       viz = lw->list.visibleItemCount;
-      /* BEGIN OSF Fix CR 6014 */
       lw->list.LastSetVizCount = lw->list.visibleItemCount;
-      /* END OSF Fix CR 6014 */
       SetDefaultSize(lw, &MyWidth, &MyHeight, True, True);
       lw->list.visibleItemCount = viz;
     }
@@ -2186,8 +2168,6 @@ QueryProc(Widget wid,
  * Dynamic default for ScrollBarDisplayPolicy based on the
  * type of CDE FileSB parent
  */
-
-/*ARGSUSED*/
 static void
 ScrollBarDisplayPolicyDefault(Widget widget,
 			      int offset, /* unused */
@@ -2221,8 +2201,6 @@ ScrollBarDisplayPolicyDefault(Widget widget,
  * If MouseMoved == True then function has been called twice on same widget, thus
  * resource needs to be set NULL, otherwise leave it alone.
  */
-
-/*ARGSUSED*/
 static void
 CheckSetRenderTable(Widget wid,
 		    int offset,
@@ -2244,8 +2222,6 @@ CheckSetRenderTable(Widget wid,
  * outside world is 1-based, and the inside world is 0-based.  Sigh.    *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 CvtToExternalPos(Widget wid,
 		 int offset,
@@ -2256,7 +2232,6 @@ CvtToExternalPos(Widget wid,
   (*value) = (XtArgVal) (lw->list.top_position + 1);
 }
 
-/*ARGSUSED*/
 static XmImportOperator
 CvtToInternalPos(Widget wid,
 		 int offset,
@@ -2307,8 +2282,6 @@ CalcVizWidth(XmListWidget lw)
  * DrawList - draw the contents of the list.				*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 DrawList(XmListWidget lw,
 	 XEvent *event,
@@ -2402,8 +2375,6 @@ DrawItem(Widget w,
  * DrawItems - draw some list items.					*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 DrawItems(XmListWidget lw,
 	  int top,
@@ -2478,7 +2449,7 @@ DrawItems(XmListWidget lw,
 	}
 
       _XmRendGC(lw->list.scratchRend) = gc;
-#ifdef USE_XFT
+#if USE_XFT
       _XmRendXftFG(lw->list.scratchRend) =
           _XmXftGetXftColor(XtDisplay(lw), _XmRendFG(lw->list.scratchRend));
 #endif
@@ -2626,7 +2597,7 @@ SetClipRect(XmListWidget widget)
   rect.width = w;
   rect.height = h;
 
-#ifdef USE_XFT
+#if USE_XFT
     _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), x, y,
 	                    &rect, 1);
 #endif
@@ -2662,7 +2633,7 @@ SetDefaultSize(XmListWidget lw,
 	       Boolean reset_max_width,
 	       Boolean reset_max_height)
 {
-  int visheight, wideborder, viz;
+  int visheight, wideborder, viz, max_height = 0;
   XFontStruct *fs = (XFontStruct *)NULL;
 
   wideborder = 2 * (lw->primitive.shadow_thickness +
@@ -2679,14 +2650,13 @@ SetDefaultSize(XmListWidget lw,
   if (lw->list.itemCount == 0)
     {
 #if USE_XFT
-      int height = 0;
+      XmRenderTableGetDefaultFontExtents(lw->list.font, &max_height, NULL, NULL);
 
-      XmRenderTableGetDefaultFontExtents(lw->list.font, &height, NULL, NULL);
-
-      lw->list.MaxItemHeight = (Dimension)height;
+      lw->list.MaxItemHeight = (Dimension)max_height;
       if (lw->list.MaxItemHeight == 0)
         lw->list.MaxItemHeight = 1;
 #else
+      (void)max_height;
       if (XmeRenderTableGetDefaultFont(lw->list.font, &fs))
 	lw->list.MaxItemHeight = fs->ascent + fs->descent;
       else
@@ -2770,6 +2740,7 @@ MakeGC(XmListWidget lw)
 				    valueMask, &values, modifyMask, 0);
 
   values.background = lw->core.background_pixel;
+
   /*generally gray insensitive foreground (instead stipple)*/
   values.foreground = _XmAssignInsensitiveColor((Widget)lw);
 
@@ -3657,6 +3628,7 @@ ReplaceItem(XmListWidget lw,
   lw->list.items[pos] = XmStringCopy(item);
   /*Selected items should be replaced also*/
   UpdateSelectedPositions(lw, lw->list.selectedItemCount);
+
   for(i=0; i<lw->list.selectedItemCount; i++)
   {
       if(lw->list.selectedPositions[i]==pos+1) {
@@ -4298,8 +4270,6 @@ ArrangeRange(XmListWidget lw,
  * and the autoselection, if enabled.					*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 HandleNewItem(XmListWidget lw,
 	      int item,
@@ -4486,8 +4456,6 @@ HandleExtendedItem(XmListWidget lw,
  * VerifyMotion - event handler for motion within the list.		*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 VerifyMotion(Widget wid,
 	     XEvent *event,
@@ -4624,8 +4592,6 @@ VerifyMotion(Widget wid,
  * Element Select - invoked on button down on a widget.			   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 SelectElement(Widget wid,
 	      XEvent *event,
@@ -4822,8 +4788,6 @@ SelectElement(Widget wid,
  * KbdSelectElement - invoked on keyboard selection.			   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdSelectElement(Widget wid,
 		 XEvent *event,
@@ -4858,8 +4822,6 @@ KbdSelectElement(Widget wid,
  * Element UnSelect - Handle the button up event.			   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 UnSelectElement(Widget wid,
 		XEvent *event,
@@ -4951,8 +4913,6 @@ UnSelectElement(Widget wid,
  * KbdUnSelectElement - invoked on keyboard selection.			   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdUnSelectElement(Widget wid,
 		   XEvent *event,
@@ -4987,8 +4947,6 @@ KbdUnSelectElement(Widget wid,
  * Shift Select								*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ExSelect(Widget wid,
 	 XEvent *event,
@@ -5015,8 +4973,6 @@ ExSelect(Widget wid,
  * Shift UnSelect							*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ExUnSelect(Widget wid,
 	   XEvent *event,
@@ -5053,8 +5009,6 @@ ExUnSelect(Widget wid,
  * CtrlBtnSelect							*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 CtrlBtnSelect(Widget wid,
 	      XEvent *event,
@@ -5078,8 +5032,6 @@ CtrlBtnSelect(Widget wid,
  * Ctrl Select								*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 CtrlSelect(Widget wid,
 	   XEvent *event,
@@ -5124,8 +5076,6 @@ CtrlSelect(Widget wid,
  * Ctrl UnSelect							*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 CtrlUnSelect(Widget wid,
 	     XEvent *event,
@@ -5162,8 +5112,6 @@ CtrlUnSelect(Widget wid,
  * Keyboard Shift Select						*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdShiftSelect(Widget wid,
 	       XEvent *event,
@@ -5192,8 +5140,6 @@ KbdShiftSelect(Widget wid,
  * Keyboard Shift UnSelect						*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdShiftUnSelect(Widget wid,
 		 XEvent *event,
@@ -5225,8 +5171,6 @@ KbdShiftUnSelect(Widget wid,
  * Keyboard Ctrl Select							*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdCtrlSelect(Widget wid,
 	      XEvent *event,
@@ -5274,8 +5218,6 @@ KbdCtrlSelect(Widget wid,
  * Keyboard Ctrl UnSelect			        		*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdCtrlUnSelect(Widget wid,
 		XEvent *event,
@@ -5313,8 +5255,6 @@ KbdCtrlUnSelect(Widget wid,
  * Keyboard Activate                                                    *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdActivate(Widget wid,
 	    XEvent *event,
@@ -5368,8 +5308,6 @@ KbdActivate(Widget wid,
  * Keyboard Cancel							*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdCancel(Widget wid,
 	  XEvent *event,
@@ -5444,8 +5382,6 @@ KbdCancel(Widget wid,
  * Keyboard toggle Add Mode                                             *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdToggleAddMode(Widget wid,
 		 XEvent *event,
@@ -5468,8 +5404,6 @@ KbdToggleAddMode(Widget wid,
  * Keyboard Select All                                                  *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdSelectAll(Widget wid,
 	     XEvent *event,
@@ -5548,8 +5482,6 @@ KbdSelectAll(Widget wid,
  * Keyboard DeSelect All                                                *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdDeSelectAll(Widget wid,
 	       XEvent *event,
@@ -5848,8 +5780,6 @@ GetPreeditPosition(XmListWidget lw,
  * ListFocusIn								*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListFocusIn(Widget wid,
 	    XEvent *event,
@@ -5881,8 +5811,6 @@ ListFocusIn(Widget wid,
  * ListFocusOut								*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListFocusOut(Widget wid,
 	     XEvent *event,
@@ -5906,8 +5834,6 @@ ListFocusOut(Widget wid,
  *		released, call the standard click stuff.		*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 BrowseScroll(XtPointer closure,
 	     XtIntervalId *id)
@@ -6065,8 +5991,6 @@ BrowseScroll(XtPointer closure,
  *	       elements.						*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListLeave(Widget wid,
 	  XEvent *event,
@@ -6132,8 +6056,6 @@ ListLeave(Widget wid,
  * ListEnter - If there is a drag timeout, remove it.			*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListEnter(Widget wid,
 	  XEvent *event,
@@ -6205,8 +6127,6 @@ MakeItemVisible(XmListWidget lw,
  * PrevElement - called when the user hits Up arrow.			*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 PrevElement(XmListWidget lw,
 	    XEvent *event,
@@ -6256,8 +6176,6 @@ PrevElement(XmListWidget lw,
  * NextElement - called when the user hits Down arrow.			*
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 NextElement(XmListWidget lw,
 	    XEvent *event,
@@ -6542,8 +6460,6 @@ ExtendAddPrevElement(Widget wid,
  * PrevPage - called when the user hits PgUp                            *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdPrevPage(Widget wid,
 	    XEvent *event,
@@ -6600,8 +6516,6 @@ KbdPrevPage(Widget wid,
  * NextPage - called when the user hits PgDn                            *
  *									*
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdNextPage(Widget wid,
         XEvent *event,
@@ -6660,8 +6574,6 @@ KbdNextPage(Widget wid,
  * KbdLeftChar - called when user hits left arrow.                      *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdLeftChar(Widget wid,
 	    XEvent *event,
@@ -6691,8 +6603,6 @@ KbdLeftChar(Widget wid,
  * KbdLeftPage - called when user hits ctrl left arrow.                 *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdLeftPage(Widget wid,
 	    XEvent *event,
@@ -6726,8 +6636,6 @@ KbdLeftPage(Widget wid,
  * Begin Line - go to the beginning of the line                         *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 BeginLine(Widget wid,
 	  XEvent *event,
@@ -6747,8 +6655,6 @@ BeginLine(Widget wid,
  * KbdRightChar - called when user hits right arrow.                    *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdRightChar(Widget wid,
 	     XEvent *event,
@@ -6777,8 +6683,6 @@ KbdRightChar(Widget wid,
  * KbdRightPage - called when user hits ctrl right arrow.               *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 KbdRightPage(Widget wid,
 	     XEvent *event,
@@ -6813,8 +6717,6 @@ KbdRightPage(Widget wid,
  * End Line - go to the end of the line                                 *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 EndLine(Widget wid,
         XEvent *event,
@@ -6834,8 +6736,6 @@ EndLine(Widget wid,
  * TopItem - go to the top item                                         *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 TopItem(Widget wid,
         XEvent *event,
@@ -6875,8 +6775,6 @@ TopItem(Widget wid,
  * EndItem - go to the bottom item                                      *
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 EndItem(Widget wid,
         XEvent *event,
@@ -6920,8 +6818,6 @@ EndItem(Widget wid,
  * ExtendTopItem - Extend the selection to the top item			*
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ExtendTopItem(Widget wid,
 	      XEvent *event,
@@ -6976,8 +6872,6 @@ ExtendTopItem(Widget wid,
  * ExtendEndItem - extend the selection to the bottom item		*
  *                                                                      *
  ************************************************************************/
-
-/*ARGSUSED*/
 static void
 ExtendEndItem(Widget wid,
 	      XEvent *event,
@@ -7037,8 +6931,6 @@ ExtendEndItem(Widget wid,
  * ListItemVisible - make the current keyboard item visible.  		   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListItemVisible(Widget wid,
 		XEvent *event,
@@ -7084,8 +6976,6 @@ ListItemVisible(Widget wid,
  *	This is a *sloow* process...					   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListCopyToClipboard(Widget wid,
 		    XEvent *event,
@@ -7100,7 +6990,6 @@ ListCopyToClipboard(Widget wid,
     (void) XmeClipboardSource(wid, XmCOPY, 0);
 }
 
-/*ARGSUSED*/
 static void
 DragDropFinished(Widget w,		/* unused */
 		 XtPointer closure,
@@ -7122,8 +7011,6 @@ DragDropFinished(Widget w,		/* unused */
  * ListProcessDrag - drag the selected items				   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListProcessDrag(Widget wid,
 		XEvent *event,
@@ -7203,8 +7090,6 @@ ListProcessDrag(Widget wid,
 /*
  * DragStart - begin a delayed drag.
  */
-
-/*ARGSUSED*/
 static void
 DragStart(XtPointer closure,
 	  XtIntervalId *id)	/* unused */
@@ -7401,8 +7286,6 @@ ListProcessBtn2(Widget wid,
  * ListQuickNavigate - navigate to an item				   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListQuickNavigate(Widget wid,
 		  XEvent *event,
@@ -7428,40 +7311,36 @@ ListQuickNavigate(Widget wid,
   /* If there is more data than we can handle, bail out. */
   if (((status_return == XLookupChars) || (status_return == XLookupBoth)) &&
       (input_length > 0))
-  {
-    if (lw->list.itemCount > 0)
     {
-      /* Convert input to a wchar_t for easy comparison. */
-      (void) mbtowc(&input_char, NULL, 0);
-      (void) mbtowc(&input_char, input_string, input_length);
+      if (lw->list.itemCount > 0)
+	{
+	  /* Convert input to a wchar_t for easy comparison. */
+	  (void) mbtowc(&input_char, NULL, 0);
+	  (void) mbtowc(&input_char, input_string, input_length);
 
-      if (iswprint((wint_t)input_char))
-      {
-	      /* Search forward from the current position. */
-	      for (i = lw->list.CurrentKbdItem + 1; i < lw->list.itemCount; i++)
-          if (CompareCharAndItem(lw, input_char, i))
-          {
-            found = True;
-            break;
-          }
+	  /* Search forward from the current position. */
+	  for (i = lw->list.CurrentKbdItem + 1; i < lw->list.itemCount; i++)
+	    if (CompareCharAndItem(lw, input_char, i))
+	      {
+		found = True;
+		break;
+	      }
 
-	      /* Wrap around to the start of the list if necessary. */
-	      if (!found)
-        {
-		    for (i = 0; i <= lw->list.CurrentKbdItem; i++)
-          if (CompareCharAndItem(lw, input_char, i))
-          {
-            found = True;
-            break;
-          }
-        }
- 	    }
+	  /* Wrap around to the start of the list if necessary. */
+	  if (!found)
+	    {
+	      for (i = 0; i <= lw->list.CurrentKbdItem; i++)
+		if (CompareCharAndItem(lw, input_char, i))
+		  {
+		    found = True;
+		    break;
+		  }
+	    }
+	}
+
+      if (!found)
+	XBell(XtDisplay(wid), 0);
     }
-
-      if (!found && iswprint((wint_t)input_char)
-      )
-	      XBell(XtDisplay(wid), 0);
-  }
 }
 
 /***************************************************************************
@@ -7543,8 +7422,6 @@ CompareCharAndItem(XmListWidget lw,
  * ListConvert - Convert routine for dragNDrop.				   *
  *									   *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 ListConvert(Widget w, XtPointer client_data,
 	    XmConvertCallbackStruct *cs)
@@ -7738,7 +7615,6 @@ ListConvert(Widget w, XtPointer client_data,
   _XmConvertComplete(w, value, size, format, type, cs);
 }
 
-/*ARGSUSED*/
 static void
 ListPreDestProc(Widget w,
 		XtPointer ignore, /* unused */
@@ -8451,7 +8327,6 @@ XmListDeleteAllItems(Widget w)
       SetSelectionParams(lw);
 
       Dimension old_max_height = lw->list.MaxItemHeight;
-
       DrawHighlight(lw, lw->list.CurrentKbdItem, FALSE);
       j = lw->list.itemCount;
       lw->list.itemCount = 0;
@@ -8914,11 +8789,7 @@ SetSelectionParams(XmListWidget lw)
 void
 XmListSelectItem(Widget w,
 		 XmString item,
-#if NeedWidePrototypes
-		 int notify)
-#else
 		 Boolean notify)
-#endif /* NeedWidePrototypes */
 {
   XmListWidget  lw = (XmListWidget) w;
   int		   item_pos;
@@ -8949,11 +8820,7 @@ XmListSelectItem(Widget w,
 void
 XmListSelectPos(Widget w,
 		int pos,
-#if NeedWidePrototypes
-		int notify)
-#else
      		Boolean notify)
-#endif /* NeedWidePrototypes */
 {
   XmListWidget  lw = (XmListWidget) w;
   _XmWidgetToAppContext(w);
@@ -9250,11 +9117,7 @@ XmListSetBottomItem(Widget w,
 
 void
 XmListSetAddMode(Widget w,
-#if NeedWidePrototypes
-		 int add_mode)
-#else
      		 Boolean add_mode)
-#endif /* NeedWidePrototypes */
 {
   XmListWidget  lw = (XmListWidget) w;
   _XmWidgetToAppContext(w);

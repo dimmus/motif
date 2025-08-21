@@ -55,34 +55,11 @@ extern "C" {
 #define _XmSetFlagsBit(field, bit) \
 	    (field[ (bit >> 3) ] |= (1 << (bit & 0x07)))
 
-
-#ifndef XTHREADS
-#define _XmFastSubclassInit(wc, bit_field) { \
-	if((_Xm_fastPtr = _XmGetBaseClassExtPtr( wc, XmQmotif)) && \
-	   (*_Xm_fastPtr)) \
-		_XmSetFlagsBit((*_Xm_fastPtr)->flags, bit_field) ; \
-   }
-
-/* _XmGetBaseClassExtPtr can return NULL or a pointer to a NULL extension,
- * for non Motif classes in particular, so we check that up front.
- * We use the global _Xm_fastPtr for that purpose, this variable exists
- * already in BaseClass.c for apparently no other use.
- */
-
-#define _XmIsFastSubclass(wc, bit) \
-	((_Xm_fastPtr = _XmGetBaseClassExtPtr((wc),XmQmotif)) && \
-         (*_Xm_fastPtr)) ? \
-	     (_XmGetFlagsBit(((*_Xm_fastPtr)->flags), bit) ? TRUE : FALSE) \
-		 : FALSE
-
-#else
-extern void _XmFastSubclassInit(WidgetClass, unsigned int);
-extern Boolean _XmIsFastSubclass(WidgetClass, unsigned int);
-#endif  /* XTHREADS */
+void _XmFastSubclassInit(WidgetClass, unsigned int);
+Boolean _XmIsFastSubclass(WidgetClass, unsigned int);
 
 #define XmBaseClassExtVersion 2L
 #define XmBaseClassExtVersion 2L
-
 
 typedef Cardinal (*XmGetSecResDataFunc)( WidgetClass,
 					    XmSecondaryResourceData **);

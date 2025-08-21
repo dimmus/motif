@@ -37,11 +37,7 @@ static char rcsid[] = "$TOG: SelectioB.c /main/19 1997/06/18 17:42:11 samborn $"
 **
 **-------------------------------------------------------------------------
 */
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
-
 #include <Xm/AccTextT.h>
 #include <Xm/ActivatableT.h>
 #include <Xm/ArrowB.h>
@@ -126,11 +122,7 @@ static void ListCallback(
 static void UpdateString(
                         Widget w,
                         XmString string,
-#if NeedWidePrototypes
-                        int direction) ;
-#else
                         XmStringDirection direction) ;
-#endif /* NeedWidePrototypes */
 static Boolean SetValues(
                         Widget cw,
                         Widget rw,
@@ -483,7 +475,6 @@ ClassPartInitialize(
 /****************************************************************
  * Create a SelectionBox instance.
  ****************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,		/* unused */
@@ -739,7 +730,6 @@ DeleteChild(
 /****************************************************************
  * Set the default type (selection or workarea) based on parent.
  ****************/
-/*ARGSUSED*/
 static void
 _XmDialogTypeDefault(
         Widget widget,
@@ -762,7 +752,6 @@ _XmDialogTypeDefault(
     return ;
 }
 
-/*ARGSUSED*/
 static XmImportOperator
 _XmSetSyntheticResForChild(
         Widget widget,		/* unused */
@@ -1405,11 +1394,7 @@ static void
 UpdateString(
         Widget w,
         XmString string,
-#if NeedWidePrototypes
-        int direction )
-#else
         XmStringDirection direction )
-#endif /* NeedWidePrototypes */
 {
 	Arg		al[3];
     	register int	ac = 0;
@@ -1427,7 +1412,6 @@ UpdateString(
 /****************************************************************
  * Update widget when values change.
  ****************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -1584,7 +1568,6 @@ SetValues(
         }
 
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetSelectionLabelString(
         Widget wid,
@@ -1608,7 +1591,6 @@ _XmSelectionBoxGetSelectionLabelString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetListLabelString(
         Widget wid,
@@ -1632,7 +1614,6 @@ _XmSelectionBoxGetListLabelString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetTextColumns(
         Widget wid,
@@ -1656,7 +1637,6 @@ _XmSelectionBoxGetTextColumns(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetTextString(
         Widget wid,
@@ -1684,7 +1664,6 @@ _XmSelectionBoxGetTextString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetListItems(
         Widget wid,
@@ -1708,7 +1687,6 @@ _XmSelectionBoxGetListItems(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetListItemCount(
         Widget wid,
@@ -1732,7 +1710,6 @@ _XmSelectionBoxGetListItemCount(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetListVisibleItemCount(
         Widget wid,
@@ -1756,7 +1733,6 @@ _XmSelectionBoxGetListVisibleItemCount(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetOkLabelString(
         Widget wid,
@@ -1780,7 +1756,6 @@ _XmSelectionBoxGetOkLabelString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetApplyLabelString(
         Widget wid,
@@ -1804,7 +1779,6 @@ _XmSelectionBoxGetApplyLabelString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetCancelLabelString(
         Widget wid,
@@ -1828,7 +1802,6 @@ _XmSelectionBoxGetCancelLabelString(
     return ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxGetHelpLabelString(
         Widget wid,
@@ -1853,7 +1826,6 @@ _XmSelectionBoxGetHelpLabelString(
     }
 
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxUpOrDown(
         Widget wid,
@@ -1954,7 +1926,6 @@ _XmSelectionBoxUpOrDown(
     }
 
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmSelectionBoxRestore(
         Widget wid,
@@ -1999,14 +1970,7 @@ _XmSelectionBoxRestore(
 /****************************************************************
  * This function returns the widget id of a SelectionBox child widget.
  ****************/
-Widget
-XmSelectionBoxGetChild(
-        Widget sb,
-#if NeedWidePrototypes
-        unsigned int which )
-#else
-        unsigned char which )
-#endif /* NeedWidePrototypes */
+Widget _XmSelectionBoxGetChild(Widget sb, unsigned char which)
 {
 /****************/
 	Widget	child = NULL;
@@ -2065,6 +2029,12 @@ XmSelectionBoxGetChild(
 	}
 	_XmAppUnlock(app);
 	return (child);
+}
+
+/* Deprecated */
+Widget XmSelectionBoxGetChild(Widget sb, unsigned char which)
+{
+	return _XmSelectionBoxGetChild(sb, which);
 }
 
 /****************************************************************
@@ -2153,7 +2123,6 @@ XmCreateSelectionDialog(
     XtFree((char *)_sb_args);
     return w ;
 }
-
 
 
 /****************************************************************

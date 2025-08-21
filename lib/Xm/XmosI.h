@@ -28,6 +28,7 @@
 #ifndef _XmosI_h
 #define _XmosI_h
 
+#include <stddef.h>
 #include <Xm/XmosP.h>
 
 #ifdef __cplusplus
@@ -53,26 +54,16 @@ extern void _XmOSQualifyFileSpec(
 extern void _XmOSGetDirEntries(
                         String qualifiedDir,
                         String matchPattern,
-#if NeedWidePrototypes
-                        unsigned int fileType,
-                        int matchDotsLiterally,
-                        int listWithFullPath,
-#else
                         unsigned char fileType,
                         Boolean matchDotsLiterally,
                         Boolean listWithFullPath,
-#endif /* NeedWidePrototypes */
                         String **pEntries,
                         unsigned int *pNumEntries,
                         unsigned int *pNumAlloc) ;
 extern void _XmOSBuildFileList(
                         String dirPath,
                         String pattern,
-#if NeedWidePrototypes
-                        unsigned int typeMask,
-#else
                         unsigned char typeMask,
-#endif /* NeedWidePrototypes */
                         String **pEntries,
                         unsigned int *pNumEntries,
                         unsigned int *pNumAlloc) ;
@@ -90,7 +81,8 @@ extern int _XmOSPutenv(
 		       char *string);
 extern void _XmOSGenerateMaskName(
 				  String imageName,
-				  String	maskNameBuf) ;
+				  String maskNameBuf,
+				  size_t buf_len);
 
 extern Status _XmOSGetInitialCharsDirection(XtPointer     characters,
 					    XmTextType    type,
@@ -121,4 +113,3 @@ extern Boolean _XmOSAbsolutePathName(
 #endif
 
 #endif /* _XmosI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

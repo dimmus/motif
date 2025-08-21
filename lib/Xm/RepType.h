@@ -53,43 +53,21 @@ extern XmRepTypeId XmRepTypeRegister(
                         String rep_type,
                         String *value_names,
                         unsigned char *values,
-#if NeedWidePrototypes
-                        unsigned int num_values) ;
-#else
                         unsigned char num_values) ;
-#endif /* NeedWidePrototypes */
 extern void XmRepTypeAddReverse(
-#if NeedWidePrototypes
-                        int rep_type_id) ;
-#else
                         XmRepTypeId rep_type_id) ;
-#endif /* NeedWidePrototypes */
 extern Boolean XmRepTypeValidValue(
-#if NeedWidePrototypes
-                        int rep_type_id,
-                        unsigned int test_value,
-#else
                         XmRepTypeId rep_type_id,
                         unsigned char test_value,
-#endif /* NeedWidePrototypes */
                         Widget enable_default_warning) ;
 extern XmRepTypeList XmRepTypeGetRegistered( void ) ;
 extern XmRepTypeEntry XmRepTypeGetRecord(
-#if NeedWidePrototypes
-                        int rep_type_id) ;
-#else
                         XmRepTypeId rep_type_id) ;
-#endif /* NeedWidePrototypes */
 extern XmRepTypeId XmRepTypeGetId(
                         String rep_type) ;
 extern String * XmRepTypeGetNameList(
-#if NeedWidePrototypes
-                        int rep_type_id,
-                        int use_uppercase_format) ;
-#else
                         XmRepTypeId rep_type_id,
                         Boolean use_uppercase_format) ;
-#endif /* NeedWidePrototypes */
 extern void XmRepTypeInstallTearOffModelConverter( void ) ;
 
 /********    End Public Function Declarations    ********/
@@ -101,4 +79,3 @@ extern void XmRepTypeInstallTearOffModelConverter( void ) ;
 #endif
 
 #endif /* _XmRepType_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

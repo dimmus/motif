@@ -32,21 +32,9 @@ extern "C" {
 #endif
 
 /********    External (DataF.c) function declaration *******/
-#ifdef _NO_PROTO
-extern Widget _XmDataFieldGetDropReciever() ;
-#else
 extern Widget _XmDataFieldGetDropReciever( Widget w ) ;
-#endif /* _NO_PROTO */
-
 
 /********    Private Function Declarations    ********/
-#ifdef _NO_PROTO
-
-extern Boolean _XmDataFieldConvert() ;
-extern void _XmDataFieldLoseSelection() ;
-
-#else
-
 extern Boolean _XmDataFieldConvert(
                         Widget w,
                         Atom *selection,
@@ -59,7 +47,6 @@ extern void _XmDataFieldLoseSelection(
                         Widget w,
                         Atom *selection) ;
 
-#endif /* _NO_PROTO */
 /********    End Private Function Declarations    ********/
 
 #ifdef __cplusplus
@@ -67,4 +54,3 @@ extern void _XmDataFieldLoseSelection(
 #endif
 
 #endif /* _XmDataFSelP_h */
-/* DON't ADD STUFF AFTER THIS #endif */

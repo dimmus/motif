@@ -40,18 +40,11 @@
  *   using XCreateGC or XtAllocateGC.
  *
  ***************************************************************************/
-
 void _XmDrawHighlight(Display *display, Drawable d,
 			  GC gc,
-#if NeedWidePrototypes
-                          int x, int y,
-			  int width, int height,
-			  int highlight_thickness,
-#else
                           Position x, Position y,
 			  Dimension width, Dimension height,
 			  Dimension highlight_thickness,
-#endif /* NeedWidePrototypes */
                    int line_style)
 {
    XSegment seg[4];

@@ -27,6 +27,16 @@
 #include <stdlib.h>
 #include <string.h>		/* May have to be strings.h on some systems. */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+#if HAVE_STDINT_H
+#include <stdint.h>
+#elif HAVE_INTTYPES_H
+#include <inttypes.h>
+#endif
+
 #include <Xm/Xm.h>
 #include <Xm/FontSP.h>
 #include <Xm/Label.h>
@@ -1225,7 +1235,7 @@ DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
 
     if ((fontdata = XLoadQueryFont(XtDisplay((Widget) fsw), font)) == NULL)
     {
-	sprintf(buf, "Font '%s'\nis not available on this machine", font);
+	sprintf(buf, "Font '%s'\nis not availiable on this machine", font);
 	DisplayUserError(fsw, buf);
 	err = True;
     }
@@ -1247,7 +1257,7 @@ DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
 
     if ((fontdata->ascent + fontdata->descent) == 0) {
 	if (IsXlfdFont(font)) {
-	    char *ptr, left_buf[BUFSIZ], right_buf[BUFSIZ], fbuf[BUFSIZ];
+	    char *ptr, left_buf[BUFSIZ >> 2], right_buf[BUFSIZ >> 2], fbuf[BUFSIZ];
 	    register int i, count;
 
 	    /*
@@ -1269,13 +1279,13 @@ DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
 	    strcpy(right_buf, ptr);
 	    strcpy(left_buf, font);
 	    left_buf[i] = '\0';
-	    sprintf(fbuf, "%s-140%s", left_buf, right_buf);
+	    snprintf(fbuf, sizeof fbuf, "%s-140%s", left_buf, right_buf);
 
 	    if ((fontdata = XLoadQueryFont(XtDisplay((Widget) fsw),
 					   fbuf)) == NULL)
 	    {
 		sprintf(buf,
-			    "Font '%s'\nis not available on this machine",
+			    "Font '%s'\nis not availiable on this machine",
 			    font);
 		DisplayUserError(fsw, buf);
 		    err = True;
@@ -1293,9 +1303,11 @@ DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
     }
 
     if (!err) {
-	fl = XmFontListCreate(fontdata, XmFONTLIST_DEFAULT_TAG);
-
 	num_largs = 0;
+
+    fl = XmFontListAppendEntry(NULL, XmFontListEntryCreate(
+        XmSTRING_DEFAULT_CHARSET, XmFONT_IS_FONT, fontdata
+    ));
 	XtSetArg(largs[num_largs], XmNfontList, fl); num_largs++;
 	XtSetValues(XmFontS_text(fsw), largs, num_largs);
 
@@ -1347,7 +1359,6 @@ DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
  *	Returns: the font string (same as buf).
  */
 
-/* ARGSUSED */
 static String
 BuildFontString(XmFontSelectorWidget fsw, FontData *cf, String buf, int size)
 {
@@ -2747,7 +2758,7 @@ CreateEncodingMenu(XmFontSelectorWidget fsw,
 				   num_args + num_largs);
 
     XtAddCallback(button,
-		  XmNactivateCallback, ChangeEncoding, (XtPointer) 0);
+		  XmNactivateCallback, ChangeEncoding, NULL);
 
     current = 0;
     for (i = 1, encodings = ENCODING_LIST(fsw) ;
@@ -2764,7 +2775,7 @@ CreateEncodingMenu(XmFontSelectorWidget fsw,
 	XmStringFree(label);
 
 	XtAddCallback(button,
-		      XmNactivateCallback, ChangeEncoding, (XtPointer) i);
+		      XmNactivateCallback, ChangeEncoding, (XtPointer)(intptr_t)i);
 
 	if (streq(*encodings, ENCODING_STRING(fsw)))
 	{
@@ -2845,7 +2856,6 @@ CheckEncoding(XmFontSelectorWidget fsw, FamilyInfo *fam)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 FamilyChanged(Widget w, XtPointer fsw_ptr, XtPointer junk)
 {
@@ -2882,7 +2892,6 @@ FamilyChanged(Widget w, XtPointer fsw_ptr, XtPointer junk)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 SizeChanged(Widget w, XtPointer fsw_ptr, XtPointer junk)
 {
@@ -2914,7 +2923,6 @@ SizeChanged(Widget w, XtPointer fsw_ptr, XtPointer junk)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 ChangeEncoding(Widget w, XtPointer data, XtPointer junk)
 {
@@ -2926,7 +2934,7 @@ ChangeEncoding(Widget w, XtPointer data, XtPointer junk)
     fsw = (XmFontSelectorWidget) w;
     cf = XmFontS_font_info(fsw)->current_font;
 
-    if ((int) data == 0)
+    if (!data)
 	{
 	XtFree(ENCODING_STRING(fsw));
 	ENCODING_STRING(fsw) = XtNewString(ANY_ENCODING);
@@ -2934,11 +2942,11 @@ ChangeEncoding(Widget w, XtPointer data, XtPointer junk)
     else
 	{
 	XtFree(ENCODING_STRING(fsw));
-	ENCODING_STRING(fsw) = XtNewString(ENCODING_LIST(fsw)[(int) data - 1]);
+	ENCODING_STRING(fsw) = XtNewString(ENCODING_LIST(fsw)[(intptr_t)data - 1]);
 	}
 
     UpdateFamilies(fsw);
-    DisplayCurrentFont(fsw, BuildFontString(fsw, cf, buf, BUFSIZ));
+    DisplayCurrentFont(fsw, BuildFontString(fsw, cf, buf, sizeof buf));
 }
 
 /*	Function Name: ToggleScaling
@@ -2949,7 +2957,6 @@ ChangeEncoding(Widget w, XtPointer data, XtPointer junk)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 ToggleScaling(Widget w, XtPointer fsw_ptr, XtPointer data)
 {
@@ -3003,7 +3010,6 @@ ToggleScaling(Widget w, XtPointer fsw_ptr, XtPointer data)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 ToggleBold(Widget w, XtPointer fsw_ptr, XtPointer data)
 {
@@ -3046,7 +3052,6 @@ ToggleBold(Widget w, XtPointer fsw_ptr, XtPointer data)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 ToggleItalic(Widget w, XtPointer fsw_ptr, XtPointer data)
 {
@@ -3087,7 +3092,6 @@ ToggleItalic(Widget w, XtPointer fsw_ptr, XtPointer data)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 ToggleMiddlePane(Widget w, XtPointer fsw_ptr, XtPointer data)
 {
@@ -3110,7 +3114,6 @@ ToggleMiddlePane(Widget w, XtPointer fsw_ptr, XtPointer data)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 ToggleNameWindow(Widget w, XtPointer fsw_ptr, XtPointer data)
 {
@@ -3388,7 +3391,6 @@ OtherMode(Widget w, XtPointer fsw_ptr, XtPointer data)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static void
 RemoveUserError(Widget w, XtPointer fsw_ptr, XtPointer data)
 {
@@ -3421,17 +3423,10 @@ ClassInitialize()
 /*
  * ClassPartInitialize sets up the fast subclassing for the widget.
  */
-static void
-#ifdef _NO_PROTO
-ClassPartInitialize(w_class)
-        WidgetClass w_class ;
-#else
-ClassPartInitialize(WidgetClass w_class)
-#endif /* _NO_PROTO */
+static void ClassPartInitialize(WidgetClass w_class)
 {
     _XmFastSubclassInit (w_class, XmFONTSELECTOR_BIT);
 }
-
 
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific
@@ -3444,7 +3439,6 @@ ClassPartInitialize(WidgetClass w_class)
  *	Returns:       none.
  */
 
-/* ARGSUSED */
 static void
 Initialize(Widget request, Widget set, ArgList args, Cardinal * num_args)
 {
@@ -3599,7 +3593,6 @@ Destroy(Widget w)
  *	Returns:       none
  */
 
-/* ARGSUSED */
 static Boolean
 SetValues(Widget old, Widget request, Widget set,
 	  ArgList args, Cardinal * num_args)
@@ -3664,7 +3657,7 @@ SetValues(Widget old, Widget request, Widget set,
 	)
     {
 	char buf[BUFSIZ];
-	int current, i;
+	int current;
 	String *encodings = ENCODING_LIST(set_fsw);
 	Widget button;
 
@@ -3692,7 +3685,7 @@ SetValues(Widget old, Widget request, Widget set,
 	    num_largs = 0;
 	    XtSetArg(largs[num_largs], XmNmenuHistory, button); num_largs++;
 	    XtSetValues(XmFontS_option_menu(set_fsw), largs, num_largs);
-	    ChangeEncoding((Widget) set_fsw, (XtPointer) current, NULL);
+	    ChangeEncoding((Widget) set_fsw, (XtPointer)(intptr_t)current, NULL);
 	}
 	else
 	{
@@ -3749,7 +3742,6 @@ SetValues(Widget old, Widget request, Widget set,
  *	Returns:       none
  */
 
-/* ARGSUSED */
 static void
 GetValuesHook(Widget w, ArgList args, Cardinal * num_args)
 {

@@ -34,15 +34,10 @@ extern "C" {
 extern Atom XmInternAtom(
         		Display *display,
         		String name,
-#if NeedWidePrototypes
-        		int only_if_exists );
-#else
         		Boolean only_if_exists );
-#endif /* NeedWidePrototypes */
 
 /* X11r5's XGetAtomName equivalent */
 extern String XmGetAtomName( Display *display, Atom atom);
-
 
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */

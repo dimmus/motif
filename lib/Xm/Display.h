@@ -44,6 +44,7 @@ enum {
 	XmDRAG_PREREGISTER,
 	XmDRAG_PREFER_DYNAMIC,
 	XmDRAG_DYNAMIC,
+	XmDRAG_XDND,
 	XmDRAG_PREFER_RECEIVER
 };
 
@@ -57,11 +58,8 @@ externalref 	WidgetClass xmDisplayClass;
 
 /********    Public Function Declarations    ********/
 
-extern Widget XmGetDragContext(
-                        Widget w,
-                        Time time) ;
-extern Widget XmGetXmDisplay(
-                        Display *display) ;
+extern Widget XmGetDragContext(Widget w, Time time);
+extern Widget XmGetXmDisplay(Display *display);
 
 /********    End Public Function Declarations    ********/
 

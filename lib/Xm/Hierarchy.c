@@ -766,15 +766,12 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
 	     * the widget and our compare to see if exists in the parent
 	     * will fail.  So we store the new parent in a temp variable.
 	     * reset parent to the old one, then remove it from the old parent,
-	     * and finnally add it to the new parent.
+	     * and finally add it to the new parent.
 	     */
-
 	    XmHierarchyC_parent(new_node) = XmHierarchyC_parent(old_node);
 	    RemoveNodeFromParent(new_node);
 	    XmHierarchyC_parent(new_node) = parent;
 	    if (parent == NULL) {
-		XmHierarchyWidget hw = (XmHierarchyWidget) XtParent(set);
-
 		AddChild(XmHierarchy_top_node(hw), new_node);
 	    }
 	    else
@@ -1393,11 +1390,9 @@ AddChildToList(HierarchyConstraints ** list, Cardinal * num, Cardinal * alloc,
 
     if (success == NO) {
 	String params[1];
-	Cardinal num = 1;
-
 	params[0] = XtName(XmHierarchyC_widget(child));
 	_XmWarningMsg(XmHierarchyC_widget(child), XmNinsertBeforeNotSibling,
-		XmNinsertBeforeNotSiblingMsg, params, num);
+		XmNinsertBeforeNotSiblingMsg, params, 1);
     }
 
     if (success != YES)		/* Stick it on the end of the list. */

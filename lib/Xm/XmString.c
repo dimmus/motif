@@ -32,11 +32,10 @@ static char rcsid[] = "$TOG: XmString.c /main/34 1998/04/16 14:35:32 mgreess $"
 #endif
 
 #include <stdio.h>
-#include <limits.h>		/* for MB_LEN_MAX */
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include <string.h>
+#include <stdarg.h>
+#include <limits.h>		/* for MB_LEN_MAX */
 #include <ctype.h>
 
 #ifdef __cplusplus
@@ -58,10 +57,6 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include "XmRenderTI.h"
 #include "XmStringI.h"
 #include "XmTabListI.h"
-
-# include <stdarg.h>
-
-# define Va_start(a,b) va_start(a,b)
 
 /* Warning Messages */
 #define NO_FONT_MSG	_XmMMsgXmString_0000
@@ -236,18 +231,10 @@ static Boolean _is_short_length(
                         unsigned char *p) ;
 static void _write_long_length(
                         unsigned char *p,
-#if NeedWidePrototypes
-                        unsigned int length) ;
-#else
                         unsigned short length) ;
-#endif /* NeedWidePrototypes */
 static unsigned char * _write_header(
                         unsigned char *p,
-#if NeedWidePrototypes
-                        unsigned int length) ;
-#else
                         unsigned short length) ;
-#endif /* NeedWidePrototypes */
 static unsigned char * _read_header(
                         unsigned char *p) ;
 static unsigned short _read_header_length(
@@ -258,19 +245,10 @@ static unsigned short _read_string_length(
                         unsigned char *p) ;
 static unsigned char * _write_component(
                         unsigned char *p,
-#if NeedWidePrototypes
-                        unsigned int tag,
-                        unsigned int length,
-#else
                         unsigned char tag,
                         unsigned short length,
-#endif /* NeedWidePrototypes */
                         unsigned char *value,
-#if NeedWidePrototypes
-                        int move_by_length) ;
-#else
                         Boolean move_by_length) ;
-#endif /* NeedWidePrototypes */
 static unsigned char * _read_component(
                         unsigned char *p,
                         unsigned char *tag,
@@ -305,32 +283,19 @@ static void LineMetrics(_XmStringEntry line,
 			Dimension *ascender,
 			Dimension *descender);
 static void SubStringPosition(
-#if NeedWidePrototypes
-                        int one_byte,
-#else
                         Boolean one_byte,
-#endif /* NeedWidePrototypes */
 			XmRenderTable rt,
                         XmRendition entry,
                         _XmStringEntry seg,
                         _XmStringEntry under_seg,
-#if NeedWidePrototypes
-                        int x,
-#else
                         Position x,
-#endif /* NeedWidePrototypes */
                         Dimension *under_begin,
                         Dimension *under_end) ;
 static void recursive_layout(_XmString string,
 			     int *line_index,
 			     int *seg_index,
-#if NeedWidePrototypes
-			     int direction,
-			     int p_direction,
-#else
                              XmDirection direction,
                              XmDirection p_direction,
-#endif /* NeedWidePrototypes */
 			     int depth);
 static void last_direction(_XmStringEntry line,
 			   int *index,
@@ -345,49 +310,25 @@ static void DrawLine(Display *d,
 		     XmRendition base,
 		     XmRenderTable rendertable,
 		     XmDirection prim_dir,
-#if NeedWidePrototypes
-		     int image,
-#else
 		     Boolean image,
-#endif /* NeedWidePrototypes */
 		     _XmString *underline,
-#if NeedWidePrototypes
-		     int descender,
-		     int opt,
-		     int opt_width,
-		     int opt_height
-#else
 		     Dimension descender,
                      Boolean opt,
 		     Dimension opt_width,
 		     Dimension opt_height
-#endif /* NeedWidePrototypes */
 		     );
 static void _calc_align_and_clip(
                         Display *d,
 			Window w,
                         GC gc,
                         Position *x,
-#if NeedWidePrototypes
-                        int y,
-                        int width,
-#else
                         Position y,
                         Dimension width,
-#endif /* NeedWidePrototypes */
                         int line_width,
                         int line_height,
-#if NeedWidePrototypes
-                        unsigned int lay_dir,
-#else
                         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
                         XRectangle *clip,
-#if NeedWidePrototypes
-                        unsigned int align,
-#else
                         unsigned char align,
-#endif /* NeedWidePrototypes */
                         int descender,
                         int *restore,
 			XmFontType font_type) ;
@@ -397,59 +338,33 @@ static void _draw(
                         XmRenderTable rendertable,
                         _XmString string,
                         GC gc,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        unsigned int align,
-                        unsigned int lay_dir,
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         unsigned char align,
                         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
                         XRectangle *clip,
-#if NeedWidePrototypes
-                        int image,
-#else
                         Boolean image,
-#endif /* NeedWidePrototypes */
                         _XmString underline) ;
 static void _render(Display *d,
 		    Drawable w,
 		    XmRenderTable rendertable,
 		    XmRendition rend,
 		    _XmString string,
-#if NeedWidePrototypes
-		    int x,
-		    int y,
-		    int width,
-		    unsigned int align,
-		    unsigned int lay_dir,
-		    int image,
-#else
 		    Position x,
 		    Position y,
 		    Dimension width,
 		    unsigned char align,
 		    unsigned char lay_dir,
 		    Boolean image,
-#endif						  /* NeedWidePrototypes */
 		    _XmString underline,
 		    XRectangle *clip);
 
 static _XmString _XmStringOptCreate(
                         unsigned char *c,
                         unsigned char *end,
-#if NeedWidePrototypes
-                        unsigned int textlen,
-                        int havetag,
-#else
                         unsigned short textlen,
                         Boolean havetag,
-#endif /* NeedWidePrototypes */
                         unsigned int tag_index) ;
 static void finish_segment(_XmString str,
 			   _XmStringUnoptSeg seg,
@@ -460,11 +375,7 @@ static void finish_segment(_XmString str,
 static _XmString _XmStringNonOptCreate(
                         unsigned char *c,
                         unsigned char *end,
-#if NeedWidePrototypes
-                        int havetag) ;
-#else
                         Boolean havetag) ;
-#endif /* NeedWidePrototypes */
 static Boolean SpecifiedSegmentExtents(_XmStringEntry entry,
 				       XmRenderTable rendertable,
 				       XmRendition *rend_in_out,
@@ -487,10 +398,7 @@ static void ComputeMetrics(XmRendition rend,
                            Boolean utf8);
 static Dimension ComputeWidth(unsigned char which,
 			      XCharStruct char_ret);
-static void _parse_locale(
-                        char *str,
-                        int *indx,
-                        int *len) ;
+static void _parse_locale(char *str, int *indx, int *len);
 static Boolean match_pattern(XtPointer      text,
 			     XmStringTag    tag,
 			     XmTextType     type,
@@ -583,11 +491,7 @@ _is_short_length(
 static void
 _write_long_length(
         unsigned char *p,
-#if NeedWidePrototypes
-        unsigned int length )
-#else
         unsigned short length )
-#endif /* NeedWidePrototypes */
 {
 
   unsigned char   * uchar_p = (unsigned char *) p;
@@ -616,11 +520,7 @@ _write_long_length(
 static unsigned char *
 _write_header(
         unsigned char *p,
-#if NeedWidePrototypes
-        unsigned int length )
-#else
         unsigned short length )
-#endif /* NeedWidePrototypes */
 {
 
   unsigned char * uchar_p = p;
@@ -779,19 +679,10 @@ _read_length(
 static unsigned char *
 _write_component(
         unsigned char *p,
-#if NeedWidePrototypes
-        unsigned int tag,
-        unsigned int length,
-#else
         unsigned char tag,
         unsigned short length,
-#endif /* NeedWidePrototypes */
         unsigned char *value,
-#if NeedWidePrototypes
-        int move_by_length )
-#else
         Boolean move_by_length )
-#endif /* NeedWidePrototypes */
 {
   unsigned char * uchar_p = p;
 
@@ -927,11 +818,7 @@ XmStringCreateLocalized(
 /* Create an optimized _XmString with only direction set. */
 XmString
 XmStringDirectionCreate(
-#if NeedWidePrototypes
-        int direction )
-#else
         XmStringDirection direction )
-#endif /* NeedWidePrototypes */
 {
   /* Maintain a static cache of the common results. */
   static XmConst XmStringDirection dir_index[] =
@@ -1454,8 +1341,7 @@ XmStringConcatAndFree(XmString a,
 	    (a_len == 0))) &&
 	  (a_type == b_type || a_type == XmNO_TEXT || b_type == XmNO_TEXT) &&
 	  ((a_len + b_len) < (1 << BYTE_COUNT_BITS)) &&
-	  ((_XmStrText(a) && b_tabs==0) ||
-	   (!_XmStrText(a) && a_tabs+b_tabs <= 3)))
+	  ((_XmStrText(a) && b_tabs==0) || (a_tabs+b_tabs <= 3)))
 	{
 	  /* Compatible strings.  Make an optimized string. */
 	  if ((b_len == 0) && (_XmStrRefCountGet(a) == 1))
@@ -2428,7 +2314,7 @@ OptLineMetrics(XmRenderTable 	r,
       else if (rend_io != NULL)
 	{
 	  _XmRendFont(*rend_io) = _XmRendFont(rend);
-#ifdef USE_XFT
+#if USE_XFT
 	  _XmRendXftFont(*rend_io) = _XmRendXftFont(rend);
 #endif
 	  _XmRendFontName(*rend_io) = _XmRendFontName(rend);
@@ -2708,19 +2594,11 @@ _XmStringCharacterCount(XtPointer text,
 	else {
 	  int cnt = 0;
 	  int len;
-#ifndef NO_MULTIBYTE
 	  while (byte_count > 0 && (len = mblen(s, MB_CUR_MAX)) > 0) {
 	    cnt++;
 	    s += len;
 	    byte_count -= len;
 	  }
-#else
-	  while (byte_count > 0 && *s) {
-	    cnt++;
-	    s++;
-	    byte_count--;
-	  }
-#endif
 	  return cnt;
 	}
       }
@@ -2875,11 +2753,7 @@ CacheGet(_XmStringEntry entry,
 
 XtPointer
 _XmScanningCacheGet(_XmStringNREntry entry,
-#if NeedWidePrototypes
-		    int d,
-#else
 		    XmDirection d,
-#endif /* NeedWidePrototypes */
 		    int field)
 {
   _XmStringScanningCache cache;
@@ -2915,11 +2789,7 @@ _XmScanningCacheGet(_XmStringNREntry entry,
 
 void
 _XmScanningCacheSet(_XmStringNREntry entry,
-#if NeedWidePrototypes
-		    int d,
-#else
 		    XmDirection d,
-#endif /* NeedWidePrototypes */
 		    int field,
 		    XtPointer value)
 {
@@ -3403,7 +3273,7 @@ _XmString
 _XmStringOptToNonOpt(_XmStringOpt string)
 {
   _XmString str;
-  _XmStringOptSegRec seg;
+  _XmStringUnoptSegRec seg;
 
   _XmStrCreate(str, XmSTRING_MULTIPLE_ENTRY, 0);
   _XmEntryInit((_XmStringEntry)&seg, XmSTRING_ENTRY_OPTIMIZED);
@@ -3421,8 +3291,7 @@ _XmStringOptToNonOpt(_XmStringOpt string)
   _XmEntryTextSet((_XmStringEntry)&seg, _XmStrText((_XmString)string));
 
   _XmStringSegmentNew(str, 0, (_XmStringEntry)&seg, True);
-
-  return(str);
+   return str;
 }
 
 /*
@@ -3432,20 +3301,12 @@ _XmStringOptToNonOpt(_XmStringOpt string)
  */
 static void
 SubStringPosition(
-#if NeedWidePrototypes
-        int one_byte,
-#else
         Boolean one_byte,
-#endif /* NeedWidePrototypes */
 	XmRenderTable rt,
 	XmRendition entry,
         _XmStringEntry seg,
         _XmStringEntry under_seg,
-#if NeedWidePrototypes
-        int x,
-#else
         Position x,
-#endif /* NeedWidePrototypes */
         Dimension *under_begin,
         Dimension *under_end )
 {
@@ -3498,7 +3359,7 @@ SubStringPosition(
 	  else
 	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
 	      *under_begin = x + abs(XTextWidth (font_struct, a, begin));
-#ifdef USE_XFT
+#if USE_XFT
 	    else {
 	      XGlyphInfo ext;
 	      XftTextExtentsUtf8(_XmRendDisplay(entry), _XmRendXftFont(entry),
@@ -3512,7 +3373,7 @@ SubStringPosition(
 	  if (width == 0) {
 	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
 	      width = abs(XTextWidth(font_struct, b, under_seg_len));
-#ifdef USE_XFT
+#if USE_XFT
 	    else {
 	      XGlyphInfo ext;
 	      XftTextExtentsUtf8(_XmRendDisplay(entry), _XmRendXftFont(entry),
@@ -3558,7 +3419,7 @@ SubStringPosition(
 	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
 	      *under_begin =
 	        x + abs(XTextWidth16 (font_struct, (XChar2b *) a, begin/2));
-#ifdef USE_XFT
+#if USE_XFT
 	    else {
 	      XGlyphInfo ext;
 	      XftTextExtents16(_XmRendDisplay(entry), _XmRendXftFont(entry),
@@ -3573,7 +3434,7 @@ SubStringPosition(
 	    if (_XmRendFontType(entry) == XmFONT_IS_FONT)
 	      width = abs(XTextWidth16(font_struct, (XChar2b *) b,
 				       under_seg_len/2));
-#ifdef USE_XFT
+#if USE_XFT
 	    else {
 	      XGlyphInfo ext;
 	      XftTextExtents16(_XmRendDisplay(entry), _XmRendXftFont(entry),
@@ -3607,20 +3468,12 @@ SubStringPosition(
 	    break;
 	  }
       } else {
-#ifndef NO_MULTIBYTE
 	len_a = mblen(&a[i], MB_CUR_MAX);
-#else
-	len_a = a[i] ? 1 : 0;
-#endif
 	if (len_a < 1) return;
 	len_a1 = len_a;
 
 	for (j = 0; j < under_seg_len; j += len_b) {
-#ifndef NO_MULTIBYTE
 	  len_b = mblen(&b[j], MB_CUR_MAX);
-#else
-	  len_b = b[j] ? 1 : 0;
-#endif
 	  if (len_b < 1) return;
 
 	  if (len_b == len_a1) {
@@ -3692,7 +3545,6 @@ SubStringPosition(
   }
 }
 
-/*ARGSUSED*/
 extern void
 _XmStringDrawLining(Display *d,
 		    Drawable w,
@@ -3869,31 +3721,16 @@ _XmStringDrawLining(Display *d,
 extern void
 _XmStringDrawSegment(Display *d,
 		     Drawable w,
-#if NeedWidePrototypes
-		     int x,
-		     int y,
-		     int width,
-		     int height,
-#else
 		     Position x,
 		     Position y,
 		     Dimension width,
 		     Dimension height,
-#endif /* NeedWidePrototypes */
 		     _XmStringNREntry seg,
 		     XmRendition rend,
 		     XmRenderTable rendertable,
-#if NeedWidePrototypes
-		     int image,
-#else
 		     Boolean image,
-#endif /* NeedWidePrototypes */
 		     XmString *underline,
-#if NeedWidePrototypes
-		     unsigned int descender
-#else
 		     Dimension descender
-#endif /* NeedWidePrototypes */
 		     )
 {
   Boolean 		text16 = False, multibyte, widechar, utf8;
@@ -4010,11 +3847,7 @@ _XmStringDrawSegment(Display *d,
 	      p += seg_len;
 	      for (i = 0; i < seg_len; i += len)
 		{
-#ifndef NO_MULTIBYTE
 		  len = mblen(q, MB_CUR_MAX);
-#else
-		  len = *q ? 1 : 0;
-#endif
 		  if (len < 1) /* Something went wrong, just return for now. */
 		    return;
 
@@ -4113,7 +3946,7 @@ _XmStringDrawSegment(Display *d,
 	  }
 	}
 
-#ifdef USE_XFT
+#if USE_XFT
       if (_XmRendFontType(rend) == XmFONT_IS_XFT)
         {
 	    _XmXftDrawString(d, w, rend, 1, x, y, draw_text, seg_len, image);
@@ -4236,13 +4069,8 @@ static void
 recursive_layout(_XmString string,
 		 int *line_index,
 		 int *seg_index,
-#if NeedWidePrototypes
-		 int direction,
-		 int p_direction,
-#else
 		 XmDirection direction,
 		 XmDirection p_direction,
-#endif
 		 int depth)
 {
   _XmStringEntry        line;
@@ -4506,11 +4334,7 @@ recursive_layout(_XmString string,
 
 void
 _XmStringLayout(_XmString string,
-#if NeedWidePrototypes
-		int direction)
-#else
                 XmDirection direction)
-#endif
 {
   int seg_index=0, line_index=0;
   _XmStringEntry        line;
@@ -4609,23 +4433,12 @@ DrawLine(
 	 XmRendition base,
 	 XmRenderTable rendertable,
 	 XmDirection prim_dir,
-#if NeedWidePrototypes
-	 int image,
-#else
 	 Boolean image,
-#endif /* NeedWidePrototypes */
 	 _XmString *underline,
-#if NeedWidePrototypes
-	 int descender,
-	 int opt,
-	 int opt_width,
-	 int opt_height
-#else
 	 Dimension descender,
 	 Boolean opt,
 	 Dimension opt_width,
 	 Dimension opt_height
-#endif /* NeedWidePrototypes */
 	 )
 {
   int				i, prev_val, val, offset;
@@ -4642,7 +4455,7 @@ DrawLine(
        * This is optimized; build an optimized segment and call the drawing
        * routine.
        */
-      _XmStringOptSegRec	segm;
+      _XmStringUnoptSegRec	segm;
       _XmString 		optline = (_XmString)line;
 
       _XmEntryInit((_XmStringEntry)&segm, XmSTRING_ENTRY_OPTIMIZED);
@@ -4901,26 +4714,13 @@ _calc_align_and_clip(
 	Window w,
         GC gc,
         Position *x,
-#if NeedWidePrototypes
-        int y,
-        int width,
-#else
         Position y,
         Dimension width,
-#endif /* NeedWidePrototypes */
         int line_width,
         int line_height,
-#if NeedWidePrototypes
-        unsigned int lay_dir,
-#else
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip,
-#if NeedWidePrototypes
-        unsigned int align,
-#else
         unsigned char align,
-#endif /* NeedWidePrototypes */
         int descender,
         int *restore,
 	XmFontType font_type)
@@ -4953,13 +4753,12 @@ _calc_align_and_clip(
             (clip->y <= y + descender))
 	{
 	    *restore = TRUE;
-#ifdef USE_XFT
+#if USE_XFT
             if (font_type == XmFONT_IS_XFT)
 	      _XmXftSetClipRectangles(d, w, 0, 0, clip, 1);
 #endif
             XSetClipRectangles (d, gc, 0, 0, clip, 1, YXBanded);
 	}
-
 }
 
 /*
@@ -4972,25 +4771,13 @@ _draw(
         XmRenderTable rendertable,
         _XmString string,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip,
-#if NeedWidePrototypes
-        int image,
-#else
         Boolean image,
-#endif /* NeedWidePrototypes */
         _XmString underline )
 {
   static XmRendition	rend = NULL;
@@ -5019,21 +4806,12 @@ _render(Display *d,
         XmRenderTable rendertable,
 	XmRendition rend,
         _XmString string,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-        int image,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
         Boolean image,
-#endif /* NeedWidePrototypes */
 	_XmString underline,
         XRectangle *clip)
 {
@@ -5133,7 +4911,7 @@ _render(Display *d,
       }
   }
   if (restore_clip) {
-#ifdef USE_XFT
+#if USE_XFT
 	  if (_XmRendFontType((_XmStrOptimized(string)) ? rend2 : rend1) == XmFONT_IS_XFT) {
 		  XftDraw *draw = _XmXftDrawCreate(d, w);
 		  XftDrawSetClip(draw, NULL);
@@ -5152,19 +4930,11 @@ _XmStringRender(Display *d,
 		XmRenderTable rendertable,
 		XmRendition rend,
 		_XmString string,
-#if NeedWidePrototypes
-		int x,
-		int y,
-		int width,
-		unsigned int align,
-		unsigned int lay_dir
-#else
 		Position x,
 		Position y,
 		Dimension width,
 		unsigned char align,
 		unsigned char lay_dir
-#endif						  /* NeedWidePrototypes */
 		)
 {
   _render(d, w, rendertable, rend, string, x, y, width,
@@ -5228,13 +4998,8 @@ static _XmString
 _XmStringOptCreate(
         unsigned char *c,
         unsigned char *end,
-#if NeedWidePrototypes
-        unsigned int textlen,
-        int havetag,
-#else
         unsigned short textlen,
         Boolean havetag,
-#endif /* NeedWidePrototypes */
         unsigned int tag_index )
 {
   _XmString      string;
@@ -5346,11 +5111,7 @@ static _XmString
 _XmStringNonOptCreate(
         unsigned char *c,
         unsigned char *end,
-#if NeedWidePrototypes
-        int havetag )
-#else
         Boolean havetag )
-#endif /* NeedWidePrototypes */
 {
   int lc, sc;
   _XmStringUnoptSegRec seg;
@@ -5573,7 +5334,6 @@ _XmStringNonOptCreate(
 /*
  * Converts from ASN.1 formatted byte stream to XmString.
  */
-/*ARGSUSED*/
 XmString
 XmCvtByteStreamToXmString(unsigned char *property)
 {
@@ -6228,6 +5988,7 @@ ComputeMetrics(XmRendition rend,
 
 		  XTextExtents16(font_struct, str, str_len,
 			     &dir, &asc, &desc, &char_ret);
+		  XFree(str);
 		} else
 	      XTextExtents16(font_struct,
 			     (XChar2b *)text, Half(byte_count),
@@ -6292,7 +6053,7 @@ ComputeMetrics(XmRendition rend,
 	}
     }
     break;
-#ifdef USE_XFT
+#if USE_XFT
     case XmFONT_IS_XFT:
 	asc = _XmRendXftFont(rend)->ascent;
 	desc = _XmRendXftFont(rend)->descent;
@@ -6530,7 +6291,7 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
 		  _XmRendFont(rend) = _XmRendFont(def_rend);
 		}
-#ifdef USE_XFT
+#if USE_XFT
               else if (_XmRendXftFont(def_rend) != NULL)
 	        {
 		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
@@ -6581,7 +6342,7 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
 		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
 		  _XmRendFont(rend) = _XmRendFont(def_rend);
 		}
-#ifdef USE_XFT
+#if USE_XFT
               else if (_XmRendXftFont(def_rend) != NULL)
 	        {
 		  _XmRendFontType(rend) = _XmRendFontType(def_rend);
@@ -6710,11 +6471,7 @@ SpecifiedSegmentExtents(_XmStringEntry entry,
   return(can_do);
 }
 
-static void
-_parse_locale(
-        char *str,
-        int *indx,
-        int *len )
+static void _parse_locale(char *str, int *indx, int *len)
 {
     char     *temp;
     int      start;
@@ -6727,6 +6484,7 @@ _parse_locale(
 
     *indx = 0;
     *len = 0;
+    if (!str) return;
 
     /*
      *  The format of the locale string is:
@@ -6752,55 +6510,43 @@ _parse_locale(
  /* This function returns current default charset being used.  This is */
  /* determined from the value of the $LANG environment variable or */
  /* XmFALLBACK_CHARSET.  */
-char *
-_XmStringGetCurrentCharset( void )
+char *_XmStringGetCurrentCharset(void)
 {
-    char *str;
-    char *ptr;
-    int  chlen;
-    int  indx;
-    int  len;
-    char *ret_val;
+	char *ptr, *str, *ret_val;
+	int indx, len;
 
-    _XmProcessLock();
-    if (!locale.inited)
-    {
-        locale.tag = NULL;
-        locale.taglen = 0;
+	_XmProcessLock();
+	if (locale.inited)
+		goto out;
 
-        str = (char *)getenv(env_variable);
+	locale.tag    = NULL;
+	locale.taglen = 0;
+	ptr           = XmFALLBACK_CHARSET;
+	len           = strlen(XmFALLBACK_CHARSET);
+	str           = getenv(env_variable);
 
-        if (str)
-        {
-           _parse_locale(str, &indx, &chlen);
-           if (chlen > 0)
-           {
-               ptr = &str[indx];
-	       len = chlen;
-           }
-           else {
-               len = strlen(XmFALLBACK_CHARSET);
-               ptr = XmFALLBACK_CHARSET;
-           }
-        }
-        else {
-	  len = strlen(XmFALLBACK_CHARSET);
-	  ptr = XmFALLBACK_CHARSET;
-        }
-        locale.tag = (char *) XtMalloc(len + 1);
-        strncpy(locale.tag, ptr, len);
-        locale.tag[len] = '\0';
-        locale.taglen = len;
+	_parse_locale(str, &indx, &len);
+	if (len > 0) {
+		ptr = str + indx;
+		if (!strcmp(ptr, "UTF8")) {
+			ptr = "UTF-8";
+			len = 5;
+		}
+	}
+
+	locale.tag = (char *)XtMalloc(len + 1);
+	strncpy(locale.tag, ptr, len);
+	locale.tag[len] = '\0';
+	locale.taglen = len;
 
 	/* Register XmSTRING_DEFAULT_CHARSET for compound text conversion. */
-	XmRegisterSegmentEncoding(XmSTRING_DEFAULT_CHARSET,
-				  XmFONTLIST_DEFAULT_TAG);
+	XmRegisterSegmentEncoding(XmSTRING_DEFAULT_CHARSET, XmFONTLIST_DEFAULT_TAG);
+	locale.inited = TRUE;
 
-        locale.inited = TRUE;
-    }
-    ret_val = locale.tag;
-    _XmProcessUnlock();
-    return (ret_val);
+out:
+	ret_val = locale.tag;
+	_XmProcessUnlock();
+	return ret_val;
 }
 
  /* This function compares a given charset to the current default charset
@@ -7130,7 +6876,7 @@ XmStringLineCount(
   int ret_val;
 
   _XmProcessLock();
-  if ((string == NULL)) {
+  if (!string) {
 	_XmProcessUnlock();
 	return(0);
   }
@@ -7155,19 +6901,11 @@ XmStringDraw(
         XmRenderTable rendertable,
         XmString string,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip )
 {
   _XmDisplayToAppContext(d);
@@ -7187,19 +6925,11 @@ XmStringDrawImage(
         XmRenderTable rendertable,
         XmString string,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip )
 {
   _XmDisplayToAppContext(d);
@@ -7219,19 +6949,11 @@ XmStringDrawUnderline(
         XmRenderTable fntlst,
         XmString str,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip,
         XmString under )
 {
@@ -7275,7 +6997,7 @@ _Xm_dump_stream(
 
 	switch (*c)
 	{
-	    case XmSTRING_COMPONENT_CHARSET:
+	    case XmSTRING_COMPONENT_TAG:
 	    case XmSTRING_COMPONENT_LOCALE:
                 if (*c ==  XmSTRING_COMPONENT_LOCALE)
 		  printf ("\tLocale name component\n");
@@ -7710,7 +7432,6 @@ XmeSetWMShellTitle(
  * XmeGetDirection: An XmParseProc to insert a direction component.
  *	Does not consume the triggering character.
  */
-/*ARGSUSED*/
 XmIncludeStatus
 XmeGetDirection(XtPointer     *in_out,
 		XtPointer      text_end, /* unused */
@@ -7739,7 +7460,6 @@ XmeGetDirection(XtPointer     *in_out,
  * match_pattern: A helper for XmStringParseText.  Determine whether
  *	the text matches a XmParseMapping pattern.
  */
-/*ARGSUSED*/
 static Boolean
 match_pattern(XtPointer      text,
 	      XmStringTag    tag, /* unused */
@@ -7942,7 +7662,7 @@ XmStringParseText(XtPointer    text,
     case XmCHARSET_TEXT:
       if (tag == NULL)
 	tag = XmFONTLIST_DEFAULT_TAG;
-      tag_type = XmSTRING_COMPONENT_CHARSET;
+      tag_type = XmSTRING_COMPONENT_TAG;
       break;
 
     case XmWIDECHAR_TEXT:
@@ -7997,11 +7717,7 @@ XmStringParseText(XtPointer    text,
   halt = (end_ptr && (ptr >= (char*) end_ptr));
   while (!halt && (wide_char ? *((wchar_t*) ptr) : *ptr))
     {
-#ifndef NO_MULTIBYTE
       int len = (wide_char ? sizeof(wchar_t) : mblen(ptr, MB_CUR_MAX));
-#else
-      int len = (wide_char ? sizeof(wchar_t) : 1);
-#endif
       advanced = False;
 
       /* If we have an invalid character, treat it as a single byte. */
@@ -8035,6 +7751,7 @@ XmStringParseText(XtPointer    text,
 	      parse_unmatched(&result, &prev_ptr, type, ptr - prev_ptr);
 	      advanced = parse_pattern(&result, &ptr, end_ptr, tag,
 				       type, pat, len, call_data, &halt);
+
 	      /* Insert the charset component after pattern insertion */
 	      result = XmStringConcatAndFree(result, XmStringComponentCreate(tag_type, strlen(tag), (XtPointer) tag));
 	    }
@@ -8326,11 +8043,7 @@ unparse_components(char          **result,
 	      else
 		unparse_text(result, length, output_type,
 			     XmSTRING_COMPONENT_TEXT,
-#ifndef NO_MULTIBYTE
 			     mblen((char*) pat->pattern, MB_CUR_MAX),
-#else
-			     *((char *) pat->pattern) ? 1: 0,
-#endif
 			     pat->pattern);
 
 	      /* Skip all but the last matched component. */
@@ -8484,7 +8197,7 @@ XmStringComponentCreate(XmStringComponentType c_type,
   /* Modify a proto-segment appropriately or return a special value. */
   switch (c_type)
     {
-    case XmSTRING_COMPONENT_CHARSET:
+    case XmSTRING_COMPONENT_TAG:
       if (!value || (length != strlen((char*) value))) {
         _XmProcessUnlock();
 	return NULL;
@@ -8962,7 +8675,7 @@ XmeStringGetComponent(_XmStringContext context,
 
 	      _XmProcessUnlock();
 	      return ((text_type == XmCHARSET_TEXT) ?
-		      XmSTRING_COMPONENT_CHARSET : XmSTRING_COMPONENT_LOCALE);
+		      XmSTRING_COMPONENT_TAG : XmSTRING_COMPONENT_LOCALE);
 	    }
 	}
       /* Fall through if no tag set. */
@@ -9583,8 +9296,6 @@ XmParseMappingSetValues(XmParseMapping mapping,
     mapping->internal_flags = XmSTRING_UNPARSE_UNKNOWN;
   _XmProcessUnlock();
 }
-
-
 
 static int
 _get_generate_parse_table (XmParseTable *gen_table)

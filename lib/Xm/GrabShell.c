@@ -107,7 +107,6 @@ static XtActionsRec actionsList[] =
   { "GrabShellMouseWheel", MouseWheel }
 };
 
-
 #define Offset(field) (XtOffsetOf(XmGrabShellRec, field))
 
 static XtResource resources[] =
@@ -610,6 +609,8 @@ ChangeManaged(Widget wid)
   Widget	    child;
 
   mygeom.request_mode = 0;
+  mygeom.width = 0;
+  mygeom.height = 0;
   if (gs->composite.num_children)
     {
       child = gs->composite.children[0];

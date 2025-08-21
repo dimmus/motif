@@ -173,11 +173,7 @@ extern void _XmRC_KeyboardInputHandler(
 				       Boolean *cont );
 extern void _XmAllowAcceleratedInsensitiveUnmanagedMenuItems(
 							     Widget wid,
-#if NeedWidePrototypes
-							     int allowed);
-#else
 							     Boolean allowed);
-#endif /* NeedWidePrototypes */
 extern void _XmPostPopupMenu(
                         Widget wid,
                         XEvent *event) ;

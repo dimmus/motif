@@ -30,10 +30,7 @@ static char rcsid[] = "$TOG: ScrollBar.c /main/20 1997/03/10 14:52:28 dbl $"
 #include <config.h>
 #endif
 
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 
 #include <Xm/DisplayP.h>        /* for enableThinThickness */
 #include <Xm/DrawP.h>
@@ -499,7 +496,6 @@ static XmConst XmNavigatorTraitRec scrollBarNT = {
  *	to reverse processing if needed.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 ExportScrollBarValue(
         Widget wid,
@@ -519,7 +515,6 @@ ExportScrollBarValue(
  *  Indicate that the value did indeed change.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static XmImportOperator
 ImportScrollBarValue(
         Widget wid,
@@ -541,7 +536,6 @@ ImportScrollBarValue(
  *    the processing direction resource dependent on the orientation.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 ProcessingDirectionDefault(
         XmScrollBarWidget widget,
@@ -608,7 +602,6 @@ BackgroundPixelDefault(
  *    Note that it works only for automatic.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 TraversalDefault(
         XmScrollBarWidget widget,
@@ -641,7 +634,6 @@ TraversalDefault(
  *
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 SliderVisualDefault(
         XmScrollBarWidget widget,
@@ -668,7 +660,6 @@ SliderVisualDefault(
  *
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 SliderMarkDefault(
         XmScrollBarWidget widget,
@@ -694,7 +685,6 @@ SliderMarkDefault(
  *
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 EditableDefault(
         XmScrollBarWidget widget,
@@ -723,7 +713,6 @@ EditableDefault(
  *    Note that it works only for automatic.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 HighlightDefault(
         XmScrollBarWidget widget,
@@ -787,7 +776,6 @@ ClassPartInitialize(
  *     The main widget instance initialization routine.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,
@@ -1929,7 +1917,6 @@ Destroy(
  *  ValidateInputs
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 ValidateInputs(
 	       XmScrollBarWidget current,
@@ -2094,7 +2081,6 @@ ValidateInputs(
  *  SetValues
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -2757,7 +2743,6 @@ Select(
  *     This function processes releases occuring on the scrollBar.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 Release(
         Widget wid,
@@ -2898,7 +2883,6 @@ Release(
  *     slider moves.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 Moved(
         Widget wid,
@@ -3070,7 +3054,6 @@ Moved(
  *	Issue the to top or bottom callbacks.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 TopOrBottom(
         Widget wid,
@@ -3395,7 +3378,6 @@ TopOrBottom(
  *	one increment.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 IncrementUpOrLeft(
         Widget wid,
@@ -3505,7 +3487,6 @@ IncrementUpOrLeft(
  *	one increment.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 IncrementDownOrRight(
         Widget wid,
@@ -3614,7 +3595,6 @@ IncrementDownOrRight(
  *	one increment.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 PageUpOrLeft(
         Widget wid,
@@ -3722,7 +3702,6 @@ PageUpOrLeft(
  *	one increment.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 PageDownOrRight(
         Widget wid,
@@ -3820,7 +3799,6 @@ PageDownOrRight(
 	}
 }
 
-/*ARGSUSED*/
 static void
 CancelDrag(
         Widget wid,
@@ -4024,7 +4002,6 @@ ChangeScrollBarValue(
  *	event evoked because of arrow selection.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 TimerEvent(
         XtPointer closure,
@@ -4543,11 +4520,7 @@ XmScrollBarSetValues(
         int slider_size,
         int increment,
         int page_increment,
-#if NeedWidePrototypes
-        int notify )
-#else
         Boolean notify )
-#endif /* NeedWidePrototypes */
 {
    XmScrollBarWidget sbw = (XmScrollBarWidget) w;
    int save_value;

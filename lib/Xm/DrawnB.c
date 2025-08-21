@@ -151,11 +151,7 @@ static void Redisplay(
                         Region region) ;
 static void DrawPushButton(
                         XmDrawnButtonWidget db,
-#if NeedWidePrototypes
-                        int armed) ;
-#else
                         Boolean armed) ;
-#endif /* NeedWidePrototypes */
 static Boolean SetValuesPrehook(
 			Widget cw,
                         Widget rw,
@@ -447,7 +443,6 @@ static XmMenuSavvyTraitRec MenuSavvyRecord = {
  *     The callbacks for XmNarmCallback are called.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 Arm(
         Widget wid,
@@ -480,7 +475,6 @@ Arm(
 }
 
 
-/*ARGSUSED*/
 static void
 MultiArm(
         Widget wid,
@@ -542,7 +536,6 @@ MultiActivate(
  }
 }
 
-/*ARGSUSED*/
 static void
 ActivateCommon(
         Widget wid,
@@ -618,7 +611,6 @@ DB_FixTearoff( XmDrawnButtonWidget db)
  *     ArmAndActivate
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 ArmAndActivate(
         Widget wid,
@@ -685,7 +677,6 @@ ArmAndActivate(
    }
 }
 
-/*ARGSUSED*/
 static void
 ArmTimeout (
 	XtPointer closure,
@@ -716,7 +707,6 @@ ArmTimeout (
  *     The callbacks for XmNdisarmCallback are called..
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 Disarm(
         Widget wid,
@@ -755,7 +745,6 @@ Disarm(
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 BtnDown(
         Widget wid,
@@ -837,7 +826,6 @@ BtnDown(
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static void
 BtnUp(
         Widget wid,
@@ -1228,7 +1216,6 @@ ClassPartInitialize(
  *
  ************************************************************/
 
-/*ARGSUSED*/
 static void
 InitializePrehook(
         Widget rw,		/* unused */
@@ -1271,7 +1258,6 @@ InitializePrehook(
  *
  ************************************************************/
 
-/*ARGSUSED*/
 static void
 InitializePosthook(
         Widget rw,		/* unused */
@@ -1287,7 +1273,6 @@ InitializePosthook(
  *  Initialize
  *
  *************************************<->***********************************/
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,
@@ -1359,7 +1344,6 @@ Resize(
  *  Redisplay (db, event, region)
  *
  *************************************<->***********************************/
-/*ARGSUSED*/
 static void
 Redisplay(
         Widget wid,
@@ -1415,11 +1399,7 @@ Redisplay(
 static void
 DrawPushButton(
         XmDrawnButtonWidget db,
-#if NeedWidePrototypes
-        int armed )
-#else
         Boolean armed )
-#endif /* NeedWidePrototypes */
 {
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay((Widget) db));
   Boolean etched_in = dpy -> display.enable_etched_in_menu;
@@ -1455,7 +1435,6 @@ DrawPushButton(
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 static Boolean
 SetValuesPrehook(
         Widget cw,		/* unused */
@@ -1499,7 +1478,6 @@ SetValuesPrehook(
  *   -----------------
  *
  *************************************<->***********************************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,

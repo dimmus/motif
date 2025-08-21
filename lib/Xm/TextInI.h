@@ -41,11 +41,7 @@ extern Boolean _XmTextHasDestination(
 extern Boolean _XmTextSetDestinationSelection(
                         Widget w,
                         XmTextPosition position,
-#if NeedWidePrototypes
-                        int disown,
-#else
                         Boolean disown,
-#endif /* NeedWidePrototypes */
                         Time set_time) ;
 extern Boolean _XmTextSetSel2(
                         XmTextWidget tw,
@@ -74,4 +70,3 @@ extern void _XmTextHandleSecondaryFinished(Widget w,
 #endif
 
 #endif /* _XmTextInI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

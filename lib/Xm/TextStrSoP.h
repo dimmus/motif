@@ -81,22 +81,14 @@ typedef XmTextStatus (*ReplaceProc)(XmTextWidget,
 				    XmTextPosition *,
 				    XmTextPosition *,
 				    XmTextBlock,
-#if NeedWidePrototypes
-				    int);
-#else
                                     Boolean);
-#endif /* NeedsWidePrototypes */
 
 typedef XmTextPosition (*ScanProc)(XmTextSource,
 				   XmTextPosition,
 				   XmTextScanType,
 				   XmTextScanDirection,	/*XmsdLeft/XmsdRight*/
 				   int,
-#if NeedWidePrototypes
-				   int);
-#else
     		                   Boolean);
-#endif /* NeedsWidePrototypes */
 
 typedef Boolean (*GetSelectionProc)(XmTextSource,
                                     XmTextPosition *,
@@ -126,4 +118,3 @@ typedef struct _XmTextSourceRec {
 #endif
 
 #endif /*  _XmTextStrSoP_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

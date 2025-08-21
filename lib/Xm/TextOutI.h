@@ -40,11 +40,7 @@ extern void _XmTextFreeContextData(
 extern void _XmTextResetClipOrigin(
                         XmTextWidget tw,
                         XmTextPosition position,
-#if NeedWidePrototypes
-                        int clip_mask_reset) ;
-#else
                         Boolean clip_mask_reset) ;
-#endif /* NeedWidePrototypes */
 extern void _XmTextAdjustGC(
                         XmTextWidget tw) ;
 extern Boolean _XmTextShouldWordWrap(
@@ -64,11 +60,7 @@ extern void _XmTextMovingCursorPosition(
                         XmTextPosition position) ;
 extern void _XmTextChangeBlinkBehavior(
                         XmTextWidget widget,
-#if NeedWidePrototypes
-                        int newvalue) ;
-#else
                         Boolean newvalue) ;
-#endif /* NeedWidePrototypes */
 extern void _XmTextOutputCreate(
                         Widget wid,
                         ArgList args,
@@ -100,4 +92,3 @@ extern void _XmTextToggleCursorGC(
 #endif
 
 #endif /* _XmTextOutI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

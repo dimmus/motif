@@ -41,14 +41,12 @@
 #include <config.h>
 #endif
 
-
-#include <stdio.h>
 #include <X11/Xlocale.h>
 
 #define X_INCLUDE_DIRENT_H
 #define XOS_USE_XT_LOCKING
 
-#ifndef NEED_XOS_R_H
+#if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h> /* Must precede XmI.h to avoid possible redefinitions
 			  of MIN() and MAX(). Xos_r.h includes Xos.h */
 #else
@@ -68,19 +66,13 @@
 /* All this stuff (cached dir) should be moved and possibly merged
    in Xmos.c, where it belongs */
 
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #include <unistd.h>
-#endif
-
 #include <sys/types.h>
-
 #include <fcntl.h>
 #include <sys/stat.h>
 
-
-#ifdef USE_GETWD
+#if !HAVE_GETCWD && HAVE_GETWD
 #include <sys/param.h>
 #define MAX_DIR_PATH_LEN    MAXPATHLEN
 #define getcwd(buf, len)   ((char *) getwd(buf))
@@ -101,8 +93,8 @@
 /**************** Icon PATH defines ********/
 
 
-static XmConst char ABSOLUTE_IPATH[] = "%H%B";
-static XmConst char ABSOLUTE_PATH[] = "\
+static const char ABSOLUTE_IPATH[] = "%H%B";
+static const char ABSOLUTE_PATH[] = "\
 %P\
 %S";
 
@@ -446,21 +438,10 @@ find_slash(String str)
   if (MB_CUR_MAX == 1) {
       return strchr(str, '/');
   } else {
-#ifndef NO_MULTIBYTE
       while ((n = mblen(str, MB_CUR_MAX)) >0) {
-#else
-      if (!str) return NULL;
-      while ((n = *str ? 1 : 0) > 0) {
-#endif
-#ifndef NO_MULTIBYTE
         if (n == 1 && *str == '/')
             return str;
         str += n;
-#else
-	if (*str == '/')
-	    return str;
-	str++;
-#endif
       }
       return NULL;
   }
@@ -548,10 +529,11 @@ XmGetIconFileName(
     unsigned int size)
 {
     Display		*display = DisplayOfScreen(screen);
+    Visual		*vis     = DefaultVisualOfScreen(screen);
     String		fileName = NULL;
     String		names[2];
     String		names_w_size[2];
-    XmConst char       *bPath, *iPath;
+    const char       *bPath, *iPath;
     Cardinal		i;
     Boolean		useColor;
     Boolean		useMask;
@@ -686,7 +668,6 @@ XmGetIconFileName(
 	if (_XmInImageCache(names[i]))
 	  fileName = XtNewString(names[i]);
 
-
 	/*
 	 * optimization to check all expansions in cache
 	 */
@@ -744,25 +725,37 @@ XmGetIconFileName(
 	  return fileName;
         }
 
-	/*******************************
-	 * first try XPM and then XBM
-	 ******************************/
-	fileName =
-	  XtResolvePathname(display, "icons", NULL,
-			    NULL, iPath, iconSubs,
-			    XtNumber(iconSubs),
-			    (XtFilePredicate) testFileFunc);
-
-	if (fileName == NULL) {
-	    fileName =
-	      XtResolvePathname(display, "bitmaps", NULL,
-				NULL, bPath, iconSubs,
-				XtNumber(iconSubs),
-				(XtFilePredicate) testFileFunc);
+	/**
+	 * Prefer SVG for TrueColor or DirectColor Visuals, falling
+	 * back to XPM and XBM for other classes of Visual.
+	 */
+	if (vis->class == TrueColor || vis->class == DirectColor) {
+		fileName = XtResolvePathname(display, "icons", NULL, ".svg",
+		                             iPath, iconSubs, XtNumber(iconSubs),
+		                             (XtFilePredicate)testFileFunc);
 	}
 
-	if (fileName)
-	  break;
+	if (fileName) break;
+
+	/**
+	 * For monochrome, no point in mucking around with colors
+	 */
+	if (vis->map_entries > 2) {
+		fileName = XtResolvePathname(display, "icons", NULL, ".xpm",
+		                             iPath, iconSubs, XtNumber(iconSubs),
+		                             (XtFilePredicate)testFileFunc);
+	}
+	if (fileName) break;
+
+	fileName = XtResolvePathname(display, "icons", NULL, NULL,
+	                             iPath, iconSubs, XtNumber(iconSubs),
+	                             (XtFilePredicate)testFileFunc);
+	if (fileName) break;
+
+	fileName = XtResolvePathname(display, "bitmaps", NULL, NULL,
+	                             bPath, iconSubs, XtNumber(iconSubs),
+	                             (XtFilePredicate)testFileFunc);
+	if (fileName) break;
     }
     _XmProcessUnlock();
 

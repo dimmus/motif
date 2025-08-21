@@ -44,13 +44,8 @@ XmeDrawPolygonShadow (
 		      GC bottomGC,
 		      XPoint *points,
 		      int n_points,
-#if NeedWidePrototypes
-		      int shadowThickness,
-		      unsigned int shadowType)
-#else
 		      Dimension shadowThickness,
 		      unsigned char shadowType)
-#endif /* NeedWidePrototypes */
 {
     Region  xregion;
     XtAppContext app;

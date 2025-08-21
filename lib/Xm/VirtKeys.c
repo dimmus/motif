@@ -24,18 +24,14 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #endif
 #endif
 
-#ifndef X_NOT_STDC_ENV
-#include <stdlib.h>
-#endif
-
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <X11/keysym.h>
@@ -47,7 +43,6 @@ static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #include "VirtKeysI.h"
 #include "XmosI.h"
 #include "XmI.h"
-
 
 #define defaultFallbackBindings _XmVirtKeys_fallbackBindingString
 
@@ -735,11 +730,7 @@ EffectiveStdModMask(Display *dpy,
 
 void
 XmTranslateKey(Display     *dpy,
-#if NeedWidePrototypes
-	       unsigned int keycode,
-#else
 	       KeyCode      keycode,
-#endif /* NeedWidePrototypes */
 	       Modifiers    modifiers,
 	       Modifiers   *modifiers_return,
 	       KeySym      *keysym_return )

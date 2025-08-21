@@ -2001,7 +2001,6 @@ Initialize(
     IsOn(new_w) = XmUNSET;
 
   {
-       XtWidgetProc resize;
        _XmProcessLock();
        resize = new_w->core.widget_class->core_class.resize;
        _XmProcessUnlock();
@@ -3235,13 +3234,8 @@ XmToggleButtonGetState(
 void
 XmToggleButtonSetState(
         Widget w,
-#if NeedWidePrototypes
-        int bnewstate,
-        int notify )
-#else
         Boolean bnewstate,
         Boolean notify )
-#endif /* NeedWidePrototypes */
 {
   XmToggleButtonWidget tw = (XmToggleButtonWidget) w;
   XmMenuSystemTrait menuSTrait;
@@ -3319,13 +3313,8 @@ XmToggleButtonSetState(
 Boolean
 XmToggleButtonSetValue(
         Widget w,
-#if NeedWidePrototypes
-        int newstate,
-        int notify )
-#else
         XmToggleButtonState newstate,
         Boolean notify )
-#endif /* NeedWidePrototypes */
 {
   XmToggleButtonWidget tw = (XmToggleButtonWidget) w;
   XtAppContext app = XtWidgetToApplicationContext(w);
@@ -3572,6 +3561,7 @@ DrawToggleLabel(
         expose = xmLabelClassRec.core_class.expose;
         _XmProcessUnlock();
         (* expose) ((Widget) tb, NULL, NULL);
+
 	/* restore default bg color */
 	if (tb->toggle.visual_set == XmSET && !Lab_IsMenupane(tb) )
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tmpc);
@@ -3651,6 +3641,7 @@ DrawEtchedInMenu(
 	{
 	    XSetWindowBackground(XtDisplay(tb), XtWindow(tb), tb->core.background_pixel);
 	}
+
 	_XmProcessLock();
 	expose = xmLabelClassRec.core_class.expose;
 	_XmProcessUnlock();

@@ -90,15 +90,10 @@ typedef Boolean (*XmCombinationBox2TextListMapProc)(
 #define XmCombinationBox2ExtensionVersion 2
 
 typedef XmDropDownClassPart XmCombinationBox2ClassPartExtension;
-
 typedef XmDropDownClassPart XmCombinationBox2ClassPart;
-
 typedef XmDropDownClassRec  XmCombinationBox2ClassRec;
-
 typedef XmDropDownPart      XmCombinationBox2Part;
-
 typedef XmDropDownRec       XmCombinationBox2Rec;
-
 extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec XM_DEPRECATED;
 
 #ifdef __cplusplus

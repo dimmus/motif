@@ -921,6 +921,7 @@ _XmMatchKeyEvent(
 
    state = event->xkey.state & ~(LockMask|ScrollLockMask|NumLockMask);
    mods  = modifiers & ~(LockMask|ScrollLockMask|NumLockMask);
+
    if ((event->type == eventType) &&
        (event->xkey.keycode == key) &&
        (state == mods))

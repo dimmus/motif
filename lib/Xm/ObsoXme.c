@@ -50,13 +50,8 @@
 /****************************_XmDrawShadows****************************/
 void _XmDrawShadows(Display *display, Drawable d,
 		    GC top_gc, GC bottom_gc,
-#if NeedWidePrototypes
-		    int x, int y,
-		    int width, int height, int shad_thick,
-#else
 		    Position x, Position y,
 		    Dimension width, Dimension height, Dimension shad_thick,
-#endif
 		    unsigned int shad_type)
 {
     XmeDrawShadows(display, d, top_gc, bottom_gc, x, y, width, height,
@@ -66,14 +61,9 @@ void _XmDrawShadows(Display *display, Drawable d,
 
 /*****************************_XmClearBorder*********************************/
 void _XmClearBorder (Display *display, Window w,
-#if NeedWidePrototypes
-		     int x, int y,
-		     int width, int height, int shadow_thick)
-#else
                      Position x, Position y,
                      Dimension width, Dimension height,
                      Dimension shadow_thick)
-#endif /* NeedWidePrototypes */
 {
     XmeClearBorder (display, w, x, y, width, height, shadow_thick);
 }
@@ -81,20 +71,11 @@ void _XmClearBorder (Display *display, Window w,
 /******************************_XmDrawSeparator**********************/
 void _XmDrawSeparator(Display *display, Drawable d,
 		      GC top_gc, GC bottom_gc, GC separator_gc,
-#if NeedWidePrototypes
-		      int x, int y,
-		      int width, int height,
-		      int shadow_thick,
-		      int margin, unsigned int orientation,
-		      unsigned int separator_type)
-#else
                       Position x, Position y,
                       Dimension width, Dimension height,
                       Dimension shadow_thick,
                       Dimension margin, unsigned char orientation,
                       unsigned char separator_type)
-#endif /* NeedWidePrototypes */
-
 {
     XmeDrawSeparator(display, d, top_gc, bottom_gc, separator_gc,
 		     x, y, width, height, shadow_thick, margin,
@@ -105,15 +86,9 @@ void _XmDrawSeparator(Display *display, Drawable d,
 /***********************_XmDrawDiamond**********************************/
 void _XmDrawDiamond(Display *display, Drawable d,
                     GC top_gc, GC bottom_gc, GC center_gc,
-#if NeedWidePrototypes
-                    int x, int y,
-                    int width, int height,
-                    int shadow_thick, int fill)
-#else
                     Position x, Position y,
                     Dimension width, Dimension height,
                     Dimension shadow_thick, Dimension fill)
-#endif /* NeedWidePrototypes */
 {
     XmeDrawDiamond (display, d, top_gc, bottom_gc, center_gc,
 		    x, y, width, height, shadow_thick, fill);
@@ -124,15 +99,9 @@ void _XmDrawDiamond(Display *display, Drawable d,
 
 void _XmDrawSimpleHighlight(Display *display, Drawable d,
 		      GC gc,
-#if NeedWidePrototypes
-		      int x, int y,
-		      int width, int height,
-		      int highlight_thickness)
-#else
 		      Position x, Position y,
 		      Dimension width, Dimension height,
 		      Dimension highlight_thickness)
-#endif /* NeedWidePrototypes */
 {
     XmeDrawHighlight(display, d, gc, x, y, width, height,
 		     highlight_thickness);
@@ -141,15 +110,9 @@ void _XmDrawSimpleHighlight(Display *display, Drawable d,
 /****************************_XmDrawArrow**********************************/
 void _XmDrawArrow(Display *display, Drawable d,
                   GC top_gc, GC bot_gc, GC cent_gc,
-#if NeedWidePrototypes
-                  int x, int y,
-                  int width, int height, int shadow_thick,
-                  unsigned int direction)
-#else
                   Position x, Position y,
                   Dimension width, Dimension height, Dimension shadow_thick,
                   unsigned char direction)
-#endif /* NeedWidePrototypes */
 {
     XmeDrawArrow(display, d, top_gc, bot_gc, cent_gc,
 		 x, y, width, height, shadow_thick, direction);
@@ -282,11 +245,7 @@ _XmWarning(
 XmFontList
 _XmGetDefaultFontList(
         Widget w,
-#if NeedWidePrototypes
-        unsigned int fontListType )
-#else
         unsigned char fontListType )
-#endif /* NeedWidePrototypes */
 {
     return XmeGetDefaultRenderTable( w, fontListType );
 }
@@ -401,15 +360,9 @@ _XmStringUpdateWMShellTitle(
 void
 _XmResizeObject(
         Widget wid,
-#if NeedWidePrototypes
-        int width,
-        int height,
-        int border_width )
-#else
         Dimension width,
         Dimension height,
         Dimension border_width )
-#endif /* NeedWidePrototypes */
 {
     RectObj g = (RectObj) wid ;
     XmDropSiteStartUpdate(wid);
@@ -433,13 +386,8 @@ _XmResizeObject(
 void
 _XmMoveObject(
         Widget wid,
-#if NeedWidePrototypes
-        int x,
-        int y )
-#else
         Position x,
         Position y )
-#endif /* NeedWidePrototypes */
 {
     RectObj g = (RectObj) wid ;
 
@@ -462,19 +410,11 @@ _XmMoveObject(
 void
 _XmConfigureObject(
         Widget wid,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        int height,
-        int border_width )
-#else
         Position x,
         Position y,
         Dimension width,
         Dimension height,
         Dimension border_width )
-#endif /* NeedWidePrototypes */
 {
     XmeConfigureObject( wid, x, y, width, height, border_width );
 }

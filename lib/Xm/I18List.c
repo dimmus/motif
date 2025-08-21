@@ -461,13 +461,7 @@ ClassInitialize()
 /*
  * ClassPartInitialize sets up the fast subclassing for the widget.
  */
-static void
-#ifdef _NO_PROTO
-ClassPartInitialize(w_class)
-        WidgetClass w_class ;
-#else
-ClassPartInitialize(WidgetClass w_class)
-#endif /* _NO_PROTO */
+static void ClassPartInitialize(WidgetClass w_class)
 {
     _XmFastSubclassInit (w_class, XmI18LIST_BIT);
 
@@ -936,10 +930,10 @@ ButtonDownAction(Widget w, XEvent *event, String *params, Cardinal *num_params)
     }
 
     if (event->type != ButtonPress) {
-        static String params[] = { "BtnDown" };
+        static String _params[] = { "BtnDown" };
 
         _XmWarningMsg(w, XmNunexpectedEvent,
-                XmNunexpectedEventMsg, params, 1);
+                XmNunexpectedEventMsg, _params, 1);
 
 	return;
     }
@@ -1002,10 +996,10 @@ ButtonUpOrLeaveAction(Widget w, XEvent *event,
     XmI18ListWidget ilist = (XmI18ListWidget) w;
 
     if (event->type != ButtonRelease) {
-	static String params[] = { "BtnUp or BtnLeave" };
+	static String _params[] = { "BtnUp or BtnLeave" };
 
 	_XmWarningMsg(w, XmNunexpectedEvent,
-		XmNunexpectedEventMsg, params, 1);
+		XmNunexpectedEventMsg, _params, 1);
 
 	return;
     }
@@ -1776,7 +1770,6 @@ DisplayList(Widget w, short start_row, short num_rows, Boolean redraw_headers)
 
     if (XmI18List_entry_background_use(ilist))
     {
-	Dimension height = ilist->core.height;
     	if(XmI18List_new_visual_style(ilist))
 		height -= ilist->primitive.shadow_thickness;
 	    else
@@ -2045,7 +2038,7 @@ static void
 CreateGCs(Widget w)
 {
     XmI18ListWidget ilist = (XmI18ListWidget) w;
-    XtGCMask mask, smask;
+    XtGCMask mask, smask = GCBackground;
     XGCValues values;
     Arg args[2];
     Cardinal num_args = 0;
@@ -2068,10 +2061,7 @@ CreateGCs(Widget w)
     values.fill_style = FillStippled;
     values.graphics_exposures = False;
 
-    mask = GCForeground | GCBackground | GCFont | GCGraphicsExposures;
-
-	smask = mask | GCFillStyle;
-
+    mask = GCForeground | GCBackground | GCFont | GCGraphicsExposures | GCFillStyle;
     XmI18List_gc(ilist) = XtGetGC(w, mask, &values);
 
     if (XmI18List_entry_background_use(ilist))
@@ -2104,7 +2094,6 @@ CreateGCs(Widget w)
 	/*added for gray insensitive foreground (instead stipple)*/
 	temp = values.foreground;
     values.foreground=_XmAssignInsensitiveColor(w);
-
     XmI18List_stippled_gc(ilist) = XtGetGC(w, smask, &values);
 
     if (XmI18List_entry_background_use(ilist))

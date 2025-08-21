@@ -188,11 +188,7 @@ static void FixEventBindings(
                         Widget w) ;
 static Widget FindFirstManagedChild(
                        CompositeWidget m,
-#if NeedWidePrototypes
-                        int first_button) ;
-#else
                         Boolean first_button) ;
-#endif /* NeedWidePrototypes */
 static void Resize(
                         Widget wid) ;
 static void Redisplay(
@@ -1150,7 +1146,7 @@ InsertChild(
      * PushButton or PushButtonGadget, either of those classes are allowed.
      */
     if (XtIsRectObj(w) && RC_IsHomogeneous(m) && RC_EntryClass(m) &&
-	    (RC_EntryClass(m) != XtClass(w)))
+	(RC_EntryClass(m) != XtClass(w)))
     {
       /* CR 7807: using _XmIsFastSubclass checks is subtly wrong???
        *	If an application asks for a specific subclass of
@@ -1958,7 +1954,6 @@ set_values_passive_grab(
    }
 }
 
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -2053,13 +2048,10 @@ SetValues(
             XmeWarning( (Widget) new_w, BadMenuPostMsg);
             /* Do Nothing - No change to postButton/Modifiers/EventType */
          }
-         else
-         {
-            if (RC_MenuPost(new_w))
-               RC_MenuPost(new_w) = XtNewString(RC_MenuPost(new_w));
-            set_values_passive_grab(old, new_w);
-            if (RC_MenuPost(old)) XtFree(RC_MenuPost(old));
-         }
+         else if (RC_MenuPost(new_w))
+            RC_MenuPost(new_w) = XtNewString(RC_MenuPost(new_w));
+         set_values_passive_grab(old, new_w);
+         if (RC_MenuPost(old)) XtFree(RC_MenuPost(old));
       }
    }
    else   /* For backwards compatibility... */
@@ -2353,11 +2345,6 @@ GeometryManager(
       {
        case XtGeometryAlmost:
        case XtGeometryNo:
-        /*
-         * If XtGeometryNo is returned, but the requested height and the
-         * requested width are less that the current, allow the children
-         * to shrink if they want to while maintaining our own size.
-         */
           if (((XtWidth(m) < w) && desired->request_mode & CWWidth) \
 		  || ((XtHeight(m) < h) && desired->request_mode & CWHeight))
           return (XtGeometryNo);
@@ -2993,7 +2980,6 @@ Initialize(
       RC_TearOffTitle(m) = XmStringCopy(RC_TearOffTitle(m));
 }
 
-/* ARGSUSED */
 static void
 ConstraintInitialize(
         Widget req,
@@ -3026,7 +3012,6 @@ ConstraintInitialize(
     }
 }
 
-/*ARGSUSED*/
 static Boolean
 ConstraintSetValues(
                   Widget old,
@@ -3531,7 +3516,6 @@ ClassPartInitialize(
  * the data is massaged correctly
  *
  ************************************************************/
-/*ARGSUSED*/
 static void
 InitializePrehook(
         Widget req,		/* unused */
@@ -3569,7 +3553,6 @@ InitializePrehook(
  * restore core class translations
  *
  ************************************************************/
-/*ARGSUSED*/
 static void
 InitializePosthook(
         Widget req,		/* unused */
@@ -3694,11 +3677,7 @@ _XmCallRowColumnUnmapCallback(
 static Widget
 FindFirstManagedChild(
         CompositeWidget m,
-#if NeedWidePrototypes
-        int first_button )
-#else
         Boolean first_button )
-#endif /* NeedWidePrototypes */
 {
     register Widget *kid;
     register int i = 0;
@@ -3927,7 +3906,6 @@ FixCallback(
    }
 }
 
-/* ARGSUSED */
 static void
 ActionNoop(
         Widget wid,
@@ -3940,7 +3918,7 @@ ActionNoop(
     * Primitive translations.
     */
 }
-/* ARGSUSED */
+
 static void
 EventNoop(
         Widget reportingWidget,
@@ -3954,8 +3932,6 @@ EventNoop(
     */
 }
 
-
-/* ARGSUSED */
 static void
 MenuFocusIn(
         Widget wid,
@@ -3976,7 +3952,6 @@ MenuFocusIn(
       _XmManagerFocusInInternal( (Widget) rc, event, NULL, NULL);
 }
 
-/* ARGSUSED */
 static void
 MenuFocusOut(
         Widget wid,
@@ -3991,7 +3966,6 @@ MenuFocusOut(
   XAllowEvents(XtDisplay(wid), SyncPointer, CurrentTime);
 }
 
-/* ARGSUSED */
 static void
 MenuUnmap(
         Widget wid,
@@ -4009,7 +3983,6 @@ MenuUnmap(
       _XmManagerUnmap( wid, event, params, num_params);
 }
 
-/*ARGSUSED*/
 static void
 MenuEnter(
         Widget wid,
@@ -4029,7 +4002,6 @@ MenuEnter(
  * Catch an 'Escape' which occurs within a gadget, and bring down the
  * menu system.
  */
-/*ARGSUSED*/
 static void
 GadgetEscape(
         Widget wid,
@@ -4063,22 +4035,18 @@ GadgetEscape(
    _XmRecordEvent(event);
 }
 
-
 /*
  * Copy the String in XmNmnemonicCharSet before returning it to the user.
  */
-/*ARGSUSED*/
 static void
 GetMnemonicCharSet(
             Widget wid,
             int resource,	/* unused */
             XtArgVal *value)
-/****************           ARGSUSED  ****************/
 {
   String        data ;
   Arg		al[1];
   Widget	label;
-/****************/
 
   label = XmOptionLabelGadget(wid);
 
@@ -4098,17 +4066,14 @@ GetMnemonicCharSet(
 /*
  * Copy the String in XmNmenuAccelerator before returning it to the user.
  */
-/*ARGSUSED*/
 static void
 GetMenuAccelerator(
             Widget wid,
             int resource,	/* unused */
             XtArgVal *value )
-/****************           ARGSUSED  ****************/
 {
   String        data ;
   XmRowColumnWidget rc  = (XmRowColumnWidget) wid;
-/****************/
 
   if (rc->row_column.menu_accelerator != NULL) {
      data = (String)XtMalloc(strlen(RC_MenuAccelerator(rc)) + 1);
@@ -4123,16 +4088,13 @@ GetMenuAccelerator(
 /*
  * Copy the String in XmNmenuPost before returning it to the user.
  */
-/*ARGSUSED*/
 static void
 GetMenuPost(
        Widget wid,
        int resource,		/* unused */
        XtArgVal * value )
-/****************           ARGSUSED  ****************/
 {
    XmRowColumnWidget rc = (XmRowColumnWidget) wid ;
-/****************/
 
    if (rc->row_column.menuPost != NULL)
    {
@@ -4146,7 +4108,6 @@ GetMenuPost(
 /*
  * Copy the XmString in XmNlabelString before returning it to the user.
  */
-/*ARGSUSED*/
 static void
 GetLabelString(
         Widget wid,
@@ -4155,7 +4116,6 @@ GetLabelString(
 {
   XmRowColumnWidget rc = (XmRowColumnWidget) wid ;
   XmString        data ;
-/****************/
 
   data = XmStringCopy(RC_OptionLabel(rc));
   *value = (XtArgVal) data ;
@@ -4166,7 +4126,6 @@ GetLabelString(
 /*
  * Copy the XmString in XmNtearOffTitle before returning it to the user.
  */
-/*ARGSUSED*/
 static void
 GetTearOffTitle(
         Widget wid,

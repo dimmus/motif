@@ -42,13 +42,8 @@ extern "C" {
 
 extern void _XmAddGrab(
                         Widget wid,
-#if NeedWidePrototypes
-                        int exclusive,
-                        int spring_loaded) ;
-#else
                         Boolean exclusive,
                         Boolean spring_loaded) ;
-#endif /* NeedWidePrototypes */
 extern void _XmRemoveGrab(
                         Widget wid) ;
 extern void _XmDefaultVisualResources(Widget widget) ;
@@ -61,4 +56,3 @@ extern void _XmDefaultVisualResources(Widget widget) ;
 #endif
 
 #endif /* _XmVendorSI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

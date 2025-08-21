@@ -48,31 +48,17 @@ externalref XrmQuark _XmLinkCursorIconQuark ;
 
 extern XmDragIconObject _XmScreenGetOperationIcon(
                         Widget w,
-#if NeedWidePrototypes
-                        unsigned int operation) ;
-#else
                         unsigned char operation) ;
-#endif /* NeedWidePrototypes */
 extern XmDragIconObject _XmScreenGetStateIcon(
                         Widget w,
-#if NeedWidePrototypes
-                        unsigned int state) ;
-#else
                         unsigned char state) ;
-#endif /* NeedWidePrototypes */
 extern XmDragIconObject _XmScreenGetSourceIcon(
                         Widget w) ;
 extern Pixmap _XmAllocScratchPixmap(
                         XmScreen xmScreen,
-#if NeedWidePrototypes
-                        unsigned int depth,
-                        int width,
-                        int height) ;
-#else
                         Cardinal depth,
                         Dimension width,
                         Dimension height) ;
-#endif /* NeedWidePrototypes */
 extern void _XmFreeScratchPixmap(
                         XmScreen xmScreen,
                         Pixmap pixmap) ;
@@ -106,4 +92,3 @@ extern XtEnum _XmGetBitmapConversionModel(
 #endif
 
 #endif /* _XmScreenI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

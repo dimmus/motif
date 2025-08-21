@@ -891,9 +891,7 @@ Redisplay(
  *	Clean up allocated resources when the widget is destroyed.
  *
  ************************************************************************/
-static void
-Destroy(
-        Widget w )
+static void Destroy(Widget w)
 {
    XmPrimitiveWidget pw = (XmPrimitiveWidget) w ;
 
@@ -902,11 +900,7 @@ Destroy(
    XtReleaseGC( w, pw->primitive.top_shadow_GC);
    XtReleaseGC( w, pw->primitive.bottom_shadow_GC);
    XtReleaseGC( w, pw->primitive.highlight_GC);
-
 }
-
-
-
 
 /************************************************************************
  *

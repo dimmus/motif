@@ -30,9 +30,7 @@ static char rcsid[] = "$TOG: TearOff.c /main/15 1997/08/21 14:19:26 csn $"
 #include <config.h>
 #endif
 
-
 #include <X11/cursorfont.h>
-
 #include <Xm/AtomMgr.h>
 #include <Xm/BaseClassP.h>
 #include <Xm/DisplayP.h>
@@ -116,19 +114,11 @@ static Boolean DoPlacement(
 static void CallTearOffMenuActivateCallback(
                         Widget wid,
                         XEvent *event,
-#if NeedWidePrototypes
-			int origin) ;
-#else
 			unsigned short origin) ;
-#endif	/*NeedWidePrototypes */
 static void CallTearOffMenuDeactivateCallback(
                         Widget wid,
                         XEvent *event,
-#if NeedWidePrototypes
-			int origin) ;
-#else
 			unsigned short origin) ;
-#endif	/*NeedWidePrototypes */
 static void RemoveTearOffEventHandlers(
 			Widget wid ) ;
 static void DismissOnPostedFromDestroy(
@@ -317,7 +307,6 @@ GetConfigEvent(
    }
 }
 
-/*ARGSUSED*/
 static void
 DisplayDestroyCallback
 	( Widget w,
@@ -344,7 +333,7 @@ GetTearOffCursor(
         	TearOffCursor =
 			XCreateFontCursor(XtDisplay(wid), XC_fleur);
 		if (0L == TearOffCursor)
-			TearOffCursor = XmGetMenuCursor(XtDisplay(wid));
+			TearOffCursor = _XmGetMenuCursorByScreen(XtScreen(wid));
 		else
 			XtAddCallback((Widget)dd, XtNdestroyCallback,
 			  DisplayDestroyCallback,(XtPointer)TearOffCursor);
@@ -476,11 +465,7 @@ static void
 CallTearOffMenuActivateCallback(
 	Widget wid,
 	XEvent *event,
-#if NeedWidePrototypes
-	int origin )
-#else
 	unsigned short origin )
-#endif	/*NeedWidePrototypes */
 {
    XmRowColumnWidget rc = (XmRowColumnWidget) wid;
    XmRowColumnCallbackStruct callback;
@@ -501,11 +486,7 @@ static void
 CallTearOffMenuDeactivateCallback(
 	Widget wid,
 	XEvent *event,
-#if NeedWidePrototypes
-	int origin )
-#else
 	unsigned short origin )
-#endif	/*NeedWidePrototypes */
 {
    XmRowColumnWidget rc = (XmRowColumnWidget) wid;
    XmRowColumnCallbackStruct callback;
@@ -527,7 +508,6 @@ CallTearOffMenuDeactivateCallback(
  * a tearoff menu pane.  This enables the RowColumn to watch for the button
  * presses inside these widgets and to 'do the right thing'.
  */
-/*ARGSUSED*/
 void
 _XmTearOffBtnDownEventHandler(
         Widget reportingWidget,
@@ -549,7 +529,6 @@ _XmTearOffBtnDownEventHandler(
     *cont = True;
 }
 
-/*ARGSUSED*/
 void
 _XmTearOffBtnUpEventHandler(
         Widget reportingWidget,
@@ -578,7 +557,7 @@ _XmAddTearOffEventHandlers(
     XmRowColumnWidget rc = (XmRowColumnWidget) wid;
     Widget child;
     int i;
-    Cursor cursor = XmGetMenuCursor(XtDisplay(wid));
+    Cursor cursor = _XmGetMenuCursorByScreen(XtScreen(wid));
     XmMenuSavvyTrait	mtrait;
 
     for (i=0; i < rc->composite.num_children; i++)
@@ -675,7 +654,6 @@ _XmDestroyTearOffShell(
    XtDestroyWidget((Widget)to_shell);
 }
 
-/*ARGSUSED*/
 void
 _XmDismissTearOff(
 	Widget shell,
@@ -773,7 +751,6 @@ _XmDismissTearOff(
    }
 }
 
-/*ARGSUSED*/
 static void
 DismissOnPostedFromDestroy(
 	Widget w,		/* unused */
@@ -853,7 +830,7 @@ _XmTearOffInitiate(
             (unsigned int)(ButtonPressMask | ButtonReleaseMask |
             EnterWindowMask | LeaveWindowMask),
             GrabModeSync, GrabModeAsync, None,
-            XmGetMenuCursor(XtDisplay(rc)), CurrentTime);
+            _XmGetMenuCursorByScreen(XtScreen(rc)), CurrentTime);
 
          _XmGrabKeyboard((Widget)rc, True, GrabModeSync, GrabModeSync,
             CurrentTime);
@@ -1157,7 +1134,6 @@ _XmLowerTearOffObscuringPoppingDownPanes(
       XFlush(XtDisplay(ancestor));
 }
 
-/*ARGSUSED*/
 void
 _XmRestoreExcludedTearOffToToplevelShell(
         Widget wid,

@@ -29,11 +29,8 @@
 #include <config.h>
 #endif
 
-
 #include <stdio.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include <string.h>
 #include <ctype.h>
 
@@ -175,7 +172,7 @@ XmFontListEntryGetFont(
         XmFontType *typeReturn )
 {
   XtPointer 	ret_val;
-#ifdef USE_XFT
+#if USE_XFT
   XtPointer     ret_val2;
 #endif
   Arg		args[3];
@@ -198,12 +195,12 @@ XmFontListEntryGetFont(
   n = 0;
   XtSetArg(args[n], XmNfontType, typeReturn); n++;
   XtSetArg(args[n], XmNfont, &ret_val); n++;
-#ifdef USE_XFT
+#if USE_XFT
   XtSetArg(args[n], XmNxftFont, &ret_val2); n++;
 #endif
   XmRenditionRetrieve(entry, args, n);
 
-#ifdef USE_XFT
+#if USE_XFT
   if (*typeReturn == XmFONT_IS_XFT)
       ret_val = ret_val2;
 #endif
@@ -394,6 +391,13 @@ XmFontListEntryLoad(
   Cardinal	n;
   Arg		args[4];
   XmFontListEntry ret_val;
+
+  if (!fontName || !*fontName)
+	return NULL;
+
+  if (type != XmFONT_IS_FONT && type != XmFONT_IS_FONTSET)
+	return NULL;
+
   _XmDisplayToAppContext(display);
 
   _XmAppLock(app);
@@ -523,14 +527,10 @@ XmFontListCreate_r(
 
     Font should not be shared between displays in an MT environment */
 
-XmFontList
-XmStringCreateFontList(
-        XFontStruct *font,
-        XmStringCharSet charset )
-{
-    return (XmFontListCreate(font,charset));
+XmFontList XmStringCreateFontList(XFontStruct *font, XmStringCharSet charset)
+{ /* deprecated */
+    return XmFontListAppendEntry(NULL, XmFontListEntryCreate(charset, XmFONT_IS_FONT, font));
 }
-
 
 /* MT safe version of XmStringCreateFontList - requires widget parameter
 
@@ -542,14 +542,10 @@ XmStringCreateFontList(
 
    Fonts can not be shared among displays in an MT environment
 */
-XmFontList
-XmStringCreateFontList_r(
-        XFontStruct *font,
-        XmStringCharSet charset,
-        Widget wid )
-{
-        /* we dont need to lock since this is just a wrapper */
-    return (XmFontListCreate_r(font,charset, wid));
+XmFontList XmStringCreateFontList_r(XFontStruct *font, XmStringCharSet charset, Widget wid)
+{ /* deprecated */
+	(void)wid;
+    return XmFontListAppendEntry(NULL, XmFontListEntryCreate(charset, XmFONT_IS_FONT, font));
 }
 
 /*

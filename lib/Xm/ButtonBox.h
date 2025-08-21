@@ -82,11 +82,7 @@ typedef struct _XmButtonBoxRec	       *XmButtonBoxWidget;
  *	Returns: The Widget created.
  */
 
-Widget XmCreateButtonBox(
-#ifndef _NO_PROTO
-Widget, String, ArgList, Cardinal
-#endif
-);
+Widget XmCreateButtonBox(Widget, String, ArgList, Cardinal);
 
 /*
  * Variable argument list functions

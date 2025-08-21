@@ -114,11 +114,7 @@ extern int XmClipboardLock(
 extern int XmClipboardUnlock(
                         Display *display,
                         Window window,
-#if NeedWidePrototypes
-                        int all_levels) ;
-#else
                         Boolean all_levels) ;
-#endif /* NeedWidePrototypes */
 extern int XmClipboardStartRetrieve(
                         Display *display,
                         Window window,
@@ -168,6 +164,4 @@ extern int XmClipboardRegisterFormat(
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmCutPaste_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

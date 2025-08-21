@@ -70,11 +70,7 @@ extern void XmImVaSetValues(
                         ...) ;
 extern XIC XmImGetXIC(
 		        Widget 		w,
-#if NeedWidePrototypes
-		        unsigned int 	input_policy,
-#else
 		        XmInputPolicy	input_policy,
-#endif /*NeedWidePrototypes*/
 		        ArgList		args,
 		        Cardinal	num_args) ;
 extern XIC XmImSetXIC(
@@ -98,4 +94,3 @@ extern XIMResetState XmImGetXICResetState(
 #endif
 
 #endif /* _XmIm_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

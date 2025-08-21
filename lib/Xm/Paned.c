@@ -996,8 +996,6 @@ GetPrefSizes(XmPanedWidget pw, Dimension *on_size, Dimension *off_size)
     }
 
     if (off_size != NULL) {
-	Widget *childP;
-
 	sizeused = 1;
 
 	for ( childP = XmPaned_managed_children(pw) ;

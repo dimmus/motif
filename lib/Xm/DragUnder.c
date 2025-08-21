@@ -30,7 +30,6 @@ static char rcsid[] = "$XConsortium: DragUnder.c /main/12 1995/07/14 10:26:51 dr
 #include <config.h>
 #endif
 
-
 #include <Xm/DrawP.h>
 #include "XmI.h"
 #include "DragCI.h"
@@ -95,8 +94,6 @@ static void AnimateLeave(
  *  Create and fill an XmAnimationSaveData structure containing the data
  *  needed to animate the dropsite.
  ***************************************************************************/
-
-/*ARGSUSED*/
 static XmAnimationSaveData
 CreateAnimationSaveData(
         XmDragContext dc,
@@ -215,7 +212,6 @@ CreateAnimationSaveData(
  *
  *  Free an XmAnimationSaveData structure.
  ***************************************************************************/
-
 static void
 FreeAnimationData(
         XmAnimationSaveData aSaveData )
@@ -262,7 +258,6 @@ FreeAnimationData(
  *  Save the original contents of a dropsite window that will be overwritten
  *  by dropsite animation into a rectangular backing store.
  ***************************************************************************/
-
 static Boolean
 SaveAll(
         XmAnimationSaveData aSaveData,
@@ -309,7 +304,6 @@ SaveAll(
  *  save 0, 1, or 4 strips into backing store, depending on the dimensions
  *  of the dropsite and the animation thickness.
  ***************************************************************************/
-
 static Boolean
 SaveSegments(
         XmAnimationSaveData aSaveData,
@@ -409,7 +403,6 @@ SaveSegments(
  *
  *  Draws a highlight around the indicated region.
  ***************************************************************************/
-
 static void
 DrawHighlight(
         XmAnimationSaveData aSaveData )
@@ -498,7 +491,6 @@ DrawHighlight(
  *
  *  Draws a 3-D shadow around the indicated region.
  ***************************************************************************/
-
 static void
 DrawShadow(
         XmAnimationSaveData aSaveData )
@@ -634,7 +626,6 @@ DrawShadow(
  *
  *  Copy an animationPixmap, possibly masked, to the dropsite window.
  ***************************************************************************/
-
 static void
 DrawPixmap(
         XmAnimationSaveData aSaveData )
@@ -751,8 +742,6 @@ DrawPixmap(
  *  AnimateExpose ()
  *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 AnimateExpose(Widget w,		/* unused */
 	      XmAnimationSaveData aSaveData,
@@ -806,8 +795,6 @@ AnimateExpose(Widget w,		/* unused */
  *  AnimateEnter ()
  *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 AnimateEnter(
         XmDropSiteManagerObject dsm, /* unused */
@@ -849,20 +836,30 @@ AnimateEnter(
  *  AnimateLeave ()
  *
  ***************************************************************************/
-
-/*ARGSUSED*/
 static void
 AnimateLeave(
         XmDropSiteManagerObject dsm, /* unused */
         XmAnimationData aData,
         XmDragProcCallbackStruct *dpcb ) /* unused */
 {
+    Cardinal i;
+    DragPixmapData *pData;
     XmAnimationSaveData aSaveData =
 	(XmAnimationSaveData) *((XtPointer *) aData->saveAddr);
 
-    if (aSaveData) {
-        Cardinal	i;
-        DragPixmapData	*pData;
+	(void)dpcb;
+	if (!aSaveData)
+	  return;
+
+	/**
+	 * Ignore this event if we have stale dragOver data. Likely, the
+	 * DragOver shell has already been destroyed.
+	 */
+	if (aData->dragOver && aData->dragOver != aSaveData->dragOver) {
+	  FreeAnimationData(aSaveData);
+	  dsm->dropManager.dragUnderData = NULL;
+	  return;
+	}
 
 	/* Move to here to avoid crashes when aSaveData already zeroed */
 	if (aSaveData->activeMode == XmDRAG_WINDOW) {
@@ -917,9 +914,8 @@ AnimateLeave(
 			     aSaveData->clipRegion);
 	}
 
-        FreeAnimationData (aSaveData);
-	*((XtPointer *) aData->saveAddr) = (XtPointer) NULL;
-    }
+	FreeAnimationData(aSaveData);
+	*((XtPointer *)aData->saveAddr) = NULL;
 }
 
 /*****************************************************************************
@@ -927,7 +923,6 @@ AnimateLeave(
  *  _XmDragUnderAnimation ()
  *
  ***************************************************************************/
-
 void
 _XmDragUnderAnimation(
     Widget w,

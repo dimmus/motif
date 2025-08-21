@@ -82,11 +82,7 @@ _XmGetFocusFlag(Widget w,
 void
 _XmSetFocusFlag(Widget w,
 		unsigned int mask,
-#if NeedWidePrototypes
-		int value)
-#else
      		Boolean value)
-#endif /* NeedWidePrototypes */
 {
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
 
@@ -285,7 +281,6 @@ _XmTrackShellFocus(Widget widget,
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 void
 _XmPrimitiveEnter(Widget wid,
 		  XEvent *event,
@@ -305,7 +300,6 @@ _XmPrimitiveEnter(Widget wid,
     }
 }
 
-/*ARGSUSED*/
 void
 _XmPrimitiveLeave(Widget wid,
 		  XEvent *event,
@@ -329,7 +323,6 @@ _XmPrimitiveLeave(Widget wid,
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 void
 _XmPrimitiveFocusInInternal(Widget wid,
 			    XEvent *event,
@@ -356,7 +349,6 @@ _XmPrimitiveFocusInInternal(Widget wid,
     }
 }
 
-/*ARGSUSED*/
 void
 _XmPrimitiveFocusOut(Widget wid,
 		     XEvent *event,
@@ -387,7 +379,6 @@ _XmPrimitiveFocusIn(Widget pw,
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 void
 _XmEnterGadget(Widget wid,
 	       XEvent *event,
@@ -440,7 +431,6 @@ DispatchGadgetInput(XmGadget g,
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 void
 _XmLeaveGadget(Widget wid,
 	       XEvent *event,
@@ -466,7 +456,6 @@ _XmLeaveGadget(Widget wid,
  *
 
  ************************************************************************/
-/*ARGSUSED*/
 void
 _XmFocusInGadget(Widget wid,
 		 XEvent *event,		/* unused */
@@ -484,7 +473,6 @@ _XmFocusInGadget(Widget wid,
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 void
 _XmFocusOutGadget(Widget wid,
 		  XEvent *event,	/* unused */
@@ -513,7 +501,6 @@ _XmFocusOutGadget(Widget wid,
  *
  ************************************************************************/
 
-/*ARGSUSED*/
 void
 _XmManagerEnter(Widget wid,
 		XEvent *event_in,
@@ -540,7 +527,6 @@ _XmManagerEnter(Widget wid,
     }
 }
 
-/*ARGSUSED*/
 void
 _XmManagerLeave(Widget wid,
 		XEvent *event,
@@ -572,7 +558,6 @@ _XmManagerLeave(Widget wid,
     }
 }
 
-/*ARGSUSED*/
 void
 _XmManagerFocusInInternal(Widget wid,
 			  XEvent *event,
@@ -632,7 +617,6 @@ _XmManagerFocusIn(Widget mw,
  * manager widget must manually force the child to take the focus.
  */
 
-/*ARGSUSED*/
 void
 _XmManagerFocusOut(Widget wid,
 		   XEvent *event,
@@ -659,7 +643,6 @@ _XmManagerFocusOut(Widget wid,
     }
 }
 
-/*ARGSUSED*/
 void
 _XmManagerUnmap(Widget mw,
 		XEvent *event,		/* unused */
@@ -681,7 +664,6 @@ _XmManagerUnmap(Widget mw,
   _XmValidateFocus(mw);
 }
 
-/*ARGSUSED*/
 void
 _XmPrimitiveUnmap(Widget pw,
 		  XEvent *event,	/* unused */

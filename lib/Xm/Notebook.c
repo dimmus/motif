@@ -1334,7 +1334,7 @@ SetValues (
     if (relayout)
 	{
 	Dimension save_width, save_height;
-	XtWidgetGeometry preferred_geo = {0};
+	XtWidgetGeometry preferred_geo;
 
 	/* Store new w/h, restore old w/h, and adjust geometry to the old */
 	save_width = XtWidth(new_w);
@@ -1349,19 +1349,21 @@ SetValues (
 	LayoutChildren(new_w, NULL);
 
 	/* Get preferred size unless app changed both width & height */
+	preferred_geo.width  = save_width;
+	preferred_geo.height = save_height;
 	if ((XtWidth(old) == save_width) || (XtHeight(old) == save_height))
 	    NewPreferredGeometry(new_w, NULL, NULL, &preferred_geo);
 
 	/* App request for width takes precedence over NewPreferredGeometry */
 	if (XtWidth(old) != save_width)
 	    XtWidth(new_w) = save_width;
-	else if (preferred_geo.width)
+	else
 	    XtWidth(new_w) = preferred_geo.width;
 
 	/* App request for height takes precedence over NewPreferredGeometry */
 	if (XtHeight(old) != save_height)
 	    XtHeight(new_w) = save_height;
-	else if (preferred_geo.height)
+	else
 	    XtHeight(new_w) = preferred_geo.height;
 	}
 
@@ -4962,8 +4964,6 @@ DrawBackPages (
 	nb->notebook.binding_type == XmPIXMAP_OVERLAP_ONLY)
     {
 	Dimension width, height;
-	Position x, y;
-
 	/* We can't pass a negative width or height to the draw call.
 	   Since it appears that draw functions later in the code need
 	   the p values set as above, let's check whether the height and

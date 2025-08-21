@@ -29,6 +29,7 @@
 #include <config.h>
 #endif
 
+
 #include "XmI.h"
 #include "MessagesI.h"
 #include <Xm/PrimitiveP.h>
@@ -49,7 +50,7 @@
  *   here because they are not used by everybody.
  *************************************************************************/
 
- Boolean _init_modifiers = TRUE;
+Boolean _init_modifiers = TRUE;
 unsigned int NumLockMask = 0;
 unsigned int ScrollLockMask = 0;
 
@@ -122,7 +123,6 @@ _XmInitModifiers (void)
     if (keymap)
 	XFree (keymap);
 }
-
 
 /**************************************************************************
  *                                                                        *
@@ -216,17 +216,10 @@ _XmDestroyParentCallback(
 void
 _XmClearShadowType(
         Widget w,
-#if NeedWidePrototypes
-        int old_width,
-        int old_height,
-        int old_shadow_thickness,
-        int old_highlight_thickness )
-#else
         Dimension old_width,
         Dimension old_height,
         Dimension old_shadow_thickness,
         Dimension old_highlight_thickness )
-#endif /* NeedWidePrototypes */
 {
 
     if (old_shadow_thickness == 0) return;

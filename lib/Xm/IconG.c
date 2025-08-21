@@ -267,8 +267,8 @@ static  Boolean PointIn(Widget widget,
 
 /* those are created in ClassInitialize and filled by the
    IconConverter. */
-static XContext 	largeIconContext = (XContext) NULL;
-static XContext		smallIconContext = (XContext) NULL;
+static XContext 	largeIconContext = 0;
+static XContext		smallIconContext = 0;
 
 static XPointer dummy;
 #define OwnLargeMask(widget) \
@@ -666,8 +666,6 @@ static XtConvertArgRec smallIconArgs[] =
  * been called twice on same widget, thus resource needs to be set NULL,
  * otherwise leave it alone.
  */
-
-/*ARGSUSED*/
 static void
 CheckSetRenderTable(Widget wid,
 		    int offset,
@@ -689,7 +687,6 @@ CheckSetRenderTable(Widget wid,
  *  FetchPixmap
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 FetchPixmap(
         Widget widget,
@@ -714,7 +711,7 @@ FetchPixmap(
 
    *pixmap = _XmGetScaledPixmap (XtScreen(widget), widget,
 				 image_name, &acc_color_rec,
-				 depth, FALSE, 0);
+				 depth, FALSE, 0, 0, 0);
 
    if (*pixmap == XmUNSPECIFIED_PIXMAP) {
        return ;
@@ -730,8 +727,6 @@ FetchPixmap(
 
    /* fetch only if a mask has not been specified in the resource slot */
    if (*(Pixmap *)mask_addr == XmUNSPECIFIED_PIXMAP) {
-       char mask_name[255] ;
-
        /* Fetch the mask out of image_name and ask for it.
 	  ImageCache:
 	  The mask_name returned is the same as the one used by the
@@ -740,11 +735,7 @@ FetchPixmap(
 	  specified for image_name. When an XPM file with a mask
 	  in it is read, the mask is cached with mask_name. */
 
-       _XmOSGenerateMaskName(image_name, mask_name) ;
-
-       *(Pixmap*)mask_addr = (Pixmap) XmGetScaledPixmap(widget,
-							mask_name,
-							1, 0, 1, 0);
+       *(Pixmap *)mask_addr = XmeGetMask(XtScreen(widget), image_name);
        /* mark that we have to destroy the mask */
        if (*(Pixmap *)mask_addr != XmUNSPECIFIED_PIXMAP) {
 	   if (res_type == XmLARGE_ICON) {
@@ -768,7 +759,6 @@ FetchPixmap(
  *  CvtStringToIconPixmap
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 CvtStringToIconPixmap(
         Display *dpy,
@@ -847,7 +837,6 @@ CvtStringToIconPixmap(
 /************************************************************************
  * GetLabelString
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 GetLabelString(
 	Widget		wid,
@@ -867,7 +856,6 @@ GetLabelString(
 *  SecondaryObjectCreate
 *
 ************************************************************************/
-/* ARGSUSED */
 static void
 SecondaryObjectCreate(
         Widget req,
@@ -926,7 +914,6 @@ SecondaryObjectCreate(
  *  InitializePosthook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 InitializePosthook(
         Widget req,
@@ -971,7 +958,6 @@ InitializePosthook(
  *  SetValuesPrehook
  *
  ************************************************************************/
-/* ARGSUSED */
 static Boolean
 SetValuesPrehook(
         Widget oldParent,
@@ -1036,7 +1022,6 @@ SetValuesPrehook(
  *  GetValuesPrehook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 GetValuesPrehook(
         Widget newParent,
@@ -1089,7 +1074,6 @@ GetValuesPrehook(
  *  GetValuesPosthook
  *
  ************************************************************************/
-/* ARGSUSED */
 static void
 GetValuesPosthook(
         Widget new_w,
@@ -1112,7 +1096,6 @@ GetValuesPosthook(
  *  SetValuesPosthook
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 SetValuesPosthook(
         Widget current,
@@ -1212,7 +1195,6 @@ ClassPartInitialize(
 /************************************************************************
  * Initialize
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 Initialize(
 	Widget		rw,
@@ -1975,7 +1957,6 @@ GetContainerData(
  * Redisplay
  * This is the main routine of this baby.
  ************************************************************************/
-/*ARGSUSED*/
 static	void
 Redisplay(
 	Widget	wid,
@@ -2204,6 +2185,7 @@ Redisplay(
 		      XmALIGNMENT_BEGINNING,
 		      LayoutG(wid), NULL);
 	}
+
 	XmStringDraw(XtDisplay(wid),XtWindow(wid),
 		      IG_RenderTable(wid),IG_LabelString(wid), gc,
 		      ig->rectangle.x + label_x + DEFAULT_LABEL_MARGIN_WIDTH,
@@ -2362,7 +2344,6 @@ Redisplay(
 /************************************************************************
  * SetValues
  ************************************************************************/
-/*ARGSUSED*/
 static	Boolean
 SetValues(
 	Widget		cw,
@@ -2814,7 +2795,6 @@ IconGCacheCompare(
  *	client_data = Address of the structure in the class record which
  *	  represents the (template of ) the secondary data.
  */
-/*ARGSUSED*/
 static Cardinal
 GetIconGClassSecResData(
         WidgetClass w_class,	/* unused */
@@ -2847,7 +2827,6 @@ GetIconGClassSecResData(
  *	have any cached_resources defined. If later secondary resources are
  *	defined for Gadget class then this routine will have to change.
  */
-/*ARGSUSED*/
 static XtPointer
 GetIconGClassSecResBase(
         Widget widget,
@@ -3142,6 +3121,7 @@ UpdateGCs(
     IG_InsensitiveGC(wid) = XtAllocateGC(XtParent(wid),
 					 XtParent(wid)->core.depth,
 					 valueMask, &values, modifyMask, 0);
+
 	/*light shadow for insensitive text (instead stipple)*/
 	values.foreground = IG_TopShadowColor(wid);
 	IG_ShadowGC(wid) = XtAllocateGC(XtParent(wid),
@@ -3424,8 +3404,6 @@ ContItemGetValues(Widget w,
 }
 
 
-
-/*ARGSUSED*/
 static Boolean
 HandleRedraw (
 	Widget kid,

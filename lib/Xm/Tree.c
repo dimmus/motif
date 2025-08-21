@@ -341,13 +341,8 @@ WidgetClass xmTreeWidgetClass = (WidgetClass) &xmTreeClassRec;
  *	Arguments:     none.
  *	Returns:       none.
  */
-
-/*ARGSUSED*/
-static void
-ClassInit(void)
+static void ClassInit(void)
 {
-    XmTreeClassRec* wc = &xmTreeClassRec;
-
     XtSetTypeConverter(XmRString, XmRXmConnectStyle,
 		       (XtTypeConverter) CvtStringToConnectStyle,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);
@@ -362,17 +357,10 @@ ClassInit(void)
 /*
  * ClassPartInitialize sets up the fast subclassing for the widget.
  */
-static void
-#ifdef _NO_PROTO
-ClassPartInitialize(w_class)
-        WidgetClass w_class ;
-#else
-ClassPartInitialize(WidgetClass w_class)
-#endif /* _NO_PROTO */
+static void ClassPartInitialize(WidgetClass w_class)
 {
     _XmFastSubclassInit (w_class, XmTREE_BIT);
 }
-
 
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific
@@ -385,7 +373,6 @@ ClassPartInitialize(WidgetClass w_class)
  *	Returns:       none.
  */
 
-/* ARGSUSED */
 static void
 Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 {
@@ -443,7 +430,6 @@ typedef struct _RedispInfo {
     Boolean found;
 } RedispInfo;
 
-/* ARGSUSED */
 static void
 Redisplay(Widget w, XEvent * event, Region region)
 {
@@ -512,7 +498,6 @@ Redisplay(Widget w, XEvent * event, Region region)
  *	Returns: Always False.
  */
 
-/* ARGSUSED */
 static Bool
 CheckExpose(Display *disp, XEvent *event, char *info_ptr)
 {
@@ -572,7 +557,6 @@ QueryGeometry(Widget w,XtWidgetGeometry *intended, XtWidgetGeometry *preferred)
  *	Returns:       none
  */
 
-/* ARGSUSED */
 static Boolean
 SetValues(Widget current, Widget request, Widget set,
 	  ArgList args, Cardinal * num_args)
@@ -663,7 +647,6 @@ ChangeManaged(Widget w)
  *	Returns:       status.
  */
 
-/* ARGSUSED */
 static XtGeometryResult
 GeometryManager(Widget w, XtWidgetGeometry * request,
 		XtWidgetGeometry * result)
@@ -735,7 +718,6 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
  *	Returns:       none.
  */
 
-/* ARGSUSED */
 static void
 ConstraintInitialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
 {
@@ -843,7 +825,6 @@ ReleaseNodeGCs(Widget w)
  *	Returns:       none
  */
 
-/* ARGSUSED */
 static Boolean
 ConstraintSetValues(Widget current, Widget request, Widget set,
 		    ArgList args, Cardinal * num_args)
@@ -937,7 +918,6 @@ ConstraintSetValues(Widget current, Widget request, Widget set,
  *	Returns:       none.
  */
 
-/* ARGSUSED */
 static void
 ToggleNodeState(Widget w, XtPointer node_ptr, XtPointer call_data)
 {
@@ -979,7 +959,6 @@ ToggleNodeState(Widget w, XtPointer node_ptr, XtPointer call_data)
  *	Returns:       True if the SetValues succeeds.
  */
 
-/*ARGSUSED*/
 static Boolean
 CvtStringToConnectStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
 			XrmValuePtr fromVal, XrmValuePtr toVal)
@@ -1035,7 +1014,6 @@ CvtStringToConnectStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
  *      Returns:       True if the SetValues succeeds.
  */
 
-/*ARGSUSED*/
 static Boolean
 CvtStringToCompressStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
                         XrmValuePtr fromVal, XrmValuePtr toVal)
@@ -1086,7 +1064,6 @@ CvtStringToCompressStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
     return(FALSE);
 }
 
-/* ARGSUSED */
 static Boolean
 CvtStringToLineStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
 			XrmValuePtr fromVal, XrmValuePtr toVal)
@@ -1146,7 +1123,6 @@ CvtStringToLineStyle(Display * dpy, XrmValuePtr args, Cardinal *num_args,
  *	Returns: none.
  */
 
-/* ARGSUSED */
 static void
 HorizontalNodeSpaceDefault(Widget widget, int offset, XrmValue *value)
 {
@@ -1171,7 +1147,6 @@ HorizontalNodeSpaceDefault(Widget widget, int offset, XrmValue *value)
  *	Returns: none.
  */
 
-/* ARGSUSED */
 static void
 VerticalNodeSpaceDefault(Widget widget, int offset, XrmValue *value)
 {
@@ -1195,7 +1170,6 @@ VerticalNodeSpaceDefault(Widget widget, int offset, XrmValue *value)
  *	Returns: none.
  */
 
-/* ARGSUSED */
 static void
 LineColorDefault(Widget widget, int offset, XrmValue *value)
 {
@@ -1204,7 +1178,6 @@ LineColorDefault(Widget widget, int offset, XrmValue *value)
     value->addr = (XtPointer) &(tw->manager.foreground);
 }
 
-/* ARGSUSED */
 static void
 LineBackgroundColorDefault(Widget widget, int offset, XrmValue *value)
 {
@@ -1223,7 +1196,6 @@ LineBackgroundColorDefault(Widget widget, int offset, XrmValue *value)
  *                 parent_point - supplies y end points for horizontal line
  *	Returns: none
  */
-/* ARGSUSED */
 static void
 DrawExtraLadderLines( Widget w, GC gc, LadderPoint first_kid,
 		      LadderPoint last_kid, LadderPoint parent_point )
@@ -2447,7 +2419,6 @@ LocInRect(XRectangle *rect, Widget w, Position x, Position y)
  *	Returns: none
  */
 
-/* ARGSUSED */
 static Boolean
 MoveNodesTimer(XtPointer data)
 {

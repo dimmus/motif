@@ -489,7 +489,6 @@ _XmRC_PostTimeOut( XtPointer wid )
  * the popup menupane, MenuShell's managed_set_changed(), checks the
  * verification.
  */
-/* ARGSUSED */
 static void
 ButtonEventHandler(
         Widget w,
@@ -736,17 +735,12 @@ _XmPostPopupMenu(
 void
 _XmAllowAcceleratedInsensitiveUnmanagedMenuItems(
 	Widget wid,
-#if NeedWidePrototypes
-        int allowed )
-#else
         Boolean allowed )
-#endif /* NeedWidePrototypes */
 {
    _XmGetMenuState((Widget)wid)->
       RC_allowAcceleratedInsensitiveUnmanagedMenuItems = (Boolean)allowed;
 }
 
-/*ARGSUSED*/
 static void
 EventNoop(
         Widget reportingWidget,	/* unused */
@@ -766,7 +760,6 @@ EventNoop(
  * is attached to the menu's associated widget, along with an assortment
  * of other widgets.
  */
-/*ARGSUSED*/
 void
 _XmRC_KeyboardInputHandler(
         Widget reportingWidget,
@@ -1083,7 +1076,6 @@ MatchInKeyboardList(
    return (-1);
 }
 
-
 /*
  * This function determines if the widget to which a menu is
  * attached is accessible to the user.  The widget is considered
@@ -1263,7 +1255,6 @@ XmRemoveFromPostFromList(
    _XmAppUnlock(app);
 }
 
-/*ARGSUSED*/
 static void
 RemoveTable(Widget w,
 	    XtPointer ig1,	/* unused */

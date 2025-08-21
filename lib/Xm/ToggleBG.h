@@ -54,23 +54,13 @@ Boolean XmToggleButtonGadgetGetState(
                         Widget w);
 void XmToggleButtonGadgetSetState(
                         Widget w,
-#if NeedWidePrototypes
-                        int newstate,
-                        int notify) ;
-#else
                         Boolean newstate,
                         Boolean notify);
-#endif /* NeedWidePrototypes */
 
 Boolean XmToggleButtonGadgetSetValue(
 					    Widget w,
-#if NeedWidePrototypes
-					    int newstate,
-					    int notify);
-#else
 					    XmToggleButtonState newstate,
 					    Boolean notify);
-#endif /* NeedWidePrototypes */
 
 Widget XmCreateToggleButtonGadget(
                         Widget parent,
@@ -93,4 +83,3 @@ Widget XmVaCreateManagedToggleButtonGadget(
 #endif
 
 #endif /* _XmToggleG_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

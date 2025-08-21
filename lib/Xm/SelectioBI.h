@@ -116,6 +116,8 @@ extern void _XmSelectionBoxRestore(
                         String *argv,
                         Cardinal *argc) ;
 
+Widget _XmSelectionBoxGetChild(Widget sb, unsigned char which);
+
 /********    End Private Function Declarations    ********/
 
 

@@ -25,18 +25,13 @@
 /*
  * HISTORY
  */
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-
 #include <ctype.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #include <unistd.h>
-#endif
 
 #include <X11/Intrinsic.h>
 #include <Xm/BaseClassP.h>
@@ -80,6 +75,13 @@
 #include "TravActI.h"
 #include "TraversalI.h"
 #include "XmI.h"
+
+/* Since this stuff is obsolete, don't worry about deprecation */
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(__clang__)
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 /********    Static Function Declarations    ********/
 
@@ -1136,11 +1138,7 @@ _XmBrightness(
 Pixel
 _XmAccessColorData(
         XmColorData *cd,
-#if NeedWidePrototypes
-        unsigned int which )
-#else
         unsigned char which )
-#endif /* NeedWidePrototypes */
 {
     Pixel p;
 
@@ -1349,9 +1347,8 @@ int
 _XmOSPutenv(
     char *string)
 {
-#ifndef NO_PUTENV
-  return (putenv(string));
-
+#if HAVE_PUTENV
+  return putenv(string);
 #else
   char *value;
 
@@ -1368,7 +1365,7 @@ _XmOSPutenv(
     }
   else
     return -1;
-#endif
+#endif /* HAVE_PUTENV */
 }
 
 /* after rework of inheritance of class extension method */
@@ -1573,7 +1570,7 @@ _XmVendorExtRealize(
   Stuff from Desktop.c
 **********************/
 
-static XContext	actualClassContext = (XContext) NULL;
+static XContext	actualClassContext = 0;
 
 
 /*ARGSUSED*/
@@ -1600,7 +1597,7 @@ _XmGetActualClass(
 {
 	  WidgetClass		actualClass;
 
-	  if (actualClassContext == (XContext) NULL)
+	  if (!actualClassContext)
 	    actualClassContext = XUniqueContext();
 
 	  /*
@@ -1634,7 +1631,7 @@ _XmSetActualClass(
     WidgetClass previous;
     WidgetClass oldActualClass;
 
-    if (actualClassContext == (XContext) NULL)
+    if (!actualClassContext)
       actualClassContext = XUniqueContext();
 
     /*
@@ -1681,7 +1678,7 @@ _XmGetWorldObject(
         Cardinal *num_args )
 {
     XmDesktopObject	worldObject;
-    static XContext	worldObjectContext = (XContext) NULL;
+    static XContext	worldObjectContext = 0;
     XmWidgetExtData     ext;
     Display		*display;
 
@@ -1690,7 +1687,7 @@ _XmGetWorldObject(
     ** the display is closed, so that we don't get bad data if a second
     ** display with the same id is opened.
     */
-    if (worldObjectContext == (XContext) NULL)
+    if (!worldObjectContext)
       worldObjectContext = XUniqueContext();
 
     display = XtDisplayOfObject(shell);
@@ -1759,45 +1756,23 @@ _XmVirtKeysHandler(Widget    widget,
     }
 }
 
-
-
 /****************************************************************
  *
  *  TextOut.c functions
  *
  ****************************************************************/
 
-/* ARGSUSED */
-void
-_XmTextDrawDestination(XmTextWidget tw)
+void _XmTextDrawDestination(XmTextWidget tw)
 {
-  /* DEPRECATED */
 }
 
-/* ARGSUSED */
-void
-_XmTextClearDestination(XmTextWidget tw,
-#if NeedWidePrototypes
-        int ignore_sens)
-#else
-        Boolean ignore_sens)
-#endif /* NeedWidePrototypes */
+void _XmTextClearDestination(XmTextWidget tw, Boolean ignore_sens)
 {
-  /* DEPRECATED */
 }
 
-/* ARGSUSED */
-void
-_XmTextDestinationVisible(Widget w,
-#if NeedWidePrototypes
-        int turn_on)
-#else
-        Boolean turn_on)
-#endif /* NeedWidePrototypes */
+void _XmTextDestinationVisible(Widget w, Boolean turn_on)
 {
-  /* DEPRECATED */
 }
-
 
 /****************************************************************
  *
@@ -1846,16 +1821,11 @@ _XmGrabTheFocus(
 }
 
 
-/*ARGSUSED*/
 void
 _XmProcessTraversal(
         Widget w,
         XmTraversalDirection dir,
-#if NeedWidePrototypes
-        int check )		/* unused */
-#else
         Boolean check )		/* unused */
-#endif /* NeedWidePrototypes */
 {
   _XmMgrTraversal( w, dir ) ;
 }
@@ -2000,19 +1970,11 @@ _XmStringDraw(
         XmRenderTable rendertable,
         _XmString string,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip )
 {
     XmStringDraw(d, w, rendertable, string, gc, x, y, width,
@@ -2026,19 +1988,11 @@ _XmStringDrawImage(
         XmRenderTable rendertable,
         _XmString string,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip )
 {
     XmStringDrawImage(d, w, rendertable, string, gc, x, y, width,
@@ -2052,19 +2006,11 @@ _XmStringDrawUnderline(
         XmRenderTable f,
         _XmString s,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip,
         _XmString u )
 {
@@ -2079,19 +2025,11 @@ _XmStringDrawMnemonic(
         XmRenderTable rendertable,
         _XmString string,
         GC gc,
-#if NeedWidePrototypes
-        int x,
-        int y,
-        int width,
-        unsigned int align,
-        unsigned int lay_dir,
-#else
         Position x,
         Position y,
         Dimension width,
         unsigned char align,
         unsigned char lay_dir,
-#endif /* NeedWidePrototypes */
         XRectangle *clip,
         String mnemonic,
         XmStringTag tag )
@@ -2237,51 +2175,31 @@ _XmGetFocusResetFlag(
 void
 _XmSetFocusResetFlag(
         Widget w,
-#if NeedWidePrototypes
-        int value )
-#else
         Boolean value )
-#endif /* NeedWidePrototypes */
 {
    _XmSetFocusFlag(w, XmFOCUS_RESET, value);
 }
 
 /********************************************************************/
 
-/*ARGSUSED*/
 void
 _XmStringUpdate(XmFontList fontlist, /* unused */
 		_XmString string ) /* unused */
 {
-  /*EMPTY*/
 }
-
-
 
 /* From BaseClass.c */
 
-/*ARGSUSED*/
-void
-_XmFreeWidgetExtData(
-        Widget widget )		/* unused */
+void _XmFreeWidgetExtData(Widget widget)		/* unused */
 {
-  /*EMPTY*/
 }
 
 
-/*ARGSUSED*/
-void
-_XmBaseClassPartInitialize(
-        WidgetClass wc )	/* unused */
+void _XmBaseClassPartInitialize(WidgetClass wc)	/* unused */
 {
-  /*EMPTY*/
 }
 
-
-Boolean
-_XmIsSlowSubclass(
-        WidgetClass wc,
-        unsigned int bit )
+Boolean _XmIsSlowSubclass(WidgetClass wc, unsigned int bit)
 {
   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 
@@ -2340,8 +2258,6 @@ _XmIsStandardMotifWidgetClass(
   return FALSE;
 }
 
-
-
 /** Obsolete from ImageCache.c */
 
 Pixmap
@@ -2355,7 +2271,6 @@ _XmGetPixmap(
     return(XmGetPixmapByDepth(screen, image_name,
 			      foreground, background, depth));
 }
-
 
 Boolean
 _XmInstallPixmap(

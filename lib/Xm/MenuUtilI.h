@@ -63,18 +63,10 @@ extern int _XmMenuGrabKeyboardAndPointer(
 			Time time) ;
 extern void _XmMenuSetInPMMode(
 			Widget wid,
-#if NeedWidePrototypes
-                        int flag) ;
-#else
                         Boolean flag) ;
-#endif /* NeedWidePrototypes */
 extern void _XmSetMenuTraversal(
                         Widget wid,
-#if NeedWidePrototypes
-                        int traversalOn) ;
-#else
                         Boolean traversalOn) ;
-#endif /* NeedWidePrototypes */
 extern void _XmLeafPaneFocusOut(
                         Widget wid) ;
 extern void _XmMenuTraverseLeft(
@@ -133,4 +125,3 @@ extern void _XmMenuTraversalHandler(
 #endif
 
 #endif /* _XmMenuUtilI_h */
-/* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -2724,7 +2724,7 @@ internal xmDesktopObjectClass
 internal xmWorldObjectClass
 
 
-#if defined(NO_REGCOMP) && !defined(NO_REGEX) && defined(SVR4) && defined(_REENTRANT)
+#if !HAVE_REGCOMP && HAVE_REGEX && defined(SVR4) && defined(_REENTRANT)
 /* Internal symbols pulled from libgen */
 internal __loc1
 internal ____loc1
@@ -3032,3 +3032,4 @@ internal _regcmp
 internal ____loc1
 internal regcmp
 #endif
+

@@ -43,7 +43,6 @@
 #include <Xm/ColorP.h>
 #include <Xm/AccColorT.h>
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -349,13 +348,7 @@ typedef void (*XmWidgetDispatchProc)( Widget, XEvent *, Mask) ;
 typedef void (*XmGrabShellPopupProc)( Widget, Widget, XEvent *) ;
 typedef void (*XmMenuPopupProc)( Widget, Widget, XEvent *) ;
 typedef void (*XmMenuTraversalProc)( Widget, Widget, XmTraversalDirection) ;
-typedef void (*XmResizeFlagProc)(
-			Widget,
-#if NeedWidePrototypes
-			int) ;
-#else
-			Boolean) ;
-#endif /* NeedWidePrototypes */
+typedef void (*XmResizeFlagProc)(Widget, Boolean) ;
 typedef void (*XmRealizeOutProc)( Widget, Mask *, XSetWindowAttributes *) ;
 typedef Boolean (*XmVisualChangeProc)( Widget, Widget, Widget) ;
 typedef void (*XmTraversalProc)( Widget, XtPointer, XtPointer, int) ;
@@ -500,11 +493,7 @@ typedef struct _XmKidGeometryRec
 } XmKidGeometryRec, *XmKidGeometry;
 
 typedef void (*XmGeoArrangeProc)( XmGeoMatrix,
-#if NeedWidePrototypes
-				 int, int,
-#else
 				 Position, Position,
-#endif /* NeedWidePrototypes */
 				 Dimension *, Dimension *) ;
 typedef Boolean (*XmGeoExceptProc)( XmGeoMatrix ) ;
 typedef void (*XmGeoExtDestructorProc)( XtPointer ) ;
@@ -1182,19 +1171,11 @@ extern void XmeRedisplayGadgets(
                         Region region) ;
 extern void XmeConfigureObject(
                         Widget g,
-#if NeedWidePrototypes
-                        int x,
-                        int y,
-                        int width,
-                        int height,
-                        int border_width) ;
-#else
                         Position x,
                         Position y,
                         Dimension width,
                         Dimension height,
                         Dimension border_width) ;
-#endif /* NeedWidePrototypes */
     /* Traversal.c */
 extern void XmeNavigChangeManaged(
                         Widget wid) ;
@@ -1267,11 +1248,7 @@ extern void XmeWarning( Widget w, char *message ) ;
     /* ResConvert.c */
 extern XmFontList XmeGetDefaultRenderTable(
         Widget w,
-#if NeedWidePrototypes
-        unsigned int fontListType );
-#else
         unsigned char fontListType );
-#endif /* NeedWidePrototypes */
 extern Boolean XmeNamesAreEqual(
         register char *in_str,
         register char *test_str );
@@ -1437,17 +1414,15 @@ extern void _XmDestroyParentCallback(
 
 #endif /* NO_XM_1_2_BC */
 
-#if __GNUC__
-#  define XM_DEPRECATED  __attribute__((__deprecated__))
-#  ifdef HAVE_WEAK_ALIASES
-#    define XM_ALIAS(sym) __attribute__((__weak__,alias(#sym)))
-#  else
+#if defined(__GNUC__) || defined(__clang__)
+#  ifdef NO_WEAK_ALIASES
 #    define XM_ALIAS(sym)
+#  else
+#    define XM_ALIAS(sym)  __attribute__((__weak__,alias(#sym)))
 #  endif
 #else
-#  define XM_DEPRECATED
-#  define XM_ALIAS(sym)
-#endif
+#define XM_ALIAS(sym)
+#endif /* __GNUC__ || __clang__ */
 
 #endif /* _XmP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

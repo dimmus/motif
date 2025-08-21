@@ -87,11 +87,7 @@ extern "C" {
 
 extern void XmTranslateKey(
                         Display *dpy,
-#if NeedWidePrototypes
-                        unsigned int keycode,
-#else
                         KeyCode keycode,
-#endif /* NeedWidePrototypes */
                         Modifiers modifiers,
                         Modifiers *modifiers_return,
                         KeySym *keysym_return) ;

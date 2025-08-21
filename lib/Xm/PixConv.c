@@ -26,7 +26,6 @@
 #include <config.h>
 #endif
 
-
 #include <Xm/AccColorT.h>
 #include <Xm/TraitP.h>
 #include <Xm/XmP.h>
@@ -40,8 +39,6 @@
 #define DEPTH(widget)  \
     (XtIsWidget(widget))? \
        ((widget)->core.depth):((XtParent(widget))->core.depth)
-
-
 
 /********    Static Function Declarations    ********/
 
@@ -61,8 +58,6 @@ static Boolean CvtStringToPixmap(
                         XrmValue *toVal,
                         XtPointer *closure_ret) ;
 /********    End Static Function Declarations    ********/
-
-
 
 
 /*--------------------------------------------------------------*/
@@ -235,7 +230,6 @@ _XmRegisterPixmapConverters( void )
  *  CvtStringToPixmap
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 CvtStringToPixmap(
         Display *dpy,
@@ -351,7 +345,7 @@ GetPixmap (
 
    pixmap = _XmGetScaledPixmap (screen, widget, image_name,
 				&acc_color_rec, depth, FALSE,
-				scaling_ratio); /* pass scaling down to
+				scaling_ratio, 0, 0); /* pass scaling down to
 				             ImageCache */
 
    return pixmap ;
@@ -406,7 +400,6 @@ GetColorInfo (
  *  and depth information.
  *
  ************************************************************************/
-/*ARGSUSED*/
 void
 _XmTopShadowPixmapDefault(
         Widget widget,
@@ -447,7 +440,6 @@ _XmTopShadowPixmapDefault(
        }
 }
 
-/*ARGSUSED*/
 void
 _XmHighlightPixmapDefault(
         Widget widget,

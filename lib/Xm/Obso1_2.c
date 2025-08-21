@@ -32,9 +32,7 @@
 
 
 #include <ctype.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include <Xm/XmP.h>
 #include <Xm/BaseClassP.h>
 #include <Xm/DesktopP.h>
@@ -106,7 +104,6 @@ XmTextGetBaseLine(
   return XmTextGetBaseline( w) ;
 }
 
-/*ARGSUSED*/
 Boolean
 _XmTestTraversability(
         Widget widget,
@@ -115,7 +112,6 @@ _XmTestTraversability(
   return XmIsTraversable( widget) ;
 }
 
-/*ARGSUSED*/
 void
 _XmClearTabGroup(
         Widget w )		/* unused */
@@ -130,7 +126,6 @@ _XmFindTabGroup(
   return XmGetTabGroup( widget) ;
 }
 
-/*ARGSUSED*/
 void
 _XmClearKbdFocus(
         Widget tabGroup )	/* unused */
@@ -145,15 +140,10 @@ _XmGetTabGroup(
   return XmGetTabGroup( w) ;
 }
 
-/*ARGSUSED*/
 Boolean
 _XmWidgetIsTraversable(
         Widget widget,
-#if NeedWidePrototypes
-        int navType,		/* unused */
-#else
         XmNavigationType navType, /* unused */
-#endif /* NeedWidePrototypes */
         XRectangle *visRect )	/* unused */
 {
   return XmIsTraversable( widget) ;
@@ -185,11 +175,7 @@ _XmGetManagedInfo(
 Boolean
 _XmChangeNavigationType(
         Widget current,
-#if NeedWidePrototypes
-        int newNavType )
-#else
         XmNavigationType newNavType )
-#endif /* NeedWidePrototypes */
 {
   /* This is a convenience routine for widgets wanting to change
    * their navigation type without using XtSetValues().
@@ -679,12 +665,8 @@ void _XmOffsetArrow (int diff_x, int diff_y, XRectangle *top, XRectangle *cent, 
  *
  *************************************<->***********************************/
 
-void _XmDrawSquareButton (Widget w, int x, int y, int size, GC topGC, GC bottomGC, GC centerGC,
-#if NeedWidePrototypes
-int fill)
-#else
-Boolean fill)
-#endif /* NeedWidePrototypes */
+void _XmDrawSquareButton (Widget w, int x, int y, int size, GC topGC,
+                          GC bottomGC, GC centerGC, Boolean fill)
 {
    _XmDrawShadow (XtDisplay (w), XtWindow (w),
                   topGC, bottomGC,
@@ -711,12 +693,8 @@ Boolean fill)
  ************************************************************************/
 
 
-void _XmDrawDiamondButton (Widget tw, int x, int y, int size, GC topGC, GC bottomGC, GC centerGC,
-#if NeedWidePrototypes
-int fill )
-#else
-Boolean fill)
-#endif /* NeedWidePrototypes */
+void _XmDrawDiamondButton(Widget tw, int x, int y, int size, GC topGC,
+                          GC bottomGC, GC centerGC, Boolean fill)
 {
    XSegment seg[12];
    XPoint   pt[5];
@@ -1067,13 +1045,8 @@ register int height)
  *****************************************************************/
 
 void _XmDrawShadowType (Widget w, unsigned int shadow_type,
-#if NeedWidePrototypes
-			int core_width, int core_height,
-                        int shadow_thickness, int highlight_thickness,
-#else
                         Dimension core_width, Dimension core_height,
                         Dimension shadow_thickness, Dimension highlight_thickness,
-#endif
                         GC top_shadow_GC, GC bottom_shadow_GC)
 {
    if (!XtIsRealized(w))
@@ -1116,14 +1089,8 @@ void _XmDrawShadowType (Widget w, unsigned int shadow_type,
  ************************************************************************/
 
 void _XmDrawBorder ( Widget w, GC gc,
-#if NeedWidePrototypes
-                                      int x, int y,
-        int width, int height, int highlight_width)
-#else
                                       Position x, Position y,
         Dimension width, Dimension height, Dimension highlight_width)
-#endif /* NeedWidePrototypes */
-
 {
    XRectangle rect[4];
 
@@ -1255,7 +1222,6 @@ _XmFileSelectionBoxCreateFilterText(
 }
 
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetDirectory(
             Widget fs,
@@ -1268,7 +1234,6 @@ _XmFileSelectionBoxGetDirectory(
     *value = (XtArgVal) data ;
 }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetNoMatchString(
             Widget fs,
@@ -1281,7 +1246,6 @@ _XmFileSelectionBoxGetNoMatchString(
     *value = (XtArgVal) data ;
 }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetPattern(
             Widget fs,
@@ -1294,7 +1258,6 @@ _XmFileSelectionBoxGetPattern(
     *value = (XtArgVal) data ;
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetFilterLabelString(
         Widget fs,
@@ -1309,7 +1272,6 @@ _XmFileSelectionBoxGetFilterLabelString(
     *value = (XtArgVal) data ;
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetDirListLabelString(
         Widget fs,
@@ -1324,7 +1286,6 @@ _XmFileSelectionBoxGetDirListLabelString(
     *value = (XtArgVal) data ;
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetDirListItems(
         Widget fs,
@@ -1339,7 +1300,6 @@ _XmFileSelectionBoxGetDirListItems(
     *value = (XtArgVal) data ;
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetDirListItemCount(
         Widget fs,
@@ -1354,7 +1314,6 @@ _XmFileSelectionBoxGetDirListItemCount(
     *value = (XtArgVal) data ;
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetListItems(
         Widget fs,
@@ -1375,7 +1334,6 @@ _XmFileSelectionBoxGetListItems(
         }
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetListItemCount(
         Widget fs,
@@ -1397,7 +1355,6 @@ _XmFileSelectionBoxGetListItemCount(
         }
 }
 /*****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxGetDirMask(
         Widget fs,
@@ -1451,7 +1408,6 @@ GetActiveText(
     return( activeChild) ;
     }
 /****************************************************************/
-/*ARGSUSED*/
 void
 _XmFileSelectionBoxUpOrDown(
         Widget wid,
@@ -1779,22 +1735,16 @@ typedef enum {
     AboveAndBelow
 } XmNavigTestType;
 
-/*ARGSUSED*/
 Boolean
 _XmPathIsTraversable(
         Widget widget,
-#if NeedWidePrototypes
-        int navType,
-#else
         XmNavigationType navType,
-#endif /* NeedWidePrototypes */
         XmNavigTestType testType, /* unused */
         XRectangle *visRect )	/* unused */
 {
   return _XmFindTraversablePrim( (CompositeWidget) widget) ;
 }
 
-/*ARGSUSED*/
 void
 SetMwmStuff(
         XmVendorShellExtObject ove, /* unused */
@@ -1805,7 +1755,6 @@ SetMwmStuff(
   return ;
 }
 
-/*ARGSUSED*/
 void
 _XmBB_GetDialogTitle(
         Widget bb,
@@ -1847,7 +1796,8 @@ _XmCharsetCanonicalize(
       len = strlen(XmSTRING_ISO8859_1);
 
       new_s = XtMalloc(len + 1);
-      strcpy(new_s, XmSTRING_ISO8859_1);
+      strncpy(new_s, XmSTRING_ISO8859_1, len);
+      new_s[len] = '\0';
     }
   else if (_isISO(charset))
     {
@@ -1861,15 +1811,13 @@ _XmCharsetCanonicalize(
   else
     /* Anything else is copied but not modified. */
     {
-      len = strlen(charset);
-
-      new_s = XtMalloc(len + 1);
-      strcpy(new_s, charset);
+      len = strlen(charset) + 1;
+      new_s = XtMalloc(len);
+      strncpy(new_s, charset, len);
     }
   return (new_s);
 }
 
-/*ARGSUSED*/
 Widget
 _XmGetDisplayObject(Widget shell,
 		    ArgList args, /* unused */
@@ -1878,7 +1826,6 @@ _XmGetDisplayObject(Widget shell,
   return XmGetXmDisplay( XtDisplay( shell)) ;
 }
 
-/*ARGSUSED*/
 Widget
 _XmGetScreenObject(Widget shell,
 		   ArgList args, /* unused */
@@ -1887,7 +1834,6 @@ _XmGetScreenObject(Widget shell,
   return XmGetXmScreen( XtScreen( shell)) ;
 }
 
-/*ARGSUSED*/
 XmWrapperData
 _XmGetWrapperData (WidgetClass w_class)	/* unused */
 {
@@ -1936,7 +1882,6 @@ _XmInitializeMenuCursor (void)
    */
 }
 
-/*ARGSUSED*/
 void
 _XmCreateMenuCursor (Widget m)	/* unused */
 {
@@ -1948,14 +1893,12 @@ XContext _XmMenuCursorContext = 0; /* This won't help much either. */
 
 static Boolean simplistic_transient_flag ;
 
-/*ARGSUSED*/
 Boolean
 _XmGetTransientFlag (Widget w)	/* unused */
 {
   return simplistic_transient_flag ;
 }
 
-/*ARGSUSED*/
 void
 _XmSetTransientFlag (Widget w,	/* unused */
 		     Boolean value)
@@ -1967,7 +1910,6 @@ _XmSetTransientFlag (Widget w,	/* unused */
   simplistic_transient_flag = value ;
 }
 
-/*ARGSUSED*/
 Boolean
 _XmQueryPixmapCache (Screen *screen, /* unused */
 		     char *image_name, /* unused */
@@ -1979,7 +1921,6 @@ _XmQueryPixmapCache (Screen *screen, /* unused */
   return FALSE ;
 }
 
-/*ARGSUSED*/
 void
 _XmRC_GetLabelString(
             XmRowColumnWidget rc,
@@ -1989,7 +1930,6 @@ _XmRC_GetLabelString(
   *value = (XtArgVal) XmStringCopy(RC_OptionLabel(rc));
 }
 
-/*ARGSUSED*/
 void
 _XmRC_GetMenuAccelerator(
             XmRowColumnWidget rc,
@@ -2006,7 +1946,6 @@ _XmRC_GetMenuAccelerator(
   else *value = (XtArgVal) NULL;
 }
 
-/*ARGSUSED*/
 void
 _XmRC_GetMnemonicCharSet(
             XmRowColumnWidget rc,
@@ -2031,7 +1970,6 @@ _XmRC_GetMnemonicCharSet(
     }
 }
 
-/*ARGSUSED*/
 void
 _XmScaleGetTitleString(
         Widget wid,
@@ -2050,17 +1988,12 @@ _XmScaleGetTitleString(
   }
 }
 
-/*ARGSUSED*/
 void
 _XmTextFieldDestinationVisible(
         Widget w,		/* unused */
-#if NeedWidePrototypes
-        int turn_on )		/* unused */
-#else
         Boolean turn_on )	/* unused */
-#endif /* NeedWidePrototypes */
 {
-  return ;
+  return;
 }
 
 int
@@ -2070,7 +2003,6 @@ _XmTextGetBaseLine(
   return XmTextGetBaseline( widget) ;
 }
 
-/*ARGSUSED*/
 void
 _XmTextOutLoadGCsAndRecolorCursors(XmTextWidget old_tw, /* unused */
 				   XmTextWidget new_tw)	/* unused */
@@ -2088,7 +2020,6 @@ _XmConst char *_XmTextEventBindings3 = _XmTextIn_XmTextEventBindings3 ;
  *	The following are the gadget traversal action routines
  *      DD; was in Manager.c but not used anywhere.
  ************************************************************************/
-/*ARGSUSED*/
 void
 _XmDoGadgetTraversal(
         XmManagerWidget mw,
@@ -2147,7 +2078,6 @@ _XmBuildManagerResources(
 
 /** Gadget synthetic hook from Manager.c. Are not static in Gadget.c **/
 
-/*ARGSUSED*/
 void
 _XmGetHighlightColor(
         Widget w,
@@ -2159,7 +2089,6 @@ _XmGetHighlightColor(
 	*value = (XtArgVal) mw->manager.highlight_color;
 }
 
-/*ARGSUSED*/
 void
 _XmGetTopShadowColor(
         Widget w,
@@ -2171,7 +2100,6 @@ _XmGetTopShadowColor(
 	*value = (XtArgVal) mw->manager.top_shadow_color;
 }
 
-/*ARGSUSED*/
 void
 _XmGetBottomShadowColor(
         Widget w,

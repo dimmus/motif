@@ -30,9 +30,10 @@ static char rcsid[] = "$TOG: Scale.c /main/31 1999/10/13 16:18:07 mgreess $"
 #include <config.h>
 #endif
 
-
 #include <stdio.h>
 #include <limits.h>
+#include <X11/Xos.h>
+
 #ifndef CSRG_BASED
 /*
  * Modification by Integrated Computer Solutions, Inc.  May 2000
@@ -64,7 +65,8 @@ static char rcsid[] = "$TOG: Scale.c /main/31 1999/10/13 16:18:07 mgreess $"
 # endif
 #else
 # define nl_langinfo(radixchar)	"."
-#endif
+#endif /* !CSRG_BASED */
+
 #ifdef __cplusplus
 extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #endif
@@ -599,13 +601,11 @@ static XmConst XmTransferTraitRec ScaleTransfer = {
 /************** Synthetic hook & default routines ***************/
 /****************************************************************/
 
-/*ARGSUSED*/
 static void
 ScaleGetTitleString(
         Widget wid,
         int resource,		/* unused */
         XtArgVal *value)
-/****************           ARGSUSED  ****************/
 {
 	XmScaleWidget scale = (XmScaleWidget) wid ;
 	Arg           al[1] ;
@@ -631,7 +631,6 @@ ScaleGetTitleString(
  *    the processing direction resource dependent on the orientation.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 ProcessingDirectionDefault(
         XmScaleWidget widget,
@@ -662,7 +661,6 @@ ProcessingDirectionDefault(
  *
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 SliderVisualDefault(
         XmScaleWidget widget,
@@ -691,7 +689,6 @@ SliderVisualDefault(
  *
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 SliderMarkDefault(
         XmScaleWidget widget,
@@ -717,7 +714,6 @@ SliderMarkDefault(
  *
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 EditableDefault(
         XmScaleWidget widget,
@@ -743,7 +739,6 @@ EditableDefault(
  * If "last_value" is True, then function has been called twice on same
  * widget, thus resource needs to be set NULL, otherwise leave it alone.
  */
-/* ARGSUSED */
 static void
 CheckSetRenderTable(Widget wid,
 		    int offset,
@@ -802,7 +797,6 @@ ClassPartInitialize(
  *	title label and scrollbar.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 ValidateInitialState(
         XmScaleWidget req,	/* unused */
@@ -1021,8 +1015,6 @@ GetForegroundGC(
 					   GCClipXOrigin | GCClipYOrigin);
 }
 
-
-/*ARGSUSED*/
 static void
 Initialize(
         Widget rw,
@@ -1052,7 +1044,7 @@ Initialize(
         if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list,
 					  &new_w->scale.font_struct))
 	    new_w->scale.font_struct = NULL;
-#ifndef USE_XFT
+#if !USE_XFT
     } else {
 	new_w->scale.font_struct =
 	  XLoadQueryFont (XtDisplay (new_w), XmDEFAULT_FONT);
@@ -1240,8 +1232,6 @@ ValidateInputs(
        }
 }
 
-
-/*ARGSUSED*/
 static void
 HandleTitle(
         XmScaleWidget cur,
@@ -1278,7 +1268,6 @@ HandleTitle(
 	}
 }
 
-/*ARGSUSED*/
 static void
 HandleScrollBar(
         XmScaleWidget cur,
@@ -1337,7 +1326,6 @@ HandleScrollBar(
  *  SetValues class method
  *
  ************************************************************************/
-/*ARGSUSED*/
 static Boolean
 SetValues(
         Widget cw,
@@ -1392,7 +1380,7 @@ SetValues(
 
     if (DIFF(scale.font_list)) {
 
-#ifndef USE_XFT
+#if !USE_XFT
 	if ((cur->scale.font_list == NULL) &&
 	    (cur->scale.font_struct != NULL))
 	    XFreeFont(XtDisplay (cur), cur->scale.font_struct);
@@ -1410,7 +1398,7 @@ SetValues(
 	    if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list,
 					      &new_w->scale.font_struct))
 	        new_w->scale.font_struct = NULL;
-#ifdef USE_XFT
+#if USE_XFT
         /* TODO: should it be ifndef? */
 	} else {
 	    new_w->scale.font_struct =
@@ -1553,7 +1541,7 @@ Destroy(
 
     XtReleaseGC ((Widget) sw, sw->scale.foreground_GC);
 
-#ifdef USE_XFT
+#if USE_XFT
     if (sw->scale.font_list == NULL && sw->scale.font_struct != NULL)
 	XFreeFont (XtDisplay (sw), sw->scale.font_struct);
 #endif
@@ -1601,7 +1589,6 @@ QueryGeometry(
  *	Accept everything except change in position.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static XtGeometryResult
 GeometryManager(
         Widget w,
@@ -1921,7 +1908,7 @@ ValueTroughWidth(
 	else\
 	    sprintf(buff, "%d", max_or_min_value);\
 	    \
-    tmp = XmStringWidth(sw->scale.font_list, tmp_str = XmStringCreateSimple(buff));\
+    tmp = XmStringWidth(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buff));\
     XmStringFree(tmp_str);\
 }
 #else
@@ -2181,7 +2168,6 @@ ScrollWidth(
 			sw->composite.children[1];
 
 		    tmp = MAX((num_managed - 2)* MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
-
 		    tic = sb->primitive.highlight_thickness
 			+ sb->primitive.shadow_thickness
 			    + (Dimension) (((float) SLIDER_SIZE( sw) / 2.0)
@@ -2255,7 +2241,6 @@ ScrollHeight(
 			    sw->composite.children[1];
 
 			tmp = MAX((num_managed - 2)* MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
-
 			tic = sb->primitive.highlight_thickness
 			    + sb->primitive.shadow_thickness
 				+ (Dimension) (((float) SLIDER_SIZE(sw) / 2.0)
@@ -2896,7 +2881,7 @@ ShowValue(
     /*  Calculate the x, y, width, and height of the string to display  */
 
 #if USE_XFT
-    XmStringExtent(sw->scale.font_list, tmp_str = XmStringCreateSimple(buffer),
+    XmStringExtent(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buffer),
 		  &width, &height);
     XmStringFree(tmp_str);
     sw->scale.show_value_width = width;
@@ -2975,12 +2960,11 @@ ShowValue(
     sw->scale.show_value_y = y - height + 1;
 #endif
 
-
     /*  Display the string  */
     XSetClipMask(XtDisplay(sw), sw->scale.foreground_GC, None);
 #if USE_XFT
     XmStringDraw(XtDisplay(sw), XtWindow(sw), sw->scale.font_list,
-                    tmp_str = XmStringCreateSimple(buffer),
+                    tmp_str = XmStringCreateLocalized(buffer),
 		    sw->scale.foreground_GC,
 		    x, y, width, XmALIGNMENT_CENTER,
 		    sw->manager.string_direction,
@@ -3109,7 +3093,6 @@ SetScrollBarData(
  *	Callback procedure invoked from the scrollbars value being changed.
  *
  *********************************************************************/
-/*ARGSUSED*/
 static void
 ValueChanged(
         Widget wid,
@@ -3162,7 +3145,6 @@ ValueChanged(
  * the drag processing, and establishes a drag context
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 StartDrag (Widget  w,
 	   XtPointer data,	/* unused */
@@ -3211,7 +3193,6 @@ StartDrag (Widget  w,
  * converted into compound text.
  *
  ************************************************************************/
-/*ARGSUSED*/
 static void
 DragConvertCallback (Widget w,
 		     XtPointer client_data, /* unused */
@@ -3443,5 +3424,4 @@ XmVaCreateManagedScale(
                          var, count);
     va_end(var);
     return w;
-
 }

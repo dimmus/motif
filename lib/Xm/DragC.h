@@ -73,10 +73,10 @@ enum{	XmDROP,				XmDROP_HELP,
 	} ;
 
 /* values for operation */
-#define	XmDROP_NOOP	0L
+#define	XmDROP_NOOP 0L
 #define XmDROP_MOVE (1L << 0)
-#define XmDROP_COPY	(1L << 1)
-#define XmDROP_LINK	(1L << 2)
+#define XmDROP_COPY (1L << 1)
+#define XmDROP_LINK (1L << 2)
 
 enum{	XmMOVE = XmDROP_MOVE,		XmCOPY = XmDROP_COPY,
 	XmLINK = XmDROP_LINK,		XmOTHER
@@ -126,6 +126,8 @@ typedef struct _XmTopLevelEnterCallbackStruct{
     Position		x, y;
     unsigned char	dragProtocolStyle;
     Atom		iccHandle;
+    Atom		targets[3];
+    unsigned char	n_targets;
 }XmTopLevelEnterCallbackStruct, *XmTopLevelEnterCallback;
 
 typedef struct _XmTopLevelLeaveCallbackStruct{
@@ -236,4 +238,3 @@ extern Boolean XmTargetsAreCompatible(
 #endif
 
 #endif /* _DragController_h */
-/* DON'T ADD STUFF AFTER THIS #endif */

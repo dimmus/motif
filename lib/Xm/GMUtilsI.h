@@ -36,52 +36,27 @@ extern "C" {
 
 extern void _XmGMCalcSize(
                         XmManagerWidget manager,
-#if NeedWidePrototypes
-                        int margin_width,
-                        int margin_height,
-#else
                         Dimension margin_width,
                         Dimension margin_height,
-#endif /* NeedWidePrototypes */
                         Dimension *replyWidth,
                         Dimension *replyHeight) ;
 extern Boolean _XmGMDoLayout(
                         XmManagerWidget manager,
-#if NeedWidePrototypes
-                        int margin_width,
-                        int margin_height,
-#else
                         Dimension margin_width,
                         Dimension margin_height,
-#endif /* NeedWidePrototypes */
                         int resize_policy,
-#if NeedWidePrototypes
-                        int queryonly) ;
-#else
                         Boolean queryonly) ;
-#endif /* NeedWidePrototypes */
 extern void _XmGMEnforceMargin(
                         XmManagerWidget manager,
-#if NeedWidePrototypes
-                        int margin_width,
-                        int margin_height,
-                        int setvalue) ;
-#else
                         Dimension margin_width,
                         Dimension margin_height,
                         Boolean setvalue) ;
-#endif /* NeedWidePrototypes */
 extern XtGeometryResult _XmGMHandleQueryGeometry(
                         Widget widget,
                         XtWidgetGeometry *intended,
                         XtWidgetGeometry *desired,
-#if NeedWidePrototypes
-                        int margin_width,
-                        int margin_height,
-#else
                         Dimension margin_width,
                         Dimension margin_height,
-#endif /* NeedWidePrototypes */
                         int resize_policy) ;
 extern Boolean _XmGMOverlap(
                         XmManagerWidget manager,
@@ -91,13 +66,8 @@ extern XtGeometryResult _XmGMHandleGeometryManager(
                         Widget w,
                         XtWidgetGeometry *request,
                         XtWidgetGeometry *reply,
-#if NeedWidePrototypes
-                        int margin_width,
-                        int margin_height,
-#else
                         Dimension margin_width,
                         Dimension margin_height,
-#endif /* NeedWidePrototypes */
                         int resize_policy,
                         int allow_overlap) ;
 /********    End Private Function Declarations    ********/
@@ -108,4 +78,3 @@ extern XtGeometryResult _XmGMHandleGeometryManager(
 #endif
 
 #endif /* _XmGMUtilsI_h */
- /* DON'T ADD STUFF AFTER THIS #endif */
