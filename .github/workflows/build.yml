@@ -53,8 +53,10 @@ jobs:
       - name: Make
         run: |
           cd /home/runner/work/motif/motif
+          make clean || true
+          make distclean || true
           CC=${{ matrix.compiler }} ./autogen.sh
-          make
+          make -j1
         shell: alpine.sh {0}
       # - name: Test
       #   run: |
