@@ -606,15 +606,9 @@ void SysCall (Widget widget, char *systemCommand, Boolean set_uidpath)
 	  printf("Trying: %s\n", str);
 	  if (set_uidpath)
 	    {
-#ifndef NO_PUTENV
 	      char *uidpath = XtMalloc(8 + strlen(str) + 4 + 1);
 	      sprintf(uidpath, "UIDPATH=%s.uid", str);
 	      putenv(uidpath);
-#else
-	      char *uidpath = XtMalloc(strlen(str) + 4 + 1);
-	      sprintf(uidpath, "%s.uid", str);
-	      setenv("UIDPATH", uidpath, 1);
-#endif
 	    }
 	  execl(str, systemCommand, NULL);
 	  printf("Still can't find %s...\n", systemCommand);
