@@ -646,7 +646,7 @@ void
   int             comp_status = 0;
 #elif HAVE_REGEX
   char *          compiledRE = NULL;
-#endif /* NO_REGCOMP */
+#endif
 /****************/
 
   _XmProcessLock();

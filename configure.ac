@@ -10,127 +10,75 @@ m4_define(ABI_REVISION, 0)
 m4_define(ABI_AGE,      0)
 m4_define(ABI_VERSION,  ABI_CURRENT:ABI_REVISION:ABI_AGE)
 
-AC_INIT(motif,XM_VERSION,https://github.com/dimmus/motif)
-AC_PREREQ(2.70)
-LT_PREREQ(2.4.6)
+AC_PREREQ([2.70])
+LT_PREREQ([2.4.6])
+AC_INIT([motif], [XM_VERSION], [https://github.com/dimmus/motif])
+AC_CONFIG_MACRO_DIRS([m4])
+AC_CONFIG_AUX_DIR([.])
+AC_CONFIG_SRCDIR([lib/Xm/Form.c])
+AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules no-installinfo no-define dist-xz])
 LT_INIT
-# AC_CANONICAL_TARGET
-AC_CONFIG_SRCDIR(Makefile.am)
-AC_CONFIG_SRCDIR(lib/Xm/Form.c)
-AC_CONFIG_AUX_DIR(.)
-AC_CONFIG_MACRO_DIRS(m4)
-AM_INIT_AUTOMAKE(foreign dist-xz subdir-objects no-define silent-rules no-installinfo)
-AM_SILENT_RULES(yes)
-AC_LANG(C)
+AM_SILENT_RULES([yes])
+AM_EXTRA_RECURSIVE_TARGETS([demos doc])
+AC_LANG([C])
 
-# C_STD="gnu99"
-# AC_SUBST(C_STD)
-
+dnl Check for the C compiler / pkg-config
 AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PATH_PROG([PKG_CONFIG], [pkg-config])
-AC_PROG_LEX(yywrap)
 AC_CHECK_PROGS(YACC, byacc, yacc)
+AC_PROG_LEX([yywrap])
 
 dnl Flex needs libfl
-LEXLIB=
-if test "x$ac_cv_prog_LEX" == "xflex"; then
-	LEXLIB=-lfl
-fi
+AS_IF([test "x$ac_cv_prog_LEX" == "xflex"],[LEXLIB=-lfl],[LEXLIB=])
 AC_SUBST([LEXLIB])
 
-# AC_CHECK_FILE(/usr/X/include/X11/X.h,
-#   AC_PREFIX_DEFAULT(/usr/X),
-#   AC_PREFIX_DEFAULT(/usr))
-# AC_CHECK_FILE(/usr/X11R7/include/X11/X.h,
-#   AC_PREFIX_DEFAULT(/usr/X11R7),
-#   AC_PREFIX_DEFAULT(/usr))
-# AC_CHECK_FILE(/usr/include/X11/X.h,
-#   AC_PREFIX_DEFAULT(/usr))
-
-# AC_PATH_X
-# AC_PATH_XTRA
-AX_LT_LIB_XTHREADS
-
+dnl Maintainer automation (add ([enabled]) to activate)
 AM_MAINTAINER_MODE
 
 dnl Check the host system type and compiler characteristics
 AC_CANONICAL_HOST
 AC_C_CONST
-# AC_TYPE_MODE_T
-# AC_TYPE_OFF_T
-# AC_TYPE_PID_T
+AC_TYPE_MODE_T
+AC_TYPE_OFF_T
+AC_TYPE_PID_T
 AC_TYPE_SIZE_T
 AC_TYPE_INTPTR_T
 AC_TYPE_UINTPTR_T
-AC_CHECK_TYPE(XICProc,,AC_DEFINE(NO_XICPROC, 1, XICProc isn't defined), [#include <X11/Xlib.h>])
+AC_CHECK_TYPE([XICProc],,,[#include <X11/Xlib.h>])
 
 dnl Check for X
 PKG_INSTALLDIR
 PKG_CHECK_MODULES([X], [x11 xpm xt xmu xext])
 
-# save_LIBS="$LIBS"
-# save_CFLAGS="$CFLAGS"
-
-# LIBS="$X_LIBS $LIBS"
-# CFLAGS="$X_CFLAGS $CFLAGS"
-
-dnl lib/Xm/VendorS.c and lib/Xm/EditresCom.c
-AC_CHECK_HEADERS(X11/Xmu/Editres.h,
-  AC_CHECK_LIB(Xmu, _XEditResCheckMessages,
-    XMU_LIBS=-lXmu
-    AC_DEFINE(HAVE_LIBXMU, 1, This System has libXmu)
-    , XMU_LIBS="", -lXt -lX11)
-  AC_CHECK_LIB(Xmu, XmuNCopyISOLatin1Lowered,
-    AC_DEFINE(HAVE_XMU_N_COPY_ISO,1,Have XmuNCopyISOLatin1Lowered)
-    , , -lXt -lX11)
-  ,,[[#include <X11/Intrinsic.h>]]
-)
-AC_SUBST(XMU_LIBS)
-
-# AC_HEADER_DIRENT
-# AC_CHECK_INCLUDES_DEFAULT
-
-# AC_HEADER_SYS_WAIT
-AC_CHECK_HEADER(wctype.h,    , AC_DEFINE(HAS_WIDECHAR_FUNCTIONS, 1, System supports wchar))
-AC_CHECK_HEADER(langinfo.h,  , AC_DEFINE(CSRG_BASED, 1, System Has langinfo.h))
-AC_CHECK_HEADER(X11/Xos_r.h, , AC_DEFINE(NEED_XOS_R_H, 1, System Missing Xos_r.h))
-AC_CHECK_HEADER(X11/Xpoll.h, , AC_DEFINE(NEED_XPOLL_H, 1, system Missing X11/Xpoll.h))
-AC_CHECK_HEADERS(sys/malloc.h sys/file.h sys/poll.h sys/time.h X11/Xos_r.h X11/Xpoll.h)
-AC_CHECK_HEADERS(alloca.h iconv.h fcntl.h limits.h malloc.h wchar.h)
-
-# AC_STRUCT_TM
-# AC_TYPE_UID_T
-# AX_WEAK_ALIAS_SUPPORT
-
-# AC_FUNC_ALLOCA
-# AC_FUNC_MEMCMP
-# AC_FUNC_SETPGRP
-# AC_FUNC_STRCOLL
-# AC_FUNC_STRFTIME
-# AC_FUNC_FORK([])
-# AC_FUNC_VPRINTF
-# AX_FUNC_VOID_SPRINTF
-AC_CHECK_FUNCS(strdup,    ,AC_DEFINE(NEED_STRDUP,     1, no strdup))
-AC_CHECK_FUNCS(strcasecmp,,AC_DEFINE(NEED_STRCASECMP, 1, no strcasecmp))
-AC_CHECK_FUNCS(putenv,    ,AC_DEFINE(NO_PUTENV,       1, no putenv))
-AC_CHECK_FUNCS(regcomp,   ,AC_DEFINE(NO_REGCOMP,      1, no regcmp))
-AC_CHECK_FUNCS(memmove,   ,AC_DEFINE(NO_MEMMOVE,      1, no memmove))
-AC_CHECK_FUNCS(getcwd getwd iconv nanosleep regex strlcat \
-               wcslen wcscpy wcsncpy wcschr wcscat wcsncat \
-               gettimeofday mkdir re_comp regcmp select \
-               strcspn strerror strstr strtod strtol uname)
+dnl Check for particular headers / functions
+AC_CHECK_HEADERS([alloca.h iconv.h wctype.h fcntl.h sys/poll.h sys/time.h X11/Xos_r.h X11/Xpoll.h])
+AC_CHECK_FUNCS([getcwd getwd iconv nanosleep putenv regcomp regex strcasecmp strdup strlcat])
+AC_DEFINE([HAVE_SYS_POLL_H])
+AC_DEFINE([HAVE_SYS_TIME_H])
 
 if test x$GCC = xyes; then
     CFLAGS="$CFLAGS -fno-strict-aliasing"
-    # CFLAGS="$CFLAGS -std=$C_STD"
+    # CFLAGS="$CFLAGS -std=gnu99"
     if test ` $CC -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4" ; then
         CFLAGS="$CFLAGS -fno-tree-ter"
     fi
 fi
+# case "$host_os" in
+#     freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";
+#         LDFLAGS="$LDFLAGS -L/usr/local/lib";;
+#     cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
+#     solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
+#         if test x$enable_utf8 = x; then
+#             enable_utf8="no"
+#         fi;
+#         if test x$enable_xft = x; then
+#             enable_xft="no"
+#         fi;;
+# esac
 
 AC_ARG_WITH([jpeg],
 	[AS_HELP_STRING([--with-jpeg], [Enable jpeg support])],
@@ -140,93 +88,50 @@ AC_ARG_WITH([png],
 	[AS_HELP_STRING([--with-png], [Enable png support])],
 	[with_png=$withval], [with_png=yes])
 
+AC_ARG_WITH([xft],
+	[AS_HELP_STRING([--with-xft], [Enable xft support])],
+	[with_xft=$withval], [with_xft=yes])
+
 AS_IF([test "x$with_jpeg" == "xyes"],[PKG_CHECK_MODULES([JPEG], [libjpeg])])
 AS_IF([test "x$with_png"  == "xyes"],[PKG_CHECK_MODULES([PNG],  [libpng])])
-
-# if test "$enable_utf8" = "yes"
-# then
-#   AC_DEFINE([UTF8_SUPPORTED], [1], [UTF8 is supported])
-#   AC_SEARCH_LIBS([iconv_open], [iconv], ,
-#     AC_SEARCH_LIBS([libiconv_open], [iconv]))
-# fi
-
-AC_ARG_ENABLE([debug],
-  [AS_HELP_STRING(
-      [--enable-debug],
-      [enable debugging support])
-	], [enable_debug=$enableval], [enable_debug=no]
-)
+AS_IF([test "x$with_xft"  == "xyes"],[PKG_CHECK_MODULES([XFT],  [xft >= 2])])
 
 AC_ARG_ENABLE([demos],
-  [AS_HELP_STRING(
-      [--disable-demos],
-      [disable building demos])
-	], [enable_demos=$enableval], [enable_demos=yes]
-)
+  [AS_HELP_STRING([--disable-demos],[disable building demos])],
+  [enable_demos=$enableval],[enable_demos=yes])
 
 AC_ARG_ENABLE([utf8],
-  [AS_HELP_STRING(
-      [--enable-utf8],
-      [enable UTF-8 support])
-	], [enable_utf8=$enableval], [enable_utf8=yes]
-)
+  [AS_HELP_STRING([--enable-utf8],[enable UTF-8 support])],
+  [enable_utf8=$enableval],[enable_utf8=yes])
+AS_IF([test "x$enable_utf8" == "xyes"],
+  [AC_SEARCH_LIBS([iconv_open], [iconv], ,
+    AC_SEARCH_LIBS([libiconv_open], [iconv]))])
 
 AC_ARG_ENABLE([message-catalog],
-  [AS_HELP_STRING(
-      [--enable-message-catalog],
-      [enable X/Open message catalog support])
-  ],
-  [enable_message_catalog=$enableval], [enable_message_catalog=no]
-)
+  [AS_HELP_STRING([--enable-message-catalog],[enable X/Open message catalog support])],
+  [enable_message_catalog=$enableval], [enable_message_catalog=no])
 
 AC_ARG_ENABLE([printing],
-	[AS_HELP_STRING(
-		[--enable-printing],
-		[enable printing support])
-	], [enable_printing=$enableval], [enable_printing=no]
-)
-
+	[AS_HELP_STRING([--enable-printing],[enable printing support])],
+  [enable_printing=$enableval],[enable_printing=no])
 AS_IF([test "x$enable_printing" == "xyes"],[
 	PKG_CHECK_MODULES([XP], [xp], [], [enable_printing=no])
-	AS_IF([test "x$enable_printing" == "xno"], [AC_MSG_FAILURE([libXp not found])])
-])
+	AS_IF([test "x$enable_printing" == "xno"], [AC_MSG_FAILURE([libXp not found])])])
 
-# case "$host_os" in
-#     freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";
-#         LDFLAGS="$LDFLAGS -L/usr/local/lib";;
-#     cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
-#     solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
-#         if test x$enable_utf8 = x
-#         then
-#             enable_utf8="no"
-#         fi;
-#         if test x$enable_xft = x
-#         then
-#             enable_xft="no"
-#         fi;;
-# esac
-
-AX_FIND_XFT
-# AC_IMAGE_SUPPORT
-
-dnl Tests
 AC_ARG_ENABLE([tests],
-	[AS_HELP_STRING([--enable-tests], [Enable automated tests])],
-	[enable_tests=$enableval], [enable_tests=no])
+	[AS_HELP_STRING([--enable-tests],[enable automated tests])],
+	[enable_tests=$enableval],[enable_tests=no])
 AS_IF([test "x$enable_tests" == "xyes"],[
 	AC_PROG_AWK
 	AC_REQUIRE_AUX_FILE([tap-driver.sh])
-	PKG_CHECK_MODULES([CHECK], [check])
-])
+	PKG_CHECK_MODULES([CHECK], [check])])
 
-dnl Debug builds (assert, etc.)
-AS_IF([test "x$enable_debug" == "xyes"],[
-	AX_APPEND_COMPILE_FLAGS([-Og -ggdb])
-	AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])
-],[
-	AX_APPEND_COMPILE_FLAGS([-O2])
-	AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])
-])
+AC_ARG_ENABLE([debug],
+  [AS_HELP_STRING([--enable-debug],[enable debugging support])],
+  [enable_debug=$enableval],[enable_debug=no])
+AS_IF([test "x$enable_debug" == "xyes"],
+  [AX_APPEND_COMPILE_FLAGS([-Og -ggdb]) AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])],
+  [AX_APPEND_COMPILE_FLAGS([-O2])       AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])])
 
 dnl Compiler flags
 XM_CFLAGS
@@ -236,59 +141,53 @@ AC_SUBST([XM_VERSION], [XM_VERSION])
 
 dnl Automake substitutions
 AC_SUBST([ABI_VERSION], [ABI_VERSION])
-AM_CONDITIONAL(MessageCatalog, test "x$enable_message_catalog" = "xyes")
-AM_CONDITIONAL(XM_PRINTING,  test "x$enable_printing" == "xyes")
-AM_CONDITIONAL(XM_WITH_XMU,  test "x$XMU_LIBS" != "x")
-AM_CONDITIONAL(XM_WITH_JPEG, test "x$with_jpeg" == "xyes")
-AM_CONDITIONAL(XM_WITH_PNG,  test "x$with_png"  == "xyes")
-AM_CONDITIONAL(XM_MSGCAT,    test "x$enable_message_catalog" == "xyes")
+AM_CONDITIONAL([XM_PRINTING],  test "x$enable_printing" == "xyes")
+AM_CONDITIONAL([XM_WITH_JPEG], test "x$with_jpeg" == "xyes")
+AM_CONDITIONAL([XM_WITH_PNG],  test "x$with_png"  == "xyes")
+AM_CONDITIONAL([XM_MSGCAT],    test "x$enable_message_catalog" == "xyes")
 
 dnl Substitutions for lib/Xm/Xm.h
 AC_SUBST([XM_MAJOR], [XM_MAJOR])
 AC_SUBST([XM_MINOR], [XM_MINOR])
 AC_SUBST([XM_PATCH], [XM_PATCH])
 
-AC_DEFINE_UNQUOTED(XM_PRINTING,
-	$(test "x$enable_printing" != "xyes"; echo $?),
-	[1 if Motif was built with printing support]
-)
-
-AC_DEFINE_UNQUOTED(XM_WITH_JPEG,
+AC_DEFINE_UNQUOTED([XM_WITH_JPEG],
 	$(test "x$with_jpeg" != "xyes" ; echo $?),
-	[1 if Motif was built with JPEG support]
-)
+	[1 if Motif was built with JPEG support])
 
-AC_DEFINE_UNQUOTED(XM_WITH_PNG,
+AC_DEFINE_UNQUOTED([XM_WITH_PNG],
 	$(test "x$with_png"  != "xyes" ; echo $?),
-	[1 if Motif was built with PNG support]
-)
+	[1 if Motif was built with PNG support])
 
-AC_DEFINE_UNQUOTED(XM_UTF8,
+AC_DEFINE_UNQUOTED([XM_UTF8],
 	$(test "x$enable_utf8" != "xyes"; echo $?),
-	[1 if Motif was built with UTF8 Support]
-)
+	[1 if Motif was built with UTF8 Support])
 
-AC_DEFINE_UNQUOTED(NO_MESSAGE_CATALOG,
-	$(test "x$enable_message_catalog" = "xyes" ; echo $?),
-	[0 if X/Open message catalog support is enabled]
-)
+AC_DEFINE_UNQUOTED([USE_XFT],
+	$(test "x\$pkg_cv_XFT_LIBS"  == "x" ; echo $?),
+	[1 if Motif ws built with Xft support])
+
+AC_DEFINE_UNQUOTED([XM_PRINTING],
+	$(test "x$enable_printing" != "xyes"; echo $?),
+	[1 if Motif was built with printing support])
+
+AC_DEFINE_UNQUOTED([XM_MSGCAT],
+	$(test "x$enable_message_catalog" != "xyes" ; echo $?),
+	[1 if X/Open message catalog support is enabled])
 
 dnl Defines/substitutions for mwm
-AC_DEFINE(NO_OL_COMPAT, 1, "No OL Compatability")
-AC_SUBST(CDE_INSTALLATION_TOP, "\${prefix}/dt")
-AC_SUBST(CDE_CONFIGURATION_TOP, "\${prefix}/etc/dt")
-AC_SUBST(MWMRCDIR, "${libdir}/X11")
+AC_DEFINE([NO_OL_COMPAT], 1, "No OL Compatability")
+AC_SUBST([CDE_INSTALLATION_TOP], "\${prefix}/dt")
+AC_SUBST([CDE_CONFIGURATION_TOP], "\${prefix}/etc/dt")
+AC_SUBST([MWMRCDIR], "${sysconfdir}/X11")
 
 dnl lib/Xm/Xmos.c
-AC_SUBST(LIBDIR,  "${libdir}/X11")
-AC_SUBST(INCDIR,  "${includedir}/X11")
-AC_SUBST(DATADIR, "${datadir}")
+AC_SUBST([INCDIR], "${includedir}/X11")
+AC_SUBST([LIBDIR], "${libdir}/X11")
+AC_SUBST([DATADIR], "${datadir}")
 
 dnl lib/Xm/VirtKeys.c
-AC_SUBST(XMBINDDIR_FALLBACK, "${libdir}/X11/bindings")
-
-dnl config/*.cf and tests
-AC_SUBST(RM, "rm -f")
+AC_SUBST([XMBINDDIR_FALLBACK], "${datadir}/X11/bindings")
 
 AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
 AC_CONFIG_FILES([Makefile \
@@ -319,33 +218,40 @@ doc/man/man5/Makefile \
 tools/Makefile \
 tools/wml/Makefile \
 lib/Xm/xmstring.list \
-tests/Makefile \
-tests/auto/Makefile \
-tests/auto/lib/Makefile \
-tests/auto/lib/common/Makefile \
-tests/auto/lib/Create/Makefile \
-tests/auto/lib/Create/geometry/Makefile \
-tests/auto/lib/Create/instances/Makefile \
-tests/auto/lib/Create/other/Makefile \
-tests/auto/lib/Create/resources/Makefile \
-tests/auto/lib/Create/specific/Makefile \
-tests/auto/lib/Create/widgets/Makefile \
-tests/auto/lib/Util/Makefile \
-tests/auto/lib/Synth/Makefile \
-tests/auto/lib/Synth/events/Makefile \
-tests/auto/lib/Synth/info/Makefile \
-tests/auto/lib/Synth/other/Makefile \
-tests/auto/lib/Synth/primitives/Makefile \
-tests/auto/lib/Visual/Makefile \
-tests/auto/lib/Script/Makefile \
-tests/environment/Makefile \
-tests/General/Makefile \
-tests/XmString/Makefile
 ])
 
-# Conditionally configure demos
-if test "$enable_demos" = "yes"
-then
+dnl Conditionally configure tests
+if test "$enable_tests" = "yes"; then
+  AC_CONFIG_FILES([tests/Makefile \
+  tests/auto/Makefile \
+  tests/auto/lib/Makefile \
+  tests/auto/lib/common/Makefile \
+  tests/auto/lib/Create/Makefile \
+  tests/auto/lib/Create/geometry/Makefile \
+  tests/auto/lib/Create/instances/Makefile \
+  tests/auto/lib/Create/other/Makefile \
+  tests/auto/lib/Create/resources/Makefile \
+  tests/auto/lib/Create/specific/Makefile \
+  tests/auto/lib/Create/widgets/Makefile \
+  tests/auto/lib/Util/Makefile \
+  tests/auto/lib/Synth/Makefile \
+  tests/auto/lib/Synth/events/Makefile \
+  tests/auto/lib/Synth/info/Makefile \
+  tests/auto/lib/Synth/other/Makefile \
+  tests/auto/lib/Synth/primitives/Makefile \
+  tests/auto/lib/Visual/Makefile \
+  tests/auto/lib/Script/Makefile \
+  tests/environment/Makefile \
+  tests/General/Makefile \
+  tests/XmString/Makefile \
+  ])
+  XM_WITH_TESTS=tests
+else
+  XM_WITH_TESTS=
+fi
+
+dnl Conditionally configure demos
+if test "$enable_demos" = "yes"; then
   AC_CONFIG_FILES([demos/Makefile \
   demos/lib/Makefile \
   demos/lib/Xmd/Makefile \
@@ -431,21 +337,19 @@ then
   demos/doc/programGuide/ch17/simple_drop/Makefile \
   demos/doc/programGuide/ch17/simple_drag/Makefile \
   ])
-  XM_WTH_DEMOS=demos
+  XM_WITH_DEMOS=demos
 else
-  XM_WTH_DEMOS=
+  XM_WITH_DEMOS=
 fi
-AC_SUBST(XM_WTH_DEMOS)
 
 XM_ADD_FEATURE([XM],[png],[${with_png}])
 XM_ADD_FEATURE([XM],[jpg],[${with_jpeg}])
 XM_ADD_FEATURE([XM],[xft],[${with_xft}])
 XM_ADD_FEATURE([XM],[utf8],[${enable_utf8}])
 XM_ADD_FEATURE([XM],[print],[${enable_printing}])
-
+XM_ADD_FEATURE([XM],[msg_catalog],[${enable_message_catalog}])
 XM_ADD_FEATURE([BUILD],[demos],[${enable_demos}])
 XM_ADD_FEATURE([BUILD],[tests],[${enable_tests}])
-
 XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
 
 AC_OUTPUT
@@ -467,5 +371,9 @@ echo ""
 echo "Compilation......: make"
 echo "  CPPFLAGS.......: $CPPFLAGS"
 echo "  CFLAGS.........: $CFLAGS"
+echo "   X_CFLAGS......: $X_CFLAGS"
+echo "   XFT_CFLAGS....: $XFT_CFLAGS"
 echo "  LDFLAGS........: $LIBS"
+echo "   X_LIBS........: $X_LIBS"
+echo "   XFT_LIBS......: $XFT_LIBS"
 echo ""

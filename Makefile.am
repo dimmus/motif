@@ -49,8 +49,8 @@ SUBDIRS	= bindings \
             tools \
             clients \
             doc \
-            tests \
-            $(XM_WTH_DEMOS)
+            ${XM_WITH_TESTS} \
+            $(XM_WITH_DEMOS)
 
 format:
 	git ls-files 'lib/Xm/*.[ch]' 'lib/Xm/*.cc' | xargs clang-format -i -style=file
