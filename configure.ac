@@ -60,26 +60,6 @@ AC_CHECK_FUNCS([getcwd getwd iconv nanosleep putenv regcomp regex strcasecmp str
 AC_DEFINE([HAVE_SYS_POLL_H])
 AC_DEFINE([HAVE_SYS_TIME_H])
 
-if test x$GCC = xyes; then
-    CFLAGS="$CFLAGS -fno-strict-aliasing"
-    # CFLAGS="$CFLAGS -std=gnu99"
-    if test ` $CC -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4" ; then
-        CFLAGS="$CFLAGS -fno-tree-ter"
-    fi
-fi
-# case "$host_os" in
-#     freebsd*) CFLAGS="$CFLAGS -DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI";
-#         LDFLAGS="$LDFLAGS -L/usr/local/lib";;
-#     cygwin*) CFLAGS="$CFLAGS -DXNO_MTSAFE_DIRENTDAPI";;
-#     solaris* | sunos*) X_LIBS="$X_LIBS -L/usr/X/lib" &&
-#         if test x$enable_utf8 = x; then
-#             enable_utf8="no"
-#         fi;
-#         if test x$enable_xft = x; then
-#             enable_xft="no"
-#         fi;;
-# esac
-
 AC_ARG_WITH([jpeg],
 	[AS_HELP_STRING([--with-jpeg], [Enable jpeg support])],
 	[with_jpeg=$withval], [with_jpeg=yes])
@@ -249,6 +229,7 @@ if test "$enable_tests" = "yes"; then
 else
   XM_WITH_TESTS=
 fi
+AC_SUBST([XM_WITH_TESTS])
 
 dnl Conditionally configure demos
 if test "$enable_demos" = "yes"; then
@@ -341,6 +322,7 @@ if test "$enable_demos" = "yes"; then
 else
   XM_WITH_DEMOS=
 fi
+AC_SUBST([XM_WITH_DEMOS])
 
 XM_ADD_FEATURE([XM],[png],[${with_png}])
 XM_ADD_FEATURE([XM],[jpg],[${with_jpeg}])

@@ -48,6 +48,18 @@ AC_DEFUN([XM_CFLAGS],[
 		])
 	],[	dnl Assume GCC
 		ax_cc_gcov_command="gcov"
+		
+		dnl Add GCC-specific flags
+		AX_APPEND_COMPILE_FLAGS([-fno-strict-aliasing])
+		
+		dnl Check GCC version and add version-specific flags
+		AS_IF([test x$GCC = xyes], [
+			dnl Check if GCC version is 4.x
+			AS_IF([test `$CC -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4"], [
+				AX_APPEND_COMPILE_FLAGS([-fno-tree-ter])
+			])
+		])
+		
 		AX_APPEND_COMPILE_FLAGS([ dnl
 			-Wall dnl
 			-Wshadow dnl
@@ -73,6 +85,39 @@ AC_DEFUN([XM_CFLAGS],[
 			-Wno-int-to-pointer-cast dnl
 		])
 	])
+
+	dnl Add host-specific flags for different operating systems
+	case "$host_os" in
+		freebsd*)
+			dnl FreeBSD specific flags
+			AX_APPEND_COMPILE_FLAGS([-DCSRG_BASED -DXNO_MTSAFE_API -DXNO_MTSAFE_PWDAPI])
+			dnl Add library path for FreeBSD
+			AS_IF([test -d "/usr/local/lib"], [
+				LDFLAGS="$LDFLAGS -L/usr/local/lib"
+			])
+			;;
+		netbsd*|openbsd*)
+			dnl NetBSD and OpenBSD specific flags
+			AX_APPEND_COMPILE_FLAGS([-DCSRG_BASED])
+			;;
+		cygwin*)
+			dnl Cygwin specific flags
+			AX_APPEND_COMPILE_FLAGS([-DXNO_MTSAFE_DIRENTDAPI])
+			;;
+		solaris*|sunos*)
+			dnl Solaris/SunOS specific flags
+			AS_IF([test -d "/usr/X/lib"], [
+				X_LIBS="$X_LIBS -L/usr/X/lib"
+			])
+			;;
+		darwin*)
+			dnl macOS specific flags
+			AX_APPEND_COMPILE_FLAGS([-D_DARWIN_C_SOURCE])
+			;;
+		*)
+			dnl Default case - no additional flags
+			;;
+	esac
 
 	AC_SUBST([ax_cc_gcov_command])
 	AC_LANG_POP([C])
