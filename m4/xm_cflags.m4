@@ -15,7 +15,7 @@ dnl This macro exports ax_cc_gcov_command as the proper gcov command
 dnl to invoke (i.e. llvm-cov gcov on clang.)
 dnl
 
-AC_DEFUN([AX_CFLAGS],[
+AC_DEFUN([XM_CFLAGS],[
 	AX_REQUIRE_DEFINED([AX_APPEND_COMPILE_FLAGS])
 	AX_REQUIRE_DEFINED([AX_CHECK_COMPILE_FLAG])
 	AC_LANG_PUSH([C])
@@ -69,6 +69,8 @@ AC_DEFUN([AX_CFLAGS],[
 			-Wno-cast-qual dnl
 			-Wno-redundant-decls dnl
 			-Wno-bad-function-cast dnl
+			-Wno-pointer-to-int-cast dnl
+			-Wno-int-to-pointer-cast dnl
 		])
 	])
 
