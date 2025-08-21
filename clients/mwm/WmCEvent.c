@@ -2596,6 +2596,7 @@ void HandleClientMessage (ClientData *pCD, XClientMessageEvent *clientEvent)
 } /* END OF FUNCTION HandleClientMessage */
 
 
+
 /*************************************<->*************************************
  *
  *  HandleCShapeNotify (pCD, shapeEvent)

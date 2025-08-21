@@ -24,7 +24,7 @@
  * Motif Release 1.2.3
 */
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 extern void InitBuiltinSystemMenu(void);
 #endif
 extern void GetAppearanceGCs (WmScreenData *pSD, Pixel fg, Pixel bg, XFontStruct *font, Pixmap bg_pixmap, Pixel ts_color, Pixmap ts_pixmap, Pixel bs_color, Pixmap bs_pixmap, GC *pGC, GC *ptsGC, GC *pbsGC);
@@ -56,7 +56,7 @@ extern String ResCat (String s1, String s2, String s3, String s4);
 void CheckForNoDither (AppearanceData *pAD);
 #endif /* WSM */
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 extern char *builtinSystemMenu;
 #else
 extern char builtinSystemMenu[];

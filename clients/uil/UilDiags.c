@@ -273,7 +273,7 @@ void	diag_issue_diagnostic
 
     va_start(ap, l_start_column);
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
     vsnprintf( msg_buffer, sizeof(msg_buffer),
 	      catgets(uil_catd, UIL_SET1, msg_cat_table[ message_number ],
 		      diag_rz_msg_table[ message_number ].ac_text),
@@ -297,7 +297,7 @@ void	diag_issue_diagnostic
 	    **	create the location line line
 	    */
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	    sprintf( loc_buffer,
 		     catgets(uil_catd, UIL_SET_MISC,
 			     UIL_MISC_0, "\t\t line: %d  file: %s"),
@@ -351,7 +351,7 @@ void	diag_issue_diagnostic
 	    */
 
 	    if (l_start_column != diag_k_no_column)
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	      sprintf(loc_buffer,
 		      catgets(uil_catd, UIL_SET_MISC,
 			      UIL_MISC_1,
@@ -367,7 +367,7 @@ void	diag_issue_diagnostic
 		      src_get_file_name( az_src_rec ) );
 #endif
 	    else
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 		sprintf( loc_buffer, catgets(uil_catd, UIL_SET_MISC,
 					     UIL_MISC_0,
 					     "\t\t line: %d  file: %s"),
@@ -542,7 +542,7 @@ int XmConst   b_tag;
 	return "section";
 
     default:
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	return (catgets(uil_catd, UIL_VALUES, UIL_VAL_1, "** unknown **"));
 #else
 	return "** unknown **";
@@ -588,14 +588,14 @@ int XmConst   b_type;
 
 {
     if ( b_type <= sym_k_error_object )
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	return (catgets(uil_catd, UIL_VALUES, UIL_VAL_0, "** error **"));
 #else
 	return "** error **";
 #endif
     if ( b_type <= uil_max_object )
 	return uil_widget_names[b_type];
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
     return (catgets(uil_catd, UIL_VALUES, UIL_VAL_1, "** unknown **"));
 #else
     return "** unknown **";
@@ -641,14 +641,14 @@ int XmConst   b_type;
 {
 
     if ( b_type <= sym_k_error_value )
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	return (catgets(uil_catd, UIL_VALUES, UIL_VAL_0, "** error **"));
 #else
 	return "** error **";
 #endif
     if ( b_type <= sym_k_max_value )
 	return uil_datatype_names[b_type];
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
     return (catgets(uil_catd, UIL_VALUES, UIL_VAL_1, "** unknown **"));
 #else
     return "** unknown **";
@@ -695,14 +695,14 @@ int XmConst   b_type;
 {
 
     if ( b_type <= sym_k_error_charset )
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	return (catgets(uil_catd, UIL_VALUES, UIL_VAL_0, "** error **"));
 #else
 	return "** error **";
 #endif
     if ( b_type <= uil_max_charset )
 	return uil_charset_names[b_type];
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
     return (catgets(uil_catd, UIL_VALUES, UIL_VAL_1, "** unknown **"));
 #else
     return "** unknown **";
@@ -1082,7 +1082,7 @@ XmConst char  *loc_buffer;
 
     /* print message line */
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
     fprintf ( stderr, "%s%s\n",
 	      catgets(uil_catd, UIL_SET_MISC,
 		      diag_rz_msg_table[ message_number ].l_severity,

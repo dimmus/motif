@@ -91,15 +91,6 @@ typedef	struct	_out_queue_type
 
 /*
 **
-**  EXTERNAL VARIABLE DECLARATIONS
-**
-**/
-
-char	*_get_memory();
-void	_free_memory();
-
-/*
-**
 **  GLOBAL VARIABLE DECLARATIONS
 **
 **/
@@ -251,7 +242,7 @@ void	sem_output_uid_file()
     */
 
     urm_status =
-    	UrmGetResourceContext ( _get_memory, _free_memory,
+    	UrmGetResourceContext ( XtMalloc, XtFree,
 	initial_context_size, &out_az_context );
     if( urm_status != MrmSUCCESS)
 	issue_urm_error( "allocating context" );
@@ -515,7 +506,7 @@ sym_entry_type	*sym_entry;
 	{
 	    src_az_avail_source_buffer =
 		(src_source_buffer_type *)
-		    _get_memory( sizeof( src_source_buffer_type ) );
+		    XtMalloc( sizeof( src_source_buffer_type ) );
 	    src_az_avail_source_buffer->az_prior_source_buffer = NULL;
 	}
 
@@ -627,67 +618,63 @@ void	out_emit_widget( widget_entry )
 sym_widget_entry_type	*widget_entry;
 
 {
-	char				buffer[32];
-	char				*widget_name;
-	char				*widget_class_name;
-	unsigned int			widget_class;
-	unsigned long			widget_variety;
-	int				arg_count;
-	int				related_arg_count;
-	int				arglist_index;
-	sym_list_entry_type		*list_entry;
-	MrmCode				access_code;
-	status				urm_status;
-	MrmCode				subtree_code;
-	sym_control_entry_type		*subtree_control;
+
+char				buffer[32];
+char				*widget_name;
+char				*widget_class_name;
+unsigned int			widget_class;
+unsigned long			widget_variety;
+int				arg_count;
+int				related_arg_count;
+int				arglist_index;
+sym_list_entry_type		*list_entry;
+MrmCode				access_code;
+status				urm_status;
+MrmCode				subtree_code;
+sym_control_entry_type		*subtree_control;
 
 
-	_assert( (widget_entry->header.b_tag == sym_k_widget_entry) ||
-		(widget_entry->header.b_tag == sym_k_gadget_entry) ||
-		(widget_entry->header.b_tag == sym_k_child_entry),
-		"object to be emitted is not an object" );
+_assert( (widget_entry->header.b_tag == sym_k_widget_entry) ||
+	 (widget_entry->header.b_tag == sym_k_gadget_entry) ||
+	 (widget_entry->header.b_tag == sym_k_child_entry),
+	 "object to be emitted is not an object" );
 
-	_assert( (widget_entry->obj_header.b_flags &
-		(sym_m_exported | sym_m_private)),
-		"object being emitted is not exported or private" );
+_assert( (widget_entry->obj_header.b_flags &
+	 (sym_m_exported | sym_m_private)),
+	 "object being emitted is not exported or private" );
 
-	if (widget_entry->header.b_tag == sym_k_child_entry)
-		widget_variety = UilMrmAutoChildVariety;
-	else
-		widget_variety = UilMrmWidgetVariety;
+if (widget_entry->header.b_tag == sym_k_child_entry)
+  widget_variety = UilMrmAutoChildVariety;
+else widget_variety = UilMrmWidgetVariety;
 
-	/*
-	* Each real widget needs a name.  Automatic children just get an
-	* empty string since the name is stored in the compression tables.
-	* For real widgets, we use the user provided name
-	* if there is one; otherwise widgetfile#-line#-col#
-	* For example, widget-1-341-111 was defined in file=1, line=341
-	* and column=11
-	*/
-	if (widget_variety == UilMrmAutoChildVariety)
-		widget_name = "";
-	else if (widget_entry->obj_header.az_name == NULL)
-	{
-		sprintf(buffer, "widget-%d-%d-%d",
-			widget_entry->header.az_src_rec->b_file_number,
-			widget_entry->header.az_src_rec->w_line_number,
-			widget_entry->header.b_src_pos);
-		widget_name = buffer;
-	}
-	else
-		widget_name = widget_entry->obj_header.az_name->c_text;
+/*
+* Each real widget needs a name.  Automatic children just get an
+* empty string since the name is stored in the compression tables.
+* For real widgets, we use the user provided name
+* if there is one; otherwise widgetfile#-line#-col#
+* For example, widget-1-341-111 was defined in file=1, line=341
+* and column=11
+*/
+if (widget_variety == UilMrmAutoChildVariety)
+  widget_name = "";
+else if (widget_entry->obj_header.az_name == NULL)
+  {
+    sprintf(buffer, "widget-%d-%d-%d",
+	    widget_entry->header.az_src_rec->b_file_number,
+	    widget_entry->header.az_src_rec->w_line_number,
+	    widget_entry->header.b_src_pos);
+    widget_name = buffer;
+  }
+else
+    widget_name = widget_entry->obj_header.az_name->c_text;
 
-	access_code = URMaPublic;
+access_code = URMaPublic;
+if (widget_entry->obj_header.b_flags & sym_m_private)
+    access_code = URMaPrivate;
 
-	if (widget_entry->obj_header.b_flags & sym_m_private)
-		access_code = URMaPrivate;
-
-	urm_status = UrmCWRInit (out_az_context, widget_name, access_code, FALSE);
-
-	if(urm_status != MrmSUCCESS)
-	{
-		issue_urm_error( "initializing context" );
-	}
+urm_status = UrmCWRInit (out_az_context, widget_name, access_code, FALSE);
+if( urm_status != MrmSUCCESS)
+    issue_urm_error( "initializing context" );
 
     /*
     **	Set the class of the widget.
@@ -705,8 +692,8 @@ sym_widget_entry_type	*widget_entry;
     */
     if ( widget_entry->header.b_type == uil_sym_user_defined_object )
 	{
-		widget_class_name =
-	    	widget_entry->az_create_proc->az_proc_def->obj_header.az_name->c_text;
+	widget_class_name =
+	    widget_entry->az_create_proc->az_proc_def->obj_header.az_name->c_text;
 	}
 
     /*
@@ -718,29 +705,29 @@ sym_widget_entry_type	*widget_entry;
     ** children issue a diagnostic.
     */
     subtree_code = uil_urm_subtree_resource[(int)widget_entry->header.b_type];
-    if (subtree_code != 0 )
+    if ( subtree_code != 0 )
 	{
-		int			    count;
+	int			    count;
 
-		list_entry = widget_entry->az_controls;
-		count = 0;
-		extract_subtree_control (list_entry, &subtree_control, &count);
-		switch ( count )
-		{
-			case 0:
-				break;
-			case 1:
-				arg_count += 1;
-				break;
-			default:
-				arg_count += 1;
-				diag_issue_diagnostic
-				(d_single_control,
-				_sar_source_pos2(subtree_control),
-				diag_object_text(widget_entry->header.b_type));
-				break;
-		}
-    }
+	list_entry = widget_entry->az_controls;
+	count = 0;
+	extract_subtree_control (list_entry, &subtree_control, &count);
+	switch ( count )
+	    {
+	    case 0:
+	        break;
+	    case 1:
+		arg_count += 1;
+		break;
+	    default:
+		arg_count += 1;
+	        diag_issue_diagnostic
+		    (d_single_control,
+		     _sar_source_pos2(subtree_control),
+		     diag_object_text(widget_entry->header.b_type));
+		break;
+	    }
+      }
 
 
     /*
@@ -748,8 +735,7 @@ sym_widget_entry_type	*widget_entry;
      */
     if (widget_variety == UilMrmAutoChildVariety)
       widget_class = uil_child_compr[(int)widget_entry->header.b_type];
-    else
-		widget_class = uil_widget_compr[(int)widget_entry->header.b_type];
+    else widget_class = uil_widget_compr[(int)widget_entry->header.b_type];
 
 
     /*
@@ -757,7 +743,7 @@ sym_widget_entry_type	*widget_entry;
      */
 
     if (widget_entry->header.b_type == uil_sym_user_defined_object)
-		widget_class = MrmwcUnknown;
+	widget_class = MrmwcUnknown;
 
     urm_status =
     UrmCWRSetClass( out_az_context,
@@ -765,7 +751,7 @@ sym_widget_entry_type	*widget_entry;
 		    widget_class_name,
 		    widget_variety );
     if( urm_status != MrmSUCCESS)
-		issue_urm_error( "setting class" );
+	issue_urm_error( "setting class" );
 
     /*
     **	Check the callback list for the creation reason and process it.
@@ -774,18 +760,17 @@ sym_widget_entry_type	*widget_entry;
     list_entry = widget_entry->az_callbacks;
     if (list_entry != NULL)
 	{
-		sym_callback_entry_type	    *callback_entry;
+	sym_callback_entry_type	    *callback_entry;
 
-		arg_count += compute_list_size (list_entry, sym_k_callback_entry);
-		callback_entry = NULL;
-		extract_create_callback (list_entry, &callback_entry);
-
-		if ( callback_entry != NULL )
-		{
-			arglist_index = 0;
-			emit_callback (callback_entry, &arglist_index, TRUE);
-			arg_count -= 1;
-		}
+	arg_count += compute_list_size (list_entry, sym_k_callback_entry);
+	callback_entry = NULL;
+	extract_create_callback (list_entry, &callback_entry);
+	if ( callback_entry != NULL )
+	    {
+	    arglist_index = 0;
+	    emit_callback (callback_entry, &arglist_index, TRUE);
+	    arg_count -= 1;
+	    }
 	}
 
     /*
@@ -794,63 +779,62 @@ sym_widget_entry_type	*widget_entry;
     */
 
     if (widget_entry->az_arguments != NULL)
-	{
-		arg_count += compute_list_size
-	    	(widget_entry->az_arguments, sym_k_argument_entry);
-	}
+	arg_count += compute_list_size
+	    (widget_entry->az_arguments, sym_k_argument_entry);
 
     if (arg_count > 0)
 	{
-		urm_status =
-		UrmCWRInitArglist( out_az_context, arg_count );
-		if( urm_status != MrmSUCCESS)
-			issue_urm_error( "initializing arglist" );
-		arglist_index = arg_count - 1;
+	urm_status =
+	UrmCWRInitArglist( out_az_context, arg_count );
+	if( urm_status != MrmSUCCESS)
+	    issue_urm_error( "initializing arglist" );
+	arglist_index = arg_count - 1;
 
-		/*
-		**	Process the callbacks, then the arguments
-		*/
-		process_all_callbacks
-			(widget_entry->az_callbacks, &arglist_index);
-		process_all_arguments
-			(widget_entry->az_arguments, &arglist_index, &related_arg_count);
+	/*
+	**	Process the callbacks, then the arguments
+	*/
+	process_all_callbacks
+	    (widget_entry->az_callbacks, &arglist_index);
+	process_all_arguments
+	    (widget_entry->az_arguments, &arglist_index, &related_arg_count);
 
-		/*
-		** Process a control which is to be entered as a subtree resource. Mark
-		** the control so it won't be processed again.
-		*/
-		if (subtree_control != NULL)
+	/*
+	** Process a control which is to be entered as a subtree resource. Mark
+	** the control so it won't be processed again.
+	*/
+	if (subtree_control != NULL)
 	    {
-			MrmCode	    widget_access;
-			MrmCode	    widget_form;
-			char	    *widget_index;
-			MrmResource_id  widget_id;
+	    MrmCode	    widget_access;
+	    MrmCode	    widget_form;
+	    char	    *widget_index;
+	    MrmResource_id  widget_id;
 
-			urm_status =
-			UrmCWRSetCompressedArgTag
-			(out_az_context, arglist_index,
-			uil_arg_compr[subtree_code], 0);
-			if( urm_status != MrmSUCCESS)
-			issue_urm_error( "setting compressed arg" );
+	    urm_status =
+	    UrmCWRSetCompressedArgTag
+		(out_az_context, arglist_index,
+		uil_arg_compr[subtree_code], 0);
+	    if( urm_status != MrmSUCCESS)
+		issue_urm_error( "setting compressed arg" );
 
-			widget_form =
-			ref_control( subtree_control,
-					&widget_access, &widget_index, &widget_id );
-			urm_status =
-			UrmCWRSetArgResourceRef
-				(out_az_context,
-				arglist_index,
-				widget_access,
-				URMgWidget,
-				RGMwrTypeSubTree,
-				widget_form,
-				widget_index,
-				widget_id );
-				if( urm_status != MrmSUCCESS)
-			issue_urm_error( "setting arg reference" );
-			subtree_control->header.b_tag = sym_k_error_entry;
+	    widget_form =
+		ref_control( subtree_control,
+			    &widget_access, &widget_index, &widget_id );
+	    urm_status =
+		UrmCWRSetArgResourceRef
+		    (out_az_context,
+		     arglist_index,
+		     widget_access,
+		     URMgWidget,
+		     RGMwrTypeSubTree,
+		     widget_form,
+		     widget_index,
+		     widget_id );
+    	    if( urm_status != MrmSUCCESS)
+		issue_urm_error( "setting arg reference" );
+	    subtree_control->header.b_tag = sym_k_error_entry;
 
-			arglist_index++;
+	    arglist_index++;
+
 	    }
 	}
 
@@ -862,16 +846,16 @@ sym_widget_entry_type	*widget_entry;
 
     if (list_entry != NULL)
 	{
-		int			    widget_index;
+	int			    widget_index;
 
-		/*
-		**  The list of controls is in reverse order.  To correct for
-		**  this, controls are placed in the list from bottom to top.
-		**  Thus widget_index represent the last slot in the list used.
-		*/
+	/*
+	**  The list of controls is in reverse order.  To correct for
+	**  this, controls are placed in the list from bottom to top.
+	**  Thus widget_index represent the last slot in the list used.
+	*/
 
-		widget_index = compute_list_size (list_entry, sym_k_control_entry);
-		if (widget_index > 0)
+	widget_index = compute_list_size (list_entry, sym_k_control_entry);
+	if (widget_index > 0)
 	    {
 	    urm_status =
 		UrmCWRInitChildren (out_az_context, widget_index );
@@ -886,7 +870,7 @@ sym_widget_entry_type	*widget_entry;
     */
 
     if (related_arg_count > 0)
-		UrmCWRSetExtraArgs( out_az_context, related_arg_count );
+	UrmCWRSetExtraArgs( out_az_context, related_arg_count );
 
     /*
     **	Emit the widget record to UID file
@@ -896,17 +880,20 @@ sym_widget_entry_type	*widget_entry;
 
     if (widget_entry->obj_header.az_name == NULL)
 	{
-		if (widget_entry->resource_id == 0 )
-		{
-			urm_status =
-			UrmIdbGetResourceId
-			( out_az_idbfile_id, &(widget_entry->resource_id) );
-			if( urm_status != MrmSUCCESS)
-			issue_urm_error( "obtaining resource id" );
-		}
+	if (widget_entry->resource_id == 0 )
+	    {
+	    urm_status =
+	    UrmIdbGetResourceId
+		( out_az_idbfile_id, &(widget_entry->resource_id) );
+	    if( urm_status != MrmSUCCESS)
+		issue_urm_error( "obtaining resource id" );
+	    }
 
-		urm_status =
-		UrmPutRIDWidget(out_az_idbfile_id, widget_entry->resource_id, out_az_context );
+        urm_status =
+	    UrmPutRIDWidget
+	    (out_az_idbfile_id,
+	     widget_entry->resource_id,
+	     out_az_context );
 	}
     else
         urm_status =
@@ -917,20 +904,20 @@ sym_widget_entry_type	*widget_entry;
 
     if( urm_status != MrmSUCCESS)
 	{
-		if (urm_status == MrmEOF)
-			diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
-						diag_k_no_column, Uil_current_file );
-		else
-			issue_urm_error( "emitting widget" );
+	if (urm_status == MrmEOF)
+	    diag_issue_diagnostic ( d_uid_write, diag_k_no_source,
+				    diag_k_no_column, Uil_current_file );
+	else
+	    issue_urm_error( "emitting widget" );
 	}
 
     if (Uil_cmd_z_command.v_show_machine_code)
 	{
-		save_widget_machine_code (widget_entry, out_az_context);
+	save_widget_machine_code (widget_entry, out_az_context);
 	}
 
     widget_entry->output_state = sym_k_emitted;
-}
+    }
 
 
 
@@ -1649,11 +1636,11 @@ sym_value_entry_type	*value_entry;
 	case sym_k_float_value:
 	case sym_k_reason_value:
 	case sym_k_argument_value:
-	    _move( buffer, &value_entry->value.l_integer, value_size );
+	    memmove( buffer, &value_entry->value.l_integer, value_size );
 	    break;
 
 	case sym_k_single_float_value:
-	    _move( buffer, &value_entry->value.single_float, value_size);
+	    memmove( buffer, &value_entry->value.single_float, value_size);
 	    break;
 
 	case sym_k_char_8_value:
@@ -1663,7 +1650,7 @@ sym_value_entry_type	*value_entry;
 	case sym_k_xbitmapfile_value:
 	case sym_k_keysym_value:
 	case sym_k_compound_string_value:
-	    _move( buffer, value_entry->value.c_value, value_size );
+	    memmove( buffer, value_entry->value.c_value, value_size );
 	    break;
 
 /* BEGIN OSF Fix CR 4859 */
@@ -1675,7 +1662,7 @@ sym_value_entry_type	*value_entry;
 
             wcharentry->wchar_item.count = value_size;
 
-            _move(wcharentry->wchar_item.bytes,
+            memmove(wcharentry->wchar_item.bytes,
                   value_entry->az_first_table_value->value.c_value, value_size);
             break;
           }
@@ -1730,7 +1717,7 @@ sym_value_entry_type	*value_entry;
 
 	    color_buffer->desc_type = URMColorDescTypeName;
 
-	    _move( color_buffer->desc.name,
+	    memmove( color_buffer->desc.name,
 		  value_entry->value.c_value,
 		  value_entry->w_length + 1 );
 
@@ -1803,7 +1790,7 @@ sym_value_entry_type	*value_entry;
 				      (unsigned char **)&(value_segment->value.c_value));
 		  XmStringFree(tmp_str);
 		  text_offset -= segment_size;
-		  _move(&(buffer[text_offset]),
+		  memmove(&(buffer[text_offset]),
 			value_segment->value.c_value, segment_size);
 		  index--;
 		  string_vector->item[index].text_item.offset = text_offset;
@@ -1839,7 +1826,7 @@ sym_value_entry_type	*value_entry;
 		segment_size = value_segment->w_length + 1;
 		buffer[text_offset-1] = '\0';
 		text_offset -= segment_size;
-		_move( &(buffer[text_offset]),
+		memmove( &(buffer[text_offset]),
 		      value_segment->value.c_value, segment_size - 1);
 		index--;
 		string_vector->item[index].text_item.offset = text_offset;
@@ -1952,7 +1939,7 @@ sym_value_entry_type	*value_entry;
 		buffer[offset - 1] = '\n';
 		segment_size = value_segment->w_length + 1;
 		offset -= segment_size;
-		_move( &(buffer[offset]),
+		memmove( &(buffer[offset]),
 		      value_segment->value.c_value, segment_size-1 );
 		}
 	    buffer[value_size - 1] = 0;
@@ -1975,8 +1962,8 @@ sym_value_entry_type	*value_entry;
 	    {
 	    RGMUnitsFloatPtr ufptr;
 
-	    ufptr = (RGMUnitsFloatPtr) buffer;
-	    *((double *)(&ufptr->value[0])) = value_entry->value.d_real;
+	    ufptr = (RGMUnitsFloatPtr)buffer;
+	    memcpy(ufptr->value, &value_entry->value.d_real, sizeof(double));
 	    ufptr->units = value_entry->b_arg_type;
 	    break;
 	    }
@@ -3244,7 +3231,7 @@ char			*buffer;
 		break;
 	    case URMrIndex:
 		desc->size = strlen( arg_index ) + 1;
-		_move( desc->key.index, arg_index, desc->size );
+		memmove( desc->key.index, arg_index, desc->size );
 		desc->size += sizeof( RGMResourceDesc ) -
 			      sizeof( MrmResource_id );
 		break;
@@ -3471,7 +3458,7 @@ char			*buffer;
 	break;
     case URMrIndex:
 	desc->size = strlen( arg_index ) + 1;
-	_move( desc->key.index, arg_index, desc->size );
+	memmove( desc->key.index, arg_index, desc->size );
 	desc->size += sizeof( RGMResourceDesc ) -
 		      sizeof( MrmResource_id );
 	break;
@@ -3883,7 +3870,7 @@ status	urm_status;
 	{
 	if (uil_arg_compr[i] != 0)
 	    {
-	    _move( &(arg_buffer[text_offset]),
+	    memmove( &(arg_buffer[text_offset]),
 		  uil_argument_toolkit_names[i],
 		  strlen(uil_argument_toolkit_names[i]) + 1);
 	    extern_arg_compr->entry[comp_code].stoffset = text_offset;
@@ -3896,7 +3883,7 @@ status	urm_status;
 	{
 	if (uil_reas_compr[i] != 0)
 	    {
-	    _move( &(arg_buffer[text_offset]),
+	    memmove( &(arg_buffer[text_offset]),
 		  uil_reason_toolkit_names[i],
 		  strlen(uil_reason_toolkit_names[i]) + 1);
 	    extern_arg_compr->entry[comp_code].stoffset =
@@ -3917,7 +3904,7 @@ status	urm_status;
 	      name = (uil_child_names[i] + strlen(AUTO_CHILD_PREFIX));
 	    else name = uil_child_names[i];
 
-	    _move( &(arg_buffer[text_offset]), name, strlen(name) + 1);
+	    memmove( &(arg_buffer[text_offset]), name, strlen(name) + 1);
 	    extern_arg_compr->entry[comp_code].stoffset = text_offset;
 	    text_offset += (strlen(name) + 1);
 	    comp_code++;
@@ -4021,7 +4008,7 @@ status	urm_status;
 	{
 	if (uil_widget_compr[i] != 0)
 	    {
-	    _move( &(class_buffer[text_offset]),
+	    memmove( &(class_buffer[text_offset]),
 	        uil_widget_funcs[i],
 	        strlen(uil_widget_funcs[i]) + 1);
 	    extern_class_compr->entry[comp_code].stoffset =

@@ -542,10 +542,10 @@ boolean			op2_temporary;
     new_str_entry->b_type = sym_k_char_8_value;
     new_str_entry->w_length = l1 + l2;
 
-    _move( new_str_entry->value.c_value,
+    memmove( new_str_entry->value.c_value,
 	   az_str1_entry->value.c_value, l1 );
 
-    _move( &new_str_entry->value.c_value[ l1 ],
+    memmove( &new_str_entry->value.c_value[ l1 ],
 	   az_str2_entry->value.c_value,
 	   l2+1 );
 
@@ -555,13 +555,13 @@ boolean			op2_temporary;
 
     if (op1_temporary)
 	{
-	_free_memory( az_str1_entry->value.c_value );
+	XtFree( az_str1_entry->value.c_value );
 	sem_free_node(( sym_entry_type *) az_str1_entry );
 	}
 
     if (op2_temporary)
 	{
-	_free_memory( az_str2_entry->value.c_value );
+	XtFree( az_str2_entry->value.c_value );
 	sem_free_node(( sym_entry_type *) az_str2_entry );
 	}
 

@@ -1769,7 +1769,7 @@ void ReManageDialog (WmScreenData *pSD, Widget dialogboxW)
     XMapWindow (DISPLAY, pCD->clientFrameWin);
     XtManageChild (dialogboxW);
 
-    if ((wmGD.keyboardFocusPolicy == KEYBOARD_FOCUS_EXPLICIT))
+    if (wmGD.keyboardFocusPolicy == KEYBOARD_FOCUS_EXPLICIT)
     {
 	Do_Focus_Key (pCD, GetTimestamp() , ALWAYS_SET_FOCUS);
     }
@@ -2986,7 +2986,6 @@ UnParentControls(
     }
 
 } /* END OF FUNCTION UnParentControl */
-
 
 
 /*************************************<->*************************************

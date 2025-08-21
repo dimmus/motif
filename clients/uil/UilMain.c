@@ -58,9 +58,7 @@ static char rcsid[] = "$XConsortium: UilMain.c /main/14 1996/06/03 15:49:20 pasc
 #ifdef OFF
 #undef OFF
 #endif
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#endif
 #include "UilDefI.h"
 #include <setjmp.h>
 
@@ -91,7 +89,7 @@ static void UilWrapup _ARGUMENTS((Uil_compile_desc_type *compile_desc));
 */
 
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 #include <nl_types.h>
 #if !defined(NL_CAT_LOCALE)
 #define NL_CAT_LOCALE	0
@@ -149,7 +147,7 @@ static unsigned	   doing_exit = 0;
 
 static void	common_main()
 {
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
   if (uil_catd == NULL)
     uil_catd = catopen("Uil", NL_CAT_LOCALE);
 #endif
@@ -393,7 +391,6 @@ static void	common_cleanup()
     return;
 }
 
-
 #ifdef CALLABLE
 /*
 **++
@@ -620,50 +617,4 @@ static void UilWrapup (compile_desc)
     Uil_sym_cleanup_storage (Uil_cmd_z_command.v_parse_tree!=1);
 
     }
-
 #endif	/* CALLABLE */
-
-#ifdef NO_MEMMOVE
-
-/*
-**++
-**  FUNCTIONAL DESCRIPTION:
-**
-**      This is a memmove function that explicitly handles
-**      overlapping memory areas.  Written in response to
-**      CR 4851.
-**
-**  FORMAL PARAMETERS:
-**
-**      same as memcpy
-**
-**  COMPLETION CODES:
-**
-**      same as memcpy
-**
-**  SIDE EFFECTS:
-**
-**--
-**/
-
-char *uil_mmove(s1, s2, n)
-char *s1, *s2;
-int n;
-{
-     char *temp;
-
-     if(s2 == s1)
-         return(s2);
-     if(s2 < s1 && s1 <= s2 + n){
-         if(temp = (char *)malloc(n)){
-             memcpy(temp, s2, n);
-             memcpy(s1, temp, n);
-             free(temp);
-             return(s1);
-         }
-         printf("uil_mmove: Memory allocation failed!\n");
-         exit(-1);
-     }
-     return((char *)memcpy(s1, s2, n));
-}
-#endif  /* NO_MEMMOVE */

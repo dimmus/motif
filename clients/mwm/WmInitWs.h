@@ -34,7 +34,7 @@ extern void MakeWmFunctionResources (WmScreenData *pSD);
 extern void MakeXorGC (WmScreenData *pSD);
 extern void CopyArgv (int argc, char *argv []);
 extern void InitScreenNames (void);
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 extern void InitNlsStrings( void ) ;
 #endif
 #ifdef WSM

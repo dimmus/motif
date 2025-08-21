@@ -11,18 +11,18 @@ libUil_la_LDFLAGS = -version-info @ABI_VERSION@
 UilParser.lo: UilParser.c
 	$(LTCOMPILE) -DCALLABLE -c UilParser.c
 
-libUil_la_LIBADD = UilParser.lo ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la -lXt
+libUil_la_LIBADD = UilParser.lo ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la
 
-uil_LDADD = libUil.la ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la -lXt
+uil_LDADD = ../../lib/Mrm/libMrm.la ../../lib/Xm/libXm.la $(X_LIBS)
 
 AM_CPPFLAGS = -DINCDIR=\"@INCDIR@\" \
-           -DLIBDIR=\"@LIBDIR@\" \
-           -I$(srcdir)/../../include \
-           -I$(srcdir)/../../lib \
-           -I$(srcdir)/../../tools/wml \
-           -I../../include \
-           -I../../lib \
-           -I../../tools/wml ${X_CFLAGS}
+              -DLIBDIR=\"@LIBDIR@\" \
+              -I$(srcdir)/../../include \
+              -I$(srcdir)/../../lib \
+              -I$(srcdir)/../../tools/wml \
+              -I../../include \
+              -I../../lib \
+              -I../../tools/wml ${X_CFLAGS}
 
 UilParser.c:
 	test -f UilParser.c || $(LN_S) $(srcdir)/UilMain.c UilParser.c
@@ -42,7 +42,7 @@ COMMON_SRC =	UilCmd.c	UilDiags.c	UilKeyTab.c	UilLexAna.c  \
 		UilLstMac.c	UilSemVal.c	UilSemCSet.c	UilDB.c
 
 SRCS =		$(COMMON_SRC)
-SRCS2 =		UilMain.c
+SRCS2 =		$(COMMON_SRC)	UilMain.c
 
 HEADERS_1 = 	Uil.h		UilSymGl.h	UilSymDef.h \
 		UilDef.h	XmAppl.uil
@@ -73,8 +73,7 @@ libUil_la_DEPENDENCIES = UilDBDef.h UilParser.lo
 UilDBDef.h:
 	$(LN_S) $(srcdir)/../../tools/wml/UilDBDef.h UilDBDef.h
 
-if MessageCatalog
-
+if XM_MSGCAT
 $(COMMON_SRC): $(CAT_FILES)
 
 CAT_FILES = Uil.cat UilMsgCatI.h
@@ -83,5 +82,4 @@ $(CAT_FILES): Uil.msg
 	$(mkinstalldirs) $(top_builddir)/localized/C/msg
 	$(top_builddir)/localized/util/mkcatdefs UilMsgCatI.h $(srcdir)/Uil.msg >$(top_builddir)/localized/C/msg/Uil.msg
 	gencat Uil.cat $(top_builddir)/localized/C/msg/Uil.msg
-
 endif

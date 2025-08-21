@@ -203,7 +203,7 @@ XmConst diag_rz_msg_entry diag_rz_msg_table[81] =
 	   { 1, msg80 },
         };
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 #include <nl_types.h>
 #include "UilMsgCatI.h"
 externalref nl_catd uil_catd;

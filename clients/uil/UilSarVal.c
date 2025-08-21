@@ -1625,7 +1625,7 @@ yystype	    *keyword_frame;
 				       _MOTIF_DEFAULT_LOCALE);
       break;
 
-    case XmSTRING_COMPONENT_CHARSET:
+    case XmSTRING_COMPONENT_TAG:
     case XmSTRING_COMPONENT_TEXT:
     case XmSTRING_COMPONENT_LOCALE_TEXT:
     case XmSTRING_COMPONENT_WIDECHAR_TEXT:
@@ -1643,7 +1643,7 @@ yystype	    *keyword_frame;
       else if ((value_frame->b_type != CHAR_8_LITERAL) &&
 	       (value_frame->b_type != LOC_STRING) &&
 	       ((value_frame->b_type != CHARSET_NAME) ||
-		(type != XmSTRING_COMPONENT_CHARSET)))
+		(type != XmSTRING_COMPONENT_TAG)))
 	diag_issue_diagnostic(d_arg_type,
 			      _sar_source_position(value_frame),
 			      tok_token_name_table[value_frame->b_type],
@@ -2375,16 +2375,16 @@ int	    value_type;
 	(length > 0))
 	{
 	value_entry->value.c_value = (char *) XtCalloc(1,length);
-	_move( value_entry->value.c_value, value, length );
+	memmove( value_entry->value.c_value, value, length );
 	}
     else if (value_type == sym_k_compound_string_value  && (length > 0))
       {
 	value_entry->value.xms_value = (XmString) XtCalloc(1,length);
-	_move( value_entry->value.xms_value, value, length );
+	memmove( value_entry->value.xms_value, value, length );
       }
     else
 	if ( length > 0 )
-	    _move( &(value_entry->value.c_value), value, length );
+	    memmove( &(value_entry->value.c_value), value, length );
 
     /* For enumerations which accept boolean values */
     if (value_type == sym_k_bool_value)
@@ -2457,7 +2457,7 @@ XmConst yystype	    *semi_frame;
 
     value_entry = sem_create_value_entry ( ptr, len, sym_k_identifier_value );
 
-    _move (value_entry->value.c_value, ptr, len);
+    memmove (value_entry->value.c_value, ptr, len);
 
     value_entry->obj_header.b_flags |= sym_m_private;
 

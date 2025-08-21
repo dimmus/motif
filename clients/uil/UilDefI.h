@@ -38,12 +38,13 @@
 #ifndef UilDefI_h
 #define UilDefI_h
 
-
 /*
 **
 **  INCLUDE FILES
 **
 **/
+#include <string.h>
+#include <X11/Intrinsic.h>
 
 #define X_INCLUDE_TIME_H
 #define XOS_USE_XT_LOCKING
@@ -182,53 +183,6 @@ typedef int boolean;
 #define _success( __status )	\
 	((__status & 1)==1)
 
-
-/*
-**
-**  Memory allocation definitions
-**
-*/
-
-#define _get_memory XtMalloc
-
-#define _free_memory XtFree
-
-/*
-**
-**  Move macro
-**
-*/
-
-#ifdef NO_MEMMOVE
-/* For fixing the bug CR 4581 */
-extern char* uil_mmove(char*, char*, int);
-
-#define _move uil_mmove
-#else
-#define _move memmove
-#endif /* NO_MEMMOVE */
-
-/*
-**
-**  Compare macro
-**
-*/
-
-#define _compare strcmp
-
-/*
-**
-**  Fill macro
-**
-*/
-
-#define _fill( __string, __char, __len )	\
-    {						\
-      register int i = __len; 			\
-      while (--i >= 0)				\
-	(__string)[i] = __char;			\
-    }
-
 /*
 **
 **  Index macro
@@ -263,7 +217,7 @@ extern char* uil_mmove(char*, char*, int);
 #include "UilIODef.h"
 #include "UilDiagDef.h"
 #include "UilSarDef.h"
-#if defined(linux) || defined(__APPLE__)
+#if defined(linux) || defined(__APPLE__) || defined(sun)
 #define YYSTYPE yystype
 #endif
 #include "UilLexPars.h"

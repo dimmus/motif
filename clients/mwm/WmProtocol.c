@@ -57,7 +57,7 @@ static char rcsid[] = "$TOG: WmProtocol.c /main/8 1997/06/18 17:31:34 samborn $"
 #include "WmPanelP.h"
 #endif /* PANELIST */
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 # include "WmCmd.h"
 # include "WmDebug.h"
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
@@ -83,7 +83,7 @@ static void wmq_lose (Widget w, Atom *pSelection);
 static void wmq_bump_xids(void);
 #endif /* NO_WMQUERY */
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 static void    OwnWMSelections      (Time timestamp);
 static Boolean WMiConvert           (Widget, Atom, Atom,
 				     XtPointer, unsigned long, int, Atom *,
@@ -126,7 +126,7 @@ int curXids = 0;
 void SetupWmICCC (void)
 {
     enum {
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
       	   XA_TARGETS, XA_MULTIPLE, XA_TIMESTAMP,
 #endif
 	   XA_WM_STATE, XA_WM_PROTOCOLS, XA_WM_CHANGE_STATE,
@@ -137,7 +137,7 @@ void SetupWmICCC (void)
 	   XA_MOTIF_WM_CLIENT_WINDOW, XA_MOTIF_WM_POINTER_WINDOW,
 	   XA_MOTIF_WM_ALL_CLIENTS,
 #endif
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 	   XA_MOTIF_WM_DEFINE_COMMAND, XA_MOTIF_WM_INCLUDE_COMMAND,
 	   XA_MOTIF_WM_REMOVE_COMMAND, XA_MOTIF_WM_ENABLE_COMMAND,
 	   XA_MOTIF_WM_DISABLE_COMMAND, XA_MOTIF_WM_RENAME_COMMAND,
@@ -147,7 +147,7 @@ void SetupWmICCC (void)
 	   XA_COMPOUND_TEXT, NUM_ATOMS };
 
     static char *atom_names[] = {
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
       	   _XA_TARGETS, _XA_MULTIPLE, _XA_TIMESTAMP,
 #endif
 	   _XA_WM_STATE, _XA_WM_PROTOCOLS, _XA_WM_CHANGE_STATE,
@@ -163,7 +163,7 @@ void SetupWmICCC (void)
 	   "_MOTIF_WM_ALL_CLIENTS"
 # endif
 #endif
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 	   _XA_MOTIF_WM_DEFINE_COMMAND, _XA_MOTIF_WM_INCLUDE_COMMAND,
 	   _XA_MOTIF_WM_REMOVE_COMMAND, _XA_MOTIF_WM_ENABLE_COMMAND,
 	   _XA_MOTIF_WM_DISABLE_COMMAND, _XA_MOTIF_WM_RENAME_COMMAND,
@@ -184,7 +184,7 @@ void SetupWmICCC (void)
     XInternAtoms(DISPLAY, atom_names, XtNumber(atom_names), False, atoms);
 
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     wmGD.xa_TARGETS			= atoms[XA_TARGETS];
 
     wmGD.xa_MULTIPLE			= atoms[XA_MULTIPLE];
@@ -203,7 +203,7 @@ void SetupWmICCC (void)
     wmGD.xa_MWM_MESSAGES		= atoms[XA_MWM_MESSAGES];
     wmGD.xa_MWM_OFFSET			= atoms[XA_MOTIF_WM_OFFSET];
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     /* wm query targets */
     wmGD._MOTIF_WM_CLIENT_WINDOW  = atoms[XA_MOTIF_WM_CLIENT_WINDOW];
     wmGD._MOTIF_WM_POINTER_WINDOW = atoms[XA_MOTIF_WM_POINTER_WINDOW];
@@ -224,7 +224,7 @@ void SetupWmICCC (void)
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     /*
      * Assert ownership of the WINDOW_MANAGER selection
      * on each screen that the window manager controls.
@@ -1155,7 +1155,7 @@ wmq_bump_xids ( void )
 
 
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
  *  static void OwnWMSelections ()

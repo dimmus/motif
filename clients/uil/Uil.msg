@@ -32,7 +32,7 @@ UIL_27 %s %s already specified for this %s %s
 UIL_28 %s item not allowed in %s %s
 UIL_29 compilation terminated - please fix previous errors
 UIL_30 internal error - please submit defect report
-UIL_31
+UIL_31  
 UIL_32 %s missing following \"%s\" option
 UIL_33 error opening listing file: %s
 UIL_34 error writing to listing file: %s
@@ -89,9 +89,9 @@ UIL_VAL_1 ** unknown **
 
 $set UIL_SET_MISC
 
-UIL_INF Info:
-UIL_WAR Warning:
-UIL_ERR Error:
-UIL_SEV Severe:
+UIL_INF Info: 
+UIL_WAR Warning: 
+UIL_ERR Error: 
+UIL_SEV Severe: 
 UIL_MISC_0 \t\t line: %d  file: %s
 UIL_MISC_1 \t\t line: %d  position: %d  file: %s

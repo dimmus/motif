@@ -27,7 +27,6 @@
 #include <config.h>
 #endif
 
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $"
@@ -40,20 +39,10 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
 
 #include "WmGlobal.h"
 #include <sys/types.h>
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#else
-extern int putenv();
-extern char *getenv();
-extern int atoi();
-extern pid_t wait();
 
-#ifndef PORT_NOVFORK
-extern pid_t vfork();
-#endif /* PORT_NOVFORK */
-#endif
 #ifndef WSM
 #include <signal.h>
 #endif
@@ -1789,14 +1778,6 @@ void Do_Focus_Key (ClientData *pCD, Time focusTime, long flags)
 		   XSetInputFocus (DISPLAY, pcdFocus->clientBaseWin,
 				RevertToPointerRoot, CurrentTime);
 		  }
-                  else if ( !(flags & CLIENT_AREA_FOCUS)                   &&
-		       !(pcdFocus->protocolFlags & PROTOCOL_WM_TAKE_FOCUS) &&
-		        pcdFocus->inputFocusModel
-		     )
-		  {
-		    XSetInputFocus (DISPLAY, focusWindow,
-				    RevertToPointerRoot, CurrentTime);
-		  }
                   else
 		  {
 		    XSetInputFocus (DISPLAY, focusWindow,
@@ -2974,7 +2955,7 @@ Boolean F_Pack_Icons (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Pack_Icons */
 
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
  *  F_Post_RMenu (args, pCD, event)
@@ -4616,7 +4597,7 @@ Boolean F_Screen (String args, ClientData *pCD, XEvent *event)
 
 
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
  *  F_InvokeCommand (args, pCD, event)
@@ -4881,7 +4862,6 @@ Boolean F_Prev_Workspace (String args, ClientData *pCD, XEvent *event)
 } /* END OF FUNCTION F_Prev_Workspace */
 
 
-
 /*************************************<->*************************************
  *
  *  F_Workspace_Presence (args, pCD, event)
@@ -4942,5 +4922,4 @@ DumpWindowList ()
     }
 }
 #endif /* DEBUG */
-
 #endif /* WSM */

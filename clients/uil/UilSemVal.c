@@ -848,8 +848,6 @@ if ( (argname_value_entry->obj_header.b_flags&sym_m_builtin) &&
 if ( (argname_value_entry->obj_header.b_flags & sym_m_builtin) &&
      (argname_value_entry->obj_header.az_name == NULL) )
     {
-    key_keytable_entry_type		* keytable_entry;
-
     keytable_entry =
 	(key_keytable_entry_type *) argname_value_entry->value.az_data;
     _assert (keytable_entry->b_class==tkn_k_class_argument,
@@ -1007,7 +1005,7 @@ if (( expected_type == sym_k_keysym_value ) &&
 	 * one of those bytes. We calloc 2 bytes for a null termination so HP type
 	 * machines will work. It looks wierd but it works.
 	 */
-	_move (argument_entry->az_arg_value->value.c_value, &tmp, 1);
+	memmove (argument_entry->az_arg_value->value.c_value, &tmp, 1);
 	argument_entry->az_arg_value->b_type = sym_k_keysym_value;
 	argument_entry->az_arg_value->w_length = 1;
 	}
@@ -1844,9 +1842,9 @@ sym_name_entry_type		*control_obj_name;
  * issue an error message if so. If it is not verified, it need not be
  * checked again.
  */
-if ( list_entry == NULL ) return FALSE;
-if ( cycle_name == NULL ) return FALSE;
-if ( cycle_name->b_flags & sym_m_cycle_checked ) return FALSE;
+if (!list_entry || !cycle_name) return FALSE;
+if ( cycle_name->b_flags & sym_m_cycle_checked )
+    return !!(cycle_name->b_flags & sym_m_has_cycle);
 
 for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
      list_member!=NULL;

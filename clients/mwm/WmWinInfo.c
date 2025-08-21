@@ -84,7 +84,7 @@ static void AdjustSlideOutGeometry (ClientData *pCD);
 static void FixSubpanelEmbeddedClientGeometry (ClientData *pCD);
 #endif /* PANELIST */
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 # define LOCALE_MSG GETMESSAGE(70, 7, "[XmbTextPropertyToTextList]:\n     Locale (%.100s) not supported. (Check $LANG).")
 #else
 # define LOCALE_MSG "[XmbTextPropertyToTextList]:\n     Locale (%.100s) not supported. (Check $LANG)."
@@ -800,7 +800,7 @@ int i;
 
     if (manageFlags & MANAGEW_ICON_BOX)
     {
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 	/** BEGIN FIX CR 6941 **/
 	MenuItem *iconBoxMenuItems, *lastItem;
 
@@ -2678,7 +2678,7 @@ ProcessWmTransientFor (ClientData *pCD)
 void
 MakeSystemMenu (ClientData *pCD)
 {
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     MenuItem *lastItem;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
@@ -2687,7 +2687,7 @@ MakeSystemMenu (ClientData *pCD)
        MAKE_MENU (PSD_FOR_CLIENT(pCD), pCD, pCD->systemMenu, F_CONTEXT_WINDOW,
 	         F_CONTEXT_WINDOW|F_CONTEXT_ICON, pCD->mwmMenuItems, TRUE);
 
-#ifdef NO_MESSAGE_CATALOG
+#if !XM_MSGCAT
     if (pCD->systemMenuSpec == NULL)
     {
         /*
@@ -2708,14 +2708,14 @@ MakeSystemMenu (ClientData *pCD)
      * but this code is causing the system menu to loose it's default
      * actions whenever client defined actions are added.  I thought
      * it prudent to minimize the changes.  It could be that the
-     * #if !defined WSM || defined MWM_QATS_PROTOCOL
+     * #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
      * should be
      * #if ((!defined(WSM)) && defined(MWM_QATS_PROTOCOL))
      * throughout the wm code, but I am loath to make such a change
      * without any documentation.
      */
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     /** BEGIN FIX CR 6941 **/
 
     /* if we still don't have a menu spec, then just abort. */
@@ -4179,6 +4179,4 @@ ProcessMwmHints (ClientData *pCD)
     }
 
     pCD->decor = pCD->clientDecoration;  /* !!! combine decor ... !!! */
-
-
 } /* END OF ProcessMwmHints */

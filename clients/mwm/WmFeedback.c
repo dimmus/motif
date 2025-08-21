@@ -78,7 +78,7 @@ static Cursor  waitCursor = (Cursor)0L;
 
 /* see WmGlobal.h for index defines: */
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 static char *confirm_mesg[4] = {"Switch to Default Behavior?",
 				"Switch to Custom Behavior?",
                                 "Restart Mwm?",
@@ -769,7 +769,7 @@ void ConfirmAction (WmScreenData *pSD, int nbr)
     if (pSD->confirmboxW[nbr] == NULL)
     /* First time for this one */
     {
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	/*
 	 * Initialize messages
 	 */
@@ -848,26 +848,22 @@ void ConfirmAction (WmScreenData *pSD, int nbr)
         XtSetArg (args[n], XmNtraversalOn, (XtArgVal) TRUE); n++;
         XtSetArg (args[n], XmNhighlightThickness,
 		  (XtArgVal) CB_HIGHLIGHT_THICKNESS); n++;
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	XtSetArg(args[n], XmNlabelString, wmGD.okLabel); n++;
 #endif
-        XtSetValues ( XmMessageBoxGetChild (pSD->confirmboxW[nbr],
-			    XmDIALOG_OK_BUTTON), args, n);
-#ifndef NO_MESSAGE_CATALOG
+        XtSetValues(XtNameToWidget(pSD->confirmboxW[nbr], "OK"), args, n);
+#if XM_MSGCAT
 	n--;
 	XtSetArg(args[n], XmNlabelString, wmGD.cancelLabel); n++;
 #endif
-        XtSetValues ( XmMessageBoxGetChild (pSD->confirmboxW[nbr],
-			    XmDIALOG_CANCEL_BUTTON), args, n);
+        XtSetValues (XtNameToWidget(pSD->confirmboxW[nbr], "Cancel"),
+			    args, n);
         XtAddCallback (pSD->confirmboxW[nbr], XmNokCallback,
 	    (XtCallbackProc)OkCB, (XtPointer)pSD);
         XtAddCallback (pSD->confirmboxW[nbr], XmNcancelCallback,
 	    (XtCallbackProc)CancelCB, (XtPointer)NULL);
 
-        XtUnmanageChild
-	    (XmMessageBoxGetChild (pSD->confirmboxW[nbr],
-		XmDIALOG_HELP_BUTTON));
-
+        XtUnmanageChild(XtNameToWidget(pSD->confirmboxW[nbr], "Help"));
         XtRealizeWidget (dialogShellW);
 
         /*

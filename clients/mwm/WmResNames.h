@@ -123,7 +123,7 @@
 #endif
 #define WmNresizeBorderWidth		"resizeBorderWidth"
 #define WmNresizeCursors		"resizeCursors"
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 # define WmNrootMenu			"rootMenu"
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 #ifdef WSM
@@ -332,7 +332,7 @@
 #endif
 #define WmCResizeBorderWidth		"ResizeBorderWidth"
 #define WmCResizeCursors		"ResizeCursors"
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 # define WmCRootMenu			"RootMenu"
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 #ifdef WSM

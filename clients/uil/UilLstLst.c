@@ -124,7 +124,7 @@ void	lst_open_listing()
 
     /* allocate fcb */
 
-    lst_az_fcb = (uil_fcb_type *)_get_memory( sizeof( uil_fcb_type ) );
+    lst_az_fcb = (uil_fcb_type *)XtMalloc( sizeof( uil_fcb_type ) );
 
     /* open the listing file */
 
@@ -204,7 +204,7 @@ void	Uil_lst_cleanup_listing()
     ** free fcb
     */
 
-    _free_memory((char*)lst_az_fcb);
+    XtFree((char*)lst_az_fcb);
     lst_az_fcb = NULL;
 }
 
@@ -507,7 +507,7 @@ void	lst_output_listing()
     for (i = 0; i <= src_l_last_source_file_number; i++) {
 
 	uil_fcb_type	*az_fcb;	    /* file control block ptr */
-	char		buffer [132];
+	char		buffer [132 + sizeof(az_fcb->expanded_name)];
 
 	az_fcb = src_az_source_file_table [i];
 	sprintf (buffer,
@@ -643,10 +643,10 @@ src_source_record_type	*az_src_rec;
 
     if ((int)mc_cnt < code_cnt) {
 	if (mc_array != NULL) {
-	    _free_memory ((char*)mc_array);
+	    XtFree ((char*)mc_array);
 	}
 	mc_array =
-	    (src_machine_code_type * *)_get_memory (sizeof (char *) * code_cnt);
+	    (src_machine_code_type * *)XtMalloc (sizeof (char *) * code_cnt);
 	mc_cnt = code_cnt;
     }
 
@@ -702,13 +702,13 @@ src_source_record_type	*az_src_rec;
 	extra_long_cnt = long_cnt % LONG_PER_LINE;
 	extra_byte_cnt = code_len % sizeof (char *);
 
-	_fill (buffer, ' ', sizeof buffer - 1);
+	memset (buffer, ' ', sizeof buffer - 1);
 
 
 	sprintf ((char *)hex_longword, "%04X", code_offset);
-	_move  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
+	memmove  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
 
-	_move (& buffer [TEXT_COL - 1], text_ptr, text_len);
+	memmove (& buffer [TEXT_COL - 1], text_ptr, text_len);
 	buffer [TEXT_COL + text_len] = '\0';
 
 	line_written = FALSE;
@@ -721,7 +721,7 @@ src_source_record_type	*az_src_rec;
 	for (i = 0; i < line_cnt; i++) {
 
 	    if (text_len == 0) {
-		_move  (& buffer [TEXT_COL - 1], code_ptr, ASCII_PER_LINE);
+		memmove  (& buffer [TEXT_COL - 1], code_ptr, ASCII_PER_LINE);
 		lex_filter_unprintable_chars ((unsigned char*)
 			& buffer [TEXT_COL - 1], ASCII_PER_LINE,
 			lex_m_filter_tab );
@@ -739,7 +739,7 @@ src_source_record_type	*az_src_rec;
                 sprintf ((char *)hex_longword, "%08lX", (* code_ptr));
 	      }
 
-		_move (& buffer [start_hex_long [j]],
+		memmove (& buffer [start_hex_long [j]],
 			hex_longword, HEX_PER_LONG);
 
 	    }
@@ -750,10 +750,10 @@ src_source_record_type	*az_src_rec;
 
 	    code_offset += LONG_PER_LINE * sizeof (long);
 	    sprintf ((char *)hex_longword, "%04X", code_offset);
-	    _move  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
+	    memmove  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
 
 	    if (i == 0 && text_len > 0) {
-		_fill (& buffer [TEXT_COL - 1], ' ', text_len);
+		memset (& buffer [TEXT_COL - 1], ' ', text_len);
 	    }
 	}
 
@@ -765,7 +765,7 @@ src_source_record_type	*az_src_rec;
 		int	ascii_cnt;
 
 		ascii_cnt = (extra_long_cnt * sizeof (long)) + extra_byte_cnt;
-		_move  (& buffer [TEXT_COL - 1], code_ptr, ascii_cnt);
+		memmove  (& buffer [TEXT_COL - 1], code_ptr, ascii_cnt);
 		lex_filter_unprintable_chars ((unsigned char*)
 			& buffer [TEXT_COL - 1], ascii_cnt,
 			lex_m_filter_tab );
@@ -775,23 +775,22 @@ src_source_record_type	*az_src_rec;
 /*	Clear code from previous lines, keeping the offset and text if
 	it is there. */
 
-	    _fill (buffer, ' ', OFFSET_COL - 1);
+	    memset (buffer, ' ', OFFSET_COL - 1);
 
 	    if (extra_long_cnt > 0) {
 
 /*	Format the code longwords.	*/
 
 		for (i = 0; i < extra_long_cnt; i++, code_ptr++) {
-                    unsigned long temp_long;
 		    if (BIT_64_LONG){
-/*		      _move( (char*) &temp_long, (char*) code_ptr, sizeof(temp_long));*/
+/*		      memmove( (char*) &temp_long, (char*) code_ptr, sizeof(temp_long));*/
 		      sprintf ((char *)hex_longword, "%lX", (* code_ptr));
 		    }
 		    else{
 		      sprintf ((char *)hex_longword, "%08lX", (*code_ptr));
 		    }
 
-		    _move (& buffer [start_hex_long [i]],
+		    memmove (& buffer [start_hex_long [i]],
 			hex_longword, HEX_PER_LONG);
 		}
 	    }
@@ -802,8 +801,8 @@ src_source_record_type	*az_src_rec;
 		int		l;
 		unsigned char	extra_bytes [sizeof (long)];
 
-		_move (extra_bytes, code_ptr, extra_byte_cnt);
-		_fill (hex_longword, ' ', HEX_PER_LONG);
+		memmove (extra_bytes, code_ptr, extra_byte_cnt);
+		memset (hex_longword, ' ', HEX_PER_LONG);
 		for (l = extra_byte_cnt - 1; l >= 0; l--) {
 		if (BIT_64_LONG)
 		    sprintf ((char *)
@@ -815,7 +814,7 @@ src_source_record_type	*az_src_rec;
 			     "%02X", extra_bytes [extra_byte_cnt-l-1]);
 
 		}
-		_move (& buffer [start_hex_long [extra_long_cnt]],
+		memmove (& buffer [start_hex_long [extra_long_cnt]],
 			hex_longword, HEX_PER_LONG);
 	    }
 

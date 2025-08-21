@@ -122,7 +122,7 @@ extern Boolean ParseWmFuncActionArg (unsigned char **linePP,
 #define ScanWhitespace(s)	(_DtWmParseSkipWhitespaceC (s))
 #endif /* WSM */
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 extern Boolean IsClientCommand (String);
 extern Boolean SetGreyedContextAndMgtMask (MenuItem *menuItem,
 					   WmFunction wmFunction);

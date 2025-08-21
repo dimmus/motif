@@ -252,7 +252,7 @@ Uil_src_cleanup_source(void)
 				   diag_k_no_source, diag_k_no_column,
 				   src_az_source_file_table[i]->expanded_name);
 	    }
-	_free_memory ((char*)src_az_source_file_table [i]);
+	XtFree ((char*)src_az_source_file_table [i]);
 	src_az_source_file_table[i] = NULL;
 	}
 
@@ -264,7 +264,7 @@ Uil_src_cleanup_source(void)
     	buffer_to_free = src_az_current_source_buffer;
     	src_az_current_source_buffer =
 	    src_az_current_source_buffer->az_prior_source_buffer;
-	_free_memory ((char*)buffer_to_free);
+	XtFree ((char*)buffer_to_free);
 	}
 
     /*
@@ -279,12 +279,12 @@ Uil_src_cleanup_source(void)
 	  {
 	    code_item_to_free = first_code_item;
 	    first_code_item = first_code_item->az_next_machine_code;
-	    _free_memory((char *)code_item_to_free);
+	    XtFree((char *)code_item_to_free);
 	  }
 
 	src_az_first_source_record =
 	    src_az_first_source_record->az_next_source_record;
-	_free_memory ((char*)record_to_free);
+	XtFree ((char*)record_to_free);
 	}
 
     /*
@@ -293,7 +293,7 @@ Uil_src_cleanup_source(void)
 /* BEGIN OSF FIX pir 2240 */
     /* Memory pointed to by main_fcb already freed. */
 /* END OSF FIX pir 2240 */
-    _free_memory (include_dir);
+    XtFree (include_dir);
 
     return;
 }
@@ -346,7 +346,7 @@ src_open_file (XmConst char *c_file_name,
 
     /* allocate fcb and source buffer */
 
-    az_fcb = (uil_fcb_type *) _get_memory (sizeof (uil_fcb_type));
+    az_fcb = (uil_fcb_type *) XtMalloc (sizeof (uil_fcb_type));
 
     if (src_az_avail_source_buffer != NULL) {
 	az_source_buffer = src_az_avail_source_buffer;
@@ -355,7 +355,7 @@ src_open_file (XmConst char *c_file_name,
     } else {
 	az_source_buffer =
 	    (src_source_buffer_type *)
-			_get_memory (sizeof (src_source_buffer_type));
+			XtMalloc (sizeof (src_source_buffer_type));
     }
 
     /* Call the OS-specific open file procedure */
@@ -490,7 +490,7 @@ src_get_source_line(void)
 
 	az_source_record =
 	    (src_source_record_type *)
-		_get_memory( sizeof( src_source_record_type ) );
+		XtMalloc( sizeof( src_source_record_type ) );
 
 	az_source_record->az_next_source_record = NULL;
 	az_source_record->w_line_number =
@@ -604,7 +604,6 @@ open_source_file( XmConst char           *c_file_name,
                   src_source_buffer_type *az_source_buffer )
 {
 
-    static unsigned short	main_dir_len = 0;
     boolean			main_file;
     int				i;  /* loop index through include files */
     char			buffer[256];
@@ -655,8 +654,8 @@ open_source_file( XmConst char           *c_file_name,
 	    }
 
 	if (!specific_directory) {
-	    _move (buffer, main_fcb -> expanded_name, main_dir_len);
-	    _move (& buffer [main_dir_len],
+	    memmove (buffer, main_fcb -> expanded_name, main_dir_len);
+	    memmove (& buffer [main_dir_len],
 		   c_file_name, strlen (c_file_name) + 1);  /* + NULL */
 	} else {
 	    strcpy (buffer, c_file_name);
@@ -682,7 +681,7 @@ open_source_file( XmConst char           *c_file_name,
 	    if (inc_dir_len == 0) {
 		search_user_include = False;
 		}
-	    _move (buffer, Uil_cmd_z_command.ac_include_dir[i], inc_dir_len);
+	    memmove (buffer, Uil_cmd_z_command.ac_include_dir[i], inc_dir_len);
 
 	/*  Add '/' if not specified at end of directory  */
 
@@ -691,7 +690,7 @@ open_source_file( XmConst char           *c_file_name,
 		inc_dir_len++;
 	    };
 
-	    _move (& buffer [inc_dir_len],
+	    memmove (& buffer [inc_dir_len],
 		   c_file_name, strlen (c_file_name) + 1);  /* + NULL */
 
 	/*    Open the include file.  If found, we are done.    */
@@ -705,8 +704,8 @@ open_source_file( XmConst char           *c_file_name,
 
 /*    Look in the default include directory.    */
 	if (search_user_include) {
-	  _move(buffer, c_include_dir, sizeof c_include_dir - 1); /* no NULL */
-	  _move(&buffer[sizeof c_include_dir - 1],
+	  memmove(buffer, c_include_dir, sizeof c_include_dir - 1); /* no NULL */
+	  memmove(&buffer[sizeof c_include_dir - 1],
 		c_file_name, strlen (c_file_name) + 1);  /* + NULL */
 
 /*    Open the include file.    */
@@ -1056,7 +1055,7 @@ boolean	src_retrieve_source
 
     if (az_src_rec == diag_k_no_source)
     {
-	_move( c_buffer, no_source, sizeof no_source );
+	memmove( c_buffer, no_source, sizeof no_source );
 	return FALSE;
     }
 
@@ -1090,7 +1089,7 @@ boolean	src_retrieve_source
     if (reget_line( fcb, c_buffer, (z_key *) &(az_src_rec->z_access_key) ))
 	return TRUE;
 
-    _move( c_buffer, no_source, sizeof no_source );
+    memmove( c_buffer, no_source, sizeof no_source );
     return FALSE;
 
 }
@@ -1147,12 +1146,12 @@ src_append_diag_info( XmConst src_source_record_type *az_src_rec,
     l_msg_length = strlen( c_msg_text ) + 1;	/* includes null */
 
     az_msg_item = (src_message_item_type *)
-	_get_memory( sizeof( src_message_item_type ) + l_msg_length );
+	XtMalloc( sizeof( src_message_item_type ) + l_msg_length );
 
     az_msg_item->l_message_number = l_msg_number;
     az_msg_item->b_source_pos = l_src_pos;
 
-    _move( (az_msg_item->c_text), c_msg_text, l_msg_length );
+    memmove( (az_msg_item->c_text), c_msg_text, l_msg_length );
 
     /*
     **  Link the message from its source line
@@ -1240,13 +1239,13 @@ src_append_machine_code ( src_source_record_type *az_src_rec,
 
     l_text_len = strlen( c_text ) + 1;	/* includes null */
 
-    az_code_item = (src_machine_code_type *) _get_memory(
+    az_code_item = (src_machine_code_type *) XtMalloc(
 		sizeof( src_machine_code_type ) + l_text_len + l_code_len );
 
     az_code_item -> w_offset = l_offset;
     az_code_item -> w_code_len = l_code_len;
-    _move( (az_code_item->data.c_data), c_code, l_code_len );
-    _move( &(az_code_item->data.c_data [l_code_len]), c_text, l_text_len );
+    memmove( (az_code_item->data.c_data), c_code, l_code_len );
+    memmove( &(az_code_item->data.c_data [l_code_len]), c_text, l_text_len );
 
     /*
     **  Link the machine code to its source line, at the head of

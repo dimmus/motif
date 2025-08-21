@@ -1056,7 +1056,7 @@ void InitializeClientData (ClientData *pCD, IconBoxData *pIBD)
 
     if (!(pCD->pSD->iconBoxTitle))
     {
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 	pCD->pSD->iconBoxTitle =
 	    XmStringCreateLocalized(wmNLS.default_icon_box_title);
 #else
@@ -3751,28 +3751,14 @@ Boolean IconVisible (ClientData *pCD)
 
 String WmXmStringToString (XmString xmString)
 {
-    XmStringContext       xmStrContext;
-    char                 *asciiString = NULL;
-    XmStringCharSet      ibTitleCharset;
-    XmStringDirection    ibTitleDirection;
-    Boolean              separator;
+    XmStringContext xmStrContext;
+    char *asciiString = NULL;
 
-    if (xmString)
-    {
-	XmStringInitContext (&xmStrContext, xmString);
+    if (!xmString)
+        return NULL;
 
-	XmStringGetNextSegment (xmStrContext, &asciiString,
-				&ibTitleCharset, &ibTitleDirection,
-				&separator);
-
-	if (ibTitleCharset != NULL)
-	{
-	    XtFree ((char *)ibTitleCharset);
-	}
-
-	XmStringFreeContext (xmStrContext);
-    }
-
-    return(asciiString);
-
+    XmStringInitContext (&xmStrContext, xmString);
+    XmStringGetNextTriple(xmStrContext, NULL, (XtPointer *)&asciiString);
+    XmStringFreeContext(xmStrContext);
+    return asciiString;
 } /* END OF FUNCTION WmXmStringToString */

@@ -38,12 +38,6 @@
 #ifndef UilDef_h
 #define UilDef_h
 
-#if    !defined(__STDC__) && !defined(__cplusplus) && !defined(c_plusplus) \
-    && !defined(FUNCPROTO) && !defined(XTFUNCPROTO) && !defined(XMFUNCPROTO)
-#define _NO_PROTO
-#endif /* __STDC__ */
-
-
 /*
 **
 **  INCLUDE FILES

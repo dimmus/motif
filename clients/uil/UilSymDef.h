@@ -45,6 +45,7 @@
 
 #include <Mrm/MrmPublic.h>
 #include <Xm/Xm.h>
+#include <string.h>
 
 /*
 **  constraint check access macro
@@ -917,7 +918,7 @@ typedef struct _sym_color_item_entry_type
 **  This macro copies the contents of one entry to another without disturbing
 **  the the linked list of entries used to connect all symbol table entries.
 */
-#define _sym_copy_entry(__dest, __src, __size) _move (__dest, __src, __size)
+#define _sym_copy_entry(__dest, __src, __size) memmove(__dest, __src, __size)
 
 
 #endif /* UilSymDef_h */

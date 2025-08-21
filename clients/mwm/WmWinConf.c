@@ -134,7 +134,7 @@ static int moveLastPointerY= 0;
 
 static Boolean anyMotion = FALSE;
 static Boolean configGrab = FALSE;
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 static Boolean grabServer = TRUE;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
@@ -286,6 +286,7 @@ void HandleClientFrameMove (ClientData *pcd, XEvent *pev)
 	    {
 		  keyMultiplier++;
 	    }
+
 	    keysym = WmKeycodeToKeysym (DISPLAY, pev->xkey.keycode);
 	    control = (pev->xkey.state & ControlMask) != 0;
 	    tmpX = tmpY = 0;
@@ -683,7 +684,7 @@ Boolean HandleResizeKeyPress (ClientData *pcd, XEvent *pev)
 {
     KeySym keysym;
     Boolean control;
-    int warpX, warpY, currentX, currentY, newX, newY;
+    int warpX, warpY, currentX = 0, currentY = 0, newX, newY;
     int junk, keyMult;
     Window junk_win;
     XEvent KeyEvent;
@@ -2588,7 +2589,7 @@ Boolean StartClientMove (ClientData *pcd, XEvent *pev)
 } /* END OF FUNCTION StartClientMove */
 
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 /*************************************<->*************************************
  *
  *  SetGrabServer ()

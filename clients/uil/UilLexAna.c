@@ -62,17 +62,8 @@ extern char *_XmStringGetCurrentCharset ();
 
 #include "UilDefI.h"
 #include <ctype.h>
-
-#ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
-#else
-double atof();
-#endif
-
 #include <errno.h>	/* needed to support conversion functions */
-#ifdef X_NOT_STDC_ENV
-extern int errno;
-#endif
 
 /*
 **
@@ -1598,7 +1589,7 @@ found_primitive_string:
 	int			l_length;
 	lex_buffer_type		*az_lex_buffer;
 	sym_value_entry_type	*az_value;
-	unsigned char		*c_char;
+	unsigned char		*pc_char;
 
 	l_length = l_lex_pos;
 
@@ -1609,17 +1600,17 @@ found_primitive_string:
 
 	az_value = create_str_entry( l_length, l_charset, az_charset_entry );
 
-	c_char = (unsigned char *)az_value->value.c_value;
+	pc_char = (unsigned char *)az_value->value.c_value;
 
 	for (az_lex_buffer = az_first_lex_buffer;
 	     az_lex_buffer != az_current_lex_buffer;
 	     az_lex_buffer = az_lex_buffer->az_next_buffer)
 	{
-	    _move( c_char, az_lex_buffer->c_text, l_max_lex_buffer_pos + 1);
-	    c_char = c_char + l_max_lex_buffer_pos + 1;
+	    memmove( pc_char, az_lex_buffer->c_text, l_max_lex_buffer_pos + 1);
+	    pc_char = pc_char + l_max_lex_buffer_pos + 1;
 	}
 
-	_move( c_char, az_lex_buffer->c_text, l_lex_pos );
+	memmove( pc_char, az_lex_buffer->c_text, l_lex_pos );
 
     	yylval.value.az_symbol_entry = (sym_entry_type *) az_value;
     	yylval.b_type = CHAR_8_LITERAL;
@@ -1790,7 +1781,7 @@ found_primitive_string:
 			 uil_sym_isolatin1_charset,
 			 az_charset_entry );
 
-		    _move( str_entry->value.c_value,
+		    memmove( str_entry->value.c_value,
 			   &az_current_lex_buffer->c_text[ a_off ],
 			   off-a_off );
 
@@ -1810,7 +1801,7 @@ found_primitive_string:
 		    str_entry =
 			create_str_entry( a_off - off, l_charset, az_charset_entry );
 
-		    _move( str_entry->value.c_value,
+		    memmove( str_entry->value.c_value,
 			   &az_current_lex_buffer->c_text[ off ],
 			   a_off-off );
 
@@ -1830,7 +1821,7 @@ found_primitive_string:
       int			l_length = 0;
       lex_buffer_type		*az_lex_buffer;
       sym_value_entry_type	*str_entry;
-      unsigned char		*c_char;
+      unsigned char		*pc_char;
 
       l_length = l_lex_pos;
 
@@ -1842,17 +1833,17 @@ found_primitive_string:
       str_entry = create_str_entry(l_length, lex_k_fontlist_default_tag,
 				  az_charset_entry );
 
-      c_char = (unsigned char *)str_entry->value.c_value;
+      pc_char = (unsigned char *)str_entry->value.c_value;
 
       for (az_lex_buffer = az_first_lex_buffer;
 	   az_lex_buffer != az_current_lex_buffer;
 	   az_lex_buffer = az_lex_buffer->az_next_buffer)
 	{
-	  _move( c_char, az_lex_buffer->c_text, l_max_lex_buffer_pos + 1);
-	  c_char = c_char + l_max_lex_buffer_pos + 1;
+	  memmove( pc_char, az_lex_buffer->c_text, l_max_lex_buffer_pos + 1);
+	  pc_char = pc_char + l_max_lex_buffer_pos + 1;
 	}
 
-      _move( c_char, az_lex_buffer->c_text, l_lex_pos );
+      memmove( pc_char, az_lex_buffer->c_text, l_lex_pos );
 
       yylval.value.az_symbol_entry = (sym_entry_type *)str_entry;
       yylval.b_type = LOC_STRING;
@@ -1965,7 +1956,7 @@ void  lex_initialize_analyzer( )
 String language;
 
 /* RAP preserve comments */
-comment_text = (char *) _get_memory(INITIAL_COMMENT_SIZE);
+comment_text = (char *) XtMalloc(INITIAL_COMMENT_SIZE);
 comment_size = INITIAL_COMMENT_SIZE;
 
 comment_text[0] = '\0';
@@ -1976,7 +1967,7 @@ comment_text[0] = '\0';
  * plus 2 positions in buffer.
  */
 az_first_lex_buffer =
-    (lex_buffer_type *) _get_memory (l_max_lex_buffer_pos + 2 +
+    (lex_buffer_type *) XtMalloc (l_max_lex_buffer_pos + 2 +
 				     sizeof(lex_buffer_type *));
 /* END OSF Fix CR 4749 */
 az_first_lex_buffer->az_next_buffer = NULL;
@@ -2063,7 +2054,7 @@ void  Uil_lex_cleanup_analyzer( )
     while (az_first_lex_buffer != NULL) {
 	az_buffer_to_free = az_first_lex_buffer;
 	az_first_lex_buffer = az_first_lex_buffer->az_next_buffer;
-	_free_memory((char*)az_buffer_to_free);
+	XtFree((char*)az_buffer_to_free);
 	}
 }
 
@@ -2248,7 +2239,7 @@ lex_buffer_type *az_current_lex_buffer;
        * plus 2 positions in buffer.
        */
 	az_lex_buffer =
-	    (lex_buffer_type *)_get_memory( l_max_lex_buffer_pos + 2 +
+	    (lex_buffer_type *)XtMalloc( l_max_lex_buffer_pos + 2 +
 					   sizeof(lex_buffer_type *));
 /* END OSF Fix CR 4749 */
 	az_current_lex_buffer->az_next_buffer = az_lex_buffer;
@@ -2368,7 +2359,7 @@ int		l_lex_pos;
 	else
 	    last = l_max_lex_buffer_pos+1;
 
-	_move( c_buffer, az_lex_buffer->c_text, last );
+	memmove( c_buffer, az_lex_buffer->c_text, last );
 
 	lex_filter_unprintable_chars (c_buffer, last, 0);
 
@@ -2449,7 +2440,6 @@ potential_overflow:
 
     return l_value;
 }
-
 
 /*
 **++

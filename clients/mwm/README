@@ -16,7 +16,7 @@ The following are new since the last tape:
 
     * Mwm now restores client X borders on quit and restart.
 	Unfortunately this has introduced a bug on restart
-	with regard to the window position when
+	with regard to the window position when 
 	positionIsFrame: True.
 	This will be fixed soon.
 
@@ -29,7 +29,7 @@ The following are new since the last tape:
 
 
 =================================
-File list for mwm beta + +
+File list for mwm beta + + 
 
 WmCEvent.c	WmCPlace.c	WmFeedback.c
 WmFunction.c	WmIDecor.c	WmIconBox.c

@@ -469,7 +469,7 @@ void RemoveColormapWindowReference (ClientData *pCD, Window window)
     Boolean     context_exists;
     int         i;
     int         reference_idx = -1;
-    ClientData  **new_cmap_window_data;
+    ClientData  **new_cmap_window_data = NULL;
 
     context_exists = (!XFindContext (DISPLAY, window,
                         wmGD.cmapWindowContextType,

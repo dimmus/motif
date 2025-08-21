@@ -137,7 +137,7 @@ Boolean SimilarAppearanceData (AppearanceData *pAD1, AppearanceData *pAD2);
 
 /* builtin window menu specification */
 
-#ifndef NO_MESSAGE_CATALOG
+#ifdef MESSAGE_CATLOG
 /*
  * Use the same name as builtin to let the message catalog menu
  * take precedence over any menus that might match in sys.mwmrc
@@ -145,7 +145,7 @@ Boolean SimilarAppearanceData (AppearanceData *pAD1, AppearanceData *pAD2);
 char defaultSystemMenuName[] = "_MwmWindowMenu_";
 #else
 char defaultSystemMenuName[] = "DefaultWindowMenu";
-#endif	/* NO_MESSAGE_CATALOG */
+#endif	/* XM_MSGCAT */
 char builtinSystemMenuName[] = "_MwmWindowMenu_";
 #ifndef MCCABE
 #define BUILTINSYSTEMMENU "_MwmWindowMenu_\n\
@@ -159,9 +159,9 @@ char builtinSystemMenuName[] = "_MwmWindowMenu_";
 	no-label				f.separator\n\
 	Close		_C	Alt<Key>F4	f.kill\n\
 }"
-#ifdef NO_MESSAGE_CATALOG
+#if !XM_MSGCAT
 char builtinSystemMenu[] = BUILTINSYSTEMMENU;
-#else /* !defined(NO_MESSAGE_CATALOG)*/
+#else /* XM_MSGCAT */
 char *builtinSystemMenu = BUILTINSYSTEMMENU;
 #ifdef WSM
 #define DEFAULT_DTWM_SYSTEMMENU "_MwmWindowMenu_\n\
@@ -473,7 +473,7 @@ void InitBuiltinSystemMenu(void)
        XtFree(CloString);
 
 } /* END OF FUNCTION  InitBuiltinSystemMenu */
-#endif /* NO_MESSAGE_CATALOG */
+#endif /* XM_MSGCAT */
 #else /* MCCABE */
 char builtinSystemMenu[];
 #endif /* MCCABE */
@@ -1438,7 +1438,7 @@ XtResource wmScreenResources[] =
 	(XtPointer)True
     },
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     {
 	WmNrootMenu,
 	WmCRootMenu,
@@ -4437,14 +4437,11 @@ MakeAppearanceResources (WmScreenData *pSD, AppearanceData *pAData, Boolean make
 	ExitWM(WM_ERROR_EXIT_VALUE);
     }
 
-#ifndef NO_MULTIBYTE
     /*
      *  Calculate title bar's height and store it in pAData.
      */
     pAData->titleHeight = (pAData->font)->ascent + (pAData->font)->descent
         + WM_TITLE_BAR_PADDING;
-#endif
-
 
     /*
      * Make standard (inactive) appearance resources.
@@ -5221,6 +5218,7 @@ ProcessWorkspaceList (WmScreenData *pSD)
 void
 ProcessWorkspaceResources (WmWorkspaceData *pWS)
 {
+	Cardinal n_resources = 0;
 
     /*
      * Retrieve workspace specific resources.
@@ -5231,9 +5229,12 @@ ProcessWorkspaceResources (WmWorkspaceData *pWS)
 
     if (wmGD.useStandardBehavior)
     {
+#ifdef WSM
+	n_resources = XtNumber(wmStdWorkspaceResources);
+#endif
 	XtGetSubresources (pWS->pSD->screenTopLevelW, (XtPointer) pWS,
-	    pWS->name, pWS->name, wmStdWorkspaceResources,
-	    XtNumber (wmStdWorkspaceResources), NULL, 0);
+	    pWS->name, pWS->name, wmStdWorkspaceResources, n_resources,
+	    NULL, 0);
 
 	/*
 	 * Fill in the standard resource values.
@@ -5246,9 +5247,12 @@ ProcessWorkspaceResources (WmWorkspaceData *pWS)
     }
     else
     {
+#ifdef WSM
+	n_resources = XtNumber(wmWorkspaceResources);
+#endif
 	XtGetSubresources (pWS->pSD->screenTopLevelW, (XtPointer) pWS,
-	    pWS->name, pWS->name, wmWorkspaceResources,
-	    XtNumber (wmWorkspaceResources), NULL, 0);
+	    pWS->name, pWS->name, wmWorkspaceResources, n_resources,
+	    NULL, 0);
 
 #ifdef WSM
         /*  Dup iconbox geometry, it may be free'd later on.  */
@@ -5331,7 +5335,7 @@ ProcessWorkspaceResources (WmWorkspaceData *pWS)
 void
 ProcessPresenceResources (WmScreenData *pSD)
 {
-#ifndef NO_MESSAGE_CATALOG
+#ifdef MESSAGE_CATLOG
     static char *default_ws_pres_title = NULL;
 #else
     static char *default_ws_pres_title = "Workspace Presence";
@@ -5340,7 +5344,7 @@ ProcessPresenceResources (WmScreenData *pSD)
     int n;
     unsigned char *pch1, *pch2;
 
-#ifndef NO_MESSAGE_CATALOG
+#ifdef MESSAGE_CATLOG
     /*
      * Set up localized default title string on initial time through
      */
@@ -5465,7 +5469,7 @@ ProcessClientResources (ClientData *pCD)
 	    0);
     }
 
-#ifdef NO_MESSAGE_CATALOG
+#if !XM_MSGCAT
     /*
      * If (window menu spec is not found) then use the builtin
      * system menu.
@@ -5723,7 +5727,7 @@ SetStdClientResourceValues (ClientData *pCD)
 void
 SetStdScreenResourceValues (WmScreenData *pSD)
 {
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
     pSD->rootMenu = builtinRootMenuName;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
     pSD->buttonBindings = builtinButtonBindingsName;
@@ -6299,7 +6303,7 @@ WmScreenData *pSD;
 	 * set.
 	 */
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
         /*
 	 * Before parsing the string, substitute the real name for
 	 * the default rootmenu using the resource rootMenu
@@ -6351,7 +6355,7 @@ WmScreenData *pSD;
 	 * set.
 	 */
 
-#if !defined WSM || defined MWM_QATS_PROTOCOL
+#if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
         /*
 	 * Before parsing the string, substitute the real name for
 	 * the default rootmenu using the resource rootMenu
@@ -6370,7 +6374,7 @@ WmScreenData *pSD;
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
     }
 
-#ifdef NO_MESSAGE_CATALOG
+#if !XM_MSGCAT
     /*
      * Set defaultSystemMenuUseBuiltin to FALSE if DefaultWindowMenu spec
      * is found.
