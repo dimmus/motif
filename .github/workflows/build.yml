@@ -63,4 +63,3 @@ jobs:
           DISPLAY=:0 make check
           kill -TERM %1
         shell: alpine.sh {0}
-
