@@ -467,8 +467,8 @@ static const char * const canned2 =
 externaldef(uil_sym_glbl) key_keytable_entry_type *key_table =\n\
 \t\tkey_table_vec;\n\n\
 /*    Maximum length of a keyword, and table size    */\n\
-externaldef(uil_sym_glbl) unsigned long key_k_keyword_max_length = %d;\n\
-externaldef(uil_sym_glbl) unsigned long key_k_keyword_count = %d;\n\n\
+externaldef(uil_sym_glbl) unsigned long key_k_keyword_max_length = %lu;\n\
+externaldef(uil_sym_glbl) unsigned long key_k_keyword_count = %lu;\n\n\
 /*    case insensitive keyword table    */\n\
 static key_keytable_entry_type key_table_case_ins_vec[] =\n\
   {\n";
