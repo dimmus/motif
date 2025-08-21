@@ -30,7 +30,6 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 #include <config.h>
 #endif
 
-
 /*
  * This is the main program for WML. It declares all global data structures
  * used during a compilation, and during output.
@@ -64,7 +63,6 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
  *	.mm files
  *		wml-uil.mm
  */
-
 #include "wml.h"
 
 #ifdef HAVE_FCNTL_H
@@ -75,7 +73,6 @@ static char rcsid[] = "$TOG: wml.c /main/8 1999/04/16 09:41:47 mgreess $"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
 
 /*
  * Globals used during WML parsing.
@@ -148,7 +145,7 @@ DynamicHandleListDefPtr	wml_tok_insens_ptr = &wml_tok_insens;
 /*
  * Routines only accessible in this module
  */
-void wmlInit ();
+static void wmlInit(void);
 
 /*
  * External variables
@@ -168,11 +165,7 @@ extern  int yyparse();
  *	4. Perform semantic validation and resolution. Exit on errors.
  *	5. Output files
  */
-
-int main (argc, argv)
-    int		argc;
-    char	**argv;
-
+int main (int argc, char *argv[])
 {
 
 int		done;
@@ -181,7 +174,7 @@ int		fd;		/* input file descriptor */
 /*
  * Initialize storage
  */
-wmlInit ();
+wmlInit();
 
 /*
  * Assume that anything in argv must be an input file. Open it, and
@@ -222,7 +215,7 @@ while (!done)
      */
     wmlOutput ();
     if ( wml_err_count > 0 ) break;
-    printf ("\nWML Uil*.h and wml-uil.mm file creation complete\n");
+    puts("WML Uil*.h and wml-uil.mm file creation complete");
 
     done = 1;
     }
@@ -243,25 +236,21 @@ return (0);
 
 }
 
-
 /*
  * Routine to initialize WML.
  *
  * The main job is to dynamically allocate any dynamic lists to a reasonable
  * initial state.
  */
-void wmlInit ()
-
+static void wmlInit(void)
 {
-
-/*
- * Initialize the list of all syntactic objects
- */
-wmlInitHList (wml_synobj_ptr, 1000, TRUE);
-
+	/*
+ 	 * Initialize the list of all syntactic objects
+ 	 */
+	wmlInitHList(wml_synobj_ptr, 1000, TRUE);
 }
 
-int yywrap()
+int yywrap(void)
 {
-return(1);
+	return 1;
 }

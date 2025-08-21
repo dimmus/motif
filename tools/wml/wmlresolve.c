@@ -30,7 +30,6 @@ static char rcsid[] = "$XConsortium: wmlresolve.c /main/9 1995/08/29 11:11:05 dr
 #include <config.h>
 #endif
 
-
 /*
  * This module contains all routines which perform semantic analysis of
  * the parsed WML specification. It is responsible for building all
@@ -44,15 +43,10 @@ static char rcsid[] = "$XConsortium: wmlresolve.c /main/9 1995/08/29 11:11:05 dr
  * Output:
  *
  */
-
-
-#include "wml.h"
-
-#if defined(__STDC__)
-#include <stdlib.h>
-#endif
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include "wml.h"
 
 /*
  * Routines used only in this module
@@ -1311,7 +1305,7 @@ WmlClassDefPtr		clsobj;		/* current class */
 /*
  * Open the output file.
  */
-outfil = fopen ( "wml.report", "w");
+outfil = fopen ( "wml.report", "w+");
 if ( outfil == NULL )
     {
     printf ("\nCouldn't open wml.report");

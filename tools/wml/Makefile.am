@@ -27,15 +27,13 @@ wmluiltok_SOURCES = wmluiltok.l
 wmluiltok_LDADD = @LEXLIB@
 
 wml_SOURCES = wml.c
-wml_LDADD = -L. -lwml
-wml_DEPENDENCIES = libwml.a
-
-wmldbcreate_LDADD = ../../lib/Xm/libXm.la -lXt
+wml_LDADD = libwml.la
+wmldbcreate_LDADD = ../../lib/Xm/libXm.la $(X_LIBS)
 
 AM_CPPFLAGS = -I../../lib -I$(srcdir)/../../lib -I$(srcdir)/../../include ${X_CFLAGS}
 
-noinst_LIBRARIES = libwml.a
-libwml_a_SOURCES = wmlparse.y wml.c wmloutkey.c wmlouth.c wmloutmm.c wmloutp1.c wmlresolve.c wmlsynbld.c wmlutils.c
+noinst_LTLIBRARIES = libwml.la
+libwml_la_SOURCES = wmlparse.y wmloutkey.c wmlouth.c wmloutmm.c wmloutp1.c wmlresolve.c wmlsynbld.c wmlutils.c
 
 wmlparse.c: wmllex.c
 
@@ -66,6 +64,6 @@ motif.wmd: wmldbcreate
 	./wmldbcreate -o motif.wmd
 
 clean-local:
-	$(RM) $(WMLTARGETS) $(WMDTABLE) $(REPORT) lex.yy.c libwml.a wml \
+	$(RM) $(WMLTARGETS) $(WMDTABLE) $(REPORT) lex.yy.c libwml.la wml \
 	*.mm *.sdml *.txt wmlparse.c wmlparse.h wmluiltok wmllex.c \
 	tokens.dat DONE wmluiltok.c Uil.c Uil.h wml.report UilLexPars.[ch] ylwrap

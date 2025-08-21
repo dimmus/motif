@@ -1,4 +1,4 @@
-/*
+/* 
  * Motif
  *
  * Copyright (c) 1987-2012, The Open Group. All rights reserved.
@@ -19,16 +19,17 @@
  * License along with these librararies and programs; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
-*/
-/*
+*/ 
+/* 
  * HISTORY
-*/
+*/ 
 /* "$TOG: wmlparse.y /main/10 1997/04/14 12:56:03 dbl $" */
 /*
  * This file defines the grammar for the Motif Widget Meta Language (WML),
- * the declarative language which describes the widget, gadgets, and
+ * the declarative language which describes the widget, gadgets, and 
  * resources in the UIL language.
  */
+
 
 %{
 
@@ -52,9 +53,6 @@
  */
 #undef NULL
 #endif
-
-int yyerror (char *s);
-int	yylex();
 
 %}
 
@@ -147,7 +145,7 @@ int	yylex();
 
 %%
 
-
+
 /*
  * Productions of the WML grammar. All routines assume that current
  * data structures are kept in globals. This works as the language has
@@ -270,7 +268,7 @@ charset_statement_list
 	;
 
 
-
+
 /*
  * The CLASS statement
  */
@@ -450,7 +448,7 @@ class_children_element
 	;
 
 
-
+
 /*
  * The RESOURCE statement
  */
@@ -510,7 +508,7 @@ boolean_resource_resource_attribute_name
 	: XRMRESOURCE		{ yytknval1 = XRMRESOURCE; }
 	;
 
-
+
 /*
  * The CHILD statement
  */
@@ -518,8 +516,8 @@ child_statement
        : name COLON STRING
           { wmlCreateChild(yynameval, yystringval); }
        ;
-
-
+  
+
 /*
  * DATATYPE statement
  */
@@ -557,7 +555,7 @@ datatype_attribute_name
 	;
 
 
-
+
 /*
  * The CONTROLLIST statement
  */
@@ -594,7 +592,7 @@ ctrlist_controls_attributes
 	;
 
 
-
+
 /*
  * The ENUMERATIONSET statement
  */
@@ -631,13 +629,13 @@ enumset_value
 	;
 
 
-
+
 /*
  * The ENUMERATIONVALUE statement
  */
 enumval_statement
 	: name
-	    COLON
+	    COLON    
 		{ wmlCreateEnumValue (yynameval); }
 	    enumvalue_definition
 	;
@@ -668,7 +666,7 @@ enumvalue_attribute_name
 	;
 
 
-
+
 /*
  * CHARACTERSET statement
  */
@@ -724,7 +722,7 @@ predefined_charset_attribute_value
 	| MIXED1_2BYTE		{ yytknval2 = MIXED1_2BYTE; }
         ;
 
-
+
 /*
  * Other productions
  */
@@ -738,10 +736,12 @@ name
 /*
  * Dummmy error routine, since we output our own.
  */
-int yyerror (char *s)
+int yyerror (s)
+char *s;
 {
 	return 0;
 }
 
 
 #include "wmllex.c"
+

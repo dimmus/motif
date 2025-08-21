@@ -66,7 +66,7 @@ DataType
     horizontal_float;
     vertical_float;
 
-
+
 !
 ! UIL character sets
 !
@@ -178,7 +178,7 @@ CharacterSet
 
     _MOTIF_DEFAULT_LOCALE
         { FontListElementTag = _MOTIF_DEFAULT_LOCALE; };
-
+
 !
 ! UIL Enumeration Sets
 !
@@ -453,7 +453,7 @@ EnumerationSet
         { XmABSOLUTE; XmRELATIVE; };
     CompoundStringComponent : integer
         { XmSTRING_COMPONENT_UNKNOWN;
-          XmSTRING_COMPONENT_CHARSET;
+          XmSTRING_COMPONENT_TAG;
           XmSTRING_COMPONENT_TEXT;
           XmSTRING_COMPONENT_DIRECTION;
           XmSTRING_COMPONENT_SEPARATOR;
@@ -478,7 +478,7 @@ EnumerationSet
         { XmTreeCompressNone; XmTreeCompressLeaves; XmTreeCompressLeaves;};
     XmTreeLineStyle : integer
         { LineSolid; LineOnOffDash; LineDoubleDash;};
-
+
 ! Define controls list of common aggregates of widgets
 
 ControlList
@@ -707,7 +707,7 @@ ControlList
 
         };
 
-
+
 
 ! The root metaclasses and their resources. RectObj/Windowobj constitutes
 ! the Core class as documented in the toolkit manual.
@@ -835,7 +835,7 @@ Resource
           Default = "True"; };
 
 
-
+
 ! Immediate subclasses of WindowObj
 
 Class
@@ -935,7 +935,7 @@ Resource
           Default = "Null"; };
 
 
-
+
 ! Immediate subclasses of RectObj
 
 Class
@@ -960,7 +960,7 @@ Class
         };
 
 
-
+
 ! Immediate sublclasses of XmGadget
 
 Class
@@ -1247,7 +1247,7 @@ Resource
     XmNdestinationCallback : Reason
         { };
 
-
+
 ! Immediate subclasses of XmLabelGadget
 
 Class
@@ -1415,7 +1415,7 @@ Resource
           Default = "True"; };
 
 
-
+
 ! Immediate subclasses of XmPrimitive
 
 Class
@@ -1602,7 +1602,7 @@ Class
             };
         };
 
-
+
 ! Immediate subclass of XmPrimitive. The ScrolledList variant is treated
 ! as a subclass
 
@@ -1776,7 +1776,7 @@ Resource
         { Type = widget_ref;
           Default = "Null"; };
 
-
+
 ! Immediate subclass of XmPrimitive. The Scrolled variant is treated
 ! as a subclass
 
@@ -1954,7 +1954,7 @@ Resource
         { Type = boolean;
           Default = "False"; };
 
-
+
 ! Immediate subclasses of XmLabel
 
 Class
@@ -2091,7 +2091,7 @@ Class
             };
         };
 
-
+
 ! Immediate subclasses of Composite.
 
 Class
@@ -2148,7 +2148,7 @@ Resource
           { Type = any ;
           Default = "CopyFromParent"; };
 
-
+
 ! Immediate subclasses of Constraint
 
 Class
@@ -2190,7 +2190,7 @@ Resource
     XmNtraverseObscuredCallback : Reason
         { };
 
-
+
 ! Immediate subclasses of Shell
 
 Class
@@ -2323,7 +2323,7 @@ Resource
         { Type = integer;
           Default = "5000"; };
 
-
+
 ! Immediate subclasses of WMShell
 Class
     VendorShell : MetaClass
@@ -2434,7 +2434,7 @@ Resource
         { Type = boolean;
           Default = "False"; };
 
-
+
 ! Immediate subclasses of VendorShell
 
 Class
@@ -2479,7 +2479,7 @@ Resource
         { Type = widget_ref;
           Default = "NULL"; };
 
-
+
 ! Immediate subclasses of TransientShell
 
 Class
@@ -2499,7 +2499,7 @@ Class
             };
     };
 
-
+
 ! Immediate subclasses of OverrideShell
 
 Class
@@ -2526,7 +2526,7 @@ Class
             };
     };
 
-
+
 ! Immediate subclasses of XmManager
 
 Class
@@ -3275,7 +3275,7 @@ Class
         };
 
 
-
+
 ! Bulletin board inherits from XmManager. Its Dialog variant is treated
 ! as a subclass
 
@@ -3388,7 +3388,7 @@ Class
         };
 
 
-
+
 ! RowColumn is instantiated as a number of different apparent widget
 ! classes. There is a UIL widget for each creation routine, which
 ! appears like a discrete class. All inherit from XmManager in fact,
@@ -3694,7 +3694,7 @@ Resource
 ! End Fix for CR 5651
 !
 
-
+
 ! Immediate subclasses of XmScrolledWindow
 
 Class
@@ -3756,7 +3756,7 @@ Resource
         { Type = boolean;
           Default = "False"; };
 
-
+
 ! Immediate subclasses of XmBulletinBoard
 ! For each class, the Dialog variant is treated as a subclass
 
@@ -3886,7 +3886,7 @@ Class
         };
 
 
-
+
 ! Immediate subclass of XmBulletinBoard
 
 ! Most Dialogs are variants of MessageBox, and are treated as subclasses.
@@ -4090,7 +4090,7 @@ Class
         };
 
 
-
+
 ! Immediate subclass of XmBulletinBoard
 
 ! Dialog variants are treated as subclasses
@@ -4228,7 +4228,7 @@ Class
         };
 
 
-
+
 ! Immediate subclasses of XmSelectionBox
 
 Class
@@ -4315,7 +4315,7 @@ Class
         };
 
 
-
+
 ! Immediate subclass of SelectionBox
 ! The Dialog variant is treated as a subclass
 
@@ -4446,7 +4446,7 @@ Class
             };
         };
 
-
+
 ! pseudo-classes for renditions
 Class
     XmRenderTable : Widget
@@ -4565,7 +4565,7 @@ Resource
         { Type = string;
           Default = "."; };
 
-
+
 ! the user-defined class
 Class
     user_defined : Widget

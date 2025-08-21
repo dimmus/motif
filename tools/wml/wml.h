@@ -26,11 +26,7 @@
  * by the WML processor
  */
 
-#if defined(__STDC__)
 #include <stddef.h>
-#else
-#include <stdio.h>
-#endif
 
 #define TRUE		1
 #define FALSE		0
@@ -63,13 +59,11 @@ typedef	char	*ObjectPtr;
 #define	WmlCharSizeTwoByte		2
 #define	WmlCharSizeMixed1_2Byte		3
 
-
 /*
  * Upper case and lower case converters
  */
 #define _upper(c)	((c) >= 'a' && (c) <= 'z' ? (c) & 0x5F:(c))
 #define _lower(c)	((c) >= 'A' && (c) <= 'Z' ? (c) | 0x20:(c))
-
 
 /*
  * The Uil token classes which are dealt with WML. Matched to definitions
@@ -624,9 +618,6 @@ extern DynamicHandleListDefPtr	wml_obj_charset_ptr;
 
 extern DynamicHandleListDefPtr	wml_tok_sens_ptr;
 extern DynamicHandleListDefPtr	wml_tok_insens_ptr;
-
-
-
 
 /*
  * Defined in wmlutils.c

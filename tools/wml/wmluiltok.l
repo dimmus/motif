@@ -1,5 +1,3 @@
-%option main
-
 %{
 /*
  * Motif
@@ -113,7 +111,7 @@ int used		= 0;
 		}
 
 [ \t]		{				/* swallow */
-		}
+		} 
 
 
 "/\*"		{				/* swallow */
@@ -135,7 +133,7 @@ int used		= 0;
 				    strcpy ((char *)
 					malloc (strlen ((XmConst char *)yytext) + 1), (XmConst char *)yytext);
 
-				temp.num_syn = 0;
+				temp.num_syn = 0; 
 				break;
 
 			    case 1:
@@ -193,7 +191,7 @@ add_token (t)					/* keep sorted by name */
     }
 
     /*
-     * if we get there then it goes at the end of the list
+     * if we get there then it goes at the end of the list 
      */
 
     token[used++] = *t;
@@ -206,7 +204,7 @@ int yywrap ()
     int i;
 
     for (i=0; i<used; i++)
-	 {
+	 { 
 	 printf ("%s %s %s\n", token[i].name, token[i].id, token[i].class);
 	 }
     return (1);
