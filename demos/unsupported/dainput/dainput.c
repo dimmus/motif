@@ -69,12 +69,14 @@ int main(int argc, char **argv)
   char       ** temp_argv = argv;
 
 
-  (void) strncpy(name, base(argv[0]), 132);
+  (void) strncpy(name, base(argv[0]), 131);
+  name[131] = '\0';  /* Ensure null termination */
 
   /* handle the '-name' option */
   while (*temp_argv) {
     if (strcmp(*temp_argv, "-name") == 0) {
-      (void) strncpy(name, *++temp_argv, 132);
+      (void) strncpy(name, *++temp_argv, 131);
+      name[131] = '\0';  /* Ensure null termination */
       break;
     }
     temp_argv++;

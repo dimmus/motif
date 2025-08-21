@@ -95,9 +95,9 @@ Widget DaCreateGui(char    * name,
   widget_array[WI_FILEMENU] =
     XmCreatePulldownMenu(widget_array[WI_MENUBAR], "fileMenu", NULL, 0);
   {
-    Arg args[1];
-    XtSetArg(args[0], XmNsubMenuId, widget_array[WI_FILEMENU]);
-    XtSetValues(widget_array[WI_FILE], args, 1);
+    Arg file_args[1];
+    XtSetArg(file_args[0], XmNsubMenuId, widget_array[WI_FILEMENU]);
+    XtSetValues(widget_array[WI_FILE], file_args, 1);
   }
 
   /***************** Exit : XmPushButton *****************/
@@ -115,9 +115,9 @@ Widget DaCreateGui(char    * name,
   widget_array[WI_HELPMENU] =
     XmCreatePulldownMenu(widget_array[WI_MENUBAR], "helpMenu", NULL, 0);
   {
-    Arg args[1];
-    XtSetArg(args[0], XmNsubMenuId, widget_array[WI_HELPMENU]);
-    XtSetValues(widget_array[WI_HELP], args, 1);
+    Arg help_args[1];
+    XtSetArg(help_args[0], XmNsubMenuId, widget_array[WI_HELPMENU]);
+    XtSetValues(widget_array[WI_HELP], help_args, 1);
   }
 
   /***************** Overview : XmPushButton *****************/

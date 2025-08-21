@@ -289,8 +289,10 @@ String name ;
     for (j=0; j < 256; j++) buff_line[j] = ' ' ;
     for (i = 0 ; i < num_resources; i++) {
 	if ((i%2) == 0) {
+	    size_t name_len = strlen(resource_list[i].resource_name);
 	    strncpy (buff_line, resource_list[i].resource_name,
-		     strlen(resource_list[i].resource_name)) ;
+		     (name_len < 256) ? name_len : 255) ;
+	    buff_line[255] = '\0'; /* Ensure null termination */
 	} else {
 	    strcpy (buff_line + 37, resource_list[i].resource_name) ;
 	    AddToBuffer(" %s\n", buff_line);
@@ -314,8 +316,10 @@ String name ;
 	for (j=0; j < 256; j++) buff_line[j] = ' ' ;
 	for (i = 0 ; i < num_resources; i++) {
 	    if ((i%2) == 0) {
+		size_t name_len = strlen(resource_list[i].resource_name);
 		strncpy (buff_line, resource_list[i].resource_name,
-			 strlen(resource_list[i].resource_name)) ;
+			 (name_len < 256) ? name_len : 255) ;
+		buff_line[255] = '\0'; /* Ensure null termination */
 	    } else {
 		strcpy (buff_line + 37, resource_list[i].resource_name) ;
 		AddToBuffer(" %s\n", buff_line);
@@ -344,10 +348,12 @@ String name ;
 		   i, res_sec_list[i]->num_resources);
 	    for (j = 0 ; j < res_sec_list[i]->num_resources; j++) {
 		if ((j%2) == 0) {
-		    strncpy (buff_line,
-			     res_sec_list[i]->resources[j].resource_name,
-			     strlen(
-				res_sec_list[i]->resources[j].resource_name)) ;
+		    size_t name_len = strlen(
+			res_sec_list[i]->resources[j].resource_name);
+			strncpy (buff_line,
+				 res_sec_list[i]->resources[j].resource_name,
+				 (name_len < 256) ? name_len : 255) ;
+			buff_line[255] = '\0'; /* Ensure null termination */
 		} else {
 		    strcpy (buff_line + 37,
 			    res_sec_list[i]->resources[j].resource_name) ;

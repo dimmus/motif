@@ -73,7 +73,7 @@ Widget
 CreateInterface(char* name, Widget parent)
 {
   Widget top, menubar, selected, view, *selected_menu, *view_menu,
-         view_pulldown, form, dirOM, where, sw, dirMenu, lroot,
+         view_pulldown, form, dirOM_local, where, sw, dirMenu, lroot,
          help, *help_menu, helpDialog, container, view_sub_menu,
          show_hidden;
   Arg args[30];
@@ -191,18 +191,18 @@ CreateInterface(char* name, Widget parent)
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_NONE); n++;
   XtSetArg(args[n], XmNresizable, True); n++;
   XtSetArg(args[n], XmNsubMenuId, dirMenu); n++;
-  dirOM = XmCreateOptionMenu(form, "dirOM", args, n);
-  XtManageChild(dirOM);
+  dirOM_local = XmCreateOptionMenu(form, "dirOM", args, n);
+  XtManageChild(dirOM_local);
   XmStringFree(tmp);
 
   n = 0;
   XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET); n++;
-  XtSetArg(args[n], XmNleftWidget, dirOM); n++;
+  XtSetArg(args[n], XmNleftWidget, dirOM_local); n++;
   XtSetArg(args[n], XmNleftOffset, 30); n++;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_OPPOSITE_WIDGET); n++;
-  XtSetArg(args[n], XmNtopWidget, dirOM); n++;
+  XtSetArg(args[n], XmNtopWidget, dirOM_local); n++;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET); n++;
-  XtSetArg(args[n], XmNbottomWidget, dirOM); n++;
+  XtSetArg(args[n], XmNbottomWidget, dirOM_local); n++;
   where = XmCreateLabelGadget(form, "Where", args, n);
   XtManageChild(where);
 
@@ -212,7 +212,7 @@ CreateInterface(char* name, Widget parent)
   XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM); n++;
   XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM); n++;
   XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET); n++;
-  XtSetArg(args[n], XmNtopWidget, dirOM); n++;
+  XtSetArg(args[n], XmNtopWidget, dirOM_local); n++;
   XtSetArg(args[n], XmNtopOffset, 5); n++;
   XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM); n++;
   XtSetArg(args[n], XmNresizable, True); n++;

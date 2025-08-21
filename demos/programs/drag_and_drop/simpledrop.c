@@ -111,7 +111,7 @@ static void Warning(DropDemo this, String s1, String s2)
    else if (s2 == NULL)
      msg = XmStringCreateLocalized(s1);
    else {
-      strncat(strcpy(tmp, s1), s2, 257);
+      strncat(strcpy(tmp, s1), s2, 255 - strlen(s1));
       msg = XmStringCreateLocalized(tmp);
    }
 
@@ -384,7 +384,7 @@ static void SomethingDropped(Widget dropSite, XtPointer client_data,
    }
    else     {
       Warning(this, "Non Identified Object is Dropped. ",
-	      num_targets > 0 ? XmGetAtomName(this->display,exports[0]) : "");
+	      num_targets > 0 && num_targets <= 1 ? XmGetAtomName(this->display,exports[0]) : "");
       status = XmTRANSFER_FAILURE;
    }
    XtSetArg(args[n], XmNnumDropTransfers, num_transfer);  n++;

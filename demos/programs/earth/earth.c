@@ -232,16 +232,16 @@ XtIntervalId *id;
 
 	  if (AppData.persue)
 	    {
-	      Position     x, y;
+	      Position     pos_x, pos_y;
 	      int          mx, my, ji;
 	      Window       jw;
 	      unsigned int jk;
 
-	      XtVaGetValues(toplevel, XmNx, &x, XmNy, &y, NULL);
+	      XtVaGetValues(toplevel, XmNx, &pos_x, XmNy, &pos_y, NULL);
 	      XQueryPointer(XtDisplay(toplevel), XtWindow(toplevel),
 			    &jw, &jw, &mx, &my, &ji, &ji, &jk);
-	      XtVaSetValues(toplevel,XmNx, x+((mx-x)/10),XmNy,
-			    y+((my-y)/10),NULL);
+	      XtVaSetValues(toplevel,XmNx, pos_x+((mx-pos_x)/10),XmNy,
+			    pos_y+((my-pos_y)/10),NULL);
 	    }
 	}
 
@@ -286,16 +286,16 @@ XtPointer callback_data ;
 	arg_count = 0 ;
 	title_string = XmStringGenerate("rotation speed", NULL,
 						     XmCHARSET_TEXT, NULL);
-	XtSetArg(args[arg_count], XmNtitleString,     title_string);  arg_count++ ;
-	XtSetArg(args[arg_count], XmNshowValue,       True); arg_count++ ;
-	XtSetArg(args[arg_count], XmNvalue,           AppData.speed); arg_count++ ;
-	XtSetArg(args[arg_count], XmNorientation,     XmHORIZONTAL); arg_count++ ;
-	XtSetArg(args[arg_count], XmNleftAttachment,  XmATTACH_POSITION); arg_count++;
-	XtSetArg(args[arg_count], XmNleftPosition,    10); arg_count++;
-	XtSetArg(args[arg_count], XmNrightAttachment, XmATTACH_POSITION); arg_count++;
-	XtSetArg(args[arg_count], XmNrightPosition,   90); arg_count++;
-	XtSetArg(args[arg_count], XmNminimum,         -100); arg_count++;
-	XtSetArg(args[arg_count], XmNmaximum,         100); arg_count++;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNtitleString,     title_string);  arg_count++ ;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNshowValue,       True); arg_count++ ;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNvalue,           AppData.speed); arg_count++ ;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNorientation,     XmHORIZONTAL); arg_count++ ;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNleftAttachment,  XmATTACH_POSITION); arg_count++;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNleftPosition,    10); arg_count++;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNrightAttachment, XmATTACH_POSITION); arg_count++;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNrightPosition,   90); arg_count++;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNminimum,         -100); arg_count++;
+	if (arg_count < 15) XtSetArg(args[arg_count], XmNmaximum,         100); arg_count++;
 	speed_scale = XmCreateScale(speed_dialog,
 				    "speed_scale",
 				    args, arg_count) ;

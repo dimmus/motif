@@ -42,7 +42,7 @@ XtAppContext  	app_context;
 Widget toplevel, mainW, dirOM, fileviewer;
 Widget gotoDialog, displayLabel;
 
-static int ErrorHandler(Display *display, XErrorEvent *event);
+static int ErrorHandler(Display *display_local, XErrorEvent *event);
 static void UpdateDir(XtPointer, XtIntervalId*);
 
 #define APP_CLASS "XmdFilemanager"
@@ -98,7 +98,7 @@ main(int argc, char* argv[])
   Arg		args[10];
   int 		n = 0;
   Pixel		fg, bg;
-  Display	*display;
+  Display	*display_local;
   int		time;
   char		*str;
   int 		i;
@@ -137,7 +137,6 @@ main(int argc, char* argv[])
     char buf[16];
     sprintf(buf, "*l%d", i);
     dirLabel[i] = XtNameToWidget(mainW, buf);
-    paths[i] = NULL;
   }
 
   fileviewer = XtNameToWidget(mainW, "*container");
@@ -197,12 +196,12 @@ fixViewerSize(Widget w, XtPointer i1, XtPointer i2)
 /* Error handler for X protocol errors.  Continue after error */
 
 static int
-ErrorHandler(Display *display, XErrorEvent *event)
+ErrorHandler(Display *display_local, XErrorEvent *event)
 {
   char errortext[100];
   XmString tmp;
 
-  XGetErrorText(display, event -> error_code, errortext, 100);
+  XGetErrorText(display_local, event -> error_code, errortext, 100);
 
   printf("X Protocol error: %s\n", errortext);
   printf("XID %ld serial %ld major %d minor %d\n",

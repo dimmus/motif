@@ -744,7 +744,7 @@ NumChildCB (Widget	w,		/*  widget id		*/
     Arg args[1] ;
     XmScaleCallbackStruct * scb = (XmScaleCallbackStruct *) call_data ;
     Widget * children, new_child ;
-    char name[10] ;
+    char name[16] ;
     int i ;
     Cardinal num_children ;
 
@@ -769,7 +769,7 @@ NumChildCB (Widget	w,		/*  widget id		*/
 
 	/* add buttons at the end of the child list */
 	for (i = rc_data.num_children ; i < scb->value; i++) {
-	    sprintf(name, "push%d", i);
+	    snprintf(name, sizeof(name), "push%d", i);
 	    new_child = XmCreatePushButton (rc_data.rc, name, NULL, 0);
 	    XtManageChild(new_child);
 	}

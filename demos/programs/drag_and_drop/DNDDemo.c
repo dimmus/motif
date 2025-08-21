@@ -445,18 +445,18 @@ RectConvert(Widget widget, XtPointer ignore, XmConvertCallbackStruct *cs)
     }
     else if (cs -> target == TARGETS || cs -> target == ME_TARGETS) {
         /* This target is required by ICCCM */
-        Atom *targs;
-        int target_count = 0;
+        Atom *targs_local;
+        int target_count_local = 0;
 
 	if (cs -> target == ME_TARGETS)
-	  targs = (Atom *)XtMalloc((unsigned) (1 * sizeof(Atom)));
+	  targs_local = (Atom *)XtMalloc((unsigned) (1 * sizeof(Atom)));
 	else
-	  targs = XmeStandardTargets(widget, 1, &target_count);
+	  targs_local = XmeStandardTargets(widget, 1, &target_count_local);
 
-        targs[target_count++] = MY_RECT;
+        targs_local[target_count_local++] = MY_RECT;
 
-        cs -> value = (XtPointer) targs;
-	cs -> length = target_count;
+        cs -> value = (XtPointer) targs_local;
+	cs -> length = target_count_local;
 	cs -> format = 32;
 	cs -> type = XA_ATOM;
 	cs -> status = XmCONVERT_DONE;

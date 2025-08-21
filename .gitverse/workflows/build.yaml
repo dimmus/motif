@@ -47,7 +47,6 @@ jobs:
             clang
       - name: Make
         run: |
-          cd /home/runner/work/motif/motif
           CC=${{ matrix.compiler }} ./autogen.sh
           make
       # - name: Test

@@ -172,8 +172,8 @@ outlineCB(Widget widget, char* subdirname,
       XtVaGetValues(parent, XmNentryParent, &grandparent, NULL, NULL);
       names[level++] = f -> name;
       for(; grandparent != (Widget) NULL; level++) {
-	FileInfoRec *f = GetInfoFromWidget(grandparent);
-	if (f) names[level] = f -> name;
+	FileInfoRec *f_grandparent = GetInfoFromWidget(grandparent);
+	if (f_grandparent) names[level] = f_grandparent -> name;
 	/* Get the next parent */
 	XtVaGetValues(grandparent, XmNentryParent, &grandparent, NULL, NULL);
       }
@@ -452,9 +452,14 @@ static void readIcon(str, icon, mask, fg, bg)
 
     if (strcmp(find_suffix(str), "xpm") == 0) {
       int len = strlen(str);
-      strncpy(msk, str, len - 4);
-      msk[len - 4] = 0;
-      strcat(msk, "_m.xpm");
+      if (len > 4) {
+        strncpy(msk, str, len - 4);
+        msk[len - 4] = 0;
+        strcat(msk, "_m.xpm");
+      } else {
+        strcpy(msk, str);
+        strcat(msk, "_m.xpm");
+      }
     } else {
       strcpy(msk, str);
       strcat(msk, "_m");

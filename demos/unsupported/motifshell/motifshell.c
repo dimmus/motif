@@ -78,6 +78,7 @@ static char rcsid[] = "$TOG: motifshell.c /main/7 1997/03/31 13:41:20 dbl $"
 #include <Xm/ScrolledW.h>
 #include <Xm/SelectioB.h>
 #include <Xm/Text.h>
+#include <limits.h>
 
 
 #define APP_CLASS       "XMdemo"
@@ -196,7 +197,9 @@ void FontTest (Widget w, XtPointer client_data, XtPointer call_data)
     return;
 
   textstr = ExtractNormalString (callback_data->value);
-  if (textstr == NULL) sprintf(textstr, "%s", DEFAULT_FONT);
+  if (textstr == NULL) {
+    textstr = DEFAULT_FONT;
+  }
 
   if ((mfinfo = XLoadQueryFont(display, textstr))==NULL)
       printf ("couldn't open %s font\n", textstr);
@@ -314,18 +317,20 @@ char *GetSource (char *fileptr)
 	{
 	  catlen = strlen(defaultcap);
 	  datahome = (char *) malloc(catlen + strlen(fileptr) + 2);
-	  strncpy(datahome, defaultcap, catlen);
-	  datahome[catlen] = '/';
-	  datahome[catlen + 1] = '\0';
-	  strcat(datahome, fileptr);
+	  if (datahome != NULL) {
+	    strcpy(datahome, defaultcap);
+	    datahome[catlen] = '/';
+	    datahome[catlen + 1] = '\0';
+	    strcat(datahome, fileptr);
 
-	  if ((fd = open(datahome, O_RDONLY)) < 0)
-	    {
-	      printf ("Cannot find the file %s in %s\n", fileptr, datahome);
-	      free(datahome);
-	      return((char *) NULL);
-	    }
-	  free(datahome);
+	    if ((fd = open(datahome, O_RDONLY)) < 0)
+	      {
+		printf ("Cannot find the file %s in %s\n", fileptr, datahome);
+		free(datahome);
+		return((char *) NULL);
+	      }
+	    free(datahome);
+	  }
 	}
       else
 	if ((capfileptr = search_in_env(fileptr)))
@@ -343,11 +348,24 @@ char *GetSource (char *fileptr)
   }
 
   flen = GetFileLen(fd);
+  if (flen <= 0) {
+    printf ("Error getting file length for %s\n", fileptr);
+    close (fd);
+    return ((char *) NULL);
+  }
+  
   retbuff = (char*) calloc (1, flen + 1);
+  if (retbuff == NULL) {
+    printf ("Memory allocation failed for %s\n", fileptr);
+    close (fd);
+    return ((char *) NULL);
+  }
 
   if (read (fd, retbuff, flen) <= 0)
     {
       printf ("Error reading file %s\n", fileptr);
+      free(retbuff);
+      close (fd);
       return ((char *) NULL);
     }
   close (fd);
@@ -444,10 +462,10 @@ void ShowFontDialogShell (Widget parent, char *label)
 		    XmNlistVisibleItemCount, 10,
 		    NULL);
 
-      list = XmSelectionBoxGetChild(dlog, XmDIALOG_LIST);
+      list = XtNameToWidget(dlog, "List");
       XtVaSetValues(list, XmNselectionPolicy, XmSINGLE_SELECT, NULL);
 
-      XtUnmanageChild(XmSelectionBoxGetChild(dlog, XmDIALOG_APPLY_BUTTON));
+      XtUnmanageChild(XtNameToWidget(dlog, "ApplyButton"));
 
       XtAddCallback (dlog, XmNokCallback,     FontSelectOK,     NULL);
       XtAddCallback (dlog, XmNhelpCallback,   FontTest,         (XtPointer)workText);
@@ -556,18 +574,31 @@ Widget CreateTextWin (Widget parent)
  *-------------------------------------------------------------*/
 int GetFileLen (int fd)
 {
-  static int retval;
+  off_t retval;
 
 #if defined(L_SET) && defined(L_XTND)
-  lseek (fd, 0, L_SET);
+  if (lseek (fd, 0, L_SET) == (off_t)-1)
+    return -1;
   retval = lseek (fd, 0, L_XTND);
-  lseek (fd, 0, L_SET);
+  if (retval == (off_t)-1)
+    return -1;
+  if (lseek (fd, 0, L_SET) == (off_t)-1)
+    return -1;
 #else
-  lseek (fd, 0, SEEK_SET);
+  if (lseek (fd, 0, SEEK_SET) == (off_t)-1)
+    return -1;
   retval = lseek (fd, 0, SEEK_END);
-  lseek (fd, 0, SEEK_SET);
+  if (retval == (off_t)-1)
+    return -1;
+  if (lseek (fd, 0, SEEK_SET) == (off_t)-1)
+    return -1;
 #endif
-  return (retval);
+  
+  /* Check if file size is reasonable */
+  if (retval < 0 || retval > INT_MAX)
+    return -1;
+    
+  return (int)retval;
 }
 
 
@@ -580,9 +611,9 @@ void SysCall (Widget widget, char *systemCommand, Boolean set_uidpath)
   char  str[256];
   char *findCmd;
   FILE *file;
-  pid_t p;
+  pid_t child_pid;
 
-  if ((p = fork()) == 0)
+  if ((child_pid = fork()) == 0)
     {
       /* note - execlp uses PATH */
       execlp(systemCommand, systemCommand, NULL);

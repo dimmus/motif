@@ -43,7 +43,6 @@ extern Widget fileviewer, dirOM, toplevel, mainW, gotoDialog;
 extern char *currentdir;
 extern Widget *dirLabel, displayLabel;
 extern int ndirLabel;
-extern char *paths[];
 extern FileInfoRec *FI;
 extern WidgetList IconGadgets;
 extern int validFI;
