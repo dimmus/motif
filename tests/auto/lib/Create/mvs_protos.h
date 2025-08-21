@@ -114,7 +114,7 @@ extern void mvsOptionMenuBehaviorSet PARAMS((
                                        int focus_mode, Arg args[],
 				       int n, int i));
 
-
+
 
 /**************************************************************************
 *                                mvslib/enums                             *
@@ -136,7 +136,7 @@ extern MvsArgVal EnumOptionMChild PARAMS((int n));
 extern MvsArgVal EnumPopupMChild PARAMS((int n));
 extern MvsArgVal EnumMenuBChild PARAMS((int n));
 
-
+
 /**************************************************************************
 *                                mvslib/other                             *
 **************************************************************************/
@@ -160,7 +160,7 @@ extern void mvsProcessArgs PARAMS((int *argc, char **argv));
 
 /* extern void msg ();  variable argument list */
 
-
+
 /**************************************************************************
 *                              mvslib/geometry                            *
 **************************************************************************/
@@ -175,7 +175,7 @@ extern XisObjectRecord *mvsGetSubObjects PARAMS((XisObjectRecord *parent_obj,
                                                 int object_type, int instance,
 						int PreDefComposite));
 
-
+
 /**************************************************************************
 *                             mvslib/resources                            *
 **************************************************************************/
@@ -337,7 +337,7 @@ extern void mvsTestCreateResources PARAMS((
 
 extern void mvsSetUpGlobalArgs PARAMS((MvsWidgetClassInfo *widget_class_info));
 
-
+
 /**************************************************************************
 *                               mvslib/widgets                            *
 **************************************************************************/
@@ -389,7 +389,7 @@ extern void SetupMotifClass PARAMS((void));
 
 extern ClassRef *ConvertClass PARAMS((ClassRefEle   ref_val, int ref_typ));
 
-
+
 /**************************************************************************
 *                              mvslib/callbacks                           *
 **************************************************************************/
@@ -460,7 +460,7 @@ extern void mvsInitCallbacks PARAMS(( void ));
 
 extern void mvsUseCallbackInfo PARAMS(( char *routine_name ));
 
-
+
 /**************************************************************************
 *                              mvslib/specific                            *
 **************************************************************************/

@@ -133,7 +133,7 @@
     {    153,    204,     50, "yellow green",       "YellowGreen"            }
 };
 
-
+
 
   visGLOBAL MvsPixmapTableRecord mvsPixmapTable[] = {
    /* NAME           PIXMAP  WIDTH     HEIGHT       PIXMAP (1=black,0=white) */

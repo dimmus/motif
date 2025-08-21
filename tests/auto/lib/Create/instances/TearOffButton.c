@@ -40,7 +40,7 @@ static char rcsid[] = "$XConsortium: TearOffButton.c /main/6 1995/07/14 11:12:50
 /*************************************************************************/
 /*            This file contains WIDGET SPECIFIC DEFINTIONS              */
 /*************************************************************************/
-
+
 /*************************************************************************/
 /*      These are the resources associated with this Widget Class        */
 /*************************************************************************/
@@ -119,7 +119,7 @@ static MvsResourceInfoRecord Wresource_info[] = {
 
 static char Widget_class_name[] = "XmTearOffButton";
 
-
+
 /*************************************************************************/
 /*    This function is used to create a widget of a particular Widget    */
 /* Class. The class is apparent from the name of the convenience         */
@@ -138,7 +138,7 @@ int nargs;
 
 } /* End CreateWidget() */
 
-
+
 /*********************************************************************/
 /*    This function sets up the widget info structure that contains  */
 /* all information that applies to a particular widget class. This   */

@@ -66,7 +66,7 @@ Window window;
 
 } /* End xisIsMapped() */
 
-
+
 int xisIsViewable(window)
 Window window;
 {
@@ -81,7 +81,7 @@ Window window;
 
 } /* End xisIsViewable() */
 
-
+
 /*
  * Return status of widget being mapped or unmapped
  */

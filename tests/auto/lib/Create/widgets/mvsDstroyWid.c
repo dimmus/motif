@@ -178,7 +178,7 @@ int check_callbacks;
   
 } /* End mvsDestroyWidget() */
 
-
+
 /***********************************************************************
   Author: SJS
   History:
@@ -223,7 +223,7 @@ void mvsDepthDestroy(w_info)
   } /* End while() */
 } /* End mvsDepthDestroy() */
 
-
+
 /***********************************************************************
   Author: SJS
   History:

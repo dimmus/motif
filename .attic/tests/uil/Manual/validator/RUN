@@ -73,7 +73,7 @@ set postCompileStatus = $status
 #remove the Page/date headers which show up in every diff
 #and other stuff which makes maintenance tedious
 
-sed -e '/Page/d' -e '/^Module/d' -e 's///g' -e '/^$/d' -e 's/^ *[0-9]* *//'  run.out | sed -e '/(0)[ 	]*$/d' > run.log
+sed -e '/Page/d' -e '/^Module/d' -e 's///g' -e '/^$/d' -e 's/^ *[0-9]* *//'  run.out | sed -e '/(0)[ 	]*$/d' > run.log
 diff -c validator.log run.log > run.diff
 
 set diffStatus = $status

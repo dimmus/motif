@@ -484,7 +484,7 @@ WidgetClass xtclass;
 
 } /* End mvsCreateWidget() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:

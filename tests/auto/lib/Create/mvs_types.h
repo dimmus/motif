@@ -67,7 +67,7 @@ typedef XtArgVal MvsArgVal;
  Note: MvsArgVal is defined merely to distinguish resource value usage intent.
 */
 
-
+
 
 /***** Clarify a Few Resource Types (for enum classification, etc.)       *****/
 /***** XtOrderProc is in the AES, but in (CompositeP.h)PRIVATE Xt include *****/
@@ -85,7 +85,7 @@ typedef Screen *Pointer;
 #include <X11/CompositeP.h>
 #endif
 
-
+
 /************** Define the Type_info Array **************/
 
 /*
@@ -112,7 +112,7 @@ typedef struct _MvsTypeInfoRecord {
     int nbits;
 }  MvsTypeInfoRecord;
 
-
+
 /**************************************************************************
 *                     ENUMERATION TYPE DEFINE
 **************************************************************************/
@@ -122,7 +122,7 @@ typedef struct {
     char str_val[MAX_STRING_VAL];
 } MvsEnumType;
 
-
+
 /**************************************************************************
 *                     BEHAVIOR TABLE INFO
 **************************************************************************/
@@ -135,7 +135,7 @@ typedef struct {
     int div_num;
 } MvsBehavior_Table;
 
-
+
 /**************************************************************************
 *                       RESOURCE INFO RECORD
 **************************************************************************/
@@ -173,7 +173,7 @@ typedef struct _MvsIntResInfoRecord {
 } MvsIntResInfoRecord;
 
 
-
+
 /**************************************************************************
 *                     WIDGET CLASS INFO
 **************************************************************************/
@@ -196,7 +196,7 @@ typedef struct _MvsWidgetClassInfo {
 
 
 
-
+
 /**************************************************************************
 *                     WIDGET INFO 
 **************************************************************************/

@@ -160,7 +160,7 @@ va_list ap;
 
 } /* End process_msg() */
 
-
+
 /* This function is used to print out messages that have been classified
    as being "Failures." Messages are only printed if the level of
    detail has been requested. "Failure" implies that some part of the
@@ -198,7 +198,7 @@ void msg_failure ( va_alist )
     return;
 } /* End msg_failure() */
 
-
+
 /* This function is used to print out messages that have been classified
    as being "Errors." Messages are only printed if the level of
    detail has been requested.
@@ -234,7 +234,7 @@ void msg_error ( va_alist )
     return;
 } /* End msg_error() */
 
-
+
 /* This function is used to print out messages that have been classified
    as being "Informational." Messages are only printed if the level of
    detail has been requested.
@@ -270,7 +270,7 @@ void msg_info ( va_alist )
 
 } /* End msg_info() */
 
-
+
 /* This function is used to print out messages that have been classified
    as being "Warnings." Messages are only printed if the level of
    detail has been requested.
@@ -306,7 +306,7 @@ void msg_warning ( va_alist )
 
 } /* End msg_warning() */
 
-
+
 /* This function is used to print out messages that have been classified
    as being "Trace." Messages are only printed if the level of
    detail has been requested.
@@ -342,7 +342,7 @@ void msg_trace ( va_alist )
 
 } /* End msg_trace() */
 
-
+
 /* This function is used to print out any messages that are passed to it.
 */
 

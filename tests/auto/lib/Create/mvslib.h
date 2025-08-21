@@ -63,7 +63,7 @@
 #    define mvsINIT(x)
 #endif
 
-
+
 /**************************************************************************
 *                       GENERAL DECLARATIONS
 **************************************************************************/
@@ -299,7 +299,7 @@ mvsGLOBAL char mvsTestName[MAX_TEST_NAME] = { 0 };
 # define mvsXmWorkAreaWidgetClass        	65
 
 #include "instances.h"
-
+
 /**************************************************************************
 *                     SET EXPECTED ACTION CODES
 **************************************************************************/
@@ -736,7 +736,7 @@ mvsGLOBAL char mvsTestName[MAX_TEST_NAME] = { 0 };
 
 # define DontCheckCallbacks 0
 # define DoCheckCallbacks   1
-
+
 
 /**************************************************************************
 *                     GLOBAL CALLBACK STRUCTURES
@@ -753,14 +753,14 @@ mvsGLOBAL long mvsCallbacksCheckSum[] = {2, 2, 543, 6387, 8911389 };
 mvsGLOBAL long mvsCallbacksCheckSum[];
 #endif
 
-
+
 mvsGLOBAL MvsCallbackInfoRecord mvsCallbackInfo[MAX_CALLBACKS] 
           mvsINIT({ 0 });
 
 mvsGLOBAL int mvsExpectedCallback[MAX_CALLBACKS]; 
 mvsGLOBAL int mvsExpectedReasons[MAX_CALLBACKS]; 
 
-
+
 #ifndef DECLARE_MVSLIB_GLOBALS_HERE
 mvsGLOBAL MvsFontInfoRecord mvsFontInfo[];
 #else

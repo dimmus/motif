@@ -117,7 +117,7 @@ MvsResourceInfoRecord *resource_info;
 
 } /* End commonLoadResources() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:
@@ -144,7 +144,7 @@ MvsArgVal resources[];
 
 } /* End mvsLoadResources() */
 
-
+
 /***********************************************************************
   	Author: PSN
 	History:

@@ -114,7 +114,7 @@ MvsWidgetInfoRecord *widget_info;
 
 } /* End mvsIsParentDialogShell() */
 
-
+
 /************************************************************************/
 /*  This function determines if the parent of a widget is a RowColumn   */
 /* RowColumn draws the entryBorder *INSIDE* its child windows. I am     */

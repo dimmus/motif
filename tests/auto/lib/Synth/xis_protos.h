@@ -98,7 +98,7 @@ extern void xisSendEvent /* Sends 1 synthesized event to the specified window */
              unsigned int    detail              /* Key,Button changed state */
           )); 
 
-
+
 /******************************************************************************
                 INFO FUNCTIONS
 ******************************************************************************/
@@ -159,7 +159,7 @@ extern void xisUseSessionInfo /* Checks if xisInitDisplayInfo called
           ));
 
 
-
+
 /******************************************************************************
                 OTHER FUNCTIONS
 ******************************************************************************/
@@ -346,7 +346,7 @@ extern int xisWindowExists /* Returns True if window exists */
           ));
     
 
-
+
 /******************************************************************************
                 PRIMITIVE BEHAVIOR FUNCTIONS
 ******************************************************************************/

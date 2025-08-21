@@ -115,7 +115,7 @@ extern void visAddToColorCache PARAMS((XColor *color));
 
 extern void visClearColorCache PARAMS((void));
 
-
+
 /**************************************************************************
 *                               vislib/enums                              *
 **************************************************************************/
@@ -123,7 +123,7 @@ extern void visClearColorCache PARAMS((void));
 extern MvsArgVal EnumPixel PARAMS((int n));
 extern MvsArgVal EnumPixmap PARAMS((int n));
 
-
+
 /**************************************************************************
 *                               vislib/other                              *
 **************************************************************************/

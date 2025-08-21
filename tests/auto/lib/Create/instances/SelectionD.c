@@ -46,7 +46,7 @@ static char rcsid[] = "$XConsortium: SelectionD.c /main/8 1995/07/14 11:11:32 dr
 /*************************************************************************/
 /*            This file contains WIDGET SPECIFIC DEFINTIONS              */
 /*************************************************************************/
-
+
 /*************************************************************************/
 /*      These are the resources associated with this Widget Class        */
 /*************************************************************************/
@@ -241,7 +241,7 @@ static MvsResourceInfoRecord Wresource_info[] = {
 
 };
 
-
+
 /*************************************************************************/
 /*      This is the name of the class (for debugging purposes)           */
 /*************************************************************************/
@@ -249,7 +249,7 @@ static MvsResourceInfoRecord Wresource_info[] = {
 static char Widget_class_name[] =
 			"XmSelectionDialog";
 
-
+
 /*************************************************************************/
 /*    This function is used to create a widget of a particular Widget    */
 /* Class. The class is apparent from the name of the convenience         */
@@ -276,7 +276,7 @@ WidgetClass xtclass;
 
 } /* End CreateWidget() */
 
-
+
 /*********************************************************************/
 /*    This function sets up the widget info structure that contains  */
 /* all information that applies to a particular widget class. This   */
