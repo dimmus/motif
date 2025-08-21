@@ -45,7 +45,9 @@
 
 #define		YYSTYPE		yystype
 
+#ifndef YYDEBUG
 #define		YYDEBUG		1
+#endif
 
 /*   Declare and initialize stack entry for epsilon productions.    */
 
@@ -242,7 +244,7 @@ module_block
 
 module_header
     : /* empty */				{ sar_create_root ( &$$ ); }
-      MODULE id 				{ sar_create_module( &$$, &$3, &$2 ); }
+      MODULE id 				{ sar_create_module( &$$, &$2, &$3 ); }
 	opt_module_clauses
     ;
 

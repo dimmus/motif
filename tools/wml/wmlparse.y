@@ -736,6 +736,7 @@ name
 /*
  * Dummmy error routine, since we output our own.
  */
+int yylex(void);
 int yyerror (s)
 char *s;
 {
