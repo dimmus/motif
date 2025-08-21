@@ -72,11 +72,11 @@ dnl Check for X
 PKG_INSTALLDIR
 PKG_CHECK_MODULES([X], [x11 xpm xt xmu xext])
 
-save_LIBS="$LIBS"
-save_CFLAGS="$CFLAGS"
+# save_LIBS="$LIBS"
+# save_CFLAGS="$CFLAGS"
 
-LIBS="$X_LIBS $LIBS"
-CFLAGS="$X_CFLAGS $CFLAGS"
+# LIBS="$X_LIBS $LIBS"
+# CFLAGS="$X_CFLAGS $CFLAGS"
 
 dnl lib/Xm/VendorS.c and lib/Xm/EditresCom.c
 AC_CHECK_HEADERS(X11/Xmu/Editres.h,
@@ -124,26 +124,8 @@ AC_CHECK_FUNCS(getcwd getwd iconv nanosleep regex strlcat \
                gettimeofday mkdir re_comp regcmp select \
                strcspn strerror strstr strtod strtol uname)
 
-# AC_COMPILE_IFELSE(
-#     [AC_LANG_PROGRAM([#include <sys/types.h>
-#                       #include <signal.h>
-#                       ],
-#                      [return *(signal(0, 0)) (0) == 1;])],
-#     [ac_cv_type_signal=int],
-#     [ac_cv_type_signal=void]
-# )
-
-# Cache the result using AC_CACHE_VAL instead of AC_CACHE_CHECK
-# AC_CACHE_VAL(ac_cv_type_signal,
-#     [AC_MSG_RESULT([$ac_cv_type_signal])])
-
-# AC_DEFINE_UNQUOTED([RETSIGTYPE], [$ac_cv_type_signal], [Define as the return type of signal handlers (`int' or `void').])
-
 if test x$GCC = xyes; then
-    CFLAGS="$CFLAGS \
-        -g -fno-strict-aliasing \
-        -Wall \
-        -Wno-unused -Wno-comment -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -Wno-unused-result"
+    CFLAGS="$CFLAGS -fno-strict-aliasing"
     # CFLAGS="$CFLAGS -std=$C_STD"
     if test ` $CC -dumpversion | sed -e 's/\(^.\).*/\1/'` = "4" ; then
         CFLAGS="$CFLAGS -fno-tree-ter"
@@ -189,17 +171,6 @@ AC_ARG_ENABLE([utf8],
 	], [enable_utf8=$enableval], [enable_utf8=yes]
 )
 
-dnl Message catalog
-# if test x$enable_message_catalog = x
-# then
-#     enable_message_catalog="yes"
-# fi
-# AC_ARG_ENABLE(message-catalog, [  --enable-message-catalog
-#                           Enable building of the X/Open message catalog (default=no)])
-# if test "$enable_message_catalog" != "yes"
-# then
-#     AC_DEFINE(NO_MESSAGE_CATALOG, 1, No Defined Message Catalog)
-# fi
 AC_ARG_ENABLE([message-catalog],
   [AS_HELP_STRING(
       [--enable-message-catalog],
@@ -215,7 +186,6 @@ AC_ARG_ENABLE([printing],
 	], [enable_printing=$enableval], [enable_printing=no]
 )
 
-dnl Printing support relies on the X print protocol
 AS_IF([test "x$enable_printing" == "xyes"],[
 	PKG_CHECK_MODULES([XP], [xp], [], [enable_printing=no])
 	AS_IF([test "x$enable_printing" == "xno"], [AC_MSG_FAILURE([libXp not found])])
@@ -249,7 +219,7 @@ dnl Debug builds (assert, etc.)
 # ])
 
 dnl Compiler flags
-# AX_CFLAGS
+XM_CFLAGS
 
 dnl .pc
 AC_SUBST([XM_VERSION], [XM_VERSION])
@@ -326,6 +296,7 @@ include/Makefile \
 include/Dt/Makefile \
 lib/Makefile \
 lib/Xm/Makefile \
+lib/Xm/version.h \
 lib/Mrm/Makefile \
 localized/Makefile \
 localized/util/Makefile \
@@ -434,16 +405,35 @@ else
 fi
 AC_SUBST(XM_WTH_DEMOS)
 
+XM_ADD_FEATURE([XM],[png],[${with_png}])
+XM_ADD_FEATURE([XM],[jpg],[${with_jpeg}])
+XM_ADD_FEATURE([XM],[xft],[${with_xft}])
+XM_ADD_FEATURE([XM],[utf8],[${enable_utf8}])
+XM_ADD_FEATURE([XM],[print],[${enable_printing}])
+
+XM_ADD_FEATURE([BUILD],[demos],[${enable_demos}])
+
+# XM_ADD_FEATURE([DBG],[tests],[${enable_tests}])
+# XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
+
 AC_OUTPUT
 
 echo ""
-echo "The following optional features will be used:"
-echo "  Enable demos:              $enable_demos"
-echo "  Enable JPG support:        $with_jpeg"
-echo "  Enable PNG support:        $with_png"
-echo "  Enable XFT support:        $enable_xft"
-echo "  Enable UTF8 support:       $enable_utf8"
-echo "  Enable XTHREADS:           $lt_cv_xthreads"
-echo "  Enable printing support:   $enable_printing"
-echo "  Enable message catalog:    $enable_message_catalog"
+echo "------------------------------------------------------------------------"
+echo "$PACKAGE $VERSION"
+echo "------------------------------------------------------------------------"
+echo ""
+echo "System configuration:"
+echo "  os.............: ${host_os}"
+echo ""
+echo "Features:"
+echo "  libxm..........: ${features_xm}"
+echo "  debug..........: ${features_dbg}"
+echo ""
+echo "Components:......: ${features_build}"
+echo ""
+echo "Compilation......: make"
+echo "  CPPFLAGS.......: $CPPFLAGS"
+echo "  CFLAGS.........: $CFLAGS"
+echo "  LDFLAGS........: $LIBS"
 echo ""
