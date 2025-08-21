@@ -608,22 +608,22 @@ process_printer_list(Widget w)
 
   /* Now put new strings in */
   for(count = 0; count < pw -> print.num_printers; count++) {
-    XmString str;
+    XmString label_str;
 
-    str = XmStringCreateLocalized(pw -> print.printers[count]);
+    label_str = XmStringCreateLocalized(pw -> print.printers[count]);
     if (pw -> print.om_items[count] != (Widget) 0)
       XtVaSetValues(pw -> print.om_items[count],
-		    XmNlabelString, str,
+		    XmNlabelString, label_str,
 		    NULL, NULL);
     else {
       Arg args[2];
-      XtSetArg(args[0], XmNlabelString, str);
+      XtSetArg(args[0], XmNlabelString, label_str);
       pw -> print.om_items[count] =
 	XmCreatePushButtonGadget(pw -> print.destination_pd, "button",
 				 args, 1);
     }
     XtManageChild(pw -> print.om_items[count]);
-    XmStringFree(str);
+    XmStringFree(label_str);
   }
 
   /* Fix the position of the widgets in the list */

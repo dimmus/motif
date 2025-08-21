@@ -2159,10 +2159,10 @@ Urm__CW_ConvertValue (Widget			parent,
       break;
     case MrmRtypeIntegerVector:
       {
-	RGMIntegerVectorPtr	vecptr ;	/* val as integer vector */
+	RGMIntegerVectorPtr	intvecptr ;	/* val as integer vector */
 
-        vecptr = (RGMIntegerVectorPtr) (*val) ;
-        *val = (long) vecptr->item ;
+        intvecptr = (RGMIntegerVectorPtr) (*val) ;
+        *val = (long) intvecptr->item ;
         break ;
       }
     case MrmRtypeAddrName:

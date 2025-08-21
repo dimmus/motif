@@ -125,7 +125,7 @@ int main(argc, argv) int argc; char **argv ;
 /**************************************/
 {
     Arg args[10] ;
-    Cardinal n;
+    Cardinal arg_count;
 
     XGCValues values;
     XtGCMask  valueMask;
@@ -152,10 +152,10 @@ int main(argc, argv) int argc; char **argv ;
 			      0);
 
     /* create a fixed size drawing area + callback for dialog popup */
-    n = 0 ;
-    XtSetArg(args[n], XmNwidth, 64);  n++ ;
-    XtSetArg(args[n], XmNheight, 64); n++ ;
-    draw = XmCreateDrawingArea (toplevel, "draw", args, n);
+    arg_count = 0 ;
+    XtSetArg(args[arg_count], XmNwidth, 64);  arg_count++ ;
+    XtSetArg(args[arg_count], XmNheight, 64); arg_count++ ;
+    draw = XmCreateDrawingArea (toplevel, "draw", args, arg_count);
     XtManageChild(draw);
     XtAddCallback(draw,XmNinputCallback,(XtCallbackProc)input_callback,NULL);
     XtAddCallback(draw,XmNexposeCallback,(XtCallbackProc)expose_callback,NULL);
@@ -272,7 +272,7 @@ XtPointer callback_data ;
   static Widget speed_dialog = NULL ;
   Widget speed_scale ;
   Arg args[15] ;
-  Cardinal n;
+  Cardinal arg_count;
   XmString title_string;
 
 
@@ -283,22 +283,22 @@ XtPointer callback_data ;
 	speed_dialog = XmCreateFormDialog(toplevel,
 					  "Speed control",
 					  NULL, 0) ;
-	n = 0 ;
+	arg_count = 0 ;
 	title_string = XmStringGenerate("rotation speed", NULL,
 						     XmCHARSET_TEXT, NULL);
-	XtSetArg(args[n], XmNtitleString,     title_string);  n++ ;
-	XtSetArg(args[n], XmNshowValue,       True); n++ ;
-	XtSetArg(args[n], XmNvalue,           AppData.speed); n++ ;
-	XtSetArg(args[n], XmNorientation,     XmHORIZONTAL); n++ ;
-	XtSetArg(args[n], XmNleftAttachment,  XmATTACH_POSITION); n++;
-	XtSetArg(args[n], XmNleftPosition,    10); n++;
-	XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION); n++;
-	XtSetArg(args[n], XmNrightPosition,   90); n++;
-	XtSetArg(args[n], XmNminimum,         -100); n++;
-	XtSetArg(args[n], XmNmaximum,         100); n++;
+	XtSetArg(args[arg_count], XmNtitleString,     title_string);  arg_count++ ;
+	XtSetArg(args[arg_count], XmNshowValue,       True); arg_count++ ;
+	XtSetArg(args[arg_count], XmNvalue,           AppData.speed); arg_count++ ;
+	XtSetArg(args[arg_count], XmNorientation,     XmHORIZONTAL); arg_count++ ;
+	XtSetArg(args[arg_count], XmNleftAttachment,  XmATTACH_POSITION); arg_count++;
+	XtSetArg(args[arg_count], XmNleftPosition,    10); arg_count++;
+	XtSetArg(args[arg_count], XmNrightAttachment, XmATTACH_POSITION); arg_count++;
+	XtSetArg(args[arg_count], XmNrightPosition,   90); arg_count++;
+	XtSetArg(args[arg_count], XmNminimum,         -100); arg_count++;
+	XtSetArg(args[arg_count], XmNmaximum,         100); arg_count++;
 	speed_scale = XmCreateScale(speed_dialog,
 				    "speed_scale",
-				    args, n) ;
+				    args, arg_count) ;
 	XtAddCallback(speed_scale,XmNdragCallback,
 		      (XtCallbackProc)speed_callback,NULL);
 	XtAddCallback(speed_scale,XmNvalueChangedCallback,

@@ -261,19 +261,19 @@ _WSMPackRequest(Display *dpy, int screen_num, WSMRequest *request,
 	break;
     case WSM_WM_WINDOWS:
 	{
-	  int i, j;
+	  int ii, j;
 
 	  data = PackCARD32(data, request->wm_windows.location_flag);
 	  data = PackListNum(data, request->wm_windows.num_window_properties);
-	  for (i=0; i<request->wm_windows.num_window_properties; i++)
-	    data = PackProperty(data, request->wm_windows.window_properties[i]);
+	  for (ii=0; ii<request->wm_windows.num_window_properties; ii++)
+	    data = PackProperty(data, request->wm_windows.window_properties[ii]);
 
 	  data = PackListNum(data, request->wm_windows.num_match_attributes);
-	  for (i = 0;  i < request->wm_windows.num_match_attributes;  i++)
+	  for (ii = 0;  ii < request->wm_windows.num_match_attributes;  ii++)
 	    {
 	      AttributePair *match_attr;
 
-	      match_attr = request->wm_windows.match_attributes[i];
+	      match_attr = request->wm_windows.match_attributes[ii];
 	      data = PackListNum(data, match_attr->num_attributes);
 
 	      for (j = 0;  j < match_attr->num_attributes;  j++)
@@ -550,7 +550,7 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 	break;
     case WSM_WM_WINDOWS:
 	{
-	  int num, i, j;
+	  int num, ii, j;
 
 	  request->extensions.allocated = True;
 	  request->wm_windows.location_flag = UnpackCARD32(&data);
@@ -558,30 +558,30 @@ _WSMUnpackRequest(Display *dpy, int screen_num, MessageData data,
 	  num = request->wm_windows.num_window_properties = UnpackListNum(&data);
 	  request->wm_windows.window_properties =
 	    (WindowProperty *) XtMalloc(sizeof(WindowProperty) * num);
-	  for (i=0; i<num; i++)
-	    request->wm_windows.window_properties[i] = UnpackProperty(&data);
+	  for (ii=0; ii<num; ii++)
+	    request->wm_windows.window_properties[ii] = UnpackProperty(&data);
 
 
 	  num = request->wm_windows.num_match_attributes = UnpackListNum(&data);
 	  request->wm_windows.match_attributes =
 	    (AttributePair **) XtMalloc(sizeof(AttributePair*) * num);
 
-	  for (i=0; i<request->wm_windows.num_match_attributes; i++)
+	  for (ii=0; ii<request->wm_windows.num_match_attributes; ii++)
 	    {
 	      num = UnpackListNum(&data);
 
-	      request->wm_windows.match_attributes[i] = (AttributePair *)
+	      request->wm_windows.match_attributes[ii] = (AttributePair *)
 		XtMalloc(sizeof(AttributePair) * num * 2 + sizeof(int));
 
-	      request->wm_windows.match_attributes[i]->num_attributes = num;
+	      request->wm_windows.match_attributes[ii]->num_attributes = num;
 	      for (j=0; j<num; j++)
 		{
-		  request->wm_windows.match_attributes[i]->allowed_attributes[j] =
+		  request->wm_windows.match_attributes[ii]->allowed_attributes[j] =
 		    UnpackProperty(&data);
 		}
 	      for (j=0; j<num; j++)
 		{
-		  request->wm_windows.match_attributes[i]->prohibited_attributes[j] =
+		  request->wm_windows.match_attributes[ii]->prohibited_attributes[j] =
 		    UnpackProperty(&data);
 		}
 	    }
