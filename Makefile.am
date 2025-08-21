@@ -40,8 +40,7 @@ MAINTAINERCLEANFILES = Makefile.in \
             $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz \
 	        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
 
-SUBDIRS	= bindings \
-            bitmaps \
+SUBDIRS	= data \
             config \
             localized \
             lib \

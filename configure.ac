@@ -172,8 +172,9 @@ AC_SUBST([XMBINDDIR_FALLBACK], "${datadir}/X11/bindings")
 AC_CONFIG_HEADERS(include/config.h lib/Xm/Xm.h)
 AC_CONFIG_FILES([Makefile \
 motif.pc \
-bindings/Makefile \
-bitmaps/Makefile \
+data/Makefile \
+data/bindings/Makefile \
+data/bitmaps/Makefile \
 clients/Makefile \
 clients/mwm/Makefile \
 clients/mwm/WmWsmLib/Makefile \
