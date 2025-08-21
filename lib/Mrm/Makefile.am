@@ -2,11 +2,11 @@ MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = Mrm.msg
 
-AM_CPPFLAGS = -I$(srcdir)/.. -I.. -I../Xm ${X_CFLAGS}
+AM_CPPFLAGS = -I$(srcdir)/.. -I.. -I../Xm ${X_CFLAGS} $(XFT_CFLAGS)
 
 mrmdir = $(includedir)/Mrm
 
-libMrm_la_LIBADD = ../Xm/libXm.la ${X_LIBS} -lXt ${X_PRE_LIBS} -lX11 ${X_EXTRA_LIBS}
+libMrm_la_LIBADD = ../Xm/libXm.la $(XFT_LIBS) ${X_LIBS} -lXt ${X_PRE_LIBS} -lX11 ${X_EXTRA_LIBS}
 
 libMrm_la_LDFLAGS = -version-info @ABI_VERSION@
 
@@ -33,9 +33,7 @@ libMrm_la_SOURCES = $(SRCS)
 
 BUILT_SOURCES = $(CAT_FILES)
 
-##Makefile: $(BUILT_SOURCES)
-
-if MessageCatalog
+if XM_MSGCAT
 
 CAT_FILES = Mrm.cat MrmMsgCatI.h
 

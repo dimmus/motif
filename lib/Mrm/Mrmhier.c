@@ -63,7 +63,7 @@ static char rcsid[] = "$XConsortium: Mrmhier.c /main/17 1996/11/13 14:01:19 drk 
 
 #include "MrmMsgI.h"
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 #if !defined(NL_CAT_LOCALE)
 #define NL_CAT_LOCALE	0
 #endif
@@ -164,7 +164,7 @@ Urm__OpenHierarchy (MrmCount			num_files,
   Display		*display;	/* display for XtResolvePathNames */
   char                 	err_stg[300];
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
   static Boolean first = True;
 
   /*

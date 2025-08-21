@@ -358,6 +358,6 @@ externaldef(mrmmsg) _MrmConst char *_MrmMsg_0118 =
 externaldef(mrmmsg) _MrmConst char *_MrmMsg_0119 =
        "Object '%s' declared PRIVATE.";
 
-#ifndef NO_MESSAGE_CATALOG
+#if XM_MSGCAT
 externaldef(mrmmsg) nl_catd Mrm_catd = NULL;
 #endif
