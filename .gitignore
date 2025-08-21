@@ -172,3 +172,4 @@ tools/wml/wmlparse.h
 tools/wml/wmluiltok.c
 lib/Mrm/MrmMsgCatI.h
 lib/Xm/XmMsgCatI.h
+lib/Xm/version.h
