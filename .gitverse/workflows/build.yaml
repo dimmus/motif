@@ -31,7 +31,7 @@ jobs:
             libxmu-dev \
             libxext-dev \
             libxft-dev \
-            libjpeg-turbo-dev \
+            libjpeg-dev \
             libpng-dev \
             linux-headers-generic \
             build-essential \
@@ -48,10 +48,8 @@ jobs:
       - name: Make
         run: |
           cd /home/runner/work/motif/motif
-          make clean || true
-          make distclean || true
           CC=${{ matrix.compiler }} ./autogen.sh
-          make -j1
+          make
       # - name: Test
       #   run: |
       #     cd /home/runner/work/motif/motif
