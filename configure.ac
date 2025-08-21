@@ -209,14 +209,24 @@ AS_IF([test "x$enable_printing" == "xyes"],[
 AX_FIND_XFT
 # AC_IMAGE_SUPPORT
 
+dnl Tests
+AC_ARG_ENABLE([tests],
+	[AS_HELP_STRING([--enable-tests], [Enable automated tests])],
+	[enable_tests=$enableval], [enable_tests=no])
+AS_IF([test "x$enable_tests" == "xyes"],[
+	AC_PROG_AWK
+	AC_REQUIRE_AUX_FILE([tap-driver.sh])
+	PKG_CHECK_MODULES([CHECK], [check])
+])
+
 dnl Debug builds (assert, etc.)
-# AS_IF([test "x$enable_debug" == "xyes"],[
-# 	AX_APPEND_COMPILE_FLAGS([-Og -ggdb])
-# 	AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])
-# ],[
-# 	AX_APPEND_COMPILE_FLAGS([-O2])
-# 	AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])
-# ])
+AS_IF([test "x$enable_debug" == "xyes"],[
+	AX_APPEND_COMPILE_FLAGS([-Og -ggdb])
+	AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])
+],[
+	AX_APPEND_COMPILE_FLAGS([-O2])
+	AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])
+])
 
 dnl Compiler flags
 XM_CFLAGS
@@ -309,6 +319,28 @@ doc/man/man5/Makefile \
 tools/Makefile \
 tools/wml/Makefile \
 lib/Xm/xmstring.list \
+tests/Makefile \
+tests/auto/Makefile \
+tests/auto/lib/Makefile \
+tests/auto/lib/common/Makefile \
+tests/auto/lib/Create/Makefile \
+tests/auto/lib/Create/geometry/Makefile \
+tests/auto/lib/Create/instances/Makefile \
+tests/auto/lib/Create/other/Makefile \
+tests/auto/lib/Create/resources/Makefile \
+tests/auto/lib/Create/specific/Makefile \
+tests/auto/lib/Create/widgets/Makefile \
+tests/auto/lib/Util/Makefile \
+tests/auto/lib/Synth/Makefile \
+tests/auto/lib/Synth/events/Makefile \
+tests/auto/lib/Synth/info/Makefile \
+tests/auto/lib/Synth/other/Makefile \
+tests/auto/lib/Synth/primitives/Makefile \
+tests/auto/lib/Visual/Makefile \
+tests/auto/lib/Script/Makefile \
+tests/environment/Makefile \
+tests/General/Makefile \
+tests/XmString/Makefile
 ])
 
 # Conditionally configure demos
@@ -412,9 +444,9 @@ XM_ADD_FEATURE([XM],[utf8],[${enable_utf8}])
 XM_ADD_FEATURE([XM],[print],[${enable_printing}])
 
 XM_ADD_FEATURE([BUILD],[demos],[${enable_demos}])
+XM_ADD_FEATURE([BUILD],[tests],[${enable_tests}])
 
-# XM_ADD_FEATURE([DBG],[tests],[${enable_tests}])
-# XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
+XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
 
 AC_OUTPUT
 

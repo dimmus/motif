@@ -14,6 +14,8 @@ autom4te.cache
 config.h*
 *~
 *.list
+test-driver
+tap-driver.sh
 clients/mwm/mwm
 clients/uil/uil
 clients/xmbind/xmbind
