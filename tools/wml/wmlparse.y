@@ -734,7 +734,7 @@ name
 %%
 
 /*
- * Dummmy error routine, since we output our own.
+ * Dummy error routine, since we output our own.
  */
 int yylex(void);
 int yyerror(char *s);

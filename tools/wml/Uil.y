@@ -1406,6 +1406,7 @@ units_specification
 /*    Dummy error routine for the parser.  We will output our own
       error messages.    */
 
+int yylex(void);
 int yyerror (s)
 char	* s;
 {
