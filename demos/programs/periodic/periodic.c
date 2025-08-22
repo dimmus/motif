@@ -780,7 +780,8 @@ get_color(Widget widget,
   Boolean result = False;
   char *text;
 
-  if (XmStringGetLtoR(name, XmFONTLIST_DEFAULT_TAG, &text))
+  text = XmStringUnparse(name, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
+  if (text)
     {
       XrmValue from, to;
 

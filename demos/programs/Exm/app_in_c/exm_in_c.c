@@ -179,7 +179,7 @@ CreateMenus(Widget parent_of_menu_bar)
    PullDownFromFile = (Widget)XmCreatePulldownMenu (menu_bar, "file_pane", args, n);
 
  /* Place the "File" cascade button at the top of the pulldown. */
-   file_string = XmStringCreateSimple("File");
+   file_string = XmStringCreateLocalized("File");
    XtVaCreateManagedWidget("File", xmCascadeButtonWidgetClass, menu_bar,
                            XmNlabelString, file_string,
 			   XmNmnemonic, 'F',
@@ -187,8 +187,8 @@ CreateMenus(Widget parent_of_menu_bar)
                            NULL);
 
  /* Create the entries pulled down by pressing "File" */
-   quit_string = XmStringCreateSimple("Quit");
-   acc_string = XmStringCreateSimple("Alt-q");
+   quit_string = XmStringCreateLocalized("Quit");
+   acc_string = XmStringCreateLocalized("Alt-q");
 
    QuitWidget = XtVaCreateManagedWidget("Quit",
 					exmMenuButtonWidgetClass,
@@ -210,7 +210,7 @@ CreateMenus(Widget parent_of_menu_bar)
                                                      args, n));
 
  /* Place the "Help" cascade button at the top of the pulldown. */
-   help_cs = XmStringCreateSimple("Help");
+   help_cs = XmStringCreateLocalized("Help");
    HelpWidget = XtVaCreateManagedWidget("Help", xmCascadeButtonWidgetClass,
                                         menu_bar,
                                         XmNlabelString, help_cs,
@@ -226,7 +226,7 @@ CreateMenus(Widget parent_of_menu_bar)
       char mnemonic_char;
 
       sprintf(menu_button_name, "Menu Button %d", menu_num);
-      menu_as_a_cs = XmStringCreateSimple(menu_help_string[menu_num]);
+      menu_as_a_cs = XmStringCreateLocalized(menu_help_string[menu_num]);
       mnemonic_char = menu_help_mnemonics[menu_num];
       MenuButtonWidget[menu_num] =
 	XtVaCreateManagedWidget(menu_button_name,
@@ -286,7 +286,7 @@ ExerciseExmStringWidgets(Widget parent_handle)
  Widget       String1, String2;
  XmString     a_compound_string;
 
-  a_compound_string = XmStringCreateLtoR("A Multiline Compound String\nIn an\n\
+  a_compound_string = XmStringLtoRCreate("A Multiline Compound String\nIn an\n\
 ExmString widget.\0", XmFONTLIST_DEFAULT_TAG);
 
 
@@ -381,14 +381,14 @@ ExerciseExmCommandButtonWidgets(Widget parent_handle)
  Widget    CommandButton1, CommandButton2, CommandButton3, CommandButton4;
  Arg       arg[3];
 
-  really_quit = XmStringCreateLtoR("Do you really want to quit?\0",
+  really_quit = XmStringLtoRCreate("Do you really want to quit?\0",
                                              XmFONTLIST_DEFAULT_TAG);
 
-  yes = XmStringCreateLtoR("Yes\0", XmFONTLIST_DEFAULT_TAG);
-  no  = XmStringCreateLtoR("No\0", XmFONTLIST_DEFAULT_TAG);
-  dance = XmStringCreateLtoR("No, I want to\ndance instead.\0",
+  yes = XmStringLtoRCreate("Yes\0", XmFONTLIST_DEFAULT_TAG);
+  no  = XmStringLtoRCreate("No\0", XmFONTLIST_DEFAULT_TAG);
+  dance = XmStringLtoRCreate("No, I want to\ndance instead.\0",
                                              XmFONTLIST_DEFAULT_TAG);
-  help = XmStringCreateLtoR("Help\0", XmFONTLIST_DEFAULT_TAG);
+  help = XmStringLtoRCreate("Help\0", XmFONTLIST_DEFAULT_TAG);
 
 
  /* Create a MessageBox to which we can attach ExmCommandButton's. */
@@ -500,7 +500,7 @@ as a button inside a menu.",
  Widget    help_dialog;
  Arg       arg[3];
 
-   message_as_a_cs = XmStringCreateLtoR(messages[(int)cd],
+   message_as_a_cs = XmStringLtoRCreate(messages[(int)cd],
                                         XmFONTLIST_DEFAULT_TAG);
 
    XtSetArg(arg[0], XmNmessageString, message_as_a_cs);
@@ -557,7 +557,7 @@ DanceCB(Widget w,
  Arg       arg[2];
  Widget    MsgBox1;
 
- everybody_dance_now = XmStringCreateSimple("Everybody Dance Now!");
+ everybody_dance_now = XmStringCreateLocalized("Everybody Dance Now!");
  XtSetArg(arg[0], XmNmessageString, everybody_dance_now);
 
  MsgBox1 = XmCreateMessageDialog(w, "MsgBox1",  arg, 1);

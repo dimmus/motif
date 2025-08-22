@@ -362,8 +362,8 @@ void DoHelp ()
   if (dlog == NULL)
     {
       dlog = XmCreateInformationDialog(appData->score, "helpDlog", NULL, 0);
-      XtUnmanageChild( XmMessageBoxGetChild (dlog, XmDIALOG_HELP_BUTTON) );
-      XtUnmanageChild( XmMessageBoxGetChild (dlog, XmDIALOG_CANCEL_BUTTON) );
+      XtUnmanageChild( XtNameToWidget(dlog, "Help") );
+      XtUnmanageChild( XtNameToWidget(dlog, "Cancel") );
     }
 
   XtManageChild(dlog);
@@ -398,7 +398,7 @@ void DoAddVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 
 
   XtGetApplicationNameAndClass(XtDisplay(w), &appName, &appClass);
-  XmStringGetLtoR(cb->value, XmSTRING_DEFAULT_CHARSET, &dspName);
+  dspName = XmStringUnparse(cb->value, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
   newDisplay = XtOpenDisplay(context, dspName, appName, appClass, NULL, 0, &argc, NULL);
 
@@ -604,7 +604,7 @@ void DoSaveVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 
   if (fdata->length > 0)
     {
-      XmStringGetLtoR(fdata->value, XmSTRING_DEFAULT_CHARSET, &fileName);
+      fileName = XmStringUnparse(fdata->value, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
       staffData = GetStaffData(staff);
       if (staffData != NULL)
@@ -678,7 +678,7 @@ void DoLoadVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
 
   if (fdata->length > 0)
     {
-      XmStringGetLtoR(fdata->value, XmSTRING_DEFAULT_CHARSET, &fileName);
+      fileName = XmStringUnparse(fdata->value, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
       fp = fopen(fileName, "r");
       if (fileName) XtFree(fileName);

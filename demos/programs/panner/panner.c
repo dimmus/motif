@@ -446,7 +446,7 @@ DoAddDisplayCB (
 
 
   XtGetApplicationNameAndClass(pInfoList[LOCAL].display, &appName, &appClass);
-  XmStringGetLtoR(cb->value, XmSTRING_DEFAULT_CHARSET, &dspName);
+  dspName = XmStringUnparse(cb->value, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
   OpenNewDisplay(dspName, notebook, pInfoList);
   if (dspName) XtFree(dspName);
@@ -1135,7 +1135,7 @@ DoAddDisplay ()
 				  args, n);
 
       XtAddCallback(dlog, XmNokCallback, DoAddDisplayCB, pInfoList);
-      XtUnmanageChild( XmSelectionBoxGetChild (dlog, XmDIALOG_HELP_BUTTON) );
+      XtUnmanageChild( XtNameToWidget(dlog, "Help") );
     }
   XtManageChild(dlog);
 }
@@ -1155,8 +1155,8 @@ DoHelp ()
     {
       dlog = XmCreateInformationDialog(pInfoList[LOCAL].shell, "messageDlog",
 					NULL, 0);
-      XtUnmanageChild( XmMessageBoxGetChild (dlog, XmDIALOG_HELP_BUTTON) );
-      XtUnmanageChild( XmMessageBoxGetChild (dlog, XmDIALOG_CANCEL_BUTTON) );
+      XtUnmanageChild( XtNameToWidget(dlog, "Help") );
+      XtUnmanageChild( XtNameToWidget(dlog, "Cancel") );
     }
 
   XtManageChild(dlog);
@@ -1265,8 +1265,8 @@ ShowPinStateWarning ()
     {
       dlog = XmCreateWarningDialog(pInfoList[LOCAL].shell, "warningDlog",
 					NULL, 0);
-      XtUnmanageChild( XmMessageBoxGetChild (dlog, XmDIALOG_HELP_BUTTON) );
-      XtUnmanageChild( XmMessageBoxGetChild (dlog, XmDIALOG_CANCEL_BUTTON) );
+      XtUnmanageChild( XtNameToWidget(dlog, "Help") );
+      XtUnmanageChild( XtNameToWidget(dlog, "Cancel") );
     }
 
   XtManageChild(dlog);

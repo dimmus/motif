@@ -374,7 +374,7 @@ static Widget MenuBarEntry(Widget menubar, String entry, String labels[],
       XtManageChild(child);
    }
    n = 0;
-   XtSetArg(args[n], XmNlabelString, XmStringCreateSimple(entry)); n++;
+   XtSetArg(args[n], XmNlabelString, XmStringCreateLocalized(entry)); n++;
    XtSetArg(args[n], XmNsubMenuId, menu); n++;
    child = XmCreateCascadeButton(menubar, entry, args, n);
    XtManageChild(child);

@@ -453,8 +453,10 @@ static void readIcon(str, icon, mask, fg, bg)
     if (strcmp(find_suffix(str), "xpm") == 0) {
       int len = strlen(str);
       if (len > 4) {
-        strncpy(msk, str, len - 4);
-        msk[len - 4] = 0;
+        int copy_len = len - 4;
+        if (copy_len >= sizeof(msk)) copy_len = sizeof(msk) - 1;
+        strncpy(msk, str, copy_len);
+        msk[copy_len] = 0;
         strcat(msk, "_m.xpm");
       } else {
         strcpy(msk, str);
