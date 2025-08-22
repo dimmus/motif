@@ -54,6 +54,10 @@
 #undef NULL
 #endif
 
+/* Function declarations */
+int yylex(void);
+int yyerror(char *s);
+
 %}
 
 
@@ -736,8 +740,6 @@ name
 /*
  * Dummy error routine, since we output our own.
  */
-int yylex(void);
-int yyerror(char *s);
 int yyerror(char *s)
 {
 	return 0;
