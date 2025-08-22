@@ -45,8 +45,8 @@ CreateMenus(Widget parent_of_menu_bar)
  Widget     overview, quit, Help1;
 
  /* Create the menubar itself. */
-   file = XmStringCreateSimple("File");
-   help = XmStringCreateSimple("Help");
+   file = XmStringCreateLocalized("File");
+   help = XmStringCreateLocalized("Help");
 
    menubar      = (Widget)XmCreateMenuBar(parent_of_menu_bar, "menubar",
                                           NULL, 0);
@@ -105,8 +105,8 @@ HelpCB(Widget   w,
 "This program demonstrates how to use an XmScale in an application.\n\
 In addition, it demonstrates how an XmScale can contain tic marks.");
 
-   hs_as_cs = XmStringCreateLtoR(help_string,
-                                 XmFONTLIST_DEFAULT_TAG);
+   hs_as_cs = XmStringLtoRCreate(help_string,
+                                 XmSTRING_DEFAULT_CHARSET);
 
    XtSetArg(arg[0], XmNmessageString, hs_as_cs);
    if(dialog_general_help == NULL)
