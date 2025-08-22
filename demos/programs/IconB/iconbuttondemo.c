@@ -170,16 +170,16 @@ ShowThisButton(Widget w, XtPointer client, XtPointer call)
     sprintf(message_string, OUTPUT_CODE, class_name,
             place_str, x, y, XtName(w));
 
-    xmstring = XmStringCreateLtoR(message_string, XmSTRING_DEFAULT_CHARSET);
+    xmstring = XmStringLtoRCreate(message_string, XmSTRING_DEFAULT_CHARSET);
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Code Sample"); argcnt++;
     XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
     info = XmCreateInformationDialog(w, "showcode", args, argcnt);
 
-    temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+    temp = XtNameToWidget(info, "Cancel");
     XtUnmanageChild(temp);
-    temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+    temp = XtNameToWidget(info, "Help");
     XtUnmanageChild(temp);
 
     XtManageChild(info);
@@ -211,15 +211,15 @@ void Explain(Widget w, XtPointer client, XtPointer call)
         XtSetArg(args[argcnt], XmNtitle, "Explanation"); argcnt++;
         info = (Widget)XmCreateInformationDialog(w, "explain", args, argcnt);
 
-        temp = (Widget)XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+        temp = (Widget)XtNameToWidget(info, "Cancel");
         XtUnmanageChild(temp);
-        temp = (Widget)XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+        temp = (Widget)XtNameToWidget(info, "Help");
         XtUnmanageChild(temp);
     }
 
     switch (explain) {
     case 1:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 " This is an IconButton resource. \n\
 \n\
  Specifies the location of the pixmap (icon) with respect \n\
@@ -230,7 +230,7 @@ to the displayed text.\n\
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case 2:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 " This is an IconBox resource.\n\
 \n\
  It specifies the location of a particular button in cell space\n\
@@ -238,7 +238,7 @@ to the displayed text.\n\
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case 3:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 " This is an IconBox resource.\n\
 \n\
  It specifies the location of a particular button in cell space\n\
@@ -332,7 +332,7 @@ main(int argc, char **argv)
  */
 
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "This is a demo of two unique Motif Widgets: the Icon Button and Icon Box.\n\
 \n\
 Labels, Push Buttons, and Toggle Buttons are limited because these\n\

@@ -228,7 +228,7 @@ ConstraintResCB(Widget w, XtPointer client, XtPointer call)
 	Widget temp;
 	XmString xmstring;
 
-	xmstring = XmStringCreateLtoR(
+	xmstring = XmStringLtoRCreate(
 "The Motif Paned Widget adds \"constraint\" widgets to any children that are\n\
 inside it. Here's the list of available constraint resources:\n\
 \n\
@@ -246,9 +246,9 @@ inside it. Here's the list of available constraint resources:\n\
 	XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
 	info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
 	XmStringFree(xmstring);
     }
@@ -272,7 +272,7 @@ OtherResCB(Widget w, XtPointer client, XtPointer call)
 	Widget temp;
 	XmString xmstring;
 
-	xmstring = XmStringCreateLtoR(
+	xmstring = XmStringLtoRCreate(
 "The Motif Paned widget provides other resources. Here's a partial\n\
 list of available resources:\n\
 \n\
@@ -288,9 +288,9 @@ list of available resources:\n\
 	XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
 	info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
 	XmStringFree(xmstring);
     }
@@ -312,7 +312,7 @@ CreateLabel(Widget w, XtPointer client, XtPointer call)
     Cardinal argcnt;
     XmString xmstring;
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "The Motif Paned Widget extends the capabilities of the standard Paned\n\
 Window that comes with Motif.\n\
 \n\
