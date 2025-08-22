@@ -122,8 +122,16 @@ char *ExtractNormalString(XmString cs)
 
 
   XmStringInitContext (&context, cs);
-  XmStringGetNextSegment (context, &primitiveString, &charset,
-			  &direction, &separator);
+  {
+    unsigned int length;
+    XtPointer value;
+    XmStringComponentType type = XmStringGetNextTriple(context, &length, &value);
+    if (type == XmSTRING_COMPONENT_TEXT) {
+      primitiveString = (char *)value;
+    } else {
+      primitiveString = NULL;
+    }
+  }
   XmStringFreeContext (context);
 
   return ((char *) primitiveString);
@@ -149,7 +157,10 @@ void FontSelectApply (Widget w, XtPointer client_data, XtPointer call_data)
 
   if ((mfinfo = XLoadQueryFont(display, textstr))==NULL)
       printf ("couldn't open %s font\n", textstr);
-  fontList = XmFontListCreate (mfinfo, XmFONTLIST_DEFAULT_TAG);
+  {
+    XmFontListEntry fontEntry = XmFontListEntryCreate(XmFONTLIST_DEFAULT_TAG, XmFONT_IS_FONT, mfinfo);
+    fontList = XmFontListAppendEntry(NULL, fontEntry);
+  }
 
   XtVaSetValues(textWidget, XmNfontList,  fontList, NULL);
 }
@@ -173,7 +184,10 @@ void FontSelectOK (Widget w, XtPointer client_data, XtPointer call_data)
 
   if ((mfinfo = XLoadQueryFont(display, textstr))==NULL)
       printf ("couldn't open %s font\n", textstr);
-  fontList = XmFontListCreate (mfinfo, XmFONTLIST_DEFAULT_TAG);
+  {
+    XmFontListEntry fontEntry = XmFontListEntryCreate(XmFONTLIST_DEFAULT_TAG, XmFONT_IS_FONT, mfinfo);
+    fontList = XmFontListAppendEntry(NULL, fontEntry);
+  }
 
   XtVaSetValues(TextWin, XmNfontList, fontList, NULL);
 }
@@ -203,7 +217,10 @@ void FontTest (Widget w, XtPointer client_data, XtPointer call_data)
 
   if ((mfinfo = XLoadQueryFont(display, textstr))==NULL)
       printf ("couldn't open %s font\n", textstr);
-  fontList = XmFontListCreate (mfinfo, " ");
+  {
+    XmFontListEntry fontEntry = XmFontListEntryCreate(" ", XmFONT_IS_FONT, mfinfo);
+    fontList = XmFontListAppendEntry(NULL, fontEntry);
+  }
 
   XtVaSetValues(txtWidget,
 		XmNfontList,  fontList,
@@ -265,13 +282,13 @@ int file_exist (char *fullname)
 /*-------------------------------------------------------------*
  |                   search_in_env                             |
  *-------------------------------------------------------------*/
-char *search_in_env (char *filename)
+char *search_in_env (char *search_filename)
 {
   int   i, len;
   char *envpath, *prefix, *cp;
 
 
-  len = strlen(filename);
+  len = strlen(search_filename);
   if ((envpath = getenv("PATH")))
     {
       cp  = envpath;
@@ -280,7 +297,7 @@ char *search_in_env (char *filename)
       while ((prefix = NextCap(envpath, cp, len)))
 	{
 	  cp += strlen(prefix);
-	  strncat(prefix, filename, len);
+	  strncat(prefix, search_filename, len);
 
 	  if (file_exist(prefix))
 	    return(prefix);
@@ -850,57 +867,57 @@ Widget CreateMenuBar (Widget parent)
   Widget    menuBar, helpCascade;
 
   menuBar = XmVaCreateSimpleMenuBar(parent, "MenuBar",
-	XmVaCASCADEBUTTON, s[0] = XmStringCreateSimple(menuString[0]), menuString[0][0],
-	XmVaCASCADEBUTTON, s[1] = XmStringCreateSimple(menuString[1]), menuString[1][0],
-	XmVaCASCADEBUTTON, s[2] = XmStringCreateSimple(menuString[2]), menuString[2][0],
-	XmVaCASCADEBUTTON, s[3] = XmStringCreateSimple(menuString[3]), menuString[3][0],
-	XmVaCASCADEBUTTON, s[4] = XmStringCreateSimple(menuString[4]), menuString[4][0],
-	XmVaCASCADEBUTTON, s[5] = XmStringCreateSimple(menuString[5]), menuString[5][0],
-	XmVaCASCADEBUTTON, s[6] = XmStringCreateSimple(menuString[6]), menuString[6][0],
+	XmVaCASCADEBUTTON, s[0] = XmStringCreateLocalized(menuString[0]), menuString[0][0],
+	XmVaCASCADEBUTTON, s[1] = XmStringCreateLocalized(menuString[1]), menuString[1][0],
+	XmVaCASCADEBUTTON, s[2] = XmStringCreateLocalized(menuString[2]), menuString[2][0],
+	XmVaCASCADEBUTTON, s[3] = XmStringCreateLocalized(menuString[3]), menuString[3][0],
+	XmVaCASCADEBUTTON, s[4] = XmStringCreateLocalized(menuString[4]), menuString[4][0],
+	XmVaCASCADEBUTTON, s[5] = XmStringCreateLocalized(menuString[5]), menuString[5][0],
+	XmVaCASCADEBUTTON, s[6] = XmStringCreateLocalized(menuString[6]), menuString[6][0],
 	NULL);
   for (i=0; i<=6; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[0], 0, Menu1CB,   /* File */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[0][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[0][0]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<1; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[1], 1, Menu2CB,   /* OSF Happenings */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[1][0]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[1] = XmStringCreateSimple(subString[1][1]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[2] = XmStringCreateSimple(subString[1][2]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[3] = XmStringCreateSimple(subString[1][3]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[1][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[1] = XmStringCreateLocalized(subString[1][1]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[2] = XmStringCreateLocalized(subString[1][2]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[3] = XmStringCreateLocalized(subString[1][3]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<=3; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[2], 2, Menu3CB,     /* Demos */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[2][0]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[1] = XmStringCreateSimple(subString[2][1]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[2] = XmStringCreateSimple(subString[2][2]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[2][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[1] = XmStringCreateLocalized(subString[2][1]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[2] = XmStringCreateLocalized(subString[2][2]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<=2; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[3], 3, Menu4CB,   /* Unix Commands */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[3][0]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[1] = XmStringCreateSimple(subString[3][1]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[2] = XmStringCreateSimple(subString[3][2]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[3][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[1] = XmStringCreateLocalized(subString[3][1]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[2] = XmStringCreateLocalized(subString[3][2]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<=2; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[4], 4, Menu5CB,   /* X Programs */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[4][0]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[1] = XmStringCreateSimple(subString[4][1]), NULL, NULL, NULL,
-	XmVaPUSHBUTTON, s[2] = XmStringCreateSimple(subString[4][2]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[4][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[1] = XmStringCreateLocalized(subString[4][1]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[2] = XmStringCreateLocalized(subString[4][2]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<=2; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[5], 5, Menu6CB,   /* Font */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[5][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[5][0]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<=0; i++) XmStringFree(s[i]);
 
   XmVaCreateSimplePulldownMenu(menuBar, menuString[6], 6, Menu7CB,     /* Help */
-	XmVaPUSHBUTTON, s[0] = XmStringCreateSimple(subString[6][0]), NULL, NULL, NULL,
+	XmVaPUSHBUTTON, s[0] = XmStringCreateLocalized(subString[6][0]), NULL, NULL, NULL,
 	NULL);
   for (i=0; i<=0; i++) XmStringFree(s[i]);
   XtVaSetValues(menuBar, XmNmenuHelpWidget, XtNameToWidget(menuBar, "button_6"), NULL);

@@ -189,7 +189,7 @@ int SquareMrmInitialize()
 
 static void ClassInitialize()
 {
-    XmResolveAllPartOffsets(squareWidgetClass, &square_offsets,
+    XmeResolvePartOffsets(squareWidgetClass, &square_offsets,
 				&square_constraint_offsets);
 }
 
