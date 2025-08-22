@@ -351,7 +351,7 @@ void  CommonGetOptions (int *argc, char **argv)
 			if (!pause_len) {
 			  printf 
 			    ("Illegal or zero value provided for width.\n");
-			  printf ("Using default %d.\n, PAUSE_LEN");
+			  printf ("Using default %d.\n", PAUSE_LEN);
 			  pause_len = PAUSE_LEN;
 			}
 			break;

@@ -95,8 +95,8 @@ void  CommonPause()
      	    ContinuePopup = CreateContinuePopup();
 
          GetInstructionsFromFile();
-         message_XmString = XmStringCreateLtoR(line_format,
-     					   XmFONTLIST_DEFAULT_TAG);
+         message_XmString = XmStringLtoRCreate(line_format,
+     					   XmSTRING_DEFAULT_CHARSET);
 
          n = 0;
          XtSetArg(args[n], XmNmessageString, message_XmString); 	n++;
@@ -192,10 +192,10 @@ static Widget CreateContinuePopup()
 
     fontlist = CommonGetFontList(test_font);
     
-    continue_string = XmStringCreateLtoR("Continue", 
-    				   XmFONTLIST_DEFAULT_TAG);
-    exit_string = XmStringCreateLtoR("Exit", 
-    				   XmFONTLIST_DEFAULT_TAG);
+    	continue_string = XmStringLtoRCreate("Continue",
+						XmSTRING_DEFAULT_CHARSET);
+	exit_string = XmStringLtoRCreate("Exit",
+					XmSTRING_DEFAULT_CHARSET);
 
     n = 0;
     XtSetArg(args[n], XtNgeometry, "=10x10+500+0");		n++;

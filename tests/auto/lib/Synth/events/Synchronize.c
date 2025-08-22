@@ -434,16 +434,16 @@ static void HandleConfig(shell, data, event, keep_going)
     XEvent *event;
     Boolean *keep_going;
 {
-    SyncValues *syncvalues = (SyncValues *) data;
+    SyncValues *sync_data = (SyncValues *) data;
     
     if (event->type == ConfigureNotify && 
 	event->xconfigure.window == xisSyncWindow) {
 	
 	/** absorb one sync event **/
 	
-	if (syncvalues->serviced_sync &&
+	if (sync_data->serviced_sync &&
 	    (!XtAppPending(xisAppContext) & XtIMXEvent))
-	  syncvalues->done = 1;
+	  sync_data->done = 1;
 	
 	else {
 	    /* Grab all the consecutive configure notify events
@@ -463,12 +463,12 @@ static void HandleConfig(shell, data, event, keep_going)
 		    /* Its one of the events we want so pull it off
 		       of the queue */
 		    XtAppNextEvent(xisAppContext, &peekevent);
-		    (syncvalues->serviced_sync)++;
+		    (sync_data->serviced_sync)++;
 		}
 		/* Its a different kind of event, so quit this loop */
 		else break;
 	    }
-	    (syncvalues->serviced_sync)++;
+	    (sync_data->serviced_sync)++;
 	    SendConfigureEvent();
 	}
 	XSync(xisDisplay,False);

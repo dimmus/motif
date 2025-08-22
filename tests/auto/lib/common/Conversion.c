@@ -59,8 +59,16 @@ char *CommonCsToRs(XmString cs)
 	return (NULL);
 
     XmStringInitContext(&context,cs);
-    XmStringGetNextSegment(context,&primitive_string,
-           &charset,&direction,&separator);
+    {
+        unsigned int length;
+        XtPointer value;
+        XmStringComponentType type = XmStringGetNextTriple(context, &length, &value);
+        if (type == XmSTRING_COMPONENT_TEXT) {
+            primitive_string = (char *)value;
+        } else {
+            primitive_string = NULL;
+        }
+    }
     XmStringFreeContext(context);
     return(primitive_string);
 }
