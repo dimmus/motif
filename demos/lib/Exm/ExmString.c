@@ -859,8 +859,7 @@ WidgetBaselines(
       if (separator1)
       {
         while (XmStringPeekNextComponent(context)== XmSTRING_COMPONENT_SEPARATOR) {
-	   XmStringGetNextSegment (context, &text1, &char_set1, &direction1,
-                                     NULL, NULL, NULL);
+	   XmStringGetNextSegment (context, &text1, &char_set1, &direction1, &separator1);
            base_array[index++] = Offset + XmStringBaseline (RenderTable, string1);
            Offset += XmStringHeight (RenderTable, string1);
 	}
