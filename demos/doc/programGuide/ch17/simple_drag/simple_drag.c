@@ -222,8 +222,8 @@ CreateMenus(Widget parent_of_menu_bar)
  Widget     overview, quit, Help1;
 
  /* Create the menubar itself. */
-   file = XmStringCreateSimple("File");
-   help = XmStringCreateSimple("Help");
+   file = XmStringCreateLocalized("File");
+   help = XmStringCreateLocalized("Help");
 
    menubar      = (Widget)XmCreateMenuBar(parent_of_menu_bar, "menubar",
                                           NULL, 0);
@@ -288,8 +288,8 @@ and 'drop' the DragIcon anywhere inside the Text widget.\n\
 The application will transfer the XmNvalue of the ScrollBar \n\
 to the Text widget.");
 
-   hs_as_cs = XmStringCreateLtoR(help_string,
-                                 XmFONTLIST_DEFAULT_TAG);
+   hs_as_cs = XmStringLtoRCreate(help_string,
+                                 XmSTRING_DEFAULT_CHARSET);
 
    XtSetArg(arg[0], XmNmessageString, hs_as_cs);
    dialog_general_help = (Widget)XmCreateMessageDialog(toplevel,
