@@ -260,7 +260,7 @@ caddr_t		call_data;	/*  data from widget class  */
     Dimension height ;
 
     file_name = XmTextGetString(
-		 XmFileSelectionBoxGetChild(w, XmDIALOG_TEXT)) ;
+		 XtNameToWidget(w, "Text")) ;
 
     if (!BuildLineTable(filedata, file_name)) {
 	WarnUser (w, "Cannot open %s\n", file_name);
@@ -372,11 +372,11 @@ window and see the slider size change.\n\n\
 You can specify which font to display the test using the\n\
 XmNfont screen resource.");
 
-	message_string = XmStringCreateLtoR (message,
+	message_string = XmStringLtoRCreate (message,
 					     XmSTRING_DEFAULT_CHARSET);
-	button_string = XmStringCreateLtoR ("Close",
+	button_string = XmStringLtoRCreate ("Close",
 					    XmSTRING_DEFAULT_CHARSET);
-	title_string = XmStringCreateLtoR ("General Help",
+	title_string = XmStringLtoRCreate ("General Help",
 					   XmSTRING_DEFAULT_CHARSET);
 
 
@@ -388,9 +388,9 @@ XmNfont screen resource.");
 	XtSetArg (args[n], XmNmessageString, message_string);  n++;
 	message_box = XmCreateMessageDialog (parent, "helpbox", args, n);
 
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_CANCEL_BUTTON);
+	button = XtNameToWidget (message_box, "Cancel");
 	XtUnmanageChild (button);
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_HELP_BUTTON);
+	button = XtNameToWidget (message_box, "Help");
 	XtUnmanageChild (button);
 
 

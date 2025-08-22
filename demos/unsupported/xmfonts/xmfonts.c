@@ -256,7 +256,7 @@ Widget		parent;		/*  parent widget	*/
 
 		/*  create PushButton in RowCol  */
 		n = 0;
-		label_string = XmStringCreateLtoR(name, charset);
+		label_string = XmStringLtoRCreate(name, charset);
 		XtSetArg (args[n], XmNlabelString, label_string);  n++;
 		if (AppData.usegadget)
 		    button = XmCreatePushButtonGadget (row_column, name,
@@ -303,7 +303,7 @@ Widget		parent;		/*  parent widget	*/
 	n = 0;
 	XtSetArg (args[n], XmNlabelString, &name_string); n++;
 	XtGetValues (parent, args, n);
-	XmStringGetLtoR (name_string, charset, &name);
+	name = XmStringUnparse(name_string, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
 
 	/*	Load font and generate message to display. */
@@ -313,13 +313,16 @@ Widget		parent;		/*  parent widget	*/
 		sprintf (message, "Unable to load font: %s", name);
 	else
 	{
-		fontlist = XmFontListCreate (font, charset);
+		{
+			XmFontListEntry fontEntry = XmFontListEntryCreate(charset, XmFONT_IS_FONT, font);
+			fontlist = XmFontListAppendEntry(NULL, fontEntry);
+		}
 		sprintf (message, "\
 This is font %s.\n\
 The quick brown fox jumps over the lazy dog.", name);
 	}
-	message_string = XmStringCreateLtoR (message, charset);
-	button_string = XmStringCreateLtoR ("Close", charset);
+	message_string = XmStringLtoRCreate (message, charset);
+	button_string = XmStringLtoRCreate ("Close", charset);
 
 
 	/*	Create MessageBox dialog.
@@ -332,7 +335,7 @@ The quick brown fox jumps over the lazy dog.", name);
 					     "fontbox",
 					     args, n);
 
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_MESSAGE_LABEL);
+	button = XtNameToWidget (message_box, "Message");
 	if (fontlist)
 	{
 		n = 0;
@@ -340,9 +343,9 @@ The quick brown fox jumps over the lazy dog.", name);
 		XtSetValues(button, args, n);
 	}
 
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_CANCEL_BUTTON);
+	button = XtNameToWidget (message_box, "Cancel");
 	XtUnmanageChild (button);
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_HELP_BUTTON);
+	button = XtNameToWidget (message_box, "Help");
 	XtUnmanageChild (button);
 
 	/*	Free strings and return MessageBox.
@@ -383,9 +386,9 @@ The button label is the name of the font.  When you select \n\
 a button, a small window will display a sample of the font.  \n\n\
 Press the 'close' button to close a font window.  \n\
 Select 'quit' from the 'exit' menu to exit this application.");
-	message_string = XmStringCreateLtoR (message, charset);
-	button_string = XmStringCreateLtoR ("Close", charset);
-	title_string = XmStringCreateLtoR ("xmfonts help", charset);
+	message_string = XmStringLtoRCreate (message, charset);
+	button_string = XmStringLtoRCreate ("Close", charset);
+	title_string = XmStringLtoRCreate ("xmfonts help", charset);
 
 
 	/*	Create MessageBox dialog.
@@ -396,9 +399,9 @@ Select 'quit' from the 'exit' menu to exit this application.");
 	XtSetArg (args[n], XmNmessageString, message_string);  n++;
 	message_box = XmCreateMessageDialog (parent, "helpbox", args, n);
 
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_CANCEL_BUTTON);
+	button = XtNameToWidget (message_box, "Cancel");
 	XtUnmanageChild (button);
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_HELP_BUTTON);
+	button = XtNameToWidget (message_box, "Help");
 	XtUnmanageChild (button);
 
 

@@ -701,11 +701,11 @@ Use the numChildren resource to control the creation and destruction\n\
 of the RowColumn. Then use the other controls to manipulate the RowColumn\n\
 layout resources.");
 
-	message_string = XmStringCreateLtoR (message,
+	message_string = XmStringLtoRCreate (message,
 					     XmSTRING_DEFAULT_CHARSET);
-	button_string = XmStringCreateLtoR ("Close",
+	button_string = XmStringLtoRCreate ("Close",
 					    XmSTRING_DEFAULT_CHARSET);
-	title_string = XmStringCreateLtoR ("General Help",
+	title_string = XmStringLtoRCreate ("General Help",
 					   XmSTRING_DEFAULT_CHARSET);
 
 
@@ -717,9 +717,9 @@ layout resources.");
 	XtSetArg (args[n], XmNmessageString, message_string);  n++;
 	message_box = XmCreateMessageDialog (parent, "helpbox", args, n);
 
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_CANCEL_BUTTON);
+	button = XtNameToWidget (message_box, "Cancel");
 	XtUnmanageChild (button);
-	button = XmMessageBoxGetChild (message_box, XmDIALOG_HELP_BUTTON);
+	button = XtNameToWidget (message_box, "Help");
 	XtUnmanageChild (button);
 
 
@@ -1264,7 +1264,7 @@ UpdateResDialog (Widget	widget)		/*  rc child widget	*/
     XmString title ;
 
     /* first update the name of the dialog */
-    title = XmStringCreateLtoR (XtName(widget), XmSTRING_DEFAULT_CHARSET);
+    title = XmStringLtoRCreate (XtName(widget), XmSTRING_DEFAULT_CHARSET);
     n = 0;
     XtSetArg (args[n], XmNdialogTitle, title);  n++;
     XtSetValues (rc_data.res_dialog, args, n);
