@@ -132,7 +132,7 @@ CreateNode(Widget w_parent, Widget parent_node, char * name, \n\
     Widget w;\n\
     XmString xmstring;\n\
 \n\
-    xmstring = XmStringCreateSimple(name);\n\
+    xmstring = XmStringCreateLocalized(name);\n\
 \n\
     num_args = 0;\n\
     XtSetArg(args[num_args], XmNlabelString, xmstring); num_args++;\n\
@@ -385,7 +385,7 @@ CreateNode(Widget w_parent, Widget parent_node, char * name,
     Widget w;
     XmString xmstring;
 
-    xmstring = XmStringCreateSimple(name);
+    xmstring = XmStringCreateLocalized(name);
 
     num_args = 0;
     XtSetArg(args[num_args], XmNlabelString, xmstring); num_args++;
@@ -416,7 +416,7 @@ void WriteUpHype(Widget parent)
     Widget w;
     XmString xmstring;
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "The Motif Tree Widget displays hierarchical data in a tree layout with a Motif\n\
 look and feel. The Tree widget displayed below contains entries corresponding\n\
 to Motif widgets. The nodes are XmPushButtons, but the tree can accept any type of widget.\n\
@@ -485,7 +485,7 @@ static void ShowCB(Widget w, XtPointer client, XtPointer call)
 	Widget temp;
 	XmString ok_xmstring;
 
-	ok_xmstring = XmStringCreateSimple("OK");
+	ok_xmstring = XmStringCreateLocalized("OK");
 
 	argcnt = 0;
 	XtSetArg(args[argcnt], XmNtitle, "Show Code..."); argcnt++;
@@ -525,7 +525,7 @@ static void ExplainCB(Widget w, XtPointer client, XtPointer call)
 	Widget temp;
 	XmString xmstring;
 
-	xmstring = XmStringCreateLtoR(
+	xmstring = XmStringLtoRCreate(
 "The Motif Tree and Outline widget actually derive behavior from the\n\
 Hierarchy Widget. The Hierarchy widget provides resources that specify\n\
 the relationships between children.\n\
@@ -556,9 +556,9 @@ opened or closed. To use this callback, press the Node State Callback toggle.",
 	XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
 	info = XmCreateInformationDialog(G_tree, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
 	XmStringFree(xmstring);
     }
@@ -612,7 +612,7 @@ void NodeStateCB(Widget w, XtPointer client, XtPointer call)
     XtSetArg(args[argcnt], XmNlabelString, &xmstring); argcnt++;
     XtGetValues(node_data->widget, args, argcnt);
 
-    XmStringGetLtoR(xmstring, XmFONTLIST_DEFAULT_TAG, &name);
+    name = XmStringUnparse(xmstring, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
     if (node_data->state == XmOpen)
 	sprintf(buf, "%s has switched to the XmOpen state.", name);
@@ -625,16 +625,16 @@ void NodeStateCB(Widget w, XtPointer client, XtPointer call)
     else
 	sprintf(buf, "%s has switched node state.", name);
 
-    xmstring = XmStringCreateSimple(buf);
+    xmstring = XmStringCreateLocalized(buf);
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Node State Changed"); argcnt++;
     XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
     info = XmCreateInformationDialog(w, "nodechange", args, argcnt);
 
-    temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+    temp = XtNameToWidget(info, "Cancel");
     XtUnmanageChild(temp);
-    temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+    temp = XtNameToWidget(info, "Help");
     XtUnmanageChild(temp);
 
     XmStringFree(xmstring);
@@ -652,14 +652,14 @@ static void ChangePixmap(Widget w, XtPointer client, XtPointer call)
   if (TreeUsingPixmaps){
     XtVaSetValues( G_tree, XmNopenFolderPixmap, XmUNSPECIFIED_PIXMAP,
 		  XmNcloseFolderPixmap, XmUNSPECIFIED_PIXMAP, NULL );
-    XtVaSetValues( label, XmNlabelString, XmStringCreateSimple("Default"),
+    XtVaSetValues( label, XmNlabelString, XmStringCreateLocalized("Default"),
 		  NULL);
   }
   else {
     XtVaSetValues( G_tree, XmNopenFolderPixmap, open_folder,
 		  XmNcloseFolderPixmap, close_folder, NULL );
     XtVaSetValues( label, XmNlabelString,
-		  XmStringCreateSimple("User Defined"), NULL);
+		  XmStringCreateLocalized("User Defined"), NULL);
   }
 
   TreeUsingPixmaps = !TreeUsingPixmaps;
@@ -681,10 +681,10 @@ static void CallbackTogCB(Widget w, XtPointer client, XtPointer call)
 
     if (XmToggleButtonGetState(w)) {
 	XtAddCallback(G_tree, XmNnodeStateCallback, NodeStateCB, NULL);
-	xmstring = XmStringCreateSimple("Added");
+	xmstring = XmStringCreateLocalized("Added");
     } else {
 	XtRemoveAllCallbacks(G_tree, XmNnodeStateCallback);
-	xmstring = XmStringCreateSimple("Not Added");
+	xmstring = XmStringCreateLocalized("Not Added");
     }
 
     argcnt = 0;
@@ -936,20 +936,20 @@ void MakeControlPanel(Widget right_pane)
 	int i;
 	for (i=0;i<XtNumber(resources);i++)
 		{
-		Arg args[8];
+		Arg local_args[8];
 		int n = 0;
 		Dimension val;
 		Widget scale;
 
     		XtVaCreateManagedWidget(resources[i], xmLabelWidgetClass,
 				  leftBbox, NULL);
-		XtSetArg(args[n], XmNminimum, 1); n++;
-		XtSetArg(args[n], XmNmaximum, 100); n++;
-		XtSetArg(args[n], XmNshowValue, True); n++;
-		XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
+		XtSetArg(local_args[n], XmNminimum, 1); n++;
+		XtSetArg(local_args[n], XmNmaximum, 100); n++;
+		XtSetArg(local_args[n], XmNshowValue, True); n++;
+		XtSetArg(local_args[n], XmNorientation, XmHORIZONTAL); n++;
 		XtVaGetValues(G_tree, resources[i], &val, NULL);
-		XtSetArg(args[n], XmNvalue, val); n++;
-		scale = XmCreateScale(rightBbox, resources[i], args, n);
+		XtSetArg(local_args[n], XmNvalue, val); n++;
+		scale = XmCreateScale(rightBbox, resources[i], local_args, n);
 		XtAddCallback(scale, XmNvalueChangedCallback, ScaleCB, (XtPointer)i);
 		XtManageChild(scale);
 		}

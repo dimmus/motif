@@ -98,15 +98,15 @@ void Explain(Widget w, XtPointer client, XtPointer call)
         XtSetArg(args[argcnt], XmNtitle, "Explanation"); argcnt++;
         info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-        temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+        temp = XtNameToWidget(info, "Cancel");
         XtUnmanageChild(temp);
-        temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+        temp = XtNameToWidget(info, "Help");
         XtUnmanageChild(temp);
     }
 
     switch (explain) {
     case EXPLAIN_MODE:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "This resouce may be either XmListMode and XmScaleMode. This\n\
 determines what mode the Color Selector should use when it is\n\
 created.\n\
@@ -117,7 +117,7 @@ adjust Red, Green, and Blue color values.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case EXPLAIN_NAME:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "This resource controls the name of the color that is displayed\n\
 to the user. Using XtGetValues on this resource returns the name\n\
 of the current color. Using XtSetValues on this resource sets the\n\
@@ -127,7 +127,7 @@ This resource is of type String.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case EXPLAIN_MAR:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "The Color Selector is made up of many children. This resource\n\
 adjusts the remaining space between a) each of the children in the\n\
 Color Selector, and b) the outside children and the edge of the\n\
@@ -136,7 +136,7 @@ Color Selector.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case EXPLAIN_RGB:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "The name of a file that contains valid color names and their\n\
 appropriate values.\n\
 \n\
@@ -163,7 +163,7 @@ static XmString
 CreateHelpArea()
 {
   XmString xmstr =
-    XmStringCreateLtoR(
+    XmStringLtoRCreate(
 "The Motif Color Selector is an interface to the colors \n\
 available on a display.\n\
 \n\

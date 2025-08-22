@@ -88,7 +88,7 @@ CreateExtListCB( Widget parent )
     col_title_str = (XmString *)XtMalloc( NUM_COLUMNS*sizeof(XmString));
 
     for (j = 0; j < NUM_COLUMNS; j++) {
-      col_title_str[j] = XmStringCreateSimple(col_titles[j]);
+      col_title_str[j] = XmStringCreateLocalized(col_titles[j]);
       switch (j){
       case 0:
 	sort_funcs[j] = (Xm18SortFunction *)NothingSort;
@@ -113,7 +113,7 @@ CreateExtListCB( Widget parent )
     XtSetArg(args[argcnt], XmNnumRows, 0); argcnt++;
     XtSetArg(args[argcnt], XmNnumColumns, NUM_COLUMNS); argcnt++;
     XtSetArg(args[argcnt], XmNcolumnTitles, col_title_str); argcnt++;
-    XtSetArg(args[argcnt], XmNtitle, tcs=XmStringCreateSimple("Lineup")); argcnt++;
+    XtSetArg(args[argcnt], XmNtitle, tcs=XmStringCreateLocalized("Lineup")); argcnt++;
     XtSetArg(args[argcnt], XmNsortFunctions, sort_funcs);        argcnt++;
     XtSetArg(args[argcnt], XmNselectionPolicy, XmSINGLE_SELECT);   argcnt++;
     XtSetArg(args[argcnt], XmNshowSash, False);   argcnt++;
@@ -148,7 +148,7 @@ RemCB(Widget w, XtPointer client, XtPointer call )
     XtGetValues(demo_info->extlist, args, argcnt);
 
 	{
-	XmString tcs = XmStringCreateSimple("No Selected Player");
+	XmString tcs = XmStringCreateLocalized("No Selected Player");
         XtVaSetValues( demo_info->rem_pb, XmNlabelString,tcs, NULL);
 	XmStringFree(tcs);
 	}
@@ -265,7 +265,7 @@ UpdateRemLabelStr(Widget w,XtPointer client, XtPointer call )
   }
 	else
 	{
-	XmString tcs = XmStringCreateSimple("No Selected Player");
+	XmString tcs = XmStringCreateLocalized("No Selected Player");
         XtVaSetValues( demo_info->rem_pb, XmNlabelString,tcs, NULL);
 	XmStringFree(tcs);
 	}
@@ -303,21 +303,21 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
 	static Widget info = NULL;
 
 	if (info == NULL) {
-	    Arg args[5];
-	    Cardinal argcnt;
+	    Arg local_args[5];
+	    Cardinal local_argcnt;
 	    Widget temp;
 
 	    xmstring =
-		XmStringCreateSimple("Cannot have more than nine players.");
+		XmStringCreateLocalized("Cannot have more than nine players.");
 
-	    argcnt = 0;
-	    XtSetArg(args[argcnt], XmNtitle, "Error"); argcnt++;
-	    XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
-	    info = XmCreateErrorDialog(w, "error", args, argcnt);
+	    local_argcnt = 0;
+	    XtSetArg(local_args[local_argcnt], XmNtitle, "Error"); local_argcnt++;
+	    XtSetArg(local_args[local_argcnt], XmNmessageString, xmstring); local_argcnt++;
+	    info = XmCreateErrorDialog(w, "error", local_args, local_argcnt);
 
-	    temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	    temp = XtNameToWidget(info, "Cancel");
 	    XtUnmanageChild(temp);
-	    temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	    temp = XtNameToWidget(info, "Help");
 	    XtUnmanageChild(temp);
 	    XmStringFree(xmstring);
 	}
@@ -332,22 +332,22 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
 	if ((int) row_info[i].data == playernum) {
 
 	    if (info == NULL) {
-		Arg args[5];
-		Cardinal argcnt;
+		Arg nested_args[5];
+		Cardinal nested_argcnt;
 		Widget temp;
 
-		argcnt = 0;
-		XtSetArg(args[argcnt], XmNtitle, "Error"); argcnt++;
-		info = XmCreateErrorDialog(w, "error", args, argcnt);
+		nested_argcnt = 0;
+		XtSetArg(nested_args[nested_argcnt], XmNtitle, "Error"); nested_argcnt++;
+		info = XmCreateErrorDialog(w, "error", nested_args, nested_argcnt);
 
-		temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+		temp = XtNameToWidget(info, "Cancel");
 		XtUnmanageChild(temp);
-		temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+		temp = XtNameToWidget(info, "Help");
 		XtUnmanageChild(temp);
 	    }
 
 	    sprintf(buf, "%s already in line up.", players[playernum].name);
-	    xmstring = XmStringCreateSimple(buf);
+	    xmstring = XmStringCreateLocalized(buf);
 
 	    argcnt = 0;
 	    XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
@@ -379,32 +379,32 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
     row_info[num_rows].selected = False;
 
     row_info[num_rows].values[1] =
-      XmStringCreateSimple(players[playernum].name);
+      XmStringCreateLocalized(players[playernum].name);
 
 
     XtFree((XtPointer) row_info[num_rows].values[2]);
     sprintf(buf, ".%d", players[playernum].average);
-    row_info[num_rows].values[2] = XmStringCreateSimple(buf);
+    row_info[num_rows].values[2] = XmStringCreateLocalized(buf);
 
     XtFree((XtPointer) row_info[num_rows].values[3]);
     sprintf(buf, "%d", players[playernum].at_bats);
-    row_info[num_rows].values[3] = XmStringCreateSimple(buf);
+    row_info[num_rows].values[3] = XmStringCreateLocalized(buf);
 
     XtFree((XtPointer) row_info[num_rows].values[4]);
     sprintf(buf, "%d", players[playernum].runs);
-    row_info[num_rows].values[4] = XmStringCreateSimple(buf);
+    row_info[num_rows].values[4] = XmStringCreateLocalized(buf);
 
     XtFree((XtPointer) row_info[num_rows].values[5]);
     sprintf(buf, "%d", players[playernum].hits);
-    row_info[num_rows].values[5] = XmStringCreateSimple(buf);
+    row_info[num_rows].values[5] = XmStringCreateLocalized(buf);
 
     XtFree((XtPointer) row_info[num_rows].values[6]);
     sprintf(buf, "%d", players[playernum].home_runs);
-    row_info[num_rows].values[6] = XmStringCreateSimple(buf);
+    row_info[num_rows].values[6] = XmStringCreateLocalized(buf);
 
     XtFree((XtPointer) row_info[num_rows].values[7]);
     sprintf(buf, "%d", players[playernum].rbi);
-    row_info[num_rows].values[7] = XmStringCreateSimple(buf);
+    row_info[num_rows].values[7] = XmStringCreateLocalized(buf);
 
     num_rows++;
 
@@ -426,7 +426,7 @@ XtPointer call;
     Cardinal argcnt;
     XmString xmstring;
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "This is a demo of the Motif Internationalized Extended List widget.\n\
 \n\
 The Internationalized Extended List provides multi-column list \n\
@@ -491,7 +491,8 @@ static String
 StringFromXmString(XmString xms)
 {
     String str;
-	if (XmStringGetLtoR(xms,XmFONTLIST_DEFAULT_TAG, &str))
+	str = XmStringUnparse(xms, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
+	if (str)
 		return str;
 	else return NULL;
 }
