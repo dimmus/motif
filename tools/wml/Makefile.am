@@ -38,6 +38,8 @@ libwml_la_SOURCES = wmlparse.y wmloutkey.c wmlouth.c wmloutmm.c wmloutp1.c wmlre
 wmlparse.c: wmllex.c
 
 wmllex.c: wmllex.l
+	$(LEX) $(LFLAGS) $(srcdir)/wmllex.l
+	mv lex.yy.c wmllex.c
 
 wmlsynbld.c: wmlparse.h
 
