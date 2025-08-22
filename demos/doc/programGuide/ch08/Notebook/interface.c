@@ -45,8 +45,8 @@ CreateMenus(Widget parent_of_menu_bar)
  Widget     overview, quit, Help1;
 
  /* Create the menubar itself. */
-   file = XmStringCreateSimple("File");
-   help = XmStringCreateSimple("Help");
+   file = XmStringCreateLocalized("File");
+   help = XmStringCreateLocalized("Help");
 
    menubar      = (Widget)XmCreateMenuBar(parent_of_menu_bar, "menubar",
                                           NULL, 0);
@@ -110,8 +110,8 @@ You can turn the pages of the notebook by \n\
   * clicking on one of the minor tab buttons (green or orange) \n\
 A status area appears when the current page number is 2.");
 
-   hs_as_cs = XmStringCreateLtoR(help_string,
-                                 XmFONTLIST_DEFAULT_TAG);
+   hs_as_cs = XmStringLtoRCreate(help_string,
+                                 XmSTRING_DEFAULT_CHARSET);
 
    XtSetArg(arg[0], XmNmessageString, hs_as_cs);
    dialog_general_help = (Widget)XmCreateMessageDialog(top_level,
