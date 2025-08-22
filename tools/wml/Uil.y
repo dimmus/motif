@@ -1407,6 +1407,8 @@ units_specification
       error messages.    */
 
 int yylex(void);
+int yyerror(char *s);
+
 int yyerror (s)
 char	* s;
 {
