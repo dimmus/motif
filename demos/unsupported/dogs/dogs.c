@@ -124,10 +124,8 @@ static void create_cb(w, id, reason)
         case k_dog3_id: dog3_id = w; break;
         case k_help_id:
 	    help_id = w;
-	    XtUnmanageChild((Widget)XmMessageBoxGetChild(help_id,
-				XmDIALOG_CANCEL_BUTTON));
-	    XtUnmanageChild((Widget)XmMessageBoxGetChild(help_id,
-				XmDIALOG_HELP_BUTTON));
+	    XtUnmanageChild(XtNameToWidget(help_id, "Cancel"));
+	    XtUnmanageChild(XtNameToWidget(help_id, "Help"));
 	    break;
     }
 }
