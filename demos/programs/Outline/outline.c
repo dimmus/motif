@@ -97,7 +97,7 @@ CreateNode(Widget w_parent, Widget parent_node, char * name, \n\
     Widget w;\n\
     XmString xmstring;\n\
 \n\
-    xmstring = XmStringCreateSimple(name);\n\
+    xmstring = XmStringCreateLocalized(name);\n\
     \n\
     num_args = 0;\n\
     XtSetArg(args[num_args], XmNlabelString, xmstring); num_args++;\n\
@@ -171,13 +171,13 @@ InitializePanel(Widget pane)
     switch(status) {
     case XtCallbackHasSome:
 	XmToggleButtonSetState(tog_temp, True, False);
-	xmstring = XmStringCreateSimple("Added");
+	xmstring = XmStringCreateLocalized("Added");
 	break;
     case XtCallbackNoList:
     case XtCallbackHasNone:
     default:
 	XmToggleButtonSetState(tog_temp, False, False);
-	xmstring = XmStringCreateSimple("Not Added");
+	xmstring = XmStringCreateLocalized("Not Added");
 	break;
     }
     argcnt = 0;
@@ -323,7 +323,7 @@ CreateNode(Widget w_parent, Widget parent_node, char * name,
     Widget w;
     XmString xmstring;
 
-    xmstring = XmStringCreateSimple(name);
+    xmstring = XmStringCreateLocalized(name);
 
     num_args = 0;
     XtSetArg(args[num_args], XmNlabelString, xmstring); num_args++;
@@ -353,7 +353,7 @@ void WriteUpHype(Widget parent)
     Widget w;
     XmString xmstring;
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "The Motif Outline Widget displays hierarchical data in an outline layout with a Motif\n\
 look and feel. The Outline widget displayed below has several Motif PushButtons (the\n\
 Outline can accept any type of widget); press one to add a new child.\n\
@@ -394,7 +394,7 @@ static void ShowCB(Widget w, XtPointer client, XtPointer call)
 	Widget temp;
 	XmString ok_xmstring;
 
-	ok_xmstring = XmStringCreateSimple("OK");
+	ok_xmstring = XmStringCreateLocalized("OK");
 
 	argcnt = 0;
 	XtSetArg(args[argcnt], XmNtitle, "Show Code..."); argcnt++;
@@ -434,7 +434,7 @@ static void ExplainCB(Widget w, XtPointer client, XtPointer call)
 	Widget temp;
 	XmString xmstring;
 
-	xmstring = XmStringCreateLtoR(
+	xmstring = XmStringLtoRCreate(
 "The Motif Tree and Outline widget actually derive behavior from the\n\
 Hierarchy Widget. The Hierarchy widget provides resources that specify\n\
 the relationships between children.\n\
@@ -462,9 +462,9 @@ opened or closed. To use this callback, press the Node State Callback toggle.",
 	XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
 	info = XmCreateInformationDialog(G_outline, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
 	XmStringFree(xmstring);
     }
@@ -492,7 +492,7 @@ void NodeStateCB(Widget w, XtPointer client, XtPointer call)
     XtSetArg(args[argcnt], XmNlabelString, &xmstring); argcnt++;
     XtGetValues(node_data->widget, args, argcnt);
 
-    XmStringGetLtoR(xmstring, XmFONTLIST_DEFAULT_TAG, &name);
+    name = XmStringUnparse(xmstring, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
     if (node_data->state == XmOpen)
 	sprintf(buf, "%s has switched to the XmOpen state.", name);
@@ -505,16 +505,16 @@ void NodeStateCB(Widget w, XtPointer client, XtPointer call)
     else
 	sprintf(buf, "%s has switched node state.", name);
 
-    xmstring = XmStringCreateSimple(buf);
+    xmstring = XmStringCreateLocalized(buf);
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNtitle, "Node State Changed"); argcnt++;
     XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
     info = XmCreateInformationDialog(w, "nodechange", args, argcnt);
 
-    temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+    temp = XtNameToWidget(info, "Cancel");
     XtUnmanageChild(temp);
-    temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+    temp = XtNameToWidget(info, "Help");
     XtUnmanageChild(temp);
 
     XmStringFree(xmstring);
@@ -538,10 +538,10 @@ static void CallbackTogCB(Widget w, XtPointer client, XtPointer call)
 
     if (XmToggleButtonGetState(w)) {
 	XtAddCallback(G_outline, XmNnodeStateCallback, NodeStateCB, NULL);
-	xmstring = XmStringCreateSimple("Added");
+	xmstring = XmStringCreateLocalized("Added");
     } else {
 	XtRemoveAllCallbacks(G_outline, XmNnodeStateCallback);
-	xmstring = XmStringCreateSimple("Not Added");
+	xmstring = XmStringCreateLocalized("Not Added");
     }
 
     argcnt = 0;
