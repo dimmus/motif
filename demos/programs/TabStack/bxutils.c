@@ -3683,9 +3683,9 @@ GRA(String *,resourceSpec)
    i = 0;
    while ( resourceSpec[i] != NULL )
    {
-       char buf[1000];
+       char buf[2048];
 
-       sprintf(buf, "*%s%s", _name, resourceSpec[i++]);
+       snprintf(buf, sizeof(buf), "*%s%s", _name, resourceSpec[i++]);
        XrmPutLineResource( &rdb, buf );
    }
 
@@ -3774,8 +3774,8 @@ GRA(char*, inst_name)
 {
    Display*		dpy = XtDisplay ( w );	/*  Retrieve the display */
    XrmDatabase		rdb = NULL;		/* A resource data base */
-   char			lineage[1000];
-   char			buf[1000];
+   char			lineage[1024];
+   char			buf[2048];
    Widget       	parent;
 
    /* Protect ourselves */
@@ -3825,24 +3825,24 @@ GRA(char*, inst_name)
 
 	   if (*defs->cInstName != '\0')
 	   {
-	       sprintf(buf, "%s.%s*%s.%s: %s",
+	       snprintf(buf, sizeof(buf), "%s.%s*%s.%s: %s",
 		       lineage, defs->wName, defs->cInstName, defs->wRsc,
 		       defs->value);
 	   }
 	   else
 	   {
-	       sprintf(buf, "%s.%s.%s: %s",
+	       snprintf(buf, sizeof(buf), "%s.%s.%s: %s",
 		       lineage, defs->wName, defs->wRsc, defs->value);
 	   }
        }
        else if (*defs->wName != '\0')
        {
-	   sprintf(buf, "%s*%s.%s: %s",
+	   snprintf(buf, sizeof(buf), "%s*%s.%s: %s",
 		   lineage, defs->wName, defs->wRsc, defs->value);
        }
        else
        {
-	   sprintf(buf, "%s.%s: %s", lineage, defs->wRsc, defs->value);
+	   snprintf(buf, sizeof(buf), "%s.%s: %s", lineage, defs->wRsc, defs->value);
        }
 
        XrmPutLineResource( &rdb, buf );
