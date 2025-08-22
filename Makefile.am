@@ -52,7 +52,7 @@ SUBDIRS	= data \
             $(XM_WITH_DEMOS)
 
 format:
-	git ls-files 'lib/Xm/*.[ch]' 'lib/Xm/*.cc' | xargs clang-format -i -style=file
+	git ls-files '*.[ch]' '*.cc' | xargs clang-format -i -style=file --assume-filename=./tools/dev/clang-format
 
 # Custom maintainer-clean target to remove .deps folders
 maintainer-clean-local:

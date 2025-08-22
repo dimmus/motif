@@ -59,17 +59,13 @@ IndentWrappedFunctionNames: false
 #                       parameter_three);
 AlignAfterOpenBracket: Align
 
-AlignArrayOfStructures: Right
+AlignArrayOfStructures: Left
 AlignEscapedNewlines: Left
 AlignOperands: Align
 AlignConsecutiveAssignments:
     Enabled:          true
     AcrossEmptyLines: false
     AcrossComments:   false
-# false: mem = p->last;
-#        p->last += pool->item_alloc;
-# true:  mem      = p->last;
-#        p->last += pool->item_alloc;
     AlignCompound:    true
     PadOperators:     false
 AlignConsecutiveBitFields:
@@ -194,39 +190,3 @@ StatementAttributeLikeMacros: []
 StatementMacros: []
 
 SkipMacroDefinitionBody: true # clang-fromat >= 18
-
-# ForEachMacros:
-    # - EINA_LIST_FOREACH
-    # - EINA_INLIST_FOREACH
-    # - EINA_INLIST_FOREACH_SAFE
-    # - EINA_INLIST_REVERSE_FOREACH
-    # - EINA_INLIST_REVERSE_FOREACH_FROM
-    # - EINA_ITERATOR_FOREACH
-    # - EINA_ACCESSOR_FOREACH
-    # - EINA_INARRAY_FOREACH
-    # - EINA_VALUE_ARRAY_FOREACH
-
-# Avoid having function calls broken onto a new line:
-#
-#   int a = foo(
-#       long, list, of, many, params);
-#
-# Instead of:
-#
-#   int a =
-#       foo(long, list, of, many, params);
-#
-# PenaltyBreakAssignment: 200
-
-# PenaltyBreakBeforeFirstCallParameter: 19
-# PenaltyBreakComment: 300
-# PenaltyBreakFirstLessLess: 120
-# PenaltyBreakOpenParenthesis: 0
-
-# We don't want literal strings to break,
-# however clang-format seems to ignore this (sigh).
-# PenaltyBreakString: 1000000
-
-# PenaltyExcessCharacter: 10
-# PenaltyIndentedWhitespace: 0
-# PenaltyReturnTypeOnItsOwnLine: 60
