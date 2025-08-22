@@ -848,7 +848,7 @@ WidgetBaselines(
     Offset = sw->simple.visual.y;
 
  /* Go through the compound string, segment by segment. */
-   while (XmStringGetNextTriple (context, &text1, &char_set1, &direction1,
+   while (XmStringGetNextSegment (context, &text1, &char_set1, &direction1,
                                    &separator1)) {
       if (string1)
 	XmStringFree(string1);
@@ -858,14 +858,14 @@ WidgetBaselines(
 
       if (separator1)
       {
-        while (XmStringPeekNextTriple(context)== XmSTRING_COMPONENT_SEPARATOR) {
-	   XmStringGetNextTriple (context, &text1, &char_set1, &direction1,
+        while (XmStringPeekNextComponent(context)== XmSTRING_COMPONENT_SEPARATOR) {
+	   XmStringGetNextSegment (context, &text1, &char_set1, &direction1,
                                      NULL, NULL, NULL);
            base_array[index++] = Offset + XmStringBaseline (RenderTable, string1);
            Offset += XmStringHeight (RenderTable, string1);
 	}
       }
-      else if (XmStringGetNextTriple (context, &text2, &char_set2, &direction2,
+      else if (XmStringGetNextSegment (context, &text2, &char_set2, &direction2,
                                        &separator2)) {
  	XmString string2;
         if (separator2)
