@@ -319,7 +319,7 @@ static void SearchSubstring(Widget button, ViewPtr this,
 /*   int status; */
    XmTextPosition pos;
 /*   int last = XmTextFieldGetLastPosition(this->search_entry); */
-   XmString search = NULL;
+   XmString search_string = NULL;
    XmTextDirection direction;
    Widget toggle;
 
@@ -330,8 +330,8 @@ static void SearchSubstring(Widget button, ViewPtr this,
    if (status == XmCOPY_FAILED || status == XmCOPY_TRUNCATED) {
       if (no_search_msg == NULL)
 	no_search_msg = FetchString(this, no_search);
-      search =  XmStringCreateLocalized(substring);
-      ViewWarning(this, no_search_msg, search);
+      search_string =  XmStringCreateLocalized(substring);
+      ViewWarning(this, no_search_msg, search_string);
       return;
    }
 */
@@ -355,9 +355,9 @@ static void SearchSubstring(Widget button, ViewPtr this,
    else {
       if (not_found_msg == NULL)
 	not_found_msg = FetchString(this, not_found);
-      search =  XmStringCreateLocalized(substring);
-      ViewWarning(this, not_found_msg, search);
-      XmStringFree(search);
+      search_string =  XmStringCreateLocalized(substring);
+      ViewWarning(this, not_found_msg, search_string);
+      XmStringFree(search_string);
    }
    XtFree(substring);
 }

@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
  * Return a language string usable by XtResolvePathname.
  */
 static String MyLanguageProc(Display * dpy, String xnl,
-			     XtAppContext theContext)
+			     XtAppContext app_context)
 {
    return setlocale(LC_CTYPE, NULL);
 }
