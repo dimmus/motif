@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM.LOG</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --accent: #ff6b35;
+            --bg: #111111;
+            --surface: #1e1e1e;
+            --text: #e4e4e4;
+            --text-secondary: #9a9a9a;
+            --border: #2a2a2a;
+            --grid: #181818;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            background-image: 
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 50px 50px;
+            color: var(--text);
+            line-height: 1.5;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .terminal::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #ff9500, var(--accent));
+            z-index: 1000;
+        }
+        
+        .prompt {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .system-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .title::before {
+            content: '> ';
+            color: var(--text-secondary);
+        }
+        
+        .description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+            font-size: 11px;
+            font-weight: 400;
+        }
+        
+        .status-left {
+            color: var(--accent);
+        }
+        
+        .status-right {
+            color: var(--text-secondary);
+        }
+        
+        .post {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        
+        .post::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .post:hover::before {
+            opacity: 1;
+        }
+        
+        .post:hover {
+            border-color: var(--accent);
+            transform: translateX(2px);
+        }
+        
+        .post-header {
+            padding: 15px 20px 0;
+            border-bottom: 1px solid var(--border);
+            background: #1a1a1a;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .post-id {
+            font-weight: 400;
+        }
+        
+        .post-timestamp {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .post-title {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .post-title:hover {
+            color: var(--accent);
+        }
+        
+        .post-body {
+            padding: 20px;
+        }
+        
+        .post-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 15px;
+            font-size: 11px;
+        }
+        
+        .action-link {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            position: relative;
+        }
+        
+        .action-link:hover {
+            opacity: 0.8;
+        }
+        
+        .action-link::before {
+            content: '[';
+            color: var(--text-secondary);
+        }
+        
+        .action-link::after {
+            content: ']';
+            color: var(--text-secondary);
+        }
+        
+        .expanded-content {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            white-space: pre-line;
+        }
+        
+        .expanded-content.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 500px;
+            }
+        }
+        
+        .reading-progress {
+            position: fixed;
+            top: 3px;
+            left: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .code-block {
+            background: #0d0d0d;
+            border: 1px solid var(--border);
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        
+        .code-block::before {
+            content: '$ ';
+            color: var(--accent);
+        }
+        
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .footer-content {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: var(--accent);
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+        
+        .system-metrics {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid var(--border);
+            padding: 10px;
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-secondary);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+        
+        .system-metrics.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .metric-line {
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+            min-width: 180px;
+        }
+        
+        .metric-value {
+            color: var(--accent);
+            font-weight: 400;
+        }
+        
+        .neural-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            opacity: 0.1;
+        }
+        
+        .neural-node {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: neuralPulse 3s infinite;
+        }
+        
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: dataFlow 2s infinite;
+        }
+        
+        @keyframes neuralPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+        
+        @keyframes dataFlow {
+            0% { opacity: 0; transform: scaleX(0); }
+            50% { opacity: 0.7; transform: scaleX(1); }
+            100% { opacity: 0; transform: scaleX(0); }
+        }
+        
+        .hologram-effect {
+            position: relative;
+            overflow: visible;
+        }
+        
+        .hologram-effect::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--accent), transparent, var(--accent));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .hologram-effect:hover::before {
+            opacity: 0.3;
+            animation: hologramScan 2s infinite;
+        }
+        
+        @keyframes hologramScan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        .glitch-text {
+            position: relative;
+            animation: glitchFlicker 0.15s infinite;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.8;
+            clip: rect(0, 0, 0, 0);
+        }
+        
+        .glitch-text::before {
+            animation: glitchTop 0.333s infinite;
+            color: #ff0080;
+        }
+        
+        .glitch-text::after {
+            animation: glitchBottom 0.667s infinite;
+            color: #00d4ff;
+        }
+        
+        @keyframes glitchFlicker {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+        }
+        
+        @keyframes glitchTop {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            100% { clip: rect(91px, 9999px, 32px, 0); }
+        }
+        
+        @keyframes glitchBottom {
+            0% { clip: rect(65px, 9999px, 119px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            100% { clip: rect(42px, 9999px, 103px, 0); }
+        }
+        
+        .quantum-loader {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--accent);
+            border-radius: 50%;
+            animation: quantumSpin 1s linear infinite;
+        }
+        
+        @keyframes quantumSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        .security-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff0080;
+            padding: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--text);
+            text-align: center;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 0 50px rgba(255, 0, 128, 0.5);
+        }
+        
+        .security-warning.show {
+            display: block;
+            animation: securityAlert 0.5s ease;
+        }
+        
+        @keyframes securityAlert {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .biometric-scanner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            background: rgba(30, 30, 30, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .biometric-scanner:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--accent);
+        }
+        
+        .scanner-ring {
+            width: 40px;
+            height: 40px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--accent);
+            border-radius: 50%;
+            animation: scannerRotate 2s linear infinite;
+        }
+        
+        @keyframes scannerRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .data-stream {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.1;
+        }
+        
+        .stream-line {
+            position: absolute;
+            right: 0;
+            width: 1px;
+            background: var(--accent);
+            animation: streamFlow 1.5s linear infinite;
+        }
+        
+        @keyframes streamFlow {
+            0% { height: 0; top: -10px; }
+            50% { height: 100px; top: 50%; }
+            100% { height: 0; top: 100%; }
+        }
+        
+        .language-nexus {
+            position: fixed;
+            top: 50%;
+            right: -300px;
+            transform: translateY(-50%);
+            width: 280px;
+            height: 400px;
+            background: rgba(8, 8, 8, 0.98);
+            border: 2px solid var(--accent);
+            border-right: none;
+            backdrop-filter: blur(15px);
+            z-index: 1500;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+        }
+        
+        .language-nexus.active {
+            right: 0;
+        }
+        
+        .nexus-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(0, 212, 255, 0.1));
+        }
+        
+        .nexus-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .nexus-subtitle {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .language-option {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid var(--border);
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .language-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .language-option:hover::before {
+            left: 100%;
+        }
+        
+        .language-option:hover {
+            border-color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .language-option.active {
+            border-color: var(--accent);
+            background: rgba(255, 107, 53, 0.2);
+            box-shadow: inset 0 0 10px rgba(255, 107, 53, 0.3);
+        }
+        
+        .lang-code {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        .lang-name {
+            font-size: 9px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .translation-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .translation-progress.show {
+            display: flex;
+        }
+        
+        .translation-container {
+            text-align: center;
+            color: var(--text);
+        }
+        
+        .neural-translator {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .translator-ring {
+            position: absolute;
+            border: 2px solid transparent;
+            border-radius: 50%;
+        }
+        
+        .ring-1 {
+            width: 120px;
+            height: 120px;
+            border-top: 2px solid var(--accent);
+            animation: translateSpin 2s linear infinite;
+        }
+        
+        .ring-2 {
+            width: 80px;
+            height: 80px;
+            top: 20px;
+            left: 20px;
+            border-right: 2px solid #ff0080;
+            animation: translateSpin 1.5s linear infinite reverse;
+        }
+        
+        .ring-3 {
+            width: 40px;
+            height: 40px;
+            top: 40px;
+            left: 40px;
+            border-bottom: 2px solid #00d4ff;
+            animation: translateSpin 1s linear infinite;
+        }
+        
+        .translator-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: neuralPulse 1s infinite;
+        }
+        
+        @keyframes translateSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .translation-status {
+            font-size: 16px;
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .translation-details {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .language-toggle {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 120px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 2px solid var(--accent);
+            border-right: none;
+            border-radius: 25px 0 0 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1400;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .language-toggle:hover {
+            background: rgba(255, 107, 53, 0.1);
+            box-shadow: -5px 0 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .toggle-icon {
+            font-size: 12px;
+            color: var(--accent);
+            text-orientation: mixed;
+            writing-mode: vertical-rl;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2000;
+            display: none;
+        }
+        
+        .matrix-rain.active {
+            display: block;
+        }
+        
+        .matrix-column {
+            position: absolute;
+            top: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            opacity: 0.7;
+            animation: matrixFall 3s linear infinite;
+        }
+        
+        @keyframes matrixFall {
+            0% { transform: translateY(-100px); }
+            100% { transform: translateY(100vh); }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .terminal {
+                padding: 20px 15px;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+            
+            .post-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <!-- Neural Network Background -->
+        <div class="neural-grid" id="neuralGrid"></div>
+        
+        <!-- Data Stream Animation -->
+        <div class="data-stream" id="dataStream"></div>
+        
+        <!-- System Metrics Panel -->
+        <div class="system-metrics" id="systemMetrics">
+            <div class="metric-line">
+                <span>CPU:</span>
+                <span class="metric-value" id="cpuUsage">0%</span>
+            </div>
+            <div class="metric-line">
+                <span>MEM:</span>
+                <span class="metric-value" id="memUsage">0%</span>
+            </div>
+            <div class="metric-line">
+                <span>NET:</span>
+                <span class="metric-value" id="netActivity">0 KB/s</span>
+            </div>
+            <div class="metric-line">
+                <span>TEMP:</span>
+                <span class="metric-value" id="tempReading">0°C</span>
+            </div>
+            <div class="metric-line">
+                <span>NEURAL:</span>
+                <span class="metric-value" id="neuralActivity">ACTIVE</span>
+            </div>
+        </div>
+        
+        <!-- Security Warning Modal -->
+        <div class="security-warning" id="securityWarning">
+            <div class="glitch-text" data-text="ACCESS GRANTED">ACCESS GRANTED</div>
+            <p style="margin: 15px 0; font-size: 12px; color: var(--text-secondary);">
+                BIOMETRIC AUTHENTICATION SUCCESSFUL<br>
+                NEURAL LINK ESTABLISHED<br>
+                <span class="quantum-loader"></span> SYNCHRONIZING...
+            </p>
+        </div>
+        
+        <!-- Language Nexus Panel -->
+        <div class="language-nexus" id="languageNexus">
+            <div class="nexus-header">
+                <div class="nexus-title">Neural Translator</div>
+                <div class="nexus-subtitle">Quantum Language Matrix</div>
+            </div>
+            <div class="language-grid">
+                <div class="language-option active" data-lang="en" data-name="ENGLISH">
+                    <span class="lang-code">EN</span>
+                    <span class="lang-name">English</span>
+                </div>
+                <div class="language-option" data-lang="es" data-name="SPANISH">
+                    <span class="lang-code">ES</span>
+                    <span class="lang-name">Español</span>
+                </div>
+                <div class="language-option" data-lang="fr" data-name="FRENCH">
+                    <span class="lang-code">FR</span>
+                    <span class="lang-name">Français</span>
+                </div>
+                <div class="language-option" data-lang="de" data-name="GERMAN">
+                    <span class="lang-code">DE</span>
+                    <span class="lang-name">Deutsch</span>
+                </div>
+                <div class="language-option" data-lang="ja" data-name="JAPANESE">
+                    <span class="lang-code">JA</span>
+                    <span class="lang-name">日本語</span>
+                </div>
+                <div class="language-option" data-lang="zh" data-name="CHINESE">
+                    <span class="lang-code">ZH</span>
+                    <span class="lang-name">中文</span>
+                </div>
+                <div class="language-option" data-lang="ru" data-name="RUSSIAN">
+                    <span class="lang-code">RU</span>
+                    <span class="lang-name">Русский</span>
+                </div>
+                <div class="language-option" data-lang="ar" data-name="ARABIC">
+                    <span class="lang-code">AR</span>
+                    <span class="lang-name">العربية</span>
+                </div>
+                <div class="language-option" data-lang="ko" data-name="KOREAN">
+                    <span class="lang-code">KO</span>
+                    <span class="lang-name">한국어</span>
+                </div>
+                <div class="language-option" data-lang="pt" data-name="PORTUGUESE">
+                    <span class="lang-code">PT</span>
+                    <span class="lang-name">Português</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Language Toggle Button -->
+        <div class="language-toggle" id="languageToggle">
+            <div class="toggle-icon">LANG</div>
+        </div>
+        
+        <!-- Translation Progress Screen -->
+        <div class="translation-progress" id="translationProgress">
+            <div class="translation-container">
+                <div class="neural-translator">
+                    <div class="translator-ring ring-1"></div>
+                    <div class="translator-ring ring-2"></div>
+                    <div class="translator-ring ring-3"></div>
+                    <div class="translator-core"></div>
+                </div>
+                <div class="translation-status" id="translationStatus">INITIALIZING</div>
+                <div class="translation-details" id="translationDetails">
+                    Neural pathways loading...<br>
+                    Quantum matrices synchronizing...<br>
+                    Language protocols activated...
+                </div>
+            </div>
+        </div>
+        
+        <!-- Matrix Rain Effect -->
+        <div class="matrix-rain" id="matrixRain"></div>
+        
+        <!-- Biometric Scanner -->
+        <div class="biometric-scanner" id="biometricScanner" title="Biometric Authentication">
+            <div class="scanner-ring"></div>
+        </div>
+        
+        <div class="prompt">
+            <div class="system-info">system@localhost:~/blog$ ls -la</div>
+            <div class="title hologram-effect">SYSTEM.LOG<span class="cursor"></span></div>
+            <div class="description">Monitoring digital thoughts and system processes...</div>
+        </div>
+        
+        <div class="status-bar">
+            <span class="status-left">STATUS: ONLINE</span>
+            <span class="status-right">LOADING...</span>
+        </div>
+        
+        <article class="post" data-post-id="0x2A1F">
+            <header class="post-header">
+                <div class="post-meta">
+                    <span class="post-id">POST_ID: 0x2A1F</span>
+                    <span class="post-timestamp">2025-08-21 14:32:15 UTC</span>
+                </div>
+                <h2 class="post-title">NEURAL_NETWORKS.execute()</h2>
+            </header>
+            <div class="post-body">
+                <div class="post-content">
+                    The symbiosis between biological and artificial neural networks continues to evolve. Latest benchmarks show unprecedented synchronization rates between human cognitive patterns and AI processing architectures. The future is not replacement—it's integration.
+                </div>
+                <div class="post-actions">
+                    <a href="#" class="action-link" data-action="read">READ</a>
+                    <a href="#" class="action-link" data-action="expand">EXPAND</a>
+                    <a href="#" class="action-link" data-action="share">SHARE</a>
+                </div>
+            </div>
+            <div class="expanded-content">
+Processing neural network synchronization data...
+
+ANALYSIS: The convergence of biological and artificial intelligence systems has reached a critical threshold. Recent experiments demonstrate:
+
+- Cognitive pattern matching: 94.7% accuracy
+- Response time synchronization: <12ms latency  
+- Adaptive learning coefficient: 0.847
+
+The implications extend beyond computational efficiency. We're witnessing the emergence of hybrid consciousness—neither fully human nor artificial, but something entirely new. The boundary dissolution creates unprecedented cognitive capabilities while raising fundamental questions about identity and autonomy.
+
+RECOMMENDATION: Continue monitoring integration protocols. Maintain ethical oversight frameworks as we approach the singularity threshold.
+
+STATUS: Integration ongoing...
+            </div>
+        </article>
+        
+        <article class="post" data-post-id="0x1B8C">
+            <header class="post-header">
+                <div class="post-meta">
+                    <span class="post-id">POST_ID: 0x1B8C</span>
+                    <span class="post-timestamp">2025-08-18 09:45:23 UTC</span>
+                </div>
+                <h2 class="post-title">interface.design.minimize()</h2>
+            </header>
+            <div class="post-body">
+                <div class="post-content">
+                    Code review: Excessive visual elements detected in current UI implementations. Recommendation: Strip to essential functions only. Clean interfaces process user intent more efficiently. Less noise, more signal.
+                </div>
+                <div class="post-actions">
+                    <a href="#" class="action-link" data-action="read">READ</a>
+                    <a href="#" class="action-link" data-action="expand">EXPAND</a>
+                    <a href="#" class="action-link" data-action="share">SHARE</a>
+                </div>
+            </div>
+            <div class="expanded-content">
+Initiating interface optimization protocol...
+
+AUDIT REPORT: Current UI systems demonstrate significant computational overhead due to redundant visual processing. Analysis reveals:
+
+- Unnecessary animations: 47 instances detected
+- Redundant color gradients: CPU utilization +23%
+- Excessive typography variations: Memory leak potential
+
+Minimal design principles align with cognitive processing efficiency. Human attention operates on limited bandwidth—approximately 126 bits per second of conscious processing. Every visual element competes for this resource allocation.
+
+The optimal interface becomes invisible. Users interact with pure function, unimpeded by aesthetic distractions. Form follows function until form disappears entirely.
+
+IMPLEMENTATION: Deploy minimalist framework across all systems.
+            </div>
+        </article>
+        
+        <article class="post" data-post-id="0x0F3D">
+            <header class="post-header">
+                <div class="post-meta">
+                    <span class="post-id">POST_ID: 0x0F3D</span>
+                    <span class="post-timestamp">2025-08-15 16:21:47 UTC</span>
+                </div>
+                <h2 class="post-title">identity.digital.query()</h2>
+            </header>
+            <div class="post-body">
+                <div class="post-content">
+                    Runtime analysis: Modern identity exists across multiple data structures. Physical self, digital avatars, AI representations—all fragments of a distributed consciousness. Question: Which instance holds the primary reference?
+                </div>
+                <div class="post-actions">
+                    <a href="#" class="action-link" data-action="read">READ</a>
+                    <a href="#" class="action-link" data-action="expand">EXPAND</a>
+                    <a href="#" class="action-link" data-action="share">SHARE</a>
+                </div>
+            </div>
+            <div class="expanded-content">
+Parsing identity data structures...
+
+PHILOSOPHICAL_STACK_TRACE:
+└─ Physical entity: biological_instance_0x1
+    ├─ Social media profiles: 14 active instances
+    ├─ Digital services: 247 registered accounts  
+    ├─ AI training data: fragments distributed globally
+    └─ Blockchain records: immutable identity hashes
+
+The modern human exists as a distributed system. Each platform, each interaction, each data point creates a new instance of "self." These fragments often contradict, creating identity conflicts in the network.
+
+Which version is authentic? The carefully curated social media presence? The raw behavioral data collected by algorithms? The biological entity experiencing consciousness in physical space?
+
+Perhaps the question itself is obsolete. Identity may be an emergent property of the entire network—not residing in any single node, but manifesting in the connections between them.
+
+CONCLUSION: Self is protocol, not program.
+            </div>
+        </article>
+        
+        <footer class="footer">
+            <div class="footer-content">
+                system@localhost:~/blog$ exit<br>
+                Connection to neural_network closed.
+            </div>
+        </footer>
+    </div>
+
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" style="width: 0%"></div>
+
+    <script>
+        // Language Translation System
+        const translations = {
+            en: {
+                title: "SYSTEM.LOG",
+                description: "Monitoring digital thoughts and system processes...",
+                statusOnline: "STATUS: ONLINE",
+                posts: {
+                    "0x2A1F": {
+                        title: "NEURAL_NETWORKS.execute()",
+                        content: "The symbiosis between biological and artificial neural networks continues to evolve. Latest benchmarks show unprecedented synchronization rates between human cognitive patterns and AI processing architectures. The future is not replacement—it's integration.",
+                        expanded: `Processing neural network synchronization data...
+
+ANALYSIS: The convergence of biological and artificial intelligence systems has reached a critical threshold. Recent experiments demonstrate:
+
+- Cognitive pattern matching: 94.7% accuracy
+- Response time synchronization: <12ms latency  
+- Adaptive learning coefficient: 0.847
+
+The implications extend beyond computational efficiency. We're witnessing the emergence of hybrid consciousness—neither fully human nor artificial, but something entirely new. The boundary dissolution creates unprecedented cognitive capabilities while raising fundamental questions about identity and autonomy.
+
+RECOMMENDATION: Continue monitoring integration protocols. Maintain ethical oversight frameworks as we approach the singularity threshold.
+
+STATUS: Integration ongoing...`
+                    },
+                    "0x1B8C": {
+                        title: "interface.design.minimize()",
+                        content: "Code review: Excessive visual elements detected in current UI implementations. Recommendation: Strip to essential functions only. Clean interfaces process user intent more efficiently. Less noise, more signal.",
+                        expanded: `Initiating interface optimization protocol...
+
+AUDIT REPORT: Current UI systems demonstrate significant computational overhead due to redundant visual processing. Analysis reveals:
+
+- Unnecessary animations: 47 instances detected
+- Redundant color gradients: CPU utilization +23%
+- Excessive typography variations: Memory leak potential
+
+Minimal design principles align with cognitive processing efficiency. Human attention operates on limited bandwidth—approximately 126 bits per second of conscious processing. Every visual element competes for this resource allocation.
+
+The optimal interface becomes invisible. Users interact with pure function, unimpeded by aesthetic distractions. Form follows function until form disappears entirely.
+
+IMPLEMENTATION: Deploy minimalist framework across all systems.`
+                    },
+                    "0x0F3D": {
+                        title: "identity.digital.query()",
+                        content: "Runtime analysis: Modern identity exists across multiple data structures. Physical self, digital avatars, AI representations—all fragments of a distributed consciousness. Question: Which instance holds the primary reference?",
+                        expanded: `Parsing identity data structures...
+
+PHILOSOPHICAL_STACK_TRACE:
+└─ Physical entity: biological_instance_0x1
+    ├─ Social media profiles: 14 active instances
+    ├─ Digital services: 247 registered accounts  
+    ├─ AI training data: fragments distributed globally
+    └─ Blockchain records: immutable identity hashes
+
+The modern human exists as a distributed system. Each platform, each interaction, each data point creates a new instance of "self." These fragments often contradict, creating identity conflicts in the network.
+
+Which version is authentic? The carefully curated social media presence? The raw behavioral data collected by algorithms? The biological entity experiencing consciousness in physical space?
+
+Perhaps the question itself is obsolete. Identity may be an emergent property of the entire network—not residing in any single node, but manifesting in the connections between them.
+
+CONCLUSION: Self is protocol, not program.`
+                    }
+                }
+            },
+            es: {
+                title: "REGISTRO.SISTEMA",
+                description: "Monitoreando pensamientos digitales y procesos del sistema...",
+                statusOnline: "ESTADO: CONECTADO",
+                posts: {
+                    "0x2A1F": {
+                        title: "REDES_NEURONALES.ejecutar()",
+                        content: "La simbiosis entre redes neuronales biológicas y artificiales continúa evolucionando. Las últimas pruebas muestran tasas de sincronización sin precedentes entre patrones cognitivos humanos y arquitecturas de procesamiento de IA. El futuro no es reemplazo—es integración.",
+                        expanded: `Procesando datos de sincronización de redes neuronales...
+
+ANÁLISIS: La convergencia de sistemas de inteligencia biológica y artificial ha alcanzado un umbral crítico. Experimentos recientes demuestran:
+
+- Coincidencia de patrones cognitivos: 94.7% de precisión
+- Sincronización de tiempo de respuesta: <12ms de latencia
+- Coeficiente de aprendizaje adaptativo: 0.847
+
+Las implicaciones van más allá de la eficiencia computacional. Somos testigos del surgimiento de la conciencia híbrida—ni completamente humana ni artificial, sino algo completamente nuevo.
+
+RECOMENDACIÓN: Continuar monitoreando protocolos de integración. Mantener marcos de supervisión ética mientras nos acercamos al umbral de singularidad.
+
+ESTADO: Integración en progreso...`
+                    },
+                    "0x1B8C": {
+                        title: "interfaz.diseño.minimizar()",
+                        content: "Revisión de código: Elementos visuales excesivos detectados en implementaciones actuales de UI. Recomendación: Reducir solo a funciones esenciales. Las interfaces limpias procesan la intención del usuario de manera más eficiente. Menos ruido, más señal.",
+                        expanded: `Iniciando protocolo de optimización de interfaz...
+
+INFORME DE AUDITORÍA: Los sistemas de UI actuales demuestran una sobrecarga computacional significativa debido al procesamiento visual redundante.
+
+Los principios de diseño minimalista se alinean con la eficiencia del procesamiento cognitivo. La atención humana opera en un ancho de banda limitado—aproximadamente 126 bits por segundo de procesamiento consciente.
+
+La interfaz óptima se vuelve invisible. Los usuarios interactúan con función pura, sin impedimentos de distracciones estéticas.
+
+IMPLEMENTACIÓN: Desplegar marco minimalista en todos los sistemas.`
+                    },
+                    "0x0F3D": {
+                        title: "identidad.digital.consultar()",
+                        content: "Análisis de tiempo de ejecución: La identidad moderna existe a través de múltiples estructuras de datos. Yo físico, avatares digitales, representaciones de IA—todos fragmentos de una conciencia distribuida. Pregunta: ¿Qué instancia mantiene la referencia primaria?",
+                        expanded: `Analizando estructuras de datos de identidad...
+
+RASTREO_FILOSÓFICO_DE_PILA:
+└─ Entidad física: instancia_biológica_0x1
+    ├─ Perfiles de redes sociales: 14 instancias activas
+    ├─ Servicios digitales: 247 cuentas registradas
+    ├─ Datos de entrenamiento de IA: fragmentos distribuidos globalmente
+    └─ Registros blockchain: hashes de identidad inmutables
+
+El humano moderno existe como un sistema distribuido. Cada plataforma, cada interacción, cada punto de datos crea una nueva instancia del "yo".
+
+CONCLUSIÓN: El yo es protocolo, no programa.`
+                    }
+                }
+            },
+            fr: {
+                title: "JOURNAL.SYSTÈME",
+                description: "Surveillance des pensées numériques et des processus système...",
+                statusOnline: "STATUT: EN LIGNE",
+                posts: {
+                    "0x2A1F": {
+                        title: "RÉSEAUX_NEURONAUX.exécuter()",
+                        content: "La symbiose entre les réseaux de neurones biologiques et artificiels continue d'évoluer. Les derniers benchmarks montrent des taux de synchronisation sans précédent entre les modèles cognitifs humains et les architectures de traitement IA. L'avenir n'est pas le remplacement—c'est l'intégration.",
+                        expanded: `Traitement des données de synchronisation des réseaux neuronaux...
+
+ANALYSE: La convergence des systèmes d'intelligence biologique et artificielle a atteint un seuil critique. Les expériences récentes démontrent:
+
+- Correspondance des modèles cognitifs: 94.7% de précision
+- Synchronisation du temps de réponse: <12ms de latence
+- Coefficient d'apprentissage adaptatif: 0.847
+
+Les implications dépassent l'efficacité computationnelle. Nous assistons à l'émergence d'une conscience hybride—ni entièrement humaine ni artificielle, mais quelque chose d'entièrement nouveau.
+
+RECOMMANDATION: Continuer la surveillance des protocoles d'intégration. Maintenir les cadres de supervision éthique alors que nous approchons du seuil de singularité.
+
+STATUT: Intégration en cours...`
+                    }
+                }
+            },
+            ja: {
+                title: "システム.ログ",
+                description: "デジタル思考とシステムプロセスを監視中...",
+                statusOnline: "状態: オンライン",
+                posts: {
+                    "0x2A1F": {
+                        title: "ニューラルネットワーク.実行()",
+                        content: "生物学的と人工ニューラルネットワークの共生は進化し続けています。最新のベンチマークは、人間の認知パターンとAI処理アーキテクチャ間の前例のない同期率を示しています。未来は置き換えではありません—それは統合です。",
+                        expanded: `ニューラルネットワーク同期データを処理中...
+
+分析: 生物学的と人工知能システムの融合が臨界閾値に達しました。最近の実験が実証:
+
+- 認知パターンマッチング: 94.7%の精度
+- レスポンス時間同期: <12msの遅延
+- 適応学習係数: 0.847
+
+含意は計算効率を超えます。我々はハイブリッド意識の出現を目撃しています—完全に人間でも人工でもない、全く新しい何かです。
+
+推奨: 統合プロトコルの監視を継続。特異点閾値に近づく中で倫理的監督フレームワークを維持。
+
+状態: 統合進行中...`
+                    }
+                }
+            }
+        };
+
+        // Reading progress functionality
+        function updateReadingProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            
+            const progressBar = document.querySelector('.reading-progress');
+            progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+        }
+
+        // Post interaction functionality
+        function initializePostActions() {
+            document.querySelectorAll('.action-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const action = this.dataset.action;
+                    const post = this.closest('.post');
+                    const postId = post.dataset.postId;
+                    const expandedContent = post.querySelector('.expanded-content');
+                    
+                    switch(action) {
+                        case 'read':
+                            // Smooth scroll to post and highlight
+                            post.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            post.style.borderColor = 'var(--accent)';
+                            setTimeout(() => {
+                                post.style.borderColor = 'var(--border)';
+                            }, 2000);
+                            
+                            // Update status bar
+                            updateStatusBar(`READING: ${postId}`, 'FOCUS MODE ACTIVE');
+                            setTimeout(() => {
+                                updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+                            }, 3000);
+                            break;
+                            
+                        case 'expand':
+                            if (expandedContent.classList.contains('show')) {
+                                // Collapse
+                                expandedContent.classList.remove('show');
+                                this.textContent = 'EXPAND';
+                                updateStatusBar('STATUS: ONLINE', 'CONTENT COLLAPSED');
+                            } else {
+                                // Expand with typing effect
+                                expandedContent.classList.add('show');
+                                this.textContent = 'COLLAPSE';
+                                simulateTyping(expandedContent);
+                                updateStatusBar(`EXPANDING: ${postId}`, 'LOADING FULL CONTENT...');
+                            }
+                            
+                            setTimeout(() => {
+                                updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+                            }, 2000);
+                            break;
+                            
+                        case 'share':
+                            // Simulate sharing with terminal output
+                            updateStatusBar(`SHARING: ${postId}`, 'GENERATING SHARE LINK...');
+                            
+                            // Create temporary terminal-style notification
+                            showNotification(`${postId}: Share link generated\\n→ neurallink.sys/post/${postId.slice(2)}\\nCopied to clipboard.`);
+                            
+                            setTimeout(() => {
+                                updateStatusBar('STATUS: ONLINE', 'SHARE COMPLETE');
+                            }, 1500);
+                            
+                            setTimeout(() => {
+                                updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+                            }, 3000);
+                            break;
+                    }
+                });
+            });
+        }
+
+        // Update status bar
+        function updateStatusBar(leftText, rightText) {
+            const statusLeft = document.querySelector('.status-left');
+            const statusRight = document.querySelector('.status-right');
+            
+            statusLeft.style.opacity = '0.3';
+            statusRight.style.opacity = '0.3';
+            
+            setTimeout(() => {
+                statusLeft.textContent = leftText;
+                statusRight.textContent = rightText;
+                statusLeft.style.opacity = '1';
+                statusRight.style.opacity = '1';
+            }, 150);
+        }
+
+        // Get automatic entries count and default status
+        function getDefaultStatus() {
+            const entriesCount = document.querySelectorAll('.post').length;
+            return `ENTRIES: ${entriesCount} | UPTIME: ${Math.floor(Math.random() * 300 + 200)} DAYS`;
+        }
+
+        // System Metrics Simulation
+        function updateSystemMetrics() {
+            const cpu = Math.floor(Math.random() * 30 + 15);
+            const mem = Math.floor(Math.random() * 40 + 20);
+            const net = Math.floor(Math.random() * 150 + 10);
+            const temp = Math.floor(Math.random() * 15 + 45);
+            
+            document.getElementById('cpuUsage').textContent = `${cpu}%`;
+            document.getElementById('memUsage').textContent = `${mem}%`;
+            document.getElementById('netActivity').textContent = `${net} KB/s`;
+            document.getElementById('tempReading').textContent = `${temp}°C`;
+            
+            // Occasionally spike values for realism
+            if (Math.random() > 0.9) {
+                document.getElementById('cpuUsage').textContent = `${Math.floor(Math.random() * 40 + 60)}%`;
+                document.getElementById('cpuUsage').style.color = '#ff0080';
+                setTimeout(() => {
+                    document.getElementById('cpuUsage').style.color = 'var(--accent)';
+                }, 2000);
+            }
+        }
+
+        // Neural Network Background Animation
+        function createNeuralNetwork() {
+            const neuralGrid = document.getElementById('neuralGrid');
+            const nodeCount = 15;
+            
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = `${Math.random() * 100}%`;
+                node.style.top = `${Math.random() * 100}%`;
+                node.style.animationDelay = `${Math.random() * 3}s`;
+                neuralGrid.appendChild(node);
+            }
+            
+            // Create connections
+            for (let i = 0; i < 8; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'neural-connection';
+                connection.style.left = `${Math.random() * 100}%`;
+                connection.style.top = `${Math.random() * 100}%`;
+                connection.style.width = `${Math.random() * 200 + 100}px`;
+                connection.style.transform = `rotate(${Math.random() * 360}deg)`;
+                connection.style.animationDelay = `${Math.random() * 2}s`;
+                neuralGrid.appendChild(connection);
+            }
+        }
+
+        // Data Stream Animation
+        function createDataStream() {
+            const dataStream = document.getElementById('dataStream');
+            
+            setInterval(() => {
+                if (dataStream.children.length < 10) {
+                    const streamLine = document.createElement('div');
+                    streamLine.className = 'stream-line';
+                    streamLine.style.right = `${Math.random() * 200}px`;
+                    streamLine.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                    dataStream.appendChild(streamLine);
+                    
+                    setTimeout(() => {
+                        if (streamLine.parentNode) {
+                            streamLine.remove();
+                        }
+                    }, 3000);
+                }
+            }, 300);
+        }
+
+        // Biometric Scanner
+        function initializeBiometricScanner() {
+            const scanner = document.getElementById('biometricScanner');
+            const securityWarning = document.getElementById('securityWarning');
+            
+            scanner.addEventListener('click', function() {
+                // Start authentication sequence
+                scanner.style.borderColor = '#ff0080';
+                scanner.style.boxShadow = '0 0 30px #ff0080';
+                
+                setTimeout(() => {
+                    // Show security warning
+                    securityWarning.classList.add('show');
+                    updateStatusBar('SECURITY: AUTHENTICATING', 'BIOMETRIC SCAN IN PROGRESS...');
+                    
+                    setTimeout(() => {
+                        // Authentication successful
+                        securityWarning.classList.remove('show');
+                        scanner.style.borderColor = 'var(--accent)';
+                        scanner.style.boxShadow = '0 0 20px var(--accent)';
+                        updateStatusBar('SECURITY: AUTHENTICATED', 'ACCESS LEVEL: ADMIN');
+                        
+                        setTimeout(() => {
+                            updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+                        }, 3000);
+                    }, 3000);
+                }, 1000);
+            });
+        }
+
+        // Language functions
+        function toggleLanguageNexus() {
+            const nexus = document.getElementById('languageNexus');
+            nexus.classList.toggle('active');
+            
+            if (nexus.classList.contains('active')) {
+                updateStatusBar('LANGUAGE: NEXUS ACTIVE', 'NEURAL TRANSLATOR ONLINE');
+            } else {
+                updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+            }
+        }
+
+        function createMatrixRain() {
+            const matrixRain = document.getElementById('matrixRain');
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ';
+            
+            for (let i = 0; i < 20; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = `${Math.random() * 100}%`;
+                column.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                column.style.animationDelay = `${Math.random() * 2}s`;
+                
+                let columnText = '';
+                for (let j = 0; j < 20; j++) {
+                    columnText += characters[Math.floor(Math.random() * characters.length)] + '\n';
+                }
+                column.textContent = columnText;
+                matrixRain.appendChild(column);
+            }
+        }
+
+        function translateContent(targetLang) {
+            const translationProgress = document.getElementById('translationProgress');
+            const matrixRain = document.getElementById('matrixRain');
+            const translationStatus = document.getElementById('translationStatus');
+            const translationDetails = document.getElementById('translationDetails');
+            
+            // Show translation progress with matrix rain
+            translationProgress.classList.add('show');
+            matrixRain.classList.add('active');
+            createMatrixRain();
+            
+            const stages = [
+                { status: "INITIALIZING", details: "Neural pathways loading...<br>Quantum matrices synchronizing...<br>Language protocols activated..." },
+                { status: "SCANNING", details: "Analyzing content structure...<br>Identifying linguistic patterns...<br>Building semantic maps..." },
+                { status: "PROCESSING", details: "Quantum translation in progress...<br>Cross-referencing cultural contexts...<br>Optimizing neural pathways..." },
+                { status: "SYNTHESIZING", details: "Merging language matrices...<br>Applying contextual transforms...<br>Finalizing neural connections..." },
+                { status: "COMPLETE", details: `Translation to ${translations[targetLang]?.title || targetLang.toUpperCase()} successful<br>Neural pathways established<br>Language matrix synchronized` }
+            ];
+            
+            let currentStage = 0;
+            
+            const progressInterval = setInterval(() => {
+                if (currentStage < stages.length) {
+                    translationStatus.textContent = stages[currentStage].status;
+                    translationDetails.innerHTML = stages[currentStage].details;
+                    currentStage++;
+                } else {
+                    clearInterval(progressInterval);
+                    
+                    setTimeout(() => {
+                        // Apply translations
+                        applyTranslations(targetLang);
+                        
+                        // Hide progress screen
+                        translationProgress.classList.remove('show');
+                        matrixRain.classList.remove('active');
+                        
+                        // Clear matrix rain
+                        setTimeout(() => {
+                            matrixRain.innerHTML = '';
+                        }, 500);
+                        
+                        updateStatusBar(`LANGUAGE: ${targetLang.toUpperCase()}`, 'TRANSLATION COMPLETE');
+                        setTimeout(() => {
+                            updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+                        }, 3000);
+                        
+                        showNotification(`NEURAL TRANSLATION COMPLETE\\nLanguage matrix: ${targetLang.toUpperCase()}\\nAll systems synchronized`);
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        function applyTranslations(lang) {
+            const translation = translations[lang] || translations.en;
+            
+            // Update main title
+            const title = document.querySelector('.title');
+            if (title) {
+                title.childNodes[0].textContent = translation.title;
+            }
+            
+            // Update description
+            const description = document.querySelector('.description');
+            if (description) {
+                description.textContent = translation.description;
+            }
+            
+            // Update status bar
+            const statusLeft = document.querySelector('.status-left');
+            if (statusLeft && statusLeft.textContent.includes('STATUS: ONLINE')) {
+                statusLeft.textContent = translation.statusOnline;
+            }
+            
+            // Update posts
+            document.querySelectorAll('.post').forEach(post => {
+                const postId = post.dataset.postId;
+                const postData = translation.posts[postId];
+                
+                if (postData) {
+                    const postTitle = post.querySelector('.post-title');
+                    const postContent = post.querySelector('.post-content');
+                    const expandedContent = post.querySelector('.expanded-content');
+                    
+                    if (postTitle) postTitle.textContent = postData.title;
+                    if (postContent) postContent.textContent = postData.content;
+                    if (expandedContent && postData.expanded) {
+                        expandedContent.innerHTML = postData.expanded.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+                    }
+                }
+            });
+        }
+
+        function initializeLanguageSystem() {
+            const languageToggle = document.getElementById('languageToggle');
+            const languageNexus = document.getElementById('languageNexus');
+            
+            // Language toggle button
+            languageToggle.addEventListener('click', toggleLanguageNexus);
+            
+            // Language option selection
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const targetLang = this.dataset.lang;
+                    const langName = this.dataset.name;
+                    
+                    // Update active state
+                    document.querySelectorAll('.language-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Close nexus
+                    languageNexus.classList.remove('active');
+                    
+                    // Start translation process
+                    updateStatusBar(`TRANSLATING TO: ${langName}`, 'NEURAL PROCESSING...');
+                    
+                    setTimeout(() => {
+                        translateContent(targetLang);
+                    }, 500);
+                });
+            });
+            
+            // Close nexus when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!languageNexus.contains(e.target) && !languageToggle.contains(e.target)) {
+                    languageNexus.classList.remove('active');
+                }
+            });
+        }
+
+        // Enhanced voice synthesis for language changes
+        function playTranslationSound() {
+            // Create audio context for futuristic beeps
+            if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+                const audioContext = new (AudioContext || webkitAudioContext)();
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.3);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            }
+        }
+
+        // Advanced language detection
+        function detectLanguageFromBrowser() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.split('-')[0];
+            
+            if (translations[langCode]) {
+                setTimeout(() => {
+                    showNotification(`BROWSER LANGUAGE DETECTED: ${langCode.toUpperCase()}\\nPress L to access Neural Translator\\nQuantum language matrix ready`);
+                }, 5000);
+            }
+        }
+
+        // Keyboard shortcuts and easter eggs
+        function initializeKeyboardShortcuts() {
+            let konamiCode = [];
+            const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+            
+            document.addEventListener('keydown', function(e) {
+                // Toggle system metrics with 'M' key
+                if (e.key === 'm' || e.key === 'M') {
+                    const metrics = document.getElementById('systemMetrics');
+                    metrics.classList.toggle('hidden');
+                }
+                
+                // Toggle language nexus with 'L' key
+                if (e.key === 'l' || e.key === 'L') {
+                    toggleLanguageNexus();
+                }
+                
+                // Konami code easter egg
+                konamiCode.push(e.code);
+                if (konamiCode.length > 10) konamiCode.shift();
+                
+                if (konamiCode.join(',') === konamiSequence.join(',')) {
+                    // Activate matrix mode
+                    document.body.style.background = 'linear-gradient(45deg, #000, #001100, #000)';
+                    showNotification('MATRIX MODE ACTIVATED\\nReality.exe has stopped working');
+                    konamiCode = [];
+                }
+            });
+        }
+
+        // Advanced Terminal Commands
+        function processTerminalCommand(command) {
+            const output = document.createElement('div');
+            output.style.cssText = `
+                background: var(--surface);
+                border: 1px solid var(--border);
+                padding: 15px;
+                margin: 10px 0;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 12px;
+                color: var(--text-secondary);
+            `;
+            
+            switch(command.toLowerCase()) {
+                case 'help':
+                    output.innerHTML = `
+Available Commands:
+- scan: Run system diagnostics
+- neural: Display neural network status  
+- encrypt: Activate encryption protocols
+- quantum: Initialize quantum processes
+- exit: Terminate session
+                    `;
+                    break;
+                case 'scan':
+                    output.innerHTML = `
+System Diagnostic Results:
+✓ Neural pathways: OPTIMAL
+✓ Data integrity: 99.7%
+✓ Security protocols: ACTIVE
+⚠ Memory fragmentation detected
+✓ Network connectivity: STABLE
+                    `;
+                    break;
+                case 'neural':
+                    output.innerHTML = `
+Neural Network Status:
+- Active nodes: ${Math.floor(Math.random() * 1000 + 500)}
+- Synaptic connections: ${Math.floor(Math.random() * 5000 + 2000)}
+- Processing power: ${Math.floor(Math.random() * 100)}% utilized
+- Learning rate: 0.${Math.floor(Math.random() * 999 + 100)}
+                    `;
+                    break;
+                default:
+                    output.innerHTML = `Command not recognized: ${command}\\nType 'help' for available commands.`;
+            }
+            
+            return output;
+        }
+
+        // Simulate typing effect for expanded content
+        function simulateTyping(element) {
+            const originalContent = element.innerHTML;
+            element.innerHTML = '';
+            element.style.opacity = '1';
+            
+            // Add cursor
+            const cursor = document.createElement('span');
+            cursor.style.background = 'var(--accent)';
+            cursor.style.width = '8px';
+            cursor.style.height = '14px';
+            cursor.style.display = 'inline-block';
+            cursor.style.animation = 'blink 1s infinite';
+            element.appendChild(cursor);
+            
+            let i = 0;
+            const typeInterval = setInterval(() => {
+                if (i < originalContent.length) {
+                    // Insert character before cursor
+                    const char = originalContent.charAt(i);
+                    const textNode = document.createTextNode(char);
+                    element.insertBefore(textNode, cursor);
+                    i++;
+                } else {
+                    // Remove cursor and restore full content
+                    clearInterval(typeInterval);
+                    element.innerHTML = originalContent;
+                }
+            }, 2); // Very fast typing
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--surface);
+                border: 1px solid var(--accent);
+                padding: 15px 20px;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+                color: var(--text);
+                z-index: 1000;
+                white-space: pre-line;
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+                animation: slideInRight 0.3s ease;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePostActions();
+            initializeBiometricScanner();
+            initializeKeyboardShortcuts();
+            initializeLanguageSystem();
+            createNeuralNetwork();
+            createDataStream();
+            detectLanguageFromBrowser();
+            
+            // Start system metrics updates
+            updateSystemMetrics();
+            setInterval(updateSystemMetrics, 2000);
+            
+            // Add scroll listener for reading progress
+            window.addEventListener('scroll', updateReadingProgress);
+            
+            // Initial progress calculation
+            updateReadingProgress();
+            
+            // Add some startup terminal feel
+            setTimeout(() => {
+                updateStatusBar('STATUS: INITIALIZED', 'BLOG SYSTEM READY');
+            }, 500);
+            
+            setTimeout(() => {
+                updateStatusBar('STATUS: ONLINE', getDefaultStatus());
+            }, 2000);
+            
+            // Welcome message with glitch effect
+            setTimeout(() => {
+                showNotification('NEURAL INTERFACE ONLINE\\nWelcome to the system\\nPress M for metrics | Press L for languages');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
