@@ -70,9 +70,9 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
 
    n = 0;
    XtSetArg(args[n], XmNmessageString,
-	    XmStringCreateSimple("Select a language, Verify your OS"));
+	    XmStringCreateLocalized("Select a language, Verify your OS"));
    n++;
-   XtSetArg(args[n], XmNokLabelString, XmStringCreateSimple("Done"));
+   XtSetArg(args[n], XmNokLabelString, XmStringCreateLocalized("Done"));
    n++;
    select_box = XmCreateTemplateDialog(theWidgetRoot, "search_box", args, n);
    XtAddCallback(select_box,
@@ -87,7 +87,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
    lang_frame = XmCreateFrame(pick_form, "lang_frame", args, n);
    n = 0;
    XtSetArg(args[n], XmNframeChildType, XmFRAME_TITLE_CHILD); n++;
-   XtSetArg(args[n], XmNlabelString, XmStringCreateSimple("Language")); n++;
+   XtSetArg(args[n], XmNlabelString, XmStringCreateLocalized("Language")); n++;
    framed[0] = XmCreateLabel(lang_frame, "title", args, n);
    n = 0;
    XtSetArg(args[n], XmNframeChildType, XmFRAME_WORKAREA_CHILD); n++;
@@ -105,7 +105,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
 	   def_lang = French;
 	 n = 0;
 	 XtSetArg(args[n], XmNlabelString,
-		  XmStringCreateSimple(LangList[i])); n++;
+		  XmStringCreateLocalized(LangList[i])); n++;
 	 XtSetArg(args[n], XmNuserData, i); n++;
 	 languages[count] =
 	   XmCreateToggleButton(framed[1], LangList[i], args, n);
@@ -127,7 +127,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
    if (os < MaxOS)
      {
 	sprintf(s, "Your Operating System is %s", os_name);
-	msg = XmStringCreateSimple(s);
+	msg = XmStringCreateLocalized(s);
 	XtSetArg(args[n], XmNlabelString, msg); n++;
 	os_frame = XmCreateLabel(pick_form, "title", args, n);
      }
@@ -137,7 +137,7 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
       n = 0;
       XtSetArg(args[n], XmNframeChildType, XmFRAME_TITLE_CHILD); n++;
       XtSetArg(args[n],
-	       XmNlabelString, XmStringCreateSimple("Operating System"));
+	       XmNlabelString, XmStringCreateLocalized("Operating System"));
       n++;
       framed[0] = XmCreateLabel(os_frame, "title", args, n);
       n = 0;
@@ -151,18 +151,18 @@ static Widget CreateLocaleBox(ViewPtr this, OS os, String os_name)
 	os_box = XmCreateRadioBox(os_frame, "os_box", args, n);
       n = 0;
       XtSetArg(args[n], XmNlabelString,
-	       XmStringCreateSimple(OSList[i])); n++;
+	       XmStringCreateLocalized(OSList[i])); n++;
       for (i = 0; i < MaxOS ; i++) {
 	 n = 0;
 	 XtSetArg(args[n], XmNuserData, i); n++;
 	 XtSetArg(args[n], XmNlabelString,
-		  XmStringCreateSimple(OSList[i])); n++;
+		  XmStringCreateLocalized(OSList[i])); n++;
 	 oss[i] = XmCreateToggleButton(framed[1], OSList[i], args, n);
       }
       n = 0;
       XtSetArg(args[n], XmNuserData, MaxOS); n++;
       XtSetArg(args[n], XmNlabelString,
-	       XmStringCreateSimple("Other"));
+	       XmStringCreateLocalized("Other"));
       n++;
       oss[MaxOS] = XmCreateToggleButton(framed[1],
 					OSList[i], args, n);

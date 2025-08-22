@@ -1154,13 +1154,13 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
     helpDialog = XmCreateMessageDialog(topLevel, "Help", args, n);
 
     n = 0;
-    buttonArray[0] = XmStringCreateSimple("Move");
-    buttonArray[1] = XmStringCreateSimple("Copy");
+    buttonArray[0] = XmStringCreateLocalized("Move");
+    buttonArray[1] = XmStringCreateLocalized("Copy");
     XtSetArg(args[n], XmNbuttons, buttonArray); n++;
     XtSetArg(args[n], XmNbuttonCount, 2); n++;
     XtSetArg(args[n], XmNbuttonSet, 0); n++;
     XtSetArg(args[n], XmNsimpleCallback, ChangeOperation); n++;
-    tempStr = XmStringCreateSimple("Operations:");
+    tempStr = XmStringCreateLocalized("Operations:");
     XtSetArg(args[n], XmNoptionLabel, tempStr); n++;
     helpMenu = XmCreateSimpleOptionMenu(helpDialog, "helpMenu", args, n);
     XmStringFree(tempStr);
@@ -1169,7 +1169,7 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
 
     XtAddCallback(helpDialog, XmNokCallback, HandleDrop, NULL);
     XtAddCallback(helpDialog, XmNcancelCallback, CancelDrop, NULL);
-    XtUnmanageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_HELP_BUTTON));
+    XtUnmanageChild(XtNameToWidget(helpDialog, "Help"));
     XtRealizeWidget(helpDialog);
   }
 
@@ -1181,32 +1181,31 @@ HandleHelp(Widget w, XtPointer call, XtPointer ignore)
   if (rectFound) {
     if (ds->operations == (XmDROP_MOVE | XmDROP_COPY)) {
       XtManageChild(helpMenu);
-      helpStr = XmStringCreateLtoR(HELP_MSG4, XmFONTLIST_DEFAULT_TAG);
-      XtManageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
+      helpStr = XmStringLtoRCreate(HELP_MSG4, XmFONTLIST_DEFAULT_TAG);
+      XtManageChild(XtNameToWidget(helpDialog, "OK"));
     } else if (ds->operation == XmDROP_MOVE) {
       XtUnmanageChild(helpMenu);
-      helpStr = XmStringCreateLtoR(HELP_MSG2, XmFONTLIST_DEFAULT_TAG);
-      XtManageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
+      helpStr = XmStringLtoRCreate(HELP_MSG2, XmFONTLIST_DEFAULT_TAG);
+      XtManageChild(XtNameToWidget(helpDialog, "OK"));
     } else if (ds->operation == XmDROP_COPY) {
       XtUnmanageChild(helpMenu);
-      helpStr = XmStringCreateLtoR(HELP_MSG3, XmFONTLIST_DEFAULT_TAG);
-      XtManageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
+      helpStr = XmStringLtoRCreate(HELP_MSG3, XmFONTLIST_DEFAULT_TAG);
+      XtManageChild(XtNameToWidget(helpDialog, "OK"));
     }
   } else if ((bgFound || pixFound) && (ds->operation == XmDROP_COPY)) {
     XtUnmanageChild(helpMenu);
     rect = RectFind(ds->x, ds->y);
     if (rect) {
-      helpStr = XmStringCreateLtoR(HELP_MSG1, XmFONTLIST_DEFAULT_TAG);
-      XtManageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
+      helpStr = XmStringLtoRCreate(HELP_MSG1, XmFONTLIST_DEFAULT_TAG);
+      XtManageChild(XtNameToWidget(helpDialog, "OK"));
     } else {
-      helpStr = XmStringCreateLtoR(HELP_MSG5, XmFONTLIST_DEFAULT_TAG);
-      XtUnmanageChild(XmMessageBoxGetChild(helpDialog,
-					   XmDIALOG_OK_BUTTON));
+      helpStr = XmStringLtoRCreate(HELP_MSG5, XmFONTLIST_DEFAULT_TAG);
+      XtUnmanageChild(XtNameToWidget(helpDialog, "OK"));
     }
   } else {
     XtUnmanageChild(helpMenu);
-    helpStr = XmStringCreateLtoR(HELP_MSG5, XmFONTLIST_DEFAULT_TAG);
-    XtUnmanageChild(XmMessageBoxGetChild(helpDialog, XmDIALOG_OK_BUTTON));
+    helpStr = XmStringLtoRCreate(HELP_MSG5, XmFONTLIST_DEFAULT_TAG);
+    XtUnmanageChild(XtNameToWidget(helpDialog, "OK"));
   }
 
   /* set the help message into the dialog */

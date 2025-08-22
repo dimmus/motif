@@ -457,7 +457,7 @@ OK_WriteCB (Widget	w,		/*  widget id		*/
     Graphic * graph = (Graphic *) client_data ;
     Position x,y ;
 
-    text = XmFileSelectionBoxGetChild(w, XmDIALOG_TEXT);
+    text = XtNameToWidget(w, "Text");
     filename = XmTextGetString(text);
 
     if ((out_file=fopen(filename, "w")) == NULL) {

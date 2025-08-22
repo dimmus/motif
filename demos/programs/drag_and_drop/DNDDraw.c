@@ -932,7 +932,7 @@ CreateColorPushButtons(Widget parent, Widget separator)
     int         n = 0;
 
     /* Creating an empty compound string so the labels will have no text. */
-    csString = XmStringCreateSimple("");
+    csString = XmStringCreateLocalized("");
 
     /* Creating 6 color labels */
     n = 0;

@@ -166,7 +166,7 @@ static Widget MenuBarEntry(Widget menubar, String entry, String labels[],
       XtManageChild(kid);
    }
    n = 0;
-   XtSetArg(args[n], XmNlabelString, XmStringCreateSimple(entry)); n++;
+   XtSetArg(args[n], XmNlabelString, XmStringCreateLocalized(entry)); n++;
    XtSetArg(args[n], XmNsubMenuId, menu); n++;
    kid = XmCreateCascadeButton(menubar, entry, args, n);
    XtManageChild(kid);
@@ -414,7 +414,7 @@ static void TransferDone(Widget transfer, XtPointer client_data,
    if (*format == 8)
      {
 	if (*type == StringAtom)
-	  string = XmStringCreateSimple( (char *) value );
+	  string = XmStringCreateLocalized( (char *) value );
 	else if (*type == CTAtom)
 	  string = XmCvtCTToXmString( (char *) value );
       XtSetArg(args[n], XmNlabelString, string); n++;
