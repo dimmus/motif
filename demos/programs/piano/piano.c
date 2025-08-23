@@ -500,14 +500,14 @@ void ClearVoiceCB (Widget w, XtPointer clientData, XtPointer callData)
  *--------------------------------------------------------------------*/
 void ArmKey (XtPointer clientData, XtIntervalId *id)
 {
-  Widget key = (Widget) clientData;
+  Widget key_widget = (Widget) clientData;
   XEvent event;
   XtCallbackList cbList;
 
-  XtVaGetValues(key, XmNarmCallback, &cbList, NULL);
-  XtVaSetValues(key, XmNarmCallback, NULL, NULL);
-  XtCallActionProc(key, "Arm", &event, NULL, 0);
-  XtVaSetValues(key, XmNarmCallback, cbList, NULL);
+  XtVaGetValues(key_widget, XmNarmCallback, &cbList, NULL);
+  XtVaSetValues(key_widget, XmNarmCallback, NULL, NULL);
+  XtCallActionProc(key_widget, "Arm", &event, NULL, 0);
+  XtVaSetValues(key_widget, XmNarmCallback, cbList, NULL);
 }
 
 
@@ -516,10 +516,10 @@ void ArmKey (XtPointer clientData, XtIntervalId *id)
  *--------------------------------------------------------------------*/
 void DisarmKey (XtPointer clientData, XtIntervalId *id)
 {
-  Widget key = (Widget) clientData;
+  Widget key_widget = (Widget) clientData;
   XEvent event;
 
-  XtCallActionProc(key, "Disarm", &event, NULL, 0);
+  XtCallActionProc(key_widget, "Disarm", &event, NULL, 0);
 }
 
 
@@ -1516,18 +1516,18 @@ void CvtStrToFloat (XrmValue *args, Cardinal *nargs, XrmValue *fromVal, XrmValue
  *----------------------------------------------------------------*/
 AppData *GetAppResources (Widget w)
 {
-   AppData *appData;
+   AppData *app_data;
 
-   if ((appData = (AppData *) XtCalloc(1, sizeof(AppData))) == NULL)
+   if ((app_data = (AppData *) XtCalloc(1, sizeof(AppData))) == NULL)
      {
 	printf(EMSG1);
 	exit(0);
      }
 
-   XtGetApplicationResources(w, (XtPointer)appData,
+   XtGetApplicationResources(w, (XtPointer)app_data,
 			     appRes, XtNumber(appRes), NULL, 0);
 
-   return (appData);
+   return (app_data);
 }
 
 

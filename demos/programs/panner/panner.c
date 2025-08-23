@@ -413,13 +413,13 @@ ChangePageCB (
      XtPointer clientData,
      XtPointer callData)
 {
-  PannerInfoRec            *pInfoList = (PannerInfoRec *)clientData;
+  PannerInfoRec            *panner_data = (PannerInfoRec *)clientData;
   XmNotebookCallbackStruct *nbData    = (XmNotebookCallbackStruct *)callData;
   int  pageNumber;
 
   pageNumber = nbData->page_number;
   if ((pageNumber >= MAX_DISPLAY_COUNT) ||
-      (pInfoList[pageNumber].display == NULL))
+      (panner_data[pageNumber].display == NULL))
     {
       fprintf(stderr, "ERROR - bad display index. (%d).\n", pageNumber);
     }
@@ -440,15 +440,15 @@ DoAddDisplayCB (
      XtPointer callData)
 {
   XmSelectionBoxCallbackStruct *cb = (XmSelectionBoxCallbackStruct *)callData;
-  PannerInfoRec *pInfoList = (PannerInfoRec *)clientData;
+  PannerInfoRec *panner_data = (PannerInfoRec *)clientData;
   char          *dspName;           /* Free when done. */
   String         appName, appClass; /* Don't free - owned by Xt. */
 
 
-  XtGetApplicationNameAndClass(pInfoList[LOCAL].display, &appName, &appClass);
+  XtGetApplicationNameAndClass(panner_data[LOCAL].display, &appName, &appClass);
   dspName = XmStringUnparse(cb->value, NULL, XmCHARSET_TEXT, XmCHARSET_TEXT, NULL, 0, XmOUTPUT_ALL);
 
-  OpenNewDisplay(dspName, notebook, pInfoList);
+  OpenNewDisplay(dspName, notebook, panner_data);
   if (dspName) XtFree(dspName);
 }
 
@@ -606,15 +606,15 @@ HandlePropertyChange (XEvent *event)
  *----------------------------------------------------------------*/
 static void
 UpdatePannerView (
-     PannerInfoRec *pInfoList,
+     PannerInfoRec *panner_data,
      int remoteDsp)
 {
-  XClearArea(pInfoList[LOCAL].display,
-	     XtWindow(pInfoList[remoteDsp].canvas),
+  XClearArea(panner_data[LOCAL].display,
+	     XtWindow(panner_data[remoteDsp].canvas),
 	     0, 0, 0, 0, False);
 
-  DrawWindows(pInfoList);
-  DrawThumb(&pInfoList[remoteDsp]);
+  DrawWindows(panner_data);
+  DrawThumb(&panner_data[remoteDsp]);
 }
 
 
@@ -622,7 +622,7 @@ UpdatePannerView (
  |                          DrawWindows                           |
  *----------------------------------------------------------------*/
 static void
-DrawWindows (PannerInfoRec *pInfoList)
+DrawWindows (PannerInfoRec *panner_data)
 {
   Window        realRoot, root, parent, *child = NULL;
   int           i, x, y;
@@ -630,10 +630,10 @@ DrawWindows (PannerInfoRec *pInfoList)
   int (*oldHandler)();
 
 
-  realRoot = RootWindow(pInfoList[DSP].display,
-			XScreenNumberOfScreen(pInfoList[DSP].screen));
+  realRoot = RootWindow(panner_data[DSP].display,
+			XScreenNumberOfScreen(panner_data[DSP].screen));
 
-  if (XQueryTree(pInfoList[DSP].display, realRoot,
+  if (XQueryTree(panner_data[DSP].display, realRoot,
 		 &root, &parent, &child, &childCount))
     {
       /*
@@ -645,17 +645,17 @@ DrawWindows (PannerInfoRec *pInfoList)
 	{
 	  XWindowAttributes attr;
 
-	  XGetWindowAttributes(pInfoList[DSP].display, child[i], &attr);
+	  XGetWindowAttributes(panner_data[DSP].display, child[i], &attr);
 
 	  if (attr.map_state == IsViewable)
 	    {
-	      TranslateCoordinates(&pInfoList[DSP],
+	      TranslateCoordinates(&panner_data[DSP],
 				   attr.x, attr.y, attr.width, attr.height,
 				   &x, &y, &width, &height);
 
-	      SetWindowColor (&pInfoList[LOCAL], i);
-	      XFillRectangle(pInfoList[LOCAL].display,
-			     XtWindow(pInfoList[DSP].canvas),
+	      SetWindowColor (&panner_data[LOCAL], i);
+	      XFillRectangle(panner_data[LOCAL].display,
+			     XtWindow(panner_data[DSP].canvas),
 			     canvasGC, x, y, width, height);
 	    }
 	}

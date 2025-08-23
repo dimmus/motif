@@ -84,7 +84,8 @@ int main(int argc, char **argv)
   Display     * display;
   char          name[132];
 
-  (void) strncpy(name, base(argv[0]), 132);
+  (void) strncpy(name, base(argv[0]), 131);
+  name[131] = '\0'; /* Ensure null termination */
 
   /* Initialize the X Intrinsics */
   XtToolkitInitialize();
