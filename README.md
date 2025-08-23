@@ -1,6 +1,7 @@
-# Motif - The Industrial-Class UI Toolkit That Defined an Era
+# Motif - The Industrial-Class UI Toolkit
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/dimmus/motif)
+[![Alpine Linux GCC](https://github.com/dimmus/motif/workflows/Alpine%20Linux%20GCC/badge.svg)](https://github.com/dimmus/motif/actions)
+[![Alpine Linux Clang](https://github.com/dimmus/motif/workflows/Alpine%20Linux%20Clang/badge.svg)](https://github.com/dimmus/motif/actions)
 [![License](https://img.shields.io/badge/license-LGPL--2.1-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-2.4.0-orange.svg)](https://github.com/dimmus/motif)
 
@@ -9,6 +10,24 @@
 **Motif** is the legendary user interface toolkit that defined the Unix desktop era and powered countless industrial, enterprise, and scientific applications throughout the 1990s and 2000s. Originally developed by the Open Software Foundation (OSF) in 1988, Motif became the de facto standard for professional Unix workstations and mission-critical applications.
 
 This is a modern, actively maintained implementation of the Motif toolkit, preserving its industrial-strength reliability while adding contemporary features like UTF-8 support, Xft font rendering, and modern image format support.
+
+## Build Status
+
+This project is continuously tested on multiple Linux distributions with both **GCC** and **Clang** compilers to ensure maximum compatibility and reliability across different build environments:
+
+### GitHub Actions (GitHub)
+- **🏔️ Alpine Linux + GCC**: Tests compilation with GNU Compiler Collection on minimal Alpine Linux
+- **🏔️ Alpine Linux + Clang**: Tests compilation with LLVM Clang compiler on Alpine Linux
+
+### Gitverse Workflows (Gitverse)  
+- **🐧 Ubuntu Linux + GCC**: Tests compilation with GNU Compiler Collection on Ubuntu Linux
+- **🐧 Ubuntu Linux + Clang**: Tests compilation with LLVM Clang compiler on Ubuntu Linux
+
+This comprehensive testing approach ensures robust compatibility:
+- **Alpine Linux** provides minimal base system testing with musl libc and strict compiler settings
+- **Ubuntu Linux** provides mainstream glibc testing with comprehensive development libraries
+- **Dual Compiler Testing** verifies compatibility with both GNU and LLVM toolchains
+- **Container Ready** builds work correctly in constrained environments and Docker containers
 
 ### Historical Significance
 
