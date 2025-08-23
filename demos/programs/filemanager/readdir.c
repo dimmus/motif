@@ -455,9 +455,7 @@ static void readIcon(str, icon, mask, fg, bg)
       if (len > 4) {
         int copy_len = len - 4;
         if (copy_len >= sizeof(msk)) copy_len = sizeof(msk) - 1;
-        strncpy(msk, str, copy_len);
-        msk[copy_len] = 0;
-        strcat(msk, "_m.xpm");
+        snprintf(msk, sizeof(msk), "%.*s_m.xpm", copy_len, str);
       } else {
         strcpy(msk, str);
         strcat(msk, "_m.xpm");
