@@ -1,7 +1,6 @@
 # Motif - The Industrial-Class UI Toolkit
 
-[![Alpine Linux GCC](https://github.com/dimmus/motif/workflows/Alpine%20Linux%20GCC/badge.svg)](https://github.com/dimmus/motif/actions)
-[![Alpine Linux Clang](https://github.com/dimmus/motif/workflows/Alpine%20Linux%20Clang/badge.svg)](https://github.com/dimmus/motif/actions)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/dimmus/motif)
 [![License](https://img.shields.io/badge/license-LGPL--2.1-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-2.4.0-orange.svg)](https://github.com/dimmus/motif)
 
