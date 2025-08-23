@@ -69,12 +69,12 @@ InitializeInterface(WSM_UI* wsm_ui_data)
   int num_rooms = GetNumberSpaces();
   int max_num_rooms = 20;
 
-  wsm_ui->space_button = (Widget*) XtMalloc(max_num_rooms*sizeof(Widget));
-  wsm_ui->num_space_buttons = num_rooms;
-  wsm_ui->from_option_button = (Widget*) XtMalloc(max_num_rooms*sizeof(Widget));
-  wsm_ui->to_option_button = (Widget*)XtMalloc((max_num_rooms +1)*sizeof(Widget));
-  wsm_ui->from_space = NULL;
-  wsm_ui->to_space = NULL;
+  wsm_ui_data->space_button = (Widget*) XtMalloc(max_num_rooms*sizeof(Widget));
+  wsm_ui_data->num_space_buttons = num_rooms;
+  wsm_ui_data->from_option_button = (Widget*) XtMalloc(max_num_rooms*sizeof(Widget));
+  wsm_ui_data->to_option_button = (Widget*)XtMalloc((max_num_rooms +1)*sizeof(Widget));
+  wsm_ui_data->from_space = NULL;
+  wsm_ui_data->to_space = NULL;
 }
 
 void
@@ -118,7 +118,7 @@ CreateWorkspacePanel(Widget shell_widget, WSM_UI* wsm_ui_data, Boolean show_menu
   for (i = 0; space != NULL && i < wsm_ui->num_space_buttons; i++)
     {
       xmstr = XmStringCreateLtoR(space->name, XmSTRING_DEFAULT_CHARSET);
-      XtVaSetValues(wsm_ui->space_button[i],XmNlabelString,xmstr,NULL);
+      XtVaSetValues(wsm_ui_data->space_button[i],XmNlabelString,xmstr,NULL);
       XmStringFree(xmstr);
       space = space->next;
     }
@@ -126,7 +126,7 @@ CreateWorkspacePanel(Widget shell_widget, WSM_UI* wsm_ui_data, Boolean show_menu
 }
 
 void
-CreateNewSpaceButton(int i, char *name, WSM_UI *wsm_ui)
+CreateNewSpaceButton(int i, char *name, WSM_UI *wsm_ui_data)
 {
   int argcnt;
   Arg args[15];
@@ -139,16 +139,16 @@ CreateNewSpaceButton(int i, char *name, WSM_UI *wsm_ui)
   XtSetArg(args[argcnt], XmNlabelString,
 	   (xmstr=XmStringCreateLtoR(name,XmSTRING_DEFAULT_CHARSET))); argcnt++;
   XtSetArg(args[argcnt], XmNrecomputeSize, True); argcnt++;
-  wsm_ui->space_button[i] = XtCreateWidget("pushButton",
+  wsm_ui_data->space_button[i] = XtCreateWidget("pushButton",
 					   xmToggleButtonWidgetClass,
 					   wsm_ui->wsm_row_column,
 					   args,
 					   argcnt);
   XmStringFree( xmstr );
 
-  XtAddCallback(wsm_ui->space_button[i], XmNvalueChangedCallback,
+  XtAddCallback(wsm_ui_data->space_button[i], XmNvalueChangedCallback,
 		SendLeaveRoomCB, (XtPointer)wsm_ui);
-  XtManageChild(wsm_ui->space_button[i]);
+  XtManageChild(wsm_ui_data->space_button[i]);
 
 }
 
@@ -172,7 +172,7 @@ SendLeaveRoomCB(Widget w, XtPointer client, XtPointer call)
 	}
     }
   if (mwm_gone && current_space != NULL)
-      XmToggleButtonSetState(wsm_ui->space_button[GetSpaceID(current_space)],True,True);
+      XmToggleButtonSetState(wsm_ui_data->space_button[GetSpaceID(current_space)],True,True);
 }
 
 /* ARGSUSED */
@@ -181,7 +181,7 @@ NewActivateCB(Widget w, XtPointer client, XtPointer call)
 {
   static int i = 0;
   char str[20];
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   Space *space;
 
   if (i == 0)
@@ -363,7 +363,7 @@ UpdateButtons(WorkWindow *w_window)
 void
 CreateConfigureCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int space_id = -1;
   if (connected )
     {
@@ -397,7 +397,7 @@ MoveCB(Widget w, XtPointer client, XtPointer call)
   int *pos_list;
   int i;
 			WorkWindow *w_window;
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
     {
@@ -419,7 +419,7 @@ DeleteCB(Widget w, XtPointer client, XtPointer call)
   int pos_count = 0;
   int *pos_list;
   WorkWindow *w_window;
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
     {
@@ -435,7 +435,7 @@ DeleteCB(Widget w, XtPointer client, XtPointer call)
 void
 ToWorkspaceCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int room_num = 0;
   Space *space;
 
@@ -461,7 +461,7 @@ void
 FromWorkspaceCB(Widget w, XtPointer client, XtPointer call)
 {
 
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int room_num;
   Space *space;
 
@@ -477,7 +477,7 @@ FromWorkspaceCB(Widget w, XtPointer client, XtPointer call)
 }
 
 void
-Copy(WSM_UI* wsm_ui)
+Copy(WSM_UI* wsm_ui_data)
 {
   int pos_count = 0;
   int *pos_list;
@@ -499,7 +499,7 @@ Copy(WSM_UI* wsm_ui)
 }
 
 void
-Link(WSM_UI* wsm_ui)
+Link(WSM_UI* wsm_ui_data)
 {
   int pos_count = 0;
   int *pos_list;
@@ -524,7 +524,7 @@ Link(WSM_UI* wsm_ui)
 void
 OccupyCB(Widget w, XtPointer client,XtPointer  call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   Boolean copy_set;
   XtVaGetValues(wsm_ui->copy_toggle, XmNset,&copy_set,NULL);
   if (copy_set)
@@ -538,7 +538,7 @@ OccupyCB(Widget w, XtPointer client,XtPointer  call)
 void
 WindowModeCB(Widget w,XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   XtVaSetValues(wsm_ui->from_list,XmNselectionPolicy,XmSINGLE_SELECT,NULL);
 }
 
@@ -547,7 +547,7 @@ WindowModeCB(Widget w,XtPointer client,XtPointer call)
 void
 ClientModeCB(Widget w,XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   XtVaSetValues(wsm_ui->from_list,XmNselectionPolicy,XmMULTIPLE_SELECT,NULL);
 }
 
@@ -555,7 +555,7 @@ ClientModeCB(Widget w,XtPointer client,XtPointer call)
 void
 SelectFromListCB(Widget w,XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int pos_count = 0;
   int *pos_list;
   WorkWindow *w_window;
@@ -578,7 +578,7 @@ SelectFromListCB(Widget w,XtPointer client,XtPointer call)
 void
 MultSelectFromListCB(Widget w,XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   XmListCallbackStruct *list_call = (XmListCallbackStruct *)call;
   int pos_count = 0;
   int *pos_list;
@@ -630,7 +630,7 @@ MultSelectFromListCB(Widget w,XtPointer client,XtPointer call)
 void
 SelectToListCB(Widget w, XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int pos_count = 0;
   int *pos_list;
 
@@ -650,7 +650,7 @@ void
 DismissConfigureCB(Widget w,XtPointer  client, XtPointer call)
 {
 
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
    XtPopdown(XtParent(wsm_ui->configure_form));
 }
@@ -664,7 +664,7 @@ void
 CreateNameCB(Widget w, XtPointer client, XtPointer call)
 {
 
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (connected )
     {
@@ -700,7 +700,7 @@ UpdateSpaceList(Widget list)
 void
 SelectNameSpaceCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int pos_count = 0;
   int *pos_list;
   Space *space;
@@ -719,12 +719,12 @@ SelectNameSpaceCB(Widget w, XtPointer client, XtPointer call)
 
 
 void
-ChangeSpaceName(WSM_UI* wsm_ui,Space *space,int wsm_index)
+ChangeSpaceName(WSM_UI* wsm_ui_data,Space *space,int wsm_index)
 {
   XmString xmstr;
 
   xmstr = XmStringCreateLtoR(space->name, XmSTRING_DEFAULT_CHARSET);
-  XtVaSetValues(wsm_ui->space_button[wsm_index],XmNlabelString,xmstr,NULL);
+  XtVaSetValues(wsm_ui_data->space_button[wsm_index],XmNlabelString,xmstr,NULL);
   XtVaSetValues(wsm_ui->from_option_button[wsm_index],XmNlabelString,xmstr,NULL);
   XtVaSetValues(wsm_ui->to_option_button[wsm_index],XmNlabelString,xmstr,NULL);
   XmStringFree(xmstr);
@@ -750,7 +750,7 @@ NameActivateCB(Widget w, XtPointer client, XtPointer call)
 void
 NameOkActivateCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   Space *space;
   int pos_count = 0;
   int *pos_list;
@@ -785,7 +785,7 @@ NameOkActivateCB(Widget w, XtPointer client, XtPointer call)
 	      strcmp(str,space->pixmap_name) != 0)
 	    if (SetSpaceLabelPixmap(space,str))
 	      {
-		XtVaSetValues(wsm_ui->space_button[GetSpaceID(space)],
+		XtVaSetValues(wsm_ui_data->space_button[GetSpaceID(space)],
 			      XmNlabelPixmap,space->pixmap_label,
 			      XmNlabelType, XmPIXMAP,
 			      NULL);
@@ -808,7 +808,7 @@ void
 DismissNameCB(Widget w, XtPointer client, XtPointer call)
 {
 
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
    XtPopdown(XtParent(wsm_ui->name_form));
 }
 
@@ -824,7 +824,7 @@ void
 CreateBackgroundCB(Widget w, XtPointer client, XtPointer call)
 {
 
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (connected )
     {
@@ -839,7 +839,7 @@ CreateBackgroundCB(Widget w, XtPointer client, XtPointer call)
 void
 SelectBackgroundSpaceCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int pos_count = 0;
   int *pos_list;
   Space *space;
@@ -875,7 +875,7 @@ BackgroundActivateCB(Widget w, XtPointer client, XtPointer call)
 	    {
 	      if (SetSpacePixel(space,str))
 		{
-		  XtVaSetValues(wsm_ui->space_button[GetSpaceID(space)],
+		  XtVaSetValues(wsm_ui_data->space_button[GetSpaceID(space)],
 				XmNbackground,space->pixel,
 				XmNunselectColor,space->pixel,
 				NULL);
@@ -906,7 +906,7 @@ void
 DismissBackgroundCB(Widget w, XtPointer client, XtPointer call)
 {
 
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
    XtPopdown(XtParent(wsm_ui->background_form));
 }
 
@@ -918,7 +918,7 @@ DismissBackgroundCB(Widget w, XtPointer client, XtPointer call)
 void
 CreateDeleteCB(Widget w, XtPointer client, XtPointer call)
 {
- WSM_UI *wsm_ui = (WSM_UI*)client;
+ WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (connected )
     {
@@ -934,7 +934,7 @@ CreateDeleteCB(Widget w, XtPointer client, XtPointer call)
 void
 DismissDeleteCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
    XtPopdown(XtParent(wsm_ui->delete_form));
 
 }
@@ -948,7 +948,7 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
   int pos_count = 0;
   int *pos_list;
   int i;
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (XmListGetSelectedPos(wsm_ui->delete_list,&pos_list, &pos_count))
     {
@@ -959,13 +959,13 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
 	  RemoveSpaceCommand(pos_list[0]-1);
 #endif
 	  RemoveSpace(space);
-	  XtDestroyWidget(wsm_ui->space_button[pos_list[0]-1]);
+	  XtDestroyWidget(wsm_ui_data->space_button[pos_list[0]-1]);
 	  XtDestroyWidget(wsm_ui->from_option_button[pos_list[0]-1]);
 	  XtDestroyWidget(wsm_ui->to_option_button[pos_list[0]-1]);
 	  for (i = pos_list[0]-1; i < wsm_ui->num_space_buttons-1; i++)
 	    {
-	      wsm_ui->space_button[i] = wsm_ui->space_button[i+1];
-	      XtVaSetValues(wsm_ui->space_button[i], XmNuserData,i+1,NULL);
+	      wsm_ui_data->space_button[i] = wsm_ui_data->space_button[i+1];
+	      XtVaSetValues(wsm_ui_data->space_button[i], XmNuserData,i+1,NULL);
 	      wsm_ui->from_option_button[i] = wsm_ui->from_option_button[i+1];
 	      XtVaSetValues(wsm_ui->from_option_button[i],XmNuserData,i+1,NULL);
 	      wsm_ui->to_option_button[i] = wsm_ui->to_option_button[i+1];
@@ -992,7 +992,7 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
 void
 SelectDeleteCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int pos_count = 0;
   int *pos_list;
   Space *space;
@@ -1028,7 +1028,7 @@ SelectDeleteCB(Widget w, XtPointer client, XtPointer call)
 void
 SaveAsCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
    XtManageChild(wsm_ui->save_as_form);
   XtPopup(XtParent(wsm_ui->save_as_form),XtGrabNone);
@@ -1038,7 +1038,7 @@ SaveAsCB(Widget w, XtPointer client, XtPointer call)
 void
 SaveAsOkCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int new_length;
   char *new_file_name;
   char *home_name;
@@ -1072,7 +1072,7 @@ SaveAsOkCB(Widget w, XtPointer client, XtPointer call)
 void
 DismissSaveAsCB(Widget w, XtPointer  client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
    XtPopdown(XtParent(wsm_ui->save_as_form));
 }
@@ -1126,7 +1126,7 @@ CreateOccupy(WorkWindow *w_window)
 void
 DismissOccupyCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
    XtPopdown(XtParent(wsm_ui->occupy_form));
 
 }
@@ -1140,7 +1140,7 @@ OccupyActivateCB(Widget w, XtPointer client, XtPointer call)
   int pos_count = 0;
   int *pos_list;
   int i;
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
   if (XmListGetSelectedPos(wsm_ui->occupy_list,&pos_list, &pos_count))
     {
@@ -1175,7 +1175,7 @@ OccupyActivateCB(Widget w, XtPointer client, XtPointer call)
 void
 SelectOccupyCB(Widget w, XtPointer client, XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   int pos_count = 0;
   int *pos_list;
   Space *space;
@@ -1197,7 +1197,7 @@ SelectOccupyCB(Widget w, XtPointer client, XtPointer call)
 void
 CopyModeCB(Widget w,XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   copy_mode = XmToggleButtonGetState(w);
 }
 
@@ -1206,6 +1206,6 @@ CopyModeCB(Widget w,XtPointer client,XtPointer call)
 void
 LinkModeCB(Widget w,XtPointer client,XtPointer call)
 {
-  WSM_UI *wsm_ui = (WSM_UI*)client;
+  WSM_UI *wsm_ui_data = (WSM_UI*)client;
   copy_mode = XmToggleButtonGetState(w);
 }
