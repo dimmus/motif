@@ -422,13 +422,14 @@ DeleteCB(Widget w, XtPointer client, XtPointer call)
   WorkWindow *w_window;
   WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
-  if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->from_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       w_window = GetWorkWindowID(wsm_ui->from_space,pos_list[0]-1);
       if (w_window != NULL)
 	DeleteWindow(w_window, wsm_ui->from_space);
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -484,7 +485,8 @@ Copy(WSM_UI* wsm_ui_data)
   int *pos_list;
   int i;
   WorkWindow *w_window;
-  if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->from_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
 #ifdef DEBUG
 /*      PRINT("%d copy %d from %s to %s\n", pos_count, pos_list[0], from_space, to_space);*/
@@ -495,8 +497,8 @@ Copy(WSM_UI* wsm_ui_data)
 	  if (w_window != NULL)
 	    CopyWindow(w_window, wsm_ui->from_space,wsm_ui->to_space);
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 void
@@ -506,7 +508,8 @@ Link(WSM_UI* wsm_ui_data)
   int *pos_list;
   WorkWindow *w_window;
   int i;
-  if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->from_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
 #ifdef DEBUG
 /*      PRINT("%d copy %d from %s to %s\n", pos_count, pos_list[0], from_space, to_space);*/
@@ -517,8 +520,8 @@ Link(WSM_UI* wsm_ui_data)
 	  if (w_window != NULL)
 	    LinkWindow(w_window, wsm_ui->from_space, wsm_ui->to_space);
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 /* ARGSUSED */
@@ -561,7 +564,8 @@ SelectFromListCB(Widget w,XtPointer client,XtPointer call)
   int *pos_list;
   WorkWindow *w_window;
 
-  if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->from_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       w_window = GetWorkWindowID(wsm_ui->from_space,pos_list[0]-1);
       if (w_window != NULL)
@@ -569,8 +573,8 @@ SelectFromListCB(Widget w,XtPointer client,XtPointer call)
 	  wsm_ui->w_window = w_window;
 	  UpdateButtons(w_window);
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -598,7 +602,8 @@ MultSelectFromListCB(Widget w,XtPointer client,XtPointer call)
       UpdateButtons(w_window);
       GetWorkWindowClientIDs(item_pos-1, wsm_ui->from_space,&select_ids,&num_select);
 
-      if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
+      XtVaGetValues(wsm_ui->from_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+      if (pos_count > 0)
 	{
 	  for (i = 0; i < pos_count; i++)
 	    {
@@ -611,6 +616,7 @@ MultSelectFromListCB(Widget w,XtPointer client,XtPointer call)
 		if (pos_list[i] != item_pos)
 		  XmListDeselectPos(wsm_ui->from_list,pos_list[i]);
 	      }
+	  XtFree((XtPointer)pos_list);
 	}
       if (num_select > 0)
 	{
@@ -637,11 +643,12 @@ SelectToListCB(Widget w, XtPointer client,XtPointer call)
 
 /*  XmListDeselectAllItems(wsm_ui->to_list);*/
 
-  if (XmListGetSelectedPos(wsm_ui->to_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->to_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       XmListDeselectPos(wsm_ui->to_list,pos_list[0]);
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -706,7 +713,8 @@ SelectNameSpaceCB(Widget w, XtPointer client, XtPointer call)
   int *pos_list;
   Space *space;
 
-  if (XmListGetSelectedPos(wsm_ui->name_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->name_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
@@ -714,8 +722,8 @@ SelectNameSpaceCB(Widget w, XtPointer client, XtPointer call)
 	  XmTextSetString(wsm_ui->name_text,space->name);
 	  XmTextSetString(wsm_ui->pixmap_text,space->pixmap_name);
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -757,7 +765,8 @@ NameOkActivateCB(Widget w, XtPointer client, XtPointer call)
   int *pos_list;
   char *old_name;
   char *str;
-  if (XmListGetSelectedPos(wsm_ui->name_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->name_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
@@ -796,8 +805,8 @@ NameOkActivateCB(Widget w, XtPointer client, XtPointer call)
 /*	  XtPopdown(XtParent(wsm_ui->name_form));*/
 #endif
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 
 }
 
@@ -845,15 +854,16 @@ SelectBackgroundSpaceCB(Widget w, XtPointer client, XtPointer call)
   int *pos_list;
   Space *space;
 
-  if (XmListGetSelectedPos(wsm_ui->background_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->background_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
 	{
 	  XmTextSetString(wsm_ui->background_text,space->background);
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -865,7 +875,8 @@ BackgroundActivateCB(Widget w, XtPointer client, XtPointer call)
   int pos_count = 0;
   int *pos_list;
   char *str;
-  if (XmListGetSelectedPos(wsm_ui->background_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->background_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
@@ -896,8 +907,8 @@ BackgroundActivateCB(Widget w, XtPointer client, XtPointer call)
 	  XmListSelectPos(wsm_ui->background_list,pos_list[0],True);
 /*	  XtPopdown(XtParent(wsm_ui->background_form));*/
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 
 }
 
@@ -951,7 +962,8 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
   int i;
   WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
-  if (XmListGetSelectedPos(wsm_ui->delete_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->delete_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
@@ -981,8 +993,8 @@ DeleteActivateCB(Widget w, XtPointer client, XtPointer call)
 	  UpdateSpaceList(wsm_ui->occupy_list);
 #endif
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -999,7 +1011,8 @@ SelectDeleteCB(Widget w, XtPointer client, XtPointer call)
   Space *space;
   WorkWindowList *w_list;
 
-  if (XmListGetSelectedPos(wsm_ui->delete_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->delete_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
@@ -1010,14 +1023,15 @@ SelectDeleteCB(Widget w, XtPointer client, XtPointer call)
 	      if (w_list->work_win->s_list->next == NULL)
 		{
 		  XtVaSetValues(wsm_ui->ok_button,XmNsensitive,False,NULL);
+		  XtFree((XtPointer)pos_list);
 		  return;
 		}
 	      w_list = w_list->next;
 	    }
 	  XtVaSetValues(wsm_ui->ok_button,XmNsensitive,True,NULL);
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
@@ -1143,7 +1157,8 @@ OccupyActivateCB(Widget w, XtPointer client, XtPointer call)
   int i;
   WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
-  if (XmListGetSelectedPos(wsm_ui->occupy_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->occupy_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       for (i = 0; i < pos_count; i++)
 	{
@@ -1163,8 +1178,8 @@ OccupyActivateCB(Widget w, XtPointer client, XtPointer call)
 	    }
 	  else PRINT("Space == NULL\n");
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
   XtPopdown(XtParent(wsm_ui->occupy_form));
 }
 
@@ -1182,15 +1197,16 @@ SelectOccupyCB(Widget w, XtPointer client, XtPointer call)
   Space *space;
   WorkWindowList *w_list;
 
-  if (XmListGetSelectedPos(wsm_ui->occupy_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->occupy_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       space = GetSpaceFromID(pos_list[0]-1);
       if (space != NULL)
 	{
 
 	}
+      XtFree((XtPointer)pos_list);
     }
-  if (pos_count > 0) XtFree((XtPointer)pos_list);
 }
 
 
