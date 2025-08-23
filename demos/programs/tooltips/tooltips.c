@@ -139,7 +139,7 @@ ToolTipPopup(Widget w, XtPointer client_data, XtPointer call_data)
 static void
 cancelCallback(Widget w, XtPointer client_data, XtPointer call_data)
 {
-Widget child = XmMessageBoxGetChild(w, XmDIALOG_CANCEL_BUTTON);
+Widget child = XtNameToWidget(w, "Cancel");
 
     XtSetSensitive(child, !XtIsSensitive(child));
 }

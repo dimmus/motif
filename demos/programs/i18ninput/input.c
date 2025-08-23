@@ -775,9 +775,9 @@ ShowIMStatus(Widget widget,
   if (message_dialog == NULL) {
     message_dialog = XmCreateMessageDialog(toplevel, "im_info", args, n);
     /* Only keep OK button */
-    tmp_w = XmMessageBoxGetChild(message_dialog, XmDIALOG_CANCEL_BUTTON);
+    tmp_w = XtNameToWidget(message_dialog, "Cancel");
     XtUnmanageChild(tmp_w);
-    tmp_w = XmMessageBoxGetChild(message_dialog, XmDIALOG_HELP_BUTTON);
+    tmp_w = XtNameToWidget(message_dialog, "Help");
     XtUnmanageChild(tmp_w);
   } else {
     XtSetValues(message_dialog, args, n);

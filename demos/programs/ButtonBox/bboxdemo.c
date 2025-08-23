@@ -223,9 +223,9 @@ void Explain(Widget w, XtPointer client, XtPointer call)
         XtSetArg(args[argcnt], XmNtitle, "Explanation"); argcnt++;
         info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-        temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+        temp = XtNameToWidget(info, "Cancel");
         XtUnmanageChild(temp);
-        temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+        temp = XtNameToWidget(info, "Help");
         XtUnmanageChild(temp);
     }
 

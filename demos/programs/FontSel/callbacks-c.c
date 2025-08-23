@@ -79,9 +79,9 @@ XtPointer call;
 	XtSetArg(args[argcnt], XmNtitle, "Explanation"); argcnt++;
 	info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
     }
 
@@ -138,9 +138,9 @@ XtPointer call;
 	XtSetArg(args[argcnt], XmNtitle, "Current Font"); argcnt++;
 	info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
     }
 
@@ -176,9 +176,9 @@ XtPointer call;
 	XtSetArg(args[argcnt], XmNtitle, "Other Resources"); argcnt++;
 	info = XmCreateInformationDialog(w, "explain", args, argcnt);
 
-	temp = XmMessageBoxGetChild(info, XmDIALOG_CANCEL_BUTTON);
+	temp = XtNameToWidget(info, "Cancel");
 	XtUnmanageChild(temp);
-	temp = XmMessageBoxGetChild(info, XmDIALOG_HELP_BUTTON);
+	temp = XtNameToWidget(info, "Help");
 	XtUnmanageChild(temp);
     }
 
