@@ -38,8 +38,15 @@ libwml_la_SOURCES = wmlparse.y wmloutkey.c wmlouth.c wmloutmm.c wmloutp1.c wmlre
 wmlparse.c: wmllex.c
 
 wmllex.c: wmllex.l
-	$(LEX) $(LFLAGS) $(srcdir)/wmllex.l
-	mv lex.yy.c wmllex.c
+	@echo "Generating wmllex.c from wmllex.l"
+	@if command -v flex >/dev/null 2>&1; then \
+		flex $(LFLAGS) -o wmllex.c $(srcdir)/wmllex.l; \
+	else \
+		$(LEX) $(LFLAGS) $(srcdir)/wmllex.l; \
+		if test -f lex.yy.c; then mv lex.yy.c wmllex.c; \
+		elif test -f lexyy.c; then mv lexyy.c wmllex.c; \
+		else echo "Error: No lexer output file found"; exit 1; fi; \
+	fi
 
 wmlsynbld.c: wmlparse.h
 
