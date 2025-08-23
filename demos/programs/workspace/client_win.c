@@ -66,10 +66,10 @@ Window IsClientWindow(dpy, win, retdata)
 	return inf;
 }
 
-static Window TryChildren (dpy, win, WM_STATE, retdata)
+static Window TryChildren (dpy, win, wm_state_atom, retdata)
 	Display *dpy;
 	Window win;
-	Atom WM_STATE;
+	Atom wm_state_atom;
 	unsigned int **retdata;
 {
 	Window root, parent;
@@ -85,7 +85,7 @@ static Window TryChildren (dpy, win, WM_STATE, retdata)
 	if (!XQueryTree(dpy, win, &root, &parent, &children, &nchildren))
 		return 0;
 	for (i = 0; !inf && (i < nchildren); i++) {
-		XGetWindowProperty(dpy, children[i], WM_STATE, 0, 2, False,
+		XGetWindowProperty(dpy, children[i], wm_state_atom, 0, 2, False,
 			AnyPropertyType, &type, &format, &nitems,
 			&after, (unsigned char **)&data);
 		if (type) {
@@ -94,7 +94,7 @@ static Window TryChildren (dpy, win, WM_STATE, retdata)
 		}
 	}
 	for (i = 0; !inf && (i < nchildren); i++)
-		inf = TryChildren(dpy, children[i], WM_STATE, retdata);
+		inf = TryChildren(dpy, children[i], wm_state_atom, retdata);
 	if (children) XFree((char *)children);
 	return inf;
 }

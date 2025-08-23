@@ -123,10 +123,10 @@ SelectionProc (Widget w, XtPointer clientData, XtPointer callData)
 void
 LastSelectionProc (Widget w, XtPointer clientData, XtPointer callData)
 {
-    Display *dsp = XtDisplay(w);
+    Display *display = XtDisplay(w);
 
-    XSync(dsp, False);
-    XCloseDisplay(dsp);
+    XSync(display, False);
+    XCloseDisplay(display);
 
     exit(0);
 }
@@ -629,14 +629,14 @@ RemoveCommandSpace(CommandSpace *cspace)
 
 
 CommandSpace*
-CreateCommandSpace(Space *space,CARD32 copy_id, CARD32 link_id,CARD32 switch_id)
+CreateCommandSpace(Space *space,CARD32 copy_id, CARD32 link_id,CARD32 switch_space_id)
 {
   CommandSpace *s, *s2;
   s = (CommandSpace*)XtMalloc(sizeof(CommandSpace));
   s->space = space;
   s->copy_command_id = copy_id;
   s->link_command_id = link_id;
-  s->switch_command_id = switch_id;
+  s->switch_command_id = switch_space_id;
   s->next = NULL;
 
   if (command_space_list == NULL)
@@ -954,13 +954,13 @@ RemoveAllCommandsAndExit()
  |                              InternStuff                             |
  *----------------------------------------------------------------------*/
 void
-InternStuff (Display *dsp)
+InternStuff (Display *display)
 {
-  WM_S0                      = XInternAtom(dsp, "WM_S0", False);
-  _MOTIF_WM_DEFINE_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_DEFINE_COMMAND", False);
-  _MOTIF_WM_INCLUDE_COMMAND = XInternAtom(dsp, "_MOTIF_WM_INCLUDE_COMMAND", False);
-  _MOTIF_WM_DISABLE_COMMAND = XInternAtom(dsp, "_MOTIF_WM_DISABLE_COMMAND", False);
-  _MOTIF_WM_ENABLE_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_ENABLE_COMMAND", False);
-  _MOTIF_WM_INVOKE_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_INVOKE_COMMAND", False);
-  _MOTIF_WM_REMOVE_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_REMOVE_COMMAND", False);
-  _MOTIF_WM_RENAME_COMMAND  = XInternAtom(dsp, "_MOTIF_WM_RENAME_COMMAND", False);}
+  WM_S0                      = XInternAtom(display, "WM_S0", False);
+  _MOTIF_WM_DEFINE_COMMAND  = XInternAtom(display, "_MOTIF_WM_DEFINE_COMMAND", False);
+  _MOTIF_WM_INCLUDE_COMMAND = XInternAtom(display, "_MOTIF_WM_INCLUDE_COMMAND", False);
+  _MOTIF_WM_DISABLE_COMMAND = XInternAtom(display, "_MOTIF_WM_DISABLE_COMMAND", False);
+  _MOTIF_WM_ENABLE_COMMAND  = XInternAtom(display, "_MOTIF_WM_ENABLE_COMMAND", False);
+  _MOTIF_WM_INVOKE_COMMAND  = XInternAtom(display, "_MOTIF_WM_INVOKE_COMMAND", False);
+  _MOTIF_WM_REMOVE_COMMAND  = XInternAtom(display, "_MOTIF_WM_REMOVE_COMMAND", False);
+  _MOTIF_WM_RENAME_COMMAND  = XInternAtom(display, "_MOTIF_WM_RENAME_COMMAND", False);}

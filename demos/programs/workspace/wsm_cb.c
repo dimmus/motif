@@ -64,7 +64,7 @@ Boolean copy_mode = True;
 /*                        WSM Dialog Interface                       */
 /**********************************************************************/
 void
-InitializeInterface(WSM_UI* wsm_ui)
+InitializeInterface(WSM_UI* wsm_ui_data)
 {
   int num_rooms = GetNumberSpaces();
   int max_num_rooms = 20;
@@ -106,7 +106,7 @@ ShowWsm()
 /**********************************************************************/
 
 Widget
-CreateWorkspacePanel(Widget shell, WSM_UI* wsm_ui, Boolean show_menu)
+CreateWorkspacePanel(Widget shell_widget, WSM_UI* wsm_ui_data, Boolean show_menu)
 {
   Widget parent;
   XmString xmstr;

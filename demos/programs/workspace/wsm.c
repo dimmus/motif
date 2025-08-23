@@ -1177,15 +1177,15 @@ ReceiveSetStateRCB(Widget w, XtPointer call,
 
 
 void
-SendSaveWsm(char *file_name)
+SendSaveWsm(char *filename)
 {
   WSMRequest request;
   request.get_state.window = 0;
   request.get_state.diffs_allowed = False;
   request.any.type = WSM_GET_STATE;
-  PRINT("wsm:  WSMSendMessage WSM_GET_STATE %s\n", file_name);
+  PRINT("wsm:  WSMSendMessage WSM_GET_STATE %s\n", filename);
   WSMSendMessage(utmShell, WSM_WINDOW_MANAGER, &request, ReceiveSaveWsmRCB,
-		 (XtPointer)file_name);
+		 (XtPointer)filename);
 }
 
 
@@ -1207,7 +1207,7 @@ void
 ReceiveSaveWsmRCB(Widget w, XtPointer client,
 	     WSMReply *reply, WSMErrorCode error)
 {
-  char *file_name = (char*) client;
+  char *filename = (char*) client;
   if (reply != NULL)
     {
       if (reply->any.type == WSM_GET_STATE)
@@ -1218,7 +1218,7 @@ ReceiveSaveWsmRCB(Widget w, XtPointer client,
 	}
     }
   UpdateXrm();
-  SaveWsmToFile(file_name);
+  SaveWsmToFile(filename);
 }
 
 
