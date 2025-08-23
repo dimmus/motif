@@ -172,7 +172,7 @@ SendLeaveRoomCB(Widget w, XtPointer client, XtPointer call)
 	}
     }
   if (mwm_gone && current_space != NULL)
-      XmToggleButtonSetState(wsm_ui_data->space_button[GetSpaceID(current_space)],True,True);
+      XmToggleButtonSetState(wsm_ui->space_button[GetSpaceID(current_space)],True,True);
 }
 
 /* ARGSUSED */
@@ -887,7 +887,7 @@ BackgroundActivateCB(Widget w, XtPointer client, XtPointer call)
 	    {
 	      if (SetSpacePixel(space,str))
 		{
-		  XtVaSetValues(wsm_ui_data->space_button[GetSpaceID(space)],
+		  XtVaSetValues(wsm_ui->space_button[GetSpaceID(space)],
 				XmNbackground,space->pixel,
 				XmNunselectColor,space->pixel,
 				NULL);
