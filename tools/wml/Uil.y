@@ -57,6 +57,9 @@ YYSTYPE		gz_yynullval = {NULL,0,0,0,0};
 
 YYSTYPE		prev_yylval;
 
+	/* Function declarations */
+int yyerror(char *s);
+
 	/* End user declarations section */
 
 %}    
@@ -1407,7 +1410,6 @@ units_specification
       error messages.    */
 
 int yylex(void);
-int yyerror(char *s);
 
 int yyerror (s)
 char	* s;
