@@ -48,6 +48,17 @@ wmllex.c: wmllex.l
 		else echo "Error: No lexer output file found"; exit 1; fi; \
 	fi
 
+wmluiltok.c: wmluiltok.l
+	@echo "Generating wmluiltok.c from wmluiltok.l"
+	@if command -v flex >/dev/null 2>&1; then \
+		flex $(LFLAGS) -o wmluiltok.c $(srcdir)/wmluiltok.l; \
+	else \
+		$(LEX) $(LFLAGS) $(srcdir)/wmluiltok.l; \
+		if test -f lex.yy.c; then mv lex.yy.c wmluiltok.c; \
+		elif test -f lexyy.c; then mv lexyy.c wmluiltok.c; \
+		else echo "Error: No lexer output file found for wmluiltok"; exit 1; fi; \
+	fi
+
 wmlsynbld.c: wmlparse.h
 
 $(srcdir)/wmldbcreate.c: $(WMLTARGETS) UilLexPars.h
