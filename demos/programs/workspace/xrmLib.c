@@ -31,6 +31,7 @@ static char rcsid[] = "$XConsortium: xrmLib.c /main/6 1995/07/14 10:01:41 drk $"
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <Xm/Xm.h>
 #include "wsm.h"
 #include "wsmDebug.h"
@@ -1088,13 +1089,19 @@ PurgeAllWindowConfiguration(Widget w,
   if (room_list != NULL)
     XtFree((XtPointer)room_list);
 
-  if ((del_db = mkstemp("wsmD")) == NULL)
+  del_db = malloc(20);
+  strcpy(del_db, "wsmDXXXXXX");
+  if (mkstemp(del_db) == -1)
   {
+      free(del_db);
       del_db = ".wsmDelDB";
       free_del = False;
   }
-  if ((save_db = mkstemp("wsmS")) == NULL)
+  save_db = malloc(20);
+  strcpy(save_db, "wsmSXXXXXX");
+  if (mkstemp(save_db) == -1)
   {
+      free(save_db);
       save_db = ".wsmSaveDB";
       free_save = False;
   }
@@ -1196,13 +1203,19 @@ PurgeWindowConfiguration(Widget w,
 			  &value);
     }
 
-  if ((del_db = mkstemp("wsmD")) == NULL)
+  del_db = malloc(20);
+  strcpy(del_db, "wsmDXXXXXX");
+  if (mkstemp(del_db) == -1)
   {
+      free(del_db);
       del_db = ".wsmDelDB";
       free_del = False;
   }
-  if ((save_db = mkstemp("wsmS")) == NULL)
+  save_db = malloc(20);
+  strcpy(save_db, "wsmSXXXXXX");
+  if (mkstemp(save_db) == -1)
   {
+      free(save_db);
       save_db = ".wsmSaveDB";
       free_save = False;
   }
