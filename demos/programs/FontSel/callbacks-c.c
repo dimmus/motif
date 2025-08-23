@@ -32,7 +32,7 @@ XtPointer call;
     Cardinal argcnt;
     XmString xmstring;
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "The Motif Font Selector lets the developer add font selecting capabilities into their applications.\n\
 The Font Selector allows the end user to choose particular fonts based on font family, size,\n\
 weight, and other advanced criteria from the X Logical Font Description (XFLD).",
@@ -87,14 +87,14 @@ XtPointer call;
 
     switch (explain) {
     case EXPLAIN_SHOWFONT:
-	xmstring = XmStringCreateLtoR(
+	xmstring = XmStringLtoRCreate(
 "The Font Selector widget can display the name of the current font\n\
 directly on the widget itself. Press the \"Show Font on Widget\" toggle\n\
 button to see this behavior.",
 				      XmSTRING_DEFAULT_CHARSET);
 	break;
     case EXPLAIN_CURFONT:
-	xmstring = XmStringCreateLtoR(
+	xmstring = XmStringLtoRCreate(
 "Getting and Setting the XmNcurrentFont resource results in obtaining\n\
 or setting the current font displayed by the Font Selector widget. Press\n\
 the \"Show Current Font...\" button to see the current font displayed in\n\
@@ -145,9 +145,9 @@ XtPointer call;
     }
 
     if (fontname == NULL)
-	xmstring = XmStringCreateSimple("No Current Font");
+	xmstring = XmStringCreateLocalized("No Current Font");
     else
-	xmstring = XmStringCreateSimple(fontname);
+	xmstring = XmStringCreateLocalized(fontname);
 
     argcnt = 0;
     XtSetArg(args[argcnt], XmNmessageString, xmstring); argcnt++;
@@ -182,7 +182,7 @@ XtPointer call;
 	XtUnmanageChild(temp);
     }
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "The Font Selector Widget has a few other resources to control its\n\
 appearance:\n\
 \n\

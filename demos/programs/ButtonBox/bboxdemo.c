@@ -231,14 +231,14 @@ void Explain(Widget w, XtPointer client, XtPointer call)
 
     switch (explain) {
     case 1:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "The equalSize resource specifies whether children of the Button\n\
 Box have equal heights and widths. The height and width chosen for\n\
 all the children is the height and width of the largest child.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case 2:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "The fillOption resource sets four kinds of fill options: FillNone,\n\
 FillMajor, FillMinor, and FillAll. Fill specifies how to use any extra\n\
 space left over once all children have been sized. This resource usually\n\
@@ -252,19 +252,19 @@ FillNone doesn't expand children.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case 3:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "marginWidth is the number of spacing pixels to the left and to the right\n\
 of the children in the Button Box.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case 4:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "marginHeight is the number of spacing pixels on top and on bottom of the \n\
 children in the Button Box.",
                                       XmSTRING_DEFAULT_CHARSET);
         break;
     case 5:
-        xmstring = XmStringCreateLtoR(
+        xmstring = XmStringLtoRCreate(
 "orientation specifies whether the children of the Button Box are placed\n\
 in a row or a column. HORIZONTAL places children in a row (major dimension\n\
 is width, minor dimension is height). VERTICAL places children in a column\n\
@@ -377,7 +377,7 @@ main(int argc, char **argv)
                 NULL,
                 0);
 
-    xmstring = XmStringCreateLtoR(
+    xmstring = XmStringLtoRCreate(
 "The Motif Button Box widget can arrange buttons into single rows and columns\n\
 much more easily than the Motif Row Column or Motif Form!\n\
 (And two ButtonBoxes paired together do a great job of lining items up.)\n\

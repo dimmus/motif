@@ -53,9 +53,17 @@ void FileOKCallback(Widget fsb, ViewPtr this,
 
 
    XmStringInitContext(&ctxt, call_data->value);
-   XmStringGetNextSegment(ctxt, &path, &charset, &dir, &sep);
+   {
+       unsigned int length;
+       XtPointer value;
+       XmStringComponentType type = XmStringGetNextTriple(ctxt, &length, &value);
+       if (type == XmSTRING_COMPONENT_TEXT) {
+           path = (char *)value;
+       } else {
+           path = NULL;
+       }
+   }
    XmStringFreeContext(ctxt);
-   XtFree((char *)charset);
    if (((file = OpenFile(path)) == NULL)
        || (buffer = ReadFile(file, &filesize)) == NULL)
      {
