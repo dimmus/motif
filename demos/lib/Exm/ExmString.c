@@ -848,49 +848,71 @@ WidgetBaselines(
     Offset = sw->simple.visual.y;
 
  /* Go through the compound string, segment by segment. */
-   while (XmStringGetNextSegment (context, &text1, &char_set1, &direction1,
-                                   &separator1)) {
+   while (1) {
+      unsigned int length;
+      XtPointer value;
+      XmStringComponentType type = XmStringGetNextTriple(context, &length, &value);
+      if (type == XmSTRING_COMPONENT_TEXT) {
+          text1 = (char *)value;
+          char_set1 = XmSTRING_DEFAULT_CHARSET;
+          separator1 = False;
+      } else if (type == XmSTRING_COMPONENT_SEPARATOR) {
+          separator1 = True;
+          continue;
+      } else {
+          break;
+      }
       if (string1)
 	XmStringFree(string1);
 
       string1 = XmStringCreate(text1, char_set1);
-      XtFree(text1);
+      if (text1) XtFree(text1);
 
       if (separator1)
       {
-        while (XmStringPeekNextComponent(context)== XmSTRING_COMPONENT_SEPARATOR) {
-	   XmStringGetNextSegment (context, &text1, &char_set1, &direction1, &separator1);
+        while (XmStringPeekNextTriple(context)== XmSTRING_COMPONENT_SEPARATOR) {
+	   {
+               unsigned int seg_length;
+               XtPointer seg_value;
+               XmStringComponentType seg_type = XmStringGetNextTriple(context, &seg_length, &seg_value);
+               if (seg_type == XmSTRING_COMPONENT_TEXT) {
+                   text1 = (char *)seg_value;
+                   char_set1 = XmSTRING_DEFAULT_CHARSET;
+               }
+           }
            base_array[index++] = Offset + XmStringBaseline (RenderTable, string1);
            Offset += XmStringHeight (RenderTable, string1);
 	}
       }
-      else if (XmStringGetNextSegment (context, &text2, &char_set2, &direction2,
-                                       &separator2)) {
- 	XmString string2;
-        if (separator2)
-        {
-          string2 = XmStringCreate(text2, char_set2);
-          string1 = XmStringConcat(string1, string2);
-          base_array[index++] = Offset + XmStringBaseline (RenderTable, string1);
-          Offset += XmStringHeight (RenderTable, string1);
-        }
-        else
-        {
-          string2 = XmStringCreate(text2, char_set2);
-          string1 = XmStringConcat(string1, string2);
-        }
+      else {
+          unsigned int length2;
+          XtPointer value2;
+          XmStringComponentType type2 = XmStringGetNextTriple(context, &length2, &value2);
+          if (type2 == XmSTRING_COMPONENT_TEXT) {
+              text2 = (char *)value2;
+              char_set2 = XmSTRING_DEFAULT_CHARSET;
+              separator2 = False;
+              
+              XmString string2;
+              if (separator2)
+              {
+                string2 = XmStringCreate(text2, char_set2);
+                string1 = XmStringConcat(string1, string2);
+                base_array[index++] = Offset + XmStringBaseline (RenderTable, string1);
+                Offset += XmStringHeight (RenderTable, string1);
+              }
+              else
+              {
+                string2 = XmStringCreate(text2, char_set2);
+                string1 = XmStringConcat(string1, string2);
+              }
 
-	XtFree(text2);
-	XmStringFree(string2);
-	XtFree(char_set2);
+              if (text2) XtFree(text2);
+              if (string2) XmStringFree(string2);
+          }
       }
-      else
-      {
-	XtFree(char_set1);
-	break;
-      }
-
-      XtFree(char_set1);
+      
+      /* No need to free char_set1 since it's a constant */
     } /* end of outer while loop */
 
     base_array[index++] = Offset + XmStringBaseline (RenderTable, string1);
