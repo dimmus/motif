@@ -117,7 +117,7 @@ CreateWorkspacePanel(Widget shell_widget, WSM_UI* wsm_ui_data, Boolean show_menu
   space = space_list;
   for (i = 0; space != NULL && i < wsm_ui->num_space_buttons; i++)
     {
-      xmstr = XmStringCreateLtoR(space->name, XmSTRING_DEFAULT_CHARSET);
+      xmstr = XmStringLtoRCreate(space->name, XmSTRING_DEFAULT_CHARSET);
       XtVaSetValues(wsm_ui_data->space_button[i],XmNlabelString,xmstr,NULL);
       XmStringFree(xmstr);
       space = space->next;
@@ -137,7 +137,7 @@ CreateNewSpaceButton(int i, char *name, WSM_UI *wsm_ui_data)
   XtSetArg(args[argcnt], XmNspacing, 10); argcnt++;
   XtSetArg(args[argcnt], XmNuserData, user_data); argcnt++;
   XtSetArg(args[argcnt], XmNlabelString,
-	   (xmstr=XmStringCreateLtoR(name,XmSTRING_DEFAULT_CHARSET))); argcnt++;
+	   (xmstr=XmStringLtoRCreate(name,XmSTRING_DEFAULT_CHARSET))); argcnt++;
   XtSetArg(args[argcnt], XmNrecomputeSize, True); argcnt++;
   wsm_ui_data->space_button[i] = XtCreateWidget("pushButton",
 					   xmToggleButtonWidgetClass,
@@ -249,7 +249,7 @@ CreateFromOptionButton(int i, char *name)
   XtSetArg(args[argcnt], XmNuserData, i+1); argcnt++;
   XtSetArg(args[argcnt], XmNrecomputeSize, True); argcnt++;
   XtSetArg(args[argcnt], XmNlabelString,
-	   (xmstr=XmStringCreateLtoR(name, XmSTRING_DEFAULT_CHARSET))); argcnt++;
+	   (xmstr=XmStringLtoRCreate(name, XmSTRING_DEFAULT_CHARSET))); argcnt++;
   wsm_ui->from_option_button[i] = XtCreateWidget("fromWorkspace1Button",
 						 xmPushButtonWidgetClass,
 						 XtParent(wsm_ui->from_option_button[0]),
@@ -271,7 +271,7 @@ CreateToOptionButton(int i, char *name)
   Arg args[15];
   XmString xmstr[2];
 
-  xmstr[0] = XmStringCreateSimple(name);
+  xmstr[0] = XmStringCreateLocalized(name);
   XtVaSetValues(wsm_ui->to_option_button[i],
 		XmNuserData, i+1,
 		XmNlabelString, xmstr[0],
@@ -281,7 +281,7 @@ CreateToOptionButton(int i, char *name)
   argcnt = 0;
   XtSetArg(args[argcnt], XmNuserData, 0); argcnt++;
   XtSetArg(args[argcnt], XmNlabelString,
-	   (xmstr[1]=XmStringCreateLtoR("All Workspaces", XmSTRING_DEFAULT_CHARSET))); argcnt++;
+	   (xmstr[1]=XmStringLtoRCreate("All Workspaces", XmSTRING_DEFAULT_CHARSET))); argcnt++;
   wsm_ui->to_option_button[i+1] = XtCreateWidget("fromWorkspace1Button",
 						 xmPushButtonWidgetClass,
 						 XtParent(wsm_ui->to_option_button[0]),
@@ -399,7 +399,8 @@ MoveCB(Widget w, XtPointer client, XtPointer call)
 			WorkWindow *w_window;
   WSM_UI *wsm_ui_data = (WSM_UI*)client;
 
-  if (XmListGetSelectedPos(wsm_ui->from_list,&pos_list, &pos_count))
+  XtVaGetValues(wsm_ui->from_list, XmNselectedPositions, &pos_list, XmNselectedPositionCount, &pos_count, NULL);
+  if (pos_count > 0)
     {
       for (i = 0; i < pos_count; i++)
 	{
@@ -688,7 +689,7 @@ UpdateSpaceList(Widget list)
   XmListDeleteAllItems(list);
   while (s != NULL)
    {
-     xmstr = XmStringCreateLtoR(s->name, XmSTRING_DEFAULT_CHARSET);
+     xmstr = XmStringLtoRCreate(s->name, XmSTRING_DEFAULT_CHARSET);
      XmListAddItem(list,xmstr,0);
      XmStringFree(xmstr);
      s = s->next;
@@ -723,7 +724,7 @@ ChangeSpaceName(WSM_UI* wsm_ui_data,Space *space,int wsm_index)
 {
   XmString xmstr;
 
-  xmstr = XmStringCreateLtoR(space->name, XmSTRING_DEFAULT_CHARSET);
+  xmstr = XmStringLtoRCreate(space->name, XmSTRING_DEFAULT_CHARSET);
   XtVaSetValues(wsm_ui_data->space_button[wsm_index],XmNlabelString,xmstr,NULL);
   XtVaSetValues(wsm_ui->from_option_button[wsm_index],XmNlabelString,xmstr,NULL);
   XtVaSetValues(wsm_ui->to_option_button[wsm_index],XmNlabelString,xmstr,NULL);
@@ -1094,7 +1095,7 @@ UpdateOccupySpaceList(Widget list)
   XmListDeleteAllItems(list);
   while (s != NULL)
    {
-     xmstr = XmStringCreateLtoR(s->name, XmSTRING_DEFAULT_CHARSET);
+     xmstr = XmStringLtoRCreate(s->name, XmSTRING_DEFAULT_CHARSET);
      XmListAddItem(list,xmstr,0);
      XmStringFree(xmstr);
      s = s->next;
