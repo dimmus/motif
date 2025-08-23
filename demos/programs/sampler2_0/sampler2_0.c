@@ -324,7 +324,7 @@ HelpCB (Widget w, XtPointer client_data, XtPointer call_data)
 
 
 static Widget
-CreateMainWindowWithMenuBar(Widget toplevel)
+CreateMainWindowWithMenuBar(Widget parent_widget)
 {
     Widget	main_window, menu_bar, menu_pane, cascade, button ;
 
@@ -335,7 +335,7 @@ CreateMainWindowWithMenuBar(Widget toplevel)
     /*	Create MainWindow.
      */
     n = 0;
-    main_window = XmCreateMainWindow (toplevel, "main_window", args, n);
+    main_window = XmCreateMainWindow (parent_widget, "main_window", args, n);
     XtManageChild (main_window);
 
 

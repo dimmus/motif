@@ -750,11 +750,11 @@ static void
 UTMConvertProc(Widget w, XtPointer clientData, XtPointer callData)
 {
   int scr = XScreenNumberOfScreen(XtScreen(w));
-  Display *dsp = XtDisplay(w);
+  Display *display = XtDisplay(w);
   XmConvertCallbackStruct *ccs = (XmConvertCallbackStruct *)callData;
-  Atom lose_sel = XInternAtom(dsp, "_MOTIF_LOSE_SELECTION", False);
-  Atom wm_sel = _WSMGetSelectionAtom(dsp, scr, WSM_WINDOW_MANAGER);
-  Atom wsm_sel = _WSMGetSelectionAtom(dsp, scr, WSM_WORKSPACE_MANAGER);
+  Atom lose_sel = XInternAtom(display, "_MOTIF_LOSE_SELECTION", False);
+  Atom wm_sel = _WSMGetSelectionAtom(display, scr, WSM_WINDOW_MANAGER);
+  Atom wsm_sel = _WSMGetSelectionAtom(display, scr, WSM_WORKSPACE_MANAGER);
 
   /*
    * Check if the callback was invoked for the right reason.
@@ -915,12 +915,12 @@ SendConnect(Widget w)
 {
   WSMRequest request;
   static short versions[] = { 3,2,1 };
-  Display *dsp = XtDisplay(w);
+  Display *display = XtDisplay(w);
   int scr = XScreenNumberOfScreen(XtScreen(shell));
-  Atom wm_selection = _WSMGetSelectionAtom(dsp, scr, WSM_WINDOW_MANAGER);
+  Atom wm_selection = _WSMGetSelectionAtom(display, scr, WSM_WINDOW_MANAGER);
 
 
-  if (XGetSelectionOwner(dsp, wm_selection) == None)
+  if (XGetSelectionOwner(display, wm_selection) == None)
     return;
 
   PRINT("send connect\n");
