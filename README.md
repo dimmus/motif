@@ -441,6 +441,10 @@ This project builds upon decades of development by:
 - **ICS/Integrated Computer Solutions**: Commercial Motif development
 - **OpenMotif Community**: Open source maintenance and evolution
 
+Special thanks to:
+- [Tim Hentenaar](https://github.com/thentenaar)
+- [Olivier Fourdan](https://github.com/ofourdan)
+- [Alexander Pampuchin](https://github.com/alx210)
 ---
 
 *"Motif: Where industrial-strength meets elegant design. Powering mission-critical applications since 1988."*
