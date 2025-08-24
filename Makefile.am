@@ -54,6 +54,10 @@ SUBDIRS	= data \
 format:
 	git ls-files '*.[ch]' '*.cc' | xargs clang-format -i -style=file --assume-filename=./tools/dev/clang-format
 
+# Dependency checking target
+deps:
+	@$(top_srcdir)/tools/dev/deps_check.sh
+
 # Custom maintainer-clean target to remove .deps folders
 maintainer-clean-local:
 	@echo "Removing .deps folders..."

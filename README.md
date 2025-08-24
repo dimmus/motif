@@ -132,12 +132,46 @@ sudo yum install gcc autoconf automake autopoint pkgconfig flex bison \
                  libXpm-devel libXft-devel libjpeg-devel libpng-devel
 ```
 
+#### Automatic Dependency Management
+For convenience, the project includes an automated dependency checker that supports multiple operating systems:
+
+```bash
+# Automatic dependency checking and installation
+make deps
+
+# Or run the script directly
+./tools/dev/deps_check.sh
+```
+
+**Supported Operating Systems:**
+- Ubuntu, Debian, Linux Mint (apt)
+- Arch Linux, Manjaro (pacman)
+- RHEL, CentOS, Fedora, Rocky, Alma (dnf)
+- Alpine Linux (apk)
+- Void Linux (xbps)
+- OpenIndiana, OmniOS (pkg)
+- FreeBSD (pkg)
+
+The dependency checker automatically:
+- Detects your operating system
+- Identifies missing packages
+- Installs required dependencies
+- Handles optional dependencies gracefully
+- Provides clear feedback and next steps
+
 ## Building and Installation
 
 ### Quick Start
 ```bash
 git clone https://github.com/dimmus/motif.git
 cd motif
+
+# Check and install dependencies (recommended)
+make deps
+
+# Or manually install dependencies for your OS
+# (see manual installation commands above)
+
 ./autogen.sh
 ./configure
 make -j$(nproc)
