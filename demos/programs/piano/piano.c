@@ -915,7 +915,7 @@ void SoundCB (Widget w, XtPointer noteNumber, XtPointer callData)
     {
       note.display      = XtDisplay(w);
       note.noteType     = EIGHTH;
-      note.noteNumber   = (NoteType)noteNumber;
+      note.noteNumber   = (NoteType)(long)noteNumber;
       note.noteIndex    = 0;
       note.ledgerLine   = 0;
       note.noteDuration = appData->baseDuration;
@@ -1144,7 +1144,7 @@ void SetActiveNote (Widget w, NoteType noteType)
  *--------------------------------------------------------------------*/
 void SetNoteCB (Widget w, XtPointer clientData, XtPointer callData)
 {
-   NoteType noteType = (NoteType)clientData;
+   NoteType noteType = (NoteType)(long)clientData;
 
    SetActiveNote(w, noteType);
 }
