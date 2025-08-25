@@ -84,7 +84,7 @@ is_binary() {
     fi
 
     # Additional heuristics for common binary file extensions
-    local filename basename extension
+    local filename extension
     filename=$(basename "$file")
     extension="${filename##*.}"
 
@@ -142,7 +142,8 @@ clean_file() {
     if grep -q '[[:space:]]\+$' "$file" 2>/dev/null; then
         changes_made=true
         if [[ $VERBOSE == true ]]; then
-            local count=$(grep -c '[[:space:]]\+$' "$file" 2>/dev/null || echo "0")
+            local count
+            count=$(grep -c '[[:space:]]\+$' "$file" 2>/dev/null || echo "0")
             log "INFO" "Found $count lines with trailing whitespace in: $file"
         fi
     fi
@@ -167,8 +168,10 @@ clean_file() {
     ' "$temp_file" > "$temp_file.tmp" && mv "$temp_file.tmp" "$temp_file"
 
     # Check if there were empty lines at the end
-    local original_lines=$(wc -l < "$file")
-    local new_lines=$(wc -l < "$temp_file")
+    local original_lines
+    original_lines=$(wc -l < "$file")
+    local new_lines
+    new_lines=$(wc -l < "$temp_file")
     if [[ $original_lines -ne $new_lines ]]; then
         changes_made=true
         if [[ $VERBOSE == true ]]; then

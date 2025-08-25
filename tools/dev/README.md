@@ -190,6 +190,118 @@ sudo pkg install gcc autoconf automake gettext pkgconf gmake flex bison \
                  libX11 libXt libXmu libXext libXpm libXft jpeg libpng libXp check
 ```
 
+## Development Environment (`env/`)
+
+A comprehensive containerized development environment for testing Motif builds across multiple operating systems using Docker/Podman.
+
+### Features
+
+- **Multi-OS Testing**: Test Motif builds on Arch Linux, FreeBSD, Ubuntu, CentOS, Fedora
+- **Automated Testing**: Complete build, test, and verification pipeline
+- **Container Isolation**: Each OS runs in its own isolated container
+- **Comprehensive Logging**: Detailed build logs with error reporting
+- **Template System**: Easy addition of new OS environments
+- **Cross-platform Support**: Works with both Docker and Podman
+
+### Quick Start
+
+```bash
+# Navigate to the environment directory
+cd tools/dev/env
+
+# Test on Arch Linux
+./test-motif.sh archlinux
+
+# Test on all available OS
+./test-motif.sh --all
+
+# List available OS environments
+./test-motif.sh --list
+
+# Add new OS environment
+./add-os.sh ubuntu
+
+# Use Makefile targets
+make test                    # Test on default OS
+make test-all               # Test on all OS
+make add-os OS=fedora       # Add Fedora support
+```
+
+### Available Scripts
+
+- **`test-motif.sh`**: Main test runner with comprehensive options
+- **`add-os.sh`**: Generate new OS environments from templates
+- **`build-motif.sh`**: Container build script (runs inside containers)
+- **`example-usage.sh`**: Demonstration of environment usage
+- **`Makefile`**: Convenient make targets for common tasks
+
+### Directory Structure
+
+```
+env/
+├── README.md                 # Comprehensive documentation
+├── test-motif.sh            # Main test runner
+├── add-os.sh                # OS environment generator
+├── example-usage.sh         # Usage examples
+├── Makefile                 # Make targets
+├── containers/              # Container definitions
+│   ├── Dockerfile.archlinux # Arch Linux container
+│   └── Dockerfile.freebsd   # FreeBSD container
+├── scripts/                 # Build scripts
+│   └── build-motif.sh      # Container build script
+├── templates/               # Template system
+│   ├── Dockerfile.template  # Dockerfile template
+│   └── os-config.yaml      # OS configuration definitions
+└── logs/                   # Test execution logs
+```
+
+### Usage Examples
+
+```bash
+# Basic testing
+./test-motif.sh archlinux
+
+# Verbose testing with container rebuild
+./test-motif.sh -v -r archlinux
+
+# Test all OS with cleanup
+./test-motif.sh --all --clean
+
+# Use Podman instead of Docker
+./test-motif.sh --podman archlinux
+
+# Keep container running for debugging
+./test-motif.sh -k archlinux
+
+# Generate new OS environment
+./add-os.sh ubuntu
+
+# Preview OS generation
+./add-os.sh --dry-run fedora
+
+# View previous test logs
+./test-motif.sh --logs-only
+```
+
+### Integration with CI/CD
+
+The environment can be easily integrated into continuous integration pipelines:
+
+```bash
+# Test all supported platforms
+./tools/dev/env/test-motif.sh --all --clean
+
+# Check exit code for CI
+if [ $? -eq 0 ]; then
+    echo "All tests passed"
+else
+    echo "Some tests failed"
+    exit 1
+fi
+```
+
+For complete documentation, see `env/README.md`.
+
 ### Contributing
 
 To add support for additional operating systems:
@@ -198,6 +310,9 @@ To add support for additional operating systems:
 3. Add package installation commands in `install_packages()`
 4. Test on the target OS
 
-### License
+For the development environment:
+1. Add OS configuration to `env/templates/os-config.yaml`
+2. Generate Dockerfile with `env/add-os.sh os-name`
+3. Test with `env/test-motif.sh os-name`
+4. Submit changes with test results
 
-This script is part of the Motif project and follows the same license terms.
