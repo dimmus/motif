@@ -35,13 +35,14 @@ detect_os() {
     log_info "Detecting operating system..."
     
     if [ -f /etc/os-release ]; then
+        # shellcheck disable=SC1091
         . /etc/os-release
         OS_NAME="$ID"
         OS_VERSION="$VERSION_ID"
         log_success "Detected: $OS_NAME $OS_VERSION"
     elif [ -f /etc/redhat-release ]; then
         OS_NAME="rhel"
-        OS_VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' 2>/dev/null || echo "unknown")
+        OS_VERSION=$(grep -oE '[0-9]+\.[0-9]+' < /etc/redhat-release 2>/dev/null || echo "unknown")
         log_success "Detected: RHEL/CentOS $OS_VERSION"
     elif [ -f /etc/freebsd-update.conf ]; then
         OS_NAME="freebsd"
@@ -136,7 +137,6 @@ check_package_available() {
 # Function to check if a package is installed
 check_package() {
     pkg_name="$1"
-    pkg_display="$2"
     
     case $PKG_MANAGER in
         apt)
@@ -182,23 +182,23 @@ install_packages() {
     case $PKG_MANAGER in
         apt)
             sudo apt-get update
-            sudo apt-get install -y $packages
+            sudo apt-get install -y "$packages"
             ;;
         pacman)
-            sudo pacman -Sy --noconfirm $packages
+            sudo pacman -Sy --noconfirm "$packages"
             ;;
         dnf)
-            sudo dnf install -y $packages
+            sudo dnf install -y "$packages"
             ;;
         apk)
             sudo apk update
-            sudo apk add $packages
+            sudo apk add "$packages"
             ;;
         xbps)
-            sudo xbps-install -y $packages
+            sudo xbps-install -y "$packages"
             ;;
         pkg)
-            sudo pkg install -y $packages
+            sudo pkg install -y "$packages"
             ;;
     esac
 }
@@ -429,9 +429,6 @@ check_dependencies() {
         log_warning "Missing optional packages: $missing_optional"
         log_info "All required dependencies are installed. Optional packages can be installed separately."
         return 0
-    else
-        log_success "All dependencies are installed!"
-        return 0
     fi
 }
 
@@ -469,7 +466,7 @@ install_missing_dependencies() {
     # Install required packages first
     if [ -n "$missing_required" ]; then
         log_info "Installing required packages: $missing_required"
-        if ! install_packages $missing_required; then
+        if ! install_packages "$missing_required"; then
             log_error "Failed to install required dependencies"
             return 1
         fi
@@ -478,7 +475,7 @@ install_missing_dependencies() {
     # Install optional packages if available
     if [ -n "$missing_optional" ]; then
         log_info "Installing optional packages: $missing_optional"
-        if install_packages $missing_optional; then
+        if install_packages "$missing_optional"; then
             log_success "Optional packages installed successfully!"
         else
             log_warning "Some optional packages failed to install (this is not critical)"

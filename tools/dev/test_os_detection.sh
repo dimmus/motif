@@ -35,13 +35,14 @@ detect_os() {
     log_info "Detecting operating system..."
     
     if [ -f /etc/os-release ]; then
+        # shellcheck disable=SC1091
         . /etc/os-release
         OS_NAME="$ID"
         OS_VERSION="$VERSION_ID"
         log_success "Detected: $OS_NAME $OS_VERSION"
     elif [ -f /etc/redhat-release ]; then
         OS_NAME="rhel"
-        OS_VERSION=$(cat /etc/redhat-release | grep -oE '[0-9]+\.[0-9]+' 2>/dev/null || echo "unknown")
+        OS_VERSION=$(grep -oE '[0-9]+\.[0-9]+' < /etc/redhat-release 2>/dev/null || echo "unknown")
         log_success "Detected: RHEL/CentOS $OS_VERSION"
     elif [ -f /etc/freebsd-update.conf ]; then
         OS_NAME="freebsd"
