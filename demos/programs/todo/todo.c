@@ -327,7 +327,7 @@ void
 help_cb(Widget w, XtPointer item, XmAnyCallbackStruct *cb)
 {
   XtManageChild(help_widget);
-  XmdGotoHelpItem(w, (int) item, help_widget);
+  XmdGotoHelpItem(w, (int)(long) item, help_widget);
 }
 
 void

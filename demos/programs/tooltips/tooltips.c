@@ -126,7 +126,7 @@ int i;
 static void
 ToolTipPopup(Widget w, XtPointer client_data, XtPointer call_data)
 {
-    if ((int)client_data == 0)
+    if ((int)(long)client_data == 0)
     {
 	printf("popping up\n");
     }
