@@ -3157,15 +3157,7 @@ CountDropSites(
 	return(acc);
 }
 
-/* This short resource list is used to initialize just the
-   activity member. */
-static XtResource mini_resources[] = {
-	{   XmNdropSiteActivity, XmCDropSiteActivity, XmRDropSiteActivity,
-		sizeof(unsigned char),
-		XtOffsetOf( struct _XmDSFullInfoRec, activity),
-		XmRImmediate, (XtPointer) XmDROP_SITE_ACTIVE
-	},
-};
+
 
 static void
 CreateInfo(

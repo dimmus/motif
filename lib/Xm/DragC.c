@@ -851,7 +851,7 @@ ValidateDragOver(
 {
   Arg		args[1];
   XmDisplay	xmDisplay = (XmDisplay)XtParent(dc);
-  unsigned char initiator = XmDRAG_NONE;
+  unsigned char initiator;
 
   initiator = xmDisplay->display.dragInitiatorProtocolStyle;
 
@@ -1909,7 +1909,6 @@ InitiatorMsgHandler(
 {
   XmDragContext	dc =(XmDragContext)clientData;
   XmICCCallbackStruct		callbackRec;
-  XmTopLevelEnterCallback te = (XmTopLevelEnterCallback)&callbackRec;
 
   (void)dontSwallow;
   if (!dc ||

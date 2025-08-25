@@ -981,8 +981,6 @@ Enter(
      if ((((ShellWidget) XtParent(XtParent(db)))->shell.popped_up) &&
 	 _XmGetInDragMode((Widget)db))
        {
-	 XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
 	 if (db->drawnbutton.armed)
 	   return;
 
@@ -1038,8 +1036,6 @@ Leave(
     if (_XmGetInDragMode((Widget)db) && db->drawnbutton.armed &&
 	(/* !ActiveTearOff || */ event->xcrossing.mode == NotifyNormal))
       {
-	XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
 	db->drawnbutton.armed = FALSE;
 
 	((XmManagerWidget) XtParent(wid))->manager.active_child = NULL;
@@ -1089,7 +1085,6 @@ BorderHighlight(
   XEvent * event = NULL;
 
   if (Lab_IsMenupane(db)) {
-    XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
     Boolean already_armed = db->drawnbutton.armed;
 
     db->drawnbutton.armed = TRUE;
@@ -1134,7 +1129,6 @@ BorderUnhighlight(
 
   if (Lab_IsMenupane(db))
     {
-      XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
       Boolean already_armed = db->drawnbutton.armed;
 
       db->drawnbutton.armed = FALSE;

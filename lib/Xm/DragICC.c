@@ -534,7 +534,6 @@ static Boolean _XdndToMotifEvent(XClientMessageEvent *msgEv,
 	unsigned long op = XmDROP_NOOP;
 	Atom xdndEnter, xdndPosition, xdndStatus, xdndLeave, xdndDrop;
 	Atom xdndFinished, xdndSelection, xdndMove, xdndCopy, xdndLink;
-	unsigned long n_targets = 0;
 
 	if (msgEv->format != 32)
 		return False;

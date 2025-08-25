@@ -3008,7 +3008,6 @@ GetCascadeBGClassSecResBase(
         Widget widget,
         XtPointer client_data )	/* unused */
 {       XtPointer  widgetSecdataPtr;
-    XtPointer ret_val;
     size_t labg_cache_size = sizeof (XmLabelGCacheObjPart);
     size_t cascadebg_cache_size = sizeof (XmCascadeButtonGCacheObjPart);
         char *cp;
@@ -3025,8 +3024,6 @@ GetCascadeBGClassSecResBase(
           }
 /* else Warning: error cannot allocate Memory */
 /*     widgetSecdataPtr = (XtPointer) ( LabG_Cache(widget)); */
-
-	ret_val = widgetSecdataPtr;
 
 	_XmProcessUnlock();
         return (widgetSecdataPtr);

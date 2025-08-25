@@ -2903,8 +2903,6 @@ Redisplay(
     {
       if (LabG_IsMenupane(pb))
 	{
-	  XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-	  Boolean etched_in = dpy->display.enable_etched_in_menu;
 	  ShellWidget mshell = (ShellWidget)XtParent(XtParent(pb));
 
 	  if (!mshell->shell.popped_up)

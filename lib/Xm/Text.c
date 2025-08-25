@@ -3179,7 +3179,6 @@ _XmTextPreeditSetCursorPosition(Widget widget,
                                 XmTextPosition position)
 {
   XmTextWidget tw = (XmTextWidget) widget;
-  XmTextSource source;
   Position dummy;
 
   if (position < 0) {
@@ -3189,8 +3188,6 @@ _XmTextPreeditSetCursorPosition(Widget widget,
   if (position > tw->text.last_position) {
     position = tw->text.last_position;
   }
-
-  source = GetSrc(tw);
 
   /* Erase insert cursor prior to move */
   EraseInsertionPoint(tw);

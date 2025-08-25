@@ -646,8 +646,6 @@ Initialize(
  ************************************************************************/
 static void Destroy(Widget w)
 {
-   XmGadget g = (XmGadget)w;
-
    _XmNavigDestroy(w);
    _XmToolTipRemove(w);
 }

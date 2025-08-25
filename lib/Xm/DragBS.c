@@ -1084,7 +1084,6 @@ ReadTargetsTable(
  *  Create the default targets table.
  ***************************************************************************/
 
-static Atom nullTargets[] = 	{ 0,		};
 static Atom stringTargets[] = 	{ XA_STRING,	};
 
 static xmTargetsTable

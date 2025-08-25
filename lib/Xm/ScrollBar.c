@@ -4490,7 +4490,7 @@ XmScrollBarGetValues(
 {
    XmScrollBarWidget sbw = (XmScrollBarWidget) w;
    XtAppContext app = XtWidgetToApplicationContext(w);
-
+   (void)app; /* may be unused in non-threaded builds */
    _XmAppLock(app);
 
    if (PROCESS_DIR_INVERSED(sbw)) {
@@ -4527,7 +4527,7 @@ XmScrollBarSetValues(
    Arg arglist[4];
    Cardinal n;
    XtAppContext app = XtWidgetToApplicationContext(w);
-
+   (void)app; /* may be unused in non-threaded builds */
    _XmAppLock(app);
 
 

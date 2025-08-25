@@ -2480,6 +2480,7 @@ XmCascadeButtonHighlight(
 
   if (NULL == cb) return;
   app = XtWidgetToApplicationContext(cb);
+  (void)app; /* may be unused in non-threaded builds */
   _XmAppLock(app);
    if ((cb) && XmIsCascadeButton(cb))
    {

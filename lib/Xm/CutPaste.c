@@ -2351,13 +2351,12 @@ ClipboardGetSelection(Display *display,
     for(;;) {
 #endif
       XEvent event;
-      XtInputMask mask;
       if (info.received) break;
 #ifndef XTHREADS
       XtAppNextEvent(app, &event);
       XtDispatchEvent(&event);
 #else
-
+      XtInputMask mask;
       while (!(mask = XtAppPending(app)))
         ;  /* Busy waiting - so that we don't lose our lock */
       if (mask & XtIMXEvent) { /* We have an XEvent */
@@ -2488,7 +2487,6 @@ ClipboardRequestDataAndWait(
 #else
     while( !dataisready && !timer_expired) {
 #endif
-      XtInputMask mask;
 #ifndef XTHREADS
       XtAppNextEvent(app_context, &event_return);
       dataisready =
@@ -2496,6 +2494,7 @@ ClipboardRequestDataAndWait(
 				(char*)&cutbynameinfo);
       XtDispatchEvent(&event_return);
 #else
+      XtInputMask mask;
       while (!(mask = XtAppPending(app_context)))
 		; /* busy waiting - don't lose lock */
       if (mask & XtIMXEvent) {

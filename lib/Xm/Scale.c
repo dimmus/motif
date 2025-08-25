@@ -1921,7 +1921,7 @@ ValueTroughWidth(
 	    \
 	XTextExtents(sw->scale.font_struct, buff, strlen(buff),\
 		     &direction, &ascent, &descent, &overall_return);\
-	    \
+	    (void)direction; (void)ascent; (void)descent; /* unused but required by XTextExtents */\
 	    tmp = overall_return.rbearing - overall_return.lbearing;\
 	    }
 #endif
@@ -3320,7 +3320,7 @@ XmScaleSetValue(
 {
     XmScaleWidget sw = (XmScaleWidget) w;
     XtAppContext app = XtWidgetToApplicationContext(w);
-
+    (void)app; /* may be unused in non-threaded builds */
     _XmAppLock(app);
 
     if (value < sw->scale.minimum) {
@@ -3357,7 +3357,7 @@ XmScaleGetValue(
 {
    XmScaleWidget sw = (XmScaleWidget) w;
    XtAppContext app = XtWidgetToApplicationContext(w);
-
+   (void)app; /* may be unused in non-threaded builds */
    _XmAppLock(app);
    *value = sw->scale.value;
    _XmAppUnlock(app);

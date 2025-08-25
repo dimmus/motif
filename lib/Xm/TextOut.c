@@ -556,7 +556,6 @@ SetNormGC(XmTextWidget tw,
 {
   unsigned long valueMask = (GCForeground | GCBackground);
   XGCValues values;
-  OutputData data = tw->text.output->data;
 
   values.foreground = tw->primitive.foreground;
   values.background = tw->core.background_pixel;

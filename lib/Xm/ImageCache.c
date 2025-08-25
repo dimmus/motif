@@ -1561,7 +1561,7 @@ Pixmap XmGetSizedPixmap(Widget widget, char *image_name, Pixel foreground,
 	Pixmap ret;
 	XmAccessColorDataRec acc_color_rec;
 	XtAppContext app = XtWidgetToApplicationContext(widget);
-
+	(void)app; /* may be unused in non-threaded builds */
 	_XmAppLock(app);
 	_XmProcessLock();
 	acc_color_rec.foreground          = foreground;
@@ -1590,7 +1590,7 @@ XmGetScaledPixmap(
     XmAccessColorDataRec acc_color_rec;
     Pixmap ret_val;
     XtAppContext app = XtWidgetToApplicationContext(widget);
-
+    (void)app; /* may be unused in non-threaded builds */
     _XmAppLock(app);
     _XmProcessLock();
     acc_color_rec.foreground = foreground ;
@@ -1630,7 +1630,7 @@ XmGetPixmapByDepth(
     Pixmap ret_val;
     XtAppContext app = XtDisplayToApplicationContext(
 				DisplayOfScreen(screen));
-
+    (void)app; /* may be unused in non-threaded builds */
     _XmAppLock(app);
     _XmProcessLock();
     acc_color_rec.foreground = foreground ;
@@ -1666,6 +1666,7 @@ XmGetPixmap(
 
     XtAppContext app = XtDisplayToApplicationContext(
 				DisplayOfScreen(screen));
+    (void)app; /* may be unused in non-threaded builds */
     _XmAppLock(app);
     ret_val = XmGetPixmapByDepth(screen, image_name, foreground, background,
 				 DefaultDepthOfScreen(screen));
@@ -1690,7 +1691,7 @@ XmeGetMask(
     Pixmap		ret_val;
     XtAppContext app = XtDisplayToApplicationContext(
 				DisplayOfScreen(screen));
-
+    (void)app; /* may be unused in non-threaded builds */
     _XmAppLock(app);
 
     _XmProcessLock();
@@ -1726,7 +1727,7 @@ XmDestroyPixmap(
 
    app = XtDisplayToApplicationContext(
 				DisplayOfScreen(screen));
-
+   (void)app; /* may be unused in non-threaded builds */
    _XmAppLock(app);
    _XmProcessLock();
 
@@ -2366,8 +2367,8 @@ static int
 FreeCacheColors(Display *display, Colormap colormap,
 		Pixel *pixels, int n, void *closure)
 {
-    int i, status;
+    int i;
     for (i = 0; i < n; i++, pixels++)
-	status = FreeCacheColor(display, colormap, *pixels);
+	(void)FreeCacheColor(display, colormap, *pixels);
     return 0;
 }

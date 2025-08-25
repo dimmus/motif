@@ -2634,7 +2634,6 @@ SetDefaultSize(XmListWidget lw,
 	       Boolean reset_max_height)
 {
   int visheight, wideborder, viz, max_height = 0;
-  XFontStruct *fs = (XFontStruct *)NULL;
 
   wideborder = 2 * (lw->primitive.shadow_thickness +
 		    lw->list.HighlightThickness +

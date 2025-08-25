@@ -236,8 +236,6 @@ WriteHeader (char* tagline, File* phile, int abi)
 {
     FILE* f;
     char* tmp;
-    Table* t;
-    TableEnt* te;
     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
 	                                  IntelABIWriteHeader, IntelABIWriteHeader,
 	                                  SPARCABIWriteHeader, FunctionWriteHeader };
