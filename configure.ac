@@ -23,7 +23,11 @@ AM_EXTRA_RECURSIVE_TARGETS([demos doc])
 AC_LANG([C])
 
 dnl Check for the C compiler / pkg-config
+dnl Save user-provided CFLAGS and clear autotools default -g -O2
+saved_CFLAGS="$CFLAGS"
+CFLAGS=""
 AC_PROG_CC
+CFLAGS="$saved_CFLAGS"
 AC_PROG_MAKE_SET
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL

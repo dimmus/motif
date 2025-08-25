@@ -2,7 +2,10 @@ ACLOCAL_AMFLAGS = -I m4
 
 datadir = ${prefix}/share/Xm/doc
 
-data_DATA = README
+# Declare phony targets
+.PHONY: help format deps release release-configure release-build release-portable release-portable-configure dev-build
+
+data_DATA = README.md
 pkgconfig_DATA  = motif.pc
 # EXTRA_DIST = LICENSE
 
@@ -51,6 +54,32 @@ SUBDIRS	= data \
             ${XM_WITH_TESTS} \
             $(XM_WITH_DEMOS)
 
+# Help target
+help:
+	@echo "Available build targets:"
+	@echo "  all           - Standard build (default)"
+	@echo "  release       - Full optimized release build with stripping"
+	@echo "  release-portable - Portable optimized release (no CPU-specific opts)"
+	@echo "  release-configure - Configure for release build only"
+	@echo "  release-build - Build release version (after configure)"
+	@echo "  dev-build     - Development build with debug symbols"
+	@echo "  clean         - Clean build artifacts"
+	@echo "  distclean     - Clean everything including configuration"
+	@echo "  format        - Format source code with clang-format"
+	@echo "  deps          - Check dependencies"
+	@echo "  install       - Install the built software"
+	@echo "  uninstall     - Uninstall the software"
+	@echo ""
+	@echo "Release build optimizations:"
+	@echo "  -O3                    - Maximum optimization"
+	@echo "  -march=native          - Optimize for current CPU"
+	@echo "  -mtune=native          - Tune for current CPU"
+	@echo "  -flto                  - Link-time optimization"
+	@echo "  -ffast-math            - Fast math operations"
+	@echo "  -funroll-loops         - Unroll loops"
+	@echo "  -fomit-frame-pointer   - Omit frame pointer"
+	@echo "  Binary stripping       - Remove debug symbols"
+
 format:
 	git ls-files '*.[ch]' '*.cc' | xargs clang-format -i -style=file --assume-filename=./tools/dev/clang-format
 
@@ -58,7 +87,68 @@ format:
 deps:
 	@$(top_srcdir)/tools/dev/deps_check.sh
 
-# Custom maintainer-clean target to remove .deps folders
+# Release build targets
+release-configure:
+	@echo "Configuring for optimized release build..."
+	@if [ ! -f configure ]; then \
+		echo "Running autoreconf to generate configure script..."; \
+		autoreconf -fiv; \
+	fi
+	@CFLAGS="-O3 -march=native -mtune=native -flto -ffast-math -funroll-loops -fomit-frame-pointer -DNDEBUG" \
+	 CXXFLAGS="-O3 -march=native -mtune=native -flto -ffast-math -funroll-loops -fomit-frame-pointer -DNDEBUG" \
+	 LDFLAGS="-O3 -flto -s" \
+	 ./configure --disable-dependency-tracking --enable-shared --disable-static
+	@echo "Release configuration complete."
+
+release-build:
+	@echo "Building optimized release version..."
+	@$(MAKE) clean
+	@$(MAKE) all
+	@echo "Stripping binaries..."
+	@find . -type f \( -name "*.so*" -o -perm -111 \) -exec file {} \; | \
+	 grep -E "(ELF.*executable|ELF.*shared object)" | \
+	 cut -d: -f1 | \
+	 xargs -r strip --strip-unneeded 2>/dev/null || true
+	@echo "Release build complete with stripped binaries."
+
+release: release-configure release-build
+	@echo "Full release build completed successfully!"
+	@echo "Optimized and stripped binaries are ready for distribution."
+
+# Portable release build (without CPU-specific optimizations)
+release-portable-configure:
+	@echo "Configuring for portable optimized release build..."
+	@if [ ! -f configure ]; then \
+		echo "Running autoreconf to generate configure script..."; \
+		autoreconf -fiv; \
+	fi
+	@CFLAGS="-O3 -flto -ffast-math -funroll-loops -fomit-frame-pointer -DNDEBUG" \
+	 CXXFLAGS="-O3 -flto -ffast-math -funroll-loops -fomit-frame-pointer -DNDEBUG" \
+	 LDFLAGS="-O3 -flto -s" \
+	 ./configure --disable-dependency-tracking --enable-shared --disable-static
+	@echo "Portable release configuration complete."
+
+release-portable: release-portable-configure release-build
+	@echo "Portable release build completed successfully!"
+	@echo "Optimized and stripped binaries are ready for distribution."
+
+# Development build (default optimization)
+dev-build:
+	@echo "Building development version..."
+	@if [ ! -f configure ]; then \
+		echo "Running autoreconf to generate configure script..."; \
+		autoreconf -fiv; \
+	fi
+	@./configure --enable-debug
+	@$(MAKE) clean
+	@$(MAKE) all
+	@echo "Development build complete."
+
+# Custom maintainer-clean target
 maintainer-clean-local:
 	@echo "Removing .deps folders..."
 	@find . -name ".deps" -type d -exec rm -rf {} + 2>/dev/null || true
+	@echo "Removing .libs folders..."
+	@find . -name ".libs" -type d -exec rm -rf {} + 2>/dev/null || true
+	@echo "Removing Makefile.in files..."
+	@find . -name "Makefile.in" -type f -exec rm -rf {} + 2>/dev/null || true
