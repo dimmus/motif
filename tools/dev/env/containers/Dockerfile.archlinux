@@ -1,0 +1,149 @@
+# Dockerfile for testing Motif build on Arch Linux
+FROM docker.io/archlinux:latest
+
+LABEL maintainer="XDE Motif Development Team"
+LABEL description="Arch Linux environment for testing Motif builds"
+LABEL version="1.0"
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Update system and install base development tools
+RUN pacman -Syu --noconfirm && \
+    pacman -S --noconfirm \
+        base-devel \
+        git \
+        autoconf \
+        automake \
+        libtool \
+        pkgconf \
+        make \
+        gcc \
+        clang \
+        cmake \
+        ninja \
+        gdb \
+        valgrind \
+        strace \
+        ltrace \
+        time \
+        which \
+        file \
+        binutils \
+        coreutils \
+        findutils \
+        grep \
+        sed \
+        gawk \
+        tar \
+        gzip \
+        xz \
+        bzip2 \
+        unzip \
+        curl \
+        wget
+
+# Install X11 and Motif dependencies
+RUN pacman -S --noconfirm \
+        xorg-server-devel \
+        xorg-util-macros \
+        libx11 \
+        libxt \
+        libxmu \
+        libxpm \
+        libxext \
+        libxft \
+        libxrender \
+        libxrandr \
+        libxi \
+        libxinerama \
+        libxcursor \
+        libxdamage \
+        libxfixes \
+        libxcomposite \
+        libxss \
+        libxtst \
+        libxv \
+        libxvmc \
+        libxxf86vm \
+        libxres \
+        libsm \
+        libice \
+        libxau \
+        libxdmcp \
+        libxcb \
+        xcb-util \
+        xcb-util-image \
+        xcb-util-keysyms \
+        xcb-util-renderutil \
+        xcb-util-wm \
+        xcb-util-xrm
+
+# Install additional libraries that Motif might need
+RUN pacman -S --noconfirm \
+        fontconfig \
+        freetype2 \
+        libpng \
+        libjpeg-turbo \
+        libtiff \
+        zlib \
+        bzip2 \
+        expat \
+        libxml2 \
+        libxslt \
+        openssl \
+        glibc \
+        glib2 \
+        pcre \
+        pcre2
+
+# Install build tools and utilities
+RUN pacman -S --noconfirm \
+        flex \
+        bison \
+        m4 \
+        gettext \
+        intltool \
+        patch \
+        diffutils \
+        dos2unix
+
+# Install documentation and development tools
+RUN pacman -S --noconfirm \
+        man-db \
+        man-pages \
+        texinfo \
+        help2man \
+        doxygen \
+        graphviz
+
+# Clean package cache to reduce image size
+RUN pacman -Scc --noconfirm
+
+# Create working directory
+WORKDIR /build
+
+# Copy build script
+COPY tools/dev/env/scripts/build-motif.sh /usr/local/bin/build-motif.sh
+RUN chmod +x /usr/local/bin/build-motif.sh
+
+# Set up build environment
+ENV CC=gcc
+ENV CXX=g++
+ENV CFLAGS="-O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"
+ENV CXXFLAGS="-O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"
+ENV LDFLAGS="-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
+ENV MAKEFLAGS="-j$(nproc)"
+
+# Create non-root user for building
+RUN useradd -m -s /bin/bash builder && \
+    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Switch to builder user
+USER builder
+WORKDIR /home/builder
+
+# Default command
+CMD ["/usr/local/bin/build-motif.sh"]

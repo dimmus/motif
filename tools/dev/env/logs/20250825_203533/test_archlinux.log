@@ -1,0 +1,986 @@
+Motif Build Test Log
+===================
+OS: archlinux
+Date: Mon Aug 25 08:38:52 PM +05 2025
+Container Engine: podman
+Container: motif-test-archlinux-1756136332
+Image: motif-test-archlinux
+
+[0;34m[INFO][0m Starting Motif build process...
+[0;34m[INFO][0m Gathering system information...
+System Information
+==================
+Date: Mon Aug 25 15:38:53 UTC 2025
+/usr/local/bin/build-motif.sh: line 52: hostname: command not found
+Hostname: 
+User: builder
+Working Directory: /home/builder
+PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+OS Release Information:
+NAME="Arch Linux"
+PRETTY_NAME="Arch Linux"
+ID=arch
+BUILD_ID=rolling
+VERSION_ID=20250817.0.405639
+ANSI_COLOR="38;2;23;147;209"
+HOME_URL="https://archlinux.org/"
+DOCUMENTATION_URL="https://wiki.archlinux.org/"
+SUPPORT_URL="https://bbs.archlinux.org/"
+BUG_REPORT_URL="https://gitlab.archlinux.org/groups/archlinux/-/issues"
+PRIVACY_POLICY_URL="https://terms.archlinux.org/docs/privacy-policy/"
+LOGO=archlinux-logo
+
+Kernel: Linux 196e3173c9e2 6.14.0-28-generic #28~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 25 10:47:01 UTC 2 x86_64 GNU/Linux
+
+CPU Information:
+processor	: 0
+model name	: Intel(R) Pentium(R) Gold G6405 CPU @ 4.10GHz
+cpu MHz		: 4103.997
+cache size	: 4096 KB
+cpu cores	: 2
+processor	: 1
+model name	: Intel(R) Pentium(R) Gold G6405 CPU @ 4.10GHz
+cpu MHz		: 4103.997
+cache size	: 4096 KB
+cpu cores	: 2
+
+Memory Information:
+MemTotal:       16327780 kB
+MemFree:         4685460 kB
+MemAvailable:   14222684 kB
+SwapTotal:       3959804 kB
+SwapFree:        3959804 kB
+
+Compiler Information:
+GCC: gcc (GCC) 15.2.1 20250813
+Clang: clang version 20.1.8
+Make: GNU Make 4.4.1
+pkg-config: 2.5.1
+
+Build Environment Variables:
+CC=gcc
+CXX=g++
+CFLAGS=-O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection
+CXXFLAGS=-O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection
+CPPFLAGS=not set
+LDFLAGS=-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now
+MAKEFLAGS=-j$(nproc)
+
+[0;34m[INFO][0m Checking build dependencies...
+[0;34m[INFO][0m Checking X11 development libraries...
+[0;32m[SUCCESS][0m All dependencies found
+[0;34m[INFO][0m Preparing source code...
+[0;34m[INFO][0m Copying source code to build directory...
+[0;34m[INFO][0m Source code prepared in: /home/builder/motif-build
+[0;34m[INFO][0m Configuring build...
+[0;34m[INFO][0m Running configure...
+[0;35m[DEBUG][0m Configure options: --prefix=/home/builder/motif-install --enable-shared --disable-static --with-x --enable-xft --enable-jpeg --enable-png
+configure: WARNING: unrecognized options: --with-x, --enable-xft, --enable-jpeg, --enable-png
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /usr/sbin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking whether make supports the include directive... yes (GNU style)
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... gcc3
+checking for a sed that does not truncate output... /usr/sbin/sed
+checking for grep that handles long lines and -e... /usr/sbin/grep
+checking for egrep... /usr/sbin/grep -E
+checking for fgrep... /usr/sbin/grep -F
+checking for ld used by gcc... /usr/sbin/ld
+checking if the linker (/usr/sbin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/sbin/nm -B
+checking the name lister (/usr/sbin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/sbin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/sbin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/sbin/dd
+checking how to truncate binary pipes... /usr/sbin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... no
+checking for gcc option to produce PIC... -fPIC -DPIC
+checking if gcc PIC flag -fPIC -DPIC works... yes
+checking if gcc static flag -static works... yes
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/usr/sbin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... no
+checking whether make supports nested variables... (cached) yes
+checking for gcc... (cached) gcc
+checking whether the compiler supports GNU C... (cached) yes
+checking whether gcc accepts -g... (cached) yes
+checking for gcc option to enable C11 features... (cached) none needed
+checking whether gcc understands -c and -o together... (cached) yes
+checking dependency style of gcc... (cached) gcc3
+checking whether make sets $(MAKE)... (cached) yes
+checking whether ln -s works... yes
+checking for pkg-config... /usr/sbin/pkg-config
+checking for byacc... no
+checking for flex... flex
+checking for lex output file root... lex.yy
+checking for lex library... none needed
+checking for library containing yywrap... no
+configure: WARNING: yywrap not found; giving up on flex
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for an ANSI C-conforming const... yes
+checking for mode_t... yes
+checking for off_t... yes
+checking for pid_t... yes
+checking for size_t... yes
+checking for intptr_t... yes
+checking for uintptr_t... yes
+checking for XICProc... yes
+checking pkg-config is at least version 0.9.0... yes
+checking for x11 xpm xt xmu xext... yes
+checking for alloca.h... yes
+checking for iconv.h... yes
+checking for wctype.h... yes
+checking for fcntl.h... yes
+checking for sys/poll.h... yes
+checking for sys/time.h... yes
+checking for X11/Xos_r.h... yes
+checking for X11/Xpoll.h... yes
+checking for getcwd... yes
+checking for getwd... yes
+checking for iconv... yes
+checking for nanosleep... yes
+checking for putenv... yes
+checking for regcomp... yes
+checking for regex... no
+checking for strcasecmp... yes
+checking for strdup... yes
+checking for strlcat... yes
+checking for libjpeg... yes
+checking for libpng... yes
+checking for xft >= 2... yes
+checking for library containing iconv_open... none required
+checking whether C compiler accepts -O2... yes
+checking whether C compiler accepts -DNDEBUG... yes
+checking whether C compiler accepts -Werror -Qunused-arguments... no
+checking whether C compiler accepts -fno-strict-aliasing... yes
+checking whether C compiler accepts -Wall... yes
+checking whether C compiler accepts -Wshadow... yes
+checking whether C compiler accepts -Wwrite-strings... yes
+checking whether C compiler accepts -Wcast-align... yes
+checking whether C compiler accepts -Wformat-security... yes
+checking whether C compiler accepts -Wno-unused... yes
+checking whether C compiler accepts -Wno-comment... yes
+checking whether C compiler accepts -Wno-unused-result... yes
+checking whether C compiler accepts -Wno-misleading-indentation... yes
+checking whether C compiler accepts -Wno-implicit-fallthrough... yes
+checking whether C compiler accepts -Wno-int-in-bool-context... yes
+checking whether C compiler accepts -Wno-conversion... yes
+checking whether C compiler accepts -Wdiscarded-qualifiers... yes
+checking whether C compiler accepts -Wno-strict-prototypes... yes
+checking whether C compiler accepts -Wno-missing-prototypes... yes
+checking whether C compiler accepts -Wno-missing-declarations... yes
+checking whether C compiler accepts -Wno-nested-externs... yes
+checking whether C compiler accepts -Wno-cast-qual... yes
+checking whether C compiler accepts -Wno-redundant-decls... yes
+checking whether C compiler accepts -Wno-bad-function-cast... yes
+checking whether C compiler accepts -Wno-pointer-to-int-cast... yes
+checking whether C compiler accepts -Wno-int-to-pointer-cast... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating motif.pc
+config.status: creating data/Makefile
+config.status: creating data/bindings/Makefile
+config.status: creating data/bitmaps/Makefile
+config.status: creating clients/Makefile
+config.status: creating clients/mwm/Makefile
+config.status: creating clients/mwm/WmWsmLib/Makefile
+config.status: creating clients/uil/Makefile
+config.status: creating clients/xmbind/Makefile
+config.status: creating config/Makefile
+config.status: creating config/util/Makefile
+config.status: creating include/Makefile
+config.status: creating include/Dt/Makefile
+config.status: creating lib/Makefile
+config.status: creating lib/Xm/Makefile
+config.status: creating lib/Xm/version.h
+config.status: creating lib/Mrm/Makefile
+config.status: creating localized/Makefile
+config.status: creating localized/util/Makefile
+config.status: creating doc/Makefile
+config.status: creating doc/man/Makefile
+config.status: creating doc/man/man1/Makefile
+config.status: creating doc/man/man3/Makefile
+config.status: creating doc/man/man4/Makefile
+config.status: creating doc/man/man5/Makefile
+config.status: creating tools/Makefile
+config.status: creating tools/wml/Makefile
+config.status: creating lib/Xm/xmstring.list
+config.status: creating demos/Makefile
+config.status: creating demos/lib/Makefile
+config.status: creating demos/lib/Xmd/Makefile
+config.status: creating demos/lib/Wsm/Makefile
+config.status: creating demos/lib/Exm/Makefile
+config.status: creating demos/lib/Exm/wml/Makefile
+config.status: creating demos/programs/Makefile
+config.status: creating demos/programs/Exm/Makefile
+config.status: creating demos/programs/Exm/app_in_c/Makefile
+config.status: creating demos/programs/Exm/app_in_uil/Makefile
+config.status: creating demos/programs/Exm/simple_app/Makefile
+config.status: creating demos/programs/airport/Makefile
+config.status: creating demos/programs/animate/Makefile
+config.status: creating demos/programs/drag_and_drop/Makefile
+config.status: creating demos/programs/draw/Makefile
+config.status: creating demos/programs/earth/Makefile
+config.status: creating demos/programs/filemanager/Makefile
+config.status: creating demos/programs/fileview/Makefile
+config.status: creating demos/programs/getsubres/Makefile
+config.status: creating demos/programs/hellomotif/Makefile
+config.status: creating demos/programs/hellomotifi18n/Makefile
+config.status: creating demos/programs/hellomotifi18n/C/Makefile
+config.status: creating demos/programs/hellomotifi18n/C/uid/Makefile
+config.status: creating demos/programs/hellomotifi18n/english/Makefile
+config.status: creating demos/programs/hellomotifi18n/english/uid/Makefile
+config.status: creating demos/programs/hellomotifi18n/french/Makefile
+config.status: creating demos/programs/hellomotifi18n/french/uid/Makefile
+config.status: creating demos/programs/hellomotifi18n/hebrew/Makefile
+config.status: creating demos/programs/hellomotifi18n/hebrew/uid/Makefile
+config.status: creating demos/programs/hellomotifi18n/japan/Makefile
+config.status: creating demos/programs/hellomotifi18n/japan/uid/Makefile
+config.status: creating demos/programs/hellomotifi18n/japanese/Makefile
+config.status: creating demos/programs/hellomotifi18n/japanese/uid/Makefile
+config.status: creating demos/programs/hellomotifi18n/swedish/Makefile
+config.status: creating demos/programs/hellomotifi18n/swedish/uid/Makefile
+config.status: creating demos/programs/i18ninput/Makefile
+config.status: creating demos/programs/panner/Makefile
+config.status: creating demos/programs/periodic/Makefile
+config.status: creating demos/programs/piano/Makefile
+config.status: creating demos/programs/popups/Makefile
+config.status: creating demos/programs/sampler2_0/Makefile
+config.status: creating demos/programs/setdate/Makefile
+config.status: creating demos/programs/todo/Makefile
+config.status: creating demos/programs/workspace/Makefile
+config.status: creating demos/programs/tooltips/Makefile
+config.status: creating demos/programs/FontSel/Makefile
+config.status: creating demos/programs/ButtonBox/Makefile
+config.status: creating demos/programs/ColorSel/Makefile
+config.status: creating demos/programs/Column/Makefile
+config.status: creating demos/programs/Combo2/Makefile
+config.status: creating demos/programs/Ext18List/Makefile
+config.status: creating demos/programs/Ext18List/pixmaps/Makefile
+config.status: creating demos/programs/IconB/Makefile
+config.status: creating demos/programs/Outline/Makefile
+config.status: creating demos/programs/Paned/Makefile
+config.status: creating demos/programs/TabStack/Makefile
+config.status: creating demos/programs/Tree/Makefile
+config.status: creating demos/programs/pixmaps/Makefile
+config.status: creating demos/unsupported/Makefile
+config.status: creating demos/unsupported/Exm/Makefile
+config.status: creating demos/unsupported/aicon/Makefile
+config.status: creating demos/unsupported/dainput/Makefile
+config.status: creating demos/unsupported/dogs/Makefile
+config.status: creating demos/unsupported/hellomotif/Makefile
+config.status: creating demos/unsupported/motifshell/Makefile
+config.status: creating demos/unsupported/uilsymdump/Makefile
+config.status: creating demos/unsupported/xmapdef/Makefile
+config.status: creating demos/unsupported/xmfonts/Makefile
+config.status: creating demos/unsupported/xmforc/Makefile
+config.status: creating demos/unsupported/xmform/Makefile
+config.status: creating demos/doc/Makefile
+config.status: creating demos/doc/programGuide/Makefile
+config.status: creating demos/doc/programGuide/ch05/Makefile
+config.status: creating demos/doc/programGuide/ch05/Scale/Makefile
+config.status: creating demos/doc/programGuide/ch06/Makefile
+config.status: creating demos/doc/programGuide/ch06/spin_box/Makefile
+config.status: creating demos/doc/programGuide/ch06/combo_box/Makefile
+config.status: creating demos/doc/programGuide/ch08/Makefile
+config.status: creating demos/doc/programGuide/ch08/Notebook/Makefile
+config.status: creating demos/doc/programGuide/ch08/Container/Makefile
+config.status: creating demos/doc/programGuide/ch16/Makefile
+config.status: creating demos/doc/programGuide/ch17/Makefile
+config.status: creating demos/doc/programGuide/ch17/simple_drop/Makefile
+config.status: creating demos/doc/programGuide/ch17/simple_drag/Makefile
+config.status: creating include/config.h
+config.status: creating lib/Xm/Xm.h
+config.status: lib/Xm/Xm.h is unchanged
+config.status: executing depfiles commands
+config.status: executing libtool commands
+configure: WARNING: unrecognized options: --with-x, --enable-xft, --enable-jpeg, --enable-png
+
+------------------------------------------------------------------------
+motif 2.4.0
+------------------------------------------------------------------------
+
+System configuration:
+  os.............: linux-gnu
+
+Features:
+  libxm..........: +png +jpg +xft +utf8 -print -msg_catalog
+  debug..........: -debug
+
+Components:......: +demos -tests
+
+Compilation......: make
+  CPPFLAGS.......: -DNDEBUG
+  CFLAGS.........: -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection -fno-strict-aliasing -Wall -Wshadow -Wwrite-strings -Wcast-align -Wformat-security -Wno-unused -Wno-comment -Wno-unused-result -Wno-misleading-indentation -Wno-implicit-fallthrough -Wno-int-in-bool-context -Wno-conversion -Wdiscarded-qualifiers -Wno-strict-prototypes -Wno-missing-prototypes -Wno-missing-declarations -Wno-nested-externs -Wno-cast-qual -Wno-redundant-decls -Wno-bad-function-cast -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
+   X_CFLAGS......: -I/usr/include/uuid
+   XFT_CFLAGS....: -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/sysprof-6 -pthread
+  LDFLAGS........: 
+   X_LIBS........: -lXpm -lXmu -lXt -lXext -lX11
+   XFT_LIBS......: -lXft
+
+[0;32m[SUCCESS][0m Configuration completed
+[0;34m[INFO][0m Building Motif...
+[0;34m[INFO][0m Building with 2 parallel jobs
+Making all in data
+make[1]: Entering directory '/home/builder/motif-build/data'
+Making all in bindings
+make[2]: Entering directory '/home/builder/motif-build/data/bindings'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/builder/motif-build/data/bindings'
+Making all in bitmaps
+make[2]: Entering directory '/home/builder/motif-build/data/bitmaps'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/builder/motif-build/data/bitmaps'
+make[2]: Entering directory '/home/builder/motif-build/data'
+make[2]: Nothing to be done for 'all-am'.
+make[2]: Leaving directory '/home/builder/motif-build/data'
+make[1]: Leaving directory '/home/builder/motif-build/data'
+Making all in config
+make[1]: Entering directory '/home/builder/motif-build/config'
+Making all in util
+make[2]: Entering directory '/home/builder/motif-build/config/util'
+  CC       makestrs.o
+makestrs.c: In function ‘CopyTmplProlog’:
+makestrs.c:88:24: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   88 | #define X_MAGIC_STRING "<<<STRING_TABLE_GOES_HERE>>>"
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+makestrs.c:211:33: note: in expansion of macro ‘X_MAGIC_STRING’
+  211 |     static char* magic_string = X_MAGIC_STRING;
+      |                                 ^~~~~~~~~~~~~~
+makestrs.c: At top level:
+makestrs.c:232:4: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |    ^~~~~~~~~
+makestrs.c:232:15: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |               ^~~~~~~~~~~~~~~~~~
+makestrs.c:232:35: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                   ^~~~~~~
+makestrs.c:232:44: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                            ^~~~~~~~~~
+makestrs.c:232:56: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                                        ^~~~~~~
+makestrs.c:232:65: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                                                 ^~~~~~~~~~
+makestrs.c: In function ‘WriteHeader’:
+makestrs.c:239:39: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  239 |     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+      |                                       ^~~~~~~~~~~~~~~~~~
+makestrs.c:239:39: note: (near initialization for ‘headerproc[0]’)
+makestrs.c:186:1: note: ‘DefaultWriteHeader’ declared here
+  186 | DefaultWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:239:59: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  239 |     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+      |                                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:239:59: note: (near initialization for ‘headerproc[1]’)
+makestrs.c:167:1: note: ‘ArrayperWriteHeader’ declared here
+  167 | ArrayperWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  240 |                                           IntelABIWriteHeader, IntelABIWriteHeader,
+      |                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:43: note: (near initialization for ‘headerproc[2]’)
+makestrs.c:113:1: note: ‘IntelABIWriteHeader’ declared here
+  113 | IntelABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  240 |                                           IntelABIWriteHeader, IntelABIWriteHeader,
+      |                                                                ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:64: note: (near initialization for ‘headerproc[3]’)
+makestrs.c:113:1: note: ‘IntelABIWriteHeader’ declared here
+  113 | IntelABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  241 |                                           SPARCABIWriteHeader, FunctionWriteHeader };
+      |                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:43: note: (near initialization for ‘headerproc[4]’)
+makestrs.c:133:1: note: ‘SPARCABIWriteHeader’ declared here
+  133 | SPARCABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  241 |                                           SPARCABIWriteHeader, FunctionWriteHeader };
+      |                                                                ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:64: note: (near initialization for ‘headerproc[5]’)
+makestrs.c:145:1: note: ‘FunctionWriteHeader’ declared here
+  145 | FunctionWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:268:6: error: too many arguments to function ‘headerproc[abi]’; expected 0, have 2
+  268 |     (*headerproc[abi])(f, phile);
+      |     ~^~~~~~~~~~~~~~~~~ ~
+makestrs.c: At top level:
+makestrs.c:288:29: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  288 | static char* const_string = "%s %sConst char %s[] = {\n";
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+makestrs.c: In function ‘WriteSource’:
+makestrs.c:406:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  406 |         DefaultWriteSource, ArrayperWriteSource,
+      |         ^~~~~~~~~~~~~~~~~~
+makestrs.c:406:9: note: (near initialization for ‘sourceproc[0]’)
+makestrs.c:384:1: note: ‘DefaultWriteSource’ declared here
+  384 | DefaultWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:406:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  406 |         DefaultWriteSource, ArrayperWriteSource,
+      |                             ^~~~~~~~~~~~~~~~~~~
+makestrs.c:406:29: note: (near initialization for ‘sourceproc[1]’)
+makestrs.c:361:1: note: ‘ArrayperWriteSource’ declared here
+  361 | ArrayperWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  407 |         IntelABIWriteSource, IntelABIBCWriteSource,
+      |         ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:9: note: (near initialization for ‘sourceproc[2]’)
+makestrs.c:291:1: note: ‘IntelABIWriteSource’ declared here
+  291 | IntelABIWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:30: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  407 |         IntelABIWriteSource, IntelABIBCWriteSource,
+      |                              ^~~~~~~~~~~~~~~~~~~~~
+makestrs.c:407:30: note: (near initialization for ‘sourceproc[3]’)
+makestrs.c:310:1: note: ‘IntelABIBCWriteSource’ declared here
+  310 | IntelABIBCWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~~~
+makestrs.c:408:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  408 |         DefaultWriteSource, FunctionWriteSource };
+      |         ^~~~~~~~~~~~~~~~~~
+makestrs.c:408:9: note: (near initialization for ‘sourceproc[4]’)
+makestrs.c:384:1: note: ‘DefaultWriteSource’ declared here
+  384 | DefaultWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:408:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  408 |         DefaultWriteSource, FunctionWriteSource };
+      |                             ^~~~~~~~~~~~~~~~~~~
+makestrs.c:408:29: note: (near initialization for ‘sourceproc[5]’)
+makestrs.c:338:1: note: ‘FunctionWriteSource’ declared here
+  338 | FunctionWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:431:6: error: too many arguments to function ‘sourceproc[abi]’; expected 0, have 1
+  431 |     (*sourceproc[abi])(abi);
+      |     ~^~~~~~~~~~~~~~~~~ ~~~
+makestrs.c: In function ‘DoLine’:
+makestrs.c:455:29: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  455 |     static char* file_str = "#file";
+      |                             ^~~~~~~
+makestrs.c:456:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  456 |     static char* table_str = "#table";
+      |                              ^~~~~~~~
+makestrs.c:457:31: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  457 |     static char* prefix_str = "#prefix";
+      |                               ^~~~~~~~~
+makestrs.c:458:32: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  458 |     static char* feature_str = "#feature";
+      |                                ^~~~~~~~~~
+makestrs.c:459:34: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  459 |     static char* externref_str = "#externref";
+      |                                  ^~~~~~~~~~~~
+makestrs.c:460:34: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  460 |     static char* externdef_str = "#externdef";
+      |                                  ^~~~~~~~~~~~
+makestrs.c:461:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  461 |     static char* ctmpl_str = "#ctmpl";
+      |                              ^~~~~~~~
+makestrs.c:462:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  462 |     static char* htmpl_str = "#htmpl";
+      |                              ^~~~~~~~
+makestrs.c:463:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  463 |     static char* const_str = "#const";
+      |                              ^~~~~~~~
+make[2]: *** [Makefile:403: makestrs.o] Error 1
+make[2]: Leaving directory '/home/builder/motif-build/config/util'
+make[1]: *** [Makefile:390: all-recursive] Error 1
+make[1]: Leaving directory '/home/builder/motif-build/config'
+make: *** [Makefile:541: all-recursive] Error 1
+[0;32m[SUCCESS][0m Build completed
+[0;34m[INFO][0m Installing Motif...
+Making install in data
+make[1]: Entering directory '/home/builder/motif-build/data'
+Making install in bindings
+make[2]: Entering directory '/home/builder/motif-build/data/bindings'
+make[3]: Entering directory '/home/builder/motif-build/data/bindings'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /usr/sbin/mkdir -p '/home/builder/motif-install/share/X11/bindings'
+ /usr/bin/install -c -m 644 xmbind.alias acorn apollo dec dg_AViiON doubleclick hal hitachi hp ibm intergraph intergraph17 megatek motorola ncr_at ncr_vt pc sgi sni sni_97801 siemens_9733 siemens_wx200 sony sun sun_at tek '/home/builder/motif-install/share/X11/bindings'
+make[3]: Leaving directory '/home/builder/motif-build/data/bindings'
+make[2]: Leaving directory '/home/builder/motif-build/data/bindings'
+Making install in bitmaps
+make[2]: Entering directory '/home/builder/motif-build/data/bitmaps'
+make[3]: Entering directory '/home/builder/motif-build/data/bitmaps'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /usr/sbin/mkdir -p '/home/builder/motif-install/include/X11/bitmaps'
+ /usr/bin/install -c -m 644 xm_error xm_hour16 xm_hour16m xm_hour32 xm_hour32m xm_information xm_noenter16 xm_noenter16m xm_noenter32 xm_noenter32m xm_question xm_warning xm_working '/home/builder/motif-install/include/X11/bitmaps'
+make[3]: Leaving directory '/home/builder/motif-build/data/bitmaps'
+make[2]: Leaving directory '/home/builder/motif-build/data/bitmaps'
+make[2]: Entering directory '/home/builder/motif-build/data'
+make[3]: Entering directory '/home/builder/motif-build/data'
+make[3]: Nothing to be done for 'install-exec-am'.
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/home/builder/motif-build/data'
+make[2]: Leaving directory '/home/builder/motif-build/data'
+make[1]: Leaving directory '/home/builder/motif-build/data'
+Making install in config
+make[1]: Entering directory '/home/builder/motif-build/config'
+Making install in util
+make[2]: Entering directory '/home/builder/motif-build/config/util'
+  CC       makestrs.o
+makestrs.c: In function ‘CopyTmplProlog’:
+makestrs.c:88:24: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   88 | #define X_MAGIC_STRING "<<<STRING_TABLE_GOES_HERE>>>"
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+makestrs.c:211:33: note: in expansion of macro ‘X_MAGIC_STRING’
+  211 |     static char* magic_string = X_MAGIC_STRING;
+      |                                 ^~~~~~~~~~~~~~
+makestrs.c: At top level:
+makestrs.c:232:4: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |    ^~~~~~~~~
+makestrs.c:232:15: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |               ^~~~~~~~~~~~~~~~~~
+makestrs.c:232:35: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                   ^~~~~~~
+makestrs.c:232:44: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                            ^~~~~~~~~~
+makestrs.c:232:56: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                                        ^~~~~~~
+makestrs.c:232:65: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                                                 ^~~~~~~~~~
+makestrs.c: In function ‘WriteHeader’:
+makestrs.c:239:39: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  239 |     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+      |                                       ^~~~~~~~~~~~~~~~~~
+makestrs.c:239:39: note: (near initialization for ‘headerproc[0]’)
+makestrs.c:186:1: note: ‘DefaultWriteHeader’ declared here
+  186 | DefaultWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:239:59: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  239 |     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+      |                                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:239:59: note: (near initialization for ‘headerproc[1]’)
+makestrs.c:167:1: note: ‘ArrayperWriteHeader’ declared here
+  167 | ArrayperWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  240 |                                           IntelABIWriteHeader, IntelABIWriteHeader,
+      |                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:43: note: (near initialization for ‘headerproc[2]’)
+makestrs.c:113:1: note: ‘IntelABIWriteHeader’ declared here
+  113 | IntelABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  240 |                                           IntelABIWriteHeader, IntelABIWriteHeader,
+      |                                                                ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:64: note: (near initialization for ‘headerproc[3]’)
+makestrs.c:113:1: note: ‘IntelABIWriteHeader’ declared here
+  113 | IntelABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  241 |                                           SPARCABIWriteHeader, FunctionWriteHeader };
+      |                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:43: note: (near initialization for ‘headerproc[4]’)
+makestrs.c:133:1: note: ‘SPARCABIWriteHeader’ declared here
+  133 | SPARCABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  241 |                                           SPARCABIWriteHeader, FunctionWriteHeader };
+      |                                                                ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:64: note: (near initialization for ‘headerproc[5]’)
+makestrs.c:145:1: note: ‘FunctionWriteHeader’ declared here
+  145 | FunctionWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:268:6: error: too many arguments to function ‘headerproc[abi]’; expected 0, have 2
+  268 |     (*headerproc[abi])(f, phile);
+      |     ~^~~~~~~~~~~~~~~~~ ~
+makestrs.c: At top level:
+makestrs.c:288:29: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  288 | static char* const_string = "%s %sConst char %s[] = {\n";
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+makestrs.c: In function ‘WriteSource’:
+makestrs.c:406:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  406 |         DefaultWriteSource, ArrayperWriteSource,
+      |         ^~~~~~~~~~~~~~~~~~
+makestrs.c:406:9: note: (near initialization for ‘sourceproc[0]’)
+makestrs.c:384:1: note: ‘DefaultWriteSource’ declared here
+  384 | DefaultWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:406:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  406 |         DefaultWriteSource, ArrayperWriteSource,
+      |                             ^~~~~~~~~~~~~~~~~~~
+makestrs.c:406:29: note: (near initialization for ‘sourceproc[1]’)
+makestrs.c:361:1: note: ‘ArrayperWriteSource’ declared here
+  361 | ArrayperWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  407 |         IntelABIWriteSource, IntelABIBCWriteSource,
+      |         ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:9: note: (near initialization for ‘sourceproc[2]’)
+makestrs.c:291:1: note: ‘IntelABIWriteSource’ declared here
+  291 | IntelABIWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:30: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  407 |         IntelABIWriteSource, IntelABIBCWriteSource,
+      |                              ^~~~~~~~~~~~~~~~~~~~~
+makestrs.c:407:30: note: (near initialization for ‘sourceproc[3]’)
+makestrs.c:310:1: note: ‘IntelABIBCWriteSource’ declared here
+  310 | IntelABIBCWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~~~
+makestrs.c:408:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  408 |         DefaultWriteSource, FunctionWriteSource };
+      |         ^~~~~~~~~~~~~~~~~~
+makestrs.c:408:9: note: (near initialization for ‘sourceproc[4]’)
+makestrs.c:384:1: note: ‘DefaultWriteSource’ declared here
+  384 | DefaultWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:408:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  408 |         DefaultWriteSource, FunctionWriteSource };
+      |                             ^~~~~~~~~~~~~~~~~~~
+makestrs.c:408:29: note: (near initialization for ‘sourceproc[5]’)
+makestrs.c:338:1: note: ‘FunctionWriteSource’ declared here
+  338 | FunctionWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:431:6: error: too many arguments to function ‘sourceproc[abi]’; expected 0, have 1
+  431 |     (*sourceproc[abi])(abi);
+      |     ~^~~~~~~~~~~~~~~~~ ~~~
+makestrs.c: In function ‘DoLine’:
+makestrs.c:455:29: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  455 |     static char* file_str = "#file";
+      |                             ^~~~~~~
+makestrs.c:456:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  456 |     static char* table_str = "#table";
+      |                              ^~~~~~~~
+makestrs.c:457:31: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  457 |     static char* prefix_str = "#prefix";
+      |                               ^~~~~~~~~
+makestrs.c:458:32: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  458 |     static char* feature_str = "#feature";
+      |                                ^~~~~~~~~~
+makestrs.c:459:34: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  459 |     static char* externref_str = "#externref";
+      |                                  ^~~~~~~~~~~~
+makestrs.c:460:34: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  460 |     static char* externdef_str = "#externdef";
+      |                                  ^~~~~~~~~~~~
+makestrs.c:461:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  461 |     static char* ctmpl_str = "#ctmpl";
+      |                              ^~~~~~~~
+makestrs.c:462:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  462 |     static char* htmpl_str = "#htmpl";
+      |                              ^~~~~~~~
+makestrs.c:463:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  463 |     static char* const_str = "#const";
+      |                              ^~~~~~~~
+make[2]: *** [Makefile:403: makestrs.o] Error 1
+make[2]: Leaving directory '/home/builder/motif-build/config/util'
+make[1]: *** [Makefile:390: install-recursive] Error 1
+make[1]: Leaving directory '/home/builder/motif-build/config'
+make: *** [Makefile:541: install-recursive] Error 1
+[0;32m[SUCCESS][0m Installation completed
+[0;34m[INFO][0m Running tests...
+[0;34m[INFO][0m Running test suite...
+Making check in data
+make[1]: Entering directory '/home/builder/motif-build/data'
+Making check in bindings
+make[2]: Entering directory '/home/builder/motif-build/data/bindings'
+make[2]: Nothing to be done for 'check'.
+make[2]: Leaving directory '/home/builder/motif-build/data/bindings'
+Making check in bitmaps
+make[2]: Entering directory '/home/builder/motif-build/data/bitmaps'
+make[2]: Nothing to be done for 'check'.
+make[2]: Leaving directory '/home/builder/motif-build/data/bitmaps'
+make[2]: Entering directory '/home/builder/motif-build/data'
+make[2]: Nothing to be done for 'check-am'.
+make[2]: Leaving directory '/home/builder/motif-build/data'
+make[1]: Leaving directory '/home/builder/motif-build/data'
+Making check in config
+make[1]: Entering directory '/home/builder/motif-build/config'
+Making check in util
+make[2]: Entering directory '/home/builder/motif-build/config/util'
+  CC       makestrs.o
+makestrs.c: In function ‘CopyTmplProlog’:
+makestrs.c:88:24: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   88 | #define X_MAGIC_STRING "<<<STRING_TABLE_GOES_HERE>>>"
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+makestrs.c:211:33: note: in expansion of macro ‘X_MAGIC_STRING’
+  211 |     static char* magic_string = X_MAGIC_STRING;
+      |                                 ^~~~~~~~~~~~~~
+makestrs.c: At top level:
+makestrs.c:232:4: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |    ^~~~~~~~~
+makestrs.c:232:15: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |               ^~~~~~~~~~~~~~~~~~
+makestrs.c:232:35: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                   ^~~~~~~
+makestrs.c:232:44: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                            ^~~~~~~~~~
+makestrs.c:232:56: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                                        ^~~~~~~
+makestrs.c:232:65: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  232 |    "Default", "Array per string", "Intel", "Intel BC", "SPARC", "Function" };
+      |                                                                 ^~~~~~~~~~
+makestrs.c: In function ‘WriteHeader’:
+makestrs.c:239:39: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  239 |     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+      |                                       ^~~~~~~~~~~~~~~~~~
+makestrs.c:239:39: note: (near initialization for ‘headerproc[0]’)
+makestrs.c:186:1: note: ‘DefaultWriteHeader’ declared here
+  186 | DefaultWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:239:59: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  239 |     static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+      |                                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:239:59: note: (near initialization for ‘headerproc[1]’)
+makestrs.c:167:1: note: ‘ArrayperWriteHeader’ declared here
+  167 | ArrayperWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  240 |                                           IntelABIWriteHeader, IntelABIWriteHeader,
+      |                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:43: note: (near initialization for ‘headerproc[2]’)
+makestrs.c:113:1: note: ‘IntelABIWriteHeader’ declared here
+  113 | IntelABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  240 |                                           IntelABIWriteHeader, IntelABIWriteHeader,
+      |                                                                ^~~~~~~~~~~~~~~~~~~
+makestrs.c:240:64: note: (near initialization for ‘headerproc[3]’)
+makestrs.c:113:1: note: ‘IntelABIWriteHeader’ declared here
+  113 | IntelABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  241 |                                           SPARCABIWriteHeader, FunctionWriteHeader };
+      |                                           ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:43: note: (near initialization for ‘headerproc[4]’)
+makestrs.c:133:1: note: ‘SPARCABIWriteHeader’ declared here
+  133 | SPARCABIWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+  241 |                                           SPARCABIWriteHeader, FunctionWriteHeader };
+      |                                                                ^~~~~~~~~~~~~~~~~~~
+makestrs.c:241:64: note: (near initialization for ‘headerproc[5]’)
+makestrs.c:145:1: note: ‘FunctionWriteHeader’ declared here
+  145 | FunctionWriteHeader (FILE* f, File* phile)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:268:6: error: too many arguments to function ‘headerproc[abi]’; expected 0, have 2
+  268 |     (*headerproc[abi])(f, phile);
+      |     ~^~~~~~~~~~~~~~~~~ ~
+makestrs.c: At top level:
+makestrs.c:288:29: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  288 | static char* const_string = "%s %sConst char %s[] = {\n";
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+makestrs.c: In function ‘WriteSource’:
+makestrs.c:406:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  406 |         DefaultWriteSource, ArrayperWriteSource,
+      |         ^~~~~~~~~~~~~~~~~~
+makestrs.c:406:9: note: (near initialization for ‘sourceproc[0]’)
+makestrs.c:384:1: note: ‘DefaultWriteSource’ declared here
+  384 | DefaultWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:406:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  406 |         DefaultWriteSource, ArrayperWriteSource,
+      |                             ^~~~~~~~~~~~~~~~~~~
+makestrs.c:406:29: note: (near initialization for ‘sourceproc[1]’)
+makestrs.c:361:1: note: ‘ArrayperWriteSource’ declared here
+  361 | ArrayperWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  407 |         IntelABIWriteSource, IntelABIBCWriteSource,
+      |         ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:9: note: (near initialization for ‘sourceproc[2]’)
+makestrs.c:291:1: note: ‘IntelABIWriteSource’ declared here
+  291 | IntelABIWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:407:30: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  407 |         IntelABIWriteSource, IntelABIBCWriteSource,
+      |                              ^~~~~~~~~~~~~~~~~~~~~
+makestrs.c:407:30: note: (near initialization for ‘sourceproc[3]’)
+makestrs.c:310:1: note: ‘IntelABIBCWriteSource’ declared here
+  310 | IntelABIBCWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~~~
+makestrs.c:408:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  408 |         DefaultWriteSource, FunctionWriteSource };
+      |         ^~~~~~~~~~~~~~~~~~
+makestrs.c:408:9: note: (near initialization for ‘sourceproc[4]’)
+makestrs.c:384:1: note: ‘DefaultWriteSource’ declared here
+  384 | DefaultWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~
+makestrs.c:408:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+  408 |         DefaultWriteSource, FunctionWriteSource };
+      |                             ^~~~~~~~~~~~~~~~~~~
+makestrs.c:408:29: note: (near initialization for ‘sourceproc[5]’)
+makestrs.c:338:1: note: ‘FunctionWriteSource’ declared here
+  338 | FunctionWriteSource (int abi)
+      | ^~~~~~~~~~~~~~~~~~~
+makestrs.c:431:6: error: too many arguments to function ‘sourceproc[abi]’; expected 0, have 1
+  431 |     (*sourceproc[abi])(abi);
+      |     ~^~~~~~~~~~~~~~~~~ ~~~
+makestrs.c: In function ‘DoLine’:
+makestrs.c:455:29: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  455 |     static char* file_str = "#file";
+      |                             ^~~~~~~
+makestrs.c:456:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  456 |     static char* table_str = "#table";
+      |                              ^~~~~~~~
+makestrs.c:457:31: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  457 |     static char* prefix_str = "#prefix";
+      |                               ^~~~~~~~~
+makestrs.c:458:32: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  458 |     static char* feature_str = "#feature";
+      |                                ^~~~~~~~~~
+makestrs.c:459:34: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  459 |     static char* externref_str = "#externref";
+      |                                  ^~~~~~~~~~~~
+makestrs.c:460:34: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  460 |     static char* externdef_str = "#externdef";
+      |                                  ^~~~~~~~~~~~
+makestrs.c:461:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  461 |     static char* ctmpl_str = "#ctmpl";
+      |                              ^~~~~~~~
+makestrs.c:462:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  462 |     static char* htmpl_str = "#htmpl";
+      |                              ^~~~~~~~
+makestrs.c:463:30: warning: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  463 |     static char* const_str = "#const";
+      |                              ^~~~~~~~
+make[2]: *** [Makefile:403: makestrs.o] Error 1
+make[2]: Leaving directory '/home/builder/motif-build/config/util'
+make[1]: *** [Makefile:390: check-recursive] Error 1
+make[1]: Leaving directory '/home/builder/motif-build/config'
+make: *** [Makefile:541: check-recursive] Error 1
+[1;33m[WARNING][0m Some tests failed, but continuing...
+[0;34m[INFO][0m Verifying installation...
+[0;34m[INFO][0m Installed headers:
+Header files: 0
+[0;32m[SUCCESS][0m Motif build completed successfully in 32 seconds
+[0;34m[INFO][0m Generating build report...
+/usr/local/bin/build-motif.sh: line 300: hostname: command not found
+[0;34m[INFO][0m Build report saved to: /home/builder/build-report.txt
+
+Build Summary
+=============
+Motif Build Report
+==================
+Date: Mon Aug 25 15:39:25 UTC 2025
+Host: 
+User: builder
+
+Build Configuration:
+- Source: /motif
+- Build Directory: /home/builder/motif-build
+- Install Directory: /home/builder/motif-install
+- Compiler: gcc
+- C++ Compiler: g++
+- CFLAGS: -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection
+- CXXFLAGS: -O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection
+- LDFLAGS: -Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now
+
+Build Status: SUCCESS
+Build Time: 32 seconds
+
+
+Build Log Summary:
+==================
+
+Errors found:
+make[2]: *** [Makefile:403: makestrs.o] Error 1
+make[1]: *** [Makefile:390: install-recursive] Error 1
+make: *** [Makefile:541: install-recursive] Error 1
+makestrs.c:239:39: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+makestrs.c:239:59: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+makestrs.c:240:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+makestrs.c:240:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+makestrs.c:241:43: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+makestrs.c:241:64: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(FILE *, File *)’ {aka ‘void (*)(FILE *, struct _File *)’} [-Wincompatible-pointer-types]
+makestrs.c:268:6: error: too many arguments to function ‘headerproc[abi]’; expected 0, have 2
+makestrs.c:406:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+makestrs.c:406:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+makestrs.c:407:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+makestrs.c:407:30: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+makestrs.c:408:9: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+makestrs.c:408:29: error: initialization of ‘void (*)(void)’ from incompatible pointer type ‘void (*)(int)’ [-Wincompatible-pointer-types]
+makestrs.c:431:6: error: too many arguments to function ‘sourceproc[abi]’; expected 0, have 1
+make[2]: *** [Makefile:403: makestrs.o] Error 1
+make[1]: *** [Makefile:390: check-recursive] Error 1
+make: *** [Makefile:541: check-recursive] Error 1
+
+Warnings found:
+Total warnings: 56
+[0;34m[INFO][0m Cleaning up...
+[0;34m[INFO][0m Build artifacts preserved in: /home/builder/motif-build
+[0;34m[INFO][0m Installation preserved in: /home/builder/motif-install
+[0;34m[INFO][0m Build log: /home/builder/build.log
+
+Build completed: Mon Aug 25 15:39:25 UTC 2025
+Exit code: 0
+[0;34m[INFO][0m Cleaning up...
+[0;34m[INFO][0m Build artifacts preserved in: /home/builder/motif-build
+[0;34m[INFO][0m Installation preserved in: /home/builder/motif-install
+[0;34m[INFO][0m Build log: /home/builder/build.log
+
+Test completed at: Mon Aug 25 08:39:26 PM +05 2025
+Exit code: 0
+RESULT: SUCCESS

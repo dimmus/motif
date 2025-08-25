@@ -1,0 +1,52 @@
+# Dockerfile template for testing Motif build on {{OS_NAME}}
+FROM {{BASE_IMAGE}}
+
+LABEL maintainer="XDE Motif Development Team"
+LABEL description="{{OS_DESCRIPTION}} environment for testing Motif builds"
+LABEL version="1.0"
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Update system and install base development tools
+{{PACKAGE_UPDATE_COMMANDS}}
+
+# Install base development tools
+{{INSTALL_BASE_TOOLS}}
+
+# Install X11 and Motif dependencies
+{{INSTALL_X11_DEPS}}
+
+# Install additional libraries that Motif might need
+{{INSTALL_ADDITIONAL_LIBS}}
+
+# Install build tools and utilities
+{{INSTALL_BUILD_TOOLS}}
+
+# Install documentation and development tools (optional)
+{{INSTALL_DOC_TOOLS}}
+
+# Clean package cache to reduce image size
+{{PACKAGE_CLEANUP}}
+
+# Create working directory
+WORKDIR /build
+
+# Copy build script
+COPY tools/dev/env/scripts/build-motif.sh /usr/local/bin/build-motif.sh
+RUN chmod +x /usr/local/bin/build-motif.sh
+
+# Set up build environment
+{{BUILD_ENVIRONMENT}}
+
+# Create non-root user for building
+{{CREATE_BUILD_USER}}
+
+# Switch to builder user
+USER builder
+WORKDIR /home/builder
+
+# Default command
+CMD ["/usr/local/bin/build-motif.sh"]

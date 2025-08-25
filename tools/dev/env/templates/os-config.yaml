@@ -1,0 +1,594 @@
+# OS Configuration Templates for Motif Testing
+# This file defines the configuration for different operating systems
+# used in the Motif development environment
+
+# Template structure:
+# os_name:
+#   base_image: "docker_image:tag"
+#   description: "Human readable description"
+#   package_manager: "package_manager_name"
+#   commands:
+#     update: "command to update package lists"
+#     install: "command to install packages"
+#     cleanup: "command to clean package cache"
+#   packages:
+#     base_tools: [list of base development packages]
+#     x11_deps: [list of X11 development packages]
+#     additional_libs: [list of additional libraries]
+#     build_tools: [list of build tools]
+#     doc_tools: [list of documentation tools]
+#   environment:
+#     compiler: "default compiler"
+#     cflags: "default CFLAGS"
+#     cxxflags: "default CXXFLAGS"
+#     ldflags: "default LDFLAGS"
+#     custom_vars: [list of custom environment variables]
+
+archlinux:
+  base_image: "docker.io/archlinux:latest"
+  description: "Arch Linux"
+  package_manager: "pacman"
+  commands:
+    update: "pacman -Syu --noconfirm"
+    install: "pacman -S --noconfirm"
+    cleanup: "pacman -Scc --noconfirm"
+  packages:
+    base_tools:
+      - base-devel
+      - git
+      - autoconf
+      - automake
+      - libtool
+      - pkgconf
+      - make
+      - gcc
+      - clang
+      - cmake
+      - ninja
+      - gdb
+      - valgrind
+      - strace
+      - ltrace
+      - time
+      - which
+      - file
+      - binutils
+      - coreutils
+      - findutils
+      - grep
+      - sed
+      - gawk
+      - tar
+      - gzip
+      - xz
+      - bzip2
+      - unzip
+      - curl
+      - wget
+    x11_deps:
+      - xorg-server-devel
+      - xorg-util-macros
+      - libx11
+      - libxt
+      - libxmu
+      - libxpm
+      - libxext
+      - libxft
+      - libxrender
+      - libxrandr
+      - libxi
+      - libxinerama
+      - libxcursor
+      - libxdamage
+      - libxfixes
+      - libxcomposite
+      - libxss
+      - libxtst
+      - libxv
+      - libxvmc
+      - libxxf86vm
+      - libxres
+      - libsm
+      - libice
+      - libxau
+      - libxdmcp
+      - libxcb
+      - xcb-util
+      - xcb-util-image
+      - xcb-util-keysyms
+      - xcb-util-renderutil
+      - xcb-util-wm
+      - xcb-util-xrm
+    additional_libs:
+      - fontconfig
+      - freetype2
+      - libpng
+      - libjpeg-turbo
+      - libtiff
+      - zlib
+      - bzip2
+      - expat
+      - libxml2
+      - libxslt
+      - openssl
+      - glibc
+      - glib2
+      - pcre
+      - pcre2
+    build_tools:
+      - flex
+      - bison
+      - m4
+      - gettext
+      - intltool
+      - patch
+      - diffutils
+      - dos2unix
+    doc_tools:
+      - man-db
+      - man-pages
+      - texinfo
+      - help2man
+      - doxygen
+      - graphviz
+  environment:
+    compiler: "gcc"
+    cflags: "-O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"
+    cxxflags: "-O2 -pipe -fno-plt -fexceptions -Wp,-D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -fstack-clash-protection -fcf-protection"
+    ldflags: "-Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now"
+    custom_vars: []
+
+ubuntu:
+  base_image: "docker.io/ubuntu:22.04"
+  description: "Ubuntu 22.04 LTS"
+  package_manager: "apt"
+  commands:
+    update: "apt-get update"
+    install: "apt-get install -y"
+    cleanup: "rm -rf /var/lib/apt/lists/*"
+  packages:
+    base_tools:
+      - build-essential
+      - git
+      - autoconf
+      - automake
+      - libtool
+      - pkg-config
+      - make
+      - gcc
+      - g++
+      - clang
+      - llvm
+      - cmake
+      - ninja-build
+      - gdb
+      - valgrind
+      - strace
+      - ltrace
+      - time
+      - file
+      - binutils
+      - coreutils
+      - findutils
+      - grep
+      - sed
+      - gawk
+      - tar
+      - gzip
+      - xz-utils
+      - bzip2
+      - unzip
+      - curl
+      - wget
+      - ca-certificates
+    x11_deps:
+      - xorg-dev
+      - libx11-dev
+      - libxt-dev
+      - libxmu-dev
+      - libxpm-dev
+      - libxext-dev
+      - libxft-dev
+      - libxrender-dev
+      - libxrandr-dev
+      - libxi-dev
+      - libxinerama-dev
+      - libxcursor-dev
+      - libxdamage-dev
+      - libxfixes-dev
+      - libxcomposite-dev
+      - libxss-dev
+      - libxtst-dev
+      - libxv-dev
+      - libxxf86vm-dev
+      - libxres-dev
+      - libsm-dev
+      - libice-dev
+      - libxau-dev
+      - libxdmcp-dev
+      - libxcb1-dev
+      - libxcb-util-dev
+      - libxcb-image0-dev
+      - libxcb-keysyms1-dev
+      - libxcb-render-util0-dev
+      - libxcb-xkb-dev
+      - libxcb-icccm4-dev
+      - libxcb-ewmh-dev
+    additional_libs:
+      - libfontconfig1-dev
+      - libfreetype6-dev
+      - libpng-dev
+      - libjpeg62-turbo-dev
+      - libtiff5-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libexpat1-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - libssl-dev
+      - libc6-dev
+      - libglib2.0-dev
+      - libpcre3-dev
+      - libpcre2-dev
+    build_tools:
+      - flex
+      - bison
+      - byacc
+      - m4
+      - gettext
+      - intltool
+      - patch
+      - diffutils
+      - dos2unix
+    doc_tools:
+      - man-db
+      - manpages-dev
+      - texinfo
+      - help2man
+      - doxygen
+      - graphviz
+  environment:
+    compiler: "gcc"
+    cflags: "-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches"
+    cxxflags: "-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches"
+    ldflags: "-Wl,-z,relro -Wl,--as-needed"
+    custom_vars: []
+
+freebsd:
+  base_image: "docker.io/debian:bookworm-slim"
+  description: "FreeBSD-like environment (Debian-based)"
+  package_manager: "apt"
+  commands:
+    update: "apt-get update"
+    install: "apt-get install -y"
+    cleanup: "rm -rf /var/lib/apt/lists/*"
+  packages:
+    base_tools:
+      - build-essential
+      - git
+      - autoconf
+      - automake
+      - libtool
+      - pkg-config
+      - make
+      - gcc
+      - g++
+      - clang
+      - llvm
+      - cmake
+      - ninja-build
+      - gdb
+      - valgrind
+      - strace
+      - ltrace
+      - time
+      - file
+      - binutils
+      - coreutils
+      - findutils
+      - grep
+      - sed
+      - gawk
+      - tar
+      - gzip
+      - xz-utils
+      - bzip2
+      - unzip
+      - curl
+      - wget
+      - ca-certificates
+    x11_deps:
+      - xorg-dev
+      - libx11-dev
+      - libxt-dev
+      - libxmu-dev
+      - libxpm-dev
+      - libxext-dev
+      - libxft-dev
+      - libxrender-dev
+      - libxrandr-dev
+      - libxi-dev
+      - libxinerama-dev
+      - libxcursor-dev
+      - libxdamage-dev
+      - libxfixes-dev
+      - libxcomposite-dev
+      - libxss-dev
+      - libxtst-dev
+      - libxv-dev
+      - libxxf86vm-dev
+      - libxres-dev
+      - libsm-dev
+      - libice-dev
+      - libxau-dev
+      - libxdmcp-dev
+      - libxcb1-dev
+      - libxcb-util-dev
+      - libxcb-image0-dev
+      - libxcb-keysyms1-dev
+      - libxcb-render-util0-dev
+      - libxcb-xkb-dev
+      - libxcb-icccm4-dev
+      - libxcb-ewmh-dev
+    additional_libs:
+      - libfontconfig1-dev
+      - libfreetype6-dev
+      - libpng-dev
+      - libjpeg62-turbo-dev
+      - libtiff5-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libexpat1-dev
+      - libxml2-dev
+      - libxslt1-dev
+      - libssl-dev
+      - libc6-dev
+      - libglib2.0-dev
+      - libpcre3-dev
+      - libpcre2-dev
+    build_tools:
+      - flex
+      - bison
+      - byacc
+      - m4
+      - gettext
+      - intltool
+      - patch
+      - diffutils
+      - dos2unix
+    doc_tools:
+      - man-db
+      - manpages-dev
+      - texinfo
+      - help2man
+      - doxygen
+      - graphviz
+  environment:
+    compiler: "clang"
+    cflags: "-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+    cxxflags: "-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+    ldflags: "-L/usr/local/lib -Wl,--as-needed"
+    custom_vars:
+      - "OPSYS=FreeBSD"
+      - "OSVERSION=1400000"
+      - "UNAME_s=FreeBSD"
+      - "UNAME_r=14.0-RELEASE"
+      - "UNAME_m=amd64"
+
+centos:
+  base_image: "quay.io/centos/centos:stream9"
+  description: "CentOS Stream 9"
+  package_manager: "dnf"
+  commands:
+    update: "dnf update -y"
+    install: "dnf install -y"
+    cleanup: "dnf clean all"
+  packages:
+    base_tools:
+      - "@Development Tools"
+      - git
+      - autoconf
+      - automake
+      - libtool
+      - pkgconf-devel
+      - make
+      - gcc
+      - gcc-c++
+      - clang
+      - llvm
+      - cmake
+      - ninja-build
+      - gdb
+      - valgrind
+      - strace
+      - ltrace
+      - time
+      - file
+      - binutils
+      - coreutils
+      - findutils
+      - grep
+      - sed
+      - gawk
+      - tar
+      - gzip
+      - xz
+      - bzip2
+      - unzip
+      - curl
+      - wget
+    x11_deps:
+      - xorg-x11-proto-devel
+      - libX11-devel
+      - libXt-devel
+      - libXmu-devel
+      - libXpm-devel
+      - libXext-devel
+      - libXft-devel
+      - libXrender-devel
+      - libXrandr-devel
+      - libXi-devel
+      - libXinerama-devel
+      - libXcursor-devel
+      - libXdamage-devel
+      - libXfixes-devel
+      - libXcomposite-devel
+      - libXScrnSaver-devel
+      - libXtst-devel
+      - libXv-devel
+      - libXvMC-devel
+      - libXxf86vm-devel
+      - libXRes-devel
+      - libSM-devel
+      - libICE-devel
+      - libXau-devel
+      - libXdmcp-devel
+      - libxcb-devel
+    additional_libs:
+      - fontconfig-devel
+      - freetype-devel
+      - libpng-devel
+      - libjpeg-turbo-devel
+      - libtiff-devel
+      - zlib-devel
+      - bzip2-devel
+      - expat-devel
+      - libxml2-devel
+      - libxslt-devel
+      - openssl-devel
+      - glibc-devel
+      - glib2-devel
+      - pcre-devel
+      - pcre2-devel
+    build_tools:
+      - flex
+      - bison
+      - byacc
+      - m4
+      - gettext-devel
+      - intltool
+      - patch
+      - diffutils
+      - dos2unix
+    doc_tools:
+      - man-db
+      - man-pages
+      - texinfo
+      - help2man
+      - doxygen
+      - graphviz
+  environment:
+    compiler: "gcc"
+    cflags: "-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches"
+    cxxflags: "-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches"
+    ldflags: "-Wl,-z,relro -Wl,--as-needed -Wl,-z,now"
+    custom_vars: []
+
+fedora:
+  base_image: "registry.fedoraproject.org/fedora:39"
+  description: "Fedora 39"
+  package_manager: "dnf"
+  commands:
+    update: "dnf update -y"
+    install: "dnf install -y"
+    cleanup: "dnf clean all"
+  packages:
+    base_tools:
+      - "@Development Tools"
+      - git
+      - autoconf
+      - automake
+      - libtool
+      - pkgconf-devel
+      - make
+      - gcc
+      - gcc-c++
+      - clang
+      - llvm
+      - cmake
+      - ninja-build
+      - gdb
+      - valgrind
+      - strace
+      - ltrace
+      - time
+      - file
+      - binutils
+      - coreutils
+      - findutils
+      - grep
+      - sed
+      - gawk
+      - tar
+      - gzip
+      - xz
+      - bzip2
+      - unzip
+      - curl
+      - wget
+    x11_deps:
+      - xorg-x11-proto-devel
+      - libX11-devel
+      - libXt-devel
+      - libXmu-devel
+      - libXpm-devel
+      - libXext-devel
+      - libXft-devel
+      - libXrender-devel
+      - libXrandr-devel
+      - libXi-devel
+      - libXinerama-devel
+      - libXcursor-devel
+      - libXdamage-devel
+      - libXfixes-devel
+      - libXcomposite-devel
+      - libXScrnSaver-devel
+      - libXtst-devel
+      - libXv-devel
+      - libXvMC-devel
+      - libXxf86vm-devel
+      - libXRes-devel
+      - libSM-devel
+      - libICE-devel
+      - libXau-devel
+      - libXdmcp-devel
+      - libxcb-devel
+    additional_libs:
+      - fontconfig-devel
+      - freetype-devel
+      - libpng-devel
+      - libjpeg-turbo-devel
+      - libtiff-devel
+      - zlib-devel
+      - bzip2-devel
+      - expat-devel
+      - libxml2-devel
+      - libxslt-devel
+      - openssl-devel
+      - glibc-devel
+      - glib2-devel
+      - pcre-devel
+      - pcre2-devel
+    build_tools:
+      - flex
+      - bison
+      - byacc
+      - m4
+      - gettext-devel
+      - intltool
+      - patch
+      - diffutils
+      - dos2unix
+    doc_tools:
+      - man-db
+      - man-pages
+      - texinfo
+      - help2man
+      - doxygen
+      - graphviz
+  environment:
+    compiler: "gcc"
+    cflags: "-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches"
+    cxxflags: "-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches"
+    ldflags: "-Wl,-z,relro -Wl,--as-needed -Wl,-z,now"
+    custom_vars: []
