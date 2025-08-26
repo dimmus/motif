@@ -168,7 +168,7 @@ static MaskTableEntry modifierStrings[] = {
 typedef struct {
    char         *event;
    unsigned int  eventType;
-   Boolean       (*parseProc)();
+   Boolean       (*parseProc)(unsigned char **linePP, unsigned int closure, unsigned int *detail);
    unsigned int  closure;
    Boolean       fClick;
 } EventTableEntry;
@@ -368,7 +368,7 @@ typedef struct {
    unsigned int   resource;
    long           mgtMask;
    WmFunction     wmFunction;
-   Boolean       (*parseProc)();
+   Boolean       (*parseProc)(unsigned char **linePP, WmFunction wmFunction, String *pArgs);
 } FunctionTableEntry;
 
 
@@ -4591,7 +4591,7 @@ static void ParseButtonSet (WmScreenData *pSD, unsigned char *lineP)
             PWarning (((char *)GETMESSAGE(60, 22, "Insufficient memory for button specification")));
             continue;
 	}
-	buttonSpec->wmFunction = (WmFunction)NULL;
+	buttonSpec->wmFunction = NULL;
 	buttonSpec->wmFuncArgs = NULL;
 	buttonSpec->nextButtonSpec = NULL;
 
@@ -5001,7 +5001,7 @@ static void ParseKeySet (WmScreenData *pSD, unsigned char *lineP)
             continue;
 	}
 
-	keySpec->wmFunction = (WmFunction)NULL;
+	keySpec->wmFunction = NULL;
 	keySpec->wmFuncArgs = NULL;
 	keySpec->nextKeySpec = NULL;
 
@@ -8075,7 +8075,7 @@ MenuItem *MakeSeparatorTemplate (int position)
     item->accelState = 0;
     item->accelKeyCode = (KeyCode) 0;
     item->accelText = (String) NULL;
-    item->wmFunction = (WmFunction) F_Separator;
+    item->wmFunction = F_Separator;
     item->wmFuncArgs = (String) NULL;
     item->greyedContext = 0;
     item->mgtMask = 0;
