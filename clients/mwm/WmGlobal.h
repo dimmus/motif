@@ -449,6 +449,10 @@ typedef unsigned long Context;
 typedef unsigned long Behavior;
 typedef unsigned long GroupArg;
 
+/* Forward declaration for ClientData */
+struct _ClientData;
+typedef struct _ClientData ClientData;
+
 typedef Boolean (*WmFunction) (String args, ClientData *pCD, XEvent *event);
 
 #define NO_MODIFIER	0		/* value for state field */
@@ -1903,7 +1907,7 @@ typedef struct _ClientData
 
     long	window_status;			/* used for Tear-off Menus */
 
-} ClientData;
+};
 
 typedef struct _ClientData *PtrClientData;
 
