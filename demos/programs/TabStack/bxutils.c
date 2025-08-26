@@ -111,11 +111,7 @@
  */
 #if defined(LOCAL_STRCASECMP)
 #define STRCASECMP	StrCasecmp
-#ifndef NeedFunctionPrototypes
-static int StrCasecmp();
-#else
 static int StrCasecmp(char*, char*);
-#endif
 #else
 #define STRCASECMP	strcasecmp
 #endif
@@ -157,24 +153,6 @@ enum { WNull, WTab, WNewLine, WCarriageReturn, WFormFeed, WVerticalTab,
  *	STATIC DECLARATION
  *****************************************************************************/
 
-#ifndef NeedFunctionPrototypes
-
-#ifndef SUPPORTS_WCHARS
-static int	 mblen			();
-#endif
-static int	strlenWc		();
-static size_t	doMbstowcs		();
-static size_t	doWcstombs 		();
-static void	copyWcsToMbs		();
-static int 	dombtowc		();
-static Boolean	extractSegment		();
-static XmString	StringToXmString	();
-static char*	getNextCStrDelim	();
-static int	getCStrCount		();
-static wchar_t *CStrCommonWideCharsGet	();
-
-#else
-
 #ifndef SUPPORTS_WCHARS
 static int 	mblen			(char*, size_t);
 #endif
@@ -189,8 +167,6 @@ static XmString	StringToXmString	(char*);
 static char*	getNextCStrDelim	(char*);
 static int	getCStrCount		(char*);
 static wchar_t *CStrCommonWideCharsGet	();
-
-#endif
 
 /*****************************************************************************
  *	STATIC CODE
