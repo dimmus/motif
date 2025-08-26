@@ -16,19 +16,19 @@ The development environment consists of:
 
 ```
 tools/dev/env/
-├── README.md                 # This documentation
+├── README.md                # This documentation
 ├── test-motif.sh            # Main test runner script
 ├── add-os.sh                # Script to add new OS environments
 ├── containers/              # Container definitions
 │   ├── Dockerfile.archlinux # Arch Linux container
 │   └── Dockerfile.freebsd   # FreeBSD container
 ├── scripts/                 # Build scripts
-│   └── build-motif.sh      # Container build script
+│   └── build-motif.sh       # Container build script
 ├── templates/               # Template system
 │   ├── Dockerfile.template  # Dockerfile template
-│   └── os-config.yaml      # OS configuration definitions
-└── logs/                   # Test execution logs
-    └── YYYYMMDD_HHMMSS/    # Timestamped log sessions
+│   └── os-config.yaml       # OS configuration definitions
+└── logs/                    # Test execution logs
+    └── YYYYMMDD_HHMMSS/     # Timestamped log sessions
 ```
 
 ## Quick Start
