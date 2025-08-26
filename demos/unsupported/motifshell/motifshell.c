@@ -683,7 +683,7 @@ void Quit(int i)
  *-------------------------------------------------------------*/
 void Menu1CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int   itemNo = (int)clientData;
+  int   itemNo = (int)(long)clientData;
 
   switch (itemNo)
     {
@@ -698,7 +698,7 @@ void Menu1CB (Widget w, XtPointer clientData, XtPointer callData)
  *-------------------------------------------------------------*/
 void Menu2CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int        itemNo = (int)clientData;
+  int        itemNo = (int)(long)clientData;
   char      *buffer = NULL;
   XmString   labelStr;
 
@@ -723,7 +723,7 @@ void Menu2CB (Widget w, XtPointer clientData, XtPointer callData)
  *-------------------------------------------------------------*/
 void Menu3CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int      itemNo = (int)clientData;
+  int      itemNo = (int)(long)clientData;
   XmString labelStr;
 
 
@@ -745,7 +745,7 @@ void Menu3CB (Widget w, XtPointer clientData, XtPointer callData)
  *-------------------------------------------------------------*/
 void Menu4CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int       itemNo = (int)clientData;
+  int       itemNo = (int)(long)clientData;
   char     *buffer;
   XmString  labelStr;
 
@@ -793,7 +793,7 @@ void Menu4CB (Widget w, XtPointer clientData, XtPointer callData)
  *-------------------------------------------------------------*/
 void Menu5CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int itemNo = (int)clientData;
+  int itemNo = (int)(long)clientData;
 
   switch (itemNo)
     {
@@ -810,7 +810,7 @@ void Menu5CB (Widget w, XtPointer clientData, XtPointer callData)
  *-------------------------------------------------------------*/
 void Menu6CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int itemNo = (int)clientData;
+  int itemNo = (int)(long)clientData;
 
   switch (itemNo)
     {
@@ -829,7 +829,7 @@ void Menu6CB (Widget w, XtPointer clientData, XtPointer callData)
  *-------------------------------------------------------------*/
 void Menu7CB (Widget w, XtPointer clientData, XtPointer callData)
 {
-  int itemNo = (int)clientData;
+  int itemNo = (int)(long)clientData;
 
 
   switch (itemNo)

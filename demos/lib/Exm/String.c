@@ -1010,7 +1010,7 @@ StringGetValue(
          /* Unparse "value" into either MULTIBYTE or WCS format. */
            result = XmStringUnparse (value,
                                      (XmStringTag) NULL,
-                                     (XmTextType)NULL,
+                                     XmNO_TEXT,
                                      (XmTextType)output_type,
                                      (XmParseTable)map,
                                      XtNumber(map),

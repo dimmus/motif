@@ -68,7 +68,7 @@ UARG( Widget, w)
 ARG( XtPointer, client)
 GRAU( XtPointer, call)
 {
-    int		exitValue = (int)client;
+    int		exitValue = (int)(long)client;
 
     exit(exitValue);
 }

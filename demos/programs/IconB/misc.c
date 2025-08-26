@@ -1384,13 +1384,13 @@ XtPointer CONVERT
 	switch(toVal.size)
 	{
 	case 1:
-	    val = (XTPOINTER)(*(char*)toVal.addr);
+	    val = (XTPOINTER)(long)(*(char*)toVal.addr);
 	    break;
 	case 2:
-	    val = (XTPOINTER)(*(short*)toVal.addr);
+	    val = (XTPOINTER)(long)(*(short*)toVal.addr);
 	    break;
 	case 4:
-	    val = (XTPOINTER)(*(int*)toVal.addr);
+	    val = (XTPOINTER)(long)(*(int*)toVal.addr);
 	    break;
 	case 8:
 	default:

@@ -997,7 +997,7 @@ OrientationCB (Widget		w,		/*  widget id		*/
 {
     Arg args[1] ;
 
-    rc_data.orientation = (unsigned char) (int) client_data ;
+    rc_data.orientation = (unsigned char) (int)(long) client_data ;
 
     if (rc_data.num_children) {
 	XtSetArg(args[0], XmNorientation, client_data);
@@ -1016,7 +1016,7 @@ EntryAlignmentCB (Widget	w,		/*  widget id		*/
 {
     Arg args[1] ;
 
-    rc_data.entry_alignment = (unsigned char) (int) client_data ;
+    rc_data.entry_alignment = (unsigned char) (int)(long) client_data ;
 
     if (rc_data.num_children) {
 	XtSetArg(args[0], XmNentryAlignment, client_data);
@@ -1035,7 +1035,7 @@ PackingCB (Widget	w,		/*  widget id		*/
 {
     Arg args[1] ;
 
-    rc_data.packing = (unsigned char) (int) client_data ;
+    rc_data.packing = (unsigned char) (int)(long) client_data ;
 
     if (rc_data.num_children) {
 	XtSetArg(args[0], XmNpacking, client_data);

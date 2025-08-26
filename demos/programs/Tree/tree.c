@@ -739,7 +739,7 @@ ScaleCB(Widget w, XtPointer client, XtPointer call)
 {
 	XmScaleCallbackStruct *cbs = (XmScaleCallbackStruct *)call;
 
-	XtVaSetValues(G_tree, resources[(int)client], cbs->value, NULL);
+	XtVaSetValues(G_tree, resources[(int)(long)client], cbs->value, NULL);
 }
 
 /*
@@ -950,7 +950,7 @@ void MakeControlPanel(Widget right_pane)
 		XtVaGetValues(G_tree, resources[i], &val, NULL);
 		XtSetArg(local_args[n], XmNvalue, val); n++;
 		scale = XmCreateScale(rightBbox, resources[i], local_args, n);
-		XtAddCallback(scale, XmNvalueChangedCallback, ScaleCB, (XtPointer)i);
+		XtAddCallback(scale, XmNvalueChangedCallback, ScaleCB, (XtPointer)(long)i);
 		XtManageChild(scale);
 		}
 	}

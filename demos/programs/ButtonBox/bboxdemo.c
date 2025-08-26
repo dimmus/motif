@@ -82,7 +82,7 @@ void Equal(Widget w, XtPointer client, XtPointer call)
     Cardinal argcnt;
     Boolean equal;
 
-    if ((int)client == 1)
+    if ((int)(long)client == 1)
         equal = True;
     else
         equal = False;
@@ -112,7 +112,7 @@ void Width(Widget w, XtPointer client, XtPointer call)
     margin = atoi(val);
 
     argcnt = 0;
-    if ((int)client == 1)
+    if ((int)(long)client == 1)
     {
         XtSetArg(args[argcnt], XmNmarginHeight, (short) margin); argcnt++;
     }
@@ -137,7 +137,7 @@ void Fill(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;
-    int val = (int)client;
+    int val = (int)(long)client;
 
     argcnt = 0;
     switch (val) {
@@ -190,7 +190,7 @@ void Orient(Widget w, XtPointer client, XtPointer call)
     Cardinal argcnt;
     unsigned char orient;
 
-    if ((int)client == 1)
+    if ((int)(long)client == 1)
         orient = XmVERTICAL;
     else
         orient = XmHORIZONTAL;
@@ -214,7 +214,7 @@ void Explain(Widget w, XtPointer client, XtPointer call)
     Cardinal argcnt;
     XmString xmstring = NULL;
     static Widget info = NULL;
-    int explain = (int) client;
+    int explain = (int)(long) client;
 
     if (info == NULL) {
         Widget temp;

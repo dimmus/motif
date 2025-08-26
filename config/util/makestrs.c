@@ -236,7 +236,7 @@ WriteHeader (char* tagline, File* phile, int abi)
 {
     FILE* f;
     char* tmp;
-    static void (*headerproc[])() = { DefaultWriteHeader, ArrayperWriteHeader,
+    static void (*headerproc[])(FILE*, File*) = { DefaultWriteHeader, ArrayperWriteHeader,
 	                                  IntelABIWriteHeader, IntelABIWriteHeader,
 	                                  SPARCABIWriteHeader, FunctionWriteHeader };
 
@@ -402,7 +402,7 @@ DefaultWriteSource (int abi)
 static void
 WriteSource(char* tagline, int abi)
 {
-    static void (*sourceproc[])() = {
+    static void (*sourceproc[])(int) = {
 	DefaultWriteSource, ArrayperWriteSource,
 	IntelABIWriteSource, IntelABIBCWriteSource,
 	DefaultWriteSource, FunctionWriteSource };

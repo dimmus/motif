@@ -202,7 +202,7 @@ void Explain(Widget w, XtPointer client, XtPointer call)
     Cardinal argcnt;
     XmString xmstring =0 ;
     static Widget info = NULL;
-    int explain = (int) client;
+    int explain = (int)(long) client;
 
     if (info == NULL) {
         Widget temp;

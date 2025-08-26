@@ -453,7 +453,7 @@ static void copyWcsToMbs
     }
 
     tmp = tbuf[lenToConvert];
-    tbuf[lenToConvert] = (unsigned)NULL;
+    tbuf[lenToConvert] = (unsigned)(long)NULL;
     numCvt = doWcstombs(mbs, tbuf, lenToConvert);
     tbuf[lenToConvert] = tmp;
 
@@ -1435,13 +1435,13 @@ XtPointer CONVERT
 	switch(toVal.size)
 	{
 	case 1:
-	    val = (XTPOINTER)(*(char*)toVal.addr);    /* may be here exists bug ! */
+	    val = (XTPOINTER)(long)(*(char*)toVal.addr);    /* may be here exists bug ! */
 	    break;
 	case 2:
-	    val = (XTPOINTER)(*(short*)toVal.addr);   /* may be here exists bug ! */
+	    val = (XTPOINTER)(long)(*(short*)toVal.addr);   /* may be here exists bug ! */
 	    break;
 	case 4:
-	    val = (XTPOINTER)(*(int*)toVal.addr);     /* may be here exists bug ! */
+	    val = (XTPOINTER)(long)(*(int*)toVal.addr);     /* may be here exists bug ! */
 	    break;
 	case 8:
 	default:
