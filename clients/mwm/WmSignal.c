@@ -165,7 +165,7 @@ RestoreDefaultSignalHandlers (void)
 
 void SetupWmSignalHandlers (int dummy)
 {
-    void (*signalHandler) ();
+    void (*signalHandler) (int);
 
 #ifdef WSM
     struct sigaction 	sa;
@@ -223,14 +223,14 @@ void SetupWmSignalHandlers (int dummy)
 
 #else /* not WSM - original mwm code*/
 
-    signalHandler = (void (*)())signal (SIGINT, SIG_IGN);
-    if (signalHandler != (void (*)())SIG_IGN)
+    signalHandler = signal (SIGINT, SIG_IGN);
+    if (signalHandler != SIG_IGN)
     {
 	signal (SIGINT, QuitWmSignalHandler);
     }
 
-    signalHandler = (void (*)())signal (SIGHUP, SIG_IGN);
-    if (signalHandler != (void (*)())SIG_IGN)
+    signalHandler = signal (SIGHUP, SIG_IGN);
+    if (signalHandler != SIG_IGN)
     {
 	signal (SIGHUP, QuitWmSignalHandler);
     }
@@ -295,11 +295,11 @@ void ChildProcSignalHandler (int dummy)
 {
    pid_t pid;
    int status;
-   void (*intStat) ();
-   void (*quitStat) ();
+   void (*intStat) (int);
+   void (*quitStat) (int);
 
-   intStat = (void (*)())signal (SIGINT, SIG_IGN);
-   quitStat = (void (*)())signal (SIGQUIT, SIG_IGN);
+   intStat = signal (SIGINT, SIG_IGN);
+   quitStat = signal (SIGQUIT, SIG_IGN);
 
    pid = wait(&status);
    signal(SIGCHLD, ChildProcSignalHandler);

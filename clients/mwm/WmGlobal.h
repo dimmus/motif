@@ -449,7 +449,7 @@ typedef unsigned long Context;
 typedef unsigned long Behavior;
 typedef unsigned long GroupArg;
 
-typedef Boolean (*WmFunction) ();
+typedef Boolean (*WmFunction) (String args, ClientData *pCD, XEvent *event);
 
 #define NO_MODIFIER	0		/* value for state field */
 
