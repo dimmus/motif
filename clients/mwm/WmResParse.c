@@ -368,7 +368,7 @@ typedef struct {
    unsigned int   resource;
    long           mgtMask;
    WmFunction     wmFunction;
-   Boolean       (*parseProc)(unsigned char **linePP, WmFunction wmFunction, String *pArgs);
+   Boolean       (*parseProc)(unsigned char **linePP, WmFunction wmFunction, void *pArgs);
 } FunctionTableEntry;
 
 

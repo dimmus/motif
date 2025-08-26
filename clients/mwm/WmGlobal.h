@@ -1907,7 +1907,7 @@ typedef struct _ClientData
 
     long	window_status;			/* used for Tear-off Menus */
 
-};
+} _ClientData;
 
 typedef struct _ClientData *PtrClientData;
 

@@ -1262,7 +1262,7 @@ Boolean HandleKeyPress (XKeyEvent *keyEvent,
 		}
 #endif /* ROOT_ICON_MENU */
 	      if (!(keySpecs->wmFunction (keySpecs->wmFuncArgs,
-					  functionClient, keyEvent)))
+					  functionClient, (XEvent *)keyEvent)))
 		{
 		  /*
 		   * The window manager function return indicates that further
@@ -1554,7 +1554,7 @@ Boolean CheckForButtonAction (XButtonEvent *buttonEvent, Context context, Contex
 		}
 
 	        if (!(buttonSpec->wmFunction (buttonSpec->wmFuncArgs, pCD,
-					      buttonEvent)))
+					      (XEvent *)buttonEvent)))
 		{
 		    /*
 		     * The window manager function return indicates that
