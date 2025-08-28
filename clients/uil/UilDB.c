@@ -873,7 +873,6 @@ void db_open_file ()
 String get_root_dir_name()
 {
 	int uid;
-	_Xgetpwparams pwd_buf;
 	struct passwd *pwd_value;
 	static char *ptr = NULL;
 	char *outptr;
@@ -884,12 +883,12 @@ String get_root_dir_name()
 	    {
 	    if((ptr = (char *)getenv(USER_VAR)) != NULL)
 		{
-		pwd_value = _XGetpwnam(ptr, pwd_buf);
+		pwd_value = getpwnam(ptr);
 		}
 	    else
 		{
 		uid = getuid();
-		pwd_value = _XGetpwuid(uid, pwd_buf);
+		pwd_value = getpwuid(uid);
 		}
 	    if (pwd_value != NULL)
 		{

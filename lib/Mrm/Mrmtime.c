@@ -108,11 +108,11 @@ Urm__UT_Time (char		*time_stg)
   long		timeval;
 #endif /* __STDC__ */
 
-  _Xctimeparams ctime_buf;
   char *result;
 
   time (&timeval);
-  if ((result = _XCtime(&timeval, ctime_buf)) != NULL)
+  result = ctime(&timeval);
+  if (result != NULL)
     strcpy(time_stg, result);
   else
     *time_stg = 0;

@@ -215,7 +215,7 @@ GetQualifiedDir(String dirSpec)
  ****************/
 {
   int             dirSpecLen;
-  _Xgetpwparams	  pwd_buf;
+
   struct passwd * pwd_value;
 
   char *          userDir;
@@ -257,7 +257,7 @@ GetQualifiedDir(String dirSpec)
 	    }
 	  *destPtr = '\0';
 
-	  pwd_value = _XGetpwnam(nameBuf, pwd_buf);
+	  pwd_value = getpwnam(nameBuf);
 	  if (pwd_value != NULL)
 	    {
 	      userDirLen = strlen(pwd_value->pw_dir);
@@ -968,7 +968,7 @@ String
 XmeGetHomeDirName(void)
 {
   uid_t uid;
-  _Xgetpwparams	pwd_buf;
+
   struct passwd * pwd_value;
 
   char *ptr = NULL;
@@ -981,11 +981,11 @@ XmeGetHomeDirName(void)
       if ((ptr = (char *)getenv("HOME")) == NULL)
 	{
 	  if ((ptr = (char *)getenv(USER_VAR)) != NULL)
-	    pwd_value = _XGetpwnam(ptr, pwd_buf);
+	    pwd_value = getpwnam(ptr);
 	  else
 	    {
 	      uid = getuid();
-	      pwd_value = _XGetpwuid(uid, pwd_buf);
+	      pwd_value = getpwuid(uid);
             }
 
 	  if (pwd_value != NULL)

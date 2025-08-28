@@ -122,6 +122,7 @@ void	lst_open_listing()
     status  open_status;
     _Xctimeparams	ctime_buf;
 
+
     /* allocate fcb */
 
     lst_az_fcb = (uil_fcb_type *)XtMalloc( sizeof( uil_fcb_type ) );
@@ -384,7 +385,7 @@ char	*current_time(_Xctimeparams *ctime_buf)
 
     time_location = time( 0 );
 
-    ascii_time = _XCtime( &time_location, *ctime_buf );
+    ascii_time = ctime( &time_location );
 
     ascii_time[24] = 0;
 
