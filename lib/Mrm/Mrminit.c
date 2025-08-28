@@ -253,315 +253,315 @@ void MrmInitialize (void)
 #endif
 
   MrmRegisterClass
-    (0, NULL, "XmCreateArrowButton", XmCreateArrowButton,
+    (0, NULL, "XmCreateArrowButton", (Widget (*)())XmCreateArrowButton,
      (WidgetClass)&xmArrowButtonClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateArrowButtonGadget", XmCreateArrowButtonGadget,
+    (0, NULL, "XmCreateArrowButtonGadget", (Widget (*)())XmCreateArrowButtonGadget,
      (WidgetClass)&xmArrowButtonGadgetClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateBulletinBoard", XmCreateBulletinBoard,
+    (0, NULL, "XmCreateBulletinBoard", (Widget (*)())XmCreateBulletinBoard,
      (WidgetClass)&xmBulletinBoardClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateBulletinBoardDialog", XmCreateBulletinBoardDialog,
+    (0, NULL, "XmCreateBulletinBoardDialog", (Widget (*)())XmCreateBulletinBoardDialog,
      (WidgetClass)&xmBulletinBoardClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateButtonBox", XmCreateButtonBox,
+    (0, NULL, "XmCreateButtonBox", (Widget (*)())XmCreateButtonBox,
      (WidgetClass)&xmButtonBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateCascadeButton", XmCreateCascadeButton,
+    (0, NULL, "XmCreateCascadeButton", (Widget (*)())XmCreateCascadeButton,
      (WidgetClass)&xmCascadeButtonClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateCascadeButtonGadget", XmCreateCascadeButtonGadget,
+    (0, NULL, "XmCreateCascadeButtonGadget", (Widget (*)())XmCreateCascadeButtonGadget,
      (WidgetClass)&xmCascadeButtonGadgetClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateColumn", XmCreateColumn,
+    (0, NULL, "XmCreateColumn", (Widget (*)())XmCreateColumn,
      (WidgetClass)&xmColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateCommand", XmCreateCommand,
+    (0, NULL, "XmCreateCommand", (Widget (*)())XmCreateCommand,
      (WidgetClass)&xmCommandClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateCommandDialog", XmCreateCommandDialog,
+    (0, NULL, "XmCreateCommandDialog", (Widget (*)())XmCreateCommandDialog,
      (WidgetClass)&xmCommandClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateColorSelector", XmCreateColorSelector,
+    (0, NULL, "XmCreateColorSelector", (Widget (*)())XmCreateColorSelector,
      (WidgetClass)&xmColorSelectorClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateDataField", XmCreateDataField,
+    (0, NULL, "XmCreateDataField", (Widget (*)())XmCreateDataField,
      (WidgetClass)&xmDataFieldClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateDialogShell", XmCreateDialogShell,
+    (0, NULL, "XmCreateDialogShell", (Widget (*)())XmCreateDialogShell,
      (WidgetClass)&xmDialogShellClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateDrawingArea", XmCreateDrawingArea,
+    (0, NULL, "XmCreateDrawingArea", (Widget (*)())XmCreateDrawingArea,
      (WidgetClass)&xmDrawingAreaClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateMultiList", XmCreateMultiList,
+    (0, NULL, "XmCreateMultiList", (Widget (*)())XmCreateMultiList,
      (WidgetClass)&xmMultiListClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateDrawnButton", XmCreateDrawnButton,
+    (0, NULL, "XmCreateDrawnButton", (Widget (*)())XmCreateDrawnButton,
      (WidgetClass)&xmDrawnButtonClassRec);
 
    MrmRegisterClass
-    (0, NULL, "XmCreateFileSelectionBox", XmCreateFileSelectionBox,
+    (0, NULL, "XmCreateFileSelectionBox", (Widget (*)())XmCreateFileSelectionBox,
      (WidgetClass)&xmFileSelectionBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateFileSelectionDialog", XmCreateFileSelectionDialog,
+    (0, NULL, "XmCreateFileSelectionDialog", (Widget (*)())XmCreateFileSelectionDialog,
      (WidgetClass)&xmFileSelectionBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateForm", XmCreateForm,
+    (0, NULL, "XmCreateForm", (Widget (*)())XmCreateForm,
      (WidgetClass)&xmFormClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateFontSelector", XmCreateFontSelector,
+    (0, NULL, "XmCreateFontSelector", (Widget (*)())XmCreateFontSelector,
      (WidgetClass)&xmFontSelectorClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateFormDialog", XmCreateFormDialog,
+    (0, NULL, "XmCreateFormDialog", (Widget (*)())XmCreateFormDialog,
      (WidgetClass)&xmFormClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateFrame", XmCreateFrame,
+    (0, NULL, "XmCreateFrame", (Widget (*)())XmCreateFrame,
      (WidgetClass)&xmFrameClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateIconButton", XmCreateIconButton,
+    (0, NULL, "XmCreateIconButton", (Widget (*)())XmCreateIconButton,
      (WidgetClass)&xmIconButtonClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateIconBox", XmCreateIconBox,
+    (0, NULL, "XmCreateIconBox", (Widget (*)())XmCreateIconBox,
      (WidgetClass)&xmIconBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateLabel", XmCreateLabel,
+    (0, NULL, "XmCreateLabel", (Widget (*)())XmCreateLabel,
      (WidgetClass)&xmLabelClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateLabelGadget", XmCreateLabelGadget,
+    (0, NULL, "XmCreateLabelGadget", (Widget (*)())XmCreateLabelGadget,
      (WidgetClass)&xmLabelGadgetClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateList", XmCreateList,
+    (0, NULL, "XmCreateList", (Widget (*)())XmCreateList,
      (WidgetClass)&xmListClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateScrolledList", XmCreateScrolledList,
+    (0, NULL, "XmCreateScrolledList", (Widget (*)())XmCreateScrolledList,
      (WidgetClass)&xmListClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateMainWindow", XmCreateMainWindow,
+    (0, NULL, "XmCreateMainWindow", (Widget (*)())XmCreateMainWindow,
      (WidgetClass)&xmMainWindowClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateMenuShell", XmCreateMenuShell,
+    (0, NULL, "XmCreateMenuShell", (Widget (*)())XmCreateMenuShell,
      (WidgetClass)&xmMenuShellClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateMessageBox", XmCreateMessageBox,
+    (0, NULL, "XmCreateMessageBox", (Widget (*)())XmCreateMessageBox,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateOutline", XmCreateOutline,
+    (0, NULL, "XmCreateOutline", (Widget (*)())XmCreateOutline,
      (WidgetClass)&xmOutlineClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateMessageDialog", XmCreateMessageDialog,
+    (0, NULL, "XmCreateMessageDialog", (Widget (*)())XmCreateMessageDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateErrorDialog", XmCreateErrorDialog,
+    (0, NULL, "XmCreateErrorDialog", (Widget (*)())XmCreateErrorDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateInformationDialog", XmCreateInformationDialog,
+    (0, NULL, "XmCreateInformationDialog", (Widget (*)())XmCreateInformationDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateQuestionDialog", XmCreateQuestionDialog,
+    (0, NULL, "XmCreateQuestionDialog", (Widget (*)())XmCreateQuestionDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateTemplateDialog", XmCreateTemplateDialog,
+    (0, NULL, "XmCreateTemplateDialog", (Widget (*)())XmCreateTemplateDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateWarningDialog", XmCreateWarningDialog,
+    (0, NULL, "XmCreateWarningDialog", (Widget (*)())XmCreateWarningDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateWorkingDialog", XmCreateWorkingDialog,
+    (0, NULL, "XmCreateWorkingDialog", (Widget (*)())XmCreateWorkingDialog,
      (WidgetClass)&xmMessageBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreatePushButton", XmCreatePushButton,
+    (0, NULL, "XmCreatePushButton", (Widget (*)())XmCreatePushButton,
      (WidgetClass)&xmPushButtonClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreatePushButtonGadget", XmCreatePushButtonGadget,
+    (0, NULL, "XmCreatePushButtonGadget", (Widget (*)())XmCreatePushButtonGadget,
      (WidgetClass)&xmPushButtonGadgetClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateRowColumn", XmCreateRowColumn,
+    (0, NULL, "XmCreateRowColumn", (Widget (*)())XmCreateRowColumn,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateWorkArea", XmCreateWorkArea,
+    (0, NULL, "XmCreateWorkArea", (Widget (*)())XmCreateWorkArea,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateRadioBox", XmCreateRadioBox,
+    (0, NULL, "XmCreateRadioBox", (Widget (*)())XmCreateRadioBox,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateMenuBar", XmCreateMenuBar,
+    (0, NULL, "XmCreateMenuBar", (Widget (*)())XmCreateMenuBar,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateOptionMenu", XmCreateOptionMenu,
+    (0, NULL, "XmCreateOptionMenu", (Widget (*)())XmCreateOptionMenu,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreatePopupMenu", XmCreatePopupMenu,
+    (0, NULL, "XmCreatePopupMenu", (Widget (*)())XmCreatePopupMenu,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreatePulldownMenu", XmCreatePulldownMenu,
+    (0, NULL, "XmCreatePulldownMenu", (Widget (*)())XmCreatePulldownMenu,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSimpleCheckBox", XmCreateSimpleCheckBox,
+    (0, NULL, "XmCreateSimpleCheckBox", (Widget (*)())XmCreateSimpleCheckBox,
      (WidgetClass)&xmRowColumnClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateScale", XmCreateScale,
+    (0, NULL, "XmCreateScale", (Widget (*)())XmCreateScale,
      (WidgetClass)&xmScaleClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateScrolledWindow", XmCreateScrolledWindow,
+    (0, NULL, "XmCreateScrolledWindow", (Widget (*)())XmCreateScrolledWindow,
      (WidgetClass)&xmScrolledWindowClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateScrollBar", XmCreateScrollBar,
+    (0, NULL, "XmCreateScrollBar", (Widget (*)())XmCreateScrollBar,
      (WidgetClass)&xmScrollBarClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSelectionBox", XmCreateSelectionBox,
+    (0, NULL, "XmCreateSelectionBox", (Widget (*)())XmCreateSelectionBox,
      (WidgetClass)&xmSelectionBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSelectionDialog", XmCreateSelectionDialog,
+    (0, NULL, "XmCreateSelectionDialog", (Widget (*)())XmCreateSelectionDialog,
      (WidgetClass)&xmSelectionBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreatePromptDialog", XmCreatePromptDialog,
+    (0, NULL, "XmCreatePromptDialog", (Widget (*)())XmCreatePromptDialog,
      (WidgetClass)&xmSelectionBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSeparator", XmCreateSeparator,
+    (0, NULL, "XmCreateSeparator", (Widget (*)())XmCreateSeparator,
      (WidgetClass)&xmSeparatorClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSeparatorGadget", XmCreateSeparatorGadget,
+    (0, NULL, "XmCreateSeparatorGadget", (Widget (*)())XmCreateSeparatorGadget,
      (WidgetClass)&xmSeparatorGadgetClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateTabBox", XmCreateTabBox,
+    (0, NULL, "XmCreateTabBox", (Widget (*)())XmCreateTabBox,
      (WidgetClass)&xmTabBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateTabStack", XmCreateTabStack,
+    (0, NULL, "XmCreateTabStack", (Widget (*)())XmCreateTabStack,
      (WidgetClass)&xmTabStackClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateText", XmCreateText,
+    (0, NULL, "XmCreateText", (Widget (*)())XmCreateText,
      (WidgetClass)&xmTextClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateTextField", XmCreateTextField,
+    (0, NULL, "XmCreateTextField", (Widget (*)())XmCreateTextField,
      (WidgetClass)&xmTextFieldClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateScrolledText", XmCreateScrolledText,
+    (0, NULL, "XmCreateScrolledText", (Widget (*)())XmCreateScrolledText,
      (WidgetClass)&xmTextClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateToggleButton", XmCreateToggleButton,
+    (0, NULL, "XmCreateToggleButton", (Widget (*)())XmCreateToggleButton,
      (WidgetClass)&xmToggleButtonClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateToggleButtonGadget", XmCreateToggleButtonGadget,
+    (0, NULL, "XmCreateToggleButtonGadget", (Widget (*)())XmCreateToggleButtonGadget,
      (WidgetClass)&xmToggleButtonGadgetClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateTree", XmCreateTree,
+    (0, NULL, "XmCreateTree", (Widget (*)())XmCreateTree,
      (WidgetClass)&xmTreeClassRec);
 
     MrmRegisterClass
-    (0, NULL, "XmCreatePaned", XmCreatePaned,
+    (0, NULL, "XmCreatePaned", (Widget (*)())XmCreatePaned,
      (WidgetClass)&xmPanedClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreatePanedWindow", XmCreatePanedWindow,
+    (0, NULL, "XmCreatePanedWindow", (Widget (*)())XmCreatePanedWindow,
      (WidgetClass)&xmPanedWindowClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateComboBox", XmCreateComboBox,
+    (0, NULL, "XmCreateComboBox", (Widget (*)())XmCreateComboBox,
      (WidgetClass)&xmComboBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateContainer", XmCreateContainer,
+    (0, NULL, "XmCreateContainer", (Widget (*)())XmCreateContainer,
      (WidgetClass)&xmContainerClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateNotebook", XmCreateNotebook,
+    (0, NULL, "XmCreateNotebook", (Widget (*)())XmCreateNotebook,
      (WidgetClass)&xmNotebookClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSpinBox", XmCreateSpinBox,
+    (0, NULL, "XmCreateSpinBox", (Widget (*)())XmCreateSpinBox,
      (WidgetClass)&xmSpinBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateSimpleSpinBox", XmCreateSimpleSpinBox,
+    (0, NULL, "XmCreateSimpleSpinBox", (Widget (*)())XmCreateSimpleSpinBox,
      (WidgetClass)&xmSimpleSpinBoxClassRec);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateIconGadget", XmCreateIconGadget,
+    (0, NULL, "XmCreateIconGadget", (Widget (*)())XmCreateIconGadget,
      (WidgetClass)&xmIconGadgetClassRec);
 
   MrmRegisterClassWithCleanup
-    (0, NULL, "_XmCreateRenderTable", _XmCreateRenderTable,
-     (WidgetClass)NULL, XmRenderTableFree);
+    (0, NULL, "_XmCreateRenderTable", (Widget (*)())_XmCreateRenderTable,
+     (WidgetClass)NULL, (void (*)())XmRenderTableFree);
 
   MrmRegisterClassWithCleanup
-    (0, NULL, "_XmCreateRendition", _XmCreateRendition,
-     (WidgetClass)NULL, XmRenditionFree);
+    (0, NULL, "_XmCreateRendition", (Widget (*)())_XmCreateRendition,
+     (WidgetClass)NULL, (void (*)())XmRenditionFree);
 
   MrmRegisterClass
-    (0, NULL, "_XmCreateTabList", _XmCreateTabList,
+    (0, NULL, "_XmCreateTabList", (Widget (*)())_XmCreateTabList,
      (WidgetClass)NULL);
 
   MrmRegisterClass
-    (0, NULL, "_XmCreateTab", _XmCreateTab,
+    (0, NULL, "_XmCreateTab", (Widget (*)())_XmCreateTab,
      (WidgetClass)NULL);
 
   MrmRegisterClass
-    (0, NULL, "XmCreateDropDown", XmCreateDropDown,
+    (0, NULL, "XmCreateDropDown", (Widget (*)())XmCreateDropDown,
      (WidgetClass)&xmDropDownClassRec);
 
   /*

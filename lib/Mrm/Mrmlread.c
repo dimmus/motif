@@ -349,7 +349,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
 	      /*
 	       * Only free the context id in all other cases
 	       */
-	      (*(context_id->free_func)) (context_id) ;
+	      (*(context_id->free_func)) ((void *)context_id) ;
 	      break;
 	    }
 
@@ -367,7 +367,7 @@ MrmFetchLiteral (MrmHierarchy		hierarchy_id,
     }
   else
     {
-      (*(context_id->free_func)) (context_id) ;
+      (*(context_id->free_func)) ((void *)context_id) ;
       _MrmAppUnlock(app);
       _MrmProcessUnlock();
       return result;

@@ -109,8 +109,8 @@ static char rcsid[] = "$XConsortium: Mrmcontext.c /main/12 1996/11/13 14:00:18 d
  */
 
 Cardinal
-UrmGetResourceContext (char			*((*alloc_func) ()),
-		       void			(*free_func) (),
+UrmGetResourceContext (char			*((*alloc_func) (size_t)),
+		       void			(*free_func) (void *),
 		       MrmSize			size,
 		       URMResourceContextPtr	*context_id_return)
 {
@@ -118,8 +118,8 @@ UrmGetResourceContext (char			*((*alloc_func) ()),
   /*
    * Set function defaults if NULL
    */
-  if ( alloc_func == NULL ) alloc_func = XtMalloc ;
-  if ( free_func == NULL ) free_func = XtFree ;
+  if ( alloc_func == NULL ) alloc_func = (char *(*)(size_t))XtMalloc ;
+  if ( free_func == NULL ) free_func = (void (*)(void *))XtFree ;
 
   /*
    * Allocate the context buffer and memory buffer, and set the
@@ -139,7 +139,7 @@ UrmGetResourceContext (char			*((*alloc_func) ()),
       (*context_id_return)->data_buffer = (char *) (*alloc_func) (size) ;
       if ( (*context_id_return)->data_buffer == NULL )
         {
-	  (*free_func) (*context_id_return) ;
+	  (*free_func) ((void *)(*context_id_return)) ;
 	  return Urm__UT_Error ("UrmGetResourceContext", _MrmMMsg_0001,
 				NULL, *context_id_return, MrmFAILURE) ;
         }
@@ -234,7 +234,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
    * Allocate the new buffer, copy the old buffer contents, and
    * update the context.
    */
-  if ( context_id->alloc_func == XtMalloc )
+  if ( context_id->alloc_func == (char *(*)(size_t))XtMalloc )
     {
       context_id->data_buffer = XtRealloc (context_id->data_buffer, size) ;
       context_id->buffer_size = size ;
@@ -248,7 +248,7 @@ UrmResizeResourceContext (URMResourceContextPtr	context_id,
       if ( context_id->data_buffer != NULL )
         {
 	  UrmBCopy (context_id->data_buffer, newbuf, context_id->buffer_size) ;
-	  (*(context_id->free_func)) (context_id->data_buffer) ;
+	  (*(context_id->free_func)) ((void *)context_id->data_buffer) ;
         }
       context_id->data_buffer = newbuf ;
       context_id->buffer_size = size ;
@@ -299,8 +299,8 @@ UrmFreeResourceContext (URMResourceContextPtr	context_id)
 
   context_id->validation = 0 ;
   if ( context_id->data_buffer != NULL )
-    (*(context_id->free_func)) (context_id->data_buffer) ;
-  (*(context_id->free_func)) (context_id) ;
+    (*(context_id->free_func)) ((void *)context_id->data_buffer) ;
+  (*(context_id->free_func)) ((void *)context_id) ;
   return MrmSUCCESS ;
 
 }

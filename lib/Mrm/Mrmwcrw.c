@@ -165,7 +165,7 @@ UrmCreateWidgetInstanceCleanup (URMResourceContextPtr	context_id,
 				     &cldesc) ;
       if ( result != MrmSUCCESS ) return result ;
 
-      if (NULL != cldesc->cleanup) (*(cldesc->cleanup)) (child) ;
+      if (NULL != cldesc->cleanup) (*(void (*)(Widget))cldesc->cleanup) (child) ;
     }
   else if (widgetrec->variety != UilMrmAutoChildVariety)
     return Urm__UT_Error("UrmCreateWidgetInstanceCleanup", _MrmMMsg_0055,
@@ -648,7 +648,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
    * Create the widget
    */
   *w_name = (ov_name != NULL) ? ov_name : (char*)widgetrec+widgetrec->name_offs;
-  *w_return = (*(cldesc->creator)) (parent, *w_name, args, num_used) ;
+  *w_return = (*(Widget (*)(Widget, String, ArgList, Cardinal))cldesc->creator) (parent, *w_name, args, num_used) ;
 
   Urm__CW_AddWRef (wref_id, *w_name, *w_return) ;
   if ( *svlist != NULL )
@@ -685,7 +685,7 @@ UrmCreateWidgetInstance (URMResourceContextPtr	context_id,
 	      {
 		cb_reason.reason = MrmCR_CREATE;
 		cb_reason.event = NULL;
-		(*cb_rtn) (*w_return, itmptr->runtime.callback.closure,
+		(*(void (*)(Widget, XtPointer, XtPointer))cb_rtn) (*w_return, itmptr->runtime.callback.closure,
 			   &cb_reason) ;
 	      }
 	    /* END OSF Fix pir 2813 */
@@ -975,7 +975,7 @@ UrmSetWidgetInstance (URMResourceContextPtr	context_id,
 	      {
 		cb_reason.reason = MrmCR_CREATE;
 		cb_reason.event = NULL;
-		(*cb_rtn) (*w_return, itmptr->runtime.callback.closure,
+		(*(void (*)(Widget, XtPointer, XtPointer))cb_rtn) (*w_return, itmptr->runtime.callback.closure,
 			   &cb_reason) ;
 	      }
 	    /* END OSF Fix pir 2813 */
