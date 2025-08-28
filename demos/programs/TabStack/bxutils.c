@@ -62,12 +62,6 @@
  */
 #define LOCAL_STRCASECMP
 
-#ifdef _NO_PROTO
-#ifdef NeedFunctionPrototypes
-#undef NeedFunctionPrototypes
-#endif
-#endif
-
 /*
  * Define SUPPORTS_WCHARS if the system supports wide character sets
  */
@@ -83,27 +77,16 @@
 /*
  * Set state of inclusion of prototypes properly
  */
-#ifdef NeedFunctionPrototypes
 #define ARGLIST(p)	(
 #define ARG(a, b)	a b,
 #define GRA(a, b)	a b)
-#else
-#define ARGLIST(p)	p
-#define ARG(a, b)	a b;
-#define GRA(a, b)	a b;
-#endif
 
-#ifdef NeedFunctionPrototypes
 #ifdef __cplusplus
 #define UARG(a, b)	a,
 #define GRAU(a, b)	a)
 #else
 #define UARG(a, b)	a b,
 #define GRAU(a, b)	a b)
-#endif
-#else
-#define UARG(a, b)	a b;
-#define GRAU(a, b)	a b;
 #endif
 
 /*
@@ -1898,11 +1881,7 @@ typedef struct {
 
 /* forward declaration of functions with prototypes */
 
-#ifdef NeedFunctionPrototypes
 #define LFUNC(f, t, p) static t f p
-#else
-#define LFUNC(f, t, p) static t f()
-#endif
 
 /*
  * functions declarations

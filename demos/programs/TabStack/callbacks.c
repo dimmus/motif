@@ -24,14 +24,6 @@
  * Macros to make code look nicer between ANSI and K&R.
  */
 #ifndef ARGLIST
-#if (NeedFunctionPrototypes == 0)
-#define PROTOTYPE(p)	()
-#define ARGLIST(p)	p
-#define ARG(a, b)	a b;
-#define GRA(a, b)	a b;
-#define UARG(a, b)      a b;
-#define GRAU(a, b)      a b;
-#else
 #define PROTOTYPE(p)	p
 #define ARGLIST(p)	(
 #define ARG(a, b)	a b,
@@ -42,7 +34,6 @@
 #else
 #define UARG(a, b)      a b,
 #define GRAU(a, b)      a b)
-#endif
 #endif
 #endif
 
