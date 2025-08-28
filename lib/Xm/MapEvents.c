@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MapEvents.c /main/12 1995/09/19 23:05:22 cde-sun $"
 #endif
 #endif
-
 #include <X11/Intrinsic.h>
 #include <X11/IntrinsicP.h>
 #include <X11/Xutil.h>
@@ -38,12 +35,10 @@ static char rcsid[] = "$XConsortium: MapEvents.c /main/12 1995/09/19 23:05:22 cd
 #include <Xm/XmP.h>
 #include "XmI.h"
 #include "MapEventsI.h"
-
 typedef String (*XmEventParseProc)(String str,
 				   unsigned int closure,
 				   unsigned long *detail,
 				   Boolean *status);
-
 typedef struct {
    XmConst char    *event;
    XrmQuark         signature;
@@ -51,9 +46,7 @@ typedef struct {
    XmEventParseProc parseProc;
    unsigned int     closure;
 } EventKey;
-
 /********    Static Function Declarations    ********/
-
 static int StrToHex(
                         String str) ;
 static int StrToOct(
@@ -96,14 +89,9 @@ static String _MapEvent(
                         unsigned long *detail,
                         Modifiers *modifiers,
 			Boolean *status) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static EventKey modifierStrings[] = {
-
 /* Modifier,	Quark,		Mask */
-
 {"None",	NULLQUARK,	0,		NULL,		None},
 {"Shift",	NULLQUARK,	0,		NULL,		ShiftMask},
 {"Lock",	NULLQUARK,	0,		NULL,		LockMask},
@@ -116,11 +104,8 @@ static EventKey modifierStrings[] = {
 {"Mod4",	NULLQUARK,	0,		NULL,		Mod4Mask},
 {"Mod5",	NULLQUARK,	0,		NULL,		Mod5Mask},
 {NULL,		NULLQUARK,	0,		NULL,		0}};
-
 static EventKey buttonEvents[] = {
-
 /* Event Name,	Quark,		Event Type,	DetailProc,	Closure */
-
 {"Btn1Down",	NULLQUARK,	ButtonPress,	ParseImmed,	Button1},
 {"Button1",	NULLQUARK,	ButtonPress,	ParseImmed,	Button1},
 {"Btn1",	NULLQUARK,	ButtonPress,	ParseImmed,	Button1},
@@ -137,27 +122,18 @@ static EventKey buttonEvents[] = {
 {"Button5",	NULLQUARK,	ButtonPress,	ParseImmed,	Button5},
 {"Btn5",	NULLQUARK,	ButtonPress,	ParseImmed,	Button5},
 {NULL,		NULLQUARK,	0,		NULL,		0}};
-
-
 static EventKey keyEvents[] = {
-
 /* Event Name,	Quark,		Event Type,	DetailProc	Closure */
-
 {"KeyPress",	NULLQUARK,	KeyPress,	ParseKeySym,	0},
 {"Key",		NULLQUARK,	KeyPress,	ParseKeySym,	0},
 {"KeyDown",	NULLQUARK,	KeyPress,	ParseKeySym,	0},
 {"KeyUp",	NULLQUARK,	KeyRelease,	ParseKeySym,	0},
 {"KeyRelease",	NULLQUARK,	KeyRelease,	ParseKeySym,	0},
 {NULL,		NULLQUARK,	0,		NULL,		0}};
-
 static XmConst Modifiers buttonModifierMasks[] = {
     0, Button1Mask, Button2Mask, Button3Mask, Button4Mask, Button5Mask
 };
-
 static Boolean initialized = FALSE;
-
-
-
 /*************************************<->*************************************
  *
  *  Numeric convertion routines
@@ -192,7 +168,6 @@ StrToHex(
 {
     register char   c;
     register int    val = 0;
-
     while ((c = *str) != '\0') {
 	if ('0' <= c && c <= '9') val = val*16+c-'0';
 	else if ('a' <= c && c <= 'f') val = val*16+c-'a'+10;
@@ -200,48 +175,38 @@ StrToHex(
 	else return -1;
 	str++;
     }
-
     return val;
 }
-
 static int
 StrToOct(
         String str )
 {
     register char c;
     register int  val = 0;
-
     while ((c = *str) != '\0') {
         if ('0' <= c && c <= '7') val = val*8+c-'0'; else return -1;
 	str++;
     }
-
     return val;
 }
-
 static int
 StrToNum(
         String str )
 {
     register char c;
     register int val = 0;
-
     if (*str == '0') {
 	str++;
 	if (*str == 'x' || *str == 'X') return StrToHex(++str);
 	else return StrToOct(str);
     }
-
     while ((c = *str) != '\0') {
 	if ('0' <= c && c <= '9') val = val*10+c-'0';
 	else return -1;
 	str++;
     }
-
     return val;
 }
-
-
 /*************************************<->*************************************
  *
  *  FillInQuarks (EventKey *table)
@@ -270,12 +235,9 @@ FillInQuarks(
         EventKey *table )
 {
     register int i;
-
     for (i=0; table[i].event; i++)
         table[i].signature = XrmPermStringToQuark(table[i].event);
 }
-
-
 /*************************************<->*************************************
  *
  *  LookupModifier (name, *valueP)
@@ -307,17 +269,13 @@ LookupModifier(
 {
     register int i;
     register XrmQuark signature = XrmStringToQuark(name);
-
     for (i=0; modifierStrings[i].event != NULL; i++)
 	if (modifierStrings[i].signature == signature) {
 	    *valueP = modifierStrings[i].closure;
 	    return TRUE;
 	}
-
     return FALSE;
 }
-
-
 /*************************************<->*************************************
  *
  *  ScanAlphanumeric (String str)
@@ -348,8 +306,6 @@ ScanAlphanumeric(
 	|| ('0' <= *str && *str <= '9')) str++;
     return str;
 }
-
-
 /*************************************<->*************************************
  *
  *  ScanWhitespace (String str)
@@ -379,8 +335,6 @@ ScanWhitespace(
     while (*str == ' ' || *str == '\t') str++;
     return str;
 }
-
-
 /*************************************<->*************************************
  *
  *  ParseImmed
@@ -414,8 +368,6 @@ ParseImmed(
    *status = TRUE;
    return str;
 }
-
-
 /*************************************<->*************************************
  *
  *  ParseKeySym (parameters)
@@ -447,13 +399,10 @@ ParseKeySym(
 {
   char keySymName[100];
   char *start = str;
-
   /* Initialize the return values. */
   *detail = NoSymbol;
   *status = FALSE;
-
   str = ScanWhitespace(str);
-
   if (*str == '\\') {
     /* "\x"; interpret "x" as a Keysym. */
     str++;
@@ -474,7 +423,6 @@ ParseKeySym(
     keySymName[str-start] = '\0';
     *detail = XStringToKeysym(keySymName);
   }
-
   if (*detail == NoSymbol)
     {
       if (( '0' <= keySymName[0]) && (keySymName[0] <= '9'))
@@ -500,7 +448,6 @@ ParseKeySym(
       return str;
     }
 }
-
 /*************************************<->*************************************
  *
  *  ParseModifiers (parameters)
@@ -532,11 +479,9 @@ ParseModifiers(
     char modStr[100];
     Boolean notFlag;
     Modifiers maskBit;
-
     /* Initially assume all is going to go well */
     *status = TRUE;
     *modifiers = 0;
-
     /* Attempt to parse the first button modifier */
     str = ScanWhitespace(str);
     start = str;
@@ -554,8 +499,6 @@ ParseModifiers(
          }
          str = start;
     }
-
-
     /* Keep parsing modifiers, until the event specifier is encountered */
     while ((*str != '<') && (*str != '\0')) {
         if (*str == '~') {
@@ -563,7 +506,6 @@ ParseModifiers(
              str++;
           } else
               notFlag = FALSE;
-
 	start = str;
         str = ScanAlphanumeric(str);
         if (start == str) {
@@ -573,25 +515,20 @@ ParseModifiers(
         }
         (void) strncpy(modStr, start, str-start);
         modStr[str-start] = '\0';
-
         if (!LookupModifier(modStr, &maskBit))
         {
            /* Unknown modifier name */
            *status = FALSE;
            return str;
         }
-
 	if (notFlag)
            *modifiers &= ~maskBit;
 	else
            *modifiers |= maskBit;
         str = ScanWhitespace(str);
     }
-
     return str;
 }
-
-
 /*************************************<->*************************************
  *
  *  ParseEventType (parameters)
@@ -625,12 +562,10 @@ ParseEventType(
     char eventTypeStr[100];
     register Cardinal   i;
     register XrmQuark	signature;
-
     /* Parse out the event string */
     str = ScanAlphanumeric(str);
     (void) strncpy(eventTypeStr, start, str-start);
     eventTypeStr[str-start] = '\0';
-
     /* Attempt to match the parsed event against our supported event set */
     signature = XrmStringToQuark(eventTypeStr);
     for (i = 0; table[i].signature != NULLQUARK; i++)
@@ -638,17 +573,13 @@ ParseEventType(
         {
            *_index = i;
            *eventType = table[*_index].eventType;
-
            *status = TRUE;
            return str;
         }
-
     /* Unknown event specified */
     *status = FALSE;
     return (str);
 }
-
-
 /*************************************<->*************************************
  *
  *  _MapEvent (parameters)
@@ -680,7 +611,6 @@ _MapEvent(
 	Boolean *status)
 {
   Cardinal index=0;
-
   /* Initialize, if first time called */
   _XmProcessLock();
   if (!initialized)
@@ -691,7 +621,6 @@ _MapEvent(
       FillInQuarks (keyEvents);
     }
   _XmProcessUnlock();
-
   /* Parse the modifiers and the '<' */
   str = ParseModifiers(str, modifiers, status);
   if (*str != '<')
@@ -699,7 +628,6 @@ _MapEvent(
   if (*status == FALSE)
     return str;
   str++;
-
   /* Parse the event type and detail and the '>' */
   str = ParseEventType(str, table, eventType, &index, status);
   if (*str != '>')
@@ -707,12 +635,10 @@ _MapEvent(
   if (*status == FALSE)
     return str;
   str++;
-
   /* Save the detail */
   return ((*(table[index].parseProc))(str, table[index].closure,
 				       detail, status));
 }
-
 /*************************************<->*************************************
  *
  *  _MapBtnEvent (parameters)
@@ -747,7 +673,6 @@ _XmMapBtnEvent(
   *button = detail;
   if (status == FALSE)
     return (FALSE);
-
   /*
    * The following is a fix for an X11 deficiency in regards to
    * modifiers in grabs.
@@ -757,10 +682,8 @@ _XmMapBtnEvent(
       /* the button that is going up will always be in the modifiers... */
       *modifiers |= buttonModifierMasks[*button];
     }
-
   return (TRUE);
 }
-
 /*************************************<->*************************************
  *
  *  _XmMapKeyEvents (parameters)
@@ -782,7 +705,6 @@ _XmMapBtnEvent(
  *   -----------------
  *
  *************************************<->***********************************/
-
 int
 _XmMapKeyEvents(String      str,
 		int       **eventTypes,
@@ -792,7 +714,6 @@ _XmMapKeyEvents(String      str,
   Boolean status = TRUE;
   int count = 0;
   char *ptr = str;
-
   *eventTypes = NULL;
   *keysyms = NULL;
   *modifiers = NULL;
@@ -801,12 +722,10 @@ _XmMapKeyEvents(String      str,
       int       	tmp_type;
       unsigned long	tmp_sym;
       Modifiers 	tmp_mods;
-
       /* Parse a single event. */
       ptr = _MapEvent(ptr, keyEvents, &tmp_type, &tmp_sym, &tmp_mods, &status);
       if (!status)
 	break;
-
       /* Save this event. */
       *eventTypes = (int *)
 	XtRealloc((char*) *eventTypes, (count + 1) * sizeof(int));
@@ -818,7 +737,6 @@ _XmMapKeyEvents(String      str,
 	XtRealloc((char*) *modifiers, (count + 1) * sizeof(Modifiers));
       (*modifiers)[count] = tmp_mods;
       count++;
-
       /* Skip the separator. */
       ptr = ScanWhitespace(ptr);
       if (*ptr == '\0')
@@ -828,7 +746,6 @@ _XmMapKeyEvents(String      str,
       else
 	status = FALSE;
     }
-
   /* Discard partial results if something fails. */
   if (!status)
     {
@@ -840,10 +757,8 @@ _XmMapKeyEvents(String      str,
       XtFree((char*) *modifiers);
       *modifiers = NULL;
     }
-
   return count;
 }
-
 /*************************************<->*************************************
  *
  *  _XmMatchBtnEvent (parameters)
@@ -883,9 +798,6 @@ _XmMatchBtnEvent(
    else
       return (FALSE);
 }
-
-
-
 /*************************************<->*************************************
  *
  *  _XmMatchKeyEvent (parameters)
@@ -916,12 +828,9 @@ _XmMatchKeyEvent(
         Modifiers modifiers )
 {
    register Modifiers state, mods;
-
    _XmCheckInitModifiers();
-
    state = event->xkey.state & ~(LockMask|ScrollLockMask|NumLockMask);
    mods  = modifiers & ~(LockMask|ScrollLockMask|NumLockMask);
-
    if ((event->type == eventType) &&
        (event->xkey.keycode == key) &&
        (state == mods))

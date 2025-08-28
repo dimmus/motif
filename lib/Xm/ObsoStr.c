@@ -25,16 +25,11 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-
 /*** This file contains the 700 or so globals that were used in 1.2.0
      but not in 1.2.1 where they were replaced by a big array */
-
 /* Define _XmConst before including anything, so that the
  * declarations will be in agreement with the definitions.
  */
@@ -45,10 +40,7 @@
 #define _XmConst
 #endif /* __STDC__ */
 #endif /* _XmConst */
-
 #include <Xm/XmP.h>
-
-
 _XmConst char _XmSCAcceleratorText[] = "AcceleratorText" ;
 _XmConst char _XmSCAccelerator[] = "Accelerator" ;
 _XmConst char _XmSCAdjustLast[] = "AdjustLast" ;
@@ -401,7 +393,6 @@ _XmConst char _XmSCXmBackgroundPixmap[] = "XmBackgroundPixmap" ;
 _XmConst char _XmSCXmStringCharSet[] = "XmStringCharSet" ;
 _XmConst char _XmSCXmStringTable[] = "XmStringTable" ;
 _XmConst char _XmSCXmString[] = "XmString" ;
-
 _XmConst char _XmSacceleratorText[] = "acceleratorText" ;
 _XmConst char _XmSaccelerator[] = "accelerator" ;
 _XmConst char _XmSactivateCallback[] = "activateCallback" ;
@@ -841,7 +832,6 @@ _XmConst char _XmSvisualPolicy[] = "visualPolicy" ;
 _XmConst char _XmSwhichButton[] = "whichButton" ;
 _XmConst char _XmSwordWrap[] = "wordWrap" ;
 _XmConst char _XmSworkWindow[] = "workWindow" ;
-
 /* Exceptions to the naming convention:
  */
 _XmConst char _XmSEMPTY_STRING[] = "" ;

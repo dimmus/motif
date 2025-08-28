@@ -25,11 +25,9 @@
 static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <stdlib.h>
 #include <Xm/XmosP.h>
 #include "XmI.h"
@@ -37,7 +35,6 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 #include <Xm/FileSBP.h>
 #include <Xm/GadgetP.h>
 #include <Xm/AtomMgr.h>
-
 #include <Xm/List.h>
 #include <Xm/LabelG.h>
 #include <Xm/RowColumnP.h>
@@ -61,21 +58,16 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
 #include "XmosI.h"
 #include "XmStringI.h"
 #include <sys/stat.h>
-
 #define MESSAGE0     _XmMMsgMotif_0001
-
 #define FILES_STRING          _XmMMsgResource_0007
 #define FILTER_APPLY_STRING   _XmMMsgResource_0010
-
 #define IsButton(w) \
 (((XtPointer) XmeTraitGet((XtPointer) XtClass((w)), XmQTactivatable) != NULL))
-
 #define IsAutoButton(fsb, w) (		\
       w == SB_OkButton(fsb) ||		\
       w == SB_ApplyButton(fsb) ||	\
       w == SB_CancelButton(fsb) ||	\
       w == SB_HelpButton(fsb))
-
 #define SetupWorkArea(fsb) \
     if (_XmGeoSetupKid (boxPtr, SB_WorkArea(fsb)))    \
     {                                                 \
@@ -84,7 +76,6 @@ static char rcsid[] = "$TOG: FileSB.c /main/21 1997/09/26 13:38:52 bill $"
         boxPtr += 2 ;                                 \
         ++layoutPtr ;                                 \
     }
-
 typedef struct
     {   XmKidGeometry filter_label ;
         XmKidGeometry filter_text ;
@@ -93,10 +84,7 @@ typedef struct
         Dimension   prefer_width ;
         Dimension   delta_width ;
         } FS_GeoExtensionRec, *FS_GeoExtension ;
-
-
 /********    Static Function Declarations    ********/
-
 static void ClassPartInitialize(
                         WidgetClass fsc) ;
 static void Initialize(
@@ -241,30 +229,23 @@ static void FilterFix(
                         int action,
                         XmGeoMajorLayout layoutPtr,
                         XmKidGeometry rowPtr) ;
-
 /********    End Static Function Declarations    ********/
-
-
 /*
  * transfer vector from translation manager action names to
  * address of routines
  */
-
 static XtActionsRec ActionsTable[] =
 {
     { "UpOrDown", FileSelectionBoxUpOrDown }, /* Motif 1.0 */
     { "SelectionBoxUpOrDown", FileSelectionBoxUpOrDown },
     { "SelectionBoxRestore", FileSelectionBoxRestore },
     };
-
-
 /*---------------------------------------------------*/
 /* widget resources                                  */
 /*---------------------------------------------------*/
 static XtResource resources[] =
 {
     /* fileselection specific resources */
-
 	{	XmNdirectory,
 		XmCDirectory,
 		XmRXmString,
@@ -392,7 +373,6 @@ static XtResource resources[] =
 		(XtPointer) TRUE
 	},
 	/* superclass resource default overrides */
-
 	{	XmNdirSpec,
 		XmCDirSpec,
 		XmRXmString,
@@ -471,7 +451,6 @@ static XtResource resources[] =
         (XtPointer) NULL
     },
 };
-
 static XmSyntheticResource syn_resources[] =
 {
   {	XmNdirectory,
@@ -552,7 +531,6 @@ static XmSyntheticResource syn_resources[] =
 	(XmImportProc)NULL
   },
 };
-
 externaldef( xmfileselectionboxclassrec) XmFileSelectionBoxClassRec
                                                    xmFileSelectionBoxClassRec =
 {
@@ -629,11 +607,8 @@ externaldef( xmfileselectionboxclassrec) XmFileSelectionBoxClassRec
 	/* extension		    */	(XtPointer)NULL,
 	}
 };
-
 externaldef( xmfileselectionboxwidgetclass) WidgetClass
      xmFileSelectionBoxWidgetClass = (WidgetClass)&xmFileSelectionBoxClassRec ;
-
-
 /****************************************************************
  * Class Initialization.  Sets up accelerators and fast subclassing.
  ****************/
@@ -642,12 +617,9 @@ ClassPartInitialize(
         WidgetClass fsc )
 {
 /****************/
-
     _XmFastSubclassInit( fsc, XmFILE_SELECTION_BOX_BIT) ;
-
     return ;
     }
-
 /****************************************************************
  * This routine initializes an instance of the file selection widget.
  * Instance record fields which are shadow resources for child widgets and
@@ -667,44 +639,34 @@ Initialize(
     XmFileSelectionBoxCallbackStruct searchData ;
     XmString local_xmstring ;
 /****************/
-
     FS_StateFlags( new_w) = 0 ;
     FS_PrevDirModTime( new_w) = 0;
-
     /*	Here we have now to take care of XmUNSPECIFIED (CR 4856).
      */
     if (new_w->selection_box.list_label_string ==
 	(XmString) XmUNSPECIFIED) {
-
 	local_xmstring = XmStringCreate(FILES_STRING,
 					XmFONTLIST_DEFAULT_TAG);
 	numArgs = 0 ;
 	XtSetArg( args[numArgs], XmNlabelString, local_xmstring) ; ++numArgs ;
 	XtSetValues( SB_ListLabel( new_w), args, numArgs) ;
 	XmStringFree(local_xmstring);
-
 	new_w->selection_box.list_label_string = NULL ;
     }
-
     if (new_w->selection_box.apply_label_string ==
 	(XmString) XmUNSPECIFIED) {
-
 	local_xmstring = XmStringCreate(FILTER_APPLY_STRING,
 					XmFONTLIST_DEFAULT_TAG);
 	numArgs = 0 ;
 	XtSetArg( args[numArgs], XmNlabelString, local_xmstring) ; ++numArgs ;
 	XtSetValues( SB_ApplyButton( new_w), args, numArgs) ;
 	XmStringFree(local_xmstring);
-
 	new_w->selection_box.list_label_string = NULL ;
     }
-
-
     /* must set adding_sel_widgets to avoid adding these widgets to
      * selection work area
      */
     SB_AddingSelWidgets( new_w) = TRUE ;
-
     if(    !(SB_ListLabel( new_w))    )
     {   _XmSelectionBoxCreateListLabel( (XmSelectionBoxWidget) new_w) ;
         }
@@ -729,18 +691,12 @@ Initialize(
     if(    !(SB_HelpButton( new_w))    )
     {   _XmSelectionBoxCreateHelpButton( (XmSelectionBoxWidget) new_w) ;
         }
-
-
     FSBCreateFilterLabel( new_w) ;
     FS_FilterLabelString( new_w) = NULL ;
-
     FSBCreateDirListLabel( new_w) ;
     FS_DirListLabelString( new_w) = NULL ;
-
     FSBCreateFilterText( new_w);
-
     FSBCreateDirList( new_w) ;
-
     if(    FS_PathMode( new_w) ==  XmPATH_MODE_RELATIVE    )
       {
         FSBCreateDirTextLabel( new_w) ;
@@ -749,7 +705,6 @@ Initialize(
 	  FS_DirTextLabel( new_w) = NULL ;
 	  FS_DirText( new_w) = NULL;
       }
-
     /* Since the DirSearchProc is going to be run during initialize,
     *   and since it has the responsibility to manage the directory list and
     *   the filter text, any initial values of the following resources can
@@ -757,9 +712,7 @@ Initialize(
     */
     FS_DirListItems( new_w) = NULL ;  /* Set/Get Values only.*/
     FS_DirListItemCount( new_w) = XmUNSPECIFIED_COUNT ; /* Set/Get Values only.*/
-
     SB_AddingSelWidgets( new_w) = FALSE;
-
     /* Remove the activate callbacks that our superclass
     *   may have attached to these buttons
     */
@@ -767,7 +720,6 @@ Initialize(
     XtRemoveAllCallbacks( SB_OkButton( new_w), XmNactivateCallback) ;
     XtRemoveAllCallbacks( SB_CancelButton( new_w), XmNactivateCallback) ;
     XtRemoveAllCallbacks( SB_HelpButton( new_w), XmNactivateCallback) ;
-
     XtAddCallback( SB_ApplyButton( new_w), XmNactivateCallback,
                           FileSelectionPB, (XtPointer) XmDIALOG_APPLY_BUTTON) ;
     XtAddCallback( SB_OkButton( new_w), XmNactivateCallback,
@@ -776,8 +728,6 @@ Initialize(
                          FileSelectionPB, (XtPointer) XmDIALOG_CANCEL_BUTTON) ;
     XtAddCallback( SB_HelpButton( new_w), XmNactivateCallback,
                            FileSelectionPB, (XtPointer) XmDIALOG_HELP_BUTTON) ;
-
-
     if( FS_NoMatchString( new_w) == (XmString) XmUNSPECIFIED) {
 	FS_NoMatchString( new_w) = XmStringConcatAndFree
 	  (XmStringDirectionCreate(XmSTRING_DIRECTION_L_TO_R),
@@ -786,7 +736,6 @@ Initialize(
     else {
 	FS_NoMatchString( new_w) = XmStringCopy( FS_NoMatchString( new_w)) ;
     }
-
     searchData.reason = XmCR_NONE ;
     searchData.event = NULL ;
     searchData.value = NULL ;
@@ -797,33 +746,27 @@ Initialize(
     searchData.dir_length = 0 ;
     searchData.pattern = NULL ;
     searchData.pattern_length = 0 ;
-
     /* The XmNdirSpec resource will be loaded into the Text widget by
     *   the Selection Box (superclass) Initialize routine.  It will be
     *   picked-up there by the XmNqualifySearchDataProc routine to fill
     *   in the value field of the search data.
     */
-
     if(FS_DirMask( new_w) != (XmString) XmUNSPECIFIED    )
     {
         searchData.mask = XmStringCopy(FS_DirMask( new_w)) ;
     } else {
 	searchData.mask = XmStringCreate("*", XmFONTLIST_DEFAULT_TAG);
     }
-
     searchData.mask_length = XmStringLength( searchData.mask) ;
-
         /* The DirMask field will be set after subsequent call to
         *   the DirSearchProc.  Set field to NULL to prevent freeing of
         *   memory owned by request.
         */
     FS_DirMask( new_w) = (XmString) XmUNSPECIFIED ;
-
     if(    FS_Directory( new_w)    )
     {
         searchData.dir = XmStringCopy( FS_Directory( new_w)) ;
         searchData.dir_length = XmStringLength( searchData.dir) ;
-
         /* The Directory field will be set after subsequent call to
         *   the DirSearchProc.  Set field to NULL to prevent freeing of
         *   memory owned by request.
@@ -834,14 +777,12 @@ Initialize(
     {
         searchData.pattern = XmStringCopy( FS_Pattern( new_w)) ;
         searchData.pattern_length = XmStringLength( searchData.pattern) ;
-
         /* The Pattern field will be set after subsequent call to
         *   the DirSearchProc.  Set field to NULL to prevent freeing of
         *   memory owned by request.
         */
         FS_Pattern( new_w) = NULL ;
         }
-
     if(    !FS_QualifySearchDataProc( new_w)    )
     {   FS_QualifySearchDataProc( new_w) = QualifySearchDataProc ;
         }
@@ -851,20 +792,16 @@ Initialize(
     if(    !FS_FileSearchProc( new_w)    )
     {   FS_FileSearchProc( new_w) = FileSearchProc ;
         }
-
     FileSelectionBoxUpdate( new_w, &searchData) ;
-
     XmStringFree( searchData.mask) ;
     XmStringFree( searchData.pattern) ;
     XmStringFree( searchData.dir) ;
-
     /* Add Convert callbacks to handle the FILE and FILENAME
        targets */
     XtAddCallback(FS_DirList(new_w), XmNconvertCallback,
 		  FSBConvert, (XtPointer) new_w);
     XtAddCallback(SB_List(new_w), XmNconvertCallback,
 		  FSBConvert, (XtPointer) new_w);
-
     /* Mark everybody as managed because no one else will.
     *   Only need to do this if we are the instantiated class.
     */
@@ -874,21 +811,17 @@ Initialize(
         }
     return ;
     }
-
 /****************************************************************/
 static void
 Destroy(
         Widget fsb )
 {
 /****************/
-
     XmStringFree( FS_NoMatchString( fsb)) ;
     XmStringFree( FS_Pattern( fsb)) ;
     XmStringFree( FS_Directory( fsb)) ;
-
     return ;
     }
-
 /****************************************************************
  * This procedure is called to remove the child from
  *   the child list, and to allow the parent to do any
@@ -901,11 +834,9 @@ DeleteChild(
             XmFileSelectionBoxWidget fs ;
 	    XtWidgetProc delete_child;
 /****************/
-
     if(    XtIsRectObj( w)    )
     {
         fs = (XmFileSelectionBoxWidget) XtParent( w) ;
-
         if(    w == FS_FilterLabel( fs)    )
         {   FS_FilterLabel( fs) = NULL ;
             }
@@ -929,11 +860,9 @@ DeleteChild(
     delete_child = ((XmSelectionBoxWidgetClass) xmSelectionBoxWidgetClass) ->
 			    composite_class.delete_child;
     _XmProcessUnlock();
-
     (*delete_child)( w) ;
     return ;
     }
-
 static XtGeometryResult
 GeometryManager(
         Widget w,
@@ -942,43 +871,32 @@ GeometryManager(
 {
   XtGeometryResult rtnVal ;
   XtGeometryHandler geometry_manager;
-
   _XmProcessLock();
   geometry_manager = xmSelectionBoxClassRec.composite_class.geometry_manager;
   _XmProcessUnlock();
-
   rtnVal = (*geometry_manager)( w, req, reply) ;
   UpdateHorizPos( XtParent( w)) ;
-
   return rtnVal ;
 }
-
 static void
 ChangeManaged(
         Widget wid )
 {
   XtWidgetProc change_managed;
-
   _XmProcessLock();
   change_managed = xmSelectionBoxClassRec.composite_class.change_managed;
   _XmProcessUnlock();
-
   (*change_managed)( wid) ;
-
   UpdateHorizPos( wid) ;
 }
-
-
 /****************************************************************/
 static void
 FSBCreateFilterLabel(
         XmFileSelectionBoxWidget fsb )
 {
 /****************/
-
     if (FS_FilterLabelString( fsb) == (XmString) XmUNSPECIFIED)
 	FS_FilterLabelString( fsb) = NULL;
-
     FS_FilterLabel( fsb) = _XmBB_CreateLabelG( (Widget) fsb,
 					      FS_FilterLabelString( fsb),
 					      "FilterLabel",
@@ -991,17 +909,14 @@ FSBCreateDirListLabel(
         XmFileSelectionBoxWidget fsb )
 {
 /****************/
-
     if (FS_DirListLabelString( fsb) == (XmString) XmUNSPECIFIED)
 	FS_DirListLabelString( fsb) = NULL;
-
     FS_DirListLabel( fsb) = _XmBB_CreateLabelG( (Widget) fsb,
 					       FS_DirListLabelString( fsb),
 					       "Dir",
 					       XmDirListStringLoc) ;
     return ;
     }
-
 /****************************************************************
  * Create the directory List widget.
  ****************/
@@ -1013,18 +928,14 @@ FSBCreateDirList(
 	register int	ac = 0;
             XtCallbackProc callbackProc ;
 /****************/
-
     FS_DirListSelectedItemPosition( fsb) = 0 ;
-
     XtSetArg( al[ac], XmNvisibleItemCount,
                                         SB_ListVisibleItemCount( fsb)) ; ac++ ;
     XtSetArg( al[ac], XmNstringDirection, SB_StringDirection( fsb));  ac++;
     XtSetArg( al[ac], XmNselectionPolicy, XmBROWSE_SELECT);  ac++;
     XtSetArg( al[ac], XmNlistSizePolicy, XmCONSTANT);  ac++;
     XtSetArg( al[ac], XmNnavigationType, XmSTICKY_TAB_GROUP) ; ++ac ;
-
     FS_DirList( fsb) = XmCreateScrolledList( (Widget) fsb, "DirList", al, ac);
-
     callbackProc = ((XmSelectionBoxWidgetClass) fsb->core.widget_class)
                                           ->selection_box_class.list_callback ;
     if(    callbackProc    )
@@ -1037,10 +948,8 @@ FSBCreateDirList(
                                                callbackProc, (XtPointer) fsb) ;
         }
     XtManageChild( FS_DirList( fsb)) ;
-
     return ;
     }
-
 /****************************************************************
  * Creates fs dir search filter text entry field.
  ****************/
@@ -1053,7 +962,6 @@ FSBCreateFilterText(
             char *          stext_value ;
             XtAccelerators  temp_accelerators ;
 /****************/
-
     /* Get text portion from Compound String, and set
     *   fs_stext_charset and fs_stext_direction bits...
     */
@@ -1079,12 +987,9 @@ FSBCreateFilterText(
     fs->core.accelerators = SB_TextAccelerators( fs) ;
     XtInstallAccelerators( FS_FilterText( fs), (Widget) fs) ;
     fs->core.accelerators = temp_accelerators ;
-
     XtFree( stext_value) ;
     return ;
     }
-
-
 static void
 FSBCreateDirText(
         XmFileSelectionBoxWidget fs)
@@ -1094,7 +999,6 @@ FSBCreateDirText(
             char *          stext_value ;
             XtAccelerators  temp_accelerators ;
 /****************/
-
     /* Get text portion from Compound String, and set
     *   fs_stext_charset and fs_stext_direction bits...
     */
@@ -1120,23 +1024,18 @@ FSBCreateDirText(
     fs->core.accelerators = SB_TextAccelerators( fs) ;
     XtInstallAccelerators(FS_DirText( fs), (Widget) fs) ;
     fs->core.accelerators = temp_accelerators ;
-
     XtFree( stext_value) ;
     return ;
     }
-
 static void
 FSBCreateDirTextLabel(
         XmFileSelectionBoxWidget fs)
 {
-
   FS_DirTextLabel(fs) = _XmBB_CreateLabelG( (Widget) fs,
 					   FS_DirTextLabelString(fs),
 					   "DirL",
 					   XmDirTextStringLoc) ;
-
 }
-
 /****************************************************************/
 static void
 FilterFix(
@@ -1147,13 +1046,11 @@ FilterFix(
 {
             FS_GeoExtension extension ;
 /****************/
-
     extension = (FS_GeoExtension) geoSpec->extension ;
     extension->filter_label = rowPtr ;
     rowPtr += 2 ;
     extension->filter_text = rowPtr ;
 }
-
 /****************************************************************
  * Get Geo matrix filled with kid widgets.
  ****************/
@@ -1176,13 +1073,11 @@ FileSBGeoMatrixCreate(
     Boolean         filterLabelBox ;
     Dimension       vspace = BB_MarginHeight(fsb);
     int             i;
-
 /*
  * Layout FileSelectionBox XmGeoMatrix.
  * Each row is terminated by leaving an empty XmKidGeometry and
  * moving to the next XmGeoRowLayout.
  */
-
     geoSpec = _XmGeoMatrixAlloc( XmFSB_MAX_WIDGETS_VERT,
                               fsb->composite.num_children,
                               sizeof( FS_GeoExtensionRec)) ;
@@ -1194,15 +1089,11 @@ FileSBGeoMatrixCreate(
     geoSpec->margin_w = BB_MarginWidth( fsb) + fsb->manager.shadow_thickness ;
     geoSpec->margin_h = BB_MarginHeight( fsb) + fsb->manager.shadow_thickness ;
     geoSpec->no_geo_request = FileSelectionBoxNoGeoRequest ;
-
     layoutPtr = &(geoSpec->layouts->row) ;
     boxPtr = geoSpec->boxes ;
-
     /* menu bar */
-
     for (i = 0; i < fsb->composite.num_children; i++)
     {   Widget w = fsb->composite.children[i];
-
         if(    XmIsRowColumn(w)
             && ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR
             && w != SB_WorkArea(fsb)
@@ -1214,12 +1105,9 @@ FileSBGeoMatrixCreate(
             break;
             }
         }
-
     /* work area, XmPLACE_TOP */
-
     if (fsb->selection_box.child_placement == XmPLACE_TOP)
       SetupWorkArea(fsb);
-
     if(    _XmGeoSetupKid( boxPtr, FS_DirTextLabel( fsb))    )
     {
         layoutPtr->space_above = vspace;
@@ -1232,9 +1120,7 @@ FileSBGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* filter label */
-
     filterLabelBox = FALSE ;
     if(    _XmGeoSetupKid( boxPtr, FS_FilterLabel( fsb))    )
     {
@@ -1248,9 +1134,7 @@ FileSBGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* filter text */
-
     if(    _XmGeoSetupKid( boxPtr, FS_FilterText( fsb))    )
     {
         if(    !filterLabelBox    )
@@ -1260,9 +1144,7 @@ FileSBGeoMatrixCreate(
 	boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* dir list and file list labels */
-
     if (LayoutIsRtoLM(fsb))
     {
         listLabelBox = FALSE ;
@@ -1293,13 +1175,11 @@ FileSBGeoMatrixCreate(
 	  ++boxPtr ;
         }
     }
-
     if(    dirListLabelBox  ||  listLabelBox    )
     {   layoutPtr->fix_up = ListLabelFix ;
         layoutPtr->space_above = vspace;
         vspace = BB_MarginHeight(fsb);
         layoutPtr->space_between = BB_MarginWidth( fsb) ;
-
         if(    dirListLabelBox && listLabelBox    )
         {   layoutPtr->sticky_end = TRUE ;
             }
@@ -1307,7 +1187,6 @@ FileSBGeoMatrixCreate(
         ++boxPtr ;
         ++layoutPtr ;
         }
-
     if (LayoutIsRtoLM(fsb))
     {
         listBox = FALSE ;
@@ -1328,7 +1207,6 @@ FileSBGeoMatrixCreate(
     else
     {
       /* dir list and file list */
-
       dirListBox = FALSE ;
       if(     FS_DirList( fsb)  &&  XtIsManaged( FS_DirList( fsb))
 	 &&  _XmGeoSetupKid( boxPtr, XtParent( FS_DirList( fsb)))    )
@@ -1344,7 +1222,6 @@ FileSBGeoMatrixCreate(
 	  ++boxPtr ;
         }
     }
-
     if(    dirListBox  || listBox    )
     {   layoutPtr->fix_up = ListFix ;
         layoutPtr->fit_mode = XmGEO_AVERAGING ;
@@ -1359,14 +1236,10 @@ FileSBGeoMatrixCreate(
         ++boxPtr ;
         ++layoutPtr ;
         }
-
     /* work area, XmPLACE_ABOVE_SELECTION */
-
     if (fsb->selection_box.child_placement == XmPLACE_ABOVE_SELECTION)
       SetupWorkArea(fsb)
-
     /* selection label */
-
     selLabelBox = FALSE ;
     if(    _XmGeoSetupKid( boxPtr, SB_SelectionLabel( fsb))    )
     {   selLabelBox = TRUE ;
@@ -1375,9 +1248,7 @@ FileSBGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* selection text */
-
     if(    _XmGeoSetupKid( boxPtr, SB_Text( fsb))    )
     {
         if(    !selLabelBox    )
@@ -1387,14 +1258,10 @@ FileSBGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* work area, XmPLACE_BELOW_SELECTION */
-
     if (fsb->selection_box.child_placement == XmPLACE_BELOW_SELECTION)
       SetupWorkArea(fsb)
-
     /* separator */
-
     if(    _XmGeoSetupKid( boxPtr, SB_Separator( fsb))    )
     {   layoutPtr->fix_up = _XmSeparatorFix ;
         layoutPtr->space_above = vspace;
@@ -1402,11 +1269,8 @@ FileSBGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* button row */
-
     firstButtonBox = boxPtr ;
-
     if (LayoutIsRtoLM(fsb))
     {
         if(    _XmGeoSetupKid( boxPtr, SB_HelpButton( fsb))    )
@@ -1418,7 +1282,6 @@ FileSBGeoMatrixCreate(
         if(    _XmGeoSetupKid( boxPtr, SB_ApplyButton( fsb))    )
         {   ++boxPtr ;
             }
-
 	for (i = 0; i < fsb->composite.num_children; i++)
 	{
 	    Widget w = fsb->composite.children[fsb->composite.num_children-i-1];
@@ -1429,7 +1292,6 @@ FileSBGeoMatrixCreate(
 		    }
 	    }
 	}
-
         if(    _XmGeoSetupKid( boxPtr, SB_OkButton( fsb))    )
         {   ++boxPtr ;
             }
@@ -1439,7 +1301,6 @@ FileSBGeoMatrixCreate(
       if(    _XmGeoSetupKid( boxPtr, SB_OkButton( fsb))    )
 	{   ++boxPtr ;
 	  }
-
       for (i = 0; i < fsb->composite.num_children; i++)
 	{
 	  Widget w = fsb->composite.children[i];
@@ -1450,7 +1311,6 @@ FileSBGeoMatrixCreate(
 		  }
 	    }
 	}
-
       if(    _XmGeoSetupKid( boxPtr, SB_ApplyButton( fsb))    )
 	{   ++boxPtr ;
 	  }
@@ -1461,7 +1321,6 @@ FileSBGeoMatrixCreate(
 	{   ++boxPtr ;
 	  }
     }
-
     if(    boxPtr != firstButtonBox    )
     {
         layoutPtr->fill_mode = XmGEO_CENTER ;
@@ -1474,9 +1333,7 @@ FileSBGeoMatrixCreate(
         layoutPtr->even_height = 1 ;
 	++layoutPtr ;
         }
-
     /* the end. */
-
     layoutPtr->space_above = vspace ;
     layoutPtr->end = TRUE ;
     return( geoSpec) ;
@@ -1487,7 +1344,6 @@ FileSelectionBoxNoGeoRequest(
         XmGeoMatrix geoSpec )
 {
 /****************/
-
     if(    BB_InSetValues( geoSpec->composite)
         && (XtClass( geoSpec->composite) == xmFileSelectionBoxWidgetClass)    )
     {
@@ -1495,7 +1351,6 @@ FileSelectionBoxNoGeoRequest(
         }
     return( FALSE) ;
     }
-
 /****************************************************************
  * This routine saves the geometry pointers of the list labels so that they
  *   can be altered as appropriate by the ListFix routine.
@@ -1509,7 +1364,6 @@ ListLabelFix(
 {
             FS_GeoExtension extension ;
 /****************/
-
     extension = (FS_GeoExtension) geoSpec->extension ;
     if (LayoutIsRtoLM(geoSpec->composite))
     {
@@ -1521,10 +1375,8 @@ ListLabelFix(
       extension->dir_list_label = rowPtr++ ;
       extension->file_list_label = rowPtr ;
     }
-
     return ;
     }
-
 /****************************************************************
  * Geometry layout fixup routine for the directory and file lists.  This
  *   routine reduces the preferred width of the file list widget according
@@ -1548,7 +1400,6 @@ ListFix(
     FS_GeoExtension extension ;
     int             listLabelsOffset ;
     /****************/
-
     if (LayoutIsRtoLM(geoSpec->composite))
 	{
 	    fileListGeo = rowPtr++;
@@ -1559,7 +1410,6 @@ ListFix(
 	    dirListGeo = rowPtr++ ;
 	    fileListGeo = rowPtr ;
 	}
-
     if(    !fileListGeo->kid    )
 	{   /* Only one list widget in this row, so do nothing.
 	     */
@@ -1576,10 +1426,8 @@ ListFix(
                 argc = 0 ;
                 XtSetArg( argv[argc], XmNfontList, &listFonts) ; ++argc ;
                 XtGetValues( (Widget) fileList, argv, argc) ;
-
                 listPathWidth = XmStringWidth( listFonts, FS_Directory(
                                                          geoSpec->composite)) ;
-
                 if(    !(FS_StateFlags( geoSpec->composite) & XmFS_NO_MATCH)    )
                 {
                     if(    listPathWidth < fileListGeo->box.width    )
@@ -1628,7 +1476,6 @@ ListFix(
                                              + (layoutPtr - 1)->row.space_above
                                                + layoutPtr->row.space_above)) ;
                     }
-
                 break ;
               }
             }
@@ -1756,8 +1603,6 @@ ListFix(
         }
     return ;
 }
-
-
 static void
 UpdateHorizPos(
         Widget wid)
@@ -1767,12 +1612,10 @@ UpdateHorizPos(
   Cardinal argc ;
   XmFontList listFonts ;
   XmString dirString = FS_Directory( wid) ;
-
   if(    FS_PathMode( wid)  ==  XmPATH_MODE_RELATIVE   )
     {
       return ;
     }
-
   if(    !(FS_StateFlags( wid) & XmFS_NO_MATCH)    )
     {
       /* Move horizontal position so path does not show in file list.
@@ -1790,14 +1633,10 @@ UpdateHorizPos(
   argc = 0 ;
   XtSetArg( argv[argc], XmNfontList, &listFonts) ; ++argc ;
   XtGetValues( FS_DirList( wid), argv, argc) ;
-
   listPathWidth = XmStringWidth( listFonts, dirString) ;
   XmListSetHorizPos( FS_DirList( wid), listPathWidth) ;
-
   return ;
 }
-
-
 /****************************************************************/
 static void
 FileSearchProc(
@@ -1818,7 +1657,6 @@ FileSearchProc(
             XmString *      XmStringFileList ;
             unsigned        dirLen ;
 /****************/
-
     if(   !(dir = _XmStringGetTextConcat( searchData->dir))    )
     {   return ;
         }
@@ -1831,16 +1669,12 @@ FileSearchProc(
                                             &fileList,  &numFiles, &numAlloc) ;
     if(    fileList  &&  numFiles    ) {
 	Boolean showDotFiles = (FS_FileFilterStyle( fs) == XmFILTER_NONE) ;
-
 	if(    numFiles > 1    )
 	    qsort( (void *)fileList, numFiles, sizeof( char *),
 		  _XmOSFileCompare) ;
-
         XmStringFileList = (XmString *) XtMalloc(numFiles * sizeof( XmString)) ;
-
         Index = 0 ;
 	dirLen = strlen( dir) ;
-
 	while(    Index < numFiles    ) {
 	    if(    showDotFiles
 	       || ((fileList[Index])[dirLen] != '.')    ) {
@@ -1857,14 +1691,12 @@ FileSearchProc(
 	      }
 	    ++Index ;
 	}
-
 	/* Update the list.
         */
         Index = 0 ;
         XtSetArg( args[Index], XmNitems, XmStringFileList) ; Index++ ;
         XtSetArg( args[Index], XmNitemCount, numItems) ; Index++ ;
         XtSetValues( SB_List( fs), args, Index) ;
-
         Index = numFiles ;
         while(    Index--    )
         {   XtFree( fileList[Index]) ;
@@ -1879,14 +1711,11 @@ FileSearchProc(
         XtSetValues( SB_List( fs), args, 1) ;
         }
     FS_ListUpdated( fs) = TRUE ;
-
     XtFree( (char *) fileList) ;
     XtFree( pattern) ;
     XtFree( dir) ;
     return ;
     }
-
-
 /****************************************************************
  * This routine validates and allocates new copies of all searchData
  *   fields that are required by the DirSearchProc and the FileSearchProc
@@ -1921,11 +1750,9 @@ QualifySearchDataProc(
             char *          patternPartPtr ;
             unsigned int    qDirLen ;
 /****************/
-
     maskString = _XmStringGetTextConcat( searchData->mask) ;
     dirString = _XmStringGetTextConcat( searchData->dir) ;
     patternString = _XmStringGetTextConcat( searchData->pattern) ;
-
     if(    !maskString
         || (dirString  &&  patternString)
         || (dirString  &&  maskString  &&  (maskString[0] != '/'))    )
@@ -1949,11 +1776,9 @@ QualifySearchDataProc(
         }
     else
     {   patternPartPtr = _XmOSFindPatternPart( maskString) ;
-
         if(    patternPartPtr != maskString    )
         {
 	    /*** This need to be re-think with Xmos.c in mind. dd */
-
             /* To avoid allocating memory and copying part of the mask string,
             *   just stuff '\0' at the '/' which is between the directory part
             *   and the pattern part.  The QualifyFileSpec below does not
@@ -1965,7 +1790,6 @@ QualifySearchDataProc(
             *   sequences are not protected, but root specifications are.
             */
             *(patternPartPtr - 1) = '\0' ;
-
             if(    !*maskString
                 || ((*maskString == '/')  &&  !maskString[1])    )
             {
@@ -2007,10 +1831,8 @@ QualifySearchDataProc(
     qualifiedMask = XtMalloc( 1 + qDirLen + strlen( qualifiedPattern)) ;
     strcpy( qualifiedMask, qualifiedDir) ;
     strcpy( &qualifiedMask[qDirLen], qualifiedPattern) ;
-
     qualifiedSearchData->reason = searchData->reason ;
     qualifiedSearchData->event = searchData->event ;
-
     if(    searchData->value    )
     {   qualifiedSearchData->value = XmStringCopy( searchData->value) ;
         valueString = NULL ;
@@ -2023,7 +1845,6 @@ QualifySearchDataProc(
 	  }else
           {
 	      String fileStr = XmTextFieldGetString( SB_Text( fs)) ;
-
             if(    (fileStr == NULL)
                 || (*fileStr == '\0')
                 || (*fileStr == '/')
@@ -2035,7 +1856,6 @@ QualifySearchDataProc(
               {
                 String dirStr = _XmStringGetTextConcat( FS_Directory( fs)) ;
                 unsigned dirLen = strlen( dirStr) ;
-
                 valueString = XtMalloc( dirLen + strlen( fileStr) + 1) ;
                 strcpy( valueString, dirStr) ;
                 strcpy( &valueString[dirLen], fileStr) ;
@@ -2048,19 +1868,16 @@ QualifySearchDataProc(
 			   XmCHARSET_TEXT, NULL);
         }
     qualifiedSearchData->length = XmStringLength( qualifiedSearchData->value) ;
-
     qualifiedSearchData->mask =
       XmStringGenerate(qualifiedMask, XmFONTLIST_DEFAULT_TAG,
 		       XmCHARSET_TEXT, NULL) ;
     qualifiedSearchData->mask_length = XmStringLength(
                                                    qualifiedSearchData->mask) ;
-
     qualifiedSearchData->dir =
       XmStringGenerate(qualifiedDir, XmFONTLIST_DEFAULT_TAG,
 		       XmCHARSET_TEXT, NULL) ;
     qualifiedSearchData->dir_length = XmStringLength(
                                                     qualifiedSearchData->dir) ;
-
     qualifiedSearchData->pattern =
       XmStringGenerate(qualifiedPattern, XmFONTLIST_DEFAULT_TAG,
 		       XmCHARSET_TEXT, NULL) ;
@@ -2075,7 +1892,6 @@ QualifySearchDataProc(
     XtFree( maskString) ;
     return ;
     }
-
 /****************************************************************/
 static void
 FileSelectionBoxUpdate(
@@ -2093,25 +1909,20 @@ FileSelectionBoxUpdate(
             int             len ;
             XmFileSelectionBoxCallbackStruct qualifiedSearchData ;
 /****************/
-
     /* Unmap file list, so if it takes a long time to generate the
     *   list items, the user doesn't wonder what is going on.
     */
     XtSetMappedWhenManaged( SB_List( fs), FALSE) ;
     XFlush( XtDisplay( fs)) ;
-
     if(    FS_StateFlags( fs) & XmFS_NO_MATCH    )
     {   XmListDeleteAllItems( SB_List( fs)) ;
         }
     FS_StateFlags( fs) |= XmFS_IN_FILE_SEARCH ;
-
     (*FS_QualifySearchDataProc( fs))( (Widget) fs, (XtPointer) searchData,
                                             (XtPointer) &qualifiedSearchData) ;
     FS_ListUpdated( fs) = FALSE ;
     FS_DirectoryValid( fs) = FALSE ;
-
     (*FS_DirSearchProc( fs))( (Widget) fs, (XtPointer) &qualifiedSearchData) ;
-
     if(    FS_DirectoryValid( fs)    )
     {
         (*FS_FileSearchProc( fs))( (Widget) fs,
@@ -2124,7 +1935,6 @@ FileSelectionBoxUpdate(
                 }
             FS_Directory( fs) = XmStringCopy( qualifiedSearchData.dir) ;
             }
-
         if(   !XmStringCompare( qualifiedSearchData.pattern, FS_Pattern( fs)) )
         {   if(    FS_Pattern( fs)    )
             {   XmStringFree( FS_Pattern( fs)) ;
@@ -2143,7 +1953,6 @@ FileSelectionBoxUpdate(
                     maskString = XtMalloc( len + strlen( patternString) + 1) ;
                     strcpy( maskString, dirString) ;
                     strcpy( &maskString[len], patternString) ;
-
 		    XmTextFieldSetString( FS_FilterText( fs), maskString) ;
 		    XmTextFieldSetInsertionPosition( FS_FilterText( fs),
 			     XmTextFieldGetLastPosition( FS_FilterText( fs))) ;
@@ -2172,17 +1981,14 @@ FileSelectionBoxUpdate(
           }
         }
     FS_StateFlags( fs) &= ~XmFS_IN_FILE_SEARCH ;
-
     al = 0 ;
     XtSetArg( ac[al], XmNitemCount, &itemCount) ; ++al ;
     XtGetValues( SB_List( fs), ac, al) ;
-
     if(    itemCount    )
     {   FS_StateFlags( fs) &= ~XmFS_NO_MATCH ;
         }
     else
     {   FS_StateFlags( fs) |= XmFS_NO_MATCH ;
-
         if(    (item = FS_NoMatchString( fs)) != NULL    )
         {   al = 0 ;
             XtSetArg( ac[al], XmNitems, &item) ; ++al ;
@@ -2206,20 +2012,16 @@ FileSelectionBoxUpdate(
           {
             XmTextFieldSetString( SB_Text( fs), NULL) ;
           }
-
         _XmBulletinBoardSizeUpdate( (Widget) fs) ;
-
         UpdateHorizPos( (Widget) fs) ;
         }
     XtSetMappedWhenManaged( SB_List( fs), TRUE) ;
-
     XmStringFree( qualifiedSearchData.value) ;
     XmStringFree( qualifiedSearchData.mask) ;
     XmStringFree( qualifiedSearchData.dir) ;
     XmStringFree( qualifiedSearchData.pattern) ;
     return ;
     }
-
 /****************************************************************
  * This loads the list widget with a directory list based
  *   on the directory specification.
@@ -2245,7 +2047,6 @@ DirSearchProc(
 	    unsigned        dirLen ;
 	    Boolean showDotFiles = (FS_FileFilterStyle( fs) == XmFILTER_NONE) ;
 /****************/
-
     /* Sometimes a directory has changed contents even though
      *   the FileSB has not navigated to a different directory;
      *   the directory list needs to be updated in this case.
@@ -2259,7 +2060,6 @@ DirSearchProc(
      * An interface for the "stat" functionality used here should
      *   re-implemented in Xmos.c.
      */
-
     if(    (qualifiedDir = _XmStringGetTextConcat( searchData->dir))
                                                                    == NULL    )
       {
@@ -2278,7 +2078,6 @@ DirSearchProc(
         || !XmStringCompare( searchData->dir, FS_Directory( fs))    )
     {
         FS_StateFlags( fs) &= ~XmFS_DIR_SEARCH_PROC ;
-
         /* Directory is different than current, so update dir list.
         */
         dirList = NULL ;
@@ -2300,17 +2099,14 @@ DirSearchProc(
         {   qsort( (void *)dirList, numDirs, sizeof( char *), _XmOSFileCompare) ;
             }
         XmStringDirList = (XmString *) XtMalloc( numDirs * sizeof( XmString)) ;
-
 	Index = 0 ;
 	dirLen = strlen( qualifiedDir) ;
-
 	while(    Index < numDirs    ) {
 	    /* Assume first entry is "." and second is "..".
 	     */
 	    if( showDotFiles
 	       || (Index == 1)
 	       || ((dirList[Index])[dirLen] != '.')) {
-
 		if(    FS_PathMode( fs)  ==  XmPATH_MODE_FULL   )
 		    XmStringDirList[numItems++] =
 			XmStringGenerate(dirList[Index],
@@ -2324,23 +2120,19 @@ DirSearchProc(
 	    }
 	    ++Index ;
 	}
-
         /* Update the list.  */
         Index = 0;
         XtSetArg( args[Index], XmNitems, XmStringDirList) ; Index++ ;
         XtSetArg( args[Index], XmNitemCount, numItems) ; Index++ ;
         XtSetArg( args[Index], XmNtopItemPosition, 1) ; Index++ ;
         XtSetValues( FS_DirList( fs), args, Index);
-
         XmListSelectPos( FS_DirList( fs), 1, FALSE) ;
         FS_DirListSelectedItemPosition( fs) = 1 ;
-
         Index = numDirs ;
         while(    Index--    )
         {   XtFree( dirList[Index]) ;
             }
         XtFree( (char *) dirList) ;
-
         while(    numItems--    )
         {
             XmStringFree( XmStringDirList[numItems]) ;
@@ -2350,11 +2142,9 @@ DirSearchProc(
         FS_PrevDirModTime( fs) = curDirModTime ;
         }
     XtFree( (char *) qualifiedDir) ;
-
     FS_DirectoryValid( fs) = TRUE ;
     return ;
     }
-
 /****************************************************************
  * Process callback from either List of the File Selection Box.
  ****************/
@@ -2376,10 +2166,8 @@ ListCallback(
             String          patternString ;
             int             len ;
 /****************/
-
     callback = (XmListCallbackStruct *) call_data ;
     fsb = (XmFileSelectionBoxWidget) client_data ;
-
     switch(    callback->reason    )
     {
         case XmCR_BROWSE_SELECT:
@@ -2410,13 +2198,11 @@ ListCallback(
                 change_data.dir_length = XmStringLength( change_data.dir) ;
                 change_data.pattern = NULL ;
                 change_data.pattern_length = 0 ;
-
                 /* Qualify and then update the filter text.
                 */
                 (*FS_QualifySearchDataProc( fsb))( (Widget) fsb,
                                      (XtPointer) &change_data,
                                           (XtPointer) &qualified_change_data) ;
-
                 if(    FS_PathMode( fsb)  ==  XmPATH_MODE_FULL   )
                   {
                     if ((dirString =
@@ -2518,7 +2304,6 @@ ListCallback(
         }
     return ;
     }
-
 /****************************************************************
  * This routine detects differences in two versions
  *   of a widget, when a difference is found the
@@ -2541,9 +2326,7 @@ SetValues(
             Boolean         doSearch = FALSE ;
             XmFileSelectionBoxCallbackStruct searchData ;
 /****************/
-
     BB_InSetValues( new_w) = TRUE ;
-
     if(    FS_DirListLabelString( current) != FS_DirListLabelString( new_w)    )
     {
         n = 0 ;
@@ -2576,11 +2359,9 @@ SetValues(
         XtSetArg( args[n], XmNitemCount, FS_DirListItemCount( new_w)) ; ++n ;
         FS_DirListItemCount( new_w) = XmUNSPECIFIED_COUNT ;
         }
-
     if(    n    )
     {   XtSetValues( FS_DirList( new_w), args, n) ;
         }
-
     if(    (SB_TextColumns( new_w) != SB_TextColumns( current))
         && FS_FilterText( new_w)    )
     {
@@ -2615,7 +2396,6 @@ SetValues(
     *   in the value field of the search data.
     */
     bzero( (char*)&searchData, sizeof( XmFileSelectionBoxCallbackStruct)) ;
-
     if(    FS_DirMask( new_w) != FS_DirMask( current)    )
     {
         if(    FS_StateFlags( new_w) & XmFS_IN_FILE_SEARCH    )
@@ -2623,7 +2403,6 @@ SetValues(
             if(    FS_FilterText( new_w)    )
             {
                 newString = _XmStringGetTextConcat( FS_DirMask( new_w)) ;
-
                 /* Should do this stuff entirely with XmStrings when the text
                 *   widget supports it.
                 */
@@ -2653,7 +2432,6 @@ SetValues(
         {   doSearch = TRUE ;
             searchData.dir = XmStringCopy( FS_Directory( request)) ;
             searchData.dir_length = XmStringLength( searchData.dir) ;
-
             /* The resource will be set to the new value after the Search
             *   routines have been called for validation.
             */
@@ -2671,7 +2449,6 @@ SetValues(
         {   doSearch = TRUE ;
             searchData.pattern = XmStringCopy( FS_Pattern( request)) ;
             searchData.pattern_length = XmStringLength( searchData.pattern) ;
-
             /* The resource will be set to the new value after the Search
             *   routines have been called for validation.
             */
@@ -2687,23 +2464,19 @@ SetValues(
     if(    doSearch    )
     {
         FileSelectionBoxUpdate( new_w, &searchData) ;
-
         XmStringFree( searchData.value) ;
         XmStringFree( searchData.mask) ;
         XmStringFree( searchData.dir) ;
         XmStringFree( searchData.pattern) ;
         }
     BB_InSetValues( new_w) = FALSE ;
-
     if(    XtClass( new_w) == xmFileSelectionBoxWidgetClass    )
     {
         _XmBulletinBoardSizeUpdate( (Widget) new_w) ;
-
         UpdateHorizPos( (Widget) new_w) ;
         }
     return( FALSE) ;
     }
-
 /****************************************************************/
 static void
 FSBGetDirSpec(
@@ -2714,9 +2487,7 @@ FSBGetDirSpec(
     if (FS_PathMode(fs) == XmPATH_MODE_RELATIVE)
     {
 	XtArgVal	filename;
-
         _XmSelectionBoxGetTextString(fs, resource, &filename);
-
         *value = (XtArgVal)XmStringConcat(FS_Directory(fs),
 	        (XmString)filename);
         XmStringFree((XmString)filename);
@@ -2725,7 +2496,6 @@ FSBGetDirSpec(
     {
         _XmSelectionBoxGetTextString(fs, resource, value);
     }
-
     return;
 }
 /****************************************************************/
@@ -2741,10 +2511,8 @@ FSBGetDirectory(
 {
     XmString        data ;
 /****************/
-
     data = XmStringCopy(FS_Directory(fs));
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************/
@@ -2760,10 +2528,8 @@ FSBGetNoMatchString(
 {
     XmString        data ;
 /****************/
-
     data = XmStringCopy(FS_NoMatchString(fs));
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************/
@@ -2779,10 +2545,8 @@ FSBGetPattern(
 {
     XmString        data ;
 /****************/
-
     data = XmStringCopy(FS_Pattern(fs));
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************
@@ -2797,11 +2561,9 @@ FSBGetFilterLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     XtSetArg( al[0], XmNlabelString, &data) ;
     XtGetValues( FS_FilterLabel( fs), al, 1) ;
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************
@@ -2816,11 +2578,9 @@ FSBGetDirListLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     XtSetArg( al[0], XmNlabelString, &data) ;
     XtGetValues( FS_DirListLabel( fs), al, 1) ;
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************
@@ -2835,11 +2595,9 @@ FSBGetDirListItems(
             XmStringTable   data ;
             Arg             al[1] ;
 /****************/
-
     XtSetArg( al[0], XmNitems, &data) ;
     XtGetValues( FS_DirList( fs), al, 1) ;
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************
@@ -2854,11 +2612,9 @@ FSBGetDirListItemCount(
             int             data ;
             Arg             al[1] ;
 /****************/
-
     XtSetArg( al[0], XmNitemCount, &data) ;
     XtGetValues( FS_DirList( fs), al, 1) ;
     *value = (XtArgVal) data ;
-
     return ;
     }
 /****************************************************************
@@ -2873,7 +2629,6 @@ FSBGetListItems(
             XmStringTable   data ;
             Arg             al[1] ;
 /****************/
-
     if(    FS_StateFlags( fs) & XmFS_NO_MATCH    )
     {
         *value = (XtArgVal) NULL ;
@@ -2897,7 +2652,6 @@ FSBGetListItemCount(
             int             data ;
             Arg             al[1] ;
 /****************/
-
     if(    FS_StateFlags( fs) & XmFS_NO_MATCH    )
     {
         *value = (XtArgVal) 0 ;
@@ -2907,7 +2661,6 @@ FSBGetListItemCount(
         XtGetValues( SB_List( fs), al, 1) ;
         *value = (XtArgVal) data ;
         }
-
     return ;
     }
 /****************************************************************
@@ -2923,16 +2676,13 @@ FSBGetDirMask(
             String          filterText ;
             XmString        data ;
 /****************/
-
     filterText = XmTextFieldGetString( FS_FilterText(fs)) ;
     data = XmStringGenerate(filterText, XmFONTLIST_DEFAULT_TAG,
 			    XmCHARSET_TEXT, NULL);
     *value = (XtArgVal) data ;
     XtFree( filterText) ;
-
     return ;
     }
-
 /****************************************************************/
 static Widget
 GetActiveText(
@@ -2941,7 +2691,6 @@ GetActiveText(
 {
     Widget          activeChild = NULL ;
 /****************/
-
     if(    _XmGetFocusPolicy( (Widget) fsb) == XmEXPLICIT    )
     {
         if(    (fsb->manager.active_child == SB_Text( fsb))
@@ -2974,8 +2723,6 @@ GetActiveText(
     }
     return( activeChild) ;
 }
-
-
 /****************************************************************/
 static void
 FileSelectionBoxUpOrDown(
@@ -2995,13 +2742,11 @@ FileSelectionBoxUpOrDown(
             Arg             av[5] ;
             Cardinal        ac ;
 /****************/
-
     if (!argc || (*argc != 1) || !argv)
     {
         XmeWarning(wid, MESSAGE0);
         return;
     }
-
     if(    !(activeChild = GetActiveText( fsb, event))    )
     {   return ;
         }
@@ -3025,11 +2770,9 @@ FileSelectionBoxUpOrDown(
     XtSetArg( av[ac], XmNtopItemPosition, &top) ; ++ac ;
     XtSetArg( av[ac], XmNvisibleItemCount, &visible) ; ++ac ;
     XtGetValues( (Widget) list, av, ac) ;
-
     if(    !count    )
     {   return ;
         }
-
     if (_XmConvertActionParamToRepTypeId((Widget) fsb,
 			 XmRID_FILE_SELECTION_BOX_UP_OR_DOWN_ACTION_PARAMS,
 			 argv[0], True, &key_pressed) == False)
@@ -3037,7 +2780,6 @@ FileSelectionBoxUpOrDown(
 	/* We couldn't convert the value. Just assume a value of 0. */
 	key_pressed = 0;
     }
-
     if(    *position == 0    )
     {   /*  No selection, so select first item.
         */
@@ -3099,7 +2841,6 @@ FileSelectionBoxRestore(
             int             maskLen ;
             Widget          activeChild ;
 /****************/
-
     if(    !(activeChild = GetActiveText( fsb, event))    )
     {   return ;
         }
@@ -3113,7 +2854,6 @@ FileSelectionBoxRestore(
             if ((dir = _XmStringGetTextConcat( FS_Directory( fsb))) != NULL)
               {
                 dirLen = strlen( dir) ;
-
                 if ((mask = _XmStringGetTextConcat( FS_Pattern( fsb))) != NULL)
                   {
                     maskLen = strlen( mask) ;
@@ -3166,14 +2906,12 @@ FileSelectionBoxFocusMoved(
                                         = (XmFocusMovedCallbackStruct *) data ;
             Widget          ancestor ;
 /****************/
-
     if(    !call_data->cont    )
     {   /* Preceding callback routine wants focus-moved processing
         *   to be discontinued.
         */
         return ;
         }
-
     if(    call_data->new_focus
         && (   (call_data->new_focus == FS_FilterText( client_data))
             || (call_data->new_focus == FS_DirText( client_data))
@@ -3182,7 +2920,6 @@ FileSelectionBoxFocusMoved(
     {
         BB_DefaultButton( client_data) = SB_ApplyButton( client_data) ;
         }
-
  /*
   * Fix for 4110 - Check to see if the new_focus is NULL.  If it is, check
   *                to see if the default button has been set.  If not, set
@@ -3205,9 +2942,7 @@ FileSelectionBoxFocusMoved(
       else
     {   BB_DefaultButton( client_data) = SB_OkButton( client_data) ;
         }
-
     _XmBulletinBoardFocusMoved( wid, client_data, (XtPointer) call_data) ;
-
     /* Since the focus-moved callback of an ancestor bulletin board may
     *   have already been called, we must make sure that it knows that
     *   we have changed our default button.  So, walk the hierarchy and
@@ -3217,7 +2952,6 @@ FileSelectionBoxFocusMoved(
     if(    call_data->cont    )
     {
         ancestor = XtParent( (Widget) client_data) ;
-
         while(    ancestor  &&  !XtIsShell( ancestor)    )
         {
             if(    XmIsBulletinBoard( ancestor)    )
@@ -3234,7 +2968,6 @@ FileSelectionBoxFocusMoved(
         }
     return ;
     }
-
 /****************************************************************
  * This is the procedure which does all of the button
  *   callback magic.
@@ -3253,9 +2986,7 @@ FileSelectionPB(
             String          text_value ;
             Boolean         allowUnmanage = FALSE ;
 /****************/
-
     fs = (XmFileSelectionBoxWidget) XtParent( wid) ;
-
     searchData.reason = XmCR_NONE ;
     searchData.event = callback->event ;
     searchData.value = NULL ;
@@ -3266,7 +2997,6 @@ FileSelectionPB(
     searchData.dir_length = 0 ;
     searchData.pattern = NULL ;
     searchData.pattern_length = 0 ;
-
     if(    ((long) which_button) == XmDIALOG_APPLY_BUTTON    )
     {
         if(    FS_FilterText( fs)
@@ -3288,9 +3018,7 @@ FileSelectionPB(
             XtFree( text_value) ;
             }
         searchData.reason = XmCR_NONE ;
-
         FileSelectionBoxUpdate( fs, &searchData) ;
-
         XmStringFree( searchData.mask) ;
         searchData.mask = NULL ;
         searchData.mask_length = 0 ;
@@ -3298,7 +3026,6 @@ FileSelectionPB(
         searchData.dir = NULL ;
         searchData.dir_length = 0 ;
         }
-
     /* Use the XmNqualifySearchDataProc routine to fill in all fields of the
     *   callback data record.
     */
@@ -3360,7 +3087,6 @@ FileSelectionPB(
     XmStringFree( qualifiedSearchData.dir) ;
     XmStringFree( qualifiedSearchData.mask) ;
     XmStringFree( qualifiedSearchData.value) ;
-
     if(    allowUnmanage
         && fs->bulletin_board.shell
         && fs->bulletin_board.auto_unmanage   )
@@ -3369,7 +3095,6 @@ FileSelectionPB(
         }
     return ;
     }
-
 /****************************************************************
  * This function returns the widget id of the
  *   specified SelectionBox child widget.
@@ -3377,10 +3102,8 @@ FileSelectionPB(
 Widget XmFileSelectionBoxGetChild(Widget fs, unsigned char which)
 {
      Widget child ;
-
     _XmWidgetToAppContext(fs);
     _XmAppLock(app);
-
     switch(    which    )
     {
         case XmDIALOG_DIR_LIST:
@@ -3406,7 +3129,6 @@ Widget XmFileSelectionBoxGetChild(Widget fs, unsigned char which)
     _XmAppUnlock(app);
     return child;
     }
-
 /****************************************************************/
 void
 XmFileSelectionDoSearch(
@@ -3416,10 +3138,8 @@ XmFileSelectionDoSearch(
             XmFileSelectionBoxCallbackStruct searchData ;
             String          textString ;
 /****************/
-
     _XmWidgetToAppContext(fs);
     _XmAppLock(app);
-
     searchData.reason = XmCR_NONE ;
     searchData.event = 0 ;
     searchData.value = NULL ;
@@ -3428,7 +3148,6 @@ XmFileSelectionDoSearch(
     searchData.dir_length = 0 ;
     searchData.pattern = NULL ;
     searchData.pattern_length = 0 ;
-
     if(    dirmask    )
     {
         searchData.mask = XmStringCopy( dirmask) ;
@@ -3464,13 +3183,11 @@ XmFileSelectionDoSearch(
             }
         }
     FileSelectionBoxUpdate( (XmFileSelectionBoxWidget) fs, &searchData) ;
-
     XmStringFree( searchData.mask) ;
     XmStringFree( searchData.dir) ;
     _XmAppUnlock(app);
     return ;
     }
-
 /****************************************************************/
 Widget
 XmCreateFileSelectionBox(
@@ -3480,10 +3197,8 @@ XmCreateFileSelectionBox(
         Cardinal n )
 {
 /****************/
-
     return( XtCreateWidget( name, xmFileSelectionBoxWidgetClass, p, args, n));
 }
-
 Widget
 XmVaCreateFileSelectionBox(
         Widget parent,
@@ -3493,12 +3208,9 @@ XmVaCreateFileSelectionBox(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmFileSelectionBoxWidgetClass,
@@ -3507,7 +3219,6 @@ XmVaCreateFileSelectionBox(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedFileSelectionBox(
         Widget parent,
@@ -3517,11 +3228,9 @@ XmVaCreateManagedFileSelectionBox(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmFileSelectionBoxWidgetClass,
@@ -3530,7 +3239,6 @@ XmVaCreateManagedFileSelectionBox(
     va_end(var);
     return w;
 }
-
 /****************************************************************
  * This convenience function creates a DialogShell
  *   and a FileSelectionBox child of the shell;
@@ -3546,7 +3254,6 @@ XmCreateFileSelectionDialog(
    return XmeCreateClassDialog (xmFileSelectionBoxWidgetClass,
 				parent, name, arglist, argcount) ;
 }
-
 static void
 FSBConvert(Widget wid, XtPointer client_data, XtPointer cb_struct)
 {
@@ -3558,10 +3265,8 @@ FSBConvert(Widget wid, XtPointer client_data, XtPointer cb_struct)
   XmConvertCallbackStruct *cs = (XmConvertCallbackStruct *) cb_struct;
   Widget fsb = (Widget) client_data;
   Atom atoms[XtNumber(atom_names)];
-
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names), False, atoms);
-
   if (FS_DirSearchProc(fsb) == DirSearchProc &&
       FS_FileSearchProc(fsb) == FileSearchProc) {
     if ((cs -> target == atoms[XmATARGETS] ||

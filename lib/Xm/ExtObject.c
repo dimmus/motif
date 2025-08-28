@@ -25,21 +25,15 @@
 static char rcsid[] = "$XConsortium: ExtObject.c /main/13 1995/10/25 20:03:50 cde-sun $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <string.h>
 #include "BaseClassI.h"
 #include "ExtObjectI.h"
 #include "SyntheticI.h"
 #include "XmI.h"
-
-
 /********    Static Function Declarations    ********/
-
 static void ClassInitialize(void);
 static void ClassPartInitPrehook(WidgetClass c);
 static void ClassPartInitPosthook(WidgetClass c);
@@ -56,18 +50,13 @@ static Boolean SetValues(Widget old, Widget ref, Widget new_w,
 static void GetValuesHook(Widget new_w, ArgList args, Cardinal *num_args);
 static void Destroy(Widget wid);
 static void UseParent(Widget w, int offset, XrmValue *value);
-
 /********    End Static Function Declarations    ********/
-
 /***************************************************************************
  *
  * ExtObject Resources
  *
  ***************************************************************************/
-
-
 #define Offset(field)	XtOffsetOf(struct _XmExtRec, ext.field)
-
 static XtResource extResources[] =
 {
   {
@@ -82,23 +71,17 @@ static XtResource extResources[] =
   }
 };
 #undef Offset
-
 #define XmNUM_ELEMENTS	4
 #define XmNUM_BYTES	255
-
 typedef struct _XmExtCache {
   char    data[XmNUM_BYTES];
   Boolean inuse;
 } XmExtCache;
-
 typedef union {
   XmExtCache	cache;
   double	force_alignment;
 } Aligned_XmExtCache;
-
 static Aligned_XmExtCache extarray[XmNUM_ELEMENTS];
-
-
 static XmBaseClassExtRec myBaseClassExtRec = {
   NULL,				/* Next extension         */
   NULLQUARK,			/* record type XmQmotif   */
@@ -121,7 +104,6 @@ static XmBaseClassExtRec myBaseClassExtRec = {
   0,				/* resource_count     	  */
   FALSE				/* use_sub_resources	  */
 };
-
 externaldef(xmextclassrec)
 XmExtClassRec xmExtClassRec = {
   {
@@ -163,10 +145,8 @@ XmExtClassRec xmExtClassRec = {
     0				  /* num syn resources	 */
   }
 };
-
 externaldef(xmextobjectclass)
 WidgetClass xmExtObjectClass = (WidgetClass) (&xmExtClassRec);
-
 /*ARGSUSED*/
 static void
 UseParent(Widget w,
@@ -175,35 +155,29 @@ UseParent(Widget w,
 {
   value->addr = (XPointer) &(w->core.parent);
 }
-
 /************************************************************************
  *
  *  ClassInitialize
  *
  ************************************************************************/
-
 static void
 ClassInitialize(void)
 {
   myBaseClassExtRec.record_type = XmQmotif;
 }
-
 /************************************************************************
  *
  *  ClassPartInitPrehook
  *
  ************************************************************************/
-
 static void
 ClassPartInitPrehook(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
-
   if ((WidgetClass)wc != xmExtObjectClass)
     {
       XmExtObjectClass sc = (XmExtObjectClass) c->core_class.superclass;
       XmBaseClassExt *scePtr = _XmGetBaseClassExtPtr(sc, XmQmotif);
-
       /*
        * If our superclass uses subresources, then we need to
        * temporarily fill it's core resource fields so that objectClass
@@ -218,19 +192,16 @@ ClassPartInitPrehook(WidgetClass c)
 	}
     }
 }
-
 /************************************************************************
  *
  *  ClassPartInitPosthook
  *
  ************************************************************************/
-
 static void
 ClassPartInitPosthook(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
   XmBaseClassExt  *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
   if ((*wcePtr) && (*wcePtr)->use_sub_resources)
     {
       /*
@@ -241,7 +212,6 @@ ClassPartInitPosthook(WidgetClass c)
       (*wcePtr)->num_ext_resources = wc->object_class.num_resources;
     }
 }
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -249,18 +219,14 @@ ClassPartInitPosthook(WidgetClass c)
  *    vendorShells class part.
  *
  ************************************************************************/
-
 static void
 ClassPartInitialize(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
-
   if (wc == (XmExtObjectClass)xmExtObjectClass)
     return;
-
   _XmBuildExtResources(c);
 }
-
 /*ARGSUSED*/
 static void
 InitializePrehook(Widget req,	/* unused */
@@ -270,7 +236,6 @@ InitializePrehook(Widget req,	/* unused */
 {
   XmExtObjectClass ec = (XmExtObjectClass) XtClass(new_w);
   XmBaseClassExt  *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-
   if ((*wcePtr)->use_sub_resources)
     {
       /*
@@ -284,12 +249,10 @@ InitializePrehook(Widget req,	/* unused */
 	{
 	  ec->object_class.resources = (*wcePtr)->compiled_ext_resources;
 	  ec->object_class.num_resources = (*wcePtr)->num_ext_resources;
-
 	  XtGetResourceList((WidgetClass) ec,
 			    &((*wcePtr)->ext_resources),
 			    &((*wcePtr)->num_ext_resources));
 	}
-
       XtGetSubresources(XtParent(new_w),
 			(XtPointer)new_w,
 			NULL, NULL,
@@ -299,7 +262,6 @@ InitializePrehook(Widget req,	/* unused */
       _XmProcessUnlock();
     }
 }
-
 static void
 Initialize(Widget req,
 	   Widget new_w,
@@ -311,14 +273,12 @@ Initialize(Widget req,
   Widget           resParent = ne->ext.logicalParent;
   XmWidgetExtData  extData;
   XmBaseClassExt  *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-
   if (!(*wcePtr)->use_sub_resources)
     {
       if (resParent)
 	{
 	  extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
 	  _XmPushWidgetExtData(resParent, extData, ne->ext.extensionType);
-
 	  extData->widget = new_w;
 	  _XmProcessLock();
 	  extData->reqWidget = (Widget)
@@ -326,13 +286,11 @@ Initialize(Widget req,
 	  memcpy((char *)extData->reqWidget, (char *)req,
 		 XtClass(new_w)->core_class.widget_size);
 	  _XmProcessUnlock();
-
 	  /*  Convert the fields from unit values to pixel values  */
 	  _XmExtImportArgs(new_w, args, num_args);
 	}
     }
 }
-
 /*ARGSUSED*/
 static Boolean
 SetValuesPrehook(Widget req,	/* unused */
@@ -343,7 +301,6 @@ SetValuesPrehook(Widget req,	/* unused */
 {
   XmExtObjectClass ec = (XmExtObjectClass) XtClass(new_w);
   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-
   if ((*wcePtr)->use_sub_resources)
     {
       _XmProcessLock();
@@ -353,10 +310,8 @@ SetValuesPrehook(Widget req,	/* unused */
 		     args, *num_args);
       _XmProcessUnlock();
     }
-
   return False;
 }
-
 static void
 GetValuesPrehook(Widget new_w,
 		 ArgList args,
@@ -364,7 +319,6 @@ GetValuesPrehook(Widget new_w,
 {
   XmExtObjectClass ec = (XmExtObjectClass) XtClass(new_w);
   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
-
   if ((*wcePtr)->use_sub_resources)
     {
       _XmProcessLock();
@@ -375,13 +329,11 @@ GetValuesPrehook(Widget new_w,
       _XmProcessUnlock();
     }
 }
-
 /************************************************************************
  *
  *  SetValues
  *
  ************************************************************************/
-
 /*ARGSUSED*/
 static Boolean
 SetValues(Widget old,
@@ -394,7 +346,6 @@ SetValues(Widget old,
   Widget	  resParent = ne->ext.logicalParent;
   XmWidgetExtData ext = _XmGetWidgetExtData(resParent, ne->ext.extensionType);
   Cardinal	  extSize;
-
     if(ext == NULL)
     {
 #ifdef DEBUG
@@ -402,34 +353,26 @@ SetValues(Widget old,
 #endif
         return FALSE;
     }
-
   if (resParent)
     {
       _XmProcessLock();
       extSize = XtClass(new_w)->core_class.widget_size;
-
       ext->widget = new_w;
-
       ext->oldWidget = (Widget) _XmExtObjAlloc(extSize);
       memcpy((char *)ext->oldWidget, (char *)old, extSize);
-
       ext->reqWidget = (Widget) _XmExtObjAlloc(extSize);
       memcpy((char *)ext->reqWidget, (char *)ref, extSize);
       _XmProcessUnlock();
-
       /* Convert the necessary fields from unit values to pixel values. */
       _XmExtImportArgs(new_w, args, num_args);
     }
-
   return FALSE;
 }
-
 /************************************************************************
  *
  *  GetValuesHook
  *
  ************************************************************************/
-
 static void
 GetValuesHook(Widget new_w,
 	      ArgList args,
@@ -438,7 +381,6 @@ GetValuesHook(Widget new_w,
   XmExtObject     ne = (XmExtObject) new_w;
   Widget          resParent = ne->ext.logicalParent;
   XmWidgetExtData ext;
-
   if (resParent)
     {
       ext = _XmGetWidgetExtData(resParent, ne->ext.extensionType);
@@ -449,40 +391,31 @@ GetValuesHook(Widget new_w,
 #endif
         return;
     }
-
       ext->widget = new_w;
-
       _XmExtGetValuesHook(new_w, args, num_args);
     }
 }
-
 /************************************************************************
  *
  *  Destroy
  *
  ************************************************************************/
-
 static void
 Destroy(Widget wid)
 {
   XmExtObject extObj = (XmExtObject) wid;
   Widget      resParent = extObj->ext.logicalParent;
-
   if (resParent)
     {
       XmWidgetExtData extData;
-
       _XmPopWidgetExtData(resParent, &extData, extObj->ext.extensionType);
-
       XtFree((char *) extData);
     }
 }
-
 char *
 _XmExtObjAlloc(int size)
 {
   register int i;
-
   if (size <= XmNUM_BYTES)
     {
       for (i = 0; i < XmNUM_ELEMENTS; i++)
@@ -492,25 +425,20 @@ _XmExtObjAlloc(int size)
 	    return extarray[i].cache.data;
 	  }
     }
-
   return XtMalloc(size);
 }
-
 void
 _XmExtObjFree(XtPointer element)
 {
   register int i;
-
   for (i = 0; i < XmNUM_ELEMENTS; i++)
     if (extarray[i].cache.data == (char*)element)
       {
 	extarray[i].cache.inuse = FALSE;
 	return;
       }
-
   XtFree((char *) element);
 }
-
 /**********************************************************************
  *
  *  _XmBuildExtResources
@@ -519,21 +447,17 @@ _XmExtObjFree(XtPointer element)
  *	this class.
  *
  **********************************************************************/
-
 void
 _XmBuildExtResources(WidgetClass c)
 {
   XmExtObjectClass wc = (XmExtObjectClass) c;
   XmExtObjectClass sc;
-
   _XmProcessLock();
   _XmInitializeSyntheticResources(wc->ext_class.syn_resources,
 				  wc->ext_class.num_syn_resources);
-
   if (wc != (XmExtObjectClass) xmExtObjectClass)
     {
       sc = (XmExtObjectClass) wc->object_class.superclass;
-
       _XmBuildResources (&(wc->ext_class.syn_resources),
 			 &(wc->ext_class.num_syn_resources),
 			 sc->ext_class.syn_resources,

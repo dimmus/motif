@@ -20,18 +20,13 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef _XmRegionI_h
 #define _XmRegionI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define ISEMPTY(r) ((r)->numRects == 0)
-
 /*  1 if two Boxs overlap.
  *  0 if two Boxs do not overlap.
  *  Remember, x2 and y2 are not in the region
@@ -41,7 +36,6 @@ extern "C" {
 	 (r1)->x1 < (r2)->x2 && \
 	 (r1)->y2 > (r2)->y1 && \
 	 (r1)->y1 < (r2)->y2)
-
 /*
  *  update region extents
  */
@@ -55,7 +49,6 @@ extern "C" {
             if((r)->y2 > (idRect)->extents.y2)\
               (idRect)->extents.y2 = (r)->y2;\
         }
-
 /*
  *   Check to see if there is enough memory in the present region.
  */
@@ -70,18 +63,15 @@ extern "C" {
           (rect) = &(firstrect)[(reg)->numRects];\
          }\
        }
-
 /*  this routine checks to see if the previous rectangle is the same
  *  or subsumes the new rectangle to add.
  */
-
 #define CHECK_PREVIOUS(Reg, R, Rx1, Ry1, Rx2, Ry2)\
                (!(((Reg)->numRects > 0)&&\
                   ((R-1)->y1 == (Ry1)) &&\
                   ((R-1)->y2 == (Ry2)) &&\
                   ((R-1)->x1 <= (Rx1)) &&\
                   ((R-1)->x2 >= (Rx2))))
-
 /*  add a rectangle to the given XmRegion */
 #define ADDRECT(reg, r, fr, rx1, ry1, rx2, ry2){\
     if (((rx1) < (rx2)) && ((ry1) < (ry2)) && \
@@ -104,9 +94,6 @@ extern "C" {
               (r)++;\
             }\
         }
-
-
-
 /*  add a rectangle to the given XmRegion */
 #define ADDRECTNOX(reg, r, rx1, ry1, rx2, ry2){\
             if ((rx1 < rx2) && (ry1 < ry2) &&\
@@ -119,17 +106,14 @@ extern "C" {
               (r)++;\
             }\
         }
-
 #define INBOX(r, x, y) \
       ( ( ((r).x2 >= x)) && \
         ( ((r).x1 <= x)) && \
         ( ((r).y2 >= y)) && \
         ( ((r).y1 <= y)) )
-
 /*
  * used by _XmRegionDrawShadow
  */
-
 #define TL_OPEN		(1 << 0)
 #define BL_OPEN		(1 << 1)
 #define TR_OPEN		(1 << 2)
@@ -138,15 +122,11 @@ extern "C" {
 #define BL_MATCH	(1 << 5)
 #define TR_MATCH	(1 << 6)
 #define BR_MATCH	(1 << 7)
-
 /*
  * The following macro were ported from the X server include file regionstr.h
  */
 #define REGION_BOXPTR(reg) ((XmRegionBox *)((reg)->rects))
-
-
 /********    Private Function Declarations for Region.c    ********/
-
 extern XmRegion _XmRegionCreate( void ) ;
 extern XmRegion _XmRegionCreateSize(
 			long size) ;
@@ -217,14 +197,10 @@ extern void _XmRegionDrawShadow(
 			Dimension border_thick,
 			Dimension shadow_thick,
 			unsigned int shadow_type ) ;
-
 extern XmRegion _XmRegionFromImage(
 			XImage *image );
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRegionI_h */

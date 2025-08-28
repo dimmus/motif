@@ -1,13 +1,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <stdio.h>
 #include <stdlib.h>
-#if defined(VMS) && !defined(__alpha)
-#define mbstowcs(a,b,n) XiMbstowcs(a,b,n)
-#endif
-
 #include <Xm/Xm.h>
 #include <Xm/XmP.h>
 #include "XmI.h"
@@ -23,7 +18,6 @@
 #include <Xm/GrabShellP.h>
 #include <Xm/ExtP.h>
 #include "MenuShellI.h"
-
 /*
  * NOTE:  I use the same syntax for popup and popdown that Xt Uses.
  *        so something is "up" if it is on the screen.  With combo
@@ -32,7 +26,6 @@
  * Note: most uses are now unposted (up) (doesn't appear) and posted (down)
  *	 (does appear)
  */
-
 #ifndef XmNautoTraversal
 #define XmNautoTraversal "autoTraversal"
 #define XmCAutoTraversal "AutoTraversal"
@@ -41,71 +34,52 @@
 #define XmNactivateOnFill "activateOnFill"
 #define XmCActivateOnFill "ActivateOnFill"
 #endif
-
 #define XmTextFieldGetString(t) \
     ( XmIsTextField(t) ? XmTextFieldGetString(t) : XmTextGetString(t) )
-
 #define XmTextFieldSetString(t,s) \
     ( XmIsTextField(t) ? XmTextFieldSetString(t,s) : XmTextSetString(t,s) )
-
 #define XmTextFieldInsert(t,l,p) \
     ( XmIsTextField(t) ? XmTextFieldInsert(t,l,p) : XmTextInsert(t,l,p) )
-
 #define XmTextFieldSetInsertionPosition(t,p) \
     ( XmIsTextField(t) ? XmTextFieldSetInsertionPosition(t,p) \
                        : XmTextSetInsertionPosition(t,p) )
-
 /* From GrabShell.c */
 #define Events	(EnterWindowMask | LeaveWindowMask | ButtonPressMask | \
 		 ButtonReleaseMask)
-
-
 static void TextButtonPress(Widget, XtPointer, XEvent *, Boolean *);
-
 static char combo_translations[] =
 "#override \n\
 Ctrl <Key>osfDown:	XiComboListPost()\n\
 Ctrl <Key>osfUp:	XiComboListUnpost()\n\
 Any <Key>osfCancel:	XiComboListCancel()";
-
 static void Resize(Widget), ChangeManaged(Widget), Destroy(Widget);
 static void Initialize(Widget, Widget, ArgList, Cardinal *);
 static void GetValuesHook(Widget, ArgList, Cardinal *);
 static Boolean SetValues(Widget, Widget, Widget, ArgList, Cardinal *);
-
 static XtGeometryResult GeometryManager(Widget,
 					XtWidgetGeometry*, XtWidgetGeometry*);
 static XtGeometryResult QueryGeometry(Widget,
 				      XtWidgetGeometry *, XtWidgetGeometry *);
-
 static void ClassPartInitialize(WidgetClass);
 static void ClassInitialize();
 static void ExposeMethod(Widget, XEvent*, Region);
-
 static Boolean ComboBoxParentProcess(Widget wid, XmParentProcessData event);
-
 /************************
  * Actions and callbacks.
  ************************/
-
 static void VerifyTextField(Widget, XtPointer, XtPointer);
 static void ModifyVerifyTextField(Widget, XtPointer, XtPointer);
 static void ValueChangedTextField(Widget, XtPointer, XtPointer);
 static void ListSelected(Widget, XtPointer, XtPointer);
-
 static void ComboUnpost(Widget, XEvent *, String *, Cardinal *);
 static void ComboPost(Widget, XEvent *, String *, Cardinal *);
 static void ComboCancel(Widget, XEvent *, String *, Cardinal *);
-
 static void SBBtnDownEH (Widget, XtPointer, XEvent *, Boolean *);
 static void SBBtnUpEH (Widget, XtPointer, XEvent *, Boolean *);
-
 /*********************
  * Internal Routines.
  *********************/
-
 static XmDropDownWidget FindComboBox(Widget);
-
 static void PopdownList(Widget);
 static void LoseFocusHandler(Widget, XtPointer, XEvent *, Boolean *);
 static void RegisterShellHandler(Widget);
@@ -116,14 +90,11 @@ static void FindDesiredSize(Widget, Widget, Dimension *, Dimension *,
 		   XtWidgetGeometry *, XtWidgetGeometry *, XtWidgetGeometry *);
 static void GetTextAndLabelWidth(Widget, Dimension, Dimension, Dimension,
 				 Dimension, Dimension *, Dimension *);
-
 static Boolean SetListFromText(Widget, Boolean), SetTextFromList(Widget);
 static Boolean PopupList(Widget);
-
 /************************************************************
 *	STATIC DECLARATIONS
 *************************************************************/
-
 static XtActionsRec actions[] =
 {
     { "XiComboListDown", ComboPost },
@@ -132,7 +103,6 @@ static XtActionsRec actions[] =
     { "XiComboListUnpost", ComboUnpost },
     { "XiComboListCancel", ComboCancel },
 };
-
 static XtResource resources[] =
 {
   {
@@ -140,103 +110,86 @@ static XtResource resources[] =
     sizeof(Dimension), XtOffsetOf(XmDropDownRec, combo.h_space),
     XmRImmediate, (XtPointer) 2
   },
-
   {
     XmNverticalMargin, XmCMargin, XmRVerticalDimension,
     sizeof(Dimension), XtOffsetOf(XmDropDownRec, combo.v_space),
     XmRImmediate, (XtPointer) 2
   },
-
   {
     XmNverify, XmCVerify, XmRBoolean,
     sizeof(Boolean), XtOffsetOf(XmDropDownRec, combo.verify),
     XmRImmediate, (XtPointer) True
   },
-
   {
     XmNeditable, XmCEditable, XmRBoolean,
     sizeof(Boolean), XtOffsetOf(XmDropDownRec, combo.editable),
     XmRImmediate, (XtPointer) True
   },
-
   {
     XmNcustomizedCombinationBox, XmCBoolean, XmRBoolean,
     sizeof(Boolean), XtOffsetOf(XmDropDownRec, combo.customized_combo_box),
     XmRImmediate, (XtPointer) False
   },
-
   {
     XmNverifyTextCallback, XmCCallback, XmRCallback,
     sizeof(XtCallbackList), XtOffsetOf(XmDropDownRec, combo.verify_text_callback),
     XmRImmediate, (XtPointer) NULL
   },
-
   {
     XmNupdateTextCallback, XmCCallback, XmRCallback,
     sizeof(XtCallbackList), XtOffsetOf(XmDropDownRec, combo.update_text_callback),
     XmRImmediate, (XtPointer) NULL
   },
-
   {
     XmNupdateShellCallback, XmCCallback, XmRCallback,
     sizeof(XtCallbackList), XtOffsetOf(XmDropDownRec, combo.update_shell_callback),
     XmRImmediate, (XtPointer) NULL
   },
-
   {
     XmNpopupShellWidget, XmCWidget, XmRWidget,
     sizeof(Widget), XtOffsetOf(XmDropDownRec, combo.popup_shell),
     XmRImmediate, (XtPointer) NULL
   },
-
   {
     XmNshowLabel, XmCBoolean, XmRBoolean,
     sizeof(Boolean), XtOffsetOf(XmDropDownRec, combo.show_label),
     XmRImmediate, (XtPointer) True
   },
-
   {
     XmNpopupOffset, XmCPopupOffset, XmRInt,
     sizeof(int), XtOffsetOf(XmDropDownRec, combo.popup_offset),
     XmRImmediate, (XtPointer) 15
   },
-
   {
     XmNpopupCursor, XmCCursor, XmRCursor,
     sizeof(Cursor), XtOffsetOf(XmDropDownRec, combo.popup_cursor),
     XmRString, (XtPointer) "left_ptr"
   },
-
   {
     XmNuseTextField, XmCUseTextField, XmRBoolean,
     sizeof(Boolean), XtOffsetOf(XmDropDownRec, combo.use_text_field),
     XmRImmediate, (XtPointer) True
   },
-
   {
     XmNcomboTranslations, XmCTranslations, XmRTranslationTable,
     sizeof(XtTranslations), XtOffsetOf(XmDropDownRec, combo.translations),
     XmRString, (XtPointer) combo_translations
   },
-
   {
     XmNvisibleItemCount, XmCVisibleItemCount, XmRInt,
     sizeof(int), XtOffsetOf(XmDropDownRec, combo.visible_items),
     XmRImmediate, (XtPointer) 5
   },
-
   {
     XmNnewVisualStyle, XmCNewVisualStyle, XmRBoolean,
     sizeof(Boolean), XtOffsetOf(XmDropDownRec, combo.new_visual_style),
     XmRImmediate, (XtPointer)True
   },
-
   {
     XmNshadowThickness, XmCShadowThickness, XmRHorizontalDimension,
     sizeof (Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
     XmRImmediate, (XtPointer) 2
   },
-
   /* intentionally undocumented feature used by other ICS widgets */
   {
     XmNverifyTextFailedCallback, XmCCallback, XmRCallback,
@@ -257,9 +210,7 @@ static XtResource resources[] =
     XmRImmediate, (XtPointer) 0
   },
 #endif
-
 };
-
 static XmSyntheticResource get_resources[] =
 {
   {
@@ -267,7 +218,6 @@ static XmSyntheticResource get_resources[] =
     XtOffsetOf(XmDropDownRec, combo.h_space),
     XmeFromHorizontalPixels, (XmImportProc) XmeToHorizontalPixels
   },
-
   {
     XmNverticalMargin, sizeof(Dimension),
     XtOffsetOf(XmDropDownRec, combo.v_space),
@@ -275,7 +225,6 @@ static XmSyntheticResource get_resources[] =
   },
 };
 #undef offset
-
 XmDropDownClassRec xmDropDownClassRec = {
   { /* core fields */
     /* superclass		*/	(WidgetClass)&xmManagerClassRec,
@@ -340,55 +289,10 @@ XmDropDownClassRec xmDropDownClassRec = {
       NULL                      /* extension          */
   }
 };
-
 WidgetClass xmDropDownWidgetClass = (WidgetClass)&xmDropDownClassRec;
-
 /************************************************************
 *	STATIC CODE
 *************************************************************/
-
-#if defined(VAX) && defined(VMS)
-static char * OsiStrncpy( char *s1, char *s2, int len );
-static size_t
-XiMbstowcs(wchar_t* wcs, char* mbs, size_t n)
-{
-    if (wcs)
-    {
-	memset((char*)wcs, 0, n);
-	OsiStrncpy((char*)wcs, mbs, n);
-	return((size_t) strlen((char*) wcs));
-    }
-    else
-    {
-	return (0);
-    }
-}
-
-/* Function:
- *     OsiStrncpy(s1, s2, len)
- * Description:
- *     strncpy() with check for NULL strings
- * Input:
- *     s1     - char * : copy to here
- *     s2     - char * : copy from here
- *     len    - int    : bytes to copy
- *
- * Output:
- *    s1
- */
-
-static char *
-OsiStrncpy( char *s1, char *s2, int len )
-{
-  if (s2 == NULL) s2 = "";
-  if (s1 == NULL) return(NULL);
-
-  return(strncpy(s1,s2,len));
-
-}
-
-#endif
-
 /*	Function Name: ClassInitialize
  *	Description:   class_initialize method for XmDropDown
  *	Arguments:     none
@@ -399,7 +303,6 @@ ClassInitialize()
 {
   /* do nothing */
 }
-
 /*	Function Name: ClassPartInitialize
  *	Description:   class_part_initialize method for XmDropDown
  *	Arguments:     w_class - the widget class.
@@ -409,7 +312,6 @@ static void ClassPartInitialize(WidgetClass w_class)
 {
       _XmFastSubclassInit (w_class, XmDROP_DOWN_BIT);
 }
-
 /*	Function Name: Initialize
  *	Description:   Called to initialize information specific
  *                     to this widget.
@@ -420,7 +322,6 @@ static void ClassPartInitialize(WidgetClass w_class)
  *                                      the creation call.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
@@ -429,67 +330,50 @@ Initialize(Widget req, Widget set, ArgList args, Cardinal * num_args)
     ArgList f_args;
     Cardinal f_num_args;
     Dimension desired_height, desired_width;
-
     XmDropDown_list_state(cbw) = XmDropDown_POSTED;
     XmDropDown_old_text(cbw) = NULL;
     XmDropDown_doActivate(cbw) = False;
     XmDropDown_inValueChanged(cbw) = False;
-
     cbw->combo.hsb = NULL;
     cbw->combo.vsb = NULL;
-
     _XmFilterArgs(args, *num_args, xm_std_filter, &f_args, &f_num_args);
-
     CreateChildren(set, f_args, f_num_args);
-
     if (!XmDropDown_customized_combo_box(cbw))
 	CreatePopup(set, f_args, f_num_args);
-
     RegisterShellHandler(set);
-
     if (!XmDropDown_editable(cbw)) {
       VerifyTextField(NULL, (XtPointer) cbw, (XtPointer) NULL);
       XtAddEventHandler(XmDropDown_text(cbw), ButtonPressMask,
 			False, TextButtonPress, NULL);
     }
-
     /*
      * Override the bad things that XmManager is doing to me.
      */
     if ((req->core.height == 0) || (req->core.width == 0))
       {
         XtWidgetGeometry arrow_geom, text_geom, label_geom;
-
         FindDesiredSize(set, NULL, &desired_width, &desired_height,
 			&label_geom, &text_geom, &arrow_geom);
-
       }
-
     if (req->core.height == 0)
       set->core.height = desired_height;
     else set->core.height = req->core.height;
-
     if (req->core.width == 0)
       set->core.width =  desired_width;
     else set->core.width = req->core.width;
-
     XtFree((char *) f_args);
 }
-
-
 /*	Function Name: Resize
  *	Description:   Called when this widget has been resized.
  *	Arguments:     w - Extended List Widget to realize.
  *	Returns:       none.
  */
-
 static void
 Resize(Widget w)
 {
     if (XtIsRealized(w)) XClearWindow(XtDisplay(w), XtWindow(w));
     PlaceChildren(w, False, NULL);
 }
-
 /*ARGSUSED*/
 static void
 GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
@@ -497,20 +381,16 @@ GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
     XmDropDownWidget 	cbw = (XmDropDownWidget) w;
     XrmQuark			visible_quark;
     int 			i;
-
     visible_quark = XrmStringToQuark(XmNvisibleItemCount);
-
     for (i = 0; i < ((int) *num_args); i++)
     {
 	if (visible_quark == XrmStringToQuark(args[i].name))
 	{
 	    XtVaGetValues(XmDropDown_list(cbw), args[i].name, args[i].value, NULL);
-
 	    break;
 	}
     }
 }
-
 /*	Function Name: SetValues
  *	Description:   Called when some widget data needs to be modified on-
  *                     the-fly.
@@ -520,7 +400,6 @@ GetValuesHook(Widget w, ArgList args, Cardinal *num_args)
  *                     args, num_args - the arguments in the list.
  *	Returns:       none
  */
-
 /*ARGSUSED*/
 static Boolean
 SetValues(Widget current, Widget request, Widget set,
@@ -531,9 +410,7 @@ SetValues(Widget current, Widget request, Widget set,
                            set_cbw = (XmDropDownWidget) set;
     ArgList                f_args;
     Cardinal               f_num_args;
-
     Boolean		   retval = False;
-
     /*
      * Pass filtered setvalues requests down to children.
      */
@@ -547,7 +424,6 @@ SetValues(Widget current, Widget request, Widget set,
 	 * the case then we need to build a popup list for the new
 	 * combo box.
 	 */
-
 	if( XmDropDown_customized_combo_box(old_cbw) &&
 	    !XmDropDown_popup_shell(set_cbw) )
 	{
@@ -555,18 +431,14 @@ SetValues(Widget current, Widget request, Widget set,
 	     * It turns out that we need to create a new popup list
 	     * for this widget so lets go ahead and do it.
 	     */
-
 	    CreatePopup (set, f_args, f_num_args);
 	}
 	XtSetValues(XmDropDown_list(set_cbw), f_args, f_num_args);
     }
-
     /* make it Create/Get only */
     if( XmDropDown_use_text_field(set_cbw) != XmDropDown_use_text_field(old_cbw) )
 	XmDropDown_use_text_field(set_cbw) = XmDropDown_use_text_field(old_cbw);
-
     _XmSetValuesOnChildren(set, f_args, f_num_args);
-
     if (XmDropDown_editable(set_cbw) != XmDropDown_editable(old_cbw)){
       if (!XmDropDown_editable(set_cbw))
 	XtAddEventHandler(XmDropDown_text(set_cbw), ButtonPressMask, False,
@@ -575,13 +447,11 @@ SetValues(Widget current, Widget request, Widget set,
 	XtRemoveEventHandler(XmDropDown_text(set_cbw), ButtonPressMask, False,
 			     TextButtonPress, NULL);
     }
-
     if ((XmDropDown_h_space(set_cbw) != XmDropDown_h_space(old_cbw)) ||
 	(XmDropDown_v_space(set_cbw) != XmDropDown_v_space(old_cbw)))
     {
 	place_children = True;
     }
-
     if (XmDropDown_popup_shell(set_cbw) != XmDropDown_popup_shell(old_cbw)) {
 	if (!XmDropDown_customized_combo_box(old_cbw)) {
 	    /*
@@ -589,10 +459,8 @@ SetValues(Widget current, Widget request, Widget set,
 	     */
 	    XtDestroyWidget(XmDropDown_popup_shell(old_cbw));
 	}
-
 	RegisterShellHandler(set);
     }
-
     /* note! the following causes a size change in the XmDropDown. It
     ** could be possible to redefine the visuals so that this isn't the case,
     ** though. As is, the effect is that the widget changes size when the
@@ -637,7 +505,6 @@ SetValues(Widget current, Widget request, Widget set,
 		XtSetArg(targs[tn], XmNheight, height + 4); tn++;
 		XtSetArg(targs[tn], XmNhighlightThickness, 2); tn++;
 		XtSetValues(XmDropDown_arrow(set_cbw),targs,tn);
-
 		tn = 0;
 		XtSetArg(targs[tn], XmNhighlightThickness, 2); tn++;
 		XtSetArg(targs[tn], XmNshadowThickness, 2); tn++;
@@ -645,7 +512,6 @@ SetValues(Widget current, Widget request, Widget set,
 		}
 	retval = True;	/* for shadows */
     }
-
     if (XmDropDown_show_label(set_cbw) != XmDropDown_show_label(old_cbw))
     {
 	retval = True;
@@ -659,28 +525,22 @@ SetValues(Widget current, Widget request, Widget set,
 	}
     }
     XtFree((char *) f_args);
-
     if (XtIsSensitive((Widget)set_cbw) != XtIsSensitive((Widget)old_cbw))
     {
 	retval = True;
     }
-
     if (place_children)
 	{
 	/* figure out the new geometry needed */
     	XtWidgetGeometry arrow_geom, text_geom, label_geom;
-
     	FindDesiredSize(set, NULL, &(set->core.width), &(set->core.height),
 		    &label_geom, &text_geom, &arrow_geom);
 	}
-
     /* Fix for CR03893, not resizing once the */
     /* label width is modified                */
     Resize((Widget)set_cbw);
-
     return(retval);
 }
-
 /*	Function Name: QueryGeometry
  *	Description:   Called when my parent wants to know what size
  *                     I would like to be.
@@ -689,38 +549,30 @@ SetValues(Widget current, Widget request, Widget set,
  *                     preferred - what I would like.
  *	Returns:       See Xt Manual.
  */
-
 static XtGeometryResult
 QueryGeometry(Widget w,XtWidgetGeometry *intended, XtWidgetGeometry *preferred)
 {
     XtWidgetGeometry arrow_geom, text_geom, label_geom;
-
     FindDesiredSize(w, NULL, &(preferred->width), &(preferred->height),
 		    &label_geom, &text_geom, &arrow_geom);
-
     return(_XmHWQuery(w, intended, preferred));
 }
-
 /*	Function Name: Destroy
  *	Description: Called when the widget dies.
  *	Arguments: w - the widget.
  *	Returns: none.
  */
-
 static void
 Destroy(Widget w)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
-
     XtFree((char *) XmDropDown_old_text(cbw));
 }
-
 /************************************************************
  *
  * Semi - Public Routines for child management.
  *
  ************************************************************/
-
 /*	Function Name: GeometryManager
  *	Description:   handles requests from children for a size change.
  *	Arguments:     child - the child to change.
@@ -738,29 +590,20 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
     XtWidgetGeometry arrow_geom, text_geom, label_geom;
     Boolean w_req = request->request_mode & CWWidth;
     Boolean h_req = request->request_mode & CWHeight;
-
     if (!(w_req || h_req)) return(XtGeometryNo);
-
     old_width = w->core.width;
     old_height = w->core.height;
-
     if (w_req)
 	w->core.width = request->width;
-
     if (h_req)
 	w->core.height = request->height;
-
     FindDesiredSize((Widget) cbw, w, &c_width, &c_height,
 		    &label_geom, &text_geom, &arrow_geom);
-
     _XmRequestNewSize((Widget) cbw, True,
        c_width, c_height, &r_width, &r_height);
-
     if (c_height == r_height) {
 	Dimension arrow_width, text_width, label_width, tbw, lbw;
-
 	result->height = w->core.height;
-
 	if (XmDropDown_show_label(cbw)) {
 	    label_width = label_geom.width;
 	    lbw = label_geom.border_width;
@@ -769,15 +612,11 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
 	    label_width = 0;
 	    lbw = 0;
 	}
-
 	text_width = text_geom.width;
 	tbw = text_geom.border_width;
-
 	arrow_width = arrow_geom.width + 2 * arrow_geom.border_width;
-
 	GetTextAndLabelWidth((Widget) cbw, r_width, arrow_width, lbw, tbw,
 			     &text_width, &label_width);
-
 	if ((text_width != 1) &&
 	    ((label_width != 1) || XmDropDown_show_label(cbw)))
 	{
@@ -793,7 +632,6 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
 	}
 	result->request_mode = CWWidth | CWHeight;
     }
-
     if ((!h_req || (result->height == request->height)) &&
 	(!w_req || (result->width == request->width)))
     {
@@ -813,19 +651,15 @@ GeometryManager(Widget w, XtWidgetGeometry * request,
     }
     else
         ret_val = XtGeometryNo;
-
     w->core.height = old_height;
     w->core.width = old_width;
-
     return(ret_val);
 }
-
 /*	Function Name: ChangeManaged
  *	Description:   When a management change has occured...
  *	Arguments:     w - the combination box widget.
  *	Returns:       none.
  */
-
 static void
 ChangeManaged(Widget w)
 {
@@ -833,10 +667,8 @@ ChangeManaged(Widget w)
 	PlaceChildren(w, True, NULL);
     else
 	PlaceChildren(w, False, NULL);
-
     XmeNavigChangeManaged(w);	/* for Motif navigation */
 }
-
 /*
  *      Function Name: ExposeMethod
  *      Description:   Handles redisplay
@@ -851,42 +683,33 @@ ExposeMethod(Widget wid, XEvent *event, Region r)
     XmDropDownWidget cbw = (XmDropDownWidget)wid;
     Widget text  = XmDropDown_text(cbw);
     Widget arrow = XmDropDown_arrow(cbw);
-
     if(!XmDropDown_new_visual_style(cbw))
 	return;
-
     if (LayoutIsRtoLM(cbw))
 	x = arrow->core.x - arrow->core.border_width -
 	    cbw->manager.shadow_thickness;
     else
 	x = text->core.x - text->core.border_width -
 	    cbw->manager.shadow_thickness;
-
     y = text->core.y - text->core.border_width -
 	cbw->manager.shadow_thickness;
-
     w = text->core.width + arrow->core.width +
 	2*(text->core.border_width + arrow->core.border_width) +
 	2*cbw->manager.shadow_thickness;
-
     h = text->core.height + 2*text->core.border_width +
 	2*cbw->manager.shadow_thickness;
-
     XmeDrawShadows(XtDisplay(cbw), XtWindow(cbw),
 		   cbw->manager.top_shadow_GC,
 		   cbw->manager.bottom_shadow_GC,
 		   x, y, w, h,
 		   cbw->manager.shadow_thickness,
 		   XmSHADOW_IN);
-
 }
-
 /************************************************************
  *
  * Actions and Callbacks.
  *
  ************************************************************/
-
 /*	Function Name: CheckUnpost
  *	Description:   This is called when the arrow button is armed.
  *	Arguments:     w - the arrow button widget.
@@ -903,7 +726,6 @@ CheckUnpost(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	if (gs && arrow && arrow->event->xbutton.time == gs->grab_shell.unpost_time)
 		XmDropDown_list_state(cbw) = XmDropDown_AFTER_UNPOST;
 }
-
 /*	Function Name: ArrowClicked
  *	Description:   This is called when the arrow button is selected.
  *	Arguments:     w - the arrow button widget.
@@ -926,12 +748,10 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
      */
     if (XmDropDown_list_state(cbw) == XmDropDown_IN_PROGRESS)
 	return;
-
 	if (XmDropDown_list_state(cbw) == XmDropDown_AFTER_UNPOST ) {
 		XmDropDown_list_state(cbw) = XmDropDown_POSTED;
 		return;
 	}
-
     /*
      * DANGER:  Do not return early from this function w/o setting
      *          XmDropDown_list_state(cbw) back to either XmDropDown_UNPOSTED or XmDropDown_POSTED or
@@ -940,20 +760,15 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
      *
      *          You have been warned!             CP 9/8/93.
      */
-
     if (XmDropDown_list_state(cbw) == XmDropDown_UNPOSTED)
 	is_unposted = True;
     else /*  (XmDropDown_list_state(cbw) == XmDropDown_POSTED) */
 	is_unposted = False;
-
     XmDropDown_list_state(cbw) = XmDropDown_IN_PROGRESS;
-
     if (is_unposted) {
 	    PopdownList((Widget) cbw);
-
 	if (!XmDropDown_customized_combo_box(cbw))
 	    (void) SetTextFromList((Widget) cbw);
-
 	cbdata.reason = XmCR_UPDATE_TEXT;
 	cbdata.event = (arrow == NULL ? NULL : arrow->event);
 	XtCallCallbackList((Widget) cbw, XmDropDown_update_text_callback(cbw),
@@ -966,14 +781,11 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	    cbdata.event = (arrow == NULL ? NULL : arrow->event);
 	    XtCallCallbackList((Widget) cbw, XmDropDown_update_shell_callback(cbw),
 			       (XtPointer) &cbdata);
-
 	    /*
 	     * Save the old text in case the user cancels.
 	     */
-
 	    XtFree((char *) XmDropDown_old_text(cbw));
 	    XmDropDown_old_text(cbw) = XmTextFieldGetString(XmDropDown_text(cbw));
-
 	    if (!XmDropDown_customized_combo_box(cbw) &&
 		!SetListFromText((Widget) cbw, False) &&
 		XmDropDown_verify(cbw))
@@ -982,11 +794,9 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	    }
 	}
     }
-
     /*
      * 'success' will only be False if Popuplist failed.
      */
-
     if (success)
     {
 	num_args = 0;
@@ -994,17 +804,14 @@ ArrowClicked(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 		 is_unposted ? XmARROW_DOWN : XmARROW_UP); num_args++;
 	XtSetValues(w, args, num_args);
     }
-
     /*
      * If we were up, we are now down, and visa-versa.
      */
-
     if (is_unposted)
 	XmDropDown_list_state(cbw) = XmDropDown_POSTED;
     else
 	XmDropDown_list_state(cbw) = XmDropDown_UNPOSTED;
 }
-
 /*	Function Name: PopdownDone
  *	Description:   This is called when the popup_shell is poped down.
  *	Arguments:     w - the popup_shell widget.
@@ -1016,10 +823,8 @@ static void
 PopdownDone(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) combo_ptr;
-
     ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
 }
-
 /*	Function Name: CheckExtensions
  *	Description:   Verifies that the extension is of the correct
  *                     format, with correct version number and
@@ -1032,11 +837,9 @@ static XmDropDownClassPartExtension *
 CheckExtensions( XmDropDownWidgetClass combo )
 {
   XmDropDownClassPartExtension *ret_extension=NULL, *extension;
-
   _XmProcessLock();
   extension= (XmDropDownClassPartExtension *)(combo->combo_class.extension);
   _XmProcessUnlock();
-
   while ((ret_extension == NULL) && (extension != NULL)){
     if ((extension->record_type == NULLQUARK) &&
 	(extension->version == XmDropDownExtensionVersion)) {
@@ -1044,12 +847,8 @@ CheckExtensions( XmDropDownWidgetClass combo )
     }
     extension=(XmDropDownClassPartExtension *)extension->next_extension;
   }
-
   return( ret_extension );
-
 }
-
-
 /*	Function Name: IsTextOK
  *	Description:   This is called to verify the text field.
  *	Arguments:     w - the text field widget.
@@ -1057,14 +856,12 @@ CheckExtensions( XmDropDownWidgetClass combo )
  * UNUSED              info_ptr - a pointer to the arrow button info.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static Boolean
 IsTextOK(XmDropDownWidget cbw)
 {
 	Boolean isOK = True;
 	XmDropDownClassPartExtension *addition;
-
 	addition = CheckExtensions( (XmDropDownWidgetClass)XtClass(cbw) );
 	if (addition && addition->verify) {
 		char *text = XmTextFieldGetString(XmDropDown_text(cbw));
@@ -1076,7 +873,6 @@ IsTextOK(XmDropDownWidget cbw)
 	}
 	return isOK;
 }
-
 /*	Function Name: VerifyTextField
  *	Description:   This is called to verify the text field.
  *	Arguments:     w - the text field widget.
@@ -1084,7 +880,6 @@ IsTextOK(XmDropDownWidget cbw)
  * UNUSED              info_ptr - a pointer to the arrow button info.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
@@ -1093,7 +888,6 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
   XmTextVerifyCallbackStruct *field = (XmTextVerifyCallbackStruct*) info_ptr;
   XmAnyCallbackStruct        cbdata;
   Boolean		     allowTraverse = True;
-
   if (!XmDropDown_customized_combo_box(cbw))
   {
       if (XmDropDown_verify(cbw) && !IsTextOK(cbw))
@@ -1102,17 +896,13 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 	   * Check to see if the extension is there
 	   */
 	  XmDropDownClassPartExtension *addition;
-
 	  addition =
 	      CheckExtensions((XmDropDownWidgetClass)XtClass(cbw));
-
 	  cbdata.reason = XmCR_VERIFY_TEXT_FAILED;
 	  cbdata.event = (field == NULL ? NULL : field->event);
-
 	  XtCallCallbackList((Widget)cbw,
 			     XmDropDown_verify_text_failed_callback(cbw),
 			     (XtPointer) &cbdata);
-
 	  /* otherwise we handle the error; again must let the subclass
 	  ** know the string has been updated -- in response to the user's
 	  ** input although not to that value -- to some other value
@@ -1150,7 +940,6 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 		  }
 	  }
   }
-
   if (w != NULL)
   {
       cbdata.reason = XmCR_VERIFY_TEXT;
@@ -1159,7 +948,6 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 			 XmDropDown_verify_text_callback(cbw),
 			 (XtPointer) &cbdata);
   }
-
   if(!XmDropDown_doActivate(cbw)) {
       /* here if we were NOT called from the autofill code */
       if(field == NULL || field->reason != XmCR_ACTIVATE) {
@@ -1170,8 +958,6 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
       (void) XmProcessTraversal((Widget)cbw, XmTRAVERSE_NEXT_TAB_GROUP);
   }
 }
-
-
 /*	Function Name: ModifyVerifyTextField
  *	Description:   This is called to check if text field is filled so
  *			we can autotraverse
@@ -1180,34 +966,26 @@ VerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
  * UNUSED              info_ptr - a pointer to the arrow button info.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 ModifyVerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 {
     XmDropDownWidget     cbw = (XmDropDownWidget) combo_ptr;
     XmTextVerifyCallbackStruct *field = (XmTextVerifyCallbackStruct*) info_ptr;
-
     if (XmDropDown_activateOnFill(cbw) <= 0) return;
-
     if(field == NULL || field->event == NULL ||
        field->event->type != KeyPress) return;
-
     /* printf("Text m/v callback, cur/new/start/end = %d %d %d %d\n",
      * field->currInsert, field->newInsert, field->startPos, field->endPos);
      */
-
     /* No make sure we are inserting a single character at the end */
     if(field->currInsert != field->endPos) return;
     if(field->currInsert != field->startPos) return;
     if(field->text->length != 1) return;
-
     if(field->currInsert + 1 == XmDropDown_activateOnFill(cbw)) {
 	XmDropDown_doActivate(cbw) = True;
     }
 }
-
-
 /*	Function Name: ValueChangedTextField
  *	Description:   Called after value is changed, checks doActivate flag
  * 			to see if we should try traversal
@@ -1216,15 +994,12 @@ ModifyVerifyTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
  * UNUSED              info_ptr - a pointer to the arrow button info.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 ValueChangedTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
 {
     XmDropDownWidget     cbw = (XmDropDownWidget) combo_ptr;
-
     if(XmDropDown_inValueChanged(cbw)) return;
-
     XmDropDown_inValueChanged(cbw) = True;
     if(XmDropDown_doActivate(cbw)) {
 	VerifyTextField(NULL, (XtPointer) cbw, (XtPointer) info_ptr);
@@ -1236,7 +1011,6 @@ ValueChangedTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
     }
     XmDropDown_inValueChanged(cbw) = False;
 }
-
 /*	Function Name: ListSelected
  *	Description:   Called when the popdown list is selected.
  *	Arguments:     w - the list widget.
@@ -1244,16 +1018,13 @@ ValueChangedTextField(Widget w, XtPointer combo_ptr, XtPointer info_ptr)
  *                     list_data_ptr - data from the list widget.
  *	Returns:       none.
  */
-
 /* ARGSUSED */
 static void
 ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) cbw_ptr;
     XmListCallbackStruct *list_data;
-
     list_data = (XmListCallbackStruct *) list_data_ptr;
-
     if ((list_data->reason == XmCR_BROWSE_SELECT) &&
 	((list_data->event == NULL) ||
 	 ((list_data->event->xany.type != ButtonPress) &&
@@ -1264,11 +1035,9 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
 	 */
 	if (!XmDropDown_customized_combo_box(cbw))
 	    (void) SetTextFromList((Widget) cbw);
-
 	return;
     }
 }
-
 /*	Function Name: ShellButtonEvent
  *	Description: Called when a button press is passed to the shell
  *                   from the grab that was activated.
@@ -1283,21 +1052,18 @@ ListSelected(Widget w, XtPointer cbw_ptr, XtPointer list_data_ptr)
  *       on the arrow (the arrow click is handled by the arrow button)
  *       or if we click in the popped up combo box widget.
  */
-
 /* ARGSUSED */
 static void
 ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *dispatch)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) cbw_ptr;
     Widget event_widget;
-
   switch (event->type)
     {
     case ButtonRelease:
       if (cbw->combo.scrolling)
 	*dispatch = cbw->combo.scrolling = FALSE;
       break;
-
     case ButtonPress:
       /* Press & release in the scrollbar shouldn't popdown the list. */
       if ((cbw->combo.vsb &&
@@ -1308,12 +1074,10 @@ ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *dispatch)
 	   (event->xbutton.window == XtWindow(cbw->combo.hsb))))
 	cbw->combo.scrolling = TRUE;
       break;
-
     default:
       /* This shouldn't happen. */
       break;
     }
-
     /* TODO: move the following into the switch statement above */
     if (event->xany.type != ButtonPress) {
 	if ((event->xany.type == ButtonRelease) &&
@@ -1324,9 +1088,7 @@ ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *dispatch)
 	    }
 	return;
     }
-
     event_widget = XtWindowToWidget(event->xany.display, event->xany.window);
-
     if (event_widget == XmDropDown_arrow(cbw))
 	return;
     else if ((event_widget == XmDropDown_text(cbw)) && !XmDropDown_editable(cbw))
@@ -1336,21 +1098,17 @@ ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *dispatch)
     }
     else {
 	Widget event_shell = event_widget;
-
 	while (!XtIsShell(event_shell))
 	    event_shell = XtParent(event_shell);
-
 	if ( (event_shell == (Widget) XmDropDown_popup_shell(cbw)) &&
 	    (event_widget != (Widget) XmDropDown_popup_shell(cbw)))
 	{
 	    return;
 	}
     }
-
    if (XmDropDown_list_state(cbw) != XmDropDown_POSTED)	/* in case this popup shell is used for more than one combobox */
     	ArrowClicked(XmDropDown_arrow(cbw), cbw_ptr, NULL);
 }
-
 /*	Function Name: LoseFocusHandler
  *	Description: This function is called whenever the shell loses focus
  *                   in this case we should bring down the list.
@@ -1360,22 +1118,18 @@ ShellButtonEvent(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *dispatch)
  *                 junk - *** UNUSED ***.
  *	Returns: none.
  */
-
 /* ARGSUSED */
-
 static void
 LoseFocusHandler(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) cbw_ptr;
     XFocusChangeEvent *fevent = &(event->xfocus);
-
     if ((event->xany.type != FocusOut) || (XmDropDown_list_state(cbw) != XmDropDown_UNPOSTED) ||
 	(fevent->detail == NotifyInferior))
     {
 	return;
     }
 }
-
 /*	Function Name: ComboUnpost
  *	Description:   Called when the user wants to remove the list from the
  *                     screen.
@@ -1384,20 +1138,16 @@ LoseFocusHandler(Widget w, XtPointer cbw_ptr, XEvent *event, Boolean *junk)
  *                     params, num_params - action routine parameters.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 ComboUnpost(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
     XmDropDownWidget cbw = FindComboBox(w);
-
     if (cbw == NULL)
 	return;
-
     if (XmDropDown_list_state(cbw) == XmDropDown_UNPOSTED)
 	ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
 }
-
 /*	Function Name: ComboPost
  *	Description:   Called when the user wants to show the list on the
  *                     screen.
@@ -1406,20 +1156,16 @@ ComboUnpost(Widget w, XEvent *event, String *params, Cardinal *num_params)
  *                     params, num_params - action routine parameters.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 ComboPost(Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
     XmDropDownWidget cbw = FindComboBox(w);
-
     if (cbw == NULL)
 	return;
-
     if (XmDropDown_list_state(cbw) != XmDropDown_UNPOSTED)
 	ArrowClicked(XmDropDown_arrow(cbw), (XtPointer) cbw, NULL);
 }
-
 /*	Function Name: ComboCancel
  *	Description:   Called when the user wants to remove the list from the
  *                     screen, but not update the text.
@@ -1428,7 +1174,6 @@ ComboPost(Widget w, XEvent *event, String *params, Cardinal *num_params)
  *                     params, num_params - action routine parameters.
  *	Returns:       none.
  */
-
 /*ARGSUSED*/
 static void
 ComboCancel(Widget w, XEvent *event, String *params, Cardinal *num_params)
@@ -1436,37 +1181,30 @@ ComboCancel(Widget w, XEvent *event, String *params, Cardinal *num_params)
     Arg args[10];
     Cardinal num_args;
     XmDropDownWidget cbw = FindComboBox(w);
-
     if ((cbw == NULL) || XmDropDown_list_state(cbw) != XmDropDown_UNPOSTED)
 	return;
-
     if (!XmIsGrabShell((Widget)cbw))
         PopdownList((Widget) cbw);
     XmDropDown_list_state(cbw) = XmDropDown_POSTED; /* List is now down (not visible). */
-
     num_args = 0;
     XtSetArg(args[num_args], XmNarrowDirection,	XmARROW_DOWN); num_args++;
     XtSetValues(XmDropDown_arrow(cbw), args, num_args);
-
     if (XmDropDown_old_text(cbw) != NULL) {
 	XmTextFieldSetString(XmDropDown_text(cbw), XmDropDown_old_text(cbw));
 	XtFree((char *) XmDropDown_old_text(cbw));
 	XmDropDown_old_text(cbw) = NULL;
     }
 }
-
 /************************************************************
  *
  * Internal routines.
  *
  ************************************************************/
-
 /*	Function Name: FindComboBox
  *	Description: Finds the combo box given any one of its descendants.
  *	Arguments: w - any descendant of the combo box.
  *	Returns: the combo box widget or NULL.
  */
-
 static XmDropDownWidget
 FindComboBox(Widget w)
 {
@@ -1476,21 +1214,17 @@ FindComboBox(Widget w)
     }
     return((XmDropDownWidget) w);
 }
-
 /*	Function Name: RegisterShellHandler
  *	Description: Registers an event handler on the shell.
  *	Arguments: w - the combo box widget.
  *	Returns: none.
  */
-
 static void
 RegisterShellHandler(Widget w)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
-
     if (XmDropDown_popup_shell(cbw) == NULL)
 	return;
-
     /*
      * Don't register the translations if it's a customized shell; the
      * actions referenced won't be there!
@@ -1501,12 +1235,10 @@ RegisterShellHandler(Widget w)
 	XtOverrideTranslations(XmDropDown_popup_shell(cbw),
 			       XmDropDown_translations(cbw));
     }
-
     XtAddEventHandler(XmDropDown_popup_shell(cbw),
 		      ButtonPressMask | ButtonReleaseMask, False,
 		      ShellButtonEvent, (XtPointer) w);
 }
-
 /*	Function Name: PlaceChildren
  *	Description:   Places and sizes the children.
  *	Arguments:     w - the combo box widget.
@@ -1515,7 +1247,6 @@ RegisterShellHandler(Widget w)
  *                             use its default size.
  *	Returns:       none
  */
-
 static void
 PlaceChildren(Widget w, Boolean allow_resize, Widget child)
 {
@@ -1528,10 +1259,8 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
     Widget label = NULL;
     Widget text = XmDropDown_text(cbw);
     Widget arrow = XmDropDown_arrow(cbw);
-
     FindDesiredSize(w, child, &width, &height,
 		    &label_geom, &text_geom, &arrow_geom);
-
     if (XmDropDown_show_label(cbw))
     {
 	label = XmDropDown_label(cbw);
@@ -1543,9 +1272,7 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
 	label_width = 0;
 	label_bw = 0;
     }
-
     text_width = text_geom.width;
-
     if (allow_resize)
     {
 	_XmRequestNewSize(w, False, width, height, &rwidth, &rheight);
@@ -1555,7 +1282,6 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
 	rwidth = w->core.width;
 	rheight = w->core.height;
     }
-
     if (width != rwidth)
     {
 	Dimension arrow_width = arrow_geom.width + 2 * arrow_geom.border_width;
@@ -1563,7 +1289,6 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
 			     label_bw, text_geom.border_width,
 			     &text_width, &label_width);
     }
-
     child_height = rheight - 2 * XmDropDown_v_space(cbw);
     if (LayoutIsRtoLM(cbw)) {
 	arrow_x = XmDropDown_h_space(cbw);
@@ -1577,7 +1302,6 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
 	text_x = label_width + 2*label_geom.border_width + \
 	       XmDropDown_h_space(cbw);
     }
-
     if (XmDropDown_show_label(cbw))
     {
 	if (!LayoutIsRtoLM(cbw))
@@ -1589,7 +1313,6 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
     {
 	text_geom.border_width = 0;
     }
-
     XmDropDown_text_x(cbw) = text_x;
     if ( XmDropDown_new_visual_style(cbw) )
     {
@@ -1610,7 +1333,6 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
     {
 	shadow = 0;
     }
-
     /*
      * Now resize the widgets
      */
@@ -1622,20 +1344,16 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
 			   child_height - 2 * label_geom.border_width,
 			   label_geom.border_width);
     }
-
     _XmConfigureWidget(text, text_x,
 		       XmDropDown_v_space(cbw) + shadow,
 		       text_width, child_height - 2 * text_geom.border_width,
 		       text_geom.border_width);
-
     _XmConfigureWidget(arrow, arrow_x,
 		       XmDropDown_v_space(cbw) + shadow,
 		       arrow_geom.width,
 		       child_height - 2 * arrow_geom.border_width,
 		       arrow_geom.border_width);
-
 }
-
 /*	Function Name: GetTextAndLabelWidth
  *	Description:   Finds the size for both the text and label widgets.
  *	Arguments:     w - the combo box.
@@ -1648,7 +1366,6 @@ PlaceChildren(Widget w, Boolean allow_resize, Widget child)
  *                                               and the new sizes are returned
  *	Returns:       none
  */
-
 static void
 GetTextAndLabelWidth(Widget w, Dimension combo_width, Dimension arrow_width,
 		     Dimension lbw, Dimension tbw,
@@ -1656,21 +1373,17 @@ GetTextAndLabelWidth(Widget w, Dimension combo_width, Dimension arrow_width,
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
     int text_and_label;
-
     text_and_label = combo_width - (arrow_width + 2 * (lbw + tbw));
     text_and_label -= 3 * XmDropDown_h_space(cbw);
-
     if (XmDropDown_show_label(cbw))
     {
 	text_and_label -= XmDropDown_h_space(cbw);
     }
-
     if (XmDropDown_new_visual_style(cbw))
     {
 	text_and_label -= 2 * cbw->manager.shadow_thickness;
 	text_and_label += XmDropDown_h_space(cbw);
     }
-
     if (text_and_label >= (int) (*text_width + *label_width))
     {
 	*text_width = text_and_label - *label_width;
@@ -1685,31 +1398,25 @@ GetTextAndLabelWidth(Widget w, Dimension combo_width, Dimension arrow_width,
 	    *text_width = *label_width = 1;
 	    return;
 	}
-
 	*text_width = ((int)(*text_width * text_and_label)/
 		       (int)(*text_width + *label_width));
-
 	*label_width = text_and_label - *text_width;
     }
-
     if (*text_width < 1)
     {
 	*text_width = 1;
     }
-
     if ((*label_width < 1) && (XmDropDown_show_label(cbw)))
     {
 	*label_width = 1;
     }
 }
-
 /*	Function Name: FindDesiredSize
  *	Description:   Finds the desired size of the combination box.
  *	Arguments:     w - the combo box.
  *      RETURNED       width_ret, height_ret - The desired size.
  *	Returns:       none
  */
-
 static void
 FindDesiredSize(Widget w, Widget child,
 		Dimension * width_ret, Dimension * height_ret,
@@ -1719,7 +1426,6 @@ FindDesiredSize(Widget w, Widget child,
     XmDropDownWidget cbw = (XmDropDownWidget) w;
     Dimension shadow;
     int label_width, text_width, arrow_width, h_space;
-
     if ( !XmDropDown_show_label(cbw) )
     {
 	label->width = 0;
@@ -1735,7 +1441,6 @@ FindDesiredSize(Widget w, Widget child,
 	label->height = child->core.height;
 	label->border_width = child->core.border_width;
     }
-
     if ( child != XmDropDown_text(cbw) )
     {
 	(void) XtQueryGeometry(XmDropDown_text(cbw), NULL, text);
@@ -1746,7 +1451,6 @@ FindDesiredSize(Widget w, Widget child,
 	text->height = child->core.height;
 	text->border_width = child->core.border_width;
     }
-
     if ( child != XmDropDown_arrow(cbw) )
     {
 	(void) XtQueryGeometry(XmDropDown_arrow(cbw), NULL, arrow);
@@ -1757,20 +1461,16 @@ FindDesiredSize(Widget w, Widget child,
 	arrow->height = child->core.height;
 	arrow->border_width = child->core.border_width;
     }
-
     label_width = label->width + 2 * label->border_width;
     text_width = text->width + 2 * text->border_width;
     arrow_width = arrow->width + 2 * arrow->border_width;
     h_space = 3 * XmDropDown_h_space(cbw);
     *width_ret = (Dimension )(label_width + text_width \
 			      + arrow_width + h_space);
-
-
     if ( XmDropDown_show_label(cbw) )
     {
 	*width_ret += XmDropDown_h_space(cbw);
     }
-
     if ( XmDropDown_new_visual_style(cbw) )
     {
 	shadow = cbw->manager.shadow_thickness;
@@ -1781,12 +1481,10 @@ FindDesiredSize(Widget w, Widget child,
     {
 	shadow = 0;
     }
-
     *height_ret = 0;
     ASSIGN_MAX(*height_ret, label->height + 2 * label->border_width);
     ASSIGN_MAX(*height_ret, text->height + \
 	       2 * text->border_width + 2 * shadow);
-
     /*
      * can't use arrow sizes in the specification;
      * it has no query_geometry procedure
@@ -1795,11 +1493,8 @@ FindDesiredSize(Widget w, Widget child,
      * ASSIGN_MAX(*height_ret, arrow->height + 2 * arrow->border_width
      * + 2 * shadow);
      */
-
     *height_ret += 2 * XmDropDown_v_space(cbw);
-
 }
-
 /*	Function Name: CreateChildren
  *	Description:   Creates all normal children for the Combo Box.
  *	Arguments:     w - the combo box.
@@ -1822,12 +1517,9 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
     Cardinal num_largs;
     Arg      targs[10], *merge;
     Cardinal tn = 0;
-
-
     XmDropDown_label(cbw) = XtCreateWidget("label", xmLabelWidgetClass,
 				      w, args, num_args);
     XtVaSetValues(XmDropDown_label(cbw), XmNtraversalOn, False, NULL);
-
     /*
      * If we are supposed to show this label lets manage the widget.
      */
@@ -1835,7 +1527,6 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
     {
 	XtManageChild(XmDropDown_label(cbw));
     }
-
     if( XmDropDown_use_text_field(cbw) )
     {
 	tn = 0;
@@ -1873,14 +1564,11 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
 	XtSetArg(targs[tn], XmNwordWrap, False); tn++;
 	XtSetArg(targs[tn], XmNscrollHorizontal, False); tn++;
 	XtSetArg(targs[tn], XmNscrollVertical, False); tn++;
-
 	merge = XtMergeArgLists(args, num_args, targs, tn);
-
 	XmDropDown_text(cbw) = XtCreateManagedWidget("text", xmTextWidgetClass,
 						w, merge, num_args + tn);
 	XtFree((XtPointer)merge);
     }
-
     XtAddCallback(XmDropDown_text(cbw), XmNlosingFocusCallback,
 		  VerifyTextField, (XtPointer) cbw);
     XtAddCallback(XmDropDown_text(cbw), XmNactivateCallback,
@@ -1889,11 +1577,8 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
 		  ModifyVerifyTextField, (XtPointer) cbw);
     XtAddCallback(XmDropDown_text(cbw), XmNvalueChangedCallback,
 		  ValueChangedTextField, (XtPointer) cbw);
-
-
     XtOverrideTranslations(XmDropDown_text(cbw),
 			   XmDropDown_translations(cbw));
-
     if(XmDropDown_new_visual_style(cbw))
     {
 	tn = 0;
@@ -1917,22 +1602,17 @@ CreateChildren(Widget w, ArgList args, Cardinal num_args)
     num_largs = 0;
     XtSetArg(largs[num_largs], XmNarrowDirection, XmARROW_DOWN); num_largs++;
     XtSetValues(XmDropDown_arrow(cbw), largs, num_largs);
-
     XtOverrideTranslations(XmDropDown_arrow(cbw),
 			   XmDropDown_translations(cbw));
-
     XtAddCallback(XmDropDown_arrow(cbw), XmNactivateCallback,
 		  ArrowClicked, (XtPointer) w);
-
     XtAddCallback(XmDropDown_arrow(cbw), XmNarmCallback, CheckUnpost, (XtPointer) w);
 }
-
 /*
  * To deal with the problem, SBBtnDownEH will do an XtGrabPointer
  * to transfer the grab to the scrollbar and SBBtnUpEH will cause
  * the grab to return to the grab shell.
  */
-
 /*ARGSUSED*/
 static void
 SBBtnDownEH(Widget    w,
@@ -1941,12 +1621,10 @@ SBBtnDownEH(Widget    w,
 	    Boolean  *cont)	/* unused */
 {
   XmGrabShellWidget shell = (XmGrabShellWidget) client_data;
-
   XtGrabPointer(w, False, Events | PointerMotionMask | ButtonMotionMask,
 		GrabModeAsync, GrabModeAsync,
 		None, shell->grab_shell.cursor, event->xbutton.time);
 }
-
 /*ARGSUSED*/
 static void
 SBBtnUpEH(Widget    w,		/* unused */
@@ -1955,7 +1633,6 @@ SBBtnUpEH(Widget    w,		/* unused */
 	  Boolean  *cont)	/* unused */
 {
   XmGrabShellWidget shell = (XmGrabShellWidget) client_data;
-
   /* Note that this regrab to the grab shell will need to be changed
    * if the kind of grab that the grabshell imposes changes.
    */
@@ -1966,14 +1643,12 @@ SBBtnUpEH(Widget    w,		/* unused */
   if (shell->grab_shell.grab_style == GrabModeSync)
     XAllowEvents(XtDisplay(shell), SyncPointer, event->xbutton.time);
 }
-
 /*	Function Name: CreatePopup
  *	Description:   Create the popup shell that contains the list.
  *	Arguments:     w - the combo box.
  *                     args, num_args - the number of arguments in the list.
  *	Returns:       none.
  */
-
 static void
 CreatePopup(Widget w, ArgList args, Cardinal num_args)
 {
@@ -1981,7 +1656,6 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
     Arg *new_list, largs[10];
     Cardinal num_largs;
     Widget sb;
-
     num_largs = 0;
     XtSetArg(largs[num_largs], XmNoverrideRedirect, True); num_largs++;
     XtSetArg(largs[num_largs], XmNsaveUnder, True); num_largs++;
@@ -1996,7 +1670,6 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 						num_largs + num_args);
     XtFree((char *) new_list);
    	XtAddCallback(XmDropDown_popup_shell(cbw), XmNpopdownCallback, PopdownDone , (XtPointer) w);
-
     /*
      * Set the visible item count of the list child widget
      */
@@ -2006,25 +1679,18 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
     new_list = XtMergeArgLists(args, num_args, largs, num_largs);
     XmDropDown_list(cbw) = XmCreateScrolledList(XmDropDown_popup_shell(cbw), "list",
 					   new_list, num_args + num_largs);
-
     XtFree((char *) new_list);
-
     XtAddCallback(XmDropDown_list(cbw), XmNdefaultActionCallback,
 		  ListSelected, (XtPointer) cbw);
-
     XtAddCallback(XmDropDown_list(cbw), XmNsingleSelectionCallback,
 		  ListSelected, (XtPointer) cbw);
-
     XtAddCallback(XmDropDown_list(cbw), XmNbrowseSelectionCallback,
 		  ListSelected, (XtPointer) cbw);
-
     XtManageChild(XmDropDown_list(cbw));
-
     num_largs = 0;
     XtSetArg(largs[num_largs], XmNhorizontalScrollBar, &(cbw->combo.hsb)), num_largs++;
     XtSetArg(largs[num_largs], XmNverticalScrollBar, &(cbw->combo.vsb)), num_largs++;
     XtGetValues(XtParent(XmDropDown_list(cbw)), largs, num_largs);
-
     sb = cbw->combo.vsb;
     if (sb != (Widget) NULL) {
 	XtInsertEventHandler(sb, ButtonPressMask, False, SBBtnDownEH,
@@ -2032,7 +1698,6 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 	XtInsertEventHandler(sb, ButtonReleaseMask, False, SBBtnUpEH,
 			       (XtPointer) XmDropDown_popup_shell(cbw), XtListHead);
     }
-
     sb = cbw->combo.hsb;
     if (sb != (Widget) NULL) {
 	  XtInsertEventHandler(sb, ButtonPressMask, False, SBBtnDownEH,
@@ -2041,18 +1706,15 @@ CreatePopup(Widget w, ArgList args, Cardinal num_args)
 			       (XtPointer) XmDropDown_popup_shell(cbw), XtListHead);
     }
 }
-
 /*	Function Name: PopdownList
  *	Description:   Pops down the list of choices.
  *	Arguments:     w - the combo box.
  *	Returns:       none
  */
-
 static void
 PopdownList(Widget w)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
-
 	Widget gs = XmDropDown_popup_shell(cbw);
   	if (gs && XmIsGrabShell(gs) && (XmDropDown_list_state(cbw) != XmDropDown_POSTED))
 	XtCallActionProc(gs, "GrabShellPopdown", NULL, NULL, 0);
@@ -2060,15 +1722,12 @@ PopdownList(Widget w)
 	XmeWarning(w, XmNnoComboShellMsg);
     }
 }
-
 static void
 TextButtonPress(Widget w , XtPointer client, XEvent *event, Boolean *go_on)
 {
     XmDropDownWidget cbw = FindComboBox(w);
-
     if (cbw == NULL)
 	return;
-
     /*
      * It is debatable whether or not we should eat this event.  For now,
      * we'll let it continue.
@@ -2076,7 +1735,6 @@ TextButtonPress(Widget w , XtPointer client, XEvent *event, Boolean *go_on)
 #ifdef notdef
     *go_on = False;
 #endif
-
     if (event->xany.type == ButtonPress)  {
 	if (XmDropDown_list_state(cbw) == XmDropDown_POSTED)  {
 	    (void)ComboPost( w, NULL, NULL, NULL );
@@ -2090,14 +1748,11 @@ TextButtonPress(Widget w , XtPointer client, XEvent *event, Boolean *go_on)
 	    XmDropDown_list_state(cbw) = XmDropDown_UNPOSTED;
     }
 }
-
-
 /*	Function Name: PopupList
  *	Description:   Pops up the list of choices.
  *	Arguments:     w - the combo box.
  *	Returns:       True if sucessful.
  */
-
 static Boolean
 PopupList(Widget w)
 {
@@ -2108,23 +1763,18 @@ PopupList(Widget w)
     int ret, scr_width, scr_height;
     Arg args[10];
     Cardinal num_args;
-
     if (shell == NULL) {
 	XmeWarning(w, XmNnoComboShellMsg);
 	return(False);
     }
-
     XtTranslateCoords(w, 0, XtHeight(w), &x, &y);
     XtRealizeWidget(shell);
-
     num_args = 0;
-
     if (LayoutIsRtoLM(w))
     temp = XmDropDown_arrow(cbw)->core.x + XmDropDown_popup_offset(cbw);
     else
     temp = XmDropDown_text_x(cbw) + XmDropDown_popup_offset(cbw);
     x += temp;
-
     if (!XmDropDown_customized_combo_box(cbw)) {
 	width = (cbw->core.width - temp -
 		 (shell)->core.border_width);
@@ -2134,7 +1784,6 @@ PopupList(Widget w)
     {
 	width = XtWidth(shell);
     }
-
     /*
      * Now that we know where on the screen we want to display the popup
      * we have to make sure that it will fit on the screen. What we
@@ -2146,7 +1795,6 @@ PopupList(Widget w)
      */
     scr_width = WidthOfScreen(XtScreen(shell));
     scr_height = HeightOfScreen(XtScreen(shell));
-
     if( (int)(y + XtHeight(shell)) > scr_height )
     {
 	Position tmp;
@@ -2159,33 +1807,26 @@ PopupList(Widget w)
 	x = scr_width - ((int)width);
     }
     if( x < 0 ) x = 0;
-
     XtSetArg(args[num_args], XmNx, x); num_args++;
     XtSetArg(args[num_args], XmNy, y); num_args++;
     XtSetValues(shell, args, num_args);
-
     /*
      * Because of an Xt bug, we need to cal the shell widget's resize
      * proc ourselves.
      */
-
     {
         /* THIS WAS -
             (*(XtClass(shell)->core_class.resize))(shell);
         */
         XtWidgetProc resize;
-
         _XmProcessLock();
         resize = *(XtClass(shell)->core_class.resize);
         _XmProcessUnlock();
-
         (*resize) (shell);
     }
-
     if (!XmIsGrabShell(shell))
         XGetInputFocus(XtDisplay(shell),
 		   &(XmDropDown_focus_owner(cbw)), &(XmDropDown_focus_state(cbw)));
-
     /*
      * If we are in pointer root mode it is possible that the pointer is
      * over our popup so that when it is popped up we have the focus.
@@ -2203,11 +1844,9 @@ PopupList(Widget w)
      *
      * Chris D. Peterson
      */
-
     if (!XmIsGrabShell(shell))
         XSetInputFocus(XtDisplay(shell), XtWindow((Widget) cbw), RevertToParent,
 		   XtLastTimestampProcessed(XtDisplay(w)) - 1);
-
     _XmPopupSpringLoaded(shell);
     if (!XmIsGrabShell(shell)) {
         ret = XtGrabPointer(shell, True,
@@ -2215,33 +1854,25 @@ PopupList(Widget w)
 			GrabModeAsync, GrabModeAsync, None,
 			XmDropDown_popup_cursor(cbw),
 			XtLastTimestampProcessed(XtDisplay(w)));
-
         if (ret != GrabSuccess) {
 	    XtPopdown(shell);
-
 	    /*
 	     * We could not popup the list, this is because somehow things
 	     * got so slow that we were not allowed to grab the server.
 	     * In this case I will fail silently and the user can try again.
 	     */
-
 	    return(False);
         }
-
         XtAddGrab(XmDropDown_arrow(cbw), False, False);
-
         /*
          * Since this is an override redirect window we know that no one
          * will get in the way of thisX SetInputFocus Event.
          */
-
         XSetInputFocus(XtDisplay(shell),
 		   XtWindow(shell), RevertToParent, CurrentTime);
     }
-
     return(True);
 }
-
 /*	Function Name: SetListFromText
  *	Description:   Makes the list highlights match the text widget.
  *	Arguments:     w - the combo box widget.
@@ -2249,7 +1880,6 @@ PopupList(Widget w)
  *	Returns:       True if each item was found, or the text widget is
  *                     empty.
  */
-
 static Boolean
 SetListFromText(Widget w, Boolean no_action)
 {
@@ -2264,10 +1894,8 @@ SetListFromText(Widget w, Boolean no_action)
     Boolean error = False;
     unsigned char policy;
     XmDropDownClassPartExtension *addition;
-
     if (ptr != NULL) {
 	int num_items;
-
 	addition = CheckExtensions((XmDropDownWidgetClass)XtClass(cbw));
 	if (addition && addition->setListFromText)
 	{
@@ -2275,26 +1903,19 @@ SetListFromText(Widget w, Boolean no_action)
 	    return (*addition->setListFromText)(w, XmDropDown_text(cbw),
 						XmDropDown_list(cbw));
 	}
-
 	num_args = 0;
 	XtSetArg(args[num_args], XmNitemCount, &num_items); num_args++;
 	XtGetValues(XmDropDown_list(cbw), args, num_args);
-
 	/*
 	 * Strlen can be used here because we are attempting to find the
 	 * number of bytes in the string not the number of i18n characters.
 	 */
-
 	from.size = sizeof(char) * (strlen(ptr) + 1);
 	from.addr = ptr;
-
 	to.size = sizeof(XmStringTable);
 	to.addr = (XtPointer) &table;
-
 	XtConvertAndStore(XmDropDown_list(cbw), XmRString, &from,
 			  XmRXmStringTable, &to);
-
-
 	/*
 	 * If the text field contains "", the table will be NULL
 	 */
@@ -2312,67 +1933,52 @@ SetListFromText(Widget w, Boolean no_action)
 	}
 	else
 		sel_table = NULL;
-
 	XtFree((char *) ptr);
     }
     else {
 	count = 0;
 	sel_table = NULL;
     }
-
     if (!no_action)
 	XmListDeselectAllItems(XmDropDown_list(cbw));
-
     /*
      * If single select and there is more than one element in
      * the list, then we have an error.
      */
-
     num_args = 0;
     XtSetArg(args[num_args], XmNselectionPolicy, &policy); num_args++;
     XtSetArg(args[num_args], XmNvisibleItemCount, &vcount); num_args++;
     XtSetArg(args[num_args], XmNitemCount, &tcount); num_args++;
     XtGetValues(XmDropDown_list(cbw), args, num_args);
-
     if ((((policy == XmSINGLE_SELECT) ||
 	  (policy == XmBROWSE_SELECT)) && (count > 1)) || error)
     {
     	XtFree((char *) sel_table);
 	return(FALSE);
     }
-
     num_args = 0;
     XtSetArg(args[num_args], XmNselectedItems, sel_table); num_args++;
     XtSetArg(args[num_args], XmNselectedItemCount, count); num_args++;
     XtSetValues(XmDropDown_list(cbw), args, num_args);
-
     /*
      * Makes the first selected item the first item in the list.
      */
-
     if (count > 0) {
 	int *pos_list, num, pos = 0;
-
 	XmListGetMatchPos(XmDropDown_list(cbw), sel_table[0], &pos_list, &num);
-
 	if (num > 0) {
 	    pos = pos_list[0] - vcount/2;
 	    if (pos < 1)
 		pos = 1;
 	    else if (pos > (tcount - vcount + 1))
 		pos = tcount - vcount + 1;
-
 	    XtFree((char *) pos_list);
 	}
-
 	XmListSetPos(XmDropDown_list(cbw), pos);
     }
-
     XtFree((char *) sel_table);
-
     return(TRUE);
 }
-
 /*	Function Name: SetTextFromList
  *	Description:   Makes the text strings matched the elements
  *                     highlighted in the list.
@@ -2380,7 +1986,6 @@ SetListFromText(Widget w, Boolean no_action)
  *	Returns:       True if each item was found, or the text widget is
  *                     empty.
  */
-
 static Boolean
 SetTextFromList(Widget w)
 {
@@ -2392,90 +1997,71 @@ SetTextFromList(Widget w)
     unsigned char policy;
     register int i, text_loc;
     XmDropDownClassPartExtension *addition;
-
     addition = CheckExtensions( (XmDropDownWidgetClass)XtClass(cbw) );
     if (addition && addition->setTextFromList)
     {
 	return (*addition->setTextFromList)(w,XmDropDown_text(cbw),
 					    XmDropDown_list(cbw));
     }
-
     num_args = 0;
     XtSetArg(args[num_args], XmNselectedItems, &items); num_args++;
     XtSetArg(args[num_args], XmNselectedItemCount, &count); num_args++;
     XtSetArg(args[num_args], XmNselectionPolicy, &policy); num_args++;
     XtGetValues(XmDropDown_list(cbw), args, num_args);
-
     if ((policy == XmMULTIPLE_SELECT) || (policy == XmEXTENDED_SELECT) ||
 	(count > 0))
     {
 	XmTextFieldSetString(XmDropDown_text(cbw), "");
     }
-
     text_loc = 0;
     i = 0;
     while (i < count) {
 	register int len;
 	String ptr;
 	wchar_t temp[BUFSIZ];
-
         ptr = XmStringUnparse(items[i], NULL, XmCHARSET_TEXT, XmMULTIBYTE_TEXT,
                 NULL, 0, XmOUTPUT_ALL);
-
 	if (mbstowcs(NULL, ptr, 0) == (ssize_t)(-1)) {
 	    XmeWarning((Widget) cbw, XmNstringGetFailedMsg);
 	    i++;
 	    continue;
 	}
-
 	/*
 	 * There must be a better way to do a strlen for I18N text.
 	 */
-
 	len = (int) mbstowcs(temp, ptr, BUFSIZ);
-
 	XmTextFieldInsert(XmDropDown_text(cbw), text_loc, ptr);
 	XtFree((char *) ptr);
 	text_loc += len;
-
 	if (++i >= count)
 	    break;
-
 	XmTextFieldInsert(XmDropDown_text(cbw), text_loc, ",");
 	text_loc++;
     }
-
     XmTextFieldSetInsertionPosition(XmDropDown_text(cbw), 0);
     return(FALSE);
 }
-
 /************************************************************
  *
  * Public Routines.
  *
  ************************************************************/
-
 /*	Function Name: XmDropDownGetValue
  *	Description:   Retreives the value from the combo box.
  *	Arguments:     w - the combination box.
  *	Returns:       The value in the text widget.
  */
-
 String
 XmDropDownGetValue(Widget w)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
     String ptr;
-
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
-
     ptr = XmTextFieldGetString(XmDropDown_text(cbw));
-
     _XmAppUnlock(app);
     return ptr;
 }
-
 /*	Function Name: XmCreateDropDown
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -2483,7 +2069,6 @@ XmDropDownGetValue(Widget w)
  *                 args, num_args - the number and list of args.
  *	Returns: The created widget.
  */
-
 Widget
 XmCreateDropDown(Widget parent, String name,
 		      ArgList args, Cardinal num_args)
@@ -2491,7 +2076,6 @@ XmCreateDropDown(Widget parent, String name,
     return(XtCreateWidget(name, xmDropDownWidgetClass,
 			  parent, args, num_args));
 }
-
 Widget
 XmVaCreateDropDown(
         Widget parent,
@@ -2501,12 +2085,9 @@ XmVaCreateDropDown(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmDropDownWidgetClass,
@@ -2515,7 +2096,6 @@ XmVaCreateDropDown(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedDropDown(
         Widget parent,
@@ -2525,11 +2105,9 @@ XmVaCreateManagedDropDown(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmDropDownWidgetClass,
@@ -2538,83 +2116,66 @@ XmVaCreateManagedDropDown(
     va_end(var);
     return w;
 }
-
 /*      Function Name:  XmDropDownGetLabel
  *      Description:    Returns the "label" child of the XmDropDown
  *      Arguments:      w - The XmDropDown Widget
  *      Returns:        The specified child of the XmDropDown
  */
-
 Widget XmDropDownGetLabel(Widget w)
 {
     if(!XtIsSubclass(w, xmDropDownWidgetClass))
 	return NULL;
     return XmDropDown_label(w);
 }
-
-
 /*      Function Name:  XmDropDownGetArrow
  *      Description:    Returns the "arrow" child of the XmDropDown
  *      Arguments:      w - The XmDropDown Widget
  *      Returns:        The specified child of the XmDropDown
  */
-
 Widget XmDropDownGetArrow(Widget w)
 {
     if(!XtIsSubclass(w, xmDropDownWidgetClass))
 	return NULL;
     return XmDropDown_arrow(w);
 }
-
-
 /*      Function Name:  XmDropDownGetText
  *      Description:    Returns the "text" child of the XmDropDown
  *      Arguments:      w - The XmDropDown Widget
  *      Returns:        The specified child of the XmDropDown
  */
-
 Widget XmDropDownGetText(Widget w)
 {
     if(!XtIsSubclass(w, xmDropDownWidgetClass))
 	return NULL;
     return XmDropDown_text(w);
 }
-
-
 /*      Function Name:  XmDropDownGetList
  *      Description:    Returns the "list" child of the XmDropDown
  *      Arguments:      w - The XmDropDown Widget
  *      Returns:        The specified child of the XmDropDown
  */
-
 Widget XmDropDownGetList(Widget w)
 {
     if(!XtIsSubclass(w, xmDropDownWidgetClass))
 	return NULL;
     return XtNameToWidget(w, "*list");
 }
-
-
 /*      Function Name:  XmDropDownGetChild
  *      Description:    Returns the child widget id of the XmDropDown
  *      Arguments:      w - The XmDropDown Widget
  *      Returns:        The specified child of the XmDropDown
  */
-
 Widget XmDropDownGetChild(Widget w, int num)
 {
     XmDropDownWidget cbw = (XmDropDownWidget) w;
     Widget child;
-
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
-
     if(!XtIsSubclass(w, xmDropDownWidgetClass))
       {
 	_XmAppUnlock(app);
 	return NULL;
       }
-
     switch (num)
     {
       case XmDROPDOWN_LABEL:
@@ -2633,11 +2194,9 @@ Widget XmDropDownGetChild(Widget w, int num)
         child = NULL;
         break;
     }
-
     _XmAppUnlock(app);
     return child;
 }
-
 /* aliases for deprecated functions of XmComboBox2 */
 extern WidgetClass xmCombinationBox2WidgetClass XM_ALIAS(xmDropDownWidgetClass);
 String XmCombinationBox2GetValue(Widget) XM_ALIAS(XmDropDownGetValue);

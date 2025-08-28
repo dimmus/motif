@@ -22,23 +22,17 @@
 */
 #ifndef _XmBaseClassP_h
 #define _XmBaseClassP_h
-
 #ifndef _XmNO_BC_INCL
 #define _XmNO_BC_INCL
 #endif
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define _XmBCEPTR(wc)	((XmBaseClassExt *)(&(((WidgetClass)(wc))\
 					      ->core_class.extension)))
 #define _XmBCE(wc)	((XmBaseClassExt)(((WidgetClass)(wc))\
 					  ->core_class.extension))
-
 #define _XmGetBaseClassExtPtr(wc, owner) \
     ((_XmBCE(wc) && (((_XmBCE(wc))->record_type) == owner)) ? \
      _XmBCEPTR(wc) :  \
@@ -46,38 +40,30 @@ extern "C" {
 						 ((XmGenericClassExt *)  \
 						  _XmBCEPTR( wc)),  \
 						 owner)))
-
 /* defines for 256 bit (at least) bit field
  */
 #define _XmGetFlagsBit(field, bit) \
 	(field[ (bit >> 3) ]) & (1 << (bit & 0x07))
-
 #define _XmSetFlagsBit(field, bit) \
 	    (field[ (bit >> 3) ] |= (1 << (bit & 0x07)))
-
 void _XmFastSubclassInit(WidgetClass, unsigned int);
 Boolean _XmIsFastSubclass(WidgetClass, unsigned int);
-
 #define XmBaseClassExtVersion 2L
 #define XmBaseClassExtVersion 2L
-
 typedef Cardinal (*XmGetSecResDataFunc)( WidgetClass,
 					    XmSecondaryResourceData **);
-
 typedef struct _XmObjectClassExtRec{
     XtPointer 		next_extension;
     XrmQuark 		record_type;
     long 		version;
     Cardinal 		record_size;
 } XmObjectClassExtRec, *XmObjectClassExt;
-
 typedef struct _XmGenericClassExtRec{
     XtPointer 		next_extension;
     XrmQuark 		record_type;
     long 		version;
     Cardinal 		record_size;
 } XmGenericClassExtRec, *XmGenericClassExt;
-
 typedef struct _XmWrapperDataRec{
     struct _XmWrapperDataRec *next;
     WidgetClass		widgetClass;
@@ -88,10 +74,8 @@ typedef struct _XmWrapperDataRec{
     XtWidgetClassProc	classPartInitLeaf;
     XtWidgetProc	resize;
     XtGeometryHandler   geometry_manager;
-
     /* init_depth is obselete now .. */
     Cardinal		init_depth;
-
     int                 initializeLeafCount;
     int                 setValuesLeafCount;
     int                 getValuesLeafCount;
@@ -100,7 +84,6 @@ typedef struct _XmWrapperDataRec{
     int                 constraintInitializeLeafCount;
     int 		constraintSetValuesLeafCount;
 } XmWrapperDataRec, *XmWrapperData;
-
 typedef struct _XmBaseClassExtRec{
     XtPointer 		next_extension;
     XrmQuark 		record_type;
@@ -126,32 +109,22 @@ typedef struct _XmBaseClassExtRec{
     XmFocusChangeProc	focusChange;
     XmWrapperData	wrapperData;
 } XmBaseClassExtRec, *XmBaseClassExt;
-
-
 typedef struct _XmWidgetExtDataRec{
     Widget		widget;
     Widget		reqWidget;
     Widget		oldWidget;
 } XmWidgetExtDataRec, *XmWidgetExtData;
-
 externalref XrmQuark	     XmQmotif;
 externalref int		     _XmInheritClass;
 externalref XmBaseClassExt * _Xm_fastPtr;
-
 /********    Private Function Declarations    ********/
-
-
 extern XmGenericClassExt * _XmGetClassExtensionPtr(
                         XmGenericClassExt *listHeadPtr,
                         XrmQuark owner) ;
 extern Boolean _XmIsSubclassOf(WidgetClass wc, WidgetClass sc);
-
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmBaseClassP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

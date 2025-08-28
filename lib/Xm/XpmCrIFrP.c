@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  CrIFrP.c:                                                                  *
 *                                                                             *
@@ -31,12 +30,10 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 void
 xpmCreateImageFromPixmap(
     Display		 *display,
@@ -48,11 +45,9 @@ xpmCreateImageFromPixmap(
     unsigned int dum;
     int dummy;
     Window win;
-
     if (*width == 0 && *height == 0)
 	XGetGeometry(display, pixmap, &win, &dummy, &dummy,
 		     width, height, &dum, &dum);
-
     *ximage_return = XGetImage(display, pixmap, 0, 0, *width, *height,
 			       AllPlanes, ZPixmap);
 }

@@ -27,16 +27,11 @@
 /* $XConsortium: ManagerI.h /main/5 1995/07/13 17:35:08 drk $ */
 #ifndef _XmManagerI_h
 #define _XmManagerI_h
-
 #include <Xm/ManagerP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmGadgetTraverseCurrent(
                         Widget wid,
                         XEvent *event,
@@ -142,13 +137,9 @@ extern void _XmGadgetMultiActivate(
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmManagerI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

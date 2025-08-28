@@ -20,34 +20,26 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef _SLIDECP_H
 #define _SLIDECP_H
-
 #include <Xm/SlideC.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ObjectP.h>
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmUNSPECIFIED_POSITION
 #define XmUNSPECIFIED_POSITION (-1)
 #endif
-
 typedef struct {
     XtPointer extension;
 } XmSlideContextClassPart;
-
 typedef struct _XmSlideContextClassRec {
 	ObjectClassPart object_class;
 	XmSlideContextClassPart slide_class;
 } XmSlideContextClassRec;
-
 extern XmSlideContextClassRec xmSlideContextClassRec;
-
 typedef struct _XmSlideContextPart {
 	XtIntervalId id;
 	XtCallbackList slideFinishCallback;
@@ -59,12 +51,10 @@ typedef struct _XmSlideContextPart {
 	Position dest_x;
 	Position dest_y;
 } XmSlideContextPart;
-
 typedef struct _XmSlideContextRec {
 	ObjectPart object;
 	XmSlideContextPart slide;
 } XmSlideContextRec;
-
 #define Slide_Id(w) (((XmSlideContextWidget)w)->slide.id)
 #define Slide_Widget(w) (((XmSlideContextWidget)w)->slide.slide_widget)
 #define Slide_Interval(w) (((XmSlideContextWidget)w)->slide.interval)
@@ -74,9 +64,7 @@ typedef struct _XmSlideContextRec {
 #define Slide_DestY(w) (((XmSlideContextWidget)w)->slide.dest_y)
 #define Slide_FinishCallback(w) (((XmSlideContextWidget)w)->slide.slideFinishCallback)
 #define Slide_MotionCallback(w) (((XmSlideContextWidget)w)->slide.slideMotionCallback)
-
 #ifdef __cplusplus
 }
 #endif
-
 #endif

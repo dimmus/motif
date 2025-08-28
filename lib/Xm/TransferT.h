@@ -24,32 +24,23 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmTransferT_H
 #define _XmTransferT_H
-
 #include <Xm/Xm.h>
 #include <Xm/TransferP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref XrmQuark XmQTtransfer;
-
 /* Trait structures and typedefs, place typedefs first */
-
 /* Version 0: initial release. */
-
 typedef struct _XmTransferTraitRec {
   int				version;		/* 0 */
   XmConvertCallbackProc		convertProc;
   XmDestinationCallbackProc	destinationProc;
   XmDestinationCallbackProc	destinationPreHookProc;
 } XmTransferTraitRec, *XmTransferTrait;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTransferT_H */

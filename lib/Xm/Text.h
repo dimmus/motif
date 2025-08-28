@@ -22,42 +22,31 @@
 */
 #ifndef _XmText_h
 #define _XmText_h
-
 #include <Xm/Xm.h>
 #include <stdio.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* -------------- *
  *   type defines *
  * -------------- */
 typedef struct _XmTextSourceRec *XmTextSource;
 typedef struct _XmTextClassRec *XmTextWidgetClass;
 typedef struct _XmTextRec *XmTextWidget;
-
 /* -------------- *
  * extern class   *
  * -------------- */
 externalref WidgetClass       xmTextWidgetClass;
-
-
 /* --------------------------------------- *
  *  text widget fast subclassing fallback  *
  * --------------------------------------- */
-
 #ifndef XmIsText
 #define XmIsText(w)	XtIsSubclass(w, xmTextWidgetClass)
 #endif /* XmIsText */
-
-
 /* ----------------------------------- *
  *   text widget public functions      *
  * ----------------------------------- */
-
 /********    Public Function Declarations    ********/
-
 extern void XmTextSetHighlight(
                         Widget w,
                         XmTextPosition left,
@@ -226,15 +215,11 @@ extern Boolean XmTextFindStringWcs(
                         wchar_t *wc_string,
                         XmTextDirection direction,
                         XmTextPosition *position);
-
 /********    End Public Function Declarations    ********/
-
 /* tmp: go to XmStrDefs */
 #define XmNtotalLines "totalLines"
 #define XmCTotalLines "TotalLines"
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmText_h */

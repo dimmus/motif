@@ -27,15 +27,11 @@
 /* $XConsortium: RCMenuI.h /main/5 1995/07/13 17:45:45 drk $ */
 #ifndef _XmRCMenuI_h
 #define _XmRCMenuI_h
-
 #include <Xm/RowColumn.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern void _XmMenuBtnUp(
         Widget wid,
         XEvent *event,
@@ -77,7 +73,6 @@ extern void _XmSetPopupMenuClick(
 extern void _XmRC_DoProcessMenuTree(
                         Widget w,
                         int mode) ;
-
 extern void _XmRC_ProcessSingleWidget(
                         Widget w,
                         int mode) ;
@@ -149,9 +144,7 @@ extern void _XmMenuGadgetDrag(
                         String *params,
                         Cardinal *num_params) ;
 extern int _XmRC_PopupMenuHandler(Widget, XEvent*);
-
 extern Boolean _XmRC_PostTimeOut( XtPointer wid );
-
 extern void _XmRC_RemoveHandlersFromPostFromWidget(
                         Widget popup,
                         Widget widget) ;
@@ -159,16 +152,11 @@ extern void _XmRC_AddPopupEventHandlers(
                         XmRowColumnWidget pane) ;
 extern void _XmRC_RemovePopupEventHandlers(
                         XmRowColumnWidget pane) ;
-
 void _XmRC_RemoveFromPostFromList(
                         XmRowColumnWidget m,
                         Widget widget) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRCMenuI_h */

@@ -21,40 +21,27 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmOutline_h
 #define _XmOutline_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
 #include <Xm/Hierarchy.h>
-
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 typedef struct _XmOutlineClassRec	*XmOutlineWidgetClass;
 typedef struct _XmOutlineRec		*XmOutlineWidget;
-
 /************************************************************
 *	MACROS
 *************************************************************/
-
 /************************************************************
 *	GLOBAL FUNCTION DECLARATIONS
 *************************************************************/
-
 /*	Function Name: XmCreateOutline
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -63,15 +50,8 @@ typedef struct _XmOutlineRec		*XmOutlineWidget;
  *	Returns: The Widget created.
  */
 Widget XmCreateOutline(Widget, String, ArgList, Cardinal);
-
 extern WidgetClass xmOutlineWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _Outline_h */

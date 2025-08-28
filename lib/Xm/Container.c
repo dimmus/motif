@@ -32,7 +32,6 @@
 #include <config.h>
 #endif
 #include <stdlib.h>
-
 #include <Xm/AtomMgr.h>
 #include <Xm/ClipWindowP.h>
 #include <Xm/ContItemT.h>
@@ -65,7 +64,6 @@
 #include "MessagesI.h"
 #include "ClipWindTI.h"
 #include <Xm/XmosP.h>                /* for bzero et al */
-
 #define	ZERO_DIM	0
 #define	DEFAULT_INDENTATION	40
 #define	NO_CELL	-1
@@ -77,14 +75,11 @@
 #define MOTION_THRESHOLD 3
 /* Make this nicely divisible by 2 */
 #define DRAG_STATE_SIZE 14
-
 #define	WRONGPARAMS	_XmMMsgContainer_0000
 #define MESSAGE1        _XmMMsgContainer_0001
-
 enum {	ANY_FIT,
 	EXACT_FIT,
 	FORCE};
-
 /* Useful macros */
 #define _LEFT   0
 #define _RIGHT  1
@@ -101,11 +96,8 @@ enum {	ANY_FIT,
 #define _LINK   0
 #define _MOVE   1
 #define _COPY   2
-
 #define	defaultTranslations	_XmContainer_defaultTranslations
 #define	traversalTranslations	_XmContainer_traversalTranslations
-
-
 /********    Static Function Declarations    ********/
 static	void                    GetDetailHeader(
 					Widget		wid,
@@ -631,10 +623,7 @@ static void 			ContainerResetDepths (XmContainerConstraint c);
 static void FindMaxDepths (XmContainerConstraint c, Widget cw);
 static Boolean			ContainerIsDescendant (Widget containerChild, Widget newEntryParent);
 static void			ContainerResequenceNodes(XmContainerWidget cw, Widget entryParent);
-
 /********    End Static Function Declarations    ********/
-
-
 static	XtActionsRec	actionsList[] = {
 {"ContainerBeginSelect",	(XtActionProc)	ContainerBeginSelect},
 {"ContainerButtonMotion",	(XtActionProc)	ContainerButtonMotion},
@@ -666,8 +655,6 @@ static	XtActionsRec	actionsList[] = {
 {"ContainerHandleBtn2Motion",	(XtActionProc)  ContainerHandleBtn2Motion},
 {"ContainerHandleBtn2Up",	(XtActionProc)  ContainerHandleBtn2Up}
 };
-
-
 static	XtResource	resources[] =
 {
     {
@@ -859,8 +846,6 @@ static	XtResource	resources[] =
 	XtOffsetOf(XmContainerRec,container.spatial_style),
 	XmRImmediate,(XtPointer)XmGRID},
 };
-
-
 static	XmSyntheticResource	syn_resources[] =
 {
     {
@@ -908,8 +893,6 @@ static	XmSyntheticResource	syn_resources[] =
         XtOffsetOf(XmContainerRec,container.first_col_width),
         GetOutlineColumnWidth, NULL},
     };
-
-
 /*  The constraint resource list  */
 static 	XtResource 	constraints[] =
 {
@@ -927,7 +910,6 @@ static 	XtResource 	constraints[] =
 	XtOffsetOf(XmContainerConstraintRec,container.position_index),
 	XmRImmediate,(XtPointer)XmLAST_POSITION},
 };
-
 static XmManagerClassExtRec managerClassExtRec = {
     NULL,
     NULLQUARK,
@@ -936,7 +918,6 @@ static XmManagerClassExtRec managerClassExtRec = {
     NULL,                               /* traversal_children */
     ObjectAtPoint                       /* object_at_point */
 };
-
 externaldef( xmcontainerclassrec) XmContainerClassRec	xmContainerClassRec =
 {	/* CoreClassPart */
 	{
@@ -1010,12 +991,8 @@ externaldef( xmcontainerclassrec) XmContainerClassRec	xmContainerClassRec =
 	NULL,				/* extension		*/
 	}
 };
-
-
 externaldef( xmcontainerwidgetclass) WidgetClass xmContainerWidgetClass
 		= (WidgetClass) &xmContainerClassRec;
-
-
 /* Transfer Trait record for Container */
 static XmConst XmTransferTraitRec transferT = {
 	0,				/* version */
@@ -1023,35 +1000,25 @@ static XmConst XmTransferTraitRec transferT = {
 	(XmDestinationCallbackProc)	ContainerDestinationProc,
 	(XmDestinationCallbackProc)	ContainerDestPrehookProc,
 };
-
 /* Trait record for ContainerT */
 static  XmConst XmContainerTraitRec containerT =
 {
         0,              		/* version */
         (XmContainerGetValuesProc)	ContGetValues,
 };
-
 /* TraversalControl Trait record for Container */
 static XmConst XmTraversalControlTraitRec traversalControlT =
 {
   0,                            /* version */
   RedirectTraversal		/* redirect */
 };
-
-
-
 /* Context for drag icon information */
 static XContext dragIconInfoContext = 0;
-
 /* Data structure for drag icon info */
 typedef struct _DragIconInfo {
   Widget	state;
   Widget	source;
 } DragIconInfoRec, *DragIconInfo;
-
-
-
-
 /************************************************************************
  * GetDetailHeader
  ************************************************************************/
@@ -1066,17 +1033,14 @@ GetDetailHeader(
     Cardinal icon_detail_header_count, i ;
     XmStringTable detail_header = NULL, icon_detail_header ;
     XmString label_string ;
-
     /* If there is an icon_header, fetch the information out of it */
     if ((icon_header = GetRealIconHeader(wid)) != NULL) {
-
 	/* we get memory owned by IconG here */
 	XtVaGetValues (icon_header,
 		       XmNlabelString, &label_string,
 		       XmNdetail, &icon_detail_header,
 		       XmNdetailCount, &icon_detail_header_count,
 		       NULL);
-
 	/* now we need to add the labelString itself, so malloc
 	   something in the Container itself.
 	   First free what is currently allocated. Last free is
@@ -1088,9 +1052,7 @@ GetDetailHeader(
   	for (i=0; i < icon_detail_header_count; i++)
  	    cw->container.cache_detail_heading[i+1] = icon_detail_header[i] ;
  	cw->container.cache_detail_heading[0] = label_string ;
-
  	detail_header = cw->container.cache_detail_heading;
-
   	/* app need not to free the returned array */
       }
      else
@@ -1098,12 +1060,8 @@ GetDetailHeader(
  	** has been maintaining
  	*/
  	detail_header = cw->container.detail_heading;
-
     *value = (XtArgVal)detail_header;
 }
-
-
-
 /************************************************************************
  * GetDetailHeaderCount
  ************************************************************************/
@@ -1115,24 +1073,18 @@ GetDetailHeaderCount(
 {
     Widget icon_header ;
     Cardinal detail_header_count = 0 ;
-
     /* If there is an icon_header, fetch the information out of it */
     if ((icon_header = GetRealIconHeader(wid)) != NULL) {
-
 	XtVaGetValues (icon_header, XmNdetailCount, &detail_header_count,
 		       NULL);
-
 	detail_header_count += 1; /* +1 for the labelString itself */
     }
-
     else {
      	XmContainerWidget cw = (XmContainerWidget)wid;
  	detail_header_count = cw->container.saved_detail_heading_count;
     }
-
     *value = (XtArgVal)detail_header_count;
 }
-
 /************************************************************************
  * GetOutlineColumnWidth
  ************************************************************************/
@@ -1143,14 +1095,12 @@ GetOutlineColumnWidth(
         XtArgVal        *value)
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
-
     /* Send 0 if dynamic, real_first_col_width otherwise */
     if (CtrIsDynamic(cw,FIRSTCW))
 	*value = (XtArgVal)0;
     else
 	*value = (XtArgVal)cw->container.real_first_col_width;
 }
-
 /************************************************************************
  * ClassPartInitialize (Core Method)
  ************************************************************************/
@@ -1159,13 +1109,11 @@ ClassPartInitialize(
         WidgetClass     wc)
 {
     _XmFastSubclassInit(wc,XmCONTAINER_BIT);
-
     /* Allow inheritance for subclasses */
     if (wc != xmContainerWidgetClass)
       {
       XmContainerClass	this_class = (XmContainerClass)wc;
       XmContainerClass	super = (XmContainerClass)wc;
-
       if (this_class->container_class.test_fit_item ==
 			    XmInheritSpatialTestFitProc)
 	    this_class->container_class.test_fit_item =
@@ -1183,17 +1131,13 @@ ClassPartInitialize(
 	    this_class->container_class.get_spatial_size =
 		    super->container_class.get_spatial_size;
       }
-
   XmeTraitSet((XtPointer)wc,XmQTtransfer,(XtPointer)&transferT);
   XmeTraitSet((XtPointer)wc,XmQTcontainer,(XtPointer)&containerT);
   XmeTraitSet((XtPointer)wc,XmQTtraversalControl,(XtPointer)&traversalControlT);
-
 }
-
 /************************************************************************
  * Initialize (Core Method)
  ************************************************************************/
-
 static  void
 Initialize(
         Widget          rw,
@@ -1207,7 +1151,6 @@ Initialize(
     Arg	wargs[10];
     Atom	targets[1];
     XmScrollFrameTrait	scrollFrameTrait;
-
     /*
      * Verify enumerated resources.
      */
@@ -1247,7 +1190,6 @@ Initialize(
     if (!XmRepTypeValidValue(XmRID_SPATIAL_SNAP_MODEL,
 			     ncw->container.snap_model,nw))
 	ncw->container.snap_model = XmNONE;
-
     /*
      * deal with XmNdetailOrder & XmNdetailOrderCount
      */
@@ -1258,7 +1200,6 @@ Initialize(
 	    ncw->container.detail_order[i] =
 		rcw->container.detail_order[i] ;
     }
-
     /*
      * Initialize internal variables.
      */
@@ -1266,7 +1207,6 @@ Initialize(
     ncw->container.last_node = NULL;
     ncw->container.self = False;
     ncw->container.create_cwid_type = CONTAINER_ICON;
-
     ncw->container.toggle_pressed = False;
     ncw->container.extend_pressed = False;
     ncw->container.ob_pressed = False;
@@ -1275,31 +1215,25 @@ Initialize(
 	(CtrPolicyIsMULTIPLE(ncw) || CtrPolicyIsSINGLE(ncw));
     ncw->container.marquee_mode = !(CtrTechIsTOUCH_ONLY(ncw));
     ncw->container.marquee_drawn = False;
-
     ncw->container.selection_state = XmSELECTED;
     ncw->container.anchor_cwid = NULL;
     ncw->container.have_primary = False;
-
     ncw->container.last_click_time = 0;
     ncw->container.selecting = False;
     ncw->container.dynamic_resource = 0L;
-
     ncw->container.cache_detail_heading = NULL;
-
     /*
      * Get default Font.
      */
     if (ncw->container.render_table == NULL)
 	{
 	    XmFontList	defaultFont = NULL;
-
 	    defaultFont = XmeGetDefaultRenderTable(nw,XmLABEL_FONTLIST);
 	    ncw->container.render_table = XmFontListCopy(defaultFont);
 	}
     else
 	ncw->container.render_table =
 	    XmFontListCopy(ncw->container.render_table);
-
     /*
      * Copy XmTablist if set, otherwise, keep track that it's dynamic.
      */
@@ -1308,31 +1242,25 @@ Initialize(
     if (ncw->container.detail_tablist != NULL)
 	ncw->container.detail_tablist =
 	    XmTabListCopy(ncw->container.detail_tablist,0,0);
-
     /*
      * Deal with setting of selectColor special cases
      */
     if (ncw->container.select_color == XmDEFAULT_SELECT_COLOR) {
         XrmValue val;
-
         _XmSelectColorDefault(nw, 0, &val);
         ncw->container.select_color = *((Pixel*) val.addr);
     } else
     if (ncw->container.select_color == XmHIGHLIGHT_COLOR) {
         ncw->container.select_color = ncw->manager.highlight_color ;
     }
-
-
      /*
      * Initialize GCs
      */
     ncw->container.normalGC = NULL;
     ncw->container.marqueeGC = NULL;
     UpdateGCs(nw);
-
     ncw->container.size_ob = NULL;
     SizeOutlineButton(nw);
-
     /* this flag is used during: expansion/collapse of outlinebutton
        to know if the first column can grow/shrink. If it
        was set, it can't, otherwise, a default is calculated whenever
@@ -1343,47 +1271,37 @@ Initialize(
 	ncw->container.dynamic_resource |= FIRSTCW;
     ncw->container.real_first_col_width = ncw->container.first_col_width  ;
     ncw->container.first_col_width = INVALID_DIMENSION  ;
-
     ncw->container.saved_detail_heading_count = 0 ;
     ncw->container.icon_header = NULL;
-
     if ((ncw->container.detail_heading_count && !ncw->container.detail_heading)
 	|| (!ncw->container.detail_heading_count
 	    && ncw->container.detail_heading))
 	{
 	    XmeWarning ((Widget) ncw, MESSAGE1);
 	}
-
     if (ncw->container.detail_heading_count > 0) {
-
 	/* if detail heading resources specified, create icon_header */
 	if (ncw->container.detail_heading) {
 	    /* and point to right sized array ! */
-
 	    CreateIconHeader(nw);
 	    /* ncw->container.icon_header is a DA iff we are
 	       in the automatic SW case.
 	       ncw->container.icon_header is created unmanaged */
-
 	    if (CtrLayoutIsDETAIL(ncw))
 		XtManageChild(ncw->container.icon_header);
 	    else
 		XtUnmanageChild(ncw->container.icon_header);
 	}
-
 	/* saved the heading count in case the heading is set later on. */
 	ncw->container.saved_detail_heading_count =
 	    ncw->container.detail_heading_count;
-
 	/* mark the detail_heading_count as invalid so
 	   that any change will be trapped by SetValues */
 	ncw->container.detail_heading_count = INVALID_COUNT ;
     }
-
     ncw->container.max_depth = 0;
     ncw->container.outline_segs = NULL;
     ncw->container.outline_seg_count = 0;
-
     /*
      * Register as Drop site.
      */
@@ -1392,18 +1310,15 @@ Initialize(
     XtSetArg(wargs[n],XmNimportTargets,targets); n++;
     XtSetArg(wargs[n],XmNnumImportTargets,1); n++;
     XmeDropSink(nw,wargs,n);
-
     ncw->container.drag_context = (Widget) NULL;
     ncw->container.transfer_action = NULL;
     ncw->container.transfer_timer_id = 0;
-
     /*
      * Initialize prev width for Resize calculations
      *        & first_change_managed for initial sizing calculations.
      */
     ncw->container.prev_width = 0;
     ncw->container.first_change_managed = True;
-
     /*
      * Initialize GRID/CELLS
      */
@@ -1413,7 +1328,6 @@ Initialize(
     ncw->container.current_width_in_cells = 0;
     ncw->container.current_height_in_cells = 0;
     ncw->container.cells_region = XCreateRegion();
-
     /*
      * Set Cell sizes.
      */
@@ -1424,7 +1338,6 @@ Initialize(
 	((ncw->container.small_cell_height > 0) &&
 	 (ncw->container.small_cell_width > 0));
     SetCellSizes(nw);
-
     /*
      * init auto scroll related data
      */
@@ -1438,8 +1351,6 @@ Initialize(
     ncw->container.scroll_proc_id = 0;
     ncw->container.LeaveDir = 0;
 }
-
-
 /************************************************************************
  * Destroy (Core Method)
  ************************************************************************/
@@ -1450,36 +1361,25 @@ Destroy(
     XmContainerWidget	cw = (XmContainerWidget)wid;
     XmScrollFrameTrait	scrollFrameTrait = (XmScrollFrameTrait)
 	XmeTraitGet((XtPointer)XtClass(XtParent(wid)),XmQTscrollFrame);
-
     XmFontListFree(cw->container.render_table);
-
-
     XtReleaseGC(wid,cw->container.normalGC);
     XtReleaseGC(wid,cw->container.marqueeGC);
-
     if (cw->container.transfer_timer_id != 0)
 	XtRemoveTimeOut(cw->container.transfer_timer_id);
-
     /* free the detail_heading array that might have been
        allocated during a getvalues */
     if (cw->container.cache_detail_heading)
 	XtFree((char*)cw->container.cache_detail_heading);
-
     if (cw->container.detail_order_count && cw->container.detail_order) {
 	XtFree((char*)cw->container.detail_order);
     }
-
     if (cw->container.detail_tablist)
 	XmTabListFree(cw->container.detail_tablist);
-
     if (cw->container.outline_segs)
 	XtFree((char*)cw->container.outline_segs);
-
     if (cw->container.cells)
 	XtFree((char*)cw->container.cells);
-
     XDestroyRegion(cw->container.cells_region);
-
     if (scrollFrameTrait && cw->container.icon_header != NULL) {
 	/* only destroy the icon_header if not a child of the
 	   Container, the auto SW/DA case */
@@ -1491,11 +1391,9 @@ Destroy(
     ** already destroyed (which is why we can't refer to it until we
     ** know its lineage)
     */
-
     if (cw->container.scroll_proc_id)
 	XtRemoveTimeOut(cw->container.scroll_proc_id);
 }
-
 /************************************************************************
  * Resize (Core Method)
  ************************************************************************/
@@ -1504,7 +1402,6 @@ Resize(
     Widget 	wid)
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
-
     /*
      * The Outline layout is oblivious to size constraints
      * in the Left-to-Right layout direction.
@@ -1519,7 +1416,6 @@ Resize(
     if (CtrLayoutIsOUTLINE_DETAIL(cw) &&
 	(cw->core.width == cw->container.prev_width))
 	return;
-
     /*
      * Save the current width for next time and reLayout.
      */
@@ -1527,7 +1423,6 @@ Resize(
     cw->container.self = True;
     Layout(wid);
     cw->container.self = False;
-
     /*
      * Outline lines will be moved in response to width change in a
      * Right-to_Left Outline Layout.  Better clear everything to erase
@@ -1537,7 +1432,6 @@ Resize(
 	if (XtIsRealized((Widget)cw))
 	        XClearArea(XtDisplay((Widget)cw),XtWindow((Widget)cw),0,0,0,0,True);
 }
-
 /************************************************************************
  * Redisplay (Core Method)
  * Special care must be taken to redraw the marquee which is drawn in XOR
@@ -1555,7 +1449,6 @@ Redisplay(
     Region  region)
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
-
     /* Erase the marquee if there is any */
     if (cw->container.marquee_drawn) {
 	DrawMarquee(wid);
@@ -1569,7 +1462,6 @@ Redisplay(
 	XSetForeground(XtDisplay(wid), cw->container.normalGC,
 		       cw->manager.foreground);
     }
-
     /*
      * If lines are present & we're in outline layout, draw the lines.
      */
@@ -1580,21 +1472,17 @@ Redisplay(
 		cw->container.outline_segs,
 		cw->container.outline_seg_count);
 	}
-
     /*
      * Redisplay all affected gadgets.
      */
     XmeRedisplayGadgets(wid,event,region);
-
     /* Redraw marquee when needed */
     if (cw->container.marquee_drawn)
 	DrawMarquee(wid);
 }
-
 /************************************************************************
  * SetValues (Core Method)
  ************************************************************************/
-
 static 	Boolean
 SetValues(
     Widget          cw,
@@ -1615,9 +1503,7 @@ SetValues(
     XmContainerConstraint c;
     XPoint 		snap_point;
     int			i;
-
     ncw->container.self = True;
-
     /*
      * Verify enumerated resources.
      */
@@ -1708,18 +1594,14 @@ SetValues(
     if (ncw->container.render_table == NULL)
 	{
 	    XmFontList	defaultFont = NULL;
-
 	    defaultFont = XmeGetDefaultRenderTable(nw,XmLABEL_FONTLIST);
 	    ncw->container.render_table = XmFontListCopy(defaultFont);
 	}
     else
 	ncw->container.render_table =
 	    XmFontListCopy(ncw->container.render_table);
-
     if (ccw->container.render_table)
         XmRenderTableFree(ccw->container.render_table);
-
-
     /*
      * Check if we'll need layout.
      * we update 4 differents boolean and at the end we
@@ -1732,18 +1614,14 @@ SetValues(
 	else
 	    container_need_layout = True;
 	}
-
     if (ncw->manager.string_direction != ccw->manager.string_direction)
 	container_need_layout = True;
-
     if ((ncw->container.margin_h != ccw->container.margin_h) ||
         (ncw->container.margin_w != ccw->container.margin_w))
 	container_need_layout = True;
-
     if ((ncw->container.spatial_style != ccw->container.spatial_style) &&
 	(!(CtrLayoutIsSPATIAL(ncw) && CtrSpatialStyleIsNONE(ncw))))
 	spatial_need_layout = True;
-
     /*
      * Change all IconGadget children's XmNentryType to match
      */
@@ -1761,7 +1639,6 @@ SetValues(
     	if (CtrLayoutIsSPATIAL(ncw) && !CtrLayoutIsSPATIAL(ccw))
 	    {
     	    XtWidgetGeometry    desired;
-
     	    node = ncw->container.first_node;
     	    while (node)
         	{
@@ -1779,7 +1656,6 @@ SetValues(
 		}
             }
 	}
-
     if ((ncw->container.entry_viewtype != ccw->container.entry_viewtype) &&
         ((ncw->container.entry_viewtype == XmSMALL_ICON) ||
 	 (ccw->container.entry_viewtype == XmSMALL_ICON)))
@@ -1788,7 +1664,6 @@ SetValues(
 	ncw->container.current_height_in_cells = 0;
 	spatial_need_layout = True;
 	}
-
     if (CtrLayoutIsSPATIAL(ncw) && !CtrSpatialStyleIsNONE(ncw) &&
         (CtrViewIsLARGE_ICON(ncw) || CtrViewIsANY_ICON(ncw)))
         {
@@ -1800,7 +1675,6 @@ SetValues(
 			!= ccw->container.large_cell_height) &&
 	    (ncw->container.large_cell_height == 0))
 	    ncw->container.large_cell_dim_fixed = False;
-
         SetCellSizes(nw);
 	if ((ncw->container.real_large_cellw
 			!= ccw->container.real_large_cellw) ||
@@ -1812,7 +1686,6 @@ SetValues(
             spatial_need_layout = True;
 	    }
         }
-
     if (CtrLayoutIsSPATIAL(ncw) && !CtrSpatialStyleIsNONE(ncw) &&
         CtrViewIsSMALL_ICON(ncw))
         {
@@ -1824,7 +1697,6 @@ SetValues(
                         != ccw->container.small_cell_height) &&
             (ncw->container.small_cell_height == 0))
             ncw->container.small_cell_dim_fixed = False;
-
         SetCellSizes(nw);
 	if ((ncw->container.real_small_cellw
                         != ccw->container.real_small_cellw) ||
@@ -1836,7 +1708,6 @@ SetValues(
             spatial_need_layout = True;
 	    }
         }
-
     /*
      * Deal with setting of special selectColor values.
      * No need to check for a change since if select_color is one of
@@ -1845,7 +1716,6 @@ SetValues(
      */
     if (ncw->container.select_color == XmDEFAULT_SELECT_COLOR) {
         XrmValue val;
-
         _XmSelectColorDefault(nw, 0, &val);
         ncw->container.select_color = *((Pixel*) val.addr);
         /* must notify the children at this point */
@@ -1856,8 +1726,6 @@ SetValues(
         /* must notify the children at this point */
 	need_expose |= _XmNotifyChildrenVisual (cw, nw, VisualSelectColor);
     }
-
-
     /*
      * Hide all non-level-0 children if we've switched to SPATIAL layout.
      */
@@ -1871,7 +1739,6 @@ SetValues(
 		HideCwid(cwid);
 	    }
 	}
-
     if ((ncw->container.collapsed_state_pixmap !=
 	 ccw->container.collapsed_state_pixmap) ||
 	(ncw->container.expanded_state_pixmap !=
@@ -1885,15 +1752,12 @@ SetValues(
 	/* update all the buttons */
 	ChangeOutlineButtons(nw);
     }
-
     /*
      * just Redisplay, if line style has changed.
      */
     if (CtrLayoutIsOUTLINE_DETAIL(ncw) &&
         (ncw->container.outline_sep_style != ccw->container.outline_sep_style))
 	need_expose = True;
-
-
     /*
      * Recalculate FirstColWidth.
      *
@@ -1909,22 +1773,18 @@ SetValues(
 	outline_need_layout = True ;
 	ncw->container.first_col_width = INVALID_DIMENSION ;
     }
-
     if ((ncw->container.ob_width != ccw->container.ob_width) ||
 	(ncw->container.outline_indent != ccw->container.outline_indent) ||
 	(ncw->container.ob_policy != ccw->container.ob_policy))
 	outline_need_layout = True ;
-
     /*
      * deal with XmNdetailTabList
      */
     if ((ncw->container.detail_tablist != ccw->container.detail_tablist))
 	{
 	detail_need_layout = True ;
-
         if (ccw->container.detail_tablist)
 	    XmTabListFree(ccw->container.detail_tablist) ;
-
 	if (ncw->container.detail_tablist == NULL)
 	    ncw->container.dynamic_resource |= TABLIST;
 	else
@@ -1933,7 +1793,6 @@ SetValues(
 	    ncw->container.detail_tablist =
 		XmTabListCopy(ncw->container.detail_tablist,0,0);
         }
-
     /*
      * deal with XmNdetailOrder & XmNdetailOrderCount changes
      */
@@ -1941,9 +1800,7 @@ SetValues(
 	 ccw->container.detail_order) ||
 	(ncw->container.detail_order_count !=
 	 ccw->container.detail_order_count)) {
-
 	detail_need_layout = True ;
-
 	if (ccw->container.detail_order_count
 	    && ccw->container.detail_order) {
 	    XtFree((char*)ccw->container.detail_order) ;
@@ -1958,8 +1815,6 @@ SetValues(
 	    ncw->container.detail_order = detail_order ;
 	}
     }
-
-
     /*
      * Reset cell/placed info if Spatial Layout options
      * have changed.
@@ -1973,7 +1828,6 @@ SetValues(
 		XtClass(ncw))->container_class.place_item)(nw,NULL,ANY_FIT);
 	need_expose = True;
 	}
-
     /*
      * Set selected items, if necessary.
      */
@@ -1983,7 +1837,6 @@ SetValues(
 				!= ccw->container.selected_items))
 	{
 	int	save_item_count;
-
 	save_item_count = ncw->container.selected_item_count;
 	ncw->container.selected_item_count =
 	    ccw->container.selected_item_count;
@@ -1997,14 +1850,12 @@ SetValues(
 	    }
 	need_expose = True;
 	}
-
     /*
      * Change GC's, if necessary.
      */
     if ((ncw->manager.foreground != ccw->manager.foreground) ||
 	(ncw->core.background_pixel != ccw->core.background_pixel))
 	UpdateGCs(nw);
-
     {
  	/*
  	** Deal with heading change
@@ -2048,35 +1899,26 @@ SetValues(
  	** or not the icon header is to be displayed; just indicate whether it
  	** was changed so that we know whether we need a relayout.
  	*/
-
 #define NONE_CHANGED 	0
 #define COUNT_CHANGED	(1<<0)
 #define HEADING_CHANGED	(1<<1)
 	unsigned char whichChanged = NONE_CHANGED;
-
 #define NONE_VALID	0
 #define COUNT_VALID	(1<<0)
 #define HEADING_VALID	(1<<1)
 #define BOTH_VALID	(COUNT_VALID | HEADING_VALID)
  	unsigned char whichValid = NONE_VALID;
-
  	if (ncw->container.detail_heading != ccw->container.detail_heading)
 	    whichChanged |= HEADING_CHANGED;
-
  	if ((INVALID_COUNT != ncw->container.detail_heading_count)
 	    && (ncw->container.detail_heading_count
 		!= ncw->container.saved_detail_heading_count))
 	    whichChanged |= COUNT_CHANGED;
-
  	if (NONE_CHANGED != whichChanged) {
-
 	    if (ncw->container.detail_heading != NULL)
 		whichValid |= HEADING_VALID;
-
 	    if (HEADING_VALID & whichValid) {
-
 		if (HEADING_CHANGED & whichChanged) {
-
 		    /* We have a new set of heading strings.
 		    ** If we have a heading but the count is invalid, then we
 		    ** need to fetch it from one of the caches, so that the
@@ -2085,9 +1927,7 @@ SetValues(
 		    ** value where it goes, except that we want to track a
 		    ** change in the count in a memory-reuse case)
 		    */
-
 		    if (INVALID_COUNT == ncw->container.detail_heading_count) {
-
 			if (ncw->container.icon_header) {
 			    XtVaGetValues(GetRealIconHeader(nw), XmNdetailCount,
 					  &(ncw->container.detail_heading_count),
@@ -2108,7 +1948,6 @@ SetValues(
 		*/
 	    }
 	    /* else if now NULL will result in destruction below */
-
 	    /* changing a count without a valid heading doesn't require any work;
 	    ** in fact, we don't need to track a change to the count -- we just
 	    ** care about the current value or the value reconstructed above.
@@ -2116,15 +1955,12 @@ SetValues(
 	    if ( (ncw->container.detail_heading_count != 0)
 		&& (INVALID_COUNT != ncw->container.detail_heading_count) )
 		whichValid |= COUNT_VALID;
-
 	    if (BOTH_VALID == (BOTH_VALID & whichValid)) {
-
 		/* we have valid data, and at least one resource changed */
 		/* we need an icon header; either create or update it */
 		assert(ncw->container.detail_heading);
 		assert(ncw->container.detail_heading_count);
 		assert(INVALID_COUNT != ncw->container.detail_heading_count);
-
 		if (ccw->container.icon_header == NULL)
 		    CreateIconHeader(nw);
 		else {
@@ -2135,11 +1971,9 @@ SetValues(
 		    UpdateIconHeader(nw,
 			    (HEADING_CHANGED & whichChanged) ? False : True);
 		}
-
 		if (CtrLayoutIsDETAIL(ncw)) {
 		    assert(ncw->container.icon_header);
 		    XtManageChild(ncw->container.icon_header);
-
 		    /* may be redundant if this is a new state */
 		    detail_need_layout = True;
 		}
@@ -2154,22 +1988,18 @@ SetValues(
 							   this is a new state */
 		}
 	    }
-
 	    if (INVALID_COUNT != ncw->container.detail_heading_count)
 		/* including 0 */
 		ncw->container.saved_detail_heading_count =
 		    ncw->container.detail_heading_count;
-
 	    if (COUNT_VALID & whichValid)
 		ncw->container.detail_heading_count = INVALID_COUNT;
-
 	    /* else if it is 0 don't do anything -- let value stay; the
 	    ** saved value is either 0 or a real !0 value but cannot be
 	    ** INVALID_COUNT
 	    */
   	}
  	/* else no change to either, so just continue with SetValues code */
-
 #undef NONE_CHANGED
 #undef COUNT_CHANGED
 #undef HEADING_CHANGED
@@ -2177,13 +2007,11 @@ SetValues(
 #undef COUNT_VALID
 #undef HEADING_VALID
     }
-
     if (CtrLayoutIsDETAIL(ncw) && !CtrLayoutIsDETAIL(ccw) &&
 	(ncw->container.icon_header != NULL)) {
 	detail_need_layout = True ;
 	XtManageChild(ncw->container.icon_header);
     }
-
     if (!CtrLayoutIsDETAIL(ncw) && CtrLayoutIsDETAIL(ccw) &&
 	(ncw->container.icon_header)) {
 	outline_need_layout = True ;
@@ -2194,9 +2022,6 @@ SetValues(
 	    nw->core.y -= real_icon_header->core.height ;
 	}
     }
-
-
-
     /*
      * Update header margins, only if we are in the detail SW case
      * where the container.icon_header is the DA.
@@ -2208,19 +2033,14 @@ SetValues(
 	(ncw->core.background_pixel != ccw->core.background_pixel) ||
 	(ncw->container.layout_type != ccw->container.layout_type) ||
 	(ncw->core.background_pixmap != ccw->core.background_pixmap)) {
-
 	if ((CtrLayoutIsDETAIL(ncw)) &&
 	    (ncw->container.icon_header) &&
 	    (XtParent(ncw->container.icon_header) != nw)) {
-
 	    Widget real_icon_header = GetRealIconHeader(nw);
-
 	    /* we need to update the margin on the DA, resize it
 	       and reposition the container. */
-
 	   /* if (0 == nw->core.y) */
 	    nw->core.y = real_icon_header->core.height ;
-
 	    XtVaSetValues(ncw->container.icon_header,
 			  XmNmarginWidth, ncw->container.margin_w,
 			  XmNmarginHeight, ncw->container.margin_h,
@@ -2228,7 +2048,6 @@ SetValues(
 			  XmNbackgroundPixmap, ncw->core.background_pixmap,
 			  XmNforeground, ncw->manager.foreground,
 			  NULL);
-
 	    XmeConfigureObject(ncw->container.icon_header, /* the DA */
 			       ncw->container.icon_header->core.x,
 			       ncw->container.icon_header->core.y,
@@ -2239,10 +2058,7 @@ SetValues(
 			       ncw->core.border_width);
 	}
     }
-
     /* need also the check for change in borderPixel, borderPixmap... */
-
-
     /*
      * Set internal variables that are based on resource values.
      */
@@ -2253,14 +2069,10 @@ SetValues(
 				ccw->container.selection_technique)
 	ncw->container.marquee_mode =
 	    (CtrTechIsTOUCH_ONLY(ncw) ? False : True);
-
-
     /** perform some logic */
     spatial_need_layout |= container_need_layout ;
     outline_need_layout |= container_need_layout ;
     detail_need_layout |= outline_need_layout ;
-
-
     if (CtrLayoutIsSPATIAL(ncw) && !CtrSpatialStyleIsNONE(ncw) &&
 	!spatial_need_layout &&
 	(ncw->container.snap_model != ccw->container.snap_model)) {
@@ -2276,7 +2088,6 @@ SetValues(
             }
 	need_expose = True ;
     }
-
     if (((CtrLayoutIsOUTLINE_DETAIL(ncw) && outline_need_layout) ||
 	(CtrLayoutIsDETAIL(ncw) && detail_need_layout) ||
 	(CtrLayoutIsSPATIAL(ncw) && spatial_need_layout)))
@@ -2284,7 +2095,6 @@ SetValues(
 	XmClipWindowTrait clipWindowTrait;
 	XmScrollFrameTrait scrollFrameTrait;
 	Widget swparent;
-
 	/* get our preferred size first */
 	ncw->container.ideal_width = 0;
 	ncw->container.ideal_height = 0;
@@ -2294,44 +2104,34 @@ SetValues(
 	ncw->core.height = ncw->container.ideal_height;
 	}
 	Layout(nw);
-
 	/*
 	 * update any scrolled window above to reflect a new original
 	 * y coordinate - CDExc19939 & CDExc23393
 	 */
-
 	/* find a scrolled window*/
 	swparent = XtParent(ncw);
 	clipWindowTrait = (XmClipWindowTrait)
 		XmeTraitGet((XtPointer) XtClass(swparent), _XmQTclipWindow);
 	if (clipWindowTrait != NULL) swparent = XtParent(swparent);
-
 	scrollFrameTrait = (XmScrollFrameTrait)
 		XmeTraitGet((XtPointer) XtClass(swparent), XmQTscrollFrame);
-
 	/* if we have one, update the geom */
 	if (scrollFrameTrait != NULL && scrollFrameTrait->version >= 1 &&
 	    scrollFrameTrait->getInfo(swparent, NULL, NULL, NULL) &&
 	    scrollFrameTrait->updateOrigGeom != NULL)
 	{
 		XtWidgetGeometry preferred;
-
 		preferred.request_mode = CWY;
 		preferred.y = ncw->core.y;
-
 		scrollFrameTrait->updateOrigGeom(swparent,
 						 (Widget) ncw,
 						 &preferred);
 	}
-
 	need_expose = True ;
     	}
-
     ncw->container.self = False;
     return(need_expose);
 }
-
-
 /*
  * XmRCallProc routine for checking font before setting it to NULL
  * if no value is specified for both XmNrenderTable and XmNfontList.
@@ -2339,14 +2139,12 @@ SetValues(
  * twice on same widget, thus * resource needs to be set NULL, otherwise
  * leave it alone.
  */
-
 static void
 CheckSetRenderTable(Widget wid,
 		    int offset,
 		    XrmValue *value)
 {
   XmContainerWidget cw = (XmContainerWidget)wid;
-
   if (cw->container.first_change_managed) /* Been here before, so set resource = NULL */
 	value->addr = NULL;
   else  {
@@ -2354,14 +2152,10 @@ CheckSetRenderTable(Widget wid,
 	value->addr = (char*)&(cw->container.render_table);
   }
 }
-
-
 /*
  * XmRCallProc routine to determine the correct default collapsed
  * pixmap for this layout direction.
  */
-
-
 static void
 DefaultCollapsedPixmap(Widget wid,
 		       int offset,
@@ -2369,18 +2163,15 @@ DefaultCollapsedPixmap(Widget wid,
 {
   static Pixmap result;
   XmContainerWidget cw = (XmContainerWidget)wid;
-
   result =
     XmGetPixmapByDepth(XtScreen(wid),
 		       (LayoutIsRtoLM(cw) ? "collapsed_rtol" : "collapsed"),
 		       cw->manager.foreground,
 		       cw->core.background_pixel,
 		       cw->core.depth);
-
   value->size = sizeof(result);
   value->addr = (char *) &result;
 }
-
 /************************************************************************
  *
  *  QueryGeometry (Core Method)
@@ -2401,14 +2192,10 @@ QueryGeometry(
 	desired->width = 0 ;
 	desired->height = 0 ;
     }
-
     GetSize (widget, &desired->width, &desired->height);
-
     /* this function will set CWidth and CHeight */
     return XmeReplyToQueryGeometry(widget, intended, desired) ;
 }
-
-
 /************************************************************************
  * GetSize
  *
@@ -2430,8 +2217,6 @@ GetSize (
     XtWidgetGeometry 	desired;
     XmTabList		save_dynamic_tablist = NULL;
     Position		save_x;
-
-
     if (CtrLayoutIsSPATIAL(cw))
 	/*
 	 * Get width & height from class method.
@@ -2453,14 +2238,12 @@ GetSize (
      */
     cw->container.ideal_width = 0;
     cw->container.ideal_height = cw->container.margin_h;
-
     /*
      * Find desired First Column width
      */
     if (CtrIsDynamic(cw,FIRSTCW)) {
         cw->container.real_first_col_width = GetDynFirstColWidth(wid);
     }
-
     /*
      * Save the current dynamic tablist and set to NULL, so Icon's
      * response to QueryGeo will not be based on current width.
@@ -2470,7 +2253,6 @@ GetSize (
 	save_dynamic_tablist = cw->container.detail_tablist;
 	cw->container.detail_tablist = NULL;
 	}
-
     /* header first. */
     if ((cwid = GetRealIconHeader(wid)) && (XtIsManaged(cwid)) &&
         ((XtParent(cwid) == wid) || (XtIsManaged(XtParent(cwid)))))
@@ -2483,7 +2265,6 @@ GetSize (
 	cw->container.ideal_height += desired.height;
 	cwid->core.x = save_x;
 	}
-
     /* then the icons */
     node = GetFirstNode(cw);
     while(node)
@@ -2506,37 +2287,29 @@ GetSize (
 	cwid->core.x = save_x;
 	node = GetNextNode(node);
 	}
-
     cw->container.ideal_width += cw->container.margin_w;
     cw->container.ideal_height += cw->container.margin_h;
-
     /* Reset dynamic XmTabList, if necessary */
     if (CtrIsDynamic(cw,TABLIST))
         cw->container.detail_tablist = save_dynamic_tablist;
-
     /* here if we are in the dynamic first column case and in detail,
        with dynamic tablist, we want to grow up front by the amount
        of the difference between the old first column and the new one.
        In outline, that should happen automatacilly, but in detail,
        if tablist is dynamic, we have to compute it here.
-
        [ samborn, 25-MAY-1999 ]
-
        This used to be done in {Expand,Collapse}Cwid, but moved it
        here.  The reason is that it needs to be applied to the ideal,
        not the current width in core. */
     if (CtrLayoutIsDETAIL(cw) && CtrIsDynamic(cw,TABLIST)) {
       cw->container.ideal_width += cw->container.real_first_col_width;
     }
-
     if (!(*pwidth)) *pwidth = cw->container.ideal_width;
     if (!(*pheight)) *pheight = cw->container.ideal_height;
 }
-
 /************************************************************************
  * GeometryManager (Composite Method)
  ************************************************************************/
-
 static XtGeometryResult
 GeometryManager(
     Widget 		cwid,
@@ -2549,7 +2322,6 @@ GeometryManager(
     Position		save_x,save_y;
     Dimension		save_width, save_height, save_border_width;
     unsigned char	save_include_model;
-
     /*
      * Position and changes always allowed for spatial None
      */
@@ -2570,13 +2342,10 @@ GeometryManager(
       if (desired->request_mode & CWBorderWidth) {
 	cwid->core.border_width = desired->border_width;
       }
-
       /* Request new size */
       RequestSpatialGrowth(wid, cwid);
-
       return(XtGeometryYes);
     }
-
     /*
      * Called from inside Container (ChangeView routine)
      * Container will resize later, so do the job and
@@ -2591,7 +2360,6 @@ GeometryManager(
 	(!(((XmContainerWidgetClass)XtClass(wid))->
 	   container_class.place_item)) ||
 	(!CtrItemIsPlaced(cwid))) {
-
 	if (desired->request_mode & CWX)
 	    cwid->core.x = desired->x;
 	if (desired->request_mode & CWY)
@@ -2604,20 +2372,17 @@ GeometryManager(
 	    cwid->core.border_width = desired->border_width;
 	return(XtGeometryYes);
     }
-
     /*
      * Position change allowed for Spatial layout && PlaceModel == CLOSEST
      */
     if (((desired->request_mode & CWX) || (desired->request_mode & CWY)) &&
 	((!CtrLayoutIsSPATIAL(cw)) || !CtrIncludeIsCLOSEST(cw)))
 	return(XtGeometryNo);
-
     save_x = c->user_x;
     save_y = c->user_y;
     save_width = cwid->core.width;
     save_height = cwid->core.height;
     save_border_width = cwid->core.border_width ;
-
     if (desired->request_mode & CWX)
 	c->user_x = desired->x;
     if (desired->request_mode & CWY)
@@ -2628,24 +2393,19 @@ GeometryManager(
 	cwid->core.height = desired->height;
     if (desired->request_mode & CWBorderWidth)
 	cwid->core.border_width = desired->border_width;
-
     /*
      * Outline/Detail Layout case.
      * Request are always granted, relayout is done.
      */
     if (CtrLayoutIsOUTLINE_DETAIL(cw)) {
 	XtWidgetGeometry    geo_desired;
-
 	geo_desired.width = 0;
 	geo_desired.height = 0; /* means resize as you want */
 	RequestOutlineDetail(wid, &geo_desired);
-
 	return(XtGeometryYes);
     }
-
     (*((XmContainerWidgetClass)
 	XtClass(wid))->container_class.remove_item)(wid,cwid);
-
     /*
      * Fake out include model, so we get placed in the same spot.
      */
@@ -2661,13 +2421,11 @@ GeometryManager(
     cw->container.include_model = save_include_model;
     if (CtrItemIsPlaced(cwid))
       return(XtGeometryYes);
-
     /*
      * See if we can grow and then re-layout to try again.
      */
     if (RequestSpatialGrowth(wid,cwid))
       LayoutSpatial(wid,False,NULL);
-
     cwid->core.width = save_width;
     cwid->core.height = save_height;
     cwid->core.border_width = save_border_width;
@@ -2688,7 +2446,6 @@ GeometryManager(
     cw->container.include_model = save_include_model;
     return(XtGeometryNo);
 }
-
 /************************************************************************
  * ChangeManaged (Composite Method)
  ************************************************************************/
@@ -2700,12 +2457,10 @@ ChangeManaged(
     int                 i;
     Widget              cwid;
     XmContainerConstraint c;
-
     /*
      * If it's one of our changes (SetValues), let's leave.
      */
     if (cw->container.self) return;
-
     for (i = 0; i < cw->composite.num_children; i++)
         {
         cwid = cw->composite.children[i];
@@ -2717,13 +2472,11 @@ ChangeManaged(
 	    (CtrOUTLINE_BUTTON(cwid) || CtrHEADER(cwid) || (c->entry_parent)))
 	    HideCwid(cwid);
 	}
-
     if (CtrLayoutIsOUTLINE_DETAIL(cw))
 	ChangeManagedOutlineDetail(wid);
     else
 	ChangeManagedSpatial(wid);
 }
-
 /************************************************************************
  * ChangeManagedOutlineDetail (Private Function)
  ************************************************************************/
@@ -2733,7 +2486,6 @@ ChangeManagedOutlineDetail(
 {
     XmContainerWidget   cw = (XmContainerWidget)wid;
     XtWidgetGeometry    geo_desired;
-
     if (!XtIsRealized(wid)) {
 	geo_desired.width = cw->core.width ;
 	geo_desired.height = cw->core.height ; /* can be 0 too */
@@ -2741,11 +2493,9 @@ ChangeManagedOutlineDetail(
 	geo_desired.width = 0;
 	geo_desired.height = 0;
     }
-
     RequestOutlineDetail(wid, &geo_desired);
     cw->container.first_change_managed = False;
 }
-
 /************************************************************************
  * ChangeManagedSpatial (Private Function)
  ************************************************************************/
@@ -2757,7 +2507,6 @@ ChangeManagedSpatial(
   Widget              cwid;
   XtWidgetGeometry	geo_desired;
   CwidNode		node;
-
   if ((CtrSpatialStyleIsGRID(cw) || CtrSpatialStyleIsCELLS(cw)))
     {
     if ((CtrViewIsSMALL_ICON(cw) && (!cw->container.small_cell_dim_fixed)) ||
@@ -2765,7 +2514,6 @@ ChangeManagedSpatial(
 		(!cw->container.large_cell_dim_fixed)))
 	SetCellSizes(wid);
     }
-
   if (cw->container.first_change_managed)
     /*
      * First time through.  Get initial size from QueryGeo
@@ -2773,9 +2521,7 @@ ChangeManagedSpatial(
     {
       if (((XmContainerWidgetClass)
            XtClass(wid))->container_class.get_spatial_size) {
-
           Dimension width, height;
-
           if (!XtIsRealized(wid)) {
                 width = cw->core.width; /* Can be 0 */
                 height = cw->core.height;
@@ -2786,7 +2532,6 @@ ChangeManagedSpatial(
           (*((XmContainerWidgetClass)
              XtClass(wid))->container_class.get_spatial_size)
               (wid, &width, &height);
-
           geo_desired.request_mode = (CWWidth | CWHeight);
           geo_desired.width = width;
           geo_desired.height = height;
@@ -2796,7 +2541,6 @@ ChangeManagedSpatial(
       }
     cw->container.first_change_managed = False;
    }
-
   node = cw->container.first_node;
   while (node)
     /*
@@ -2812,14 +2556,11 @@ ChangeManagedSpatial(
 	   XtClass(wid))->container_class.remove_item)(wid,cwid);
       node = node->next_ptr;
     }
-
   /*
    * Layout will handle placing newly-managed cwids
    */
   LayoutSpatial(wid,True,NULL);
 }
-
-
 /************************************************************************
  * RequestSpatialGrowth (Private Function)
  *
@@ -2844,7 +2585,6 @@ RequestSpatialGrowth(
     int		cell_width,cell_height;
     int		width_in_cells, height_in_cells;
     XtWidgetGeometry	geo_desired;
-
     /*
      * Must determine the constraints on growth from XmNresizeModel.
      * At Realize time, XmNspatialResizeModel is assumed to be XmGROW_BALANCED.
@@ -2874,12 +2614,10 @@ RequestSpatialGrowth(
             {
 		grow_width_allowed = False;
             }
-
         }
 	if ((!grow_width_allowed) && (!grow_height_allowed))
 	    return(False);
     	}
-
     c = GetContainerConstraint(cwid);
     if (CtrSpatialStyleIsNONE(cw))
 	{
@@ -2955,7 +2693,6 @@ RequestSpatialGrowth(
                 }
 	    }
 	}
-
     geo_desired.request_mode = 0;
     if (width_increase != 0)
 	{
@@ -2977,11 +2714,9 @@ RequestSpatialGrowth(
      */
     return(_XmMakeGeometryRequest(wid,&geo_desired) == XtGeometryYes);
 }
-
 /************************************************************************
  * ConstraintInitialize (Constraint Method)
  ************************************************************************/
-
 static void
 ConstraintInitialize(
        Widget 		rcwid,		/* unused */
@@ -2992,12 +2727,10 @@ ConstraintInitialize(
 	XmContainerWidget	cw = (XmContainerWidget)XtParent(ncwid);
 	XmContainerConstraint	nc = GetContainerConstraint(ncwid);
 	XmContainerConstraint	pc;	/* parent's constraints */
-
 	nc->related_cwid = NULL;
 	nc->cwid_type = cw->container.create_cwid_type;
 	if (!CtrICON(ncwid))
 	    return;
-
 	/*
 	 * validate resource values
 	 */
@@ -3005,12 +2738,10 @@ ConstraintInitialize(
 		nc->outline_state = XmCOLLAPSED;
 	if (nc->position_index != XmLAST_POSITION)
 		nc->position_index = MAX(0,nc->position_index);
-
 	/* I can be my own grandpa but not my own descendant; pre-check */
 	if (nc->entry_parent)
 		if (ContainerIsDescendant(ncwid, nc->entry_parent))
 			nc->entry_parent = NULL;
-
 	/*
 	 * Enforce margins.  Save initial x,y info.
 	 */
@@ -3019,18 +2750,15 @@ ConstraintInitialize(
 	ncwid->core.y = MAX(ncwid->core.y,(Position)cw->container.margin_h);
 	nc->user_x = ncwid->core.x;
 	nc->user_y = ncwid->core.y;
-
 	/*
 	 * Create new node for child and insert into list.
 	 */
 	InsertNode(NewNode(ncwid));
-
 	/*
 	 * Override XmNviewType
 	 */
 	if (!CtrViewIsANY_ICON(cw))
 	    SetViewType(ncwid,cw->container.entry_viewtype);
-
         nc->selection_visual = GetVisualEmphasis(ncwid);
 	if (nc->selection_visual == XmSELECTED)
 		{
@@ -3058,14 +2786,12 @@ ConstraintInitialize(
 		nc->visible_in_outline = True;
 		nc->depth = 0;
 		}
-
 	/*
          * Initialize variables used by
 	 * 	Container SpatialLayout methods.
          */
 	nc->cell_idx = NO_CELL;
 }
-
 /************************************************************************
  * ConstraintDestroy (Constraint Method)
  ************************************************************************/
@@ -3075,12 +2801,10 @@ ConstraintDestroy(
 {
 	XmContainerWidget	cw = (XmContainerWidget)XtParent(cwid);
         XmContainerConstraint   c = GetContainerConstraint(cwid);
-
         if (cwid == cw->container.anchor_cwid)
                 cw->container.anchor_cwid = NULL;
 	if (!CtrICON(cwid))
 	    return;
-
 		cw->container.icon_header = NULL;
 	{
 		CwidNode 	node = c->node_ptr->child_ptr;
@@ -3095,13 +2819,11 @@ ConstraintDestroy(
 			node = c->node_ptr->child_ptr;
 		}
 	}
-
 	DeleteNode(cwid);
 	ContainerResequenceNodes(cw, c->entry_parent);
 	if (c->selection_state == XmSELECTED)
 		{
 		unsigned char	save_state = cw->container.selection_state;
-
 		cw->container.selection_state = XmNOT_SELECTED;
 		MarkCwid(cwid,False);
 		cw->container.selection_state = save_state;
@@ -3109,11 +2831,9 @@ ConstraintDestroy(
     if (XtIsRealized((Widget)cw))
 	XClearArea(XtDisplay((Widget)cw),XtWindow((Widget)cw),0,0,0,0,True);
 }
-
 /************************************************************************
  * ConstraintSetValues (Constraint Method)
  ************************************************************************/
-
 static Boolean
 ConstraintSetValues(
 	Widget		ccwid,
@@ -3128,15 +2848,12 @@ ConstraintSetValues(
     XmContainerConstraint	pc;	/* Parent's Contraints */
     Boolean			need_layout = False;
     Boolean			need_expose = False;
-
     /*
      * SetValues called from inside Container - let's get out of here!
      */
     if (cw->container.self) return(False);
-
     if (!CtrICON(ncwid))
 	return(False);
-
     /*
      * Validate resource values
      */
@@ -3148,7 +2865,6 @@ ConstraintSetValues(
     if (nc->position_index < 0)
 	if (XmLAST_POSITION != nc->position_index)
 		nc->position_index = cc->position_index;
-
     /* I can be my own grandpa but not my own descendant; pre-check */
     if (nc->entry_parent != cc->entry_parent)
 	if (nc->entry_parent)
@@ -3162,7 +2878,6 @@ ConstraintSetValues(
 	 (nc->position_index != cc->position_index) ||
          (nc->outline_state != cc->outline_state)))
 	need_layout = True;
-
     /*
      * Check for change in selection status
      */
@@ -3179,7 +2894,6 @@ ConstraintSetValues(
 	    cw->container.selected_item_count--;
 	nc->selection_state = nc->selection_visual;
 	}
-
     /*
      * Changes in parentage or position.
      * If XmNpositionIndex has changed, but the "node" has no siblings,
@@ -3208,7 +2922,6 @@ ConstraintSetValues(
             pc = GetContainerConstraint(nc->entry_parent);
             nc->depth = pc->depth +1;
 	    ContainerResetDepths(nc);
-
 		FindMaxDepths(cc, (Widget)cw);
             if (pc->outline_state == XmEXPANDED)
             	nc->visible_in_outline = pc->visible_in_outline;
@@ -3219,10 +2932,8 @@ ConstraintSetValues(
 	    	    HideCwid(ncwid);
 	    }
     }
-
     if (nc->outline_state != cc->outline_state)
 	OutlineButtonAction(ncwid, nc->outline_state, (XEvent*)NULL);
-
     /*
      * Change Spatial locations.
      */
@@ -3236,7 +2947,6 @@ ConstraintSetValues(
 	{
 	unsigned char	save_include_model;
 	unsigned char	save_snap_model;
-
 	(*((XmContainerWidgetClass)
 	    XtClass((Widget)cw))->container_class.remove_item)
 			((Widget)cw,ncwid);
@@ -3251,7 +2961,6 @@ ConstraintSetValues(
 	cw->container.snap_model = save_snap_model;
 	need_expose = True;
 	}
-
     if (need_layout)
         {
 	if (CtrLayoutIsOUTLINE_DETAIL(cw))
@@ -3266,14 +2975,11 @@ ConstraintSetValues(
         Layout((Widget)cw);
         need_expose = True;
         }
-
      if (need_expose && XtIsRealized((Widget)cw))
        XClearArea(XtDisplay((Widget)cw),XtWindow((Widget)cw),0,0,0,0,True);
-
      /* everything that needs to be done so far has been */
      return(False);
 }
-
 /************************************************************************
  * TestFitItem (Container Method)
  ************************************************************************/
@@ -3288,7 +2994,6 @@ TestFitItem(
     int	trial_cell;
     XPoint cell_coord;
     XmContainerConstraint cwidc = GetContainerConstraint(cwid);
-
     /*
      * Must be a 2-D layout.
      */
@@ -3327,23 +3032,19 @@ TestFitItem(
       {
 	XtWidgetGeometry child_req;
 	XtGeometryResult result;
-
 	/* If we don't need to resize,  just return */
 	if ((XtWidth(cw) >= (x + XtWidth(cwid) + cw -> container.margin_w)) &&
 	    (XtHeight(cw) >= (y + XtHeight(cwid) + cw -> container.margin_h)))
 	  return(True);
-
 	/* Otherwise,  we'll try it via the geometry manager */
 	child_req.request_mode = CWX | CWY;
 	child_req.x = x;
 	child_req.y = y;
-
 	/* Make the request,  but always allow the drop */
 	result = _XmMakeGeometryRequest(cwid, &child_req);
       }
     return(True);
 }
-
 /************************************************************************
  * PlaceItem (Container Method)
  ************************************************************************/
@@ -3354,17 +3055,13 @@ PlaceItem(
     unsigned char fit_type)
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
-
     /* cwid NULL means initialize */
     if (cwid == NULL) {
 	PlaceItemReset(wid);
 	return(True);
     }
-
-
     if (CtrItemIsPlaced(cwid))
 	return(True);
-
     switch(cw->container.spatial_style)
     {
     case XmNONE:
@@ -3378,7 +3075,6 @@ PlaceItem(
 	HideCwid(cwid);
     return(CtrItemIsPlaced(cwid));
 }
-
 /************************************************************************
  * RemoveItem (Container Method)
  ************************************************************************/
@@ -3391,7 +3087,6 @@ RemoveItem(
     XmContainerConstraint c = GetContainerConstraint(cwid);
     XRectangle		cwid_rect;
     Region		cwid_region;
-
     if (!CtrItemIsPlaced(cwid))
 	return(True);
     switch(cw->container.spatial_style)
@@ -3413,7 +3108,6 @@ RemoveItem(
     }
     return(True);
 }
-
 /************************************************************************
  * GetSpatialSize  (Container method)
  ************************************************************************/
@@ -3435,7 +3129,6 @@ GetSpatialSize (
     int			cwid_width_in_cells,cwid_height_in_cells;
     int			cell_count = 0;
     Dimension   width = 1, height = 1 ;
-
     if (CtrSpatialStyleIsGRID(cw) || CtrSpatialStyleIsCELLS(cw))
 	{
 	if (CtrViewIsSMALL_ICON(cw))
@@ -3462,7 +3155,6 @@ GetSpatialSize (
     else
 	cwid_info = NULL;
     cwid_info_count = 0;
-
     /*
      * Go through the linked list of cwids and lets determine
      * their geometry needs.
@@ -3575,12 +3267,9 @@ GetSpatialSize (
     if (!*pwidth) *pwidth = width ;
     if (!*pheight) *pheight = height ;
 }
-
-
 /************************************************************************
  * PlaceItemNone (Private Function)
  ************************************************************************/
-
 static 	void
 PlaceItemNone(
     Widget      wid,
@@ -3589,7 +3278,6 @@ PlaceItemNone(
 {
     XmContainerWidget		cw = (XmContainerWidget)wid;
     XmContainerConstraint	c = GetContainerConstraint(cwid);
-
     PlaceCwid(cwid,cwid->core.x,cwid->core.y);
     /*
      * Mark the cwid as placed (any value except NO_CELL) if it's within
@@ -3601,7 +3289,6 @@ PlaceItemNone(
 				(cw->core.height - cw->container.margin_h)))
     	c->cell_idx = 1;
 }
-
 /************************************************************************
  * PlaceItemGridCells (Private Function)
  ************************************************************************/
@@ -3620,7 +3307,6 @@ PlaceItemGridCells(
   XPoint 	cell_coord;
   XPoint 	place_point;
   XRectangle	cwidrect;
-
   if (CtrIncludeIsAPPEND(cw))
     trial_cell = cw->container.next_free_cell;
   if (CtrIncludeIsCLOSEST(cw))
@@ -3712,7 +3398,6 @@ PlaceItemGridCells(
     }
   PlaceCwid(cwid,place_point.x,place_point.y);
 }
-
 /************************************************************************
  * GetCellFromCoord (Private Function)
  ************************************************************************/
@@ -3725,12 +3410,10 @@ GetCellFromCoord(
     XmContainerWidget	cw = (XmContainerWidget)wid;
     int	cell_width,cell_height;
     int	row,col;
-
     cell_width = (CtrViewIsSMALL_ICON(cw)) ?
         cw->container.real_small_cellw : cw->container.real_large_cellw;
     cell_height = (CtrViewIsSMALL_ICON(cw)) ?
         cw->container.real_small_cellh : cw->container.real_large_cellh;
-
     /*
      * Note: x & y parameters include Container margins.
      */
@@ -3746,7 +3429,6 @@ GetCellFromCoord(
     else
 	return(cw->container.current_height_in_cells * col + row);
 }
-
 /************************************************************************
  * GetCoordFromCell (Private Function)
  ************************************************************************/
@@ -3759,7 +3441,6 @@ GetCoordFromCell(
     XmContainerWidget	cw = (XmContainerWidget)wid;
     int	cell_width,cell_height;
     int	row,col;
-
     if (CtrIsHORIZONTAL(cw))
 	{
 	row = cell_idx / cw->container.current_width_in_cells;
@@ -3785,7 +3466,6 @@ GetCoordFromCell(
     point->y = row * cell_height + cw->container.margin_h;
     return(point);
 }
-
 /************************************************************************
  * PlaceItemReset (Private Function)
  ************************************************************************/
@@ -3797,7 +3477,6 @@ PlaceItemReset(
     CwidNode	node;
     int	cell_width = 0,cell_height = 0;
     int	width_in_cells = 0,height_in_cells = 0;
-
     /*
      * Deallocate old cell structure.
      */
@@ -3816,10 +3495,8 @@ PlaceItemReset(
 	XtFree((char*)cw->container.cells);
 	cw->container.cells = NULL;
     }
-
     if (CtrSpatialStyleIsNONE(cw))
 	return;
-
     /*
      * Create new cell structure.
      */
@@ -3837,19 +3514,16 @@ PlaceItemReset(
 		/ cell_height;
     else
 	height_in_cells = 1;
-
     cw->container.cell_count = width_in_cells * height_in_cells;
     cw->container.cells = (int *)XtCalloc(cw->container.cell_count,sizeof(int));
     cw->container.next_free_cell = 0;
     cw->container.current_width_in_cells = width_in_cells;
     cw->container.current_height_in_cells = height_in_cells;
-
     if (CtrSpatialStyleIsGRID(cw))
 	return;
     XSubtractRegion(cw->container.cells_region,cw->container.cells_region,
 			cw->container.cells_region);
 }
-
 /************************************************************************
  * PlaceCwid (Private Function)
  ************************************************************************/
@@ -3860,7 +3534,6 @@ PlaceCwid(
     Position	y)
 {
     XmContainerWidget		cw;
-
     if (cwid == NULL) return;
     cw = (XmContainerWidget)XtParent(cwid);
     /*
@@ -3877,11 +3550,9 @@ PlaceCwid(
     else
 	x = MAX(x,(Position)cw->container.margin_w);
     y = MAX(y,(Position)cw->container.margin_h);
-
     if ((x != cwid->core.x) || (y != cwid->core.y))
 	XmeConfigureObject(cwid,x,y,cwid->core.width,cwid->core.height,0);
 }
-
 /************************************************************************
  * SnapCwid (Private Function)
  ************************************************************************/
@@ -3897,15 +3568,12 @@ SnapCwid(
     XPoint 		target_cell_coord;
     int			cell_width = 0,cell_height = 0;
     int			width_in_cells = 0,height_in_cells = 0;
-
     target_cell = GetCellFromCoord((Widget)cw,x,y);
     (void)GetCoordFromCell((Widget)cw,target_cell, &target_cell_coord);
     point->x = target_cell_coord.x;
     point->y = target_cell_coord.y;
-
     if (CtrSnapModelIsSNAP(cw) && !LayoutIsRtoLM(cw))
 	return(point);
-
     if (CtrViewIsSMALL_ICON(cw))
         {
         cell_width = cw->container.real_small_cellw;
@@ -3916,7 +3584,6 @@ SnapCwid(
 	cell_width = cw->container.real_large_cellw;
 	cell_height = cw->container.real_large_cellh;
 	}
-
     if (CtrSpatialStyleIsGRID(cw))
 	width_in_cells = height_in_cells = 1;
     else
@@ -3929,14 +3596,12 @@ SnapCwid(
 	if (cwid->core.height % cell_height)
 	    height_in_cells++;
 	}
-
     if (CtrSnapModelIsSNAP(cw))
 	/* LayoutIsRtoLM(cw)  */
 	{
 	point->x += (width_in_cells * cell_width) - cwid->core.width;
 	return(point);
 	}
-
     if (CtrSnapModelIsNONE(cw))
 	{
 	point->x = MIN(x,
@@ -3945,14 +3610,12 @@ SnapCwid(
 		target_cell_coord.y + (height_in_cells * cell_height) - 1);
 	return(point);
 	}
-
     if (CtrSpatialStyleIsGRID(cw))
         {
 	/* Adjust large items to 0 so we don't try to center them */
         width_in_cells = (cell_width < cwid->core.width) ? 0 : 1;
         height_in_cells = (cell_height < cwid->core.height) ? 0 : 1;
         }
-
     /* CtrSnapModelIsCENTER */
     /* If this is small icon view then the icon is placed centered
        up/down,  if this is large icon view then the icon is placed
@@ -3977,7 +3640,6 @@ SnapCwid(
         }
     return(point);
 }
-
 /************************************************************************
  * HideCwid (Private Function)
  ************************************************************************/
@@ -3988,23 +3650,18 @@ HideCwid(
     XmContainerConstraint   c;
     CwidNode                node;
     CwidNode                child_node;
-
     if (cwid == NULL) return;
     c = GetContainerConstraint(cwid);
-
     XmeConfigureObject(
 	cwid,(Position)(0 - ((Widget)cwid)->core.width),
 	     (Position)(0 - ((Widget)cwid)->core.height),
 	     ((Widget)cwid)->core.width,((Widget)cwid)->core.height,0);
-
     if (!CtrICON(cwid)) return;
-
     /*
      * Hide our button!
      */
     if (c->related_cwid)
         HideCwid(c->related_cwid);
-
     /*
      * If we're XmEXPANDED, then let's hide our children too.
      */
@@ -4021,7 +3678,6 @@ HideCwid(
         child_node = child_node->next_ptr;
         }
 }
-
 /************************************************************************
  * ContainerStartTransfer (Action Proc)
  ************************************************************************/
@@ -4035,11 +3691,9 @@ ContainerStartTransfer(
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget                  cwid;
 	int			transfer_action;
-
 	if (cw->container.selecting)
 	  /* Don't allow drag while select in progress */
 	  return;
-
 	if (CtrLayoutIsOUTLINE_DETAIL(wid))
 	    {
             cwid = (Widget)_XmInputForGadget(wid,
@@ -4066,13 +3720,11 @@ ContainerStartTransfer(
 		cw->container.transfer_action->event = (XEvent *)
 			XtCalloc(1,sizeof(XEvent));
 		}
-
 	cw->container.transfer_action->wid = (Widget)cw;
 	memcpy((void *)cw->container.transfer_action->event,(void *)event,
 		sizeof(XEvent));
 	cw->container.transfer_action->params = params;
 	cw->container.transfer_action->num_params = num_params;
-
 	if (num_params == 0 ||
 	    _XmConvertActionParamToRepTypeId((Widget) cw,
 			     XmRID_CONTAINER_START_TRANSFER_ACTION_PARAMS,
@@ -4081,7 +3733,6 @@ ContainerStartTransfer(
 	    /* We couldn't convert the value. Just assume a value of _COPY. */
 	    transfer_action = _COPY;
 	}
-
 	if (transfer_action == _LINK)
 		cw->container.transfer_action->operation = XmLINK;
 	else
@@ -4089,7 +3740,6 @@ ContainerStartTransfer(
 			cw->container.transfer_action->operation = XmMOVE;
 		else
 			cw->container.transfer_action->operation = XmCOPY;
-
 	/*
 	 * Set off timer.
 	 */
@@ -4100,11 +3750,9 @@ ContainerStartTransfer(
 			XtGetMultiClickTime(XtDisplay((Widget)cw)),
 			DragStart,(XtPointer)cw);
 }
-
 /************************************************************************
  * ContainerEndTransfer (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerEndTransfer(
         Widget          wid,
@@ -4113,7 +3761,6 @@ ContainerEndTransfer(
         Cardinal        *num_params)	/* unused */
 {
   XmContainerWidget       cw = (XmContainerWidget)wid;
-
   /*
    * Kill the timeout.  If it already expired, then we didn't make
    * the interval for primary transfer, so return.
@@ -4138,11 +3785,9 @@ ContainerEndTransfer(
   XtFree((char*)cw->container.transfer_action);
   cw->container.transfer_action = NULL;
 }
-
 /************************************************************************
  * ContainerPrimaryCopy (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerPrimaryCopy(
         Widget          wid,
@@ -4151,7 +3796,6 @@ ContainerPrimaryCopy(
         Cardinal        *num_params)	/* unused */
 {
 	XPoint		*loc_data;
-
 	/* WARNING: do not free the following memory in this module.  It
 	 * will be freed in FreeLocationData, triggered at the end of
 	 * the data transfer operation.
@@ -4162,11 +3806,9 @@ ContainerPrimaryCopy(
         XmePrimarySink(wid,XmCOPY,
 		       (XtPointer) loc_data,event->xbutton.time);
 }
-
 /************************************************************************
  * ContainerPrimaryLink (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerPrimaryLink(
         Widget          wid,
@@ -4175,7 +3817,6 @@ ContainerPrimaryLink(
         Cardinal        *num_params)	/* unused */
 {
 	XPoint		*loc_data;
-
 	/* WARNING: do not free the following memory in this module.  It
 	 * will be freed in FreeLocationData, triggered at the end of
 	 * the data transfer operation.
@@ -4186,11 +3827,9 @@ ContainerPrimaryLink(
         XmePrimarySink(wid,XmLINK,
 		       (XtPointer) loc_data,event->xbutton.time);
 }
-
 /************************************************************************
  * ContainerPrimaryMove (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerPrimaryMove(
         Widget          wid,
@@ -4199,7 +3838,6 @@ ContainerPrimaryMove(
         Cardinal        *num_params)	/* unused */
 {
 	XPoint		*loc_data;
-
 	/* WARNING: do not free the following memory in this module.  It
 	 * will be freed in FreeLocationData, triggered at the end of
 	 * the data transfer operation.
@@ -4210,7 +3848,6 @@ ContainerPrimaryMove(
         XmePrimarySink(wid,XmMOVE,
 		       (XtPointer) loc_data,event->xbutton.time);
 }
-
 /************************************************************************
  * Actions to dispatch based on button1 transfer options
  *
@@ -4219,7 +3856,6 @@ ContainerPrimaryMove(
  *
  * If there is a second parameter,  it is COPY, MOVE or LINK.
  ************************************************************************/
-
 static void
 ContainerNoop(
         Widget          wid,	/* unused */
@@ -4229,7 +3865,6 @@ ContainerNoop(
 {
   /* Do nothing */
 }
-
 /*************************************************
  * ContainerHandleBtn1Down
  *
@@ -4253,18 +3888,15 @@ ContainerHandleBtn1Down(
   Widget		cwid = (Widget) NULL;
   XmDisplay		dpy =
     (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
   if (*num_params < 2) {
     XmeWarning(wid, WRONGPARAMS);
     return;
   }
-
   cwid = ObjectAtPoint(wid, event->xbutton.x,event->xbutton.y);
   if (cwid != (Widget) NULL)
     cwidc = GetContainerConstraint(cwid);
   else
     cwidc = (XmContainerConstraint) NULL;
-
   if (dpy -> display.enable_btn1_transfer && cwid != (Widget) NULL
 	&& !CtrOUTLINE_BUTTON(cwid)) {
     /* Select if over unselected item or background*/
@@ -4283,7 +3915,6 @@ ContainerHandleBtn1Down(
     XtCallActionProc(wid, params[0], event, NULL, 0);
   }
 }
-
 static void
 ContainerHandleBtn1Motion(
         Widget          wid,
@@ -4294,22 +3925,18 @@ ContainerHandleBtn1Motion(
   XmContainerWidget	cw = (XmContainerWidget)wid;
   XmDisplay		dpy =
     (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
   if (*num_params < 1) {
     XmeWarning(wid, WRONGPARAMS);
     return;
   }
-
   /* If we're doing btn1 transfer,  then check to
      see if we've moved enough to start the drag */
   if (dpy->display.enable_btn1_transfer != XmOFF &&
       (! cw -> container.selecting))
     {
       int dx, dy;
-
       dx = event->xmotion.x - cw->container.anchor_point.x;
       dy = event->xmotion.y - cw->container.anchor_point.y;
-
       if (ABS(dx) >= MOTION_THRESHOLD ||
 	  ABS(dy) >= MOTION_THRESHOLD) {
 	/* Force the drag to start */
@@ -4325,7 +3952,6 @@ ContainerHandleBtn1Motion(
       XtCallActionProc(wid, params[0], event, NULL, 0);
     }
 }
-
 static void
 ContainerHandleBtn1Up(
         Widget          wid,
@@ -4336,12 +3962,10 @@ ContainerHandleBtn1Up(
   XmContainerWidget	cw = (XmContainerWidget)wid;
   XmDisplay		dpy =
     (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
   if (*num_params < 1) {
     XmeWarning(wid, WRONGPARAMS);
     return;
   }
-
   /* If we're doing btn1 transfer,  then remove the
      timer that starts the drag */
   if (dpy->display.enable_btn1_transfer) {
@@ -4352,10 +3976,8 @@ ContainerHandleBtn1Up(
       cw->container.drag_context = (Widget) NULL;
     }
   }
-
   XtCallActionProc(wid, params[0], event, NULL, 0);
 }
-
 static void
 ContainerHandleBtn2Down(
         Widget          wid,
@@ -4365,18 +3987,15 @@ ContainerHandleBtn2Down(
 {
   XmDisplay		dpy =
     (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
   if (*num_params < 2) {
     XmeWarning(wid, WRONGPARAMS);
     return;
   }
-
   if (dpy -> display.enable_btn1_transfer == XmBUTTON2_ADJUST)
     XtCallActionProc(wid, "ContainerBeginExtend", event, NULL, 0);
   else
     XtCallActionProc(wid, params[0], event, &params[1], 1);
 }
-
 static void
 ContainerHandleBtn2Motion(
         Widget          wid,
@@ -4387,20 +4006,16 @@ ContainerHandleBtn2Motion(
   XmContainerWidget	cw = (XmContainerWidget)wid;
   XmDisplay		dpy =
     (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
   if (*num_params < 1) {
     XmeWarning(wid, WRONGPARAMS);
     return;
   }
-
   if (dpy->display.enable_btn1_transfer != XmBUTTON2_ADJUST &&
       (! cw -> container.selecting))
     {
       int dx, dy;
-
       dx = event->xmotion.x - cw->container.anchor_point.x;
       dy = event->xmotion.y - cw->container.anchor_point.y;
-
       if (ABS(dx) >= MOTION_THRESHOLD ||
 	  ABS(dy) >= MOTION_THRESHOLD) {
 	/* Force the drag to start */
@@ -4413,7 +4028,6 @@ ContainerHandleBtn2Motion(
   else
     XtCallActionProc(wid, params[0], event, NULL, 0);
 }
-
 static void
 ContainerHandleBtn2Up(
         Widget          wid,
@@ -4423,14 +4037,12 @@ ContainerHandleBtn2Up(
 {
   XmDisplay		dpy =
     (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-
   if ((dpy -> display.enable_btn1_transfer == XmBUTTON2_ADJUST) ||
       (!num_params) || (*num_params < 1))
     XtCallActionProc(wid, "ContainerEndExtend", event, NULL, 0);
   else
     XtCallActionProc(wid, params[0], event, NULL, 0);
 }
-
 /************************************************************************
  * ContainerBeginSelect (Action Proc)
  ************************************************************************/
@@ -4443,7 +4055,6 @@ ContainerBeginSelect(
 {
   XmContainerWidget	cw = (XmContainerWidget)wid;
   Widget		cwid = (Widget) NULL;
-
   cw->container.cancel_pressed = False;
   if (CtrLayoutIsOUTLINE_DETAIL(wid))
     {
@@ -4459,7 +4070,6 @@ ContainerBeginSelect(
   cw->container.selecting = True;
   StartSelect(wid,event,params,num_params);
 }
-
 /************************************************************************
  * ContainerButtonMotion (Action Proc)
  ************************************************************************/
@@ -4472,8 +4082,6 @@ ContainerButtonMotion(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Boolean			selection_changes;
-
-
 	/* if we are outside the window update LeaveDir */
 	if (cw->container.scroll_proc_id) {
 	    Widget clip = XtParent(wid);
@@ -4504,7 +4112,6 @@ ContainerButtonMotion(
 	    cw->container.last_xmotion_x = rx;
 	    cw->container.last_xmotion_y = ry;
 	}
-
 	if (cw->container.cancel_pressed)
 		return;
 	if (cw->container.ob_pressed)
@@ -4522,7 +4129,6 @@ ContainerButtonMotion(
 	if (CtrIsAUTO_SELECT(cw) && selection_changes)
 		CallSelectCB(wid,event,XmAUTO_MOTION);
 }
-
 /************************************************************************
  * ContainerEndSelect (Action Proc)
  ************************************************************************/
@@ -4535,14 +4141,12 @@ ContainerEndSelect(
 {
   XmContainerWidget	cw = (XmContainerWidget)wid;
   Boolean			selection_changes;
-
   /* first remove TimeOutProc if any */
   cw->container.LeaveDir = 0;
   if (cw->container.scroll_proc_id) {
       XtRemoveTimeOut(cw->container.scroll_proc_id);
       cw->container.scroll_proc_id = 0;
   }
-
   cw->container.selecting = False;
   if (cw->container.cancel_pressed)
     return;
@@ -4569,7 +4173,6 @@ ContainerEndSelect(
       CallSelectCB(wid,event,XmAUTO_UNSET);
       return;
     }
-
   selection_changes = ProcessButtonMotion(wid,event,params,num_params);
   cw->container.no_auto_sel_changes |= selection_changes;
   if (cw->container.marquee_drawn)
@@ -4588,7 +4191,6 @@ ContainerEndSelect(
       if (!cw->container.kaddmode) {
 	Boolean set_cursor = False;
 	Widget current_focus = XmGetFocusWidget(wid);
-
 	/* Only move the focus if the old focus child is no
 	   longer in the set.  We can tell by looking
 	   at the constraint record off the current focus
@@ -4621,7 +4223,6 @@ ContainerEndSelect(
   else
     CallSelectCB(wid,event,XmAUTO_UNSET);
 }
-
 /************************************************************************
  * ContainerBeginToggle (Action Proc)
  ************************************************************************/
@@ -4634,7 +4235,6 @@ ContainerBeginToggle(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget                  cwid;
-
 	if (CtrLayoutIsOUTLINE_DETAIL(wid))
 	    {
             cwid = (Widget)_XmInputForGadget(wid,
@@ -4655,7 +4255,6 @@ ContainerBeginToggle(
 	cw->container.selecting = True;
 	StartSelect(wid,event,params,num_params);
 }
-
 /************************************************************************
  * ContainerEndToggle (Action Proc)
  ************************************************************************/
@@ -4667,7 +4266,6 @@ ContainerEndToggle(
         Cardinal        *num_params)
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
-
 	cw->container.toggle_pressed = False;
 	cw->container.selecting = False;
 	if (cw->container.cancel_pressed)
@@ -4681,7 +4279,6 @@ ContainerEndToggle(
 		return;
 	ContainerEndSelect(wid,event,params,num_params);
 }
-
 /************************************************************************
  * ContainerBeginExtend (Action Proc)
  ************************************************************************/
@@ -4694,7 +4291,6 @@ ContainerBeginExtend(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			current_cwid;
-
 	if (CtrLayoutIsOUTLINE_DETAIL(wid))
 	    {
 	    current_cwid = (Widget)_XmInputForGadget(wid,
@@ -4717,7 +4313,6 @@ ContainerBeginExtend(
 	/* Handle ObjectAtPoint returning an outline button */
 	if ((current_cwid) && CtrOUTLINE_BUTTON(current_cwid))
 	  current_cwid = NULL;
-
 	SetLocationCursor(current_cwid);
 	if (current_cwid == NULL)
 		return;
@@ -4731,7 +4326,6 @@ ContainerBeginExtend(
 		CallSelectCB(wid,event,XmAUTO_BEGIN);
 	cw->container.selecting = True;
 }
-
 /************************************************************************
  * ContainerEndExtend (Action Proc)
  ************************************************************************/
@@ -4744,7 +4338,6 @@ ContainerEndExtend(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Boolean			selection_changes;
-
 	cw->container.extend_pressed = False;
 	cw->container.selecting = False;
 	if (cw->container.cancel_pressed)
@@ -4782,7 +4375,6 @@ ContainerEndExtend(
 	else
 		CallSelectCB(wid,event,XmAUTO_UNSET);
 }
-
 /************************************************************************
  * ContainerCancel (Action Proc)
  ************************************************************************/
@@ -4795,7 +4387,6 @@ ContainerCancel(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Boolean			selection_changes = False;
-
 	if (cw->container.ob_pressed)
 		{
 		XtCallActionProc(wid,"ManagerParentCancel",
@@ -4841,7 +4432,6 @@ ContainerCancel(
 		CallSelectCB(wid,event,XmAUTO_CANCEL);
 		}
 }
-
 /************************************************************************
  * ContainerSelect (Action Proc)
  ************************************************************************/
@@ -4854,7 +4444,6 @@ ContainerSelect(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			focus_cwid = XmGetFocusWidget(wid);
-
 	if (CtrLayoutIsOUTLINE_DETAIL(wid) && focus_cwid &&
 		(focus_cwid != wid) && CtrOUTLINE_BUTTON(focus_cwid))
                     {
@@ -4865,11 +4454,9 @@ ContainerSelect(
 	cw->container.extending_mode = cw->container.kaddmode;
 	KBSelect(wid,event,params,num_params);
 }
-
 /************************************************************************
  * ContainerExtend (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerExtend(
         Widget          wid,
@@ -4879,7 +4466,6 @@ ContainerExtend(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			focus_cwid = XmGetFocusWidget(wid);
-
 	if ((focus_cwid == wid) || (focus_cwid == NULL))
 	    return;
 	if (CtrOUTLINE_BUTTON(focus_cwid))
@@ -4903,7 +4489,6 @@ ContainerExtend(
 		if (cw->container.no_auto_sel_changes)
 			CallSelectCB(wid,event,XmAUTO_UNSET);
 }
-
 /************************************************************************
  * ContainerMoveCursor (Action Proc)
  ************************************************************************/
@@ -4916,7 +4501,6 @@ ContainerMoveCursor(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			focus_cwid;
-
 	if (*num_params == 0) return;
 	if (_XmGetFocusPolicy(wid) == XmPOINTER)
 	    return;
@@ -4929,7 +4513,6 @@ ContainerMoveCursor(
 	cw->container.extending_mode = False;
 	KBSelect(wid,event,params,num_params);
 }
-
 /************************************************************************
  * ContainerExtendCursor (Action Proc)
  ************************************************************************/
@@ -4950,11 +4533,9 @@ ContainerExtendCursor(
 	CalcNextLocationCursor(wid,params[0]);
 	ContainerExtend(wid,event,params,num_params);
 }
-
 /************************************************************************
  * ContainerToggleMode (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerToggleMode(
         Widget          wid,
@@ -4964,7 +4545,6 @@ ContainerToggleMode(
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
     Widget		focus_cwid = XmGetFocusWidget(wid);
-
     if (CtrPolicyIsEXTENDED(cw))
       cw->container.kaddmode = !cw->container.kaddmode;
     if (XtIsRealized(wid) && focus_cwid && (focus_cwid != wid))
@@ -4975,7 +4555,6 @@ ContainerToggleMode(
                         focus_cwid->core.height,
                         True);
 }
-
 /************************************************************************
  * ContainerSelectAll (Action Proc)
  ************************************************************************/
@@ -4987,7 +4566,6 @@ ContainerSelectAll(
         Cardinal        *num_params)
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
-
 	if (CtrPolicyIsSINGLE(cw) || CtrPolicyIsBROWSE(cw))
 		{
 		ContainerSelect(wid,event,params,num_params);
@@ -5004,11 +4582,9 @@ ContainerSelectAll(
 		if (cw->container.no_auto_sel_changes)
                 	CallSelectCB(wid,event,XmAUTO_UNSET);
 }
-
 /************************************************************************
  * ContainerDeselectAll (Action Proc)
  ************************************************************************/
-
 static  void
 ContainerDeselectAll(
         Widget          wid,
@@ -5017,7 +4593,6 @@ ContainerDeselectAll(
         Cardinal        *num_params)	/* unused */
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
-
 	cw->container.no_auto_sel_changes |= DeselectAllCwids(wid);
 	GainPrimary(wid,event->xbutton.time);
 	if (CtrIsAUTO_SELECT(cw) && (!CtrPolicyIsSINGLE(cw)))
@@ -5029,7 +4604,6 @@ ContainerDeselectAll(
 		if (cw->container.no_auto_sel_changes)
 			CallSelectCB(wid,event,XmAUTO_UNSET);
 }
-
 /************************************************************************
  * ContainerActivate (Action Proc)
  ************************************************************************/
@@ -5041,7 +4615,6 @@ ContainerActivate(
         Cardinal        *num_params)
 {
 	Widget			focus_cwid = XmGetFocusWidget(wid);
-
         if ((focus_cwid == wid) || (focus_cwid == NULL))
             return;
         if (CtrLayoutIsOUTLINE_DETAIL(wid) && CtrOUTLINE_BUTTON(focus_cwid))
@@ -5052,8 +4625,6 @@ ContainerActivate(
                 }
 	CallActionCB(focus_cwid,event);
 }
-
-
 /************************************************************************
  * ContainerExpandOrCollapse (Action Proc)
  ************************************************************************/
@@ -5069,23 +4640,18 @@ ContainerExpandOrCollapse(
     Widget focus_cwid;
     int state_to;
     unsigned char new_state;
-
     if (!num_params || *num_params != 1 || !params)
 	return;
-
     if ( ((focus_cwid=XmGetFocusWidget(wid)) == NULL)
       || (wid != XtParent(focus_cwid))
       || (CtrLayoutIsSPATIAL(cw))
       || (CtrOUTLINE_BUTTON(focus_cwid)))
         return;
-
     if (_XmConvertActionParamToRepTypeId((Widget) cw,
 		     XmRID_CONTAINER_EXPAND_OR_COLLAPSE_ACTION_PARAMS,
 		     params[0], False, &state_to) == False)
 	return;
-
     c = GetContainerConstraint(focus_cwid);
-
     /* check LtoR and reduce to _COLLAPSE and _EXPAND values */
     if ((state_to == _COLLAPSE)
      || (state_to == _LEFT && (! LayoutIsRtoLM(cw)))
@@ -5093,15 +4659,11 @@ ContainerExpandOrCollapse(
 	    new_state = XmCOLLAPSED;
     else
 	    new_state = XmEXPANDED;
-
     /* check if there is anything to do */
     if (new_state == c->outline_state)
 	return;
-
     OutlineButtonAction(focus_cwid, new_state, NULL);
 }
-
-
 /************************************************************************
  * ContainerConvertProc (Trait Method)
  ************************************************************************/
@@ -5124,7 +4686,6 @@ ContainerConvertProc(
     XmS_MOTIF_DROP,			XmSTARGETS,
     XmSUTF8_STRING,
   };
-
   XmContainerWidget	cw = (XmContainerWidget)wid;
   WidgetList		items = NULL;
   int			item_count = 0;
@@ -5133,11 +4694,9 @@ ContainerConvertProc(
   int			format = 0;
   Atom			type = 0;
   Atom			atoms[XtNumber(atom_names)];
-
   /* Get Atom values from cache. */
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names), False, atoms);
-
   if (cs->target == atoms[XmA_MOTIF_LOSE_SELECTION])
     {
       cw->container.have_primary = False;
@@ -5153,7 +4712,6 @@ ContainerConvertProc(
     {
       Atom	*targargs;
       int	n = 0;
-
       if (cs -> target == atoms[XmA_TARGETS])
 	targargs = XmeStandardTargets(wid,6,&n);
       else
@@ -5172,7 +4730,6 @@ ContainerConvertProc(
       {
 	short	*offset_args = (short *)XtCalloc(2,sizeof(short));
 	int	n = 0;
-
 	value = (XtPointer)offset_args;
 	offset_args[n++] = cw->container.drag_offset_x;
 	offset_args[n++] = cw->container.drag_offset_y;
@@ -5205,7 +4762,6 @@ ContainerConvertProc(
       Pixmap *        return_pm = (Pixmap *)
 	XtCalloc(item_count,sizeof(Pixmap));
       int	      return_pm_count = 0;
-
       for (i = 0; i < item_count; i++)
 	{
 	  n = 0;
@@ -5230,7 +4786,6 @@ ContainerConvertProc(
 	int		n,i;
 	XmString	item_xmstr;
 	XmString	return_xmstr = XmStringCreateLocalized("");
-
 	n = 0;
 	XtSetArg(wargs[n],XmNlabelString,&item_xmstr); n++;
 	for (i = 0; i < item_count; i++)
@@ -5276,11 +4831,9 @@ ContainerConvertProc(
 	XtFree((char*) items);
   _XmConvertComplete(wid, value, length, format, type, cs);
 }
-
 /************************************************************************
  * ContainerDestinationProc (Trait Method)
  ************************************************************************/
-
 static  void
 ContainerDestinationProc(
         Widget          wid,
@@ -5289,11 +4842,9 @@ ContainerDestinationProc(
 {
 	enum { XmA_MOTIF_DROP, XmA_MOTIF_DRAG_OFFSET, NUM_ATOMS };
 	static char *atom_names[] = { XmS_MOTIF_DROP, XmS_MOTIF_DRAG_OFFSET };
-
 	XmContainerWidget		cw = (XmContainerWidget)wid;
 	XmDropProcCallbackStruct *	dropproc_cs;
 	Atom atoms[XtNumber(atom_names)];
-
 	/*
 	** In case of a primary transfer operation where a location_data
 	** has been allocated, register a done proc to be called when
@@ -5301,17 +4852,14 @@ ContainerDestinationProc(
 	*/
 	if (cs->selection == XA_PRIMARY && cs->location_data)
 	    XmeTransferAddDoneProc(cs->transfer_id, FreeLocationData);
-
 	/* If we aren't sensitive,  don't allow transfer */
 	if (! wid -> core.sensitive ||
 	    ! wid -> core.ancestor_sensitive)
 	  XmTransferDone(cs -> transfer_id, XmTRANSFER_DONE_FAIL);
-
 	/* Get Atom values from cache. */
 	assert(XtNumber(atom_names) == NUM_ATOMS);
 	XInternAtoms(XtDisplay(wid), atom_names, XtNumber(atom_names),
 		     False, atoms);
-
 	if (cs->selection != atoms[XmA_MOTIF_DROP])
 		return;
 	if (cw->container.drag_context == (Widget) NULL)
@@ -5329,11 +4877,9 @@ ContainerDestinationProc(
 			(XtCallbackProc)MoveItemCallback,
 			(XtPointer)&cw->container.dropspot,cs->time);
 }
-
 /************************************************************************
  * ContainerDestPrehookProc (Trait Method)
  ************************************************************************/
-
 static  void
 ContainerDestPrehookProc(
         Widget          wid,
@@ -5343,14 +4889,12 @@ ContainerDestPrehookProc(
   XmContainerWidget		cw = (XmContainerWidget)wid;
   XmDropProcCallbackStruct *	dropproc_cs;
   XPoint			*loc_data;
-
   /* For a PRIMARY selection, don't null out the location_data.
    * It can point to allocated memory, that will be free when
    * transfer is done.
    */
   if (cs->selection != XA_PRIMARY)
       cs->location_data = NULL;
-
   if (cs->selection == XInternAtom(XtDisplay(wid),XmS_MOTIF_DROP,False))
     {
       loc_data = (XPoint *) XtMalloc(sizeof(XPoint));
@@ -5361,25 +4905,19 @@ ContainerDestPrehookProc(
       XmeTransferAddDoneProc(cs->transfer_id, FreeLocationData);
     }
 }
-
 /************************************************
  * Free data allocated for destination callback
  ************************************************/
-
 static 	void
 FreeLocationData(Widget wid,	/* unused */
 		 XtEnum ignore_op, /* unused */
 		 XmTransferDoneCallbackStruct* cs)
 {
   XmDestinationCallbackStruct *ds;
-
   ds = _XmTransferGetDestinationCBStruct(cs -> transfer_id);
-
   XtFree((char*) ds -> location_data);
-
   ds -> location_data = NULL;
 }
-
 /************************************************************************
  * ContGetValues (Trait Method)
  ************************************************************************/
@@ -5389,7 +4927,6 @@ ContGetValues(
     XmContainerData	contData)
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
-
     if (CtrLayoutIsOUTLINE_DETAIL(cw))
 	{
 	if (CtrLayoutIsDETAIL(cw))
@@ -5418,7 +4955,6 @@ ContGetValues(
 	    contData->detail_order_count = 0;
 	    contData->detail_tablist = NULL;
 	    }
-
 	/* we want to return a valid firstcolumnwidth even in pure outline,
 	   so that clipping can happen */
 	if (cw->container.real_first_col_width == 0)
@@ -5442,7 +4978,6 @@ ContGetValues(
         contData->selection_mode = XmNORMAL_MODE;
     contData->select_color = cw->container.select_color;
 }
-
 /************************************************************************
  * GetVisualEmphasis (Private Function)
  ************************************************************************/
@@ -5452,7 +4987,6 @@ GetVisualEmphasis(
 {
     XmContainerItemDataRec      cItemData;
     XmContainerItemTrait        cItemTrait;
-
     if ((cItemTrait = (XmContainerItemTrait)
         XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem)) == NULL)
         return(XmNOT_SELECTED);
@@ -5460,7 +4994,6 @@ GetVisualEmphasis(
     cItemTrait->getValues(cwid,(XmContainerItemData)&cItemData);
     return(cItemData.visual_emphasis);
 }
-
 /************************************************************************
  * SetVisualEmphasis (Private Function)
  ************************************************************************/
@@ -5472,7 +5005,6 @@ SetVisualEmphasis(
     XmContainerWidget		cw = (XmContainerWidget)XtParent(cwid);
     XmContainerItemDataRec	cItemData;
     XmContainerItemTrait	cItemTrait;
-
     if ((cItemTrait = (XmContainerItemTrait)
 	XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem)) == NULL)
 	return;
@@ -5482,7 +5014,6 @@ SetVisualEmphasis(
     cItemTrait->setValues(cwid,(XmContainerItemData)&cItemData);
     cw->container.self = False;
 }
-
 /************************************************************************
  * GetViewType (Private Function)
  ************************************************************************/
@@ -5492,7 +5023,6 @@ GetViewType(
 {
     XmContainerItemDataRec      cItemData;
     XmContainerItemTrait        cItemTrait;
-
     if ((cItemTrait = (XmContainerItemTrait)
         XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem)) == NULL)
         return(XmLARGE_ICON);
@@ -5500,7 +5030,6 @@ GetViewType(
     cItemTrait->getValues(cwid,(XmContainerItemData)&cItemData);
     return(cItemData.view_type);
 }
-
 /************************************************************************
  * SetViewType (Private Function)
  ************************************************************************/
@@ -5512,7 +5041,6 @@ SetViewType(
     XmContainerWidget           cw = (XmContainerWidget)XtParent(cwid);
     XmContainerItemDataRec      cItemData;
     XmContainerItemTrait        cItemTrait;
-
     if ((cItemTrait = (XmContainerItemTrait)
         XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem)) == NULL)
         return;
@@ -5522,7 +5050,6 @@ SetViewType(
     cItemTrait->setValues(cwid,(XmContainerItemData)&cItemData);
     cw->container.self = False;
 }
-
 /************************************************************************
  * GetIconWidth (Private Function)
  ************************************************************************/
@@ -5532,7 +5059,6 @@ GetIconWidth(
 {
     XmContainerItemDataRec      cItemData;
     XmContainerItemTrait        cItemTrait;
-
     if ((cItemTrait = (XmContainerItemTrait)
         XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem)) == NULL)
         return(cwid->core.width);
@@ -5540,7 +5066,6 @@ GetIconWidth(
     cItemTrait->getValues(cwid,(XmContainerItemData)&cItemData);
     return(cItemData.icon_width);
 }
-
 /************************************************************************
 * GetDefaultDetailCount (Private Function)
  ************************************************************************/
@@ -5554,13 +5079,11 @@ GetDefaultDetailCount(
     Widget	cwid;
     CwidNode	node;
     Cardinal	detail_count = 0;
-
     /*
      * Get the IconHeader's detail_count first
      */
     if ((cwid = GetRealIconHeader(wid)) && (XtIsManaged(cwid)) &&
 	((XtParent(cwid) == wid) || (XtIsManaged(XtParent(cwid))))) {
-
 	cItemTrait = (XmContainerItemTrait)
 		XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem);
 	cItemData.valueMask = ContItemDetailCount;
@@ -5585,8 +5108,6 @@ GetDefaultDetailCount(
 	}
     return(detail_count);
 }
-
-
 /************************************************************************
 * SetDynamicTabList (Private Function)
  ************************************************************************/
@@ -5597,9 +5118,7 @@ SetDynamicTabList(
     XmContainerWidget   cw = (XmContainerWidget)wid;
     int tab_size;
     Cardinal		detail_order_count;
-
     if (!CtrIsDynamic(cw,TABLIST)) return(NULL);	/* Just in case */
-
     /*
      * Always free the previous XmTabList
      */
@@ -5621,7 +5140,6 @@ SetDynamicTabList(
      * and get a reasonable size.
      */
     if (cw->core.width == 0) return(NULL);
-
     tab_size = cw->core.width - (cw->container.margin_w * 2)
                                 - cw->container.real_first_col_width;
     detail_order_count = (cw->container.detail_order_count) ?
@@ -5632,11 +5150,9 @@ SetDynamicTabList(
 	return(NULL);
     tab_size /= detail_order_count;
     if (tab_size <=30) return NULL ; /* HACKKKK */
-
     cw->container.detail_tablist = GetDumbTabList(tab_size,detail_order_count);
     return(cw->container.detail_tablist);
 }
-
 /************************************************************************
 * GetDumbTabList (Private Function)
  ************************************************************************/
@@ -5649,32 +5165,26 @@ GetDumbTabList(
     static XmTab * Tab_pool = NULL ;
     XmTabList Tab_list = NULL ;
     Cardinal i, prev_num_tab = Num_tab ;
-
     _XmProcessLock();
     if (Num_tab < asked_num_tab)
         {
         Num_tab = MAX(asked_num_tab,100);	/* HACKKKK */
         Tab_pool = (XmTab*) XtRealloc((char*)Tab_pool,Num_tab*sizeof(XmTab));
         }
-
     /* create more tabs */
     for (i=prev_num_tab; i<Num_tab; i++)
         Tab_pool[i] =  XmTabCreate(0.0, XmPIXELS, XmABSOLUTE,
                                    XmALIGNMENT_BEGINNING, XmS);
-
     /* update the values */
     for (i=0; i<asked_num_tab; i++)
         XmTabSetValue(Tab_pool[i], (float)tab_size*(i+1));
-
     /*
      * Return a new tablist.
      */
     Tab_list = XmTabListInsertTabs(NULL, Tab_pool, asked_num_tab, 0);
     _XmProcessUnlock();
-
     return Tab_list ;
 }
-
 /************************************************************************
 * GetDynFirstColWidth (Private Function)
  ************************************************************************/
@@ -5690,13 +5200,11 @@ GetDynFirstColWidth(
     CwidNode    node;
     Dimension	cwid_fcw = 0;
     Dimension	fcw = 0;
-
     /*
      * Get the IconHeader's icon_width
      */
     if ((cwid = GetRealIconHeader(wid)) && (XtIsManaged(cwid)) &&
 	((XtParent(cwid) == wid) || (XtIsManaged(XtParent(cwid))))) {
-
 	cItemTrait = (XmContainerItemTrait)
                 XmeTraitGet((XtPointer)XtClass(cwid),XmQTcontainerItem);
         cItemData.valueMask = ContItemIconWidth;
@@ -5722,18 +5230,14 @@ GetDynFirstColWidth(
 	     * Just use Gadget width, if it doesn't have the trait.
 	     */
 	    cwid_fcw = cwid->core.width;
-
 	c = GetContainerConstraint(cwid);
 	cwid_fcw += cw->container.ob_width +
 	    c->depth * cw->container.outline_indent;
-
 	fcw = MAX(fcw,cwid_fcw);
         node = GetNextNode(node);
     }
-
     return(fcw);
 }
-
 /************************************************************************
  * ResizeIconWidths (Private Function)
  * This function gets the preferred width of all icons based on the
@@ -5750,7 +5254,6 @@ ResizeIconWidths(
     XmContainerConstraint c;
     XtWidgetGeometry	desired;
     Position max_x = 0 ;
-
     /*** get the maximum right edge first */
     if (cw->core.width == cw->container.ideal_width)
 	max_x = cw->container.ideal_width - cw->container.margin_w;
@@ -5790,7 +5293,6 @@ ResizeIconWidths(
 		}
 	    }
 	}
-
     /*** Then resize */
     if ((cwid = GetRealIconHeader(wid)) && (XtIsManaged(cwid)) &&
 	((XtParent(cwid) == wid) || (XtIsManaged(XtParent(cwid)))))
@@ -5809,7 +5311,6 @@ ResizeIconWidths(
 			       cw->core.border_width);
 	}
     }
-
     node = GetFirstNode(cw);
     while(node) {
 	cwid = node->widget_ptr;
@@ -5824,11 +5325,9 @@ ResizeIconWidths(
 	XmeConfigureObject(cwid, cwid->core.x, cwid->core.y,
 			   cwid->core.width,
 			   cwid->core.height, cwid->core.border_width);
-
 	node = GetNextNode(node);
     }
 }
-
 /************************************************************************
  * Layout (Private Function)
  ************************************************************************/
@@ -5837,13 +5336,11 @@ Layout(
         Widget  wid)
 {
   XmContainerWidget	cw = (XmContainerWidget)wid;
-
   if (CtrLayoutIsOUTLINE_DETAIL(cw))
     LayoutOutlineDetail(wid);
   else
     LayoutSpatial(wid,False,NULL);
 }
-
 /************************************************************************
  * RequestOutlineDetail (Private Function)
  ************************************************************************/
@@ -5854,28 +5351,23 @@ RequestOutlineDetail(
 {
     XmContainerWidget   cw = (XmContainerWidget)wid;
     Dimension saved_width = 0 ;
-
     /* deal with special requirements for width */
     if (geo_desired->width) {
       saved_width = cw->core.width;
       cw->core.width = geo_desired->width;
     }
-
     /* let's find out about our preferred size */
     cw->container.ideal_width = 0;
     cw->container.ideal_height = 0;
     GetSize(wid,&cw->container.ideal_width,&cw->container.ideal_height);
     geo_desired->request_mode = (CWWidth | CWHeight);
-
     /* see if a constraint was placed on the preferred size */
     if (!(geo_desired->width))
 	geo_desired->width = cw->container.ideal_width;
     else
 	cw->core.width = saved_width ;
-
     if (!(geo_desired->height))
 	geo_desired->height = cw->container.ideal_height;
-
     if (geo_desired->width < 1) geo_desired->width = cw->core.width ;
     if (geo_desired->height < 1) geo_desired->height = cw->core.height ;
     _XmMakeGeometryRequest(wid,geo_desired);
@@ -5884,7 +5376,6 @@ RequestOutlineDetail(
     LayoutOutlineDetail(wid);
     cw->container.prev_width = cw->core.width;
 }
-
 /************************************************************************
  * LayoutOutlineDetail (Private Function)
  ************************************************************************/
@@ -5895,27 +5386,23 @@ LayoutOutlineDetail(
     XmContainerWidget		cw = (XmContainerWidget)wid;
     XmContainerConstraint	c;
     XmContainerConstraint	pc;
-
     Position		x,y,ob_y;
     CwidNode		node;
     Widget		cwid;
     int                 n_outline_segs,seg_idx;
     XPoint *            point_at_depth = NULL;
     int                 i;
-
     if (CtrLayoutIsDETAIL(cw))
 	{
 	if (CtrIsDynamic(cw,TABLIST))
 	    SetDynamicTabList(wid);
 	ResizeIconWidths(wid);
 	}
-
 	/*
 	** assert(c->depth == pc->depth + 1);
 	** for children with entry-parents, and otherwise
 	** assert(c->depth == 0);
 	*/
-
     /*
      * Create array of XSegments to hold line descriptions for Outline.
      */
@@ -5941,7 +5428,6 @@ LayoutOutlineDetail(
 	}
     point_at_depth = (XPoint *)XtCalloc((cw->container.max_depth + 1),
 					sizeof(XPoint));
-
     y = cw->container.margin_h;
     if (CtrLayoutIsDETAIL(cw) && cw->container.icon_header) {
 	/*
@@ -5950,12 +5436,10 @@ LayoutOutlineDetail(
 	 */
 	Widget real_icon_header = GetRealIconHeader(wid),
 	       header_parent = XtParent(real_icon_header) ;
-
 	/* only if it is managed */
 	if (XtIsManaged(real_icon_header) &&
 	    ((header_parent == wid) ||
 	     (XtIsManaged(header_parent)))) {
-
 	    if (header_parent != wid) {
 		/* auto SW case : DA is the parent of the header */
 		/* set y of the container so that it glue the
@@ -5965,7 +5449,6 @@ LayoutOutlineDetail(
 		   height that need to be hidden (replaced by the DA one) */
 		if (0 == cw->core.y)
 			cw->core.y = real_icon_header->core.height ;
-
 		/* resize the DA to remove the bottom margin */
 		XmeConfigureObject(header_parent,
 			       header_parent->core.x,
@@ -5986,14 +5469,12 @@ LayoutOutlineDetail(
 		}
 	}
     }
-
     node = GetFirstNode(cw);
     while (node)
 	{
 	cw->container.last_node = node;
 	cwid = node->widget_ptr;
 	c = GetContainerConstraint(cwid);
-
 	if (LayoutIsRtoLM(cw))
 	    x = cw->core.width - cw->container.margin_w
 			- c->depth * cw->container.outline_indent;
@@ -6032,7 +5513,6 @@ LayoutOutlineDetail(
 		}
 	if (CtrOB_PRESENT(cw) && !LayoutIsRtoLM(cw))
 	    x += cw->container.ob_width;
-
         /*
 	 * we don't want the x position to be bigger than
 	 * the firstcolumnwidth, otherwize the arithmetic in
@@ -6044,7 +5524,6 @@ LayoutOutlineDetail(
 	else
 	    x = MIN(x,(Position)(cw->container.margin_w
 			+ cw->container.real_first_col_width - 1));
-
 	/*
 	 * Calculate Outline lines
 	 */
@@ -6057,7 +5536,6 @@ LayoutOutlineDetail(
             point_at_depth[c->depth].y = ob_y + cw->container.ob_height;
         else
             point_at_depth[c->depth].y = y + cwid->core.height;
-
         if (c->entry_parent)
             {
             pc = GetContainerConstraint(c->entry_parent);
@@ -6100,15 +5578,12 @@ LayoutOutlineDetail(
                                 cw->container.outline_segs[seg_idx].y2;
             seg_idx += 2;
             }
-
         if (LayoutIsRtoLM(cw))
 	    x = x - (Position)cwid->core.width;
 	XmeConfigureObject(cwid,x,y,cwid->core.width,cwid->core.height,0);
-
 	y += cwid->core.height;
 	node = GetNextNode(node);
 	}
-
     /*
      * Free the Malloc'd point_at_depth.
      * If Left-to-Right, reverse all the x1's & x2's and adjust.
@@ -6119,7 +5594,6 @@ LayoutOutlineDetail(
 	{
 	int	max_x = (int)cw->container.real_first_col_width
 			+ (int)cw->container.margin_w;
-
 	/* we don't want the lines to be drawn after the first
 	   column width, so we clip here the x positions of the
 	   segments */
@@ -6128,10 +5602,8 @@ LayoutOutlineDetail(
 	cw->container.outline_segs[i].x2 = MIN(max_x,
 				cw->container.outline_segs[i].x2);
         }
-
     if (LayoutIsRtoLM(cw)) {
 	int	adjust;
-
 	adjust = (int)cw->core.width - (int)cw->container.ideal_width;
 	for (i = 0; i < cw->container.outline_seg_count; i++) {
 	    cw->container.outline_segs[i].x1 = MAX(0,
@@ -6143,7 +5615,6 @@ LayoutOutlineDetail(
 	}
     }
 }
-
 /************************************************************************
  * LayoutSpatial (Private Function)
  ************************************************************************/
@@ -6157,7 +5628,6 @@ LayoutSpatial(
   int		cell_width,cell_height;
   int		width_in_cells,height_in_cells;
   CwidNode	node;
-
     if (!((XmContainerWidgetClass)XtClass(wid))->container_class.place_item)
 	return;
     if (CtrSpatialStyleIsGRID(cw) || CtrSpatialStyleIsCELLS(cw))
@@ -6190,7 +5660,6 @@ LayoutSpatial(
 	    if ((width_in_cells * height_in_cells) > cw->container.cell_count)
 	    	{
 	      	int	i,old_cell_count = cw->container.cell_count;
-
 	      	cw->container.cell_count = width_in_cells * height_in_cells;
 	      	if (CtrIsHORIZONTAL(cw)) /* For "clipped" items */
 		    cw->container.cell_count += height_in_cells;
@@ -6204,12 +5673,10 @@ LayoutSpatial(
 	        }
 	    }
         }
-
     node = GetFirstNode(cw);
     while (node)
     	{
       	Widget cwid = node -> widget_ptr;
-
       	cw->container.last_node = node;
       	if (CtrItemIsPlaced(cwid))
 	    PlaceCwid(cwid,cwid->core.x,cwid->core.y);
@@ -6254,7 +5721,6 @@ LayoutSpatial(
 	node = GetNextNode(node);
     	}
 }
-
 /************************************************************************
  * SetCellSizes (Private Function)
  ************************************************************************/
@@ -6269,7 +5735,6 @@ SetCellSizes(
     else
 	SetLargeCellSizes(wid);
 }
-
 /************************************************************************
  * SetSmallCellSizes (Private Function)
  ************************************************************************/
@@ -6279,18 +5744,15 @@ SetSmallCellSizes(
 {
     XmContainerWidget   cw = (XmContainerWidget)wid;
     CwidNode		node;
-
     if (!CtrDynamicSmallCellHeight(cw))
 	cw->container.real_small_cellh = cw->container.small_cell_height;
     if (!CtrDynamicSmallCellWidth(cw))
 	cw->container.real_small_cellw = cw->container.small_cell_width;
     if (!CtrDynamicSmallCellHeight(cw) && !CtrDynamicSmallCellWidth(cw))
 	return;
-
     if ((cw->container.first_node) && (cw->container.small_cell_dim_fixed))
 	return;
     cw->container.small_cell_dim_fixed = True;
-
     if (cw->container.first_node)
     {
         node = cw->container.first_node;
@@ -6343,7 +5805,6 @@ SetSmallCellSizes(
 		MAX(10,(int) (.02 * WidthOfScreen(XtScreen((Widget)cw))));
         }
 }
-
 /************************************************************************
  * SetLargeCellSizes (Private Function)
  ************************************************************************/
@@ -6353,17 +5814,14 @@ SetLargeCellSizes(
 {
     XmContainerWidget   cw = (XmContainerWidget)wid;
     CwidNode            node;
-
     if (!CtrDynamicLargeCellHeight(cw))
         cw->container.real_large_cellh = cw->container.large_cell_height;
     if (!CtrDynamicLargeCellWidth(cw))
         cw->container.real_large_cellw = cw->container.large_cell_width;
     if (!CtrDynamicLargeCellHeight(cw) && !CtrDynamicLargeCellWidth(cw))
         return;
-
     if ((cw->container.first_node) && (cw->container.large_cell_dim_fixed))
         return;
-
     if (cw->container.first_node)
     {
 	cw->container.large_cell_dim_fixed = True;
@@ -6417,7 +5875,6 @@ SetLargeCellSizes(
                 MAX(20,(int) (.04 * WidthOfScreen(XtScreen((Widget)cw))));
         }
 }
-
 /************************************************************************
  * SizeOutlineButton (Private Function)
  ************************************************************************/
@@ -6429,7 +5886,6 @@ SizeOutlineButton(
     Arg			wargs[10];
     int			n;
     Dimension		width,height;
-
     /*
      * Create dummy outline button so we can get size.
      */
@@ -6461,7 +5917,6 @@ SizeOutlineButton(
     cw->container.ob_width = MAX(cw->container.ob_width,width);
     cw->container.ob_height = MAX(cw->container.ob_height,height);
 }
-
 /************************************************************************
  * UpdateGCs (Private Function)
  ************************************************************************/
@@ -6472,7 +5927,6 @@ UpdateGCs(
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	XGCValues		values;
 	XtGCMask		valueMask, unusedMask;
-
 	/*
 	 * Free any previous GC's
 	 */
@@ -6490,7 +5944,6 @@ UpdateGCs(
 	values.graphics_exposures = False;
 	cw->container.normalGC = XtAllocateGC(wid, 0, valueMask, &values,
 						GCClipMask | GCForeground, unusedMask);
-
 	valueMask = GCForeground | GCSubwindowMode | GCFunction;
 	values.foreground = cw->core.background_pixel ^
 				cw->manager.foreground;
@@ -6499,7 +5952,6 @@ UpdateGCs(
 	cw->container.marqueeGC = XtAllocateGC(wid, 0, valueMask, &values,
 						GCClipMask, 0);
 }
-
 /************************************************************************
  * GetSpatialSizeCellAdjustment (Private Function)
  * 	This routine does a trial placement of all items using the
@@ -6524,7 +5976,6 @@ GetSpatialSizeCellAdjustment(
     Boolean			this_spot_fits;
     Boolean 			*cell_occupied;
     int				i,start_row,start_col,row,col;
-
     cell_occupied = (Boolean *)XtCalloc((width_in_cells * height_in_cells),
 						sizeof(Boolean));
     i = 0;
@@ -6599,8 +6050,6 @@ GetSpatialSizeCellAdjustment(
 	*parm_height_in_cells = height_in_cells;
 	}
 }
-
-
 /************************************************************************
  * CreateIconHeader (Private Function)
  ************************************************************************/
@@ -6613,20 +6062,15 @@ CreateIconHeader(
     Arg                 sargs[10];
     Cardinal              n = 0;
     unsigned char scrollp = XmAPPLICATION_DEFINED ;
-
 #define NO_PARENT 	0
 #define SWINDOW_PARENT	1
 #define CWINDOW_PARENT	2
     int inScrolledWindow = NO_PARENT;
-
     cw->container.self = True;
     cw->container.create_cwid_type = CONTAINER_HEADER;
-
-
     /*
      * Set up args for DrawingArea and Create.
      */
-
     {
     XmScrollFrameTrait	scrollFrameTrait = (XmScrollFrameTrait)
         XmeTraitGet((XtPointer)XtClass(XtParent(wid)),XmQTscrollFrame);
@@ -6640,7 +6084,6 @@ CreateIconHeader(
 		inScrolledWindow = CWINDOW_PARENT;
 	}
     }
-
     if (NO_PARENT != inScrolledWindow)
     {
 	Widget sWindow = (SWINDOW_PARENT == inScrolledWindow) ? XtParent(wid) : XtParent(XtParent(wid));
@@ -6648,7 +6091,6 @@ CreateIconHeader(
 	/* use an intermediate DA so that we can have margins */
 	n = 0 ;
 	XtSetArg(sargs[n], XmNscrolledWindowChildType, XmSCROLL_HOR); n++;
-
 	XtSetArg(sargs[n], XmNmarginHeight,
 		 cw->container.margin_h); n++ ;
 	XtSetArg(sargs[n], XmNmarginWidth,
@@ -6663,7 +6105,6 @@ CreateIconHeader(
 	XtSetArg(sargs[n], XmNtraversalOn, False); n++;
 	header_parent = XmCreateDrawingArea(sWindow, DANAME, sargs, n);
     }
-
     /*
      * Set up args for IconHeader and Create.
      */
@@ -6674,9 +6115,7 @@ CreateIconHeader(
     /* not really necessary */
     XtSetArg(sargs[n],XmNlargeIconPixmap, XmUNSPECIFIED_PIXMAP); n++;
     XtSetArg(sargs[n],XmNsmallIconPixmap, XmUNSPECIFIED_PIXMAP); n++;
-
     assert(cw->container.detail_heading_count > 0) ;
-
     XtSetArg(sargs[n],XmNlabelString,
 	     cw->container.detail_heading[0]); n++;
     if (cw->container.detail_heading_count > 1) {
@@ -6685,10 +6124,8 @@ CreateIconHeader(
     }
     XtSetArg(sargs[n],XmNdetailCount,
 	     cw->container.detail_heading_count - 1); n++;
-
     cw->container.icon_header =
 	XmCreateIconHeader(header_parent, HEADERNAME, sargs,n);
-
     if (scrollp == XmAUTOMATIC) {
 	/* set y of the container so that it glue the
 	   bottom of the Icon header *inside* the DA, that
@@ -6696,7 +6133,6 @@ CreateIconHeader(
 	 if (CtrLayoutIsDETAIL(cw))
 	   /* if (0 == cw->core.y) */
 	     cw->core.y = cw->container.icon_header->core.height ;
-
 	/* also resize the DA to remove the bottom margin */
 	XmeConfigureObject(header_parent,
 			   header_parent->core.x,
@@ -6706,7 +6142,6 @@ CreateIconHeader(
 			   cw->container.icon_header->core.height +
 			   cw->container.margin_h,
 			   header_parent->core.border_width);
-
 	/* manage the child inside */
 	XtManageChild(cw->container.icon_header);
 	/* keep the reference to the DA parent, since that's the one
@@ -6715,12 +6150,10 @@ CreateIconHeader(
     }
     /* if not scrolling, no need to do anything it, it will
        be dealt with as a regular kid */
-
     /* set the internal creation flag down */
     cw->container.create_cwid_type = CONTAINER_ICON;
     cw->container.self = False;
 }
-
 /************************************************************************
  * GetRealIconHeader (Private Function)
  ************************************************************************/
@@ -6729,9 +6162,7 @@ GetRealIconHeader(
     Widget      wid)
 {
     XmContainerWidget   cw = (XmContainerWidget)wid;
-
     if (!cw->container.icon_header) return NULL;
-
     /* determine the real icon_header id */
     if (XtParent(cw->container.icon_header) != wid)
 	/* we are in the SW auto case where a DA was created as
@@ -6743,8 +6174,6 @@ GetRealIconHeader(
     else
 	return cw->container.icon_header ;
 }
-
-
 /************************************************************************
  * UpdateIconHeader (Private Function)
  ************************************************************************/
@@ -6757,14 +6186,11 @@ UpdateIconHeader(
     Arg                 wargs[10];
     int                 n;
     Widget icon_header = GetRealIconHeader(wid);
-
     cw->container.self = True ;
-
     /*
      * Set up args for IconHeader.
      */
     assert (cw->container.detail_heading_count > 0);
-
     n = 0;
     if (!count_only) {
 	XtSetArg(wargs[n],XmNlabelString,
@@ -6774,14 +6200,11 @@ UpdateIconHeader(
 	    n++;
 	}
     }
-
     XtSetArg(wargs[n],XmNdetailCount,
 			cw->container.detail_heading_count - 1); n++;
     XtSetValues(icon_header,wargs,n);
-
     cw->container.self = True ;
 }
-
 /************************************************************************
  * ChangeView (Private Function)
  ************************************************************************/
@@ -6793,7 +6216,6 @@ ChangeView(
     XmContainerWidget	cw = (XmContainerWidget)wid;
     CwidNode		node;
     Widget              cwid;
-
     node = cw->container.first_node;
     while (node)
 	{
@@ -6801,7 +6223,6 @@ ChangeView(
 	SetViewType(cwid,view);
 	/* setting a new view type will have the child request
 	   and get its preferred size */
-
 	/*
 	 * Get the next cwid, whether it's visible or not
 	 */
@@ -6814,7 +6235,6 @@ ChangeView(
 		node = GetNextUpLevelNode(node);
 	}
 }
-
 /************************************************************************
  * NewNode (Private Function)
  ************************************************************************/
@@ -6824,7 +6244,6 @@ NewNode(
 {
 	XmContainerConstraint	c = GetContainerConstraint(cwid);
 	CwidNode		new_node;
-
 	/*
          * Create the new CwidNode structure.
          */
@@ -6833,7 +6252,6 @@ NewNode(
         c->node_ptr = new_node;         /* widget --> node link */
 	return(new_node);
 }
-
 /************************************************************************
  * InsertNode (Private Function)
  ************************************************************************/
@@ -6857,11 +6275,9 @@ InsertNode(
 				** XmNpositionIndex; XmNpositionIndex has no
 				** gaps
 				*/
-
 	cwid = node->widget_ptr;
 	cw = (XmContainerWidget)XtParent(cwid);
 	c = GetContainerConstraint(cwid);
-
 	/*
 	 * Find the first cwid within XmNentryParent, NULL if none.
 	 */
@@ -6876,7 +6292,6 @@ InsertNode(
 	    parent_node = pc->node_ptr;
 	    prev_node = parent_node->child_ptr;
 	    }
-
 	if (prev_node == NULL)
 	    {
 	    /*
@@ -6902,9 +6317,7 @@ InsertNode(
 		next_node = next_node->next_ptr;
 		}
 	}
-
 	c->position_index = count++;
-
 	/*
 	 * Insert the node into the linked list.
 	 */
@@ -6915,7 +6328,6 @@ InsertNode(
 		next_node->prev_ptr = node;
 	if ((parent_node) && (node->prev_ptr == NULL))
 		parent_node->child_ptr = node;
-
 	/* if we've done other parts right, we shouldn't need to do this part */
 	next_node = node->next_ptr;
 	while (next_node)
@@ -6924,14 +6336,12 @@ InsertNode(
 		sc->position_index = count++;
 		next_node = next_node->next_ptr;
 	}
-
 	/*
 	 * Update cw->container.first_node, if we're now the first node.
 	 */
 	if (node->next_ptr == cw->container.first_node)
 		cw->container.first_node = node;
 }
-
 /************************************************************************
  * SeverNode (Private Function)
  ************************************************************************/
@@ -6943,11 +6353,8 @@ SeverNode(
 	CwidNode		parent_node;
 	CwidNode		prev_node;
 	CwidNode		next_node;
-
 	if (node == NULL) return;
-
 	cw = (XmContainerWidget)XtParent(node->widget_ptr);
-
 	/*
 	 * Find new cw->container.first_node, if we're now the first node.
 	 */
@@ -6966,7 +6373,6 @@ SeverNode(
 		parent_node = node->parent_ptr;
 		parent_node->child_ptr = node->next_ptr;
 		}
-
 	/*
 	 * Unlink node from the linked list.
 	 */
@@ -6981,7 +6387,6 @@ SeverNode(
 		next_node->prev_ptr = node->prev_ptr;
 		}
 }
-
 /************************************************************************
  * DeleteNode (Private Function)
  ************************************************************************/
@@ -6993,9 +6398,7 @@ DeleteNode(
         CwidNode        target_node;
         CwidNode        child_node;
         CwidNode        target_child;
-
         if ((target_node = c->node_ptr) == NULL) return;
-
         /*
          * Delete any children first.
          */
@@ -7011,7 +6414,6 @@ DeleteNode(
         c->node_ptr = NULL;
         c->visible_in_outline = False;
 }
-
 /************************************************************************
  * GetFirstNode (Private Function)
  ************************************************************************/
@@ -7024,8 +6426,6 @@ GetFirstNode(
   else
       return GetNextNode(cw->container.first_node) ;
 }
-
-
 /************************************************************************
  * GetNextNode (Private Function)
  ************************************************************************/
@@ -7035,11 +6435,9 @@ GetNextNode(
 {
     XmContainerWidget	cw;
     CwidNode 		node;
-
     if (!start_node)
 	return(NULL);
     cw = (XmContainerWidget)XtParent(start_node->widget_ptr);
-
     if (CtrLayoutIsSPATIAL(cw))
 	{
 	node = start_node->next_ptr;
@@ -7051,7 +6449,6 @@ GetNextNode(
 	    }
 	return(NULL);
 	}
-
     /* depth-first search of tree */
     if (NodeIsActive(start_node) && (start_node->child_ptr))
 	node = start_node->child_ptr;
@@ -7071,7 +6468,6 @@ GetNextNode(
 	}
     return(NULL);
 }
-
 /************************************************************************
  * NodeIsActive (Private Function)
  ************************************************************************/
@@ -7081,7 +6477,6 @@ NodeIsActive(
 {
     XmContainerWidget   cw;
     XmContainerConstraint c;
-
     if (!node)
 	return(False);
     if (!XtIsManaged(node->widget_ptr))
@@ -7095,8 +6490,6 @@ NodeIsActive(
 	}
     return(True);
 }
-
-
 /************************************************************************
  * GetNextUpLevelNode (Private Function)
  ************************************************************************/
@@ -7105,7 +6498,6 @@ GetNextUpLevelNode(
         CwidNode	start_node)
 {
 	CwidNode 	node;
-
 	node = start_node;
 	while (node)
 		{
@@ -7116,12 +6508,10 @@ GetNextUpLevelNode(
 		}
 	return(NULL);
 }
-
 static void ContainerResetDepths
 	(XmContainerConstraint	c)
 {
 	CwidNode 	node = c->node_ptr->child_ptr;
-
 	while (node)
 	{
 		Widget child = node->widget_ptr;
@@ -7131,7 +6521,6 @@ static void ContainerResetDepths
 		node = node->next_ptr;
 	}
 }
-
 static void FindMaxDepths(XmContainerConstraint	c, Widget w)
 {
 	XmContainerWidget cw = (XmContainerWidget)w;
@@ -7144,7 +6533,6 @@ static void FindMaxDepths(XmContainerConstraint	c, Widget w)
 		node = node->next_ptr;
 	}
 }
-
 /* true if newEntryParent (or any other widget) is a descendant of the target;
 ** determine by looking upward in the tree for a match. Returns True for the
 ** widget itself.
@@ -7162,14 +6550,12 @@ static Boolean ContainerIsDescendant
 	}
 	return False;
 }
-
 static void ContainerResequenceNodes
 	(XmContainerWidget cw, Widget entryParent)
 {
 	XmContainerConstraint c;
 	CwidNode 	node;
 	int count = 0;
-
 	if (entryParent)
 	{
  		c = GetContainerConstraint(entryParent);
@@ -7179,7 +6565,6 @@ static void ContainerResequenceNodes
 	{
 		node = cw->container.first_node;
 	}
-
 	while (node)
 	{
 		c = GetContainerConstraint(node->widget_ptr);
@@ -7187,8 +6572,6 @@ static void ContainerResequenceNodes
 		node = node->next_ptr;
 	}
 }
-
-
 /************************************************************************
  * StartSelect (Private Function)
  ************************************************************************/
@@ -7202,31 +6585,25 @@ StartSelect(
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			current_cwid;
 	XmContainerConstraint	c = NULL;
-
 	current_cwid = ObjectAtPoint(wid,event->xbutton.x,event->xbutton.y);
 	/* Handle ObjectAtPoint returning an outline button */
 	if ((current_cwid) && CtrOUTLINE_BUTTON(current_cwid))
 	  current_cwid = NULL;
-
 	cw->container.no_auto_sel_changes = False;
-
 	/*
 	 * Setup for marque drawing and multiclick time.
 	 * Will return true if XmNdefaultActionCallback invoked.
 	 */
         if (SetupDrag(wid, event, params, num_params))
 	    return;
-
 	if (CtrPolicyIsSINGLE(cw))
 		{
 		  /* CR 8400 - clicking on selected item should
 		     unselect in SINGLE mode */
-
 		  /* Fix by Metro Link.
 		     First, get the constraints if current_cwid is valid. */
 		  if (current_cwid)
 		    c = GetContainerConstraint(current_cwid);
-
 		  /* Now check to see if the *item* is selected. */
 		  if (current_cwid
 		      && current_cwid == cw->container.anchor_cwid &&
@@ -7271,7 +6648,6 @@ StartSelect(
 	cw->container.anchor_cwid = current_cwid;
 	if (cw->container.anchor_cwid)
 	  SetLocationCursor(cw->container.anchor_cwid);
-
 	if (CtrTechIsTOUCH_OVER(cw))
         {
 		if (cw->container.anchor_cwid == NULL)
@@ -7310,8 +6686,6 @@ StartSelect(
 		cw->container.marquee_drawn = True;
 		}
 }
-
-
 static  Boolean
 SetupDrag(Widget wid,
 	  XEvent *event,
@@ -7322,13 +6696,11 @@ SetupDrag(Widget wid,
   Widget		current_cwid;
   int			multi_click_time;
   Time			click_time;
-
   /* Figure out double clicking */
   current_cwid = ObjectAtPoint(wid,event->xbutton.x,event->xbutton.y);
   /* Handle ObjectAtPoint returning an outline button */
   if ((current_cwid) && CtrOUTLINE_BUTTON(current_cwid))
     current_cwid = NULL;
-
   multi_click_time = XtGetMultiClickTime(XtDisplay(wid));
   click_time = event->xbutton.time;
   if ((cw->container.anchor_cwid == current_cwid) &&
@@ -7340,9 +6712,7 @@ SetupDrag(Widget wid,
       cw->container.cancel_pressed = True;
       return(True);
     }
-
   cw->container.last_click_time = event->xbutton.time;
-
   cw->container.anchor_point.x = event->xbutton.x;
   cw->container.marquee_smallest.x = event->xbutton.x;
   cw->container.marquee_largest.x = event->xbutton.x;
@@ -7351,7 +6721,6 @@ SetupDrag(Widget wid,
   cw->container.marquee_largest.y = event->xbutton.y;
   return(False);
 }
-
 /************************************************************************
  * ProcessButtonMotion (Private Function)
  ************************************************************************/
@@ -7367,12 +6736,10 @@ ProcessButtonMotion(
 	Boolean			selection_changes = False;
 	Boolean			find_anchor = False;
 	XmContainerConstraint	c;
-
         current_cwid = ObjectAtPoint(wid,event->xbutton.x,event->xbutton.y);
 	/* Handle ObjectAtPoint returning an outline button */
 	if ((current_cwid) && CtrOUTLINE_BUTTON(current_cwid))
 	  current_cwid = NULL;
-
         if (CtrPolicyIsBROWSE(cw))
                 {
 		if ((cw->container.extend_pressed) ||
@@ -7423,7 +6790,6 @@ ProcessButtonMotion(
 	cw->container.marquee_drawn = True;
 	return(selection_changes);
 }
-
 /************************************************************************
  *
  *  ObjectAtPoint method
@@ -7440,21 +6806,17 @@ ObjectAtPoint(Widget wid, Position x, Position y)
 	Widget			prev_cwid;
 	XmGadget		g;
 	XmPointInTrait          pointInTrait ;
-
 	node = cw->container.first_node;
 	prev_cwid = NULL;
 	while (node) {
 	  XmContainerConstraint c;
-
 	  g = (XmGadget)node->widget_ptr;
 	  c = GetContainerConstraint((Widget) g);
-
 	  /* If we are in OUTLINE_DETAIL,  then check for hit in outline
 	     button,  if there is one */
 	  if (CtrLayoutIsOUTLINE_DETAIL(cw) &&
 	      c -> related_cwid != (Widget) NULL) {
 	    Widget outline_button = c -> related_cwid;
-
 	    pointInTrait = (XmPointInTrait)
 	      XmeTraitGet((XtPointer)XtClass(outline_button),XmQTpointIn) ;
 	    if (pointInTrait) {
@@ -7467,13 +6829,10 @@ ObjectAtPoint(Widget wid, Position x, Position y)
 		  (XtY(outline_button) + XtHeight(outline_button) >= y))
 		return(outline_button);
 	  }
-
 	  pointInTrait = (XmPointInTrait)
 	    XmeTraitGet((XtPointer)XtClass(node->widget_ptr),XmQTpointIn) ;
-
 	  if ((y < g->rectangle.y) && CtrLayoutIsOUTLINE_DETAIL(cw))
 	    return(prev_cwid);
-
 	  if (pointInTrait && ! CtrLayoutIsOUTLINE_DETAIL(cw)) {
 	    if (pointInTrait->pointIn(node->widget_ptr, x, y))
 	      return node->widget_ptr ;
@@ -7483,22 +6842,18 @@ ObjectAtPoint(Widget wid, Position x, Position y)
 		(g->rectangle.y <= y) &&
 		(y <= g->rectangle.y + g->rectangle.height))
 	      return(node->widget_ptr);
-
 	  if ((g->rectangle.y + g->rectangle.height > cw->core.height) &&
 	      CtrLayoutIsOUTLINE_DETAIL(cw))
 	    return(NULL);
-
 	  if ((g->rectangle.x <= x) &&
 	      (x <= g->rectangle.x + g->rectangle.width))
 	    prev_cwid = node->widget_ptr;
 	  else
 	    prev_cwid = NULL;
-
 	  node = GetNextNode(node);
 	}
 	return(NULL);
 }
-
 /************************************************************************
  * SelectAllCwids (Private Function)
  ************************************************************************/
@@ -7509,7 +6864,6 @@ SelectAllCwids(
         XmContainerWidget       cw = (XmContainerWidget)wid;
         CwidNode  	        node;
 	Boolean			selection_changes = False;
-
 	/*
 	 * Mark all visible cwids as XmSELECTED
 	 */
@@ -7522,7 +6876,6 @@ SelectAllCwids(
                 }
 	return(selection_changes);
 }
-
 /************************************************************************
  * DeselectAllCwids (Private Function)
  ************************************************************************/
@@ -7533,13 +6886,11 @@ DeselectAllCwids(
 	XmContainerWidget       cw = (XmContainerWidget)wid;
         CwidNode  	        node;
 	Boolean			selection_changes = False;
-
 	if (cw->container.selected_item_count == 0)
 		{
 		cw->container.selection_state = XmSELECTED;
 		return(False);
 		}
-
         /*
          * Mark all visible cwids as XmNOT_SELECTED
          */
@@ -7583,7 +6934,6 @@ DeselectAllCwids(
 	cw->container.selection_state = XmSELECTED;
 	return(selection_changes);
 }
-
 /************************************************************************
  * MarkCwid (Private Function)
  ************************************************************************/
@@ -7595,7 +6945,6 @@ MarkCwid(
     XmContainerWidget	cw = (XmContainerWidget)XtParent(cwid);
     XmContainerConstraint c = GetContainerConstraint(cwid);
     Boolean		selection_changes = False;
-
     if (XtIsSensitive(cwid))
       	{
       	if (cw->container.selection_state != c->selection_visual)
@@ -7613,7 +6962,6 @@ MarkCwid(
 	}
     return(selection_changes);
 }
-
 /************************************************************************
  * UnmarkCwidVisual (Private Function)
  ************************************************************************/
@@ -7623,7 +6971,6 @@ UnmarkCwidVisual(
 {
         XmContainerWidget       cw = (XmContainerWidget)XtParent(cwid);
         XmContainerConstraint   c = GetContainerConstraint(cwid);
-
 	/*
 	 * If the item visual matches its select state, or the item
 	 * visual doesn't match our current select/unselect action,
@@ -7642,7 +6989,6 @@ UnmarkCwidVisual(
                         cw->container.selected_item_count--;
 	return(True);
 }
-
 /************************************************************************
  * SetMarkedCwids (Private Function)
  ************************************************************************/
@@ -7653,7 +6999,6 @@ SetMarkedCwids(
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	CwidNode 		node;
         XmContainerConstraint	c;
-
 	node = cw->container.first_node;
         while (node)
                 {
@@ -7662,7 +7007,6 @@ SetMarkedCwids(
                 node = GetNextNode(node);
                 }
 }
-
 /************************************************************************
  * ResetMarkedCwids (Private Function)
  ************************************************************************/
@@ -7673,7 +7017,6 @@ ResetMarkedCwids(
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	CwidNode 		node;
 	Boolean			selection_changes = False;
-
 	node = cw->container.first_node;
 	while (node)
 		{
@@ -7682,7 +7025,6 @@ ResetMarkedCwids(
 		}
 	return(selection_changes);
 }
-
 /************************************************************************
  * MarkCwidsInRange (Private Function)
  ************************************************************************/
@@ -7700,7 +7042,6 @@ MarkCwidsInRange(
 	Boolean			marking_started = False;
 	Boolean			marking_ended = False;
 	Boolean			selection_changes = False;
-
 	node = cw->container.first_node;
 	if (cwid1 == NULL)
 		if ((cwid1 = cwid2) == NULL) return(False);
@@ -7725,7 +7066,6 @@ MarkCwidsInRange(
 		}
 	return(selection_changes);
 }
-
 /************************************************************************
  * MarkCwidsInMarquee (Private Function)
  ************************************************************************/
@@ -7739,7 +7079,6 @@ MarkCwidsInMarquee(
         CwidNode		node;
         Boolean                 selection_changes = False;
 	XmContainerConstraint	c;
-
 	node = cw->container.first_node;
 	while (node)
 		{
@@ -7766,7 +7105,6 @@ MarkCwidsInMarquee(
 		}
 	return(selection_changes);
 }
-
 /************************************************************************
  * InMarquee (Private Function)
  ************************************************************************/
@@ -7777,7 +7115,6 @@ InMarquee(
 	XmContainerWidget	cw = (XmContainerWidget)XtParent(cwid);
 	Position		cwid_x,cwid_y,cwid_xw,cwid_yh;
 	Dimension		width,height;
-
 	XtVaGetValues(cwid,XmNx,&cwid_x,XmNy,&cwid_y,
 		XmNwidth,&width,XmNheight,&height,NULL);
 	cwid_xw = cwid_x + (Position)width;
@@ -7787,7 +7124,6 @@ InMarquee(
 		(cwid_xw <= cw->container.marquee_end.x) &&
 		(cwid_yh <= cw->container.marquee_end.y));
 }
-
 /************************************************************************
  * RecalcMarquee (Private Function)
  ************************************************************************/
@@ -7802,7 +7138,6 @@ RecalcMarquee(
 	Dimension		width,height;
 	Position		anchor_x,anchor_y,anchor_xw,anchor_yh;
 	Position		cwid_x,cwid_y,cwid_xw,cwid_yh;
-
 	/*
 	 * Erase any marquee that is currently drawn.
 	 */
@@ -7837,14 +7172,12 @@ RecalcMarquee(
 				/* CR9113: adjust marquee to encompass child */
 				if(anchor_x > 0) anchor_x--, width++;
 				if(anchor_y > 0) anchor_y--, height++;
-
 				XtVaGetValues(cwid,XmNx,&cwid_x,XmNy,&cwid_y,
 					XmNwidth,&width,
 					XmNheight,&height,NULL);
 				/* CR9113: adjust marquee to encompass child */
 				if(cwid_x > 0) cwid_x--, width++;
 				if(cwid_y > 0) cwid_y--, height++;
-
 				cwid_xw = cwid_x + (Position)width;
 				cwid_yh = cwid_y + (Position)height;
 				cw->container.marquee_start.x =
@@ -7880,7 +7213,6 @@ RecalcMarquee(
 				/* CR9113: adjust marquee to encompass child */
 				if(cwid_x > 0) cwid_x--, width++;
 				if(cwid_y > 0) cwid_y--, height++;
-
 				cwid_xw = cwid_x + (Position)width;
 				cwid_yh = cwid_y + (Position)height;
 				if (x <= cwid_xw)
@@ -7935,7 +7267,6 @@ RecalcMarquee(
 	cw->container.marquee_largest.y = MAX(cw->container.marquee_end.y,
 				cw->container.marquee_largest.y);
 }
-
 /************************************************************************
  * DrawMarquee (Private Function)
  ************************************************************************/
@@ -7945,7 +7276,6 @@ DrawMarquee(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Dimension		width,height;
-
 	/*
 	 * If the container widget is realized, draw the marquee rectangle
 	 * using the gc parameter.
@@ -7960,7 +7290,6 @@ DrawMarquee(
 		cw->container.marquee_start.x,cw->container.marquee_start.y,
 		width,height);
 }
-
 /************************************************************************
  * KBSelect (Private Function)
  ************************************************************************/
@@ -7974,7 +7303,6 @@ KBSelect(
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	Widget			focus_cwid = XmGetFocusWidget(wid);
 	XmContainerConstraint	c;
-
 	if ((focus_cwid == wid) || (focus_cwid == NULL))
 		return;
 	cw->container.no_auto_sel_changes = False;
@@ -8002,7 +7330,6 @@ KBSelect(
 		if (cw->container.no_auto_sel_changes)
 			CallSelectCB(wid,event,XmAUTO_UNSET);
 }
-
 /************************************************************************
  * SetLocationCursor (Private Function)
  ************************************************************************/
@@ -8016,8 +7343,6 @@ SetLocationCursor(
 	return;
     XmProcessTraversal(cwid,XmTRAVERSE_CURRENT);
 }
-
-
 /************************************************************************
  * CalcNextLocationCursor (Private Function)
  ************************************************************************/
@@ -8029,7 +7354,6 @@ CalcNextLocationCursor(
     XmContainerWidget cw = (XmContainerWidget)wid;
     int move_to;
     Widget w;
-
     if (_XmConvertActionParamToRepTypeId((Widget) cw,
                          XmRID_CONTAINER_CURSOR_ACTION_PARAMS,
                          direction, False, &move_to) == False)
@@ -8037,7 +7361,6 @@ CalcNextLocationCursor(
         /* We couldn't convert the value. Just assume a value of _FIRST. */
         move_to = _FIRST;
     }
-
     if (CtrLayoutIsSPATIAL(cw))
         {
         if (move_to == _LEFT)
@@ -8075,8 +7398,6 @@ CalcNextLocationCursor(
 	    }
         }
 }
-
-
 /************************************************************************
  * RedirectTraversal (ControlTraversal Trait Method)
  ************************************************************************/
@@ -8091,7 +7412,6 @@ RedirectTraversal(
     XmContainerWidget cw;
     Widget to_widget = new_focus;
     Boolean wrap;
-
   if ( (old_focus == NULL)
     || (focus_policy != XmEXPLICIT)
     || (   direction != XmTRAVERSE_PREV
@@ -8102,15 +7422,12 @@ RedirectTraversal(
 	&& direction != XmTRAVERSE_DOWN
 	&& direction != XmTRAVERSE_HOME))
     return new_focus;
-
     if ( ((cw=(XmContainerWidget)XtParent(old_focus)) == NULL)
       || (!XmIsContainer(cw))
       || (CtrLayoutIsSPATIAL(cw))
       || (CtrOUTLINE_BUTTON(old_focus)))
 	return new_focus;
-
     wrap = !XmIsClipWindow((XmClipWindowWidget)XtParent(cw));
-
     switch (direction)
 	{
 	case XmTRAVERSE_PREV:
@@ -8129,12 +7446,8 @@ RedirectTraversal(
 	default:
 	    break;
 	} /* switch */
-
     return (to_widget ? to_widget : old_focus);
 }
-
-
-
 /************************************************************************
  * GetLastTraversableChild (Private Function)
  ************************************************************************/
@@ -8145,7 +7458,6 @@ GetLastTraversableChild(
     CwidNode last_node = NULL;
     CwidNode child_node;
     CwidNode recu_node;
-
     if (node && (child_node=node->child_ptr))
 	{
 	while (child_node)
@@ -8162,8 +7474,6 @@ GetLastTraversableChild(
 	}
     return(last_node);
 }
-
-
 /************************************************************************
  * GetPrevTraversableSibling (Private Function)
  ************************************************************************/
@@ -8173,7 +7483,6 @@ GetPrevTraversableSibling(
 {
     CwidNode prev_node = NULL;
     CwidNode recu_node;
-
     if (node && (prev_node=node->prev_ptr))
 	{
         while (prev_node)
@@ -8193,8 +7502,6 @@ GetPrevTraversableSibling(
 	}
     return(prev_node);
 }
-
-
 /************************************************************************
  * GetPrevTraversableUplevel (Private Function) (Private Function)
  ************************************************************************/
@@ -8205,7 +7512,6 @@ GetPrevTraversableUplevel(
     CwidNode 	prev_node = NULL;
     CwidNode 	parent_node;
     CwidNode 	recu_node;
-
     if (node && (parent_node=node->parent_ptr))
 	{
 	while (parent_node)
@@ -8226,11 +7532,8 @@ GetPrevTraversableUplevel(
 	    parent_node = parent_node->parent_ptr;
 	    }
 	}
-
     return(prev_node);
 }
-
-
 /************************************************************************
  * GetNextTraversableChild (Private Function)
  ************************************************************************/
@@ -8240,7 +7543,6 @@ GetNextTraversableChild(
 {
     CwidNode next_node = NULL;
     CwidNode recu_node;
-
     if (node && (next_node=node->child_ptr))
 	{
         while (next_node)
@@ -8260,8 +7562,6 @@ GetNextTraversableChild(
 	}
     return(next_node);
 }
-
-
 /************************************************************************
  * GetNextTraversableSibling (Private Function)
  ************************************************************************/
@@ -8271,7 +7571,6 @@ GetNextTraversableSibling(
 {
     CwidNode next_node = NULL;
     CwidNode recu_node;
-
     if (node && (next_node=node->next_ptr))
 	{
         while (next_node)
@@ -8291,8 +7590,6 @@ GetNextTraversableSibling(
 	}
     return(next_node);
 }
-
-
 /************************************************************************
  * GetNextTraversableUplevel (Private Function)
  ************************************************************************/
@@ -8302,7 +7599,6 @@ GetNextTraversableUplevel(
 {
     CwidNode 	next_node = NULL;
     CwidNode 	parent_node;
-
     if (node && (parent_node=node->parent_ptr))
 	{
 	while (parent_node && (next_node == NULL))
@@ -8312,11 +7608,8 @@ GetNextTraversableUplevel(
 		parent_node = parent_node->parent_ptr;
 	    }
 	}
-
     return(next_node);
 }
-
-
 /************************************************************************
  * GetNextTraversable (Private Function)
  ************************************************************************/
@@ -8325,22 +7618,15 @@ GetNextTraversable(
     CwidNode 		node)
 {
     CwidNode next_node = NULL;
-
     if (node == NULL)
 	return(NULL);
-
     next_node = GetNextTraversableChild(node);
-
     if (next_node == NULL)
         next_node = GetNextTraversableSibling(node);
-
     if (next_node == NULL)
         next_node = GetNextTraversableUplevel(node);
-
     return(next_node);
 }
-
-
 /************************************************************************
  * GetLastTraversalWidget (Private Function)
  ************************************************************************/
@@ -8353,15 +7639,11 @@ GetLastTraversalWidget(
     CwidNode    last_node = NULL;
     CwidNode    temp_node;
     CwidNode    child_node;
-
     if (cw == NULL || child == NULL)
         return(NULL);
-
     child_node = cw->container.first_node;
-
     while (child_node && !NodeIsActive(child_node))
         child_node = child_node->next_ptr;
-
     if (child_node)
         {
 	last_node = child_node;
@@ -8372,14 +7654,10 @@ GetLastTraversalWidget(
         if (last_node == NULL && XtIsSensitive(child_node->widget_ptr))
 	    last_node = child_node;
         }
-
     if (last_node && !XmIsTraversable(last_node->widget_ptr))
         last_node = NULL;
-
     return(last_node ? last_node->widget_ptr : NULL);
 }
-
-
 /************************************************************************
  * GetFirstTraversalWidget (Private Function)
  ************************************************************************/
@@ -8391,15 +7669,11 @@ GetFirstTraversalWidget(
 {
     CwidNode    first_node = NULL;
     CwidNode    child_node;
-
     if (cw == NULL || child == NULL)
         return(NULL);
-
     child_node = cw->container.first_node;
-
     while (child_node && !NodeIsActive(child_node))
         child_node = child_node->next_ptr;
-
     if (child_node)
 	{
         if (XtIsSensitive(child_node->widget_ptr))
@@ -8407,14 +7681,10 @@ GetFirstTraversalWidget(
         else
             first_node = GetNextTraversable(child_node);
 	}
-
     if (first_node && !XmIsTraversable(first_node->widget_ptr))
         first_node = NULL;
-
     return(first_node ? first_node->widget_ptr : NULL);
 }
-
-
 /************************************************************************
  * GetNextTraversalWidget (Private Function)
  ************************************************************************/
@@ -8426,24 +7696,16 @@ GetNextTraversalWidget(
 {
     CwidNode	child_node;
     CwidNode	next_node;
-
     if (cw == NULL || child == NULL)
 	return(NULL);
-
     child_node = GetContainerConstraint(child)->node_ptr;
-
     next_node = GetNextTraversable(child_node);
-
     if (next_node == NULL && wrap)
 	return(GetFirstTraversalWidget(cw, child, wrap));
-
     if (next_node && !XmIsTraversable(next_node->widget_ptr))
         next_node = NULL;
-
     return(next_node ? next_node->widget_ptr : NULL);
 }
-
-
 /************************************************************************
  * GetPrevTraversalWidget (Private Function)
  ************************************************************************/
@@ -8456,27 +7718,18 @@ GetPrevTraversalWidget(
     CwidNode	child_node;
     CwidNode	prev_node;
     CwidNode	last_node;
-
     if (cw == NULL || child == NULL)
 	return(NULL);
-
     child_node = GetContainerConstraint(child)->node_ptr;
-
     prev_node = GetPrevTraversableSibling(child_node);
-
     if (prev_node == NULL)
 	prev_node = GetPrevTraversableUplevel(child_node);
-
     if (prev_node == NULL && wrap)
 	return(GetLastTraversalWidget(cw, child, wrap));
-
     if (prev_node && !XmIsTraversable(prev_node->widget_ptr))
         prev_node = NULL;
-
     return(prev_node ? prev_node->widget_ptr : NULL);
 }
-
-
 /************************************************************************
  * MakeOutlineButton (Private Function)
  ************************************************************************/
@@ -8488,7 +7741,6 @@ MakeOutlineButton(
     XmContainerConstraint	c = GetContainerConstraint(cwid);
     XmContainerConstraint	obc;
     Pixmap			pm;
-
     cw->container.self = True;
     if (c->outline_state == XmEXPANDED)
 	pm = cw->container.expanded_state_pixmap;
@@ -8511,12 +7763,10 @@ MakeOutlineButton(
     XtManageChild(c->related_cwid);
     cw->container.create_cwid_type = CONTAINER_ICON;
     cw->container.self = False;
-
 #undef NO_PARENT
 #undef SWINDOW_PARENT
 #undef CWINDOW_PARENT
 }
-
 /************************************************************************
  * ChangeOutlineButton (Private Function)
  ************************************************************************/
@@ -8531,7 +7781,6 @@ ChangeOutlineButtons(
     Pixmap			pm;
     Arg				wargs[2];
     int				n;
-
     for (i = 0; i < cw->composite.num_children; i++)
 	{
 	cwid = cw->composite.children[i];
@@ -8550,8 +7799,6 @@ ChangeOutlineButtons(
 	    }
 	}
 }
-
-
 /************************************************************************
  * ExpandCwid (Private Function)
  ************************************************************************/
@@ -8564,14 +7811,12 @@ ExpandCwid(
     CwidNode 		node;
     CwidNode 		child_node;
     XtWidgetGeometry geo_desired ;
-
     if (c->related_cwid == NULL)
 	return;
     cw->container.self = True;
     XtVaSetValues(c->related_cwid,
 	XmNlabelPixmap,cw->container.expanded_state_pixmap,NULL);
     cw->container.self = False;
-
     c->outline_state = XmEXPANDED;
     node = c->node_ptr;
     child_node = node->child_ptr;
@@ -8583,17 +7828,13 @@ ExpandCwid(
 	c->visible_in_outline = True;
 	child_node = child_node->next_ptr;
 	}
-
     geo_desired.width = 0;
     geo_desired.height = 0;
-
     RequestOutlineDetail ((Widget)cw, &geo_desired);
-
     /* need to redraw lines correctly */
     if (XtIsRealized((Widget)cw))
 	XClearArea(XtDisplay((Widget)cw),XtWindow((Widget)cw),0,0,0,0,True);
 }
-
 /************************************************************************
  * CollapseCwid (Private Function)
  ************************************************************************/
@@ -8606,14 +7847,12 @@ CollapseCwid(
     CwidNode		node;
     CwidNode		child_node;
     XtWidgetGeometry geo_desired ;
-
     if (c->related_cwid == NULL)
 	return;
     cw->container.self = True;
     XtVaSetValues(c->related_cwid,
                 XmNlabelPixmap,cw->container.collapsed_state_pixmap,NULL);
     cw->container.self = False;
-
     c->outline_state = XmCOLLAPSED;
     node = c->node_ptr;
     child_node = node->child_ptr;
@@ -8628,17 +7867,13 @@ CollapseCwid(
 	    HideCwid(c->related_cwid);
 	child_node = child_node->next_ptr;
         }
-
     geo_desired.width = 0;
     geo_desired.height = 0;
-
     RequestOutlineDetail ((Widget)cw, &geo_desired);
-
     /* need to redraw lines correctly */
     if (XtIsRealized((Widget)cw))
 	XClearArea(XtDisplay((Widget)cw),XtWindow((Widget)cw),0,0,0,0,True);
 }
-
 /************************************************************************
  * CallActionCB (Private Function)
  ************************************************************************/
@@ -8650,7 +7885,6 @@ CallActionCB(
 	XmContainerWidget	cw = (XmContainerWidget)XtParent(cwid);
 	XmContainerConstraint	c = GetContainerConstraint(cwid);
 	XmContainerSelectCallbackStruct	cbs;
-
 	if (!(XtHasCallbacks((Widget)cw,XmNdefaultActionCallback)
 				== XtCallbackHasSome))
 		return;
@@ -8673,7 +7907,6 @@ CallActionCB(
 	XtCallCallbackList((Widget)cw,cw->container.default_action_cb,&cbs);
 	XtFree((char*)cbs.selected_items);
 }
-
 /************************************************************************
  * CallSelectCB (Private Function)
  ************************************************************************/
@@ -8685,13 +7918,11 @@ CallSelectCB(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
 	XmContainerSelectCallbackStruct	cbs;
-
 	if (!(XtHasCallbacks(wid,XmNselectionCallback)
 				== XtCallbackHasSome))
 		return;
 	cbs.selected_items = NULL;
 	cbs.selected_item_count = 0;
-
 	switch(cw->container.selection_policy)
 	{
 	case	XmSINGLE_SELECT:
@@ -8724,7 +7955,6 @@ CallSelectCB(
 	if (cbs.selected_items)
 		XtFree((char*)cbs.selected_items);
 }
-
 /************************************************************************
  * GetSelectedCwids (Private Function)
  ************************************************************************/
@@ -8737,10 +7967,8 @@ GetSelectedCwids(
 	CwidNode 		node;
 	unsigned int		tally = 0;
 	XmContainerConstraint	c;
-
 	if (cw->container.selected_item_count == 0)
 		return(NULL);
-
 	selected_items = (WidgetList)XtMalloc
 			(cw->container.selected_item_count * sizeof(Widget));
 	/*
@@ -8790,7 +8018,6 @@ GetSelectedCwids(
 		}
 	return(NULL);
 }
-
 /************************************************************************
  * GetSelectedItems (Private Synthetic Resource Function)
  ************************************************************************/
@@ -8801,11 +8028,9 @@ GetSelectedItems(
 	XtArgVal	*value)
 {
 	WidgetList	selected_items;
-
 	selected_items = GetSelectedCwids(wid);
 	*value = (XtArgVal)selected_items;
 }
-
 /************************************************************************
  * CompareInts (Private qsort Function)
  ************************************************************************/
@@ -8816,13 +8041,11 @@ CompareInts(
 {
         int     i1 = * (int *)p1;
         int     i2 = * (int *)p2;
-
 	/*
 	 * A "qsort" function that simply compares two integers
 	 */
         return(i1 - i2);
 }
-
 /************************************************************************
  * Isqrt (Private Function)
  ************************************************************************/
@@ -8834,7 +8057,6 @@ Isqrt(
      * Integer Square Root (using Newton's Method) - rounded up
      */
     int current_answer,next_trial;
-
     if (n <= 1)
         return(n);
     current_answer = n;
@@ -8848,7 +8070,6 @@ Isqrt(
         current_answer++;
     return(current_answer);
 }
-
 /************************************************************************
  * GainPrimary (Private Function)
  ************************************************************************/
@@ -8858,7 +8079,6 @@ GainPrimary(
 	Time	timestamp)
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
-
 	if (cw->container.primary_ownership == XmOWN_NEVER)
 		return;
 	if ((cw->container.primary_ownership == XmOWN_POSSIBLE_MULTIPLE) &&
@@ -8871,7 +8091,6 @@ GainPrimary(
 		return;
 	cw->container.have_primary = XmePrimarySource(wid,timestamp);
 }
-
 /************************************************************************
  * ConvertRefuse (Private Function)
  ************************************************************************/
@@ -8886,7 +8105,6 @@ ConvertRefuse(
 	cs->type = 0;
         cs->status = XmCONVERT_REFUSE;
 }
-
 /************************************************************************
  * DragStart (Private Function)
  ************************************************************************/
@@ -8909,18 +8127,15 @@ DragStart(
     DragIconInfo	dragIconInfo = NULL;
     int			offsetx, offsety;
     Pixel		bg, fg;
-
     cw->container.transfer_timer_id = 0;
     if (cw->container.transfer_action == NULL)
 	return;		/* No context record, shouldn't happen */
-
     cw->container.druggee = ObjectAtPoint((Widget)cw,
 			cw->container.transfer_action->event->xbutton.x,
 			cw->container.transfer_action->event->xbutton.y);
     /* Handle ObjectAtPoint returning an outline button */
     if ((cw->container.druggee) && CtrOUTLINE_BUTTON(cw->container.druggee))
       cw->container.druggee = NULL;
-
     if (cw->container.druggee == NULL)
 	{
 	  XtFree((char*)cw->container.transfer_action->event);
@@ -8929,13 +8144,10 @@ DragStart(
 	  return;
 	}
     g = (XmGadget)cw->container.druggee;
-
     offsetx = cw->container.transfer_action->event->xbutton.x - g->rectangle.x;
     offsety = cw->container.transfer_action->event->xbutton.y - g->rectangle.y;
-
     cw->container.drag_offset_x = offsetx;
     cw->container.drag_offset_y = offsety;
-
     /* Get the pixmap if there is one from the IconGadget or other
        Container savvy object */
     n = 0;
@@ -8951,12 +8163,10 @@ DragStart(
 	}
     XtGetValues(cw->container.druggee,wargs,n);
     vis_state = GetVisualEmphasis(cw->container.druggee);
-
     _XmProcessLock();
     if (dragIconInfoContext == 0)
       dragIconInfoContext = XUniqueContext();
     _XmProcessUnlock();
-
     /* Note that there is one of these per display.  That way we
        can just do a XtSetValues and not recreate the state
        XmDragIcon constantly */
@@ -8968,7 +8178,6 @@ DragStart(
       GC tempgc;
       Arg args[10];
       int midpoint = DRAG_STATE_SIZE / 2, farpoint = DRAG_STATE_SIZE;
-
       dragIconInfo = (DragIconInfo) XtMalloc(sizeof(DragIconInfoRec));
       XSaveContext(XtDisplay(cw), None, dragIconInfoContext,
 		   (char*) dragIconInfo);
@@ -8997,12 +8206,10 @@ DragStart(
       XtSetArg(args[n], XmNwidth, farpoint); n++;
       dragIconInfo -> state = XmCreateDragIcon(diParent, "stateIcon", args, n);
     }
-
     n = 0;
     XtSetArg(wargs[n],XmNforeground,&fg); n++;
     XtSetArg(wargs[n],XmNbackground,&bg); n++;
     XtGetValues((Widget) g, wargs, n);
-
     /* We're dragging from an icon gadget or other object with a
        pixmap obtained above.  We use the pixmap as the source icon.
        The actual XmDragIcon object is cached to avoid constantly
@@ -9014,7 +8221,6 @@ DragStart(
 	  unsigned int rh, rw;
 	  int rd;
 	  int ix, iy;
-
 	  _XmIconGadgetIconPos((Widget) g, &ix, &iy);
 	  /* Fix the offset amounts */
 	  offsetx -= ix;
@@ -9023,11 +8229,9 @@ DragStart(
 	  XtSetArg(wargs[n],XmNoffsetX, offsetx); n++;
 	  XtSetArg(wargs[n],XmNoffsetY, offsety); n++;
 	  XtSetValues(dragIconInfo->state, wargs, n);
-
 	  /* now create or fix up the source icon */
 	  XmeGetPixmapData(XtScreen(cw), pixmap,
 			   NULL, &rd, NULL, NULL, NULL, NULL, &rw, &rh);
-
 	  n = 0;
 	  XtSetArg(wargs[n],XmNpixmap,pixmap); n++;
 	  XtSetArg(wargs[n],XmNmask,mask); n++;
@@ -9051,7 +8255,6 @@ DragStart(
         loc_data = NULL;
     else
         loc_data = (XtPointer)cw->container.druggee;
-
     XtSetArg(wargs[n],XmNcursorBackground,bg); n++;
     XtSetArg(wargs[n],XmNcursorForeground,fg); n++;
     dc = XmeDragSource((Widget)cw,loc_data,
@@ -9063,7 +8266,6 @@ DragStart(
     XtFree((char*)cw->container.transfer_action);
     cw->container.transfer_action = NULL;
 }
-
 /************************************************************************
  * OutlineButtonCallback (Private Callback Function)
  ************************************************************************/
@@ -9076,14 +8278,11 @@ OutlineButtonCallback(
     Widget cwid = (Widget)client_data;
     XmAnyCallbackStruct * pbcbs = (XmAnyCallbackStruct *)call_data;
     XmContainerConstraint c = GetContainerConstraint(cwid);
-
     if (c->outline_state == XmCOLLAPSED)
 	OutlineButtonAction(cwid, XmEXPANDED, pbcbs->event);
     else /* if (c->outline_state == XmEXPANDED) */
 	OutlineButtonAction(cwid, XmCOLLAPSED, pbcbs->event);
 }
-
-
 /************************************************************************
  * OutlineButtonAction (Private Callback Function)
  ************************************************************************/
@@ -9098,7 +8297,6 @@ OutlineButtonAction(
     XmGadget g = (XmGadget)cwid;
     XmContainerOutlineCallbackStruct cbs;
     unsigned char state_before_callback;
-
     /*
      * call the XmNoutlineChangedCallback callback
      */
@@ -9110,46 +8308,36 @@ OutlineButtonAction(
     cbs.item = cwid;
     cbs.new_outline_state = new_state;
     c->outline_state = new_state;
-
     state_before_callback = c->outline_state;
     XtCallCallbackList((Widget)cw,cw->container.outline_cb,&cbs);
-
     /* in case user destroys child  */
     if (g->object.being_destroyed)
 	return;
-
     /* verify value returned */
     if ((cbs.new_outline_state != XmCOLLAPSED)
      && (cbs.new_outline_state != XmEXPANDED))
 	cbs.new_outline_state = state_before_callback;
-
     /* in case user has called SetValues in XmNoutlineChangedCallback */
     if (c->outline_state != state_before_callback)
 	return;
-
     /* the user wants to go back to the previous state */
     if (cbs.new_outline_state != state_before_callback)
 	{
 	c->outline_state = cbs.new_outline_state;
 	return;
 	}
-
     if (c->outline_state == XmCOLLAPSED)
 	    CollapseCwid(cwid);
     else
 	    ExpandCwid(cwid);
 }
-
-
 /************************************************************************
  * MoveItemCallback (Private Callback Function)
  ************************************************************************/
-
 /* Create the multipliers to try the surrounding spots for cell or
    grid mode */
 static int x_deltas[] = { 0, -1,  0,  1, -1,  1, -1,  0,  1};
 static int y_deltas[] = { 0, -1, -1, -1,  0,  0,  1,  1,  1};
-
 static  void
 MoveItemCallback(
         Widget          wid,
@@ -9166,29 +8354,23 @@ MoveItemCallback(
   XmDestinationCallbackStruct *   ds =
     _XmTransferGetDestinationCBStruct(cs->transfer_id);
   XPoint			*offset = (XPoint *) cs -> value;
-
   if (cwid == NULL)
     return;
   c = GetContainerConstraint(cwid);
-
   /* Offset the dropspot by the returned data */
   dropspot->x -= offset->x;
   dropspot->y -= offset->y;
-
   if (((XmContainerWidgetClass)
        XtClass(wid))->container_class.test_fit_item ) {
     XmSpatialTestFitProc test_item;
     Boolean status;
-
     test_item = (XmSpatialTestFitProc)
       ((XmContainerWidgetClass) XtClass(wid))
 	->container_class.test_fit_item;
-
     if (CtrSpatialStyleIsGRID(wid) || CtrSpatialStyleIsCELLS(wid)) {
       int pos;
       int dw, dh;
       int trial_x = 0, trial_y =0 ;
-
       if (CtrViewIsLARGE_ICON(wid) || CtrViewIsANY_ICON(wid)) {
 	dw = cw -> container.real_large_cellw;
 	dh = cw -> container.real_large_cellh;
@@ -9196,19 +8378,16 @@ MoveItemCallback(
 	dw = cw -> container.real_small_cellw;
 	dh = cw -> container.real_small_cellh;
       }
-
       /* Try all the array positions until one is found.  Start
 	 at the center and work around left to right,  top to
 	 bottom */
       status = False;
-
       for(pos = 0; pos < 9; pos++) {
 	trial_x = dropspot->x + x_deltas[pos] * dw;
 	trial_y = dropspot->y + y_deltas[pos] * dh;
 	status = test_item(wid, cwid, trial_x, trial_y);
 	if (status) break;
       }
-
       if (status && pos < 9) {
 	dropspot->x = trial_x;
 	dropspot->y = trial_y;
@@ -9217,7 +8396,6 @@ MoveItemCallback(
       /* Just try the direct spot */
       status = test_item(wid,cwid,dropspot->x,dropspot->y);
     }
-
     if (! status) {
       XmTransferDone(cs->transfer_id,XmTRANSFER_DONE_FAIL);
       return;
@@ -9228,12 +8406,10 @@ MoveItemCallback(
     (*((XmContainerWidgetClass)
        XtClass(wid))->container_class.remove_item)
       (wid,cwid);
-
   /* Clear old placement */
   XClearArea(XtDisplay(wid),XtWindow(wid),
 	     cwid->core.x,cwid->core.y,
 	     cwid->core.width,cwid->core.height, True);
-
   if (CtrSpatialStyleIsGRID(cw) || CtrSpatialStyleIsCELLS(cw))
     /*
      * Fake the include model so it pays attention to core.x & core.y
@@ -9242,14 +8418,11 @@ MoveItemCallback(
       save_include_model = cw->container.include_model;
       cw->container.include_model = XmCLOSEST;
     }
-
   XmeConfigureObject(cwid, dropspot->x, dropspot->y,
 		     cwid->core.width, cwid->core.height,
 		     cwid->core.border_width);
-
   c->user_x = dropspot->x;
   c->user_y = dropspot->y;
-
   if (((XmContainerWidgetClass)
        XtClass(wid))->container_class.place_item)
     (*((XmContainerWidgetClass)
@@ -9267,7 +8440,6 @@ MoveItemCallback(
 		    (XtCallbackProc)NULL,NULL,
 		    XtLastTimestampProcessed(XtDisplay(wid)));
 }
-
 /************************************************************************
  * DropDoneCallback (Private Callback Function)
  ************************************************************************/
@@ -9278,17 +8450,13 @@ DropDoneCallback(
         XtPointer       call_data)	/* unused */
 {
         XmContainerWidget       cw = (XmContainerWidget)client_data;
-
 	cw->container.drag_context = (Widget) NULL;
 }
-
-
 /************************************************************************
  *									*
  * EnterHandler - If there is a drag timeout, remove it.		*
  *									*
  ************************************************************************/
-
 static void
 EnterHandler(
 	Widget wid,
@@ -9297,21 +8465,18 @@ EnterHandler(
         Boolean	*continue_to_dispatch)
 {
     XmContainerWidget       cw = (XmContainerWidget)wid;
-
     cw->container.LeaveDir = 0;
     if (cw->container.scroll_proc_id) {
 	XtRemoveTimeOut(cw->container.scroll_proc_id);
 	cw->container.scroll_proc_id = 0;
     }
 }
-
 /************************************************************************
  *									*
  * LeaveHandler - If the user leaves in Marquee Select mode set up a    *
  *	          timer to scroll the container.			*
  *									*
  ************************************************************************/
-
 static void
 LeaveHandler(
 	Widget wid,
@@ -9323,10 +8488,8 @@ LeaveHandler(
     Widget                  clip = XtParent(wid);
     int rx, ry;			/* event coords relative to the clip */
     int interval = 200;
-
     if (!cw->container.selecting || CtrPolicyIsSINGLE(cw))
 	return;
-
     /* first lets see which direction we left the window */
     cw->container.LeaveDir = 0;
     rx = event->xcrossing.x + (int)wid->core.x;
@@ -9339,13 +8502,11 @@ LeaveHandler(
 	cw->container.LeaveDir |= TOPLEAVE;
     else if (ry >= (int)clip->core.height)
 	cw->container.LeaveDir |= BOTTOMLEAVE;
-
     /* then add a TimeOutProc to handle the auto scroll */
     cw->container.scroll_proc_id =
 	XtAppAddTimeOut(XtWidgetToApplicationContext(wid),
 			(unsigned long) interval, ScrollProc, (XtPointer) cw);
 }
-
 /************************************************************************
  *									*
  * ScrollProc - timer proc that scrolls the container if the user has   *
@@ -9353,7 +8514,6 @@ LeaveHandler(
  *		been released, call the standard click stuff.		*
  *									*
  ************************************************************************/
-
 static void
 ScrollProc(
 	XtPointer closure,
@@ -9370,12 +8530,9 @@ ScrollProc(
     int interval = 100;
     XEvent event;
     Boolean selection_changes;
-
     if (cw->container.scroll_proc_id == 0)
 	return;
-
     cw->container.scroll_proc_id = 0;
-
     /* since we've got reparented by the clip the scrollFrame is 2 levels up */
     sf = XtParent(XtParent((Widget)cw));
     scrollFrameTrait = (XmScrollFrameTrait)
@@ -9383,7 +8540,6 @@ ScrollProc(
     if (!(scrollFrameTrait &&
 	  (scrollFrameTrait->getInfo(sf,NULL,&nav,&num_nav_list))))
 	return;			/* this should never happen */
-
     for (i=0; i < num_nav_list; i++, nav++) {
 	navigatorTrait = (XmNavigatorTrait)
 	    XmeTraitGet((XtPointer)XtClass(*nav), XmQTnavigator);
@@ -9392,7 +8548,6 @@ ScrollProc(
 	    NavValue | NavIncrement | NavMinimum | NavMaximum | NavSliderSize;
 	bzero(&nav_data,sizeof(XmNavigatorDataRec));
 	navigatorTrait->getValue(*nav, &nav_data);
-
 	/* compute the new position */
 	if (cw->container.LeaveDir & BOTTOMLEAVE)
 	    nav_data.value.y += nav_data.increment.y;
@@ -9402,7 +8557,6 @@ ScrollProc(
 	    nav_data.value.x -= nav_data.increment.x;
 	else if (cw->container.LeaveDir & RIGHTLEAVE)
 	    nav_data.value.x += nav_data.increment.x;
-
 	if (nav_data.value.y < nav_data.minimum.y)
 	    nav_data.value.y = nav_data.minimum.y;
 	if (nav_data.value.y > (nav_data.maximum.y - nav_data.slider_size.y))
@@ -9411,12 +8565,10 @@ ScrollProc(
 	    nav_data.value.x = nav_data.minimum.x;
 	if (nav_data.value.x > (nav_data.maximum.x - nav_data.slider_size.x))
 	    nav_data.value.x = nav_data.maximum.x - nav_data.slider_size.x;
-
 	/* and set it  */
 	nav_data.valueMask = NavValue;
         navigatorTrait->setValue(*nav, &nav_data, True);
     }
-
     /* fake a button event using the last event coordinates */
     event.xbutton.x = cw->container.last_xmotion_x - (int)wid->core.x;
     event.xbutton.y = cw->container.last_xmotion_y - (int)wid->core.y;
@@ -9424,13 +8576,11 @@ ScrollProc(
     cw->container.no_auto_sel_changes |= selection_changes;
     if (CtrIsAUTO_SELECT(cw) && selection_changes)
 	CallSelectCB(wid, NULL, XmAUTO_MOTION);
-
     /* reset timer proc */
     cw->container.scroll_proc_id =
 	XtAppAddTimeOut(XtWidgetToApplicationContext(wid),
 			(unsigned long) interval, ScrollProc, (XtPointer) cw);
 }
-
 /************************************************************************
  * XmContainerCut (Public Function)
  ************************************************************************/
@@ -9441,10 +8591,8 @@ XmContainerCut(
 {
 	XmContainerWidget       cw = (XmContainerWidget)wid;
 	Boolean			status;
-
 	_XmWidgetToAppContext(wid);
 	_XmAppLock(app);
-
 	if (cw->container.selected_item_count == 0) {
 		_XmAppUnlock(app);
                 return(False);
@@ -9457,7 +8605,6 @@ XmContainerCut(
 	_XmAppUnlock(app);
 	return(status);
 }
-
 /************************************************************************
  * XmContainerCopy (Public Function)
  ************************************************************************/
@@ -9468,10 +8615,8 @@ XmContainerCopy(
 {
 	XmContainerWidget	cw = (XmContainerWidget)wid;
         Boolean         	status;
-
 	_XmWidgetToAppContext(wid);
 	_XmAppLock(app);
-
 	if (cw->container.selected_item_count == 0) {
 		_XmAppUnlock(app);
 		return(False);
@@ -9484,7 +8629,6 @@ XmContainerCopy(
 	_XmAppUnlock(app);
         return(status);
 }
-
 /************************************************************************
  * XmContainerPaste (Public Function)
  ************************************************************************/
@@ -9494,7 +8638,6 @@ XmContainerPaste(
 {
 	return(XmeClipboardSink(wid,XmCOPY,NULL));
 }
-
 /************************************************************************
  * XmContainerCopyLink (Public Function)
  ************************************************************************/
@@ -9505,10 +8648,8 @@ XmContainerCopyLink(
 {
         XmContainerWidget       cw = (XmContainerWidget)wid;
         Boolean         	status;
-
 	_XmWidgetToAppContext(wid);
 	_XmAppLock(app);
-
 	if (cw->container.selected_item_count == 0) {
 		_XmAppUnlock(app);
                 return(False);
@@ -9521,7 +8662,6 @@ XmContainerCopyLink(
 	_XmAppUnlock(app);
         return(status);
 }
-
 /************************************************************************
  * XmContainerPasteLink (Public Function)
  ************************************************************************/
@@ -9531,7 +8671,6 @@ XmContainerPasteLink(
 {
 	return(XmeClipboardSink(wid,XmLINK,NULL));
 }
-
 /************************************************************************
  * XmContainerGetItemChildren (Public Function)
  ************************************************************************/
@@ -9547,9 +8686,7 @@ XmContainerGetItemChildren(
 	CwidNode	first_child_node;
 	WidgetList	clist;
 	int		i,clist_count;
-
 	_XmWidgetToAppContext(wid);
-
 	_XmAppLock(app);
 	if (item == NULL)
 		{
@@ -9594,7 +8731,6 @@ XmContainerGetItemChildren(
 	_XmAppUnlock(app);
 	return(clist_count);
 }
-
 /************************************************************************
  *  XmContainerRelayout (Public Function)
  ************************************************************************/
@@ -9604,11 +8740,9 @@ XmContainerRelayout(
 {
     XmContainerWidget	cw = (XmContainerWidget)wid;
     _XmWidgetToAppContext(wid);
-
     if (!XtIsRealized(wid))
       /* Don't need to relayout,  will be right anyway */
       return;
-
     _XmAppLock(app);
     if (CtrLayoutIsOUTLINE_DETAIL(cw)) {
 	_XmAppUnlock(app);
@@ -9622,18 +8756,15 @@ XmContainerRelayout(
 	_XmAppUnlock(app);
 	return;
     }
-
     /* Reset grid/cell information */
     (*((XmContainerWidgetClass)XtClass(wid))->container_class.place_item)
            					(wid,NULL,ANY_FIT);
     /* Relayout - no geometry changes */
     LayoutSpatial(wid,False,NULL);
-
     if (XtIsRealized(wid))
 	XClearArea(XtDisplay(wid),XtWindow(wid),0,0,0,0,True);
     _XmAppUnlock(app);
 }
-
 /************************************************************************
  *  XmContainerReorder (Public Function)
  ************************************************************************/
@@ -9648,9 +8779,7 @@ XmContainerReorder(
 	Widget			pcwid;
 	int *			pi_list;
 	int			i, pi_count;
-
 	_XmWidgetToAppContext(wid);
-
 	if (cwid_count <= 1)
 		return;
 	_XmAppLock(app);
@@ -9682,7 +8811,6 @@ XmContainerReorder(
 			}
 		}
 	XtFree((char*)pi_list);
-
 	/*
 	 * Outline & Detail Layouts must always remain in order.
 	 */
@@ -9695,7 +8823,6 @@ XmContainerReorder(
 	     XClearArea(XtDisplay(wid),XtWindow(wid),0,0,0,0,True);
 	_XmAppUnlock(app);
 }
-
 /************************************************************************
  *  XmCreateContainer (Public Function)
  ************************************************************************/
@@ -9711,7 +8838,6 @@ XmCreateContainer(
 	 */
    return(XtCreateWidget(name,xmContainerWidgetClass,parent,arglist,argcount));
 }
-
 Widget
 XmVaCreateContainer(
         Widget parent,
@@ -9721,12 +8847,9 @@ XmVaCreateContainer(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmContainerWidgetClass,
@@ -9735,7 +8858,6 @@ XmVaCreateContainer(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedContainer(
         Widget parent,
@@ -9745,11 +8867,9 @@ XmVaCreateManagedContainer(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmContainerWidgetClass,

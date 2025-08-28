@@ -28,8 +28,6 @@ static char rcsid[] = "$XConsortium: Region.c /main/10 1995/07/13 17:46:45 drk $
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 /*
  * The functions in this file implement the XmRegion abstraction
  * An XmRegion is simply an area, as the name
@@ -55,23 +53,17 @@ static char rcsid[] = "$XConsortium: Region.c /main/10 1995/07/13 17:46:45 drk $
  * rectangles in the same places (of the same width, of course). This maintains
  * the y-x-banding that's so nice to have...
  */
-
 #include <Xm/XmosP.h>  /* for memmove */
 #include "XmI.h"
 #include "RegionI.h"
 #include "MessagesI.h"
-
 #define MESSAGE1	_XmMMsgRegion_0000
-
 typedef void (*XmOverlapProc)( XmRegion, XmRegionBox *, XmRegionBox *,
 			       XmRegionBox *, XmRegionBox *,
                                short, short) ;
 typedef void (*XmNonOverlapProc)( XmRegion, XmRegionBox *, XmRegionBox *,
                                short, short) ;
-
-
 /********    Static Function Declarations    ********/
-
 static void miSetExtents(
                         XmRegion pReg) ;
 static void Compress(
@@ -165,23 +157,18 @@ static void ShrinkRegion(
 			XmRegion t,
 			int dx,
 			int dy) ;
-
 /********    End Static Function Declarations    ********/
-
-
 /************************************************************************
  *
  *  _XmRegionCreateSize()
  *
  *  Creates a new, empty, XmRegion of specified size.
  ***********************************************************************/
-
 XmRegion
 _XmRegionCreateSize(
     long	size )
 {
     XmRegion temp;
-
     if (!(temp = ( XmRegion )XtMalloc(sizeof (XmRegionRec))))
 	return (XmRegion) NULL;
     if (!(temp->rects = (XmRegionBox *)
@@ -197,27 +184,23 @@ _XmRegionCreateSize(
     temp->size = size;
     return( temp );
 }
-
 /************************************************************************
  *
  *  _XmRegionCreate()
  *
  *  Creates a new, empty, XmRegion.
  ***********************************************************************/
-
 XmRegion
 _XmRegionCreate( void )
 {
     return (_XmRegionCreateSize(1L));
 }
-
 /************************************************************************
  *
  *  _XmRegionDestroy ()
  *
  *  Frees the memory associated with an XmRegion.
  ***********************************************************************/
-
 void
 _XmRegionDestroy(
     XmRegion	r )
@@ -225,14 +208,12 @@ _XmRegionDestroy(
     XtFree( (char *) r->rects );
     XtFree( (char *) r );
 }
-
 /************************************************************************
  *
  *  _XmRegionClear ()
  *
  *  Empties an XmRegion.
  ***********************************************************************/
-
 void
 _XmRegionClear(
     XmRegion	r )
@@ -243,58 +224,49 @@ _XmRegionClear(
     r->extents.x2 = 0;
     r->extents.y2 = 0;
 }
-
 /************************************************************************
  *
  *  _XmRegionIsEmpty ()
  *
  *  Check to see if an XmRegion is empty.
  ***********************************************************************/
-
 Boolean
 _XmRegionIsEmpty(
     XmRegion	r )
 {
     return ISEMPTY(r);
 }
-
 /************************************************************************
  *
  *  _XmRegionEqual ()
  *
  *  Check to see if two XmRegions are equal.
  ***********************************************************************/
-
 Boolean
 _XmRegionEqual(
     register XmRegion	r1,
     register XmRegion	r2 )
 {
     register int i;
-
     if (r1->numRects != r2->numRects) {
 	return( False );
     }
     else if (ISEMPTY(r1)) {
 	return( True );
     }
-
     /*
      *  R1 and r2 have the same nonzero number of rectangles.
      *  Check the extents.
      */
-
     else if (r1->extents.x1 != r2->extents.x1 ||
              r1->extents.x2 != r2->extents.x2 ||
              r1->extents.y1 != r2->extents.y1 ||
              r1->extents.y2 != r2->extents.y2) {
 	return( False );
     }
-
     /*
      *  The extents match.  Check each rectangle.
      */
-
     else {
 	for (i=0; i < r1->numRects; i++) {
     	    if (r1->rects[i].x1 != r2->rects[i].x1 ||
@@ -307,14 +279,12 @@ _XmRegionEqual(
     }
     return( True );
 }
-
 /************************************************************************
  *
  *  _XmRegionPointInRegion ()
  *
  *  Check to see if a point is in a XmRegion.
  ***********************************************************************/
-
 Boolean
 _XmRegionPointInRegion(
     XmRegion	r,
@@ -322,7 +292,6 @@ _XmRegionPointInRegion(
     int		y )
 {
     register int i;
-
     if (ISEMPTY(r)) {
         return(False);
     }
@@ -336,14 +305,12 @@ _XmRegionPointInRegion(
     }
     return(False);
 }
-
 /************************************************************************
  *
  *  _XmRegionOffset ()
  *
  *  Adds an (x, y) offset to an XmRegion.
  ***********************************************************************/
-
 void
 _XmRegionOffset(
     XmRegion	r,
@@ -352,10 +319,8 @@ _XmRegionOffset(
 {
     register long		nbox;
     register XmRegionBox	*pbox;
-
     pbox = r->rects;
     nbox = r->numRects;
-
     while(nbox--)
     {
 	pbox->x1 += x;
@@ -369,7 +334,6 @@ _XmRegionOffset(
     r->extents.y1 += y;
     r->extents.y2 += y;
 }
-
 /************************************************************************
  *
  *  _XmRegionGetExtents ()
@@ -377,7 +341,6 @@ _XmRegionOffset(
  *  Returns an XmRegion's extents in an XRectangle provided by the caller.
  *  Assumes the extents are current.
  ***********************************************************************/
-
 void
 _XmRegionGetExtents(
     XmRegion	r,
@@ -388,21 +351,18 @@ _XmRegionGetExtents(
     rect->width = r->extents.x2 - r->extents.x1;
     rect->height = r->extents.y2 - r->extents.y1;
 }
-
 /************************************************************************
  *
  *  _XmRegionGetNumRectangles ()
  *
  *  Returns the number of rectangles used by an XmRegion.
  ***********************************************************************/
-
 long
 _XmRegionGetNumRectangles(
     XmRegion 	r )
 {
     return (r->numRects);
 }
-
 /************************************************************************
  *
  *  _XmRegionGetRectangles ()
@@ -410,7 +370,6 @@ _XmRegionGetNumRectangles(
  *  Allocates and returns a list and count of XRectangles representing
  *  an XmRegion.
  ***********************************************************************/
-
 void
 _XmRegionGetRectangles(
     XmRegion 	r,
@@ -420,12 +379,10 @@ _XmRegionGetRectangles(
     register XmRegionBox	*pBox = r->rects;
     register XRectangle		*pRect;
     register long		count = r->numRects;
-
     if (!(*nrects = count)) {
 	*rects = NULL;
 	return;
     }
-
     pRect = *rects = (XRectangle *)
 	XtMalloc ((Cardinal) (sizeof (XRectangle) * count));
     if (pRect) {
@@ -437,7 +394,6 @@ _XmRegionGetRectangles(
         }
     }
 }
-
 /************************************************************************
  *
  *  _XmRegionSetGCRegion ()
@@ -445,7 +401,6 @@ _XmRegionGetRectangles(
  *  Sets the clip-mask of a given GC to an XmRegion.
  *  Graphics output is disabled if the XmRegion is empty.
  ***********************************************************************/
-
 void
 _XmRegionSetGCRegion(
     Display		*dpy,
@@ -456,16 +411,13 @@ _XmRegionSetGCRegion(
 {
     XRectangle	*rects;
     long	nrects;
-
     _XmRegionGetRectangles (r, &rects, &nrects);
-
     if (rects || !nrects) {	/* not if XtMalloc failed */
 	XSetClipRectangles(dpy, gc, x_origin, y_origin,
 			   rects, (int) nrects, YXBanded);
     }
     XtFree ((char *) rects);
 }
-
 /************************************************************************
  *
  *  miSetExtents()
@@ -481,7 +433,6 @@ _XmRegionSetGCRegion(
  *	The region's 'extents' structure is overwritten.
  *
  ***********************************************************************/
-
 static void
 miSetExtents(
     XmRegion  	pReg )
@@ -489,7 +440,6 @@ miSetExtents(
     register XmRegionBox	*pBox;
     register XmRegionBox	*pBoxEnd;
     register XmRegionBox	*pExtents;
-
     if (ISEMPTY(pReg))
     {
 	pReg->extents.x1 = 0;
@@ -498,11 +448,9 @@ miSetExtents(
 	pReg->extents.y2 = 0;
 	return;
     }
-
     pExtents = &pReg->extents;
     pBox = pReg->rects;
     pBoxEnd = &pBox[pReg->numRects - 1];
-
     /*
      * Since pBox is the first rectangle in the region, it must have the
      * smallest y1 and since pBoxEnd is the last rectangle in the region,
@@ -510,12 +458,10 @@ miSetExtents(
      * x2 from  pBox and pBoxEnd, resp., as good things to initialize them
      * to...
      */
-
     pExtents->x1 = pBox->x1;
     pExtents->y1 = pBox->y1;
     pExtents->x2 = pBoxEnd->x2;
     pExtents->y2 = pBoxEnd->y2;
-
     assert(pExtents->y1 < pExtents->y2);
     while (pBox <= pBoxEnd)
     {
@@ -531,27 +477,23 @@ miSetExtents(
     }
     assert(pExtents->x1 < pExtents->x2);
 }
-
 /************************************************************************
  *
  *  _XmRegionComputeExtents ()
  *
  *  Compute and set the extents of an XmRegion.
  ***********************************************************************/
-
 void
 _XmRegionComputeExtents(
     XmRegion	r )
 {
     miSetExtents (r);
 }
-
 /************************************************************************
  *
  *  miRegionCopy()
  *
  ***********************************************************************/
-
 static void
 miRegionCopy(
     register XmRegion	dstrgn,
@@ -575,16 +517,13 @@ miRegionCopy(
         dstrgn->extents.y1 = rgn->extents.y1;
         dstrgn->extents.x2 = rgn->extents.x2;
         dstrgn->extents.y2 = rgn->extents.y2;
-
 	memmove((char *) dstrgn->rects, (char *) rgn->rects,
 	      (int) (rgn->numRects * sizeof(XmRegionBox)));
     }
 }
-
 /*======================================================================
  *	    Generic Region Operator
  *====================================================================*/
-
 /*-
  *-----------------------------------------------------------------------
  * miCoalesce --
@@ -616,12 +555,9 @@ miCoalesce(
     long    	  		prevNumRects; /* Number of rectangles in
 						 previous band */
     long    	  		bandY1;	 /* Y1 coordinate for current band */
-
     pRegEnd = &pReg->rects[pReg->numRects];
-
     pPrevBox = &pReg->rects[prevStart];
     prevNumRects = curStart - prevStart;
-
     /*
      * Figure out how many rectangles are in the current band. Have to do
      * this because multiple bands could have been added in miRegionOp
@@ -635,7 +571,6 @@ miCoalesce(
     {
 	pCurBox++;
     }
-
     if (pCurBox != pRegEnd)
     {
 	/*
@@ -652,7 +587,6 @@ miCoalesce(
 	curStart = pRegEnd - pReg->rects;
 	pRegEnd = pReg->rects + pReg->numRects;
     }
-
     if ((curNumRects == prevNumRects) && (curNumRects != 0)) {
 	pCurBox -= curNumRects;
 	/*
@@ -681,11 +615,9 @@ miCoalesce(
 		pCurBox++;
 		prevNumRects -= 1;
 	    } while (prevNumRects != 0);
-
 	    pReg->numRects -= curNumRects;
 	    pCurBox -= curNumRects;
 	    pPrevBox -= curNumRects;
-
 	    /*
 	     * The bands may be merged, so set the bottom y of each box
 	     * in the previous band to that of the corresponding box in
@@ -698,7 +630,6 @@ miCoalesce(
 		pCurBox++;
 		curNumRects -= 1;
 	    } while (curNumRects != 0);
-
 	    /*
 	     * If only one band was added to the region, we have to backup
 	     * curStart to the start of the previous band.
@@ -720,12 +651,10 @@ miCoalesce(
 		    *pPrevBox++ = *pCurBox++;
 		} while (pCurBox != pRegEnd);
 	    }
-
 	}
     }
     return (curStart);
 }
-
 /*-
  *-----------------------------------------------------------------------
  * miRegionOp --
@@ -778,7 +707,6 @@ miRegionOp(
 						 * band */
     short     	  	bot;	    	    	/* Bottom of non-overlapping
 						 * band */
-
     /*
      * Initialization:
      *	set r1, r2, r1End and r2End appropriately, preserve the important
@@ -789,9 +717,7 @@ miRegionOp(
     r2 = reg2->rects;
     r1End = r1 + reg1->numRects;
     r2End = r2 + reg2->numRects;
-
     oldRects = newReg->rects;
-
     /*
      * Mark the "new" region empty and
      * allocate a reasonable number of rectangles for it. The idea
@@ -800,16 +726,13 @@ miRegionOp(
      * have to worry about using too much memory. I hope to be able to
      * nuke the XtRealloc() at the end of this function eventually.
      */
-
     newReg->numRects = 0;
     newReg->size = MAX(reg1->numRects,reg2->numRects) * 2;
-
     if (! (newReg->rects = (XmRegionBox *)
 	   XtMalloc ((Cardinal) (sizeof(XmRegionBox) * newReg->size)))) {
 	newReg->size = 0;
 	return;
     }
-
     /*
      * Initialize ybot and ytop.
      * In the upcoming loop, ybot and ytop serve different functions depending
@@ -827,7 +750,6 @@ miRegionOp(
 	ybot = reg1->extents.y1;
     else
 	ybot = reg2->extents.y1;
-
     /*
      * prevBand serves to mark the start of the previous band so rectangles
      * can be coalesced into larger rectangles. qv. miCoalesce, above.
@@ -838,11 +760,9 @@ miRegionOp(
      * array of rectangles.
      */
     prevBand = 0;
-
     do
     {
 	curBand = newReg->numRects;
-
 	/*
 	 * This algorithm proceeds one source-band (as opposed to a
 	 * destination band, which is determined by where the two regions
@@ -855,13 +775,11 @@ miRegionOp(
 	{
 	    r1BandEnd++;
 	}
-
 	r2BandEnd = r2;
 	while ((r2BandEnd != r2End) && (r2BandEnd->y1 == r2->y1))
 	{
 	    r2BandEnd++;
 	}
-
 	/*
 	 * First handle the band that doesn't intersect, if any.
 	 *
@@ -874,31 +792,26 @@ miRegionOp(
 	{
 	    top = MAX(r1->y1,ybot);
 	    bot = MIN(r1->y2,r2->y1);
-
 	    if ((top != bot) && nonOverlap1Func)
 	    {
 		(* nonOverlap1Func) (newReg, r1, r1BandEnd, top, bot);
 	    }
-
 	    ytop = r2->y1;
 	}
 	else if (r2->y1 < r1->y1)
 	{
 	    top = MAX(r2->y1,ybot);
 	    bot = MIN(r2->y2,r1->y1);
-
 	    if ((top != bot) && nonOverlap2Func)
 	    {
 		(* nonOverlap2Func) (newReg, r2, r2BandEnd, top, bot);
 	    }
-
 	    ytop = r1->y1;
 	}
 	else
 	{
 	    ytop = r1->y1;
 	}
-
 	/*
 	 * If any rectangles got added to the region, try and coalesce them
 	 * with rectangles from the previous band. Note we could just do
@@ -909,7 +822,6 @@ miRegionOp(
 	{
 	    prevBand = miCoalesce (newReg, prevBand, curBand);
 	}
-
 	/*
 	 * Now see if we've hit an intersecting band. The two bands only
 	 * intersect if ybot > ytop
@@ -919,14 +831,11 @@ miRegionOp(
 	if (ybot > ytop)
 	{
 	    (* overlapFunc) (newReg, r1, r1BandEnd, r2, r2BandEnd, ytop, ybot);
-
 	}
-
 	if (newReg->numRects != curBand)
 	{
 	    prevBand = miCoalesce (newReg, prevBand, curBand);
 	}
-
 	/*
 	 * If we've finished with a band (y2 == ybot) we skip forward
 	 * in the region to the next band.
@@ -940,7 +849,6 @@ miRegionOp(
 	    r2 = r2BandEnd;
 	}
     } while ((r1 != r1End) && (r2 != r2End));
-
     /*
      * Deal with whichever region still has rectangles left.
      */
@@ -976,12 +884,10 @@ miRegionOp(
 	    r2 = r2BandEnd;
 	} while (r2 != r2End);
     }
-
     if (newReg->numRects != curBand)
     {
 	(void) miCoalesce (newReg, prevBand, curBand);
     }
-
     /*
      * A bit of cleanup. To keep regions from growing without bound,
      * we shrink the array of rectangles to match the new number of
@@ -995,7 +901,6 @@ miRegionOp(
 	if (newReg->numRects)
 	{
 	    XmRegionBox *prev_rects = newReg->rects;
-
 	    newReg->size = newReg->numRects;
 	    newReg->rects = (XmRegionBox *) XtRealloc ((char *) newReg->rects,
 			     (Cardinal) (sizeof(XmRegionBox) * newReg->size));
@@ -1015,7 +920,6 @@ miRegionOp(
     }
     XtFree ((char *) oldRects);
 }
-
 /*======================================================================
  *	    Region Intersection
  *====================================================================*/
@@ -1045,14 +949,11 @@ miIntersectO(
     register short  		x1;
     register short  		x2;
     register XmRegionBox	*pNextRect;
-
     pNextRect = &pReg->rects[pReg->numRects];
-
     while ((r1 != r1End) && (r2 != r2End))
     {
 	x1 = MAX(r1->x1,r2->x1);
 	x2 = MIN(r1->x2,r2->x2);
-
 	/*
 	 * If there's any overlap between the two rectangles, add that
 	 * overlap to the new region.
@@ -1063,7 +964,6 @@ miIntersectO(
 	if (x1 < x2)
 	{
 	    assert(y1<y2);
-
 	    MEMCHECK(pReg, pNextRect, pReg->rects);
 	    pNextRect->x1 = x1;
 	    pNextRect->y1 = y1;
@@ -1073,7 +973,6 @@ miIntersectO(
 	    pNextRect++;
 	    assert(pReg->numRects <= pReg->size);
 	}
-
 	/*
 	 * Need to advance the pointers. Shift the one that extends
 	 * to the right the least, since the other still has a chance to
@@ -1094,7 +993,6 @@ miIntersectO(
 	}
     }
 }
-
 /************************************************************************
  *
  *  _XmRegionIntersect ()
@@ -1102,7 +1000,6 @@ miIntersectO(
  *  Intersect two regions and place the result into a new region.
  *  The new region is overwritten.
  ***********************************************************************/
-
 void
 _XmRegionIntersect(
     XmRegion 	  	reg1,
@@ -1112,14 +1009,12 @@ _XmRegionIntersect(
    /*
     *  Check for trivial reject.
     */
-
     if ( ISEMPTY(reg1) || ISEMPTY(reg2) ||
 	(!EXTENTCHECK(&reg1->extents, &reg2->extents)))
         newReg->numRects = 0;
     else
 	miRegionOp (newReg, reg1, reg2,
     		miIntersectO, NULL, NULL);
-
     /*
      * Can't alter newReg's extents before we call miRegionOp because
      * it might be one of the source regions and miRegionOp depends
@@ -1127,10 +1022,8 @@ _XmRegionIntersect(
      * way there's no checking against rectangles that will be nuked
      * due to coalescing, so we have to examine fewer rectangles.
      */
-
     miSetExtents(newReg);
 }
-
 /************************************************************************
  *
  *  _XmRegionIntersectRectWithRegion ()
@@ -1138,7 +1031,6 @@ _XmRegionIntersect(
  *  Intersect a rectangle with a region and place the result into a new
  *  region.  The new region is overwritten.
  ***********************************************************************/
-
 void
 _XmRegionIntersectRectWithRegion(
     XRectangle		*rect,
@@ -1146,7 +1038,6 @@ _XmRegionIntersectRectWithRegion(
     XmRegion		dest )
 {
     XmRegionRec	region;
-
     region.rects = &region.extents;
     region.numRects = 1;
     region.extents.x1 = rect->x;
@@ -1154,14 +1045,11 @@ _XmRegionIntersectRectWithRegion(
     region.extents.x2 = rect->x + rect->width;
     region.extents.y2 = rect->y + rect->height;
     region.size = 1;
-
     _XmRegionIntersect(&region, source, dest);
 }
-
 /*======================================================================
  *	    Region Union
  *====================================================================*/
-
 /*-
  *-----------------------------------------------------------------------
  * miUnionNonO --
@@ -1187,11 +1075,8 @@ miUnionNonO(
     register short  		y2 )
 {
     register XmRegionBox	*pNextRect;
-
     pNextRect = &pReg->rects[pReg->numRects];
-
     assert(y1 <= y2);
-
     while (r != rEnd)
     {
 	assert(r->x1 < r->x2);
@@ -1202,12 +1087,10 @@ miUnionNonO(
 	pNextRect->y2 = y2;
 	pReg->numRects += 1;
 	pNextRect++;
-
 	assert(pReg->numRects<=pReg->size);
 	r++;
     }
 }
-
 /*-
  *-----------------------------------------------------------------------
  * miUnionO --
@@ -1223,7 +1106,6 @@ miUnionNonO(
  *
  *-----------------------------------------------------------------------
  */
-
 static void
 miUnionO(
     XmRegion		pReg,
@@ -1235,9 +1117,7 @@ miUnionO(
     register short		y2 )
 {
     register XmRegionBox	*pNextRect;
-
     pNextRect = &pReg->rects[pReg->numRects];
-
 #define MERGERECT(r) \
     if ((pReg->numRects != 0) &&  \
 	(pNextRect[-1].y1 == y1) &&  \
@@ -1262,7 +1142,6 @@ miUnionO(
     }  \
     assert(pReg->numRects<=pReg->size);\
     r++;
-
     assert (y1<y2);
     while ((r1 != r1End) && (r2 != r2End))
     {
@@ -1275,7 +1154,6 @@ miUnionO(
 	    MERGERECT(r2);
 	}
     }
-
     if (r1 != r1End)
     {
 	do
@@ -1288,7 +1166,6 @@ miUnionO(
 	MERGERECT(r2);
     }
 }
-
 /************************************************************************
  *
  *  _XmRegionUnion ()
@@ -1296,7 +1173,6 @@ miUnionO(
  *  Union two regions and place the result into a new region.
  *  The new region is overwritten.
  ***********************************************************************/
-
 void
 _XmRegionUnion(
     XmRegion 	  reg1,
@@ -1304,7 +1180,6 @@ _XmRegionUnion(
     XmRegion 	  newReg )
 {
     /*  checks all the simple cases */
-
     /*
      * XmRegion 1 and 2 are the same or region 1 is empty
      */
@@ -1313,7 +1188,6 @@ _XmRegionUnion(
 	miRegionCopy(newReg, reg2);
 	return;
     }
-
     /*
      * if nothing to union (region 2 empty)
      */
@@ -1322,7 +1196,6 @@ _XmRegionUnion(
 	miRegionCopy(newReg, reg1);
 	return;
     }
-
     /*
      * Region 1 completely subsumes region 2
      */
@@ -1335,7 +1208,6 @@ _XmRegionUnion(
 	miRegionCopy(newReg, reg1);
 	return;
     }
-
     /*
      * Region 2 completely subsumes region 1
      */
@@ -1348,16 +1220,13 @@ _XmRegionUnion(
 	miRegionCopy(newReg, reg2);
 	return;
     }
-
     miRegionOp (newReg, reg1, reg2, miUnionO,
     		miUnionNonO, miUnionNonO);
-
     newReg->extents.x1 = MIN(reg1->extents.x1, reg2->extents.x1);
     newReg->extents.y1 = MIN(reg1->extents.y1, reg2->extents.y1);
     newReg->extents.x2 = MAX(reg1->extents.x2, reg2->extents.x2);
     newReg->extents.y2 = MAX(reg1->extents.y2, reg2->extents.y2);
 }
-
 /************************************************************************
  *
  *  _XmRegionUnionRectWithRegion ()
@@ -1365,7 +1234,6 @@ _XmRegionUnion(
  *  Union a rectangle with a region and place the result into a new
  *  region.  The new region is overwritten.
  ***********************************************************************/
-
 void
 _XmRegionUnionRectWithRegion(
     XRectangle		*rect,
@@ -1374,7 +1242,6 @@ _XmRegionUnionRectWithRegion(
 {
     XmRegionRec	region;
     XmRegionBox box[1];
-
 /*
     region.rects = &region.extents;
 */
@@ -1385,14 +1252,11 @@ _XmRegionUnionRectWithRegion(
     region.rects->x2 = region.extents.x2 = rect->x + rect->width;
     region.rects->y2 = region.extents.y2 = rect->y + rect->height;
     region.size = 1;
-
     _XmRegionUnion(&region, source, dest);
 }
-
 /*======================================================================
  * 	    	  Region Subtraction
  *====================================================================*/
-
 /*-
  *-----------------------------------------------------------------------
  * miSubtractNonO --
@@ -1416,11 +1280,8 @@ miSubtractNonO1(
     register short   		y2 )
 {
     register XmRegionBox	*pNextRect;
-
     pNextRect = &pReg->rects[pReg->numRects];
-
     assert(y1<y2);
-
     while (r != rEnd)
     {
 	assert(r->x1<r->x2);
@@ -1431,13 +1292,10 @@ miSubtractNonO1(
 	pNextRect->y2 = y2;
 	pReg->numRects += 1;
 	pNextRect++;
-
 	assert(pReg->numRects <= pReg->size);
-
 	r++;
     }
 }
-
 /*-
  *-----------------------------------------------------------------------
  * miSubtractO --
@@ -1464,12 +1322,9 @@ miSubtractO(
 {
     register XmRegionBox	*pNextRect;
     register int  		x1;
-
     x1 = r1->x1;
-
     assert(y1<y2);
     pNextRect = &pReg->rects[pReg->numRects];
-
     while ((r1 != r1End) && (r2 != r2End))
     {
 	if (r2->x2 <= x1)
@@ -1519,9 +1374,7 @@ miSubtractO(
 	    pNextRect->y2 = y2;
 	    pReg->numRects += 1;
 	    pNextRect++;
-
 	    assert(pReg->numRects<=pReg->size);
-
 	    x1 = r2->x2;
 	    if (x1 >= r1->x2)
 	    {
@@ -1563,7 +1416,6 @@ miSubtractO(
 	    }
 	}
     }
-
     /*
      * Add remaining minuend rectangles to region.
      */
@@ -1577,16 +1429,13 @@ miSubtractO(
 	pNextRect->y2 = y2;
 	pReg->numRects += 1;
 	pNextRect++;
-
 	assert(pReg->numRects<=pReg->size);
-
 	if (++r1 != r1End)
 	{
 	    x1 = r1->x1;
 	}
     }
 }
-
 /************************************************************************
  *
  *  _XmRegionSubtract ()
@@ -1594,7 +1443,6 @@ miSubtractO(
  *  Subtract one region from another and place the result into a new
  *  region.  The new region is overwritten.
  ***********************************************************************/
-
 void
 _XmRegionSubtract(
     XmRegion 	  	regM,
@@ -1608,10 +1456,8 @@ _XmRegionSubtract(
 	miRegionCopy(regD, regM);
         return;
     }
-
     miRegionOp (regD, regM, regS, miSubtractO,
     		miSubtractNonO1, NULL);
-
     /*
      * Can't alter newReg's extents before we call miRegionOp because
      * it might be one of the source regions and miRegionOp depends
@@ -1619,10 +1465,8 @@ _XmRegionSubtract(
      * way there's no checking against rectangles that will be nuked
      * due to coalescing, so we have to examine fewer rectangles.
      */
-
     miSetExtents (regD);
 }
-
 /************************************************************************
  *
  *  Utility procedure Compress:
@@ -1644,7 +1488,6 @@ _XmRegionSubtract(
  * scratch regions, so that we don't have to allocate them on every
  * call.
  ***********************************************************************/
-
 static void
 Compress(
     XmRegion		r,
@@ -1655,11 +1498,9 @@ Compress(
     int			grow )
 {
     register unsigned shift = 1;
-
     miRegionCopy (s, r);
     while (dx) {
         if (dx & shift) {
-
 	    if (xdir) {
 		_XmRegionOffset (r, -(int)shift, 0);
 	    }
@@ -1672,7 +1513,6 @@ Compress(
 	    else {
 		_XmRegionIntersect (r,s,r);
 	    }
-
             dx -= shift;
             if (!dx) break;
         }
@@ -1692,7 +1532,6 @@ Compress(
         shift <<= 1;
     }
 }
-
 /************************************************************************
  *
  *  ShrinkRegion ()
@@ -1700,7 +1539,6 @@ Compress(
  *  Shrink an XmRegion dx and dy in the x and y directions, respectively.
  *  The width and height are reduced by 2dx and 2dy, respectively.
  ***********************************************************************/
-
 static void
 ShrinkRegion(
     XmRegion	r,
@@ -1710,7 +1548,6 @@ ShrinkRegion(
     int		dy )
 {
     int	grow;
-
     if ((grow = (dx < 0)) != 0) {
 	dx = -dx;
     }
@@ -1725,7 +1562,6 @@ ShrinkRegion(
     }
     _XmRegionOffset (r, dx, dy);
 }
-
 /************************************************************************
  *
  *  _XmRegionShrink ()
@@ -1733,7 +1569,6 @@ ShrinkRegion(
  *  Shrink an XmRegion dx and dy in the x and y directions, respectively.
  *  The width and height are reduced by 2dx and 2dy, respectively.
  ***********************************************************************/
-
 void
 _XmRegionShrink(
     XmRegion	r,
@@ -1741,7 +1576,6 @@ _XmRegionShrink(
     int		dy )
 {
     XmRegion	s, t;
-
     if (!dx && !dy) {
         return;
     }
@@ -1752,13 +1586,10 @@ _XmRegionShrink(
         _XmRegionDestroy (s);
 	return;
     }
-
     ShrinkRegion (r, s, t, dx, dy);
-
     _XmRegionDestroy (s);
     _XmRegionDestroy (t);
 }
-
 /************************************************************************
  *
  *  CreateLeftShadow ()
@@ -1766,7 +1597,6 @@ _XmRegionShrink(
  *  Create a one-pixel thick left shadow segment for the current XY-
  *  banded rectangle.
  ***********************************************************************/
-
 static void
 CreateLeftShadow(
     XmRegionBox		*here,
@@ -1777,7 +1607,6 @@ CreateLeftShadow(
 {
     Position	start_y = here->y1 + 1;
     Position	end_y = here->y2;
-
     if (*segmi >= *segmc) {
 	*segml = (XSegment *) XtRealloc ((char *)(*segml),
 		 (Cardinal) ((sizeof(XSegment) << 1) * (*segmc)));
@@ -1788,7 +1617,6 @@ CreateLeftShadow(
 	}
 	*segmc *= 2;
     }
-
     if (mask & BL_OPEN) {
         end_y--;
     }
@@ -1799,7 +1627,6 @@ CreateLeftShadow(
 	(*segmi)++;
     }
 }
-
 /************************************************************************
  *
  *  CreateRightShadow ()
@@ -1807,7 +1634,6 @@ CreateLeftShadow(
  *  Create a one-pixel thick right shadow segment for the current XY-
  *  banded rectangle.
  ***********************************************************************/
-
 static void
 CreateRightShadow(
     XmRegionBox		*here,
@@ -1818,7 +1644,6 @@ CreateRightShadow(
 {
     Position	start_y = here->y1;
     Position	end_y = here->y2;
-
     if (*segmi >= *segmc) {
 	*segml = (XSegment *) XtRealloc ((char *)(*segml),
 		 (Cardinal) ((sizeof(XSegment) << 1) * (*segmc)));
@@ -1829,7 +1654,6 @@ CreateRightShadow(
 	}
 	*segmc *= 2;
     }
-
     if (!(mask & TR_MATCH)) {
         start_y++;
     }
@@ -1843,14 +1667,12 @@ CreateRightShadow(
 	(*segmi)++;
     }
 }
-
 /************************************************************************
  *
  *  CreateTopShadow ()
  *
  *  Create a one-pixel thick top shadow segment between two points.
  ***********************************************************************/
-
 static void
 CreateTopShadow(
     Position		start_x,
@@ -1871,7 +1693,6 @@ CreateTopShadow(
 	}
 	*segmc *= 2;
     }
-
     if (mask & TL_OPEN) {
         start_x++;
     }
@@ -1882,14 +1703,12 @@ CreateTopShadow(
 	(*segmi)++;
     }
 }
-
 /************************************************************************
  *
  *  CreateBottomShadow ()
  *
  *  Create a one-pixel thick bottom shadow segment between two points.
  ***********************************************************************/
-
 static void
 CreateBottomShadow(
     Position		start_x,
@@ -1910,7 +1729,6 @@ CreateBottomShadow(
 	}
 	*segmc *= 2;
     }
-
     if (!(mask & BL_OPEN)) {
         start_x++;
     }
@@ -1921,7 +1739,6 @@ CreateBottomShadow(
 	(*segmi)++;
     }
 }
-
 /************************************************************************
  *
  *  _XmRegionDrawShadow ()
@@ -1957,7 +1774,6 @@ CreateBottomShadow(
  *  highlightThickness.
  *
  ***********************************************************************/
-
 void
 _XmRegionDrawShadow(
     Display		*display,
@@ -1988,21 +1804,17 @@ _XmRegionDrawShadow(
     XmRegionBox		*rects;
     long		nrects = region->numRects;
     int min_y, i ;
-
     if (!d || ISEMPTY(region) || !shadow_thick) {
 	return;
     }
-
     if (shadow_type == XmSHADOW_IN) {
         tmp_gc = top_gc ;
         top_gc = bottom_gc ;  /* switch top and bottom shadows */
         bottom_gc = tmp_gc ;
     }
-
     /*
      *  Create scratch regions and segment arrays.
      */
-
     if (!(scReg1 = _XmRegionCreate())) {
 	XmeWarning(NULL, MESSAGE1);
 	return;
@@ -2019,7 +1831,6 @@ _XmRegionDrawShadow(
 	return;
     }
     miRegionCopy (workReg, region);
-
     /* Currently this code crashes when given negative y and
        some big thickness. (it crashes below, the line that accesses
        'above' in:   while (above < end_above && above->x2 <= x1) { ...
@@ -2038,9 +1849,7 @@ _XmRegionDrawShadow(
 	    workReg->rects[i].y2 += -min_y;
 	}
     }
-
     topSegmCount = botSegmCount = (int) (nrects * shadow_thick << 1);
-
     if (!(topSegms = (XSegment *)
 	    XtMalloc(sizeof (XSegment) * topSegmCount))) {
 	XmeWarning(NULL, MESSAGE1);
@@ -2059,25 +1868,19 @@ _XmRegionDrawShadow(
 	return;
     }
     curTopSeg = curBotSeg = 0;
-
     /*
      *  Remove the border from workReg.
      */
-
     if (workReg->numRects && border_thick) {
 	ShrinkRegion (workReg, scReg1, scReg2, border_thick, border_thick);
     }
-
     /*
      *  Draw the shadows one pixel wide at a time.
      */
-
     while ((nrects = workReg->numRects) && shadow_thick) {
-
 	/*
 	 *  Set up the initial banded rectangle pointers.
 	 */
-
 	rects = workReg->rects;
 	end_all = &rects[nrects];
 	end_above = NULL;
@@ -2086,78 +1889,61 @@ _XmRegionDrawShadow(
             end_below++;
 	}
 	y = -1;
-
 	/*
 	 *  Scan through the bands
 	 */
-
 	while (end_here != end_all) {
-
 	    /*
 	     *  Shift down one band.
 	     *  valid:  y, end_above, here, end_here, end_below, end_all
 	     */
-
             above = end_above;		/* in case not there yet */
             below = end_below;		/* in case not there yet */
-
 	    end_above = end_here;
             if (end_here->y1 != y) {	/* gap between bands */
 	        above = end_above;
 	    }
-
             y = here->y2;
-
 	    end_here = end_below;
             while (end_below != end_all && end_below->y1 == end_here->y1) {
                 end_below++;
             }
-
             if ((end_here == end_all) || (end_here->y1 != y)) { /* gap */
 	        below = end_below;
 	    }
-
             /*
 	     *  Process this band.
 	     */
-
             while (here < end_here) {
                 x1 = here->x1;
                 x2 = here->x2;
 	        mask = 0;
-
 	        /*
 	         *  Determine the left shadow.
 	         */
-
 	        while (above < end_above && above->x2 <= x1) {
 		    above++;
 	        }
 	        while (below < end_below && below->x2 <= x1) {
 		    below++;
 	        }
-
                 if (above < end_above && above->x1 < x1) {
 		    mask |= TL_OPEN;
 	        }
                 else if (above < end_above && above->x1 == x1) {
 		    mask |= TL_MATCH;
 	        }
-
                 if (below < end_below && below->x1 < x1) {
 		    mask |= BL_OPEN;
 	        }
                 else if (below < end_below && below->x1 == x1) {
 		    mask |= BL_MATCH;
 	        }
-
 	        CreateLeftShadow (here, mask, &topSegms, &topSegmCount,
 			          &curTopSeg);
-
 	        /*
 	         *  Determine the top shadow(s).
 	         */
-
 	        if (mask & (TL_OPEN | TL_MATCH)) {
 	            draw = False;
 	        }
@@ -2165,7 +1951,6 @@ _XmRegionDrawShadow(
 	            draw = True;
 	        }
                 start_x = x1;
-
 	        while (above < end_above && above->x2 < x2) {
 		    if (draw) {
 	                CreateTopShadow (start_x, above->x1, here,
@@ -2178,7 +1963,6 @@ _XmRegionDrawShadow(
                     start_x = above->x2;
 		    above++;
 	        }
-
 	        if (above < end_above && above->x2 == x2) {
 		    if (draw) {
 	                CreateTopShadow (start_x, above->x1, here,
@@ -2201,11 +1985,9 @@ _XmRegionDrawShadow(
 				         &topSegms, &topSegmCount, &curTopSeg);
 		    }
 	        }
-
 	        /*
 	         *  Determine the bottom shadow(s).
 	         */
-
 	        if (mask & (BL_OPEN | BL_MATCH)) {
 	            draw = False;
 	        }
@@ -2213,7 +1995,6 @@ _XmRegionDrawShadow(
 	            draw = True;
 	        }
                 start_x = x1;
-
 	        while (below < end_below && below->x2 < x2) {
 		    if (draw) {
 	                CreateBottomShadow (start_x, below->x1, here,
@@ -2226,7 +2007,6 @@ _XmRegionDrawShadow(
                     start_x = below->x2;
 		    below++;
 	        }
-
 	        if (below < end_below && below->x2 == x2) {
 		    if (draw) {
 	                CreateBottomShadow (start_x, below->x1, here,
@@ -2250,25 +2030,20 @@ _XmRegionDrawShadow(
 					    &curBotSeg);
 		    }
 	        }
-
 	        /*
 	         *  Determine the right shadow.
 	         */
-
 	        CreateRightShadow (here, mask, &botSegms, &botSegmCount,
 			           &curBotSeg);
 	        here++;
             }
         }
-
 	ShrinkRegion (workReg, scReg1, scReg2, 1, 1);
 	shadow_thick--;
     }
-
     /*
      *  Draw the segments.
      */
-
     /* reincorporate the negative offset taken away one page up. CR 9141 */
     if (min_y < 0) {
 	for (i = 0 ; i < curTopSeg; i++) {
@@ -2280,17 +2055,14 @@ _XmRegionDrawShadow(
 	    botSegms[i].y2 += min_y;
 	}
     }
-
     XDrawSegments (display, d, top_gc, topSegms, curTopSeg);
     XDrawSegments (display, d, bottom_gc, botSegms, curBotSeg);
-
     XtFree((char *) botSegms);
     XtFree((char *) topSegms);
     _XmRegionDestroy (workReg);
     _XmRegionDestroy (scReg2);
     _XmRegionDestroy (scReg1);
 }
-
 /*
  * _XmRegionFromImage:
  *   This function was ported from the X server ddx driver code in the
@@ -2298,7 +2070,6 @@ _XmRegionDrawShadow(
  *   in mfbclip.c.  The function takes an image and converts the image
  *   into an XmRegion.
  */
-
 XmRegion
 _XmRegionFromImage(
     XImage	*image)
@@ -2309,9 +2080,7 @@ _XmRegionFromImage(
     register XmRegionBox *prectO, *prectN;
     XmRegionBox		*FirstRect, *rects, *prectLineStart;
     Bool		fInBox, fSame;
-
     pReg = (XmRegion) XCreateRegion();
-
     if(!pReg)
 	return NULL;
     FirstRect = REGION_BOXPTR(pReg);

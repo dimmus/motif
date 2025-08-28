@@ -22,24 +22,19 @@
 */
 #ifndef _XmI_h
 #define _XmI_h
-
 #ifndef _XmNO_BC_INCL
 #define _XmNO_BC_INCL
 #endif
-
 #include <stdio.h>
 #include <limits.h>
 #include <Xm/XmP.h>
 #include "XmStrDefsI.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern Boolean _init_modifiers;
 extern unsigned int NumLockMask;
 extern unsigned int ScrollLockMask;
-
 void _XmInitModifiers (void);
 #define _XmCheckInitModifiers() 						\
     { 									\
@@ -49,7 +44,6 @@ void _XmInitModifiers (void);
 	    _init_modifiers = FALSE; 					\
 	}								\
     }
-
 #ifndef DEBUG
 # define assert(assert_exp)
 #elif (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
@@ -65,23 +59,17 @@ void _XmInitModifiers (void);
     (void) (fprintf(stderr, "assert(%s) failed at line %d in %s\n",	\
 		    "assert_exp", __LINE__, __FILE__), abort())))
 #endif
-
-
 #define ASSIGN_MAX(a, b) 	((a) = ((a) > (b) ? (a) : (b)))
 #define ASSIGN_MIN(a, b) 	((a) = ((a) < (b) ? (a) : (b)))
-
 #ifndef MAX
 #define MAX(x,y)	((x) > (y) ? (x) : (y))
 #endif
-
 #ifndef MIN
 #define MIN(x,y)	((x) > (y) ? (y) : (x))
 #endif
-
 #ifndef ABS
 #define ABS(x)		(((x) >= 0) ? (x) : -(x))
 #endif
-
 #define GMode(g)	    ((g)->request_mode)
 #define IsX(g)		    (GMode (g) & CWX)
 #define IsY(g)		    (GMode (g) & CWY)
@@ -90,24 +78,16 @@ void _XmInitModifiers (void);
 #define IsBorder(g)	    (GMode (g) & CWBorderWidth)
 #define IsWidthHeight(g)    (GMode (g) & (CWWidth | CWHeight))
 #define IsQueryOnly(g)      (GMode (g) & XtCWQueryOnly)
-
 #define XmStrlen(s)      ((s) ? strlen(s) : 0)
-
-
 #define XmStackAlloc(size, stack_cache_array)	\
     ((((char*)(stack_cache_array) != NULL) &&	\
      ((size) <= sizeof(stack_cache_array)))	\
      ?  (char *)(stack_cache_array)		\
      :  XtMalloc((unsigned)(size)))
-
 #define XmStackFree(pointer, stack_cache_array) \
     if ((pointer) != ((char*)(stack_cache_array))) XtFree(pointer);
-
-
 /******** _XmCreateImage ********/
-
 #ifdef NO_XM_1_2_BC
-
 /* The _XmCreateImage macro is used to create XImage with client
    specific data for the bit and byte order.
    We still have to do the following because XCreateImage
@@ -116,7 +96,6 @@ void _XmInitModifiers (void);
    creating the bitmap data in Motif) -- BUG 4262 */
 /* Used in Motif 1.2 in DragIcon.c, MessageB.c, ReadImage.c and
    ImageCache.c */
-
 #define _XmCreateImage(IMAGE, DISPLAY, DATA, WIDTH, HEIGHT, BYTE_ORDER) {\
     IMAGE = XCreateImage(DISPLAY,\
 			 DefaultVisual(DISPLAY, DefaultScreen(DISPLAY)),\
@@ -131,16 +110,12 @@ void _XmInitModifiers (void);
     IMAGE->bitmap_unit = 8;\
     IMAGE->bitmap_bit_order = LSBFirst;\
 }
-
 #endif /* NO_XM_1_2_BC */
-
-
 /****************************************************************
  *
  *  Macros for Right-to-left Layout
  *
  ****************************************************************/
-
 #define GetLayout(w)     (_XmGetLayoutDirection((Widget)(w)))
 #define LayoutM(w)       (XmIsManager(w) ? \
 			  ((XmManagerWidget)w)->manager.string_direction : \
@@ -151,7 +126,6 @@ void _XmInitModifiers (void);
 #define LayoutG(w)       (XmIsGadget(w) ? \
 			  ((XmGadget)w)->gadget.layout_direction : \
 			  GetLayout(w))
-
 #define LayoutIsRtoL(w)      \
   (XmDirectionMatchPartial(GetLayout(w), XmRIGHT_TO_LEFT, XmHORIZONTAL_MASK))
 #define LayoutIsRtoLM(w)     \
@@ -160,10 +134,7 @@ void _XmInitModifiers (void);
   (XmDirectionMatchPartial(LayoutP(w), XmRIGHT_TO_LEFT, XmHORIZONTAL_MASK))
 #define LayoutIsRtoLG(w)     \
   (XmDirectionMatchPartial(LayoutG(w), XmRIGHT_TO_LEFT, XmHORIZONTAL_MASK))
-
-
 /********    Private Function Declarations for Direction.c    ********/
-
 extern void _XmDirectionDefault(Widget widget,
   			        int offset,
   			        XrmValue *value );
@@ -171,14 +142,11 @@ extern void _XmFromLayoutDirection(
                         Widget widget,
                         int offset,
                         XtArgVal *value) ;
-
 extern XmImportOperator _XmToLayoutDirection(
                         Widget widget,
                         int offset,
                         XtArgVal *value) ;
 extern XmDirection _XmGetLayoutDirection(Widget w);
-
-
 /********    Private Function Declarations for thickness  ********/
 extern void _XmSetThickness(
                         Widget widget,
@@ -188,9 +156,7 @@ extern void _XmSetThicknessDefault0(
                         Widget widget,
                         int offset,
                         XrmValue *value) ;
-
 /********    Private Function Declarations for Xm.c    ********/
-
 extern void _XmReOrderResourceList(
 			WidgetClass widget_class,
 			String res_name,
@@ -229,29 +195,21 @@ extern XChar2b* _XmUtf8ToUcs2(char *draw_text,
                               size_t seg_len,
 			      size_t *ret_str_len);
 extern Pixel _XmAssignInsensitiveColor(Widget w);
-
 /********    End Private Function Declarations    ********/
-
 /********    Conditionally defined macros for thread_safe Motif ******/
 #if defined(XTHREADS) && defined(XUSE_MTSAFE_API)
-
 # define _XmWidgetToAppContext(w) \
         XtAppContext app = XtWidgetToApplicationContext(w)
-
 # define _XmDisplayToAppContext(d) \
         XtAppContext app = XtDisplayToApplicationContext(d)
-
 # define _XmAppLock(app)	XtAppLock(app)
 # define _XmAppUnlock(app)	XtAppUnlock(app)
 # define _XmProcessLock()	XtProcessLock()
 # define _XmProcessUnlock()	XtProcessUnlock()
-
 /* Remove use of _XtProcessLock when Xt provides API to query its MT-status */
 extern void (*_XtProcessLock)();
 # define _XmIsThreadInitialized() (_XtProcessLock)
-
 #else
-
 # define _XmWidgetToAppContext(w)
 # define _XmDisplayToAppContext(d)
 # define _XmAppLock(app)
@@ -259,14 +217,9 @@ extern void (*_XtProcessLock)();
 # define _XmProcessLock()
 # define _XmProcessUnlock()
 # define _XmIsThreadInitialized()	(FALSE)
-
 #endif /* XTHREADS && XUSE_MTSAFE_API */
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
-
 #endif /* _XmI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

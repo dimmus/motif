@@ -23,23 +23,17 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: UniqueEvnt.c /main/14 1996/11/25 11:33:58 pascale $"
 #endif
 #endif
-
 #include <limits.h>
 #include <Xm/XmP.h>
 #include <Xm/DisplayP.h>
 #include "UniqueEvnI.h"
-
 #define XmCHECK_UNIQUENESS 1
 #define XmRECORD_EVENT     2
-
-
 /* XmUniqueStamp structure is per display */
 typedef struct _XmUniqueStampRec
 {
@@ -47,10 +41,7 @@ typedef struct _XmUniqueStampRec
   Time time;
   int type;
 } XmUniqueStampRec, *XmUniqueStamp;
-
-
 /********    Static Function Declarations    ********/
-
 static Time ExtractTime(
                         XEvent *event) ;
 static Boolean ManipulateEvent(
@@ -62,10 +53,7 @@ static void UniqueStampDisplayDestroyCallback(
 			Widget w,
 			XtPointer client_data,
 			XtPointer call_data ) ;
-
 /********    End Static Function Declarations    ********/
-
-
 /************************************************************************
  *
  *  _XwExtractTime
@@ -78,41 +66,31 @@ ExtractTime(
 {
    if ((event->type == ButtonPress) || (event->type == ButtonRelease))
       return (event->xbutton.time);
-
    if ((event->type == KeyPress) || (event->type == KeyRelease))
       return (event->xkey.time);
-
    return ((Time) 0);
 }
-
 static Boolean
 Later(unsigned long recorded,
       unsigned long new_l)
 {
   long normalizedNew;
-
   /* The pathogenic cases for this calculation involve numbers
      very close to 0 or ULONG_MAX.
-
      So the way we do it is by normalizing to 0 (signed).  That
      way the differences are +/- in the appropriate way.
-
      These numbers are defined as a unsigned long.  Please
      remember that when changing this code.
      */
-
   normalizedNew = new_l - recorded;
-
   return (normalizedNew > 0);
 }
-
 static XmUniqueStamp
 GetUniqueStamp(
 	XEvent *event )
 {
   XmDisplay xmDisplay = (XmDisplay)XmGetXmDisplay(event->xany.display);
   XmUniqueStamp uniqueStamp = (XmUniqueStamp)NULL;
-
   if ((XmDisplay)NULL != xmDisplay)
   {
     uniqueStamp = (XmUniqueStamp)((XmDisplayInfo *)(xmDisplay->display.
@@ -120,13 +98,10 @@ GetUniqueStamp(
     if ((XmUniqueStamp)NULL == uniqueStamp)
     {
       uniqueStamp = (XmUniqueStamp) XtMalloc(sizeof(XmUniqueStampRec));
-
       ((XmDisplayInfo *)(xmDisplay->display.displayInfo))->UniqueStamp =
 	(XtPointer)uniqueStamp;
-
       XtAddCallback((Widget)xmDisplay, XtNdestroyCallback,
 		      UniqueStampDisplayDestroyCallback, (XtPointer) NULL);
-
       uniqueStamp->serial = 0;
       uniqueStamp->time = 0;
       uniqueStamp->type = 0;
@@ -134,7 +109,6 @@ GetUniqueStamp(
   }
   return uniqueStamp;
 }
-
 /*ARGSUSED*/
 static void
 UniqueStampDisplayDestroyCallback
@@ -143,7 +117,6 @@ UniqueStampDisplayDestroyCallback
         XtPointer call_data )	/* unused */
 {
   XmDisplay xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
-
   if ((XmDisplay)NULL != xmDisplay)
   {
     XmUniqueStamp uniqueStamp = (XmUniqueStamp)((XmDisplayInfo *)
@@ -157,14 +130,12 @@ UniqueStampDisplayDestroyCallback
     }
   }
 }
-
 static Boolean
 ManipulateEvent(
         XEvent *event,
         int action )
 {
    XmUniqueStamp uniqueStamp = GetUniqueStamp(event);
-
    switch (action)
    {
       case XmCHECK_UNIQUENESS:
@@ -200,7 +171,6 @@ ManipulateEvent(
 	 *
 	 * So if the serial numbers match,  we use the timestamps.
 	 */
-
 	if ( Later(uniqueStamp->serial, event->xany.serial)
 	     ||  ( uniqueStamp->serial == event->xany.serial &&
 		   Later(uniqueStamp->time, event->xbutton.time)))
@@ -208,25 +178,20 @@ ManipulateEvent(
 	else
 	  return (FALSE);
       }
-
       case XmRECORD_EVENT:
       {
          /* Save the fingerprints for the new event */
          uniqueStamp->type = event->type;
          uniqueStamp->serial = event->xany.serial;
          uniqueStamp->time = ExtractTime(event);
-
          return (TRUE);
       }
-
       default:
       {
          return (FALSE);
       }
    }
 }
-
-
 /*
  * Check to see if this event has already been processed.
  */
@@ -236,9 +201,6 @@ _XmIsEventUnique(
 {
    return (ManipulateEvent (event, XmCHECK_UNIQUENESS));
 }
-
-
-
 /*
  * Record the specified event, so that it will not be reprocessed.
  */

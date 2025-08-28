@@ -22,25 +22,20 @@
 */
 #ifndef _XmTextInP_h
 #define _XmTextInP_h
-
 #include <Xm/Text.h>
 #include <Xm/TextStrSoP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /****************************************************************
  *
  * Definitions for modules implementing text input modules.
  *
  ****************************************************************/
-
 typedef struct {
     int x;
     int y;
 } SelectionHint;
-
 typedef struct _InputDataRec {
     XmTextWidget widget;		/* Back-pointer to widget record. */
     XmTextScanType *sarray;	/* Description of what to cycle through on */
@@ -78,18 +73,14 @@ typedef struct _InputDataRec {
     XtIntervalId drag_id;       /* timer to start btn1 drag */
     _XmTextActionRec *transfer_action;  /* to keep track of delayed action */
 } InputDataRec, *InputData;
-
-
 /*
  * Create a new instance of an input object.  By the time this is called,
  * the widget context has been saved.
  */
-
 typedef void (*InputCreateProc)(
 			Widget,
 			ArgList,
 			Cardinal) ;
-
 /*
  * Get values out of the input object.
  */
@@ -97,18 +88,15 @@ typedef void (*InputGetValuesProc)(
 			Widget,
 			ArgList,
 			Cardinal) ;
-
 /*
  * Set values in the input object.
  */
-
 typedef void (*InputSetValuesProc)(
 			Widget,
 			Widget,
 			Widget,
 			ArgList,
 			Cardinal *) ;
-
 /*
  * Inform input of invalidated positions.
  */
@@ -117,14 +105,11 @@ typedef void (*InputInvalidateProc)(
 			XmTextPosition,
 			XmTextPosition,
 			long) ;
-
 /*
  * Get secondary resources.
  */
 typedef void (*InputGetSecResProc)(
 			XmSecondaryResourceData *) ;
-
-
 typedef struct _InputRec {
     struct _InputDataRec *data;	/* Input-specific data; opaque type. */
     InputInvalidateProc Invalidate;
@@ -133,15 +118,10 @@ typedef struct _InputRec {
     XtWidgetProc	destroy;
     InputGetSecResProc  GetSecResData;
 } InputRec;
-
-
 externalref XtPointer _XmdefaultTextActionsTable;
 externalref Cardinal  _XmdefaultTextActionsTableSize;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextInP_h */
 /*DON'T ADD ANYTHING AFTER THIS #endif */

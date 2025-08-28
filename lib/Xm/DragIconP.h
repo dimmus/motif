@@ -20,33 +20,25 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef _XmDragIconP_h
 #define _XmDragIconP_h
-
 #include <Xm/VendorSEP.h>
 #include <Xm/DragIcon.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 typedef void (*XmCloneVisualProc) (XmDragIconObject, Widget, Widget);
 typedef void (*XmMovePixmapProc)  (XmDragIconObject,
 				   XmDragIconObject,
 				   XmDragIconObject,
 				   Position, Position);
-
 typedef struct {
   XtPointer		extension;
 } XmDragIconClassPart;
-
 typedef struct _XmDragIconClassRec{
   RectObjClassPart		rectangle_class;
   XmDragIconClassPart		dragIcon_class;
 } XmDragIconClassRec;
-
 typedef struct {
   Cardinal	depth;
   Pixmap	pixmap;
@@ -60,15 +52,12 @@ typedef struct {
   Region        restore_region;
   Position	x_offset, y_offset;
 } XmDragIconPart, *XmDragIconPartPtr;
-
 externalref XmDragIconClassRec 	xmDragIconClassRec;
-
 typedef struct _XmDragIconRec{
   ObjectPart		object;
   RectObjPart		rectangle;
   XmDragIconPart	drag;
 } XmDragIconRec;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

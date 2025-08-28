@@ -25,15 +25,11 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include <Xm/DrawP.h>
-
 /****************************XmeDrawArrow**********************************/
 void XmeDrawArrow(Display *display, Drawable d,
                   GC top_gc, GC bot_gc, GC cent_gc,
@@ -44,7 +40,6 @@ void XmeDrawArrow(Display *display, Drawable d,
    /* cent_gc might be NULL, which means don't draw anything on the center,
       but if shadow_thick is 1, then center is not NULL, see in ArrowB */
    /* in the current implementation, on shadow_thick = 2, 1 or 0 supported */
-
    static unsigned int allocated = 0;
    static XRectangle * top  = NULL;
    static XRectangle * cent = NULL;
@@ -54,14 +49,10 @@ void XmeDrawArrow(Display *display, Drawable d,
    register int temp, yy, i, h, w;
    short t = 0 , b = 0 , c = 0 ;
    XtAppContext app;
-
    if (!d) return ;
-
    app = XtDisplayToApplicationContext(display);
    _XmAppLock(app);
-
    /*  Get the size and the position and allocate the rectangle lists  */
-
    if (width > height) {
       size = height - 2;
       xOffset = (width - height) / 2;
@@ -81,19 +72,14 @@ void XmeDrawArrow(Display *display, Drawable d,
       allocated = size;
       _XmProcessUnlock();
    }
-
 #define SWAP(x,y) temp = x ; x = y; y = temp
-
    if (direction == XmARROW_RIGHT || direction == XmARROW_LEFT) {
       SWAP(xOffset,yOffset) ;
    }
-
    /*  Set up a loop to generate the segments.  */
-
    wwidth = size;
    yy = size - 1 + yOffset;
    start = 1 + xOffset;
-
    _XmProcessLock();
    while (wwidth > 0) {
        if (wwidth == 1) {
@@ -166,15 +152,11 @@ void XmeDrawArrow(Display *display, Drawable d,
        wwidth -= 2;
        yy -= 2;
    }
-
    if (direction == XmARROW_DOWN || direction == XmARROW_RIGHT) {
        rect_tmp = top; top = bot; bot = rect_tmp;
        SWAP(t, b);
    }
-
-
    /*  Transform the "up" pointing arrow to the correct direction  */
-
    switch (direction) {
    case XmARROW_LEFT:
        i = -1;
@@ -194,7 +176,6 @@ void XmeDrawArrow(Display *display, Drawable d,
            }
        } while (i < t || i < b || i < c);
        break;
-
    case XmARROW_RIGHT:
        h = height - 2;
        w = width - 2;
@@ -221,7 +202,6 @@ void XmeDrawArrow(Display *display, Drawable d,
            }
        } while (i < t || i < b || i < c);
        break;
-
    case XmARROW_DOWN:
        w = width - 2;
        h = height - 2;
@@ -243,7 +223,6 @@ void XmeDrawArrow(Display *display, Drawable d,
        } while (i < t || i < b || i < c);
        break;
    }
-
    if (x != 0 || y != 0) {
        for (i = 0; i < t; i++) {
            top[i].x += x;
@@ -258,7 +237,6 @@ void XmeDrawArrow(Display *display, Drawable d,
            bot[i].y += y;
        }
    }
-
    if (shadow_thick) {  /* 1 or 2 shadow thickness: always draw
 			   2 thickness at that point, we'll correct it
 			   later */
@@ -272,7 +250,6 @@ void XmeDrawArrow(Display *display, Drawable d,
            XFillRectangles (display, d, cent_gc, bot, b);
        }
    }
-
    if (shadow_thick == 1) {
        /* we already drawn the shadow of 2, now let's draw a
 	  bigger center area: ask for a smaller arrow with

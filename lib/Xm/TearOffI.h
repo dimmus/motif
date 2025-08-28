@@ -27,16 +27,11 @@
 /* $XConsortium: TearOffI.h /main/5 1995/07/13 18:02:12 drk $ */
 #ifndef _XmTearOffI_h
 #define _XmTearOffI_h
-
 #include <Xm/TearOffP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmTearOffBtnDownEventHandler(
                         Widget reportingWidget,
                         XtPointer data,
@@ -72,13 +67,9 @@ extern void _XmRestoreTearOffToToplevelShell(
 extern void _XmRestoreTearOffToMenuShell(
                         Widget wid,
                         XEvent *event) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTearOffI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -20,17 +20,14 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
-
 #ifndef _XmCombinationBox2P_h_
 #define _XmCombinationBox2P_h_
-
 #include <Xm/DropDownP.h>
 #include <Xm/XmP.h>
-
+#include <Xm/deprecated.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define XmCombinationBox2_UP 		XmDropDown_UP
 #define XmCombinationBox2_UNPOSTED	XmDropDown_UNPOSTED
 #define XmCombinationBox2_DOWN        	XmDropDown_DOWN
@@ -38,7 +35,6 @@ extern "C" {
 #define XmCombinationBox2_IN_PROGRESS 	XmDropDown_IN_PROGRESS
 #define XmCombinationBox2_BEGIN_POPUP_FROM_TEXT \
   XmDropDown_BEGIN_POPUP_FROM_TEXT
-
 #define XmComboBox2_h_space(w) (((XmCombinationBox2Widget)(w))->combo.h_space)
 #define XmComboBox2_v_space(w) (((XmCombinationBox2Widget)(w))->combo.v_space)
 #define XmComboBox2_popup_offset(w) (((XmCombinationBox2Widget)(w))->combo.popup_offset)
@@ -56,7 +52,6 @@ extern "C" {
 #define XmComboBox2_update_shell_callback(w) (((XmCombinationBox2Widget)(w))->combo.update_shell_callback)
 #define XmComboBox2_visible_items(w) (((XmCombinationBox2Widget)(w))->combo.visible_items)
 #define XmComboBox2_new_visual_style(w) (((XmCombinationBox2Widget)(w))->combo.new_visual_style)
-
 #define XmComboBox2_old_text(w) (((XmCombinationBox2Widget)(w))->combo.old_text)
 #define XmComboBox2_focus_owner(w) (((XmCombinationBox2Widget)(w))->combo.focus_owner)
 #define XmComboBox2_focus_state(w) (((XmCombinationBox2Widget)(w))->combo.focus_state)
@@ -66,12 +61,10 @@ extern "C" {
 #define XmComboBox2_label(w) (((XmCombinationBox2Widget)(w))->combo.label)
 #define XmComboBox2_text(w) (((XmCombinationBox2Widget)(w))->combo.text)
 #define XmComboBox2_arrow(w) (((XmCombinationBox2Widget)(w))->combo.arrow)
-
 #define XmComboBox2_autoTraversal(w) (((XmCombinationBox2Widget)(w))->combo.autoTraversal)
 #define XmComboBox2_activateOnFill(w) (((XmCombinationBox2Widget)(w))->combo.activateOnFill)
 #define XmComboBox2_doActivate(w) (((XmCombinationBox2Widget)(w))->combo.doActivate)
 #define XmComboBox2_inValueChanged(w) (((XmCombinationBox2Widget)(w))->combo.inValueChanged)
-
 /* Should return True to ignore invalid entry warning. Combination Box
  *  does not currently use this. Presumes do it in subclasses
  */
@@ -79,25 +72,20 @@ typedef Boolean (*XmCombinationBox2TextProc)(
     Widget,
     char *text
 );
-
 typedef Boolean (*XmCombinationBox2TextListMapProc)(
     Widget,		/* combo box */
     Widget,		/* text */
     Widget		/* list */
 );
-
 /* Version number for the first Revision  */
 #define XmCombinationBox2ExtensionVersion 2
-
 typedef XmDropDownClassPart XmCombinationBox2ClassPartExtension;
 typedef XmDropDownClassPart XmCombinationBox2ClassPart;
 typedef XmDropDownClassRec  XmCombinationBox2ClassRec;
 typedef XmDropDownPart      XmCombinationBox2Part;
 typedef XmDropDownRec       XmCombinationBox2Rec;
-extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec XM_DEPRECATED;
-
+extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec __attribute__((deprecated));
 #ifdef __cplusplus
 }	/* Closes scope of 'extern "C"' declaration */
 #endif
-
 #endif /* _XmCombinationBox2P_h_ */

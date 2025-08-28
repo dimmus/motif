@@ -27,25 +27,21 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: XmStringObso.c /main/6 1995/09/19 23:13:52 cde-sun $"
 #endif
 #endif
-
 #include <Xm/XmosP.h>
 #include "XmStringI.h"
 #include "XmI.h"
 #include "XmRenderTI.h"
-
 /* Since this stuff is obsolete, don't worry about deprecation */
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #elif defined(__clang__)
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
-
 /*
  * as close as we can come to Latin1Create without knowing the charset of
  * Latin1.  This imposes the semantic of \n meaning separator.
@@ -58,46 +54,36 @@ XmStringLtoRCreate(
   char *start, *end;
   Boolean done;
   XmString string;
-
   _XmProcessLock();
   if (!text) {
 	_XmProcessUnlock();
 	return (NULL);
   }
-
   start = text;
   done = FALSE;
-
   /* Set the direction once only at the beginning. */
   string = XmStringDirectionCreate(XmSTRING_DIRECTION_L_TO_R);
-
   while ( ! done)		/* loop thu local copy */
     {				/* looking for \n */
       end = start;
-
       while ((*end != '\0') && (*end != '\n'))  end++;
-
       if (*end == '\0')
 	done = TRUE;		/* we are at the end */
-
       /* Don't convert empty string unless it's an initial newline. */
       /* Done so StringHeight has clue to size of empty lines. */
       if ((start != end) || (start == text))
         string = XmStringConcatAndFree (string,
 					_XmStringNCreate(start, tag,
 							 end - start));
-
       /* Make a separator if this isn't the last segment. */
       if (!done) {
         string = XmStringConcatAndFree(string, XmStringSeparatorCreate());
 	start = ++end;		/* start at next char */
       }
     }
-
   _XmProcessUnlock();
   return (string);
 }
-
 XmString
 XmStringCreateLtoR(
         char *text,
@@ -105,7 +91,6 @@ XmStringCreateLtoR(
 {
   return (XmStringLtoRCreate (text, tag));
 }
-
 /*
  * build an external TCS 'segment', just a high level create
  */
@@ -117,16 +102,12 @@ XmStringSegmentCreate(
         Boolean separator )
 {
   XmString result;
-
   result = XmStringConcatAndFree (XmStringDirectionCreate (direction),
 				  XmStringCreate (text, tag));
-
   if (separator)
     result = XmStringConcatAndFree (result, XmStringSeparatorCreate ());
-
   return result;
 }
-
 /*
  * Convenience routine to create an XmString from a NULL terminated string.
  */
@@ -146,18 +127,13 @@ XmStringNConcat(XmString first,
 		int n )
 {
   XmString	tmp, ret_val;
-
   _XmProcessLock();
   tmp = XmStringConcat(first, second);
-
   ret_val = XmStringNCopy(tmp, XmStringLength(first) + n);
-
   XmStringFree(tmp);
-
   _XmProcessUnlock();
   return(ret_val);
 }
-
 /*
  * Copy a compound string, such that the equivalent ASN.1 form
  * has <= n bytes.  Only copy a component at a time
@@ -171,10 +147,8 @@ XmStringNCopy(
   unsigned char	*tmp;
   unsigned int	len;
   XmString	ret_val;
-
   _XmProcessLock();
   len = XmCvtXmStringToByteStream(str, &tmp);
-
   if (n >= len) /* No need to truncate */
     {
       ret_val = XmStringCopy(str);
@@ -184,13 +158,10 @@ XmStringNCopy(
       tmp = _XmStringTruncateASN1(tmp, n);
       ret_val = XmCvtByteStreamToXmString(tmp);
     }
-
   XtFree((char *)tmp);
-
   _XmProcessUnlock();
   return(ret_val);
 }
-
 /* Compare ASN.1 form of strings. */
 Boolean
 XmStringByteCompare(
@@ -201,7 +172,6 @@ XmStringByteCompare(
     unsigned char  *b;
     unsigned short a_length, b_length;
     Boolean	   ret_val;
-
     _XmProcessLock();
     if ((a1 == NULL) && (b1 == NULL)) {
 	_XmProcessUnlock();
@@ -211,21 +181,16 @@ XmStringByteCompare(
 	_XmProcessUnlock();
 	return (FALSE);
     }
-
     a_length = XmCvtXmStringToByteStream(a1, &a);
     b_length = XmCvtXmStringToByteStream(b1, &b);
-
     if ((a_length != b_length) || (memcmp(a, b, a_length) != 0))
       ret_val = FALSE;
     else ret_val = TRUE;
-
     XtFree((char *)a);
     XtFree((char *)b);
-
     _XmProcessUnlock();
     return(ret_val);
 }
-
 XmStringComponentType
 XmStringGetNextComponent(
         XmStringContext context,
@@ -239,10 +204,8 @@ XmStringGetNextComponent(
   XmStringComponentType type;
   unsigned int  	len;
   XtPointer		val;
-
   _XmProcessLock();
   type = XmeStringGetComponent((_XmStringContext) context, True, True, &len, &val);
-
   /* Case on return type */
   /* Set appropriate return value and return. */
   switch (type)
@@ -270,16 +233,13 @@ XmStringGetNextComponent(
   _XmProcessUnlock();
   return(type);
 }
-
 XmStringComponentType
 XmStringPeekNextComponent(XmStringContext context)
 {
   unsigned int len;
   XtPointer    val;
-
   return XmeStringGetComponent((_XmStringContext) context, False, False, &len, &val);
 }
-
 /*
  * fetch the first text 'segment' of the external TCS that matches the given
  * char set.
@@ -295,7 +255,6 @@ XmStringGetLtoR(
   XmStringTag c, curtag = NULL;
   XmStringDirection d;
   Boolean s, is_local = FALSE, done = FALSE, is_default = FALSE;
-
   _XmProcessLock();
   if (!string) {
 	_XmProcessUnlock();
@@ -305,13 +264,10 @@ XmStringGetLtoR(
 	_XmProcessUnlock();
 	return (FALSE);
   }
-
   if ((tag == XmFONTLIST_DEFAULT_TAG) ||
       (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0))
     is_local = TRUE;
-
   *text = NULL;				  /* pre-condition result */
-
   if (!is_local)
     {
       if ((strcmp(tag, XmSTRING_DEFAULT_CHARSET) == 0))
@@ -321,9 +277,7 @@ XmStringGetLtoR(
 	}
       else curtag = tag;
     }
-
   XmStringInitContext (&context, string);
-
   while ( ! done)
     {
       if (XmStringGetNextSegment (context, &t, &c, &d, &s))
@@ -341,19 +295,16 @@ XmStringGetLtoR(
 	    }
 	  else
 	    XtFree (t);			  /* not this text */
-
 	  if (c)
 	    XtFree (c);			  /* always dump charset */
 	}
       else
 	done = TRUE;
     }
-
   XmStringFreeContext (context);
   _XmProcessUnlock();
   return (*text != NULL);
 }
-
 /*
  * _XmStringGetSegment: A generalized version of XmStringGetNextSegment.
  *	Returns char_count, and allows explicit control over peeking
@@ -385,7 +336,6 @@ _XmStringGetSegment(_XmStringContext   context,
   XmStringComponentType ctype;
   unsigned int 		len;
   XtPointer 		val;
-
   /* Initialize the out parameters */
   if (text)           *text           = NULL;
   if (tag)            *tag            = NULL;
@@ -398,23 +348,19 @@ _XmStringGetSegment(_XmStringContext   context,
   if (char_count)     *char_count     = 0;
   if (push_before)    *push_before    = 0;
   if (pop_after)      *pop_after      = False;
-
   /* No NULL pointers allowed. */
   if (! (context && text && tag && type && rendition_tags && tag_count
 	 && direction && separator && tabs && char_count && push_before
 	 && pop_after))
     return False;
-
   if (_XmStrContError(context))
     return False;
-
   /* Setup a writable context. */
   if (!update_context)
     {
       local_context = &local_context_data;
       _XmStringContextCopy(local_context, context);
     }
-
   /* N.B.: This code relies on the order of components from XmeStringGetComponent()! */
   done = new_renditions = FALSE;
   while (!done)
@@ -429,14 +375,12 @@ _XmStringGetSegment(_XmStringContext   context,
 	  else
 	    *push_before = *((XmDirection *) val);
 	  break;
-
 	case XmSTRING_COMPONENT_RENDITION_BEGIN:
 	  if (*text)
 	    done = TRUE;
 	  else if (*tabs)
 	    new_renditions = TRUE;
 	  break;
-
 	case XmSTRING_COMPONENT_TAG:
 	case XmSTRING_COMPONENT_LOCALE:
 	  if (*text)
@@ -444,7 +388,6 @@ _XmStringGetSegment(_XmStringContext   context,
 	  else
 	    *tag = (XmStringTag) val;
 	  break;
-
 	case XmSTRING_COMPONENT_TAB:
 	  if (*text)
 	    done = TRUE;
@@ -473,20 +416,17 @@ _XmStringGetSegment(_XmStringContext   context,
 		      *rendition_tags = perm_rends;
 		    }
 		}
-
 	      /* Return at the end of this line. */
 	      (*tabs)++;
 	      result = TRUE;
 	    }
 	  break;
-
 	case XmSTRING_COMPONENT_DIRECTION:
 	  if (*text)
 	    done = TRUE;
 	  else
 	    *direction = *((XmStringDirection *) val);
 	  break;
-
 	case XmSTRING_COMPONENT_TEXT:
 	case XmSTRING_COMPONENT_LOCALE_TEXT:
 	case XmSTRING_COMPONENT_WIDECHAR_TEXT:
@@ -502,7 +442,6 @@ _XmStringGetSegment(_XmStringContext   context,
 	    {
 	      *char_count = len;
 	      *text = val;
-
 	      if (ctype == XmSTRING_COMPONENT_TEXT)
 		*type = XmCHARSET_TEXT;
 	      else if (ctype == XmSTRING_COMPONENT_LOCALE_TEXT)
@@ -511,13 +450,10 @@ _XmStringGetSegment(_XmStringContext   context,
 		*type = XmWIDECHAR_TEXT;
 	      else
 		{ assert(FALSE); }
-
 	      /* Force a tag for backward compatibility with Motif 1.2 */
 	      if (! *tag)
 		*tag = _XmStrContTag(local_context);
-
 	      result = TRUE;
-
 	      /* Save the renditions now. */
 	      if ((*tag_count == 0) && _XmStrContRendCount(local_context))
 		{
@@ -543,10 +479,8 @@ _XmStringGetSegment(_XmStringContext   context,
 		}
 	    }
 	  break;
-
 	case XmSTRING_COMPONENT_RENDITION_END:
 	  break;
-
 	case XmSTRING_COMPONENT_LAYOUT_POP:
 	  if (*tabs || *text)
 	    {
@@ -559,7 +493,6 @@ _XmStringGetSegment(_XmStringContext   context,
 	      *push_before = 0;
 	    }
 	  break;
-
 	case XmSTRING_COMPONENT_SEPARATOR:
 	  if (*tabs || *text)
 	    {
@@ -567,42 +500,34 @@ _XmStringGetSegment(_XmStringContext   context,
 	      done = TRUE;
 	    }
 	  break;
-
 	case XmSTRING_COMPONENT_END:
 	default:
 	  done = TRUE;
 	  break;
 	}
-
       /* Consume the component if we aren't done. */
       if (!done)
 	(void) XmeStringGetComponent(local_context, TRUE, FALSE, &len, &val);
     }
-
   if (copy_data && result)
     {
       /* Copy the tag. */
       if (*tag)
 	*tag = XtNewString(*tag);
-
       /* Copy the text. */
       if (*text)
 	{
 	  char *tmp = XtMalloc(*char_count + sizeof(wchar_t));
 	  memcpy(tmp, *text, *char_count);
 	  bzero(tmp + *char_count, sizeof(wchar_t));
-
 	  *text = (XtPointer) tmp;
 	}
     }
-
   /* Free the local context. */
   if (local_context == &local_context_data)
     _XmStringContextFree(local_context);
-
   return result;
 }
-
 Boolean
 _XmStringGetNextSegment(
         _XmStringContext context,
@@ -619,7 +544,6 @@ _XmStringGetNextSegment(
   unsigned char tabs;
   XmDirection   push_before;
   Boolean	pop_after;
-
   /* Get all the fields and discard the ones we don't want. */
   result = _XmStringGetSegment(context, True, True, (XtPointer*) text, tag,
 		       &type, &rendition_tags, &tag_count, direction,
@@ -631,15 +555,12 @@ _XmStringGetNextSegment(
 	  XtFree((char*) rendition_tags[tag_count]);
 	XtFree((char*) rendition_tags);
       }
-
     if (type == XmWIDECHAR_TEXT && *text) {
       /* must convert (this should be done in segment's locale instead) */
       int len;
       wchar_t *wtext = (wchar_t *)(*text);
-
       /* should be enough */
       len = ((*char_count)*MB_CUR_MAX)/sizeof(wchar_t);
-
       *text = (char *)XtMalloc(len+1);
       *char_count = wcstombs(*text, wtext, len);
       if ((*char_count) == (size_t)-1) {
@@ -651,10 +572,8 @@ _XmStringGetNextSegment(
       XtFree((char *)wtext);
     }
   }
-
   return result;
 }
-
 /*
  * fetch the next 'segment' of the external TCS
  */
@@ -667,7 +586,6 @@ XmStringGetNextSegment(XmStringContext context,
 {
   short char_count;
   Boolean ret_val;
-
   _XmProcessLock();
   ret_val = _XmStringGetNextSegment((_XmStringContext)context,
 		 tag, direction, text, &char_count, separator);

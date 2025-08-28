@@ -26,16 +26,13 @@
  */
 #ifndef _XmNotebookP_h
 #define _XmNotebookP_h
-
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/ScrollFrameT.h>
 #include <Xm/Notebook.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Notebook's constraint info. fields */
 typedef struct _XmNotebookConstraintPart
 {
@@ -43,25 +40,19 @@ typedef struct _XmNotebookConstraintPart
     int page_number;			/* page number */
     unsigned char child_type;		/* notebook child type */
     Boolean resizable;			/* is this child resizable? */
-
     /* private variables */
     Boolean active;			/* True if the child is active */
 } XmNotebookConstraintPart, *XmNotebookConstraint;
-
 typedef struct _XmNotebookConstraintRec
 {
     XmManagerConstraintPart manager;
     XmNotebookConstraintPart notebook;
 } XmNotebookConstraintRec, *XmNotebookConstraintPtr;
-
-
 /* New fields for the Notebook widget class record */
 typedef struct _XmNotebookClassPart
 {
     XtPointer extension;
 } XmNotebookClassPart;
-
-
 /* Full class record declaration */
 typedef struct _NotebookClassRec
 {
@@ -71,10 +62,7 @@ typedef struct _NotebookClassRec
     XmManagerClassPart manager_class;
     XmNotebookClassPart	notebook_class;
 } XmNotebookClassRec;
-
 externalref XmNotebookClassRec xmNotebookClassRec;
-
-
 /* New fields for the Notebook widget instance record */
 typedef struct _XmNotebookPart
 {
@@ -99,7 +87,6 @@ typedef struct _XmNotebookPart
     Dimension minor_spacing;		/* gap between minor tabs */
     Dimension shadow_thickness;		/* notebook frame shadow thickness */
     XtCallbackList page_change_callback;/* the page change callback */
-
     /* child widgets */
     Widget scroller;			/* the page scroller widget */
     Widget scroller_child;		/* TextF child of def page scroller */
@@ -107,7 +94,6 @@ typedef struct _XmNotebookPart
     Widget prev_major;			/* prev major tab scroll button */
     Widget next_minor;			/* next minor tab scroll button */
     Widget prev_minor;			/* prev minor tab scroll button */
-
     /* preferred children sizes */
     Dimension real_binding_width;	/* real binding width */
     Dimension real_back_page_number;	/* real back page number */
@@ -127,7 +113,6 @@ typedef struct _XmNotebookPart
     Dimension minor_scroller_height;	/* height of minor scrollers */
     Dimension frame_width;		/* width of the frame */
     Dimension frame_height;		/* height of the frame */
-
     /* for layouting tabs */
     Widget first_major;			/* the first major tab */
     Widget old_top_major;		/* the old top major tab */
@@ -138,19 +123,16 @@ typedef struct _XmNotebookPart
     Widget top_minor;			/* the top minor tab */
     Widget last_minor;			/* the last minor tab */
     Widget constraint_child;		/* changing geom during ConstraintSV */
-
     /* shadow thickness state for current page major and minor tab */
     Dimension major_shadow_thickness;	/* joined major tab shadow thickness */
     Dimension minor_shadow_thickness;	/* joined minor tab shadow thickness */
     Widget major_shadow_child;		/* saved shadow thickness tab */
     Widget minor_shadow_child;		/* saved shadow thickness tab */
     Boolean in_setshadow;		/* setting tab shadow thickness */
-
     /* extra position information */
     unsigned char major_pos;		/* position of major tabs */
     unsigned char minor_pos;		/* position of minor tabs */
     unsigned char binding_pos;		/* binding position */
-
     /* other misc. variables */
     unsigned char which_tab;		/* currently active tab type */
     int last_alloc_num;			/* lastly allocated page number */
@@ -163,12 +145,9 @@ typedef struct _XmNotebookPart
     GC binding_gc;                      /* GC for drawing binding */
     GC foreground_gc;                   /* GC for drawing foreground */
     GC background_gc;                   /* GC for drawing background */
-
     Boolean first_change_managed;	/* flags 1st call to ChangeManaged */
     XmScrollFrameData scroll_frame_data; /* data for ScrollFrame trait */
 } XmNotebookPart;
-
-
 /* Full instance record declaration */
 typedef struct _XmNotebookRec
 {
@@ -178,21 +157,16 @@ typedef struct _XmNotebookRec
     XmManagerPart manager;
     XmNotebookPart notebook;
 } XmNotebookRec;
-
-
 /******************************************************************************
  *                                                                            *
  *                         constants & useful macros                          *
  *                                                                            *
  ******************************************************************************/
-
 /* internal child types, must not conflict with XmRNBChildType enum */
 #define XmMAJOR_TAB_SCROLLER            12
 #define XmMINOR_TAB_SCROLLER            13
 #define XmTAB_SCROLLER                  14
-
 #ifdef __cplusplus
 }
 #endif
-
 #endif /* _XmNotebookP_h */

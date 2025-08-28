@@ -22,23 +22,18 @@
 */
 #ifndef _XmDrawP_h
 #define _XmDrawP_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*---------------------------------------------------------------*/
 /*   Functions used by Xm widgets for the Motif visual drawing   */
 /*---------------------------------------------------------------*/
 /* All these functions have an Xlib draw like API:
       a Display*, a Drawable, then GCs, Positions and Dimensions
       and finally some specific paramaters */
-
 /******** The Draw.c file has been split in several module for
           a better link profile *********/
-
 /*---------------------------------------------------------------
   XmeDrawShadows,
        use in place of the 1.1 _XmDrawShadow and _XmDrawShadowType
@@ -72,10 +67,7 @@ extern "C" {
     XmeDrawIndicator
        new one for toggle drawing
 ---------------------------------------------------------------------------*/
-
-
 /********    Private Function Declarations    ********/
-
 extern void XmeDrawShadows(
                         Display *display,
                         Drawable d,
@@ -121,7 +113,6 @@ extern void XmeDrawDiamond(
                         Dimension height,
                         Dimension shadow_thick,
                         Dimension margin);
-
 extern void XmeDrawCircle(
                         Display *display,
                         Drawable d,
@@ -134,7 +125,6 @@ extern void XmeDrawCircle(
                         Dimension height,
                         Dimension shadow_thick,
                         Dimension margin);
-
 extern void XmeDrawHighlight(
                         Display *display,
                         Drawable d,
@@ -157,7 +147,6 @@ extern void XmeDrawArrow(
                         Dimension height,
                         Dimension shadow_thick,
                         unsigned char direction);
-
 extern void XmeDrawPolygonShadow(
 		      Display *dpy,
 		      Drawable d,
@@ -167,7 +156,6 @@ extern void XmeDrawPolygonShadow(
 		      int n_points,
 		      Dimension shadowThickness,
 		      unsigned char shadowType);
-
 extern void XmeDrawIndicator(Display *display,
 		 Drawable d,
 		 GC gc,
@@ -175,10 +163,7 @@ extern void XmeDrawIndicator(Display *display,
                  Dimension width, Dimension height,
 		 Dimension margin,
                  XtEnum type);
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

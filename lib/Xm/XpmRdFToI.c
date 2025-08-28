@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  RdFToI.c:                                                                  *
 *                                                                             *
@@ -31,9 +30,7 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -48,15 +45,12 @@
 #include <fcntl.h>
 #endif
 #endif
-
 LFUNC(OpenReadFile, int, (const char *filename, xpmData *mdata));
 LFUNC(xpmDataClose, void, (xpmData *mdata));
-
 FUNC(xpmPipeThrough, FILE*, (int fd,
 			     const char *cmd,
 			     const char *arg1,
 			     const char *mode));
-
 #ifndef CXPMPROG
 int
 XpmReadFileToImage(
@@ -70,14 +64,11 @@ XpmReadFileToImage(
     XpmInfo info;
     int ErrorStatus;
     xpmData mdata;
-
     xpmInitXpmImage(&image);
     xpmInitXpmInfo(&info);
-
     /* open file to read */
     if ((ErrorStatus = OpenReadFile(filename, &mdata)) != XpmSuccess)
 	return (ErrorStatus);
-
     /* create the XImage from the XpmData */
     if (attributes) {
 	xpmInitAttributes(attributes);
@@ -94,14 +85,11 @@ XpmReadFileToImage(
 	    xpmSetAttributes(attributes, &image, &info);
 	XpmFreeXpmInfo(&info);
     }
-
     xpmDataClose(&mdata);
     /* free the XpmImage */
     XpmFreeXpmImage(&image);
-
     return (ErrorStatus);
 }
-
 int
 XpmReadFileToXpmImage(
     const char	*filename,
@@ -110,24 +98,18 @@ XpmReadFileToXpmImage(
 {
     xpmData mdata;
     int ErrorStatus;
-
     /* init returned values */
     xpmInitXpmImage(image);
     xpmInitXpmInfo(info);
-
     /* open file to read */
     if ((ErrorStatus = OpenReadFile(filename, &mdata)) != XpmSuccess)
 	return (ErrorStatus);
-
     /* create the XpmImage from the XpmData */
     ErrorStatus = xpmParseData(&mdata, image, info);
-
     xpmDataClose(&mdata);
-
     return (ErrorStatus);
 }
 #endif /* CXPMPROG */
-
 #ifndef NO_ZPIPE
 /* Do not depend on errno after read_through */
 FILE*
@@ -188,7 +170,6 @@ fail2:
     return NULL;
 }
 #endif
-
 /*
  * open the given file to be read as an xpmData which is returned.
  */
@@ -261,7 +242,6 @@ OpenReadFile(
 #endif
     return (XpmSuccess);
 }
-
 /*
  * close the file related to the xpmData if any
  */

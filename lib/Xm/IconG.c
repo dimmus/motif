@@ -24,12 +24,9 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/AccColorT.h>
 #include <Xm/CareVisualT.h>
 #include <Xm/ContItemT.h>
@@ -57,24 +54,18 @@
 #include "XmosI.h"
 #include "IconGI.h"
 #include <Xm/XmP.h>
-
-
 /* spacing between the line and the detail string.
    Those could be moved as plain resources later. */
 #define DEFAULT_LABEL_MARGIN_WIDTH	2
 #define DEFAULT_LABEL_MARGIN_HEIGHT	2
 #define DEFAULT_HOR_SPACING		4
-
 /* This macro should probably be put in XmI.h and used everywhere */
 #define PIXMAP_VALID(pix) \
     (pix != XmUNSPECIFIED_PIXMAP && pix != None)
-
 #define SHOW_DETAIL(wid, container_data) \
     (IG_Detail(wid) && IG_DetailCount(wid) && \
      (container_data)->detail_order_count)
-
 #define INVALID_DIMENSION ((Dimension)-1)
-
 /********    Static Function Declarations    ********/
        /* XmRCallProcs */
 static void 			CheckSetRenderTable(
@@ -89,7 +80,6 @@ static Boolean CvtStringToIconPixmap(
                         XrmValue *fromVal,
                         XrmValue *toVal,
                         XtPointer *closure_ret) ;
-
         /* Hooks */
 static	void			GetLabelString(
 					Widget		wid,
@@ -234,28 +224,20 @@ static	void			GetSize(
 					Widget		wid,
 					Dimension	*ideal_width,
 					Dimension	*ideal_height);
-
 	/* Trait methods */
 static	void ContItemSetValues(Widget w,
 			       XmContainerItemData contItemData);
-
 static	void ContItemGetValues(Widget w,
 			       XmContainerItemData contItemData);
-
 static  Boolean HandleRedraw (Widget kid,
 			      Widget cur_parent,
 			      Widget new_parent,
 			      Mask visual_flag);
 static  void GetColors(Widget widget,
 		       XmAccessColorData color_data);
-
 static  Boolean PointIn(Widget widget,
 		        Position x, Position y);
-
 /********    End Static Function Declarations    ********/
-
-
-
 /*** Xt trivia: How do you manage a flag that tells you that something
      happened during a resource conversion ?
      We need a association outside the widget instance for the
@@ -264,12 +246,10 @@ static  Boolean PointIn(Widget widget,
      overiding it.
      So we use the XContext manager for that.
      (I could probably have used private resource too...)  ***/
-
 /* those are created in ClassInitialize and filled by the
    IconConverter. */
 static XContext 	largeIconContext = 0;
 static XContext		smallIconContext = 0;
-
 static XPointer dummy;
 #define OwnLargeMask(widget) \
         (XFindContext(XtDisplay(widget),  \
@@ -281,10 +261,7 @@ static XPointer dummy;
 		     (Window) widget,   \
 		     smallIconContext,  \
 		     &dummy) == 0)
-
-
 #define MESSAGE0	_XmMMsgPixConv_0000
-
 /***** The resources of this class */
 static	XtResource		resources[] =
 {
@@ -342,8 +319,6 @@ static	XtResource		resources[] =
 	XtOffset(XmIconGadget, icong.check_set_render_table),
 	XmRImmediate, (XtPointer) False},
 };
-
-
 static XtResource cache_resources[] =
 {
    {
@@ -435,7 +410,6 @@ static XtResource cache_resources[] =
      XmRImmediate, (XtPointer) 2
    },
 };
-
 static	XmSyntheticResource	syn_resources[] =
 {
     {
@@ -443,7 +417,6 @@ static	XmSyntheticResource	syn_resources[] =
 	XtOffset(XmIconGadget,icong.label_string),GetLabelString,NULL
 	},
 };
-
 static	XmSyntheticResource	cache_syn_resources[] =
 {
     {
@@ -462,8 +435,6 @@ static	XmSyntheticResource	cache_syn_resources[] =
       XmeFromVerticalPixels, XmeToVerticalPixels
     },
 };
-
-
 /* ext rec static initialization */
 externaldef(xmicongcacheobjclassrec)
 XmIconGCacheObjClassRec xmIconGCacheObjClassRec =
@@ -502,14 +473,12 @@ XmIconGCacheObjClassRec xmIconGCacheObjClassRec =
     /* display accelerator*/    NULL,
     /* extension record   */    NULL,
   },
-
   {
     /* synthetic resources */   cache_syn_resources,
     /* num_syn_resources   */   XtNumber(cache_syn_resources),
     /* extension           */   NULL,
   }
 };
-
 static XmBaseClassExtRec   iconGBaseClassExtRec = {
     NULL,    					/* next_extension        */
     NULLQUARK,					/* record_typ            */
@@ -534,15 +503,12 @@ static XmBaseClassExtRec   iconGBaseClassExtRec = {
     XmInheritWidgetNavigable,                   /* widgetNavigable      */
     XmInheritFocusChange,                       /* focusChange          */
 };
-
 static XmCacheClassPart IconGClassCachePart = {
     {NULL, 0, 0},        /* head of class cache list */
     _XmCacheCopy,       /* Copy routine     */
     _XmCacheDelete,     /* Delete routine   */
     IconGCacheCompare,    /* Comparison routine   */
 };
-
-
 static XmGadgetClassExtRec GadClassExtRec = {
     NULL,
     NULLQUARK,
@@ -552,8 +518,6 @@ static XmGadgetClassExtRec GadClassExtRec = {
     GetDisplayRect,			/* widget_display_rect */
     MarginsProc,                        /* widget_margins */
 };
-
-
 externaldef( xmicongadgetclassrec) XmIconGadgetClassRec	xmIconGadgetClassRec =
 {	/* RectObjClassPart */
     {
@@ -590,7 +554,6 @@ externaldef( xmicongadgetclassrec) XmIconGadgetClassRec	xmIconGadgetClassRec =
 	NULL,				/* display_accelerator	*/
 	(XtPointer)&iconGBaseClassExtRec,	/* extension	*/
     },
-
     /* XmGadget Class Part */
     {
 	HighlightBorder,		        /* border_highlight	*/
@@ -603,62 +566,46 @@ externaldef( xmicongadgetclassrec) XmIconGadgetClassRec	xmIconGadgetClassRec =
 	&IconGClassCachePart,		        /* class_cache_part	*/
 	(XtPointer)&GadClassExtRec,	        /* extension		*/
     },
-
 	/* XmIconGadget Class Part */
     {
 	NULL,		/* get_container_parent	*/
 	NULL,		/* extension	*/
     },
 };
-
 externaldef(xmicongadgetclass) WidgetClass
 	xmIconGadgetClass=(WidgetClass)&xmIconGadgetClassRec;
-
-
-
 /* ContainerItem Trait record for IconGadget */
-
 static XmConst XmContainerItemTraitRec iconCIT = {
   0,		/* version */
   ContItemSetValues,
   ContItemGetValues,
 };
-
 /* CareVisual Trait record for IconGadget */
-
 static XmConst XmCareVisualTraitRec iconCVT = {
     0,		/* version */
     HandleRedraw,
 };
-
 /* Access Colors Trait record for IconGadget */
-
 static XmConst XmAccessColorsTraitRec iconACT = {
   0,			/* version */
   GetColors
 };
-
 /* Point In Trait record for IconGadget */
-
 static XmConst XmPointInTraitRec iconPIT = {
   0,			/* version */
   PointIn,
 };
-
 /******** for the special IconPixmap/Mask converter */
 static XtConvertArgRec largeIconArgs[] =
 {
    { XtBaseOffset, (XtPointer) 0, sizeof (int) },
    { XtAddress, (XtPointer)(int)XmLARGE_ICON, 0}
 };
-
 static XtConvertArgRec smallIconArgs[] =
 {
    { XtBaseOffset, (XtPointer) 0, sizeof (int) },
    { XtAddress, (XtPointer)(int)XmSMALL_ICON, 0}
 };
-
-
 /*** XmRCallProcs ***/
 /*
  * XmRCallProc routine for checking icon_cache.render_table before setting
@@ -672,7 +619,6 @@ CheckSetRenderTable(Widget wid,
 		    XrmValue *value)
 {
   XmIconGadget ig = (XmIconGadget)wid;
-
   /* Check if been here before */
   if (ig->icong.check_set_render_table)
       value->addr = NULL;
@@ -681,7 +627,6 @@ CheckSetRenderTable(Widget wid,
       value->addr = (char*)&(IG_RenderTable(ig));
   }
 }
-
 /************************************************************************
  *
  *  FetchPixmap
@@ -698,33 +643,26 @@ FetchPixmap(
    XtPointer mask_addr ;
    XmAccessColorDataRec acc_color_rec;
    XmAccessColorsTrait access_colors_trait ;
-
    depth = - XtParent(widget)->core.depth;
    /* this is the convention used by XmGetPixmapByDepth, pass
       a negative depth means do bitmap if you can */
-
    /* always called when the cache is valid and the colors
       can be returned */
    access_colors_trait = (XmAccessColorsTrait)
        XmeTraitGet((XtPointer)XtClass(widget), XmQTaccessColors) ;
    access_colors_trait->getColors(widget, &acc_color_rec);
-
    *pixmap = _XmGetScaledPixmap (XtScreen(widget), widget,
 				 image_name, &acc_color_rec,
 				 depth, FALSE, 0, 0, 0);
-
    if (*pixmap == XmUNSPECIFIED_PIXMAP) {
        return ;
    }
-
    /* now we see if a mask is to be fetched too */
-
    if (res_type == XmLARGE_ICON) {
        mask_addr = (XtPointer)&(IG_LargeIconMask(widget)) ;
    } else {
        mask_addr = (XtPointer)&(IG_SmallIconMask(widget)) ;
    }
-
    /* fetch only if a mask has not been specified in the resource slot */
    if (*(Pixmap *)mask_addr == XmUNSPECIFIED_PIXMAP) {
        /* Fetch the mask out of image_name and ask for it.
@@ -734,7 +672,6 @@ FetchPixmap(
 	  so we will get it from the cache if an XPM file with a mask was
 	  specified for image_name. When an XPM file with a mask
 	  in it is read, the mask is cached with mask_name. */
-
        *(Pixmap *)mask_addr = XmeGetMask(XtScreen(widget), image_name);
        /* mark that we have to destroy the mask */
        if (*(Pixmap *)mask_addr != XmUNSPECIFIED_PIXMAP) {
@@ -752,8 +689,6 @@ FetchPixmap(
        }
    }
 }
-
-
  /************************************************************************
  *
  *  CvtStringToIconPixmap
@@ -772,8 +707,6 @@ CvtStringToIconPixmap(
    String image_name = (String) (fromVal->addr);
    Widget widget ;
    unsigned char res_type;
-
-
    if (*numArgs != 2) {
        XtAppWarningMsg (XtDisplayToApplicationContext(dpy),
 			"wrongParameters", "cvtStringToPixmap",
@@ -781,24 +714,20 @@ CvtStringToIconPixmap(
 			(String *) NULL, (Cardinal *)NULL);
        return False;
    }
-
    /* CR 7568: Set widget before we use it. */
    widget = *((Widget *) args[0].addr);
    /* get back the resource type: LARGE or SMALL_ICON */
    res_type = (unsigned char) (int) (long) args[1].addr;
-
    if (XmeNamesAreEqual(image_name, "none")) {
        pixmap = None ;
        _XM_CONVERTER_DONE ( toVal, Pixmap, pixmap,
 	     XmDestroyPixmap(XtScreen(widget), pixmap) ;)
    }
-
    if (XmeNamesAreEqual(image_name, XmSunspecified_pixmap)) {
        pixmap = XmUNSPECIFIED_PIXMAP ;
        _XM_CONVERTER_DONE ( toVal, Pixmap, pixmap,
 	     XmDestroyPixmap(XtScreen(widget), pixmap) ;)
    }
-
    /* First we have to check if the gadget has been initialized
       before trying to create the pixmap. We need the colors
       and if the cache is not yet created, we have to delay
@@ -813,27 +742,19 @@ CvtStringToIconPixmap(
 	   IG_LargePixmapName(widget) = image_name ;
        else
 	   IG_SmallPixmapName(widget) = image_name ;
-
        _XM_CONVERTER_DONE ( toVal, Pixmap, pixmap,
 	     XmDestroyPixmap(XtScreen(widget), pixmap) ;)
    }
-
    /* fetch the pixmap */
    FetchPixmap(widget, image_name, res_type, &pixmap);
-
    if (pixmap == XmUNSPECIFIED_PIXMAP) {
        XtDisplayStringConversionWarning(dpy, image_name,
 					"Large/SmallIconPixmap");
        return False;
    }
-
-
    _XM_CONVERTER_DONE ( toVal, Pixmap, pixmap,
 		       XmDestroyPixmap(XtScreen(widget), pixmap) ;)
 }
-
-
-
 /************************************************************************
  * GetLabelString
  ************************************************************************/
@@ -844,13 +765,10 @@ GetLabelString(
 	XtArgVal	*value)
 {
     XmString	string = NULL;
-
     if (IG_LabelString(wid))
 	string = XmStringCopy(IG_LabelString(wid));
     *value = (XtArgVal)string;
 }
-
-
 /************************************************************************
 *
 *  SecondaryObjectCreate
@@ -868,24 +786,17 @@ SecondaryObjectCreate(
   WidgetClass                 wc;
   Cardinal                    size;
   XtPointer                   newSec, reqSec;
-
   cePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
-
   wc = (*cePtr)->secondaryObjectClass;
   size = wc->core_class.widget_size;
-
   newSec = _XmExtObjAlloc(size);
   reqSec = _XmExtObjAlloc(size);
-
-
 /*
  *  Update pointers in instance records now so references to resources
  * in the cache record will be valid for use in CallProcs.
  */
-
   IG_Cache(new_w) = &(((XmIconGCacheObject)newSec)->icon_cache);
   IG_Cache(req) = &(((XmIconGCacheObject)reqSec)->icon_cache);
-
     /*
      * fetch the resources in superclass to subclass order
      */
@@ -895,20 +806,15 @@ SecondaryObjectCreate(
                     wc->core_class.resources,
                     wc->core_class.num_resources,
                     args, *num_args );
-
   extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
-
   ((XmIconGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
   ((XmIconGCacheObject)newSec)->ext.logicalParent = new_w;
-
   _XmPushWidgetExtData(new_w, extData,
                       ((XmIconGCacheObject)newSec)->ext.extensionType);
    memcpy(reqSec, newSec, size);
 }
-
-
 /************************************************************************
  *
  *  InitializePosthook
@@ -923,25 +829,21 @@ InitializePosthook(
 {
     XmWidgetExtData     ext;
     XmIconGadget sw = (XmIconGadget)new_w;
-
     /*
      * - register parts in cache.
      * - update cache pointers
      * - and free req
      */
-
     _XmProcessLock();
     IG_Cache(sw) = (XmIconGCacheObjPart *)
       _XmCachePart( IG_ClassCachePart(sw),
                     (XtPointer) IG_Cache(sw),
                     sizeof(XmIconGCacheObjPart));
-
     /*
      * might want to break up into per-class work that gets explicitly
      * chained. For right now, each class has to replicate all
      * superclass logic in hook routine
      */
-
     /*
      * free the req subobject used for comparisons
      */
@@ -950,9 +852,7 @@ InitializePosthook(
     _XmExtObjFree((XtPointer) ext->reqWidget);
     _XmProcessUnlock();
     XtFree( (char *) ext);
-
 }
-
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -971,7 +871,6 @@ SetValuesPrehook(
     WidgetClass                 ec;
     XmIconGCacheObject     newSec, reqSec;
     Cardinal                    size;
-
     _XmProcessLock();
     cePtr = _XmGetBaseClassExtPtr(XtClass(newParent), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
@@ -979,7 +878,6 @@ SetValuesPrehook(
     newSec = (XmIconGCacheObject)_XmExtObjAlloc(size);
     reqSec = (XmIconGCacheObject)_XmExtObjAlloc(size);
     _XmProcessUnlock();
-
     newSec->object.self = (Widget)newSec;
     newSec->object.widget_class = ec;
     newSec->object.parent = XtParent(newParent);
@@ -987,36 +885,26 @@ SetValuesPrehook(
     newSec->object.being_destroyed = False;
     newSec->object.destroy_callbacks = NULL;
     newSec->object.constraints = NULL;
-
     newSec->ext.logicalParent = newParent;
     newSec->ext.extensionType = XmCACHE_EXTENSION;
-
     memcpy( &(newSec->icon_cache),
             IG_Cache(newParent),
             sizeof(XmIconGCacheObjPart));
-
     extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
     extData->widget = (Widget)newSec;
     extData->reqWidget = (Widget)reqSec;
     _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
-
     XtSetSubvalues((XtPointer)newSec,
                    ec->core_class.resources,
                    ec->core_class.num_resources,
                    args, *num_args);
-
     memcpy((XtPointer)reqSec, (XtPointer)newSec, size);
-
     IG_Cache(newParent) = &(((XmIconGCacheObject)newSec)->icon_cache);
     IG_Cache(refParent) =
 	      &(((XmIconGCacheObject)extData->reqWidget)->icon_cache);
-
     _XmExtImportArgs((Widget)newSec, args, num_args);
-
     return FALSE;
 }
-
-
 /************************************************************************
  *
  *  GetValuesPrehook
@@ -1033,15 +921,12 @@ GetValuesPrehook(
     WidgetClass                 ec;
     XmIconGCacheObject     newSec;
     Cardinal                    size;
-
     cePtr = _XmGetBaseClassExtPtr(XtClass(newParent), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
     size = ec->core_class.widget_size;
-
     _XmProcessLock();
     newSec = (XmIconGCacheObject)_XmExtObjAlloc(size);
     _XmProcessUnlock();
-
     newSec->object.self = (Widget)newSec;
     newSec->object.widget_class = ec;
     newSec->object.parent = XtParent(newParent);
@@ -1049,26 +934,20 @@ GetValuesPrehook(
     newSec->object.being_destroyed = False;
     newSec->object.destroy_callbacks = NULL;
     newSec->object.constraints = NULL;
-
     newSec->ext.logicalParent = newParent;
     newSec->ext.extensionType = XmCACHE_EXTENSION;
-
     memcpy( &(newSec->icon_cache),
             IG_Cache(newParent),
             sizeof(XmIconGCacheObjPart));
-
     extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
     extData->widget = (Widget)newSec;
     _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
-
     XtGetSubvalues((XtPointer)newSec,
                    ec->core_class.resources,
                    ec->core_class.num_resources,
                    args, *num_args);
-
     _XmExtGetValuesHook((Widget)newSec, args, num_args);
 }
-
 /************************************************************************
  *
  *  GetValuesPosthook
@@ -1081,16 +960,12 @@ GetValuesPosthook(
         Cardinal *num_args )
 {
     XmWidgetExtData ext;
-
     _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
-
     _XmProcessLock();
     _XmExtObjFree((XtPointer) ext->widget);
     _XmProcessUnlock();
     XtFree( (char *) ext);
 }
-
-
 /************************************************************************
  *
  *  SetValuesPosthook
@@ -1105,13 +980,11 @@ SetValuesPosthook(
         Cardinal *num_args )
 {
     XmWidgetExtData             ext;
-
     /*
      * - register parts in cache.
      * - update cache pointers
      * - and free req
      */
-
     /* assign if changed! */
     _XmProcessLock();
     if (!IconGCacheCompare((XtPointer) IG_Cache(new_w),
@@ -1119,30 +992,22 @@ SetValuesPosthook(
     {
           /* delete the old one */
 	_XmCacheDelete( (XtPointer) IG_Cache(current));
-
 	IG_Cache(new_w) = (XmIconGCacheObjPart *)
             _XmCachePart(IG_ClassCachePart(new_w),
                          (XtPointer) IG_Cache(new_w),
                          sizeof(XmIconGCacheObjPart));
      } else
 	 IG_Cache(new_w) = IG_Cache(current);
-
     _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
-
     _XmExtObjFree((XtPointer) ext->widget);
     _XmExtObjFree((XtPointer) ext->reqWidget);
     _XmProcessUnlock();
-
     XtFree( (char *) ext);
-
     return FALSE;
 }
-
 /*----------------
 | RectObj methods |
 ----------------*/
-
-
 /************************************************************************
  * ClassInitialize
  *
@@ -1151,23 +1016,18 @@ static void
 ClassInitialize( void )
 {
     iconGBaseClassExtRec.record_type = XmQmotif;
-
    /* Install the special converters for pixmap/mask */
     XtSetTypeConverter (XmRString, XmRLargeIconPixmap,
 			CvtStringToIconPixmap,
 			largeIconArgs, XtNumber(largeIconArgs),
 			(XtCacheNone | XtCacheRefCount), NULL);
-
     XtSetTypeConverter (XmRString, XmRSmallIconPixmap,
 			CvtStringToIconPixmap,
 			smallIconArgs, XtNumber(smallIconArgs),
 			(XtCacheNone | XtCacheRefCount), NULL);
-
     largeIconContext = XUniqueContext();
     smallIconContext = XUniqueContext();
 }
-
-
 /************************************************************************
  * ClassPartInitialize
  *
@@ -1177,21 +1037,15 @@ ClassPartInitialize(
 	WidgetClass	wc)
 {
     _XmFastSubclassInit(wc, XmICONGADGET_BIT);
-
     /* Install the containerItem trait for me and all subclasses */
     XmeTraitSet((XtPointer) wc, XmQTcontainerItem, (XtPointer)&iconCIT);
-
     /* Install the care Visual trait for me and all subclasses */
     XmeTraitSet((XtPointer) wc, XmQTcareParentVisual, (XtPointer)&iconCVT);
-
    /* Install the accessColors trait for all subclasses as well. */
     XmeTraitSet((XtPointer) wc, XmQTaccessColors, (XtPointer)&iconACT);
-
    /* Install the pointIn trait for all subclasses as well. */
     XmeTraitSet((XtPointer) wc, XmQTpointIn, (XtPointer)&iconPIT);
 }
-
-
 /************************************************************************
  * Initialize
  ************************************************************************/
@@ -1205,27 +1059,19 @@ Initialize(
     XmIconGadget	new_ig = (XmIconGadget)nw;
     unsigned int w = 0, h = 0;
     Cardinal i ;
-
     /* XmNviewType */
     if (!XmRepTypeValidValue(XmRID_VIEW_TYPE,IG_ViewType(nw),nw))
 	IG_ViewType(nw) = XmLARGE_ICON;
-
-
     /* XmNvisualEmphasis */
     if (!XmRepTypeValidValue(XmRID_VISUAL_EMPHASIS,
 			     IG_VisualEmphasis(nw),nw))
 	IG_VisualEmphasis(nw) = XmNOT_SELECTED;
-
-
     /* XmNalignment */
     if (!XmRepTypeValidValue(XmRID_ALIGNMENT, IG_Alignment(nw), nw))
 	IG_Alignment(nw) = XmALIGNMENT_CENTER;
-
-
     /* XmNrenderTable */
     if (IG_RenderTable(nw) == NULL) {
 	XmRenderTable	defaultRT = NULL;
-
 	XtVaGetValues(XtParent(nw), XmNrenderTable, &defaultRT, NULL);
 	if (defaultRT == NULL)
 	    defaultRT = XmeGetDefaultRenderTable(nw, XmLABEL_FONTLIST);
@@ -1233,8 +1079,6 @@ Initialize(
     }
     else
 	IG_RenderTable(nw) = XmRenderTableCopy(IG_RenderTable(nw), NULL, 0);
-
-
     /* XmNlabelString */
     if (!IG_LabelString(nw)) {
 	IG_LabelString(nw) =  XmeGetLocalizedString (
@@ -1242,19 +1086,13 @@ Initialize(
 				XrmQuarkToString(new_ig->object.xrm_name));
     } else
 	IG_LabelString(nw) = XmStringCopy(IG_LabelString(nw));
-
-
-
     /* XmNdetail */
     if (IG_Detail(nw) && IG_DetailCount(nw)) {
 	IG_Detail(nw) = (XmStringTable)
 	    XtMalloc(IG_DetailCount(nw) * sizeof(XmString));
-
 	for (i=0; i<IG_DetailCount(nw); i++)
 	    IG_Detail(nw)[i] = XmStringCopy(IG_Detail(rw)[i]);
     }
-
-
     /* get the label size */
     if (!XmStringEmpty(IG_LabelString(nw)))
 	XmStringExtent(IG_RenderTable(nw), IG_LabelString(nw),
@@ -1268,8 +1106,6 @@ Initialize(
        it's time to draw the label */
     IG_LabelRectWidth(nw) += 2*DEFAULT_LABEL_MARGIN_WIDTH ;
     IG_LabelRectHeight(nw) += 2*DEFAULT_LABEL_MARGIN_HEIGHT  ;
-
-
     /* before doing anything with the pixmap, check if we have to
        re-ask for a conversion */
     if (IG_LargeIconPixmap(nw) == XmDELAYED_PIXMAP) {
@@ -1285,8 +1121,6 @@ Initialize(
 					     "Large/SmallIconPixmap");
 	}
     }
-
-
     if (IG_SmallIconPixmap(nw) == XmDELAYED_PIXMAP) {
 	FetchPixmap(nw, IG_SmallPixmapName(nw), XmSMALL_ICON,
 		    &(IG_SmallIconPixmap(nw)));
@@ -1296,8 +1130,6 @@ Initialize(
 					     "Large/SmallIconPixmap");
 	}
     }
-
-
     /* get the large icon size */
     if (PIXMAP_VALID(IG_LargeIconPixmap(nw)))
 	XmeGetPixmapData(XtScreen(nw),
@@ -1310,10 +1142,8 @@ Initialize(
     else {
 	w = h = 0 ;
     }
-
     IG_LargeIconRectWidth(nw)  = (Dimension)w;
     IG_LargeIconRectHeight(nw) = (Dimension)h;
-
     /* get the small icon size */
     if (PIXMAP_VALID(IG_SmallIconPixmap(nw)))
 	XmeGetPixmapData(XtScreen(nw),
@@ -1326,51 +1156,39 @@ Initialize(
     else {
 	w = h = 0 ;
     }
-
     IG_SmallIconRectWidth(nw)  = (Dimension)w;
     IG_SmallIconRectHeight(nw) = (Dimension)h;
-
     /* turn None in unspecified, since it is the only value
        Container supports */
     if (IG_LargeIconPixmap(nw) == None)
 	IG_LargeIconPixmap(nw) = XmUNSPECIFIED_PIXMAP ;
     if (IG_SmallIconPixmap(nw) == None)
 	IG_SmallIconPixmap(nw) = XmUNSPECIFIED_PIXMAP ;
-
     /*****
       we want the mask to act as a max for the size of the
       overall pixmap .
       We need to get the mask sizes first.
-
     if (IG_LargeMaskWidth(nw))
 	IG_LargeIconRectWidth(nw)  = MIN(IG_LargeIconRectWidth(nw),
 					 IG_LargeMaskWidth(nw)) ;
-
     if (IG_LargeMaskHeight(nw))
 	IG_LargeIconRectHeight(nw)  = MIN(IG_LargeIconRectHeight(nw),
 					  IG_LargeMaskHeight(nw)) ;
-
     if (IG_SmallMaskWidth(nw))
 	IG_SmallIconRectWidth(nw)  = MIN(IG_SmallIconRectWidth(nw),
 					 IG_SmallMaskWidth(nw)) ;
-
     if (IG_SmallMaskHeight(nw))
 	IG_SmallIconRectHeight(nw)  = MIN(IG_SmallIconRectHeight(nw),
 					  IG_SmallMaskHeight(nw)) ;
 	*****/
-
     /* undo our superclass size check */
     if (((XmGadget)rw)->rectangle.width == 0)
 	new_ig->rectangle.width = 0;
-
     if (((XmGadget)rw)->rectangle.height == 0)
 	new_ig->rectangle.height = 0;
-
     /* if a size has been specified (not 0), it won't be altered
        by the GetSize function */
     GetSize(nw, &new_ig->rectangle.width, &new_ig->rectangle.height);
-
-
     IG_NormalGC(nw) = NULL;
     IG_BackgroundGC(nw) = NULL;
     IG_InsensitiveGC(nw) = NULL;
@@ -1381,13 +1199,9 @@ Initialize(
     IG_InverseGC(nw) = NULL;
     IG_SelectedGC(nw) = NULL;  /* otherwize UpdateGCs frees them */
     UpdateGCs(nw);
-
-
     new_ig->gadget.event_mask =  XmHELP_EVENT |
         XmFOCUS_IN_EVENT | XmFOCUS_OUT_EVENT | XmENTER_EVENT | XmLEAVE_EVENT ;
 }
-
-
 /************************************************************************
  * Destroy
  ************************************************************************/
@@ -1396,29 +1210,22 @@ Destroy(
 	Widget	wid)
 {
     Cardinal i ;
-
     if (IG_RenderTable(wid) != NULL) XmRenderTableFree(IG_RenderTable(wid));
-
     if (IG_LabelString(wid) != NULL) XmStringFree(IG_LabelString(wid));
-
     if (IG_Detail(wid) && IG_DetailCount(wid)) {
 	for (i=0; i<IG_DetailCount(wid); i++)
 	    XmStringFree(IG_Detail(wid)[i]);
 	XtFree((char*)IG_Detail(wid));
-
     }
-
     if (OwnLargeMask(wid)) {
 	if (PIXMAP_VALID(IG_LargeIconMask(wid)) )
 	    XmDestroyPixmap(XtScreen(wid),IG_LargeIconMask(wid));
     }
-
     if (OwnSmallMask(wid)) {
 	if (PIXMAP_VALID(IG_SmallIconMask(wid)))
 	    XmDestroyPixmap(XtScreen(wid),IG_SmallIconMask(wid));
     }
     /* the IconPixmap is freed by the converter destructor */
-
     XtReleaseGC(XtParent(wid),IG_NormalGC(wid));
     XtReleaseGC(XtParent(wid),IG_InsensitiveGC(wid));
     XtReleaseGC(XtParent(wid),IG_ShadowGC(wid));
@@ -1428,15 +1235,10 @@ Destroy(
     XtReleaseGC(XtParent(wid),IG_TopShadowGC(wid));
     XtReleaseGC(XtParent(wid),IG_BottomShadowGC(wid));
     XtReleaseGC(XtParent(wid),IG_HighlightGC(wid));
-
     _XmProcessLock();
     _XmCacheDelete((XtPointer) IG_Cache(wid));
     _XmProcessUnlock();
-
 }
-
-
-
 /************************************************************************
  * GetLabelXY
  *  from origin of gadget
@@ -1450,23 +1252,18 @@ GetLabelXY(
     Dimension ist = IG_ShadowThickness(wid);
     Position label_x = ist;
     Position label_y = ist;
-
 #define HAS_PIXMAP(wid) \
     (((IG_ViewType(wid) == XmLARGE_ICON) && \
       (PIXMAP_VALID(IG_LargeIconPixmap(wid)))) || \
      ((IG_ViewType(wid) == XmSMALL_ICON) && \
       (PIXMAP_VALID(IG_SmallIconPixmap(wid)))))
-
 #define SPACING(wid) (HAS_PIXMAP(wid) ? IG_Spacing(wid) : 0)
-
 #define HAS_MASK(wid) \
     (((IG_ViewType(wid) == XmSMALL_ICON) && \
       (PIXMAP_VALID(IG_SmallIconMask(wid)))) ||\
      ((IG_ViewType(wid) == XmLARGE_ICON) && \
       (PIXMAP_VALID(IG_LargeIconMask(wid)))))
-
     if (IG_ViewType(wid) == XmLARGE_ICON) {
-
 	if ((IG_Alignment(wid) == XmALIGNMENT_CENTER) && !HAS_MASK(wid) &&
 	    (IG_LargeIconRectWidth(wid) > IG_LabelRectWidth(wid)))
 	    label_x += (IG_LargeIconRectWidth(wid) - IG_LabelRectWidth(wid))/2;
@@ -1481,13 +1278,9 @@ GetLabelXY(
 		 (IG_LargeIconRectWidth(wid) > IG_LabelRectWidth(wid) + 2*ist))
 	    label_x +=
 		IG_LargeIconRectWidth(wid) - IG_LabelRectWidth(wid) - 2*ist;
-
 	label_y += IG_LargeIconRectHeight(wid) + SPACING(wid);
-
     } else { /* XmSMALL_ICON */
-
 	label_x += IG_SmallIconRectWidth(wid) + SPACING(wid);
-
 	if (!HAS_MASK(wid) &&
 	    (IG_SmallIconRectHeight(wid) > IG_LabelRectHeight(wid)))
 	    label_y += (IG_SmallIconRectHeight(wid) -
@@ -1505,15 +1298,9 @@ GetLabelXY(
     } else {
 	label_x += IG_HLThickness(wid) ;
     }
-
     if (x_ret) *x_ret = label_x;
     if (y_ret) *y_ret = label_y + IG_HLThickness(wid) + IG_MarginHeight(wid);
-
 }
-
-
-
-
 /************************************************************************
  * GetLargeIconX
  ************************************************************************/
@@ -1524,7 +1311,6 @@ GetLargeIconX(
     /* no test LayoutIsRtoLG(wid) here */
     Dimension ist = IG_ShadowThickness(wid);
     Position large_x = IG_HLThickness(wid) + IG_MarginWidth(wid);
-
     if ((IG_Alignment(wid) == XmALIGNMENT_CENTER) && !HAS_MASK(wid) &&
 	(IG_LabelRectWidth(wid) > IG_LargeIconRectWidth(wid)))
 	large_x += (IG_LabelRectWidth(wid) - IG_LargeIconRectWidth(wid)) /2;
@@ -1538,27 +1324,22 @@ GetLargeIconX(
     else if ((IG_Alignment(wid) == XmALIGNMENT_END) && HAS_MASK(wid) &&
 	     (IG_LargeIconRectWidth(wid) < IG_LabelRectWidth(wid) + 2*ist))
 	large_x += IG_LabelRectWidth(wid) + 2*ist - IG_LargeIconRectWidth(wid);
-
     if (!HAS_MASK(wid))
 	large_x += ist;
-
     return large_x;
 }
-
 /************************************************************************
  * GetLargeIconY
  ************************************************************************/
 /* the shadow thickness is only incorporated when there is no mask */
 #define GetLargeIconY(wid) (IG_HLThickness(wid) + IG_MarginHeight(wid) + \
 			    (HAS_MASK(wid) ? 0 : IG_ShadowThickness(wid)))
-
 /************************************************************************
  * GetSmallIconX
  ************************************************************************/
 /* the shadow thickness is only incorporated when there is no mask */
 #define GetSmallIconX(wid) (IG_HLThickness(wid) + IG_MarginWidth(wid) + \
 			    (HAS_MASK(wid) ? 0 : IG_ShadowThickness(wid)))
-
 /************************************************************************
  * GetSmallIconY
  ************************************************************************/
@@ -1568,7 +1349,6 @@ GetSmallIconY(
 {
     Dimension ist = IG_ShadowThickness(wid);
     Position small_y = IG_HLThickness(wid) + IG_MarginHeight(wid);
-
     if (!HAS_MASK(wid) &&
 	(IG_LabelRectHeight(wid) > IG_SmallIconRectHeight(wid)))
 	small_y += (IG_LabelRectHeight(wid) - IG_SmallIconRectHeight(wid))/2;
@@ -1578,11 +1358,8 @@ GetSmallIconY(
 		    IG_SmallIconRectHeight(wid))/2;
     if (!HAS_MASK(wid))
 	small_y += ist;
-
     return small_y;
 }
-
-
 /************************************************************************
  * GetIconLabelWidth
  *  including the shadows, the spacing, and the margin
@@ -1592,7 +1369,6 @@ GetIconLabelWidth(
 	Widget		wid)
 {
     Dimension width = 2*IG_MarginWidth(wid);
-
     if (IG_ViewType(wid) == XmLARGE_ICON) {
 	if (!HAS_MASK(wid))
 	    width += MAX(IG_LargeIconRectWidth(wid),
@@ -1606,9 +1382,6 @@ GetIconLabelWidth(
     }
     return width;
 }
-
-
-
 /************************************************************************
  * GetIconLabelHeight
  *  including the shadows, the possible spacing, and the margin
@@ -1618,7 +1391,6 @@ GetIconLabelHeight(
 	Widget		wid)
 {
     Dimension height = 2*IG_MarginHeight(wid);
-
     if (IG_ViewType(wid) == XmLARGE_ICON) {
 	height += IG_LargeIconRectHeight(wid) + IG_LabelRectHeight(wid) +
 	    2*IG_ShadowThickness(wid) + SPACING(wid);
@@ -1632,8 +1404,6 @@ GetIconLabelHeight(
     }
     return height;
 }
-
-
 /***********
  * GetShapeInfo.
  *  This return the points that defines the shadow rectangle.
@@ -1665,7 +1435,6 @@ GetShapeInfo(
     Boolean highlight_case ;
     Dimension mh, mw, rmh = IG_MarginHeight(wid), rmw = IG_MarginWidth(wid);
     Dimension maxX;
-
     if (ht == INVALID_DIMENSION) {
 	/* If we're doing the highlight case, mark the dimension
 	   as zero but remember it so that the shadow is not drawn
@@ -1678,14 +1447,12 @@ GetShapeInfo(
 	mw = rmw;
 	mh = rmh;
     }
-
     /* then first treat the simple case where either the pixmap or
        the label is missing */
     points[0].x = ht + mw;
     points[0].y = ht + mh;
     points[1].x = 2*ist + 2*rht - ht + 2*rmw - mw;
     points[1].y = 2*ist + 2*rht - ht + 2*rmh - mh;
-
     if (XmStringEmpty(IG_LabelString(wid))) { /* no label */
 	if ((IG_ViewType(wid) == XmLARGE_ICON) &&
 	    (PIXMAP_VALID(IG_LargeIconPixmap(wid)))) {
@@ -1705,7 +1472,6 @@ GetShapeInfo(
 	    n = 2 ;
 	}
     }
-
     if (n == 8 && IG_ViewType(wid) == XmLARGE_ICON) {
 	/* point #0 is top left corner of label */
 	points[0].x = label_x - ist - rht + ht - rmw + mw;
@@ -1779,7 +1545,6 @@ GetShapeInfo(
 	points[7].x = points[0].x ;
 	points[7].y = points[6].y;
     }
-
     /* now treat the case where the pixmap is present
        but it has a mask: no shadow around the pixmap, just the
        label, if there is a label of course.
@@ -1803,7 +1568,6 @@ GetShapeInfo(
 	    n = 2 ;
 	}
     }
-
     /* put the points in the frame */
     if (highlight_case)
 	maxX = ig->rectangle.width - ht - mw;
@@ -1814,14 +1578,11 @@ GetShapeInfo(
 	    points[i].x = maxX;
 	if (points[i].y > ig->rectangle.height - ht - mh)
 	    points[i].y = ig->rectangle.height - ht - mh;
-
 	/* add the gadget position in its parent */
 	points[i].x += ig->rectangle.x ;
 	points[i].y += ig->rectangle.y ;
     }
-
     /* test LayoutIsRtoLG(wid) here */
-
      if (LayoutIsRtoLG(wid) ) {
 	 /* mirror the x position */
 	 for (i = 0; i < n; i++)
@@ -1834,11 +1595,8 @@ GetShapeInfo(
 	     points[0].x = save_x +1;
 	 }
     }
-
     return n ;
 }
-
-
 /***********
  * GetContainerData
  **********/
@@ -1851,7 +1609,6 @@ GetContainerData(
     Widget container_id ;
     XmContainerTrait container_trait ;
     XmIconGadget 	ig = (XmIconGadget)wid;
-
     /**** initialize the trait struct */
     /* need to set detail_order_count and first_column so that
        container gets a min base. The problem we're trying to solve here
@@ -1865,12 +1622,10 @@ GetContainerData(
     container_data->detail_order_count = IG_DetailCount(wid);
     container_data->first_column_width =
 	IG_HLThickness(wid) + GetIconLabelWidth(wid) - IG_MarginWidth(wid);
-
     container_data->selection_mode = XmNORMAL_MODE ;
     container_data->detail_order = NULL ;
     container_data->detail_tablist = NULL ;
     container_data->select_color = XmREVERSED_GROUND_COLORS ;
-
     /*** get the Container information using the trait */
     /* first get the widget id from which to fetch the trait */
     container_id = (igc->icong_class.get_container_parent)?
@@ -1882,7 +1637,6 @@ GetContainerData(
     if (container_trait)
 	container_trait->getValues(container_id, container_data);
     else return ;
-
     /*** detail_order_count might be 0: mean no detail displayed,
       even if the icon has some.
       detail_order might be NULL: mean if there is detail to display,
@@ -1891,15 +1645,12 @@ GetContainerData(
       (XmContainer returns NULL unless it can't come up with a reasonable
        tablist due to its size being NULL or too small)
       first_column_width might be 0, which mean spatial: use icon/label only */
-
-
     /* a return of 0 for first column width means we are
        in spatial, in this case, don't use rectangle.x at all */
     if (!container_data->first_column_width) {
 	container_data->first_column_width =
 	    IG_HLThickness(wid) + GetIconLabelWidth(wid) - IG_MarginWidth(wid);
     } else {
-
 	/* remove the current hor indentation */
 	if (LayoutIsRtoLG(wid)) {
 	    if (XtWidth(XtParent(wid))) {
@@ -1938,7 +1689,6 @@ GetContainerData(
 		container_data->first_column_width =
 		    IG_HLThickness(wid) + IG_MarginWidth(wid);
     }
-
     /*** leaving this routine:
        detail_order_count might be 0: no detail to display
        detail_order might be NULL. : use implicit order
@@ -1950,9 +1700,6 @@ GetContainerData(
         from the current position of the icon to the start of
         the detail rendering (included highlight too). */
 }
-
-
-
 /************************************************************************
  * Redisplay
  * This is the main routine of this baby.
@@ -1977,17 +1724,14 @@ Redisplay(
     Dimension mw = IG_MarginWidth(wid), mh = IG_MarginHeight(wid);
     Cardinal i ;
     XPoint shad_points[8] ;
-
     /* a gc for the ink (text only) */
     if (!XtIsSensitive(wid))
         gc = IG_InsensitiveGC(wid);
     else
         gc = IG_NormalGC(wid);
-
     /**** invert the background gc for selected view */
     if (IG_VisualEmphasis(wid) == XmSELECTED) {
 	background_gc = IG_SelectedGC(wid);
-
 	/* if inverse_gc has been set, it holds the parent background
 	   as its foreground (ink). Use it when in selected mode */
     	if (IG_InverseGC(wid))
@@ -1995,12 +1739,9 @@ Redisplay(
     } else {
 	background_gc = IG_BackgroundGC(wid);
     }
-
-
     /**** get the container information */
     container_data.valueMask = ContAllValid ;
     GetContainerData(wid, &container_data);
-
     /**** clear the background */
     /* in detail mode, clear the entire gadget area using
        background_gc (which, depending on the selected mode is the
@@ -2015,15 +1756,10 @@ Redisplay(
     } else {
         XSetClipMask(XtDisplay(wid), IG_BackgroundGC(wid), None);
     }
-
-
-
     /**** render the pixmap first */
     if ((IG_ViewType(wid) == XmLARGE_ICON) &&
 	(PIXMAP_VALID(IG_LargeIconPixmap(wid)))) {
-
 	large_icon_x = GetLargeIconX(wid); /* no rtl yet */
-
 	XmeGetPixmapData(XtScreen(wid),
 			 IG_LargeIconPixmap(wid),
 			 NULL,
@@ -2031,14 +1767,12 @@ Redisplay(
 			 NULL, NULL,
 			 NULL, NULL,
 			 NULL, NULL);
-
 	pm_width = IG_LargeIconRectWidth(wid);
 	if (large_icon_x + pm_width >
 	    MIN(ig->rectangle.width, container_data.first_column_width)) {
 	    pm_width = MIN(ig->rectangle.width - 2*ht,
 			   container_data.first_column_width - ht);
 	    pm_width -= MIN(pm_width, (Dimension)large_icon_x);
-
 	    if (LayoutIsRtoLG(wid))
 		large_icon_x = ig->rectangle.width -
 		    MIN(ig->rectangle.width - 2*ht,
@@ -2047,24 +1781,19 @@ Redisplay(
 	    if (LayoutIsRtoLG(wid))
 		large_icon_x = ig->rectangle.width - large_icon_x - pm_width ;
 	}
-
 	pm_height = IG_LargeIconRectHeight(wid) ;
 	if (ht + ist + pm_height > ig->rectangle.height - 2*ht)
 	    pm_height = ig->rectangle.height - ist - ht;
-
 	/* clip with the mask if any */
 	if (PIXMAP_VALID(IG_LargeIconMask(wid))) {
-
 	    XSetClipMask(XtDisplay(wid), IG_NormalGC(wid),
 			 IG_LargeIconMask(wid));
-
 	    XSetClipOrigin(XtDisplay(wid), IG_NormalGC(wid),
 			   ig->rectangle.x + large_icon_x,
 			   ig->rectangle.y + ht + mh);
 	} else {
 	    XSetClipMask(XtDisplay(wid), IG_NormalGC(wid),None);
 	}
-
 	if (depth == XtParent(wid)->core.depth)
 	    XCopyArea(XtDisplay(wid),IG_LargeIconPixmap(wid),
 		      XtWindow(wid), IG_NormalGC(wid), 0,0,
@@ -2080,12 +1809,9 @@ Redisplay(
 			   ig->rectangle.x + large_icon_x,
 			   ig->rectangle.y + GetLargeIconY(wid), 1);
     }
-
     if ((IG_ViewType(wid) == XmSMALL_ICON) &&
 	(PIXMAP_VALID(IG_SmallIconPixmap(wid)))) {
-
 	small_icon_y = GetSmallIconY(wid);
-
 	XmeGetPixmapData(XtScreen(wid),
 			 IG_SmallIconPixmap(wid),
 			 NULL,
@@ -2093,16 +1819,13 @@ Redisplay(
 			 NULL, NULL,
 			 NULL, NULL,
 			 NULL, NULL);
-
 	pm_width = IG_SmallIconRectWidth(wid);
 	small_icon_x = GetSmallIconX(wid);
-
 	if (small_icon_x + pm_width  > MIN(ig->rectangle.width - 2*ht,
 				  container_data.first_column_width - 2*ht)) {
 	    pm_width = MIN(ig->rectangle.width,
 			   container_data.first_column_width) - 2*ht;
 	    pm_width -= MIN(pm_width, (Dimension)small_icon_x);
-
 	    if (LayoutIsRtoLG(wid))
 		small_icon_x = ig->rectangle.width + 2*ht -
 		    MIN(ig->rectangle.width,
@@ -2111,11 +1834,9 @@ Redisplay(
 	    if (LayoutIsRtoLG(wid))
 		small_icon_x = ig->rectangle.width - small_icon_x - pm_width ;
 	}
-
 	pm_height = IG_SmallIconRectHeight(wid);
 	if (small_icon_y + pm_height > ig->rectangle.height - 2*ht)
 	    pm_height = ig->rectangle.height - small_icon_y;
-
 	/* clip with the mask if any */
 	if (PIXMAP_VALID(IG_SmallIconMask(wid))) {
 	    XSetClipMask(XtDisplay(wid), IG_NormalGC(wid),
@@ -2126,7 +1847,6 @@ Redisplay(
 	} else {
 	    XSetClipMask(XtDisplay(wid), IG_NormalGC(wid),None);
 	}
-
 	if (depth == XtParent(wid)->core.depth)
 	    XCopyArea(XtDisplay(wid),IG_SmallIconPixmap(wid),
 		      XtWindow(wid), IG_NormalGC(wid),0,0,
@@ -2141,40 +1861,32 @@ Redisplay(
 			   ig->rectangle.x + small_icon_x,
 			   ig->rectangle.y + small_icon_y, 1);
     }
-
     clip_rect.y = ig->rectangle.y + ht + mh;
     clip_rect.width = MIN(ig->rectangle.width - 2*ht - 2*mw,
 			  container_data.first_column_width - ht - mw);
     clip_rect.height = ig->rectangle.height - 2*ht - 2*mh;
-
     if (LayoutIsRtoLG(wid)) {
 	clip_rect.x = ig->rectangle.x + ig->rectangle.width -
 	    ht - clip_rect.width - mw;
     } else {
 	clip_rect.x = ig->rectangle.x + ht + mw;
     }
-
     XSetClipRectangles(XtDisplay(wid),gc,0,0,&clip_rect,1,Unsorted);
     XSetClipRectangles(XtDisplay(wid),background_gc,0,0,&clip_rect,1,Unsorted);
-
-
     /**** then draw the label part of the icon */
     GetLabelXY(wid, &label_x, &label_y) ;
-
     if (!XmStringEmpty(IG_LabelString(wid))) {
 	XFillRectangle(XtDisplay(wid), XtWindow(wid), background_gc,
 		       ig->rectangle.x + label_x,
 		       ig->rectangle.y + label_y,
 		       IG_LabelRectWidth(wid),
 		       IG_LabelRectHeight(wid));
-
 	/* if we are in the inverse_color case, we need to draw
 	   the string with parent background ink, and
 	   parent foreground as back color (The previous fillrectangle
 	   took care of that last part). gc has been set
 	   up to IG_InverseGC at the beginning of this routine,
 	   so what's left is the forcing of this ink/foreground */
-
 	/*Draw shadow for insensitive text*/
 	if (!XtIsSensitive(wid)) {
 		XmStringDraw(XtDisplay(wid),XtWindow(wid),
@@ -2185,7 +1897,6 @@ Redisplay(
 		      XmALIGNMENT_BEGINNING,
 		      LayoutG(wid), NULL);
 	}
-
 	XmStringDraw(XtDisplay(wid),XtWindow(wid),
 		      IG_RenderTable(wid),IG_LabelString(wid), gc,
 		      ig->rectangle.x + label_x + DEFAULT_LABEL_MARGIN_WIDTH,
@@ -2194,16 +1905,12 @@ Redisplay(
 		      XmALIGNMENT_BEGINNING,
 		      LayoutG(wid), NULL);
     }
-
     XSetClipMask(XtDisplay(wid),background_gc,None);
-
     /**** now the polygon shadow around the icon+label, or the
           square shadow around a masked pixmap or a no pixmap icon */
-
     /* only draw shadows if there is something inside */
     if (container_data.first_column_width) {
 	Cardinal n ;
-
 	/* undo the ltr layout for label_x, because getshapeinfo
 	   does it */
 	if (LayoutIsRtoLG(wid)) {
@@ -2229,50 +1936,39 @@ Redisplay(
 				  shad_points, n, ist, XmSHADOW_OUT);
 	}
     }
-
     /**** then comes the details rendering */
-
     if (SHOW_DETAIL(wid, &container_data)&&
 	container_data.first_column_width >= ht + mw) {
 	unsigned int tab_count = 0 ;
 	Dimension detail_x, detail_y;
 	XmStringTable new_detail ;
 	int lab_baseline = 0, detail_baseline ;
-
 	/* get the detail table to be displayed */
 	new_detail =
 	    GetStringTableReOrdered(IG_Detail(wid), IG_DetailCount(wid),
 				    container_data.detail_order,
 				    container_data.detail_order_count);
-
 	if (container_data.detail_tablist)
 	    tab_count = XmTabListTabCount(container_data.detail_tablist) ;
 	/* the extra tabs are ignored */
 	tab_count = MIN(tab_count, container_data.detail_order_count);
 	/* tab_count might be 0 at this point, but it won't be treated as
 	   a special case */
-
 	if (IG_LabelString(wid))
 	    lab_baseline = XmStringBaseline(IG_RenderTable(wid),
 					    IG_LabelString(wid)) ;
-
 	/* detail_x is in gadget relative coordinate */
 	detail_x = container_data.first_column_width;
-
 	for (i = 0 ; i < IG_DetailCount(wid) ; i++) {
 	    Position next_tab_x = 0 ;
-
 	    w = 0 ;
-
 	    detail_x += DEFAULT_HOR_SPACING ;
-
 	    if (container_data.detail_tablist)
 		next_tab_x = container_data.first_column_width +
 		    _XmTabListGetPosition(XtScreen(wid),
 					 container_data.detail_tablist,
 					 XmPIXELS, i);
 	    if (new_detail[i]) {
-
 		/* if we have a tab, use it, don't bother to call an
 		   expensive string extent. */
 		if (i < tab_count) {
@@ -2283,7 +1979,6 @@ Redisplay(
 		    if (LayoutIsRtoLG(wid))
 			clip_rect.x = ig->rectangle.x + ig->rectangle.width
 			    - detail_x - clip_rect.width;
-
 		    clip_rect.y = ig->rectangle.y + ht + mh;
 		    clip_rect.height = ig->rectangle.height - 2*ht - 2*mh;
 		    XSetClipRectangles(XtDisplay(wid),gc,0,0,&clip_rect,1,
@@ -2301,12 +1996,10 @@ Redisplay(
 			clip_set = True ;
 		    }
 		}
-
 		detail_baseline = XmStringBaseline(IG_RenderTable(wid),
 						    new_detail[i]);
 		detail_y = label_y + DEFAULT_LABEL_MARGIN_HEIGHT +
 		    lab_baseline - detail_baseline;
-
 		XmStringDraw(XtDisplay(wid),XtWindow(wid),
 			     IG_RenderTable(wid), new_detail[i], gc,
 			     (LayoutIsRtoLG(wid)) ?
@@ -2318,9 +2011,7 @@ Redisplay(
 			     XmALIGNMENT_BEGINNING,
 			     LayoutG(wid),
 			     NULL);  /* clip is done in gc */
-
 	    }
-
 	    if (i < tab_count) {
 		detail_x = next_tab_x;
 	    } else {
@@ -2328,7 +2019,6 @@ Redisplay(
 	    }
 	}
     }
-
     /**** draw the highlight if needed */
     if (ig->gadget.highlighted) {
 	if(((XmGadgetClass) XtClass(wid))->gadget_class.border_highlight){
@@ -2336,11 +2026,7 @@ Redisplay(
 	       ->gadget_class.border_highlight))(wid) ;
 	}
     }
-
-
 }
-
-
 /************************************************************************
  * SetValues
  ************************************************************************/
@@ -2356,15 +2042,12 @@ SetValues(
     Boolean			Redraw = False;
     unsigned int w, h ;
     Cardinal i ;
-
-
     if (IG_ViewType(nw) != IG_ViewType(cw)) {
 	if (XmRepTypeValidValue(XmRID_VIEW_TYPE,IG_ViewType(nw),nw))
 	    Relayout = Redraw = True;
 	else
 	    IG_ViewType(nw) = IG_ViewType(cw);
     }
-
     if (IG_VisualEmphasis(nw) != IG_VisualEmphasis(cw)) {
 	if (XmRepTypeValidValue(XmRID_VISUAL_EMPHASIS,
 				IG_VisualEmphasis(nw),nw))
@@ -2372,14 +2055,12 @@ SetValues(
 	else
 	    IG_VisualEmphasis(nw) = IG_VisualEmphasis(cw);
     }
-
     if (IG_Alignment(nw) != IG_Alignment(cw)) {
 	if (XmRepTypeValidValue(XmRID_ALIGNMENT, IG_Alignment(nw), nw))
 	    Relayout = Redraw = True;
 	else
 	    IG_Alignment(nw) = IG_Alignment(cw);
     }
-
     if ((IG_Background(nw) != IG_Background(cw)) ||
 	(IG_Foreground(nw) != IG_Foreground(cw)) ||
 	(IG_TopShadowColor(nw) != IG_TopShadowColor(cw)) ||
@@ -2391,27 +2072,21 @@ SetValues(
 	(IG_HighlightPixmap(nw) != IG_HighlightPixmap(cw))) {
 	UpdateGCs(nw);
     }
-
     if (IG_RenderTable(nw) != IG_RenderTable(cw)) {
 	XmRenderTableFree(IG_RenderTable(cw));
 	IG_RenderTable(nw) = XmRenderTableCopy(IG_RenderTable(nw), NULL, 0);
 	UpdateGCs(nw);
-
 	if (!XmStringEmpty(IG_LabelString(nw)))
 	    XmStringExtent(IG_RenderTable(nw), IG_LabelString(nw),
 			    &(IG_LabelRectWidth(nw)),
 			    &(IG_LabelRectHeight(nw)));
-
 	IG_LabelRectWidth(nw) += 2*DEFAULT_LABEL_MARGIN_WIDTH ;
 	IG_LabelRectHeight(nw) += 2*DEFAULT_LABEL_MARGIN_HEIGHT  ;
-
 	Relayout = Redraw = True;
     }
-
     if (IG_LabelString(nw) != IG_LabelString(cw)) {
 	XmStringFree(IG_LabelString(cw));
 	IG_LabelString(nw) = XmStringCopy(IG_LabelString(nw));
-
 	if (!XmStringEmpty(IG_LabelString(nw)))
 	    XmStringExtent(IG_RenderTable(nw), IG_LabelString(nw),
 			    &(IG_LabelRectWidth(nw)),
@@ -2422,10 +2097,8 @@ SetValues(
 	}
 	IG_LabelRectWidth(nw) += 2*DEFAULT_LABEL_MARGIN_WIDTH ;
 	IG_LabelRectHeight(nw) += 2*DEFAULT_LABEL_MARGIN_HEIGHT  ;
-
 	Relayout = Redraw = True;
     }
-
     if (IG_LargeIconMask(nw) != IG_LargeIconMask(cw)) {
 	if (OwnLargeMask(cw)) {
 	    XDeleteContext(XtDisplay(nw),
@@ -2438,11 +2111,9 @@ SetValues(
 	if (IG_ViewType(nw) == XmLARGE_ICON)
 	    Relayout = Redraw = True;
     }
-
     if (IG_LargeIconPixmap(nw) != IG_LargeIconPixmap(cw)) {
 	if (IG_ViewType(nw) == XmLARGE_ICON)
 	    Relayout = Redraw = True;
-
 	/* if the new icon is different, refetch the sizes */
 	if (PIXMAP_VALID(IG_LargeIconPixmap(nw)))
 	    XmeGetPixmapData(XtScreen(nw),
@@ -2455,11 +2126,9 @@ SetValues(
 	else {
 	    w = h = 0 ;
 	}
-
 	IG_LargeIconRectWidth(nw)  = (unsigned short)w;
 	IG_LargeIconRectHeight(nw) = (unsigned short)h;
     }
-
     if (IG_SmallIconMask(nw) != IG_SmallIconMask(cw)) {
 	if (OwnSmallMask(cw)) {
 	    XDeleteContext(XtDisplay(nw),
@@ -2472,11 +2141,9 @@ SetValues(
 	if (IG_ViewType(nw) == XmSMALL_ICON)
 	    Relayout = Redraw = True;
     }
-
     if (IG_SmallIconPixmap(nw) != IG_SmallIconPixmap(cw)) {
 	if (IG_ViewType(nw) == XmSMALL_ICON)
 	    Relayout = Redraw = True;
-
 	if (PIXMAP_VALID(IG_SmallIconPixmap(nw)))
 	    XmeGetPixmapData(XtScreen(nw),
 			     IG_SmallIconPixmap(nw),
@@ -2488,40 +2155,32 @@ SetValues(
 	else {
 	    w = h = 0 ;
 	}
-
 	IG_SmallIconRectWidth(nw)  = (unsigned short)w;
 	IG_SmallIconRectHeight(nw) = (unsigned short)h;
     }
-
     if (IG_Detail(nw) != IG_Detail(cw)) {
 	/* new XmNdetail copy in */
-
 	/* first free the current detail table and strings if present */
 	if (IG_Detail(cw) && IG_DetailCount(cw)) {
 	    for (i=0; i<IG_DetailCount(cw); i++)
 		XmStringFree(IG_Detail(cw)[i]);
 	    XtFree((char*)IG_Detail(cw));
 	}
-
 	/* now copy */
 	if (IG_Detail(nw) && IG_DetailCount(nw)) {
 	    IG_Detail(nw) = (XmStringTable)
 		XtMalloc(IG_DetailCount(nw) * sizeof(XmString));
-
 	    for (i=0; i<IG_DetailCount(nw); i++)
 		IG_Detail(nw)[i] = XmStringCopy(IG_Detail(rw)[i]);
 	}
 	Relayout = Redraw = True;
     }
-
     if (IG_DetailCount(nw) != IG_DetailCount(cw)) {
 	Relayout = Redraw = True;
     }
-
     if (LayoutG(nw) != LayoutG(cw) || XtIsSensitive(nw) != XtIsSensitive(cw)) {
 	Redraw = True;
     }
-
     if ((Relayout) ||
 	(IG_Spacing(nw) != IG_Spacing(cw)) ||
 	(IG_MarginWidth(nw) != IG_MarginWidth(cw)) ||
@@ -2536,15 +2195,10 @@ SetValues(
 	    if (rw->core.height == cw->core.height)
 		nw->core.height = 0;
 	}
-
 	GetSize(nw, &nw->core.width, &nw->core.height);
     }
-
-
     return(Redraw);
 }
-
-
 /************************************************************************
  * QueryGeometry
  ************************************************************************/
@@ -2554,7 +2208,6 @@ QueryGeometry(
 	XtWidgetGeometry	*intended,
 	XtWidgetGeometry	*desired)
 {
-
     if (IG_RecomputeSize(wid) == False) {
         desired->width = XtWidth(wid) ;
 	desired->height = XtHeight(wid) ;
@@ -2564,16 +2217,11 @@ QueryGeometry(
 	GetSize(wid, &desired->width, &desired->height);
 	/* the above asks for the containertrait firstColumnWidth */
     }
-
     return XmeReplyToQueryGeometry(wid, intended, desired) ;
 }
-
-
 /*-----------------
 | XmGadget methods |
 -----------------*/
-
-
 /************************************************************************
  * HighlightBorder
  ************************************************************************/
@@ -2584,28 +2232,20 @@ HighlightBorder(
     XmIconGadget ig = (XmIconGadget) w ;
     XmContainerDataRec container_data ;
     Dimension ht = IG_HLThickness(w) ;
-
     /* test LayoutIsRtoLG(wid) here */
-
     ig->gadget.highlighted = True ;
     ig->gadget.highlight_drawn = True ;
-
     if(ig->rectangle.width == 0 || ig->rectangle.height == 0
        || ig->gadget.highlight_thickness == 0) return ;
-
     /* The highlight is different depending if there is a detail
        or not. With a detail, it's a rectangular shadow,
        otherwise it's drawn around the icon+label */
-
     /**** get the container information */
     container_data.valueMask = ContFirstColumnWidth | ContSelectionMode ;
     GetContainerData(w, &container_data);
-
     XSetClipMask(XtDisplay(w), IG_HighlightGC(w), None);
-
     if (SHOW_DETAIL(w, &container_data)) {
         ChangeHighlightGC(w, container_data.selection_mode, ht);
-
 	if (container_data.selection_mode == XmADD_MODE)
 	  _XmDrawHighlight(XtDisplay(w),XtWindow(w),
 			   IG_HighlightGC(w),
@@ -2618,20 +2258,16 @@ HighlightBorder(
 			   ig->rectangle.x,  ig->rectangle.y,
 			   ig->rectangle.width, ig->rectangle.height,
 			   ht);
-
     } else {
 	Position label_x, label_y ;
 	XPoint points[8] ;
-
 	/* do the polygon highlight around the icon + label part */
 	GetLabelXY(w, &label_x, &label_y) ;
-
 	/* undo the ltr layout for label_x, because getshapeinfo
 	   does it */
 	if (LayoutIsRtoLG(w)) {
 	    label_x = XtWidth(w) - IG_LabelRectWidth(w) - label_x ;
 	}
-
 	if (GetShapeInfo(w, GetLargeIconX(w), GetSmallIconY(w),
 			 label_x, label_y,
 			 container_data.first_column_width, INVALID_DIMENSION,
@@ -2659,9 +2295,7 @@ HighlightBorder(
 				  points, 8, ht, XmSHADOW_OUT);
 	}
     }
-
 }
-
 /************************************************************************
  * UnhighlightBorder
  ************************************************************************/
@@ -2673,23 +2307,17 @@ UnhighlightBorder(
     XmContainerDataRec container_data ;
     Dimension ht = IG_HLThickness(w) ;
     GC background_gc ;
-
     /* test LayoutIsRtoLG(wid) here */
-
     ig->gadget.highlighted = False ;
     ig->gadget.highlight_drawn = False ;
-
     if(ig->rectangle.width == 0 || ig->rectangle.height == 0
        || ig->gadget.highlight_thickness == 0) return ;
-
     /* unhighlight has to use the current selected background,
        it cannot call the superclass unhighlight as in highlight
        because Gadget does a simple clearborder. */
-
     /**** get the container information */
     container_data.valueMask = ContFirstColumnWidth ;
     GetContainerData(w, &container_data);
-
     if(XmIsManager (XtParent(w)))  {
 	background_gc = ((XmManagerWidget)XtParent(w))
 	    ->manager.background_GC ;
@@ -2697,8 +2325,6 @@ UnhighlightBorder(
 	XSetClipMask(XtDisplay(w), IG_BackgroundGC(w), None);
 	background_gc = IG_BackgroundGC(w) ;
     }
-
-
     if (SHOW_DETAIL(w, &container_data)) {
 	/* unhighlight the entire gadget area */
 	XmeDrawHighlight(XtDisplay(w),XtWindow(w),
@@ -2709,16 +2335,13 @@ UnhighlightBorder(
     } else {
 	Position label_x, label_y ;
 	XPoint points[8] ;
-
 	/* do the polygon unhighlight around the icon + label part */
 	GetLabelXY(w, &label_x, &label_y) ;
-
 	/* undo the ltr layout for label_x, because getshapeinfo
 	   does it */
 	if (LayoutIsRtoLG(w)) {
 	    label_x = XtWidth(w) - IG_LabelRectWidth(w) - label_x ;
 	}
-
 	if (GetShapeInfo(w, GetLargeIconX(w), GetSmallIconY(w),
 			 label_x, label_y,
 			 container_data.first_column_width, INVALID_DIMENSION,
@@ -2735,12 +2358,8 @@ UnhighlightBorder(
 				  background_gc, background_gc,
 				  points, 8, ht, XmSHADOW_OUT);
 	}
-
     }
 }
-
-
-
 /*******************************************************************
  *
  *  IconGCacheCompare
@@ -2753,7 +2372,6 @@ IconGCacheCompare(
 {
     XmIconGCacheObjPart *icon_inst = (XmIconGCacheObjPart *) A ;
     XmIconGCacheObjPart *icon_cache_inst = (XmIconGCacheObjPart *) B ;
-
     if((icon_inst-> render_table == icon_cache_inst->render_table) &&
        (icon_inst-> selected_GC == icon_cache_inst->selected_GC) &&
        (icon_inst-> inverse_GC == icon_cache_inst->inverse_GC) &&
@@ -2782,8 +2400,6 @@ IconGCacheCompare(
     else
        return 0;
  }
-
-
 /****************************************************
  *   Functions for manipulating Secondary Resources.
  *********************************************************/
@@ -2803,7 +2419,6 @@ GetIconGClassSecResData(
     XmBaseClassExt  bcePtr;
     String  resource_class, resource_name;
     XtPointer  client_data;
-
     bcePtr = &(iconGBaseClassExtRec );
     client_data = NULL;
     resource_class = NULL;
@@ -2813,9 +2428,7 @@ GetIconGClassSecResData(
                 resource_name, resource_class,
                 GetIconGClassSecResBase);
     return (arrayCount);
-
 }
-
 /*
  * GetIconGClassResBase ()
  *   retrun the address of the base of resources.
@@ -2832,13 +2445,9 @@ GetIconGClassSecResBase(
         Widget widget,
         XtPointer client_data )	/* unused */
 {	XtPointer  widgetSecdataPtr;
-
 	widgetSecdataPtr = (XtPointer) (IG_Cache(widget));
-
-
     return (widgetSecdataPtr);
 }
-
 /************************************************************************
  * InputDispatch
  ************************************************************************/
@@ -2848,7 +2457,6 @@ InputDispatch(
 	XEvent	*event,
 	Mask	event_mask)
 {
-
     if (event_mask & XmHELP_EVENT) _XmSocorro(wid,event,NULL,NULL);
     else if (event_mask & XmFOCUS_IN_EVENT)
 	_XmFocusInGadget (wid, event, NULL, NULL);
@@ -2859,8 +2467,6 @@ InputDispatch(
     else if (event_mask & XmLEAVE_EVENT)
 	_XmLeaveGadget (wid, event, NULL, NULL);
 }
-
-
 /************************************************************************
  * GetBaselines
  ************************************************************************/
@@ -2872,12 +2478,9 @@ GetBaselines(
 {
     Dimension *	base_array;
     Position label_y ;
-
     *line_count = 1;
     base_array = (Dimension *)XtMalloc(sizeof(Dimension));
-
     GetLabelXY(wid, NULL, &label_y);
-
     if (IG_LabelString(wid) == NULL) {
 	base_array[0] = IG_HLThickness(wid) + label_y ;
     } else {
@@ -2885,11 +2488,9 @@ GetBaselines(
 	    + DEFAULT_LABEL_MARGIN_HEIGHT
 	    + XmStringBaseline(IG_RenderTable(wid), IG_LabelString(wid));
     }
-
     *baselines = base_array;
     return(True);
 }
-
 /************************************************************************
  * GetDisplayRect
  ************************************************************************/
@@ -2899,16 +2500,13 @@ GetDisplayRect(
 	XRectangle	*displayrect)
 {
     Dimension w = 0, h = 0 ;
-
     (*displayrect).x = IG_HLThickness(wid);
     (*displayrect).y = IG_HLThickness(wid);
     GetSize(wid, &w, &h);
     (*displayrect).width = w - 2*IG_HLThickness(wid);
     (*displayrect).height = h - 2*IG_HLThickness(wid) ;
-
     return(True);
 }
-
 /************************************************************************
  * MarginsProc
  ************************************************************************/
@@ -2926,19 +2524,15 @@ MarginsProc(
       margins_rec->margin_height = DEFAULT_LABEL_MARGIN_HEIGHT;
     }
 }
-
 /*---------------------
 | XmIconGadget methods |
 ---------------------*/
-
 /*------------
 | ActionProcs |
 ------------*/
-
 /*-------------------
 | Internal functions |
 -------------------*/
-
 /************************************************************************
  * ChangeHighlightGC
  ************************************************************************/
@@ -2950,7 +2544,6 @@ ChangeHighlightGC(
 {
     XtGCMask  valueMask;
     XGCValues	values;
-
     valueMask = GCLineStyle | GCLineWidth | GCDashList | GCCapStyle ;
     values.line_width = line_width;
     values.dashes = MAX(IG_HLThickness(wid), 8);
@@ -2958,11 +2551,8 @@ ChangeHighlightGC(
     values.line_style = (selection_mode == XmADD_MODE)
 			    ? LineDoubleDash
 			    : LineSolid;
-
     XChangeGC(XtDisplay(wid), IG_HighlightGC(wid), valueMask, &values);
 }
-
-
 /************************************************************************
  * UpdateSelectGCs
  ************************************************************************/
@@ -2975,26 +2565,21 @@ UpdateSelectGCs(
     XtGCMask	valueMask;
     XFontStruct	*fs = (XFontStruct *)NULL;
     XtGCMask  modifyMask = GCClipMask | GCClipXOrigin | GCClipYOrigin;
-
    if (IG_SelectedGC(wid))
 	XtReleaseGC(XtParent(wid),IG_SelectedGC(wid));
     if (IG_InverseGC(wid))
 	XtReleaseGC(XtParent(wid),IG_InverseGC(wid));
-
     valueMask = GCForeground | GCBackground | GCGraphicsExposures;
     values.graphics_exposures = FALSE;
-
     /* we need a font becasue the inverse gc is going to be
        used to render some text */
     if (XmeRenderTableGetDefaultFont(IG_RenderTable(wid), &fs)) {
 	values.font = fs->fid;
 	valueMask |= GCFont;
     }
-
     /* the select color can take the special value XmREVERSED_GROUND_COLORS,
        which means use parent background as ink for text and parent
        foreground as back for the icon rendering */
-
     values.background = IG_Foreground(wid) ;
     if (select_color != XmREVERSED_GROUND_COLORS) {
 	values.foreground = select_color ;
@@ -3006,20 +2591,15 @@ UpdateSelectGCs(
 	IG_InverseGC(wid) = XtAllocateGC(XtParent(wid),
 					 XtParent(wid)->core.depth,
 					 valueMask, &values, modifyMask, 0);
-
 	/* get the foreground for the inversed selected background */
 	values.background = IG_Background(wid) ;
 	XtVaGetValues(XtParent(wid),
 		      XmNforeground, &(values.foreground), NULL);
-
     }
-
     IG_SelectedGC(wid) = XtAllocateGC(XtParent(wid),
 				      XtParent(wid)->core.depth,
 				      valueMask, &values, modifyMask, 0);
 }
-
-
 /************************************************************************
  * UpdateGCs
  ************************************************************************/
@@ -3033,7 +2613,6 @@ UpdateGCs(
     XmContainerDataRec container_data ;
     Pixel select_color;
     XtGCMask  modifyMask = GCClipMask | GCClipXOrigin | GCClipYOrigin;
-
     if (IG_NormalGC(wid))
 	XtReleaseGC(XtParent(wid),IG_NormalGC(wid));
     if (IG_InsensitiveGC(wid))
@@ -3046,34 +2625,27 @@ UpdateGCs(
 	XtReleaseGC(XtParent(wid),IG_BottomShadowGC(wid));
     if (IG_HighlightGC(wid))
 	XtReleaseGC(XtParent(wid),IG_HighlightGC(wid));
-
     /** normal gc **/
     valueMask = GCForeground | GCBackground | GCGraphicsExposures;
     values.foreground = IG_Foreground(wid) ;
     values.background = IG_Background(wid) ;
     values.graphics_exposures = FALSE;
-
     if (XmeRenderTableGetDefaultFont(IG_RenderTable(wid), &fs)) {
 	values.font = fs->fid;
 	valueMask |= GCFont;
     }
-
     IG_NormalGC(wid) = XtAllocateGC(XtParent(wid),
 					 XtParent(wid)->core.depth,
 					 valueMask, &values, modifyMask, 0);
-
     /** background gc **/
     values.foreground = IG_Background(wid) ;
     values.background = IG_Foreground(wid) ;
-
     if (PIXMAP_VALID(IG_BackgroundPixmap(wid))) {
 	int depth ;
-
 	XmeGetPixmapData(XtScreen(wid),IG_BackgroundPixmap(wid) ,
 			 NULL,
 			 &depth,
 			 NULL, NULL, NULL, NULL, NULL, NULL);
-
 	if (depth == 1) {
 	    valueMask |= GCFillStyle | GCStipple ;
 	    values.fill_style = FillOpaqueStippled;
@@ -3083,87 +2655,66 @@ UpdateGCs(
 	    values.fill_style = FillTiled;
 	    values.tile = IG_BackgroundPixmap(wid);
 	}
-
     }
-
     IG_BackgroundGC(wid) =  XtAllocateGC(XtParent(wid),
 					 XtParent(wid)->core.depth,
 					 valueMask, &values, modifyMask, 0);
-
     /** selected gcs **/
     /* use a select color from the trait if possible,
      otherwise default to select background of the parent
      (or is it of the container logical parent ? not really
      important for the header case is not selectable... */
-
     /* get the container information */
     /* I need the selection mode for the highlight init value */
     container_data.valueMask = ContSelectColor | ContSelectionMode;
     GetContainerData(wid, &container_data);
-
     if (container_data.valueMask & ContSelectColor) {
 	select_color = container_data.select_color;
     } else {
 	select_color = XmREVERSED_GROUND_COLORS ;
     }
-
     UpdateSelectGCs(wid, select_color) ;
-
-
     /** insensitive gc **/
-
 	/*generally gray insensitive foreground (instead stipple)*/
     values.foreground = _XmAssignInsensitiveColor( wid);
     values.background = IG_Background(wid) ;
     valueMask |= GCFillStyle;
     values.fill_style = FillSolid;
-
     IG_InsensitiveGC(wid) = XtAllocateGC(XtParent(wid),
 					 XtParent(wid)->core.depth,
 					 valueMask, &values, modifyMask, 0);
-
 	/*light shadow for insensitive text (instead stipple)*/
 	values.foreground = IG_TopShadowColor(wid);
 	IG_ShadowGC(wid) = XtAllocateGC(XtParent(wid),
 					XtParent(wid)->core.depth,
 					 valueMask, &values, modifyMask, 0);
-
     /** highlight **/
-
     valueMask = (GCForeground | GCBackground | GCLineWidth |
 		 GCLineStyle | GCDashList);
     modifyMask = (GCLineStyle | GCLineWidth | GCDashList |
 		  GCClipXOrigin | GCClipYOrigin | GCClipMask);
-
     values.foreground = IG_HighlightColor(wid);
     XtVaGetValues(XtParent(wid), XmNbackground, &(values.background), NULL);
     values.line_width = IG_HLThickness(wid);
     values.dashes = MAX(values.line_width, 8);
     values.line_style = (container_data.selection_mode == XmADD_MODE) ?
       LineDoubleDash : LineSolid;
-
     IG_HighlightGC(wid) = XtAllocateGC(XtParent(wid),
 				       XtParent(wid)->core.depth,
 				       valueMask, &values,
 				       modifyMask, 0);
-
     /** topshadow, bottomshadow gc */
     IG_TopShadowGC(wid) =
 	_XmGetPixmapBasedGC (wid,
 			     IG_TopShadowColor(wid),
 			     IG_Background(wid),
 			     IG_TopShadowPixmap(wid));
-
      IG_BottomShadowGC(wid) =
 	_XmGetPixmapBasedGC (wid,
 			     IG_BottomShadowColor(wid),
 			     IG_Background(wid),
 			     IG_BottomShadowPixmap(wid));
-
 }
-
-
-
 /************************************************************************
  * GetStringTableReOrdered.
  *  lazy alloc/filling using realloc
@@ -3179,19 +2730,15 @@ GetStringTableReOrdered(
     static XmString * Default_st = NULL ;
     static Cardinal Max_st_count = 0;
     Cardinal i, count ;
-
     if (!order_count || !st_count) return NULL ;
-
     /* here we are filling up a new string table out of an existing
        one and a new order table. Take only the minimum number of both */
     count = MIN(order_count, st_count);
-
     if (count > Max_st_count) {
 	Max_st_count = MAX(count, 33);
 	Default_st = (XmStringTable) XtRealloc((char*) Default_st,
 					Max_st_count * sizeof(XmString));
     }
-
     for (i = 0; i < count; i++) {
 	if (order) {
 	    if (order[i] <= st_count)
@@ -3202,13 +2749,10 @@ GetStringTableReOrdered(
 	    Default_st[i] = st[i];
 	}
     }
-
     return Default_st ;
     /* This is realloced memory, be sure that no one is keeping
        reference to this stuff longer enough for it to be realloced again */
 }
-
-
 /************************************************************************
  * GetStringTableExtent
  *
@@ -3224,7 +2768,6 @@ GetStringTableReOrdered(
 	4> If the XmTablist is less than XmNdetailOrderCount-1, then,
 	   concatenate the extra details at the end and request
 	   the additional width.
-
 ************************************************************************/
 static	void
 GetStringTableExtent(
@@ -3242,17 +2785,13 @@ GetStringTableExtent(
     Dimension w, h, baseline ;
     unsigned int tab_count = 0 ;
     Dimension height_under_max = 0 ;
-
     *baseline_ret = 0 ;
     *width_ret = 0 ;
     *height_ret = 0 ;
     if (tab_list) tab_count = XmTabListTabCount(tab_list) ;
-
     if (st == NULL || !st_count) return ;
-
     /* the extra tabs are ignored */
     tab_count = MIN(tab_count, st_count);
-
     /* the width is given by the last tab position + the remaining items */
     if (tab_count) *width_ret = _XmTabListGetPosition(screen,
 						     tab_list,
@@ -3271,12 +2810,8 @@ GetStringTableExtent(
 	*baseline_ret = MAX(*baseline_ret, (Position)baseline);
 	if (i >= tab_count) *width_ret += w + hor_spacing;
     }
-
     *height_ret = *baseline_ret + height_under_max ;
 }
-
-
-
 /************************************************************************
  * GetSize
  ************************************************************************/
@@ -3293,17 +2828,12 @@ GetSize(
     Dimension detail_width, detail_height;
     XmStringTable new_detail ;
     Position label_y, lab_baseline, detail_baseline ;
-
     /* get the container information */
     container_data.valueMask = ContAllValid ;
     GetContainerData(wid, &container_data);
-
-
     /**** first the size without the detail */
     ideal_width = GetIconLabelWidth(wid) ;
     ideal_height = GetIconLabelHeight(wid) ;
-
-
     if (SHOW_DETAIL(wid, &container_data)) {
 	/* get the detail table to be displayed */
 	new_detail =
@@ -3336,14 +2866,10 @@ GetSize(
 			   lab_baseline - mh -
 			   detail_baseline + detail_height);
     }
-
     /* do not set non null dimensions */
     if (*ret_width == 0) *ret_width = ideal_width + 2*ht;
     if (*ret_height == 0) *ret_height = ideal_height + 2*ht;
-
 }
-
-
 /*-------------------
 | Trait methods     |
 -------------------*/
@@ -3357,30 +2883,23 @@ ContItemSetValues(Widget w,
 		  XmContainerItemData contItemData)
 {
     XtExposeProc    expose;
-
     /* here there is a match between the containerItem and the IconGadget
        resource values, because we are doing both at the same time and it's
        convenient. Others IconGadget kind might have to map our
        viewType, visualEmphasis values onto their corresponding types */
-
     if (contItemData->valueMask & ContItemViewType)
 	XtVaSetValues(w, XmNviewType, contItemData->view_type, NULL);
-
     if (contItemData->valueMask & ContItemVisualEmphasis) {
 	IG_VisualEmphasis(w) = contItemData->visual_emphasis ;
-
 	if (XtIsRealized(XtParent(w)))
 	{
 	  _XmProcessLock();
 	  expose = w->core.widget_class->core_class.expose;
 	  _XmProcessUnlock();
-
 	  (* (expose)) (w, NULL, NULL);
 	}
     }
 }
-
-
 /************************************************************************
  * ContItemGetValues
  *
@@ -3389,7 +2908,6 @@ static	void
 ContItemGetValues(Widget w,
 		  XmContainerItemData contItemData)
 {
-
     if (contItemData->valueMask & ContItemViewType)
 	contItemData->view_type = IG_ViewType(w);
     if (contItemData->valueMask & ContItemVisualEmphasis)
@@ -3400,10 +2918,7 @@ ContItemGetValues(Widget w,
     if (contItemData->valueMask & ContItemDetailCount) {
 	contItemData->detail_count = IG_DetailCount(w);
     }
-
 }
-
-
 static Boolean
 HandleRedraw (
 	Widget kid,
@@ -3414,12 +2929,9 @@ HandleRedraw (
     XmIconGadget ig = (XmIconGadget) kid ;
     Boolean redraw = False;
     XmIconGCacheObjPart oldCopy;
-
-
     if (visual_flag & VisualSelectColor) {
 	XmContainerDataRec container_data ;
 	Pixel select_color;
-
 	/* this is all shared data, so we need to make a copy
 	   because changing any field */
 	_XmProcessLock();
@@ -3428,28 +2940,21 @@ HandleRedraw (
 	_XmCacheDelete ((XtPointer) IG_Cache(ig));
 	_XmProcessUnlock();
 	IG_Cache(ig) = &oldCopy;
-
-
 	/* use a select color from the trait if possible,
 	   otherwise default to select background of the parent
 	   (or is it of the container logical parent ? not really
 	   important for the header case is not selectable... */
-
 	/* get the container information */
 	/* I need the selection mode for the highlight init value */
 	container_data.valueMask = ContSelectColor ;
 	GetContainerData(kid, &container_data);
-
 	if (container_data.valueMask & ContSelectColor) {
 	    select_color = container_data.select_color;
 	} else {
 	    select_color = XmREVERSED_GROUND_COLORS ;
 	}
-
 	UpdateSelectGCs(kid, select_color) ;
-
 	redraw = True;
-
 	/* now cache back the new version */
 	_XmProcessLock();
 	IG_Cache(ig) = (XmIconGCacheObjPart *)
@@ -3457,51 +2962,39 @@ HandleRedraw (
 			 (XtPointer) IG_Cache(ig),
 			 sizeof(XmIconGCacheObjPart));
 	_XmProcessUnlock();
-
     }
-
     return redraw ;
 }
-
-
 static void
 GetColors(Widget w,
 	  XmAccessColorData color_data)
 {
     XmContainerDataRec container_data ;
-
     /* since we use our own private converter, no real
        need to check for validity here, we already do it
        in the converter itself, but it doesn't hurt
        and if we ever change IconG to use a generic pixmap
        converter (solve the mask pixmap setting), it will work
        all by itself */
-
     if (IG_Cache(w)) { /* mean it's valid */
 	color_data->valueMask = AccessForeground | AccessBackgroundPixel |
 	    AccessHighlightColor | AccessTopShadowColor |
 		AccessBottomShadowColor | AccessSelectColor;
-
 	color_data->background = IG_Background(w);
 	color_data->foreground = IG_Foreground(w);
 	color_data->highlight_color = IG_Foreground(w);
 	color_data->top_shadow_color = IG_TopShadowColor(w);
 	color_data->bottom_shadow_color = IG_BottomShadowColor(w);
-
 	container_data.valueMask = ContSelectColor ;
-
 	/*** get the Container select color using the trait */
 	{
 	  XmIconGadgetClass igc = (XmIconGadgetClass) XtClass(w);
 	  Widget container_id ;
 	  XmContainerTrait container_trait ;
-
 	  container_id = (igc->icong_class.get_container_parent) ?
 	    (*(igc->icong_class.get_container_parent))(w) : XtParent(w);
-
 	  container_trait = (XmContainerTrait)
 	    XmeTraitGet((XtPointer)XtClass(container_id), XmQTcontainer) ;
-
 	  /* remove message about uninitialized memory read */
 	  container_data.first_column_width = 0;
 	  container_data.select_color = XmREVERSED_GROUND_COLORS;
@@ -3513,7 +3006,6 @@ GetColors(Widget w,
 	} else {
 	    color_data->select_color = XmREVERSED_GROUND_COLORS ;
 	}
-
     } else { /* cannot access the color of the gadget,
 		because the cache is not yet present.
 		Return that value, so that the converter
@@ -3522,23 +3014,18 @@ GetColors(Widget w,
 	color_data->valueMask = AccessColorInvalid ;
     }
 }
-
-
 static Boolean
 PointIn(Widget wid,
 	Position x,
         Position y)
 {
     XmContainerDataRec container_data ;
-
     /* x, y in parent coordinates system */
-
     /* first check that point is in bbox */
     if (!(x >= wid->core.x && y >= wid->core.y &&
 	x < wid->core.x + wid->core.width    &&
 	y < wid->core.y + wid->core.height))
 	return False;
-
     /* if we have detail then it's enough to answer yes */
     container_data.valueMask = ContAllValid ;
     GetContainerData(wid, &container_data);
@@ -3548,10 +3035,8 @@ PointIn(Widget wid,
 	Position label_x, label_y;
 	XPoint points[8];
 	Cardinal n;
-
 	/* now check if it's not in empty space at the corners */
 	GetLabelXY(wid, &label_x, &label_y);
-
 	/* undo the ltr layout for label_x, because getshapeinfo does it */
 	if (LayoutIsRtoLG(wid)) {
 	    label_x = XtWidth(wid) - IG_LabelRectWidth(wid) - label_x;
@@ -3589,8 +3074,6 @@ PointIn(Widget wid,
 	return True;		/* actually we should never get there */
     }
 }
-
-
 /*-------------------
 | _Xm functions      |
 --------------------*/
@@ -3599,7 +3082,6 @@ _XmIconGadgetIconPos(Widget wid, int *x, int *y)
 {
   XmIconGadget	ig = (XmIconGadget)wid;
   Position icon_x;
-
   if (ig -> icong.viewtype == XmSMALL_ICON) {
     icon_x = GetSmallIconX(wid);
     if (LayoutIsRtoLG(wid))
@@ -3614,8 +3096,6 @@ _XmIconGadgetIconPos(Widget wid, int *x, int *y)
     *y = GetLargeIconY(wid);
   }
 }
-
-
 /*-------------------
 | External functions |
 -------------------*/
@@ -3632,7 +3112,6 @@ XmCreateIconGadget(
 {
     return(XtCreateWidget(name,xmIconGadgetClass,parent,arglist,argcount));
 }
-
 Widget
 XmVaCreateIconGadget(
         Widget parent,
@@ -3642,12 +3121,9 @@ XmVaCreateIconGadget(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmIconGadgetClass,
@@ -3656,7 +3132,6 @@ XmVaCreateIconGadget(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedIconGadget(
         Widget parent,
@@ -3666,11 +3141,9 @@ XmVaCreateManagedIconGadget(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmIconGadgetClass,

@@ -26,8 +26,6 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <stdlib.h>
 #include <Xm/AccTextT.h>
 #include <Xm/ActivatableT.h>
@@ -55,29 +53,21 @@
 #include "RepTypeI.h"
 #include "ScrollFramTI.h"
 #include "XmI.h"
-
 #define MESSAGE0     _XmMMsgNotebook_0000
 #define MESSAGE1     _XmMMsgMotif_0001
-
-
 /* Under SunOS /usr/include/sys/sysmacros.h (included by types.h) */
 /*	thoughtfully grabs part of our name space. */
 #ifdef major
 #undef major
 #endif
-
 #ifdef minor
 #undef minor
 #endif
-
-
 /*****************************************************************************
  *                                                                           *
  *                        constants & useful macros                          *
  *                                                                           *
  *****************************************************************************/
-
-
 /* names of notebook internal children */
 #define MAJOR_TAB_NEXT_NAME     "MajorTabScrollerNext"
 #define MAJOR_TAB_PREV_NAME     "MajorTabScrollerPrevious"
@@ -85,19 +75,16 @@
 #define MINOR_TAB_PREV_NAME     "MinorTabScrollerPrevious"
 #define PAGE_SCROLLER_NAME      "PageScroller"
 #define NB_TEXT_FIELD_NAME 	"NBTextField"
-
 /* status values for notebook.scroller_status */
 #define DEFAULT_NONE    	0	/* default is not created yet */
 #define DEFAULT_CREATE  	1	/* default being created */
 #define DEFAULT_USED    	2	/* default is being used */
 #define DEFAULT_GONE    	3	/* default is destroyed */
-
 /* Notebook position value */
 #define LEFT                    0
 #define RIGHT                   1
 #define TOP                     2
 #define BOTTOM                  4
-
 /* tab traversal value */
 #define _HOME                   0
 #define _END                    1
@@ -106,13 +93,10 @@
 #define	_FIRST_VISIBLE		4	/* For KNextTab/KPrevTab, scrolling */
 #define	_LAST_VISIBLE		5	/* For tab scrolling */
 #define	_CURRENT_VISIBLE	6	/* For tab group traversal */
-
 /* status values for drawing minor tabs */
 #define TAB_DRAW        0               /* tab is to be drawn */
 #define TAB_DRAWING     1               /* tab is being drawn */
 #define TAB_DRAWN       2               /* tab has been drawn */
-
-
 /* XmNotebook default values */
 #define FIRST_PAGE_NUMBER_DEFAULT	1
 #define BACK_PAGE_NUMBER_DEFAULT	2
@@ -127,9 +111,7 @@
 #define NOTEBOOK_MINIMUM_WIDTH		16
 #define NOTEBOOK_MINIMUM_HEIGHT		16
 #define MIN_DRAWABLE_SPIRAL_SIZE	6
-
 /* macros */
-
 #define NB_IS_CHILD_NONE(x) \
         ((unsigned char)x == XmNONE)
 #define NB_IS_CHILD_PAGE(x) \
@@ -151,76 +133,55 @@
 #define NB_IS_CHILD_MINOR_SCROLLER(x) \
         (((unsigned char)x == XmMINOR_TAB_SCROLLER) \
         || ((unsigned char)x == XmTAB_SCROLLER))
-
-
 /* Layout defines */
 #define NB_IS_VISIBLE(w) \
       ((XtIsManaged(w) && \
       ((w)->core.x > -(int)((w)->core.width + (w)->core.border_width * 2)) && \
       ((w)->core.y > -(int)((w)->core.height + (w)->core.border_width * 2))))
-
 #define	NB_IS_HIDDEN(w) \
     (((w)->core.x <= -(int)((w)->core.width + (w)->core.border_width * 2)) && \
      ((w)->core.y <= -(int)((w)->core.height + (w)->core.border_width * 2)))
-
 #define NB_ENFORCE_SIGN(s,x) ((s) > 0 ? (x) : -(x))
-
 				/* Fixed placement of non-top minor tabs */
 #define NB_MINOR_TAB_STEP(x) ((x) /2)
-
 				/* Max dimension of major tab area, i.e.,
 				   max of tab and tab scroller dimension */
 #define NB_MAJOR_MAX(n,x,y) (MAX((x), (y)))
  /* MAX(0, (n)->notebook.shadow_thickness - (n)->notebook.back_page_size)) */
-
 				/* Max dimension of minor tab area, i.e.,
 				   max of tab (minus fixed placement) and
 				   tab scroller dimension */
 #define NB_MINOR_MAX(n,x,y) \
  (MAX((int)((x) - NB_MINOR_TAB_STEP((n)->notebook.back_page_size)),(int)(y)))
  /* MAX(0, (n)->notebook.shadow_thickness - (n)->notebook.back_page_size)) */
-
-
 /* Retrieve trait defines */
 #define NB_SCROLL_FRAME(x) \
     ((XmScrollFrameTrait)XmeTraitGet((XtPointer)XtClass((Widget)(x)), \
     XmQTscrollFrame))
-
 #define NB_ACTIVATABLE(x) \
     ((XmActivatableTrait)XmeTraitGet((XtPointer)XtClass((Widget)(x)), \
     XmQTactivatable))
-
 #define NB_NAVIGATOR(x) \
     ((XmNavigatorTrait)XmeTraitGet((XtPointer)XtClass((Widget)(x)), \
     XmQTnavigator))
-
 #define NB_JOINSIDE(x) \
     ((XmJoinSideTrait)XmeTraitGet((XtPointer)XtClass((Widget)(x)), \
     XmQTjoinSide))
-
-
 /* Is trait defines */
 #define NB_IS_CHILD_ACTIVATABLE(x) \
     (((XmeTraitGet((XtPointer)XtClass(x),XmQTactivatable)) != NULL) \
     ? True : False)
-
 #define NB_IS_CHILD_NAVIGATOR(x) \
     (((XmeTraitGet((XtPointer)XtClass(x),XmQTnavigator)) != NULL) \
     ? True : False)
-
 #define NB_IS_CHILD_JOINSIDE(x) \
     (((XmeTraitGet((XtPointer)XtClass(x),XmQTjoinSide)) != NULL) \
     ? True : False)
-
 #define NB_IS_CHILD_ACCESSTEXTUAL(x) \
     (((XmeTraitGet((XtPointer)XtClass(x),XmQTaccessTextual)) != NULL) \
     ? True : False)
-
-
 #define NotebookConstraint(w) \
         (&((XmNotebookConstraintPtr) (w)->core.constraints)->notebook)
-
-
 /* If the original dimension is negative, then offset the original
    position by that negative amount and make it the new position. Also
    make the new dimension be the positive original dimension. So for
@@ -228,7 +189,6 @@
    value be 10 and the width be positive 10. If the original dimension
    is not negative, then just set the new values to be the same as the
    old values. */
-
 #define ADJUST_NEGATIVE_DIMENSION(orig_pos, orig_dim, new_pos, new_dim) \
         if (orig_dim < 0) \
         { \
@@ -240,29 +200,18 @@
 	    new_pos = orig_pos; \
 	    new_dim = (Dimension) orig_dim; \
 	}
-
-
 #define manager_translations _XmNotebook_manager_translations
-
-
 /*****************************************************************************
  *                                                                           *
  *                               global variables                            *
  *                                                                           *
  *****************************************************************************/
-
-
 static XtAccelerators TabAcceleratorsParsed;
-
-
 /*****************************************************************************
  *                                                                           *
  *                           Static function declarations                    *
  *                                                                           *
  *****************************************************************************/
-
-
-
 /* synthetic hook */
 static void GetDefaultFrameBackground(
                         Widget g,
@@ -498,28 +447,20 @@ static GC GetUnhighlightGC(
 			Widget child) ;
 static unsigned char  GetDefaultBackPagePosAgain(
 			Widget w);
-
-
 /*****************************************************************************
  *                                                                           *
  *               		Action Records				     *
  *                                                                           *
  *****************************************************************************/
-
-
 static XtActionsRec tab_actions_list[] =
 {
     {"TraverseTab",		TraverseTab},
 };
-
-
 /*****************************************************************************
  *                                                                           *
  *                		Resources                                    *
  *                                                                           *
  *****************************************************************************/
-
-
 static XtResource resources[]  =
 {
     {
@@ -694,8 +635,6 @@ static XtResource resources[]  =
         (XtPointer)NULL
     }
 };
-
-
 static XtResource constraint_resources[] =
 {
     {
@@ -726,8 +665,6 @@ static XtResource constraint_resources[] =
 	(XtPointer)True
     }
 };
-
-
 static XmSyntheticResource syn_resources[] =
 {
     {
@@ -773,15 +710,11 @@ static XmSyntheticResource syn_resources[] =
         XmeFromHorizontalPixels,XmeToHorizontalPixels
     }
 };
-
-
 /*****************************************************************************
  *                                                                           *
  *                    Notebook class record definition  		     *
  *                                                                           *
  *****************************************************************************/
-
-
 externaldef(xmnotebookclassrec) XmNotebookClassRec xmNotebookClassRec =
 {
     /* core class record */
@@ -852,12 +785,8 @@ externaldef(xmnotebookclassrec) XmNotebookClassRec xmNotebookClassRec =
 	NULL				    /* unused */
     }
 };
-
-
 externaldef(xmnotebookwidgetclass) WidgetClass xmNotebookWidgetClass =
 	(WidgetClass) &xmNotebookClassRec;
-
-
 /* Trait record for Notebook scrollFrame */
 static XmConst XmScrollFrameTraitRec notebookSFT =
 {
@@ -868,37 +797,25 @@ static XmConst XmScrollFrameTraitRec notebookSFT =
     RemoveNavigator,		/* remove navigator method */
     NULL			/* update original geometry */
 };
-
-
 /* Trait record for Notebook traversalControl */
 static XmConst XmTraversalControlTraitRec notebookTCT =
 {
   0,				/* version */
   RedirectTraversal		/* redirect */
 };
-
-
 /* Trait record for Notebook specifyUnhighlight */
 static XmConst XmSpecifyUnhighlightTraitRec notebookSUT =
 {
   0,				/* version */
   GetUnhighlightGC		/* getUnhighlightGC */
 };
-
-
-
-
 /*****************************************************************************
  *                                                                           *
  *			    Core method functions			     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- ClassInitialize ---------------------------------------------------------
-
 	This routine is invoked only once.
-
 -----------------------------------------------------------------------------*/
 static void
 ClassInitialize(void)
@@ -907,32 +824,21 @@ ClassInitialize(void)
     TabAcceleratorsParsed =
                 XtParseAcceleratorTable( _XmNotebook_TabAccelerators );
 }
-
-
 /*- ClassPartInitialize -----------------------------------------------------
-
 	Set up the fast subclassing for the widget and install traits
-
 -----------------------------------------------------------------------------*/
 static void
 ClassPartInitialize (
     WidgetClass wc)
 {
     _XmFastSubclassInit(wc, XmNOTEBOOK_BIT);
-
     XmeTraitSet((XtPointer)wc,XmQTscrollFrame,(XtPointer)&notebookSFT);
     XmeTraitSet((XtPointer)wc,XmQTtraversalControl,(XtPointer)&notebookTCT);
     XmeTraitSet((XtPointer)wc,XmQTspecifyUnhighlight,(XtPointer)&notebookSUT);
-
 }
-
-
 /*- Initialize --------------------------------------------------------------
-
 	Initialize method
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 Initialize (
@@ -943,29 +849,22 @@ Initialize (
 {
     XmNotebookWidget new_w = (XmNotebookWidget)nw;
     XmScrollFrameTrait scroll_frameT;
-
     /* XmNaccelerators */
     new_w->core.accelerators = TabAcceleratorsParsed;
-
     /* XmNorientation */
     if (!XmRepTypeValidValue(XmRID_ORIENTATION,new_w->notebook.orientation,nw))
 	new_w->notebook.orientation = XmHORIZONTAL;
-
     /* XmNbackPagePlacement */
     if (!XmRepTypeValidValue(XmRID_SCROLL_BAR_PLACEMENT,
 			new_w->notebook.back_page_pos, nw))
 	new_w->notebook.back_page_pos = GetDefaultBackPagePosAgain(nw);
-
     /* XmNbindingType */
     if (!XmRepTypeValidValue(XmRID_BINDING_TYPE,
 			new_w->notebook.binding_type, nw))
 	new_w->notebook.binding_type = XmSOLID;
-
     /* set tab and binding positions */
     SetVisualConfig(new_w);
-
     /* page number resources */
-
     /* fix BUX 1183 in notebook widget, the real_back_page_number is used
      * for division, however it is never set unless the back_page_number
      * changed (in SetValues).
@@ -973,7 +872,6 @@ Initialize (
     ASSIGN_MIN(new_w->notebook.real_back_page_number,
                  (Dimension)(new_w->notebook.back_page_size /2));
     ASSIGN_MAX(new_w->notebook.real_back_page_number, 1);
-
     if (new_w->notebook.current_page_number == XmUNSPECIFIED_PAGE_NUMBER)
        new_w->notebook.current_page_number = new_w->notebook.first_page_number;
     if (new_w->notebook.last_page_number == XmUNSPECIFIED_PAGE_NUMBER)
@@ -984,7 +882,6 @@ Initialize (
     else
 	new_w->notebook.dynamic_last_page_num = False;
     new_w->notebook.last_alloc_num = new_w->notebook.first_page_number;
-
     /* intialize variables for layouting tabs */
     new_w->notebook.first_major = NULL;
     new_w->notebook.old_top_major = NULL;
@@ -995,14 +892,12 @@ Initialize (
     new_w->notebook.top_minor = NULL;
     new_w->notebook.last_minor = NULL;
     new_w->notebook.constraint_child = NULL;
-
    /* shadow thickness state for current page major and minor tab */
     new_w->notebook.major_shadow_thickness = (Dimension) 0;
     new_w->notebook.minor_shadow_thickness = (Dimension) 0;
     new_w->notebook.in_setshadow = False;
     new_w->notebook.major_shadow_child = NULL;
     new_w->notebook.minor_shadow_child = NULL;
-
     /* other misc. variables */
     new_w->notebook.which_tab = XmMAJOR_TAB;
     new_w->notebook.scroller_status = DEFAULT_NONE;
@@ -1015,40 +910,28 @@ Initialize (
     new_w->notebook.background_gc = NULL;
     new_w->notebook.foreground_gc = NULL;
     new_w->notebook.spiral_pixmap = XmUNSPECIFIED_PIXMAP;
-
-
     /* initialize the scroll_frame and change_managed flags */
     new_w->notebook.scroll_frame_data = NULL;
     new_w->notebook.first_change_managed = True;
-
     /* initialize the scrollFrame with move callback (subclass trait check) */
-
     if (((scroll_frameT=NB_SCROLL_FRAME(nw)) != NULL)
 	&& (scroll_frameT->init != NULL) )
 	scroll_frameT->init(nw, PageMove, nw);
-
     /* creating GCs */
     GetFrameGCs(new_w);
     GetBackpageGCs(new_w);
-
     /* create tab scrollers */
     CreateTabScrollers(new_w);
     SetPageScroller(new_w);
-
 }
-
-
 /*- Destroy -----------------------------------------------------------------
-
 	Destroy the widget and its children
-
 -----------------------------------------------------------------------------*/
 static void
 Destroy (
     Widget w)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     /* release all GCs */
     if (nb->notebook.frame_gc)
         XtReleaseGC(w, nb->notebook.frame_gc);
@@ -1058,44 +941,31 @@ Destroy (
         XtReleaseGC(w,nb->notebook.foreground_gc);
     if (nb->notebook.background_gc)
         XtReleaseGC(w,nb->notebook.background_gc);
-
     /* release spiral pixmap */
     if (nb->notebook.spiral_pixmap != XmUNSPECIFIED_PIXMAP
 	&& nb->notebook.spiral_pixmap != XmNONE)
         XFreePixmap(XtDisplay(w), nb->notebook.spiral_pixmap);
-
     /* release scroll frame data */
     if (nb->notebook.scroll_frame_data != NULL)
 	XtFree((char*)nb->notebook.scroll_frame_data);
 }
-
-
 /*- Resize -----------------------------------------------------------------
-
 	Resize the widget
-
 -----------------------------------------------------------------------------*/
 static void
 Resize (
     Widget w)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     /* Adjust notebook children sizes based on notebook size */
     AdjustGeometry(nb, NULL, NULL);
-
     /* Layout children based on notebook sizes */
     LayoutChildren(nb, NULL);
-
     if (XtIsRealized(w))
 	XClearArea(XtDisplay(w),XtWindow(w),0,0,0,0,True);
 }
-
-
 /*- Redisplay ---------------------------------------------------------------
-
 	Method for expose event
-
 -----------------------------------------------------------------------------*/
 static void
 Redisplay (
@@ -1149,10 +1019,8 @@ Redisplay (
     DrawBackPages(nb, event, region);
     DrawBinding(nb, event, region);
     DrawFrameShadow(nb, event, region);
-
     /* display gadgets */
     XmeRedisplayGadgets(w,e,region);
-
     /* Work-around due to PushBG not updating border highlight
        -- to be removed when PushBG is fixed, see CR9805 */
     for (i=0; i < nb->composite.num_children; i++)
@@ -1166,12 +1034,8 @@ Redisplay (
 	    }
 	}
 }
-
-
 /*- SetValues ---------------------------------------------------------------
-
         Set notebook widget resources
-
 -----------------------------------------------------------------------------*/
 /*ARGSUSED*/
 static Boolean
@@ -1189,7 +1053,6 @@ SetValues (
     Boolean updateVisual = False;
     Boolean relayout = False;
     Mask visualFlag = NoVisualChange;
-
     /* XmNorientation */
     if (new_w->notebook.orientation != old->notebook.orientation)
         {
@@ -1197,7 +1060,6 @@ SetValues (
 			new_w->notebook.orientation, nw))
            new_w->notebook.orientation = old->notebook.orientation;
         }
-
     /* XmNbackPagePlacement */
     if (new_w->notebook.back_page_pos != old->notebook.back_page_pos)
         {
@@ -1205,7 +1067,6 @@ SetValues (
 			new_w->notebook.back_page_pos, nw))
             new_w->notebook.back_page_pos = old->notebook.back_page_pos;
         }
-
     /* XmNbindingType */
     if (new_w->notebook.binding_type != old->notebook.binding_type)
 	{
@@ -1213,19 +1074,16 @@ SetValues (
 			new_w->notebook.binding_type, nw))
             new_w->notebook.binding_type = old->notebook.binding_type;
         }
-
     /* XmNcurrentPageNumber */
     /* current page must be in the page number range */
     ASSIGN_MAX(new_w->notebook.current_page_number,
 		new_w->notebook.first_page_number);
     ASSIGN_MIN(new_w->notebook.current_page_number,
 		new_w->notebook.last_page_number);
-
     /* XmNlastPageNumber */
     /* set static last page number, if the last page number is set */
     if (new_w->notebook.last_page_number != old->notebook.last_page_number)
 	new_w->notebook.dynamic_last_page_num = False;
-
     /* XmNfirstPageNumber */
     /* re-determine active children, if page number range has been changed */
     if (new_w->notebook.first_page_number != old->notebook.first_page_number
@@ -1237,22 +1095,18 @@ SetValues (
 	    UpdateNavigators(new_w);
 	SetActiveChildren(new_w);
 	}
-
     /* if XmNcurrentPageNumber is changed, go to the new page */
     if (new_w->notebook.current_page_number !=
 				old->notebook.current_page_number)
 	{
 	int page_number;
-
 	page_number = new_w->notebook.current_page_number;
 	new_w->notebook.current_page_number = old->notebook.current_page_number;
 	GotoPage(new_w, page_number, NULL, XmCR_NONE);
 	}
-
     /*
      * Notebook visuals
      */
-
     /* XmNorientation, XmNbackPagePlacement */
     if (new_w->notebook.orientation != old->notebook.orientation
 	|| new_w->notebook.back_page_pos != old->notebook.back_page_pos)
@@ -1260,11 +1114,9 @@ SetValues (
 	updateVisual = True;
 	updateJoin = True;
 	}
-
     /* XmNframeShadowThickness */
     if (new_w->notebook.shadow_thickness != old->notebook.shadow_thickness)
 	updateJoin = True;
-
     /* XmNbackPageNumber */
     if (new_w->notebook.back_page_number != old->notebook.back_page_number)
 	{
@@ -1278,7 +1130,6 @@ SetValues (
 					old->notebook.real_back_page_number)
 	    redraw = True;
 	}
-
     /* XmNframeBackground */
     if (new_w->notebook.frame_background != old->notebook.frame_background
 	|| new_w->manager.foreground != old->manager.foreground)
@@ -1286,14 +1137,12 @@ SetValues (
 	GetFrameGCs(new_w);
 	visualFlag |= (VisualHighlightColor|VisualHighlightPixmap);
 	}
-
     /* XmNbackPageBackground, XmNbackPageForeground */
     if (new_w->notebook.back_page_background !=
 				    old->notebook.back_page_background
 	|| new_w->notebook.back_page_foreground !=
 				    old->notebook.back_page_foreground)
 	GetBackpageGCs(new_w);
-
     /* Set new size, if necessary */
     if (XtIsRealized((Widget)new_w) &&
 	(new_w->notebook.orientation != old->notebook.orientation
@@ -1312,7 +1161,6 @@ SetValues (
 	relayout = True;
 	redraw = True;
 	}
-
     /* if visual is changed, redraw */
     if (new_w->notebook.frame_background != old->notebook.frame_background
 	|| new_w->notebook.binding_pixmap != old->notebook.binding_pixmap
@@ -1323,65 +1171,47 @@ SetValues (
 	{
 	redraw = True;
 	}
-
-
     if (updateVisual)
 	SetVisualConfig(new_w);
-
     if (updateJoin)
 	UpdateJoinSideChildren (new_w, (Dimension) 0);
-
     if (relayout)
 	{
 	Dimension save_width, save_height;
 	XtWidgetGeometry preferred_geo;
-
 	/* Store new w/h, restore old w/h, and adjust geometry to the old */
 	save_width = XtWidth(new_w);
 	save_height = XtHeight(new_w);
 	XtWidth(new_w) = XtWidth(old);
 	XtHeight(new_w) = XtHeight(old);
-
 	/* Adjust notebook's children type sizes to old size */
 	AdjustGeometry(new_w, NULL, NULL);
-
 	/* Layout Children based on old notebook sizes */
 	LayoutChildren(new_w, NULL);
-
 	/* Get preferred size unless app changed both width & height */
 	preferred_geo.width  = save_width;
 	preferred_geo.height = save_height;
 	if ((XtWidth(old) == save_width) || (XtHeight(old) == save_height))
 	    NewPreferredGeometry(new_w, NULL, NULL, &preferred_geo);
-
 	/* App request for width takes precedence over NewPreferredGeometry */
 	if (XtWidth(old) != save_width)
 	    XtWidth(new_w) = save_width;
 	else
 	    XtWidth(new_w) = preferred_geo.width;
-
 	/* App request for height takes precedence over NewPreferredGeometry */
 	if (XtHeight(old) != save_height)
 	    XtHeight(new_w) = save_height;
 	else
 	    XtHeight(new_w) = preferred_geo.height;
 	}
-
     if (visualFlag)
 	redraw |= _XmNotifyChildrenVisual (ow, nw, visualFlag);
-
-
     return(redraw);
 }
-
-
 /*- QueryGeometry -----------------------------------------------------------
-
         Method for the composite widget's QueryGeometry
-
 	Returns:
 	    preferred size if realized, else user/application w/h values
-
 -----------------------------------------------------------------------------*/
 static XtGeometryResult
 QueryGeometry (
@@ -1389,10 +1219,8 @@ QueryGeometry (
     XtWidgetGeometry *intended,
     XtWidgetGeometry *desired)
 {
-
     /* Get the preferred w/h based on children preferred sizes */
     NewPreferredGeometry((XmNotebookWidget)w, NULL, NULL, desired);
-
     /* Handle user initial size setting */
     if (!XtIsRealized(w))
 	{
@@ -1401,26 +1229,17 @@ QueryGeometry (
 	if (XtHeight(w))
 	    desired->height = XtHeight(w);
 	}
-
     /* Return result, XmeReplyToQueryGeometry will set CWidth and CHeight */
     return(XmeReplyToQueryGeometry(w, intended, desired));
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                         Composite Class Methods                           *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- GeometryManager ---------------------------------------------------------
-
         Method for the composite widget's GeometryManager
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static XtGeometryResult
 GeometryManager (
@@ -1432,7 +1251,6 @@ GeometryManager (
     XmNotebookConstraint nc = NotebookConstraint(instigator);
     XtGeometryResult result = XtGeometryNo;
     XtWidgetGeometry myrequest, myallowed;
-
     /* handle changes during ConstraintSetValues layout */
     if ( (nb->notebook.constraint_child == instigator)
       && ((IsX(desired)) && (IsY(desired))))
@@ -1446,7 +1264,6 @@ GeometryManager (
 	    XtHeight(instigator) = desired->height;
 	return XtGeometryYes;
 	}
-
     /* only for resizing request */
     if ((nc->resizable || NB_IS_CHILD_TAB(nc->child_type))
         && (desired->request_mode & (CWWidth|CWHeight|CWBorderWidth))
@@ -1454,7 +1271,6 @@ GeometryManager (
 	{
 	/* Determine preferred geometry based on instigator preferrences */
 	NewPreferredGeometry(nb, instigator, desired, &myrequest);
-
 	/*
 	 * Prepare resize request (as needed) to the parent
 	 */
@@ -1467,7 +1283,6 @@ GeometryManager (
             myrequest.request_mode |= CWHeight;
         if (IsBorder(desired) && XtBorderWidth(nb) != myrequest.border_width)
             myrequest.border_width |= CWBorderWidth;
-
         /* ask parent, only if notebook resize request is needed */
         if (myrequest.request_mode)
 	    {
@@ -1476,22 +1291,18 @@ GeometryManager (
 	    else /* nc->resizable */
             {
 	    result = XtMakeGeometryRequest((Widget)nb, &myrequest, &myallowed);
-
 	    /* Parent unable to completely fulfill request */
 	    if (result == XtGeometryAlmost)
 	    result = XtGeometryNo;
 	    }
 	    }
-
 	/* Update the geometry, if necessary */
 	if (result == XtGeometryYes && !IsQueryOnly(desired))
 	    {
 	    /* Adjust notebook's children type sizes to new size */
 	    AdjustGeometry(nb, instigator, desired);
-
 	    /* Layout Children based on new notebook size */
 	    LayoutChildren(nb, instigator);
-
 	    if (XtIsRealized((Widget)nb))
 		XClearArea(XtDisplay((Widget)nb),XtWindow((Widget)nb),
 			0,0,0,0,True);
@@ -1499,16 +1310,11 @@ GeometryManager (
 	}
     return result;
 }
-
-
 /*- ChangeManaged -----------------------------------------------------------
-
         Method for the composite widget's ChangeManaged
-
         Something changed in the set of managed children, so place
         the children and change the form widget size to reflect new size,
         if possible.
-
 -----------------------------------------------------------------------------*/
 static void
 ChangeManaged (
@@ -1516,27 +1322,22 @@ ChangeManaged (
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
     XtWidgetGeometry preferred;
-
     /* ChangeManaged recursively called by SetPageScroller; return */
     if (nb->notebook.scroller_status == DEFAULT_CREATE)
 	return;
-
     /* if this is the first time through, set the page scroller */
     if (nb->notebook.scroller_status == DEFAULT_NONE)
 	{
 	SetPageScroller(nb);
 	UpdateNavigators(nb);
 	}
-
     /* assign default page number to those who don't have */
     AssignDefaultPageNumber(nb);
-
     /* invoke XmNpageChangedCallback for initial setting of current page */
     if (nb->notebook.first_change_managed
 	&& XtHasCallbacks(w, XmNpageChangedCallback) == XtCallbackHasSome)
 	{
 	XmNotebookCallbackStruct cbs;
-
 	cbs.reason           = XmCR_NONE;
 	cbs.event            = NULL;
 	cbs.page_number      = nb->notebook.current_page_number;
@@ -1544,20 +1345,16 @@ ChangeManaged (
 				nb->notebook.current_page_number, XmPAGE);
 	cbs.prev_page_number = XmUNSPECIFIED_PAGE_NUMBER;
 	cbs.prev_page_widget = NULL;
-
 	/* Mark that the callback is being called and when it finishes */
 	nb->notebook.in_callback = True;
 	XtCallCallbackList(w, nb->notebook.page_change_callback, &cbs);
 	nb->notebook.in_callback = False;
 	}
-
     /* sort children by their page number and update their activity */
     SortChildren(nb);
-
     /*
      * Determine preferred notebook size based on new managed child
      */
-
     /* Check if current size is the preferred size */
     if (NewPreferredGeometry(nb, NULL, NULL, &preferred))
     {
@@ -1567,31 +1364,22 @@ ChangeManaged (
             preferred.request_mode |= CWWidth;
         if (XtIsRealized((Widget)nb) || XtHeight(nb) == 0)
             preferred.request_mode |= CWHeight;
-
 	/* Make parent geometry request, if necessary */
 	if (preferred.request_mode)
 	    _XmMakeGeometryRequest((Widget)nb, &preferred);
-
 	/* Clear notebook area otherwise binder and backpage don't update. */
 	if (XtIsRealized((Widget)nb) && !nb->notebook.first_change_managed)
 	    XClearArea(XtDisplay(nb), XtWindow(nb), 0, 0, 0, 0, True);
     }
-
     /* Adjust notebook's children type sizes (based on notebook size) */
     AdjustGeometry(nb, NULL, NULL);
-
     /* Layout Children (based on notebook size) */
     LayoutChildren(nb, NULL);
-
     XmeNavigChangeManaged(w);
     nb->notebook.first_change_managed = False;
 }
-
-
 /*- InsertChild -------------------------------------------------------------
-
         Method for the composite widget's InsertChild
-
 -----------------------------------------------------------------------------*/
 static void
 InsertChild (
@@ -1601,33 +1389,27 @@ InsertChild (
     XmNotebookConstraint nc = NotebookConstraint(child);
     XmScrollFrameTrait scroll_frameT;
     XtWidgetProc insert_child;
-
     /* check if trying to insert an invalid object */
     if (!XtIsRectObj(child))
 	return;
-
     /* call manager's InsertChild method */
     _XmProcessLock();
     insert_child = ((XmManagerWidgetClass)xmManagerWidgetClass)
 			->composite_class.insert_child;
     _XmProcessUnlock();
     (*insert_child)(child);
-
     /* add some keyboard traversal stuff */
     switch (nc->child_type)
 	{
 	case XmPAGE_SCROLLER:
 	    /* First: take care of previous page scroller */
-
 	    /* default page scroller not yet made, so just put this one in */
 	    if (nb->notebook.scroller_status == DEFAULT_NONE)
 	       nb->notebook.scroller_status = DEFAULT_GONE;
-
 	    /* remove previously created default page scroller */
 	    else if (nb->notebook.scroller_status == DEFAULT_USED)
 		{
 		nb->notebook.scroller_status = DEFAULT_CREATE;
-
 		/* remove navigator, if page scroller is a navigator */
 		if (NB_IS_CHILD_NAVIGATOR(nb->notebook.scroller))
 		    {
@@ -1637,16 +1419,13 @@ InsertChild (
 							nb->notebook.scroller);
 		    }
 		XtDestroyWidget(nb->notebook.scroller);
-
 		nb->notebook.scroller_status = DEFAULT_GONE;
 		}
-
 	    /* remove previously created non-default page scroller */
 	    else if (nb->notebook.scroller_status == DEFAULT_GONE
 		  && nb->notebook.scroller != NULL)
 		{
 		nb->notebook.scroller_status = DEFAULT_CREATE;
-
 		/* remove navigator, if page scroller is a navigator */
 		if (NB_IS_CHILD_NAVIGATOR(nb->notebook.scroller))
 		    {
@@ -1656,15 +1435,11 @@ InsertChild (
 							nb->notebook.scroller);
 		    }
 		XtUnmanageChild(nb->notebook.scroller);
-
 		nb->notebook.scroller_status = DEFAULT_GONE;
 		}
-
 	    /* Second: take care of this new page scroller */
-
 	    /* update scroller's translation table */
 	    nb->notebook.scroller = child;
-
 	    /* add navigator, if page scroller has navigator trait */
 	    if (NB_IS_CHILD_NAVIGATOR(nb->notebook.scroller))
 		{
@@ -1673,45 +1448,34 @@ InsertChild (
 			scroll_frameT->addNavigator((Widget)nb,
 						    child, NavigDimensionX);
 		}
-
 	    /* update navigators so this one get initial info */
             UpdateNavigators(nb);
-
 	    break;
-
 	case XmPAGE:
 	case XmSTATUS_AREA:
             XtVaSetValues(child, XmNnavigationType, XmTAB_GROUP, NULL);
 	    break;
-
 	case XmMAJOR_TAB:
 	case XmMINOR_TAB:
 	    /* Install activiation callback */
 	    {
 	    XmActivatableTrait activeT;
-
 	    if ((activeT=NB_ACTIVATABLE(child)) != NULL
 		&& activeT->changeCB != NULL)
 		activeT->changeCB(child, TabPressed,
 		    (XtPointer)(unsigned long)(NB_IS_CHILD_MAJOR(nc->child_type)
 		    ? XmCR_MAJOR_TAB : XmCR_MINOR_TAB), True);
 	    }
-
 	    /* Update JoinSide information */
 	    (void) UpdateJoinSide(nb, child, nc->child_type, (Dimension) 0);
-
 	    /* Install accelerators */
 	    if (!XmIsGadget(child))
                 XtInstallAccelerators(child, (Widget)nb);
 	    break;
 	}
 }
-
-
 /*- DeleteChild -------------------------------------------------------------
-
         Method for the composite widget's DeleteChild
-
 -----------------------------------------------------------------------------*/
 static void
 DeleteChild (
@@ -1721,7 +1485,6 @@ DeleteChild (
     XmNotebookConstraint nc = NotebookConstraint(child);
     XmScrollFrameTrait scroll_frameT;
     XtWidgetProc delete_child;
-
     /* clear child pointers in Notebook */
     switch (nc->child_type)
 	{
@@ -1750,7 +1513,6 @@ DeleteChild (
 	    nb->notebook.prev_minor = NULL;
 	    break;
 	}
-
     /* call manager's DeleteChild method */
     _XmProcessLock();
     delete_child = ((XmManagerWidgetClass)xmManagerWidgetClass)
@@ -1758,24 +1520,15 @@ DeleteChild (
     _XmProcessUnlock();
     (*delete_child)(child);
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                        Constraint Class Methods                           *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- ConstraintInitialize ----------------------------------------------------
-
         Initialize method for Notebook's constraint class
-
 	A default page number will be provided when the widget is managed.
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 ConstraintInitialize (
@@ -1785,17 +1538,14 @@ ConstraintInitialize (
     Cardinal *num)		/* unused */
 {
     XmNotebookConstraint nc = NotebookConstraint(new_w);
-
     /* check for invalid object */
     if (!XtIsRectObj(new_w))
         return;
-
     /* validate the child type */
     if (nc->child_type != XmMAJOR_TAB_SCROLLER
 	&& nc->child_type != XmMINOR_TAB_SCROLLER
 	&& !XmRepTypeValidValue(XmRID_NB_CHILD_TYPE, nc->child_type, new_w))
         nc->child_type = XmNONE;
-
     /* convert to internal */
      if (nc->child_type == XmNONE)
         {
@@ -1809,14 +1559,9 @@ ConstraintInitialize (
 	    nc->child_type = XmPAGE;
 	}
 }
-
-
 /*- ConstraintSetValues -----------------------------------------------------
-
         SetValue method for notebook's constraint class
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static Boolean
 ConstraintSetValues (
@@ -1831,17 +1576,14 @@ ConstraintSetValues (
     XmNotebookConstraint new_nc = NotebookConstraint(new_w);
     Boolean redraw = False;
     Boolean need_reset = False;
-
     /* check for invalid object */
     if (!XtIsRectObj(new_w))
 	return False;
-
     /* XmNnotebookChildType is only CG, not Settable */
     if (new_nc->child_type != old_nc->child_type) {
 	new_nc->child_type = old_nc->child_type;
 	XmeWarning(new_w, MESSAGE0);
     }
-
     /* if the page number is changed, sort again */
     /* by just repositioning that child */
     if (new_nc->page_number != old_nc->page_number)
@@ -1858,11 +1600,9 @@ ConstraintSetValues (
 	    else if (old_nc->page_number == nb->notebook.last_page_number)
 		need_reset = AssignDefaultPageNumber(nb);
 	    }
-
 	/* re-sort and check child list */
 	RepositionChild(nb, new_w);
 	SetActiveChildren(nb);
-
 	/* check for changes that affect layout */
 	if (!nb->notebook.in_callback)
 	    {
@@ -1896,25 +1636,16 @@ ConstraintSetValues (
 		} /* switch */
 	    } /* if */
 	} /* if */
-
     return(redraw);
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *			  Initializing & Resource Managing		     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- GetDefaultBackPagePos ---------------------------------------------------
-
 	Get the default back page position
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 GetDefaultFrameBackground(
@@ -1924,8 +1655,6 @@ GetDefaultFrameBackground(
 {
   value->addr = (XtPointer) &w->core.background_pixel;
 }
-
-
 /*ARGSUSED*/
 static void
 GetDefaultBackPageBackground(
@@ -1935,14 +1664,10 @@ GetDefaultBackPageBackground(
 {
   XmNotebookWidget nb = (XmNotebookWidget)w;
   static Pixel pixel;
-
   value->addr = (XtPointer) &pixel;
-
   XmGetColors(XtScreen(w), nb->core.colormap, nb->notebook.frame_background,
 	      NULL, NULL, NULL, &pixel);
 }
-
-
 /*ARGSUSED*/
 static void
 GetDefaultBackPagePos (
@@ -1952,7 +1677,6 @@ GetDefaultBackPagePos (
 {
     static unsigned char back_page_pos;
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     /* initialize the notebook layout default */
     if (LayoutIsRtoLM(w))
 	{
@@ -1976,10 +1700,8 @@ GetDefaultBackPagePos (
      * This will have to change when BOTTOM_TO_TOP is supported for
      * XmNlayoutDirection.
      */
-
     value->addr = (XPointer) &back_page_pos;
 }
-
 /* Same logic as the GetDefaultBackPagePos default proc ... rewritten
  * without the static variable - for use from the Initialize proc .
  */
@@ -1989,7 +1711,6 @@ GetDefaultBackPagePosAgain (
 {
     unsigned char back_page_pos;
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if (LayoutIsRtoLM(w))
 	{
 	if (nb->notebook.orientation == XmVERTICAL)
@@ -2008,14 +1729,10 @@ GetDefaultBackPagePosAgain (
 	    /* LEFT_TO_RIGHT and HORIZONTAL */
 	    back_page_pos = XmBOTTOM_RIGHT;
 	}
-
     return back_page_pos;
 }
-
 /*- FromOrientationPixels ---------------------------------------------------
-
         Determines orientation and calls appropriate converter.
-
 -----------------------------------------------------------------------------*/
 static void
 FromOrientationPixels (
@@ -2024,7 +1741,6 @@ FromOrientationPixels (
     XtArgVal *value)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if ((int)(*value) < 0)
 	*value = 0;
     if (nb->notebook.orientation == XmHORIZONTAL)
@@ -2032,12 +1748,8 @@ FromOrientationPixels (
     else
 	XmeFromVerticalPixels(w, offset, value);
 }
-
-
 /*- ToOrientationPixels ----------------------------------------------------
-
         Determines orientation and calls appropriate converter.
-
 -----------------------------------------------------------------------------*/
 static XmImportOperator
 ToOrientationPixels (
@@ -2046,18 +1758,13 @@ ToOrientationPixels (
     XtArgVal *value)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if (nb->notebook.orientation == XmHORIZONTAL)
         return(XmeToHorizontalPixels(w, offset, value));
     else
         return(XmeToVerticalPixels(w, offset, value));
 }
-
-
 /*- FromOrientationOppositePixels -------------------------------------------
-
         Determines orientation and calls appropriate converter.
-
 -----------------------------------------------------------------------------*/
 static void
 FromOrientationOppositePixels (
@@ -2066,7 +1773,6 @@ FromOrientationOppositePixels (
     XtArgVal *value)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if ((int)(*value) < 0)
         *value = 0;
     if (nb->notebook.orientation == XmHORIZONTAL)
@@ -2074,12 +1780,8 @@ FromOrientationOppositePixels (
     else
         XmeFromHorizontalPixels(w, offset, value);
 }
-
-
 /*- ToOrientationOppositePixels --------------------------------------------
-
         Determines orientation and calls appropriate converter.
-
 -----------------------------------------------------------------------------*/
 static XmImportOperator
 ToOrientationOppositePixels (
@@ -2088,18 +1790,13 @@ ToOrientationOppositePixels (
     XtArgVal *value)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if (nb->notebook.orientation == XmHORIZONTAL)
 	return(XmeToVerticalPixels(w, offset, value));
     else
         return(XmeToHorizontalPixels(w, offset, value));
 }
-
-
 /*- CreateTabScrollers -----------------------------------------------------
-
 	Create Notebook's tab scrollers
-
 -----------------------------------------------------------------------------*/
 static void
 CreateTabScrollers (
@@ -2116,7 +1813,6 @@ CreateTabScrollers (
     ((XmActivatableTrait)XmeTraitGet((XtPointer)
 		XtClass((Widget)nb->notebook.next_major),XmQTactivatable))->
 		changeCB(nb->notebook.next_major,FlipTabs,NULL,True);
-
     nb->notebook.prev_major = XtVaCreateManagedWidget(MAJOR_TAB_PREV_NAME,
                 xmArrowButtonGadgetClass, (Widget)nb,
                 XmNwidth, TAB_SCROLLER_WIDTH_DEFAULT,
@@ -2127,7 +1823,6 @@ CreateTabScrollers (
     ((XmActivatableTrait)XmeTraitGet((XtPointer)
                 XtClass((Widget)nb->notebook.prev_major),XmQTactivatable))->
                 changeCB(nb->notebook.prev_major,FlipTabs,NULL,True);
-
     /* creating minor tab scrollers */
     nb->notebook.next_minor = XtVaCreateManagedWidget(MINOR_TAB_NEXT_NAME,
                 xmArrowButtonGadgetClass, (Widget)nb,
@@ -2139,7 +1834,6 @@ CreateTabScrollers (
     ((XmActivatableTrait)XmeTraitGet((XtPointer)
                 XtClass((Widget)nb->notebook.next_minor),XmQTactivatable))->
                 changeCB(nb->notebook.next_minor,FlipTabs,NULL,True);
-
     nb->notebook.prev_minor = XtVaCreateManagedWidget(MINOR_TAB_PREV_NAME,
                 xmArrowButtonGadgetClass, (Widget)nb,
                 XmNwidth, TAB_SCROLLER_WIDTH_DEFAULT,
@@ -2151,12 +1845,8 @@ CreateTabScrollers (
                 XtClass((Widget)nb->notebook.prev_minor),XmQTactivatable))->
                 changeCB(nb->notebook.prev_minor,FlipTabs,NULL,True);
 }
-
-
 /*- SetVisualConfig ---------------------------------------------------------
-
         Sets Notebook visual configuration private variables.
-
 -----------------------------------------------------------------------------*/
 static void
 SetVisualConfig (
@@ -2220,19 +1910,14 @@ SetVisualConfig (
         nb->notebook.binding_pos = BOTTOM;
     }
 }
-
-
 /*- UpdateJoinSide ------------------------------------------------------------
-
         Update tab's JoinSide Trait to match current visual configuration.
-
 	Uses instance state:
 		major_pos
 		minor_pos
 	Returns
 	    True, if the child is major or minor tab and holds the
 	    JoinSide trait.  Otherwise, returns False.
-
 -----------------------------------------------------------------------------*/
 static Boolean
 UpdateJoinSide (
@@ -2244,7 +1929,6 @@ UpdateJoinSide (
     XmJoinSideTrait joinsideT;          /* child JoinSide trait */
     unsigned char side_of_book;         /* side of notebook tab is on */
     unsigned char side_to_join;         /* side to join */
-
    /* Determine side of nookbook tabs reside */
     if (NB_IS_CHILD_MAJOR(child_type))
 	side_of_book = nb->notebook.major_pos;
@@ -2252,7 +1936,6 @@ UpdateJoinSide (
 	side_of_book = nb->notebook.minor_pos;
     else
 	return(False);
-
    /* Update JoinSide trait infomation, unless trait not found */
     if ((joinsideT=NB_JOINSIDE(child)) != NULL
 	&& joinsideT->setValue != NULL)
@@ -2278,15 +1961,10 @@ UpdateJoinSide (
 	joinsideT->setValue(child, side_to_join, shadow_thickness);
 	return(True);
 	}
-
     return(False);
 }
-
-
 /*- UpdateJoinSideChildren --------------------------------------------------
-
         Update JoinSide aware children of new shadow_thickness or JoinSide.
-
 -----------------------------------------------------------------------------*/
 static void
 UpdateJoinSideChildren (
@@ -2296,7 +1974,6 @@ UpdateJoinSideChildren (
     Widget cw;				/* child widget */
     unsigned char ct;			/* child constraint type */
     int i;
-
     for (i=0; i < nb->composite.num_children; i++)
 	{
 	cw = nb->composite.children[i];
@@ -2305,34 +1982,25 @@ UpdateJoinSideChildren (
 	    (void) UpdateJoinSide(nb, cw, ct, shadow_thickness);
 	}
 }
-
-
 /*- SetPageScroller ---------------------------------------------------------
-
 	Set the visual configuration of the page scroller.
-
 	It creates the default page scroller if no page scroller
 	is created yet (consisting of a SpinBox with TextField child).
-
 -----------------------------------------------------------------------------*/
 static void
 SetPageScroller (
     XmNotebookWidget nb)
 {
-
     /* Only create default page scroller if none currently exists */
     if (nb->notebook.scroller_status != DEFAULT_NONE)
     	return;
-
     /* Mark that we are in the process of creating the default */
     nb->notebook.scroller_status = DEFAULT_CREATE;
-
     nb->notebook.scroller = XtVaCreateManagedWidget(PAGE_SCROLLER_NAME,
 		  xmSpinBoxWidgetClass, (Widget)nb,
 		  XmNarrowLayout, XmARROWS_SPLIT,
 		  XmNnotebookChildType, XmPAGE_SCROLLER,
 		  NULL);
-
     nb->notebook.scroller_child = XtVaCreateManagedWidget(NB_TEXT_FIELD_NAME,
 		  xmTextFieldWidgetClass, nb->notebook.scroller,
 		  XmNspinBoxChildType, XmNUMERIC,
@@ -2342,24 +2010,16 @@ SetPageScroller (
 		  XmNeditable, False,
 		  XmNtraversalOn, True,
 		  NULL);
-
     /* Mark that the default page scroller has been established */
     nb->notebook.scroller_status = DEFAULT_USED;
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *			   Child Layout Functions			     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- LayoutChildren ----------------------------------------------------------
-
         Function to layout Notebook's children
-
 -----------------------------------------------------------------------------*/
 static void
 LayoutChildren (
@@ -2368,28 +2028,21 @@ LayoutChildren (
 {
     /* reset top pointers of tabs */
     ResetTopPointers(nb, XmNONE, 0);
-
     /* layout children */
     LayoutPages(nb, instigator);
     LayoutMajorTabs(nb, instigator);
     LayoutMinorTabs(nb, instigator);
 }
-
-
 /*- LayoutPages -------------------------------------------------------------
-
 	Function to layout Page, Status, and Page Scroller.
-
 	Uses instance state:
 		current_page_number,
 		orientation, and
 		precalculated sizes of each child type.
-
         Called from:
 	    LayoutChildren(), when performing complete relayout
 	    ConstraintSetValues(), when child page number changes
 	    GotoPage(), when notebook.current_page_number changes
-
 -----------------------------------------------------------------------------*/
 static void
 LayoutPages (
@@ -2400,7 +2053,6 @@ LayoutPages (
     Widget child;
     int i;
     Dimension x, y, x1, y1, x2;
-
     /* get the page's x, y position */
     x = nb->notebook.margin_width + nb->notebook.shadow_thickness + 1;
     y = nb->notebook.margin_height + nb->notebook.shadow_thickness + 1;
@@ -2420,7 +2072,6 @@ LayoutPages (
     else if (nb->notebook.minor_pos == TOP)
 	y += NB_MINOR_MAX(nb, nb->notebook.minor_height,
 	    nb->notebook.minor_scroller_height) + nb->notebook.back_page_size;
-
     /* get the status area and the page scroller's position */
     y1 = y + nb->notebook.page_height + nb->notebook.margin_height;
     if (nb->notebook.back_page_pos == XmTOP_RIGHT ||
@@ -2434,7 +2085,6 @@ LayoutPages (
         x1 = x + nb->notebook.page_width - nb->notebook.status_width;
 	x2 = x;
     }
-
     /* resize pages & status */
     for (i = 0; i < nb->composite.num_children; i++)
 	{
@@ -2474,7 +2124,6 @@ LayoutPages (
 		}
 	    }
 	}
-
     /* Show the page scroller */
     if (nb->notebook.scroller != NULL)
     {
@@ -2484,12 +2133,8 @@ LayoutPages (
 			nb->notebook.scroller_height);
     }
 }
-
-
 /*- LayoutMajorTabs ---------------------------------------------------------
-
         Function to layout major tabs
-
 -----------------------------------------------------------------------------*/
 static void
 LayoutMajorTabs (
@@ -2523,13 +2168,11 @@ LayoutMajorTabs (
 		nb->notebook.first_page_number - 1;
     gray_prev = gray_next = True;
     sx1 = sy1 = sx2 = sy2 = 0;
-
     /*
      * Determine tab margin spacing and tab staggering
      */
     spacing = MAX(nb->notebook.major_spacing, nb->notebook.shadow_thickness);
     delta = nb->notebook.back_page_size / nb->notebook.real_back_page_number;
-
     /*
      * Determine tab positions
      */
@@ -2558,7 +2201,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    y += nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_UP;
         next = XmARROW_DOWN;
@@ -2588,7 +2230,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    x += nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_LEFT;
         next = XmARROW_RIGHT;
@@ -2620,7 +2261,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    y += nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_UP;
         next = XmARROW_DOWN;
@@ -2650,7 +2290,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    x -= spacing;
-
 	/* set arrow direction resource */
 	prev = XmARROW_RIGHT;
 	next = XmARROW_LEFT;
@@ -2680,7 +2319,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    y -= spacing;
-
         /* set arrow direction resource */
         prev = XmARROW_DOWN;
         next = XmARROW_UP;
@@ -2713,7 +2351,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    x += nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_LEFT;
         next = XmARROW_RIGHT;
@@ -2746,7 +2383,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    y -= spacing;
-
         /* set arrow direction resource */
         prev = XmARROW_DOWN;
         next = XmARROW_UP;
@@ -2777,52 +2413,40 @@ LayoutMajorTabs (
 	    }
 	else
 	    x -= spacing;
-
         /* set arrow direction resource */
         prev = XmARROW_RIGHT;
         next = XmARROW_LEFT;
 	}
-
-
-
     /*
      * Deal with previous top and current top tab shadowing
      */
-
     /* Inform old top major to restore shadow_thickness */
     if (nb->notebook.old_top_major != NULL
 	&& nb->notebook.old_top_major != nb->notebook.top_major)
 	{
 	/* Protect against geometry requests during join changes */
 	nb->notebook.in_setshadow = True;
-
 	/* Inform join-aware tab else restore shadow thickness */
 	if (!UpdateJoinSide(nb, nb->notebook.old_top_major,
 			    XmMAJOR_TAB, (Dimension)0))
 	    {
 	    /* Hide the old top major shadow */
 	    HideShadowedTab(nb, nb->notebook.old_top_major);
-
 	    /* Restore child shadow thickness */
 	    XtVaSetValues(nb->notebook.old_top_major,
 		    XmNshadowThickness, nb->notebook.major_shadow_thickness,
 		    NULL);
 	    }
-
 	/* Release protection against geometry requests */
 	nb->notebook.in_setshadow = False;
 	}
-
-
     /* Store & set new top major's shadow */
     if (nb->notebook.top_major != NULL)
 	{
 	/* Hide the top major shadow, as it may be moving (shown or hidden) */
 	HideShadowedTab(nb, nb->notebook.top_major);
-
 	/* Protect against geometry requests during join changes */
 	nb->notebook.in_setshadow = True;
-
 	/* Set shadow thickness of new top tab */
 	if (!UpdateJoinSide(nb, nb->notebook.top_major,
 			XmMAJOR_TAB, nb->notebook.shadow_thickness))
@@ -2845,7 +2469,6 @@ LayoutMajorTabs (
 		if (current != 0)
 		  nb->notebook.major_shadow_thickness = current;
 	      }
-
 	    /* Notebook will draw shadow for non-JoinSide trait tabs */
 	    XtVaSetValues(nb->notebook.top_major,
 		    XmNshadowThickness, 0,
@@ -2853,7 +2476,6 @@ LayoutMajorTabs (
 	    }
 	else
 	    join_child = nb->notebook.top_major;
-
 	/* Release protection against geometry requests */
 	nb->notebook.in_setshadow = False;
 	}
@@ -2890,7 +2512,6 @@ LayoutMajorTabs (
 	{
 	child = nb->composite.children[i];
 	nc = NotebookConstraint(child);
-
         if (NB_IS_CHILD_MAJOR(nc->child_type))
 	    {
 	    if (!nc->active)
@@ -2938,7 +2559,6 @@ LayoutMajorTabs (
                 tmpx = x;
                 tmpy = y;
                 }
-
 		if (/*(nb->notebook.orientation == XmHORIZONTAL &&
 		    nc->page_number < top_major)
 		    ||*/ (nb->notebook.major_pos == RIGHT && tmpx > fixed)
@@ -2953,7 +2573,6 @@ LayoutMajorTabs (
 		    {
 		    tmpy = fixed;
 		    }
-
 		/* move joinSide top tab over to align with frame */
 		if ((join_child && (join_child == child))
 		||  (nb->notebook.top_major
@@ -2968,7 +2587,6 @@ LayoutMajorTabs (
 		    else /* (nb->notebook.major_pos == BOTTOM) */
 			tmpy = tmpy - nb->notebook.shadow_thickness;
 		    }
-
 		/* Make tab visible */
 		ShowChild(child, instigator, tmpx, tmpy,
 			    nb->notebook.major_width,
@@ -2983,9 +2601,7 @@ LayoutMajorTabs (
                     x += nb->notebook.major_width + spacing;
 		else /* (nb->notebook.minor_pos == LEFT) */
 		    x -= nb->notebook.major_width + spacing;
-
 		}
-
             /* to the next back page line */
 	    if (nc->page_number >= top_major)
 		{
@@ -3001,14 +2617,11 @@ LayoutMajorTabs (
 		current_tab++;
 	} /* if */
     } /* for */
-
-
     /*
      * Display the tab scrolling tab, if neccessary
      */
     if (NB_IS_CHILD_MAJOR_SCROLLER(nb->notebook.need_scroller) && tab_count)
 	{
-
 	/* set scroller's arrow directions */
 	XtVaGetValues(nb->notebook.prev_major,
 	     XmNarrowDirection, &direction, NULL);
@@ -3020,18 +2633,15 @@ LayoutMajorTabs (
 	if (direction != next)
            XtVaSetValues(nb->notebook.next_major,
              XmNarrowDirection, next, NULL);
-
 	/* Gray out scrollers, if necessary */
 	if (gray_prev)
 	    XtSetSensitive(nb->notebook.prev_major, False);
 	else
 	    XtSetSensitive(nb->notebook.prev_major, True);
-
 	if (gray_next)
 	    XtSetSensitive(nb->notebook.next_major, False);
 	else
 	    XtSetSensitive(nb->notebook.next_major, True);
-
 	/* show the scrollers */
         ShowChild(nb->notebook.prev_major, instigator, sx1, sy1,
 			nb->notebook.major_scroller_width,
@@ -3046,12 +2656,8 @@ LayoutMajorTabs (
         HideChild(nb->notebook.next_major, instigator);
 	}
 }
-
-
 /*- LayoutMinorTabs ---------------------------------------------------------
-
         Function to layout minor tabs
-
 -----------------------------------------------------------------------------*/
 static void
 LayoutMinorTabs (
@@ -3091,15 +2697,12 @@ LayoutMinorTabs (
 		: nb->notebook.first_page_number - 1;
     gray_prev = gray_next = True;
     sx1 = sy1 = sx2 = sy2 = 0;
-
     if ( nb->notebook.shadow_thickness == 0 )
        offset = 1;
-
     /*
      * Determine tap spacing
      */
     spacing = MAX(nb->notebook.minor_spacing, nb->notebook.shadow_thickness);
-
     /*
      * Determine tab positions
      */
@@ -3133,7 +2736,6 @@ LayoutMinorTabs (
 	    }
 	else
 	    x += nb->notebook.shadow_thickness;
-
 	/* set arrow direction resource */
 	prev = XmARROW_LEFT;
 	next = XmARROW_RIGHT;
@@ -3171,7 +2773,6 @@ LayoutMinorTabs (
 	    }
 	else
 	    y += nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_UP;
         next = XmARROW_DOWN;
@@ -3210,7 +2811,6 @@ LayoutMinorTabs (
 	    }
 	else
 	    x -= nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_RIGHT;
         next = XmARROW_LEFT;
@@ -3249,7 +2849,6 @@ LayoutMinorTabs (
 	    }
 	else
 	    y += nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_UP;
         next = XmARROW_DOWN;
@@ -3287,7 +2886,6 @@ LayoutMinorTabs (
 	    }
 	else
 	    x += nb->notebook.shadow_thickness;
-
 	/* set arrow direction resource */
 	prev = XmARROW_LEFT;
 	next = XmARROW_RIGHT;
@@ -3324,7 +2922,6 @@ LayoutMinorTabs (
 	    }
 	else
 	    y -= nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_DOWN;
         next = XmARROW_UP;
@@ -3366,7 +2963,6 @@ LayoutMinorTabs (
         }
 	else
 	    x -= nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_RIGHT;
         next = XmARROW_LEFT;
@@ -3407,50 +3003,40 @@ LayoutMinorTabs (
 	    }
 	else
 	    y -= nb->notebook.shadow_thickness;
-
         /* set arrow direction resource */
         prev = XmARROW_DOWN;
         next = XmARROW_UP;
 	}
-
     /*
      * Deal with previous top and current top tab shadowing
      */
-
     /* Inform old top minor to restore shadow_thickness */
     if (nb->notebook.old_top_minor != NULL
 	&& nb->notebook.old_top_minor != nb->notebook.top_minor)
         {
         /* Protect against geometry requests during join changes */
         nb->notebook.in_setshadow = True;
-
         /* Inform join-aware tab else restore shadow thickness */
         if (!UpdateJoinSide(nb, nb->notebook.old_top_minor,
 				XmMINOR_TAB, (Dimension)0))
 	    {
 	    /* Hide the old top minor shadow */
 	    HideShadowedTab(nb, nb->notebook.old_top_minor);
-
 	    /* Restore the old top minor shadow thickness */
             XtVaSetValues(nb->notebook.old_top_minor,
                     XmNshadowThickness, nb->notebook.minor_shadow_thickness,
                     NULL);
 	    }
-
         /* Release protection against geometry requests */
         nb->notebook.in_setshadow = False;
         }
-
-
     /* Store & set new top minor's shadow */
     if (nb->notebook.top_minor != NULL)
         {
 	/* Hide the top minor shadow, as it may be moving (shown or hidden) */
 	HideShadowedTab(nb, nb->notebook.top_minor);
-
         /* Protect against geometry requests during join changes */
         nb->notebook.in_setshadow = True;
-
         /* Set shadow thickness of new top tab */
         if (!UpdateJoinSide(nb, nb->notebook.top_minor,
 				XmMINOR_TAB, nb->notebook.shadow_thickness))
@@ -3474,7 +3060,6 @@ LayoutMinorTabs (
 		if (current != 0)
 		  nb->notebook.minor_shadow_thickness = current;
 	      }
-
             /* Notebook will draw shadow */
             XtVaSetValues(nb->notebook.top_minor,
                     XmNshadowThickness, 0,
@@ -3482,12 +3067,9 @@ LayoutMinorTabs (
             }
 	else
 	    join_child = nb->notebook.top_minor;
-
         /* Release protection against geometry requests */
 	nb->notebook.in_setshadow = False;
         }
-
-
     /*
      * Layout major tabs
      */
@@ -3497,18 +3079,15 @@ LayoutMinorTabs (
 	{
 	child = nb->composite.children[i];
 	nc = NotebookConstraint(child);
-
 	if (first_minor < nb->notebook.first_page_number
 	    || (nc->active
 		&& NB_IS_CHILD_MAJOR(nc->child_type)
 		&& (status == TAB_DRAWING || nc->page_number > first_minor)))
 	    status = TAB_DRAWN;
-
         if (NB_IS_CHILD_MINOR(nc->child_type))
 	    {
             if (!nc->active || status == TAB_DRAWN)
                 HideChild(child, instigator);
-
             else if (nc->page_number < first_minor)
 		{
 		if (nc->page_number >= top_major)
@@ -3536,7 +3115,6 @@ LayoutMinorTabs (
 		    else
 			tmpx = fixed;
 		    }
-
 		/* move joinSide top tab over to align with frame */
 		if ((join_child && (join_child == child))
 		||  (nb->notebook.top_minor
@@ -3551,13 +3129,11 @@ LayoutMinorTabs (
 		    else if (nb->notebook.minor_pos == BOTTOM)
 			tmpy = tmpy - nb->notebook.shadow_thickness;
 		    }
-
 		/* Make tab visible */
 		ShowChild(child, instigator, tmpx, tmpy,
 			    nb->notebook.minor_width,
 			    nb->notebook.minor_height);
 		tab_count++;
-
                 /* Calculate the next position */
 		if (nb->notebook.binding_pos == LEFT)
 		    x += nb->notebook.minor_width + spacing;
@@ -3567,16 +3143,12 @@ LayoutMinorTabs (
 		    y += nb->notebook.minor_height + spacing;
 		else
 		    y -= nb->notebook.minor_height + spacing;
-
 		}
 	    }
 	}
-
-
     /* display the tab scrolling tab if neccessary */
     if (NB_IS_CHILD_MINOR_SCROLLER(nb->notebook.need_scroller) && tab_count)
 	{
-
         /* set scroller's arrow directions */
         XtVaGetValues(nb->notebook.prev_minor,
                 XmNarrowDirection, &direction, NULL);
@@ -3588,7 +3160,6 @@ LayoutMinorTabs (
         if (direction != next)
             XtVaSetValues(nb->notebook.next_minor,
                 XmNarrowDirection, next, NULL);
-
         /* gray out scrollers if necessary */
         if (gray_prev)
             XtSetSensitive(nb->notebook.prev_minor, False);
@@ -3598,7 +3169,6 @@ LayoutMinorTabs (
             XtSetSensitive(nb->notebook.next_minor, False);
         else
             XtSetSensitive(nb->notebook.next_minor, True);
-
         /* show the scrollers */
         ShowChild(nb->notebook.prev_minor, instigator, sx1, sy1,
                         nb->notebook.minor_scroller_width,
@@ -3613,18 +3183,12 @@ LayoutMinorTabs (
         HideChild(nb->notebook.next_minor, instigator);
 	}
 }
-
-
 /*- ResetTopPointers --------------------------------------------------------
-
     Function to calculate and update needed information to perform
     layout for major and minor tabs, and the tab scroller.
-
     Uses instance state:
 	notebook.current_page_number
-
     Updates instance state:
-
 	notebook.first_major 	- page# of the first visible major tab
 	notebook.first_minor 	- page# of the first visible minor tab
 	notebook.top_major 	- page# of the currently active major tab
@@ -3634,14 +3198,11 @@ LayoutMinorTabs (
 				  XmMAJOR_TAB_SCROLLER indicates major only,
 				  XmMINOR_TAB_SCROLLER indicates minor only,
 				  XmTAB_SCROLLER indicates both are needed.
-
     Called from:
 	LayoutChildren(), when performing layout
 	GotoPage(), when changing the top pages
 	FlipTabs(), when tab scrolling are activated
 	TraverseTab(), when tab traverse actions are activated
-
-
     Parameters:
 	IN reason 		- Why was this routine called?
 		where
@@ -3652,7 +3213,6 @@ LayoutMinorTabs (
 		XmMINOR_TAB 	= reset due to activating a major tab
 		XmMAJOR_TAB_SCROLLER = reset due to major scroller activation
 		XmMINOR_TAB_SCROLLER = reset due to minor scroller activation
-
 	IN scroll 		- What type of scrolling
 		where
 		_NEXT		= scroll to the next major/minor tab
@@ -3661,7 +3221,6 @@ LayoutMinorTabs (
 		_END		= scroll to the last major/minor tab
 		(only used for reason == NB_IS_CHILD_MAJOR_SCROLLER or
 		NB_IS_CHILD_MINOR_SCROLLER)
-
 -----------------------------------------------------------------------------*/
 static void
 ResetTopPointers (
@@ -3678,7 +3237,6 @@ ResetTopPointers (
     Dimension frame_dim,
 	      tab_dim,
 	      scroller_dim; 		/* temporary w/h */
-
     /* major tab information */
     Widget start_major;		/* the very first major tab */
     Widget top_major;		/* the currently major tab */
@@ -3692,7 +3250,6 @@ ResetTopPointers (
     int num_rest_major;		/* # of next major tabs of the current page */
     int num_next_major;		/* # of next major tabs of first_major */
     int num_prev_major;		/* # of prev major tabs of first_major */
-
     /* minor tab information */
     Widget start_minor;		/* the first minor tab in the current major */
     Widget top_minor;		/* the current minor tab */
@@ -3708,12 +3265,9 @@ ResetTopPointers (
     int num_rest_minor;		/* # of next minor tabs of the current page */
     int num_next_minor;		/* # of next minor tabs of first_minor */
     int num_prev_minor;		/* # of prev minor tabs of first_minor */
-
-
     /*
      * Calculate general tab information, based on the current_page_number.
      */
-
     /* Major tab */
     first_major_page = nb->notebook.first_major
 		? NotebookConstraint(nb->notebook.first_major)->page_number
@@ -3722,7 +3276,6 @@ ResetTopPointers (
     top_major_idx = -1;
     start_major = top_major = next_major = prev_major = NULL;
     num_major = num_rest_major = num_next_major = num_prev_major = 0;
-
     for (i=0; i < nb->composite.num_children; i++)
 	{
 	child = nb->composite.children[i];
@@ -3732,7 +3285,6 @@ ResetTopPointers (
 	    if (!start_major)
 		/* Mark the very first tab */
 		start_major = child;
-
 	    if (nc->page_number <= nb->notebook.current_page_number)
 		{
 		/* Mark the closest tab to the current page */
@@ -3743,7 +3295,6 @@ ResetTopPointers (
 	    else
 		/* Count of tabs past the current page  */
 		num_rest_major++;
-
 	    if (nc->page_number < first_major_page)
 		{
 		/* Mark the closest previous tab to the first visible tab */
@@ -3759,12 +3310,10 @@ ResetTopPointers (
 		/* Count of tabs after the current page */
 		num_next_major++;
 		}
-
 	    /* Count of all tabs */
 	    num_major++;
 	    }
 	}
-
     /* Minor tab */
     first_minor_page = nb->notebook.first_minor
 		? NotebookConstraint(nb->notebook.first_minor)->page_number
@@ -3784,7 +3333,6 @@ ResetTopPointers (
             if (   nc->page_number > top_major_page
 		&& NB_IS_CHILD_MAJOR(nc->child_type) )
                 break;
-
 	    /* This minor tab is in the current major tab section */
             if (   nc->page_number >= top_major_page
 		&& NB_IS_CHILD_MINOR(nc->child_type) )
@@ -3823,20 +3371,16 @@ ResetTopPointers (
 		    /* Count of tabs after the current page */
 		    num_next_minor++;
 		    }
-
 		end_minor_idx = i;
 		num_minor++;
 		}
 	    }
 	}
-
-
     /*
      * Find the number of possibly visible tabs (num_visible_xxx), and
      * find whether the tab scroller is needed (notebook.need_scroller)
      */
     nb->notebook.need_scroller = XmNONE;
-
     /* Major tab */
     if (nb->notebook.orientation == XmHORIZONTAL)
 	{
@@ -3866,7 +3410,6 @@ ResetTopPointers (
 			     nb->notebook.shadow_thickness ) /
 			     (int)(tab_dim + spacing);
 	}
-
     /* Minor tab */
     if (nb->notebook.orientation == XmHORIZONTAL)
 	{
@@ -3901,12 +3444,9 @@ ResetTopPointers (
 			     nb->notebook.shadow_thickness) /
 				 (int)(tab_dim + spacing);
 	}
-
-
     /*
      * If tab scrolling, then determine first tab but leave top tab alone.
      */
-
     /* Major tab */
     if (NB_IS_CHILD_MAJOR_SCROLLER(reason))
     {
@@ -3945,7 +3485,6 @@ ResetTopPointers (
 	    }
 	return;
     }
-
     /* Minor tab */
     if (NB_IS_CHILD_MINOR_SCROLLER(reason))
 	{
@@ -3979,8 +3518,6 @@ ResetTopPointers (
 	    }
 	    return;
 	}
-
-
     /*
      * If going to a new page, then determine if we need to scroll
      * the tabs to make the top major/minor tabs visible
@@ -4001,24 +3538,19 @@ ResetTopPointers (
 		reason = XmMINOR_TAB;
 	    }
 	}
-
     /*
      * Set new top major/minor tabs
      */
     nb->notebook.old_top_major = nb->notebook.top_major;
     nb->notebook.top_major = top_major;
-
     nb->notebook.old_top_minor = nb->notebook.top_minor;
     nb->notebook.top_minor = top_minor;
-
-
     /*
      * Determine new first tab for the new top tab.
      * If apparently activated by a minor tab, we don't need to do anything
      * because the top major and minor must be visible .
      * If apparently activated by a major tab, we don't need to do anything.
      */
-
     /* A page change NOT caused by a major tab activiation */
     if (!NB_IS_CHILD_MAJOR(reason) && !NB_IS_CHILD_MINOR(reason))
 	{
@@ -4028,12 +3560,10 @@ ResetTopPointers (
         if (!NB_IS_CHILD_MAJOR_SCROLLER(nb->notebook.need_scroller)
 	    || (top_major_page <= nb->notebook.first_page_number))
 	    nb->notebook.first_major = start_major;
-
 	/* Set the first tab to the calculated top tab, if it is the
 	   only one that might be visible */
 	else if (num_visible_major <= 1)
 	    nb->notebook.first_major = top_major;
-
 	/* Set the first tab so that the top tab is near the center of the
 	   visible tabs */
 	else
@@ -4053,7 +3583,6 @@ ResetTopPointers (
 		}
 	    }
 	}
-
     /* Minor tab */
     if (!(NB_IS_CHILD_MINOR(reason)))
 	{
@@ -4063,12 +3592,10 @@ ResetTopPointers (
         if (!NB_IS_CHILD_MINOR_SCROLLER(nb->notebook.need_scroller)
 	    || (top_minor_page <= nb->notebook.first_page_number))
 	    nb->notebook.first_minor = start_minor;
-
 	/* Set the first tab to the calculated top tab, if it is the
 	   only one that might be visible */
 	else if (num_visible_minor <= 1)
 	    nb->notebook.first_minor = top_minor;
-
 	/* Set the first tab so that the top tab is near the center of the
 	   visible tabs */
         else
@@ -4094,20 +3621,13 @@ ResetTopPointers (
 	    }
 	}
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *			      Drawing Functions 			     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- GetFrameGCs -------------------------------------------------------------
-
         Get the GC's for drawing notebook frame and binding
-
 -----------------------------------------------------------------------------*/
 static void
 GetFrameGCs (
@@ -4115,12 +3635,10 @@ GetFrameGCs (
 {
     XGCValues values;
     XtGCMask mask, dynamicMask;
-
     if (nb->notebook.frame_gc)
         XtReleaseGC((Widget)nb, nb->notebook.frame_gc);
     if (nb->notebook.binding_gc)
         XtReleaseGC((Widget)nb, nb->notebook.binding_gc);
-
     dynamicMask = GCForeground;
     mask = GCForeground | GCBackground | GCLineWidth;
     values.foreground = nb->manager.foreground;
@@ -4128,7 +3646,6 @@ GetFrameGCs (
     values.line_width = 1;
     nb->notebook.frame_gc = XtAllocateGC((Widget)nb, 0, mask, &values,
 					 dynamicMask, 0);
-
     mask = GCForeground | GCBackground;
     dynamicMask = (GCFillStyle | GCTile | GCStipple | GCTileStipXOrigin |
 		   GCTileStipYOrigin);
@@ -4137,13 +3654,9 @@ GetFrameGCs (
     nb->notebook.binding_gc = XtAllocateGC((Widget)nb, 0, mask, &values,
 					   dynamicMask, 0);
 }
-
-
 /*- GetBackpageGCs ---------------------------------------------------------
-
         Get the GC's for drawing notebook backpages. These two may be
 	shared with other widgets.
-
 -----------------------------------------------------------------------------*/
 static void
 GetBackpageGCs (
@@ -4151,12 +3664,10 @@ GetBackpageGCs (
 {
     XGCValues values;
     XtGCMask mask, dynamicMask, unusedMask;
-
     if (nb->notebook.foreground_gc)
         XtReleaseGC((Widget)nb, nb->notebook.foreground_gc);
     if (nb->notebook.background_gc)
         XtReleaseGC((Widget)nb, nb->notebook.background_gc);
-
     /* Will often be the same as HighlightGC in List */
     mask = GCForeground;
     dynamicMask = (GCLineWidth | GCLineStyle |
@@ -4165,7 +3676,6 @@ GetBackpageGCs (
     values.foreground = nb->notebook.back_page_foreground;
     nb->notebook.foreground_gc = XtAllocateGC((Widget)nb, 0, mask, &values,
 					      dynamicMask, unusedMask);
-
     /* Will often be the same as InverseGC in List */
     mask |= GCGraphicsExposures;
     dynamicMask = GCClipMask | GCClipXOrigin | GCClipYOrigin;
@@ -4174,24 +3684,16 @@ GetBackpageGCs (
     values.graphics_exposures = FALSE;
     nb->notebook.background_gc = XtAllocateGC((Widget)nb, 0, mask, &values,
 					      dynamicMask, unusedMask);
-
 }
-
-
 /*- MakeSpiralPixmap -------------------------------------------------------
-
     Makes a spiral binding pixmap.
-
     Uses instance state:
 	binding placement	(XmNorientation and XmNbackPagePlacement)
-
     Updates instance state:
 	spiral_pixmap
-
     Parameters:
 	IN width   		- binding area width
 	IN height  		- binding area height
-
 -----------------------------------------------------------------------------*/
 static void
 MakeSpiralPixmap (
@@ -4209,11 +3711,9 @@ MakeSpiralPixmap (
     int div;                              /* division of binding width */
     int i;
     Pixmap pixmap;
-
     /* check binding width for reasonable values */
     if (width < MIN_DRAWABLE_SPIRAL_SIZE || height < MIN_DRAWABLE_SPIRAL_SIZE)
         return;
-
     /*
      * Determine spiral component values
      */
@@ -4221,30 +3721,24 @@ MakeSpiralPixmap (
         {
         div = width / 3;
         gap = div / 2;
-
         pw = width;
         ph = div + gap;
-
         sx = 0;
         sy = gap / 2;
         sw = div * 2;
         sh = div;
         sd = sh / 4;
-
         a1 =  270 - 20;
         a2 = -270;
         a3 =  90 - 20;
         a4 =  110;
-
         hx = sx + sw - sd;
         hy = sy + (sh / 2) - sd +1;
         hd = MIN(div, sd * 2);
-
         rx = div;
         ry = 0;
         rw = width - div;
         rh = ph;
-
         lx1 = div;
         ly1 = 0;
         lx2 = lx1;
@@ -4254,30 +3748,24 @@ MakeSpiralPixmap (
         {
         div = width / 3;
         gap = div / 2;
-
         pw = width;
         ph = div + gap;
-
         sx = div - 1;
         sy = gap / 2;
         sw = div * 2;
         sh = div;
         sd = sh / 4;
-
         a1 =  275;
         a2 =  270;
         a3 =  90 - 10;
         a4 =  100;
-
         hx = sx - (sd / 2);
         hy = sy + (sh / 2) - sd +1;
         hd = MIN(div, sd * 2);
-
         rx = 0;
         ry = 0;
         rw = pw - div;
         rh = ph;
-
         lx1 = pw - div;
         ly1 = 0;
         lx2 = lx1;
@@ -4287,30 +3775,24 @@ MakeSpiralPixmap (
         {
         div = height / 3;
         gap = div / 2;
-
         pw = div + gap;
         ph = height;
-
         sx = gap / 2;
         sy = 0;
         sw = div;
         sh = div * 2;
         sd = sw / 4;
-
         a1 =  0 + 15;
         a2 =  270;
         a3 =  90;
         a4 =  110;
-
         hx = sx + (sw / 2) - sd +1;
         hy = sh - sd;
         hd = MIN(div, sd * 2);
-
         rx = 0;
         ry = div;
         rw = pw;
         rh = height - div;
-
         lx1 = 0;
         ly1 = div;
         lx2 = pw;
@@ -4320,66 +3802,54 @@ MakeSpiralPixmap (
         {
         div = height / 3;
         gap = div / 2;
-
         pw = div + gap;
         ph = height;
-
         sx = gap / 2;
         sy = div -1;
         sw = div;
         sh = (div * 2);
         sd = sw / 4;
-
         a1 =  360 - 5;
         a2 =  -295;
         a3 =  90 + 8;
         a4 =  110;
-
         hx = sx + (sw / 2);
         hy = sy;
         hd = MIN(div, sd * 2);
-
         rx = 0;
         ry = 0;
         rw = pw;
         rh = ph - div;
-
         lx1 = 0;
         ly1 = ph - div;
         lx2 = pw;
         ly2 = ly1;
         }
-
     /*
      * Create spiral pixmap, if previous one exists destroy it
      */
     if (nb->notebook.spiral_pixmap != XmUNSPECIFIED_PIXMAP
     &&  nb->notebook.spiral_pixmap != XmNONE)
             XFreePixmap(XtDisplay(nb), nb->notebook.spiral_pixmap);
-
     pixmap = nb->notebook.spiral_pixmap =
         XCreatePixmap(XtDisplay(nb), XtWindow(nb), pw, ph, nb->core.depth);
-
     /*
      * Scribble in spiral pixmap
      */
     /* Fill pixmap with notebook background */
     XFillRectangle(XtDisplay(nb), pixmap, nb->manager.background_GC,
                 0, 0, pw, ph);
-
     /* draw binding surface */
     XSetForeground(XtDisplay(nb), nb->notebook.frame_gc,
                 nb->notebook.frame_background);
     XFillRectangle(XtDisplay(nb), pixmap, nb->notebook.frame_gc,
                 rx, ry, rw, rh);
-
     /* draw line along binding surface */
     XSetClipMask(XtDisplay(nb), nb->notebook.foreground_gc, None);
     XSetLineAttributes(XtDisplay(nb), nb->notebook.foreground_gc, 1,
                 LineSolid, CapRound, JoinMiter);
     XDrawLine(XtDisplay(nb), pixmap, nb->notebook.foreground_gc,
                 lx1, ly1, lx2, ly2);
-
     /* draw hole in binding surface with top/bottom shadows */
     XFillArc(XtDisplay(nb), pixmap, nb->manager.background_GC,
                 hx, hy, hd, hd, 0, 360 * 64);
@@ -4387,7 +3857,6 @@ MakeSpiralPixmap (
                 hx, hy, hd, hd, 225 * 64, -180 * 64);
     XDrawArc(XtDisplay(nb), pixmap, nb->manager.top_shadow_GC,
                 hx, hy, hd, hd,  45 * 64, -180 * 64);
-
     /* draw spiral with top/bottom shadows */
     XSetForeground(XtDisplay(nb), nb->notebook.frame_gc,
                 nb->manager.foreground);
@@ -4405,16 +3874,9 @@ MakeSpiralPixmap (
     XDrawArc(XtDisplay(nb), pixmap, nb->manager.bottom_shadow_GC,
                 sx +sd, sy +sd, sw -sd, sh -sd, a1 * 64, a2 * 64);
 }
-
-
-
-
 /*- DrawBinding -------------------------------------------------------------
-
         Draw the Notebook binding
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 DrawBinding (
@@ -4423,12 +3885,10 @@ DrawBinding (
     Region region)
 {
     Dimension x, y, width, height;
-
     /* check binding type resource and binding width */
     if (nb->notebook.binding_type == XmNONE
 	|| nb->notebook.real_binding_width <= 0)
 	return;
-
     /* get the binding area */
     x = y = 0;
     if (nb->notebook.major_pos == LEFT)
@@ -4459,7 +3919,6 @@ DrawBinding (
 	height = nb->notebook.real_binding_width;
 	x += 1;
 	}
-
     /* draw the binding if applicable */
     if (XRectInRegion(region, x, y, width, height))
 	{
@@ -4487,13 +3946,8 @@ DrawBinding (
 	    } /* switch */
 	} /* if */
 }
-
-
-
 /*- DrawPixmapBinding -------------------------------------------------------
-
         Draw the pixmap binding
-
 -----------------------------------------------------------------------------*/
 static void
 DrawPixmapBinding (
@@ -4508,15 +3962,12 @@ DrawPixmapBinding (
     int x_origin, y_origin;
     XGCValues values;
     XtGCMask mask;
-
     /* no pixmap? don't draw */
     if (pixmap == XmUNSPECIFIED_PIXMAP || pixmap == XmNONE)
 	return;
-
     /* get Pixmap depth */
     XmeGetPixmapData(XtScreen(nb), pixmap,
 			NULL, &depth, NULL, NULL, NULL, NULL, NULL, NULL);
-
     /* creating the gc */
     if (depth == 1)
 	{
@@ -4531,7 +3982,6 @@ DrawPixmapBinding (
 	values.tile = pixmap;
 	}
     XChangeGC(XtDisplay(nb), nb->notebook.binding_gc, mask, &values);
-
     /*
      * set TSOrigin
      */
@@ -4541,21 +3991,14 @@ DrawPixmapBinding (
         x_origin = x + width - 1, y_origin = y;
     else /* if (nb->notebook.binding_pos == BOTTOM) */
         x_origin = x, y_origin = y + height;
-
     XSetTSOrigin(XtDisplay(nb), nb->notebook.binding_gc, x_origin, y_origin);
-
     /* display the pixmap binding */
     XFillRectangle(XtDisplay(nb), XtWindow(nb), nb->notebook.binding_gc,
 		    x, y, width -1, height - 1);
 }
-
-
 /*- DrawFrameShadow ---------------------------------------------------------
-
         Draw the Notebook frame shadow
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 DrawFrameShadow (
@@ -4566,7 +4009,6 @@ DrawFrameShadow (
     Dimension x, y, width, height;
     Region shadow_region;
     XRectangle rect;
-
     /* get the page's x, y position */
     x = y = 1;
     if (nb->notebook.binding_pos == LEFT)
@@ -4587,17 +4029,14 @@ DrawFrameShadow (
             nb->notebook.minor_scroller_height) + nb->notebook.back_page_size;
     width = nb->notebook.frame_width - 2;
     height = nb->notebook.frame_height - 2;
-
     XSetForeground(XtDisplay(nb), nb->notebook.frame_gc,
 		   nb->notebook.frame_background);
-
     /* draw the frame shadow */
     if (nb->notebook.shadow_thickness)
     {
 	/* draw the shadow */
 	/* creating the shadow region */
 	shadow_region = XCreateRegion();
-
 	/* adding the frame area to the shadow region */
 	rect.x = x;
 	rect.y = y;
@@ -4606,7 +4045,6 @@ DrawFrameShadow (
 	XFillRectangle(XtDisplay(nb), XtWindow(nb), nb->notebook.frame_gc,
 			x, y, width + 1, height + 1);
 	XUnionRectWithRegion(&rect, shadow_region, shadow_region);
-
 	/* adding the top major tab area to the shadow region */
 	if (nb->notebook.top_major
 	    && NB_IS_VISIBLE(nb->notebook.top_major)
@@ -4633,10 +4071,8 @@ DrawFrameShadow (
                 rect.height -= rect.y;
                 rect.y = 0;
                 }
-
 	    XUnionRectWithRegion(&rect, shadow_region, shadow_region);
 	}
-
 	/* adding the top minor tab area to the shadow region */
 	if (nb->notebook.top_minor
 	    && NB_IS_VISIBLE(nb->notebook.top_minor)
@@ -4665,7 +4101,6 @@ DrawFrameShadow (
                 }
 	    XUnionRectWithRegion(&rect, shadow_region, shadow_region);
 	}
-
 	/* draw the shadow */
 	_XmRegionDrawShadow(XtDisplay(nb), XtWindow(nb),
 			    nb->manager.top_shadow_GC,
@@ -4703,11 +4138,9 @@ DrawFrameShadow (
                 rect.height -= rect.y;
                 rect.y = 0;
                 }
-
 	XDrawRectangle(XtDisplay(nb), XtWindow(nb), nb->notebook.frame_gc,
 			rect.x, rect.y, rect.width, rect.height);
 	}
-
 	/* adding the top minor tab area to the shadow region */
 	if (nb->notebook.top_minor
 	    && NB_IS_VISIBLE(nb->notebook.top_minor)
@@ -4734,16 +4167,10 @@ DrawFrameShadow (
 			rect.x, rect.y, rect.width, rect.height);
 	}
     }
-
 }
-
-
 /*- DrawBackPages -----------------------------------------------------------
-
 	Draw Notebook back pages
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 DrawBackPages (
@@ -4758,13 +4185,10 @@ DrawBackPages (
     int x, y, limit;	/* temporary variables */
     XPoint p[5];	/* foreground line pattern */
     XPoint q[3];	/* background line pattern */
-
-
     /*
      * initialize
      */
     delta = nb->notebook.back_page_size / nb->notebook.real_back_page_number;
-
     /* draw backpages on the frame, which is not necessarily along the
        entire binding */
     if (nb->notebook.binding_type == XmPIXMAP)
@@ -4773,7 +4197,6 @@ DrawBackPages (
     else
 	binding_width = MIN(nb->notebook.real_binding_width,
 			nb->notebook.binding_width);
-
     /* find back page line pattern */
     if (nb->notebook.back_page_pos == XmBOTTOM_RIGHT &&
 	nb->notebook.orientation == XmHORIZONTAL)
@@ -4947,13 +4370,11 @@ DrawBackPages (
 	mx = - nb->notebook.back_page_size;
 	my = - nb->notebook.back_page_size;
     }
-
     /* set the clipping region if necessary */
     XSetRegion(XtDisplay(nb), nb->notebook.foreground_gc, region);
     XSetRegion(XtDisplay(nb), nb->notebook.background_gc, region);
     XSetClipOrigin(XtDisplay(nb), nb->notebook.foreground_gc, 0, 0);
     XSetClipOrigin(XtDisplay(nb), nb->notebook.background_gc, 0, 0);
-
     /* draw the first page outline */
     XSetLineAttributes(XtDisplay(nb), nb->notebook.foreground_gc, 1,
 			LineSolid, CapButt, JoinMiter);
@@ -4969,7 +4390,6 @@ DrawBackPages (
 	   the p values set as above, let's check whether the height and
 	   width here are negative and adjust the draw coordinates
 	   as appropriate. */
-
 	if (nb->notebook.orientation == XmHORIZONTAL)
 	{
 	    ADJUST_NEGATIVE_DIMENSION(p[1].x, p[2].x, x, width);
@@ -4987,7 +4407,6 @@ DrawBackPages (
 			   x, y, width, height);
 	}
     }
-
     /* for XmSOLID, XmPIXMAP, and XmPIXMAP_OVERLAP_ONLY */
     if (nb->notebook.binding_type == XmSOLID ||
 	nb->notebook.binding_type == XmPIXMAP ||
@@ -5002,7 +4421,6 @@ DrawBackPages (
 	    /* draw backpage foreground */
 	    XDrawLines(XtDisplay(nb), XtWindow(nb), nb->notebook.foreground_gc,
 			&(p[1]), 4, CoordModePrevious);
-
 	    /* draw backpage background */
 	    if (delta >= 2 && limit > delta - 2)
 	    {
@@ -5033,7 +4451,6 @@ DrawBackPages (
 	    p[1].y += dy;
 	    limit -= delta;
 	}
-
 	/* draw the last page line */
 	p[0].x = x;
 	p[0].y = y;
@@ -5044,7 +4461,6 @@ DrawBackPages (
 	XDrawLines(XtDisplay(nb), XtWindow(nb), nb->notebook.foreground_gc,
 			p, 5, CoordModePrevious);
     }
-
     /* for XmNONE and XmSPIRAL */
     else
     {
@@ -5059,7 +4475,6 @@ DrawBackPages (
 	    /* draw backpage foreground */
 	    XDrawLines(XtDisplay(nb), XtWindow(nb), nb->notebook.foreground_gc,
 			p, 5, CoordModePrevious);
-
 	    /* draw backpage background */
 	    if (delta >= 2 && limit > delta - 2)
 	    {
@@ -5108,7 +4523,6 @@ DrawBackPages (
 	    p[0].y += dy;
 	    limit -= delta;
 	}
-
 	/* draw the last page line */
 	p[0].x = x + mx;
 	p[0].y = y + my;
@@ -5117,22 +4531,14 @@ DrawBackPages (
 	XDrawLines(XtDisplay(nb), XtWindow(nb), nb->notebook.foreground_gc,
 			p, 5, CoordModePrevious);
     }
-
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *			      Geometry Functions			     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- CalcGeoInfo ------------------------------------------------------------
-
     Calculate Notebook's preferred geometry.
-
     Updates instance state:
 	page_width
 	page_height
@@ -5152,7 +4558,6 @@ DrawBackPages (
 	frame_height
 	real_binding_width
 	real_back_page_number,	if adjust is True
-
     Parameters:
 	IN instigator  		- child widget requesting geo request
 	IN desired     		- instigator's requested geometry
@@ -5160,7 +4565,6 @@ DrawBackPages (
 			    	  variables used for layout should be set.
 	OUT preferred_width,
 	OUT preferred_height	- notebook w/h based on children sizes
-
 -----------------------------------------------------------------------------*/
 static void
 CalcGeoInfo (
@@ -5186,13 +4590,11 @@ CalcGeoInfo (
     Dimension	minor_scroller_width = 0,minor_scroller_height = 0;
     Dimension	frame_width,frame_height;
     Dimension	real_binding_width,real_back_page_number;
-
     /* get width and height of children */
     for (i = 0; i < nb->composite.num_children; i++)
     {
 	/* ask preferred size */
 	child = nb->composite.children[i];
-
 	if (child == instigator)
 	    {
 	    width = IsWidth(desired)
@@ -5218,7 +4620,6 @@ CalcGeoInfo (
 				? preferred.height
 				: XtHeight(child) + child->core.border_width*2;
 	    }
-
 	/* get the maximum */
 	if (XtIsManaged(child))
 	{
@@ -5256,11 +4657,9 @@ CalcGeoInfo (
 	    }
 	}
     }
-
     /* adjust page's width */
     page_width = MAX((int)page_width, (int)(status_width + nb->notebook.margin_width +
 					scroller_width));
-
     /* set the real binding width */
     real_binding_width = nb->notebook.binding_width;
     switch (nb->notebook.binding_type)
@@ -5291,17 +4690,14 @@ CalcGeoInfo (
 	/* Note: in case of XmPIXMAP_OVERLAP_ONLY binding_width is used
 	   so we don't care about the Pixmap size here */
     }
-
     /* Calculate the real back page number */
     real_back_page_number = nb->notebook.back_page_number;
     ASSIGN_MIN(real_back_page_number, (Dimension)(nb->notebook.back_page_size /2));
     ASSIGN_MAX(real_back_page_number, 1);
-
     /* Calculate status w/h based on page,margin,& scroller w/h */
     status_width = MAX(0,(int)
 		(page_width - nb->notebook.margin_width - scroller_width));
     status_height = scroller_height = MAX(status_height,scroller_height);
-
     /* Calculate the notebook frame size based on page size,shadows,& margins*/
     frame_width = page_width +
 		  (nb->notebook.shadow_thickness * 2) +
@@ -5309,14 +4705,12 @@ CalcGeoInfo (
     frame_height = page_height + status_height +
                   (nb->notebook.shadow_thickness * 2) +
                   (nb->notebook.margin_height * 3) + 1;
-
     /*
      * Return calculated notebook's preferred size
      */
     /* add frame and back pages area */
     *preferred_width = frame_width + nb->notebook.back_page_size;
     *preferred_height = frame_height + nb->notebook.back_page_size;
-
     /* add binding and tab area */
     if (nb->notebook.orientation == XmHORIZONTAL)
 	{
@@ -5332,8 +4726,6 @@ CalcGeoInfo (
 	*preferred_height += real_binding_width +
 			NB_MAJOR_MAX(nb, major_height, major_scroller_height);
 	}
-
-
     /*
      * Set notebook geometry, if adjusting
      */
@@ -5359,17 +4751,12 @@ CalcGeoInfo (
 	nb->notebook.real_back_page_number = real_back_page_number;
     }
 }
-
-
 /*- NewPreferredGeometry ----------------------------------------------------
-
     Get Notebook's preferred geometry
-
     Parameters:
 	IN instigator		- child widget requesting geo request
 	IN desired		- instigator's requested geometry
 	OUT preferred		- w/h based on child's preferred sizes
-
 -----------------------------------------------------------------------------*/
 static Boolean
 NewPreferredGeometry (
@@ -5379,38 +4766,29 @@ NewPreferredGeometry (
     XtWidgetGeometry *preferred)
 {
     Dimension preferred_width, preferred_height;
-
     /* calculate preferred geometry information */
     CalcGeoInfo(nb, instigator, desired,
 	    &preferred_width, &preferred_height, FALSE);
-
     preferred->width = preferred_width;
     preferred->height = preferred_height;
     preferred->request_mode = CWHeight | CWWidth;
-
     return(!((preferred->width == nb->core.width) &&
 	     (preferred->height == nb->core.height)));
 }
-
-
 /*- AdjustGeometry ----------------------------------------------------------
-
         Adjust notebook's children sizes based on the Notebook's width
 	and height.
-
 	The minimum width needed is determined by the following:
 	   1. page and status are minimized until they reach XmNbackPageWidth
 	   2. binding is minimized
 	   3. major tabs are minimized
 	   4. page scroller is minimized
 	   5. back pages and frame are clipped
-
 	The minimum height needed is determined by the following:
 	   1. page is minimized
 	   2. status and page scroller are minimized
 	   3. minor tabs are minimized
 	   4. back pages and frame are clipped
-
 -----------------------------------------------------------------------------*/
 static void
 AdjustGeometry (
@@ -5419,19 +4797,15 @@ AdjustGeometry (
     XtWidgetGeometry *desired)
 {
     Dimension ideal_width,ideal_height;
-
     /* the value min is the minimum width/height that the Notebook can be
        after a component is reduced to its minimum */
     Dimension min;
-
     /* calculate preferred geometry information */
     CalcGeoInfo(nb, instigator, desired, &ideal_width, &ideal_height, TRUE);
-
     /* adjust children's width */
     /* Notebook's width is bigger than ideal width */
     if (nb->core.width > ideal_width)
 	nb->notebook.page_width += nb->core.width - ideal_width;
-
     /* Notebook's width is smaller than ideal width */
     else if (nb->core.width < ideal_width)
     {
@@ -5472,12 +4846,10 @@ AdjustGeometry (
 	    }
 	}
     }
-
     /* adjust children's height */
     /* Notebook's height is bigger than ideal height */
     if (nb->core.height > ideal_height)
 	nb->notebook.page_height += nb->core.height - ideal_height;
-
     /* Notebook's height is smaller than ideal height */
     else if (nb->core.height < ideal_height)
     {
@@ -5525,13 +4897,11 @@ AdjustGeometry (
 	    }
 	}
     }
-
     /* Calculate status w/h based on page,margin,& scroller w/h */
     nb->notebook.status_width = MAX(0,(int)(nb->notebook.page_width -
 	nb->notebook.margin_width - nb->notebook.scroller_width));
     nb->notebook.status_height = nb->notebook.scroller_height =
 	MAX(nb->notebook.status_height, nb->notebook.scroller_height);
-
     /* Calculate the notebook frame size based on page size,shadows,& margins*/
       nb->notebook.frame_width = nb->notebook.page_width +
                    (nb->notebook.shadow_thickness * 2) +
@@ -5539,33 +4909,22 @@ AdjustGeometry (
       nb->notebook.frame_height = nb->notebook.page_height + nb->notebook.status_height +
                    (nb->notebook.shadow_thickness * 2) +
                    (nb->notebook.margin_height * 3) + 1;
-
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *			   Child Managing Functions			     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- SetLastPageNumber ----------------------------------------------------
-
     Sets XmNlastPageNumber if no explicit last page number was set,
     and updates navigators.
-
     Uses instance state:
 	dynamic_last_page_num		,True, if no explicit setting
-
     Called from:
 	AssignDefaultPageNumber		,when children are managed
 	ConstraintSetValues		,when a child page # is changed
-
     Return:
 	True, if last_page_number changed. Otherwise, False.
-
 -----------------------------------------------------------------------------*/
 static Boolean
 SetLastPageNumber (
@@ -5581,13 +4940,9 @@ SetLastPageNumber (
 	}
     return(False);
 }
-
-
 /*- AssignDefaultPageNumber -------------------------------------------------
-
         assign a default page number to those children who did not get
 	from the application.
-
 	When a page is managed without a page number, the Notebook provides
 	the page with the smallest unallocated page number that is greater
 	than or equal to the first page number and is greater than the last
@@ -5601,7 +4956,6 @@ SetLastPageNumber (
 	will not receive this number. The default page number that the Notebook
 	generates can exceed the last page number, which makes those page
 	inaccessable by the user.
-
 -----------------------------------------------------------------------------*/
 static Boolean
 AssignDefaultPageNumber (
@@ -5610,16 +4964,13 @@ AssignDefaultPageNumber (
     XmNotebookConstraint nc;
     Widget child;
     int i, last_page_number;
-
     /* initialize */
     last_page_number = nb->notebook.first_page_number;
-
     /* for all children */
     for (i = 0; i < nb->composite.num_children; i++)
 	{
 	child = nb->composite.children[i];
 	nc = NotebookConstraint(child);
-
 	/* for all managed children */
 	if (XtIsManaged(child))
 	    {
@@ -5647,7 +4998,6 @@ AssignDefaultPageNumber (
 		}
 	    else
 		nb->notebook.last_alloc_num = nc->page_number;
-
 	    /* update the last_page_number */
 	    if (NB_IS_CHILD_PAGE(nc->child_type)
 	    || NB_IS_CHILD_TAB(nc->child_type)
@@ -5659,28 +5009,20 @@ AssignDefaultPageNumber (
 	} /* for */
     return(SetLastPageNumber(nb, last_page_number));
 }
-
-
 /*- SetActiveChildren ------------------------------------------------------
-
     Determine which children should be active.
-
     Active children are all managed scrollers and managed pages, status
     areas, and tabs which are within the page number range and not
     duplicated or later matched ones if duplicated.
-
     Uses instance state:
 	first_page_number
 	last_page_number
-
     Updates child constraint "active" field
 	FALSE, if child is NOT managed or
 		  child page # less than notebook.first_page_number or
 		  child page # greater than notebook.last_page_number or
 		  child page # duplicated by a child of the same type
 	TRUE,  otherwise
-
-
 -----------------------------------------------------------------------------*/
 static void
 SetActiveChildren (
@@ -5692,7 +5034,6 @@ SetActiveChildren (
     unsigned char type = XmNONE;		/* initial previous type */
     int num  = XmUNSPECIFIED_PAGE_NUMBER;	/* initial previous page */
     int i;
-
     for (i = 0; i < nb->composite.num_children; i++)
 	{
 	child = nb->composite.children[i];
@@ -5716,12 +5057,8 @@ SetActiveChildren (
     if (last)
 	last->active = True;
 }
-
-
 /*- CompareChildren ---------------------------------------------------------
-
         Compares children, used for qsort() in SortChildren.
-
 -----------------------------------------------------------------------------*/
 static int
 CompareChildren (
@@ -5731,50 +5068,34 @@ CompareChildren (
     XmNotebookConstraint ac = NotebookConstraint(*((Widget *)a));
     XmNotebookConstraint bc = NotebookConstraint(*((Widget *)b));
     int cmp;
-
     /* Compare page numbers */
     cmp = ac->page_number - bc->page_number;
-
     /* Compare child types, if page numbers are same */
     if (!cmp)
 	cmp = ac->child_type - bc->child_type;
-
     /* Compare position in the array, if child types are the same */
     if (!cmp)
 	cmp = (unsigned long)a - (unsigned long)b;
-
     return cmp;
 }
-
-
 /*- SortChildren ------------------------------------------------------------
-
         Sorts children by page number and type.
-
 	Assumptions:
 		Previously created children are already sorted,
 		and newly created children are at the end of the
 		composite.children list.
-
 -----------------------------------------------------------------------------*/
 static void
 SortChildren (
     XmNotebookWidget nb)
 {
-
-
     qsort(nb->composite.children, nb->composite.num_children,
             sizeof(Widget), CompareChildren);
-
     SetActiveChildren(nb);
 }
-
-
 /*- RepositionChild ---------------------------------------------------------
-
         Repositions a childs position in composite array using an
         insertion method.
-
 -----------------------------------------------------------------------------*/
 static void
 RepositionChild (
@@ -5788,11 +5109,9 @@ RepositionChild (
     int cur_pos = -1;                   /* position of changing child */
     int ins_pos = -1;                   /* position to insert child */
     int i;                              /* counter */
-
     /* nothing to do, if there is only one child in array */
     if (nb->composite.num_children == 1)
         return;
-
     for (i = 0; i < nb->composite.num_children; i++)
         {
         w = nb->composite.children[i];
@@ -5808,11 +5127,9 @@ RepositionChild (
                 ins_pos = i; /* should be inserted before this element */
             }
         } /* for */
-
     /* error, unable to locate repositioning child in array??? */
     if (cur_pos < 0)
         return;
-
     /* found no one less than, move others down, and insert at last position */
     if (ins_pos < 0)
         {
@@ -5835,13 +5152,9 @@ RepositionChild (
         nb->composite.children[ins_pos] = child;
         }
 }
-
-
 /*- GetNextAvailPageNum -----------------------------------------------------
-
         Finds out the next available page number for allocating it to
 	a newly created page or other child.
-
 -----------------------------------------------------------------------------*/
 static int
 GetNextAvailPageNum(
@@ -5851,7 +5164,6 @@ GetNextAvailPageNum(
     XmNotebookConstraint nc;
     Widget child;
     int i, avail;
-
     avail = nb->notebook.last_alloc_num;
     for (i = 0; i < last; i++)
     {
@@ -5862,13 +5174,9 @@ GetNextAvailPageNum(
     }
     return avail;
 }
-
-
 /*- GetChildWidget ---------------------------------------------------------
-
         Finds the later matched child widget of the specified type.
 	It returns NULL if not found.
-
 -----------------------------------------------------------------------------*/
 static Widget
 GetChildWidget(
@@ -5879,7 +5187,6 @@ GetChildWidget(
     XmNotebookConstraint nc;
     Widget child, this_w;
     int i;
-
     this_w = NULL;
     for (i = 0; i < nb->composite.num_children; i++)
     {
@@ -5898,12 +5205,8 @@ GetChildWidget(
     }
     return this_w;
 }
-
-
 /*- GotoPage ---------------------------------------------------------------
-
         Places the specified page on top.
-
 	If the specified page IS currently on top nothing is done.
 	Otherwise,
 	    - the XmNpageChangedCallback is called. During which
@@ -5912,12 +5215,10 @@ GetChildWidget(
 	      layout at that time.
 	    - navigators are updated
 	    - relayout is performed
-
 	Called from:
 		SetValues(), when notebook.current_page_number is set
 		TabPressed(), when tabs are activated
 		PageMove(), when ScrollFrame trait navigation is triggered
-
 -----------------------------------------------------------------------------*/
 static void
 GotoPage(
@@ -5931,22 +5232,17 @@ GotoPage(
     Widget old_top_major, old_first_major;
     Widget old_top_minor, old_first_minor;
     int prev_page = nb->notebook.current_page_number;
-
-
     /* Don't bother when the page number is out of the page number
        range, or if it is same as the old page number */
     if (   page_number == nb->notebook.current_page_number
 	|| page_number < nb->notebook.first_page_number
 	|| page_number > nb->notebook.last_page_number)
 	return;
-
     /* Save the notebook's size before invoking the callback */
     save_width = XtWidth(nb);
     save_height = XtHeight(nb);
-
     /* Set the NEW current page number */
     nb->notebook.current_page_number = page_number;
-
     /* Invoke the XmNpageChangedCallback, if any exist */
     if ((XtHasCallbacks((Widget)nb, XmNpageChangedCallback)
 			    == XtCallbackHasSome))
@@ -5957,17 +5253,14 @@ GotoPage(
 	call_value.page_widget 	    = GetChildWidget(nb, page_number, XmPAGE);
 	call_value.prev_page_number = prev_page;
 	call_value.prev_page_widget = GetChildWidget(nb, prev_page, XmPAGE);
-
 	/* Mark that the callback is being called and when it finishes */
 	nb->notebook.in_callback = True;
 	XtCallCallbackList((Widget)nb, nb->notebook.page_change_callback,
 			    &call_value);
 	nb->notebook.in_callback = False;
 	}
-
     /* Tell all navigators about our page change */
     UpdateNavigators(nb);
-
     /* If there is any visual change caused by the callback then
 	relayout and redisplay children */
     if (save_width != XtWidth(nb) || save_height != XtHeight(nb))
@@ -5984,38 +5277,25 @@ GotoPage(
 	old_first_major = nb->notebook.first_major;
 	old_top_minor = nb->notebook.top_minor;
 	old_first_minor = nb->notebook.first_minor;
-
 	/* Reset tab pointers */
 	ResetTopPointers(nb, XmPAGE, 0);
-
 	/* Layout children */
 	LayoutPages(nb, NULL);
-
 	if (   old_top_major != nb->notebook.top_major
 	    || old_first_major != nb->notebook.first_major)
 	    LayoutMajorTabs(nb, NULL);
-
 	if (   old_top_minor != nb->notebook.top_minor
 	    || old_first_minor != nb->notebook.first_minor)
 	    LayoutMinorTabs(nb, NULL);
 	}
-
-
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                            utility functions                              *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- ShowChild ---------------------------------------------------------------
-
         Change the dimensional aspects of a child, and display it.
-
 -----------------------------------------------------------------------------*/
 static void
 ShowChild (
@@ -6027,7 +5307,6 @@ ShowChild (
     int height)
 {
     int border_width;
-
     /* adjust width and height and calculate border_width */
     border_width = child->core.border_width;
     width -= border_width * 2;
@@ -6038,7 +5317,6 @@ ShowChild (
 	width = 1, border_width = 0;
     if (height <= 0)
 	height = 1, border_width = 0;
-
     /* Configure the object */
     if (child == instigator)
 	{
@@ -6059,12 +5337,8 @@ ShowChild (
 				(Dimension)border_width);
 	}
 }
-
-
 /*- HideChild ---------------------------------------------------------------
-
         Hide a child by placing it to invisible place.
-
 -----------------------------------------------------------------------------*/
 static void
 HideChild (
@@ -6073,11 +5347,9 @@ HideChild (
 {
     int x = - (int)(child->core.width + child->core.border_width * 2);
     int y = - (int)(child->core.height + child->core.border_width * 2);
-
     /* if the child is already invisible, don't bother */
     if (!NB_IS_VISIBLE(child))
 	return;
-
     /* place the child to (x, y) */
     if (child == instigator)
 	{
@@ -6096,12 +5368,8 @@ HideChild (
 			child->core.border_width);
 	}
 }
-
-
 /*- HideShadowedTab ---------------------------------------------------------
-
         Clear tab child and its surrounding frame shadow
-
 -----------------------------------------------------------------------------*/
 static void
 HideShadowedTab (
@@ -6109,7 +5377,6 @@ HideShadowedTab (
     Widget child)
 {
     int x, y, width, height;
-
     if (XtIsRealized((Widget)nb) && child && NB_IS_VISIBLE(child))
     {
         x = child->core.x - nb->notebook.shadow_thickness;
@@ -6122,22 +5389,14 @@ HideShadowedTab (
           XClearArea(XtDisplay(nb), XtWindow(nb), x - 1 , y - 1, width + 1, height + 1, True);
     }
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                             callback functions                            *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- FlipTabs ----------------------------------------------------------------
-
         callback function for events for tab scrolling
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 FlipTabs (
@@ -6148,11 +5407,9 @@ FlipTabs (
     XmNotebookWidget nb = (XmNotebookWidget)XtParent(w);
     Widget old_first_major, old_first_minor;
     Widget cfw = XmGetFocusWidget((Widget)nb);
-
     /* save tab pointers */
     old_first_major = nb->notebook.first_major;
     old_first_minor = nb->notebook.first_minor;
-
     /* request to reset notebook.first_major */
     if (w == nb->notebook.next_major)
 	ResetTopPointers(nb, XmMAJOR_TAB_SCROLLER, _NEXT);
@@ -6162,13 +5419,11 @@ FlipTabs (
 	ResetTopPointers(nb, XmMINOR_TAB_SCROLLER, _NEXT);
     else if (w == nb->notebook.prev_minor)
 	ResetTopPointers(nb, XmMINOR_TAB_SCROLLER, _PREVIOUS);
-
     /* redraw tabs if necessary */
     if (old_first_major != nb->notebook.first_major)
 	LayoutMajorTabs(nb, NULL);
     if (old_first_minor != nb->notebook.first_minor)
 	LayoutMinorTabs(nb, NULL);
-
     /*
      * If focus was a tab widget that is now hidden due to tab scrolling then
      * move focus to the next visible tab
@@ -6176,7 +5431,6 @@ FlipTabs (
     if (cfw && XtParent(cfw) == (Widget)nb)
 	{
 	unsigned char ct = NotebookConstraint(cfw)->child_type;
-
 	if (NB_IS_HIDDEN(cfw) && NB_IS_CHILD_TAB(ct))
 	    {
 	    if ((w == nb->notebook.next_major) && NB_IS_CHILD_MAJOR(ct))
@@ -6198,12 +5452,8 @@ FlipTabs (
 	    }
 	}
 }
-
-
 /*- TabPressed --------------------------------------------------------------
-
         callback function for events for tab push-buttons.
-
 -----------------------------------------------------------------------------*/
 static void
 TabPressed (
@@ -6215,26 +5465,17 @@ TabPressed (
     XmNotebookConstraint nc = NotebookConstraint(w);
     XmAnyCallbackStruct *cbs = (XmAnyCallbackStruct *)call_data;
     int reason = (unsigned long)data;
-
     /* move to the selected page */
     GotoPage(nb, nc->page_number, cbs->event, reason);
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                Keyboard Traversal Functions & Action Procs                *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- TraverseTab -------------------------------------------------------------
-
         action for moving the focus on tabs
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 TraverseTab (
@@ -6247,7 +5488,6 @@ TraverseTab (
     XmNotebookConstraint nc;
     Widget first, last, next, prev, child = NULL;
     int traverse_to;
-
     /* Check error conditions */
     if (nb && XmIsNotebook(nb))
         child = XmGetFocusWidget(w);
@@ -6259,25 +5499,20 @@ TraverseTab (
            }
     if (!nb || !child)
         return;
-
     if (!num_params || (*num_params != 1) || !params)
 	{
         XmeWarning(w, MESSAGE1);
         return;
 	}
-
     /* Only valid for major or minor tabs */
     if (!(nc = NotebookConstraint(child))
 	|| !(NB_IS_CHILD_MAJOR(nc->child_type)
 	   || NB_IS_CHILD_MINOR(nc->child_type)))
         return;
-
     if (_XmConvertActionParamToRepTypeId((Widget) nb,
 				 XmRID_NOTEBOOK_TRAVERSE_TAB_ACTION_PARAMS,
 				 params[0], False, &traverse_to) == False)
 	traverse_to = _HOME;
-
-
     /*
      * Make the traversal
      */
@@ -6301,7 +5536,6 @@ TraverseTab (
 	if (first)
 	    XmProcessTraversal(first,XmTRAVERSE_CURRENT);
 	}
-
     else if (traverse_to == _END)
 	{
 	last = GetNextTab(nb,nc->child_type,nc->page_number,_END);
@@ -6321,7 +5555,6 @@ TraverseTab (
 	if (last)
 	    XmProcessTraversal(last,XmTRAVERSE_CURRENT);
 	}
-
     else if (traverse_to == _PREVIOUS)
 	{
 	prev = GetNextTab(nb,nc->child_type,nc->page_number,_PREVIOUS);
@@ -6341,7 +5574,6 @@ TraverseTab (
 	if (prev)
 	    XmProcessTraversal(prev, XmTRAVERSE_CURRENT);
 	}
-
     else if (traverse_to == _NEXT)
 	{
 	next = GetNextTab(nb,nc->child_type,nc->page_number,_NEXT);
@@ -6362,21 +5594,14 @@ TraverseTab (
 	    XmProcessTraversal(next, XmTRAVERSE_CURRENT);
 	}
 }
-
-
 /*- RedirectTraversal -------------------------------------------------------
-
         redirect traversal control trait
-
 			Focus From      Focus To        Focus Request
 	NEXT_TAB_GROUP  <anything>      MINOR           _CURRENT_VISIBLE MAJOR
 			MAJOR           <anything>      _CURRENT_VISIBLE MINOR
 	PREV_TAB_GROUP <anything>       MAJOR           _CURRENT_VISIBLE MINOR
 			MINOR           <anything>      _CURRENT_VISIBLE MAJOR
-
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static Widget
 RedirectTraversal(
@@ -6390,13 +5615,11 @@ RedirectTraversal(
     Widget to_child, from_child;
     Widget to_parent, from_parent;
     Widget new_focus_widget;
-
     /* If we're in pointer focus mode there's nothing to be done. */
     if ((focus_policy != XmEXPLICIT)
      || ((direction != XmTRAVERSE_NEXT_TAB_GROUP) &&
 	 (direction != XmTRAVERSE_PREV_TAB_GROUP)))
     return new_focus;
-
     /* Determine nearest notebook parent for the target. */
     to_parent = NULL;
     if ((to_child=new_focus))
@@ -6410,11 +5633,9 @@ RedirectTraversal(
 		break;
 	    }
 	}
-
     /* Determine target child type. */
     if (to_parent)
 	to_type = NotebookConstraint(to_child)->child_type;
-
     /* Determine nearest notebook parent for the source. */
     from_parent = NULL;
     if ((from_child=old_focus))
@@ -6428,11 +5649,9 @@ RedirectTraversal(
 		break;
 	    }
 	}
-
     /* Determine source child type. */
     if (from_parent)
 	from_type = NotebookConstraint(from_child)->child_type;
-
     /*
      * Determine if we need to force traversal between major and
      * minor tabs (traverse to nearest tab to the current page)
@@ -6441,24 +5660,20 @@ RedirectTraversal(
      * one TAB GROUP i.e., the Major/Minor tabs TAB GROUP
      */
     new_focus_widget = NULL;
-
     if (direction == XmTRAVERSE_NEXT_TAB_GROUP)
 	{
 	/* If FROM Minor with a NULL TO then GOTO Major */
         if (to_child == NULL && (from_parent && (from_type == XmMINOR_TAB)))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)from_parent,
 					    XmMAJOR_TAB,0,_CURRENT_VISIBLE);
-
 	/* If FROM Major with any TO then GOTO Minor */
 	else if (from_parent && (from_type == XmMAJOR_TAB))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)from_parent,
 					    XmMINOR_TAB,0,_CURRENT_VISIBLE);
-
 	/* If *NOT* FROM Major and TO Minor then GOTO Major */
 	else if (to_parent && (to_type == XmMINOR_TAB))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)to_parent,
 					    XmMAJOR_TAB,0,_CURRENT_VISIBLE);
-
 	/* If TO Major with any FROM then GOTO Major */
 	else if (to_parent && (to_type == XmMAJOR_TAB))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)to_parent,
@@ -6470,40 +5685,31 @@ RedirectTraversal(
         if (to_child == NULL && (from_parent && (from_type == XmMAJOR_TAB)))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)from_parent,
 					    XmMINOR_TAB,0,_CURRENT_VISIBLE);
-
         /* If FROM Minor with any TO and then GOTO Major */
 	else if (from_parent && (from_type == XmMINOR_TAB))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)from_parent,
 					    XmMAJOR_TAB,0,_CURRENT_VISIBLE);
-
 	/* If *NOT* FROM Minor with TO Major then GOTO Major */
 	else if (to_parent && (to_type == XmMAJOR_TAB))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)to_parent,
 					    XmMINOR_TAB,0,_CURRENT_VISIBLE);
-
 	/* If to a Minor then traverse to a Minor nearest the current page */
         else if (to_parent && (to_type == XmMINOR_TAB))
 	    new_focus_widget = GetNextTab((XmNotebookWidget)to_parent,
                                             XmMINOR_TAB,0,_CURRENT_VISIBLE);
 	}
-
     if (new_focus_widget && XmIsTraversable(new_focus_widget))
 	return new_focus_widget;
-
     return new_focus;
 }
-
 /*- GetNextTab --------------------------------------------------------------
-
         Get next tab to set focus to.
-
 	In Parameters:
 		child_type	XmMAJOR_TAB or XmMINOR_TAB
 		page_number	page number of interest
 		direction	traversal direction
         returns
 		next major || minor tab (can be NULL)
-
 -----------------------------------------------------------------------------*/
 static Widget
 GetNextTab (
@@ -6520,12 +5726,10 @@ GetNextTab (
     unsigned char target_child_type;
     Boolean  target_found;
     int top_major_page;
-
     if (NB_IS_CHILD_MAJOR(child_type) || NB_IS_CHILD_MINOR(child_type))
 	target_child_type = child_type;
     else
 	return(NULL);	/* Bad parameter */
-
     if (MaxIsRightUp(nb,target_child_type))
 	target_dir = direction;
     else
@@ -6540,7 +5744,6 @@ GetNextTab (
 	default:
 	    target_dir = direction;
 	}
-
     /*
      * Attempt to return top tab
      */
@@ -6563,7 +5766,6 @@ GetNextTab (
 		target_dir = _FIRST_VISIBLE;
 	    }
 	}
-
     i = 0;
     target = NULL;
     target_found = False;
@@ -6617,7 +5819,6 @@ GetNextTab (
         top_major_page = nb->notebook.top_major ?
                 NotebookConstraint(nb->notebook.top_major)->page_number :
                 nb->notebook.first_page_number - 1;
-
 	while((!target_found) && (i < nb->composite.num_children))
           {
           child = nb->composite.children[i];
@@ -6669,19 +5870,14 @@ GetNextTab (
 	}       /* else   */
     return(target);
 }
-
-
 /*- MaxIsRightUp ------------------------------------------------------------
-
         returns
                 True,
                     if "<Key>osfRight" and "<Key>osfDown" mean "next"
                     and "<Key>osfLeft" and "<Key>osfUp" mean "prev"
-
                 False,
                     if "<Key>osfLeft" and "<Key>osfUp" mean "next"
                     and "<Key>osfRight" and "<Key>osfDown" mean "prev"
-
 -----------------------------------------------------------------------------*/
 static Boolean
 MaxIsRightUp (
@@ -6710,20 +5906,13 @@ MaxIsRightUp (
 			(nb->notebook.back_page_pos == XmTOP_RIGHT)
 		    &&  (nb->notebook.orientation == XmHORIZONTAL)))));
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                          Trait Stuff			      		     *
  *                                                                           *
  *****************************************************************************/
-
-
 /*- ScrollFrameInit ---------------------------------------------------------
-
 	ScrollFrame init trait method
-
 -----------------------------------------------------------------------------*/
 static void
 ScrollFrameInit (
@@ -6732,27 +5921,19 @@ ScrollFrameInit (
     Widget scrollable)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if (nb->notebook.scroll_frame_data != NULL)
 	return;
-
     nb->notebook.scroll_frame_data = (XmScrollFrameData)
         XtMalloc(sizeof(XmScrollFrameDataRec));
-
     nb->notebook.scroll_frame_data->num_nav_list = 0 ;
     nb->notebook.scroll_frame_data->nav_list = NULL ;
     nb->notebook.scroll_frame_data->num_nav_slots = 0 ;
-
     nb->notebook.scroll_frame_data->move_cb = moveCB ;
     nb->notebook.scroll_frame_data->scrollable = scrollable ;
 }
-
-
 /*- ScrollFrameGetInfo ------------------------------------------------------
-
         ScrollFrame getInfo trait method
 	Notebook is a 1 dimensional frame.
-
 -----------------------------------------------------------------------------*/
 static Boolean
 ScrollFrameGetInfo (
@@ -6762,9 +5943,7 @@ ScrollFrameGetInfo (
     Cardinal *num_nav_list)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if (dimension) *dimension = 1;  /* one dimensional frame */
-
     if (nb->notebook.scroll_frame_data != NULL)
 	{
         if (nav_list)
@@ -6772,15 +5951,10 @@ ScrollFrameGetInfo (
         if (num_nav_list)
             *num_nav_list = nb->notebook.scroll_frame_data->num_nav_list;
 	}
-
     return( nb->notebook.scroll_frame_data != NULL );
 }
-
-
 /*- AddNavigator ------------------------------------------------------------
-
         ScrollFrame addNavigator trait method
-
 -----------------------------------------------------------------------------*/
 static void
 AddNavigator (
@@ -6792,12 +5966,8 @@ AddNavigator (
     if (nb->notebook.scroll_frame_data != NULL)
 	_XmSFAddNavigator(w, nav, dimMask, nb->notebook.scroll_frame_data);
 }
-
-
 /*- RemoveNavigator ---------------------------------------------------------
-
         ScrollFrame removeNavigator trait method
-
 -----------------------------------------------------------------------------*/
 static void
 RemoveNavigator (
@@ -6805,18 +5975,12 @@ RemoveNavigator (
     Widget nav)
 {
     XmNotebookWidget nb = (XmNotebookWidget)w;
-
     if (nb->notebook.scroll_frame_data != NULL)
 	_XmSFRemoveNavigator(w, nav, nb->notebook.scroll_frame_data);
 }
-
-
 /*- PageMove ----------------------------------------------------------------
-
 	Callback for the value changes of navigators.
-
 -----------------------------------------------------------------------------*/
-
 /*ARGSUSED*/
 static void
 PageMove (
@@ -6829,15 +5993,12 @@ PageMove (
     XmNavigatorDataRec nav_data;
     XmNavigatorTrait navigatorT;
     int reason;
-
     /* Get the new navigator value using the trait getValue */
     nav_data.valueMask = NavValue;
-
     /* Check to ensure navigator is ok */
     if ((navigatorT=NB_NAVIGATOR(w)) == NULL || navigatorT->getValue == NULL)
 	return;
     navigatorT->getValue(w, &nav_data);
-
     /* Determine the callback reason */
     if (nav_data.value.x > nb->notebook.current_page_number)
         reason = XmCR_PAGE_SCROLLER_INCREMENT;
@@ -6845,25 +6006,18 @@ PageMove (
         reason = XmCR_PAGE_SCROLLER_DECREMENT;
     else
         reason = XmCR_NONE;
-
     /* Look at the kind of navigator and make the appropriate move */
     if ((nav_data.dimMask & NavigDimensionX) && (reason != XmCR_NONE))
 	GotoPage(nb, nav_data.value.x, NULL, reason);
-
 }
-
-
 /*- UpdateNavigators --------------------------------------------------------
-
         Update navigators due to page change
-
 -----------------------------------------------------------------------------*/
 static void
 UpdateNavigators (
     XmNotebookWidget nb)
 {
     XmNavigatorDataRec nav_data;
-
     /* update navigators */
     nav_data.value.x = nb->notebook.current_page_number;
     nav_data.minimum.x = nb->notebook.first_page_number;
@@ -6874,9 +6028,7 @@ UpdateNavigators (
     nav_data.dimMask = NavigDimensionX;
     nav_data.valueMask = NavValue | NavMinimum | NavMaximum |
 	NavSliderSize | NavIncrement | NavPageIncrement;
-
     _XmSFUpdateNavigatorsValue((Widget)nb, &nav_data, True);
-
     /* Control arrow sensitivity if using default page scroller */
     if (nb->notebook.scroller_status == DEFAULT_USED)
 	{
@@ -6897,12 +6049,8 @@ UpdateNavigators (
 		XmARROWS_SENSITIVE, NULL);
 	}
 }
-
-
 /*- GetUnhighlightGC --------------------------------------------------------
-
         ScrollFrame removeNavigator trait method
-
 -----------------------------------------------------------------------------*/
 static GC
 GetUnhighlightGC (
@@ -6912,7 +6060,6 @@ GetUnhighlightGC (
     XmNotebookWidget nb = (XmNotebookWidget)w;
     XmNotebookConstraint nc;
     GC background_GC = NULL;
-
     if (child)
 	{
 	nc = NotebookConstraint(child);
@@ -6928,7 +6075,6 @@ GetUnhighlightGC (
 		else
 		  background_GC = nb->manager.background_GC;
 		break;
-
 	    case XmMINOR_TAB:
 		if (nb->notebook.top_minor == child)
 		    {
@@ -6939,7 +6085,6 @@ GetUnhighlightGC (
 		else
 		    background_GC = nb->manager.background_GC;
 		break;
-
 	    case XmPAGE:
 	    case XmPAGE_SCROLLER:
 	    case XmSTATUS_AREA:
@@ -6947,27 +6092,19 @@ GetUnhighlightGC (
 			       nb->notebook.frame_background);
 		background_GC = nb->notebook.frame_gc;
 		break;
-
 	    case XmMAJOR_TAB_SCROLLER:
 	    case XmMINOR_TAB_SCROLLER:
 		background_GC = nb->manager.background_GC;
 		break;
-
 	    }
 	}
-
     return(background_GC);
 }
-
-
-
 /*****************************************************************************
  *                                                                           *
  *                               Public Functions                            *
  *                                                                           *
  *****************************************************************************/
-
-
 XmNotebookPageStatus
 XmNotebookGetPageInfo (
     Widget notebook,
@@ -6981,19 +6118,15 @@ XmNotebookGetPageInfo (
     XmNotebookPageStatus result;
     int i;
     _XmWidgetToAppContext(notebook);
-
     _XmAppLock(app);
-
     /* initialize */
     page = status = major_tab = minor_tab = NULL;
     result = XmPAGE_EMPTY;
-
     /* searching for the page */
     for (i = 0; i < nb->composite.num_children; i++)
     {
         child = nb->composite.children[i];
         nc = NotebookConstraint(child);
-
 	if (nc->page_number > page_number)
 	    break;
 	switch (nc->child_type)
@@ -7025,24 +6158,19 @@ XmNotebookGetPageInfo (
 		    break;
 	    }
     }
-
     /* see if the page number is invalid */
     if (page_number < nb->notebook.first_page_number ||
 	page_number > nb->notebook.last_page_number)
 	result = XmPAGE_INVALID;
-
     /* fill the XmNotebookPageInfo struct */
     page_info->page_number = page_number;
     page_info->page_widget = page;
     page_info->status_area_widget = status;
     page_info->major_tab_widget = major_tab;
     page_info->minor_tab_widget = minor_tab;
-
     _XmAppUnlock(app);
     return result;
 }
-
-
 Widget
 XmCreateNotebook(
         Widget          parent,
@@ -7055,7 +6183,6 @@ XmCreateNotebook(
          */
    return(XtCreateWidget(name,xmNotebookWidgetClass,parent,arglist,argcount));
 }
-
 Widget
 XmVaCreateNotebook(
         Widget parent,
@@ -7065,12 +6192,9 @@ XmVaCreateNotebook(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmNotebookWidgetClass,
@@ -7079,7 +6203,6 @@ XmVaCreateNotebook(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedNotebook(
         Widget parent,
@@ -7089,11 +6212,9 @@ XmVaCreateManagedNotebook(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmNotebookWidgetClass,
@@ -7102,5 +6223,4 @@ XmVaCreateManagedNotebook(
     va_end(var);
     return w;
 }
-
 /* End of Notebook.c */

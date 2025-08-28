@@ -24,12 +24,9 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include "MessagesI.h"
 #include <Xm/PrimitiveP.h>
@@ -38,7 +35,6 @@
 #include <Xm/IconGP.h>
 #include <Xm/LabelGP.h>
 #include <X11/keysym.h>
-
 /**************************************************************************
  *   This is Xm.c
  *    It contains global API that:
@@ -49,12 +45,9 @@
  *   For example, TrackingLocate or ResolvePartOffset do not belong
  *   here because they are not used by everybody.
  *************************************************************************/
-
 Boolean _init_modifiers = TRUE;
 unsigned int NumLockMask = 0;
 unsigned int ScrollLockMask = 0;
-
-
 /*************************************<->*************************************
  *
  *  _XmInitModifiers (void)
@@ -88,25 +81,21 @@ _XmInitModifiers (void)
     int max_keycode;
     int keysyms_per_keycode;
     int i;
-
     dpy = _XmGetDefaultDisplay();
     NumLockMask = 0;
     ScrollLockMask = 0;
     keysyms_per_keycode = 0;
     min_keycode = 0;
     max_keycode = 0;
-
     XDisplayKeycodes (dpy, &min_keycode, &max_keycode);
     modmap = XGetModifierMapping (dpy);
     keymap = XGetKeyboardMapping (dpy, min_keycode, max_keycode - min_keycode + 1, &keysyms_per_keycode);
-
     if (modmap && keymap) {
 	for (i = 3 * modmap->max_keypermod; i < 8 * modmap->max_keypermod; i++) {
 	    keycode = modmap->modifiermap[i];
 	    if ((keycode >= min_keycode) && (keycode <= max_keycode)) {
 		int j;
 		KeySym *syms = keymap + (keycode - min_keycode) * keysyms_per_keycode;
-
 		for (j = 0; j < keysyms_per_keycode; j++)
 		    if (!NumLockMask && (syms[j] == XK_Num_Lock))
 			NumLockMask = (1 << (i / modmap->max_keypermod));
@@ -115,15 +104,12 @@ _XmInitModifiers (void)
 	    }
 	}
     }
-
     /* Cleanup memory */
     if (modmap)
 	XFreeModifiermap (modmap);
-
     if (keymap)
 	XFree (keymap);
 }
-
 /**************************************************************************
  *                                                                        *
  * _XmSocorro - Help dispatch function.  Start at the widget help was     *
@@ -140,12 +126,9 @@ _XmSocorro(
         Cardinal *num_params )	/* unused */
 {
     XmAnyCallbackStruct cb;
-
     if (w == NULL) return;
-
     cb.reason = XmCR_HELP;
     cb.event = event;
-
     do {
         if ((XtHasCallbacks(w, XmNhelpCallback) == XtCallbackHasSome))
         {
@@ -157,8 +140,6 @@ _XmSocorro(
     }
     while (w != NULL);
 }
-
-
 /****************************************************************
  *
  * _XmParentProcess
@@ -172,19 +153,13 @@ _XmParentProcess(
         XmParentProcessData data )
 {
     XmManagerWidgetClass manClass ;
-
     manClass = (XmManagerWidgetClass) widget->core.widget_class ;
-
     if(    XmIsManager( widget)
        && manClass->manager_class.parent_process    ) {
 	return( (*manClass->manager_class.parent_process)( widget, data)) ;
     }
-
     return( FALSE) ;
 }
-
-
-
 /************************************************************************
  *
  *  _XmDestroyParentCallback
@@ -200,9 +175,6 @@ _XmDestroyParentCallback(
 {
    XtDestroyWidget (XtParent (w));
 }
-
-
-
 /************************************************************************
  *
  *  _XmClearShadowType
@@ -221,9 +193,7 @@ _XmClearShadowType(
         Dimension old_shadow_thickness,
         Dimension old_highlight_thickness )
 {
-
     if (old_shadow_thickness == 0) return;
-
     if (XtIsRealized(w)) {
       if (old_width <= w->core.width)
 	  XClearArea (XtDisplay (w), XtWindow (w),
@@ -232,7 +202,6 @@ _XmClearShadowType(
 		      old_shadow_thickness, old_height -
 		      old_highlight_thickness,
 		      False);
-
       if (old_height <= w->core.height)
 	  XClearArea (XtDisplay (w), XtWindow (w),
 		      0, old_height - old_shadow_thickness -
@@ -242,9 +211,6 @@ _XmClearShadowType(
 		      False);
    }
 }
-
-
-
 /**********************************************************************
  *
  * _XmReOrderResourceList
@@ -265,20 +231,16 @@ _XmReOrderResourceList(
     XrmQuark res_nameQ = XrmPermStringToQuark(res_name);
     XrmResource *tmp ;
     int n ;
-
     _XmProcessLock();
     list = (XrmResource **) widget_class->core_class.resources ;
     len = widget_class->core_class.num_resources;
-
     /* look for the named resource slot */
     n = 0;
     while ((n < len) && (list[n]->xrm_name != res_nameQ))
       n++;
-
     if (n < len) {
 	int m, i;
 	XrmQuark insert_afterQ ;
-
 	if (insert_after) {
 	    insert_afterQ = XrmPermStringToQuark(insert_after) ;
 	    /* now look for the insert_after resource slot */
@@ -287,10 +249,8 @@ _XmReOrderResourceList(
 	      m++;
 	} else m = len ;
 	if (m == len) m = -1 ;
-
 	/* now do the insertion/packing, both cases */
 	tmp = list[n] ;
-
 	if (n > m) {
 	    for (i = n; i > m+1; i--)
 		list[i] = list[i-1];
@@ -303,9 +263,6 @@ _XmReOrderResourceList(
     }
     _XmProcessUnlock();
 }
-
-
-
 /************************************************************************
  *
  *  _XmWarningMsg
@@ -323,12 +280,10 @@ _XmWarningMsg(Widget w,
   char *new_params[11];
   Cardinal num_new_params = num_params + 1;
   int i;
-
   if (num_new_params > 11) num_new_params = 11;
   for (i = 0; i < num_new_params-1; i++)
     new_params[i] = params[i];
   new_params[num_new_params-1] = XME_WARNING;
-
   if (w != NULL) {
     XtAppWarningMsg (XtWidgetToApplicationContext(w),
 		     XrmQuarkToString (w->core.xrm_name),
@@ -338,7 +293,6 @@ _XmWarningMsg(Widget w,
   } else
     XtWarning(message);
 }
-
 /* ARGSUSED */
 Boolean
 _XmIsISO10646(Display *dpy, XFontStruct *font)
@@ -348,10 +302,8 @@ _XmIsISO10646(Display *dpy, XFontStruct *font)
     char *regname;
     Atom registry;
     XFontProp *xfp;
-
     ok = False;
     registry = XInternAtom(dpy, "CHARSET_REGISTRY", False);
-
     for (i = 0, xfp = font->properties;
 	 ok == False && i < font->n_properties; xfp++, i++) {
 	if (xfp->name == registry) {
@@ -364,7 +316,6 @@ _XmIsISO10646(Display *dpy, XFontStruct *font)
     }
     return ok;
 }
-
 XChar2b*
 _XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
 {
@@ -372,13 +323,10 @@ _XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
     unsigned short codepoint;
     XChar2b *ptr;
     XChar2b *buf2b;
-
     /*
      * Convert to UCS2 string on the fly.
      */
-
      buf2b = (XChar2b *)XtMalloc(seg_len * sizeof(XChar2b));
-
      ep = draw_text + seg_len;
      for (ptr = buf2b; draw_text < ep; ptr++) {
 	if((draw_text[0]&0x80)==0) {
@@ -402,15 +350,9 @@ _XmUtf8ToUcs2(char *draw_text, size_t seg_len, size_t *ret_str_len)
      *ret_str_len = ptr - buf2b;
      return buf2b;
 }
-
-
 /***************************************/
 /********---- PUBLIC API ----**********/
 /*************************************/
-
-
-
-
 /************************************************************************
  *
  *  XmeWarning
@@ -423,13 +365,11 @@ XmeWarning(Widget w,
 {
   char *params[1];
   Cardinal num_params = 0;
-
   if (w != NULL) {
     /* the MotifWarningHandler installed in VendorS.c knows about
        this convention */
     params[0] = XME_WARNING;
     num_params++;
-
     XtAppWarningMsg (XtWidgetToApplicationContext(w),
 		     XrmQuarkToString (w->core.xrm_name),
 		     "XmeWarning",
@@ -438,8 +378,6 @@ XmeWarning(Widget w,
   } else
     	XtWarning(message);
 }
-
-
 /************************************************************************
  *
  *  XmObjectAtPoint
@@ -457,14 +395,11 @@ XmObjectAtPoint(
     XmManagerClassExt *mext ;
     Widget return_wid = NULL;
     _XmWidgetToAppContext(wid);
-
     _XmAppLock(app);
-
     if (!XmIsManager(wid)) {
 	_XmAppUnlock(app);
 	return NULL;
     }
-
     mext = (XmManagerClassExt *)
 	_XmGetClassExtensionPtr( (XmGenericClassExt *)
 				&(mw->manager_class.extension), NULLQUARK) ;
@@ -472,14 +407,11 @@ XmObjectAtPoint(
 	_XmAppUnlock(app);
 	return NULL;
     }
-
     if ((*mext)->object_at_point)
 	return_wid = ((*mext)->object_at_point)(wid, x, y);
-
     _XmAppUnlock(app);
     return return_wid;
 }
-
 /************************************************************************
  *
  *  _XmAssignInsensitiveColor
@@ -487,12 +419,10 @@ XmObjectAtPoint(
  *
  *
  ************************************************************************/
-
 Pixel
 _XmAssignInsensitiveColor(Widget w)
 {
 	Pixel p = 0;
-
 	if (XmIsPrimitive(w)) {
 		XmPrimitiveWidget pw = (XmPrimitiveWidget) w;
 		p = pw->primitive.bottom_shadow_color;
@@ -510,6 +440,5 @@ _XmAssignInsensitiveColor(Widget w)
 	else {
 		p = 0;
 	}
-
 	return p;
 }

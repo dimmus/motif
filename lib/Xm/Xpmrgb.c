@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * rgb.c:                                                                      *
 *                                                                             *
@@ -31,23 +30,19 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 /*
  * The code related to FOR_MSW has been added by
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
-
 /*
  * Part of this code has been taken from the ppmtoxpm.c file written by Mark
  * W. Snitily but has been modified for my special need
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
 #include <ctype.h>
-
 #ifndef FOR_MSW				/* normal part first, MSW part at
 					 * the end, (huge ifdef!) */
 /*
@@ -64,22 +59,18 @@ xpmReadRgbNames(
     int n, items, red, green, blue;
     char line[512], name[512], *rgbname, *s1, *s2;
     xpmRgbName *rgb;
-
     /* Open the rgb text file.  Abort if error. */
     if ((rgbf = fopen(rgb_fname, "r")) == NULL)
 	return 0;
-
     /* Loop reading each line in the file. */
     n = 0;
     rgb = rgbn;
     /* Quit if rgb text file has too many entries. */
     while (fgets(line, sizeof(line), rgbf) && n < MAX_RGBNAMES) {
-
 	/* Skip silently if line is bad. */
 	items = sscanf(line, "%d %d %d %[^\n]\n", &red, &green, &blue, name);
 	if (items != 4)
 	    continue;
-
 	/*
 	 * Make sure rgb values are within 0->255 range. Skip silently if
 	 * bad.
@@ -88,16 +79,13 @@ xpmReadRgbNames(
 	    green < 0 || green > 0xFF ||
 	    blue < 0 || blue > 0xFF)
 	    continue;
-
 	/* Allocate memory for ascii name. If error give up here. */
 	if (!(rgbname = (char *) XpmMalloc(strlen(name) + 1)))
 	    break;
-
 	/* Copy string to ascii name and lowercase it. */
 	for (s1 = name, s2 = rgbname; *s1; s1++)
 	    *s2++ = tolower(*s1);
 	*s2 = '\0';
-
 	/* Save the rgb values and ascii name in the array. */
 	rgb->r = red * 257;		/* 65535/255 = 257 */
 	rgb->g = green * 257;
@@ -106,13 +94,10 @@ xpmReadRgbNames(
 	rgb++;
 	n++;
     }
-
     fclose(rgbf);
-
     /* Return the number of read rgb names. */
     return n < 0 ? 0 : n;
 }
-
 /*
  * Return the color name corresponding to the given rgb values
  */
@@ -126,7 +111,6 @@ xpmGetRgbName(
 {
     int i;
     xpmRgbName *rgb;
-
     /*
      * Just perform a dumb linear search over the rgb values of the color
      * mnemonics.  One could speed things up by sorting the rgb values and
@@ -135,11 +119,9 @@ xpmGetRgbName(
     for (i = 0, rgb = rgbn; i < rgbn_max; i++, rgb++)
 	if (red == rgb->r && green == rgb->g && blue == rgb->b)
 	    return rgb->name;
-
     /* if not found return NULL */
     return NULL;
 }
-
 /*
  * Free the strings which have been malloc'ed in xpmReadRgbNames
  */
@@ -150,16 +132,12 @@ xpmFreeRgbNames(
 {
     int i;
     xpmRgbName *rgb;
-
     for (i = 0, rgb = rgbn; i < rgbn_max; i++, rgb++)
 	XpmFree(rgb->name);
 }
-
 #else					/* here comes the MSW part, the
 					 * second part of the  huge ifdef */
-
 #include "Xpmrgbtab.h"			/* hard coded rgb.txt table */
-
 int
 xpmReadRgbNames(
     char	*rgb_fname,
@@ -171,7 +149,6 @@ xpmReadRgbNames(
      */
     return (numTheRGBRecords);
 }
-
 /*
  * MSW rgb values are made from 3 BYTEs, this is different from X XColor.red,
  * which has something like #0303 for one color
@@ -184,11 +161,9 @@ xpmGetRgbName(
     int		red, 		/* rgb values */
     int		green,
     int		blue)
-
 {
     int i;
     unsigned long rgbVal;
-
     i = 0;
     while (i < numTheRGBRecords) {
 	rgbVal = theRGBRecords[i].rgb;
@@ -200,7 +175,6 @@ xpmGetRgbName(
     }
     return (NULL);
 }
-
 /* used in XParseColor in simx.c */
 int
 xpmGetRGBfromName(
@@ -214,9 +188,7 @@ xpmGetRGBfromName(
     unsigned long rgbVal;
     char *name;
     char *grey, *p;
-
     name = xpmstrdup(inname);
-
     /*
      * the table in rgbtab.c has no names with spaces, and no grey, but a
      * lot of gray
@@ -234,14 +206,12 @@ xpmGetRGBfromName(
 	*p = tolower(*p);
 	p++;
     }
-
     /*
      * substitute Grey with Gray, else rgbtab.h would have more than 100
      * 'duplicate' entries
      */
     if (grey = strstr(name, "grey"))
 	grey[2] = 'a';
-
     /* binary search */
     left = 0;
     right = numTheRGBRecords - 1;
@@ -261,21 +231,17 @@ xpmGetRGBfromName(
 	    left = middle + 1;
 	}
     } while (left <= right);
-
     /*
      * I don't like to run in a ColorInvalid error and to see no pixmap at
      * all, so simply return a red pixel. Should be wrapped in an #ifdef
      * HeDu
      */
-
     *r = 255;
     *g = 0;
     *b = 0;				/* red error pixel */
-
     free(name);
     return (1);
 }
-
 void
 xpmFreeRgbNames(
     xpmRgbName	rgbn[],
@@ -283,5 +249,4 @@ xpmFreeRgbNames(
 {
     /* nothing to do */
 }
-
 #endif					/* MSW part */

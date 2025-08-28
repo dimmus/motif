@@ -20,29 +20,21 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
-
 #ifndef _XmSpinB_h
 #define _XmSpinB_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*
  * SpinB Widget
  */
 externalref WidgetClass xmSpinBoxWidgetClass;
-
 typedef struct _XmSpinBoxClassRec *XmSpinBoxWidgetClass;
 typedef struct _XmSpinBoxRec      *XmSpinBoxWidget;
-
-
 /*
  * Spin externs for application accessible functions
  */
-
 Widget	XmCreateSpinBox(Widget	parent,
 				char	*name,
 				ArgList	arglist,
@@ -58,11 +50,7 @@ Widget XmVaCreateManagedSpinBox(
 int	XmSpinBoxValidatePosition(
 				Widget	text_field,
 				int	*position_value);
-
-
-
 #ifdef __cplusplus
 }
 #endif
-
 #endif /* _SpinB_h */

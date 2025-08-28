@@ -22,51 +22,40 @@
 */
 #ifndef _XmTextOutP_h
 #define _XmTextOutP_h
-
 #include <Xm/XmP.h>
 #include <Xm/Text.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /****************************************************************
  *
  * Definitions for modules implementing and using text output routines.
  *
  ****************************************************************/
-
 #define ShouldWordWrap(data, widget)	(data->wordwrap && \
        (!(((XmDirectionMatch(XmPrim_layout_direction(widget), \
 			     XmTOP_TO_BOTTOM_RIGHT_TO_LEFT)) ? \
             data->scrollvertical : data->scrollhorizontal) \
        && XmIsScrolledWindow(widget->core.parent))) \
        && widget->text.edit_mode != XmSINGLE_LINE_EDIT)
-
 typedef struct _LineTableExtraRec {
     Dimension width;
     Boolean wrappedbychar;
 } LineTableExtraRec, *LineTableExtra ;
-
 /*
  * output.c  (part of stext)
  */
-
 typedef unsigned int LineNum;
 typedef enum {on, off} OnOrOff;	/* For when Booleans aren't obvious enough. */
-
 /*
  * Return the line number containing the given position.  If text currently
  * knows of no line containing that position, returns NOLINE.
  */
-
 #define NOLINE	30000
-
 /*
  * These next define the types of the routines that output is required
  * to export for use by text and by input.
  */
-
 typedef struct _OutputDataRec {
     XmFontList fontlist;	/* Fontlist for text. */
     unsigned int blinkrate;
@@ -136,13 +125,10 @@ typedef struct _OutputDataRec {
     Boolean use_xft;            /* True if font to be used is XftFont */
 #endif
 } OutputDataRec, *OutputData;
-
-
 /*
  * Create a new instance of an output object.  This is expected to fill in
  * info about innerwidget and output in the widget record.
  */
-
 typedef void (*OutputCreateProc)(
 			Widget,
 			ArgList,
@@ -151,23 +137,19 @@ typedef void (*OutputCreateProc)(
  * Given an (x,y) coordinate, return the closest corresponding position. (For
  * use by input; text shouldn't ever need to know.)
  */
-
 typedef XmTextPosition (*XYToPosProc)(
 			XmTextWidget,
 			Position,	/* These are relative to the */
 			Position) ;	/* innerwindow returned above. */
-
 /*
  * Return the (x,y) coordinate corresponing to the given position.  If this
  * returns FALSE, then the given position isn't being displayed.
  */
-
 typedef Boolean (*PosToXYProc)(
 			XmTextWidget,
 			XmTextPosition,
 			Position *,	/* These are relative to the */
 			Position *) ;	/* innerwindow returned above. */
-
 /*
  * Measures the extent of a line.  Given the line number and starting position
  * of a line, returns the starting position of the next line.  Also returns
@@ -190,39 +172,32 @@ typedef Boolean (*PosToXYProc)(
  * then no extra information should be generated, and the 'extra' parameter
  * should be ignored.)
  */
-
 #define PASTENDPOS	2147483647  /* Biggest number that can fit in long */
-
 typedef Boolean (*MeasureLineProc)(
 			XmTextWidget,
 			LineNum,
 			XmTextPosition,
 			XmTextPosition *,
 			LineTableExtraRec **) ;
-
 /*
  * Draw some text within a line.  The output finds out information about the
  * line by calling the line table routines.
  *
  * %%% Document special cases (like lines containing PASTENDPOS).
  */
-
 typedef void (*DrawProc)(
 			XmTextWidget,
 			LineNum,
 			XmTextPosition,
 			XmTextPosition,
 			XmHighlightMode) ;
-
 /*
  * Output should draw or erase an insertion point at the given position.
  */
-
 typedef void (*DrawInsertionPointProc)(
 			XmTextWidget,
 			XmTextPosition,
 			OnOrOff) ;
-
 /*
  * Output should ensure that the given position is visible (e.g., not scrolled
  * off horizontally).
@@ -230,7 +205,6 @@ typedef void (*DrawInsertionPointProc)(
 typedef void (*MakePositionVisibleProc)(
 			XmTextWidget,
 			XmTextPosition) ;
-
 /* Text would like to move some lines around on the screen.  It would like to
  * move lines fromline through toline (inclusive) to now start at line
  * destline.  If output can perform this move by means of a XCopyArea or
@@ -239,23 +213,19 @@ typedef void (*MakePositionVisibleProc)(
  * "extra" entries in the linetable, because after returning text will go ahead
  * and move linetable entries around.
  */
-
 typedef Boolean (*MoveLinesProc)(
 			XmTextWidget,
 			LineNum,
 			LineNum,
 			LineNum) ;
-
 /*
  * Inform output of invalidated positions.
  */
-
 typedef void (*InvalidateProc)(
 			XmTextWidget,
 			XmTextPosition,
 			XmTextPosition,
 			long) ;
-
 /*
  * Get preferred size of text widget based on the row and column
  * resources multiplied by font attributes as well as adding the
@@ -265,28 +235,22 @@ typedef void (*GetPreferredSizeProc)(
 			Widget,
 			Dimension *,
 			Dimension *) ;
-
 /*
  * Get values out of the output object.
  */
-
 typedef void (*GetValuesProc)(
 			Widget,
 			ArgList,
 			Cardinal) ;
-
 /*
  * Set values in the output object.
  */
-
 typedef Boolean (*SetValuesProc)(
 			Widget,
 			Widget,
 			Widget,
 			ArgList,
 			Cardinal *) ;
-
-
 typedef struct _OutputRec {
     struct _OutputDataRec	*data; /* Output-specific data; opaque type. */
     XYToPosProc			XYToPos;
@@ -305,11 +269,8 @@ typedef struct _OutputRec {
     XmResizeFlagProc		resize;
     XtExposeProc		expose;
 } OutputRec;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextOutP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

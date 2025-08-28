@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: Separator.c /main/14 1996/03/25 17:53:11 barstow $"
 #endif
 #endif
-
 #include <stdio.h>
 #include <ctype.h>
 #include <X11/keysymdef.h>
@@ -43,10 +40,7 @@ static char rcsid[] = "$XConsortium: Separator.c /main/14 1996/03/25 17:53:11 ba
 #include <Xm/MenuT.h>
 #include <Xm/DrawP.h>
 #include <Xm/VaSimpleP.h>
-
-
 /********    Static Function Declarations    ********/
-
 static void ClassInitialize() ;
 static void ClassPartInitialize(
                         WidgetClass wc) ;
@@ -69,9 +63,7 @@ static Boolean SetValues(
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args) ;
-
 /********    End Static Function Declarations    ********/
-
 /* Menu Savvy trait record */
 static XmConst XmMenuSavvyTraitRec MenuSavvySeparatorRecord = {
     0,				/* version */
@@ -80,10 +72,7 @@ static XmConst XmMenuSavvyTraitRec MenuSavvySeparatorRecord = {
     NULL,			/* getMnemonic */
     NULL,			/* getActivateCBName */
 };
-
-
 /* Definition for resources that need special processing in get values */
-
 static XmSyntheticResource syn_resources[] =
 {
    {
@@ -94,10 +83,7 @@ static XmSyntheticResource syn_resources[] =
       XmeToHorizontalPixels
    },
 };
-
-
 /*  Resource list for Separator  */
-
 static XtResource resources[] =
 {
    {
@@ -105,7 +91,6 @@ static XtResource resources[] =
       XtOffsetOf( struct _XmSeparatorRec, separator.separator_type),
       XmRImmediate, (XtPointer) XmSHADOW_ETCHED_IN
    },
-
    {
       XmNmargin,
       XmCMargin,
@@ -114,7 +99,6 @@ static XtResource resources[] =
       XtOffsetOf( struct _XmSeparatorRec, separator.margin),
       XmRImmediate, (XtPointer)  0
    },
-
    {
       XmNorientation, XmCOrientation, XmROrientation, sizeof (unsigned char),
       XtOffsetOf( struct _XmSeparatorRec, separator.orientation),
@@ -145,10 +129,7 @@ static XtResource resources[] =
      XmRImmediate, (XtPointer) 2
    },
 };
-
-
 /*  The Separator class record definition  */
-
 externaldef(xmseparatorclassrec) XmSeparatorClassRec xmSeparatorClassRec =
 {
    {
@@ -186,7 +167,6 @@ externaldef(xmseparatorclassrec) XmSeparatorClassRec xmSeparatorClassRec =
       (XtStringProc)NULL,               /* display_accelerator   */
       NULL,                             /* extension             */
    },
-
    {
       (XtWidgetProc)NULL,               /* Primitive border_highlight   */
       (XtWidgetProc)NULL,               /* Primitive border_unhighlight */
@@ -196,15 +176,12 @@ externaldef(xmseparatorclassrec) XmSeparatorClassRec xmSeparatorClassRec =
       XtNumber(syn_resources),	        /* num syn_resources            */
       NULL,                             /* extension                    */
    },
-
    {
       (XtPointer) NULL,                 /* extension                    */
    }
 };
-
 externaldef(xmseparatorwidgetclass) WidgetClass xmSeparatorWidgetClass =
 				   (WidgetClass) &xmSeparatorClassRec;
-
 /************************************************************************
  *
  *  ClassInitialize
@@ -217,7 +194,6 @@ ClassInitialize( void )
     XmeTraitSet((XtPointer) xmSeparatorWidgetClass, XmQTmenuSavvy,
 		(XtPointer) &MenuSavvySeparatorRecord);
 }
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -230,8 +206,6 @@ ClassPartInitialize(
 {
    _XmFastSubclassInit (wc, XmSEPARATOR_BIT);
 }
-
-
 /************************************************************************
  *
  *  Initialize
@@ -249,34 +223,28 @@ Initialize(
    XmSeparatorWidget request = (XmSeparatorWidget) rw ;
    XmSeparatorWidget new_w = (XmSeparatorWidget) nw ;
    new_w -> primitive.traversal_on = FALSE;
-
    /* Force highlightThickness to zero if in a menu. */
    if (XmIsRowColumn(XtParent(new_w)) &&
        ((RC_Type(XtParent(new_w)) == XmMENU_PULLDOWN) ||
         (RC_Type(XtParent(new_w)) == XmMENU_POPUP)))
      new_w->primitive.highlight_thickness = 0;
-
    if(    !XmRepTypeValidValue( XmRID_SEPARATOR_TYPE,
                               new_w->separator.separator_type, (Widget) new_w)    )
    {
       new_w -> separator.separator_type = XmSHADOW_ETCHED_IN;
    }
-
    if(    !XmRepTypeValidValue( XmRID_ORIENTATION,
                                  new_w->separator.orientation, (Widget) new_w)    )
    {
       new_w -> separator.orientation = XmHORIZONTAL;
    }
-
    if (new_w->separator.orientation == XmHORIZONTAL)
    {
       if (request -> core.width == 0)
 	 new_w -> core.width = 2 * new_w -> primitive.highlight_thickness +2;
-
       if (request -> core.height == 0)
       {
 	 new_w -> core.height = 2 * new_w -> primitive.highlight_thickness;
-
 	 if (new_w -> separator.separator_type == XmSINGLE_LINE ||
 	     new_w -> separator.separator_type == XmSINGLE_DASHED_LINE)
 	    new_w -> core.height += 3;
@@ -293,16 +261,13 @@ Initialize(
 	       new_w -> core.height = 1;
       }
    }
-
    if (new_w->separator.orientation == XmVERTICAL)
    {
       if (request -> core.height == 0)
 	 new_w -> core.height = 2 * new_w -> primitive.highlight_thickness +2;
-
       if (request -> core.width == 0)
       {
 	 new_w -> core.width = 2 * new_w -> primitive.highlight_thickness;
-
 	 if (new_w -> separator.separator_type == XmSINGLE_LINE ||
 	     new_w -> separator.separator_type == XmSINGLE_DASHED_LINE)
 	    new_w -> core.width += 3;
@@ -319,15 +284,9 @@ Initialize(
 	       new_w -> core.width = 1;
       }
    }
-
    /*  Get the drawing graphics contexts.  */
-
    GetSeparatorGC (new_w);
 }
-
-
-
-
 /************************************************************************
  *
  *  GetSeparatorGC
@@ -340,25 +299,17 @@ GetSeparatorGC(
 {
    XGCValues values;
    XtGCMask  valueMask;
-
    valueMask = GCForeground | GCBackground;
-
    values.foreground = mw -> primitive.foreground;
    values.background = mw -> core.background_pixel;
-
    if (mw -> separator.separator_type == XmSINGLE_DASHED_LINE ||
        mw -> separator.separator_type == XmDOUBLE_DASHED_LINE)
    {
       valueMask = valueMask | GCLineStyle;
       values.line_style = LineDoubleDash;
    }
-
    mw -> separator.separator_GC = XtGetGC ((Widget) mw, valueMask, &values);
 }
-
-
-
-
 /************************************************************************
  *
  *  Redisplay
@@ -373,7 +324,6 @@ Redisplay(
         Region region )
 {
      XmSeparatorWidget mw = (XmSeparatorWidget) wid ;
-
     XmeDrawSeparator(XtDisplay(wid), XtWindow(wid),
                   mw->primitive.top_shadow_GC,
                   mw->primitive.bottom_shadow_GC,
@@ -387,10 +337,6 @@ Redisplay(
                   mw->separator.orientation,
                   mw->separator.separator_type);
 }
-
-
-
-
 /************************************************************************
  *
  *  Destroy
@@ -403,10 +349,6 @@ Destroy(
 {
    XtReleaseGC (wid, ((XmSeparatorWidget) wid)->separator.separator_GC);
 }
-
-
-
-
 /************************************************************************
  *
  *  SetValues
@@ -425,42 +367,34 @@ SetValues(
         XmSeparatorWidget request = (XmSeparatorWidget) rw ;
         XmSeparatorWidget new_w = (XmSeparatorWidget) nw ;
    Boolean flag = FALSE;
-
    /*
     * We never allow our traversal flags to be changed during SetValues();
     * this is enforced by our superclass.
     */
-
    /*  Force traversal_on to FALSE */
    new_w -> primitive.traversal_on = FALSE;
-
    /* Force highlightThickness to zero if in a menu. */
    if (XmIsRowColumn(XtParent(new_w)) &&
        ((RC_Type(XtParent(new_w)) == XmMENU_PULLDOWN) ||
         (RC_Type(XtParent(new_w)) == XmMENU_POPUP)))
      new_w->primitive.highlight_thickness = 0;
-
    if(    !XmRepTypeValidValue( XmRID_SEPARATOR_TYPE,
                               new_w->separator.separator_type, (Widget) new_w)    )
    {
       new_w -> separator.separator_type = current -> separator.separator_type;
    }
-
    if(    !XmRepTypeValidValue( XmRID_ORIENTATION,
                                  new_w->separator.orientation, (Widget) new_w)    )
    {
       new_w -> separator.orientation = current -> separator.orientation;
    }
-
    if (new_w -> separator.orientation == XmHORIZONTAL)
    {
       if (request -> core.width == 0)
 	 new_w -> core.width = 2 * new_w->primitive.highlight_thickness + 2;
-
       if (request -> core.height == 0)
       {
 	 new_w -> core.height = 2 * new_w -> primitive.highlight_thickness;
-
 	 if (new_w -> separator.separator_type == XmSINGLE_LINE ||
 	     new_w -> separator.separator_type == XmSINGLE_DASHED_LINE)
 	    new_w -> core.height += 3;
@@ -476,7 +410,6 @@ SetValues(
 	    if (new_w -> core.height == 0)
 	       new_w -> core.height = 1;
       }
-
       if ((new_w -> separator.separator_type != current -> separator.separator_type ||
            new_w -> primitive.shadow_thickness != current -> primitive.shadow_thickness ||
            new_w -> primitive.highlight_thickness != current -> primitive.highlight_thickness) &&
@@ -496,16 +429,13 @@ SetValues(
 	    new_w -> core.height = 2 * new_w -> primitive.highlight_thickness + 5;
       }
    }
-
    if (new_w -> separator.orientation == XmVERTICAL)
    {
       if (request -> core.height == 0)
 	 new_w -> core.height = 2 * new_w->primitive.highlight_thickness + 2;
-
       if (request -> core.width == 0)
       {
 	 new_w -> core.width = 2 * new_w -> primitive.highlight_thickness;
-
 	 if (new_w -> separator.separator_type == XmSINGLE_LINE ||
 	     new_w -> separator.separator_type == XmSINGLE_DASHED_LINE)
 	    new_w -> core.width += 3;
@@ -521,7 +451,6 @@ SetValues(
 	    if (new_w -> core.width == 0)
 	       new_w -> core.width = 1;
       }
-
       if ((new_w -> separator.separator_type != current -> separator.separator_type ||
            new_w -> primitive.shadow_thickness != current -> primitive.shadow_thickness ||
            new_w -> primitive.highlight_thickness != current -> primitive.highlight_thickness) &&
@@ -541,12 +470,10 @@ SetValues(
 	    new_w -> core.width = 2 * new_w -> primitive.highlight_thickness + 5;
       }
    }
-
    if (new_w -> separator.orientation != current -> separator.orientation ||
        new_w -> separator.margin != current -> separator.margin ||
        new_w -> primitive.shadow_thickness != current -> primitive.shadow_thickness)
       flag = TRUE;
-
    if (new_w -> separator.separator_type != current -> separator.separator_type  ||
        new_w -> core.background_pixel != current -> core.background_pixel    ||
        new_w -> primitive.foreground != current -> primitive.foreground)
@@ -555,10 +482,8 @@ SetValues(
       GetSeparatorGC (new_w);
       flag = TRUE;
    }
-
    return (flag);
 }
-
 /************************************************************************
  *
  *  XmCreateSeparator()
@@ -586,12 +511,9 @@ XmVaCreateSeparator(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmSeparatorWidgetClass,
@@ -599,7 +521,6 @@ XmVaCreateSeparator(
                          var, count);
     va_end(var);
     return w;
-
 }
 Widget
 XmVaCreateManagedSeparator(
@@ -610,11 +531,9 @@ XmVaCreateManagedSeparator(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmSeparatorWidgetClass,
@@ -622,5 +541,4 @@ XmVaCreateManagedSeparator(
                          var, count);
     va_end(var);
     return w;
-
 }

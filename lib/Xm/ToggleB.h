@@ -27,33 +27,24 @@
  ***********************************************************************/
 #ifndef _XmToggle_h
 #define _XmToggle_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref WidgetClass xmToggleButtonWidgetClass;
-
 typedef struct _XmToggleButtonClassRec *XmToggleButtonWidgetClass;
 typedef struct _XmToggleButtonRec      *XmToggleButtonWidget;
-
 /*fast subclass define */
 #ifndef XmIsToggleButton
 #define XmIsToggleButton(w)     XtIsSubclass(w, xmToggleButtonWidgetClass)
 #endif /* XmIsToggleButton */
-
-
 /********    Public Function Declarations    ********/
-
 Boolean XmToggleButtonGetState(
                         Widget w);
 void XmToggleButtonSetState(
                         Widget w,
                         Boolean newstate,
                         Boolean notify);
-
 Boolean XmToggleButtonSetValue(
         Widget w,
         XmToggleButtonState newstate,
@@ -72,10 +63,7 @@ Widget XmVaCreateManagedToggleButton(
                         char *name,
                         ...);
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmToggle_h */

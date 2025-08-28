@@ -22,48 +22,35 @@
 */
 #ifndef _XmDragCP_h
 #define _XmDragCP_h
-
 #include <Xm/XmP.h>
 #include <Xm/DragC.h>
-
 #include <X11/Shell.h>
 #include <X11/ShellP.h>
-
 #include <Xm/DragIcon.h>
 #include <Xm/DragOverS.h>
 #include <Xm/DropSMgrP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /***********************************************************************
  *
  * DragContext (RootWrapper) Widget Private Data
  *
  ***********************************************************************/
-
 typedef void	(*XmDragStartProc)( XmDragContext, Widget, XEvent *);
 typedef void 	(*XmDragCancelProc)( XmDragContext) ;
-
-
 typedef struct {
     XmDragStartProc		start;
     XmDragCancelProc		cancel;
     XtPointer       		extension;
 } XmDragContextClassPart;
-
 typedef struct _XmDragContextClassRec {
     CoreClassPart	      	core_class;
     XmDragContextClassPart	drag_class;
 } XmDragContextClassRec;
-
 externalref XmDragContextClassRec xmDragContextClassRec;
-
 #define XtDragByPoll 	0
 #define XtDragByEvent	1
-
 typedef struct {
     Window		frame;
     Window		window;
@@ -76,18 +63,13 @@ typedef struct {
     unsigned int	depth;
     XtPointer		iccInfo;
 } XmDragReceiverInfoStruct, *XmDragReceiverInfo;
-
-
 typedef union _XmConvertSelectionRec
   {
     XtConvertSelectionIncrProc sel_incr ;
     XtConvertSelectionProc     sel ;
   } XmConvertSelectionRec ;
-
-
 typedef struct _XmDragContextPart{
     /****  resources ****/
-
     Atom			*exportTargets;
     Cardinal			numExportTargets;
     XmConvertSelectionRec	convertProc;
@@ -113,19 +95,16 @@ typedef struct _XmDragContextPart{
     unsigned char		dragOperations;
     Boolean			incremental;
     unsigned char		blendModel;
-
     /* private resources */
     Window			srcWindow;
     Time			dragStartTime;
     Atom			iccHandle;
     Widget			sourceWidget;
     Boolean			sourceIsExternal;
-
     /**** instance data ****/
     Boolean			topWindowsFetched;
     unsigned char 		commType;
     unsigned char		animationType;
-
     unsigned char		operation;
     unsigned char		operations;
     unsigned int		lastEventState;
@@ -136,47 +115,35 @@ typedef struct _XmDragContextPart{
     Boolean			useLocal;
     Boolean			inDropSite;
     XtIntervalId 		dragTimerId;
-
     Time			roundOffTime;
     Time			lastChangeTime;
     Time			crossingTime;
-
     Time			dragFinishTime;
     Time			dropFinishTime;
-
     Atom			dropSelection;
     Widget			srcShell;
 	Position		startX, startY;
-
     XmID			siteID;
-
     Screen			*currScreen;
     Window			currWmRoot;
     XmDragOverShellWidget	curDragOver;
     XmDragOverShellWidget	origDragOver;
-
     XmDragReceiverInfoStruct	*currReceiverInfo;
     XmDragReceiverInfoStruct	*rootReceiverInfo;
     XmDragReceiverInfoStruct	*receiverInfos;
     Cardinal			numReceiverInfos;
     Cardinal			maxReceiverInfos;
-
     unsigned char		trackingMode;
     unsigned char		activeProtocolStyle;
     unsigned char               activeBlendModel;
     Boolean			dragDropCancelEffect;
     long 			SaveEventMask; 		/* Save the current root eventMask so that D&D works for MWM */
 } XmDragContextPart;
-
-
 typedef  struct _XmDragContextRec{
     CorePart	 		core;
     XmDragContextPart		drag;
 } XmDragContextRec;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDragCP_h */

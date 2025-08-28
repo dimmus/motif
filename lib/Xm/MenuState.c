@@ -25,27 +25,19 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/XmP.h>
 #include <Xm/RowColumnP.h>
 #include <Xm/ScreenP.h>
 #include "MenuStateI.h"
-
 /********    Static Function Declarations    ********/
-
 static void ScreenDestroyCallback (
 			Widget w,
 			XtPointer client_data,
 			XtPointer call_data );
-
 /********    End Static Function Declarations    ********/
-
-
 Widget
 _XmGetRC_PopupPosted (
        Widget wid)
@@ -55,7 +47,6 @@ _XmGetRC_PopupPosted (
    else
       return NULL;
 }
-
 /*
  * The following two functions are used by menu and menu-item widgets to keep
  * track of whether we're in drag (button down) or traversal mode.
@@ -66,7 +57,6 @@ _XmGetInDragMode (
 {
   return((_XmGetMenuState(widget))->MU_InDragMode);
 }
-
 void
 _XmSetInDragMode(
         Widget widget,
@@ -74,8 +64,6 @@ _XmSetInDragMode(
 {
   (_XmGetMenuState(widget))->MU_InDragMode = mode;
 }
-
-
 /************************************************************************
  *
  * _XmGetMenuState(wid)
@@ -87,12 +75,10 @@ _XmGetMenuState(
 {
    XmScreen scrn = (XmScreen) XmGetXmScreen(XtScreen(wid));
    XmMenuState menu_state = (XmMenuState)NULL;
-
    if ((XmScreen)NULL != scrn)
    {
      menu_state  =
 	(XmMenuState)((XmScreenInfo *)(scrn->screen.screenInfo))->menu_state;
-
      if ((XmMenuState)NULL == menu_state)
      {
       menu_state = (XmMenuState)XtMalloc(sizeof(XmMenuStateRec));
@@ -100,7 +86,6 @@ _XmGetMenuState(
 		(XtPointer)menu_state;
       XtAddCallback((Widget)scrn, XtNdestroyCallback,
 		    ScreenDestroyCallback, (XtPointer) NULL);
-
       menu_state->RC_LastSelectToplevel = NULL;
       menu_state->RC_ButtonEventStatus.time = (unsigned) -1;
       menu_state->RC_ButtonEventStatus.verified = FALSE;
@@ -113,18 +98,14 @@ _XmGetMenuState(
       menu_state->RC_menuFocus.oldFocus = (Window)NULL;
       menu_state->RC_menuFocus.oldRevert = 0;
       menu_state->RC_menuFocus.oldWidget = NULL;
-
       menu_state->MS_LastManagedMenuTime = (Time)0L;
-
       menu_state->MU_InDragMode = False;
       menu_state->MU_CurrentMenuChild = NULL;
       menu_state->MU_InPMMode = False;
      }
    }
-
    return menu_state;
 }
-
 static void
 ScreenDestroyCallback
 	( Widget w,

@@ -27,22 +27,15 @@
 /*	ComboBoxP.h  */
 #ifndef _XmComboBoxP_H
 #define _XmComboBoxP_H
-
 #include <Xm/ManagerP.h>
 #include <Xm/ComboBox.h>
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* New fields for the ComboBox widget class record. */
-
 typedef struct _XmComboBoxClassPart {
   XtPointer extension;		/* Pointer to extension record. */
 } XmComboBoxClassPart;
-
-
 /* Full class record declaration. */
 typedef struct _XmComboBoxClassRec {
   CoreClassPart		core_class;
@@ -51,13 +44,10 @@ typedef struct _XmComboBoxClassRec {
   XmManagerClassPart	manager_class;
   XmComboBoxClassPart	combo_box_class;
 } XmComboBoxClassRec;
-
 externalref XmComboBoxClassRec xmComboBoxClassRec;
-
 /*
  * New fields for the ComboBox widget record.
  */
-
 typedef struct _XmComboBoxPart {
   /* Resources */
   unsigned char 	type;
@@ -71,7 +61,6 @@ typedef struct _XmComboBoxPart {
   XmString		selected_item; /* synthetic, not updated */
   int			selected_position;
   XmFontList		render_table;
-
   /* Internal data */
   Widget		list_shell;
   Widget		list;		/* Now accessible as a resource */
@@ -91,7 +80,6 @@ typedef struct _XmComboBoxPart {
    * the XmNRenderTable, XmNFontList resource settings
    */
   Boolean		text_changed;
-
   /* New resources/data for CDE compatibility. */
   Widget		edit_box;
   XmStringTable		items;
@@ -99,12 +87,8 @@ typedef struct _XmComboBoxPart {
   int			visible_item_count;
   short			columns;
   XtEnum		position_mode;
-
 } XmComboBoxPart;
-
-
 /* Full instance record declaration. */
-
 typedef struct _XmComboBoxRec {
   CorePart		core;
   CompositePart		composite;
@@ -112,13 +96,8 @@ typedef struct _XmComboBoxRec {
   XmManagerPart		manager;
   XmComboBoxPart 	combo_box;
 } XmComboBoxRec;
-
-
 /********    Private Function Declarations    ********/
-
 /********    End Private Function Declarations    ********/
-
-
 /* Access macros */
 #define CB_ArrowPressed(w)   (((XmComboBoxWidget)(w))->combo_box.arrow_pressed)
 #define CB_ArrowSize(w)	     (((XmComboBoxWidget)(w))->combo_box.arrow_size)
@@ -142,12 +121,8 @@ typedef struct _XmComboBoxRec {
 #define CB_ShellState(w)     (((XmComboBoxWidget)(w))->combo_box.shell_state)
 #define CB_TextChanged(w)    (((XmComboBoxWidget)(w))->combo_box.text_changed)
 #define CB_Type(w) 	     (((XmComboBoxWidget)(w))->combo_box.type)
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
-
 #endif /* _XmComboBoxP_H */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

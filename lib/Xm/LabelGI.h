@@ -27,16 +27,12 @@
 /* $XConsortium: LabelGI.h /main/5 1995/07/13 17:31:31 drk $ */
 #ifndef _XMLABELGI_H
 #define _XMLABELGI_H
-
 #include <Xm/LabelGP.h>
 #include <Xm/MenuT.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern int _XmLabelCacheCompare(
                         XtPointer A,
                         XtPointer B) ;
@@ -73,21 +69,15 @@ extern Boolean _XmLabelGCVTRedraw (Widget kid,
 				   Widget cur_parent,
 				   Widget new_parent,
 				   Mask visual_flag);
-
 extern void _XmRedisplayLabG (Widget      w,
 			      XEvent     *event,
 			      Region      region,
 			      LRectangle *background_box);
-
 extern void _XmLabelGCloneMenuSavvy(WidgetClass, XmMenuSavvyTrait);
-
 extern void _XmLabelSetBackgroundGC(XmLabelGadget lw);
 extern void _XmLabelGCalcTextRect(Widget wid);
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XMLABELGI_H */

@@ -22,21 +22,17 @@
 */
 #ifndef _XmRepTypeI_h
 #define _XmRepTypeI_h
-
 #include <Xm/RepType.h>
 #include "XmI.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* We need a name to refer to the original unit type converter.
    This name is used as a to_type when installing a duplicate of the
    unit type converter in RepType.c and it is used again as a to_type
    when calling XtConvertAndStore in ResConvert.c when implementing
    XmCvtStringToUnitType (call to the original converter) */
 #define REAL_UNIT_TYPE_NAME "RealUnitType"
-
 /*  The following enumerations of representation type identification
  *   numbers have a one-to-one positional mapping to the corresponding
  *   representation type record in the static rep type lists.
@@ -44,7 +40,6 @@ extern "C" {
  *   the coding of the XmRepTypeGetId routine. ('_' is the exception in
  *   this enum, the XmR names gives the order, really)
  */
-
 enum {
 	XmRID_ALIGNMENT,
 	XmRID_ANIMATION_STYLE,
@@ -161,24 +156,16 @@ enum {
 	XmRID_WHICH_BUTTON,
 	XmRID_PIXMAP_PLACEMENT
 	} ;
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmRepTypeInstallConverters( void ) ;
 extern Boolean _XmConvertActionParamToRepTypeId(Widget widget,
 						XmRepTypeId rep_type_id,
 						char *parameter,
 						Boolean can_be_numeric,
 						int *result) ;
-
 /********    End Private Function Declarations    ********/
-
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRepTypeI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

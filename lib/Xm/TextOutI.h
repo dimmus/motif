@@ -23,16 +23,11 @@
  */
 #ifndef _XmTextOutI_h
 #define _XmTextOutI_h
-
 #include <Xm/TextOutP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmTextFreeContextData(
                         Widget w,
                         XtPointer clientData,
@@ -83,12 +78,8 @@ extern void _XmTextChangeVOffset(
                         int length) ;
 extern void _XmTextToggleCursorGC(
                         Widget widget) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextOutI_h */

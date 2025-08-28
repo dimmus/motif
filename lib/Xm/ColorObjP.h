@@ -27,22 +27,16 @@
  */
 #ifndef _XmColorObjP_h
 #define _XmColorObjP_h
-
 #include <Xm/VendorSP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /** misc structures, defines, and functions for using ColorObj **/
-
 #define XmCO_MAX_NUM_COLORS	 8
 #define XmCO_NUM_COLORS		 XmCO_MAX_NUM_COLORS
 #define XmPIXEL_SET_PROP_VERSION '1'
-
 /* Constants for color usage */
 enum { XmCO_BLACK_WHITE, XmCO_LOW_COLOR, XmCO_MEDIUM_COLOR, XmCO_HIGH_COLOR };
-
 typedef struct {
     Pixel fg;
     Pixel bg;
@@ -50,9 +44,7 @@ typedef struct {
     Pixel bs;
     Pixel sc;
 } XmPixelSet;
-
 typedef XmPixelSet Colors[XmCO_NUM_COLORS];
-
 typedef struct _XmColorObjPart {
     XtArgsProc          RowColInitHook;
     XmPixelSet       	*myColors;     /* colors for my (application) screen */
@@ -72,14 +64,10 @@ typedef struct _XmColorObjPart {
     Boolean         	useColorObj;  /* read only resource variable */
     Boolean             useText;        /* use text color set id for text? */
     Boolean             useTextForList; /* use text color set id for lists? */
-
     Boolean		useMask;
     Boolean		useMultiColorIcons;
     Boolean		useIconFileCache;
-
 } XmColorObjPart;
-
-
 typedef struct _XmColorObjRec {
     CorePart 		core;
     CompositePart 	composite;
@@ -87,11 +75,9 @@ typedef struct _XmColorObjRec {
     WMShellPart		wm;
     XmColorObjPart	color_obj;
 } XmColorObjRec;
-
 typedef struct _XmColorObjClassPart {
     XtPointer        extension;
 } XmColorObjClassPart;
-
 /*
  * we make it a appShell subclass so it can have it's own instance
  * hierarchy
@@ -103,41 +89,26 @@ typedef struct _XmColorObjClassRec{
     WMShellClassPart   		wm_shell_class;
     XmColorObjClassPart		color_obj_class;
 } XmColorObjClassRec;
-
-
 externalref XmColorObjClassRec xmColorObjClassRec;
-
-
 #ifndef XmIsColorObj
 #define XmIsColorObj(w) (XtIsSubclass(w, xmColorObjClass))
 #endif /* XmIsXmDisplay */
-
 externalref WidgetClass  xmColorObjClass;
 typedef struct _XmColorObjClassRec *XmColorObjClass;
 typedef struct _XmColorObjRec      *XmColorObj;
-
-
 #define  XmCO_DitherTopShadow(display, screen, pixelSet) \
                         ((pixelSet)->bs == BlackPixel((display), (screen)))
-
 #define  XmCO_DitherBottomShadow(display, screen, pixelSet) \
                         ((pixelSet)->ts == WhitePixel((display), (screen)))
-
 #define  XmCO_DITHER     XmS50_foreground
 #define  XmCO_NO_DITHER  XmSunspecified_pixmap
-
-
 /********    Private Function Declarations    ********/
-
 extern Boolean XmeGetIconControlInfo(
                         Screen *screen,
                         Boolean *useMaskRtn,
                         Boolean *useMultiColorIconsRtn,
                         Boolean *useIconFileCacheRtn) ;
-
 extern Boolean XmeUseColorObj( void ) ;
-
-
 extern Boolean XmeGetColorObjData(
                    Screen * screen,
                    int *colorUse,
@@ -148,14 +119,12 @@ extern Boolean XmeGetColorObjData(
 		   short *primary_id,
 		   short *secondary_id,
 		   short *text_id) ;
-
 extern Boolean XmeGetDesktopColorCells (
                          Screen * screen,
 			 Colormap colormap,
 			 XColor * colors,
 			 int n_colors,
 			 int * ncolors_returns) ;
-
 extern Boolean XmeGetPixelData (
 			int screen_number,
 			int *colorUse,
@@ -164,12 +133,8 @@ extern Boolean XmeGetPixelData (
 			short *i,
 			short *p,
 			short *s) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmColorObjP_h */

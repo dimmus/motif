@@ -26,27 +26,18 @@
  */
 #ifndef	_XmContainer_h
 #define _XmContainer_h
-
 #include <Xm/Xm.h>
 #include <Xm/Manager.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-
 /* Class record constants */
 externalref	WidgetClass	xmContainerWidgetClass;
-
 typedef	struct	_XmContainerClassRec	*XmContainerWidgetClass;
 typedef struct  _XmContainerRec	*XmContainerWidget;
-
 #ifndef XmIsContainer
 #define XmIsContainer(w) XtIsSubclass(w, xmContainerWidgetClass)
 #endif /* XmIsContainer */
-
-
 /********    Public Function Declarations    ********/
 extern	Widget	XmCreateContainer(
 			Widget parent,
@@ -85,10 +76,8 @@ extern  Boolean XmContainerCopyLink(
 extern  Boolean XmContainerPasteLink(
                         Widget  wid);
 /********    End Public Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmContainer_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

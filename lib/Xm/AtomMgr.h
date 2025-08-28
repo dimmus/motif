@@ -22,30 +22,23 @@
 */
 #ifndef _XmAtomMgr_h
 #define _XmAtomMgr_h
-
 #include <Xm/Xm.h>
 #include <X11/Xresource.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* X11r5' XInternAtom equivalent */
 extern Atom XmInternAtom(
         		Display *display,
         		String name,
         		Boolean only_if_exists );
-
 /* X11r5's XGetAtomName equivalent */
 extern String XmGetAtomName( Display *display, Atom atom);
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 /* This macro name is confusing, and of unknown benefit.
  * #define XmNameToAtom(display, atom) \
  *      XmGetAtomName(display, atom)
  */
-
 #endif /* _XmAtomMgr_h */

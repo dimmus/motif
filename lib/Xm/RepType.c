@@ -25,11 +25,9 @@
 static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include "RepTypeI.h"
 #include "MessagesI.h"
 #include <Xm/XmosP.h>		/* for (indirectly) atoi() */
@@ -37,11 +35,9 @@ static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
 #include <string.h>
 #include <ctype.h>
 #include "XmI.h"
-
 #define MESSAGE0 _XmMMsgRepType_0000
 #define MESSAGE1 _XmMMsgRepType_0001
 #define MESSAGE2 _XmMMsgRepType_0002
-
 /* INSTRUCTIONS to add a statically-stored representation type:
  *    (For dynamically allocated/created representation types, see the
  *     man page for XmRepTypeRegister).
@@ -103,9 +99,7 @@ static char rcsid[] = "$TOG: RepType.c /main/17 1997/09/15 10:10:39 cshi $"
  *  have hardcoded strings in the reptype table where the XmR value would
  *  normally go.
  */
-
 /********    Static Function Declarations    ********/
-
 static String * CopyStringArray(
                         String *StrArray,
                         unsigned char NumEntries,
@@ -138,15 +132,10 @@ static Boolean ReverseConvertRepType(
                         XrmValue *from,
                         XrmValue *to,
                         XtPointer *converter_data) ;
-
 /********    End Static Function Declarations    ********/
-
-
-
 /*** For consistency with the enum and array declaration, keep these
   declarations sorted. Put the map array right after the string
   array if any. ***/
-
 static XmConst char *XmConst AlignmentNames[] =
 {   "alignment_beginning", "alignment_center", "alignment_end"
     } ;
@@ -208,7 +197,6 @@ static XmConst char *XmConst BlendModelNames[] =
 {   "blend_all", "blend_state_source", "blend_just_source", "blend_none"
     } ;
 #define ChildHorizontalAlignmentNames   AlignmentNames
-
 static XmConst char *XmConst ChildPlacementNames[] =
 {   "place_top", "place_above_selection", "place_below_selection"
     } ;
@@ -221,7 +209,6 @@ static XmConst char *XmConst ChildVerticalAlignmentNames[] =
     "alignment_widget_top", "alignment_widget_bottom",
     "alignment_child_top", "alignment_child_bottom"
     } ;
-
 static XmConst unsigned char ChildVerticalAlignmentMap[] =
 {   XmALIGNMENT_BASELINE_TOP, XmALIGNMENT_CENTER,
     XmALIGNMENT_BASELINE_BOTTOM,
@@ -254,12 +241,10 @@ static XmConst char *XmConst ContainerStartTransferActionParamNames[] =
 {
     "link", "move", "copy"
   } ;
-
 static XmConst char *XmConst DefaultButtonEmphasisNames[] =
 {
     "external_highlight", "internal_highlight"
 } ;
-
 static XmConst char *XmConst DefaultButtonTypeNames[] =
 {   "dialog_none", "dialog_cancel_button", "dialog_ok_button",
     "dialog_help_button"
@@ -271,7 +256,6 @@ static XmConst unsigned char DefaultButtonTypeMap[] =
 static XmConst char *XmConst DeleteResponseNames[] =
 {   "destroy", "unmap", "do_nothing"
     } ;
-
 static XmConst char *XmConst DialogStyleNames[] =
 {   "dialog_modeless", "dialog_work_area", "dialog_primary_application_modal",
     "dialog_application_modal", "dialog_full_application_modal",
@@ -282,7 +266,6 @@ static XmConst unsigned char DialogStyleMap[] =
     XmDIALOG_APPLICATION_MODAL, XmDIALOG_FULL_APPLICATION_MODAL,
     XmDIALOG_SYSTEM_MODAL
     } ;
-
 static XmConst char *XmConst DialogTypeNames[] =
 {   "dialog_template", "dialog_error", "dialog_information", "dialog_message",
     "dialog_question", "dialog_warning", "dialog_working"
@@ -319,17 +302,13 @@ static XmConst char *XmConst DropSiteTypeNames[] =
 static XmConst char *XmConst EditModeNames[] =
 {   "multi_line_edit", "single_line_edit"
     } ;
-
 static XmConst char *XmConst EnableBtn1Names[] =
 {   XtEfalse, XtEtrue, XtEoff, "button2_adjust", "button2_transfer" };
-
 static XmConst unsigned char EnableBtn1Map[] =
 {   XmOFF, XmBUTTON2_ADJUST, XmOFF, XmBUTTON2_ADJUST, XmBUTTON2_TRANSFER };
-
 static XmConst char *XmConst EnableWarpNames[] =
 {   "enable_warp_on",	"enable_warp_off",
     } ;
-
 static XmConst char *XmConst EntryViewTypeNames[] =
 {   "large_icon", "small_icon", "any_icon"
     } ;
@@ -382,7 +361,6 @@ static XmConst char *XmConst InputPolicyNames[] =
 static XmConst char *XmConst KeyboardFocusPolicyNames[] =
 {   "explicit", "pointer"
     } ;
-
 static XmConst char *XmConst LabelTypeNames[] =
 {   "pixmap", "string", "pixmap_and_string"
     } ;
@@ -569,7 +547,6 @@ static XmConst unsigned char ShowValueMap[] =
     XmNEAR_BORDER,
     0,0,0,0,0
     } ;
-
 static XmConst char *XmConst SliderMarkNames[] =
 {   "none", "etched_line", "thumb_mark", "round_mark"
     } ;
@@ -596,7 +573,6 @@ static XmConst char *XmConst SpinBoxChildTypeNames[] =
   "string",
   "numeric",
   };
-
 static XmConst unsigned char SpinBoxChildTypeMap[] =
   {
   (unsigned char) XmSTRING,
@@ -661,16 +637,11 @@ static XmConst char *XmConst PixmapPlacementNames[] =
 static XmConst unsigned char PixmapPlacementMap[] =
 {   XmPIXMAP_TOP, XmPIXMAP_BOTTOM, XmPIXMAP_LEFT, XmPIXMAP_RIGHT
     } ;
-
-
-
 /* Note that this array does not initialize rep_type_id fields,
  * for this field is useless.  It always matches the index of the
  * entry in the array.  We have to keep the field since the structure
  * is public.  For the API, rep_type_id is set on query.
  */
-
-
 static XmRepTypeEntryRec StandardRepTypes[] = {
   {
     XmRAlignment, (String*)AlignmentNames, NULL,
@@ -1156,14 +1127,9 @@ static XmRepTypeEntryRec StandardRepTypes[] = {
     XtNumber(PixmapPlacementNames), FALSE,
   }
 } ;
-
 static XmConst Cardinal StandardNumRecs = XtNumber( StandardRepTypes );
 static XmRepTypeEntryRec *DynamicRepTypes = NULL;
 static Cardinal DynamicRepTypeNumRecords = 0;
-
-
-
-
 static String *
 CopyStringArray(
 		String *StrArray,
@@ -1173,12 +1139,9 @@ CopyStringArray(
     unsigned int Index ;
     String * TmpStr ;
     int PrefixSize = 0 ;
-
     TmpStr = (String *) XtMalloc((NumEntries + 1) * sizeof(String));
     TmpStr[NumEntries] = NULL ;
-
     if (UppercaseFormat) PrefixSize = 2 ;
-
     Index = 0 ;
     while(Index < NumEntries)
       {
@@ -1186,13 +1149,11 @@ CopyStringArray(
 	 strcpy(TmpStr[Index] + PrefixSize, StrArray[Index]);
 	 Index ++ ;
       }
-
     if (UppercaseFormat) {
 	Index = 0 ;
 	while( Index < NumEntries)
 	    {
 		Cardinal i ;
-
 		TmpStr[Index][0] = 'X' ;
 		TmpStr[Index][1] = 'm' ;
 		i = 2 ;
@@ -1204,11 +1165,8 @@ CopyStringArray(
 		++Index ;
             }
     }
-
     return( TmpStr) ;
 }
-
-
 static void
 CopyRecord(
 	   XmRepTypeEntry OutputEntry,
@@ -1221,10 +1179,8 @@ CopyRecord(
 	   Boolean copy_in)
 {
     OutputEntry->rep_type_name = XtNewString(rep_type_name) ;
-
     OutputEntry->value_names = CopyStringArray(value_names, num_values,
 					       False);
-
     /* only when the record is copied out to the app we want to
        create a array of consecutive values */
     if (values || !copy_in)
@@ -1238,15 +1194,10 @@ CopyRecord(
 	Cardinal i ;
 	for (i=0; i<num_values;i++) OutputEntry->values[i] = i ;
     }
-
     OutputEntry->num_values = num_values ;
     OutputEntry->reverse_installed = reverse_installed ;
     OutputEntry->rep_type_id = rep_type_id ;
-
 }
-
-
-
 static Boolean
 ValuesConsecutiveStartingAtZero(
         unsigned char *values,
@@ -1261,8 +1212,6 @@ ValuesConsecutiveStartingAtZero(
         }
     return( TRUE) ;
 }
-
-
 static XmRepTypeEntry
 GetRepTypeRecord(
      XmRepTypeId rep_type_id)
@@ -1273,11 +1222,8 @@ GetRepTypeRecord(
     if (rep_type_id < DynamicRepTypeNumRecords + StandardNumRecs) {
 	return &DynamicRepTypes[rep_type_id - StandardNumRecs];
     }
-
     return (XmRepTypeEntry)NULL ;
 }
-
-
 XmRepTypeId
 XmRepTypeRegister(
         String rep_type_name,
@@ -1288,21 +1234,16 @@ XmRepTypeRegister(
     XmRepTypeEntry NewRecord ;
     XtConvertArgRec convertArg;
     XmRepTypeId reptype_id;
-
     if (!num_values || !rep_type_name || !value_names)
 	return( XmREP_TYPE_INVALID) ;
-
     _XmProcessLock();
     /** expand the dynamic table */
     DynamicRepTypes = (XmRepTypeList)
 	XtRealloc( (char *) DynamicRepTypes, (sizeof(XmRepTypeEntryRec)
 				* (DynamicRepTypeNumRecords + 1))) ;
-
    /** fill in the new record */
     NewRecord = &DynamicRepTypes[DynamicRepTypeNumRecords] ;
-
     /* the new reptype ID values are located after the standard ones */
-
     CopyRecord(NewRecord,
 	       rep_type_name, value_names,
 	       (ValuesConsecutiveStartingAtZero( values, num_values)) ?
@@ -1310,35 +1251,26 @@ XmRepTypeRegister(
 	       num_values, False,
 	       DynamicRepTypeNumRecords + StandardNumRecs,
 	       True);
-
-
     /** register the converter to Xt */
     convertArg.address_mode = XtImmediate;
     convertArg.address_id   = (XPointer)(long)NewRecord->rep_type_id;
     convertArg.size         = sizeof(convertArg.address_id);
-
     XtSetTypeConverter( XmRString, NewRecord->rep_type_name, ConvertRepType,
 		       &convertArg, 1, XtCacheNone, NULL) ;
-
-
     DynamicRepTypeNumRecords++ ;
     reptype_id  = NewRecord->rep_type_id;
     _XmProcessUnlock();
     /*XmRepTypeAddReverse(reptype_id);*/
     return reptype_id;
 }
-
 void
 XmRepTypeAddReverse(
      XmRepTypeId rep_type_id)
 {
-
     XtConvertArgRec convertArg;
     XmRepTypeEntry Record;
-
     _XmProcessLock();
     Record = GetRepTypeRecord( rep_type_id);
-
     if(    Record  &&  !Record->reverse_installed    )
       {
 	  convertArg.address_mode = XtImmediate;
@@ -1352,7 +1284,6 @@ XmRepTypeAddReverse(
     _XmProcessUnlock();
     return ;
 }
-
 Boolean
 XmRepTypeValidValue(
      XmRepTypeId rep_type_id,
@@ -1360,7 +1291,6 @@ XmRepTypeValidValue(
      Widget enable_default_warning)
 {
     XmRepTypeEntry Record;
-
     _XmProcessLock();
     Record = GetRepTypeRecord( rep_type_id);
     if (!Record) {
@@ -1392,99 +1322,74 @@ XmRepTypeValidValue(
 	    return FALSE;
 	}
     }
-
     _XmProcessUnlock();
     return FALSE ;
 }
-
-
-
 XmRepTypeList
 XmRepTypeGetRegistered( void )
 {
     unsigned int TotalEntries ;
     XmRepTypeList OutputList ;
     unsigned int Index ;
-
     /* Total up the data sizes of the static and run-time lists. */
-
     _XmProcessLock();
     TotalEntries = StandardNumRecs + DynamicRepTypeNumRecords ;
-
     OutputList = (XmRepTypeList)
 	XtMalloc((TotalEntries + 1)  * sizeof(XmRepTypeEntryRec)) ;
-
-
     for ( Index = 0; Index < StandardNumRecs; Index++ )
       {
 	  XmRepTypeEntry Record = (XmRepTypeEntry) &(StandardRepTypes[Index]);
-
 	  CopyRecord(&(OutputList[Index]),
 		     Record->rep_type_name, Record->value_names,
 		     Record->values, Record->num_values,
 		     Record->reverse_installed, Index,
 		     False) ;
       }
-
     for ( Index = 0; Index < DynamicRepTypeNumRecords; Index++ )
       {
 	  XmRepTypeEntry Record = &(DynamicRepTypes[Index]) ;
-
 	  CopyRecord(&(OutputList[StandardNumRecs + Index]),
 		     Record->rep_type_name, Record->value_names,
 		     Record->values, Record->num_values,
 		     Record->reverse_installed, Index + StandardNumRecs,
 		     False) ;
       }
-
     OutputList[TotalEntries].rep_type_name = NULL ;
-
     _XmProcessUnlock();
     return(OutputList) ;
 }
-
 XmRepTypeEntry
 XmRepTypeGetRecord(
         XmRepTypeId rep_type_id)
 {
     XmRepTypeEntry Record;
     XmRepTypeEntry OutputRecord ;
-
     _XmProcessLock();
     Record = GetRepTypeRecord( rep_type_id);
     if(    Record    )
       {
 	  OutputRecord = (XmRepTypeEntry)
 	      XtMalloc(sizeof( XmRepTypeEntryRec)) ;
-
 	  CopyRecord(OutputRecord,
 		     Record->rep_type_name, Record->value_names,
 		     Record->values, Record->num_values,
 		     Record->reverse_installed, rep_type_id,
 		     False) ;
-
 	  _XmProcessUnlock();
 	  return( OutputRecord) ;
       }
     _XmProcessUnlock();
     return( NULL) ;
 }
-
-
-
 XmRepTypeId
 XmRepTypeGetId(
         String rep_type_name)
 {
     Cardinal Index ;
-
-
     _XmProcessLock();
     /* First look in the statically defined lists */
-
     /* Just an ordered search, could do better, but this routine
        is probably not be worth it */
-
     for ( Index = 0; Index < StandardNumRecs ; Index++ ) {
 	int compare_name = strcmp(rep_type_name,
 				  StandardRepTypes[Index].rep_type_name ) ;
@@ -1493,25 +1398,19 @@ XmRepTypeGetId(
 		return  Index;
 	}
 	else if (compare_name < 0) break ;
-
      }
-
-
     /* Not in the static list; look in the run-time list. */
     /* This one is not ordered: have to go thru */
     for ( Index = 0; Index < DynamicRepTypeNumRecords; Index++ ) {
-
 	  if( !strcmp( rep_type_name,
 		      DynamicRepTypes[Index].rep_type_name )) {
 	    _XmProcessUnlock();
 	    return Index + StandardNumRecs ;
 	  }
       }
-
     _XmProcessUnlock();
     return( XmREP_TYPE_INVALID) ;
 }
-
 String *
 XmRepTypeGetNameList(
         XmRepTypeId rep_type_id,
@@ -1519,7 +1418,6 @@ XmRepTypeGetNameList(
 {
     XmRepTypeEntry Record;
     String *name_list = NULL;
-
     _XmProcessLock();
     Record = GetRepTypeRecord( rep_type_id);
     if(Record) {
@@ -1529,9 +1427,6 @@ XmRepTypeGetNameList(
     _XmProcessUnlock();
     return name_list;
 }
-
-
-
 static Boolean
 ConvertRepType(
         Display *disp,
@@ -1546,45 +1441,34 @@ ConvertRepType(
     XmRepTypeId RepTypeID = (XmRepTypeId)(long)argvalue;
     XmRepTypeEntry Record;
     Cardinal Index = 0 ;
-
     _XmProcessLock();
     Record = GetRepTypeRecord( RepTypeID);
     while(Index < Record->num_values) {
-
 	if(XmeNamesAreEqual( in_str, Record->value_names[Index])) {
-
 	    if ((RepTypeID == XmRID_EDIT_MODE) ||
 		(RepTypeID == XmRID_WHICH_BUTTON) ||
 		(RepTypeID == XmRID_FONT_TYPE))
 	      {
 		/* special case for int sized fields */
-
 		int conversion_buffer ;
 		conversion_buffer = (int)
 		    ((Record->values) ? Record->values[Index] : Index) ;
-
 		_XmProcessUnlock();
 		_XM_CONVERTER_DONE (to, int, conversion_buffer, ;)
-
 	     } else {
-
 		unsigned char conversion_buffer  ;
 		conversion_buffer = (unsigned char)
 		    ((Record->values) ? Record->values[Index] : Index) ;
-
 		_XmProcessUnlock();
 		_XM_CONVERTER_DONE (to, unsigned char, conversion_buffer, ;)
 	     }
 	}
 	++Index ;
     }
-
     _XmProcessUnlock();
      XtDisplayStringConversionWarning( disp, in_str, Record->rep_type_name);
-
     return( FALSE) ;
 }
-
 static Boolean
 ReverseConvertRepType(
         Display *disp,
@@ -1602,14 +1486,11 @@ ReverseConvertRepType(
     char **OutValue = NULL ;
     String in_str ;
     String reverse_message = MESSAGE0 ;
-
     _XmProcessLock();
     Record = GetRepTypeRecord( RepTypeID);
     NumValues = Record->num_values;
-
     if(Record->values)  {   /* mapped type */
 	  unsigned short Index = 0 ;
-
 	  while(Index < NumValues    )  {
 		if(in_value == Record->values[Index]    )
 		  {
@@ -1624,8 +1505,6 @@ ReverseConvertRepType(
 		OutValue = (char **) &Record->value_names[in_value] ;
             }
       }
-
-
     _XmProcessUnlock();
 #if 0
     if (OutValue)  _XM_CONVERTER_DONE (to, String, *OutValue, ;)
@@ -1652,23 +1531,17 @@ ReverseConvertRepType(
 	return(True);
     }
 #endif
-
-
 	/** generate a message and display it */
     in_str = (char *) XtMalloc (strlen(reverse_message) + 10) ;
     sprintf(in_str, "%s %d", reverse_message, in_value);
-
     XtDisplayStringConversionWarning( disp, in_str, Record->rep_type_name) ;
-
     return( FALSE) ;
 }
-
 void
 _XmRepTypeInstallConverters( void )
 {
     unsigned short Index = XmRID_UNIT_TYPE ;
     XtConvertArgRec convertArg;
-
     /* in order to be able to implement the XmCvtStringToUnitType
        converter as using the native code in RepType, we must
        have a different unit type converter name to refer to from
@@ -1680,19 +1553,15 @@ _XmRepTypeInstallConverters( void )
 		       REAL_UNIT_TYPE_NAME,
 		       ConvertRepType, &convertArg, 1,
 		       XtCacheNone, NULL) ;
-
     /* Install the static consecutive-valued converters. */
     for ( Index = 0; Index < StandardNumRecs; Index ++ ) {
-
       /* Special case the record used for the action param, where
 	 we don't need to install the converter. For these, we
 	 have used the reverse_installed field set to True to
 	 notify this routine not to install them */
       if (StandardRepTypes[Index].reverse_installed) continue ;
-
       /* only update the index data, the other field are already good */
       convertArg.address_id = (XPointer)(long)Index;
-
       XtSetTypeConverter(XmRString,
 			 StandardRepTypes[Index].rep_type_name,
 			 ConvertRepType, &convertArg, 1,
@@ -1700,13 +1569,11 @@ _XmRepTypeInstallConverters( void )
      XmRepTypeAddReverse(Index);
     }
 }
-
 void
 XmRepTypeInstallTearOffModelConverter( void )
 {
   /* Obsolete,  we now do this by default */
 }
-
 /*
  * Given a rep_type_id and a string parameter, this function tries to
  * find the reptype value for that string. The resulting reptype value is
@@ -1723,7 +1590,6 @@ XmRepTypeInstallTearOffModelConverter( void )
  * widget parameter is used by various warning message functions so any
  * widget may be passed.
  */
-
 Boolean
 _XmConvertActionParamToRepTypeId(Widget widget, XmRepTypeId rep_type_id,
 				 char *parameter, Boolean can_be_numeric,
@@ -1732,7 +1598,6 @@ _XmConvertActionParamToRepTypeId(Widget widget, XmRepTypeId rep_type_id,
     int value, i;
     XtPointer aligned_value;
     XrmValue args, from, to;
-
     /* If the parameter can be numeric (for backward compatibility) then
        try to convert the parameter to a number */
     if (can_be_numeric)
@@ -1754,7 +1619,6 @@ _XmConvertActionParamToRepTypeId(Widget widget, XmRepTypeId rep_type_id,
 	    return(False);
 	}
     }
-
     /* If we made it this far, then the parameter can't be numeric or can
        be numeric but we were unable to parse it as such. Try to convert
        the parameter via the rep type converters. */
@@ -1765,38 +1629,29 @@ _XmConvertActionParamToRepTypeId(Widget widget, XmRepTypeId rep_type_id,
     from.addr = parameter;
     to.size = sizeof(unsigned char);
     to.addr = (XPointer) &value;
-
     if (ConvertRepType(XtDisplay(widget), &args, NULL, &from, &to, NULL))
     {
 	/* We converted okay. Set up result and return True. */
 	*result = *((unsigned char *)(to.addr));
 	return(True);
     }
-
     /* All conversions failed. Just return False. */
     return(False);
 }
-
-
 #ifdef DEBUG
 void _XmCheckStandardNumRecs() {
     Cardinal Index ;
     XmRepTypeEntry Record, PrevRecord = NULL ;
-
     for ( Index = 0; Index < StandardNumRecs; Index++ )
       {
 	  Record = &(StandardRepTypes[Index]) ;
-
 	  printf("Record[%d]: %s", Index, Record->rep_type_name) ;
 	  if (PrevRecord)
 	      if (strcmp(Record->rep_type_name,
 			 PrevRecord->rep_type_name) <= 0)
 		  printf(" ** UNSORTED ENTRY **");
 	  printf("\n");
-
 	  PrevRecord = Record ;
-
       }
 }
-
 #endif

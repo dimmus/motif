@@ -25,28 +25,21 @@
 /*
  * HISTORY
  */
-
 /*
 ** This file contains the _Xm routines replaced by Xme functions
 ** in 2.0. We do not want to mix them with other _Xm in Obso2_0.c
 ** since there is a higher probability that these have been used
 ** by programs (that's why they are Xme now)
 */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
-
 #define NO_XM_1_2_BC
-
 #include <Xm/DrawP.h>
 #include <Xm/XmP.h>
 #include <Xm/XmosP.h>
 #include "RegionI.h"
 #include <Xm/DropSMgr.h>
-
 /****************************_XmDrawShadows****************************/
 void _XmDrawShadows(Display *display, Drawable d,
 		    GC top_gc, GC bottom_gc,
@@ -57,8 +50,6 @@ void _XmDrawShadows(Display *display, Drawable d,
     XmeDrawShadows(display, d, top_gc, bottom_gc, x, y, width, height,
 		   shad_thick, shad_type);
 }
-
-
 /*****************************_XmClearBorder*********************************/
 void _XmClearBorder (Display *display, Window w,
                      Position x, Position y,
@@ -67,7 +58,6 @@ void _XmClearBorder (Display *display, Window w,
 {
     XmeClearBorder (display, w, x, y, width, height, shadow_thick);
 }
-
 /******************************_XmDrawSeparator**********************/
 void _XmDrawSeparator(Display *display, Drawable d,
 		      GC top_gc, GC bottom_gc, GC separator_gc,
@@ -81,8 +71,6 @@ void _XmDrawSeparator(Display *display, Drawable d,
 		     x, y, width, height, shadow_thick, margin,
 		     orientation, separator_type);
 }
-
-
 /***********************_XmDrawDiamond**********************************/
 void _XmDrawDiamond(Display *display, Drawable d,
                     GC top_gc, GC bottom_gc, GC center_gc,
@@ -93,10 +81,7 @@ void _XmDrawDiamond(Display *display, Drawable d,
     XmeDrawDiamond (display, d, top_gc, bottom_gc, center_gc,
 		    x, y, width, height, shadow_thick, fill);
 }
-
-
 /****************************_XmDrawSimpleHighlight************************/
-
 void _XmDrawSimpleHighlight(Display *display, Drawable d,
 		      GC gc,
 		      Position x, Position y,
@@ -106,7 +91,6 @@ void _XmDrawSimpleHighlight(Display *display, Drawable d,
     XmeDrawHighlight(display, d, gc, x, y, width, height,
 		     highlight_thickness);
 }
-
 /****************************_XmDrawArrow**********************************/
 void _XmDrawArrow(Display *display, Drawable d,
                   GC top_gc, GC bot_gc, GC cent_gc,
@@ -117,11 +101,7 @@ void _XmDrawArrow(Display *display, Drawable d,
     XmeDrawArrow(display, d, top_gc, bot_gc, cent_gc,
 		 x, y, width, height, shadow_thick, direction);
 }
-
-
-
 /**********************************************************************/
-
 void
 _XmFromHorizontalPixels(
         Widget widget,
@@ -130,9 +110,7 @@ _XmFromHorizontalPixels(
 {
     XmeFromHorizontalPixels(widget, offset, value);
 }
-
 /**********************************************************************/
-
 void
 _XmFromVerticalPixels(
         Widget widget,
@@ -141,9 +119,7 @@ _XmFromVerticalPixels(
 {
     XmeFromVerticalPixels(widget, offset, value);
 }
-
 /**********************************************************************/
-
 XmImportOperator
 _XmToHorizontalPixels(
         Widget widget,
@@ -152,9 +128,7 @@ _XmToHorizontalPixels(
 {
     return XmeToHorizontalPixels( widget, offset, value );
 }
-
 /********************************************************************/
-
 XmImportOperator
 _XmToVerticalPixels(
         Widget widget,
@@ -163,18 +137,14 @@ _XmToVerticalPixels(
 {
     return XmeToVerticalPixels( widget, offset, value );
 }
-
 /********************************************************************/
-
 void
 _XmNavigChangeManaged(
         Widget wid )
 {
     XmeNavigChangeManaged(wid);
 }
-
 /********************************************************************/
-
 void
 _XmRedisplayGadgets(
         Widget w,
@@ -183,19 +153,14 @@ _XmRedisplayGadgets(
 {
     XmeRedisplayGadgets( w, event, region );
 }
-
 /********************************************************************/
-
 Widget
 _XmGetTextualDragIcon(
         Widget w )
 {
     return XmeGetTextualDragIcon(w);
 }
-
-
 /********************************************************************/
-
 void
 _XmVirtualToActualKeysym(
         Display *dpy,
@@ -205,11 +170,9 @@ _XmVirtualToActualKeysym(
 {
   int num_keys;
   XmKeyBinding keys;
-
   /* Initialize the return parameters. */
   *actualKeysymRtn = NoSymbol;
   *modifiersRtn = 0;
-
   /* Arbitrarily return the first keysym in the list. */
   num_keys = XmeVirtualToActualKeysyms(dpy, virtKeysym, &keys);
   if (num_keys > 0)
@@ -219,18 +182,14 @@ _XmVirtualToActualKeysym(
     }
   XtFree((char*) keys);
 }
-
 /********************************************************************/
-
 Cursor
 _XmGetNullCursor(
         Widget w )
 {
     return XmeGetNullCursor(w);
 }
-
 /********************************************************************/
-
 void
 _XmWarning(
         Widget w,
@@ -238,10 +197,7 @@ _XmWarning(
 {
     XmeWarning( w, message );
 }
-
-
 /********************************************************************/
-
 XmFontList
 _XmGetDefaultFontList(
         Widget w,
@@ -249,9 +205,7 @@ _XmGetDefaultFontList(
 {
     return XmeGetDefaultRenderTable( w, fontListType );
 }
-
 /********************************************************************/
-
 Boolean
 _XmFontListGetDefaultFont(
         XmFontList fontlist,
@@ -259,9 +213,7 @@ _XmFontListGetDefaultFont(
 {
     return XmeRenderTableGetDefaultFont(fontlist, font_struct);
 }
-
 /********************************************************************/
-
 XtGeometryResult
 _XmGMReplyToQueryGeometry(Widget widget,
 			  XtWidgetGeometry * intended,
@@ -269,9 +221,7 @@ _XmGMReplyToQueryGeometry(Widget widget,
 {
     return XmeReplyToQueryGeometry(widget, intended, desired);
 }
-
 /********************************************************************/
-
 Boolean
 _XmStringsAreEqual(
         register char *in_str,
@@ -279,9 +229,7 @@ _XmStringsAreEqual(
 {
     return XmeNamesAreEqual( in_str, test_str );
 }
-
 /********************************************************************/
-
 void
 _XmGetMaxCursorSize(
         Widget w,
@@ -290,18 +238,14 @@ _XmGetMaxCursorSize(
 {
     XmeQueryBestCursorSize(w, width, height);
 }
-
 /********************************************************************/
-
 Boolean
 _XmStringIsXmString(
         XmString string )
 {
     return XmeStringIsValid(string);
 }
-
 /********************************************************************/
-
 XmGadget
 _XmInputInGadget(
         Widget wid,
@@ -310,9 +254,7 @@ _XmInputInGadget(
 {
     return (XmGadget) XmObjectAtPoint( wid, x, y );
 }
-
 /********************************************************************/
-
 XmString
 _XmOSGetLocalizedString(
         char *reserved,
@@ -322,27 +264,20 @@ _XmOSGetLocalizedString(
 {
     return XmeGetLocalizedString( reserved, widget, resource, string);
 }
-
 /********************************************************************/
-
 int
 _XmMicroSleep(
         long    usecs)
 {
     return XmeMicroSleep( usecs );
 }
-
 /********************************************************************/
-
 String
 _XmOSGetHomeDirName()
 {
     return XmeGetHomeDirName();
 }
-
-
 /********************************************************************/
-
 void
 _XmStringUpdateWMShellTitle(
 	XmString xmstr,
@@ -350,7 +285,6 @@ _XmStringUpdateWMShellTitle(
 {
     XmeSetWMShellTitle(xmstr, shell);
 }
-
 /************************************************************************
  *
  *  _XmResizeObject
@@ -373,10 +307,6 @@ _XmResizeObject(
 			   width, height, 0);
     XmDropSiteEndUpdate(wid);
 }
-
-
-
-
 /************************************************************************
  *
  *  _XmMoveObject
@@ -390,7 +320,6 @@ _XmMoveObject(
         Position y )
 {
     RectObj g = (RectObj) wid ;
-
     XmDropSiteStartUpdate(wid);
     if (XtIsWidget (g))
 	XtMoveWidget ((Widget) g, x, y);
@@ -399,8 +328,6 @@ _XmMoveObject(
 			   g->rectangle.width, g->rectangle.height, 0);
     XmDropSiteEndUpdate(wid);
 }
-
-
 /************************************************************************
  *
  *  _XmConfigureObject

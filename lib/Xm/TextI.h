@@ -27,15 +27,11 @@
 /* $XConsortium: TextI.h /main/6 1996/05/29 13:45:16 pascale $ */
 #ifndef _XmTextI_h
 #define _XmTextI_h
-
 #include <Xm/TextP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern XmTextPosition _XmTextFindScroll(XmTextWidget widget,
 					XmTextPosition start,
 					int delta);
@@ -79,7 +75,6 @@ extern void _XmTextSetCursorPosition(Widget widget,
 extern void _XmTextDisableRedisplay(XmTextWidget widget,
                                     Boolean losesbackingstore);
 extern void _XmTextEnableRedisplay(XmTextWidget widget);
-
 extern void _XmTextSetHighlight(Widget, XmTextPosition,
                                 XmTextPosition, XmHighlightMode);
 extern void _XmTextShowPosition(Widget, XmTextPosition);
@@ -98,14 +93,10 @@ extern void _XmTextReplace(Widget widget,
 extern void _XmTextValidate(XmTextPosition *start,
 		            XmTextPosition *end,
 		            int maxsize);
-
 extern XmTextPosition _XmTextSetPreeditPosition(Widget w,
                                                 XmTextPosition cursor_position);
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextI_h */

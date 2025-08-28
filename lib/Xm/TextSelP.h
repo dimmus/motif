@@ -22,17 +22,12 @@
 */
 #ifndef _XmTextSelP_h
 #define _XmTextSelP_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextSelP_h */
 /* DON't ADD STUFF AFTER THIS #endif */

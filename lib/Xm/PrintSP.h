@@ -22,27 +22,21 @@
  */
 #ifndef _XmPrintShellP_h
 #define _XmPrintShellP_h
-
 #include <Xm/XmP.h>
 #include <X11/ShellP.h>
 #include <Xm/Print.h>
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*
  * we make it a appShell subclass so it can have it's own instance
  * hierarchy
  */
-
 typedef struct {
     XmSyntheticResource * syn_resources;
     int                   num_syn_resources;
     XtPointer             extension;
 } XmPrintShellClassPart;
-
 typedef struct _XmPrintShellClassRec{
     CoreClassPart      		core_class;
     CompositeClassPart 		composite_class;
@@ -53,8 +47,6 @@ typedef struct _XmPrintShellClassRec{
     ApplicationShellClassPart 	application_shell_class;
     XmPrintShellClassPart	print_shell_class;
 } XmPrintShellClassRec;
-
-
 typedef struct {
     Boolean          xp_connected ;
     Boolean          last_page ;
@@ -66,8 +58,6 @@ typedef struct {
     XtCallbackList   page_setup_callback;
     XtCallbackList   pdm_notification_callback ;
 } XmPrintShellPart, *XmPrintShellPartPtr;
-
-
 typedef struct _XmPrintShellRec{
     CorePart 		core;
     CompositePart 	composite;
@@ -78,12 +68,9 @@ typedef struct _XmPrintShellRec{
     ApplicationShellPart application;
     XmPrintShellPart	 print;
 } XmPrintShellRec;
-
 externalref XmPrintShellClassRec 	xmPrintShellClassRec;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPrintShellP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

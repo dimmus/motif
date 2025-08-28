@@ -25,16 +25,12 @@
 static char rcsid[] = "$TOG: DragC.c /main/29 1997/10/07 12:19:52 cshi $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifndef DEFAULT_WM_TIMEOUT
 #define DEFAULT_WM_TIMEOUT 5000
 #endif
-
 #include <X11/Xatom.h>
 #include <X11/cursorfont.h>
 #include <Xm/AtomMgr.h>
@@ -54,25 +50,20 @@ static char rcsid[] = "$TOG: DragC.c /main/29 1997/10/07 12:19:52 cshi $"
 #include "MessagesI.h"
 #include "TraversalI.h"
 #include "VendorSI.h"
-
 #include <stdio.h>
 #include <stdlib.h>
-
 #ifdef DEBUG
 #define Warning(str)	XmeWarning(NULL, str)
 #else
 #define Warning(str)	/*EMPTY*/
 #endif
-
 #define BIGSIZE ((Dimension)32767)
-
 #define MESSAGE1 _XmMMsgDragC_0001
 #define MESSAGE2 _XmMMsgDragC_0002
 #define MESSAGE3 _XmMMsgDragC_0003
 #define MESSAGE4 _XmMMsgDragC_0004
 #define MESSAGE5 _XmMMsgDragC_0005
 #define MESSAGE6 _XmMMsgDragC_0006
-
 typedef struct _MotionEntryRec{
     int		type;
     Time	time;
@@ -81,19 +72,14 @@ typedef struct _MotionEntryRec{
     Position	x, y;
     unsigned int state;
 } MotionEntryRec, *MotionEntry;
-
 #define STACKMOTIONBUFFERSIZE 	120
-
 typedef struct _MotionBufferRec{
     XmDragReceiverInfo currReceiverInfo;
     Cardinal		count;
     MotionEntryRec      entries[STACKMOTIONBUFFERSIZE];
 } MotionBufferRec, *MotionBuffer;
-
 #define MOTIONFILTER		16
-
 /********    Static Function Declarations    ********/
-
 static void GetRefForeground(
                         Widget widget,
                         int offset,
@@ -297,10 +283,7 @@ static void noMoreShell (
                         Widget w,
                         XtPointer client,
                         XtPointer call) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static XtActionsRec	dragContextActions[] =
 {
     {"FinishDrag"	, FinishDrag	},
@@ -310,7 +293,6 @@ static XtActionsRec	dragContextActions[] =
     {"DragKey"		, DragKey	},
     {"IgnoreButtons"	, IgnoreButtons	},
 };
-
 static const unsigned char protocolMatrix[8][7] = {
     /*
      *
@@ -327,7 +309,6 @@ static const unsigned char protocolMatrix[8][7] = {
      *      PR    | NO | DO | P  | P  | D  | D  | X  |
      *      X     | NO | X  | X  | X  | X  | X  | X  |
      */
-
     { /* Initiator == XmDRAG_NONE ==   0 */
 	XmDRAG_NONE,        XmDRAG_NONE,        XmDRAG_NONE,
 	XmDRAG_NONE,        XmDRAG_NONE,        XmDRAG_NONE,
@@ -369,15 +350,12 @@ static const unsigned char protocolMatrix[8][7] = {
 	 XmDRAG_XDND
     },
 };
-
 /***************************************************************************
  *
  * Default values for resource lists
  *
  ***************************************************************************/
-
 #define Offset(x)	(XtOffsetOf(XmDragContextRec, x))
-
 static XtResource dragContextResources[] =
 {
     {
@@ -530,9 +508,6 @@ static XtResource dragContextResources[] =
         XmRImmediate, (XtPointer)None,
     },
 };
-
-
-
 externaldef(xmdragcontextclassrec)
 XmDragContextClassRec xmDragContextClassRec = {
     {
@@ -575,10 +550,8 @@ XmDragContextClassRec xmDragContextClassRec = {
 	NULL,				/* extension record	*/
     },
 };
-
 externaldef(dragContextclass) WidgetClass
       xmDragContextClass = (WidgetClass) &xmDragContextClassRec;
-
 static void
 GetRefForeground(
         Widget widget,
@@ -586,15 +559,11 @@ GetRefForeground(
         XrmValue *value )
 {
     static Pixel	pixel;
-
     XmDragContext	dc = (XmDragContext)widget;
     Widget		sw = dc->drag.sourceWidget;
-
     pixel = BlackPixelOfScreen(XtScreen(widget));
-
     value->addr = (XPointer)(&pixel);
     value->size = sizeof(Pixel);
-
     if (sw) {
 	if (XmIsGadget(sw))
 	  pixel = ((XmManagerWidget)(XtParent(sw)))->manager.foreground;
@@ -604,8 +573,6 @@ GetRefForeground(
 	  pixel = ((XmManagerWidget)sw)->manager.foreground;
     }
 } /* GetRefForeground */
-
-
 static void
 CopyRefForeground(
         Widget widget,
@@ -613,12 +580,9 @@ CopyRefForeground(
         XrmValue *value )
 {
     XmDragContext	dc = (XmDragContext)widget;
-
     value->addr = (XPointer)(&dc->drag.cursorForeground);
     value->size = sizeof(Pixel);
 } /* CopyRefForeground */
-
-
 static void
 GetRefBackground(
         Widget widget,
@@ -626,15 +590,11 @@ GetRefBackground(
         XrmValue *value )
 {
     static Pixel	pixel;
-
     XmDragContext	dc = (XmDragContext)widget;
     Widget		sw = dc->drag.sourceWidget;
-
     pixel = WhitePixelOfScreen(XtScreen(dc));
-
     value->addr = (XPointer)(&pixel);
     value->size = sizeof(Pixel);
-
     if (sw) {
 	if (XmIsGadget(sw))
 	  pixel = ((XmManagerWidget)(XtParent(sw)))->core.background_pixel;
@@ -642,8 +602,6 @@ GetRefBackground(
 	  pixel = sw->core.background_pixel;
     }
 } /* GetRefBackground */
-
-
 static void
 DragContextInitialize(
         Widget req,
@@ -652,23 +610,17 @@ DragContextInitialize(
         Cardinal *numArgs )
 {
     XmDragContext	dc = (XmDragContext)new_w;
-
     dc->drag.roundOffTime = 50;
-
     dc->drag.dragFinishTime =
       dc->drag.dropFinishTime = 0;
-
     dc->drag.inDropSite = False;
     dc->drag.dragTimerId = (XtIntervalId) NULL;
     dc->drag.activeBlendModel = dc->drag.blendModel;
     dc->drag.trackingMode = XmDRAG_TRACK_MOTION ;
     dc->drag.curDragOver = dc->drag.origDragOver = NULL;
     dc->drag.startX = dc->drag.startY = 0;
-
     dc->drag.SaveEventMask = 0L;
-
     InitDropSiteManager(dc);
-
     if (dc->drag.exportTargets) {
 	unsigned int 	size;
 	size = sizeof(Atom) * dc->drag.numExportTargets;
@@ -679,24 +631,19 @@ DragContextInitialize(
       dc->core.y = 0;
     dc->core.width =
       dc->core.height = 16;
-
     /* pixel values in drag context refer to the source widget's colormap */
     if (dc->drag.sourceWidget)  {
 	Widget sw = dc->drag.sourceWidget;
 	dc->core.colormap = XmIsGadget(sw) ?
 	    XtParent(sw)->core.colormap : sw->core.colormap;
     }
-
    XtRealizeWidget((Widget)dc);
-
     dc->drag.currReceiverInfo =
       dc->drag.receiverInfos = NULL;
     dc->drag.numReceiverInfos =
       dc->drag.maxReceiverInfos = 0;
-
     dc->drag.dragDropCancelEffect = False;
 }
-
 static Boolean
 DragContextSetValues(
         Widget old,
@@ -708,7 +655,6 @@ DragContextSetValues(
     XmDragContext	oldDC = (XmDragContext)old;
     XmDragContext	newDC = (XmDragContext)new_w;
     XmDragOverShellWidget dos = newDC->drag.curDragOver;
-
     if (oldDC->drag.exportTargets != newDC->drag.exportTargets) {
 	if (oldDC->drag.exportTargets) /* should have been freed */
 	  XtFree( (char *)oldDC->drag.exportTargets);
@@ -734,7 +680,6 @@ DragContextSetValues(
     }
     return False;
 }
-
 static void
 DragContextDestroy(
         Widget w )
@@ -742,7 +687,6 @@ DragContextDestroy(
   XmDropFinishCallbackStruct cb;
   XmDragContext	dc = (XmDragContext)w;
   Cardinal		i;
-
    /* Make sure we send XdndFinished back to the source */
    if (dc->drag.sourceIsExternal && dc->drag.activeProtocolStyle == XmDRAG_XDND) {
       cb.reason           = XmCR_DROP_FINISH;
@@ -754,57 +698,46 @@ DragContextDestroy(
       cb.completionStatus = dc->drag.dragDropCompletionStatus;
       ExternalNotifyHandler(w, (XtPointer)dc, &cb);
    }
-
   /* Fix CR 5556:  Restore root event mask saved at DragStart time */
    if (0 != dc->drag.SaveEventMask)
       XSelectInput(XtDisplay(dc), dc->drag.currWmRoot, dc->drag.SaveEventMask);
-
   if (dc->drag.exportTargets)
     XtFree((char *)dc->drag.exportTargets);
-
   dc->drag.exportTargets = NULL;
-
   if (dc->drag.dragTimerId)
     {
       XtRemoveTimeOut(dc->drag.dragTimerId);
       dc->drag.dragTimerId = (XtIntervalId) NULL;
     }
-
   if (dc->drag.receiverInfos)
     {
       if (dc->drag.trackingMode != XmDRAG_TRACK_MOTION)
 	{
 	  EventMask mask;
 	  XmDragReceiverInfo info;
-
 	  for (i = 1; i < dc->drag.numReceiverInfos; i++)
 	    {
 	      info = &(dc->drag.receiverInfos[i]);
-
 	      if (info->shell)
 		mask = XtBuildEventMask(info->shell);
 	      else
 		mask = 0;
-
 	      XSelectInput(XtDisplay(w), info->window, mask);
 	    }
 	}
       XtFree((char *)dc->drag.receiverInfos);
     }
 }
-
 static void
 DragContextClassInitialize( void )
 {
   /* The applications should call XtRegisterGrabAction. */
 }
-
 static void
 DragContextClassPartInitialize( WidgetClass wc )
 {
   _XmFastSubclassInit (wc, XmDRAG_CONTEXT_BIT);
 }
-
 static Window
 GetClientWindow(
         Display *dpy,
@@ -820,12 +753,10 @@ GetClientWindow(
     unsigned long 	nitems, after;
     unsigned char 	*data = NULL;
     Window 		inf = 0;
-
     XGetWindowProperty(dpy, win, atom, 0, 0, False, AnyPropertyType,
 		       &type, &format, &nitems, &after, &data);
     if (data)
 	XFree(data);
-
     if (type)
       return win;
     else {
@@ -842,7 +773,6 @@ GetClientWindow(
     }
     return 0;
 }
-
 static void
 ValidateDragOver(
         XmDragContext dc,
@@ -852,9 +782,7 @@ ValidateDragOver(
   Arg		args[1];
   XmDisplay	xmDisplay = (XmDisplay)XtParent(dc);
   unsigned char initiator;
-
   initiator = xmDisplay->display.dragInitiatorProtocolStyle;
-
   if (newStyle != oldStyle)
     {
       /*
@@ -872,8 +800,6 @@ ValidateDragOver(
 	}
     }
 }
-
-
 static XmDragReceiverInfo
 FindReceiverInfo(
         XmDragContext dc,
@@ -881,7 +807,6 @@ FindReceiverInfo(
 {
     Cardinal	i;
     XmDragReceiverInfo info = NULL;
-
     for (i = 0; i < dc->drag.numReceiverInfos; i++) {
 	info = &dc->drag.receiverInfos[i];
 	if ((info->frame == win) || (info->window == win))
@@ -892,13 +817,11 @@ FindReceiverInfo(
     else
       return NULL;
 }
-
 XmDragReceiverInfo
 _XmAllocReceiverInfo(
         XmDragContext dc )
 {
     Cardinal	offset = 0;
-
     if (dc->drag.currReceiverInfo) {
 	offset = (Cardinal) (dc->drag.currReceiverInfo -
 			     dc->drag.receiverInfos);
@@ -915,7 +838,6 @@ _XmAllocReceiverInfo(
     dc->drag.rootReceiverInfo = dc->drag.receiverInfos;
     return &(dc->drag.receiverInfos[dc->drag.numReceiverInfos++]);
 }
-
 /* Find a window with WM_STATE, else return win itself, as per ICCCM */
 static void
 GetDestinationInfo(
@@ -928,17 +850,13 @@ GetDestinationInfo(
     Atom 		WM_STATE;
     unsigned char 	oldStyle = dc->drag.activeProtocolStyle;
     XmDragReceiverInfo 	currReceiverInfo;
-
     if (dc->core.being_destroyed)
 	return;
-
     dpy      = XtDisplayOfObject((Widget)dc);
     WM_STATE = XInternAtom(dpy, XmSWM_STATE, True);
     dc->drag.crossingTime = dc->drag.lastChangeTime;
-
     currReceiverInfo =
       dc->drag.currReceiverInfo = FindReceiverInfo(dc, win);
-
     /*
      * check for bootstrap case
      */
@@ -954,10 +872,8 @@ GetDestinationInfo(
 	 */
         rel_x = dc->drag.startX - dc->drag.srcShell->core.x;
         rel_y = dc->drag.startY - dc->drag.srcShell->core.y;
-
         if (rel_x < 0) rel_x = 0;
 	if (rel_y < 0) rel_y = 0;
-
 	(void) XTranslateCoordinates(XtDisplayOfObject((Widget) dc),
 				     win, currRoot,
 				     rel_x, rel_y,
@@ -966,7 +882,6 @@ GetDestinationInfo(
 	if (currReceiverInfo)
 	  currReceiverInfo->frame = win;
     }
-
     if (currReceiverInfo == NULL) {
 	if (clientWin == win) {
 	    if ((clientWin = GetClientWindow(dpy, win, WM_STATE)) == 0)
@@ -978,7 +893,6 @@ GetDestinationInfo(
 	currReceiverInfo->window = clientWin;
 	currReceiverInfo->shell = XtWindowToWidget(dpy, clientWin);
     }
-
     /*
      * we fetch the root info in NewScreen
      */
@@ -1004,7 +918,6 @@ GetDestinationInfo(
 	  }
       } else {
 	XmDisplay	xmDisplay = (XmDisplay)XtParent(dc);
-
 	/*
 	 * We only have a protocol style if we have drop sites.
 	 */
@@ -1013,7 +926,6 @@ GetDestinationInfo(
 	    xmDisplay->display.dragReceiverProtocolStyle;
 	else
 	  currReceiverInfo->dragProtocolStyle = XmDRAG_NONE;
-
 	currReceiverInfo->xOrigin = dc->drag.currReceiverInfo->shell->core.x;
 	currReceiverInfo->yOrigin = dc->drag.currReceiverInfo->shell->core.y;
 	currReceiverInfo->width = dc->drag.currReceiverInfo->shell->core.width;
@@ -1022,7 +934,6 @@ GetDestinationInfo(
 	currReceiverInfo->iccInfo = NULL;
       }
     }
-
     /*
      * If we're still waiting on the window manager, then don't mess
      * with the active protocol style.
@@ -1031,12 +942,9 @@ GetDestinationInfo(
       {
 	dc->drag.activeProtocolStyle =
 	  _XmGetActiveProtocolStyle((Widget)dc);
-
 	ValidateDragOver(dc, oldStyle, dc->drag.activeProtocolStyle);
       }
 }
-
-
 static void
 GetScreenInfo(
         XmDragContext dc )
@@ -1044,12 +952,10 @@ GetScreenInfo(
     Display	*dpy = XtDisplay(dc);
     Window	root = RootWindowOfScreen(XtScreen(dc->drag.curDragOver));
     XmDragReceiverInfo rootInfo;
-
     /*
      * the rootInfo is the first entry in the receiverInfo
      * array
      */
-
     if (dc->drag.numReceiverInfos == 0) {
 	dc->drag.rootReceiverInfo =
 	  rootInfo = _XmAllocReceiverInfo(dc);
@@ -1057,7 +963,6 @@ GetScreenInfo(
 	dc->drag.rootReceiverInfo =
 	  rootInfo = dc->drag.receiverInfos;
     }
-
     rootInfo->frame = None;
     rootInfo->window = root;
     rootInfo->shell = XtWindowToWidget(dpy, root);
@@ -1066,7 +971,6 @@ GetScreenInfo(
     rootInfo->height = XHeightOfScreen(dc->drag.currScreen);
     rootInfo->depth = DefaultDepthOfScreen(dc->drag.currScreen);
     rootInfo->iccInfo = NULL;
-
     if (_XmGetDragReceiverInfo(dpy, root, rootInfo))
       {
 	  switch (rootInfo->dragProtocolStyle) {
@@ -1083,7 +987,6 @@ GetScreenInfo(
 	  }
       }
 }
-
 /**
  * Handle X errors around drag message send operations
  */
@@ -1094,12 +997,10 @@ static int drag_error(Display *display, XErrorEvent *e)
 	(void)e;
 	if (!current_dc)
 		return 0;
-
         current_dc->drag.activeProtocolStyle = XmDRAG_NONE;
         current_dc = NULL;
 	return 0;
 }
-
 static void
 SendDragMessage(
         XmDragContext dc,
@@ -1112,20 +1013,16 @@ SendDragMessage(
 		_XmGetDropSiteManagerObject((XmDisplay)(XtParent(dc)));
     XmICCCallbackStruct	callbackRec;
     int			reason = _XmMessageTypeToReason(messageType);
-
     callbackRec.any.event = NULL;
-
     if (dc->drag.activeProtocolStyle == XmDRAG_NONE    ||
 	(dc->drag.activeProtocolStyle == XmDRAG_DROP_ONLY &&
 	 reason != XmCR_DROP_START))
       return;
-
     switch(callbackRec.any.reason = reason) {
       case XmCR_TOP_LEVEL_ENTER:
 	{
 	    XmTopLevelEnterCallback	callback =
 	      (XmTopLevelEnterCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->window = dc->drag.srcWindow;
 	    callback->dragProtocolStyle = dc->drag.activeProtocolStyle;
@@ -1139,7 +1036,6 @@ SendDragMessage(
 	{
 	    XmTopLevelLeaveCallback	callback =
 	      (XmTopLevelLeaveCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->window = dc->drag.srcWindow;
 	}
@@ -1148,13 +1044,11 @@ SendDragMessage(
 	{
 	    XmDragMotionCallback	callback =
 	      (XmDragMotionCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->x = dc->core.x;
 	    callback->y = dc->core.y;
 	    callback->operation = dc->drag.operation;
 	    callback->operations = dc->drag.operations;
-
 	    /* Outgoing motion; be conservative */
 	    callback->dropSiteStatus = XmNO_DROP_SITE;
 	}
@@ -1163,7 +1057,6 @@ SendDragMessage(
 	{
 	    XmOperationChangedCallback	callback =
 	      (XmOperationChangedCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->operation = dc->drag.operation;
 	    callback->operations = dc->drag.operations;
@@ -1173,7 +1066,6 @@ SendDragMessage(
 	{
 	    XmDropStartCallback 	callback =
 	      (XmDropStartCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.dragFinishTime;
 	    callback->operation = dc->drag.operation;
 	    callback->operations = dc->drag.operations;
@@ -1188,7 +1080,6 @@ SendDragMessage(
       default:
 	break;
     }
-
     /*
      * if we're the initiator and the destination isn't us and either
      * its the drop message or the dynamic protocol (or Xdnd) send it
@@ -1210,7 +1101,6 @@ SendDragMessage(
 	  XFlush(XtDisplayOfObject((Widget)dc));
 	  XSync(XtDisplayOfObject((Widget)dc), False);
 	  (void)XSetErrorHandler(old_handler);
-
 	  /**
 	   * Here, we commit to the XdndSelection atom if the recipient
 	   * is using Xdnd.
@@ -1222,7 +1112,6 @@ SendDragMessage(
 		_XmFreeMotifAtom((Widget)dc, dc->drag.iccHandle);
 		dc->drag.iccHandle = xdndSelection;
 	  }
-
 	  if (dc->drag.activeProtocolStyle == XmDRAG_NONE)
 		return;
       }
@@ -1230,11 +1119,9 @@ SendDragMessage(
 	XtPointer			data;
 	XmDragTopLevelClientDataStruct	topLevelData;
 	XmDragMotionClientDataStruct	motionData;
-
 	if ((reason == XmCR_TOP_LEVEL_ENTER)   ||
 	    (reason == XmCR_TOP_LEVEL_LEAVE)   ||
 	    (reason == XmCR_DROP_START)){
-
 	    topLevelData.destShell = dc->drag.currReceiverInfo->shell;
 	    topLevelData.sourceIsExternal = dc->drag.sourceIsExternal;
 	    topLevelData.iccInfo = dc->drag.currReceiverInfo->iccInfo;
@@ -1259,13 +1146,11 @@ SendDragMessage(
 	else {
 		data = NULL;
 	}
-
 	_XmDSMUpdate(dsm,
 		     (XtPointer)data,
 		     (XtPointer)&callbackRec);
     }
 }
-
 static void
 GenerateClientCallback(
         XmDragContext dc,
@@ -1273,18 +1158,14 @@ GenerateClientCallback(
 {
     XmICCCallbackStruct	callbackRec;
     XtCallbackList	callbackList = NULL;
-
     if (dc->core.being_destroyed)
 	return;
-
     callbackRec.any.event = NULL;
-
     switch(callbackRec.any.reason = reason) {
       case XmCR_TOP_LEVEL_ENTER:
 	if ((callbackList = dc->drag.topLevelEnterCallback) != NULL) {
 	    XmTopLevelEnterCallback	callback =
 	      (XmTopLevelEnterCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->window = dc->drag.currReceiverInfo->window;
 	    callback->dragProtocolStyle =
@@ -1299,7 +1180,6 @@ GenerateClientCallback(
 	if ((callbackList = dc->drag.topLevelLeaveCallback) != NULL) {
 	    XmTopLevelLeaveCallback	callback =
 	      (XmTopLevelLeaveCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->screen = dc->drag.currScreen;
 	    callback->window = dc->drag.currReceiverInfo->window;
@@ -1309,13 +1189,11 @@ GenerateClientCallback(
 	if ((callbackList = dc->drag.dragMotionCallback) != NULL) {
 	    XmDragMotionCallback	callback =
 	      (XmDragMotionCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->x = dc->core.x;
 	    callback->y = dc->core.y;
 	    callback->operation = dc->drag.operation;
 	    callback->operations = dc->drag.operations;
-
 	    /*
 	     * If we're over DropOnly client, be optimistic.
 	     */
@@ -1338,11 +1216,9 @@ GenerateClientCallback(
 	if ((callbackList = dc->drag.operationChangedCallback) != NULL) {
 	    XmOperationChangedCallback	callback =
 	      (XmOperationChangedCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	    callback->operation = dc->drag.operation;
 	    callback->operations = dc->drag.operations;
-
             /*
 	     * If we're over DropOnly client, be optimistic.
 	     */
@@ -1370,7 +1246,6 @@ GenerateClientCallback(
 	{
 	    XmDropSiteLeaveCallback	callback =
 	      (XmDropSiteLeaveCallback)&callbackRec;
-
 	    callback->timeStamp = dc->drag.lastChangeTime;
 	}
 	break;
@@ -1380,13 +1255,11 @@ GenerateClientCallback(
     if (callbackList)
     {
       XtCallCallbackList( (Widget)dc, callbackList, &callbackRec);
-
       if (callbackList == dc->drag.dragMotionCallback)
       {
          XmDragOverShellWidget dos = dc->drag.curDragOver;
          XmDragMotionCallback  callback =
                        (XmDragMotionCallback)&callbackRec;
-
          dc->drag.operation = callback->operation;
          dc->drag.operations = callback->operations;
          if (dos->drag.cursorState != callback->dropSiteStatus)
@@ -1397,7 +1270,6 @@ GenerateClientCallback(
       }
     }
 }
-
 static void
 DropLoseIncrSelection(
         Widget w,
@@ -1406,37 +1278,29 @@ DropLoseIncrSelection(
 {
     DropLoseSelection( w, selection) ;
 }
-
-
 static void
 DropLoseSelection(
         Widget w,
         Atom *selection)
 {
   XmDragContext	dc ;
-
   dc = (XmDragContext)_XmGetDragContextFromHandle(w, *selection);
   if (dc && dc->drag.activeProtocolStyle != XmDRAG_XDND && dc->drag.dropFinishTime == 0)
     {
       XmeWarning(w, MESSAGE3) ;
     }
 }
-
 static void
 DragDropFinish(
         XmDragContext dc )
 {
     Widget w = NULL;
     Atom xdndSelection;
-
     XmDropSiteManagerObject dsm = (XmDropSiteManagerObject)
 		_XmGetDropSiteManagerObject((XmDisplay)(XtParent(dc)));
-
-
     /* Handle completion */
     if (dc->drag.dropFinishCallback) {
 	XmDropFinishCallbackStruct cb;
-
 	cb.reason = XmCR_DROP_FINISH;
 	cb.event = NULL;
 	cb.timeStamp = dc->drag.dropFinishTime;
@@ -1448,22 +1312,18 @@ DragDropFinish(
 	XtCallCallbackList((Widget) dc, dc->drag.dropFinishCallback, &cb);
 	dc->drag.dragDropCompletionStatus = cb.completionStatus;
     }
-
     if (dc->drag.blendModel != XmBLEND_NONE &&
 	dc->drag.dragDropCancelEffect == False) {
       _XmDragOverFinish((Widget)dc->drag.curDragOver,
 			dc->drag.dragDropCompletionStatus);
     }
-
     if (dc->drag.dragDropFinishCallback) {
 	XmDragDropFinishCallbackStruct cb;
-
 	cb.reason = XmCR_DRAG_DROP_FINISH;
 	cb.event = NULL;
 	cb.timeStamp = dc->drag.dropFinishTime;
 	XtCallCallbackList((Widget) dc, dc->drag.dragDropFinishCallback, &cb);
     }
-
     /*
      * we send this now so that the non-local receiver can clean up
      * its dc after everything is done
@@ -1474,20 +1334,14 @@ DragDropFinish(
         XtDisownSelection(dc->drag.srcShell, xdndSelection, dc->drag.dragFinishTime);
         _XmFreeMotifAtom((Widget)dc, dc->drag.iccHandle);
     }
-
     XtRemoveEventHandler(dc->drag.srcShell, FocusChangeMask, True,
 			 InitiatorMsgHandler,
 			 (XtPointer)dc);
-
     XtVaGetValues((Widget)dc, XmNsourceWidget, &w, NULL);
     if (w)
 	XtRemoveCallback(w, XmNdestroyCallback, cancelDrag, (XtPointer)dc);
-
     XtDestroyWidget((Widget) dc);
 }
-
-
-
 /*
  * This callback is called when a drag operation needs to be terminated.
  * This can occur when the widget whose id is contained in the drag data
@@ -1502,7 +1356,6 @@ cancelDrag(
     Widget dragContext = (Widget)client;
     XmDragCancel(dragContext);
 }
-
 /*
  * This routine is passed as the frontend to the convertProc.
  */
@@ -1525,15 +1378,12 @@ DropConvertIncrCallback(
     static char *atom_names[] = {
       XmSTRANSFER_SUCCESS, XmSTRANSFER_FAILURE,
       XmS_MOTIF_CANCEL_DROP_EFFECT, XmS_MOTIF_DROP, XmSTARGETS };
-
     XmDragContext	dc;
     Time		dropTime;
     Boolean 		returnVal = True;
     Boolean 		success;
     Atom		atoms[XtNumber(atom_names)];
-
     dropTime = XtGetSelectionRequest(w, *selection, requestID)->time;
-
     if (!(dc = (XmDragContext)
 	  _XmGetDragContextFromHandle(w, *selection))) {
 	XmeWarning(w, MESSAGE2);
@@ -1579,11 +1429,9 @@ DropConvertIncrCallback(
 				  clientData,
 				  requestID));
       }
-
     /* add code to handle TARGET target automatically if not there yet */
     if ((! returnVal) && (*target == atoms[XmATARGETS])) {
 	int len = sizeof(Atom) * dc->drag.numExportTargets;
-
 	if (dc->drag.incremental & 0x2) {
 	    dc->drag.incremental = 1;
 	    *valueRtn = NULL;
@@ -1598,10 +1446,8 @@ DropConvertIncrCallback(
 	*typeRtn = XA_ATOM;
 	returnVal = True;
     }
-
     return returnVal;
 }
-
 /*
  * This routine is passed as the frontend to the convertProc.
  */
@@ -1621,15 +1467,12 @@ DropConvertCallback(
     static char *atom_names[] = {
       XmSTRANSFER_SUCCESS, XmSTRANSFER_FAILURE,
       XmS_MOTIF_CANCEL_DROP_EFFECT, XmS_MOTIF_DROP, XmSTARGETS };
-
     XmDragContext	dc;
     Time		dropTime;
     Boolean 		returnVal = True;
     Boolean		success;
     Atom		atoms[XtNumber(atom_names)];
-
     dropTime = XtGetSelectionRequest(w, *selection, NULL)->time;
-
     if (!(dc = (XmDragContext)
 	  _XmGetDragContextFromHandle(w, *selection))) {
 	XmeWarning(w, MESSAGE2);
@@ -1672,7 +1515,6 @@ DropConvertCallback(
 				  lengthRtn,
 				  formatRtn));
       }
-
     /* add code to handle TARGET target automatically if not there yet */
     if ((! returnVal) && (*target == atoms[XmATARGETS])) {
 	int len = sizeof(Atom) * dc->drag.numExportTargets;
@@ -1683,10 +1525,8 @@ DropConvertCallback(
 	*typeRtn = XA_ATOM;
 	returnVal = True;
     }
-
     return returnVal;
 }
-
 static void
 DragStartProto(
         XmDragContext dc)
@@ -1702,8 +1542,6 @@ DragStartProto(
     SendDragMessage(dc, dc->drag.currReceiverInfo->window, XmTOP_LEVEL_ENTER);
     SendDragMessage(dc, dc->drag.currReceiverInfo->window, XmDRAG_MOTION);
 }
-
-
 static void
 NewScreen(
 	  XmDragContext	dc,
@@ -1713,17 +1551,13 @@ NewScreen(
   Cardinal	i;
   Arg		args[8];
   Widget  old = (Widget) (dc->drag.curDragOver);
-
   /* Find the new screen number */
   for (i = 0; i < XScreenCount(XtDisplayOfObject((Widget) dc)); i++)
     if (RootWindow(XtDisplayOfObject((Widget) dc), i) == newRoot)
       break;
-
   dc->drag.currScreen =
     ScreenOfDisplay(XtDisplayOfObject((Widget) dc), i);
   dc->drag.currWmRoot = RootWindowOfScreen(dc->drag.currScreen);
-
-
   /* Build a new one */
   i = 0;
   /*
@@ -1734,7 +1568,6 @@ NewScreen(
   else
     XtSetArg(args[i], XmNdragOverMode, XmCURSOR);
   i++;
-
   XtSetArg(args[i], XmNhotX, dc->core.x); i++;
   XtSetArg(args[i], XmNhotY, dc->core.y); i++;
   XtSetArg(args[i], XmNbackgroundPixmap, None); i++;
@@ -1743,7 +1576,6 @@ NewScreen(
   XtSetArg(args[i], XmNcolormap,
 	   DefaultColormapOfScreen(dc->drag.currScreen));i++;
   XtSetArg(args[i], XmNvisual, DefaultVisualOfScreen(dc->drag.currScreen));i++;
-
   /*
    * As popup child(ren) of the dc, the drag over(s) will
    * automatically destroyed by Xt when the dc is destroyed.
@@ -1752,29 +1584,23 @@ NewScreen(
   dc->drag.curDragOver = (XmDragOverShellWidget)
     XtCreatePopupShell("dragOver", xmDragOverShellWidgetClass,
 		       (Widget) dc, args, i);
-
   if (dc->drag.currScreen == XtScreen(dc->drag.srcShell))
     _XmDragOverSetInitialPosition((Widget)dc->drag.curDragOver,
 				  dc->drag.startX, dc->drag.startY);
-
   if (old != NULL) {
     if (old != (Widget) (dc->drag.origDragOver))
       XtDestroyWidget(old);
     else
       _XmDragOverHide((Widget)dc->drag.origDragOver, 0, 0, NULL);
   }
-
   GetScreenInfo(dc);
-
   if (dc->drag.origDragOver == NULL)
     {
       dc->drag.origDragOver = dc->drag.curDragOver;
     }
-
   if (dc->drag.trackingMode == XmDRAG_TRACK_MOTION)
     {
       EventMask	mask = _XmDRAG_EVENT_MASK(dc);
-
       if (XGrabPointer(XtDisplayOfObject((Widget) dc->drag.curDragOver),
 		       RootWindowOfScreen(XtScreen(dc->drag.curDragOver)),
 		       False,
@@ -1785,14 +1611,11 @@ NewScreen(
 		       _XmDragOverGetActiveCursor((Widget)dc->drag.curDragOver),
 		       dc->drag.lastChangeTime) != GrabSuccess)
 	Warning(MESSAGE4);
-
       XAllowEvents(XtDisplayOfObject((Widget) dc->drag.srcShell),
 		   SyncPointer,
 		   dc->drag.lastChangeTime);
     }
 }
-
-
 static void
 LocalNotifyHandler(
         Widget w,
@@ -1802,12 +1625,10 @@ LocalNotifyHandler(
     XmDropSiteManagerObject 	dsm = (XmDropSiteManagerObject)w;
     XmDragContext	dc = (XmDragContext)client;
     XmDropFinishCallbackStruct *cb = (XmDropFinishCallbackStruct *)call;
-
     switch(((XmAnyICCCallback)call)->reason) {
       case XmCR_DROP_SITE_ENTER:
 	SiteEnteredWithLocalSource((Widget)dsm, (XtPointer)dc, (XtPointer)call);
 	break;
-
       case XmCR_DROP_SITE_LEAVE:
 	/* SiteLeftWithLocalSource expect to find an
          * XmDropSiteEnterPendingCallbackStruct, so upgrade the
@@ -1825,29 +1646,23 @@ LocalNotifyHandler(
 				(XtPointer) &new_call);
 	break;
 	}
-
       case XmCR_DRAG_MOTION:
 	SiteMotionWithLocalSource((Widget)dsm, (XtPointer)dc, (XtPointer)call);
 	break;
-
       case XmCR_OPERATION_CHANGED:
 	OperationChanged((Widget)dsm, (XtPointer)dc, (XtPointer)call);
 	break;
-
       case XmCR_DROP_START:
 	DropStartConfirmed((Widget)dsm, (XtPointer)dc, (XtPointer)call);
 	break;
-
       case XmCR_DROP_FINISH:
 	dc->drag.dragDropCompletionStatus = cb->completionStatus;
 	dc->drag.dropFinishTime = XtLastTimestampProcessed(XtDisplay(dc));
 	DragDropFinish(dc);
-
       default:
 	break;
     }
 }
-
 /*
  * sends replies to drag messages
  */
@@ -1860,13 +1675,11 @@ ExternalNotifyHandler(
     XErrorHandler old_handler;
     XmDragContext	dc = (XmDragContext)client;
     XmAnyICCCallback	cb = (XmAnyICCCallback)call;
-
     if (dc->drag.activeProtocolStyle == XmDRAG_NONE &&
         dc->drag.currReceiverInfo->dragProtocolStyle == XmDRAG_XDND)
 	dc->drag.activeProtocolStyle = XmDRAG_XDND;
     if (dc->drag.activeProtocolStyle == XmDRAG_NONE)
 	return;
-
     switch(cb->reason) {
       case XmCR_DROP_SITE_ENTER:
       case XmCR_DROP_SITE_LEAVE:
@@ -1889,14 +1702,11 @@ ExternalNotifyHandler(
 	XSync(XtDisplayOfObject((Widget)dc), False);
 	(void)XSetErrorHandler(old_handler);
 	break;
-
       default:
 	XmeWarning((Widget)dc, MESSAGE5);
 	break;
     }
 }
-
-
 /*
  * catches replies on drag messages
  */
@@ -1909,23 +1719,18 @@ InitiatorMsgHandler(
 {
   XmDragContext	dc =(XmDragContext)clientData;
   XmICCCallbackStruct		callbackRec;
-
   (void)dontSwallow;
   if (!dc ||
       !_XmICCEventToICCCallback((XClientMessageEvent *)event,
 				 &callbackRec, XmICC_RECEIVER_EVENT))
     return;
-
   if (dc->drag.dragStartTime > callbackRec.any.timeStamp)
     return;
-
   if (dc->drag.activeProtocolStyle != XmDRAG_XDND &&
       dc->drag.crossingTime > callbackRec.any.timeStamp)
     return;
-
   LocalNotifyHandler(w, (XtPointer)dc, (XtPointer)&callbackRec);
 }
-
 static void
 SiteEnteredWithLocalSource(
         Widget w,
@@ -1934,21 +1739,16 @@ SiteEnteredWithLocalSource(
 {
     XmDragContext	dc = (XmDragContext)client;
     XmDropSiteEnterCallbackStruct  *cb = (XmDropSiteEnterCallbackStruct *)call;
-
     CalculateDragOperation(dc);
-
     /* check against the current location of the pointer */
-
     if (dc->drag.siteEnterCallback) {
 	XtCallCallbackList((Widget) dc, dc->drag.siteEnterCallback, cb);
     }
     dc->drag.operation = cb->operation;
     dc->drag.operations = cb->operations;
     dc->drag.inDropSite = True;
-
     _XmDragOverChange((Widget)dc->drag.curDragOver, cb->dropSiteStatus);
 }
-
 static void
 SiteLeftWithLocalSource(
         Widget w,
@@ -1958,23 +1758,18 @@ SiteLeftWithLocalSource(
     XmDragContext	dc = (XmDragContext)client;
     XmDropSiteEnterPendingCallbackStruct  *cb =
 			 (XmDropSiteEnterPendingCallbackStruct *)call;
-
     dc->drag.inDropSite = False;
-
     if (dc->drag.siteLeaveCallback) {
 	XtCallCallbackList((Widget) dc, dc->drag.siteLeaveCallback,
 			   (XmDropSiteLeaveCallbackStruct *)cb);
     }
-
     CalculateDragOperation(dc);
-
     /*
      * Don't forward laggard echo leaves to dragUnder
      */
     if (dc->drag.dragFinishTime == 0 && !cb->enter_pending)
       _XmDragOverChange((Widget)dc->drag.curDragOver, XmNO_DROP_SITE);
 }
-
 static void
 OperationChanged(
         Widget w,
@@ -1983,7 +1778,6 @@ OperationChanged(
 {
     XmDragContext	dc = (XmDragContext)client;
     XmOperationChangedCallbackStruct  *cb = (XmOperationChangedCallbackStruct *)call;
-
     if (dc->drag.operationChangedCallback) {
 	XtCallCallbackList((Widget) dc, dc->drag.operationChangedCallback, cb);
     }
@@ -1991,7 +1785,6 @@ OperationChanged(
     dc->drag.operations = cb->operations;
     _XmDragOverChange((Widget)dc->drag.curDragOver, cb->dropSiteStatus);
 }
-
 static void
 SiteMotionWithLocalSource(
         Widget w,
@@ -2000,18 +1793,14 @@ SiteMotionWithLocalSource(
 {
     XmDragContext	dc = (XmDragContext)client;
     XmDragMotionCallbackStruct  *cb = (XmDragMotionCallbackStruct *)call;
-
     if (dc->drag.dragMotionCallback) {
 	XtCallCallbackList((Widget) dc, dc->drag.dragMotionCallback, cb);
     }
-
     /* Application should not be able to change callback data so
      * don't call _XmDragOverChange(), this will result in better
      * drag performance.
      */
 }
-
-
 static void
 DropStartConfirmed(
         Widget w,
@@ -2021,24 +1810,20 @@ DropStartConfirmed(
     XmDragContext	dc = (XmDragContext)client;
     XmDropStartCallbackStruct  *cb = (XmDropStartCallbackStruct *)call;
     XtAppContext	appContext = XtWidgetToApplicationContext((Widget)dc);
-
     if (dc->drag.dragTimerId) {
 	XtRemoveTimeOut(dc->drag.dragTimerId);
 	dc->drag.dragTimerId = (XtIntervalId) NULL;
     }
-
     /* Add a long timeout in case the drop site dies. */
     dc->drag.dragTimerId =
       XtAppAddTimeOut(appContext,
 		      XtAppGetSelectionTimeout(appContext) * 10,
 		      DropFinishTimeout,
 		      (XtPointer)dc);
-
     if (dc->drag.dropStartCallback) {
 	XtCallCallbackList( (Widget)dc, dc->drag.dropStartCallback, cb);
     }
     dc->drag.dragCompletionStatus = cb->dropAction;
-
     switch(dc->drag.dragCompletionStatus) {
       case XmDROP:
       case XmDROP_INTERRUPT:
@@ -2048,8 +1833,6 @@ DropStartConfirmed(
 	break;
     }
 }
-
-
 static Widget
 GetShell(
         Widget w )
@@ -2058,7 +1841,6 @@ GetShell(
       w = XtParent(w);
     return w;
 }
-
 static void
 InitDropSiteManager(
         XmDragContext dc )
@@ -2066,9 +1848,7 @@ InitDropSiteManager(
     XmDropSiteManagerObject	dsm;
     Arg				args[4];
     Cardinal			i = 0;
-
     dsm = _XmGetDropSiteManagerObject((XmDisplay)(XtParent(dc)));
-
     XtSetArg(args[i], XmNclientData, dc); i++;
     if (dc->drag.sourceIsExternal) {
 	XtSetArg(args[i], XmNnotifyProc, ExternalNotifyHandler); i++;
@@ -2078,7 +1858,6 @@ InitDropSiteManager(
     }
     XtSetValues((Widget)dsm, args, i);
 }
-
 static void
 TopWindowsReceived(
         Widget w,
@@ -2095,22 +1874,17 @@ TopWindowsReceived(
     XmDragReceiverInfo	currInfo, startInfo;
     Window	*clientWindows;
     unsigned char	oldStyle;
-
     if (dd->display.activeDC != dc) {
       /* Too late... */
       return;
     }
-
     /* CR 6337.  Must call DragOverChange if the blendModel
        changes.  This doesn't happen often,  only in certain
        cases involving PREREGISTER */
-
     if (dc -> drag.blendModel != dc -> drag.activeBlendModel) {
       dc->drag.blendModel = dc->drag.activeBlendModel;
       _XmDragOverChange((Widget)dc->drag.curDragOver, XmNO_DROP_SITE);
     }
-
-
     if ((*length != 0) && (*format == 32) && (*type == XA_WINDOW)) {
 	/*
 	 * we make a receiverInfo array one larger than the number of
@@ -2120,13 +1894,11 @@ TopWindowsReceived(
 	  startInfo = dc->drag.receiverInfos;
 	else
 	  startInfo = NULL;
-
 	dc->drag.numReceiverInfos =
 	  dc->drag.maxReceiverInfos = *length + 1;
 	dc->drag.receiverInfos = (XmDragReceiverInfo)
 	  XtCalloc(dc->drag.maxReceiverInfos, sizeof(XmDragReceiverInfoStruct));
 	clientWindows = (Window *)value;
-
 	if (startInfo) {
 	    memcpy((char *)dc->drag.receiverInfos,
 		   (char *)startInfo,
@@ -2148,7 +1920,6 @@ TopWindowsReceived(
 			     currInfo->window,
 			     EnterWindowMask | LeaveWindowMask);
 	    }
-
 	}
 	/*
 	 * set the currReceiver to the srcShell since that's where
@@ -2157,7 +1928,6 @@ TopWindowsReceived(
 	dc->drag.currReceiverInfo =
 	  FindReceiverInfo(dc, XtWindow(dc->drag.srcShell));
 	dc->drag.trackingMode = XmDRAG_TRACK_WM_QUERY;
-
 	oldStyle = dc->drag.activeProtocolStyle;
 	dc->drag.activeProtocolStyle =
 		_XmGetActiveProtocolStyle((Widget)dc);
@@ -2168,23 +1938,19 @@ TopWindowsReceived(
 	EventMask	mask;
 	Window		confineWindow;
 	Cursor		cursor;
-
 	dc->drag.trackingMode = XmDRAG_TRACK_MOTION;
 	GetDestinationInfo(dc,
 			   dc->drag.currWmRoot,
 			   dc->drag.currReceiverInfo->window);
 	confineWindow = None;
-
 	/*
 	 * we need to regrab so that the confine window can be changed
 	 * from the source window. If there was another value for
 	 * trackingMode like XmDRAG_TRACK_WM_QUERY_FAILED we could do
 	 * this in DragStartWithTracking
 	 */
-
 	mask = _XmDRAG_EVENT_MASK(dc);
 	cursor = _XmDragOverGetActiveCursor((Widget)dc->drag.curDragOver);
-
 	if (XGrabPointer(XtDisplayOfObject((Widget) dc),
 			 RootWindowOfScreen(XtScreen(dc)),
 			 False,
@@ -2196,13 +1962,10 @@ TopWindowsReceived(
 			 dc->drag.lastChangeTime) != GrabSuccess)
 	  Warning(MESSAGE4);
     }
-
     if (value)
       XtFree((char *)value);
     DragStartWithTracking(dc);
 }
-
-
 static void
 DragStart(
         XmDragContext dc,
@@ -2217,25 +1980,20 @@ DragStart(
     Window		confineWindow;
     Cursor		cursor = None;
     Atom		xdndSelection;
-
     dd = (XmDisplay)XtParent(dc);
     dd->display.activeDC = dc;
     dd->display.userGrabbed = True;
-
     dc->drag.crossingTime =
       dc->drag.dragStartTime =
         dc->drag.lastChangeTime = event->xbutton.time;
-
     dc->drag.startX = dc->core.x = event->xbutton.x_root;
     dc->drag.startY = dc->core.y = event->xbutton.y_root;
     dc->drag.curDragOver = NULL;
     dc->drag.origDragOver = NULL;
     dc->drag.srcShell = GetShell(src);
     dc->drag.srcWindow = XtWindow(dc->drag.srcShell);
-
     xdndSelection      = XInternAtom(XtDisplay(dc), "XdndSelection", False);
     dc->drag.iccHandle = _XmAllocMotifAtom((Widget)dc, dc->drag.dragStartTime);
-
     if (dc->drag.incremental) {
       XtOwnSelectionIncremental(dc->drag.srcShell,
 				dc->drag.iccHandle,
@@ -2263,12 +2021,10 @@ DragStart(
 		     DropLoseSelection,
 		     NULL);
     }
-
     dc->drag.serverGrabbed = False;
     dc->drag.sourceIsExternal = False;
     dc->drag.activeProtocolStyle = activeProtocolStyle =
       _XmGetActiveProtocolStyle((Widget)dc);
-
     switch (dc->drag.activeProtocolStyle)
       {
       case XmDRAG_PREREGISTER:
@@ -2280,17 +2036,13 @@ DragStart(
       case XmDRAG_NONE:
 	break;
       }
-
     /* must be either DYNAMIC or NONE at this point */
-
     /*
      * start out with the default operations in effective operations
      */
-
     dc->drag.lastEventState = state;
     CalculateDragOperation(dc);
     dc->drag.sourceIsExternal = False;
-
     /*
      * if we're in query_pending mode then initialize the
      * currReceiverInfo to us
@@ -2302,21 +2054,16 @@ DragStart(
 	dc->drag.trackingMode = XmDRAG_TRACK_WM_QUERY_PENDING;
 	confineWindow = XtWindow(dc->drag.srcShell);
     }
-
     if (dc->drag.trackingMode == XmDRAG_TRACK_WM_QUERY_PENDING &&
         activeProtocolStyle == XmDRAG_PREREGISTER) {
        dc->drag.blendModel = XmBLEND_NONE;
     }
-
     NewScreen(dc, RootWindowOfScreen(XtScreen(dc)));
-
     XtInsertEventHandler(dc->drag.srcShell, FocusChangeMask, True,
 			 InitiatorMsgHandler,
 			 (XtPointer)dc,
 			 XtListHead);
-
     mask = _XmDRAG_EVENT_MASK(dc);
-
     /*
      * we grab on the Xt pointer so that Xt doesn't interfere with us.
      * Also once we have the WM_QUERY capability this will work.
@@ -2329,11 +2076,8 @@ DragStart(
      * guarantee that the release event goes to us. The grab window
      * must be viewable so we can't use the dc window
      */
-
     saveWindow = dc->core.window;
-
     cursor = _XmDragOverGetActiveCursor((Widget)dc->drag.curDragOver);
-
     dc->core.window = RootWindowOfScreen(XtScreen(dc));
     if ((XtGrabPointer((Widget)dc,
 		       False,
@@ -2361,7 +2105,6 @@ DragStart(
       Warning(MESSAGE4);
     _XmAddGrab((Widget)dc, True, False);
     dc->core.window = saveWindow;
-
     /* Begin fixing OSF CR 5556 */
     /*
      * Add ButtonMotionMask to the already set-up event mask for root window.
@@ -2369,7 +2112,6 @@ DragStart(
      */
     {
       XWindowAttributes       xwa;
-
       XGetWindowAttributes(XtDisplay(dc), dc->drag.currWmRoot, &xwa);
       dc->drag.SaveEventMask = xwa.your_event_mask;
       XSelectInput(XtDisplay(dc),
@@ -2377,54 +2119,43 @@ DragStart(
 		   xwa.your_event_mask | ButtonMotionMask);
     }
     /* End fixing OSF CR 5556 */
-
     if (dc->drag.trackingMode == XmDRAG_TRACK_WM_QUERY_PENDING) {
         enum { XmA_MOTIF_WM_QUERY, XmA_MOTIF_WM_ALL_CLIENTS, NUM_ATOMS };
 	static char *atom_names[] = {
 	  XmS_MOTIF_WM_QUERY, XmS_MOTIF_WM_ALL_CLIENTS };
 	Atom atoms[XtNumber(atom_names)];
-
 	assert(XtNumber(atom_names) == NUM_ATOMS);
 	XInternAtoms(XtDisplay(dc), atom_names, XtNumber(atom_names),
 		     False, atoms);
-
 	XtGetSelectionValue((Widget)dd,
 			    atoms[XmA_MOTIF_WM_QUERY],
 			    atoms[XmA_MOTIF_WM_ALL_CLIENTS],
 			    TopWindowsReceived,
 			    (XtPointer)dc,
 			    dc->drag.dragStartTime);
-
 	XAllowEvents(XtDisplayOfObject((Widget) dc->drag.srcShell),
 		     SyncPointer,
 		     dc->drag.dragStartTime);
     }
     else
       DragStartWithTracking(dc);
-
     XSync(XtDisplay(dc), False);
-
     XtAppAddTimeOut( XtWidgetToApplicationContext( (Widget)dc),
 		    0, InitiatorMainLoop,
 		    (XtPointer)(&dd->display.activeDC));
 }
-
-
 static void
 DragStartWithTracking(
         XmDragContext dc)
 {
     if (dc->drag.dragFinishTime)
       return;
-
     if (dc->drag.trackingMode == XmDRAG_TRACK_WM_QUERY) {
 	EventMask	mask = _XmDRAG_EVENT_MASK(dc);
 	Window		confineWindow;
 	Cursor		cursor;
-
 	confineWindow = None;
 	cursor = _XmDragOverGetActiveCursor((Widget)dc->drag.curDragOver);
-
 	/*
 	 * set owner events to true so that the crossings and motion
 	 * are reported relative to the destination windows. Don't
@@ -2443,12 +2174,10 @@ DragStartWithTracking(
 			 dc->drag.lastChangeTime) != GrabSuccess)
 	  Warning(MESSAGE4);
     }
-
     XAllowEvents(XtDisplayOfObject((Widget) dc->drag.srcShell),
 		 SyncPointer,
 		 dc->drag.lastChangeTime);
 }
-
 static void
 UpdateMotionBuffer(
 	XmDragContext dc,
@@ -2460,12 +2189,9 @@ UpdateMotionBuffer(
     Window window, subwindow;
     Position x ;
     Position y ;
-
     if (dc->drag.currReceiverInfo == NULL)
       return;
-
     dc->drag.lastChangeTime = event->xmotion.time;
-
     /*
      * we munged the window and subwindow fields before calling
      * XtDispatchEvent so we could get the event thru to the
@@ -2478,7 +2204,6 @@ UpdateMotionBuffer(
 	    if (mb->count == (STACKMOTIONBUFFERSIZE)){
 		MotionBuffer	oldMb = mb;
 		Cardinal size;
-
 		size = sizeof(MotionBufferRec) +
 		  (STACKMOTIONBUFFERSIZE * sizeof(MotionEntryRec));
 		mb = (MotionBuffer) XtMalloc(size);
@@ -2513,7 +2238,6 @@ UpdateMotionBuffer(
 	mb->entries[mb->count].x = x;
 	mb->entries[mb->count++].y = y;
 	break;
-
       case EnterNotify:
 	if ((event->xcrossing.mode == NotifyNormal) &&
 	    (dc->drag.trackingMode != XmDRAG_TRACK_MOTION)) {
@@ -2523,7 +2247,6 @@ UpdateMotionBuffer(
 	      mb->currReceiverInfo = rInfo;
 	}
 	break;
-
       case LeaveNotify:
 	if ((event->xcrossing.mode == NotifyNormal) &&
 	    (dc->drag.trackingMode != XmDRAG_TRACK_MOTION)) {
@@ -2539,8 +2262,6 @@ UpdateMotionBuffer(
 	break;
     }
 }
-
-
 static void
 DragMotionProto(
         XmDragContext dc,
@@ -2548,7 +2269,6 @@ DragMotionProto(
         Window subWindow )
 {
   Boolean incrementTimestamp = False;
-
   /*
    * We've selected for motion on the root window. This allows us to
    * use the subwindow field to know whenever we have left or
@@ -2603,12 +2323,9 @@ DragMotionProto(
 	    }
 	  GenerateClientCallback(dc, XmCR_TOP_LEVEL_LEAVE);
 	}
-
       if (root != dc->drag.currWmRoot)
 	NewScreen(dc, root);
-
       GetDestinationInfo(dc, root, subWindow);
-
       /* we should special-case the root window */
       if (dc->drag.currReceiverInfo->window)
 	{
@@ -2637,7 +2354,6 @@ DragMotionProto(
   if (incrementTimestamp)
     dc->drag.lastChangeTime++;
 }
-
 static void
 ProcessMotionBuffer(
         XmDragContext dc,
@@ -2645,7 +2361,6 @@ ProcessMotionBuffer(
 {
     Cardinal	incr, i, j, max;
     Window	protoWindow = None;
-
     incr = (mb->count / MOTIONFILTER);
     if (incr == 0) incr = 1;
     max = mb->count / incr;
@@ -2653,7 +2368,6 @@ ProcessMotionBuffer(
     for (i = 0; i < max; i++, j += incr) {
 	dc->core.x = mb->entries[j].x;
 	dc->core.y = mb->entries[j].y;
-
 	if (mb->entries[j].state != dc->drag.lastEventState)
 	  CheckModifiers(dc, mb->entries[j].state);
 	if (dc->drag.currWmRoot != mb->entries[j].window) {
@@ -2666,10 +2380,8 @@ ProcessMotionBuffer(
 	}
 	else
 	  protoWindow = mb->entries[j].subwindow;
-
     }
     _XmDragOverMove((Widget)dc->drag.curDragOver, dc->core.x, dc->core.y);
-
     /* if the protoWindow gotten above is the drag window,
      * we can use XTranslateCoordinates to look through the
      * one pixel hole (which has just been moved to be under where
@@ -2679,29 +2391,24 @@ ProcessMotionBuffer(
       {
 	Window currRoot = dc->drag.currWmRoot;
 	int dummyx, dummyy;
-
 	(void) XTranslateCoordinates(XtDisplay(dc), currRoot, currRoot,
 				     dc->core.x, dc->core.y,
 				     &dummyx, &dummyy,
 				     &protoWindow);
       }
-
     /*
      * actually inform the receiver/initiator that movement has
      * occurred
      */
     DragMotionProto(dc, dc->drag.currWmRoot, protoWindow);
-
     if (mb->count > STACKMOTIONBUFFERSIZE)
       XtFree( (char *)mb);
 }
-
 #define IsGrabEvent(ev) \
   ((ev->type == ButtonPress) ||\
    (ev->type == ButtonRelease) ||\
    (ev->type == KeyPress) ||\
    (ev->type == KeyRelease))
-
 static void
 DragMotion(
         Widget w,
@@ -2714,17 +2421,14 @@ DragMotion(
     MotionBufferRec	stackBuffer;
     MotionBuffer	motionBuffer = &stackBuffer;
     Boolean		grabEvent = False;
-
     stackBuffer.count = 0;
     stackBuffer.currReceiverInfo = dc->drag.currReceiverInfo;
     UpdateMotionBuffer(dc, motionBuffer,event);
-
     /*
      * We need to process all outstanding events of interest
      * inline and flush out any stale motion events.  Need to
      * check for state change events like modifier or button press.
      */
-
     /*
      * get any that came in after
      */
@@ -2741,7 +2445,6 @@ DragMotion(
     ProcessMotionBuffer(dc, motionBuffer);
     XFlush(dpy);
 }
-
 static void
 DragKey(
         Widget w,
@@ -2755,13 +2458,9 @@ DragKey(
   XEvent	motionEvent;
   XmDisplay     dd;
   unsigned int	state = 0;
-
   dd = (XmDisplay) XtParent(w);
-
   direction = params[0];
-
   if (event == NULL) return;
-
   if (strcmp(direction, "Up") == 0)
     { dx = 0; dy = -1; }
   else if (strcmp(direction, "Down") == 0)
@@ -2775,16 +2474,13 @@ DragKey(
     if (event -> type == KeyPress)
       state = keyevent -> state;
   }
-
   if (keyevent -> state & ControlMask)
     { dx *= 16; dy *= 16; }
-
   if (dd -> display.enable_warp == False) {
     dx = 0; dy = 0;
   } else {
     XWarpPointer(XtDisplay(w), None, None, 0, 0, 0, 0, dx, dy);
   }
-
   /* Send a button2 motion event so that the drag
      feedback will happen within DragMotion */
   motionEvent.xmotion.type = MotionNotify;
@@ -2797,14 +2493,11 @@ DragKey(
   motionEvent.xmotion.x_root = keyevent -> x_root;
   motionEvent.xmotion.y_root = keyevent -> y_root;
   motionEvent.xmotion.same_screen = keyevent -> same_screen;
-
   /* Or in the modifier bits if this is an update */
   motionEvent.xmotion.state = Button2Mask | state;
   motionEvent.xmotion.is_hint = 0;
-
   DragMotion(w, (XEvent *) &motionEvent, NULL, 0);
 }
-
 static void
 DropStartTimeout(
         XtPointer clientData,
@@ -2814,7 +2507,6 @@ DropStartTimeout(
     XmDropStartCallbackStruct	callbackRec, *callback = &callbackRec;
     XmDropSiteManagerObject dsm = (XmDropSiteManagerObject)
 		_XmGetDropSiteManagerObject((XmDisplay)(XtParent(dc)));
-
     if (dc->drag.dropStartCallback) {
 	callback->reason = XmCR_DROP_START;
 	callback->event = NULL;
@@ -2833,23 +2525,18 @@ DropStartTimeout(
     }
     dc->drag.dragDropCompletionStatus = XmDROP_FAILURE;
     dc->drag.dropFinishTime = dc->drag.dragFinishTime;
-
     DragDropFinish(dc);
 }
-
 static void
 DropFinishTimeout(
         XtPointer clientData,
         XtIntervalId *id )
 {
     XmDragContext	dc = (XmDragContext)clientData;
-
     dc->drag.dragDropCompletionStatus = XmDROP_FAILURE;
     dc->drag.dropFinishTime = dc->drag.dragFinishTime;
-
     DragDropFinish(dc);
 }
-
 static void
 FinishAction(
         XmDragContext dc,
@@ -2859,10 +2546,8 @@ FinishAction(
     Arg			args[4];
     Cardinal		i = 0;
     XmDisplay		dd = (XmDisplay) XmGetXmDisplay(XtDisplay(dc));
-
     dd->display.activeDC = NULL;
     dd->display.userGrabbed = False;
-
     if (ev) {
 	switch(ev->type) {
 	  case ButtonRelease:
@@ -2878,14 +2563,12 @@ FinishAction(
 	    dc->core.y = ev->xkey.y_root;
 	    break;
 	}
-
 	/*
 	 * start out with the default operations in effective operations
 	 */
   	dc->drag.lastEventState = state;
  	CalculateDragOperation(dc);
     }
-
     /*
      * change the dragOver to a window in so it can persist after the
      * ungrab
@@ -2893,11 +2576,9 @@ FinishAction(
     if (dc->drag.curDragOver) {
        unsigned char currentMode;
        unsigned char currentActiveMode;
-
        XtSetArg(args[0], XmNdragOverMode, &currentMode);
        XtSetArg(args[1], XmNdragOverActiveMode, &currentActiveMode);
        XtGetValues((Widget) dc->drag.curDragOver, args, 2);
-
        i = 0;
        XtSetArg(args[i], XmNhotX, dc->core.x); i++;
        XtSetArg(args[i], XmNhotY, dc->core.y); i++;
@@ -2906,14 +2587,11 @@ FinishAction(
 	 XtSetArg(args[i], XmNdragOverMode, XmWINDOW); i++;
        }
        XtSetValues((Widget) dc->drag.curDragOver, args, i);
-
        XUngrabPointer(XtDisplayOfObject((Widget) dc), dc->drag.lastChangeTime);
        XtUngrabPointer((Widget) dc, dc->drag.dragFinishTime);
        XUngrabKeyboard(XtDisplayOfObject((Widget) dc), dc->drag.lastChangeTime);
-
 	_XmRemoveGrab((Widget)dc);
     }
-
     if (dc->drag.serverGrabbed)
       XUngrabServer(XtDisplay((Widget) dc));
     /*
@@ -2921,19 +2599,16 @@ FinishAction(
      * to flush a top-level leave to the local dsm.
      */
     dc->drag.dragFinishTime = dc->drag.lastChangeTime;
-
     if (dc->drag.inDropSite) {
 	GenerateClientCallback(dc, XmCR_DROP_SITE_LEAVE);
 	dc->drag.inDropSite = False;
     }
-
     if (dc->drag.currReceiverInfo) {
        if (dc->drag.currReceiverInfo->window) {
 	  if ((dc->drag.activeProtocolStyle != XmDRAG_NONE) &&
 	      ((dc->drag.dragCompletionStatus == XmDROP) ||
 	       (dc->drag.dragCompletionStatus == XmDROP_HELP))) {
 	      XtAppContext appContext= XtWidgetToApplicationContext((Widget)dc);
-
 	      /*
 	       * we send the leave message in the dragDropFinish so
 	       * that a non-local receiver can cleanup its dc
@@ -2961,9 +2636,6 @@ FinishAction(
        DropStartTimeout((XtPointer)dc, NULL);
      }
 }
-
-
-
 static void
 CheckModifiers(
 	       XmDragContext	dc,
@@ -2971,10 +2643,8 @@ CheckModifiers(
 {
     unsigned char	oldOperation = dc->drag.operation;
     unsigned char	oldOperations = dc->drag.operations;
-
     dc->drag.lastEventState = state;
     CalculateDragOperation(dc);
-
     if ((oldOperations != dc->drag.operations) ||
 	(oldOperation != dc->drag.operation)) {
 	if ((dc->drag.currReceiverInfo->window) &&
@@ -2989,7 +2659,6 @@ CheckModifiers(
 	}
     }
 }
-
 static void
 IgnoreButtons(
         Widget w,
@@ -2998,17 +2667,14 @@ IgnoreButtons(
         Cardinal *numParams )
 {
     XmDragContext	dc = (XmDragContext)w;
-
     /*
      * the user has pressed some other buttons and caused the server
      * to synch up. Swallow and continue
      */
-
     XAllowEvents(XtDisplayOfObject((Widget) dc->drag.srcShell),
 		 SyncPointer,
 		 dc->drag.lastChangeTime);
 }
-
 static void
 CancelDrag(
         Widget w,
@@ -3017,7 +2683,6 @@ CancelDrag(
         Cardinal *numParams )
 {
     XmDragContext	dc = (XmDragContext)w;
-
     /*
      * only cancel if drag has not yet completed
      */
@@ -3026,7 +2691,6 @@ CancelDrag(
 	FinishAction(dc, event);
     }
 }
-
 static void
 HelpDrag(
         Widget w,
@@ -3035,12 +2699,9 @@ HelpDrag(
         Cardinal *numParams )
 {
     XmDragContext	dc = (XmDragContext)w;
-
     dc->drag.dragCompletionStatus = XmDROP_HELP;
     FinishAction(dc, event);
 }
-
-
 static void
 FinishDrag(
         Widget w,
@@ -3049,11 +2710,9 @@ FinishDrag(
         Cardinal *numParams )
 {
     XmDragContext	dc = (XmDragContext)w;
-
     dc->drag.dragCompletionStatus = XmDROP;
     FinishAction(dc, event);
 }
-
 static void
 noMoreShell(
         Widget w,
@@ -3063,8 +2722,6 @@ noMoreShell(
     Boolean *contAction = (Boolean *)client;
     *contAction = False;
 }
-
-
 static void
 InitiatorMainLoop(
         XtPointer clientData,
@@ -3075,7 +2732,6 @@ InitiatorMainLoop(
     XEvent		event;
     Widget		focusWidget, shell;
     Boolean		contAction = True;
-
     if (*activeDC) {
 	appContext = XtWidgetToApplicationContext((Widget) *activeDC);
         shell = (*activeDC)->drag.srcShell;
@@ -3104,15 +2760,12 @@ InitiatorMainLoop(
 	DragStartProto(*activeDC);
     }
     else return;
-
     XtAddCallback (shell, XmNdestroyCallback, noMoreShell,
 		   (XtPointer)&contAction);
-
     while ( (*activeDC) && (XtAppGetExitFlag(appContext) == False) ) {
 	XmDragContext dc = *activeDC;
 #ifdef XTHREADS
 	XtInputMask mask;
-
       while(!(mask = XtAppPending(appContext)))
 	; /* busy wait */
       if (mask & XtIMXEvent)
@@ -3150,7 +2803,6 @@ InitiatorMainLoop(
 	    event.xmotion.window = XtWindow(dc);
 	    break;
 	}
-
         if ((event.type == MotionNotify ||
              event.type == LeaveNotify ||
              event.type == EnterNotify) &&
@@ -3175,9 +2827,6 @@ InitiatorMainLoop(
 	}
     }
 }
-
-
-
 Widget
 XmDragStart(
         Widget w,
@@ -3191,13 +2840,11 @@ XmDragStart(
     Arg			*mergedArgs;
     XmDragStartCallbackStruct	cb;
     _XmWidgetToAppContext(w);
-
     _XmAppLock(app);
     if (dd->display.dragInitiatorProtocolStyle == XmDRAG_NONE) {
       _XmAppUnlock(app);
       return(NULL);
     }
-
     if (event->type != ButtonPress &&
 	event->type != ButtonRelease &&
 	event->type != KeyRelease &&
@@ -3207,19 +2854,16 @@ XmDragStart(
 	_XmAppUnlock(app);
 	return NULL;
     }
-
     cb.reason = XmCR_DRAG_START;
     cb.event = event;
     cb.widget = w;
     cb.doit = True;
     XtCallCallbackList((Widget)dd, dd->display.dragStartCallback,
 		       (XtPointer) &cb);
-
     if (!cb.doit) {
 	_XmAppUnlock(app);
 	return NULL;
     }
-
     /*
      * check if the menu system is already active
      */
@@ -3230,9 +2874,7 @@ XmDragStart(
 	_XmAppUnlock(app);
 	return NULL;
     }
-
     XtSetArg(lclArgs[0], XmNsourceWidget, w);
-
     if (numArgs) {
 	mergedArgs = XtMergeArgLists(args, numArgs, lclArgs, 1);
     }
@@ -3244,14 +2886,11 @@ XmDragStart(
 		     (Widget) dd, mergedArgs, numArgs + 1);
     XtAddCallback(w, XmNdestroyCallback, cancelDrag, (XtPointer)dc);
     _XmDragStart(dc, w, event);
-
     if (numArgs)
       XtFree( (char *)mergedArgs);
     _XmAppUnlock(app);
     return (Widget)dc;
 }
-
-
 static void
 DragCancel(
         XmDragContext dc )
@@ -3259,7 +2898,6 @@ DragCancel(
     dc->drag.dragCompletionStatus = XmDROP_CANCEL;
     FinishAction(dc, NULL);
 }
-
 void
 XmDragCancel(
         Widget dragContext )
@@ -3269,8 +2907,6 @@ XmDragCancel(
     DragCancel((XmDragContext)dragContext);
     _XmAppUnlock(app);
 }
-
-
 Boolean
 XmTargetsAreCompatible(
         Display *dpy,
@@ -3281,7 +2917,6 @@ XmTargetsAreCompatible(
 {
     Cardinal		j, k;
     _XmDisplayToAppContext(dpy);
-
     _XmAppLock(app);
     for (j = 0; j < numExportTargets; j++)
       for (k = 0; k < numImportTargets; k++)
@@ -3292,8 +2927,6 @@ XmTargetsAreCompatible(
     _XmAppUnlock(app);
     return False;
 }
-
-
 unsigned char
 _XmGetActiveProtocolStyle(
         Widget w )
@@ -3303,10 +2936,8 @@ _XmGetActiveProtocolStyle(
     active = XmDRAG_NONE;
   XmDragContext	dc = (XmDragContext)w;
   XmDisplay		xmDisplay = (XmDisplay)XtParent(dc);
-
   initiator = xmDisplay->display.dragInitiatorProtocolStyle;
   receiver = xmDisplay->display.dragReceiverProtocolStyle;
-
   if (!dc->drag.sourceIsExternal)
     {
       /* We are the initiator.  Find the receiver. */
@@ -3335,7 +2966,6 @@ _XmGetActiveProtocolStyle(
 	   */
 	  /*EMPTY*/
 	}
-
       active = protocolMatrix[initiator][receiver];
     }
   else
@@ -3365,7 +2995,6 @@ _XmGetActiveProtocolStyle(
     }
   return active;
 }
-
 static void
 CalculateDragOperation(XmDragContext dc)
 {

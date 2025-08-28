@@ -23,13 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #endif
 #endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -43,14 +41,10 @@ static char rcsid[] = "$TOG: VirtKeys.c /main/22 1999/06/02 14:45:52 samborn $"
 #include "VirtKeysI.h"
 #include "XmosI.h"
 #include "XmI.h"
-
 #define defaultFallbackBindings _XmVirtKeys_fallbackBindingString
-
 #define BUFFERSIZE	2048
 #define MAXLINE		256
-
 /********    Static Function Declarations    ********/
-
 static Boolean CvtStringToVirtualBinding(Display *dpy,
 					 XrmValuePtr args,
 					 Cardinal *num_args,
@@ -76,9 +70,7 @@ static void LoadVendorBindings(Display *display,
 			       char *path,
 			       FILE *fp,
 			       String *binding);
-
 /********    End Static Function Declarations    ********/
-
 static XmConst XmVirtualKeysymRec virtualKeysyms[] =
 {
   { XmVosfActivate,		osfXK_Activate	      },
@@ -129,7 +121,6 @@ static XmConst XmVirtualKeysymRec virtualKeysyms[] =
   { XmVosfUndo,			osfXK_Undo	      },
   { XmVosfUp,			osfXK_Up	      }
 };
-
 static XmConst XmDefaultBindingStringRec fallbackBindingStrings[] =
 {
   { "Acorn Computers Ltd",
@@ -167,7 +158,6 @@ static XmConst XmDefaultBindingStringRec fallbackBindingStrings[] =
   { "Tektronix, Inc.",
       _XmVirtKeys_tekFallbackBindingString }
 };
-
 /*ARGSUSED*/
 static Boolean
 CvtStringToVirtualBinding(Display    *dpy,
@@ -187,22 +177,18 @@ CvtStringToVirtualBinding(Display    *dpy,
     int		  codes_per_sym;
     KeyCode	  minK;
     Modifiers	  used_mods;
-
     /* Lookup codes_per_sym, and let Xt cache the result instead of */
     /* always downloading a new copy with XGetKeyboardMapping(). */
     /* This also initializes Xt's per-display data structures, so */
     /* we can use XtTranslateKey() instead of XLookupString(). */
     (void) XtGetKeysymTable(dpy, &minK, &codes_per_sym);
-
     count = _XmMapKeyEvents(str, &eventTypes, &keysyms, &modifiers);
     if (count > 0)
       {
 	Boolean fini;
-
 	for (tmp = 0; tmp < count; tmp++)
 	  {
 	    fini = False;
-
 	    /*
 	     * Here's a nasty bit of code. If some vendor defines one of
 	     * the standard modifiers to be the mode switch mod, the
@@ -213,7 +199,6 @@ CvtStringToVirtualBinding(Display    *dpy,
 	     */
 	    event.display = dpy;
 	    event.keycode = XKeysymToKeycode(dpy, keysyms[tmp]);
-
 	    /*
 	     * In case the guy specifies a symbol that is modified (like
 	     * HP's Del which is <shift><escape>), we'll find the implied
@@ -230,7 +215,6 @@ CvtStringToVirtualBinding(Display    *dpy,
 			  min_codes_per_sym = codes_per_sym;
 			else
 			  min_codes_per_sym = keysyms_per_keycode;
-
 			if (keysymTab[0] != keysyms[tmp])
 			  for (j = 1; j < min_codes_per_sym; j++)
 			    if (keysymTab[j] == keysyms[tmp])
@@ -247,7 +231,6 @@ CvtStringToVirtualBinding(Display    *dpy,
 		   *            keyboard, as the fix assumes knowledge of the
 		   *            server keycode to keysym key map.
 		   */
-
 				  if ((keysyms[tmp] == XK_KP_Enter) &&
 				      (j == 4) &&
 				      (keysymTab[0] == XK_Return) &&
@@ -257,55 +240,46 @@ CvtStringToVirtualBinding(Display    *dpy,
 					}
 				  else
 				    event.state = 1 << (j-1);
-
 				  break;
 				}
 			XFree(keysymTab);
 		      }
 	      }
-
 	    if (!fini) {
 		event.state |= modifiers[tmp];
 		XtTranslateKey(dpy, event.keycode, event.state, &used_mods,
 			       keysyms + tmp);
 	    }
 	  }
-
 	/* Fail if insufficient storage was provided. */
 	if ((toVal->addr != NULL) &&
 	    (toVal->size < sizeof(XmKeyBindingRec) * count))
 	  {
 	    toVal->size = sizeof(XmKeyBindingRec) * count;
-
 	    XtFree((char*) eventTypes);
 	    XtFree((char*) keysyms);
 	    XtFree((char*) modifiers);
 	    return False;
 	  }
-
 	/* Allocate storage if none was provided. */
 	toVal->size = sizeof(XmKeyBindingRec) * count;
 	if (toVal->addr == NULL)
 	  toVal->addr = XtMalloc(toVal->size);
-
 	/* Copy the data. */
 	for (tmp = 0; tmp < count; tmp++)
 	  {
 	    ((XmKeyBinding) toVal->addr)[tmp].keysym = keysyms[tmp];
 	    ((XmKeyBinding) toVal->addr)[tmp].modifiers = modifiers[tmp];
 	  }
-
 	XtFree((char*) eventTypes);
 	XtFree((char*) keysyms);
 	XtFree((char*) modifiers);
 	return True;
       }
-
     /* The value supplied could not be converted. */
     XtDisplayStringConversionWarning(dpy, str, XmRVirtualBinding);
     return False;
 }
-
 static void
 FillBindingsFromDB(Display       *dpy,
 		   XrmDatabase    rdb,
@@ -319,27 +293,22 @@ FillBindingsFromDB(Display       *dpy,
   Cardinal	    vk_num;
   XrmQuark	    XmQVirtualBinding = XrmPermStringToQuark(XmRVirtualBinding);
   XrmQuark	    XmQString         = XrmPermStringToQuark(XmRString);
-
   xrm_class[0] = XmQVirtualBinding;
   xrm_class[1] = 0;
-
   /* Previously entries in display.bindings corresponded exactly to */
   /* entries in virtualKeysyms.  Since multiple keysyms can be bound */
   /* to a single virtual key, display.num_bindings and the virtkey */
   /* field in XmVKeyBindingRec were added.  This also allows us to */
   /* remove null bindings from the table, improving search times. */
-
   /* Allocate the initial arrays. */
   *num_keys = 0;
   *keys = NULL;
-
   /* Process each known virtual key. */
   for (vk_num = 0; vk_num < XtNumber(virtualKeysyms); vk_num++)
     {
       Boolean	   free_keys = False;
       XmKeyBinding new_keys = NULL;
       Cardinal	   new_num = 0;
-
       xrm_name[0] = XrmPermStringToQuark(virtualKeysyms[vk_num].name);
       xrm_name[1] = 0;
       if (XrmQGetResource(rdb, xrm_name, xrm_class, &rep_type, &value))
@@ -350,7 +319,6 @@ FillBindingsFromDB(Display       *dpy,
 	      new_keys = (XmKeyBinding) value.addr;
 	      new_num = value.size / sizeof(XmKeyBindingRec);
 	    }
-
 	  else if (rep_type == XmQString)
 	    {
 	      /* Convert String resource to key bindings. */
@@ -365,16 +333,13 @@ FillBindingsFromDB(Display       *dpy,
 		  free_keys = True;
 		}
 	    }
-
 	  /* Append the new bindings to the end of the table. */
 	  if (new_num > 0)
 	    {
 	      int tmp;
-
 	      *keys = (XmVKeyBinding)
 		XtRealloc((char*) *keys,
 			  (*num_keys + new_num) * sizeof(XmVKeyBindingRec));
-
 	      for (tmp = 0; tmp < new_num; tmp++)
 		{
 		  (*keys)[*num_keys + tmp].keysym = new_keys[tmp].keysym;
@@ -382,16 +347,13 @@ FillBindingsFromDB(Display       *dpy,
 		  (*keys)[*num_keys + tmp].virtkey =
 		    virtualKeysyms[vk_num].keysym;
 		}
-
 	      *num_keys += new_num;
 	    }
-
 	  if (free_keys)
 	    XtFree((char *)new_keys);
 	}
     }
 }
-
 static Boolean
 GetBindingsProperty(Display *display,
 		    String   property,
@@ -402,11 +364,8 @@ GetBindingsProperty(Display *display,
   int		actual_format;
   unsigned long	num_items;
   unsigned long	bytes_after;
-
-
   if ( binding == NULL )
     return False;
-
   XGetWindowProperty (display,
 		      RootWindow(display, 0),
 		      XInternAtom(display, property, FALSE),
@@ -415,7 +374,6 @@ GetBindingsProperty(Display *display,
 		      &actual_type, &actual_format,
 		      &num_items, &bytes_after,
 		      (unsigned char **) &prop);
-
   if ((actual_type != XA_STRING) ||
       (actual_format != 8) ||
       (num_items == 0))
@@ -430,7 +388,6 @@ GetBindingsProperty(Display *display,
       return True;
     }
 }
-
 /*
  * This routine is called by the XmDisplay Initialize method to set
  * up the virtual bindings table, XtKeyProc, and event handler.
@@ -444,13 +401,10 @@ _XmVirtKeysInitialize(Widget widget)
   String bindingsString;
   String fallbackString = NULL;
   Boolean needXFree = False;
-
   if (!XmIsDisplay(widget))
     return;
-
   bindingsString = xmDisplay->display.bindingsString;
   xmDisplay->display.lastKeyEvent = NULL;
-
   if (bindingsString == NULL)
     {
       /* XmNdefaultVirtualBindings not set, try _MOTIF_BINDINGS */
@@ -474,23 +428,19 @@ _XmVirtKeysInitialize(Widget widget)
 	  bindingsString = fallbackString;
 	}
     }
-
   XtSetTypeConverter(XmRString, XmRVirtualBinding, CvtStringToVirtualBinding,
 		     NULL, 0, XtCacheNone, (XtDestructor)NULL);
   keyDB = XrmGetStringDatabase( bindingsString );
   FillBindingsFromDB (XtDisplay(xmDisplay), keyDB,
 		      &xmDisplay->display.bindings,
 		      &xmDisplay->display.num_bindings);
-
   XrmDestroyDatabase(keyDB);
   if (needXFree)
     XFree (bindingsString);
   if (fallbackString)
     XtFree (fallbackString);
-
   XtSetKeyTranslator(dpy, (XtKeyProc)XmTranslateKey);
 }
-
 /*
  * This routine is called by the XmDisplay Destroy method to free
  * up the virtual bindings table.
@@ -499,11 +449,9 @@ void
 _XmVirtKeysDestroy(Widget widget)
 {
   XmDisplay xmDisplay = (XmDisplay) widget;
-
   XtFree((char*)xmDisplay->display.lastKeyEvent);
   XtFree((char*)xmDisplay->display.bindings);
 }
-
 static void
 FindVirtKey(Display *dpy,
 	    KeyCode keycode,
@@ -519,16 +467,13 @@ FindVirtKey(Display *dpy,
   KeySym       *ks_table = XtGetKeysymTable( dpy, &min_kcode, &ks_per_kc);
   KeySym       *kc_map = &ks_table[(keycode - min_kcode) * ks_per_kc];
   Modifiers     EffectiveSMMask = EffectiveStdModMask( dpy, kc_map, ks_per_kc);
-
   /* Get the modifiers from the actual event */
   Modifiers VirtualStdMods = 0;
   Modifiers StdModMask;
-
   for (i = 0; i < xmDisplay->display.num_bindings; i++)
     {
       unsigned j = ks_per_kc;
       KeySym vks = keyBindings[i].keysym;
-
       if (vks)
 	{
 	  while (j--)
@@ -546,7 +491,6 @@ FindVirtKey(Display *dpy,
 	      if ((j == 1)  &&  (kc_map[j] == NoSymbol))
 		{
 		  KeySym uc, lc;
-
 		  XtConvertCase( dpy, kc_map[0], &lc, &uc);
 		  if ((vks == lc)  ||  (vks == uc))
 		    VirtualStdMods |= keyBindings[i].modifiers;
@@ -568,7 +512,6 @@ FindVirtKey(Display *dpy,
 	    }
 	}
     }
-
   /* Don't want to return standard modifiers that do not
    * impact the keysym selected for a particular keycode,
    * since this blocks matching of translation productions
@@ -586,7 +529,6 @@ FindVirtKey(Display *dpy,
    * the call to XtTranslateKey.
    */
   *modifiers_return &= EffectiveSMMask;
-
   /* Modifiers present in the virtual binding table for the
    * keysyms associated with this keycode, which are or might
    * have been used to change the keysym generated by this
@@ -596,19 +538,16 @@ FindVirtKey(Display *dpy,
    * which keysym is generated by that keycode.
    */
   *modifiers_return |= VirtualStdMods;
-
   /* Effective standard modifiers that are set in the event
    * will be 0 in the following bit mask, which will be used
    * to collapse conflicting modifiers in the virtual
    * key binding table, as described below.
    */
   StdModMask = ~(modifiers & EffectiveSMMask);
-
   for (i = 0; i < xmDisplay->display.num_bindings; i++)
     {
       XmVKeyBinding currBinding = &keyBindings[i];
       KeySym vks = currBinding->keysym;
-
       /* The null binding should not be interpreted as a match
        * keysym is zero (e.g. pre-edit terminator)
        */
@@ -636,7 +575,6 @@ FindVirtKey(Display *dpy,
 	}
     }
 }
-
 static Modifiers
 EffectiveStdModMask(Display *dpy,
 		    KeySym *kc_map,
@@ -650,7 +588,6 @@ EffectiveStdModMask(Display *dpy,
    */
   KeySym uc;
   KeySym lc;
-
   /* Since the group modifier can be any of Mod1-Mod5 or Control, we will
    * return all of these bits if the group modifier is found to be effective.
    * Lock will always be returned (for backwards compatibility with
@@ -724,10 +661,8 @@ EffectiveStdModMask(Display *dpy,
     case 0:
       break;
     }
-
   return esm_mask;
 }
-
 void
 XmTranslateKey(Display     *dpy,
 	       KeyCode      keycode,
@@ -738,11 +673,9 @@ XmTranslateKey(Display     *dpy,
   _XmDisplayToAppContext(dpy);
   _XmAppLock(app);
   XtTranslateKey(dpy, keycode, modifiers, modifiers_return, keysym_return);
-
   FindVirtKey(dpy, keycode, modifiers, modifiers_return, keysym_return);
   _XmAppUnlock(app);
 }
-
 int
 XmeVirtualToActualKeysyms(Display      *dpy,
 			  KeySym        virtKeysym,
@@ -753,23 +686,19 @@ XmeVirtualToActualKeysyms(Display      *dpy,
   XmDisplay     xmDisplay = (XmDisplay)XmGetXmDisplay (dpy);
   XmVKeyBinding keyBindings = xmDisplay->display.bindings;
   _XmDisplayToAppContext(dpy);
-
   _XmAppLock(app);
   /* Initialize the return parameters. */
   *actualKeyData = NULL;
-
   /* Count the number of matches. */
   matches = 0;
   for (index = 0; index < xmDisplay->display.num_bindings; index++)
     if (keyBindings[index].virtkey == virtKeysym)
       matches++;
-
   /* Allocate the return array. */
   if (matches > 0)
     {
       *actualKeyData = (XmKeyBinding)
 	XtMalloc(matches * sizeof(XmKeyBindingRec));
-
       matches = 0;
       for (index = 0; index < xmDisplay->display.num_bindings; index++)
 	if (keyBindings[index].virtkey == virtKeysym)
@@ -779,11 +708,9 @@ XmeVirtualToActualKeysyms(Display      *dpy,
 	    matches++;
 	  }
     }
-
   _XmAppUnlock(app);
   return matches;
 }
-
 Boolean
 _XmVirtKeysLoadFileBindings(char   *fileName,
 			    String *binding )
@@ -794,16 +721,13 @@ _XmVirtKeysLoadFileBindings(char   *fileName,
   int firsttime;
   char line[256];
   Boolean skip;
-
   if ((fileP = fopen (fileName, "r")) != NULL)
     {
       skip = False;
       count = 0;
       buffersize = 1;
       firsttime = 1;
-
       while (fgets(line, sizeof(line), fileP) != NULL) {
-
 	/* handle '!' comments; they can extend across mutliple reads */
 	if (skip) {
 	  if (line[strlen(line) - 1] == '\n') skip = False;
@@ -816,34 +740,26 @@ _XmVirtKeysLoadFileBindings(char   *fileName,
 	    continue;
 	  }
 	}
-
 	/* must be >=, because buffersize is always 1 bigger for '\0' */
 	if (count + strlen(line) >= buffersize) {
 	  buffersize += BUFFERSIZE;
 	  *binding = XtRealloc(*binding, buffersize);
-
 	  /* always make sure that the end of *binding is null terminated */
 	  if (firsttime) {
 	    *binding[0] = '\0';
 	    firsttime = 0;
 	  }
 	}
-
 	count += strlen(line);
-
 	strcat(*binding, line);
       }
-
       /* trim unused buffer space */
       *binding = XtRealloc (*binding, count + 1);
-
       fclose (fileP);
       return True;
     }
-
   return False;
 }
-
 static void
 LoadVendorBindings(Display *display,
 		   char    *path,
@@ -856,11 +772,9 @@ LoadVendorBindings(Display *display,
   char *vendorV;
   char *ptr;
   char *start;
-
   vendor = ServerVendor(display);
   vendorV = XtMalloc (strlen(vendor) + 20); /* assume rel.# is < 19 digits */
   sprintf (vendorV, "%s %d", vendor, VendorRelease(display));
-
   while (fgets (buffer, MAXLINE, fp) != NULL)
     {
       ptr = buffer;
@@ -868,13 +782,11 @@ LoadVendorBindings(Display *display,
 	ptr++;
       if (*ptr != '"')
 	continue;
-
       start = ++ptr;
       while (*ptr != '"' && *ptr != '\0')
 	ptr++;
       if (*ptr != '"')
 	continue;
-
       *ptr = '\0';
       if ((strcmp (start, vendor) == 0) || (strcmp (start, vendorV) == 0))
 	{
@@ -883,12 +795,10 @@ LoadVendorBindings(Display *display,
 	    ptr++;
 	  if (*ptr == '\0')
 	    continue;
-
 	  start = ptr;
 	  while (!isspace((unsigned char)*ptr) && *ptr != '\n' && *ptr)
 	    ptr++;
 	  *ptr = '\0';
-
 	  bindFile = _XmOSBuildFileName (path, start);
 	  if (_XmVirtKeysLoadFileBindings (bindFile, binding))
 	    {
@@ -898,17 +808,14 @@ LoadVendorBindings(Display *display,
 	  XtFree (bindFile);
 	}
     }
-
   XtFree (vendorV);
 }
-
 int
 _XmVirtKeysLoadFallbackBindings(Display	*display,
 				String	*binding )
 {
   enum { XmA_MOTIF_BINDINGS, XmA_MOTIF_DEFAULT_BINDINGS, NUM_ATOMS };
   static char *atom_names[] = {XmS_MOTIF_BINDINGS, XmS_MOTIF_DEFAULT_BINDINGS};
-
   XmConst XmDefaultBindingStringRec *currDefault;
   int i;
   FILE *fp;
@@ -917,18 +824,14 @@ _XmVirtKeysLoadFallbackBindings(Display	*display,
   char *bindDir;
   static XmConst char xmbinddir_fallback[] = XMBINDDIR_FALLBACK;
   Atom atoms[XtNumber(atom_names)];
-
   *binding = NULL;
-
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(display, atom_names, XtNumber(atom_names), False, atoms);
-
   /* Load .motifbind - necessary, if mwm and xmbind are not used */
   homeDir = XmeGetHomeDirName();
   fileName = _XmOSBuildFileName(homeDir, MOTIFBIND);
   _XmVirtKeysLoadFileBindings(fileName, binding);
   XtFree(fileName);
-
   /* Look for a match in the user's xmbind.alias */
   if (*binding == NULL)
     {
@@ -940,7 +843,6 @@ _XmVirtKeysLoadFallbackBindings(Display	*display,
 	}
       XtFree (fileName);
     }
-
   if (*binding != NULL)
     {
       /* Set the user property for future Xm applications. */
@@ -950,7 +852,6 @@ _XmVirtKeysLoadFallbackBindings(Display	*display,
 		       (unsigned char *)*binding, strlen(*binding));
       return 0;
     }
-
   /* Look for a match in the system xmbind.alias */
   if (*binding == NULL)
     {
@@ -964,7 +865,6 @@ _XmVirtKeysLoadFallbackBindings(Display	*display,
 	}
       XtFree (fileName);
     }
-
   /* Check hardcoded fallbacks (for 1.1 bc) */
   if (*binding == NULL)
     {
@@ -980,19 +880,16 @@ _XmVirtKeysLoadFallbackBindings(Display	*display,
 	    }
 	}
     }
-
   /* Use generic fallback bindings */
   if (*binding == NULL)
     {
       *binding = XtMalloc (strlen (defaultFallbackBindings) + 1);
       strcpy (*binding, defaultFallbackBindings);
     }
-
   /* Set the fallback property for future Xm applications */
   XChangeProperty (display, RootWindow(display, 0),
 		   atoms[XmA_MOTIF_DEFAULT_BINDINGS],
 		   XA_STRING, 8, PropModeReplace,
 		   (unsigned char *)*binding, strlen(*binding));
-
   return 0;
 }

@@ -24,44 +24,32 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmTransfer_H
 #define _XmTransfer_H
-
 #include <Xm/DragC.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Proc typedefs */
-
 #define XmConvertCallbackProc 		XtCallbackProc
 #define XmSelectionDoneProc   		XtSelectionDoneProc
 #define XmCancelSelectionProc 		XtCancelConvertSelectionProc
 #define XmDestinationCallbackProc	XtCallbackProc
 #define XmSelectionCallbackProc		XtSelectionCallbackProc
-
 /* Flags */
-
 typedef enum { XmTRANSFER_DONE_SUCCEED = 0, XmTRANSFER_DONE_FAIL,
 	       XmTRANSFER_DONE_CONTINUE, XmTRANSFER_DONE_DEFAULT
 	     } XmTransferStatus;
-
 enum { XmSELECTION_DEFAULT = 0, XmSELECTION_INCREMENTAL,
        XmSELECTION_PERSIST, XmSELECTION_SNAPSHOT,
        XmSELECTION_TRANSACT };
-
 enum { XmCONVERTING_NONE = 0,
        XmCONVERTING_SAME = 1,
        XmCONVERTING_TRANSACT = 2,
        XmCONVERTING_PARTIAL = 4 };
-
 enum { XmCONVERT_DEFAULT = 0, XmCONVERT_MORE,
        XmCONVERT_MERGE, XmCONVERT_REFUSE, XmCONVERT_DONE };
-
 /* Callback structures */
-
 typedef struct {
 	int		reason;
 	XEvent		*event;
@@ -80,7 +68,6 @@ typedef struct {
 	int		format;
 	unsigned long	length;
 } XmConvertCallbackStruct;
-
 typedef struct {
 	int		reason;
   	XEvent		*event;
@@ -92,7 +79,6 @@ typedef struct {
 	XtPointer	location_data;
 	Time		time;
 } XmDestinationCallbackStruct;
-
 typedef struct {
 	int		reason;
   	XEvent		*event;
@@ -106,7 +92,6 @@ typedef struct {
 	unsigned long	length;
 	int		format;
 } XmSelectionCallbackStruct;
-
 typedef struct {
 	int		reason;
   	XEvent		*event;
@@ -115,19 +100,15 @@ typedef struct {
 	XmTransferStatus	status;
 	XtPointer	client_data;
 } XmTransferDoneCallbackStruct;
-
 typedef void (*XmSelectionFinishedProc)(Widget, XtEnum,
 					XmTransferDoneCallbackStruct*);
-
 void XmTransferDone(XtPointer, XmTransferStatus);
 void XmTransferValue(XtPointer, Atom, XtCallbackProc,
 		     XtPointer,	Time);
 void XmTransferSetParameters(XtPointer, XtPointer, int,	unsigned long, Atom);
 void XmTransferStartRequest(XtPointer);
 void XmTransferSendRequest(XtPointer, Time);
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTransfer_H */

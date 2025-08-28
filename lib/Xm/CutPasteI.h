@@ -24,21 +24,14 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmCutPasteI_H
 #define _XmCutPasteI_H
-
 #include <Xm/CutPaste.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 void _XmClipboardPassType(Atom);
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmCutPasteI_H */

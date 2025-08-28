@@ -22,85 +22,61 @@
 */
 #ifndef _XmArrowGadgetP_h
 #define _XmArrowGadgetP_h
-
 #include <Xm/ArrowBG.h>
 #include <Xm/GadgetP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*  Arrow class structure  */
-
 typedef struct _XmArrowButtonGadgetClassPart
 {
    XtPointer extension;
 } XmArrowButtonGadgetClassPart;
-
-
 /*  Full class record declaration for Arrow class  */
-
 typedef struct _XmArrowButtonGadgetClassRec
 {
   RectObjClassPart             rect_class;
   XmGadgetClassPart            gadget_class;
   XmArrowButtonGadgetClassPart arrow_button_class;
 } XmArrowButtonGadgetClassRec;
-
 externalref XmArrowButtonGadgetClassRec xmArrowButtonGadgetClassRec;
-
 /*  The Arrow instance record  */
-
 typedef struct _XmArrowButtonGadgetPart
 {
   XtCallbackList activate_callback;
   XtCallbackList arm_callback;
   XtCallbackList disarm_callback;
   unsigned char  direction;	/* The direction the arrow is pointing. */
-
   Boolean	 selected;
-
   short		 top_count;
   short		 cent_count;
   short		 bot_count;
   XRectangle	*top;
   XRectangle	*cent;
   XRectangle	*bot;
-
   Position	 old_x;
   Position	 old_y;
-
   GC		 arrow_GC;
   XtIntervalId	 timer;
   unsigned char	 multiClick;	/* KEEP/DISCARD resource */
   int		 click_count;
   GC		 insensitive_GC;
-
-
   GC		 background_GC;
   GC		 top_shadow_GC;
   GC		 bottom_shadow_GC;
   GC		 highlight_GC;
-
   Pixel		 foreground;
   Pixel		 background;
-
   Pixel		 top_shadow_color;
   Pixmap	 top_shadow_pixmap;
-
   Pixel		 bottom_shadow_color;
   Pixmap	 bottom_shadow_pixmap;
-
   Pixel		 highlight_color;
   Pixmap	 highlight_pixmap;
-
   Boolean	 fill_bg_box;
   Dimension detail_shadow_thickness ;
 } XmArrowButtonGadgetPart;
-
-
 /*  Full instance record declaration  */
-
 typedef struct _XmArrowButtonGadgetRec
 {
    ObjectPart              object;
@@ -108,9 +84,6 @@ typedef struct _XmArrowButtonGadgetRec
    XmGadgetPart            gadget;
    XmArrowButtonGadgetPart arrowbutton;
 } XmArrowButtonGadgetRec;
-
-
-
 #define ArrowBG_BackgroundGC(w)		(((XmArrowButtonGadget)(w)) -> \
                                            arrowbutton. background_GC)
 #define ArrowBG_TopShadowGC(w)		(((XmArrowButtonGadget)(w)) -> \
@@ -135,16 +108,10 @@ typedef struct _XmArrowButtonGadgetRec
                                            arrowbutton. highlight_color)
 #define ArrowBG_HighlightPixmap(w)	(((XmArrowButtonGadget)(w)) -> \
                                            arrowbutton. highlight_pixmap)
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmArrowGadgetP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

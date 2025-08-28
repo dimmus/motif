@@ -31,58 +31,44 @@
  *		Implements the XmSimpleSpinBox.
  *
  ******************************************************************************/
-
 #ifndef _XmSSpinB_h
 #define _XmSSpinB_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* XmSimpleSpinBox Widget */
 externalref WidgetClass xmSimpleSpinBoxWidgetClass;
-
 typedef struct _XmSimpleSpinBoxClassRec *XmSimpleSpinBoxWidgetClass;
 typedef struct _XmSimpleSpinBoxRec      *XmSimpleSpinBoxWidget;
-
 /* Spin externs for application accessible functions */
 extern Widget XmCreateSimpleSpinBox(
 		Widget		parent,
 		char		*name,
 		ArgList		arglist,
 		Cardinal	argcount);
-
 extern void XmSimpleSpinBoxAddItem(
                 Widget          widget,
                 XmString        item,
                 int             pos);
-
 extern void XmSimpleSpinBoxDeletePos(
                 Widget          widget,
                 int             pos);
-
 extern void XmSimpleSpinBoxSetItem(
                 Widget          widget,
                 XmString        item);
-
 /*
  * Variable argument list functions
  */
-
 extern Widget XmVaCreateSimpleSpinBox(
                         Widget parent,
                         char *name,
                         ...);
-
 extern Widget XmVaCreateManagedSimpleSpinBox(
                         Widget parent,
                         char *name,
                         ...);
-
 #ifdef __cplusplus
 }
 #endif
-
 #endif /* _SSpinB_h */

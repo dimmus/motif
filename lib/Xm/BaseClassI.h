@@ -27,15 +27,11 @@
 /* $XConsortium: BaseClassI.h /main/6 1995/07/14 10:10:58 drk $ */
 #ifndef _XmBaseClassI_h
 #define _XmBaseClassI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern void _XmPushWidgetExtData(
                         Widget widget,
                         XmWidgetExtData data,
@@ -53,7 +49,6 @@ extern void _XmTransformSubResources(
                         Cardinal num_comp_resources,
                         XtResourceList *resources,
                         Cardinal *num_resources) ;
-
 extern Cardinal _XmSecondaryResourceData(
                         XmBaseClassExt bcePtr,
                         XmSecondaryResourceData **secResDataRtn,
@@ -61,9 +56,7 @@ extern Cardinal _XmSecondaryResourceData(
                         String name,
                         String class_name,
                         XmResourceBaseProc basefunctionpointer) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

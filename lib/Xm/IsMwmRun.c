@@ -25,17 +25,12 @@
 /*
  * HISTORY
  */
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/XmP.h>
 #include <Xm/MwmUtil.h>
 #include "XmI.h"
-
 /************************************************************************
  *
  *  XmIsMotifWMRunning
@@ -51,16 +46,12 @@ XmIsMotifWMRunning(
     unsigned long num_items, bytes_after;
     PropMotifWmInfo	*prop = 0;
     Window	root = RootWindowOfScreen(XtScreen(shell));
-
     _XmWidgetToAppContext(shell);
-
     _XmAppLock(app);
-
     motif_wm_info_atom = XInternAtom(XtDisplay(shell),
 				       _XA_MOTIF_WM_INFO,
 				       FALSE);
     _XmProcessLock();
-
     XGetWindowProperty (XtDisplay(shell),
 			 root,
 			 motif_wm_info_atom,
@@ -70,7 +61,6 @@ XmIsMotifWMRunning(
 			 &num_items, &bytes_after,
 			 (unsigned char **) &prop);
     _XmProcessUnlock();
-
     if ((actual_type != motif_wm_info_atom) ||
 	 (actual_format != 32) ||
 	 (num_items < PROP_MOTIF_WM_INFO_ELEMENTS))
@@ -86,7 +76,6 @@ XmIsMotifWMRunning(
 	   unsigned int	num_children;
 	   Boolean	returnVal;
 	   Cardinal	i;
-
 	   if (XQueryTree(XtDisplay(shell),
 			  root, &top, &parent,
 			  &children, &num_children))
@@ -98,7 +87,6 @@ XmIsMotifWMRunning(
 	     }
 	   else
 	     returnVal = FALSE;
-
 	   if (prop) XFree((char *)prop);
 	   if (children) XFree((char *)children);
            _XmAppUnlock(app);

@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * rgbtab.h                                                                    *
 *                                                                             *
@@ -36,20 +35,15 @@
 *                                                                             *
 * Developed by HeDu 3/94 (hedu@cul-ipn.uni-kiel.de)                           *
 \*****************************************************************************/
-
-
 typedef struct {
     char *name;
     COLORREF rgb;			/* it's unsigned long */
 }      rgbRecord;
-
 /*
 #define myRGB(r,g,b) \
 	((unsigned long)r<<16|(unsigned long)g<<8|(unsigned long)b)
 */
 #define myRGB(r,g,b)	RGB(r,g,b)	/* MSW has this macro */
-
-
 static rgbRecord theRGBRecords[] =
 {
     {"AliceBlue", myRGB(240, 248, 255)},
@@ -288,5 +282,4 @@ static rgbRecord theRGBRecords[] =
     {"YellowGreen", myRGB(50, 216, 56)},
     NULL
 };
-
 static int numTheRGBRecords = 234;

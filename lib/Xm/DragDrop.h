@@ -22,12 +22,10 @@
 */
 #ifndef _XmDragDrop_h
 #define _XmDragDrop_h
-
 #include <Xm/Xm.h>
 #include <Xm/DragC.h>
 #include <Xm/DragIcon.h>
 #include <Xm/DropTrans.h>
 #include <Xm/DragOverS.h>
 #include <Xm/DropSMgr.h>
-
 #endif /* _XmDragDrop_h */

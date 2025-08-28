@@ -22,27 +22,18 @@
 */
 #ifndef _XmFrame_h
 #define _XmFrame_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsFrame
 #define XmIsFrame(w) XtIsSubclass(w, xmFrameWidgetClass)
 #endif /* XmIsFrame */
-
 /* Class record constants */
-
 externalref WidgetClass xmFrameWidgetClass;
-
 typedef struct _XmFrameClassRec * XmFrameWidgetClass;
 typedef struct _XmFrameRec      * XmFrameWidget;
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateFrame(
                         Widget parent,
                         char *name,
@@ -56,13 +47,9 @@ extern Widget XmVaCreateManagedFrame(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmFrame_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

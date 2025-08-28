@@ -27,16 +27,12 @@
 /* $XConsortium: ColorI.h /main/6 1995/07/14 10:15:47 drk $ */
 #ifndef _XmColorI_h
 #define _XmColorI_h
-
 #include <Xm/ColorP.h>
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for Color.c    ********/
-
 extern void _XmForegroundColorDefault(
                         Widget widget,
                         int offset,
@@ -71,10 +67,8 @@ extern Pixmap _XmConvertToBW(
                         Widget w,
                         Pixmap pm) ;
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmColorI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

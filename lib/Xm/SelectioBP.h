@@ -22,35 +22,25 @@
 */
 #ifndef _XmSelectionBoxP_h
 #define _XmSelectionBoxP_h
-
 #include <Xm/BulletinBP.h>
 #include <Xm/SelectioB.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Defines for use in allocation geometry matrix. */
-
 #define XmSB_MAX_WIDGETS_VERT	8
-
 /* Constraint part record for SelectionBox widget */
 typedef struct _XmSelectionBoxConstraintPart
 {
    char unused;
 } XmSelectionBoxConstraintPart, * XmSelectionBoxConstraint;
-
 /*  New fields for the SelectionBox widget class record  */
-
 typedef struct
 {
   XtCallbackProc  list_callback ;
   XtPointer	  extension;      /* Pointer to extension record */
 } XmSelectionBoxClassPart;
-
-
 /* Full class record declaration */
-
 typedef struct _XmSelectionBoxClassRec
 {
   CoreClassPart			core_class;
@@ -60,67 +50,47 @@ typedef struct _XmSelectionBoxClassRec
   XmBulletinBoardClassPart	bulletin_board_class;
   XmSelectionBoxClassPart	selection_box_class;
 } XmSelectionBoxClassRec;
-
 externalref XmSelectionBoxClassRec xmSelectionBoxClassRec;
-
-
 /* New fields for the SelectionBox widget record */
-
 typedef struct
 {
   Widget	list_label;		/*  list Label  */
   XmString	list_label_string;
-
   Widget	list;			/*  List  */
   XmString	*list_items;
   int		list_item_count;
   int		list_visible_item_count;
   int		list_selected_item_position;
-
   Widget	selection_label;	/*  selection Label  */
   XmString	selection_label_string;
-
   Widget	text;			/*  Text  */
   XmString	text_string;
   short		text_columns;
-
   Widget	work_area;		/*  other widget  */
-
   Widget	separator;		/*  separator  */
-
   Widget	ok_button;		/*  enter button  */
   XmString	ok_label_string;
-
   Widget	apply_button;		/*  apply button  */
   XmString	apply_label_string;
-
   XmString	cancel_label_string;	/*  cancel button label  */
-
   Widget	help_button;		/*  help button  */
   XmString	help_label_string;
-
   XtCallbackList	ok_callback;		/*  callbacks  */
   XtCallbackList	apply_callback;
   XtCallbackList	cancel_callback;
   XtCallbackList	no_match_callback;
-
   XtAccelerators	text_accelerators;
-
   Boolean	must_match;		/*  flags  */
   Boolean	adding_sel_widgets;
   Boolean	minimize_buttons;
-
   unsigned char	dialog_type;		/*  prompt or selection  */
   unsigned char child_placement;
 } XmSelectionBoxPart;
-
-
 /****************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************/
-
 typedef struct _XmSelectionBoxRec
 {
   CorePart		core;
@@ -130,10 +100,7 @@ typedef struct _XmSelectionBoxRec
   XmBulletinBoardPart	bulletin_board;
   XmSelectionBoxPart	selection_box;
 } XmSelectionBoxRec;
-
-
 /*  Access Macros  */
-
 #define SB_ListLabel(w) 	\
 	(((XmSelectionBoxWidget) (w))->selection_box.list_label)
 #define SB_List(w)		\
@@ -185,11 +152,8 @@ typedef struct _XmSelectionBoxRec
 	(((XmSelectionBoxWidget) w)->selection_box.minimize_buttons)
 #define SB_MustMatch(w)		\
 	(((XmSelectionBoxWidget) w)->selection_box.must_match)
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmSelectionBoxP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

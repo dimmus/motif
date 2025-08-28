@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * data.c:                                                                     *
 *                                                                             *
@@ -31,14 +30,11 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #ifndef CXPMPROG
 #if 0
 /* Official version number */
 static char *RCS_Version = "$XpmVersion: 3.4k $";
-
 /* Internal version number */
 static char *RCS_Id = "Id: xpm.shar,v 3.71 1998/03/19 19:47:14 lehors Exp $";
 #endif
@@ -48,12 +44,10 @@ static char *RCS_Id = "Id: xpm.shar,v 3.71 1998/03/19 19:47:14 lehors Exp $";
 #include "XpmI.h"
 #endif
 #include <ctype.h>
-
 #ifndef CXPMPROG
 #define Getc(data, file) getc(file)
 #define Ungetc(data, c, file) ungetc(c, file)
 #endif
-
 static int
 ParseComment(xpmData *data)
 {
@@ -63,10 +57,8 @@ ParseComment(xpmData *data)
 	unsigned int notend;
 	char *s;
 	const char *s2;
-
 	s = data->Comment;
 	*s = data->Bcmt[0];
-
 	/* skip the string beginning comment */
 	s2 = data->Bcmt;
 	do {
@@ -75,7 +67,6 @@ ParseComment(xpmData *data)
 	    n++;
 	    s2++;
 	} while (c == *s2 && *s2 != '\0' && c);
-
 	if (*s2 != '\0') {
 	    /* this wasn't the beginning of a comment */
 	    data->cptr -= n;
@@ -122,10 +113,8 @@ ParseComment(xpmData *data)
 	unsigned int notend;
 	char *s;
 	const char *s2;
-
 	s = data->Comment;
 	*s = data->Bcmt[0];
-
 	/* skip the string beginning comment */
 	s2 = data->Bcmt;
 	do {
@@ -134,7 +123,6 @@ ParseComment(xpmData *data)
 	    n++;
 	    s2++;
 	} while (c == *s2 && *s2 != '\0' && c != EOF);
-
 	if (*s2 != '\0') {
 	    /* this wasn't the beginning of a comment */
 	    /* put characters back in the order that we got them */
@@ -178,7 +166,6 @@ ParseComment(xpmData *data)
 	return 0;
     }
 }
-
 /*
  * skip to the end of the current string and the beginning of the next one
  */
@@ -189,11 +176,9 @@ xpmNextString(xpmData *data)
 	data->cptr = (data->stream.data)[++data->line];
     else if (data->type == XPMBUFFER) {
 	register char c;
-
 	/* get to the end of the current string */
 	if (data->Eos)
 	    while ((c = *data->cptr++) && c != data->Eos);
-
 	/*
 	 * then get to the beginning of the next string looking for possible
 	 * comment
@@ -210,11 +195,9 @@ xpmNextString(xpmData *data)
     } else {
 	register int c;
 	FILE *file = data->stream.file;
-
 	/* get to the end of the current string */
 	if (data->Eos)
 	    while ((c = Getc(data, file)) != data->Eos && c != EOF);
-
 	/*
 	 * then get to the beginning of the next string looking for possible
 	 * comment
@@ -223,7 +206,6 @@ xpmNextString(xpmData *data)
 	    while ((c = Getc(data, file)) != data->Bos && c != EOF)
 		if (data->Bcmt && c == data->Bcmt[0])
 		    ParseComment(data);
-
 	} else if (data->Bcmt) {	/* XPM2 natural */
 	    while ((c = Getc(data, file)) == data->Bcmt[0])
 		ParseComment(data);
@@ -232,8 +214,6 @@ xpmNextString(xpmData *data)
     }
     return 0;
 }
-
-
 /*
  * skip whitespace and return the following word
  */
@@ -245,7 +225,6 @@ xpmNextWord(
 {
     register unsigned int n = 0;
     int c;
-
     if (!data->type || data->type == XPMBUFFER) {
 	while (isspace(c = *data->cptr) && c != data->Eos)
 	    data->cptr++;
@@ -258,7 +237,6 @@ xpmNextWord(
 	data->cptr--;
     } else {
 	FILE *file = data->stream.file;
-
 	while ((c = Getc(data, file)) != EOF && isspace(c) && c != data->Eos);
 	while (!isspace(c) && c != data->Eos && c != EOF && n < buflen) {
 	    *buf++ = c;
@@ -269,7 +247,6 @@ xpmNextWord(
     }
     return (n); /* this returns bytes read + 1 */
 }
-
 /*
  * skip whitespace and compute the following unsigned int,
  * returns 1 if one is found and 0 if not
@@ -281,11 +258,9 @@ xpmNextUI(
 {
     char buf[BUFSIZ];
     int l;
-
     l = xpmNextWord(data, buf, BUFSIZ);
     return xpmatoui(buf, l, ui_return);
 }
-
 /*
  * return end of string - WARNING: malloc!
  */
@@ -298,7 +273,6 @@ xpmGetString(
     unsigned int i, n = 0;
     int c;
     char *p = NULL, *q, buf[BUFSIZ];
-
     if (!data->type || data->type == XPMBUFFER) {
 	if (data->cptr) {
 	    char *start = data->cptr;
@@ -314,10 +288,8 @@ xpmGetString(
 	}
     } else {
 	FILE *file = data->stream.file;
-
 	if ((c = Getc(data, file)) == EOF)
 	    return (XpmFileInvalid);
-
 	i = 0;
 	q = buf;
 	p = (char *) XpmMalloc(1);
@@ -369,7 +341,6 @@ xpmGetString(
     *l = n;
     return (XpmSuccess);
 }
-
 /*
  * get the current comment line
  */
@@ -390,7 +361,6 @@ xpmGetCmt(
 	*cmt = NULL;
     return 0;
 }
-
 xpmDataType xpmDataTypes[] =
 {
     {"", "!", "\n", '\0', '\n', "", "", "", ""},	/* Natural type */
@@ -398,7 +368,6 @@ xpmDataType xpmDataTypes[] =
     {"Lisp", ";", "\n", '"', '"', "\n", "(setq ", " '(\n", "))\n"},
     {NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, NULL}
 };
-
 /*
  * parse xpm header
  */
@@ -407,7 +376,6 @@ xpmParseHeader(xpmData *data)
 {
     char buf[BUFSIZ+1] = {0};
     int l, n = 0;
-
     if (data->type) {
 	data->Bos = '\0';
 	data->Eos = '\n';
@@ -416,7 +384,6 @@ xpmParseHeader(xpmData *data)
 	if (l == 7 && !strncmp("#define", buf, 7)) {
 	    /* this maybe an XPM 1 file */
 	    char *ptr;
-
 	    l = xpmNextWord(data, buf, BUFSIZ);
 	    if (!l)
 		return (XpmFileInvalid);
@@ -428,7 +395,6 @@ xpmParseHeader(xpmData *data)
 	    data->format = 1;
 	    n = 1;			/* handle XPM1 as mainly XPM2 C */
 	} else {
-
 	    /*
 	     * skip the first word, get the second one, and see if this is
 	     * XPM 2 or 3
@@ -441,7 +407,6 @@ xpmParseHeader(xpmData *data)
 		else {
 		    /* get the type key word */
 		    l = xpmNextWord(data, buf, BUFSIZ);
-
 		    /*
 		     * get infos about this type
 		     */

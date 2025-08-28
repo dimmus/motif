@@ -22,39 +22,29 @@
 */
 #ifndef _XmTextF_h
 #define _XmTextF_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /******************
  * type defines   *
  ******************/
 typedef struct _XmTextFieldClassRec *XmTextFieldWidgetClass;
 typedef struct _XmTextFieldRec *XmTextFieldWidget;
-
 /******************
  * extern class   *
  ******************/
 externalref WidgetClass       xmTextFieldWidgetClass;
-
-
 /************************
  * fast subclass define *
  ************************/
 #ifndef XmIsTextField
 #define XmIsTextField(w)     XtIsSubclass(w, xmTextFieldWidgetClass)
 #endif /* XmIsTextField */
-
-
 /********************
  * public functions *
  ********************/
-
 /********    Public Function Declarations    ********/
-
 char * XmTextFieldGetString(
                  Widget w);
 int XmTextFieldGetSubstring(
@@ -185,12 +175,8 @@ Widget XmVaCreateManagedTextField(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextF_h */

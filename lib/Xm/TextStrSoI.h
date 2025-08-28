@@ -23,15 +23,11 @@
  */
 #ifndef _XmTextStrSoI_h
 #define _XmTextStrSoI_h
-
 #include <Xm/TextStrSoP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern char  * _XmStringSourceGetString(XmTextWidget tw,
 				        XmTextPosition from,
 				        XmTextPosition to,
@@ -82,12 +78,8 @@ extern void    _XmTextValueChanged(XmTextWidget initiator,
 extern Boolean *_XmStringSourceGetPending(XmTextWidget widget);
 extern void    _XmStringSourceSetPending(XmTextWidget widget,
 					 Boolean *pending);
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /*  _XmTextStrSoI_h */

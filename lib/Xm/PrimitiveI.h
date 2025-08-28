@@ -27,16 +27,11 @@
 /* $XConsortium: PrimitiveI.h /main/5 1995/07/13 17:41:15 drk $ */
 #ifndef _XmPrimitiveI_h
 #define _XmPrimitiveI_h
-
 #include <Xm/PrimitiveP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmTraverseLeft(
                         Widget w,
                         XEvent *event,
@@ -113,11 +108,8 @@ extern void _XmMenuButtonTakeFocusUp(
                         String *params,
                         Cardinal *num_params) ;
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPrimitiveI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

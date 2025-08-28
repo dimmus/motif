@@ -1,5 +1,4 @@
 #include <X11/Xfuncs.h>
-
 /**
  * This is just a copy of Xfuncs that (for some reason) gets installed
  * alongside Motif.

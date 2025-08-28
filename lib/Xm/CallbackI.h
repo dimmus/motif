@@ -22,17 +22,12 @@
  */
 #ifndef _XmCallbackI_h
 #define _XmCallbackI_h
-
 #include "XmI.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define _XtCBCalling		1
 #define _XtCBFreeAfterCalling	2
-
 /* The internal callback list is a little header followed by an array of
  * XtCallbackRec structs.  Declaring the first element of the array with
  * the header allows the compiler to take care of any alignment required.
@@ -43,10 +38,7 @@ typedef struct internalCallbackRec {
   char           call_state;	/* combination of _XtCB{FreeAfter}Calling */
   XtCallbackRec  callbacks;	/* first XtCallback record declared here */
 } InternalCallbackRec, *InternalCallbackList;
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmAddCallback(InternalCallbackList *callbacks,
 			   XtCallbackProc callback,
 			   XtPointer closure);
@@ -57,13 +49,9 @@ extern void _XmCallCallbackList(Widget widget,
 				XtCallbackList callbacks,
 				XtPointer call_data);
 extern void _XmRemoveAllCallbacks(InternalCallbackList *callbacks);
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmCallbackI_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

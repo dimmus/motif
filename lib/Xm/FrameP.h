@@ -22,23 +22,16 @@
 */
 #ifndef _XmFrameP_h
 #define _XmFrameP_h
-
 #include <Xm/Frame.h>
 #include <Xm/ManagerP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-
 /* Full class records */
-
 typedef struct
 {
    XtPointer extension;
 } XmFrameClassPart;
-
 typedef struct _XmFrameClassRec
 {
    CoreClassPart       core_class;
@@ -47,12 +40,8 @@ typedef struct _XmFrameClassRec
    XmManagerClassPart  manager_class;
    XmFrameClassPart    frame_class;
 } XmFrameClassRec;
-
 externalref XmFrameClassRec xmFrameClassRec;
-
-
 /*  Frame instance records  */
-
 typedef struct
 {
    Dimension margin_width;
@@ -67,7 +56,6 @@ typedef struct
    Widget title_area;
    Boolean processing_constraints;
 } XmFramePart;
-
 typedef struct _XmFrameRec
 {
     CorePart	   core;
@@ -76,10 +64,7 @@ typedef struct _XmFrameRec
     XmManagerPart  manager;
     XmFramePart    frame;
 } XmFrameRec;
-
-
 /*  Frame constraint records  */
-
 typedef struct _XmFrameConstraintPart
 {
    /* "unused" is actually being used in the CheckSetChildType defaultproc ! */
@@ -89,23 +74,15 @@ typedef struct _XmFrameConstraintPart
    Dimension child_h_spacing;
    unsigned char child_v_alignment;
 } XmFrameConstraintPart, * XmFrameConstraint;
-
 typedef struct _XmFrameConstraintRec
 {
    XmManagerConstraintPart manager;
    XmFrameConstraintPart   frame;
 } XmFrameConstraintRec, * XmFrameConstraintPtr;
-
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmFrameP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -27,16 +27,11 @@
 /* $XConsortium: TextFI.h /main/5 1995/07/13 18:05:32 drk $ */
 #ifndef _XmTextFI_h
 #define _XmTextFI_h
-
 #include <Xm/TextFP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern int _XmTextFieldCountBytes(
                         XmTextFieldWidget tf,
                         wchar_t *wc_value,
@@ -86,12 +81,8 @@ extern void _XmTextFieldHandleSecondaryFinished(Widget w,
 extern int _XmTextFieldCountCharacters(XmTextFieldWidget tf,
 				       char *ptr,
 				       int n_bytes);
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextFI_h */

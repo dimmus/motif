@@ -23,16 +23,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #endif
 #endif
-
 /* Make sure all wm properties can make it out of the resource manager */
-
 #include <stdio.h>
 #include <Xm/AccColorT.h>
 #include <Xm/AtomMgr.h>
@@ -67,35 +63,25 @@ static char rcsid[] = "$TOG: VendorS.c /main/21 1999/08/09 10:49:41 mgreess $"
 #include "XmImI.h"
 #include "VendorSI.h"
 #include "XmI.h"
-
 #if HAVE_LIBXMU
 #include <X11/Xmu/Editres.h>
 #endif
-
 #if XM_MSGCAT
 #if !defined(NL_CAT_LOCALE)
 #define NL_CAT_LOCALE	0
 #endif
 #endif
-
-
 /* #define DEBUG_GRABS */
-
 #define MSG1	_XmMMsgVendor_0000
 #define MSG2	_XmMMsgVendor_0001
 #define MSG3	_XmMMsgVendor_0002
 #define MSG4	_XmMMsgVendor_0003
-
 #define DONT_CARE -1
-
 typedef struct {
     XmVendorShellExtObject ve ;
     Widget shell ;
     } XmDestroyGrabRec, *XmDestroyGrabList ;
-
-
 /********    Static Function Declarations    ********/
-
 static XtPointer BaseProc(
                         Widget widget,
                         XtPointer client_data) ;
@@ -249,7 +235,6 @@ static void VendorExtRealize(
                         Widget w,
                         XtPointer closure,
                         XtPointer call_data) ;
-
 static void AddDLEntry(
                         XmVendorShellExtObject ve,
                         Widget shell) ;
@@ -267,36 +252,24 @@ static XmDirection GetDirection(Widget);
 static void GetColors(Widget widget,
 		      XmAccessColorData color_data);
 static unsigned char GetUnitType(Widget);
-
 /********    End Static Function Declarations    ********/
-
 #ifdef DEBUG_GRABS
-
-
 static void PrintModal(
                         XmModalData modal) ;
 static void PrintXmGrabs(
                         Widget wid) ;
-
-
 #endif /* DEBUG_GRABS */
-
 char _XmVersionString[] = XmVERSION_STRING ;
-
 static XmDestroyGrabList destroy_list ;
 static unsigned short destroy_list_size ;
 static unsigned short destroy_list_cnt ;
-
 static Display * _XmDisplayHandle = NULL ;
 static XtErrorMsgHandler previousWarningHandler = NULL;
-
-
 #if defined(__APPLE__)
 /* Hack necessary to handle Apple two-level namespaces */
 extern WidgetClass vendorShellWidgetClass; /* from Xt/Vendor.c */
 extern VendorShellClassRec xmVendorShellClassRec;
 #define vendorShellClassRec xmVendorShellClassRec
-
 __attribute__((constructor))
 static void __VendorShellHack(void)
 {
@@ -307,50 +280,40 @@ static void __VendorShellHack(void)
     xmDragOverShellWidgetClass->core_class.superclass = vendorShellWidgetClass;
 }
 #endif
-
-
 /***************************************************************************
  *
  * Vendor shell class record
  *
  ***************************************************************************/
-
 #define Offset(field) (XtOffsetOf(WMShellRec, field))
-
 static int default_unspecified_shell_int = XtUnspecifiedShellInt;
 /*
  * Warning, casting XtUnspecifiedShellInt (which is -1) to an (XtPointer)
  * can result is loss of bits on some machines (i.e. crays)
  */
-
 static XtResource resources[] =
 {
     {
 	XmNx, XmCPosition, XmRHorizontalPosition, sizeof(Position),
 	XtOffsetOf(WidgetRec, core.x), XmRImmediate, (XtPointer) 0,
     },
-
     {
 	XmNy, XmCPosition, XmRVerticalPosition, sizeof(Position),
 	XtOffsetOf(WidgetRec, core.y), XmRImmediate, (XtPointer) 0,
     },
-
     {
 	XmNwidth, XmCDimension, XmRHorizontalDimension, sizeof(Dimension),
 	XtOffsetOf(WidgetRec, core.width), XmRImmediate, (XtPointer) 0,
     },
-
     {
 	XmNheight, XmCDimension, XmRVerticalDimension, sizeof(Dimension),
 	XtOffsetOf(WidgetRec, core.height), XmRImmediate, (XtPointer) 0,
     },
-
     {
 	XmNborderWidth, XmCBorderWidth, XmRHorizontalDimension,
 	sizeof(Dimension),
 	XtOffsetOf(WidgetRec, core.border_width), XmRImmediate, (XtPointer) 0,
     },
-
     /* size_hints minus things stored in core */
     { XmNbaseWidth, XmCBaseWidth, XmRHorizontalInt, sizeof(int),
 	Offset(wm.base_width),
@@ -397,7 +360,6 @@ static XtResource resources[] =
     { XmNiconY, XmCIconY, XmRVerticalInt, sizeof(int),
 	Offset(wm.wm_hints.icon_y),
 	XmRVerticalInt, (XtPointer) &default_unspecified_shell_int},
-
     { /* override dec default */
 	XmNinput, XmCInput, XmRBool,
 	sizeof(Bool), Offset(wm.wm_hints.input),
@@ -416,7 +378,6 @@ static XtResource resources[] =
    },
 };
 #undef Offset
-
 static XtResource subresources[] =
 {
     {
@@ -435,7 +396,6 @@ static XtResource subresources[] =
         XmRImmediate, (XtPointer) False,
     },
 };
-
 static CompositeClassExtensionRec compositeClassExtRec = {
     NULL,
     NULLQUARK,
@@ -443,7 +403,6 @@ static CompositeClassExtensionRec compositeClassExtRec = {
     sizeof(CompositeClassExtensionRec),
     TRUE,
 };
-
 static ShellClassExtensionRec shellClassExtRec = {
     NULL,
     NULLQUARK,
@@ -451,7 +410,6 @@ static ShellClassExtensionRec shellClassExtRec = {
     sizeof(ShellClassExtensionRec),
     RootGeometryManager,
 };
-
 static XmBaseClassExtRec baseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -468,7 +426,6 @@ static XmBaseClassExtRec baseClassExtRec = {
     GetValuesPrehook,				/* get_values_prehook	*/
     GetValuesPosthook,				/* get_values_posthook  */
 };
-
 externaldef(vendorshellclassrec)
 VendorShellClassRec vendorShellClassRec = {
     {
@@ -522,43 +479,28 @@ VendorShellClassRec vendorShellClassRec = {
 	NULL, 				/* extension            */
     }
 };
-
 externaldef(vendorshellwidgetclass) WidgetClass
   vendorShellWidgetClass = (WidgetClass) (&vendorShellClassRec);
-
-
-
-
 /* Trait record for VendorS specify render table */
-
 static XmConst XmSpecRenderTraitRec vsSRT = {
   0,		/* version */
   GetTable,
 };
-
 /* Trait record for VendorS specify layout direction  */
-
 static XmConst XmSpecifyLayoutDirectionTraitRec vsLDT = {
   0,			/* version */
   GetDirection
 };
-
-
 /* Access Colors Trait record for vendor shell */
-
 static XmConst XmAccessColorsTraitRec vsACT = {
   0,			/* version */
   GetColors
 };
-
 /* Unit Type Trait record for VendorShell */
-
 static XmConst XmSpecUnitTypeTraitRec vsUTT = {
   0,			/* version */
   GetUnitType
 };
-
-
 /************************************************************************
  *
  *  BaseProc
@@ -575,20 +517,14 @@ BaseProc(
    XmWidgetExtData	extData;
    Widget		secObj = NULL;
    _XmWidgetToAppContext(widget);
-
    _XmAppLock(app);
-
-
     if ((extData = _XmGetWidgetExtData(widget, XmSHELL_EXTENSION)))
     {
 	secObj = extData->widget;
     }
-
     _XmAppUnlock(app);
     return secObj;
 }
-
-
 /************************************************************************
  *
  *  GetSecResData
@@ -603,7 +539,6 @@ GetSecResData(
     int arrayCount = 0;
     String  resource_class, resource_name;
     XtPointer  client_data;
-
     _XmProcessLock();
     if ((bcePtr = _XmGetBaseClassExtPtr(w_class, XmQmotif)) &&
 	(bcePtr) && (*bcePtr) &&
@@ -616,12 +551,10 @@ GetSecResData(
         _XmSecondaryResourceData ( *bcePtr, secResDataRtn, client_data,
                                    resource_name, resource_class,
 			           BaseProc) ;
-
     }
     _XmProcessUnlock();
     return arrayCount;
 }
-
 /************************************************************************
  *
  *  ClassInitialize
@@ -638,7 +571,6 @@ ClassInitialize( void )
   int                         i, j;
   XtResourceList              uncompiled;
   Cardinal                    num;
-
 /**************************************************************************
    ShellExt's and VendorShellExt's resource lists are being merged into one
    and assigned to xmVendorShellExtObjectClassRec. This is for performance
@@ -650,26 +582,18 @@ ClassInitialize( void )
          that are being overwritten by the subclass then the merged_lists
          need to be created differently.
 ****************************************************************************/
-
   _XmProcessLock();
   wc_num_res = xmVendorShellExtClassRec.object_class.num_resources;
-
   sc_num_res = xmShellExtClassRec.object_class.num_resources;
-
   merged_list = (XtResource *)XtMalloc((sizeof(XtResource) * (wc_num_res +
                                                                  sc_num_res)));
-
   _XmTransformSubResources(xmShellExtClassRec.object_class.resources,
                            sc_num_res, &uncompiled, &num);
-
   for (i = 0; i < num; i++)
   {
-
   merged_list[i] = uncompiled[i];
-
   }
   _XmProcessUnlock();
-
   _XmProcessLock();
   for (i = 0, j = num; i < wc_num_res; i++, j++)
   {
@@ -677,63 +601,46 @@ ClassInitialize( void )
         xmVendorShellExtClassRec.object_class.resources[i];
   }
   _XmProcessUnlock();
-
   _XmProcessLock();
   xmVendorShellExtClassRec.object_class.resources = merged_list;
   xmVendorShellExtClassRec.object_class.num_resources = wc_num_res + sc_num_res ;
   _XmProcessUnlock();
-
   _XmRegisterConverters();
   _XmRegisterPixmapConverters();
-
   _XmInitializeExtensions();
   _XmInitializeTraits();
-
 {
    XtProc class_initialize;
    _XmProcessLock();
    class_initialize = xmVendorShellExtObjectClass->core_class.class_initialize;
    _XmProcessUnlock();
-
    (*class_initialize) ();
 }
    baseClassExtRec.record_type = XmQmotif;
-
    _XmBuildExtResources((WidgetClass) baseClassExtRec.secondaryObjectClass);
-
     _XmProcessLock();
-
    if (((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->desktop_class.insert_child ==
           XtInheritInsertChild)
        ((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->desktop_class.insert_child =
         ((XmShellExtObjectClass) xmDesktopClass)->desktop_class.insert_child;
-
    if (((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->desktop_class.delete_child ==
           XtInheritDeleteChild)
        ((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->desktop_class.delete_child =
         ((XmShellExtObjectClass) xmDesktopClass)->desktop_class.delete_child;
-
    if (((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->shell_class.structureNotifyHandler ==
           XmInheritEventHandler)
        ((XmShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->shell_class.structureNotifyHandler =
         ((XmShellExtObjectClass) xmShellExtObjectClass)->shell_class.structureNotifyHandler;
-
    if (((XmVendorShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->vendor_class.offset_handler ==
           XmInheritProtocolHandler)
        ((XmVendorShellExtObjectClass)baseClassExtRec.secondaryObjectClass)->vendor_class.offset_handler =
         ((XmVendorShellExtObjectClass) xmVendorShellExtObjectClass)->vendor_class.offset_handler;
-
     _XmProcessUnlock();
-
-
    XtFree((char *)uncompiled);
-
 #if XM_MSGCAT
     Xm_catd = catopen("Xm", NL_CAT_LOCALE);
 #endif
 }
-
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -746,96 +653,71 @@ ClassPartInitialize(
         WidgetClass wc )
 {
     CompositeWidgetClass	compWc = (CompositeWidgetClass)wc;
-
     CompositeClassExtensionRec 	**compExtPtr;
     XmBaseClassExt		*wcePtr, *scePtr;
     XmVendorShellWidgetClass    vc = (XmVendorShellWidgetClass) wc;
-
     CompositeWidgetClass	superWc;
     _XmProcessLock();
     superWc = (CompositeWidgetClass)wc->core_class.superclass;
     _XmProcessUnlock();
-
     wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
     _XmProcessLock();
     scePtr = _XmGetBaseClassExtPtr(wc->core_class.superclass, XmQmotif);
-
     if ( (vc != (XmVendorShellWidgetClass)vendorShellWidgetClass) &&
 	scePtr && *scePtr &&
 	(*wcePtr)->secondaryObjectClass != NULL &&
 	((*scePtr)->secondaryObjectClass != (*wcePtr)->secondaryObjectClass)){
 	XmVendorShellExtObjectClass  wceClass, sceClass;
-
 	wceClass = (XmVendorShellExtObjectClass)(*wcePtr)->
 	    secondaryObjectClass;
 	sceClass = (XmVendorShellExtObjectClass)(*scePtr)->
 	    secondaryObjectClass;
 	_XmBuildExtResources((WidgetClass) (*wcePtr)->secondaryObjectClass);
-
 	if (wceClass->desktop_class.insert_child == XtInheritInsertChild)
 	    wceClass->desktop_class.insert_child =
 		sceClass->desktop_class.insert_child;
-
 	if (wceClass->desktop_class.delete_child == XtInheritDeleteChild)
 	    wceClass->desktop_class.delete_child =
 		sceClass->desktop_class.delete_child;
-
 	if (wceClass->shell_class.structureNotifyHandler ==
 	    XmInheritEventHandler)
 	    wceClass->shell_class.structureNotifyHandler =
 		sceClass->shell_class.structureNotifyHandler;
-
 	if (wceClass->vendor_class.offset_handler == XmInheritProtocolHandler)
 	    wceClass->vendor_class.offset_handler =
 		sceClass->vendor_class.offset_handler;
       }
-
     compExtPtr = (CompositeClassExtensionRec **)
 	&(compWc->composite_class.extension);
-
     _XmProcessUnlock();
-
     compExtPtr = (CompositeClassExtensionRec **)
 	_XmGetClassExtensionPtr( (XmGenericClassExt *) compExtPtr, NULLQUARK);
-
     if (*compExtPtr == NULL) {
 	CompositeClassExtensionRec 	**superExtPtr;
-
     _XmProcessLock();
 	superExtPtr = (CompositeClassExtensionRec **) &(superWc->composite_class.extension);
     _XmProcessUnlock();
-
 	superExtPtr = (CompositeClassExtensionRec **)
                   _XmGetClassExtensionPtr(
                       (XmGenericClassExt *) superExtPtr,
                       NULLQUARK);
-
 	*compExtPtr = XtNew(CompositeClassExtensionRec);
 	memcpy((char*)*compExtPtr, (char*)*superExtPtr,
 	       sizeof(CompositeClassExtensionRec));
     }
-
     /* Do this here because of bug in Xt */
     _XmProcessLock();
     wc->core_class.expose = Redisplay;
     _XmProcessUnlock();
-
    /* Install the render table trait for all subclasses as well. */
     XmeTraitSet((XtPointer)wc, XmQTspecifyRenderTable, (XtPointer)&vsSRT);
-
    /* Install the direction trait for all subclasses as well. */
     XmeTraitSet((XtPointer)wc, XmQTspecifyLayoutDirection, (XtPointer)&vsLDT);
-
    /* Install the accessColors trait for all subclasses as well. */
     XmeTraitSet((XtPointer)wc, XmQTaccessColors, (XtPointer)&vsACT);
-
    /* Install the unit type trait for all subclasses as well. */
     XmeTraitSet((XtPointer)wc, XmQTspecifyUnitType, (XtPointer)&vsUTT);
-
 }
-
-
 /************************************************************************
  *
  *  SetMwmStuff
@@ -849,7 +731,6 @@ SetMwmStuff(
 {
     Boolean		changed = FALSE;
     Widget		extParent = nve->ext.logicalParent;
-
     if (!ove || (ove->vendor.mwm_menu != nve->vendor.mwm_menu))
       {
 	  /* make mwm_menu local */
@@ -860,7 +741,6 @@ SetMwmStuff(
 	  if (XtIsRealized(extParent))
 	    SetMwmMenu(nve);
       }
-
     if (!ove || (ove->vendor.mwm_hints.functions != nve->vendor.mwm_hints.functions))
       {
 	  if (nve->vendor.mwm_hints.functions == DONT_CARE)
@@ -869,7 +749,6 @@ SetMwmStuff(
 	    nve->vendor.mwm_hints.flags |= MWM_HINTS_FUNCTIONS;
 	  changed |= TRUE;
       }
-
     if (!ove || (ove->vendor.mwm_hints.decorations != nve->vendor.mwm_hints.decorations))
       {
 	  if (nve->vendor.mwm_hints.decorations == DONT_CARE)
@@ -878,7 +757,6 @@ SetMwmStuff(
 	    nve->vendor.mwm_hints.flags |= MWM_HINTS_DECORATIONS;
 	  changed |= TRUE;
       }
-
     if (!ove || (ove->vendor.mwm_hints.input_mode != nve->vendor.mwm_hints.input_mode))
       {
 	  if (nve->vendor.mwm_hints.input_mode == DONT_CARE)
@@ -887,11 +765,9 @@ SetMwmStuff(
 	    nve->vendor.mwm_hints.flags |= MWM_HINTS_INPUT_MODE;
 	  changed |= TRUE;
       }
-
     if (changed && XtIsRealized(extParent))
       SetMwmHints(nve);
 }
-
 /* The AddGrab and RemoveGrab routines manage a virtual Xt modal
  * cascade that allows us to remove entries in the list without
  * flushing out the grabs of all following entries.
@@ -904,14 +780,12 @@ _XmAddGrab(
 {
   AddGrab( NULL, wid, exclusive, spring_loaded, NULL) ;
 }
-
 void
 _XmRemoveGrab(
         Widget wid)
 {
   RemoveGrab( NULL, FALSE, wid) ;
 }
-
 static void
 AddGrab(
         XmVendorShellExtObject ve,
@@ -923,17 +797,13 @@ AddGrab(
     Cardinal		     	position;
     XmModalData			modals;
     XmDisplay			xmDisplay;
-
     if(    shell == NULL    )
       {
         shell = ve->ext.logicalParent ;
       }
     xmDisplay = (XmDisplay) XmGetXmDisplay(XtDisplay(shell));
-
     modals = xmDisplay->display.modals;
-
     position = xmDisplay->display.numModals;
-
     if (xmDisplay->display.numModals == xmDisplay->display.maxModals) {
 	/* Allocate more space */
 	xmDisplay->display.maxModals +=  (xmDisplay->display.maxModals / 2) + 2;
@@ -955,14 +825,12 @@ AddGrab(
                   shell->core.name, exclusive, springLoaded,
                     origKid ? origKid->ext.logicalParent->core.name : "NULL") ;
 #endif
-
     /* If the shell gets destroyed, we don't have to worry about removing
      * the Xt grab, but we do have to remove the ve from the list of modals.
      * Should the client_data be ve or origKid?
      */
     XtAddCallback((Widget) shell, XmNdestroyCallback, RemoveGrabCallback,(XtPointer)ve);
 }
-
 /*
  * we add a new argument here, being_destroyed.  If true, it means that
  * we are being called from a callback triggered by the destruction of a
@@ -979,7 +847,6 @@ RemoveGrab(
     XmDisplay			xmDisplay;
     Cardinal		     	incr, i, numRemoves, numModals;
     XmModalData			modals;
-
     if(    !being_destroyed    )
       {
         /* The "shell" argument of this routine is required when the
@@ -1002,11 +869,9 @@ RemoveGrab(
 	    shell->core.name, ve) ;
     PrintXmGrabs( (Widget) shell) ;
 #endif
-
     xmDisplay = (XmDisplay) XmGetXmDisplay(XtDisplay(shell));
     modals = xmDisplay->display.modals;
     numModals = xmDisplay->display.numModals;
-
     for (i = 0, numRemoves = 0;
 	 i < numModals;
 	 i++)
@@ -1018,7 +883,6 @@ RemoveGrab(
     printf( "RemoveGrab: numRemoves: %d\n", numRemoves) ;
 #endif
     if (numRemoves == 0) return;
-
     if (!being_destroyed)
        for (i = 0; i < numRemoves; i++)
          {
@@ -1028,7 +892,6 @@ RemoveGrab(
                                                   ((Widget)shell)->core.name) ;
 #endif
          }
-
     /* Add back all the grabs that were flushed by the removes */
     /*
      ** What this piece of code is trying to do is to iterate over the list,
@@ -1044,7 +907,6 @@ RemoveGrab(
      ** to add the grabs back in to later widgets.
      ** As is, it's not obvious when modals[i] is to be overwritten.
      */
-
     for (i = 0, incr = 0;
 	 (i + numRemoves) < numModals;
 	 i++)
@@ -1090,14 +952,12 @@ RemoveGrab(
 	    }
       }
     xmDisplay->display.numModals -= numRemoves ;
-
 #ifdef DEBUG_GRABS
     printf( "\n**** Leaving RemoveGrab on %s (0x%x) ****\n",
 	    shell->core.name, ve) ;
     PrintXmGrabs( (Widget) shell) ;
 #endif
 }
-
 /* ARGSUSED */
 static void
 RemoveGrabCallback(
@@ -1125,7 +985,6 @@ RemoveGrabCallback(
       RemoveGrab( (XmVendorShellExtObject) client_data, TRUE, w) ;
     }
 }
-
 static void
 AddToGrabList(
         Widget  parent,
@@ -1136,7 +995,6 @@ AddToGrabList(
     Widget		*children;
     Cardinal		numChildren;
     Cardinal		i;
-
     if (!parent)
       return;
     else if (XmIsScreen(parent)) {
@@ -1160,7 +1018,6 @@ AddToGrabList(
 		  ShellWidget shell;
 		  shell = (ShellWidget)
 		    ((XmDesktopObject)(*currKid))->ext.logicalParent;
-
 		  if(    shell->shell.popped_up
                      || (    XtIsRealized((Widget)shell)
                           && !IsPopupShell( (Widget) shell))    )
@@ -1174,21 +1031,17 @@ AddToGrabList(
 		   * XmDisplay widgets.
 		   */
 		  continue;
-
 	      AddToGrabList(*currKid, NULL, origKid);
 	  }
       }
 }
-
 static void
 AddCousinsToGrabList(
         Widget parent,
         Widget excludedKid,
         Widget origKid )
 {
-
     Widget	grandParent;
-
     if (!parent)
       return;
     else if (XmIsScreen(parent)) {
@@ -1205,18 +1058,15 @@ AddCousinsToGrabList(
     AddToGrabList(parent, excludedKid, origKid);
     AddCousinsToGrabList(grandParent, parent, origKid);
 }
-
 static Boolean
 IsPopupShell(
         Widget shell)
 {
   Widget parent = XtParent( shell) ;
-
   if(    parent != NULL    )
     {
       Widget *ps_list = parent->core.popup_list ;
       unsigned n_psl = parent->core.num_popups ;
-
       while(    n_psl--    )
         {
           if(    ps_list[n_psl] == shell    )
@@ -1227,7 +1077,6 @@ IsPopupShell(
     }
   return FALSE ;
 }
-
 /************************************************************************
  *
  *     PopupCallback
@@ -1244,27 +1093,20 @@ PopupCallback(
     XtGrabKind			grab_kind = XtGrabNone;
     Boolean			grabCousins = False;
     XmScreen			xmScreen;
-
     xmScreen = (XmScreen) XmGetXmScreen(XtScreen(shellParent));
-
     ve->vendor.xAtMap = shellParent->core.x;
     ve->vendor.yAtMap = shellParent->core.y;
-
     /*
      * work around broken Xt spec ordering for realize and popup callback
      */
     if (!XtIsRealized(shellParent))
       XtRealizeWidget(shellParent);
-
     /*
      * get the request num + 1 Since it's a map raised. This will
      * only work when the hierarchy is already realized, i.e. after
      * first time
      */
-
     ve->vendor.lastMapRequest = NextRequest(XtDisplay(shellParent)) + 1;
-
-
     switch (ve->vendor.mwm_hints.input_mode)
       {
 	case DONT_CARE:
@@ -1286,14 +1128,12 @@ PopupCallback(
 	default:
 	  break;
       }
-
     if (grab_kind == XtGrabExclusive)
     {
 	Cardinal	numModals;
         XmModalData	modals;
         XmDisplay	xmDisplay;
 	int		i;
-
         xmDisplay = (XmDisplay) XmGetXmDisplay(XtDisplay(shellParent));
         modals = xmDisplay->display.modals;
 	numModals = xmDisplay->display.numModals;
@@ -1306,15 +1146,12 @@ PopupCallback(
 	     XmDragCancel((Widget) modals[i].wid);
       	}
     }
-
     if (grab_kind != XtGrabNone)
       AddGrab(ve, NULL,
 	      (grab_kind == XtGrabExclusive),
 	      False,
 	      ve);
-
     ve->vendor.grab_kind = grab_kind;
-
     if (grabCousins)
       AddCousinsToGrabList((Widget)ve->desktop.parent,
 			   (Widget)ve,
@@ -1324,7 +1161,6 @@ PopupCallback(
     PrintXmGrabs( shellParent) ;
 #endif
 }
-
 /************************************************************************
  *
  *     PopdownCallback
@@ -1338,7 +1174,6 @@ PopdownCallback(
         XtPointer callData )	/* unused */
 {
     XmVendorShellExtObject	ve = (XmVendorShellExtObject)closure;
-
     if (ve->vendor.grab_kind != XtGrabNone)
       RemoveGrab(ve, False, NULL);
 #ifdef DEBUG_GRABS
@@ -1346,20 +1181,16 @@ PopdownCallback(
     PrintXmGrabs( shellParent) ;
 #endif
 }
-
 static Widget
 GetNextShell(
         Widget vw )
 {
     Widget 	parent;
-
     parent = XtParent(vw);
     while (parent && !XmIsVendorShell(parent))
       parent = XtParent(parent);
-
     return parent;
 }
-
 /*ARGSUSED*/
 static XmDesktopObject
 GetShellDesktopParent(
@@ -1369,14 +1200,11 @@ GetShellDesktopParent(
 {
 	Widget			transientParent = NULL;
 	XmDesktopObject		desktopParent = NULL;
-
-
 	if (vw->wm.transient)
 	{
 		if (XtIsSubclass((Widget) vw, transientShellWidgetClass))
 		{
 			TransientShellWidget tw = (TransientShellWidget)vw;
-
 			if (!(transientParent = tw->transient.transient_for))
 			{
 				tw->transient.transient_for =
@@ -1388,11 +1216,9 @@ GetShellDesktopParent(
 			transientParent = GetNextShell((Widget) vw);
 		}
 	}
-
 	if (transientParent)
 	{
 		XmWidgetExtData	extData;
-
 		if (XmIsVendorShell(transientParent))
 		{
 			extData = _XmGetWidgetExtData(transientParent, XmSHELL_EXTENSION);
@@ -1416,7 +1242,6 @@ GetShellDesktopParent(
 	}
 	return desktopParent;
 }
-
 /************************************************************************
  *
  *     DisplayClosedCallback
@@ -1433,8 +1258,6 @@ DisplayClosedCallback(
   _XmDisplayHandle = NULL;
   _XmProcessUnlock();
 }
-
-
 /************************************************************************
  *
  *  SecondaryObjectCreate
@@ -1454,23 +1277,19 @@ SecondaryObjectCreate(
     Cardinal                    size;
     XtPointer                   newSec, reqSec;
     XmWidgetExtData             extData;
-
     _XmProcessLock();
     if (!_XmDisplayHandle)
       {
 	XmDisplay xmDisplay;
-
 	if ((xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(new_w))) != NULL)
 	  XtAddCallback((Widget)xmDisplay, XmNdestroyCallback,
 			DisplayClosedCallback, NULL);
       }
     _XmDisplayHandle = XtDisplay(new_w);
     _XmProcessUnlock();
-
     desktopParent = GetShellDesktopParent( (VendorShellWidget) new_w,
                                                     args, num_args) ;
     if (desktopParent) {
-
 	/*
 	 * if the secondary object is using sub_resources then
 	 * create it as a child of the shell. Otherwise try to
@@ -1479,34 +1298,26 @@ SecondaryObjectCreate(
 	_XmProcessLock();
 	pePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
 	vec = (*pePtr)->secondaryObjectClass;
-
     _XmProcessLock();
 	size = vec->core_class.widget_size;
     _XmProcessUnlock();
-
 	newSec = XtMalloc(size);
 	reqSec = _XmExtObjAlloc(size);
 	_XmProcessUnlock();
-
 	extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
 	extData->widget = (Widget)newSec;
 	extData->reqWidget = (Widget)reqSec;
-
 	((XmVendorShellExtObject)newSec)->ext.extensionType =
 	    XmSHELL_EXTENSION;
 	((XmVendorShellExtObject)newSec)->ext.logicalParent = new_w;
 	((XmVendorShellExtObject)newSec)->desktop.parent =
 	    (Widget) desktopParent;
-
     _XmProcessLock();
 	((XmVendorShellExtObject)newSec)->object.widget_class = vec;
     _XmProcessUnlock();
-
 	((XmVendorShellExtObject)newSec)->object.parent = new_w;
-
 	_XmPushWidgetExtData(new_w, extData,
                          ((XmVendorShellExtObject)newSec)->ext.extensionType);
-
 	/*
 	 * fetch the resources in superclass to subclass order
 	 */
@@ -1518,11 +1329,8 @@ SecondaryObjectCreate(
 			  vec->core_class.num_resources,
 			  args, *num_args );
     _XmProcessUnlock();
-
 	memcpy(reqSec, newSec, size);
-
 	_XmExtImportArgs((Widget)newSec, args, num_args);
-
 	{
 	   XtInitProc initialize;
 	   _XmProcessLock();
@@ -1532,7 +1340,6 @@ SecondaryObjectCreate(
 	}
     }
 }
-
 /************************************************************************
  *
  *  InitializePrehook
@@ -1550,13 +1357,10 @@ InitializePrehook(
     XtInitProc         		secondaryCreate;
     XmToolTipConfigTrait        ttp;           /* ToolTip pointer */
     XmToolTipConfigTraitRec     base;
-
     ttp = (XmToolTipConfigTrait) XmeTraitGet (new_w, XmQTtoolTipConfig);
-
     if (ttp == NULL)
     {
         ttp = (XmToolTipConfigTrait) XtMalloc (sizeof (XmToolTipConfigTraitRec));
-
         ttp->post_delay = 5000;
         ttp->post_duration = 5000;
         ttp->enable = False;
@@ -1564,25 +1368,18 @@ InitializePrehook(
         ttp->duration_timer = 0;
         ttp->leave_time = 0;
         ttp->slider = ttp->label = NULL;
-
         XtGetSubresources(new_w, &base, NULL, NULL,
  		subresources, XtNumber(subresources),
  		args, *num_args);
-
         ttp->post_delay = base.post_delay;
         ttp->post_duration = base.post_duration;
         ttp->enable = base.enable;
-
         XmeTraitSet ((XtPointer) new_w, XmQTtoolTipConfig, (XtPointer) ttp);
     }
-
     cePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
-
     if ((secondaryCreate = (*cePtr)->secondaryObjectCreate) != NULL)
 	(*secondaryCreate)(req, new_w, args, num_args);
 }
-
-
 /************************************************************************
  *
  *     VendorExtInitialize
@@ -1600,7 +1397,6 @@ VendorExtInitialize(
 	   XmAWM_DELETE_WINDOW, NUM_ATOMS };
     static char *atom_names[] = { _XA_MOTIF_WM_OFFSET, _XA_MOTIF_WM_MESSAGES,
 	 XmIWM_DELETE_WINDOW };
-
     XmFontList                  defaultFont;
     XmVendorShellExtObject	ve;
     XmVendorShellExtObject	req_ve;
@@ -1610,27 +1406,20 @@ VendorExtInitialize(
     Widget			extParent;
     XmShellExtObjectClass	sec = (XmShellExtObjectClass) XtClass(new_w);
     XtEventHandler		handler;
-
     ve  = (XmVendorShellExtObject) new_w;
     req_ve  = (XmVendorShellExtObject) req;
-
     ve->shell.lastConfigureRequest = 0;
-
     extParent = ve->ext.logicalParent;
-
     /* add the handler for tracking whether the hierarchy has focus */
-
     XtInsertEventHandler(extParent,
 			 (EventMask)FocusChangeMask | EnterWindowMask | LeaveWindowMask,
 			 FALSE,
 			 _XmTrackShellFocus,
 			 (XtPointer)new_w,
 			 XtListHead);
-
     _XmProcessLock();
     handler = sec->shell_class.structureNotifyHandler;
     _XmProcessUnlock();
-
     if (handler)
       {
 	  XtInsertEventHandler(extParent,
@@ -1644,23 +1433,17 @@ VendorExtInitialize(
     else
       XtError("No structure notify handler for shell");
 #endif /* DEBUG */
-
     ve->vendor.lastOffsetSerial =
       ve->vendor.lastMapRequest = 0;
-
     ve->vendor.xAtMap =
       ve->vendor.yAtMap =
 	ve->vendor.xOffset =
 	  ve->vendor.yOffset = 0;
-
     _XmAddCallback((InternalCallbackList *) &(ve->vendor.realize_callback),
 		   VendorExtRealize, NULL);
-
     ve->vendor.externalReposition = False;
     extParent = ve->ext.logicalParent;
-
     ve->vendor.focus_data = (XmFocusData) _XmCreateFocusData();
-
     switch (ve->vendor.delete_response){
       case XmUNMAP:
       case XmDESTROY:
@@ -1670,20 +1453,15 @@ VendorExtInitialize(
 	XmeWarning(new_w, MSG1);
 	ve->vendor.delete_response = XmDESTROY;
     }
-
     XtAddCallback(extParent, XmNpopupCallback, PopupCallback,(XtPointer)new_w);
     XtAddCallback(extParent, XmNpopdownCallback, PopdownCallback,(XtPointer)new_w);
-
     assert(XtNumber(atom_names) == NUM_ATOMS);
     XInternAtoms(XtDisplay(extParent), atom_names,
 		 XtNumber(atom_names), FALSE, atoms);
-
     XmAddWMProtocols(extParent, &atoms[XmA_MOTIF_WM_MESSAGES], 1);
-
     XmAddProtocols(extParent,
 		   atoms[XmA_MOTIF_WM_MESSAGES],
 		   &atoms[XmA_MOTIF_WM_OFFSET], 1);
-
     _XmProcessLock();
     XmAddProtocolCallback( extParent,
 			  atoms[XmA_MOTIF_WM_MESSAGES],
@@ -1695,35 +1473,24 @@ VendorExtInitialize(
      * add deleteWindow stuff
      */
     XmAddWMProtocols(extParent, &atoms[XmAWM_DELETE_WINDOW], 1);
-
     /* add a post hook for delete response */
-
     _XmProcessLock();
     delete_window_handler = vec->vendor_class.delete_window_handler;
     _XmProcessUnlock();
-
     XmSetWMProtocolHooks( extParent,
 			 atoms[XmAWM_DELETE_WINDOW], NULL, NULL,
 			 delete_window_handler, (XtPointer) ve);
-
-
     /* initialize the old_managed field for focus change tracking */
-
     ve->vendor.old_managed = NULL;
-
     /* initialize the mwm_hints flags */
     ve->vendor.mwm_hints.flags = 0;
-
     SetMwmStuff( NULL, (XmVendorShellExtObject) new_w);
-
     if ((ve->vendor.focus_policy != XmEXPLICIT) &&
 	(ve->vendor.focus_policy != XmPOINTER))
       {
 	  ve->vendor.focus_policy = XmEXPLICIT;
       }
-
     /* initialize input manager resources */
-
     ve->vendor.input_method_string =
 			XtNewString(req_ve->vendor.input_method_string);
     ve->vendor.preedit_type_string =
@@ -1736,7 +1503,6 @@ VendorExtInitialize(
 	  defaultFont = XmeGetDefaultRenderTable( (Widget) extParent, XmBUTTON_FONTLIST);
       }
      ve->vendor.button_font_list = XmFontListCopy (defaultFont);
-
      defaultFont =  ve->vendor.label_font_list;
      if ( !defaultFont )
        {
@@ -1745,7 +1511,6 @@ VendorExtInitialize(
 	   defaultFont = XmeGetDefaultRenderTable( (Widget) extParent, XmLABEL_FONTLIST);
      }
      ve->vendor.label_font_list = XmFontListCopy (defaultFont);
-
      defaultFont =  ve->vendor.text_font_list;
      if ( !defaultFont )
        {
@@ -1762,9 +1527,7 @@ VendorExtInitialize(
     ve->vendor.timer = (XtIntervalId)0;
     ve->vendor.duration_timer = (XtIntervalId)0;
     ve->vendor.leave_time = (Time)0;
-
 }
-
 /************************************************************************
  *  MotifWarningHandler
  *    Build up a warning message and print it
@@ -1781,22 +1544,18 @@ MotifWarningHandler (String name,
 {
    char buf[1024], buf2[1024], header[200], *bp, *newline_pos;
    int pos;
-
    if (!(params && num_params && (*num_params > 0) &&
 	 (params[*num_params-1] == XME_WARNING)) &&
        previousWarningHandler) {
-
      /* We assume it is not coming from our XmeWarning function */
      /* call the previous Warning handler */
      (*previousWarningHandler) (name, type, s_class, message,
 				params, num_params);
      return;
    }
-
    XtGetErrorDatabaseText(name, type, s_class, message, buf2, 1024);
    XtGetErrorDatabaseText("motif", "header", "Motif",
 			  _XmMMsgMotif_0000, header, 200);
-
    sprintf(buf, header, name, s_class);
    if (num_params && *num_params > 1) {
      int i = *num_params-1;
@@ -1808,7 +1567,6 @@ MotifWarningHandler (String name,
 		    par[4], par[5], par[6], par[7], par[8], par[9]);
    } else
      strcat(buf, buf2);
-
    pos = 0;
    bp = buf;
    do {
@@ -1824,14 +1582,9 @@ MotifWarningHandler (String name,
        pos += 4;
      }
    } while (newline_pos != NULL);
-
    buf2[pos] = '\n'; buf2[++pos] = '\0';
-
    XtWarning(buf2);
 }
-
-
-
 /************************************************************************
  *
  *  Initialize
@@ -1847,7 +1600,6 @@ Initialize(
 {
     VendorShellWidget		vw = (VendorShellWidget)new_w;
     XmWidgetExtData		extData;
-
     if ((extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION)) != NULL)
       {
 	   VendorExtInitialize(extData->reqWidget,
@@ -1855,24 +1607,18 @@ Initialize(
 			       args,
 			       num_args);
       }
-
     /* get reasonable defaults for visual, depth and colormap */
     _XmDefaultVisualResources(new_w);
-
     /* Keep count of the number of VendorShells. When it reaches zero
      * we will destroy the XmDisplay object in Destroy()
      */
     if (!XmIsDisplay(new_w)) {
 	 XmDisplay xmDisplay = (XmDisplay) XmGetXmDisplay (XtDisplay(new_w));
-
 	 xmDisplay->display.shellCount += 1;
-
 #ifdef HAVE_LIBXMU
 	XtAddEventHandler(new_w, (EventMask)0, True, (XtEventHandler)_XEditResCheckMessages, NULL);
 #endif
-
     }
-
     /* install the Motif warning handler that works with XmeWarning */
     _XmProcessLock();
     if (!previousWarningHandler)
@@ -1880,9 +1626,7 @@ Initialize(
 	XtAppSetWarningMsgHandler(XtWidgetToApplicationContext(new_w),
 				  MotifWarningHandler);
     _XmProcessUnlock();
-
 }
-
 /************************************************************************
  *
  *  InitializePosthook
@@ -1897,7 +1641,6 @@ InitializePosthook(
 	 Cardinal *num_args )
 {
     XmWidgetExtData	ext;
-
     if ((ext = _XmGetWidgetExtData(new_w, XmSHELL_EXTENSION)) != NULL) {
 	 _XmProcessLock();
 	 _XmExtObjFree((XtPointer) ext->reqWidget);
@@ -1906,9 +1649,6 @@ InitializePosthook(
 	 /* extData gets freed at destroy */
     }
 }
-
-
-
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -1927,49 +1667,38 @@ SetValuesPrehook(
     XmBaseClassExt      *cePtr;
     WidgetClass         ec;
     Cardinal            extSize;
-
     cePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
-
     _XmProcessLock();
     extSize = ec->core_class.widget_size;
     _XmProcessUnlock();
-
     oldExtData = _XmGetWidgetExtData(new_w, XmSHELL_EXTENSION);
     newExtData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
-
     if (oldExtData && newExtData) {
 	 _XmPushWidgetExtData(new_w, newExtData, XmSHELL_EXTENSION);
-
     newExtData->widget = oldExtData->widget;
-
     _XmProcessLock();
     newExtData->oldWidget = (Widget) _XmExtObjAlloc(extSize);
     memcpy((char *)newExtData->oldWidget, (char *)oldExtData->widget, extSize);
     _XmProcessUnlock();
-
     _XmProcessLock();
     XtSetSubvalues(oldExtData->widget,
 		    ec->core_class.resources,
 		    ec->core_class.num_resources,
 		    args, *num_args);
     _XmProcessUnlock();
-
     _XmProcessLock();
     newExtData->reqWidget = (Widget) _XmExtObjAlloc(extSize);
     memcpy((char *)newExtData->reqWidget, (char *)oldExtData->widget, extSize);
     _XmProcessUnlock();
-
     /*  Convert the necessary fields from unit values to pixel values  */
      _XmProcessLock();
      oldExtData->widget->core.widget_class = ec;
      _XmProcessUnlock();
     _XmExtImportArgs(oldExtData->widget, args, num_args);
-
     }
     return FALSE;
 }
-
 /************************************************************************
  *
  *  SetValues
@@ -1988,10 +1717,8 @@ VendorExtSetValues(
   XmVendorShellExtObject  ov = (XmVendorShellExtObject) old;
   XmVendorShellExtObject  nv = (XmVendorShellExtObject) new_w;
   XmFontList		  defaultFont;
-
   ove = (XmVendorShellExtPartPtr) &(ov->vendor);
   nve = (XmVendorShellExtPartPtr) &(nv->vendor);
-
   switch (nve->delete_response)
     {
     case XmUNMAP:
@@ -2002,33 +1729,27 @@ VendorExtSetValues(
       XmeWarning(new_w, MSG1);
       nve->delete_response = XmDESTROY;
     }
-
   if ((nve->focus_policy != XmEXPLICIT) &&
       (nve->focus_policy != XmPOINTER))
     {
       nve->focus_policy = ove->focus_policy;
     }
-
   if (nve->focus_policy != ove->focus_policy)
     {
       _XmFocusModelChanged( nv->ext.logicalParent, NULL,
 			   (XtPointer)(unsigned long)nve->focus_policy );
     }
-
   SetMwmStuff(ov, nv);
-
   if (nve->input_method_string != ove->input_method_string)
     {
       XtFree(ove->input_method_string);
       nve->input_method_string = XtNewString(nve->input_method_string);
     }
-
   if (nve->preedit_type_string != ove->preedit_type_string)
     {
       XtFree(ove->preedit_type_string);
       nve->preedit_type_string = XtNewString(nve->preedit_type_string);
     }
-
   if (nve->button_font_list != ove->button_font_list)
     {
       XmFontListFree(ove->button_font_list);
@@ -2042,7 +1763,6 @@ VendorExtSetValues(
 	}
       nve->button_font_list = XmFontListCopy (defaultFont);
     }
-
   if (nve->label_font_list != ove->label_font_list)
     {
       XmFontListFree(ove->label_font_list);
@@ -2056,7 +1776,6 @@ VendorExtSetValues(
 	}
       nve->label_font_list = XmFontListCopy (defaultFont);
     }
-
   if (nve->text_font_list != ove->text_font_list)
     {
       XmFontListFree(ove->text_font_list);
@@ -2070,7 +1789,6 @@ VendorExtSetValues(
 	}
       nve->text_font_list = XmFontListCopy (defaultFont);
     }
-
   if (nve->input_policy != ove->input_policy)
     {
       switch (nve->input_policy)
@@ -2083,16 +1801,13 @@ VendorExtSetValues(
 	  nve->input_policy = ove->input_policy;
 	}
     }
-
     if (nve->layout_direction != ove->layout_direction)
       {
 	XmeWarning(new_w, MSG3);
 	nve->layout_direction = ove->layout_direction;
       }
-
   return FALSE;
 }
-
 /************************************************************************
  *
  *  SetValues
@@ -2106,13 +1821,11 @@ SetValues(
 	 ArgList args,
 	 Cardinal *num_args )
 {
-
     VendorShellWidget		vw = (VendorShellWidget)new_w;
     XmWidgetExtData		extData;
     XmVendorShellExtObject	vse;
     int i;
     XmToolTipConfigTrait ttp;
-
     ttp = (XmToolTipConfigTrait) XmeTraitGet (new_w, XmQTtoolTipConfig);
     if (ttp != NULL)
     {
@@ -2134,7 +1847,6 @@ SetValues(
         }
         _XmProcessUnlock ();
     }
-
     if ((extData = _XmGetWidgetExtData( (Widget) vw, XmSHELL_EXTENSION)) &&
 	 (vse = (XmVendorShellExtObject) extData->widget))
       {
@@ -2143,17 +1855,12 @@ SetValues(
 			      extData->widget,
 			      args,
 			      num_args);
-
 	     vse = (XmVendorShellExtObject) extData->widget;
 	     if (req->core.height != current->core.height)
 		 vse->vendor.im_vs_height_set = True;
-
       }
-
 	 return(FALSE);
 }
-
-
 /************************************************************************
  *
  *  SetValuesPosthook
@@ -2169,9 +1876,7 @@ SetValuesPosthook(
 	 Cardinal *num_args )	/* unused */
 {
     XmWidgetExtData	ext;
-
     _XmPopWidgetExtData(new_w, &ext, XmSHELL_EXTENSION);
-
     if (ext) {
 	 _XmProcessLock();
 	 _XmExtObjFree( (XtPointer) ext->reqWidget);
@@ -2181,8 +1886,6 @@ SetValuesPosthook(
     }
 	 return(FALSE);
 }
-
-
 /************************************************************************
  *
  *  GetValuesPrehook
@@ -2196,14 +1899,12 @@ GetValuesPrehook(
 	 Cardinal *num_args )	/* unused */
 {
     XmWidgetExtData	oldExtData, newExtData;
-
     if ((oldExtData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) != NULL) {
 	 newExtData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
 	 newExtData->widget = oldExtData->widget;
 	 _XmPushWidgetExtData(w, newExtData, XmSHELL_EXTENSION);
     }
 }
-
 static void
 GetValuesHook(
 	 Widget w,
@@ -2217,9 +1918,7 @@ GetValuesHook(
     int *ip;
     Boolean *bp;
     XmToolTipConfigTrait ttp;
-
     ttp = (XmToolTipConfigTrait) XmeTraitGet (w, XmQTtoolTipConfig);
-
     if (ttp != NULL)
     {
         _XmProcessLock ();
@@ -2243,10 +1942,8 @@ GetValuesHook(
         }
         _XmProcessUnlock ();
     }
-
     cePtr = _XmGetBaseClassExtPtr(XtClass(w), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
-
     if ((ext = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) != NULL)
     {
       _XmProcessLock();
@@ -2257,9 +1954,7 @@ GetValuesHook(
       _XmProcessUnlock();
       _XmExtGetValuesHook( ext->widget, args, num_args );
     }
-
 }
-
 /*ARGSUSED*/
 static void
 GetValuesPosthook(
@@ -2268,12 +1963,10 @@ GetValuesPosthook(
 	 Cardinal *num_args )	/* unused */
 {
     XmWidgetExtData	ext = NULL;
-
     _XmPopWidgetExtData(w, &ext, XmSHELL_EXTENSION);
     if (ext)
       XtFree((char *) ext);
 }
-
 /*
  * This handles the case where the secondary shells is waiting for the
  * primary to get mapped and is destroyed in the interim.
@@ -2287,7 +1980,6 @@ PendingTransientDestroyed(
 {
 	 XmExtObject ancestorExtObj = (XmExtObject) cl_data ;
 	 Widget ancestor = ancestorExtObj->ext.logicalParent ;
-
     if(    !ancestor->core.being_destroyed    )
     {
 /*
@@ -2299,7 +1991,6 @@ PendingTransientDestroyed(
 	 }
     return ;
     }
-
 /*
  * Handle having the application shell realized after the secondary shells
  */
@@ -2314,34 +2005,27 @@ SetTransientFor(
 	 Widget ancestor = ((XmExtObject) w)->ext.logicalParent ;
 	 Arg args[2] ;
 	 Cardinal i = 0 ;
-
     if(    !XtIsRealized( ancestor)    )
     {
 	 XtRealizeWidget( ancestor) ;
 	 }
     XtSetArg( args[i], XtNwindowGroup, XtWindow( ancestor)) ; i++ ;
-
     if(    XtIsTransientShell( (Widget) vw)    )
     {
 	 /* because Shell.c is broken force the code */
 	 ((TransientShellWidget) vw)->transient.transient_for = NULL ;
-
 	 XtSetArg( args[i], XtNtransientFor, ancestor) ; i++ ;
 	 }
     XtSetValues( (Widget) vw, args, i) ;
 /*
     XtRemoveCallback( w, XmNrealizeCallback, SetTransientFor, (XtPointer) vw) ;
 */
-
     _XmRemoveCallback((InternalCallbackList *) &(((XmVendorShellExtObject)w)->vendor.realize_callback),
 			   SetTransientFor, (XtPointer) vw) ;
-
     XtRemoveCallback( (Widget) vw, XmNdestroyCallback,
 				     PendingTransientDestroyed, (XtPointer) w) ;
     return ;
     }
-
-
 /************************************************************************
  *
  *  Resize
@@ -2357,7 +2041,6 @@ Resize(
     int y;
     XmVendorShellExtObject vendorExt;
     XmWidgetExtData	extData;
-
     extData = _XmGetWidgetExtData((Widget)sw, XmSHELL_EXTENSION);
 if(extData == NULL)
 {
@@ -2366,7 +2049,6 @@ if(extData == NULL)
 #endif
 }
     vendorExt = (XmVendorShellExtObject) extData->widget;
-
     _XmImResize((Widget)sw);
     y = sw->core.height - vendorExt->vendor.im_height;
     for(i = 0; i < sw->composite.num_children; i++) {
@@ -2379,7 +2061,6 @@ if(extData == NULL)
 	 }
     }
 }
-
 /************************************************************************
  *
  *  ChangeManaged
@@ -2396,46 +2077,37 @@ ChangeManaged(
     XmVendorShellExtObject vendorExt;
     XmWidgetExtData	extData;
     XtWidgetProc 	change_managed;
-
     extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION);
-
 if(extData == NULL)
 {
 #ifdef DEBUG
         XmeWarning(NULL, "_XmGetWidgetExtData() returned NULL pointer.");
 #endif
 }
-
     vendorExt = (XmVendorShellExtObject) extData->widget;
-
     for (i= 0; i < vw->composite.num_children; i++)
       if (XtIsManaged(vw->composite.children[i]))
 	 firstManaged = vw->composite.children[i];
-
     /* Danger! Danger! Ugly Code Warning! Since the shell's
      * change Managed routine in the intrinsics will always
      * configure the child to be the size of the parent, if
      * there is any im_height we must subtract it here and
      * add it back in after this call.
      */
-
     vw->core.height -= vendorExt->vendor.im_height;
     _XmProcessLock();
     change_managed = super->composite_class.change_managed;
     _XmProcessUnlock();
     (*change_managed) ((Widget) vw);
     vw->core.height += vendorExt->vendor.im_height;
-
     /*
      * make sure that there is a reasonable initial focus path. This
      * is especially important for making sure the event handler is
      * there.
      */
     XtSetKeyboardFocus((Widget)vw, (Widget)firstManaged);
-
     XmeNavigChangeManaged((Widget)vw);
 }
-
 static void
 UpdateCoreGeometry(
 	 VendorShellWidget vw,
@@ -2467,7 +2139,6 @@ UpdateCoreGeometry(
 		 }
 	 }
 }
-
 /************************************************************************
  *
  *  Realize
@@ -2483,7 +2154,6 @@ Realize(
     WMShellWidgetClass	super = (WMShellWidgetClass)wmShellWidgetClass;
     XmVendorShellExtObject vendorExt;
     XmWidgetExtData	extData;
-
     if ((extData = _XmGetWidgetExtData((Widget)vw, XmSHELL_EXTENSION)) != NULL)
       {
 	 vendorExt = (XmVendorShellExtObject) extData->widget;
@@ -2491,9 +2161,7 @@ Realize(
       }
     else
       vendorExt = NULL;
-
     UpdateCoreGeometry(vw, vendorExt);
-
     /*
      * Set nearest shell as transientFor so Mwm will be able to build tree.
      */
@@ -2513,21 +2181,18 @@ Realize(
 		   _XmAddCallback((InternalCallbackList *) &(((XmVendorShellExtObject)ancestorExtData->widget)->vendor.realize_callback),
 		    SetTransientFor,
 		      (XtPointer) vw);
-
 		   XtAddCallback( (Widget) vw, XmNdestroyCallback,
 					PendingTransientDestroyed,
 					  (XtPointer) ancestorExtData->widget) ;
 		 }
 	     }
       }
-
     /*	Make sure height and width are not zero, without warning, since
 	 we change the internal behavior of BB and DA and we don't want
 	 to change the external one.
     */
    if (!XtWidth(wid)) XtWidth(wid) = 1 ;
    if (!XtHeight(wid)) XtHeight(wid) = 1 ;
-
     /* Make my superclass do all the dirty work */
     {
 	XtRealizeProc realize;
@@ -2539,7 +2204,6 @@ Realize(
     if (vendorExt)
       _XmImRealize((Widget)vw);
 }
-
 /************************************************************************
  *
  *  GeometryManager
@@ -2557,22 +2221,17 @@ GeometryManager(
     XmVendorShellExtObject ve;
     XmWidgetExtData   extData;
     XtGeometryResult res ;
-
     if (!(extData = _XmGetWidgetExtData((Widget)shell,
 					 XmSHELL_EXTENSION)))
       return XtGeometryNo;
-
     ve = (XmVendorShellExtObject) extData->widget;
-
     if(!(shell->shell.allow_shell_resize) && XtIsRealized(wid) &&
 	(request->request_mode & (CWWidth | CWHeight | CWBorderWidth)))
       return(XtGeometryNo);
-
     my_request.request_mode = 0;
     /* %%% worry about XtCWQueryOnly */
     if (request->request_mode & XtCWQueryOnly)
       my_request.request_mode |= XtCWQueryOnly;
-
     if (request->request_mode & CWWidth) {
 	 my_request.width = request->width;
 	 my_request.request_mode |= CWWidth;
@@ -2585,7 +2244,6 @@ GeometryManager(
 	 my_request.border_width = request->border_width;
 	 my_request.request_mode |= CWBorderWidth;
     }
-
   if (request->request_mode & CWX) {
     my_request.x = request->x;
     my_request.request_mode |= CWX;
@@ -2594,9 +2252,7 @@ GeometryManager(
     my_request.y = request->y;
     my_request.request_mode |= CWY;
   }
-
     res = XtMakeGeometryRequest((Widget)shell, &my_request, NULL) ;
-
     if (res == XtGeometryYes)
       {
 	   _XmImResize((Widget)shell);
@@ -2617,8 +2273,6 @@ GeometryManager(
     else
       return XtGeometryNo;
 }
-
-
 /************************************************************************
  *
  *  RootGeometryManager
@@ -2637,9 +2291,7 @@ RootGeometryManager(
     XtGeometryResult	returnVal = XtGeometryNo;
     WMShellWidget	wmShell = (WMShellWidget)w;
     XmShellExtObject	se;
-
     XmWidgetExtData	extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
-
     if(extData == NULL)
     {
 #ifdef DEBUG
@@ -2647,10 +2299,7 @@ RootGeometryManager(
 #endif
         return XtGeometryNo;
     }
-
     se = (XmShellExtObject)extData->widget;
-
-
     if (se)
       {
 	   se->shell.lastConfigureRequest = NextRequest(XtDisplay(w));
@@ -2659,14 +2308,12 @@ RootGeometryManager(
     else
       XtError("no extension object");
 #endif /* DEBUG */
-
     _XmProcessLock();
     scExtPtr = (ShellClassExtensionRec **)
                     _XmGetClassExtensionPtr(
                         (XmGenericClassExt *) &(swc->shell_class.extension),
                         NULLQUARK);
     _XmProcessUnlock();
-
     if (request->request_mode & XtCWQueryOnly)
       {
 	   if (!(wmShell->shell.allow_shell_resize) &&
@@ -2679,7 +2326,6 @@ RootGeometryManager(
 	   else
 	     return XtGeometryYes;
       }
-
     if (se->shell.useAsyncGeometry)
       {
 	   /* make wait_for_wm = FALSE to force desired behaviour */
@@ -2710,13 +2356,11 @@ RootGeometryManager(
 		   w->core.x = request->x;
 	       if (request->request_mode & CWY)
 		   w->core.y = request->y;
-
 	       returnVal = XtGeometryYes;
 	   }
       }
     return returnVal;
 }
-
 /************************************************************************
  *
  *  SetMwmHints
@@ -2729,11 +2373,9 @@ SetMwmHints(
     PropMwmHints	prop;
     Atom		mwm_hints_atom;
     Widget		shell = ve->ext.logicalParent;
-
     mwm_hints_atom = XInternAtom(XtDisplay(shell),
 				   _XA_MWM_HINTS,
 				   FALSE);
-
 #define SET(field) prop.field = ve->vendor.mwm_hints.field
     SET(flags);
     SET(functions);
@@ -2741,17 +2383,12 @@ SetMwmHints(
     prop.inputMode = ve->vendor.mwm_hints.input_mode;
     SET(status);
 #undef SET
-
     XChangeProperty (XtDisplay(shell),
 		      XtWindow(shell),
 		      mwm_hints_atom,mwm_hints_atom,
 		      32, PropModeReplace,
 		      (unsigned char *) &prop, PROP_MWM_HINTS_ELEMENTS);
 }
-
-
-
-
 /************************************************************************
  *
  *  SetMwmMenu
@@ -2765,28 +2402,21 @@ SetMwmMenu(
     Atom	  mwm_menu_atom;
     XTextProperty text_prop;
     int		  status;
-
-
     mwm_menu_atom = XInternAtom(XtDisplay(shell),
 				_XA_MWM_MENU,
 				FALSE);
-
     text_prop.value = NULL;
     status = XmbTextListToTextProperty(XtDisplay(shell),
 				       &ve->vendor.mwm_menu, 1,
 				       XStdICCTextStyle,
 				       &text_prop);
-
     if (status == Success || status > 0)
       {
 	XSetTextProperty(XtDisplay(shell), XtWindow(shell),
 			 &text_prop, mwm_menu_atom);
-
 	if (text_prop.value != NULL) XFree((char*)text_prop.value);
       }
 }
-
-
 /*ARGSUSED*/
 static void
 VendorExtRealize(
@@ -2796,16 +2426,12 @@ VendorExtRealize(
 {
     XmVendorShellExtObject	ve = (XmVendorShellExtObject)w;
     VendorShellWidget		vw;
-
     vw = (VendorShellWidget)ve->ext.logicalParent;
     if (ve->vendor.mwm_hints.flags)
       SetMwmHints(ve);
-
     if (ve->vendor.mwm_menu)
       SetMwmMenu(ve);
-
     _XmInstallProtocols(ve->ext.logicalParent);
-
     if(    !IsPopupShell( (Widget) vw)    )
       {
 	 /* Non-popup shells are allowed input as soon as
@@ -2814,14 +2440,12 @@ VendorExtRealize(
 	 AddGrab(ve, NULL, FALSE, FALSE, ve);
       }
 }
-
 static void
 AddDLEntry(
 	 XmVendorShellExtObject ve,
 	 Widget shell)
 {
   unsigned short i = 0 ;
-
   _XmProcessLock();
   while(    i < destroy_list_cnt    )
     {
@@ -2845,7 +2469,6 @@ AddDLEntry(
   ++destroy_list_cnt ;
   _XmProcessUnlock();
 }
-
 static void
 RemoveDLEntry(
 	 unsigned pos)
@@ -2859,7 +2482,6 @@ RemoveDLEntry(
   --destroy_list_cnt ;
   _XmProcessUnlock();
 }
-
 static void
 Destroy(
 	 Widget wid)
@@ -2867,7 +2489,6 @@ Destroy(
   XmWidgetExtData ext;
   XmVendorShellExtObject ve;
   unsigned short n = 0 ;
-
   _XmProcessLock();
   while(    n < destroy_list_cnt    )
   {
@@ -2880,7 +2501,6 @@ Destroy(
     ++n ;
   }
   _XmProcessUnlock();
-
     _XmPopWidgetExtData(wid, &ext, XmSHELL_EXTENSION);
     if (ext != NULL) {
 	 if ((ve = (XmVendorShellExtObject) ext->widget) != NULL) {
@@ -2898,14 +2518,11 @@ Destroy(
 		 XmFontListFree(ve->vendor.text_font_list);
 	     if (ve->vendor.im_info)
 	         _XmImFreeShellData(wid, &ve->vendor.im_info);
-
 	     _XmDestroyFocusData(ve->vendor.focus_data);
-
 	     _XmRemoveAllCallbacks((InternalCallbackList *)
 				 &(ve->vendor.realize_callback));
 	     _XmRemoveAllCallbacks((InternalCallbackList *)
 				 &(ve->vendor.focus_moved_callback));
-
          {
          XtWidgetProc destroy;
          _XmProcessLock();
@@ -2917,17 +2534,14 @@ Destroy(
 	 }
 	 XtFree((char *) ext);
     }
-
     {
         XmToolTipConfigTrait        ttp;           /* ToolTip pointer */
-
         if ((ttp = XmeTraitGet((XtPointer) wid, XmQTtoolTipConfig)) != NULL)
         {
             XmeTraitSet((XtPointer) wid, XmQTtoolTipConfig, (XtPointer) NULL);
             XtFree((char *)ttp);
         }
     }
-
     /*
      * If all VendorShells have been destroyed, destroy the XmDisplay object
      * in order to reset any per-display and per-screen data. This is
@@ -2935,7 +2549,6 @@ Destroy(
      */
     if (!XmIsDisplay (wid)) {
 	 XmDisplay xmDisplay = (XmDisplay) XmGetXmDisplay (XtDisplay(wid));
-
 	 xmDisplay->display.shellCount -= 1;
 	 if (xmDisplay->display.shellCount == 0) {
 	     XmImCloseXIM (wid);
@@ -2943,7 +2556,6 @@ Destroy(
 	 }
     }
 }
-
 /*ARGSUSED*/
 static void
 Redisplay(
@@ -2953,8 +2565,6 @@ Redisplay(
 {
     _XmImRedisplay(wid);
 }
-
-
 /****************************************************************
  *
  * Trait method for specify render table
@@ -2967,7 +2577,6 @@ GetTable(
 {
     XmWidgetExtData   extData;
     XmVendorShellExtObject ve;
-
     if ((extData = _XmGetWidgetExtData(wid, XmSHELL_EXTENSION)) &&
 	(ve = (XmVendorShellExtObject) extData->widget))
 	{
@@ -2977,10 +2586,8 @@ GetTable(
 	    case XmTEXT_RENDER_TABLE : return ve->vendor.text_font_list ;
 	    }
 	}
-
     return NULL ;
 }
-
 /****************************************************************
  *
  * Trait method for specify layout direction
@@ -2991,9 +2598,7 @@ GetDirection(Widget w)
 {
   XmWidgetExtData extData;
   XmVendorShellExtObject vendorExt;
-
   extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
-
   if(extData == NULL)
   {
 #ifdef DEBUG
@@ -3001,17 +2606,14 @@ GetDirection(Widget w)
 #endif
     return XmRIGHT_TO_LEFT;
   }
-
   vendorExt = (XmVendorShellExtObject) extData->widget;
   return vendorExt->vendor.layout_direction;
 }
-
 static unsigned char
 GetUnitType(Widget w)
 {
     XmWidgetExtData extData;
     XmVendorShellExtObject vendorExt;
-
     if ((extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION)) &&
 	(vendorExt = (XmVendorShellExtObject) extData->widget))
 	return vendorExt->vendor.unit_type ;
@@ -3020,8 +2622,6 @@ GetUnitType(Widget w)
 	   being created, so force pixel... */
 	return XmPIXELS ;
 }
-
-
 static void
 GetColors(Widget w,
 	  XmAccessColorData color_data)
@@ -3029,7 +2629,6 @@ GetColors(Widget w,
     /* cannot use XmGetColors to generate the other for
        it ends up in a loop since XmGetColors creates a XmScreen,
        which needs an XmDisplay, which is a VendorS. */
-
    color_data->valueMask = AccessForeground | AccessBackgroundPixel |
        AccessHighlightColor | AccessTopShadowColor |
 	   AccessBottomShadowColor ;
@@ -3039,9 +2638,6 @@ GetColors(Widget w,
        color_data->top_shadow_color =
 	   color_data->bottom_shadow_color = XmUNSPECIFIED_PIXEL ;
 }
-
-
-
 /************************************************************************
  *
  *  _XmGetDefaultDisplay
@@ -3051,7 +2647,6 @@ Display *
 _XmGetDefaultDisplay(void)
 {
     Display *theDisplay = NULL;
-
     _XmProcessLock();
     if (_XmDisplayHandle)
 	theDisplay =  _XmDisplayHandle ;
@@ -3059,10 +2654,8 @@ _XmGetDefaultDisplay(void)
       XtWarning(MSG4);
     }
     _XmProcessUnlock();
-
     return theDisplay;
 }
-
 /************************************************************************
  *
  *  _XmDefaultVisualResources
@@ -3074,9 +2667,7 @@ _XmDefaultVisualResources(
 {
    /* Default the Shell visual resources (visual, depth and colormap)
       from the nearest shell. See CR 5459 */
-
     ShellWidget next_shell, this_shell = (ShellWidget)widget;
-
     /* go find the next shell ancestor, which might be widget itself
        in the case of a root shell. Looking for the next widget with
        a "visual" resource is too expensive, remember this is going to be done
@@ -3086,12 +2677,10 @@ _XmDefaultVisualResources(
 	do {
 	    next_shell = (ShellWidget) XtParent((Widget)next_shell);
 	} while (!XtIsShell((Widget)next_shell));
-
     /* now default the 3 visual resources */
     if (this_shell->shell.visual == INVALID_VISUAL) {
 	/* next_shell might be self, still invalid, but in this case,
 	 we know it is a root shell: take regular Xt default */
-
 	if (this_shell == next_shell) {
 	    this_shell->shell.visual = CopyFromParent ;
 	    this_shell->core.depth = DefaultDepthOfScreen(XtScreen(widget));
@@ -3102,12 +2691,8 @@ _XmDefaultVisualResources(
 	    this_shell->core.colormap = next_shell->core.colormap;
 	}
     }
-
 }
-
-
 #ifdef DEBUG_GRABS
-
 static void
 PrintModal(
         XmModalData modal)
@@ -3120,7 +2705,6 @@ PrintModal(
           modal->springLoaded,
 	  modal->ve) ;
 }
-
 static void
 PrintXmGrabs(
         Widget wid)
@@ -3129,12 +2713,10 @@ PrintXmGrabs(
   XmModalData modals = disp->display.modals ;
   Cardinal nmodals = disp->display.numModals ;
   Cardinal cnt = 0 ;
-
   while(    cnt < nmodals    )
     {
       PrintModal( &(modals[cnt])) ;
       ++cnt ;
     }
 }
-
 #endif /* DEBUG_GRABS */

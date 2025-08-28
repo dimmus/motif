@@ -1,24 +1,17 @@
 #ifndef _XmMultiListP_h_
 #define _XmMultiListP_h_
-
 #include <Xm/ManagerP.h>
 #include <Xm/PrimitiveP.h>
-
 #include <Xm/MultiList.h>
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 /*
  * IList Stuff.
  */
-
 #define XmMultiList_DEFAULT_VISIBLE_COUNT	5 /* XmNvisibleItemCount */
-
 #define XmMultiListIndex (XmManagerIndex + 1)
 #define XmI18ListIndex (XmPrimitiveIndex + 1)
-
 #define XmI18List_selection_policy(w) (((XmI18ListWidget)(w))->ilist.selection_policy)
 #define XmI18List_num_columns(w) (((XmI18ListWidget)(w))->ilist.num_columns)
 #define XmI18List_column_titles(w) (((XmI18ListWidget)(w))->ilist.column_titles)
@@ -64,7 +57,6 @@ extern "C" {
 #define XmI18List_entry_background_stippled_gc(w) (((XmI18ListWidget)(w))->ilist.entry_background_stippled_gc)
 #define XmI18List_entry_background_stippled_rev_gc(w) (((XmI18ListWidget)(w))->ilist.entry_background_stippled_rev_gc)
 #define XmI18List_entry_background_inv_gc(w) (((XmI18ListWidget)(w))->ilist.entry_background_inv_gc)
-
 #define XmMultiList_title(w)    (((XmMultiListWidget)(w))->ext_list.title)
 #define XmMultiList_find_label(w)       \
    (((XmMultiListWidget)(w))->ext_list.find_label)
@@ -93,11 +85,9 @@ extern "C" {
     (((XmMultiListWidget)(w))->ext_list.visible_rows)
 #define XmMultiList_title_string(w)     \
     (((XmMultiListWidget)(w))->ext_list.title_string)
-
 /*
  * IList widget definitions.
  */
-
 /* I18List struct passed to Convert proc for drag and drop */
 typedef struct _XmI18ListDragConvertStruct
 {
@@ -106,24 +96,19 @@ typedef struct _XmI18ListDragConvertStruct
     int       num_items;
     Pixmap    pixmap;
 } XmI18ListDragConvertStruct;
-
 typedef struct _I18ListClassPart {
     XtPointer extension;	/* Just in case we need it later. */
 } I18ListClassPart;
-
 typedef struct _XmI18ListClassRec {
     CoreClassPart		core_class;
     XmPrimitiveClassPart	primitive;
     I18ListClassPart		ilist_class;
 } XmI18ListClassRec;
-
 externalref XmI18ListClassRec xmI18ListClassRec;
-
 typedef struct _XmI18ListPart {
     /*
      * Resources
      */
-
     unsigned char selection_policy; /* selection mode - kat 12-28-90 */
     short num_columns;		/* number of columns in the list. */
     XmString * column_titles;	/* title for each column. */
@@ -132,57 +117,39 @@ typedef struct _XmI18ListPart {
     Boolean first_col_pixmaps;	/* Should we put mini_icons in the first
 				   column of each entry? */
     XmFontList font_list;	/* This widget's font list. */
-
     Widget v_bar, h_bar;	/* Scrollbars that may be used
 				   to scroll this widget. */
-
     short first_row;		/* which row is at the top of the display. */
     short first_col;		/* which column is at the far left. */
-
     XtCallbackList double_click; /* The double click callback list. */
     XtCallbackList single_select; /*The single click callback list. */
-
     short selected_header;	/* The currently selected header. */
-
     Xm18SortFunction *sort_functions; /* The client supplied sort functions */
-
     unsigned char string_direction;
     unsigned char alignment;
-
     /*
      * Private State
      */
-
     short * column_widths;	/* Width of each column. */
     short end;			/* The non-anchor end point. */
     short anchor;		/* The anchor point for the extended
 				   selection. */
-
     int sep_y;			/*location of the top of the separator line.*/
-
     short title_row_height;	/* height of title row */
     short row_height;	/* height of all other data rows */
-
     GC gc;			/* The graphics context for normal text. */
     GC rev_gc;			/* The graphics context for inverted text. */
     GC stippled_gc;		/* The graphics context for normal text. */
     GC stippled_rev_gc;		/* The graphics context for inverted text. */
     GC inv_gc;			/* The graphics context for inverting areas. */
-
     unsigned short state;	/* The state of this widget. */
     XtIntervalId timeout;	/* The mulit - click timout. */
-
     short working_row, working_col; /* A Working row and column. */
     Time time;			/*The server time of the last button click. */
-
     int left_loc;		/* left margin in pixels. */
-
     short search_column;	/* added for I18List Find support */
-
     int visible_rows;		/* Visible item (row) count */
-
     Boolean new_visual_style;
-
     Pixel entry_background_pixel;
     Boolean entry_background_use;
     GC entry_background_gc;
@@ -191,26 +158,20 @@ typedef struct _XmI18ListPart {
     GC entry_background_stippled_rev_gc;
     GC entry_background_inv_gc;
     GC entry_background_rev_gc;
-
     Boolean check_set_render_table; /* used in CheckSetRenderTable */
-
     XmI18ListDragConvertStruct * drag_conv;
 } XmI18ListPart;
-
 typedef struct _XmI18ListRec {
     CorePart		core;
     XmPrimitivePart	primitive;
     XmI18ListPart	ilist;
 } XmI18ListRec;
-
 /*
  * Extended List.
  */
-
 typedef struct {
     XtPointer extension;	/* Just in case we need it later. */
 } XmMultiListClassPart;
-
 typedef struct _XmMultiListClassRec {
     CoreClassPart		core_class;
     CompositeClassPart		composite_class;
@@ -218,37 +179,26 @@ typedef struct _XmMultiListClassRec {
     XmManagerClassPart		manager_class;
     XmMultiListClassPart	ext_list_class;
 } XmMultiListClassRec;
-
 typedef struct {
     /* resources */
-
     XmString title;		/* Title for the list (backwards compatible) */
     XmString find_label;	/* label for Find button */
-
     XtCallbackList double_click; /* The double click callbacks. */
     XtCallbackList single_select; /* The single click callbacks. -kat */
-
     Boolean show_find;    /* whether to display the Find button and textF */
-
     /* private state */
-
     Widget title_wid;		/* The list title widget. */
     Widget frame;		/* Frame to display list into. */
     Widget ilist;		/* The internal list widget. */
     Widget v_bar, h_bar;	/* The scrollbars. */
     Widget find, find_text;	/* Widgets used for a find. */
-
     String last_search;
-
     XtCallbackList item_found;	/* Called when find succeeds */
     XtCallbackList not_found;	/* Called when find doesn't succeed */
-
     int visible_rows;		/* visible items (mirrored in XmI18ListPart) */
     XmString title_string;	/* (preferred use) Title for the list */
-
     Boolean check_set_select_callback;
 } XmMultiListPart;
-
 typedef struct _XmMultiListRec {
     CorePart		core;
     CompositePart	composite;
@@ -256,29 +206,19 @@ typedef struct _XmMultiListRec {
     XmManagerPart	manager;
     XmMultiListPart	ext_list;
 } XmMultiListRec;
-
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
-
 XmMultiListRowInfo ** XmI18ListGetSelectedRows(Widget);
-
 void Xm18IListUnselectItem(Widget, XmMultiListRowInfo *);
-
 void Xm18IListUnselectAllItems(Widget);
-
 void XmI18ListToggleRow(Widget , short);
-
 typedef struct _XmI18ListClassRec	*XmI18ListWidgetClass;
 typedef struct _XmI18ListRec	*XmI18ListWidget;
-
 extern XmMultiListClassRec xmMultiListClassRec;
-
 extern XmI18ListClassRec xiI18ListClassRec;
 extern WidgetClass xmI18ListWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
 #endif /* _XmMultiListP_h_ */

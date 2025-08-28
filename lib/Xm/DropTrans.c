@@ -25,12 +25,9 @@
 static char rcsid[] = "$XConsortium: DropTrans.c /main/15 1996/05/02 13:50:19 pascale $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/DropTransP.h>
 #include <Xm/DragCP.h>
 #include "XmI.h"
@@ -38,18 +35,14 @@ static char rcsid[] = "$XConsortium: DropTrans.c /main/15 1996/05/02 13:50:19 pa
 #include "DragICCI.h"
 #include <Xm/AtomMgr.h>
 #include <stdio.h>
-
 /* Deactivated the fix, since it causes crash.
    For details see http://bugs.motifzone.net/long_list.cgi?buglist=1361
-
    #define CR1146
 */
-
 #ifdef CR1146
 static int isValidStartDropTimerId = 0;
 #endif
 /********    Static Function Declarations    ********/
-
 static void ClassPartInit(
                         WidgetClass wc) ;
 static void Initialize(
@@ -99,10 +92,7 @@ static void DragContextDestroyCB(
 			Widget widget,
 			XtPointer client,
 			XtPointer call) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static XtResource resources[] = {
 	{   XmNdropTransfers, XmCDropTransfers,
 		XmRDropTransfers, sizeof(XmDropTransferEntry),
@@ -131,10 +121,7 @@ static XtResource resources[] = {
 		XmRImmediate, (XtPointer) XmTRANSFER_SUCCESS
 	},
 };
-
-
 /*  class record definition  */
-
 externaldef(xmgadgetclassrec) XmDropTransferClassRec
 	xmDropTransferClassRec = {
    {
@@ -177,18 +164,15 @@ externaldef(xmgadgetclassrec) XmDropTransferClassRec
       NULL,                        	/* extension             */
    },
 };
-
 externaldef(xmdroptransferobjectclass) WidgetClass
 	xmDropTransferObjectClass = (WidgetClass)
 		&xmDropTransferClassRec;
-
 /*ARGSUSED*/
 static void
 ClassPartInit(
         WidgetClass wc )
 {
 }
-
 /*ARGSUSED*/
 static void
 Initialize(
@@ -200,7 +184,6 @@ Initialize(
 	XmDropTransferObject new_w = (XmDropTransferObject) nw;
 	XmDropTransferPart *dtp =
 		(XmDropTransferPart *) &(new_w->dropTransfer);
-
 	if (dtp->num_drop_transfers != 0)
 	{
 		dtp->num_drop_transfer_lists = 1;
@@ -213,9 +196,7 @@ Initialize(
 				* dtp->num_drop_transfers);
 		dtp->drop_transfer_lists[0].num_transfers =
 			dtp->num_drop_transfers;
-
 		/* strictly for hygene... */
-
 		dtp->drop_transfers = dtp->drop_transfer_lists[0].transfer_list;
 	}
 	else
@@ -223,16 +204,13 @@ Initialize(
 		dtp->drop_transfer_lists = NULL;
 		dtp->num_drop_transfer_lists = 0;
 	}
-
 	dtp->motif_drop_atom = XInternAtom(
 		XtDisplayOfObject(nw), XmS_MOTIF_DROP, False);
-
 	dtp->cur_drop_transfer_list = (Cardinal) -1;
 	dtp->cur_xfer = (Cardinal) -1;
 	dtp->cur_targets = (Atom *) NULL;
 	dtp->cur_client_data = (XtPointer *) NULL;
 }
-
 /*ARGSUSED*/
 static Boolean
 SetValues(
@@ -246,7 +224,6 @@ SetValues(
 	/* !!! Should disallow any changes !!! */
 	return True;
 }
-
 static void
 Destroy(
         Widget w )
@@ -254,7 +231,6 @@ Destroy(
     XmDropTransferObject new_w = (XmDropTransferObject) w;
     Cardinal 		 i;
     XmDragContext	 dc;
-
     /*
      * clean up the hanging dragContext
      */
@@ -262,17 +238,14 @@ Destroy(
 					 new_w->dropTransfer.timestamp);
     if (dc && dc->drag.sourceIsExternal)
       XtDestroyWidget((Widget)dc);
-
     for (i = 0; i < new_w->dropTransfer.num_drop_transfer_lists; i++)
       {
 	  XmDropTransferList	currEntry =
 	    &(new_w->dropTransfer.drop_transfer_lists[i]);
-
 	  XtFree((char *)currEntry->transfer_list);
       }
     XtFree((char *)new_w->dropTransfer.drop_transfer_lists);
 }
-
 /*ARGSUSED*/
 static void
 SourceNotifiedCB(
@@ -285,13 +258,11 @@ SourceNotifiedCB(
         int *format )
 {
     XmDropTransferObject	dt = (XmDropTransferObject)client_data;
-
     if (value != NULL)
       XtFree((char *) value);
     /* self-immolution aaaaaaiii */
     XtDestroyWidget((Widget)dt);
 }
-
 static void
 TerminateTransfer(
         XmDropTransferObject dt,
@@ -301,25 +272,21 @@ TerminateTransfer(
 	XmDropTransferPart *dtp =
 		(XmDropTransferPart *) &(dt->dropTransfer);
 	XmDragContext	dc = (XmDragContext) dtp->dragContext;
-
 	if (dtp->transfer_status == XmTRANSFER_SUCCESS)
 		status = XInternAtom(XtDisplayOfObject((Widget)dt),
 			XmSTRANSFER_SUCCESS, False);
 	else /* XmTRANSFER_FAILURE */
 		status = XInternAtom(XtDisplayOfObject((Widget)dt),
 			XmSTRANSFER_FAILURE, False);
-
 	/*
 	 * we need to pass in the shell since that is the only widget
 	 * visible to the initiator.
 	 */
-
 	XtGetSelectionValue(dc->drag.currReceiverInfo->shell,
 				*selection, status,
 				SourceNotifiedCB, (XtPointer)dt,
 				dtp->timestamp);
 }
-
 static void
 ProcessTransferEntry(
         XmDropTransferObject dt,
@@ -332,17 +299,14 @@ ProcessTransferEntry(
 	Cardinal i;
 	Arg args[1];
 	Atom real_selection_atom;
-
 	dtp->cur_drop_transfer_list = which;
 	dtp->cur_targets = (Atom *)
 		XtMalloc((tl->num_transfers * sizeof(Atom)));
 	dtp->cur_client_data = (XtPointer *)
 		XtMalloc((tl->num_transfers * sizeof(XtPointer)));
-
 	i = 0;
 	XtSetArg(args[i], XmNiccHandle, &real_selection_atom); i++;
 	XtGetValues(dtp->dragContext, args, i);
-
 	for (i=0; i < tl->num_transfers; i++)
 	{
 		dtp->cur_targets[i] = tl->transfer_list[i].target;
@@ -352,14 +316,11 @@ ProcessTransferEntry(
 		 */
 		dtp->cur_client_data[i] = (XtPointer)dt;
 	}
-
 	dtp->cur_xfer = 0;
-
 	/*
 	 * we need to pass in the destShell since that is the only widget
 	 * visible to the initiator.
 	 */
-
 	/*
 	 * As both an optimization and workaround for an Xt bug,
 	 * if the number of transfers is just one then call the
@@ -373,7 +334,6 @@ ProcessTransferEntry(
 	 * might be large enough to trigger an INCR as a single item
 	 * that would avoid the MULTIPLE case.
 	 */
-
 	if (dtp->incremental)
 	{
            if (tl->num_transfers == 1) {
@@ -384,7 +344,6 @@ ProcessTransferEntry(
                        (XtPointer)dtp->cur_client_data[0],
                        dtp->timestamp);
            } else {
-
 		XtGetSelectionValuesIncremental(
 			dc->drag.currReceiverInfo->shell,
 			real_selection_atom, dtp->cur_targets,
@@ -410,8 +369,6 @@ ProcessTransferEntry(
            }
 	}
 }
-
-
 /*
  * This routine is called with the shell as the widget and us as the
  * client data. We can't pass ourselves since we're not windowed
@@ -432,28 +389,22 @@ DropTransferSelectionCB(
 		(XmDropTransferPart *) &(dt->dropTransfer);
 	XmDropTransferList	tl =
 		&(dtp->drop_transfer_lists[dtp->cur_drop_transfer_list]);
-
-
 	(*(dtp->transfer_callback))
 		((Widget)dt, tl->transfer_list[dtp->cur_xfer].client_data,
 			selection, type, value, length, format);
-
        /* The transfer list needs to be reassigned at this point in case
 	* an XmDropTransferAdd() was called in the callback.
         */
 	tl = &(dtp->drop_transfer_lists[dtp->cur_drop_transfer_list]);
-
 	if ( !(dtp->incremental)
 		||
 		((dtp->incremental) && (value != NULL) && (*length == 0)))
 	{
 		dtp->cur_xfer++;
-
 		if (dtp->cur_xfer == tl->num_transfers)
 		{
 			XtFree((char *)dtp->cur_targets);
 			XtFree((char *)dtp->cur_client_data);
-
 			if (++(dtp->cur_drop_transfer_list) <
 				dtp->num_drop_transfer_lists)
 			{
@@ -465,8 +416,6 @@ DropTransferSelectionCB(
 		}
 	}
 }
-
-
 /*ARGSUSED*/
 static void
 StartDropTimer(
@@ -478,14 +427,10 @@ StartDropTimer(
 	Arg my_args[1];
 	int i;
 	Atom selection;
-
 #ifdef CR1146
     isValidStartDropTimerId = 0;
 #endif
-
-
 	dtp = (XmDropTransferPart *) &(dt->dropTransfer);
-
 	if (dtp->num_drop_transfer_lists)
 	{
 		/* Get the first transfer entry in the list and process it */
@@ -496,11 +441,9 @@ StartDropTimer(
 		i = 0;
 		XtSetArg(my_args[i], XmNiccHandle, &selection); i++;
 		XtGetValues(dtp->dragContext, my_args, i);
-
 		TerminateTransfer(dt, &selection);
 	}
 }
-
 static void
 DragContextDestroyCB(
         Widget widget,
@@ -513,7 +456,6 @@ DragContextDestroyCB(
 #endif
         XtRemoveTimeOut(timer);
 }
-
 static Widget
 StartDropTransfer(
         Widget refWidget,
@@ -524,7 +466,6 @@ StartDropTransfer(
 	XmDropTransferObject dt;
 	char buf[30];
 	XtIntervalId timer;
-
 	_XmProcessLock();
 	sprintf(buf, "Transfer%d", which++);
 	_XmProcessUnlock();
@@ -532,11 +473,9 @@ StartDropTransfer(
 		xmDropTransferObjectClass,
 		(Widget) XmGetXmDisplay(XtDisplayOfObject(refWidget)),
 		args, argCount);
-
 	dt->dropTransfer.dragContext = refWidget;
 	dt->dropTransfer.timestamp =
 	  ((XmDragContext)refWidget)->drag.dragFinishTime;
-
 	/*
 	 * The processing of the dropTransfer should happen after the
 	 * dropStart message is echoed to the initiator. Since we're
@@ -550,7 +489,6 @@ StartDropTransfer(
  	 * watching for destruction of the widget and avoid the rest of the
  	 * operations.
  	 */
-
 	timer = XtAppAddTimeOut(XtWidgetToApplicationContext( (Widget)dt),
 				0, StartDropTimer, (XtPointer)dt);
 #ifdef CR1146
@@ -561,12 +499,8 @@ StartDropTransfer(
 #endif
 	XtAddCallback(refWidget, XmNdestroyCallback, DragContextDestroyCB,
 		      (XtPointer)timer);
-
 	return((Widget) dt);
 }
-
-
-
 Widget
 XmDropTransferStart(
         Widget refWidget,
@@ -579,20 +513,15 @@ XmDropTransferStart(
 	int n;
 	Widget ret_val;
 	_XmWidgetToAppContext(refWidget);
-
 	_XmAppLock(app);
 	n = 0;
 	XtSetArg(lclArgs[n], XmNdropTransferClass, &wc); n++;
 	XtGetValues(ddo, lclArgs, n);
-
 	ret_val = (*(wc->dropTransfer_class.start_drop_transfer))
 		(refWidget, args, argCount);
 	_XmAppUnlock(app);
 	return ret_val;
 }
-
-
-
 static void
 AddDropTransfer(
         Widget widget,
@@ -603,7 +532,6 @@ AddDropTransfer(
 	XmDropTransferPart *dtp =
 		(XmDropTransferPart *) &(dto->dropTransfer);
 	Cardinal index = dtp->num_drop_transfer_lists++;
-
 	dtp->drop_transfer_lists = (XmDropTransferList)
 		XtRealloc((char *)dtp->drop_transfer_lists,
 			sizeof(XmDropTransferListRec) *
@@ -613,8 +541,6 @@ AddDropTransfer(
 		transfers, sizeof(XmDropTransferEntryRec) * num_transfers);
 	dtp->drop_transfer_lists[index].num_transfers = num_transfers;
 }
-
-
 void
 XmDropTransferAdd(
         Widget widget,
@@ -624,7 +550,6 @@ XmDropTransferAdd(
 	XmDropTransferObject dt = (XmDropTransferObject) widget;
 	XmDropTransferObjectClass wc;
 	_XmWidgetToAppContext(widget);
-
 	_XmAppLock(app);
 	wc = (XmDropTransferObjectClass) XtClass(dt);
 	((*(wc->dropTransfer_class.add_drop_transfer))

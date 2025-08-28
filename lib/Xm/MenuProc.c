@@ -1,4 +1,3 @@
-
 /* $XConsortium: MenuProc.c /main/8 1996/01/17 10:50:38 lehors $ */
 /*
  * Motif
@@ -29,36 +28,28 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 /*
  * The following functions are used to separate the private class function
  * in RowColumn from the buttons that may be children of the RowColumn.
  * This is simply an interface supplied so that the buttons will not have
  * to have intimate knowledge of the RowColumn class functions.
  */
-
 #include <Xm/XmP.h>
 #include <Xm/MenuProcP.h>
 #include "MenuProcI.h"
 #include "GadgetUtiI.h"
 #include "XmI.h"
-
 static XtPointer menuProcEntry = NULL;
-
 /*
  * this routine is called at RowColumn class init to
  * save the address of the menuProcedureEntry routine.
  */
-
 void
 _XmSaveMenuProcContext(
         XtPointer address )
 {
    menuProcEntry = address;
 }
-
-
 /*
  * This routine is used by the button children of the RowColumn (currently
  * all label and labelgadget subclasses) to get the address of the
@@ -70,14 +61,10 @@ _XmGetMenuProcContext( void )
 {
    return menuProcEntry;
 }
-
-
 /* temp hold for core class translations used during subclass'
  * InitializePrehook & InitializePosthook
  */
 static XContext SaveTranslationsContext = 0;
-
-
 /************************************************************************
  *
  * _XmSaveCoreClassTranslations
@@ -95,12 +82,10 @@ _XmSaveCoreClassTranslations(
     _XmProcessLock();
     if (SaveTranslationsContext == 0)
 	SaveTranslationsContext = XUniqueContext();
-
     XSaveContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext,
 	 	 (char *)(widget->core.widget_class->core_class.tm_table));
     _XmProcessUnlock();
 }
-
 /************************************************************************
  *
  * _XmRestoreCoreClassTranslations
@@ -116,7 +101,6 @@ _XmRestoreCoreClassTranslations(
         Widget widget)
 {
   String saved_translations;
-
   _XmProcessLock();
   if (SaveTranslationsContext &&
       (!XFindContext(XtDisplay(widget), (XID)widget,
@@ -128,14 +112,11 @@ _XmRestoreCoreClassTranslations(
 #endif
   _XmProcessUnlock();
 }
-
-
 /*************************************************
  * This function extracts a time from an event or
  * returns the last processed time if the event
  * is NULL or isn't an event with a timestamp
  *************************************************/
-
 /*ARGSUSED*/
 Time
 _XmGetDefaultTime(Widget wid,

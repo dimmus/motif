@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * Attrib.c:                                                                   *
 *                                                                             *
@@ -31,20 +30,15 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 /* 3.2 backward compatibility code */
 LFUNC(CreateOldColorTable, int, (XpmColor *ct, unsigned int ncolors,
 				 XpmColor ***oldct));
-
 LFUNC(FreeOldColorTable, void, (XpmColor **colorTable, unsigned int ncolors));
-
 /*
  * Create a colortable compatible with the old style colortable
  */
@@ -56,10 +50,8 @@ CreateOldColorTable(
 {
     XpmColor **colorTable, **color;
     unsigned int a;
-
     if (ncolors >= UINT_MAX / sizeof(XpmColor *))
 	return XpmNoMemory;
-
     colorTable = (XpmColor **) XpmMalloc(ncolors * sizeof(XpmColor *));
     if (!colorTable) {
 	*oldct = NULL;
@@ -70,7 +62,6 @@ CreateOldColorTable(
     *oldct = colorTable;
     return (XpmSuccess);
 }
-
 static void
 FreeOldColorTable(
     XpmColor	**colorTable,
@@ -79,7 +70,6 @@ FreeOldColorTable(
     unsigned int a, b;
     XpmColor **color;
     char **sptr;
-
     if (colorTable) {
 	for (a = 0, color = colorTable; a < ncolors; a++, color++) {
 	    for (b = 0, sptr = (char **) *color; b <= NKEYS; b++, sptr++)
@@ -90,9 +80,7 @@ FreeOldColorTable(
 	XpmFree(colorTable);
     }
 }
-
 /* end 3.2 bc */
-
 /*
  * Free the computed color table
  */
@@ -104,7 +92,6 @@ xpmFreeColorTable(
     int a, b;
     XpmColor *color;
     char **sptr;
-
     if (colorTable) {
 	for (a = 0, color = colorTable; a < ncolors; a++, color++) {
 	    for (b = 0, sptr = (char **) color; b <= NKEYS; b++, sptr++)
@@ -114,7 +101,6 @@ xpmFreeColorTable(
 	XpmFree(colorTable);
     }
 }
-
 /*
  * Free array of extensions
  */
@@ -126,7 +112,6 @@ XpmFreeExtensions(
     unsigned int i, j, nlines;
     XpmExtension *ext;
     char **sptr;
-
     if (extensions  && nextensions > 0) {
 	for (i = 0, ext = extensions; i < nextensions; i++, ext++) {
 	    if (ext->name)
@@ -141,17 +126,14 @@ XpmFreeExtensions(
 	XpmFree(extensions);
     }
 }
-
 /*
  * Return the XpmAttributes structure size
  */
-
 int
 XpmAttributesSize(void)
 {
     return sizeof(XpmAttributes);
 }
-
 /*
  * Init returned data to free safely later on
  */
@@ -178,7 +160,6 @@ xpmInitAttributes(XpmAttributes *attributes)
 	}
     }
 }
-
 /*
  * Fill in the XpmAttributes with the XpmImage and the XpmInfo
  */
@@ -191,7 +172,6 @@ xpmSetAttributes(
     if (attributes->valuemask & XpmReturnColorTable) {
 	attributes->colorTable = image->colorTable;
 	attributes->ncolors = image->ncolors;
-
 	/* avoid deletion of copied data */
 	image->ncolors = 0;
 	image->colorTable = NULL;
@@ -199,11 +179,9 @@ xpmSetAttributes(
 /* 3.2 backward compatibility code */
     else if (attributes->valuemask & XpmReturnInfos) {
 	int ErrorStatus;
-
 	ErrorStatus = CreateOldColorTable(image->colorTable, image->ncolors,
 					  (XpmColor ***)
 					  &attributes->colorTable);
-
 	/* if error just say we can't return requested data */
 	if (ErrorStatus != XpmSuccess) {
 	    attributes->valuemask &= ~XpmReturnInfos;
@@ -218,7 +196,6 @@ xpmSetAttributes(
 	    attributes->hints_cmt = info->hints_cmt;
 	    attributes->colors_cmt = info->colors_cmt;
 	    attributes->pixels_cmt = info->pixels_cmt;
-
 	    /* avoid deletion of copied data */
 	    image->ncolors = 0;
 	    image->colorTable = NULL;
@@ -231,7 +208,6 @@ xpmSetAttributes(
     if (attributes->valuemask & XpmReturnExtensions) {
 	attributes->extensions = info->extensions;
 	attributes->nextensions = info->nextensions;
-
 	/* avoid deletion of copied data */
 	info->extensions = NULL;
 	info->nextensions = 0;
@@ -247,7 +223,6 @@ xpmSetAttributes(
     attributes->width = image->width;
     attributes->height = image->height;
 }
-
 /*
  * Free the XpmAttributes structure members
  * but the structure itself

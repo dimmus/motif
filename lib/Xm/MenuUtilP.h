@@ -22,17 +22,13 @@
 */
 #ifndef _XmMenuUtilP_h
 #define _XmMenuUtilP_h
-
 #include <Xm/XmP.h>
 #include <Xm/RowColumnP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif  /* _XmMenuUtilP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

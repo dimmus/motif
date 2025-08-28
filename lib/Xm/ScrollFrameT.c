@@ -24,24 +24,17 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include <Xm/TraitP.h>
 #include <Xm/ScrollFrameT.h>
 #include <Xm/NavigatorT.h>
 #include "MessagesI.h"
 #include "ScrollFramTI.h"
-
 #define SWMessage3      _XmMMsgScrollFrameT_0000
 #define SWMessage4      _XmMMsgScrollFrameT_0001
-
-
-
 /************************************************************************
  *
  *  _XmSFAddNavigator convenience function
@@ -59,20 +52,16 @@ _XmSFAddNavigator(
 {
     XmNavigatorTrait nav_trait ;
     XmNavigatorDataRec nav_data ;
-
     if ((nav_trait = (XmNavigatorTrait)
 	 XmeTraitGet((XtPointer) XtClass(nav), XmQTnavigator)) != NULL) {
-
 	/* check for NULL move_cb */
 	if (scroll_frame_data->move_cb)
 	    nav_trait -> changeMoveCB(nav, scroll_frame_data->move_cb,
 				      (XtPointer) scroll_frame_data->scrollable,
 				      True) ;
-
 	nav_data.valueMask = NavDimMask ;
 	nav_data.dimMask = dimMask ;
 	nav_trait -> setValue(nav, &nav_data, False);
-
 	if (scroll_frame_data->num_nav_list ==
 	    scroll_frame_data->num_nav_slots) {
 	    /* Allocate more space */
@@ -81,21 +70,12 @@ _XmSFAddNavigator(
 		(WidgetList) XtRealloc((char*)scroll_frame_data->nav_list,
 			scroll_frame_data->num_nav_slots * sizeof(Widget));
 	}
-
 	scroll_frame_data->nav_list[scroll_frame_data->num_nav_list] = nav;
 	scroll_frame_data->num_nav_list++;
-
     } else {
 	XmeWarning(sf, SWMessage3);
     }
-
 }
-
-
-
-
-
-
 /************************************************************************
  *
  *  _XmSFRemoveNavigator convenience function
@@ -109,10 +89,8 @@ _XmSFRemoveNavigator(
 {
     Cardinal	     position, i;
     XmNavigatorTrait nav_trait ;
-
     if ((nav_trait = (XmNavigatorTrait)
 	 XmeTraitGet((XtPointer) XtClass(nav), XmQTnavigator)) != NULL) {
-
 	/* remove the move callback */
 	if (scroll_frame_data->move_cb)
 	    nav_trait -> changeMoveCB(nav, scroll_frame_data->move_cb,
@@ -122,23 +100,17 @@ _XmSFRemoveNavigator(
 	XmeWarning(sf, SWMessage4);
 	return ;
     }
-
     for (position = 0; position<scroll_frame_data->num_nav_list; position++) {
         if (scroll_frame_data->nav_list[position] == nav) {
 	    break;
 	}
     }
     if (position == scroll_frame_data->num_nav_list) return;
-
-
     scroll_frame_data->num_nav_list--;
     for (i = position; i < scroll_frame_data->num_nav_list; i++) {
         scroll_frame_data->nav_list[i] = scroll_frame_data->nav_list[i+1];
     }
-
 }
-
-
 /************************************************************************
  *
  *  _XmSFUpdateNavigatorsValues convenience function
@@ -153,27 +125,22 @@ _XmSFUpdateNavigatorsValue(
     Cardinal i, num_nav_list ;
     Widget * nav_list ;
     Boolean inited ;
-
     /* there is a possibility that the SW was not inited for
        navigation business: APP_DEFINED where no scrollbar have
        been added yet */
     inited =  ((XmScrollFrameTrait)
 	       XmeTraitGet((XtPointer) XtClass(sf), XmQTscrollFrame))
 	->getInfo(sf, NULL, &nav_list, &num_nav_list);
-
     if (!inited) return ;
-
     /* loop over the associated navigator list and call the change value
        method for each navigator */
     /* Updating the first navigator only if notify is True is not
        enough, since the dimension is pertinent */
-
     for (i=0; i < num_nav_list; i++) {
 	Widget nav = nav_list[i] ;
 	XmNavigatorSetValueProc	nav_setValue =
 	    ((XmNavigatorTrait)
 	     XmeTraitGet((XtPointer) XtClass(nav), XmQTnavigator))->setValue;
-
 	nav_setValue(nav, nav_data, notify);
     }
 }

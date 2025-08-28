@@ -21,31 +21,20 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmPaned_h
 #define _XmPaned_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 #define XmPanedAskChild 0
-
 typedef struct _XmPanedClassRec	*XmPanedWidgetClass;
 typedef struct _XmPanedRec	*XmPanedWidget;
-
 /************************************************************
  *
  *  Public Procedures
  *
  ************************************************************/
-
 /*	Function Name: XmPanedGetPanes
  *	Description: Returns the number of panes in the paned widget.
  *	Arguments: w - the paned widget.
@@ -53,13 +42,11 @@ typedef struct _XmPanedRec	*XmPanedWidget;
  *                 num - the number of panes.
  *	Returns: the number of panes in the paned widget.
  */
-
 extern int XmPanedGetPanes(
     Widget			/* w */,
     WidgetList *		/* panes */,
     int *			/* num */
 );
-
 /*	Function Name: XmCreatePaned
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -67,18 +54,10 @@ extern int XmPanedGetPanes(
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
 Widget XmCreatePaned(Widget, String, ArgList, Cardinal);
-
 /* Class record constant */
 extern WidgetClass xmPanedWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmPaned_h --  DON'T ADD STUFF AFTER THIS #endif */

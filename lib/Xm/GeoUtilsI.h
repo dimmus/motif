@@ -27,15 +27,11 @@
 /* $XConsortium: GeoUtilsI.h /main/5 1995/07/13 17:28:18 drk $ */
 #ifndef _XmGeoUtilsI_h
 #define _XmGeoUtilsI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for GeoUtils.c    ********/
-
 extern XtGeometryResult _XmHandleQueryGeometry(
                         Widget wid,
                         XtWidgetGeometry *intended,
@@ -129,11 +125,8 @@ extern Boolean _XmGeoReplyYes(
 extern XtGeometryResult _XmMakeGeometryRequest(
                         Widget w,
                         XtWidgetGeometry *geom) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmGeoUtilsI_h */

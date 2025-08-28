@@ -25,22 +25,15 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmIconGI_h
 #define _XmIconGI_h
-
 #include <X11/Intrinsic.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 void _XmIconGadgetIconPos(Widget wid, int *x, int *y);
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmIconGI_h */
-
 /* DON'T ADD ANYTHING AFTER THIS #endif */

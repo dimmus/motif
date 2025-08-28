@@ -25,12 +25,9 @@
 static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #define X_INCLUDE_STRING_H
 #define XOS_USE_XT_LOCKING
 #if HAVE_X11_XOS_R_H
@@ -38,7 +35,6 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #else
 #include <Xm/Xmos_r.h>
 #endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -51,19 +47,13 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #include "ResIndI.h"
 #include "XmI.h"
 #include "XmRenderTI.h"
-
-
 #define MSG2	_XmMMsgResConvert_0001
 #define MSG3    _XmMMsgResConvert_0002
 #define MSG4    _XmMMsgResConvert_0003
 #define MSG6    _XmMMsgResConvert_0005
 #define MSG7    _XmMMsgResConvert_0006
 #define MSG12   _XmMMsgResConvert_0011
-
-
-
 /********    Static Function Declarations    ********/
-
 static Boolean StringToEntity(
                         Display *disp,
                         XrmValue *args,
@@ -382,28 +372,18 @@ static Boolean CvtStringToTextRenderTable(Display *dpy,
 					     XrmValue *from,
 					     XrmValue *to,
 					     XtPointer *converter_data);
-
 static void _XmGetDisplayArg(Widget widget,
 					Cardinal *size,
 					XrmValue *value);
-
-
 /********    End Static Function Declarations    ********/
-
-
 static XtConvertArgRec selfConvertArgs[] = {
     { XtBaseOffset, (XtPointer) 0, sizeof(int) }
 };
-
 static XtConvertArgRec  displayConvertArg[] = {
     {XtProcedureArg, (XtPointer)_XmGetDisplayArg, 0},
 };
-
 /* Motif widget set version number.  Accessable by applications via Xm.h. */
-
 externaldef(xmuseversion) int xmUseVersion = XmVersion;
-
-
 /************************************************************************
  *
  *  _XmGetDisplayArg
@@ -422,12 +402,9 @@ static void _XmGetDisplayArg(widget, size, value)
                  (String*)NULL, (Cardinal*)NULL );
         /* can't return any useful Display and caller will de-ref NULL,
            so aborting is the only useful option */
-
     value->size = sizeof(Display*);
     value->addr = (XPointer)&DisplayOfScreen(XtScreenOfObject(widget));
 }
-
-
 /************************************************************************
  *
  *  _XmRegisterConverters
@@ -440,12 +417,10 @@ void
 _XmRegisterConverters( void )
 {
     static Boolean registered = False ;
-
     _XmProcessLock();
     if(    !registered    )
     {
         _XmRepTypeInstallConverters() ;
-
         XtSetTypeConverter( XmRString, XmRWidget, CvtStringToWidget,
                             selfConvertArgs, XtNumber(selfConvertArgs),
                             XtCacheNone, (XtDestructor) NULL) ;
@@ -462,7 +437,6 @@ _XmRegisterConverters( void )
 			    CvtStringToXmStringDestroy ) ;
         XtSetTypeConverter( XmRString, XmRKeySym, CvtStringToKeySym,
 			   NULL, 0, XtCacheNone, NULL) ;
-
         XtSetTypeConverter( XmRString, XmRHorizontalPosition,
                            CvtStringToHorizontalPosition, selfConvertArgs,
                              XtNumber( selfConvertArgs), XtCacheNone, NULL) ;
@@ -478,12 +452,10 @@ _XmRegisterConverters( void )
         XtSetTypeConverter( XmRString, XmRBooleanDimension,
                              CvtStringToBooleanDimension, selfConvertArgs,
                              XtNumber( selfConvertArgs), XtCacheNone, NULL) ;
-
         XtSetTypeConverter( XmRCompoundText, XmRXmString, XmCvtTextToXmString,
 			   NULL, 0, XtCacheNone, NULL) ;
         XtSetTypeConverter( XmRXmString, XmRCompoundText, XmCvtXmStringToText,
                            NULL, 0, XtCacheNone, NULL) ;
-
         XtSetTypeConverter( XmRString, XmRCharSetTable,
 			   CvtStringToCharSetTable, NULL, 0, XtCacheNone,
 			   CvtStringToCharSetTableDestroy) ;
@@ -520,19 +492,16 @@ _XmRegisterConverters( void )
 			   CvtStringToRenditionPixel,
 			   (XmConst XtConvertArgList)colorConvertArgs, 2,
 			   XtCacheByDisplay, NULL);
-
 	/* also set a converter from Pixel to RenditionPixel so that
 	   the ColorObject setting as Pixel directly in the resource
 	   Database be taken for rendition background and foreground */
 	XtSetTypeConverter(XmRPixel, XmRRenditionPixel,
 			   CvtPixelToRenditionPixel, NULL, 0,
 			   XtCacheByDisplay, NULL);
-
 	XtSetTypeConverter(XmRString, XmRSelectColor,
 			   CvtStringToSelectColor,
 			   (XmConst XtConvertArgList)colorConvertArgs, 2,
 			   XtCacheByDisplay, NULL);
-
 	XtSetTypeConverter(XmRString, XmRTabList,
 			   CvtStringToXmTabList, NULL, 0,
 			   (XtCacheAll | XtCacheRefCount),
@@ -557,7 +526,6 @@ _XmRegisterConverters( void )
 			   selfConvertArgs, XtNumber(selfConvertArgs),
 			   (XtCacheNone | XtCacheRefCount),
 			   CvtStringToXmRenderTableDestroy);
-
         XtSetTypeConverter(XmRString, XmRButtonFontList,
 			   CvtStringToButtonFontList,
 			   selfConvertArgs, XtNumber(selfConvertArgs),
@@ -573,15 +541,11 @@ _XmRegisterConverters( void )
 			   selfConvertArgs, XtNumber(selfConvertArgs),
 			   (XtCacheNone | XtCacheRefCount),
 			   CvtStringToXmFontListDestroy);
-
         registered = True;
         }
     _XmProcessUnlock();
     return ;
 }
-
-
-
 /************************************************************************
  *
  *  XmeNamesAreEqual
@@ -596,7 +560,6 @@ XmeNamesAreEqual(
         register char *test_str )
 {
         register char i ;
-
     if(    ((in_str[0] == 'X') || (in_str[0] == 'x'))
         && ((in_str[1] == 'M') || (in_str[1] == 'm'))    )
     {
@@ -613,18 +576,13 @@ XmeNamesAreEqual(
         else
             i = *in_str;
         in_str++;
-
         if(    i != *test_str++    )
         {
             return( False) ;
             }
     }while(    i    ) ;
-
     return( True) ;
     }
-
-
-
 /************************************************************************
  *
  *  StringToEntity
@@ -644,43 +602,34 @@ StringToEntity(
     Widget widget = *(Widget*) args[0].addr ;
     static Widget  itsChild;
     Boolean        success;
-
     if (*n_args != 1)
       XtAppWarningMsg (
             XtDisplayToApplicationContext(disp),
             "wrongParameters", "cvtStringToWidget", "XtToolkitError",
             MSG12, (String*)NULL, (Cardinal*)NULL );
-
     /* handle the XmSELF case */
     if (XmeNamesAreEqual ((String) from->addr, "self"))
 	child  = widget ;
     else {
 	child  = XtNameToWidget(XtParent(widget), (String)from->addr);
     }
-
     success   = !( child == NULL );
-
     if ( success )
     {
         if (to->addr == NULL) {
            itsChild = child;
            to->addr = (XPointer) &itsChild;
 	}
-
         else if (to->size < sizeof(Widget))
             success  = FALSE;
-
         else
             *(Widget*) to->addr = child;
-
         to->size = sizeof(Widget);
     }
     else
         XtDisplayStringConversionWarning(disp, from->addr, "Widget");
-
     return ( success );
 }
-
 /************************************************************************
  *
  *  CvtStringToWidget
@@ -698,7 +647,6 @@ CvtStringToWidget(
 {
     return (StringToEntity( disp, args, n_args, from, to, converter_data ) );
 }
-
 /************************************************************************
  *
  *  CvtStringToWindow
@@ -716,9 +664,6 @@ CvtStringToWindow(
 {
     return (StringToEntity( disp, args, n_args, from, to, converter_data ) );
 }
-
-
-
 /************************************************************************
  *
  *  CvtStringToChar
@@ -735,11 +680,8 @@ CvtStringToChar(
         XtPointer *converter_data) /* unused */
 {
    unsigned char in_char = *((unsigned char *) (from->addr)) ;
-
    _XM_CONVERTER_DONE( to, unsigned char, in_char, ; )
    }
-
-
 /************************************************************************
  *
  *   CvtStringToKeySym
@@ -756,16 +698,13 @@ CvtStringToKeySym(
         XtPointer *converter_data) /* unused */
 {
     KeySym tmpKS = XStringToKeysym( (char *) (from->addr)) ;
-
     if(    tmpKS != NoSymbol    )
     {
         _XM_CONVERTER_DONE( to, KeySym, tmpKS, ; )
         }
     XtDisplayStringConversionWarning(display, (char *) from->addr, XmRKeySym) ;
-
     return( FALSE) ;
     }
-
 static void
 CvtStringToXmStringDestroy(
         XtAppContext app,	/* unused */
@@ -777,7 +716,6 @@ CvtStringToXmStringDestroy(
     XmStringFree( *((XmString *) to->addr)) ;
     return ;
     }
-
 /************************************************************************
  *
  *  CvtStringToXmString
@@ -794,7 +732,6 @@ CvtStringToXmString(
         XtPointer *converter_data) /* unused */
 {
         XmString tmpStr ;
-
     if(    from->addr    )
     {
         tmpStr = XmStringGenerate((char *)from->addr,
@@ -807,10 +744,8 @@ CvtStringToXmString(
         }
     XtDisplayStringConversionWarning(display, ((char *) from->addr),
 				     XmRXmString) ;
-
     return( FALSE) ;
     }
-
 static void
 CvtStringToXmFontListDestroy(
         XtAppContext app,	/* unused */
@@ -820,10 +755,8 @@ CvtStringToXmFontListDestroy(
         Cardinal *num_args)	/* unused */
 {
     XmFontListFree( *((XmFontList *) to->addr)) ;
-
     return ;
     }
-
 /************************************************************************
  *
  *  CvtStringToXmFontList
@@ -848,7 +781,6 @@ CvtStringToXmFontListDestroy(
  *  2. Empty fontlistentries are ignored.
  *
  ************************************************************************/
-
 static Boolean
 CvtStringToXmFontList(
         Display *dpy,
@@ -868,13 +800,11 @@ CvtStringToXmFontList(
   char delim;
   XmFontListEntry fontListEntry;
   XmFontList      fontList = NULL;
-
   if (from->addr)
     {
       /* Copy the input string. */
       s = (char *) from->addr;
       sPtr = newString = XtNewString(s);
-
       /* Get the first fontlist entries. */
       if (!GetNextFontListEntry(&sPtr, &fontName, &fontTag,
 				&fontType, &delim))
@@ -882,8 +812,6 @@ CvtStringToXmFontList(
 	  XtFree(newString);
 	  s = (char *) XmDEFAULT_FONT;
 	  sPtr = newString = XtNewString(s);
-
-
 	  if (!GetNextFontListEntry(&sPtr, &fontName, &fontTag,
 				    &fontType, &delim))
 	    {
@@ -892,7 +820,6 @@ CvtStringToXmFontList(
 	      exit(1);
 	    }
 	}
-
       /* Parse additional font list entries. */
       do {
 	if (*fontName)
@@ -913,17 +840,13 @@ CvtStringToXmFontList(
 				    &fontType, &delim));
       XtFree(newString);
     }
-
   if (got_it)
     {
       _XM_CONVERTER_DONE(to, XmFontList, fontList, XmFontListFree(fontList);)
     }
-
   XtDisplayStringConversionWarning(dpy, (char *) from->addr, XmRFontList);
   return FALSE;
 }
-
-
 static Boolean
 CvtStringToButtonFontList(Display *dpy,
 				XrmValue *args,
@@ -932,11 +855,9 @@ CvtStringToButtonFontList(Display *dpy,
 				XrmValue *to,
 				XtPointer *converter_data) /* unused */
 {
-
   return(CvtStringToXmFontList(dpy, args, num_args, from, to,
 			       converter_data));
 }
-
 static Boolean
 CvtStringToLabelFontList(Display *dpy,
 			       XrmValue *args,
@@ -945,11 +866,9 @@ CvtStringToLabelFontList(Display *dpy,
 			       XrmValue *to,
 			       XtPointer *converter_data) /* unused */
 {
-
   return(CvtStringToXmFontList(dpy, args, num_args, from, to,
 			       converter_data));
 }
-
 static Boolean
 CvtStringToTextFontList(Display *dpy,
 			       XrmValue *args,
@@ -961,7 +880,6 @@ CvtStringToTextFontList(Display *dpy,
   return(CvtStringToXmFontList(dpy, args, num_args, from, to,
 			       converter_data));
 }
-
 /************************************************************************
  *
  *  GetNextFontListEntry
@@ -980,39 +898,30 @@ GetNextFontListEntry (
     char *fontPtr;
     String params[2];
     Cardinal num_params;
-
     *fontTypeRes = XmFONT_IS_FONT;
-
     /*
      * Parse the fontname or baselist.
      */
-
     if (!GetFontName(s, &fontName, delim))
     {
 	return (FALSE);
     }
-
     while (*delim == ';')
     {
         *fontTypeRes = XmFONT_IS_FONTSET;
-
         **s = ',';
         (*s)++;
-
         if (!GetFontName(s, &fontPtr, delim))
         {
 	    return (FALSE);
         }
     }
-
     /*
      * Parse the fontsettag or fonttag.
      */
-
     if (*delim == ':')
     {
         *fontTypeRes = XmFONT_IS_FONTSET;
-
 	(*s)++;
         if (!GetFontTag(s, &fontTag, delim))
         {
@@ -1028,10 +937,8 @@ GetNextFontListEntry (
 	    num_params = 1;
 	    XtWarningMsg("conversionWarning", "string", "XtToolkitError",
 			 MSG3, params, &num_params);
-
 	    return (FALSE);
 	}
-
         if (*delim == '=')
         {
 	    (*s)++;
@@ -1051,7 +958,6 @@ GetNextFontListEntry (
 	    num_params = 1;
 	    XtWarningMsg("conversionWarning", "string", "XtToolkitError",
 			 MSG4, params, &num_params);
-
 	    return (FALSE);
         }
     }
@@ -1059,7 +965,6 @@ GetNextFontListEntry (
     *fontTagRes = fontTag;
     return (TRUE);
 }
-
 /************************************************************************
  *
  *  GetFontName
@@ -1075,11 +980,9 @@ GetFontName (
 {
     String params[2];
     Cardinal num_params;
-
     /*
      * Skip any leading whitespace.
      */
-
     while (**s != '\0' && isspace((unsigned char)**s))
     {
 	(*s)++;
@@ -1088,11 +991,9 @@ GetFontName (
     {
         return (FALSE);
     }
-
     /*
      * Have nonspace.  Find the end of the name.
      */
-
     *name = *s;
     if (**s == '"')
     {
@@ -1125,10 +1026,8 @@ GetFontName (
 	*delim = **s;
         **s = '\0';
     }
-
     return (TRUE);
 }
-
 /************************************************************************
  *
  *  GetFontTag
@@ -1143,11 +1042,9 @@ GetFontTag (
     String params[2];
     Cardinal num_params;
     Boolean needs_tag = (*delim == '=');
-
     /*
      * Skip any leading whitespace.
      */
-
     while (**s != '\0' && isspace((unsigned char)**s))
     {
 	(*s)++;
@@ -1156,11 +1053,9 @@ GetFontTag (
     {
         return (FALSE);
     }
-
     /*
      * Have nonspace.  Find the end of the tag.
      */
-
     *tag = *s;
     if (**s == '"')
     {
@@ -1193,9 +1088,7 @@ GetFontTag (
 	*delim = isspace ((unsigned char)**s) ? ',' : **s;
         **s = '\0';
     }
-
     /* Null tags are not accepted. */
-
     if (*s == *tag)
     {
         if (needs_tag) {
@@ -1207,10 +1100,8 @@ GetFontTag (
 	}
         return (FALSE);
     }
-
     return (TRUE);
 }
-
 /************************************************************************
  *									*
  * GetNextXmString - return a pointer to a null-terminated string.	*
@@ -1225,25 +1116,16 @@ GetNextXmString(
 {
    char *tmp;
    int csize;
-
    if (**s == '\0')
       return(FALSE);
-
-
    /*  Skip any leading whitespace.  */
-
    while(isspace((unsigned char)**s) && **s != '\0') (*s)++;
-
    if (**s == '\0')
       return(FALSE);
-
-
    /* Found something. Allocate some space (ugh!) and start copying  */
    /* the next string                                                */
-
    *cs = XtMalloc(strlen(*s) + 1);
    tmp = *cs;
-
    while((**s) != '\0')
    {
       if ((**s) == '\\' && *((*s)+1) == ',')	/* Quoted comma */
@@ -1276,11 +1158,9 @@ GetNextXmString(
          }
        }
     }
-
     *tmp = '\0';
     return(TRUE);
 }
-
 /************************************************************************
  *
  * CvtStringToXmStringTable
@@ -1305,10 +1185,8 @@ CvtStringToXmStringTable(
   XmString *table;
   static  XmString *tblptr;
   int	  str_no, table_size;
-
   if (from_val->addr == NULL)
     return FALSE;
-
   s = (char *) from_val->addr;
   table_size = 100;
   table = (XmString *) XtMalloc(sizeof(XmString) * table_size);
@@ -1324,12 +1202,10 @@ CvtStringToXmStringTable(
 				       XmCHARSET_TEXT, NULL);
       XtFree(cs);
     }
-
   /* NULL terminate the array... */
   table_size = str_no + 1;
   table = (XmString *)XtRealloc((char *) table, sizeof(XmString) * table_size);
   table[str_no] = (XmString) NULL;
-
   if (to_val->addr != NULL)
     {
       if (to_val->size < sizeof(XtPointer))
@@ -1347,7 +1223,6 @@ CvtStringToXmStringTable(
   to_val->size = sizeof(XtPointer);
   return TRUE;
 }
-
 /****************
  *
  * XmStringCvtDestroy - free up the space allocated by the converter
@@ -1367,7 +1242,6 @@ XmStringCvtDestroy(
        XmStringFree(table[i]);
    XtFree((char*)table);
 }
-
 static Boolean
 CvtStringToStringTable(
         Display *dpy,		/* unused */
@@ -1384,12 +1258,10 @@ CvtStringToStringTable(
             int size = 50 ;
             int i, len ;
             int csize;
-
     if(    (p = from_val->addr) == NULL    )
     {   return( False) ;
         }
     table = (String *) XtMalloc( sizeof( String) * size) ;
-
     for(    i = 0 ; *p ; i++    )
     {
         while(    isspace((unsigned char) *p) && *p != '\0'    )
@@ -1405,7 +1277,6 @@ CvtStringToStringTable(
                 }
             table[i] = XtMalloc( sizeof( char)) ;
             *(table[i]) = '\0' ;
-
             break ;
             }
         for(    top = p ; *p != ',' && *p != '\0' ; p+=csize    )
@@ -1430,7 +1301,6 @@ CvtStringToStringTable(
         }
     table = (String *)XtRealloc( (char *) table, sizeof( String) * (i + 1)) ;
     table[i] = NULL ;
-
     if(    to_val->addr != NULL    )
     {
         if(    to_val->size < sizeof( XPointer)    )
@@ -1447,7 +1317,6 @@ CvtStringToStringTable(
     to_val->size = sizeof( XPointer) ;
     return( True) ;
     }
-
 static void
 StringCvtDestroy(
         XtAppContext app,	/* unused */
@@ -1458,15 +1327,12 @@ StringCvtDestroy(
 {
             int i ;
             String *table = * (String **) (to->addr) ;
-
     for(    i = 0 ; table[i] != NULL ; i++    )
     {   XtFree( (char *) table[i]) ;
         }
     XtFree( (char *) table) ;
-
     return ;
     }
-
 static Boolean
 CvtStringToCardinalList(
     Display *dpy,		/* unused */
@@ -1481,10 +1347,8 @@ CvtStringToCardinalList(
     int             	crd_array_size = 50;
     int			crd_array_count = 0;
     int			new_element;
-
     if ((p = from_val->addr) == NULL)
         return(False);
-
     crd_array = (Cardinal *)XtCalloc
 			(crd_array_size,sizeof(Cardinal));
     while (*p != '\0')
@@ -1510,10 +1374,8 @@ CvtStringToCardinalList(
 	else
 	    p++;
 	}
-
         _XM_CONVERTER_DONE(to_val,Cardinal *,crd_array,;)
 }
-
 static void
 CardinalListCvtDestroy(
         XtAppContext app,	/* unused */
@@ -1524,7 +1386,6 @@ CardinalListCvtDestroy(
 {
         XtFree((XPointer)to->addr);
 }
-
 static Boolean
 CvtStringToHorizontalPosition(
         Display *display,
@@ -1539,7 +1400,6 @@ CvtStringToHorizontalPosition(
     unsigned char defaultFromType = _XmGetUnitType(widget) ;
     Position tmpPix;
     Boolean parseError;
-
     tmpPix = (Position)
 	_XmConvertStringToUnits (screen, from->addr, (int) defaultFromType,
 			       XmHORIZONTAL, XmPIXELS, (XtEnum*) &parseError);
@@ -1551,7 +1411,6 @@ CvtStringToHorizontalPosition(
     else
         _XM_CONVERTER_DONE( to, Position, tmpPix, ; )
 }
-
 static Boolean
 CvtStringToHorizontalDimension(
         Display *display,
@@ -1566,7 +1425,6 @@ CvtStringToHorizontalDimension(
     unsigned char defaultFromType = _XmGetUnitType(widget) ;
     Dimension tmpPix;
     Boolean parseError;
-
     tmpPix = (Dimension)
       _XmConvertStringToUnits (screen, from->addr, (int) defaultFromType,
 			       XmHORIZONTAL, XmPIXELS, (XtEnum*) &parseError);
@@ -1579,7 +1437,6 @@ CvtStringToHorizontalDimension(
     else
         _XM_CONVERTER_DONE( to, Dimension, tmpPix, ; )
     }
-
 static Boolean
 CvtStringToVerticalPosition(
         Display *display,
@@ -1594,7 +1451,6 @@ CvtStringToVerticalPosition(
     unsigned char defaultFromType = _XmGetUnitType(widget) ;
     Position tmpPix;
     Boolean parseError;
-
     tmpPix = (Position)
 	_XmConvertStringToUnits(screen, from->addr, (int) defaultFromType,
 				XmVERTICAL, XmPIXELS, (XtEnum*) &parseError);
@@ -1607,7 +1463,6 @@ CvtStringToVerticalPosition(
         else
             _XM_CONVERTER_DONE( to, Position, tmpPix, ; )
 }
-
 static Boolean
 CvtStringToVerticalDimension(
         Display *display,
@@ -1622,7 +1477,6 @@ CvtStringToVerticalDimension(
         unsigned char defaultFromType = _XmGetUnitType(widget) ;
 	Dimension tmpPix;
         Boolean parseError;
-
         tmpPix = (Dimension)
 	  _XmConvertStringToUnits(screen, from->addr, (int) defaultFromType,
 				  XmVERTICAL, XmPIXELS, (XtEnum*) &parseError);
@@ -1635,8 +1489,6 @@ CvtStringToVerticalDimension(
         else
             _XM_CONVERTER_DONE( to, Dimension, tmpPix, ; )
     }
-
-
 /************************************************************************
  *
  *  XmeGetDefaultRenderTable
@@ -1651,19 +1503,16 @@ typedef struct _system_font_list
     Display	*display;
     XmFontList	 fontlist;
 } SystemFontList;
-
 static XmFontList DefaultSystemFontList(Display *display, XmFontList fontlist)
 {
     static SystemFontList	*sFontLists = NULL;
     static int			 nsFontLists = 0;
     static int			 maxnsFontLists = 0;
-
     if (fontlist)
     {
 	if (nsFontLists >= maxnsFontLists)
 	{
 	    Cardinal nbytes;
-
 	    maxnsFontLists += 8;
 	    nbytes = (Cardinal) sizeof(SystemFontList)*maxnsFontLists;
 	    if (NULL == sFontLists)
@@ -1686,7 +1535,6 @@ static XmFontList DefaultSystemFontList(Display *display, XmFontList fontlist)
     {
 	int i;
 	if (NULL == sFontLists) return NULL;
-
 	for (i=0; i<nsFontLists; i++)
 	{
 	    if (sFontLists[i].display == display)
@@ -1695,7 +1543,6 @@ static XmFontList DefaultSystemFontList(Display *display, XmFontList fontlist)
     }
     return NULL;
 }
-
 XmFontList
 XmeGetDefaultRenderTable(
         Widget w,
@@ -1714,7 +1561,6 @@ XmeGetDefaultRenderTable(
     char delim;
     XmSpecRenderTrait trait ;
     _XmWidgetToAppContext(w);
-
     if (fontListType) {
         _XmAppLock(app);
 	/* look for the first ancestor with the trait */
@@ -1728,7 +1574,6 @@ XmeGetDefaultRenderTable(
 	}
         _XmAppUnlock(app);
     }
-
     if (fontlist) {
         return (fontlist);
     }
@@ -1738,14 +1583,12 @@ XmeGetDefaultRenderTable(
 	return(sFontList);
     }
 #endif
-
     _XmProcessLock();
     fontlist = DefaultSystemFontList(XtDisplay(origw), (XmFontList) NULL);
     if (!fontlist) {
 	/* Begin fixing OSF 4735 */
 	s = (char *) XmDEFAULT_FONT;
 	sPtr = newString = XtNewString (s);
-
 	if (!GetNextFontListEntry (&sPtr, &fontName, &fontTag,
 				   &fontType, &delim)) {
 	    _XmProcessUnlock();
@@ -1753,7 +1596,6 @@ XmeGetDefaultRenderTable(
 	    XmeWarning(NULL, MSG2);
 	    exit( 1) ;
 	}
-
 	do {
 	    if (*fontName) {
 		fontListEntry = XmFontListEntryLoad (XtDisplay(origw),
@@ -1778,7 +1620,6 @@ XmeGetDefaultRenderTable(
     _XmProcessUnlock();
     return (fontlist);
 }
-
 static void
 ConvertStringToButtonTypeDestroy(
         XtAppContext app,	/* unused */
@@ -1788,10 +1629,8 @@ ConvertStringToButtonTypeDestroy(
         Cardinal *num_args)	/* unused */
 {
     XtFree( *((char **) to->addr)) ;
-
     return ;
     }
-
 static Boolean
 ConvertStringToButtonType(
         Display *display,
@@ -1807,7 +1646,6 @@ ConvertStringToButtonType(
     int i, comma_count ;
     String work_str, btype_str ;
     _Xstrtokparams strtok_buf;
-
     comma_count = 0 ;
     while(    in_str[in_str_size]    )
     {   if(    in_str[in_str_size++] == ','    )
@@ -1815,13 +1653,11 @@ ConvertStringToButtonType(
             }
         }
     ++in_str_size ;
-
     buttonTable = (XmButtonTypeTable) XtMalloc(
                                    sizeof( XmButtonType) * (comma_count + 2)) ;
     buttonTable[comma_count+1] = (XmButtonType)0;
     work_str = (String) XtMalloc( in_str_size) ;
     strcpy( work_str, in_str) ;
-
     for(    i = 0, btype_str = _XStrtok(work_str, ",", strtok_buf) ;
             btype_str ;
             btype_str = _XStrtok(NULL, ",", strtok_buf), ++i)
@@ -1847,15 +1683,12 @@ ConvertStringToButtonType(
 					     XmRButtonType) ;
             XtFree( (char *) buttonTable) ;
             XtFree( (char *) work_str) ;
-
             return( FALSE) ;
             }
         }
     XtFree( work_str) ;
-
     _XM_CONVERTER_DONE( to, XmButtonTypeTable, buttonTable, XtFree( (char *) buttonTable) ; )
     }
-
 static void
 CvtStringToKeySymTableDestroy(
         XtAppContext app,	/* unused */
@@ -1865,10 +1698,8 @@ CvtStringToKeySymTableDestroy(
         Cardinal *num_args)	/* unused */
 {
     XtFree( *((char **) to->addr)) ;
-
     return ;
     }
-
 static Boolean
 CvtStringToKeySymTable(
         Display *display,
@@ -1885,7 +1716,6 @@ CvtStringToKeySymTable(
   String work_str, ks_str;
   KeySym ks;
   _Xstrtokparams strtok_buf;
-
   comma_count = 0;
   while (in_str[in_str_size])
     {
@@ -1893,11 +1723,9 @@ CvtStringToKeySymTable(
 	++comma_count;
     }
   ++in_str_size;
-
   keySymTable = (XmKeySymTable) XtMalloc(sizeof(KeySym) * (comma_count + 2));
   keySymTable[comma_count + 1] = (KeySym)NULL;
   work_str = XtNewString(in_str);
-
   for (ks_str = _XStrtok(work_str, ",", strtok_buf), i = 0;
        ks_str;
        ks_str = _XStrtok(NULL, ",", strtok_buf), i++)
@@ -1911,18 +1739,15 @@ CvtStringToKeySymTable(
 	      XtDisplayStringConversionWarning(display, ks_str, XmRKeySym);
 	      XtFree((char *) work_str);
 	      XtFree((char *) keySymTable);
-
 	      return FALSE;
 	    }
 	  keySymTable[i] = ks;
 	}
     }
   XtFree((char *) work_str);
-
   _XM_CONVERTER_DONE(to, XmKeySymTable, keySymTable,
 		     XtFree((char*)keySymTable);)
 }
-
 static void
 CvtStringToCharSetTableDestroy(
         XtAppContext app,	/* unused */
@@ -1932,10 +1757,8 @@ CvtStringToCharSetTableDestroy(
         Cardinal *num_args)	/* unused */
 {
     XtFree( *((char **) to->addr)) ;
-
     return ;
     }
-
 static Boolean
 CvtStringToCharSetTable(
         Display *display,	/* unused */
@@ -1953,9 +1776,7 @@ CvtStringToCharSetTable(
   int i;
   String work_str, cs_str;
   _Xstrtokparams strtok_buf;
-
   work_str = XtNewString(in_str);
-
   for (cs_str = _XStrtok(work_str, ",", strtok_buf);
        cs_str;
        cs_str = _XStrtok(NULL, ",", strtok_buf))
@@ -1964,13 +1785,11 @@ CvtStringToCharSetTable(
 	strDataSize += strlen(cs_str) + 1;
       ++numCharsets;
     }
-
   charsetTable = (XmStringCharSetTable)
     XtMalloc(strDataSize + sizeof(XmStringCharSet) * (numCharsets+1));
   charsetTable[numCharsets] = (XmStringCharSet)NULL;
   dataPtr = (char *) &charsetTable[numCharsets+1];
   strcpy(work_str, in_str);
-
   for (i = 0, cs_str = _XStrtok(work_str, ",", strtok_buf);
        cs_str;
        cs_str = _XStrtok(NULL, ",", strtok_buf), ++i)
@@ -1987,11 +1806,9 @@ CvtStringToCharSetTable(
 	}
     }
   XtFree((char *) work_str);
-
   _XM_CONVERTER_DONE(to, XmStringCharSetTable, charsetTable,
 		     XtFree((char *) charsetTable);)
 }
-
 /************************************************************************
  *
  *  CvtStringToBooleanDimension
@@ -2009,7 +1826,6 @@ CvtStringToBooleanDimension(
         char *in_str = (char *) from->addr ;
         Dimension outVal ;
         int intermediate;
-
     if (isInteger(from->addr, &intermediate))
     {
         /* Is numeric argument, so convert to horizontal dimension.  This is
@@ -2019,7 +1835,6 @@ CvtStringToBooleanDimension(
         Widget widget = *(Widget*) args[0].addr ;
         Screen * screen = XtScreen(widget) ;
         unsigned char unitType = _XmGetUnitType(widget) ;
-
         if(    intermediate < 0    )
         {   XtDisplayStringConversionWarning(display, (char *)from->addr,
 					     XmRBooleanDimension) ;
@@ -2047,9 +1862,6 @@ CvtStringToBooleanDimension(
         }
     _XM_CONVERTER_DONE( to, Dimension, outVal, ; )
     }
-
-
-
 /************************************************************************
  *
  *  XmCvtStringToAtomList
@@ -2074,10 +1886,8 @@ CvtStringToAtomList(
   int atom_count;
   Atom *atom_list;
   char *context_string;
-
   if (from->addr == NULL)
     return(False);
-
   atom_count = 0;
   for (atom_name = GetNextToken((char*) from->addr, ",", &context_string);
        atom_name != NULL;
@@ -2086,7 +1896,6 @@ CvtStringToAtomList(
       if (atom_count == max_atoms)
 	{
 	  max_atoms *= 2;
-
 	  if (name_list == stack_names)
 	    {
 	      char **new_names = (char **) XtMalloc(sizeof(char *) * max_atoms);
@@ -2100,19 +1909,14 @@ CvtStringToAtomList(
 					      sizeof(char *) * max_atoms);
 	    }
 	}
-
       name_list[atom_count++] = atom_name;
     }
-
   atom_list = (Atom *) XtMalloc(sizeof(Atom) * atom_count);
   XInternAtoms(dpy, name_list, atom_count, False, atom_list);
-
   while(--atom_count >= 0)
     XtFree(name_list[atom_count]);
-
   {
     static Atom *buf;
-
     if(to->addr)
       {
 	if(to->size < sizeof(Atom *))
@@ -2129,12 +1933,10 @@ CvtStringToAtomList(
 	buf = atom_list;
 	to->addr = (XPointer) &buf;
       }
-
     to->size = sizeof(Atom *);
     return(True);
   }
 }
-
 static void
 SimpleDestructor(
         XtAppContext app,	/* unused */
@@ -2144,10 +1946,8 @@ SimpleDestructor(
         Cardinal *num_args )	/* unused */
 {
    char *simple_struct = *(char **)(to->addr);
-
    XtFree(simple_struct);
 }
-
 /*
  *
  * GetNextToken
@@ -2180,21 +1980,17 @@ SimpleDestructor(
  *        ": the \t token .  "
  *
  */
-
 static Boolean
 OneOf(
         char c,
 	char *set )
 {
 	char *p;
-
 	for (p = set; *p != 0; p++)
 		if (*p == c)
 			return(True);
-
 	return(False);
 }
-
 static char *
 GetNextToken(
 	char *src,
@@ -2206,15 +2002,11 @@ GetNextToken(
 	char *next_context;
 	char *buf = NULL;
 	int len;
-
 	if (src != NULL)
 		*context = src;
-
 	if (*context == NULL)
 		return(NULL);
-
 	s = *context;
-
 	/* find the end of the token */
 	for (e = s; (!terminated) && (*s != '\0'); e = s++)
 	{
@@ -2223,7 +2015,6 @@ GetNextToken(
 		else if (OneOf(*s, delim))
 			terminated = True;
 	}
-
 	/* assert (OneOf(*e,delim) || (*e == '\0')) */
 	if (terminated)
 	{
@@ -2232,14 +2023,12 @@ GetNextToken(
 	}
 	else
 		next_context = NULL;
-
 	/* Strip out non-backslashed leading and trailing whitespace */
 	s = *context;
 	while ((s != e) && isspace((unsigned char)*s))
 		s++;
 	while ((e != s) && isspace((unsigned char)*e) && ((*e-1) != '\\'))
 		e--;
-
 	if (e == s)
 	{
 		/*
@@ -2256,31 +2045,25 @@ GetNextToken(
 		else
 			return(NULL);
 	}
-
 	/*
 	 * Copy into buffer.  Swallow any backslashes which precede
 	 * delimiter characters or spaces.  It would be great if we had
 	 * time to implement full C style backslash processing...
 	 */
 	len = (e - s) + 1;
-
 	p = buf = XtMalloc(len + 1);
 	while (s != e)
 	{
 		if ((*s == '\\') &&
 		    (OneOf(*(s+1), delim) || isspace((unsigned char)*(s+1))))
 			s++;
-
 		*(p++) = *(s++);
 	}
 	*(p++) = *(s++);
 	*p = '\0';
-
 	*context = next_context;
-
 	return(buf);
 }
-
 static Boolean
 CvtStringToCardinal(
         Display *display,
@@ -2298,12 +2081,9 @@ CvtStringToCardinal(
 					 XmRCardinal);
 	return False;
 	}
-
     value = (Cardinal) intermediate;
     _XM_CONVERTER_DONE( to, Cardinal, value, ; )
 }
-
-
 static Boolean
 CvtStringToTextPosition(
         Display *display,
@@ -2321,12 +2101,9 @@ CvtStringToTextPosition(
 					 XmRTextPosition);
         return False;
         }
-
     value = (XmTextPosition) intermediate;
     _XM_CONVERTER_DONE( to, XmTextPosition, value, ; )
 }
-
-
 static Boolean
 CvtStringToTopItemPosition(
         Display *display,
@@ -2344,12 +2121,9 @@ CvtStringToTopItemPosition(
 					 XmRTopItemPosition);
         return False;
         }
-
     value = intermediate - 1;
     _XM_CONVERTER_DONE( to, int, value, ; )
 }
-
-
 static Boolean
 isInteger(
     String string,
@@ -2397,8 +2171,6 @@ isInteger(
     }
     return False;
 }
-
-
 /************************************************************************
  *
  *  CvtStringToRenditionPixel
@@ -2416,15 +2188,12 @@ CvtStringToRenditionPixel(Display *disp,
 {
   String 	str = (String)from_val->addr;
   Boolean	result = False;
-
   if (XmeNamesAreEqual(str, "unspecified_pixel"))
     {
       _XM_CONVERTER_DONE(to_val, Pixel, XmUNSPECIFIED_PIXEL, ;)
       }
-
   result = XtCallConverter(disp, XtCvtStringToPixel, args, *num_args,
 			   from_val, to_val, NULL);
-
   if (result == False)
     {
       *converter_data = False;
@@ -2436,7 +2205,6 @@ CvtStringToRenditionPixel(Display *disp,
       return True;
     }
 }
-
 /************************************************************************
  *
  *  CvtPixelToRenditionPixel
@@ -2444,7 +2212,6 @@ CvtStringToRenditionPixel(Display *disp,
  *      doing nothing.
  *
  ************************************************************************/
-
 static Boolean
 CvtPixelToRenditionPixel(Display *disp,
 			     XrmValuePtr args, /* unused */
@@ -2460,7 +2227,6 @@ CvtPixelToRenditionPixel(Display *disp,
 			(String *) NULL, (Cardinal *)NULL);
     _XM_CONVERTER_DONE(to_val, Pixel, *(int*)from_val->addr, ;)
 }
-
 /************************************************************************
  *
  *  CvtStringToSelectColor
@@ -2480,7 +2246,6 @@ CvtStringToSelectColor(Display *disp,
 {
   String 	str = (String)from_val->addr;
   Boolean	result = False;
-
   /* in those 3 cases, just return the constant and the widget
      will have to do teh onversion itself. It's ok, since the widget
      has to handle the constant case anyway for direct use by
@@ -2494,11 +2259,9 @@ CvtStringToSelectColor(Display *disp,
   else if (XmeNamesAreEqual(str, "highlight_color")) {
       _XM_CONVERTER_DONE(to_val, Pixel, XmHIGHLIGHT_COLOR, ;)
       }
-
   /* else call the Xt converter, passing it the colorConvertArg */
   result = XtCallConverter(disp, XtCvtStringToPixel, args, *num_args,
 			   from_val, to_val, NULL);
-
   if (result == False)
     {
       *converter_data = False;
@@ -2510,8 +2273,6 @@ CvtStringToSelectColor(Display *disp,
       return True;
     }
 }
-
-
 /************************************************************************
  *
  *  GetNextTab
@@ -2526,44 +2287,33 @@ GetNextTab(char **s,
   int	ret_val;
   char 	sign[3];
   char	*tmp;
-
   bzero(sign, sizeof(sign));
   unitType[0] = '\0';
-
   if (sscanf(*s, " %2[+]", sign) == 1)
     ret_val = sscanf(*s, " %2[+] %f %12[^ \t\r\n\v\f,] ",
 		     sign, value, unitType);
   else ret_val = sscanf(*s, " %f %12[^ \t\r\n\v\f,] ",
 			value, unitType);
-
   if (ret_val == EOF) return(FALSE);
-
   if (sign[1] != '\0')
     {
       /* Error message */
       return(FALSE);
     }
-
   switch (sign[0])
     {
     case '\0':
       *offsetModel = XmABSOLUTE;
       break;
-
     case '+':
       *offsetModel = XmRELATIVE;
       break;
     }
-
   tmp = strpbrk(*s, ",");
-
   if (tmp == NULL) *s += strlen(*s);
   else *s = (tmp + 1);
-
   return(TRUE);
 }
-
-
 static void
 CvtStringToXmTabListDestroy(XtAppContext app, /* unused */
 			       XrmValue *to,
@@ -2572,10 +2322,8 @@ CvtStringToXmTabListDestroy(XtAppContext app, /* unused */
 			       Cardinal *num_args) /* unused */
 {
   XmTabListFree(*((XmTabList *)to->addr));
-
   return;
 }
-
 /************************************************************************
  *
  *  CvtStringToXmTabList
@@ -2590,7 +2338,6 @@ CvtStringToXmTabListDestroy(XtAppContext app, /* unused */
  *  <sign>	::=	+ | -
  *
  ************************************************************************/
-
 static Boolean
 CvtStringToXmTabList(Display *dpy,
 			XrmValue *args,	/* unused */
@@ -2608,18 +2355,14 @@ CvtStringToXmTabList(Display *dpy,
   XmParseResult	result;
   XmTab		tab;
   XmTabList	tl = NULL;
-
   if (from->addr)
     {
       s = (char *)from->addr;
-
       /* Parse the tabs */
       while (GetNextTab(&s, &value, unitType, &offsetModel))
 	{
 	  got_one = TRUE;
-
 	  result = XmeParseUnits(unitType, &units);
-
 	  if (result == XmPARSE_ERROR)
 	    {
 	      got_one = FALSE;
@@ -2631,20 +2374,15 @@ CvtStringToXmTabList(Display *dpy,
 	    }
 	  tab = XmTabCreate(value, (unsigned char)units, offsetModel,
 			    XmALIGNMENT_BEGINNING, XmS);
-
 	  tl = XmTabListInsertTabs(tl, &tab, 1, -1);
-
 	  XmTabFree(tab);
 	}
     }
-
   if (got_one)
     _XM_CONVERTER_DONE(to, XmTabList, tl, XmTabListFree(tl);)
-
   XtDisplayStringConversionWarning(dpy, (char *)from->addr, XmRTabList);
   return(FALSE);
 }
-
 static Boolean
 cvtStringToXmRenderTable(Display *dpy,
 			 Widget widget,
@@ -2659,30 +2397,25 @@ cvtStringToXmRenderTable(Display *dpy,
   char		*tag;
   Boolean	has_default = FALSE, in_db = FALSE;
   _Xstrtokparams strtok_buf;
-
   if (from->addr)
     {
       s = XtNewString((char *)from->addr);
       rt = NULL;
       has_default = FALSE;
-
       /* Try for default rendition */
       rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass,
 				   NULL, NULL, 0, NULL);
-
       if (rend[0] != NULL)
 	{
 	  rt = XmRenderTableAddRenditions(NULL, rend, 1, XmMERGE_REPLACE);
 	  has_default = TRUE;
 	}
-
       /* Try to get first tag. */
       if ((tag = _XStrtok(s, " \t\r\n\v\f,", strtok_buf)) != NULL)
 	{
 	  XmRenditionFree(rend[0]);
 	  rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass,
 				       tag, NULL, 0, &in_db);
-
 	  if (!has_default && !in_db)
 	    {
 	      /* Call the fontlist converter */
@@ -2690,7 +2423,6 @@ cvtStringToXmRenderTable(Display *dpy,
 	      XtFree(s);
 	      return CvtStringToXmFontList(dpy, NULL, 0, from, to, NULL);
 	    }
-
 	  rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);
 	}
       else if (rend[0] == NULL)
@@ -2706,25 +2438,19 @@ cvtStringToXmRenderTable(Display *dpy,
 	  XmRenditionFree(rend[0]);
 	  _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
 	}
-
       while ((tag = _XStrtok(NULL, " \t\r\n\v\f,", strtok_buf)) != NULL)
 	{
 	  XmRenditionFree(rend[0]);
-
 	  rend[0] = _XmRenditionCreate(NULL, widget, resname, resclass,
 				       tag, NULL, 0, NULL);
-
 	  rt = XmRenderTableAddRenditions(rt, rend, 1, XmMERGE_REPLACE);
 	}
-
       XtFree(s);
       XmRenditionFree(rend[0]);
       _XM_CONVERTER_DONE(to, XmRenderTable, rt, XmRenderTableFree(rt);)
     }
-
   return FALSE;
 }
-
 static Boolean
 CvtStringToRenderTable(Display *dpy,
 			  XrmValue *args,
@@ -2734,14 +2460,11 @@ CvtStringToRenderTable(Display *dpy,
 			  XtPointer *converter_data) /* unused */
 {
   Widget wid;
-
   wid = *(Widget *)args[0].addr;
-
   return(cvtStringToXmRenderTable(dpy, wid,
 				  XmNrenderTable, XmCRenderTable,
 				  from, to));
 }
-
 static Boolean
 CvtStringToButtonRenderTable(Display *dpy,
 				XrmValue *args,
@@ -2751,14 +2474,11 @@ CvtStringToButtonRenderTable(Display *dpy,
 				XtPointer *converter_data) /* unused */
 {
   Widget wid;
-
   wid = *(Widget *)args[0].addr;
-
   return(cvtStringToXmRenderTable(dpy, wid,
 				  XmNbuttonRenderTable, XmCButtonRenderTable,
 				  from, to));
 }
-
 static Boolean
 CvtStringToLabelRenderTable(Display *dpy,
 			       XrmValue *args,
@@ -2768,14 +2488,11 @@ CvtStringToLabelRenderTable(Display *dpy,
 			       XtPointer *converter_data) /* unused */
 {
   Widget wid;
-
   wid = *(Widget *)args[0].addr;
-
   return(cvtStringToXmRenderTable(dpy, wid,
 				  XmNlabelRenderTable, XmCLabelRenderTable,
 				  from, to));
 }
-
 static Boolean
 CvtStringToTextRenderTable(Display *dpy,
 			      XrmValue *args,
@@ -2785,14 +2502,11 @@ CvtStringToTextRenderTable(Display *dpy,
 			      XtPointer *converter_data) /* unused */
 {
   Widget wid;
-
   wid = *(Widget *)args[0].addr;
-
   return(cvtStringToXmRenderTable(dpy, wid,
 				  XmNtextRenderTable, XmCTextRenderTable,
 				  from, to));
 }
-
 static void
 CvtStringToXmRenderTableDestroy(XtAppContext app, /* unused */
 				 XrmValue *to,

@@ -21,43 +21,29 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmFontSelector_h
 #define _XmFontSelector_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 /************************************************************
  *       INCLUDE FILES
  ************************************************************/
-
 #include <Xm/Ext.h>
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 /************************************************************
  *       TYPEDEFS AND DEFINES
  ************************************************************/
-
 typedef struct _XmFontSelectorClassRec *XmFontSelectorWidgetClass;
 typedef struct _XmFontSelectorRec *XmFontSelectorWidget;
-
 /************************************************************
  *       MACROS
  ************************************************************/
-
 /************************************************************
  *       GLOBAL DECLARATIONS
  ************************************************************/
-
 /************************************************************
  *       EXTERNAL DECLARATIONS
  ************************************************************/
-
 /*	Function Name: XmCreateFontSelector
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -65,17 +51,9 @@ typedef struct _XmFontSelectorRec *XmFontSelectorWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
 Widget XmCreateFontSelector(Widget, String, ArgList, Cardinal);
-
 extern WidgetClass xmFontSelectorWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmFontSelector_h */

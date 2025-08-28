@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  WrFFrP.c:                                                                  *
 *                                                                             *
@@ -31,12 +30,10 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 int
 XpmWriteFileFromPixmap(
     Display		*display,
@@ -50,7 +47,6 @@ XpmWriteFileFromPixmap(
     unsigned int width = 0;
     unsigned int height = 0;
     int ErrorStatus;
-
     /* get geometry */
     if (attributes && attributes->valuemask & XpmSize) {
 	width = attributes->width;
@@ -62,16 +58,13 @@ XpmWriteFileFromPixmap(
     if (shapemask)
 	xpmCreateImageFromPixmap(display, shapemask, &shapeimage,
 				 &width, &height);
-
     /* write to the file */
     ErrorStatus = XpmWriteFileFromImage(display, filename, ximage, shapeimage,
 					attributes);
-
     /* destroy the ximages */
     if (ximage)
 	XDestroyImage(ximage);
     if (shapeimage)
 	XDestroyImage(shapeimage);
-
     return (ErrorStatus);
 }

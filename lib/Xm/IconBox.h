@@ -21,45 +21,30 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmIconBox_h
 #define _XmIconBox_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
-
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 #define XmIconBoxAnyCell (-5)
-
 typedef struct _XmIconBoxClassRec	*XmIconBoxWidgetClass;
 typedef struct _XmIconBoxRec		*XmIconBoxWidget;
-
 typedef struct _XmIconBoxDropData {
     Position cell_x, cell_y;	/* drop location in cell coordinates. */
 } XmIconBoxDropData;
-
 /************************************************************
 *	MACROS
 *************************************************************/
-
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
-
 /*	Function Name: XmIconBoxIsCellEmpty
  *	Description:   Returns true if this cell is unused.
  *	Arguments:     w - the icon box.
@@ -67,9 +52,7 @@ typedef struct _XmIconBoxDropData {
  *                     ignore - ignore this widget when checking.
  *	Returns:       Returns true if this cell is unused.
  */
-
 Boolean XmIconBoxIsCellEmpty(Widget, Position, Position, Widget);
-
 /*	Function Name: XmCreateIconBox
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -77,21 +60,12 @@ Boolean XmIconBoxIsCellEmpty(Widget, Position, Position, Widget);
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
 Widget XmCreateIconBox(Widget, String, ArgList, Cardinal);
-
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
-
 extern WidgetClass xmIconBoxWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmIconBox_h */

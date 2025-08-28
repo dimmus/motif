@@ -27,26 +27,20 @@
 /*   $XConsortium: XmRenderTI.h /main/5 1995/07/13 18:24:12 drk $ */
 #ifndef _XmRenderTI_h
 #define _XmRenderTI_h
-
 #include <Xm/XmP.h>
 #if USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Internal types for XmRenderTable.c */
-
 #define REND_OPTIMIZED_BITS	1
 #define REND_MARK_BITS		REND_OPTIMIZED_BITS
 #define REND_REFCOUNT_BITS	(16 - REND_OPTIMIZED_BITS)
-
 /*
  * Macros for Rendition data structure access
  */
-
 #define _XmRendRefcount(r)	((_XmRendition)*(r))->refcount
 #define _XmRendFontOnly(r)	((_XmRendition)*(r))->fontOnly
 #define _XmRendLoadModel(r)	((_XmRendition)*(r))->loadModel
@@ -86,13 +80,11 @@ extern "C" {
 #define _XmRendHadEnds(r)	((_XmRendition)*(r))->hadEnds
 #define _XmRendRefcountInc(r)	++(((_XmRendition)*(r))->refcount)
 #define _XmRendRefcountDec(r)	--(((_XmRendition)*(r))->refcount)
-
 typedef struct __XmRenditionRec
 {
   /* flag indicating _XmFontRenditionRec */
   unsigned int	fontOnly : REND_OPTIMIZED_BITS;
   unsigned int	refcount : REND_REFCOUNT_BITS;
-
   unsigned char	loadModel;
   XmStringTag	tag;
   String	fontName;
@@ -103,7 +95,6 @@ typedef struct __XmRenditionRec
   XmStringTag	*tags;
   unsigned int	count;
   Boolean	hadEnds;
-
   XmTabList	tabs;
   Pixel		background;
   Pixel		foreground;
@@ -111,7 +102,6 @@ typedef struct __XmRenditionRec
   unsigned char strikethruType;
   unsigned char backgroundState;
   unsigned char foregroundState;
-
 #if USE_XFT
 	char *fontStyle,
 /*			*family,	Use font_name instead. */
@@ -122,13 +112,11 @@ typedef struct __XmRenditionRec
 	XftColor xftForeground, xftBackground;
 #endif
 } _XmRenditionRec, *_XmRendition;
-
 typedef struct __XmFontRenditionRec
 {
   /* flag indicating _XmFontRenditionRec */
   unsigned int	fontOnly : REND_OPTIMIZED_BITS;
   unsigned int	refcount : REND_REFCOUNT_BITS;
-
   unsigned char	loadModel;
   XmStringTag	tag;
   String	fontName;
@@ -139,9 +127,7 @@ typedef struct __XmFontRenditionRec
   XmStringTag	*tags;
   unsigned int	count;
 } _XmFontRenditionRec, *_XmFontRendition;
-
 /* Accessor macros. */
-
 #define _XmRTCount(rt)		((_XmRenderTable)*(rt))->count
 #define _XmRTRenditions(rt)	((_XmRenderTable)*(rt))->renditions
 #define _XmRTDisplay(rt)	((_XmRenderTable)*(rt))->display
@@ -149,9 +135,7 @@ typedef struct __XmFontRenditionRec
 #define _XmRTRefcount(rt)	((_XmRenderTable)*(rt))->refcount
 #define _XmRTRefcountInc(rt)	++(((_XmRenderTable)*(rt))->refcount)
 #define _XmRTRefcountDec(rt)	--(((_XmRenderTable)*(rt))->refcount)
-
 #define RENDITIONS_IN_STRUCT	1
-
 typedef struct __XmRenderTableRec
 {
   unsigned int			mark : REND_MARK_BITS;
@@ -160,10 +144,7 @@ typedef struct __XmRenderTableRec
   Display			*display;
   XmRendition			renditions[RENDITIONS_IN_STRUCT];
 } _XmRenderTableRec, 		*_XmRenderTable;
-
-
 /********    Private Function Declarations for XmRenderTable.c    ********/
-
 extern XmRendition _XmRenderTableFindRendition(XmRenderTable table,
 					       XmStringTag tag,
 					       Boolean cached_tag,
@@ -217,37 +198,27 @@ extern XmRenderTable _XmRenderTableRemoveRenditions(XmRenderTable oldtable,
 						    Boolean chk_font,
 						    XmFontType type,
 						    XtPointer font);
-
 #if USE_XFT
 /*
  * XftDraw cache functions, implemented in lib/Xm/FontList.c
  */
 XftDraw * _XmXftDrawCreate(Display *display, Window window);
-
 void _XmXftDrawDestroy(Display *display, Window window, XftDraw *d);
-
 void _XmXftDrawString(Display *display, Window window, XmRendition rend, int bpc,
                       Position x, Position y,
                       char *s, int len,
                       Boolean image
 		     );
-
 void _XmXftDrawString2(Display *display, Window window, GC gc, XftFont *font, int bpc,
                 Position x, Position y,
                 char *s, int len);
-
 void _XmXftSetClipRectangles(Display *display, Window window, Position x, Position y, XRectangle *rects, int n);
-
 XftColor _XmXftGetXftColor(Display *display, Pixel color);
-
 void _XmXftFontAverageWidth(Widget w, XtPointer f, int *width);
 #endif
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRenderTI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

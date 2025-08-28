@@ -25,28 +25,22 @@
  *  (Used by RowColumn Tear Off Menupanes)
  *
  */
-
 #ifndef _XmTearOffBP_h
 #define _XmTearOffBP_h
-
 #include <Xm/PushBP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*****************************************************************************
  *
  * TearOffButton Widget Private Data
  *
  *****************************************************************************/
-
 /* New fields for the TearOffButton widget class record */
 typedef struct _XmTearOffButtonClassPart
 {
     String translations;
 } XmTearOffButtonClassPart;
-
 /* Full Class record declaration */
 typedef struct _XmTearOffButtonClassRec {
     CoreClassPart         core_class;
@@ -55,11 +49,8 @@ typedef struct _XmTearOffButtonClassRec {
     XmPushButtonClassPart pushbutton_class;
     XmTearOffButtonClassPart    tearoffbutton_class;
 } XmTearOffButtonClassRec;
-
 typedef struct _XmTearOffButtonClassRec *XmTearOffButtonWidgetClass;
-
 externalref XmTearOffButtonClassRec xmTearOffButtonClassRec;
-
 /* New fields for the TearOffButton widget record */
 typedef struct {
    Dimension      margin;
@@ -68,13 +59,11 @@ typedef struct {
    GC separator_GC;
    Boolean 	set_recompute_size;
 } XmTearOffButtonPart;
-
 /*****************************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************************/
-
 typedef struct _XmTearOffButtonRec {
    CorePart         core;
    XmPrimitivePart  primitive;
@@ -82,27 +71,16 @@ typedef struct _XmTearOffButtonRec {
    XmPushButtonPart pushbutton;
    XmTearOffButtonPart tear_off_button;
 } XmTearOffButtonRec;
-
 typedef struct _XmTearOffButtonRec      *XmTearOffButtonWidget;
-
 /* Class Record Constant */
-
 externalref WidgetClass xmTearOffButtonWidgetClass;
-
 #ifndef XmIsTearOffButton
 #define XmIsTearOffButton(w)	XtIsSubclass(w, xmTearOffButtonWidgetClass)
 #endif /* XmIsTearOffButton */
-
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTearOffButtonP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

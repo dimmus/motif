@@ -22,7 +22,6 @@
  *
  */
 #include <Xm/Picture.h>
-
 #define NUMDIGIT      '#'
 #define HEXDIGIT      'x'
 #define OCTALDIGIT    'o'
@@ -37,9 +36,7 @@
 #define LBRACE        '{'
 #define RBRACE        '}'
 #define ALTERNATIVE   ','
-
 #define NODE_START_COUNT 40
-
 typedef enum {
     NullTransition,		/* Transition on no input */
     NumericDigit,		/* eqivalent to [0-9] */
@@ -51,7 +48,6 @@ typedef enum {
     UpCaseCharacter,		/* ditto, case transition as above */
     LiteralCharacter		/* Single character */
 } XmTransType;
-
 typedef struct _XmPictureTransition {
     int                 destination;   /* Node to transition to */
     XmTransType         type;	       /* literal, null, upcasechar, etc... */
@@ -59,12 +55,10 @@ typedef struct _XmPictureTransition {
 				       /* OR: count for closures */
     struct _XmPictureTransition *next; /* Next transition from our node */
 } XmPictureTransition;
-
 typedef struct _XmPictureNode {
     int                  index;
     XmPictureTransition *transitions;
 } XmPictureNode;
-
 typedef struct _XmPictureRec {
     char          * source;	/* string it was parsed from */
     int             num_nodes;
@@ -73,7 +67,6 @@ typedef struct _XmPictureRec {
     int             final_node;
     XmPictureNode **nodes;	/* array of nodes */
 } XmPictureRec;
-
 typedef struct _XmPictureStateRec {
     XmPictureRec  *picture;
     char          *current_string;
@@ -85,7 +78,6 @@ typedef struct _XmPictureStateRec {
     char           current;	/* currently added character */
     Boolean        upcase;
 } XmPictureStateRec;
-
 typedef struct _XmAutoFill {
     char    c;			/* char to fill */
     Boolean reject;		/* literal's didn't match: it's "right out" */

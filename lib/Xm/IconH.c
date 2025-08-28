@@ -27,22 +27,15 @@
 /*
  * IconH.c: The IconHeader widget methods.
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/IconHP.h>
-
 /********    Static Function Declarations    ********/
-
 static	void			ClassPartInitialize(
 					WidgetClass	wc);
 static Widget GetContainerParent(Widget);
-
 /********    End Static Function Declarations    ********/
-
 static	XtResource		resources[] =
 	{
 		{
@@ -50,12 +43,9 @@ static	XtResource		resources[] =
 		sizeof(Widget),
 		XtOffset(XmIconHeader,iconh.container_ID),
 			XmRImmediate,(XtPointer)NULL},
-
 	};
-
 /* That should not be necessary, but inheriting extension is
    not very well understood yet */
-
 static XmGadgetClassExtRec GadClassExtRec = {
     NULL,
     NULLQUARK,
@@ -65,8 +55,6 @@ static XmGadgetClassExtRec GadClassExtRec = {
     XmInheritDisplayRectProc,               /* widget_display_rect */
     XmInheritMarginsProc,                   /* widget_margins */
 };
-
-
 externaldef( xmiconheaderclassrec) XmIconHeaderClassRec	xmIconHeaderClassRec =
 {	/* RectObjClassPart */
 	{
@@ -103,7 +91,6 @@ externaldef( xmiconheaderclassrec) XmIconHeaderClassRec	xmIconHeaderClassRec =
 		NULL,				/* display_accelerator	*/
 		NULL,				/* extension		*/
 	},
-
 	/* XmGadget Class Part */
 	{
 	XmInheritBorderHighlight,		/* border_highlight	*/
@@ -126,17 +113,11 @@ externaldef( xmiconheaderclassrec) XmIconHeaderClassRec	xmIconHeaderClassRec =
 	    NULL,		                /* extension	*/
         },
 };
-
 externaldef(xmiconheaderclass) WidgetClass
 	xmIconHeaderClass=(WidgetClass)&xmIconHeaderClassRec;
-
-
-
-
 /*----------------
 | RectObj methods |
 ----------------*/
-
 /************************************************************************
  * ClassPartInitialize
  *      Parms(IconGadgetClass)
@@ -149,10 +130,7 @@ ClassPartInitialize(
 	WidgetClass	wc)
 {
     _XmFastSubclassInit(wc,XmICONHEADER_BIT);
-
 }
-
-
 /************************************************************************
  * GetContainerParent class method
  *
@@ -163,8 +141,6 @@ GetContainerParent(
 {
     return (((XmIconHeader)(wid))->iconh.container_ID);
 }
-
-
 /*-------------------
 | External functions |
 -------------------*/

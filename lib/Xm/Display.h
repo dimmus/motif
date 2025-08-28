@@ -20,23 +20,18 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef _XmDisplay_h
 #define _XmDisplay_h
-
 #include <Xm/Xm.h>
 #include <X11/Shell.h>
 #include <Xm/DragC.h>
 #include <Xm/DropSMgr.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsDisplay
 #define XmIsDisplay(w) (XtIsSubclass(w, xmDisplayClass))
 #endif /* XmIsXmDisplay */
-
 enum {
 	XmDRAG_NONE,
 	XmDRAG_DROP_ONLY,
@@ -47,24 +42,16 @@ enum {
 	XmDRAG_XDND,
 	XmDRAG_PREFER_RECEIVER
 };
-
 /* Class record constants */
-
 typedef struct _XmDisplayRec *XmDisplay;
 typedef struct _XmDisplayClassRec *XmDisplayClass;
 externalref 	WidgetClass xmDisplayClass;
-
 #define XmGetDisplay(w) XmGetXmDisplay(XtDisplayOfObject(w))
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmGetDragContext(Widget w, Time time);
 extern Widget XmGetXmDisplay(Display *display);
-
 /********    End Public Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDisplay_h */

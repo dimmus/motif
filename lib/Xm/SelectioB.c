@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: SelectioB.c /main/19 1997/06/18 17:42:11 samborn $"
 #endif
 #endif
-
 /*-------------------------------------------------------------------------
 **
 **	include files
@@ -62,22 +59,17 @@ static char rcsid[] = "$TOG: SelectioB.c /main/19 1997/06/18 17:42:11 samborn $"
 #include "TransferI.h"
 #include "XmI.h"
 #include "XmStringI.h"
-
 #define WARN_DIALOG_TYPE_CHANGE _XmMMsgSelectioB_0001
 #define WARN_CHILD_TYPE		_XmMMsgSelectioB_0002
 #define MESSAGE0     		_XmMMsgMotif_0001
-
 #define defaultTextAccelerators		_XmSelectioB_defaultTextAccelerators
-
 #define IsButton(w) \
 (((XtPointer) XmeTraitGet((XtPointer) XtClass((w)), XmQTactivatable) != NULL))
-
 #define IsAutoButton(sb, w) ( \
       w == SB_OkButton(sb)     || \
       w == SB_ApplyButton(sb)  || \
       w == SB_CancelButton(sb) || \
       w == SB_HelpButton(sb))
-
 #define SetupWorkArea(sb) \
     if (_XmGeoSetupKid (boxPtr, SB_WorkArea(sb)))     \
     {                                                 \
@@ -86,11 +78,7 @@ static char rcsid[] = "$TOG: SelectioB.c /main/19 1997/06/18 17:42:11 samborn $"
       boxPtr += 2 ;                                 \
       ++layoutPtr ;                                 \
     }
-
-
-
 /********    Static Function Declarations    ********/
-
 static void ClassInitialize( void ) ;
 static void ClassPartInitialize(
                         WidgetClass w_class) ;
@@ -129,25 +117,17 @@ static Boolean SetValues(
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static XtAccelerators defaultTextAcceleratorsParsed;
-
 /*  Action list  */
-
 static XtActionsRec actionsList[] =
 {
     { "UpOrDown",               _XmSelectionBoxUpOrDown }, /* Motif 1.0 */
     { "SelectionBoxUpOrDown",   _XmSelectionBoxUpOrDown },
     { "SelectionBoxRestore",    _XmSelectionBoxRestore },
     };
-
-
 /*  Resource definitions for SelectionBox
 */
-
 static XmSyntheticResource syn_resources[] =
 {
 	{	XmNselectionLabelString,
@@ -156,70 +136,60 @@ static XmSyntheticResource syn_resources[] =
 		_XmSelectionBoxGetSelectionLabelString,
 		_XmSetSyntheticResForChild
 	},
-
 	{	XmNlistLabelString,
 		sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_label_string),
 		_XmSelectionBoxGetListLabelString,
 		_XmSetSyntheticResForChild
 	},
-
 	{	XmNtextColumns,
 		sizeof(short),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_columns),
 		_XmSelectionBoxGetTextColumns,
 		NULL
 	},
-
 	{	XmNtextString,
 		sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_string),
 		_XmSelectionBoxGetTextString,
 		_XmSetSyntheticResForChild
 	},
-
 	{	XmNlistItems,
 		sizeof (XmStringTable),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_items),
 		_XmSelectionBoxGetListItems,
 		_XmSetSyntheticResForChild
 	},
-
 	{	XmNlistItemCount,
 		sizeof(int),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_item_count),
 		_XmSelectionBoxGetListItemCount,
 		_XmSetSyntheticResForChild
 	},
-
 	{	XmNlistVisibleItemCount,
 		sizeof(int),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_visible_item_count),
 		_XmSelectionBoxGetListVisibleItemCount,
 		_XmSetSyntheticResForChild
 	},
-
 	{	XmNokLabelString,
 		sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.ok_label_string),
 		_XmSelectionBoxGetOkLabelString,
 		NULL
 	},
-
 	{	XmNapplyLabelString,
 		sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.apply_label_string),
 		_XmSelectionBoxGetApplyLabelString,
 		NULL
 	},
-
 	{	XmNcancelLabelString,
 		sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.cancel_label_string),
 		_XmSelectionBoxGetCancelLabelString,
 		NULL
 	},
-
 	{	XmNhelpLabelString,
 		sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.help_label_string),
@@ -227,9 +197,6 @@ static XmSyntheticResource syn_resources[] =
 		NULL
 	},
 };
-
-
-
 static XtResource resources[] =
 {
 	{	XmNtextAccelerators,
@@ -237,124 +204,102 @@ static XtResource resources[] =
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_accelerators),
 		XmRImmediate, NULL
 	},
-
 	{	XmNselectionLabelString,
 		XmCSelectionLabelString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.selection_label_string),
 		XmRString, NULL
 	},
-
 	{	XmNlistLabelString,
 		XmCListLabelString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_label_string),
 		XmRString, NULL
 	},
-
 	{	XmNtextColumns,
 		XmCColumns, XmRShort, sizeof(short),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_columns),
 		XmRImmediate, (XtPointer) 20
 	},
-
 	{	XmNtextString,
 		XmCTextString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_string),
 		XmRImmediate, (XtPointer) XmUNSPECIFIED
 	},
-
 	{	XmNlistItems,
 		XmCItems, XmRXmStringTable, sizeof (XmStringTable),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_items),
 		XmRImmediate, NULL
 	},
-
 	{	XmNlistItemCount,
 		XmCItemCount, XmRInt, sizeof(int),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_item_count),
 		XmRImmediate, (XtPointer) XmUNSPECIFIED_COUNT
 	},
-
 	{	XmNlistVisibleItemCount,
 		XmCVisibleItemCount, XmRInt, sizeof(int),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_visible_item_count),
 		XmRImmediate, (XtPointer) 8
 	},
-
 	{	XmNokLabelString,
 		XmCOkLabelString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.ok_label_string),
 		XmRString, NULL
 	},
-
 	{	XmNapplyLabelString,
 		XmCApplyLabelString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.apply_label_string),
 		XmRString, NULL
 	},
-
 	{	XmNcancelLabelString,
 		XmCCancelLabelString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.cancel_label_string),
 		XmRString, NULL
 	},
-
 	{	XmNhelpLabelString,
 		XmCHelpLabelString, XmRXmString, sizeof (XmString),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.help_label_string),
 		XmRString, NULL
 	},
-
 	{	XmNnoMatchCallback,
 		XmCCallback, XmRCallback, sizeof (XtCallbackList),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.no_match_callback),
 		XmRImmediate, (XtPointer) NULL
 	},
-
 	{	XmNmustMatch,
 		XmCMustMatch, XmRBoolean, sizeof(Boolean),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.must_match),
 		XmRImmediate, (XtPointer) False
 	},
-
 	{	XmNminimizeButtons,
 		XmCMinimizeButtons, XmRBoolean, sizeof(Boolean),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.minimize_buttons),
 		XmRImmediate, (XtPointer) False
 	},
-
 	{	XmNokCallback,
 		XmCCallback, XmRCallback, sizeof (XtCallbackList),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.ok_callback),
 		XmRImmediate, (XtPointer) NULL
 	},
-
 	{	XmNapplyCallback,
 		XmCCallback, XmRCallback, sizeof (XtCallbackList),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.apply_callback),
 		XmRImmediate, (XtPointer) NULL
 	},
-
 	{	XmNcancelCallback,
 		XmCCallback, XmRCallback, sizeof (XtCallbackList),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.cancel_callback),
 		XmRImmediate, (XtPointer) NULL
 	},
-
 	{	XmNdialogType,
 		XmCDialogType, XmRSelectionType, sizeof (unsigned char),
 		XtOffsetOf( struct _XmSelectionBoxRec, selection_box.dialog_type),
 		XmRCallProc, (XtPointer) _XmDialogTypeDefault
         },
-
         {       XmNchildPlacement,
                 XmCChildPlacement, XmRChildPlacement, sizeof (unsigned char),
                 XtOffsetOf( struct _XmSelectionBoxRec, selection_box.child_placement),
                 XmRImmediate, (XtPointer) XmPLACE_ABOVE_SELECTION
 	},
 };
-
-
-
 externaldef( xmselectionboxclassrec) XmSelectionBoxClassRec
                                                        xmSelectionBoxClassRec =
 {
@@ -392,18 +337,14 @@ externaldef( xmselectionboxclassrec) XmSelectionBoxClassRec
     	/* display_accelerator*/	NULL,
 	/* extension	      */	NULL,
     },
-
     {	/* composite class record */
-
 	/* childrens geo mgr proc   */  XtInheritGeometryManager,
 	/* set changed proc	    */  XtInheritChangeManaged,
 	/* insert_child		    */	InsertChild,
 	/* delete_child 	    */	DeleteChild,
 	/* extension		    */	NULL,
     },
-
     {	/* constraint class record */
-
 	/* no additional resources  */	NULL,
 	/* num additional resources */	0,
 	/* size of constraint rec   */	0,
@@ -412,7 +353,6 @@ externaldef( xmselectionboxclassrec) XmSelectionBoxClassRec
 	/* constraint_setvalue	    */	NULL,
 	/* extension		    */	NULL,
     },
-
     {	/* manager class record */
       XmInheritTranslations, 		        /* default translations   */
       syn_resources, 				/* syn_resources      	  */
@@ -422,30 +362,24 @@ externaldef( xmselectionboxclassrec) XmSelectionBoxClassRec
       XmInheritParentProcess,                   /* parent_process         */
       NULL, 					/* extension		  */
     },
-
     {	/* bulletin board class record */
         TRUE,                                   /*always_install_accelerators*/
         _XmSelectionBoxGeoMatrixCreate,         /* geo_matrix_create */
         XmInheritFocusMovedProc,                /* focus_moved_proc */
 	NULL, 					/* extension */
     },
-
     {	/* selection box class record */
         ListCallback,                           /* list_callback */
 	NULL, 					/* extension  */
     },
 };
-
 externaldef( xmselectionboxwidgetclass) WidgetClass xmSelectionBoxWidgetClass
                                       = (WidgetClass) &xmSelectionBoxClassRec ;
-
-
 /****************************************************************/
 static void
 ClassInitialize( void )
 {
 /****************/
-
     /* parse the default translation and accelerator tables
     */
     defaultTextAcceleratorsParsed =
@@ -461,17 +395,12 @@ ClassPartInitialize(
     XmSelectionBoxWidgetClass wc = (XmSelectionBoxWidgetClass) w_class;
     XmSelectionBoxWidgetClass super =
         (XmSelectionBoxWidgetClass) wc->core_class.superclass;
-
     if (wc->selection_box_class.list_callback == XmInheritCallbackProc)
         wc->selection_box_class.list_callback =
             super->selection_box_class.list_callback;
-
     _XmFastSubclassInit(w_class, XmSELECTION_BOX_BIT) ;
-
     return ;
 }
-
-
 /****************************************************************
  * Create a SelectionBox instance.
  ****************/
@@ -484,14 +413,11 @@ Initialize(
 {
     XmSelectionBoxWidget new_w = (XmSelectionBoxWidget) nw ;
 /****************/
-
     new_w->selection_box.work_area = NULL;
-
     if ( new_w->selection_box.text_accelerators == NULL ) {
 	new_w->selection_box.text_accelerators =
 	    defaultTextAcceleratorsParsed;
     }
-
     /*	Validate dialog type.
      */
     if(    !XmRepTypeValidValue( XmRID_SELECTION_TYPE,
@@ -510,12 +436,10 @@ Initialize(
         {
 	    new_w->selection_box.child_placement = XmPLACE_ABOVE_SELECTION;
 	}
-
     /*	Create child widgets.
 	Here we have now to take care of XmUNSPECIFIED (CR 4856).
 	*/
     new_w->selection_box.adding_sel_widgets = True;
-
     if ( (new_w->selection_box.dialog_type != XmDIALOG_PROMPT)
 	&& (new_w->selection_box.dialog_type != XmDIALOG_COMMAND) )
 	{
@@ -527,17 +451,13 @@ Initialize(
 		    (XmString) XmUNSPECIFIED ;
 	    } else
 		_XmSelectionBoxCreateListLabel( new_w) ;
-
 	}
     else
         {   SB_ListLabel (new_w) = NULL;
 	}
-
     if (new_w->selection_box.list_label_string !=
 	(XmString) XmUNSPECIFIED)
 	new_w->selection_box.list_label_string = NULL ;
-
-
     if (new_w->selection_box.dialog_type != XmDIALOG_PROMPT)
 	{
             _XmSelectionBoxCreateList( new_w) ;
@@ -547,8 +467,6 @@ Initialize(
 	}
     new_w->selection_box.list_items = NULL ;
     new_w->selection_box.list_item_count = XmUNSPECIFIED_COUNT ;
-
-
     if (new_w->selection_box.selection_label_string ==
 	(XmString) XmUNSPECIFIED) {
 	new_w->selection_box.selection_label_string = NULL ;
@@ -559,20 +477,15 @@ Initialize(
 	_XmSelectionBoxCreateSelectionLabel(new_w);
 	new_w->selection_box.selection_label_string = NULL ;
     }
-
-
     _XmSelectionBoxCreateText(new_w);
-
     /* Do not reset text_string to XmUNSPECIFIED until after calls
      *   to CreateList and CreateText.
      */
     new_w->selection_box.text_string = (XmString) XmUNSPECIFIED ;
-
     if(    new_w->manager.initial_focus == NULL    )
         {
             new_w->manager.initial_focus = SB_Text( new_w) ;
 	}
-
     if (new_w->selection_box.dialog_type != XmDIALOG_COMMAND)
 	{
 	    _XmSelectionBoxCreateSeparator (new_w);
@@ -587,7 +500,6 @@ Initialize(
 		_XmSelectionBoxCreateApplyButton (new_w);
 	    _XmSelectionBoxCreateCancelButton (new_w);
 	    _XmSelectionBoxCreateHelpButton (new_w);
-
 	    BB_DefaultButton( new_w) = SB_OkButton( new_w) ;
 	    _XmBulletinBoardSetDynDefaultButton( (Widget) new_w,
 						BB_DefaultButton( new_w)) ;
@@ -606,21 +518,15 @@ Initialize(
 	new_w->selection_box.apply_label_string = NULL ;
     new_w->selection_box.cancel_label_string = NULL ;
     new_w->selection_box.help_label_string = NULL ;
-
     new_w->selection_box.adding_sel_widgets = False;
-
-
     XtManageChildren (new_w->composite.children,
 		      new_w->composite.num_children) ;
-
     if (new_w->selection_box.dialog_type == XmDIALOG_PROMPT ||
 	new_w->selection_box.dialog_type == XmDIALOG_WORK_AREA)
 	{
 	    XtUnmanageChild (SB_ApplyButton (new_w));
 	}
-
 }
-
 /****************************************************************
  * Selection widget supports ONE child.  This routine
  *   handles adding a child to selection widget
@@ -632,21 +538,17 @@ InsertChild(
             XmSelectionBoxWidget sb ;
 /****************/
     XtWidgetProc insert_child;
-
     /* Use the dialog class insert proc to do all the dirty work
     */
     _XmProcessLock();
     insert_child = ((XmBulletinBoardWidgetClass) xmBulletinBoardWidgetClass)
 					  ->composite_class.insert_child;
     _XmProcessUnlock();
-
     (*insert_child)(child) ;
-
     if(    !XtIsRectObj( child)    )
     {   return ;
         }
     sb = (XmSelectionBoxWidget) XtParent( child) ;
-
     /* check if this child is to be the selection widget's work area widget
     */
     if(    !sb->selection_box.adding_sel_widgets
@@ -658,7 +560,6 @@ InsertChild(
         }
     return ;
     }
-
 /****************************************************************
  * Remove child from selection widget
  ****************/
@@ -669,7 +570,6 @@ DeleteChild(
             XmSelectionBoxWidget sel ;
 	    XtWidgetProc delete_child;
 /****************/
-
     if(    XtIsRectObj( child)    )
     {
         sel = (XmSelectionBoxWidget) XtParent( child) ;
@@ -726,7 +626,6 @@ DeleteChild(
     (*delete_child)( child) ;
     return ;
     }
-
 /****************************************************************
  * Set the default type (selection or workarea) based on parent.
  ****************/
@@ -738,7 +637,6 @@ _XmDialogTypeDefault(
 {
     static unsigned char	type;
 /****************/
-
     /*
      * Set the default type.  To do this, we check the dialog
      * box's parent.  If it is a DialogShell widget, then this
@@ -751,7 +649,6 @@ _XmDialogTypeDefault(
     value->addr = (XPointer)(&type);
     return ;
 }
-
 static XmImportOperator
 _XmSetSyntheticResForChild(
         Widget widget,		/* unused */
@@ -760,7 +657,6 @@ _XmSetSyntheticResForChild(
 {
     return XmSYNTHETIC_LOAD;
     }
-
 /****************************************************************
  * Create the Label displayed above the List widget.
  ****************/
@@ -769,7 +665,6 @@ _XmSelectionBoxCreateListLabel(
         XmSelectionBoxWidget sel )
 {
 /****************/
-
     SB_ListLabel( sel) = _XmBB_CreateLabelG( (Widget) sel,
                                sel->selection_box.list_label_string, "Items",
 			       XmItemsStringLoc) ;
@@ -783,9 +678,6 @@ _XmSelectionBoxCreateSelectionLabel(
         XmSelectionBoxWidget sel )
 {
 /****************/
-
-
-
   if (sel->selection_box.dialog_type == XmDIALOG_COMMAND)
       SB_SelectionLabel(sel) = _XmBB_CreateLabelG((Widget)sel,
 				     sel->selection_box.selection_label_string,
@@ -797,8 +689,6 @@ _XmSelectionBoxCreateSelectionLabel(
 				      "Selection",
 				      XmSelectionStringLoc) ;
 }
-
-
 /****************************************************************
  * Create the List widget.
  ****************/
@@ -812,7 +702,6 @@ _XmSelectionBoxCreateList(
             int         pos_count ;
             XtCallbackProc callbackProc ;
 /****************/
-
     if(    sel->selection_box.list_items    )
     {
         XtSetArg( al[ac], XmNitems, sel->selection_box.list_items) ; ac++ ;
@@ -824,16 +713,12 @@ _XmSelectionBoxCreateList(
         }
     XtSetArg( al[ac], XmNvisibleItemCount,
 		sel->selection_box.list_visible_item_count) ;  ac++ ;
-
     sel->selection_box.list_selected_item_position = 0 ;
-
     XtSetArg( al[ac], XmNstringDirection, SB_StringDirection (sel)) ;  ac++ ;
     XtSetArg( al[ac], XmNselectionPolicy, XmBROWSE_SELECT) ;  ac++ ;
     XtSetArg( al[ac], XmNlistSizePolicy, XmCONSTANT) ;  ac++ ;
     XtSetArg( al[ac], XmNnavigationType, XmSTICKY_TAB_GROUP) ; ++ac ;
-
     SB_List( sel) = XmCreateScrolledList( (Widget) sel, "ItemsList", al, ac) ;
-
     if(    sel->selection_box.text_string != (XmString) XmUNSPECIFIED    )
     {
         if(    sel->selection_box.text_string
@@ -859,10 +744,8 @@ _XmSelectionBoxCreateList(
                                                callbackProc, (XtPointer) sel) ;
         }
     XtManageChild( SB_List( sel)) ;
-
     return ;
     }
-
 /****************************************************************
  * Create the Text widget.
  ****************/
@@ -875,12 +758,10 @@ _XmSelectionBoxCreateText(
 	String		text_value ;
 	XtAccelerators	temp_accelerators ;
 /****************/
-
 	XtSetArg (al[ac], XmNcolumns, sel->selection_box.text_columns);  ac++;
 	XtSetArg (al[ac], XmNresizeWidth, False);  ac++;
 	XtSetArg (al[ac], XmNeditMode, XmSINGLE_LINE_EDIT);  ac++;
         XtSetArg( al[ac], XmNnavigationType, XmSTICKY_TAB_GROUP) ; ++ac ;
-
 	SB_Text( sel) = XmCreateTextField( (Widget) sel, "Text", al, ac);
 	if(    (sel->selection_box.text_string != (XmString) XmUNSPECIFIED)    )
         {
@@ -893,7 +774,6 @@ _XmSelectionBoxCreateText(
                 }
             XtFree( (char *) text_value) ;
             }
-
 	/*	Install text accelerators.
 	*/
         temp_accelerators = sel->core.accelerators;
@@ -902,7 +782,6 @@ _XmSelectionBoxCreateText(
 	sel->core.accelerators = temp_accelerators;
         return ;
 }
-
 /****************************************************************
  * Create the Separator displayed above the buttons.
  ****************/
@@ -913,7 +792,6 @@ _XmSelectionBoxCreateSeparator(
 	Arg		al[10];
 	register int	ac = 0;
 /****************/
-
 	XtSetArg (al[ac], XmNhighlightThickness, 0);  ac++;
 	SB_Separator (sel) =
 		XmCreateSeparatorGadget( (Widget) sel, "Separator", al, ac);
@@ -927,7 +805,6 @@ _XmSelectionBoxCreateOkButton(
         XmSelectionBoxWidget sel )
 {
 /****************/
-
     SB_OkButton( sel) = _XmBB_CreateButtonG( (Widget) sel,
                                     sel->selection_box.ok_label_string, "OK",
 				    XmOkStringLoc) ;
@@ -935,7 +812,6 @@ _XmSelectionBoxCreateOkButton(
                         SelectionBoxCallback, (XtPointer) XmDIALOG_OK_BUTTON) ;
     return ;
     }
-
 /****************************************************************
  * Create the "Apply" PushButton.
  ****************/
@@ -944,7 +820,6 @@ _XmSelectionBoxCreateApplyButton(
         XmSelectionBoxWidget sel )
 {
 /****************/
-
     SB_ApplyButton( sel) = _XmBB_CreateButtonG( (Widget) sel,
                               sel->selection_box.apply_label_string, "Apply",
                               XmApplyStringLoc) ;
@@ -963,7 +838,6 @@ _XmSelectionBoxCreateCancelButton(
         XmSelectionBoxWidget sel )
 {
 /****************/
-
     SB_CancelButton( sel) = _XmBB_CreateButtonG( (Widget) sel,
                             sel->selection_box.cancel_label_string, "Cancel",
                             XmCancelStringLoc) ;
@@ -979,7 +853,6 @@ _XmSelectionBoxCreateHelpButton(
         XmSelectionBoxWidget sel )
 {
 /****************/
-
     SB_HelpButton( sel) = _XmBB_CreateButtonG( (Widget) sel,
                                 sel->selection_box.help_label_string, "Help",
                                 XmHelpStringLoc) ;
@@ -990,9 +863,7 @@ _XmSelectionBoxCreateHelpButton(
                       SelectionBoxCallback, (XtPointer) XmDIALOG_HELP_BUTTON) ;
     return ;
     }
-
 /****************************************************************/
-
 XmGeoMatrix
 _XmSelectionBoxGeoMatrixCreate(
         Widget wid,
@@ -1009,13 +880,11 @@ _XmSelectionBoxGeoMatrixCreate(
     Boolean         selLabelBox ;
     Dimension       vspace = BB_MarginHeight(sb);
     int             i;
-
 /*
  * Layout SelectionBox XmGeoMatrix.
  * Each row is terminated by leaving an empty XmKidGeometry and
  * moving to the next XmGeoRowLayout.
  */
-
     geoSpec = _XmGeoMatrixAlloc( XmSB_MAX_WIDGETS_VERT,
                               sb->composite.num_children, 0) ;
     geoSpec->composite = (Widget) sb ;
@@ -1026,15 +895,11 @@ _XmSelectionBoxGeoMatrixCreate(
     geoSpec->margin_w = BB_MarginWidth( sb) + sb->manager.shadow_thickness ;
     geoSpec->margin_h = BB_MarginHeight( sb) + sb->manager.shadow_thickness ;
     geoSpec->no_geo_request = _XmSelectionBoxNoGeoRequest ;
-
     layoutPtr = &(geoSpec->layouts->row) ;
     boxPtr = geoSpec->boxes ;
-
     /* menu bar */
-
     for (i = 0; i < sb->composite.num_children; i++)
     {	Widget w = sb->composite.children[i];
-
         if(    XmIsRowColumn(w)
             && ((XmRowColumnWidget)w)->row_column.type == XmMENU_BAR
             && w != SB_WorkArea(sb)
@@ -1046,14 +911,10 @@ _XmSelectionBoxGeoMatrixCreate(
             break;
             }
         }
-
     /* work area, XmPLACE_TOP */
-
     if (sb->selection_box.child_placement == XmPLACE_TOP)
       SetupWorkArea(sb);
-
     /* list box label */
-
     listLabelBox = FALSE ;
     if(    _XmGeoSetupKid( boxPtr, SB_ListLabel( sb))    )
     {
@@ -1063,9 +924,7 @@ _XmSelectionBoxGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* list box */
-
     list = (XmListWidget) SB_List( sb) ;
     if(    list  &&  XtIsManaged((Widget)list)
         && _XmGeoSetupKid( boxPtr, XtParent( list))    )
@@ -1079,14 +938,10 @@ _XmSelectionBoxGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* work area, XmPLACE_ABOVE_SELECTION */
-
     if (sb->selection_box.child_placement == XmPLACE_ABOVE_SELECTION)
       SetupWorkArea(sb)
-
     /* selection label */
-
     selLabelBox = FALSE ;
     if(    _XmGeoSetupKid( boxPtr, SB_SelectionLabel( sb))    )
     {   selLabelBox = TRUE ;
@@ -1095,9 +950,7 @@ _XmSelectionBoxGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* selection text */
-
     if(    _XmGeoSetupKid( boxPtr, SB_Text( sb))    )
     {
         if(    !selLabelBox    )
@@ -1107,14 +960,10 @@ _XmSelectionBoxGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* work area, XmPLACE_BELOW_SELECTION */
-
     if (sb->selection_box.child_placement == XmPLACE_BELOW_SELECTION)
       SetupWorkArea(sb)
-
     /* separator */
-
     if(    _XmGeoSetupKid( boxPtr, SB_Separator( sb))    )
     {   layoutPtr->fix_up = _XmSeparatorFix ;
         layoutPtr->space_above = vspace;
@@ -1122,11 +971,8 @@ _XmSelectionBoxGeoMatrixCreate(
         boxPtr += 2 ;
         ++layoutPtr ;
         }
-
     /* button row */
-
     firstButtonBox = boxPtr ;
-
     if (LayoutIsRtoLM(sb))
     {
        if(    _XmGeoSetupKid( boxPtr, SB_HelpButton( sb))    )
@@ -1138,7 +984,6 @@ _XmSelectionBoxGeoMatrixCreate(
        if(    _XmGeoSetupKid( boxPtr, SB_ApplyButton( sb))    )
        {   ++boxPtr ;
            }
-
        for (i = 0; i < sb->composite.num_children; i++)
        {
 	    Widget w = sb->composite.children[sb->composite.num_children-i-1];
@@ -1149,7 +994,6 @@ _XmSelectionBoxGeoMatrixCreate(
 		}
 	    }
        }
-
        if(    _XmGeoSetupKid( boxPtr, SB_OkButton( sb))    )
        {   ++boxPtr ;
            }
@@ -1179,7 +1023,6 @@ _XmSelectionBoxGeoMatrixCreate(
 	{   ++boxPtr ;
 	  }
     }
-
     if(    boxPtr != firstButtonBox    )
     {   layoutPtr->fill_mode = XmGEO_CENTER ;
         layoutPtr->fit_mode = XmGEO_WRAP ;
@@ -1191,21 +1034,17 @@ _XmSelectionBoxGeoMatrixCreate(
         layoutPtr->even_height = 1 ;
 	++layoutPtr ;
         }
-
     /* the end. */
-
     layoutPtr->space_above = vspace;
     layoutPtr->end = TRUE ;
     return( geoSpec) ;
     }
-
 /****************************************************************/
 Boolean
 _XmSelectionBoxNoGeoRequest(
         XmGeoMatrix geoSpec )
 {
 /****************/
-
     if(    BB_InSetValues( geoSpec->composite)
         && (XtClass( geoSpec->composite) == xmSelectionBoxWidgetClass)    )
     {
@@ -1213,7 +1052,6 @@ _XmSelectionBoxNoGeoRequest(
         }
     return( FALSE) ;
     }
-
 /****************************************************************
  * Call the callbacks for a SelectionBox button.
  ****************/
@@ -1230,14 +1068,12 @@ SelectionBoxCallback(
 	Boolean			match = True;
 	String			text_value;
 /****************/
-
 	text_value = XmTextFieldGetString (SB_Text (sel));
 	temp.event = callback->event;
 	temp.value = XmStringGenerate(text_value, XmFONTLIST_DEFAULT_TAG,
 				      XmCHARSET_TEXT, NULL);
 	temp.length = XmStringLength (temp.value);
 	XtFree (text_value);
-
 	switch (which_button)
 	{
 		case XmDIALOG_OK_BUTTON:
@@ -1259,17 +1095,14 @@ SelectionBoxCallback(
 					selection_box.ok_callback, &temp);
 			}
 			break;
-
 		case XmDIALOG_APPLY_BUTTON:
 			temp.reason = XmCR_APPLY;
 			XtCallCallbackList ((Widget) sel, sel->selection_box.apply_callback, &temp);
 			break;
-
 		case XmDIALOG_CANCEL_BUTTON:
 			temp.reason = XmCR_CANCEL;
 			XtCallCallbackList ((Widget) sel, sel->selection_box.cancel_callback, &temp);
 			break;
-
 		case XmDIALOG_HELP_BUTTON:
 			/* Invoke the help system. */
                         _XmManagerHelp((Widget)sel, callback->event, NULL, NULL) ;
@@ -1278,7 +1111,6 @@ SelectionBoxCallback(
         XmStringFree( temp.value) ;
         return ;
 }
-
 /****************************************************************
  * Process callback from the List in a SelectionBox.
  ****************/
@@ -1293,7 +1125,6 @@ ListCallback(
 	static char *atom_names[] = {
 	  XmI_MOTIF_SELECTION_TEXT, XmS_MOTIF_COMPOUND_STRING,
 	  XmSCOMPOUND_TEXT };
-
 	XmListCallbackStruct	*callback = (XmListCallbackStruct *) call_data;
 	XmSelectionBoxWidget	sel = (XmSelectionBoxWidget) client_data ;
 	XmGadgetClass		gadget_class;
@@ -1307,22 +1138,17 @@ ListCallback(
 	unsigned long	size;
 	int		format;
 	Boolean		success;
-
-
 	textTrait = (XmAccessTextualTrait)
 	  XmeTraitGet((XtPointer) XtClass(SB_Text(sel)), XmQTaccessTextual);
 	if (textTrait == NULL) return; /* Abort if text child is broken */
-
 	assert(XtNumber(atom_names) == NUM_ATOMS);
 	XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names),
 		     False, atoms);
-
 	/*	Update the text widget to relect the latest list selection.
 	 *	If list default action (double click), activate default button.
 	 */
 	sel->selection_box.list_selected_item_position =
                                                        callback->item_position;
-
 	success = False;
 	/*
 	 * Obtain item.
@@ -1346,7 +1172,6 @@ ListCallback(
 	  if (type == atoms[XmA_MOTIF_COMPOUND_STRING]) {
 	    XmString temp;
 	    temp = XmCvtByteStreamToXmString((unsigned char *) value);
-
 	    textTrait -> setValue(SB_Text(sel), temp, XmFORMAT_XmSTRING);
 	    XmStringFree(temp);
 	  } else if (type == atoms[XmACOMPOUND_TEXT]) {
@@ -1358,7 +1183,6 @@ ListCallback(
 	    textTrait -> setValue(SB_Text(sel), value, XmFORMAT_MBYTE);
 	  }
 	}
-
 	if(success)
 	{
 	  XmTextFieldSetInsertionPosition(SB_Text (sel),
@@ -1385,8 +1209,6 @@ ListCallback(
 	 }
         return ;
         }
-
-
 /****************************************************************
  * Set the label string of a label or button
  ****************/
@@ -1399,7 +1221,6 @@ UpdateString(
 	Arg		al[3];
     	register int	ac = 0;
 /****************/
-
 	if (w)
 	{
 		XtSetArg (al[ac], XmNstringDirection, direction);  ac++;
@@ -1408,7 +1229,6 @@ UpdateString(
 	}
         return ;
 }
-
 /****************************************************************
  * Update widget when values change.
  ****************/
@@ -1425,13 +1245,9 @@ SetValues(
             XmSelectionBoxWidget new_w = (XmSelectionBoxWidget) nw ;
 	Arg		al[10];
 	register int	ac;
-
 	String		text_value ;
 /****************/
-
 	BB_InSetValues (new_w) = True;
-
-
       /*      Validate child placement.
       */
       if(    (new_w->selection_box.child_placement
@@ -1442,7 +1258,6 @@ SetValues(
           new_w->selection_box.child_placement =
                       current->selection_box.child_placement;
           }
-
 	/*	Update label strings.
 	*/
 	if(    new_w->selection_box.selection_label_string
@@ -1452,7 +1267,6 @@ SetValues(
                                                     SB_StringDirection (new_w)) ;
             new_w->selection_box.selection_label_string = NULL ;
             }
-
 	if(    new_w->selection_box.list_label_string
                                != current->selection_box.list_label_string    )
 	{   UpdateString( SB_ListLabel (new_w),
@@ -1460,7 +1274,6 @@ SetValues(
                                                     SB_StringDirection (new_w)) ;
             new_w->selection_box.list_label_string = NULL ;
             }
-
 	if(    new_w->selection_box.ok_label_string
                                  != current->selection_box.ok_label_string    )
 	{   UpdateString( SB_OkButton (new_w),
@@ -1468,7 +1281,6 @@ SetValues(
                                                     SB_StringDirection (new_w)) ;
             new_w->selection_box.ok_label_string = NULL ;
             }
-
 	if(    new_w->selection_box.apply_label_string
                               != current->selection_box.apply_label_string    )
 	{   UpdateString( SB_ApplyButton (new_w),
@@ -1476,7 +1288,6 @@ SetValues(
                                                     SB_StringDirection (new_w)) ;
             new_w->selection_box.apply_label_string = NULL ;
             }
-
 	if(    new_w->selection_box.cancel_label_string
                              != current->selection_box.cancel_label_string    )
 	{   UpdateString( SB_CancelButton (new_w),
@@ -1484,7 +1295,6 @@ SetValues(
                                                     SB_StringDirection (new_w)) ;
             new_w->selection_box.cancel_label_string = NULL ;
             }
-
 	if(    new_w->selection_box.help_label_string
                                != current->selection_box.help_label_string    )
 	{   UpdateString( SB_HelpButton (new_w),
@@ -1492,7 +1302,6 @@ SetValues(
                                                     SB_StringDirection (new_w)) ;
             new_w->selection_box.help_label_string = NULL ;
             }
-
 	/*	Update List widget.
 	*/
 	ac = 0;
@@ -1515,7 +1324,6 @@ SetValues(
 	    XtSetValues (SB_List (new_w), al, ac);
 	  new_w->selection_box.list_items = NULL ;
 	}
-
 	/*	Update Text widget.
 	*/
         text_value = NULL ;
@@ -1546,7 +1354,6 @@ SetValues(
 			          XmTextFieldGetLastPosition( SB_Text( new_w))) ;
 		XtFree (text_value);
 	}
-
 	/*	Validate dialog type.
 	*/
 	if (request->selection_box.dialog_type !=
@@ -1557,7 +1364,6 @@ SetValues(
 			current->selection_box.dialog_type;
 	}
 	BB_InSetValues (new_w) = False;
-
 	/*	If this is the instantiated class then do layout.
 	*/
 	if(    XtClass( new_w) == xmSelectionBoxWidgetClass    )
@@ -1566,7 +1372,6 @@ SetValues(
 	    }
 	return (Boolean) (FALSE);
         }
-
 /****************************************************************/
 void
 _XmSelectionBoxGetSelectionLabelString(
@@ -1578,7 +1383,6 @@ _XmSelectionBoxGetSelectionLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_SelectionLabel (sel)    )
     {
         XtSetArg( al[0], XmNlabelString, &data) ;
@@ -1601,7 +1405,6 @@ _XmSelectionBoxGetListLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_ListLabel( sel)    )
     {
         XtSetArg( al[0], XmNlabelString, &data) ;
@@ -1624,7 +1427,6 @@ _XmSelectionBoxGetTextColumns(
             short           data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_Text( sel)    )
     {
         XtSetArg( al[0], XmNcolumns, &data) ;
@@ -1648,7 +1450,6 @@ _XmSelectionBoxGetTextString(
             XmString        text_string ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_Text( sel)    )
     {
         XtSetArg( al[0], XmNvalue, &data) ;
@@ -1674,7 +1475,6 @@ _XmSelectionBoxGetListItems(
             Arg             al[1] ;
             XmString        data ;
 /****************/
-
     if(    SB_List( sel)    )
     {
         XtSetArg( al[0], XmNitems, &data) ;
@@ -1697,7 +1497,6 @@ _XmSelectionBoxGetListItemCount(
             int             data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_List( sel)    )
     {
         XtSetArg( al[0], XmNitemCount, &data) ;
@@ -1720,7 +1519,6 @@ _XmSelectionBoxGetListVisibleItemCount(
             int             data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_List( sel)    )
     {
         XtSetArg( al[0], XmNvisibleItemCount, &data) ;
@@ -1743,7 +1541,6 @@ _XmSelectionBoxGetOkLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_OkButton( sel)    )
     {
         XtSetArg( al[0], XmNlabelString, &data) ;
@@ -1766,7 +1563,6 @@ _XmSelectionBoxGetApplyLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_ApplyButton( sel)    )
     {
         XtSetArg( al[0], XmNlabelString, &data) ;
@@ -1789,7 +1585,6 @@ _XmSelectionBoxGetCancelLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_CancelButton( sel)    )
     {
         XtSetArg( al[0], XmNlabelString, &data) ;
@@ -1812,7 +1607,6 @@ _XmSelectionBoxGetHelpLabelString(
             XmString        data ;
             Arg             al[1] ;
 /****************/
-
     if(    SB_HelpButton( sel)    )
     {
         XtSetArg( al[0], XmNlabelString, &data) ;
@@ -1824,7 +1618,6 @@ _XmSelectionBoxGetHelpLabelString(
         }
     return ;
     }
-
 /****************************************************************/
 void
 _XmSelectionBoxUpOrDown(
@@ -1843,13 +1636,11 @@ _XmSelectionBoxUpOrDown(
             Arg             av[5] ;
             Cardinal        ac ;
 /****************/
-
     if (!argc || (*argc != 1) || !argv)
     {
         XmeWarning(wid, MESSAGE0);
         return;
     }
-
     if(    !(list = sel->selection_box.list)    )
     {   return ;
         }
@@ -1858,11 +1649,9 @@ _XmSelectionBoxUpOrDown(
     XtSetArg( av[ac], XmNtopItemPosition, &top) ; ++ac ;
     XtSetArg( av[ac], XmNvisibleItemCount, &visible) ; ++ac ;
     XtGetValues( list, av, ac) ;
-
     if(    !count    )
     {   return ;
         }
-
     if (_XmConvertActionParamToRepTypeId((Widget) sel,
 			 XmRID_SELECTION_BOX_UP_OR_DOWN_ACTION_PARAMS,
 			 argv[0], True, &key_pressed) == False)
@@ -1870,9 +1659,7 @@ _XmSelectionBoxUpOrDown(
 	/* We couldn't convert the value. Just assume a value of 0. */
 	key_pressed = 0;
     }
-
     position = &(sel->selection_box.list_selected_item_position) ;
-
     if(    *position == 0    )
     {   /*  No selection, so select first item or last if key_pressed == end.
         */
@@ -1924,7 +1711,6 @@ _XmSelectionBoxUpOrDown(
         }
     return ;
     }
-
 /****************************************************************/
 void
 _XmSelectionBoxRestore(
@@ -1941,9 +1727,7 @@ _XmSelectionBoxRestore(
             int             ac ;
             String          textItem ;
 /****************/
-
     list = SB_List( sel) ;
-
     if(    list
         && SB_Text( sel)    )
     {
@@ -1966,7 +1750,6 @@ _XmSelectionBoxRestore(
         }
     return ;
     }
-
 /****************************************************************
  * This function returns the widget id of a SelectionBox child widget.
  ****************/
@@ -1976,53 +1759,41 @@ Widget _XmSelectionBoxGetChild(Widget sb, unsigned char which)
 	Widget	child = NULL;
 	_XmWidgetToAppContext(sb);
 	_XmAppLock(app);
-
 	switch (which)
 	{
 		case XmDIALOG_LIST:
 			child = SB_List (sb);
 			break;
-
 		case XmDIALOG_LIST_LABEL:
 			child = SB_ListLabel (sb);
 			break;
-
 		case XmDIALOG_SELECTION_LABEL:
 			child = SB_SelectionLabel (sb);
 			break;
-
 		case XmDIALOG_WORK_AREA:
 			child = SB_WorkArea (sb);
 			break;
-
 		case XmDIALOG_TEXT:
 			child = SB_Text (sb);
 			break;
-
 		case XmDIALOG_SEPARATOR:
 			child = SB_Separator (sb);
 			break;
-
 		case XmDIALOG_OK_BUTTON:
 			child = SB_OkButton (sb);
 			break;
-
 		case XmDIALOG_APPLY_BUTTON:
 			child = SB_ApplyButton (sb);
 			break;
-
 		case XmDIALOG_CANCEL_BUTTON:
 			child = SB_CancelButton (sb);
 			break;
-
 		case XmDIALOG_HELP_BUTTON:
 			child = SB_HelpButton (sb);
 			break;
-
 		case XmDIALOG_DEFAULT_BUTTON:
 			child = SB_DefaultButton (sb);
 			break;
-
 		default:
 			XmeWarning( (Widget) sb, WARN_CHILD_TYPE);
 			break;
@@ -2030,13 +1801,11 @@ Widget _XmSelectionBoxGetChild(Widget sb, unsigned char which)
 	_XmAppUnlock(app);
 	return (child);
 }
-
 /* Deprecated */
 Widget XmSelectionBoxGetChild(Widget sb, unsigned char which)
 {
 	return _XmSelectionBoxGetChild(sb, which);
 }
-
 /****************************************************************
  * This function creates and returns a SelectionBox widget.
  ****************/
@@ -2049,7 +1818,6 @@ XmCreateSelectionBox(
 {
     return (XtCreateWidget (name, xmSelectionBoxWidgetClass, p, args, n));
 }
-
 Widget
 XmVaCreateSelectionBox(
         Widget parent,
@@ -2059,12 +1827,9 @@ XmVaCreateSelectionBox(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmSelectionBoxWidgetClass,
@@ -2073,7 +1838,6 @@ XmVaCreateSelectionBox(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedSelectionBox(
         Widget parent,
@@ -2083,11 +1847,9 @@ XmVaCreateManagedSelectionBox(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmSelectionBoxWidgetClass,
@@ -2096,7 +1858,6 @@ XmVaCreateManagedSelectionBox(
     va_end(var);
     return w;
 }
-
 /****************************************************************
  * This convenience function creates a DialogShell and a SelectionBox
  *   child of the shell; returns the SelectionBox widget.
@@ -2110,21 +1871,17 @@ XmCreateSelectionDialog(
 {
     ArgList		_sb_args;	/*  arglist for sb	*/
     Widget w;
-
     /*  allocate arglist, copy args, add dialog type arg
      */
     _sb_args = (ArgList) XtMalloc (sizeof (Arg) * (sb_n + 1));
     memcpy(_sb_args, sb_args, sizeof (Arg) * sb_n);
     XtSetArg (_sb_args[sb_n], XmNdialogType, XmDIALOG_SELECTION);  sb_n++;
-
     /*  create SelectionBoxDialog, free args, return */
     w = XmeCreateClassDialog (xmSelectionBoxWidgetClass,
 			      ds_p, name, _sb_args, sb_n) ;
     XtFree((char *)_sb_args);
     return w ;
 }
-
-
 /****************************************************************
  * This convenience function creates a DialogShell and a SelectionBox
  *   child of the shell; returns the SelectionBox widget.
@@ -2138,13 +1895,11 @@ XmCreatePromptDialog(
 {
     ArgList		_sb_args;	/*  arglist for sb	*/
     Widget w;
-
     /*  allocate arglist, copy args, add dialog type arg
      */
     _sb_args = (ArgList) XtMalloc (sizeof (Arg) * (sb_n + 1));
     memcpy(_sb_args, sb_args, sizeof (Arg) * sb_n);
     XtSetArg (_sb_args[sb_n], XmNdialogType, XmDIALOG_PROMPT);  sb_n++;
-
     /*  create SelectionBoxDialog, free args, return */
     w = XmeCreateClassDialog (xmSelectionBoxWidgetClass,
 			      ds_p, name, _sb_args, sb_n) ;

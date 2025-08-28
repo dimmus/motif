@@ -36,42 +36,32 @@
      XmGetIconFileName      (used by ImageCache)
    It is still Dt centric for the PATH variables and the local variables.
 */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <X11/Xlocale.h>
-
 #define X_INCLUDE_DIRENT_H
 #define XOS_USE_XT_LOCKING
-
 #if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h> /* Must precede XmI.h to avoid possible redefinitions
 			  of MIN() and MAX(). Xos_r.h includes Xos.h */
 #else
 #include <Xm/Xmos_r.h>
 #endif
-
 #include "XmosI.h"
-
 #include <Xm/IconFileP.h>
 #include <Xm/ColorObjP.h>
 #include "XmI.h"
 #include "HashI.h"
-
 #include "ImageCachI.h"
-
 /**************** vendor dependant defaults ********/
 /* All this stuff (cached dir) should be moved and possibly merged
    in Xmos.c, where it belongs */
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-
 #if !HAVE_GETCWD && HAVE_GETWD
 #include <sys/param.h>
 #define MAX_DIR_PATH_LEN    MAXPATHLEN
@@ -80,35 +70,22 @@
 #define MAX_DIR_PATH_LEN    1024
 #endif
 #define MAX_USER_NAME_LEN   256
-
 #ifndef S_ISDIR
 #define S_ISDIR(m) ((m & S_IFMT)==S_IFDIR)
 #endif
-
 /**************** end of vendor dependant defaults ********/
-
-
-
-
 /**************** Icon PATH defines ********/
-
-
 static const char ABSOLUTE_IPATH[] = "%H%B";
 static const char ABSOLUTE_PATH[] = "\
 %P\
 %S";
-
-
 /******------------------------------------------********/
-
 typedef union _DtCachedDirStruct *DtCachedDir;
-
 typedef struct _DtCommonCachedDirStruct{
     int			cachedDirType;
     int			dirNameLen;
     String		dirName;
 }DtCommonCachedDirStruct, *DtCommonCachedDir;
-
 typedef struct _DtValidCachedDirStruct{
     int			cachedDirType;
     int			dirNameLen;
@@ -123,27 +100,20 @@ typedef struct _DtValidCachedDirStruct{
     String		names
     */
 }DtValidCachedDirStruct, *DtValidCachedDir;
-
 #define DtVALID_CACHED_DIR	0
 #define DtINVALID_CACHED_DIR	1
 #define DtUNCACHED_DIR		2
-
 #define MAX_CACHE_DIR_SIZE	(1L << 16)
-
 typedef union _DtCachedDirStruct{
     DtCommonCachedDirStruct	common;
     DtValidCachedDirStruct 	valid_dir;
 }DtCachedDirStruct;
-
 typedef struct _DtCachedDirListStruct{
     int			numDirs;
     int			maxDirs;
     DtCachedDir	*dirs;
 }DtCachedDirListStruct;
-
-
 /********    Static Function Declarations    ********/
-
 static DtCachedDir MakeCachedDirEntry(
                         String dirName) ;
 static int CheckDirCache(
@@ -152,14 +122,7 @@ static Boolean TestIconFile(
                         String path) ;
 static Boolean CompareIconNames (XmHashKey key_1, XmHashKey key_2);
 static XmHashValue HashIconName (XmHashKey key);
-
 /********    End Static Function Declarations    ********/
-
-
-
-
-
-
 static DtCachedDir
 MakeCachedDirEntry(String dirName)
 {
@@ -167,7 +130,6 @@ MakeCachedDirEntry(String dirName)
     struct dirent	*currDirect;
     DtCachedDir 	cachedDir = NULL;
     int			cachedDirType;
-
     if ((fileDesc = opendir (dirName)) == NULL)  {
 	/* invalid directory */
 	cachedDirType = DtINVALID_CACHED_DIR;
@@ -179,7 +141,6 @@ MakeCachedDirEntry(String dirName)
 	int	numFiles = 0;
 	int	nameHeapSize = 0;
 	_Xreaddirparams dirEntryBuf;
-
         /*
          * Original code was caching each struct direct in stackBuf.
          * Instead, just cache currDirect->d_name, null-terminated.
@@ -203,20 +164,17 @@ MakeCachedDirEntry(String dirName)
 	  /* invalid entry */
 	  cachedDirType = DtINVALID_CACHED_DIR;
 	}
-
         if( cachedDirType == DtVALID_CACHED_DIR)
         {
 	    DtValidCachedDir	validDir;
 	    String		nameHeap;
 	    Cardinal		i;
-
             /*
              * Go through stackBuf and count the length of all
              * the names.  Don't count the nulls.
              */
             for (p = stackBuf ; p - stackBuf < oldBufLen;
 		 p = p + strlen(p) + 1) {
-
 		numFiles++;
 		nameHeapSize += strlen(p);
 	    }
@@ -228,7 +186,6 @@ MakeCachedDirEntry(String dirName)
 	      XtMalloc((sizeof(DtValidCachedDirStruct)) +
 		       (sizeof(validDir->nameOffsets[0]) * numFiles) +
 		       (nameHeapSize));
-
 	    validDir->dirNameLen = strlen(dirName);
 	    validDir->dirName = dirName;
 	    validDir->numFiles = numFiles;
@@ -238,11 +195,9 @@ MakeCachedDirEntry(String dirName)
 	    validDir->nameOffsets[0] = 0;
 	    nameHeap = (String)
 	      &(validDir->nameOffsets[numFiles + 1]);
-
             /* Copy the strings from stackBuf to nameHeap.  Omit the nulls. */
             for (i = 0, p = stackBuf; i < validDir->numFiles;
                  i++, p = p + strlen(p) + 1) {
-
 		validDir->nameOffsets[i + 1] =
 		  validDir->nameOffsets[i] + strlen(p);
 		memcpy(&(nameHeap[validDir->nameOffsets[i]]), p, strlen(p));
@@ -267,19 +222,13 @@ MakeCachedDirEntry(String dirName)
       closedir(fileDesc);
     return cachedDir;
 }
-
 static 	DtCachedDirListStruct cacheList;
-
-
-
 void
 XmeFlushIconFileCache(String	path)
 {
     Cardinal	dirNameLen;
     Cardinal 	i;
-
     _XmProcessLock();
-
     /*
      * loop thru the dir list. if no path was specified then flush the
      * entire cache.
@@ -290,14 +239,12 @@ XmeFlushIconFileCache(String	path)
       dirNameLen = 0;
     for (i = 0; i < cacheList.numDirs; i++) {
 	DtValidCachedDir	currDir;
-
 	currDir = (DtValidCachedDir)cacheList.dirs[i];
 	if (!path ||
 	    ((currDir->dirNameLen == dirNameLen) &&
 	     (strncmp(currDir->dirName, path, dirNameLen) == 0))) {
 	    XtFree(currDir->dirName);
 	    XtFree((char *)currDir);
-
 	    if (path) {
 		/* ripple down the dir array */
 		for (; i < cacheList.numDirs - 1; i++)
@@ -316,16 +263,12 @@ XmeFlushIconFileCache(String	path)
     /* don't free the dirList itself */
     _XmProcessUnlock();
 }
-
-
 #ifndef XTHREADS
 static String GdirName;
 static String GleafName;
 #endif
-
 static int
 CheckDirCache(String	path)
-
 {
     String	dirName;
     String	filePtr;
@@ -333,10 +276,8 @@ CheckDirCache(String	path)
     int		numDirs, dirNameLen, fileNameLen;
     Cardinal	i, j;
     char   	stackString[MAX_DIR_PATH_LEN];
-
     (void) _XmOSAbsolutePathName(path, &path, stackString);
     _XmOSFindPathParts(path, &filePtr, &suffixPtr);
-
     if (path == filePtr) {
 	dirNameLen = 0;
 	fileNameLen = strlen(path);
@@ -346,33 +287,27 @@ CheckDirCache(String	path)
 	dirNameLen = filePtr - path - 1;
 	fileNameLen = strlen(path) - dirNameLen - 1;
     }
-
     /*
      * set global variable for later use
      */
 #ifndef XTHREADS
     GleafName = filePtr;
 #endif
-
     if (dirNameLen == 0) {
 	return DtINVALID_CACHED_DIR;
     }
-
     /*
      * loop thru the dir list. on the last pass create the new cached
      * dir and process it.
      */
     _XmProcessLock();
-
     numDirs = cacheList.numDirs;
     for (i = 0; i <= numDirs; i++) {
 	String			currName;
 	int			currNameLen;
 	String			nameHeap;
 	DtValidCachedDir	currDir;
-
 	if (i == cacheList.numDirs) {
-
 	    /*
 	     * we didn't get a hit on the directory list so create a new one
 	     */
@@ -387,17 +322,14 @@ CheckDirCache(String	path)
 	    cacheList.dirs[cacheList.numDirs++] = MakeCachedDirEntry(dirName);
 	}
 	currDir = (DtValidCachedDir)cacheList.dirs[i];
-
 	/*
 	 * set global variable
 	 */
 #ifndef XTHREADS
 	GdirName = currDir->dirName;
 #endif
-
 	if ((currDir->dirNameLen == dirNameLen) &&
 	    (strncmp(currDir->dirName, path, dirNameLen) == 0)) {
-
 	    switch(currDir->cachedDirType) {
 	      case DtINVALID_CACHED_DIR:
 	      case DtUNCACHED_DIR:
@@ -430,7 +362,6 @@ CheckDirCache(String	path)
     _XmProcessUnlock();
     return DtINVALID_CACHED_DIR;
 }
-
 static String
 find_slash(String str)
 {
@@ -446,19 +377,15 @@ find_slash(String str)
       return NULL;
   }
 }
-
 static Boolean
 TestIconFile(String	path)
 {
     struct stat status;
     int	dirCacheType;
-
     if (!path || !*path)
       return False;
-
     /* if there is no directory information in the name, it's
        a local file, check here or CheckDirCache will fail */
-
     if (!find_slash(path)) {
 	dirCacheType = DtUNCACHED_DIR ;
 #ifndef XTHREADS
@@ -467,35 +394,25 @@ TestIconFile(String	path)
 #endif
     } else
 	dirCacheType = CheckDirCache(path);
-
     switch(dirCacheType) {
       case DtVALID_CACHED_DIR:
 	return True;
-
       case DtINVALID_CACHED_DIR:
 	return False;
-
       case DtUNCACHED_DIR:
 	return (access(path, R_OK) == 0 &&	/* exists and is readable */
 		stat(path, &status) == 0 &&	/* get the status */
 		S_ISDIR(status.st_mode) == 0	/* not a directory */
 		);
     }
-
     return False ;
 }
-
-
 /*********** Hash table stuff  */
-
-
 typedef struct _DtIconNameEntryRec{
     String	dirName;
     String	leafName;
     String	key_name;
 }DtIconNameEntryRec, *DtIconNameEntry;
-
-
 /* Compare two icon names from icon entry rec */
 static Boolean
 CompareIconNames (XmHashKey key_1,
@@ -503,23 +420,17 @@ CompareIconNames (XmHashKey key_1,
 {
   DtIconNameEntry data_1 = (DtIconNameEntry) key_1;
   DtIconNameEntry data_2 = (DtIconNameEntry) key_2;
-
   return ((data_1->key_name == data_2->key_name) ||
 	  (strcmp(data_1->key_name, data_2->key_name) == 0));
 }
-
-
 /* Hash an icon name . */
 static XmHashValue
 HashIconName (XmHashKey key)
 {
   DtIconNameEntry data = (DtIconNameEntry) key;
   unsigned int len = strlen(data->key_name);
-
   return (((len << 8) | data->key_name[0]) << 8) | data->key_name[len];
 }
-
-
 String
 XmGetIconFileName(
     Screen	*screen,
@@ -545,59 +456,44 @@ XmGetIconFileName(
     static String	bmPath = NULL;
     static XmHashTable iconNameCache = NULL;
     char 		stackString[MAX_DIR_PATH_LEN];
-
 #define B_SUB	0
 #define P_SUB	1
 #define M_SUB	2
 #define H_SUB	3
-
     SubstitutionRec iconSubs[] = {
 	{'B', NULL},	/* bitmap name */
 	{'P', NULL},	/* alternate bitmap name BC */
 	{'M', NULL},	/* magnitude */
 	{'H', NULL},	/* host prefix */
     };
-
     XtAppContext app;
-
     app = XtDisplayToApplicationContext(display);
-
     _XmAppLock(app);
-
     /* start by asking some screen state */
     (void)XmeGetIconControlInfo(screen,
 				&useMask,  /* not used here */
 				&useColor,
 				&useIconFileCache);
-
     _XmProcessLock();
-
     /* generate the icon paths once per application: iconPath and bmPath */
     if (!iconNameCache) {
 	Boolean		junkBoolean;
-
 	iconNameCache =  _XmAllocHashTable(100,
 					   CompareIconNames, HashIconName);
-
 	cacheList.numDirs =
 	  cacheList.maxDirs = 0;
 	cacheList.dirs = NULL;
-
 	homedir = XmeGetHomeDirName();
 	strcpy(stackString, homedir) ;
-
 	if (useColor) {
 	    iconPath = _XmOSInitPath(NULL, "XMICONSEARCHPATH", &junkBoolean);
 	}
 	else {
 	    iconPath = _XmOSInitPath(NULL, "XMICONBMSEARCHPATH", &junkBoolean);
 	}
-
 	/* 1.2 path as a fallback */
 	bmPath = _XmOSInitPath(NULL, "XBMLANGPATH", &junkBoolean);
-
     }
-
     switch (size) {
       case XmTINY_ICON_SIZE:
 	iconSubs[M_SUB].substitution = ".t";
@@ -615,24 +511,18 @@ XmGetIconFileName(
 	iconSubs[M_SUB].substitution = NULL;
 	break;
     }
-
     iconSubs[H_SUB].substitution = hostPrefix;
-
     if (useIconFileCache)
       testFileFunc = TestIconFile;
     else
       testFileFunc = NULL;
-
     names[0] 	    = imageInstanceName;
     names[1] 	    = imageClassName;
     names_w_size[0] = names_w_size[1] = (String)NULL;
-
     /** loop over the two names */
     for (i = 0; i < 2; i++) {
-
 	if (names[i] == NULL)
 	  continue;
-
 	if ((absolute = _XmOSAbsolutePathName(names[i], &names[i],
 					      stackString)) != FALSE) {
 	    iPath = ABSOLUTE_IPATH;
@@ -642,10 +532,8 @@ XmGetIconFileName(
 	    iPath = iconPath;
 	    bPath = bmPath;
 	}
-
 	iconSubs[B_SUB].substitution = names[i];
 	iconSubs[P_SUB].substitution = names[i];
-
        /* need to add size suffix if size is specified */
         if (size != XmUNSPECIFIED_ICON_SIZE) {
            int basenameLen = strlen(names[i]);
@@ -656,37 +544,28 @@ XmGetIconFileName(
 	   memmove(&ext_name[basenameLen],
 	           iconSubs[M_SUB].substitution, sizeLen);
 	   ext_name[basenameLen + sizeLen] = '\0';
-
            names_w_size[i] = ext_name;
-
         } else
            names_w_size[i] = NULL;
-
        /*
         * try to see if its already in the image cache
 	*/
 	if (_XmInImageCache(names[i]))
 	  fileName = XtNewString(names[i]);
-
 	/*
 	 * optimization to check all expansions in cache
 	 */
 	if (!fileName) {
 	    DtIconNameEntry iNameEntry;
 	    DtIconNameEntryRec  iNameData ;
-
 	    iNameData.key_name = (names_w_size[i])?names_w_size[i]:names[i];
-
 	    iNameEntry =  (DtIconNameEntry)
 		_XmGetHashEntry(iconNameCache, (XmHashKey)&iNameData);
-
 	    if (iNameEntry) {
 		int dirLen, leafLen;
-
 		dirLen = strlen(iNameEntry->dirName);
 		leafLen = strlen(iNameEntry->leafName);
 		fileName = XtMalloc(dirLen + leafLen + 2);
-
 		memmove(&fileName[0],
 	      		iNameEntry->dirName,
 			dirLen);
@@ -698,12 +577,10 @@ XmGetIconFileName(
 		memmove(&fileName[dirLen + 1],
 	      		iNameEntry->leafName,
 			leafLen);
-
 		fileName[dirLen + leafLen + 1] = '\0';
 		}
 	    }
 	}
-
 	if (fileName) {
 	  /*
 	   * CDExc20823 (memory leak): free names_w_size[i]
@@ -719,12 +596,10 @@ XmGetIconFileName(
 	    if (names_w_size[i] != (String)NULL)
 	      XtFree(names_w_size[i]);
 	  }
-
 	  _XmProcessUnlock();
 	  _XmAppUnlock(app);
 	  return fileName;
         }
-
 	/**
 	 * Prefer SVG for TrueColor or DirectColor Visuals, falling
 	 * back to XPM and XBM for other classes of Visual.
@@ -734,9 +609,7 @@ XmGetIconFileName(
 		                             iPath, iconSubs, XtNumber(iconSubs),
 		                             (XtFilePredicate)testFileFunc);
 	}
-
 	if (fileName) break;
-
 	/**
 	 * For monochrome, no point in mucking around with colors
 	 */
@@ -746,28 +619,23 @@ XmGetIconFileName(
 		                             (XtFilePredicate)testFileFunc);
 	}
 	if (fileName) break;
-
 	fileName = XtResolvePathname(display, "icons", NULL, NULL,
 	                             iPath, iconSubs, XtNumber(iconSubs),
 	                             (XtFilePredicate)testFileFunc);
 	if (fileName) break;
-
 	fileName = XtResolvePathname(display, "bitmaps", NULL, NULL,
 	                             bPath, iconSubs, XtNumber(iconSubs),
 	                             (XtFilePredicate)testFileFunc);
 	if (fileName) break;
     }
     _XmProcessUnlock();
-
     if (fileName && !absolute) {
 	/* register it in name cache */
 	DtIconNameEntry 	iNameEntry;
 	String name_used = (names_w_size[i])? names_w_size[i] : names[i] ;
-
 	/** alloc a icon cache entry **/
 	iNameEntry = (DtIconNameEntry) XtMalloc(sizeof(DtIconNameEntryRec));
 	iNameEntry->key_name = XtNewString(name_used);
-
 #ifndef XTHREADS
         if (useIconFileCache)
         {
@@ -781,30 +649,24 @@ XmGetIconFileName(
            String	filePtr;
            String 	suffixPtr;
            int	dirNameLen;
-
            _XmOSFindPathParts(fileName, &filePtr, &suffixPtr);
-
            if (fileName == filePtr)
 	       dirNameLen = 0;
            else {
 	       /* take the slash into account */
 	       dirNameLen = filePtr - fileName - 1;
            }
-
            dirName = (String)XtMalloc(dirNameLen + 1);
 	   strncpy(dirName, fileName, dirNameLen);
 	   dirName[dirNameLen] = '\0';
-
 	   iNameEntry->dirName = dirName;
 	   iNameEntry->leafName = XtNewString(filePtr);
         }
-
 	_XmProcessLock();
         _XmAddHashEntry(iconNameCache, (XmHashKey)iNameEntry,
 			(XtPointer)iNameEntry);
 	_XmProcessUnlock();
     }
-
     /*
      * CDExc20823 (memory leak): free names_w_size[i] if not NULL.
      */
@@ -813,7 +675,6 @@ XmGetIconFileName(
 	if (names_w_size[i] != (String)NULL)
 	    XtFree(names_w_size[i]);
     }
-
     _XmAppUnlock(app);
     return fileName;
 }

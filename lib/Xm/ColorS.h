@@ -21,24 +21,14 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmColorSelector_h
 #define _XmColorSelector_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 typedef struct _XmColorSelectorClassRec *XmColorSelectorWidgetClass;
 typedef struct _XmColorSelectorRec *XmColorSelectorWidget;
-
-
 /*	Function Name: XmCreateColorSelector
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -47,11 +37,9 @@ typedef struct _XmColorSelectorRec *XmColorSelectorWidget;
  *	Returns: The Widget created.
  */
 Widget XmCreateColorSelector(Widget, String, ArgList, Cardinal);
-
 /*
  * Variable argument list functions
  */
-
 extern Widget XmVaCreateColorSelector(
                         Widget parent,
                         char *name,
@@ -60,15 +48,8 @@ extern Widget XmVaCreateManagedColorSelector(
                         Widget parent,
                         char *name,
                         ...);
-
 extern WidgetClass       xmColorSelectorWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmColorSelect_h */

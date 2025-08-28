@@ -22,43 +22,31 @@
 */
 #ifndef _XmArrowButtonP_h
 #define _XmArrowButtonP_h
-
 #include <Xm/ArrowB.h>
 #include <Xm/PrimitiveP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*  Arrow class structure  */
-
 typedef struct _XmArrowButtonClassPart
 {
   XtPointer extension;
 } XmArrowButtonClassPart;
-
-
 /*  Full class record declaration for Arrow class  */
-
 typedef struct _XmArrowButtonClassRec
 {
   CoreClassPart	  	 core_class;
   XmPrimitiveClassPart	 primitive_class;
   XmArrowButtonClassPart arrowbutton_class;
 } XmArrowButtonClassRec;
-
 externalref XmArrowButtonClassRec xmArrowButtonClassRec;
-
-
 /*  The ArrowButton instance record  */
-
 typedef struct _XmArrowButtonPart
 {
   XtCallbackList activate_callback;
   XtCallbackList arm_callback;
   XtCallbackList disarm_callback;
   unsigned char  direction;	/* The direction the arrow is pointing. */
-
   Boolean 	 selected;
   short          top_count;
   short          cent_count;
@@ -66,7 +54,6 @@ typedef struct _XmArrowButtonPart
   XRectangle    *top;
   XRectangle    *cent;
   XRectangle    *bot;
-
   GC		 arrow_GC;
   XtIntervalId   timer;
   unsigned char  multiClick;	/* KEEP/DISCARD resource */
@@ -75,27 +62,17 @@ typedef struct _XmArrowButtonPart
   GC		 insensitive_GC;
   Dimension detail_shadow_thickness ;
 } XmArrowButtonPart;
-
-
 /*  Full instance record declaration  */
-
 typedef struct _XmArrowButtonRec
 {
   CorePart	   	core;
   XmPrimitivePart	primitive;
   XmArrowButtonPart	arrowbutton;
 } XmArrowButtonRec;
-
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmArrowButtonP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

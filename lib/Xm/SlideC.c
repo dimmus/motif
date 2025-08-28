@@ -20,33 +20,26 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include "XmI.h"
 #include "SlideCP.h"
 #include <Xm/XmP.h>
-
 /*
    Widget methods, forward declarations
  */
-
 static void class_initialize(void);
 static void class_part_initialize(WidgetClass widget_class);
 static void initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args);
 static void destroy(Widget w);
 static Boolean set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num_args);
 static void get_values_hook(Widget w, ArgList args, Cardinal *num_args);
-
 static void _XmSlideProc(Widget w);
 static void targetDestroy(Widget target, XtPointer client_data, XtPointer call_data);
-
 /*
    Widget default resources
  */
-
 #define Offset(field) XtOffsetOf(XmSlideContextRec, slide.field)
 static XtResource resources[] =
 {
@@ -92,7 +85,6 @@ static XtResource resources[] =
     },
 };
 #undef Offset
-
 /*
    Widget class record
  */
@@ -139,19 +131,15 @@ XmSlideContextClassRec xmSlideContextClassRec = {
 	}
 };
 /* *INDENT-ON* */
-
 WidgetClass xmSlideContextWidgetClass = (WidgetClass)&xmSlideContextClassRec;
-
 static void
 class_initialize(void)
 {
 }
-
 static void
 class_part_initialize(WidgetClass widget_class)
 {
 }
-
 static void
 initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args)
 {
@@ -160,7 +148,6 @@ initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args)
     	XtName(new_w),
     	Slide_Interval(new_w));
     	*/
-
     if (Slide_Widget(new_w) == NULL)
     {
 	_XmWarningMsg(new_w,
@@ -193,7 +180,6 @@ initialize(Widget request, Widget new_w, ArgList args, Cardinal *num_args)
 	XtAddCallback(Slide_Widget(new_w), XmNdestroyCallback, (XtCallbackProc)targetDestroy, new_w);
     }
 }
-
 static void
 destroy(Widget w)
 {
@@ -204,7 +190,6 @@ destroy(Widget w)
     }
     XtRemoveCallback(Slide_Widget(w), XmNdestroyCallback, (XtCallbackProc)targetDestroy, w);
 }
-
 static Boolean
 set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num_args)
 {
@@ -215,32 +200,26 @@ set_values(Widget old, Widget request, Widget new_w, ArgList args, Cardinal *num
     }
     return(False);
 }
-
 static void
 get_values_hook(Widget w, ArgList args, Cardinal *num_args)
 {
 }
-
 static void
 targetDestroy(Widget target, XtPointer client_data, XtPointer call_data)
 {
 Widget w = (Widget)client_data;
-
     XtDestroyWidget(w);
 }
-
 static void
 _XmSlideProc(Widget w)
 {
 Dimension width, height;
 Position x, y;
-
     /*
     printf("%s:%s(%d) - %s %li\n", __FILE__, __FUNCTION__, __LINE__,
     	XtName(w),
     	Slide_Interval(w));
     	*/
-
     if (Slide_Interval(w) == 0)
     {
 	width = Slide_DestWidth(w);

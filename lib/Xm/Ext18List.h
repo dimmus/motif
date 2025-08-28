@@ -21,30 +21,24 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmExt18List_h_
 #define _XmExt18List_h_
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 #include <Xm/MultiList.h>
 #include <Xm/XmP.h>
-
+#include <Xm/deprecated.h>
 XM_ALTERNATIVE(Use XmMultiList instead)
 externalref WidgetClass xmExt18ListWidgetClass;
-
 enum {
     XmEXT18LIST_FOUND = XmMULTILIST_FOUND,
     XmEXT18LIST_NOT_FOUND = XmMULTILIST_NOT_FOUND
 };
-
 typedef XmMultiListWidgetClass *XmExt18ListWidgetClass;
 typedef XmMultiListWidget *XmExt18ListWidget;
 typedef XmMultiListRowInfo Xm18RowInfo;
 typedef XmMultiListCallbackStruct XmExt18ListCallbackStruct;
-
 /*
  * Function Name: XmExt18ListGetSelectedRows
  * Description:   Takes an Extended List and returns a NULL terminated array
@@ -52,8 +46,7 @@ typedef XmMultiListCallbackStruct XmExt18ListCallbackStruct;
  * Arguments:     w - the extended list widget
  * Returns:       Xm18RowInfo **
  */
-XM_DEPRECATED Xm18RowInfo **XmExt18ListGetSelectedRows(Widget w);
-
+Xm18RowInfo **XmExt18ListGetSelectedRows(Widget w) __attribute__((deprecated));
 /*	Function Name: XmCreateExtended18List
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -63,38 +56,31 @@ XM_DEPRECATED Xm18RowInfo **XmExt18ListGetSelectedRows(Widget w);
  */
 XM_ALTERNATIVE(Use XmMultiList instead)
 extern Widget XmCreateExtended18List(Widget, String, ArgList, Cardinal);
-
 XM_ALTERNATIVE(Use XmMultiList instead)
 extern Widget XmCreateExt18List(Widget, String, ArgList, Cardinal);
-
 XM_ALTERNATIVE(Use XmMultiList instead)
 extern Widget XmVaCreateExt18List(Widget parent, char *name, ...);
-
 XM_ALTERNATIVE(Use XmMultiList instead)
 extern Widget XmVaCreateManagedExt18List(Widget parent, char *name, ...);
-
 /*  Function Name: XmExt18ListUnselectAllItems
  *  Description:   Unselects all rows
  *  Arguments:     w - the ilist widget.
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListUnselectAllItems(Widget w);
-
+extern void XmExt18ListUnselectAllItems(Widget w) __attribute__((deprecated));
 /*  Function Name: XmExt18ListUnselectItem
  *  Description:   Unselects the row passed in
  *  Arguments:     w - the ilist widget.
  *                 row_info - ptr to the row passed in
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListUnselectItem(Widget, Xm18RowInfo *);
-
+extern void XmExt18ListUnselectItem(Widget, Xm18RowInfo *) __attribute__((deprecated));
 /*  Function Name: XmExt18ListToggleRow
  *  Description:   Toggles the selection state of a specified row
  *  Arguments:     w - the extended list widget
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListToggleRow(Widget, short);
-
+extern void XmExt18ListToggleRow(Widget, short) __attribute__((deprecated));
 /*  Function Name: XmExt18ListSelectItems
  *  Description:   Set selection state by matching column entries to XmString
  *  Arguments:     w - the extended list widget
@@ -103,8 +89,7 @@ extern XM_DEPRECATED void XmExt18ListToggleRow(Widget, short);
  *		   notify - if True, call XmNsingleSelectionCallback
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListSelectItems(Widget, XmString, int, Boolean);
-
+extern void XmExt18ListSelectItems(Widget, XmString, int, Boolean) __attribute__((deprecated));
 /*  Function Name: XmExt18ListDeselectItems
  *  Description:   Set selection state by matching column entries to XmString
  *  Arguments:     w - the extended list widget
@@ -112,16 +97,14 @@ extern XM_DEPRECATED void XmExt18ListSelectItems(Widget, XmString, int, Boolean)
  *		   column - column number (0 - N) to match (or XmANY_COLUMN)
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListDeselectItems(Widget, XmString, int);
-
+extern void XmExt18ListDeselectItems(Widget, XmString, int) __attribute__((deprecated));
 /*  Function Name: XmExt18ListSelectAllItems
  *  Description:   Set selection state on all rows
  *  Arguments:     w - the extended list widget
  *		   notify - if True, call XmNsingleSelectionCallback for each
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListSelectAllItems(Widget, Boolean);
-
+extern void XmExt18ListSelectAllItems(Widget, Boolean) __attribute__((deprecated));
 /*  Function Name: XmExt18ListSelectRow
  *  Description:   Set selection state on all rows
  *  Arguments:     w - the extended list widget
@@ -129,16 +112,14 @@ extern XM_DEPRECATED void XmExt18ListSelectAllItems(Widget, Boolean);
  *		   notify - if True, call XmNsingleSelectionCallback
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListSelectRow(Widget, int, Boolean);
-
+extern void XmExt18ListSelectRow(Widget, int, Boolean) __attribute__((deprecated));
 /*  Function Name: XmExt18ListDeselectRow
  *  Description:   Set selection state on all rows
  *  Arguments:     w - the extended list widget
  *		   row - the row to select
  *  Returns:       none
  */
-extern XM_DEPRECATED void XmExt18ListDeselectRow(Widget, int);
-
+extern void XmExt18ListDeselectRow(Widget, int) __attribute__((deprecated));
 /*
  * Function Name: XmExt18ListGetSelectedRowArray
  * Description:   Takes an Extended List and returns a NULL terminated array
@@ -147,16 +128,14 @@ extern XM_DEPRECATED void XmExt18ListDeselectRow(Widget, int);
  *		  num_rows - pointer to the number of rows
  * Returns:       array of integer (selected) row numbers
  */
-extern XM_DEPRECATED int *XmExt18ListGetSelectedRowArray(Widget, int *);
-
+extern int *XmExt18ListGetSelectedRowArray(Widget, int *) __attribute__((deprecated));
 /*  Function Name: XmExt18ListMakeRowVisible
  *  Description:   Shifts the visible extended list rows as desired
  *  Arguments:     w - the extended list widget
  *		   row - the row number wished to be made visible
  *  Returns:       none
  */
-void XM_DEPRECATED XmExt18ListMakeRowVisible(Widget, int);
-
+void XmExt18ListMakeRowVisible(Widget, int) __attribute__((deprecated));
 #if defined(__cplusplus)
 }
 #endif

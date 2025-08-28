@@ -22,19 +22,14 @@
  */
 #ifndef _XmPrintSI_h
 #define _XmPrintSI_h
-
 #include <Xm/PrintSP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 extern XContext _XmPrintScreenToShellContext;
 extern Cardinal _XmPrintShellCounter  ;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPrintSI_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

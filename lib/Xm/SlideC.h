@@ -20,16 +20,12 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef _SLIDEC_H
 #define _SLIDEC_H
-
 #include <X11/Intrinsic.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsSlideContext
 #define XmIsSlideContext(w) XtIsSubclass(w,xmSlideContextClass)
 #endif
@@ -81,21 +77,16 @@ extern "C" {
 #ifndef XmCSlideDestY
 #define XmCSlideDestY "SlideDestY"
 #endif
-
 extern WidgetClass xmSlideContextWidgetClass;
-
 typedef struct _XmSlideContextRec *XmSlideContextWidget;
 typedef struct _XmSlideContextClassRec *XmSlideContextWidgetClass;
-
 typedef struct _XmSlideStruct {
 	Widget w;
 	XtWidgetGeometry dest;
 	unsigned long interval;
 	XtIntervalId id;
 } XmSlideStruct, *XmSlidePtr;
-
 void XmSlide(XmSlidePtr slide_info);
-
 #ifdef __cplusplus
 }
 #endif

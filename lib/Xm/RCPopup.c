@@ -23,17 +23,14 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #ifdef REV_INFO
 #ifndef lint
 static char *rcsid = "$XConsortium: RCPopup.c /main/7 1996/03/28 15:15:24 daniel $";
 #endif
 #endif
-
 #include <stdio.h>
 #include <ctype.h>
 #include "XmI.h"
@@ -60,8 +57,6 @@ static char *rcsid = "$XConsortium: RCPopup.c /main/7 1996/03/28 15:15:24 daniel
 #include "ScreenI.h"
 #include "TearOffI.h"
 #include "UniqueEvnI.h"
-
-
 static void ButtonEventHandler(
                         Widget w,
                         XtPointer data,
@@ -95,17 +90,13 @@ static int OnPostFromList(XmRowColumnWidget menu,
 			  Widget widget ) ;
 static void RemoveTable(Widget, XtPointer, XtPointer) ;
 static Widget MenuMatches(Widget possible, int level, XEvent*);
-
 /* Used to store popup information in hash table for non-popup-list
    menus added by XmAddToPopupFromList */
-
 typedef struct _PopupListRec {
   WidgetList	popups;
   Cardinal	num_popups;
 } PopupListRec, *PopupList;
-
 static XmHashTable popup_table = (XmHashTable) NULL;
-
 /**************************************************************************/
 /* From the Specification:
  *
@@ -167,7 +158,6 @@ static XmHashTable popup_table = (XmHashTable) NULL;
  * For keyboard events we use the current focus widget instead of the
  * pointer position and we always post the menu.
  **************************************************************************/
-
 /*****************************************************************/
 /*								 */
 /*  New Button Press handler for the Popup menu system and the   */
@@ -176,9 +166,7 @@ static XmHashTable popup_table = (XmHashTable) NULL;
 /*  XmPOPUP_AUTOMATIC or XmPOPUP_AUTOMATIC_RECURSIVE.	         */
 /*								 */
 /*****************************************************************/
-
 static Widget lasttarget = (Widget) 0;
-
 static void
 PopupMenuEventHandler(Widget wid, XtPointer poster,
 		      XEvent *e, Boolean *cont)
@@ -190,26 +178,19 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
   XmMenuState mst = _XmGetMenuState((Widget) wid);
   XmRowColumnWidget popupW = (XmRowColumnWidget) poster ;
   Time _time = _XmGetDefaultTime(wid, e);
-
   /* Now look at the event type.  It better be a button or
      key event.  Otherwise abort */
-
   if (e -> type != ButtonPress && e -> type != ButtonRelease &&
       e -> type != KeyPress && e -> type != KeyRelease)
     return;
-
   /* First determine if this might have been a replay.  This variable
      gets passed to the callback as the repost field */
-
   seen = (mst->RC_ReplayInfo.time == _time);
-
   /* Decide whether this event is a posting event.  If it is
      then we turn cont off to prevent multiple
      PopupMenuEventHandlers from being invoked on a single
      event.  */
-
   mst->RC_ButtonEventStatus.time = _time;
-
   if (e -> type == KeyPress || e -> type == KeyRelease) {
     mst->RC_ButtonEventStatus.verified = True;
   } else {
@@ -218,7 +199,6 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
 		       RC_PostButton(popupW),
 		       RC_PostModifiers(popupW));
   }
-
   /* Add the handler to remove the grab if an error occurs */
   if (mst -> RC_ButtonEventStatus.verified) {
     if (!popupW->core.being_destroyed &&
@@ -228,30 +208,22 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
 			  _XmRC_PostTimeOut, (XtPointer) popupW);
     mst->RC_ButtonEventStatus.waiting_to_be_managed = TRUE;
     mst->RC_ButtonEventStatus.event = e -> xbutton;
-
     *cont = False;
   }
   else /* If this is not a verified event then return */
     return;
-
   if (e -> type == ButtonPress || e -> type == ButtonRelease) {
     /* OK.  We have a button event on some widget in our hierarchy.
        Go find the most specific widget */
-
     postWidget = FindBestMatchWidget(wid, e);
   } else {
     /* If this is a key event then use the focus data for the most
        specific widget */
-
     postWidget = XmGetFocusWidget(wid);
-
     if (postWidget == (Widget) NULL) postWidget = wid;
   }
-
   /* Now find the right popup */
-
   popup = FindPopupMenu(wid, postWidget, e, 0);
-
   /* Construct the callback structure */
   _XmProcessLock();
   if (seen && (postWidget == lasttarget))
@@ -264,15 +236,11 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
       cb.reason = XmCR_POST;
       cb.postIt = True;
     }
-
   lasttarget = postWidget;
   _XmProcessUnlock();
-
-
   cb.event = e;
   cb.menuToPost = popup;
   cb.target = postWidget;
-
   /* Call the callback(s)
    *
    * Gadgets have no callback list, hence the callbacks of the manager
@@ -290,24 +258,18 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
       XtCallCallbacks(postWidget, XmNpopupHandlerCallback, (XtPointer) &cb);
       break;
     }
-
-
   popup = cb.menuToPost;
-
   if (popup != 0 && cb.postIt) {
     if (RC_TornOff(popup) && !XmIsMenuShell(XtParent(popup)))
       _XmRestoreTearOffToMenuShell((Widget)popup, e);
-
     /*
      * popups keep active widget in postFromList in cascadeBtn field -
      * moved here from PositionMenu so XmGetPostedFromWidget set up
      * BEFORE application's event handler.
      */
     RC_CascadeBtn(popup) = XtParent(XtParent(popup));
-
     if (e -> type == KeyPress || e -> type == KeyRelease) {
       XmRowColumnClassRec * rc;
-
       rc = (XmRowColumnClassRec *)XtClass(popup);
       (*(rc->row_column_class.armAndActivate)) (popup, e, NULL, NULL);
     } else {
@@ -319,9 +281,7 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
        menu,  so continue to process the event */
     *cont = True;
   }
-
 }
-
 /***************************************************************
  * FindBestMatchWidget walks down to the most specific widget
  * that matches the event.  For each apparent range match,  we
@@ -329,7 +289,6 @@ PopupMenuEventHandler(Widget wid, XtPointer poster,
  * then pushes a level and determines if a subwidget of the
  * composite might match the event
  ***************************************************************/
-
 static Widget
 FindBestMatchWidget(Widget wid, XEvent* event)
 {
@@ -341,15 +300,12 @@ FindBestMatchWidget(Widget wid, XEvent* event)
   int delx, dely;
   int done;
   int found;
-
   target = wid;
   done = 0;
-
   /* appx,appy always contain the relative event (x,y) in
      the current widget being examined */
   appx = event -> xbutton.x;
   appy = event -> xbutton.y;
-
   while(done == 0) {
     if (XtIsComposite(target))
       {
@@ -376,10 +332,8 @@ FindBestMatchWidget(Widget wid, XEvent* event)
     else
       done = 1;
   }
-
   return(target);
 }
-
 /***********************************************************
  * FindPopupMenu starts at the target widget (at level == 0)
  * and starts to walk up the widget hierarchy up to the
@@ -389,16 +343,13 @@ FindBestMatchWidget(Widget wid, XEvent* event)
  * menu with the correct menuPost flags and the correct
  * value of popupEnabled.
  **********************************************************/
-
 static Widget
 FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int level)
 {
   int i;
   WidgetRec *thiswid = (WidgetRec *) target;
   Widget possible = NULL;
-
   if (target == NULL) return(NULL);
-
   if (! XmIsGadget(target)) {
     for(i = 0; i < thiswid -> core.num_popups; i++) {
       possible = thiswid -> core.popup_list[i];
@@ -421,7 +372,6 @@ FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int level)
       }
     }
   }
-
   if (possible)
     return(possible);
   else if (toplevel != target)
@@ -429,12 +379,10 @@ FindPopupMenu(Widget toplevel, Widget target, XEvent *event, int level)
   else
     return((Widget) NULL);
 }
-
 static Widget
 MenuMatches(Widget menu, int level, XEvent *event)
 {
   Boolean found = False;
-
   if (XtIsShell(menu) &&
       ((CompositeRec *) menu) -> composite.num_children == 1) {
     menu = ((CompositeRec *) menu) -> composite.children[0];
@@ -456,14 +404,11 @@ MenuMatches(Widget menu, int level, XEvent *event)
 	}
       }
   }
-
   if (found)
     return(menu);
   else
     return((Widget) NULL);
 }
-
-
 /*Argsused*/
 Boolean
 _XmRC_PostTimeOut( XtPointer wid )
@@ -471,7 +416,6 @@ _XmRC_PostTimeOut( XtPointer wid )
   XmRowColumnWidget popup = (XmRowColumnWidget) wid;
   XmMenuState mst = _XmGetMenuState((Widget) wid);
   Time _time = XtLastTimestampProcessed(XtDisplay((Widget) wid));
-
   popup->row_column.popup_workproc = 0;
   if (mst->RC_ButtonEventStatus.waiting_to_be_managed)
   {
@@ -479,10 +423,8 @@ _XmRC_PostTimeOut( XtPointer wid )
      mst->RC_ButtonEventStatus.waiting_to_be_managed = FALSE;
      mst->RC_ButtonEventStatus.verified = FALSE;
   }
-
   return TRUE;
 }
-
 /*
  * ButtonEventHandler is inserted at the head of the event handlers.  We must
  * pre-verify the events that popup a menupane.  When the application manages
@@ -499,7 +441,6 @@ ButtonEventHandler(
    XmRowColumnWidget popup = (XmRowColumnWidget) data ;
    XButtonEvent *xbutton_event = (XButtonEvent *)event;
    XmMenuState mst = _XmGetMenuState((Widget) w);
-
    /*
     * if this event  has been seen before, and some other popup has
     * already marked it as verified, then we don't need to bother with it.
@@ -516,11 +457,9 @@ ButtonEventHandler(
 	  !_XmMatchBtnEvent(event, RC_PostEventType(popup), RC_PostButton(popup),
 			    RC_PostModifiers(popup)) )
        return;
-
    mst->RC_ButtonEventStatus.time = xbutton_event->time;
    mst->RC_ButtonEventStatus.verified = _XmMatchBtnEvent( event,
       RC_PostEventType(popup), RC_PostButton(popup), RC_PostModifiers(popup));
-
    if (mst->RC_ButtonEventStatus.verified)
    {
      XtUngrabPointer((Widget) popup,CurrentTime);
@@ -531,10 +470,8 @@ ButtonEventHandler(
 	 XtAppAddWorkProc(XtWidgetToApplicationContext((Widget) popup),
 			  _XmRC_PostTimeOut, (XtPointer) popup);
      mst->RC_ButtonEventStatus.event = *xbutton_event;
-
      if (RC_TornOff(popup) && !XmIsMenuShell(XtParent(popup)))
        _XmRestoreTearOffToMenuShell((Widget)popup, event);
-
      /*
       * popups keep active widget in postFromList in cascadeBtn field -
       * moved here from PositionMenu so XmGetPostedFromWidget set up
@@ -544,16 +481,13 @@ ButtonEventHandler(
 					     xbutton_event->window);
    }
 }
-
 static void
 AddHandlersToPostFromWidget(
         Widget popup,
         Widget widget )
 {
    Cursor cursor;
-
    cursor = _XmGetMenuCursorByScreen(XtScreen(popup));
-
    if (RC_PopupEnabled(popup) == XmPOPUP_AUTOMATIC ||
        RC_PopupEnabled(popup) == XmPOPUP_AUTOMATIC_RECURSIVE)
      XtInsertEventHandler(widget, ButtonPressMask|ButtonReleaseMask,
@@ -562,7 +496,6 @@ AddHandlersToPostFromWidget(
    else
      XtInsertEventHandler(widget, ButtonPressMask|ButtonReleaseMask,
 			  False, ButtonEventHandler, (XtPointer) popup, XtListHead);
-
    if ((RC_PopupEnabled(popup) == XmPOPUP_AUTOMATIC ||
 	RC_PopupEnabled(popup) == XmPOPUP_AUTOMATIC_RECURSIVE))
      XtAddEventHandler(widget, KeyPressMask|KeyReleaseMask,
@@ -570,7 +503,6 @@ AddHandlersToPostFromWidget(
    else
      XtAddEventHandler(widget, KeyPressMask|KeyReleaseMask,
 		       False, _XmRC_KeyboardInputHandler, (XtPointer) popup);
-
    /*
     * Add an event handler on the associated widget for ButtonRelease
     * events.  This is so that a quick press/release pair does not get
@@ -581,7 +513,6 @@ AddHandlersToPostFromWidget(
     */
    XtAddEventHandler(widget, ButtonReleaseMask,
 		     False, EventNoop, NULL);
-
    /*
     * Must add a passive grab, so that owner_events is set to True
     * when the button grab is activated; this is so that enter/leave
@@ -591,13 +522,11 @@ AddHandlersToPostFromWidget(
 		 TRUE, (unsigned int)ButtonReleaseMask, GrabModeAsync,
 		 GrabModeSync, None, cursor);
 }
-
 void
 _XmRC_RemoveHandlersFromPostFromWidget(
         Widget popup,
         Widget widget )
 {
-
    if (RC_PopupEnabled(popup) == XmPOPUP_AUTOMATIC ||
        RC_PopupEnabled(popup) == XmPOPUP_AUTOMATIC_RECURSIVE)
      XtRemoveEventHandler(widget, ButtonPressMask|ButtonReleaseMask,
@@ -605,19 +534,14 @@ _XmRC_RemoveHandlersFromPostFromWidget(
    else
      XtRemoveEventHandler(widget,	ButtonPressMask|ButtonReleaseMask,
 			  False, ButtonEventHandler, (XtPointer) popup);
-
    XtRemoveEventHandler(widget,	KeyPressMask|KeyReleaseMask,
 			False, _XmRC_KeyboardInputHandler, (XtPointer) popup);
-
    XtRemoveEventHandler(widget, ButtonReleaseMask,
 			False, EventNoop, NULL);
-
    /* Remove our passive grab */
    if (!widget->core.being_destroyed)
       XtUngrabButton (widget, RC_PostButton(popup), AnyModifier);
 }
-
-
 /*
  * Add the Popup Menu Event Handlers needed for posting and accelerators
  */
@@ -626,22 +550,18 @@ _XmRC_AddPopupEventHandlers(
         XmRowColumnWidget pane )
 {
    int i;
-
    /* to myself for gadgets */
    XtAddEventHandler( (Widget) pane, KeyPressMask|KeyReleaseMask,
 		     False, _XmRC_KeyboardInputHandler, (XtPointer) pane);
-
    /* Add to Our shell parent */
    XtAddEventHandler(XtParent(pane), KeyPressMask|KeyReleaseMask,
 		     False, _XmRC_KeyboardInputHandler, pane);
-
    /* add to all of the widgets in the postFromList*/
    for (i=0; i < pane->row_column.postFromCount; i++)
    {
       AddHandlersToPostFromWidget ((Widget) pane, pane->row_column.postFromList[i]);
    }
 }
-
 /*
  * Remove the Popup Menu Event Handlers needed for posting and accelerators
  */
@@ -650,15 +570,12 @@ _XmRC_RemovePopupEventHandlers(
         XmRowColumnWidget pane )
 {
    int i;
-
    /* Remove it from us */
    XtRemoveEventHandler((Widget) pane, KeyPressMask|KeyReleaseMask,
 			False, _XmRC_KeyboardInputHandler, (XtPointer) pane);
-
    /* Remove it from our shell parent */
    XtRemoveEventHandler(XtParent(pane), KeyPressMask|KeyReleaseMask,
 			False, _XmRC_KeyboardInputHandler, (XtPointer) pane);
-
    /* Remove it from the postFrom widgets */
    for (i=0; i < pane->row_column.postFromCount; i++)
    {
@@ -666,9 +583,6 @@ _XmRC_RemovePopupEventHandlers(
 					     pane->row_column.postFromList[i]);
    }
 }
-
-
-
 /*
  *************************************************************************
  *
@@ -689,10 +603,8 @@ _XmPostPopupMenu(
 {
    Window saveWindow;
    XmMenuState mst = _XmGetMenuState((Widget)wid);
-
    if (!(wid && XmIsRowColumn(wid) && IsPopup(wid)))
       return;
-
    /* We'll still verify the incoming button event.  But for all other cases
     * we'll just take for granted that the application knows what it's doing
     * and force the menu to post.
@@ -720,8 +632,6 @@ _XmPostPopupMenu(
    }
    XtManageChild(wid);
 }
-
-
 /* When an application uses shared menupanes, enabling accelerators are a
  * tricky situation.  Before now, the application was required to set all
  * menu-items sensitive when the menu hierarchy unposted.  Then when the
@@ -740,7 +650,6 @@ _XmAllowAcceleratedInsensitiveUnmanagedMenuItems(
    _XmGetMenuState((Widget)wid)->
       RC_allowAcceleratedInsensitiveUnmanagedMenuItems = (Boolean)allowed;
 }
-
 static void
 EventNoop(
         Widget reportingWidget,	/* unused */
@@ -753,7 +662,6 @@ EventNoop(
     * Primitive translations.
     */
 }
-
 /*
  * This is the event handler which catches, verifies and dispatches all
  * accelerators and mnemonics defined for a given menu hierarchy.  It
@@ -770,15 +678,12 @@ _XmRC_KeyboardInputHandler(
    XmRowColumnWidget topLevel = (XmRowColumnWidget) data;
    ShellWidget topLevelShell = (ShellWidget)XtParent(topLevel);
    XmMenuState mst = _XmGetMenuState((Widget)topLevel);
-
    /* Process the event only if not already processed */
    if (!_XmIsEventUnique(event))
       return;
-
    if (IsBar(topLevel) || IsOption(topLevel))
        if (! AllWidgetsAccessible((Widget) topLevel))
 	   return;
-
    /*
     * XmGetPostFromWidget() requires help to identify the topLevel widget
     * when a menupane is posted via accelerators.
@@ -797,13 +702,10 @@ _XmRC_KeyboardInputHandler(
    }
    else
       mst->RC_LastSelectToplevel = NULL;
-
    ProcessKey (topLevel, event);
-
    /* reset toplevel "accelerator" state to NULL */
    mst->RC_LastSelectToplevel = NULL;
 }
-
 /*
  * try to find a match in the menu for the key event.   Cascade down the
  * submenus if necessary
@@ -817,7 +719,6 @@ ProcessKey(
    int i;
    Widget child;
    Widget SaveCascadeButton;
-
    /* Try to use it on the current rowcol */
    if (! CheckKey (rowcol, event))
    {
@@ -825,7 +726,6 @@ ProcessKey(
       for (i=0; (i < rowcol->composite.num_children) && (! found); i++)
       {
 	 child = rowcol->composite.children[i];
-
 	 /* only check sensitive and managed cascade buttons */
 	 if (XtIsSensitive(child) && XtIsManaged(child))
 	 {
@@ -844,7 +744,6 @@ ProcessKey(
 		    */
 		   if (!found)
 		       RC_CascadeBtn(CBG_Submenu(child)) = SaveCascadeButton;
-
 	       }
 	    }
 	    else if (XmIsCascadeButton(child))
@@ -867,7 +766,6 @@ ProcessKey(
    else
        return (True);
 }
-
 /*
  * Check if the key event is used in the rowcol
  */
@@ -879,13 +777,11 @@ CheckKey(
    int menu_index = 0;
    XmKeyboardData * entry;
    ShellWidget shell;
-
    /* Process all matching key events */
    while ((menu_index = MatchInKeyboardList(rowcol, (XKeyEvent *) event,
                                                             menu_index)) != -1)
    {
       entry = MGR_KeyboardList(rowcol) + menu_index;
-
       /* Ignore this entry if it is not accessible to the user */
       if (XmIsRowColumn(entry->component))
       {
@@ -919,7 +815,6 @@ CheckKey(
 	 menu_index++;
 	 continue;
       }
-
       /*
        * For a mnemonic, the associated component must be visible, and
        * it must be in the last menupane posted.
@@ -943,7 +838,6 @@ CheckKey(
 	     {
 	       /* See if the associated shell is visible */
 	       shell = (ShellWidget)XtParent(XtParent(entry->component));
-
 	       /*
 		* Verify the pane is popped up, and the active pane is our
 		* parent (this is necessary because of shared menupanes.
@@ -955,7 +849,6 @@ CheckKey(
 		   menu_index++;
 		   continue;
 		 }
-
 	       /* Verify we are the last pane */
 	       if (RC_PopupPosted(shell->composite.children[0]))
 		 {
@@ -977,10 +870,8 @@ CheckKey(
 	    }
 	 }
       }
-
       /* Key event - make sure we're not in drag mode */
       _XmSetInDragMode(entry->component, False);
-
       /* Fix 7766, Ungrab the keyboard.  This seems to be necessary to
 	 avoid focus problems in some cases where the activate callback
 	 does "fancy" things like tracking locate.  Strictly speaking
@@ -989,44 +880,35 @@ CheckKey(
 	XtUngrabKeyboard(XtParent(entry->component), CurrentTime);
       else
 	XtUngrabKeyboard(entry->component, CurrentTime);
-
       /* Perform the action associated with the keyboard event */
       if (XmIsPrimitive(entry->component))
       {
          XmPrimitiveClassRec * prim;
-
          prim = (XmPrimitiveClassRec *)XtClass(entry->component);
-
          (*(prim->primitive_class.arm_and_activate))
                                          (entry->component, event, NULL, NULL);
       }
       else if (XmIsGadget(entry->component))
       {
          XmGadgetClassRec * gadget;
-
          gadget = (XmGadgetClassRec *)XtClass(entry->component);
-
          (*(gadget->gadget_class.arm_and_activate))
                                          (entry->component, event, NULL, NULL);
       }
       else if (XmIsRowColumn(entry->component))
       {
          XmRowColumnClassRec * rc;
-
          rc = (XmRowColumnClassRec *)XtClass(entry->component);
          (*(rc->row_column_class.armAndActivate)) (entry->component, event,
                                                                    NULL, NULL);
       }
-
       /* used the key */
       _XmRecordEvent(event);
       return (True);
    }
-
    /* did not use the key */
    return (False);
 }
-
 /*
  * This function searches the list of keyboard events associated with the
  * specified  row column widget to see if any of them match the
@@ -1042,10 +924,8 @@ MatchInKeyboardList(
    XmKeyboardData * klist = MGR_KeyboardList(rowcol);
    int count = MGR_NumKeyboardEntries(rowcol);
    int i;
-
    if (klist == NULL)
       return(-1);
-
    for (i = startIndex; i < count; i++)
    {
       /*
@@ -1058,7 +938,6 @@ MatchInKeyboardList(
        */
        if (klist[i].key == 1)
 	   klist[i].key = XKeysymToKeycode(XtDisplay(rowcol), klist[i].keysym);
-
        if (klist[i].key != NoSymbol)
        {
 	   if (_XmMatchKeyEvent((XEvent *) event, klist[i].eventType,
@@ -1071,11 +950,9 @@ MatchInKeyboardList(
 	   }
        }
    }
-
    /* No match */
    return (-1);
 }
-
 /*
  * This function determines if the widget to which a menu is
  * attached is accessible to the user.  The widget is considered
@@ -1090,13 +967,10 @@ AllWidgetsAccessible(
    {
       if (!XtIsSensitive(w) || !XtIsManaged(w) || !w->core.mapped_when_managed)
          return (False);
-
       w = XtParent(w);
    }
-
    return (True);
 }
-
 /*
  * search the postFromList and return the index of the found widget.  If it
  * is not found, return -1
@@ -1109,22 +983,18 @@ OnPostFromList(
         Widget widget )
 {
    int i;
-
    for (i = 0; i < menu->row_column.postFromCount; i++)
    {
       if (menu->row_column.postFromList[i] == widget)
 	  return (i);
    }
-
    return (-1);
 }
-
 /************************************************************************
  *
  * XmAddToPostFromList and XmRemoveFromPostFromList
  *
  ************************************************************************/
-
 void
 XmAddToPostFromList(
         Widget m,
@@ -1133,7 +1003,6 @@ XmAddToPostFromList(
   XmRowColumnWidget menu = (XmRowColumnWidget) m ;
   Arg args[1];
   _XmWidgetToAppContext(m);
-
   _XmAppLock(app);
   /* only continue if its a valid widget and a popup or pulldown menu */
   if (! XmIsRowColumn(menu) ||
@@ -1142,20 +1011,17 @@ XmAddToPostFromList(
     _XmAppUnlock(app);
     return;
   }
-
   if (OnPostFromList(menu, widget) == -1)
     {
       /* The first section of this code,  new in 2.0,  places
 	 the popup information in a secondary list so we can
 	 find it when doing automatic popup behavior */
       PopupList list;
-
       /* Add to associated popup data for widget */
       _XmProcessLock();
       if (! popup_table) {
 	popup_table = _XmAllocHashTable(100, NULL, NULL);
       }
-
       /* See if we have an associated table.  If not,  create
 	 one. */
       if ((list = (PopupList) _XmGetHashEntry(popup_table, (XmHashKey) widget))
@@ -1164,7 +1030,6 @@ XmAddToPostFromList(
 	if (_XmHashTableCount(popup_table) >
 	    (2 * _XmHashTableSize(popup_table)))
 	  _XmResizeHashTable(popup_table, 2 * _XmHashTableSize(popup_table));
-
 	list = (PopupList) XtMalloc(sizeof(PopupListRec));
 	list -> popups = (WidgetList) NULL;
 	list -> num_popups = 0;
@@ -1172,14 +1037,12 @@ XmAddToPostFromList(
 	XtAddCallback(widget, XtNdestroyCallback, RemoveTable, NULL);
       }
       _XmProcessUnlock();
-
       /* Add to list,  we add the menu's shell parent */
       list -> popups = (WidgetList) XtRealloc((char*) list -> popups,
 					      sizeof(Widget) *
 					      (list -> num_popups + 1));
       list -> popups[list -> num_popups] = XtParent(m);
       list -> num_popups++;
-
       if (IsPulldown(menu))
 	{
 	  XtSetArg (args[0], XmNsubMenuId, menu);
@@ -1194,7 +1057,6 @@ XmAddToPostFromList(
     }
     _XmAppUnlock(app);
 }
-
 void
 XmRemoveFromPostFromList(
         Widget m,
@@ -1203,7 +1065,6 @@ XmRemoveFromPostFromList(
   XmRowColumnWidget menu = (XmRowColumnWidget) m ;
   Arg args[1];
   _XmWidgetToAppContext(m);
-
   _XmAppLock(app);
   /* only continue if its a valid widget and a popup or pulldown menu */
   if (! XmIsRowColumn(menu) ||
@@ -1212,19 +1073,15 @@ XmRemoveFromPostFromList(
     _XmAppUnlock(app);
     return;
   }
-
   if ((OnPostFromList(menu, widget)) != -1)
     {
       PopupList list;
-
       _XmProcessLock();
       if (popup_table) {
 	int i, j;
-
 	/* How we could get here without the table being inited
 	   is beyond me.  But just in case,  avoid crashing */
 	list = (PopupList) _XmGetHashEntry(popup_table, (XmHashKey) widget);
-
 	/* Remove from associated list */
 	for(i = 0; i < list -> num_popups;) {
 	  if (list -> popups[i] == XtParent(m)) {
@@ -1239,7 +1096,6 @@ XmRemoveFromPostFromList(
 	}
       }
       _XmProcessUnlock();
-
       if (IsPulldown(menu))
 	{
 	  XtSetArg (args[0], XmNsubMenuId, NULL);
@@ -1254,14 +1110,12 @@ XmRemoveFromPostFromList(
    }
    _XmAppUnlock(app);
 }
-
 static void
 RemoveTable(Widget w,
 	    XtPointer ig1,	/* unused */
 	    XtPointer ig2)	/* unused */
 {
   PopupList list;
-
   _XmProcessLock();
   list = (PopupList) _XmGetHashEntry(popup_table, (XmHashKey) w);
   _XmRemoveHashEntry(popup_table, (XmHashKey) w);

@@ -25,12 +25,9 @@
 static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <ctype.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
@@ -70,22 +67,16 @@ static char rcsid[] = "$TOG: Label.c /main/26 1997/06/18 17:40:00 samborn $"
 #include <string.h>
 #include <Xm/XmP.h>
 #include <Xm/ColorI.h>
-
 #if USE_XFT
 #include "XmRenderTI.h"
 #include <X11/Xft/Xft.h>
 #endif
-
 #define Pix(w)			((w)->label.pixmap)
 #define Pix_insen(w)		((w)->label.pixmap_insen)
-
 /* Warning Messages */
-
 #define CS_STRING_MESSAGE	_XmMMsgLabel_0003
 #define ACC_MESSAGE		_XmMMsgLabel_0004
-
 /********    Static Function Declarations    ********/
-
 static void ClassInitialize(void);
 static void ClassPartInitialize(WidgetClass c);
 static void InitializePrehook(Widget req, Widget new_w,
@@ -137,10 +128,7 @@ static KeySym GetLabelMnemonic(Widget);
 static XtPointer ConvertToEncoding(Widget, char*, Atom, unsigned long *,
 				 Boolean *);
 /********    End Static Function Declarations    ********/
-
-
 void _XmLabelConvert(Widget w, XtPointer ignore, XmConvertCallbackStruct*);
-
 /* Transfer trait record */
 static XmConst XmTransferTraitRec LabelTransfer = {
   0, 						/* version		  */
@@ -148,7 +136,6 @@ static XmConst XmTransferTraitRec LabelTransfer = {
   NULL,						/* destinationProc	  */
   NULL						/* destinationPreHookProc */
 };
-
 /* Menu Savvy trait record */
 static XmConst XmMenuSavvyTraitRec MenuSavvyRecord = {
   0,						     /* version		  */
@@ -157,7 +144,6 @@ static XmConst XmMenuSavvyTraitRec MenuSavvyRecord = {
   GetLabelMnemonic,				     /* getMnemonic	  */
   (XmMenuSavvyGetActivateCBNameProc) NULL,	     /* getActivateCBName */
 };
-
 /* Access Textual trait record */
 XmAccessTextualTraitRec _XmLabel_AccessTextualRecord = {
   0,				/* version         */
@@ -165,32 +151,20 @@ XmAccessTextualTraitRec _XmLabel_AccessTextualRecord = {
   LabelSetValue,		/* setValuesMethod */
   LabelPreferredValue,		/* preferredFormat */
 };
-
-
 /* Default translations and action recs */
-
 static XtTranslations default_parsed;
-
 #define defaultTranslations	_XmLabel_defaultTranslations
-
 static XtTranslations menu_parsed;
-
 #define menuTranslations	_XmLabel_menuTranslations
-
-
 static XtActionsRec ActionsList[] = {
   { "Enter",		Enter		},
   { "Leave",		Leave		},
   { "Help",		Help		},
   { "ProcessDrag",	ProcessDrag	}
 };
-
-
 /* Here are the translations used by the subclasses for menu traversal */
 /* The matching actions are defined in RowColumn.c                     */
-
 #define menu_traversal_events	_XmLabel_menu_traversal_events
-
 static XtResource resources[] =
 {
   {
@@ -198,133 +172,111 @@ static XtResource resources[] =
     sizeof(Dimension), XtOffsetOf(XmLabelRec, primitive.shadow_thickness),
     XmRImmediate, (XtPointer) 0
   },
-
   {
     XmNalignment, XmCAlignment, XmRAlignment,
     sizeof(unsigned char), XtOffsetOf(XmLabelRec, label.alignment),
     XmRImmediate, (XtPointer) XmALIGNMENT_CENTER
   },
-
   {
     XmNlabelType, XmCLabelType, XmRLabelType,
     sizeof(unsigned char), XtOffsetOf(XmLabelRec, label.label_type),
     XmRImmediate, (XtPointer) XmSTRING
   },
-
   {
     XmNmarginWidth, XmCMarginWidth, XmRHorizontalDimension,
     sizeof(Dimension), XtOffsetOf(XmLabelRec, label.margin_width),
     XmRImmediate, (XtPointer) 2
   },
-
   {
     XmNmarginHeight, XmCMarginHeight, XmRVerticalDimension,
     sizeof(Dimension), XtOffsetOf(XmLabelRec, label.margin_height),
     XmRImmediate, (XtPointer) 2
   },
-
   {
     XmNmarginLeft, XmCMarginLeft, XmRHorizontalDimension,
     sizeof(Dimension), XtOffsetOf(XmLabelRec, label.margin_left),
     XmRImmediate, (XtPointer) 0
   },
-
   {
     XmNmarginRight, XmCMarginRight, XmRHorizontalDimension,
     sizeof(Dimension), XtOffsetOf(XmLabelRec, label.margin_right),
     XmRImmediate, (XtPointer) 0
   },
-
   {
     XmNmarginTop, XmCMarginTop, XmRVerticalDimension,
     sizeof(Dimension), XtOffsetOf(XmLabelRec, label.margin_top),
     XmRImmediate, (XtPointer) 0
   },
-
   {
     XmNmarginBottom, XmCMarginBottom, XmRVerticalDimension,
     sizeof(Dimension), XtOffsetOf(XmLabelRec, label.margin_bottom),
     XmRImmediate, (XtPointer) 0
   },
-
   {
       "pri.vate","Pri.vate",XmRBoolean,
       sizeof(Boolean), XtOffsetOf(XmLabelRec, label.check_set_render_table),
       XmRImmediate, (XtPointer) False
   },
-
   {
     XmNfontList, XmCFontList, XmRFontList,
     sizeof(XmFontList), XtOffsetOf(XmLabelRec, label.font),
     XmRCallProc, (XtPointer)CheckSetRenderTable
   },
-
   {
     XmNrenderTable, XmCRenderTable, XmRRenderTable,
     sizeof(XmRenderTable), XtOffsetOf(XmLabelRec, label.font),
     XmRCallProc, (XtPointer)CheckSetRenderTable
   },
-
   {
     XmNlabelPixmap, XmCLabelPixmap, XmRDynamicPixmap,
     sizeof(Pixmap), XtOffsetOf(XmLabelRec, label.pixmap),
     XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
   },
-
   {
     XmNlabelInsensitivePixmap, XmCLabelInsensitivePixmap, XmRDynamicPixmap,
     sizeof(Pixmap), XtOffsetOf(XmLabelRec, label.pixmap_insen),
     XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
   },
-
   {
     XmNlabelString, XmCXmString, XmRXmString,
     sizeof(XmString), XtOffsetOf(XmLabelRec, label._label),
     XmRImmediate, (XtPointer) NULL
   },
-
   {
     XmNmnemonic, XmCMnemonic, XmRKeySym,
     sizeof(KeySym), XtOffsetOf(XmLabelRec, label.mnemonic),
     XmRImmediate, (XtPointer) XK_VoidSymbol
   },
-
    {
      XmNmnemonicCharSet, XmCMnemonicCharSet, XmRString,
      sizeof(XmStringCharSet), XtOffsetOf(XmLabelRec, label.mnemonicCharset),
      XmRImmediate, (XtPointer) XmFONTLIST_DEFAULT_TAG
    },
-
   {
     XmNaccelerator, XmCAccelerator, XmRString,
     sizeof(char *), XtOffsetOf(XmLabelRec, label.accelerator),
     XmRImmediate, (XtPointer) NULL
   },
-
   {
     XmNacceleratorText, XmCAcceleratorText, XmRXmString,
     sizeof(XmString), XtOffsetOf(XmLabelRec, label._acc_text),
     XmRImmediate, (XtPointer) NULL
   },
-
  {
    XmNrecomputeSize, XmCRecomputeSize, XmRBoolean,
    sizeof(Boolean), XtOffsetOf(XmLabelRec, label.recompute_size),
    XmRImmediate, (XtPointer) True
  },
-
  {
    XmNstringDirection, XmCStringDirection, XmRStringDirection,
    sizeof(unsigned char), XtOffsetOf(XmLabelRec, label.string_direction),
    XmRImmediate, (XtPointer) XmDEFAULT_DIRECTION
  },
-
  {
    XmNtraversalOn, XmCTraversalOn, XmRBoolean,
    sizeof(Boolean), XtOffsetOf(XmPrimitiveRec, primitive.traversal_on),
    XmRImmediate, (XtPointer) False
   },
-
   {
     XmNhighlightThickness, XmCHighlightThickness, XmRHorizontalDimension,
     sizeof(Dimension), XtOffsetOf(XmPrimitiveRec, primitive.highlight_thickness),
@@ -348,9 +300,7 @@ static XtResource resources[] =
     XmRImmediate, (XtPointer) 2
   }
 };
-
 /* Definition for resources that need special processing in get values. */
-
 static XmSyntheticResource syn_resources[] =
 {
   {
@@ -358,68 +308,57 @@ static XmSyntheticResource syn_resources[] =
     XtOffsetOf(XmLabelRec, label.margin_width),
     XmeFromHorizontalPixels, XmeToHorizontalPixels
   },
-
   {
     XmNmarginHeight, sizeof(Dimension),
     XtOffsetOf(XmLabelRec, label.margin_height),
     XmeFromVerticalPixels, XmeToVerticalPixels
   },
-
   {
     XmNmarginLeft, sizeof(Dimension),
     XtOffsetOf(XmLabelRec, label.margin_left),
     XmeFromHorizontalPixels, XmeToHorizontalPixels
   },
-
   {
     XmNmarginRight, sizeof(Dimension),
     XtOffsetOf(XmLabelRec, label.margin_right),
     XmeFromHorizontalPixels, XmeToHorizontalPixels
   },
-
   {
     XmNmarginTop, sizeof(Dimension),
     XtOffsetOf(XmLabelRec, label.margin_top),
     XmeFromVerticalPixels, XmeToVerticalPixels
   },
-
   {
     XmNmarginBottom, sizeof(Dimension),
     XtOffsetOf(XmLabelRec, label.margin_bottom),
     XmeFromVerticalPixels, XmeToVerticalPixels
   },
-
   {
     XmNlabelString, sizeof(XmString),
     XtOffsetOf(XmLabelRec, label._label),
     GetLabelString, NULL
   },
-
   {
     XmNmnemonicCharSet, sizeof(XmStringCharSet),
     XtOffsetOf(XmLabelRec, label.mnemonicCharset),
     GetMnemonicCharSet, NULL
   },
-
   {
     XmNaccelerator, sizeof(String),
     XtOffsetOf(XmLabelRec, label.accelerator),
     GetAccelerator, NULL
   },
-
   {
     XmNacceleratorText, sizeof(XmString),
     XtOffsetOf(XmLabelRec, label._acc_text),
     GetAcceleratorText, NULL
   },
-
   {
     XmNpixmapTextPadding, sizeof(Dimension),
     XtOffsetOf(XmLabelRec, label.pixmap_text_padding),
     FromPaddingPixels, (XmImportProc) ToPaddingPixels
   }
 };
-
 static XmBaseClassExtRec labelBaseClassExtRec = {
   NULL,				/* Next extension         */
   NULLQUARK,			/* record type XmQmotif   */
@@ -444,7 +383,6 @@ static XmBaseClassExtRec labelBaseClassExtRec = {
   XmInheritWidgetNavigable,	/* widgetNavigable        */
   XmInheritFocusChange		/* focusChange            */
 };
-
 static XmPrimitiveClassExtRec _XmLabelPrimClassExtRec = {
   NULL,					/* next_extension      */
   NULLQUARK,				/* record_type         */
@@ -454,7 +392,6 @@ static XmPrimitiveClassExtRec _XmLabelPrimClassExtRec = {
   XmLabelGetDisplayRect,		/* widget_display_rect */
   XmLabelMarginsProc,			/* widget_margins      */
 };
-
 externaldef (xmlabelclassrec) XmLabelClassRec xmLabelClassRec = {
   {
     (WidgetClass) &xmPrimitiveClassRec,	/* superclass	       */
@@ -490,7 +427,6 @@ externaldef (xmlabelclassrec) XmLabelClassRec xmLabelClassRec = {
     NULL,				/* display accelerator */
     (XtPointer)&labelBaseClassExtRec	/* extension record    */
   },
-
   { /* XmPrimitiveClassPart */
     XmInheritBorderHighlight,		 /* border_highlight   */
     XmInheritBorderUnhighlight,		 /* border_unhighlight */
@@ -500,7 +436,6 @@ externaldef (xmlabelclassrec) XmLabelClassRec xmLabelClassRec = {
     XtNumber(syn_resources),		 /* num syn_resources  */
     (XtPointer)&_XmLabelPrimClassExtRec, /* extension          */
   },
-
   { /* XmLabelClassPart */
     SetOverrideCallback,	/* override_callback             */
     NULL,			/* menu procedure interface      */
@@ -508,10 +443,8 @@ externaldef (xmlabelclassrec) XmLabelClassRec xmLabelClassRec = {
     NULL			/* extension record              */
   }
 };
-
 externaldef(xmlabelwidgetclass) WidgetClass xmLabelWidgetClass =
 				(WidgetClass) &xmLabelClassRec;
-
 /*********************************************************************
  *
  * ClassInitialize
@@ -519,7 +452,6 @@ externaldef(xmlabelwidgetclass) WidgetClass xmLabelWidgetClass =
  *       the first time a widget of this class is initialized.
  *
  ********************************************************************/
-
 /*ARGSUSED*/
 static void
 ClassInitialize(void)
@@ -527,18 +459,14 @@ ClassInitialize(void)
   /* Parse the various translation tables */
   menu_parsed	 = XtParseTranslationTable(menuTranslations);
   default_parsed = XtParseTranslationTable(defaultTranslations);
-
   /* Set up base class extension quark */
   labelBaseClassExtRec.record_type = XmQmotif;
-
   xmLabelClassRec.label_class.translations =
     (String) (XtParseTranslationTable(menu_traversal_events));
-
   /* Install menu savvy on just this class */
   XmeTraitSet((XtPointer) &xmLabelClassRec,
 	      XmQTmenuSavvy, (XtPointer) &MenuSavvyRecord);
 }
-
 void
 _XmLabelCloneMenuSavvy(WidgetClass wc,
 		       XmMenuSavvyTrait mst)
@@ -551,28 +479,23 @@ _XmLabelCloneMenuSavvy(WidgetClass wc,
       mst->getAccelerator = MenuSavvyRecord.getAccelerator;
       mst->getMnemonic = MenuSavvyRecord.getMnemonic;
     }
-
   /* Install the new record */
   XmeTraitSet((XtPointer) wc, XmQTmenuSavvy, (XtPointer) mst);
 }
-
 char* _XmCBNameActivate()
 {
   return XmNactivateCallback;
 }
-
 char* _XmCBNameValueChanged()
 {
   return XmNvalueChangedCallback;
 }
-
 /************************************************************
  *
  * InitializePosthook
  *	Restore core class translations.
  *
  ************************************************************/
-
 /*ARGSUSED*/
 static void
 InitializePosthook(Widget req,		/* unused */
@@ -582,7 +505,6 @@ InitializePosthook(Widget req,		/* unused */
 {
   _XmRestoreCoreClassTranslations (new_w);
 }
-
 /*********************************************************************
  *
  *  ClassPartInitialize
@@ -594,23 +516,17 @@ ClassPartInitialize(WidgetClass c)
 {
   register XmLabelWidgetClass wc = (XmLabelWidgetClass) c;
   XmLabelWidgetClass super = (XmLabelWidgetClass)wc->core_class.superclass;
-
   if (wc->label_class.setOverrideCallback == XmInheritSetOverrideCallback)
     wc->label_class.setOverrideCallback =
       super->label_class.setOverrideCallback;
-
   if (wc->label_class.translations == XtInheritTranslations)
     wc->label_class.translations = super->label_class.translations;
-
   _XmFastSubclassInit (c, XmLABEL_BIT);
-
-
   /* Install traits */
   XmeTraitSet((XtPointer) c, XmQTtransfer, (XtPointer) &LabelTransfer);
   XmeTraitSet((XtPointer) c, XmQTaccessTextual,
 	      (XtPointer) &_XmLabel_AccessTextualRecord);
 }
-
 /************************************************************
  *
  * InitializePrehook
@@ -618,7 +534,6 @@ ClassPartInitialize(WidgetClass c)
  * that the data is massaged correctly.
  *
  ************************************************************/
-
 /*ARGSUSED*/
 static void
 InitializePrehook(Widget req,		/* unused */
@@ -628,70 +543,55 @@ InitializePrehook(Widget req,		/* unused */
 {
   unsigned char type;
   XmMenuSystemTrait menuSTrait;
-
   _XmProcessLock();
   if (new_w->core.widget_class->core_class.tm_table != NULL) {
     _XmProcessUnlock();
     return;
   }
-
   _XmSaveCoreClassTranslations (new_w);
-
   menuSTrait = (XmMenuSystemTrait)
     XmeTraitGet((XtPointer) XtClass((Widget) XtParent(new_w)), XmQTmenuSystem);
-
   if (menuSTrait != (XmMenuSystemTrait) NULL)
     type = menuSTrait->type(XtParent(new_w));
   else
     type = XmWORK_AREA;
-
   if (type == XmWORK_AREA)
     new_w->core.widget_class->core_class.tm_table = (String) default_parsed;
   else
     new_w->core.widget_class->core_class.tm_table = (String) menu_parsed;
   _XmProcessUnlock();
 }
-
 /************************************************************************
  *
  *  SetNormalGC
  *      Create the normal and insensitive GC's for the gadget.
  *
  ************************************************************************/
-
 static void
 SetNormalGC(XmLabelWidget lw)
 {
   XGCValues       values;
   XtGCMask        valueMask, dynamicMask;
   XFontStruct     *fs = (XFontStruct *) NULL;
-
   valueMask = GCForeground | GCBackground | GCGraphicsExposures;
   dynamicMask = GCClipMask | GCClipXOrigin | GCClipYOrigin;
-
   values.foreground = lw->primitive.foreground;
   values.background = lw->core.background_pixel;
   values.graphics_exposures = False;
-
   if (XmeRenderTableGetDefaultFont(lw->label.font, &fs))
     values.font = fs->fid, valueMask |= GCFont;
-
   lw->label.normal_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
 				     dynamicMask, 0);
-
   /*generally gray insensitive foreground (instead stipple)*/
   values.foreground =  _XmAssignInsensitiveColor((Widget)lw);
   values.background = lw->core.background_pixel;
-
   lw->label.insensitive_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
 					  dynamicMask, 0);
-
   /*light shadow for insensitive text (instead stipple)*/
   values.foreground = lw->primitive.top_shadow_color;
   lw->label.shadow_GC = XtAllocateGC((Widget) lw, 0, valueMask, &values,
 					  dynamicMask, 0);
 }
-
 /************************************************************************
  *
  * _XmCalcLabelDimensions()
@@ -700,7 +600,6 @@ SetNormalGC(XmLabelWidget lw)
  *   Also called by subclasses to recalculate label dimensions.
  *
  ************************************************************************/
-
 void
 _XmCalcLabelDimensions(Widget wid)
 {
@@ -708,8 +607,6 @@ _XmCalcLabelDimensions(Widget wid)
   XmLabelPart  *lp = &(newlw->label);
   Dimension dw, dh;
   unsigned int  w = 0, h = 0;
-
-
   /* Initialize TextRect width and height to 0, change later if needed */
   lp->acc_TextRect.width = 0;
   lp->acc_TextRect.height = 0;
@@ -721,7 +618,6 @@ _XmCalcLabelDimensions(Widget wid)
   lp->PixmapRect.y = 0;
   lp->PixmapRect.width = 0;
   lp->PixmapRect.height = 0;
-
   if (Lab_IsPixmap(newlw) || Lab_IsPixmapAndText(newlw))
     {
       /* change NULL pixmap to refer to XmUNSPECIFIED_PIXMAP */
@@ -729,7 +625,6 @@ _XmCalcLabelDimensions(Widget wid)
         Pix(newlw) = XmUNSPECIFIED_PIXMAP;
       if (Pix_insen(newlw) == (Pixmap)None)
         Pix_insen(newlw) = XmUNSPECIFIED_PIXMAP;
-
       /* Is a pixmap so find out how big it is. */
       if (XtIsSensitive(wid))
 	{
@@ -738,7 +633,6 @@ _XmCalcLabelDimensions(Widget wid)
 	      XmeGetPixmapData(XtScreen(newlw), Pix(newlw),
 			       NULL, NULL, NULL, NULL, NULL, NULL,
 			       &w, &h);
-
 	      lp->PixmapRect.width = (unsigned short) w;
 	      lp->PixmapRect.height = (unsigned short) h;
 	    }
@@ -746,22 +640,18 @@ _XmCalcLabelDimensions(Widget wid)
       else
 	{
 	  Pixmap pix_use = Pix_insen (newlw) ;
-
 	  if (pix_use == XmUNSPECIFIED_PIXMAP)
 	      pix_use = Pix(newlw);
-
 	  if (pix_use != XmUNSPECIFIED_PIXMAP)
 	    {
 	      XmeGetPixmapData(XtScreen(newlw), pix_use,
 			       NULL, NULL, NULL, NULL, NULL, NULL,
 			       &w, &h);
-
 	      lp->PixmapRect.width = (unsigned short) w;
 	      lp->PixmapRect.height = (unsigned short) h;
 	    }
 	}
     }
-
   if (Lab_IsText(newlw) || Lab_IsPixmapAndText(newlw))
     {
       if (!XmStringEmpty (lp->_label))
@@ -772,9 +662,7 @@ _XmCalcLabelDimensions(Widget wid)
 	  lp->StringRect.height = (unsigned short)dh;
 	}
     }
-
   _XmLabelCalcTextRect(wid);
-
  if (lp->_acc_text != NULL)
    {
      /* If we have a string then size it. */
@@ -786,16 +674,13 @@ _XmCalcLabelDimensions(Widget wid)
        }
    }
 }
-
 void
 _XmLabelCalcTextRect(Widget wid)
 {
   XmLabelWidget newlw = (XmLabelWidget) wid;
   XmLabelPart  *lp = &(newlw->label);
-
   lp->TextRect.width = 0;
   lp->TextRect.height = 0;
-
   if (Lab_IsPixmap(newlw))
     {
       lp->TextRect.width = lp->PixmapRect.width;
@@ -822,7 +707,6 @@ _XmLabelCalcTextRect(Widget wid)
           	lp->StringRect.width + lp->pixmap_text_padding;
           lp->TextRect.height = MAX(lp->StringRect.height, lp->PixmapRect.height);
         }
-
       if (lp->pixmap_placement == XmPIXMAP_TOP)
         {
 	  lp->PixmapRect.y = 0;
@@ -849,7 +733,6 @@ _XmLabelCalcTextRect(Widget wid)
 	   lp->StringRect.x = 0;
 	   lp->PixmapRect.x = lp->StringRect.width + lp->pixmap_text_padding;
 	}
-
       if (lp->pixmap_placement == XmPIXMAP_RIGHT ||
 	    lp->pixmap_placement == XmPIXMAP_LEFT)
         {
@@ -876,7 +759,6 @@ _XmLabelCalcTextRect(Widget wid)
         }
     }
 }
-
 /************************************************************************
  *
  *  Resize
@@ -885,14 +767,12 @@ _XmLabelCalcTextRect(Widget wid)
  *      SetValues.
  *
  ************************************************************************/
-
 static void
 Resize(Widget wid)
 {
   XmLabelWidget newlw = (XmLabelWidget) wid;
   XmLabelPart *lp = &(newlw->label);
   int leftx, rightx;
-
   /* Increase margin width if necessary to accomodate accelerator text. */
   if (lp->_acc_text != NULL)
     {
@@ -917,7 +797,6 @@ Resize(Widget wid)
 	    }
 	}
     }
-
   /* Has a width been specified?  */
   if (newlw->core.width == 0)
     newlw->core.width = (Dimension)
@@ -926,16 +805,13 @@ Resize(Widget wid)
 	  (2 * (lp->margin_width
 		+ newlw->primitive.highlight_thickness
 		+ newlw->primitive.shadow_thickness));
-
   leftx = (newlw->primitive.highlight_thickness +
 	   newlw->primitive.shadow_thickness +
 	   lp->margin_width + lp->margin_left);
-
   rightx = (newlw->core.width -
 	    (newlw->primitive.highlight_thickness +
 	     newlw->primitive.shadow_thickness +
 	     lp->margin_width + lp->margin_right));
-
   switch (lp->alignment)
     {
     case XmALIGNMENT_BEGINNING:
@@ -944,21 +820,18 @@ Resize(Widget wid)
       else
 	lp->TextRect.x = leftx;
       break;
-
     case XmALIGNMENT_END:
       if (LayoutIsRtoLP(newlw))
 	lp->TextRect.x = leftx;
       else
 	lp->TextRect.x = rightx - lp->TextRect.width;
       break;
-
     default:
       /* CR 9737: Be careful about casting here, since rounding during */
       /*	division on Suns depends on the sign. */
       lp->TextRect.x = leftx + (rightx - leftx - (int)lp->TextRect.width) / 2;
       break;
     }
-
   /* Has a height been specified? */
   if (newlw->core.height == 0)
     newlw->core.height = (Dimension)
@@ -968,7 +841,6 @@ Resize(Widget wid)
 	    + (2 * (lp->margin_height
 		    + newlw->primitive.highlight_thickness
 		    + newlw->primitive.shadow_thickness));
-
   lp->TextRect.y =  (short) (newlw->primitive.highlight_thickness
 			     + newlw->primitive.shadow_thickness
 			     + lp->margin_height + lp->margin_top +
@@ -978,11 +850,9 @@ Resize(Widget wid)
 				       + newlw->primitive.highlight_thickness
 				       + newlw->primitive.shadow_thickness))
 			       - lp->TextRect.height) / 2));
-
   if (lp->_acc_text != NULL)
     {
       Dimension  base_label, base_accText, diff;
-
       if (LayoutIsRtoLP(newlw))
 	lp->acc_TextRect.x = newlw->primitive.highlight_thickness +
 	  newlw->primitive.shadow_thickness +
@@ -993,7 +863,6 @@ Resize(Widget wid)
 	    newlw->primitive.shadow_thickness -
 	      newlw->label.margin_width -
 		newlw->label.margin_right + LABEL_ACC_PAD;
-
       lp->acc_TextRect.y =
 	(short) (newlw->primitive.highlight_thickness
 		 + newlw->primitive.shadow_thickness
@@ -1004,15 +873,12 @@ Resize(Widget wid)
 			   + newlw->primitive.highlight_thickness
 			   + newlw->primitive.shadow_thickness))
 				       - lp->acc_TextRect.height) / 2));
-
       /* make sure the label and accelerator text line up */
       /* when the fonts are different */
-
       if (Lab_IsText(newlw) || Lab_IsPixmapAndText(newlw))
 	{
 	  base_label = XmStringBaseline (lp->font, lp->_label);
 	  base_accText = XmStringBaseline (lp->font, lp->_acc_text);
-
 	  if (base_label > base_accText)
 	    {
 	      diff = base_label - base_accText;
@@ -1025,13 +891,11 @@ Resize(Widget wid)
 	    }
 	}
     }
-
   if (newlw->core.width == 0)    /* set core width and height to a */
     newlw->core.width = 1;       /* default value so that it doesn't */
   if (newlw->core.height == 0)   /* generate a Toolkit Error */
     newlw->core.height = 1;
 }
-
 /************************************************************
  *
  * Initialize
@@ -1050,27 +914,21 @@ Initialize(
   XmLabelWidget lw = (XmLabelWidget) new_w;
   XmMenuSystemTrait menuSTrait;
   XtTranslations	trans;
-
   lw->label.baselines = NULL;
   lw->label.computing_size = FALSE;
-
   /* if menuProcs is not set up yet, try again */
   if (xmLabelClassRec.label_class.menuProcs == NULL)
     xmLabelClassRec.label_class.menuProcs =
       (XmMenuProc) _XmGetMenuProcContext();
-
   /* Check for Invalid enumerated types */
-
   if (!XmRepTypeValidValue(XmRID_LABEL_TYPE, lw->label.label_type, (Widget) lw))
     {
       lw->label.label_type = XmSTRING;
     }
-
   if (!XmRepTypeValidValue(XmRID_ALIGNMENT, lw->label.alignment, (Widget) lw))
     {
       lw->label.alignment = XmALIGNMENT_CENTER;
     }
-
   if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, lw->label.pixmap_placement, (Widget) lw))
     {
       lw->label.pixmap_placement = XmPIXMAP_LEFT;
@@ -1095,7 +953,6 @@ Initialize(
       break;
     }
 #endif
-
   /* If layout_direction is set, it overrides string_direction.
    * If string_direction is set, but not layout_direction, use
    *	string_direction value.
@@ -1113,13 +970,11 @@ Initialize(
     lw->label.string_direction =
       XmDirectionToStringDirection(XmPrim_layout_direction(lw));
   }
-
   if (!XmRepTypeValidValue(XmRID_STRING_DIRECTION,
 			   lw->label.string_direction, (Widget) lw))
     {
       lw->label.string_direction = XmSTRING_DIRECTION_L_TO_R;
     }
-
   /* Make a local copy of the font list */
   if (lw->label.font == NULL)
     {
@@ -1127,16 +982,13 @@ Initialize(
       lw->label.font = XmeGetDefaultRenderTable (new_w, XmLABEL_FONTLIST);
     }
   lw->label.font = XmFontListCopy(lw->label.font);
-
   menuSTrait = (XmMenuSystemTrait)
     XmeTraitGet((XtPointer) XtClass(XtParent(new_w)), XmQTmenuSystem);
-
   /* get menu type and which button */
   if (menuSTrait != (XmMenuSystemTrait) NULL)
     lw->label.menu_type = menuSTrait->type(XtParent(new_w));
   else
     lw->label.menu_type = XmWORK_AREA;
-
   /*  Handle the label string :
    *   If label is the constant XmUNSPECIFIED, creates a empty XmString.
    *    (this is used by DrawnB instead of a default conversion that leads
@@ -1170,7 +1022,6 @@ Initialize(
       XmeWarning((Widget) lw, CS_STRING_MESSAGE);
       lw->label._label = XmStringCreateLocalized(lw->core.name);
     }
-
   /*
    * Convert the given mnemonicCharset to the internal Xm-form.
    */
@@ -1180,7 +1031,6 @@ Initialize(
   else
     lw->label.mnemonicCharset =
       _XmStringCharSetCreate (XmFONTLIST_DEFAULT_TAG);
-
   /* Accelerators are currently only supported in menus */
   if ((lw->label._acc_text != NULL) && Lab_IsMenupane(lw))
     {
@@ -1204,8 +1054,6 @@ Initialize(
     }
   else
     lw->label._acc_text = NULL;
-
-
   if ((lw->label.accelerator != NULL) && Lab_IsMenupane(lw))
     {
       /* Copy the accelerator into local space */
@@ -1213,38 +1061,27 @@ Initialize(
     }
   else
     lw->label.accelerator = NULL;
-
   lw->label.skipCallback = FALSE;
-
   lw->label.acc_right_delta = 0;
   lw->label.acc_left_delta = 0;
-
   /*  If zero width and height was requested by the application,  */
   /*  reset new_w's width and height to zero to allow Resize()   */
   /*  to operate properly.                                        */
-
   if (req->core.width == 0)
     lw->core.width = 0;
-
   if (req->core.height == 0)
     lw->core.height = 0;
-
   /* CR 6267:  Suppress highlight thickness before sizing also. */
   if ((lw->label.menu_type == XmMENU_POPUP) ||
       (lw->label.menu_type == XmMENU_PULLDOWN) ||
       (lw->label.menu_type == XmMENU_BAR))
     lw->primitive.highlight_thickness = 0;
-
   _XmCalcLabelDimensions(new_w);
-
   /* CR 7283: We can't use the resize method pointer, because */
   /*	subclasses haven't been initialized yet.	      */
   Resize((Widget) lw);
-
   SetNormalGC(lw);
-
   /* Force the label traversal flag when in a menu. */
-
   if ((XtClass(lw) == xmLabelWidgetClass) &&
       ((lw->label.menu_type == XmMENU_POPUP) ||
        (lw->label.menu_type == XmMENU_PULLDOWN) ||
@@ -1253,34 +1090,28 @@ Initialize(
       lw->primitive.traversal_on = FALSE;
       lw->primitive.highlight_on_enter = FALSE;
     }
-
   /* if in menu, override with menu traversal translations */
   if ((lw->label.menu_type == XmMENU_POPUP) ||
       (lw->label.menu_type == XmMENU_PULLDOWN) ||
       (lw->label.menu_type == XmMENU_BAR) ||
       (lw->label.menu_type == XmMENU_OPTION))
     {
-
       _XmProcessLock();
       trans = (XtTranslations)
 	  ((XmLabelClassRec *)XtClass(lw))->label_class.translations;
       _XmProcessUnlock();
-
       XtOverrideTranslations((Widget) lw, trans);
     }
   else
     {
-
       _XmProcessLock();
       trans = (XtTranslations)
 	  ((XmPrimitiveClassRec *) XtClass(lw))->primitive_class.translations;
       _XmProcessUnlock();
-
       /* Otherwise override with primitive traversal translations */
       XtOverrideTranslations((Widget) lw, trans);
     }
 }
-
 /************************************************************************
  *
  *  QueryGeometry
@@ -1293,7 +1124,6 @@ QueryGeometry(
         XtWidgetGeometry *desired)
 {
   XmLabelWidget lw = (XmLabelWidget) widget;
-
   if (lw->label.recompute_size == FALSE)
     {
       desired->width = XtWidth(widget);
@@ -1309,7 +1139,6 @@ QueryGeometry(
 		  lw->label.margin_right;
       if (desired->width == 0)
 	desired->width = 1;
-
       desired->height = (Dimension) MAX(lw->label.TextRect.height,
 					lw->label.acc_TextRect.height)
 	+ (2 * (lw->label.margin_height +
@@ -1320,10 +1149,8 @@ QueryGeometry(
       if (desired->height == 0)
 	desired->height = 1;
     }
-
   return XmeReplyToQueryGeometry(widget, intended, desired);
 }
-
 /************************************************************************
  *
  *  Destroy
@@ -1336,35 +1163,26 @@ Destroy(
         Widget w)
 {
   XmLabelWidget lw = (XmLabelWidget) w;
-
   if (lw->label._label != NULL)
     XmStringFree (lw->label._label);
-
   if (lw->label._acc_text != NULL)
     XmStringFree (lw->label._acc_text);
-
   if (lw->label.accelerator != NULL)
     XtFree (lw->label.accelerator);
-
   if (lw->label.font != NULL)
     XmFontListFree (lw->label.font);
-
   if (lw->label.mnemonicCharset != NULL)
     XtFree (lw->label.mnemonicCharset);
-
   if (lw->label.baselines != NULL)
     XtFree ((char*) lw->label.baselines);
-
   XtReleaseGC ((Widget) lw, lw->label.normal_GC);
   XtReleaseGC ((Widget) lw, lw->label.insensitive_GC);
   XtReleaseGC ((Widget) lw, lw->label.shadow_GC);
 }
-
 /************************************************************************
  *
  *  Redisplay
  *
-
  ***********************************************************************/
 static void
 Redisplay(
@@ -1379,9 +1197,7 @@ Redisplay(
   XmLabelPart *lp;
   Dimension availW, availH, marginal_width, marginal_height, max_text_height;
   int depth;
-
   lp = &(lw->label);
-
   /*
    * Set a clipping area if the label will overwrite critical margins.
    * A critical margin is defined to be "margin_{left,right,
@@ -1391,23 +1207,18 @@ Redisplay(
    */
   availH = lw->core.height;
   availW = lw->core.width;
-
   /* Adjust definitions of temporary variables */
   marginal_width = lp->margin_left + lp->margin_right +
     (2 * (lw->primitive.highlight_thickness +
 	  lw->primitive.shadow_thickness));
-
   marginal_height = lp->margin_top + lp->margin_bottom +
     (2 * (lw->primitive.highlight_thickness +
 	  lw->primitive.shadow_thickness));
-
   max_text_height = MAX(lp->TextRect.height, lp->acc_TextRect.height);
-
   if (XtIsSensitive(wid))
     clipgc = lp->normal_GC;
   else
     clipgc = lp->insensitive_GC;
-
   if ((availH < (Dimension)(marginal_height + max_text_height)) ||
       (availW < (Dimension)(marginal_width + lp->TextRect.width)))
     {
@@ -1415,18 +1226,15 @@ Redisplay(
 	lw->primitive.shadow_thickness + lp->margin_left;
       clip_rect.y = lw->primitive.highlight_thickness +
 	lw->primitive.shadow_thickness + lp->margin_top;
-
       /* Don't allow negative dimensions. */
       if (availW > marginal_width)
 	clip_rect.width = availW - marginal_width;
       else
 	clip_rect.width = 0;
-
       if (availH > marginal_height)
 	clip_rect.height = availH - marginal_height;
       else
 	clip_rect.height = 0;
-
       XSetClipRectangles(XtDisplay(lw), clipgc, 0,0, &clip_rect, 1, Unsorted);
 #if USE_XFT
       _XmXftSetClipRectangles(XtDisplay(lw), XtWindow(lw), 0, 0, &clip_rect, 1);
@@ -1439,7 +1247,6 @@ Redisplay(
       XftDrawSetClip(draw, NULL);
 #endif
     }
-
 #if USE_XFT
     /* it is needed to clear anti-aliased text before draw it again */
     if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL)
@@ -1452,7 +1259,6 @@ Redisplay(
 			lp->TextRect.height, False);
      }
 #endif
-
   if (Lab_IsPixmap(lw) || Lab_IsPixmapAndText(lw))
     {
       if (XtIsSensitive(wid))
@@ -1460,10 +1266,8 @@ Redisplay(
 	  if (Pix (lw) != XmUNSPECIFIED_PIXMAP)
 	    {
 	      gc = lp->normal_GC;
-
 	      XmeGetPixmapData(XtScreen(lw), Pix(lw), NULL, &depth,
 			       NULL, NULL, NULL, NULL, NULL, NULL);
-
 	      if (depth == lw->core.depth)
 		XCopyArea (XtDisplay(lw), Pix(lw), XtWindow(lw), gc, 0, 0,
 			   lp->PixmapRect.width,
@@ -1483,16 +1287,13 @@ Redisplay(
       else
 	{
 	  Pixmap pix_use = Pix_insen (lw) ;
-
 	  if (pix_use == XmUNSPECIFIED_PIXMAP)
 		Pix_insen(lw) = pix_use = _XmConvertToBW(wid, Pix(lw));
 	  if (pix_use != XmUNSPECIFIED_PIXMAP)
 	    {
 	      gc = lp->insensitive_GC;
-
 	      XmeGetPixmapData(XtScreen(lw), pix_use, NULL, &depth,
 			       NULL, NULL, NULL, NULL, NULL, NULL);
-
 	      if (depth == lw->core.depth)
 		XCopyArea (XtDisplay(lw), pix_use, XtWindow(lw),
 			   gc, 0, 0,
@@ -1508,7 +1309,6 @@ Redisplay(
 			    lp->TextRect.x + lp->PixmapRect.x,
 			    lp->TextRect.y + lp->PixmapRect.y,
 			    1);
-
 	      if (pix_use == Pix(lw)) {
 		  XSetFillStyle(XtDisplay(lw), gc, FillStippled);
 		  XSetStipple(XtDisplay(lw), gc, _XmGetInsensitiveStippleBitmap((Widget)lw));
@@ -1518,12 +1318,10 @@ Redisplay(
 			lp->PixmapRect.width,
 			lp->PixmapRect.height);
 		  XSetFillStyle(XtDisplay(lw), gc, FillSolid);
-
 	      }
 	    }
 	}
     }
-
   if ((Lab_IsText (lw) || Lab_IsPixmapAndText(lw)) && (lp->_label != NULL))
     {
       if (lp->mnemonic != XK_VoidSymbol)
@@ -1531,10 +1329,8 @@ Redisplay(
 	  /* CR 5181: Convert the mnemonic keysym to a character string. */
 	  char tmp[MB_LEN_MAX * 2];
 	  XmString underline;
-
  	  tmp[_XmOSKeySymToCharacter(lp->mnemonic, NULL, tmp)] = '\0';
 	  underline = XmStringCreate(tmp, lp->mnemonicCharset);
-
 	  if (XtIsSensitive(wid) )
 	  {
 		  /*Draw normal text*/
@@ -1570,7 +1366,6 @@ Redisplay(
 				  lp->alignment,
 				  XmPrim_layout_direction(lw), NULL,
 				  underline);
-
 	  }
 	  XmStringFree(underline);
 	}
@@ -1611,7 +1406,6 @@ Redisplay(
 	  }
 	}
     }
-
   if (lp->_acc_text != NULL)
     {
       /* Since accelerator text  is drawn by moving in from the right,
@@ -1619,7 +1413,6 @@ Redisplay(
        * Therefore draw accelerator text only if there is enough
        * room for everything
        */
-
       if (lw->core.width >= (Dimension)
 	  (2 * (lw->primitive.highlight_thickness +
 		lw->primitive.shadow_thickness +
@@ -1655,27 +1448,22 @@ Redisplay(
 		  }
 	     }
     }
-
   /* Redraw the proper highlight  */
   if (! Lab_IsMenupane(lw) && Lab_MenuType(lw) != XmMENU_BAR)
     {
       XtExposeProc expose;
-
       _XmProcessLock();
       expose = (xmPrimitiveClassRec.core_class.expose);
       _XmProcessUnlock();
-
       /* Envelop our superclass expose method */
       (*(expose))((Widget) lw, event, region);
     }
 }
-
 /**********************************************************************
  *
  * Enter
  *
  *********************************************************************/
-
 static void
 Enter(Widget wid,
       XEvent *event,
@@ -1683,17 +1471,14 @@ Enter(Widget wid,
       Cardinal *num_params)
 {
   XmLabelWidget w = (XmLabelWidget) wid;
-
   if (w->primitive.highlight_on_enter)
     _XmPrimitiveEnter (wid, event, params, num_params);
 }
-
 /**********************************************************************
  *
  * Leave
  *
  *********************************************************************/
-
 static void
 Leave(Widget wid,
       XEvent *event,
@@ -1701,18 +1486,15 @@ Leave(Widget wid,
       Cardinal *num_params)
 {
   XmLabelWidget w = (XmLabelWidget) wid;
-
   if (w->primitive.highlight_on_enter)
     _XmPrimitiveLeave ((Widget) w, event, params, num_params);
 }
-
 /************************************************************************
  *
  * SetValues
  *	This routine will take care of any changes that have been made.
  *
  ************************************************************************/
-
 /*ARGSUSED*/
 static Boolean
 SetValues(Widget cw,
@@ -1731,13 +1513,10 @@ SetValues(Widget cw,
   Boolean CleanupFontFlag = FALSE;
   Boolean Call_Resize = False;
   XmMenuSystemTrait menuSTrait;
-
   /* Get pointers to the label parts  */
   newlp = &(new_w->label);
   curlp = &(current->label);
   reqlp = &(req->label);
-
-
   /* Discard the baseline cache if it is no longer valid. */
   if ((newlp->_label != curlp->_label) ||
       (newlp->font != curlp->font))
@@ -1748,10 +1527,8 @@ SetValues(Widget cw,
 	  newlp->baselines = NULL;
 	}
     }
-
   /* If the label has changed, make a copy of the new label */
   /* and free the old label.                                */
-
   if (newlp->_label != curlp->_label)
     {
       newstring = TRUE;
@@ -1766,22 +1543,17 @@ SetValues(Widget cw,
 	  else
 	    {
 	      XmeWarning((Widget) new_w, CS_STRING_MESSAGE);
-
 	      newlp->_label = XmStringCreateLocalized(new_w->core.name);
 	    }
 	}
-
       XmStringFree(curlp->_label);
       curlp->_label= NULL;
       reqlp->_label= NULL;
     }
-
-
   if (newlp->margin_right != curlp->margin_right)
     newlp->acc_right_delta = 0;
   if (newlp->margin_left != curlp->margin_left)
     newlp->acc_left_delta = 0;
-
   if ((newlp->_acc_text != curlp->_acc_text) &&
       Lab_IsMenupane(new_w))
     {
@@ -1796,7 +1568,6 @@ SetValues(Widget cw,
 		newlp->_acc_text = NULL;
 	      else
 		newlp->_acc_text = XmStringCopy((XmString) newlp->_acc_text);
-
 	      XmStringFree(curlp->_acc_text);
 	      curlp->_acc_text= NULL;
 	      reqlp->_acc_text= NULL;
@@ -1829,8 +1600,6 @@ SetValues(Widget cw,
     }
   else
     newlp->_acc_text = curlp->_acc_text;
-
-
   if (newlp->font != curlp->font)
     {
       CleanupFontFlag = True;
@@ -1841,26 +1610,21 @@ SetValues(Widget cw,
 	    XmeGetDefaultRenderTable((Widget) new_w, XmLABEL_FONTLIST);
 	}
       newlp->font = XmFontListCopy (newlp->font);
-
     }
-
   if ((new_w->label.menu_type == XmMENU_POPUP) ||
       (new_w->label.menu_type == XmMENU_PULLDOWN) ||
       (new_w->label.menu_type == XmMENU_BAR))
     new_w->primitive.highlight_thickness = 0;
-
   if (!XmRepTypeValidValue(XmRID_LABEL_TYPE, new_w->label.label_type,
 			   (Widget) new_w))
     {
       new_w->label.label_type = current->label.label_type;
     }
-
   if (!XmRepTypeValidValue(XmRID_PIXMAP_PLACEMENT, new_w->label.pixmap_placement,
 			   (Widget) new_w))
     {
       new_w->label.pixmap_placement = current->label.pixmap_placement;
     }
-
   if (LayoutP(new_w) != LayoutP(current))
     {
       /* if no new margins specified swap them */
@@ -1873,12 +1637,10 @@ SetValues(Widget cw,
 	}
       flag = TRUE;
     }
-
   _XmCalcLabelDimensions((Widget) new_w);
   Boolean pixmap_size_changed = ((newlp->PixmapRect.width
       != curlp->PixmapRect.width) || (newlp->PixmapRect.height
       != curlp->PixmapRect.height));
-
   if (((Lab_IsText(new_w) || Lab_IsPixmapAndText(new_w)) &&
        ((newstring) ||
 	(newlp->font != curlp->font))) ||
@@ -1897,7 +1659,6 @@ SetValues(Widget cw,
 	  if (req->core.height == current->core.height)
 	    new_w->core.height = 0;
 	}
-
       Call_Resize = True;
       flag = True;
     }
@@ -1909,7 +1670,6 @@ SetValues(Widget cw,
     {
       flag = True;
     }
-
   if ((newlp->alignment != curlp->alignment) ||
       (XmPrim_layout_direction(new_w) !=
        XmPrim_layout_direction(current)))
@@ -1919,12 +1679,9 @@ SetValues(Widget cw,
 	{
 	  new_w->label.alignment = current->label.alignment;
 	}
-
       Call_Resize = True;
-
       flag = True;
     }
-
   if ((newlp->margin_height != curlp->margin_height) ||
       (newlp->margin_width != curlp->margin_width) ||
       (newlp->margin_left != curlp->margin_left) ||
@@ -1943,13 +1700,11 @@ SetValues(Widget cw,
         {
 	  new_w->label.alignment = current->label.alignment;
         }
-
       if (!XmRepTypeValidValue(XmRID_STRING_DIRECTION,
 			       new_w->label.string_direction, (Widget) new_w))
         {
 	  new_w->label.string_direction = current->label.string_direction;
         }
-
       if (newlp->recompute_size)
         {
           if (req->core.width == current->core.width)
@@ -1957,34 +1712,23 @@ SetValues(Widget cw,
           if (req->core.height == current->core.height)
             new_w->core.height = 0;
         }
-
       Call_Resize = True;
-
       flag = True;
     }
-
-
   /* Resize is called only if we need to calculate the dimensions or */
   /* coordinates  for the string.				     */
   if (Call_Resize)
     {
       XtWidgetProc resize;
-
       /* CR 5419: Suppress redundant calls to DrawnB's resize callbacks. */
       Boolean was_computing = newlp->computing_size;
-
       newlp->computing_size = TRUE;
-
       _XmProcessLock();
       resize = new_w->core.widget_class->core_class.resize;
       _XmProcessUnlock();
-
       (* (resize)) ((Widget) new_w);
       newlp->computing_size = was_computing;
     }
-
-
-
   /*
    * If sensitivity of the label has changed then we must redisplay
    *  the label.
@@ -1993,7 +1737,6 @@ SetValues(Widget cw,
     {
       flag = TRUE;
     }
-
   if ((new_w->primitive.foreground != current->primitive.foreground) ||
       (new_w->core.background_pixel != current->core.background_pixel) ||
       (newlp->font != curlp->font))
@@ -2003,9 +1746,7 @@ SetValues(Widget cw,
       SetNormalGC(new_w);
       flag = TRUE;
     }
-
   /*  Force the traversal flag when in a menu.  */
-
   if ((XtClass(new_w) == xmLabelWidgetClass) &&
       ((new_w->label.menu_type == XmMENU_POPUP) ||
        (new_w->label.menu_type == XmMENU_PULLDOWN) ||
@@ -2014,20 +1755,16 @@ SetValues(Widget cw,
       new_w->primitive.traversal_on = FALSE;
       new_w->primitive.highlight_on_enter = FALSE;
     }
-
   if (new_w->primitive.traversal_on &&
       (new_w->primitive.traversal_on != current->primitive.traversal_on) &&
       new_w->core.tm.translations)
     {
-
      XtTranslations trans;
-
      if ((new_w->label.menu_type == XmMENU_POPUP) ||
 	  (new_w->label.menu_type == XmMENU_PULLDOWN) ||
 	  (new_w->label.menu_type == XmMENU_BAR) ||
 	  (new_w->label.menu_type == XmMENU_OPTION))
 	{
-
 	  _XmProcessLock();
 	  trans = (XtTranslations)
 	      ((XmLabelClassRec *)XtClass(new_w))->label_class.translations;
@@ -2036,7 +1773,6 @@ SetValues(Widget cw,
 	}
       else
 	{
-
 	  _XmProcessLock();
 	  trans = (XtTranslations)
 	     ((XmLabelClassRec*) XtClass(new_w))->primitive_class.translations;
@@ -2044,7 +1780,6 @@ SetValues(Widget cw,
 	  if (trans) XtOverrideTranslations ((Widget)new_w, trans);
 	}
     }
-
   if ((new_w->label.menu_type != XmWORK_AREA) &&
       (new_w->label.mnemonic != current->label.mnemonic))
     {
@@ -2054,7 +1789,6 @@ SetValues(Widget cw,
           new_w->label.label_type == XmPIXMAP_AND_STRING)
 	flag = TRUE;
     }
-
   if (new_w->label.mnemonicCharset != current->label.mnemonicCharset)
     {
       if (new_w->label.mnemonicCharset)
@@ -2063,15 +1797,12 @@ SetValues(Widget cw,
       else
 	new_w->label.mnemonicCharset =
 	  _XmStringCharSetCreate(XmFONTLIST_DEFAULT_TAG);
-
       if (current->label.mnemonicCharset != NULL)
 	XtFree (current->label.mnemonicCharset);
-
       if (new_w->label.label_type == XmSTRING ||
           new_w->label.label_type == XmPIXMAP_AND_STRING)
 	flag = TRUE;
     }
-
   if (Lab_IsMenupane(new_w) &&
       (new_w->label.accelerator != current->label.accelerator))
     {
@@ -2080,7 +1811,6 @@ SetValues(Widget cw,
 	  /* Copy the accelerator into local space */
 	  newlp->accelerator = XtNewString(newlp->accelerator);
 	}
-
       XtFree(curlp->accelerator);
       curlp->accelerator = NULL;
       reqlp->accelerator = NULL;
@@ -2088,23 +1818,17 @@ SetValues(Widget cw,
     }
   else
     newlp->accelerator = curlp->accelerator;
-
   menuSTrait = (XmMenuSystemTrait)
     XmeTraitGet((XtPointer) XtClass(XtParent(current)), XmQTmenuSystem);
-
   if (ProcessFlag && menuSTrait != NULL)
     menuSTrait->updateBindings((Widget)new_w, XmREPLACE);
-
   if (flag &&
       (new_w->label.menu_type == XmMENU_PULLDOWN) && menuSTrait != NULL)
     menuSTrait->updateHistory(XtParent(new_w), (Widget) new_w, True);
-
   if (CleanupFontFlag)
     if (curlp->font) XmFontListFree(curlp->font);
-
   return flag;
 }
-
 /************************************************************************
  *
  *  SetActivateCallbackState
@@ -2115,25 +1839,21 @@ SetValues(Widget cw,
  * entryCallback of the parent.
  *
  ************************************************************************/
-
 static void
 SetActivateCallbackState(Widget          wid,
 			 XmActivateState state)
 {
   XmLabelWidget w = (XmLabelWidget) wid;
-
   switch (state)
     {
     case XmDISABLE_ACTIVATE:
       w->label.skipCallback = True;
       break;
-
     case XmENABLE_ACTIVATE:
       w->label.skipCallback = False;
       break;
     }
 }
-
 /************************************************************************
  *
  * SetOverrideCallback
@@ -2142,15 +1862,12 @@ SetActivateCallbackState(Widget          wid,
  * do their activate callbacks, instead the RowColumn callbacks are called
  * by RowColumn.
  ************************************************************************/
-
 static void
 SetOverrideCallback(Widget wid)
 {
   XmLabelWidget w = (XmLabelWidget) wid;
-
   w->label.skipCallback = True;
 }
-
 /************************************************************************
  *
  *  Help
@@ -2158,7 +1875,6 @@ SetOverrideCallback(Widget wid)
  *      on the widget.
  *
  ************************************************************************/
-
 static void
 Help(Widget w,
      XEvent *event,
@@ -2168,16 +1884,12 @@ Help(Widget w,
   XmLabelWidget lw = (XmLabelWidget) w;
   Widget parent = XtParent(lw);
   XmMenuSystemTrait menuSTrait;
-
   menuSTrait = (XmMenuSystemTrait)
     XmeTraitGet((XtPointer) XtClass(XtParent(lw)), XmQTmenuSystem);
-
   if (Lab_IsMenupane(lw) && menuSTrait != NULL)
     menuSTrait->popdown((Widget) parent, event);
-
   _XmPrimitiveHelp((Widget) w, event, params, num_params);
 }
-
 /************************************************************************
  *
  * GetLabelString
@@ -2185,7 +1897,6 @@ Help(Widget w,
  * form of the label string from the internal form.
  *
  ***********************************************************************/
-
 /*ARGSUSED*/
 static void
 GetLabelString(Widget wid,
@@ -2194,12 +1905,9 @@ GetLabelString(Widget wid,
 {
   XmLabelWidget lw = (XmLabelWidget) wid;
   XmString string;
-
   string = XmStringCopy(lw->label._label);
-
   *value = (XtArgVal) string;
 }
-
 /************************************************************************
  *
  *  GetAccelerator
@@ -2207,7 +1915,6 @@ GetLabelString(Widget wid,
  *     of the accelerator string.
  *
  ***********************************************************************/
-
 /*ARGSUSED*/
 static void
 GetAccelerator(Widget wid,
@@ -2216,12 +1923,9 @@ GetAccelerator(Widget wid,
 {
   XmLabelWidget lw = (XmLabelWidget) wid;
   String string;
-
   string = XtNewString(Lab_Accelerator(lw));
-
   *value = (XtArgVal) string;
 }
-
 /************************************************************************
  *
  *  GetAcceleratorText
@@ -2229,7 +1933,6 @@ GetAccelerator(Widget wid,
  *     form of the accelerator text from the internal form.
  *
  ***********************************************************************/
-
 /*ARGSUSED*/
 static void
 GetAcceleratorText(Widget wid,
@@ -2238,12 +1941,9 @@ GetAcceleratorText(Widget wid,
 {
   XmLabelWidget lw = (XmLabelWidget) wid;
   XmString string;
-
   string = XmStringCopy(lw->label._acc_text);
-
   *value = (XtArgVal) string;
 }
-
 /************************************************************************
  *
  *  XmCreateLabel()
@@ -2252,7 +1952,6 @@ GetAcceleratorText(Widget wid,
  *      Externally accessable function for creating a label gadget.
  *
  ************************************************************************/
-
 Widget
 XmCreateLabel(Widget parent,
 	      char *name,
@@ -2261,7 +1960,6 @@ XmCreateLabel(Widget parent,
 {
   return XtCreateWidget(name,xmLabelWidgetClass,parent,arglist,argCount);
 }
-
 Widget
 XmVaCreateLabel(
         Widget parent,
@@ -2271,12 +1969,9 @@ XmVaCreateLabel(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmLabelWidgetClass,
@@ -2284,9 +1979,7 @@ XmVaCreateLabel(
                          var, count);
     va_end(var);
     return w;
-
 }
-
 Widget
 XmVaCreateManagedLabel(
         Widget parent,
@@ -2296,11 +1989,9 @@ XmVaCreateManagedLabel(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmLabelWidgetClass,
@@ -2308,16 +1999,12 @@ XmVaCreateManagedLabel(
                          var, count);
     va_end(var);
     return w;
-
 }
-
-
 static XmStringCharSet
 _XmStringCharSetCreate(XmStringCharSet stringcharset)
 {
   return (XmStringCharSet) XtNewString((char*) stringcharset);
 }
-
 /************************************************************************
  *
  * GetMnemonicCharSet
@@ -2325,7 +2012,6 @@ _XmStringCharSetCreate(XmStringCharSet stringcharset)
  * form of the mnemonicCharSet from the internal form.  Returns a
  * string containg the mnemonicCharSet.  Caller must free the string.
  ***********************************************************************/
-
 /*ARGSUSED*/
 static void
 GetMnemonicCharSet(Widget wid,
@@ -2335,7 +2021,6 @@ GetMnemonicCharSet(Widget wid,
   XmLabelWidget lw = (XmLabelWidget) wid;
   char *cset;
   int   size;
-
   cset = NULL;
   if (lw->label.mnemonicCharset)
     {
@@ -2343,10 +2028,8 @@ GetMnemonicCharSet(Widget wid,
       if (size > 0)
 	cset = (char *) (_XmStringCharSetCreate(lw->label.mnemonicCharset));
     }
-
   *value = (XtArgVal) cset;
 }
-
 /*ARGSUSED*/
 static void
 SetValuesAlmost(Widget cw,	/* unused */
@@ -2356,15 +2039,12 @@ SetValuesAlmost(Widget cw,	/* unused */
 {
   XmLabelWidget new_w = (XmLabelWidget) nw;
   XtWidgetProc resize;
-
   _XmProcessLock();
   resize = new_w->core.widget_class->core_class.resize;
   _XmProcessUnlock();
-
   (* (resize)) ((Widget) new_w);
   *request = *reply;
 }
-
 /************************************************************************
  *
  * XmLabelGetDisplayRect
@@ -2375,21 +2055,17 @@ SetValuesAlmost(Widget cw,	/* unused */
  * the text or pixmap.  This is assigned to the variable being passed in
  *
  ***********************************************************************/
-
 static Boolean
 XmLabelGetDisplayRect(Widget w,
 		      XRectangle *displayrect)
 {
   XmLabelWidget wid = (XmLabelWidget) w;
-
   (*displayrect).x = wid->label.TextRect.x;
   (*displayrect).y = wid->label.TextRect.y;
   (*displayrect).width = wid->label.TextRect.width;
   (*displayrect).height = wid->label.TextRect.height;
-
   return TRUE;
 }
-
 /************************************************************************
  *
  * XmLabelGetBaselines
@@ -2399,7 +2075,6 @@ XmLabelGetDisplayRect(Widget w,
  * being passed in.
  *
  ************************************************************************/
-
 static Boolean
 XmLabelGetBaselines(Widget wid,
 		    Dimension **baselines,
@@ -2408,17 +2083,14 @@ XmLabelGetBaselines(Widget wid,
   XmLabelWidget lw = (XmLabelWidget)wid;
   Cardinal count;
   int delta;
-
   if (Lab_IsPixmap(wid))
     return False;
-
   /* Compute raw baselines if unavailable. */
   if (lw->label.baselines == NULL)
     {
       _XmStringGetBaselines(lw->label.font, lw->label._label,
 			    &(lw->label.baselines), &count);
       assert(lw->label.baselines != NULL);
-
       /* Store the current offset in an extra location. */
       lw->label.baselines = (Dimension*)
 	XtRealloc((char*) lw->label.baselines, (count+1) * sizeof(Dimension));
@@ -2428,7 +2100,6 @@ XmLabelGetBaselines(Widget wid,
     {
       count = XmStringLineCount(lw->label._label);
     }
-
   /* Readjust offsets if necessary. */
   delta = Lab_TextRect_y(lw) - lw->label.baselines[count];
   if (delta)
@@ -2437,13 +2108,11 @@ XmLabelGetBaselines(Widget wid,
       for (tmp = 0; tmp <= count; tmp++)
 	lw->label.baselines[tmp] += delta;
     }
-
   /* Copy the cached data. */
   *line_count = count;
   *baselines = (Dimension*) XtMalloc(*line_count * sizeof(Dimension));
   memcpy((char*) *baselines, (char*) lw->label.baselines,
 	 *line_count * sizeof(Dimension));
-
   return True;
 }
 /************************************************************************
@@ -2451,13 +2120,11 @@ XmLabelGetBaselines(Widget wid,
  * XmLabelMarginsProc
  *
  ***********************************************************************/
-
 /* ARGSUSED */
 static void
 XmLabelMarginsProc(Widget w,
 		   XmBaselineMargins *margins_rec)
 {
-
   if (margins_rec->get_or_set == XmBASELINE_SET) {
     Lab_MarginTop(w) = margins_rec->margin_top;
     Lab_MarginBottom(w) = margins_rec->margin_bottom;
@@ -2470,8 +2137,6 @@ XmLabelMarginsProc(Widget w,
     margins_rec->margin_height = Lab_MarginHeight(w);
   }
 }
-
-
 static Widget
 GetPixmapDragIcon(Widget w)
 {
@@ -2482,12 +2147,9 @@ GetPixmapDragIcon(Widget w)
   Widget screen_object = XmGetXmScreen(XtScreen(w));
   unsigned int width, height;
   int depth;
-
   /* It's a labelPixmap, use directly the pixmap */
-
   XmeGetPixmapData(XtScreen(lw), Pix(lw), NULL, &depth,
 		   NULL, NULL, NULL, NULL, &width, &height);
-
   n = 0;
   XtSetArg(args[n], XmNhotX, 0),				n++;
   XtSetArg(args[n], XmNhotY, 0),				n++;
@@ -2504,7 +2166,6 @@ GetPixmapDragIcon(Widget w)
 			     screen_object, args, n);
   return drag_icon;
 }
-
 /*ARGSUSED*/
 static void
 ProcessDrag(Widget w,
@@ -2518,13 +2179,10 @@ ProcessDrag(Widget w,
   int n;
   Time _time = _XmGetDefaultTime(w, event);
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
-
   if (Lab_IsMenupane(w))
     XAllowEvents(XtDisplay(w), SyncPointer, _time);
-
   /* Disallow drag if this is a cascade button and armed - Hack alert */
   if (XmIsCascadeButton(w) && CB_IsArmed(w)) return;
-
   /* CDE - allow user to not drag labels and label subclasses
      also,  disable drag if enable_btn1_transfer is set to
      BUTTON2_ADJUST and the trigger was button2 */
@@ -2532,7 +2190,6 @@ ProcessDrag(Widget w,
       (dpy -> display.enable_btn1_transfer == XmBUTTON2_ADJUST &&
        event && event -> xany.type == ButtonPress &&
        event -> xbutton.button == 2)) return;
-
   /* CR 5141: Don't allow multi-button drags; they just cause confusion. */
   if (event && ! (event->xbutton.state &
 	 ~((Button1Mask >> 1) << event->xbutton.button) &
@@ -2541,7 +2198,6 @@ ProcessDrag(Widget w,
       n = 0;
       XtSetArg(args[n], XmNcursorBackground, lw->core.background_pixel), n++;
       XtSetArg(args[n], XmNcursorForeground, lw->primitive.foreground),  n++;
-
       /* If it's a labelPixmap, only specify the pixmap icon */
       if (Lab_IsPixmap(lw) && (Pix(lw) != XmUNSPECIFIED_PIXMAP))
 	{
@@ -2557,7 +2213,6 @@ ProcessDrag(Widget w,
       (void) XmeDragSource(w, NULL, event, args, n);
     }
 }
-
 /*ARGSUSED*/
 void
 _XmLabelConvert(Widget w,
@@ -2580,7 +2235,6 @@ _XmLabelConvert(Widget w,
     XmSUTF8_STRING
 #endif
     };
-
   Atom atoms[XtNumber(atom_names)];
   Atom C_ENCODING;
   int target_count = 0;
@@ -2591,24 +2245,20 @@ _XmLabelConvert(Widget w,
   XmString label_string;
   Pixmap label_pixmap;
   Boolean is_pixmap, is_text;
-
   if (w == (Widget) NULL)
     {
       cs->status = XmCONVERT_REFUSE;
       return;
     }
-
   C_ENCODING = XmeGetEncodingAtom(w);
   assert(XtNumber(atom_names) == NUM_ATOMS);
   XInternAtoms(XtDisplayOfObject(w), atom_names, XtNumber(atom_names),
 	       False, atoms);
-
   if (cs->selection != atoms[XmA_MOTIF_DROP])
     {
       cs->status = XmCONVERT_REFUSE;
       return;
     }
-
   if (XtIsWidget(w))
     {
       label_string = ((XmLabelWidget) w)->label._label;
@@ -2623,34 +2273,28 @@ _XmLabelConvert(Widget w,
       is_pixmap = LabG_IsPixmap(w) || LabG_IsPixmapAndText(w);;
       is_text = LabG_IsText(w) || LabG_IsPixmapAndText(w);
     }
-
   if (cs->target == atoms[XmATARGETS] ||
       cs->target == atoms[XmA_MOTIF_EXPORT_TARGETS] ||
       cs->target == atoms[XmA_MOTIF_CLIPBOARD_TARGETS])
     {
       Atom *targs;
-
       if (cs->target == atoms[XmATARGETS]) {
 	targs = XmeStandardTargets(w, 7, &target_count);
       } else {
 	target_count = 0;
 	targs = (Atom *) XtMalloc(sizeof(Atom) * 7);
       }
-
       value = (XtPointer) targs;
-
       if (is_pixmap)
 	{
 	  targs[target_count] = XA_PIXMAP; target_count++;
 	}
-
       if (is_text)
 	{
 	  XtPointer temp;
 	  unsigned long length;
 	  char* ctext;
 	  Boolean success;
-
 	  ctext = XmCvtXmStringToCT(label_string);
 	  targs[target_count] = atoms[XmA_MOTIF_COMPOUND_STRING]; target_count++;
 	  targs[target_count] = atoms[XmACOMPOUND_TEXT]; target_count++;
@@ -2685,7 +2329,6 @@ _XmLabelConvert(Widget w,
       size = target_count;
       format = 32;
     }
-
   if (cs->target == atoms[XmA_MOTIF_COMPOUND_STRING])
     {
       type = atoms[XmA_MOTIF_COMPOUND_STRING];
@@ -2705,14 +2348,11 @@ _XmLabelConvert(Widget w,
 	size = strlen((char*) value);
       else
 	size = 0;
-
       if (cs->target == XA_STRING)
 	{
 	  Boolean success;
-
 	  value = ConvertToEncoding(w, (char*) value,
 				    XA_STRING, &size, &success);
-
 	  if (value != NULL && success == False)
 	    cs->flags |= XmCONVERTING_PARTIAL;
 	  type = XA_STRING;
@@ -2723,13 +2363,10 @@ _XmLabelConvert(Widget w,
 	{
 	  char *cvt;
 	  Boolean success;
-
 	  cvt = (char*) ConvertToEncoding(w, (char*) value,
 					  C_ENCODING, &size, &success);
-
 	  if (cvt != NULL && success == False)
 	    cs->flags |= XmCONVERTING_PARTIAL;
-
 	  if (cvt != NULL && success)
 	    {
 	      /* 100% ok */
@@ -2763,12 +2400,10 @@ _XmLabelConvert(Widget w,
 	size = 0;
 #endif
     }
-
   if (cs->target == XA_PIXMAP)
     {
       /* Get widget's pixmap */
       Pixmap *pix;
-
       pix = (Pixmap *) XtMalloc(sizeof(Pixmap));
       *pix = label_pixmap;
       /* value, type, size, and format must be set */
@@ -2777,12 +2412,10 @@ _XmLabelConvert(Widget w,
       size = 1;
       format = 32;
     }
-
   if (cs->target == atoms[XmABACKGROUND])
     {
       /* Get widget's background */
       Pixel *background;
-
       background = (Pixel *) XtMalloc(sizeof(Pixel));
       if (XtIsWidget(w))
 	*background = ((XmLabelWidget) w)->core.background_pixel;
@@ -2794,12 +2427,10 @@ _XmLabelConvert(Widget w,
       size = 1;
       format = 32;
     }
-
   if (cs->target == atoms[XmAFOREGROUND])
     {
       /* Get widget's foreground */
       Pixel *foreground;
-
       foreground = (Pixel *) XtMalloc(sizeof(Pixel));
       if (XtIsWidget(w))
 	*foreground = ((XmLabelWidget) w)->primitive.foreground;
@@ -2811,12 +2442,10 @@ _XmLabelConvert(Widget w,
       size = 1;
       format = 32;
     }
-
   if (cs->target == XA_COLORMAP)
     {
       /* Get widget's colormap */
       Colormap *colormap;
-
       colormap = (Colormap *) XtMalloc(sizeof(Colormap));
       if (XtIsWidget(w))
 	*colormap = w->core.colormap;
@@ -2828,10 +2457,8 @@ _XmLabelConvert(Widget w,
       size = 1;
       format = 32;
     }
-
   _XmConvertComplete(w, value, size, format, type, cs);
 }
-
 /**************************************************************************
  * ConvertToEncoding
  *
@@ -2851,14 +2478,12 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
   Atom UTF8_STRING = XInternAtom(XtDisplay(w), XmSUTF8_STRING, False);
 #endif
   int ret_status;
-
   if (encoding == XA_STRING) {
     /* convert value to 8859.1 */
     ret_status =
       XmbTextListToTextProperty(XtDisplay(w), (char**) &str, 1,
 				(XICCEncodingStyle)XStringStyle,
 				&tmp_prop);
-
     if (ret_status == Success || ret_status > 0)
       {
 	rval = (XtPointer) tmp_prop.value;
@@ -2869,7 +2494,6 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
 	rval = NULL;
 	*length = 0;
       }
-
     *flag = (ret_status == Success);
 #if XM_UTF8
   } else if (encoding == UTF8_STRING) {
@@ -2878,7 +2502,6 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
       Xutf8TextListToTextProperty(XtDisplay(w), (char**) &str, 1,
 				(XICCEncodingStyle)XUTF8StringStyle,
 				&tmp_prop);
-
     if (ret_status == Success || ret_status > 0)
       {
 	rval = (XtPointer) tmp_prop.value;
@@ -2889,7 +2512,6 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
 	rval = NULL;
 	*length = 0;
       }
-
     *flag = (ret_status >= Success);
 #endif
   } else {
@@ -2898,16 +2520,13 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
      * in strlen.
      */
     *length = str ? strlen(str) : 0;
-
     rval = _XmTextToLocaleText(w, (XtPointer) str,
 			       COMPOUND_TEXT, 8,
 			       *length,
 			       flag);
   }
-
   return(rval);
 }
-
 /**************************************************************************
  * FromPaddingPixels
  *
@@ -2916,12 +2535,10 @@ ConvertToEncoding(Widget w, char* str, Atom encoding,
  *  widget - the icon button widget.
  *  offset, value - passed to correct function based on orientation.
  **************************************************************************/
-
 static void
 FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
 {
     XmLabelWidget iw = (XmLabelWidget) widget;
-
     switch(iw->label.pixmap_placement) {
     case XmPIXMAP_TOP:
     case XmPIXMAP_BOTTOM:
@@ -2932,7 +2549,6 @@ FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
 	break;
     }
 }
-
 /**************************************************************************
  * ToPaddingPixels
  *
@@ -2942,12 +2558,10 @@ FromPaddingPixels(Widget widget, int offset, XtArgVal *value)
  *  offset, value - passed to correct function based on orientation.
  * Returns the import order from _XmTo{Horizontal, Vertical}Pixels.
  **************************************************************************/
-
 static XmImportOperator
 ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
 {
     XmLabelWidget iw = (XmLabelWidget) widget;
-
     switch(iw->label.pixmap_placement) {
     case XmPIXMAP_TOP:
     case XmPIXMAP_BOTTOM:
@@ -2956,14 +2570,12 @@ ToPaddingPixels(Widget widget, int offset, XtArgVal *value)
 	return(XmeToHorizontalPixels(widget, offset, value));
     }
 }
-
 /*
  * XmRCallProc routine for checking label.font before setting it to NULL
  * If "check_set_render_table" is True, then function has
  * been called twice on same widget, thus resource needs to be set NULL,
  * otherwise leave it alone.
  */
-
 /*ARGSUSED*/
 static void
 CheckSetRenderTable(Widget wid,
@@ -2971,7 +2583,6 @@ CheckSetRenderTable(Widget wid,
 		    XrmValue *value)
 {
   XmLabelWidget lw = (XmLabelWidget)wid;
-
   /* Check if been here before */
   if (lw->label.check_set_render_table)
       value->addr = NULL;
@@ -2979,16 +2590,12 @@ CheckSetRenderTable(Widget wid,
       lw->label.check_set_render_table = True;
       value->addr = (char*)&(lw->label.font);
   }
-
 }
-
 static XtPointer
 LabelGetValue(Widget w, int type)
 {
   XmString value;
-
   XtVaGetValues(w, XmNlabelString, &value, NULL);
-
   if (type == XmFORMAT_XmSTRING)
     {
       return (XtPointer) value;
@@ -3008,7 +2615,6 @@ LabelGetValue(Widget w, int type)
   else
     return NULL;
 }
-
 static void
 LabelSetValue(Widget w, XtPointer value, int type)
 {
@@ -3016,7 +2622,6 @@ LabelSetValue(Widget w, XtPointer value, int type)
   Cardinal nargs;
   XmString temp;
   Boolean freetemp = True;
-
   if (type == XmFORMAT_XmSTRING)
     {
       temp = (XmString) value;
@@ -3030,7 +2635,6 @@ LabelSetValue(Widget w, XtPointer value, int type)
 	  char *str;
 	  wchar_t *str2;
 	  str2 = (wchar_t *) value;
-
 	  /* Get length of wchar string */
 	  length = 0;
 	  while (str2[length] != 0)
@@ -3042,23 +2646,19 @@ LabelSetValue(Widget w, XtPointer value, int type)
 	}
       temp = XmStringCreateLocalized((char*) value);
     }
-
   nargs = 0;
   XtSetArg(args[nargs], XmNlabelString, temp), nargs++;
   assert(nargs <= XtNumber(args));
   XtSetValues(w, args, nargs);
-
   if (freetemp)
     XmStringFree(temp);
 }
-
 /*ARGSUSED*/
 static int
 LabelPreferredValue(Widget w)	/* unused */
 {
   return XmFORMAT_XmSTRING;
 }
-
 static char*
 GetLabelAccelerator(Widget w)
 {
@@ -3067,7 +2667,6 @@ GetLabelAccelerator(Widget w)
   else
     return Lab_Accelerator(w);
 }
-
 static KeySym
 GetLabelMnemonic(Widget w)
 {

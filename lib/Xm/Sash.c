@@ -25,12 +25,9 @@
 static char rcsid[] = "$XConsortium: Sash.c /main/12 1995/07/13 17:51:55 drk $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <X11/cursorfont.h>
 #include "XmI.h"
 #include <Xm/SashP.h>
@@ -39,12 +36,9 @@ static char rcsid[] = "$XConsortium: Sash.c /main/12 1995/07/13 17:51:55 drk $"
 #include <Xm/DisplayP.h>
 #include "MenuStateI.h"
 #include "TraversalI.h"
-
 #define defTranslations		_XmSash_defTranslations
 #define SASHSIZE 10
-
 /********    Static Function Declarations    ********/
-
 static void ClassPartInitialize(
                         WidgetClass wc) ;
 static void ClassInitialize( void ) ;
@@ -82,36 +76,27 @@ static void Redisplay(
                         Widget w,
                         XEvent *event,
                         Region region) ;
-
 static void SashDisplayDestroyCallback (
 			Widget w,
 			XtPointer client_data,
 			XtPointer call_data );
 /********    End Static Function Declarations    ********/
-
-
 static XtResource resources[] = {
    {XmNborderWidth, XmCBorderWidth, XmRHorizontalDimension, sizeof(Dimension),
       XtOffsetOf( struct _XmSashRec, core.border_width), XmRImmediate, (XtPointer) 0},
-
    {XmNcallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
       XtOffsetOf( struct _XmSashRec, sash.sash_action), XmRPointer, NULL},
-
    { XmNnavigationType, XmCNavigationType, XmRNavigationType,
      sizeof (unsigned char),
      XtOffsetOf( struct _XmPrimitiveRec, primitive.navigation_type),
      XmRImmediate, (XtPointer) XmSTICKY_TAB_GROUP},
 };
-
-
 static XtActionsRec actionsList[] =
 {
   {"SashAction",	SashAction},
   {"SashFocusIn",	SashFocusIn},
   {"SashFocusOut",	SashFocusOut},
 };
-
-
 static XmBaseClassExtRec SashBaseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -136,7 +121,6 @@ static XmBaseClassExtRec SashBaseClassExtRec = {
     WidgetNavigable,                    /* widgetNavigable      */
     XmInheritFocusChange,               /* focusChange          */
 };
-
 externaldef(xmsashclassrec) XmSashClassRec xmSashClassRec = {
    {
 /* core class fields */
@@ -173,7 +157,6 @@ externaldef(xmsashclassrec) XmSashClassRec xmSashClassRec = {
     NULL,                             /* display_accelerator   */
     (XtPointer)&SashBaseClassExtRec, /* extension             */
    },
-
    {
       XmInheritWidgetProc,   /* Primitive border_highlight   */
       XmInheritWidgetProc,   /* Primitive border_unhighlight */
@@ -183,16 +166,12 @@ externaldef(xmsashclassrec) XmSashClassRec xmSashClassRec = {
       0,	    /* num get_resources            */
       NULL,         /* extension                    */
    },
-
    {
       (XtPointer) NULL,         /* extension        */
    }
-
 };
-
 externaldef(xmsashwidgetclass) WidgetClass xmSashWidgetClass =
 					         (WidgetClass) &xmSashClassRec;
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -205,7 +184,6 @@ ClassPartInitialize(
 {
    _XmFastSubclassInit(wc, XmSASH_BIT);
 }
-
 /************************************************************************
  *
  *  ClassInitialize
@@ -222,7 +200,6 @@ ClassInitialize( void )
                   UnhighlightSash;
    SashBaseClassExtRec.record_type = XmQmotif;
 }
-
 /*ARGSUSED*/
 static void
 Initialize(
@@ -239,33 +216,26 @@ Initialize(
      new_w->core.height += SASHSIZE;
   new_w->sash.has_focus = False;
 }
-
 static void
 HighlightSash(
         Widget sash )
 {
   int x, y;
-
   x = y = ((XmSashWidget) sash)->primitive.shadow_thickness;
-
   XFillRectangle( XtDisplay( sash), XtWindow( sash),
                    ((XmSashWidget) sash)->primitive.highlight_GC,
                    x,y, sash->core.width-(2*x), sash->core.height-(2*y));
 }
-
 static void
 UnhighlightSash(
         Widget sash )
 {
   int x, y;
-
   x = y = ((XmSashWidget) sash)->primitive.shadow_thickness;
-
   XClearArea( XtDisplay( sash), XtWindow( sash),
                    x,y, sash->core.width-(2*x), sash->core.height-(2*y),
 	           FALSE);
 }
-
 static XmNavigability
 WidgetNavigable(
         Widget wid)
@@ -291,7 +261,6 @@ WidgetNavigable(
     }
   return XmNOT_NAVIGABLE ;
 }
-
 /* ARGSUSED */
 static void
 SashFocusIn(
@@ -301,24 +270,18 @@ SashFocusIn(
         Cardinal *num_params )
 {
     register XmSashWidget sash = (XmSashWidget) w;
-
     if (event->xany.type != FocusIn || !event->xfocus.send_event)
           return;
-
     if (_XmGetFocusPolicy( (Widget) sash) == XmEXPLICIT)
        HighlightSash(w);
-
-
     XmeDrawShadows (XtDisplay (w), XtWindow (w),
                      sash->primitive.top_shadow_GC,
                      sash->primitive.bottom_shadow_GC,
                      0,0,w->core.width, w->core.height,
                      sash->primitive.shadow_thickness,
 		     XmSHADOW_OUT);
-
     sash->sash.has_focus = True;
 }
-
 /* ARGSUSED */
 static void
 SashFocusOut(
@@ -328,23 +291,18 @@ SashFocusOut(
         Cardinal *num_params )
 {
     register XmSashWidget sash = (XmSashWidget) w;
-
     if (event->xany.type != FocusOut || !event->xfocus.send_event)
           return;
-
     if (_XmGetFocusPolicy( (Widget) sash) == XmEXPLICIT)
        UnhighlightSash(w);
-
     XmeDrawShadows (XtDisplay (w), XtWindow (w),
                      sash->primitive.top_shadow_GC,
                      sash->primitive.bottom_shadow_GC,
                      0,0,w->core.width, w->core.height,
                      sash->primitive.shadow_thickness,
 		     XmSHADOW_OUT);
-
     sash->sash.has_focus = False;
 }
-
 static void
 SashAction(
         Widget widget,
@@ -354,14 +312,11 @@ SashAction(
 {
     register XmSashWidget sash = (XmSashWidget) widget;
     SashCallDataRec call_data;
-
     call_data.event = event;
     call_data.params = params;
     call_data.num_params = *num_params;
-
     XtCallCallbackList(widget, sash->sash.sash_action, (XtPointer)&call_data);
 }
-
 static void
 Realize(
         register Widget w,
@@ -371,7 +326,6 @@ Realize(
 	XmDisplay   dd = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
 	Cursor SashCursor =
 		((XmDisplayInfo *)(dd->display.displayInfo))->SashCursor;
-
 	if (0L == SashCursor)
 		{
 		/* create some data shared among all instances on this
@@ -384,12 +338,10 @@ Realize(
 		XtAddCallback((Widget)dd, XtNdestroyCallback,
 			SashDisplayDestroyCallback, (XtPointer) NULL);
 		}
-
 	attributes->cursor = SashCursor;
 	XtCreateWindow (w, InputOutput, CopyFromParent,
 		*p_valueMask | CWCursor, attributes);
 }
-
 /*ARGSUSED*/
 static void
 SashDisplayDestroyCallback
@@ -412,10 +364,6 @@ SashDisplayDestroyCallback
 		}
 	}
 }
-
-
-
-
 /*************************************<->*************************************
  *
  *  Redisplay (w, event)
@@ -447,13 +395,11 @@ Redisplay(
         Region region )
 {
    register XmSashWidget sash = (XmSashWidget) w;
-
      XmeDrawShadows (XtDisplay (w), XtWindow (w),
                       sash->primitive.top_shadow_GC,
                       sash->primitive.bottom_shadow_GC,
 		      0,0,w->core.width, w->core.height,
                       sash->primitive.shadow_thickness,
 		      XmSHADOW_OUT);
-
      if (sash->sash.has_focus) HighlightSash(w);
 }

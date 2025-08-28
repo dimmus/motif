@@ -25,11 +25,9 @@
 static char rcsid[] = "$TOG: CascadeBG.c /main/28 1999/02/01 18:47:11 mgreess $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <string.h>
 #include "XmI.h"
 #include <X11/ShellP.h>
@@ -64,19 +62,15 @@ static char rcsid[] = "$TOG: CascadeBG.c /main/28 1999/02/01 18:47:11 mgreess $"
 #include "TravActI.h"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
-
 #define CASCADE_PIX_SPACE     4	/* pixels between label and bit map */
 #define MAP_DELAY_DEFAULT   180
 #define EVENTS              ((unsigned int) (ButtonPressMask | \
 			       ButtonReleaseMask | EnterWindowMask | \
 			       LeaveWindowMask))
-
 #define WRONGPARENT	_XmMMsgCascadeB_0000
 #define WRONGSUBMENU	_XmMMsgCascadeB_0001
 #define WRONGMAPDELAY	_XmMMsgCascadeB_0002
-
 /********    Static Function Declarations    ********/
-
 static void ClassInitialize( void ) ;
 static void ClassPartInitialize(
                         WidgetClass wc) ;
@@ -210,9 +204,7 @@ static Cardinal GetCascadeBGClassSecResData(
 static XtPointer GetCascadeBGClassSecResBase(
                         Widget widget,
                         XtPointer client_data) ;
-
 /********    End Static Function Declarations    ********/
-
 static XtResource resources[] =
 {
     {   XmNactivateCallback,
@@ -223,7 +215,6 @@ static XtResource resources[] =
         XmRCallback,
         NULL
     },
-
     {   XmNcascadingCallback,
         XmCCallback,
         XmRCallback,
@@ -233,7 +224,6 @@ static XtResource resources[] =
         XmRCallback,
         NULL
     },
-
     {	XmNsubMenuId,
 	XmCMenuWidget,				/* submenu */
 	XmRMenuWidget,
@@ -251,7 +241,6 @@ static XtResource resources[] =
         XmRCallProc,
 	(XtPointer) _XmSetThickness
     },
-
     {
         XmNtraversalOn,
         XmCTraversalOn,
@@ -261,7 +250,6 @@ static XtResource resources[] =
         XmRImmediate,
         (XtPointer) True
     },
-
     {
         XmNhighlightThickness,
         XmCHighlightThickness,
@@ -272,11 +260,8 @@ static XtResource resources[] =
 	(XtPointer) _XmSetThickness
     },
 };
-
-
 static XtResource cache_resources[] =
 {
-
    {   XmNcascadePixmap,
        XmCPixmap,
        XmRDynamicPixmap,
@@ -286,7 +271,6 @@ static XtResource cache_resources[] =
        XmRImmediate,
        (XtPointer) XmUNSPECIFIED_PIXMAP
    },
-
    {   XmNmappingDelay,
        XmCMappingDelay,
        XmRInt,
@@ -297,15 +281,12 @@ static XtResource cache_resources[] =
        (XtPointer) MAP_DELAY_DEFAULT
    },
 };
-
-
 static XmCacheClassPart CascadeButtonClassCachePart = {
     {NULL, 0, 0},        /* head of class cache list */
     _XmCacheCopy,       /* Copy routine     */
     _XmCacheDelete,     /* Delete routine   */
     _XmCascadeBCacheCompare,    /* Comparison routine   */
 };
-
 static XmBaseClassExtRec   CascadeBGClassExtensionRec = {
     NULL,    					    /* next_extension        */
     NULLQUARK,    				    /* record_typ  	     */
@@ -330,7 +311,6 @@ static XmBaseClassExtRec   CascadeBGClassExtensionRec = {
     XmInheritWidgetNavigable,                 /* widgetNavigable      */
     XmInheritFocusChange,                     /* focusChange          */
 };
-
 /* ext rec static initialization */
 externaldef(xmcascadebuttongcacheobjclassrec)
 XmCascadeButtonGCacheObjClassRec xmCascadeButtonGCacheObjClassRec =
@@ -369,20 +349,16 @@ XmCascadeButtonGCacheObjClassRec xmCascadeButtonGCacheObjClassRec =
       /* display accelerator*/    NULL,
       /* extension record   */    NULL,
    },
-
    {
       /* synthetic resources */   NULL,
       /* num_syn_resources   */   0,
       /* extension           */   NULL,
    },
 };
-
-
 /*
  * static initialization of the cascade button widget class record,
  * must do each field
  */
-
 static XmGadgetClassExtRec _XmCascadeBGadClassExtRec = {
      NULL,
      NULLQUARK,
@@ -392,7 +368,6 @@ static XmGadgetClassExtRec _XmCascadeBGadClassExtRec = {
      XmInheritDisplayRectProc,               /* widget_display_rect */
      XmInheritMarginsProc,                   /* widget_margins */
 };
-
 externaldef(xmcascadebuttongadgetclassrec) XmCascadeButtonGadgetClassRec
 	xmCascadeButtonGadgetClassRec =
 {
@@ -451,15 +426,12 @@ externaldef(xmcascadebuttongadgetclassrec) XmCascadeButtonGadgetClassRec
         NULL,  				        /* extension          */
     }
 };
-
 /*
  * now make a public symbol that points to this class record
  */
-
 externaldef(xmcascadebuttongadgetclass) WidgetClass
 	xmCascadeButtonGadgetClass =
                           (WidgetClass) &xmCascadeButtonGadgetClassRec;
-
 /*
  * use caching to share arrow data
  */
@@ -469,8 +441,6 @@ static XmCacheClassPart ArrowPixmapCache = {
    _XmArrowPixmapCacheDelete,   /* Delete routine   */
    _XmArrowPixmapCacheCompare,  /* Comparison routine   */
 };
-
-
 /* Menu Savvy trait record */
 static XmMenuSavvyTraitRec MenuSavvyRecord = {
     /* version: */
@@ -480,7 +450,6 @@ static XmMenuSavvyTraitRec MenuSavvyRecord = {
     NULL,
     _XmCBNameActivate,
 };
-
 static void
 ClassInitialize( void )
 {
@@ -489,7 +458,6 @@ ClassInitialize( void )
   int                         i, j;
   XtResourceList              uncompiled;
   Cardinal                    num;
-
 /**************************************************************************
    Label's and Cascadebutton's resource lists are being merged into one
    and assigned to xmCascadeButtonGCacheObjClassRec. This is for performance
@@ -501,40 +469,29 @@ ClassInitialize( void )
          that are being overwritten by the subclass then the merged_lists
          need to be created differently.
 ****************************************************************************/
-
   wc_num_res = xmCascadeButtonGCacheObjClassRec.object_class.num_resources;
-
   sc_num_res = xmLabelGCacheObjClassRec.object_class.num_resources;
-
   merged_list = (XtResource *)XtMalloc((sizeof(XtResource) * (wc_num_res +
                                                                  sc_num_res)));
-
   _XmTransformSubResources(xmLabelGCacheObjClassRec.object_class.resources,
                            sc_num_res, &uncompiled, &num);
-
   for (i = 0; i < num; i++)
   {
-
   merged_list[i] = uncompiled[i];
-
   }
   XtFree((char *)uncompiled);
-
   for (i = 0, j = num; i < wc_num_res; i++, j++)
   {
    merged_list[j] =
         xmCascadeButtonGCacheObjClassRec.object_class.resources[i];
   }
-
   _XmProcessLock();
   xmCascadeButtonGCacheObjClassRec.object_class.resources = merged_list;
   xmCascadeButtonGCacheObjClassRec.object_class.num_resources =
                 wc_num_res + sc_num_res ;
   _XmProcessUnlock();
-
   CascadeBGClassExtensionRec.record_type = XmQmotif;
 }
-
 /*
  * set up fast subclassing
  */
@@ -543,10 +500,8 @@ ClassPartInitialize(
         WidgetClass wc )
 {
   _XmFastSubclassInit (wc, XmCASCADE_BUTTON_GADGET_BIT);
-
   _XmLabelGCloneMenuSavvy (wc, &MenuSavvyRecord);
 }
-
 /************************************************************************
 *
 *  SecondaryObjectCreate
@@ -564,57 +519,45 @@ SecondaryObjectCreate(
   WidgetClass                 wc;
   Cardinal                    size;
   XtPointer                   newSec, reqSec;
-
   _XmProcessLock();
-
   cePtr = _XmGetBaseClassExtPtr(XtClass(new_w), XmQmotif);
   wc = (*cePtr)->secondaryObjectClass;
   size = wc->core_class.widget_size;
-
   newSec = _XmExtObjAlloc(size);
   reqSec = _XmExtObjAlloc(size);
-
   _XmProcessUnlock();
-
     /*
      * Since the resource lists for label and cascadebutton were merged at
      * ClassInitialize time we need to make only one call to
      * XtGetSubresources()
      */
-
 /*
  *  Update pointers in instance records now so references to resources
  * in the cache record will be valid for use in CallProcs.
  * CallProcs are invoked by XtGetSubresources().
  */
-
   LabG_Cache(new_w) = &(((XmLabelGCacheObject)newSec)->label_cache);
     LabG_Cache(req) = &(((XmLabelGCacheObject)reqSec)->label_cache);
    CBG_Cache(new_w) = &(((XmCascadeButtonGCacheObject)newSec)->
 			cascade_button_cache);
      CBG_Cache(req) = &(((XmCascadeButtonGCacheObject)reqSec)->
 			cascade_button_cache);
-
   XtGetSubresources(new_w,
                     newSec,
                     NULL, NULL,
                     wc->core_class.resources,
                     wc->core_class.num_resources,
                     args, *num_args );
-
   extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
   extData->widget = (Widget)newSec;
   extData->reqWidget = (Widget)reqSec;
-
   ((XmCascadeButtonGCacheObject)newSec)->ext.extensionType = XmCACHE_EXTENSION;
   ((XmCascadeButtonGCacheObject)newSec)->ext.logicalParent = new_w;
-
   _XmPushWidgetExtData(new_w, extData,
 		       ((XmCascadeButtonGCacheObject)newSec)->
 		                                   ext.extensionType);
   memcpy(reqSec, newSec, size);
 }
-
 /************************************************************************
  *
  *  InitializePosthook
@@ -631,7 +574,6 @@ InitializePrehook(
   if (LabG_Font(new_w) == NULL)
     LabG_Font(new_w) = XmeGetDefaultRenderTable (new_w, XmBUTTON_FONTLIST);
 }
-
 /************************************************************************
  *
  *  InitializePosthook
@@ -646,31 +588,25 @@ InitializePosthook(
 {
     XmWidgetExtData     ext;
     XmCascadeButtonGadget  cbw = (XmCascadeButtonGadget)new_w;
-
     /*
     * - register parts in cache.
     * - update cache pointers
     * - and free req
     */
-
     _XmProcessLock();
-
     LabG_Cache(cbw) = (XmLabelGCacheObjPart *)
       _XmCachePart( LabG_ClassCachePart(cbw),
                     (XtPointer) LabG_Cache(cbw),
                     sizeof(XmLabelGCacheObjPart));
-
     CBG_Cache(cbw) = (XmCascadeButtonGCacheObjPart *)
            _XmCachePart( CBG_ClassCachePart(cbw),
                          (XtPointer) CBG_Cache(cbw),
                          sizeof(XmCascadeButtonGCacheObjPart));
-
    /*
     * might want to break up into per-class work that gets explicitly
     * chained. For right now, each class has to replicate all
     * superclass logic in hook routine
     */
-
    /*
     * free the req subobject used for comparisons
     */
@@ -679,9 +615,7 @@ InitializePosthook(
     _XmExtObjFree((XtPointer) ext->reqWidget);
     XtFree( (char *) ext);
     _XmProcessUnlock();
-
 }
-
 /*******************************************************************
  *
  *  _XmCascadeBCacheCompare
@@ -704,9 +638,7 @@ _XmCascadeBCacheCompare(
         return 1;
    else
         return 0;
-
 }
-
 /*******************************************************************
  * _XmArrowPixmapCacheCompare()
  *******************************************************************/
@@ -717,7 +649,6 @@ _XmArrowPixmapCacheCompare(
 {
    XmArrowPixmap *arrowpix_rec = (XmArrowPixmap *) A ;
    XmArrowPixmap *arrowpix_cache_rec = (XmArrowPixmap *) B ;
-
    if ((arrowpix_rec->height == arrowpix_cache_rec->height) &&
        (arrowpix_rec->width == arrowpix_cache_rec->width) &&
        (arrowpix_rec->screen == arrowpix_cache_rec->screen) &&
@@ -733,7 +664,6 @@ _XmArrowPixmapCacheCompare(
    else
       return 0;
 }
-
 /*******************************************************************
  * _XmArrowPixmapCacheDelete()
  *******************************************************************/
@@ -744,7 +674,6 @@ _XmArrowPixmapCacheDelete(
         Pixmap pixmap = (Pixmap) data ;
    XmGadgetCachePtr ptr;
    XmArrowPixmap *arrowpix_rec;
-
    ptr =  (XmGadgetCachePtr)(ClassCacheHead(&ArrowPixmapCache)).next;
    while (ptr)
    {
@@ -765,7 +694,6 @@ _XmArrowPixmapCacheDelete(
         ptr = (XmGadgetCachePtr)ptr->next;
    }
 }
-
 /*
  * Border highlighting is only allowed for option menus.  Otherwise
  * the button is armed (does not pop up submenus).
@@ -778,13 +706,9 @@ BorderHighlight(
    if (LabG_MenuType(cb) == XmMENU_OPTION)
       (* ((XmGadgetClass) xmGadgetClass)->
              gadget_class.border_highlight) ((Widget) cb);
-
    else
       Arm (cb);
 }
-
-
-
 /*
  * Border unhighlighting only done in option menus.  Otherwise the button
  * is disarmed (does not pop down submenus).
@@ -797,12 +721,9 @@ BorderUnhighlight(
    if (LabG_MenuType(cb) == XmMENU_OPTION)
       (* ((XmGadgetClass) xmGadgetClass)->
              gadget_class.border_unhighlight) ((Widget) cb);
-
    else
       Disarm (cb, False);
 }
-
-
 /*
  * Draw the 3D shadow around the widget if its in an option menu or if the
  * widget is armed.
@@ -813,10 +734,8 @@ DrawShadow(
 {
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay((Widget) cb));
   Boolean etched_in;
-
   etched_in = dpy -> display.enable_etched_in_menu
     && (! (LabG_MenuType(cb) == XmMENU_OPTION)) ;
-
   if (CBG_IsArmed(cb) ||
       (LabG_MenuType(cb) == XmMENU_OPTION))
     {
@@ -836,7 +755,6 @@ DrawShadow(
       }
    }
 }
-
 static void
 DrawCascade(
         register XmCascadeButtonGadget cb )
@@ -850,7 +768,6 @@ DrawCascade(
 	 Dimension height, width;
 	 Dimension offset_y;
          Dimension offset_x;
-
 	 switch(CBG_Cascade_height(cb) - 2*G_ShadowThickness(cb)) {
 	    case 5:
 	    case 6:
@@ -877,7 +794,6 @@ DrawCascade(
 	 }
 	 width -= 2*G_ShadowThickness(cb);
 	 offset_y =  (CBG_Cascade_height(cb)- height)/2;
-
 	 if (LayoutIsRtoLG(cb))
 	   {
 	     offset_x = (CBG_Cascade_width(cb) - width - G_ShadowThickness(cb));
@@ -886,7 +802,6 @@ DrawCascade(
 			    cb->rectangle.x + CBG_Cascade_x(cb) + offset_x,
 			    cb->rectangle.y + CBG_Cascade_y(cb) + offset_y,
 			    width, height);
-
 	     XmeDrawShadows(XtDisplay(cb), XtWindow(XtParent(cb)),
 			    LabG_TopShadowGC(cb), LabG_BottomShadowGC(cb),
 			    cb->rectangle.x + CBG_Cascade_x(cb) + offset_x -
@@ -906,7 +821,6 @@ DrawCascade(
 			    G_ShadowThickness(cb),
 			    cb->rectangle.y + CBG_Cascade_y(cb) + offset_y,
 			    width, height);
-
 	     XmeDrawShadows(XtDisplay(cb), XtWindow(XtParent(cb)),
 			    LabG_TopShadowGC(cb), LabG_BottomShadowGC(cb),
 			    cb->rectangle.x + CBG_Cascade_x(cb),
@@ -920,11 +834,9 @@ DrawCascade(
       else {
 	  Pixmap pixmap ;
 	  int depth ;
-
 	  pixmap = CBG_IsArmed(cb) &&
 	      (CBG_ArmedPixmap(cb) != XmUNSPECIFIED_PIXMAP) ?
 		  CBG_ArmedPixmap(cb) : CBG_CascadePixmap(cb) ;
-
 	  XmeGetPixmapData(XtScreen(cb),
 			   pixmap,
 			   NULL,
@@ -932,7 +844,6 @@ DrawCascade(
 			   NULL, NULL,
 			   NULL, NULL,
 			   NULL, NULL);
-
 	  if (depth == XtParent(cb)->core.depth)
 	      XCopyArea (XtDisplay(cb), pixmap,
 			 XtWindow(XtParent(cb)),
@@ -951,8 +862,6 @@ DrawCascade(
       }
    }
 }
-
-
 /*
  * set up the cascade position.
  */
@@ -961,7 +870,6 @@ position_cascade(
         XmCascadeButtonGadget cascadebtn )
 {
    Dimension buffer;
-
    if (CBG_HasCascade(cascadebtn))
    {
       if (LayoutIsRtoLG(cascadebtn))
@@ -974,11 +882,9 @@ position_cascade(
 	                            cascadebtn->gadget.shadow_thickness -
 	                            LabG_MarginWidth(cascadebtn) -
 		                    CBG_Cascade_width(cascadebtn);
-
       buffer = cascadebtn->gadget.highlight_thickness +
              cascadebtn->gadget.shadow_thickness +
              LabG_MarginHeight(cascadebtn);
-
       CBG_Cascade_y(cascadebtn) = buffer +
                                ((cascadebtn->rectangle.height -  2*buffer) -
                                 CBG_Cascade_height(cascadebtn)) / 2;
@@ -989,7 +895,6 @@ position_cascade(
       CBG_Cascade_x(cascadebtn) = 0;
    }
 }
-
 /*
  * redisplay the widget
  */
@@ -1001,53 +906,44 @@ Redisplay(
 {
         XmCascadeButtonGadget cb = (XmCascadeButtonGadget) wid ;
 	XtExposeProc expose;
-
     if (XtIsRealized ((Widget)cb))
     {
        XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(cb));
        Boolean etched_in = dpy->display.enable_etched_in_menu;
        GC tmpGC = NULL;
-
        if (LabG_IsMenupane(cb))
        {
 	  XmMenuShellWidget mshell = (XmMenuShellWidget)XtParent(XtParent(cb));
-
 	  if (!mshell->shell.popped_up)
 	      return;
        }
-
        /*
 	* This might be necessary in an option menu to keep the glyph from
 	* moving when it's items vary in size.
 	*/
        if (LabG_MenuType(cb) == XmMENU_OPTION)
           position_cascade(cb);
-
 	if (etched_in) {
 	    XFillRectangle (XtDisplay(cb), XtWindow(XtParent(cb)),
 	                CBG_IsArmed(cb) ? CBG_ArmGC(cb) : CBG_BackgroundGC(cb),
 			    cb->rectangle.x, cb->rectangle.y,
 			    cb->rectangle.width, cb->rectangle.height);
 	}
-
 	if (etched_in && CBG_IsArmed(cb)) {
 	    Pixel	junk, select_pix;
 	    XmManagerWidget mw = (XmManagerWidget) XtParent(cb);
 	    Boolean replaceGC = False;
 	    XGCValues values;
 	    GC tmp_bgc = NULL;
-
 	    XmGetColors(XtScreen(mw), mw->core.colormap,
 		mw->core.background_pixel,
                 &junk, &junk, &junk, &select_pix);
-
 	    if (select_pix == mw->manager.foreground) {
 		/* mw->core.background_pixel */
 		replaceGC = True;
 		tmpGC = LabG_NormalGC(cb);
 		LabG_NormalGC(cb) = CBG_BackgroundGC(cb);
 	    }
-
 	    /* Fetch the select_color GetGC() actually used. */
 	    XGetGCValues(XtDisplay(cb), LabG_BackgroundGC(cb), GCBackground, &values);
 	    if (values.background != select_pix)
@@ -1057,33 +953,26 @@ Redisplay(
 		}
 	    tmp_bgc = LabG_BackgroundGC(cb);
 	    LabG_BackgroundGC(cb) = CBG_ArmGC(cb);
-
 	    _XmProcessLock();
 	    expose = xmLabelGadgetClassRec.rect_class.expose;
 	    _XmProcessUnlock();
 	    (* expose)((Widget)cb, event, region);
-
 	    /* Restore default bg GC*/
 	    LabG_BackgroundGC(cb) = tmp_bgc;
-
 	    if (replaceGC)
 		LabG_NormalGC(cb) = tmpGC;
 	}
 	else {
-
 	    /* Label class does most of the work */
 	    _XmProcessLock();
 	    expose = xmLabelGadgetClassRec.rect_class.expose;
 	    _XmProcessUnlock();
 	    (* expose)((Widget)cb, event, region);
 	}
-
 	DrawCascade(cb);
 	DrawShadow (cb);
     }
 }
-
-
 /*
  * Input sent by a manager is dispatched here.  The gadget handles Arm,
  * Activate, Enter, Leave, FocusIn, FocusOut and Help events.
@@ -1099,19 +988,15 @@ InputDispatch(
    {
       if (LabG_MenuType(cb) == XmMENU_OPTION)
          ArmAndPost (cb, event);
-
       else if (LabG_MenuType(cb) == XmMENU_BAR)
 	  MenuBarSelect ((Widget) cb, event);
-
       else
          StartDrag (cb, event);
    }
-
    else if (event_mask & XmBDRAG_EVENT)
    {
       _XmProcessDrag ((Widget) cb, event, NULL, NULL);
    }
-
    else if (event_mask & XmACTIVATE_EVENT)
    {
       if ((LabG_MenuType(cb) == XmMENU_PULLDOWN) ||
@@ -1120,27 +1005,21 @@ InputDispatch(
       {
           if (event->type == ButtonRelease)
              DoSelect (cb, event);
-
           else if (event->type == KeyPress)
              KeySelect (cb, event);
-
           CBG_SetWasPosted(cb, FALSE);
       }
       /* else option menu - do nothing if menu was not posted on btndown */
    }
-
    else if (event_mask & XmENTER_EVENT)
    {
       if (LabG_MenuType(cb) == XmMENU_BAR)
 	  MenuBarEnter ((Widget) cb, event);
-
       else if (LabG_MenuType(cb) == XmMENU_OPTION)
 	  _XmEnterGadget ((Widget) cb, event, NULL, NULL);
-
       else
 	  DelayedArm (cb, event);
    }
-
    else if (event_mask & XmLEAVE_EVENT)
    {
       if (LabG_MenuType(cb) == XmMENU_BAR)
@@ -1150,11 +1029,9 @@ InputDispatch(
       else
 	  CheckDisarm (cb, event);
    }
-
    else if (event_mask & XmFOCUS_IN_EVENT)
       (* (((XmCascadeButtonGadgetClassRec *)(cb->object.widget_class))->
 		gadget_class.border_highlight)) ((Widget) cb);
-
    else if (event_mask & XmFOCUS_OUT_EVENT)
    {
       if (LabG_IsMenupane(cb) &&
@@ -1163,7 +1040,6 @@ InputDispatch(
       {
 	  XmMenuShellWidget mshell =
 	      (XmMenuShellWidget) XtParent(CBG_Submenu(cb));
-
 	  if ((mshell->composite.children[0] == CBG_Submenu(cb)) &&
 	      (XmIsMenuShell(mshell)) &&
 	      (mshell->shell.popped_up))
@@ -1171,15 +1047,12 @@ InputDispatch(
 	    return;
 	  }
       }
-
       (* (((XmCascadeButtonGadgetClassRec *)(cb->object.widget_class))->
 		gadget_class.border_unhighlight)) ((Widget) cb);
     }
     else if (event_mask & XmHELP_EVENT)
        _XmCBHelp((Widget) cb, event, NULL, NULL);
 }
-
-
 /*
  * Arming the CascadeButtonGadget consists of setting the armed bit
  * and drawing the 3D shadow.  CascadeButtonGadgets in
@@ -1195,9 +1068,7 @@ Arm(
    {
       XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(cb));
       Boolean etched_in = dpy->display.enable_etched_in_menu;
-
       CBG_SetArmed(cb, TRUE);
-
       if (etched_in)
 	  Redisplay((Widget) cb, NULL, NULL);
       else {
@@ -1207,9 +1078,6 @@ Arm(
    }
    XmProcessTraversal((Widget) cb, XmTRAVERSE_CURRENT);
 }
-
-
-
 /*
  * Post any submenus and then arm the gadget.  The order is important for
  * performance.
@@ -1221,22 +1089,17 @@ ArmAndPost(
 {
    XmMenuState mst = _XmGetMenuState((Widget)cb);
    XmMenuSystemTrait menuSTrait;
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(cb)), XmQTmenuSystem);
-
    if (menuSTrait == NULL) return;
-
    if (!CBG_IsArmed(cb))
    {
       if ((LabG_MenuType(cb) == XmMENU_OPTION) &&
 	  (XtParent(cb) == mst->RC_ReplayInfo.toplevel_menu) &&
 	  (event->xbutton.time == mst->RC_ReplayInfo.time))
 	 return;
-
       _XmCascadingPopup ((Widget) cb, event, TRUE);
       Arm(cb);
-
       /*
        * Option menus must be armed since the post just arms the
        * submenu
@@ -1245,7 +1108,6 @@ ArmAndPost(
       {
 	menuSTrait -> arm((Widget) cb);
       }
-
       /*
        * Record so spring loaded DispatchEvent() doesn't handle this event
        */
@@ -1253,7 +1115,6 @@ ArmAndPost(
 	  _XmRecordEvent(event);
    }
 }
-
 /*
  * class function to cause the cascade button to be armed and selected
  */
@@ -1269,16 +1130,12 @@ ArmAndActivate(
    XmRowColumnWidget parent = (XmRowColumnWidget) XtParent(cb);
    Time _time = _XmGetDefaultTime(wid, event);
    XmMenuSystemTrait menuSTrait;
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
-
    /* check if event has been processed */
    if (event && !_XmIsEventUnique(event))
       return;
-
    if (menuSTrait == NULL) return;
-
    switch (LabG_MenuType(cb))
    {
     case XmMENU_OPTION:
@@ -1302,13 +1159,11 @@ ArmAndActivate(
        }
        break;
     }
-
     case XmMENU_PULLDOWN:
     case XmMENU_POPUP:
     {
        /* In case the tear off is active but not armed or grabbed */
        menuSTrait -> tearOffArm((Widget) parent);
-
        Select (cb, event, TRUE);
        if (CBG_Submenu(cb))
        {
@@ -1328,15 +1183,12 @@ ArmAndActivate(
        }
        break;
     }
-
     case XmMENU_BAR:
     {
        ShellWidget myShell = NULL;
-
        /* Shared menupanes require some additional checks */
        if (CBG_Submenu(cb))
 	   myShell = (ShellWidget)XtParent(CBG_Submenu(cb));
-
        if (myShell &&
 	   XmIsMenuShell(myShell) &&         /* not torn ?! */
            (myShell->shell.popped_up) &&
@@ -1346,14 +1198,12 @@ ArmAndActivate(
 	  menuSTrait -> popdown((Widget) parent, event);
 	  Disarm (cb, FALSE);
        }
-
        else
        {
 	  /* call the cascading callbacks first thing */
 	  cback.reason = XmCR_CASCADING;
 	  cback.event = event;
 	  XtCallCallbackList ((Widget) cb, CBG_CascadeCall(cb), &cback);
-
 	  /*
 	   * check if the traversing flag is set true.  This indicates
 	   * that we are in a traverse and don't want to activate if
@@ -1361,23 +1211,18 @@ ArmAndActivate(
 	   */
 	  if (CBG_Traversing(cb) && !CBG_Submenu(cb))
 	      return;
-
 	  if (! RC_IsArmed (parent))
 	  {
 	     _XmMenuFocus((Widget) parent, XmMENU_BEGIN, _time);
-
 	     if (CBG_Submenu (cb) && menuSTrait != NULL)
 	       menuSTrait -> arm((Widget) cb);
 	  }
 	  else
 	     menuSTrait -> menuBarCleanup((Widget) parent);
-
 	  /* do the select without calling the cascading callbacks again */
 	  Select (cb, event, FALSE);
-
           /* To support menu replay, keep the pointer in sync mode */
           XAllowEvents(XtDisplay(cb), SyncPointer, CurrentTime);
-
 	  if (CBG_Submenu(cb))
 	  {
              /*
@@ -1401,7 +1246,6 @@ ArmAndActivate(
 	     XtUngrabPointer(XtParent(cb), _time);
 	  }
        }
-
        break;
     }
    }
@@ -1409,8 +1253,6 @@ ArmAndActivate(
    if (event)
       _XmRecordEvent(event);
 }
-
-
 /*
  * Disarm the menu.  This may include popping down any submenu that is up
  * and removing the timeout to post a submenu.
@@ -1421,11 +1263,9 @@ Disarm(
         Boolean unpost )
 {
    Widget rowcol = XtParent(cb);
-
    if (CBG_IsArmed(cb))
    {
       CBG_SetArmed(cb,FALSE);
-
       /* popdown  any posted submenus */
       if ((unpost) &&  (RC_PopupPosted(rowcol)))
       {
@@ -1433,14 +1273,12 @@ Disarm(
 	     menu_shell_class.popdownEveryone))
 	      (RC_PopupPosted(rowcol),NULL, NULL, NULL);
       }
-
       /* if a delayed arm is pending, remove it */
       if (CBG_Timer(cb))
       {
          XtRemoveTimeOut (CBG_Timer(cb));
          CBG_Timer(cb) = 0;
       }
-
       /* if the shadow is drawn and the menupane is not going down, erase it */
       if ((! RC_PoppingDown(rowcol)) || RC_TornOff(rowcol))
       {
@@ -1449,7 +1287,6 @@ Disarm(
 	     /* etched in menu button */
 	     XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(cb));
 	     Boolean etched_in = dpy->display.enable_etched_in_menu;
-
 	     if (etched_in)
 		 Redisplay((Widget) cb, NULL, NULL);
 	     else
@@ -1468,8 +1305,6 @@ Disarm(
       DrawCascade(cb);
    }
 }
-
-
 /*
  * called when the post delay timeout occurs.
  */
@@ -1479,18 +1314,12 @@ PostTimeout(
 	XtIntervalId *id)	/* unused */
 {
         XmCascadeButtonGadget cb = (XmCascadeButtonGadget) closure ;
-
    if (CBG_Timer(cb))
    {
       CBG_Timer(cb) = 0;
-
       _XmCascadingPopup ((Widget) cb, NULL, TRUE);
-
    }
 }
-
-
-
 /*
  * set the timer to post the submenu if a leave event does
  * not occur first.
@@ -1503,7 +1332,6 @@ DelayedArm(
    if ((! CBG_IsArmed(cb)) &&
        (((XmMenuShellWidget) XtParent(XtParent(cb)))->shell.popped_up) &&
        _XmGetInDragMode((Widget) cb))
-
    {
       if (CBG_MapDelay(cb) <= 0)
       {
@@ -1528,8 +1356,6 @@ DelayedArm(
       }
    }
 }
-
-
 /*
  * if traversal is not on and the mouse
  * has not entered its cascading submenu, disarm the
@@ -1542,14 +1368,12 @@ CheckDisarm(
 {
    XmMenuShellWidget submenushell;
    XMotionEvent * entEvent = (XMotionEvent *) event;
-
    if (_XmGetInDragMode((Widget) cb))
    {
       if ((CBG_IsArmed(cb)) &&
           (CBG_Submenu(cb)))
       {
          submenushell = (XmMenuShellWidget) XtParent (CBG_Submenu(cb));
-
          if (submenushell->shell.popped_up)
          {
             if ((entEvent->x_root >= submenushell->core.x) &&
@@ -1560,7 +1384,6 @@ CheckDisarm(
                 (entEvent->y_root <  submenushell->core.y +
                                      submenushell->core.height +
 	   			     (submenushell->core.border_width << 1)))
-
   	        /* then we are in the cascading submenu, don't disarm */
  	        return;
          }
@@ -1568,8 +1391,6 @@ CheckDisarm(
       Disarm (cb, TRUE);
    }
 }
-
-
 /*
  * post submenu and disable traversal.  These functions must be called
  * in this order.
@@ -1582,37 +1403,27 @@ StartDrag(
    XmRowColumnWidget parent = (XmRowColumnWidget) XtParent(cb);
    XmMenuShellWidget mshell = (XmMenuShellWidget) XtParent(parent);
    XmMenuSystemTrait menuSTrait;
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(cb)), XmQTmenuSystem);
-
    /* Start with posted submenu bit reset */
    CBG_SetWasPosted(cb, FALSE);
-
    if (CBG_Submenu(cb) &&
        RC_IsArmed ((XmRowColumnWidget) CBG_Submenu(cb))) {
      CBG_SetWasPosted(cb, TRUE);
    }
-
    if (LabG_IsMenupane(cb) &&
        ! mshell->shell.popped_up)
    {
       return;
    }
-
    /* In case the tear off is active but not armed or grabbed */
    if (menuSTrait != NULL) menuSTrait -> tearOffArm((Widget) parent);
-
    _XmSetInDragMode((Widget) cb, True);
-
    _XmCascadingPopup ((Widget) cb, event, TRUE);
    Arm (cb);
-
    /* record event so MenuShell does not process it */
    _XmRecordEvent (event);
 }
-
-
 /*
  * do the popup and if there is not a submenu, bring down the menu system.
  */
@@ -1624,20 +1435,16 @@ Select(
 {
    XmAnyCallbackStruct cback;
    XmMenuSystemTrait menuSTrait;
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(cb)), XmQTmenuSystem);
    if (menuSTrait == NULL) return;
-
    if (CBG_WasPosted(cb)) {
      Disarm(cb, TRUE);
      if ((CBG_Submenu(cb) != NULL) && (LabG_MenuType(cb) == XmMENU_BAR))
        _XmMenuPopDown(XtParent((Widget) cb), event, NULL);
      return;
    }
-
    _XmCascadingPopup ((Widget) cb, event, doCascade);
-
    /*
     * check if there is a submenu here in case this changed during
     * the cascadeing callbacks
@@ -1646,19 +1453,14 @@ Select(
    {
       if (menuSTrait != NULL)
 	menuSTrait -> popdown(XtParent(cb), event);
-
       Disarm (cb, FALSE);
-
       if (menuSTrait != NULL)
 	menuSTrait -> disarm(XtParent(cb));
-
       cback.event = event;
       cback.reason = XmCR_ACTIVATE;
-
       if (menuSTrait != NULL)
 	menuSTrait -> entryCallback(XtParent(cb), (Widget) cb,
 					     &cback);
-
       if ((! LabG_SkipCallback(cb)) &&
 	  (CBG_ActivateCall(cb)))
       {
@@ -1670,9 +1472,6 @@ Select(
       Arm (cb);
    }
 }
-
-
-
 /*
  * if there is a submenu, enable traversal.
  * call select to do the work
@@ -1683,11 +1482,9 @@ DoSelect(
         XEvent *event )
 {
   Time _time = _XmGetDefaultTime((Widget) cb, event);
-
    if ((LabG_MenuType(cb) == XmMENU_BAR) &&
        ! RC_IsArmed(XtParent(cb)))
        return;
-
    /*
     * make sure the shell is popped up, this takes care of a corner case
     * that can occur with rapid pressing of the mouse button
@@ -1697,16 +1494,12 @@ DoSelect(
    {
       return;
    }
-
    Select(cb, event, (Boolean)(CBG_Submenu(cb) != NULL));
-
    /*
     * don't let the menu shell widget process this event
     */
    _XmRecordEvent (event);
-
    _XmSetInDragMode((Widget) cb, False);
-
    if (CBG_Submenu(cb))
    {
       /*
@@ -1730,7 +1523,6 @@ DoSelect(
        * (* xmLabelGadgetClassRec.label_class.menuProcs)
        *    (XmMENU_DISARM, XtParent(cb));
        */
-
       if (LabG_MenuType(cb) == XmMENU_BAR)
       {
 	 _XmMenuFocus(XtParent(cb), XmMENU_END, _time);
@@ -1738,8 +1530,6 @@ DoSelect(
       }
    }
 }
-
-
 /*
  * if the menu system traversal is enabled, do a select
  */
@@ -1750,11 +1540,9 @@ KeySelect(
 {
    XmRowColumnWidget parent = (XmRowColumnWidget) XtParent(cb);
    XmMenuSystemTrait menuSTrait;
-
    /* check if event has been processed */
    if (!_XmIsEventUnique(event))
       return;
-
    if (!_XmGetInDragMode((Widget) cb) && RC_IsArmed(parent))
    {
       if (LabG_MenuType(cb) == XmMENU_BAR) {
@@ -1763,20 +1551,15 @@ KeySelect(
 	if (menuSTrait != NULL)
 	  menuSTrait -> menuBarCleanup((Widget) parent);
       }
-
       Select(cb, event, TRUE);
-
       if (CBG_Submenu(cb))
       {
          XmProcessTraversal(CBG_Submenu(cb), XmTRAVERSE_CURRENT);
       }
    }
-
    /* record so that menuShell does not process this event */
    _XmRecordEvent(event);
 }
-
-
 /*
  * If the menu system is not active, arm it and arm this cascadebutton
  * else start the drag mode
@@ -1790,53 +1573,37 @@ MenuBarSelect(
    Boolean validButton;
    Time _time = _XmGetDefaultTime(wid, event);
    XmMenuSystemTrait menuSTrait;
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
-
    if (menuSTrait == NULL) return;
-
    CBG_SetWasPosted(cb, FALSE);
-
    if (RC_IsArmed ((XmRowColumnWidget) XtParent(cb)))
    {
       /* Cleanup the PM menubar mode, if enabled */
       menuSTrait -> menuBarCleanup(XtParent(cb));
-
       if (!CBG_Submenu(cb))
       {
 	 _XmMenuFocus(XtParent(cb), XmMENU_MIDDLE, _time);
       }
-
       StartDrag ((XmCascadeButtonGadget) cb, event);
-
    }
-
    else
    {
       validButton = menuSTrait -> verifyButton(XtParent(cb), event);
-
       if (validButton)
       {
          /* Don't post the menu if the menu cannot control grabs! */
-
          if (_XmMenuGrabKeyboardAndPointer(XtParent(cb), _time) != GrabSuccess)
          {
             _XmRecordEvent (event);
             return;
 	 }
-
          _XmMenuFocus(XtParent(cb), XmMENU_BEGIN, _time);
-
 	 menuSTrait -> arm((Widget) cb);
-
          _XmSetInDragMode((Widget) cb, True);
-
          _XmCascadingPopup ((Widget) cb, event, TRUE);
-
 	 /* To support menu replay, keep the pointer in sync mode */
 	 XAllowEvents(XtDisplay(cb), SyncPointer, CurrentTime);
-
 	 if (!CBG_Submenu(cb))
 	 {
 	    /*
@@ -1846,23 +1613,17 @@ MenuBarSelect(
 	    if (RC_BeingArmed(XtParent(cb)))
 	    {
 	       Cursor cursor;
-
 	       cursor = _XmGetMenuCursorByScreen(XtScreen(cb));
-
                _XmGrabPointer(XtParent(cb), True, EVENTS,
                   GrabModeAsync, GrabModeAsync, None, cursor, _time);
-
 	       RC_SetBeingArmed(XtParent(cb), False);
 	    }
 	 }
-
 	 /* record so that menuShell doesn't process this event */
 	 _XmRecordEvent (event);
       }
    }
 }
-
-
 /*
  * If the menu is active, post submenu and arm.
  */
@@ -1873,7 +1634,6 @@ MenuBarEnter(
 {
    register XmCascadeButtonWidget cb = (XmCascadeButtonWidget) wid ;
    XmRowColumnWidget rc = (XmRowColumnWidget)XtParent(cb);
-
    if ((RC_IsArmed (rc)) && (! CBG_IsArmed(cb))
        && _XmGetInDragMode((Widget) cb))
    {
@@ -1882,13 +1642,10 @@ MenuBarEnter(
 	 _XmMenuFocus( (Widget) rc, XmMENU_MIDDLE,
 		      _XmGetDefaultTime(wid, event));
       }
-
       _XmCascadingPopup ((Widget) cb, event, TRUE);
       Arm((XmCascadeButtonGadget) cb);
    }
 }
-
-
 /*
  * unless our submenu is posted or traversal is on, disarm
  */
@@ -1898,27 +1655,21 @@ MenuBarLeave(
 {
    register XmCascadeButtonWidget cb = (XmCascadeButtonWidget) wid ;
    XmMenuShellWidget submenuShell;
-
    if (RC_IsArmed (XtParent (cb)))
    {
       /* Reset this bit so that we don't unpost if the user
 	 reenters the cascade button */
       CBG_SetWasPosted(cb, FALSE);
-
       if (CBG_Submenu(cb))
       {
          submenuShell = (XmMenuShellWidget) XtParent(CBG_Submenu(cb));
-
          if (submenuShell->shell.popped_up)
             return;
       }
-
       if (_XmGetInDragMode((Widget) cb))
          Disarm ((XmCascadeButtonGadget) cb, TRUE);
    }
 }
-
-
 /*
  * Create the CB and CBG 3d arrows.
  * The Pixmaps must be unspecified going into this routine.  This helps to
@@ -1945,14 +1696,12 @@ _XmCreateArrowPixmaps(
    GC armGC = NULL;
    XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(cb));
    Boolean etched_in = dpy->display.enable_etched_in_menu;
-
    screen = XtScreen(cb);
    if (XmIsGadget(cb))
    {
       if ((CBG_CascadePixmap(cb) != XmUNSPECIFIED_PIXMAP) &&
           (CBG_ArmedPixmap(cb) != XmUNSPECIFIED_PIXMAP))
         return;
-
       ht = G_HighlightThickness(cb);
       st = G_ShadowThickness(cb);
       tsc = LabG_TopShadowColor(cb);
@@ -1963,23 +1712,18 @@ _XmCreateArrowPixmaps(
       arrow_direction = (LayoutIsRtoLP(cb)) ? XmARROW_LEFT : XmARROW_RIGHT;
       text_height = LabG_TextRect_height(cb);
       depth = XtParent(cb)->core.depth;
-
       if (etched_in)
           armGC = CBG_ArmGC(wid);
-
    }
    else
    {
       Pixel       select_pixel;
-
       if ((CB_CascadePixmap(cb) != XmUNSPECIFIED_PIXMAP) &&
           (CB_ArmedPixmap(cb) != XmUNSPECIFIED_PIXMAP))
         return;
-
       XmGetColors(XtScreen(wid), wid->core.colormap,
 		  wid -> core.background_pixel,
 		  NULL, NULL, NULL, &select_pixel);
-
       if (etched_in)
       {
           values.foreground = values.background = select_pixel;
@@ -1987,7 +1731,6 @@ _XmCreateArrowPixmaps(
           armGC = XtGetGC ((Widget) wid,
               GCForeground | GCBackground | GCGraphicsExposures, &values);
       }
-
       ht = cb->primitive.highlight_thickness;
       st = cb->primitive.shadow_thickness;
       tsc =  cb->primitive.top_shadow_color;
@@ -1999,10 +1742,8 @@ _XmCreateArrowPixmaps(
       text_height = Lab_TextRect_height(cb);
       depth = cb->core.depth;
    }
-
    side = MAX( (text_height * 2 / 3) + 2 * (ht + st),
 	      (2*(ht + (st-1) +1)) +1 );       /* see _XmGetArrowDrawRects() */
-
    cpart.height = cpart.width = side;
    cpart.depth = depth;
    cpart.direction = arrow_direction;
@@ -2012,7 +1753,6 @@ _XmCreateArrowPixmaps(
    cpart.display = XtDisplay(cb);
    cpart.screen = screen;
    cpart.pixmap = XmUNSPECIFIED_PIXMAP;
-
    /*
     * Create or get an existing arrow cache record for the unarmed arrow
     */
@@ -2020,18 +1760,15 @@ _XmCreateArrowPixmaps(
    unarmed_arrow = (XmArrowPixmap *)
        _XmCachePart(&ArrowPixmapCache, (XtPointer) &cpart,
 		    sizeof(XmArrowPixmap));
-
    /*
     * Create or get an existing arrow cache record for the armed arrow
     */
    cpart.top_shadow_color = bsc;
    cpart.bottom_shadow_color = tsc;
-
    armed_arrow =  (XmArrowPixmap *)
       _XmCachePart(&ArrowPixmapCache, (XtPointer) &cpart,
 		   sizeof(XmArrowPixmap));
    _XmProcessUnlock();
-
    if ((unarmed_arrow->pixmap == XmUNSPECIFIED_PIXMAP) ||
        (armed_arrow->pixmap == XmUNSPECIFIED_PIXMAP))
    {
@@ -2039,15 +1776,12 @@ _XmCreateArrowPixmaps(
       values.graphics_exposures = False;
       gc = XtGetGC ((Widget) cb,
                    GCForeground | GCBackground | GCGraphicsExposures, &values);
-
       /* armed arrow */
       if (armed_arrow->pixmap == XmUNSPECIFIED_PIXMAP)
       {
          pixmap = XCreatePixmap(XtDisplay(cb), RootWindowOfScreen(screen),
             side, side, depth);
-
          armed_arrow->pixmap = pixmap;
-
          XFillRectangle(XtDisplay(cb), pixmap, etched_in? armGC : gc,
 			0, 0, side, side);
 	 XmeDrawArrow(XtDisplay((Widget)cb), pixmap,
@@ -2058,15 +1792,12 @@ _XmCreateArrowPixmaps(
 		side - 2*(ht + st - 1),
 		st, arrow_direction);
       }
-
       /* standard (unarmed) pixmap */
       if (unarmed_arrow->pixmap == XmUNSPECIFIED_PIXMAP)
       {
          pixmap = XCreatePixmap(XtDisplay(cb),  RootWindowOfScreen(screen),
             side, side, depth);
-
          unarmed_arrow->pixmap = pixmap;
-
          XFillRectangle(XtDisplay(cb), pixmap, gc, 0, 0, side, side);
 	 XmeDrawArrow(XtDisplay((Widget)cb), pixmap,
 	 tsGC, bsGC, gc,
@@ -2089,8 +1820,6 @@ _XmCreateArrowPixmaps(
       CB_CascadePixmap(cb) = unarmed_arrow->pixmap;
    }
 }
-
-
 /*
  * get the cascade size set up
  */
@@ -2101,13 +1830,11 @@ size_cascade(
     Window rootwin;
     int x,y;					/* must be int */
     unsigned int width, height, border, depth;  /* must be unsigned int */
-
     if (CBG_CascadePixmap(cascadebtn) != XmUNSPECIFIED_PIXMAP)
     {
        XGetGeometry(XtDisplay(cascadebtn), CBG_CascadePixmap(cascadebtn),
 		    &rootwin, &x, &y, &width, &height,
 		    &border, &depth);
-
        CBG_Cascade_width(cascadebtn) = (Dimension) width;
        CBG_Cascade_height(cascadebtn) = (Dimension) height;
     }
@@ -2120,7 +1847,6 @@ size_cascade(
 		MAX(LabG_TextRect(cascadebtn).height,
 		    LabG_AccTextRect(cascadebtn).height) +
 	        2 * cascadebtn->gadget.shadow_thickness;     /* glyph shadow */
-
        }
        else
        {
@@ -2129,8 +1855,6 @@ size_cascade(
        }
     }
 }
-
-
 /*
  * set up the cascade size and location
  */
@@ -2141,7 +1865,6 @@ setup_cascade(
         Boolean adjustHeight )
 {
    Dimension delta;
-
    if (CBG_HasCascade(cascadebtn))
    {
       /*
@@ -2156,10 +1879,8 @@ setup_cascade(
             delta = CBG_Cascade_width(cascadebtn) + CASCADE_PIX_SPACE -
                 LabG_MarginLeft(cascadebtn);
             LabG_MarginLeft(cascadebtn) += delta;
-
             if (adjustWidth)
                 cascadebtn->rectangle.width += delta;
-
             else
             {
                if (LabG_Alignment(cascadebtn) == XmALIGNMENT_BEGINNING)
@@ -2168,11 +1889,9 @@ setup_cascade(
                    LabG_TextRect_x(cascadebtn) += delta/2;
             }
         }
-
       }
       else
       {
-
 	if ((CBG_Cascade_width(cascadebtn) + CASCADE_PIX_SPACE) >
 	    LabG_MarginRight(cascadebtn))
 	  {
@@ -2180,21 +1899,17 @@ setup_cascade(
 	      LabG_MarginRight(cascadebtn);
 	    LabG_MarginRight(cascadebtn) = LabG_MarginRight(cascadebtn) +
 	      delta;
-
 	    if (adjustWidth)
 	      cascadebtn->rectangle.width += delta;
-
 	    else
 	      {
 		if (LabG_Alignment(cascadebtn) == XmALIGNMENT_END)
 		  LabG_TextRect_x(cascadebtn) -= delta;
 	    else if (LabG_Alignment(cascadebtn) == XmALIGNMENT_CENTER)
 	      LabG_TextRect_x(cascadebtn) -= delta/2;
-
 	      }
 	  }
       }
-
       /*
        * the cascade height should fit inside of
        * TextRect + marginTop + marginBottom
@@ -2203,7 +1918,6 @@ setup_cascade(
                    2 * (LabG_MarginHeight(cascadebtn) +
 		         cascadebtn->gadget.shadow_thickness +
 		         cascadebtn->gadget.highlight_thickness);
-
       if (delta > cascadebtn->rectangle.height)
       {
 	 delta -= cascadebtn->rectangle.height;
@@ -2212,16 +1926,12 @@ setup_cascade(
 	 LabG_TextRect_y(cascadebtn) += delta/2;
 	 LabG_MarginBottom(cascadebtn) = LabG_MarginBottom(cascadebtn) +
 	   delta - (delta/2);
-
 	 if (adjustHeight)
 	     cascadebtn->rectangle.height += delta;
       }
    }
-
    position_cascade(cascadebtn);
 }
-
-
 /*
  * Destroy the widget
  */
@@ -2233,35 +1943,27 @@ Destroy(
     XmRowColumnWidget submenu = (XmRowColumnWidget) CBG_Submenu(cb);
     XmMenuSystemTrait menuSTrait;
     XmManagerWidget mw = (XmManagerWidget) XtParent(cb);
-
     menuSTrait = (XmMenuSystemTrait)
       XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
-
     /*
      * break the submenu link
      */
     if (submenu != NULL && menuSTrait != NULL)
       menuSTrait -> recordPostFromWidget((Widget) submenu, (Widget) cb, FALSE);
-
     if (CBG_Timer(cb))
          XtRemoveTimeOut (CBG_Timer(cb));
-
     _XmProcessLock();
     if (CBG_ArmedPixmap(cb) != XmUNSPECIFIED_PIXMAP)
     {
        _XmArrowPixmapCacheDelete((XtPointer) CBG_ArmedPixmap(cb));
        _XmArrowPixmapCacheDelete((XtPointer) CBG_CascadePixmap(cb));
     }
-
    /* Release the GCs */
    XtReleaseGC ((Widget) mw, CBG_ArmGC(cb));
    XtReleaseGC ((Widget) mw, CBG_BackgroundGC(cb));
-
     _XmCacheDelete((XtPointer) CBG_Cache(cb));
     _XmProcessUnlock();
 }
-
-
 /*
  * routine to resize a cascade button, called by the parent
  * geometery manager
@@ -2279,13 +1981,10 @@ Resize(
       resize = xmLabelGadgetClassRec.rect_class.resize;
       _XmProcessUnlock();
       (* resize) ((Widget) cb);
-
       /* move the cascade too */
       position_cascade (cb);
     }
 }
-
-
 /************************************************************************
  *
  *  SetValuesPrehook
@@ -2304,18 +2003,13 @@ SetValuesPrehook(
     WidgetClass                 ec;
     Cardinal                    size;
     XmCascadeButtonGCacheObject newSec, reqSec;
-
     _XmProcessLock();
-
     cePtr = _XmGetBaseClassExtPtr(XtClass(newParent), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
     size = ec->core_class.widget_size;
-
     newSec = (XmCascadeButtonGCacheObject)_XmExtObjAlloc(size);
     reqSec = (XmCascadeButtonGCacheObject)_XmExtObjAlloc(size);
-
     _XmProcessUnlock();
-
     newSec->object.self = (Widget)newSec;
     newSec->object.widget_class = ec;
     newSec->object.parent = XtParent(newParent);
@@ -2323,57 +2017,43 @@ SetValuesPrehook(
     newSec->object.being_destroyed = False;
     newSec->object.destroy_callbacks = NULL;
     newSec->object.constraints = NULL;
-
     newSec->ext.logicalParent = newParent;
     newSec->ext.extensionType = XmCACHE_EXTENSION;
-
     memcpy( &(newSec->label_cache),
             LabG_Cache(newParent),
             sizeof(XmLabelGCacheObjPart));
-
     memcpy( &(newSec->cascade_button_cache),
             CBG_Cache(newParent),
             sizeof(XmCascadeButtonGCacheObjPart));
-
     extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
     extData->widget = (Widget)newSec;
     extData->reqWidget = (Widget)reqSec;
     _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
-
     /*
      * Since the resource lists for label and cascadebutton were merged at
      * ClassInitialize time we need to make only one call to
      * XtSetSubvalues()
      */
-
     XtSetSubvalues((XtPointer)newSec,
                     ec->core_class.resources,
                     ec->core_class.num_resources,
                     args, *num_args);
-
     memcpy((XtPointer)reqSec, (XtPointer)newSec, size);
-
     LabG_Cache(newParent) = &(((XmLabelGCacheObject)newSec)->label_cache);
     LabG_Cache(refParent) = &(((XmLabelGCacheObject)extData->reqWidget)->
 			      label_cache);
-
     CBG_Cache(newParent) =
         &(((XmCascadeButtonGCacheObject)newSec)->cascade_button_cache);
     CBG_Cache(refParent) =
         &(((XmCascadeButtonGCacheObject)extData->reqWidget)->
 	  cascade_button_cache);
-
     _XmExtImportArgs((Widget)newSec, args, num_args);
-
-
     /* CR 2990: Use XmNbuttonFontList as the default font. */
     if (LabG_Font(newParent) == NULL)
       LabG_Font(newParent) = XmeGetDefaultRenderTable (newParent,
 						       XmBUTTON_FONTLIST);
-
     return FALSE;
 }
-
 /************************************************************************
  *
  *  GetValuesPrehook
@@ -2390,15 +2070,12 @@ GetValuesPrehook(
     WidgetClass                 ec;
     Cardinal 			size;
     XmCascadeButtonGCacheObject newSec;
-
     _XmProcessLock();
     cePtr = _XmGetBaseClassExtPtr(XtClass(newParent), XmQmotif);
     ec = (*cePtr)->secondaryObjectClass;
     size = ec->core_class.widget_size;
-
     newSec = (XmCascadeButtonGCacheObject)_XmExtObjAlloc(size);
     _XmProcessUnlock();
-
     newSec->object.self = (Widget)newSec;
     newSec->object.widget_class = ec;
     newSec->object.parent = XtParent(newParent);
@@ -2406,22 +2083,17 @@ GetValuesPrehook(
     newSec->object.being_destroyed = False;
     newSec->object.destroy_callbacks = NULL;
     newSec->object.constraints = NULL;
-
     newSec->ext.logicalParent = newParent;
     newSec->ext.extensionType = XmCACHE_EXTENSION;
-
     memcpy( &(newSec->label_cache),
             LabG_Cache(newParent),
             sizeof(XmLabelGCacheObjPart));
-
     memcpy( &(newSec->cascade_button_cache),
             CBG_Cache(newParent),
             sizeof(XmCascadeButtonGCacheObjPart));
-
     extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
     extData->widget = (Widget)newSec;
     _XmPushWidgetExtData(newParent, extData, XmCACHE_EXTENSION);
-
     /* Note that if a resource is defined in the superclass's as well as a
    subclass's resource list and if a NULL is passed in as the third
    argument to XtSetArg, then when a GetSubValues() is done by the
@@ -2431,21 +2103,17 @@ GetValuesPrehook(
    This means that we have to pass the same arglist with the NULL to
    both the superclass and subclass and propagate the values up once
    the XtGetSubValues() are done.*/
-
     /*
      * Since the resource lists for label and cascadebutton were merged at
      * ClassInitialize time we need to make only one call to
      * XtGetSubvalues()
      */
-
     XtGetSubvalues((XtPointer)newSec,
                    ec->core_class.resources,
                    ec->core_class.num_resources,
                    args, *num_args);
-
     _XmExtGetValuesHook((Widget)newSec, args, num_args);
 }
-
 /************************************************************************
  *
  *  GetValuesPosthook
@@ -2458,16 +2126,12 @@ GetValuesPosthook(
         Cardinal *num_args )
 {
     XmWidgetExtData             ext;
-
     _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
-
     _XmProcessLock();
     _XmExtObjFree((XtPointer) ext->widget);
     _XmProcessUnlock();
     XtFree( (char *) ext);
 }
-
-
 /************************************************************************
  *
  *  SetValuesPosthook
@@ -2487,7 +2151,6 @@ SetValuesPosthook(
     * - update cache pointers
     * - and free req
     */
-
   /* assign if changed! */
   _XmProcessLock();
   if (!_XmLabelCacheCompare((XtPointer)LabG_Cache(new_w),
@@ -2501,7 +2164,6 @@ SetValuesPosthook(
   }
   else
        LabG_Cache(new_w) = LabG_Cache(current);
-
   /* assign if changed! */
   if (!_XmCascadeBCacheCompare((XtPointer)CBG_Cache(new_w),
                               (XtPointer)CBG_Cache(current)))
@@ -2514,19 +2176,13 @@ SetValuesPosthook(
       }
   else
       CBG_Cache(new_w) = CBG_Cache(current);
-
   _XmPopWidgetExtData(new_w, &ext, XmCACHE_EXTENSION);
-
   _XmExtObjFree((XtPointer) ext->widget);
   _XmExtObjFree((XtPointer) ext->reqWidget);
-
   _XmProcessUnlock();
-
   XtFree( (char *) ext);
-
   return FALSE;
 }
-
 /*
  * Set Values
  */
@@ -2545,10 +2201,8 @@ SetValues(
     Boolean adjustWidth = FALSE;
     Boolean adjustHeight = FALSE;
     XmMenuSystemTrait menuSTrait;
-
     menuSTrait = (XmMenuSystemTrait)
       XmeTraitGet((XtPointer) XtClass(XtParent(cw)), XmQTmenuSystem);
-
     if ((CBG_Submenu(new_w)) &&
 	((! XmIsRowColumn(CBG_Submenu(new_w))) ||
 	 (RC_Type(CBG_Submenu(new_w)) != XmMENU_PULLDOWN)))
@@ -2556,13 +2210,11 @@ SetValues(
        CBG_Submenu(new_w) = NULL;
        XmeWarning( (Widget) new_w, WRONGSUBMENU);
     }
-
     if (CBG_MapDelay(new_w) < 0)
     {
        CBG_MapDelay(new_w) = CBG_MapDelay(old);
        XmeWarning( (Widget) new_w, WRONGMAPDELAY);
     }
-
     /* if there is a change to submenu, notify menu system */
     if (CBG_Submenu(old) != CBG_Submenu(new_w))
     {
@@ -2572,14 +2224,11 @@ SetValues(
 	*/
        if (CBG_Submenu(old) && menuSTrait != NULL)
 	 menuSTrait -> recordPostFromWidget(CBG_Submenu(old), nw, FALSE);
-
        if (CBG_Submenu(new_w) && menuSTrait != NULL)
 	 menuSTrait -> recordPostFromWidget(CBG_Submenu(new_w), nw, TRUE);
     }
-
     if (LabG_MenuType(new_w) == XmMENU_BAR)
 	new_w->gadget.traversal_on = TRUE;
-
     /* handle the cascade pixmap indicator */
     else if (LabG_MenuType(new_w) == XmMENU_PULLDOWN ||
 	     LabG_MenuType(new_w) == XmMENU_POPUP ||
@@ -2588,13 +2237,10 @@ SetValues(
        /* don't let traversal change */
        if (LabG_MenuType(new_w) != XmMENU_OPTION)
           new_w->gadget.traversal_on = TRUE;
-
        if (LabG_RecomputeSize(new_w) || (requested->rectangle.width <= 0))
 	  adjustWidth = TRUE;
-
        if (LabG_RecomputeSize(new_w) || (requested->rectangle.height <= 0))
 	  adjustHeight = TRUE;
-
        /* get new pixmap size */
        if (CBG_CascadePixmap (old) != CBG_CascadePixmap (new_w))
        {
@@ -2623,7 +2269,6 @@ SetValues(
 		_XmProcessUnlock();
                 size_cascade (new_w);
           }
-
        /*
         * resize gadget if cascade appeared or disappeared, or if the
 	* cascade pixmap changed size.
@@ -2633,12 +2278,10 @@ SetValues(
 	    (CBG_Submenu(old) != CBG_Submenu(new_w)))
        {
 	  setup_cascade (new_w, adjustWidth, adjustHeight);
-
 	  /* if there wasn't a cascade, and still isn't, don't redraw */
 	  if (CBG_Submenu(old) || CBG_Submenu(new_w))
 	      flag = TRUE;
        }
-
        /* make sure that other changes did not scrunch our pixmap */
        else if (CBG_Submenu(new_w))
        {
@@ -2651,33 +2294,25 @@ SetValues(
 	      (LabG_MarginTop (new_w) != LabG_MarginTop (old))	    ||
 	      (LabG_MarginBottom (new_w) != LabG_MarginBottom (old)))
 	  {
-
              setup_cascade (new_w, adjustWidth, adjustHeight);
 	     flag = TRUE;
 	  }
-
 	  else if ((LabG_MarginWidth(new_w) != LabG_MarginWidth(old)) ||
 		   (new_w->rectangle.width != old->rectangle.width)   ||
 		   (new_w->rectangle.height != old->rectangle.height))
-
 	  {
 	     position_cascade (new_w);
 	     flag = TRUE;
 	  }
        }
     }
-
     /* don't allow this to change */
     new_w->gadget.event_mask = XmARM_EVENT | XmACTIVATE_EVENT |
                              XmFOCUS_IN_EVENT | XmFOCUS_OUT_EVENT |
                              XmENTER_EVENT | XmLEAVE_EVENT | XmHELP_EVENT |
 			     XmBDRAG_EVENT ;
-
     return (flag);
 }
-
-
-
 /************************************************************************
  *
  *  GetArmGC
@@ -2685,7 +2320,6 @@ SetValues(
  *     cascade button when armed.
  *
  ************************************************************************/
-
 static void
 GetArmGC(
         XmCascadeButtonGadget cb )
@@ -2694,19 +2328,14 @@ GetArmGC(
   XtGCMask  valueMask;
   Pixel     junk, select_pixel;
   XmManagerWidget mw = (XmManagerWidget) XtParent(cb);
-
   XmGetColors(XtScreen(mw), mw->core.colormap, mw->core.background_pixel,
 	      &junk, &junk, &junk, &select_pixel);
-
   valueMask = GCForeground | GCBackground | GCGraphicsExposures;
-
   values.foreground = select_pixel;
   values.background = select_pixel;
   values.graphics_exposures = False;
-
   CBG_ArmGC(cb) = XtGetGC ((Widget) mw, valueMask, &values);
 }
-
 /************************************************************************
  *
  *  GetBackgroundGC
@@ -2714,7 +2343,6 @@ GetArmGC(
  *     cascade button when not armed.
  *
  ************************************************************************/
-
 static void
 GetBackgroundGC(
         XmCascadeButtonGadget cb )
@@ -2722,22 +2350,17 @@ GetBackgroundGC(
   XGCValues values;
   XtGCMask  valueMask;
   XFontStruct  *fs;
-
   XmManagerWidget mw = (XmManagerWidget) XtParent(cb);
-
   valueMask = GCForeground | GCBackground | GCFont | GCGraphicsExposures;
   values.foreground = mw -> core.background_pixel;
   values.background = mw -> core.background_pixel;
   values.graphics_exposures = False;
-
   if (XmeRenderTableGetDefaultFont(LabG_Font(cb), &fs))
       values.font = fs->fid;
   else
       valueMask &= ~GCFont;
-
   CBG_BackgroundGC(cb) = XtGetGC( (Widget) mw, valueMask, &values);
 }
-
 /*
  * Initialize
  */
@@ -2754,10 +2377,8 @@ Initialize(
    Boolean adjustHeight = FALSE;
    XmMenuSystemTrait menuSTrait;
    XmRowColumnWidget    submenu = (XmRowColumnWidget) CBG_Submenu (new_w);
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass(XtParent(nw)), XmQTmenuSystem);
-
    if (! (LabG_MenuType(new_w) == XmMENU_BAR ||
 	  LabG_MenuType(new_w) == XmMENU_PULLDOWN ||
 	  LabG_MenuType(new_w) == XmMENU_POPUP    ||
@@ -2765,21 +2386,16 @@ Initialize(
    {
       XmeWarning( (Widget) new_w, WRONGPARENT);
    }
-
    /* Initialize GCs for armed button select and background only */
    GetArmGC (new_w);
    GetBackgroundGC (new_w);
-
    /* if menuProcs is not set up yet, try again */
-
    _XmProcessLock();
    if (xmLabelGadgetClassRec.label_class.menuProcs == NULL)
        xmLabelGadgetClassRec.label_class.menuProcs =
 	   (XmMenuProc) _XmGetMenuProcContext();
    _XmProcessUnlock();
-
    CBG_ArmedPixmap(new_w) =  XmUNSPECIFIED_PIXMAP;
-
    /*
     * if the user did not specify a margin width, and we are
     * in a menuBar, set up the default.  First, find out what was the
@@ -2789,7 +2405,6 @@ Initialize(
    {
       Dimension requestedMarginWidth;
       XtResource request_resources;
-
       request_resources.resource_name = XmNmarginWidth;
       request_resources.resource_class = XmCMarginWidth;
       request_resources.resource_type = XmRHorizontalDimension;
@@ -2797,18 +2412,15 @@ Initialize(
       request_resources.default_type = XmRImmediate;
       request_resources.resource_offset = 0;
       request_resources.default_addr = (XtPointer) XmINVALID_DIMENSION;
-
       XtGetSubresources(XtParent(new_w), &requestedMarginWidth,
 			XtName((Widget)new_w),
 			new_w->object.widget_class->core_class.class_name,
 			&request_resources, 1, args, *num_args);
-
       if (requestedMarginWidth == XmINVALID_DIMENSION)
       {
 	 LabG_MarginWidth(new_w) = 6;
       }
    }
-
    /* for other menu types, we may need to initialize the cascade pixmap */
    else
    if ((LabG_MenuType(new_w) != XmMENU_OPTION))
@@ -2819,14 +2431,12 @@ Initialize(
 	 _XmProcessUnlock();
       }
    }
-
    /* Clear before setting  */
    CBG_Armed(new_w) = 0;
    CBG_SetArmed(new_w, FALSE);
    CBG_SetTraverse (new_w, FALSE);
    CBG_SetWasPosted (new_w, FALSE);
    CBG_Timer(new_w) = 0;
-
    if ((submenu) &&
        ((! XmIsRowColumn(submenu)) ||
 	(RC_Type(submenu) != XmMENU_PULLDOWN)))
@@ -2834,49 +2444,39 @@ Initialize(
       submenu = NULL;
       XmeWarning( (Widget) new_w, WRONGSUBMENU);
    }
-
    if (CBG_MapDelay(new_w) < 0)
    {
       CBG_MapDelay(new_w) = MAP_DELAY_DEFAULT;
       XmeWarning( (Widget) new_w, WRONGMAPDELAY);
    }
-
    /* call submenu's class function to set the link  */
    if (submenu != NULL && menuSTrait != NULL)
      menuSTrait -> recordPostFromWidget(CBG_Submenu(new_w), (Widget) new_w, TRUE);
-
    if (LabG_MenuType(new_w) == XmMENU_PULLDOWN	||
        LabG_MenuType(new_w) == XmMENU_POPUP ||
        LabG_MenuType(new_w) == XmMENU_OPTION)
    {
       if (req->rectangle.width <= 0)
 	  adjustWidth = TRUE;
-
       if (req->rectangle.height <= 0)
 	  adjustHeight = TRUE;
-
       /* get pixmap size and set up gadget to allow room for it */
       size_cascade (new_w);
       setup_cascade (new_w, adjustWidth, adjustHeight);
    }
-
    if (LabG_MenuType(new_w) == XmMENU_BAR ||
        LabG_MenuType(new_w) == XmMENU_PULLDOWN	||
        LabG_MenuType(new_w) == XmMENU_POPUP)
    {
       new_w->gadget.traversal_on = TRUE;
    }
-
    /*
     * initialize the input types
     */
    new_w->gadget.event_mask = XmARM_EVENT | XmACTIVATE_EVENT |
        XmFOCUS_IN_EVENT | XmFOCUS_OUT_EVENT |
 	   XmENTER_EVENT | XmLEAVE_EVENT | XmHELP_EVENT;
-
 }
-
-
 /*
  *************************************************************************
  *
@@ -2892,12 +2492,9 @@ XmCreateCascadeButtonGadget(
         Cardinal ac )
 {
     Widget cb;
-
     cb = XtCreateWidget(name, xmCascadeButtonGadgetClass, parent, al, ac);
-
     return (cb);
 }
-
 Widget
 XmVaCreateCascadeButtonGadget(
         Widget parent,
@@ -2907,12 +2504,9 @@ XmVaCreateCascadeButtonGadget(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmCascadeButtonGadgetClass,
@@ -2921,7 +2515,6 @@ XmVaCreateCascadeButtonGadget(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedCascadeButtonGadget(
         Widget parent,
@@ -2931,11 +2524,9 @@ XmVaCreateManagedCascadeButtonGadget(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmCascadeButtonGadgetClass,
@@ -2944,7 +2535,6 @@ XmVaCreateManagedCascadeButtonGadget(
     va_end(var);
     return w;
 }
-
 /*
  * Arm or disarm the gadget.  This routine does not pop up or down submenus
  */
@@ -2955,19 +2545,16 @@ XmCascadeButtonGadgetHighlight(
 {
    XmCascadeButtonGadget cb  = (XmCascadeButtonGadget) wid;
    _XmWidgetToAppContext(wid);
-
    _XmAppLock(app);
    if ((cb) && XmIsCascadeButtonGadget(cb))
    {
       if (highlight)
          Arm (cb);
-
       else
          Disarm (cb, FALSE);
    }
    _XmAppUnlock(app);
 }
-
 /****************************************************
  *   Functions for manipulating Secondary Resources.
  *********************************************************/
@@ -2985,7 +2572,6 @@ GetCascadeBGClassSecResData(
     XmBaseClassExt  bcePtr;
     String  resource_class, resource_name;
     XtPointer  client_data;
-
     _XmProcessLock();
     bcePtr = &(CascadeBGClassExtensionRec );
     client_data = NULL;
@@ -2998,7 +2584,6 @@ GetCascadeBGClassSecResData(
     _XmProcessUnlock();
     return (arrayCount);
 }
-
 /*
  * GetCascadeBGClassResBase ()
  *   retrun the address of the base of resources.
@@ -3011,11 +2596,9 @@ GetCascadeBGClassSecResBase(
     size_t labg_cache_size = sizeof (XmLabelGCacheObjPart);
     size_t cascadebg_cache_size = sizeof (XmCascadeButtonGCacheObjPart);
         char *cp;
-
     _XmProcessLock();
     widgetSecdataPtr = (XtPointer)
                       (XtMalloc ( labg_cache_size + cascadebg_cache_size + 1));
-
     if (widgetSecdataPtr)
           { cp = (char *) widgetSecdataPtr;
             memcpy( cp, LabG_Cache(widget), labg_cache_size);
@@ -3024,7 +2607,6 @@ GetCascadeBGClassSecResBase(
           }
 /* else Warning: error cannot allocate Memory */
 /*     widgetSecdataPtr = (XtPointer) ( LabG_Cache(widget)); */
-
 	_XmProcessUnlock();
         return (widgetSecdataPtr);
 }

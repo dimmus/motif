@@ -27,16 +27,11 @@
 /* $XConsortium: RCLayoutI.h /main/5 1995/07/13 17:44:58 drk $ */
 #ifndef _XmRCLayoutI_h
 #define _XmRCLayoutI_h
-
 #include <Xm/RCLayoutP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmRCDoMarginAdjustment(
                         XmRowColumnWidget m) ;
 extern void _XmRCThinkAboutSize(
@@ -67,17 +62,12 @@ extern XmRCKidGeometry _XmRCGetKidGeo(
 extern void _XmRCSetKidGeo(
                         XmRCKidGeometry kg,
                         Widget instigator) ;
-
 extern void _XmRC_SetOrGetTextMargins(
                         Widget wid,
                         unsigned char op,
                         XmBaselineMargins *textMargins) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRCLayoutI_h */

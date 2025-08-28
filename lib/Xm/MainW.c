@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: MainW.c /main/20 1996/10/17 15:21:07 cde-osf $"
 #endif
 #endif
-
 #include "XmI.h"
 #include <Xm/SeparatoGP.h>  /* just access the position/dimension fields,*/
 #include <Xm/ScrollBarP.h>  /*   could live without that if needed */
@@ -41,16 +38,11 @@ static char rcsid[] = "$XConsortium: MainW.c /main/20 1996/10/17 15:21:07 cde-os
 #include "MessagesI.h"
 #include "RepTypeI.h"
 #include "GeoUtilsI.h"
-
 #define MWMessage1	_XmMMsgMainW_0000
 #define MWMessage2	_XmMMsgMainW_0001
-
 #define ExistManaged( wid)      (wid && XtIsManaged( wid))
-
 #define DEFAULT_SIZE 50
-
 /********    Static Function Declarations    ********/
-
 static void ClassPartInitialize(
                         WidgetClass wc) ;
 static void Initialize(
@@ -86,21 +78,14 @@ static void GetVertRects(
 			Widget sw,
 			XRectangle ** vrect,
 			Cardinal * num_vrect);
-
 static void CheckKids(
 			XmMainWindowWidget mw);
-
 /********    End Static Function Declarations    ********/
-
-
-
-
 /************************************************************************
  *									*
  * Main Window Resources						*
  *									*
  ************************************************************************/
-
 static XtResource resources[] =
 {
     {
@@ -142,31 +127,25 @@ static XtResource resources[] =
 	XmRImmediate, (XtPointer) False
     }
 };
-
 /****************
  *
  * Resolution independent resources
  *
  ****************/
-
 static XmSyntheticResource syn_resources[] =
 {
    { XmNmainWindowMarginWidth,
      sizeof (Dimension),
      XtOffsetOf(XmMainWindowRec, mwindow.margin_width),
      XmeFromHorizontalPixels, XmeToHorizontalPixels },
-
    { XmNmainWindowMarginHeight,
      sizeof (Dimension),
      XtOffsetOf(XmMainWindowRec, mwindow.margin_height),
      XmeFromVerticalPixels, XmeToVerticalPixels },
-
 };
-
 /*******************************************/
 /*  Declaration of class extension records */
 /*******************************************/
-
 static XmScrolledWindowClassExtRec scrolled_windowClassExtRec = {
     NULL,
     NULLQUARK,
@@ -175,14 +154,11 @@ static XmScrolledWindowClassExtRec scrolled_windowClassExtRec = {
     NULL,                              /* inherit get_hor_rects */
     GetVertRects,                      /* overide get_vert_rects */
 };
-
-
 /****************************************************************
  *
  * Full class record constant
  *
  ****************************************************************/
-
 externaldef(xmmainwindowclassrec) XmMainWindowClassRec xmMainWindowClassRec = {
   {
 /* core_class fields      */
@@ -235,7 +211,6 @@ externaldef(xmmainwindowclassrec) XmMainWindowClassRec xmMainWindowClassRec = {
     NULL,
     NULL,
     NULL
-
   },
 /* Manager Class */
    {
@@ -247,7 +222,6 @@ externaldef(xmmainwindowclassrec) XmMainWindowClassRec xmMainWindowClassRec = {
       XmInheritParentProcess,                   /* parent_process         */
       NULL,					/* extension           */
    },
-
  {
 /* Scrolled Window class */
     (XtPointer) &scrolled_windowClassExtRec,    /* auto drag extension */
@@ -257,13 +231,8 @@ externaldef(xmmainwindowclassrec) XmMainWindowClassRec xmMainWindowClassRec = {
      /* extension */            (XtPointer) NULL
  }
 };
-
 externaldef(xmmainwindowwidgetclass) WidgetClass
              xmMainWindowWidgetClass = (WidgetClass)&xmMainWindowClassRec;
-
-
-
-
 /************************************************************************
  *									*
  *  ClassPartInitialize - Set up the fast subclassing.			*
@@ -275,8 +244,6 @@ ClassPartInitialize(
 {
    _XmFastSubclassInit (wc, XmMAIN_WINDOW_BIT);
 }
-
-
 /************************************************************************
  *									*
  *  Initialize								*
@@ -293,8 +260,6 @@ Initialize(
     XmMainWindowWidget new_w = (XmMainWindowWidget) nw ;
     int   n;
     Arg loc_args[20];
-
-
     /* First, undo our superclass defaulting to a real size in
        AUTOMATIC mode, because MainWindow can build a real size
        out of its children in AUTOMATIC */
@@ -304,17 +269,13 @@ Initialize(
 	if ((rw->core.height == 0) && new_w->core.height)
 	    new_w->core.height = 0 ;
     }
-
     if (!XmRepTypeValidValue(XmRID_COMMAND_WINDOW_LOCATION,
 			    new_w->mwindow.CommandLoc, nw))
         new_w->mwindow.CommandLoc = XmCOMMAND_ABOVE_WORKSPACE;
-
     n = 0;
     XtSetArg (loc_args[n], XmNorientation, XmHORIZONTAL); n++;
     XtSetArg (loc_args[n], XmNscrolledWindowChildType, XmSEPARATOR); n++;
-
     new_w->mwindow.ManagingSep = True ;
-
     new_w->mwindow.Sep1 = (XmSeparatorGadget)
 	XtCreateManagedWidget("Separator1", xmSeparatorGadgetClass,
 			      nw, loc_args, n);
@@ -324,17 +285,13 @@ Initialize(
     new_w->mwindow.Sep3 = (XmSeparatorGadget)
 	XtCreateManagedWidget("Separator3", xmSeparatorGadgetClass,
 			      nw, loc_args, n);
-
     new_w->mwindow.ManagingSep = False ;
-
     /* override the SW setting here */
     new_w->swindow.XOffset = new_w->mwindow.margin_width;
     new_w->swindow.YOffset = new_w->mwindow.margin_height;
     new_w->swindow.WidthPad = new_w->mwindow.margin_width;
     new_w->swindow.HeightPad = new_w->mwindow.margin_height;
 }
-
-
 /************************************************************************
  *									*
  *  DeleteChild								*
@@ -349,7 +306,6 @@ DeleteChild(
     CompositeWidgetClass superclass = (CompositeWidgetClass)
 	                xmMainWindowClassRec.core_class.superclass ;
     XtWidgetProc      delete_child;
-
     /* update our own internals first */
     if (child == mw->mwindow.CommandWindow)
         mw->mwindow.CommandWindow = NULL;
@@ -357,18 +313,15 @@ DeleteChild(
         mw->mwindow.MenuBar = NULL;
     if (child == mw->mwindow.Message)
         mw->mwindow.Message = NULL;
-
     _XmProcessLock();
     delete_child = superclass->composite_class.delete_child;
     _XmProcessUnlock();
     (*delete_child)(child);
 }
-
 static void
 CheckKids(
         XmMainWindowWidget mw )
 {
-
     /* do a sanity check */
     if( mw->swindow.WorkWindow != NULL &&
        mw->swindow.WorkWindow->core.being_destroyed ) {
@@ -395,9 +348,6 @@ CheckKids(
 	mw->mwindow.Message = NULL;
     }
 }
-
-
-
 /************************************************************************
  *									*
  *  InsertChild								*
@@ -412,10 +362,7 @@ InsertChild(
     XmMainWindowWidget   mw = (XmMainWindowWidget ) w->core.parent;
     XmScrolledWindowConstraint nc = GetSWConstraint(w);
     XtWidgetProc insert_child;
-
     if (!XtIsRectObj(w)) return;
-
-
     /* Try to guess the nature of the child_type .
        If we're lucky, fine, otherwise, something bad might happens: the
        scrolledwindow can take it as a workwindow and possibly reparents
@@ -423,10 +370,8 @@ InsertChild(
        In the absence of a set childType constraint resource set,
        there is not much we can do to avoid the problem */
     /* Note: auto created Separator were already labelled in Initialize */
-
     if (nc->child_type == (unsigned char) RESOURCE_DEFAULT) {
 	XmMenuSystemTrait menuSTrait;
-
 	if ((menuSTrait = (XmMenuSystemTrait)
 	     XmeTraitGet ((XtPointer) XtClass(w), XmQTmenuSystem)) != NULL) {
 	    if (menuSTrait->type(w) == XmMENU_BAR &&
@@ -435,14 +380,12 @@ InsertChild(
 		nc->child_type = XmMENU_BAR ;
 	    }
 	}  else
-
 	if (XmIsCommandBox(w)) {
 	    if (!mw->mwindow.CommandWindow)   {
 		/* If it's a command, and we don't have one, get it */
 		nc->child_type = XmCOMMAND_WINDOW ;
 	    }
 	} else
-
 	    /* new in 2.0 */
 	if (XmIsMessageBox(w)) {
 	    if (!mw->mwindow.Message)   {
@@ -450,7 +393,6 @@ InsertChild(
 	    }
 	}
     }
-
     if (nc->child_type == XmMENU_BAR) {
 	mw->mwindow.MenuBar = w;
     } else
@@ -460,17 +402,13 @@ InsertChild(
     if (nc->child_type == XmMESSAGE_WINDOW) {
 	mw->mwindow.Message = w;
     }
-
     /* call ScrolledWindow InsertChild directly, since it does nothing
        to the MainWindow known childType */
     _XmProcessLock();
     insert_child = superclass->composite_class.insert_child;
     _XmProcessUnlock();
     (*insert_child)(w);
-
 }
-
-
 /************************************************************************
  *									*
  * Layout - Layout the main window.					*
@@ -487,10 +425,7 @@ Layout(
     Dimension	bw = 0, sep2h, sep3h;
     XtWidgetGeometry  desired, preferred;
     int tmp ; /* used for checking negative Dimension value */
-
-
     CheckKids(mw);
-
 /****************
  *
  * Query the kids - and we have definite preferences as to their sizes.
@@ -502,12 +437,10 @@ Layout(
  ****************/
     MyXpad = mw->mwindow.margin_width;
     MyYpad = mw->mwindow.margin_height;
-
     mw->swindow.XOffset = MyXpad;
     mw->swindow.YOffset = MyYpad;
     mw->swindow.HeightPad = mw->mwindow.margin_height;
     mw->swindow.WidthPad = mw->mwindow.margin_width;
-
     cwx = MyXpad;
     cwy = swy = MyYpad;
     mw->mwindow.ManagingSep = True;
@@ -519,7 +452,6 @@ Layout(
 	tmp = mw->core.width - (2 * (MyXpad + bw));
 	if (tmp <= 0) mbwidth = 10; else  mbwidth = tmp ;
 	mbheight = mw->mwindow.MenuBar->core.height;
-
 	desired.x = mbx;
 	desired.y = mby;
 	desired.border_width = bw;
@@ -533,7 +465,6 @@ Layout(
         }
         XmeConfigureObject(mw->mwindow.MenuBar, mbx, mby,
 			   mbwidth, mbheight,bw);
-
         if (mw->mwindow.ShowSep)
         {
 	    XtManageChild((Widget) mw->mwindow.Sep1);
@@ -554,14 +485,12 @@ Layout(
     {
 	XtUnmanageChild((Widget) mw->mwindow.Sep1);
     }
-
     if (ExistManaged(mw->mwindow.CommandWindow))
     {
         bw = mw->mwindow.CommandWindow->core.border_width;
 	tmp = mw->core.width - (2 * (MyXpad + bw));
 	if (tmp <= 0) cwwidth = 10; else cwwidth = tmp ;
 	cwheight = mw->mwindow.CommandWindow->core.height;
-
 	desired.x = cwx;
 	desired.y = cwy;
 	desired.border_width = bw;
@@ -574,20 +503,16 @@ Layout(
    	    bw = preferred.border_width;
 	    cwheight = preferred.height;
         }
-
         if ((cwheight + cwy + (2 * bw)) > (mw->core.height - MyYpad)) {
 	    tmp = mw->core.height - (2 * bw) - MyYpad - cwy;
 	    if (tmp <= 0) cwheight = 10 ; else cwheight = tmp;
 	}
-
         if (mw->mwindow.ShowSep)
             sep2h = mw->mwindow.Sep2->rectangle.height;
         else
             sep2h = 0;
-
         sep2y = (cwy +  cwheight) + 2 * bw;
         swy = sep2y + sep2h ;
-
         if (mw->mwindow.CommandLoc == XmCOMMAND_BELOW_WORKSPACE)
         {
             mby = swy;
@@ -607,7 +532,6 @@ Layout(
         sep2h = 0;
         cwheight = 0;
     }
-
     if (ExistManaged(mw->mwindow.Message))
     {
         bw = mw->mwindow.Message->core.border_width;
@@ -615,7 +539,6 @@ Layout(
 	tmp = mw->core.width - (2 * (MyXpad + bw));
 	if (tmp <= 0) mwwidth = 10 ; else mwwidth = tmp ;
 	mwheight = mw->mwindow.Message->core.height;
-
 	desired.x = mwx;
 	desired.y = swy;
 	desired.border_width = bw;
@@ -632,11 +555,9 @@ Layout(
             sep3h = mw->mwindow.Sep3->rectangle.height;
         else
             sep3h = 0;
-
         sepy = mw->core.height - mwheight - (2 * bw) -
 	    mw->mwindow.margin_height - sep3h;
         mwy = sepy + sep3h;
-
         if (mw->mwindow.CommandLoc == XmCOMMAND_BELOW_WORKSPACE)
         {
             mw->swindow.HeightPad = sep2h + cwheight + sep3h + mwheight
@@ -647,7 +568,6 @@ Layout(
         else
             mw->swindow.HeightPad = sep3h + mwheight
 		+ mw->mwindow.margin_height;
-
         XmeConfigureObject(mw->mwindow.Message, mwx, mwy,
 			   mwwidth, mwheight, bw);
         if (mw->mwindow.ShowSep)
@@ -664,7 +584,6 @@ Layout(
     {
 	XtUnmanageChild((Widget) mw->mwindow.Sep3);
     }
-
     if (ExistManaged(mw->mwindow.CommandWindow))
     {
         XmeConfigureObject( mw->mwindow.CommandWindow,
@@ -679,11 +598,9 @@ Layout(
         else
             XtUnmanageChild((Widget) mw->mwindow.Sep2);
     }
-
     mw->swindow.YOffset = swy;
     mw->mwindow.ManagingSep = False;
 }
-
 /************************************************************************
  *                                                                      *
  *  Relayout the main window.				*
@@ -696,9 +613,7 @@ Resize(
     CompositeWidgetClass superclass = (CompositeWidgetClass)
 	                xmMainWindowClassRec.core_class.superclass ;
     XtWidgetProc resize;
-
     Layout((XmMainWindowWidget) wid);
-
     /* call our superclass layout now that MainWindow has updated
        some internal positional fields: offset, pads */
     _XmProcessLock();
@@ -706,9 +621,6 @@ Resize(
     _XmProcessUnlock();
     (*resize)(wid);
 }
-
-
-
 /************************************************************************
  *									*
  * GetSize - compute the size of the Main window to enclose all the	*
@@ -730,19 +642,13 @@ GetSize(
 		    hsbht = 0, vsbht = 0;
     Dimension	    width, MyXpad, MyYpad;
     XtWidgetGeometry  preferred;
-
-
     MyXpad = mw->mwindow.margin_width * 2;
     MyYpad = mw->mwindow.margin_height * 2;
-
-
     /* what id to use for the sw frame */
    if (mw->swindow.ScrollPolicy == XmAPPLICATION_DEFINED)
         w = mw->swindow.WorkWindow;
     else
         w = (Widget)mw->swindow.ClipWindow;
-
-
     /* note: first time through, all relevant values are 0, but we need to
     ** take account of the preferred size anyway
     */
@@ -753,7 +659,6 @@ GetSize(
 	vmwidth = vsb->core.width + mw->swindow.pad +
 	          (2 * vsb->primitive.highlight_thickness);
     }
-
     if (ExistManaged((Widget) hsb) &&
         ((0 == mw->core.height) || ((Dimension)hsb->core.y < mw->core.height)))  /* needed */
     {
@@ -761,7 +666,6 @@ GetSize(
 	hsheight = hsb->core.height + mw->swindow.pad +
 		   (2 * hsb->primitive.highlight_thickness);
     }
-
 /****************
  *
  * Use the work window as the basis for our height. If the mode is
@@ -770,7 +674,6 @@ GetSize(
  * match for the workspace until the swindow is realized.
  *
  ****************/
-
     if (ExistManaged(w))
     {
         if ((mw->swindow.ScrollPolicy == XmAUTOMATIC) &&
@@ -795,9 +698,7 @@ GetSize(
 	newWidth = MyXpad;
         newHeight = MyYpad;
     }
-
     /* Take the max width, add the height of the other kids */
-
     if (ExistManaged(mw->mwindow.CommandWindow))
     {
         XtQueryGeometry(mw->mwindow.CommandWindow, NULL, &preferred);
@@ -808,9 +709,7 @@ GetSize(
   	            (2 * mw->mwindow.CommandWindow->core.border_width);
         if (mw->mwindow.Sep2 && mw->mwindow.ShowSep)
 	    newHeight += mw->mwindow.Sep2->rectangle.height;
-
     }
-
     if (ExistManaged(mw->mwindow.MenuBar))
     {
         XtQueryGeometry(mw->mwindow.MenuBar, NULL, &preferred);
@@ -822,7 +721,6 @@ GetSize(
         if (mw->mwindow.Sep1  && mw->mwindow.ShowSep)
 	    newHeight += mw->mwindow.Sep1->rectangle.height;
     }
-
     if (ExistManaged(mw->mwindow.Message))
     {
         XtQueryGeometry(mw->mwindow.Message, NULL, &preferred);
@@ -833,18 +731,13 @@ GetSize(
   	            (2 * mw->mwindow.Message->core.border_width);
         if (mw->mwindow.Sep3 && mw->mwindow.ShowSep)
 	    newHeight += mw->mwindow.Sep3->rectangle.height;
-
     }
-
     if (!*pwidth) *pwidth = newWidth ;
     if (!*pheight) *pheight = newHeight ;
-
     /* might still be null */
     if (!*pwidth) *pwidth = DEFAULT_SIZE ;
     if (!*pheight) *pheight = DEFAULT_SIZE ;
-
 }
-
 /************************************************************************
  *									*
  *  GeometryManager							*
@@ -865,10 +758,7 @@ GeometryManager(
     XtWidgetGeometry  parent_request ;
     XtWidgetGeometry  desired, preferred;
     XtWidgetProc resize;
-
-
     CheckKids(mw);
-
 /****************
  *
  * If it's not a mainwindow kid, let the scrolled window deal with it.
@@ -882,21 +772,15 @@ GeometryManager(
         w != (Widget )mw->mwindow.Sep1 &&
         w != (Widget) mw->mwindow.Sep2 &&
         w != (Widget) mw->mwindow.Sep3) {
-
 	/* this is the only case of geometry manager enveloping that
 	   I know of in Motif */
-
 	XtGeometryHandler geo_mgr;
 	_XmProcessLock();
 	geo_mgr = superclass->composite_class.geometry_manager;
 	_XmProcessUnlock();
-
         res = (*geo_mgr)(w, request, reply);
-
         if (res == XtGeometryYes) {
-
 	    Widget mb = mw->mwindow.MenuBar;
-
 	    if ((w == mw->swindow.WorkWindow) &&
                 (request->request_mode & CWWidth) &&
                 mb && XtIsManaged(mb)) {
@@ -935,25 +819,19 @@ GeometryManager(
 	}
 	return(res);
     }
-
     /** Disallow any X or Y changes for MainW children **/
     if ((request -> request_mode & CWX || request -> request_mode & CWY))
 	return(XtGeometryNo);
-
-
     if(request->request_mode & CWBorderWidth)
 	bw = request->border_width;
     else
         bw = w->core.border_width;
-
     if (request->request_mode & CWWidth)
 	newWidth = request->width + 2 * (bw + mw->mwindow.margin_width);
     else
         newWidth = mw->core.width ;
-
     /* grow only in width */
     if (newWidth <= mw->core.width) newWidth = mw->core.width;
-
 /****************
 *
  * Margins are already included in the old width & height
@@ -965,39 +843,29 @@ GeometryManager(
 	    	     request->height + 2 * bw;
     else
          newHeight = mw->core.height;
-
     OldHeight = mw->core.height;
-
     parent_request.request_mode = CWWidth | CWHeight;
     if (request->request_mode & XtCWQueryOnly)
 	parent_request.request_mode |= XtCWQueryOnly;
     parent_request.width = newWidth ;
     parent_request.height = newHeight;
-
     res = XtMakeGeometryRequest((Widget) mw, &parent_request, NULL) ;
-
     if (res == XtGeometryYes) {
 	if (!(request->request_mode & XtCWQueryOnly)) {
 	    if(request->request_mode & CWWidth)
 		w->core.width = request->width;
 	    if(request->request_mode & CWHeight)
 		w->core.height = request->height;
-
 	    mw->swindow.YOffset = mw->swindow.YOffset +
 		(newHeight - OldHeight);
-
 	    _XmProcessLock();
 	    resize = XtCoreProc(mw, resize);
 	    _XmProcessUnlock();
 	    (*resize) ((Widget)mw) ;
 	}
     }
-
     return(res);
 }
-
-
-
 /************************************************************************
  *									*
  *  ChangeManaged - called whenever there is a change in the managed	*
@@ -1014,11 +882,8 @@ ChangeManaged(
     Widget   w;
     register int i;
     XtWidgetProc resize;
-
     if (mw->mwindow.ManagingSep || mw->swindow.FromResize) return;
-
     CheckKids(mw);
-
 /****************
  *
  * This is an ugly bit of work... It's possible for the clip window to get
@@ -1028,21 +893,17 @@ ChangeManaged(
     if ((mw->swindow.ScrollPolicy == XmAUTOMATIC) &&
         (cw->composite.num_children > 1) &&
 	(mw->swindow.WorkWindow != NULL)) {
-
 	/* loop over the clip window child list and treat the bogus */
 	for (i = 0; i < cw->composite.num_children; i++) {
 	    XmScrolledWindowConstraint swc ;
 	    int j ;
-
 	    w = cw->composite.children[i];
 	    swc = GetSWConstraint(w);
-
 	    /* only those kind are allowed as clipwindow kids */
 	    if ((swc->child_type != XmWORK_AREA) &&
 		(swc->child_type != XmSCROLL_HOR) &&
 		(swc->child_type != XmSCROLL_VERT) &&
 		(swc->child_type != XmNO_SCROLL)) {
-
 		/* add it to the main window child list. first increase
 		   the list if needed- Gee, I wish I remember what made
 		   me keep this hacky code around... */
@@ -1057,7 +918,6 @@ ChangeManaged(
 		}
 		mw->composite.children[mw->composite.num_children++] = w;
 		w->core.parent = (Widget) mw;
-
 		/* remove it from the clipwindow child list by
 		   moving all the siblings that comes after it
 		   one slot down */
@@ -1068,7 +928,6 @@ ChangeManaged(
 	    }
 	}
    }
-
     if (!XtIsRealized(wid))  {
 	desired.width = XtWidth(wid) ;   /* might be 0 */
 	desired.height = XtHeight(wid) ; /* might be 0 */
@@ -1076,20 +935,15 @@ ChangeManaged(
 	desired.width = 0 ;
 	desired.height = 0 ;
     }
-
     GetSize(mw, &desired.width, &desired.height);
     desired.request_mode = (CWWidth | CWHeight);
     (void) _XmMakeGeometryRequest(wid, &desired);
-
     _XmProcessLock();
     resize = XtCoreProc(mw, resize);
     _XmProcessUnlock();
     (*resize) (wid) ;
-
     XmeNavigChangeManaged(wid);
 }
-
-
 /************************************************************************
  *									*
  *  SetValues								*
@@ -1107,9 +961,7 @@ SetValues(
     XmMainWindowWidget current = (XmMainWindowWidget) cw ;
     XmMainWindowWidget new_w = (XmMainWindowWidget) nw ;
     Boolean flag = False;
-
     CheckKids(new_w);
-
     /* somehow, this used not to create problem in 1.2,
        some apps did setvalue of XmNmenubar to itself ?
        check that and change back */
@@ -1117,35 +969,29 @@ SetValues(
         (new_w->mwindow.MenuBar == nw)) {
 	new_w->mwindow.MenuBar = current->mwindow.MenuBar;
     }
-
     /* fix for 8990: these warnings must be here for bc... */
     if ((new_w->mwindow.MenuBar != current->mwindow.MenuBar) &&
         (new_w->mwindow.MenuBar == NULL)) {
         XmeWarning( (Widget) new_w, MWMessage1);
 	new_w->mwindow.MenuBar = current->mwindow.MenuBar;
     }
-
     if ((new_w->mwindow.CommandWindow != current->mwindow.CommandWindow) &&
         (new_w->mwindow.CommandWindow == NULL)) {
         XmeWarning( (Widget) new_w, MWMessage2);
 	new_w->mwindow.CommandWindow = current->mwindow.CommandWindow;
     }
-
     /* first deal with the layout attributes, and set up a flag */
-
     /* There is a potential bug here: if the change in margin
        concur with a change on some other stuff, like separator
        or a new child, and the getSize call return the same size,
        no resize call will be generated by Xt.
        A way to fix that is to check this no change in size
        and to fake a request.. maybe not worth. */
-
     if ((new_w->mwindow.margin_width != current->mwindow.margin_width) ||
 	(new_w->mwindow.margin_height != current->mwindow.margin_height) ||
 	(new_w->mwindow.ShowSep != current->mwindow.ShowSep)) {
 	flag = True;
     }
-
     if ((new_w->mwindow.CommandLoc != current->mwindow.CommandLoc) &&
         (XmRepTypeValidValue(XmRID_COMMAND_WINDOW_LOCATION,
 			     new_w->mwindow.CommandLoc, (Widget) new_w))) {
@@ -1157,8 +1003,6 @@ SetValues(
     }
     else
         new_w->mwindow.CommandLoc = current->mwindow.CommandLoc;
-
-
     /* At InsertChild time, a lot of bad things might have happened.
        The command window, messagewindow and work window, which we have
        no real way to identify at that time, might have been mixed up.
@@ -1173,9 +1017,6 @@ SetValues(
        The requirement, if a childType resource isn't provided,
        is that the workwindow be created first, at least in AUTO mode
        where the reparenting happens */
-
-
-
     if ((new_w->mwindow.MenuBar != current->mwindow.MenuBar) ||
         (new_w->mwindow.Message != current->mwindow.Message) ||
         (new_w->mwindow.CommandWindow != current->mwindow.CommandWindow ) ||
@@ -1196,17 +1037,13 @@ SetValues(
 	    new_w->core.height = height ;
 	}
     }
-
     return (False);
 }
-
-
 /************************************************************************
  *									*
  * GetAutoDragVertRects	class methods					*
  *									*
  ************************************************************************/
-
 static void
 GetVertRects(
 	     Widget sw,
@@ -1215,36 +1052,27 @@ GetVertRects(
 {
     Widget w ;
     XmMainWindowWidget mw = (XmMainWindowWidget) sw ;
-
     *num_vrect = 2 ;
     *vrect = (XRectangle *) XtMalloc(sizeof(XRectangle) * (*num_vrect)) ;
-
     /* The vertical rectangles are the ones that vertically auto scroll,
        they are defined by areas on the top and bottom of the
        workarea, e.g. the margins, the spacing, the scrollbars
        and the shadows */
-
     /* Both rects are computed using only the relative work_area or
        clipwindow (in AUTO) location within the scrolled window:
        this is the area between the widget and its parent frame.
-
        Then they need to be translated into the scrollbar coord system. */
-
     /* what id to use for the sw child frame */
    if (mw->swindow.ScrollPolicy == XmAPPLICATION_DEFINED) {
        w = mw->swindow.WorkWindow;
        if (!w) w = sw ; /* fallback */
    } else
         w = (Widget) mw->swindow.ClipWindow;
-
-
     /* the vertical rectangle are more complex to compute than for
        the SW case because we cannot go blindy to the SW boundary,
        we have to stop at the next sibling window boundary */
-
     /* We have to consider all case of existing/managed menubar, command,
        or message area, with the command up or down too. */
-
     if (!ExistManaged(mw->mwindow.MenuBar) &&
 	!ExistManaged(mw->mwindow.CommandWindow)) {
 	(*vrect)[0].y = 0 ;
@@ -1265,21 +1093,16 @@ GetVertRects(
 	(*vrect)[0].height = w->core.y - mw->mwindow.CommandWindow->core.y -
 	    mw->mwindow.CommandWindow->core.height ;
     }
-
-
     /* The first rectangle is the one that makes the scrollbar goes up */
     (*vrect)[0].x = w->core.x - mw->swindow.vScrollBar->core.x ;
     /* just translate to the scrollbar coordinate */
     (*vrect)[0].y -= mw->swindow.vScrollBar->core.y ;
     (*vrect)[0].width = w->core.width ;
-
     /* The second rectangle is the one that makes the scrollbar goes down */
-
     (*vrect)[1].x = (*vrect)[0].x ;
     (*vrect)[1].y = w->core.y + w->core.height
 	- mw->swindow.vScrollBar->core.y ;
     (*vrect)[1].width = (*vrect)[0].width ;
-
     if (!ExistManaged(mw->mwindow.CommandWindow) &&
 	!ExistManaged(mw->mwindow.Message)) {
 	(*vrect)[1].height = mw->core.height - (*vrect)[1].y ;
@@ -1293,15 +1116,12 @@ GetVertRects(
 	(*vrect)[1].height = mw->mwindow.Message->core.y -
 	    w->core.y - w->core.height;
     }
-
 }
-
 /************************************************************************
  *									*
  * Public API Functions							*
  *									*
  ************************************************************************/
-
 /************************************************************************
  *									*
  * XmMainWindowSetAreas - set a new children set.				*
@@ -1320,7 +1140,6 @@ XmMainWindowSetAreas(
 {
      Arg args[5] ;
      Cardinal    n;
-
      n = 0;
      if (menu) {
 	 XtSetArg (args[n], XmNmenuBar, menu); n++;
@@ -1339,8 +1158,6 @@ XmMainWindowSetAreas(
      }
      XtSetValues(w, args, n);
 }
-
-
 /************************************************************************
  *									*
  * XmMainWindowSep1, 2 and 3                                            *
@@ -1356,14 +1173,11 @@ XmMainWindowSep1(
     XmMainWindowWidget   mw = (XmMainWindowWidget) w;
     Widget separator;
     _XmWidgetToAppContext(w);
-
     _XmAppLock(app);
     separator =  (Widget) mw->mwindow.Sep1;
     _XmAppUnlock(app);
-
     return separator;
 }
-
 Widget
 XmMainWindowSep2(
         Widget w )
@@ -1371,15 +1185,11 @@ XmMainWindowSep2(
     XmMainWindowWidget   mw = (XmMainWindowWidget) w;
     Widget separator;
     _XmWidgetToAppContext(w);
-
     _XmAppLock(app);
     separator = (Widget) mw->mwindow.Sep2;
     _XmAppUnlock(app);
-
     return separator;
 }
-
-
 Widget
 XmMainWindowSep3(
         Widget w )
@@ -1387,15 +1197,11 @@ XmMainWindowSep3(
     XmMainWindowWidget   mw = (XmMainWindowWidget) w;
     Widget separator;
     _XmWidgetToAppContext(w);
-
     _XmAppLock(app);
     separator = (Widget) mw->mwindow.Sep3;
     _XmAppUnlock(app);
-
     return separator;
 }
-
-
 /************************************************************************
  *									*
  * XmCreateMainWindow -                                         	*
@@ -1411,7 +1217,6 @@ XmCreateMainWindow(
     return (XtCreateWidget(name, xmMainWindowWidgetClass, parent,
 			     args, argCount ) );
 }
-
 Widget
 XmVaCreateMainWindow(
         Widget parent,
@@ -1421,12 +1226,9 @@ XmVaCreateMainWindow(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmMainWindowWidgetClass,
@@ -1435,7 +1237,6 @@ XmVaCreateMainWindow(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedMainWindow(
         Widget parent,
@@ -1445,11 +1246,9 @@ XmVaCreateManagedMainWindow(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmMainWindowWidgetClass,

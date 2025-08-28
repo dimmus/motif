@@ -23,17 +23,14 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
 #endif
 #endif
-
 /* Define _XmConst before including TransltnsP.h or XmP.h, so that the
  * declarations will be in agreement with the definitions.
  */
-
 #ifndef _XmConst
 #if defined(__STDC__) || !defined( NO_CONST )
 #define _XmConst const
@@ -41,10 +38,8 @@ static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
 #define _XmConst
 #endif /* __STDC__ */
 #endif /* _XmConst */
-
 #include <Xm/XmP.h>
 #include <Xm/TransltnsP.h>
-
 /* This is the new-style translation table, which is used with
  * versions of libXt that have the :-production translation fix
  * (fix-trackers seq 2797, or MIT public patch 24).
@@ -57,8 +52,6 @@ static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
  *  - Prefix osf key translations with ':', and reorder as necessary
  *	to remove ~mod.
  */
-
-
 /*** ArrowB.c ***/
 externaldef(translations) _XmConst char _XmArrowB_defaultTranslations[] = "\
 <EnterWindow>:			Enter()\n\
@@ -75,7 +68,6 @@ c<Btn1Down>:			ButtonTakeFocus()\n\
 :<Key>osfHelp:			Help()\n\
 ~s ~m ~a <Key>Return:		PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:		ArmAndActivate()";
-
 /*** BulletinB.c ***/
 externaldef(translations) _XmConst char _XmBulletinB_defaultTranslations[] = "\
 <BtnMotion>:			ManagerGadgetButtonMotion()\n\
@@ -93,7 +85,6 @@ c<Btn1Down>:			ManagerGadgetTraverseCurrent()\n\
 <Key>space:			ManagerGadgetSelect()\n\
 <Key>Return:			ManagerParentActivate()\n\
 <Key>:				ManagerGadgetKeyInput()";
-
 /*** CascadeB.c ***/
 externaldef(translations) _XmConst char _XmCascadeB_menubar_events[] = "\
 <EnterWindow>Normal:	MenuBarEnter()\n\
@@ -110,7 +101,6 @@ c<BtnUp>:		MenuButtonTakeFocusUp()\n\
 :<Key>osfCancel:	CleanupMenuBar()\n\
 ~s<Key>Return:		KeySelect()\n\
 ~s<Key>space:		KeySelect()";
-
 externaldef(translations) _XmConst char _XmCascadeB_p_events[] = "\
 <EnterWindow>:		DelayedArm()\n\
 <LeaveWindow>:		CheckDisarm()\n\
@@ -126,8 +116,6 @@ c<BtnUp>:		MenuButtonTakeFocusUp()\n\
 :<Key>osfCancel:	CleanupMenuBar()\n\
 ~s<Key>Return:		KeySelect()\n\
 ~s<Key>space:		KeySelect()";
-
-
 /*** Display.c ***/
 /*
  * Although adding Ctrl<Key>s as a binding for osfCancel would
@@ -209,8 +197,6 @@ externaldef(translations) _XmConst char _XmDisplay_baseTranslations[] = "\
 \043override\
 	c<Key>s:	PrimitiveParentCancel()\n\
 ";
-
-
 /*** DragC.c ***/
 externaldef(translations) _XmConst char _XmDragC_defaultTranslations[] = "\
 Button1<Enter>:		DragMotion()\n\
@@ -233,7 +219,6 @@ Button2<Motion>:	DragMotion()\n\
 :<Key>osfRight:		DragKey(Right)\n\
 :<KeyUp>:		DragKey(Update)\n\
 :<KeyDown>:		DragKey(Update)";
-
 /*** DrawingA.c ***/
 externaldef(translations) _XmConst char _XmDrawingA_defaultTranslations[] = "\
 <BtnMotion>:		ManagerGadgetButtonMotion()\n\
@@ -255,7 +240,6 @@ c<Btn1Down>:		ManagerGadgetTraverseCurrent()\n\
 <Key>space:		DrawingAreaInput() ManagerGadgetSelect()\n\
 <KeyDown>:		DrawingAreaInput() ManagerGadgetKeyInput()\n\
 <KeyUp>:		DrawingAreaInput()";
-
 externaldef(translations) _XmConst char _XmDrawingA_traversalTranslations[] = "\
 <EnterWindow>:		ManagerEnter()\n\
 <LeaveWindow>:		ManagerLeave()\n\
@@ -268,7 +252,6 @@ externaldef(translations) _XmConst char _XmDrawingA_traversalTranslations[] = "\
 :<Key>osfBeginLine:	DrawingAreaInput() ManagerGadgetTraverseHome()\n\
 s<Key>Tab:		DrawingAreaInput() ManagerGadgetPrevTabGroup()\n\
 ~s<Key>Tab:		DrawingAreaInput() ManagerGadgetNextTabGroup()";
-
 /*** DrawnB.c ***/
 externaldef(translations) _XmConst char _XmDrawnB_defaultTranslations[] = "\
 <EnterWindow>:		Enter()\n\
@@ -285,7 +268,6 @@ c<Btn1Down>:		ButtonTakeFocus()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-
 externaldef(translations) _XmConst char _XmDrawnB_menuTranslations[] = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
@@ -299,7 +281,6 @@ c<Btn1Up>:		MenuButtonTakeFocusUp()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	ArmAndActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-
 /*** Frame.c ***/
 /*
  * XmFrame has inherited XmManager's translations since OSF/Motif 1.1.
@@ -307,7 +288,6 @@ c<Btn1Up>:		MenuButtonTakeFocusUp()\n\
  * promised for one major release) we can reclaim this storage now.
  */
 externaldef(translations) _XmConst char _XmFrame_defaultTranslations[] = "";
-
 /*** Label.c ***/
 externaldef(translations) _XmConst char _XmLabel_defaultTranslations[] = "\
 <EnterWindow>:		Enter()\n\
@@ -317,13 +297,11 @@ externaldef(translations) _XmConst char _XmLabel_defaultTranslations[] = "\
 :<Key>osfCancel:	PrimitiveParentCancel()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()";
-
 externaldef(translations) _XmConst char _XmLabel_menuTranslations[] = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
 <Btn2Down>:		ProcessDrag()\n\
 :<Key>osfHelp:		Help()";
-
 externaldef(translations) _XmConst char _XmLabel_menu_traversal_events[] = "\
 <Unmap>:		Unmap()\n\
 <FocusOut>:		FocusOut()\n\
@@ -333,7 +311,6 @@ externaldef(translations) _XmConst char _XmLabel_menu_traversal_events[] = "\
 :<Key>osfRight:		MenuTraverseRight()\n\
 :<Key>osfUp:		MenuTraverseUp()\n\
 :<Key>osfDown:		MenuTraverseDown()";
-
 /*** List.c ***/
 externaldef(translations) _XmConst char _XmList_ListXlations1[] = "\
 <Unmap>:			PrimitiveUnmap()\n\
@@ -365,7 +342,6 @@ c ~s ~m a <Btn1Down>:		ListProcessDrag()\n\
 :<Key>osfPageRight:		ListRightPage()\n\
 :c <Key>osfPageDown:		ListRightPage()\n\
 :<Key>osfPageDown:		ListNextPage()\n";
-
 externaldef(translations) _XmConst char _XmList_ListXlations2[] = "\
 :s <KeyDown>osfSelect:		ListKbdBeginExtend()\n\
 :<KeyDown>osfSelect:		ListKbdBeginSelect()\n\
@@ -401,7 +377,6 @@ s ~m ~a <KeyUp>space:		ListKbdEndExtend()\n\
 ~s ~c ~m ~a <Btn5Down>,<Btn5Up>:ListScrollDown() ListScrollDown() ListScrollDown()\n\
 <Btn4Down>,<Btn4Up>:		ListScrollUp() ListScrollUp() ListScrollUp() ListScrollUp() ListScrollUp() ListScrollUp()\n\
 <Btn5Down>,<Btn5Up>:		ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown()";
-
 /*** Manager.c ***/
 externaldef(translations)
 _XmConst char _XmManager_managerTraversalTranslations[] = "\
@@ -416,7 +391,6 @@ _XmConst char _XmManager_managerTraversalTranslations[] = "\
 :<Key>osfRight:			ManagerGadgetTraverseRight()\n\
 s ~m ~a <Key>Tab:		ManagerGadgetPrevTabGroup()\n\
 ~m ~a <Key>Tab:			ManagerGadgetNextTabGroup()";
-
 externaldef(translations) _XmConst char _XmManager_defaultTranslations[] = "\
 <BtnMotion>:			ManagerGadgetButtonMotion()\n\
 c<Btn1Down>:			ManagerGadgetTraverseCurrent()\n\
@@ -433,13 +407,11 @@ c<Btn1Down>:			ManagerGadgetTraverseCurrent()\n\
 ~s ~m ~a <Key>Return:		ManagerParentActivate()\n\
 ~s ~m ~a <Key>space:		ManagerGadgetSelect()\n\
 <Key>:				ManagerGadgetKeyInput()";
-
 /*** MenuShell.c ***/
 externaldef(translations) _XmConst char _XmMenuShell_translations [] = "\
 <Key>osfCancel:			MenuEscape()\n\
 <BtnDown>:			ClearTraversal()\n\
 <BtnUp>:			MenuShellPopdownDone()";
-
 /*** Primitive.c ***/
 externaldef(translations) _XmConst char _XmPrimitive_defaultTranslations[] = "\
 <Unmap>:		PrimitiveUnmap()\n\
@@ -455,7 +427,6 @@ externaldef(translations) _XmConst char _XmPrimitive_defaultTranslations[] = "\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()\n\
 s ~m ~a <Key>Tab:	PrimitivePrevTabGroup()\n\
 ~m ~a <Key>Tab:		PrimitiveNextTabGroup()";
-
 /*** PushB.c ***/
 externaldef(translations) _XmConst char _XmPushB_defaultTranslations[] = "\
 <EnterWindow>:			Enter()\n\
@@ -473,7 +444,6 @@ c<Btn1Down>:			ButtonTakeFocus()\n\
 :<Key>osfHelp:			Help()\n\
 ~s ~m ~a <Key>Return:		PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:		ArmAndActivate()";
-
 externaldef(translations) _XmConst char _XmPushB_menuTranslations[] = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
@@ -488,7 +458,6 @@ c<Btn1Up>:		MenuButtonTakeFocusUp()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	ArmAndActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-
 /*** RowColumn.c ***/
 externaldef(translations) _XmConst char _XmRowColumn_menu_traversal_table[] = "\
 <Unmap>:		MenuUnmap()\n\
@@ -500,7 +469,6 @@ externaldef(translations) _XmConst char _XmRowColumn_menu_traversal_table[] = "\
 :<Key>osfRight:		MenuGadgetTraverseRight()\n\
 :<Key>osfUp:		MenuGadgetTraverseUp()\n\
 :<Key>osfDown:		MenuGadgetTraverseDown()";
-
 externaldef(translations) _XmConst char _XmRowColumn_option_table[]= "\
 <Btn2Down>:		MenuGadgetDrag()\n\
 c<Btn2Up>:		MenuBtnUp()\n\
@@ -514,7 +482,6 @@ c<Btn1Up>:		MenuGadgetTraverseCurrentUp()\n\
 :<Key>osfHelp:		MenuHelp()\n\
 ~s ~m ~a <Key>Return:	ManagerParentActivate()\n\
 ~s ~m ~a <Key>space:	ManagerGadgetSelect()";
-
 externaldef(translations) _XmConst char _XmRowColumn_bar_table[]= "\
 <Btn2Down>:		MenuGadgetDrag()\n\
 c<Btn2Up>:		MenuBtnUp()\n\
@@ -528,7 +495,6 @@ c<Btn1Up>:		MenuGadgetTraverseCurrentUp()\n\
 :<Key>osfCancel:	MenuGadgetEscape()\n\
 ~s ~m ~a <Key>Return:	MenuBarGadgetSelect()\n\
 ~s ~m ~a <Key>space:	MenuBarGadgetSelect()";
-
 externaldef(translations) _XmConst char _XmRowColumn_menu_table[]= "\
 c<Btn2Up>:		MenuBtnUp()\n\
 c<Btn1Down>:		MenuGadgetTraverseCurrent()\n\
@@ -541,7 +507,6 @@ c<Btn1Up>:		MenuGadgetTraverseCurrentUp()\n\
 :<Key>osfCancel:	MenuGadgetEscape()\n\
 ~s ~m ~a <Key>Return:	ManagerGadgetSelect()\n\
 ~s ~m ~a <Key>space:	ManagerGadgetSelect()";
-
 /*** Sash.c ***/
 externaldef(translations) _XmConst char _XmSash_defTranslations[] = "\
 <Unmap>:			PrimitiveUnmap()\n\
@@ -569,7 +534,6 @@ externaldef(translations) _XmConst char _XmSash_defTranslations[] = "\
 ~s ~m ~a <Key>Return:		PrimitiveParentActivate()\n\
 s ~m ~a <Key>Tab:		PrevTabGroup()\n\
 ~m ~a <Key>Tab:			NextTabGroup()";
-
 /*** ScrollBar.c ***/
 externaldef(translations) _XmConst char _XmScrollBar_defaultTranslations[] = "\
 <Unmap>:			PrimitiveUnmap()\n\
@@ -610,7 +574,6 @@ s ~m ~a <Key>Tab:		PrimitivePrevTabGroup()\n\
 ~s ~c ~m ~a <Btn5Down>,<Btn5Up>:IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1)\n\
 <Btn4Down>,<Btn4Up>:		IncrementUpOrLeft(0) IncrementUpOrLeft(0) IncrementUpOrLeft(0) IncrementUpOrLeft(0) IncrementUpOrLeft(0) IncrementUpOrLeft(0) IncrementUpOrLeft(1) IncrementUpOrLeft(1) IncrementUpOrLeft(1) IncrementUpOrLeft(1) IncrementUpOrLeft(1) IncrementUpOrLeft(1)\n\
 <Btn5Down>,<Btn5Up>:		IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1)IncrementDownOrRight(1)";
-
 /*** ScrolledW.c ***/
 externaldef(translations)
 _XmConst char _XmScrolledW_ScrolledWindowXlations[] = "\
@@ -638,7 +601,6 @@ _XmConst char _XmScrolledW_ScrolledWindowXlations[] = "\
 ~s ~m ~a <Key>Return:	ManagerParentActivate()\n\
 s ~m ~a <Key>Tab:	ManagerGadgetPrevTabGroup()\n\
 ~m ~a <Key>Tab:		ManagerGadgetNextTabGroup()";
-
 /* N.B.: This string is hard-coded in ClipWindow.c:ClipWindowKeys! */
 externaldef(translations) _XmConst char _XmClipWindowTranslationTable[] = "\
 :c <Key>osfBeginLine:	ActionGrab(SWTopLine)\n\
@@ -651,8 +613,6 @@ externaldef(translations) _XmConst char _XmClipWindowTranslationTable[] = "\
 :<Key>osfPageRight:	ActionGrab(SWRightPage)\n\
 :c <Key>osfPageDown:	ActionGrab(SWRightPage)\n\
 :<Key>osfPageDown:	ActionGrab(SWDownPage)";
-
-
 /*** SelectioB.c ***/
 externaldef(translations)
 _XmConst char _XmSelectioB_defaultTextAccelerators[] = "\
@@ -663,7 +623,6 @@ _XmConst char _XmSelectioB_defaultTextAccelerators[] = "\
 :<Key>osfEndLine:	SelectionBoxUpOrDown(3)\n\
 :<Key>osfRestore:	SelectionBoxRestore()\n\
 s c ~m ~a <Key>space:	SelectionBoxRestore()";
-
 /*** TearOffB.c ***/
 externaldef(translations) _XmConst char _XmTearOffB_overrideTranslations[] = "\
 <Btn2Down>:		BDrag()\n\
@@ -672,7 +631,6 @@ externaldef(translations) _XmConst char _XmTearOffB_overrideTranslations[] = "\
 :<Key>osfActivate:	KActivate()\n\
 ~s ~m ~a <Key>Return:	KActivate()\n\
 ~s ~m ~a <Key>space:	KActivate()";
-
 /*** TextF.c ***/
 externaldef(translations) _XmConst char _XmTextF_EventBindings1[] = "\
 <Unmap>:		unmap()\n\
@@ -721,7 +679,6 @@ s c <Btn2Up>:		process-bdrag-event(extend-end, link-to)\n\
 :c <Key>osfPageUp:	page-left()\n\
 :s <Key>osfPageRight:	page-right(extend)\n\
 :<Key>osfPageRight:	page-right()\n";
-
 externaldef(translations) _XmConst char _XmTextF_EventBindings2[] = "\
 :s c <Key>osfPageDown:	page-right(extend)\n\
 :c <Key>osfPageDown:	page-right()\n\
@@ -755,7 +712,6 @@ externaldef(translations) _XmConst char _XmTextF_EventBindings2[] = "\
 :<Key>osfRight:		forward-character()\n\
 :<Key>osfUp:		traverse-prev()\n\
 :<Key>osfDown:		traverse-next()\n";
-
 externaldef(translations) _XmConst char _XmTextF_EventBindings3[] = "\
 c ~m ~a <Key>slash:	select-all()\n\
 c ~m ~a <Key>backslash:	deselect-all()\n\
@@ -766,7 +722,6 @@ c ~s ~m ~a <Key>space:	set-anchor()\n\
 c s ~m ~a <Key>space:	key-select()\n\
 s ~c ~m ~a <Key>space:	self-insert()\n\
 <Key>:			self-insert()";
-
 /*** TextIn.c ***/
 externaldef(translations) _XmConst char _XmTextIn_XmTextEventBindings1[] = "\
 <Unmap>:		unmap()\n\
@@ -821,7 +776,6 @@ s c <Btn2Up>:		process-bdrag-event(extend-end, link-to)\n\
 :<Key>osfPageUp:	previous-page()\n\
 :s <Key>osfPageRight:	page-right(extend)\n\
 :<Key>osfPageRight:	page-right()\n";
-
 externaldef(translations) _XmConst char _XmTextIn_XmTextEventBindings2[] = "\
 :s c <Key>osfPageDown:	page-right(extend)\n\
 :c <Key>osfPageDown:	page-right()\n\
@@ -863,7 +817,6 @@ externaldef(translations) _XmConst char _XmTextIn_XmTextEventBindings2[] = "\
 :c <Key>osfDown:	forward-paragraph()\n\
 :s <Key>osfDown:	process-shift-down()\n\
 :<Key>osfDown:		process-down()\n";
-
 externaldef(translations) _XmConst char _XmTextIn_XmTextEventBindings3[] = "\
     c ~m ~a <Key>slash:		select-all()\n\
     c ~m ~a <Key>backslash:	deselect-all()\n\
@@ -881,7 +834,6 @@ externaldef(translations) _XmConst char _XmTextIn_XmTextEventBindings3[] = "\
 ~s ~c ~m ~a <Btn5Down>,<Btn5Up>:scroll-one-line-up() scroll-one-line-up() scroll-one-line-up()\n\
 <Btn4Down>,<Btn4Up>:		scroll-one-line-down() scroll-one-line-down() scroll-one-line-down() scroll-one-line-down() scroll-one-line-down() scroll-one-line-down() scroll-one-line-down()\n\
 <Btn5Down>,<Btn5Up>:		scroll-one-line-up() scroll-one-line-up() scroll-one-line-up() scroll-one-line-up() scroll-one-line-up() scroll-one-line-up() scroll-one-line-up()";
-
 externaldef(translations) _XmConst char _XmTextIn_XmTextVEventBindings[] = "\
 :s c <Key>osfLeft:forward-paragraph(extend)\n\
 :c <Key>osfLeft:forward-paragraph()\n\
@@ -907,8 +859,6 @@ externaldef(translations) _XmConst char _XmTextIn_XmTextVEventBindings[] = "\
 :<Key>osfPageRight:previous-page()\n\
 :s <Key>osfPageDown:page-down(extend)\n\
 :<Key>osfPageDown:page-down()";
-
-
 /*** ToggleB.c ***/
 externaldef(translations) _XmConst char _XmToggleB_defaultTranslations[] = "\
 <EnterWindow>:		Enter()\n\
@@ -923,7 +873,6 @@ c<Btn1Down>:		ButtonTakeFocus()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-
 externaldef(translations) _XmConst char _XmToggleB_menuTranslations[] = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
@@ -938,9 +887,7 @@ c<Btn1Up>:		MenuButtonTakeFocusUp()\n\
 :<Key>osfCancel:	MenuEscape()\n\
 ~s ~m ~a <Key>Return:	ArmAndActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-
 /*** VirtKeys.c ***/
-
 /* Do not abbreviate meta, ctrl, shift, lock, alt, etc. */
 externaldef(translations) _XmConst char _XmVirtKeys_fallbackBindingString[] = "\
 osfCancel:<Key>Escape,<Key>Cancel\n\
@@ -964,11 +911,9 @@ osfActivate:<Key>KP_Enter,<Key>Execute\n\
 osfClear:<Key>Clear\n\
 osfUndo:<Key>Undo\n\
 osfSwitchDirection:Alt<Key>Return,Alt<Key>KP_Enter";
-
 /*"Acorn Computers Ltd"
 * Acorn RISC iX versions 1.0->1.2 running on Acorn R140, R225, R260
 * (all national keyboard variants)*/
-
 externaldef(translations) _XmConst char _XmVirtKeys_acornFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -988,10 +933,7 @@ osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10\n\
 osfActivate:<Key>KP_Enter\n\
 osfCopy:<Key>Select";
-
-
 /*"Apollo Computer Inc."*/
-
 externaldef(translations) _XmConst char _XmVirtKeys_apolloFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1015,11 +957,8 @@ osfCopy:<Key>apCopy\n\
 osfCut:<Key>apCut\n\
 osfPaste:<Key>apPaste\n\
 osfUndo:<Key>Undo";
-
-
 /*"Data General Corporation Rev 04"
 * AViiON */
-
 externaldef(translations) _XmConst char _XmVirtKeys_dgFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1037,10 +976,7 @@ osfAddMode:Shift <Key>F8\n\
 osfHelp:<Key>F1\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*"DECWINDOWS DigitalEquipmentCorp."*/
-
 externaldef(translations) _XmConst char _XmVirtKeys_decFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1061,11 +997,8 @@ osfMenuBar:<Key>F10\n\
 osfSelect:<Key>Select\n\
 osfActivate:<Key>KP_Enter\n\
 osfPrimaryPaste:<Key>F14";
-
-
 /*"Double Click Imaging, Inc. KeyX"
 * for the version of KeyX running on 386 AT bus compatibles. */
-
 externaldef(translations) _XmConst char _XmVirtKeys_dblclkFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1083,10 +1016,7 @@ osfAddMode:Shift <Key>F8\n\
 osfHelp:<Key>F1\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*"Hewlett-Packard Company" */
-
 externaldef(translations) _XmConst char _XmVirtKeys_hpFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1108,11 +1038,8 @@ osfSelect:<Key>Select\n\
 osfClear:<Key>Clear\n\
 osfUndo:<Key>Undo\n\
 osfPrimaryPaste:Alt Ctrl<Key>Insert";
-
-
 /*"International Business Machines"
 * for AIX/PS2 and RS/6000 systems */
-
 externaldef(translations) _XmConst char _XmVirtKeys_ibmFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1130,11 +1057,8 @@ osfAddMode:Shift <Key>F8\n\
 osfHelp:<Key>F1\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*  Intergraph keyboard support        */
 /* Intergraph */
-
 externaldef(translations) _XmConst char _XmVirtKeys_ingrFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1152,11 +1076,8 @@ osfAddMode:Shift<Key>F8\n\
 osfHelp:<Key>Help\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*"Megatek Corporation"
 * Megatek X-Cellerator */
-
 externaldef(translations) _XmConst char _XmVirtKeys_megatekFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1178,8 +1099,6 @@ osfCopy:<Key>F16\n\
 osfCut:<Key>F20\n\
 osfPaste:<Key>F18\n\
 osfUndo:<Key>F14";
-
-
 /*"Motorola Inc. (Microcomputer Division)" */
 /* (c) Copyright 1990 Motorola Inc. */
 /* Motorola provides these key bindings as is,
@@ -1187,7 +1106,6 @@ osfUndo:<Key>F14";
 	Motorola is under no obligation to support,
 	update, or extend these key bindings for
 	future releases. */
-
 externaldef(translations) _XmConst char _XmVirtKeys_motorolaFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1205,10 +1123,7 @@ osfAddMode:Shift <Key>F8\n\
 osfHelp:<Key>F1\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*"Silicon Graphics Inc." */
-
 externaldef(translations) _XmConst char _XmVirtKeys_sgiFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1227,11 +1142,8 @@ osfHelp:<Key>F1\n\
 osfActivate:<Key>KP_Enter\n\
 osfMenu:Shift<Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*"Siemens Munich by SP-4's Hacker Crew"
 * Siemens WX200 system */
-
 externaldef(translations) _XmConst char _XmVirtKeys_siemensWx200FallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1250,11 +1162,8 @@ osfHelp:<Key>Help,<Key>F1\n\
 osfActivate:<Key>KP_Enter\n\
 osfMenu:<Key>Menu,Shift <Key>F10\n\
 osfMenuBar:<Key>F10";
-
-
 /*"Siemens Munich (SP-4's hacker-clan)"
 * Siemens 9733 system */
-
 externaldef(translations) _XmConst char _XmVirtKeys_siemens9733FallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\
@@ -1272,10 +1181,7 @@ osfAddMode:Shift <Key>F8\n\
 osfHelp:<Key>Help\n\
 osfMenu:<Key>Linefeed\n\
 osfMenuBar:<Key>F10";
-
-
 /* "Sun Microsystems, Inc." */
-
 externaldef(translations) _XmConst char _XmVirtKeys_sunFallbackBindingString[] = "\
 osfActivate:<Key>KP_Enter\n\
 osfCancel:<Key>Escape\n\
@@ -1298,10 +1204,7 @@ osfAddMode:Shift<Key>F8\n\
 osfCopy:<Key>SunCopy\n\
 osfCut:<Key>SunCut\n\
 osfPaste:<Key>SunPaste";
-
-
 /*"Tektronix, Inc." */
-
 externaldef(translations) _XmConst char _XmVirtKeys_tekFallbackBindingString[] = "\
 osfCancel:<Key>Escape\n\
 osfLeft:<Key>Left\n\

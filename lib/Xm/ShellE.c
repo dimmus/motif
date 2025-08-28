@@ -23,23 +23,17 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$XConsortium: ShellE.c /main/10 1995/10/25 20:19:54 cde-sun $"
 #endif
 #endif
-
 #include <Xm/ShellEP.h>
 #include <X11/ShellP.h>
 #include <Xm/VendorSEP.h>
 #include <Xm/ScreenP.h>
 #include "XmI.h"
-
-
 /********    Static Function Declarations    ********/
-
 static void ShellClassPartInitialize(
                         WidgetClass w) ;
 static void StructureNotifyHandler(
@@ -47,18 +41,13 @@ static void StructureNotifyHandler(
                         XtPointer closure,
                         XEvent *event,
                         Boolean *continue_to_dispatch) ;
-
 /********    End Static Function Declarations    ********/
-
-
 /***************************************************************************
  *
  * Class Record
  *
  ***************************************************************************/
-
 #define Offset(field) XtOffsetOf( struct _XmShellExtRec, shell.field)
-
 static XtResource shellResources[] =
 {
     {
@@ -68,7 +57,6 @@ static XtResource shellResources[] =
     },
 };
 #undef Offset
-
 externaldef(xmshellextclassrec)
 XmShellExtClassRec xmShellExtClassRec = {
     {
@@ -121,11 +109,8 @@ XmShellExtClassRec xmShellExtClassRec = {
 	NULL,				/* extension		*/
     },
 };
-
 externaldef(xmShellExtobjectclass) WidgetClass
   xmShellExtObjectClass = (WidgetClass) (&xmShellExtClassRec);
-
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -140,15 +125,12 @@ ShellClassPartInitialize(
     XmShellExtObjectClass wc = (XmShellExtObjectClass) w;
     XmShellExtObjectClass sc =
       (XmShellExtObjectClass) wc->object_class.superclass;
-
     if (wc == (XmShellExtObjectClass)xmShellExtObjectClass)
       return;
-
     if (wc->shell_class.structureNotifyHandler == XmInheritEventHandler)
       wc->shell_class.structureNotifyHandler =
 	sc->shell_class.structureNotifyHandler;
 }
-
 /************************************************************************
  *
  *  StructureNotifyHandler
@@ -170,7 +152,6 @@ StructureNotifyHandler(
     XmVendorShellExtObject	vendorExt = (XmVendorShellExtObject)closure;
     XmVendorShellExtPart	*vePPtr;
     XmScreen			xmScreen;
-
     /*
      *  for right now if this is being used by overrides bug out
      */
@@ -178,12 +159,10 @@ StructureNotifyHandler(
       return;
     else
       vePPtr = (XmVendorShellExtPart *) &(vendorExt->vendor);
-
     if (XmIsScreen(vendorExt->desktop.parent))
       xmScreen = (XmScreen) (vendorExt->desktop.parent);
     else
       xmScreen = (XmScreen) XmGetXmScreen(XtScreen(wid));
-
     switch(event->type) {
       case MapNotify:
 	break;
@@ -214,7 +193,6 @@ StructureNotifyHandler(
 			  w->core.x -= vePPtr->xOffset;
 			  w->core.y -= vePPtr->yOffset;
 			  w->shell.client_specified &= ~_XtShellPositionValid;
-
 			  vePPtr->externalReposition = False;
 		      }
 		    else
@@ -226,7 +204,6 @@ StructureNotifyHandler(
 		vePPtr->externalReposition = True;
 	  }
 	break;
-
       case ConfigureNotify:
 	/*
 	 * only process configureNotifies that aren't stale
@@ -292,18 +269,14 @@ StructureNotifyHandler(
 	    w->shell.client_specified &= ~_XtShellPositionValid;
 	}
 	return;
-
       default:
 	return;
     }
-
     if (sizechanged) {
       XtWidgetProc resize;
-
       _XmProcessLock();
       resize = XtClass(w)->core_class.resize;
       _XmProcessUnlock();
-
       if (resize != (XtWidgetProc) NULL)
 	(*resize)((Widget) w);
     }

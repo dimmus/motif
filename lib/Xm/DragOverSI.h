@@ -27,15 +27,11 @@
 /* $XConsortium: DragOverSI.h /main/6 1995/07/14 10:26:24 drk $ */
 #ifndef _XmDragOverSI_h
 #define _XmDragOverSI_h
-
 #include <Xm/DragOverSP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for DragOverS.c    ********/
-
 extern void _XmDragOverHide(
                         Widget w,
                         Position clipOriginX,
@@ -56,18 +52,14 @@ extern void _XmDragOverChange(
 extern void _XmDragOverFinish(
                         Widget w,
                         unsigned char completionStatus) ;
-
 extern Cursor _XmDragOverGetActiveCursor(
 			Widget w) ;
 extern void _XmDragOverSetInitialPosition(
 			Widget w,
 			Position initialX,
 			Position initialY) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDragOverSI_h */

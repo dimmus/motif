@@ -24,42 +24,32 @@
  * HISTORY
 */
 /*   $TOG: XmStringI.h /main/7 1999/09/01 17:15:15 mgreess $ */
-
 #ifndef _XmStringI_h
 #define _XmStringI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*
  * These are the fontlist structures
  */
-
 typedef struct _XmFontListContextRec
 {
   Boolean		error;			  /* something bad */
   unsigned short	index;			  /* next rendition */
   XmRenderTable		table;			  /* associated table */
 } XmFontListContextRec;
-
 /* useful macros */
 #define two_byte_font(f)        (( (f)->min_byte1 != 0 || (f)->max_byte1 != 0))
-
 #define  FontListType(r)		((_XmRendition)(*(r)))->fontType
 #define  FontListFont(r)		((_XmRendition)(*(r)))->font
 #define  FontListTag(r)			((_XmRendition)(*(r)))->tag
-
 /* Convenience macros */
 #define _XmStringCvtNonOpt(str)		(_XmStrOptimized(str) ? \
 					 _XmStringOptToNonOpt(str) : (str))
-
 /*
  * Macros for string internal context block data structure access
  */
-
 #define _XmStrContString(cont)	  \
                  ((_XmStringContextRec *)(cont))->string
 #define _XmStrContCurrLine(cont)  \
@@ -79,7 +69,6 @@ typedef struct _XmFontListContextRec
 #define _XmStrContRendIndex(cont) ((_XmStringContextRec *)(cont))->rend_index
 #define _XmStrContTmpStrDir(cont) ((_XmStringContextRec *)(cont))->tmp_str_dir
 #define _XmStrContTmpDir(cont)	  ((_XmStringContextRec *)(cont))->tmp_dir
-
 /*
  * internal context data block, for read-out
  */
@@ -88,7 +77,6 @@ enum
   PUSH_STATE, BEGIN_REND_STATE, TAG_STATE, TAB_STATE, DIR_STATE,
   TEXT_STATE, END_REND_STATE, POP_STATE, SEP_STATE
 };
-
 typedef struct __XmStringContextRec
 {
     _XmString   	string;		/* pointer to internal string	*/
@@ -107,7 +95,6 @@ typedef struct __XmStringContextRec
     XmDirection		tmp_dir;	/* temporary storage            */
     XmStringDirection	tmp_str_dir;	/* temporary storage            */
 } _XmStringContextRec;
-
 /*
  * Internal representation of an XmParseMapping.
  */
@@ -120,35 +107,26 @@ typedef struct __XmParseMappingRec {
   XmIncludeStatus	include_status;
   unsigned char		internal_flags;	/* reserved for unparse data */
 } _XmParseMappingRec, *_XmParseMapping;
-
 /****************************************************************
  * Symbolic values
  ****************************************************************/
-
 #define XmSTRING_OPTIMIZED			0x0
 #define XmSTRING_OTHER				0x1
 #define XmSTRING_MULTIPLE_ENTRY	 		0x2
-
 #define TAG_INDEX_BITS  	3
 #define REND_INDEX_BITS		4
 #define BYTE_COUNT_BITS		8
 #define TEXT_BYTES_IN_STRUCT	1
-
 #define TAG_INDEX_UNSET		((1 << TAG_INDEX_BITS) - 1)
 #define TAG_INDEX_MAX		TAG_INDEX_UNSET
 #define REND_INDEX_UNSET	((1 << REND_INDEX_BITS) - 1)
 #define REND_INDEX_MAX		REND_INDEX_UNSET
-
 /****************************************************************
-
   XmStringOpt is an optimized string containing text of less than
   256 bytes with an associated string direction and up to three
   implicit tabs.
-
   The text is stored immediately after the header within the string.
-
  ****************************************************************/
-
 typedef struct __XmStringOptHeader {
   unsigned int type        : 2;	     /* XmSTRING_OPTIMIZED */
   unsigned int text_type   : 2;	     /* MB, WC, locale or charset text.*/
@@ -162,65 +140,48 @@ typedef struct __XmStringOptHeader {
   unsigned int tabs	   : 2;	     /* number of tabs preceding the text */
   unsigned int refcount    : 6;      /* reference count */
 } _XmStringOptHeader;
-
 typedef struct __XmStringOpt {
   _XmStringOptHeader header;
   char               text[TEXT_BYTES_IN_STRUCT];
 } _XmStringOptRec, *_XmStringOpt;
-
 /****************************************************************
-
   XmStringMulti specifies a string consisting of multiple entries.
   Each entry is a segment, either an optimized single segment, an
   unoptimized segment, or an array of segments.
-
   If implicit_line is 1, each entry is treated as a single line for
   display and other purposes.
-
   If implicit_line is 0, the string is a sequence of entries, treated as
   being on one line.
-
  ****************************************************************/
-
 /* Forward definitions */
 typedef union __XmStringEntryRec *_XmStringEntry;
 typedef union __XmStringNREntryRec *_XmStringNREntry;
-
 typedef struct __XmStringMultiHeader {
   unsigned int	type          : 2;	/* XmSTRING_MULTIPLE_ENTRY */
   unsigned int	implicit_line : 1;	/* 1 => linefeed at end */
   unsigned int	entry_count   : 21;
   unsigned char	refcount;
 } _XmStringMultiHeader;
-
 typedef struct __XmStringMulti{
   _XmStringMultiHeader	header;
   _XmStringEntry      * entry;	/* pointer to array of pointers to entries */
 } _XmStringMultiRec, *_XmStringMulti;
-
 typedef struct __XmStringEmptyHeader {
   unsigned int	type          : 2;
 } _XmStringEmptyHeader;
-
 typedef union __XmStringRec {
   _XmStringEmptyHeader  empty;
   _XmStringOptHeader	opt_str;	/* XmSTRING_OPTIMIZED */
   XtPointer		component;	/* unused */
   _XmStringMultiHeader	multi_str;      /* XmSTRING_MULTIPLE_ENTRY */
 } _XmStringRec;
-
-
-
 /****************************************************************
-
   Cache data structures
-
  ****************************************************************/
 #define _XmSCANNING_CACHE  0
 #define _XmRENDERING_CACHE 1
 /* #define _XmHIGHLIGHT_CACHE 2 */
 /* #define _XmCSTEXT_CACHE    3 */
-
 /*
  * Header
  */
@@ -229,7 +190,6 @@ typedef struct __XmStringCacheRec {
   unsigned char               cache_type;/* only 255 cache types supported */
   Boolean		      dirty;	 /* 1 => recompute this cache */
 }  _XmStringCacheHeader, *_XmStringCache;
-
 /*
  * Scanning cache
  */
@@ -237,14 +197,12 @@ typedef struct __XmStringScanning {
   _XmStringCacheHeader header;           /* cache_type == _XmSCANNING_CACHE */
   /* Matching fields */
   XmDirection          prim_dir;         /* primary layout direction */
-
   /* Cached data */
   _XmStringEntry       left;	         /* leftward segment in string */
   _XmStringEntry       right;	         /* rightward segment in string */
   XmDirection          layout_direction; /* current segment layout direction */
   unsigned short       depth;		 /* depth of layout push */
 } _XmStringScanningRec, *_XmStringScanningCache;
-
 /*
  * Rendering cache
  */
@@ -252,7 +210,6 @@ typedef struct __XmStringRendering {
   _XmStringCacheHeader header;           /* cache_type == _XmRENDERING_CACHE */
   /* Matching fields */
   XmRenderTable        rt;
-
   /* Cached data */
   int  	               x;	         /* x pos of segment */
   int                  y;	         /* y pos of segment */
@@ -264,14 +221,9 @@ typedef struct __XmStringRendering {
   XmRendition          rendition;        /* Rendition used for this segment */
   char                 prev_tabs;        /* accumulates tabs on line */
 } _XmStringRenderingRec, *_XmStringRenderingCache;
-
-
 /****************************************************************
-
   Optimized segment definition.
-
  ****************************************************************/
-
 typedef struct __XmStringOptSegHdrRec {
   unsigned int type            : 2;  /* XmSTRING_ENTRY_OPTIMIZED */
   unsigned int text_type       : 2;  /* MB, WC, locale or charset */
@@ -288,7 +240,6 @@ typedef struct __XmStringOptSegHdrRec {
   unsigned int immediate       : 1;  /* 0 => data is immediate */
   unsigned int pad             : 2;
 } _XmStringOptSegHdrRec;
-
 typedef struct __XmStringOptSegRec {
   _XmStringOptSegHdrRec header;
   union {
@@ -297,13 +248,9 @@ typedef struct __XmStringOptSegRec {
     XtPointer	        text;
   } data;
 } _XmStringOptSegRec, *_XmStringOptSeg;
-
 /****************************************************************
-
   Array 'segment' definition.
-
  ****************************************************************/
-
 typedef struct __XmStringArraySegHdrRec {
   unsigned int type            : 2;  /* XmSTRING_ENTRY_ARRAY */
   unsigned int soft_line_break : 1;  /* linebreak before is soft */
@@ -311,19 +258,13 @@ typedef struct __XmStringArraySegHdrRec {
   unsigned int segment_count   : 8;  /* 256 segments per line */
   unsigned char pad2byte[2];
 } _XmStringArraySegHdrRec;
-
 typedef struct __XmStringArraySegRec {
   _XmStringArraySegHdrRec header;
   _XmStringNREntry	* seg;	      /* array of pointers to segments */
 } _XmStringArraySegRec, *_XmStringArraySeg;
-
-
 /****************************************************************
-
   Unoptimized segment definition.
-
  ****************************************************************/
-
 typedef struct __XmStringUnoptSegHdrRec {
   unsigned int	type            : 2;  /* XmSTRING_ENTRY_UNOPTIMIZED */
   unsigned int  soft_line_break : 1;  /* linebreak before is soft */
@@ -335,7 +276,6 @@ typedef struct __XmStringUnoptSegHdrRec {
   unsigned char	tabs_before;	      /* Number of tabs preceding segment */
   XmTextType	text_type;	      /* determines type of text and tag */
 }  _XmStringUnoptSegHdrRec;
-
 typedef struct __XmStringUnoptSegRec {
   _XmStringUnoptSegHdrRec header;
   union {
@@ -352,65 +292,49 @@ typedef struct __XmStringUnoptSegRec {
   unsigned int	          char_count;	   /* character count */
   _XmStringCache          cache;
 }  _XmStringUnoptSegRec, *_XmStringUnoptSeg;
-
 /****************************************************************
-
   XmStringEntry specifies the different 'segments' that can be part
   of a multiple-entry XmString.
-
   These entries can be an optimized segment, an segment with cache,
   also optimized, an unoptimized segment or an array of segments.
-
   The array entry type can contain any of the three other entry types,
   but not an array entry. This is because we do not want to handle
   recursive XmStrings.
-
  ****************************************************************/
-
 #define XmSTRING_ENTRY_OPTIMIZED		0x0
 #define XmSTRING_ENTRY_UNOPTIMIZED		0x1
 /* #define XmSTRING_ENTRY_OPTIMIZED_CACHE  	0x2 */
 #define XmSTRING_ENTRY_ARRAY			0x3
-
 typedef union __XmStringEntryRec {
   _XmStringEmptyHeader         empty;
   _XmStringOptSegHdrRec	       single;	       /* XmSTRING_ENTRY_OPTIMIZED */
   _XmStringUnoptSegHdrRec      unopt_single;   /* XmSTRING_ENTRY_UNOPTIMIZED */
   _XmStringArraySegHdrRec      multiple;       /* XmSTRING_ENTRY_ARRAY */
 } _XmStringEntryRec;
-
 /***************************************************************
-
   _XmStringNREntry:
   Used in the XmStringArraySeg, to prevent recursive
   definitions of XmStrings.
-
  ****************************************************************/
-
 typedef union __XmStringNREntryRec {
   _XmStringEmptyHeader         empty;
   _XmStringOptSegHdrRec	       single;		/* XmSTRING_ENTRY_OPTIMIZED */
   _XmStringUnoptSegHdrRec      unopt_single; 	/* XmSTRING_ENTRY_UNOPTIMIZED */
 } _XmStringNREntryRec;
-
 /****************************************************************
  *
  * Typedefs for old structures
  *
  ****************************************************************/
-
 typedef struct __XmStringUnoptSegRec _XmStringSegmentRec;
 typedef struct __XmStringUnoptSegRec *_XmStringSegment;
-
 typedef struct __XmStringArraySegRec _XmStringLineRec;
 typedef struct __XmStringArraySegRec *_XmStringLine;
-
 /****************************************************************
  *
  * Macros
  *
  ****************************************************************/
-
 /* General */
 #define _XmStrType(str)	      ((str)->empty.type)
 #define _XmStrOptimized(str)  ((str)->empty.type == XmSTRING_OPTIMIZED)
@@ -425,19 +349,16 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
    ((str)->multi_str.refcount = (val)) : 	  			   \
    (_XmStrOptimized(str) ?		   	  			   \
     ((str)->opt_str.refcount = (val)) : 0))
-
 #define _XmStrRefCountInc(str)						   \
   (_XmStrMultiple(str)  ? 		   				   \
    ++((str)->multi_str.refcount) :	 	  			   \
    (_XmStrOptimized(str) ?		   	  			   \
     ++((str)->opt_str.refcount) : 0))
-
 #define _XmStrRefCountDec(str)						   \
   (_XmStrMultiple(str)  ? 		   				   \
    --((str)->multi_str.refcount) :	 	  			   \
    (_XmStrOptimized(str) ?		   	  			   \
     --((str)->opt_str.refcount) : 0))
-
 /* Optimized, one-segment XmStrings */
 #define _XmStrTextType(str)   ((str)->opt_str.text_type)
 #define _XmStrTagIndex(str)   ((str)->opt_str.tag_index)
@@ -459,7 +380,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 #define _XmStrFlipped(str)    ((str)->opt_str.flipped)
 #define _XmStrTabs(str)	      ((str)->opt_str.tabs)
 #define _XmStrText(str)       (((_XmStringOpt)(str))->text)
-
 /* Multi-segment XmStrings */
 #define _XmStrImplicitLine(str) (str)->multi_str.implicit_line
 #define _XmStrAddNewline(str)   (_XmStrMultiple(str) ? 		           \
@@ -474,7 +394,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 #define _XmStrEntryGet(str)     (_XmStrMultiple(str) ? 		   	   \
 				 _XmStrEntry(str) :			   \
 				 (_XmStringEntry*)NULL)
-
 #define _XmStrInit(str, type)						   \
 {									   \
   switch (type) { 							   \
@@ -494,7 +413,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
     break; 								   \
   } 									   \
 }
-
 #ifdef _XmDEBUG_XMSTRING_MEM
 #define STR_OFFSET		sizeof(double)
 #define _XmStrMalloc(size)	(XtMalloc((size) + STR_OFFSET) + STR_OFFSET)
@@ -503,7 +421,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 #define _XmStrMalloc(size)	(XtMalloc(size))
 #define _XmStrFree(ptr)		(XtFree((char*)(ptr)))
 #endif /* _XmDEBUG_XMSTRING_MEM */
-
 #define _XmStrCreate(str, type, text_len)				   \
 {									   \
   switch (type) { 							   \
@@ -528,7 +445,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
     break; 								   \
   } 									   \
 }
-
 /* General XmString Entry macros */
 #define _XmEntryType(entry)	(((_XmStringEntry)(entry))->empty.type)
 #define _XmEntryOptimized(entry) 					   \
@@ -537,7 +453,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
         (_XmEntryType(entry) == XmSTRING_ENTRY_ARRAY)
 #define _XmEntryUnoptimized(entry) 					   \
 	(_XmEntryType(entry) == XmSTRING_ENTRY_UNOPTIMIZED)
-
 /* Non-array entry macros */
 #define _XmEntryTextTypeSet(entry, val)					   \
 	(_XmEntryOptimized(entry) ? 					   \
@@ -625,8 +540,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 	(_XmEntryUnoptimized(entry) ? 					   \
 	 (((_XmStringUnoptSeg)(entry))->cache = (val)) :		   \
 	 NULL)
-
-
 /* Array entry specific macros */
 #define _XmEntrySegmentCount(entry) 					   \
   (((_XmStringEntry)(entry))->multiple.segment_count)
@@ -636,14 +549,11 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 	 1)
 #define _XmEntrySegment(entry) 						   \
   (((_XmStringArraySeg)(entry))->seg)
-
 #define _XmEntrySegmentGet(entry) 					   \
         (_XmEntryMultiple(entry) ? 					   \
 	 _XmEntrySegment(entry) : 					   \
 	 (_XmStringNREntry *)&(entry))
-
 /* Creation macros */
-
 #define _XmEntryInit(entry, type)                               	   \
 {									   \
   switch (type) { 							   \
@@ -664,7 +574,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
   if (type != XmSTRING_ENTRY_ARRAY)                                        \
     _XmEntryDirectionSet(entry, XmSTRING_DIRECTION_UNSET);		   \
 }
-
 #define _XmEntryCreate(entry, type)					   \
 {									   \
   switch (type) { 							   \
@@ -690,11 +599,9 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
       _XmEntryDirectionSet(entry, XmSTRING_DIRECTION_UNSET);		   \
   } 									   \
 }
-
 #define _XmCACHE_DIRTY        0
 #define _XmCacheDirty(cache)    (((_XmStringCache)(cache))->dirty)
 #define _XmCacheNext(cache)     (((_XmStringCache)(cache))->next)
-
 #define _XmEntryDirtyGet(entry, type, data) \
      (((type) == _XmSCANNING_CACHE) ? \
       (Boolean)(long)_XmScanningCacheGet((_XmStringNREntry)entry, \
@@ -705,8 +612,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 					(XmRenderTable)(long)data, \
 				        _XmCACHE_DIRTY) : \
        True))
-
-
 #define _XmEntryDirtySet(entry, type, data, val) \
      (((type) == _XmSCANNING_CACHE) ? \
       _XmScanningCacheSet((_XmStringNREntry)entry, \
@@ -717,7 +622,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 			 (XmRenderTable)(long)data, \
 			 _XmCACHE_DIRTY, (XtPointer)(long)val) : \
        (void)NULL))
-
 /* Scanning cache */
 #define _XmCACHE_SCAN_LEFT    1
 #define _XmCACHE_SCAN_RIGHT   2
@@ -739,7 +643,6 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
       _XmScanningCacheSet(entry, d, _XmCACHE_SCAN_LAYOUT, (XtPointer)(long)val)
 #define _XmEntryLayoutDepthSet(entry, d, val) 			   \
       _XmScanningCacheSet(entry, d, _XmCACHE_SCAN_DEPTH, (XtPointer)(long)val)
-
 /* Rendering cache */
 #define _XmCACHE_RENDER_WIDTH     1
 #define _XmCACHE_RENDER_HEIGHT    2
@@ -786,18 +689,15 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
         _XmRenderCacheSet(entry, rt, _XmCACHE_RENDER_RENDITION, (XtPointer)(long)val)
 #define _XmEntryPrevTabsSet(entry, rt, val)				   \
         _XmRenderCacheSet(entry, rt, _XmCACHE_RENDER_PREV_TABS, (XtPointer)(long)val)
-
 /*
  * Macros for old non-optimized segment data structure access
  */
-
 #define _XmSegTag(seg)			_XmUnoptSegTag(seg)
 #define _XmSegCharCount(seg)		_XmUnoptSegByteCount(seg)
 #define _XmSegText(seg)			((_XmStringUnoptSeg)(seg))->data.text
 #define _XmSegDirection(seg)		_XmEntryDirectionGet(seg)
 #define _XmSegLayoutDirection(seg)      _XmEntryPushGet(seg)
 #define _XmSegLayout(seg)               _XmEntryPopGet(seg)
-
 #define _XmSegType(seg)			_XmEntryTextTypeGet(seg)
 #define _XmSegTextGet(seg)		(unsigned char *)_XmSegText(seg)
 #define _XmSegTextSet(seg,val)		_XmEntryTextSet(seg, (XtPointer)(val))
@@ -812,35 +712,27 @@ typedef struct __XmStringArraySegRec *_XmStringLine;
 #define _XmSegRendEnds(seg)		_XmUnoptSegRendEnds(seg)
 #define _XmSegRendEndGet(seg,n)		_XmEntryRendEndGet(seg,n)
 #define _XmSegRendEndCount(seg)		_XmUnoptSegRendEndCount(seg)
-
 /*
  * Macros for line data structure access
  */
-
 #define _XmStrLineSegCount(line)        _XmEntrySegmentCount(line)
 #define _XmStrLineSegment(line)						\
   ((_XmStringSegment *)_XmEntrySegment(line))
 #define _XmStrLineSegmentSet(line, val)	_XmEntrySegment(line) = 	\
   (_XmStringNREntry *)(val)
-
 /*
  * Macros for internal string data structure access
  */
-
 #define _XmStrLineCnt(str)		_XmStrEntryCount(str)
 #define _XmStrLineLine(str)		((_XmStringLine *)_XmStrEntry(str))
 #define _XmStrLineLineSet(str, val)	_XmStrEntry(str) = 		\
   (_XmStringEntry *)(val)
-
-
 /****************************************************************
  *
  * Function headers
  *
  ****************************************************************/
-
 /**** Private Defines, Typedefs, and Function Declarations for XmString.c ****/
-
 extern XFontStruct * _XmGetFirstFont(
                         XmFontListEntry entry) ;
 extern Boolean _XmFontListSearch(
@@ -848,15 +740,12 @@ extern Boolean _XmFontListSearch(
                         XmStringCharSet charset,
                         short *indx,
                         XFontStruct **font_struct) ;
-
 extern int _XmStringIndexCacheTag(
                         XmStringTag tag,
                         int length) ;
 extern XmStringTag _XmStringCacheTag(
                         XmStringTag tag,
                         int length) ;
-
-
 extern Boolean _XmStringInitContext(
                         _XmStringContext *context,
                         _XmString string) ;
@@ -989,7 +878,6 @@ extern XtPointer _XmStringUngenerate (XmString string,
 			XmStringTag tag,
 			XmTextType tag_type,
 			XmTextType output_type);
-
 extern void _XmStringDrawSegment(Display *d,
 				 Drawable w,
 				 Position x,
@@ -1014,7 +902,6 @@ extern void _XmStringDrawLining(Display *d,
 				Pixel select_color,
 				XmHighlightMode mode,
 				Boolean colors_set);
-
 extern Boolean _XmStringSegmentExtents(_XmStringEntry entry,
 				       XmRenderTable rendertable,
 				       XmRendition *rend_in_out,
@@ -1023,7 +910,6 @@ extern Boolean _XmStringSegmentExtents(_XmStringEntry entry,
 				       Dimension *height,
 				       Dimension *ascent,
 				       Dimension *descent);
-
 extern void _XmStringLayout(_XmString string,
                             XmDirection direction
 			    );
@@ -1058,9 +944,7 @@ extern void      _XmRenderCacheSet(_XmStringEntry entry,
 				   XmRenderTable rt,
 				   int field,
 				   XtPointer value);
-
 extern XmStringTag _XmStringIndexGetTag(int index);
-
 extern Boolean _XmStringGetSegment(_XmStringContext   context,
 				   Boolean	      update_context,
 				   Boolean	      copy_data,
@@ -1075,7 +959,6 @@ extern Boolean _XmStringGetSegment(_XmStringContext   context,
 				   short             *char_count,
 				   XmDirection       *push_before,
 				   Boolean	     *pop_after);
-
 /* Declarations for macro to function switchover. */
 extern _XmStringCache _XmEntryCacheGet(_XmStringEntry entry);
 extern XmStringTag _XmEntryTag(_XmStringEntry entry);
@@ -1101,7 +984,6 @@ extern void _XmEntryRendBeginSet(_XmStringEntry entry,
 extern unsigned char _XmEntryTabsGet(_XmStringEntry entry);
 extern unsigned int _XmEntryTextTypeGet(_XmStringEntry entry);
 extern void _XmEntryTextSet(_XmStringEntry entry, XtPointer val);
-
 extern unsigned char *_XmStringTruncateASN1(unsigned char *str, int n);
 extern void _XmStringContextCopy(_XmStringContext target,
 				 _XmStringContext source);
@@ -1115,9 +997,6 @@ extern void _XmStringContextReInit(_XmStringContext context,
 			 _XmString	  string);
 extern int _XmConvertFactor(unsigned char units,
 			    float *factor);
-
-
-
 #ifdef _XmDEBUG_XMSTRING
 extern void _Xm_dump_fontlist(XmFontList f) ;
 extern void _Xm_dump_fontlist_cache( void ) ;
@@ -1125,9 +1004,7 @@ extern void _Xm_dump_stream( unsigned char *cs) ;
 extern void _Xm_dump_internal(_XmString string) ;
 #endif /* _XmDEBUG_XMSTRING */
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmStringI_h */

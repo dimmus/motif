@@ -192,6 +192,11 @@ configure_build() {
     
     # Configure with standard options
     log_info "Running configure..."
+    
+    # Set environment variables to prioritize system headers
+    export CPPFLAGS="-I/usr/include ${CPPFLAGS:-}"
+    export CFLAGS="-I/usr/include ${CFLAGS:-}"
+    
     local configure_opts=(
         "--prefix=${INSTALL_DIR}"
         "--enable-shared"

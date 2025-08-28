@@ -25,51 +25,36 @@
  * PushButton Widget
  *
  ***********************************************************************/
-
 #ifndef _XmPButtonG_h
 #define _XmPButtonG_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsPushButtonGadget
 #define XmIsPushButtonGadget(w) XtIsSubclass(w, xmPushButtonGadgetClass)
 #endif /* XmIsPushButtonGadget */
-
 externalref WidgetClass xmPushButtonGadgetClass;
-
 typedef struct _XmPushButtonGadgetClassRec   *XmPushButtonGadgetClass;
 typedef struct _XmPushButtonGadgetRec        *XmPushButtonGadget;
 typedef struct _XmPushButtonGCacheObjRec     *XmPushButtonGCacheObject;
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreatePushButtonGadget(
                         Widget parent,
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
-
 extern Widget XmVaCreatePushButtonGadget(
 			Widget parent,
 			char *name,
 			...);
-
 extern Widget XmVaCreateManagedPushButtonGadget(
 			Widget parent,
 			char *name,
 			...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPButtonG_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -10,7 +10,7 @@
  *	for XmStrings (to work properly with app-defaults), and if needed
  *	the XPM pixmap utilities.
  *
- * Edit the file ${BX}/gen/bxutils.c (BX$SYSTEM:[gen]bxutils.c on VMS) to
+ * Edit the file ${BX}/gen/bxutils.c to
  * make system wide changes to this file which will be visible next time
  * this file is generated.
  * ${BX} is the directory where Builder Xcessory is installed.
@@ -786,19 +786,6 @@ static XmString StringToXmString
 	 */
 	if (dir != curDir)
 	{
-#if defined(VMS) || (defined(__osf__) && defined(__alpha))
-#if XmVERSION > 1 || (XmVERSION == 1 && XmREVISION >= 2)
-	    /*
-	     * This is required on DEC Windows systems because they've
-	     * added the REVERT direction.
-	     */
-	    s1 = XmStringDirectionCreate(XmSTRING_DIRECTION_REVERT);
-	    s2 = xmStr;
-	    xmStr = XmStringConcat(s2, s1);
-	    XmStringFree(s1);
-	    XmStringFree(s2);
-#endif
-#endif
 	    curDir = dir;
 	    s1 = XmStringDirectionCreate(curDir);
 	    s2 = xmStr;

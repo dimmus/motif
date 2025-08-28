@@ -28,8 +28,6 @@ static char rcsid[] = "$XConsortium: ResInd.c /main/17 1996/06/07 11:40:05 danie
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <limits.h>
 #include <ctype.h>		/* for isascii, isspace */
 #include <Xm/ScreenP.h>
@@ -43,22 +41,16 @@ static char rcsid[] = "$XConsortium: ResInd.c /main/17 1996/06/07 11:40:05 danie
 #if XM_PRINTING
 #include "PrintSI.h"
 #endif
-
 /*********** Macros and Internal Types   ************/
-
 #define MAKEINT(float_value) ((int) (((float_value) > 0.0) ? \
             ((float_value) + 0.5) : \
             ((float_value) - 0.5)))
-
 #define FLOATABS(float_value) ((float_value) > 0.0 ? \
             (float_value) : \
             ((float_value) * -1.0))
-
 #define OVERFLOW(float_value) \
             (FLOATABS(float_value) > (float) INT_MAX) ? 1 : 0
-
 /********    Static Function Declarations    ********/
-
 static void FromPixels(
                Widget widget,
                int offset,
@@ -74,8 +66,6 @@ static XmParseResult ParseUnitString(
                 float *float_value, /* RETURN */
                 int *unit_type);    /* RETURN */
 /********    End Static Function Declarations    ********/
-
-
 /**********************************************************************
  *
  * XmConvertStringToUnits
@@ -88,7 +78,6 @@ static XmParseResult ParseUnitString(
  *			future, if desired.
  *
  **********************************************************************/
-
 int
 XmConvertStringToUnits(
         Screen *screen,
@@ -99,15 +88,12 @@ XmConvertStringToUnits(
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
-
   _XmAppLock(app);
   value = _XmConvertStringToUnits(screen, spec, XmPIXELS,
 				 orientation, to_type, parse_error);
   _XmAppUnlock(app);
   return value;
 }
-
-
 /**********************************************************************
  *
  * _XmConvertFloatUnitsToIntUnits
@@ -118,14 +104,12 @@ XmConvertStringToUnits(
  * overflow.
  *
  **********************************************************************/
-
 int
 _XmConvertFloatUnitsToIntUnits(int unitType, float unitValue,
 			       int *intUnitType, float *intUnitValue,
 			       int default_from_type)
 {
     float multiplier;
-
     switch (unitType)
     {
       case XmINCHES:
@@ -157,7 +141,6 @@ _XmConvertFloatUnitsToIntUnits(int unitType, float unitValue,
 	*intUnitType = default_from_type;
 	break;
     };
-
     /* Normalize to units _XmConvertUnits will understand. */
     *intUnitValue = multiplier * unitValue;
     if (OVERFLOW(*intUnitValue)) {
@@ -165,14 +148,12 @@ _XmConvertFloatUnitsToIntUnits(int unitType, float unitValue,
     }
     return(True);
 }
-
 /**********************************************************************
  *
  * _XmConvertStringToUnits
  * Does the real work of converting string unit specifications
  *
  **********************************************************************/
-
 int
 _XmConvertStringToUnits(
         Screen *screen,
@@ -184,10 +165,8 @@ _XmConvertStringToUnits(
 {
     float floatValue, convertValue;
     int unitType, fromType;  /* the type that we will pass to XmConvertUnits */
-
     if (parse_error)
       *parse_error = False;
-
     switch (ParseUnitString (spec, &floatValue, &unitType))
       {
       default:
@@ -195,7 +174,6 @@ _XmConvertStringToUnits(
 	if (parse_error)
 	  *parse_error = True;
         return 0;
-
       case XmPARSE_NO_UNITS:
 	fromType = default_from_type;
 	convertValue = floatValue;
@@ -203,7 +181,6 @@ _XmConvertStringToUnits(
 	    return 0;
 	}
 	break;
-
       case XmPARSE_UNITS_OK:
 	if (unitType == to_type)  /* No conversion required */
 	  return (MAKEINT(floatValue));
@@ -215,7 +192,6 @@ _XmConvertStringToUnits(
     return _XmConvertUnits(screen, orientation, fromType,
 			   MAKEINT(convertValue), to_type);
 }
-
 /**********************************************************************
  *
  * XmeParseUnits
@@ -232,7 +208,6 @@ XmeParseUnits(String spec, int *unitType)
    * the worst case, the tests below take up about 30%
    * of the total conversion time.
    */
-
   /* an empty string here means unit_type wasn't specified */
   if (*spec == '\0')
     return XmPARSE_NO_UNITS;
@@ -262,19 +237,14 @@ XmeParseUnits(String spec, int *unitType)
     *unitType = XmFONT_UNITS;
   else
     return XmPARSE_ERROR;
-
   return XmPARSE_UNITS_OK;
 }
-
-
 /**********************************************************************
  *
  * ParseUnitString
  * Internal routine for parsing <float><units> specifications
  *
  **********************************************************************/
-
-
 static XmParseResult
 ParseUnitString(
     String spec,
@@ -285,31 +255,25 @@ ParseUnitString(
   double power;
   int sign;
   char c;
-
   /* Skip leading whitespace */
   while ((isascii(c=*string)) && (isspace(c))) string++;
-
   /* Check for sign */
   sign = (*string == '-')? -1 : 1;
   if ((*string == '+') || (*string == '-'))
     string++;
-
   /*
    * Do floating point arithmetic here whether we have a decimal
    * point or not to avoid parsing an extra time.
    */
-
   /* Parse digits left of decimal point */
   *float_value = 0;
   while ((*string >= '0') && (*string <= '9')) {
     *float_value = 10.0 * *float_value + (*string - '0');
     string++;
   }
-
   /* Handle decimal point */
   if (*string == '.')
     string++;
-
   /* Parse digits right of decimal point */
   power = 1.0;
   while ((*string >= '0') && (*string <= '9')) {
@@ -317,17 +281,11 @@ ParseUnitString(
     power *= 10;
     string++;
   }
-
   *float_value = sign * *float_value / power;
-
   /* Skip whitespace between float and unit */
   while ((isascii(c=*string)) && (isspace(c))) string++;
-
   return(XmeParseUnits(string, unit_type));
 }
-
-
-
 /**********************************************************************
  *
  * _XmConvertUnits
@@ -349,31 +307,21 @@ _XmConvertUnits(
   register int from_val_in_mm = 0;
   register int mm_per_pixel = 0 ; /* time 100000 */
   int font_unit;
-
-
   /*  Do error checking  */
-
   if (!XmRepTypeValidValue(XmRID_ORIENTATION,
 			   (unsigned char) dimension,
 			   (Widget) NULL))
     return (0);
-
   if (!XmRepTypeValidValue( XmRID_UNIT_TYPE, from_type, (Widget)NULL))
     return (0);
-
   if (!XmRepTypeValidValue( XmRID_UNIT_TYPE, to_type, (Widget)NULL))
     return (0);
-
   if (screen == NULL)
     return (0);
-
   /*  Check for type to same type conversions  */
-
   if (from_type == to_type)
     return (from_val);
-
   /*  Get the screen dimensional data  */
-
 #if XM_PRINTING
   /* specialize for printing */
   _XmProcessLock();
@@ -381,7 +329,6 @@ _XmConvertUnits(
      screen is from it and get the proper resolution */
   if (_XmPrintShellCounter) {
       XmPrintShellWidget pshell = NULL ;
-
       XFindContext(DisplayOfScreen(screen), (XID)screen,
 		   _XmPrintScreenToShellContext, (XPointer *) &pshell);
       if (pshell)
@@ -389,7 +336,6 @@ _XmConvertUnits(
   }
   _XmProcessUnlock();
 #endif /* XM_PRINTING */
-
   if (!mm_per_pixel) {
       if (dimension == XmHORIZONTAL)
 	  mm_per_pixel = (WidthMMOfScreen(screen) * 1000) /
@@ -398,8 +344,6 @@ _XmConvertUnits(
 	  mm_per_pixel = (HeightMMOfScreen(screen) * 1000) /
 	      HeightOfScreen(screen);
   }
-
-
   if (from_type == XmPIXELS)
     from_val_in_mm = from_val * mm_per_pixel ;
   else if (from_type == Xm100TH_POINTS)
@@ -426,8 +370,6 @@ _XmConvertUnits(
       font_unit = _XmGetFontUnit (screen, dimension);
       from_val_in_mm = from_val * font_unit * mm_per_pixel ;
     }
-
-
   if (to_type == XmPIXELS)
     return (from_val_in_mm / mm_per_pixel);
   else if (to_type == Xm100TH_POINTS)
@@ -455,10 +397,6 @@ _XmConvertUnits(
       return ((from_val_in_mm ) / (mm_per_pixel * font_unit));
     }
 }
-
-
-
-
 /**********************************************************************
  *
  *  XmConvertUnits
@@ -479,16 +417,12 @@ XmConvertUnits(
   int value;
   Screen *screen;
   _XmWidgetToAppContext(widget);
-
   _XmAppLock(app);
   screen = XtScreen(widget);
   value = _XmConvertUnits(screen, dimension, from_type, from_val, to_type);
   _XmAppUnlock(app);
   return value;
 }
-
-
-
 /*********************************************************************
  *
  *  XmCvtToVerticalPixels
@@ -504,13 +438,11 @@ XmCvtToHorizontalPixels(
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
-
   _XmAppLock(app);
   value = _XmConvertUnits(screen, XmHORIZONTAL, from_type, from_val, XmPIXELS);
   _XmAppUnlock(app);
   return value;
 }
-
 /**********************************************************************
  *
  *  ToPixels
@@ -528,13 +460,10 @@ ToPixels(
 {
   Screen * screen = XtScreen (widget);
   register unsigned char unit_type;
-
   /*  Get the unit type of the widget  */
   unit_type = _XmGetUnitType(widget) ;
-
   /*  Check for type to same type conversions  */
   if (unit_type == XmPIXELS) return XmSYNTHETIC_LOAD;
-
   /* otherwise, let _XmConvertUnits do the work */
   *value = (XtArgVal) _XmConvertUnits (screen,
 				       (int) orientation,
@@ -543,7 +472,6 @@ ToPixels(
 				       XmPIXELS);
   return XmSYNTHETIC_LOAD;
 }
-
 /**********************************************************************
  *
  *  XmeToHorizontalPixels
@@ -560,13 +488,11 @@ XmeToHorizontalPixels(
 {
    XmImportOperator ret_value;
    _XmWidgetToAppContext(widget);
-
    _XmAppLock(app);
    ret_value = ToPixels(widget, offset, value, XmHORIZONTAL) ;
    _XmAppUnlock(app);
    return ret_value;
 }
-
 /*********************************************************************
  *
  *  XmCvtToVerticalPixels
@@ -582,15 +508,11 @@ XmCvtToVerticalPixels(
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
-
   _XmAppLock(app);
   value = _XmConvertUnits(screen, XmVERTICAL, from_type, from_val, XmPIXELS);
   _XmAppUnlock(app);
   return value;
 }
-
-
-
 /********************************************************************
  *
  *  XmeToVerticalPixels
@@ -607,14 +529,11 @@ XmeToVerticalPixels(
 {
   XmImportOperator ret_value;
   _XmWidgetToAppContext(widget);
-
   _XmAppLock(app);
   ret_value = ToPixels(widget, offset, value, XmVERTICAL) ;
   _XmAppUnlock(app);
   return ret_value;
 }
-
-
 /*********************************************************************
 *
 *
@@ -631,13 +550,11 @@ XmCvtFromHorizontalPixels(
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
-
   _XmAppLock(app);
   value = _XmConvertUnits(screen, XmHORIZONTAL, XmPIXELS, from_val, to_type);
   _XmAppUnlock(app);
   return value;
 }
-
 /**********************************************************************
  *
  *  FromPixels
@@ -655,13 +572,10 @@ FromPixels(
 {
   Screen * screen = XtScreen (widget);
   unsigned char unit_type;
-
   /*  Get the unit type of the widget  */
   unit_type = _XmGetUnitType(widget);
-
   /*  Check for type to same type conversions  */
   if (unit_type == XmPIXELS) return;
-
   /* otherwise, let _XmConvertUnits do the work */
   *value = (XtArgVal) _XmConvertUnits (screen,
 				       (int) orientation,
@@ -669,8 +583,6 @@ FromPixels(
 				       (int) (*value),
 				       unit_type);
 }
-
-
 /**********************************************************************
  *
  *  XmeFromHorizontalPixels
@@ -690,8 +602,6 @@ XmeFromHorizontalPixels(
   FromPixels(widget, offset, value, XmHORIZONTAL);
   _XmAppUnlock(app);
 }
-
-
 /*********************************************************************
 *
 *
@@ -708,15 +618,11 @@ XmCvtFromVerticalPixels(
 {
   int value;
   _XmDisplayToAppContext(DisplayOfScreen(screen));
-
   _XmAppLock(app);
   value = _XmConvertUnits(screen, XmVERTICAL, XmPIXELS, from_val, to_type);
   _XmAppUnlock(app);
   return value;
 }
-
-
-
 /**********************************************************************
  *
  *  XmeFromVerticalPixels
@@ -736,9 +642,6 @@ XmeFromVerticalPixels(
   FromPixels(widget, offset, value, XmVERTICAL);
   _XmAppUnlock(app);
 }
-
-
-
 /**********************************************************************
  *
  * _XmUnitTypeDefault
@@ -755,17 +658,14 @@ _XmUnitTypeDefault(
         XrmValue *value )
 {
   static unsigned char unit_type;
-
   value->size = sizeof(unit_type);
   value->addr = (XPointer) &unit_type;
-
   if (XmIsManager(widget->core.parent))
     unit_type =
       ((XmManagerWidget)(widget->core.parent))->manager.unit_type;
   else
     unit_type = XmPIXELS;
 }
-
 /**********************************************************************
  *
  * _XmGetUnitType
@@ -778,7 +678,6 @@ _XmGetUnitType(
         Widget widget)
 {
     XmSpecUnitTypeTrait trait;
-
     if ((trait = (XmSpecUnitTypeTrait)
 	 XmeTraitGet((XtPointer) XtClass(widget),
 		     XmQTspecifyUnitType)) != NULL)
@@ -790,12 +689,10 @@ _XmGetUnitType(
 	/* CR 8952: Look on the real widget class too. */
 	XmExtObject extObj = (XmExtObject)widget;
 	Widget	    parent = extObj->ext.logicalParent;
-
 	if ((trait = (XmSpecUnitTypeTrait)
 	     XmeTraitGet((XtPointer) XtClass(parent),
 			 XmQTspecifyUnitType)) != NULL)
 	  return trait->getUnitType(parent);
       }
-
     return XmPIXELS ;
 }

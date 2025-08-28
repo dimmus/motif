@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  CrIFrData.c:                                                               *
 *                                                                             *
@@ -31,14 +30,11 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 LFUNC(OpenArray, void, (char **data, xpmData *mdata));
-
 int
 XpmCreateImageFromData(
     Display		 *display,
@@ -51,13 +47,10 @@ XpmCreateImageFromData(
     XpmInfo info;
     int ErrorStatus;
     xpmData mdata;
-
     xpmInitXpmImage(&image);
     xpmInitXpmInfo(&info);
-
     /* open data */
     OpenArray(data, &mdata);
-
     /* create an XpmImage from the file */
     if (attributes) {
 	xpmInitAttributes(attributes);
@@ -74,13 +67,10 @@ XpmCreateImageFromData(
 	    xpmSetAttributes(attributes, &image, &info);
 	XpmFreeXpmInfo(&info);
     }
-
     /* free the XpmImage */
     XpmFreeXpmImage(&image);
-
     return (ErrorStatus);
 }
-
 int
 XpmCreateXpmImageFromData(
     char	**data,
@@ -89,20 +79,15 @@ XpmCreateXpmImageFromData(
 {
     xpmData mdata;
     int ErrorStatus;
-
     /* init returned values */
     xpmInitXpmImage(image);
     xpmInitXpmInfo(info);
-
     /* open data */
     OpenArray(data, &mdata);
-
     /* create the XpmImage from the XpmData */
     ErrorStatus = xpmParseData(&mdata, image, info);
-
     return (ErrorStatus);
 }
-
 /*
  * open the given array to be read or written as an xpmData which is returned
  */

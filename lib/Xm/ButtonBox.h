@@ -39,41 +39,27 @@
  */
 #ifndef _XmButtonBox_h
 #define _XmButtonBox_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
-
 /************************************************************
  *       INCLUDE FILES
  ************************************************************/
-
 /************************************************************
  *       TYPEDEFS AND DEFINES
  ************************************************************/
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 typedef struct _XmButtonBoxClassRec    *XmButtonBoxWidgetClass;
 typedef struct _XmButtonBoxRec	       *XmButtonBoxWidget;
-
-
 /************************************************************
  *       MACROS
  ************************************************************/
-
 /************************************************************
  *       GLOBAL DECLARATIONS
  ************************************************************/
-
 /************************************************************
  *       EXTERNAL DECLARATIONS
  ************************************************************/
-
 /*	Function Name: XmCreateButtonBox
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -81,13 +67,10 @@ typedef struct _XmButtonBoxRec	       *XmButtonBoxWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
 Widget XmCreateButtonBox(Widget, String, ArgList, Cardinal);
-
 /*
  * Variable argument list functions
  */
-
 extern Widget XmVaCreateButtonBox(
                         Widget parent,
                         char *name,
@@ -96,15 +79,8 @@ extern Widget XmVaCreateManagedButtonBox(
                         Widget parent,
                         char *name,
                         ...);
-
 extern WidgetClass xmButtonBoxWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmButtonBox_h */

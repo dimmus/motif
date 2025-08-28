@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  CrPFrI.c:                                                                  *
 *                                                                             *
@@ -31,12 +30,10 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 void
 xpmCreatePixmapFromImage(
     Display	*display,
@@ -46,7 +43,6 @@ xpmCreatePixmapFromImage(
 {
     GC gc;
     XGCValues values;
-
     *pixmap_return = XCreatePixmap(display, d, ximage->width,
 				   ximage->height, ximage->depth);
     /* set fg and bg in case we have an XYBitmap */
@@ -54,9 +50,7 @@ xpmCreatePixmapFromImage(
     values.background = 0;
     gc = XCreateGC(display, *pixmap_return,
 		   GCForeground | GCBackground, &values);
-
     XPutImage(display, *pixmap_return, gc, ximage, 0, 0, 0, 0,
 	      ximage->width, ximage->height);
-
     XFreeGC(display, gc);
 }

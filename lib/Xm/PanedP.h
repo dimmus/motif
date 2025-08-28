@@ -21,33 +21,22 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmPanedP_h
 #define _XmPanedP_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/ManagerP.h>
 #include <Xm/Paned.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*********************************************************************
  *
  * Paned Widget Private Data
  *
  *********************************************************************/
-
 /* New fields for the Paned widget class record */
-
 typedef struct _XmPanedClassPart {
     XtPointer extension;
 } XmPanedClassPart;
-
 /* Full Class record declaration */
 typedef struct _XmPanedClassRec {
     CoreClassPart       core_class;
@@ -56,9 +45,7 @@ typedef struct _XmPanedClassRec {
     XmManagerClassPart	manager_class;
     XmPanedClassPart     paned_class;
 } XmPanedClassRec;
-
 extern XmPanedClassRec xmPanedClassRec;
-
 /* Paned constraint record */
 typedef struct _XmPanedConstraintsPart {
   /* Resources. */
@@ -77,8 +64,6 @@ typedef struct _XmPanedConstraintsPart {
 				   on a resize or change managed after
 				   realize. */
     Boolean     is_a_pane;	/* INTERNAL INFO */
-
-
   /* Private state. */
     Position	delta;		/* Desired Location */
     Position	olddelta;	/* The last value of delta. */
@@ -87,35 +72,28 @@ typedef struct _XmPanedConstraintsPart {
     int         size;		/* the size the widget will actually get. */
     Widget	sash;		/* The sash for this child */
     Widget      separator;      /* The separator for this child */
-
     Boolean     prefs_inited;	/* Preferences have been inited... */
 } XmPanedConstraintsPart, *Pane;
-
 typedef struct _XmPanedConstraintsRec {
     XmManagerConstraintPart	manager;
     XmPanedConstraintsPart	paned;
 } XmPanedConstraintsRec, *XmPanedConstraints;
-
 /*
  * Ugliness:  the XmOffset macros require this naming convention, yet
  * epak already depends on the pluralized name ;(
  */
 typedef XmPanedConstraintsPart XmPanedConstraintPart;
-
 /*
  * The Pane Stack Structure.
  */
-
 typedef struct _PaneStack {
     struct _PaneStack * next;	/* The next element on the stack. */
     Pane pane;			/* The pane in this element on the stack. */
     int start_size;		/* The size of this element when it was pushed
 				   onto the stack. */
 } PaneStack;
-
 #define NO_ADJUST    ((char) 0)
 #define BEGAN_ADJUST ((char) 1)
-
 /* New Fields for the XmPaned widget record */
 typedef struct {
     /* resources */
@@ -125,21 +103,17 @@ typedef struct {
     XtTranslations sash_translations;      /* sash translation table */
     Dimension   internal_bw;	           /* internal border width. */
     unsigned char orientation;	           /* Orientation of paned widget. */
-
     Cursor	cursor;		/* Cursor for paned window */
-
     /* Things from Motif behaviour */
     Boolean     separator_on;        /* make separator visible */
     Dimension   margin_width;        /* space between right and left edges of
                                         Paned window and it's children */
     Dimension   margin_height;       /* space between top and bottom edges of
                                         Paned window and it's children */
-
     /* sash modifying resources */
     Dimension   sash_width;            /* Modify sash width */
     Dimension   sash_height;           /* Modify sash height */
     Dimension   sash_shadow_thickness; /* Modify sash shadow_thickness */
-
     /* Private */
     Boolean	recursively_called;        /* for ChangeManaged */
     Boolean	resize_children_to_pref;   /* override constraint resources
@@ -152,22 +126,18 @@ typedef struct {
 					      borders */
     short	num_panes;                 /* count of managed panes */
     short       num_slots;            	   /*number of avail. slots for kids */
-
     PaneStack * stack;		           /* The pane stack for this widget.*/
     WidgetList  managed_children;	   /* keep track of managed children */
-
     Boolean     allow_unused_space;      /* should the paned widget allow
                                           * a pane to be shrunk to the point
                                           * that there is unused space at
                                           * the bottom/right of the widget */
 } XmPanedPart;
-
 /**************************************************************************
  *
  * Full instance record declaration
  *
  **************************************************************************/
-
 typedef struct _XmPanedRec {
     CorePart       core;
     CompositePart  composite;
@@ -175,7 +145,6 @@ typedef struct _XmPanedRec {
     XmManagerPart  manager;
     XmPanedPart     paned;
 } XmPanedRec;
-
 /************************************************************
  *
  *  Functions
@@ -183,8 +152,6 @@ typedef struct _XmPanedRec {
  ************************************************************/
 void _XmFromPanedPixels(Widget, int, XtArgVal *);
 XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
-
-
 /************************************************************
  *
  *  Macros
@@ -193,7 +160,6 @@ XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
 /*
  * XmResolvePartOffsets stuff follows
  */
-
 #define XmPaned_sash_indent(w) (((XmPanedWidget)(w))->paned.sash_indent)
 #define XmPaned_refiguremode(w) (((XmPanedWidget)(w))->paned.refiguremode)
 #define XmPaned_sash_translations(w) (((XmPanedWidget)(w))->paned.sash_translations)
@@ -217,7 +183,6 @@ XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
 #define XmPaned_stack(w) (((XmPanedWidget)(w))->paned.stack)
 #define XmPaned_managed_children(w) (((XmPanedWidget)(w))->paned.managed_children)
 #define XmPaned_allow_unused_space(w) (((XmPanedWidget)(w))->paned.allow_unused_space)
-
 #define XmPanedC_min(w) (((XmPanedConstraintsRec*)(w)->core.constraints)->paned.min)
 #define XmPanedC_max(w) (((XmPanedConstraintsRec*)(w)->core.constraints)->paned.max)
 #define XmPanedC_allow_resize(w) (((XmPanedConstraintsRec*)(w)->core.constraints)->paned.allow_resize)
@@ -235,34 +200,23 @@ XmImportOperator _XmToPanedPixels(Widget, int, XtArgVal *);
 #define XmPanedC_sash(w) (((XmPanedConstraintsRec*)(w)->core.constraints)->paned.sash)
 #define XmPanedC_separator(w) (((XmPanedConstraintsRec*)(w)->core.constraints)->paned.separator)
 #define XmPanedC_prefs_inited(w) (((XmPanedConstraintsRec*)(w)->core.constraints)->paned.prefs_inited)
-
 #define ForceSashOff(pane) ((pane)->min == (pane)->max)
 #define PaneConsRec(w)	((XmPanedConstraints)(w)->core.constraints)
 #define PaneInfo(w) (&(((XmPanedConstraintsRec*)((w)->core.constraints))->paned))
 #define HasSash(w)	(XmPanedC_sash(w) != NULL)
 #define HasSep(w)	(XmPanedC_separator(w) != NULL)
-
 #define PaneIndex(w)	(XmPanedC_position(w))
 #define IsVert(w)       (XmPaned_orientation(w) == XmVERTICAL)
-
 #define IsLastPane(pw, childP) ((XmPaned_managed_children((pw)) + \
 				 XmPaned_num_panes((pw)) - 1) == childP)
-
 #define ForAllPaned(pw, childP) \
   for ( ((childP) = (XmPaned_managed_children((pw)))) ; \
 	((childP) < ((XmPaned_managed_children((pw))) \
                     + (XmPaned_num_panes((pw))))) ; \
 	(childP)++ )
-
 #define NthPane(pw, paneIndex) (XmPaned_managed_children((pw)) + (paneIndex))
-
 #ifdef _cplusplus
 }	/* Closes scope of 'extern "C"' declaration */
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmPanedP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

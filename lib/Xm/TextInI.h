@@ -27,15 +27,11 @@
 /* $XConsortium: TextInI.h /main/5 1995/07/13 18:07:40 drk $ */
 #ifndef _XmTextInI_h
 #define _XmTextInI_h
-
 #include <Xm/TextInP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern Boolean _XmTextHasDestination(
                         Widget w) ;
 extern Boolean _XmTextSetDestinationSelection(
@@ -60,13 +56,8 @@ extern void _XmTextInputCreate(
                         Cardinal num_args) ;
 extern void _XmTextHandleSecondaryFinished(Widget w,
 					   XEvent *event);
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextInI_h */

@@ -20,10 +20,8 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #ifndef _XmAll_h
 #define _XmAll_h
-
 #include <Xm/Xm.h>
 #include <Xm/ArrowB.h>
 #include <Xm/ArrowBG.h>
@@ -97,6 +95,5 @@
 #include <Xm/VirtKeys.h>
 #include <Xm/XmIm.h>
 #include <Xm/XmStrDefs.h>
-
 #endif /* _XmAll_h */
  /* DON'T ADD STUFF AFTER THIS #endif */

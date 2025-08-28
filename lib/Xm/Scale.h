@@ -22,29 +22,19 @@
 */
 #ifndef _XmScale_h
 #define _XmScale_h
-
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Class record constants */
-
 externalref WidgetClass xmScaleWidgetClass;
-
 /* fast XtIsSubclass define */
 #ifndef XmIsScale
 #define XmIsScale(w) XtIsSubclass (w, xmScaleWidgetClass)
 #endif
-
 typedef struct _XmScaleClassRec * XmScaleWidgetClass;
 typedef struct _XmScaleRec      * XmScaleWidget;
-
-
 /********    Public Function Declarations    ********/
-
 void XmScaleSetValue(
                  Widget w,
                  int value) ;
@@ -73,11 +63,8 @@ void XmScaleSetTicks(
 		     Dimension  size_med,
 		     Dimension  size_small);
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmScale_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

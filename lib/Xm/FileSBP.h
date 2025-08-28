@@ -22,41 +22,29 @@
 */
 #ifndef _XmFSelectP_h
 #define _XmFSelectP_h
-
 #include <Xm/SelectioBP.h>
 #include <Xm/FileSB.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Defines for use in allocation geometry matrix. */
-
 #define XmFSB_MAX_WIDGETS_VERT   12
-
 /* Bit locations for the state_flags bit field.
 */
 #define XmFS_NO_MATCH		(1 << 0)
 #define XmFS_IN_FILE_SEARCH	(1 << 1)
 #define XmFS_DIR_SEARCH_PROC    (1 << 2)
-
 /* Constraint part record for FileSelectionBox widget */
-
 typedef struct _XmFileSelectionBoxConstraintPart
 {
    char unused;
 } XmFileSelectionBoxConstraintPart, * XmFileSelectionBoxConstraint;
-
 /*  New fields for the FileSelectionBox widget class record  */
-
 typedef struct
 {
     XtPointer           extension;      /* Pointer to extension record */
 } XmFileSelectionBoxClassPart;
-
-
 /* Full class record declaration */
-
 typedef struct _XmFileSelectionBoxClassRec
 {
    CoreClassPart       core_class;
@@ -67,12 +55,8 @@ typedef struct _XmFileSelectionBoxClassRec
    XmSelectionBoxClassPart    selection_box_class;
    XmFileSelectionBoxClassPart    file_selection_box_class;
 } XmFileSelectionBoxClassRec;
-
 externalref XmFileSelectionBoxClassRec xmFileSelectionBoxClassRec;
-
-
 /* New fields for the FileSelectionBox widget record */
-
 typedef struct
 {
     XmString        directory;        /* directory specification */
@@ -95,7 +79,6 @@ typedef struct
     Boolean         list_updated;     /* flag to indicate file list update   */
     Boolean         directory_valid ; /* flag to indicate valid new directory*/
     unsigned char   state_flags ;     /* internal flags to indicate state.   */
-
     XtEnum   path_mode ;
     XtEnum   file_filter_style ;
     Widget          dir_text ;
@@ -103,14 +86,11 @@ typedef struct
     XmString        dir_text_label_string ;
     time_t   	    prev_dir_modtime;
 } XmFileSelectionBoxPart;
-
-
 /****************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************/
-
 typedef struct _XmFileSelectionBoxRec
 {
     CorePart	            core;
@@ -121,10 +101,7 @@ typedef struct _XmFileSelectionBoxRec
     XmSelectionBoxPart      selection_box;
     XmFileSelectionBoxPart  file_selection_box;
 } XmFileSelectionBoxRec;
-
-
 /* Access macros */
-
 #define FS_Directory( w) \
                 (((XmFileSelectionBoxWidget)(w))->file_selection_box.directory)
 #define FS_DirMask( w) \
@@ -167,7 +144,6 @@ typedef struct _XmFileSelectionBoxRec
               (((XmFileSelectionBoxWidget)(w))->file_selection_box.state_flags)
 #define FS_DirListSelectedItemPosition( w) (((XmFileSelectionBoxWidget) w) \
                           ->file_selection_box.dir_list_selected_item_position)
-
 #define FS_PathMode( w) (((XmFileSelectionBoxWidget) w) \
                           ->file_selection_box.path_mode)
 #define FS_FileFilterStyle( w) (((XmFileSelectionBoxWidget) w) \
@@ -180,17 +156,10 @@ typedef struct _XmFileSelectionBoxRec
                           ->file_selection_box.dir_text_label_string)
 #define FS_PrevDirModTime( w) (((XmFileSelectionBoxWidget) w) \
                           ->file_selection_box.prev_dir_modtime)
-
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmFSelectP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

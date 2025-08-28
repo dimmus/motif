@@ -21,49 +21,33 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmIconButton_h
 #define _XmIconButton_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
-
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 typedef struct _XmIconButtonClassRec	*XmIconButtonWidgetClass;
 typedef struct _XmIconButtonRec	        *XmIconButtonWidget;
-
-
 /************************************************************
 *	MACROS
 *************************************************************/
-
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
-
 typedef struct _XmIconButtonCallbackInfo {
     Boolean state;		/* The current state of the icon button. */
     XEvent * event;		/* The event that caused this action. */
 } XmIconButtonCallbackInfo;
-
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
-
 /*	Function Name: XmCreateIconButton
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -71,17 +55,9 @@ typedef struct _XmIconButtonCallbackInfo {
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
 Widget XmCreateIconButton(Widget, String, ArgList, Cardinal);
-
 extern WidgetClass xmIconButtonWidgetClass;
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmIconButton_h */

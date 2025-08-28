@@ -21,19 +21,14 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmDataFSelP_h
 #define _XmDataFSelP_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    External (DataF.c) function declaration *******/
 extern Widget _XmDataFieldGetDropReciever( Widget w ) ;
-
 /********    Private Function Declarations    ********/
 extern Boolean _XmDataFieldConvert(
                         Widget w,
@@ -46,11 +41,8 @@ extern Boolean _XmDataFieldConvert(
 extern void _XmDataFieldLoseSelection(
                         Widget w,
                         Atom *selection) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDataFSelP_h */

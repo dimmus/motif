@@ -1,14 +1,9 @@
 /* $Xorg: Xpoll.h,v 1.3 2000/08/18 04:05:44 coskrey Exp $ */
-
 /*
-
 Copyright 1994, 1998  The Open Group
-
 All Rights Reserved.
-
 The above copyright notice and this permission notice shall be included
 in all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -16,20 +11,15 @@ IN NO EVENT SHALL THE OPEN GROUP BE LIABLE FOR ANY CLAIM, DAMAGES OR
 OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
-
 Except as contained in this notice, the name of The Open Group shall
 not be used in advertising or otherwise to promote the sale, use or
 other dealings in this Software without prior written authorization
 from The Open Group.
-
 */
 /* $XFree86: xc/include/Xpoll.h,v 3.7 2000/09/19 12:46:05 eich Exp $ */
-
 #ifndef _XPOLL_H_
 #define _XPOLL_H_
-
 #include <X11/Xos.h>
-
 #ifndef WIN32
 #ifndef USE_POLL
 #if !defined(DGUX)
@@ -44,12 +34,10 @@ from The Open Group.
 #include <sys/types.h>
 #include <unistd.h>
 #endif
-
 #ifdef __QNX__  /* Make sure we get 256 bit select masks */
 #define FD_SETSIZE 256
 #include <sys/select.h>
 #endif
-
 /* AIX 4.2 fubar-ed <sys/select.h>, so go to heroic measures to get it */
 #if defined(AIXV4) && !defined(NFDBITS)
 #include <sys/select.h>
@@ -61,24 +49,19 @@ from The Open Group.
 typedef long fd_mask;
 # endif
 #endif
-
 #define XFD_SETSIZE	256
 #ifndef FD_SETSIZE
 #define FD_SETSIZE	XFD_SETSIZE
 #endif
-
 #ifndef NBBY
 #define NBBY	8		/* number of bits in a byte */
 #endif
-
 #ifndef NFDBITS
 #define NFDBITS (sizeof(fd_mask) * NBBY)	/* bits per mask */
 #endif
-
 #ifndef howmany
 #define howmany(x,y)	(((x)+((y)-1))/(y))
 #endif
-
 #ifdef BSD
 # if BSD < 198911	/* 198911 == OSF/1, 199103 == CSRG_BASED */
 #  ifndef luna		/* and even though on LUNA BSD ==  43, it has it */
@@ -88,7 +71,6 @@ typedef struct fd_set {
 #  endif
 # endif
 #endif
-
 #ifndef hpux /* and perhaps old BSD ??? */
 # define Select(n,r,w,e,t) select(n,(fd_set*)r,(fd_set*)w,(fd_set*)e,(struct timeval*)t)
 #else
@@ -98,7 +80,6 @@ typedef struct fd_set {
 #  define Select(n,r,w,e,t) select(n,(fd_set*)r,(fd_set*)w,(fd_set*)e,(struct timeval*)t)
 # endif
 #endif
-
 #ifndef FD_SET
 #define FD_SET(n, p)    ((p)->fds_bits[(n)/NFDBITS] |= ((fd_mask)1 << ((n) % NFDBITS)))
 #endif
@@ -111,7 +92,6 @@ typedef struct fd_set {
 #ifndef FD_ZERO
 #define FD_ZERO(p)      bzero((char *)(p), sizeof(*(p)))
 #endif
-
 /*
  * The following macros are used by the servers only. There is an
  * explicit assumption that the bit array in the fd_set is at least
@@ -129,7 +109,6 @@ typedef struct fd_set {
 		(p)->fds_bits[2] || (p)->fds_bits[3] || \
 		(p)->fds_bits[4] || (p)->fds_bits[5] || \
 		(p)->fds_bits[6] || (p)->fds_bits[7])
-
 #define XFD_COPYSET(src,dst) \
 		(dst)->fds_bits[0] = (src)->fds_bits[0]; \
 		(dst)->fds_bits[1] = (src)->fds_bits[1]; \
@@ -139,7 +118,6 @@ typedef struct fd_set {
 		(dst)->fds_bits[5] = (src)->fds_bits[5]; \
 		(dst)->fds_bits[6] = (src)->fds_bits[6]; \
 		(dst)->fds_bits[7] = (src)->fds_bits[7];
-
 #define XFD_ANDSET(dst,b1,b2) \
 		(dst)->fds_bits[0] = ((b1)->fds_bits[0] & (b2)->fds_bits[0]); \
 		(dst)->fds_bits[1] = ((b1)->fds_bits[1] & (b2)->fds_bits[1]); \
@@ -149,7 +127,6 @@ typedef struct fd_set {
 		(dst)->fds_bits[5] = ((b1)->fds_bits[5] & (b2)->fds_bits[5]); \
 		(dst)->fds_bits[6] = ((b1)->fds_bits[6] & (b2)->fds_bits[6]); \
 		(dst)->fds_bits[7] = ((b1)->fds_bits[7] & (b2)->fds_bits[7]);
-
 #define XFD_ORSET(dst,b1,b2) \
 		(dst)->fds_bits[0] = ((b1)->fds_bits[0] | (b2)->fds_bits[0]); \
 		(dst)->fds_bits[1] = ((b1)->fds_bits[1] | (b2)->fds_bits[1]); \
@@ -159,7 +136,6 @@ typedef struct fd_set {
 		(dst)->fds_bits[5] = ((b1)->fds_bits[5] | (b2)->fds_bits[5]); \
 		(dst)->fds_bits[6] = ((b1)->fds_bits[6] | (b2)->fds_bits[6]); \
 		(dst)->fds_bits[7] = ((b1)->fds_bits[7] | (b2)->fds_bits[7]);
-
 #define XFD_UNSET(dst,b1) \
 		(dst)->fds_bits[0] &= ~((b1)->fds_bits[0]); \
 		(dst)->fds_bits[1] &= ~((b1)->fds_bits[1]); \
@@ -169,25 +145,19 @@ typedef struct fd_set {
 		(dst)->fds_bits[5] &= ~((b1)->fds_bits[5]); \
 		(dst)->fds_bits[6] &= ~((b1)->fds_bits[6]); \
 		(dst)->fds_bits[7] &= ~((b1)->fds_bits[7]);
-
 #else /* USE_POLL */
 #include <sys/poll.h>
 #endif /* USE_POLL */
-
 #else /* WIN32 */
-
 #define XFD_SETSIZE	256
 #ifndef FD_SETSIZE
 #define FD_SETSIZE	XFD_SETSIZE
 #endif
 #include <X11/Xwinsock.h>
-
 #define Select(n,r,w,e,t) select(0,(fd_set*)r,(fd_set*)w,(fd_set*)e,(struct timeval*)t)
-
 #define XFD_SETCOUNT(p)	(((fd_set FAR *)(p))->fd_count)
 #define XFD_FD(p,i) (((fd_set FAR *)(p))->fd_array[i])
 #define XFD_ANYSET(p)	XFD_SETCOUNT(p)
-
 #define XFD_COPYSET(src,dst) { \
     u_int __i; \
     FD_ZERO(dst); \
@@ -196,7 +166,6 @@ typedef struct fd_set {
     } \
     XFD_SETCOUNT(dst) = XFD_SETCOUNT(src); \
 }
-
 #define XFD_ANDSET(dst,b1,b2) { \
     u_int __i; \
     FD_ZERO(dst); \
@@ -205,7 +174,6 @@ typedef struct fd_set {
 	   FD_SET(XFD_FD(b1,__i), dst); \
     } \
 }
-
 #define XFD_ORSET(dst,b1,b2) { \
     u_int __i; \
     XFD_COPYSET(b1,dst); \
@@ -214,7 +182,6 @@ typedef struct fd_set {
 	   FD_SET(XFD_FD(b2,__i), dst); \
     } \
 }
-
 /* this one is really sub-optimal */
 #define XFD_UNSET(dst,b1) { \
     u_int __i; \
@@ -222,7 +189,6 @@ typedef struct fd_set {
 	FD_CLR(XFD_FD(b1,__i), dst); \
     } \
 }
-
 /* we have to pay the price of having an array here, unlike with bitmasks
    calling twice FD_SET with the same fd is not transparent, so be careful */
 #undef FD_SET
@@ -230,9 +196,6 @@ typedef struct fd_set {
     if (XFD_SETCOUNT(set) < FD_SETSIZE && !FD_ISSET(fd,set)) \
         XFD_FD(set,XFD_SETCOUNT(set)++)=(fd); \
 } while(0)
-
 #define getdtablesize() FD_SETSIZE
-
 #endif /* WIN32 */
-
 #endif /* _XPOLL_H_ */

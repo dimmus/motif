@@ -25,20 +25,15 @@
 /*
  * HISTORY
  */
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include <Xm/ManagerP.h>
 #include <Xm/GadgetP.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/TraitP.h>
 #include <Xm/LayoutT.h>
-
 /*********************************************************************
  *
  * _XmDirectionDefault
@@ -53,9 +48,7 @@ _XmDirectionDefault(Widget widget,
 		    XrmValue *value )
 {
   static XmDirection direction;
-
   value->addr = (XPointer) &direction;
-
   /* This is an ugly hack, but what to do when user sets stringDirection
      in resource file. Dependent on that stringDirection comes before
      layoutDirection in resource list. Part of the reason is that this is
@@ -69,7 +62,6 @@ _XmDirectionDefault(Widget widget,
   else
     direction = _XmGetLayoutDirection(XtParent(widget));
 }
-
 /*ARGSUSED*/
 void
 _XmFromLayoutDirection(
@@ -83,7 +75,6 @@ _XmFromLayoutDirection(
     *value =
       (XtArgVal)XmDirectionToStringDirection(_XmGetLayoutDirection(wid));
 }
-
 /*ARGSUSED*/
 XmImportOperator
 _XmToLayoutDirection(
@@ -105,11 +96,6 @@ _XmToLayoutDirection(
   }
   return XmSYNTHETIC_LOAD;
 }
-
-
-
-
-
 XmStringDirection
 XmDirectionToStringDirection(XmDirection dir)
 {
@@ -119,7 +105,6 @@ XmDirectionToStringDirection(XmDirection dir)
     return XmSTRING_DIRECTION_R_TO_L;
   return XmSTRING_DIRECTION_DEFAULT;
 }
-
 XmDirection
 XmStringDirectionToDirection(XmStringDirection dir)
 {
@@ -132,28 +117,21 @@ XmStringDirectionToDirection(XmStringDirection dir)
     return XmDEFAULT_DIRECTION;
   }
 }
-
-
 XmDirection
 _XmGetLayoutDirection( Widget w )
 {
   XmSpecifyLayoutDirectionTrait layoutT = NULL;
-
   while (w && !(layoutT = (XmSpecifyLayoutDirectionTrait)
 		XmeTraitGet((XtPointer) XtClass(w),
 			    XmQTspecifyLayoutDirection)))
     w = XtParent(w);
-
   if (w && layoutT && layoutT->get_direction)
     return layoutT->get_direction(w);
   else
     return XmLEFT_TO_RIGHT;
 }
-
-
 /* Handle compatibility with XmStringDirection */
 #define Fixdir(d) (((d) <= 1) ? (~((d)+1)) : ((d) | XmDIRECTION_IGNORED))
-
 Boolean
 XmDirectionMatch(XmDirection d1,
 		 XmDirection d2)
@@ -163,7 +141,6 @@ XmDirectionMatch(XmDirection d1,
   return (((XmDirection)(d1 & d2) == (XmDirection)d1) ||
 	  ((XmDirection)(d1 & d2) == (XmDirection)d2));
 }
-
 Boolean
 XmDirectionMatchPartial(XmDirection d1,
 		 XmDirection d2,

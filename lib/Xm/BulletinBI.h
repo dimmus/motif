@@ -27,13 +27,10 @@
 /* $XConsortium: BulletinBI.h /main/7 1996/06/14 23:09:13 pascale $ */
 #ifndef _XmBulletinBI_h
 #define _XmBulletinBI_h
-
 #include <Xm/BulletinBP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 typedef enum {
     XmOkStringLoc,
     XmCancelStringLoc,
@@ -46,9 +43,7 @@ typedef enum {
     XmDirTextStringLoc,
     XmPromptStringLoc
 } XmLabelStringLoc;
-
 /********    Private Function Declarations    ********/
-
 extern Widget _XmBB_CreateButtonG(
                         Widget bb,
                         XmString l_string,
@@ -83,12 +78,9 @@ extern void _XmBulletinBoardMap(
 extern void _XmBulletinBoardSetDynDefaultButton(
                         Widget wid,
                         Widget newDefaultButton) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmBulletinBI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

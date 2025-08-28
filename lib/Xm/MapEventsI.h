@@ -27,15 +27,11 @@
 /* $XConsortium: MapEventsI.h /main/5 1995/07/13 17:35:36 drk $ */
 #ifndef _XmMapEventsI_h
 #define _XmMapEventsI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for MapEvents.c    ********/
-
 extern Boolean _XmMapBtnEvent(
                         register String str,
                         int *eventType,
@@ -56,12 +52,9 @@ extern Boolean _XmMatchKeyEvent(
                         int eventType,
                         unsigned int key,
                         Modifiers modifiers) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmMapEventsI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

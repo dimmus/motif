@@ -26,16 +26,13 @@
  */
 #ifndef	_XmContainerP_h
 #define _XmContainerP_h
-
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/DragCP.h>
 #include <Xm/Container.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*
  * One _XmCwidNodeRec structure is allocated by Container for each of
  * it's children (except for OutlineButtons).  Information about the
@@ -55,7 +52,6 @@ typedef struct _XmCwidNodeRec
 	struct	_XmCwidNodeRec *	parent_ptr;
 	Widget			widget_ptr;
 	}	XmCwidNodeRec, *CwidNode;
-
 /*
  * Container allocates a _XmContainerXfrActionRec structure to store
  * the data from a ContainerStartTransfer action until it can determine
@@ -69,7 +65,6 @@ typedef	struct	_XmContainerXfrActionRec
 	Cardinal	*num_params;
 	Atom		operation;
 	}	XmContainerXfrActionRec, *ContainerXfrAction;
-
 /*
  * Container allocates an array of _XmContainerCwidCellInfoRec structures
  * to use in calculating an ideal size in the GetSpatialSize procedure when
@@ -81,7 +76,6 @@ typedef	struct	_XmContainerCwidCellInfoRec
 	int	cwid_width_in_cells;
 	int	cwid_height_in_cells;
 	}	XmContainerCwidCellInfoRec, *ContainerCwidCellInfo;
-
 /* Container constraint class part record */
 typedef	struct	_XmContainerConstraintPart
 	{
@@ -99,16 +93,13 @@ typedef	struct	_XmContainerConstraintPart
 	unsigned char	selection_state;
 	unsigned char	cwid_type;
 	}	XmContainerConstraintPart, * XmContainerConstraint;
-
 typedef	struct	_XmContainerConstraintRec
 	{
 	XmManagerConstraintPart		manager;
 	XmContainerConstraintPart	container;
 	}	XmContainerConstraintRec, * XmContainerConstraintPtr;
-
 /* move the other typedef here */
 typedef void (*XmSpatialGetSize)(Widget, Dimension *, Dimension *);
-
 /* Container widget class record  */
 typedef	struct	_XmContainerClassPart
 	{
@@ -118,7 +109,6 @@ typedef	struct	_XmContainerClassPart
 	XmSpatialGetSize		get_spatial_size;
 	XtPointer			extension;
 	}	XmContainerClassPart;
-
 /* Full class record declaration */
 typedef	struct	_XmContainerClassRec
 	{
@@ -128,9 +118,7 @@ typedef	struct	_XmContainerClassRec
 	XmManagerClassPart	manager_class;
 	XmContainerClassPart		container_class;
 	}	XmContainerClassRec, *XmContainerClass;
-
 externalref	XmContainerClassRec	xmContainerClassRec;
-
 /* Container instance record */
 typedef	struct	_XmContainerPart
 	{
@@ -239,7 +227,6 @@ typedef	struct	_XmContainerPart
 	XmString *	cache_detail_heading;  /* XmNdetailColumnHeading
 						  getValues */
 	}	XmContainerPart;
-
 /* Full instance record declaration */
 typedef	struct	_XmContainerRec
 	{
@@ -249,17 +236,14 @@ typedef	struct	_XmContainerRec
 	XmManagerPart	manager;
 	XmContainerPart	container;
 	}	XmContainerRec;
-
 /* enums to keep up with cwid types */
 enum {	CONTAINER_ICON,
 	CONTAINER_OUTLINE_BUTTON,
 	CONTAINER_HEADER};
-
 #define	TABLIST	(1L<<0)
 #define	FIRSTCW (1L<<1)
 #define	CtrIsDynamic(w,mask) \
 	(((XmContainerWidget)(w))->container.dynamic_resource & mask)
-
 #define CtrDynamicSmallCellHeight(w) \
 	(((XmContainerWidget)(w))->container.small_cell_height == 0)
 #define	CtrDynamicSmallCellWidth(w) \
@@ -268,7 +252,6 @@ enum {	CONTAINER_ICON,
         (((XmContainerWidget)(w))->container.large_cell_height == 0)
 #define CtrDynamicLargeCellWidth(w) \
         (((XmContainerWidget)(w))->container.large_cell_width == 0)
-
 #define CtrIsAUTO_SELECT(w) \
         ((((XmContainerWidget)(w))->container.automatic == XmAUTO_SELECT) && \
          (((XmContainerWidget)(w))->container.selection_policy \
@@ -292,7 +275,6 @@ enum {	CONTAINER_ICON,
 #define CtrLayoutIsOUTLINE_DETAIL(w) \
 	((((XmContainerWidget)(w))->container.layout_type == XmDETAIL) || \
 	(((XmContainerWidget)(w))->container.layout_type == XmOUTLINE))
-
 #define CtrDrawLinesOUTLINE(w) \
 	(CtrLayoutIsOUTLINE_DETAIL(w) && \
 	 (((XmContainerWidget)(w))->container.outline_sep_style \
@@ -370,21 +352,17 @@ enum {	CONTAINER_ICON,
 #define	CtrHEADER(w) \
 	(((XmContainerConstraintPtr)(w)->core.constraints)->container.cwid_type\
 					== CONTAINER_HEADER)
-
 #define	XmInheritSpatialTestFitProc	((XmSpatialTestFitProc) _XtInherit)
 #define	XmInheritSpatialPlacementProc	((XmSpatialPlacementProc) _XtInherit)
 #define	XmInheritSpatialRemoveProc	((XmSpatialRemoveProc) _XtInherit)
 #define	XmInheritSpatialGetSize		((XmSpatialGetSize) _XtInherit)
-
 /* possible directions when leaving the container */
 #define	TOPLEAVE	(1<<0)
 #define	BOTTOMLEAVE	(1<<1)
 #define	LEFTLEAVE	(1<<2)
 #define	RIGHTLEAVE	(1<<3)
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmContainerP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

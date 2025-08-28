@@ -25,12 +25,9 @@
 static char rcsid[] = "$XConsortium: GadgetUtil.c /main/16 1996/10/23 15:00:52 cde-osf $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -41,15 +38,8 @@ static char rcsid[] = "$XConsortium: GadgetUtil.c /main/16 1996/10/23 15:00:52 c
 #include <Xm/DropSMgr.h>
 #include "GadgetUtiI.h"
 #include "XmI.h"
-
-
 /********    Static Function Declarations    ********/
-
-
 /********    End Static Function Declarations    ********/
-
-
-
 /************************************************************************
  *
  *  _XmInputForGadget
@@ -64,18 +54,11 @@ _XmInputForGadget(
         int y )
 {
     Widget widget;
-
     widget = XmObjectAtPoint (wid, x, y);
-
     if (!widget  ||  !XtIsSensitive (widget))
 	return ((XmGadget) NULL);
-
    return ((XmGadget) widget);
 }
-
-
-
-
 /************************************************************************
  *
  *  XmConfigureObject
@@ -93,9 +76,7 @@ XmeConfigureObject(
 {
     _XmWidgetToAppContext(wid);
     XmDropSiteStartUpdate(wid);
-
     _XmAppLock(app);
-
     if (!width && !height) {
 	XtWidgetGeometry   desired, preferred ;
 	desired.request_mode = 0;
@@ -106,14 +87,9 @@ XmeConfigureObject(
     if (!width)  width++;
     if (!height) height++;
     XtConfigureWidget(wid, x, y, width, height, border_width);
-
     XmDropSiteEndUpdate(wid);
     _XmAppUnlock(app);
 }
-
-
-
-
 /************************************************************************
  *
  *  XmeRedisplayGadgets
@@ -131,9 +107,7 @@ XmeRedisplayGadgets(
    register int i;
    register Widget child;
    XtExposeProc expose;
-
    _XmWidgetToAppContext(w);
-
    _XmAppLock(app);
    for (i = 0; i < mw->composite.num_children; i++)
    {
@@ -147,11 +121,9 @@ XmeRedisplayGadgets(
                 child->core.y < event->xexpose.y + event->xexpose.height     &&
                 child->core.y + child->core.height > event->xexpose.y)
             {
-
 	       _XmProcessLock();
 	       expose = child->core.widget_class->core_class.expose;
 	       _XmProcessUnlock();
-
                if (expose)
                   (*(expose))
                      (child, event, region);
@@ -165,7 +137,6 @@ XmeRedisplayGadgets(
  	      _XmProcessLock();
 	      expose = child->core.widget_class->core_class.expose;
 	      _XmProcessUnlock();
-
               if (expose)
                   (*(expose))
                      (child, event, region);
@@ -175,10 +146,6 @@ XmeRedisplayGadgets(
    }
    _XmAppUnlock(app);
 }
-
-
-
-
 /************************************************************************
  *
  *  _XmDispatchGadgetInput
@@ -198,10 +165,8 @@ _XmDispatchGadgetInput(
       if (event != NULL)
       {
          XEvent synth_event;
-
 #define CopyEvent(source, dest, type) \
     source.type = dest->type
-
          switch(mask) {
 	   case XmENTER_EVENT:
                    CopyEvent(synth_event, event, xcrossing);
@@ -265,7 +230,6 @@ _XmDispatchGadgetInput(
 		      (size_t)sizeof(synth_event));
 		   break;
          }
-
          (*(((XmGadgetClass) (g->object.widget_class))->
              gadget_class.input_dispatch)) ((Widget) g,
                                                (XEvent *) &synth_event, mask) ;

@@ -22,40 +22,27 @@
 */
 #ifndef _XmArrowButtonGadget_h
 #define _XmArrowButtonGadget_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsArrowButtonGadget
 #define XmIsArrowButtonGadget(w) XtIsSubclass(w, xmArrowButtonGadgetClass)
 #endif /* XmIsArrowButtonGadget */
-
 externalref WidgetClass xmArrowButtonGadgetClass;
-
 typedef struct _XmArrowButtonGadgetClassRec * XmArrowButtonGadgetClass;
 typedef struct _XmArrowButtonGadgetRec      * XmArrowButtonGadget;
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateArrowButtonGadget(
                         Widget parent,
                         char *name,
                         ArgList arglist,
                         Cardinal argcount) ;
-
 extern Widget XmVaCreateManagedArrowButtonGadget( Widget parent, char *name, ...);
 extern Widget XmVaCreateArrowButtonGadget( Widget parent, char *name, ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmArrowButtonGadget_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

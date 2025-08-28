@@ -22,16 +22,12 @@
 */
 #ifndef _XmVirtKeys_h
 #define _XmVirtKeys_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef _OSF_Keysyms
 #define _OSF_Keysyms
-
 #define osfXK_Activate		0x1004FF44
 #define osfXK_AddMode		0x1004FF31
 #define osfXK_BackSpace		0x1004FF08
@@ -79,24 +75,16 @@ extern "C" {
 #define osfXK_SwitchDirection	0x1004FF7E
 #define osfXK_Undo		0x1004FF65
 #define osfXK_Up		0x1004FF52
-
 #endif  /* OSF_Keysyms */
-
-
 /********    Public Function Declarations    ********/
-
 extern void XmTranslateKey(
                         Display *dpy,
                         KeyCode keycode,
                         Modifiers modifiers,
                         Modifiers *modifiers_return,
                         KeySym *keysym_return) ;
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmVirtKeys_h */

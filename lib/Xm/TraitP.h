@@ -24,23 +24,15 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmTraitP_H
 #define _XmTraitP_H 1
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Macros */
-
 #define XmeTraitRemove(w, t) XmeTraitSet((XtPointer) w, t, NULL)
-
-
 /********    Private Function Declarations    ********/
-
 /*
  * XmeTraitGet(object, trait) returns a pointer to the trait_record
  * from looking up the trait on this object.  If the trait
@@ -52,9 +44,7 @@ extern "C" {
  *   trait_rec -> disarm();
  * }
  */
-
 extern XtPointer XmeTraitGet(XtPointer, XrmQuark);
-
 /*
  * Boolean XmeTraitSet(object, traitname, traitrecord)
  *
@@ -66,13 +56,9 @@ extern XtPointer XmeTraitGet(XtPointer, XrmQuark);
  * storage for traitrecord,  but can use malloc or static initialization
  *
  */
-
 extern Boolean XmeTraitSet(XtPointer, XrmQuark, XtPointer);
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTraitP_H */

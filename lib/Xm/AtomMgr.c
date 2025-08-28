@@ -25,21 +25,17 @@
 static char rcsid[] = "$TOG: AtomMgr.c /main/13 1997/09/08 14:06:18 cshi $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <Xm/AtomMgr.h>
 #include <Xm/XmP.h>
 #include <X11/Xresource.h>
-
 /*****************************************************************************
  *
  *  XmInternAtom()
  *
  ****************************************************************************/
-
 Atom
 XmInternAtom(
         Display *display,
@@ -50,13 +46,11 @@ XmInternAtom(
   /* XInternAtom directly. */
   return XInternAtom(display, name, only_if_exists);
 }
-
 /*****************************************************************************
  *
  *  XmGetAtomName()
  *
  ****************************************************************************/
-
 String
 XmGetAtomName(
         Display *display,

@@ -22,28 +22,19 @@
 */
 #ifndef _XmLabel_h
 #define _XmLabel_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*  Widget class and record definitions  */
-
 externalref WidgetClass xmLabelWidgetClass;
-
 typedef struct _XmLabelClassRec     * XmLabelWidgetClass;
 typedef struct _XmLabelRec      * XmLabelWidget;
-
 /*fast subclass define */
 #ifndef XmIsLabel
 #define XmIsLabel(w)     XtIsSubclass(w, xmLabelWidgetClass)
 #endif /* XmIsLabel */
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateLabel(
                         Widget parent,
                         char *name,
@@ -58,11 +49,8 @@ extern Widget XmVaCreateManagedLabel(
         char *name,
         ...);
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmLabel_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -27,15 +27,11 @@
 /* $XConsortium: TextSelI.h /main/5 1995/07/13 18:10:00 drk $ */
 #ifndef _XmTextSelI_h
 #define _XmTextSelI_h
-
 #include <Xm/TextSelP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern Boolean _XmTextConvert(
                         Widget w,
                         Atom *selection,
@@ -52,12 +48,9 @@ extern void _XmTextLoseSelection(
 extern Widget _XmTextGetDropReciever(
                         Widget w) ;
 extern void _XmTextInstallTransferTrait(void);
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextSelI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

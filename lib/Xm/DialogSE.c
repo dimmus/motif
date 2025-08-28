@@ -28,16 +28,11 @@ static char rcsid[] = "$XConsortium: DialogSE.c /main/10 1995/07/14 10:19:03 drk
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/Xm.h>		/* To make cpp on Sun happy. CR 5943 */
 #include <Xm/DialogSEP.h>
 #include <Xm/BaseClassP.h>
 #include <X11/ShellP.h>
-
-
 /********    Static Function Declarations    ********/
-
 static void ClassInitialize( void ) ;
 static void DeleteWindowHandler(
                         Widget wid,
@@ -45,10 +40,7 @@ static void DeleteWindowHandler(
                         XtPointer call_data) ;
 static Widget GetManagedKid(
                         CompositeWidget p) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static XtResource extResources[]= {
     {
 	XmNdeleteResponse, XmCDeleteResponse,
@@ -57,8 +49,6 @@ static XtResource extResources[]= {
 	XmRImmediate, (XtPointer) XmUNMAP,
     },
 };
-
-
 static XmBaseClassExtRec       myExtExtension = {
     NULL,                                     /* Next extension       */
     NULLQUARK,                                /* record type XmQmotif */
@@ -81,7 +71,6 @@ static XmBaseClassExtRec       myExtExtension = {
     0,					      /* resource_count     	*/
     TRUE,				      /* use_sub_resources	*/
 };
-
 /* ext rec static initialization */
 externaldef(xmdialogshellextclassrec)
 XmDialogShellExtClassRec xmDialogShellExtClassRec = {
@@ -143,17 +132,13 @@ XmDialogShellExtClassRec xmDialogShellExtClassRec = {
 	(XtPointer) NULL,		/* extension		*/
     }
 };
-
 externaldef(xmdialogshellextobjectclass)
     WidgetClass xmDialogShellExtObjectClass = (WidgetClass) &xmDialogShellExtClassRec;
-
-
 static void
 ClassInitialize( void )
 {
     myExtExtension.record_type = XmQmotif;
 }
-
 /************************************************************************
  *
  *  DeleteWindowHandler
@@ -168,13 +153,11 @@ DeleteWindowHandler(
 {
     VendorShellWidget	w = (VendorShellWidget) wid ;
     XmVendorShellExtObject ve = (XmVendorShellExtObject) closure;
-
     switch(ve->vendor.delete_response)
       {
 	case XmUNMAP:
 	  {
 	      Widget managedKid;
-
 	      if ((managedKid = GetManagedKid((CompositeWidget) w)) != NULL)
 		XtUnmanageChild(managedKid);
 	      break;
@@ -182,20 +165,17 @@ DeleteWindowHandler(
 	case XmDESTROY:
 	  XtDestroyWidget(wid);
 	  break;
-
 	case XmDO_NOTHING:
 	default:
 	  break;
       }
 }
-
 static Widget
 GetManagedKid(
         CompositeWidget p )
 {
     Cardinal	i;
     Widget	*currKid;
-
     for (i = 0, currKid = p->composite.children;
 	 i < p->composite.num_children;
 	 i++, currKid++)

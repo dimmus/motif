@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Manager.c /main/22 1999/01/27 16:07:30 mgreess $"
 #endif
 #endif
-
 #include <Xm/AccColorT.h>
 #include <Xm/CareVisualT.h>
 #include <Xm/DrawP.h>
@@ -57,12 +54,9 @@ static char rcsid[] = "$TOG: Manager.c /main/22 1999/01/27 16:07:30 mgreess $"
 #include "TraversalI.h"
 #include "UniqueEvnI.h"
 #include "XmI.h"
-
 #define MESSAGE1 _XmMMsgManager_0000
 #define MESSAGE2 _XmMMsgManager_0001
-
 /********    Static Function Declarations    ********/
-
 static void GetXFromShell(
                         Widget wid,
                         int resource_offset,
@@ -143,14 +137,9 @@ static XmDirection GetDirection(Widget);
 static void GetColors(Widget widget,
 		      XmAccessColorData color_data);
 static unsigned char GetUnitType(Widget);
-
 /********    End Static Function Declarations    ********/
-
-
-
 /***********************************/
 /*  Default actions for XmManager  */
-
 static XtActionsRec actions[] = {
 	{ "ManagerGadgetTraverseCurrent",  _XmGadgetTraverseCurrent },
 	{ "ManagerEnter",               _XmManagerEnter },
@@ -182,13 +171,9 @@ static XtActionsRec actions[] = {
         { "Help",            _XmManagerHelp },          /* Motif 1.0 BC. */
         { "Arm",             _XmGadgetArm },            /* Motif 1.0 BC. */
 	{ "Activate",        _XmGadgetActivate },       /* Motif 1.0 BC. */
-
 };
-
-
 /****************************************/
 /*  Resource definitions for XmManager  */
-
 static XtResource resources[] =
 {
    {
@@ -196,110 +181,92 @@ static XtResource resources[] =
      sizeof (unsigned char), XtOffsetOf(XmManagerRec, manager.unit_type),
      XmRCallProc, (XtPointer) _XmUnitTypeDefault
    },
-
    {
      XmNx, XmCPosition, XmRHorizontalPosition,
      sizeof(Position), XtOffsetOf(WidgetRec, core.x),
      XmRImmediate, (XtPointer) 0
    },
-
    {
      XmNy, XmCPosition, XmRVerticalPosition,
      sizeof(Position), XtOffsetOf(WidgetRec, core.y),
      XmRImmediate, (XtPointer) 0
    },
-
    {
      XmNwidth, XmCDimension, XmRHorizontalDimension,
      sizeof(Dimension), XtOffsetOf(WidgetRec, core.width),
      XmRImmediate, (XtPointer) 0
    },
-
    {
      XmNheight, XmCDimension, XmRVerticalDimension,
      sizeof(Dimension), XtOffsetOf(WidgetRec, core.height),
      XmRImmediate, (XtPointer) 0
    },
-
    {
      XmNborderWidth, XmCBorderWidth, XmRHorizontalDimension,
      sizeof(Dimension), XtOffsetOf(WidgetRec, core.border_width),
      XmRImmediate, (XtPointer) 0
    },
-
    {
      XmNforeground, XmCForeground, XmRPixel,
      sizeof (Pixel), XtOffsetOf(XmManagerRec, manager.foreground),
      XmRCallProc, (XtPointer) _XmForegroundColorDefault
    },
-
    {
      XmNbackground, XmCBackground, XmRPixel,
      sizeof (Pixel), XtOffsetOf(WidgetRec, core.background_pixel),
      XmRCallProc, (XtPointer) _XmBackgroundColorDefault
    },
-
    {
      XmNbackgroundPixmap, XmCPixmap, XmRPixmap,
      sizeof (Pixmap), XtOffsetOf(WidgetRec, core.background_pixmap),
      XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
    },
-
    {
      XmNhighlightColor, XmCHighlightColor, XmRPixel,
      sizeof (Pixel), XtOffsetOf(XmManagerRec, manager.highlight_color),
      XmRCallProc, (XtPointer) _XmHighlightColorDefault
    },
-
    {
      XmNhighlightPixmap, XmCHighlightPixmap, XmRNoScalingDynamicPixmap,
      sizeof (Pixmap), XtOffsetOf(XmManagerRec, manager.highlight_pixmap),
      XmRCallProc, (XtPointer) _XmHighlightPixmapDefault
    },
-
    {
      XmNnavigationType, XmCNavigationType, XmRNavigationType,
      sizeof (unsigned char),
      XtOffsetOf(XmManagerRec, manager.navigation_type),
      XmRImmediate, (XtPointer) XmTAB_GROUP,
    },
-
    {
      XmNshadowThickness, XmCShadowThickness, XmRHorizontalDimension,
      sizeof (Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
      XmRImmediate, (XtPointer) 0
    },
-
    {
      XmNtopShadowColor, XmCTopShadowColor, XmRPixel,
      sizeof (Pixel), XtOffsetOf(XmManagerRec, manager.top_shadow_color),
      XmRCallProc, (XtPointer) _XmTopShadowColorDefault
    },
-
    {
      XmNtopShadowPixmap, XmCTopShadowPixmap, XmRNoScalingDynamicPixmap,
      sizeof (Pixmap), XtOffsetOf(XmManagerRec, manager.top_shadow_pixmap),
      XmRCallProc, (XtPointer) _XmTopShadowPixmapDefault
    },
-
    {
      XmNbottomShadowColor, XmCBottomShadowColor, XmRPixel,
      sizeof (Pixel), XtOffsetOf(XmManagerRec, manager.bottom_shadow_color),
      XmRCallProc, (XtPointer) _XmBottomShadowColorDefault
    },
-
    {
      XmNbottomShadowPixmap, XmCBottomShadowPixmap, XmRNoScalingDynamicPixmap,
      sizeof (Pixmap), XtOffsetOf(XmManagerRec, manager.bottom_shadow_pixmap),
      XmRImmediate, (XtPointer) XmUNSPECIFIED_PIXMAP
    },
-
    {
      XmNhelpCallback, XmCCallback, XmRCallback,
      sizeof(XtCallbackList), XtOffsetOf(XmManagerRec, manager.help_callback),
      XmRPointer, (XtPointer) NULL
    },
-
 #ifndef XM_PART_BC
    {
      XmNpopupHandlerCallback, XmCCallback, XmRCallback,
@@ -308,13 +275,11 @@ static XtResource resources[] =
      XmRPointer, (XtPointer) NULL
    },
 #endif
-
    {
      XmNuserData, XmCUserData, XmRPointer,
      sizeof(XtPointer), XtOffsetOf(XmManagerRec, manager.user_data),
      XmRPointer, (XtPointer) NULL
    },
-
    {
      XmNtraversalOn, XmCTraversalOn, XmRBoolean,
      sizeof(Boolean), XtOffsetOf(XmManagerRec, manager.traversal_on),
@@ -338,47 +303,35 @@ static XtResource resources[] =
      XmRImmediate, NULL
    }
 };
-
 /***************************************/
 /*  Definition for synthetic resources */
-
 static XmSyntheticResource syn_resources[] =
 {
    { XmNx,
      sizeof (Position), XtOffsetOf(WidgetRec, core.x),
      GetXFromShell, XmeToHorizontalPixels },
-
    { XmNy,
      sizeof (Position), XtOffsetOf(WidgetRec, core.y),
      GetYFromShell,  XmeToVerticalPixels },
-
    { XmNwidth,
      sizeof (Dimension), XtOffsetOf(WidgetRec, core.width),
      XmeFromHorizontalPixels, XmeToHorizontalPixels },
-
    { XmNheight,
      sizeof (Dimension), XtOffsetOf(WidgetRec, core.height),
      XmeFromVerticalPixels, XmeToVerticalPixels },
-
    { XmNborderWidth,
      sizeof (Dimension), XtOffsetOf(WidgetRec, core.border_width),
      XmeFromHorizontalPixels, XmeToHorizontalPixels },
-
    { XmNshadowThickness,
      sizeof (Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
      XmeFromHorizontalPixels, XmeToHorizontalPixels },
-
    { XmNstringDirection,
      sizeof(XmStringDirection),
      XtOffsetOf(XmManagerRec, manager.string_direction),
      _XmFromLayoutDirection, _XmToLayoutDirection }
-
 };
-
-
 /*******************************************/
 /*  Declaration of class extension records */
-
 static XmBaseClassExtRec baseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -403,7 +356,6 @@ static XmBaseClassExtRec baseClassExtRec = {
     WidgetNavigable,                    /* widgetNavigable      */
     NULL                                /* focusChange          */
 };
-
 static CompositeClassExtensionRec compositeClassExtRec = {
     NULL,
     NULLQUARK,
@@ -411,7 +363,6 @@ static CompositeClassExtensionRec compositeClassExtRec = {
     sizeof(CompositeClassExtensionRec),
     TRUE,                               /* accepts_objects */
 };
-
 static XmManagerClassExtRec managerClassExtRec = {
     NULL,
     NULLQUARK,
@@ -420,10 +371,8 @@ static XmManagerClassExtRec managerClassExtRec = {
     NULL,                               /* traversal_children */
     ObjectAtPoint                       /* object_at_point */
 };
-
 /******************************************/
 /*  The Manager class record definition.  */
-
 externaldef(xmmanagerclassrec) XmManagerClassRec xmManagerClassRec =
 {
    {
@@ -467,7 +416,6 @@ externaldef(xmmanagerclassrec) XmManagerClassRec xmManagerClassRec =
       DeleteChild,	                     /* Delete Child      */
       (XtPointer)&compositeClassExtRec,      /* extension         */
    },
-
    {						/* constraint class	*/
       NULL,					/* resources		*/
       0,					/* num resources	*/
@@ -477,7 +425,6 @@ externaldef(xmmanagerclassrec) XmManagerClassRec xmManagerClassRec =
       ConstraintSetValues,			/* set values		*/
       NULL,					/* extension		*/
    },
-
    {						/* manager class	  */
       _XmManager_managerTraversalTranslations,  /* default translations   */
       syn_resources,				/* syn resources      	  */
@@ -488,38 +435,27 @@ externaldef(xmmanagerclassrec) XmManagerClassRec xmManagerClassRec =
       (XtPointer)&managerClassExtRec,		/* extension		  */
    },
 };
-
 externaldef(xmmanagerwidgetclass) WidgetClass xmManagerWidgetClass =
                                  (WidgetClass) &xmManagerClassRec;
-
-
-
 static XmConst XmSpecifyLayoutDirectionTraitRec manLDT = {
   0,			/* version */
   GetDirection
 };
-
-
 /* Access Colors Trait record for Manager */
-
 static XmConst XmAccessColorsTraitRec manACT = {
   0,			/* version */
   GetColors
 };
-
 /* Unit Type Trait record for Manager */
-
 static XmConst XmSpecUnitTypeTraitRec manUTT = {
   0,			/* version */
   GetUnitType
 };
-
 /**************************************************************************
 **
 ** Synthetic resource hooks function section
 **
 **************************************************************************/
-
 static void
 GetXFromShell(
         Widget wid,
@@ -528,9 +464,7 @@ GetXFromShell(
 {
     /* return the x in the child's unit type; for children of shell, return
      * the parent's x relative to the origin, in pixels */
-
     Widget parent = XtParent(wid);
-
     if (XtIsShell(parent)) {
 	/* at the moment menuShell doesn't reset x,y values to 0, so
 	** we'll have them counted twice if we use XtTranslateCoords
@@ -541,7 +475,6 @@ GetXFromShell(
 	XmeFromHorizontalPixels(wid,  resource_offset, value);
     }
 }
-
 static void
 GetYFromShell(
         Widget wid,
@@ -550,9 +483,7 @@ GetYFromShell(
 {
     /* return the y in the child's unit type; for children of shell, return
      * the parent's y relative to the origin, in pixels */
-
     Widget parent = XtParent(wid);
-
     if (XtIsShell(parent)) {
 	/* at the moment menuShell doesn't reset x,y values to 0, so
 	** we'll have them counted twice if we use XtTranslateCoords
@@ -563,7 +494,6 @@ GetYFromShell(
 	XmeFromVerticalPixels(wid,  resource_offset, value);
     }
 }
-
 /*********************************************************************
  *
  * ClassInitialize
@@ -578,11 +508,8 @@ ClassInitialize( void )
    _XmRegisterPixmapConverters();
    _XmInitializeExtensions();
    _XmInitializeTraits();
-
    baseClassExtRec.record_type = XmQmotif;
 }
-
-
 static CompositeClassExtension
 FindCompClassExtension(
         WidgetClass widget_class )
@@ -592,7 +519,6 @@ FindCompClassExtension(
 	       ->composite_class.extension;
     while ((ext != NULL) && (ext->record_type != NULLQUARK))
       ext = (CompositeClassExtension)ext->next_extension;
-
     if (ext != NULL) {
 	/* fix for 9640: check for older version of the extension as well */
 	if (  ext->version <= XtCompositeExtensionVersion &&
@@ -610,9 +536,6 @@ FindCompClassExtension(
     }
     return ext;
 }
-
-
-
 /**********************************************************************
  *
  *  BuildManagerResources
@@ -627,32 +550,22 @@ BuildManagerResources(
 {
     XmManagerWidgetClass wc = (XmManagerWidgetClass) c ;
     XmManagerWidgetClass sc;
-
     sc = (XmManagerWidgetClass) wc->core_class.superclass;
-
     _XmInitializeSyntheticResources(wc->manager_class.syn_resources,
 				    wc->manager_class.num_syn_resources);
-
     _XmInitializeSyntheticResources(
 			wc->manager_class.syn_constraint_resources,
 			wc->manager_class.num_syn_constraint_resources);
-
     if (sc == (XmManagerWidgetClass) constraintWidgetClass) return;
-
     _XmBuildResources (&(wc->manager_class.syn_resources),
 		       &(wc->manager_class.num_syn_resources),
 		       sc->manager_class.syn_resources,
 		       sc->manager_class.num_syn_resources);
-
     _XmBuildResources (&(wc->manager_class.syn_constraint_resources),
 		       &(wc->manager_class.num_syn_constraint_resources),
 		       sc->manager_class.syn_constraint_resources,
 		       sc->manager_class.num_syn_constraint_resources);
 }
-
-
-
-
 /*********************************************************************
  *
  * ClassPartInitialize
@@ -669,15 +582,10 @@ ClassPartInitialize(
     XmManagerClassExt *mext = (XmManagerClassExt *)
 	_XmGetClassExtensionPtr((XmGenericClassExt *)
 				&(mw->manager_class.extension), NULLQUARK) ;
-
-
-
     _XmFastSubclassInit (wc, XmMANAGER_BIT);
-
     /*** start by doing the inheritance for Xt... */
     if (FindCompClassExtension(wc) == NULL) {
 	CompositeClassExtension comp_ext ;
-
 	XtPointer *comp_extP
 	    = &((CompositeWidgetClass)wc)->composite_class.extension;
 	comp_ext = XtNew(CompositeClassExtensionRec);
@@ -686,26 +594,20 @@ ClassPartInitialize(
 	comp_ext->next_extension = *comp_extP;
 	*comp_extP = (XtPointer)comp_ext;
     }
-
     /*** deal with inheritance for regular methods */
     if (mw->manager_class.translations == XtInheritTranslations)
 	mw->manager_class.translations = super->manager_class.translations;
     else if (mw->manager_class.translations)
 	mw->manager_class.translations = (String)
 	    XtParseTranslationTable(mw->manager_class.translations);
-
     if (mw->manager_class.parent_process == XmInheritParentProcess)
 	mw->manager_class.parent_process =
 	    super->manager_class.parent_process;
-
     /* synthetic resource management */
     BuildManagerResources((WidgetClass) wc);
-
-
     /*** then deal with class extension inheritance.
       if it's NULL, create a new one with inherit everywhere,
       then do the inheritance*/
-
     if (*mext == NULL) {
 	*mext = (XmManagerClassExt) XtCalloc(1, sizeof(XmManagerClassExtRec));
 	(*mext)->record_type     = NULLQUARK ;
@@ -714,14 +616,11 @@ ClassPartInitialize(
 	(*mext)->traversal_children = XmInheritTraversalChildrenProc ;
 	(*mext)->object_at_point = XmInheritObjectAtPointProc ;
     }
-
     if ((WidgetClass)mw != xmManagerWidgetClass) {
-
 	XmManagerClassExt *smext = (XmManagerClassExt *)
 	    _XmGetClassExtensionPtr( (XmGenericClassExt *)
 				    &(super->manager_class.extension),
 				    NULLQUARK) ;
-
 	if ((*mext)->traversal_children == XmInheritTraversalChildrenProc) {
 	    (*mext)->traversal_children = (*smext)->traversal_children ;
 	}
@@ -729,8 +628,6 @@ ClassPartInitialize(
 	    (*mext)->object_at_point = (*smext)->object_at_point ;
 	}
     }
-
-
    /*** Carry this ugly non portable code that deal with Xt internals.
       first_time because we want to do that onlt once but
       after Object ClassPartInit has been called */
@@ -740,17 +637,11 @@ ClassPartInitialize(
 			       XmNforeground, XmNbackground);
         first_time = FALSE;
     }
-
-
     /*** setting up traits for all subclasses as well. */
-
     XmeTraitSet((XtPointer)wc, XmQTspecifyLayoutDirection, (XtPointer)&manLDT);
     XmeTraitSet((XtPointer)wc, XmQTaccessColors, (XtPointer)&manACT);
     XmeTraitSet((XtPointer)wc, XmQTspecifyUnitType, (XtPointer)&manUTT);
 }
-
-
-
 /************************************************************************
  *
  *  Initialize
@@ -765,9 +656,7 @@ Initialize(
 {
     XmManagerWidget mw = (XmManagerWidget) new_w ;
     XtTranslations translations ;
-
    /*  Initialize manager and composite instance data  */
-
    mw->manager.selected_gadget = NULL;
    mw->manager.highlighted_widget = NULL;
    mw->manager.event_handler_added = False;
@@ -776,12 +665,10 @@ Initialize(
    mw->manager.num_keyboard_entries = 0;
    mw->manager.size_keyboard_list = 0;
    mw->manager.has_focus = False;
-
    _XmProcessLock();
    translations = (XtTranslations) ((XmManagerClassRec *)XtClass( mw))
                                       ->manager_class.translations ;
    _XmProcessUnlock();
-
    if(    mw->manager.traversal_on
        && translations  &&  mw->core.tm.translations
        && !XmIsRowColumn( mw)    )
@@ -797,26 +684,20 @@ Initialize(
        */
        XtOverrideTranslations( (Widget) mw, translations) ;
        }
-
    if(    (mw->manager.navigation_type != XmDYNAMIC_DEFAULT_TAB_GROUP)
        && !XmRepTypeValidValue( XmRID_NAVIGATION_TYPE,
                         mw->manager.navigation_type, (Widget) mw)    )
    {   mw->manager.navigation_type = XmNONE ;
        }
    _XmNavigInitialize( request, new_w, args, num_args);
-
    /*  Verify resource data  */
-
    if(    !XmRepTypeValidValue( XmRID_UNIT_TYPE, mw->manager.unit_type,
                                           (Widget) mw)    )
    {
       mw->manager.unit_type = XmPIXELS;
    }
-
    /*  Convert the fields from unit values to pixel values  */
-
    _XmManagerImportArgs( (Widget) mw, args, num_args);
-
     if (mw->manager.string_direction == XmSTRING_DIRECTION_DEFAULT) {
       /* This indicates that layoutDirection was set in the arglist, but
          stringDirection defaulting overwrote the value */
@@ -825,9 +706,7 @@ Initialize(
 	if (strcmp(args[i].name, XmNlayoutDirection) == 0)
 	  mw->manager.string_direction = (XmDirection)args[i].value;
     }
-
    /*  Get the shadow drawing GC's  */
-
     mw->manager.background_GC =
 	_XmGetPixmapBasedGC (new_w,
 			     mw->core.background_pixel,
@@ -848,22 +727,16 @@ Initialize(
 			     mw->manager.bottom_shadow_color,
 			     mw->core.background_pixel,
 			     mw->manager.bottom_shadow_pixmap);
-
    /* Copy accelerator widget from parent or set to NULL.
     */
     {
       XmManagerWidget p = (XmManagerWidget) XtParent(mw);
-
       if (XmIsManager(p) && p->manager.accelerator_widget)
          mw->manager.accelerator_widget = p->manager.accelerator_widget;
       else
          mw->manager.accelerator_widget = NULL;
     }
 }
-
-
-
-
 /*************************************************************************
  *
  *  Realize
@@ -876,23 +749,17 @@ Realize(
         XSetWindowAttributes *attributes )
 {
    Mask valueMask = *p_valueMask;
-
     /*	Make sure height and width are not zero.
     */
    if (!XtWidth(w)) XtWidth(w) = 1 ;
    if (!XtHeight(w)) XtHeight(w) = 1 ;
-
    valueMask |= CWBitGravity | CWDontPropagate;
    attributes->bit_gravity = NorthWestGravity;
    attributes->do_not_propagate_mask =
       ButtonPressMask | ButtonReleaseMask |
       KeyPressMask | KeyReleaseMask | PointerMotionMask;
-
    XtCreateWindow (w, InputOutput, CopyFromParent, valueMask, attributes);
 }
-
-
-
 /************************************************************************
  *
  *  Destroy
@@ -903,18 +770,12 @@ Destroy(
         Widget w )
 {
    XmManagerWidget	mw = (XmManagerWidget) w;
-
    _XmNavigDestroy(w);
-
    XtReleaseGC (w, mw->manager.background_GC);
    XtReleaseGC (w, mw->manager.top_shadow_GC);
    XtReleaseGC (w, mw->manager.bottom_shadow_GC);
    XtReleaseGC (w, mw->manager.highlight_GC);
 }
-
-
-
-
 /************************************************************************
  *
  *  SetValues
@@ -932,30 +793,25 @@ SetValues(
     Mask visualFlag = NoVisualChange;
     XmManagerWidget curmw = (XmManagerWidget) current;
     XmManagerWidget newmw = (XmManagerWidget) new_w;
-
     /*  Process the change in values */
-
     /* CR 7124: XmNlayoutDirection and XmNstringDirection are CG resources. */
     if (curmw->manager.string_direction != newmw->manager.string_direction)
       {
 	XmeWarning(new_w, MESSAGE2);
 	newmw->manager.string_direction = curmw->manager.string_direction;
       }
-
     /* If traversal has been turned on, then augment the translations
     *    of the new widget.
     */
     if(    newmw->manager.traversal_on
         && (newmw->manager.traversal_on != curmw->manager.traversal_on)
         && newmw->core.tm.translations) {
-
     	   XtTranslations translations;
 	   _XmProcessLock();
 	   translations = (XtTranslations)
 	       ((XmManagerClassRec *) XtClass( newmw))
 		   ->manager_class.translations;
 	   _XmProcessUnlock();
-
 	   if (translations)
         	XtOverrideTranslations( (Widget) newmw, translations);
         }
@@ -964,7 +820,6 @@ SetValues(
 	_XmSetInitialOfTabGroup( (Widget) newmw,
 				newmw->manager.initial_focus) ;
       }
-
     if( curmw->manager.navigation_type != newmw->manager.navigation_type   )
       {
 	if(    !XmRepTypeValidValue( XmRID_NAVIGATION_TYPE,
@@ -973,31 +828,23 @@ SetValues(
 	    newmw->manager.navigation_type = curmw->manager.navigation_type ;
 	  }
       }
-
     returnFlag = _XmNavigSetValues(current, request, new_w, args, num_args);
-
     /*  Validate changed data.  */
-
     if(    !XmRepTypeValidValue( XmRID_UNIT_TYPE, newmw->manager.unit_type,
                                                         (Widget) newmw)    )
     {
        newmw->manager.unit_type = curmw->manager.unit_type;
     }
-
    /*  Convert the necessary fields from unit values to pixel values  */
-
    _XmManagerImportArgs( (Widget) newmw, args, num_args);
-
     /*  Checking for valid Direction */
     if(    !XmRepTypeValidValue( XmRID_DIRECTION,
                        newmw->manager.string_direction, (Widget) newmw)    )
     {
         newmw->manager.string_direction = curmw->manager.string_direction ;
     }
-
    /*  If either of the background, shadow, or highlight colors or  */
    /*  pixmaps have changed, destroy and recreate the gc's.         */
-
    if (curmw->core.background_pixel != newmw->core.background_pixel ||
        curmw->core.background_pixmap != newmw->core.background_pixmap)
    {
@@ -1010,7 +857,6 @@ SetValues(
       returnFlag = True;
       visualFlag |= (VisualBackgroundPixel|VisualBackgroundPixmap);
    }
-
    if (curmw->manager.top_shadow_color != newmw->manager.top_shadow_color ||
        curmw->manager.top_shadow_pixmap != newmw->manager.top_shadow_pixmap)
    {
@@ -1023,7 +869,6 @@ SetValues(
       returnFlag = True;
       visualFlag |= (VisualTopShadowColor|VisualTopShadowPixmap);
    }
-
    if (curmw->manager.bottom_shadow_color !=
           newmw->manager.bottom_shadow_color ||
        curmw->manager.bottom_shadow_pixmap !=
@@ -1038,7 +883,6 @@ SetValues(
       returnFlag = True;
       visualFlag |= (VisualBottomShadowColor|VisualBottomShadowPixmap);
    }
-
    if (curmw->manager.highlight_color != newmw->manager.highlight_color ||
        curmw->manager.highlight_pixmap != newmw->manager.highlight_pixmap)
    {
@@ -1051,26 +895,14 @@ SetValues(
       returnFlag = True;
       visualFlag |= (VisualHighlightColor|VisualHighlightPixmap);
    }
-
    if (curmw->manager.foreground != newmw->manager.foreground)
       visualFlag |= VisualForeground ;
-
-
    /*  Inform children of possible visual changes  */
-
    if (visualFlag)
       returnFlag |= _XmNotifyChildrenVisual (current, new_w, visualFlag);
-
-
    /*  Return flag to indicate if redraw is needed.  */
-
    return (returnFlag);
 }
-
-
-
-
-
 /*********************************************************************
  *
  * InsertChild
@@ -1082,16 +914,13 @@ InsertChild(
 {
     CompositeClassRec *cc = (CompositeClassRec *) compositeWidgetClass;
     XtWidgetProc insert_child;
-
     if (!XtIsRectObj(child))
 	return;
-
     _XmProcessLock();
     insert_child = cc->composite_class.insert_child;
     _XmProcessUnlock();
     (*insert_child)(child);
 }
-
 /*********************************************************************
  *
  * DeleteChild
@@ -1105,13 +934,10 @@ DeleteChild(
     Widget tab_group ;
     CompositeClassRec *cc = (CompositeClassRec *) compositeWidgetClass;
     XtWidgetProc delete_child;
-
     if (!XtIsRectObj(child))
 	return;
-
     if (mw->manager.selected_gadget == (XmGadget) child)
 	mw->manager.selected_gadget = NULL;
-
     if(    mw->manager.initial_focus == child    )
 	{
 	    mw->manager.initial_focus = NULL ;
@@ -1127,16 +953,11 @@ DeleteChild(
 	{
 	    ((XmManagerWidget) tab_group)->manager.active_child = NULL ;
 	}
-
     _XmProcessLock();
     delete_child = cc->composite_class.delete_child;
     _XmProcessUnlock();
     (*delete_child)(child);
 }
-
-
-
-
 /************************************************************************
  *
  *  ManagerMotion
@@ -1156,9 +977,7 @@ ManagerMotion(
    XmManagerWidget mw = (XmManagerWidget) wid ;
    XmGadget gadget;
    XmGadget oldGadget;
-
    /*  Event on the managers window and not propagated from a child  */
-
    /* Old comment from 1.1:
     * ManagerMotion() creates misleading Enter/Leave events.  A race condition
     * exists such that it's possible that when ManagerMotion() is called, the
@@ -1177,7 +996,6 @@ ManagerMotion(
     *
     * if ((event->subwindow != 0) || !mw->manager.has_focus)
     */
-
     /* CR 9362:
      * ManagerMotion() was not keeping track of Enter/Leave events.
      * Pointer motion on a gadget which extended beyond the manager's
@@ -1188,37 +1006,25 @@ ManagerMotion(
      * Prior to 1.1, xcrossing.focus was used, but this proved incorrect,
      * as the 1.1 comment above describes.
      */
-
    if (event->xmotion.subwindow != 0 || !mw->manager.has_focus)
       return;
-
    gadget = _XmInputForGadget((Widget) mw, event->xmotion.x,
 			      event->xmotion.y);
    oldGadget = (XmGadget) mw->manager.highlighted_widget;
-
-
    /*  Dispatch motion events to the child  */
-
    if (gadget != NULL)
    {
       if (gadget->gadget.event_mask & XmMOTION_EVENT)
          _XmDispatchGadgetInput((Widget) gadget, event, XmMOTION_EVENT);
    }
-
-
    /*  Check for and process a leave window condition  */
-
    if (oldGadget != NULL && gadget != oldGadget)
    {
       if (oldGadget->gadget.event_mask & XmLEAVE_EVENT)
          _XmDispatchGadgetInput( (Widget) oldGadget, event, XmLEAVE_EVENT);
-
       mw->manager.highlighted_widget = NULL;
    }
-
-
    /*  Check for and process an enter window condition  */
-
    if (gadget != NULL && gadget != oldGadget)
    {
       if (gadget->gadget.event_mask & XmENTER_EVENT)
@@ -1230,10 +1036,6 @@ ManagerMotion(
          mw->manager.highlighted_widget = NULL;
    }
 }
-
-
-
-
 /************************************************************************
  *
  *  ManagerEnter
@@ -1252,31 +1054,25 @@ ManagerEnter(
 {
    XmManagerWidget mw = (XmManagerWidget) wid ;
    XmGadget gadget;
-
    /* Old comment from 1.1:
     * See ManagerMotion()
     * if (!(mw->manager.has_focus = (Boolean) event->xcrossing.focus))
     *    return;
     */
-
     /* Toggle to entered state */
     mw->manager.has_focus = True;
-
    /*
     * call the traversal action in order to synch things up. This
     * should be cleaned up into a single module |||
     */
    _XmManagerEnter((Widget) mw, event, NULL, NULL);
-
    gadget = _XmInputForGadget( (Widget) mw, event->xcrossing.x,
                                            event->xcrossing.y);
    /*  Dispatch motion and enter events to the child  */
-
    if (gadget != NULL)
    {
       if (gadget->gadget.event_mask & XmMOTION_EVENT)
          _XmDispatchGadgetInput( (Widget) gadget, event, XmMOTION_EVENT);
-
       if (gadget->gadget.event_mask & XmENTER_EVENT)
       {
          _XmDispatchGadgetInput( (Widget) gadget, event, XmENTER_EVENT);
@@ -1284,13 +1080,8 @@ ManagerEnter(
       }
       else
          mw->manager.highlighted_widget = NULL;
-
    }
 }
-
-
-
-
 /************************************************************************
  *
  *  ManagerLeave
@@ -1308,17 +1099,13 @@ ManagerLeave(
 {
    XmManagerWidget mw = (XmManagerWidget) wid ;
    XmGadget oldGadget;
-
    /* See ManagerMotion()
     * if (!(mw->manager.has_focus = (Boolean) event->xcrossing.focus))
     *    return;
     */
-
     /* Toggle to leave state */
     mw->manager.has_focus = False;
-
    oldGadget = (XmGadget) mw->manager.highlighted_widget;
-
    if (oldGadget != NULL)
    {
       if (oldGadget->gadget.event_mask & XmLEAVE_EVENT)
@@ -1330,11 +1117,7 @@ ManagerLeave(
     * should be cleaned up into a single module |||
     */
    _XmManagerLeave( (Widget) mw, event, NULL, NULL);
-
 }
-
-
-
 /************************************************************************
  *
  *  AddMotionHandlers
@@ -1363,14 +1146,11 @@ AddMotionHandlers(
 			ManagerMotion, NULL);
    }
 #endif
-
    XtAddEventHandler ((Widget) mw, EnterWindowMask, False,
 		      ManagerEnter, NULL);
    XtAddEventHandler ((Widget) mw, LeaveWindowMask, False,
 		      ManagerLeave, NULL);
 }
-
-
 /************************************************************************
  *
  *  ConstraintInitialize
@@ -1389,16 +1169,11 @@ ConstraintInitialize(
 {
    XmGadget g;
    XmManagerWidget parent;
-
    if (!XtIsRectObj(new_w)) return;
-
    parent = (XmManagerWidget) new_w->core.parent;
-
    if (XmIsGadget (new_w))
    {
       g = (XmGadget) new_w;
-
-
       if ((g->gadget.event_mask &
            (XmENTER_EVENT | XmLEAVE_EVENT | XmMOTION_EVENT)) &&
            parent->manager.event_handler_added == False)
@@ -1414,11 +1189,6 @@ ConstraintInitialize(
      }
    /* else non-widget non-gadget RectObj */
 }
-
-
-
-
-
 /************************************************************************
  *
  *  CheckRemoveMotionHandlers
@@ -1434,16 +1204,12 @@ CheckRemoveMotionHandlers(
 {
    register int i;
    register Widget child;
-
-
    /*  If there are any gadgets which need motion events, return.  */
-
    if (!mw->core.being_destroyed)
    {
       for (i = 0; i < mw->composite.num_children; i++)
       {
          child = mw->composite.children[i];
-
          if (XmIsGadget(child))
          {
             if (((XmGadget) child)->gadget.event_mask &
@@ -1452,12 +1218,8 @@ CheckRemoveMotionHandlers(
          }
       }
    }
-
-
    /*  Remove the motion event handlers  */
-
    mw->manager.event_handler_added = False;
-
    XtRemoveEventHandler ((Widget) mw, PointerMotionMask, False,
 			 ManagerMotion, NULL);
    XtRemoveEventHandler ((Widget) mw, EnterWindowMask, False,
@@ -1465,10 +1227,6 @@ CheckRemoveMotionHandlers(
    XtRemoveEventHandler ((Widget) mw, LeaveWindowMask, False,
 			 ManagerLeave, NULL);
 }
-
-
-
-
 /************************************************************************
  *
  *  ConstraintDestroy
@@ -1483,28 +1241,20 @@ ConstraintDestroy(
 {
    XmGadget g;
    XmManagerWidget parent;
-
    if (!XtIsRectObj(w)) return;
-
    if (XmIsGadget (w))
    {
       g = (XmGadget) w;
       parent = (XmManagerWidget) w->core.parent;
-
       if (g->gadget.event_mask &
           (XmENTER_EVENT | XmLEAVE_EVENT | XmMOTION_EVENT))
          CheckRemoveMotionHandlers (parent);
-
       if (parent->manager.highlighted_widget == w)
          parent->manager.highlighted_widget = NULL;
-
       if (parent->manager.selected_gadget == g)
          parent->manager.selected_gadget = NULL;
    }
 }
-
-
-
 /************************************************************************
  *
  *  ConstraintSetValues
@@ -1524,47 +1274,37 @@ ConstraintSetValues(
    XmGadget currentg, newg;
    XmManagerWidget parent;
    unsigned int motion_events;
-
    if (!XtIsRectObj(new_w)) return(FALSE);
-
    /*  If the child is a gadget and its event mask has changed with  */
    /*  respect to the event types which need motion events on the    */
    /*  parent.                                                       */
-
    if (XmIsGadget (new_w))
    {
       currentg = (XmGadget) current;
       newg = (XmGadget) new_w;
       parent = (XmManagerWidget) new_w->core.parent;
-
       motion_events = XmENTER_EVENT | XmLEAVE_EVENT | XmMOTION_EVENT;
-
       if ((newg->gadget.event_mask & motion_events) !=
           (currentg->gadget.event_mask & motion_events))
       {
          if ((newg->gadget.event_mask & motion_events) &&
              parent->manager.event_handler_added == False)
             AddMotionHandlers (parent);
-
          if ((~(newg->gadget.event_mask & motion_events)) &&
              parent->manager.event_handler_added == True)
             CheckRemoveMotionHandlers (parent);
       }
    }
-
    return (False);
 }
-
 /****************************************************************/
 static Boolean
 ManagerParentProcess(
         Widget widget,
         XmParentProcessData data )
 {
-
     return( _XmParentProcess( XtParent( widget), data)) ;
 }
-
 /************************************************************************
  *
  *  ObjectAtPoint method
@@ -1582,7 +1322,6 @@ ObjectAtPoint(
     CompositeWidget cw = (CompositeWidget) wid ;
     register int i;
     register Widget widget;
-
    /* For the case of overlapping gadgets, the last one in the
     * composite list will be the visible gadget (see order of
     * redisplay in XmeRedisplayGadgets).  So, search the child
@@ -1592,7 +1331,6 @@ ObjectAtPoint(
     i = cw->composite.num_children ;
     while( i-- ) {
 	widget = cw->composite.children[i];
-
 	if (XmIsGadget(widget) && XtIsManaged (widget)) {
 	    if (x >= widget->core.x && y >= widget->core.y &&
 		x < widget->core.x + widget->core.width    &&
@@ -1600,12 +1338,8 @@ ObjectAtPoint(
 		return (widget);
 	}
     }
-
     return (NULL);
 }
-
-
-
 static XmNavigability
 WidgetNavigable(
         Widget wid)
@@ -1626,8 +1360,6 @@ WidgetNavigable(
 	}
     return XmNOT_NAVIGABLE ;
 }
-
-
 /****************************************************************
  ****************************************************************
  **
@@ -1635,26 +1367,21 @@ WidgetNavigable(
  **
  ****************************************************************
  ****************************************************************/
-
 static XmDirection
 GetDirection(Widget w)
 {
   return (XmDirection)((XmManagerWidget)(w))->manager.string_direction;
 }
-
 static unsigned char
 GetUnitType(Widget w)
 {
     return ((XmManagerWidget) w)->manager.unit_type ;
 }
-
-
 static void
 GetColors(Widget w,
 	  XmAccessColorData color_data)
 {
     XmManagerWidget mw = (XmManagerWidget) w ;
-
     color_data->valueMask = AccessForeground | AccessBackgroundPixel |
 	AccessHighlightColor | AccessTopShadowColor | AccessBottomShadowColor;
     color_data->background = w->core.background_pixel;
@@ -1663,9 +1390,6 @@ GetColors(Widget w,
     color_data->top_shadow_color = mw->manager.top_shadow_color;
     color_data->bottom_shadow_color = mw->manager.bottom_shadow_color;
 }
-
-
-
 /****************************************************************
  ****************************************************************
  **
@@ -1674,7 +1398,6 @@ GetColors(Widget w,
  **
  ****************************************************************
  ****************************************************************/
-
 /*ARGSUSED*/
 void
 _XmGadgetTraversePrevTabGroup(
@@ -1686,19 +1409,15 @@ _XmGadgetTraversePrevTabGroup(
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
   Boolean button_tab;
   XmDisplay xm_dpy;
-
   if (ref_wid == NULL)
     ref_wid = wid ;
-
   xm_dpy = (XmDisplay) XmGetXmDisplay(XtDisplayOfObject(ref_wid));
   button_tab = xm_dpy->display.enable_button_tab;
-
   if (button_tab)
     _XmMgrTraversal(ref_wid,  XmTRAVERSE_GLOBALLY_BACKWARD);
   else
     _XmMgrTraversal(ref_wid,  XmTRAVERSE_PREV_TAB_GROUP);
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseNextTabGroup(
@@ -1710,19 +1429,15 @@ _XmGadgetTraverseNextTabGroup(
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
   Boolean button_tab;
   XmDisplay xm_dpy;
-
   if (ref_wid == NULL)
     ref_wid = wid ;
-
   xm_dpy = (XmDisplay) XmGetXmDisplay(XtDisplayOfObject(ref_wid));
   button_tab = xm_dpy->display.enable_button_tab;
-
   if (button_tab)
     _XmMgrTraversal(ref_wid, XmTRAVERSE_GLOBALLY_FORWARD);
   else
     _XmMgrTraversal(ref_wid, XmTRAVERSE_NEXT_TAB_GROUP);
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseCurrent(
@@ -1732,11 +1447,9 @@ _XmGadgetTraverseCurrent(
         Cardinal *num_params )	/* unused */
 {
   Widget child ;
-
   child = (Widget) _XmInputForGadget(wid, event->xbutton.x, event->xbutton.y);
   XmProcessTraversal(child, XmTRAVERSE_CURRENT) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseLeft(
@@ -1746,14 +1459,12 @@ _XmGadgetTraverseLeft(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_LEFT) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseRight(
@@ -1763,14 +1474,12 @@ _XmGadgetTraverseRight(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_RIGHT) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseUp(
@@ -1780,14 +1489,12 @@ _XmGadgetTraverseUp(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_UP) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseDown(
@@ -1797,14 +1504,12 @@ _XmGadgetTraverseDown(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_DOWN) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseNext(
@@ -1814,14 +1519,12 @@ _XmGadgetTraverseNext(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_NEXT) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraversePrev(
@@ -1831,14 +1534,12 @@ _XmGadgetTraversePrev(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_PREV) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetTraverseHome(
@@ -1848,14 +1549,12 @@ _XmGadgetTraverseHome(
         Cardinal *num_params )	/* unused */
 {
   Widget ref_wid = ((XmManagerWidget) wid)->manager.active_child ;
-
   if(    ref_wid == NULL    )
     {
       ref_wid = wid ;
     }
   _XmMgrTraversal( ref_wid, XmTRAVERSE_HOME) ;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetSelect(
@@ -1866,7 +1565,6 @@ _XmGadgetSelect(
 {
    XmManagerWidget mw = (XmManagerWidget) wid ;
             Widget child ;
-
     if(    _XmGetFocusPolicy( (Widget) mw) == XmEXPLICIT    )
     {
         child = mw->manager.active_child ;
@@ -1885,7 +1583,6 @@ _XmGadgetSelect(
         }
     return ;
     }
-
 void
 _XmManagerParentActivate(
         Widget mw,
@@ -1894,16 +1591,13 @@ _XmManagerParentActivate(
         Cardinal *num_params )
 {
     XmParentInputActionRec  pp_data ;
-
     pp_data.process_type = XmINPUT_ACTION ;
     pp_data.action = XmPARENT_ACTIVATE ;
     pp_data.event = event ;
     pp_data.params = params ;
     pp_data.num_params = num_params ;
-
     _XmParentProcess( mw, (XmParentProcessData) &pp_data);
 }
-
 void
 _XmManagerParentCancel(
         Widget mw,
@@ -1912,16 +1606,13 @@ _XmManagerParentCancel(
         Cardinal *num_params )
 {
 	XmParentInputActionRec  pp_data ;
-
     pp_data.process_type = XmINPUT_ACTION ;
     pp_data.action = XmPARENT_CANCEL ;
     pp_data.event = event ;
     pp_data.params = params ;
     pp_data.num_params = num_params ;
-
     _XmParentProcess( mw, (XmParentProcessData) &pp_data) ;
     }
-
 /*ARGSUSED*/
 void
 _XmGadgetButtonMotion(
@@ -1932,7 +1623,6 @@ _XmGadgetButtonMotion(
 {
    XmManagerWidget mw = (XmManagerWidget) wid ;
             Widget child ;
-
     if(    _XmGetFocusPolicy( (Widget) mw) == XmEXPLICIT    )
     {
         child = mw->manager.active_child ;
@@ -1949,7 +1639,6 @@ _XmGadgetButtonMotion(
         }
     return ;
     }
-
 /*ARGSUSED*/
 void
 _XmGadgetKeyInput(
@@ -1960,7 +1649,6 @@ _XmGadgetKeyInput(
 {
             XmManagerWidget mw = (XmManagerWidget) wid ;
             Widget child ;
-
     if(    _XmGetFocusPolicy( (Widget) mw) == XmEXPLICIT    )
     {
         child = mw->manager.active_child ;
@@ -1978,7 +1666,6 @@ _XmGadgetKeyInput(
         }
     return ;
     }
-
 /*ARGSUSED*/
 void
 _XmGadgetArm(
@@ -1989,7 +1676,6 @@ _XmGadgetArm(
 {
     XmManagerWidget mw = (XmManagerWidget) wid ;
     XmGadget gadget;
-
     if ((gadget = _XmInputForGadget( (Widget) mw, event->xbutton.x,
 				    event->xbutton.y)) != NULL)
     {
@@ -2004,10 +1690,8 @@ _XmGadgetArm(
             XmProcessTraversal( wid, XmTRAVERSE_CURRENT) ;
           }
       }
-
     mw->manager.eligible_for_multi_button_event = NULL;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetDrag(
@@ -2018,7 +1702,6 @@ _XmGadgetDrag(
 {
     XmManagerWidget mw = (XmManagerWidget) wid ;
     XmGadget gadget;
-
     /* CR 5141: Don't let multi-button drags cause confusion. */
     if ( !(event->xbutton.state &
          ~((Button1Mask >> 1) << event->xbutton.button) &
@@ -2029,10 +1712,8 @@ _XmGadgetDrag(
         _XmDispatchGadgetInput( (Widget) gadget, event, XmBDRAG_EVENT);
         mw->manager.selected_gadget = gadget;
     }
-
     mw->manager.eligible_for_multi_button_event = NULL;
 }
-
 /*ARGSUSED*/
 void
 _XmGadgetActivate(
@@ -2043,7 +1724,6 @@ _XmGadgetActivate(
 {
         XmManagerWidget mw = (XmManagerWidget) wid ;
         XmGadget gadget;
-
     /* we emulate automatic grab with owner_events = false by sending
      * the button up to the button down gadget
      */
@@ -2054,8 +1734,6 @@ _XmGadgetActivate(
         mw->manager.eligible_for_multi_button_event = gadget;
         }
     }
-
-
 /*ARGSUSED*/
 void
 _XmManagerHelp(
@@ -2066,10 +1744,8 @@ _XmManagerHelp(
 {
         XmManagerWidget mw = (XmManagerWidget) wid ;
 	Widget widget;
-
 	if (!_XmIsEventUnique(event))
 	   return;
-
         if (_XmGetFocusPolicy( (Widget) mw) == XmEXPLICIT)
         {
           if ((widget = mw->manager.active_child) != NULL)
@@ -2086,11 +1762,8 @@ _XmManagerHelp(
           else
                _XmSocorro( (Widget) mw, event, NULL, NULL);
         }
-
 	_XmRecordEvent(event);
 }
-
-
 void
 _XmGadgetMultiArm(
         Widget wid,
@@ -2100,7 +1773,6 @@ _XmGadgetMultiArm(
 {
     XmManagerWidget mw = (XmManagerWidget) wid ;
     XmGadget gadget;
-
     gadget = _XmInputForGadget( (Widget) mw, event->xbutton.x,
 			       event->xbutton.y);
     /*
@@ -2123,7 +1795,6 @@ _XmGadgetMultiArm(
        else
 	   mw->manager.eligible_for_multi_button_event = NULL;
 }
-
 void
 _XmGadgetMultiActivate(
         Widget wid,
@@ -2133,7 +1804,6 @@ _XmGadgetMultiActivate(
 {
     XmManagerWidget mw = (XmManagerWidget) wid ;
     XmGadget gadget;
-
     /*
      * If we're not set up for multi_button events, call _XmGadgetActivate
      * in case we're quickly selecting a new gadget in which it should

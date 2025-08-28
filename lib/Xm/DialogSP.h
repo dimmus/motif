@@ -22,27 +22,20 @@
 */
 #ifndef _XmDialogShellP_h
 #define _XmDialogShellP_h
-
 #include <Xm/XmP.h>
 #include <Xm/DialogS.h>
 #include <X11/ShellP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* The DialogShell instance record */
-
 typedef struct
 {
     /* internal fields */
     XtGrabKind 		grab_kind;
     Position		old_x, old_y;
 } XmDialogShellPart;
-
-
 /* Full instance record declaration */
-
 typedef  struct _XmDialogShellRec
 {
     CorePart		    core;
@@ -53,7 +46,6 @@ typedef  struct _XmDialogShellRec
     TransientShellPart	    transient;
     XmDialogShellPart	    dialog;
 } XmDialogShellRec;
-
 typedef  struct _XmDialogShellWidgetRec /* OBSOLETE (for compatibility only).*/
 {
     CorePart		    core;
@@ -64,19 +56,12 @@ typedef  struct _XmDialogShellWidgetRec /* OBSOLETE (for compatibility only).*/
     TransientShellPart	    transient;
     XmDialogShellPart	    dialog;
 } XmDialogShellWidgetRec;
-
-
-
 /* DialogShell class structure */
-
 typedef struct
 {
     XtPointer			extension;	 /* Pointer to extension record */
 } XmDialogShellClassPart;
-
-
 /* Full class record declaration */
-
 typedef struct _XmDialogShellClassRec
 {
     CoreClassPart 		core_class;
@@ -87,20 +72,11 @@ typedef struct _XmDialogShellClassRec
     TransientShellClassPart  	transient_shell_class;
     XmDialogShellClassPart 	dialog_shell_part;
 } XmDialogShellClassRec;
-
-
 externalref XmDialogShellClassRec  xmDialogShellClassRec;
-
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDialogShellP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

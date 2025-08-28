@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
 #endif
 #endif
-
 #include <X11/IntrinsicP.h>
 #include <X11/Composite.h>
 #include <X11/ShellP.h>
@@ -60,10 +57,8 @@ static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
 #include "ResIndI.h"
 #include "XmI.h"
 #include <Xm/SlideC.h>
-
 #define Events ((unsigned int) (ButtonPressMask | ButtonReleaseMask | \
 		EnterWindowMask | LeaveWindowMask))
-
 /* Warning messages */
 #define ChildMsg	_XmMMsgMenuShell_0000
 #define ManageMsg	_XmMMsgMenuShell_0001
@@ -75,12 +70,8 @@ static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
 #define MESSAGE7        _XmMMsgMenuShell_0007
 #define MESSAGE8        _XmMMsgMenuShell_0008
 #define MESSAGE9        _XmMMsgMenuShell_0009
-
 #define default_translations	_XmMenuShell_translations
-
-
 /********    Static Function Declarations    ********/
-
 static void _XmFastExpose(
                         register XmManagerWidget rowcol) ;
 static void _XmFastPopdown(
@@ -175,11 +166,8 @@ static void CheckSetRenderTables(Widget wid,
 				int offset,
 				XrmValue *value);
 static XmDirection GetDirection(Widget);
-
 /********    End Static Function Declarations    ********/
-
 static XmConst char tk_error[] = "XtToolkitError" ;
-
 static XtActionsRec actionsList[] =
 {
     {"MenuShellPopdownOne", PopdownOne},
@@ -199,7 +187,6 @@ static XtResource resources[] =
          XmRString,
          (XtPointer) NULL
    },
-
    {      XmNlabelFontList,
           XmCLabelFontList,
           XmRLabelRenderTable,
@@ -208,7 +195,6 @@ static XtResource resources[] =
           XmRCallProc,
           (XtPointer) CheckSetRenderTables
    },
-
    {      XmNbuttonFontList,
           XmCButtonFontList,
           XmRButtonRenderTable,
@@ -217,7 +203,6 @@ static XtResource resources[] =
           XmRCallProc,
           (XtPointer) CheckSetRenderTables
    },
-
    {      XmNlabelRenderTable,
           XmCLabelRenderTable,
           XmRLabelRenderTable,
@@ -226,7 +211,6 @@ static XtResource resources[] =
           XmRCallProc,
           (XtPointer)CheckSetRenderTables
    },
-
    {      XmNbuttonRenderTable,
           XmCButtonRenderTable,
           XmRButtonRenderTable,
@@ -235,7 +219,6 @@ static XtResource resources[] =
           XmRCallProc,
           (XtPointer)CheckSetRenderTables
    },
-
    {
           XmNlayoutDirection,
 	  XmCLayoutDirection,
@@ -245,7 +228,6 @@ static XtResource resources[] =
 	  XmRCallProc,
 	  (XtPointer) _XmDirectionDefault
    },
-
    {    /* default visual dynamically, see _XmDefaultVisualResources */
           XtNvisual,
 	  XtCVisual,
@@ -261,8 +243,6 @@ static XtResource resources[] =
 	  XmRImmediate, (XtPointer) False
    },
 };
-
-
 static XmBaseClassExtRec baseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -278,12 +258,8 @@ static XmBaseClassExtRec baseClassExtRec = {
     { 0 },				/* fastSubclass flags	*/
     (XtArgsProc)NULL,			/* get_values_prehook	*/
     (XtArgsProc)NULL,			/* get_values_posthook	*/
-
 	/* ... */
 };
-
-
-
 externaldef(xmmenushellclassrec) XmMenuShellClassRec xmMenuShellClassRec =
 {
     {
@@ -343,28 +319,21 @@ externaldef(xmmenushellclassrec) XmMenuShellClassRec xmMenuShellClassRec =
         NULL,                           /* extension */
     },
 };
-
 externaldef(xmmenushellwidgetclass) WidgetClass xmMenuShellWidgetClass =
    (WidgetClass) &xmMenuShellClassRec;
-
-
 /* Trait record for MenuShell specify render table */
-
 static XmConst XmSpecRenderTraitRec menushellSRT = {
   0,		/* version */
   GetTable,
 };
-
 static XmConst XmSpecifyLayoutDirectionTraitRec LayoutDirection = {
   0,			/* version */
   GetDirection
 };
-
 /* Save pointers for renderTable XmRCallProc */
 static XmMenuShellWidget check_set_save = NULL;
 static int check_set_offset1 = 0;
 static int check_set_offset2 = 0;
-
 /*
  * When using an override redirect window, it is safe to draw to the
  * window as soon as you have mapped it; you need not wait for exposure
@@ -378,31 +347,23 @@ _XmFastExpose(
 {
    register int i;
    register Widget child;
-
    /* Process the menupane */
    RC_SetExpose(rowcol, True);
    (*(XtClass(rowcol)->core_class.expose))((Widget) rowcol, NULL, NULL);
-
    /* Process each windowed child */
    for (i = 0; i < rowcol->composite.num_children; i++)
    {
       child = rowcol->composite.children[i];
-
       if (XtIsWidget(child) &&
           XtIsManaged(child))
       {
          (*(XtClass(child)->core_class.expose))(child, NULL, NULL);
       }
    }
-
    XFlush(XtDisplay(rowcol));
-
    /* Set one-shot, so menupane will ignore next expose */
    RC_SetExpose(rowcol, False);
 }
-
-
-
 /*
  * When unposting a group of cascading menupanes, we will first unmap all
  * of the MenuShell widgets, and then take care of the other work needed
@@ -415,26 +376,19 @@ _XmFastPopdown(
 {
    if (RC_PopupPosted(shell->composite.children[0]))
        _XmFastPopdown((XmMenuShellWidget) RC_PopupPosted(shell->composite.children[0]));
-
    XtUnmapWidget(shell);
 }
-
-
-
 static void
 slideCancel(Widget w, Widget slide)
 {
     XtRemoveCallback(w, XmNunmapCallback, (XtCallbackProc)slideCancel, slide);
     XtDestroyWidget(slide);
 }
-
 static void
 slideFinish(Widget slide, Widget w)
 {
     XtRemoveCallback(w, XmNunmapCallback, (XtCallbackProc)slideCancel, slide);
 }
-
-
 static void
 _XmPopupI(
     Widget      widget,
@@ -443,13 +397,11 @@ _XmPopupI(
     )
 {
     register ShellWidget shell_widget = (ShellWidget) widget;
-
     if (! XtIsShell(widget)) {
 	XtAppErrorMsg(XtWidgetToApplicationContext(widget),
 		      "invalidClass", "xmPopup", tk_error, MESSAGE2,
 		      (String *)NULL, (Cardinal *)NULL);
     }
-
     if (! shell_widget->shell.popped_up) {
 	XtGrabKind call_data = grab_kind;
 	XtCallCallbacks(widget, XtNpopupCallback, (XtPointer)&call_data);
@@ -472,7 +424,6 @@ _XmPopupI(
 	    Dimension width, height;
 	    XtWidgetGeometry geo;
 	    Widget slider;
-
 		XtQueryGeometry(widget, NULL, &geo);
 		width = geo.width;
 		height = geo.height;
@@ -499,16 +450,13 @@ _XmPopupI(
 	XMapRaised(XtDisplay(widget), XtWindow(widget));
     } else
 	XRaiseWindow(XtDisplay(widget), XtWindow(widget));
-
 } /* _XmPopupI */
-
 void
 _XmPopupSpringLoaded(
         Widget shell)
 {
   _XmPopupI( shell, XtGrabExclusive, True) ;
 }
-
 void
 _XmPopup(
         Widget shell,
@@ -516,7 +464,6 @@ _XmPopup(
 {
   _XmPopupI( shell, grab_kind, FALSE) ;
 }
-
 /*
  * Post the requested menu shell widget,
  */
@@ -528,7 +475,6 @@ PostMenuShell(
 {
    XEvent event;
    XEvent *lastEvent;
-
    /* Remember the next event from the queue
       so we don't popdown on the replay */
    event.xbutton.type = ButtonPress;
@@ -547,7 +493,6 @@ PostMenuShell(
      XtLastTimestampProcessed(XtDisplay((Widget) menuShell));
    event.xbutton.display = XtDisplay((Widget)menuShell);
    _XmRecordEvent((XEvent *) &event);
-
    if (spring_loaded)
      {
        /* XmPopupSpringLoaded ((Widget) menuShell); */
@@ -560,11 +505,9 @@ PostMenuShell(
      }
    else
        _XmPopup ((Widget) menuShell, grab_kind);
-
    /* mark the row column as NOT popping down */
    RC_SetPoppingDown(menuShell->composite.children[0], False);
 }
-
 /*
  * Class Initialize.  Set up fast subclassing.
  */
@@ -574,29 +517,21 @@ ClassInitialize( void )
    _XmInitializeExtensions();
    baseClassExtRec.record_type = XmQmotif;
 }
-
 static XmDirection
 GetDirection(Widget w)
 {
   return ((XmMenuShellWidget)w)->menu_shell.layout_direction;
 }
-
 static void
 ClassPartInitialize(
         WidgetClass wc )
 {
-
    _XmFastSubclassInit (wc, XmMENU_SHELL_BIT);
-
     /* Install the specifyrendertable trait for all subclasses */
     XmeTraitSet((XtPointer)wc, XmQTspecifyRenderTable,
 		(XtPointer) &menushellSRT);
     XmeTraitSet(wc, XmQTspecifyLayoutDirection, (XtPointer) &LayoutDirection);
-
 }
-
-
-
 /*
  * Initialize routine
  */
@@ -609,44 +544,28 @@ Initialize(
 {
     XmFontList defaultFont;
     XmMenuShellWidget ms = (XmMenuShellWidget) new_w;
-
     new_w->core.background_pixmap = None;
-
     XtBorderWidth (new_w) = 0;            /* Style Guide says so */
-
     ms->menu_shell.focus_data = (XmFocusData)_XmCreateFocusData();
-
     ms->menu_shell.focus_policy = XmEXPLICIT;
-
     ms->shell.allow_shell_resize = TRUE;
-
-
     /* get reasonable defaults for visual, depth and colormap */
     _XmDefaultVisualResources(new_w);
-
-
     /* Fix 7961 - realization ordering causing badmatch */
     XtRealizeWidget (new_w);
-
     /* Assume, for now, that the application created this shell */
     ms->menu_shell.private_shell = False;
-
     defaultFont =  ms->menu_shell.button_font_list;
-
     if ( !defaultFont )
     {
 	/* backward compatibility */
 	defaultFont =  ms->menu_shell.default_font_list;
-
 	if ( !defaultFont )
 	    defaultFont = XmeGetDefaultRenderTable( (Widget) ms,
 					    XmBUTTON_FONTLIST);
     }
-
     ms->menu_shell.button_font_list = XmFontListCopy (defaultFont);
-
     defaultFont =  ms->menu_shell.label_font_list;
-
     if ( !defaultFont )
     {
 	/* backward compatibility */
@@ -655,15 +574,11 @@ Initialize(
 	    defaultFont = XmeGetDefaultRenderTable( (Widget) ms,
 						XmLABEL_FONTLIST);
     }
-
     ms->menu_shell.label_font_list = XmFontListCopy (defaultFont);
-
     if(ms->menu_shell.default_font_list != NULL)
         ms->menu_shell.default_font_list =
             XmFontListCopy(ms->menu_shell.default_font_list);
-
     _XmSetSwallowEventHandler((Widget) ms, True);
-
     /*
      * Take over EventHandler in Shell, to dump the configure notify
      * events since it is not smart enough to ignore stale events.
@@ -671,9 +586,7 @@ Initialize(
     XtInsertEventHandler((Widget) ms, (EventMask) StructureNotifyMask, True,
 			 StructureNotifyHandler, (XtPointer) NULL,
 			 XtListHead);
-
 }
-
 static void
 StructureNotifyHandler(
         Widget wid,
@@ -693,7 +606,6 @@ StructureNotifyHandler(
 	*continue_to_dispatch = False;
     }
 }
-
 /*
  * set values
  *
@@ -710,7 +622,6 @@ SetValues(
    XmMenuShellWidget new_w = (XmMenuShellWidget) nw ;
    XmMenuShellWidget old_w = (XmMenuShellWidget) cw ;
 	XmFontList defaultFont;
-
    /* CR 7124: XmNlayoutDirection is a CG resource. */
    if (old_w->menu_shell.layout_direction !=
        new_w->menu_shell.layout_direction)
@@ -718,7 +629,6 @@ SetValues(
        XmeWarning(nw, MESSAGE9);
        new_w->menu_shell.layout_direction = old_w->menu_shell.layout_direction;
      }
-
 	if (new_w->menu_shell.button_font_list !=
 		old_w->menu_shell.button_font_list)
 	{
@@ -733,7 +643,6 @@ SetValues(
 			}
 	new_w->menu_shell.button_font_list = XmFontListCopy (defaultFont);
 	}
-
 	if (new_w->menu_shell.label_font_list !=
 		old_w->menu_shell.label_font_list)
 	{
@@ -748,12 +657,9 @@ SetValues(
 			}
 	new_w->menu_shell.label_font_list = XmFontListCopy (defaultFont);
 	}
-
    new_w->shell.allow_shell_resize = TRUE;
    return (TRUE);
 }
-
-
 /*
  * Resize our first child
  *
@@ -766,7 +672,6 @@ Resize(
         Widget wid )
 {
    XmMenuShellWidget ms = (XmMenuShellWidget) wid ;
-
    if (((ms->composite.num_children == 1) &&
         (XtIsManaged(ms->composite.children[0]))))
 /*
@@ -774,13 +679,10 @@ Resize(
 */
    {
       Widget child = ms->composite.children[0];
-
       XmeConfigureObject(child, -ms->core.border_width, -ms->core.border_width,
 	 ms->core.width, ms->core.height, ms->core.border_width);
    }
 }
-
-
 /*
  * DeleteChild routine
  */
@@ -789,14 +691,11 @@ DeleteChild(
         Widget widget )
 {
    XmMenuShellWidget parent = (XmMenuShellWidget)XtParent(widget);
-
    /* Remove the child as our tab group */
    XtVaSetValues(widget, XmNnavigationType, XmNONE, NULL);
-
    /* Let composite class finish the work */
    (*(((CompositeWidgetClass)compositeWidgetClass)->composite_class.
           delete_child))(widget);
-
    /*
     * If we had multiple children, but we've now dropped down to 1 child,
     * then we need to unmanage the child.
@@ -817,7 +716,6 @@ DeleteChild(
        XtDestroyWidget((Widget) parent);
    }
 }
-
 /*
  * InsertChild routine
  */
@@ -827,7 +725,6 @@ InsertChild(
 {
     CompositeWidget parent = (CompositeWidget) widget->core.parent;
     int num_real_children, i;
-
     if (XmIsRowColumn (widget))
     {
        if ((RC_Type(widget) == XmMENU_PULLDOWN) ||
@@ -836,16 +733,12 @@ InsertChild(
 	  XtAddEventHandler (widget, EnterWindowMask, FALSE,
 			     _XmEnterRowColumn, FALSE);
        }
-
        /*
         * add to composite list
         */
-
        (*((CompositeWidgetClass)compositeWidgetClass)->composite_class.
               insert_child) (widget);
-
        XtRealizeWidget(widget);
-
        /* Find the number of children excluding those being destroyed.
         * This fixes a problem with menus being dynamically destroyed
 	* and added.  Before this fix the new menu was never mapped
@@ -855,7 +748,6 @@ InsertChild(
 	    i < parent->composite.num_children; i++)
 	 if (!parent->composite.children[i]->core.being_destroyed)
 	   num_real_children++;
-
        /*
         * If only one child, then we will manage and unmanage it when we
         * want it to post or unpost.  If there are more than one child, then
@@ -893,8 +785,6 @@ InsertChild(
     else
        XmeWarning(widget, ChildMsg);
 }
-
-
 static void
 ForceMenuPaneOnScreen(
         register XmRowColumnWidget rowcol,
@@ -906,17 +796,13 @@ ForceMenuPaneOnScreen(
    Widget pulldown_button = RC_CascadeBtn(rowcol);
    Dimension RowColBorderWidth = rowcol->core.border_width << 1;
    Dimension CascadeBorderWidth = 0;
-
    if (pulldown_button)
       CascadeBorderWidth = pulldown_button->core.border_width << 1;
-
    /* Force the rowcol to be completely visible */
-
    rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
    bottomEdgeOfMenu = *y + RowColBorderWidth + rowcol->core.height;
    dispWidth = WidthOfScreen (XtScreen(rowcol));
    dispHeight = HeightOfScreen (XtScreen(rowcol));
-
    /*
     * For OPTION menus, if the submenu is [partially] offscreen, offset it
     * off the button.
@@ -936,11 +822,9 @@ ForceMenuPaneOnScreen(
 	  rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
           bottomEdgeOfMenu = *y + RowColBorderWidth + rowcol->core.height;
       }
-
       if (*y < 0)
       {
           *y = 0;
-
 	  /* Consider CascadeBtn as well as RowCol width to allow multi
 	   * column RowColumn
 	   */
@@ -951,13 +835,11 @@ ForceMenuPaneOnScreen(
 	  rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
           bottomEdgeOfMenu = *y + RowColBorderWidth + rowcol->core.height;
       }
-
       if (rightEdgeOfMenu >= (Position)dispWidth)
       {
 	  *x = old_x - rowcol->core.width + RowColBorderWidth;
 	  rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
       }
-
       if (*x < 0)
       {
           if (LayoutIsRtoLM(rowcol))
@@ -967,13 +849,11 @@ ForceMenuPaneOnScreen(
 	  rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
       }
    }
-
    /*
     * If the submenu is offscreen force it completely on.
     */
    if (rightEdgeOfMenu >= (Position)dispWidth)
        *x -= (rightEdgeOfMenu - dispWidth + 1);
-
    if (bottomEdgeOfMenu >= (Position)dispHeight)
    {
       if (pulldown_button && XtParent(pulldown_button) &&
@@ -981,31 +861,25 @@ ForceMenuPaneOnScreen(
 	  (RC_Type(XtParent(pulldown_button)) == XmMENU_BAR))
       {
 	 Position y_temp = *y;
-
 	 /* this menu pane is being pulled down from a bar */
 	 /* it doesn't fit, so we have to place it above   */
 	 /* the bar -- if it will fit                      */
-
 	 y_temp -= (CascadeBorderWidth
 		    + pulldown_button->core.height
 		    + RowColBorderWidth
 		    + rowcol->core.height + 1);
-
 	 if (y_temp > 0)
 	     *y = y_temp;
       }
       else
 	  *y -= (bottomEdgeOfMenu - dispHeight + 1);
    }
-
    /* Make sure that the top left corner os on screen! */
    if (*x < 0)
        *x = 0;
-
    if (*y < 0)
        *y = 0;
 }
-
 /*
  * Method for posting a multi-paned menushell
  */
@@ -1029,10 +903,8 @@ PopupSharedMenuShell(
    XmMenuState mst = _XmGetMenuState((Widget)submenu);
    Time _time = _XmGetDefaultTime(cbwid, event);
    XmMenuSystemTrait menuSTrait;
-
    menuSTrait = (XmMenuSystemTrait)
      XmeTraitGet((XtPointer) XtClass((Widget) submenu), XmQTmenuSystem);
-
    /* Find out which child is trying to get posted */
    for (i = 0; i < popup->composite.num_children; i++)
    {
@@ -1042,21 +914,18 @@ PopupSharedMenuShell(
 	 break;
       }
    }
-
    /* Swap only if the submenu is not already child[0] */
    if (_index != 0)
    {
       /* Swap places in the children list */
       old_rowcol = (XmRowColumnWidget) popup->composite.children[0];
       old_cascadebtn = (XmCascadeButtonWidget)RC_CascadeBtn(old_rowcol);
-
       RC_SetPoppingDown(old_rowcol, True);
       menuSTrait -> disarm((Widget) old_rowcol);
       /* RC_SetArmed (old_rowcol, False); */
       popup->composite.children[_index] = (Widget)old_rowcol;
       popup->composite.children[0] = (Widget)submenu;
       RC_SetPoppingDown(submenu, False);
-
       if (RC_TornOff(old_rowcol))
 	 _XmRestoreTearOffToToplevelShell((Widget)old_rowcol, event);
       else
@@ -1072,31 +941,25 @@ PopupSharedMenuShell(
          old_cascadebtn = (XmCascadeButtonWidget)RC_CascadeBtn(submenu);
 	 XUnmapWindow(XtDisplay(submenu), XtWindow(submenu));
       }
-
    if (popped_up ||
        (old_cascadebtn && RC_TornOff(XtParent(old_cascadebtn)) &&
 	!XmIsMenuShell(XtParent(XtParent(old_cascadebtn)))))
    {
       XmCascadeButtonHighlight( (Widget) old_cascadebtn, False);
    }
-
    if (submenu->core.being_destroyed)
        return;
-
    /* It seems that menupanes that share their menushell are always managed.
     * When reposting a tear off, the restoration code unmanages the pane.
     * So set it here!
     */
    submenu->core.managed = TRUE;
-
    if (menuSTrait)
      menuSTrait -> cascade((Widget) submenu, (Widget) cascadebtn, event);
-
    /*
     * Set us as the active tab group for our parent
     */
    _XmSetActiveTabGroup(popup->menu_shell.focus_data, (Widget)submenu);
-
    /*
     * get the shell widget in sync with the menu widget
     * We keep the menu at 0,0 and shell at the menu's position.
@@ -1105,29 +968,23 @@ PopupSharedMenuShell(
     * NOTE: the menu may be moved down slightly to take into account the
     * tear off control.
     */
-
    /* Always adjust to the size of the menupane */
    width = XtWidth(submenu);
    height = XtHeight(submenu);
-
    if (RC_WidgetHasMoved (submenu))     /* but make sure it didn't */
    {                                    /* just move to where it */
                                         /* is now.  Happens with */
                                         /* pulldowns a lot */
       x = XtX(submenu);
       y = XtY(submenu);
-
       ForceMenuPaneOnScreen(submenu,&x,&y);
-
       XtX (submenu) = XtY (submenu) = (-1 * XtBorderWidth(submenu));
-
       if (RC_WindowHasMoved(submenu))
       {
 	 XMoveWindow (XtDisplay(submenu), XtWindow(submenu),
 		      XtX(submenu), XtY(submenu));
 	 RC_SetWindowMoved (submenu, FALSE);
       }
-
       RC_SetWidgetMoved (submenu, FALSE);
    }
    else
@@ -1135,17 +992,12 @@ PopupSharedMenuShell(
       x = XtX(popup);
       y = XtY(popup);
    }
-
    XmeConfigureObject((Widget) popup, x, y, width, height, popup->core.border_width);
-
    XMapWindow(XtDisplay(submenu), XtWindow(submenu));
-
    if (popped_up &&
        !((old_rowcol == submenu) && (cascadebtn == old_cascadebtn)))
       _XmCallRowColumnUnmapCallback((Widget)old_rowcol, event);
-
    _XmCallRowColumnMapCallback((Widget)submenu, event);
-
    /*
     * if there is a tear off control, set the initial focus to the first
     * real child.  If none of the children is traversible, let the
@@ -1163,9 +1015,7 @@ PopupSharedMenuShell(
 	   }
        }
    }
-
    if (menuSTrait) menuSTrait -> arm((Widget) submenu);
-
    if (popped_up)
       _XmFastExpose((XmManagerWidget) submenu);
    else
@@ -1174,10 +1024,8 @@ PopupSharedMenuShell(
        * we are the root of the chain and better do the exclusive grab
        */
       parent_menu = (XmRowColumnWidget) XtParent (cascadebtn);
-
       if (RC_Type(parent_menu) == XmMENU_OPTION)
       {
-
 	 /* Don't post the menu if the menu cannot control grabs! Note:
           * grabs done twice. You cannot grab on a non viewable window.
           */
@@ -1186,16 +1034,12 @@ PopupSharedMenuShell(
          {
             return;
          }
-
 	 /* Remember the time in case this is just a BSelect Click */
 	 if ((event->type == ButtonPress) || (event->type == ButtonRelease))
 	    mst->MS_LastManagedMenuTime = event->xbutton.time;
-
          PostMenuShell(popup, XtGrabExclusive, True);
          _XmFastExpose((XmManagerWidget) submenu);
-
 	 _XmMenuFocus(XtParent(submenu), XmMENU_BEGIN, _time);
-
            /** the real grab ***/
          _XmMenuGrabKeyboardAndPointer((Widget)submenu, _time);
       }
@@ -1210,30 +1054,23 @@ PopupSharedMenuShell(
 	    {
 		return;
 	    }
-
 	    RC_SetBeingArmed(parent_menu, False);
 	 }
-
 	 PostMenuShell(popup, XtGrabNonexclusive, False);
 	 _XmFastExpose((XmManagerWidget) submenu);
-
 	 /* We always must move the focuse for the leaf menu pane */
 	 _XmMenuFocus(XtParent(submenu), XmMENU_MIDDLE, _time);
       }
    }
-
    /*
     * now highlight the pulldown entry widget that
     * pulled down the menu
     */
    XmCascadeButtonHighlight ((Widget) cascadebtn, TRUE);
-
    if (popped_up)
    {
       XmGadget activeChild;
-
       activeChild = (XmGadget)old_rowcol->manager.active_child;
-
       /*
        * If the active child was a gadget, then we need to
        * handle the sending of the focus out ourselves.
@@ -1245,7 +1082,6 @@ PopupSharedMenuShell(
       }
    }
 }
-
 /* BEGIN OSF fix pir 2131 */
 /* This is ripped off from Xt/Shell.c and modified to also deal with X
 and Y
@@ -1260,7 +1096,6 @@ because
  * it is possible that some time in the future the request will be
  * asynchronusly denied and the window reverted to it's old size/shape.
 */
-
 static XtGeometryResult
 GeometryManager(
 	Widget wid,
@@ -1269,10 +1104,8 @@ GeometryManager(
 {
   ShellWidget shell = (ShellWidget)(wid->core.parent);
   XtWidgetGeometry my_request;
-
   if(shell->shell.allow_shell_resize == FALSE && XtIsRealized(wid))
     return(XtGeometryNo);
-
   if(!XtIsRealized((Widget)shell)){
     if (request->request_mode & (CWX | CWY)) {
       return(XtGeometryNo);
@@ -1287,7 +1120,6 @@ GeometryManager(
         request->border_width;
     return(XtGeometryYes);
   }
-
   /* %%% worry about XtCWQueryOnly */
   my_request.request_mode = 0;
   if (request->request_mode & CWX) {
@@ -1339,8 +1171,6 @@ GeometryManager(
   } else return XtGeometryNo;
 }
 /* END OSF fix pir 2131 */
-
-
 /*
  * ChangeManaged
  */
@@ -1360,16 +1190,12 @@ ChangeManaged(
    XmMenuState mst = _XmGetMenuState((Widget)w);
    XmMenuSystemTrait menuSTrait;
    Time _time = XtLastTimestampProcessed(XtDisplay(w));
-
    mst->RC_ButtonEventStatus.waiting_to_be_managed = FALSE;
-
    /* Don't handle multi-paned shells here */
    if (popup->composite.num_children > 1)
        return;
-
    if (rowcol->core.being_destroyed)
        return;
-
    if (XtIsManaged ((Widget)rowcol))
    {
       if  ((RC_Type(rowcol) == XmMENU_PULLDOWN) &&
@@ -1398,16 +1224,13 @@ ChangeManaged(
 	    /* Remember the time in case this is just a BMenu Click */
 	    mst->MS_LastManagedMenuTime = mst->RC_ButtonEventStatus.time;
 	 }
-
       /* Set us as the active tab group for our parent */
       _XmSetActiveTabGroup(popup->menu_shell.focus_data, (Widget)rowcol);
-
       /* make the callback now to give the application a crack at
        * repositioning the pane.
        */
       _XmCallRowColumnMapCallback((Widget)rowcol,
 	 (XEvent *)&mst->RC_ButtonEventStatus.event);
-
       /*
        * get the shell widget in sync with the menu widget
        * We keep the menu at 0,0 and shell at the menu's position.
@@ -1416,26 +1239,20 @@ ChangeManaged(
        * If a tear off control is relevant, move the pane down to allow for
        * its height.
        */
-
       width = XtWidth(rowcol);
       height = XtHeight(rowcol);
-
       if (RC_WidgetHasMoved (rowcol))
       {
 	 x = XtX(rowcol);
 	 y = XtY(rowcol);
-
          ForceMenuPaneOnScreen(rowcol,&x,&y);
-
 	 XtX (rowcol) = XtY (rowcol) = (-1 * XtBorderWidth(rowcol));
-
 	 if (RC_WindowHasMoved(rowcol))
 	 {
 	    XMoveWindow (XtDisplay(rowcol), XtWindow(rowcol),
 			 XtX(rowcol), XtY(rowcol));
 	    RC_SetWindowMoved (rowcol, FALSE);
 	 }
-
 	 RC_SetWidgetMoved (rowcol, FALSE);
       }
       else
@@ -1443,10 +1260,8 @@ ChangeManaged(
 	 x = XtX(popup);
 	 y = XtY(popup);
       }
-
       XmeConfigureObject((Widget) popup, x, y, width, height,
 			popup->core.border_width);
-
       /*
        * if there is a tear off control, set the initial focus to the first
        * real child.  If none of the children is traversible, let the
@@ -1464,20 +1279,15 @@ ChangeManaged(
 	      }
 	  }
       }
-
       menuSTrait = (XmMenuSystemTrait)
 	XmeTraitGet((XtPointer) XtClass((Widget) rowcol), XmQTmenuSystem);
-
       menuSTrait -> arm((Widget) rowcol);
-
       /*
        * now figure out exactly how to pop it up
        */
-
       switch (RC_Type(rowcol))
       {
        case XmMENU_POPUP:
-
 	 /* Don't post the menu if the menu cannot control grabs! Note:
 	  * grabs done twice. You cannot grab on a non viewable window.
 	  */
@@ -1492,24 +1302,18 @@ ChangeManaged(
 	     return;
 	   }
 	 }
-
 	 PostMenuShell((XmMenuShellWidget) w, XtGrabExclusive, True);
 	 _XmFastExpose((XmManagerWidget) rowcol);
-
 	       /** the real grab ***/
          _XmMenuGrabKeyboardAndPointer((Widget)rowcol, _time);
 	 _XmMenuFocus(XtParent(rowcol), XmMENU_BEGIN, _time);
-
 	 /* To support menu replay, keep the pointer in sync mode */
 	 XAllowEvents(XtDisplay(rowcol), SyncPointer, CurrentTime);
-
 	 menuSTrait -> controlTraversal((Widget) rowcol, FALSE);
 	 break;
-
        case XmMENU_PULLDOWN:
 	 cascadebtn = (XmCascadeButtonWidget) RC_CascadeBtn(rowcol);
 	 parent_menu = (XmRowColumnWidget) XtParent (cascadebtn);
-
 	 /* Make sure the correct item gets the focus */
 	 if (!_XmGetInDragMode((Widget) rowcol))
 	 {
@@ -1519,7 +1323,6 @@ ChangeManaged(
 	       if (XtParent(RC_MemWidget(rowcol)) == (Widget)rowcol)
 		  _XmSetInitialOfTabGroup( (Widget) rowcol,
 					  RC_MemWidget(rowcol));
-
 	       else
 	       {
 		  /* Find our link to the memory widget */
@@ -1528,7 +1331,6 @@ ChangeManaged(
 		  {
 		     if (XtParent(child) == (Widget)rowcol)
 			 break;
-
 		     child = (Widget)RC_CascadeBtn(XtParent(child));
 		  }
 		  rowcol->manager.active_child =  child;
@@ -1536,7 +1338,6 @@ ChangeManaged(
 	    }
 	    else
 		rowcol->manager.active_child = NULL;
-
 	    if ((parent_menu->manager.active_child != (Widget)cascadebtn) &&
 		((RC_Type(parent_menu) == XmMENU_POPUP) ||
 		 (RC_Type(parent_menu) == XmMENU_PULLDOWN)))
@@ -1545,10 +1346,8 @@ ChangeManaged(
 	       _XmMgrTraversal((Widget) cascadebtn, XmTRAVERSE_CURRENT);
 	    }
 	 }
-
 	 if (RC_Type(parent_menu) == XmMENU_OPTION)
 	 {
-
 	    /* Don't post the menu if the menu cannot control grabs! Note:
 	     * grabs done twice. You cannot grab on a non viewable window.
 	     */
@@ -1558,20 +1357,15 @@ ChangeManaged(
 	        XtUnmanageChild((Widget) rowcol);
 	        return;
 	    }
-
 	    /* Remember the time in case this is just a BSelect Click */
 	    mst->MS_LastManagedMenuTime = mst->RC_ButtonEventStatus.time;
-
 	    PostMenuShell((XmMenuShellWidget) w, XtGrabExclusive, True);
 	    _XmFastExpose((XmManagerWidget) rowcol);
-
 	    /* Removed fixing bug #1260 (Yuriy Syrota, 2004-07-29)
 	    _XmMenuFocus(XtParent(rowcol), XmMENU_BEGIN, _time); */
-
                     /**the real grab *****/
             _XmMenuGrabKeyboardAndPointer((Widget)rowcol, _time);
 	    _XmMenuFocus(XtParent(rowcol), XmMENU_BEGIN, _time);
-
 	    /* To support menu replay, keep the pointer in sync mode */
 	    XAllowEvents(XtDisplay(rowcol), SyncPointer, CurrentTime);
 	 }
@@ -1587,17 +1381,13 @@ ChangeManaged(
 	           XtUnmanageChild((Widget) rowcol);
 		   return;
 	       }
-
 	       RC_SetBeingArmed(parent_menu, False);
 	    }
-
 	    PostMenuShell((XmMenuShellWidget) w, XtGrabNonexclusive, False);
 	    _XmFastExpose((XmManagerWidget) rowcol);
-
 	    /* We always must grab the keyboard for the leaf menu pane */
 	    _XmMenuFocus(XtParent(rowcol), XmMENU_MIDDLE, _time);
 	    XtSetKeyboardFocus(XtParent(rowcol), (Widget) rowcol);
-
 	    /*
 	     * now highlight the pulldown entry widget that
 	     * pulled down the menu
@@ -1611,11 +1401,9 @@ ChangeManaged(
    {
       /* popdown anything that is still up */
       _XmMenuFocus(w, XmMENU_END, _time);
-
       (* (((XmMenuShellClassRec *)(popup->
 	 core.widget_class))->menu_shell_class.popdownEveryone))
 	    ((Widget) popup, NULL, NULL, NULL);
-
       if (RC_Type(rowcol) == XmMENU_POPUP)
       {
 	 XtUngrabPointer(w, _time);
@@ -1623,20 +1411,16 @@ ChangeManaged(
    }
    mst->RC_ButtonEventStatus.verified = False;
 }
-
-
 void
 _XmPopdown(
         Widget widget)
 {
   register ShellWidget shell_widget = (ShellWidget) widget;
-
   if (! XtIsShell(widget)) {
     XtAppErrorMsg(XtWidgetToApplicationContext(widget),
 		  "invalidClass", "xmPopdown", tk_error, MESSAGE3,
 		  (String *)NULL, (Cardinal *)NULL);
   }
-
   if (shell_widget->shell.popped_up) {
     XtGrabKind grab_kind = shell_widget->shell.grab_kind ;
     XWithdrawWindow( XtDisplay( shell_widget), XtWindow( shell_widget),
@@ -1649,7 +1433,6 @@ _XmPopdown(
     XtCallCallbacks((Widget) shell_widget, XtNpopdownCallback, (XtPointer) &grab_kind) ;
   }
 }
-
 /*
  * actually popdown a menuShell widget, also flag as unmanaged
  * its menu child and unhighlight the cascadebutton that popped up this
@@ -1663,12 +1446,10 @@ Popdown(
     XmRowColumnWidget  rowcol = (XmRowColumnWidget)
                                  menushell->composite.children[0];
     XmMenuSystemTrait menuSTrait;
-
     if (menushell->shell.popped_up)
     {
         /* mark the row column as popping down */
         RC_SetPoppingDown (rowcol, True);
-
         /* XmPopdown ((Widget) menushell); */
         /* Since the MenuShell may be popped up spring-loaded,
          *   and since XmPopdown will remove the grab using XtRemoveGrab
@@ -1678,19 +1459,14 @@ Popdown(
          *   MenuShell.
          */
         _XmPopdown( (Widget) menushell) ;
-
 	menuSTrait = (XmMenuSystemTrait)
 	  XmeTraitGet((XtPointer) XtClass((Widget) rowcol), XmQTmenuSystem);
 	menuSTrait -> disarm((Widget) rowcol);
-
         ClearTraversalInternal(menushell, event);
-
         /* Don't unmanage if we're sharing the menu shell */
         if (menushell->composite.num_children == 1)
            rowcol->core.managed = FALSE;
-
 	_XmCallRowColumnUnmapCallback((Widget)rowcol, event);
-
 	/* Restore tear offs - except for Popups 'cause the ungrabs are
 	 * yet to occur
 	 */
@@ -1698,8 +1474,6 @@ Popdown(
 	   _XmRestoreTearOffToToplevelShell((Widget)rowcol, event);
     }
 }
-
-
 /*
  * Popdown all the popup kids of this widget, do bottom to top popdown.
  */
@@ -1709,21 +1483,16 @@ PopdownKids(
         XEvent *event )
 {
    ShellWidget subShell;
-
    if ((subShell = (ShellWidget)
 	RC_PopupPosted(menushell->composite.children[0])) != NULL)
    {
       Widget rowcol = subShell->composite.children[0];
-
       /* mark this row colum as popping down */
       RC_SetPoppingDown (rowcol, True);
-
       PopdownKids ((XmMenuShellWidget) subShell, event);
       Popdown ((XmMenuShellWidget) subShell, event);
    }
 }
-
-
 /*
  * This routine determines if there is an enter event pending which will
  * just pop back up the row column that is about to be popped down.
@@ -1733,27 +1502,21 @@ SkipPopdown(
         XmCascadeButtonWidget cascade )
 {
     XEvent  event;
-
     /*
      * check if an enter event is pending.
      */
     if (XPending (XtDisplay (cascade)))
     {
         XPeekEvent (XtDisplay (cascade), &event);
-
         if (event.type == EnterNotify)
         {
             XEnterWindowEvent * enterevent = (XEnterWindowEvent *) &event;
-
             if (XtWindow (cascade) == enterevent->window)
                      return (TRUE);
         }
     }
-
     return (FALSE);
 }
-
-
 /*
  * event handler for entering on a row column widget.  The widget must
  * be either a pulldown or popup menu.
@@ -1768,11 +1531,9 @@ _XmEnterRowColumn(
     XmRowColumnWidget cascade;
     Widget cascadebtn;
     Time _time = _XmGetDefaultTime(widget, event);
-
     XmRowColumnWidget rowcol = (XmRowColumnWidget) widget;
     XmMenuShellWidget menushell = (XmMenuShellWidget) XtParent(rowcol);
     XEnterWindowEvent *enterevent = (XEnterWindowEvent *) event;
-
     /*
      * Ignore popdown requests if traversal is on, or we're no longer
      * visible, or we don't have any submenus up.
@@ -1781,12 +1542,9 @@ _XmEnterRowColumn(
 	(!menushell->shell.popped_up)     ||
 	(! RC_PopupPosted(rowcol)))
 	return;
-
     cascade = (XmRowColumnWidget)
 	((CompositeWidget) RC_PopupPosted(rowcol))->composite.children[0];
-
     cascadebtn = RC_CascadeBtn (cascade);
-
     /*
      * Make sure that popdown should not be skipped.  It should be skipped
      * if the mouse has moved into the cascadebutton (widget or gadget)
@@ -1805,7 +1563,6 @@ _XmEnterRowColumn(
        else
        {
 	  Position x, y;
-
 	  XtTranslateCoords(cascadebtn, 0, 0, &x, &y);
 	  if ( (enterevent->x_root >= x)  &&
 	       (enterevent->x_root < (x + XtWidth(cascadebtn))) &&
@@ -1816,12 +1573,9 @@ _XmEnterRowColumn(
 	  }
        }
     }
-
     _XmMenuFocus(XtParent(rowcol), XmMENU_MIDDLE, _time);
     PopdownKids (menushell, event);
 }
-
-
 static void
 PopdownOne(
         Widget widget,
@@ -1832,12 +1586,10 @@ PopdownOne(
     XmMenuShellWidget ms = (XmMenuShellWidget)widget;
     XmMenuShellWidget tms;
     XmRowColumnWidget rowcol;
-
     /* Find a menu shell, this may be a menushell, rowcol or button */
     /* OR (!) a top level shell! */
     while (ms && !XtIsShell(ms))
          ms = (XmMenuShellWidget)XtParent(ms);
-
     if (ms && !XmIsMenuShell(ms))
     {
        /* prevent coredumps when pulldown menu isn't realized yet */
@@ -1845,10 +1597,8 @@ PopdownOne(
            _XmDismissTearOff((Widget) ms, (XtPointer) event, (XtPointer) NULL);
        return;
     }
-
     if (ms == NULL)
         return;
-
     /* Find the toplevel MenuShell
      */
     _XmGetActiveTopLevelMenu (ms->composite.children[0], (Widget *) &rowcol);
@@ -1868,7 +1618,6 @@ PopdownOne(
 	      ms = tms = (XmMenuShellWidget)RC_ParentShell(rowcol);
 	}
     }
-
     if (ms == tms)
        (* (((XmMenuShellClassRec *)(ms->core.widget_class))->
 		menu_shell_class.popdownDone))
@@ -1879,16 +1628,12 @@ PopdownOne(
 		menu_shell_class.popdownEveryone))
 			((Widget) ms, event, params, num_params);
     }
-
     if (event)
        _XmRecordEvent(event);
 }
-
-
 /*
  * Class function used to unpost all menupanes
  */
-
 /*
  * popdown this all the popup children, and then me, ie. bottom to top
  *
@@ -1903,7 +1648,6 @@ PopdownEveryone(
 {
     Widget rowcol;
     XmMenuShellWidget shell = (XmMenuShellWidget) widget;
-
     /* Ignore this event, if already processed */
     if ( event && !_XmIsEventUnique(event))
        return;
@@ -1912,7 +1656,6 @@ PopdownEveryone(
      * make sure the keyboard grab gets reset to the right window.
      */
     rowcol = shell->composite.children[0];
-
     /* Only reset the focus if the this is not a tear off or the cascaded
      * submenu's parent is not a tear off.
      */
@@ -1924,10 +1667,8 @@ PopdownEveryone(
        _XmMenuFocus(XtParent(XtParent(RC_CascadeBtn(rowcol))),
 		    XmMENU_MIDDLE, _XmGetDefaultTime(widget, event));
     }
-
     /* mark this row colum as popping down */
     RC_SetPoppingDown (rowcol, True);
-
     if (shell->shell.popped_up)
     {
        if (XmIsMenuShell(shell))
@@ -1943,8 +1684,6 @@ PopdownEveryone(
        }
     }
 }
-
-
 /*
  * Class function used to unpost all menupanes.
  * Note that to catch BSelect in a gadget and popdown correctly, widget param
@@ -1962,23 +1701,17 @@ PopdownDone(
     XmMenuState mst = _XmGetMenuState((Widget)widget);
     Time _time = _XmGetDefaultTime(widget, event);
     XmMenuSystemTrait menuSTrait;
-
     /* Ignore this event, if already processed */
     if (event && !_XmIsEventUnique(event))
        return;
-
     /* Find a menu shell, this may be a menushell, rowcol or button */
     while (ms && !XmIsMenuShell(ms))
          ms = (XmMenuShellWidget)XtParent(ms);
-
     if (ms == NULL)
 	return;
-
     _XmGetActiveTopLevelMenu (ms->composite.children[0], (Widget *) &rowcol);
-
     menuSTrait = (XmMenuSystemTrait)
       XmeTraitGet((XtPointer) XtClass((Widget) rowcol), XmQTmenuSystem);
-
     /* We used to check the event,  but not anymore (CUA) */
     /* if (event && ((event->xbutton.type==ButtonPress) || */
     /*     (event->xbutton.type==ButtonRelease))) */
@@ -1992,7 +1725,6 @@ PopdownDone(
     /*       return; */
     /*    } */
     /* } */
-
     /* Take menus out of drag mode in either case of click into traversal or
      * unpost, unless the menu is a torn-off pane.
      */
@@ -2002,7 +1734,6 @@ PopdownDone(
     {
 	_XmSetInDragMode((Widget) rowcol, False);
     }
-
     /* This is to enable Option and Popup Menus to post on BMenu/BSelect Click.
      * By this time we know that the button is valid.  We need to check
      * if the post event occured within a short time span.  Next we force
@@ -2019,7 +1750,6 @@ PopdownDone(
 	{
 	   if (!XmProcessTraversal(RC_MemWidget(rowcol), XmTRAVERSE_CURRENT))
 	      XmProcessTraversal(RC_OptionSubMenu(rowcol), XmTRAVERSE_CURRENT);
-
 	   /* To support menu replay, keep the pointer in sync mode */
 	   XAllowEvents(XtDisplay(rowcol), SyncPointer, CurrentTime);
 	   return;
@@ -2028,13 +1758,11 @@ PopdownDone(
 	   if (!rowcol->manager.highlighted_widget)
 	   {
               XmProcessTraversal((Widget) rowcol, XmTRAVERSE_CURRENT);
-
 	      /* To support menu replay, keep the pointer in sync mode */
 	      XAllowEvents(XtDisplay(rowcol), SyncPointer, CurrentTime);
 	      return;
 	   }
      }
-
     /*
      * If in a menubar or popup, get the toplevel menushell
      * CHECK OPTION MENU esp w/ cascading submenus, JAY!
@@ -2049,9 +1777,7 @@ PopdownDone(
     }
     else if ((RC_Type(rowcol) == XmMENU_POPUP) || RC_TornOff(rowcol))
 	ms = (XmMenuShellWidget) XtParent(rowcol);
-
     _XmMenuFocus( (Widget) ms, XmMENU_END, _time);
-
     if (XmIsMenuShell(ms))
     {
        (* (((XmMenuShellClassRec *)(ms->
@@ -2064,7 +1790,6 @@ PopdownDone(
 	  core.widget_class))->menu_shell_class.popdownEveryone))
 	     ((Widget) ms, event, params, num_params);
     }
-
     /* if its a menubar, clean it up and disarm it */
     if (RC_Type(rowcol) == XmMENU_BAR)
     {
@@ -2072,13 +1797,10 @@ PopdownDone(
     }
     else if ((RC_Type(rowcol) == XmMENU_POPUP) && RC_TornOff(rowcol))
 	_XmRestoreTearOffToToplevelShell((Widget)rowcol, event);
-
     menuSTrait -> disarm((Widget) rowcol);
-
     /* Cleanup grabs */
     XtUngrabPointer((Widget) ms, _time);
 }
-
 static void
 ClearTraversalInternal(
         XmMenuShellWidget menushell,
@@ -2086,9 +1808,7 @@ ClearTraversalInternal(
 {
    Widget activeChild;
    XmRowColumnWidget rowcol;
-
    rowcol = (XmRowColumnWidget)menushell->composite.children[0];
-
    /* Clean up traversal */
    activeChild = rowcol->manager.active_child;
    if (activeChild)
@@ -2104,12 +1824,10 @@ ClearTraversalInternal(
 	    primitive_class.border_unhighlight) (activeChild);
       }
    }
-
    /*
     * (Internal state update) Clear focus from unposting submenu.
     */
    _XmClearFocusPath((Widget) rowcol);
-
    if ((RC_Type(rowcol) != XmMENU_POPUP) && RC_CascadeBtn(rowcol))
    {
 /*
@@ -2123,8 +1841,6 @@ PushB and ToggleB and ???
       RC_PopupPosted (XtParent(RC_CascadeBtn(rowcol))) = FALSE;
    }
 }
-
-
 /*
  * XmRCallProc routine for checking MenuShell render table resources
  * before setting them to NULL if no value is specified
@@ -2139,7 +1855,6 @@ CheckSetRenderTables(Widget wid,
 		     XrmValue *value )
 {
   XmMenuShellWidget msw = (XmMenuShellWidget)wid;
-
   if (check_set_save == msw)
     {
       if ((offset == check_set_offset1) ||
@@ -2159,11 +1874,8 @@ CheckSetRenderTables(Widget wid,
       value->addr = ((char *)msw + offset);
       check_set_offset2 = 0;
     }
-
   check_set_save = msw;
 }
-
-
 /****************************************************************
  *
  * Trait method for specify render table
@@ -2175,18 +1887,13 @@ GetTable(
 	  XtEnum type)
 {
     XmMenuShellWidget menu = (XmMenuShellWidget) wid ;
-
     switch(type) {
     case XmLABEL_RENDER_TABLE : return menu->menu_shell.label_font_list ;
     case XmBUTTON_RENDER_TABLE : return menu->menu_shell.button_font_list ;
     case XmTEXT_RENDER_TABLE : return menu->menu_shell.default_font_list ;
     }
-
     return NULL ;
 }
-
-
-
 /*
  * Clear traversal in the associated menu hierarchy
  */
@@ -2200,10 +1907,8 @@ _XmClearTraversal(
     XmMenuShellWidget ms = (XmMenuShellWidget) wid ;
     XmRowColumnWidget rowcol;
     XmMenuState mst = _XmGetMenuState((Widget)wid);
-
     if (!_XmIsEventUnique(event))
 	return;
-
     /* if a valid event */
     if ((ms->composite.num_children != 0) &&
 	(rowcol = (XmRowColumnWidget)ms->composite.children[0]) &&
@@ -2213,7 +1918,6 @@ _XmClearTraversal(
 	(_XmMatchBSelectEvent((Widget)rowcol, event ))))
     {
 	XButtonPressedEvent *xbutton = (XButtonPressedEvent *) event;
-
 	/*
 	 * if this is the Popup's posting event, ignore it.  It is just
 	 * being sent to the spring loaded widget by Xt's dispatch
@@ -2229,13 +1933,11 @@ _XmClearTraversal(
 			 _XmGetDefaultTime(wid, event));
 	    return;
 	}
-
 	_XmHandleMenuButtonPress (ms->composite.children[0], event);
     }
     else
        XAllowEvents(XtDisplay(ms), SyncPointer, CurrentTime);
 }
-
 /*
  * Public Routine
  */
@@ -2248,7 +1950,6 @@ XmCreateMenuShell(
 {
    return (XtCreatePopupShell (name, xmMenuShellWidgetClass, parent, al, ac));
 }
-
 static void
 Destroy(
         Widget wid )
@@ -2257,19 +1958,15 @@ Destroy(
     _XmDestroyFocusData(ms->menu_shell.focus_data);
     if (ms->menu_shell.default_font_list != NULL)
        XmFontListFree (ms->menu_shell.default_font_list);
-
     if (ms->menu_shell.button_font_list != NULL)
        XmFontListFree (ms->menu_shell.button_font_list);
-
     if (ms->menu_shell.label_font_list != NULL)
        XmFontListFree (ms->menu_shell.label_font_list);
-
     /* Clear pointers for renderTable XmRCallProc */
     check_set_save = NULL;
     check_set_offset1 = 0;
     check_set_offset2 = 0;
 }
-
 static Widget
 _XmFindPopup(
     Widget widget,
@@ -2278,17 +1975,13 @@ _XmFindPopup(
     register Cardinal i;
     register XrmQuark q;
     register Widget w;
-
     q = XrmStringToQuark(name);
-
     for (w=widget; w != NULL; w=w->core.parent)
 	for (i=0; i<w->core.num_popups; i++)
 	    if (w->core.popup_list[i]->core.xrm_name == q)
 		return w->core.popup_list[i];
-
     return NULL;
 }
-
 static void
 _XmMenuPopupAction(
     Widget widget,
@@ -2298,14 +1991,12 @@ _XmMenuPopupAction(
 {
     Boolean spring_loaded;
     register Widget popup_shell;
-
     if (*num_params != 1) {
 	XtAppWarningMsg(XtWidgetToApplicationContext(widget),
 			"invalidParameters", "xtMenuPopupAction", tk_error,
 			MESSAGE4, (String *)NULL, (Cardinal *)NULL);
 	return;
     }
-
     if (event->type == ButtonPress)
 	spring_loaded = True;
     else if (event->type == KeyPress || event->type == EnterNotify)
@@ -2316,7 +2007,6 @@ _XmMenuPopupAction(
 			MESSAGE5, (String *)NULL, (Cardinal *)NULL);
 	spring_loaded = False;
       }
-
     popup_shell = _XmFindPopup(widget, params[0]);
     if (popup_shell == NULL) {
 	XtAppWarningMsg(XtWidgetToApplicationContext(widget),
@@ -2324,11 +2014,9 @@ _XmMenuPopupAction(
 			MESSAGE6, params, num_params);
 	return;
     }
-
     if (spring_loaded) _XmPopupI(popup_shell, XtGrabExclusive, TRUE);
     else _XmPopupI(popup_shell, XtGrabNonexclusive, FALSE);
 }
-
 static void
 _XmMenuPopdownAction(
     Widget widget,
@@ -2337,7 +2025,6 @@ _XmMenuPopdownAction(
     Cardinal *num_params)
 {
     Widget popup_shell;
-
     if (*num_params == 0) {
 	_XmPopdown(widget);
     } else if (*num_params == 1) {

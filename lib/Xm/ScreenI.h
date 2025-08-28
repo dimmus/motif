@@ -27,14 +27,10 @@
 /* $XConsortium: ScreenI.h /main/5 1995/07/13 17:53:44 drk $ */
 #ifndef _XmScreenI_h
 #define _XmScreenI_h
-
 #include <Xm/ScreenP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 externalref XrmQuark _XmInvalidCursorIconQuark ;
 externalref XrmQuark _XmValidCursorIconQuark ;
 externalref XrmQuark _XmNoneCursorIconQuark ;
@@ -42,10 +38,7 @@ externalref XrmQuark _XmDefaultDragIconQuark ;
 externalref XrmQuark _XmMoveCursorIconQuark ;
 externalref XrmQuark _XmCopyCursorIconQuark ;
 externalref XrmQuark _XmLinkCursorIconQuark ;
-
-
 /********    Private Function Declarations    ********/
-
 extern XmDragIconObject _XmScreenGetOperationIcon(
                         Widget w,
                         unsigned char operation) ;
@@ -83,12 +76,8 @@ extern Pixmap _XmGetInsensitiveStippleBitmap(
 			Widget w) ;
 extern XtEnum _XmGetBitmapConversionModel(
 			Screen *screen) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmScreenI_h */

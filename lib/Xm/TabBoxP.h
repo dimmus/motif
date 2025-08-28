@@ -23,22 +23,17 @@
  */
 #ifndef _XmTabBoxP_h_
 #define _XmTabBoxP_h_
-
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/ExtP.h>
 #include <Xm/TabBox.h>
 #include <Xm/TabList.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 typedef struct _XmTabBoxClassPart {
     XtPointer extension;
 } XmTabBoxClassPart;
-
 typedef struct _XmTabBoxClassRec {
     CoreClassPart        core_class;
     CompositeClassPart	 composite_class;
@@ -46,9 +41,7 @@ typedef struct _XmTabBoxClassRec {
     XmManagerClassPart   manager_class;
     XmTabBoxClassPart    tab_box_class;
 } XmTabBoxClassRec;
-
 externalref XmTabBoxClassRec xmTabBoxClassRec;
-
 typedef struct _XmTabBoxPart {
     XmFontList          font_list;
     XmTabStyle          tab_style;
@@ -67,19 +60,14 @@ typedef struct _XmTabBoxPart {
     Boolean	        uniform_tab_size;
     Boolean		tab_auto_select;
     Boolean		use_image_cache;
-
     Pixel		select_color;
     Pixmap		select_pixmap;
-
     int                 num_stacks;
     int			selected_index;
     int			traversal_index;
-
     Boolean		stacked_effect;
-
     XtCallbackList      select_callback;
     XtCallbackList      unselect_callback;
-
     /* Private */
     GC               _tab_GC;
     GC               _text_GC;
@@ -90,17 +78,12 @@ typedef struct _XmTabBoxPart {
     int              _num_actual;
     int              _selected;
     int		     _keyboard;
-
     int		     _armed_tab;
-
     int              _scroll_x;
     XRectangle	     _scroll_rect;
-
     int              _corner_size;
-
     int		     _num_columns;
     int		     _num_rows;
-
     /*
      * The following data memebers are used for the rotation of
      * the pixmap and the text.
@@ -108,26 +91,19 @@ typedef struct _XmTabBoxPart {
     int              _bitmap_width;
     int		     _bitmap_height;
     Pixmap           _bitmap;
-
     GC		     _zero_GC;
     GC		     _one_GC;
-
     Widget	     _canvas;
     Widget           _left_arrow;
     Widget           _right_arrow;
-
     Boolean          _inited;
-
     struct _XmCache *_cache;
     int              _cache_size;
-
     Boolean		check_set_render_table;
 } XmTabBoxPart;
-
 /*
  * Access macros for instance variables
  */
-
 #define XmTabBox_font_list(w) (((XmTabBoxWidget)(w))->tab_box.font_list)
 #define XmTabBox_tab_style(w) (((XmTabBoxWidget)(w))->tab_box.tab_style)
 #define XmTabBox_tab_mode(w) (((XmTabBoxWidget)(w))->tab_box.tab_mode)
@@ -179,7 +155,6 @@ typedef struct _XmTabBoxPart {
 #define XmTabBox__inited(w) (((XmTabBoxWidget)(w))->tab_box._inited)
 #define XmTabBox__cache(w) (((XmTabBoxWidget)(w))->tab_box._cache)
 #define XmTabBox__cache_size(w) (((XmTabBoxWidget)(w))->tab_box._cache_size)
-
 typedef struct _XmTabBoxRec {
     CorePart        core;
     CompositePart   composite;
@@ -187,13 +162,7 @@ typedef struct _XmTabBoxRec {
     XmManagerPart   manager;
     XmTabBoxPart    tab_box;
 } XmTabBoxRec;
-
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* __TabBoxP_h__ */

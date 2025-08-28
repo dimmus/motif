@@ -27,16 +27,11 @@
 /* $XConsortium: DrawI.h /main/6 1995/07/14 10:27:37 drk $ */
 #ifndef _XmDrawI_h
 #define _XmDrawI_h
-
 #include <Xm/DrawP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmDrawHighlight(
                         Display *display,
                         Drawable d,
@@ -47,12 +42,8 @@ extern void _XmDrawHighlight(
                         Dimension height,
                         Dimension highlight_thick,
                         int line_style) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDrawI_h */

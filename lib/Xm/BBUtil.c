@@ -25,13 +25,9 @@
 /*
  * HISTORY
  */
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/Xm.h>
 #include <Xm/PushBG.h>
 #include <Xm/LabelG.h>
@@ -39,7 +35,6 @@
 #include <Xm/TakesDefT.h>
 #include "BulletinBI.h"
 #include "MessagesI.h"
-
 /* defines for label string resources coming from message catalog */
 #define OK_STRING         _XmMMsgResource_0001
 #define CANCEL_STRING     _XmMMsgResource_0002
@@ -51,9 +46,6 @@
 #define ITEMS_STRING      _XmMMsgResource_0009
 #define DIRTEXT_STRING    _XmMMsgResource_0011
 #define PROMPT_STRING     _XmMMsgResource_0012
-
-
-
 /****************************************************************/
 static char *
 GetLabelString(
@@ -98,8 +90,6 @@ GetLabelString(
 	}
     return retval;
 }
-
-
 /****************************************************************/
 Widget
 _XmBB_CreateButtonG(
@@ -114,7 +104,6 @@ _XmBB_CreateButtonG(
     XmTakesDefaultTrait trait_default ;
     XmString            default_label_string_loc = NULL;
 /****************/
-
     if(    l_string    )
 	{
 	    XtSetArg( al[ac], XmNlabelString, l_string) ; ac++ ;
@@ -125,23 +114,17 @@ _XmBB_CreateButtonG(
 						      XmFONTLIST_DEFAULT_TAG);
 	    XtSetArg( al[ac], XmNlabelString, default_label_string_loc); ac++;
 	}
-
     XtSetArg( al[ac], XmNstringDirection, BB_StringDirection( bb)) ; ac++ ;
-
     button = XmCreatePushButtonGadget( (Widget) bb, name, al, ac) ;
-
     trait_default = (XmTakesDefaultTrait) XmeTraitGet((XtPointer)
 						      XtClass(button),
 						      XmQTtakesDefault) ;
     if (trait_default)
 	trait_default->showAsDefault  (button, XmDEFAULT_READY);
-
     if (default_label_string_loc)
 	XmStringFree(default_label_string_loc);
-
     return( button ) ;
 }
-
 /****************************************************************/
 Widget
 _XmBB_CreateLabelG(
@@ -155,7 +138,6 @@ _XmBB_CreateLabelG(
     Widget                  label ;
     XmString                default_label_string_loc = NULL;
 /****************/
-
     if(    l_string    )
 	{
 	    XtSetArg( al[ac], XmNlabelString, l_string) ; ac++ ;
@@ -166,17 +148,12 @@ _XmBB_CreateLabelG(
 						      XmFONTLIST_DEFAULT_TAG);
 	    XtSetArg( al[ac], XmNlabelString, default_label_string_loc); ac++;
 	}
-
     XtSetArg( al[ac], XmNstringDirection, BB_StringDirection( bb)) ; ac++ ;
     XtSetArg( al[ac], XmNhighlightThickness, 0) ; ac++ ;
     XtSetArg( al[ac], XmNtraversalOn, False) ; ac++ ;
     XtSetArg( al[ac], XmNalignment, XmALIGNMENT_BEGINNING) ; ac++ ;
-
     label = XmCreateLabelGadget( bb, name, al, ac);
-
     if (default_label_string_loc)
 	XmStringFree(default_label_string_loc);
-
     return( label ) ;
-
 }

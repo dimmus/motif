@@ -22,15 +22,11 @@
 */
 #ifndef _XmCutPaste_h
 #define _XmCutPaste_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* XmClipboard return status definitions */
-
 typedef enum {
   XmClipboardFail = 0,
   XmClipboardSuccess = 1,
@@ -39,29 +35,22 @@ typedef enum {
   XmClipboardBadFormat = 5,
   XmClipboardNoData = 6
 } XmClipboardStatus;
-
 /* XmClipboard pre-1.2 definitions */
-
 #define ClipboardFail     	0
 #define ClipboardSuccess  	1
 #define ClipboardTruncate 	2
 #define ClipboardLocked   	4
 #define ClipboardBadFormat   	5
 #define ClipboardNoData   	6
-
 typedef struct {
     long DataId;
     long PrivateId;
 } XmClipboardPendingRec, *XmClipboardPendingList;
-
 typedef void (*XmCutPasteProc)( Widget w, long * data_id, long * private_id,
 							        int * reason) ;
 typedef void (*VoidProc)( Widget w, int * data_id, int * private_id,
 							        int * reason) ;
-
-
 /********    Public Function Declarations    ********/
-
 extern int XmClipboardBeginCopy(
                         Display *display,
                         Window window,
@@ -157,10 +146,7 @@ extern int XmClipboardRegisterFormat(
                         Display *display,
                         char *format_name,
                         int format_length) ;
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

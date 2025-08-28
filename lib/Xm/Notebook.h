@@ -24,26 +24,18 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmNotebook_h
 #define _XmNotebook_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref WidgetClass xmNotebookWidgetClass;
-
 typedef struct _XmNotebookClassRec *XmNotebookWidgetClass;
 typedef struct _XmNotebookRec *XmNotebookWidget;
-
-
 /************************************************************************
  *  Notebook Defines
  ************************************************************************/
-
 /* XmNotebookPageStatus */
 typedef enum
 {
@@ -52,7 +44,6 @@ typedef enum
     XmPAGE_EMPTY,		/* no page widget found */
     XmPAGE_DUPLICATED		/* there are more than one page widgets */
 } XmNotebookPageStatus;
-
 /* Notebook page information structure */
 typedef struct
 {
@@ -62,40 +53,30 @@ typedef struct
     Widget      major_tab_widget;
     Widget	minor_tab_widget;
 } XmNotebookPageInfo;
-
-
 /************************************************************************
  *  Public Functions
  ************************************************************************/
-
 #ifndef XmIsNotebook
 #define XmIsNotebook(w) XtIsSubclass((w), xmNotebookWidgetClass)
 #endif
-
 extern Widget XmCreateNotebook(
 			Widget		parent,
 			String		name,
 			ArgList		arglist,
 			Cardinal	argcount);
-
 extern XmNotebookPageStatus XmNotebookGetPageInfo(
 			Widget notebook,
 			int page_number,
 			XmNotebookPageInfo *page_info) ;
-
 extern Widget XmVaCreateNotebook(
                         Widget parent,
                         char *name,
                         ...);
-
 extern Widget XmVaCreateManagedNotebook(
                         Widget parent,
                         char *name,
                         ...);
-
-
 #ifdef __cplusplus
 }
 #endif
-
 #endif /* _XmNotebook_h  */

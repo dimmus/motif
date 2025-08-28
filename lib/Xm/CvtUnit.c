@@ -28,10 +28,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include "XmI.h"
 #include "RepTypeI.h"
-
 /************************************************************************
  *
  *  XmCvtStringToUnitType
@@ -49,7 +47,6 @@ XmCvtStringToUnitType(
         XrmValue *to_val )
 {
    Display * dpy = _XmGetDefaultDisplay();
-
    /* we cannot call XmRUnitType directly, since it would loop
       if a program registers this function with to_type = XmRUnitType (which
       is very likely).
@@ -57,5 +54,4 @@ XmCvtStringToUnitType(
       same semantics as the original XmRUnitType in RepType.c */
    XtConvertAndStore(XmGetXmDisplay(dpy), XmRString, from_val,
 		     REAL_UNIT_TYPE_NAME, to_val);
-
 }

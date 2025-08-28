@@ -22,18 +22,13 @@
 */
 #ifndef _XmTravActI_h
 #define _XmTravActI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define XmFOCUS_RESET	1<<0
 #define XmFOCUS_IGNORE	1<<1
-
 /********    Private Function Declarations    ********/
-
 extern unsigned short _XmGetFocusFlag(
 			Widget w,
 			unsigned int mask) ;
@@ -126,12 +121,8 @@ extern void _XmManagerUnmap(
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTravActI_h */

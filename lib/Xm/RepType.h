@@ -22,20 +22,12 @@
 */
 #ifndef _XmRepType_h
 #define _XmRepType_h
-
-
 #include <Xm/Xm.h>
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define XmREP_TYPE_INVALID		0x1FFF
-
 typedef unsigned short XmRepTypeId ;
-
 typedef struct
 {
     String rep_type_name ;
@@ -45,10 +37,7 @@ typedef struct
     Boolean reverse_installed ;
     XmRepTypeId rep_type_id ;
     }XmRepTypeEntryRec, *XmRepTypeEntry, XmRepTypeListRec, *XmRepTypeList ;
-
-
 /********    Public Function Declarations    ********/
-
 extern XmRepTypeId XmRepTypeRegister(
                         String rep_type,
                         String *value_names,
@@ -69,13 +58,8 @@ extern String * XmRepTypeGetNameList(
                         XmRepTypeId rep_type_id,
                         Boolean use_uppercase_format) ;
 extern void XmRepTypeInstallTearOffModelConverter( void ) ;
-
 /********    End Public Function Declarations    ********/
-
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRepType_h */

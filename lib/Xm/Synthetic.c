@@ -24,12 +24,9 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include <Xm/ManagerP.h>
 #include <Xm/PrimitiveP.h>
@@ -39,7 +36,6 @@
 #include <Xm/PrintSP.h>
 #endif
 #include "SyntheticI.h"
-
 /**
  * For conversion between a String and a XrmQuark
  */
@@ -47,9 +43,7 @@ union string_quark {
   String str;
   XrmQuark quark;
 };
-
 /*******    Static Function Declarations    ********/
-
 static void GetValuesHook(Widget w,
 			  XtPointer base,
 			  Widget alt_w,
@@ -78,10 +72,7 @@ static void ImportConstraintArgs(Widget w,
 				 Cardinal alt_mask,
 				 ArgList args,
 				 Cardinal *num_args) ;
-
-
 /********    End Static Function Declarations    ********/
-
 /**********************************************************************
  *
  *  _XmBuildResources
@@ -89,7 +80,6 @@ static void ImportConstraintArgs(Widget w,
  *	the the widget's class and super class resource list.
  *
  **********************************************************************/
-
 void
 _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
 		  int *wc_num_resources_ptr,
@@ -102,49 +92,35 @@ _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
   int                  new_num_resources;
   int i, j;
   Boolean override;
-
-
   wc_resources = (XmSyntheticResource *) *wc_resources_ptr;
   wc_num_resources = (int) *wc_num_resources_ptr;
-
-
   /*  If there are no new resources, just use the super class data  */
-
   if (wc_num_resources == 0)
     {
       *wc_resources_ptr = sc_resources;
       *wc_num_resources_ptr = sc_num_resources;
       return;
     }
-
-
   /*
    * Allocate a new resource list to contain the combined set of
    * resources from the class and super class.  This allocation
    * may create to much space if there are overrides in the new
    * resource list.  Copy sc's resources into the space.
    */
-
   new_resources = (XmSyntheticResource *)
     XtMalloc(sizeof (XmSyntheticResource) *
 	     (wc_num_resources + sc_num_resources));
   if (sc_num_resources)
     memcpy ((char *) new_resources, (char *) sc_resources,
 	    sc_num_resources * sizeof (XmSyntheticResource));
-
-
   /*
    * Loop through the wc resources and copy
    * them into the new resources
    */
-
   new_num_resources = sc_num_resources;
-
   for (i = 0; i < wc_num_resources; i++)
     {
-
       /*  First check to see if this is an override  */
-
       override = False;
       for (j = 0; j < sc_num_resources; j++)
 	{
@@ -160,21 +136,14 @@ _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
 	      break;
 	    }
 	}
-
-
       /*  If it wasn't an override stuff it into the list  */
-
       if (override == False)
 	new_resources[new_num_resources++] = wc_resources[i];
     }
-
-
   /*  Replace the resource list and count will the new one.  */
-
   *wc_resources_ptr = new_resources;
   *wc_num_resources_ptr = new_num_resources;
 }
-
 /**********************************************************************
  *
  *  InitializeSyntheticResources
@@ -184,20 +153,17 @@ _XmBuildResources(XmSyntheticResource **wc_resources_ptr,
  *	lists.
  *
  **********************************************************************/
-
 void
 _XmInitializeSyntheticResources(XmSyntheticResource *resources,
 				int num_resources )
 {
   register int i;
   union string_quark q;
-
   for (i = 0, q.str = NULL; i < num_resources; i++, q.str = NULL) {
     q.quark = XrmPermStringToQuark(resources[i].resource_name);
     resources[i].resource_name = q.str;
   }
 }
-
 /**********************************************************************
  *
  *  GetValuesHook
@@ -208,7 +174,6 @@ _XmInitializeSyntheticResources(XmSyntheticResource *resources,
  *	value data.
  *
  **********************************************************************/
-
 static void
 GetValuesHook(Widget w,
 	      XtPointer base,
@@ -229,21 +194,17 @@ GetValuesHook(Widget w,
   Widget value_widget;
   Cardinal value_offset;
   union string_quark q;
-
   /*  Loop through each argument, quarkifing the name.  Then loop  */
   /*  through each synthetic resource to see if there is a match.  */
-
   for (i = 0; i < num_args; i++)
     {
       quark = XrmStringToQuark (args[i].name);
-
       for (j = 0; j < num_resources; j++)
 	{
 	  q.str = resources[j].resource_name;
 	  if (resources[j].export_proc && q.quark == quark)
 	    {
 	      value_size = resources[j].resource_size;
-
 	      /* CR 5385: Use alt_w and alt_base if alt_mask is set in the */
 	      /*	offset.  This lets extension sythetic resources */
 	      /*	point to the "real" widget class resources. */
@@ -259,7 +220,6 @@ GetValuesHook(Widget w,
 		  value_widget = w;
 		  value_ptr = (XtPointer) ((char *) base + value_offset);
 		}
-
 	      if (value_size == sizeof(long))
 		value = (XtArgVal)(*(long *)value_ptr);
 	      else if (value_size == sizeof(int))
@@ -270,12 +230,9 @@ GetValuesHook(Widget w,
 		value = (XtArgVal)(*(char *)value_ptr);
 	      else
 		value = *(XtArgVal*)value_ptr;
-
 	      orig_value = value;
-
 	      (*(resources[j].export_proc))
 		(value_widget, value_offset, &value);
-
 #if defined(GETVALUES_BUG)
 	      /* if the value that was in the widget prior to calling
 		 the get hook is the same as the one put by Xt in the
@@ -290,7 +247,6 @@ GetValuesHook(Widget w,
 #endif
 		{
 		  value_ptr = (XtPointer) args[i].value;
-
 		  if (value_size == sizeof(long))
 		    *(long *) value_ptr = (long) value;
 		  else if (value_size == sizeof(int))
@@ -302,13 +258,11 @@ GetValuesHook(Widget w,
 		  else
 		    *(XtArgVal*) value_ptr = value;
 		}
-
 	      break;
 	    }
 	}
     }
 }
-
 /**********************************************************************
  *
  *  ConstraintGetValuesHook
@@ -317,7 +271,6 @@ GetValuesHook(Widget w,
  *	resource processing that needs to be done.
  *
  **********************************************************************/
-
 static void
 ConstraintGetValuesHook(Widget w,
 			Widget alt_w,
@@ -327,7 +280,6 @@ ConstraintGetValuesHook(Widget w,
 {
   XmManagerWidgetClass parent_wc =
     (XmManagerWidgetClass) w->core.parent->core.widget_class;
-
   if (XmIsManager(w->core.parent) &&
       parent_wc->manager_class.num_syn_constraint_resources)
     GetValuesHook(w, w->core.constraints,
@@ -336,14 +288,12 @@ ConstraintGetValuesHook(Widget w,
 		  parent_wc->manager_class.num_syn_constraint_resources,
 		  args, *num_args);
 }
-
 /**********************************************************************
  *
  *  _XmPrimitiveGetValuesHook
  *	Process the synthetic resources that need to be synthesized
  *
  **********************************************************************/
-
 void
 _XmPrimitiveGetValuesHook(
         Widget w,
@@ -351,7 +301,6 @@ _XmPrimitiveGetValuesHook(
         Cardinal *num_args )
 {
   XmPrimitiveWidgetClass wc;
-
   _XmProcessLock();
   wc = (XmPrimitiveWidgetClass) w->core.widget_class;
   if (wc->primitive_class.num_syn_resources != 0)
@@ -359,26 +308,22 @@ _XmPrimitiveGetValuesHook(
 		   wc->primitive_class.syn_resources,
 		   wc->primitive_class.num_syn_resources,
 		   args, *num_args);
-
   if (w->core.constraints != NULL)
     ConstraintGetValuesHook (w, w, None, args, num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  *  _XmGadgetGetValuesHook
  *	Process the synthetic resources that need to be synthesized
  *
  **********************************************************************/
-
 void
 _XmGadgetGetValuesHook(Widget w,
 		       ArgList args,
 		       Cardinal *num_args )
 {
   XmGadgetClass wc;
-
   _XmProcessLock();
   wc = (XmGadgetClass) w->core.widget_class;
   if (wc->gadget_class.num_syn_resources != 0)
@@ -386,26 +331,22 @@ _XmGadgetGetValuesHook(Widget w,
 		   wc->gadget_class.syn_resources,
 		   wc->gadget_class.num_syn_resources,
 		   args, *num_args);
-
   if (w->core.constraints != NULL)
     ConstraintGetValuesHook (w, w, None, args, num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  *  _XmManagerGetValuesHook
  *	Process the synthetic resources that need to be synthesized
  *
  **********************************************************************/
-
 void
 _XmManagerGetValuesHook(Widget w,
 			ArgList args,
 			Cardinal *num_args)
 {
   XmManagerWidgetClass wc;
-
   _XmProcessLock();
   wc = (XmManagerWidgetClass) w->core.widget_class;
   if (wc->manager_class.num_syn_resources != 0)
@@ -413,29 +354,23 @@ _XmManagerGetValuesHook(Widget w,
 		   wc->manager_class.syn_resources,
 		   wc->manager_class.num_syn_resources,
 		   args, *num_args);
-
   if (w->core.constraints != NULL)
     ConstraintGetValuesHook (w, w, None, args, num_args);
   _XmProcessUnlock();
 }
-
-
 #if XM_PRINTING
-
 /**********************************************************************
  *
  *  _XmPrintShellGetValuesHook
  *	Process the synthetic resources that need to be synthesized
  *
  **********************************************************************/
-
 void
 _XmPrintShellGetValuesHook(Widget w,
 			ArgList args,
 			Cardinal *num_args)
 {
   XmPrintShellWidgetClass wc;
-
   _XmProcessLock();
   wc = (XmPrintShellWidgetClass) w->core.widget_class;
   if (wc->print_shell_class.num_syn_resources != 0)
@@ -443,18 +378,15 @@ _XmPrintShellGetValuesHook(Widget w,
 		   wc->print_shell_class.syn_resources,
 		   wc->print_shell_class.num_syn_resources,
 		   args, *num_args);
-
   _XmProcessUnlock();
 }
 #endif /* XM_PRINTING */
-
 /**********************************************************************
  *
  *  _XmExtGetValuesHook
  *	Process the synthetic resources that need to be synthesized
  *
  **********************************************************************/
-
 void
 _XmExtGetValuesHook(Widget w,
 		    ArgList args,
@@ -462,7 +394,6 @@ _XmExtGetValuesHook(Widget w,
 {
   XmExtObjectClass wc;
   Widget parent;
-
   _XmProcessLock();
   wc = (XmExtObjectClass)XtClass(w);
   parent = ((XmExtObject)w)->ext.logicalParent;
@@ -474,7 +405,6 @@ _XmExtGetValuesHook(Widget w,
 		  args, *num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  * ImportArgs
@@ -483,7 +413,6 @@ _XmExtGetValuesHook(Widget w,
  * specified for the given resource.
  *
  **********************************************************************/
-
 static void
 ImportArgs(Widget w,
 	   XtPointer base,
@@ -505,21 +434,17 @@ ImportArgs(Widget w,
   XtPointer value_base;
   XmImportOperator op;
   union string_quark q;
-
   /*  Loop through each argument, quarkifing the name.  Then loop  */
   /*  through each synthetic resource to see if there is a match.  */
-
   for (i = 0; i < num_args; i++)
     {
       quark = XrmStringToQuark (args[i].name);
-
       for (j = 0; j < num_resources; j++)
 	{
 	  q.str = resources[j].resource_name;
 	  if (resources[j].import_proc && q.quark == quark)
 	    {
 	      value = args[i].value;
-
 	      /* CR 5385: Let VendorSE mix real and extension resources. */
 	      value_offset = resources[j].resource_offset;
 	      if (value_offset & alt_mask)
@@ -533,7 +458,6 @@ ImportArgs(Widget w,
 		  value_base = base;
 		  value_widget = w;
 		}
-
 	      op = (*(resources[j].import_proc))
 		(value_widget, value_offset, &value);
 	      if ((op == XmSYNTHETIC_LOAD) && (value_base != NULL))
@@ -541,7 +465,6 @@ ImportArgs(Widget w,
 		  /* Load the converted value into the structure */
 		  value_size = resources[j].resource_size;
 		  value_ptr = (XtPointer) ((char *) value_base + value_offset);
-
 		  if (value_size == sizeof(long))
 		    *(long *) value_ptr = (long) value;
 		  else if (value_size == sizeof(int))
@@ -557,13 +480,11 @@ ImportArgs(Widget w,
 		{
 		  args[i].value = value;
 		}
-
 	      break;
 	    }
 	}
     }
 }
-
 /**********************************************************************
  *
  *  ImportConstraintArgs
@@ -581,7 +502,6 @@ ImportConstraintArgs(Widget w,
 {
   XmManagerWidgetClass parent_wc =
     (XmManagerWidgetClass) w->core.parent->core.widget_class;
-
   if (XmIsManager(w->core.parent) &&
       parent_wc->manager_class.num_syn_constraint_resources)
     ImportArgs(w, w->core.constraints,
@@ -590,14 +510,12 @@ ImportConstraintArgs(Widget w,
 	       parent_wc->manager_class.num_syn_constraint_resources,
 	       args, *num_args);
 }
-
 /**********************************************************************
  *
  * _XmExtImportArgs
  * Does arg importing for sub-classes of VendorExt.
  *
  **********************************************************************/
-
 void
 _XmExtImportArgs(Widget w,
 		 ArgList args,
@@ -605,7 +523,6 @@ _XmExtImportArgs(Widget w,
 {
   XmExtObjectClass wc;
   Widget parent;
-
   _XmProcessLock();
   wc = (XmExtObjectClass)XtClass(w);
   parent = ((XmExtObject)w)->ext.logicalParent;
@@ -617,21 +534,18 @@ _XmExtImportArgs(Widget w,
 	       args, *num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  * _XmPrimitiveImportArgs
  * Does arg importing for sub-classes of XmPrimitive.
  *
  **********************************************************************/
-
 void
 _XmPrimitiveImportArgs(Widget w,
 		       ArgList args,
 		       Cardinal *num_args )
 {
   XmPrimitiveWidgetClass wc;
-
   _XmProcessLock();
   wc = (XmPrimitiveWidgetClass) w->core.widget_class;
   if (wc->primitive_class.num_syn_resources != 0)
@@ -639,26 +553,22 @@ _XmPrimitiveImportArgs(Widget w,
 		wc->primitive_class.syn_resources,
 		wc->primitive_class.num_syn_resources,
 		args, *num_args);
-
   if (w->core.constraints != NULL)
     ImportConstraintArgs (w, w, None, args, num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  *  _XmGadgetImportArgs
  * Does arg importing for sub-classes of XmGadget.
  *
  **********************************************************************/
-
 void
 _XmGadgetImportArgs(Widget w,
 		    ArgList args,
 		    Cardinal *num_args )
 {
   XmGadgetClass wc;
-
   /* Main object args */
   _XmProcessLock();
   wc = (XmGadgetClass) w->core.widget_class;
@@ -667,12 +577,10 @@ _XmGadgetImportArgs(Widget w,
 		wc->gadget_class.syn_resources,
 		wc->gadget_class.num_syn_resources,
 		args, *num_args);
-
   if (w->core.constraints != NULL)
     ImportConstraintArgs (w, w, None, args, num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  *  _XmGadgetImportSecondaryArgs
@@ -688,7 +596,6 @@ _XmGadgetImportSecondaryArgs(Widget w,
   XmGadgetClass wc;
   XmBaseClassExt *classExtPtr;
   XmExtClassRec *secondaryObjClass;
-
   _XmProcessLock();
   wc = (XmGadgetClass) w->core.widget_class;
   classExtPtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
@@ -703,21 +610,18 @@ _XmGadgetImportSecondaryArgs(Widget w,
 		args, *num_args);
   _XmProcessUnlock();
 }
-
 /**********************************************************************
  *
  *  _XmManagerImportArgs
  * Does arg importing for sub-classes of XmManager.
  *
  **********************************************************************/
-
 void
 _XmManagerImportArgs(Widget w,
 		     ArgList args,
 		     Cardinal *num_args )
 {
   XmManagerWidgetClass wc = (XmManagerWidgetClass) w->core.widget_class;
-
   _XmProcessLock();
   wc = (XmManagerWidgetClass) w->core.widget_class;
   if (wc->manager_class.num_syn_resources != 0)
@@ -725,7 +629,6 @@ _XmManagerImportArgs(Widget w,
 		wc->manager_class.syn_resources,
 		wc->manager_class.num_syn_resources,
 		args, *num_args);
-
   if (w->core.constraints != NULL)
     ImportConstraintArgs (w, w, None, args, num_args);
   _XmProcessUnlock();

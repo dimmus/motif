@@ -26,18 +26,13 @@
  */
 #ifndef _XmScrollFrameT_H
 #define _XmScrollFrameT_H
-
 #include <Xm/Xm.h>
 #include <Xm/NavigatorT.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref XrmQuark XmQTscrollFrame;
-
 /* Trait structures and typedefs, place typedefs first */
-
 typedef void (*XmScrollFrameInitProc)(Widget sf,
 				      XtCallbackProc moveCB,
 				      Widget scrollable);
@@ -53,10 +48,7 @@ typedef void (*XmScrollFrameRemoveNavigatorProc)(Widget sf,
 typedef void (*XmScrollFrameUpdateOrigGeomProc)(Widget sf,
 						Widget child,
 						XtWidgetGeometry *geom);
-
-
 /* Version 1: added updateOrigGeom */
-
 typedef struct _XmScrollFrameTraitRec {
   int				    version;		/* 1 */
   XmScrollFrameInitProc		    init;
@@ -65,12 +57,9 @@ typedef struct _XmScrollFrameTraitRec {
   XmScrollFrameRemoveNavigatorProc  removeNavigator;
   XmScrollFrameUpdateOrigGeomProc   updateOrigGeom;
 } XmScrollFrameTraitRec, *XmScrollFrameTrait;
-
-
 /* This one gets allocated per instance by the scrollFrame
    class. It is just a convenient structure reusable by other scrollFrame
    and it needs not to be part of the public trait API */
-
 typedef struct _XmScrollFrameDataRec {
    XtCallbackProc move_cb ;
    Widget         scrollable ;
@@ -78,10 +67,7 @@ typedef struct _XmScrollFrameDataRec {
    Cardinal       num_nav_list ;
    Cardinal       num_nav_slots;
 } XmScrollFrameDataRec, *XmScrollFrameData;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmScrollFrameT_H */

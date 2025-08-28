@@ -27,15 +27,11 @@
 /* $XConsortium: CascadeBGI.h /main/6 1995/07/14 10:14:47 drk $ */
 #ifndef _XmCascadeBGI_h
 #define _XmCascadeBGI_h
-
 #include <Xm/CascadeBGP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern int _XmArrowPixmapCacheCompare(
                         XtPointer A,
                         XtPointer B) ;
@@ -43,13 +39,9 @@ extern void _XmArrowPixmapCacheDelete(
                         XtPointer data) ;
 extern void _XmCreateArrowPixmaps(
                         Widget wid) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmCascadeBGI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

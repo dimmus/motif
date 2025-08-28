@@ -23,36 +23,29 @@
  */
 #ifndef _XmDataFP_h
 #define _XmDataFP_h
-
 #include <Xm/DataF.h>
 #include <Xm/XmP.h>
 #include <Xm/ExtP.h>
 #include <Xm/TextFP.h>
 #include <Xm/Picture.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*
  * Motif doesn't define this:  go figure
  */
 #ifndef XmTextFieldIndex
 #define XmTextFieldIndex (XmPrimitiveIndex + 1)
 #endif
-
 #define XmDataFieldIndex (XmTextFieldIndex)
-
 typedef struct _XmDataFieldClassPart {
     XtPointer extension;
 } XmDataFieldClassPart;
-
 typedef struct _XmDataFieldClassRec {
     CoreClassPart        core_class;
     XmPrimitiveClassPart primitive_class;
     XmDataFieldClassPart data_class;
 } XmDataFieldClassRec;
-
 typedef struct _XmDataFieldPart {
     unsigned char   alignment;	/* XmALIGNMENT_BEGINNING by default */
     String          picture_source;
@@ -61,16 +54,13 @@ typedef struct _XmDataFieldPart {
     XtCallbackList  picture_error_cb;
     XtCallbackList  validate_cb;
 } XmDataFieldPart;
-
 typedef struct _XmDataFieldRec {
     CorePart core;
     XmPrimitivePart primitive;
     XmTextFieldPart text;
     XmDataFieldPart data;
 } XmDataFieldRec;
-
 extern XmDataFieldClassRec xmDataFieldClassRec;
-
 #define XmTextF_activate_callback(w) (((XmDataFieldWidget)(w))->text.activate_callback)
 #define XmTextF_focus_callback(w) (((XmDataFieldWidget)(w))->text.focus_callback)
 #define XmTextF_losing_focus_callback(w) (((XmDataFieldWidget)(w))->text.losing_focus_callback)
@@ -169,7 +159,6 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define	XmTextF_xft_font(w) (((XftFont*)((XmDataFieldWidget)(w))->text.font))
 #endif
 #define XmTextF_changed_visible(w) (((XmDataFieldWidget)(w))->text.changed_visible)
-
 #define XmDataField_alignment(w) (((XmDataFieldWidget)(w))->data.alignment)
 #define XmDataField_picture_source(w) (((XmDataFieldWidget)(w))->data.picture_source)
 #define XmDataField_picture(w) (((XmDataFieldWidget)(w))->data.picture)
@@ -177,9 +166,7 @@ extern XmDataFieldClassRec xmDataFieldClassRec;
 #define XmDataField_auto_fill(w) (((XmDataFieldWidget)(w))->data.auto_fill)
 #define XmDataField_picture_error_cb(w) (((XmDataFieldWidget)(w))->data.picture_error_cb)
 #define XmDataField_validate_cb(w) (((XmDataFieldWidget)(w))->data.validate_cb)
-
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
-
 #endif /* _XmDataFP_h */

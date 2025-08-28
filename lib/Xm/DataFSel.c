@@ -26,7 +26,6 @@
 static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.6 $ $Date: 2003/10/06 10:10:23 $"
 #endif
 #endif
-
 #include <Xm/Ext.h>
 #include <Xm/DataFSelP.h>
 #include <Xm/DataFP.h>
@@ -35,8 +34,6 @@ static char rcsid[] = "$RCSfile: DataFSel.c,v $ $Revision: 1.6 $ $Date: 2003/10/
 #include <Xm/XmosP.h>
 #include <Xm/DragC.h>
 #include <Xm/TextFP.h>
-
-
 /********    Static Function Declarations    ********/
 static void InsertSelection(
                         Widget w,
@@ -62,9 +59,7 @@ static void HandleInsertTargets(
                         XtPointer value,
                         unsigned long *length,
                         int *format );
-
 /********    End Static Function Declarations    ********/
-
 extern void _XmDataFieldDeselectSelection(Widget, int, Boolean, Time);
 extern void _XmDataFieldStartSelection(XmDataFieldWidget, XmTextPosition,
 				       XmTextPosition, Time);
@@ -73,7 +68,6 @@ extern Boolean _XmDataFielddf_SetDestination(Widget, XmTextPosition, Time);
 extern void _XmDataFielddf_SetCursorPosition(XmDataFieldWidget, XEvent *,
 					     XmTextPosition, Boolean,
 					     Boolean);
-
 static void
 InsertSelection(
         Widget w,
@@ -101,19 +95,16 @@ InsertSelection(
     int malloc_size = 0;
     int i, status = 0;
     XmAnyCallbackStruct cb;
-
     if (!value) {
        insert_select->done_status = True;
        return;
     }
-
    /* Don't do replace if there is not text to add */
     if (*(char *) value == (char)'\0' || *length == 0){
        XtFree((char *)value);
        insert_select->done_status = True;
        return;
     }
-
     if (insert_select->select_type == XmPRIM_SELECT) {
        if (!XmDataFieldGetSelectionPosition (w, &left, &right) ||
 	   left == right) {
@@ -134,8 +125,6 @@ InsertSelection(
       } else
          left = right = TextF_CursorPosition(tf);
     }
-
-
     if (*type == COMPOUND_TEXT || *type == XA_STRING) {
        tmp_prop.value = (unsigned char *) value;
        tmp_prop.encoding = *type;
@@ -149,15 +138,12 @@ InsertSelection(
        if (num_vals && (status == Success || status > 0)) {
           for (i = 0; i < num_vals ; i++)
               malloc_size += strlen(tmp_value[i]);
-
           total_tmp_value = XtMalloc ((unsigned) malloc_size + 1);
           total_tmp_value[0] = '\0';
           for (i = 0; i < num_vals ; i++)
              strcat(total_tmp_value, tmp_value[i]);
 	  XFreeStringList(tmp_value);
        }
-
-
        if (XmTextF_max_char_size(tf) == 1) {
           replace_res = _XmDataFieldReplaceText(tf,
                                                 (XEvent *) insert_select->event,
@@ -188,7 +174,6 @@ InsertSelection(
           temp[*length] = '\0';
           wc_value = (wchar_t*)XtMalloc((unsigned)
                                                (*length + 1) * sizeof(wchar_t));
-
          /* NOTE: casting *length could result in a truncated long. */
           num_chars = mbstowcs(wc_value, temp, (unsigned)*length + 1);
           replace_res = _XmDataFieldReplaceText(tf,
@@ -199,14 +184,11 @@ InsertSelection(
           XtFree((char *)wc_value);
        }
     }
-
     if (!replace_res) {
        insert_select->success_status = False;
     } else {
        insert_select->success_status = True;
-
        if (!XmTextF_add_mode(tf)) XmTextF_prim_anchor(tf) = left;
-
        XmTextF_pending_off(tf) = True;
        if (XmTextF_max_char_size(tf) == 1)
        {
@@ -241,12 +223,10 @@ InsertSelection(
        XtCallCallbackList((Widget) tf, TextF_ValueChangedCallback(tf),
                           (XtPointer) &cb);
     }
-
     XtFree((char *)value);
     value = NULL;
     insert_select->done_status = True;
 }
-
 static void
 HandleInsertTargets(
         Widget w,
@@ -263,15 +243,12 @@ HandleInsertTargets(
    Atom target = TEXT;
    Atom *atom_ptr;
    int i;
-
    if (!length) {
       XtFree((char *)value);
       insert_select->done_status = True;
       return; /* Supports no targets, so don't bother sending anything */
    }
-
    atom_ptr = (Atom *)value;
-
     for (i = 0; i < *length; i++, atom_ptr++) {
       if (*atom_ptr == COMPOUND_TEXT) {
          target = *atom_ptr;
@@ -279,14 +256,11 @@ HandleInsertTargets(
       } else if (*atom_ptr == XA_STRING)
          target = *atom_ptr;
     }
-
    XtGetSelectionValue(w, *seltype, target,
                        InsertSelection,
                        (XtPointer) insert_select,
                        insert_select->event->time);
-
 }
-
 /*
  * Converts requested target of insert selection.
  */
@@ -314,34 +288,26 @@ ConvertInsertSelection(
    unsigned char *prop = NULL;
    _XmInsertSelect insert_select;
    _XmTextInsertPair *pair;
-
    insert_select.done_status = False;
    insert_select.success_status = False;
-
    if (*selection == MOTIF_DESTINATION) {
       insert_select.select_type = XmDEST_SELECT;
    } else if (*selection == XA_PRIMARY) {
       insert_select.select_type = XmPRIM_SELECT;
    }
-
    req_event = XtGetSelectionRequest(w, *selection, NULL);
-
    insert_select.event = req_event;
-
   /* Work around for intrinsics selection bug */
    if (old_serial != req_event->serial)
       old_serial = req_event->serial;
    else
       return False;
-
    if (XGetWindowProperty(req_event->display, req_event->requestor,
                       req_event->property, 0L, 10000000, False,
                       AnyPropertyType, &actual_type, &actual_format,
                       &nitems, &bytes, &prop) != Success)
       return FALSE;
-
    pair = (_XmTextInsertPair *)prop;
-
    if (pair->target != locale_atom) {
      /*
       * Make selection request to find out which targets
@@ -367,25 +333,21 @@ ConvertInsertSelection(
    */
    for (;;) {
        XEvent event;
-
        if (insert_select.done_status)
           break;
        XtAppNextEvent(app, &event);
        XtDispatchEvent(&event);
    }
-
    *type = XmInternAtom(XtDisplay(w), "NULL", False);
    *format = 8;
    *value = NULL;
    *length = 0;
-
    if(    prop != NULL    )
      {
        XFree((void *)prop);
      }
    return (insert_select.success_status);
 }
-
 Boolean
 _XmDataFieldConvert(
         Widget w,
@@ -428,16 +390,13 @@ _XmDataFieldConvert(
     XtPointer c_ptr;
     Arg args[1];
     XmAnyCallbackStruct cb;
-
     if (*selection == MOTIF_DROP) {
        XtSetArg (args[0], XmNclientData, &c_ptr);
        XtGetValues (w, args, 1);
        tf = (XmDataFieldWidget) c_ptr;
     } else
        tf = (XmDataFieldWidget) w;
-
     if (tf == NULL) return False;
-
     ret_status = XmbTextListToTextProperty(XtDisplay(w), &tmp_string, 1,
                                       (XICCEncodingStyle)XTextStyle, &tmp_prop);
     if (ret_status == Success)
@@ -448,7 +407,6 @@ _XmDataFieldConvert(
 				       * case its broken, this prevents a core
 				       * dump.
 				       */
-
     if ((*selection == XA_PRIMARY) || (*selection == CLIPBOARD)) {
        has_selection = XmTextF_has_primary(tf);
        left = XmTextF_prim_pos_left(tf);
@@ -473,14 +431,12 @@ _XmDataFieldConvert(
        is_destination = is_primary = is_secondary = False;
     } else
        return False;
-
   /*
    * TARGETS identifies what targets the textfield widget can
    * provide data for.
    */
     if (*target == TARGETS) {
       Atom *targs = (Atom *)XtMalloc((unsigned) (MAX_TARGS * sizeof(Atom)));
-
       *value = (XtPointer) targs;
       *targs++ = CS_OF_LOCALE; target_count++;
       *targs++ = TARGETS; target_count++;
@@ -519,11 +475,9 @@ _XmDataFieldConvert(
       *type = (Atom) XA_STRING;
       *format = 8;
       if (is_destination || !has_selection) return False;
-
       /* put a char* value into tmp_value, then convert to 8859.1 */
       if (XmTextF_max_char_size(tf) != 1) {
 	  int stat ;
-
 	/* NOTE: casting (right - left) could result in a truncated long. */
          *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left,
                                           (int)(right - left));
@@ -562,7 +516,6 @@ _XmDataFieldConvert(
       if (is_destination || !has_selection) return False;
       if (XmTextF_max_char_size(tf) != 1) {
 	  int stat ;
-
 	  /* NOTE: casting (right - left) could result in a truncated long. */
 	  *length = _XmDataFieldCountBytes(tf, TextF_WcValue(tf) + left,
 					   (int)(right - left));
@@ -588,7 +541,6 @@ _XmDataFieldConvert(
       if (is_destination || !has_selection) return False;
       if (XmTextF_max_char_size(tf) != 1) {
 	int stat ;
-
 	/* convert to char* before converting to CT.  NOTE: casting
          * (right - left) could result in a truncated long.
          */
@@ -610,7 +562,6 @@ _XmDataFieldConvert(
 				             in a truncated long. */
       }
       tmp_value[*length] = '\0';
-
      /* Convert to compound text */
       ret_status = XmbTextListToTextProperty(XtDisplay(w), &tmp_value, 1,
                                           (XICCEncodingStyle)XCompoundTextStyle,
@@ -632,26 +583,20 @@ _XmDataFieldConvert(
       if (is_secondary) return False;
       return (ConvertInsertSelection((Widget) tf, selection, type,
                                      value, length, format, CS_OF_LOCALE));
-
   /* Delete the selection */
     } else if (*target == DELETE) {
       Boolean move_cursor = True;
-
       if (!(is_primary || is_drop)) return False;
-
       if (is_drop) {
          Atom real_selection_atom; /* DND hides the selection atom from us */
-
          XtSetArg(args[0], XmNiccHandle, &real_selection_atom);
          XtGetValues(w, args, 1); /* 'w' is the drag context */
          req_event = XtGetSelectionRequest(w, real_selection_atom, NULL);
       } else {
          req_event = XtGetSelectionRequest((Widget) tf, *selection, NULL);
       }
-
       left = XmTextF_prim_pos_left(tf);
       right = XmTextF_prim_pos_right(tf);
-
       if (is_drop) {
            if (_XmDataFieldGetDropReciever((Widget)tf) == (Widget) tf)
               move_cursor = False;
@@ -659,10 +604,8 @@ _XmDataFieldConvert(
          if (req_event->requestor == XtWindow((Widget)tf))
 	    move_cursor = False;
       }
-
       _XmDataFieldStartSelection(tf, XmTextF_prim_anchor(tf), XmTextF_prim_anchor(tf),
  				 req_event->time);
-
       if (!_XmDataFieldReplaceText(tf, (XEvent *) req_event,
 				   left, right, NULL, 0, move_cursor)) {
            XmTextF_has_primary(tf) = True;
@@ -672,24 +615,19 @@ _XmDataFieldConvert(
       cb.event = (XEvent *) req_event;
       XtCallCallbackList((Widget) tf, TextF_ValueChangedCallback(tf),
 			 (XtPointer) &cb);
-
       XmTextF_has_primary(tf) = True;
-
       if (XmTextF_has_destination(tf))
           XmTextF_prim_anchor(tf) = TextF_CursorPosition(tf);
-
       *type = XmInternAtom(XtDisplay(w), "NULL", False);
       *value = NULL;
       *length = 0;
       *format = 8;
     } else if (*target == LENGTH) {
 	long *len = (long*)XtMalloc(sizeof(long));
-
 	if (right > left)
 	    *len = right - left;
 	else
 	    *len = left - right;
-
 	*value = (XtPointer)len;
 	*type = XA_INTEGER;
     	*length = 1L;
@@ -698,7 +636,6 @@ _XmDataFieldConvert(
 	return FALSE;
     return TRUE;
 }
-
 void
 _XmDataFieldLoseSelection(
         Widget w,
@@ -712,7 +649,6 @@ _XmDataFieldLoseSelection(
         XmAnyCallbackStruct cb;
         _XmDataFieldDeselectSelection(w, False, 0,
 				      XtLastTimestampProcessed(XtDisplay(w)));
-
         cb.reason = XmCR_LOSE_PRIMARY;
         cb.event = NULL;
         XtCallCallbackList(w, XmTextF_lose_primary_callback(tf),

@@ -27,15 +27,11 @@
 /* $XConsortium: SyntheticI.h /main/6 1996/04/18 12:01:21 daniel $ */
 #ifndef _XmSyntheticI_h
 #define _XmSyntheticI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for Synthetic.c    ********/
-
 extern void _XmBuildResources(
                         XmSyntheticResource **wc_resources_ptr,
                         int *wc_num_resources_ptr,
@@ -86,12 +82,9 @@ extern void _XmManagerImportArgs(
                         Widget w,
                         ArgList args,
                         Cardinal *num_args) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmSyntheticI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

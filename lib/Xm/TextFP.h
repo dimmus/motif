@@ -22,42 +22,33 @@
  */
 #ifndef _XmTextFP_h
 #define _XmTextFP_h
-
 #include <Xm/PrimitiveP.h>
 #include <Xm/TextF.h>
 #if USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*
  * Defines for different cursors
  */
-
 #define IBEAM_WIDTH	3
 #define CARET_WIDTH	9
 #define CARET_HEIGHT	5
-
 /*
  * Here is the Text Field Widget class structure.
  */
-
 typedef struct _XmTextFieldClassPart {
   XtPointer extension;		/* Pointer to extension record. */
 } XmTextFieldClassPart;
-
 typedef struct _XmTextFieldClassRec {
   CoreClassPart core_class;  /* Not RectObjClassPart so I can reference
 				  core_class s */
   XmPrimitiveClassPart primitive_class;
   XmTextFieldClassPart text_class;
 } XmTextFieldClassRec;
-
 externalref XmTextFieldClassRec xmTextFieldClassRec;
-
 /*
  * On the spot support.
  */
@@ -73,11 +64,9 @@ typedef struct _OnTheSpotData {
   Boolean verify_commit;
   int pad;
 } OnTheSpotDataRec, *OnTheSpotData;
-
 /*
  * Here is the Text Field Widget instance structures.
  */
-
 typedef struct _XmTextFieldPart {
     XtCallbackList activate_callback;	       /* Command activate callback */
     XtCallbackList focus_callback;             /* Verify gain focus callback */
@@ -98,7 +87,6 @@ typedef struct _XmTextFieldPart {
     char * value;		/* pointer to widget value stored as char * */
     wchar_t * wc_value;		/* pointer to widget value stored as
 				   wchar_t * */
-
     XmFontList font_list;	/* Uses only the font portion of fontlist */
 #if USE_XFT
     XtPointer font;	        /* font retrieved from the fontlist */
@@ -108,18 +96,15 @@ typedef struct _XmTextFieldPart {
     XmTextScanType *selection_array; /* Description of what to cycle
 					through on selections */
     _XmHighlightData highlight;      /* Info on the highlighting regions. */
-
     GC gc;			/* Normal GC for drawing text and cursor */
     GC image_gc;		/* Image GC for drawing text cursor*/
     GC save_gc;                 /* GC for saving/restoring under IBeam */
-
     Pixmap ibeam_off;		/* pixmap for area under the IBeam */
     Pixmap add_mode_cursor;	/* The add mode cursor pixmap */
     Pixmap cursor;		/* The ibeam cursor stencil */
     Pixmap putback;		/* AVAILABLE: was in 1.1 but not really used */
     Pixmap stipple_tile;	/* The tile pattern for the stippled I-beam */
     Pixmap image_clip;		/* AVAILABLE: was in 1.2 but not used now */
-
     XmTextPosition cursor_position;  /* Character location of the insert
 					cursor */
     XmTextPosition new_h_offset;     /* AVAILABLE: was in 1.1 but not used */
@@ -132,23 +117,17 @@ typedef struct _XmTextFieldPart {
     XmTextPosition prim_pos_left;    /* Left primary selection position */
     XmTextPosition prim_pos_right;   /* Right primary selection position */
     XmTextPosition prim_anchor;	     /* Primary selection pivot point */
-
     XmTextPosition sec_pos_left;     /* Left secondary selection position */
     XmTextPosition sec_pos_right;    /* Right secondary selection position */
     XmTextPosition sec_anchor;	     /* Secondary selection pivot point */
-
     XmTextPosition stuff_pos;	/* Position to stuff the primary selection */
-
     Position select_pos_x;      /* x position for timer-based scrolling */
-
     Time prim_time;             /* Timestamp of primary selection */
     Time dest_time;             /* Timestamp of destination selection */
     Time sec_time;              /* Timestamp of secondary selection */
     Time last_time;             /* Time of last selection event */
-
     XtIntervalId timer_id;	/* Blinking cursor timer */
     XtIntervalId select_id;     /* Timer based scrolling identifier */
-
     int blink_rate;		/* Rate of blinking text cursor in msec */
     int selection_array_count;  /* Selection array count */
     int threshold;		/* Selection threshold */
@@ -160,10 +139,8 @@ typedef struct _XmTextFieldPart {
     int sarray_index;		/* Index into selection array */
     int max_length;		/* Maximum number of character that can be
 				   inserted into the text field widget */
-
     int max_char_size;          /* Max bytes per character in cur locale */
     short columns;		/* The number of characters in the width */
-
     Dimension margin_width;	/* Height between text borders and text */
     Dimension margin_height;	/* Width between text borders and text */
     Dimension average_char_width;   /* Average character width based on font */
@@ -173,7 +150,6 @@ typedef struct _XmTextFieldPart {
 				   text */
     Dimension font_ascent;      /* Ascent of font or fontset used by widget */
     Dimension font_descent;     /* Descent of font or fontset used by widget */
-
     Boolean resize_width;	/* Allows the widget to grow horizontally
 				   when borders are reached */
     Boolean pending_delete;	/* Delete primary selection on insert when
@@ -182,7 +158,6 @@ typedef struct _XmTextFieldPart {
     Boolean verify_bell;        /* Determines if bell is sounded when verify
 				   callback returns doit - False */
     Boolean cursor_position_visible; /* Sets visibility of insert cursor */
-
     Boolean traversed;          /* Flag used with losing focus verification to
                                    indicate a traversal key pressed event */
     Boolean add_mode;		/* Add mode for cursor movement */
@@ -223,7 +198,6 @@ typedef struct _XmTextFieldPart {
     Boolean overstrike;		/* overstrike mode for character input */
     Boolean sel_start;		/* overstrike mode for character input */
     XtPointer extension;	/* Pointer to extension record. */
-
     XtCallbackList  destination_callback;   /* Selection destination cb */
     Boolean selection_link;	/* Indicates that the action requires a
 				   link */
@@ -236,27 +210,22 @@ typedef struct _XmTextFieldPart {
     _XmTextActionRec *transfer_action;  /* to keep track of delayed action */
     /* Boolean rt_save; */  		/* used for MT work */
     OnTheSpotData onthespot;    /* data for on-the-spot im support */
-
     Boolean check_set_render_table; /* used for MT safe work */
     Boolean programmatic_highlights;	/* XmTextFieldSetHighlight called */
 #if USE_XFT
     Boolean use_xft;
 #endif
 } XmTextFieldPart;
-
 typedef struct _XmTextFieldRec {
     CorePart core;
     XmPrimitivePart primitive;
     XmTextFieldPart text;
 } XmTextFieldRec;
-
-
 /****************
  *
  * Macros for the uncached data
  *
  ****************/
-
 #define TextF_ActivateCallback(tfg)	\
 	(((XmTextFieldWidget)(tfg)) -> text.activate_callback)
 #define TextF_LosingFocusCallback(tfg)	\
@@ -317,7 +286,6 @@ typedef struct _XmTextFieldRec {
 #define	TextF_XftFont(tfg)		\
 	((XftFont*)(((XmTextFieldWidget)(tfg)) -> text.font))
 #endif
-
 /*
  * On the spot support.
  */
@@ -331,9 +299,7 @@ typedef struct _XmTextFieldRec {
 					 text.onthespot->under_verify_preedit)
 #define FVerifyCommitNeeded(tfg)		(((XmTextFieldWidget)(tfg)) -> \
 					 text.onthespot->verify_commit)
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextFieldWidgetP_h */

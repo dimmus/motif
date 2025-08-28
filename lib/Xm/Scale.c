@@ -25,15 +25,12 @@
 static char rcsid[] = "$TOG: Scale.c /main/31 1999/10/13 16:18:07 mgreess $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <stdio.h>
 #include <limits.h>
 #include <X11/Xos.h>
-
 #ifndef CSRG_BASED
 /*
  * Modification by Integrated Computer Solutions, Inc.  May 2000
@@ -66,7 +63,6 @@ static char rcsid[] = "$TOG: Scale.c /main/31 1999/10/13 16:18:07 mgreess $"
 #else
 # define nl_langinfo(radixchar)	"."
 #endif /* !CSRG_BASED */
-
 #ifdef __cplusplus
 extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #endif
@@ -74,7 +70,6 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif /* __cplusplus */
-
 #include <Xm/AtomMgr.h>
 #include <Xm/DisplayP.h>
 #include <Xm/DragC.h>
@@ -93,9 +88,7 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include "TransferI.h"
 #include "TraversalI.h"
 #include "XmI.h"
-
 #define state_flags last_value
-
 #define MESSAGE1	_XmMMsgScale_0000
 #define MESSAGE2	_XmMMsgScale_0001
 #define MESSAGE3	_XmMMsgScale_0002
@@ -103,31 +96,20 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #define MESSAGE7	_XmMMsgScale_0006
 #define MESSAGE8	_XmMMsgScale_0007
 #define MESSAGE9	_XmMMsgScale_0008
-
-
 static Region null_region = NULL;
-
-
 /* Convenience macros and definitions */
-
 #define TotalWidth(w)   (w->core.width + (w->core.border_width * 2))
 #define TotalHeight(w)  (w->core.height + (w->core.border_width * 2))
-
 #define SCROLLBAR_MAX	1000000000
 #define SCALE_VALUE_MARGIN 3
 #define SCALE_DEFAULT_MAJOR_SIZE \
 	(100 + (2 * sw->scale.highlight_thickness))
 #define SCALE_DEFAULT_MINOR_SIZE \
 	(15 + (2 * sw->scale.highlight_thickness))
-
 #define SLIDER_SIZE(sca)	((sca->scale.sliding_mode == XmTHERMOMETER)?\
 				 0:sca->scale.slider_size)
-
-
 /* this one is context dependent, args and n are used */
 #define SET(name, val) {XtSetArg (args[n], (name), (val)); n++;}
-
-
 #define LeadXTic(sb, sca) (sb->scrollBar.slider_area_x \
 		     + (Dimension) (((float) SLIDER_SIZE(sca) / 2.0) + 0.5))
 #define LeadYTic(sb, sca) (sb->scrollBar.slider_area_y \
@@ -138,10 +120,7 @@ static Region null_region = NULL;
 #define TrailYTic(sb, sca) (sb->core.height - (sb->scrollBar.slider_area_y \
 		     + sb->scrollBar.slider_area_height\
 		      - (Dimension) (((float) SLIDER_SIZE(sca) / 2.0) + 0.5)))
-
-
 /********    Static Function Declarations    ********/
-
 static void ScaleGetTitleString(
                         Widget wid,
                         int resource,
@@ -298,13 +277,8 @@ static void DragConvertCallback (Widget w,
 static void CheckSetRenderTable(Widget wid,
 				int offset,
 				XrmValue *value);
-
 /********    End Static Function Declarations    ********/
-
-
-
 /*  Resource definitions for Scale class */
-
 static XtResource resources[] =
 {
    {
@@ -312,92 +286,77 @@ static XtResource resources[] =
        sizeof (Dimension), XtOffsetOf(XmManagerRec, manager.shadow_thickness),
        XmRCallProc, (XtPointer) _XmSetThickness
    },
-
    {
        XmNvalue, XmCValue, XmRInt,
        sizeof(int), XtOffsetOf(XmScaleRec,scale.value),
        XmRImmediate, (XtPointer) XmINVALID_DIMENSION
    },
-
    {
        XmNmaximum, XmCMaximum, XmRInt,
        sizeof(int), XtOffsetOf(XmScaleRec,scale.maximum),
        XmRImmediate, (XtPointer)100
    },
-
    {
        XmNminimum, XmCMinimum, XmRInt,
        sizeof(int), XtOffsetOf(XmScaleRec,scale.minimum),
        XmRImmediate, (XtPointer)0
    },
-
    {
        XmNorientation, XmCOrientation, XmROrientation,
        sizeof(unsigned char), XtOffsetOf(XmScaleRec,scale.orientation),
        XmRImmediate, (XtPointer) XmVERTICAL
    },
-
    {
        XmNprocessingDirection, XmCProcessingDirection, XmRProcessingDirection,
        sizeof(unsigned char),
        XtOffsetOf(XmScaleRec,scale.processing_direction),
        XmRCallProc, (XtPointer) ProcessingDirectionDefault
    },
-
    {
        XmNtitleString, XmCTitleString, XmRXmString,
        sizeof(XmString), XtOffsetOf(XmScaleRec,scale.title),
        XmRImmediate, (XtPointer) NULL
    },
-
    {
 	"pri.vate","Pri.vate",XmRInt,
 	sizeof(int), XtOffsetOf(XmScaleRec,scale.last_value),
 	XmRImmediate, (XtPointer) False
    },
-
    {
        XmNfontList, XmCFontList, XmRFontList,
        sizeof(XmFontList), XtOffsetOf(XmScaleRec, scale.font_list),
        XmRCallProc, (XtPointer)CheckSetRenderTable
    },
-
    {
        XmNrenderTable, XmCRenderTable, XmRRenderTable,
        sizeof(XmRenderTable), XtOffsetOf(XmScaleRec, scale.font_list),
        XmRCallProc, (XtPointer)CheckSetRenderTable
    },
-
    {
        XmNshowValue, XmCShowValue, XmRShowValue,
        sizeof(XtEnum), XtOffsetOf(XmScaleRec,scale.show_value),
        XmRImmediate, (XtPointer) XmNONE
    },
-
    {
        XmNdecimalPoints, XmCDecimalPoints, XmRShort,
        sizeof(short), XtOffsetOf(XmScaleRec,scale.decimal_points),
        XmRImmediate, (XtPointer) 0
    },
-
    {
        XmNscaleWidth, XmCScaleWidth, XmRHorizontalDimension,
        sizeof (Dimension), XtOffsetOf(XmScaleRec, scale.scale_width),
        XmRImmediate, (XtPointer) 0
    },
-
    {
        XmNscaleHeight, XmCScaleHeight, XmRVerticalDimension,
        sizeof (Dimension), XtOffsetOf(XmScaleRec, scale.scale_height),
        XmRImmediate, (XtPointer) 0
    },
-
    {
        XmNhighlightThickness, XmCHighlightThickness, XmRHorizontalDimension,
        sizeof (Dimension), XtOffsetOf(XmScaleRec, scale.highlight_thickness),
        XmRCallProc, (XtPointer) _XmSetThickness
    },
-
    {
        XmNhighlightOnEnter, XmCHighlightOnEnter, XmRBoolean,
        sizeof (Boolean), XtOffsetOf(XmScaleRec, scale.highlight_on_enter),
@@ -409,20 +368,17 @@ static XtResource resources[] =
        XtOffsetOf(XmScaleRec,scale.value_changed_callback),
        XmRCallback, (XtPointer) NULL
    },
-
    {
       XmNconvertCallback, XmCCallback, XmRCallback, sizeof(XtCallbackList),
       XtOffsetOf(XmScaleRec, scale.convert_callback),
       XmRCallback, (XtPointer) NULL
    },
-
    {
        XmNdragCallback, XmCCallback, XmRCallback,
        sizeof(XtCallbackList),
        XtOffsetOf(XmScaleRec,scale.drag_callback),
        XmRCallback, (XtPointer) NULL
    },
-
    {
        XmNscaleMultiple, XmCScaleMultiple, XmRInt,
        sizeof(int), XtOffsetOf(XmScaleRec,scale.scale_multiple),
@@ -461,10 +417,7 @@ static XtResource resources[] =
        XmRImmediate, (XtPointer) XmNONE
    },
 };
-
-
 /*  Definition for resources that need special processing in get values  */
-
 static XmSyntheticResource syn_resources[] =
 {
     {
@@ -483,10 +436,7 @@ static XmSyntheticResource syn_resources[] =
 	XmeFromVerticalPixels, XmeToVerticalPixels
     }
 };
-
-
 /*  Scale class record definition  */
-
 static XmBaseClassExtRec baseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -512,7 +462,6 @@ static XmBaseClassExtRec baseClassExtRec = {
     (XmFocusChangeProc)NULL,            /* focusChange          */
     (XmWrapperData)NULL			/* wrapperData 		*/
 };
-
 externaldef(xmscaleclassrec) XmScaleClassRec xmScaleClassRec =
 {
    {                                            /* core_class fields    */
@@ -549,7 +498,6 @@ externaldef(xmscaleclassrec) XmScaleClassRec xmScaleClassRec =
       (XtStringProc)NULL,                       /* display_accelerator*/
       (XtPointer)&baseClassExtRec,              /* extension          */
    },
-
    {                                            /* composite_class fields */
       GeometryManager,                          /* geometry_manager   */
       ChangeManaged,                            /* change_managed     */
@@ -557,7 +505,6 @@ externaldef(xmscaleclassrec) XmScaleClassRec xmScaleClassRec =
       XtInheritDeleteChild,                     /* delete_child       */
       NULL,                                     /* extension          */
    },
-
    {                                            /* constraint_class fields */
       NULL,                                     /* resource list        */
       0,                                        /* num resources        */
@@ -567,8 +514,6 @@ externaldef(xmscaleclassrec) XmScaleClassRec xmScaleClassRec =
       (XtSetValuesFunc)NULL,                    /* set values proc      */
       NULL,                                     /* extension            */
    },
-
-
    {		/* manager_class fields */
       XtInheritTranslations,			/* translations           */
       syn_resources,				/* syn_resources      	  */
@@ -578,29 +523,22 @@ externaldef(xmscaleclassrec) XmScaleClassRec xmScaleClassRec =
       XmInheritParentProcess,                   /* parent_process         */
       NULL,					/* extension           	  */
    },
-
    {                                            /* scale class - none */
       (XtPointer) NULL                          /* extension */
    }
 };
-
 externaldef(xmscalewidgetclass) WidgetClass
 	xmScaleWidgetClass = (WidgetClass)&xmScaleClassRec;
-
-
 /* Transfer trait record */
-
 static XmConst XmTransferTraitRec ScaleTransfer = {
   0, 						/* version */
   (XmConvertCallbackProc) DragConvertCallback,	/* convertProc */
   NULL,						/* destinationProc */
   NULL,						/* destinationPreHookProc */
 };
-
 /****************************************************************/
 /************** Synthetic hook & default routines ***************/
 /****************************************************************/
-
 static void
 ScaleGetTitleString(
         Widget wid,
@@ -609,7 +547,6 @@ ScaleGetTitleString(
 {
 	XmScaleWidget scale = (XmScaleWidget) wid ;
 	Arg           al[1] ;
-
 	if (scale->scale.title == NULL) {
 	    /* mean that the title has never been set, so
 	       we should return NULL, not the label value which
@@ -622,8 +559,6 @@ ScaleGetTitleString(
 	    XtGetValues (scale->composite.children[0], al, 1);
 	}
 }
-
-
 /*********************************************************************
  *
  * ProcessingDirectionDefault
@@ -638,9 +573,7 @@ ProcessingDirectionDefault(
         XrmValue *value )
 {
 	static unsigned char direction;
-
 	value->addr = (XPointer) &direction;
-
 	if (widget->scale.orientation == XmHORIZONTAL)
         {
            if (LayoutIsRtoLM(widget))
@@ -652,9 +585,6 @@ ProcessingDirectionDefault(
 		                   initialization */
 		direction = XmMAX_ON_TOP;
 }
-
-
-
 /*********************************************************************
  *
  * SliderVisualDefault
@@ -668,21 +598,13 @@ SliderVisualDefault(
         XrmValue *value )
 {
       static XtEnum slider_visual ;
-
       value->addr = (XPointer) &slider_visual;
-
       if (widget->scale.sliding_mode == XmTHERMOMETER) {
           slider_visual = XmTROUGH_COLOR ;
       } else {
 	  slider_visual = XmSHADOWED_BACKGROUND ;
       }
-
 }
-
-
-
-
-
 /*********************************************************************
  *
  * SliderMarkDefault
@@ -696,9 +618,7 @@ SliderMarkDefault(
         XrmValue *value )
 {
       static XtEnum slider_mark ;
-
       value->addr = (XPointer) &slider_mark;
-
       if (!widget->scale.editable) slider_mark = XmNONE ;
       else {
 	  if (widget->scale.sliding_mode == XmTHERMOMETER)
@@ -707,7 +627,6 @@ SliderMarkDefault(
 	      slider_mark = XmETCHED_LINE ;
       }
 }
-
 /*********************************************************************
  *
  * EditableDefault
@@ -721,18 +640,13 @@ EditableDefault(
         XrmValue *value )
 {
       static XtEnum editable ;
-
       value->addr = (XPointer) &editable;
-
       if (widget->scale.sliding_mode == XmTHERMOMETER) {
           editable = False ;
       } else {
 	  editable = True ;
       }
-
 }
-
-
 /*
  * XmRCallProc routine for checking list.font before setting it to NULL
  * if no value is specified for both XmNrenderTable and XmNfontList.
@@ -745,7 +659,6 @@ CheckSetRenderTable(Widget wid,
 		    XrmValue *value )
 {
   XmScaleWidget sw = (XmScaleWidget)wid;
-
   /* Check if been here before */
   if (sw->scale.last_value)
       value->addr = NULL;
@@ -753,10 +666,7 @@ CheckSetRenderTable(Widget wid,
       sw->scale.last_value = True;
       value->addr = (char*)&(sw->scale.font_list);
   }
-
 }
-
-
 /************************************************************************
  *
  *  ClassInitialize
@@ -766,13 +676,9 @@ static void
 ClassInitialize( void )
 {
   baseClassExtRec.record_type = XmQmotif ;
-
   if (null_region == NULL)
     null_region = XCreateRegion();
 }
-
-
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -784,13 +690,9 @@ ClassPartInitialize(
         WidgetClass wc )
 {
    _XmFastSubclassInit (wc, XmSCALE_BIT);
-
     /* Install transfer trait */
     XmeTraitSet((XtPointer)wc, XmQTtransfer, (XtPointer) &ScaleTransfer);
 }
-
-
-
 /*********************************************************************
  *  Initialize
  *      Validate all of the argument data for the widget, create the
@@ -804,18 +706,14 @@ ValidateInitialState(
 {
 	Boolean default_value = FALSE;
         float value_range;
-
-
 	if (new_w->scale.minimum >= new_w->scale.maximum)
 	{
 		new_w->scale.minimum = 0;
 		new_w->scale.maximum = 100;
 		XmeWarning( (Widget) new_w, MESSAGE1);
 	}
-
         value_range = (float)((float)new_w->scale.maximum -
 			      (float)new_w->scale.minimum);
-
         if (value_range > (float)((float)INT_MAX / (float) 2.0))
         {
              new_w->scale.minimum = 0;
@@ -823,42 +721,35 @@ ValidateInitialState(
 	         new_w->scale.maximum = INT_MAX / 2;
             XmeWarning( (Widget) new_w, MESSAGE9);
         }
-
 	if (new_w->scale.value == XmINVALID_DIMENSION)
 	{
 		new_w->scale.value = 0;
 		default_value = True;
 	}
-
 	if (new_w->scale.value < new_w->scale.minimum)
 	{
 		new_w->scale.value = new_w->scale.minimum;
 		if (!default_value) XmeWarning( (Widget) new_w, MESSAGE2);
 	}
-
 	if (new_w->scale.value > new_w->scale.maximum)
 	{
 		new_w->scale.value = new_w->scale.minimum;
 		if (!default_value) XmeWarning( (Widget) new_w, MESSAGE3);
 	}
-
 	if(!XmRepTypeValidValue( XmRID_ORIENTATION,
 				new_w->scale.orientation, (Widget) new_w) )
 	{
 		new_w->scale.orientation = XmVERTICAL;
 	}
-
 	if (!XmRepTypeValidValue( XmRID_SHOW_VALUE,
 				new_w->scale.show_value, (Widget) new_w) )
 	    {
 		new_w->scale.show_value = XmNONE;
 	    }
-
 	if (new_w->scale.orientation == XmHORIZONTAL)
 	{
 		if ((new_w->scale.processing_direction != XmMAX_ON_RIGHT) &&
 			(new_w->scale.processing_direction != XmMAX_ON_LEFT))
-
 		{
 			new_w->scale.processing_direction = XmMAX_ON_RIGHT;
 			XmeWarning( (Widget) new_w, MESSAGE5);
@@ -873,7 +764,6 @@ ValidateInitialState(
 			XmeWarning( (Widget) new_w, MESSAGE5);
 		}
 	}
-
 	if (new_w->scale.scale_multiple > (new_w->scale.maximum
 		- new_w->scale.minimum))
 	{
@@ -894,7 +784,6 @@ ValidateInitialState(
         if (new_w->scale.scale_multiple < 1)
                 new_w->scale.scale_multiple = 1;
 }
-
 static Widget
 CreateScaleTitle(
         XmScaleWidget new_w )
@@ -902,19 +791,15 @@ CreateScaleTitle(
 	XmLabelGadget title;
 	Arg args[5];
 	int n;
-
 	/*  Create the title label gadget  */
-
 	/* title can be NULL or a valid XmString, if null,
 	   the label will use its own name as XmString */
 	n = 0;
 	XtSetArg (args[n], XmNlabelString, new_w->scale.title);	n++;
 	XtSetArg (args[n], XmNfontList, new_w->scale.font_list);	n++;
-
 	title = (XmLabelGadget) XmCreateLabelGadget( (Widget) new_w,
 						    "Title",
 		args, n);
-
 	if (new_w->scale.title) {
 	    XtManageChild ((Widget) title);
 	    new_w->scale.title = (XmString) -1 ;
@@ -923,10 +808,8 @@ CreateScaleTitle(
 	     return NULL at Getvalue time in the hook. This is pirs 3197:
 	     when you setvalues a new xmstring as title, the value of the
 	     title field, a pointer, might be the same. */
-
 	return((Widget) title);
 }
-
 static Widget
 CreateScaleScrollBar(
         XmScaleWidget new_w )
@@ -934,9 +817,7 @@ CreateScaleScrollBar(
     Widget scrollbar;
     Arg args[25];
     int n = 0;
-
     /*  Build up an arg list for and create the scrollbar  */
-
     n = 0;
     SET(XmNmaximum, SCROLLBAR_MAX);
     SET(XmNminimum, 0);
@@ -952,8 +833,6 @@ CreateScaleScrollBar(
 	SET(XmNwidth, new_w->scale.scale_width);
     if (new_w->scale.scale_height != 0)
 	SET(XmNheight, new_w->scale.scale_height);
-
-
     /* then get everything else from the scale parent */
     /* another more incestuous but also more powerful - because it
        allows customization - way of doing that would be to provide
@@ -971,16 +850,11 @@ CreateScaleScrollBar(
     SET(XmNtopShadowPixmap, new_w->manager.top_shadow_pixmap);
     SET(XmNbottomShadowPixmap, new_w->manager.bottom_shadow_pixmap);
     scrollbar = XmCreateScrollBar( (Widget) new_w, "Scrollbar", args, n);
-
     XtManageChild(scrollbar);
-
     XtAddCallback(scrollbar, XmNvalueChangedCallback, ValueChanged, NULL);
     XtAddCallback(scrollbar, XmNdragCallback, ValueChanged, NULL);
-
     return(scrollbar);
 }
-
-
 /************************************************************************
  *
  *  GetForegroundGC
@@ -993,28 +867,24 @@ GetForegroundGC(
 {
    XGCValues values;
    XtGCMask  valueMask;
-
    valueMask = GCForeground | GCBackground | GCGraphicsExposures;
    values.foreground = sw->manager.foreground;
    values.background = sw->core.background_pixel;
    values.graphics_exposures = False;
    if (sw->scale.font_struct)
      values.font = sw->scale.font_struct->fid, valueMask |= GCFont;
-
 /*   if ((sw->core.background_pixmap != None) &&
        (sw->core.background_pixmap != XmUNSPECIFIED_PIXMAP)) {
        valueMask |= GCFillStyle | GCTile ;
        values.fill_style = FillTiled;
        values.tile = sw->core.background_pixmap;
    }*/
-
    /* Added dynamic clip mask & don't care about origion to merge with
       Label[Gadget] and List GC:s */
    sw->scale.foreground_GC = XtAllocateGC ((Widget) sw, 0, valueMask, &values,
 					   GCClipMask,
 					   GCClipXOrigin | GCClipYOrigin);
 }
-
 static void
 Initialize(
         Widget rw,
@@ -1024,22 +894,16 @@ Initialize(
 {
     XmScaleWidget req = (XmScaleWidget) rw ;
     XmScaleWidget new_w = (XmScaleWidget) nw ;
-
     new_w->scale.value_region = XCreateRegion();
-
     /* Validate the incoming data  */
     ValidateInitialState(req, new_w);
-
     if (new_w->scale.font_list == NULL)
 	new_w->scale.font_list =
 	    XmeGetDefaultRenderTable( (Widget) new_w, XmLABEL_FONTLIST);
-
     /*  Set the scale font struct used for interactive value display  */
     /*  to the 0th font in the title font list.  If not font list is  */
     /*  provides, open up fixed and use that.                         */
-
     new_w->scale.font_list = XmFontListCopy(new_w->scale.font_list);
-
     if (new_w->scale.font_list) {
         if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list,
 					  &new_w->scale.font_struct))
@@ -1052,25 +916,18 @@ Initialize(
 	    new_w->scale.font_struct = XLoadQueryFont (XtDisplay (new_w), "*");
 #endif
     }
-
     (void) CreateScaleTitle(new_w);
     (void) CreateScaleScrollBar(new_w);
-
     /*  Get the foreground GC and initialize internal variables  */
-
     GetForegroundGC (new_w);
-
     new_w->scale.show_value_x = 0;
     new_w->scale.show_value_y = 0;
     new_w->scale.show_value_width = 0;
     new_w->scale.show_value_height = 0;
     new_w->scale.state_flags = 0 ;
-
     /* add the handler that drags the value shown in the scale window */
     XtAddEventHandler(nw, ButtonPressMask, False, StartDrag, NULL);
 }
-
-
 /************************************************************************
  *
  *  Redisplay
@@ -1086,15 +943,9 @@ Redisplay(
         Region region )
 {
     XmScaleWidget sw = (XmScaleWidget) wid ;
-
     XmeRedisplayGadgets( (Widget) sw, event, region);
-
     ShowValue (sw);
 }
-
-
-
-
 /************************************************************************
  *
  *  Resize
@@ -1107,30 +958,22 @@ Resize(
 {
     XmScaleWidget sw = (XmScaleWidget) wid ;
     XtWidgetGeometry desired ;
-
     /* Find out what the best possible answer would be, the layout
        routines use this optimum for placing the children */
     desired.width =  0;
     desired.height =  0;
     GetScaleSize(sw, &desired.width, &desired.height);
-
     if (sw->scale.orientation == XmHORIZONTAL)
 	LayoutHorizontalScale(sw, &desired, NULL);
     else
 	LayoutVerticalScale(sw, &desired, NULL);
-
     /* Scale has a gravity None, so resize will always generate redisplay */
 }
-
-
-
-
 /************************************************************************
  *
  *  SetValues stuff
  *
  ************************************************************************/
-
 static void
 ValidateInputs(
         XmScaleWidget cur,
@@ -1138,14 +981,12 @@ ValidateInputs(
 {
    float value_range;
    /* Validate the incoming data  */
-
    if (new_w->scale.minimum >= new_w->scale.maximum)
    {
       new_w->scale.minimum = cur->scale.minimum;
       new_w->scale.maximum = cur->scale.maximum;
       XmeWarning( (Widget) new_w, MESSAGE1);
    }
-
    value_range = (float)((float)new_w->scale.maximum -
 			 (float)new_w->scale.minimum);
    if (value_range > (float)((float)INT_MAX / (float) 2.0))
@@ -1155,40 +996,31 @@ ValidateInputs(
              new_w->scale.maximum = INT_MAX / 2;
         XmeWarning( (Widget) new_w, MESSAGE9);
    }
-
    if (new_w->scale.value < new_w->scale.minimum)
    {
       new_w->scale.value = new_w->scale.minimum;
       XmeWarning( (Widget) new_w, MESSAGE2);
    }
-
    if (new_w->scale.value > new_w->scale.maximum)
    {
       new_w->scale.value = new_w->scale.maximum;
       XmeWarning( (Widget) new_w, MESSAGE3);
    }
-
    if(!XmRepTypeValidValue( XmRID_SLIDING_MODE,
 			   new_w->scale.sliding_mode, (Widget) new_w) )
    {
       new_w->scale.sliding_mode = cur->scale.sliding_mode;
    }
-
-
    if(!XmRepTypeValidValue( XmRID_ORIENTATION,
 			   new_w->scale.orientation, (Widget) new_w)    )
        {
        new_w->scale.orientation = cur->scale.orientation;
    }
-
-
    if(!XmRepTypeValidValue( XmRID_SHOW_VALUE,
 			   new_w->scale.show_value, (Widget) new_w)    )
        {
        new_w->scale.show_value = cur->scale.show_value;
    }
-
-
    if (new_w->scale.orientation == XmHORIZONTAL)
    {
       if (new_w->scale.processing_direction != XmMAX_ON_LEFT &&
@@ -1207,7 +1039,6 @@ ValidateInputs(
          XmeWarning( (Widget) new_w, MESSAGE5);
       }
    }
-
    if (new_w->scale.scale_multiple != cur->scale.scale_multiple)
        {
 	   if (new_w->scale.scale_multiple > (new_w->scale.maximum
@@ -1231,7 +1062,6 @@ ValidateInputs(
 	       new_w->scale.scale_multiple = 1;
        }
 }
-
 static void
 HandleTitle(
         XmScaleWidget cur,
@@ -1240,20 +1070,16 @@ HandleTitle(
 {
 	Arg args[5];
 	int n = 0;
-
 	/* cur title is either NULL or (-1), as set in CreateScaleTitle,
 	   so diff are always pertinent */
 	/* new title can be NULL or a valid xmstring */
 	if (new_w->scale.title != cur->scale.title) {
 	    XtSetArg (args[n], XmNlabelString, new_w->scale.title);	n++;
 	}
-
 	if (new_w->scale.font_list != cur->scale.font_list) {
 	    XtSetArg (args[n], XmNfontList, new_w->scale.font_list);	n++;
 	}
-
 	if (n) XtSetValues (new_w->composite.children[0], args, n);
-
 	if (new_w->scale.title != cur->scale.title) {
 	    if (new_w->scale.title != NULL) {
 		/* new title differs from old one and is no null, so
@@ -1267,7 +1093,6 @@ HandleTitle(
 		XtUnmanageChild (new_w->composite.children[0]);
 	}
 }
-
 static void
 HandleScrollBar(
         XmScaleWidget cur,
@@ -1278,7 +1103,6 @@ HandleScrollBar(
 	int n = 0;
 	Widget scrollbar = new_w->composite.children[1];
 	int slider_size, increment, page, value ;
-
 	/* reset any attributes of the scrollbar */
 	SET(XmNshowArrows, new_w->scale.show_arrows);
 	SET(XmNorientation, new_w->scale.orientation);
@@ -1291,12 +1115,10 @@ HandleScrollBar(
 	SET(XmNsliderMark, new_w->scale.slider_mark);
 	SET(XmNsliderVisual, new_w->scale.slider_visual);
 	SET(XmNeditable, new_w->scale.editable);
-
 	/* there is an issue of propagation here, whether or not
 	   we want to force it. There is a behavior compatibility
 	   issue if we decide to change the current situation */
 	SET(XmNsensitive, new_w->core.sensitive);
-
 	SET(XmNhighlightColor, new_w->manager.highlight_color);
         SET(XmNhighlightPixmap, new_w->manager.highlight_pixmap);
 	SET(XmNhighlightThickness, new_w->scale.highlight_thickness);
@@ -1308,19 +1130,14 @@ HandleScrollBar(
 	SET(XmNtopShadowPixmap, new_w->manager.top_shadow_pixmap);
 	SET(XmNbottomShadowColor, new_w->manager.bottom_shadow_color);
 	SET(XmNbottomShadowPixmap, new_w->manager.bottom_shadow_pixmap);
-
 	CalcScrollBarData(new_w, &value, &slider_size, &increment, &page);
 	SET(XmNvalue, value);
 	SET(XmNsliderSize, slider_size);
 	SET(XmNincrement, increment);
 	SET(XmNpageIncrement, page);
-
 	XtSetValues (scrollbar, args, n);
-
 	SetScrollBarData(new_w);
 }
-
-
 /************************************************************************
  *
  *  SetValues class method
@@ -1338,14 +1155,10 @@ SetValues(
     XmScaleWidget req = (XmScaleWidget) rw ;
     XmScaleWidget new_w = (XmScaleWidget) nw ;
     Boolean redisplay = False ;
-
 #define DIFF(x) ((new_w->x) != (cur->x))
-
     /* this flag is checked in the GM */
     new_w->scale.state_flags |= FROM_SET_VALUE ;
-
     if (DIFF(scale.orientation)) {
-
 	/* Make sure that processing direction tracks orientation */
 	if (!DIFF(scale.processing_direction)) {
 	    if ((new_w->scale.orientation == XmHORIZONTAL) &&
@@ -1361,39 +1174,28 @@ SetValues(
 		     (cur->scale.processing_direction == XmMAX_ON_RIGHT))
 		new_w->scale.processing_direction = XmMAX_ON_TOP;
 	}
-
 	/* Make scale_width and scale_height track orientation too */
 	if ((new_w->scale.scale_width == cur->scale.scale_width) &&
 	    (new_w->scale.scale_height == cur->scale.scale_height)) {
 	    new_w->scale.scale_width = cur->scale.scale_height;
 	    new_w->scale.scale_height = cur->scale.scale_width;
 	}
-
     }
-
     ValidateInputs(cur, new_w);
-
     HandleTitle(cur, req, new_w);
     HandleScrollBar(cur, req, new_w);
-
 	/*  Set the font struct for the value displayed  */
-
     if (DIFF(scale.font_list)) {
-
 #if !USE_XFT
 	if ((cur->scale.font_list == NULL) &&
 	    (cur->scale.font_struct != NULL))
 	    XFreeFont(XtDisplay (cur), cur->scale.font_struct);
 #endif
-
         if (cur->scale.font_list) XmFontListFree(cur->scale.font_list);
-
 	if (new_w->scale.font_list == NULL)
 	    new_w->scale.font_list =
 		XmeGetDefaultRenderTable( (Widget) new_w, XmLABEL_FONTLIST);
-
 	new_w->scale.font_list = XmFontListCopy(new_w->scale.font_list);
-
 	if (new_w->scale.font_list != NULL) {
 	    if (!XmeRenderTableGetDefaultFont(new_w->scale.font_list,
 					      &new_w->scale.font_struct))
@@ -1408,13 +1210,10 @@ SetValues(
 		    XLoadQueryFont(XtDisplay(new_w), "*");
 #endif
 	}
-
 	XtReleaseGC ((Widget) new_w, new_w->scale.foreground_GC);
 	GetForegroundGC (new_w);
 	redisplay = True;
     }
-
-
     if (XtIsRealized((Widget)new_w) &&
 	( DIFF(scale.font_list) ||
 	DIFF(scale.highlight_thickness) ||
@@ -1430,22 +1229,17 @@ SetValues(
 	(DIFF(scale.show_value) &&
 	 ((new_w->scale.show_value == XmNONE) ||
 	  (cur->scale.show_value == XmNONE))))) {
-
 	Dimension width=0, height=0 ;
 	    /*
 	     * Re-calculate the size of the Scale if a new size was not
 	     * specified, and only if realized.
              */
-
 	GetScaleSize (new_w, &width, &height);
-
 	if (new_w->core.width == cur->core.width)
 	    new_w->core.width = width ;
-
 	if (new_w->core.height == cur->core.height)
 	    new_w->core.height = height ;
     }
-
     if (XtIsRealized((Widget)new_w) &&
 	(DIFF(scale.sliding_mode) ||
 	/* minor show value change only */
@@ -1454,17 +1248,13 @@ SetValues(
 	 (cur->scale.show_value != XmNONE)) ||
 	DIFF(scale.show_arrows))) {
 	XtWidgetProc resize;
-
 	/* generate a relayout and ask for redisplay, only if realized */
 	_XmProcessLock();
 	resize = xmScaleClassRec.core_class.resize;
 	_XmProcessUnlock();
-
 	(* resize) (nw);
 	redisplay = True;
     }
-
-
     if (XtIsRealized((Widget)new_w) &&
 	(DIFF(scale.decimal_points) ||
 	DIFF(scale.value) ||
@@ -1474,10 +1264,7 @@ SetValues(
 	DIFF(scale.show_value))) {
 	ShowValue(new_w);
     }
-
-
     /*  See if the GC needs to be regenerated  */
-
     if (DIFF(manager.foreground) ||
 	DIFF(core.background_pixel)||
 	DIFF(core.background_pixmap)) {
@@ -1485,16 +1272,11 @@ SetValues(
 	GetForegroundGC (new_w);
 	redisplay = True;
     }
-
     /* unset the GM flag */
     new_w->scale.state_flags &= ~FROM_SET_VALUE ;
-
     return (redisplay);
 #undef DIFF
 }
-
-
-
 /************************************************************************
  *
  *  Realize
@@ -1510,23 +1292,17 @@ Realize(
         XSetWindowAttributes *attributes )
 {
    Mask valueMask = *p_valueMask;
-
    /*	Make sure height and width are not zero.
     */
    if (!XtWidth(w)) XtWidth(w) = 1 ;
    if (!XtHeight(w)) XtHeight(w) = 1 ;
-
    valueMask |= CWBitGravity | CWDontPropagate;
    attributes->bit_gravity = ForgetGravity;
    attributes->do_not_propagate_mask =
       ButtonPressMask | ButtonReleaseMask |
       KeyPressMask | KeyReleaseMask | PointerMotionMask;
-
    XtCreateWindow (w, InputOutput, CopyFromParent, valueMask, attributes);
 }
-
-
-
 /************************************************************************
  *
  *  Destroy
@@ -1538,23 +1314,15 @@ Destroy(
         Widget wid )
 {
     XmScaleWidget sw = (XmScaleWidget) wid ;
-
     XtReleaseGC ((Widget) sw, sw->scale.foreground_GC);
-
 #if USE_XFT
     if (sw->scale.font_list == NULL && sw->scale.font_struct != NULL)
 	XFreeFont (XtDisplay (sw), sw->scale.font_struct);
 #endif
-
     if (sw->scale.font_list) XmFontListFree(sw->scale.font_list);
-
     if (sw->scale.value_region)
       XDestroyRegion(sw->scale.value_region);
 }
-
-
-
-
 /************************************************************************
  *
  *  QueryGeometry
@@ -1575,14 +1343,10 @@ QueryGeometry(
 	desired->width = 0 ;
 	desired->height = 0 ;
     }
-
     GetScaleSize ((XmScaleWidget) widget, &desired->width, &desired->height);
-
     /* this function will set CWidth and CHeight */
     return XmeReplyToQueryGeometry(widget, intended, desired) ;
 }
-
-
 /************************************************************************
  *
  *  GeometryManager
@@ -1597,40 +1361,27 @@ GeometryManager(
 {
     XtWidgetGeometry desired ;
     XmScaleWidget sw = (XmScaleWidget) XtParent(w) ;
-
     if (IsQueryOnly(request)) return XtGeometryYes;
-
-
     if (IsWidth(request)) w->core.width = request->width;
     if (IsHeight(request)) w->core.height = request->height;
     if (IsBorder(request)) w->core.border_width = request->border_width;
-
     /* no need to do any layout if it is our change, Xt will
      generate one at the end */
     if (sw->scale.state_flags & FROM_SET_VALUE) return XtGeometryYes;
-
-
     /* Find out what the best possible answer would be */
     desired.width =  0;
     desired.height =  0;
     GetScaleSize(sw, &desired.width, &desired.height);
-
     /* ask that to our parent */
     desired.request_mode = (CWWidth | CWHeight);
     _XmMakeGeometryRequest((Widget) sw, &desired);
-
     /* layout using the new size (accepted or not) */
     if (sw->scale.orientation == XmHORIZONTAL)
 	LayoutHorizontalScale(sw, &desired, w);
     else /* sw->scale.orientation == XmVERTICAL */
 	LayoutVerticalScale(sw, &desired, w);
-
     return XtGeometryYes;
 }
-
-
-
-
 /*********************************************************************
  *  ChangeManaged
  *     Layout children.
@@ -1643,20 +1394,16 @@ ChangeManaged(
     XmScaleWidget sw = (XmScaleWidget) wid ;
     XtWidgetGeometry desired ;
     Dimension tmp_width = 0, tmp_height = 0 ;
-
     GetScaleSize(sw, &tmp_width, &tmp_height);
     desired.width = tmp_width ;
     desired.height = tmp_height ;
-
     if (!XtIsRealized((Widget)sw))  {
 	/* the first time, only attemps to change non specified sizes */
 	if (XtWidth(sw)) desired.width = XtWidth(sw) ;
 	if (XtHeight(sw)) desired.height = XtHeight(sw) ;
     }
-
     desired.request_mode = (CWWidth | CWHeight);
     _XmMakeGeometryRequest((Widget) sw, &desired);
-
     /* layout with no instigator, but with our real preferred size */
     desired.width = tmp_width ;
     desired.height = tmp_height ;
@@ -1664,14 +1411,8 @@ ChangeManaged(
 	LayoutHorizontalScale(sw, &desired, NULL);
     else
 	LayoutVerticalScale(sw, &desired, NULL);
-
     XmeNavigChangeManaged( (Widget) sw);
 }
-
-
-
-
-
 static void
 GetScaleSize(
         XmScaleWidget sw,
@@ -1679,22 +1420,17 @@ GetScaleSize(
         Dimension *h )
 {
     Dimension sav_w, sav_h;
-
     sav_w = XtWidth(sw);
     sav_h = XtHeight(sw);
-
     /* Mark the scale as anything goes */
     XtWidth(sw) = *w;
     XtHeight(sw) = *h;
-
     /* only override the pointed dimensions if they are null */
-
     if (sw->scale.orientation == XmHORIZONTAL)  {
 	if (!*w) {
 	    *w = MAX(TitleWidth(sw),
 		     MajorLeadPad(sw) + ScrollWidth(sw) + MajorTrailPad(sw));
 	}
-
 	if (!*h) {
 	    *h = MaxLabelHeight(sw) + ValueTroughHeight(sw)
 		+ ScrollHeight(sw) + TitleHeight(sw);
@@ -1706,24 +1442,18 @@ GetScaleSize(
 		+ ScrollWidth(sw) + TitleWidth(sw);
 	    if (sw->scale.show_value) *w += SCALE_VALUE_MARGIN;
 	}
-
 	if (!*h) {
 	    *h = MAX(TitleHeight(sw),
 		     MajorLeadPad(sw) + ScrollHeight(sw) + MajorTrailPad(sw));
 	}
     }
-
     /* Don't ever desire 0 dimensions */
     if (!*w) *w = 1;
     if (!*h) *h = 1;
-
     /* Restore the current values */
     XtWidth(sw) = sav_w;
     XtHeight(sw) = sav_h;
-
 }
-
-
 static Dimension
 MaxLabelWidth(
         XmScaleWidget sw )
@@ -1731,7 +1461,6 @@ MaxLabelWidth(
     register int i;
     register Widget c;
     Dimension max = 0;
-
     /* start at 2 to skip the title and the scrollbar */
     for ( i = 2; i < sw->composite.num_children; i++)
 	{
@@ -1740,10 +1469,8 @@ MaxLabelWidth(
 		!((Object)c)->object.being_destroyed)
 		ASSIGN_MAX(max, TotalWidth(c));
 	}
-
     return (max);
 }
-
 static Dimension
 MaxLabelHeight(
         XmScaleWidget sw )
@@ -1751,7 +1478,6 @@ MaxLabelHeight(
     register int i;
     register Widget c;
     Dimension max = 0;
-
     /* start at 2 to skip the title and the scrollbar */
     for ( i = 2; i < sw->composite.num_children; i++)
 	{
@@ -1760,10 +1486,8 @@ MaxLabelHeight(
 		!((Object)c)->object.being_destroyed)
 		ASSIGN_MAX(max, TotalHeight(c));
 	}
-
     return (max);
 }
-
 static Dimension
 ValueTroughHeight(
         XmScaleWidget sw)
@@ -1780,7 +1504,6 @@ ValueTroughHeight(
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
     XCharStruct overall_return;
-
 #define GET_MAX(tmp, max_or_min_value) {\
     if (sw->scale.decimal_points)\
 	    sprintf(buff, "%d%c", max_or_min_value,\
@@ -1793,7 +1516,6 @@ ValueTroughHeight(
 	    \
 	    tmp = ascent + descent;\
 	    }
-
     if (sw->scale.show_value) {
 	GET_MAX(tmp_max, sw->scale.maximum) ;
 	GET_MAX(tmp_min, sw->scale.minimum) ;
@@ -1805,7 +1527,6 @@ ValueTroughHeight(
 #undef GET_MAX
 #endif
 }
-
 static Dimension
 ValueTroughAscent(
         XmScaleWidget sw)
@@ -1822,7 +1543,6 @@ ValueTroughAscent(
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
     XCharStruct overall_return;
-
 #define GET_MAX(tmp, max_or_min_value) {\
     if (sw->scale.decimal_points)\
 	    sprintf(buff, "%d%c", max_or_min_value,\
@@ -1835,7 +1555,6 @@ ValueTroughAscent(
 	    \
 	    tmp = ascent;\
 	    }
-
     if (sw->scale.show_value) {
 	GET_MAX(tmp_max, sw->scale.maximum) ;
 	GET_MAX(tmp_min, sw->scale.minimum) ;
@@ -1847,7 +1566,6 @@ ValueTroughAscent(
 #undef GET_MAX
 #endif
 }
-
 static Dimension
 ValueTroughDescent(
         XmScaleWidget sw)
@@ -1864,7 +1582,6 @@ ValueTroughDescent(
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
     XCharStruct overall_return;
-
 #define GET_MAX(tmp, max_or_min_value) {\
     if (sw->scale.decimal_points)\
 	    sprintf(buff, "%d%c", max_or_min_value,\
@@ -1877,7 +1594,6 @@ ValueTroughDescent(
 	    \
 	    tmp = descent;\
 	    }
-
     if (sw->scale.show_value) {
 	GET_MAX(tmp_max, sw->scale.maximum) ;
 	GET_MAX(tmp_min, sw->scale.minimum) ;
@@ -1889,7 +1605,6 @@ ValueTroughDescent(
 #undef GET_MAX
 #endif
 }
-
 static Dimension
 ValueTroughWidth(
         XmScaleWidget sw)
@@ -1898,7 +1613,6 @@ ValueTroughWidth(
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
     XCharStruct overall_return;
-
 #if USE_XFT
 #define GET_MAX(tmp, max_or_min_value) {\
     XmString tmp_str;\
@@ -1925,7 +1639,6 @@ ValueTroughWidth(
 	    tmp = overall_return.rbearing - overall_return.lbearing;\
 	    }
 #endif
-
     if (sw->scale.show_value) {
 	GET_MAX(tmp_max, sw->scale.maximum) ;
 	GET_MAX(tmp_min, sw->scale.minimum) ;
@@ -1936,45 +1649,32 @@ ValueTroughWidth(
 	return (0);
 #undef GET_MAX
 }
-
-
 static Dimension
 TitleWidth(
         XmScaleWidget sw )
 {
     register Dimension tmp = 0;
     register Widget title_widget = sw->composite.children[0];
-
     if (XtIsManaged(title_widget)) {
 	tmp = TotalWidth(title_widget) ;
-
 	if (sw->scale.orientation == XmVERTICAL)
 	    tmp += (TotalHeight(title_widget)) >> 2;
     }
-
     return(tmp);
 }
-
-
-
 static Dimension
 TitleHeight(
         XmScaleWidget sw )
 {
     register Dimension tmp = 0;
     register Widget title_widget = sw->composite.children[0];
-
     if (XtIsManaged(title_widget)) {
 	tmp = TotalHeight(title_widget);
-
 	if (sw->scale.orientation == XmHORIZONTAL)
 	    tmp += (TotalHeight(title_widget)) >> 2;
     }
-
     return(tmp);
 }
-
-
 static Cardinal
 NumManaged(
         XmScaleWidget sw,
@@ -1983,7 +1683,6 @@ NumManaged(
 {
     Cardinal i, num_managed = 0 ;
     Widget first_tic = NULL, last_tic = NULL, c  ;
-
     for (i = 2; i < sw->composite.num_children; i++) {
 	c = sw->composite.children[i];
 	if (XtIsManaged(c) &&
@@ -1993,14 +1692,10 @@ NumManaged(
 	    last_tic = c ;
 	}
     }
-
     if (first_man) *first_man = first_tic ;
     if (last_man) *last_man = last_tic ;
-
     return num_managed + 2 ;
 }
-
-
 static Dimension
 MajorLeadPad(
         XmScaleWidget sw )
@@ -2009,9 +1704,7 @@ MajorLeadPad(
     int tmp1 = 0, tmp2;
     Cardinal num_managed ;
     Widget first_tic  ;
-
     num_managed = NumManaged(sw, &first_tic, NULL);
-
     if (num_managed > 3) {
 	if (sw->scale.orientation == XmHORIZONTAL)
 	    tmp1 = (TotalWidth(first_tic) / 2)
@@ -2019,7 +1712,6 @@ MajorLeadPad(
 	else
 	    tmp1 = (TotalHeight(first_tic) / 2)
 		- LeadYTic(sb, sw);
-
     } else if (num_managed == 3) {
 	/*
 	 * This is a potential non-terminal recursion.
@@ -2028,7 +1720,6 @@ MajorLeadPad(
 	 * problem and has guards around the call to this procedure.
 	 * Modify with care.
 	 */
-
 	if (sw->scale.orientation == XmHORIZONTAL)
 	    tmp1 = ((int)TotalWidth(first_tic) -
 		    (int)ScrollWidth(sw))/2;
@@ -2036,9 +1727,7 @@ MajorLeadPad(
 	    tmp1 = ((int)TotalHeight(first_tic) -
 		    (int)ScrollHeight(sw))/2;
     }
-
     tmp1 -= (sb->primitive.highlight_thickness + sb->primitive.shadow_thickness);
-
     if (sw->scale.orientation == XmHORIZONTAL)
 	tmp2 = ((int)ValueTroughWidth(sw) / 2) - (int)LeadXTic(sb, sw);
     else {
@@ -2047,18 +1736,12 @@ MajorLeadPad(
 	else
 	    tmp2 = ((int)ValueTroughHeight(sw) / 2) - (int)LeadYTic(sb, sw);
     }
-
     tmp2 -= (sb->primitive.highlight_thickness
 	     + sb->primitive.shadow_thickness);
-
     ASSIGN_MAX(tmp1, 0);
     ASSIGN_MAX(tmp2, 0);
-
     return(MAX(tmp1, tmp2));
 }
-
-
-
 static Dimension
 MajorTrailPad(
         XmScaleWidget sw )
@@ -2067,9 +1750,7 @@ MajorTrailPad(
     int tmp1 = 0, tmp2;
     Cardinal num_managed ;
     Widget first_tic, last_tic ;
-
     num_managed = NumManaged(sw, &first_tic, &last_tic);
-
     if (num_managed > 3) {
 	if (sw->scale.orientation == XmHORIZONTAL)
 	    tmp1 = ((int)TotalWidth(last_tic) / 2)
@@ -2085,7 +1766,6 @@ MajorTrailPad(
 	 * problem and has guards around the call to this procedure.
 	 * Modify with care.
 	 */
-
 	if (sw->scale.orientation == XmHORIZONTAL)
 	    tmp1 = ((int)TotalWidth(first_tic) -
 		    (int)ScrollWidth(sw))/2;
@@ -2093,10 +1773,8 @@ MajorTrailPad(
 	    tmp1 = ((int)TotalHeight(first_tic) -
 		    (int)ScrollHeight(sw))/2;
     }
-
     tmp1 -= (sb->primitive.highlight_thickness
 		+ sb->primitive.shadow_thickness);
-
     if (sw->scale.orientation == XmHORIZONTAL)
 	tmp2 = ((int)ValueTroughWidth(sw) / 2) - (int)TrailXTic(sb, sw);
     else {
@@ -2105,24 +1783,17 @@ MajorTrailPad(
 	else
 	    tmp2 = ((int)ValueTroughHeight(sw) / 2) - (int)TrailYTic(sb, sw);
     }
-
     tmp2 += (sb->primitive.highlight_thickness
 	     + sb->primitive.shadow_thickness);
-
     ASSIGN_MAX(tmp1, 0);
     ASSIGN_MAX(tmp2, 0);
-
     return(MAX(tmp1, tmp2));
 }
-
-
-
 static Dimension
 ScrollWidth(
         XmScaleWidget sw )
 {
     int tmp = 0;
-
     if (sw->scale.orientation == XmVERTICAL) {
 	if (!(tmp = sw->scale.scale_width))
 	    tmp = SCALE_DEFAULT_MINOR_SIZE;
@@ -2132,7 +1803,6 @@ ScrollWidth(
 	if (!(tmp = sw->scale.scale_width)) {
 	    if (sw->core.width != 0) {
 		Cardinal num_managed ;
-
 		num_managed = NumManaged(sw, NULL, NULL);
 		/* Have to catch an indirect recursion here */
 		if (num_managed > 3)
@@ -2143,7 +1813,6 @@ ScrollWidth(
 		    int tmp1, tmp2;
 		    XmScrollBarWidget sb = (XmScrollBarWidget)
 			sw->composite.children[1];
-
 		    tmp1 = ((int)ValueTroughWidth(sw) / 2) -
 			(int)LeadXTic(sb, sw);
 		    tmp2 = ((int)ValueTroughWidth(sw) / 2) -
@@ -2154,46 +1823,36 @@ ScrollWidth(
 		}
 	    }
 	}
-
 	if (tmp <= 0) {
 	    Cardinal num_managed ;
-
 	    num_managed = NumManaged(sw, NULL, NULL);
-
 	    if (num_managed > 2) {
 		/* Have to catch an indirect recursion here */
 		if (num_managed > 3) {
 		    Dimension tic, diff;
 		    XmScrollBarWidget sb = (XmScrollBarWidget)
 			sw->composite.children[1];
-
 		    tmp = MAX((num_managed - 2)* MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
 		    tic = sb->primitive.highlight_thickness
 			+ sb->primitive.shadow_thickness
 			    + (Dimension) (((float) SLIDER_SIZE( sw) / 2.0)
 					   + 0.5);
-
 		    diff = tic - ((int)MaxLabelWidth(sw) / 2);
-
 		    if (diff > 0) tmp+= (2 * diff);
 		}
 		else
 			tmp = MAX(MaxLabelWidth(sw), SCALE_DEFAULT_MAJOR_SIZE);
 	    }
 	}
-
 	if (tmp <= 0) tmp = SCALE_DEFAULT_MAJOR_SIZE;
     }
-
     return((Dimension) tmp);
 }
-
 static Dimension
 ScrollHeight(
         XmScaleWidget sw )
 {
     int tmp;
-
     if (sw->scale.orientation == XmHORIZONTAL) {
 	if (!(tmp = sw->scale.scale_height))
 	    tmp = SCALE_DEFAULT_MINOR_SIZE;
@@ -2204,7 +1863,6 @@ ScrollHeight(
 	    if (sw->core.height != 0)
 		{
 		    Cardinal num_managed ;
-
 		    num_managed = NumManaged(sw, NULL, NULL);
 		    /* Have to catch an indirect recursion here */
 		    if (num_managed > 3)
@@ -2215,54 +1873,41 @@ ScrollHeight(
 			    int tmp1, tmp2;
 			    XmScrollBarWidget sb = (XmScrollBarWidget)
 				sw->composite.children[1];
-
 			    tmp1 = ((int)ValueTroughHeight(sw) / 2) -
 			    			(int)LeadYTic(sb, sw);
 			    tmp2 = ((int)ValueTroughHeight(sw) / 2) -
 			    			(int)TrailYTic(sb, sw);
-
 			    ASSIGN_MAX(tmp1, 0);
 			    ASSIGN_MAX(tmp2, 0);
 			    tmp = (int)sw->core.height - tmp1 - tmp2;
 		    }
 		}
 	}
-
 	if (tmp <= 0){
 	    Cardinal num_managed ;
-
 	    num_managed = NumManaged(sw, NULL, NULL);
-
 	    if (num_managed > 2){
 		/* Have to catch an indirect recursion here */
 		    if (num_managed > 3) {
 			Dimension tic, diff;
 			XmScrollBarWidget sb = (XmScrollBarWidget)
 			    sw->composite.children[1];
-
 			tmp = MAX((num_managed - 2)* MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
 			tic = sb->primitive.highlight_thickness
 			    + sb->primitive.shadow_thickness
 				+ (Dimension) (((float) SLIDER_SIZE(sw) / 2.0)
 					       + 0.5);
-
 			diff = tic - (MaxLabelHeight(sw) / 2);
-
 			if (diff > 0) tmp+= (2 * diff);
 		    }
 		else
 		    tmp = MAX(MaxLabelHeight(sw), SCALE_DEFAULT_MAJOR_SIZE);
 	    }
 	}
-
 	if (tmp <= 0) tmp = SCALE_DEFAULT_MAJOR_SIZE;
     }
-
     return((Dimension)tmp);
 }
-
-
-
 static void
 LayoutHorizontalLabels(
 		       XmScaleWidget sw,
@@ -2278,18 +1923,14 @@ LayoutHorizontalLabels(
 	int i;
 	Position x, y, y1;
 	Cardinal num_managed ;
-
 	y1 = labelBox->y + labelBox->height;
-
 	num_managed = NumManaged(sw, &first_tic, NULL);
-
 	if (num_managed > 3)
 	{
 	  first_tic_dim = scrollBox->x + LeadXTic(sb, sw);
 	  last_tic_dim = (scrollBox->x + sb->core.width) - TrailXTic(sb, sw);
 	  tic_interval = (float)(last_tic_dim - first_tic_dim)
 	    / (num_managed - 3);
-
 	  for (i = 2, tmp = first_tic_dim;
 	       i < sw->composite.num_children;
 	       i++)
@@ -2299,10 +1940,8 @@ LayoutHorizontalLabels(
 		w = sw->composite.children[sw->composite.num_children - i + 1];
 	      else
 		w = sw->composite.children[i];
-
 	      if (!XtIsManaged(w) ||
 		  ((Object)w)->object.being_destroyed) continue ;
-
 	      x = (int) tmp - (TotalWidth(w) / 2);
 	      y = y1 - TotalHeight(w);
 	      if (instigator != w)
@@ -2313,7 +1952,6 @@ LayoutHorizontalLabels(
 		w->core.x = x ;
 		w->core.y = y ;
 	      }
-
 	      tmp += tic_interval ;
 	    }
 	}
@@ -2323,7 +1961,6 @@ LayoutHorizontalLabels(
 		y = y1 - TotalHeight(w);
 		if (XtIsManaged(w) &&
 		    !((Object)w)->object.being_destroyed) {
-
 		    tmp = (sb->scrollBar.slider_area_width -
 			   TotalWidth(w)) / 2;
 		    x = scrollBox->x + sb->scrollBar.slider_area_x
@@ -2339,7 +1976,6 @@ LayoutHorizontalLabels(
 		}
 	}
 }
-
 static void
 LayoutHorizontalScale(
         XmScaleWidget sw,
@@ -2348,16 +1984,12 @@ LayoutHorizontalScale(
 {
 	int diff_w, diff_h, tdiff;
 	XRectangle labelBox, valueBox, scrollBox, titleBox;
-
 	diff_w = XtWidth(sw) - desired->width;
 	diff_h = XtHeight(sw) - desired->height;
-
-
 	titleBox.height = TitleHeight(sw);
 	scrollBox.height = ScrollHeight(sw);
 	valueBox.height = ValueTroughHeight(sw);
 	labelBox.height = MaxLabelHeight(sw);
-
 	/* Figure out all of the y locations */
 	if (diff_h >= 0)
 	{
@@ -2366,7 +1998,6 @@ LayoutHorizontalScale(
 		 */
 		titleBox.y = XtHeight(sw) - titleBox.height;
 		scrollBox.y = titleBox.y - scrollBox.height;
-
 		if (sw->scale.show_value == XmNEAR_BORDER) {
 		    valueBox.y = 0;
 		    labelBox.y = scrollBox.y - labelBox.height;
@@ -2378,7 +2009,6 @@ LayoutHorizontalScale(
 	else if ((tdiff = diff_h + TitleHeight(sw)) >= 0)
 	{
 		/* Place from the left and let the title get clipped */
-
 		if (sw->scale.show_value == XmNEAR_BORDER) {
 		    valueBox.y = 0;
 		    labelBox.y = valueBox.y + valueBox.height;
@@ -2386,9 +2016,7 @@ LayoutHorizontalScale(
 		    labelBox.y = 0;
 		    valueBox.y = labelBox.y + labelBox.height;
 		}
-
 		scrollBox.y = valueBox.y + valueBox.height;
-
 		titleBox.y = scrollBox.y + scrollBox.height;
 	}
 	else if ((tdiff += ValueTroughHeight(sw)) >= 0)
@@ -2399,7 +2027,6 @@ LayoutHorizontalScale(
 		 */
 		titleBox.y = XtHeight(sw);
 		scrollBox.y = titleBox.y - scrollBox.height;
-
 		if (sw->scale.show_value == XmNEAR_BORDER) {
 		    valueBox.y = 0;
 		    labelBox.y = scrollBox.y - labelBox.height;
@@ -2430,7 +2057,6 @@ LayoutHorizontalScale(
 		labelBox.y = valueBox.y;
 		scrollBox.y = (XtHeight(sw) - ScrollHeight(sw)) / 2;
 	}
-
 	if (diff_w >= 0)
 	{
 		scrollBox.x = MajorLeadPad(sw);
@@ -2441,15 +2067,12 @@ LayoutHorizontalScale(
 		Dimension sb_min, avail, lp, tp;
 		XmScrollBarWidget sb = (XmScrollBarWidget)
 			(sw->composite.children[1]);
-
 		sb_min = (2 * sb->primitive.highlight_thickness)
 			+ (4 * sb->primitive.shadow_thickness)
 			+ SLIDER_SIZE( sw);
-
 		lp = MajorLeadPad(sw);
 		tp = MajorTrailPad(sw);
 		avail = XtWidth(sw) - lp - tp;
-
 		if (avail < sb_min)
 		{
 			scrollBox.width = sb_min;
@@ -2461,7 +2084,6 @@ LayoutHorizontalScale(
 			scrollBox.x = lp;
 		}
 	}
-
         if (LayoutIsRtoLM(sw))
         {
            titleBox.x = ScrollWidth(sw) - TitleWidth(sw);
@@ -2481,8 +2103,6 @@ LayoutHorizontalScale(
 	    sw->composite.children[0]->core.x = 0 ;
 	    sw->composite.children[0]->core.y = titleBox.y ;
 	  }
-
-
 	if (instigator != sw->composite.children[1])
 	    XmeConfigureObject(sw->composite.children[1],
 			       scrollBox.x, scrollBox.y,
@@ -2494,12 +2114,9 @@ LayoutHorizontalScale(
 	    sw->composite.children[1]->core.height = scrollBox.height ;
 	    sw->composite.children[1]->core.border_width = 0 ;
 	}
-
 	SetScrollBarData(sw);
-
 	LayoutHorizontalLabels(sw, &scrollBox, &labelBox, instigator);
 }
-
 static void
 LayoutVerticalLabels(
 		     XmScaleWidget sw,
@@ -2515,11 +2132,8 @@ LayoutVerticalLabels(
 	float tmp, tic_interval;
 	Position x, x1, y;
 	Cardinal num_managed ;
-
 	num_managed = NumManaged(sw, &first_tic, NULL);
-
 	x1 = labelBox->x + labelBox->width;
-
 	if (num_managed > 3)
 	{
 		first_tic_dim = scrollBox->y + LeadYTic(sb, sw);
@@ -2527,7 +2141,6 @@ LayoutVerticalLabels(
 		    TrailYTic(sb, sw);
 		tic_interval = (float)(last_tic_dim - first_tic_dim)
 			/ (num_managed - 3);
-
 		for (i = 2, tmp = first_tic_dim;
 			i < sw->composite.num_children;
 			i++)
@@ -2535,7 +2148,6 @@ LayoutVerticalLabels(
 			w = sw->composite.children[i];
 			if (!XtIsManaged(w) ||
 			    ((Object)w)->object.being_destroyed) continue ;
-
 			y = (int) tmp - (TotalHeight(w) / 2);
 			if (LayoutIsRtoLM(sw))
 			  x = labelBox->x;
@@ -2549,7 +2161,6 @@ LayoutVerticalLabels(
 			    w->core.x = x ;
 			    w->core.y = y ;
 			}
-
 			tmp += tic_interval ;
 		}
 	}
@@ -2558,7 +2169,6 @@ LayoutVerticalLabels(
 		w = first_tic;
 		if (XtIsManaged(w) &&
 		    !((Object)w)->object.being_destroyed) {
-
 		    x = x1 - TotalWidth(w);
 		    tmp = (sb->scrollBar.slider_area_height -
 			   TotalHeight(w)) / 2;
@@ -2575,7 +2185,6 @@ LayoutVerticalLabels(
 		}
 	}
 }
-
 static void
 LayoutVerticalScale(
         XmScaleWidget sw,
@@ -2584,15 +2193,12 @@ LayoutVerticalScale(
 {
 	int diff_w, diff_h, tdiff;
 	XRectangle labelBox, valueBox, scrollBox, titleBox;
-
 	diff_w = XtWidth(sw) - desired->width;
 	diff_h = XtHeight(sw) - desired->height;
-
 	titleBox.width = TitleWidth(sw);
 	scrollBox.width = ScrollWidth(sw);
 	valueBox.width = ValueTroughWidth(sw);
 	labelBox.width = MaxLabelWidth(sw);
-
 	/* Figure out all of the x locations */
 	if (diff_w >= 0)
 	{
@@ -2602,7 +2208,6 @@ LayoutVerticalScale(
 	     */
 	    titleBox.x = 0;
 	    scrollBox.x = titleBox.x + titleBox.width;
-
 	    if (sw->scale.show_value == XmNEAR_BORDER) {
 	      valueBox.x = XtWidth(sw) - valueBox.width;
 	      labelBox.x = scrollBox.x + scrollBox.width;
@@ -2616,7 +2221,6 @@ LayoutVerticalScale(
 	     */
 	    titleBox.x = XtWidth(sw) - titleBox.width;
 	    scrollBox.x = titleBox.x - scrollBox.width;
-
 	    if (sw->scale.show_value == XmNEAR_BORDER) {
 	      valueBox.x = 0;
 	      labelBox.x = scrollBox.x - labelBox.width;
@@ -2639,7 +2243,6 @@ LayoutVerticalScale(
 	      valueBox.x = labelBox.x - valueBox.width;
 	      scrollBox.x = valueBox.x - scrollBox.width;
 	    }
-
 	    titleBox.x = scrollBox.x - titleBox.width;
 	  } else {
 	    /* Place from the left and let the title get clipped */
@@ -2652,7 +2255,6 @@ LayoutVerticalScale(
 		valueBox.x = labelBox.x + labelBox.width;
 		scrollBox.x = valueBox.x + valueBox.width;
 	    }
-
 	    titleBox.x = scrollBox.x + scrollBox.width;
 	  }
 	}
@@ -2676,7 +2278,6 @@ LayoutVerticalScale(
                  } else {
 		   titleBox.x = XtWidth(sw);
 		   scrollBox.x = titleBox.x - scrollBox.width;
-
 		   if (sw->scale.show_value == XmNEAR_BORDER) {
 		     labelBox.x = scrollBox.x - labelBox.width;
 		     valueBox.x = 0;
@@ -2715,7 +2316,6 @@ LayoutVerticalScale(
 		labelBox.x = valueBox.x;
 		scrollBox.x = (XtWidth(sw) - ScrollWidth(sw)) / 2;
 	    }
-
 	if (diff_h >= 0)
 	{
 		scrollBox.y = MajorLeadPad(sw);
@@ -2726,15 +2326,12 @@ LayoutVerticalScale(
 		Dimension sb_min, avail, lp, tp;
 		XmScrollBarWidget sb = (XmScrollBarWidget)
 			(sw->composite.children[1]);
-
 		sb_min = (2 * sb->primitive.highlight_thickness)
 			+ (4 * sb->primitive.shadow_thickness)
 			+ SLIDER_SIZE( sw);
-
 		lp = MajorLeadPad(sw);
 		tp = MajorTrailPad(sw);
 		avail = XtHeight(sw) - lp - tp;
-
 		if (avail < sb_min)
 		{
 			scrollBox.height = sb_min;
@@ -2746,7 +2343,6 @@ LayoutVerticalScale(
 			scrollBox.y = lp;
 		}
 	}
-
 	if (instigator != sw->composite.children[0])
 	    XmeConfigureObject(sw->composite.children[0],
 			       titleBox.x, 0,
@@ -2757,7 +2353,6 @@ LayoutVerticalScale(
 	    sw->composite.children[0]->core.x = titleBox.x ;
 	    sw->composite.children[0]->core.y = 0 ;
 	}
-
 	if (instigator != sw->composite.children[1])
 	    XmeConfigureObject(sw->composite.children[1],
 			       scrollBox.x, scrollBox.y,
@@ -2769,15 +2364,9 @@ LayoutVerticalScale(
 	    sw->composite.children[1]->core.height = scrollBox.height ;
 	    sw->composite.children[1]->core.border_width = 0 ;
 	}
-
 	SetScrollBarData(sw);
-
 	LayoutVerticalLabels(sw, &scrollBox, &labelBox, instigator);
 }
-
-
-
-
 /************************************************************************/
 static void
 GetValueString(
@@ -2788,28 +2377,20 @@ GetValueString(
     register int i;
     int  diff, dec_point_size;
     struct lconv *loc_values;
-
     if (sw->scale.decimal_points > 0) {
       /* Add one to decimal points to get leading zero, since
 	 only US sometimes skips this zero, not other countries */
       sprintf (buffer,"%.*d", sw->scale.decimal_points+1, value);
-
       diff = strlen(buffer) - sw->scale.decimal_points;
       loc_values = localeconv();
       dec_point_size = strlen(loc_values->decimal_point);
-
       for (i = strlen(buffer); i >= diff; i--)
 	buffer[i+dec_point_size] = buffer[i];
-
       for (i=0; i<dec_point_size; i++)
 	buffer[diff+i] = loc_values->decimal_point[i];
-
     } else
       sprintf (buffer,"%d", value);
 }
-
-
-
 /************************************************************************
  *
  *  ShowValue
@@ -2832,18 +2413,13 @@ ShowValue(
     Region value_region = sw->scale.value_region;
     XRectangle value_rect;
     XmString tmp_str;
-
     if (!XtIsRealized((Widget)sw)) return;
-
     x = sw->scale.show_value_x;
     y = sw->scale.show_value_y;
     width = sw->scale.show_value_width;
     height = sw->scale.show_value_height;
-
     if (!sw->scale.show_value) { /* turn off the value display */
-
 	if (width) { /* We were displaying, so we must clear it */
-
 	    XClearArea (XtDisplay (sw), XtWindow (sw), x, y, width,
 			height, FALSE);
 	    value_rect.x = x;
@@ -2857,11 +2433,9 @@ ShowValue(
 	sw->scale.show_value_width = 0;
 	return;
     }
-
     /*
      * Time for the real work.
      */
-
     if (width)	{
 	/* Clear the old one */
 	value_rect.x = x;
@@ -2873,13 +2447,9 @@ ShowValue(
 	XUnionRectWithRegion(&value_rect, value_region, value_region);
 	XmeRedisplayGadgets( (Widget) sw, NULL, value_region);
     }
-
     /*  Get a string representation of the new value  */
-
     GetValueString(sw, sw->scale.value, buffer);
-
     /*  Calculate the x, y, width, and height of the string to display  */
-
 #if USE_XFT
     XmStringExtent(sw->scale.font_list, tmp_str = XmStringCreateLocalized(buffer),
 		  &width, &height);
@@ -2893,9 +2463,7 @@ ShowValue(
     sw->scale.show_value_width = width;
     sw->scale.show_value_height = height + descent;
 #endif
-
     scrollbar = (XmScrollBarWidget) sw->composite.children[1];
-
     if (sw->scale.orientation == XmHORIZONTAL) {
 #if USE_XFT
 	x = scrollbar->core.x
@@ -2951,7 +2519,6 @@ ShowValue(
 	    + SLIDER_SIZE(sw) + ((height - SLIDER_SIZE( sw)) / 2) - 3;
 #endif
     }
-
 #if USE_XFT
     sw->scale.show_value_x = x;
     sw->scale.show_value_y = y + 1;
@@ -2959,7 +2526,6 @@ ShowValue(
     sw->scale.show_value_x = x + width_return.lbearing;
     sw->scale.show_value_y = y - height + 1;
 #endif
-
     /*  Display the string  */
     XSetClipMask(XtDisplay(sw), sw->scale.foreground_GC, None);
 #if USE_XFT
@@ -2975,8 +2541,6 @@ ShowValue(
 		 sw->scale.foreground_GC, x, y, buffer, strlen(buffer));
 #endif
 }
-
-
 /*********************************************************************
  *
  * CalcScrollBarData
@@ -2999,18 +2563,14 @@ CalcScrollBarData(
     register int ht = scrollbar->primitive.highlight_thickness;
     register int st = scrollbar->primitive.shadow_thickness;
     int size;
-
 	/*  Adjust the slider size to take SLIDER_SIZE area.    */
 	/*  Adjust value to be in the bounds of the scrollbar.  */
-
     if (scrollbar->scrollBar.orientation == XmHORIZONTAL)
 	scrollbar_size = scrollbar->scrollBar.slider_area_width + 2 *(ht +st);
     else
 	scrollbar_size = scrollbar->scrollBar.slider_area_height + 2 *(ht +st);
-
     size = scrollbar_size - 2 * (sw->scale.highlight_thickness
 		 + sw->manager.shadow_thickness) ;
-
     /* prevent divide by zero error and integer rollover */
     if (size <= 0)
 		scrollbar_size = 1;
@@ -3018,9 +2578,7 @@ CalcScrollBarData(
 	    /* this looks suspicious to me, but it is bc to let it in */
 		scrollbar_size -= 2 * (sw->scale.highlight_thickness
 			+ sw->manager.shadow_thickness);
-
     slider_size = (SCROLLBAR_MAX / scrollbar_size) * SLIDER_SIZE( sw);
-
     /*
      * Now error check our arithmetic
      */
@@ -3030,34 +2588,24 @@ CalcScrollBarData(
 	slider_size = 1;
     else if (slider_size > SCROLLBAR_MAX)
 	slider_size = SCROLLBAR_MAX;
-
     sb_value = (float) (sw->scale.value - sw->scale.minimum) /
 		(float) (sw->scale.maximum - sw->scale.minimum);
     sb_value = sb_value * (float) (SCROLLBAR_MAX - slider_size);
-
     value = (int) sb_value;
-
     ASSIGN_MIN(value, SCROLLBAR_MAX - slider_size);
     ASSIGN_MAX(value, 0);
-
     /* Set up the increment processing correctly */
-
     tmp = (float) SCROLLBAR_MAX - (float) slider_size;
-
     increment = (int) ((tmp /
 		(float) (sw->scale.maximum - sw->scale.minimum)) + 0.5);
     ASSIGN_MAX(increment, 1);
-
     page = sw->scale.scale_multiple * (increment);
     ASSIGN_MAX(page, 1);
-
     *pvalue = value ;
     *pslider_size = slider_size ;
     *pincrement = increment ;
     *ppage = page ;
 }
-
-
 /*********************************************************************
  *
  * SetScrollBarData
@@ -3073,20 +2621,13 @@ SetScrollBarData(
     Cardinal n = 0 ;
     XmScrollBarWidget scrollbar =
 	    (XmScrollBarWidget) sw->composite.children[1];
-
     CalcScrollBarData(sw, &value, &slider_size, &increment, &page);
-
     SET(XmNvalue, value);
     SET(XmNsliderSize, slider_size);
     SET(XmNincrement, increment);
     SET(XmNpageIncrement, page);
-
     XtSetValues ((Widget)scrollbar, args, n);
 }
-
-
-
-
 /*********************************************************************
  *
  *  ValueChanged
@@ -3105,24 +2646,18 @@ ValueChanged(
     XmScaleCallbackStruct scale_callback;
     float sb_value;
     XmScrollBarWidget sb = (XmScrollBarWidget)(sw->composite.children[1]);
-
     sb_value = (float) scroll_callback->value
 	     / (float) (SCROLLBAR_MAX - sb->scrollBar.slider_size);
     sb_value = (sb_value * (float) (sw->scale.maximum - sw->scale.minimum))
 	       + (float) sw->scale.minimum;
-
     /* Set up the round off correctly */
     if (sb_value < 0.0) sb_value -= 0.5;
     else if (sb_value > 0.0) sb_value += 0.5;
-
     sw->scale.value = (int) sb_value;
-
     ShowValue (sw);
-
     scale_callback.event = scroll_callback->event;
     scale_callback.reason = scroll_callback->reason;
     scale_callback.value = sw->scale.value;
-
     if (scale_callback.reason == XmCR_DRAG)
 	XtCallCallbackList((Widget) sw, sw->scale.drag_callback,
 			   &scale_callback);
@@ -3134,9 +2669,6 @@ ValueChanged(
 			       &scale_callback);
 	}
 }
-
-
-
 /************************************************************************
  *
  * StartDrag:
@@ -3156,7 +2688,6 @@ StartDrag (Widget  w,
    Cardinal        n;
    XmScaleWidget sw = (XmScaleWidget) w ;
    XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
-
    /* CDE - allow user to not drag labels and label subclasses
       also,  disable drag if enable_btn1_transfer is set to
       BUTTON2_ADJUST and the trigger was button2 */
@@ -3164,7 +2695,6 @@ StartDrag (Widget  w,
        (dpy -> display.enable_btn1_transfer == XmBUTTON2_ADJUST &&
 	event && event -> xany.type == ButtonPress &&
 	event -> xbutton.button == 2)) return;
-
    /* first check that the click is OK: button 2 and in the value label */
    if ((!sw->scale.show_value) ||
        (event->xbutton.button != Button2) ||
@@ -3174,9 +2704,7 @@ StartDrag (Widget  w,
 	 sw->scale.show_value_width) ||
 	(event->xbutton.y > sw->scale.show_value_y +
 	 sw->scale.show_value_height))) return ;
-
    drag_icon = XmeGetTextualDragIcon(w);
-
    n = 0;
    XtSetArg(args[n], XmNcursorBackground, sw->core.background_pixel);  n++;
    XtSetArg(args[n], XmNcursorForeground, sw->manager.foreground);  n++;
@@ -3184,8 +2712,6 @@ StartDrag (Widget  w,
    XtSetArg(args[n], XmNdragOperations, XmDROP_COPY); n++ ;
    (void) XmeDragSource(w, NULL, event, args, n);
 }
-
-
 /************************************************************************
  *
  * DragConvertProc:
@@ -3203,7 +2729,6 @@ DragConvertCallback (Widget w,
    static char *atom_names[] = {
      XmSCOMPOUND_TEXT, XmSTARGETS, XmS_MOTIF_EXPORT_TARGETS,
      XmS_MOTIF_CLIPBOARD_TARGETS, XmSUTF8_STRING };
-
    char	         tmpstring[100];
    char         *strlist;
    char         *passtext;
@@ -3214,25 +2739,20 @@ DragConvertCallback (Widget w,
    XtPointer	 value = NULL ;
    unsigned long size = 0 ;
    int		 format = 8 ;
-
    assert(XtNumber(atom_names) == NUM_ATOMS);
    XInternAtoms(XtDisplay(w), atom_names, XtNumber(atom_names), False, atoms);
-
    /* Begin fixing the bug OSF 4846 */
    /* get the value of the scale and convert it to compound text */
    GetValueString(sw, sw->scale.value, tmpstring);
-
    if (cs -> target == atoms[XmATARGETS] ||
        cs -> target == atoms[XmA_MOTIF_EXPORT_TARGETS] ||
        cs -> target == atoms[XmA_MOTIF_CLIPBOARD_TARGETS]) {
      int count = 0;
      Atom *targs;
-
      if (cs -> target == atoms[XmATARGETS])
        targs = XmeStandardTargets(w, 3, &count);
      else
        targs = (Atom *) XtMalloc(sizeof(Atom) * 3);
-
      value = (XtPointer) targs;
      targs[count] = XA_STRING; count++;
      targs[count] = atoms[XmACOMPOUND_TEXT]; count++;
@@ -3241,7 +2761,6 @@ DragConvertCallback (Widget w,
      type = XA_ATOM;
      format = 32;
    }
-
    if (cs -> target == XA_STRING ||
        cs -> target == atoms[XmAUTF8_STRING]) {
      /* handle plain STRING and UTF8_STRING first */
@@ -3250,7 +2769,6 @@ DragConvertCallback (Widget w,
      size = strlen((char*) value);
      format = 8;
    }
-
    /* this routine processes only compound text now */
    if (cs -> target == atoms[XmACOMPOUND_TEXT]) {
      strlist = tmpstring;
@@ -3260,7 +2778,6 @@ DragConvertCallback (Widget w,
      passtext = XtNewString((char*)tp.value);
      XtFree((char*)tp.value);
      /* End fixing the bug OSF 4846 */
-
      /* format the value for transfer.  convert the value from
       * compound string to compound text for the transfer */
      type = atoms[XmACOMPOUND_TEXT];
@@ -3268,12 +2785,8 @@ DragConvertCallback (Widget w,
      size = strlen(passtext);
      format = 8;
    }
-
    _XmConvertComplete(w, value, size, format, type, cs);
 }
-
-
-
 /************************************************************************
  *
  *  WidgetNavigable class method
@@ -3288,7 +2801,6 @@ WidgetNavigable(
     {
       XmNavigationType nav_type
 	                   = ((XmManagerWidget) wid)->manager.navigation_type ;
-
       if(    (nav_type == XmSTICKY_TAB_GROUP)
 	 ||  (nav_type == XmEXCLUSIVE_TAB_GROUP)
          ||  (    (nav_type == XmTAB_GROUP)
@@ -3299,15 +2811,11 @@ WidgetNavigable(
     }
   return XmNOT_NAVIGABLE ;
 }
-
-
 /************************************************************************
  *
  *	External API functions.
  *
  ************************************************************************/
-
-
 /************************************************************************
  *
  *  XmScaleSetValue
@@ -3322,29 +2830,21 @@ XmScaleSetValue(
     XtAppContext app = XtWidgetToApplicationContext(w);
     (void)app; /* may be unused in non-threaded builds */
     _XmAppLock(app);
-
     if (value < sw->scale.minimum) {
 	XmeWarning( (Widget) sw, MESSAGE2);
 	_XmAppUnlock(app);
 	return ;
     }
-
     if (value > sw->scale.maximum) {
 	XmeWarning( (Widget) sw, MESSAGE3);
 	_XmAppUnlock(app);
 	return ;
     }
-
     sw->scale.value = value ;
     SetScrollBarData(sw);
     ShowValue(sw);
-
     _XmAppUnlock(app);
 }
-
-
-
-
 /************************************************************************
  *
  *  XmScaleGetValue
@@ -3362,7 +2862,6 @@ XmScaleGetValue(
    *value = sw->scale.value;
    _XmAppUnlock(app);
 }
-
 /************************************************************************
  *
  *  XmCreateScale
@@ -3378,7 +2877,6 @@ XmCreateScale(
    return (XtCreateWidget(name, xmScaleWidgetClass,
 			  parent, arglist, argcount));
 }
-
 Widget
 XmVaCreateScale(
         Widget parent,
@@ -3388,12 +2886,9 @@ XmVaCreateScale(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmScaleWidgetClass,
@@ -3401,7 +2896,6 @@ XmVaCreateScale(
                          var, count);
     va_end(var);
     return w;
-
 }
 Widget
 XmVaCreateManagedScale(
@@ -3412,11 +2906,9 @@ XmVaCreateManagedScale(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmScaleWidgetClass,

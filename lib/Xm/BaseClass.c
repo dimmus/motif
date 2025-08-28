@@ -26,11 +26,9 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
 #endif
 #endif
 #define HAVE_EXTENSIONS
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <Xm/XmP.h>
 #include <X11/ShellP.h>
 #include <Xm/ExtObjectP.h>
@@ -43,10 +41,8 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
 #include "MessagesI.h"
 #include "TraversalI.h"
 #include "XmI.h"
-
 #define MSG1	_XmMMsgBaseClass_0000
 #define MSG2	_XmMMsgBaseClass_0001
-
 #define IsBaseClass(wc) \
   ((wc == xmGadgetClass) 		||\
    (wc == xmManagerWidgetClass)		||\
@@ -56,12 +52,9 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
    (wc == xmScreenClass)		||\
    (wc == xmExtObjectClass)		||\
    (_XmIsFastSubclass(wc, XmMENU_SHELL_BIT)))
-
 #define isWrappedXtClass(wc) \
    ((wc == rectObjClass)	||\
     (wc == compositeWidgetClass))
-
-
 /*
  * These must be initialized; otherwise they are "secondary symbols"
  * and are not actually present in the library under HP/UX 10.0.  That
@@ -69,28 +62,21 @@ static char rcsid[] = "$TOG: BaseClass.c /main/20 1997/03/31 13:14:31 dbl $"
  */
 externaldef(baseclass) XrmQuark XmQmotif = NULLQUARK;
 externaldef(baseclass) XmBaseClassExt *_Xm_fastPtr = NULL;
-
 typedef struct _XmObjectClassWrapper {
     XtInitProc		initialize;
     XtSetValuesFunc	setValues;
     XtArgsProc		getValues;
     XtWidgetClassProc	classPartInit;
 } XmObjectClassWrapper;
-
 static XmObjectClassWrapper objectClassWrapper;
 static XContext resizeRefWContext = 0;
 static XContext geoRefWContext = 0;
-
 #define GetRefW(dpy, context, w) \
 	if (XFindContext(dpy, None, context, (XPointer *) &w))  w = NULL
 #define SetRefW(dpy, context, w) \
 	XSaveContext(dpy, None, context, (char *)w)
-
 externaldef(xminheritclass) int _XmInheritClass = 0;
-
-
 /********    Static Function Declarations    ********/
-
 static XmWrapperData GetWrapperData(WidgetClass w_class);
 static XContext ExtTypeToContext(unsigned char extType);
 static void RealizeWrapper0(Widget w, Mask *vmask, XSetWindowAttributes *attr);
@@ -221,7 +207,6 @@ static void GetValuesLeafWrapper(
                         Cardinal *num_args,
 			int depth);
 static int GetDepth(WidgetClass wc);
-
 static void InitializeLeafWrapper0(
 			Widget req,
 			Widget new_w,
@@ -272,7 +257,6 @@ static void InitializeLeafWrapper9(
 			Widget new_w,
 			ArgList args,
 			Cardinal *num_args);
-
 static void CInitializeLeafWrapper0(
 			Widget req,
 			Widget new_w,
@@ -323,8 +307,6 @@ static void CInitializeLeafWrapper9(
 			Widget new_w,
 			ArgList args,
 			Cardinal *num_args);
-
-
 static Boolean SetValuesLeafWrapper0(
                         Widget current,
                         Widget req,
@@ -385,7 +367,6 @@ static Boolean SetValuesLeafWrapper9(
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args);
-
 static Boolean CSetValuesLeafWrapper0(
                         Widget current,
                         Widget req,
@@ -446,8 +427,6 @@ static Boolean CSetValuesLeafWrapper9(
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args);
-
-
 static void GetValuesLeafWrapper0(
                         Widget new_w,
                         ArgList args,
@@ -488,17 +467,13 @@ static void GetValuesLeafWrapper9(
                         Widget new_w,
                         ArgList args,
                         Cardinal *num_args);
-
 /********    End Static Function Declarations    ********/
-
-
 XmGenericClassExt *
 _XmGetClassExtensionPtr(
         XmGenericClassExt *listHeadPtr,
         XrmQuark owner )
 {
   XmGenericClassExt *lclPtr = listHeadPtr;
-
 #ifdef DEBUG
   if (!lclPtr)
     {
@@ -506,21 +481,16 @@ _XmGetClassExtensionPtr(
       return NULL;
     }
 #endif /* DEBUG */
-
   while (lclPtr && *lclPtr && ((*lclPtr)->record_type != owner))
     lclPtr = (XmGenericClassExt *) &((*lclPtr)->next_extension);
-
   return lclPtr;
 }
-
 static XmWrapperData
 GetWrapperData(
         WidgetClass w_class )
 {
   XmBaseClassExt *wcePtr;
-
   wcePtr = _XmGetBaseClassExtPtr( w_class, XmQmotif);
-
   if (!*wcePtr)
     {
       *wcePtr = (XmBaseClassExt) XtCalloc(1, sizeof(XmBaseClassExtRec));
@@ -529,23 +499,17 @@ GetWrapperData(
       (*wcePtr)->version	= XmBaseClassExtVersion;
       (*wcePtr)->record_size	= sizeof( XmBaseClassExtRec);
     }
-
   if ((*wcePtr)->version < XmBaseClassExtVersion)
     return NULL;
-
   if (!((*wcePtr)->wrapperData))
     (*wcePtr)->wrapperData =
       (XmWrapperData) XtCalloc(1, sizeof(XmWrapperDataRec));
-
   return (*wcePtr)->wrapperData;
 }
-
-
 typedef struct _ExtToContextRec {
     unsigned char	extType;
     XContext		context;
 } ExtToContextRec, *ExtToContext;
-
 static XContext
 ExtTypeToContext(
         unsigned char extType )
@@ -554,7 +518,6 @@ ExtTypeToContext(
   Cardinal		 i;
   ExtToContext		 curr;
   XContext		 context = 0;
-
   _XmProcessLock();
   for (i = 0, curr = &extToContextMap[0];
        i < XtNumber(extToContextMap) && !context;
@@ -569,18 +532,14 @@ ExtTypeToContext(
 	}
     }
   _XmProcessUnlock();
-
   if (!context)
     XmeWarning(NULL, MSG1);
-
   return context;
 }
-
 typedef struct _XmAssocDataRec {
     XtPointer			data;
     struct _XmAssocDataRec	*next;
 } XmAssocDataRec, *XmAssocData;
-
 void
 _XmPushWidgetExtData(
         Widget widget,
@@ -592,25 +551,18 @@ _XmPushWidgetExtData(
   XmAssocData *assocDataPtr;
   Boolean      empty;
   XContext     widgetExtContext = ExtTypeToContext(extType);
-
   newData = (XmAssocData) XtCalloc(1, sizeof(XmAssocDataRec));
-
   newData->data = (XtPointer)data;
-
   empty = XFindContext(XtDisplay(widget), (Window) widget,
 		       widgetExtContext, (char **) &assocData);
-
   assocDataPtr = &assocData;
   while (*assocDataPtr)
     assocDataPtr = &((*assocDataPtr)->next);
-
   *assocDataPtr = newData;
-
   if (empty)
     XSaveContext(XtDisplay(widget), (Window) widget,
 		 widgetExtContext, (XPointer) assocData);
 }
-
 void
 _XmPopWidgetExtData(
         Widget widget,
@@ -620,10 +572,8 @@ _XmPopWidgetExtData(
   XmAssocData  assocData = NULL;
   XmAssocData *assocDataPtr;
   XContext     widgetExtContext = ExtTypeToContext(extType);
-
   /* Initialize the return parameter. */
   *dataRtn = NULL;
-
   if (XFindContext(XtDisplay(widget),
 		   (Window) widget,
 		   widgetExtContext,
@@ -634,14 +584,11 @@ _XmPopWidgetExtData(
 #endif
       return;
     }
-
   assocDataPtr = &assocData;
   while ((*assocDataPtr) && (*assocDataPtr)->next)
     assocDataPtr = &((*assocDataPtr)->next);
-
   if (*assocDataPtr == assocData)
     XDeleteContext(XtDisplay(widget), (Window)widget, widgetExtContext);
-
   if (*assocDataPtr)
     {
       *dataRtn = (XmWidgetExtData) (*assocDataPtr)->data;
@@ -649,7 +596,6 @@ _XmPopWidgetExtData(
       *assocDataPtr = NULL;
     }
 }
-
 XmWidgetExtData
 _XmGetWidgetExtData(
         Widget widget,
@@ -658,8 +604,6 @@ _XmGetWidgetExtData(
   XmAssocData  assocData = NULL;
   XmAssocData *assocDataPtr;
   XContext     widgetExtContext = ExtTypeToContext(extType);
-
-
   if ((XFindContext(XtDisplay(widget),
 		    (Window) widget,
 		    widgetExtContext,
@@ -675,31 +619,24 @@ _XmGetWidgetExtData(
       assocDataPtr = &assocData;
       while ((*assocDataPtr)->next)
 	assocDataPtr = &((*assocDataPtr)->next);
-
       return (XmWidgetExtData) (*assocDataPtr)->data;
     }
 }
-
-
 Boolean
 _XmIsSubclassOf(
 	WidgetClass wc,
 	WidgetClass sc)
 {
   WidgetClass p = wc;
-
   while ((p) && (p != sc))
     p = p->core_class.superclass;
-
   return (p == sc);
 }
-
 /*********************************************************************
  *
  *  RealizeWrappers for vendorShell
  *
  *********************************************************************/
-
 static void
 RealizeWrapper0(
         Widget w,
@@ -708,7 +645,6 @@ RealizeWrapper0(
 {
   RealizeWrapper(w, vmask, attr, 0);
 }
-
 static void
 RealizeWrapper1(
         Widget w,
@@ -717,7 +653,6 @@ RealizeWrapper1(
 {
   RealizeWrapper(w, vmask, attr, 1);
 }
-
 static void
 RealizeWrapper2(
         Widget w,
@@ -726,7 +661,6 @@ RealizeWrapper2(
 {
   RealizeWrapper(w, vmask, attr, 2);
 }
-
 static void
 RealizeWrapper3(
         Widget w,
@@ -735,7 +669,6 @@ RealizeWrapper3(
 {
   RealizeWrapper(w, vmask, attr, 3);
 }
-
 static void
 RealizeWrapper4(
         Widget w,
@@ -744,7 +677,6 @@ RealizeWrapper4(
 {
   RealizeWrapper(w, vmask, attr, 4);
 }
-
 static void
 RealizeWrapper5(
         Widget w,
@@ -753,7 +685,6 @@ RealizeWrapper5(
 {
   RealizeWrapper(w, vmask, attr, 5);
 }
-
 static void
 RealizeWrapper6(
         Widget w,
@@ -762,7 +693,6 @@ RealizeWrapper6(
 {
   RealizeWrapper(w, vmask, attr, 6);
 }
-
 static void
 RealizeWrapper7(
         Widget w,
@@ -771,7 +701,6 @@ RealizeWrapper7(
 {
   RealizeWrapper(w, vmask, attr, 7);
 }
-
 static void
 RealizeWrapper8(
         Widget w,
@@ -780,7 +709,6 @@ RealizeWrapper8(
 {
   RealizeWrapper(w, vmask, attr, 8);
 }
-
 static void
 RealizeWrapper9(
         Widget w,
@@ -789,7 +717,6 @@ RealizeWrapper9(
 {
   RealizeWrapper(w, vmask, attr, 9);
 }
-
 static void
 RealizeWrapper10(
         Widget w,
@@ -798,7 +725,6 @@ RealizeWrapper10(
 {
   RealizeWrapper(w, vmask, attr, 10);
 }
-
 /* Used to be XmConst, but this was not linking on Solaris */
 static XtRealizeProc realizeWrappers[] = {
     RealizeWrapper0,
@@ -813,36 +739,30 @@ static XtRealizeProc realizeWrappers[] = {
     RealizeWrapper9,
     RealizeWrapper10
 };
-
 static Cardinal
 GetRealizeDepth(
         WidgetClass wc )
 {
   Cardinal i;
-
   i = 0;
   while (wc && wc != vendorShellWidgetClass)
     {
       i++;
       wc = wc->core_class.superclass;
     }
-
   if (wc)
     return i;
 #ifdef DEBUG
   else
     XtError("bad class for shell realize");
 #endif /* DEBUG */
-
   return 0;
 }
-
 /************************************************************************
  *
  *  RealizeWrapper
  *
  ************************************************************************/
-
 static void
 RealizeWrapper(
         Widget w,
@@ -858,27 +778,23 @@ RealizeWrapper(
       XtRealizeProc 	realize;
       Cardinal		leafDepth = GetRealizeDepth(wc);
       Cardinal		depthDiff = leafDepth - depth;
-
       while (depthDiff)
 	{
 	  depthDiff--;
 	  wc = wc->core_class.superclass;
 	}
-
       _XmProcessLock();
       wrapperData = GetWrapperData(wc);
       realize = wrapperData ? wrapperData->realize : NULL;
       _XmProcessUnlock();
       if (realize)
 	(*realize)(w, vmask, attr);
-
 #if 0
       /* DRK 6/20/94 -- This change breaks our test environment; when
        *	present the normal shell isn't added to the grab list
        *	because VendorExtRealize is never called.  It used to
        *	be called for the ApplicationShell class.
        */
-
       /*
        * CR 9266: Only call the RealizeCallback if we're doing the
        * VendorShell class level. Do not call multiple times for
@@ -909,111 +825,95 @@ RealizeWrapper(
 #endif /* DEBUG */
     }
 }
-
 /*********************************************************************
  *
  *  ResizeWrappers for rectObj
  *
  *********************************************************************/
-
 static void
 ResizeWrapper0(
         Widget w )
 {
   ResizeWrapper(w, 0);
 }
-
 static void
 ResizeWrapper1(
         Widget w )
 {
   ResizeWrapper(w, 1);
 }
-
 static void
 ResizeWrapper2(
         Widget w )
 {
   ResizeWrapper(w, 2);
 }
-
 static void
 ResizeWrapper3(
         Widget w )
 {
   ResizeWrapper(w, 3);
 }
-
 static void
 ResizeWrapper4(
         Widget w )
 {
   ResizeWrapper(w, 4);
 }
-
 static void
 ResizeWrapper5(
         Widget w )
 {
   ResizeWrapper(w, 5);
 }
-
 static void
 ResizeWrapper6(
         Widget w )
 {
   ResizeWrapper(w, 6);
 }
-
 static void
 ResizeWrapper7(
         Widget w )
 {
   ResizeWrapper(w, 7);
 }
-
 static void
 ResizeWrapper8(
         Widget w )
 {
   ResizeWrapper(w, 8);
 }
-
 static void
 ResizeWrapper9(
         Widget w )
 {
   ResizeWrapper(w, 9);
 }
-
 static void
 ResizeWrapper10(
         Widget w )
 {
   ResizeWrapper(w, 10);
 }
-
 static void
 ResizeWrapper11(
         Widget w )
 {
   ResizeWrapper(w, 11);
 }
-
 static void
 ResizeWrapper12(
         Widget w )
 {
   ResizeWrapper(w, 12);
 }
-
 static void
 ResizeWrapper13(
         Widget w )
 {
   ResizeWrapper(w, 13);
 }
-
 /* Used to be XmConst, but this was not linking on Solaris */
 static XtWidgetProc resizeWrappers[] = {
     ResizeWrapper0,
@@ -1031,32 +931,26 @@ static XtWidgetProc resizeWrappers[] = {
     ResizeWrapper12,
     ResizeWrapper13
 };
-
 static Cardinal
 GetResizeDepth(
         WidgetClass wc )
 {
   Cardinal i;
-
   i = 0;
   while (wc && wc != rectObjClass)
     {
       i++;
       wc = wc->core_class.superclass;
     }
-
   if (wc)
     return i;
-
   return 0;
 }
-
 /************************************************************************
  *
  *  ResizeWrapper
  *
  ************************************************************************/
-
 static void
 ResizeWrapper(
         Widget w,
@@ -1070,7 +964,6 @@ ResizeWrapper(
   Cardinal	leafDepth = GetResizeDepth(wc);
   Cardinal	depthDiff = leafDepth - depth;
   Boolean	call_navig_resize = FALSE;
-
   /* Call _XmNavigResize() only once per resize event, so nested
    *	resize calls are completed before evaluating the status of
    *	the focus widget.  Only check for lost focus in
@@ -1081,19 +974,16 @@ ResizeWrapper(
    */
   if (XtParent(w) && XtIsShell(XtParent(w)))
     call_navig_resize = TRUE;
-
   while (depthDiff)
     {
       depthDiff--;
       wc = wc->core_class.superclass;
     }
-
   GetRefW(dpy, resizeRefWContext, refW);
   _XmProcessLock();
   wrapperData = GetWrapperData(wc);
   resize = wrapperData ? wrapperData->resize: NULL;
   _XmProcessUnlock();
-
   if (resize)
     {
       if ((refW == NULL) && (_XmDropSiteWrapperCandidate(w)))
@@ -1109,17 +999,14 @@ ResizeWrapper(
       else
 	(*resize)(w);
     }
-
   if (call_navig_resize)
     _XmNavigResize( w);
 }
-
 /*********************************************************************
  *
  *  GeometryHandlerWrappers for composite
  *
  *********************************************************************/
-
 static XtGeometryResult
 GeometryHandlerWrapper0(
         Widget w,
@@ -1128,7 +1015,6 @@ GeometryHandlerWrapper0(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 0);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper1(
         Widget w,
@@ -1137,7 +1023,6 @@ GeometryHandlerWrapper1(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 1);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper2(
         Widget w,
@@ -1146,7 +1031,6 @@ GeometryHandlerWrapper2(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 2);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper3(
         Widget w,
@@ -1155,7 +1039,6 @@ GeometryHandlerWrapper3(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 3);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper4(
         Widget w,
@@ -1164,7 +1047,6 @@ GeometryHandlerWrapper4(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 4);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper5(
         Widget w,
@@ -1173,7 +1055,6 @@ GeometryHandlerWrapper5(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 5);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper6(
         Widget w,
@@ -1182,7 +1063,6 @@ GeometryHandlerWrapper6(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 6);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper7(
         Widget w,
@@ -1191,7 +1071,6 @@ GeometryHandlerWrapper7(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 7);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper8(
         Widget w,
@@ -1200,7 +1079,6 @@ GeometryHandlerWrapper8(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 8);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper9(
         Widget w,
@@ -1209,7 +1087,6 @@ GeometryHandlerWrapper9(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 9);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper10(
         Widget w,
@@ -1218,7 +1095,6 @@ GeometryHandlerWrapper10(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 10);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper11(
         Widget w,
@@ -1227,7 +1103,6 @@ GeometryHandlerWrapper11(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 11);
 }
-
 static XtGeometryResult
 GeometryHandlerWrapper12(
         Widget w,
@@ -1236,7 +1111,6 @@ GeometryHandlerWrapper12(
 {
   return GeometryHandlerWrapper(w, desired, allowed, 12);
 }
-
 /* Used to be XmConst, but this was not linkking on Solaris */
 static XtGeometryHandler geometryHandlerWrappers[] = {
     GeometryHandlerWrapper0,
@@ -1253,26 +1127,21 @@ static XtGeometryHandler geometryHandlerWrappers[] = {
     GeometryHandlerWrapper11,
     GeometryHandlerWrapper12
 };
-
 static Cardinal
 GetGeometryHandlerDepth(
         WidgetClass wc )
 {
   Cardinal i;
-
   i = 0;
   while (wc && wc != rectObjClass)
     {
       i++;
       wc = wc->core_class.superclass;
     }
-
   if (wc)
     return i;
-
   return 0;
 }
-
 /************************************************************************
  *
  *  GeometryHandlerWrapper
@@ -1294,19 +1163,16 @@ GeometryHandlerWrapper(
   XtGeometryHandler geometry_manager;
   Cardinal	    leafDepth = GetGeometryHandlerDepth(wc);
   Cardinal	    depthDiff = leafDepth - depth;
-
   while (depthDiff)
     {
       depthDiff--;
       wc = wc->core_class.superclass;
     }
-
   GetRefW(dpy, geoRefWContext, refW);
   _XmProcessLock();
   wrapperData = GetWrapperData(wc);
   geometry_manager = wrapperData ? wrapperData->geometry_manager: NULL;
   _XmProcessUnlock();
-
   if (geometry_manager)
     {
       if ((refW == NULL) && (_XmDropSiteWrapperCandidate(w)))
@@ -1322,10 +1188,8 @@ GeometryHandlerWrapper(
       else
 	result = (*geometry_manager) (w, desired, allowed);
     }
-
   return result;
 }
-
 /************************************************************************
  *
  *  BaseClassPartInitialize
@@ -1340,22 +1204,18 @@ BaseClassPartInitialize(
   Boolean		inited;
   XmWrapperData		wcData, scData;
   Boolean		isBaseClass = IsBaseClass(wc);
-
   /*
    * This routine is called out of the ClassPartInitRootWrapper. It
    * needs to make sure that this is a Motif class and if it is,
    * then to initialize it.  We assume that the base classes always
    * have a static initializer !!!
    */
-
   wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
   scePtr = _XmGetBaseClassExtPtr(wc->core_class.superclass, XmQmotif);
-
   if (!isBaseClass &&
       !isWrappedXtClass(wc) &&
       (!scePtr || !(*scePtr)))
     return NULL;
-
   if ((isBaseClass) || (scePtr && (*scePtr)))
     {
       if (!(*wcePtr))
@@ -1378,11 +1238,9 @@ BaseClassPartInitialize(
 	}
       else
 	inited = True;
-
       /* this should get done by the static initializers */
       for (i = 0; i < 32; i++)
 	(*wcePtr)->flags[i] = 0;
-
       if (scePtr && *scePtr)
 	{
 	  if (!inited)
@@ -1423,7 +1281,6 @@ BaseClassPartInitialize(
       else if (!IsBaseClass(wc))
 	XtError("class must have non-null superclass extension");
 #endif /* DEBUG */
-
       /*
        * If this class has a secondary object class and that
        * class does not have it's own extension (or has not
@@ -1440,18 +1297,14 @@ BaseClassPartInitialize(
 	  XmBaseClassExtVersion,                    /* version              */
 	  sizeof(XmBaseClassExtRec),                /* size                 */
 	};
-
 	if (xmExtExtensionRec.record_type == NULLQUARK)
 	  xmExtExtensionRec.record_type = XmQmotif;
-
 	if (sec && !sec->core_class.extension)
 	  sec->core_class.extension = (XtPointer)&xmExtExtensionRec;
       }
     }
-
   wcData = GetWrapperData(wc);
   scData = GetWrapperData(wc->core_class.superclass);
-
   if ((wc == vendorShellWidgetClass) ||
       _XmIsSubclassOf(wc, vendorShellWidgetClass))
     {
@@ -1473,7 +1326,6 @@ BaseClassPartInitialize(
 	}
       wc->core_class.realize = realizeWrappers[GetRealizeDepth(wc)];
     }
-
   if ((wc == rectObjClass) ||
       _XmIsSubclassOf(wc, rectObjClass))
     {
@@ -1495,7 +1347,6 @@ BaseClassPartInitialize(
 	}
       wc->core_class.resize = resizeWrappers[GetResizeDepth(wc)];
     }
-
   if ((wc == compositeWidgetClass) ||
       _XmIsSubclassOf(wc, compositeWidgetClass))
     {
@@ -1521,10 +1372,8 @@ BaseClassPartInitialize(
 	(XtGeometryHandler)
 	  geometryHandlerWrappers[GetGeometryHandlerDepth(wc)];
     }
-
   return wcePtr;
 }
-
 /*
  * This function replaces the objectClass classPartInit slot and is
  * called at the start of the first XtCreate invocation.
@@ -1535,8 +1384,6 @@ ClassPartInitRootWrapper(
 {
   XtWidgetClassProc *leafFuncPtr;
   XmBaseClassExt    *wcePtr;
-
-
   wcePtr = BaseClassPartInitialize(wc);
   /*
    * check that it's a class that we know about
@@ -1545,7 +1392,6 @@ ClassPartInitRootWrapper(
     {
       if ((*wcePtr)->classPartInitPrehook)
 	(*((*wcePtr)->classPartInitPrehook)) (wc);
-
       /*
        * If we have a prehook, then envelop the leaf class function
        * that whould be called last.
@@ -1553,7 +1399,6 @@ ClassPartInitRootWrapper(
       if ((*wcePtr)->classPartInitPosthook)
 	{
 	  XmWrapperData wrapperData;
-
 	  wrapperData = GetWrapperData(wc);
 	  leafFuncPtr = (XtWidgetClassProc *)
 	    &(wc->core_class.class_part_initialize);
@@ -1561,28 +1406,22 @@ ClassPartInitRootWrapper(
 	  *leafFuncPtr = ClassPartInitLeafWrapper;
 	}
     }
-
   if (objectClassWrapper.classPartInit)
     (* objectClassWrapper.classPartInit) (wc);
 }
-
 static void
 ClassPartInitLeafWrapper(
         WidgetClass wc )
 {
   XtWidgetClassProc *leafFuncPtr;
   XmBaseClassExt    *wcePtr;
-
   wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
   if (*wcePtr && (*wcePtr)->classPartInitPosthook)
     {
       XmWrapperData wrapperData;
-
       wrapperData = GetWrapperData(wc);
       leafFuncPtr = (XtWidgetClassProc *)
 	&(wc->core_class.class_part_initialize);
-
       if (wrapperData->classPartInitLeaf)
 	(* wrapperData->classPartInitLeaf) (wc);
       if ((*wcePtr)->classPartInitPosthook)
@@ -1595,29 +1434,22 @@ ClassPartInitLeafWrapper(
       wrapperData->classPartInitLeaf = NULL;
     }
 }
-
 static Boolean
 is_constraint_subclass(WidgetClass cls)
 {
   WidgetClass sc;
-
   for (sc = cls; sc != NULL; sc = sc->core_class.superclass)
     if (sc == (WidgetClass) &constraintClassRec)
       return True;
-
   return False;
 }
-
-
 void
 _XmInitializeExtensions( void )
 {
   static Boolean firstTime = True;
-
   if (firstTime)
     {
       XmQmotif = XrmPermStringToQuark("OSF_MOTIF");
-
       objectClassWrapper.initialize =
 	objectClass->core_class.initialize;
       objectClassWrapper.setValues =
@@ -1639,8 +1471,6 @@ _XmInitializeExtensions( void )
     resizeRefWContext = XUniqueContext();
     geoRefWContext = XUniqueContext();
 }
-
-
 Cardinal
 _XmSecondaryResourceData(
         XmBaseClassExt bcePtr,
@@ -1653,19 +1483,16 @@ _XmSecondaryResourceData(
   WidgetClass		  secObjClass;
   XmSecondaryResourceData secResData, *sd;
   Cardinal 		  count = 0;
-
   if (bcePtr)
     {
       secObjClass = ( (bcePtr)->secondaryObjectClass);
       if (secObjClass)
 	{
 	  secResData = XtNew(XmSecondaryResourceDataRec);
-
 	  _XmTransformSubResources(secObjClass->core_class.resources,
 				   secObjClass->core_class.num_resources,
 				   &(secResData->resources),
 				   &(secResData->num_resources));
-
 	  secResData->name = name;
 	  secResData->res_class = class_name;
 	  secResData->client_data = client_data;
@@ -1676,10 +1503,8 @@ _XmSecondaryResourceData(
 	  count++;
 	}
     }
-
   return count;
 }
-
 /*
  * This function makes assumptions about what the Intrinsics is
  * doing with the resource lists.  It is based on the X11R5 version
@@ -1693,14 +1518,11 @@ CreateIndirectionTable(XtResourceList resources,
 {
   register int i;
   XtResourceList* table;
-
   table = (XtResourceList*)XtMalloc(num_resources * sizeof(XtResourceList));
   for (i = 0; i < num_resources; i++)
     table[i] = (XtResourceList)(&(resources[i]));
-
   return table;
 }
-
 /*
  * The statement in this function calls CreateIndirectionTable() which
  * is scheduled for removal (see comment in function above).
@@ -1756,7 +1578,6 @@ _XmTransformSubResources(
        /* display_accelerator  */  NULL,
        /* extension            */  NULL
      },
-
      { /**** CompositePart *****/
        /* geometry_handler     */  NULL,
        /* change_managed       */  NULL,
@@ -1764,7 +1585,6 @@ _XmTransformSubResources(
        /* delete_child         */  XtInheritDeleteChild,
        /* extension            */  NULL
      },
-
      { /**** ConstraintPart ****/
        /* resources            */  NULL,
        /* num_resources        */  0,
@@ -1775,17 +1595,13 @@ _XmTransformSubResources(
        /* extension            */  NULL
      }
    };
-
    if (((int)comp_resources[0].resource_offset) >= 0)
      {
        XtResourceList tmp_resources;
-
        tmp_resources = (XtResourceList)
 	 XtMalloc(sizeof(XtResource) * num_comp_resources);
-
        memcpy(tmp_resources, comp_resources,
 	      sizeof(XtResource) * num_comp_resources);
-
        *resources = tmp_resources;
        *num_resources = num_comp_resources;
      }
@@ -1793,24 +1609,18 @@ _XmTransformSubResources(
      {
        if (!shadowObjectClassRec.core_class.class_inited)
 	 XtInitializeWidgetClass((WidgetClass) &shadowObjectClassRec);
-
        /* This next statement is marked for change */
        shadowObjectClassRec.constraint_class.resources = (XtResourceList)
 	 CreateIndirectionTable(comp_resources, num_comp_resources);
-
        shadowObjectClassRec.constraint_class.num_resources = num_comp_resources;
-
        XtGetConstraintResourceList((WidgetClass) &shadowObjectClassRec,
 				   resources, num_resources);
-
        if (shadowObjectClassRec.constraint_class.resources)
 	 XtFree((char *) shadowObjectClassRec.constraint_class.resources);
-
        shadowObjectClassRec.constraint_class.resources = NULL;
        shadowObjectClassRec.constraint_class.num_resources = 0;
      }
 }
-
 static XtInitProc InitializeLeafWrappers[] = {
 	InitializeLeafWrapper0,
 	InitializeLeafWrapper1,
@@ -1835,7 +1645,6 @@ static XtInitProc CInitializeLeafWrappers[] = {
 	CInitializeLeafWrapper8,
 	CInitializeLeafWrapper9
 };
-
 /*
  * This function replaces the objectClass initialize slot and is
  * called at the start of every XtCreate invocation.
@@ -1849,24 +1658,16 @@ InitializeRootWrapper(
 {
 	WidgetClass wc = XtClass(new_w);
 	XmBaseClassExt *wcePtr;
-
 	wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
 	if (wcePtr && *wcePtr) {
-
 	   if ((*wcePtr)->initializePrehook)
 		(*((*wcePtr)->initializePrehook))(req, new_w, args, num_args);
-
-
 	   if ((*wcePtr)->initializePosthook) {
 		XmWrapperData wrapperData;
-
 	   	_XmProcessLock();
-
 		if (!XtIsShell(new_w) && XtParent(new_w)
 			&& XtIsConstraint(XtParent(new_w))) {
 			ConstraintWidgetClass cwc;
-
 			cwc = (ConstraintWidgetClass) XtClass(XtParent(new_w));
 			wrapperData = GetWrapperData((WidgetClass) cwc);
 			if (wrapperData->constraintInitializeLeafCount ==0)
@@ -1890,15 +1691,12 @@ InitializeRootWrapper(
 			}
 			(wrapperData->initializeLeafCount)++;
 		}
-
 		_XmProcessUnlock();
 	   }
-
 	   if (objectClassWrapper.initialize)
 		(*objectClassWrapper.initialize)(req, new_w,args, num_args);
 	}
 }
-
 static void
 InitializeLeafWrapper(
 			Widget req,
@@ -1912,12 +1710,9 @@ InitializeLeafWrapper(
 	XtInitProc post_proc = NULL;
 	int leafDepth = GetDepth(wc);
 	XmWrapperData wrapperData;
-
 	_XmProcessLock();
-
 	if (leafDepth == depth) { /* Correct depth */
 	   wrapperData = GetWrapperData(wc);
-
 	   if (!XtIsShell(new_w) && XtParent(new_w) &&
 			XtIsConstraint(XtParent(new_w))) {
 		init_proc = wrapperData->initializeLeaf;
@@ -1934,23 +1729,18 @@ InitializeLeafWrapper(
 	}
 	else {
 		int depthDiff = leafDepth - depth;
-
 		for ( ; depthDiff;
 		        depthDiff--, wc = wc->core_class.superclass)
 			{};
-
 		wrapperData = GetWrapperData(wc);
 		init_proc = wrapperData->initializeLeaf;
 	}
-
 	_XmProcessUnlock();
-
 	if (init_proc)
 		(*init_proc)(req, new_w, args, num_args);
 	if (post_proc)
 		(*post_proc)(req, new_w, args, num_args);
 }
-
 static void
 CInitializeLeafWrapper(
 			Widget req,
@@ -1966,13 +1756,10 @@ CInitializeLeafWrapper(
 	XtInitProc post_proc = NULL;
 	int leafDepth = GetDepth((WidgetClass) cwc);
 	XmWrapperData wrapperData;
-
 	_XmProcessLock();
-
 	if (leafDepth == depth) {
 		XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 		wrapperData = GetWrapperData((WidgetClass) cwc);
-
 		init_proc = wrapperData->constraintInitializeLeaf;
 		if ((post_proc = (*wcePtr)->initializePosthook)) {
 		    if ((--(wrapperData->constraintInitializeLeafCount)) ==0)
@@ -1982,24 +1769,19 @@ CInitializeLeafWrapper(
 	}
 	else {
 		int depthDiff = leafDepth - depth;
-
 		for ( ; depthDiff;
 		        depthDiff--, cwc = (ConstraintWidgetClass)
 		                           cwc->core_class.superclass)
 			{};
-
 		wrapperData = GetWrapperData((WidgetClass) cwc);
 		init_proc = wrapperData->constraintInitializeLeaf;
 	}
-
 	_XmProcessUnlock();
-
 	if (init_proc)
 		(*init_proc)(req, new_w, args, num_args);
 	if (post_proc)
 		(*post_proc)(req, new_w, args, num_args);
 }
-
 static void
 InitializeLeafWrapper0(
 	Widget req, Widget new_w, ArgList args, Cardinal *num_args)
@@ -2060,7 +1842,6 @@ InitializeLeafWrapper9(
 {
 	InitializeLeafWrapper(req, new_w, args, num_args, 9);
 }
-
 static void
 CInitializeLeafWrapper0(
 	Widget req, Widget new_w, ArgList args, Cardinal *num_args)
@@ -2121,7 +1902,6 @@ CInitializeLeafWrapper9(
 {
 	CInitializeLeafWrapper(req, new_w, args, num_args,9);
 }
-
 static XtSetValuesFunc SetValuesLeafWrappers[] = {
 	SetValuesLeafWrapper0,
 	SetValuesLeafWrapper1,
@@ -2146,7 +1926,6 @@ static XtSetValuesFunc CSetValuesLeafWrappers[] = {
 	CSetValuesLeafWrapper8,
 	CSetValuesLeafWrapper9
 };
-
 /*
  * This function replaces the objectClass set_values slot and is
  * called at the start of every XtSetValues invocation.
@@ -2162,24 +1941,17 @@ SetValuesRootWrapper(
 	WidgetClass wc = XtClass(new_w);
 	XmBaseClassExt *wcePtr;
 	Boolean returnVal = False;
-
 	wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
 	if (wcePtr && *wcePtr) {
-
 	   if ((*wcePtr)->setValuesPrehook)
 		returnVal |= (*((*wcePtr)->setValuesPrehook))
 				(current, req, new_w, args,  num_args);
-
 	   if ((*wcePtr)->setValuesPosthook) {
 	    	XmWrapperData wrapperData;
-
 	    	_XmProcessLock();
-
 	    	if (!XtIsShell(new_w) && XtParent(new_w)
 		    	&& XtIsConstraint(XtParent(new_w))) {
 	    		ConstraintWidgetClass cwc;
-
 			cwc = (ConstraintWidgetClass) XtClass(XtParent(new_w));
 			wrapperData = GetWrapperData((WidgetClass) cwc);
 			if (wrapperData->constraintSetValuesLeafCount ==0)
@@ -2203,18 +1975,14 @@ SetValuesRootWrapper(
 			}
 			(wrapperData->setValuesLeafCount)++;
 		}
-
 	   	_XmProcessUnlock();
 	   }
 	}
-
 	if (objectClassWrapper.setValues)
 	    returnVal |= (*objectClassWrapper.setValues)
 				(current, req, new_w, args, num_args);
-
 	return returnVal;
 }
-
 static Boolean
 SetValuesLeafWrapper(
                         Widget current,
@@ -2230,12 +1998,9 @@ SetValuesLeafWrapper(
 	Boolean returnVal = False;
 	int leafDepth = GetDepth(wc);
 	XmWrapperData wrapperData;
-
 	_XmProcessLock();
-
 	if (leafDepth == depth) { /* Correct depth */
 	   wrapperData = GetWrapperData(wc);
-
 	   if (!XtIsShell(new_w) && XtParent(new_w) &&
 			   XtIsConstraint(XtParent(new_w))) {
 		setvalues_proc = wrapperData->setValuesLeaf;
@@ -2253,27 +2018,21 @@ SetValuesLeafWrapper(
 	}
 	else {
 		int depthDiff = leafDepth - depth;
-
 		for ( ; depthDiff;
 			depthDiff--, wc = wc->core_class.superclass)
 			{};
-
 		wrapperData = GetWrapperData(wc);
 		setvalues_proc = wrapperData->setValuesLeaf;
 	}
-
 	_XmProcessUnlock();
-
 	if (setvalues_proc)
 		returnVal |= (*setvalues_proc)
 				(current, req, new_w, args, num_args);
 	if (post_proc)
 		returnVal |= (*post_proc)
 				(current, req, new_w, args, num_args);
-
 	return returnVal;
 }
-
 static Boolean
 CSetValuesLeafWrapper(
                         Widget current,
@@ -2291,9 +2050,7 @@ CSetValuesLeafWrapper(
 	Boolean returnVal = False;
 	int leafDepth = GetDepth((WidgetClass) cwc);
 	XmWrapperData wrapperData;
-
 	_XmProcessLock();
-
 	if (leafDepth == depth) {
 		XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
 		wrapperData = GetWrapperData((WidgetClass) cwc);
@@ -2306,28 +2063,22 @@ CSetValuesLeafWrapper(
 	}
 	else {
 		int depthDiff = leafDepth - depth;
-
 	 	for ( ; depthDiff;
 		 	depthDiff--, cwc = (ConstraintWidgetClass)
 		                           cwc->core_class.superclass)
 			{};
-
 		wrapperData = GetWrapperData((WidgetClass) cwc);
 		setvalues_proc = wrapperData->constraintSetValuesLeaf;
 	}
-
 	_XmProcessUnlock();
-
 	if (setvalues_proc)
 		returnVal |= (*setvalues_proc)
 				(current, req, new_w, args, num_args);
 	if (post_proc)
 		returnVal |= (*post_proc)
 				(current, req, new_w, args, num_args);
-
 	return returnVal;
 }
-
 static Boolean
 SetValuesLeafWrapper0(
 	Widget current, Widget req, Widget new_w, ArgList args,
@@ -2398,7 +2149,6 @@ SetValuesLeafWrapper9(
 {
 	return SetValuesLeafWrapper(current, req, new_w, args, num_args, 9);
 }
-
 static Boolean
 CSetValuesLeafWrapper0(
 	Widget current, Widget req, Widget new_w, ArgList args,
@@ -2469,7 +2219,6 @@ CSetValuesLeafWrapper9(
 {
 	return CSetValuesLeafWrapper(current, req, new_w, args, num_args, 9);
 }
-
 static XtArgsProc GetValuesLeafWrappers[] = {
 	GetValuesLeafWrapper0,
 	GetValuesLeafWrapper1,
@@ -2482,7 +2231,6 @@ static XtArgsProc GetValuesLeafWrappers[] = {
 	GetValuesLeafWrapper8,
 	GetValuesLeafWrapper9
 };
-
 /*
  * This function replaces the objectClass get_values slot and is
  * called at the start of every XtGetValues invocation.
@@ -2495,19 +2243,13 @@ GetValuesRootWrapper(
 {
 	WidgetClass wc = XtClass(new_w);
 	XmBaseClassExt *wcePtr;
-
 	wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
 	if (wcePtr && *wcePtr) {
-
 	   if ((*wcePtr)->getValuesPrehook)
 		(*((*wcePtr)->getValuesPrehook))(new_w, args, num_args);
-
 	   if ((*wcePtr)->getValuesPosthook) {
 		XmWrapperData wrapperData;
-
 		_XmProcessLock();
-
 		wrapperData = GetWrapperData(wc);
 		if (wrapperData->getValuesLeafCount == 0) {
 			wrapperData->getValuesLeaf =
@@ -2516,14 +2258,12 @@ GetValuesRootWrapper(
 				GetValuesLeafWrappers[GetDepth(wc)];
 		}
 		(wrapperData->getValuesLeafCount)++;
-
 		_XmProcessUnlock();
 	   }
 	}
 	if (objectClassWrapper.getValues)
 		(*objectClassWrapper.getValues) (new_w, args, num_args);
 }
-
 static void
 GetValuesLeafWrapper(
                         Widget new_w,
@@ -2536,12 +2276,9 @@ GetValuesLeafWrapper(
 	XtArgsProc post_proc = NULL;
 	int leafDepth = GetDepth(wc);
 	XmWrapperData wrapperData;
-
 	_XmProcessLock();
-
 	if (leafDepth == depth) { /* Correct depth */
 	   XmBaseClassExt *wcePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
 	   wrapperData = GetWrapperData(wc);
 	   getvalues_proc = wrapperData->getValuesLeaf;
 	   if ((post_proc = ((*wcePtr)->getValuesPosthook))) {
@@ -2552,23 +2289,18 @@ GetValuesLeafWrapper(
 	}
 	else {
 		int depthDiff = leafDepth - depth;
-
 		for ( ; depthDiff;
 			depthDiff--, wc = wc->core_class.superclass)
 			{};
-
 		wrapperData = GetWrapperData(wc);
 		getvalues_proc = wrapperData->getValuesLeaf;
 	}
-
 	_XmProcessUnlock();
-
 	if (getvalues_proc)
 		(*getvalues_proc)(new_w, args, num_args);
 	if (post_proc)
 		(*post_proc)(new_w, args,  num_args);
 }
-
 static void
 GetValuesLeafWrapper0( Widget new_w, ArgList args,Cardinal *num_args)
 {
@@ -2619,22 +2351,18 @@ GetValuesLeafWrapper9( Widget new_w, ArgList args,Cardinal *num_args)
 {
 	GetValuesLeafWrapper(new_w, args, num_args, 9);
 }
-
 static int
 GetDepth(WidgetClass wc)
 {
 	int i;
-
 	for (i = 0;
 	     wc && wc != rectObjClass;
 	     i++, wc = wc->core_class.superclass) {};
-
 	if (wc)
 		return i;
 	else
 		return 0;
 }
-
 /*
  * These symbols must always be present so applications compiling with
  * -DXTHREADS can still link against libraries built without it.  How
@@ -2644,19 +2372,15 @@ GetDepth(WidgetClass wc)
 inline void _XmFastSubclassInit(WidgetClass wc, unsigned int bit)
 {
 	XmBaseClassExt *basePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
 	if (basePtr && (*basePtr))
 		_XmSetFlagsBit(((*basePtr)->flags), bit);
 }
-
 Boolean inline
 _XmIsFastSubclass(WidgetClass wc, unsigned int bit)
 {
 	XmBaseClassExt *basePtr = _XmGetBaseClassExtPtr(wc, XmQmotif);
-
 	if (!basePtr || !(*basePtr))
 		return False;
-
 	if (_XmGetFlagsBit(((*basePtr)->flags), bit))
 		return True;
 	else

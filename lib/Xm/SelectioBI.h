@@ -27,16 +27,11 @@
 /* $XConsortium: SelectioBI.h /main/5 1995/07/13 17:57:50 drk $ */
 #ifndef _XmSelectioBI_h
 #define _XmSelectioBI_h
-
 #include <Xm/SelectioBP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern void _XmSelectionBoxCreateListLabel(
                         XmSelectionBoxWidget sel) ;
 extern void _XmSelectionBoxCreateSelectionLabel(
@@ -115,15 +110,10 @@ extern void _XmSelectionBoxRestore(
                         XEvent *event,
                         String *argv,
                         Cardinal *argc) ;
-
 Widget _XmSelectionBoxGetChild(Widget sb, unsigned char which);
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmSelectioBI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

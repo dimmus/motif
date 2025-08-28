@@ -22,37 +22,27 @@
 */
 #ifndef _XmTextP_h
 #define _XmTextP_h
-
 #include <Xm/PrimitiveP.h>
 #include <Xm/TextOutP.h>
 #include <Xm/TextInP.h>
 #include <Xm/TransferT.h>
-
 typedef struct _InputRec *Input;
 typedef struct _OutputRec *Output;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define NODELTA		LONG_MAX
-
 #define TEXTWIDGETCLASS	"Text"	/* Resource class for the text widget. */
-
 #define GetSrc(widget)  (((XmTextWidget) (widget))->text.source)
-
 typedef struct {
   XtPointer		extension;	/* Pointer to extension record */
 } XmTextClassPart;
-
 typedef struct _XmTextClassRec {
     CoreClassPart core_class;
     XmPrimitiveClassPart primitive_class;
     XmTextClassPart text_class;
 } XmTextClassRec;
-
 externalref XmTextClassRec	xmTextClassRec;
-
 typedef struct {
     XmTextPosition start;	/* First position in this line. */
     Boolean changed;		/* TRUE if something in this line changed. */
@@ -62,22 +52,18 @@ typedef struct {
 				/* line actually on the screen. */
     LineTableExtra extra;	/* Extra info the output module keeps. */
 } LineRec, *Line;
-
 typedef struct _XmTextLineTableRec{
     unsigned int start_pos:31;
     unsigned int virt_line:1;
 } XmTextLineTableRec, *XmTextLineTable;
-
 typedef struct {
     XmTextPosition from, to;	/* Information on one range to repaint. */
 } RangeRec;
-
 typedef struct {
     Cardinal number;		/* Number of ranges defined. */
     Cardinal maximum;		/* Number of ranges we have space for. */
     RangeRec *range;		/* Pointer to array of ranges. */
 } Ranges;
-
 /*
  * The data for on-the-spot support.
  */
@@ -93,7 +79,6 @@ typedef struct _OnTheSpotDataTW {
     Boolean verify_commit;
     int pad;
 } OnTheSpotDataRecTW, *OnTheSpotDataTW;
-
 #define PreStartTW(tw) ((tw)->text.onthespot->start)
 #define PreEndTW(tw) ((tw)->text.onthespot->end)
 #define PreCursorTW(tw) ((tw)->text.onthespot->cursor)
@@ -103,12 +88,9 @@ typedef struct _OnTheSpotDataTW {
 #define PreUnder(tw) ((tw)->text.onthespot->under_preedit)
 #define UnderVerifyPreedit(tw) ((tw)->text.onthespot->under_verify_preedit)
 #define VerifyCommitNeeded(tw) ((tw)->text.onthespot->verify_commit)
-
-
 /*
  * Structure for main text info.
  */
-
 typedef struct _XmTextPart {
     XmTextSource source;		   /* The source for this widget. */
     XtCallbackList activate_callback;      /* command activate callback. */
@@ -164,12 +146,10 @@ typedef struct _XmTextPart {
     Boolean pendingoff;         /* TRUE if we shouldn't do pending delete on
                                    the current selection. */
     char char_size;             /* number of bytes for storing a character */
-
     OnOrOff on_or_off;		  /* used to halt unecessary motion verify
 				     callback calls during primary moves.*/
     Output output;		   /* The output portion. */
     Input input;		   /* The input portion. */
-
     XmTextPosition first_position; /* First legal position in the source. */
     XmTextPosition last_position;  /* Last legal position in the source. */
     XmTextPosition forget_past;	   /* Forget all about positions past this. */
@@ -178,16 +158,13 @@ typedef struct _XmTextPart {
     XmTextPosition last_top_char;  /* unused - available. */
     XmTextPosition dest_position;  /* Location of the destination point. */
     int disable_depth;		   /* How many levels of disable we've done. */
-
     int pending_scroll;		/* Number of lines we want to scroll. */
     int total_lines;		/* Total number of lines in the text widget */
     int top_line;		/* Line number of the top visible line */
     int vsbar_scrolling;	/* scrolling using the vertical scrollbar */
-
     Cardinal number_lines;	/* Number of line table entries. */
     Cardinal maximum_lines;	/* Maximum number of line table entries. */
     Line line;			/* Pointer to array of line table entries. */
-
     Ranges repaint;		/* Info on the repaint ranges. */
     _XmHighlightData highlight;	/* Info on the highlighting regions. */
     _XmHighlightData old_highlight;/* Old value of above. */
@@ -197,25 +174,18 @@ typedef struct _XmTextPart {
     XmTextLineTable line_table;
     unsigned int table_size;
     unsigned int table_index;
-
     XtCallbackList  destination_callback;   /* Selection destination cb */
     int          hsbar_scrolling;/* scroring using the horizontal scrollbar */
-
     OnTheSpotDataTW onthespot;  /* On the spot preedit style support. */
-
     XtTranslations tm_table;
 } XmTextPart;
-
 typedef struct _XmTextRec {
     CorePart	core;
     XmPrimitivePart primitive;
     XmTextPart text;
 } XmTextRec;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTextP_h */
 /* DON't ADD STUFF AFTER THIS #endif */

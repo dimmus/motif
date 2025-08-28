@@ -25,17 +25,12 @@
 static char rcsid[] = "$TOG: Display.c /main/23 1997/06/18 17:36:59 samborn $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <stdio.h>
-
 #include <X11/Intrinsic.h>
 #include <X11/extensions/shape.h>
-
 #include <X11/Xatom.h>
 #include <Xm/AtomMgr.h>
 #include <Xm/DisplayP.h>
@@ -50,25 +45,17 @@ static char rcsid[] = "$TOG: Display.c /main/23 1997/06/18 17:36:59 samborn $"
 #include "MessagesI.h"
 #include "VirtKeysI.h"
 #include "ColorObjI.h"
-
 #define MESSAGE1 _XmMMsgDisplay_0001
 #define MESSAGE2 _XmMMsgDisplay_0002
 #define MESSAGE3 _XmMMsgDisplay_0003
-
 #define TheDisplay(dd) (XtDisplayOfObject((Widget)dd))
 #define TheScreen(dd) (XtScreen((Widget)dd))
-
 #define Offset(x) (XtOffsetOf( struct _XmDisplayRec, x))
-
 #define CHECK_TIME(dc, time) \
   ((dc->drag.dragStartTime <= time) && \
    ((dc->drag.dragFinishTime == 0) || (time <= dc->drag.dragFinishTime)))
-
 #define INVALID_PROTOCOL_VALUE 255
-
-
 /********    Static Function Declarations    ********/
-
 static void DisplayClassPartInitialize(
                         WidgetClass wc) ;
 static void DisplayClassInitialize( void ) ;
@@ -107,14 +94,10 @@ static void ReceiverShellExternalSourceHandler(
                         Boolean *dontSwallow) ;
 static Widget GetDisplay(
                         Display *display) ;
-
 /********    End Static Function Declarations    ********/
-
 externaldef(displaymsg) String	_Xm_MOTIF_DRAG_AND_DROP_MESSAGE = NULL;
-
 static XContext	displayContext = 0;
 static WidgetClass curDisplayClass = NULL;
-
 static XtResource resources[] = {
     {
 	XmNdropSiteManagerClass, XmCDropSiteManagerClass, XmRWidgetClass,
@@ -164,98 +147,84 @@ static XtResource resources[] = {
         sizeof(XtEnum), Offset(display.enable_warp),
         XmRImmediate, (XtPointer) True
     },
-
     {
         XmNdragStartCallback, XmCCallback,
  	XmRCallback, sizeof(XtCallbackList),
  	Offset(display.dragStartCallback),
         XmRImmediate, (XtPointer)NULL,
     },
-
     {
         XmNnoFontCallback, XmCCallback,
  	XmRCallback, sizeof(XtCallbackList),
  	Offset(display.noFontCallback),
         XmRImmediate, (XtPointer)NULL,
     },
-
     {
         XmNnoRenditionCallback, XmCCallback,
  	XmRCallback, sizeof(XtCallbackList),
  	Offset(display.noRenditionCallback),
         XmRImmediate, (XtPointer)NULL,
     },
-
     {
         XmNenableBtn1Transfer, XmCEnableBtn1Transfer,
         XmREnableBtn1Transfer, sizeof(XtEnum),
 	Offset(display.enable_btn1_transfer),
 	XmRImmediate, (XtPointer) XmOFF
     },
-
     {
         XmNenableButtonTab, XmCEnableButtonTab,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_button_tab),
 	XmRImmediate, (XtPointer) False
     },
-
     {
         XmNenableEtchedInMenu, XmCEnableEtchedInMenu,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_etched_in_menu),
 	XmRImmediate, (XtPointer) False
     },
-
     {
         XmNdefaultButtonEmphasis, XmCDefaultButtonEmphasis,
 	XmRDefaultButtonEmphasis, sizeof(XtEnum),
 	Offset(display.default_button_emphasis),
 	XmRImmediate, (XtPointer) XmEXTERNAL_HIGHLIGHT
     },
-
     {
         XmNenableToggleColor, XmCEnableToggleColor,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_toggle_color),
 	XmRImmediate, (XtPointer) False
     },
-
     {
         XmNenableToggleVisual, XmCEnableToggleVisual,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_toggle_visual),
 	XmRImmediate, (XtPointer) False
     },
-
     {
         XmNenableDragIcon, XmCEnableDragIcon,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_drag_icon),
 	XmRImmediate, (XtPointer) False
     },
-
     {
         XmNenableUnselectableDrag, XmCEnableUnselectableDrag,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_unselectable_drag),
 	XmRImmediate, (XtPointer) True
     },
-
     {
         XmNenableThinThickness, XmCEnableThinThickness,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_thin_thickness),
 	XmRImmediate, (XtPointer) False
     },
-
     {
         XmNenableMultiKeyBindings, XmCEnableMultiKeyBindings,
 	XmRBoolean, sizeof(Boolean),
 	Offset(display.enable_multi_key_bindings),
         XmRImmediate, (XtPointer) False
     },
-
     /* Force this resource to avoid loop in the pixmap conversion.
        XmDisplay is a VendorShell, so when iconPixmap is set in
        a resource file, the VendorShell converter is called, but
@@ -270,9 +239,7 @@ static XtResource resources[] = {
 	XmRImmediate, NULL
     },
 };
-
 #undef Offset
-
 static XmBaseClassExtRec baseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -298,8 +265,6 @@ static XmBaseClassExtRec baseClassExtRec = {
     (XmFocusChangeProc)NULL,               /* focusChange          */
     (XmWrapperData)NULL	/* wrapperData		*/
 };
-
-
 externaldef(xmdisplayclassrec)
 XmDisplayClassRec xmDisplayClassRec = {
     {
@@ -363,19 +328,14 @@ XmDisplayClassRec xmDisplayClassRec = {
 	NULL,				/* extension		*/
     },
 };
-
 externaldef(xmdisplayclass) WidgetClass
       xmDisplayClass = (WidgetClass) (&xmDisplayClassRec);
-
-
-
 static void
 DisplayClassPartInitialize(
 	WidgetClass wc )
 {
 	_XmFastSubclassInit(wc, XmDISPLAY_BIT);
 }
-
 static void
 DisplayClassInitialize( void )
 {
@@ -383,7 +343,6 @@ DisplayClassInitialize( void )
     _Xm_MOTIF_DRAG_AND_DROP_MESSAGE =
 		XmMakeCanonicalString("_MOTIF_DRAG_AND_DROP_MESSAGE");
 }
-
 static void
 SetDragReceiverInfo(
         Widget w,
@@ -392,7 +351,6 @@ SetDragReceiverInfo(
         Boolean *dontSwallow )
 {
     XmDisplay	dd = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
-
     if (XtIsRealized(w)) {
 	_XmSetDragReceiverInfo(dd, (Widget)client_data);
 	XtRemoveEventHandler(w, StructureNotifyMask, False,
@@ -400,7 +358,6 @@ SetDragReceiverInfo(
 			     client_data);
     }
 }
-
 /*
  * this routine is registered on the XmNtreeUpdateProc resource of the
  * dropSiteManager.  It is called whenever the tree is changed.
@@ -413,16 +370,13 @@ TreeUpdateHandler(
 {
     XmAnyCallbackStruct	    	*anyCB = (XmAnyCallbackStruct *)call;
     XmDisplay	  	dd = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
-
     if (dd->display.dragReceiverProtocolStyle == XmDRAG_NONE)
 		return;
-
     switch(anyCB->reason) {
       case XmCR_DROP_SITE_TREE_ADD:
 	{
 	    XmDropSiteTreeAddCallback cb =
 	      (XmDropSiteTreeAddCallback)anyCB;
-
 	    if (XtIsRealized(cb->rootShell)) {
 		_XmSetDragReceiverInfo(dd, cb->rootShell);
 	    }
@@ -456,7 +410,6 @@ TreeUpdateHandler(
 	break;
     }
 }
-
 /************************************************************************
  *
  *  DisplayInitialize
@@ -491,34 +444,27 @@ DisplayInitialize(
       _XA_MOTIF_WM_MENU, _XA_MOTIF_WM_MESSAGES, _XA_MOTIF_WM_OFFSET,
       "WM_PROTOCOLS"
     };
-
     Atom	atoms[XtNumber(atom_names)];
     XmDisplay	xmDisplay = (XmDisplay)new_widget;
     int		dummy1, dummy2;
     XContext 	context;
-
     /*
      * Pre-load the Xlib atom cache with atoms we are likely to use,
      * similar to the way _XmInitAtomPairs() did in  Motif 1.2.x.
      */
     XInternAtoms(XtDisplay(xmDisplay), atom_names, XtNumber(atom_names),
 		 False, atoms);
-
     xmDisplay->display.shellCount = 0;
-
     xmDisplay->display.numModals = 0;
     xmDisplay->display.modals = NULL;
     xmDisplay->display.maxModals = 0;
     xmDisplay->display.userGrabbed = False;
     xmDisplay->display.activeDC = NULL;
     xmDisplay->display.dsm = (XmDropSiteManagerObject) NULL;
-
     xmDisplay->display.proxyWindow =
       _XmGetDragProxyWindow(XtDisplay(xmDisplay));
-
     _XmInitByteOrderChar();
     xmDisplay->display.xmim_info = NULL;
-
     xmDisplay->display.displayInfo = (XtPointer) XtNew(XmDisplayInfo);
     ((XmDisplayInfo *)(xmDisplay->display.displayInfo))->SashCursor = 0L;
     ((XmDisplayInfo *)(xmDisplay->display.displayInfo))->TearOffCursor = 0L;
@@ -532,10 +478,8 @@ DisplayInitialize(
     ((XmDisplayInfo *)(xmDisplay->display.displayInfo))->resetFocusFlag = 0;
     ((XmDisplayInfo *)(xmDisplay->display.displayInfo))->traversal_in_progress=
 	FALSE;
-
     xmDisplay->display.displayHasShapeExtension =
       XShapeQueryExtension(XtDisplay(xmDisplay), &dummy1, &dummy2);
-
     /* Handle dynamic default of receiver protocol style */
     if (xmDisplay->display.dragReceiverProtocolStyle ==
 	INVALID_PROTOCOL_VALUE) {
@@ -545,15 +489,12 @@ DisplayInitialize(
 	xmDisplay->display.dragReceiverProtocolStyle =
 	  XmDRAG_PREFER_PREREGISTER;
     }
-
     _XmVirtKeysInitialize (new_widget);
-
     _XmProcessLock();
     if (displayContext == 0)
       displayContext = XUniqueContext();
     context = displayContext;
     _XmProcessUnlock();
-
 	if (! XFindContext(XtDisplay(xmDisplay), None, context,
 		(char **) &xmDisplay))
 	{
@@ -564,7 +505,6 @@ DisplayInitialize(
 		 * Xt doesn't really give us a way to abort a create.  We'll
 		 * just let the new one dangle.
 		 */
-
 		XmeWarning((Widget) xmDisplay, MESSAGE1);
 	}
 	else
@@ -574,12 +514,10 @@ DisplayInitialize(
 			 context,
 			 (char *)xmDisplay);
 	}
-
     if (xmDisplay->display.enable_multi_key_bindings) {
 	Display * display = XtDisplay(new_widget);
 	int i, num_screens = ScreenCount(display);
 	XrmDatabase new_db;
-
 	for (i = 0; i < num_screens; i++)  {
 	    Screen * screen = ScreenOfDisplay(display, i);
 	    XrmDatabase db = XtScreenDatabase(screen);
@@ -588,8 +526,6 @@ DisplayInitialize(
 	}
     }
 }
-
-
 /************************************************************************
  *
  *  DisplayInsertChild
@@ -601,7 +537,6 @@ DisplayInsertChild(
 {
 	if (XtIsRectObj(w)) {
 		XtWidgetProc insert_child;
-
 		_XmProcessLock();
 		insert_child = ((CompositeWidgetClass)compositeWidgetClass)
 				->composite_class.insert_child;
@@ -609,8 +544,6 @@ DisplayInsertChild(
 		(*insert_child)(w);
 	}
 }
-
-
 /************************************************************************
  *
  *  DisplayDeleteChild
@@ -622,7 +555,6 @@ DisplayDeleteChild(
 {
 	if (XtIsRectObj(w)) {
 		XtWidgetProc delete_child;
-
 		_XmProcessLock();
 		delete_child = ((CompositeWidgetClass)compositeWidgetClass)
 				->composite_class.delete_child;
@@ -630,7 +562,6 @@ DisplayDeleteChild(
 		(*delete_child)(w);
 	}
 }
-
 /************************************************************************
  *
  *  DisplayDestroy
@@ -642,31 +573,22 @@ DisplayDestroy(
 {
     XmDisplay dd = (XmDisplay) w ;
     XContext context;
-
     _XmProcessLock();
     context = displayContext;
     _XmProcessUnlock();
-
-
     XtFree((char *) dd->display.modals);
-
     if (((XmDisplayInfo *)(dd->display.displayInfo))
 		->excParentPane.pane != (Widget *)NULL)
 	XtFree((char *) ((XmDisplayInfo *)(dd->display.displayInfo))
 		->excParentPane.pane);
     XtFree((char *) dd->display.displayInfo);
-
     /* Destroy the DropSiteManager object. */
     if (dd->display.dsm != NULL)
 	XtDestroyWidget((Widget) dd->display.dsm);
-
     _XmClearDisplayTables(XtDisplay(w));
-
     _XmVirtKeysDestroy (w);
-
     XDeleteContext( XtDisplay( w), None, context) ;
 }
-
 XmDropSiteManagerObject
 _XmGetDropSiteManagerObject(
         XmDisplay xmDisplay )
@@ -680,7 +602,6 @@ _XmGetDropSiteManagerObject(
   if(    xmDisplay->display.dsm == NULL    )
     {
       Arg lclArgs[1] ;
-
       XtSetArg( lclArgs[0], XmNtreeUpdateProc, TreeUpdateHandler) ;
       xmDisplay->display.dsm = (XmDropSiteManagerObject) XtCreateWidget( "dsm",
                                        xmDisplay->display.dropSiteManagerClass,
@@ -688,17 +609,13 @@ _XmGetDropSiteManagerObject(
     }
   return( xmDisplay->display.dsm);
 }
-
-
 unsigned char
 _XmGetDragProtocolStyle(
         Widget w )
 {
     XmDisplay		xmDisplay;
     unsigned char	style;
-
     xmDisplay = (XmDisplay) XmGetXmDisplay(XtDisplay(w));
-
     switch(xmDisplay->display.dragReceiverProtocolStyle) {
 	  case XmDRAG_NONE:
 	  case XmDRAG_DROP_ONLY:
@@ -721,7 +638,6 @@ _XmGetDragProtocolStyle(
 	}
     return style;
 }
-
 Widget
 XmGetDragContext(
         Widget w,
@@ -730,10 +646,8 @@ XmGetDragContext(
 	XmDisplay		xmDisplay;
 	XmDragContext	matchedDC = NULL, dc = NULL;
 	Cardinal		i;
-
 	_XmWidgetToAppContext(w);
 	_XmAppLock(app);
-
 	xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
 	for(i = 0; i < xmDisplay->composite.num_children; i++)
 	{
@@ -748,7 +662,6 @@ XmGetDragContext(
 	_XmAppUnlock(app);
 	return((Widget)matchedDC);
 }
-
 Widget
 _XmGetDragContextFromHandle(
         Widget w,
@@ -757,9 +670,7 @@ _XmGetDragContextFromHandle(
 	XmDisplay		xmDisplay;
 	XmDragContext	dc;
 	Cardinal		i;
-
 	xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(w));
-
 	for(i = 0; i < xmDisplay->composite.num_children; i++)
 	{
 		dc = (XmDragContext)(xmDisplay->composite.children[i]);
@@ -770,10 +681,6 @@ _XmGetDragContextFromHandle(
 	}
 	return(NULL);
 }
-
-
-
-
 static XmDragContext
 FindDC(
         XmDisplay xmDisplay,
@@ -782,7 +689,6 @@ FindDC(
 {
 	XmDragContext	dc = NULL;
 	Cardinal			i;
-
 	for(i = 0; i < xmDisplay->composite.num_children; i++)
 	{
 		dc = (XmDragContext)(xmDisplay->composite.children[i]);
@@ -794,7 +700,6 @@ FindDC(
 	}
 	return(NULL);
 }
-
 static int
 isMine(
         Display *dpy,
@@ -803,15 +708,12 @@ isMine(
 {
 	XmDisplayEventQueryStruct 	*q = (XmDisplayEventQueryStruct *) arg;
 	XmICCCallbackStruct		callback, *cb = &callback;
-
 	/* Once we have a drop start we must stop looking at the queue */
 	if (q->hasDropStart)
 		return(False);
-
 	if (!_XmICCEventToICCCallback((XClientMessageEvent *)event,
 			cb, XmICC_INITIATOR_EVENT))
 		return(False);
-
 	if ((cb->any.reason == XmCR_DROP_SITE_ENTER) ||
 		(cb->any.reason == XmCR_DROP_SITE_LEAVE))
 	{
@@ -821,15 +723,12 @@ isMine(
 		 */
 		return(True);
 	}
-
-
 	if (!q->dc)
 		q->dc = FindDC(q->dd, cb->any.timeStamp, True);
 	/*
 	 * if we can find a dc then we have already processed
 	 * an enter for this shell.
 	 */
-
 	switch(cb->any.reason)
 	{
 		case XmCR_TOP_LEVEL_ENTER:
@@ -873,7 +772,6 @@ isMine(
 	}
 	return True;
 }
-
 /*
  * this handler is used to catch messages from external drag
  * contexts that want to map motion or drop events
@@ -897,14 +795,12 @@ ReceiverShellExternalSourceHandler(
     XmDropSiteManagerObject		dsm = _XmGetDropSiteManagerObject( dd);
     XmDropStartCallback     dsCallback = &dropStartCB;
     XmTopLevelEnterCallback teCallback = &enterCB;
-
     /*
      * If dd has an active dc then we are the initiator.  We shouldn't
      * do receiver processing as the initiator, so bail out.
      */
     if (dd->display.activeDC != NULL)
 	return;
-
     q.dd = dd;
     q.dc = (XmDragContext)NULL;
     q.enterCB = &enterCB;
@@ -920,22 +816,18 @@ ReceiverShellExternalSourceHandler(
      * we want to bail out now with don't swallow if we don't want this
      * event.  Otherwise we'll swallow it.
      */
-
      /*
 	  * process the event that fired this event handler.
 	  * If it's not a Receiver DND event, bail out.
 	  */
     if (!isMine(XtDisplayOfObject(w), event, (char*)&q))
 		return;
-
     /*
      * swallow all the pending messages inline except the last motion
      */
     while (XCheckIfEvent( XtDisplayOfObject(w), event, isMine, (char*)&q))
       /*EMPTY*/;
-
     dc = q.dc;
-
     if (q.hasEnter || q.hasMotion || q.hasDropStart || q.hasLeave) {
 	/*
 	 * handle a dangling leave first
@@ -943,7 +835,6 @@ ReceiverShellExternalSourceHandler(
 	if (q.hasLeave)
 	  {
 	      XmTopLevelLeaveCallback	callback = &leaveCB;
-
 	      topClientData.destShell = shell;
 	      topClientData.xOrigin = shell->core.x;
 	      topClientData.yOrigin = shell->core.y;
@@ -951,7 +842,6 @@ ReceiverShellExternalSourceHandler(
 	      topClientData.iccInfo = NULL;
 	      topClientData.window = XtWindow(w);
 	      topClientData.dragOver = NULL;
-
 	      _XmDSMUpdate(dsm,
 			   (XtPointer)&topClientData,
 			   (XtPointer)callback);
@@ -973,7 +863,6 @@ ReceiverShellExternalSourceHandler(
 		Time		timeStamp;
 		Window		window;
 		Atom		iccHandle;
-
 		if (q.hasDropStart) {
 		    timeStamp = dsCallback->timeStamp;
 		    window = dsCallback->window;
@@ -991,7 +880,6 @@ ReceiverShellExternalSourceHandler(
 		XtSetArg(args[i], XmNiccHandle, iccHandle);i++;
 		dc = (XmDragContext) XtCreateWidget("dragContext",
 			dd->display.dragContextClass, (Widget)dd, args, i);
-
 		/*
 		 * force in value for dropTransfer to use in selection
 		 * calls.
@@ -1005,7 +893,6 @@ ReceiverShellExternalSourceHandler(
 			dc->drag.currReceiverInfo->dragProtocolStyle = XmDRAG_XDND;
 		_XmReadInitiatorInfo((Widget)dc);
 	    }
-
 	    topClientData.destShell = shell;
 	    topClientData.xOrigin = XtX(shell);
 	    topClientData.yOrigin = XtY(shell);
@@ -1014,16 +901,13 @@ ReceiverShellExternalSourceHandler(
 	    topClientData.sourceIsExternal = True;
 	    topClientData.iccInfo = NULL;
 	}
-
 	if (!dc) return;
-
 	if (q.hasDropStart) {
 	    dc->drag.dragFinishTime = dropStartCB.timeStamp;
 	    if (dropStartCB.x == -1 || dropStartCB.y == -1) {
 	        dropStartCB.x = dc->drag.currReceiverInfo->xLast;
 	        dropStartCB.y = dc->drag.currReceiverInfo->yLast;
 	    }
-
 	    _XmDSMUpdate(dsm,
 			 (XtPointer)&topClientData,
 			 (XtPointer)&dropStartCB);
@@ -1039,7 +923,6 @@ ReceiverShellExternalSourceHandler(
 	if (q.hasMotion) {
 	    XmDragMotionCallback	callback = &motionCB;
 	    XmDragMotionClientDataStruct	motionData;
-
 	    /**
 	     * Xdnd doesn't give us position info for certain events, so we'll track
 	     * the last position we got in the drag context for later.
@@ -1052,7 +935,6 @@ ReceiverShellExternalSourceHandler(
 	}
     }
 }
-
 static Widget
 GetDisplay(
         Display *display )
@@ -1061,19 +943,15 @@ GetDisplay(
 	XContext        context;
 	Arg args[3];
 	int n;
-
 	_XmProcessLock();
 	context = displayContext;
 	_XmProcessUnlock();
-
 	if ((context == 0) ||
 		(XFindContext(display, None, context,
 			(char **) &xmDisplay)))
 	{
 		String	name, w_class;
-
 		XtGetApplicationNameAndClass(display, &name, &w_class);
-
 		n = 0;
 		XtSetArg(args[n], XmNmappedWhenManaged, False); n++;
 		XtSetArg(args[n], XmNwidth, 1); n++;
@@ -1081,12 +959,10 @@ GetDisplay(
 		xmDisplay = (XmDisplay) XtAppCreateShell(name, w_class,
 			xmDisplayClass, display, args, n);
 	}
-
 	/* We need a window to be useful */
 	if (!XtIsRealized((Widget)xmDisplay))
 	  {
 	    XtRealizeWidget((Widget)xmDisplay);
-
 	    /*
 	     * Got the resources - get rid of name-type properties.
 	     * Otherwise, clients (ie: xwd) may get the wrong window
@@ -1096,10 +972,8 @@ GetDisplay(
 	    XDeleteProperty(display, XtWindow(xmDisplay), XA_WM_ICON_NAME);
 	    XDeleteProperty(display, XtWindow(xmDisplay), XA_WM_CLASS);
 	  }
-
 	return ((Widget)xmDisplay);
 }
-
 Widget
 XmGetXmDisplay(
         Display *display )
@@ -1107,34 +981,28 @@ XmGetXmDisplay(
 	XmDisplayClass dC;
 	Widget w;
 	_XmDisplayToAppContext(display);
-
 	/*
 	 * We have a chicken and egg problem here; we'd like to get
 	 * the display via a class function, but we don't know which
 	 * class to use.  Hence the magic functions _XmGetXmDisplayClass
 	 * and _XmSetXmDisplayClass.
 	 */
-
 	_XmAppLock(app);
 	_XmProcessLock();
 	dC = (XmDisplayClass) _XmGetXmDisplayClass();
 	w = (*(dC->display_class.GetDisplay))(display);
 	_XmProcessUnlock();
 	_XmAppUnlock(app);
-
 	return w;
 }
-
 /*
  * It would be nice if the next two functions were methods, but
  * for obvious reasons they're not.
  */
-
 WidgetClass
 _XmGetXmDisplayClass( void )
 {
 	WidgetClass class;
-
 	_XmProcessLock();
 	if (curDisplayClass == NULL)
 		curDisplayClass = xmDisplayClass;
@@ -1142,14 +1010,12 @@ _XmGetXmDisplayClass( void )
 	_XmProcessUnlock();
 	return class;
 }
-
 WidgetClass
 _XmSetXmDisplayClass(
 	WidgetClass wc )
 {
 	WidgetClass oldDisplayClass;
 	WidgetClass sc = wc;
-
 	_XmProcessLock();
 	oldDisplayClass = curDisplayClass;
 	/*
@@ -1158,16 +1024,13 @@ _XmSetXmDisplayClass(
 	 */
 	while ((sc != NULL) && (sc != xmDisplayClass))
 		sc = sc->core_class.superclass;
-
 	if (sc != NULL)
 		curDisplayClass = wc;
 	else
 		XmeWarning(NULL, MESSAGE3);
-
 	_XmProcessUnlock();
 	return(oldDisplayClass);
 }
-
 /**********************************************************************
  *
  * _XmSetThickness
@@ -1184,20 +1047,15 @@ _XmSetThickness(
 {
 	XmDisplay	 xmDisplay;
 	static Dimension thickness;
-
 	xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(widget));
-
 	if (xmDisplay->display.enable_thin_thickness) {
 		thickness = 1;
 	}
 	else {
 		thickness = 2;
 	}
-
 	value->addr = (XPointer)&thickness;
-
 }
-
 /**********************************************************************
  *
  * _XmSetThicknessDefault0
@@ -1214,16 +1072,12 @@ _XmSetThicknessDefault0(
 {
 	XmDisplay	 xmDisplay;
 	static Dimension thickness;
-
 	xmDisplay = (XmDisplay)XmGetXmDisplay(XtDisplay(widget));
-
 	if (xmDisplay->display.enable_thin_thickness) {
 		thickness = 1;
 	}
 	else {
 		thickness = 0;
 	}
-
 	value->addr = (XPointer)&thickness;
-
 }

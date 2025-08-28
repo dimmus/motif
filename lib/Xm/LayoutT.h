@@ -26,28 +26,19 @@
  */
 #ifndef _XmLayoutT_H
 #define _XmLayoutT_H
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref XrmQuark XmQTspecifyLayoutDirection;
-
 /* Trait structures and typedefs, place typedefs first */
-
 typedef XmDirection (*XmGetLayoutDirectionProc)(Widget);
-
 /* Version 0: initial release. */
-
 typedef struct {
   int			   version;		/* 0 */
   XmGetLayoutDirectionProc get_direction;
 } XmSpecifyLayoutDirectionTraitRec, *XmSpecifyLayoutDirectionTrait;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmLayoutT_H */

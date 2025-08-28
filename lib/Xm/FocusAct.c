@@ -25,16 +25,12 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include "PrimitiveI.h"
 #include "UniqueEvnI.h"
-
 /**********************************************************************
  *
  * _XmMenuButtonTakeFocus
@@ -50,12 +46,9 @@ _XmMenuButtonTakeFocus(
 {
    /* Support menu replay, free server input queue until next button event */
    XAllowEvents(XtDisplay(wid), SyncPointer, CurrentTime);
-
    XmProcessTraversal(wid, XmTRAVERSE_CURRENT);
-
    _XmRecordEvent (event);
 }
-
 /**********************************************************************
  *
  * _XmMenuButtonTakeFocusUp

@@ -25,12 +25,9 @@
 static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 /*****************************************************************************
  * THE DROPSITE DATABASE
  *
@@ -75,7 +72,6 @@ static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
  * DetectAndInsertAllClippers(dsm, root) - We now rebuild the clipper
  * hierarchy.
  *****************************************************************************/
-
 #include <Xm/GadgetP.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/ManagerP.h>
@@ -94,7 +90,6 @@ static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
 #include "PixConvI.h"
 #include "RegionI.h"
 #include "TraversalI.h"		/* for _XmIntersectionOf() */
-
 #define MESSAGE1 _XmMMsgDropSMgr_0001
 #define MESSAGE2 _XmMMsgDropSMgr_0002
 #define MESSAGE3 _XmMMsgDropSMgr_0003
@@ -105,7 +100,6 @@ static char rcsid[] = "$TOG: DropSMgr.c /main/21 1999/08/11 14:44:57 vipin $"
 #define MESSAGE8 _XmMMsgDropSMgr_0008
 #define MESSAGE9 _XmMMsgDropSMgr_0009
 #define MESSAGE10 _XmMMsgDropSMgr_0010
-
 /* #define DEBUG */
 #ifdef DEBUG
 #define DPRINT(x) printf x
@@ -113,9 +107,7 @@ void _XmPrintDSTree(XmDropSiteManagerObject dsm, XmDSInfo root);
 #else
 #define DPRINT(x)
 #endif
-
 /********    Static Function Declarations    ********/
-
 static void ClassInit( void ) ;
 static void ClassPartInit(
                         WidgetClass wc) ;
@@ -334,9 +326,7 @@ static void DestroyCallback(
                         Widget widget,
                         XtPointer client_data,
                         XtPointer call_data) ;
-
 /********    End Static Function Declarations    ********/
-
 static XtResource resources[] = {
 { XmNnotifyProc, XmCNotifyProc, XmRCallbackProc,
   sizeof(XtCallbackProc),
@@ -351,9 +341,7 @@ static XtResource resources[] = {
   XtOffsetOf( struct _XmDropSiteManagerRec, dropManager.client_data),
   XmRImmediate, NULL },
 };
-
 /*  class record definition  */
-
 externaldef(xmdropsitemanagerclassrec)
     XmDropSiteManagerClassRec xmDropSiteManagerClassRec =
 {
@@ -398,48 +386,37 @@ externaldef(xmdropsitemanagerclassrec)
 		RetrieveInfo,        /* retrieveInfo         */
 		UpdateInfo,          /* updateInfo           */
 		EndUpdate,           /* endUpdate            */
-
 		Update,              /* updateDSM            */
-
 		ProcessMotion,       /* processMotion        */
 		ProcessDrop,         /* processDrop          */
 		ChangeOperation,     /* operationChanged     */
 		ChangeRoot,          /* changeDSRoot         */
-
 		InsertInfo,          /* insertInfo           */
 		RemoveInfo,          /* removeInfo           */
-
 		SyncTree,            /* syncTree             */
 		GetTreeFromDSM,      /* getTreeFromDSM       */
-
 		CreateTable,         /* createTable          */
 		DestroyTable,        /* destroyTable         */
 		RegisterInfo,        /* registerInfo         */
 		WidgetToInfo,        /* widgetToInfo         */
 		UnregisterInfo,      /* unregisterInfo       */
-
 		NULL,                /* extension            */
 	},
 };
-
 externaldef(xmdropsitemanagerobjectclass) WidgetClass
 	xmDropSiteManagerObjectClass = (WidgetClass)
 		&xmDropSiteManagerClassRec;
-
 static void
 ClassInit( void )
 {
     _XmRegisterPixmapConverters();
 }
-
 static void
 ClassPartInit(
 		WidgetClass wc )
 {
 	/*EMPTY*/
 }
-
-
 static void
 DropSiteManagerInitialize(
 		Widget rw,
@@ -450,7 +427,6 @@ DropSiteManagerInitialize(
 	XmDropSiteManagerObject 	dsm = (XmDropSiteManagerObject)nw;
 	XmDSFullInfoRec info_rec;
 	XmDSFullInfo info = &(info_rec);
-
 	dsm->dropManager.dragUnderData = NULL;
 	dsm->dropManager.curInfo = NULL;
 	dsm->dropManager.curTime = 0;
@@ -471,26 +447,21 @@ DropSiteManagerInitialize(
 	dsm->dropManager.updateInfo = NULL;
 	dsm->dropManager.updateTimeOutId = 0;
 	dsm->dropManager.dragUnderData = NULL;
-
 	/* Patch around broken Xt interfaces */
 	XtGetSubresources(nw, info, NULL, NULL, _XmDSResources,
 		_XmNumDSResources, NULL, 0);
 }
-
 static void
 Destroy(
 		Widget w )
 {
 	XmDropSiteManagerObject	dsm = (XmDropSiteManagerObject)w;
-
 	if (dsm->dropManager.updateTimeOutId)
 	    XtRemoveTimeOut(dsm->dropManager.updateTimeOutId);
-
 	DSMDestroyTable(dsm);
 	_XmRegionDestroy(dsm->dropManager.curAncestorClipRegion);
 	_XmRegionDestroy(dsm->dropManager.newAncestorClipRegion);
 }
-
 static Boolean
 SetValues(
 		Widget cw,
@@ -502,45 +473,37 @@ SetValues(
 	/*EMPTY*/
 	return False;
 }
-
 /* Function for Hash table */
 static Boolean
 CompareWidgets(XtPointer w1, XtPointer w2)
 {
   return(w1 == w2);
 }
-
 static XmHashValue
 HashWidget(XtPointer w1)
 {
   return((XmHashValue)(long)w1);
 }
-
 static void
 CreateTable(
 		XmDropSiteManagerObject dsm )
 {
   XtPointer *tab = &(dsm->dropManager.dsTable);
-
   _XmProcessLock();
   *tab = (XtPointer) _XmAllocHashTable(100, CompareWidgets, HashWidget);
   _XmProcessUnlock();
 }
-
 static void
 DestroyTable(
         XmDropSiteManagerObject dsm )
 {
     XtPointer * tab = &(dsm->dropManager.dsTable);
-
     _XmProcessLock();
     _XmFreeHashTable((XmHashTable) *tab);
     _XmProcessUnlock();
     *tab = NULL;
 }
-
 #define DSTABLE(dsm) ((XmHashTable)(dsm->dropManager.dsTable))
-
 static void
 RegisterInfo(
         register XmDropSiteManagerObject dsm,
@@ -548,26 +511,19 @@ RegisterInfo(
         register XtPointer info )
 {
     register XmHashTable tab;
-
     if (GetDSRegistered(info)) return;
-
     DPRINT(("(RegI) Widget %p (%s) info %p (internal %d widget %p)\n",
 	    widget, XtName(widget), info, GetDSInternal(info),
 	    GetDSWidget(info)));
-
     tab = DSTABLE(dsm);
-
     _XmProcessLock();
     /* Resize if the table has many more entries than slots */
     if (_XmHashTableCount(tab) > (2 * _XmHashTableSize(tab)))
       _XmResizeHashTable(tab, 2 * _XmHashTableSize(tab));
-
     _XmAddHashEntry(tab, widget, info);
     _XmProcessUnlock();
-
     SetDSRegistered(info, True);
 }
-
 static void
 UnregisterInfo(
         register XmDropSiteManagerObject dsm,
@@ -577,18 +533,13 @@ UnregisterInfo(
     XtPointer iterator;
     Widget widget = GetDSWidget(info);
     XtPointer data;
-
     if ((info == NULL) || !GetDSRegistered(info))
       return;
-
     DPRINT(("(UnregI) Widget %p (%s) info %p (internal %d widget %p)\n",
 	    widget, XtName(widget), info, GetDSInternal(info),
 	    GetDSWidget(info)));
-
     tab = DSTABLE(dsm);
-
     iterator = NULL;
-
     _XmProcessLock();
     while((data = _XmGetHashEntryIterate(tab, widget, &iterator)) != NULL)
       {
@@ -598,10 +549,8 @@ UnregisterInfo(
 	}
       }
       _XmProcessUnlock();
-
     SetDSRegistered(info, False);
 }
-
 static XtPointer
 WidgetToInfo(
         register XmDropSiteManagerObject dsm,
@@ -609,14 +558,10 @@ WidgetToInfo(
 {
   XmHashTable tab;
   XmDSInfo info;
-
   tab = DSTABLE(dsm);
-
   info = (XmDSInfo) _XmGetHashEntry(tab, widget);
-
   return((XtPointer) info);
 }
-
 static Boolean
 Coincident(
         XmDropSiteManagerObject dsm,
@@ -625,7 +570,6 @@ Coincident(
 {
 	XRectangle wR;
 	Boolean hit = False;
-
 	if (!XtIsShell(w))
 	{
 		/* r is shell relative, so wR needs to be translated */
@@ -638,63 +582,49 @@ Coincident(
 	{
 		wR.x = wR.y = 0;
 	}
-
-
 	wR.width = XtWidth(w);
 	wR.height = XtHeight(w);
-
 	if ( !(r->detected & XmDROP_SITE_LEFT_EDGE) && (r->x == wR.x))
 	{
 		r->detected |= XmDROP_SITE_LEFT_EDGE;
 		hit = True;
 	}
-
 	if ( !(r->detected & XmDROP_SITE_RIGHT_EDGE) &&
 		((r->x + r->width) == (wR.x + wR.width)))
 	{
 		r->detected |= XmDROP_SITE_RIGHT_EDGE;
 		hit = True;
 	}
-
 	if ( !(r->detected & XmDROP_SITE_TOP_EDGE) && (r->y == wR.y))
 	{
 		r->detected |= XmDROP_SITE_TOP_EDGE;
 		hit = True;
 	}
-
 	if ( !(r->detected & XmDROP_SITE_BOTTOM_EDGE) &&
 		((r->y + r->height) == (wR.y + wR.height)))
 	{
 		r->detected |= XmDROP_SITE_BOTTOM_EDGE;
 		hit = True;
 	}
-
 	return(hit);
 }
-
 static Boolean
 IsDescendent(
         Widget parentW,
         Widget childW )
 {
 	Widget tmp;
-
 	if ((parentW == NULL) || (childW == NULL))
 		return(False);
-
 	tmp = XtParent(childW);
-
 	while (tmp != parentW)
 	{
 		if (XtIsShell(tmp))
 			return(False);
-
 		tmp = XtParent(tmp);
 	}
-
 	return(True);
 }
-
 static void
 DetectAncestorClippers(
         XmDropSiteManagerObject dsm,
@@ -712,17 +642,13 @@ DetectAncestorClippers(
 	 * We can add as many as four clippers to the tree as a result
 	 * of this routine.
 	 */
-
-
 	/*
 	 * Hygiene.
 	 */
 	if (w == NULL)
 		return;
-
 	if (!XtIsShell(w))
 		DetectAncestorClippers(dsm, XtParent(w), r, info);
-
 	/*
 	 * We never need to add the shell to the tree as a clipper.
 	 * We call Coincident first so that any clipping provided by
@@ -731,50 +657,40 @@ DetectAncestorClippers(
 	if ((Coincident(dsm, w, r)) && (!XtIsShell(w)))
 	{
 		XmDSInfo clipper;
-
 		/* Have we already put this clipper in the tree? */
 		if ((clipper = (XmDSInfo) DSMWidgetToInfo(dsm, w)) != NULL)
 			return;
-
 		clipper = CreateClipperDSInfo(dsm, w);
 		DSMRegisterInfo(dsm, w, (XtPointer) clipper);
 		SetDSParent(clipper, dsm->dropManager.clipperList);
 		dsm->dropManager.clipperList = (XtPointer) clipper;
 	}
 }
-
 static void
 DetectImpliedClipper(
         XmDropSiteManagerObject dsm,
         XmDSInfo info )
 {
 	static XmRegion tmpRegion = NULL;
-
 	if (tmpRegion == NULL)
 	{
 		tmpRegion = _XmRegionCreate();
 	}
-
 	if ((GetDSType(info) == XmDROP_SITE_SIMPLE) && GetDSHasRegion(info))
 	{
 		Widget w = GetDSWidget(info);
 		XRectangle wr, tr, rr;
-
 		/*
 		 * This step only has meaning if there is a separately
 		 * specified region for this drop site (which can only be done
 		 * for simple drop sites).
 		 */
-
 		/* The region will be relative to the origin of the widget */
 		wr.x = wr.y = 0;
 		wr.width = XtWidth(w);
 		wr.height = XtHeight(w);
-
 		_XmRegionGetExtents(GetDSRegion(info), &rr);
-
 		_XmIntersectionOf(&wr, &rr, &tr);
-
 		if ((rr.x != tr.x) ||
 			(rr.y != tr.y) ||
 			(rr.width != tr.width) ||
@@ -786,14 +702,12 @@ DetectImpliedClipper(
 			 * of it.  (It refers to the same widget, but it's not
 			 * registered.)
 			 */
-
 			clipper = CreateClipperDSInfo(dsm, w);
 			SetDSParent(clipper, dsm->dropManager.clipperList);
 			dsm->dropManager.clipperList = (XtPointer) clipper;
 		}
 	}
 }
-
 static void
 DetectAllClippers(
         XmDropSiteManagerObject dsm,
@@ -804,17 +718,14 @@ DetectAllClippers(
 	int i;
 	Widget w;
 	static XmRegion tmpR = NULL;
-
 	if (GetDSLeaf(parentInfo))
 		return;
-
 	_XmProcessLock();
 	if (tmpR == NULL)
 	{
 		tmpR = _XmRegionCreate();
 	}
 	_XmProcessUnlock();
-
 	for (i = 0; i < (int)GetDSNumChildren(parentInfo); i++)
 	{
 		childInfo = (XmDSInfo) GetDSChild(parentInfo, i);
@@ -829,22 +740,15 @@ DetectAllClippers(
 		 */
 		_XmRegionGetExtents(GetDSRegion(childInfo),
 			(XRectangle *)(&extents));
-
 		_XmProcessLock();
 		_XmRegionUnion(GetDSRegion(childInfo), GetDSRegion(childInfo),
 			tmpR);
-
 		w = GetDSWidget(childInfo);
-
 		IntersectWithWidgetAncestors(w, tmpR);
-
 		_XmRegionGetExtents(tmpR, (XRectangle *)(&clippedExtents));
 		_XmProcessUnlock();
-
 		/* tmpR is now in shell relative position */
-
 		clippedExtents.detected = 0;
-
 		if ((clippedExtents.width < extents.width) ||
 			(clippedExtents.height < extents.height))
 		{
@@ -856,19 +760,16 @@ DetectAllClippers(
 				XtParent(GetDSWidget(childInfo)),
 				&clippedExtents, childInfo);
 		}
-
 		/*
 		 * We now have inserted clippers for any ancestors which may
 		 * have clipped the widget.  Now we need to check for the
 		 * case that the widget itself clips the region.
 		 */
 		DetectImpliedClipper(dsm, childInfo);
-
 		/* Re-Curse */
 		DetectAllClippers(dsm, childInfo);
 	}
 }
-
 static Boolean
 InsertClipper(
         XmDropSiteManagerObject dsm,
@@ -877,22 +778,18 @@ InsertClipper(
 {
 	int i;
 	XmDSInfo childInfo;
-
 	/*
 	 * Do a tail-end recursion which will insert the clipper into
 	 * the info tree as a child of its closest ancestor in the tree.
 	 */
-
 	if (GetDSLeaf(parentInfo))
 		return(False);
-
 	for (i=0; i < (int)GetDSNumChildren(parentInfo); i++)
 	{
 		childInfo = (XmDSInfo) GetDSChild(parentInfo, i);
 		if (InsertClipper(dsm, childInfo, clipper))
 			return(True);
 	}
-
 	if (IsDescendent(GetDSWidget(parentInfo), GetDSWidget(clipper)))
 	{
 		i = 0;
@@ -914,35 +811,28 @@ InsertClipper(
 				 */
 				i++;
 		}
-
 		AddDSChild(parentInfo, clipper, GetDSNumChildren(parentInfo));
-
 		/* We have inserted the clipper into the tree */
 		return(True);
 	}
 	else
 		return(False);
 }
-
 static void
 DetectAndInsertAllClippers(
         XmDropSiteManagerObject dsm,
         XmDSInfo root )
 {
 	XmDSInfo clipper;
-
 	if ((!GetDSShell(root)) || (GetDSRemote(root)))
 		return;
-
 	DetectAllClippers(dsm, root);
-
 	while ((clipper = (XmDSInfo) dsm->dropManager.clipperList) != NULL)
 	{
 		dsm->dropManager.clipperList = GetDSParent(clipper);
 		(void) InsertClipper(dsm, root, clipper);
 	}
 }
-
 static void
 RemoveClipper(
         XmDropSiteManagerObject dsm,
@@ -950,10 +840,8 @@ RemoveClipper(
 {
   XmDSInfo parentInfo = (XmDSInfo) GetDSParent(clipper);
   int i;
-
   /* Remove the clipper from its parent */
   RemoveDSChild(parentInfo, clipper);
-
   /*
    * Pull all of the children up into the parent's child
    * list between the clipper and the clipper's sibling.
@@ -962,14 +850,12 @@ RemoveClipper(
     XmDSInfo childInfo = (XmDSInfo) GetDSChild(clipper, i);
     AddDSChild(parentInfo, childInfo, GetDSNumChildren(parentInfo));
   }
-
   /*
    * Destroy the clipper
    */
   DSMUnregisterInfo(dsm, clipper);
   DestroyDSInfo(clipper, True);
 }
-
 static void
 RemoveAllClippers(
         XmDropSiteManagerObject dsm,
@@ -977,7 +863,6 @@ RemoveAllClippers(
 {
   XmDSInfo child;
   int i;
-
   if (!GetDSLeaf(parentInfo))
     {
       i = 0;
@@ -993,7 +878,6 @@ RemoveAllClippers(
       }
     }
 }
-
 static void
 DestroyDSInfo(
         XmDSInfo info,
@@ -1001,7 +885,6 @@ DestroyDSInfo(
 {
 	DestroyDS(info, substructures);
 }
-
 static XmDSInfo
 CreateShellDSInfo(
         XmDropSiteManagerObject dsm,
@@ -1010,9 +893,7 @@ CreateShellDSInfo(
 	XmDSInfo		info;
 	XmRegion region = _XmRegionCreate();
 	XRectangle rect;
-
 	info = (XmDSInfo) XtCalloc(1, sizeof(XmDSLocalNoneNodeRec));
-
 	SetDSLeaf(info, True);
 	SetDSShell(info, True);
 	SetDSAnimationStyle(info, XmDRAG_UNDER_NONE);
@@ -1020,19 +901,15 @@ CreateShellDSInfo(
 	SetDSInternal(info, True);
 	SetDSActivity(info, XmDROP_SITE_INACTIVE);
 	SetDSWidget(info, widget);
-
 	rect.x = rect.y = 0;
 	rect.width = XtWidth(widget);
 	rect.height = XtHeight(widget);
 	_XmRegionUnionRectWithRegion(&rect, region, region);
 	SetDSRegion(info, region);
-
 	XtAddCallback(widget, XmNdestroyCallback,
 		DestroyCallback, dsm);
-
 	return(info);
 }
-
 static XmDSInfo
 CreateClipperDSInfo(
         XmDropSiteManagerObject dsm,
@@ -1041,33 +918,26 @@ CreateClipperDSInfo(
 	XmDSInfo info = NULL;
 	XmRegion region = _XmRegionCreate();
 	XRectangle rect;
-
 	info = (XmDSInfo) XtCalloc(1, sizeof(XmDSLocalNoneNodeRec));
-
 	SetDSLeaf(info, True);
 	SetDSInternal(info, True);
 	SetDSType(info, XmDROP_SITE_COMPOSITE);
 	SetDSAnimationStyle(info, XmDRAG_UNDER_NONE);
 	SetDSWidget(info, clipW);
 	SetDSActivity(info, XmDROP_SITE_ACTIVE);
-
 	rect.x = rect.y = 0;
 	rect.width = XtWidth(clipW);
 	rect.height = XtHeight(clipW);
 	_XmRegionUnionRectWithRegion(&rect, region, region);
 	SetDSRegion(info, region);
-
 	/*
 	 * Don't need a destroy callback.  When this widget is destroyed
 	 * the drop site children will be destroyed and as a side-effect
 	 * of the last drop site being destroyed, the clipper will be
 	 * destroyed.
 	 */
-
 	return(info);
 }
-
-
 static void
 InsertInfo(
         XmDropSiteManagerObject dsm,
@@ -1077,13 +947,11 @@ InsertInfo(
 	XmDSInfo	childInfo = (XmDSInfo) info;
 	XmDSInfo	parentInfo = NULL;
 	Widget		parent = XtParent(GetDSWidget(childInfo));
-
 	while (!(parentInfo = (XmDSInfo) DSMWidgetToInfo(dsm, parent)) &&
 		!XtIsShell(parent))
 	{
 		parent = XtParent(parent);
 	}
-
 	if (parentInfo == NULL)
 	{
 		/*
@@ -1111,15 +979,12 @@ InsertInfo(
 			 * Display exactly once so that event handlers and such
 			 * can be installed on this client.
 			 */
-
 			XmDropSiteTreeAddCallbackStruct	outCB;
-
 			outCB.reason = XmCR_DROP_SITE_TREE_ADD;
 			outCB.event = NULL;
 			outCB.rootShell = parent;
 			outCB.numDropSites = 0; /* Unused */
 			outCB.numArgsPerDSHint = 0;
-
 			(dsm->dropManager.treeUpdateProc)
 			  ((Widget) dsm, NULL, (XtPointer) &outCB);
 		}
@@ -1133,7 +998,6 @@ InsertInfo(
 		XmeWarning(GetDSWidget(childInfo), MESSAGE1);
 	}
 }
-
 static void
 RemoveInfo(
         XmDropSiteManagerObject dsm,
@@ -1141,13 +1005,9 @@ RemoveInfo(
 {
 	Widget widget = GetDSWidget(info);
 	XmDSInfo parentInfo = (XmDSInfo) GetDSParent(info);
-
 	RemoveDSChild(parentInfo, (XmDSInfo) info);
-
 	DSMUnregisterInfo(dsm, info);
-
 	XtRemoveCallback(widget, XmNdestroyCallback, DestroyCallback, dsm);
-
 	if ((parentInfo != NULL) &&
 		(GetDSNumChildren(parentInfo) == 0) &&
 		(GetDSInternal(parentInfo)))
@@ -1161,7 +1021,6 @@ RemoveInfo(
 			if (dsm->dropManager.treeUpdateProc)
 			{
 				XmDropSiteTreeAddCallbackStruct	outCB;
-
 				outCB.reason = XmCR_DROP_SITE_TREE_REMOVE;
 				outCB.event = NULL;
 				outCB.rootShell = GetDSWidget(parentInfo);
@@ -1169,12 +1028,9 @@ RemoveInfo(
 				  ((Widget)dsm, NULL, (XtPointer) &outCB);
 			}
 		}
-
 		DSMDestroyInfo(dsm, GetDSWidget(parentInfo));
 	}
 }
-
-
 static Boolean
 IntersectWithWidgetAncestors(
         Widget w,
@@ -1187,40 +1043,31 @@ IntersectWithWidgetAncestors(
 	XRectangle parentR;
 	static XmRegion tmpR = NULL;
 	Dimension bw = XtBorderWidth(w);
-
 	if (XtIsShell(w))
 	{
 		return(True);
 	}
-
 	_XmProcessLock();
 	if (tmpR == NULL)
 	{
 		tmpR = _XmRegionCreate();
 	}
 	_XmProcessUnlock();
-
 	/* Translate the coordinates into parent relative coords */
 	_XmRegionOffset(r, (XtX(w) + bw), (XtY(w) + bw));
-
 	parentR.x = parentR.y = 0;
 	parentR.width = XtWidth(XtParent(w));
 	parentR.height = XtHeight(XtParent(w));
-
 	_XmProcessLock();
 	_XmRegionClear(tmpR);
 	_XmRegionUnionRectWithRegion(&parentR, tmpR, tmpR);
-
 	_XmRegionIntersect(tmpR, r, r);
 	_XmProcessUnlock();
-
 	if (!_XmRegionIsEmpty(r))
 		return(IntersectWithWidgetAncestors(XtParent(w), r));
 	else
 		return(False);
 }
-
-
 static Boolean
 IntersectWithDSInfoAncestors(
         XmDSInfo parent,
@@ -1229,7 +1076,6 @@ IntersectWithDSInfoAncestors(
 	static XmRegion testR = (XmRegion) NULL;
 	static XmRegion pR = (XmRegion) NULL;
 	Dimension bw;
-
 	_XmProcessLock();
 	if (testR == NULL)
 	{
@@ -1237,7 +1083,6 @@ IntersectWithDSInfoAncestors(
 		pR = _XmRegionCreate();
 	}
 	_XmProcessUnlock();
-
 	/*
 	 * A simplifying assumption in this code is that the regions
 	 * are all relative to the shell widget.  We don't have to
@@ -1247,18 +1092,15 @@ IntersectWithDSInfoAncestors(
 	 * region with its ancestors until we reach the top of the drop
 	 * site tree.
 	 */
-
 	/*
 	 * If got to the top, then there is some part of the
 	 * region which is visible.
 	 */
 	if (parent == NULL)
 		return(True);
-
 	_XmProcessLock();
 	_XmRegionUnion(GetDSRegion(parent), GetDSRegion(parent), pR);
 	_XmProcessUnlock();
-
 	if ((bw = GetDSBorderWidth(parent)) != 0)
 	{
 		/*
@@ -1272,18 +1114,14 @@ IntersectWithDSInfoAncestors(
 		_XmRegionShrink(pR, bw, bw);
 		_XmProcessUnlock();
 	}
-
 	_XmProcessLock();
 	_XmRegionIntersect(r, pR, r);
 	_XmProcessUnlock();
-
 	/* C will ensure that we only recurse if testR is non-empty */
 	return((!_XmRegionIsEmpty(r)) &&
 		(IntersectWithDSInfoAncestors(
 			(XmDSInfo) GetDSParent(parent), r)));
 }
-
-
 static Boolean
 CalculateAncestorClip(
         XmDropSiteManagerObject dsm,
@@ -1296,18 +1134,14 @@ CalculateAncestorClip(
 	 * be in shell relative coordinates.
 	 */
 	_XmRegionClear(r);
-
     if (GetDSRemote(info))
 	{
 		XRectangle universe;
-
 		/* Set it to the "universe" -- which is shell relative */
 		universe.x = universe.y = 0;
 		universe.width = dsm->dropManager.rootW;
 		universe.height = dsm->dropManager.rootH;
-
 		_XmRegionUnionRectWithRegion(&universe, r, r);
-
 		/*
 		 * IntersectWithDSInfoAncestors will shoot the universe
 		 * through all of the DSInfo ancestors and return us what
@@ -1320,7 +1154,6 @@ CalculateAncestorClip(
 	{
 		XRectangle parentR;
 		Widget parentW = XtParent(GetDSWidget(info));
-
 		if (parentW == NULL)
 			return(True);
 		else
@@ -1328,9 +1161,7 @@ CalculateAncestorClip(
 			parentR.x = parentR.y = -(XtBorderWidth(parentW));
 			parentR.width = XtWidth(parentW);
 			parentR.height = XtHeight(parentW);
-
 			_XmRegionUnionRectWithRegion(&parentR, r, r);
-
 			/*
 			 * IntersectWithWidgetAncestors will intersect the parent
 			 * of info with all successive parents and return us what
@@ -1340,8 +1171,6 @@ CalculateAncestorClip(
 		}
 	}
 }
-
-
 static Boolean
 PointInDS(
         XmDropSiteManagerObject dsm,
@@ -1353,7 +1182,6 @@ PointInDS(
 	static XmRegion tmpR = (XmRegion) NULL;
 	XmRegion *visR = &(dsm->dropManager.newAncestorClipRegion);
 	Widget w = GetDSWidget(info);
-
 	_XmProcessLock();
 	if (testR == NULL)
 	{
@@ -1361,13 +1189,11 @@ PointInDS(
 		tmpR = _XmRegionCreate();
 	}
 	_XmProcessUnlock();
-
 	/*
 	 * CalculateAncestorClip will intersect the universe with all of
 	 * the ancestors.  If anything is left, it will return true the
 	 * intersection will be in tmpR.
 	 */
-
 	_XmProcessLock();
 	if (!CalculateAncestorClip(dsm, info, tmpR))
 	{
@@ -1375,7 +1201,6 @@ PointInDS(
 		return(False);
 	}
 	_XmProcessUnlock();
-
 	if (GetDSRemote(info))
 	{
 		/*
@@ -1388,23 +1213,18 @@ PointInDS(
 	else
 	{
 		Position tmpX, tmpY;
-
 		_XmRegionUnion(GetDSRegion(info), GetDSRegion(info), testR);
-
 		/*
 		 * We know that the information is widget
 		 * relative so we will have to translate it.
 		 */
-
 		XtTranslateCoords(w, 0, 0, &tmpX, &tmpY);
-
 		_XmProcessLock();
 		_XmRegionOffset(testR, (tmpX - dsm->dropManager.rootX),
 			(tmpY - dsm->dropManager.rootY));
 		_XmRegionIntersect(tmpR, testR, testR);
 		_XmProcessUnlock();
 	}
-
 	_XmProcessLock();
 	if ((!_XmRegionIsEmpty(testR)) &&
 		(_XmRegionPointInRegion(testR, x, y)))
@@ -1418,11 +1238,8 @@ PointInDS(
 		_XmProcessUnlock();
 		return(False);
 	}
-
 	/* _XmProcessUnlock();	*/	/* not reached */
 }
-
-
 static XmDSInfo
 PointToDSInfo(
         XmDropSiteManagerObject dsm,
@@ -1432,7 +1249,6 @@ PointToDSInfo(
 {
   unsigned int	i;
   XmDSInfo		child = NULL;
-
   if (!GetDSLeaf(info))
     {
       /*
@@ -1443,19 +1259,15 @@ PointToDSInfo(
       for (i = 0; i < GetDSNumChildren(info); i++)
 	{
 	  Boolean managed;
-
 	  child = (XmDSInfo) GetDSChild(info,i);
-
 	  if (GetDSRemote(child))
 	    managed = True;
 	  else {
 	    Widget child_widget;
 	    Widget parent;
-
 	    child_widget = GetDSWidget(child);
 	    parent = XtParent(child_widget);
 	    managed = XtIsManaged(child_widget);
-
 	    /* CR 7848,  first check if DS widget is managed and
 	       all the parents are managed.  To accomplish this
 	       we wander up to the shell and make sure all the widget
@@ -1465,7 +1277,6 @@ PointToDSInfo(
 	      parent = XtParent(parent);
 	    }
 	  }
-
 	  if (managed &&
 	      PointInDS(dsm, child, x, y) &&
 	      GetDSActivity(child) != XmDROP_SITE_INACTIVE)
@@ -1474,27 +1285,22 @@ PointToDSInfo(
 		{
 		  XmDSInfo descendant = PointToDSInfo(dsm, child,
 						      x, y);
-
 		  if (descendant != NULL)
 		    return(descendant);
 		}
-
 	      if (!GetDSInternal(child))
 		return(child);
 	    }
 	}
     }
-
   return(NULL);
 }
-
 static void
 DoAnimation(
         XmDropSiteManagerObject dsm,
         XmDragMotionClientData motionData,
         XtPointer callback )
 {
-
   XmDSInfo info = (XmDSInfo) (dsm->dropManager.curInfo);
   XmDSInfo parentInfo = (XmDSInfo) GetDSParent(info);
   Widget w;
@@ -1508,17 +1314,14 @@ DoAnimation(
   Boolean sourceIsExternal;
   Dimension bw = 0;
   Arg args[1];
-
   if (GetDSAnimationStyle(info) == XmDRAG_UNDER_NONE)
     return;
-
   /*
    * Should we have saved this from the last top level enter?
    */
   n = 0;
   XtSetArg(args[n], XmNsourceIsExternal, &sourceIsExternal); n++;
   XtGetValues(dc, args, n);
-
   _XmProcessLock();
   if (dsRegion == NULL)
     {
@@ -1527,11 +1330,9 @@ DoAnimation(
       tmpRegion  = _XmRegionCreate();
     }
   _XmProcessUnlock();
-
   if (sourceIsExternal)
     {
       animationData.dragOver = NULL;
-
       /*
        * The window is expected to the the shell window which will be
        * drawn in with include inferiors.
@@ -1547,37 +1348,29 @@ DoAnimation(
       animationData.window = motionData->window;
       animationData.screen = XtScreen(motionData->dragOver);
     }
-
   animationData.windowX = dsm->dropManager.rootX;
   animationData.windowY = dsm->dropManager.rootY;
   animationData.saveAddr =
     (XtPointer) &(dsm->dropManager.dragUnderData);
-
   /* We're going to need a copy. */
   _XmProcessLock();
   _XmRegionUnion(GetDSRegion(info), GetDSRegion(info), dsRegion);
   _XmProcessUnlock();
-
   bw = GetDSBorderWidth(info);
-
   if (!GetDSRemote(info))
     {
       Position wX, wY;
-
       w = GetDSWidget(info);
-
       XtTranslateCoords(w, 0, 0, &wX, &wY);
       _XmProcessLock();
       _XmRegionOffset(dsRegion, (wX - dsm->dropManager.rootX),
 		      (wY - dsm->dropManager.rootY));
       _XmProcessUnlock();
     }
-
   /* All drawing occurs within the drop site */
   _XmProcessLock();
   _XmRegionUnion(dsRegion, dsRegion, clipRegion);
   _XmProcessUnlock();
-
   if (bw && !GetDSHasRegion(info))
     {
       /*
@@ -1596,7 +1389,6 @@ DoAnimation(
       _XmRegionShrink(clipRegion, bw, bw);
       _XmProcessUnlock();
     }
-
   /*
    * trim off anything clipped by ancestors
    * ancestorClip region is in shell relative coordinates.
@@ -1605,7 +1397,6 @@ DoAnimation(
   _XmRegionIntersect(clipRegion,
 		     dsm->dropManager.curAncestorClipRegion, clipRegion);
   _XmProcessUnlock();
-
   /* trim off anything obsucred by a sibling stacked above us */
   if (parentInfo != NULL)
     {
@@ -1634,16 +1425,13 @@ DoAnimation(
 		   */
 		  Position wX, wY;
 		  Widget sibling = GetDSWidget(child);
-
 		  XtTranslateCoords(sibling, 0, 0, &wX, &wY);
 		  _XmProcessLock();
 		  _XmRegionUnion(GetDSRegion(child),
 				 GetDSRegion(child), tmpRegion);
-
 		  _XmRegionOffset(tmpRegion,
 				  (wX - dsm->dropManager.rootX),
 				  (wY - dsm->dropManager.rootY));
-
 		  _XmRegionSubtract(clipRegion, tmpRegion,
 				    clipRegion);
 		  _XmProcessUnlock();
@@ -1655,12 +1443,10 @@ DoAnimation(
   animationData.clipRegion = clipRegion;
   animationData.dropSiteRegion = dsRegion;
   _XmProcessUnlock();
-
   _XmDragUnderAnimation((Widget)dsm,
 			(XtPointer) &animationData,
 			(XtPointer) callback);
 }
-
 static void
 ProxyDragProc(
         XmDropSiteManagerObject dsm,
@@ -1675,7 +1461,6 @@ ProxyDragProc(
 	Arg args[10];
 	Widget shell;
 	unsigned char operations;
-
 	operations = callback->operations & GetDSOperations(info);
 	if (XmDROP_MOVE & operations)
 	  callback->operation = XmDROP_MOVE;
@@ -1685,33 +1470,26 @@ ProxyDragProc(
 	  callback->operation = XmDROP_LINK;
 	else
 	  callback->operation = XmDROP_NOOP;
-
 	n = 0;
 	XtSetArg(args[n], XmNexportTargets, &export_targets); n++;
 	XtSetArg(args[n], XmNnumExportTargets, &num_export); n++;
 	XtGetValues ((Widget)dc, args, n);
-
 	if (GetDSRemote(info))
 		shell = XtParent(dsm);
 	else
 		shell = GetDSWidget(info);
-
 	while (!XtIsShell(shell))
 		shell = XtParent(shell);
-
 	num_import = _XmIndexToTargets(shell,
 		GetDSImportTargetsID(info), &import_targets);
-
 	if ((callback->operation != XmDROP_NOOP) &&
 		(XmTargetsAreCompatible (XtDisplay (dsm),
 			export_targets, num_export, import_targets, num_import)))
 		callback->dropSiteStatus = XmVALID_DROP_SITE;
 	else
 		callback->dropSiteStatus = XmINVALID_DROP_SITE;
-
 	callback->animate = True;
 }
-
 static void
 HandleEnter(
         XmDropSiteManagerObject dsm,
@@ -1723,7 +1501,6 @@ HandleEnter(
 	XmDragProcCallbackStruct cbRec;
 	Position tmpX, tmpY;
 	XRectangle extents;
-
 	cbRec.reason = XmCR_DROP_SITE_ENTER_MESSAGE;
 	cbRec.event = (XEvent *) NULL;
 	cbRec.timeStamp = callback->timeStamp;
@@ -1734,49 +1511,37 @@ HandleEnter(
 	cbRec.operations = callback->operations;
 	cbRec.operation = callback->operation;
 	cbRec.animate = True;
-
 	ProxyDragProc(dsm, NULL, &cbRec);
-
 	if ((!GetDSRemote(info)) &&
 	    (GetDSDragProc(info) != NULL))
 	{
   	        Widget widget = GetDSWidget(info);
-
 		/* Return if this is not a managed widget, CR5215 */
 		if (! XtIsManaged(widget)) return;
-
 		/* Make the coordinates widget relative */
 		XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 		cbRec.x -= tmpX;
 		cbRec.y -= tmpY;
-
 		(*(GetDSDragProc(info)))
 			(widget, NULL, (XtPointer) &cbRec);
 	}
-
 	if ((cbRec.animate) &&
 		(cbRec.dropSiteStatus == XmVALID_DROP_SITE))
 		DoAnimation(dsm, motionData, (XtPointer) &cbRec);
-
 	dsm->dropManager.curDropSiteStatus = cbRec.dropSiteStatus;
 	dsm->dropManager.curAnimate = cbRec.animate;
 	dsm->dropManager.curOperations = cbRec.operations;
 	dsm->dropManager.curOperation = cbRec.operation;
-
 	if (dsm->dropManager.notifyProc)
 	{
 		XmDropSiteEnterCallbackStruct	outCB;
-
 		_XmRegionGetExtents(GetDSRegion(info), &extents);
-
 		outCB.reason = XmCR_DROP_SITE_ENTER;
 		outCB.event = NULL;
 		outCB.timeStamp = cbRec.timeStamp;
 		outCB.dropSiteStatus = cbRec.dropSiteStatus;
 		outCB.operations = cbRec.operations;
 		outCB.operation = cbRec.operation;
-
 		/*
 		 * Pass outCB.x and outCB.y as the root relative position
 		 * of the entered drop site.  Remote info's are already
@@ -1791,20 +1556,15 @@ HandleEnter(
 		else
 		{
 			Widget	widget = GetDSWidget(info);
-
 			XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 			outCB.x = extents.x + tmpX;
 			outCB.y = extents.y + tmpY;
 		}
-
 		(*(dsm->dropManager.notifyProc))
 			((Widget)dsm, dsm->dropManager.client_data,
 			 (XtPointer) &outCB);
 	}
 }
-
-
 static void
 HandleMotion(
         XmDropSiteManagerObject dsm,
@@ -1814,7 +1574,6 @@ HandleMotion(
         unsigned char style )
 {
 	XmDragProcCallbackStruct cbRec;
-
 	cbRec.reason = XmCR_DROP_SITE_MOTION_MESSAGE;
 	cbRec.event = (XEvent *) NULL;
 	cbRec.timeStamp = callback->timeStamp;
@@ -1823,32 +1582,24 @@ HandleMotion(
 	cbRec.y = dsm->dropManager.curY;
 	cbRec.animate = dsm->dropManager.curAnimate;
 	cbRec.dropSiteStatus = dsm->dropManager.curDropSiteStatus;
-
 	if (info != NULL)
 	{
 		cbRec.operations = dsm->dropManager.curOperations;
 		cbRec.operation = dsm->dropManager.curOperation;
-
 		if (	(!GetDSRemote(info)) &&
 			(GetDSDragProc(info) != NULL))
 		{
 			Widget	widget = GetDSWidget(info);
 			Position tmpX, tmpY;
-
 			/* Return if this is not a managed widget */
 			if (! XtIsManaged(widget)) return;
-
 			/* Make the coordinates widget relative */
-
 			XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 			cbRec.x -= tmpX;
 			cbRec.y -= tmpY;
-
 			(*(GetDSDragProc(info)))
 				(widget, NULL, (XtPointer) &cbRec);
 		}
-
 		if ((cbRec.animate) &&
 			(cbRec.dropSiteStatus !=
 				dsm->dropManager.curDropSiteStatus))
@@ -1857,11 +1608,9 @@ HandleMotion(
 				cbRec.reason = XmCR_DROP_SITE_ENTER;
 			else
 				cbRec.reason = XmCR_DROP_SITE_LEAVE;
-
 			DoAnimation(dsm, motionData, (XtPointer) &cbRec);
 			cbRec.reason = XmCR_DROP_SITE_MOTION_MESSAGE;
 		}
-
 		dsm->dropManager.curDropSiteStatus = cbRec.dropSiteStatus;
 		dsm->dropManager.curAnimate = cbRec.animate;
 		dsm->dropManager.curOperations = cbRec.operations;
@@ -1873,11 +1622,9 @@ HandleMotion(
 		cbRec.operation = callback->operation;
 		cbRec.dropSiteStatus = XmNO_DROP_SITE;
 	}
-
 	if (dsm->dropManager.notifyProc)
 	{
 		XmDragMotionCallbackStruct	outCB;
-
 		outCB.reason = XmCR_DRAG_MOTION;
 		outCB.event = NULL;
 		outCB.timeStamp = cbRec.timeStamp;
@@ -1886,13 +1633,11 @@ HandleMotion(
 		outCB.y = dsm->dropManager.curY;
 		outCB.operations = cbRec.operations;
 		outCB.operation = cbRec.operation;
-
 		(*(dsm->dropManager.notifyProc))
 			((Widget)dsm, dsm->dropManager.client_data,
 			 (XtPointer)&outCB);
 	}
 }
-
 static void
 HandleLeave(
         XmDropSiteManagerObject dsm,
@@ -1903,7 +1648,6 @@ HandleLeave(
         Boolean enterPending )
 {
 	XmDragProcCallbackStruct cbRec;
-
 	cbRec.reason = XmCR_DROP_SITE_LEAVE_MESSAGE;
 	cbRec.event = (XEvent *) NULL;
 	cbRec.timeStamp = callback->timeStamp;
@@ -1914,43 +1658,32 @@ HandleLeave(
 	cbRec.operation = callback->operation;
 	cbRec.animate = dsm->dropManager.curAnimate;
 	cbRec.dropSiteStatus = dsm->dropManager.curDropSiteStatus;
-
 	if (	(!GetDSRemote(info) && (GetDSDragProc(info) != NULL)))
 	{
 		Widget widget = GetDSWidget(info);
 		Position tmpX, tmpY;
-
 		/* Make the coordinates widget relative */
-
 		XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 		cbRec.x -= tmpX;
 		cbRec.y -= tmpY;
-
 		(*(GetDSDragProc(info)))
 			(widget, NULL, (XtPointer) &cbRec);
 	}
-
 	if ((cbRec.animate) &&
 		(cbRec.dropSiteStatus == XmVALID_DROP_SITE))
 		DoAnimation(dsm, motionData, (XtPointer) &cbRec);
-
 	if (dsm->dropManager.notifyProc)
 	{
 		XmDropSiteEnterPendingCallbackStruct	outCB;
-
 		outCB.reason = XmCR_DROP_SITE_LEAVE;
 		outCB.event = callback->event;
 		outCB.timeStamp = cbRec.timeStamp;
                 outCB.enter_pending = enterPending;
-
 		(*(dsm->dropManager.notifyProc))
 			((Widget)dsm, dsm->dropManager.client_data,
 			 (XtPointer)&outCB);
 	}
 }
-
-
 static void
 ProcessMotion(
         XmDropSiteManagerObject dsm,
@@ -1966,20 +1699,17 @@ ProcessMotion(
   XmDSInfo	curDSInfo = (XmDSInfo)(dsm->dropManager.curInfo);
   XmDSInfo	newDSInfo;
   unsigned char style;
-
   if (dsm->dropManager.curDragContext == NULL)
     {
       XmeWarning((Widget)dsm, MESSAGE2);
       return;
     }
-
   style = _XmGetActiveProtocolStyle(dsm->dropManager.curDragContext);
   dsm->dropManager.curTime = callback->timeStamp;
   dsm->dropManager.oldX = dsm->dropManager.curX;
   dsm->dropManager.oldY = dsm->dropManager.curY;
   dsm->dropManager.curX = x;
   dsm->dropManager.curY = y;
-
   if (dsRoot)
     {
       /*
@@ -1989,9 +1719,7 @@ ProcessMotion(
        */
       x -= dsm->dropManager.rootX;
       y -= dsm->dropManager.rootY;
-
       newDSInfo =  PointToDSInfo(dsm, dsRoot, x, y);
-
       if (curDSInfo != newDSInfo)
 	{
 	  if (curDSInfo) {
@@ -2010,23 +1738,18 @@ ProcessMotion(
 	      HandleLeave(dsm, motionData, callback,
 			  curDSInfo, style, False);
 	  }
-
 	  dsm->dropManager.curInfo = (XtPointer) newDSInfo;
 	  _XmRegionUnion(dsm->dropManager.newAncestorClipRegion,
 			 dsm->dropManager.newAncestorClipRegion,
 			 dsm->dropManager.curAncestorClipRegion);
-
 	  if (newDSInfo)
 	    HandleEnter(dsm, motionData, callback,
 			newDSInfo, style);
-
 	  return;
 	}
     }
-
   HandleMotion(dsm, motionData, callback, curDSInfo, style);
 }
-
 static void
 ProcessDrop(
         XmDropSiteManagerObject dsm,
@@ -2049,7 +1772,6 @@ ProcessDrop(
 	Position savX, savY;
 	Dimension savW, savH;
 	Time savTime;
-
 	if (dragContext == NULL)
 	{
 		/*
@@ -2059,7 +1781,6 @@ ProcessDrop(
 		 */
 		return;
 	}
-
 	/*
 	 * Look out for race conditions.
 	 *
@@ -2073,20 +1794,16 @@ ProcessDrop(
 	savW = dsm->dropManager.rootW;
 	savH = dsm->dropManager.rootH;
 	savTime = dsm->dropManager.curTime;
-
 	dsm->dropManager.curTime = callback->timeStamp;
 	dsm->dropManager.dsRoot = (XtPointer) newRoot;
 	dsm->dropManager.rootX = cd->xOrigin;
 	dsm->dropManager.rootY = cd->yOrigin;
 	dsm->dropManager.rootW = cd->width;
 	dsm->dropManager.rootH = cd->height;
-
 	x = callback->x - dsm->dropManager.rootX;
 	y = callback->y - dsm->dropManager.rootY;
-
 	if (newRoot != NULL)
 		info = PointToDSInfo(dsm, (XmDSInfo) dsm->dropManager.dsRoot, x, y);
-
 	if (info != NULL)
         {
             widget = GetDSWidget(info);
@@ -2102,11 +1819,9 @@ ProcessDrop(
 		/* we will do a failure drop transfer */
 		Arg		args[4];
 		Cardinal	i = 0;
-
 		XtSetArg(args[i], XmNtransferStatus, XmTRANSFER_FAILURE); i++;
 		XtSetArg(args[i], XmNnumDropTransfers, 0); i++;
 		(void) XmDropTransferStart(dragContext, args, i);
-
 		/* ???
 		 * Should we do something interesting with the callback
 		 * struct before calling notify in these cases?
@@ -2117,29 +1832,21 @@ ProcessDrop(
 	}
 	else
 	{
-
 		/* This will be needed by the ProxyDragProc */
 		dsm->dropManager.curInfo = (XtPointer) info;
-
 		/* Make the coordinates widget relative */
 		XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 		/* Load the dropProcStruct */
 		cbRec.reason = XmCR_DROP_MESSAGE;
 		cbRec.event = callback->event;
 		cbRec.timeStamp = callback->timeStamp;
 		cbRec.dragContext = dragContext;
-
 		/* Make the coordinates widget relative */
 		XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 		cbRec.x = callback->x - tmpX;
 		cbRec.y = callback->y - tmpY;
-
-
 		{ /* Nonsense to pre-load the cbRec correctly */
 			XmDragProcCallbackStruct junkRec;
-
 			junkRec.reason = XmCR_DROP_SITE_MOTION_MESSAGE;
 			junkRec.event = callback->event;
 			junkRec.timeStamp = cbRec.timeStamp;
@@ -2150,32 +1857,25 @@ ProcessDrop(
 			junkRec.operation = callback->operation;
 			junkRec.operations = callback->operations;
 			junkRec.animate = dsm->dropManager.curAnimate;
-
 			ProxyDragProc(dsm, NULL, &junkRec);
-
 			cbRec.dropSiteStatus = junkRec.dropSiteStatus;
 			cbRec.operation = junkRec.operation;
 			cbRec.operations = junkRec.operations;
 		}
-
 		cbRec.dropAction = callback->dropAction;
-
 		/* Call the drop site's drop proc */
 		(*(GetDSDropProc(info))) (widget, NULL, (XtPointer) &cbRec);
-
 		callback->operation = cbRec.operation;
 		callback->operations = cbRec.operations;
 		callback->dropSiteStatus = cbRec.dropSiteStatus;
 		callback->dropAction = cbRec.dropAction;
 	}
-
 	if (dsm->dropManager.notifyProc)
 	{
 		(*(dsm->dropManager.notifyProc))
 			((Widget)dsm, dsm->dropManager.client_data,
 			(XtPointer)callback);
 	}
-
 	dsm->dropManager.dsRoot = (XtPointer) savRoot;
 	dsm->dropManager.curInfo = (XtPointer) savInfo;
 	dsm->dropManager.rootX = savX;
@@ -2184,7 +1884,6 @@ ProcessDrop(
 	dsm->dropManager.rootH = savH;
 	dsm->dropManager.curTime = savTime;
 }
-
 static void
 ChangeOperation(
         XmDropSiteManagerObject dsm,
@@ -2198,7 +1897,6 @@ ChangeOperation(
 	XmDragProcCallbackStruct cbRec;
 	XmDSInfo info = (XmDSInfo) dsm->dropManager.curInfo;
 	unsigned char style;
-
 	if ((cbRec.dragContext = dsm->dropManager.curDragContext) == NULL)
 	{
 		XmeWarning((Widget)dsm, MESSAGE3);
@@ -2209,40 +1907,31 @@ ChangeOperation(
 		style = _XmGetActiveProtocolStyle(
 			dsm->dropManager.curDragContext);
 	}
-
 	cbRec.reason = callback->reason;
 	cbRec.event = callback->event;
 	cbRec.timeStamp = callback->timeStamp;
-
 	cbRec.x = dsm->dropManager.curX;
 	cbRec.y = dsm->dropManager.curY;
 	cbRec.dropSiteStatus = dsm->dropManager.curDropSiteStatus;
 	cbRec.animate = dsm->dropManager.curAnimate;
-
 	cbRec.operation = callback->operation;
 	cbRec.operations = callback->operations;
-
 	if (info != NULL)
 	{
 		ProxyDragProc(dsm, NULL, &cbRec);
-
 		if ((style == XmDRAG_DYNAMIC) &&
 			(!GetDSRemote(info)) &&
 			(GetDSDragProc(info) != NULL))
 		{
 			Widget widget = GetDSWidget(info);
 			Position tmpX, tmpY;
-
 			/* Make the coordinates widget relative */
 			XtTranslateCoords(widget, 0, 0, &tmpX, &tmpY);
-
 			cbRec.x -= tmpX;
 			cbRec.y -= tmpY;
-
 			(*(GetDSDragProc(info)))
 				(widget, NULL, (XtPointer) &cbRec);
 		}
-
 		if ((cbRec.animate) &&
 			(cbRec.dropSiteStatus !=
 				dsm->dropManager.curDropSiteStatus))
@@ -2251,16 +1940,13 @@ ChangeOperation(
 				cbRec.reason = XmCR_DROP_SITE_ENTER_MESSAGE;
 			else
 				cbRec.reason = XmCR_DROP_SITE_LEAVE_MESSAGE;
-
 			DoAnimation(dsm, motionData, (XtPointer) &cbRec);
 			cbRec.reason = callback->reason;
 		}
-
 		/* Update the callback rec */
 		callback->operations = cbRec.operations;
 		callback->operation = cbRec.operation;
 		callback->dropSiteStatus = cbRec.dropSiteStatus;
-
 		/* Update the drop site manager */
 		dsm->dropManager.curDropSiteStatus = cbRec.dropSiteStatus;
 		dsm->dropManager.curAnimate = cbRec.animate;
@@ -2271,7 +1957,6 @@ ChangeOperation(
 	{
 		callback->dropSiteStatus = XmNO_DROP_SITE;
 	}
-
 	if (dsm->dropManager.notifyProc)
 	{
 		(*(dsm->dropManager.notifyProc))
@@ -2279,7 +1964,6 @@ ChangeOperation(
 			(XtPointer)callback);
 	}
 }
-
 static void
 PutDSToStream(
         XmDropSiteManagerObject dsm,
@@ -2296,42 +1980,34 @@ PutDSToStream(
 	XmICCDropSiteInfoStruct iccInfo;
 	Arg args[30];
 	int n;
-
 	_XmProcessLock();
 	if (tmpRegion == NULL)
 	{
 		tmpRegion = _XmRegionCreate();
 	}
 	_XmProcessUnlock();
-
 	/*
 	 * Clear out the info.  This is especially important in the cases
 	 * that the widget does not define resources all of the required
 	 * animation resources.
 	 */
 	bzero(((void *) &iccInfo), sizeof(iccInfo));
-
 	if (last)
 		tType |= XmDSM_T_CLOSE;
 	else
 		tType &= ~ XmDSM_T_CLOSE;
-
-
 	if (GetDSLeaf(dsInfo) || (!GetDSNumChildren(dsInfo)))
 		dsType |= XmDSM_DS_LEAF;
 	else
 		dsType &= ~ XmDSM_DS_LEAF;
-
 	if (GetDSInternal(dsInfo))
 		dsType |= XmDSM_DS_INTERNAL;
 	else
 		dsType &= ~ XmDSM_DS_INTERNAL;
-
 	if (GetDSHasRegion(dsInfo))
 		dsType |= XmDSM_DS_HAS_REGION;
 	else
 		dsType &= ~ XmDSM_DS_HAS_REGION;
-
 	/*
 	 * The local drop site tree is always kept in widget relative
 	 * coordinates.  We have to put shell relative coordinates on
@@ -2339,7 +2015,6 @@ PutDSToStream(
 	 * region.
 	 */
 	XtTranslateCoords(w, 0, 0, &wX, &wY);
-
 	if (GetDSHasRegion(dsInfo))
 	{
 		_XmProcessLock();
@@ -2350,22 +2025,18 @@ PutDSToStream(
 	else
 	{
 		XRectangle rect;
-
 		rect.x = rect.y = -bw;
 		rect.width = XtWidth(w) + (2 * bw);
 		rect.height = XtHeight(w) + (2 * bw);
-
 		_XmProcessLock();
 		_XmRegionClear(tmpRegion);
 		_XmRegionUnionRectWithRegion(&rect, tmpRegion, tmpRegion);
 		_XmProcessUnlock();
 	}
-
 	_XmProcessLock();
 	_XmRegionOffset(tmpRegion, (wX - dsm->dropManager.rootX),
 		(wY - dsm->dropManager.rootY));
 	_XmProcessUnlock();
-
 	/*
 	 * We need to pull up the relevant visual information from
 	 * the widget so it will be available for correct animation
@@ -2380,7 +2051,6 @@ PutDSToStream(
 	_XmProcessLock();
 	iccInfo.header.region = tmpRegion;
 	_XmProcessUnlock();
-
 	/*
 	 * We need to retrieve information from the widget. XtGetValues is
 	 * too slow, so retrieve the information directly from the widget
@@ -2391,18 +2061,15 @@ PutDSToStream(
 	 *
 	 * (See also XmDropSiteGetActiveVisuals() )
 	 */
-
 	if (XmIsPrimitive(w))
 	{
 	     XmPrimitiveWidget pw= (XmPrimitiveWidget)w;
-
 	    switch(iccInfo.header.animationStyle)
 	    {
 		case XmDRAG_UNDER_HIGHLIGHT:
 		{
 			XmICCDropSiteHighlight info =
 				(XmICCDropSiteHighlight)  (&iccInfo);
-
 			info->animation_data.highlightPixmap = XmUNSPECIFIED_PIXMAP;
 			if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
@@ -2422,11 +2089,9 @@ PutDSToStream(
 		{
 			XmICCDropSiteShadow info =
 				(XmICCDropSiteShadow)  (&iccInfo);
-
 			info->animation_data.topShadowPixmap =
 				info->animation_data.bottomShadowPixmap =
 				XmUNSPECIFIED_PIXMAP;
-
 			if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
 					pw->core.border_width;
@@ -2452,13 +2117,11 @@ PutDSToStream(
 				(XmICCDropSitePixmap)  (&iccInfo);
 			XmDSLocalPixmapStyle ps =
 				(XmDSLocalPixmapStyle) GetDSLocalAnimationPart(dsInfo);
-
 			info->animation_data.animationPixmapDepth =
 				ps->animation_pixmap_depth;
 			info->animation_data.animationPixmap =
 				ps->animation_pixmap;
 			info->animation_data.animationMask = ps->animation_mask;
-
 			if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
 					pw->core.border_width;
@@ -2476,7 +2139,6 @@ PutDSToStream(
 		{
 			XmICCDropSiteNone info =
 				(XmICCDropSiteNone)  (&iccInfo);
-
 			if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth = pw->core.border_width;
 			else
@@ -2494,7 +2156,6 @@ PutDSToStream(
 	    XmManagerWidget mw;
             XmGadget g;
             Boolean is_gadget;
-
             if (XmIsGadget(w)) {
 	       mw = (XmManagerWidget) XtParent(w);
 	       g = (XmGadget) w;
@@ -2504,14 +2165,12 @@ PutDSToStream(
 	       g = NULL;
                is_gadget = False;
             }
-
 	    switch(iccInfo.header.animationStyle)
 	    {
 		case XmDRAG_UNDER_HIGHLIGHT:
 		{
 			XmICCDropSiteHighlight info =
 				(XmICCDropSiteHighlight)  (&iccInfo);
-
 			info->animation_data.highlightPixmap = XmUNSPECIFIED_PIXMAP;
 			if (!GetDSHasRegion(dsInfo))
 			{
@@ -2522,7 +2181,6 @@ PutDSToStream(
 			      info->animation_data.borderWidth =
 					mw->core.border_width;
                         }
-
 		       /* Temporary hack until we support full defaulting */
 		        info->animation_data.highlightThickness = 1;
 			info->animation_data.highlightColor =
@@ -2538,17 +2196,14 @@ PutDSToStream(
 		{
 			XmICCDropSiteShadow info =
 				(XmICCDropSiteShadow)  (&iccInfo);
-
 			info->animation_data.topShadowPixmap =
 				info->animation_data.bottomShadowPixmap =
 				XmUNSPECIFIED_PIXMAP;
-
                         if (is_gadget)
 			{
 			   if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
 					w->core.border_width;
-
 			   info->animation_data.shadowThickness =
 				   g->gadget.shadow_thickness;
                         }
@@ -2557,7 +2212,6 @@ PutDSToStream(
 			   if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
 					mw->core.border_width;
-
 			   info->animation_data.shadowThickness =
 				   mw->manager.shadow_thickness;
                         }
@@ -2580,19 +2234,16 @@ PutDSToStream(
 				(XmICCDropSitePixmap)  (&iccInfo);
 			XmDSLocalPixmapStyle ps =
 				(XmDSLocalPixmapStyle) GetDSLocalAnimationPart(dsInfo);
-
 			info->animation_data.animationPixmapDepth =
 				ps->animation_pixmap_depth;
 			info->animation_data.animationPixmap =
 				ps->animation_pixmap;
 			info->animation_data.animationMask = ps->animation_mask;
-
                         if (is_gadget)
 			{
 			   if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
 					w->core.border_width;
-
 			   info->animation_data.shadowThickness =
 				   g->gadget.shadow_thickness;
                         }
@@ -2601,7 +2252,6 @@ PutDSToStream(
 			   if (!GetDSHasRegion(dsInfo))
 				info->animation_data.borderWidth =
 					mw->core.border_width;
-
 			   info->animation_data.shadowThickness =
 				   mw->manager.shadow_thickness;
                         }
@@ -2616,7 +2266,6 @@ PutDSToStream(
 		{
 			XmICCDropSiteNone info =
 				(XmICCDropSiteNone)  (&iccInfo);
-
 			if (!GetDSHasRegion(dsInfo))
 			{
                            if (is_gadget)
@@ -2640,26 +2289,22 @@ PutDSToStream(
 		n = 0;
 		XtSetArg(args[n], XmNunitType, &unitType); n++;
 		XtGetValues(w, args, n);
-
 		if (unitType != XmPIXELS) { /* we need values in pixels */
 		    n = 0;
 		    XtSetArg(args[n], XmNunitType, XmPIXELS); n++;
 		    XtSetValues(w, args, n);
 		}
-
 	 	switch(iccInfo.header.animationStyle)
 	 	{
 		    case XmDRAG_UNDER_HIGHLIGHT:
 		    {
 			XmICCDropSiteHighlight info =
 				(XmICCDropSiteHighlight)  (&iccInfo);
-
 			/*
 			 * Pre-load a sane pixmap default in case the
 			 * widget doesn't have a pixmap resource.
 			 */
 			info->animation_data.highlightPixmap = XmUNSPECIFIED_PIXMAP;
-
 			n = 0;
 			if (!GetDSHasRegion(dsInfo))
 			{
@@ -2682,12 +2327,10 @@ PutDSToStream(
 		    {
 			XmICCDropSiteShadow info =
 				(XmICCDropSiteShadow)  (&iccInfo);
-
 			/* Pre-load some sane pixmap defaults */
 			info->animation_data.topShadowPixmap =
 				info->animation_data.bottomShadowPixmap =
 				XmUNSPECIFIED_PIXMAP;
-
 			n = 0;
 			if (!GetDSHasRegion(dsInfo))
 			{
@@ -2717,13 +2360,11 @@ PutDSToStream(
 				(XmICCDropSitePixmap)  (&iccInfo);
 			XmDSLocalPixmapStyle ps =
 				(XmDSLocalPixmapStyle) GetDSLocalAnimationPart(dsInfo);
-
 			info->animation_data.animationPixmapDepth =
 				ps->animation_pixmap_depth;
 			info->animation_data.animationPixmap =
 				ps->animation_pixmap;
 			info->animation_data.animationMask = ps->animation_mask;
-
 			n = 0;
 			if (!GetDSHasRegion(dsInfo))
 			{
@@ -2745,7 +2386,6 @@ PutDSToStream(
 		    {
 			XmICCDropSiteNone info =
 				(XmICCDropSiteNone)  (&iccInfo);
-
 			if (!GetDSHasRegion(dsInfo))
 			{
 				n = 0;
@@ -2761,9 +2401,7 @@ PutDSToStream(
 			/*EMPTY*/
 		    }
 		    break;
-
 		}
-
 		if (unitType != XmPIXELS) {
 		    n = 0;
 		    XtSetArg(args[n], XmNunitType, unitType); n++;
@@ -2772,7 +2410,6 @@ PutDSToStream(
 	}
 	_XmWriteDSToStream(dsm, dataPtr, &iccInfo);
 }
-
 static void
 GetDSFromDSM(
         XmDropSiteManagerObject dsm,
@@ -2782,15 +2419,12 @@ GetDSFromDSM(
 {
 	XmDSInfo child;
 	int i;
-
 	PutDSToStream(dsm, parentInfo, last, dataPtr);
-
 	last = False;
 	for (i = 0; i < (int)GetDSNumChildren(parentInfo); i++)
 	{
 		if ((i + 1) == GetDSNumChildren(parentInfo))
 			last = True;
-
 		child = (XmDSInfo) GetDSChild(parentInfo, i);
 		if (!GetDSLeaf(child))
 			GetDSFromDSM(dsm, child, last, dataPtr);
@@ -2798,7 +2432,6 @@ GetDSFromDSM(
 			PutDSToStream(dsm, child, last, dataPtr);
 	}
 }
-
 static int
 GetTreeFromDSM(
         XmDropSiteManagerObject dsm,
@@ -2807,27 +2440,20 @@ GetTreeFromDSM(
 {
 	XmDSInfo root = (XmDSInfo) DSMWidgetToInfo(dsm, shell);
 	Position shellX, shellY, savX, savY;
-
 	if (root == NULL)
 		return(0);
 	XtTranslateCoords(shell, 0, 0, &shellX, &shellY);
-
 	/* Save current */
 	savX = dsm->dropManager.rootX;
 	savY = dsm->dropManager.rootY;
-
 	dsm->dropManager.rootX = shellX;
 	dsm->dropManager.rootY = shellY;
-
 	DSMSyncTree(dsm, shell);
 	GetDSFromDSM(dsm, root, True, dataPtr);
-
 	dsm->dropManager.rootX = savX;
 	dsm->dropManager.rootY = savY;
-
 	return(CountDropSites(root));
 }
-
 static XmDSInfo
 GetDSFromStream(
         XmDropSiteManagerObject dsm,
@@ -2838,9 +2464,7 @@ GetDSFromStream(
 	XmDSInfo info;
 	XmICCDropSiteInfoStruct iccInfo;
 	size_t size;
-
 	_XmReadDSFromStream(dsm, dataPtr, &iccInfo);
-
 	switch(iccInfo.header.animationStyle)
 	  {
 	  case XmDRAG_UNDER_HIGHLIGHT:
@@ -2875,13 +2499,9 @@ GetDSFromStream(
 	      size = sizeof(XmDSRemoteNoneNodeRec);
 	    break;
 	  }
-
 	info = (XmDSInfo) XtCalloc(1, size);
-
 	/* Load the Status fields */
-
 	SetDSRemote(info, True);
-
 	if (iccInfo.header.dropType & XmDSM_DS_LEAF)
 	{
 		SetDSLeaf(info, True);
@@ -2892,24 +2512,19 @@ GetDSFromStream(
 		SetDSLeaf(info, False);
 		SetDSType(info, XmDROP_SITE_COMPOSITE);
 	}
-
 	SetDSAnimationStyle(info, iccInfo.header.animationStyle);
-
 	if (iccInfo.header.dropType & XmDSM_DS_INTERNAL)
 		SetDSInternal(info, True);
 	else
 		SetDSInternal(info, False);
-
 	if (iccInfo.header.dropType & XmDSM_DS_HAS_REGION)
 		SetDSHasRegion(info, True);
 	else
 		SetDSHasRegion(info, False);
-
 	SetDSActivity(info, iccInfo.header.dropActivity);
 	SetDSImportTargetsID(info, iccInfo.header.importTargetsID);
 	SetDSOperations(info, iccInfo.header.operations);
 	SetDSRegion(info, iccInfo.header.region);
-
 	/* Load the animation data */
 	switch(GetDSAnimationStyle(info))
 	{
@@ -2920,7 +2535,6 @@ GetDSFromStream(
 					GetDSRemoteAnimationPart(info);
 			XmICCDropSiteHighlight hi =
 				(XmICCDropSiteHighlight) (&iccInfo);
-
 			hs->highlight_color = hi->animation_data.highlightColor;
 			hs->highlight_pixmap =
 				hi->animation_data.highlightPixmap;
@@ -2938,7 +2552,6 @@ GetDSFromStream(
 				(XmDSRemoteShadowStyle) GetDSRemoteAnimationPart(info);
 			XmICCDropSiteShadow si =
 				(XmICCDropSiteShadow) (&iccInfo);
-
 			ss->top_shadow_color =
 				si->animation_data.topShadowColor;
 			ss->top_shadow_pixmap =
@@ -2961,7 +2574,6 @@ GetDSFromStream(
 				(XmDSRemotePixmapStyle) GetDSRemoteAnimationPart(info);
 			XmICCDropSitePixmap pi =
 				(XmICCDropSitePixmap) (&iccInfo);
-
 			ps->animation_pixmap =
 				pi->animation_data.animationPixmap;
 			ps->animation_pixmap_depth =
@@ -2982,19 +2594,16 @@ GetDSFromStream(
 				(XmDSRemoteNoneStyle) GetDSRemoteAnimationPart(info);
 			XmICCDropSiteNone ni =
 				(XmICCDropSiteNone) (&iccInfo);
-
 			ns->border_width = ni->animation_data.borderWidth;
 		}
 		break;
 		default:
 		break;
 	}
-
 	*close = (iccInfo.header.traversalType & XmDSM_T_CLOSE);
 	*type = iccInfo.header.dropType;
 	return(info);
 }
-
 static void
 GetNextDS(
         XmDropSiteManagerObject dsm,
@@ -3004,7 +2613,6 @@ GetNextDS(
 	Boolean close = TRUE;
 	unsigned char type;
 	XmDSInfo new_w = GetDSFromStream(dsm, dataPtr, &close, &type);
-
 	while (!close)
 	{
 		AddDSChild(parentInfo, new_w, GetDSNumChildren(parentInfo));
@@ -3012,14 +2620,10 @@ GetNextDS(
 			GetNextDS(dsm, new_w, dataPtr);
 		new_w = GetDSFromStream(dsm, dataPtr, &close, &type);
 	}
-
 	AddDSChild(parentInfo, new_w, GetDSNumChildren(parentInfo));
 	if (! (type & XmDSM_DS_LEAF))
 		GetNextDS(dsm, new_w, dataPtr);
 }
-
-
-
 static XmDSInfo
 ReadTree(
         XmDropSiteManagerObject dsm,
@@ -3027,21 +2631,17 @@ ReadTree(
 {
 	Boolean junkb;
 	unsigned char junkc;
-
 	XmDSInfo root = GetDSFromStream(dsm, dataPtr, &junkb, &junkc);
 	SetDSShell(root, True);
 	GetNextDS(dsm, root, dataPtr);
 	return root;
 }
-
-
 static void
 FreeDSTree(
         XmDSInfo tree )
 {
 	int i;
 	XmDSInfo child;
-
 	if (!GetDSLeaf(tree))
 		for (i = 0; i < (int)GetDSNumChildren(tree); i++)
 		{
@@ -3050,7 +2650,6 @@ FreeDSTree(
 		}
 	DestroyDSInfo(tree, True);
 }
-
 static void
 ChangeRoot(
         XmDropSiteManagerObject dsm,
@@ -3063,9 +2662,7 @@ ChangeRoot(
 		(XmTopLevelEnterCallback) callData;
 	Widget		newRoot = cd->destShell;
 	XtPointer	dataPtr = cd->iccInfo;
-
 	dsm->dropManager.curTime = callback->timeStamp;
-
 	if (callback->reason == XmCR_TOP_LEVEL_ENTER)
 	{
 		/*
@@ -3074,7 +2671,6 @@ ChangeRoot(
 		 */
 		dsm->dropManager.curDragContext = (Widget) XmGetDragContext(
 			(Widget)dsm, callback->timeStamp);
-
 		if (newRoot)
 		{
 			dsm->dropManager.dsRoot = DSMWidgetToInfo(dsm, newRoot);
@@ -3087,7 +2683,6 @@ ChangeRoot(
 			dsm->dropManager.dsRoot =
 				(XtPointer) ReadTree(dsm, dataPtr);
 		}
-
 		dsm->dropManager.rootX = cd->xOrigin;
 		dsm->dropManager.rootY = cd->yOrigin;
 		dsm->dropManager.rootW = cd->width;
@@ -3101,32 +2696,25 @@ ChangeRoot(
 			XmDragMotionClientDataStruct cdRec ;
 			unsigned char style = _XmGetActiveProtocolStyle(
 				dsm->dropManager.curDragContext);
-
 			/* Fake out a motion message from the DragC */
 			cbRec.reason = XmCR_DROP_SITE_LEAVE;
 			cbRec.event = callback->event;
 			cbRec.timeStamp = callback->timeStamp;
 			cbRec.x = dsm->dropManager.curX;
 			cbRec.y = dsm->dropManager.curY;
-
 			/* These fields are irrelevant on a leave */
 			cbRec.operations = cbRec.operation = 0;
 			cbRec.dropSiteStatus = 0;
-
 			/* Need these too */
 			cdRec.window = cd->window;
 			cdRec.dragOver = cd->dragOver;
-
 			HandleLeave(dsm, &cdRec, &cbRec,
 				    (XmDSInfo) dsm->dropManager.curInfo,
 				    style, False);
-
 			dsm->dropManager.curInfo = NULL;
 		}
-
 		if (GetDSRemote((XmDSInfo)(dsm->dropManager.dsRoot)))
 			FreeDSTree((XmDSInfo)dsm->dropManager.dsRoot);
-
 		/* Invalidate the root--force errors to show themselves */
 		dsm->dropManager.curDragContext = NULL;
 		dsm->dropManager.dsRoot = (XtPointer) NULL;
@@ -3136,7 +2724,6 @@ ChangeRoot(
 		dsm->dropManager.rootH = 0;
 	}
 }
-
 static int
 CountDropSites(
         XmDSInfo info )
@@ -3144,7 +2731,6 @@ CountDropSites(
 	int i;
 	XmDSInfo child;
 	int acc = 1;
-
 	if (!GetDSLeaf(info))
 	{
 		for (i = 0; i < (int)GetDSNumChildren(info); i++)
@@ -3153,12 +2739,8 @@ CountDropSites(
 			acc += CountDropSites(child);
 		}
 	}
-
 	return(acc);
 }
-
-
-
 static void
 CreateInfo(
         XmDropSiteManagerObject dsm,
@@ -3171,31 +2753,24 @@ CreateInfo(
 	XmRegion region = _XmRegionCreate();
 	Widget shell = widget;
 	size_t size;
-
 	/* zero out the working info struct */
 	bzero((void *)(&fullInfoRec), sizeof(fullInfoRec));
-
 	/* Load that puppy */
 	SetDSLeaf(&fullInfoRec, True);
 	fullInfoRec.widget = widget;
 	XtGetSubresources(widget, &fullInfoRec, NULL, NULL, _XmDSResources,
 			  _XmNumDSResources, args, argCount);
-
 	/* Handle ignore first. */
 	if (fullInfoRec.activity == XmDROP_SITE_IGNORE) {
 	  return;
 	}
-
 	DSMStartUpdate(dsm, widget);
-
 	/* Do some input validation */
-
 	if ((fullInfoRec.activity == XmDROP_SITE_ACTIVE) &&
 		(fullInfoRec.drop_proc == NULL))
 	{
 		XmeWarning(widget, MESSAGE4);
 	}
-
 	if ((fullInfoRec.animation_style == XmDRAG_UNDER_PIXMAP) &&
 		(fullInfoRec.animation_pixmap != XmUNSPECIFIED_PIXMAP) &&
 		(fullInfoRec.animation_pixmap_depth == 0))
@@ -3207,7 +2782,6 @@ CreateInfo(
 			     (int*)&(fullInfoRec.animation_pixmap_depth),
 			     NULL, NULL, NULL, NULL, NULL, NULL);
 	}
-
 	if ((fullInfoRec.type == XmDROP_SITE_COMPOSITE) &&
 		((fullInfoRec.rectangles != NULL) ||
 		(fullInfoRec.num_rectangles != 1)))
@@ -3216,21 +2790,16 @@ CreateInfo(
 		fullInfoRec.rectangles = NULL;
 		fullInfoRec.num_rectangles = 1;
 	}
-
 	/* Handle the region*/
 	if (fullInfoRec.rectangles == NULL)
 	{
 		XRectangle rect;
 		Dimension bw = XtBorderWidth(widget);
-
 		rect.x = rect.y = -bw;
 		rect.width = XtWidth(widget) + (2 * bw);
 		rect.height = XtHeight(widget) + (2 * bw);
-
 		_XmRegionUnionRectWithRegion(&rect, region, region);
-
 		fullInfoRec.region = region;
-
 		/*
 		 * Leave HasRegion == 0 indicating that we created this
 		 * region for the drop site.
@@ -3240,22 +2809,16 @@ CreateInfo(
 	{
 		int i;
 		XRectangle *rects = fullInfoRec.rectangles;
-
 		for (i=0; i < fullInfoRec.num_rectangles; i++)
 			_XmRegionUnionRectWithRegion(&(rects[i]), region, region);
-
 		fullInfoRec.region = region;
 		fullInfoRec.status.has_region = True;
 	}
-
 	XtAddCallback(widget, XmNdestroyCallback, DestroyCallback, dsm);
-
 	while(!XtIsShell(shell))
 		shell = XtParent(shell);
-
 	fullInfoRec.import_targets_ID = _XmTargetsToIndex(shell,
 		fullInfoRec.import_targets, fullInfoRec.num_import_targets);
-
 	switch(fullInfoRec.animation_style)
 	{
 		case XmDRAG_UNDER_PIXMAP:
@@ -3275,11 +2838,8 @@ CreateInfo(
 			  size = sizeof(XmDSLocalNoneLeafRec);
 		break;
 	}
-
 	new_info = (XmDSInfo) XtCalloc(1, size);
-
 	CopyFullIntoVariant(&fullInfoRec, new_info);
-
 	if ((prev_info = (XmDSInfo) DSMWidgetToInfo(dsm, widget)) == NULL)
 	{
 		DSMRegisterInfo(dsm, widget, (XtPointer) new_info);
@@ -3302,17 +2862,12 @@ CreateInfo(
 		{
 		  XmeWarning(widget, MESSAGE7);
 		}
-
 		DestroyDSInfo(new_info, True);
 		return;
 	}
-
 	DSMInsertInfo(dsm, (XtPointer) new_info, NULL);
-
 	DSMEndUpdate(dsm, widget);
 }
-
-
 static void
 CopyVariantIntoFull(
         XmDropSiteManagerObject dsm,
@@ -3325,25 +2880,20 @@ CopyVariantIntoFull(
 	long num_rects;
 	XRectangle *rects;
 int index;
-
 	if (GetDSRemote(variant))
 		shell = XtParent(dsm);
 	else
 		shell = GetDSWidget(variant);
-
 	while (!XtIsShell(shell))
 		shell = XtParent(shell);
-
 	/*
 	 * Clear the full info back to the default (kind of) state.
 	 */
 	bzero((void *)(full_info), sizeof(XmDSFullInfoRec));
 	full_info->animation_pixmap = XmUNSPECIFIED_PIXMAP;
 	full_info->animation_mask = XmUNSPECIFIED_PIXMAP;
-
 	/* Structure copy the status stuff across */
 	full_info->status = variant->status;
-
 	full_info->parent = GetDSParent(variant);
 	full_info->import_targets_ID = GetDSImportTargetsID(variant);
 	full_info->operations = GetDSOperations(variant);
@@ -3351,9 +2901,7 @@ int index;
 	full_info->drag_proc = GetDSDragProc(variant);
 	full_info->drop_proc = GetDSDropProc(variant);
  	full_info->client_data = GetDSClientData(variant);
-
 	full_info->widget = GetDSWidget(variant);
-
 	full_info->type = GetDSType(variant);
 	full_info->animation_style = GetDSAnimationStyle(variant);
 	full_info->activity = GetDSActivity(variant);
@@ -3370,12 +2918,9 @@ int index;
 		full_info->num_import_targets = 0;
 		full_info->import_targets = NULL;
 	}
-
-
 	_XmRegionGetRectangles(GetDSRegion(variant), &rects, &num_rects);
 	full_info->rectangles = rects;
 	full_info->num_rectangles = (Cardinal) num_rects;
-
 	if (GetDSRemote(variant))
 	{
 		switch(GetDSAnimationStyle(variant))
@@ -3385,7 +2930,6 @@ int index;
 				XmDSRemoteHighlightStyle hs =
 					(XmDSRemoteHighlightStyle)
 						GetDSRemoteAnimationPart(variant);
-
 				full_info->highlight_color = hs->highlight_color;
 				full_info->highlight_pixmap = hs->highlight_pixmap;
 				full_info->background = hs->background;
@@ -3400,7 +2944,6 @@ int index;
 				XmDSRemoteShadowStyle ss =
 					(XmDSRemoteShadowStyle)
 						GetDSRemoteAnimationPart(variant);
-
 				full_info->top_shadow_color = ss->top_shadow_color;
 				full_info->top_shadow_pixmap = ss->top_shadow_pixmap;
 				full_info->bottom_shadow_color =
@@ -3418,7 +2961,6 @@ int index;
 				XmDSRemotePixmapStyle ps =
 					(XmDSRemotePixmapStyle)
 						GetDSRemoteAnimationPart(variant);
-
 				full_info->animation_pixmap = ps->animation_pixmap;
 				full_info->animation_pixmap_depth =
 					ps->animation_pixmap_depth;
@@ -3450,7 +2992,6 @@ int index;
 				XmDSLocalPixmapStyle ps =
 					(XmDSLocalPixmapStyle)
 						GetDSLocalAnimationPart(variant);
-
 				full_info->animation_pixmap = ps->animation_pixmap;
 				full_info->animation_pixmap_depth =
 					ps->animation_pixmap_depth;
@@ -3463,8 +3004,6 @@ int index;
 		}
 	}
 }
-
-
 static void
 RetrieveInfo(
         XmDropSiteManagerObject dsm,
@@ -3476,7 +3015,6 @@ RetrieveInfo(
 	XmDSInfo	info;
 	int i;
 	Boolean freeRects;
-
 	if (XmIsDragContext(widget))
 	{
 		if (widget != dsm->dropManager.curDragContext)
@@ -3486,12 +3024,9 @@ RetrieveInfo(
 	}
 	else
 		info = (XmDSInfo) DSMWidgetToInfo(dsm, widget);
-
 	if (info == NULL)
 		return;
-
 	CopyVariantIntoFull(dsm, info, &full_info_rec);
-
 	XtGetSubvalues((XtPointer)(&full_info_rec),
 	      (XtResourceList)(_XmDSResources), (Cardinal)(_XmNumDSResources),
 	      (ArgList)(args), (Cardinal)(argCount));
@@ -3503,7 +3038,6 @@ RetrieveInfo(
 	if (freeRects && full_info_rec.rectangles)
 	    XtFree((char *) full_info_rec.rectangles);
 }
-
 static void
 CopyFullIntoVariant(
         XmDSFullInfo full_info,
@@ -3516,18 +3050,15 @@ CopyFullIntoVariant(
 	 */
 	if (GetDSRemote(full_info))
 		return;
-
 	/* Magic internal fields */
 	SetDSRemote(variant, GetDSRemote(full_info));
 	SetDSLeaf(variant, GetDSLeaf(full_info));
 	SetDSShell(variant, GetDSShell(full_info));
 	SetDSHasRegion(variant, full_info->status.has_region);
-
 	/* Externally visible fields */
 	SetDSAnimationStyle(variant, full_info->animation_style);
 	SetDSType(variant, full_info->type);
 	SetDSActivity(variant, full_info->activity);
-
 	SetDSImportTargetsID(variant, full_info->import_targets_ID);
 	SetDSOperations(variant, full_info->operations);
 	SetDSRegion(variant, full_info->region);
@@ -3535,7 +3066,6 @@ CopyFullIntoVariant(
 	SetDSDropProc(variant, full_info->drop_proc);
  	SetDSClientData(variant, full_info->client_data);
 	SetDSWidget(variant, full_info->widget);
-
 	switch(full_info->animation_style)
 	{
 		case XmDRAG_UNDER_HIGHLIGHT:
@@ -3547,7 +3077,6 @@ CopyFullIntoVariant(
 		{
 			XmDSLocalPixmapStyle ps =
 				(XmDSLocalPixmapStyle) GetDSLocalAnimationPart(variant);
-
 			ps->animation_pixmap = full_info->animation_pixmap;
 			ps->animation_pixmap_depth =
 				full_info->animation_pixmap_depth;
@@ -3559,8 +3088,6 @@ CopyFullIntoVariant(
 		break;
 	}
 }
-
-
 static void
 UpdateInfo(
         XmDropSiteManagerObject dsm,
@@ -3575,20 +3102,14 @@ UpdateInfo(
 	XmRegion	old_region;
 	XRectangle	*rects;
 	long		num_rects;
-
 	if ((info == NULL) || GetDSInternal(info))
 		return;
-
         rects = NULL;
-
 	DSMStartUpdate(dsm, widget);
-
 	CopyVariantIntoFull(dsm, info, full_info);
-
 	/* Save the type and region in case they try to cheat */
 	type = GetDSType(info);
 	old_region = GetDSRegion(info);
-
 /* BEGIN OSF Fix CR 5335 */
 	/*
 	 * Set up the rectangle list stuff.
@@ -3596,12 +3117,10 @@ UpdateInfo(
 	rects = full_info->rectangles;
 	num_rects = (long) full_info->num_rectangles;
 /* END OSF Fix CR 5335 */
-
 	/* Update the info */
         {
 	Atom			*old_import_targets;
 	Cardinal		old_num_import_targets;
-
         old_num_import_targets = full_info->num_import_targets;
         old_import_targets = full_info->import_targets;
 	XtSetSubvalues(full_info, _XmDSResources, _XmNumDSResources,
@@ -3615,13 +3134,11 @@ UpdateInfo(
 			full_info->import_targets, full_info->num_import_targets);
 		}
         }
-
 	if (full_info->type != type)
 	{
 		XmeWarning(widget, MESSAGE8);
 		full_info->type = type;
 	}
-
 	if ((full_info->rectangles != rects) ||
 		(full_info->num_rectangles != num_rects))
 	{
@@ -3629,12 +3146,10 @@ UpdateInfo(
 		{
 			int i;
 			XmRegion new_region = _XmRegionCreate();
-
 			for (i=0; i < full_info->num_rectangles; i++)
 				_XmRegionUnionRectWithRegion(
 					&(full_info->rectangles[i]), new_region,
 					new_region);
-
 			full_info->region = new_region;
 			full_info->status.has_region = True;
 			_XmRegionDestroy(old_region);
@@ -3644,7 +3159,6 @@ UpdateInfo(
 			XmeWarning(widget, MESSAGE9);
 		}
 	}
-
 	if ((full_info->animation_style == XmDRAG_UNDER_PIXMAP) &&
 		(full_info->animation_pixmap_depth == 0))
 	{
@@ -3653,17 +3167,14 @@ UpdateInfo(
 			     (int*)&(full_info->animation_pixmap_depth),
 			     NULL, NULL, NULL, NULL, NULL, NULL);
 	}
-
 	/*
 	 * If the animation style has changed, we need to change info
 	 * into a different variant.
 	 */
-
 	if (full_info->animation_style != GetDSAnimationStyle(info))
 	{
 		XmDSInfo new_info;
 		size_t size;
-
 		switch (full_info->animation_style)
 		{
 			case XmDRAG_UNDER_PIXMAP:
@@ -3683,43 +3194,33 @@ UpdateInfo(
 				  size = sizeof(XmDSLocalNoneLeafRec);
 			break;
 		}
-
 		/* Allocate the new info rec */
 		new_info = (XmDSInfo) XtCalloc(1, size);
-
 		CopyFullIntoVariant(full_info, new_info);
-
 		/*
 		 * Fix the parent pointers of the children
 		 */
 		SetDSNumChildren(new_info, GetDSNumChildren(info));
 		SetDSChildren(new_info, GetDSChildren(info));
-
 		if ((GetDSType(new_info) == XmDROP_SITE_COMPOSITE) &&
 			(GetDSNumChildren(new_info)))
 		{
 			XmDSInfo child;
 			int i;
-
 			for (i=0; i < (int)GetDSNumChildren(new_info); i++)
 			{
 				child = (XmDSInfo) GetDSChild(new_info, i);
 				SetDSParent(child, new_info);
 			}
 		}
-
 		/* Clear the registered bit on the new one */
 		SetDSRegistered(new_info, False);
-
 		/* Remove the old one from the hash table */
 		DSMUnregisterInfo(dsm, info);
-
 		/* Replace the old one in the drop site tree */
 		ReplaceDSChild(info, new_info);
-
 		/* Destroy the old one, but not anything it points to */
 		DestroyDSInfo(info, False);
-
 		/* Register the new one */
 		DSMRegisterInfo(dsm, widget, (XtPointer) new_info);
 	}
@@ -3727,12 +3228,9 @@ UpdateInfo(
 	{
 		CopyFullIntoVariant(full_info, info);
 	}
-
 	DSMEndUpdate(dsm, widget);
-
 	if (rects!=NULL) XtFree ((char *)rects);
 }
-
 static void
 StartUpdate(
         XmDropSiteManagerObject dsm,
@@ -3740,16 +3238,12 @@ StartUpdate(
 {
 	Widget shell = refWidget;
 	XmDSInfo shellInfo;
-
 	while(!(XtIsShell(shell)))
 		shell = XtParent(shell);
-
 	shellInfo = (XmDSInfo) DSMWidgetToInfo(dsm, shell);
-
 	if (shellInfo)
 		SetDSUpdateLevel(shellInfo, (GetDSUpdateLevel(shellInfo) + 1));
 }
-
 static void
 EndUpdate(
         XmDropSiteManagerObject dsm,
@@ -3760,28 +3254,19 @@ EndUpdate(
   Boolean clean;
   Widget shell;
   XmDSInfo shellInfo;
-
   dsupdate = dsm -> dropManager.updateInfo;
   clean = (dsupdate == NULL);
-
   shell = refWidget;
-
   while(!(XtIsShell(shell)))
     shell = XtParent(shell);
-
   shellInfo = (XmDSInfo) DSMWidgetToInfo(dsm, shell);
-
   if (shellInfo == NULL) return;
-
   if (GetDSUpdateLevel(shellInfo) > 0)
     SetDSUpdateLevel(shellInfo, (GetDSUpdateLevel(shellInfo) - 1));
-
   if (GetDSUpdateLevel(shellInfo) > 0) return;
-
   /* Fix CR 7976,  losing track of some updates because of bad
      list manipulation */
   oldupdate = dsupdate;
-
   /* Really,  keep track of toplevel widgets to be updated */
   while(dsupdate) {
     if (dsupdate -> refWidget == shell) {
@@ -3790,7 +3275,6 @@ EndUpdate(
     }
     dsupdate = dsupdate -> next;
   }
-
   if (! found) {
     /* Queue real end update to a timeout */
     dsupdate = (_XmDropSiteUpdateInfo)
@@ -3800,7 +3284,6 @@ EndUpdate(
     dsupdate -> next = oldupdate;
     dsm -> dropManager.updateInfo = dsupdate;
   }
-
   /* We don't add a timeout if the record is already marked for update */
   if (clean) {
     dsm -> dropManager.updateTimeOutId =
@@ -3808,7 +3291,6 @@ EndUpdate(
 		      _XmIEndUpdate, dsm);
   }
 }
-
 void
 _XmIEndUpdate(XtPointer client_data, XtIntervalId *interval_id)
 {
@@ -3816,41 +3298,33 @@ _XmIEndUpdate(XtPointer client_data, XtIntervalId *interval_id)
   _XmDropSiteUpdateInfo dsupdate;
   Widget shell;
   XmDSInfo shellInfo;
-
   /* Remove timeout if this is a forced update */
   if (dsm -> dropManager.updateTimeOutId) {
     if (interval_id == NULL)
       XtRemoveTimeOut(dsm -> dropManager.updateTimeOutId);
     dsm -> dropManager.updateTimeOutId = 0;
   }
-
   /* Return if all updates have already happened */
   while(dsm -> dropManager.updateInfo != NULL) {
     dsupdate = (_XmDropSiteUpdateInfo) dsm -> dropManager.updateInfo;
     shell = dsupdate -> refWidget;
     dsm -> dropManager.updateInfo = dsupdate -> next;
     XtFree((char*) dsupdate);
-
     while(!(XtIsShell(shell)))
       shell = XtParent(shell);
-
     shellInfo = (XmDSInfo) DSMWidgetToInfo(dsm, shell);
-
     if (shellInfo && XtIsRealized(shell))
       {
 	/* This one's for real */
-
 	if (_XmGetDragProtocolStyle(shell) != XmDRAG_DYNAMIC)
 	  {
 	    XmDropSiteTreeAddCallbackStruct	outCB;
-
 	    /* Gotta' update that window property. */
 	    outCB.reason = XmCR_DROP_SITE_TREE_ADD;
 	    outCB.event = NULL;
 	    outCB.rootShell = shell;
 	    outCB.numDropSites = CountDropSites(shellInfo);
 	    outCB.numArgsPerDSHint = 0;
-
 	    if (dsm->dropManager.treeUpdateProc)
 	      (dsm->dropManager.treeUpdateProc)
 		((Widget) dsm, NULL, (XtPointer) &outCB);
@@ -3863,19 +3337,15 @@ _XmIEndUpdate(XtPointer client_data, XtIntervalId *interval_id)
       }
   }
 }
-
 static void
 DestroyInfo(
         XmDropSiteManagerObject dsm,
         Widget widget )
 {
 	XmDSInfo info = (XmDSInfo) DSMWidgetToInfo(dsm, widget);
-
 	if (info == NULL)
 		return;
-
 	DSMStartUpdate(dsm, widget);
-
 	if (info == (XmDSInfo) (dsm->dropManager.curInfo))
 	{
 		Widget shell;
@@ -3883,87 +3353,67 @@ DestroyInfo(
 		XmDragMotionClientDataStruct cdRec ;
 		unsigned char style = _XmGetActiveProtocolStyle(
 			dsm->dropManager.curDragContext);
-
 		/* Fake out a motion message from the DragC */
 		cbRec.reason = XmCR_DROP_SITE_LEAVE;
 		cbRec.event = NULL;
 		cbRec.timeStamp = dsm->dropManager.curTime;
 		cbRec.x = dsm->dropManager.curX;
 		cbRec.y = dsm->dropManager.curY;
-
 		/* These fields are irrelevant on a leave */
 		cbRec.operations = cbRec.operation = 0;
 		cbRec.dropSiteStatus = 0;
-
 		/* Need these too */
 		shell = GetDSWidget(info);
-
 		while (!XtIsShell(shell))
 			shell = XtParent(shell);
-
 		cdRec.window = XtWindow(shell);
 		cdRec.dragOver = (Widget)
 			(((XmDragContext)(dsm->dropManager.curDragContext))
 				->drag.curDragOver);
-
 		HandleLeave(dsm, &cdRec, &cbRec,
 			    (XmDSInfo) dsm->dropManager.curInfo, style, False);
-
 		dsm->dropManager.curInfo = NULL;
 	}
-
 	while(info != NULL) {
 	  DSMRemoveInfo(dsm, (XtPointer) info);
 	  DestroyDSInfo(info, True);
-
 	  /* This should be NULL now,  otherwise,  keep removing
 	     until done */
 	  info = (XmDSInfo) DSMWidgetToInfo(dsm, widget);
 	}
-
 	DSMEndUpdate(dsm, widget);
 }
-
 static void
 SyncDropSiteGeometry(
         XmDropSiteManagerObject dsm,
         XmDSInfo info )
 {
 	XmDSInfo child;
-
 	if (!GetDSLeaf(info))
 	{
 		int i;
-
 		for (i = 0; i < (int)GetDSNumChildren(info); i++)
 		{
 			child = (XmDSInfo) GetDSChild(info, i);
 			SyncDropSiteGeometry(dsm, child);
 		}
 	}
-
 	if (!GetDSHasRegion(info))
 	{
 		Widget w = GetDSWidget(info);
 		XRectangle rect;
 		Dimension bw = XtBorderWidth(w);
-
 		/* The region is the object rectangle */
-
 		/* assert(GetDSRegion(info) != NULL)  */
-
 		/* The region comes from the widget */
-
 		rect.x = rect.y = -bw;
 		rect.width = XtWidth(w) + (2 * bw);
 		rect.height = XtHeight(w) + (2 * bw);
-
 		_XmRegionClear(GetDSRegion(info));
 		_XmRegionUnionRectWithRegion(&rect, GetDSRegion(info),
 			GetDSRegion(info));
 	}
 }
-
 static void
 SyncTree(
         XmDropSiteManagerObject dsm,
@@ -3972,10 +3422,8 @@ SyncTree(
 	XmDSInfo saveRoot;
 	XmDSInfo root = (XmDSInfo) DSMWidgetToInfo(dsm, shell);
 	Position shellX, shellY, savX, savY;
-
 	if ((root == NULL) || (GetDSRemote(root)))
 		return;
-
 	/*
 	 * Set things up so that the shell coordinates are trivially
 	 * available.
@@ -3983,23 +3431,19 @@ SyncTree(
 	saveRoot = (XmDSInfo) dsm->dropManager.dsRoot;
 	savX = dsm->dropManager.rootX;
 	savY = dsm->dropManager.rootY;
-
 	dsm->dropManager.dsRoot = (XtPointer) root;
 	XtTranslateCoords(GetDSWidget(root), 0, 0, &shellX, &shellY);
 	dsm->dropManager.rootX = shellX;
 	dsm->dropManager.rootY = shellY;
-
 	/* Do the work */
 	RemoveAllClippers(dsm, root);
 	SyncDropSiteGeometry(dsm, root);
 	DetectAndInsertAllClippers(dsm, root);
-
 	/* Restore the DSM */
 	dsm->dropManager.dsRoot = (XtPointer) saveRoot;
 	dsm->dropManager.rootX = savX;
 	dsm->dropManager.rootY = savY;
 }
-
 void
 _XmSyncDropSiteTree(
         Widget shell )
@@ -4007,10 +3451,8 @@ _XmSyncDropSiteTree(
 	XmDropSiteManagerObject dsm = (XmDropSiteManagerObject)
 		_XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(shell)));
-
 	DSMSyncTree(dsm, shell);
 }
-
 static void
 Update(
         XmDropSiteManagerObject dsm,
@@ -4018,7 +3460,6 @@ Update(
         XtPointer callData )
 {
 	XmAnyCallbackStruct	*callback = (XmAnyCallbackStruct *)callData;
-
 	switch(callback->reason)
 	{
 		case XmCR_TOP_LEVEL_ENTER:
@@ -4037,7 +3478,6 @@ Update(
 		break;
 	}
 }
-
 void
 _XmDSMUpdate(
         XmDropSiteManagerObject dsm,
@@ -4046,8 +3486,6 @@ _XmDSMUpdate(
 {
 	DSMUpdate(dsm, clientData, callData);
 }
-
-
 int
 _XmDSMGetTreeFromDSM(
         XmDropSiteManagerObject dsm,
@@ -4056,7 +3494,6 @@ _XmDSMGetTreeFromDSM(
 {
 	return(DSMGetTreeFromDSM(dsm, shell, dataPtr));
 }
-
 Boolean
 _XmDropSiteShell(
         Widget widget )
@@ -4064,13 +3501,11 @@ _XmDropSiteShell(
 	XmDropSiteManagerObject dsm = (XmDropSiteManagerObject)
 		_XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(widget)));
-
 	if ((XtIsShell(widget)) && (DSMWidgetToInfo(dsm, widget) != NULL))
 		return(True);
 	else
 		return(False);
 }
-
 static Boolean
 HasDropSiteDescendant(
 	XmDropSiteManagerObject dsm,
@@ -4079,10 +3514,8 @@ HasDropSiteDescendant(
 	CompositeWidget cw;
 	int i;
 	Widget child;
-
 	if (!XtIsComposite(widget))
 		return(False);
-
 	cw = (CompositeWidget) widget;
 	for (i = 0; i < cw->composite.num_children; i++)
 	{
@@ -4093,10 +3526,8 @@ HasDropSiteDescendant(
 			return(True);
 		}
 	}
-
 	return(False);
 }
-
 Boolean
 _XmDropSiteWrapperCandidate(
         Widget widget )
@@ -4105,15 +3536,12 @@ _XmDropSiteWrapperCandidate(
 		_XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(widget)));
 	Widget shell;
-
 	if (widget == NULL)
 		return(False);
-
 	if (DSMWidgetToInfo(dsm, widget) != NULL)
 		return(True);
 	else if (!XtIsComposite(widget))
 		return(False);
-
 	/*
 	 * Make sure that there might be a drop site somewhere in
 	 * this shell before traversing the descendants.
@@ -4121,13 +3549,10 @@ _XmDropSiteWrapperCandidate(
 	shell = widget;
 	while (!XtIsShell(shell))
 		shell = XtParent(shell);
-
 	if (!_XmDropSiteShell(shell))
 		return(False);
-
 	return(HasDropSiteDescendant(dsm, widget));
 }
-
 static void
 DestroyCallback(
         Widget widget,
@@ -4135,13 +3560,10 @@ DestroyCallback(
         XtPointer call_data )
 {
 	XmDropSiteManagerObject dsm = (XmDropSiteManagerObject) client_data;
-
 	DSMDestroyInfo(dsm, widget);
-
 	/* Force Update */
 	_XmIEndUpdate((XtPointer) dsm, (XtIntervalId *) NULL);
 }
-
 Boolean
 XmDropSiteRegistered(
         Widget widget )
@@ -4149,23 +3571,18 @@ XmDropSiteRegistered(
     XmDropSiteManagerObject dsm;
     XtPointer info;
     _XmWidgetToAppContext(widget);
-
     _XmAppLock(app);
     dsm = (XmDropSiteManagerObject)
 	   _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 	                         XtDisplayOfObject(widget)));
     info = DSMWidgetToInfo(dsm, widget);
-
     if (!info) {
 	_XmAppUnlock(app);
 	return False;
     }
-
     _XmAppUnlock(app);
     return True;
 }
-
-
 void
 XmDropSiteRegister(
         Widget widget,
@@ -4174,7 +3591,6 @@ XmDropSiteRegister(
 {
   XmDropSiteManagerObject dsm;
   _XmWidgetToAppContext(widget);
-
   _XmAppLock(app);
   dsm = (XmDropSiteManagerObject)
     _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
@@ -4185,32 +3601,27 @@ XmDropSiteRegister(
     DSMCreateInfo(dsm, widget, args, argCount);
   _XmAppUnlock(app);
 }
-
 void
 XmDropSiteUnregister(
         Widget widget )
 {
 	XmDropSiteManagerObject dsm;
 	_XmWidgetToAppContext(widget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(widget)));
 	DSMDestroyInfo(dsm, widget);
-
 	/* Force Update */
 	_XmIEndUpdate((XtPointer) dsm, (XtIntervalId *) NULL);
 	_XmAppUnlock(app);
 }
-
 void
 XmDropSiteStartUpdate(
         Widget refWidget )
 {
 	XmDropSiteManagerObject dsm;
 	_XmWidgetToAppContext(refWidget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
@@ -4218,7 +3629,6 @@ XmDropSiteStartUpdate(
 	DSMStartUpdate(dsm, refWidget);
 	_XmAppUnlock(app);
 }
-
 void
 XmDropSiteUpdate(
         Widget enclosingWidget,
@@ -4227,7 +3637,6 @@ XmDropSiteUpdate(
 {
 	XmDropSiteManagerObject dsm;
 	_XmWidgetToAppContext(enclosingWidget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
@@ -4235,23 +3644,19 @@ XmDropSiteUpdate(
 	DSMUpdateInfo(dsm, enclosingWidget, args, argCount);
 	_XmAppUnlock(app);
 }
-
 void
 XmDropSiteEndUpdate(
         Widget refWidget )
 {
 	XmDropSiteManagerObject dsm;
 	_XmWidgetToAppContext(refWidget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(refWidget)));
-
 	DSMEndUpdate(dsm, refWidget);
 	_XmAppUnlock(app);
 }
-
 void
 XmDropSiteRetrieve(
         Widget enclosingWidget,
@@ -4260,19 +3665,15 @@ XmDropSiteRetrieve(
 {
 	XmDropSiteManagerObject dsm;
 	_XmWidgetToAppContext(enclosingWidget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(enclosingWidget)));
-
 	/* Update if dsm is dirty */
 	_XmIEndUpdate((XtPointer) dsm, (XtIntervalId *) NULL);
-
 	DSMRetrieveInfo(dsm, enclosingWidget, args, argCount);
 	_XmAppUnlock(app);
 }
-
 Status
 XmDropSiteQueryStackingOrder(
         Widget widget,
@@ -4286,21 +3687,17 @@ XmDropSiteQueryStackingOrder(
 	Cardinal num_visible_children = 0; /* visible to application code */
 	int i,j;
 	_XmWidgetToAppContext(widget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(widget)));
 	info = (XmDSInfo) DSMWidgetToInfo(dsm, widget);
-
 	/* Update if dsm is dirty */
 	_XmIEndUpdate((XtPointer) dsm, (XtIntervalId *) NULL);
-
 	if (info == NULL) {
 		_XmAppUnlock(app);
 		return(0);
 	}
-
 	if (!GetDSLeaf(info))
 	{
 		for (i=0; i < (int)GetDSNumChildren(info); i++)
@@ -4309,12 +3706,10 @@ XmDropSiteQueryStackingOrder(
 			if (!GetDSInternal(child))
 				num_visible_children++;
 		}
-
 		if (num_visible_children)
 		{
 			*children_rtn = (Widget *) XtMalloc(sizeof(Widget) *
 				num_visible_children);
-
 			/* Remember to reverse the order */
 			for (j=0, i=(GetDSNumChildren(info) - 1); i >= 0; i--)
 			{
@@ -4326,7 +3721,6 @@ XmDropSiteQueryStackingOrder(
 		}
 		else
 			*children_rtn = NULL;
-
 		*num_children_rtn = num_visible_children;
 	}
 	else
@@ -4334,9 +3728,7 @@ XmDropSiteQueryStackingOrder(
 		*children_rtn = NULL;
 		*num_children_rtn = 0;
 	}
-
 	parentInfo = (XmDSInfo) GetDSParent(info);
-
 	if (GetDSInternal(parentInfo))
 	{
 	  *parent_rtn = NULL;
@@ -4346,11 +3738,9 @@ XmDropSiteQueryStackingOrder(
 	}
 	else
 		*parent_rtn = GetDSWidget(parentInfo);
-
 	_XmAppUnlock(app);
 	return(1);
 }
-
 void
 XmDropSiteConfigureStackingOrder(
         Widget widget,
@@ -4361,40 +3751,31 @@ XmDropSiteConfigureStackingOrder(
 	XmDSInfo info;
 	XmDSInfo parent;
 	_XmWidgetToAppContext(widget);
-
 	if (widget == NULL)
 		return;
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 		_XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(widget)));
-
 	info = (XmDSInfo) DSMWidgetToInfo(dsm, widget);
-
 	if ((widget == sibling) || (info == NULL)) {
 		_XmAppUnlock(app);
 		return;
 	}
-
 	parent = (XmDSInfo) GetDSParent(info);
-
 	if (sibling != NULL)
 	{
 		XmDSInfo sib = (XmDSInfo) DSMWidgetToInfo(dsm, sibling);
 		Cardinal index, sib_index;
 		int i;
-
 		if ((sib == NULL) ||
 			(((XmDSInfo) GetDSParent(sib)) != parent) ||
 			(XtParent(widget) != XtParent(sibling))) {
 			_XmAppUnlock(app);
 			return;
 		}
-
 		index = GetDSChildPosition(parent, info);
 		sib_index = GetDSChildPosition(parent, sib);
-
 		switch(stack_mode)
 		{
 			case XmABOVE:
@@ -4422,7 +3803,6 @@ XmDropSiteConfigureStackingOrder(
 	{
 		Cardinal index = GetDSChildPosition(parent, info);
 		int i;
-
 		switch(stack_mode)
 		{
 			case XmABOVE:
@@ -4440,7 +3820,6 @@ XmDropSiteConfigureStackingOrder(
 	}
 	_XmAppUnlock(app);
 }
-
 XmDropSiteVisuals
 XmDropSiteGetActiveVisuals(
         Widget widget )
@@ -4449,7 +3828,6 @@ XmDropSiteGetActiveVisuals(
 	XmDSInfo info;
 	XmDropSiteVisuals dsv;
 	_XmWidgetToAppContext(widget);
-
 	_XmAppLock(app);
 	dsm = (XmDropSiteManagerObject)
 	    _XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
@@ -4457,17 +3835,14 @@ XmDropSiteGetActiveVisuals(
 	info = (XmDSInfo) dsm->dropManager.curInfo;
 	dsv = (XmDropSiteVisuals) XtCalloc(1,
 		sizeof(XmDropSiteVisualsRec));
-
 	/* Update if dsm is dirty */
 	_XmIEndUpdate((XtPointer) dsm, (XtIntervalId *) NULL);
-
 	if (info == NULL)
 	{
 		XtFree((char *)dsv);
 		_XmAppUnlock(app);
 		return(NULL);
 	}
-
 	if (!GetDSRemote(info))
 	{
 		Arg args[30];
@@ -4475,7 +3850,6 @@ XmDropSiteGetActiveVisuals(
 		Widget w;
                 unsigned char unitType;
 		w = GetDSWidget(info);
-
 		/*
 		 * We need to retrieve information from the widget. XtGetValues is
 		 * too slow, so retrieve the information directly from the widget
@@ -4489,11 +3863,9 @@ XmDropSiteGetActiveVisuals(
 		 *
 		 * (See also PutDSToStream() )
 		 */
-
 		if (XmIsPrimitive(w))
 		{
 			XmPrimitiveWidget pw = (XmPrimitiveWidget)w;
-
 			dsv->background = pw->core.background_pixel;
 			dsv->foreground = pw->primitive.foreground;
 			dsv->topShadowColor = pw->primitive.top_shadow_color;
@@ -4512,7 +3884,6 @@ XmDropSiteGetActiveVisuals(
 		else if (XmIsManager(w))
 		{
 			XmManagerWidget mw = (XmManagerWidget)w;
-
 			dsv->background = mw->core.background_pixel;
 			dsv->foreground = mw->manager.foreground;
 			dsv->topShadowColor = mw->manager.top_shadow_color;
@@ -4537,13 +3908,11 @@ XmDropSiteGetActiveVisuals(
 			n = 0;
 			XtSetArg(args[n], XmNunitType, &unitType); n++;
 			XtGetValues(w, args, n);
-
                 	if (unitType != XmPIXELS) { /* we need values in pixels */
 			   n = 0;
 			   XtSetArg(args[n], XmNunitType, XmPIXELS); n++;
 			   XtSetValues(w, args, n);
                 	}
-
 			n = 0;
 			XtSetArg(args[n], XmNbackground, &(dsv->background)); n++;
 			XtSetArg(args[n], XmNforeground, &(dsv->foreground)); n++;
@@ -4570,9 +3939,7 @@ XmDropSiteGetActiveVisuals(
 			}
 			else
 			    dsv->borderWidth = 0;
-
 			XtGetValues(w, args, n);
-
 			if (unitType != XmPIXELS) {
 			    n = 0;
 			    XtSetArg(args[n], XmNunitType, unitType); n++;
@@ -4589,7 +3956,6 @@ XmDropSiteGetActiveVisuals(
 				XmDSRemoteHighlightStyle hs =
 					(XmDSRemoteHighlightStyle)
 						GetDSRemoteAnimationPart(info);
-
 				dsv->highlightColor = hs->highlight_color;
 				dsv->highlightPixmap = hs->highlight_pixmap;
 				dsv->background = hs->background;
@@ -4603,7 +3969,6 @@ XmDropSiteGetActiveVisuals(
 				XmDSRemoteShadowStyle ss =
 					(XmDSRemoteShadowStyle)
 						GetDSRemoteAnimationPart(info);
-
 				dsv->topShadowColor = ss->top_shadow_color;
 				dsv->topShadowPixmap = ss->top_shadow_pixmap;
 				dsv->bottomShadowColor = ss->bottom_shadow_color;
@@ -4619,7 +3984,6 @@ XmDropSiteGetActiveVisuals(
 				XmDSRemotePixmapStyle ps =
 					(XmDSRemotePixmapStyle)
 						GetDSRemoteAnimationPart(info);
-
 				dsv->background = ps->background;
 				dsv->foreground = ps->foreground;
 				dsv->shadowThickness = ps->shadow_thickness;
@@ -4635,7 +3999,6 @@ XmDropSiteGetActiveVisuals(
 	_XmAppUnlock(app);
 	return(dsv);
 }
-
 Widget
 _XmGetActiveDropSite(
         Widget widget )
@@ -4644,63 +4007,47 @@ _XmGetActiveDropSite(
 		_XmGetDropSiteManagerObject((XmDisplay) XmGetXmDisplay(
 			XtDisplayOfObject(widget)));
 	XmDSInfo info = (XmDSInfo) dsm->dropManager.curInfo;
-
 	/* Update if dsm is dirty */
 	_XmIEndUpdate((XtPointer) dsm, (XtIntervalId *) NULL);
-
 	if ((!XmIsDragContext(widget)) || (GetDSRemote(info)))
 		return(NULL);
 	else
 		return(GetDSWidget(info));
-
 }
-
 #ifdef DEBUG
 /**********************************************************************
  * Debugging code for DropSMgr.  This code will print out the current
  * state of the tree
  **********************************************************************/
-
-
 static Boolean
 PrintHashEntry(XmHashKey key, XtPointer value, XtPointer data)
 {
   Widget wid = (Widget) key;
-
   printf("Widget %p (%s) Info %p\n", wid, XtName(wid), value);
-
   return(False);
 }
-
 static void
 PrintTree(XmDSInfo rec, int level)
 {
   int i;
   Widget wid = GetDSWidget(rec);
   char *name = "";
-
   /* Indent for level */
   for(i = 0; i < level; i++) printf("  ");
-
   if (wid != (Widget) NULL) name = XtName(wid);
-
   printf("%p (internal %d) - widget %p (%s)\n",
 	 rec, GetDSInternal(rec), wid, name);
-
   if (!GetDSLeaf(rec)) {
     int j;
-
     for(j = 0; j < GetDSNumChildren(rec); j++)
       PrintTree(GetDSChild(rec, j), level + 1);
   }
 }
-
 void
 _XmPrintDSTree(XmDropSiteManagerObject dsm, XmDSInfo root)
 {
   /* First print all the information records in tree format */
   PrintTree(root, 0);
-
   /* Now print widget to info hash table */
   _XmMapHashTable(DSTABLE(dsm), PrintHashEntry, NULL);
 }

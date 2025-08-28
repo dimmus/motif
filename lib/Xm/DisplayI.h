@@ -22,13 +22,10 @@
 */
 #ifndef _XmDisplayI_h
 #define _XmDisplayI_h
-
 #include <Xm/DisplayP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 typedef struct _XmDisplayEventQueryStruct {
   XmDisplay			dd;
   XmDragContext			dc;
@@ -41,10 +38,7 @@ typedef struct _XmDisplayEventQueryStruct {
   Boolean			hasLeave;
   Boolean			hasDropStart;
 } XmDisplayEventQueryStruct;
-
-
 /********    Private Function Declarations    ********/
-
 extern XmDropSiteManagerObject _XmGetDropSiteManagerObject(
                         XmDisplay xmDisplay) ;
 extern unsigned char _XmGetDragProtocolStyle(
@@ -57,12 +51,9 @@ extern Widget _XmGetDragContextFromHandle(
 extern WidgetClass _XmGetXmDisplayClass( void ) ;
 extern WidgetClass _XmSetXmDisplayClass(
                         WidgetClass wc) ;
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDisplayI_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

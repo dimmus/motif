@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * WrFFrBuf.c:                                                                 *
 *                                                                             *
@@ -31,14 +30,11 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 int
 XpmWriteFileFromBuffer(
     const char	*filename,
@@ -46,15 +42,12 @@ XpmWriteFileFromBuffer(
 {
     size_t fcheck, len;
     FILE *fp = fopen(filename, "w");
-
     if (!fp)
 	return XpmOpenFailed;
-
     len = strlen(buffer);
     fcheck = fwrite(buffer, len, 1, fp);
     fclose(fp);
     if (fcheck != 1)
 	return XpmOpenFailed; /* maybe use a better return value */
-
     return XpmSuccess;
 }

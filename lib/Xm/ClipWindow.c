@@ -24,12 +24,9 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/ClipWindowP.h>
 #include <Xm/TransltnsP.h>
 #include <Xm/VirtKeysP.h>	/* for XmeVirtualToActualKeysyms */
@@ -39,9 +36,7 @@
 #include "TraversalI.h"
 #include "XmI.h"
 #include "ClipWindTI.h"
-
 /********    Static Function Declarations    ********/
-
 static String GetRealTranslations(
                         Display *dpy,
 			XmConst _XmBuildVirtualKeyStruct *keys,
@@ -75,11 +70,7 @@ static void ActionGrab(
                         XEvent *event,
                         String *params,
                         Cardinal *num_params) ;
-
 /********    End Static Function Declarations    ********/
-
-
-
 /**************
  *
  *  Translation tables management for ClipWindow:
@@ -93,8 +84,6 @@ static void ActionGrab(
  *  directly should be enough (+ still registering the grab). The
  *  override cuisine + the getreal will go away.
  **************/
-
-
 /**************
  *
  * Only one action that takes as parameter the name of the action
@@ -103,19 +92,15 @@ static void ActionGrab(
  *  match the action name in the ScrolledWindow.
  *
  **************/
-
 static XtActionsRec actions[] =
 {
  {"ActionGrab",    ActionGrab},
 };
-
-
 /****************************************************************
  *
  * Full class record constant
  *
  ****************************************************************/
-
 static XmBaseClassExtRec baseClassExtRec = {
     NULL,
     NULLQUARK,
@@ -140,7 +125,6 @@ static XmBaseClassExtRec baseClassExtRec = {
     WidgetNavigable,                    /* widgetNavigable      */
     NULL                                /* focusChange          */
 };
-
 externaldef( xmclipwindowclassrec) XmClipWindowClassRec xmClipWindowClassRec =
 {
    {			/* core_class fields      */
@@ -184,7 +168,6 @@ externaldef( xmclipwindowclassrec) XmClipWindowClassRec xmClipWindowClassRec =
       DeleteChild,     		                /* delete_child       */
       NULL,                                     /* extension          */
    },
-
    {		/* constraint_class fields */
       NULL,					/* resource list        */
       0,					/* num resources        */
@@ -194,7 +177,6 @@ externaldef( xmclipwindowclassrec) XmClipWindowClassRec xmClipWindowClassRec =
       NULL,					/* set values proc      */
       NULL,                                     /* extension            */
    },
-
    {		/* manager_class fields */
       NULL,			                /* translations           */
       NULL,				        /* syn_resources      	  */
@@ -204,21 +186,15 @@ externaldef( xmclipwindowclassrec) XmClipWindowClassRec xmClipWindowClassRec =
       XmInheritParentProcess,                   /* parent_process         */
       NULL,					/* extension           */
    },
-
    {		/* DrawingArea class - none */
       0						/* mumble */
    },
-
    {		/* ClipWindow class - none */
       NULL					/* extension */
    }
 };
-
 externaldef( xmclipwindowwidgetclass) WidgetClass xmClipWindowWidgetClass
                                        = (WidgetClass) &xmClipWindowClassRec ;
-
-
-
 /************************************************************************
  *                                                                      *
  * GetRealTranslations - Builds up a "real" translation table out of    *
@@ -226,7 +202,6 @@ externaldef( xmclipwindowwidgetclass) WidgetClass xmClipWindowWidgetClass
  * Well, not exactly out of a virtual translation table, but rather a
  * special struct, a _XmBuildVirtualKeyStruct that maches the
  * clipwindow virtual translation found in Transltns.c:
-
    ":c <Key>osfBeginLine:ActionGrab(SWTopLine)\n\
       :<Key>osfBeginLine:ActionGrab(SWBeginLine)\n\
       :c <Key>osfEndLine:ActionGrab(SWBottomLine)\n\
@@ -237,7 +212,6 @@ externaldef( xmclipwindowwidgetclass) WidgetClass xmClipWindowWidgetClass
      :c <Key>osfPageDown:ActionGrab(SWRightPage)\n\
          :<Key>osfPageUp:ActionGrab(SWUpPage)\n\
        :<Key>osfPageDown:ActionGrab(SWDownPage)";
-
  * This is just because it is simpler that way, we don't have to
  * parse a translation table string from scratch.
  *
@@ -245,9 +219,7 @@ externaldef( xmclipwindowwidgetclass) WidgetClass xmClipWindowWidgetClass
  * defined below, has to be updated.
  *
  ************************************************************************/
-
 /*  _XmBuildVirtualKeyStruct is declared in XmP.h */
-
 static XmConst _XmBuildVirtualKeyStruct ClipWindowKeys[] = {
      {ControlMask, XmVosfBeginLine, "ActionGrab(SWTopLine)\n"},
      {0,           XmVosfBeginLine, "ActionGrab(SWBeginLine)\n"},
@@ -260,9 +232,7 @@ static XmConst _XmBuildVirtualKeyStruct ClipWindowKeys[] = {
      {0,           XmVosfPageUp,    "ActionGrab(SWUpPage)\n"},
      {0,           XmVosfPageDown,  "ActionGrab(SWDownPage)\n"}
 };
-
 #define MAX_CLIPWINDOW_TM_SIZE 1000  /* roughly 10lines * 100chars */
-
 static String
 GetRealTranslations(
         Display *dpy,
@@ -277,46 +247,36 @@ GetRealTranslations(
   XmKeyBinding vkeys;
   KeySym    keysym;
   Modifiers mods;
-
   *tmp = '\0';
   for (i = 0; i < num_keys; i++) {
     keysym = XStringToKeysym(keys[i].key);
     if (keysym == NoSymbol) break;
-
     /* A virtual keysym may map to multiple real keysyms. */
     num_vkeys = XmeVirtualToActualKeysyms(dpy, keysym, &vkeys);
     while (--num_vkeys >= 0)
       {
 	keystring = XKeysymToString(vkeys[num_vkeys].keysym);
 	if (!keystring) break;
-
 	/* this is why the struct is simpler than a pure translation parser,
 	   we have to merge the modifiers */
 	mods = vkeys[num_vkeys].modifiers | keys[i].mod;
-
 	if (mods & ControlMask)
 	  strcat(tmp, "Ctrl ");
 	if (mods & ShiftMask)
 	  strcat(tmp, "Shift ");
 	if (mods & Mod1Mask)
 	  strcat(tmp, "Mod1 "); /* "Alt" may not be always right */
-
 	strcat(tmp,"<Key>");
 	strcat(tmp, keystring);
 	strcat(tmp,": ");
 	strcat(tmp, keys[i].action); /* actions contain line separators. */
-
 	tmp += strlen(tmp);
 	assert((tmp - buf) < MAX_CLIPWINDOW_TM_SIZE);
       }
-
     XtFree((char*) vkeys);
   }
-
   return buf;
 }
-
-
 /****************************************************************/
 static XtTranslations ClipWindowTranslations = NULL;
 static void
@@ -324,32 +284,24 @@ ClassInitialize( void )
 {
     /* can't do that static in the base extextion record */
     baseClassExtRec.record_type = XmQmotif ;
-
     /* register the grab action related to the paging. at this
        point the widget has a real translation table */
     XtRegisterGrabAction(ActionGrab,  True, KeyPressMask | KeyReleaseMask,
 			 GrabModeAsync, GrabModeAsync);
-
     ClipWindowTranslations = XtParseTranslationTable(_XmClipWindowTranslationTable);
 }
-
 /****************************************************************/
 static XmConst XmClipWindowTraitRec clipWindowData = {
      0                         /* version         */
 };
-
 static void
 ClassPartInitialize(
         WidgetClass w_class )
 {
     _XmFastSubclassInit(w_class, XmCLIP_WINDOW_BIT) ;
-
     /* Install the clipWindow trait for all subclasses as well. */
     XmeTraitSet((XtPointer)w_class, _XmQTclipWindow, (XtPointer)&clipWindowData);
 }
-
-
-
 /************************************************************************
  *									*
  *  Initialize								*
@@ -365,31 +317,25 @@ Initialize(
 {
     XmClipWindowWidget cw = (XmClipWindowWidget) nw ;
     static XtTranslations ClipWindowXlations = NULL;
-
     /* force some DA resources */
     cw->manager.shadow_thickness = 0 ;
     cw->core.border_width = 0 ;
     cw->drawing_area.margin_width = 0 ;
     cw->drawing_area.margin_height = 0 ;
-
     /* I could leave this one for more bc support,
        but it will force me to special case the DA SetValues method ...
     cw->drawing_area.resize_policy = XmRESIZE_SWINDOW ; */
-
     cw->clip_window.flags = 0 ;
     /* flags used in the ClipWindow to track that
        the widget hasn't gotten yet its real translation table.
        This will be changed in Redisplay, after realization, and the flag
        will be reset to 1 there */
-
     /* Here we create the real translation table out of the virtual one,
        parse it and attach it to the clipwindow */
     /* This has to be done in Initialize because we need the particular
        display of the widget, not a default display (which is available
        in ClassInitialize) */
-
     /* do the parsing only once */
-
     if (!ClipWindowXlations) {
 	ClipWindowXlations = XtParseTranslationTable(
 					GetRealTranslations(
@@ -397,13 +343,10 @@ Initialize(
 						ClipWindowKeys,
 						XtNumber(ClipWindowKeys)));
     }
-
     XtOverrideTranslations(nw, ClipWindowXlations);
-
     /* need for the RtoL win gravity resize support */
     cw->clip_window.old_width = cw->core.width ;
 }
-
 /*************************************************************************
  *
  *  Resize: implement north east win gravity for all kids.
@@ -416,18 +359,14 @@ Resize(
         Widget w )
 {
     XtWidgetProc resize;
-
     /* When layout is rtol,
        implement win gravity north east for all kids */
-
     if (LayoutIsRtoLM(w)) {
 	XmClipWindowWidget cw = (XmClipWindowWidget) w ;
 	Cardinal i ;
-
 	for (i = 0; i < cw->composite.num_children; i++) {
 	    Widget child ;
 	    child = cw->composite.children[i] ;
-
 	    if (XtIsManaged(child)) {
 		/* we want the distance from the x of the child to the
 		   width of the clipwindow to remain constant */
@@ -443,7 +382,6 @@ Resize(
 	}
 	cw->clip_window.old_width = cw->core.width ;
     }
-
     /* For compatibility invoke the drawing area's XmNresizeCallback. */
     _XmProcessLock();
     resize = ((CoreWidgetClass) xmClipWindowClassRec.core_class.superclass)->
@@ -451,8 +389,6 @@ Resize(
    _XmProcessUnlock();
     (* resize) (w);
 }
-
-
 /************************************************************************
  *									*
  *  Redisplay - 	                                                *
@@ -466,8 +402,6 @@ Redisplay(
 {
     XmClipWindowWidget cw = (XmClipWindowWidget) wid ;
     XtExposeProc expose;
-
-
     /* Here we're doing something once for every instance of ClipWindow.
        if the clipwindow translation hasn't been override yet, do it:
        install the virtual translation */
@@ -477,11 +411,8 @@ Redisplay(
        additional code */
     if (cw->clip_window.flags == 0) {
 	cw->clip_window.flags = 1 ;
-
     	XtOverrideTranslations (wid, ClipWindowTranslations);
     }
-
-
     /* envelop our superclass expose method */
     _XmProcessLock();
     expose = ((CoreWidgetClass) xmClipWindowClassRec.core_class.superclass)->
@@ -489,15 +420,12 @@ Redisplay(
     _XmProcessUnlock();
     (* expose)  (wid, event, region);
 }
-
-
 /****************************************************************
  *
  * GeometryManager:
  *      Always accpet the change and notify the ScrollFrame parent
  *
  ****************************************************************/
-
 /*ARGSUSED*/
 static XtGeometryResult
 GeometryManager(
@@ -508,23 +436,17 @@ GeometryManager(
     /* notify the navigators of the change thru
        the appropriate Trait's methods */
     Widget clip = XtParent(w);
-
     if (IsQueryOnly(request)) return XtGeometryYes;
-
     /* The clipwindow is making the change to the child geometry */
     if (IsX(request)) w->core.x = request->x;
     if (IsY(request)) w->core.y = request->y;
     if (IsWidth(request)) w->core.width = request->width;
     if (IsHeight(request)) w->core.height = request->height;
     if (IsBorder(request)) w->core.border_width = request->border_width;
-
     /* notify the ScrolledWindow parent by using a direct call */
     _XmSWNotifyGeoChange(XtParent(clip), w, request);
-
     return XtGeometryYes;
 }
-
-
 /****************************************************************
  *
  * ChangeManaged
@@ -537,10 +459,8 @@ ChangeManaged(
 {
     /* notify the ScrolledWindow */
     _XmSWNotifyGeoChange(XtParent(wid), NULL, NULL);
-
     XmeNavigChangeManaged(wid) ;
 }
-
 /************************************************************************
  *									*
  *  DeleteChild: track the workwindow death				*
@@ -551,16 +471,12 @@ DeleteChild(
         Widget child )
 {
     XtWidgetProc delete_child;
-
     /* looks like we need a Trait here as well, at least we don't
        need the 1.2 destroy callback stuff anymore */
     XmScrolledWindowWidget sw;
-
     sw = (XmScrolledWindowWidget)child->core.parent->core.parent;
-
     if (child == sw->swindow.WorkWindow)
         sw->swindow.WorkWindow = NULL;
-
     /* remove it from the child list by enveloping */
     _XmProcessLock();
     delete_child = ((CompositeWidgetClass)
@@ -569,8 +485,6 @@ DeleteChild(
     _XmProcessUnlock();
     (* delete_child) (child);
 }
-
-
 /****************************************************************
  * Xm private class method
  ****************/
@@ -584,7 +498,6 @@ WidgetNavigable(
 	{
 	    XmNavigationType nav_type = ((XmManagerWidget) wid)
 		->manager.navigation_type ;
-
 	    if(    (nav_type == XmSTICKY_TAB_GROUP)
 	       ||  (nav_type == XmEXCLUSIVE_TAB_GROUP)
 	       ||  (    (nav_type == XmTAB_GROUP)
@@ -595,10 +508,7 @@ WidgetNavigable(
 	    return XmDESCENDANTS_NAVIGABLE ;
 	}
     return XmNOT_NAVIGABLE ;
-
 }
-
-
 /************************************************************************
  *                                                                      *
  * Grab routine - The first param is the name of the action             *

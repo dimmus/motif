@@ -27,32 +27,22 @@
  */
 #ifndef _XmColorObjI_h
 #define _XmColorObjI_h
-
 #include <Xm/ColorObjP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* defines for palette.c */
 #define VALUE_THRESHOLD 225
-
 externalref XmColorObj _XmDefaultColorObj;
 externalref XContext _XmColorObjCache;
 externalref Display  *_XmColorObjCacheDisplay;
-
 /********    Private Function Declarations    ********/
-
 extern void _XmColorObjCreate(
                         Widget w,
                         ArgList al,
                         Cardinal *acPtr) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmColorObjI_h */

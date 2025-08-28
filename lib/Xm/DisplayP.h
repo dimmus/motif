@@ -22,31 +22,23 @@
 */
 #ifndef _XmDisplayP_h
 #define _XmDisplayP_h
-
 #include <Xm/DesktopP.h>
 #include <Xm/VendorSEP.h>
 #include <Xm/DropSMgr.h>
 #include <Xm/Display.h>
 #include <Xm/ScreenP.h>
-
 /* A little incest */
 #include <Xm/DragCP.h>
 #include <Xm/VirtKeysP.h>
-
 #include <Xm/TearOffP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 typedef Widget (*XmDisplayGetDisplayProc)(Display *);
-
-
 typedef struct {
     XmDisplayGetDisplayProc GetDisplay;
     XtPointer               extension;
 } XmDisplayClassPart;
-
 /*
  * we make it a appShell subclass so it can have it's own instance
  * hierarchy
@@ -61,7 +53,6 @@ typedef struct _XmDisplayClassRec{
     ApplicationShellClassPart 	application_shell_class;
     XmDisplayClassPart		display_class;
 } XmDisplayClassRec;
-
 typedef struct _XmModalDataRec{
     Widget                      wid;
     XmVendorShellExtObject	ve;
@@ -69,13 +60,10 @@ typedef struct _XmModalDataRec{
     Boolean			exclusive;
     Boolean			springLoaded;
 } XmModalDataRec, *XmModalData;
-
 typedef struct {
     unsigned char		dragInitiatorProtocolStyle;
     unsigned char		dragReceiverProtocolStyle;
-
     unsigned char		userGrabbed; /* flag for menu vs dnd */
-
     WidgetClass			dragContextClass;
     WidgetClass			dropTransferClass;
     WidgetClass			dropSiteManagerClass;
@@ -83,17 +71,14 @@ typedef struct {
     XmDropSiteManagerObject	dsm;
     Time			lastDragTime;
     Window			proxyWindow;
-
     XmModalData			modals;
     Cardinal			numModals;
     Cardinal			maxModals;
     XtPointer			xmim_info;
-
     String			bindingsString;
     XmVKeyBindingRec		*bindings;
     XKeyEvent			*lastKeyEvent;			 /* unused */
     unsigned char		keycode_tag[XmKEYCODE_TAG_SIZE]; /* unused */
-
     int				shellCount;
     XtPointer			displayInfo;	/* extension */
     XtPointer                   user_data;
@@ -104,7 +89,6 @@ typedef struct {
     XtCallbackList		noFontCallback;
     XtCallbackList		noRenditionCallback;
     Boolean			displayHasShapeExtension;
-
     XtEnum			enable_btn1_transfer ;
     Boolean			enable_button_tab ;
     Boolean			enable_etched_in_menu;
@@ -116,7 +100,6 @@ typedef struct {
     Boolean                     enable_thin_thickness;
     Boolean			enable_multi_key_bindings;
 } XmDisplayPart, *XmDisplayPartPtr;
-
 typedef struct _XmDisplayInfo {
   /* so much for information hiding */
   Cursor	SashCursor;		/* Sash.c */
@@ -127,7 +110,6 @@ typedef struct _XmDisplayInfo {
   unsigned short resetFocusFlag;	/* TravAct.c */
   Boolean	traversal_in_progress;  /* Traversal.c */
 } XmDisplayInfo;
-
 typedef struct _XmDisplayRec{
     CorePart 		core;
     CompositePart 	composite;
@@ -138,15 +120,10 @@ typedef struct _XmDisplayRec{
     ApplicationShellPart application;
     XmDisplayPart	display;
 } XmDisplayRec;
-
 externalref XmDisplayClassRec 	xmDisplayClassRec;
-
 externalref String _Xm_MOTIF_DRAG_AND_DROP_MESSAGE ;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDisplayP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

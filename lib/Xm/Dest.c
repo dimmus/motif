@@ -25,17 +25,13 @@
 static char rcsid[] = "$XConsortium: Dest.c /main/12 1995/09/19 23:00:44 cde-sun $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/XmP.h>
 #include <Xm/DisplayP.h>
 #include "XmI.h"
 #include "DestI.h"
-
 /*
    This function is used for setting the "last editable widget on which a
    select, edit, insert, or paste operation was performed and is a destination
@@ -53,14 +49,12 @@ void _XmSetDestination (Display *dpy, Widget w)
 	((XmDisplayInfo *)(dd->display.displayInfo))->destinationWidget =
 		w;
 }
-
 /* This public function retrieves the widget saved by _XmSetDestination. */
 Widget XmGetDestination (Display *display)
 {
       XmDisplay   dd = (XmDisplay) XmGetXmDisplay(display);
       Widget w = (Widget)NULL;
       _XmDisplayToAppContext(display);
-
       _XmAppLock(app);
       if ((XmDisplay)NULL != dd)
 	 w = ((XmDisplayInfo *)(dd->display.displayInfo))->destinationWidget;

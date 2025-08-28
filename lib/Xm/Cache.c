@@ -25,22 +25,13 @@
 static char rcsid[] = "$XConsortium: Cache.c /main/12 1995/07/14 10:12:26 drk $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "CacheI.h"
 #include <Xm/GadgetP.h>
-
-
 /********    Static Function Declarations    ********/
-
-
 /********    End Static Function Declarations    ********/
-
-
 /************************************************************************
  *
  *  _XmCacheDelete
@@ -54,7 +45,6 @@ _XmCacheDelete(
         XtPointer data )
 {
     XmGadgetCachePtr ptr;
-
     ptr = (XmGadgetCachePtr) DataToGadgetCache(data);
     if (--ptr->ref_count <= 0) {
       (ptr->prev)->next = ptr->next;
@@ -63,7 +53,6 @@ _XmCacheDelete(
       XtFree( (char *) ptr );
     }
 }
-
 /************************************************************************
  *
  *  _XmCacheCopy
@@ -78,7 +67,6 @@ _XmCacheCopy(
 {
     memcpy( dest, src, size);
 }
-
 /************************************************************************
  *
  *  _XmCachePart
@@ -101,14 +89,12 @@ _XmCachePart(
         size_t size )
 {
     XmGadgetCachePtr ptr, last;
-
     if (ClassCacheHead(cp).next == NULL)       /* First one */
     {
 	ClassCacheHead(cp).next =
 	  (struct _XmGadgetCache *)XtMalloc( size +
 					    XtOffsetOf(XmGadgetCacheRef, data));
         ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
-
         ClassCacheCopy(cp)(cpart, CacheDataPtr(ptr), size );
 	ptr-> ref_count = 1;
         ptr-> next = NULL;
@@ -118,7 +104,6 @@ _XmCachePart(
     ptr = (XmGadgetCachePtr)ClassCacheHead(cp).next;
     do
     {
-
         if ((ClassCacheCompare(cp)( cpart, CacheDataPtr(ptr))))
         {
             ptr->ref_count++;
@@ -130,7 +115,6 @@ _XmCachePart(
             ptr = (XmGadgetCachePtr)ptr->next;
         }
     } while (ptr);
-
     /* Malloc a new rec off of last, fill it out*/
     ptr = (XmGadgetCachePtr)XtMalloc( size +
 				     XtOffsetOf(XmGadgetCacheRef, data) );

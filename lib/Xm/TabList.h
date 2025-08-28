@@ -23,18 +23,14 @@
  */
 #ifndef _Xm_TabList_h_
 #define _Xm_TabList_h_
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define XmCOLOR_DYNAMIC ((Pixel)-1)
 #define XmPIXMAP_DYNAMIC ((Pixmap) 3)
 #define XmTAB_LAST_POSITION -1
 #define XmTAB_NOT_FOUND -1
-
 #define XmTAB_LABEL_STRING      (1L<<0)
 #define XmTAB_LABEL_PIXMAP      (1L<<1)
 #define XmTAB_PIXMAP_PLACEMENT  (1L<<2)
@@ -50,7 +46,6 @@ extern "C" {
 				 XmTAB_FOREGROUND|XmTAB_VALUE_MODE|\
 				 XmTAB_LABEL_ALIGNMENT|XmTAB_STRING_DIRECTION|\
 				 XmTAB_BACKGROUND_PIXMAP|XmTAB_SENSITIVE)
-
 typedef struct _XmTabAttributeRec {
     XmString          label_string;	/* default: NULL                     */
     XmStringDirection string_direction; /* default: XmSTRING_DIRECTION_L_TO_R*/
@@ -63,43 +58,24 @@ typedef struct _XmTabAttributeRec {
     Boolean	      sensitive;        /* default: True                     */
     XmTabValueMode    value_mode;       /* default: XmTAB_VALUE_COPY         */
 } XmTabAttributeRec, * XmTabAttributes;
-
 typedef struct _XmTabbedStackListRec *XmTabbedStackList;
-
 XmTabbedStackList XmTabbedStackListCreate(void);
-
 XmTabbedStackList XmTabbedStackListCopy(XmTabbedStackList);
-
 void XmTabbedStackListFree(XmTabbedStackList);
-
 void XmTabbedStackListRemove(XmTabbedStackList, int);
-
 int XmTabbedStackListInsert(XmTabbedStackList, int, XtValueMask, XmTabAttributes);
-
 int XmTabbedStackListAppend(XmTabbedStackList, XtValueMask, XmTabAttributes);
-
 void XmTabbedStackListModify(XmTabbedStackList, int, XtValueMask, XmTabAttributes);
-
 void XmTabbedStackListQuery(XmTabbedStackList, int, XmTabAttributes);
-
 int XmTabbedStackListFind(XmTabbedStackList, XmString);
-
 void XmTabbedStackListSimpleRemove(XmTabbedStackList, XmString);
-
 int XmTabbedStackListSimpleInsert(XmTabbedStackList, int, XmString);
-
 int XmTabbedStackListSimpleAppend(XmTabbedStackList, XmString);
-
 void XmTabbedStackListSimpleModify(XmTabbedStackList, int, XmString);
-
 XmString XmTabbedStackListSimpleQuery(XmTabbedStackList, int);
-
 XmTabResult XmTabbedStackListCompare(XmTabbedStackList, XmTabbedStackList);
-
 void XmTabAttibutesFree(XmTabAttributes);
-
 #ifdef __cplusplus
 }	/* Closes scope of 'extern "C"' declaration */
 #endif
-
 #endif /* _Xm_TabList_h_ */

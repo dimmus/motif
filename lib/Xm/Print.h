@@ -20,54 +20,37 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
  */
-
 #ifndef _XmPrintShell_h
 #define _XmPrintShell_h
-
 #include <Xm/Xm.h>
 #include <X11/extensions/Print.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Class record constants */
-
 externalref WidgetClass xmPrintShellWidgetClass;
-
 typedef struct _XmPrintShellClassRec * XmPrintShellWidgetClass;
 typedef struct _XmPrintShellRec      * XmPrintShellWidget;
-
-
 #ifndef XmIsPrintShell
 #define XmIsPrintShell(w)  (XtIsSubclass (w, xmPrintShellWidgetClass))
 #endif
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmPrintSetup(
              Widget           video_widget,
              Screen           *print_screen,
              String            print_shell_name,
              ArgList           args,
              Cardinal          num_args);
-
 extern void XmRedisplayWidget(Widget widget) ;
-
 extern XtEnum XmPrintToFile(Display *dpy,
 			    char *file_name,
 			    XPFinishProc finish_proc,
 			    XPointer client_data) ;
-
 extern XtEnum XmPrintPopupPDM(Widget print_shell,
 			      Widget transient_for);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPrintShell_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

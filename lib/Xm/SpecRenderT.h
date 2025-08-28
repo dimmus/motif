@@ -26,30 +26,20 @@
  */
 #ifndef _XmSpecRenderT_H
 #define _XmSpecRenderT_H
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include <Xm/Xm.h>
-
 externalref XrmQuark XmQTspecifyRenderTable;
-
 /* Trait structures and typedefs, place typedefs first */
-
 typedef XmFontList (*XmSpecRenderGetTableProc)(Widget wid,
 					       XtEnum type);
-
 /* Version 0: initial release. */
-
 typedef struct _XmSpecRenderTraitRec {
   int			   version;		/* 0 */
   XmSpecRenderGetTableProc getRenderTable;
 } XmSpecRenderTraitRec, *XmSpecRenderTrait;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmSpecRenderT_H */

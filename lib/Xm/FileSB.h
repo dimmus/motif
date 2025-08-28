@@ -22,41 +22,25 @@
 */
 #ifndef _XmFSelect_h
 #define _XmFSelect_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /* Type definitions for FileSB resources: */
-
-
 typedef void (*XmQualifyProc)( Widget, XtPointer, XtPointer) ;
 typedef void (*XmSearchProc)( Widget, XtPointer) ;
-
-
-
 /* Class record constants */
-
 externalref WidgetClass xmFileSelectionBoxWidgetClass;
-
 typedef struct _XmFileSelectionBoxClassRec * XmFileSelectionBoxWidgetClass;
 typedef struct _XmFileSelectionBoxRec      * XmFileSelectionBoxWidget;
-
-
 #ifndef XmIsFileSelectionBox
 #define XmIsFileSelectionBox(w) (XtIsSubclass((w),xmFileSelectionBoxWidgetClass))
 #endif
-
 /********    Public Function Declarations    ********/
-
 XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmFileSelectionBoxGetChild(
                         Widget fs,
                         unsigned char which);
-
 extern void XmFileSelectionDoSearch(
                         Widget fs,
                         XmString dirmask) ;
@@ -78,12 +62,8 @@ extern Widget XmVaCreateManagedFileSelectionBox(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmFSelect_h */

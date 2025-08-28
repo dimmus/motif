@@ -22,29 +22,18 @@
 */
 #ifndef _XmBulletinBoard_h
 #define _XmBulletinBoard_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Class record constants */
-
 externalref WidgetClass xmBulletinBoardWidgetClass;
-
 typedef struct _XmBulletinBoardClassRec * XmBulletinBoardWidgetClass;
 typedef struct _XmBulletinBoardRec      * XmBulletinBoardWidget;
-
-
 #ifndef XmIsBulletinBoard
 #define XmIsBulletinBoard(w)  (XtIsSubclass (w, xmBulletinBoardWidgetClass))
 #endif
-
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateBulletinBoard(
                         Widget p,
                         String name,
@@ -55,11 +44,9 @@ extern Widget XmCreateBulletinBoardDialog(
                         String name,
                         ArgList bb_args,
                         Cardinal bb_n) ;
-
 /*
  * Variable argument list functions
  */
-
 extern Widget XmVaCreateBulletinBoard(
                         Widget parent,
                         char *name,
@@ -68,13 +55,9 @@ extern Widget XmVaCreateManagedBulletinBoard(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmBulletinBoard_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

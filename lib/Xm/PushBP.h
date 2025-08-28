@@ -22,36 +22,25 @@
 */
 #ifndef _XmPButtonP_h
 #define _XmPButtonP_h
-
 #include <Xm/PushB.h>
 #include <Xm/LabelP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* PushButton class structure */
-
 typedef struct _XmPushButtonClassPart
 {
    XtPointer extension;   /* Pointer to extension record */
 } XmPushButtonClassPart;
-
-
 /* Full class record declaration for PushButton class */
-
 typedef struct _XmPushButtonClassRec {
     CoreClassPart	  core_class;
     XmPrimitiveClassPart  primitive_class;
     XmLabelClassPart      label_class;
     XmPushButtonClassPart pushbutton_class;
 } XmPushButtonClassRec;
-
-
 externalref XmPushButtonClassRec xmPushButtonClassRec;
-
 /* PushButton instance record */
-
 typedef struct _XmPushButtonPart
 {
    Boolean 	    fill_on_arm;
@@ -61,7 +50,6 @@ typedef struct _XmPushButtonPart
    XtCallbackList   activate_callback;
    XtCallbackList   arm_callback;
    XtCallbackList   disarm_callback;
-
    Boolean 	    armed;
    Pixmap	    unarm_pixmap;
    GC               fill_gc;
@@ -74,28 +62,18 @@ typedef struct _XmPushButtonPart
    Dimension    default_button_shadow_thickness;
 		/* New resource - always add it
                     to widgets dimension. */
-
 } XmPushButtonPart;
-
-
 /* Full instance record declaration */
-
 typedef struct _XmPushButtonRec {
     CorePart	     core;
     XmPrimitivePart  primitive;
     XmLabelPart      label;
     XmPushButtonPart pushbutton;
 } XmPushButtonRec;
-
-
 /********    Private Function Declarations    ********/
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPButtonP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

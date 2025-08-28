@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  CrBufFrP.c:                                                                *
 *                                                                             *
@@ -31,12 +30,10 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 int
 XpmCreateBufferFromPixmap(
     Display		 *display,
@@ -50,7 +47,6 @@ XpmCreateBufferFromPixmap(
     unsigned int width = 0;
     unsigned int height = 0;
     int ErrorStatus;
-
     /* get geometry */
     if (attributes && attributes->valuemask & XpmSize) {
 	width = attributes->width;
@@ -62,16 +58,13 @@ XpmCreateBufferFromPixmap(
     if (shapemask)
 	xpmCreateImageFromPixmap(display, shapemask, &shapeimage,
 				 &width, &height);
-
     /* create the buffer */
     ErrorStatus = XpmCreateBufferFromImage(display, buffer_return, ximage,
 					   shapeimage, attributes);
-
     /* destroy the ximages */
     if (ximage)
 	XDestroyImage(ximage);
     if (shapeimage)
 	XDestroyImage(shapeimage);
-
     return (ErrorStatus);
 }

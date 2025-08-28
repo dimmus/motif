@@ -22,34 +22,23 @@
 */
 #ifndef _XmBulletinBoardP_h
 #define _XmBulletinBoardP_h
-
 #include <Xm/BulletinB.h>
 #include <Xm/ManagerP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /****************************************************************************
  * this suffix is added to dialog shells created by Xm convenience routines *
  * so that, for example, a call to create a form dialog named f generates a *
  * dialog shell named f_popup in addition to a form named f                 *
  ****************************************************************************/
-
 #define XmDIALOG_SUFFIX		"_popup"
 #define XmDIALOG_SUFFIX_SIZE	6
-
-
-
 typedef struct _XmBulletinBoardConstraintPart
 {
    char unused;
 } XmBulletinBoardConstraintPart, * XmBulletinBoardConstraint;
-
-
 /*  New fields for the BulletinBoard widget class record  */
-
 typedef struct
 {
   Boolean		always_install_accelerators;
@@ -57,10 +46,7 @@ typedef struct
   XmFocusMovedProc	focus_moved_proc;
   XtPointer		extension;
 } XmBulletinBoardClassPart;
-
-
 /* Full class record declaration */
-
 typedef struct _XmBulletinBoardClassRec
 {
   CoreClassPart			core_class;
@@ -69,63 +55,46 @@ typedef struct _XmBulletinBoardClassRec
   XmManagerClassPart		manager_class;
   XmBulletinBoardClassPart	bulletin_board_class;
 } XmBulletinBoardClassRec;
-
 externalref XmBulletinBoardClassRec xmBulletinBoardClassRec;
-
-
 /* New fields for the BulletinBoard widget record */
-
 typedef struct
 {
   Dimension	margin_width;		/*  margins		*/
   Dimension	margin_height;
-
   Widget	default_button;		/*  widgets		*/
   Widget	dynamic_default_button;	/*  widgets		*/
   Widget	cancel_button;
   Widget	dynamic_cancel_button;
-
   XtCallbackList focus_callback;	/*  callback lists	*/
   XtCallbackList map_callback;
   XtCallbackList unmap_callback;
-
   XtTranslations text_translations;
-
   XmFontList	button_font_list;	/*  font lists		*/
   XmFontList	label_font_list;
   XmFontList	text_font_list;
-
   Boolean	allow_overlap;		/*  policies		*/
   Boolean	default_position;
   Boolean	auto_unmanage;
   unsigned char	resize_policy;
-
   Dimension	old_width;		/*  shadow resources	*/
   Dimension	old_height;
   Dimension	old_shadow_thickness;
   unsigned char	shadow_type;
-
   Boolean	in_set_values;		/*  internal flag	*/
   Boolean	initial_focus;
-
   Boolean	no_resize;		/*  dialog resources	*/
   unsigned char	dialog_style;
   XmString	dialog_title;
   Widget	shell;
   Widget	_UNUSED;
-
   XmGeoMatrix   geo_cache;		/* Cache for geometry management. */
-
   unsigned char check_set;	/* For XmNfontList & XmNRenderTable */
 } XmBulletinBoardPart;
-
-
 /****************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************/
-
 typedef struct _XmBulletinBoardRec
 {
   CorePart		core;
@@ -134,8 +103,6 @@ typedef struct _XmBulletinBoardRec
   XmManagerPart		manager;
   XmBulletinBoardPart	bulletin_board;
 } XmBulletinBoardRec;
-
-
 /* Access macros */
 #define BB_CancelButton(w) \
 	(((XmBulletinBoardWidget) w)->bulletin_board.cancel_button)
@@ -163,11 +130,8 @@ typedef struct _XmBulletinBoardRec
 	(((XmBulletinBoardWidget) w)->bulletin_board.in_set_values)
 #define BB_InitialFocus(w) \
 	(((XmBulletinBoardWidget) w)->bulletin_board.initial_focus)
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmBulletinBoardP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

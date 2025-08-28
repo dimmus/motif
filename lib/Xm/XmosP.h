@@ -22,14 +22,11 @@
 */
 #ifndef _XmosP_h
 #define _XmosP_h
-
 /* Some SVR4 systems don't have bzero. */
 #include <X11/Xfuncs.h>
-
 /*
  * Fix for 8975 - using LOGNAME instead of USER on SYSV and SVR4
 */
-
 #ifndef USER_VAR
 #if defined(SYSV) || defined(SVR4)
 #define USER_VAR "LOGNAME"
@@ -37,9 +34,7 @@
 #define USER_VAR "USER"
 #endif
 #endif
-
 #include <stdlib.h> /* Needed for MB_CUR_MAX, mbtowc, mbstowcs and mblen */
-
 /* On Sun systems, mblen is broken. It doesn't return 0 when the
    string is empty. Here's a patch. NOTE: On Sun systems, mblen
    is a macro wrapper around mbtowc. Hence the implementation below. */
@@ -48,9 +43,7 @@
 #define mblen(ptr, size) \
   ((ptr && *(ptr) == '\0') ? 0 : mbtowc((wchar_t *)0, (ptr), (size)))
 #endif
-
 #include <limits.h>		/* for MB_LEN_MAX et al */
-
 #ifndef INT_MAX
 #define INT_MAX 2147483647
 #endif
@@ -63,23 +56,18 @@
 #undef MB_CUR_MAX
 #define MB_CUR_MAX 1 /* temp fix for ultrix */
 #endif /* BOGUS_MB_MAX */
-
 /**********************************************************************/
 /* here we duplicate Xtos.h, since we can't include this private file */
-
 #if defined(INCLUDE_ALLOCA_H) || defined(HAVE_ALLOCA_H)
 #include <alloca.h>
 #endif
-
 #ifdef CRAY
 #define WORD64
 #endif
-
 /* Don't Use Alloca On Solaris */
 #if defined(sun)
 #define NO_ALLOCA
 #endif
-
 /* stolen from server/include/os.h */
 #ifndef NO_ALLOCA
 /*
@@ -88,25 +76,18 @@
  * LOCAL then you add that in here.
  */
 #if defined(__HIGHC__)
-
 #if HCVERSION < 21003
 #define ALLOCATE_LOCAL(size)	alloca(size)
 pragma on(alloca);
 #else /* HCVERSION >= 21003 */
 #define	ALLOCATE_LOCAL(size)	_Alloca(size)
 #endif /* HCVERSION < 21003 */
-
 #define DEALLOCATE_LOCAL(ptr)  /* as nothing */
-
 #endif /* defined(__HIGHC__) */
-
-
 #ifdef __GNUC__
-
 #ifndef alloca /* gnu itself might have done that already */
 #define alloca __builtin_alloca
 #endif
-
 #define ALLOCATE_LOCAL(size) alloca(size)
 #define DEALLOCATE_LOCAL(ptr)  /* as nothing */
 #else /* ! __GNUC__ */
@@ -123,72 +104,51 @@ char *alloca();
 #define DEALLOCATE_LOCAL(ptr)  /* as nothing */
 #endif /* who does alloca */
 #endif /* __GNUC__ */
-
 #endif /* NO_ALLOCA */
-
 #ifndef ALLOCATE_LOCAL
 #define ALLOCATE_LOCAL(size)	XtMalloc(size)
 #define DEALLOCATE_LOCAL(ptr)	XtFree(ptr)
 #endif /* ALLOCATE_LOCAL */
-
 /* End of Xtos.h */
 /*****************/
-
 #include <Xm/XmP.h>
-
 /* For padding structures in Mrm we need to know how big pointers are. */
 #if !defined(CRAY) && !defined(__alpha)
 #define MrmShortPtr
 #endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define MATCH_CHAR 'P'  /* referenced in InitPath strings and in the files
 			 that uses it (ImageCache.c and Mrmhier.c) */
-
 /* OS-dependent file info for VirtKeys */
-
 #define XMBINDDIR "XMBINDDIR"
 #ifndef XMBINDDIR_FALLBACK
 #define XMBINDDIR_FALLBACK "/usr/lib/Xm/bindings"
 #endif
 #define XMBINDFILE "xmbind.alias"
 #define MOTIFBIND ".motifbind"
-
 typedef enum {
   XmOS_METHOD_NULL,
   XmOS_METHOD_DEFAULTED,
   XmOS_METHOD_REPLACED
 } XmOSMethodStatus;
-
 typedef XmDirection (*XmCharDirectionProc)(XtPointer   /* char */,
 					   XmTextType  /* type */,
 					   XmStringTag /* locale */);
-
 typedef Status  (*XmInitialDirectionProc)(XtPointer      /* chars */,
 					  XmTextType     /* type */,
 					  XmStringTag    /* locale */,
 					  unsigned int * /* num_bytes */,
 					  XmDirection *  /* direction */);
-
-
 /********    Private Function Declarations    ********/
-
 extern XmOSMethodStatus XmOSGetMethod(Widget w,
 				      String method_name,
 				      XtPointer * method,
 				      XtPointer * os_data);
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
-
 #endif /* _XmosP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

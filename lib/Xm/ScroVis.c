@@ -25,20 +25,15 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/ScrolledWP.h>
 #include <Xm/NavigatorT.h>
 #include "ScrollFramTI.h"
 #include "MessagesI.h"
 #include "XmI.h"
-
 #define SWMessage1      _XmMMsgScrollVis_0000
-
 /************************************************************************
  *									*
  * XmScrollVisible -  TraverseObscureCallback helper                    *
@@ -73,7 +68,6 @@ XmScrollVisible(
     XmScrolledWindowConstraint swc;
     XmNavigatorDataRec nav_data ;
     _XmWidgetToAppContext(scrw);
-
     _XmAppLock(app);
     /* check param */
     if (!((scrw) && (XmIsScrolledWindow(scrw)) &&
@@ -82,7 +76,6 @@ XmScrollVisible(
 	_XmAppUnlock(app);
 	return ;
     }
-
     /* loop up in search for a "workwindow" */
     w = wid;
     while (w && (XtParent(w) != (Widget) sw->swindow.ClipWindow))
@@ -92,7 +85,6 @@ XmScrollVisible(
 	_XmAppUnlock(app);
 	return ;
     }
-
     /* w is the potentially scrollable ascendant of wid that needs to
        be scrolled, its parent is the clip window */
     /* In the new scheme, w might not be able to scroll at all,
@@ -103,17 +95,13 @@ XmScrollVisible(
        check for NO_SCROLL in w, but since we cannot check for SCROLL_HOR
        or SCROLL_VERT - depend on the traversal layout - I'd rather do
        nothing */
-
     /* we need to get the position of wid relative to w,
        so we use 2 XtTranslateCoords */
-
     XtTranslateCoords(wid, 0, 0, &src_x, &src_y);
     XtTranslateCoords(w, 0, 0, &dst_x, &dst_y);
     dx = src_x - dst_x ;
     dy = src_y - dst_y ;
-
     swc = GetSWConstraint(w);
-
     /* get the other positions and sizes */
     cw = XtWidth((Widget) sw->swindow.ClipWindow) ;
     ch = XtHeight((Widget) sw->swindow.ClipWindow) ;
@@ -121,12 +109,10 @@ XmScrollVisible(
     wy = swc->orig_y - XtY(w) ; /* both always positive */
     tw = XtWidth(wid) ;
     th = XtHeight(wid) ;
-
     /* find out the zone where the widget lies and set newx,newy (neg) for
        the workw */
     /* if the widget is bigger than the clipwindow, we put it on
        the left, top or top/left, depending on the zone it was */
-
     if (dy < wy) {                                       /* North */
 	newy = dy - (Position)ver_margin ;      /* stuck it on top + margin */
     } else
@@ -138,7 +124,6 @@ XmScrollVisible(
 	else
 	    newy = swc->orig_y + dy - ch + th + (Position)ver_margin;
     }
-
     if (dx < wx) {                              /* West */
 	newx = dx - (Position)hor_margin ; /* stuck it on left + margin */
     } else
@@ -150,7 +135,6 @@ XmScrollVisible(
 	else
 	    newx = swc->orig_x + dx - cw + tw + (Position)hor_margin;
     }
-
     /* a last check */
     if (newx > sw->swindow.hmax - sw->swindow.hExtent)
 	newx = sw->swindow.hmax - sw->swindow.hExtent;
@@ -158,7 +142,6 @@ XmScrollVisible(
 	newy = sw->swindow.vmax - sw->swindow.vExtent;
     if (newx < sw->swindow.hmin) newx =  sw->swindow.hmin ;
     if (newy < sw->swindow.vmin) newy =  sw->swindow.vmin ;
-
     nav_data.valueMask = NavValue ;
     nav_data.value.x = newx ;
     nav_data.value.y = newy ;

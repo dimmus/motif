@@ -1,17 +1,10 @@
 #ifndef _XmDropDown_h_
 #define _XmDropDown_h_
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/ManagerP.h>
 #include <Xm/DropDown.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define XmDropDown_UP 		((unsigned char) 0)
 #define XmDropDown_UNPOSTED	XmDropDown_UP
 #define XmDropDown_DOWN        	((unsigned char) 1)
@@ -48,7 +41,6 @@ extern "C" {
    (((XmDropDownWidget)(w))->combo.visible_items)
 #define XmDropDown_new_visual_style(w)  \
    (((XmDropDownWidget)(w))->combo.new_visual_style)
-
 #define XmDropDown_old_text(w)      (((XmDropDownWidget)(w))->combo.old_text)
 #define XmDropDown_focus_owner(w)   (((XmDropDownWidget)(w))->combo.focus_owner)
 #define XmDropDown_focus_state(w)   (((XmDropDownWidget)(w))->combo.focus_state)
@@ -58,47 +50,38 @@ extern "C" {
 #define XmDropDown_label(w)         (((XmDropDownWidget)(w))->combo.label)
 #define XmDropDown_text(w)          (((XmDropDownWidget)(w))->combo.text)
 #define XmDropDown_arrow(w)         (((XmDropDownWidget)(w))->combo.arrow)
-
 #define XmDropDown_autoTraversal(w) (((XmDropDownWidget)(w))->combo.autoTraversal)
 #define XmDropDown_activateOnFill(w)    \
     (((XmDropDownWidget)(w))->combo.activateOnFill)
 #define XmDropDown_doActivate(w)    (((XmDropDownWidget)(w))->combo.doActivate)
 #define XmDropDown_inValueChanged(w)    \
     (((XmDropDownWidget)(w))->combo.inValueChanged)
-
-
 /* Should return True to ignore invalid entry warning. Combination Box
  *  does not currently use this. Presumes do it in subclasses
  */
 typedef Boolean (*XmDropDownTextProc)(Widget w, char *text);
-
 typedef Boolean (*XmDropDownTextListMapProc)(
     Widget w,		/* combo box */
     Widget text,	/* text */
     Widget list		/* list */
 );
-
 /* Version number for the first Revision  */
 #define XmDropDownExtensionVersion 2
-
 typedef struct {
         /* standard extension fields */
 	XtPointer 		    next_extension;
 	XrmQuark                    record_type;
 	long                        version;
 	Cardinal                    record_size;
-
 	/* extra fields */
 	XmDropDownTextProc	    verify;
 	XmDropDownTextProc	    update;
 	XmDropDownTextListMapProc   setTextFromList;
 	XmDropDownTextListMapProc   setListFromText;
 } XmDropDownClassPartExtension;
-
 typedef struct {
     XtPointer extension;	/* Just in case we need it later. */
 } XmDropDownClassPart;
-
 typedef struct _XmDropDownClassRec {
     CoreClassPart	    core_class;
     CompositeClassPart	    composite_class;
@@ -106,10 +89,8 @@ typedef struct _XmDropDownClassRec {
     XmManagerClassPart	    manager_class;
     XmDropDownClassPart     combo_class;
 } XmDropDownClassRec;
-
 typedef struct {
     /* resources */
-
     Dimension h_space;		/* The amount of space to leave between */
     Dimension v_space;		/* widgets and the box edges. */
     int popup_offset;		/* The offset of the popup offset from the
@@ -123,47 +104,34 @@ typedef struct {
     Widget popup_shell;		/* The id of the popup shell. */
     Cursor popup_cursor;	/* Cursor for the Popup Window.  */
     XtTranslations translations; /* The translation table for all children. */
-
     /*
      * Callbacks to verify, and update the text and shell widgets.
      */
-
     XtCallbackList verify_text_callback;
     XtCallbackList verify_text_failed_callback;
     XtCallbackList update_text_callback;
     XtCallbackList update_shell_callback;
-
     /* private state */
-
     String old_text;		/* The old text value. */
     Window focus_owner;		/* Previous owner and state of the focus. */
     int focus_state;
-
     unsigned char list_state;	/* XmDropDown_UP, XmDropDown_DOWN or XmDropDown_IN_PROGRESS. */
-
     Position text_x;		/* X location of the text widget. */
-
     Widget list;		/* List contained in the popup shell. */
-
     Widget label;		/* The three children of the combo box. */
     Widget text;
     Widget arrow;
-
     int visible_items;		/* only to set/get XmNvisibleItemCount, which is
 				** a sop for non-customized combobox users */
-
     Boolean new_visual_style;
-
     Boolean autoTraversal;	/* traverse next on return */
     int	activateOnFill;		/* activate when we fill this many chars */
     Boolean doActivate;		/* do activate on next value changed */
     Boolean inValueChanged;	/* recursion prevention */
-
     Widget		vsb;
     Widget		hsb;
     Boolean		scrolling;
 } XmDropDownPart;
-
 typedef struct _XmDropDownRec {
     CorePart		core;
     CompositePart	composite;
@@ -171,15 +139,8 @@ typedef struct _XmDropDownRec {
     XmManagerPart	manager;
     XmDropDownPart combo;
 } XmDropDownRec;
-
 extern XmDropDownClassRec xmDropDownClassRec;
-
 #ifdef __cplusplus
 }	/* Closes scope of 'extern "C"' declaration */
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _XmDropDownP_h_ */

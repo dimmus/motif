@@ -28,27 +28,19 @@
  * (c) Copyright 1989, 1990, 1991, 1992, 1993 OPEN SOFTWARE FOUNDATION, INC.
  * ALL RIGHTS RESERVED
  */
-
 #ifndef _XmClipWindowTI_H
 #define _XmClipWindowTI_H
-
 #include <Xm/Xm.h>
 #include <Xm/NavigatorT.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref XrmQuark _XmQTclipWindow;
-
 /* Version 0: initial release. */
-
 typedef struct _XmClipWindowTraitRec {
   int				    version;		/* 0 */
 } XmClipWindowTraitRec, *XmClipWindowTrait;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmClipWindowTI_H */

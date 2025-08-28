@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * misc.c:                                                                     *
 *                                                                             *
@@ -31,16 +30,12 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 /* we don't want the XpmFree macro since we define the XpmFree function here */
 #define NO_XPMFREE_MACRO
 #include "XpmI.h"
-
 #if !HAVE_STRDUP
 /*
  * in case strdup is not provided by the system here is one
@@ -51,14 +46,11 @@ xpmstrdup(char *s1)
 {
     char *s2;
     size_t l = strlen(s1) + 1;
-
     if (s2 = (char *) XpmMalloc(l))
 	strcpy(s2, s1);
     return s2;
 }
-
 #endif
-
 unsigned int
 xpmatoui(
     register char	*p,
@@ -66,21 +58,18 @@ xpmatoui(
     unsigned int	*ui_return)
 {
     register unsigned int n, i;
-
     n = 0;
     for (i = 0; i < l; i++)
 	if (*p >= '0' && *p <= '9')
 	    n = n * 10 + *p++ - '0';
 	else
 	    break;
-
     if (i != 0 && i == l) {
 	*ui_return = n;
 	return 1;
     } else
 	return 0;
 }
-
 /*
  * Function returning a character string related to an error code.
  */
@@ -104,7 +93,6 @@ XpmGetErrorString(int errcode)
 	return ("Invalid XpmError");
     }
 }
-
 /*
  * The following function provides a way to figure out if the linked library is
  * newer or older than the one with which a program has been first compiled.
@@ -114,10 +102,7 @@ XpmLibraryVersion(void)
 {
     return XpmIncludeVersion;
 }
-
-
 /* The following should help people wanting to use their own functions */
-
 void
 XpmFree(void *ptr)
 {

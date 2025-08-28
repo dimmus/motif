@@ -27,21 +27,16 @@
 /* $XConsortium: ImageCachI.h /main/7 1996/01/29 13:19:43 daniel $ */
 #ifndef _XmImageCacheI_h
 #define _XmImageCacheI_h
-
 #include <Xm/XmP.h>
-
 /* this name is used by XmeGetPixmapData to cache a pixmap in the
    pixmap cache with no associated name. _XmCachePixmap knows about it
    and will not add this one in the pixmap_data cache because it is a
    _name_ based pixmap cache used during conversion */
 #define DIRECT_PIXMAP_CACHED ""
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for ImageCache.c    ********/
-
 extern Boolean _XmInstallImage(
                         XImage *image,
                         char *image_name,
@@ -65,7 +60,6 @@ extern Pixmap _XmGetColoredPixmap(Screen *screen,
 				  XmAccessColorData acc_color,
 				  int depth,
 				  Boolean only_if_exists) ;
-
 extern Boolean _XmGetPixmapData(
 		   Screen *screen,
 		   Pixmap pixmap,
@@ -79,7 +73,6 @@ extern Boolean _XmGetPixmapData(
 		   unsigned int *height) ;
 extern Boolean _XmInImageCache(
 			       String image_name);
-
 extern Pixmap _XmGetScaledPixmap(
     Screen *screen,
     Widget widget,
@@ -90,13 +83,10 @@ extern Pixmap _XmGetScaledPixmap(
     double scaling_ratio,
     int desired_w,
     int desired_h);
-
 extern void _XmPutScaledImage(Screen *screen, Display *display, Drawable d,
                               int depth, GC gc, XImage *src, int sx, int sy,
                               int sw, int sh, int dx, int dy, int dw, int dh);
-
 extern void _XmCleanPixmapCache(Screen * screen, Widget shell);
-
 /* for Xm.h */
 extern Pixmap XmGetScaledPixmap(
     Widget widget,
@@ -105,11 +95,8 @@ extern Pixmap XmGetScaledPixmap(
     Pixel background,
     int depth,
     double scaling_ratio);
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmImageCacheI_h */

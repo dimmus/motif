@@ -22,28 +22,19 @@
 */
 #ifndef _XmMessage_h
 #define _XmMessage_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Class record constants */
-
 externalref WidgetClass xmMessageBoxWidgetClass;
-
 typedef struct _XmMessageBoxClassRec * XmMessageBoxWidgetClass;
 typedef struct _XmMessageBoxRec      * XmMessageBoxWidget;
-
 /* fast XtIsSubclass define */
 #ifndef XmIsMessageBox
 #define XmIsMessageBox(w) XtIsSubclass (w, xmMessageBoxWidgetClass)
 #endif
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateMessageBox(
                         Widget parent,
                         char *name,
@@ -84,16 +75,13 @@ extern Widget XmCreateTemplateDialog(
                         char *name,
                         ArgList al,
                         Cardinal ac) ;
-
 XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmMessageBoxGetChild(
                         Widget widget,
                         unsigned char child);
-
 /*
  * Variable argument list functions
  */
-
 extern Widget XmVaCreateMessageBox(
                         Widget parent,
                         char *name,
@@ -102,12 +90,8 @@ extern Widget XmVaCreateManagedMessageBox(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmMessage_h */

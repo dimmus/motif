@@ -22,16 +22,11 @@
 */
 #ifndef _XmDragIcon_h
 #define _XmDragIcon_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define XmIsDragIconObjectClass(w) (XtIsSubclass(w, xmDragIconObjectClass))
-
 enum {
 	XmATTACH_NORTH_WEST,
 	XmATTACH_NORTH,
@@ -44,25 +39,17 @@ enum {
 	XmATTACH_CENTER,
 	XmATTACH_HOT
 };
-
 typedef struct _XmDragIconRec *XmDragIconObject;
 typedef struct _XmDragIconClassRec *XmDragIconObjectClass;
 externalref WidgetClass xmDragIconObjectClass;
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateDragIcon(
                         Widget parent,
                         String name,
                         ArgList argList,
                         Cardinal argCount) ;
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDragIcon_h */

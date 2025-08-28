@@ -25,12 +25,9 @@
 static char rcsid[] = "$XConsortium: Frame.c /main/18 1996/10/15 15:01:45 cde-osf $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/DrawP.h>
 #include <Xm/FrameP.h>
 #include <Xm/GadgetP.h>
@@ -38,11 +35,8 @@ static char rcsid[] = "$XConsortium: Frame.c /main/18 1996/10/15 15:01:45 cde-os
 #include "GMUtilsI.h"
 #include "RepTypeI.h"
 #include "XmI.h"
-
 #define GetFrameConstraint(w) \
         (&((XmFrameConstraintPtr) (w)->core.constraints)->frame)
-
-
 /********    Static Function Declarations    ********/
 static void CheckSetChildType(Widget wid,
 			      int offset,
@@ -55,7 +49,6 @@ static void ConfigureChildren(
                         XmFrameWidget fw,
 			Widget instigator,
 			XtWidgetGeometry *inst_desired) ;
-
 static void ClassPartInitialize(
                         WidgetClass wc) ;
 static void Initialize(
@@ -123,10 +116,7 @@ static Boolean ConstraintSetValues(
                         Cardinal *num_args) ;
 static void ConstraintDestroy(
 			Widget w) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static XmSyntheticResource syn_resources[] =
 {
    {  XmNmarginWidth,
@@ -134,14 +124,12 @@ static XmSyntheticResource syn_resources[] =
       XtOffsetOf( struct _XmFrameRec, frame.margin_width),
       XmeFromHorizontalPixels,
       XmeToHorizontalPixels },
-
    {  XmNmarginHeight,
       sizeof (Dimension),
       XtOffsetOf( struct _XmFrameRec, frame.margin_height),
       XmeFromVerticalPixels,
       XmeToVerticalPixels, }
 };
-
 static XtResource resources[] =
 {
    {  XmNmarginWidth,
@@ -150,21 +138,18 @@ static XtResource resources[] =
       sizeof (Dimension),
       XtOffsetOf( struct _XmFrameRec, frame.margin_width),
       XmRImmediate, (XtPointer) 0 },
-
    {  XmNmarginHeight,
       XmCMarginHeight,
       XmRVerticalDimension,
       sizeof (Dimension),
       XtOffsetOf( struct _XmFrameRec, frame.margin_height),
       XmRImmediate, (XtPointer) 0 },
-
    {  XmNshadowType,
       XmCShadowType,
       XmRShadowType,
       sizeof (unsigned char),
       XtOffsetOf( struct _XmFrameRec, frame.shadow_type),
       XmRImmediate, (XtPointer) XmINVALID_DIMENSION },
-
    {  XmNshadowThickness,
       XmCShadowThickness,
       XmRHorizontalDimension,
@@ -172,57 +157,47 @@ static XtResource resources[] =
       XtOffsetOf( struct _XmFrameRec, manager.shadow_thickness),
       XmRImmediate, (XtPointer) XmINVALID_DIMENSION }
 };
-
 static XmSyntheticResource syn_constraints[] =
 {
    {  XmNchildHorizontalSpacing, sizeof (Dimension),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.child_h_spacing),
       XmeFromHorizontalPixels, XmeToHorizontalPixels }
 };
-
-
 static XtResource constraints[] =
 {
    {  "pri.vate", "Pri.vate", XmRInt,
       sizeof (int),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.unused),
       XmRImmediate, (XtPointer) 0 },
-
    {  XmNchildType, XmCChildType, XmRChildType,
       sizeof (unsigned char),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.child_type),
       XmRCallProc, (XtPointer) CheckSetChildType },
-
    /* add a dup in 2.0 with new local names */
    {  XmNframeChildType, XmCFrameChildType, XmRChildType,
       sizeof (unsigned char),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.child_type),
       XmRCallProc, (XtPointer) CheckSetChildType },
-
    {  XmNchildHorizontalAlignment, XmCChildHorizontalAlignment,
       XmRChildHorizontalAlignment,
       sizeof (unsigned char),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.child_h_alignment),
       XmRImmediate, (XtPointer) XmALIGNMENT_BEGINNING },
-
    {  XmNchildVerticalAlignment, XmCChildVerticalAlignment,
       XmRChildVerticalAlignment,
       sizeof (unsigned char),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.child_v_alignment),
       XmRImmediate, (XtPointer) XmALIGNMENT_CENTER   },
-
    {  XmNchildHorizontalSpacing, XmCChildHorizontalSpacing,
       XmRHorizontalDimension, sizeof (Dimension),
       XtOffsetOf( struct _XmFrameConstraintRec, frame.child_h_spacing),
       XmRImmediate, (XtPointer) XmINVALID_DIMENSION}
 };
-
 /****************************************************************
  *
  * Full class record constant
  *
  ****************************************************************/
-
 externaldef(xmframeclassrec) XmFrameClassRec xmFrameClassRec =
 {
    {			/* core_class fields      */
@@ -259,7 +234,6 @@ externaldef(xmframeclassrec) XmFrameClassRec xmFrameClassRec =
       NULL,                                     /* display_accelerator   */
       NULL,                                     /* extension             */
    },
-
    {		/* composite_class fields */
       GeometryManager,    	                /* geometry_manager   */
       ChangeManaged,		                /* change_managed     */
@@ -267,7 +241,6 @@ externaldef(xmframeclassrec) XmFrameClassRec xmFrameClassRec =
       XtInheritDeleteChild,			/* delete_child       */
       NULL,                                     /* extension          */
    },
-
    {		/* constraint_class fields */
       constraints,				/* resource list        */
       XtNumber(constraints),			/* num resources        */
@@ -277,7 +250,6 @@ externaldef(xmframeclassrec) XmFrameClassRec xmFrameClassRec =
       ConstraintSetValues,			/* set values proc      */
       NULL,                                     /* extension            */
    },
-
    {						/* manager class     */
       XtInheritTranslations,			/* translations      */
       syn_resources,				/* syn resources      	  */
@@ -287,16 +259,12 @@ externaldef(xmframeclassrec) XmFrameClassRec xmFrameClassRec =
       XmInheritParentProcess,                   /* parent_process         */
       NULL,					/* extension         */
    },
-
    {						/* frame class       */
       NULL,					/* extension         */
    }
 };
-
 externaldef(xmframewidgetclass) WidgetClass xmFrameWidgetClass =
 			                        (WidgetClass) &xmFrameClassRec;
-
-
 /************************************************************************
  *
  *  CheckSetChildType
@@ -306,7 +274,6 @@ externaldef(xmframewidgetclass) WidgetClass xmFrameWidgetClass =
  *      one is not, so don't change it.
  *
  ************************************************************************/
-
 static void
 CheckSetChildType(Widget wid,
 		    int offset,
@@ -314,7 +281,6 @@ CheckSetChildType(Widget wid,
 {
     XmFrameConstraint fc = GetFrameConstraint(wid);
     static unsigned char child_type = XmFRAME_WORKAREA_CHILD ;
-
     if (fc->unused) /* Been here already, so default it .. */
 	value->addr = (XPointer) &child_type;
     else {
@@ -322,8 +288,6 @@ CheckSetChildType(Widget wid,
 	fc->unused = 1;
     }
 }
-
-
 /************************************************************************
  *
  *  DrawShadow
@@ -342,10 +306,6 @@ DrawShadow(
 		fw->frame.old_shadow_thickness, fw->frame.shadow_type);
    }
 }
-
-
-
-
 /************************************************************************
  *
  *  ClearShadow
@@ -363,13 +323,8 @@ ClearShadow(
 		      fw->frame.old_width,
 		      fw->frame.old_height,
 		      fw->frame.old_shadow_thickness);
-
     }
 }
-
-
-
-
 /************************************************************************
  *
  *  ConfigureChildren
@@ -396,12 +351,10 @@ ConfigureChildren(
     Position shadowY = 0;
     XtWidgetGeometry title_reply;
     Dimension spacing;
-
     if (fw->frame.title_area && XtIsManaged(fw->frame.title_area)) {
 	child = fw->frame.title_area;
 	fc = GetFrameConstraint(child);
 	spacing = shadowThickness + fc->child_h_spacing;
-
 	/* asking the preferred geometry without constraint */
 	XtQueryGeometry (child, NULL, &title_reply);
 	childWidth = (title_reply.request_mode & CWWidth) ?
@@ -445,14 +398,12 @@ ConfigureChildren(
 	}
 	CalcTitleExtent (fw, childHeight, childBW,
 				&titleExtent, &childY, &shadowHeight, &shadowY);
-
 	if (child != instigator) {
 	    XmeConfigureObject (child, childX, childY, childWidth,
 				childHeight, childBW);
 	}
 	else {
 	    /* Do not resize the instigator, just return GeometryYes */
-
 	    inst_geometry->request_mode = CWX | CWY | CWWidth | CWHeight |
 						CWBorderWidth;
 	    child->core.x = childX;
@@ -462,7 +413,6 @@ ConfigureChildren(
 	    child->core.border_width = childBW;
 	}
     }
-
     if (fw->frame.work_area  && XtIsManaged(fw->frame.work_area)) {
 	child = fw -> frame.work_area;
 	if (child != instigator)
@@ -470,7 +420,6 @@ ConfigureChildren(
 	else
 	    childBW = (inst_geometry->request_mode & CWBorderWidth) ?
 		    inst_geometry->border_width : child->core.border_width;
-
 	CalcWorkAreaSize (fw, &childWidth, &childHeight, childBW,
 			      fw->core.width, fw->core.height);
 	childX = shadowThickness + fw->frame.margin_width;
@@ -481,7 +430,6 @@ ConfigureChildren(
 	}
 	else {
 	    /* Do not resize the instigator, just return GeometryYes */
-
 	    inst_geometry->request_mode = CWX | CWY | CWWidth | CWHeight |
 						CWBorderWidth;
 	    child->core.x = childX;
@@ -491,18 +439,12 @@ ConfigureChildren(
 	    child->core.border_width = childBW;
 	}
     }
-
     fw->frame.old_shadow_x = 0;
     fw->frame.old_shadow_y = shadowY;
     fw->frame.old_width = fw->core.width;
     fw->frame.old_height = shadowHeight;
     fw->frame.old_shadow_thickness = shadowThickness;
-
 }
-
-
-
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -515,10 +457,6 @@ ClassPartInitialize(
 {
    _XmFastSubclassInit (wc, XmFRAME_BIT);
 }
-
-
-
-
 /************************************************************************
  *
  *  Initialize
@@ -534,11 +472,9 @@ Initialize(
 {
    XmFrameWidget request = (XmFrameWidget) rw ;
    XmFrameWidget new_w = (XmFrameWidget) nw;
-
    new_w->frame.title_area = NULL;
    new_w->frame.work_area = NULL;
    new_w->frame.processing_constraints = False;
-
    if (new_w->frame.shadow_type == (unsigned char) XmINVALID_DIMENSION)
    {
       if (XtIsShell (XtParent(new_w)))
@@ -550,13 +486,11 @@ Initialize(
          new_w->frame.shadow_type = XmSHADOW_ETCHED_IN;
       }
   }
-
    if (!XmRepTypeValidValue( XmRID_SHADOW_TYPE, new_w->frame.shadow_type,
 			(Widget) new_w))
    {
       new_w->frame.shadow_type = XmSHADOW_ETCHED_IN;
    }
-
    if (request->manager.shadow_thickness == XmINVALID_DIMENSION)
    {
       if (XtIsShell (XtParent(new_w)))
@@ -574,10 +508,6 @@ Initialize(
    new_w->frame.old_height = new_w->core.height;
    new_w->frame.old_shadow_thickness = new_w->manager.shadow_thickness;
 }
-
-
-
-
 /************************************************************************
  *
  *  Resize
@@ -589,17 +519,10 @@ Resize(
         Widget wid )
 {
    XmFrameWidget fw = (XmFrameWidget) wid ;
-
    ClearShadow(fw);
-
    ConfigureChildren(fw, NULL, NULL);
-
    DrawShadow(fw);
 }
-
-
-
-
 /************************************************************************
  *
  *  Redisplay
@@ -614,12 +537,9 @@ Redisplay(
 {
    XmFrameWidget fw = (XmFrameWidget) wid;
    Widget title_area = fw->frame.title_area;
-
    DrawShadow(fw);
-
    /* since the shadow may have screw up the gadget title, while this
       one won't get refresh, we have to redraw it manually */
-
    if (title_area && XmIsGadget(title_area) && XtIsManaged(title_area))
    {
       XClearArea (XtDisplay(fw), XtWindow(fw),
@@ -630,22 +550,15 @@ Redisplay(
 	title_area->core.y, title_area->core.width, title_area->core.height))
       {
 	 XtExposeProc expose;
-
 	 _XmProcessLock();
 	 expose = title_area->core.widget_class->core_class.expose;
 	 _XmProcessUnlock();
-
          if (expose)
 	    (*expose)(title_area, event, NULL);
       }
    }
-
    XmeRedisplayGadgets( (Widget) fw, event, region);
 }
-
-
-
-
 /************************************************************************
  *
  *  Geometry Manager
@@ -677,32 +590,24 @@ GeometryManager(
    XtWidgetGeometry parent_reply;
    Dimension almost_width;
    Dimension almost_height;
-
    if (fw->frame.processing_constraints)
    {
       fw->frame.processing_constraints = False;
       request -> border_width -= 1;
    }
-
    /*  Set up the calculation variables according to the  */
    /*  contents of the requested geometry.                */
-
    if (request -> request_mode & XtCWQueryOnly)
       query_only = True;
-
    if ((request -> request_mode & CWX) || (request -> request_mode & CWY))
       almost = True;
-
    if (request -> request_mode & CWWidth) req_width = request -> width;
    else req_width = w -> core.width;
-
    if (request -> request_mode & CWHeight) req_height = request -> height;
    else req_height = w -> core.height;
-
    if (request -> request_mode & CWBorderWidth)
        req_bw = request -> border_width;
    else req_bw = w -> core.border_width;
-
    if (w == title_area)
    {
       title_width = req_width;
@@ -715,18 +620,14 @@ GeometryManager(
       work_height = req_height;
       work_bw = req_bw;
    }
-
    /* find the frame size based on the children preferred geometry */
-
    CalcFrameSize (fw, title_width, title_height, title_bw,
 		  work_width, work_height, work_bw,
 		  &frame_width, &frame_height);
-
    parent_request.request_mode = CWWidth | CWHeight;
    if (almost || query_only) parent_request.request_mode |= XtCWQueryOnly;
    parent_request.width = frame_width;
    parent_request.height = frame_height;
-
    switch (XtMakeGeometryRequest ((Widget)fw,
 				  &parent_request, &parent_reply)) {
    case XtGeometryYes:
@@ -759,7 +660,6 @@ GeometryManager(
 	     }
 	 } else return (XtGeometryNo);
          break;
-
    case XtGeometryAlmost:
 	 if (w == title_area) {
 	     /* we got an Almost, try to honor the title request anyway,
@@ -788,12 +688,8 @@ GeometryManager(
          return (XtGeometryNo);
 	 break;
    }
-
-
    /*  Fallen through to an almost condition.  Clear the x and y  */
    /*  and set the width, height, and border.                     */
-
-
    if (reply != NULL) {
       reply -> request_mode = request -> request_mode & ~(CWX | CWY);
       reply -> width = almost_width;
@@ -805,13 +701,8 @@ GeometryManager(
                reply -> stack_mode = request -> stack_mode;
       return (XtGeometryAlmost);
    }
-
    return (XtGeometryNo);
 }
-
-
-
-
 /************************************************************************
  *
  *  ChangeManaged
@@ -826,23 +717,19 @@ ChangeManaged(
         Widget wid )
 {
    XmFrameWidget fw = (XmFrameWidget) wid ;
-
    Widget title_area = (fw->frame.title_area &&
 			XtIsManaged(fw->frame.title_area)) ?
 			fw->frame.title_area : (Widget) NULL;
    Dimension t_w = 0;
    Dimension t_h = 0;
    Dimension t_bw = (title_area) ? title_area->core.border_width : 0;
-
    Widget work_area = (fw->frame.work_area &&
 			XtIsManaged(fw->frame.work_area)) ?
 			fw->frame.work_area : (Widget) NULL;
-
    Dimension w_w = (work_area) ? work_area->core.width : 0;
    Dimension w_h = (work_area) ? work_area->core.height : 0;
    Dimension w_bw = (work_area) ? work_area->core.border_width : 0;
    Dimension fwWidth, fwHeight;
-
    if (title_area)
    {
 	/* We don't want the current size of the title object -- width/height
@@ -857,29 +744,20 @@ ChangeManaged(
 	t_h = (title_reply.request_mode & CWHeight) ?
 		title_reply.height : title_area->core.height;
    }
-
    /* need to  check on initial sizing (not null) */
    if (XtIsRealized((Widget)fw) || (XtWidth(fw) == 0) || (XtHeight(fw) == 0)) {
        CalcFrameSize (fw, t_w, t_h, t_bw, w_w, w_h, w_bw,
 		      &fwWidth, &fwHeight);
-
        while (XtMakeResizeRequest ((Widget) fw,
 				   fwWidth, fwHeight,
 				   &fwWidth, &fwHeight) == XtGeometryAlmost)
 	 /*EMPTY*/;
        ClearShadow(fw);
    }
-
    ConfigureChildren(fw, NULL, NULL);
-
    DrawShadow(fw);
-
    XmeNavigChangeManaged((Widget) fw);
 }
-
-
-
-
 /************************************************************************
  *
  *  Set Values
@@ -904,23 +782,18 @@ SetValues(
    Dimension t_w = (title_area) ? title_area->core.width : 0;
    Dimension t_h = (title_area) ? title_area->core.height : 0;
    Dimension t_bw = (title_area) ? title_area->core.border_width : 0;
-
    Widget work_area = (new_w->frame.work_area &&
 			XtIsManaged(new_w->frame.work_area)) ?
 			new_w->frame.work_area : (Widget) NULL;
    Dimension w_w = (work_area) ? work_area->core.width : 0;
    Dimension w_h = (work_area) ? work_area->core.height : 0;
    Dimension w_bw = (work_area) ? work_area->core.border_width : 0;
-
-
    if (!XmRepTypeValidValue( XmRID_SHADOW_TYPE, new_w->frame.shadow_type,
 			(Widget) new_w))
    {
       new_w->frame.shadow_type = current->frame.shadow_type;
    }
-
     if (!XtIsRealized((Widget)new_w)) return False ;
-
    if (new_w->frame.margin_width != current->frame.margin_width ||
        new_w->frame.margin_height != current->frame.margin_height ||
        new_w->manager.shadow_thickness != current->manager.shadow_thickness)
@@ -928,7 +801,6 @@ SetValues(
       CalcFrameSize (new_w, t_w, t_h, t_bw, w_w, w_h, w_bw,
 			&new_w->core.width, &new_w->core.height);
    }
-
    if (new_w -> frame.shadow_type != current -> frame.shadow_type ||
        new_w->frame.margin_width != current->frame.margin_width ||
        new_w->frame.margin_height != current->frame.margin_height ||
@@ -936,13 +808,8 @@ SetValues(
    {
      redisplay = True;
    }
-
    return (redisplay);
 }
-
-
-
-
 /************************************************************************
  *
  *  QueryGeometry
@@ -959,7 +826,6 @@ QueryGeometry(
     Dimension title_width = 0, title_height = 0, title_bw = 0 ;
     XtWidgetGeometry child_pref ;
     XmFrameWidget fw = (XmFrameWidget) widget ;
-
     /* first determine what is the desired size, using the
        preferred sizes of the title and the work_area, or the
        current setting if no preference are given */
@@ -981,22 +847,17 @@ QueryGeometry(
 	if (IsBorder(&child_pref)) title_bw = child_pref.border_width ;
 	else title_bw = XtBorderWidth(fw->frame.title_area);
     }
-
     CalcFrameSize (fw,
 		   title_width, title_height, title_bw,
 		   work_width, work_height, work_bw,
 		   &desired->width, &desired->height);
-
     /* deal with user initial size setting */
     if (!XtIsRealized(widget))  {
 	if (XtWidth(widget) != 0) desired->width = XtWidth(widget) ;
 	if (XtHeight(widget) != 0) desired->height = XtHeight(widget) ;
     }
-
     return XmeReplyToQueryGeometry(widget, intended, desired) ;
 }
-
-
 /************************************************************************
  *
  *  CalcFrameSize
@@ -1021,30 +882,21 @@ CalcFrameSize(
    Dimension titleExtent = shadowThickness;
    Dimension workMax = 0;
    Dimension titleMax = 0;
-
    if (fw->frame.title_area && XtIsManaged(fw->frame.title_area)) {
       XmFrameConstraint fc = GetFrameConstraint(fw->frame.title_area);
-
       CalcTitleExtent (fw, titleHeight, titleBorder, &titleExtent, NULL,
 		NULL, NULL);
       titleMax = 2 * (shadowThickness + titleBorder + fc->child_h_spacing) +
 		titleWidth;
    }
-
    workMax = 2 * (workBorder + shadowThickness + fw->frame.margin_width) +
 		workWidth;
-
    *fwWidth =  MAX (workMax, titleMax);
    if (*fwWidth == 0) *fwWidth = 1;
-
    *fwHeight = workHeight + 2 * (workBorder + fw->frame.margin_height) +
        shadowThickness + titleExtent;
    if (*fwHeight == 0) *fwHeight = 1;
 }
-
-
-
-
 /************************************************************************
  *
  *  CalcWorkAreaSize
@@ -1065,28 +917,19 @@ CalcWorkAreaSize(
    Dimension shadowThickness = fw->manager.shadow_thickness;
    Dimension titleExtent = shadowThickness;
    int temp;
-
    if (title && XtIsManaged(title))
       CalcTitleExtent (fw, title->core.height, title->core.border_width,
 			&titleExtent, NULL, NULL, NULL);
-
    temp = (int) fwWidth -
           (int) (2 * (workBorder + shadowThickness + fw->frame.margin_width));
-
    if (temp <= 0) *workWidth = 1;
    else *workWidth = (Dimension) temp;
-
    temp = (int) fwHeight -
           (int) (2 * (workBorder + fw->frame.margin_height) +
                 shadowThickness + titleExtent);
-
    if (temp <= 0) *workHeight = 1;
    else *workHeight = (Dimension) temp;
 }
-
-
-
-
 /************************************************************************
  *
  *  CalcTitleExtent
@@ -1118,7 +961,6 @@ CalcTitleExtent(
     Dimension *lines;
     int nlines;
     Dimension total = titleHeight + 2 * titleBorder;
-
     switch (fc->child_v_alignment) {
 	case(XmALIGNMENT_BASELINE_TOP):
 	case(XmALIGNMENT_BASELINE_BOTTOM):
@@ -1162,15 +1004,11 @@ CalcTitleExtent(
 	    sh = fw->core.height;
 	    break;
     }
-
     if (titleExtent) *titleExtent = extent;
     if (titleY) *titleY = ty;
     if (shadowHeight) *shadowHeight = sh;
     if (shadowY) *shadowY = sy;
 }
-
-
-
 /************************************************************************
  *
  *  Constraint Initialize
@@ -1186,12 +1024,9 @@ ConstraintInitialize(
    XmFrameConstraint nc;
    XmFrameConstraint bc;
    XmFrameWidget fw;
-
    if (!XtIsRectObj (nw)) return;
-
    nc = GetFrameConstraint(nw);
    fw = (XmFrameWidget)XtParent(nw);
-
    if (!XmRepTypeValidValue( XmRID_CHILD_TYPE, nc->child_type, nw))
    {
       nc->child_type = XmFRAME_GENERIC_CHILD;
@@ -1220,23 +1055,17 @@ ConstraintInitialize(
             break;
       }
    }
-
    if (!XmRepTypeValidValue( XmRID_CHILD_HORIZONTAL_ALIGNMENT,
 			nc->child_h_alignment, nw))
    {
       nc->child_h_alignment = XmALIGNMENT_BEGINNING;
    }
-
    if (!XmRepTypeValidValue( XmRID_CHILD_VERTICAL_ALIGNMENT,
 			nc->child_v_alignment, nw))
    {
       nc->child_v_alignment = XmALIGNMENT_CENTER;
    }
 }
-
-
-
-
 /************************************************************************
  *
  *  Constraint SetValues
@@ -1255,13 +1084,10 @@ ConstraintSetValues(
    XmFrameConstraint bc;
    XmFrameWidget fw;
    Boolean reconfigure = False;
-
    if (!XtIsRectObj (nw)) return (False);
-
    nc = GetFrameConstraint(nw);
    cc = GetFrameConstraint(cw);
    fw = (XmFrameWidget)XtParent(nw);
-
    if (nc->child_type != cc->child_type)
    {
       if(    !XmRepTypeValidValue( XmRID_CHILD_TYPE, nc->child_type, nw)    )
@@ -1297,7 +1123,6 @@ ConstraintSetValues(
         }
       }
    }
-
    if (nc->child_h_alignment != cc->child_h_alignment &&
       !XmRepTypeValidValue( XmRID_CHILD_HORIZONTAL_ALIGNMENT,
 			nc->child_h_alignment, nw))
@@ -1310,7 +1135,6 @@ ConstraintSetValues(
    {
       nc->child_v_alignment = cc->child_v_alignment;
    }
-
    if (nc->child_type == XmFRAME_TITLE_CHILD &&
       (nc->child_h_alignment != cc->child_h_alignment ||
        nc->child_h_spacing != cc->child_h_spacing ||
@@ -1318,25 +1142,18 @@ ConstraintSetValues(
    {
       reconfigure = True;
    }
-
    if (nc->child_type != cc->child_type)
    {
       reconfigure = True;
    }
-
    if (reconfigure && XtIsManaged (nw) && XtIsRealized (nw))
    {
       fw->frame.processing_constraints = True;
       nw->core.border_width+=1; /* force call to GM */
       return (True);
   }
-
    return (False);
 }
-
-
-
-
 /************************************************************************
  *
  *  Constraint Destroy
@@ -1347,20 +1164,13 @@ ConstraintDestroy(
         Widget w )
 {
    XmFrameWidget fw;
-
    if (!XtIsRectObj (w)) return;
-
    fw = (XmFrameWidget)XtParent(w);
-
    if (w == fw->frame.title_area)
       fw->frame.title_area = NULL;
    else  if (w == fw->frame.work_area)
       fw->frame.work_area = NULL;
 }
-
-
-
-
 /************************************************************************
  *
  *  XmCreateFrame
@@ -1377,7 +1187,6 @@ XmCreateFrame(
    return (XtCreateWidget (name, xmFrameWidgetClass,
                            parent, arglist, argcount));
 }
-
 Widget
 XmVaCreateFrame(
         Widget parent,
@@ -1387,12 +1196,9 @@ XmVaCreateFrame(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmFrameWidgetClass,
@@ -1401,7 +1207,6 @@ XmVaCreateFrame(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedFrame(
         Widget parent,
@@ -1411,11 +1216,9 @@ XmVaCreateManagedFrame(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmFrameWidgetClass,

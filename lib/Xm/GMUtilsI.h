@@ -22,18 +22,13 @@
 */
 #ifndef _XmGMUtilsI_h
 #define _XmGMUtilsI_h
-
-
 /* Include files:
 */
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern void _XmGMCalcSize(
                         XmManagerWidget manager,
                         Dimension margin_width,
@@ -71,10 +66,7 @@ extern XtGeometryResult _XmGMHandleGeometryManager(
                         int resize_policy,
                         int allow_overlap) ;
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmGMUtilsI_h */

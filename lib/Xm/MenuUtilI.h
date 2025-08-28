@@ -27,15 +27,11 @@
 /* $XConsortium: MenuUtilI.h /main/6 1996/07/23 16:45:49 pascale $ */
 #ifndef _XmMenuUtilI_h
 #define _XmMenuUtilI_h
-
 #include <Xm/MenuUtilP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations    ********/
-
 extern void _XmMenuHelp(
                         Widget wid,
                         XEvent *event,
@@ -119,9 +115,7 @@ extern void _XmMenuTraversalHandler(
                         Widget pw,
                         XmTraversalDirection direction) ;
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmMenuUtilI_h */

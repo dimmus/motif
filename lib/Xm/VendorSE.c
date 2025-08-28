@@ -26,16 +26,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: VendorSE.c /main/21 1997/10/13 14:58:18 cshi $"
 #endif
 #endif
-
 /* Make sure all wm properties can make it out of the resource manager */
-
 #include <stdlib.h>
 #include <string.h>
 #include <Xm/Xm.h>		/* To make cpp on Sun happy. CR 5943 */
@@ -55,15 +51,10 @@ static char rcsid[] = "$TOG: VendorSE.c /main/21 1997/10/13 14:58:18 cshi $"
 #include "TraversalI.h"
 #include "VendorSEI.h"
 #include "XmI.h"
-
 #define NOTVENDORSHELL	_XmMMsgProtocols_0000
-
 #define DONT_CARE	-1L
 #define BIGSIZE		((Dimension)32767)
-
-
 /********    Static Function Declarations    ********/
-
 static Boolean CvtStringToHorizontalInt(
                         Display *dpy,
                         XrmValue *args,
@@ -103,24 +94,16 @@ static void GetMWMFunctionsFromProperty(
 static void CheckSetRenderTables(Widget wid,
 				int offset,
 				XrmValue *value);
-
 /********    End Static Function Declarations    ********/
-
-
 static XtConvertArgRec selfConvertArgs[] = {
     { XtBaseOffset, (XtPointer) 0, sizeof(int) }
 };
-
-
-
 /***************************************************************************
  *
  * Vendor shell class record
  *
  ***************************************************************************/
-
 #define Offset(field) XtOffsetOf( struct _XmVendorShellExtRec, vendor.field)
-
 static XtResource extResources[] =
 {
     {
@@ -278,13 +261,10 @@ static XtResource extResources[] =
     },
 };
 #undef Offset
-
 /*  Definition for resources that need special processing in get values  */
-
 #define ParentOffset(x) 	\
 	(XtOffsetOf(VendorShellRec, x) | XmLOGICAL_PARENT_RESOURCE)
 #define ExtOffset(x)		XtOffsetOf(XmVendorShellExtRec, x)
-
 static XmSyntheticResource synResources[] =
 {
     {
@@ -317,9 +297,7 @@ static XmSyntheticResource synResources[] =
 	XmeFromHorizontalPixels,
 	XmeToHorizontalPixels,
     },
-
 /* size_hints minus things stored in core */
-
     {
 	XmNminWidth, sizeof(int),
 	ParentOffset(wm.size_hints.min_width),
@@ -344,9 +322,7 @@ static XmSyntheticResource synResources[] =
 	XmeFromVerticalPixels,
 	XmeToVerticalPixels,
     },
-
 /* wm_hints */
-
     {
 	XmNiconX, sizeof(int),
 	ParentOffset(wm.wm_hints.icon_x),
@@ -366,10 +342,8 @@ static XmSyntheticResource synResources[] =
 	(XmImportProc)NULL,
     },
 };
-
 #undef ParentOffset
 #undef ExtOffset
-
 static XmBaseClassExtRec myBaseClassExtRec = {
     NULL,                               /* Next extension         */
     NULLQUARK,                          /* record type XmQmotif   */
@@ -392,7 +366,6 @@ static XmBaseClassExtRec myBaseClassExtRec = {
     0,					/* resource_count     	  */
     TRUE,				/* use_sub_resources	  */
 };
-
 externaldef(xmvendorshellextclassrec)
 XmVendorShellExtClassRec xmVendorShellExtClassRec = {
     {
@@ -450,10 +423,8 @@ XmVendorShellExtClassRec xmVendorShellExtClassRec = {
 	NULL,				/* extension		*/
     },
 };
-
 externaldef(xmVendorShellExtobjectclass) WidgetClass
        xmVendorShellExtObjectClass = (WidgetClass) (&xmVendorShellExtClassRec);
-
 static Boolean
 CvtStringToHorizontalInt(
         Display *display,
@@ -468,7 +439,6 @@ CvtStringToHorizontalInt(
     unsigned char defaultFromType = _XmGetUnitType(widget) ;
     int tmpPix;
     Boolean parseError;
-
     tmpPix = (int)
       _XmConvertStringToUnits (screen, from->addr, (int) defaultFromType,
 			       XmHORIZONTAL, XmPIXELS, (XtEnum*) &parseError);
@@ -481,7 +451,6 @@ CvtStringToHorizontalInt(
     else
         _XM_CONVERTER_DONE( to, int, tmpPix, ; )
 }
-
 static Boolean
 CvtStringToVerticalInt(
         Display *display,
@@ -496,7 +465,6 @@ CvtStringToVerticalInt(
     unsigned char defaultFromType = _XmGetUnitType(widget) ;
     int tmpPix;
     Boolean parseError;
-
     tmpPix = (int)
 	_XmConvertStringToUnits(screen, from->addr, (int) defaultFromType,
 				XmVERTICAL, XmPIXELS, (XtEnum*) &parseError);
@@ -508,11 +476,7 @@ CvtStringToVerticalInt(
 	}
     else
 	_XM_CONVERTER_DONE( to, int, tmpPix, ; )
-
 }
-
-
-
 /************************************************************************
  *
  *  ClassInitialize
@@ -534,10 +498,8 @@ ClassInitialize( void )
 		       selfConvertArgs,
 		       XtNumber(selfConvertArgs),
 		       XtCacheNone, (XtDestructor)NULL);
-
     myBaseClassExtRec.record_type = XmQmotif;
 }
-
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -552,21 +514,15 @@ ClassPartInitialize(
     XmVendorShellExtObjectClass wc = (XmVendorShellExtObjectClass) w;
     XmVendorShellExtObjectClass sc =
       (XmVendorShellExtObjectClass) wc->object_class.superclass;
-
     if (wc == (XmVendorShellExtObjectClass)xmVendorShellExtObjectClass)
       return;
-
     if (wc->vendor_class.delete_window_handler == XmInheritProtocolHandler)
       wc->vendor_class.delete_window_handler =
 	sc->vendor_class.delete_window_handler;
-
     if (wc->vendor_class.offset_handler == XmInheritProtocolHandler)
       wc->vendor_class.offset_handler =
 	sc->vendor_class.offset_handler;
 }
-
-
-
 /************************************************************************
  *  DeleteWindowHandler
  *
@@ -579,7 +535,6 @@ DeleteWindowHandler(
 {
         VendorShellWidget w = (VendorShellWidget) wid ;
     XmVendorShellExtObject ve = (XmVendorShellExtObject) closure;
-
     switch(ve->vendor.delete_response)
       {
 	case XmUNMAP:
@@ -588,7 +543,6 @@ DeleteWindowHandler(
 	  else
 	    XtUnmapWidget((Widget) w);
 	  break;
-
 	case XmDESTROY:
 	  if (XtIsApplicationShell((Widget) w))
 	    {
@@ -599,14 +553,11 @@ DeleteWindowHandler(
 	  else
 	    XtDestroyWidget((Widget) w);
 	  break;
-
 	case XmDO_NOTHING:
 	default:
 	  break;
       }
 }
-
-
 /************************************************************************
  *
  *     OffsetHandler
@@ -621,15 +572,11 @@ OffsetHandler(
         XmAnyCallbackStruct *callData = (XmAnyCallbackStruct *) cd ;
     XClientMessageEvent		*offsetEvent;
     XmVendorShellExtObject	ve = (XmVendorShellExtObject)clientData;
-
     offsetEvent = (XClientMessageEvent *) callData->event;
-
     ve->vendor.lastOffsetSerial = offsetEvent->serial;
     ve->vendor.xOffset = (Position) offsetEvent->data.l[1];
     ve->vendor.yOffset = (Position) offsetEvent->data.l[2];
 }
-
-
 /************************************************************************
  *
  *     InitializePrehook
@@ -649,10 +596,8 @@ InitializePrehook(
     XmExtObjectClass		pec = (XmExtObjectClass) XtClass(parent);
     XmBaseClassExt		*pcePtr;
     XmWidgetExtData		extData;
-
     wcePtr = _XmGetBaseClassExtPtr(ec, XmQmotif);
     pcePtr = _XmGetBaseClassExtPtr(pec, XmQmotif);
-
     if ((*wcePtr)->use_sub_resources)
       {
           _XmProcessLock();
@@ -669,11 +614,9 @@ InitializePrehook(
 		  (*wcePtr)->compiled_ext_resources;
 		ec->object_class.num_resources =
 		  (*wcePtr)->num_ext_resources;
-
 		XtGetResourceList((WidgetClass) ec,
 				  &((*wcePtr)->ext_resources),
 				  &((*wcePtr)->num_ext_resources));
-
 	    }
 	  if ((*pcePtr)->ext_resources == NULL)
 	    {
@@ -687,31 +630,24 @@ InitializePrehook(
 			    (*wcePtr)->ext_resources,
 			    (*wcePtr)->num_ext_resources,
 			    args, *num_args);
-
 	  extData = (XmWidgetExtData) XtCalloc(1, sizeof(XmWidgetExtDataRec));
 	  _XmPushWidgetExtData(parent, extData, ne->ext.extensionType);
-
 	  extData->widget = new_w;
 	  extData->reqWidget = (Widget)
 	    XtMalloc(XtClass(new_w)->core_class.widget_size);
 	  memcpy( extData->reqWidget, req,
 		XtClass(new_w)->core_class.widget_size);
-
 	  /*  Convert the fields from unit values to pixel values  */
-
 	  XtGetSubresources(parent,
 			    (XtPointer)parent,
 			    NULL, NULL,
 			    (*pcePtr)->ext_resources,
 			    (*pcePtr)->num_ext_resources,
 			    args, *num_args);
-
 	  _XmExtImportArgs(new_w, args, num_args);
 	  _XmProcessUnlock();
       }
 }
-
-
 /************************************************************************
  *
  *  Destroy
@@ -742,7 +678,6 @@ Destroy(
 	XtRemoveTimeOut(ve->vendor.duration_timer);
     _XmDestroyFocusData(ve->vendor.focus_data);
 }
-
 /*
  * XmRCallProc routine for checking VendorShell render table resources
  * before setting them to NULL if no value is specified
@@ -758,16 +693,13 @@ CheckSetRenderTables(Widget wid,
 {
   XmVendorShellExtObject ve;
   XmWidgetExtData extData;
-
 #define SET_BFL(state) (state |= 0x01)
 #define IS_SET_BFL(state) (state & 0x01)
 #define SET_LFL(state) (state |= 0x02)
 #define IS_SET_LFL(state) (state & 0x02)
 #define SET_TFL(state) (state |= 0x04)
 #define IS_SET_TFL(state) (state & 0x04)
-
   extData = _XmGetWidgetExtData(wid, XmSHELL_EXTENSION);
-
 if(extData == NULL)
 {
 #ifdef DEBUG
@@ -775,9 +707,7 @@ if(extData == NULL)
 #endif
         return;
 }
-
   ve = (XmVendorShellExtObject)(extData->widget);
-
   if (((char *)ve + offset) == (char *) &(ve->vendor.button_font_list)) {
 	if (IS_SET_BFL(ve->vendor.mapStyle))
 		value->addr = NULL;
@@ -803,7 +733,6 @@ if(extData == NULL)
 	}
   }
 }
-
 /************************************************************************
  *
  *  _XmGetAudibleWarning
@@ -819,12 +748,10 @@ _XmGetAudibleWarning(Widget w)
 {
   XmWidgetExtData extData ;
   XmVendorShellExtObject vendorExt;
-
   while (w) {
     if (XmIsVendorShell (w))
       {
 	extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
-
         if(extData == NULL)
           {
 #ifdef DEBUG
@@ -832,8 +759,6 @@ _XmGetAudibleWarning(Widget w)
 #endif
             return XmBELL;
         }
-
-
 	vendorExt = (XmVendorShellExtObject) extData->widget;
 	return vendorExt->vendor.audible_warning;
       }
@@ -842,7 +767,6 @@ _XmGetAudibleWarning(Widget w)
   }
   return (XmBELL);
 }
-
 /****************************************************************/
 static void
 GetMWMFunctionsFromProperty(
@@ -857,7 +781,6 @@ GetMWMFunctionsFromProperty(
   XmVendorShellExtObject ve = (XmVendorShellExtObject) wid ;
   Widget shell = ve->ext.logicalParent ;
   Atom mwm_hints_atom ;
-
   if(    !XtIsRealized( shell)    )
     {
       *value = (XtArgVal) ve->vendor.mwm_hints.functions ;
@@ -883,10 +806,7 @@ GetMWMFunctionsFromProperty(
   *value = (XtArgVal) prop->functions ;
   XFree( (char *) prop) ;
 }
-
-
 /******* XmeFunctions ********/
-
 void
 XmeAddFocusChangeCallback(Widget w,
 			  XtCallbackProc proc,
@@ -895,17 +815,13 @@ XmeAddFocusChangeCallback(Widget w,
   XmWidgetExtData extData ;
   XmVendorShellExtObject vendorExt;
   _XmWidgetToAppContext(w);
-
   _XmAppLock(app);
-
   if (XmIsVendorShell(w) == False) {
     XmeWarning(w, NOTVENDORSHELL);
     _XmAppUnlock(app);
     return;
   }
-
   extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
-
   if(extData == NULL)
   {
 #ifdef DEBUG
@@ -914,14 +830,11 @@ XmeAddFocusChangeCallback(Widget w,
     _XmAppUnlock(app);
     return;
   }
-
   vendorExt = (XmVendorShellExtObject) extData->widget;
-
   _XmAddCallback((InternalCallbackList *)
 		 &(vendorExt->vendor.focus_moved_callback), proc, data);
   _XmAppUnlock(app);
 }
-
 void
 XmeRemoveFocusChangeCallback(Widget w,
 			     XtCallbackProc proc,
@@ -930,17 +843,13 @@ XmeRemoveFocusChangeCallback(Widget w,
   XmWidgetExtData extData ;
   XmVendorShellExtObject vendorExt;
   _XmWidgetToAppContext(w);
-
   _XmAppLock(app);
-
   if (XmIsVendorShell(w) == False) {
     XmeWarning(w, NOTVENDORSHELL);
     _XmAppUnlock(app);
     return;
   }
-
   extData = _XmGetWidgetExtData(w, XmSHELL_EXTENSION);
-
   if(extData == NULL)
   {
 #ifdef DEBUG
@@ -949,9 +858,7 @@ XmeRemoveFocusChangeCallback(Widget w,
     _XmAppUnlock(app);
     return;
   }
-
   vendorExt = (XmVendorShellExtObject) extData->widget;
-
   _XmRemoveCallback((InternalCallbackList *)
 		    &(vendorExt->vendor.focus_moved_callback), proc, data);
   _XmAppUnlock(app);

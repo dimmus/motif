@@ -27,16 +27,11 @@
 /* $XConsortium: ResIndI.h /main/5 1995/07/13 17:50:09 drk $ */
 #ifndef _XmResIndI_h
 #define _XmResIndI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Private Function Declarations for ResInd.c    ********/
-
-
 extern int _XmConvertUnits(
                         Screen *screen,
                         int dimension,
@@ -65,12 +60,9 @@ extern int _XmConvertStringToUnits(
 extern void _XmStringDirectionDefault(Widget widget,
 				      int offset,
 				      XrmValue *value );
-
 /********    End Private Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmResIndI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

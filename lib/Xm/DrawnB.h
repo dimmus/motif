@@ -25,30 +25,20 @@
  * DrawnButton Widget
  *
  ***********************************************************************/
-
 #ifndef _XmDButton_h
 #define _XmDButton_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsDrawnButton
 #define XmIsDrawnButton(w) XtIsSubclass(w, xmDrawnButtonWidgetClass)
 #endif /* XmIsDrawnButton */
-
 /* DrawnButon Widget */
-
 externalref WidgetClass xmDrawnButtonWidgetClass;
-
 typedef struct _XmDrawnButtonClassRec *XmDrawnButtonWidgetClass;
 typedef struct _XmDrawnButtonRec      *XmDrawnButtonWidget;
-
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateDrawnButton(
                         Widget parent,
                         char *name,
@@ -62,13 +52,9 @@ extern Widget XmVaCreateManagedDrawnButton(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDButton_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  Image.c:                                                                   *
 *                                                                             *
@@ -31,12 +30,10 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 /*
  * Init returned data to free safely later on
  */
@@ -47,7 +44,6 @@ xpmInitXpmImage(XpmImage *image)
     image->colorTable = NULL;
     image->data = NULL;
 }
-
 /*
  * Free the XpmImage data which have been allocated
  */

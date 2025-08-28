@@ -27,16 +27,11 @@
 /* $XConsortium: MenuStateI.h /main/5 1995/07/13 17:36:46 drk $ */
 #ifndef _XmMenuStateI_h
 #define _XmMenuStateI_h
-
 #include <Xm/MenuStateP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 /********    Private Function Declarations    ********/
-
 extern Widget _XmGetRC_PopupPosted (
                          Widget wid) ;
 extern Boolean _XmGetInDragMode(
@@ -44,14 +39,10 @@ extern Boolean _XmGetInDragMode(
 extern void _XmSetInDragMode(
                         Widget widget,
                         Boolean mode) ;
-
 extern XmMenuState _XmGetMenuState(
                         Widget widget) ;
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmMenuStateI_h */

@@ -22,14 +22,11 @@
 */
 #ifndef _XmRowColumnP_h
 #define _XmRowColumnP_h
-
 #include <Xm/RowColumn.h>
 #include <Xm/ManagerP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Button Event Status Record for popup verification at manage time */
 typedef struct _XmButtonEventStatusRec
 {
@@ -38,14 +35,12 @@ typedef struct _XmButtonEventStatusRec
 	Boolean waiting_to_be_managed;
 	XButtonEvent event;
 } XmButtonEventStatusRec;
-
 /* replay info rec - last menu that was posted before event replay */
 typedef struct _XmReplayInfoRec
 {
 	Time time;
 	Widget toplevel_menu;
 } XmReplayInfoRec;
-
 typedef struct _XmMenuFocusRec
 {
 	Widget  oldWidget;
@@ -53,7 +48,6 @@ typedef struct _XmMenuFocusRec
 	int	oldRevert;
 	Time	oldTime;
 } XmMenuFocusRec;
-
 /* Menu State is per screen */
 typedef struct _XmMenuStateRec
 {
@@ -78,8 +72,6 @@ typedef struct _XmMenuStateRec
    Widget MU_CurrentMenuChild;
    Boolean MU_InPMMode;
 } XmMenuStateRec, *XmMenuState;
-
-
 typedef struct _XmRCKidGeometryRec
 {
   Widget kid;
@@ -88,133 +80,93 @@ typedef struct _XmRCKidGeometryRec
   Dimension margin_bottom;
   Dimension baseline;
 } XmRCKidGeometryRec, *XmRCKidGeometry;
-
 /* The RowColumn instance record */
-
 typedef	struct _XmRowColumnPart
 {
     Dimension       margin_height;  /* margin around inside of widget */
     Dimension       margin_width;
-
-
     Dimension       spacing;        /* pixels between entries */
     Dimension       entry_border;   /* size of entry borders */
-
                     /* next only used w/ menubars */
-
     Widget      help_pushbutton;    /* ptr to help pushbutton widget */
-
     Widget      cascadeBtn;         /* if this menu is pulled down by a */
                                     /* pulldown widget this will point */
                                     /* at the pulldown.  needed to go */
                                     /* up the cascade */
-
                     /* next two only used w/ option menus */
                     /* they are really only temporary */
                     /* since the data is passed off to */
                     /* the pulldown widget which is */
                     /* automatically built */
-
     XmString  option_label;         /* label for option menu pulldown */
-
     Widget      option_submenu;     /* which submenu to pulldown */
-
-
     XmRCKidGeometry   boxes;          /* when doing menu layouts is an */
                                     /* array of geo req's to make it easy */
-
     WidgetClass     entry_class;    /* if homogeneous, what class */
-
     XtCallbackList  entry_callback; /* a child fired off */
     XtCallbackList  map_callback;   /* about to be mapped call back */
     XtCallbackList  unmap_callback; /* about to be unmapped call back */
-
     Widget      memory_subwidget;   /* id of last subwidget that */
                                     /* fired off.  Recorded by the */
                                     /* entry_fired proc, can be set too */
                                     /* this causes mouse/muscle memory */
                                     /* to also be reset */
-
     short       num_columns;        /* if columnar packing this is how */
                                     /* many columns to use */
-
     String	    menuPost;	    /* a translation for posting popups */
     unsigned int    postButton;     /* active mouse button */
     int             postEventType;  /* active mouse event type */
     unsigned int    postModifiers;  /* active mouse modifier */
-
     String      menu_accelerator;
     KeySym	    mnemonic;
     XmStringCharSet mnemonicCharSet;
-
     unsigned char   entry_alignment; /* type of label alignment */
                                      /* our children should have */
-
                     /* next two are layout, Tight is the */
                     /* standard menubar packing.  Columns */
                     /* is radio box style, orientation */
                     /* determines if it is column or row */
                     /* major, Vert = column major */
-
     unsigned char   packing;    /* entry packing (layout) style */
-
     unsigned char   type;       /* temporary: diff between menu/bar */
-
     unsigned char   orientation;    /* horizontal or vertical */
-
                     /* next two indicate how the widget */
                     /* responds to size changes if there */
                     /* is no geo mgr.  If true then the */
                     /* dimension is never changed.  Set */
                     /* to true if dimension is spec'd */
                     /* at create time */
-
     Boolean     armed;      /* controls whether pulldowns work */
                             /* or not, button down in any part of */
                             /* the menubar arms it, this is a bit field  */
                             /* used for other internal flags, see macros */
-
                     /* next is only valid for popup menus */
-
     Boolean     adjust_margin;  /* T/F, indicating if we should force */
                                 /* all subwidgets to have similar */
                                 /* margins */
-
     Boolean     adjust_last;    /* Indicates whether or not the last row */
                                 /* row or column should be stretched to  */
                                 /* the edge of the row_column widget.    */
-
     Boolean     do_alignment;   /* T/F, do we force alignment on all */
                                 /* our children */
-
     Boolean     radio;          /* T/F, do we do the toggle button */
                                 /* 'only-one-down' enforcement */
-
     Boolean     radio_one;      /* T/F, must have one radio button */
                                 /* set to on */
-
-
     Boolean     homogeneous;    /* T/F, do we only allow a single */
                                 /* class of children */
-
     Boolean     resize_width;
     Boolean     resize_height;
-
     XtEnum      popup_enabled;
-
     Dimension	old_width;		/* save the old width, etc to use  */
     Dimension	old_height;		/* at resize time since it now has */
     Dimension	old_shadow_thickness;   /* NW gravity                      */
-
     Widget *	postFromList;		/* list for sharing menupanes */
     int		postFromCount;		/* count of the list */
     int		postFromListSize;	/* size of the malloc'ed list */
-
     Widget      lastSelectToplevel;     /* returned in XmGetPostedFromWidget*/
     Widget	popupPosted;		/* popup submenu currently posted */
-
     unsigned char oldFocusPolicy;	/* save when menus begin traversal */
-
     /***************** 1.2 ***************/
     unsigned char	TearOffModel;	/* enable/disable flag */
     Widget		ParentShell;	/* Save the parent shell when torn */
@@ -225,16 +177,12 @@ typedef	struct _XmRowColumnPart
     XtCallbackList	tear_off_deactivated_callback;
     Widget		tear_off_lastSelectToplevel;
     Widget		tear_off_focus_item;	/* when tear off is inactive */
-
     unsigned char	entry_vertical_alignment;
     unsigned char	popup_menu_click;
     XtWorkProcId	popup_workproc;
     XmString		tear_off_title;
 } XmRowColumnPart;
-
-
 /* Full instance record declaration */
-
 typedef struct _XmRowColumnRec
 {
     CorePart		core;
@@ -243,7 +191,6 @@ typedef struct _XmRowColumnRec
     XmManagerPart	manager;
     XmRowColumnPart	row_column;
 } XmRowColumnRec;
-
 typedef struct _XmRowColumnWidgetRec /* OBSOLETE (for compatibility only).*/
 {
     CorePart		core;
@@ -252,11 +199,7 @@ typedef struct _XmRowColumnWidgetRec /* OBSOLETE (for compatibility only).*/
     XmManagerPart	manager;
     XmRowColumnPart	row_column;
 } XmRowColumnWidgetRec;
-
-
-
 /* RowColumn class structure */
-
 typedef struct _XmRowColumnClassPart
 {
     XmMenuProc	menuProcedures; /* proc to interface with menu widgets */
@@ -264,9 +207,6 @@ typedef struct _XmRowColumnClassPart
     XmMenuTraversalProc traversalHandler;/* proc to handle menu traversal */
     XtPointer   extension;      /* Pointer to extension record */
 } XmRowColumnClassPart;
-
-
-
 typedef struct _XmRowColumnClassRec
 {
     CoreClassPart		core_class;
@@ -275,15 +215,9 @@ typedef struct _XmRowColumnClassRec
     XmManagerClassPart		manager_class;
     XmRowColumnClassPart	row_column_class;
 } XmRowColumnClassRec, *XmRowColumnClass;
-
 externalref XmRowColumnClassRec     xmRowColumnClassRec;
-
-
-
 /* Constraint Definition */
-
 /* No constraint resources */
-
 typedef struct _XmRowColumnConstraintPart
 {
 	Boolean	was_managed;
@@ -292,16 +226,12 @@ typedef struct _XmRowColumnConstraintPart
         Dimension baseline;
 	short position_index;
 } XmRowColumnConstraintPart;
-
 typedef struct _XmRowColumnConstraintRec
 {
 	XmManagerConstraintPart manager;
 	XmRowColumnConstraintPart row_column;
 } XmRowColumnConstraintRec;
-
-
 /* Access macros */
-
 #define XmRC_ARMED_BIT	      (1 << 0)
 #define XmRC_BEING_ARMED_BIT  (1 << 1)		/* bits in menu's armed byte */
 #define XmRC_EXPOSE_BIT       (1 << 2)		/* used in both menu and */
@@ -309,7 +239,6 @@ typedef struct _XmRowColumnConstraintRec
 #define XmRC_WIDGET_MOVED_BIT (1 << 4)
 #define XmRC_POPPING_DOWN_BIT (1 << 5)
 #define XmRC_FROM_RESIZE_BIT  (1 << 6)
-
 #define RC_IsArmed(m)	 (((XmRowColumnWidget)(m))->row_column.armed & XmRC_ARMED_BIT)
 #define RC_BeingArmed(m) (((XmRowColumnWidget)(m))->row_column.armed & XmRC_BEING_ARMED_BIT)
 #define RC_DoExpose(m)	 (((XmRowColumnWidget)(m))->row_column.armed & XmRC_EXPOSE_BIT)
@@ -317,10 +246,7 @@ typedef struct _XmRowColumnConstraintRec
 #define RC_WindowHasMoved(m) (((XmRowColumnWidget)(m))->row_column.armed & XmRC_WINDOW_MOVED_BIT)
 #define RC_PoppingDown(m) (((XmRowColumnWidget)(m))->row_column.armed & XmRC_POPPING_DOWN_BIT)
 #define RC_FromResize(m) (((XmRowColumnWidget)(m))->row_column.armed & XmRC_FROM_RESIZE_BIT)
-
-
 #define RC_SetBit(byte,bit,v)  byte = (byte & (~bit)) | (v ? bit : 0)
-
 #define RC_SetArmed(m,v)  RC_SetBit (((XmRowColumnWidget)(m))->row_column.armed, XmRC_ARMED_BIT, v)
 #define RC_SetBeingArmed(m,v)  RC_SetBit (((XmRowColumnWidget)(m))->row_column.armed, XmRC_BEING_ARMED_BIT, v)
 #define RC_SetExpose(m,v) RC_SetBit (((XmRowColumnWidget)(m))->row_column.armed, XmRC_EXPOSE_BIT, v)
@@ -328,14 +254,11 @@ typedef struct _XmRowColumnConstraintRec
 #define RC_SetWindowMoved(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.armed, XmRC_WINDOW_MOVED_BIT,v)
 #define RC_SetPoppingDown(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.armed, XmRC_POPPING_DOWN_BIT,v)
 #define RC_SetFromResize(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.armed, XmRC_FROM_RESIZE_BIT,v)
-
 #define RC_MarginW(m)	    (((XmRowColumnWidget)(m))->row_column.margin_width)
 #define RC_MarginH(m)	    (((XmRowColumnWidget)(m))->row_column.margin_height)
-
 #define RC_Entry_cb(m)	    (((XmRowColumnWidget)(m))->row_column.entry_callback)
 #define RC_Map_cb(m)	    (((XmRowColumnWidget)(m))->row_column.map_callback)
 #define RC_Unmap_cb(m)	    (((XmRowColumnWidget)(m))->row_column.unmap_callback)
-
 #define RC_Orientation(m)   (((XmRowColumnWidget)(m))->row_column.orientation)
 #define RC_Spacing(m)	    (((XmRowColumnWidget)(m))->row_column.spacing)
 #define RC_EntryBorder(m)   (((XmRowColumnWidget)(m))->row_column.entry_border)
@@ -368,70 +291,45 @@ typedef struct _XmRowColumnConstraintRec
 #define RC_PostButton(m) (((XmRowColumnWidget) m)->row_column.postButton)
 #define RC_PostModifiers(m) (((XmRowColumnWidget) m)->row_column.postModifiers)
 #define RC_PostEventType(m) (((XmRowColumnWidget) m)->row_column.postEventType)
-
 #define RC_OldFocusPolicy(m) (((XmRowColumnWidget) m)->row_column.oldFocusPolicy)
 #define RC_ParentShell(m) (((XmRowColumnWidget) m)->row_column.ParentShell)
 #define RC_TearOffControl(m) (((XmRowColumnWidget) m)->row_column.tear_off_control)
 #define RC_TearOffModel(m) (((XmRowColumnWidget) m)->row_column.TearOffModel)
-
 #define RC_popupMenuClick(m) (((XmRowColumnWidget)(m))->row_column.popup_menu_click)
-
 #define RC_TearOffTitle(m) (((XmRowColumnWidget)(m))->row_column.tear_off_title)
-
 /* Tear Off State */
-
 #define XmTO_TORN_OFF_BIT	(1 << 0)
 #define XmTO_FROM_INIT_BIT	(1 << 1)
 #define XmTO_VISUAL_DIRTY_BIT	(1 << 2)
 #define XmTO_ACTIVE_BIT		(1 << 3)
-
 #define RC_SetTornOff(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.to_state, XmTO_TORN_OFF_BIT,v)
-
 #define RC_TornOff(m) (((XmRowColumnWidget)(m))->row_column.to_state & XmTO_TORN_OFF_BIT)
-
 #define RC_SetFromInit(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.to_state, XmTO_FROM_INIT_BIT,v)
-
 #define RC_FromInit(m)	(((XmRowColumnWidget)(m))->row_column.to_state & XmTO_FROM_INIT_BIT)
-
 #define RC_SetTearOffDirty(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.to_state, XmTO_VISUAL_DIRTY_BIT,v)
-
 #define RC_TearOffDirty(m) (((XmRowColumnWidget)(m))->row_column.to_state & XmTO_VISUAL_DIRTY_BIT)
-
 #define RC_TearOffActive(m) (((XmRowColumnWidget)(m))->row_column.to_state & XmTO_ACTIVE_BIT)
-
 #define RC_SetTearOffActive(m,v) RC_SetBit(((XmRowColumnWidget)(m))->row_column.to_state, XmTO_ACTIVE_BIT,v)
-
 #define initial_value 0
-
 /* Defines used when calling _XmProcessMenuTree() */
-
 #define XmADD     0
 #define XmDELETE  1
 #define XmREPLACE 2
-
-
 /* Defines used when calling _XmMenuIsAccessible() */
-
 #define XmWEAK_CHECK 1
 #define XmMEDIUM_CHECK 2
 #define XmSTRONG_CHECK 3
-
 #define XmMENU_BEGIN 0
 #define XmMENU_MIDDLE 1
 #define XmMENU_END 2
-
 /* Defines used when calling find_first_managed_child() */
 #define ANY_CHILD 0
 #define FIRST_BUTTON 1
-
-
 #define XmInheritMenuProceduresProc	((XmMenuProc) _XtInherit)
 #define XmInheritArmAndActivateProc	((XtActionProc) _XtInherit)
 #define XmInheritMenuTraversalProc	((XmMenuTraversalProc) _XtInherit)
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif  /* _XmRowColumnP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

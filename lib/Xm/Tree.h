@@ -21,33 +21,21 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-
 #ifndef _XmTree_h
 #define _XmTree_h
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvset.h>
-#endif
-
 #include <Xm/Ext.h>
 #include <Xm/Hierarchy.h>
-
 /************************************************************
 *	INCLUDE FILES
 *************************************************************/
-
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
 typedef struct _XmTreeClassRec		*XmTreeWidgetClass;
 typedef struct _XmTreeRec		*XmTreeWidget;
-
-
 /*	Function Name: XmCreateTree
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -55,26 +43,15 @@ typedef struct _XmTreeRec		*XmTreeWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-
 Widget XmCreateTree(Widget, String, ArgList, Cardinal);
-
 extern WidgetClass xmTreeWidgetClass;
-
 /************************************************************
 *	MACROS
 *************************************************************/
-
-
 /************************************************************
 *	GLOBAL FUNCTION DECLARATIONS
 *************************************************************/
-
 #if defined(__cplusplus)
 }
 #endif
-
-#if defined(VMS) || defined(__VMS)
-#include <X11/apienvrst.h>
-#endif
-
 #endif /* _Tree_h */

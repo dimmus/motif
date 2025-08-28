@@ -745,17 +745,6 @@ static XmString StringToXmString
 	 */
 	if (dir != curDir)
 	{
-#if defined(VMS) || (defined(__osf__) && defined(__alpha))
-	    /*
-	     * This is required on DEC Windows systems because they've
-	     * added the REVERT direction.
-	     */
-	    s1 = XmStringDirectionCreate(XmSTRING_DIRECTION_REVERT);
-	    s2 = xmStr;
-	    xmStr = XmStringConcat(s2, s1);
-	    XmStringFree(s1);
-	    XmStringFree(s2);
-#endif
 	    curDir = dir;
 	    s1 = XmStringDirectionCreate(curDir);
 	    s2 = xmStr;

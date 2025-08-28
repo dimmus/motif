@@ -25,12 +25,9 @@
 static char rcsid[] = "$XConsortium: Simple.c /main/11 1995/09/19 23:08:54 cde-sun $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <stdio.h>
 #include <X11/StringDefs.h>
 #include <Xm/RowColumnP.h>
@@ -40,15 +37,11 @@ static char rcsid[] = "$XConsortium: Simple.c /main/11 1995/09/19 23:08:54 cde-s
 #include <Xm/LabelG.h>
 #include <Xm/SeparatoG.h>
 #include "XmI.h"
-
 /********    Static Function Declarations    ********/
-
 static void EvaluateConvenienceStructure(
                         Widget wid,
                         XmSimpleMenu sm) ;
-
 /********    End Static Function Declarations    ********/
-
 static XtResource SimpleMenuResources[] =
 {
 	{ XmNbuttonCount, XmCButtonCount, XmRInt, sizeof(int),
@@ -102,7 +95,6 @@ static XtResource SimpleMenuResources[] =
           XmRImmediate, (XtPointer) NULL
 	},
 };
-
 static void
 EvaluateConvenienceStructure(
         Widget wid,
@@ -117,7 +109,6 @@ EvaluateConvenienceStructure(
 	Arg args[6];
 	Widget child;
 	XmButtonType btype;
-
 	for (i = 0; i < sm->count; i++)
 	{
 		n = 0;
@@ -148,14 +139,11 @@ EvaluateConvenienceStructure(
 				sm->mnemonic_charset[i]);
 			n++;
 		}
-
 		/* Dynamic Defaulting of button type */
-
 		if (sm->button_type && sm->button_type[i])
 			btype = sm->button_type[i];
 		else
 			btype = XmNONE;
-
 		if (btype == XmNONE)
 		{
 			if (rc->row_column.type == XmMENU_BAR)
@@ -163,7 +151,6 @@ EvaluateConvenienceStructure(
 			else
 				btype = XmPUSHBUTTON;
 		}
-
 		switch (btype)
 		{
 			case XmTITLE:
@@ -218,7 +205,6 @@ EvaluateConvenienceStructure(
 		}
 	}
 }
-
 Widget
 XmCreateSimpleMenuBar(
         Widget parent,
@@ -229,21 +215,15 @@ XmCreateSimpleMenuBar(
 	Widget rc;
 	XmSimpleMenuRec mr;
 	_XmWidgetToAppContext(parent);
-
 	_XmAppLock(app);
-
 	XtGetSubresources(parent, &mr, name, XmCSimpleMenuBar,
 		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-
 	rc = XmCreateMenuBar(parent, name, args, arg_count);
-
 	EvaluateConvenienceStructure( rc, &mr);
-
 	_XmAppUnlock(app);
 	return(rc);
 }
-
 Widget
 XmCreateSimplePopupMenu(
         Widget parent,
@@ -254,21 +234,15 @@ XmCreateSimplePopupMenu(
 	Widget rc;
 	XmSimpleMenuRec mr;
 	_XmWidgetToAppContext(parent);
-
 	_XmAppLock(app);
-
 	XtGetSubresources(parent, &mr, name, XmCSimplePopupMenu,
 		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-
 	rc = XmCreatePopupMenu(parent, name, args, arg_count);
-
 	EvaluateConvenienceStructure( rc, &mr);
-
 	_XmAppUnlock(app);
 	return(rc);
 }
-
 Widget
 XmCreateSimplePulldownMenu(
         Widget parent,
@@ -282,25 +256,19 @@ XmCreateSimplePulldownMenu(
 	Arg local_args[3];
 	WidgetList buttons;
 	Cardinal num_buttons;
-
 	_XmWidgetToAppContext(parent);
 	_XmAppLock(app);
-
 	XtGetSubresources(parent, &mr, name, XmCSimplePulldownMenu,
 		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-
 	rc = XmCreatePulldownMenu(parent, name, args, arg_count);
-
 	EvaluateConvenienceStructure(rc, &mr);
-
 	if (mr.post_from_button >= 0)
 	{
 		n = 0;
 		XtSetArg(local_args[n], XtNchildren, &buttons); n++;
 		XtSetArg(local_args[n], XtNnumChildren, &num_buttons); n++;
 		XtGetValues(parent, local_args, n);
-
 		if (!num_buttons)
 		{
 			/* error condition */
@@ -317,7 +285,6 @@ XmCreateSimplePulldownMenu(
 					(i == mr.post_from_button))
 					break;
 			}
-
 			if ( i < num_buttons)
 			{
 				n = 0;
@@ -329,7 +296,6 @@ XmCreateSimplePulldownMenu(
 	_XmAppUnlock(app);
 	return(rc);
 }
-
 Widget
 XmCreateSimpleOptionMenu(
         Widget parent,
@@ -344,19 +310,13 @@ XmCreateSimpleOptionMenu(
 	WidgetList buttons;
 	Cardinal num_buttons;
 	_XmWidgetToAppContext(parent);
-
 	_XmAppLock(app);
-
 	XtGetSubresources(parent, &mr, name, XmCSimpleOptionMenu,
 		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-
 	rc = XmCreateOptionMenu(parent, name, args, arg_count);
-
 	sub_rc = XmCreatePulldownMenu(parent, name, args, arg_count);
-
 	EvaluateConvenienceStructure(sub_rc, &mr);
-
 	n = 0;
 	if (mr.option_label)
 	{
@@ -366,17 +326,14 @@ XmCreateSimpleOptionMenu(
 	{
 		XtSetArg(local_args[n], XmNmnemonic, mr.option_mnemonic); n++;
 	}
-
 	XtSetArg(local_args[n], XmNsubMenuId, sub_rc); n++;
 	XtSetValues(rc, local_args, n);
-
 	if (mr.button_set >= 0)
 	{
 		n = 0;
 		XtSetArg(local_args[n], XtNchildren, &buttons); n++;
 		XtSetArg(local_args[n], XtNnumChildren, &num_buttons); n++;
 		XtGetValues(sub_rc, local_args, n);
-
 		if (!num_buttons)
 		{
 			/* error condition */
@@ -396,7 +353,6 @@ XmCreateSimpleOptionMenu(
 					button_count++;
 				}
 			}
-
 			if ( i < num_buttons)
 			{
 				n = 0;
@@ -405,11 +361,9 @@ XmCreateSimpleOptionMenu(
 			}
 		}
 	}
-
 	_XmAppUnlock(app);
 	return(rc);
 }
-
 Widget
 XmCreateSimpleRadioBox(
         Widget parent,
@@ -422,17 +376,13 @@ XmCreateSimpleRadioBox(
 	int i, n;
 	XmSimpleMenuRec mr;
 	char name_buf[20];
-
 	rc = XmCreateRadioBox(parent, name, args, arg_count);
-
 	XtGetSubresources(parent, &mr, name, XmCSimpleRadioBox,
 		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-
 	for(i=0; i < mr.count; i++)
 	{
 		sprintf(name_buf,"button_%d", i);
-
 		n = 0;
 		if (mr.label_string && mr.label_string[i])
 		{
@@ -449,10 +399,8 @@ XmCreateSimpleRadioBox(
 			XtAddCallback(child, XmNvalueChangedCallback,
 				mr.callback, (XtPointer)(unsigned long)i);
 	}
-
 	return(rc);
 }
-
 Widget
 XmCreateSimpleCheckBox(
         Widget parent,
@@ -465,24 +413,16 @@ XmCreateSimpleCheckBox(
 	int i, n;
 	XmSimpleMenuRec mr;
 	char name_buf[20];
-
-
 	rc = XmCreateRadioBox(parent, name, args, arg_count);
-
 	n = 0;
         XtSetArg(local_args[n], XmNradioBehavior, FALSE); n++;
-
 	XtSetValues(rc, local_args, n);
-
-
 	XtGetSubresources(parent, &mr, name, XmCSimpleCheckBox,
 		SimpleMenuResources, XtNumber(SimpleMenuResources),
 		args, arg_count);
-
 	for(i=0; i < mr.count; i++)
 	{
 		sprintf(name_buf,"button_%d", i);
-
 		n = 0;
 		if (mr.label_string && mr.label_string[i])
 		{
@@ -495,6 +435,5 @@ XmCreateSimpleCheckBox(
 			XtAddCallback(child, XmNvalueChangedCallback,
 				mr.callback, (XtPointer)(unsigned long)i);
 	}
-
 	return(rc);
 }

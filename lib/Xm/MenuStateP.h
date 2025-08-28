@@ -27,17 +27,13 @@
  */
 #ifndef _XmMenuStateP_h
 #define _XmMenuStateP_h
-
 #include <Xm/XmP.h>
 #include <Xm/RowColumnP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif  /* _XmMenuStateP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

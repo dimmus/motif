@@ -22,31 +22,22 @@
 */
 #ifndef _XmCommandP_h
 #define _XmCommandP_h
-
 #include <Xm/SelectioBP.h>
 #include <Xm/Command.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Constraint part record for Command widget */
-
 typedef struct _XmCommandConstraintPart
 {
   char unused;
 } XmCommandConstraintPart, * XmCommandConstraint;
-
 /*  New fields for the Command widget class record  */
-
 typedef struct
 {
   XtPointer           extension;      /* Pointer to extension record */
 } XmCommandClassPart;
-
-
 /* Full class record declaration */
-
 typedef struct _XmCommandClassRec
 {
   CoreClassPart            core_class;
@@ -57,11 +48,8 @@ typedef struct _XmCommandClassRec
   XmSelectionBoxClassPart  selection_box_class;
   XmCommandClassPart       command_class;
 } XmCommandClassRec;
-
 externalref XmCommandClassRec xmCommandClassRec;
-
 /* New fields for the Command widget record */
-
 typedef struct
 {
   XtCallbackList   callback;
@@ -69,14 +57,11 @@ typedef struct
   int              history_max_items;
   Boolean          error;        /* error has been made visible in list */
 } XmCommandPart;
-
-
 /****************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************/
-
 typedef struct _XmCommandRec
 {
     CorePart	        core;
@@ -87,11 +72,8 @@ typedef struct _XmCommandRec
     XmSelectionBoxPart  selection_box;
     XmCommandPart       command;
 } XmCommandRec;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmCommandP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

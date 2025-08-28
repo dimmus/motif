@@ -24,35 +24,26 @@
 /*
  * HISTORY
  */
-
 #ifndef _XmMenuT_H
 #define _XmMenuT_H
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* Quick fix for Linux-ARM where "arm" is the #define symbol */
 #ifdef arm
 # undef arm
 #endif
-
 /* Menu System Traits */
 externalref XrmQuark XmQTmenuSystem;
 externalref XrmQuark XmQTmenuSavvy;
-
 /* Trait structures and typedefs, place typedefs first */
-
 /* Used by the disable callback method of the menu savvy trait */
 typedef enum {
     XmDISABLE_ACTIVATE,   /* defer to the entryCallback */
     XmENABLE_ACTIVATE     /* invoke own activate callback */
 } XmActivateState;
-
 /* Menu trait typedefs */
-
 typedef int (*XmMenuSystemWidgetProc)(Widget);
 typedef Boolean (*XmMenuSystemVerifyProc)(Widget, XEvent*);
 typedef void (*XmMenuSystemControlTraversalProc)(Widget, Boolean);
@@ -78,11 +69,8 @@ typedef char* (*XmMenuSavvyGetActivateCBNameProc)();
 #define XmMenuSystemReparentProc	XmMenuSystemPositionProc
 #define XmMenuSystemPopdownAllProc	XmMenuSystemPositionProc
 #define XmMenuSystemChildFocusProc	XmMenuSystemDisarmProc
-
 /* XmTmenuProcTrait */
-
 /* Version 0: initial release. */
-
 typedef struct _XmMenuSystemTraitRec
 {
   int					version;		/* 0 */
@@ -109,11 +97,8 @@ typedef struct _XmMenuSystemTraitRec
   XmMenuSystemChildFocusProc		childFocus;
   XmMenuSystemPopupPostedProc		getPopupPosted;
 } XmMenuSystemTraitRec, *XmMenuSystemTrait;
-
 /* XmTmenuSavvyTrait */
-
 /* Version 0: initial release. */
-
 typedef struct _XmMenuSavvyTraitRec
 {
   int					version;		/* 0 */
@@ -122,9 +107,7 @@ typedef struct _XmMenuSavvyTraitRec
   XmMenuSavvyGetMnemonicProc		getMnemonic;
   XmMenuSavvyGetActivateCBNameProc	getActivateCBName;
 } XmMenuSavvyTraitRec, *XmMenuSavvyTrait;
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmMenuT_H */

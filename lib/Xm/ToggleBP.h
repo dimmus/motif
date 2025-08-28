@@ -26,23 +26,17 @@
  *   for the Toggle widget class record
  *
  ********************************************/
-
 #ifndef _XmToggleButtonP_h
 #define _XmToggleButtonP_h
-
 #include <Xm/ToggleB.h>
 #include <Xm/LabelP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 typedef struct _XmToggleButtonClassPart
  {
    XtPointer extension;   /* Pointer to extension record */
  } XmToggleButtonClassPart;
-
-
 /****************************************************
  *
  * Full class record declaration for Toggle class
@@ -54,17 +48,12 @@ typedef struct _XmToggleButtonClassRec {
     XmLabelClassPart      	label_class;
     XmToggleButtonClassPart	toggle_class;
 } XmToggleButtonClassRec;
-
-
 externalref XmToggleButtonClassRec xmToggleButtonClassRec;
-
-
 /********************************************
  *
  * No new fields needed for instance record
  *
  ********************************************/
-
 typedef struct _XmToggleButtonPart
 {
    unsigned char	ind_type;
@@ -102,32 +91,21 @@ typedef struct _XmToggleButtonPart
    Dimension		ind_bottom_delta;
    Dimension detail_shadow_thickness ;
 } XmToggleButtonPart;
-
-
-
 /****************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************/
-
 typedef struct _XmToggleButtonRec {
     CorePart	        core;
     XmPrimitivePart     primitive;
     XmLabelPart		label;
     XmToggleButtonPart  toggle;
 } XmToggleButtonRec;
-
-
 /********    Private Function Declarations    ********/
-
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmToggleButtonP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 * RdFToBuf.c:                                                                 *
 *                                                                             *
@@ -31,14 +30,11 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 /*
  * The code related to FOR_MSW has been added by
  * HeDu (hedu@cul-ipn.uni-kiel.de) 4/94
  */
-
 /* October 2004, source code review by Thomas Biege <thomas@suse.de> */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -57,7 +53,6 @@
 #define fdopen _fdopen
 #define O_RDONLY _O_RDONLY
 #endif
-
 int
 XpmReadFileToBuffer(
     const char	 *filename,
@@ -68,9 +63,7 @@ XpmReadFileToBuffer(
     char *ptr;
     struct stat stats;
     FILE *fp;
-
     *buffer_return = NULL;
-
 #ifndef VAX11C
     fd = open(filename, O_RDONLY);
 #else
@@ -78,7 +71,6 @@ XpmReadFileToBuffer(
 #endif
     if (fd < 0)
 	return XpmOpenFailed;
-
     if (fstat(fd, &stats)) {
 	close(fd);
 	return XpmOpenFailed;
@@ -100,25 +92,7 @@ XpmReadFileToBuffer(
     }
     fcheck = fread(ptr, 1, len, fp);
     fclose(fp);
-#ifdef VMS
-    /* VMS often stores text files in a variable-length record format,
-       where there are two bytes of size followed by the record.  fread
-       converts this so it looks like a record followed by a newline.
-       Unfortunately, the size reported by fstat() (and fseek/ftell)
-       counts the two bytes for the record terminator, while fread()
-       counts only one.  So, fread() sees fewer bytes in the file (size
-       minus # of records) and thus when asked to read the amount
-       returned by stat(), it fails.
-       The best solution, suggested by DEC, seems to consider the length
-       returned from fstat() as an upper bound and call fread() with
-       a record length of 1. Then don't check the return value.
-       We'll check for 0 for gross error that's all.
-    */
-    len = fcheck;
-    if (fcheck == 0) {
-#else
     if (fcheck != len) {
-#endif
 	XpmFree(ptr);
 	return XpmOpenFailed;
     }

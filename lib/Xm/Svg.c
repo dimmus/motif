@@ -5,26 +5,21 @@
  * Copyright (c) 1987 - 2012 The Open Group.
  * Licensed under the LGPL 2.1 license.
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-
 #include <X11/Xlibint.h>
 #include "SvgI.h"
-
 #define NANOSVG_IMPLEMENTATION
 #include "nanosvg.h"
 #define NANOSVGRAST_IMPLEMENTATION
 #include "nanosvgrast.h"
-
 /* same as xlib's _XDestroyImage */
 static int destroy(XImage *image)
 {
 	nsvgDelete((NSVGimage *)image->obdata);
 	return 1;
 }
-
 /**
  * sub_image: Rasterize the svg to the target size
  */
@@ -34,29 +29,24 @@ static XImage *rasterize(XImage *src, int x, int y, unsigned int w, unsigned int
 	unsigned char *data;
 	float scale, x_scale = 1.0, y_scale = 1.0;
 	NSVGrasterizer *rast;
-
 	(void)x;
 	(void)y;
 	if (!w || !h || !(rast = nsvgCreateRasterizer()))
 		return NULL;
-
 	if (!(data = Xcalloc(4, w * h))) {
 		nsvgDeleteRasterizer(rast);
 		return NULL;
 	}
-
 	x_scale = w / (float)src->width;
 	y_scale = h / (float)src->height;
 	scale   = (x_scale < y_scale) ? x_scale : y_scale;
 	nsvgRasterize(rast, (NSVGimage *)src->obdata, x * scale, y * scale,
 	              scale, data, w, h, w * 4);
 	nsvgDeleteRasterizer(rast);
-
 	if (!(img = Xcalloc(1, sizeof *img))) {
 		XFree(data);
 		return NULL;
 	}
-
 	img->data             = (char *)data;
 	img->obdata           = NULL;
 	img->width            = w;
@@ -75,7 +65,6 @@ static XImage *rasterize(XImage *src, int x, int y, unsigned int w, unsigned int
 	XInitImage(img);
 	return img;
 }
-
 static unsigned long get_pixel(XImage *img, int x, int y)
 {
 	(void)img;
@@ -83,7 +72,6 @@ static unsigned long get_pixel(XImage *img, int x, int y)
 	(void)y;
 	return 0;
 }
-
 static int put_pixel(XImage *img, int x, int y, unsigned long pixel)
 {
 	(void)img;
@@ -92,21 +80,18 @@ static int put_pixel(XImage *img, int x, int y, unsigned long pixel)
 	(void)pixel;
 	return 1;
 }
-
 static int add_pixel(XImage *img, long pixel)
 {
 	(void)img;
 	(void)pixel;
 	return 1;
 }
-
 int _XmSvgGetImage(FILE *fp, XImage **out)
 {
 	char *data;
 	long size;
 	XImage *img;
 	NSVGimage *svg;
-
 	*out = NULL;
 	errno = 0;
 	fseek(fp, 0, SEEK_END);
@@ -114,30 +99,24 @@ int _XmSvgGetImage(FILE *fp, XImage **out)
 	rewind(fp);
 	if (errno || !(data = Xmalloc((size_t)size + 1)))
 		return 1;
-
 	if (!fread(data, 1, (size_t)size, fp)) {
 		XFree(data);
 		return 1;
 	}
-
 	data[size] = '\0';
 	svg = nsvgParse(data, "px", 96);
 	XFree(data);
-
 	if (!svg)
 		return 1;
-
 	if (!svg->width || !svg->height) {
 		nsvgDelete(svg);
 		return 1;
 	}
-
 	/* Create our XImage */
 	if (!(img = Xmalloc(sizeof *img))) {
 		nsvgDelete(svg);
 		return 2;
 	}
-
 	img->data             = NULL;
 	img->obdata           = (XPointer)svg;
 	img->width            = (int)svg->width;

@@ -22,20 +22,14 @@
 */
 #ifndef _XmTraversalI_h
 #define _XmTraversalI_h
-
 #include <Xm/XmP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #define NavigTypeIsTabGroup(navigation_type) \
   ((navigation_type == XmTAB_GROUP) || \
    (navigation_type == XmSTICKY_TAB_GROUP) || \
    (navigation_type == XmEXCLUSIVE_TAB_GROUP))
-
-
 typedef enum {
     XmUnrelated,
     XmMyAncestor,
@@ -43,7 +37,6 @@ typedef enum {
     XmMyCousin,
     XmMySelf
 } XmGeneology;
-
 typedef struct _XmTravGraphRec
 {
     union _XmTraversalNodeRec *head ;
@@ -57,8 +50,6 @@ typedef struct _XmTravGraphRec
     unsigned short num_tab_list ;
     Widget *excl_tab_list ;
 } XmTravGraphRec, * XmTravGraph ;
-
-
 typedef struct _XmFocusDataRec {
     Widget	active_tab_group;
     Widget	focus_item;
@@ -72,18 +63,15 @@ typedef struct _XmFocusDataRec {
     XmTravGraphRec trav_graph ;  /*   data retrieved using _XmGetFocusData().*/
     Widget      first_focus ;
 } XmFocusDataRec ;
-
 typedef enum
 {
   XmTAB_GRAPH_NODE, XmTAB_NODE, XmCONTROL_GRAPH_NODE, XmCONTROL_NODE
 } XmTravGraphNodeType ;
-
 typedef union _XmDeferredGraphLink
 {
   int offset ;
   struct _XmGraphNodeRec *link ;
 } XmDeferredGraphLink ;
-
 typedef struct _XmAnyNodeRec               /* Common */
 {
   unsigned char type ;
@@ -94,26 +82,22 @@ typedef struct _XmAnyNodeRec               /* Common */
   union _XmTraversalNodeRec *next ;
   union _XmTraversalNodeRec *prev ;
 } XmAnyNodeRec, *XmAnyNode ;
-
 typedef struct _XmControlNodeRec
 {
   XmAnyNodeRec any ;
   union _XmTraversalNodeRec *up ;
   union _XmTraversalNodeRec *down ;
 } XmControlNodeRec, *XmControlNode ;
-
 typedef struct _XmTabNodeRec
 {
   XmAnyNodeRec any ;
 } XmTabNodeRec, *XmTabNode ;
-
 typedef struct _XmGraphNodeRec
 {
   XmAnyNodeRec any ;
   union _XmTraversalNodeRec *sub_head ;
   union _XmTraversalNodeRec *sub_tail ;
 } XmGraphNodeRec, *XmGraphNode ;
-
 typedef union _XmTraversalNodeRec
 {
   XmAnyNodeRec any ;
@@ -121,7 +105,6 @@ typedef union _XmTraversalNodeRec
   XmTabNodeRec tab ;
   XmGraphNodeRec graph ;
 } XmTraversalNodeRec, *XmTraversalNode ;
-
 typedef struct
 {
   XmTraversalNode *items;
@@ -131,10 +114,7 @@ typedef struct
   Position min_hint;
   Position max_hint;
 } XmTraversalRow;
-
-
 /********    Private Function Declarations for Traversal.c    ********/
-
 extern XmFocusData _XmCreateFocusData( void ) ;
 extern void _XmDestroyFocusData(
                         XmFocusData focusData) ;
@@ -217,11 +197,8 @@ extern Boolean _XmShellIsExclusive(
                         Widget wid) ;
 extern Widget _XmGetFirstFocus(
                         Widget wid) ;
-
 /********    End Private Function Declarations    ********/
-
 /********    Private Function Declarations for TraversalI.c    ********/
-
 extern XmNavigability _XmGetNavigability(
                         Widget wid) ;
 extern Boolean _XmIsViewable(
@@ -275,12 +252,8 @@ extern void _XmTabListAdd(
 extern void _XmTabListDelete(
                         XmTravGraph graph,
                         Widget wid) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTraversalI_h */

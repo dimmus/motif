@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  CrIFrBuf.c:                                                                *
 *                                                                             *
@@ -31,14 +30,11 @@
 *  mask                                                                       *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 LFUNC(OpenBuffer, void, (char *buffer, xpmData *mdata));
-
 int
 XpmCreateImageFromBuffer(
     Display		 *display,
@@ -51,13 +47,10 @@ XpmCreateImageFromBuffer(
     XpmInfo info;
     int ErrorStatus;
     xpmData mdata;
-
     xpmInitXpmImage(&image);
     xpmInitXpmInfo(&info);
-
     /* open buffer to read */
     OpenBuffer(buffer, &mdata);
-
     /* create the XImage from the XpmData */
     if (attributes) {
 	xpmInitAttributes(attributes);
@@ -74,13 +67,10 @@ XpmCreateImageFromBuffer(
 	    xpmSetAttributes(attributes, &image, &info);
 	XpmFreeXpmInfo(&info);
     }
-
     /* free the XpmImage */
     XpmFreeXpmImage(&image);
-
     return (ErrorStatus);
 }
-
 int
 XpmCreateXpmImageFromBuffer(
     char	*buffer,
@@ -89,20 +79,15 @@ XpmCreateXpmImageFromBuffer(
 {
     xpmData mdata;
     int ErrorStatus;
-
     /* init returned values */
     xpmInitXpmImage(image);
     xpmInitXpmInfo(info);
-
     /* open buffer to read */
     OpenBuffer(buffer, &mdata);
-
     /* create the XpmImage from the XpmData */
     ErrorStatus = xpmParseData(&mdata, image, info);
-
     return (ErrorStatus);
 }
-
 /*
  * open the given buffer to be read or written as an xpmData which is returned
  */

@@ -25,29 +25,20 @@
  * HISTORY
  */
 /* ComboBox.h */
-
 #ifndef _XmComboBox_h
 #define _XmComboBox_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref WidgetClass xmComboBoxWidgetClass;
-
 typedef struct _XmComboBoxClassRec	* XmComboBoxWidgetClass;
 typedef struct _XmComboBoxRec 		* XmComboBoxWidget;
-
-
 /* XmIsComboBox may already be defined for Fast Subclassing  */
 #ifndef XmIsComboBox
 #define XmIsComboBox(w)		XtIsSubclass(w, xmComboBoxWidgetClass)
 #endif  /* XmIsComboBox */
-
 /********    Public Function Declarations    ********/
-
 extern Widget XmCreateComboBox (Widget parent,
 				char *name,
 				ArgList args,
@@ -76,20 +67,14 @@ extern void XmComboBoxDeletePos (Widget widget,
 				 int    pos);
 extern void XmComboBoxSelectItem (Widget   widget,
 				  XmString item);
-
 /* JIM ADDED THIS TO APEASE SYMBOL GOD */
 extern XmString  XmCombinationBoxGetValue(Widget widget);
-
 extern void XmComboBoxSetItem (Widget   widget,
 			       XmString item);
 extern void XmComboBoxUpdate (Widget widget);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmComboBox_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

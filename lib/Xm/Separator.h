@@ -23,25 +23,17 @@
 /*  Separator Widget  */
 #ifndef _XmSeparator_h
 #define _XmSeparator_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #ifndef XmIsSeparator
 #define XmIsSeparator(w) XtIsSubclass(w, xmSeparatorWidgetClass)
 #endif /* XmIsSeparator */
-
 externalref WidgetClass xmSeparatorWidgetClass;
-
 typedef struct _XmSeparatorClassRec * XmSeparatorWidgetClass;
 typedef struct _XmSeparatorRec      * XmSeparatorWidget;
-
-
 /********    Public Function Declarations    ********/
-
 Widget XmCreateSeparator(
                         Widget parent,
                         char *name,
@@ -56,11 +48,8 @@ Widget XmVaCreateManagedSeparator(
                         char *name,
                         ...);
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmSeparator_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -22,19 +22,13 @@
 */
 #ifndef _XmTransltnsP_h
 #define _XmTransltnsP_h
-
 #include <X11/Intrinsic.h>	/* for externalref */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 #ifndef _XmConst
 #define _XmConst
 #endif
-
-
 externalref _XmConst char _XmArrowB_defaultTranslations[];
 externalref _XmConst char _XmBulletinB_defaultTranslations[];
 externalref _XmConst char _XmCascadeB_menubar_events[];
@@ -94,7 +88,6 @@ externalref _XmConst char _XmTextIn_XmTextVEventBindings[];
 externalref _XmConst char _XmToggleB_defaultTranslations[];
 externalref _XmConst char _XmToggleB_menuTranslations[];
 externalref _XmConst char _XmVirtKeys_fallbackBindingString[];
-
 /*
  * The following keybindings have been "grandfathered"
  * for backward compatablility.
@@ -114,10 +107,8 @@ externalref _XmConst char _XmVirtKeys_siemensWx200FallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_siemens9733FallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_sunFallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_tekFallbackBindingString[];
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmTransltnsP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -22,25 +22,17 @@
 */
 #ifndef _XmRowColumn_h
 #define _XmRowColumn_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref WidgetClass xmRowColumnWidgetClass;
-
 typedef struct _XmRowColumnClassRec * XmRowColumnWidgetClass;
 typedef struct _XmRowColumnRec      * XmRowColumnWidget;
-
 #ifndef XmIsRowColumn
 #define XmIsRowColumn(w) XtIsSubclass((w),xmRowColumnWidgetClass)
 #endif
-
-
 /********    Public Function Declarations    ********/
-
 extern void XmMenuPosition(
                         Widget p,
                         XButtonPressedEvent *event) ;
@@ -87,7 +79,6 @@ extern Widget XmGetPostedFromWidget(
                         Widget menu) ;
 extern Widget XmGetTearOffControl(
 			Widget menu) ;
-
 extern void XmAddToPostFromList(
 			Widget m,
 			Widget widget );
@@ -97,7 +88,6 @@ extern void XmRemoveFromPostFromList(
 /*
  * Variable argument list functions
  */
-
 extern Widget XmVaCreateRowColumn(
                         Widget parent,
                         char *name,
@@ -106,13 +96,9 @@ extern Widget XmVaCreateManagedRowColumn(
                         Widget parent,
                         char *name,
                         ...);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmRowColumn_h  */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -22,28 +22,20 @@
 */
 #ifndef _XmList_h
 #define _XmList_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref WidgetClass xmListWidgetClass;
-
 #define XmINITIAL 	0
 #define XmADDITION	1
 #define XmMODIFICATION	2
-
 #ifndef XmIsList
 #define XmIsList(w)	XtIsSubclass(w, xmListWidgetClass)
 #endif /* XmIsList */
-
 typedef struct _XmListClassRec * XmListWidgetClass;
 typedef struct _XmListRec      * XmListWidget;
-
 /********    Public Function Declarations    ********/
-
 extern void XmListAddItem(
                         Widget w,
                         XmString item,
@@ -190,18 +182,13 @@ extern Widget XmVaCreateManagedList(
                         Widget parent,
                         char *name,
                         ...);
-
 XM_ALTERNATIVE(Use XtGetValues for XmNselectedPositions and XmNselectedPositionCount instead)
 extern Boolean XmListGetSelectedPos(
                         Widget w,
                         int **pos_list,
                         int *pos_count);
-
 /********    End Public Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmList_h */

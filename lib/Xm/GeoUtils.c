@@ -25,18 +25,14 @@
 static char rcsid[] = "$XConsortium: GeoUtils.c /main/13 1996/08/15 17:11:25 pascale $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include <stdlib.h>
 #include "XmI.h"
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
-
 /********    Static Function Declarations    ********/
-
 static XtGeometryResult QueryAnyPolicy(
                         XmGeoMatrix geoSpec,
                         XtWidgetGeometry *parentRequestRtn) ;
@@ -112,21 +108,13 @@ static Position _XmGeoArrangeList(
                         Dimension width,
                         Dimension marginW,
                         Dimension marginH) ;
-
 /********    End Static Function Declarations    ********/
-
 /****************************************************************/
-
-
 #ifdef DEBUG_GEOUTILS
-
 void PrintBox( char * hdr, XmKidGeometry box) ;
 void PrintList( char * hdr, XmKidGeometry listPtr) ;
 void PrintMatrix( char * hdr, XmGeoMatrix spec) ;
-
 #endif /* DEBUG_GEOUTILS */
-
-
 /****************************************************************/
 XtGeometryResult
 _XmHandleQueryGeometry(
@@ -139,7 +127,6 @@ _XmHandleQueryGeometry(
     Dimension       width = 0 ;
     Dimension       height = 0 ;
     XmGeoMatrix     geoSpec ;
-
     /* first determine what is the desired size, using the resize_policy. */
     if (resize_policy == XmRESIZE_NONE) {
 	desired->width = XtWidth(widget) ;
@@ -147,7 +134,6 @@ _XmHandleQueryGeometry(
     } else {
 	if (GMode( intended) & CWWidth) width = intended->width;
 	if (GMode( intended) & CWHeight) height = intended->height;
-
 	geoSpec = (*createMatrix)( widget, NULL, NULL) ;
 	_XmGeoMatrixGet( geoSpec, XmGET_PREFERRED_SIZE) ;
 	_XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0,
@@ -163,17 +149,13 @@ _XmHandleQueryGeometry(
 	    desired->height = height ;
 	}
     }
-
     /* deal with user initial size setting */
     if (!XtIsRealized(widget))  {
 	if (XtWidth(widget) != 0) desired->width = XtWidth(widget) ;
 	if (XtHeight(widget) != 0) desired->height = XtHeight(widget) ;
     }
-
     return XmeReplyToQueryGeometry(widget, intended, desired) ;
 }
-
-
 /****************************************************************/
 XtGeometryResult
 _XmHandleGeometryManager(
@@ -190,7 +172,6 @@ _XmHandleGeometryManager(
             XtGeometryResult queryResult ;
             XtGeometryResult result ;
 /****************/
-
     if(    !cachePtr    )
     {
         /* Almost replies are not entertained unless caching is supported.
@@ -199,7 +180,6 @@ _XmHandleGeometryManager(
         }
     else
     {   geoSpec = *cachePtr ;
-
         if(    geoSpec    )
         {
             if(    (geoSpec->composite == wid)
@@ -220,15 +200,12 @@ _XmHandleGeometryManager(
                     if(    geoSpec->parent_request.request_mode    )
                     {
                         geoSpec->parent_request.request_mode &= ~XtCWQueryOnly ;
-
                         XtMakeGeometryRequest( wid, &geoSpec->parent_request,
                                                                             NULL) ;
                         }
                     _XmGeoMatrixSet( geoSpec) ;
-
                     _XmGeoMatrixFree( geoSpec) ;
                     *cachePtr = NULL ;
-
                     return( XtGeometryYes) ;
                     }
                 }
@@ -244,14 +221,12 @@ _XmHandleGeometryManager(
     /*	Get box list and arrange boxes according to policy.
     */
     geoSpec = (*createMatrix)( wid, instigator, desired) ;
-
     if(    geoSpec->no_geo_request
         && (*geoSpec->no_geo_request)( geoSpec)    )
     {
         _XmGeoMatrixFree( geoSpec) ;
         return( XtGeometryNo) ;
         }
-
     /* The following Query routines only respond with XtGeometryYes or
     *    XtGeometryNo.  All requests made to the parent are strictly
     *    queries.
@@ -288,7 +263,6 @@ _XmHandleGeometryManager(
             }
         }
     result = XtGeometryNo ; /* Setup default response. */
-
     /* If parent replies XtGeometryYes, then build appropriate reply for
     *   instigator.  Otherwise, it is not reasonable to try to find a child
     *   size which would result in an acceptable overall size, so just say no.
@@ -315,11 +289,9 @@ _XmHandleGeometryManager(
                     *   always be honored.
                     */
                     parentRequest.request_mode &= ~XtCWQueryOnly ;
-
                     XtMakeGeometryRequest( wid, &parentRequest, NULL) ;
                     }
                 _XmGeoMatrixSet( geoSpec) ;
-
                 result = XtGeometryYes ;
                 }
             }
@@ -372,7 +344,6 @@ _XmHandleGeometryManager(
         }
     return( result) ;
     }
-
 /****************************************************************
  * Handle geometry request for XmRESIZE_ANY resize policy.
  * Accept request allowed by parent.
@@ -393,11 +364,8 @@ QueryAnyPolicy(
             Dimension       almostW ;
             Dimension       almostH ;
 /****************/
-
     wid = geoSpec->composite ;
-
     _XmGeoMatrixGet( geoSpec, XmGET_PREFERRED_SIZE) ;
-
     layoutW = 0 ;
     layoutH = 0 ;
     _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0, &layoutW,
@@ -407,7 +375,6 @@ QueryAnyPolicy(
     parentRequestRtn->request_mode = CWWidth | CWHeight ;
     parentRequestRtn->width = layoutW ;
     parentRequestRtn->height = layoutH ;
-
     /*	Query parent only if necessary.
     */
     if(    (layoutW == XtWidth( wid))
@@ -418,7 +385,6 @@ QueryAnyPolicy(
         }
     else
     {   parentRequestRtn->request_mode |= XtCWQueryOnly ;
-
         queryResult = XtMakeGeometryRequest( wid, parentRequestRtn,
                                                              &parentResponse) ;
         if(    queryResult == XtGeometryAlmost    )
@@ -434,10 +400,8 @@ QueryAnyPolicy(
                 */
                 *parentRequestRtn = parentResponse ;
                 queryResult = XtGeometryYes ;
-
                 almostW = parentResponse.width ;
                 almostH = parentResponse.height ;
-
                 if(    (almostW != layoutW)  ||  (almostH != layoutH)    )
                 {
                     /* Response to geometry request was different than
@@ -463,7 +427,6 @@ QueryAnyPolicy(
         }
     return( queryResult) ;
     }
-
 /****************************************************************
  * Handle geometry request for XmRESIZE_GROW resize policy.
  * Accept request which would increase or maintain current size.
@@ -484,11 +447,8 @@ QueryGrowPolicy(
             Dimension       almostW ;
             Dimension       almostH ;
 /****************/
-
     wid = geoSpec->composite ;
-
     _XmGeoMatrixGet( geoSpec, XmGET_PREFERRED_SIZE) ;
-
     if(    geoSpec->instig_request.request_mode & CWWidth    )
     {   layoutW = 0 ;               /* Let the layout routine choose a width.*/
         }
@@ -496,7 +456,6 @@ QueryGrowPolicy(
     {   layoutW = XtWidth( wid) ;   /* All changes will be reflected in      */
         }                           /*   vertical dimension.                 */
     layoutH = XtHeight( wid) ;  /* Layout routine will grow vert., if needed.*/
-
     _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0, &layoutW,
                                                                     &layoutH) ;
     if(    layoutW < XtWidth( wid)    )
@@ -504,7 +463,6 @@ QueryGrowPolicy(
         /* Try again, this time passing the width to _XmGeoArrangeBoxes.
         */
         _XmGeoMatrixGet( geoSpec, XmGET_PREFERRED_SIZE) ;
-
         layoutW = XtWidth( wid) ;
         layoutH = XtHeight( wid) ;
         _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0, &layoutW,
@@ -515,7 +473,6 @@ QueryGrowPolicy(
     parentRequestRtn->request_mode = CWWidth | CWHeight ;
     parentRequestRtn->width = layoutW ;
     parentRequestRtn->height = layoutH ;
-
     /*	Query parent only if necessary.
     */
     if(    (layoutW == XtWidth( wid))
@@ -526,7 +483,6 @@ QueryGrowPolicy(
         }
     else
     {   parentRequestRtn->request_mode |= XtCWQueryOnly ;
-
         queryResult = XtMakeGeometryRequest( wid, parentRequestRtn,
                                                              &parentResponse) ;
         if(    queryResult == XtGeometryAlmost    )
@@ -542,10 +498,8 @@ QueryGrowPolicy(
                 */
                 *parentRequestRtn = parentResponse ;
                 queryResult = XtGeometryYes ;
-
                 almostW = parentResponse.width ;
                 almostH = parentResponse.height ;
-
                 if(    (almostW < XtWidth( wid))
                     || (almostH < XtHeight( wid))    )
                 {
@@ -595,24 +549,18 @@ QueryNonePolicy(
             Dimension       layoutW ;
             Dimension       layoutH ;
 /****************/
-
     wid = geoSpec->composite ;
-
     _XmGeoMatrixGet( geoSpec, XmGET_PREFERRED_SIZE) ;
-
     layoutW = XtWidth( wid) ;
     layoutH = XtHeight( wid) ;
     _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0,
                                                           &layoutW, &layoutH) ;
     parentRequestRtn->request_mode = 0 ;
-
     if(    (layoutW != XtWidth( wid))  ||  (layoutH != XtHeight( wid))    )
     {   return( XtGeometryNo) ;
         }
-
     return( XtGeometryYes) ;
     }
-
 /****************************************************************/
 void
 _XmHandleSizeUpdate(
@@ -627,11 +575,8 @@ _XmHandleSizeUpdate(
             Dimension       r_h ;
             XtGeometryResult parentResult = XtGeometryNo ;
 /****************/
-
     geoSpec = (*createMatrix)( wid, NULL, NULL) ;
-
     _XmGeoMatrixGet( geoSpec, XmGET_PREFERRED_SIZE) ;
-
     switch(    policy    )
     {
         case XmRESIZE_NONE:
@@ -639,7 +584,6 @@ _XmHandleSizeUpdate(
             w = XtWidth( wid) ;
             h = XtHeight( wid) ;
             _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0, &w, &h) ;
-
             break ;
             }
         case XmRESIZE_GROW:
@@ -647,7 +591,6 @@ _XmHandleSizeUpdate(
             w = 0 ;
             h = XtHeight( wid) ;
             _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0, &w, &h) ;
-
             if(    w < XtWidth( wid)    )
             {   w = XtWidth( wid) ;
                 h = XtHeight( wid) ;
@@ -662,11 +605,9 @@ _XmHandleSizeUpdate(
             w = 0 ;
             h = 0 ;
             _XmGeoArrangeBoxes( geoSpec, (Position) 0, (Position) 0, &w, &h) ;
-
             break ;
             }
         }
-
     if(    ((w == XtWidth( wid))  &&  (h == XtHeight( wid)))    )
     {   parentResult = XtGeometryYes ;
         }
@@ -674,7 +615,6 @@ _XmHandleSizeUpdate(
     {   if(    policy != XmRESIZE_NONE    )
         {
             parentResult = XtMakeResizeRequest( wid, w, h, &r_w, &r_h) ;
-
             if(    parentResult == XtGeometryAlmost    )
             {
                 if(    (policy == XmRESIZE_GROW)
@@ -704,7 +644,6 @@ _XmHandleSizeUpdate(
     _XmGeoMatrixFree( geoSpec) ;
     return ;
     }
-
 /****************************************************************
  * This routine allocates and initializes the data structure used
  *   to describe a matrix of geometry boxes.  Supplemental initialization
@@ -732,7 +671,6 @@ _XmGeoMatrixAlloc(
             unsigned int    boxesSize ;
             unsigned int    totalSize ;
 /****************/
-
     /* Get sizes of the various components of the GeoMatrix.  Round up to
     *   prevent alignment problems.
     */
@@ -753,9 +691,7 @@ _XmGeoMatrixAlloc(
     */
     boxesSize = (numBoxes + numRows) * kidGeoRecSize ;
     totalSize = matrixRecSize + layoutSize + boxesSize + extSize ;
-
     geoSpecPtr = (XmGeoMatrix) XtCalloc( 1, totalSize) ;   /* Must be zeroed.*/
-
     /* Set locations of arrays of row layout, box, and extension records.
     */
     geoSpecPtr->layouts = (XmGeoMajorLayout) (((char *) geoSpecPtr)
@@ -778,7 +714,6 @@ _XmGeoMatrixFree(
     }
   XtFree( (char *) geo_spec) ;
 }
-
 /****************************************************************
  * If the widget specified by the "kidWid" parameter is non-NULL and is managed,
  *   its value is copied into the appropriate field of the kid geometry
@@ -797,14 +732,12 @@ _XmGeoSetupKid(
     /* The widget ID will be used for subsequent "get" operation.
     */
     geo->kid = (Widget) kidWid;
-
     /* Return TRUE so the user knows that the box record was filled with
     *   a widget ID and can then increment the box pointer for the next
     *   managed widget to be setup.
     */
     return( TRUE) ;
     }
-
 /****************************************************************
  * This routine goes through the widget matrix and retrieves the appropriate
  *   values for the KidGeometry boxes.  Field values of the boxes may be
@@ -825,12 +758,10 @@ _XmGeoMatrixGet(
             XtWidgetGeometry * request ;
             Widget          instigator ;
 /****************/
-
     request = &geoSpec->instig_request ;
     instigator = geoSpec->instigator ;
     rowPtr = geoSpec->boxes ;
     layoutPtr = &(geoSpec->layouts->row) ;
-
     while(    !(layoutPtr->end)    )
     {
         boxPtr = rowPtr ;
@@ -856,7 +787,6 @@ _XmGeoMatrixGet(
 #endif
     return ;
     }
-
 /****************************************************************
  * The XtConfigureWidget routine is called on all widgets of the geoSpec
  *   matrix as needed (when the geometry values of the box have changed).
@@ -874,11 +804,9 @@ _XmGeoMatrixSet(
     register XmGeoRowLayout  layoutPtr ;
             Boolean         fixUps = FALSE ;
 /****************/
-
 #ifdef DEBUG_GEOUTILS
     PrintMatrix( "(set) ", geoSpec) ;
 #endif
-
     /* Give the user a chance to avoid setting the widgets to box values.
     */
     if(    !geoSpec->set_except  ||  !(*geoSpec->set_except)( geoSpec)    )
@@ -908,7 +836,6 @@ _XmGeoMatrixSet(
         while(    !(layoutPtr->end)    )
         {
             _XmSetKidGeo( rowPtr, geoSpec->instigator) ;
-
             rowPtr += layoutPtr->box_count + 1 ;         /* Skip to next row.*/
             ++layoutPtr ;
             }
@@ -934,7 +861,6 @@ _XmGeoMatrixSet(
         }
     return ;
     }
-
 /****************************************************************
  * This routine adjusts boxes according to policies regarding border size
  *   and even-sized boxes.  Box dimensions are altered appropriately if
@@ -952,13 +878,10 @@ _XmGeoAdjustBoxes(
             Dimension       globalBorder ;
             Dimension       borderValue ;
 /****************/
-
     globalSetBorder = geoSpec->uniform_border ;
     globalBorder = geoSpec->border ;
-
     rowPtr = geoSpec->boxes ;
     layoutPtr = &(geoSpec->layouts->row) ;
-
     while(    !(layoutPtr->end)    )
     {
         if(    layoutPtr->even_width    )
@@ -986,7 +909,6 @@ _XmGeoAdjustBoxes(
         }
     return ;
     }
-
 /****************************************************************
  * This routine traverses the matrix and collects data regarding the
  *   sizes of boxes, the minimum fill area expected, and various other
@@ -1010,7 +932,6 @@ _XmGeoGetDimensions(
             Dimension       marginW ;
             Dimension       marginH ;
 /****************/
-
     marginH = geoSpec->margin_h ;
     marginW = geoSpec->margin_w ;
     rowPtr = geoSpec->boxes ;
@@ -1046,7 +967,6 @@ _XmGeoGetDimensions(
         layoutPtr->max_box_height = rowH ;/* Tallest box in row, with border.*/
         layoutPtr->boxes_width = rowW ; /* Sum of box widths and borders.*/
         layoutPtr->box_count = numBoxes ;
-
         /* Check for vertical stetch row.
         */
         if(    layoutPtr->stretch_height    )
@@ -1096,7 +1016,6 @@ _XmGeoGetDimensions(
     geoSpec->boxes_minor = matrixBoxesH ;  /* Sum of tallest box in each row.*/
     geoSpec->fill_minor = matrixFillH ;    /* Sum of vertical fill spacing.  */
     }
-
 /****************************************************************
  * After the boxes have been layed-out according to the minimum vertical fill
  *   requirements of the matrix, this routine stretches the layout to fill
@@ -1116,7 +1035,6 @@ _XmGeoStretchVertical(
             int             deltaY ;
             int             deltaH ;
 /****************/
-
     layoutPtr = &(geoSpec->layouts->row) ;
     stretchableSpace = 0 ;
     fillOffset = ((int) desiredH) - ((int) actualH) ;
@@ -1203,7 +1121,6 @@ _XmGeoStretchVertical(
         }
     return( actualH + deltaY) ;                    /* Return new height.*/
     }
-
 /****************************************************************
  * After the boxes have been layed-out according to the minimum vertical fill
  *   requirements of the matrix, this routine stretches the layout to fill
@@ -1229,7 +1146,6 @@ _XmGeoFillVertical(
             Dimension       newLastSpace ;
             int             deltaY ;
 /****************/
-
     /* Need to accumulate specified spacing factors, saving first and last
     *   ends separately.
     */
@@ -1254,7 +1170,6 @@ _XmGeoFillVertical(
     marginH = geoSpec->margin_h ;
     currentFirstSpace = (firstSpecSpace < marginH) ? marginH : firstSpecSpace ;
     currentLastSpace  = (lastSpecSpace < marginH) ? marginH : lastSpecSpace ;
-
     /* Fill amount includes the current fill plus margins and extra
     *   spacing.
     */
@@ -1295,10 +1210,8 @@ _XmGeoFillVertical(
                     * fillAmount) / totalSpecSpace) - layoutPtr->space_above) ;
         }
     deltaY += newLastSpace - currentLastSpace ;
-
     return( actualH + deltaY) ;                    /* Return new height.*/
     }
-
 /****************************************************************
  * Calculates and returns appropriate fill factor from given layout
  *   parameters.  Also returns appropriate spacing for ends.
@@ -1317,7 +1230,6 @@ _XmGeoCalcFill(
 {
             Dimension       totalSpecSpace ;/* Sum of specified spacing.*/
 /****************/
-
     if(    !endSpec    )
     {   if(    numBoxes == 1    )
         {   endSpec = 1 ;
@@ -1330,7 +1242,6 @@ _XmGeoCalcFill(
         }
     totalSpecSpace = (betweenSpec * (numBoxes - 1)) + (endSpec << 1) ;
     *pEndSpace = (endSpec * fillSpace) / totalSpecSpace ;
-
     if(    *pEndSpace < margin    )
     {
         if(    (endSpec << 1) < totalSpecSpace    )
@@ -1350,7 +1261,6 @@ _XmGeoCalcFill(
     *pBetweenSpace = (betweenSpec * fillSpace) / totalSpecSpace ;
     return ;
     }
-
 /****************************************************************
  * The x, y, width, and height fields of the boxes in the geoSpec matrix
  *   are modified with values appropriate for the layout parameters specified
@@ -1377,7 +1287,6 @@ _XmGeoArrangeBoxes(
             Dimension       actualH ;
             Dimension       initY ;
 /****************/
-
     if(    geoSpec->arrange_boxes
        &&  (geoSpec->arrange_boxes != _XmGeoArrangeBoxes)    )
       {
@@ -1388,37 +1297,30 @@ _XmGeoArrangeBoxes(
     *   specifications.
     */
     _XmGeoAdjustBoxes( geoSpec) ;
-
     /* Compute layout dimensions.
     */
     _XmGeoGetDimensions( geoSpec) ;
-
     /* Initialize global layout dimensions.
     */
     marginW = geoSpec->margin_w ;
     marginH = geoSpec->margin_h ;
     actualW = geoSpec->max_major + (marginW << 1) ;
-
 /****** the value of this assignment is never used **********
     actualH = geoSpec->boxes_minor + geoSpec->fill_minor + (marginH << 1) ;
 *************************************************************/
-
     /* Adjust layout dimensions to requested dimensions.
     */
     if(    *pW    )
     {   actualW = *pW ;
         }
-
 /******* the value assigned to actualH is never used *************
     if(    *pH    )
     {   actualH = *pH ;
         }
 ******************************************************************/
-
     /* Save initial Y coordinate for later computation of height.
     */
     initY = y ;
-
     /* Layout horizontal position of each box in row, one row at a time.
     */
     layoutPtr = &(geoSpec->layouts->row) ;
@@ -1439,7 +1341,6 @@ _XmGeoArrangeBoxes(
                                                             marginW, marginH) ;
         rowPtr += layoutPtr->box_count + 1 ;             /* Skip to next row.*/
         ++layoutPtr ;
-
         /* Add between-row spacing.
         */
         y += layoutPtr->space_above ;
@@ -1477,7 +1378,6 @@ _XmGeoArrangeBoxes(
         }
     return ;
     }
-
 /****************************************************************/
 static int
 boxWidthCompare(
@@ -1485,7 +1385,6 @@ boxWidthCompare(
         XmConst void * boxPtr2 )
 {
 /****************/
-
     return( (*((XmKidGeometry *) boxPtr1))->box.width
                                  > (*((XmKidGeometry *) boxPtr2))->box.width) ;
     }
@@ -1508,7 +1407,6 @@ FitBoxesAveraging(
             unsigned int    Index ;
             XmKidGeometry * sortedBoxes ;
 /****************/
-
     /* Get memory to use for sorting the list of boxes.
     */
     sortedBoxes = (XmKidGeometry *) XtMalloc( numBoxes
@@ -1549,7 +1447,6 @@ FitBoxesAveraging(
         if(    (int) boxWidth > amtOffset    )
         {
             boxWidth = (boxWidth - amtOffset) / (numBoxes - Index) ;
-
             if(    !boxWidth    )
             {   boxWidth = 1 ;
                 }
@@ -1566,10 +1463,8 @@ FitBoxesAveraging(
             }
         }
     XtFree( (char *) sortedBoxes) ;
-
     return ;
     }
-
 /****************************************************************
  * This routine alters the width of boxes in proportion to the width of each
  *   box such that the total change is equal to amtOffset.  If amtOffset is
@@ -1586,8 +1481,6 @@ FitBoxesProportional(
             int             deltaX ;
             int             deltaW ;
 /****************/
-
-
     if(    boxWidth >= numBoxes    )
     {
         deltaX = 0 ;
@@ -1623,11 +1516,9 @@ FitBoxesProportional(
             deltaX += boxWidth ;
             ++rowPtr ;
             }
-
         }
     return ;
     }
-
 /****************************************************************/
 static void
 SegmentFill(
@@ -1651,10 +1542,8 @@ SegmentFill(
             Position        rowX ;
             XmKidGeometry   rowPtr ;
 /****************/
-
     holdEnd = rowBoxes[numBoxes].kid ;
     rowBoxes[numBoxes].kid = NULL ;
-
     spacedWidth = (betweenSpace * (numBoxes - 1)) + (endSpace << 1) ;
     amtOffset = ((int) spacedWidth + (maxX - endX)) ;
     if(    (amtOffset > 0)  &&  (amtOffset < width)    )
@@ -1664,7 +1553,6 @@ SegmentFill(
     {   boxWidth = 1 ;
         }
     sumW = boxWidth + spacedWidth ;
-
     amtOffset = ((int) sumW) - ((int) width) ;
     /* Setup the default spacing.
     */
@@ -1715,7 +1603,6 @@ SegmentFill(
     rowBoxes[numBoxes].kid = holdEnd ;
     return ;
     }
-
 /****************************************************************
  * This routine lays out the row of boxes with the spacing specified in
  *   the endSpace and betweenSpace parameters.  If the width of a row
@@ -1746,7 +1633,6 @@ _XmGeoLayoutWrap(
     register XmKidGeometry  boxPtr ;
             Position        endX ;
 /****************/
-
     rowX = x + endSpace ;
     rowH = layoutPtr->max_box_height ;
     numBoxes = 0 ;
@@ -1754,7 +1640,6 @@ _XmGeoLayoutWrap(
     boxPtr = rowPtr ;
     while(    boxPtr->kid    )
     {   boxMaxX = rowX + boxPtr->box.width + (boxPtr->box.border_width << 1) ;
-
         if(    (boxMaxX > maxX)  &&  numBoxes    )
         {   /* Wrap the line.  Also adjust preceding segment according to
             *   fill policy.
@@ -1830,7 +1715,6 @@ _XmGeoLayoutSimple(
             Dimension       rowH ;
             Dimension       boxH ;
 /****************/
-
     rowH = layoutPtr->max_box_height ;
     rowX = x + endSpace ;
     while(    rowPtr->kid    )
@@ -1858,8 +1742,6 @@ _XmGeoLayoutSimple(
         }
     return( y + rowH) ;
     }
-
-
 /****************************************************************
  * This routines lays out the boxes in this row according to the specified
  *   paramaters and the policies specified in the layout record at layoutPtr.
@@ -1883,7 +1765,6 @@ _XmGeoArrangeList(
             Position        maxX ;
             Dimension       totalFill ;
 /****************/
-
     numBoxes = layoutPtr->box_count ;
     boxWidth = layoutPtr->boxes_width ;
     sumW = boxWidth + layoutPtr->fill_width + (marginW << 1) ;
@@ -1894,7 +1775,6 @@ _XmGeoArrangeList(
     endsOfBoxes = (layoutPtr->space_end < marginW)
                                              ? marginW : layoutPtr->space_end ;
     maxX = x + width - marginW ;
-
     if(    (sumW > width)  &&  (layoutPtr->fit_mode == XmGEO_WRAP)    )
     {   /* Wrapping is required, so fill routines and other policy decisions
         *   are not needed.  Do the layout using the wrap routine and we're
@@ -1956,7 +1836,6 @@ _XmGeoArrangeList(
         }
     return( y) ;
     }
-
 /****************************************************************
  * Changes boxes in the kid geometry list to have desired width.
  * If width > 1, then use the specified width.
@@ -1973,9 +1852,7 @@ _XmGeoBoxesSameWidth(
     register XmKidGeometry   boxPtr ;
     register Dimension       useW ;
 /****************/
-
     useW = width ;  /* Setup default width of each box in row, as specified.*/
-
     if(    width <= 1    )
     {
         /* If user specified width parameter of zero or one, then find the
@@ -2015,9 +1892,7 @@ _XmGeoBoxesSameHeight(
     register XmKidGeometry   boxPtr ;
     register Dimension       useH ;
 /****************/
-
     useH = height ; /* Setup default height of each box in row, as specified.*/
-
     if(    height <= 1    )
     {
         /* If user specified height parameter of zero or one, then find the
@@ -2041,7 +1916,6 @@ _XmGeoBoxesSameHeight(
         }
     return( useH) ;
     }
-
 /****************************************************************
  * This routine is a fixup routine which can be used for rows which consist
  *   of a single separator widget.  The effect of this routine is to have
@@ -2057,10 +1931,8 @@ _XmSeparatorFix(
     register Dimension       marginW ;
     register Dimension       twoMarginW ;
 /****************/
-
     marginW = geoSpec->margin_w ;
     twoMarginW = (marginW << 1) ;
-
     switch(    action    )
     {
         case XmGEO_PRE_SET:
@@ -2089,8 +1961,6 @@ _XmSeparatorFix(
         }
     return ;
     }
-
-
 /****************************************************************
  * This routine is a fixup routine which can be used for rows which consist
  *   of a single MenuBar RowColumn.  The effect of this routine is to have
@@ -2107,11 +1977,9 @@ _XmMenuBarFix(
     register Dimension       marginH ;
     register Dimension       twoMarginW ;
 /****************/
-
     marginW = geoSpec->margin_w ;
     twoMarginW = (marginW << 1) ;
     marginH = geoSpec->margin_h ;
-
     switch(    action    )
     {
         case XmGEO_PRE_SET:
@@ -2141,7 +2009,6 @@ _XmMenuBarFix(
         }
     return ;
     }
-
 /****************************************************************/
 void
 _XmGeoLoadValues(
@@ -2154,7 +2021,6 @@ _XmGeoLoadValues(
             XtWidgetGeometry reply ;
             XtWidgetGeometry * geoSource ;
 /****************/
-
     if(    wid == instigator    )
     {   /* If this widget is making the request, then use the request info.
         */
@@ -2162,7 +2028,6 @@ _XmGeoLoadValues(
         }
     else
     {   geoSource = &reply ;
-
         switch(    geoType    )
         {
             case XmGET_PREFERRED_SIZE:
@@ -2186,7 +2051,6 @@ _XmGeoLoadValues(
     geoResult->request_mode = CWX | CWY | CWWidth | CWHeight | CWBorderWidth ;
     return ;
     }
-
 /****************************************************************
  * Get a count of the managed kids of a parent, it is assumed that all
  *   gadgets are always managed
@@ -2197,7 +2061,6 @@ _XmGeoCount_kids(
 {
     register int i, n = 0 ;
 /****************/
-
     for(    i = 0 ; i < c->composite.num_children ; i++    )
     {
         if(    c->composite.children[i]->core.managed    )
@@ -2206,7 +2069,6 @@ _XmGeoCount_kids(
         }
     return( n) ;
     }
-
 /****************************************************************
  * Assemble a kid box for each child widget and gadget, fill in data about
  *   each widget and optionally set up uniform border widths.
@@ -2232,7 +2094,6 @@ _XmGetKidGeo(
             int             j = 0 ;
             Boolean         helpFound = FALSE ;
 /****************/
-
     geo = (XmKidGeometry) XtMalloc(
                             (_XmGeoCount_kids (c) + 1) * sizeof (XmKidGeometryRec)) ;
     /* load all managed kids */
@@ -2246,7 +2107,6 @@ _XmGetKidGeo(
                 }
             else
             {   geo[j].kid = kidWid ;
-
                 _XmGeoLoadValues( kidWid, geo_type, instigator, request,
                                                                &(geo[j].box)) ;
                 if(    uniform_border    )     /* if asked override border */
@@ -2259,19 +2119,15 @@ _XmGetKidGeo(
     if(    helpFound    )                 /* put help guy into list */
     {
         geo[j].kid = help ;
-
         _XmGeoLoadValues( help, geo_type, instigator, request, &(geo[j].box)) ;
-
         if(    uniform_border    )         /* if asked override border */
         {   geo[j].box.border_width = border ;
             }
         j++ ;
         }
     geo[j].kid = NULL ;                /* signal end of list */
-
     return( geo) ;
     }
-
 /****************************************************************/
 void
 _XmGeoClearRectObjAreas(
@@ -2281,18 +2137,15 @@ _XmGeoClearRectObjAreas(
             Widget          parent = XtParent( r) ;
             int             bw2 ;
 /****************/
-
     bw2 = old->border_width << 1;
     XClearArea( XtDisplay( parent), XtWindow( parent), old->x, old->y,
                                    old->width + bw2, old->height + bw2, TRUE) ;
-
     bw2 = r->rectangle.border_width << 1;
     XClearArea( XtDisplay( parent), XtWindow( parent), (int) r->rectangle.x,
                (int) r->rectangle.y, (unsigned int) (r->rectangle.width + bw2),
                             (unsigned int) (r->rectangle.height + bw2), TRUE) ;
     return ;
     }
-
 /****************************************************************
  * Take the kid geometry array and change each kid to match them.
  *   remember not to do the resize of the instigator.
@@ -2306,11 +2159,9 @@ void _XmSetKidGeo(
     XtWidgetGeometry * b ;
     int             i ;
 /****************/
-
     for(    i=0 ; kg[i].kid != NULL ; i++    )  {
         w = (Widget) kg[i].kid ;
         b = &(kg[i].box) ;
-
         if(    w != instigator    ) {
 	    XmeConfigureObject( w, b->x, b->y,
 			       b->width, b->height, b->border_width) ;
@@ -2324,7 +2175,6 @@ void _XmSetKidGeo(
     }
     return ;
 }
-
 /****************************************************************
  * Returns TRUE if all specified geometries of geoA are equal to either the
  *   specified geometries of geoB or to the geometry of the widget, and
@@ -2340,7 +2190,6 @@ _XmGeometryEqual(
     if(!geoA){ /* For fixing OSF CR 5956 */
          return(False);
     }
-
     if(    IsWidth( geoA)  ||  IsWidth( geoB)    )
     {
         if(    IsWidth( geoA)  &&  IsWidth( geoB)    )
@@ -2453,7 +2302,6 @@ _XmGeometryEqual(
         }
     return( TRUE) ;
     }
-
 /****************************************************************
  * Returns TRUE if all specified geometries of "desired" correspond to
  *   specified geometries of "response" and are equal to them.
@@ -2511,7 +2359,6 @@ _XmGeoReplyYes(
         }
     return( TRUE) ;
     }
-
 /****************************************************************
  * This routine calls the geometry manager and accept the almost
  ****************/
@@ -2523,9 +2370,7 @@ _XmMakeGeometryRequest(
   XtWidgetGeometry allowed ;
   XtGeometryResult answer ;
 /****************/
-
   answer = XtMakeGeometryRequest( w, geom, &allowed) ;
-
   /* On an almost, accept the returned value and make
    *   a second request to get an XtGeometryYes returned.
    */
@@ -2540,7 +2385,6 @@ _XmMakeGeometryRequest(
     }
   return answer ;
 }
-
 /****************************************************************/
 #ifdef DEBUG_GEOUTILS
 /****************************************************************/
@@ -2570,7 +2414,6 @@ PrintList(
             int             num ;
             char            subhdr[256] ;
 /****************/
-
     num = 0 ;
     while(    listPtr->kid    )
     {   sprintf( subhdr, "%si: %d ", hdr, num) ;
@@ -2580,7 +2423,6 @@ PrintList(
         }
     return ;
     }
-
 /****************************************************************/
 void
 PrintMatrix(

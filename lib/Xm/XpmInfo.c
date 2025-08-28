@@ -22,7 +22,6 @@
  * used in advertising or otherwise to promote the sale, use or other dealings
  * in this Software without prior written authorization from GROUPE BULL.
  */
-
 /*****************************************************************************\
 *  Info.c:                                                                    *
 *                                                                             *
@@ -31,12 +30,10 @@
 *                                                                             *
 *  Developed by Arnaud Le Hors                                                *
 \*****************************************************************************/
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "XpmI.h"
-
 /*
  * Init returned data to free safely later on
  */
@@ -51,7 +48,6 @@ xpmInitXpmInfo(XpmInfo *info)
 	info->nextensions = 0;
     }
 }
-
 /*
  * Free the XpmInfo data which have been allocated
  */
@@ -81,7 +77,6 @@ XpmFreeXpmInfo(XpmInfo *info)
 	info->valuemask = 0;
     }
 }
-
 /*
  * Set the XpmInfo valuemask to retrieve required info
  */
@@ -96,7 +91,6 @@ xpmSetInfoMask(
     if (attributes->valuemask & XpmReturnExtensions)
 	info->valuemask |= XpmReturnExtensions;
 }
-
 /*
  * Fill in the XpmInfo with the XpmAttributes
  */

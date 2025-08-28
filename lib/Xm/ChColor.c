@@ -25,18 +25,14 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/PrimitiveP.h>
 #include <Xm/GadgetP.h>
 #include "XmI.h"
-
 /*********************************************************************
  *
  *  XmChangeColor - change set of colors for existing widget, given
@@ -47,7 +43,6 @@ void
 XmChangeColor(
 	      Widget w,
 	      Pixel background )
-
 {
   Widget windowed_ancestor = w;
   Pixel foreground_ret;
@@ -57,31 +52,25 @@ XmChangeColor(
   Pixel use_background = background;
   Pixel gadget_background;
   Arg args[5];
-
   /*
    * If the gadget is in BC mode (for colors), it must follow its parent's
    * color scheme.  We therefore ignore the background pixel that was
    * passed in.
    */
-
   _XmWidgetToAppContext(w);
   _XmAppLock(app);
-
   if (XmIsGadget(w))
     {
       Widget parent = XtParent(w);
-
       windowed_ancestor = parent;
       XtSetArg(args[0], XmNbackground, &gadget_background);
       XtGetValues(w,args,1);
       if (gadget_background == parent->core.background_pixel)
 	use_background = parent->core.background_pixel;
     }
-
   XmGetColors(windowed_ancestor->core.screen, windowed_ancestor->core.colormap,
 	      use_background, &foreground_ret, &topshadow_ret,
 	      &bottomshadow_ret, NULL );
-
   if ( (XmIsManager(w)) ||  (XmIsPrimitive(w)) || (XmIsGadget(w)) )
     {
       XtSetArg (args[0], XmNbackground, (XtArgVal) use_background);
@@ -89,9 +78,7 @@ XmChangeColor(
       XtSetArg (args[2], XmNtopShadowColor, (XtArgVal) topshadow_ret);
       XtSetArg (args[3], XmNbottomShadowColor, (XtArgVal) bottomshadow_ret);
       XtSetArg (args[4], XmNhighlightColor, (XtArgVal) foreground_ret);
-
       XtSetValues (w, args, 5);
-
       if (XmIsPrimitive(w) || XmIsGadget(w))
 	{
 	  if ( (XmIsScrollBar(w)) ||
@@ -101,7 +88,6 @@ XmChangeColor(
 	      XmGetColors( windowed_ancestor->core.screen,
 			   windowed_ancestor->core.colormap,
 			   background, NULL, NULL, NULL, &select_ret);
-
 	      if (XmIsToggleButton(w) || XmIsToggleButtonGadget(w))
 	        {
 		  XtSetArg (args[0], XmNselectColor, (XtArgVal) select_ret);

@@ -20,10 +20,8 @@
  * to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
  * Floor, Boston, MA 02110-1301 USA
 */
-
 #include <X11/Intrinsic.h>
 #include <Xm/DrawUtils.h>
-
 #define STATIC_RECTS 20
 /*
  * Function:
@@ -53,7 +51,6 @@ XmDrawBevel(Display *dpy, Drawable d, GC top_gc, GC bottom_gc,
     static int numAlloced = 0;
     XRectangle *rt;
     int        i;
-
     /*
      * First lets see if we can get away with using our list rectangles
      * without allocating any.
@@ -81,7 +78,6 @@ XmDrawBevel(Display *dpy, Drawable d, GC top_gc, GC bottom_gc,
 	}
 	rt = alloced;
     }
-
     /*
      * Now that we have enough rectangles to fill in an area lets
      * set up the rectangles and pass them off to be drawn.  First the
@@ -102,7 +98,6 @@ XmDrawBevel(Display *dpy, Drawable d, GC top_gc, GC bottom_gc,
     {
 	XFillRectangle(dpy, d, top_gc, x, y, size, size);
     }
-
     /*
      * ... And the the bottom half of the beveled corner.
      */

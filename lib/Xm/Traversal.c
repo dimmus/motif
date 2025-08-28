@@ -23,14 +23,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: Traversal.c /main/20 1999/08/17 11:52:26 vipin $"
 #endif
 #endif
-
 #include <Xm/GadgetP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/MenuShellP.h>
@@ -46,10 +43,7 @@ static char rcsid[] = "$TOG: Traversal.c /main/20 1999/08/17 11:52:26 vipin $"
 #include "RepTypeI.h"
 #include "TravActI.h"
 #include "TraversalI.h"
-
-
 /********    Static Function Declarations    ********/
-
 static Widget FindFirstManaged(
                         Widget wid) ;
 static Boolean CallTraverseObsured(
@@ -69,16 +63,12 @@ static Widget RedirectTraversal(Widget		     old_focus,
 				unsigned int	     focus_policy,
 				XmTraversalDirection direction,
 				unsigned int	     pass);
-
 /********    End Static Function Declarations    ********/
-
-
 XmFocusData
 _XmCreateFocusData( void )
 {
   return (XmFocusData) XtCalloc(1, sizeof( XmFocusDataRec)) ;
 }
-
 void
 _XmDestroyFocusData(
         XmFocusData focusData )
@@ -87,7 +77,6 @@ _XmDestroyFocusData(
   XtFree((char *) focusData->trav_graph.excl_tab_list) ;
   XtFree((char *) focusData) ;
 }
-
 void
 _XmSetActiveTabGroup(
         XmFocusData focusData,
@@ -95,14 +84,12 @@ _XmSetActiveTabGroup(
 {
     focusData->active_tab_group = tabGroup;
 }
-
 Widget
 _XmGetActiveItem(
         Widget w )
 {
   return XmGetFocusWidget( w) ;
 }
-
 /*ARGSUSED*/
 void
 _XmNavigInitialize(
@@ -112,11 +99,9 @@ _XmNavigInitialize(
         Cardinal *num_args )	/* unused */
 {
   XmFocusData focusData ;
-
   if(    (focusData = _XmGetFocusData( new_wid)) != NULL    )
     {
       XmNavigationType navType = _XmGetNavigationType( new_wid) ;
-
       if(    navType == XmEXCLUSIVE_TAB_GROUP    )
 	{
 	  ++(focusData->trav_graph.exclusive) ;
@@ -142,7 +127,6 @@ _XmNavigInitialize(
    */
   return ;
 }
-
 /*ARGSUSED*/
 Boolean
 _XmNavigSetValues(
@@ -171,16 +155,13 @@ _XmNavigSetValues(
    *       reset the focus for the hierarchy to the bootstrap
    *       condition).
    */
-
   XmFocusData focusData ;
-
   if(    (focusData = _XmGetFocusData( new_wid)) != NULL    )
     {
       XmTravGraph graph = &(focusData->trav_graph) ;
       XmNavigationType newNavType = _XmGetNavigationType( new_wid) ;
       XmNavigationType curNavType = _XmGetNavigationType( current) ;
       Boolean ChangeInExclusive = FALSE ;
-
       if(    curNavType != newNavType    )
 	{
 	  if(    (curNavType == XmEXCLUSIVE_TAB_GROUP)
@@ -190,7 +171,6 @@ _XmNavigSetValues(
 	       * Update the value of the focus data "exclusive" field.
 	       */
 	      ChangeInExclusive = TRUE ;
-
 	      if(    newNavType == XmEXCLUSIVE_TAB_GROUP    )
 		{
 		  ++(graph->exclusive) ;
@@ -234,7 +214,6 @@ _XmNavigSetValues(
 		{
 		  XmNavigability cur_nav = _XmGetNavigability( current) ;
 		  XmNavigability new_nav = _XmGetNavigability( new_wid) ;
-
 		  if(    !cur_nav  &&  new_nav    )
 		    {
 		      /* Newly navigable widget; add it to the
@@ -257,7 +236,6 @@ _XmNavigSetValues(
 	  if(    !(focusData->focus_item)    )
 	    {
 	      Widget shell ;
-
 	      /* CR 5417: Remove (focusData->focalPoint != XmMySelf) test. */
 	      if(    XmIsTraversable( new_wid)
 		 &&  (shell = _XmFindTopMostShell( new_wid))
@@ -289,7 +267,6 @@ _XmNavigSetValues(
 		      new_focus = new_wid ;
 		    }
 		  _XmMgrTraversal( new_focus, XmTRAVERSE_CURRENT) ;
-
 		  if(    !XtIsSensitive( new_wid)    )
 		    {
 		      /* Since widget has become insensitive, it did not
@@ -305,7 +282,6 @@ _XmNavigSetValues(
     }
   return FALSE ;
 }
-
 void
 XmeNavigChangeManaged(
         Widget wid )
@@ -322,7 +298,6 @@ XmeNavigChangeManaged(
    */
   XmFocusData focus_data ;
   _XmWidgetToAppContext(wid);
-
   _XmAppLock(app);
   if(    XtIsRealized( wid)
      &&  (focus_data = _XmGetFocusData( wid))
@@ -331,7 +306,6 @@ XmeNavigChangeManaged(
       if(    focus_data->focus_item == NULL    )
 	{
 	  Widget firstManaged ;
-
 	  if(    XtIsShell( wid)    )
 	    {
 	      if(    focus_data->first_focus == NULL    )
@@ -375,7 +349,6 @@ XmeNavigChangeManaged(
   _XmAppUnlock(app);
   return ;
 }
-
 static Widget
 FindFirstManaged(
 	Widget wid)
@@ -383,7 +356,6 @@ FindFirstManaged(
   if(    XtIsShell( wid)    )
     {
       unsigned i = 0 ;
-
       while(    i < ((CompositeWidget) wid)->composite.num_children    )
 	{
 	  if(    XtIsManaged( ((CompositeWidget) wid)
@@ -396,7 +368,6 @@ FindFirstManaged(
     }
   return NULL ;
 }
-
 void
 _XmNavigResize(
 	Widget wid)
@@ -410,7 +381,6 @@ _XmNavigResize(
    * of Scrolled Window or by finding an alternative focus widget.
    */
   XmFocusData focus_data ;
-
   if(    XtIsRealized( wid)  &&  !XtIsShell( wid)
      &&  (focus_data = _XmGetFocusData( wid))    )
     {
@@ -429,7 +399,6 @@ _XmNavigResize(
 	       */
 	      Widget parent = XtParent( wid) ;
 	      Widget firstManaged ;
-
 	      if(    parent && XtIsShell( parent)
 		 &&  (firstManaged = FindFirstManaged( parent))    )
 		{
@@ -472,13 +441,11 @@ _XmNavigResize(
 	}
     }
 }
-
 void
 _XmValidateFocus(
         Widget wid )
 {
   XmFocusData focus_data = _XmGetFocusData( wid) ;
-
   if(    focus_data
      &&  (focus_data->focus_policy == XmEXPLICIT)
      &&  (focus_data->focus_item != NULL)
@@ -494,7 +461,6 @@ _XmValidateFocus(
       _XmMgrTraversal( new_focus, XmTRAVERSE_CURRENT) ;
     }
 }
-
 void
 _XmNavigDestroy(
         Widget wid )
@@ -512,12 +478,10 @@ _XmNavigDestroy(
    * data structures.
    */
   XmFocusData focusData = _XmGetFocusData( wid) ;
-
   if(    focusData    )
     {
       XmTravGraph trav_list = &(focusData->trav_graph) ;
       XmNavigationType navType = _XmGetNavigationType( wid) ;
-
       if(    wid == focusData->first_focus    )
 	{
 	  focusData->first_focus = NULL ;
@@ -541,7 +505,6 @@ _XmNavigDestroy(
 	   * focus item field.
 	   */
 	  Widget new_focus ;
-
 	  if(    (focusData->focus_policy != XmEXPLICIT)
 	     ||  (    !(new_focus = _XmTraverseAway( trav_list,
 				       focusData->focus_item,
@@ -571,7 +534,6 @@ _XmNavigDestroy(
     }
   return ;
 }
-
 static Boolean
 CallFocusMoved(Widget		    old,
 	       Widget		    new_wid,
@@ -582,14 +544,11 @@ CallFocusMoved(Widget		    old,
   Widget topShell ;
   XtCallbackList callbacks ;
   Boolean contin = TRUE ;
-
   if (old)
     w = old;
   else /* if (new_wid) -- if there's no w assignment we're in big trouble! */
     w = new_wid;
-
   topShell 	= (Widget) _XmFindTopMostShell(w);
-
   /*
    * make sure it's a shell that has a vendorExt object
    */
@@ -597,16 +556,13 @@ CallFocusMoved(Widget		    old,
     {
       XmWidgetExtData		extData;
       XmVendorShellExtObject	vendorExt;
-
       extData	= _XmGetWidgetExtData(topShell, XmSHELL_EXTENSION);
       if(extData==NULL) return (contin);
-
       if ((vendorExt = (XmVendorShellExtObject) extData->widget) != NULL)
 	{
 	  if ((callbacks = vendorExt->vendor.focus_moved_callback) != NULL)
 	    {
 	      XmFocusMovedCallbackStruct	callData;
-
 	      callData.reason		= XmCR_FOCUS_MOVED;
 	      callData.event		= event;
 	      callData.cont		= True;
@@ -614,7 +570,6 @@ CallFocusMoved(Widget		    old,
 	      callData.new_focus	= new_wid;
 	      callData.focus_policy	= vendorExt->vendor.focus_policy;
 	      callData.direction	= direction;
-
 	      _XmCallCallbackList((Widget) vendorExt, callbacks,
 				  (XtPointer) &callData);
 	      contin = callData.cont ;
@@ -623,7 +578,6 @@ CallFocusMoved(Widget		    old,
     }
   return( contin) ;
 }
-
 Boolean
 _XmCallFocusMoved(
         Widget old,
@@ -632,7 +586,6 @@ _XmCallFocusMoved(
 {
   return CallFocusMoved(old, new_wid, event, XmTRAVERSE_CURRENT);
 }
-
 Boolean
 _XmMgrTraversal(
         Widget wid,
@@ -648,10 +601,8 @@ _XmMgrTraversal(
   Boolean rtnVal = FALSE ;
   XmTraversalDirection local_dir;
   XmDisplay dd = (XmDisplay)XmGetXmDisplay(XtDisplay(wid));
-
 #define traversal_in_progress \
    ((XmDisplayInfo *)(dd->display.displayInfo))->traversal_in_progress
-
   if(    traversal_in_progress
      ||  !(top_shell = _XmFindTopMostShell( wid))
      ||  top_shell->core.being_destroyed
@@ -661,7 +612,6 @@ _XmMgrTraversal(
       return FALSE ;
     }
   traversal_in_progress = TRUE ;
-
   /* Recursive traversal calls can sometimes be generated during
    * the handling of focus events and associated callbacks.
    * In this version of Motif, recursive calls always fail.
@@ -675,14 +625,12 @@ _XmMgrTraversal(
    */
   trav_list = &(focus_data->trav_graph) ;
   old_focus = focus_data->focus_item ;
-
   if(    (old_focus == NULL)
      &&  (wid == top_shell)
      &&  focus_data->first_focus
      &&  IsTraversable( focus_data->first_focus, TRUE)    )
     {
       new_focus = focus_data->first_focus ;
-
       if (direction == XmTRAVERSE_GLOBALLY_FORWARD)
 	local_dir = XmTRAVERSE_NEXT_TAB_GROUP;
       else if (direction == XmTRAVERSE_GLOBALLY_BACKWARD)
@@ -694,10 +642,8 @@ _XmMgrTraversal(
     {
       new_focus = _XmTraverse(trav_list, direction, &local_dir, wid) ;
     }
-
   new_focus = RedirectTraversal(old_focus, new_focus,
 				focus_data->focus_policy, local_dir, 0);
-
   if(    new_focus
      &&  (new_focus == old_focus)
      &&  focus_data->old_focus_item    )
@@ -734,11 +680,8 @@ _XmMgrTraversal(
       _XmSetFocusFlag( top_shell, XmFOCUS_RESET, TRUE) ;
       XtSetKeyboardFocus( top_shell, None) ;
       _XmSetFocusFlag( top_shell, XmFOCUS_RESET, FALSE) ;
-
       _XmClearFocusPath( old_focus) ;
-
       focus_data->active_tab_group = new_active_tab ;
-
       if(    (new_active_tab != new_focus)
 	 &&  XmIsManager( new_active_tab)    )
 	{
@@ -753,12 +696,10 @@ _XmMgrTraversal(
 	}
       focus_data->focus_item = new_focus ;
       focus_data->old_focus_item = old_focus ? old_focus : new_focus ;
-
       /* Setting the focus data and manager active_child fields enables
        * focus-in events to be propagated to the new focus widget.
        */
       XtSetKeyboardFocus( top_shell, new_focus) ;
-
       rtnVal = TRUE ;
     }
   else
@@ -771,16 +712,13 @@ _XmMgrTraversal(
 	 ||  !IsTraversable( old_focus, TRUE)    )
 	{
 	  Widget firstManaged = FindFirstManaged( top_shell) ;
-
 	  _XmSetFocusFlag( top_shell, XmFOCUS_RESET, TRUE) ;
 	  XtSetKeyboardFocus( top_shell, firstManaged) ;
 	  _XmSetFocusFlag( top_shell, XmFOCUS_RESET, FALSE) ;
-
 	  _XmClearFocusPath( old_focus) ;
 	  _XmFreeTravGraph( trav_list) ;
 	}
     }
-
   if(    trav_list->num_entries
      &&  (focus_data->focalPoint == XmUnrelated)
      &&  (    XmIsVendorShell( top_shell)
@@ -804,7 +742,6 @@ _XmMgrTraversal(
   traversal_in_progress = FALSE ;
   return rtnVal ;
 }
-
 static Boolean
 CallTraverseObsured(
         Widget new_focus,
@@ -816,14 +753,11 @@ CallTraverseObsured(
   XRectangle clip_rect;		/* Area a given ancestor obscures. */
   XRectangle view_rect;		/* Temporary intersection of the two. */
   XmTraverseObscuredCallbackStruct call_data;
-
   call_data.reason = XmCR_OBSCURED_TRAVERSAL;
   call_data.event = NULL;
   call_data.traversal_destination = new_focus;
   call_data.direction = dir;
-
   _XmSetRect(&focus_rect, new_focus);
-
   /* Look for ancestors that clip this window. */
   for (prev = ancestor;
        ((ancestor = XtParent(ancestor)) != NULL) && !XtIsShell(ancestor);
@@ -832,7 +766,6 @@ CallTraverseObsured(
       /* CR 9705: Special case overlapping work windows. */
       if (!_XmIsScrollableClipWidget(ancestor, False, &clip_rect))
 	_XmSetRect(&clip_rect, ancestor);
-
       if (!_XmIntersectionOf(&focus_rect, &clip_rect, &view_rect) ||
 	  (view_rect.width != focus_rect.width) ||
 	  (view_rect.height != focus_rect.height))
@@ -844,7 +777,6 @@ CallTraverseObsured(
 	      XtCallbackList callbacks = ((XmScrolledWindowWidget) sw)
 		->swindow.traverseObscuredCallback;
 	      XtCallCallbackList(sw, callbacks, (XtPointer) &call_data);
-
 	      ancestor = sw;
 	    }
 	  else
@@ -853,10 +785,8 @@ CallTraverseObsured(
 	    }
 	}
     }
-
   return IsTraversable( new_focus, TRUE);
 }
-
 void
 _XmClearFocusPath(
         Widget wid )
@@ -871,7 +801,6 @@ _XmClearFocusPath(
    * that the focus is not in this shell hierarchy.
    */
   XmFocusData focus_data ;
-
   while(    wid  &&  !XtIsShell( wid)    )
     {
       if(    XmIsManager( wid)    )
@@ -887,14 +816,12 @@ _XmClearFocusPath(
       focus_data->active_tab_group = NULL ;
     }
 }
-
 Boolean
 _XmFocusIsHere(
         Widget w )
 {
     XmFocusData focus_data;
     Widget	item;
-
     if ((focus_data = _XmGetFocusData( w)) &&
 	(item = focus_data->focus_item))
       {
@@ -904,23 +831,18 @@ _XmFocusIsHere(
       }
     return(False);
 }
-
 unsigned char
 _XmGetFocusPolicy(
         Widget w )
 {
   Widget topmost_shell ;
-
   /* Find the topmost shell widget
    */
   topmost_shell = _XmFindTopMostShell( w) ;
-
   if(    XtIsVendorShell( topmost_shell)    )
     {
       XmWidgetExtData xwed = _XmGetWidgetExtData(topmost_shell, XmSHELL_EXTENSION);
-
       if(xwed == NULL) return(XmPOINTER);
-
       return (((XmVendorShellExtObject)
 	       (xwed)->widget)
 	      ->vendor.focus_policy) ;
@@ -934,7 +856,6 @@ _XmGetFocusPolicy(
     }
   return( XmPOINTER) ;
 }
-
 Widget
 _XmFindTopMostShell(
         Widget w )
@@ -945,7 +866,6 @@ _XmFindTopMostShell(
     }
   return( w) ;
 }
-
 /*ARGSUSED*/
 void
 _XmFocusModelChanged(
@@ -960,13 +880,11 @@ _XmFocusModelChanged(
   unsigned char new_focus_policy = (unsigned char)(unsigned long) call_data ;
   Widget shell = _XmFindTopMostShell( wid) ;
   XmFocusData focus_data = _XmGetFocusData( shell) ;
-
   if(    focus_data    )
     {
       if(    new_focus_policy == XmEXPLICIT    )
 	{
 	  Widget new_item = focus_data->pointer_item ;
-
 	  if(    new_item != NULL    )
 	    {
 	      if(    XmIsManager( new_item)
@@ -989,9 +907,7 @@ _XmFocusModelChanged(
 	  if(    focus_data->focus_item    )
 	    {
 	      Widget firstManaged = FindFirstManaged( shell) ;
-
 	      _XmWidgetFocusChange( focus_data->focus_item, XmFOCUS_OUT) ;
-
 	      _XmClearFocusPath( focus_data->focus_item) ;
 	      _XmSetFocusFlag( shell, XmFOCUS_RESET, TRUE) ;
 	      XtSetKeyboardFocus( shell, firstManaged) ;
@@ -1001,8 +917,6 @@ _XmFocusModelChanged(
 	}
     }
 }
-
-
 XmFocusData
 _XmGetFocusData (Widget wid)
 {
@@ -1019,7 +933,6 @@ _XmGetFocusData (Widget wid)
       {
          XmWidgetExtData xwed = _XmGetWidgetExtData (wid, XmSHELL_EXTENSION);
          XmVendorShellExtObject vse;
-
          if (xwed == NULL)
             return NULL;
          vse = (XmVendorShellExtObject) xwed->widget;
@@ -1043,8 +956,6 @@ _XmGetFocusData (Widget wid)
    }
    return NULL;
 }
-
-
 Boolean
 _XmComputeVisibilityRect(Widget      w,
 			 XRectangle *rectPtr,
@@ -1064,18 +975,15 @@ _XmComputeVisibilityRect(Widget      w,
    * then the clip window is used as the initial rectangle for w.
    */
   Widget sw;
-
   if (!_XmIsViewable(w))
     {
       _XmClearRect(rectPtr);
       return False;
     }
-
   if (allow_scrolling && w && XtParent(w) &&
       ((sw = _XmIsScrollableClipWidget(w, True, rectPtr)) != NULL))
     {
       w = sw;
-
       if (!_XmIsViewable(w))
         {
 	  _XmClearRect(rectPtr);
@@ -1086,17 +994,14 @@ _XmComputeVisibilityRect(Widget      w,
     {
       _XmSetRect(rectPtr, w);
     }
-
   if (include_initial_border)
     {
       int border = XtBorderWidth(w);
-
       rectPtr->x -= border;
       rectPtr->y -= border;
       rectPtr->width += 2 * border;
       rectPtr->height += 2 * border;
     }
-
   /* Process all widgets, excluding the shell widget. */
   while (((w = XtParent(w)) != NULL) && !XtIsShell(w))
     {
@@ -1106,10 +1011,8 @@ _XmComputeVisibilityRect(Widget      w,
 	  return False;
 	}
     }
-
   return True;
 }
-
 Boolean
 _XmGetPointVisibility(Widget w,
 		      int    root_x,
@@ -1117,7 +1020,6 @@ _XmGetPointVisibility(Widget w,
 {
   /* Compute whether a point is really visible inside a widget. */
   XRectangle rect;
-
   if (_XmComputeVisibilityRect(w, &rect, TRUE, FALSE))
     {
       return ((root_x >= rect.x) &&
@@ -1125,10 +1027,8 @@ _XmGetPointVisibility(Widget w,
 	      (root_y >= rect.y) &&
 	      (root_y <  rect.y + (int)rect.height));
     }
-
   return False;
 }
-
 void
 _XmSetRect(
         register XRectangle *rect,
@@ -1139,7 +1039,6 @@ _XmSetRect(
    */
    Widget p;
    Position x, y;
-
    p = XtParent(w);
    XtTranslateCoords(p ? p : w, w->core.x, w->core.y, &x, &y);
    rect->x = x + w->core.border_width;
@@ -1147,7 +1046,6 @@ _XmSetRect(
    rect->width = w->core.width;
    rect->height = w->core.height;
 }
-
 int
 _XmIntersectRect(
         register XRectangle *srcRectA,
@@ -1159,22 +1057,17 @@ _XmIntersectRect(
    * do not.
    */
   XRectangle srcRectB;
-
   _XmSetRect(&srcRectB, widget);
-
   return( (int) _XmIntersectionOf( srcRectA, &srcRectB, dstRect)) ;
 }
-
 int
 _XmEmptyRect(
         register XRectangle *r )
 {
    if (r->width <= 0 || r->height <= 0)
       return (TRUE);
-
    return (FALSE);
 }
-
 void
 _XmClearRect(
         register XRectangle *r )
@@ -1184,7 +1077,6 @@ _XmClearRect(
    r->width = 0;
    r->height = 0;
 }
-
 Boolean
 _XmIsNavigable(
 	Widget wid)
@@ -1204,14 +1096,12 @@ _XmIsNavigable(
     }
   return TRUE ;
 }
-
 void
 _XmWidgetFocusChange(
         Widget wid,
         XmFocusChange change)
 {
   XmBaseClassExt *er ;
-
   if(    XtIsRectObj( wid)
      && !wid->core.being_destroyed    )
     {
@@ -1226,7 +1116,6 @@ _XmWidgetFocusChange(
         {   /* From here on is compatibility code.
 	     */
 	  WidgetClass wc ;
-
 	  if(    XmIsPrimitive( wid)    )
             {
 	      wc = (WidgetClass) &xmPrimitiveClassRec ;
@@ -1243,7 +1132,6 @@ _XmWidgetFocusChange(
 	    {
 	      wc = NULL ;
 	    }
-
 	  if(    wc
 	     && (er = _XmGetBaseClassExtPtr( wc, XmQmotif))
 	     && (*er)
@@ -1256,7 +1144,6 @@ _XmWidgetFocusChange(
     }
   return ;
 }
-
 Widget
 _XmNavigate(
         Widget wid,
@@ -1266,17 +1153,13 @@ _XmNavigate(
   XmFocusData focus_data;
   Widget nav_wid = NULL ;
   Widget shell = _XmFindTopMostShell( wid) ;
-
   if(    (focus_data = _XmGetFocusData( shell))
      &&  (focus_data->focus_policy == XmEXPLICIT)    )
     {
       XmTravGraph trav_list = &(focus_data->trav_graph) ;
-
       nav_wid = _XmTraverse( trav_list, direction, &local_dir, wid) ;
-
       nav_wid = RedirectTraversal(focus_data->focus_item, nav_wid,
 				  focus_data->focus_policy, local_dir, 0);
-
       if(    trav_list->num_entries
 	 &&  (focus_data->focalPoint == XmUnrelated)
 	 &&  (    XmIsVendorShell( shell)
@@ -1287,14 +1170,12 @@ _XmNavigate(
     }
   return nav_wid ;
 }
-
 void
 _XmSetInitialOfTabGroup(
 	Widget tab_group,
 	Widget init_focus)
 {
   XmFocusData focus_data ;
-
   if(    XmIsManager( tab_group)    )
     {
       ((XmManagerWidget) tab_group)->manager.initial_focus = init_focus ;
@@ -1306,7 +1187,6 @@ _XmSetInitialOfTabGroup(
 			      tab_group, init_focus) ;
     }
 }
-
 static Boolean
 IsTraversable(
         Widget wid,
@@ -1326,25 +1206,21 @@ IsTraversable(
 	   * of the XmNtraverseObscuredCallback of ScrolledWindow.
 	   */
 	  XRectangle visRect ;
-
 	  return _XmGetEffectiveView( wid, &visRect) ;
 	}
     }
   return FALSE ;
 }
-
 void
 _XmResetTravGraph(
 	Widget wid)
 {
   XmFocusData focus_data = _XmGetFocusData( wid) ;
-
   if(    focus_data  &&  focus_data->trav_graph.num_entries    )
     {
       _XmFreeTravGraph( &(focus_data->trav_graph)) ;
     }
 }
-
 Boolean
 XmeFocusIsInShell(
         Widget wid)
@@ -1355,7 +1231,6 @@ XmeFocusIsInShell(
   XmFocusData focus_data ;
   int revert ;
   _XmWidgetToAppContext(wid);
-
   _XmAppLock(app);
   if(    XmIsVendorShell( shell_of_wid)
      &&  (focus_data = _XmGetFocusData( shell_of_wid))    )
@@ -1369,7 +1244,6 @@ XmeFocusIsInShell(
   else
     {
       XGetInputFocus( XtDisplay( shell_of_wid), &focus, &revert) ;
-
       if(    (focus != PointerRoot)
 	 &&  (focus != None)
 	 &&  (focus_wid = XtWindowToWidget( XtDisplay( shell_of_wid), focus))
@@ -1382,13 +1256,11 @@ XmeFocusIsInShell(
   _XmAppUnlock(app);
   return FALSE ;
 }
-
 Boolean
 _XmShellIsExclusive(
 	Widget wid)
 {
   XmFocusData focusData = _XmGetFocusData( wid) ;
-
   if(    focusData
      &&  focusData->trav_graph.exclusive    )
     {
@@ -1396,22 +1268,18 @@ _XmShellIsExclusive(
     }
   return FALSE ;
 }
-
 static Widget
 FindFirstFocus(
 	Widget wid)
 {
   Widget shell = _XmFindTopMostShell( wid) ;
-
   return _XmNavigate( shell, XmTRAVERSE_CURRENT) ;
 }
-
 Widget
 _XmGetFirstFocus(
 	Widget wid)
 {
   XmFocusData focus_data = _XmGetFocusData( wid) ;
-
   if(    focus_data    )
     {
       if(    focus_data->focus_item    )
@@ -1429,25 +1297,20 @@ _XmGetFirstFocus(
     }
   return NULL ;
 }
-
-
 /*******************
  * Public procedures
  *******************/
-
 Boolean
 XmIsTraversable(
         Widget wid)
 {
   Boolean traversable;
   _XmWidgetToAppContext(wid);
-
   _XmAppLock(app);
   traversable = IsTraversable( wid, FALSE) ;
   _XmAppUnlock(app);
   return traversable;
 }
-
 XmVisibility
 XmGetVisibility(
         Widget wid)
@@ -1458,7 +1321,6 @@ XmGetVisibility(
   int i;
   Window *windowptr;
   _XmWidgetToAppContext(wid);
-
   _XmAppLock(app);
   if(    !wid
      || !_XmComputeVisibilityRect(wid, &rect, FALSE, TRUE)    )
@@ -1472,9 +1334,7 @@ XmGetVisibility(
       _XmAppUnlock(app);
       return( XmVISIBILITY_PARTIALLY_OBSCURED) ;
     }
-
   /* Obscurity by siblings */
-
   children = NULL;
   if (!(parent_window = XtWindow(XtParent(wid))) ||
 	XQueryTree( XtDisplay(wid), parent_window, &rootwindow,
@@ -1484,9 +1344,7 @@ XmGetVisibility(
         _XmAppUnlock(app);
         return( XmVISIBILITY_UNOBSCURED) ;
   }
-
   windowptr = children;
-
   /* walk through those which are under the window of interest */
   for ( i = 0; i < numchildren; i++ )
   {
@@ -1498,7 +1356,6 @@ XmGetVisibility(
   }
   i++;
   windowptr++;
-
   /* process windows above the window of interest */
   if(i < numchildren) {
       XRectangle parent_rect, srcRectB, intersect_rect;
@@ -1507,12 +1364,10 @@ XmGetVisibility(
       Region tmp_region = XCreateRegion();
       Region left_region = XCreateRegion();
       XmVisibility value;
-
       XUnionRectWithRegion(&rect, region, region);
       while(i < numchildren) {
         XGetWindowAttributes(XtDisplay(wid), *windowptr,
 				&window_attributes_return);
-
         if(window_attributes_return.map_state == IsViewable) {
           _XmSetRect(&parent_rect, XtParent(wid));
           srcRectB.x = parent_rect.x + window_attributes_return.x
@@ -1521,7 +1376,6 @@ XmGetVisibility(
 					+ window_attributes_return.border_width;
           srcRectB.width = window_attributes_return.width;
           srcRectB.height = window_attributes_return.height;
-
           /* accumulate all the region covered by siblings */
           if(_XmIntersectionOf( &rect, &srcRectB, &intersect_rect)) {
             XUnionRectWithRegion(&intersect_rect, tmp_region, tmp_region);
@@ -1530,7 +1384,6 @@ XmGetVisibility(
         i++;
         windowptr++;
      }
-
      XSubtractRegion(region, tmp_region, left_region);
      if(XEqualRegion(region, left_region)) {
 	value = XmVISIBILITY_UNOBSCURED;
@@ -1547,11 +1400,9 @@ XmGetVisibility(
      return (value);
   }
   XFree((Window*)children);
-
   _XmAppUnlock(app);
   return( XmVISIBILITY_UNOBSCURED) ;
 }
-
 Widget
 XmGetTabGroup(
         Widget wid)
@@ -1559,7 +1410,6 @@ XmGetTabGroup(
   XmFocusData focus_data ;
   Boolean exclusive ;
   _XmWidgetToAppContext(wid);
-
   _XmAppLock(app);
   if(    !wid
      || (_XmGetFocusPolicy( wid) != XmEXPLICIT)
@@ -1569,11 +1419,9 @@ XmGetTabGroup(
       return( NULL) ;
     }
   exclusive = !!(focus_data->trav_graph.exclusive) ;
-
   do
     {
       XmNavigationType nav_type = _XmGetNavigationType( wid) ;
-
       if(    (nav_type == XmSTICKY_TAB_GROUP)
 	 ||  (nav_type == XmEXCLUSIVE_TAB_GROUP)
 	 ||  (    (nav_type == XmTAB_GROUP)
@@ -1583,11 +1431,9 @@ XmGetTabGroup(
 	  return( wid) ;
 	}
     } while(    (wid = XtParent( wid)) && !XtIsShell( wid)    ) ;
-
   _XmAppUnlock(app);
   return wid ;
 }
-
 Widget
 XmGetFocusWidget(
         Widget wid)
@@ -1595,7 +1441,6 @@ XmGetFocusWidget(
   Widget focus_wid = NULL ;
   XmFocusData focus_data = _XmGetFocusData( wid) ;
   _XmWidgetToAppContext(wid);
-
   _XmAppLock(app);
   if(    focus_data != NULL    )
     {
@@ -1606,7 +1451,6 @@ XmGetFocusWidget(
       else
         {
 	  focus_wid = focus_data->pointer_item ;
-
 	  if(    (focus_wid != NULL)
 	     &&  XmIsManager( focus_wid)
 	     &&  (((XmManagerWidget) focus_wid)
@@ -1620,7 +1464,6 @@ XmGetFocusWidget(
   _XmAppUnlock(app);
   return focus_wid ;
 }
-
 Boolean
 XmProcessTraversal(
         Widget w,
@@ -1628,11 +1471,9 @@ XmProcessTraversal(
 {
   XmFocusData focus_data ;
   Boolean ret_val = FALSE;
-
   if ( w )
   {
     _XmWidgetToAppContext(w);
-
     _XmAppLock(app);
     if(    (focus_data = _XmGetFocusData( w))
        &&  (focus_data->focus_policy == XmEXPLICIT)    )
@@ -1654,27 +1495,22 @@ XmProcessTraversal(
   }
   return ret_val;
 }
-
 void
 XmAddTabGroup(
         Widget tabGroup )
 {
     Arg		arg;
-
     XtSetArg(arg, XmNnavigationType, XmEXCLUSIVE_TAB_GROUP);
     XtSetValues(tabGroup, &arg, 1);
 }
-
 void
 XmRemoveTabGroup(
         Widget w )
 {
   Arg		arg;
-
   XtSetArg(arg, XmNnavigationType, XmNONE);
   XtSetValues(w, &arg, 1);
 }
-
 /*
  * Invoke the traversal redirection trait for all ancestors of both
  * old_focus and new_focus.  Repeat until concensus is achieved.
@@ -1689,20 +1525,17 @@ RedirectTraversal(Widget	       old_focus,
   XmTraversalControlTrait trav_trait;
   Widget proposal = new_focus;
   Widget parent;
-
   /* Try not to get into an infinite loop. */
   if (pass >= 255)
     {
       assert(FALSE);
       return NULL;
     }
-
   /* Check ancestors of the old focus. */
   for (parent = old_focus; parent != NULL; parent = XtParent(parent))
     {
       trav_trait = (XmTraversalControlTrait)
 	XmeTraitGet((XtPointer) XtClass(parent), XmQTtraversalControl);
-
       if (trav_trait && trav_trait->redirect)
 	{
 	  proposal = trav_trait->redirect(old_focus, new_focus,
@@ -1712,13 +1545,11 @@ RedirectTraversal(Widget	       old_focus,
 				     focus_policy, direction, pass + 1);
 	}
     }
-
   /* Check ancestors of the new focus. */
   for (parent = new_focus; parent != NULL; parent = XtParent(parent))
     {
       trav_trait = (XmTraversalControlTrait)
 	XmeTraitGet((XtPointer) XtClass(parent), XmQTtraversalControl);
-
       if (trav_trait && trav_trait->redirect)
 	{
 	  proposal = trav_trait->redirect(old_focus, new_focus,
@@ -1728,7 +1559,6 @@ RedirectTraversal(Widget	       old_focus,
 				     focus_policy, direction, pass + 1);
 	}
     }
-
   /* Nobody changed our mind. */
   return new_focus;
 }

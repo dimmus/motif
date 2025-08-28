@@ -4,7 +4,6 @@
  */
 #ifndef XM_DEPRECATED_H
 #define XM_DEPRECATED_H
-
 /**
  * Try for C23's [[deprecated]], falling back to good ol' __attribute__,
  * assuming we're building with GCC 4.x or newer.
@@ -15,11 +14,10 @@
 #define XM_DEPRECATED       [[deprecated]]
 #define XM_ALTERNATIVE(...) [[deprecated(#__VA_ARGS__)]]
 #elif defined(__GNUC__) || defined(__clang__)
-#define XM_DEPRECATED       __attribute__((deprecated))
-#define XM_ALTERNATIVE(...) __attribute__((deprecated(#__VA_ARGS__)))
+#define XM_DEPRECATED       /* __attribute__((deprecated)) - placed after function declaration */
+#define XM_ALTERNATIVE(...) /* __attribute__((deprecated(#__VA_ARGS__)) - placed after function declaration */
 #else
 #define XM_DEPRECATED
 #define XM_ALTERNATIVE(...)
 #endif
-
 #endif /* XM_DEPRECATED_H */

@@ -26,26 +26,18 @@
  */
 #ifndef _XmNavigatorT_H
 #define _XmNavigatorT_H
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 externalref XrmQuark XmQTnavigator;
-
 /* Trait structures and typedefs, place typedefs first */
-
-
 /* this structure is equivalent to an XPoint but in int,
    not in Position, which are short */
 typedef struct _TwoDInt {
     int x;
     int y;
 } TwoDIntRec, *TwoDInt;
-
-
 /* this one can be expanded in the future */
 typedef struct _XmNavigatorDataRec {
     Mask valueMask ;
@@ -57,7 +49,6 @@ typedef struct _XmNavigatorDataRec {
     TwoDIntRec increment;
     TwoDIntRec page_increment;
 } XmNavigatorDataRec, *XmNavigatorData;
-
 #define NavAllValid             (OxFFFF)
 #define NavDimMask		(1L<<0)
 #define NavValue  		(1L<<1)
@@ -66,9 +57,6 @@ typedef struct _XmNavigatorDataRec {
 #define NavSliderSize		(1L<<4)
 #define NavIncrement            (1L<<5)
 #define NavPageIncrement	(1L<<6)
-
-
-
 typedef void (*XmNavigatorMoveCBProc)(Widget nav,
 				      XtCallbackProc moveCB,
 				      XtPointer closure,
@@ -78,25 +66,17 @@ typedef void (*XmNavigatorSetValueProc)(Widget nav,
 					Boolean notify);
 typedef void (*XmNavigatorGetValueProc)(Widget nav,
 					XmNavigatorData nav_data);
-
-
-
 /* Version 0: initial release. */
-
 typedef struct _XmNavigatorTraitRec {
   int			  version;		/* 0 */
   XmNavigatorMoveCBProc   changeMoveCB;
   XmNavigatorSetValueProc setValue;
   XmNavigatorGetValueProc getValue;
 } XmNavigatorTraitRec, *XmNavigatorTrait;
-
-
 #define NavigDimensionX			(1L<<0)
 #define NavigDimensionY			(1L<<1)
-
 /* convenience Macros */
 #define ACCESS_DIM(mask,field) ((mask & NavigDimensionX)?(field.x):(field.y))
-
 #define ASSIGN_DIM(mask,field,val)	\
   {					\
     if (mask & NavigDimensionX)		\
@@ -104,10 +84,7 @@ typedef struct _XmNavigatorTraitRec {
     else				\
       (field.y)=(val);			\
   }
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmNavigatorT_H */

@@ -22,25 +22,19 @@
 */
 #ifndef _XmDragCI_h
 #define _XmDragCI_h
-
 #include <Xm/XmP.h>
 #include <Xm/DragCP.h>
 #include <Xm/DragIconP.h>
 #include <Xm/DropSMgrP.h>
 #include <Xm/DisplayP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #define _XmDragStart(dc, srcW, event) \
   ((*((XmDragContextClass)XtClass(dc))->drag_class.start) (dc, srcW, event))
-
 #define _XmDragCancel(dc) \
   ((*((XmDragContextClass)XtClass(dc))->drag_class.cancel) (dc))
-
 #define _XmDCtoDD(dc)	((XmDisplay)XtParent(dc))
-
 #define _XmDRAG_MASK_BASE \
 	(ButtonPressMask | ButtonReleaseMask | ButtonMotionMask)
 #ifdef DRAG_USE_MOTION_HINTS
@@ -49,12 +43,10 @@ extern "C" {
 #else
 #define _XmDRAG_GRAB_MASK _XmDRAG_MASK_BASE
 #endif /* _XmDRAG_USE_MOTION_HINTS */
-
 #define _XmDRAG_EVENT_MASK(dc) \
   ((((XmDragContext)dc)->drag.trackingMode == XmDRAG_TRACK_WM_QUERY) \
    ? (_XmDRAG_GRAB_MASK | EnterWindowMask | LeaveWindowMask) \
    : (_XmDRAG_GRAB_MASK))
-
 enum{	XmCR_DROP_SITE_TREE_ADD = _XmNUMBER_DND_CB_REASONS,
 	XmCR_DROP_SITE_TREE_REMOVE
 	} ;
@@ -64,18 +56,12 @@ enum{	XmCR_DROP_SITE_TREE_ADD = _XmNUMBER_DND_CB_REASONS,
 enum {
   XmDRAG_TRACK_WM_QUERY, XmDRAG_TRACK_MOTION, XmDRAG_TRACK_WM_QUERY_PENDING
 };
-
-
 /* Strings to use for the intern atoms */
 typedef String	XmCanonicalString;
-
 #define XmMakeCanonicalString( s) \
 	(XmCanonicalString) XrmQuarkToString(XrmStringToQuark(s))
-
 #define _XmAllocAndCopy( data, len) \
 	memcpy((XtPointer) XtMalloc(len), (XtPointer)(data), (len))
-
-
 typedef struct _XmDragTopLevelClientDataStruct{
     Widget	destShell;
     Position	xOrigin, yOrigin;
@@ -85,13 +71,10 @@ typedef struct _XmDragTopLevelClientDataStruct{
 	Window	window;
 	Widget	dragOver;
 } XmDragTopLevelClientDataStruct, *XmDragTopLevelClientData;
-
 typedef struct _XmDragMotionClientDataStruct{
     Window	window;
     Widget	dragOver;
 } XmDragMotionClientDataStruct, *XmDragMotionClientData;
-
-
 /*
  * dsm to dragDisplay comm
  */
@@ -103,14 +86,12 @@ typedef struct _XmDropSiteTreeAddCallbackStruct{
     Cardinal		numDropSites;
     Cardinal		numArgsPerDSHint;
 } XmDropSiteTreeAddCallbackStruct, *XmDropSiteTreeAddCallback;
-
 /* Move to DropSMgrI.h */
 typedef struct _XmDropSiteTreeRemoveCallbackStruct{
     int			reason;
     XEvent          	*event;
     Widget		rootShell;
 } XmDropSiteTreeRemoveCallbackStruct, *XmDropSiteTreeRemoveCallback;
-
 /* Move to DropSMgrI.h */
 typedef struct _XmDropSiteTreeUpdateCallbackStruct{
     int			reason;
@@ -119,14 +100,12 @@ typedef struct _XmDropSiteTreeUpdateCallbackStruct{
     Cardinal		numDropSites;
     Cardinal		numArgsPerDSHint;
 } XmDropSiteTreeUpdateCallbackStruct, *XmDropSiteTreeUpdateCallback;
-
 typedef struct _XmDropSiteEnterPendingCallbackStruct{
     int                 reason;
     XEvent              *event;
     Time                timeStamp;
     Boolean		enter_pending;
 } XmDropSiteEnterPendingCallbackStruct, *XmDropSiteEnterPendingCallback;
-
 /* Move to DropSMgrI.h */
 typedef struct _XmAnimationData {
     Widget		dragOver;
@@ -137,20 +116,13 @@ typedef struct _XmAnimationData {
     XmRegion		dropSiteRegion;
     XtPointer		saveAddr;
 } XmAnimationDataRec, *XmAnimationData;
-
-
 /********    Private Function Declarations    ********/
-
 extern XmDragReceiverInfo _XmAllocReceiverInfo(
                         XmDragContext dc) ;
 extern unsigned char _XmGetActiveProtocolStyle(
                         Widget w) ;
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmDragCI_h */

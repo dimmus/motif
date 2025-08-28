@@ -26,30 +26,22 @@
  */
 #ifndef _XmIconGP_h
 #define _XmIconGP_h
-
 #include <Xm/XmP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/GadgetP.h>
 #include <Xm/IconG.h>
 #include <Xm/ExtObjectP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 typedef Widget (*XmGetContainerParentProc)(Widget) ;
-
 #define XmInheritGetContainerParentProc ((XmGetContainerParentProc) _XtInherit)
-
-
 /* IconGadget class record */
 typedef struct _XmIconGadgetClassPart
 	{
 	XmGetContainerParentProc	get_container_parent;
 	XtPointer extension ;
 	} 	XmIconGadgetClassPart;
-
-
 /* Full class record declaration */
 typedef struct _XmIconGadgetClassRec
 	{
@@ -57,70 +49,55 @@ typedef struct _XmIconGadgetClassRec
 	XmGadgetClassPart	gadget_class;
 	XmIconGadgetClassPart	icong_class;
 	} 	XmIconGadgetClassRec;
-
 extern	XmIconGadgetClassRec 	xmIconGadgetClassRec;
-
 /*****************************************************************/
 /* The Icon Gadget Cache Object's class and instance records*/
 /*****************************************************************/
-
 typedef struct _XmIconGCacheObjClassPart
 {
     XtPointer extension;
 } XmIconGCacheObjClassPart;
-
-
 typedef struct _XmIconGCacheObjClassRec  /* Icon cache class record */
 {
     ObjectClassPart                     object_class;
     XmExtClassPart                      ext_class;
     XmIconGCacheObjClassPart            icon_class_cache;
 } XmIconGCacheObjClassRec;
-
 externalref XmIconGCacheObjClassRec xmIconGCacheObjClassRec;
-
 /*  The Icon Gadget Cache instance record  */
-
 typedef struct _XmIconGCacheObjPart
 {
    XmRenderTable    render_table;		/* XmNrenderTable */
    GC               selected_GC;
    GC               inverse_GC;
-
    Pixel            background;
    Pixel            foreground;
    Pixel            top_shadow_color;
    Pixel            bottom_shadow_color;
    Pixel            highlight_color;
-
    Pixmap           background_pixmap;
    Pixmap           top_shadow_pixmap;
    Pixmap           bottom_shadow_pixmap;
    Pixmap           highlight_pixmap;
-
    GC               normal_GC;
    GC               background_GC;
    GC               insensitive_GC;
    GC               top_shadow_GC;
    GC               bottom_shadow_GC;
    GC               highlight_GC;
-
    unsigned char    alignment;
    Dimension        spacing;
    Dimension        margin_width;
    Dimension        margin_height;
    GC               shadow_GC;
 } XmIconGCacheObjPart;
-
 typedef struct _XmIconGCacheObjRec
 {
   ObjectPart                object;
   XmExtPart		    ext;
   XmIconGCacheObjPart       icon_cache;
 } XmIconGCacheObjRec;
-
 typedef struct _XmIconGCacheObjRec   * XmIconGCacheObject;
-
 /* IconGadget instance record */
 typedef struct _XmIconGadgetPart
 	{
@@ -142,11 +119,9 @@ typedef struct _XmIconGadgetPart
 	Dimension	small_icon_rect_height;
 	String          large_pixmap_name ;
 	String          small_pixmap_name ;
-
 	XmIconGCacheObjPart  *cache;
    	Boolean	        check_set_render_table;
 } XmIconGadgetPart;
-
 /* Full instance record declaration */
 typedef struct _XmIconGadgetRec
 	{
@@ -155,8 +130,6 @@ typedef struct _XmIconGadgetRec
 	XmGadgetPart	gadget;
 	XmIconGadgetPart icong;
 	} 	XmIconGadgetRec;
-
-
 /* Useful macros */
 #define	IG_LabelString(w)	(((XmIconGadget)(w))->icong.label_string)
 #define	IG_LargeIconMask(w)	(((XmIconGadget)(w))->icong.large_icon_mask)
@@ -179,20 +152,17 @@ typedef struct _XmIconGadgetRec
 		(((XmIconGadget)(w))->icong.small_icon_rect_height)
 #define	IG_LargePixmapName(w) (((XmIconGadget)(w))->icong.large_pixmap_name)
 #define	IG_SmallPixmapName(w) (((XmIconGadget)(w))->icong.small_pixmap_name)
-
 /* XmNrecomputeSize didn't make it as a resource, but since the
    code is already written, I'll keep it and force its value here.
    If it's ever wanted back, just replace that macro by:
  #define IG_RecomputeSize(w)	(((XmIconGadget)(w))->icong.recompute_size) */
 #define	IG_RecomputeSize(w)	(True)
-
 #define	IG_LayoutDirection(w)	(((XmIconGadget)(w))->gadget.layout_direction)
 #define	IG_Highlighted(w)	(((XmIconGadget)(w))->gadget.highlighted)
 #define	IG_HLThickness(w)     (((XmIconGadget)(w))->gadget.highlight_thickness)
 #define	IG_ShadowThickness(w)	(((XmIconGadget)(w))->gadget.shadow_thickness)
 #define	IG_Depth(w)		(((XmManagerWidget) \
 			      (((XmGadget)(w))->object.parent))->core.depth)
-
 /* cached resources for IconGadget */
 #define	IG_RenderTable(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->render_table)
@@ -200,7 +170,6 @@ typedef struct _XmIconGadgetRec
 				 icong.cache->selected_GC)
 #define	IG_InverseGC(w)	        (((XmIconGadget)(w))-> \
 				 icong.cache->inverse_GC)
-
 /** These are gadget resources really. hopefully in 2.1,
     that will be replaced by stuff like:
     #define	IG_Background(w)    Gad_Background(w)
@@ -216,7 +185,6 @@ typedef struct _XmIconGadgetRec
 				 icong.cache->bottom_shadow_color)
 #define	IG_HighlightColor(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->highlight_color)
-
 #define	IG_BackgroundPixmap(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->background_pixmap)
 #define	IG_TopShadowPixmap(w)	(((XmIconGadget)(w))-> \
@@ -225,7 +193,6 @@ typedef struct _XmIconGadgetRec
 				 icong.cache->bottom_shadow_pixmap)
 #define	IG_HighlightPixmap(w)	(((XmIconGadget)(w))-> \
 				 icong.cache->highlight_pixmap)
-
 #define	IG_NormalGC(w)	        (((XmIconGadget)(w))-> \
 				 icong.cache->normal_GC)
 #define	IG_BackgroundGC(w)	(((XmIconGadget)(w))-> \
@@ -248,16 +215,12 @@ typedef struct _XmIconGadgetRec
 				 icong.cache->margin_width)
 #define	IG_MarginHeight(w) 	(((XmIconGadget)(w))-> \
 				 icong.cache->margin_height)
-
-
 /* Convenience Macros */
 #define IG_Cache(w)            (((XmIconGadget)(w))->icong.cache)
 #define IG_ClassCachePart(w)   (((XmIconGadgetClass)xmIconGadgetClass)->\
 				gadget_class.cache_part)
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmIconGP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

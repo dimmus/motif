@@ -28,12 +28,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include "ColorObjI.h"
-
-
 /**********************************************************************/
 /** XmeUseColorObj()                                                 **/
 /**           Return False if color is not working for some reason.  **/
@@ -46,7 +42,6 @@ Boolean
 XmeUseColorObj( void )
 {
     XmColorObj tmpColorObj = _XmDefaultColorObj;
-
     _XmProcessLock();
     if (!tmpColorObj ||
       !tmpColorObj->color_obj.colorIsRunning ||
@@ -59,9 +54,6 @@ XmeUseColorObj( void )
       return True;
     }
 }
-
-
-
 /**********************************************************************/
 /** Following entries kept for bc with CDE (they'll be moved to
  **       obsolete module later                                      **/
@@ -79,7 +71,6 @@ _XmGetPixelData(
 {
     return XmeGetPixelData( screen, colorUse, pixelSet, a, i, p, s );
 }
-
 Boolean
 _XmGetIconControlInfo(
         Screen  *screen,
@@ -90,7 +81,6 @@ _XmGetIconControlInfo(
     return XmeGetIconControlInfo(screen, useMaskRtn,
 			  useMultiColorIconsRtn, useIconFileCacheRtn);
 }
-
 Boolean
 _XmUseColorObj( void )
 {

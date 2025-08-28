@@ -22,20 +22,16 @@
 */
 #ifndef _XmTextStrSoP_h
 #define _XmTextStrSoP_h
-
 #include <Xm/XmP.h>
 #include <Xm/Text.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /****************************************************************
  *
  * Definitions for use by sources and source users.
  *
  ****************************************************************/
-
 typedef struct _XmSourceDataRec {
   XmTextSource source;	/* Backpointer to source record. */
   XmTextWidget *widgets;	/* Array of widgets displaying this source. */
@@ -56,17 +52,13 @@ typedef struct _XmSourceDataRec {
   Boolean editable;		/* Whether we allow any edits. */
   Boolean take_selection;	/* Whether we should take the selection. */
 } XmSourceDataRec, *XmSourceData;
-
 typedef void (*AddWidgetProc)(XmTextSource,
 			      XmTextWidget);
-
 typedef int (*CountLinesProc)(XmTextSource,
 			      XmTextPosition,
 			      unsigned long);
-
 typedef void (*RemoveWidgetProc)(XmTextSource,
 				 XmTextWidget);
-
 typedef XmTextPosition (*ReadProc)(XmTextSource,
 				   XmTextPosition,	/* starting position */
 				   XmTextPosition,	/* The last position
@@ -75,31 +67,25 @@ typedef XmTextPosition (*ReadProc)(XmTextSource,
 							   about any later
 							   positions. */
 				   XmTextBlock);	/* RETURN: text read */
-
 typedef XmTextStatus (*ReplaceProc)(XmTextWidget,
 				    XEvent *,
 				    XmTextPosition *,
 				    XmTextPosition *,
 				    XmTextBlock,
                                     Boolean);
-
 typedef XmTextPosition (*ScanProc)(XmTextSource,
 				   XmTextPosition,
 				   XmTextScanType,
 				   XmTextScanDirection,	/*XmsdLeft/XmsdRight*/
 				   int,
     		                   Boolean);
-
 typedef Boolean (*GetSelectionProc)(XmTextSource,
                                     XmTextPosition *,
                                     XmTextPosition *);
-
 typedef void (*SetSelectionProc)(XmTextSource,
 				 XmTextPosition,
 				 XmTextPosition,
 				 Time);
-
-
 typedef struct _XmTextSourceRec {
   struct _XmSourceDataRec *data;   /* Source-defined data (opaque type). */
   AddWidgetProc	AddWidget;
@@ -111,10 +97,7 @@ typedef struct _XmTextSourceRec {
   GetSelectionProc	GetSelection;
   SetSelectionProc	SetSelection;
 } XmTextSourceRec;
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /*  _XmTextStrSoP_h */

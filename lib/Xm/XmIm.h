@@ -26,15 +26,11 @@
  */
 #ifndef _XmIm_h
 #define _XmIm_h
-
 #include <Xm/Xm.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /********    Public Function Declarations    ********/
-
 extern void XmImRegister(
                         Widget w,
 			unsigned int reserved) ;
@@ -54,7 +50,6 @@ extern XIM XmImGetXIM(
                         Widget w) ;
 extern void XmImCloseXIM(
                         Widget w) ;
-
 extern int XmImMbLookupString(
                         Widget w,
                         XKeyPressedEvent *event,
@@ -79,18 +74,13 @@ extern XIC XmImSetXIC(
 extern void XmImFreeXIC(
 			Widget w,
 			XIC    input_context) ;
-
 extern void XmImMbResetIC(
 			Widget w,
 			char **mb);
-
 extern XIMResetState XmImGetXICResetState(
 			Widget w);
-
 /********    End Public Function Declarations    ********/
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmIm_h */

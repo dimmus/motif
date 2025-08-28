@@ -25,20 +25,14 @@
 static char rcsid[] = "$XConsortium: Desktop.c /main/12 1995/07/14 10:17:30 drk $"
 #endif
 #endif
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include <Xm/DesktopP.h>
 #include <Xm/BaseClassP.h>
 #include <Xm/ScreenP.h>
 #include <Xm/DisplayP.h>
-
-
 /********    Static Function Declarations    ********/
-
 static void ClassPartInitialize(
                         WidgetClass widgetClass) ;
 static void ResParentDestroyed(
@@ -56,11 +50,7 @@ static void Initialize(
                         Widget new_widget,
                         ArgList args,
                         Cardinal *num_args) ;
-
 /********    End Static Function Declarations    ********/
-
-
-
 static XtResource resources[] =
 {
     {
@@ -76,8 +66,6 @@ static XtResource resources[] =
 	XmRImmediate, (XtPointer)XmDESKTOP_EXTENSION,
     },
 };
-
-
 externaldef(xmdesktopclassrec) XmDesktopClassRec xmDesktopClassRec = {
     {
 	(WidgetClass) &xmExtClassRec,	/* superclass	*/
@@ -125,32 +113,24 @@ externaldef(xmdesktopclassrec) XmDesktopClassRec xmDesktopClassRec = {
 	NULL,				/* extension		*/
     },
 };
-
 externaldef(xmdesktopclass) WidgetClass
       xmDesktopClass = (WidgetClass) &xmDesktopClassRec;
-
-
-
 static void
 ClassPartInitialize(
         WidgetClass widgetClass )
 {
     register XmDesktopClassPartPtr wcPtr;
     register XmDesktopClassPartPtr superPtr;
-
     wcPtr = (XmDesktopClassPartPtr)
       &(((XmDesktopObjectClass)widgetClass)->desktop_class);
-
     if (widgetClass != xmDesktopClass)
       /* don't compute possible bogus pointer */
       superPtr = (XmDesktopClassPartPtr)&(((XmDesktopObjectClass)widgetClass
 				->core_class.superclass)->desktop_class);
     else
       superPtr = NULL;
-
     /* We don't need to check for null super since we'll get to xmDesktop
        eventually, and it had better define them!  */
-
     if (wcPtr->child_class == XmInheritClass) {
 	wcPtr->child_class =
 	  superPtr->child_class;
@@ -158,13 +138,10 @@ ClassPartInitialize(
     if (wcPtr->insert_child == XtInheritInsertChild) {
 	wcPtr->insert_child = superPtr->insert_child;
     }
-
     if (wcPtr->delete_child == XtInheritDeleteChild) {
 	wcPtr->delete_child = superPtr->delete_child;
     }
-
 }
-
 /*ARGSUSED*/
 static void
 ResParentDestroyed(
@@ -177,7 +154,6 @@ ResParentDestroyed(
       XtDestroyWidget((Widget) me);
     }
 }
-
 static void
 Destroy(
         Widget wid )
@@ -186,7 +162,6 @@ Destroy(
     XmDesktopObject		deskObj = (XmDesktopObject)w;
     Widget			deskParent;
     Widget			resParent = w->ext.logicalParent;
-
     if ((deskParent = deskObj->desktop.parent) != NULL) {
 	if (XmIsScreen(deskParent)) {
 	      XmScreenClass	deskParentClass = (XmScreenClass)
@@ -201,7 +176,6 @@ Destroy(
 		((Widget) deskObj);
 	  }
     }
-
     /*
      * if we were created as a sibling of our primary then we have a
      * destroy callback on them.
@@ -211,10 +185,8 @@ Destroy(
 			 XmNdestroyCallback,
 			 ResParentDestroyed,
 			 (XtPointer)w);
-
     XtFree((char *) w->desktop.children);
 }
-
 static void
 InsertChild(
         Widget wid )
@@ -224,12 +196,9 @@ InsertChild(
     register Cardinal        	i;
     register XmDesktopObject 	cw;
     register WidgetList      	children;
-
     cw = (XmDesktopObject) w->desktop.parent;
     children = cw->desktop.children;
-
     position = cw->desktop.num_children;
-
     if (cw->desktop.num_children == cw->desktop.num_slots) {
 	/* Allocate more space */
 	cw->desktop.num_slots +=  (cw->desktop.num_slots / 2) + 2;
@@ -244,7 +213,6 @@ InsertChild(
     children[position] = (Widget)w;
     cw->desktop.num_children++;
 }
-
 static void
 DeleteChild(
         Widget wid )
@@ -253,23 +221,19 @@ DeleteChild(
     register Cardinal	     	position;
     register Cardinal	     	i;
     register XmDesktopObject 	cw;
-
     cw = (XmDesktopObject) w->desktop.parent;
-
     for (position = 0; position < cw->desktop.num_children; position++) {
         if (cw->desktop.children[position] == (Widget)w) {
 	    break;
 	}
     }
     if (position == cw->desktop.num_children) return;
-
     /* Ripple children down one space from "position" */
     cw->desktop.num_children--;
     for (i = position; i < cw->desktop.num_children; i++) {
         cw->desktop.children[i] = cw->desktop.children[i+1];
     }
 }
-
 /************************************************************************
  *
  *  DesktopInitialize
@@ -285,11 +249,9 @@ Initialize(
 {
     XmDesktopObject		deskObj = (XmDesktopObject)new_widget;
     Widget			deskParent;
-
     deskObj->desktop.num_children = 0;
     deskObj->desktop.children = NULL;
     deskObj->desktop.num_slots = 0;
-
     if ((deskParent = deskObj->desktop.parent) != NULL) {
 	  if (XmIsScreen(deskParent)) {
 	      XmScreenClass	deskParentClass = (XmScreenClass)

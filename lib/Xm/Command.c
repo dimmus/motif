@@ -39,12 +39,9 @@ static char rcsid[] = "$TOG: Command.c /main/21 1999/01/26 18:12:51 mgreess $"
 #include "RepTypeI.h"
 #include "SelectioBI.h"
 #include "XmStringI.h"
-
 #include <string.h>
 #include <stdlib.h>
-
 #define ARG_LIST_CNT 25
-
 /* defines for warning messages */
 #define WARNING1 _XmMMsgCommand_0000
 #define WARNING2 _XmMMsgCommand_0001
@@ -52,9 +49,7 @@ static char rcsid[] = "$TOG: Command.c /main/21 1999/01/26 18:12:51 mgreess $"
 #define WARNING4 _XmMMsgCommand_0003
 #define WARNING5 _XmMMsgCommand_0004
 #define WARNING6 _XmMMsgCommand_0005
-
 /********    Static Function Declarations    ********/
-
 static void ClassPartInitialize(
                         WidgetClass wc) ;
 static void Initialize(
@@ -81,10 +76,7 @@ static Boolean SetValues(
                         Widget nw,
                         ArgList args,
                         Cardinal *num_args) ;
-
 /********    End Static Function Declarations    ********/
-
-
 static XtActionsRec actionsList[] =
 {
         { "Return",                     _XmCommandReturn },     /* Motif 1.0 */
@@ -92,43 +84,34 @@ static XtActionsRec actionsList[] =
         { "BulletinBoardReturn",        _XmCommandReturn },
         { "SelectionBoxUpOrDown",       _XmCommandUpOrDown },
 };
-
-
 /* define the resource stuff for a command widget */
 static XmSyntheticResource syn_resources[] = {
-
     {   XmNpromptString,
         sizeof (XmString),
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.selection_label_string),
         _XmSelectionBoxGetSelectionLabelString,
 		NULL },
-
     {   XmNcommand,
         sizeof (XmString),
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_string),
         _XmSelectionBoxGetTextString,
 		NULL },
-
     {   XmNhistoryItems,
         sizeof (XmString *),
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_items),
         _XmSelectionBoxGetListItems,
 		NULL },
-
     {   XmNhistoryItemCount,
         sizeof(int),
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_item_count),
         _XmSelectionBoxGetListItemCount,
 		NULL },
-
     {   XmNhistoryVisibleItemCount,
         sizeof(int),
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_visible_item_count),
         _XmSelectionBoxGetListVisibleItemCount,
 		NULL },
 };
-
-
 static XtResource resources[] =
 {
     {   XmNcommandEnteredCallback,
@@ -138,7 +121,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmCommandRec, command.callback),
         XmRCallback,
         (XtPointer)NULL},
-
     {   XmNcommandChangedCallback,
         XmCCallback,
         XmRCallback,
@@ -146,7 +128,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmCommandRec, command.value_changed_callback),
         XmRCallback,
         (XtPointer) NULL},
-
     {   XmNpromptString,
         XmCPromptString,
         XmRXmString,
@@ -154,7 +135,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.selection_label_string),
         XmRImmediate,
         (XtPointer) XmUNSPECIFIED},
-
     {   XmNcommand,
         XmCTextString,
         XmRXmString,
@@ -162,7 +142,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.text_string),
         XmRImmediate,
         (XtPointer) XmUNSPECIFIED},
-
     {   XmNhistoryItems,
         XmCItems,
         XmRXmStringTable,
@@ -170,7 +149,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_items),
         XmRImmediate,
         NULL},
-
     {   XmNhistoryItemCount,
         XmCItemCount,
         XmRInt,
@@ -178,7 +156,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_item_count),
         XmRImmediate,
         (XtPointer) XmUNSPECIFIED_COUNT},
-
     {   XmNhistoryMaxItems,
         XmCMaxItems,
         XmRInt,
@@ -186,7 +163,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmCommandRec, command.history_max_items),
         XmRImmediate,
         (XtPointer) 100},
-
     {   XmNhistoryVisibleItemCount,
         XmCVisibleItemCount,
         XmRInt,
@@ -194,7 +170,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.list_visible_item_count),
         XmRImmediate,
         (XtPointer) 8},
-
     {   XmNdialogType,
         XmCDialogType,
         XmRSelectionType,
@@ -202,7 +177,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmSelectionBoxRec, selection_box.dialog_type),
         XmRImmediate,
         (XtPointer) XmDIALOG_COMMAND},
-
     {   XmNdefaultPosition,
         XmCDefaultPosition,
         XmRBoolean,
@@ -210,7 +184,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmBulletinBoardRec, bulletin_board.default_position),
         XmRImmediate,
         (XtPointer) False},
-
     {   XmNautoUnmanage,
         XmCAutoUnmanage,
         XmRBoolean,
@@ -218,7 +191,6 @@ static XtResource resources[] =
         XtOffsetOf( struct _XmBulletinBoardRec, bulletin_board.auto_unmanage),
         XmRImmediate,
         (XtPointer) False},
-
     {   XmNresizePolicy,
         XmCResizePolicy,
         XmRResizePolicy,
@@ -227,14 +199,11 @@ static XtResource resources[] =
         XmRImmediate,
         (XtPointer) XmRESIZE_NONE},
 };
-
-
 /****************************************************************
  *
  * Full class record constant
  *
  ****************************************************************/
-
 externaldef( xmcommandclassrec) XmCommandClassRec xmCommandClassRec =
 {
     {                                            /*core class record         */
@@ -310,25 +279,18 @@ externaldef( xmcommandclassrec) XmCommandClassRec xmCommandClassRec =
         NULL,                                    /* Extension pointer - none */
     }
 };
-
-
 /*
  * now make a public symbol that points to this class record
  */
-
 externaldef( xmcommandwidgetclass) WidgetClass xmCommandWidgetClass
                                            = (WidgetClass) &xmCommandClassRec ;
-
-
 /****************************************************************/
 static void
 ClassPartInitialize(
         WidgetClass wc )
 {
 /****************/
-
     _XmFastSubclassInit (wc, XmCOMMAND_BOX_BIT);
-
     return ;
     }
 /****************************************************************
@@ -346,28 +308,23 @@ Initialize(
     Arg             argv[5] ;
     Cardinal        argc ;
 /****************/
-
     /*	Here we have now to take care of XmUNSPECIFIED (CR 4856).
      */
     if (new_w->selection_box.selection_label_string ==
 	(XmString) XmUNSPECIFIED) {
 	XmString local_xmstring ;
-
 	local_xmstring = XmStringCreate(">", XmFONTLIST_DEFAULT_TAG);
 	argc = 0 ;
 	XtSetArg( argv[argc], XmNlabelString, local_xmstring) ; ++argc ;
 	XtSetValues( SB_SelectionLabel( new_w), argv, argc) ;
 	XmStringFree(local_xmstring);
-
 	new_w->selection_box.selection_label_string = NULL ;
     }
-
     /* mustMatch does not apply to command... (it is always false) */
     if (new_w->selection_box.must_match != False) {
         new_w->selection_box.must_match = False;
         XmeWarning( (Widget) new_w, WARNING5);
     }
-
     /* check for and change max history items (remove items if needed) */
     if (new_w->command.history_max_items < 1) {
         new_w->command.history_max_items = 100;
@@ -376,7 +333,6 @@ Initialize(
     argc = 0 ;
     XtSetArg( argv[argc], XmNitemCount, &max) ; ++argc ;
     XtGetValues( SB_List( new_w), argv, argc) ;
-
     if (new_w->command.history_max_items < max)
     {
         while (max > new_w->command.history_max_items) {
@@ -394,10 +350,8 @@ Initialize(
     XtAddCallback (new_w->selection_box.text, XmNvalueChangedCallback,
                                               CommandCallback, (XtPointer) new_w);
     new_w->command.error = FALSE;
-
     return ;
 }
-
 /****************************************************************
  * Process callback from the List in a SelectionBox.
  ****************/
@@ -419,11 +373,9 @@ ListCallback(
 /*********** reset is not used ************
             Boolean         reset = FALSE ;
 ****************/
-
     argc = 0 ;
     XtSetArg( argv[argc], XmNitemCount, &count) ; ++argc ;
     XtGetValues( SB_List( cmdWid), argv, argc) ;
-
     if(    !count    )
     {   return ;
         }
@@ -437,7 +389,6 @@ ListCallback(
             *   error message.  Restore previous selection and return.
             */
             XmListDeselectPos( SB_List( cmdWid), listCB->item_position) ;
-
             if(    cmdWid->selection_box.list_selected_item_position    )
             {   XmListSelectPos( SB_List( cmdWid),
                     cmdWid->selection_box.list_selected_item_position, FALSE) ;
@@ -447,7 +398,6 @@ ListCallback(
         XmListDeletePos( SB_List( cmdWid), 0) ;   /* Delete error message.*/
         XmListDeletePos( SB_List( cmdWid), 0) ;   /* Delete blank line.*/
         cmdWid->command.error = FALSE ;
-
         if(    count <= 2    )
         {   /* List only contained error message and blank line.
             */
@@ -455,7 +405,6 @@ ListCallback(
             return ;
             }
         count -= 2 ;
-
         if(    (listCB->item_position > count)
             && (listCB->reason == XmCR_DEFAULT_ACTION)    )
         {
@@ -477,14 +426,12 @@ ListCallback(
         if(    count >= cmdWid->command.history_max_items    )
         {
             XmListDeletePos( cmdWid->selection_box.list, 1) ;
-
             if(    cmdWid->selection_box.list_selected_item_position > 0    )
             {   cmdWid->selection_box.list_selected_item_position-- ;
                 }
             }
         tmpXmString = XmStringCopy( listCB->item) ;
         XmListAddItemUnselected( cmdWid->selection_box.list, tmpXmString, 0) ;
-
         XmListSetBottomPos( cmdWid->selection_box.list, 0) ;
         XmTextFieldSetString( cmdWid->selection_box.text, "") ;
         /* Call the users command entered callback.
@@ -494,7 +441,6 @@ ListCallback(
         cmdCB.value  = tmpXmString ;
         cmdCB.length = XmStringLength( tmpXmString) ;
         XtCallCallbackList( (Widget) cmdWid, cmdWid->command.callback, &cmdCB) ;
-
         XmStringFree( tmpXmString) ;
         }
     else /* listCB->reason is BROWSE_SELECT or SINGLE_SELECT */
@@ -525,23 +471,18 @@ CommandCallback(
     XmCommandCallbackStruct  cb;
     char *str;
 /****************/
-
     cb.reason = XmCR_COMMAND_CHANGED;
     cb.event = ((XmAnyCallbackStruct *) call_data)->event ;
-
     /* get char* string from text and convert to XmString type */
     str = XmTextFieldGetString (client_data->selection_box.text);
     cb.value = XmStringGenerate(str, XmFONTLIST_DEFAULT_TAG,
 				XmCHARSET_TEXT, NULL);
     XtFree (str);
-
     cb.length = XmStringLength (cb.value);
-
     XtCallCallbackList ((Widget) client_data, client_data->command.value_changed_callback, &cb);
     XmStringFree (cb.value);
     return ;
 }
-
 /****************************************************************/
 static Boolean
 CommandParentProcess(
@@ -550,7 +491,6 @@ CommandParentProcess(
 {
             XmCommandWidget cmd = (XmCommandWidget) wid ;
 /****************/
-
     if(    (event->any.process_type == XmINPUT_ACTION)
         && (   (event->input_action.action == XmPARENT_ACTIVATE)
             || (    (event->input_action.action == XmPARENT_CANCEL)
@@ -569,10 +509,8 @@ CommandParentProcess(
             }
         return( TRUE) ;
         }
-
     return( _XmParentProcess( XtParent( cmd), event)) ;
     }
-
 /****************************************************************
  * Return function to "complete" text entry
  ****************/
@@ -591,7 +529,6 @@ _XmCommandReturn(
             Cardinal        argc ;
             int             count ;
 /****************/
-
     /* if an error has been sent to the history list, remove it now */
     if (w->command.error) {
         XmListDeletePos (w->selection_box.list, 0);     /* delete error msg  */
@@ -599,7 +536,6 @@ _XmCommandReturn(
         w->command.error = FALSE;
         XmListSetBottomPos (w->selection_box.list, 0);
     }
-
     /* update the history:  - get text, check null/empty  */
     /*                      - create XmString from text   */
     /*                      - increment local list count  */
@@ -609,7 +545,6 @@ _XmCommandReturn(
     /*                      - position list to end        */
     /*                      - reset selection list ptr    */
     /*                      - reset command to ""         */
-
     tmpString = XmTextFieldGetString (w->selection_box.text);
     if ((tmpString == NULL) || (strcmp(tmpString, "") == 0)) {
         if (tmpString) XtFree(tmpString);
@@ -619,7 +554,6 @@ _XmCommandReturn(
     XtSetArg( argv[argc], XmNitemCount, &count) ; ++argc ;
     XtGetValues( SB_List( w), argv, argc) ;
     /* if already at max items, remove first item in list */
-
     if (count >= w->command.history_max_items)
     {
         XmListDeletePos (w->selection_box.list, 1);
@@ -629,11 +563,9 @@ _XmCommandReturn(
     tmpXmString = XmStringGenerate(tmpString, XmFONTLIST_DEFAULT_TAG,
 				   XmCHARSET_TEXT, NULL);
     XmListAddItemUnselected (w->selection_box.list, tmpXmString, 0);
-
     XmListSetBottomPos (w->selection_box.list, 0);
     XmTextFieldSetString (w->selection_box.text, "");
     /* call the users command entered callback */
-
     cb.reason = XmCR_COMMAND_ENTERED;
     cb.event  = event;
     cb.value  = tmpXmString;
@@ -662,7 +594,6 @@ _XmCommandUpOrDown(
             Cardinal        ac ;
             int             selected_count ;
 /****************/
-
     if(    !(list = cmd->selection_box.list)    )
     {   return ;
         }
@@ -672,12 +603,10 @@ _XmCommandUpOrDown(
     XtSetArg( av[ac], XmNvisibleItemCount, &visible) ; ++ac ;
     XtSetArg( av[ac], XmNselectedItemCount, &selected_count); ac++;
     XtGetValues( (Widget) list, av, ac) ;
-
     if(    !count
         || (cmd->command.error  &&  (count <= 2))    )
     {   return ;
         }
-
  /*
   * Fix for 5237 - Check the selected_count to ensure that a selection
   *                exists.  No items may be selected if the application
@@ -686,7 +615,6 @@ _XmCommandUpOrDown(
   */
     if (!selected_count)
        cmd->selection_box.list_selected_item_position = 0;
-
     if (_XmConvertActionParamToRepTypeId((Widget) cmd,
 			 XmRID_COMMAND_SELECTION_BOX_UP_OR_DOWN_ACTION_PARAMS,
 			 argv[0], True, &key_pressed) == False)
@@ -694,9 +622,7 @@ _XmCommandUpOrDown(
 	/* We couldn't convert the value. Just assume a value of 0. */
 	key_pressed = 0;
     }
-
     position = &(cmd->selection_box.list_selected_item_position) ;
-
     if(    *position == 0    )
     {
         /* If error is visible, select last item - 2.  Otherwise, select
@@ -750,13 +676,11 @@ _XmCommandUpOrDown(
         }
     return ;
     }
-
 /*************************************************************************
  *                                                                      *
  * Resize - update visibleItemCount when resized
  *                                                                      *
  ************************************************************************/
-
 static void
 Resize(Widget wid)
 {
@@ -764,19 +688,16 @@ Resize(Widget wid)
   Arg             av[5] ;
  XmCommandWidget cw = (XmCommandWidget)wid;
  XtWidgetProc resize;
-
  _XmProcessLock();
  resize = xmSelectionBoxClassRec.core_class.resize;
  _XmProcessUnlock();
  (*resize) ((Widget) cw) ;
-
   /* keep list_visible_item_count in sync with List's visibleItemCount*/
   ac = 0 ;
   XtSetArg( av[ac], XmNvisibleItemCount, &(cw->selection_box.list_visible_item_count)) ; ++ac
 ;
   XtGetValues( cw->selection_box.list, av, ac) ;
 }
-
 /****************************************************************
  * Set attributes of a command widget
  ****************/
@@ -794,18 +715,15 @@ SetValues(
             Arg             argv[5] ;
             Cardinal        argc ;
 /****************/
-
     /* mustMatch does not apply to command... (it is always false) */
     if (new_w->selection_box.must_match != False) {
         new_w->selection_box.must_match = False;
         XmeWarning( (Widget) new_w, WARNING5);
     }
-
     if (new_w->selection_box.dialog_type != XmDIALOG_COMMAND) {
         new_w->selection_box.dialog_type = XmDIALOG_COMMAND;
         XmeWarning( (Widget) new_w, WARNING1);
     }
-
     /* check for and change max history items (remove items if needed) */
     if (new_w->command.history_max_items < 1) {
         new_w->command.history_max_items = old->command.history_max_items;
@@ -817,7 +735,6 @@ SetValues(
         argc = 0 ;
         XtSetArg( argv[argc], XmNitemCount, &max) ; ++argc ;
         XtGetValues( SB_List( new_w), argv, argc) ;
-
         while (max > new_w->command.history_max_items) {
             XmListDeletePos (new_w->selection_box.list, 1);
             if (new_w->selection_box.list_selected_item_position > 0)
@@ -829,16 +746,13 @@ SetValues(
     {
         int new_count = new_w->selection_box.list_item_count;
         int old_count = old->selection_box.list_item_count;
-
 	if (new_count > 2 && old_count > 2)
 	{
             XmString new_blank, old_blank, new_error, old_error;
-
             new_error = new_w->selection_box.list_items[new_count-1];
             old_error = old->selection_box.list_items[new_count-1];
             new_blank = new_w->selection_box.list_items[new_count-2];
             old_blank = old->selection_box.list_items[new_count-2];
-
 	    if (XmStringCompare(new_error, old_error) &&
 	        XmStringCompare(new_blank, old_blank))
 	    {
@@ -852,7 +766,6 @@ SetValues(
 	}
 	else new_w->command.error = FALSE;
     }
-
     /* require redisplay */
     return(True);
 }
@@ -868,23 +781,18 @@ XmCreateCommand(
 {
     Widget   w;
     ArgList  argsNew;
-
     /* add dialogType to arglist and force to XmDIALOG_COMMAND... */
     /* big time bad stuff will happen if they use prompt type...  */
     /* (like, no list gets created, but used all through command) */
-
     /*  allocate arglist, copy args, add dialog type arg */
     argsNew = (ArgList) XtMalloc (sizeof(Arg) * (ac + 1));
     memcpy( argsNew, al, sizeof(Arg) * ac);
     XtSetArg (argsNew[ac], XmNdialogType, XmDIALOG_COMMAND);  ac++;
-
     /*  create Command, free argsNew, return */
     w = XtCreateWidget (name, xmCommandWidgetClass, parent, argsNew, ac);
     XtFree ((char *) argsNew);
-
     return (w);
 }
-
 Widget
 XmVaCreateCommand(
         Widget parent,
@@ -894,12 +802,9 @@ XmVaCreateCommand(
     register Widget w;
     va_list var;
     int count;
-
     Va_start(var,name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmCommandWidgetClass,
@@ -908,7 +813,6 @@ XmVaCreateCommand(
     va_end(var);
     return w;
 }
-
 Widget
 XmVaCreateManagedCommand(
         Widget parent,
@@ -918,11 +822,9 @@ XmVaCreateManagedCommand(
     Widget w = NULL;
     va_list var;
     int count;
-
     Va_start(var, name);
     count = XmeCountVaListSimple(var);
     va_end(var);
-
     Va_start(var, name);
     w = XmeVLCreateWidget(name,
                          xmCommandWidgetClass,
@@ -931,7 +833,6 @@ XmVaCreateManagedCommand(
     va_end(var);
     return w;
 }
-
 Widget
 XmCommandGetChild(
         Widget widget,
@@ -942,7 +843,6 @@ XmCommandGetChild(
     _XmWidgetToAppContext(widget);
 /****************/
     _XmAppLock(app);
-
     switch (child) {
         case XmDIALOG_COMMAND_TEXT:
 		ret_widget = w->selection_box.text;
@@ -978,7 +878,6 @@ XmCommandSetValue(
     char *str;
     _XmWidgetToAppContext(widget);
 /****************/
-
     _XmAppLock(app);
     if(    !(str = _XmStringGetTextConcat( value))    )
     {
@@ -1004,9 +903,7 @@ XmCommandAppendValue(
     XmTextPosition   endPosition;
     _XmWidgetToAppContext(widget);
 /****************/
-
     if (value == NULL) return;
-
     _XmAppLock(app);
     /* return if invalid string from "value" passed in */
     if(    !(strNew = _XmStringGetTextConcat( value))    )
@@ -1043,14 +940,10 @@ XmCommandError(
 {
     XmCommandWidget   w = (XmCommandWidget)widget;
     XmString  blankXmString;
-
     _XmWidgetToAppContext(widget);
 /****************/
-
     if (error == NULL) return;
-
     _XmAppLock(app);
-
     /* If error is currently in list remove it, but leave (or add) blank item.
     */
     if(    w->command.error    )
@@ -1063,16 +956,12 @@ XmCommandError(
         XmStringFree (blankXmString);
         w->command.error = TRUE;
         }
-
     /* create and add the error string as a list item */
     XmListAddItemUnselected (w->selection_box.list, error, 0);
     XmListSetBottomPos (w->selection_box.list, 0);
-
     _XmAppUnlock(app);
     return ;
     }
-
-
 /****************************************************************
  * This convenience function creates a DialogShell and a Command
  *   child of the shell; returns the Command widget.

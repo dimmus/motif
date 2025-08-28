@@ -26,17 +26,13 @@
  */
 #ifndef _XmGrabShellP_h
 #define _XmGrabShellP_h
-
 #include <Xm/GrabShell.h>
 #include <Xm/XmP.h>
 #include <X11/ShellP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* The GrabShell instance record */
-
 typedef struct
 {
   Cursor	cursor;
@@ -56,10 +52,7 @@ typedef struct
   Window	old_focus;
   int		old_revert_to;
 } XmGrabShellPart;
-
-
 /* Full instance record declaration */
-
 typedef  struct _XmGrabShellRec
 {
   CorePart		core;
@@ -69,7 +62,6 @@ typedef  struct _XmGrabShellRec
   VendorShellPart	vendor_shell;
   XmGrabShellPart	grab_shell;
 } XmGrabShellRec;
-
 typedef  struct _XmGrabShellWidgetRec /* OBSOLETE (for compatibility only).*/
 {
   CorePart		core;
@@ -79,19 +71,12 @@ typedef  struct _XmGrabShellWidgetRec /* OBSOLETE (for compatibility only).*/
   VendorShellPart	vendor_shell;
   XmGrabShellPart	grab_shell;
 } XmGrabShellWidgetRec;
-
-
-
 /* GrabShell class structure */
-
 typedef struct
 {
   XtPointer		extension;	 /* Pointer to extension record */
 } XmGrabShellClassPart;
-
-
 /* Full class record declaration */
-
 typedef struct _XmGrabShellClassRec
 {
   CoreClassPart	    	core_class;
@@ -101,18 +86,11 @@ typedef struct _XmGrabShellClassRec
   VendorShellClassPart	vendor_shell_class;
   XmGrabShellClassPart  grab_shell_class;
 } XmGrabShellClassRec;
-
-
 externalref XmGrabShellClassRec  xmGrabShellClassRec;
-
 /********    Private Function Declarations    ********/
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmGrabShellP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

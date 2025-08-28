@@ -22,24 +22,18 @@
 */
 #ifndef _XmPButtonGP_h
 #define _XmPButtonGP_h
-
 #include <Xm/PushBG.h>
 #include <Xm/LabelGP.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /*************************************************************/
 /* The PushButton Gadget Cache Object's class and instance records*/
 /*************************************************************/
-
 typedef struct _XmPushButtonGCacheObjClassPart
 {
     int foo;
 } XmPushButtonGCacheObjClassPart;
-
-
 typedef struct _XmPushButtonGCacheObjClassRec
 {
 	ObjectClassPart                     object_class;
@@ -47,10 +41,7 @@ typedef struct _XmPushButtonGCacheObjClassRec
 	XmLabelGCacheObjClassPart           label_class_cache;
 	XmPushButtonGCacheObjClassPart      pushbutton_class_cache;
 } XmPushButtonGCacheObjClassRec;
-
 externalref XmPushButtonGCacheObjClassRec xmPushButtonGCacheObjClassRec;
-
-
 typedef struct _XmPushButtonGCacheObjPart
 {
    Boolean 	    fill_on_arm;
@@ -60,18 +51,14 @@ typedef struct _XmPushButtonGCacheObjPart
    unsigned char    multiClick;     /* KEEP/DISCARD resource */
    Dimension        default_button_shadow_thickness;
 		     /* New resource - always add it to gadget's dimension. */
-
    GC               fill_gc;
    GC               background_gc;
-
    /* following items have some persistence across gadget instances and are
    ** here only for data-space savings
    */
    XtIntervalId     timer;
    Widget           timer_widget;
-
 } XmPushButtonGCacheObjPart;
-
 typedef struct _XmPushButtonGCacheObjRec
 {
     ObjectPart                   object;
@@ -79,52 +66,35 @@ typedef struct _XmPushButtonGCacheObjRec
     XmLabelGCacheObjPart         label_cache;
     XmPushButtonGCacheObjPart    pushbutton_cache;
 } XmPushButtonGCacheObjRec;
-
-
 /* PushButton class structure */
-
 typedef struct _XmPushButtonGadgetClassPart
 {
     XtPointer extension;  /* Pointer to extension record */
 } XmPushButtonGadgetClassPart;
-
-
 /* Full class record declaration for PushButton class */
-
 typedef struct _XmPushButtonGadgetClassRec
 {
    RectObjClassPart             rect_class;
    XmGadgetClassPart            gadget_class;
    XmLabelGadgetClassPart       label_class;
    XmPushButtonGadgetClassPart  pushbutton_class;
-
 } XmPushButtonGadgetClassRec;
-
-
 externalref XmPushButtonGadgetClassRec xmPushButtonGadgetClassRec;
-
-
 /* PushButton instance record */
-
 typedef struct _XmPushButtonGadgetPart
 {
    XtCallbackList   activate_callback;
    XtCallbackList   arm_callback;
    XtCallbackList   disarm_callback;
-
    Dimension        show_as_default;
    Boolean 	    armed;
    int              click_count;
-
    Boolean	    compatible;	  /* if false it is Motif 1.1 else Motif 1.0  */
                                   /* not cached for performance reasons */
-
    XmPushButtonGCacheObjPart  *cache; /* Replace cache instance fields */
 					/* with a pointer */
 } XmPushButtonGadgetPart;
-
 /* Full instance record declaration */
-
 typedef struct _XmPushButtonGadgetRec {
    ObjectPart              object;
    RectObjPart             rectangle;
@@ -132,12 +102,9 @@ typedef struct _XmPushButtonGadgetRec {
    XmLabelGadgetPart       label;
    XmPushButtonGadgetPart   pushbutton;
 } XmPushButtonGadgetRec;
-
 /* MACROS */
 /**********/
-
 /* Macros for cached instance fields */
-
 #define PBG_FillOnArm(w)		(((XmPushButtonGadget) (w)) -> \
 					   pushbutton.cache->fill_on_arm)
 #define PBG_ArmColor(w)			(((XmPushButtonGadget) (w)) -> \
@@ -156,9 +123,7 @@ typedef struct _XmPushButtonGadgetRec {
                        			   pushbutton.cache->multiClick)
 #define PBG_DefaultButtonShadowThickness(w)     (((XmPushButtonGadget) (w)) -> \
                        pushbutton.cache->default_button_shadow_thickness)
-
 /* Macros for uncached instance fields */
-
 #define PBG_ActivateCallback(w)		(((XmPushButtonGadget) (w)) -> \
 					   pushbutton.activate_callback)
 #define PBG_ArmCallback(w)		(((XmPushButtonGadget) (w)) -> \
@@ -173,25 +138,17 @@ typedef struct _XmPushButtonGadgetRec {
                        pushbutton.compatible)
 #define PBG_ShowAsDefault(w)		(((XmPushButtonGadget) (w)) -> \
 					   pushbutton.show_as_default)
-
 /******************************/
 /* Convenience Macros         */
 /******************************/
-
 #define PBG_Cache(w)			(((XmPushButtonGadget)(w))->\
 					   pushbutton.cache)
 #define PBG_ClassCachePart(w) \
 	(((XmPushButtonGadgetClass)xmPushButtonGadgetClass)->gadget_class.cache_part)
-
-
 /********    Private Function Declarations    ********/
-
 /********    End Private Function Declarations    ********/
-
-
 #ifdef __cplusplus
 }  /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-
 #endif /* _XmPButtonGP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

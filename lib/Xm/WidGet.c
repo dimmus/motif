@@ -25,25 +25,18 @@
 /*
  * HISTORY
  */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-
 #include "XmI.h"
 #include <Xm/PrimitiveP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/GadgetP.h>
-
-
-
 /************************************************************************
  *
  *   XmWidgetGetBaselines
  *
  ************************************************************************/
-
 Boolean
 XmWidgetGetBaselines(
         Widget wid,
@@ -52,14 +45,11 @@ XmWidgetGetBaselines(
 {
   _XmWidgetToAppContext(wid);
   _XmAppLock(app);
-
   if (XmIsPrimitive(wid))
       {
 	  XmPrimitiveClassExt              *wcePtr;
 	  WidgetClass   wc = XtClass(wid);
-
 	  wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
-
 	  if (*wcePtr && (*wcePtr)->widget_baseline)
 	      {
 		_XmAppUnlock(app);
@@ -71,9 +61,7 @@ XmWidgetGetBaselines(
       {
 	  XmGadgetClassExt              *wcePtr;
 	  WidgetClass   wc = XtClass(wid);
-
 	  wcePtr = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
-
 	  if (*wcePtr && (*wcePtr)->widget_baseline)
 	      {
 		_XmAppUnlock(app);
@@ -84,14 +72,11 @@ XmWidgetGetBaselines(
   _XmAppUnlock(app);
   return (False);
 }
-
-
 /************************************************************************
  *
  *   XmWidgetDisplayRect
  *
  ************************************************************************/
-
 Boolean
 XmWidgetGetDisplayRect(
         Widget wid,
@@ -99,14 +84,11 @@ XmWidgetGetDisplayRect(
 {
     _XmWidgetToAppContext(wid);
     _XmAppLock(app);
-
     if (XmIsPrimitive(wid))
 	{
 	    XmPrimitiveClassExt              *wcePtr;
 	    WidgetClass   wc = XtClass(wid);
-
 	    wcePtr = _XmGetPrimitiveClassExtPtr(wc, NULLQUARK);
-
 	    if (*wcePtr && (*wcePtr)->widget_display_rect)
 		(*((*wcePtr)->widget_display_rect)) (wid, displayrect);
 	    _XmAppUnlock(app);
@@ -116,9 +98,7 @@ XmWidgetGetDisplayRect(
 	{
 	    XmGadgetClassExt              *wcePtr;
 	    WidgetClass   wc = XtClass(wid);
-
 	    wcePtr = _XmGetGadgetClassExtPtr(wc, NULLQUARK);
-
 	    if (*wcePtr && (*wcePtr)->widget_display_rect)
 		(*((*wcePtr)->widget_display_rect)) (wid, displayrect);
 	    _XmAppUnlock(app);
