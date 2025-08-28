@@ -59,12 +59,6 @@
  */
 #define LOCAL_STRCASECMP
 
-#ifdef _NO_PROTO
-#ifdef NeedFunctionPrototypes
-#undef NeedFunctionPrototypes
-#endif
-#endif
-
 /*
  * Define SUPPORTS_WCHARS if the system supports wide character sets
  */
@@ -80,24 +74,13 @@
 /*
  * Set state of inclusion of prototypes properly
  */
-#ifdef NeedFunctionPrototypes
 #define ARGLIST(p)	(
 #define ARG(a, b)	a b,
 #define GRA(a, b)	a b)
-#else
-#define ARGLIST(p)	p
-#define ARG(a, b)	a b;
-#define GRA(a, b)	a b;
-#endif
 
-#ifdef NeedFunctionPrototypes
 #ifdef __cplusplus
 #define UARG(a, b)	a,
 #define GRAU(a, b)	a)
-#else
-#define UARG(a, b)	a b,
-#define GRAU(a, b)	a b)
-#endif
 #else
 #define UARG(a, b)	a b;
 #define GRAU(a, b)	a b;
@@ -1023,14 +1006,13 @@ static wchar_t *CStrCommonWideCharsGet()
  * Output:
  *	Standard.
  */
-static Boolean CvtStringToXmString
-    ARGLIST((d, args, num_args, fromVal, toVal, data))
-        ARG(Display *, d)
-        UARG(XrmValue *, args)
-        ARG(Cardinal *, num_args)
-        ARG(XrmValue *, fromVal)
-        ARG(XrmValue *, toVal)
-        GRAU(XtPointer, data)
+static Boolean CvtStringToXmString(
+    Display *d,
+    XrmValue *args,
+    Cardinal *num_args,
+    XrmValue *fromVal,
+    XrmValue *toVal,
+    XtPointer data)
 {
     static XmString	resStr;
     char		*str;
@@ -1087,13 +1069,12 @@ static Boolean CvtStringToXmString
     }
     return(True);
 }
-static void XmStringCvtDestroy
-    ARGLIST((app, to, data, args, num_args))
-        UARG(XtAppContext, app)
-        ARG(XrmValue *, to)
-        UARG(XtPointer, data)
-        UARG(XrmValue *, args)
-        GRAU(Cardinal *, num_args)
+static void XmStringCvtDestroy(
+    XtAppContext app,
+    XrmValue *to,
+    XtPointer data,
+    XrmValue *args,
+    Cardinal *num_args)
 {
     XmStringFree(*(XmString*)(to->addr));
 }
@@ -1117,14 +1098,13 @@ static void XmStringCvtDestroy
  * Output:
  *	Standard.
  */
-static Boolean CvtStringToXmStringTable
-    ARGLIST((d, args, num_args, fromVal, toVal, data))
-        ARG(Display *, d)
-        ARG(XrmValue *, args)
-        ARG(Cardinal *, num_args)
-        ARG(XrmValue *, fromVal)
-        ARG(XrmValue *, toVal)
-        GRAU(XtPointer, data)
+static Boolean CvtStringToXmStringTable(
+    Display *d,
+    XrmValue *args,
+    Cardinal *num_args,
+    XrmValue *fromVal,
+    XrmValue *toVal,
+    XtPointer data)
 {
     static XmString	*CStrTable;
     XmString		*tblPtr;
@@ -1245,13 +1225,12 @@ static Boolean CvtStringToXmStringTable
     }
     return(True);
 }
-static void XmStringTableCvtDestroy
-    ARGLIST((app, to, data, args, num_args))
-        UARG(XtAppContext, app)
-        ARG(XrmValue *, to)
-        UARG(XtPointer, data)
-        UARG(XrmValue *, args)
-        GRAU(Cardinal *, num_args)
+static void XmStringTableCvtDestroy(
+    XtAppContext app,
+    XrmValue *to,
+    XtPointer data,
+    XrmValue *args,
+    Cardinal *num_args)
 {
     XmString	*tblPtr = *(XmString**)(to->addr);
 
@@ -1279,9 +1258,8 @@ static void XmStringTableCvtDestroy
  * Output:
  *      None
  */
-void RegisterConverters
-    ARGLIST((appContext))
-        GRA(XtAppContext, appContext)
+void RegisterConverters(
+    XtAppContext appContext)
 {
     XtAppSetTypeConverter(appContext, XmRString, XmRXmString,
 			  (XtTypeConverter)CvtStringToXmString,
@@ -1307,13 +1285,12 @@ void RegisterConverters
  *      None
  */
 #ifndef IGNORE_CONVERT
-XtPointer CONVERT
-    ARGLIST((w, from_string, to_type, to_size, success))
-        ARG(Widget, w)
-        ARG(char *, from_string)
-        ARG(char *, to_type)
-        ARG(int, to_size)
-        GRA(Boolean *, success)
+XtPointer CONVERT(
+    Widget w,
+    char *from_string,
+    char *to_type,
+    int to_size,
+    Boolean *success)
 {
     XrmValue		fromVal, toVal;	/* resource holders		*/
     Boolean		convResult;	/* return value			*/
@@ -1433,12 +1410,11 @@ XtPointer CONVERT
 
 #ifndef IGNORE_MENU_POST
 
-void MENU_POST
-    ARGLIST((p, mw, ev, dispatch))
-        UARG(Widget, p)
-        ARG(XtPointer, mw)
-        ARG(XEvent *, ev)
-        GRAU(Boolean *, dispatch)
+void MENU_POST(
+    Widget p,
+    XtPointer mw,
+    XEvent *ev,
+    Boolean *dispatch)
 {
     Arg	args[2];
     int	argcnt;
@@ -1477,12 +1453,11 @@ void MENU_POST
  *          calculated at creation time.
  */
 
-void SET_BACKGROUND_COLOR
-    ARGLIST((w, args, argcnt, bg_color))
-        ARG(Widget, w)
-        ARG(ArgList, args)
-        ARG(Cardinal *, argcnt)
-        GRA(Pixel, bg_color)
+void SET_BACKGROUND_COLOR(
+    Widget w,
+    ArgList args,
+    Cardinal *argcnt,
+    Pixel bg_color)
 {
     int		i;
     int		topShadowLoc;
@@ -1847,13 +1822,8 @@ typedef struct {
 
 /* forward declaration of functions with prototypes */
 
-#ifdef NeedFunctionPrototypes
 #define FUNC(f, t, p) extern t f p
 #define LFUNC(f, t, p) static t f p
-#else
-#define FUNC(f, t, p) extern t f()
-#define LFUNC(f, t, p) static t f()
-#endif
 
 /*
  * functions declarations
