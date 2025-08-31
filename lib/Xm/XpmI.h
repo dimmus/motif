@@ -111,7 +111,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <X11/Xmd.h>
+#include <string.h>
 /* stdio.h doesn't declare popen on a Sequent DYNIX OS */
 #ifdef sequent
 extern FILE *popen();
@@ -119,9 +119,10 @@ extern FILE *popen();
 #ifdef FOR_MSW
 #include "simx.h"
 #else
+/* Include X11 headers after system headers to avoid conflicts */
+#include <X11/Xmd.h>
 #include <X11/Xos.h>
 #include <X11/Xfuncs.h>
-#include <X11/Xmd.h>
 #endif
 /* The following should help people wanting to use their own memory allocation
  * functions. To avoid the overhead of a function call when the standard
@@ -328,7 +329,7 @@ FUNC(xpmstrcasecmp, int, (char *s1, char *s2));
 #else
 #undef xpmstrcasecmp
 #define xpmstrcasecmp strcasecmp
-#include <strings.h>
+/* strings.h already included above, no need to include again */
 #endif
 FUNC(xpmatoui, unsigned int,
      (char *p, unsigned int l, unsigned int *ui_return));

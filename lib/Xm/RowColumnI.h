@@ -159,8 +159,8 @@ extern void _XmCallRowColumnUnmapCallback(
                         XEvent *event) ;
 extern void _XmRC_RemoveFromPostFromListOnDestroyCB (
  			Widget w,
- 			caddr_t clientData,
- 			caddr_t callData) ;
+ 			XtPointer clientData,
+ 			XtPointer callData) ;
 extern void _XmRC_CheckAndSetOptionCascade(XmRowColumnWidget menu) ;
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus

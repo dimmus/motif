@@ -136,7 +136,20 @@ AC_DEFUN([XM_CFLAGS],[
 	])
 
 	dnl Check for ANSI C environment - modern compilers always support ANSI C
-	AC_DEFINE([__STDC__], [1], [Define if compiler supports ANSI C])
+	dnl Only define __STDC__ if not already defined by compiler
+	AC_COMPILE_IFELSE([
+		AC_LANG_PROGRAM([], [[
+			#ifndef __STDC__
+			#error "__STDC__ not defined"
+			#endif
+		]])
+	], [
+		dnl __STDC__ is already defined by compiler
+		AC_MSG_NOTICE([__STDC__ already defined by compiler])
+	], [
+		dnl __STDC__ not defined, so define it
+		AC_DEFINE([__STDC__], [1], [Define if compiler supports ANSI C])
+	])
 	dnl X_NOT_STDC_ENV is no longer needed for modern builds
 
 	dnl Configure multi-threading options

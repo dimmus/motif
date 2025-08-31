@@ -1772,8 +1772,8 @@ _XmRC_AddToPostFromList(
 void
 _XmRC_RemoveFromPostFromListOnDestroyCB (
 	Widget w,
-	caddr_t clientData,
-	caddr_t callData )	/* unused */
+	XtPointer clientData,
+	XtPointer callData )	/* unused */
 {
    /* The attach_widget has been destroyed.  Remove it from the Popup's
     * postFromList.

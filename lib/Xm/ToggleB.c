@@ -2806,6 +2806,7 @@ XmToggleButtonGetState(
   Boolean ret_val;
   if (XmIsGadget(w))
     return XmToggleButtonGadgetGetState(w);
+  _XmWidgetToAppContext(w);
   _XmAppLock(app);
   ret_val = tw->toggle.set;
   _XmAppUnlock(app);
@@ -2830,6 +2831,7 @@ XmToggleButtonSetState(
     XmToggleButtonGadgetSetState(w, bnewstate, notify);
     return;
   }
+  _XmWidgetToAppContext(w);
   _XmAppLock(app);
   /* toggel.set is enum type, not Boolean */
   newstate = (bnewstate == XmSET)? XmSET : XmUNSET;
@@ -2892,6 +2894,7 @@ XmToggleButtonSetValue(
   XmToggleButtonWidget tw = (XmToggleButtonWidget) w;
   if (XmIsGadget(w))
     return XmToggleButtonGadgetSetValue(w, newstate, notify);
+  _XmWidgetToAppContext(w);
   _XmAppLock(app);
   /* Can't set third state if we aren't in three state mode. */
   if ((newstate == XmINDETERMINATE) &&
