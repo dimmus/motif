@@ -1053,8 +1053,7 @@ for ( ndx=0 ; ndx<wml_obj_allclass_ptr->cnt ; ndx++ )
  * assumed to be inherited).
  */
 
-void wmlResolveClassInherit (clsobj)
-    WmlClassDefPtr		clsobj;
+void wmlResolveClassInherit(WmlClassDefPtr clsobj)
 
 {
 
