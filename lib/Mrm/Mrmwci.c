@@ -868,6 +868,7 @@ hash_function(int	l_length,
 
   bzero((char *)al_value, sizeof(int) * 20);
   strncpy((char *)al_value, c_value, l_length);
+  ((char *)al_value)[l_length] = '\0';
   l_hash_code = 0;
 
   for (i = 0 ; i < l_limit ; i++)

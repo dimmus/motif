@@ -295,10 +295,10 @@ Urm__OpenHierarchy (MrmCount			num_files,
        */
       cur_file->class_ctable = NULL;
       cur_file->resource_ctable = NULL;
-      result = UrmGetResourceContext ((char *(*)())NULL, (void(*)())NULL,
+      result = UrmGetResourceContext ((char *(*)(size_t))NULL, (void(*)(void *))NULL,
 				      0, &class_ctx);
       if ( result != MrmSUCCESS ) return result;
-      result = UrmGetResourceContext ((char *(*)())NULL, (void(*)())NULL,
+      result = UrmGetResourceContext ((char *(*)(size_t))NULL, (void(*)(void *))NULL,
 				      0, &resource_ctx);
       if ( result != MrmSUCCESS ) return result;
       result = UrmGetIndexedLiteral (cur_file, UilMrmClassTableIndex,

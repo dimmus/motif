@@ -604,10 +604,8 @@ UrmCWRSetArgValue (URMResourceContextPtr	context_id,
   Cardinal		result ;	/* function results */
   RGMArgListDescPtr	argdesc ;	/* arglist desc in record */
   RGMArgumentPtr	argptr ;	/* argument being set */
-  MrmOffset		offset, dumoff; /* non-immediate value offset */
+  MrmOffset		offset; /* non-immediate value offset */
   double		*dblptr ;	/* pointer to double constant */
-  char			*dumaddr;	/* dummy address for GuaranteeSpace */
-  Cardinal		diff;		/* alignment diff for dblptr */
   RGMColorTablePtr	src_ct ;	/* arg_val as color table pointer */
   RGMColorTablePtr	dst_ct ;	/* color table allocated in record */
   RGMIconImagePtr	src_icon ;	/* arg_val as icon pointer */

@@ -64,28 +64,28 @@
 /*									     */
 /* This file is also used to generate the XPG4 type message catalog.	     */
 /* NO MESSAGES CAN BE REMOVED! If a message is no longer used, it can	     */
-/* be removed from the object module by adding an #if 0 or /* above the      */
+/* be removed from the object module by adding an #if 0 or comment above the      */
 /* line(s) containing the message, and the corresponding #endif or 	     */
 /* end-of-comment after the line(s).					     */
 /*									     */
-/* When ADDING messages to existing "sets" - a set is found inside /**** *****/
+/* When ADDING messages to existing "sets" - a set is found inside **** *****/
 /* always add the new "externaldef(messages)" definition after everything    */
 /* else in the set. Example:                                                 */
 /*									     */
-/* /**************** First.c ****************/
+/* **************** First.c ****************/
 /*									     */
 /* externaldef(mrmmsg) _MrmConst char *_MrmMsgFirst_0000 =		     */
 /*    "Memory error";							     */
 /*									     */
-/* /* Needed for message catalog BC. Do not remove */
-/* /***+MSG_First_1000 "Fake message."*/
-/* /***+$ MSG_First_1000 message is obsolete - DO NOT localize this message.*/
+/* Needed for message catalog BC. Do not remove */
+/* ***+MSG_First_1000 "Fake message."*/
+/* ***+$ MSG_First_1000 message is obsolete - DO NOT localize this message.*/
 /*									     */
 /*									     */
-/* /**************** Second.c ****************/
+/* **************** Second.c ****************/
 /*									     */
 /* Messages added to the set "First" should be added after the line          */
-/* /****+MSG_First_1000 "Fake message."*/
+/* ****+MSG_First_1000 "Fake message."*/
 /* not after "Memory error".                                                 */
 /*									     */
 /* If you need to add another message "set", do so right before the          */

@@ -766,7 +766,6 @@ MrmFetchWidgetOverride (MrmHierarchy		hierarchy_id,
   URMResourceContextPtr	wref_ctx;	/* for widget references */
   URMSetValuesDescPtr	svlist = NULL;	/* list of SetValues descriptors */
   int			ndx ;		/* loop index */
-  char			errmsg[300];
   _MrmWidgetToAppContext(parent);
 
   _MrmAppLock(app);
