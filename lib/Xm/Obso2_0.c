@@ -28,8 +28,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <ctype.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <X11/Intrinsic.h>
 #include <Xm/BaseClassP.h>

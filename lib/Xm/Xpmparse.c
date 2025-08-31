@@ -42,6 +42,7 @@
 #include "XpmI.h"
 #include <ctype.h>
 #include <string.h>
+#include <strings.h>
 #if defined(HAS_STRLCAT) || defined(HAVE_STRLCAT)
 # define STRLCAT(dst, src, dstsize) do { \
   	if (strlcat(dst, src, dstsize) >= (dstsize)) \

@@ -68,7 +68,7 @@ int WmReturnIdentity (int argc, char *argv[], char *environ[]);
 (IsBackdropWindow (ACTIVE_PSD, (w))))
 #else /* WSM */
 #define ManagedRoot(w) (!XFindContext (DISPLAY, (w), wmGD.screenContextType, \
-(XtPointer *)&pSD) ? (SetActiveScreen (pSD), True) : False)
+(char **)&pSD) ? (SetActiveScreen (pSD), True) : False)
 #endif /* WSM */
 
 WmScreenData *pSD;

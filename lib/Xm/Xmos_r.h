@@ -580,7 +580,7 @@ extern int _Preaddir_r(DIR *, struct dirent *, struct dirent **);
     (readdir_r((d),&((p).dir_entry)) ? NULL : &((p).dir_entry))
 # elif defined(SVR4)
 /* Pre-POSIX API, returns non-NULL on success. */
-#  define _XReaddir(d,p)	(readdir_r((d), &(p).dir_entry))
+#  define _XReaddir(d,p)	(readdir(d))
 # else
 /* We have no idea what is going on.  Fake it all using process locks. */
 #  define _XReaddir(d,p)	\

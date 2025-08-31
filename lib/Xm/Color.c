@@ -29,6 +29,7 @@
 #endif
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
 #include <Xm/ManagerP.h>

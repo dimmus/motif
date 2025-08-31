@@ -38,8 +38,9 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
  */
 
 #include "WmGlobal.h"
-#include <sys/types.h>
 #include <stdlib.h>
+#include <X11/Xlib.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 

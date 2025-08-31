@@ -199,7 +199,7 @@ WmXErrorHandler (Display *display, XErrorEvent *errorEvent)
 
     if ((errorEvent->error_code == BadWindow) &&
 	!XFindContext (DISPLAY, errorEvent->resourceid, wmGD.windowContextType,
-	     (XtPointer *)&pCD))
+	                  (char **)&pCD))
     {
 	if (errorEvent->resourceid == pCD->client)
 	{

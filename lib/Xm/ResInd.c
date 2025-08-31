@@ -29,7 +29,7 @@ static char rcsid[] = "$XConsortium: ResInd.c /main/17 1996/06/07 11:40:05 danie
 #include <config.h>
 #endif
 #include <limits.h>
-#include <ctype.h>		/* for isascii, isspace */
+#include <ctype.h>		/* for isspace */
 #include <Xm/ScreenP.h>
 #include <Xm/ManagerP.h>
 #include <Xm/TraitP.h>
@@ -256,7 +256,7 @@ ParseUnitString(
   int sign;
   char c;
   /* Skip leading whitespace */
-  while ((isascii(c=*string)) && (isspace(c))) string++;
+  while (((c=*string) >= 0 && (c <= 127)) && (isspace(c))) string++;
   /* Check for sign */
   sign = (*string == '-')? -1 : 1;
   if ((*string == '+') || (*string == '-'))
@@ -283,7 +283,7 @@ ParseUnitString(
   }
   *float_value = sign * *float_value / power;
   /* Skip whitespace between float and unit */
-  while ((isascii(c=*string)) && (isspace(c))) string++;
+  while (((c=*string) >= 0 && (c <= 127)) && (isspace(c))) string++;
   return(XmeParseUnits(string, unit_type));
 }
 /**********************************************************************

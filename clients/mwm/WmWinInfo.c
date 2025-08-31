@@ -2633,7 +2633,7 @@ ProcessWmTransientFor (ClientData *pCD)
 
 	if ((pCD->client != window) &&
 	    !XFindContext (DISPLAY, window, wmGD.windowContextType,
-		(XtPointer *)&leader))
+		                (char **)&leader))
 	{
 	    pCD->transientFor = window;
 	    pCD->transientLeader = leader;
@@ -3915,7 +3915,7 @@ SetupClientIconWindow (ClientData *pCD, Window window)
      */
 
     if (!XFindContext (DISPLAY, window, wmGD.windowContextType,
-	     (XtPointer *)&pcd))
+	                  (char **)&pcd))
     {
 	if (window == pCD->client)
 	{

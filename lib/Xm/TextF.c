@@ -37,7 +37,6 @@ static char rcsid[] = "$TOG: TextF.c /main/65 1999/09/01 17:28:48 mgreess $"
 #include <X11/ShellP.h>
 #include <X11/VendorP.h>
 #include <X11/Xatom.h>
-#include <X11/keysym.h>
 #include <Xm/AccColorT.h>
 #include <Xm/AccTextT.h>
 #include <Xm/AtomMgr.h>
@@ -2505,7 +2504,7 @@ _XmTextFieldReplaceText(XmTextFieldWidget tf,
 	else
 	    size = sizeof(wchar_t);
 	insert_orig = XtMalloc(insert_length * size);
-	bcopy(insert, insert_orig, insert_length * size);
+	memcpy(insert_orig, insert, insert_length * size);
     } else
 	insert_orig = NULL;
     if (!ModifyVerify(tf, event, &replace_prev, &replace_next,
@@ -7488,14 +7487,14 @@ PreeditStart(XIC xic,
        tf->text.onthespot->over_len = lastPos - PreCursor(tf);
             if (tf->text.max_char_size == 1){
                 mb = XtMalloc(tf->text.onthespot->over_len + 1);
-                bcopy(&tf->text.value[PreStart(tf)], mb,
+                memcpy(&tf->text.value[PreStart(tf)], mb,
                                         tf->text.onthespot->over_len);
                 mb[tf->text.onthespot->over_len] = '\0';
                 tf->text.onthespot->over_str = mb;
             } else {
                 wc = (wchar_t *) XtMalloc(
                         (tf->text.onthespot->over_len+1)*sizeof(wchar_t));
-                bcopy((char *)&tf->text.wc_value[PreStart(tf)], (char *)wc,
+                memcpy((char *)&tf->text.wc_value[PreStart(tf)], (char *)wc,
                                 tf->text.onthespot->over_len*sizeof(wchar_t));
                 wc[tf->text.onthespot->over_len] = (wchar_t)'\0';
                 tf->text.onthespot->over_str = (char *)wc;
@@ -7683,12 +7682,12 @@ PreeditDraw(XIC xic,
         if (rest_len){
             if (tf->text.max_char_size == 1){
                 over_mb = XtMalloc(rest_len+1);
-               bcopy(&tf->text.value[PreStart(tf)+call_data->chg_first+
+               memcpy(&tf->text.value[PreStart(tf)+call_data->chg_first+
                                 call_data->chg_length], over_mb, rest_len);
                 over_mb[rest_len] = '\0';
             } else {
                 over_wc = (wchar_t *)XtMalloc((rest_len+1)*sizeof(wchar_t));
-                bcopy((char *)&tf->text.wc_value[PreStart(tf)+
+                memcpy((char *)&tf->text.wc_value[PreStart(tf)+
                         call_data->chg_first+call_data->chg_length],
                         (char *)over_wc, rest_len*sizeof(wchar_t));
                 over_wc[rest_len] = (wchar_t)'\0';
@@ -7867,7 +7866,7 @@ TextFieldResetIC(Widget w)
 	FVerifyCommitNeeded(tf) = False;
 	str = XtMalloc((PreEnd(tf) - PreStart(tf)+1)*sizeof(wchar_t));
 	if (tf->text.max_char_size == 1) {
-	  bcopy(&tf->text.value[PreStart(tf)], str,
+	  memcpy(&TextF_Value(tf)[PreStart(tf)], str,
 				PreEnd(tf) - PreStart(tf));
 	  str[PreEnd(tf) - PreStart(tf)] = '\0';
 	}
@@ -7876,7 +7875,7 @@ TextFieldResetIC(Widget w)
 	  wchar_t *wc_string;
 	  wc_string = (wchar_t *)XtMalloc((PreEnd(tf) - PreStart(tf)+1)
                                                         *sizeof(wchar_t));
-          bcopy((char *)&tf->text.wc_value[PreStart(tf)], (char *)wc_string,
+          memcpy((char *)&TextF_WcValue(tf)[PreStart(tf)], (char *)wc_string,
                                 (PreEnd(tf) - PreStart(tf))*sizeof(wchar_t));
           wc_string[PreEnd(tf) - PreStart(tf)] = (wchar_t)'\0';
 	  num_bytes = wcstombs(str, wc_string,
@@ -8018,7 +8017,7 @@ XmTextFieldGetSubstring(Widget widget,
   }
   if (num_chars > 0) {
     if (tf->text.max_char_size == 1) {
-      (void)memcpy((void*)buffer, (void*)&TextF_Value(tf)[start], num_chars);
+      memcpy((void*)buffer, (void*)&TextF_Value(tf)[start], num_chars);
     } else {
       wcs_ret = wcstombs(buffer, &TextF_WcValue(tf)[start], n_bytes);
       if (wcs_ret < 0) n_bytes = 0;
@@ -8041,7 +8040,7 @@ XmTextFieldGetStringWcs(Widget w)
     temp_wcs = (wchar_t*) XtMalloc((unsigned) sizeof(wchar_t) *
 				   (tf->text.string_length + 1));
     if (tf->text.max_char_size != 1) {
-      (void)memcpy((void*)temp_wcs, (void*)TextF_WcValue(tf),
+      memcpy((void*)temp_wcs, (void*)TextF_WcValue(tf),
 		   sizeof(wchar_t) * (tf->text.string_length + 1));
     } else {
       num_wcs = mbstowcs(temp_wcs, TextF_Value(tf),
@@ -8082,7 +8081,7 @@ XmTextFieldGetSubstringWcs(Widget widget,
       num_wcs = mbstowcs(buffer, &TextF_Value(tf)[start], num_chars);
       if (num_wcs < 0) num_chars = 0;
     } else {
-      (void)memcpy((void*)buffer, (void*)&TextF_WcValue(tf)[start],
+      memcpy((void*)buffer, (void*)&TextF_WcValue(tf)[start],
 		   (size_t) num_chars * sizeof(wchar_t));
     }
     buffer[num_chars] = '\0';

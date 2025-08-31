@@ -692,7 +692,7 @@ EndsInDigits(char *str)
     register char *c = str;
     while(*c != '\0') c++;	/* advance to end of string marker */
     c--;			/* back to the last character */
-    if(c >= str && isascii(*c) && isdigit(*c))
+    if(c >= str && (*c >= 0 && *c <= 127) && isdigit(*c))
 	return True;
     return False;
 }
@@ -1071,7 +1071,7 @@ read_rgb_file(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args, Bool
 		/*
 		 * Copy in all characters that are ascii and non-spaces.
 		 */
-		if (!isascii(c))
+		if (!(c >= 0 && c <= 127))
 		    continue;
 		if (!isspace(c))
 		    *name++ = tolower(c);
@@ -1084,7 +1084,7 @@ read_rgb_file(XmColorSelectorWidget csw, ArgList cargs, Cardinal cnum_args, Bool
 		/*
 		 * Capitalize all characters after a space.
 		 */
-		if (!isascii(c))
+		if (!(c >= 0 && c <= 127))
 		    continue;
 		if (isspace(c) && ((i + 1) < len)) {
 		    color_name[i + 1] = toupper(color_name[i + 1]);
@@ -1190,7 +1190,7 @@ find_name(char *buffer)
 	/*
 	 * Look for first non number, non space or tab.
 	 */
-	if (isascii(*curr) && (isdigit(*curr) || isspace(*curr)))
+	if ((*curr >= 0 && *curr <= 127) && (isdigit(*curr) || isspace(*curr)))
 	    continue;
 	temp = (char *) strchr(curr, '\n');
 	*temp = '\0';

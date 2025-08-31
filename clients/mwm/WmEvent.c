@@ -986,7 +986,7 @@ Boolean WmDispatchWsEvent (XEvent *event)
 	     */
 
 	    if ((XFindContext (DISPLAY, event->xmaprequest.window,
-		    wmGD.windowContextType, (XtPointer *)&pCD)) &&
+		                        wmGD.windowContextType, (char **)&pCD)) &&
 		(pSD = GetScreenForWindow (event->xmaprequest.window)))
 	    {
 	        /*

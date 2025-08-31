@@ -217,7 +217,7 @@ void AdoptInitialClients (WmScreenData *pSD)
 	    }
 #endif /* WSM */
 	    if (!XFindContext (DISPLAY, clients[i], wmGD.windowContextType,
-	        (XtPointer *)&pcd))
+	                        (char **)&pcd))
 	    {
 		/* don't manage a window we've already established a
 		   context for (e.g. icon windows) */

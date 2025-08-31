@@ -22,6 +22,8 @@
  */
 #ifndef _XpmI_h
 #define _XpmI_h
+/* Define HAVE_STRDUP since string.h is included */
+#define HAVE_STRDUP 1
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -112,6 +114,7 @@ extern "C" {
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
+#include <strings.h>
 /* stdio.h doesn't declare popen on a Sequent DYNIX OS */
 #ifdef sequent
 extern FILE *popen();
@@ -322,7 +325,6 @@ FUNC(xpmstrdup, char *, (char *s1));
 #else
 #undef xpmstrdup
 #define xpmstrdup strdup
-#include <string.h>
 #endif
 #if !HAVE_STRCASECMP
 FUNC(xpmstrcasecmp, int, (char *s1, char *s2));

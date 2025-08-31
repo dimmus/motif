@@ -2347,7 +2347,7 @@ void DeleteIconFromBox (IconBoxData *pIBD, ClientData *pCD)
      */
 
     if (!(XFindContext (DISPLAY, pCD->pSD->activeIconTextWin,
-			wmGD.windowContextType, (XtPointer *)&pCD_tmp)))
+			                        wmGD.windowContextType, (char **)&pCD_tmp)))
     {
 	if (pCD == pCD_tmp)
 	{
@@ -2954,7 +2954,7 @@ void PackIconBox (IconBoxData *pIBD, Boolean packVert, Boolean packHorz, int pas
     if (ICON_DECORATION(pMyCD) & ICON_ACTIVE_LABEL_PART)
     {
 	if (XFindContext (DISPLAY, pMyCD->pSD->activeIconTextWin,
-			wmGD.windowContextType, (XtPointer *)&pCD_tmp))
+			                        wmGD.windowContextType, (char **)&pCD_tmp))
 	{
 	    hasActiveText = 0;
 	}
