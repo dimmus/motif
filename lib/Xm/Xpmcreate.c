@@ -1720,7 +1720,7 @@ PutPixel1LSB(
 	ximage->data[ZINDEX1(x, y, ximage)] &= ~(1 << (x & 7));
     return 1;
 }
-#endif /* not FOR_MSW && not AMIGA */
+
 /*
  * This function parses an Xpm file or data and directly create an XImage
  */
