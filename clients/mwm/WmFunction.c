@@ -43,6 +43,7 @@ static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #ifndef WSM
 #include <signal.h>
@@ -3668,7 +3669,7 @@ F_Toggle_Front_Panel (String args, ClientData *pCD, XEvent *event)
     if (pPanelist)
     {
 	(void) XFindContext (DISPLAY, XtWindow(O_Shell(pPanelist)),
-			    wmGD.windowContextType, (XtPointer *)&pCD);
+			    wmGD.windowContextType, (char **)&pCD);
     }
 
 

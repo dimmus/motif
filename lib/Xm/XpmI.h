@@ -324,6 +324,8 @@ FUNC(xpm_znormalizeimagebits, void, (register unsigned char *bp,
 FUNC(xpmstrdup, char *, (char *s1));
 #else
 #undef xpmstrdup
+/* Ensure strdup is properly declared */
+extern char *strdup(const char *s);
 #define xpmstrdup strdup
 #endif
 #if !HAVE_STRCASECMP

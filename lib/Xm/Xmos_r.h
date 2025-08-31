@@ -128,7 +128,7 @@ extern void (*_XUnlockMutex_fn)(
 # elif defined(XOS_USE_XT_LOCKING)
 extern void (*_XtProcessLock)(void);
 #  ifndef _XtintrinsicP_h
-#   include <X11/Xfuncproto.h
+#   include <X11/Xfuncproto.h>
 extern void XtProcessLock(
     void
 );
@@ -551,33 +551,49 @@ typedef struct {
 } _Xreaddirparams;
 # if defined(AIXV3) || defined(AIXV4) || defined(HAVE_READDIR_R_3) || defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 /* AIX defines the draft POSIX symbol, but uses the final API. */
-/* POSIX final API, returns (int)0 on success. */
+/* Use readdir with proper locking for thread safety */
 #  if defined(__osf__)
-/* OSF/1 V4.0 <dirent.h> doesn't declare _Preaddir_r, breaking under C++. */
-extern int _Preaddir_r(DIR *, struct dirent *, struct dirent **);
+/* OSF/1 V4.0 specific handling - no longer needed */
 #  endif
 #  define _XReaddir(d,p)						\
-    (readdir_r((d), &((p).dir_entry), &((p).result)) ? NULL : (p).result)
+    ( (_Xos_processLock),						\
+      (((p).result = readdir((d))) ?				 \
+       (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+        ((p).result = &(p).dir_entry), 0) :			 \
+       0),								 \
+      (_Xos_processUnlock),					 \
+      (p).result )
 # elif defined(_POSIX_REENTRANT_FUNCTIONS) && defined(__osf__)
 /*
- * OSF/1 V3.2 readdir_r() will SEGV if the main program is not
- * explicitly linked with -lc_r.  The library REQUIREDLIBS don't help.
+ * OSF/1 V3.2 specific handling - use readdir with proper locking
  * Assume that if threads have been initialized we're linked properly.
  */
 #  define _XReaddir(d,p)						\
  ( (_Xos_isThreadInitialized) ?						\
-   (readdir_r((d), &((p).dir_entry)) ? NULL : &((p).dir_entry)) :	\
+   ( (_Xos_processLock),						\
+     (((p).result = readdir((d))) ?				 \
+      (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+       ((p).result = &(p).dir_entry), 0) :			 \
+     0),								 \
+     (_Xos_processUnlock),					 \
+     (p).result ) :							\
    ((_Xos_processLock),							\
-    (((p).result = readdir((d))) ?					\
-     (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen),	\
-      ((p).result = &(p).dir_entry), 0) :				\
+    (((p).result = readdir((d))) ?				 \
+     (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+      ((p).result = &(p).dir_entry), 0) :			 \
      0),								\
     (_Xos_processUnlock),						\
     (p).result) )
 # elif defined(_POSIX_REENTRANT_FUNCTIONS)
-/* POSIX draft API, returns (int)0 on success. */
+/* POSIX draft API - use readdir with proper locking for thread safety */
 #  define _XReaddir(d,p)	\
-    (readdir_r((d),&((p).dir_entry)) ? NULL : &((p).dir_entry))
+    ( (_Xos_processLock),						\
+      (((p).result = readdir((d))) ?				 \
+       (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+        ((p).result = &(p).dir_entry), 0) :			 \
+       0),								 \
+      (_Xos_processUnlock),					 \
+      (p).result )
 # elif defined(SVR4)
 /* Pre-POSIX API, returns non-NULL on success. */
 #  define _XReaddir(d,p)	(readdir(d))
@@ -585,9 +601,9 @@ extern int _Preaddir_r(DIR *, struct dirent *, struct dirent **);
 /* We have no idea what is going on.  Fake it all using process locks. */
 #  define _XReaddir(d,p)	\
     ( (_Xos_processLock),						\
-      (((p).result = readdir((d))) ?					\
-       (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen),	\
-	((p).result = &(p).dir_entry), 0) :				\
+      (((p).result = readdir((d))) ?				 \
+       (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+	((p).result = &(p).dir_entry), 0) :			 \
        0),								\
       (_Xos_processUnlock),						\
       (p).result )
@@ -960,17 +976,18 @@ typedef struct {
    strcpy((p).grp.gr_name, (p).pgrp->gr_name), \
    ((p).pgrp = &(p).grp), \
    0 )
-#endif
-#define _XGetgrgid(g,p) \
+
+# define _XGetgrgid(g,p) \
  ( (_Xos_processLock), \
    (((p).pgrp = getgrgid((g))) ? _Xgrp_copyGroup(p) : 0), \
    (_Xos_processUnlock), \
    (p).pgrp )
-#define _XGetgrnam(n,p) \
+# define _XGetgrnam(n,p) \
  ( (_Xos_processLock), \
    (((p).pgrp = getgrnam((n))) ? _Xgrp_copyGroup(p) : 0), \
    (_Xos_processUnlock), \
    (p).pgrp )
+
 #elif !defined(_POSIX_THREAD_SAFE_FUNCTIONS) && (defined(sun) || defined(__osf__))
 /* Non-POSIX API.  Solaris, DEC v3.2.
  *
@@ -981,8 +998,9 @@ typedef struct {
   struct group grp;
   char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
 } _Xgetgrparams;
-#define _XGetgrgid(g,p)	getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf))
-#define _XGetgrnam(n,p)	getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf))
+# define _XGetgrgid(g,p)	getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf))
+# define _XGetgrnam(n,p)	getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf))
+
 #elif !defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 /* Non-POSIX API.  HP/UX 10, AIX 4.
  *
@@ -993,10 +1011,11 @@ typedef struct {
   struct group grp;
   char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
 } _Xgetgrparams;
-#define _XGetgrgid(g,p)	\
+# define _XGetgrgid(g,p)	\
  ((getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf)) ? NULL : &(p).grp))
-#define _XGetgrnam(n,p)	\
+# define _XGetgrnam(n,p)	\
  ((getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf)) ? NULL : &(p).grp))
+
 #else
 /* POSIX final API.  DEC v4.0, IRIX 6.2.
  *
@@ -1013,10 +1032,10 @@ typedef struct {
   char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
   struct group *result;
 } _Xgetgrparams;
-#define _XGetgrgid(g,p)	\
+# define _XGetgrgid(g,p)	\
  ((getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf), &(p).result) ? \
    NULL : (p).result))
-#define _XGetgrnam(n,p)	\
+# define _XGetgrnam(n,p)	\
  ((getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf), &(p).result) ? \
    NULL : (p).result))
 #endif

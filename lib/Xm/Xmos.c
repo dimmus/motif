@@ -49,6 +49,12 @@ extern "C" { /* some 'locale.h' do not have prototypes (sun) */
 #include <stdlib.h>
 #include <unistd.h>
 #include <ctype.h>		/* for isspace() */
+#include <string.h>		/* for strdup, strlcat */
+
+/* Ensure nanosleep is properly declared */
+#if HAVE_NANOSLEEP
+extern int nanosleep(const struct timespec *req, struct timespec *rem);
+#endif
 #if HAVE_REGEX && !HAVE_REGCOMP
 # if defined(SVR4)
 #  include <libgen.h>
@@ -63,12 +69,24 @@ extern int regex();
 #include <sys/stat.h>
 /* X_INCLUDE_PWD_H is now configured by build system */
 #define X_INCLUDE_DIRENT_H
+/* Include necessary headers manually */
+#include <sys/types.h>
+#include <dirent.h>
 /* XOS_USE_XT_LOCKING is now configured by build system */
-#if HAVE_X11_XOS_R_H
-#include <X11/Xos_r.h>
-#else
+/* Force use of local Xmos_r.h to avoid deprecated readdir_r in system headers */
 #include <Xm/Xmos_r.h>
+/* Override any system readdir_r definitions with our safe version */
+#ifdef _XReaddir
+#undef _XReaddir
 #endif
+#define _XReaddir(d,p)	\
+    ( (_Xos_processLock),						\
+      (((p).result = readdir((d))) ?				 \
+       (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+        ((p).result = &(p).dir_entry), 0) :			 \
+       0),								 \
+      (_Xos_processUnlock),					 \
+      (p).result )
 #include "XmosI.h"
 #include "XmI.h"
 #if !HAVE_GETCWD && HAVE_GETWD
@@ -1133,8 +1151,8 @@ XmeMicroSleep(long usecs)
 {
 #if HAVE_NANOSLEEP
 	struct timespec ts;
-	ts.tv_sec  = usecs / 1e6;
-	ts.tv_nsec = (usecs - ts.tv_sec * 1e6) * 1000;
+	ts.tv_sec  = usecs / 1000000;
+	ts.tv_nsec = (usecs % 1000000) * 1000;
 	return nanosleep(&ts, NULL);
 #elif defined(USE_POLL)
 	return poll(NULL, 0, usecs / 1000);

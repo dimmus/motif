@@ -30,6 +30,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <X11/IntrinsicP.h>
 #include <X11/ShellP.h>
 #include <Xm/ManagerP.h>
@@ -42,6 +43,9 @@
 #include "ScreenI.h"
 #include "XmI.h"
 #include <Xm/XpmP.h>
+
+/* Ensure strdup is properly declared */
+extern char *strdup(const char *s);
 /* Warning and Error messages */
 #define MESSAGE0	_XmMMsgVisual_0000
 #define MESSAGE1	_XmMMsgVisual_0001

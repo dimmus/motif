@@ -41,13 +41,24 @@
 #endif
 #include <X11/Xlocale.h>
 #define X_INCLUDE_DIRENT_H
+/* Include necessary headers manually */
+#include <sys/types.h>
+#include <dirent.h>
 /* XOS_USE_XT_LOCKING is now configured by build system */
-#if HAVE_X11_XOS_R_H
-#include <X11/Xos_r.h> /* Must precede XmI.h to avoid possible redefinitions
-			  of MIN() and MAX(). Xos_r.h includes Xos.h */
-#else
+/* Force use of local Xmos_r.h to avoid deprecated readdir_r in system headers */
 #include <Xm/Xmos_r.h>
+/* Override any system readdir_r definitions with our safe version */
+#ifdef _XReaddir
+#undef _XReaddir
 #endif
+#define _XReaddir(d,p)	\
+    ( (_Xos_processLock),						\
+      (((p).result = readdir((d))) ?				 \
+       (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
+        ((p).result = &(p).dir_entry), 0) :			 \
+       0),								 \
+      (_Xos_processUnlock),					 \
+      (p).result )
 #include "XmosI.h"
 #include <Xm/IconFileP.h>
 #include <Xm/ColorObjP.h>

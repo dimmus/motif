@@ -39,27 +39,45 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+
+#include <stddef.h>  /* for size_t */
+#include <string.h>  /* for strlen, strncat, memcpy */
+
 #include "XpmI.h"
 #include <ctype.h>
-#include <string.h>
 #include <strings.h>
-#if defined(HAS_STRLCAT) || defined(HAVE_STRLCAT)
+
+/* Always use fallback implementation for strlcat/strlcpy */
 # define STRLCAT(dst, src, dstsize) do { \
-  	if (strlcat(dst, src, dstsize) >= (dstsize)) \
-	    return (XpmFileInvalid); } while(0)
+	size_t dlen = strlen(dst); \
+	size_t slen = strlen(src); \
+	size_t res = dlen + slen; \
+	if (dlen >= (dstsize)) { \
+		return (XpmFileInvalid); \
+	} \
+	if (res >= (dstsize)) { \
+		res = (dstsize) - 1; \
+	} \
+	strncat(dst, src, (dstsize) - dlen - 1); \
+	dst[(dstsize) - 1] = '\0'; \
+	if (res >= (dstsize)) { \
+		return (XpmFileInvalid); \
+	} \
+} while(0)
+
 # define STRLCPY(dst, src, dstsize) do { \
-  	if (strlcpy(dst, src, dstsize) >= (dstsize)) \
-	    return (XpmFileInvalid); } while(0)
-#else
-# define STRLCAT(dst, src, dstsize) do { \
-	if ((strlen(dst) + strlen(src)) < (dstsize)) \
- 	    strcat(dst, src); \
-	else return (XpmFileInvalid); } while(0)
-# define STRLCPY(dst, src, dstsize) do { \
-	if (strlen(src) < (dstsize)) \
- 	    strcpy(dst, src); \
-	else return (XpmFileInvalid); } while(0)
-#endif
+	size_t srclen = strlen(src); \
+	if ((dstsize) > 0) { \
+		if (srclen >= (dstsize)) { \
+			srclen = (dstsize) - 1; \
+		} \
+		memcpy(dst, src, srclen); \
+		dst[srclen] = '\0'; \
+	} \
+	if (srclen >= (dstsize)) { \
+		return (XpmFileInvalid); \
+	} \
+} while(0)
 LFUNC(ParsePixels, int, (xpmData *data, unsigned int width,
 			 unsigned int height, unsigned int ncolors,
 			 unsigned int cpp, XpmColor *colorTable,

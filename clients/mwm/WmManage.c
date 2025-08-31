@@ -1678,7 +1678,7 @@ void WithdrawDialog (Widget dialogboxW)
      */
 
     if (XFindContext (DISPLAY, XtWindow (XtParent (dialogboxW)),
-		      wmGD.windowContextType, (XtPointer *)&pCD))
+		      wmGD.windowContextType, (char **)&pCD))
       return;
 
     XtUnmanageChild (dialogboxW);
@@ -1736,7 +1736,7 @@ void ReManageDialog (WmScreenData *pSD, Widget dialogboxW)
      */
 
     if (XFindContext (DISPLAY, XtWindow (XtParent (dialogboxW)),
-		      wmGD.windowContextType, (XtPointer *)&pCD))
+		      wmGD.windowContextType, (char **)&pCD))
       return;
 
     /*
@@ -2516,7 +2516,7 @@ ForceSubpanelWMState (Window win)
 	}
 
 	if (!XFindContext(DISPLAY, win, wmGD.windowContextType,
-	    (XtPointer *)&pCD))
+	    (char **)&pCD))
 	{
 	    /*
 	     * Only continue if we're not already managing this subpanel.

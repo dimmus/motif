@@ -1141,6 +1141,8 @@ _XmOSPutenv(
     char *string)
 {
 #if HAVE_PUTENV
+  /* Ensure putenv is properly declared - use POSIX declaration */
+  extern int putenv(char *string);
   return putenv(string);
 #else
   char *value;

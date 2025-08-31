@@ -3378,7 +3378,7 @@ void IconActivateCallback (Widget w, XtPointer client_data, XmAnyCallbackStruct 
      */
 
     if (!(XFindContext (DISPLAY, theIcon,
-			wmGD.windowContextType, (XtPointer *)&pCD)))
+			wmGD.windowContextType, (char **)&pCD)))
     {
 	F_Restore_And_Raise ((String)NULL, pCD, (XEvent *)NULL );
 /*	F_Normalize_And_Raise ((String)NULL, pCD, (XEvent *)NULL );
@@ -3455,7 +3455,7 @@ void ChangeActiveIconboxIconText (Widget icon, XtPointer dummy, XFocusChangeEven
     theIcon = XtWindow(icon);
 
     if (!(XFindContext (DISPLAY, theIcon,
-			wmGD.windowContextType, (XtPointer *)&pCD)) &&
+			wmGD.windowContextType, (char **)&pCD)) &&
 	P_ICON_BOX(pCD) &&
 	P_ICON_BOX(pCD)->pCD_iconBox &&
 	P_ICON_BOX(pCD)->pCD_iconBox->clientState !=  MINIMIZED_STATE)
@@ -3505,7 +3505,7 @@ void HandleIconBoxIconKeyPress (Widget icon, XtPointer dummy, XKeyEvent *keyEven
 
     theIcon = XtWindow(icon);
     if (!(XFindContext (DISPLAY, theIcon,
-			wmGD.windowContextType, (XtPointer *)&pCD)))
+			wmGD.windowContextType, (char **)&pCD)))
     {
 #ifdef WSM
 	SetClientWsIndex (pCD);

@@ -42,6 +42,8 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <string.h>
+#include <stdlib.h>
 #include "XpmI.h"
 #define MAXPRINTABLE 92			/* number of printable ascii chars
 					 * minus \ and " for string compat
