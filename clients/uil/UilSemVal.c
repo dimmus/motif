@@ -134,7 +134,7 @@ static int			cycle_id = 1;
 **  error_arg_type.
 **/
 
-static int ( * numeric_convert_table[])() = {
+static int ( * numeric_convert_table[])(sym_value_entry_type *, data_value_type *) = {
 	    0,
 	    sem_convert_to_integer,
 	    sem_convert_to_single_float,

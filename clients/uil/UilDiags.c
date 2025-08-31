@@ -85,9 +85,9 @@ static	int	Uil_diag_status_delay_count;
 /*
  * Fix for CR 5534 - static storage for old signal handlers
  */
-static	void 	(*bus_handler)();
-static	void 	(*sys_handler)();
-static	void 	(*fpe_handler)();
+static	void 	(*bus_handler)(int);
+static	void 	(*sys_handler)(int);
+static	void 	(*fpe_handler)(int);
 
 /*
 **++
@@ -1038,7 +1038,7 @@ XmConst char  *loc_buffer;
  *                and restore the Uil signal handlers immediately afterwards
  */
         diag_restore_diagnostics();
-	return_status = (*Uil_cmd_z_command.message_cb)(
+	return_status = ((Uil_continue_type (*)(char *, int, int, char *, char *, char *, char *, int *))Uil_cmd_z_command.message_cb)(
 			    Uil_cmd_z_command.message_data,
 			    message_number,
 			    diag_rz_msg_table[ message_number ].l_severity,
@@ -1204,7 +1204,7 @@ void	diag_report_status ( )
  *                   immediately after.
  */
         diag_restore_diagnostics();
-	return_status = (*Uil_cmd_z_command.status_cb)(
+	return_status = ((Uil_continue_type (*)(char *, int, int, char *, int *))Uil_cmd_z_command.status_cb)(
 			    Uil_cmd_z_command.status_data,
 			    Uil_percent_complete,
 			    Uil_lines_processed,
