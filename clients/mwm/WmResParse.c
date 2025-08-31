@@ -322,14 +322,14 @@ static EventTableEntry buttonEvents[] = {
     {"btn5up",      ButtonRelease,  ParseImmed,    Button5,  FALSE},
     {"btn5click",   ButtonRelease,  ParseImmed,    Button5,  TRUE},
     {"btn5click2",  ButtonPress,    ParseImmed,    Button5,  TRUE},
-    { NULL,         0,              (Boolean(*)())NULL, 0, FALSE}
+    { NULL,         0,              (Boolean(*)(unsigned char **, WmFunction, String *))NULL, 0, FALSE}
 };
 
 
 static EventTableEntry keyEvents[] = {
 
     {"key",         KeyPress,    ParseKeySym,    0,  FALSE},
-    { NULL,         0,       (Boolean(*)())NULL, 0,  FALSE}
+    { NULL,         0,       (Boolean(*)(unsigned char **, WmFunction, String *))NULL, 0,  FALSE}
 };
 
 #ifdef PANELIST
@@ -1996,8 +1996,8 @@ void ProcessWmFile (WmScreenData *pSD)
 /**** This function stolen from Xt/Intrinsic.c ****/
 /* The implementation of this routine is operating system dependent */
 
-static char *ExtractLocaleName(lang)
-    String	lang;
+static char *ExtractLocaleName(String lang)
+
 {
 
 #ifdef hpux	 /* hpux-specific parsing of the locale string */

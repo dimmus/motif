@@ -30,6 +30,7 @@ static char rcsid[] = "$TOG: command_ui.c /main/8 1997/05/02 10:08:26 dbl $"
 #endif
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <Xm/Xm.h>
 #include <Xm/ToggleB.h>
 #include <X11/Xmd.h>
@@ -181,7 +182,7 @@ SendMessage(RType rtype, XtPointer msg, int len, Time time)
 
   UTMSendMessage(utmShell, WM_S0, target,
 		 (XtPointer) msg, (unsigned long)len, WSM_PROTO_FMT,
-		 s_proc, (XtPointer)++debug_index, time);
+		 s_proc, (XtPointer)(uintptr_t)++debug_index, time);
 
   if (msg != NULL)
     XtFree(msg);
