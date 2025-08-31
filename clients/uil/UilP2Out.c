@@ -488,9 +488,7 @@ void	sem_output_uid_file()
 **--
 **/
 
-void	push(sym_entry)
-
-sym_entry_type	*sym_entry;
+void	push(sym_entry_type *sym_entry)
 
 {
 
@@ -558,7 +556,7 @@ sym_entry_type	*sym_entry;
 **--
 **/
 
-sym_entry_type	*pop()
+sym_entry_type	*pop(void)
 
 {
 
@@ -613,9 +611,7 @@ sym_entry_type	*pop()
 **--
 **/
 
-void	out_emit_widget( widget_entry )
-
-sym_widget_entry_type	*widget_entry;
+void	out_emit_widget(sym_widget_entry_type *widget_entry)
 
 {
 

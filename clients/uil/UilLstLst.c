@@ -245,9 +245,7 @@ void	Uil_lst_cleanup_listing()
 **--
 **/
 
-status	create_listing_file( az_fcb )
-
-uil_fcb_type			*az_fcb;
+status	create_listing_file(uil_fcb_type *az_fcb)
 
 {
     /* place the file name in the expanded_name buffer */
@@ -303,10 +301,7 @@ uil_fcb_type			*az_fcb;
 **/
 
 
-void	lst_output_line( ac_line, v_new_page )
-
-char	*ac_line;
-boolean	v_new_page;
+void	lst_output_line(char *ac_line, boolean v_new_page)
 
 {
     status	error_status;
@@ -550,9 +545,7 @@ void	lst_output_listing()
 **--
 **/
 
-void	lst_output_messages( az_message_item )
-
-src_message_item_type	*az_message_item;
+void	lst_output_messages(src_message_item_type *az_message_item)
 
 {
     src_message_item_type	*az_msg;
@@ -622,9 +615,7 @@ src_message_item_type	*az_message_item;
 **--
 **/
 
-void	lst_output_machine_code ( az_src_rec )
-
-src_source_record_type	*az_src_rec;
+void	lst_output_machine_code(src_source_record_type *az_src_rec)
 
 {
 
@@ -872,10 +863,7 @@ src_source_record_type	*az_src_rec;
 **--
 **/
 
-void	lst_output_message_ptr_line( az_src_rec, src_buffer )
-
-src_source_record_type	*az_src_rec;
-char			*src_buffer;
+void	lst_output_message_ptr_line(src_source_record_type *az_src_rec, char *src_buffer)
 
 {
     src_message_item_type	*az_msg;
