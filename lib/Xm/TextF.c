@@ -7362,7 +7362,6 @@ PreeditSetRendition(Widget w,
     XIMFeedback fb;
     XmTextPosition prestart = PreStart((XmTextFieldWidget)w)+data->chg_first, left, right;
     XmHighlightMode mode;
-    XmTextFieldWidget tf = (XmTextFieldWidget)w;
     if (!text->length) {
         return;
     }
@@ -7513,7 +7512,6 @@ PreeditDone(XIC xic,
             XPointer client_data,
             XPointer call_data)
 {
-    Boolean replace_res;
     XmTextFieldWidget tf = (XmTextFieldWidget)client_data;
     Widget p = (Widget) tf;
     Boolean need_verify, end_preedit = False;
@@ -7534,7 +7532,6 @@ PreeditDone(XIC xic,
     }
     if (tf->text.overstrike){
       if (need_verify) {
-	int cur = PreStart(tf);
  	PreeditVerifyReplace(tf, PreStart(tf), PreStart(tf),
 				(char*) tf->text.onthespot->over_str,
 				tf->text.onthespot->over_maxlen,
@@ -7543,7 +7540,7 @@ PreeditDone(XIC xic,
       }
       else {
         _XmTextFieldDrawInsertionPoint(tf, False);
-        replace_res = _XmTextFieldReplaceTextForPreedit(tf, PreStart(tf),
+        (void)_XmTextFieldReplaceTextForPreedit(tf, PreStart(tf),
                         PreStart(tf), (char*) tf->text.onthespot->over_str,
                         tf->text.onthespot->over_maxlen, True);
         TextF_CursorPosition(tf) = PreStart(tf);
@@ -7572,7 +7569,6 @@ PreeditDraw(XIC xic,
     char *mb = NULL, *over_mb = NULL;
     wchar_t *wc = NULL, *over_wc = NULL, *tab_wc = NULL , *recover_wc = NULL;
     XmTextPosition startPos, endPos, rest_len =0 , tmp_end;
-    Boolean replace_res;
     XRectangle overall_ink;
     int i;
     int recover_len=0;
@@ -7606,7 +7602,7 @@ PreeditDraw(XIC xic,
 	  }
 	}
 	else {
-          replace_res = _XmTextFieldReplaceTextForPreedit(tf, startPos,
+          (void)_XmTextFieldReplaceTextForPreedit(tf, startPos,
                                              endPos, NULL, 0, True);
 	}
 	_XmTextFieldDrawInsertionPoint(tf, True);
@@ -7739,7 +7735,7 @@ PreeditDraw(XIC xic,
 	  }
 	}
 	else {
-          replace_res = _XmTextFieldReplaceTextForPreedit(tf, startPos,
+          (void)_XmTextFieldReplaceTextForPreedit(tf, startPos,
                                              endPos, mb,
                                              strlen(mb), True);
     	  PreeditSetCursorPosition(tf, PreCursor(tf));
@@ -7794,7 +7790,7 @@ PreeditDraw(XIC xic,
 	  }
         }
         else {
-          replace_res = _XmTextFieldReplaceTextForPreedit(tf, startPos,
+          (void)_XmTextFieldReplaceTextForPreedit(tf, startPos,
                                              endPos, (char *)wc,
                                              wcslen(wc), True);
           PreeditSetCursorPosition(tf, PreCursor(tf));

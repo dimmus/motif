@@ -311,6 +311,7 @@ XmImUnregister(Widget w)
   if (w == NULL)
     return;
   app = XtWidgetToApplicationContext(w);
+  (void)app; /* unused but required for _XmAppLock */
   _XmAppLock(app);
   /* Locate this record. */
   xim_info = get_xim_info(w);
@@ -669,6 +670,7 @@ XmImFreeXIC(Widget w,
   if (w == NULL)
     return;
   app = XtWidgetToApplicationContext(w);
+  (void)app; /* unused but required for _XmAppLock */
   _XmAppLock(app);
   /* Locate this record. */
   xim_info = get_xim_info(w);

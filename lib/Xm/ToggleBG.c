@@ -3362,10 +3362,9 @@ XmToggleButtonGadgetGetState(
 {
   XmToggleButtonGadget tg = (XmToggleButtonGadget) w;
   Boolean ret_val;
-  XtAppContext app = XtWidgetToApplicationContext(w);
-  _XmAppLock(app);
+  _XmAppLock(XtWidgetToApplicationContext(w));
   ret_val = TBG_Set(tg);
-  _XmAppUnlock(app);
+  _XmAppUnlock(XtWidgetToApplicationContext(w));
   return (ret_val);
 }
 /****************************************************************
@@ -3383,8 +3382,7 @@ XmToggleButtonGadgetSetState(
   XmToggleButtonGadget tg = (XmToggleButtonGadget) w;
   XmMenuSystemTrait menuSTrait;
   XmToggleButtonState newstate;
-  XtAppContext app = XtWidgetToApplicationContext(w);
-  _XmAppLock(app);
+  _XmAppLock(XtWidgetToApplicationContext(w));
   newstate = (bnewstate == XmSET)? XmSET : XmUNSET;
   if (TBG_Set(tg) != newstate)
     {
@@ -3426,9 +3424,9 @@ XmToggleButtonGadgetSetState(
 		XFlush (XtDisplay (tg));
 	      ToggleButtonCallback(tg, XmCR_VALUE_CHANGED, TBG_Set(tg), NULL);
 	    }
-	}
+	      }
     }
-  _XmAppUnlock(app);
+  _XmAppUnlock(XtWidgetToApplicationContext(w));
 }
 /****************************************************************
  *
@@ -3444,12 +3442,11 @@ XmToggleButtonGadgetSetValue(
 {
   XmToggleButtonGadget tg = (XmToggleButtonGadget) w;
   XmMenuSystemTrait menuSTrait;
-  XtAppContext app = XtWidgetToApplicationContext(w);
-  _XmAppLock(app);
+  _XmAppLock(XtWidgetToApplicationContext(w));
   /* Can't set third state if we aren't in three state mode */
   if ((newstate == XmINDETERMINATE) &&
       (TBG_ToggleMode(tg) != XmTOGGLE_INDETERMINATE)) {
-    _XmAppUnlock(app);
+    _XmAppUnlock(XtWidgetToApplicationContext(w));
     return False;
   }
   if (TBG_Set(tg) != newstate)
@@ -3494,7 +3491,7 @@ XmToggleButtonGadgetSetValue(
 	    }
 	}
     }
-  _XmAppUnlock(app);
+  _XmAppUnlock(XtWidgetToApplicationContext(w));
   return True;
 }
 /***********************************************************************
@@ -3704,8 +3701,6 @@ DrawEtchedInMenu(
   GC tmp_gc = NULL;
   Boolean restore_bgc = False;
   GC tmp_bgc = NULL;
-  XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay((Widget) tb));
-  Boolean etched_in = dpy->display.enable_etched_in_menu;
   if ((LabG_TopShadowColor(tb) == TBG_SelectColor(tb)) ||
       (LabG_BottomShadowColor(tb) == TBG_SelectColor(tb)))
     {

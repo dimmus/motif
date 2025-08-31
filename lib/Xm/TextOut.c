@@ -674,12 +674,12 @@ _FontStructFindHeight(XmTextWidget tw,
 		     int to)   /* How many bytes in to stop measuring */
 {
   OutputData data = tw->text.output->data;
-  XFontStruct *font = data->font;
   char *ptr = NULL;
-  unsigned char c;
   int i = 0, csize = 0;
   int result = 0;
   XCharStruct overall;
+  unsigned char c;
+  (void)c; /* unused but required for consistency */
   if (tw->text.char_size != 1) {
     for (i = from, ptr = block->ptr + from; i < to; i +=csize, ptr += csize) {
       csize = mblen(ptr, tw->text.char_size);
@@ -717,10 +717,11 @@ _XftFindHeight(XmTextWidget tw,
   OutputData data = tw->text.output->data;
   XftFont *font = (XftFont*)data->font;
   char *ptr = NULL;
-  unsigned char c;
   int i = 0, csize = 0;
   int result = 0;
   XGlyphInfo ext;
+  unsigned char c;
+  (void)c; /* unused but required for consistency */
   if (tw->text.char_size != 1) {
     for (i = from, ptr = block->ptr + from; i < to; i +=csize, ptr += csize) {
       csize = mblen(ptr, tw->text.char_size);
@@ -757,12 +758,13 @@ FindHeight(XmTextWidget tw,
 {
   OutputData data = tw->text.output->data;
   char *ptr = NULL;
-  unsigned char c;
   int result = 0;
   int tmp = 0;
   int csize = 1;
   int i = 0;
   XOrientation orient;
+  unsigned char c;
+  (void)c; /* unused but required for consistency */
 #if USE_XFT
   if (data->use_xft)
     return _XftFindHeight(tw, y, block, from, to);
@@ -1480,8 +1482,8 @@ _XmChangeHSB(XmTextWidget tw)
   OutputData data = tw->text.output->data;
   int local_total = 0;
   int new_size = 0;
+  int offset;
   XmNavigatorDataRec nav_data;
-  int offset = 0;
   if (tw->text.disable_depth != 0) return;
   if (tw->core.being_destroyed) return;
   if (!tw->text.top_character) tw->text.top_line = 0;
@@ -2006,7 +2008,6 @@ Draw(XmTextWidget tw,
   XmHighlightMode endhighlight = highlight;
   int bottomedge = (((int)tw->text.inner_widget->core.height) -
 		     data->bottommargin) + data->voffset;
-  int win_width = 0;
   int newy = 0;
   int charheight = data->font_ascent + data->font_descent;
   if (!XtIsRealized((Widget) tw)) return;
@@ -2264,7 +2265,7 @@ Draw(XmTextWidget tw,
 	  }
 	  SetNormGC(tw, data->gc, True, stipple);
 	  if (data->use_fontset) {
-	    int wx, wy;
+	    int wx;
 	    wx = x - data->hoffset;
 	    if (stipple)
 	      {
@@ -4731,12 +4732,12 @@ SliderMove(Widget w,
   XmTextWidget tw = (XmTextWidget) closure;
   XmNavigatorDataRec nav_data;
   int offset, n;
+  int new_top;
   XPoint xmim_point;
   XRectangle xmim_area;
   Arg args[10];
   OutputData data = tw->text.output->data;
   int local_total = 0;
-  int new_top = 0;
   /* get the navigator information using the trait getValue since I
      cannot use a callback struct */
   nav_data.valueMask = NavValue;

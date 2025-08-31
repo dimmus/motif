@@ -255,17 +255,14 @@ GetUseableText(Display *display, XmString xmstring, char **buffer,
     char *text = NULL, *final_string = NULL, *text_item=NULL, *compound_text;
     unsigned char return_status;
     int result, size_so_far = 1; /* initialized for the ending NULL */
-    XICCEncodingStyle encoding_style;
     /* Initialize the buffer in case we have to abort and return
        failure. */
     *buffer = NULL;
     switch(texttype)
     {
       case _LOCALE_TEXT:
-	encoding_style = XTextStyle;
 	break;
       case _STRING_TEXT:
-	encoding_style = XStringStyle;
 	break;
       default:
 	return(XLocaleNotSupported);
@@ -543,7 +540,6 @@ XmCvtTextPropertyToXmStringTable(Display *display,
         XmSUTF8_STRING
 #endif
 	};
-    char **text_list;
     int i, elements = 0;
     XmStringTable string_table;
     XmStringTag tag;

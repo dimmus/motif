@@ -114,6 +114,7 @@ void XmeDrawShadows(Display *display, Drawable d,
     XtAppContext app;
     if(!d) return ;
     app = XtDisplayToApplicationContext(display);
+    (void)app; /* unused but required for _XmAppLock */
     _XmAppLock(app);
     if ((shad_type == XmSHADOW_IN) || (shad_type == XmSHADOW_ETCHED_IN)) {
         tmp_gc = top_gc ;
@@ -141,6 +142,7 @@ void XmeClearBorder (Display *display, Window w,
     XtAppContext app;
     if (!w || !shadow_thick || !width || !height) return ;
     app = XtDisplayToApplicationContext(display);
+    (void)app; /* unused but required for _XmAppLock */
     _XmAppLock(app);
     XClearArea (display, w, x, y, width, shadow_thick, FALSE);
     XClearArea (display, w, x, y + height - shadow_thick, width,
@@ -161,6 +163,7 @@ void XmeDrawHighlight(Display *display, Drawable d,
     XtAppContext app;
     if (!d || !highlight_thickness || !width || !height) return ;
     app = XtDisplayToApplicationContext(display);
+    (void)app; /* unused but required for _XmAppLock */
     _XmAppLock(app);
     rect[0].x = rect[1].x = rect[2].x = x ;
     rect[3].x = x + width - highlight_thickness ;
@@ -189,6 +192,7 @@ void XmeDrawSeparator(Display *display, Drawable d,
    XtAppContext app;
    if (!d || (separator_type == XmNO_LINE)) return ;
    app = XtDisplayToApplicationContext(display);
+   (void)app; /* unused but required for _XmAppLock */
    _XmAppLock(app);
    if (orientation == XmHORIZONTAL) {
        center = y + height / 2;

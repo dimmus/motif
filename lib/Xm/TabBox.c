@@ -1129,7 +1129,7 @@ SetValues(Widget current, Widget request, Widget set, ArgList arg_list,
 	{
 	    sfield(font_list) = XmeGetDefaultRenderTable(set, XmLABEL_FONTLIST);
 	}
-	sfield(font_list) == XmFontListCopy(sfield(font_list));
+	sfield(font_list) = XmFontListCopy(sfield(font_list));
 	need_layout = True;
 	need_resize = True;
     }

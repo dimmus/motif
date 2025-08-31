@@ -1549,7 +1549,6 @@ XmeGetDefaultRenderTable(
         unsigned char fontListType )
 {
     XmFontList fontlist = NULL;
-    static XmFontList sFontList = NULL;
     Widget origw = w;
     XmFontListEntry fontListEntry;
     char *s;

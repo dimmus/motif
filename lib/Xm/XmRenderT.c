@@ -1587,6 +1587,7 @@ XmRenderTableGetTags(XmRenderTable table,
       return(0);
     }
   app = XtDisplayToApplicationContext(_XmRTDisplay(table));
+  (void)app; /* unused but required for _XmAppLock */
   _XmAppLock(app);
   *tag_list =
     (XmStringTag *)XtMalloc(sizeof(XmStringTag) * _XmRTCount(table));
@@ -2478,9 +2479,11 @@ static struct _XmXftDrawCacheStruct {
 	XftDraw	*draw;
 } *_XmXftDrawCache = NULL;
 static int _XmXftDrawCacheSize = 0;
-static XErrorHandler           oldErrorHandler;
-static int xft_error;
-static int
+static XErrorHandler           oldErrorHandler __attribute__((unused));
+static int xft_error __attribute__((unused));
+/* Suppress unused variable warning */
+static XErrorHandler oldErrorHandler_ptr __attribute__((unused)) = NULL;
+static int __attribute__((unused))
 _XmXftErrorHandler(
         Display *display,
         XErrorEvent *error )
@@ -2490,16 +2493,16 @@ _XmXftErrorHandler(
    error->error_code,
    error->request_code) ;
    xft_error = BadWindow;
+   oldErrorHandler_ptr = _XmXftErrorHandler; /* suppress unused function warning */
     /* No exit! - but keep lint happy */
     return 0 ;
 }
+
 XftDraw *
 _XmXftDrawCreate(Display *display, Window window)
 {
 	XftDraw			*draw;
-	XWindowAttributes	wa;
 	int			i;
-	Status status;
 	for (i=0; i<_XmXftDrawCacheSize; i++) {
 		if (_XmXftDrawCache[i].display == display &&
 		    _XmXftDrawCache[i].window == window) {

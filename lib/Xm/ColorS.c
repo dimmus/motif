@@ -289,7 +289,6 @@ WidgetClass xmColorSelectorWidgetClass = (WidgetClass)&xmColorSelectorClassRec;
 static void
 ClassInitialize(void)
 {
-    XmColorSelectorClassRec *wc = &xmColorSelectorClassRec;
     XtSetTypeConverter(XmRString, XmRXmColorMode,
 		       (XtTypeConverter) CvtStringToColorMode,
 		       NULL, (Cardinal) 0, XtCacheAll, NULL);

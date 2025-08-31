@@ -2070,7 +2070,7 @@ processCharsetAndTextUtf8(XmStringCharSet tag,
 		      unsigned int	*outlen,
 		      ct_Charset	*prev)
 {
-  unsigned int		ctlen = 0, len;
+  unsigned int		ctlen = 0;
   if (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0) {
       if (_XmStringIsCurrentCharset("UTF-8")) {
     	  if (ctext)
@@ -2150,7 +2150,7 @@ processCharsetAndText(XmStringCharSet tag,
 		      unsigned int	*outlen,
 		      ct_Charset	*prev)
 {
-  unsigned int		ctlen = 0, len;
+  unsigned int		ctlen = 0;
   if (strcmp(tag, CS_UTF_8) == 0)
     tag = XmFONTLIST_DEFAULT_TAG;
   if (strcmp(tag, XmFONTLIST_DEFAULT_TAG) == 0)
@@ -2333,7 +2333,7 @@ processCharsetAndText(XmStringCharSet tag,
     else {
       /* Must be a non-standard character set! */
       OctetPtr        temp;
-      len = strlen(tag);
+      unsigned int len = strlen(tag);
       temp = (unsigned char *) XtMalloc(*outlen + 6 + len + 2);
       /* orig + header + tag + STX + EOS */
       memcpy( temp, *outc, *outlen);

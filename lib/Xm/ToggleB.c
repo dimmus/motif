@@ -2113,10 +2113,8 @@ BorderUnhighlight(
   if (Lab_IsMenupane(tb))
     {
       XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(wid));
-      Boolean etched_in = dpy->display.enable_etched_in_menu;
-      Boolean already_armed = tb->toggle.Armed;
       tb -> toggle.Armed = FALSE;
-      if ((etched_in) &&
+      if ((dpy->display.enable_etched_in_menu) &&
 	      ((tb->toggle.ind_on) ||
 	       (!(tb->toggle.ind_on) && !(tb->toggle.fill_on_select))))
         {
@@ -2806,7 +2804,6 @@ XmToggleButtonGetState(
 {
   XmToggleButtonWidget tw = (XmToggleButtonWidget) w;
   Boolean ret_val;
-  XtAppContext app = XtWidgetToApplicationContext(w);
   if (XmIsGadget(w))
     return XmToggleButtonGadgetGetState(w);
   _XmAppLock(app);
@@ -2828,7 +2825,6 @@ XmToggleButtonSetState(
 {
   XmToggleButtonWidget tw = (XmToggleButtonWidget) w;
   XmMenuSystemTrait menuSTrait;
-  XtAppContext app = XtWidgetToApplicationContext(w);
   XmToggleButtonState newstate;
   if (XmIsGadget(w)) {
     XmToggleButtonGadgetSetState(w, bnewstate, notify);
@@ -2894,7 +2890,6 @@ XmToggleButtonSetValue(
         Boolean notify )
 {
   XmToggleButtonWidget tw = (XmToggleButtonWidget) w;
-  XtAppContext app = XtWidgetToApplicationContext(w);
   if (XmIsGadget(w))
     return XmToggleButtonGadgetSetValue(w, newstate, notify);
   _XmAppLock(app);
@@ -3138,8 +3133,7 @@ DrawEtchedInMenu(
   Boolean restore_gc = False;
   GC tmp_gc = None;
   XmDisplay dpy = (XmDisplay) XmGetXmDisplay(XtDisplay(tb));
-  Boolean etched_in = dpy->display.enable_etched_in_menu;
-  Pixel select_pix, tmpc;
+  Pixel select_pix;
   if (tb->primitive.top_shadow_color == tb->toggle.select_color ||
       tb->primitive.bottom_shadow_color == tb->toggle.select_color)
     {
@@ -3156,7 +3150,6 @@ DrawEtchedInMenu(
 		  fx, fy, fw, fh);
   if (tb->toggle.Armed)
     {
-	tmpc = tb->core.background_pixel;
 	XmGetColors(XtScreen(tb), tb->core.colormap,
 		    tb->core.background_pixel,
 		    NULL, NULL, NULL, &select_pix);

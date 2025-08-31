@@ -1249,7 +1249,7 @@ _XmOSGenerateMaskName(
     size_t	buf_len)
 {
     String 	file, suffix;
-    int		len;
+    int len;
     _XmOSFindPathParts(imageName, &file, &suffix);
     if (suffix) {
 	len = (int)(suffix - imageName) - 1;

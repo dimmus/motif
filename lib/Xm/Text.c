@@ -2145,22 +2145,7 @@ _XmTextSetTopCharacter(Widget widget,
 	   tw->text.edit_mode == XmSINGLE_LINE_EDIT)
     _XmTextShowPosition(widget, top_character);
 }
-static void
-LosingFocus(XmTextWidget tw)
-{
-  XmTextVerifyCallbackStruct  cbdata;
-  cbdata.reason = XmCR_LOSING_FOCUS;
-  cbdata.event = NULL;
-  cbdata.doit = True;
-  cbdata.currInsert = tw->text.cursor_position;
-  cbdata.newInsert = tw->text.cursor_position;
-  cbdata.startPos = tw->text.cursor_position;
-  cbdata.endPos = tw->text.cursor_position;
-  cbdata.text = NULL;
-  XtCallCallbackList((Widget)tw, tw->text.losing_focus_callback,
-		     (XtPointer) &cbdata);
-  tw->text.source->data->take_selection = True;
-}
+
 static Boolean
 SetValues(Widget oldw,
 	  Widget reqw,
@@ -2968,7 +2953,6 @@ PreeditDraw(XIC xic,
   XFontStruct *font = o_data->font;
   XRectangle overall_ink;
   int escapement;
-  size_t mb_siz;
   Widget p =w;
   Boolean need_verify, end_preedit = False;
   if (!PreUnder(tw))
@@ -3037,7 +3021,7 @@ PreeditDraw(XIC xic,
     if (o_data->use_fontset) {
       if (call_data->text->encoding_is_wchar){
         mb = XtMalloc((insert_length+1)*tw->text.char_size);
-        mb_siz = wcstombs(mb, call_data->text->string.wide_char,
+        (void)wcstombs(mb, call_data->text->string.wide_char,
                   insert_length);
       }
       else {

@@ -39,7 +39,7 @@ int _XmJpegGetImage(FILE *fp, XImage **ximage)
 	int ret = 0;
 	XImage *img = NULL;
 	int w1, h1;
-	unsigned int i, j, w, h;
+	unsigned int i, w, h;
 	unsigned char *data = NULL, *gp;
 	struct jerr err;
 	struct jpeg_decompress_struct jpeg;

@@ -598,7 +598,6 @@ WidgetClass xmTabStackWidgetClass = (WidgetClass) &xmTabStackClassRec;
  */
 static void ClassInitialize(void)
 {
-    XmTabStackClassRec* wc = &xmTabStackClassRec;
     /*
      * Initialize the XmTabBox class to add its type converters which we
      * also use.

@@ -268,14 +268,10 @@ _XmGetMBStringFromXmString(XmString xmstr)
     String 			text;
     XmStringContext 		context;   /* context for conversion	*/
     char			*newText;  /* new text string        	*/
-    XmStringCharSet		charset;   /* dummy			*/
-    XmStringDirection   	direction; /* dummy			*/
-    XmStringComponentType	u_tag;	   /* is newline		*/
     int				length;    /* length of string		*/
-    unsigned int		u_length;  /* bogus length		*/
-    unsigned char		*u_value;  /* bogus value		*/
+    unsigned int		u_length;  /* length from XmStringGetNextTriple		*/
     XmStringComponentType 	type;	   /* type			*/
-    Boolean			done, separator; /* done with it	*/
+    Boolean			done; /* done with it	*/
     if ( !XmStringInitContext(&context, xmstr) )
     {
       XmStringFree(xmstr);

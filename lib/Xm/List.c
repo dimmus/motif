@@ -1269,7 +1269,6 @@ ComputeVizCount(XmListWidget lw)
   int viz, lineheight;
   int listheight;
   /*  BEGIN OSF Fix pir 2730 */
-  XFontStruct *font_struct = (XFontStruct *) NULL;
   /* END OSF Fix pir 2730 */
   /*  Don't let listheight underflow to a large positive number! */
   int borders = 2 * (lw->primitive.shadow_thickness +

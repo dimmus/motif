@@ -243,13 +243,11 @@ _XmPictureParseNode(XmPictureRec *picture, char **in_string,
     XmPictureNode *start_node_2;
     XmPictureNode *current_node_2;
     XmPictureNode *newnode;
-    int node_idx;
     XmPictureTransition *newtrans;
     char inc;
     int count;
     char *endcount;
     start_node = _XiGetNewNode(picture);
-    node_idx = start_node->index;
     current_node = start_node;
     while((inc = *((*in_string)++))) {
 	switch(inc) {

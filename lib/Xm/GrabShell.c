@@ -352,7 +352,6 @@ MapNotifyHandler(Widget shell, XtPointer client_data,
 }
 static void MouseWheel (Widget w, XEvent *event, String *params, Cardinal *num_params)
 {
-	XmGrabShellWidget grabshell = (XmGrabShellWidget) w;
 	GSAllowEvents(w, SyncPointer, event -> xbutton.time);
 }
 /*

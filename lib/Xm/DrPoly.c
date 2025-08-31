@@ -46,6 +46,7 @@ XmeDrawPolygonShadow (
     Region  xregion;
     XtAppContext app;
     app = XtDisplayToApplicationContext(dpy);
+    (void)app; /* unused but required for _XmAppLock */
     _XmAppLock(app);
     xregion = XPolygonRegion(points, n_points, /* FillRule */ WindingRule);
     _XmRegionDrawShadow (dpy, d,

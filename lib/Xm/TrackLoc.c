@@ -81,21 +81,19 @@ XmTrackingEvent(
     Boolean     key_has_been_pressed= False;
     Widget      target ;
     Position x, y ;
-    XtAppContext app;
     if (widget == NULL) return(NULL);
-    app = XtWidgetToApplicationContext(widget);
-    _XmAppLock(app);
+    _XmAppLock(XtWidgetToApplicationContext(widget));
     w = XtWindowOfObject(widget);
     if (confineTo) confine_to = w;
     lastTime = XtLastTimestampProcessed(XtDisplay(widget));
     XmUpdateDisplay(widget);
-    if (XtGrabPointer(widget, True,
+    	if (XtGrabPointer(widget, True,
           /* The following truncation of masks is due to a bug in the Xt API.*/
 		      (unsigned int) (ButtonPressMask | ButtonReleaseMask),
 		      GrabModeAsync, GrabModeAsync,
 		      confine_to, cursor, lastTime) != GrabSuccess) {
 	XmeWarning(widget, GRABPTRERROR);
-	_XmAppUnlock(app);
+	_XmAppUnlock(XtWidgetToApplicationContext(widget));
 	return NULL ;
     }
     while (True) {
@@ -114,7 +112,7 @@ XmTrackingEvent(
 		    (pev->xbutton.y > widget->core.height))
 		    {
 			XtUngrabPointer(widget, lastTime);
-			_XmAppUnlock(app);
+			_XmAppUnlock(XtWidgetToApplicationContext(widget));
 			return(NULL);
 		    }
 	    }
@@ -153,7 +151,7 @@ XmTrackingEvent(
 	   the keypress activatation of the function itself */
     }
     XtUngrabPointer(widget, lastTime);
-    _XmAppUnlock(app);
+    _XmAppUnlock(XtWidgetToApplicationContext(widget));
     return(target);
 }
 /* reimplementation of the old function using the new one and a dummy event */

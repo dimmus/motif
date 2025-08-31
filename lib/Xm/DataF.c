@@ -1138,7 +1138,6 @@ static XmConst XmAccessTextualTraitRec dataFieldCS = {
 };
 static void ClassInit(void)
 {
-    XmDataFieldClassRec* wc = &xmDataFieldClassRec;
     XmTransferTrait tt;
     /* set TextField's transfer trait */
     tt = XmeTraitGet((XtPointer)xmTextFieldWidgetClass, XmQTtransfer);
@@ -7770,7 +7769,7 @@ wchar_t *XmDataFieldGetStringWcs(Widget w)
 {
     XmDataFieldWidget tf = (XmDataFieldWidget) w;
     wchar_t *temp_wcs;
-    int num_wcs = 0;
+    int num_wcs;
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
     if (XmTextF_string_length(tf) > 0)
@@ -7855,8 +7854,6 @@ void XmDataFieldSetString(Widget w, char *value)
     XmTextPosition fromPos, toPos, newInsert;
     int length;
     int free_insert = False;
-    int ret_val = 0;
-    char * mod_value = NULL;
     _XmWidgetToAppContext(w);
     _XmAppLock(app);
     fromPos = 0;

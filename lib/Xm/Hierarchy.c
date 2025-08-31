@@ -288,7 +288,6 @@ WidgetClass xmHierarchyWidgetClass = (WidgetClass) &xmHierarchyClassRec;
 static void
 ClassInit()
 {
-    XmHierarchyClassRec* wc = &xmHierarchyClassRec;
     XtSetTypeConverter(XmRString, XmRXmHierarchyNodeState,CvtStringToNodeState,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);
 }

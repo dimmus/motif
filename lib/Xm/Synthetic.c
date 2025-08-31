@@ -188,7 +188,6 @@ GetValuesHook(Widget w,
   int i, j;
   XrmQuark quark;
   XtArgVal value;
-  XtArgVal orig_value;
   Cardinal value_size;
   XtPointer value_ptr;
   Widget value_widget;
@@ -230,7 +229,6 @@ GetValuesHook(Widget w,
 		value = (XtArgVal)(*(char *)value_ptr);
 	      else
 		value = *(XtArgVal*)value_ptr;
-	      orig_value = value;
 	      (*(resources[j].export_proc))
 		(value_widget, value_offset, &value);
 #if defined(GETVALUES_BUG)

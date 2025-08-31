@@ -781,8 +781,6 @@ ValidateDragOver(
 {
   Arg		args[1];
   XmDisplay	xmDisplay = (XmDisplay)XtParent(dc);
-  unsigned char initiator;
-  initiator = xmDisplay->display.dragInitiatorProtocolStyle;
   if (newStyle != oldStyle)
     {
       /*

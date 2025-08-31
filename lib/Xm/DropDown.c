@@ -2167,7 +2167,6 @@ Widget XmDropDownGetList(Widget w)
  */
 Widget XmDropDownGetChild(Widget w, int num)
 {
-    XmDropDownWidget cbw = (XmDropDownWidget) w;
     Widget child;
     _XmWidgetToAppContext(w);
     _XmAppLock(app);

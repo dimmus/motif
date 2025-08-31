@@ -66,6 +66,7 @@ XmeGetPixmapData(
     unsigned int loc_height;
     XtAppContext app;
     app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
+    (void)app; /* unused but required for _XmAppLock */
     _XmAppLock(app);
     /* support passed NULL argument */
     if (!image_name) image_name = &loc_image_name ;

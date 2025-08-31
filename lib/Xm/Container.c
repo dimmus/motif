@@ -3031,7 +3031,6 @@ TestFitItem(
     if (CtrSpatialStyleIsNONE(cw))
       {
 	XtWidgetGeometry child_req;
-	XtGeometryResult result;
 	/* If we don't need to resize,  just return */
 	if ((XtWidth(cw) >= (x + XtWidth(cwid) + cw -> container.margin_w)) &&
 	    (XtHeight(cw) >= (y + XtHeight(cwid) + cw -> container.margin_h)))
@@ -3041,7 +3040,7 @@ TestFitItem(
 	child_req.x = x;
 	child_req.y = y;
 	/* Make the request,  but always allow the drop */
-	result = _XmMakeGeometryRequest(cwid, &child_req);
+	_XmMakeGeometryRequest(cwid, &child_req);
       }
     return(True);
 }
@@ -4886,7 +4885,6 @@ ContainerDestPrehookProc(
 	XtPointer	closure, /* unused */
         XmDestinationCallbackStruct *cs)
 {
-  XmContainerWidget		cw = (XmContainerWidget)wid;
   XmDropProcCallbackStruct *	dropproc_cs;
   XPoint			*loc_data;
   /* For a PRIMARY selection, don't null out the location_data.
@@ -7717,7 +7715,7 @@ GetPrevTraversalWidget(
 {
     CwidNode	child_node;
     CwidNode	prev_node;
-    CwidNode	last_node;
+
     if (cw == NULL || child == NULL)
 	return(NULL);
     child_node = GetContainerConstraint(child)->node_ptr;

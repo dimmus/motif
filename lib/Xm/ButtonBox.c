@@ -224,12 +224,6 @@ ClassInitialize()
 static void
 ClassPartInitialize(WidgetClass w_class )
 {
-    XmButtonBoxWidgetClass bbClass
-        = (XmButtonBoxWidgetClass) w_class ;
-/* this seems to do nothing.... why is it here? -rh
-    XmButtonBoxWidgetClass bbSuper
-	    = (XmButtonBoxWidgetClass) w_class->core_class.superclass ;
-*/
     _XmFastSubclassInit (w_class, XmBUTTONBOX_BIT);
     /* Install the specifyrendertable trait for all subclasses */
     /*
@@ -482,7 +476,6 @@ ChangeManaged(Widget w)
 static void
 InsertChild(register Widget child)
 {
-Boolean         is_button = False ;
 XmButtonBoxWidget bb = (XmButtonBoxWidget) XtParent( child) ;
     /*
      * Check for non-widgets - ButtonBox doesn't support gadgets, for now ...
@@ -510,7 +503,6 @@ XmButtonBoxWidget bb = (XmButtonBoxWidget) XtParent( child) ;
     }
     if(XmeTraitGet((XtPointer)XtClass(child), XmQTtakesDefault))
     {
-        is_button = TRUE ;
         if( XmButtonBox_default_button( bb) )
         {
             /* Notify child that it has to be ready for default visual */

@@ -946,16 +946,14 @@ static Boolean
 RenditionsCompatible(_XmStringEntry seg1,
 		     _XmStringEntry seg2)
 {
-  XmStringTag	*begin1, *begin2, *end1, *end2;
   short		bcnt1, bcnt2, ecnt1, ecnt2;
+  XmStringTag	*begin1, *end2;
   _XmProcessLock();
   bcnt1 = _XmEntryRendBeginCountGet(seg1);
   bcnt2 = _XmEntryRendBeginCountGet(seg2);
   ecnt1 = _XmEntryRendEndCountGet(seg1);
   ecnt2 = _XmEntryRendEndCountGet(seg2);
   begin1 = _XmEntryRendCountedBegins(seg1, bcnt1);
-  begin2 = _XmEntryRendCountedBegins(seg2, bcnt2);
-  end1 = _XmEntryRendCountedEnds(seg1, ecnt1);
   end2 = _XmEntryRendCountedEnds(seg2, ecnt2);
   _XmProcessUnlock();
   /* if seg1 is optimized, we are very limited in what renditions will be
@@ -6590,16 +6588,20 @@ match_pattern(XtPointer      text,
     {
       /* Compare wchar_t text to a mbs pattern. */
       char mb_text[MB_LEN_MAX];
-      wctomb(mb_text, (wchar_t) '\0');
-      wctomb(mb_text, *((wchar_t*)text));
+      int tmp;
+      tmp = wctomb(mb_text, (wchar_t) '\0');
+      tmp = wctomb(mb_text, *((wchar_t*)text));
+      (void)tmp; /* suppress unused variable warning */
       return !strncmp(mb_text, (char*) pattern->pattern, char_len);
     }
   else if (pattern->pattern_type == XmWIDECHAR_TEXT)
     {
       /* Compare mbs text to wchar_t pattern. */
       char mb_pattern[MB_LEN_MAX];
-      wctomb(mb_pattern, (wchar_t) '\0');
-      wctomb(mb_pattern, *((wchar_t*)pattern->pattern));
+      int tmp;
+      tmp = wctomb(mb_pattern, (wchar_t) '\0');
+      tmp = wctomb(mb_pattern, *((wchar_t*)pattern->pattern));
+      (void)tmp; /* suppress unused variable warning */
       return !strncmp((char*) text, mb_pattern, char_len);
     }
   else if (strlen((char*) pattern->pattern) == char_len)

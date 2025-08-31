@@ -51,6 +51,7 @@ void XmeDrawArrow(Display *display, Drawable d,
    XtAppContext app;
    if (!d) return ;
    app = XtDisplayToApplicationContext(display);
+   (void)app; /* unused but required for _XmAppLock */
    _XmAppLock(app);
    /*  Get the size and the position and allocate the rectangle lists  */
    if (width > height) {

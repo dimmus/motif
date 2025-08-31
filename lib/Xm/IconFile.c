@@ -468,6 +468,7 @@ XmGetIconFileName(
     };
     XtAppContext app;
     app = XtDisplayToApplicationContext(display);
+    (void)app; /* unused but required for _XmAppLock */
     _XmAppLock(app);
     /* start by asking some screen state */
     (void)XmeGetIconControlInfo(screen,

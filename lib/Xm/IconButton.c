@@ -366,7 +366,6 @@ static XmConst XmActivatableTraitRec iconButtonAT =
 static void
 ClassInit()
 {
-    XmIconButtonClassRec *wc = &xmIconButtonClassRec;
     XtSetTypeConverter(XmRString, XmRXmIconPlacement,
 		       (XtTypeConverter) CvtStringToIconPlacement,
 		       NULL, (Cardinal) 0, XtCacheAll, (XtDestructor) NULL);

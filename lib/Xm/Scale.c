@@ -1613,6 +1613,7 @@ ValueTroughWidth(
     register Dimension tmp_max, tmp_min, result;
     int direction, ascent, descent;
     XCharStruct overall_return;
+    (void)direction; (void)ascent; (void)descent; (void)overall_return; /* unused but required by XTextExtents */
 #if USE_XFT
 #define GET_MAX(tmp, max_or_min_value) {\
     XmString tmp_str;\
@@ -2409,6 +2410,7 @@ ShowValue(
     XCharStruct width_return;
     char buffer[256];
     int direction, descent;
+    (void)direction; (void)descent; (void)width_return; /* unused but required by XTextExtents */
     XmScrollBarWidget scrollbar;
     Region value_region = sw->scale.value_region;
     XRectangle value_rect;
@@ -2459,6 +2461,7 @@ ShowValue(
 #else
     XTextExtents (sw->scale.font_struct, buffer, strlen(buffer),
 		  &direction, &height, &descent, &width_return);
+    (void)direction; (void)descent; /* unused but required by XTextExtents */
     width = width_return.rbearing - width_return.lbearing;
     sw->scale.show_value_width = width;
     sw->scale.show_value_height = height + descent;

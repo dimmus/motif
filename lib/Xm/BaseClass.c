@@ -1434,15 +1434,7 @@ ClassPartInitLeafWrapper(
       wrapperData->classPartInitLeaf = NULL;
     }
 }
-static Boolean
-is_constraint_subclass(WidgetClass cls)
-{
-  WidgetClass sc;
-  for (sc = cls; sc != NULL; sc = sc->core_class.superclass)
-    if (sc == (WidgetClass) &constraintClassRec)
-      return True;
-  return False;
-}
+
 void
 _XmInitializeExtensions( void )
 {
