@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 datadir = ${prefix}/share/Xm/doc
 
 # Declare phony targets
-.PHONY: help format deps release release-configure release-build release-portable release-portable-configure dev-build
+.PHONY: help format deps release release-configure release-build release-portable release-portable-configure dev-build gcov clean-gcov
 
 data_DATA = README.md
 pkgconfig_DATA  = motif.pc
@@ -40,6 +40,9 @@ MAINTAINERCLEANFILES = Makefile.in \
             test-driver \
             ylwrap \
             config/util/makestrs \
+            *.gcda \
+            *.gcno \
+            *.gcov \
             $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz \
 	        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
 
@@ -69,6 +72,8 @@ help:
 	@echo "  deps          - Check dependencies"
 	@echo "  install       - Install the built software"
 	@echo "  uninstall     - Uninstall the software"
+	@echo "  gcov          - Generate code coverage reports (requires --enable-tests)"
+	@echo "  clean-gcov    - Clean up coverage files"
 	@echo ""
 	@echo "Release build optimizations:"
 	@echo "  -O3                    - Maximum optimization"
@@ -152,3 +157,37 @@ maintainer-clean-local:
 	@find . -name ".libs" -type d -exec rm -rf {} + 2>/dev/null || true
 	@echo "Removing Makefile.in files..."
 	@find . -name "Makefile.in" -type f -exec rm -rf {} + 2>/dev/null || true
+	@echo "Removing coverage files..."
+	@find . -name "*.gcda" -delete 2>/dev/null || true
+	@find . -name "*.gcno" -delete 2>/dev/null || true
+	@find . -name "*.gcov" -delete 2>/dev/null || true
+
+# Gcov code coverage target (only available when tests are enabled)
+if XM_WITH_TESTS
+gcov:
+	@echo "Running code coverage analysis with $(ax_cc_gcov_command)..."
+	@if [ ! -f tests/tests ]; then \
+		echo "Error: Test executable not found. Please run 'make check' first."; \
+		exit 1; \
+	fi
+	@echo "Running tests to generate coverage data..."
+	@cd tests && ./tests
+	@echo "Generating coverage reports..."
+	@find . -name "*.gcda" -exec $(ax_cc_gcov_command) {} \; 2>/dev/null || true
+	@echo "Coverage analysis complete. Check *.gcov files for results."
+	@echo "Note: For HTML reports, consider using lcov or gcovr tools."
+
+clean-gcov:
+	@echo "Cleaning up coverage files..."
+	@find . -name "*.gcda" -delete 2>/dev/null || true
+	@find . -name "*.gcno" -delete 2>/dev/null || true
+	@find . -name "*.gcov" -delete 2>/dev/null || true
+	@echo "Coverage files cleaned up."
+else
+gcov:
+	@echo "Code coverage analysis is only available when tests are enabled."
+	@echo "Please configure with --enable-tests and run 'make check' first."
+
+clean-gcov:
+	@echo "Code coverage is not enabled."
+endif
