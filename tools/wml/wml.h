@@ -27,6 +27,7 @@
  */
 
 #include <stddef.h>
+#include <stdio.h>
 
 #define TRUE		1
 #define FALSE		0
@@ -622,17 +623,17 @@ extern DynamicHandleListDefPtr	wml_tok_insens_ptr;
 /*
  * Defined in wmlutils.c
  */
-extern char *wmlAllocateString ();		/* dynamic string copy */
-extern void wmlUpperCaseString ();		/* convert to upper case */
-extern void wmlInitHList ();			/* init dynamic list */
-extern void wmlResizeHList ();			/* resize a list */
-extern void wmlClearHList ();			/* clear a list for reuse */
-extern int wmlFindInHList ();			/* find name in list */
-extern void wmlInsertInHList ();		/* generic list insert */
-extern void wmlInsertInKeyList ();		/* specialized list insert */
-extern WmlClassResDefPtr wmlResolveResIsMember ();
+extern char *wmlAllocateString (char *);		/* dynamic string copy */
+extern void wmlUpperCaseString (char *);		/* convert to upper case */
+extern void wmlInitHList (DynamicHandleListDefPtr, int, int);			/* init dynamic list */
+extern void wmlResizeHList (DynamicHandleListDefPtr, int);			/* resize a list */
+extern void wmlClearHList (DynamicHandleListDefPtr);			/* clear a list for reuse */
+extern int wmlFindInHList (DynamicHandleListDefPtr, char *);			/* find name in list */
+extern void wmlInsertInHList (DynamicHandleListDefPtr, char *, ObjectPtr);		/* generic list insert */
+extern void wmlInsertInKeyList (DynamicHandleListDefPtr, char *, void *);		/* specialized list insert */
+extern WmlClassResDefPtr wmlResolveResIsMember (WmlResourceDefPtr, WmlClassResDefPtr);
 						/* is resource in class? */
-extern WmlClassChildDefPtr wmlResolveChildIsMember ();
+extern WmlClassChildDefPtr wmlResolveChildIsMember (WmlChildDefPtr, WmlClassChildDefPtr);
 						/* is child in class? */
 
 /*
@@ -644,24 +645,24 @@ extern int		yytknval1;		/* terminal token value 1 */
 extern int		yytknval2;		/* terminal token value 2 */
 extern ObjectPtr	wml_cur_obj;		/* object being constructed */
 extern ObjectPtr	wml_cur_subobj;		/* current subobject */
-extern void wmlCreateClass ();
-extern void wmlAddClassAttribute ();
-extern void wmlAddClassResource ();
-extern void wmlAddClassResourceAttribute ();
-extern void wmlAddClassControl ();
-extern void wmlAddCtrList ();
-extern void wmlCreateResource ();
-extern void wmlCreateDatatype ();
-extern void wmlAddResourceAttribute ();
-extern void wmlAddDatatypeAttribute ();
-extern void wmlAddCtrListControl ();
-extern void wmlCreateEnumSet ();
-extern void wmlAddEnumSetValue ();
-extern void wmlCreateEnumValue ();
-extern void wmlAddEnumValueAttribute ();
-extern void wmlCreateCharset ();
-extern void wmlAddCharsetAttribute ();
-extern void LexIssueError ();
+extern void wmlCreateClass (char *, int);
+extern void wmlAddClassAttribute (int, void *);
+extern void wmlAddClassResource (char *);
+extern void wmlAddClassResourceAttribute (int, void *);
+extern void wmlAddClassControl (char *);
+extern void wmlAddCtrList (char *);
+extern void wmlCreateResource (char *, int);
+extern void wmlCreateDatatype (char *);
+extern void wmlAddResourceAttribute (int, void *);
+extern void wmlAddDatatypeAttribute (int, char *);
+extern void wmlAddCtrListControl (char *, int);
+extern void wmlCreateEnumSet (char *, char *);
+extern void wmlAddEnumSetValue (char *);
+extern void wmlCreateEnumValue (char *);
+extern void wmlAddEnumValueAttribute (int, char *);
+extern void wmlCreateCharset (char *);
+extern void wmlAddCharsetAttribute (int, void *);
+extern void LexIssueError (int);
 
 /*      May be, declaration of functions must be next:
 extern void wmlAddClassChild ();
@@ -680,22 +681,32 @@ extern void wmlAddCtrlListControl (char *);
 /*
  * Defined in wmlresolve.c
  */
-extern void wmlResolveDescriptors ();
-extern void wmlMarkReferencePointers ();
+extern void wmlResolveDescriptors (void);
+extern void wmlMarkReferencePointers (WmlClassDefPtr);
+extern ObjectPtr wmlResolveFindObject (char *, int, char *);
+extern void wmlIssueReferenceError (char *, char *);
+extern void wmlIssueIllegalReferenceError (char *, char *);
+extern void wmlIssueError (char *);
+extern void wmlResolveClassInherit (WmlClassDefPtr);
+extern void wmlResolveInitRefObj (WmlClassResDefPtr, WmlClassResDefPtr);
+extern void wmlResolveInitChildRefObj (WmlClassChildDefPtr, WmlClassChildDefPtr);
+extern void wmlResolvePrintClass (FILE *, WmlClassDefPtr);
+extern void wmlResolvePrintClassArgs (FILE *, WmlClassDefPtr);
+extern void wmlResolvePrintClassReasons (FILE *, WmlClassDefPtr);
 
 
 /*
  * Defined in wmlouth.c
  */
-extern void wmlOutputHFiles ();
+extern void wmlOutputHFiles (void);
 
 
 /*
  * Defined in wmloutdat.c
  */
-extern void wmlOutputDatFiles ();
+extern void wmlOutputDatFiles (void);
 
 /*
  * Define in wmloutp1 or wmloutp2
  */
-extern void wmlOutput ();
+extern void wmlOutput (void);

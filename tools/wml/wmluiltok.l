@@ -81,7 +81,7 @@ typedef struct _token
 TokenRec token[1000];
 TokenRec temp;
 
-void add_token ();
+void add_token (Token t);
 int yywrap ();
 
 int phase		= 0;

@@ -311,7 +311,7 @@ class_attribute
 	| boolean_class_attribute_name
 	    EQUALS
 	    boolean_attribute_value
-		{ wmlAddClassAttribute (yytknval1, yytknval2); }
+		{ wmlAddClassAttribute (yytknval1, (void *)(long)yytknval2); }
 	    SEMICOLON
 	| class_resources SEMICOLON
 	| class_controls SEMICOLON
@@ -384,7 +384,7 @@ class_resource_attribute_element
 	| boolean_class_resource_attribute_name
 	    EQUALS
 	    boolean_attribute_value
-		{ wmlAddClassResourceAttribute (yytknval1, yytknval2); }
+		{ wmlAddClassResourceAttribute (yytknval1, (void *)(long)yytknval2); }
 	    SEMICOLON
 	| error { LexIssueError(SEMICOLON); } SEMICOLON
 	;
@@ -492,7 +492,7 @@ resource_attribute
 	| boolean_resource_resource_attribute_name
 	    EQUALS
 	    boolean_attribute_value
-		{ wmlAddResourceAttribute (yytknval1, yytknval2); }
+		{ wmlAddResourceAttribute (yytknval1, (void *)(long)yytknval2); }
 	    SEMICOLON
 	| error { LexIssueError(SEMICOLON); } SEMICOLON
 	;
@@ -701,7 +701,7 @@ charset_attribute
 	| predefined_charset_attribute_name
 	    EQUALS
 	    predefined_charset_attribute_value
-		{ wmlAddCharsetAttribute (yytknval1, yytknval2); }
+		{ wmlAddCharsetAttribute (yytknval1, (void *)(long)yytknval2); }
 	    SEMICOLON
 	| error { LexIssueError(SEMICOLON); } SEMICOLON
 	;

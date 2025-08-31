@@ -51,34 +51,34 @@ static char rcsid[] = "$XConsortium: wmlresolve.c /main/9 1995/08/29 11:11:05 dr
 /*
  * Routines used only in this module
  */
-void wmlResolveGenerateSymK ();
-void wmlResolveValidateClass ();
-void wmlResolvePrintReport ();
+void wmlResolveGenerateSymK (void);
+void wmlResolveValidateClass (void);
+void wmlResolvePrintReport (void);
 
-void wmlResolveSymKDataType ();
-void wmlResolveSymKChild ();
-void wmlResolveSymKEnumVal ();
-void wmlResolveSymKEnumSet ();
-void wmlResolveSymKReason ();
-void wmlResolveSymKArgument ();
-void wmlResolveSymKRelated ();
-void wmlResolveSymKClass ();
-void wmlResolveSymKCtrlList ();
-void wmlResolveSymKCharSet ();
+void wmlResolveSymKDataType (void);
+void wmlResolveSymKChild (void);
+void wmlResolveSymKEnumVal (void);
+void wmlResolveSymKEnumSet (void);
+void wmlResolveSymKReason (void);
+void wmlResolveSymKArgument (void);
+void wmlResolveSymKRelated (void);
+void wmlResolveSymKClass (void);
+void wmlResolveSymKCtrlList (void);
+void wmlResolveSymKCharSet (void);
 
-void wmlResolveClassInherit ();
-void wmlResolveClearRefPointers ();
-void wmlResolveInitRefObj ();
-void wmlResolveInitChildRefObj ();
+void wmlResolveClassInherit (WmlClassDefPtr);
+void wmlResolveClearRefPointers (void);
+void wmlResolveInitRefObj (WmlClassResDefPtr, WmlClassResDefPtr);
+void wmlResolveInitChildRefObj (WmlClassChildDefPtr, WmlClassChildDefPtr);
 
-void wmlResolvePrintClass ();
-void wmlResolvePrintClassArgs ();
-void wmlResolvePrintClassReasons ();
+void wmlResolvePrintClass (FILE *, WmlClassDefPtr);
+void wmlResolvePrintClassArgs (FILE *, WmlClassDefPtr);
+void wmlResolvePrintClassReasons (FILE *, WmlClassDefPtr);
 
-ObjectPtr wmlResolveFindObject ();
-void wmlIssueReferenceError ();
-void wmlIssueIllegalReferenceError ();
-void wmlIssueError ();
+ObjectPtr wmlResolveFindObject (char *, int, char *);
+void wmlIssueReferenceError (char *, char *);
+void wmlIssueIllegalReferenceError (char *, char *);
+void wmlIssueError (char *);
 
 
 
@@ -175,7 +175,7 @@ wmlResolveSymKChild();
  *   the syntactic descriptor.
  */
 
-void wmlResolveSymKDataType ()
+void wmlResolveSymKDataType (void)
 
 {
 
@@ -224,7 +224,7 @@ for ( ndx=0 ; ndx<wml_synobj_ptr->cnt ; ndx++ )
  *   Link child to its class.
  */
 
-void wmlResolveSymKChild ()
+void wmlResolveSymKChild (void)
 
 {
 
@@ -284,7 +284,7 @@ for ( ndx=0 ; ndx<wml_obj_child_ptr->cnt ; ndx++ )
  *   enumeration values, so don't assign any.
  */
 
-void wmlResolveSymKEnumVal ()
+void wmlResolveSymKEnumVal (void)
 
 {
 
@@ -356,7 +356,7 @@ for ( ndx=0 ; ndx<wml_obj_enumval_ptr->cnt ; ndx++ )
  *   enumeration values, so don't assign any.
  */
 
-void wmlResolveSymKEnumSet ()
+void wmlResolveSymKEnumSet (void)
 
 {
 
@@ -440,7 +440,7 @@ for ( ndx=0 ; ndx<wml_obj_enumset_ptr->cnt ; ndx++ )
  *   the syntactic descriptor.
  */
 
-void wmlResolveSymKReason ()
+void wmlResolveSymKReason (void)
 
 {
 
@@ -514,7 +514,7 @@ for ( ndx=0 ; ndx<wml_obj_reason_ptr->cnt ; ndx++ )
  *   the syntactic descriptor.
  */
 
-void wmlResolveSymKArgument ()
+void wmlResolveSymKArgument (void)
 
 {
 
@@ -591,7 +591,7 @@ for ( ndx=0 ; ndx<wml_obj_arg_ptr->cnt ; ndx++ )
  * The binding only goes one way.
  */
 
-void wmlResolveSymKRelated ()
+void wmlResolveSymKRelated (void)
 
 {
 
@@ -635,7 +635,7 @@ for ( ndx=0 ; ndx<wml_obj_arg_ptr->cnt ; ndx++ )
  * Resources are not inherited and linked at this time.
  */
 
-void wmlResolveSymKClass ()
+void wmlResolveSymKClass (void)
 
 {
 
@@ -739,7 +739,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
  * is used to resolve references.
  */
 
-void wmlResolveSymKCtrlList ()
+void wmlResolveSymKCtrlList (void)
 
 {
 
@@ -799,7 +799,7 @@ for ( ndx=0 ; ndx<wml_synobj_ptr->cnt ; ndx++ )
  *   the syntactic descriptor.
  */
 
-void wmlResolveSymKCharSet ()
+void wmlResolveSymKCharSet (void)
 
 {
 
@@ -882,7 +882,7 @@ for ( ndx=0 ; ndx<wml_obj_charset_ptr->cnt ; ndx++ )
  *	  Excluded resources remain in the list, and are simply marked.
  */
 
-void wmlResolveValidateClass ()
+void wmlResolveValidateClass (void)
 
 {
 
@@ -1248,9 +1248,7 @@ clsobj->inherit_done = TRUE;
  * Routine to copy a resource reference
  */
 
-void wmlResolveInitRefObj (dstobj, srcobj)
-    WmlClassResDefPtr		dstobj;
-    WmlClassResDefPtr		srcobj;
+void wmlResolveInitRefObj (WmlClassResDefPtr dstobj, WmlClassResDefPtr srcobj)
 
 {
 
@@ -1271,9 +1269,7 @@ dstobj->exclude = srcobj->exclude;
  * Routine to copy a child reference
  */
 
-void wmlResolveInitChildRefObj (dstobj, srcobj)
-    WmlClassChildDefPtr		dstobj;
-    WmlClassChildDefPtr		srcobj;
+void wmlResolveInitChildRefObj (WmlClassChildDefPtr dstobj, WmlClassChildDefPtr srcobj)
 
 {
 
@@ -1293,7 +1289,7 @@ childobj->ref_ptr = dstobj;
  * This routine dumps the developed database into the file 'wml.report'
  */
 
-void wmlResolvePrintReport ()
+void wmlResolvePrintReport (void)
 
 {
 
@@ -1341,9 +1337,7 @@ fclose (outfil);
  * Print the information for a class
  */
 
-void wmlResolvePrintClass (outfil, clsobj)
-    FILE			*outfil;
-    WmlClassDefPtr		clsobj;
+void wmlResolvePrintClass (FILE *outfil, WmlClassDefPtr clsobj)
 
 {
 
@@ -1437,9 +1431,7 @@ for ( ndx=0 ; ndx<wml_obj_class_ptr->cnt ; ndx++ )
  * inheritance order.
  */
 
-void wmlResolvePrintClassArgs (outfil, clsobj)
-    FILE			*outfil;
-    WmlClassDefPtr		clsobj;
+void wmlResolvePrintClassArgs (FILE *outfil, WmlClassDefPtr clsobj)
 
 {
 
@@ -1572,9 +1564,7 @@ if ( constr )
  * Like printing arguments, only reasons instead.
  */
 
-void wmlResolvePrintClassReasons (outfil, clsobj)
-    FILE			*outfil;
-    WmlClassDefPtr		clsobj;
+void wmlResolvePrintClassReasons (FILE *outfil, WmlClassDefPtr clsobj)
 
 {
 
@@ -1642,8 +1632,7 @@ for ( ndx=0 ; ndx<wml_obj_reason_ptr->cnt ; ndx++ )
  * bit masks or reports.
  */
 
-void wmlMarkReferencePointers (clsobj)
-    WmlClassDefPtr		clsobj;
+void wmlMarkReferencePointers (WmlClassDefPtr clsobj)
 
 {
 
@@ -1674,7 +1663,7 @@ for ( ctrlref=clsobj->controls ; ctrlref!=NULL ; ctrlref=ctrlref->next )
  * Routine to clear reference pointers
  */
 
-void wmlResolveClearRefPointers ()
+void wmlResolveClearRefPointers (void)
 
 {
 
@@ -1723,10 +1712,7 @@ for ( ndx=0 ; ndx<wml_obj_child_ptr->cnt ; ndx++ )
  * Returns:	pointer to the object found
  */
 
-ObjectPtr wmlResolveFindObject (name, type, requester)
-    char			*name;
-    int				type;
-    char			*requester;
+ObjectPtr wmlResolveFindObject (char *name, int type, char *requester)
 
 {
 
@@ -1775,9 +1761,7 @@ switch ( synobj->validation )
  *	badname		the missing object
  */
 
-void wmlIssueReferenceError (srcname, badname)
-    char			*srcname;
-    char			*badname;
+void wmlIssueReferenceError (char *srcname, char *badname)
 
 {
 
@@ -1791,9 +1775,7 @@ wml_err_count += 1;
  * Report an attempt to make a reference which is not supported.
  */
 
-void wmlIssueIllegalReferenceError (srcname, badname)
-    char			*srcname;
-    char			*badname;
+void wmlIssueIllegalReferenceError (char *srcname, char *badname)
 
 {
 
@@ -1806,8 +1788,7 @@ wml_err_count += 1;
 /*
  * Report an error string.
  */
-void wmlIssueError (errstg)
-    char			*errstg;
+void wmlIssueError (char *errstg)
 
 {
 

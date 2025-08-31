@@ -81,9 +81,7 @@ ObjectPtr	wml_cur_subobj;
  *	ctype		class type, one of METACLASS | WIDGET | GADGET
  */
 
-void wmlCreateClass (name, ctype)
-    char		*name;
-    int			ctype;
+void wmlCreateClass (char *name, int ctype)
 
 {
 
@@ -152,9 +150,7 @@ return;
  *			ARGUMENT | REASON | CONSTRAINT | SUBRESOURCE
  */
 
-void wmlCreateResource (name, rtype)
-    char		*name;
-    int			rtype;
+void wmlCreateResource (char *name, int rtype)
 
 {
 
@@ -224,8 +220,7 @@ return;
  *	name		the datatype name
  */
 
-void wmlCreateDatatype (name)
-    char		*name;
+void wmlCreateDatatype (char *name)
 
 {
 
@@ -266,9 +261,8 @@ return;
  *	class		the class name
  */
 
-void wmlCreateChild (name, class)
-     char		*name;
-     char		*class;
+void wmlCreateChild (char *name, char *class)
+
 {
 
 WmlSynChildDefPtr	chdesc;		/* new child descriptor */
@@ -306,8 +300,7 @@ return;
  *	name		the controls list name
  */
 
-void wmlCreateOrAppendCtrlList (name)
-    char		*name;
+void wmlCreateOrAppendCtrlList (char *name)
 
 {
 int			idx;
@@ -351,9 +344,7 @@ return;
  *	type		data type, must match a data type name
  */
 
-void wmlCreateEnumSet (name, dtype)
-    char		*name;
-    char		*dtype;
+void wmlCreateEnumSet (char *name, char *dtype)
 
 {
 
@@ -393,8 +384,7 @@ return;
  *	name		the enumeration value name
  */
 
-void wmlCreateEnumValue (name)
-    char		*name;
+void wmlCreateEnumValue (char *name)
 
 {
 
@@ -433,8 +423,7 @@ return;
  *	name		the charset name
  */
 
-void wmlCreateCharset (name)
-    char		*name;
+void wmlCreateCharset (char *name)
 
 {
 
@@ -485,9 +474,7 @@ return;
  *	val		value of the attribute, usually a string
  */
 
-void wmlAddClassAttribute (attrid, val)
-    int			attrid;
-    char		*val;
+void wmlAddClassAttribute (int attrid, void *val)
 
 {
 
@@ -517,22 +504,22 @@ if ( cdesc->validation != WmlClassDefValid )
 switch ( attrid )
     {
     case SUPERCLASS:
-        cdesc->superclass = wmlAllocateString (val);
+        cdesc->superclass = wmlAllocateString ((char *)val);
 	break;
     case PARENTCLASS:
-        cdesc->parentclass = wmlAllocateString (val);
+        cdesc->parentclass = wmlAllocateString ((char *)val);
 	break;
     case INTERNALLITERAL:
-        cdesc->int_lit = wmlAllocateString (val);
+        cdesc->int_lit = wmlAllocateString ((char *)val);
 	break;
     case CONVFUNC:
-        cdesc->convfunc = wmlAllocateString (val);
+        cdesc->convfunc = wmlAllocateString ((char *)val);
 	break;
     case DOCNAME:
-        cdesc->docname = wmlAllocateString (val);
+        cdesc->docname = wmlAllocateString ((char *)val);
 	break;
     case WIDGETCLASS:
-        cdesc->widgetclass = wmlAllocateString (val);
+        cdesc->widgetclass = wmlAllocateString ((char *)val);
 	break;
     case DIALOGCLASS:
 	switch ( (long)val )
@@ -543,7 +530,7 @@ switch ( attrid )
 	    }
 	break;
     case CTRLMAPSRESOURCE:
-        cdesc->ctrlmapto = wmlAllocateString (val);
+        cdesc->ctrlmapto = wmlAllocateString ((char *)val);
 	break;
     case ALIAS:
 	if ( cdesc->alias_cnt == 0 )
@@ -552,7 +539,7 @@ switch ( attrid )
 	    synlist = (char **)
 		realloc (cdesc->alias_list,
 			 (cdesc->alias_cnt+1)*sizeof(char **));
-	synlist[cdesc->alias_cnt] = wmlAllocateString (val);
+	synlist[cdesc->alias_cnt] = wmlAllocateString ((char *)val);
 	cdesc->alias_cnt += 1;
 	cdesc->alias_list = synlist;
 	break;
@@ -572,8 +559,7 @@ return;
  *	name		the name of the controlled class
  */
 
-void wmlAddClassControl (name)
-    char			*name;
+void wmlAddClassControl (char *name)
 
 {
 
@@ -626,8 +612,7 @@ return;
  *	name		the resource name
  */
 
-void wmlAddClassResource (name)
-    char			*name;
+void wmlAddClassResource (char *name)
 
 {
 
@@ -683,8 +668,7 @@ return;
  *	name		the resource name
  */
 
-void wmlAddClassChild (name)
-    char			*name;
+void wmlAddClassChild (char *name)
 
 {
 
@@ -738,9 +722,7 @@ return;
  *	val		attribute value, usually a string. Must be
  *			ATTRTRUE | ATTRFALSE for EXCLUDE.
  */
-void wmlAddClassResourceAttribute (attrid, val)
-    int			attrid;
-    char		*val;
+void wmlAddClassResourceAttribute (int attrid, void *val)
 
 {
 
@@ -768,10 +750,10 @@ if ( rdesc->validation != WmlClassResDefValid )
 switch ( attrid )
     {
     case TYPE:
-        rdesc->type = wmlAllocateString (val);
+        rdesc->type = wmlAllocateString ((char *)val);
 	break;
     case DEFAULT:
-        rdesc->dflt = wmlAllocateString (val);
+        rdesc->dflt = wmlAllocateString ((char *)val);
 	break;
     case EXCLUDE:
 	excval = (long) val;
@@ -816,9 +798,7 @@ return;
  *	val		value of the attribute, usually a string
  */
 
-void wmlAddResourceAttribute (attrid, val)
-    int			attrid;
-    char		*val;
+void wmlAddResourceAttribute (int attrid, void *val)
 
 {
 
@@ -849,25 +829,25 @@ if ( rdesc->validation != WmlResourceDefValid )
 switch ( attrid )
     {
     case TYPE:
-        rdesc->datatype = wmlAllocateString (val);
+        rdesc->datatype = wmlAllocateString ((char *)val);
 	break;
     case INTERNALLITERAL:
-        rdesc->int_lit = wmlAllocateString (val);
+        rdesc->int_lit = wmlAllocateString ((char *)val);
 	break;
     case RESOURCELITERAL:
-        rdesc->resliteral = wmlAllocateString (val);
+        rdesc->resliteral = wmlAllocateString ((char *)val);
 	break;
     case ENUMERATIONSET:
-        rdesc->enumset = wmlAllocateString (val);
+        rdesc->enumset = wmlAllocateString ((char *)val);
 	break;
     case DOCNAME:
-        rdesc->docname = wmlAllocateString (val);
+        rdesc->docname = wmlAllocateString ((char *)val);
 	break;
     case RELATED:
-        rdesc->related = wmlAllocateString (val);
+        rdesc->related = wmlAllocateString ((char *)val);
 	break;
     case DEFAULT:
-        rdesc->dflt = wmlAllocateString (val);
+        rdesc->dflt = wmlAllocateString ((char *)val);
 	break;
     case XRMRESOURCE:
 	xrmval = (long) val;
@@ -894,7 +874,7 @@ switch ( attrid )
 	    synlist = (char **)
 		realloc (rdesc->alias_list,
 			 (rdesc->alias_cnt+1)*sizeof(char **));
-	synlist[rdesc->alias_cnt] = wmlAllocateString (val);
+	synlist[rdesc->alias_cnt] = wmlAllocateString ((char *)val);
 	rdesc->alias_cnt += 1;
 	rdesc->alias_list = synlist;
 	break;
@@ -920,9 +900,7 @@ return;
  *	val		value of the attribute, usually a string
  */
 
-void wmlAddDatatypeAttribute (attrid, val)
-    int			attrid;
-    char		*val;
+void wmlAddDatatypeAttribute (int attrid, char *val)
 
 {
 
@@ -995,8 +973,7 @@ return;
  *	name		the name of the controlled class
  */
 
-void wmlAddCtrlListControl (name)
-    char			*name;
+void wmlAddCtrlListControl (char *name)
 
 {
 
@@ -1047,8 +1024,7 @@ return;
  *
  *	name		the name of the enumeration value
  */
-void wmlAddEnumSetValue (name)
-    char		*name;
+void wmlAddEnumSetValue (char *name)
 
 {
 
@@ -1098,9 +1074,7 @@ wml_cur_subobj = (ObjectPtr) evelm;
  *	attrid		oneof ENUMLITERAL
  *	val		value of the attribute, usually a string
  */
-void wmlAddEnumValueAttribute (attrid, val)
-    int			attrid;
-    char		*val;
+void wmlAddEnumValueAttribute (int attrid, char *val)
 
 {
 
@@ -1155,9 +1129,7 @@ return;
  *	val		value of the attribute, usually a string
  */
 
-void wmlAddCharsetAttribute (attrid, val)
-    int			attrid;
-    char		*val;
+void wmlAddCharsetAttribute (int attrid, void *val)
 
 {
 
@@ -1188,7 +1160,7 @@ if ( ddesc->validation != WmlCharSetDefValid )
 switch ( attrid )
     {
     case INTERNALLITERAL:
-        ddesc->int_lit = wmlAllocateString (val);
+        ddesc->int_lit = wmlAllocateString ((char *)val);
 	break;
     case ALIAS:
 	if ( ddesc->alias_cnt == 0 )
@@ -1197,12 +1169,12 @@ switch ( attrid )
 	    synlist = (char **)
 		realloc (ddesc->alias_list,
 			 (ddesc->alias_cnt+1)*sizeof(char **));
-	synlist[ddesc->alias_cnt] = wmlAllocateString (val);
+	synlist[ddesc->alias_cnt] = wmlAllocateString ((char *)val);
 	ddesc->alias_cnt += 1;
 	ddesc->alias_list = synlist;
 	break;
     case XMSTRINGCHARSETNAME:
-        ddesc->xms_name = wmlAllocateString (val);
+        ddesc->xms_name = wmlAllocateString ((char *)val);
 	break;
     case DIRECTION:
 	atrval = (long) val;
@@ -1278,8 +1250,7 @@ return;
  * For now, issue a very simple error message
  */
 
-void LexIssueError (tkn)
-    int			tkn;
+void LexIssueError (int tkn)
 
 {
 
