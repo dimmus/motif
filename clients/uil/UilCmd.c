@@ -117,9 +117,7 @@ externaldef(uil_comp_glbl) cmd_command_line_type Uil_cmd_z_command = {
 **
 **--
 **/
-void	cmd_decode_command_line( l_arg_count, rac_arg_value )
-int 	l_arg_count;
-char 	*rac_arg_value[ ];
+void	cmd_decode_command_line(int l_arg_count, char *rac_arg_value[])
 
 {
     static char	    *include_list	[Uil_k_max_include_dir_count];

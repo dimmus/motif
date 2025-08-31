@@ -6154,9 +6154,7 @@ XmColorData * _WmGetDefaultColors (Screen *screen, Colormap colormap, String def
  *
  *************************************<->***********************************/
 
-char * WmRealloc (ptr, size)
-	char *ptr;
-	unsigned size;
+char * WmRealloc(char *ptr, unsigned size)
 
 {
     if (ptr)
@@ -6202,9 +6200,7 @@ char * WmRealloc (ptr, size)
  *
  *************************************<->***********************************/
 
-char * WmMalloc (ptr, size)
-	char *ptr;
-	unsigned size;
+char * WmMalloc(char *ptr, unsigned size)
 
 {
     if (ptr)
@@ -6250,10 +6246,7 @@ char * WmMalloc (ptr, size)
  *
  *************************************<->***********************************/
 
-void
-SetupDefaultResources (pSD)
-
-WmScreenData *pSD;
+void SetupDefaultResources(WmScreenData *pSD)
 
 {
     KeySpec *nextKeySpec;

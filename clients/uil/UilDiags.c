@@ -492,9 +492,7 @@ void	diag_issue_summary()
 **--
 **/
 
-char	*diag_tag_text( b_tag )
-
-int XmConst   b_tag;
+char	*diag_tag_text(int XmConst b_tag)
 
 {
 
@@ -582,9 +580,7 @@ int XmConst   b_tag;
 **--
 **/
 
-char	*diag_object_text( b_type )
-
-int XmConst   b_type;
+char	*diag_object_text(int XmConst b_type)
 
 {
     if ( b_type <= sym_k_error_object )
@@ -634,9 +630,7 @@ int XmConst   b_type;
 **--
 **/
 
-char	*diag_value_text( b_type )
-
-int XmConst   b_type;
+char	*diag_value_text(int XmConst b_type)
 
 {
 
@@ -688,9 +682,7 @@ int XmConst   b_type;
 **--
 **/
 
-char	*diag_charset_text( b_type )
-
-int XmConst   b_type;
+char	*diag_charset_text(int XmConst b_type)
 
 {
 
@@ -744,7 +736,7 @@ int XmConst   b_type;
 **--
 **/
 
-void	diag_initialize_diagnostics()
+void	diag_initialize_diagnostics(void)
 
 {
 
