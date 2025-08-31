@@ -41,7 +41,7 @@
 #endif
 #include <X11/Xlocale.h>
 #define X_INCLUDE_DIRENT_H
-#define XOS_USE_XT_LOCKING
+/* XOS_USE_XT_LOCKING is now configured by build system */
 #if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h> /* Must precede XmI.h to avoid possible redefinitions
 			  of MIN() and MAX(). Xos_r.h includes Xos.h */

@@ -63,7 +63,7 @@ extern int regex();
 #include <sys/stat.h>
 /* X_INCLUDE_PWD_H is now configured by build system */
 #define X_INCLUDE_DIRENT_H
-#define XOS_USE_XT_LOCKING
+/* XOS_USE_XT_LOCKING is now configured by build system */
 #if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h>
 #else

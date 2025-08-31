@@ -29,7 +29,7 @@ static char rcsid[] = "$TOG: ResConvert.c /main/29 1999/05/18 19:19:39 mgreess $
 #include <config.h>
 #endif
 #define X_INCLUDE_STRING_H
-#define XOS_USE_XT_LOCKING
+/* XOS_USE_XT_LOCKING is now configured by build system */
 #if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h>
 #else

@@ -163,10 +163,102 @@ AC_DEFUN([XM_CFLAGS],[
 			AC_DEFINE([XTHREADS_WARN], [1], [Enable XTHREADS warnings])
 			AC_DEFINE([XTHREADS_FILE_LINE], [1], [Enable XTHREADS file/line debugging])
 		])
+		
+		dnl Configure XOS locking strategy
+		AC_ARG_ENABLE([xos-locking],
+			[AS_HELP_STRING([--enable-xos-locking=STRATEGY], [XOS locking strategy: xlib, xt, none, or auto])],
+			[enable_xos_locking=$enableval], [enable_xos_locking=auto])
+		
+		AS_IF([test "$enable_xos_locking" = "xlib"], [
+			AC_DEFINE([XOS_USE_XLIB_LOCKING], [1], [Use Xlib-only locking])
+		], [test "$enable_xos_locking" = "xt"], [
+			AC_DEFINE([XOS_USE_XT_LOCKING], [1], [Use Xt-based locking])
+		], [test "$enable_xos_locking" = "none"], [
+			AC_DEFINE([XOS_USE_NO_LOCKING], [1], [Disable XOS locking])
+		], [
+			dnl Auto-detect: prefer Xt locking if available, fallback to Xlib
+			AC_DEFINE([XOS_USE_XT_LOCKING], [1], [Use Xt-based locking (auto-detected)])
+		])
 	], [
 		dnl XTHREADS not available, use single-threaded API
 		AC_DEFINE([XNO_MTSAFE_API], [1], [Define if multi-thread safe API is not available])
 		AC_DEFINE([XNO_MTSAFE_PWDAPI], [1], [Define if multi-thread safe password API is not available])
+		AC_DEFINE([XOS_USE_NO_LOCKING], [1], [Disable XOS locking for single-threaded builds])
+	])
+
+	dnl Configure CDE/DTE integration options
+	AC_ARG_ENABLE([cde-integration],
+		[AS_HELP_STRING([--enable-cde-integration], [Enable CDE/DTE integration (WSM)])],
+		[enable_cde_integration=$enableval], [enable_cde_integration=auto])
+	
+	AS_IF([test "$enable_cde_integration" = "yes"], [
+		AC_DEFINE([WSM], [1], [Enable CDE/DTE integration])
+	], [test "$enable_cde_integration" = "no"], [
+		dnl WSM disabled
+	], [
+		dnl Auto-detect: check for CDE/DTE headers
+		AC_CHECK_HEADER([Dt/Action.h], [
+			AC_DEFINE([WSM], [1], [Enable CDE/DTE integration (auto-detected)])
+		])
+	])
+	
+	dnl Configure HP Panelist support
+	AC_ARG_ENABLE([panelist],
+		[AS_HELP_STRING([--enable-panelist], [Enable HP Panelist front panel support])],
+		[enable_panelist=$enableval], [enable_panelist=no])
+	
+	AS_IF([test "$enable_panelist" = "yes"], [
+		AC_DEFINE([PANELIST], [1], [Enable HP Panelist support])
+	])
+	
+	dnl Configure MWM QATS protocol support
+	AC_ARG_ENABLE([mwm-qats],
+		[AS_HELP_STRING([--enable-mwm-qats], [Enable MWM Quality Assurance Test Suite protocol])],
+		[enable_mwm_qats=$enableval], [enable_mwm_qats=no])
+	
+	AS_IF([test "$enable_mwm_qats" = "yes"], [
+		AC_DEFINE([MWM_QATS_PROTOCOL], [1], [Enable MWM QATS protocol support])
+	])
+	
+	dnl Configure locale and internationalization support
+	AC_ARG_ENABLE([locale-support],
+		[AS_HELP_STRING([--enable-locale-support], [Enable locale and message catalog support])],
+		[enable_locale_support=$enableval], [enable_locale_support=auto])
+	
+	AS_IF([test "$enable_locale_support" = "yes"], [
+		AC_DEFINE([NL_CAT_LOCALE], [1], [Enable locale support])
+	], [test "$enable_locale_support" = "no"], [
+		dnl Locale support disabled
+	], [
+		dnl Auto-detect: check for locale support
+		AC_CHECK_HEADER([nl_types.h], [
+			AC_DEFINE([NL_CAT_LOCALE], [1], [Enable locale support (auto-detected)])
+		])
+	])
+	
+	dnl Configure wide character support
+	AC_ARG_ENABLE([wchar-support],
+		[AS_HELP_STRING([--enable-wchar-support], [Enable wide character support])],
+		[enable_wchar_support=$enableval], [enable_wchar_support=auto])
+	
+	AS_IF([test "$enable_wchar_support" = "yes"], [
+		AC_DEFINE([SUPPORTS_WCHARS], [1], [Enable wide character support])
+	], [test "$enable_wchar_support" = "no"], [
+		dnl Wide character support disabled
+	], [
+		dnl Auto-detect: check for wchar support
+		AC_CHECK_HEADER([wchar.h], [
+			AC_DEFINE([SUPPORTS_WCHARS], [1], [Enable wide character support (auto-detected)])
+		])
+	])
+	
+	dnl Configure local string functions
+	AC_ARG_ENABLE([local-string-funcs],
+		[AS_HELP_STRING([--enable-local-string-funcs], [Use local string comparison functions])],
+		[enable_local_string_funcs=$enableval], [enable_local_string_funcs=no])
+	
+	AS_IF([test "$enable_local_string_funcs" = "yes"], [
+		AC_DEFINE([LOCAL_STRCASECMP], [1], [Use local string case comparison functions])
 	])
 
 	AC_SUBST([ax_cc_gcov_command])

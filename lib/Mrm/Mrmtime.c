@@ -53,7 +53,7 @@ static char rcsid[] = "$XConsortium: Mrmtime.c /main/19 1996/11/21 20:03:40 drk 
  */
 
 #define X_INCLUDE_TIME_H
-#define XOS_USE_XT_LOCKING
+/* XOS_USE_XT_LOCKING is now configured by build system */
 
 #if HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h> /* Must precede Mrm/MrmAppl.h and Mrm/Mrm.h to avoid

@@ -47,7 +47,7 @@
 #include <X11/Intrinsic.h>
 
 #define X_INCLUDE_TIME_H
-#define XOS_USE_XT_LOCKING
+/* XOS_USE_XT_LOCKING is now configured by build system */
 #ifdef HAVE_X11_XOS_R_H
 #include <X11/Xos_r.h>
 #else
