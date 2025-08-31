@@ -243,11 +243,7 @@ sym_value_entry_type 	*sem_create_wchar_str()
 **--
 **/
 
-void	sem_append_str_to_cstr(az_cstr_entry, az_str_entry, op2_temporary)
-
-sym_value_entry_type	*az_cstr_entry;
-sym_value_entry_type	*az_str_entry;
-boolean			op2_temporary;
+void	sem_append_str_to_cstr(sym_value_entry_type *az_cstr_entry, sym_value_entry_type *az_str_entry, boolean op2_temporary)
 
 {
     sym_value_entry_type	*last_str_entry;
@@ -365,11 +361,7 @@ boolean			op2_temporary;
 **--
 **/
 
-void	sem_append_cstr_to_cstr(az_cstr1_entry, az_cstr2_entry, op2_temporary)
-
-sym_value_entry_type	*az_cstr1_entry;
-sym_value_entry_type	*az_cstr2_entry;
-boolean			op2_temporary;
+void	sem_append_cstr_to_cstr(sym_value_entry_type *az_cstr1_entry, sym_value_entry_type *az_cstr2_entry, boolean op2_temporary)
 
 {
     sym_value_entry_type	*last_str_entry;
@@ -499,13 +491,7 @@ boolean			op2_temporary;
 **/
 
 sym_value_entry_type
-	*sem_cat_str_to_str
-	    (az_str1_entry, op1_temporary, az_str2_entry, op2_temporary)
-
-sym_value_entry_type	*az_str1_entry;
-boolean			op1_temporary;
-sym_value_entry_type	*az_str2_entry;
-boolean			op2_temporary;
+	*sem_cat_str_to_str(sym_value_entry_type *az_str1_entry, boolean op1_temporary, sym_value_entry_type *az_str2_entry, boolean op2_temporary)
 
 {
     sym_value_entry_type    *new_str_entry;
