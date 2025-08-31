@@ -358,9 +358,7 @@ void		sar_create_child
 **--
 **/
 
-void	sar_link_section ( id_frame )
-
-yystype			* id_frame;
+void	sar_link_section(yystype *id_frame)
 
 {
 sym_section_entry_type	* section_entry;
@@ -409,9 +407,7 @@ section_entry->entries = id_frame->value.az_symbol_entry;
 **--
 **/
 
-void	sar_save_src_semicolon_pos (semi_frame)
-
-yystype			* semi_frame;
+void	sar_save_src_semicolon_pos(yystype *semi_frame)
 
 {
 sym_section_entry_type	* section_entry;
@@ -453,9 +449,7 @@ _sar_save_source_pos (&section_entry->entries->header, semi_frame);
 **--
 **/
 
-void	sar_save_list_end (close_frame)
-
-yystype	    *close_frame;
+void	sar_save_list_end(yystype *close_frame)
 
 {
     sym_list_entry_type		* list_entry;
@@ -502,10 +496,7 @@ yystype	    *close_frame;
 **--
 **/
 
-void	sar_save_src_entry_end (close_frame, entry_frame)
-
-yystype    *close_frame;
-yystype    *entry_frame;
+void	sar_save_src_entry_end(yystype *close_frame, yystype *entry_frame)
 
 {
     sym_entry_type		* entry;
@@ -725,10 +716,7 @@ yystype		* current_frame;
 **--
 **/
 
-void		sar_set_object_class
-			( current_frame )
-
-yystype		* current_frame;
+void		sar_set_object_class(yystype *current_frame)
 
 {
 
@@ -783,10 +771,7 @@ yystype		* current_frame;
 **--
 **/
 
-void		sar_set_object_variant
-			( current_frame )
-
-yystype		* current_frame;
+void		sar_set_object_variant(yystype *current_frame)
 
 {
 
@@ -955,8 +940,7 @@ yystype 	* current_frame;
 **--
 **/
 
-void		sar_object_reference ( ref_frame )
-yystype 	* ref_frame;
+void		sar_object_reference(yystype *ref_frame)
 
 {
     yystype			* obj_frame;
@@ -1219,9 +1203,7 @@ yystype 	* control_list_frame;
 **--
 **/
 
-void parent_list_traverse (widget_entry, control_list_entry)
-    sym_widget_entry_type	*widget_entry;
-    sym_list_entry_type 	*control_list_entry;
+void parent_list_traverse(sym_widget_entry_type *widget_entry, sym_list_entry_type *control_list_entry)
 
 {
 sym_obj_entry_type		*control_list_member;
