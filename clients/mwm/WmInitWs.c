@@ -520,14 +520,7 @@ void InitWmGlobal (int argc, char *argv [], char *environ [])
 	ExitWM (WM_ERROR_EXIT_VALUE);
     }
 
-#if defined(sun) && defined(ALLPLANES)
-    {
-	int dummy;
 
-	wmGD.allplanes = XAllPlanesQueryExtension(wmGD.display,
-				&dummy, &dummy);
-    }
-#endif /* defined(sun) && defined(ALLPLANES) */
 
     /*
      * Setup error handling:

@@ -1458,11 +1458,7 @@ void MoveOpaque (ClientData *pcd, int x, int y,
 static void
 DrawSegments (Display *dpy, Window win, GC gc, XSegment *outline, int nsegs)
 {
-#if defined(sun) && defined(ALLPLANES)
-	if (wmGD.allplanes)
-	    XAllPlanesDrawSegments(dpy, win, outline, nsegs);
-	else
-#endif /* defined(sun) && defined(ALLPLANES) */
+
 	    XDrawSegments(dpy, win, gc, outline, nsegs);
 } /* END OF FUNCTION  DrawSegments */
 

@@ -58,9 +58,7 @@
 #endif /* PANELIST */
 #endif /* WSM */
 
-#if defined(sun) && defined(ALLPLANES)
-#include <X11/extensions/allplanes.h>
-#endif /* defined(sun) && defined(ALLPLANES) */
+
 
 /*
  * Value definitions and macros:
@@ -2341,9 +2339,7 @@ typedef struct _WmGlobalData
 
     int numMouseButtons;		/* num of mouse buttons available */
     unsigned int bMenuButton;		/* BMenu binding (button/state) */
-#if defined(sun) && defined(ALLPLANES)
-    Bool	allplanes;		/* is SUN_ALLPLANES available? */
-#endif /* defined(sun) && defined(ALLPLANES) */
+
 } WmGlobalData;
 
 /* quick references to global data: */

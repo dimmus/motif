@@ -878,7 +878,6 @@ CreateXImage(
 				 width, height, bitmap_pad, 0);
     if (!*image_return)
 	return (XpmNoMemory);
-#if !defined(FOR_MSW) && !defined(AMIGA)
     if (height != 0 && (*image_return)->bytes_per_line >= INT_MAX / height) {
 	XDestroyImage(*image_return);
 	return XpmNoMemory;
@@ -893,9 +892,6 @@ CreateXImage(
 	*image_return = NULL;
 	return (XpmNoMemory);
     }
-#else
-    /* under FOR_MSW and AMIGA XCreateImage has done it all */
-#endif
     return (XpmSuccess);
 }
 #ifndef FOR_MSW
@@ -1537,7 +1533,6 @@ MSWPutImagePixels(
     SelectObject(*dc, obm);
 }
 #endif /* FOR_MSW */
-#if !defined(FOR_MSW) && !defined(AMIGA)
 static int
 PutPixel1(
     register XImage	*ximage,
@@ -1864,7 +1859,6 @@ xpmParseDataAndCreate(
 				   width, height, &ximage);
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
-#if !defined(FOR_MSW) && !defined(AMIGA)
 	/*
 	 * set the XImage pointer function, to be used with XPutPixel,
 	 * to an internal optimized function
@@ -1896,7 +1890,6 @@ xpmParseDataAndCreate(
 	    ximage->f.put_pixel = PutPixel1;
 	else
 	    ximage->f.put_pixel = PutPixel;
-#endif /* not FOR_MSW && not AMIGA */
     }
     /* create the shape mask image */
     if (mask_pixel_index != XpmUndefPixel && shapeimage_return) {
@@ -1904,20 +1897,15 @@ xpmParseDataAndCreate(
 				   width, height, &shapeimage);
 	if (ErrorStatus != XpmSuccess)
 	    RETURN(ErrorStatus);
-#if !defined(FOR_MSW) && !defined(AMIGA)
 	if (shapeimage->bitmap_bit_order == MSBFirst)
 	    shapeimage->f.put_pixel = PutPixel1MSB;
 	else
 	    shapeimage->f.put_pixel = PutPixel1LSB;
-#endif
     }
     /*
      * read pixels and put them in the XImage
      */
     ErrorStatus = ParseAndPutPixels(
-#ifdef FOR_MSW
-				    display,
-#endif
 				    data, width, height, ncolors, cpp,
 				    colorTable, &hashtable,
 				    ximage, image_pixels,

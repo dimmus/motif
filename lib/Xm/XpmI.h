@@ -147,9 +147,7 @@ extern FILE *popen();
 #define XpmCalloc(nelem, elsize) \
 		boundCheckingCalloc((long)(nelem),(long) (elsize))
 #endif
-#if defined(SCO) || defined(__USLC__)
-#include <stdint.h>	/* For SIZE_MAX */
-#endif
+
 #include <limits.h>
 #ifndef SIZE_MAX
 # ifdef ULONG_MAX
@@ -225,14 +223,12 @@ FUNC(xpmSetInfoMask, void, (XpmInfo *info, XpmAttributes *attributes));
 FUNC(xpmSetInfo, void, (XpmInfo *info, XpmAttributes *attributes));
 FUNC(xpmSetAttributes, void, (XpmAttributes *attributes, XpmImage *image,
 			      XpmInfo *info));
-#if !defined(FOR_MSW) && !defined(AMIGA)
 FUNC(xpmCreatePixmapFromImage, void, (Display *display, Drawable d,
 				      XImage *ximage, Pixmap *pixmap_return));
 FUNC(xpmCreateImageFromPixmap, void, (Display *display, Pixmap pixmap,
 				      XImage **ximage_return,
 				      unsigned int *width,
 				      unsigned int *height));
-#endif
 /* structures and functions related to hastable code */
 typedef struct _xpmHashAtom {
     char *name;

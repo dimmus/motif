@@ -38,9 +38,7 @@
 #else
 char *malloc();
 #endif
-#if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
-char *malloc();
-#endif /* macII */
+
 
 typedef struct _TableEnt {
     struct _TableEnt* next;

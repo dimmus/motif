@@ -308,7 +308,6 @@ extern "C" {
 #endif
 /* FOR_MSW, all ..Pixmap.. are excluded, only the ..XImage.. are used */
 /* Same for Amiga! */
-#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreatePixmapFromData, int, (Display *display,
 					Drawable d,
 					char **data,
@@ -324,14 +323,13 @@ extern "C" {
 				    Drawable d,
 				    const char *filename,
 				    Pixmap *pixmap_return,
-				    Pixmap *shapemask_return,
-				    XpmAttributes *attributes));
+					Pixmap *shapemask_return,
+					XpmAttributes *attributes));
     FUNC(XpmWriteFileFromPixmap, int, (Display *display,
 				       const char *filename,
 				       Pixmap pixmap,
 				       Pixmap shapemask,
-				       XpmAttributes *attributes));
-#endif
+					XpmAttributes *attributes));
     FUNC(XpmCreateImageFromData, int, (Display *display,
 				       char **data,
 				       XImage **image_return,
@@ -357,7 +355,6 @@ extern "C" {
 					 XImage **image_return,
 					 XImage **shapemask_return,
 					 XpmAttributes *attributes));
-#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreatePixmapFromBuffer, int, (Display *display,
 					  Drawable d,
 					  char *buffer,
@@ -374,7 +371,6 @@ extern "C" {
 					  Pixmap pixmap,
 					  Pixmap shapemask,
 					  XpmAttributes *attributes));
-#endif
     FUNC(XpmReadFileToBuffer, int, (const char *filename, char **buffer_return));
     FUNC(XpmWriteFileFromBuffer, int, (const char *filename, char *buffer));
     FUNC(XpmReadFileToData, int, (const char *filename, char ***data_return));
@@ -394,14 +390,12 @@ extern "C" {
     FUNC(XpmWriteFileFromXpmImage, int, (const char *filename,
 					 XpmImage *image,
 					 XpmInfo *info));
-#if !defined(FOR_MSW) && !defined(AMIGA)
     FUNC(XpmCreatePixmapFromXpmImage, int, (Display *display,
 					    Drawable d,
 					    XpmImage *image,
 					    Pixmap *pixmap_return,
 					    Pixmap *shapemask_return,
 					    XpmAttributes *attributes));
-#endif
     FUNC(XpmCreateImageFromXpmImage, int, (Display *display,
 					   XpmImage *image,
 					   XImage **image_return,
