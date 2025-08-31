@@ -1850,9 +1850,7 @@ extern "C" {
 #endif
 
 
-#ifdef SYSV
-#define bcopy(source, dest, count) memcpy(dest, source, count)
-#endif
+/* Modern systems use memcpy directly */
 
 typedef struct {
     unsigned int type;

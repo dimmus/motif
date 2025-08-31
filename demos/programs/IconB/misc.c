@@ -1692,9 +1692,7 @@ Cannot find widget %s\n", cbName, widget);
  ****************************************************************************/
 
 #ifndef IGNORE_XPM_PIXMAP
-#ifdef SYSV
-#include <memory.h>
-#endif
+/* Modern systems don't need SYSV-specific includes */
 
 /*
  * Copyright 1990, 1991 GROUPE BULL
@@ -1824,9 +1822,7 @@ extern "C" {
 #endif
 
 
-#ifdef SYSV
-#define bcopy(source, dest, count) memcpy(dest, source, count)
-#endif
+/* Modern systems use memcpy directly */
 
 typedef struct {
     unsigned int type;

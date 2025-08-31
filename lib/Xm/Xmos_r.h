@@ -953,17 +953,7 @@ typedef struct {
   struct group *pgrp;
   size_t len;
 } _Xgetgrparams;
-#ifdef SVR4
-/* Copy the gr_passwd field too. */
-# define _Xgrp_copyGroup(p) \
- ( memcpy(&(p).grp, (p).pgrp, sizeof(struct group)), \
-   ((p).grp.gr_name = (p).buf), \
-   ((p).len = strlen((p).pgrp->gr_name)), \
-   strcpy((p).grp.gr_name, (p).pgrp->gr_name), \
-   ((p).grp.gr_passwd = (p).grp.gr_name + (p).len + 1), \
-   ((p).pgrp = &(p).grp), \
-   0 )
-#else
+
 # define _Xgrp_copyGroup(p) \
  ( memcpy(&(p).grp, (p).pgrp, sizeof(struct group)), \
    ((p).grp.gr_name = (p).buf), \

@@ -118,7 +118,7 @@
 #define XpmIncludeVersion ((XpmFormat * 100 + XpmVersion) * 100 + XpmRevision)
 #ifndef XPM_NUMBERS
 #ifdef FOR_MSW
-# define SYSV			/* uses memcpy string.h etc. */
+/* Modern systems use standard functions */
 # include <malloc.h>
 # include "simx.h"		/* defines some X stuff using MSW types */
 #else /* FOR_MSW */

@@ -25,14 +25,10 @@
 /* Some SVR4 systems don't have bzero. */
 #include <X11/Xfuncs.h>
 /*
- * Fix for 8975 - using LOGNAME instead of USER on SYSV and SVR4
+ * Modern systems use USER environment variable
 */
 #ifndef USER_VAR
-#if defined(SYSV) || defined(SVR4)
-#define USER_VAR "LOGNAME"
-#else
 #define USER_VAR "USER"
-#endif
 #endif
 #include <stdlib.h> /* Needed for MB_CUR_MAX, mbtowc, mbstowcs and mblen */
 /* On Sun systems, mblen is broken. It doesn't return 0 when the

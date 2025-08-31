@@ -863,20 +863,12 @@ XmdPrintDocument(char* pathname,
 
   command[0] = 0;
 
-  /* These commands may need modification on different systems.  These
-     are the system V and berkeley printer commands */
+  /* These commands may need modification on different systems.  Use modern lpr command */
   if (cb -> to_printer) {
-#ifdef SYSV
-    sprintf(command, "lp -d%s -n%d %s",
-	    cb -> printer,
-	    cb -> copies,
-	    pathname);
-#else /* Berk */
     sprintf(command, "lpr -P%s -#%d %s",
 	    cb -> printer,
 	    cb -> copies,
 	    pathname);
-#endif /* SYSV */
   } else {
     sprintf(command, "cp %s %s", pathname, cb -> printer);
   }

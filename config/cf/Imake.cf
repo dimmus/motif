@@ -332,41 +332,7 @@ XCOMM $TOG: Imake.cf /main/30 1998/04/28 13:55:25 barstow $
 # endif
 #endif /* MOTOROLA */
 
-#ifdef SVR4
-# ifdef i386
-#  define i386Architecture
-#  undef i386
-# endif
-# define SVR4Architecture
-# define MacroIncludeFile <svr4.cf>
-# define MacroFile svr4.cf
-# undef SVR4
-#endif /* SVR4 */
-
-#ifdef SYSV
-# ifdef i386
-#  define MacroIncludeFile <x386.cf>
-#  define MacroFile x386.cf
-#  define i386SVR3Architecture
-#  undef i386
-# endif
-#endif /* SYSV */
-
-#ifdef SYSV386
-# undef i386
-# ifdef SVR4
-#  define i386Architecture
-#  define SVR4Architecture
-#  define i386SVR4Architecture
-#  define MacroIncludeFile <svr4.cf>
-#  define MacroFile svr4.cf
-#  undef SVR4
-# else
-#  define MacroIncludeFile <x386.cf>
-#  define MacroFile x386.cf
-#  define i386SVR3Architecture
-# endif
-#endif /* SYSV386 */
+# SVR4/SYSV legacy support removed - modern systems use autotools
 
 #ifdef DGUX
 # define MacroIncludeFile <DGUX.cf>

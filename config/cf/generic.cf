@@ -11,11 +11,6 @@ XCOMM operating system:  OSName
 #define OSMinorVersion    0
 #endif
 
-#ifdef SYSV
-#define SystemV		YES
-#endif
-#ifdef SVR4
-#define SystemV4	YES
-#endif
+# Modern systems don't need SYSV/SVR4 defines
 
 #define BuildServer	NO

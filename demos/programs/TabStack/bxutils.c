@@ -1767,9 +1767,7 @@ XtPointer DOUBLE
 
 #ifndef USE_XPM_LIBRARY
 
-#ifdef SYSV
-#include <memory.h>
-#endif
+/* Modern systems don't need SYSV-specific includes */
 
 /*
  * Copyright 1990, 1991 GROUPE BULL

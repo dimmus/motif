@@ -1042,18 +1042,14 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
     {
 
 #ifndef NO_SETPGRP
-#if defined(SVR4) || defined(__OSF1__) || defined(__osf__) || defined(_POSIX_JOB_CONTROL)
+#if defined(__OSF1__) || defined(__osf__) || defined(_POSIX_JOB_CONTROL)
 	setsid();
-#else
-#ifdef SYSV
-	setpgrp();
 #else
 	int tpid;
 
 	tpid = getpid();
 	setpgrp(tpid, tpid);
-#endif /* SYSV */
-#endif /* SVR4 */
+#endif
 #endif /* NO_SETPGRP */
 #ifdef WSM
 	/*
@@ -1108,11 +1104,7 @@ Boolean F_Exec (String args, ClientData *pCD, XEvent *event)
 	 * There is no SHELL environment variable or the first execl failed.
 	 * Try /bin/sh .
 	 */
-#ifdef SVR4
-        execl ("/usr/bin/sh", "sh", "-c", args, NULL);
-#else
         execl ("/bin/sh", "sh", "-c", args, NULL);
-#endif
 
 
 	/*
