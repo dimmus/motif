@@ -30,4 +30,4 @@ extern void SendClientOffsetMessage (ClientData *pCD);
 extern void SendClientMsg (Window window, long type, long data0, Time time, long *pData, int dataLen);
 extern Boolean AddWmTimer (unsigned int timerType, unsigned long timerInterval, ClientData *pCD);
 extern void DeleteClientWmTimers (ClientData *pCD);
-extern void TimeoutProc (caddr_t client_data, XtIntervalId *id);
+extern void TimeoutProc (XtPointer client_data, XtIntervalId *id);

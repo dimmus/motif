@@ -1444,7 +1444,7 @@ InitWmScreen (WmScreenData *pSD, int sNum)
      * Save screen context
      */
     XSaveContext (DISPLAY, pSD->rootWindow, wmGD.screenContextType,
-	(caddr_t)pSD);
+	(XtPointer)pSD);
     /*
      * Create shell widget for screen resource hierarchy
      */
@@ -1948,7 +1948,7 @@ void SetupWmWorkspaceWindows (void)
 			pSD->wmWorkspaceWin);
 #ifdef WSM
 	    XSaveContext (DISPLAY, pSD->wmWorkspaceWin,
-		    wmGD.mwmWindowContextType, (caddr_t)pSD);
+		    wmGD.mwmWindowContextType, (XtPointer)pSD);
 #endif /* WSM */
 	}
     }

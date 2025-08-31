@@ -391,7 +391,7 @@ void ResetColormapData (ClientData *pCD, Window *pWindows, int count)
 		AddColormapWindowReference(pCD, pWindows[i]);
 #else
 		XSaveContext (DISPLAY, pWindows[i], wmGD.windowContextType,
-		    (caddr_t)pCD);
+		    (XtPointer)pCD);
 #endif
 	    }
 	}
@@ -448,7 +448,7 @@ void AddColormapWindowReference (ClientData *pCD, Window window)
     new_cmap_window_data[i] = pCD;
     new_cmap_window_data[i + 1] = NULL;
     XSaveContext (DISPLAY, window, wmGD.cmapWindowContextType,
-                        (caddr_t)new_cmap_window_data);
+                        (XtPointer)new_cmap_window_data);
 }
 
 /*************************************<->*************************************
@@ -507,7 +507,7 @@ void RemoveColormapWindowReference (ClientData *pCD, Window window)
         {
             XSaveContext (DISPLAY, window,
                         wmGD.cmapWindowContextType,
-                        (caddr_t)new_cmap_window_data);
+                        (XtPointer)new_cmap_window_data);
         }
     }
 }

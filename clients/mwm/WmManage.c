@@ -92,7 +92,7 @@ Boolean IsPushRecallClient (
     WmFpPushRecallClientData **ppPRCD);
 static void HandleSubstructEvents(
         Widget w,
-        caddr_t ptr,
+        XtPointer ptr,
         XEvent *event );
 Boolean UpdateEmbeddedClientsProperty(
         WmScreenData *pSD );
@@ -217,7 +217,7 @@ void AdoptInitialClients (WmScreenData *pSD)
 	    }
 #endif /* WSM */
 	    if (!XFindContext (DISPLAY, clients[i], wmGD.windowContextType,
-	        (caddr_t *)&pcd))
+	        (XtPointer *)&pcd))
 	    {
 		/* don't manage a window we've already established a
 		   context for (e.g. icon windows) */
@@ -359,7 +359,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 
 	    pPanelist = (WmPanelistObject) pCD->pSD->wPanelist;
 	    (void) XFindContext (DISPLAY, XtWindow(O_Shell (pPanelist)),
-		      wmGD.windowContextType, (caddr_t *)&pCDfp);
+		      wmGD.windowContextType, (XtPointer *)&pCDfp);
 
 	    pCD->transientLeader = pCDfp;
 	}
@@ -517,7 +517,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 		    else
 		    {
 			XSaveContext (DISPLAY, pCD->pWsList[i].iconFrameWin,
-				wmGD.windowContextType, (caddr_t)pCD);
+				wmGD.windowContextType, (XtPointer)pCD);
 
 			if (pCD->iconWindow && pCD->pWsList[i].iconFrameWin)
 			{
@@ -584,10 +584,10 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
      */
 
     XSaveContext (DISPLAY, pCD->clientFrameWin, wmGD.windowContextType,
-	(caddr_t)pCD);
+	(XtPointer)pCD);
 
     XSaveContext (DISPLAY, pCD->clientBaseWin, wmGD.windowContextType,
-	(caddr_t)pCD);
+	(XtPointer)pCD);
 
     if (DECOUPLE_TITLE_APPEARANCE(pCD) && pCD->clientTitleWin)
     {
@@ -595,13 +595,13 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 	 * handle exposures on title bar if it has its own appearance
 	 */
 	XSaveContext (DISPLAY, pCD->clientTitleWin, wmGD.windowContextType,
-	    (caddr_t)pCD);
+	    (XtPointer)pCD);
     }
 #ifndef WSM
     if (pCD->iconFrameWin)
     {
 	XSaveContext (DISPLAY, pCD->iconFrameWin, wmGD.windowContextType,
-	    (caddr_t)pCD);
+	    (XtPointer)pCD);
     }
 #endif /* WSM */
 
@@ -615,7 +615,7 @@ ManageWindow (WmScreenData *pSD, Window clientWindow, long manageFlags)
 		AddColormapWindowReference(pCD, pCD->cmapWindows[i]);
 #else
 	        XSaveContext (DISPLAY, pCD->cmapWindows[i],
-		    wmGD.windowContextType, (caddr_t)pCD);
+		    wmGD.windowContextType, (XtPointer)pCD);
 #endif
 	    }
 	}
@@ -1678,7 +1678,7 @@ void WithdrawDialog (Widget dialogboxW)
      */
 
     if (XFindContext (DISPLAY, XtWindow (XtParent (dialogboxW)),
-		      wmGD.windowContextType, (caddr_t *)&pCD))
+		      wmGD.windowContextType, (XtPointer *)&pCD))
       return;
 
     XtUnmanageChild (dialogboxW);
@@ -1736,7 +1736,7 @@ void ReManageDialog (WmScreenData *pSD, Widget dialogboxW)
      */
 
     if (XFindContext (DISPLAY, XtWindow (XtParent (dialogboxW)),
-		      wmGD.windowContextType, (caddr_t *)&pCD))
+		      wmGD.windowContextType, (XtPointer *)&pCD))
       return;
 
     /*
@@ -2258,7 +2258,7 @@ ManageEmbeddedClient (
      */
 
     XSaveContext (DISPLAY, pCD->client, wmGD.windowContextType,
-		    (caddr_t)pCD);
+		    (XtPointer)pCD);
 
     if (!(pCD->clientFlags & CLIENT_WM_CLIENTS))
     {
@@ -2516,7 +2516,7 @@ ForceSubpanelWMState (Window win)
 	}
 
 	if (!XFindContext(DISPLAY, win, wmGD.windowContextType,
-	    (caddr_t *)&pCD))
+	    (XtPointer *)&pCD))
 	{
 	    /*
 	     * Only continue if we're not already managing this subpanel.
@@ -2786,7 +2786,7 @@ CheckPushRecallClient(
 
 /******************************<->*************************************
  *
- *  static void HandleSubstructEvents (Widget w, caddr_t pCD, XEvent *event)
+ *  static void HandleSubstructEvents (Widget w, XtPointer pCD, XEvent *event)
  *
  *
  *  Description:
@@ -2818,7 +2818,7 @@ CheckPushRecallClient(
 static void
 HandleSubstructEvents(
         Widget w,
-        caddr_t ptr,
+        XtPointer ptr,
         XEvent *event )
 {
 	struct _ClientData *pCD = (struct _ClientData *)ptr;

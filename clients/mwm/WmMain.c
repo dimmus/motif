@@ -64,11 +64,11 @@ static char rcsid[] = "$TOG: WmMain.c /main/8 1998/04/20 13:01:09 mgreess $"
 #ifdef WSM
 int WmReturnIdentity (int argc, char *argv[], char *environ[]);
 #define ManagedRoot(w) (!XFindContext (DISPLAY, (w), wmGD.screenContextType, \
-(caddr_t *)&pSD) ? (SetActiveScreen (pSD), True) : \
+(XtPointer *)&pSD) ? (SetActiveScreen (pSD), True) : \
 (IsBackdropWindow (ACTIVE_PSD, (w))))
 #else /* WSM */
 #define ManagedRoot(w) (!XFindContext (DISPLAY, (w), wmGD.screenContextType, \
-(caddr_t *)&pSD) ? (SetActiveScreen (pSD), True) : False)
+(XtPointer *)&pSD) ? (SetActiveScreen (pSD), True) : False)
 #endif /* WSM */
 
 WmScreenData *pSD;

@@ -3667,7 +3667,7 @@ F_Toggle_Front_Panel (String args, ClientData *pCD, XEvent *event)
     if (pPanelist)
     {
 	(void) XFindContext (DISPLAY, XtWindow(O_Shell(pPanelist)),
-			    wmGD.windowContextType, (caddr_t *)&pCD);
+			    wmGD.windowContextType, (XtPointer *)&pCD);
     }
 
 

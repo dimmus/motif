@@ -39,8 +39,8 @@
 	CreateMenuWidget(pSD, mName, parent, fTLP, tSpec, moreItems)
 #endif /* !defined(WSM) || defined(MWM_QATS_PROTOCOL) */
 
-extern void ActivateCallback (Widget w, caddr_t client_data,
-			      caddr_t call_data);
+extern void ActivateCallback (Widget w, XtPointer client_data,
+			      XtPointer call_data);
 extern Widget CreateMenuWidget (WmScreenData *pSD,
 #if ((!defined(WSM)) || defined(MWM_QATS_PROTOCOL))
 				ClientData *pCD,

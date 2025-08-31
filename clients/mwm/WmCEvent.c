@@ -186,12 +186,12 @@ Boolean WmDispatchClientEvent (XEvent *event)
 
 #ifndef IBM_169380
     if ((XFindContext (DISPLAY, event->xany.window, wmGD.windowContextType,
-            (caddr_t *)&pCD)) &&
+            (XtPointer *)&pCD)) &&
         (XFindContext (DISPLAY, event->xany.window, wmGD.cmapWindowContextType,
-            (caddr_t *)&cmap_window_data)))
+            (XtPointer *)&cmap_window_data)))
 #else
     if (XFindContext (DISPLAY, event->xany.window, wmGD.windowContextType,
-	    (caddr_t *)&pCD))
+	    (XtPointer *)&pCD))
 #endif
     {
 	/*
@@ -566,7 +566,7 @@ Boolean HandleEventsOnSpecialWindows (XEvent *pEvent)
     }
 #ifdef  WSM
     else if (!XFindContext (DISPLAY, pEvent->xany.window,
-		    wmGD.mwmWindowContextType, (caddr_t *)&pSD))
+		    wmGD.mwmWindowContextType, (XtPointer *)&pSD))
     {
 	if ((pEvent->type == PropertyNotify) &&
 	    (pEvent->xproperty.atom == wmGD.xa_DT_WM_REQUEST) &&
@@ -2299,7 +2299,7 @@ void HandleCConfigureRequest (ClientData *pCD, XConfigureRequestEvent *configure
 	if (changeMask & CWSibling)
 	{
 	    if (XFindContext (DISPLAY, configureRequest->above,
-		    wmGD.windowContextType, (caddr_t *)&pcdSibling))
+		    wmGD.windowContextType, (XtPointer *)&pcdSibling))
 	    {
 		changeMask &= ~CWSibling;
 	    }
@@ -2455,7 +2455,7 @@ void HandleCColormapNotify (ClientData *pCD, XColormapEvent *colorEvent)
 
 #ifndef	IBM_169380
         if (!XFindContext (DISPLAY, colorEvent->window,
-            wmGD.cmapWindowContextType, (caddr_t *)&cmap_window_data))
+            wmGD.cmapWindowContextType, (XtPointer *)&cmap_window_data))
         {
             /*
              * The WM_COLORMAP_WINDOWS property of a toplevel window may
@@ -2761,7 +2761,7 @@ WmScreenData * GetScreenForWindow (win)
     if (XGetWindowAttributes (DISPLAY, win, &attribs))
     {
 	if (!XFindContext (DISPLAY, attribs.root, wmGD.screenContextType,
-			    (caddr_t *)&pSD))
+			    (XtPointer *)&pSD))
 	{
 	    if (pSD && !pSD->screenTopLevelW)
 	    {

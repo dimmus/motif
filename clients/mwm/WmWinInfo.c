@@ -268,7 +268,7 @@ GetClientInfo (WmScreenData *pSD, Window clientWindow, long manageFlags)
      * Register the client window to facilitate event handling:
      */
 
-    XSaveContext (DISPLAY, clientWindow, wmGD.windowContextType, (caddr_t)pCD);
+    XSaveContext (DISPLAY, clientWindow, wmGD.windowContextType, (XtPointer)pCD);
 
 
     /*
@@ -783,7 +783,7 @@ int i;
      * Register the client window to facilitate event handling.
      */
 
-    XSaveContext (DISPLAY, pCD->client, wmGD.windowContextType, (caddr_t)pCD);
+    XSaveContext (DISPLAY, pCD->client, wmGD.windowContextType, (XtPointer)pCD);
 
 
     /*
@@ -1122,7 +1122,7 @@ ProcessWmHints (ClientData *pCD, Boolean firstTime)
 
 		if ((pCD->client != pCD->windowGroup) &&
 		    !XFindContext (DISPLAY, pCD->windowGroup,
-			wmGD.windowContextType, (caddr_t *)&leader))
+			wmGD.windowContextType, (XtPointer *)&leader))
 		{
 		    pCD->transientFor = pCD->windowGroup;
 		    pCD->transientLeader = leader;
@@ -2633,7 +2633,7 @@ ProcessWmTransientFor (ClientData *pCD)
 
 	if ((pCD->client != window) &&
 	    !XFindContext (DISPLAY, window, wmGD.windowContextType,
-		(caddr_t *)&leader))
+		(XtPointer *)&leader))
 	{
 	    pCD->transientFor = window;
 	    pCD->transientLeader = leader;
@@ -3156,7 +3156,7 @@ AdjustSlideOutGeometry ( ClientData *pCD)
     pCD->slideDirection = SLIDE_NORTH;	/* assume up for now */
     pPanelist = (WmPanelistObject) pCD->pSD->wPanelist;
     (void) XFindContext (DISPLAY, XtWindow(O_Shell(pPanelist)),
-		  wmGD.windowContextType, (caddr_t *)&pCD_FP);
+		  wmGD.windowContextType, (XtPointer *)&pCD_FP);
 
     if (pCD_FP)
     {
@@ -3915,7 +3915,7 @@ SetupClientIconWindow (ClientData *pCD, Window window)
      */
 
     if (!XFindContext (DISPLAY, window, wmGD.windowContextType,
-	     (caddr_t *)&pcd))
+	     (XtPointer *)&pcd))
     {
 	if (window == pCD->client)
 	{

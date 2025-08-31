@@ -816,7 +816,7 @@ void PackRootIcons (void)
      */
 
     if (XFindContext (DISPLAY, ACTIVE_PSD->activeIconTextWin,
-			wmGD.windowContextType, (caddr_t *)&pCD_active))
+			wmGD.windowContextType, (XtPointer *)&pCD_active))
     {
 	hasActiveText = 0;
     }

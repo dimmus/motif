@@ -986,7 +986,7 @@ Boolean WmDispatchWsEvent (XEvent *event)
 	     */
 
 	    if ((XFindContext (DISPLAY, event->xmaprequest.window,
-		    wmGD.windowContextType, (caddr_t *)&pCD)) &&
+		    wmGD.windowContextType, (XtPointer *)&pCD)) &&
 		(pSD = GetScreenForWindow (event->xmaprequest.window)))
 	    {
 	        /*
@@ -1338,7 +1338,7 @@ void HandleWsButtonPress (XButtonEvent *buttonEvent)
 
     if ((buttonEvent->subwindow == None) ||
 	(XFindContext (DISPLAY, buttonEvent->subwindow, wmGD.windowContextType,
-	     (caddr_t *)&pCD)))
+	     (XtPointer *)&pCD)))
     {
 	/* no managed window under the pointer */
 	pCD = NULL;
@@ -1411,7 +1411,7 @@ void HandleWsButtonRelease (XButtonEvent *buttonEvent)
 
     if ((buttonEvent->subwindow == None) ||
 	(XFindContext (DISPLAY, buttonEvent->subwindow, wmGD.windowContextType,
-	     (caddr_t *)&pCD)))
+	     (XtPointer *)&pCD)))
     {
 	/* no managed window under the pointer */
 	pCD = NULL;
@@ -2002,7 +2002,7 @@ HandleDtWmRequest (WmScreenData *pSD, XEvent *pev)
 	    {
 		if (!XFindContext (DISPLAY, wmGD.requestContextWin,
 					wmGD.windowContextType,
-					(caddr_t *)&pCD))
+					(XtPointer *)&pCD))
 		{
 		    /*
 		     * A valid client window was specified
@@ -2164,7 +2164,7 @@ void HandleWsEnterNotify (XEnterWindowEvent *enterEvent)
      */
     if (wmGD.queryScreen &&
 	(!XFindContext (DISPLAY, enterEvent->window, wmGD.screenContextType,
-	    (caddr_t *)&pSD)))
+	    (XtPointer *)&pSD)))
     {
 	SetActiveScreen (pSD);
     }
@@ -2262,7 +2262,7 @@ void HandleWsLeaveNotify (XLeaveWindowEvent *leaveEvent)
 	/*  Set new active screen */
 
 	if (!XFindContext (DISPLAY, leaveEvent->root, wmGD.screenContextType,
-	    (caddr_t *)&pSD))
+	    (XtPointer *)&pSD))
 	{
 	    /* moved to another screen we manage! */
 	    SetActiveScreen (pSD);
@@ -2314,7 +2314,7 @@ void HandleWsConfigureRequest (XConfigureRequestEvent *configureEvent)
      */
 
     if (XFindContext (DISPLAY, configureEvent->window, wmGD.windowContextType,
-	    (caddr_t *)&pCD))
+	    (XtPointer *)&pCD))
     {
 	/*
 	 * Get window attribute information; this is used later on
