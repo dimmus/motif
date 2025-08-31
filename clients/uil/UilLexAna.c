@@ -2092,9 +2092,7 @@ void  Uil_lex_cleanup_analyzer( )
 **--
 **/
 
-void  lex_issue_error( restart_token )
-
-int		restart_token;
+void  lex_issue_error(int restart_token)
 
 {
 
@@ -2172,9 +2170,7 @@ int		restart_token;
 **--
 **/
 
-void issue_control_char_diagnostic
-
-	(unsigned char c_char )
+void issue_control_char_diagnostic(unsigned char c_char)
 
 {
 
@@ -2220,9 +2216,7 @@ void issue_control_char_diagnostic
 **--
 **/
 
-static lex_buffer_type *get_lex_buffer( az_current_lex_buffer )
-
-lex_buffer_type *az_current_lex_buffer;
+static lex_buffer_type *get_lex_buffer(lex_buffer_type *az_current_lex_buffer)
 
 {
     lex_buffer_type *az_lex_buffer;
