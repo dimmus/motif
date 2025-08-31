@@ -27,6 +27,14 @@
 #include <config.h>
 #endif
 
+/* Feature test macros to expose POSIX functions */
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #ifdef REV_INFO
 #ifndef lint
 static char rcsid[] = "$TOG: WmFunction.c /main/19 1998/04/20 13:00:48 mgreess $"
