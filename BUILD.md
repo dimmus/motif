@@ -56,6 +56,12 @@ make dev-build
 - **`make format`** - Format source code with clang-format
 - **`make deps`** - Check dependencies
 
+### Testing and Coverage Targets
+
+- **`make check`** - Run automated tests (requires `--enable-tests`)
+- **`make gcov`** - Generate code coverage reports (requires `--enable-tests`)
+- **`make clean-gcov`** - Clean up coverage files
+
 ## Optimization Details
 
 ### Release Build Optimizations
@@ -110,6 +116,11 @@ make release
 # Install optimized version
 make release
 sudo make install
+
+# Build with tests and generate coverage
+./configure --enable-tests
+make check
+make gcov
 ```
 
 ## Performance Notes
@@ -118,3 +129,40 @@ sudo make install
 - **`make release-portable`** provides good performance and works on most x86_64 systems
 - Both release builds are significantly faster than the default build
 - Debug builds (`make dev-build`) are slower but include debugging information
+
+## Code Coverage
+
+When tests are enabled (`--enable-tests`), the build system automatically adds coverage instrumentation:
+
+### Coverage Features
+
+- **Automatic Compiler Detection**: Automatically uses the correct gcov command for your compiler
+  - **GCC**: Uses `gcov` for coverage analysis
+  - **Clang**: Uses `llvm-cov gcov` for coverage analysis
+
+- **Coverage Instrumentation**: Adds `-fprofile-arcs -ftest-coverage` flags to test builds
+
+- **Coverage Targets**:
+  - `make gcov` - Runs tests and generates coverage reports
+  - `make clean-gcov` - Removes all coverage files
+
+### Coverage Workflow
+
+```bash
+# 1. Configure with tests enabled
+./configure --enable-tests
+
+# 2. Build and run tests
+make check
+
+# 3. Generate coverage reports
+make gcov
+
+# 4. View coverage files (*.gcov)
+ls *.gcov
+
+# 5. Clean up when done
+make clean-gcov
+```
+
+Coverage reports are generated as `.gcov` files in the source directories, showing line-by-line execution counts.

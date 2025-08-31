@@ -6,6 +6,8 @@ config.*
 *.lo
 *.la
 *.cat
+*.gcno
+*.gcda
 .deps
 .libs
 stamp-h1
@@ -14,6 +16,7 @@ autom4te.cache
 config.h*
 *~
 *.list
+tests/test*
 tools/dev/env/logs/*
 test-driver
 tap-driver.sh

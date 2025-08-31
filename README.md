@@ -421,7 +421,29 @@ cd motif
 ./configure --enable-debug --enable-demos --enable-tests
 make -j$(nproc)
 make check  # Run tests
+make gcov   # Generate code coverage reports
 ```
+
+### Code Coverage
+
+When tests are enabled (`--enable-tests`), you can generate code coverage reports:
+
+```bash
+# Generate coverage reports
+make gcov
+
+# Clean up coverage files
+make clean-gcov
+
+# View available targets
+make help
+```
+
+The coverage system automatically detects your compiler:
+- **GCC**: Uses `gcov` for coverage analysis
+- **Clang**: Uses `llvm-cov gcov` for coverage analysis
+
+Coverage reports are generated as `.gcov` files in the source directories.
 
 ## License
 

@@ -1,6 +1,6 @@
 XMSTRING_LIST = xmstring.list
 
-MAINTAINERCLEANFILES = Makefile.in
+MAINTAINERCLEANFILES = Makefile.in *.gcda *.gcno *.gcov
 CLEANFILES = $(BUILT_SOURCES)
 EXTRA_DIST = xmstring.list Xm.msg \
              XmStrDefs.ct
@@ -10,10 +10,17 @@ AM_CPPFLAGS = -I.. -I$(srcdir)/.. \
               -DINCDIR=\"@INCDIR@\" -DLIBDIR=\"@LIBDIR@\"   \
               -DDATADIR=\"@DATADIR@\" \
               $(XFT_CFLAGS) ${X_CFLAGS}
+
 xmdir = $(includedir)/Xm
 
 libXm_la_LDFLAGS = -version-info @ABI_VERSION@
 libXm_la_LIBADD  = $(XFT_LIBS) ${X_LIBS}
+
+# Add coverage flags when tests are enabled
+if XM_WITH_TESTS
+AM_CFLAGS = -fprofile-arcs -ftest-coverage
+libXm_la_LIBADD += -lgcov
+endif
 lib_LTLIBRARIES  = libXm.la
 
 TIP_SRCS = ToolTip.c
