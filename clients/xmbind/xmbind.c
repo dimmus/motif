@@ -36,9 +36,7 @@ static char rcsid[] = "$TOG: xmbind.c /main/10 1997/06/18 17:34:48 samborn $"
 extern Boolean _XmVirtKeysLoadFileBindings(char *fileName, String *binding);
 extern int _XmVirtKeysLoadFallbackBindings(Display *display, String *binding);
 
-int main(argc, argv)
-    int argc;
-    char **argv;
+int main(int argc, char **argv)
 {
     enum { XA_MOTIF_DEFAULT_BINDINGS, XA_MOTIF_BINDINGS };
     static char *atom_names[] = {

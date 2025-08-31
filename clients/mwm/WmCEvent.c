@@ -2747,8 +2747,7 @@ void DetermineActiveScreen (XEvent *pEvent)
  *
  *************************************<->***********************************/
 
-WmScreenData * GetScreenForWindow (win)
-    Window win;
+WmScreenData * GetScreenForWindow(Window win)
 
 {
     XWindowAttributes attribs;
