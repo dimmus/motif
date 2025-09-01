@@ -2245,10 +2245,14 @@ XmConst yystype	    *id_frame;
 
     if (id_frame->b_type != NAME)
     {
-      diag_issue_diagnostic
-	( d_override_builtin,
-	 _sar_source_position( id_frame ),
-	 id_frame->value.az_keyword_entry->at_name);
+      /* Suppress warning for "module" since it's a common and harmless usage */
+      if (strcmp(id_frame->value.az_keyword_entry->at_name, "module") != 0)
+      {
+	diag_issue_diagnostic
+	  ( d_override_builtin,
+	   _sar_source_position( id_frame ),
+	   id_frame->value.az_keyword_entry->at_name);
+      }
 
       name_entry =
 	sym_insert_name

@@ -65,7 +65,7 @@ UIL_60 the %s constraint is not supported for the %s %s
 UIL_61 too many \"%s\" options, limit is %d
 UIL_62 error closing source file: %s
 UIL_63 the %s value is circularly defined
-UIL_64 overriding built-in name %s
+UIL_64 note: '%s' is a reserved keyword but is being used as a name (this is allowed but may cause confusion)
 UIL_65 the %s argument does not support enumerated values
 UIL_66 the %s argument does not support the %s enumerated value
 UIL_67 $LANG contains an unknown character set
