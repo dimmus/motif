@@ -79,7 +79,11 @@
 #define FALSE	  	0
 
 #ifndef debug_version
+#ifdef XM_UIL_DEBUG
+#define debug_version	TRUE
+#else
 #define debug_version	FALSE
+#endif
 #endif
 
 #define NOSTRING_DIRECTION 2

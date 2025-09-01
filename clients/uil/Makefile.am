@@ -24,6 +24,10 @@ AM_CPPFLAGS = -DINCDIR=\"@INCDIR@\" \
               -I../../lib \
               -I../../tools/wml ${X_CFLAGS}
 
+if XM_UIL_DEBUG
+AM_CPPFLAGS += -DXM_UIL_DEBUG
+endif
+
 UilParser.c:
 	test -f UilParser.c || $(LN_S) $(srcdir)/UilMain.c UilParser.c
 

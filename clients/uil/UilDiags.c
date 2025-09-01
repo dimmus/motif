@@ -1034,10 +1034,10 @@ XmConst char  *loc_buffer;
 			    Uil_cmd_z_command.message_data,
 			    message_number,
 			    diag_rz_msg_table[ message_number ].l_severity,
-			    msg_buffer,
-			    src_buffer,
-			    ptr_buffer,
-			    loc_buffer,
+			    (char *)msg_buffer,
+			    (char *)src_buffer,
+			    (char *)ptr_buffer,
+			    (char *)loc_buffer,
 			    Uil_message_count);
          diag_store_handlers();
 /*

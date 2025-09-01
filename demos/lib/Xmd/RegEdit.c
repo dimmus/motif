@@ -211,7 +211,7 @@ _XEditResCheckMessages(Widget w, XtPointer data, XEvent *event, Boolean *cont)
 	if (c_event->data.l[3] != CURRENT_PROTOCOL_VERSION) {
 	    _XEditResResetStream(&globals.stream);
 	    _XEditResPut8(&globals.stream, CURRENT_PROTOCOL_VERSION);
-	    SendCommand(w, res_comm, ident, ProtocolMismatch, &globals.stream);
+	    SendCommand(w, res_comm, ident, (EditresCommand)ProtocolMismatch, &globals.stream);
 	    return;
 	}
 
@@ -469,7 +469,7 @@ ExecuteCommand(Widget w, Atom sel, ResIdent ident, EditresEvent *event)
 
     _XEditResResetStream(&globals.stream);
     if ((str = (*func)(w, event, &globals.stream)) == NULL)
-	SendCommand(w, sel, ident, PartialSuccess, &globals.stream);
+	        SendCommand(w, sel, ident, (EditresCommand)PartialSuccess, &globals.stream);
     else {
 	SendFailure(w, sel, ident, str);
 	XtFree(str);
@@ -540,7 +540,7 @@ SendFailure(Widget w, Atom sel, ResIdent ident, char *str)
 {
     _XEditResResetStream(&globals.stream);
     _XEditResPutString8(&globals.stream, str);
-    SendCommand(w, sel, ident, Failure, &globals.stream);
+    SendCommand(w, sel, ident, (EditresCommand)Failure, &globals.stream);
 }
 
 /*	Function Name: BuildReturnPacket
