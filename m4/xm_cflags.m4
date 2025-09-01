@@ -201,17 +201,32 @@ AC_DEFUN([XM_CFLAGS],[
 
 	dnl Configure CDE/DTE integration options
 	AC_ARG_ENABLE([cde-integration],
-		[AS_HELP_STRING([--enable-cde-integration], [Enable CDE/DTE integration (WSM)])],
+		[AS_HELP_STRING([--enable-cde-integration], [Enable CDE/DTE WorkSpace integration (WSM)])],
 		[enable_cde_integration=$enableval], [enable_cde_integration=auto])
 	
 	AS_IF([test "$enable_cde_integration" = "yes"], [
-		AC_DEFINE([WSM], [1], [Enable CDE/DTE integration])
+		dnl Check for required WSM headers before enabling
+		AC_CHECK_HEADERS([Dt/Action.h Dt/Service.h Dt/Wsm.h], [
+			AC_DEFINE([WSM], [1], [Enable CDE/DTE integration])
+		], [
+			AC_MSG_WARN([WSM headers not found, disabling CDE/DTE integration])
+			enable_cde_integration=no
+		])
 	], [test "$enable_cde_integration" = "no"], [
 		dnl WSM disabled
 	], [
-		dnl Auto-detect: check for CDE/DTE headers
-		AC_CHECK_HEADER([Dt/Action.h], [
-			AC_DEFINE([WSM], [1], [Enable CDE/DTE integration (auto-detected)])
+		dnl Auto-detect: check for required WSM headers and dependencies
+		AC_CHECK_HEADERS([Dt/Action.h Dt/Service.h Dt/Wsm.h], [
+			dnl Check for ToolTalk dependency
+			AC_CHECK_HEADER([Tt/tt_c.h], [
+				AC_DEFINE([WSM], [1], [Enable CDE/DTE integration (auto-detected)])
+			], [
+				AC_MSG_WARN([ToolTalk headers not found, WSM may not compile properly])
+				AC_DEFINE([WSM], [1], [Enable CDE/DTE integration (auto-detected with warnings)])
+			])
+		], [
+			dnl Headers not found, WSM disabled
+			AC_MSG_NOTICE([WSM headers not found, CDE/DTE integration disabled])
 		])
 	])
 	

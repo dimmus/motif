@@ -19,7 +19,7 @@ AC_CONFIG_SRCDIR([lib/Xm/Form.c])
 AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules no-installinfo no-define dist-xz])
 LT_INIT
 AM_SILENT_RULES([yes])
-AM_EXTRA_RECURSIVE_TARGETS([demos doc])
+AM_EXTRA_RECURSIVE_TARGETS([doc])
 AC_LANG([C])
 
 dnl Check for the C compiler / pkg-config
@@ -119,6 +119,10 @@ AS_IF([test "x$enable_debug" == "xyes"],
   [AX_APPEND_COMPILE_FLAGS([-Og -ggdb]) AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])],
   [AX_APPEND_COMPILE_FLAGS([-O2])       AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])])
 
+AC_ARG_ENABLE([uil-debug],
+  [AS_HELP_STRING([--enable-uil-debug],[enable UIL compiler debugging support])],
+  [enable_uil_debug=$enableval],[enable_uil_debug=no])
+
 dnl Compiler flags
 XM_CFLAGS
 
@@ -132,6 +136,7 @@ AM_CONDITIONAL([XM_WITH_JPEG], test "x$with_jpeg" == "xyes")
 AM_CONDITIONAL([XM_WITH_PNG],  test "x$with_png"  == "xyes")
 AM_CONDITIONAL([XM_MSGCAT],    test "x$enable_message_catalog" == "xyes")
 AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests" == "xyes")
+AM_CONDITIONAL([XM_UIL_DEBUG], test "x$enable_uil_debug" == "xyes")
 
 dnl Substitutions for lib/Xm/Xm.h
 AC_SUBST([XM_MAJOR], [XM_MAJOR])
@@ -161,6 +166,10 @@ AC_DEFINE_UNQUOTED([XM_PRINTING],
 AC_DEFINE_UNQUOTED([XM_MSGCAT],
 	$(test "x$enable_message_catalog" != "xyes" ; echo $?),
 	[1 if X/Open message catalog support is enabled])
+
+AC_DEFINE_UNQUOTED([XM_UIL_DEBUG],
+	$(test "x$enable_uil_debug" != "xyes" ; echo $?),
+	[1 if UIL compiler debugging support is enabled])
 
 dnl Defines/substitutions for mwm
 AC_DEFINE([NO_OL_COMPAT], 1, "No OL Compatability")
@@ -340,7 +349,35 @@ XM_ADD_FEATURE([XM],[print],[${enable_printing}])
 XM_ADD_FEATURE([XM],[msg_catalog],[${enable_message_catalog}])
 XM_ADD_FEATURE([BUILD],[demos],[${enable_demos}])
 XM_ADD_FEATURE([BUILD],[tests],[${enable_tests}])
+XM_ADD_FEATURE([BUILD],[mtsafe],[${enable_force_mtsafe}])
+XM_ADD_FEATURE([BUILD],[xos_locking],[${enable_xos_locking}])
+XM_ADD_FEATURE([BUILD],[cde],[${enable_cde_integration}])
+XM_ADD_FEATURE([BUILD],[panelist],[${enable_panelist}])
+XM_ADD_FEATURE([BUILD],[mwm_qats],[${enable_mwm_qats}])
+XM_ADD_FEATURE([BUILD],[locale],[${enable_locale_support}])
+XM_ADD_FEATURE([BUILD],[wchar],[${enable_wchar_support}])
+XM_ADD_FEATURE([BUILD],[local_string],[${enable_local_string_funcs}])
 XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
+XM_ADD_FEATURE([DBG],[xthreads_dbg],[${enable_xthreads_debug}])
+
+# XM_ADD_FEATURE([FLAGS],[_POSIX_SOURCE],[${_POSIX_SOURCE}])
+# XM_ADD_FEATURE([FLAGS],[X_NOT_POSIX],[${X_NOT_POSIX}])
+# XM_ADD_FEATURE([FLAGS],[__STDC__],[${__STDC__}])
+# XM_ADD_FEATURE([FLAGS],[X_FORCE_USE_MTSAFE_API],[${X_FORCE_USE_MTSAFE_API}])
+# XM_ADD_FEATURE([FLAGS],[XTHREADS_WARN],[${XTHREADS_WARN}])
+# XM_ADD_FEATURE([FLAGS],[XTHREADS_FILE_LINE],[${XTHREADS_FILE_LINE}])
+# XM_ADD_FEATURE([FLAGS],[XOS_USE_XLIB_LOCKING],[${XOS_USE_XLIB_LOCKING}])
+# XM_ADD_FEATURE([FLAGS],[XOS_USE_XT_LOCKING],[${XOS_USE_XT_LOCKING}])
+# XM_ADD_FEATURE([FLAGS],[XOS_USE_NO_LOCKING],[${XOS_USE_NO_LOCKING}])
+# XM_ADD_FEATURE([FLAGS],[XNO_MTSAFE_API],[${XNO_MTSAFE_API}])
+# XM_ADD_FEATURE([FLAGS],[XNO_MTSAFE_PWDAPI],[${XNO_MTSAFE_PWDAPI}])
+# XM_ADD_FEATURE([FLAGS],[XOS_USE_NO_LOCKING],[${XOS_USE_NO_LOCKING}])
+# XM_ADD_FEATURE([FLAGS],[WSM],[${WSM}])
+# XM_ADD_FEATURE([FLAGS],[PANELIST],[${PANELIST}])
+# XM_ADD_FEATURE([FLAGS],[MWM_QATS_PROTOCOL],[${MWM_QATS_PROTOCOL}])
+# XM_ADD_FEATURE([FLAGS],[NL_CAT_LOCALE],[${NL_CAT_LOCALE}])
+# XM_ADD_FEATURE([FLAGS],[SUPPORTS_WCHARS],[${SUPPORTS_WCHARS}])
+# XM_ADD_FEATURE([FLAGS],[LOCAL_STRCASECMP],[${LOCAL_STRCASECMP}])
 
 AC_OUTPUT
 
@@ -358,6 +395,8 @@ echo "  debug..........: ${features_dbg}"
 echo ""
 echo "Components:......: ${features_build}"
 echo ""
+# echo "Global flags:....: ${features_flags}"
+# echo ""
 echo "Compilation......: make"
 echo "  CPPFLAGS.......: $CPPFLAGS"
 echo "  CFLAGS.........: $CFLAGS"
