@@ -123,6 +123,18 @@ AC_ARG_ENABLE([uil-debug],
   [AS_HELP_STRING([--enable-uil-debug],[enable UIL compiler debugging support])],
   [enable_uil_debug=$enableval],[enable_uil_debug=no])
 
+AC_ARG_ENABLE([logging],
+  [AS_HELP_STRING([--enable-logging],[enable enhanced logging system])],
+  [enable_logging=$enableval],[enable_logging=yes])
+
+AC_ARG_WITH([log-level],
+  [AS_HELP_STRING([--with-log-level=LEVEL],[set default logging level (DEBUG, INFO, WARN, ERROR, CRITICAL)])],
+  [with_log_level=$withval],[with_log_level=INFO])
+
+AC_ARG_WITH([log-output],
+  [AS_HELP_STRING([--with-log-output=DEST],[set default log output destination (stderr, stdout, file) @<:@default=stderr@:>@])],
+  [with_log_output=$withval],[with_log_output=stderr])
+
 dnl Compiler flags
 XM_CFLAGS
 
@@ -137,11 +149,14 @@ AM_CONDITIONAL([XM_WITH_PNG],  test "x$with_png"  == "xyes")
 AM_CONDITIONAL([XM_MSGCAT],    test "x$enable_message_catalog" == "xyes")
 AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests" == "xyes")
 AM_CONDITIONAL([XM_UIL_DEBUG], test "x$enable_uil_debug" == "xyes")
+AM_CONDITIONAL([XM_LOGGING], test "x$enable_logging" == "xyes")
 
 dnl Substitutions for lib/Xm/Xm.h
 AC_SUBST([XM_MAJOR], [XM_MAJOR])
 AC_SUBST([XM_MINOR], [XM_MINOR])
 AC_SUBST([XM_PATCH], [XM_PATCH])
+AC_SUBST([XM_DEFAULT_LOG_LEVEL], [$with_log_level])
+AC_SUBST([XM_DEFAULT_LOG_OUTPUT], [$with_log_output])
 
 AC_DEFINE_UNQUOTED([XM_WITH_JPEG],
 	$(test "x$with_jpeg" != "xyes" ; echo $?),
@@ -162,6 +177,26 @@ AC_DEFINE_UNQUOTED([USE_XFT],
 AC_DEFINE_UNQUOTED([XM_PRINTING],
 	$(test "x$enable_printing" != "xyes"; echo $?),
 	[1 if Motif was built with printing support])
+
+AS_IF([test "x$enable_logging" == "xyes"],
+  [AC_DEFINE([XM_LOGGING], [1], [1 if Motif was built with enhanced logging support])])
+
+case "$with_log_level" in
+    DEBUG)   XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_DBG" ;;
+    INFO)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
+    WARN)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_WARN" ;;
+    ERROR)   XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_ERR" ;;
+    CRITICAL) XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_CRITICAL" ;;
+    *)       XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
+esac
+
+AS_IF([test "x$enable_logging" == "xyes"],
+  [AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_LEVEL], [$XM_DEFAULT_LOG_LEVEL_VAL],
+	[Default logging level for Motif])])
+
+AS_IF([test "x$enable_logging" == "xyes"],
+  [AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_OUTPUT], ["$with_log_output"],
+	[Default logging output destination])])
 
 AC_DEFINE_UNQUOTED([XM_MSGCAT],
 	$(test "x$enable_message_catalog" != "xyes" ; echo $?),

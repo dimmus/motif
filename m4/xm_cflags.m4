@@ -25,6 +25,14 @@ AC_DEFUN([XM_CFLAGS],[
 	                      [ax_cc_clang="yes"],dnl
 	                      [ax_cc_clang="no"])
 
+	dnl Set C23 standard for both Clang and GCC
+	dnl Use c2x for GCC < 15, c23 for GCC >= 15
+	AX_CHECK_COMPILE_FLAG([-std=c23], [
+		AX_APPEND_COMPILE_FLAGS([-std=c23])
+	], [
+		AX_APPEND_COMPILE_FLAGS([-std=c2x])
+	])
+
 	AS_IF([test "$ax_cc_clang" == "yes"],[
 		ax_cc_gcov_command="llvm-cov gcov"
 		AX_APPEND_COMPILE_FLAGS([ dnl
@@ -66,6 +74,7 @@ AC_DEFUN([XM_CFLAGS],[
 			-Wwrite-strings dnl
 			-Wcast-align dnl
 			-Wformat-security dnl
+			-Wincompatible-pointer-types dnl
 			-Wno-unused dnl
 			-Wno-comment dnl
 			-Wno-unused-result dnl
