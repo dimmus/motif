@@ -65,14 +65,14 @@ static int vecnum = sizeof(vec) / sizeof(char*);
 static MrmCode		class, return_type ;
 
        /* forward declaration of interface procedures */
-static void p_motifanim_start();
-static void p_motifanim_stop();
-static void p_motifanim_step();
-static void p_motifanim_speed();
-static void p_motifanim_draw();
-static void p_motifanim_exit();
-static void p_motifanim_help();
-static void InitAnim();
+static void p_motifanim_start(Widget widget, char *tag, XmAnyCallbackStruct *callback_data);
+static void p_motifanim_stop(Widget widget, char *tag, XmAnyCallbackStruct *callback_data);
+static void p_motifanim_step(Widget widget, char *tag, XmAnyCallbackStruct *callback_data);
+static void p_motifanim_speed(Widget widget, int *tag, XmScaleCallbackStruct *callback_data);
+static void p_motifanim_draw(Widget widget, int *tag, XmAnyCallbackStruct *callback_data);
+static void p_motifanim_exit(Widget widget, char *tag, XmAnyCallbackStruct *callback_data);
+static void p_motifanim_help(Widget w, XtPointer client_data, XtPointer call_data);
+static void InitAnim(void);
 
        /* binding of uil procedure names with C functions */
 static MRMRegisterArg	regvec[] = {
@@ -125,9 +125,7 @@ NULL
 /******************************************************************
  *  Main program: motifanim [-anim anim_name] [-speed speed_factor]
  */
-int main(argc, argv)
-     int    argc;
-     String argv[];
+int main(int argc, String argv[])
 {
      /*
      *  Declare the variables to contain the two widget ids
@@ -211,8 +209,7 @@ int main(argc, argv)
 }
 
 
-static void InitAnim()
-/********/
+static void InitAnim(void)
 {
 
     XGCValues gcv;
@@ -279,9 +276,7 @@ static void InitAnim()
   Background Work Procedure: it return the current value of stop
   and then is automatically removed when stop = true.
 **/
-static Boolean fstep(client_data)
-/************************/
-     XtPointer client_data ;       /* scalespeed */
+static Boolean fstep(XtPointer client_data)
 {
     speedcount += (int)*(int*)client_data ;
     if (speedcount >= (max_scale*speed_factor)) {
@@ -313,37 +308,25 @@ p_motifanim_help (Widget w, XtPointer client_data, XtPointer call_data)
 }
 
 
-static void p_motifanim_start( widget, tag, callback_data )
-	Widget	widget;
-	char    *tag;
-	XmAnyCallbackStruct *callback_data;
+static void p_motifanim_start(Widget widget, char * tag, XmAnyCallbackStruct * callback_data)
 {
     XtAppAddWorkProc(app_context,fstep, (XtPointer)&scalespeed);
     stop = False ;
 }
 
-static void p_motifanim_stop( widget, tag, callback_data )
-	Widget	widget;
-	char    *tag;
-	XmAnyCallbackStruct *callback_data;
+static void p_motifanim_stop(Widget widget, char * tag, XmAnyCallbackStruct * callback_data)
 {
     stop = True ;
 }
 
-static void p_motifanim_step( widget, tag, callback_data )
-	Widget	widget;
-	char    *tag;
-	XmAnyCallbackStruct *callback_data;
+static void p_motifanim_step(Widget widget, char * tag, XmAnyCallbackStruct * callback_data)
 {
     int max = (max_scale*speed_factor) ;
 
     fstep(&max) ;
 }
 
-static void p_motifanim_speed( widget, tag, callback_data )
-	Widget	widget;
-	int    *tag;
-	XmScaleCallbackStruct *callback_data;
+static void p_motifanim_speed(Widget widget, int * tag, XmScaleCallbackStruct * callback_data)
 {
     Arg arg ;
 
@@ -355,10 +338,7 @@ static void p_motifanim_speed( widget, tag, callback_data )
     else scalespeed = callback_data->value ;
 }
 
-static void p_motifanim_draw( widget, tag, callback_data )
-	Widget	widget;
-	int    *tag;
-	XmAnyCallbackStruct *callback_data;
+static void p_motifanim_draw(Widget widget, int * tag, XmAnyCallbackStruct * callback_data)
 {
     Arg arg ;
 
@@ -375,10 +355,7 @@ static void p_motifanim_draw( widget, tag, callback_data )
 
 }
 
-static void p_motifanim_exit( widget, tag, callback_data )
-	Widget	widget;
-	char    *tag;
-	XmAnyCallbackStruct *callback_data;
+static void p_motifanim_exit(Widget widget, char * tag, XmAnyCallbackStruct * callback_data)
 {
     exit(0);
 }

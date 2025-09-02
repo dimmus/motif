@@ -26,6 +26,7 @@
  * HISTORY
  */
 #include <stdio.h>
+#include <sys/types.h>
 #include <Xm/XmP.h>
 #include <X11/ShellP.h>
 #include "RegEdit.h"
@@ -490,13 +491,8 @@ ExecuteCommand(Widget w, Atom sel, ResIdent ident, EditresEvent *event)
 
 /* ARGSUSED */
 static Boolean
-ConvertReturnCommand(w, selection, target,
-		     type_ret, value_ret, length_ret, format_ret)
-Widget w;
-Atom * selection, * target, * type_ret;
-XtPointer *value_ret;
-unsigned long * length_ret;
-int * format_ret;
+ConvertReturnCommand(Widget w, Atom *selection, Atom *target,
+		     Atom *type_ret, XtPointer *value_ret, unsigned long *length_ret, int *format_ret)
 {
     /*
      * I assume the intrinsics give me the correct selection back.
@@ -1681,6 +1677,6 @@ LoadResources(Widget w)
 			  XtRString, XtREditresBlock, CvtStringToBlock,
 			  NULL, (Cardinal) 0, XtCacheAll, NULL);
 
-    XtGetApplicationResources( w, (caddr_t) &globals, resources,
+    XtGetApplicationResources( w, (void *) &globals, resources,
 			      XtNumber(resources), NULL, (Cardinal) 0);
 }

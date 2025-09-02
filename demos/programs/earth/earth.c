@@ -66,7 +66,7 @@ static XtResource resources[] = {
     {
 	XmNspeed, XmCSpeed, XmRInt, sizeof(int),
 	XtOffsetOf (ApplicationData, speed),
-	XmRImmediate, (caddr_t) 50 },
+	        XmRImmediate, (void *) 50 },
 
     /* overwrite the default colors (doing that will lead to weird
        behavior if you specify -fg or -bg on the command line, but
@@ -82,7 +82,7 @@ static XtResource resources[] = {
     {
         XmNpersue, XmCPersue, XmRBoolean, sizeof (Boolean),
 	XtOffsetOf (ApplicationData, persue),
-	XmRImmediate, (caddr_t) 0}
+	        XmRImmediate, (void *) 0}
 };
 
 static XrmOptionDescRec options[] = {
@@ -96,15 +96,13 @@ static Pixmap       pterre ;
 static GC           gc ;
 static int          n ;
 
-static void    Syntax() ;
-static void    input_callback();
-static void    expose_callback();
-static void    speed_callback() ;
-static void    NextBitmap ();
+static void    Syntax(char *com);
+static void    input_callback(Widget widget, XtPointer tag, XtPointer callback_data);
+static void    expose_callback(Widget widget, XtPointer tag, XtPointer callback_data);
+static void    speed_callback(Widget widget, XtPointer tag, XtPointer callback_data);
+static void    NextBitmap(XtPointer client_data, XtIntervalId *id);
 
-int delayInterval (speed)
-/**************************/
-int speed;
+int delayInterval(int speed)
 {
   double maxDelay = 1000.0;
   double val      = (double)(abs(speed));
@@ -121,8 +119,7 @@ char *fallback[] = {
 };
 
 
-int main(argc, argv) int argc; char **argv ;
-/**************************************/
+int main(int argc, char **argv)
 {
     Arg args[10] ;
     Cardinal arg_count;
@@ -209,10 +206,7 @@ int main(argc, argv) int argc; char **argv ;
     return 0;    /* make compiler happy */
 }
 
-static void NextBitmap (client_data, id)
-/****************************************************/
-XtPointer client_data;
-XtIntervalId *id;
+static void NextBitmap(XtPointer client_data, XtIntervalId *id)
 {
 
 
@@ -252,21 +246,13 @@ XtIntervalId *id;
 }
 
 
-static void expose_callback(widget, tag, callback_data)
-/****************************************************/
-Widget widget ;
-XtPointer tag ;
-XtPointer callback_data ;
+static void expose_callback(Widget widget, XtPointer tag, XtPointer callback_data)
 {
     XCopyPlane (XtDisplay(draw), pterre, XtWindow(draw), gc,
 		0, 64*n, 64, 64, 0, 0, 1);
 }
 
-static void input_callback(widget, tag, callback_data)
-/****************************************************/
-Widget widget ;
-XtPointer tag ;
-XtPointer callback_data ;
+static void input_callback(Widget widget, XtPointer tag, XtPointer callback_data)
 {
   XmDrawingAreaCallbackStruct * dacb = (XmDrawingAreaCallbackStruct *) callback_data ;
   static Widget speed_dialog = NULL ;
@@ -314,11 +300,7 @@ XtPointer callback_data ;
 }
 
 
-static void speed_callback(widget, tag, callback_data)
-/******************************************************/
-Widget widget ;
-XtPointer tag ;
-XtPointer callback_data ;
+static void speed_callback(Widget widget, XtPointer tag, XtPointer callback_data)
 {
   XmScaleCallbackStruct * scb =
     (XmScaleCallbackStruct *) callback_data ;
@@ -335,8 +317,7 @@ XtPointer callback_data ;
 }
 
 
-static void Syntax(com) char * com ;
-/**********************************/
+static void Syntax(char *com)
 {
     fprintf(stderr, "%s understands all standard Xt options, plus:\n",com);
     fprintf(stderr, "       -speed:    -100,100  (earth rotation speed)\n");

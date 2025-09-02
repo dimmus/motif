@@ -709,7 +709,7 @@ CvtStringToLongList(Display *dpy, XrmValuePtr args,
         }
       XtFree((XtPointer) str);
     }
-  if (to->addr == NULL) to->addr = (caddr_t)&list;
+  if (to->addr == NULL) to->addr = (void *)&list;
   else *(long**) to->addr = list;
   to->size = count;
   return TRUE;

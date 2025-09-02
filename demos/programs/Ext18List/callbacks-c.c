@@ -241,10 +241,7 @@ UnselCB(Widget w, XtPointer client, XtPointer call )
 
 /* ARGSUSED */
 void
-QuitCB(w, client, call)
-Widget w;
-XtPointer client;
-XtPointer call;
+QuitCB(Widget w, XtPointer client, XtPointer call)
 {
     exit(0);
 }
@@ -417,10 +414,7 @@ ChoosePlayerCB(Widget w,XtPointer client, XtPointer call )
 
 /* ARGSUSED */
 void
-CreateLabel(w, client, call)
-Widget w;
-XtPointer client;
-XtPointer call;
+CreateLabel(Widget w, XtPointer client, XtPointer call)
 {
     Arg args[5];
     Cardinal argcnt;

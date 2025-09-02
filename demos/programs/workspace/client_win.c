@@ -30,15 +30,12 @@ static char rcsid[] = "$XConsortium: client_win.c /main/5 1995/07/14 09:47:48 dr
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
-static Window TryChildren();
+static Window TryChildren(Display * dpy, Window win, Atom wm_state_atom, unsigned int ** retdata);
 
 /* Find a window with WM_STATE, else return win itself, as per ICCCM */
 static Atom WM_STATE = None;
 
-Window IsClientWindow(dpy, win, retdata)
-	Display *dpy;
-	Window win;
-	unsigned int **retdata;
+Window IsClientWindow(Display * dpy, Window win, unsigned int ** retdata)
 {
 	Atom type = None;
 	int format;
@@ -66,11 +63,7 @@ Window IsClientWindow(dpy, win, retdata)
 	return inf;
 }
 
-static Window TryChildren (dpy, win, wm_state_atom, retdata)
-	Display *dpy;
-	Window win;
-	Atom wm_state_atom;
-	unsigned int **retdata;
+static Window TryChildren(Display * dpy, Window win, Atom wm_state_atom, unsigned int ** retdata)
 {
 	Window root, parent;
 	Window *children;

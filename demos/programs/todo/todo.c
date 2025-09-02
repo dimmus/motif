@@ -256,10 +256,7 @@ TextChanged(Widget w, XtPointer i, XtPointer i2)
   modified = 1;
 }
 
-void manageCB( widget, w_to_manage, callback_data)
-     Widget widget;
-     Widget w_to_manage;
-     XtPointer callback_data;
+void manageCB(Widget widget, Widget w_to_manage, XtPointer callback_data)
 {
   if (w_to_manage != (Widget) NULL)
     XtManageChild(w_to_manage);

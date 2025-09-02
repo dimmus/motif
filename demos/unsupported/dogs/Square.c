@@ -50,15 +50,15 @@ static char rcsid[] = "$TOG: Square.c /main/6 1998/03/25 18:18:13 csn $"
 			Square,make_square, Boolean)
 
 static void ClassInitialize();
-static void Initialize();
-static Boolean SetValues();
-static void ConstraintInitialize();
-static Boolean ConstraintSetValues();
+static void Initialize(SquareWidget req, SquareWidget new);
+static Boolean SetValues(SquareWidget curr, SquareWidget req, SquareWidget new);
+static void ConstraintInitialize(Widget req, Widget new);
+static Boolean ConstraintSetValues(Widget old, Widget ref, Widget new);
 
 static XmPartResource resources[] = {
     {
     SquareNmajorDimension, SquareCMajorDimension, XmRInt, sizeof(int),
-    XmPartOffset(Square,major_dimension), XmRImmediate, (caddr_t)SquareWIDTH
+    XmPartOffset(Square,major_dimension), XmRImmediate, (void *)SquareWIDTH
     }
 };
 
@@ -66,7 +66,7 @@ static XmPartResource constraints[] = {
    {
     SquareNmakeSquare, SquareCMakeSquare, XmRBoolean, sizeof(Boolean),
     XmConstraintPartOffset(Square,make_square),
-    XmRImmediate, (caddr_t)False
+    XmRImmediate, (void *)False
    }
 };
 
@@ -80,7 +80,7 @@ externaldef(squareclassrec) SquareClassRec squareClassRec =
       ClassInitialize,          /* class_initialize     */
       NULL,                     /* class init part proc */
       False,                    /* class_inited         */
-      Initialize,               /* initialize           */
+      (XtInitProc)Initialize,   /* initialize           */
       NULL,                     /* initialize_notify    */
       XtInheritRealize,         /* realize              */
       NULL,                     /* actions              */
@@ -120,7 +120,7 @@ externaldef(squareclassrec) SquareClassRec squareClassRec =
       (XtResourceList)constraints,  /* constraint resource     */
       XtNumber(constraints),        /* number of constraints   */
       sizeof(SquareConstraintRec), /* size of constraint      */
-      ConstraintInitialize,         /* initialization          */
+      (XtInitProc)ConstraintInitialize, /* initialization          */
       NULL,                         /* destroy proc            */
       ConstraintSetValues,          /* set_values proc         */
       NULL,                         /* extension               */
@@ -160,11 +160,7 @@ static XmOffsetPtr square_constraint_offsets;	/* Constraint offsets table */
  *
  *********************************************************************/
 
-Widget SquareCreate(parent, name, arglist, nargs)
-    Widget parent;
-    char *name;
-    Arg *arglist;
-    int nargs;
+Widget SquareCreate(Widget parent, char *name, ArgList arglist, Cardinal nargs)
 {
     return(XtCreateWidget (name, squareWidgetClass, parent, arglist, nargs));
 }
@@ -178,7 +174,7 @@ Widget SquareCreate(parent, name, arglist, nargs)
 int SquareMrmInitialize()
 {
     return(MrmRegisterClass (MrmwcUnknown, "Square", "SquareCreate",
-			     SquareCreate, (WidgetClass)&squareClassRec));
+			     (Widget (*)(void))SquareCreate, (WidgetClass)&squareClassRec));
 }
 
 /**********************************************************************
@@ -193,9 +189,7 @@ static void ClassInitialize()
 				&square_constraint_offsets);
 }
 
-static void Initialize(req, new)
-    SquareWidget req;
-    SquareWidget new;
+static void Initialize(SquareWidget req, SquareWidget new)
 {
     if (MajorDimension(new) != SquareWIDTH &&
 	MajorDimension(new) != SquareHEIGHT) {
@@ -204,10 +198,7 @@ static void Initialize(req, new)
     }
 }
 
-static Boolean SetValues(curr, req, new)
-    SquareWidget curr;
-    SquareWidget req;
-    SquareWidget new;
+static Boolean SetValues(SquareWidget curr, SquareWidget req, SquareWidget new)
 {
     if (MajorDimension(new) != SquareWIDTH &&
 	MajorDimension(new) != SquareHEIGHT) {
@@ -217,9 +208,7 @@ static Boolean SetValues(curr, req, new)
     return (False);
 }
 
-static void ConstraintInitialize (req, new)
-    Widget req;
-    Widget new;
+static void ConstraintInitialize(Widget req, Widget new)
 {
     Dimension m;
 
@@ -233,10 +222,7 @@ static void ConstraintInitialize (req, new)
     }
 }
 
-static Boolean ConstraintSetValues (old, ref, new)
-    Widget old;
-    Widget ref;
-    Widget new;
+static Boolean ConstraintSetValues(Widget old, Widget ref, Widget new)
 {
     Boolean redraw = False;
 
@@ -259,7 +245,7 @@ static Boolean ConstraintSetValues (old, ref, new)
 	    gi.request_mode = CWWidth | CWHeight;
 	    gi.width = Width(new);
 	    gi.height = Height(new);
-	    if (XtQueryGeometry(new, &gi, &gp) == XtGeometryAlmost) {
+	    if (XtQueryGeometry((Widget)new, &gi, &gp) == XtGeometryAlmost) {
 		if (gp.request_mode && CWWidth != 0) Width(new) = gp.width;
 		if (gp.request_mode && CWHeight != 0) Height(new) = gp.height;
 	    }

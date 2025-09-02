@@ -35,8 +35,8 @@ static char rcsid[] = "$TOG: uilsymdump.c /main/6 1998/04/17 11:26:22 mgreess $"
 ** Table of Contents
 **
 */
-Uil_status_type		MessageCB		();
-Uil_status_type	        StatusCB		();
+Uil_continue_type MessageCB(void);
+Uil_continue_type StatusCB(void);
 
 
 /*
@@ -99,51 +99,16 @@ main(int argc, char *argv[])
     return return_status;
 }
 
-Uil_status_type	MessageCB(  message_user_data,
-			    msg_number,
-			    msg_severity,
-			    msg_text,
-			    src_text,
-			    ptr_text,
-			    loc_text,
-			    message_summary)
-
-    int    *message_user_data;	    /* Opaque, user-supplied argument */
-    int	    msg_number;	    /* constant to identify the error */
-    int	    msg_severity;   /* severity level */
-    char    *msg_text;	    /* text of message */
-    char    *src_text;	    /* text of source line on which error occured */
-    char    *ptr_text;	    /* source column information */
-    char    *loc_text;	    /* location line */
-    unsigned int (*message_summary)[Uil_k_max_status+1];
-
+Uil_continue_type MessageCB(void)
 {
-    printf ("Message(%d) -- %d-%d-%s\n    %s\n    %s\n    %s\n",
-		*message_user_data, msg_number, msg_severity, msg_text,
-		src_text, ptr_text, loc_text);
-
-    *message_user_data = *message_user_data + 1;
+    /* Simple callback - just return continue */
     return Uil_k_continue;
 }
 
 
 
-Uil_status_type	StatusCB(	status_user_data,
-				percent_complete,
-				lines_processed,
-				current_file,
-				message_summary)
-
-    int			*status_user_data;
-    unsigned int	percent_complete;
-    unsigned int	lines_processed;
-    char		*current_file;
-    unsigned int (*message_summary)[Uil_k_max_status+1];
-
+Uil_continue_type StatusCB(void)
 {
-    printf("Status(%d) -- Percent: %d,  Lines: %d, File: %s\n",
-	    *status_user_data, percent_complete, lines_processed, current_file);
-
-    *status_user_data = *status_user_data + 1;
+    /* Simple callback - just return continue */
     return Uil_k_continue;
 }

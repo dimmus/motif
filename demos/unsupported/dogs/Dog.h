@@ -50,7 +50,7 @@ typedef struct _DogRec *DogWidget;
 
 #define IsDog(w) XtIsSubclass((w), dogWidgetClass)
 
-extern Widget DogCreate();
+extern Widget DogCreate(Widget parent, char *name, ArgList arglist, Cardinal nargs);
 #ifdef	USING_UIL
 extern int DogMrmInitialize();
 #endif

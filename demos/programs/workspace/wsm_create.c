@@ -54,7 +54,7 @@ static char rcsid[] = "$XConsortium: wsm_create.c /main/7 1996/10/30 10:23:18 cd
 /*
  * Some Convenience Routines
  */
-void MENU_POST();
+void MENU_POST(Widget p, XtPointer mw, XEvent *ev, Boolean *dispatch);
 extern Space *current_space;
 /*
  * Literal Definitions
@@ -86,18 +86,11 @@ extern Space *current_space;
  */
 
 
-#define ARGLIST(p)	(
-#define ARG(a, b)	a b,
-#define GRA(a, b)	a b)
+
 
 #ifndef IGNORE_MENU_POST
 
-void MENU_POST
-ARGLIST((p, mw, ev, dispatch))
-ARG(Widget, p)
-ARG(XtPointer, mw)
-ARG(XEvent *, ev)
-GRA(Boolean *, dispatch)
+void MENU_POST(Widget p, XtPointer mw, XEvent *ev, Boolean *dispatch)
 {
     Arg	args[2];
     int	argcnt;

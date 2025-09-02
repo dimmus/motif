@@ -128,8 +128,7 @@ static String fallbacks[] = {
  *
  */
 void
-InitializeData(shell )
-Widget shell;
+InitializeData(Widget shell)
 {
   porsche_pix = XPM_PIXMAP(shell, porsche);
   crab_pix = XPM_PIXMAP(shell, crab);

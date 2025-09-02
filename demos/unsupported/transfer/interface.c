@@ -894,9 +894,7 @@ Widget create_editbox_widget(char    * name,
   return(dialog);
 }
 
-Widget CreateHelpDialog(parent, name)
-     Widget parent;
-     char* name;
+Widget CreateHelpDialog(Widget parent, char* name)
 {
   Widget help;
   Arg args[10];
@@ -947,19 +945,13 @@ Widget CreateHelpDialog(parent, name)
   return(help);
 }
 
-void manageCB( widget, w_to_manage, callback_data)
-     Widget widget;
-     Widget w_to_manage;
-     XtPointer callback_data;
+void manageCB(Widget widget, Widget w_to_manage, XtPointer callback_data)
 {
   if (w_to_manage != (Widget) NULL)
     XtManageChild(w_to_manage);
 }
 
-void unmanageCB( widget, w_to_unmanage, callback_data)
-     Widget widget;
-     Widget w_to_unmanage;
-     XtPointer callback_data;
+void unmanageCB(Widget widget, Widget w_to_unmanage, XtPointer callback_data)
 {
   if (w_to_unmanage != (Widget) NULL)
     XtUnmanageChild(w_to_unmanage);

@@ -39,28 +39,27 @@ BxRegisterConverters()
  * Function prototypes for routines
  * located in utilities file.
  */
-extern XtPointer CONVERT();
-extern void MENU_POST();
+extern XtPointer CONVERT(void);
+extern void MENU_POST(Widget p, XtPointer mw, XEvent *ev, Boolean *dispatch);
 
 
 /*
  * Callback procedure declarations
  */
-extern void CreateLabel();
-extern void OtherResCB();
-extern void ConstraintResCB();
-extern void OrientChValCB();
-extern void SepValChCB();
-extern void QuitCB();
-extern void SashValChCB();
+extern void CreateLabel(Widget w, XtPointer client, XtPointer call);
+extern void OtherResCB(Widget w, XtPointer client, XtPointer call);
+extern void ConstraintResCB(Widget w, XtPointer client, XtPointer call);
+extern void OrientChValCB(Widget w, XtPointer client, XtPointer call);
+extern void SepValChCB(Widget w, XtPointer client, XtPointer call);
+extern void QuitCB(Widget w, XtPointer client, XtPointer call);
+extern void SashValChCB(Widget w, XtPointer client, XtPointer call);
 
 /*
  * Function: Createpaned()
  *        Create paned hierarchy of widgets.
  */
 Widget
-Createpaned( parent)
-Widget parent;
+Createpaned(Widget parent)
 {
     Arg    	args[512];
     Cardinal   	argcnt;
@@ -273,8 +272,7 @@ Widget parent;
  *        Create form hierarchy of widgets.
  */
 Widget
-Createform( parent)
-Widget parent;
+Createform(Widget parent)
 {
     Arg    	args[512];
     Cardinal   	argcnt;

@@ -87,7 +87,7 @@ typedef struct _ExmContainerRec      * ExmContainerWidget;
 
 
 /* Specify the API for this widget. */
-extern Widget ExmCreateContainer();
+extern Widget ExmCreateContainer(Widget parent, char *name, ArgList arglist, Cardinal argcount);
 
 
 /* Allow for C++ compilation. */

@@ -48,27 +48,25 @@ BxRegisterConverters()
  * Function prototypes for routines
  * located in utilities file.
  */
-extern XtPointer CONVERT();
-extern void MENU_POST();
+extern XtPointer CONVERT(void);
 
 
 /*
  * Callback procedure declarations
  */
-extern void CreateHypeLabel();
-extern void ShowFontValChCB();
-extern void ExplainCB();
-extern void ShowCurFont();
-extern void ShowOtherCB();
-extern void QuitCB();
+extern void CreateHypeLabel(Widget w, XtPointer client, XtPointer call);
+extern void ShowFontValChCB(Widget w, XtPointer client, XtPointer call);
+extern void ExplainCB(Widget w, XtPointer client, XtPointer call);
+extern void ShowCurFont(Widget w, XtPointer client, XtPointer call);
+extern void ShowOtherCB(Widget w, XtPointer client, XtPointer call);
+extern void QuitCB(Widget w, XtPointer client, XtPointer call);
 
 /*
  * Function: CreateDemoForm()
  *        Create form hierarchy of widgets.
  */
 Widget
-CreateDemoForm( parent)
-Widget parent;
+CreateDemoForm(Widget parent)
 {
     Arg    	args[512];
     Cardinal   	argcnt;

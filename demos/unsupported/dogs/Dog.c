@@ -96,21 +96,21 @@ static char rcsid[] = "$TOG: Dog.c /main/7 1997/05/02 10:11:08 dbl $"
     DefaultDepthOfScreen(XtScreen(w)))
 
 static void ClassInitialize();
-static void Initialize();
-static void Redisplay();
-static void Resize();
-static void Destroy();
-static Boolean SetValues();
-static XtGeometryResult QueryGeometry();
+static void Initialize(DogWidget request, DogWidget new);
+static void Redisplay(Widget w, XEvent *event, Region region);
+static void Resize(DogWidget w);
+static void Destroy(DogWidget w);
+static Boolean SetValues(DogWidget current, DogWidget request, DogWidget new);
+static XtGeometryResult QueryGeometry(DogWidget w, XtWidgetGeometry *intended, XtWidgetGeometry *reply);
 
-static void bark_dog();
-static void end_bark();
-static void start_wag();
-static void stop_wag();
-static void do_wag();
-static void create_GC();
-static void create_pixmaps();
-static void destroy_pixmaps();
+static void bark_dog(DogWidget w, XEvent *event);
+static void end_bark(DogWidget w, XtIntervalId *t);
+static void start_wag(DogWidget w, XEvent *event);
+static void stop_wag(DogWidget w, XEvent *event);
+static void do_wag(XtPointer w, XtIntervalId *t);
+static void create_GC(DogWidget w);
+static void create_pixmaps(DogWidget w);
+static void destroy_pixmaps(DogWidget w);
 
 static char defaultTranslations[] =
    "<Btn1Down>:         Bark()\n\
@@ -134,10 +134,10 @@ static XtActionsRec actionsList[] = {
 
 static XmPartResource resources[] = {
     {DogNwagTime, DogCWagTime, XtRInt, sizeof(int),
-	XmPartOffset(Dog,wag_time), XmRImmediate, (caddr_t)100},
+	XmPartOffset(Dog,wag_time), XmRImmediate, (void *)100},
     {DogNbarkTime, DogCBarkTime, XtRInt, sizeof(int),
-	XmPartOffset(Dog,bark_time), XmRImmediate, (caddr_t)1000},
-    {DogNbarkCallback, XtCCallback, XtRCallback, sizeof(caddr_t),
+	XmPartOffset(Dog,bark_time), XmRImmediate, (void *)1000},
+    {DogNbarkCallback, XtCCallback, XtRCallback, sizeof(void *),
 	XmPartOffset(Dog,bark_callback), XtRCallback, NULL}
 };
 
@@ -149,7 +149,7 @@ DogClassRec dogClassRec = {
     ClassInitialize,                    /* class_initialize     */
     NULL,                               /* class_part_initialize*/
     False,                              /* class_inited         */
-    Initialize,                         /* initialize           */
+    (XtInitProc)Initialize,             /* initialize           */
     NULL,                               /* initialize_notify    */
     XtInheritRealize,                   /* realize              */
     actionsList,                        /* actions              */
@@ -161,8 +161,8 @@ DogClassRec dogClassRec = {
     True,                               /* compress_exposure    */
     True,                               /* compress_enterleave  */
     False,                              /* visible_interest     */
-    Destroy,                            /* destroy              */
-    Resize,                             /* resize               */
+    (XtWidgetProc)Destroy,              /* destroy              */
+    (XtWidgetProc)Resize,               /* resize               */
     Redisplay,                          /* expose               */
     SetValues,                          /* set_values           */
     NULL,                               /* set_values_hook      */
@@ -172,7 +172,7 @@ DogClassRec dogClassRec = {
     XtVersionDontCheck,                 /* version              */
     NULL,                               /* callback_private     */
     defaultTranslations,                /* tm_table             */
-    QueryGeometry,                      /* query_geometry       */
+    (XtGeometryHandler)QueryGeometry,    /* query_geometry       */
     NULL,                               /* disp accelerator     */
     NULL                                /* extension            */
     },
@@ -180,7 +180,7 @@ DogClassRec dogClassRec = {
     XmInheritWidgetProc,               	/* border_highlight     */
     XmInheritWidgetProc,               	/* border_unhighlight   */
     XtInheritTranslations,       	/* translations         */
-    bark_dog,                           /* arm_and_activate     */
+    (XtActionProc)bark_dog,             /* arm_and_activate     */
     NULL,   	    			/* syn resources        */
     0,					/* num syn_resources    */
     NULL,                             	/* extension            */
@@ -201,11 +201,7 @@ static XmOffsetPtr offsets; /* Part Offset table for XmResolvePartOffsets */
  *
  *********************************************************************/
 
-Widget DogCreate(parent, name, arglist, nargs)
-    Widget parent;
-    char *name;
-    Arg *arglist;
-    int nargs;
+Widget DogCreate(Widget parent, char *name, ArgList arglist, Cardinal nargs)
 {
     return(XtCreateWidget (name, dogWidgetClass, parent, arglist, nargs));
 }
@@ -219,7 +215,7 @@ Widget DogCreate(parent, name, arglist, nargs)
 
 int DogMrmInitialize()
 {
-    return(MrmRegisterClass (MrmwcUnknown, "Dog" , "DogCreate",	DogCreate,
+    return(MrmRegisterClass (MrmwcUnknown, "Dog" , "DogCreate",	(Widget (*)(void))DogCreate,
 				(WidgetClass)&dogClassRec));
 }
 #endif /* USING_UIL */
@@ -230,8 +226,7 @@ int DogMrmInitialize()
  *
  *********************************************************************/
 
-void _DogDrawPixmap(dw)
-    DogWidget dw;
+void _DogDrawPixmap(DogWidget dw)
 {
     Widget w = (Widget) dw;
 
@@ -250,8 +245,7 @@ void _DogDrawPixmap(dw)
  *
  *********************************************************************/
 
-void _DogPosition(w)
-    DogWidget w;
+void _DogPosition(DogWidget w)
 {
     Dimension margin = ShadowThickness(w) + HighlightThickness(w);
 
@@ -290,8 +284,7 @@ static void ClassInitialize()
 }
 
 
-static void create_GC(w)
-    DogWidget w;
+static void create_GC(DogWidget w)
 {
     XGCValues       values;
     XtGCMask        valueMask;
@@ -303,17 +296,14 @@ static void create_GC(w)
     DrawGC(w) = XtGetGC((Widget)w,valueMask,&values);
 }
 
-static void create_pixmaps(w)
-    DogWidget w;
+static void create_pixmaps(DogWidget w)
 {
     UpPixmap(w) = MakePixmap(up_bits, up_width, up_height);
     DownPixmap(w) = MakePixmap(down_bits, down_width, down_height);
     BarkPixmap(w) = MakePixmap(bark_bits, bark_width, bark_height);
 }
 
-static void Initialize(request, new)
-    DogWidget request;
-    DogWidget new;
+static void Initialize(DogWidget request, DogWidget new)
 {
     if (Width(request) == 0)
 	Width(new) = MAX(MAX(up_width, down_width),bark_width) +
@@ -332,8 +322,7 @@ static void Initialize(request, new)
     Resize(new);
 }
 
-static void destroy_pixmaps(w)
-    DogWidget w;
+static void destroy_pixmaps(DogWidget w)
 {
     XFreePixmap (XtDisplay(w), UpPixmap(w));
     XFreePixmap (XtDisplay(w), DownPixmap(w));
@@ -341,8 +330,7 @@ static void destroy_pixmaps(w)
 }
 
 
-static void Destroy(w)
-    DogWidget w;
+static void Destroy(DogWidget w)
 {
     XtReleaseGC ((Widget)w, DrawGC(w));
     destroy_pixmaps(w);
@@ -355,15 +343,12 @@ static void Destroy(w)
     XtRemoveAllCallbacks ((Widget)w, DogNbarkCallback);
 }
 
-static void Resize(w)
-    DogWidget w;
+static void Resize(DogWidget w)
 {
     _DogPosition(w);
 }
 
-static Boolean DifferentBackground(w, p)
-     Widget w;
-     Widget p;
+static Boolean DifferentBackground(Widget w, Widget p)
 {
   if (XmIsPrimitive(w) && XmIsManager(p))
     {
@@ -379,10 +364,7 @@ static Boolean DifferentBackground(w, p)
   return (False);
 }
 
-static void Redisplay(w, event, region)
-    Widget w;
-    XEvent *event;
-    Region region;
+static void Redisplay(Widget w, XEvent *event, Region region)
 {
     if (XtIsRealized(w)) {
 	XmeDrawShadows(XtDisplay (w), XtWindow (w),
@@ -404,11 +386,7 @@ static void Redisplay(w, event, region)
     }
 }
 
-static Boolean SetValues(current, request, new)
-    DogWidget current;
-    DogWidget request;
-    DogWidget new;
-
+static Boolean SetValues(DogWidget current, DogWidget request, DogWidget new)
 {
     Boolean redraw = False;
 
@@ -439,10 +417,7 @@ static Boolean SetValues(current, request, new)
     return (redraw);
 }
 
-static XtGeometryResult QueryGeometry (w, intended, reply)
-    DogWidget w;
-    XtWidgetGeometry *intended;
-    XtWidgetGeometry *reply;
+static XtGeometryResult QueryGeometry(DogWidget w, XtWidgetGeometry *intended, XtWidgetGeometry *reply)
 {
     reply->request_mode = 0;
 
@@ -470,9 +445,7 @@ static XtGeometryResult QueryGeometry (w, intended, reply)
  *
  *********************************************************************/
 
-static void bark_dog(w, event)
-    DogWidget w;
-    XEvent *event;
+static void bark_dog(DogWidget w, XEvent *event)
 {
     XmProcessTraversal((Widget)w, XmTRAVERSE_CURRENT);
     XtCallCallbacks ((Widget)w, DogNbarkCallback, NULL);
@@ -482,12 +455,10 @@ static void bark_dog(w, event)
     _DogPosition(w);
     _DogDrawPixmap(w);
     BarkId(w) = XtAppAddTimeOut (XtWidgetToApplicationContext((Widget)w),
-                BarkTime(w), end_bark, w);
+                BarkTime(w), (XtTimerCallbackProc)end_bark, w);
 }
 
-static void end_bark(w, t)
-    DogWidget w;
-    XtIntervalId *t;
+static void end_bark(DogWidget w, XtIntervalId *t)
 {
     SetPixmap(w,DownPx,DownPixmap(w),down_width,down_height);
     _DogPosition(w);
@@ -500,9 +471,7 @@ static void end_bark(w, t)
 
 }
 
-static void start_wag(w, event)
-    DogWidget w;
-    XEvent *event;
+static void start_wag(DogWidget w, XEvent *event)
 {
     XmProcessTraversal((Widget)w, XmTRAVERSE_CURRENT);
     if (Wagging(w) == True) return;
@@ -512,9 +481,7 @@ static void start_wag(w, event)
                 WagTime(w), do_wag, w);
 }
 
-static void stop_wag(w, event)
-    DogWidget w;
-    XEvent *event;
+static void stop_wag(DogWidget w, XEvent *event)
 {
     XmProcessTraversal((Widget)w, XmTRAVERSE_CURRENT);
     Wagging(w) = False;
@@ -524,9 +491,7 @@ static void stop_wag(w, event)
 
 }
 
-static void do_wag(w, t)
-    XtPointer w;
-    XtIntervalId *t;
+static void do_wag(XtPointer w, XtIntervalId *t)
 {
     DogWidget dw = (DogWidget)w;
 

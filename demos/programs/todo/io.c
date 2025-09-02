@@ -60,8 +60,7 @@ Page AllocPage();
  * regular lines start with .
  */
 
-void ParseNewLines(label)
-char * label ;
+void ParseNewLines(char * label)
 {
     /* look for "\n" and change in '\n' and compact */
 
@@ -81,9 +80,7 @@ char * label ;
 
 }
 
-static void PrintWithNewLines(output, label)
-FILE *output ;
-char * label ;
+static void PrintWithNewLines(FILE * output, char * label)
 {
     /* look for '\n' and print "\n" */
 

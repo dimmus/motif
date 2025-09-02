@@ -627,7 +627,7 @@ DrawWindows (PannerInfoRec *panner_data)
   Window        realRoot, root, parent, *child = NULL;
   int           i, x, y;
   unsigned int  childCount, width, height;
-  int (*oldHandler)();
+  XErrorHandler oldHandler;
 
 
   realRoot = RootWindow(panner_data[DSP].display,
@@ -1208,7 +1208,7 @@ GetTimestamp (Display *dsp)
 /*----------------------------------------------------------------*
  |                      CheckPinnedState                          |
  *----------------------------------------------------------------*/
-static void CheckPinnedState ()
+static void CheckPinnedState(void)
 {
   static int    panDx=0, panDy=-1;
   XtPointer     msg, fulldata;
@@ -1255,7 +1255,7 @@ static void CheckPinnedState ()
  |                      ShowPinStateWarning                       |
  *----------------------------------------------------------------*/
 static void
-ShowPinStateWarning ()
+ShowPinStateWarning(void)
 {
   static Widget dlog = NULL;
   Arg           args[3];

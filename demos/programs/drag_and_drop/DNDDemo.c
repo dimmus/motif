@@ -1116,7 +1116,7 @@ CancelDrop(Widget w, XtPointer call, XtPointer ignore)
 
 void
 ChangeOperation(Widget widget,
-		caddr_t client_data,
+		                void *client_data,
 		XmAnyCallbackStruct *call_data)
 {
 

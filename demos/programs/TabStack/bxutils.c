@@ -3728,7 +3728,7 @@ GRA(char*, inst_name)
 
    /* Start the lineage with our name and then get our parents */
 
-   sprintf(lineage, "*%s", inst_name);
+   snprintf(lineage, sizeof(lineage), "*%s", inst_name);
    parent = w;
 
    while (parent)
@@ -3738,7 +3738,11 @@ GRA(char*, inst_name)
        if (wclass == applicationShellWidgetClass) break;
 
        strcpy(buf, lineage);
-       sprintf(lineage, "*%s%s", XtName(parent), buf);
+       int len = snprintf(lineage, sizeof(lineage), "*%s%s", XtName(parent), buf);
+       if (len >= (int)sizeof(lineage)) {
+           /* Truncation occurred, but this is acceptable for this use case */
+           lineage[sizeof(lineage) - 1] = '\0';
+       }
 
        parent = XtParent(parent);
    }

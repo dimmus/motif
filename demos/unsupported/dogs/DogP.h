@@ -37,8 +37,8 @@
 #include <Xm/PrimitiveP.h>
 #include "Dog.h"
 
-void _DogDrawPixmap();
-void _DogPosition();
+void _DogDrawPixmap(DogWidget dw);
+void _DogPosition(DogWidget w);
 
 #define DogIndex (XmPrimitiveIndex + 1)
 

@@ -57,12 +57,12 @@ xmform*bottomShadowColor:        black
 #include <Xm/PushB.h>
 #include <Xm/ArrowB.h>
 
-static void FillItPlease();
-static void NearlyEvenSpread();
-static Widget AddStem() ;
+static void FillItPlease(Widget form, char letter);
+static void NearlyEvenSpread(Widget *child_list, Cardinal num_child,
+			     Dimension hor_spacing, Dimension ver_spacing);
+static Widget AddStem(Widget form, int top, int right, int bottom, int left, int type);
 
-int main(argc, argv)
-int argc; char **argv;
+int main(int argc, char ** argv)
 {
     XtAppContext app_context;
     Widget      toplevel, topform, *forms ;
@@ -101,12 +101,8 @@ int argc; char **argv;
 }
 
 
-static void NearlyEvenSpread(child_list, num_child,
-			     hor_spacing, ver_spacing)
-Widget * child_list;
-Cardinal num_child;
-Dimension hor_spacing;
-Dimension ver_spacing;
+static void NearlyEvenSpread(Widget *child_list, Cardinal num_child,
+			     Dimension hor_spacing, Dimension ver_spacing)
 {
     /* this algorithm works only for the default fractionBase == 100 */
     /* hor_spacing and ver_margin are equally applied on each sides */
@@ -133,9 +129,7 @@ Dimension ver_spacing;
     }
 }
 
-static void FillItPlease(form, letter)
-Widget form ;
-char letter ;
+static void FillItPlease(Widget form, char letter)
 {
     /* This routine only handle the "MOTIF" letters, it's up
        to you to implement the rest, good luck for K,N,R,V,X,Y,Z... */
@@ -149,7 +143,7 @@ char letter ;
 	/* 2 buttons and the arrow in between on top */
 	child[p] = AddStem(form, 0, 25, 100, 0, XmPUSHBUTTON); p++;
 	child[p] = AddStem(form, 0, 100, 100, 75, XmPUSHBUTTON); p++;
-	child[p] = AddStem(form, 0, 75, 35, 25, NULL); p++;
+	child[p] = AddStem(form, 0, 75, 35, 25, 0); p++;
 /*	XtSetArg(args[n], XmNshadowThickness, 0); n++;*/
 	XtSetArg(args[n], XmNarrowDirection, XmARROW_DOWN); n++;
 	XtSetValues(child[2], args, n);
@@ -171,7 +165,7 @@ char letter ;
 	break ;
     case 'I' :
 	/* 1 vertical button + one arrow on top */
-	child[p] = AddStem(form, 0, 63, 25, 38, NULL); p++;
+	child[p] = AddStem(form, 0, 63, 25, 38, 0); p++;
 	child[p] = AddStem(form, 30, 63, 100, 38, XmPUSHBUTTON); p++;
 /*	XtSetArg(args[n], XmNshadowThickness, 0); n++;*/
 	XtSetValues(child[0], args, n);
@@ -192,10 +186,7 @@ char letter ;
 }
 
 
-static Widget AddStem(form, top, right, bottom, left, type)
-Widget form ;
-Dimension top, right, bottom, left;
-int type ;
+static Widget AddStem(Widget form, int top, int right, int bottom, int left, int type)
 {
     /* create an object, either a button or an arrow, using
        positionnal attachment everywhere, instead of possibly

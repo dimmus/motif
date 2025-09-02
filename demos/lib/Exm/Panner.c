@@ -1089,7 +1089,7 @@ ParsePageString (
 
     /* Syntax:    spaces [+-] number spaces [pc\0] spaces  */
 
-    for (; isascii(*s) && isspace(*s); s++) ;	/* skip white space */
+    for (; (*s >= 0 && *s <= 127) && isspace(*s); s++) ;	/* skip white space */
 
     if (*s == '+' || *s == '-') {	/* deal with signs */
 	rel = TRUE;
@@ -1103,11 +1103,11 @@ ParsePageString (
     }
 
 					/* skip over numbers */
-    for (cp = s; isascii(*s) && isdigit(*s); s++) ;
+    for (cp = s; (*s >= 0 && *s <= 127) && isdigit(*s); s++) ;
     val *= atoi (cp);
 
 					/* skip blanks */
-    for (; isascii(*s) && isspace(*s); s++) ;
+    for (; (*s >= 0 && *s <= 127) && isspace(*s); s++) ;
 
     if (*s) {				/* if units */
 	switch (s[0]) {

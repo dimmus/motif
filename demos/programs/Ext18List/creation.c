@@ -42,23 +42,23 @@ RegisterConverters()
  * located in utilities file.
  */
 extern XtPointer CONVERT();
-extern void MENU_POST();
+extern void MENU_POST(Widget p, XtPointer mw, XEvent *ev, Boolean *dispatch);
 
 
 /*
  * Callback procedure declarations
  */
-extern Widget CreateExtListCB();
-extern void AddCB();
-extern void RemCB();
-extern void ExplainCB();
-extern void QuitCB();
-extern void UnselCB();
-extern void ToggleFindArea();
-extern void FirstRowCol();
-extern void ChoosePlayerCB();
-extern void UpdateRemLabelStr();
-extern void CreateLabel();
+extern Widget CreateExtListCB(Widget parent);
+extern void AddCB(Widget w, XtPointer client, XtPointer call);
+extern void RemCB(Widget w, XtPointer client, XtPointer call);
+extern void ExplainCB(Widget w, XtPointer client, XtPointer call);
+extern void QuitCB(Widget w, XtPointer client, XtPointer call);
+extern void UnselCB(Widget w, XtPointer client, XtPointer call);
+extern void ToggleFindArea(Widget w, XtPointer client, XtPointer call);
+extern void FirstRowCol(Widget w, XtPointer client, XtPointer call);
+extern void ChoosePlayerCB(Widget w, XtPointer client, XtPointer call);
+extern void UpdateRemLabelStr(Widget w, XtPointer client, XtPointer call);
+extern void CreateLabel(Widget w, XtPointer client, XtPointer call);
 
 /*
  * Function: Createform()

@@ -50,23 +50,23 @@ XtAppContext  app_context;
 #define k_dog3_id 3
 #define k_help_id 4
 
-static void create_cb();
-static void bark_cb();
-static void tb_cb();
-static void scale_cb();
-static void help_cb();
-static void exit_cb();
+static void create_cb(Widget w, int *id, unsigned long *reason);
+static void bark_cb(Widget w, int *volume, XtPointer cb);
+static void tb_cb(Widget w, int *tag, XmToggleButtonCallbackStruct *cb);
+static void scale_cb(Widget w, int *tag, XmScaleCallbackStruct *cb);
+static void help_cb(Widget w, XmString name, XtPointer cb);
+static void exit_cb(Widget w, XmString name, XtPointer cb);
 
 static MrmHierarchy mrm_id;
 static char *mrm_vec[]={"dogs.uid"};
 static MrmCode mrm_class;
 static MRMRegisterArg mrm_names[] = {
-        {"create_cb", (caddr_t)create_cb },
-        {"bark_cb", (caddr_t)bark_cb },
-        {"tb_cb", (caddr_t)tb_cb },
-        {"scale_cb", (caddr_t)scale_cb },
-        {"help_cb", (caddr_t)help_cb },
-        {"exit_cb", (caddr_t)exit_cb }
+        {"create_cb", (void *)create_cb },
+        {"bark_cb", (void *)bark_cb },
+        {"tb_cb", (void *)tb_cb },
+        {"scale_cb", (void *)scale_cb },
+        {"help_cb", (void *)help_cb },
+        {"exit_cb", (void *)exit_cb }
 };
 
 static Widget dog1_id;
@@ -74,9 +74,7 @@ static Widget dog2_id;
 static Widget dog3_id;
 static Widget help_id;
 
-int main(argc, argv)
-    int argc;
-    char **argv;
+int main(int argc, char **argv)
 {
     Widget shell;
     Display *display;
@@ -113,10 +111,7 @@ int main(argc, argv)
     return 0;    /* make compiler happy */
 }
 
-static void create_cb(w, id, reason)
-    Widget w;
-    int *id;
-    unsigned long *reason;
+static void create_cb(Widget w, int *id, unsigned long *reason)
 {
     switch (*id) {
         case k_dog1_id: dog1_id = w; break;
@@ -130,18 +125,12 @@ static void create_cb(w, id, reason)
     }
 }
 
-static void bark_cb (w, volume, cb)
-    Widget w;
-    int *volume;
-    XtPointer cb;
+static void bark_cb(Widget w, int *volume, XtPointer cb)
 {
     XBell(XtDisplay(w), *volume);
 }
 
-static void tb_cb (w, tag, cb)
-    Widget w;
-    int *tag;
-    XmToggleButtonCallbackStruct *cb;
+static void tb_cb(Widget w, int *tag, XmToggleButtonCallbackStruct *cb)
 {
     Arg args[1];
     Widget dog=NULL;
@@ -155,10 +144,7 @@ static void tb_cb (w, tag, cb)
     XtSetValues(dog, args, 1);
 }
 
-static void scale_cb(w, tag, cb)
-    Widget w;
-    int *tag;
-    XmScaleCallbackStruct *cb;
+static void scale_cb(Widget w, int *tag, XmScaleCallbackStruct *cb)
 {
     Arg args[1];
     Widget dog = NULL;
@@ -172,10 +158,7 @@ static void scale_cb(w, tag, cb)
     XtSetValues(dog, args, 1);
 }
 
-static void help_cb (w, name, cb)
-    Widget w;
-    XmString name;
-    XtPointer cb;
+static void help_cb(Widget w, XmString name, XtPointer cb)
 {
     Arg args[1];
 
@@ -185,10 +168,7 @@ static void help_cb (w, name, cb)
     XtManageChild(help_id);
 }
 
-static void exit_cb (w, name, cb)
-    Widget w;
-    XmString name;
-    XtPointer cb;
+static void exit_cb(Widget w, XmString name, XtPointer cb)
 {
     exit(0);
 }

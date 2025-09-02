@@ -57,14 +57,14 @@ Xmfonts.ad:
 **	Forward Declarations
 */
 
-Widget CreateApplication ();	/*  create main window		*/
-Widget CreateFontSample ();	/*  create font display window	*/
-Widget CreateHelp ();		/*  create help window		*/
+Widget CreateApplication(Widget parent);	/*  create main window		*/
+Widget CreateFontSample(Widget parent);	/*  create font display window	*/
+Widget CreateHelp(Widget parent);		/*  create help window		*/
 
-void SelectFontCB ();		/*  callback for font buttons	*/
-void CloseCB ();		/*  callback for close button	*/
-void HelpCB ();			/*  callback for help button	*/
-void QuitCB ();			/*  callback for quit button	*/
+void SelectFontCB(Widget w, XtPointer client_data, XtPointer call_data);		/*  callback for font buttons	*/
+void CloseCB(Widget w, XtPointer client_data, XtPointer call_data);		/*  callback for close button	*/
+void HelpCB(Widget w, XtPointer client_data, XtPointer call_data);			/*  callback for help button	*/
+void QuitCB(Widget w, XtPointer client_data, XtPointer call_data);			/*  callback for quit button	*/
 
 
 
@@ -99,19 +99,17 @@ static XtResource resources[] = {
   { XtNfontPattern, XtCFontPattern, XmRString, sizeof(String),
     XtOffset(ApplicationDataPtr, fontpattern), XmRString, "*" },
   { XtNmaxFont, XtCMaxFont, XmRInt, sizeof(int),
-    XtOffset(ApplicationDataPtr, maxfont), XmRImmediate, (caddr_t) 1000 },
+    XtOffset(ApplicationDataPtr, maxfont), XmRImmediate, (void *) 1000 },
   { XtNmaxLen, XtCMaxLen, XmRInt, sizeof(int),
-    XtOffset(ApplicationDataPtr, maxlen), XmRImmediate, (caddr_t) 10 },
+    XtOffset(ApplicationDataPtr, maxlen), XmRImmediate, (void *) 10 },
   { XtNuseGadget, XtCUseGadget, XmRBoolean, sizeof (Boolean),
-    XtOffset(ApplicationDataPtr, usegadget), XmRImmediate, (caddr_t) TRUE }
+    XtOffset(ApplicationDataPtr, usegadget), XmRImmediate, (void *) TRUE }
 };
 
 /*-------------------------------------------------------------
 **	main		- main logic for application
 */
-int main (argc,argv)
-	int		argc;
-	char 		**argv;
+int main(int argc, char ** argv)
 {
 	Display		*display;	/*  Display		*/
 	Widget		app_shell;	/*  ApplicationShell	*/
@@ -146,8 +144,7 @@ int main (argc,argv)
 /*-------------------------------------------------------------
 **	CreateApplication	- create main window
 */
-Widget CreateApplication (parent)
-Widget		parent;		/*  parent widget	*/
+Widget CreateApplication(Widget parent)
 {
 	Widget		main_window;	/*  MainWindow		*/
 	Widget		menu_bar;	/*  MenuBar		*/
@@ -281,8 +278,7 @@ Widget		parent;		/*  parent widget	*/
 /*-------------------------------------------------------------
 **	CreateFontSample	- create font display window
 */
-Widget CreateFontSample (parent)
-Widget		parent;		/*  parent widget	*/
+Widget CreateFontSample(Widget parent)
 {
 	Widget		message_box;		/*  MessageBox Dialog	*/
 	Widget		button;
@@ -362,8 +358,7 @@ The quick brown fox jumps over the lazy dog.", name);
 /*-------------------------------------------------------------
 **	CreateHelp		- create help window
 */
-Widget CreateHelp (parent)
-	Widget		parent;		/*  parent widget	*/
+Widget CreateHelp(Widget parent)
 {
 	Widget		button;
 	Widget		message_box;	/*  Message Dialog 	*/
@@ -418,10 +413,7 @@ Select 'quit' from the 'exit' menu to exit this application.");
 /*-------------------------------------------------------------
 **	SelectFontCB		- callback for font buttons
 */
-void SelectFontCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void SelectFontCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 	Widget		message_box;
 
@@ -441,10 +433,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	CloseCB			- callback for close button
 */
-void CloseCB  (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  font pointer	*/
-caddr_t		call_data;	/*  data from widget class  */
+void CloseCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 	XFontStruct	*font	= (XFontStruct *) client_data;
 	Widget		message_box	= XtParent (w);
@@ -467,10 +456,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	HelpCB			- callback for help button
 */
-void HelpCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void HelpCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 	Widget		message_box;		/*  MessageBox		*/
 
@@ -490,10 +476,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	QuitCB			- callback for quit button
 */
-void QuitCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from applicaiton   */
-caddr_t		call_data;	/*  data from widget class  */
+void QuitCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 
 

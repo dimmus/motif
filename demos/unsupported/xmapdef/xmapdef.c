@@ -40,27 +40,10 @@
 /*-------------------------------------------------------------
 **	Forwarded functions
 */
-void CreateApplication ();
-void WarnUser ();
-Widget CreateHelp ();
-
-/*      Xt callbacks
-*/
-void DrawCB ();
-void ValueCB ();
-void OpenCB ();
-void ReadCB ();
-void QuitCB ();
-void HelpCB ();
 
 /*-------------------------------------------------------------
-**      File i/o and drawing stuff
+**      File data structure
 */
-void InitFile ();
-Boolean BuildLineTable ();
-void ReDraw ();
-void ReSize ();
-
 typedef struct {
     Widget work_area  ;
     Widget v_scrb ;
@@ -72,11 +55,32 @@ typedef struct {
 } FileData ;
 
 
+void CreateApplication(Widget parent, FileData * filedata);
+void WarnUser(Widget widget, String format, String name);
+Widget CreateHelp(Widget parent);
+
+/*      Xt callbacks
+*/
+void DrawCB(Widget w, XtPointer client_data, XtPointer call_data);
+void ValueCB(Widget w, XtPointer client_data, XtPointer call_data);
+void OpenCB(Widget w, XtPointer client_data, XtPointer call_data);
+void ReadCB(Widget w, XtPointer client_data, XtPointer call_data);
+void QuitCB(Widget w, XtPointer client_data, XtPointer call_data);
+void HelpCB(Widget w, XtPointer client_data, XtPointer call_data);
+
+/*-------------------------------------------------------------
+**      File i/o and drawing stuff
+*/
+void InitFile(Widget widget, FileData * filedata, int argc, char ** argv);
+Boolean BuildLineTable(FileData * filedata, String file_name);
+void ReDraw(FileData * filedata);
+void ReSize(FileData * filedata);
+
+
 /*-------------------------------------------------------------
 **	    Main body
 */
-int main(argc, argv)
-int argc; char **argv;
+int main(int argc, char ** argv)
 {
     XtAppContext app_context;
     Widget      toplevel ;
@@ -100,9 +104,7 @@ int argc; char **argv;
 **	Create a app_defined Main Window with a Menubar to load a file
 **      Add the vertical scrollbar and the workarea to filedata.
 */
-void CreateApplication (parent, filedata)
-Widget		parent;
-FileData *       filedata;
+void CreateApplication(Widget parent, FileData * filedata)
 {
     Widget main_window, menu_bar, menu_pane, cascade,
            button ;
@@ -198,10 +200,7 @@ FileData *       filedata;
 /*-------------------------------------------------------------
 **	OpenCB			- callback for Open button
 */
-void OpenCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void OpenCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 	static Widget fsb_box = NULL ;
 
@@ -219,10 +218,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	QuitCB			- callback for quit button
 */
-void QuitCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from applicaiton   */
-caddr_t		call_data;	/*  data from widget class  */
+void QuitCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     exit (0);
 }
@@ -231,10 +227,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	HelpCB			- callback for help button
 */
-void HelpCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void HelpCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 	static Widget message_box = NULL ;
 
@@ -248,10 +241,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	ReadCB	- callback for fsb activate
 */
-void ReadCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void ReadCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     FileData * filedata = (FileData *) client_data ;
     String file_name ;
@@ -294,10 +284,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	ValueCB		- callback for scrollbar
 */
-void ValueCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void ValueCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     FileData * filedata = (FileData *) client_data ;
 
@@ -312,10 +299,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	DrawCB			- callback for drawing area
 */
-void DrawCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+void DrawCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
 
     XmDrawingAreaCallbackStruct * dacs =
@@ -350,8 +334,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	CreateHelp		- create help window
 */
-Widget CreateHelp (parent)
-	Widget		parent;		/*  parent widget	*/
+Widget CreateHelp(Widget parent)
 {
 	Widget		button;
 	Widget		message_box;	/*  Message Dialog 	*/
@@ -403,10 +386,7 @@ XmNfont screen resource.");
 	return (message_box);
 }
 
-void WarnUser (widget, format, name)
-Widget widget ;
-String format ;
-String name ;
+void WarnUser(Widget widget, String format, String name)
 {
     /* better ui needed */
     printf(format, name);
@@ -415,10 +395,7 @@ String name ;
 
 /*************************** FILE STUFF **********************************/
 
-void InitFile(widget, filedata, argc, argv)
-Widget		widget;
-FileData *       filedata;
-int argc;     char **argv;
+void InitFile(Widget widget, FileData * filedata, int argc, char ** argv)
 {
     Arg args[5];
     int	n ;
@@ -454,9 +431,7 @@ int argc;     char **argv;
 }
 
 
-Boolean BuildLineTable(filedata, file_name)
-FileData * filedata ;
-String file_name ;
+Boolean BuildLineTable(FileData * filedata, String file_name)
 {
     FILE  *in_file ;
     char linebuff[256] ;
@@ -485,8 +460,7 @@ String file_name ;
     }
 }
 
-void ReDraw(filedata)
-FileData * filedata ;
+void ReDraw(FileData * filedata)
 {
     /* Display as many line as slider_size actually shows, since
        slider_size is computed relative to the work_area height */
@@ -516,8 +490,7 @@ FileData * filedata ;
     }
 }
 
-void ReSize(filedata)
-FileData * filedata ;
+void ReSize(FileData * filedata)
 {
     /* Just update the scrollbar internals here, don't bother to redisplay
        since the gravity is none */

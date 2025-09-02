@@ -97,9 +97,7 @@ InitializeDemoForm(Widget form)
  *
  */
 int
-main(argc, argv)
-int argc;
-char **argv;
+main(int argc, char **argv)
 {
     Arg args[5];
     Cardinal argcnt;

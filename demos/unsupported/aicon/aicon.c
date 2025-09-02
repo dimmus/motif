@@ -113,9 +113,7 @@ DefCB(
 
 }
 static void
-AppModalDialogWarning (w, str)
-Widget w;
-String str;
+AppModalDialogWarning (Widget w, String str)
 {
     static Widget warning_dialog = NULL ;
     XmString message_string ;
@@ -137,9 +135,7 @@ String str;
 
 
 static void
-PopulateContainer(cont, dir)
-Widget cont ;
-String dir ;
+PopulateContainer(Widget cont, String dir)
 {
     char icon_fullname[256] ;
 #if defined (SYS_DIR) || defined (NDIR)
@@ -219,25 +215,16 @@ String dir ;
 }
 
 
-static void QuitCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-XtPointer		client_data;	/*  data from application   */
-XtPointer		call_data;	/*  data from widget class  */
+static void QuitCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     exit(0);
 }
-static void UnMapCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-XtPointer		client_data;	/*  data from application   */
-XtPointer		call_data;	/*  data from widget class  */
+static void UnMapCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     XtUnmanageChild(w);
 }
 
-static void OKCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-XtPointer		client_data;	/*  data from application   */
-XtPointer		call_data;	/*  data from widget class  */
+static void OKCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     Widget cont = *(Widget*)client_data ;
     String dir ;
@@ -254,10 +241,7 @@ XtPointer		call_data;	/*  data from widget class  */
     PopulateContainer(cont, dir);
 }
 
-static void OpenCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-XtPointer		client_data;	/*  data from application   */
-XtPointer		call_data;	/*  data from widget class  */
+static void OpenCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     static Widget fsb_box = NULL ;
 
@@ -283,9 +267,7 @@ XtPointer		call_data;	/*  data from widget class  */
     XtManageChild (fsb_box);
 }
 
-static Widget CreateMainWindowWithMenuBar(toplevel, client_data)
-Widget toplevel ;
-XtPointer client_data ;
+static Widget CreateMainWindowWithMenuBar(Widget toplevel, XtPointer client_data)
 {
     Widget	main_window, menu_bar, menu_pane, cascade, button ;
 

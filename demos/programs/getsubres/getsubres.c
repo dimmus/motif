@@ -41,8 +41,8 @@
 #include <Xm/IconHP.h>
 #include <Xm/ClipWindowP.h>
 
-static void QuitCB ();
-static void HelpCB ();
+static void QuitCB(Widget w, XtPointer client_data, XtPointer call_data);
+static void HelpCB(Widget w, XtPointer client_data, XtPointer call_data);
 
 typedef struct _ClassArrayRec {
     String name ;
@@ -216,8 +216,7 @@ static void InitClassArray () {
 }
 
 
-static WidgetClass GetClassPointer(class)
-String class ;
+static WidgetClass GetClassPointer(String class)
 {
     Cardinal i ;
     static Boolean first_time = True ;
@@ -261,8 +260,7 @@ AddToBuffer (String fmt, ...)
 }
 
 
-static void GetPrintRes (name)
-String name ;
+static void GetPrintRes(String name)
 {
     Cardinal i, j, k, num_resources, num_sec;
     XtResourceList resource_list ;
@@ -373,8 +371,7 @@ static String fallbacks[] = {
 
 #define APP_CLASS "XmdGetsubres"
 
-int main(argc, argv)
-int argc ; char **argv;
+int main(int argc, char ** argv)
 {
     Widget toplevel, main_window, menu_bar, menu_pane, cascade,
            button, viewer ;
@@ -479,10 +476,7 @@ int argc ; char **argv;
 /*-------------------------------------------------------------
 **	QuitCB			- callback for quit button
 */
-static void QuitCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from applicaiton   */
-caddr_t		call_data;	/*  data from widget class  */
+static void QuitCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     exit (0);
 }
@@ -490,10 +484,7 @@ caddr_t		call_data;	/*  data from widget class  */
 /*-------------------------------------------------------------
 **	HelpCB			- callback for help button
 */
-static void HelpCB (w, client_data, call_data)
-Widget		w;		/*  widget id		*/
-caddr_t		client_data;	/*  data from application   */
-caddr_t		call_data;	/*  data from widget class  */
+static void HelpCB(Widget w, XtPointer client_data, XtPointer call_data)
 {
     static Widget help_widget = NULL ;
 

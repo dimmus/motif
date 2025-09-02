@@ -441,11 +441,7 @@ find_suffix(char *filename)
     return(filename);
 }
 
-static void readIcon(str, icon, mask, fg, bg)
-     char *str;
-     Pixmap *icon;
-     Pixmap *mask;
-     Pixel fg, bg;
+static void readIcon(char * str, Pixmap * icon, Pixmap * mask, Pixel fg, Pixel bg)
 {
   if (str != NULL) {
     char msk[256];
