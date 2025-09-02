@@ -1,5 +1,7 @@
 %{
 #define _POSIX_C_SOURCE 200809L
+#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 /*
  * Motif
  *
@@ -28,6 +30,7 @@
 #if defined(__STDC__)
 #include <string.h>
 #endif
+#include <stdio.h>
 #include <unistd.h>
 
 #ifndef XmConst
