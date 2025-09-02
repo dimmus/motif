@@ -324,8 +324,7 @@ void db_incorporate()
 
 
 
-void db_read_ints_and_string(header)
-    _db_header_ptr   header;
+void db_read_ints_and_string(_db_header_ptr header)
 
 /*
  *++
@@ -418,8 +417,7 @@ void db_read_ints_and_string(header)
 
 
 
-void db_read_char_table(header)
-    _db_header_ptr   header;
+void db_read_char_table(_db_header_ptr header)
 
 /*
  *++
@@ -509,8 +507,7 @@ void db_read_char_table(header)
 
 
 
-void db_read_length_and_string(header)
-    _db_header_ptr   header;
+void db_read_length_and_string(_db_header_ptr header)
 
 /*
  *++
@@ -670,8 +667,7 @@ void db_read_length_and_string(header)
 
 
 
-void db_read_int_and_shorts(header)
-    _db_header_ptr   header;
+void db_read_int_and_shorts(_db_header_ptr header)
 
 /*
  *++
@@ -955,8 +951,7 @@ static char ABSOLUTE_PATH[] = "\
 %N\
 %S";
 
-String init_wmd_path(filename)
-    String	filename ;
+String init_wmd_path(String filename)
 {
     String path;
     String old_path;

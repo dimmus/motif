@@ -2321,11 +2321,8 @@ void lex_filter_unprintable_chars
 **--
 **/
 
-static void	dump_token( az_current_lex_buffer,
-		    l_lex_pos)
-
-lex_buffer_type	*az_current_lex_buffer;
-int		l_lex_pos;
+static void	dump_token(lex_buffer_type *az_current_lex_buffer,
+		    int l_lex_pos)
 {
     unsigned char    c_buffer[l_max_lex_buffer_pos +2];
     lex_buffer_type *az_lex_buffer;
@@ -2401,8 +2398,7 @@ int		l_lex_pos;
 #define k_max_int 2147483647
 #define k_max_div_10 214748364
 
-long		cvt_ascii_to_long(c_text)
-unsigned char XmConst	*c_text;
+long		cvt_ascii_to_long(unsigned char XmConst *c_text)
 {
     unsigned long   	l_value;
     int			pos;
@@ -2466,11 +2462,7 @@ potential_overflow:
 **--
 **/
 
-sym_value_entry_type *create_str_entry (l_size, l_charset, az_charset_entry)
-
-    int				l_size;
-    int				l_charset;
-    sym_value_entry_type	*az_charset_entry;
+sym_value_entry_type *create_str_entry(int l_size, int l_charset, sym_value_entry_type *az_charset_entry)
 
 
 {

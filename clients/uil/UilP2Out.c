@@ -947,10 +947,7 @@ if( urm_status != MrmSUCCESS)
 **--
 **/
 
-void extract_subtree_control (list_entry, menu_entry, count)
-    sym_list_entry_type		*list_entry;
-    sym_control_entry_type	**menu_entry;
-    int				*count;
+void extract_subtree_control(sym_list_entry_type *list_entry, sym_control_entry_type **menu_entry, int *count)
 
 {
 
@@ -1012,9 +1009,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 **--
 **/
 
-void extract_create_callback (list_entry, create_entry)
-    sym_list_entry_type		*list_entry;
-    sym_callback_entry_type	**create_entry;
+void extract_create_callback(sym_list_entry_type *list_entry, sym_callback_entry_type **create_entry)
 
 {
 
@@ -1090,9 +1085,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 **--
 **/
 
-void process_all_callbacks (list_entry, arglist_index)
-    sym_list_entry_type		*list_entry;
-    int				*arglist_index;
+void process_all_callbacks (sym_list_entry_type *list_entry, int *arglist_index)
 
 {
 
@@ -1160,10 +1153,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 **--
 **/
 
-void process_all_arguments (list_entry, arglist_index, related_count)
-    sym_list_entry_type		*list_entry;
-    int				*arglist_index;
-    int				*related_count;
+void process_all_arguments(sym_list_entry_type *list_entry, int *arglist_index, int *related_count)
 
 {
 
@@ -1231,9 +1221,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 **--
 **/
 
-void process_all_controls (list_entry, widget_index)
-    sym_list_entry_type		*list_entry;
-    int				*widget_index;
+void process_all_controls (sym_list_entry_type *list_entry, int *widget_index)
 
 {
 
@@ -1303,9 +1291,7 @@ for (list_member=(sym_obj_entry_type *)list_entry->obj_header.az_next;
 **--
 **/
 
-void	out_emit_value( value_entry )
-
-sym_value_entry_type	*value_entry;
+void	out_emit_value(sym_value_entry_type *value_entry)
 
 {
     MrmCode	    access;
@@ -2194,9 +2180,7 @@ emit_callback_procedures
 **--
 **/
 
-int	count_proc(proc_list, count)
-sym_list_entry_type	*proc_list;
-int			count;
+int	count_proc(sym_list_entry_type *proc_list, int count)
 
 {
     sym_obj_entry_type		*proc_list_next;
@@ -2379,11 +2363,7 @@ void	emit_callback_procedures
 **--
 **/
 
-void	emit_argument( argument_entry, arglist_index, related_arg_count )
-
-sym_argument_entry_type	*argument_entry;
-int			arglist_index;
-int			*related_arg_count;
+void	emit_argument(sym_argument_entry_type *argument_entry, int arglist_index, int *related_arg_count)
 
 {
 sym_value_entry_type		*arg_name_entry;
@@ -2544,10 +2524,7 @@ if( urm_status != MrmSUCCESS)
 **--
 **/
 
-void	emit_control( control_entry, control_offset )
-
-sym_control_entry_type	*control_entry;
-int			control_offset;
+void	emit_control(sym_control_entry_type *control_entry, int control_offset)
 
 {
     MrmCode		    access;
@@ -2641,16 +2618,8 @@ int			control_offset;
 **--
 **/
 
-MrmCode	ref_value(value_entry,
-		  arg_type, arg_value, arg_access, arg_index, arg_id, arg_group)
-
-sym_value_entry_type	*value_entry;
-MrmCode			*arg_type;
-long			*arg_value;
-MrmCode			*arg_access;
-char			**arg_index;
-MrmResource_id		*arg_id;
-MrmCode			*arg_group;
+MrmCode	ref_value(sym_value_entry_type *value_entry,
+		  MrmCode *arg_type, long *arg_value, MrmCode *arg_access, char **arg_index, MrmResource_id *arg_id, MrmCode *arg_group)
 
 {
 
@@ -2804,12 +2773,7 @@ MrmCode			*arg_group;
 **--
 **/
 
-MrmCode	ref_control(control_entry, access, index, id)
-
-sym_control_entry_type	*control_entry;
-MrmCode			*access;
-char			**index;
-MrmResource_id		*id;
+MrmCode	ref_control(sym_control_entry_type *control_entry, MrmCode *access, char **index, MrmResource_id *id)
 
 {
 
@@ -2922,9 +2886,7 @@ MrmResource_id		*id;
 **--
 **/
 
-void	issue_urm_error( problem )
-
-char	*problem;
+void	issue_urm_error(char *problem)
 
 {
     char    buffer[132];
@@ -2966,9 +2928,7 @@ char	*problem;
  *--
  */
 
-MrmCode Urm_code_from_uil_type( uil_type )
-
-int	uil_type;
+MrmCode Urm_code_from_uil_type(int uil_type)
 
 {
 
@@ -3045,9 +3005,7 @@ int	uil_type;
 **--
 **/
 
-int	compute_color_table_size(table_entry)
-
-sym_value_entry_type	*table_entry;
+int	compute_color_table_size(sym_value_entry_type *table_entry)
 
 {
     sym_value_entry_type    *color_entry;
@@ -3151,10 +3109,7 @@ sym_value_entry_type	*table_entry;
 **--
 **/
 
-void	create_color_table(table_entry, buffer)
-
-sym_value_entry_type	*table_entry;
-char			*buffer;
+void	create_color_table(sym_value_entry_type *table_entry, char *buffer)
 
 {
     RGMColorTable	    *table;
@@ -3268,9 +3223,7 @@ char			*buffer;
 **--
 **/
 
-int	compute_icon_size(icon_entry)
-
-sym_value_entry_type	*icon_entry;
+int	compute_icon_size(sym_value_entry_type *icon_entry)
 
 {
     int			    size;
@@ -3386,10 +3339,7 @@ sym_value_entry_type	*icon_entry;
 **--
 **/
 
-void	create_icon(icon_entry,buffer)
-
-sym_value_entry_type	*icon_entry;
-char			*buffer;
+void	create_icon(sym_value_entry_type *icon_entry, char *buffer)
 
 {
     sym_value_entry_type    *row_entry;
@@ -3543,9 +3493,7 @@ char			*buffer;
 **--
 **/
 
-int compute_list_size (list_entry, type)
-    sym_list_entry_type		*list_entry;
-    int				type;
+int compute_list_size(sym_list_entry_type *list_entry, int type)
 
 {
 
@@ -3621,7 +3569,7 @@ return count;
 **--
 **/
 
-void create_int_compression_codes ()
+void create_int_compression_codes(void)
 {
 
 /*

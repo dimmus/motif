@@ -177,10 +177,7 @@ static int		off_info_cnt = 0;
 **--
 **/
 
-void		save_widget_machine_code ( widget_entry, az_context )
-
-sym_widget_entry_type	* widget_entry;
-URMResourceContext	* az_context;
+void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceContext *az_context)
 
 {
 
@@ -381,11 +378,7 @@ URMResourceContext	* az_context;
 **
 **--
 **/
-void	unload_stack( rec, rec_size, az_src_rec )
-
-char			*rec;
-int			rec_size;
-src_source_record_type	*az_src_rec;
+void	unload_stack(char *rec, int rec_size, src_source_record_type *az_src_rec)
 
 {
 
@@ -899,10 +892,7 @@ src_source_record_type	*az_src_rec;
 **--
 **/
 
-void		save_value_machine_code ( value_entry, az_context )
-
-sym_value_entry_type	* value_entry;
-URMResourceContext	* az_context;
+void		save_value_machine_code(sym_value_entry_type *value_entry, URMResourceContext *az_context)
 
 {
     src_source_record_type	* az_src_rec;
@@ -1177,10 +1167,7 @@ URMResourceContext	* az_context;
 **--
 **/
 
-void		save_module_machine_code ( az_src_rec, az_context )
-
-src_source_record_type	* az_src_rec;
-URMResourceContext	* az_context;
+void		save_module_machine_code(src_source_record_type *az_src_rec, URMResourceContext *az_context)
 
 {
 
@@ -1329,10 +1316,7 @@ void	off_put
 **--
 **/
 
-void	off_get (off_type, off_offset)
-
-unsigned short		* off_type;
-unsigned short		* off_offset;
+void	off_get(unsigned short *off_type, unsigned short *off_offset)
 
 {
     off_info_type	* off_info_ptr;
@@ -1544,10 +1528,7 @@ char * group_from_code
 }
 
 
-void format_arg_value (argval_ptr, buffer)
-
-RGMArgValuePtr		argval_ptr;
-char			* buffer;
+void format_arg_value(RGMArgValuePtr argval_ptr, char *buffer)
 
 /*
  *++

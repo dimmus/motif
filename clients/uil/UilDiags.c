@@ -849,9 +849,7 @@ void	diag_reset_overflow_handler()
 **--
 **/
 
-void	diag_handler( l_error )
-
-int	l_error;
+void	diag_handler(int l_error)
 
 {
     /*
@@ -934,9 +932,7 @@ int	l_error;
 **--
 **/
 
-void	diag_issue_internal_error( error_text )
-
-char	* error_text;
+void	diag_issue_internal_error(char *error_text)
 
 {
 
@@ -1008,13 +1004,7 @@ static char	XmConst *severity_table [] =
     { success_text, info_text, warning_text, error_text, severe_text, };
 
 void	write_msg_to_standard_error
-		(message_number, src_buffer, ptr_buffer, msg_buffer, loc_buffer)
-
-XmConst int   message_number;
-XmConst char  *src_buffer;
-XmConst char  *ptr_buffer;
-XmConst char  *msg_buffer;
-XmConst char  *loc_buffer;
+		(XmConst int message_number, XmConst char *src_buffer, XmConst char *ptr_buffer, XmConst char *msg_buffer, XmConst char *loc_buffer)
 
 {
 
@@ -1127,9 +1117,7 @@ XmConst char  *loc_buffer;
 **--
 **/
 
-char XmConst *diag_get_message_abbrev( d_message_number )
-
-int	d_message_number;
+char XmConst *diag_get_message_abbrev(int d_message_number)
 
 {
     return
@@ -1173,7 +1161,7 @@ int	d_message_number;
 **--
 **/
 
-void	diag_report_status ( )
+void	diag_report_status(void)
 
 {
     Uil_continue_type	return_status;

@@ -249,9 +249,7 @@ static void	common_main()
 **--
 **/
 
-void	uil_exit(severity)
-
-int	severity;
+void	uil_exit(int severity)
 
 {
 
@@ -319,9 +317,7 @@ int	severity;
 **--
 **/
 
-int	main( l_argc, rac_argv )
-int	l_argc;
-char	*rac_argv[ ];
+int	main(int l_argc, char *rac_argv[])
 {
 
     setlocale(LC_ALL, "");
@@ -572,8 +568,7 @@ char            *status_data)
  * Local function to provide compiler wrapup processing. It is called both
  * from the longjmp and sequential paths in the callable compiler above.
  */
-static void UilWrapup (compile_desc)
-    Uil_compile_desc_type	*compile_desc;
+static void UilWrapup(Uil_compile_desc_type *compile_desc)
 
 {
 

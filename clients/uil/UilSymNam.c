@@ -120,10 +120,7 @@ static char rcsid[] = "$TOG: UilSymNam.c /main/13 1997/09/08 11:12:50 cshi $"
 **/
 
 sym_name_entry_type
-    *sym_find_name(l_length, c_text)
-
-int	l_length;	/* length of name to find */
-char	*c_text;	/* text of the name */
+    *sym_find_name(int l_length, char *c_text)
 
 {
     sym_name_entry_type	*az_current_name;
@@ -213,10 +210,7 @@ char	*c_text;	/* text of the name */
 **--
 **/
 
-sym_name_entry_type *sym_insert_name(l_length, c_text)
-
-int	l_length;	/* length of name to insert */
-char	*c_text;	/* text of the name */
+sym_name_entry_type *sym_insert_name(int l_length, char *c_text)
 
 {
     sym_name_entry_type	*az_previous_name;
@@ -335,10 +329,7 @@ insert_name:
 **--
 **/
 
-int	hash_function(l_length, c_value)
-
-int	l_length;
-char	*c_value;
+int	hash_function(int l_length, char *c_value)
 {
 #ifdef WORD64
 #define _shift 3

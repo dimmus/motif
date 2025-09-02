@@ -667,10 +667,7 @@ void	sar_unset_object_flags
 **--
 **/
 
-void		sar_set_list_type
-			( current_frame )
-
-yystype		* current_frame;
+void		sar_set_list_type(yystype *current_frame)
 
 {
 
@@ -886,9 +883,7 @@ void		sar_set_object_variant(yystype *current_frame)
 **--
 **/
 
-yystype		* sem_find_object ( current_frame )
-
-yystype 	* current_frame;
+yystype		* sem_find_object(yystype *current_frame)
 
 {
 
@@ -1127,10 +1122,7 @@ void		sar_object_reference(yystype *ref_frame)
 **--
 **/
 
-void		sar_update_parent_list
-			( control_list_frame )
-
-yystype 	* control_list_frame;
+void		sar_update_parent_list(yystype *control_list_frame)
 
 {
     yystype			* widget_frame;
@@ -1349,10 +1341,7 @@ sym_parent_list_type		*parent_ptr;
 **--
 **/
 
-void		sar_save_feature
-			( feature_frame )
-
-yystype 	* feature_frame;
+void		sar_save_feature(yystype *feature_frame)
 
 {
     yystype			* widget_frame;
@@ -1464,12 +1453,7 @@ yystype 	* feature_frame;
 **
 **--
 **/
-void		sar_save_argument_pair
-  		  ( argument_frame, value_frame, equals_frame)
-
-yystype 	* argument_frame;
-yystype 	* value_frame;
-yystype		* equals_frame;
+void		sar_save_argument_pair(yystype *argument_frame, yystype *value_frame, yystype *equals_frame)
 
 {
 
@@ -1584,12 +1568,7 @@ yystype		* equals_frame;
 **--
 **/
 
-void		sar_save_reason_binding
-  		  	( reason_frame, proc_ref_frame, equals_frame )
-
-yystype		* reason_frame;
-yystype 	* proc_ref_frame;
-yystype 	* equals_frame;
+void		sar_save_reason_binding(yystype *reason_frame, yystype *proc_ref_frame, yystype *equals_frame)
 
 {
 
@@ -1687,11 +1666,7 @@ yystype 	* equals_frame;
 **--
 **/
 
-void		sar_save_control_item
-			( managed_frame, item_frame )
-
-yystype		* managed_frame;
-yystype		* item_frame;
+void		sar_save_control_item(yystype *managed_frame, yystype *item_frame)
 
 {
 
@@ -1778,11 +1753,7 @@ yystype		* item_frame;
 **--
 **/
 
-void		sar_save_control_widget
-			( control_frame, item_frame )
-
-yystype		* control_frame;
-yystype		* item_frame;
+void		sar_save_control_widget(yystype *control_frame, yystype *item_frame)
 
 {
 
@@ -1881,12 +1852,7 @@ yystype		* item_frame;
 **--
 **/
 
-void		sar_save_user_proc_ref_src
-			( procedure_frame, proc_id_frame, proc_arg_frame)
-
-yystype		* procedure_frame;
-yystype 	* proc_id_frame;
-yystype 	* proc_arg_frame;
+void		sar_save_user_proc_ref_src(yystype *procedure_frame, yystype *proc_id_frame, yystype *proc_arg_frame)
 
 {
     sym_proc_ref_entry_type	* proc_ref_entry;
@@ -1937,12 +1903,7 @@ yystype 	* proc_arg_frame;
 **--
 **/
 
-void		sar_process_proc_ref
-			( proc_id_frame, proc_arg_frame, context )
-
-yystype 	* proc_id_frame;
-yystype 	* proc_arg_frame;
-int		context;
+void		sar_process_proc_ref(yystype *proc_id_frame, yystype *proc_arg_frame, int context)
 
 {
 
@@ -2026,10 +1987,7 @@ int		context;
 **--
 **/
 
-void		sar_add_list_entry
-  		  	( entry_frame )
-
-yystype		* entry_frame;
+void		sar_add_list_entry(yystype *entry_frame)
 
 {
     yystype			* list_frame;
@@ -2145,10 +2103,7 @@ yystype		* entry_frame;
 **--
 **/
 
-void		sar_add_forward_list_entry
-  		  	( entry_frame )
-
-yystype		* entry_frame;
+void		sar_add_forward_list_entry(yystype *entry_frame)
 
 {
     yystype			* list_frame;
@@ -2224,9 +2179,7 @@ yystype		* entry_frame;
 **--
 **/
 
-void	sar_verify_object ( current_frame )
-
-yystype			* current_frame;
+void	sar_verify_object(yystype *current_frame)
 
 {
 yystype				* obj_frame;
@@ -2340,8 +2293,7 @@ if (widget_type == uil_sym_user_defined_object)
 **--
 **/
 
-sym_entry_type	* sem_allocate_node
-	(unsigned char node_tag, unsigned short node_size )
+sym_entry_type	* sem_allocate_node(unsigned char node_tag, unsigned short node_size)
 
 {
 
@@ -2382,9 +2334,7 @@ sym_entry_type	* sem_allocate_node
 **--
 **/
 
-void	sem_free_node ( node_ptr )
-
-sym_entry_type		* node_ptr;
+void	sem_free_node(sym_entry_type *node_ptr)
 
 {
 

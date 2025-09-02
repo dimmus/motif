@@ -221,9 +221,7 @@ typedef int boolean;
 #include "UilIODef.h"
 #include "UilDiagDef.h"
 #include "UilSarDef.h"
-#if defined(linux) || defined(__APPLE__) || defined(sun)
 #define YYSTYPE yystype
-#endif
 #include "UilLexPars.h"
 #include "UilCmdDef.h"
 #include "UilLexDef.h"
