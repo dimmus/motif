@@ -59,9 +59,15 @@
 #define _POSIX_C_SOURCE 200809L
 #define _DEFAULT_SOURCE
 #define _GNU_SOURCE
+#define _BSD_SOURCE
 
 #include <stdio.h>
 #include <unistd.h>
+
+/* Explicit declaration for fileno if not available */
+#ifndef fileno
+extern int fileno(FILE *stream);
+#endif
 
 #define TRUE  1
 #define FALSE 0
