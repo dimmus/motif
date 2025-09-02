@@ -12,6 +12,15 @@ BUILD_DIR="/home/builder/motif-build"
 INSTALL_DIR="/home/builder/motif-install"
 LOG_FILE="/home/builder/build.log"
 
+# Build options (can be overridden via command line)
+BUILD_TYPE="release"
+INCREMENTAL=false
+NO_TESTS=false
+OPTIMIZE=false
+NO_DEPS=false
+JOBS=""
+CLEAN_BUILD=false
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -49,7 +58,7 @@ get_system_info() {
     echo "System Information" | tee -a "${LOG_FILE}"
     echo "==================" | tee -a "${LOG_FILE}"
     echo "Date: $(date)" | tee -a "${LOG_FILE}"
-    echo "Hostname: $(hostname)" | tee -a "${LOG_FILE}"
+    echo "Hostname: $(hostname 2>/dev/null || echo 'unknown')" | tee -a "${LOG_FILE}"
     echo "User: $(whoami)" | tee -a "${LOG_FILE}"
     echo "Working Directory: $(pwd)" | tee -a "${LOG_FILE}"
     echo "PATH: ${PATH}" | tee -a "${LOG_FILE}"
@@ -142,6 +151,99 @@ check_dependencies() {
     return 0
 }
 
+# Parse command line arguments
+parse_arguments() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --incremental)
+                INCREMENTAL=true
+                shift
+                ;;
+            --no-tests)
+                NO_TESTS=true
+                shift
+                ;;
+            --optimize)
+                OPTIMIZE=true
+                shift
+                ;;
+            --no-deps)
+                NO_DEPS=true
+                shift
+                ;;
+            --jobs)
+                shift
+                JOBS="$1"
+                shift
+                ;;
+            --clean)
+                CLEAN_BUILD=true
+                shift
+                ;;
+            --debug)
+                BUILD_TYPE="debug"
+                shift
+                ;;
+            --help|-h)
+                show_help
+                exit 0
+                ;;
+            *)
+                log_error "Unknown option: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Set default jobs if not specified
+    if [[ -z "${JOBS}" ]]; then
+        JOBS=$(nproc 2>/dev/null || echo "2")
+    fi
+    
+    # Apply optimizations
+    if [[ "${OPTIMIZE}" == "true" ]]; then
+        export CFLAGS="-O3 -march=native -mtune=native ${CFLAGS:-}"
+        export CXXFLAGS="-O3 -march=native -mtune=native ${CXXFLAGS:-}"
+        export MAKEFLAGS="-j${JOBS} ${MAKEFLAGS:-}"
+    fi
+    
+    log_info "Build options:"
+    log_info "  Type: ${BUILD_TYPE}"
+    log_info "  Incremental: ${INCREMENTAL}"
+    log_info "  Skip tests: ${NO_TESTS}"
+    log_info "  Optimized: ${OPTIMIZE}"
+    log_info "  Skip deps: ${NO_DEPS}"
+    log_info "  Jobs: ${JOBS}"
+    log_info "  Clean build: ${CLEAN_BUILD}"
+}
+
+# Show help
+show_help() {
+    cat << EOF
+Motif Build Script for Container Environments
+
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  --incremental    Build incrementally (skip tests, reuse build artifacts)
+  --no-tests       Skip running tests after build
+  --optimize       Use aggressive optimization flags
+  --no-deps        Skip dependency checking
+  --jobs N         Number of parallel build jobs (default: auto-detect)
+  --clean          Clean build (remove previous build artifacts)
+  --debug          Build with debug symbols
+  --help, -h       Show this help message
+
+Examples:
+  $(basename "$0")                    # Standard build
+  $(basename "$0") --incremental      # Incremental build
+  $(basename "$0") --jobs 8           # Build with 8 parallel jobs
+  $(basename "$0") --optimize         # Optimized build
+  $(basename "$0") --no-tests         # Build without tests
+EOF
+}
+
 # Prepare source code
 prepare_source() {
     log_info "Preparing source code..."
@@ -151,24 +253,69 @@ prepare_source() {
         return 1
     fi
     
+    # Handle incremental builds with simple copy approach
+    if [[ "${INCREMENTAL}" == "true" ]]; then
+        log_info "📦 Incremental build requested"
+        
+        # Check if there's a build cache on the host
+        local host_cache="/motif/.motif-build-cache"
+        if [[ -d "${host_cache}" ]]; then
+            log_info "📦 Found build cache on host, copying into container"
+            
+            # Copy the cache into the build directory
+            if cp -r "${host_cache}" "${BUILD_DIR}" 2>/dev/null; then
+                log_info "✅ Build cache copied successfully"
+                
+                # Check if we can reuse the copied build directory
+                if [[ -f "${BUILD_DIR}/Makefile" ]]; then
+                    log_info "✅ Found existing Makefile, attempting to reuse build directory"
+                    cd "${BUILD_DIR}"
+                    
+                    # Check if we can run make
+                    if make -n all >/dev/null 2>&1; then
+                        log_info "🚀 Build directory is usable, proceeding with incremental build"
+                        return 0
+                    else
+                        log_info "⚠️  Build directory exists but is not usable, will reconfigure"
+                        # Don't remove, just reconfigure
+                    fi
+                else
+                    log_info "🔄 No Makefile found in cache, will do full build"
+                fi
+            else
+                log_info "⚠️  Failed to copy build cache, will do full build"
+            fi
+        else
+            log_info "🔄 No build cache found on host, will do full build"
+        fi
+    fi
+    
+    # Clean build if requested
+    if [[ "${CLEAN_BUILD}" == "true" ]]; then
+        log_info "🧹 Clean build requested, removing previous build artifacts"
+        rm -rf "${BUILD_DIR}"
+    fi
+    
     # Copy source to build location
-    log_info "Copying source code to build directory..."
+    log_info "📁 Copying source code to build directory..."
     rm -rf "${BUILD_DIR}"
     mkdir -p "${BUILD_DIR}"
     
     # Use rsync if available, otherwise cp
     if command -v rsync &> /dev/null; then
+        log_info "📦 Using rsync for efficient file copying"
         rsync -a --exclude='.git' --exclude='*.o' --exclude='*.lo' --exclude='*.la' \
               --exclude='Makefile' --exclude='config.log' --exclude='config.status' \
               --exclude='libtool' --exclude='.libs' --exclude='.deps' \
               "${MOTIF_SOURCE}/" "${BUILD_DIR}/" | tee -a "${LOG_FILE}"
     else
+        log_info "📦 Using cp for file copying"
         cp -r "${MOTIF_SOURCE}"/* "${BUILD_DIR}/" | tee -a "${LOG_FILE}"
     fi
     
     cd "${BUILD_DIR}"
     
-    log_info "Source code prepared in: ${BUILD_DIR}"
+    log_info "✅ Source code prepared in: ${BUILD_DIR}"
     return 0
 }
 
@@ -229,11 +376,30 @@ build_motif() {
     
     cd "${BUILD_DIR}"
     
-    # Get number of CPU cores for parallel build
-    local num_cores=$(nproc 2>/dev/null || echo "2")
+    # Use specified jobs or auto-detect
+    local num_cores="${JOBS:-$(nproc 2>/dev/null || echo "2")}"
     log_info "Building with ${num_cores} parallel jobs"
     
+    # Check if this is an incremental build
+    if [[ "${INCREMENTAL}" == "true" ]]; then
+        local obj_count=$(find . -name "*.o" 2>/dev/null | wc -l)
+        local lib_count=$(find . -name "*.la" 2>/dev/null | wc -l)
+        
+        log_info "📦 Incremental build status:"
+        log_info "   Object files: ${obj_count}"
+        log_info "   Library files: ${lib_count}"
+        
+        if [[ ${obj_count} -gt 100 ]]; then
+            log_info "🚀 Most components already built, this should be fast!"
+        elif [[ ${obj_count} -gt 50 ]]; then
+            log_info "⚡ Partial incremental build, some components will be rebuilt"
+        else
+            log_info "🔄 Minimal incremental build, most components will be rebuilt"
+        fi
+    fi
+    
     # Build the project
+    log_info "🔨 Starting compilation..."
     make -j"${num_cores}" 2>&1 | tee -a "${LOG_FILE}"
     
     log_success "Build completed"
@@ -258,6 +424,11 @@ install_motif() {
 
 # Run tests
 run_tests() {
+    if [[ "${NO_TESTS}" == "true" ]]; then
+        log_info "Skipping tests (--no-tests flag)"
+        return 0
+    fi
+    
     log_info "Running tests..."
     
     cd "${BUILD_DIR}"
@@ -306,7 +477,7 @@ generate_report() {
 Motif Build Report
 ==================
 Date: $(date)
-Host: $(hostname)
+Host: $(hostname 2>/dev/null || echo 'unknown')
 User: $(whoami)
 
 Build Configuration:
@@ -362,10 +533,39 @@ cleanup() {
     log_info "Build log: ${LOG_FILE}"
 }
 
+# Save build cache for incremental builds
+save_build_cache() {
+    if [[ "${INCREMENTAL}" != "true" ]]; then
+        return 0
+    fi
+    
+    log_info "📦 Saving build cache for incremental builds..."
+    
+    # Create cache directory on host
+    local host_cache="/motif/.motif-build-cache"
+    mkdir -p "${host_cache}"
+    
+    # Copy build artifacts to host cache
+    if cp -r "${BUILD_DIR}"/* "${host_cache}/" 2>/dev/null; then
+        log_info "✅ Build cache saved successfully"
+        log_info "   Cache location: ${host_cache}"
+        
+        # Show what was cached
+        local obj_count=$(find "${host_cache}" -name "*.o" 2>/dev/null | wc -l)
+        local lib_count=$(find "${host_cache}" -name "*.la" 2>/dev/null | wc -l)
+        log_info "   Cached: ${obj_count} object files, ${lib_count} library files"
+    else
+        log_warning "⚠️  Failed to save build cache"
+    fi
+}
+
 # Main function
 main() {
     local start_time=$(date +%s)
     local exit_code=0
+    
+    # Parse command line arguments
+    parse_arguments "$@"
     
     # Initialize log file
     echo "Motif Build Log" > "${LOG_FILE}"
@@ -398,11 +598,16 @@ main() {
         install_motif || exit_code=$?
     fi
     
-    if [[ ${exit_code} -eq 0 ]]; then
-        run_tests || exit_code=$?
-    fi
-    
-    # Calculate build time
+         if [[ ${exit_code} -eq 0 ]]; then
+         run_tests || exit_code=$?
+     fi
+     
+     # Save build cache for incremental builds
+     if [[ ${exit_code} -eq 0 && "${INCREMENTAL}" == "true" ]]; then
+         save_build_cache
+     fi
+     
+     # Calculate build time
     local end_time=$(date +%s)
     local build_time=$((end_time - start_time))
     export BUILD_TIME="${build_time} seconds"

@@ -1411,8 +1411,7 @@ units_specification
 
 int yylex(void);
 
-int yyerror (s)
-char	* s;
+int yyerror(char *s)
 {
 	return 0;
 }

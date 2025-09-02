@@ -172,8 +172,7 @@ int used		= 0;
 
 
 void
-add_token (t)					/* keep sorted by name */
-    Token t;
+add_token(Token t)
 {
     int i, j;
 
@@ -199,7 +198,7 @@ add_token (t)					/* keep sorted by name */
 
 
 
-int yywrap ()
+int yywrap(void)
 {
     int i;
 

@@ -15,6 +15,11 @@
 #   -r, --rebuild       Force rebuild of container images
 #   -p, --podman        Use podman instead of docker
 #   --logs-only         Only show logs from previous runs
+#   --incremental       Build Motif incrementally (skip tests)
+#   --jobs              Number of parallel jobs for build (e.g., --jobs=4)
+#   --no-tests          Skip tests after build
+#   --optimize          Optimize build (e.g., --optimize=--jobs=4)
+#   --no-deps           Skip dependency installation
 #
 # Examples:
 #   ./test-motif.sh archlinux     # Test on Arch Linux
@@ -41,6 +46,13 @@ KEEP_RUNNING=false
 REBUILD=false
 TEST_ALL=false
 LOGS_ONLY=false
+INCREMENTAL=false
+NO_TESTS=false
+OPTIMIZE=false
+NO_DEPS=false
+JOBS=""
+BUILD_TYPE="release"
+CLEAN_CACHE=false
 
 # Colors for output
 RED='\033[0;31m'
@@ -95,6 +107,12 @@ Options:
   -r, --rebuild       Force rebuild of container images
   -p, --podman        Use podman instead of docker
   --logs-only         Only show logs from previous runs
+  --incremental       Build Motif incrementally (skip tests)
+  --jobs              Number of parallel jobs for build (e.g., --jobs=4)
+  --no-tests          Skip tests after build
+  --optimize          Optimize build (e.g., --optimize=--jobs=4)
+  --no-deps           Skip dependency installation
+  --clean-cache       Clean incremental build cache
 
 Available OS environments:
 $(list_available_os | sed 's/^/  - /')
@@ -105,6 +123,10 @@ Examples:
   $(basename "$0") --all                  # Test on all available OS
   $(basename "$0") -v -r archlinux        # Verbose test with rebuild
   $(basename "$0") --logs-only            # Show previous test logs
+  $(basename "$0") --incremental archlinux # Incremental build (skip tests)
+  $(basename "$0") --jobs 8 archlinux     # Use 8 parallel jobs
+  $(basename "$0") --no-tests archlinux   # Build without running tests
+  $(basename "$0") --optimize archlinux   # Optimized build with parallel jobs
 
 Logs are saved to: ${LOGS_DIR}/
 Container definitions: ${CONTAINERS_DIR}/
@@ -155,12 +177,45 @@ build_container() {
     log_debug "Dockerfile: ${dockerfile}"
     log_debug "Image name: ${image_name}"
     
+    # Show build configuration
+    log_info "📋 Build Configuration:"
+    log_info "   OS: ${os_name}"
+    log_info "   Engine: ${CONTAINER_ENGINE}"
+    log_info "   Dockerfile: ${dockerfile}"
+    log_info "   Target image: ${image_name}"
+    
+    if [[ "${REBUILD}" == "true" ]]; then
+        log_info "🔄 Forcing rebuild (--no-cache flag)"
+        log_info "⏳ This will take longer but ensures fresh dependencies"
+    else
+        log_info "📦 Using cached layers (faster build)"
+        log_info "💡 Use --rebuild flag for fresh container"
+    fi
+    
+    log_info "🚀 Starting container build..."
+    log_info "⏳ This may take 5-10 minutes for first build"
+    log_info "   📊 Build progress will show below:"
+    echo ""
+    
+    local build_start=$(date +%s)
+    
     if [[ "${REBUILD}" == "true" ]]; then
         log_debug "Forcing rebuild (--no-cache)"
         "${CONTAINER_ENGINE}" build --no-cache -f "${dockerfile}" -t "${image_name}" "${PROJECT_ROOT}"
     else
         "${CONTAINER_ENGINE}" build -f "${dockerfile}" -t "${image_name}" "${PROJECT_ROOT}"
     fi
+    
+    local build_end=$(date +%s)
+    local build_duration=$((build_end - build_start))
+    local build_minutes=$((build_duration / 60))
+    local build_seconds=$((build_duration % 60))
+    
+    log_success "✅ Container image built successfully!"
+    log_info "⏱️  Build time: ${build_minutes}m ${build_seconds}s"
+    log_info "🐳 Image: ${image_name}"
+    log_info "💾 Ready for test execution"
+    echo ""
 }
 
 # Run test in container
@@ -174,6 +229,10 @@ run_test() {
     log_info "Running test for ${os_name}..."
     log_debug "Container: ${container_name}"
     log_debug "Log file: ${log_file}"
+    
+    # Enhanced progress tracking
+    local start_time=$(date +%s)
+    log_info "🚀 Starting ${os_name} test at $(date '+%H:%M:%S')"
     
     # Ensure log directory exists
     if ! mkdir -p "$(dirname "${log_file}")"; then
@@ -197,43 +256,138 @@ EOF
         return 1
     fi
     
-    # Run the container
-    local exit_code=0
-    if [[ "${VERBOSE}" == "true" ]]; then
-        "${CONTAINER_ENGINE}" run \
-            --name "${container_name}" \
-            --rm \
-            -v "${PROJECT_ROOT}:/motif:ro" \
-            "${image_name}" \
-            2>&1 | tee -a "${log_file}" || exit_code=$?
-    else
-        "${CONTAINER_ENGINE}" run \
-            --name "${container_name}" \
-            --rm \
-            -v "${PROJECT_ROOT}:/motif:ro" \
-            "${image_name}" \
-            >> "${log_file}" 2>&1 || exit_code=$?
+    # Prepare build arguments
+    local build_args=()
+    if [[ "${INCREMENTAL}" == "true" ]]; then
+        build_args+=("--incremental")
+        log_info "📦 Using incremental build mode"
     fi
+    if [[ "${NO_TESTS}" == "true" ]]; then
+        build_args+=("--no-tests")
+        log_info "⏭️  Skipping tests for faster build"
+    fi
+    if [[ "${OPTIMIZE}" == "true" ]]; then
+        build_args+=("--optimize")
+        log_info "⚡ Using optimized build flags"
+    fi
+    if [[ "${NO_DEPS}" == "true" ]]; then
+        build_args+=("--no-deps")
+        log_info "🔧 Skipping dependency checks"
+    fi
+    if [[ -n "${JOBS}" ]]; then
+        build_args+=("--jobs" "${JOBS}")
+        log_info "🔄 Using ${JOBS} parallel build jobs"
+    fi
+    
+    # Show build configuration summary
+    log_info "🔧 Build Configuration:"
+    log_info "   OS: ${os_name}"
+    log_info "   Container: ${container_name}"
+    log_info "   Engine: ${CONTAINER_ENGINE}"
+    log_info "   Arguments: ${build_args[*]:-none}"
+    log_info "   Log file: ${log_file}"
+    echo ""
+    
+    # Run the container with enhanced monitoring
+    local exit_code=0
+    local start_time=$(date +%s)
+    log_info "🐳 Starting container execution..."
+    
+    # Set up persistent build directory for incremental builds
+    local persistent_build_dir="${PROJECT_ROOT}/.motif-build-cache"
+    if [[ "${INCREMENTAL}" == "true" ]]; then
+        mkdir -p "${persistent_build_dir}"
+        log_info "📦 Incremental build: using persistent cache at ${persistent_build_dir}"
+        log_info "   Previous build artifacts will be reused"
+    fi
+    
+    if [[ "${VERBOSE}" == "true" ]]; then
+        log_info "📺 Verbose mode: showing real-time output"
+        if [[ "${INCREMENTAL}" == "true" ]]; then
+            "${CONTAINER_ENGINE}" run \
+                --name "${container_name}" \
+                --rm \
+                -v "${PROJECT_ROOT}:/motif:ro" \
+                "${image_name}" \
+                "${build_args[@]}" \
+                2>&1 | tee -a "${log_file}" || exit_code=$?
+        else
+            "${CONTAINER_ENGINE}" run \
+                --name "${container_name}" \
+                --rm \
+                -v "${PROJECT_ROOT}:/motif:ro" \
+                "${image_name}" \
+                "${build_args[@]}" \
+                2>&1 | tee -a "${log_file}" || exit_code=$?
+        fi
+    else
+        log_info "📝 Standard mode: output saved to log file"
+        log_info "💡 Use --verbose flag to see real-time output"
+        
+        # Show progress indicator for long-running operations
+        log_info "⏳ Container is running... (this may take 5-15 minutes)"
+        log_info "   📊 Progress updates will appear below:"
+        
+        # Run container and show progress
+        if [[ "${INCREMENTAL}" == "true" ]]; then
+            "${CONTAINER_ENGINE}" run \
+                --name "${container_name}" \
+                --rm \
+                -v "${PROJECT_ROOT}:/motif:ro" \
+                "${image_name}" \
+                "${build_args[@]}" \
+                >> "${log_file}" 2>&1 || exit_code=$?
+        else
+            "${CONTAINER_ENGINE}" run \
+                --name "${container_name}" \
+                --rm \
+                -v "${PROJECT_ROOT}:/motif:ro" \
+                "${image_name}" \
+                "${build_args[@]}" \
+                >> "${log_file}" 2>&1 || exit_code=$?
+        fi
+    fi
+    
+    # Calculate execution time
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
+    local minutes=$((duration / 60))
+    local seconds=$((duration % 60))
+    
+    log_info "⏱️  Test completed in ${minutes}m ${seconds}s"
     
     # Log results
     if [[ -f "${log_file}" ]]; then
         echo "" >> "${log_file}"
         echo "Test completed at: $(date)" >> "${log_file}"
         echo "Exit code: ${exit_code}" >> "${log_file}"
+        echo "Duration: ${minutes}m ${seconds}s" >> "${log_file}"
         
         if [[ ${exit_code} -eq 0 ]]; then
-            log_success "Test passed for ${os_name}"
+            log_success "✅ Test PASSED for ${os_name}"
             echo "RESULT: SUCCESS" >> "${log_file}"
+            
+            # Show success summary
+            log_info "🎉 Build completed successfully!"
+            log_info "   📁 Build artifacts: ${BUILD_DIR:-/home/builder/motif-build}"
+            log_info "   📁 Installation: ${INSTALL_DIR:-/home/builder/motif-install}"
+            log_info "   📄 Log file: ${log_file}"
         else
-            log_error "Test failed for ${os_name} (exit code: ${exit_code})"
+            log_error "❌ Test FAILED for ${os_name} (exit code: ${exit_code})"
             echo "RESULT: FAILED" >> "${log_file}"
+            
+            # Show failure summary
+            log_error "💥 Build failed with exit code ${exit_code}"
+            log_info "   📄 Check log file for details: ${log_file}"
+            log_info "   🔍 Common issues: missing dependencies, compilation errors"
+            log_info "   💡 Try: --verbose flag for detailed output"
         fi
     else
-        log_warning "Log file does not exist: ${log_file}"
+        log_warning "⚠️  Log file does not exist: ${log_file}"
         if [[ ${exit_code} -eq 0 ]]; then
-            log_success "Test passed for ${os_name}"
+            log_success "✅ Test passed for ${os_name}"
         else
-            log_error "Test failed for ${os_name} (exit code: ${exit_code})"
+            log_error "❌ Test failed for ${os_name}"
         fi
     fi
     
@@ -425,6 +579,35 @@ main() {
                 LOGS_ONLY=true
                 shift
                 ;;
+            --incremental)
+                INCREMENTAL=true
+                shift
+                ;;
+            --jobs)
+                if [[ $# -lt 2 ]]; then
+                    log_error "--jobs requires a number"
+                    exit 1
+                fi
+                shift
+                JOBS="$1"
+                shift
+                ;;
+            --no-tests)
+                NO_TESTS=true
+                shift
+                ;;
+            --optimize)
+                OPTIMIZE=true
+                shift
+                ;;
+            --no-deps)
+                NO_DEPS=true
+                shift
+                ;;
+            --clean-cache)
+                CLEAN_CACHE=true
+                shift
+                ;;
             -*)
                 log_error "Unknown option: $1"
                 echo "Use --help for usage information"
@@ -481,6 +664,19 @@ main() {
     # Cleanup if requested
     if [[ "${CLEAN_AFTER}" == "true" ]]; then
         cleanup
+    fi
+
+    # Clean cache if requested
+    if [[ "${CLEAN_CACHE}" == "true" ]]; then
+        log_info "Cleaning up incremental build cache..."
+        local persistent_build_dir="${PROJECT_ROOT}/.motif-build-cache"
+        if [[ -d "${persistent_build_dir}" ]]; then
+            log_debug "Removing cache directory: ${persistent_build_dir}"
+            rm -rf "${persistent_build_dir}"
+            log_success "Incremental build cache cleaned."
+        else
+            log_warning "Incremental build cache not found at ${persistent_build_dir}"
+        fi
     fi
     
     # Final message

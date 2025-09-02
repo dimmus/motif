@@ -10,117 +10,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-# Update system and install base development tools
-RUN pacman -Syu --noconfirm && \
-    pacman -S --noconfirm \
-        base-devel \
-        git \
-        autoconf \
-        automake \
-        libtool \
-        pkgconf \
-        make \
-        gcc \
-        clang \
-        cmake \
-        ninja \
-        gdb \
-        valgrind \
-        strace \
-        ltrace \
-        time \
-        which \
-        file \
-        binutils \
-        coreutils \
-        findutils \
-        grep \
-        sed \
-        gawk \
-        tar \
-        gzip \
-        xz \
-        bzip2 \
-        unzip \
-        curl \
-        wget
+# Copy and run package installation helper script
+COPY tools/dev/env/containers/install-packages.sh /tmp/install-packages.sh
+RUN chmod +x /tmp/install-packages.sh && /tmp/install-packages.sh
 
-# Install X11 and Motif dependencies
-RUN pacman -S --noconfirm \
-        xorg-server-devel \
-        xorg-util-macros \
-        libx11 \
-        libxt \
-        libxmu \
-        libxpm \
-        libxext \
-        libxft \
-        libxrender \
-        libxrandr \
-        libxi \
-        libxinerama \
-        libxcursor \
-        libxdamage \
-        libxfixes \
-        libxcomposite \
-        libxss \
-        libxtst \
-        libxv \
-        libxvmc \
-        libxxf86vm \
-        libxres \
-        libsm \
-        libice \
-        libxau \
-        libxdmcp \
-        libxcb \
-        xcb-util \
-        xcb-util-image \
-        xcb-util-keysyms \
-        xcb-util-renderutil \
-        xcb-util-wm \
-        xcb-util-xrm
 
-# Install additional libraries that Motif might need
-RUN pacman -S --noconfirm \
-        fontconfig \
-        freetype2 \
-        libpng \
-        libjpeg-turbo \
-        libtiff \
-        zlib \
-        bzip2 \
-        expat \
-        libxml2 \
-        libxslt \
-        openssl \
-        glibc \
-        glib2 \
-        pcre \
-        pcre2
 
-# Install build tools and utilities
-RUN pacman -S --noconfirm \
-        flex \
-        bison \
-        m4 \
-        gettext \
-        intltool \
-        patch \
-        diffutils \
-        dos2unix
 
-# Install documentation and development tools
-RUN pacman -S --noconfirm \
-        man-db \
-        man-pages \
-        texinfo \
-        help2man \
-        doxygen \
-        graphviz
-
-# Clean package cache to reduce image size
-RUN pacman -Scc --noconfirm
 
 # Create working directory
 WORKDIR /build
@@ -145,5 +41,5 @@ RUN useradd -m -s /bin/bash builder && \
 USER builder
 WORKDIR /home/builder
 
-# Default command
-CMD ["/usr/local/bin/build-motif.sh"]
+# Set entrypoint to the build script
+ENTRYPOINT ["/usr/local/bin/build-motif.sh"]
