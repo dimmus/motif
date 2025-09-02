@@ -1,4 +1,5 @@
 %{
+#define _POSIX_C_SOURCE 200809L
 /*
  * Motif
  *
@@ -27,6 +28,7 @@
 #if defined(__STDC__)
 #include <string.h>
 #endif
+#include <unistd.h>
 
 #ifndef XmConst
 #if defined(__STDC__) || !defined( NO_CONST )

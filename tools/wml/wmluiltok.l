@@ -56,6 +56,7 @@
 %a 9999						/* transitions */
 
 %{
+#define _POSIX_C_SOURCE 200809L
 
 #include <stdio.h>
 #include <unistd.h>
