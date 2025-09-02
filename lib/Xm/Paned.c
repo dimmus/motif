@@ -1391,7 +1391,7 @@ HandleSash(Widget sash, XtPointer junk, XtPointer callData)
 		params, num);
 	return;
     }
-    if (isascii(action_type) && islower(action_type))
+    if (action_type >= 0 && action_type <= 127 && islower(action_type))
 	action_type = toupper(action_type);
     loc = GetEventLocation(pw, event);
     if (event->xany.type == KeyPress) {
