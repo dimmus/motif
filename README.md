@@ -12,6 +12,8 @@ This is a modern, actively maintained implementation of the Motif toolkit, prese
 
 ## Build Status
 
+**🚀 Modern C Standard Support**: This project now fully supports the **C23 standard** and is compatible with **GCC 15**, ensuring cutting-edge compiler features and future-proof development.
+
 This project is continuously tested on multiple Linux distributions with both **GCC** and **Clang** compilers to ensure maximum compatibility and reliability across different build environments:
 
 ### GitHub Actions (GitHub)
@@ -53,6 +55,8 @@ This fusion created a toolkit that powered:
 - **Accessibility**: Built-in keyboard navigation and screen reader support
 
 ### Modern Enhancements
+- **C23 Standard Support**: Built with the latest C language standard for modern development
+- **GCC 15 Compatibility**: Future-ready compiler support with automatic fallback
 - **Xft Font Rendering**: Anti-aliased text with modern font support
 - **PNG/JPEG Support**: Modern image format integration
 - **UTF-8 Support**: Full Unicode text handling
@@ -95,11 +99,17 @@ autoconf >= 2.69
 automake >= 1.16.1
 autopoint
 pkg-config
-gcc (or compatible C compiler)
+gcc >= 13.0 (supports C23 standard and GCC 15 compatibility)
 make (GNU Make required)
 flex/lex
 yacc/bison
 ```
+
+**Compiler Support**:
+- **GCC 13.0+**: Full C23 standard support with `-std=c23` flag
+- **GCC 15**: Future-ready compatibility (uses `-std=c2x` fallback for current GCC versions)
+- **Clang**: Compatible with modern C standards
+- **Legacy Compilers**: Graceful fallback to C99/C11 standards
 
 #### Runtime Dependencies
 ```bash
@@ -268,11 +278,14 @@ int main(int argc, char *argv[])
 
 ### Compilation
 ```bash
-# Using pkg-config (recommended)
+# Using pkg-config (recommended) - automatically uses C23 standard
 gcc -o myapp myapp.c `pkg-config --cflags --libs motif`
 
-# Manual compilation
-gcc -o myapp myapp.c -I/usr/local/include -L/usr/local/lib -lXm -lXt -lX11
+# Manual compilation with C23 standard
+gcc -std=c23 -o myapp myapp.c -I/usr/local/include -L/usr/local/lib -lXm -lXt -lX11
+
+# For GCC 15 compatibility (automatic fallback to c2x if c23 not supported)
+gcc -std=c2x -o myapp myapp.c -I/usr/local/include -L/usr/local/lib -lXm -lXt -lX11
 ```
 
 ### UIL Development
