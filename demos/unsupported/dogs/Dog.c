@@ -100,7 +100,7 @@ static void Initialize(DogWidget request, DogWidget new);
 static void Redisplay(Widget w, XEvent *event, Region region);
 static void Resize(DogWidget w);
 static void Destroy(DogWidget w);
-static Boolean SetValues(DogWidget current, DogWidget request, DogWidget new);
+static Boolean SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *num_args);
 static XtGeometryResult QueryGeometry(DogWidget w, XtWidgetGeometry *intended, XtWidgetGeometry *reply);
 
 static void bark_dog(DogWidget w, XEvent *event);
@@ -386,30 +386,33 @@ static void Redisplay(Widget w, XEvent *event, Region region)
     }
 }
 
-static Boolean SetValues(DogWidget current, DogWidget request, DogWidget new)
+static Boolean SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *num_args)
 {
+    DogWidget curr = (DogWidget)current;
+    DogWidget req = (DogWidget)request;
+    DogWidget nw = (DogWidget)new;
     Boolean redraw = False;
 
-    if (ShadowThickness(new) != ShadowThickness(current) ||
-	HighlightThickness(new) != HighlightThickness(current)) {
-	_DogPosition(new);
+    if (ShadowThickness(nw) != ShadowThickness(curr) ||
+	HighlightThickness(nw) != HighlightThickness(curr)) {
+	_DogPosition(nw);
 	redraw = True;
     }
-    if (Foreground(new) != Foreground(current) ||
-        BackgroundPixel(new) != BackgroundPixel(current)) {
-	XtReleaseGC ((Widget)current, DrawGC(current));
-        create_GC(new);
-	destroy_pixmaps(new);
-	create_pixmaps(new);
-	switch (CurrPx(new)) {
+    if (Foreground(nw) != Foreground(curr) ||
+        BackgroundPixel(nw) != BackgroundPixel(curr)) {
+	XtReleaseGC ((Widget)curr, DrawGC(curr));
+        create_GC(nw);
+	destroy_pixmaps(nw);
+	create_pixmaps(nw);
+	switch (CurrPx(nw)) {
 	    case(UpPx) :
-		SetPixmap(new,UpPx,UpPixmap(new),up_width,up_height);
+		SetPixmap(nw,UpPx,UpPixmap(nw),up_width,up_height);
 		break;
 	    case(DownPx) :
-		SetPixmap(new,DownPx,DownPixmap(new),down_width,down_height);
+		SetPixmap(nw,DownPx,DownPixmap(nw),down_width,down_height);
 		break;
 	    case(BarkPx) :
-		SetPixmap(new,BarkPx,BarkPixmap(new),bark_width,bark_height);
+		SetPixmap(nw,BarkPx,BarkPixmap(nw),bark_width,bark_height);
 		break;
 	}
 	redraw = True;

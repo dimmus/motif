@@ -51,9 +51,9 @@ static char rcsid[] = "$TOG: Square.c /main/6 1998/03/25 18:18:13 csn $"
 
 static void ClassInitialize();
 static void Initialize(SquareWidget req, SquareWidget new);
-static Boolean SetValues(SquareWidget curr, SquareWidget req, SquareWidget new);
+static Boolean SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *num_args);
 static void ConstraintInitialize(Widget req, Widget new);
-static Boolean ConstraintSetValues(Widget old, Widget ref, Widget new);
+static Boolean ConstraintSetValues(Widget old, Widget ref, Widget new, ArgList args, Cardinal *num_args);
 
 static XmPartResource resources[] = {
     {
@@ -198,12 +198,16 @@ static void Initialize(SquareWidget req, SquareWidget new)
     }
 }
 
-static Boolean SetValues(SquareWidget curr, SquareWidget req, SquareWidget new)
+static Boolean SetValues(Widget current, Widget request, Widget new, ArgList args, Cardinal *num_args)
 {
-    if (MajorDimension(new) != SquareWIDTH &&
-	MajorDimension(new) != SquareHEIGHT) {
+    SquareWidget curr = (SquareWidget)current;
+    SquareWidget req = (SquareWidget)request;
+    SquareWidget nw = (SquareWidget)new;
+    
+    if (MajorDimension(nw) != SquareWIDTH &&
+	MajorDimension(nw) != SquareHEIGHT) {
 	XtWarning("Square: invalid majorDimension");
-	MajorDimension(new) = MajorDimension(curr);
+	MajorDimension(nw) = MajorDimension(curr);
     }
     return (False);
 }
@@ -222,7 +226,7 @@ static void ConstraintInitialize(Widget req, Widget new)
     }
 }
 
-static Boolean ConstraintSetValues(Widget old, Widget ref, Widget new)
+static Boolean ConstraintSetValues(Widget old, Widget ref, Widget new, ArgList args, Cardinal *num_args)
 {
     Boolean redraw = False;
 
