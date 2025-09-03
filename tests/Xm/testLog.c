@@ -334,12 +334,6 @@ END_TEST
 START_TEST(test_build_time_config)
 {
    // Test that build-time configuration is available
-#ifdef XM_LOGGING
-   ck_assert_msg(XM_TRUE, "XM_LOGGING is defined");
-#else
-   ck_assert_msg(XM_FALSE, "XM_LOGGING should be defined when logging is enabled");
-#endif
-
 #ifdef XM_DEFAULT_LOG_LEVEL
    ck_assert_msg(XM_TRUE, "XM_DEFAULT_LOG_LEVEL is defined");
 #else

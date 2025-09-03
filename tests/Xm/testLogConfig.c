@@ -16,13 +16,6 @@ void log_teardown(void);
 // Test that build-time configuration defines are available
 START_TEST(test_build_time_defines)
 {
-   // Test XM_LOGGING define
-#ifdef XM_LOGGING
-   ck_assert_msg(XM_TRUE, "XM_LOGGING should be defined when logging is enabled");
-#else
-   ck_assert_msg(XM_FALSE, "XM_LOGGING is not defined - logging may be disabled");
-#endif
-
    // Test XM_DEFAULT_LOG_LEVEL define
 #ifdef XM_DEFAULT_LOG_LEVEL
    ck_assert_msg(XM_TRUE, "XM_DEFAULT_LOG_LEVEL should be defined");

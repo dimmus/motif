@@ -123,9 +123,8 @@ AC_ARG_ENABLE([uil-debug],
   [AS_HELP_STRING([--enable-uil-debug],[enable UIL compiler debugging support])],
   [enable_uil_debug=$enableval],[enable_uil_debug=no])
 
-AC_ARG_ENABLE([logging],
-  [AS_HELP_STRING([--enable-logging],[enable enhanced logging system])],
-  [enable_logging=$enableval],[enable_logging=yes])
+# Logging is always enabled - no option to disable it
+enable_logging=yes
 
 AC_ARG_WITH([log-level],
   [AS_HELP_STRING([--with-log-level=LEVEL],[set default logging level (DEBUG, INFO (default), WARN, ERROR, CRITICAL)])],
@@ -149,7 +148,6 @@ AM_CONDITIONAL([XM_WITH_PNG],  test "x$with_png"  == "xyes")
 AM_CONDITIONAL([XM_MSGCAT],    test "x$enable_message_catalog" == "xyes")
 AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests" == "xyes")
 AM_CONDITIONAL([XM_UIL_DEBUG], test "x$enable_uil_debug" == "xyes")
-AM_CONDITIONAL([XM_LOGGING], test "x$enable_logging" == "xyes")
 
 dnl Substitutions for lib/Xm/Xm.h
 AC_SUBST([XM_MAJOR], [XM_MAJOR])
@@ -178,9 +176,6 @@ AC_DEFINE_UNQUOTED([XM_PRINTING],
 	$(test "x$enable_printing" != "xyes"; echo $?),
 	[1 if Motif was built with printing support])
 
-AS_IF([test "x$enable_logging" == "xyes"],
-  [AC_DEFINE([XM_LOGGING], [1], [1 if Motif was built with enhanced logging support])])
-
 case "$with_log_level" in
     DEBUG)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_DBG" ;;
     INFO)     XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
@@ -190,13 +185,13 @@ case "$with_log_level" in
     *)        XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
 esac
 
-AS_IF([test "x$enable_logging" == "xyes"],
-  [AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_LEVEL], [$XM_DEFAULT_LOG_LEVEL_VAL],
-	[Default logging level for Motif])])
+# Logging is always enabled
+AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_LEVEL], [$XM_DEFAULT_LOG_LEVEL_VAL],
+	[Default logging level for Motif])
 
-AS_IF([test "x$enable_logging" == "xyes"],
-  [AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_OUTPUT], ["$with_log_output"],
-	[Default logging output destination])])
+# Logging is always enabled
+AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_OUTPUT], ["$with_log_output"],
+	[Default logging output destination])
 
 AC_DEFINE_UNQUOTED([XM_MSGCAT],
 	$(test "x$enable_message_catalog" != "xyes" ; echo $?),
@@ -394,7 +389,7 @@ XM_ADD_FEATURE([BUILD],[wchar],[${enable_wchar_support}])
 XM_ADD_FEATURE([BUILD],[local_string],[${enable_local_string_funcs}])
 XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
 XM_ADD_FEATURE([DBG],[xthreads_dbg],[${enable_xthreads_debug}])
-XM_ADD_FEATURE([DBG],[log],[${enable_logging}])
+XM_ADD_FEATURE([DBG],[log],[yes])
 XM_ADD_FEATURE([DBG],[log_output],[${with_log_output}])
 XM_ADD_FEATURE([DBG],[log_level],[${with_log_level}])
 

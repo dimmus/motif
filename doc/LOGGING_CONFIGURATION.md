@@ -10,10 +10,10 @@ The XM Logging System provides configurable logging output destinations that can
 
 The logging system can be configured during the build process using the following configure options:
 
-#### `--enable-logging`
-- **Default**: `yes`
-- **Description**: Enable or disable the enhanced logging system
-- **Example**: `./configure --enable-logging` or `./configure --disable-logging`
+#### Logging System
+- **Status**: Always enabled
+- **Description**: The enhanced logging system is always compiled in and available
+- **Note**: Logging cannot be disabled at build time
 
 #### `--with-log-level=LEVEL`
 - **Default**: `INFO`
@@ -31,13 +31,13 @@ The logging system can be configured during the build process using the followin
 
 ```bash
 # Development build with debug logging to stdout
-./configure --enable-logging --with-log-level=DEBUG --with-log-output=stdout
+./configure --with-log-level=DEBUG --with-log-output=stdout
 
 # Production build with error logging to stderr
-./configure --enable-logging --with-log-level=ERROR --with-log-output=stderr
+./configure --with-log-level=ERROR --with-log-output=stderr
 
-# Build with logging disabled
-./configure --disable-logging
+# Default build (logging always enabled with INFO level to stderr)
+./configure
 ```
 
 ## Runtime Configuration
@@ -113,7 +113,7 @@ Only messages at or above the configured level are output.
 
 The following preprocessor defines are set based on the configuration:
 
-- `XM_LOGGING` - Defined as 1 if logging is enabled
+- Logging is always enabled (no conditional compilation needed)
 - `XM_DEFAULT_LOG_LEVEL` - Set to the configured log level constant
 - `XM_DEFAULT_LOG_OUTPUT` - Set to the configured output destination string
 
@@ -158,22 +158,17 @@ The following files have been updated to use the new logging system:
 
 ### Conditional Compilation
 
-The logging system uses conditional compilation to ensure it only affects builds where it's enabled:
+The logging system is always available and compiled in:
 
 ```c
-#ifdef XM_LOGGING
-    // Logging code
-    XmLogPrint(domain, level, file, func, line, fmt, ...);
-#else
-    // Fallback to traditional methods
-    fprintf(stderr, fmt, ...);
-#endif
+// Logging is always available
+XmLogPrint(domain, level, file, func, line, fmt, ...);
 ```
 
 ## Troubleshooting
 
 ### Logs Not Appearing
-1. Check if logging is enabled: `grep XM_LOGGING config.h`
+1. Logging is always enabled - no need to check
 2. Verify log level: `grep XM_DEFAULT_LOG_LEVEL config.h`
 3. Check output destination: `grep XM_DEFAULT_LOG_OUTPUT config.h`
 

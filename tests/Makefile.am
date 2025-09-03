@@ -6,7 +6,7 @@ AM_CPPFLAGS          = -I$(top_builddir)/include -I$(top_builddir)/lib $(X_CFLAG
 AM_CFLAGS            = -fprofile-arcs -ftest-coverage
 check_PROGRAMS       = tests
 noinst_HEADERS       = suites.h
-tests_SOURCES        = runner.c testXmFontListEntry.c testXmFontList.c testPng.c testJpeg.c testSvg.c testLog.c testLogConfig.c
+tests_SOURCES        = runner.c Xm/testXmFontListEntry.c Xm/testXmFontList.c Xm/testPng.c Xm/testJpeg.c Xm/testSvg.c Xm/testLog.c Xm/testLogConfig.c
 tests_LDADD          = $(top_builddir)/lib/Xm/libXm.la $(X_LIBS) $(CHECK_LIBS) -lgcov
 
 # Auto test subdirectories
