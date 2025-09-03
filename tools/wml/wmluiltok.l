@@ -57,7 +57,9 @@
 
 %{
 #define _POSIX_C_SOURCE 200809L
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
 #define _GNU_SOURCE
 #define _BSD_SOURCE
 
