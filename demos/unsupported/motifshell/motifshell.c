@@ -52,8 +52,7 @@ static char rcsid[] = "$TOG: motifshell.c /main/7 1997/03/31 13:41:20 dbl $"
 *                                                  *
 ****************************************************/
 
-#define _POSIX_C_SOURCE 200809L
-#define _GNU_SOURCE
+
 #include <X11/Xos.h>
 
 /*  Standard C headers  */

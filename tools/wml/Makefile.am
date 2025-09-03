@@ -48,7 +48,7 @@ wmllex.c: wmllex.l
 		else echo "Error: No lexer output file found"; exit 1; fi; \
 	fi
 	@echo "Adding feature test macros to wmllex.c"
-	@sed -i '1i#define _POSIX_C_SOURCE 200809L\n#define _DEFAULT_SOURCE\n#define _GNU_SOURCE\n#define _BSD_SOURCE\n#include <stdio.h>\n#include <unistd.h>' wmllex.c
+	@sed -i '1i#include <stdio.h>\n#include <unistd.h>' wmllex.c
 
 wmluiltok.c: wmluiltok.l
 	@echo "Generating wmluiltok.c from wmluiltok.l"
@@ -61,7 +61,7 @@ wmluiltok.c: wmluiltok.l
 		else echo "Error: No lexer output file found for wmluiltok"; exit 1; fi; \
 	fi
 	@echo "Adding feature test macros to wmluiltok.c"
-	@sed -i '1i#define _POSIX_C_SOURCE 200809L\n#define _DEFAULT_SOURCE\n#define _GNU_SOURCE\n#define _BSD_SOURCE\n#include <stdio.h>\n#include <unistd.h>' wmluiltok.c
+	@sed -i '1i#include <stdio.h>\n#include <unistd.h>' wmluiltok.c
 
 wmlsynbld.c: wmlparse.h
 

@@ -27,13 +27,7 @@
 #include <config.h>
 #endif
 
-/* Feature test macros to expose POSIX functions */
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
-#ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE 200809L
-#endif
+/* Feature test macros are now defined globally in configure.ac */
 
 #ifdef REV_INFO
 #ifndef lint
