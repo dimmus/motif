@@ -10,121 +10,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
-# Update system and install base development tools
-# No update command specified
-
-# Install base development tools
-RUN apt-get install -y \
-        build-essential \
-        git \
-        autoconf \
-        automake \
-        libtool \
-        pkg-config \
-        make \
-        gcc \
-        g++ \
-        clang \
-        llvm \
-        cmake \
-        ninja-build \
-        gdb \
-        valgrind \
-        strace \
-        ltrace \
-        time \
-        file \
-        binutils \
-        coreutils \
-        findutils \
-        grep \
-        sed \
-        gawk \
-        tar \
-        gzip \
-        xz-utils \
-        bzip2 \
-        unzip \
-        curl \
-        wget \
-        ca-certificates
-
-# Install X11 and Motif dependencies
-RUN apt-get install -y \
-        xorg-dev \
-        libx11-dev \
-        libxt-dev \
-        libxmu-dev \
-        libxpm-dev \
-        libxext-dev \
-        libxft-dev \
-        libxrender-dev \
-        libxrandr-dev \
-        libxi-dev \
-        libxinerama-dev \
-        libxcursor-dev \
-        libxdamage-dev \
-        libxfixes-dev \
-        libxcomposite-dev \
-        libxss-dev \
-        libxtst-dev \
-        libxv-dev \
-        libxxf86vm-dev \
-        libxres-dev \
-        libsm-dev \
-        libice-dev \
-        libxau-dev \
-        libxdmcp-dev \
-        libxcb1-dev \
-        libxcb-util-dev \
-        libxcb-image0-dev \
-        libxcb-keysyms1-dev \
-        libxcb-render-util0-dev \
-        libxcb-xkb-dev \
-        libxcb-icccm4-dev \
-        libxcb-ewmh-dev
-
-# Install additional libraries that Motif might need
-RUN apt-get install -y \
-        libfontconfig1-dev \
-        libfreetype6-dev \
-        libpng-dev \
-        libjpeg62-turbo-dev \
-        libtiff5-dev \
-        zlib1g-dev \
-        libbz2-dev \
-        libexpat1-dev \
-        libxml2-dev \
-        libxslt1-dev \
-        libssl-dev \
-        libc6-dev \
-        libglib2.0-dev \
-        libpcre3-dev \
-        libpcre2-dev
-
-# Install build tools and utilities
-RUN apt-get install -y \
-        flex \
-        bison \
-        byacc \
-        m4 \
-        gettext \
-        intltool \
-        patch \
-        diffutils \
-        dos2unix
-
-# Install documentation and development tools (optional)
-RUN apt-get install -y \
-        man-db \
-        manpages-dev \
-        texinfo \
-        help2man \
-        doxygen \
-        graphviz
-
-# Clean package cache to reduce image size
-# No cleanup command specified
+# Copy dependency checker and install dependencies using make deps
+COPY tools/dev/deps_check.sh /tmp/deps_check.sh
+RUN chmod +x /tmp/deps_check.sh && /tmp/deps_check.sh
 
 # Create working directory
 WORKDIR /build
@@ -142,7 +30,7 @@ ENV LDFLAGS=""
 ENV MAKEFLAGS="-j$(nproc)"
 
 # Create non-root user for building
-RUN useradd -m -s /bin/bash builder {{CREATE_BUILD_USER}}{{CREATE_BUILD_USER}} \
+RUN useradd -m -s /bin/bash builder && \
     echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 # Switch to builder user

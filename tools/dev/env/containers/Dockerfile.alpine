@@ -1,0 +1,150 @@
+# Dockerfile for testing Motif build on Alpine Linux
+FROM docker.io/alpine:latest
+
+LABEL maintainer="XDE Motif Development Team"
+LABEL description="Alpine Linux environment for testing Motif builds"
+LABEL version="1.0"
+
+# Set environment variables
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Install dependencies directly using apk (Alpine package manager)
+RUN apk update && \
+    apk add --no-cache \
+        build-base \
+        git \
+        autoconf \
+        autoconf-archive \
+        automake \
+        libtool \
+        pkgconf \
+        make \
+        gcc \
+        g++ \
+        clang \
+        llvm \
+        cmake \
+        ninja \
+        gdb \
+        valgrind \
+        strace \
+        ltrace \
+        time \
+        file \
+        binutils \
+        coreutils \
+        findutils \
+        grep \
+        sed \
+        gawk \
+        tar \
+        gzip \
+        xz \
+        bzip2 \
+        unzip \
+        curl \
+        wget \
+        ca-certificates \
+        sudo \
+        bash && \
+    apk add --no-cache \
+        xorg-server-dev \
+        xorgproto \
+        libx11-dev \
+        libxt-dev \
+        libxmu-dev \
+        libxpm-dev \
+        libxext-dev \
+        libxft-dev \
+        libxrender-dev \
+        libxrandr-dev \
+        libxi-dev \
+        libxinerama-dev \
+        libxcursor-dev \
+        libxdamage-dev \
+        libxfixes-dev \
+        libxcomposite-dev \
+        libxscrnsaver-dev \
+        libxtst-dev \
+        libxv-dev \
+        libxxf86vm-dev \
+        libxres-dev \
+        libsm-dev \
+        libice-dev \
+        libxau-dev \
+        libxdmcp-dev \
+        libxcb-dev \
+        xcb-util-dev \
+        xcb-util-image-dev \
+        xcb-util-keysyms-dev \
+        xcb-util-renderutil-dev \
+        xcb-util-wm-dev && \
+    apk add --no-cache \
+        fontconfig-dev \
+        freetype-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        tiff-dev \
+        zlib-dev \
+        bzip2-dev \
+        expat-dev \
+        libxml2-dev \
+        libxslt-dev \
+        openssl-dev \
+        musl-dev \
+        glib-dev \
+        pcre-dev \
+        pcre2-dev && \
+    apk add --no-cache \
+        flex \
+        flex-dev \
+        bison \
+        m4 \
+        gettext \
+        intltool \
+        patch \
+        diffutils \
+        dos2unix && \
+    apk add --no-cache \
+        man-db \
+        man-pages \
+        texinfo \
+        help2man \
+        doxygen \
+        graphviz && \
+    apk add --no-cache \
+        check-dev
+
+# Copy build script (must be done as root)
+COPY tools/dev/env/scripts/build-motif.sh /usr/local/bin/build-motif.sh
+RUN chmod +x /usr/local/bin/build-motif.sh
+
+# Create working directory
+WORKDIR /build
+
+# Set up Alpine-specific build environment
+ENV CC=gcc
+ENV CXX=g++
+ENV CFLAGS="-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+ENV CXXFLAGS="-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+ENV LDFLAGS="-Wl,--as-needed"
+ENV MAKEFLAGS="-j$(nproc)"
+
+# Alpine-specific environment variables
+ENV OPSYS=Linux
+ENV OSVERSION=6000000
+ENV UNAME_s=Linux
+ENV UNAME_r=6.0.0
+ENV UNAME_m=x86_64
+
+# Create non-root user for building
+RUN adduser -D -s /bin/sh builder && \
+    echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+# Switch to builder user
+USER builder
+WORKDIR /home/builder
+
+# Set entrypoint to the build script
+ENTRYPOINT ["/usr/local/bin/build-motif.sh"]

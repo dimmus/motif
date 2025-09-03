@@ -119,6 +119,13 @@ AS_IF([test "x$enable_debug" == "xyes"],
   [AX_APPEND_COMPILE_FLAGS([-Og -ggdb]) AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])],
   [AX_APPEND_COMPILE_FLAGS([-O2])       AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])])
 
+dnl Feature test macros for compatibility across different libc implementations
+dnl These ensure functions like strdup, asprintf, etc. are available
+AX_APPEND_COMPILE_FLAGS([-D_GNU_SOURCE], [CPPFLAGS])
+AX_APPEND_COMPILE_FLAGS([-D_DEFAULT_SOURCE], [CPPFLAGS])
+AX_APPEND_COMPILE_FLAGS([-D_POSIX_C_SOURCE=200809L], [CPPFLAGS])
+AX_APPEND_COMPILE_FLAGS([-D_BSD_SOURCE], [CPPFLAGS])
+
 AC_ARG_ENABLE([uil-debug],
   [AS_HELP_STRING([--enable-uil-debug],[enable UIL compiler debugging support])],
   [enable_uil_debug=$enableval],[enable_uil_debug=no])

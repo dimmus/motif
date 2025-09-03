@@ -592,3 +592,123 @@ fedora:
     cxxflags: "-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches"
     ldflags: "-Wl,-z,relro -Wl,--as-needed -Wl,-z,now"
     custom_vars: []
+
+alpine:
+  base_image: "docker.io/alpine:latest"
+  description: "Alpine Linux"
+  package_manager: "apk"
+  commands:
+    update: "apk update"
+    install: "apk add"
+    cleanup: "apk cache clean"
+  packages:
+    base_tools:
+      - build-base
+      - git
+      - autoconf
+      - autoconf-archive
+      - automake
+      - libtool
+      - pkgconf
+      - make
+      - gcc
+      - g++
+      - clang
+      - llvm
+      - cmake
+      - ninja
+      - gdb
+      - valgrind
+      - strace
+      - ltrace
+      - time
+      - file
+      - binutils
+      - coreutils
+      - findutils
+      - grep
+      - sed
+      - gawk
+      - tar
+      - gzip
+      - xz
+      - bzip2
+      - unzip
+      - curl
+      - wget
+      - ca-certificates
+    x11_deps:
+      - xorg-server-dev
+      - xorg-util-macros
+      - libx11-dev
+      - libxt-dev
+      - libxmu-dev
+      - libxpm-dev
+      - libxext-dev
+      - libxft-dev
+      - libxrender-dev
+      - libxrandr-dev
+      - libxi-dev
+      - libxinerama-dev
+      - libxcursor-dev
+      - libxdamage-dev
+      - libxfixes-dev
+      - libxcomposite-dev
+      - libxss-dev
+      - libxtst-dev
+      - libxv-dev
+      - libxxf86vm-dev
+      - libxres-dev
+      - libsm-dev
+      - libice-dev
+      - libxau-dev
+      - libxdmcp-dev
+      - libxcb-dev
+      - xcb-util-dev
+      - xcb-util-image-dev
+      - xcb-util-keysyms-dev
+      - xcb-util-renderutil-dev
+      - xcb-util-wm-dev
+    additional_libs:
+      - fontconfig-dev
+      - freetype-dev
+      - libpng-dev
+      - libjpeg-turbo-dev
+      - libtiff-dev
+      - zlib-dev
+      - bzip2-dev
+      - expat-dev
+      - libxml2-dev
+      - libxslt-dev
+      - openssl-dev
+      - musl-dev
+      - glib-dev
+      - pcre-dev
+      - pcre2-dev
+    build_tools:
+      - flex
+      - bison
+      - m4
+      - gettext
+      - intltool
+      - patch
+      - diffutils
+      - dos2unix
+    doc_tools:
+      - man-db
+      - man-pages
+      - texinfo
+      - help2man
+      - doxygen
+      - graphviz
+  environment:
+    compiler: "gcc"
+    cflags: "-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+    cxxflags: "-O2 -pipe -fstack-protector-strong -fno-strict-aliasing"
+    ldflags: "-Wl,--as-needed"
+    custom_vars:
+      - "OPSYS=Linux"
+      - "OSVERSION=6000000"
+      - "UNAME_s=Linux"
+      - "UNAME_r=6.0.0"
+      - "UNAME_m=x86_64"
