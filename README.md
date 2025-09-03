@@ -96,6 +96,7 @@ The comprehensive Motif widget set includes:
 ```bash
 # Essential build tools
 autoconf >= 2.69
+autoconf-archive          # Required for additional autoconf macros
 automake >= 1.16.1
 autopoint
 pkg-config
@@ -130,14 +131,14 @@ libXp-dev            # Printing support (if available)
 #### Ubuntu/Debian Installation
 ```bash
 sudo apt-get update
-sudo apt-get install build-essential autoconf automake autopoint pkg-config \
+sudo apt-get install build-essential autoconf autoconf-archive automake autopoint pkg-config \
                      flex bison libx11-dev libxt-dev libxmu-dev libxext-dev \
                      libxpm-dev libxft-dev libjpeg-dev libpng-dev
 ```
 
 #### RHEL/CentOS/Fedora Installation
 ```bash
-sudo yum install gcc autoconf automake autopoint pkgconfig flex bison \
+sudo yum install gcc autoconf autoconf-archive automake autopoint pkgconfig flex bison \
                  libX11-devel libXt-devel libXmu-devel libXext-devel \
                  libXpm-devel libXft-devel libjpeg-devel libpng-devel
 ```
@@ -168,6 +169,40 @@ The dependency checker automatically:
 - Installs required dependencies
 - Handles optional dependencies gracefully
 - Provides clear feedback and next steps
+
+### Troubleshooting
+
+#### Autoconf Error: "possibly undefined macro: dnl"
+If you encounter this error during the build process:
+```
+configure.ac:1: error: possibly undefined macro: dnl
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+autoreconf: error: /usr/bin/autoconf failed with exit status: 1
+```
+
+**Solution**: Install the `autoconf-archive` package which provides additional autoconf macros:
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install autoconf-archive
+
+# Arch Linux
+sudo pacman -S autoconf-archive
+
+# RHEL/CentOS/Fedora
+sudo yum install autoconf-archive
+# or for newer versions:
+sudo dnf install autoconf-archive
+
+# Alpine Linux
+sudo apk add autoconf-archive
+
+# FreeBSD
+sudo pkg install autoconf-archive
+```
+
+After installing `autoconf-archive`, run `./autogen.sh` again to regenerate the configure script.
 
 ## Building and Installation
 

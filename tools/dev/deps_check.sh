@@ -211,6 +211,7 @@ get_package_names() {
         ubuntu|debian|linuxmint)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "autopoint" ;;
                 pkg-config) echo "pkg-config" ;;
@@ -234,6 +235,7 @@ get_package_names() {
         arch|manjaro)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "gettext" ;;
                 pkg-config) echo "pkgconf" ;;
@@ -257,6 +259,7 @@ get_package_names() {
         rhel|centos|fedora|rocky|alma)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "gettext" ;;
                 pkg-config) echo "pkgconfig" ;;
@@ -280,6 +283,7 @@ get_package_names() {
         openindiana|omnios)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "gettext" ;;
                 pkg-config) echo "pkg-config" ;;
@@ -303,6 +307,7 @@ get_package_names() {
         alpine)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "gettext" ;;
                 pkg-config) echo "pkgconf" ;;
@@ -326,6 +331,7 @@ get_package_names() {
         void)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "gettext" ;;
                 pkg-config) echo "pkg-config" ;;
@@ -349,6 +355,7 @@ get_package_names() {
         freebsd)
             case $base_pkg in
                 autoconf) echo "autoconf" ;;
+                autoconf-archive) echo "autoconf-archive" ;;
                 automake) echo "automake" ;;
                 autopoint) echo "gettext" ;;
                 pkg-config) echo "pkgconf" ;;
@@ -377,7 +384,7 @@ check_dependencies() {
     log_info "Checking project dependencies..."
     
     # Define required dependencies (essential for building)
-    required_deps="autoconf automake autopoint pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
+    required_deps="autoconf autoconf-archive automake autopoint pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
     
     # Define optional dependencies (nice to have but not essential)
     optional_deps="libXp"
@@ -439,7 +446,7 @@ install_missing_dependencies() {
     # Get list of missing required packages
     missing_required=""
     missing_optional=""
-    required_deps="autoconf automake autopoint pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
+    required_deps="autoconf autoconf-archive automake autopoint pkg-config gcc make flex bison libX11 libXt libXmu libXext libXpm libXft libjpeg libpng check"
     optional_deps="libXp"
     
     # Check required dependencies
