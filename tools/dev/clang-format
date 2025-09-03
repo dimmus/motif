@@ -36,8 +36,8 @@
 
 # BasedOnStyle: Defines the base coding style to inherit from
 # Options: LLVM, Google, Chromium, Mozilla, WebKit, Microsoft, GNU, None
-# Current: GNU - Uses GNU coding standards as base
-# Example with GNU: Braces on new lines, 2-space indentation
+# Current: GNU - Uses GNU coding standards as base (matches Log.c style)
+# Example with GNU: Braces on new lines, 3-space indentation (customized)
 # Example with Google: Braces on same line, 2-space indentation
 BasedOnStyle: GNU
 
@@ -87,13 +87,21 @@ UseTab: Never
 
 # TabWidth: Number of columns used for tab stops
 # Range: Positive integer
-# Current: 2 - Each tab represents 2 columns
+# Current: 3 - Each tab represents 3 columns (matches IndentWidth)
 # Note: TabWidth and IndentWidth must be the same, or strange things happen.
-TabWidth: 2
+TabWidth: 3
 
 # IndentWidth: Number of columns to use for indentation
 # Range: Positive integer  
-# Current: 2 - Each indentation level is 2 spaces
+# Current: 3 - Each indentation level is 3 spaces (matches Log.c style)
+# Example with 3:
+#   if (condition)
+#   {
+#      if (nested_condition)  // 3 spaces
+#      {
+#         action();           // 6 spaces total
+#      }
+#   }
 # Example with 2:
 #   if (condition)
 #   {
@@ -102,35 +110,27 @@ TabWidth: 2
 #       action();            // 4 spaces total
 #     }
 #   }
-# Example with 4:
-#   if (condition)
-#   {
-#       if (nested_condition)  // 4 spaces
-#       {
-#           action();          // 8 spaces total
-#       }
-#   }
-IndentWidth: 2
+IndentWidth: 3
 
 # PPIndentWidth: Indentation width for preprocessor statements
 # Range: -1 (use IndentWidth) or positive integer
-# Current: 2 - Preprocessor directives indented by 2 spaces
-# Example with 2:
+# Current: 3 - Preprocessor directives indented by 3 spaces (matches IndentWidth)
+# Example with 3:
 #   #ifdef DEBUG
-#     #define LOG(x) printf(x)  // 2 spaces after #ifdef
+#      #define LOG(x) printf(x)  // 3 spaces after #ifdef
 #   #endif
-PPIndentWidth: 2
+PPIndentWidth: 3
 
 # ContinuationIndentWidth: Indent width for line continuations
 # Range: Positive integer
-# Current: 2 - Continuation lines indented by 2 additional spaces
-# Example with 2:
+# Current: 3 - Continuation lines indented by 3 additional spaces (matches Log.c style)
+# Example with 3:
 #   int result = very_long_function_name(parameter1,
 #                                        parameter2);  // aligned to opening paren
 #   // vs for statements that don't align:
 #   if (very_long_condition_that_forces_break &&
-#     another_condition)  // 2 spaces continuation indent
-ContinuationIndentWidth: 2
+#      another_condition)  // 3 spaces continuation indent
+ContinuationIndentWidth: 3
 
 # ------------------------------------------------------------------------------
 # LINE ENDING AND EMPTY LINE SETTINGS
@@ -358,7 +358,7 @@ AlignOperands: Align
 # ------------------------------------------------------------------------------
 
 # AlignConsecutiveAssignments: Align consecutive assignment operators
-# Current: Enabled with specific options
+# Current: Disabled to preserve original variable name alignment pattern
 # Example with Enabled=true:
 #   int    short_var = 1;
 #   double longer_variable = 2.0;
@@ -368,7 +368,7 @@ AlignOperands: Align
 #   double longer_variable = 2.0;
 #   char x = 'a';
 AlignConsecutiveAssignments:
-    Enabled:          true            # Enable alignment of = operators
+    Enabled:          false           # Disable alignment of = operators to preserve original style
     AcrossEmptyLines: false           # Don't align across empty lines
     AcrossComments:   false           # Don't align across comment lines
     AlignCompound:    true            # Align compound assignments (+=, -=, etc.)
