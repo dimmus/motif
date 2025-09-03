@@ -30,7 +30,6 @@
 #include <Xm/XmP.h>
 #include <Xm/DrawP.h>
 #include <Xm/MultiListP.h>
-#include "bitmaps/gray"
 #include <Xm/ScrollBar.h>
 #include <Xm/TraitP.h>
 #include <Xm/TransferT.h>
@@ -41,6 +40,10 @@
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
+#define gray_width 2
+#define gray_height 2
+static char gray_bits[] = {0x01, 0x02};
+
 #define SUPERCLASS ((WidgetClass) &xmPrimitiveClassRec)
 #define NO_SELECTION -1		/* There is currently no anchor. */
 #define IN_COLUMN_HEADER -2	/* The location is in the header. */

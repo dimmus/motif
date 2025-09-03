@@ -30,7 +30,6 @@
 #include <Xm/ActivatableT.h>
 #include <stdio.h>
 #include <Xm/IconButtonP.h>
-#include "bitmaps/gray"
 #include <Xm/ExtP.h>
 #include "PrimitiveI.h"
 #include "XmStrDefsI.h"
@@ -39,6 +38,10 @@
 /************************************************************
 *	TYPEDEFS AND DEFINES
 *************************************************************/
+#define gray_width 2
+#define gray_height 2
+static char gray_bits[] = {0x01, 0x02};
+
 #define SUPERCLASS ((WidgetClass) &xmPrimitiveClassRec)
 #define FILL_SPACE(iw)		((iw)->primitive.highlight_thickness + \
                                  (iw)->primitive.shadow_thickness)
