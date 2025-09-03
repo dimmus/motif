@@ -374,20 +374,6 @@ void XmLogPrintCbStdOut(const XmLogDomain *d,
                               va_list args);
 
 /**
- * @brief Print callback for journald output.
- *
- * This callback redirects to stderr for simplicity.
- */
-void XmLogPrintCbJournald(const XmLogDomain *d,
-                                XmLogLevel level,
-                                const char *file,
-                                const char *fnc,
-                                int line,
-                                const char *fmt,
-                                void *data,
-                                va_list args);
-
-/**
  * @brief Print callback for file output.
  *
  * @param[in] data Should be a FILE* pointer.

@@ -1,17 +1,11 @@
-/**
- * Motif
- *
- * Copyright (c) 2025 Tim Hentenaar.
- * Copyright (c) 1987 - 2012 The Open Group.
- * Licensed under the LGPL 2.1 license.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <check.h>
-#include "Log.h"
+
 #include "suites.h"
+
+#include "Log.h"
 
 // Test that build-time configuration defines are available
 START_TEST(test_build_time_defines)

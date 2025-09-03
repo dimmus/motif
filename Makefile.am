@@ -43,8 +43,8 @@ MAINTAINERCLEANFILES = Makefile.in \
             *.gcda \
             *.gcno \
             *.gcov \
-            $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.gz \
-	        $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).tar.bz2
+            *.tar.gz \
+	        *.tar.xz
 
 SUBDIRS	= data \
             config \

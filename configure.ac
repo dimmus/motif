@@ -1,7 +1,7 @@
 dnl Library version
 m4_define(XM_MAJOR,   2)
 m4_define(XM_MINOR,   4)
-m4_define(XM_PATCH,   0)
+m4_define(XM_PATCH,   1)
 m4_define(XM_VERSION, XM_MAJOR.XM_MINOR.XM_PATCH)
 
 dnl Shared library version (libtool)
@@ -128,7 +128,7 @@ AC_ARG_ENABLE([logging],
   [enable_logging=$enableval],[enable_logging=yes])
 
 AC_ARG_WITH([log-level],
-  [AS_HELP_STRING([--with-log-level=LEVEL],[set default logging level (DEBUG, INFO, WARN, ERROR, CRITICAL)])],
+  [AS_HELP_STRING([--with-log-level=LEVEL],[set default logging level (DEBUG, INFO (default), WARN, ERROR, CRITICAL)])],
   [with_log_level=$withval],[with_log_level=INFO])
 
 AC_ARG_WITH([log-output],
@@ -155,7 +155,7 @@ dnl Substitutions for lib/Xm/Xm.h
 AC_SUBST([XM_MAJOR], [XM_MAJOR])
 AC_SUBST([XM_MINOR], [XM_MINOR])
 AC_SUBST([XM_PATCH], [XM_PATCH])
-AC_SUBST([XM_DEFAULT_LOG_LEVEL], [$with_log_level])
+AC_SUBST([XM_DEFAULT_LOG_LEVEL],  [$with_log_level])
 AC_SUBST([XM_DEFAULT_LOG_OUTPUT], [$with_log_output])
 
 AC_DEFINE_UNQUOTED([XM_WITH_JPEG],
@@ -182,12 +182,12 @@ AS_IF([test "x$enable_logging" == "xyes"],
   [AC_DEFINE([XM_LOGGING], [1], [1 if Motif was built with enhanced logging support])])
 
 case "$with_log_level" in
-    DEBUG)   XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_DBG" ;;
-    INFO)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
-    WARN)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_WARN" ;;
-    ERROR)   XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_ERR" ;;
+    DEBUG)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_DBG" ;;
+    INFO)     XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
+    WARN)     XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_WARN" ;;
+    ERROR)    XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_ERR" ;;
     CRITICAL) XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_CRITICAL" ;;
-    *)       XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
+    *)        XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
 esac
 
 AS_IF([test "x$enable_logging" == "xyes"],
@@ -394,6 +394,9 @@ XM_ADD_FEATURE([BUILD],[wchar],[${enable_wchar_support}])
 XM_ADD_FEATURE([BUILD],[local_string],[${enable_local_string_funcs}])
 XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
 XM_ADD_FEATURE([DBG],[xthreads_dbg],[${enable_xthreads_debug}])
+XM_ADD_FEATURE([DBG],[log],[${enable_logging}])
+XM_ADD_FEATURE([DBG],[log_output],[${with_log_output}])
+XM_ADD_FEATURE([DBG],[log_level],[${with_log_level}])
 
 # XM_ADD_FEATURE([FLAGS],[_POSIX_SOURCE],[${_POSIX_SOURCE}])
 # XM_ADD_FEATURE([FLAGS],[X_NOT_POSIX],[${X_NOT_POSIX}])

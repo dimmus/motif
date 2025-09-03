@@ -56,7 +56,6 @@ static const char *_level_names[] = {
    "DBG"
 };
 
-// Simple color functions - using LOG_COLOR constants
 const char *
 XmLogLevelColorGet(int level)
 {
@@ -80,7 +79,6 @@ XmLogPidGet(void)
    return (unsigned int)getpid();
 }
 
-// Simple domain string creation
 static const char *
 XmLogDomainStrGet(const char *name, const char *color)
 {
@@ -249,8 +247,7 @@ XmLogDomainLevelSet(const char *domain_name, int level)
 int
 XmLogDomainLevelGet(const char *domain_name)
 {
-   if (!domain_name)
-      return XM_LOG_LEVEL_UNKNOWN;
+   if (!domain_name) return XM_LOG_LEVEL_UNKNOWN;
 
    LOG_LOCK();
    for (unsigned int i = 0; i < _log_domains_count; i++)
@@ -273,6 +270,7 @@ XmLogDomainRegisteredLevelSet(int domain, int level)
 {
    if (domain < 0 || (unsigned int)domain >= _log_domains_count)
       return;
+   
    LOG_LOCK();
    _log_domains[domain].level = level;
    LOG_UNLOCK();
@@ -283,6 +281,7 @@ XmLogDomainRegisteredLevelGet(int domain)
 {
    if (domain < 0 || (unsigned int)domain >= _log_domains_count)
       return XM_LOG_LEVEL_UNKNOWN;
+
    return _log_domains[domain].level;
 }
 
@@ -349,7 +348,6 @@ XmLogThreadsEnable(void)
 void
 XmLogColorDisableSet(XmBool disabled)
 {
-   // Simple color disable - just store the flag
    (void)disabled;
 }
 
@@ -362,7 +360,6 @@ XmLogColorDisableGet(void)
 void
 XmLogFileDisableSet(XmBool disabled)
 {
-   // Simple file disable - just store the flag
    (void)disabled;
 }
 
@@ -375,7 +372,6 @@ XmLogFileDisableGet(void)
 void
 XmLogFunctionDisableSet(XmBool disabled)
 {
-   // Simple function disable - just store the flag
    (void)disabled;
 }
 
@@ -385,7 +381,6 @@ XmLogFunctionDisableGet(void)
    return XM_FALSE;
 }
 
-// Print callback implementations
 void
 XmLogPrintCbStdErr(const XmLogDomain *d, XmLogLevel level,
                   const char *file, const char *fnc, int line,
@@ -423,62 +418,47 @@ XmLogPrintCbStdErr(const XmLogDomain *d, XmLogLevel level,
    vfprintf(stderr, fmt, args);
    putc('\n', stderr);
 
-   (void)data; // Suppress unused parameter warning
+   (void)data;
 }
 
 void
 XmLogPrintCbStdOut(const XmLogDomain *d, XmLogLevel level,
-                  const char *file, const char *fnc, int line,
-                  const char *fmt, void *data, va_list args)
+                   const char *file, const char *fnc, int line,
+                   const char *fmt, void *data, va_list args)
 {
    // Simple prefix printing
    const char *level_name =
       (level >= 0 && level < XM_LOG_LEVELS) ? _level_names[level] : "UNK";
 
    // Get colors
-   const char *level_color = XmLogLevelColorGet(level);
+   const char *level_color  = XmLogLevelColorGet(level);
    const char *domain_color = d->color ? d->color : "";
-   const char *reset_color = LOG_COLOR_RESET;
+   const char *reset_color  = LOG_COLOR_RESET;
 
    // Print colored level
-   if (level_color) {
-      fputs(level_color, stdout);
-   }
+   if (level_color) fputs(level_color, stdout);
+
    fputs(level_name, stdout);
-   if (level_color) {
-      fputs(reset_color, stdout);
-   }
+   if (level_color) fputs(reset_color, stdout);
 
    // Print colored domain
-   if (domain_color) {
-      fputs(domain_color, stdout);
-   }
+   if (domain_color) fputs(domain_color, stdout);
+
    fprintf(stdout,
          "<%u>:%s %s:%d %s() ",
          XmLogPidGet(), d->name, file, line, fnc);
-   if (domain_color) {
-      fputs(reset_color, stdout);
-   }
+   if (domain_color) fputs(reset_color, stdout);
 
    vprintf(fmt, args);
    putchar('\n');
 
-   (void)data; // Suppress unused parameter warning
-}
-
-void
-XmLogPrintCbJournald(const XmLogDomain *d, XmLogLevel level,
-                     const char *file, const char *fnc, int line,
-                     const char *fmt, void *data, va_list args)
-{
-   // Redirect to stderr for simplicity
-   XmLogPrintCbStdErr(d, level, file, fnc, line, fmt, data, args);
+   (void)data;
 }
 
 void
 XmLogPrintCbFile(const XmLogDomain *d, XmLogLevel level, const char *file,
-               const char *fnc, int line, const char *fmt, void *data,
-               va_list args)
+                 const char *fnc, int line, const char *fmt, void *data,
+                 va_list args)
 {
    if (!data) return;
 
@@ -489,38 +469,32 @@ XmLogPrintCbFile(const XmLogDomain *d, XmLogLevel level, const char *file,
       (level >= 0 && level < XM_LOG_LEVELS) ? _level_names[level] : "UNK";
 
    // Get colors
-   const char *level_color = XmLogLevelColorGet(level);
+   const char *level_color  = XmLogLevelColorGet(level);
    const char *domain_color = d->color ? d->color : "";
-   const char *reset_color = LOG_COLOR_RESET;
+   const char *reset_color  = LOG_COLOR_RESET;
 
    // Print colored level
-   if (level_color) {
-      fputs(level_color, f);
-   }
+   if (level_color) fputs(level_color, f);
+
    fputs(level_name, f);
-   if (level_color) {
-      fputs(reset_color, f);
-   }
+   if (level_color) fputs(reset_color, f);
 
    // Print colored domain
-   if (domain_color) {
-      fputs(domain_color, f);
-   }
+   if (domain_color) fputs(domain_color, f);
+
    fprintf(f, 
          "<%u>:%s %s:%d %s() ",
          XmLogPidGet(), d->name, file, line, fnc);
-   if (domain_color) {
-      fputs(reset_color, f);
-   }
+   if (domain_color) fputs(reset_color, f);
 
    vfprintf(f, fmt, args);
    putc('\n', f);
 }
 
-// Main print function
+
 void
 XmLogPrint(int domain, XmLogLevel level, const char *file, const char *fnc,
-         int line, const char *fmt, ...)
+           int line, const char *fmt, ...)
 {
    va_list args;
    va_start(args, fmt);
@@ -528,24 +502,22 @@ XmLogPrint(int domain, XmLogLevel level, const char *file, const char *fnc,
    va_end(args);
 }
 
-// Initialize logging system
 XmBool
 XmLogInit(void)
 {
    // Set default print callback based on configuration
 #ifdef XM_DEFAULT_LOG_OUTPUT
-   if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stdout") == 0) {
+   if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stdout") == 0)
       _print_cb = XmLogPrintCbStdOut;
-   } else if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stderr") == 0) {
+   else if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stderr") == 0)
       _print_cb = XmLogPrintCbStdErr;
-   } else if (strcmp(XM_DEFAULT_LOG_OUTPUT, "file") == 0) {
+   else if (strcmp(XM_DEFAULT_LOG_OUTPUT, "file") == 0)
       _print_cb = XmLogPrintCbFile;
       // For file output, we need to set up a default log file
       _print_cb_data = (void*)"motif.log";
-   } else {
+   else
       // Default fallback to stderr
       _print_cb = XmLogPrintCbStdErr;
-   }
 #else
    // Fallback if XM_DEFAULT_LOG_OUTPUT is not defined
    _print_cb = XmLogPrintCbStdErr;
@@ -576,20 +548,25 @@ XmLogInit(void)
 XmBool
 XmLogSetOutput(const char *output, const char *filename)
 {
-   if (!output) {
-      return XM_FALSE;
-   }
+   if (!output) return XM_FALSE;
 
-   if (strcmp(output, "stdout") == 0) {
+   if (strcmp(output, "stdout") == 0)
+   {
       _print_cb = XmLogPrintCbStdOut;
       _print_cb_data = NULL;
-   } else if (strcmp(output, "stderr") == 0) {
+   }
+   else if (strcmp(output, "stderr") == 0)
+   {
       _print_cb = XmLogPrintCbStdErr;
       _print_cb_data = NULL;
-   } else if (strcmp(output, "file") == 0) {
+   }
+   else if(strcmp(output, "file") == 0)
+   {
       _print_cb = XmLogPrintCbFile;
       _print_cb_data = (void*)(filename ? filename : "motif.log");
-   } else {
+   }
+   else
+   {
       return XM_FALSE;  // Invalid output type
    }
 
@@ -602,14 +579,10 @@ XmLogShutdown(void)
 {
    // Clean up domains
    for (unsigned int i = 0; i < _log_domains_count; i++)
-   {
-      if (!_log_domains[i].deleted)
-      {
-         XmLogDomainFree(&_log_domains[i]);
-      }
-   }
+      if (!_log_domains[i].deleted) XmLogDomainFree(&_log_domains[i]);
 
    free(_log_domains);
+   
    _log_domains            = NULL;
    _log_domains_count      = 0;
    _log_domains_allocated  = 0;

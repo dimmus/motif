@@ -1,11 +1,3 @@
-/**
- * Motif
- *
- * Copyright (c) 2025 Tim Hentenaar.
- * Copyright (c) 1987 - 2012 The Open Group.
- * Licensed under the LGPL 2.1 license.
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
