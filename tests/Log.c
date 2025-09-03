@@ -5,6 +5,7 @@
 #include <string.h>
 #include <time.h>
 #include <check.h>
+#include "config.h"
 #include "Log.h"
 #include "suites.h"
 
@@ -38,6 +39,8 @@ END_TEST
 
 START_TEST(test_basic_logging)
 {
+   ck_assert_msg(XmLogInit(), "Failed to initialize logging system");
+   
    // Test basic logging functionality
    XM_LOG_INFO("Application started successfully");
    XM_LOG_WARN("This is a warning message to test the system");
@@ -46,11 +49,15 @@ START_TEST(test_basic_logging)
    
    test_function();
    ck_assert_msg(XM_TRUE, "Basic logging test completed");
+   
+   XmLogShutdown();
 }
 END_TEST
 
 START_TEST(test_domain_registration)
 {
+   ck_assert_msg(XmLogInit(), "Failed to initialize logging system");
+   
    int test_domain = XmLogDomainRegister("test_module", LOG_COLOR_CYAN);
    
    ck_assert_msg(test_domain >= 0, "Failed to register test domain");
@@ -62,6 +69,7 @@ START_TEST(test_domain_registration)
    
    // Cleanup
    XmLogDomainUnregister(test_domain);
+   XmLogShutdown();
 }
 END_TEST
 
@@ -124,6 +132,8 @@ END_TEST
 
 START_TEST(test_domain_level_management)
 {
+   ck_assert_msg(XmLogInit(), "Failed to initialize logging system");
+   
    int test_domain = XmLogDomainRegister("level_test", LOG_COLOR_CYAN);
    ck_assert_msg(test_domain >= 0, "Failed to register test domain");
    
@@ -144,6 +154,7 @@ START_TEST(test_domain_level_management)
    
    // Cleanup
    XmLogDomainUnregister(test_domain);
+   XmLogShutdown();
 }
 END_TEST
 
@@ -222,6 +233,8 @@ END_TEST
 
 START_TEST(test_comprehensive_logging)
 {
+   ck_assert_msg(XmLogInit(), "Failed to initialize logging system");
+   
    // Final comprehensive test
    XM_LOG_INFO("=== Final test message ===");
    XM_LOG_WARN("Testing all features together");
@@ -235,6 +248,7 @@ START_TEST(test_comprehensive_logging)
    }
    
    ck_assert_msg(XM_TRUE, "Comprehensive logging test completed");
+   XmLogShutdown();
 }
 END_TEST
 
@@ -279,12 +293,14 @@ END_TEST
 // Test setting output to file
 START_TEST(test_output_set_file)
 {
+   ck_assert_msg(XmLogInit(), "Failed to initialize logging system");
+   
    const char *test_file = "test_output.log";
    
    ck_assert_msg(XmLogSetOutput("file", test_file), "Failed to set output to file");
    
    // Test that logging works with file output
-   XM_LOG_ERROR("This message should be written to %s", test_file);
+   XM_LOG_ERR("This message should be written to %s", test_file);
    
    // Verify file was created
    FILE *fp = fopen(test_file, "r");
@@ -296,6 +312,7 @@ START_TEST(test_output_set_file)
    }
    
    ck_assert_msg(XM_TRUE, "file output test passed");
+   XmLogShutdown();
 }
 END_TEST
 
@@ -345,6 +362,18 @@ START_TEST(test_build_time_config)
    ck_assert_msg(XM_TRUE, "Build-time configuration test passed");
 }
 END_TEST
+
+// Setup function for Log tests
+void log_setup(void)
+{
+   XmLogInit();
+}
+
+// Teardown function for Log tests
+void log_teardown(void)
+{
+   XmLogShutdown();
+}
 
 void log_suite(SRunner *runner)
 {

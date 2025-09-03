@@ -453,7 +453,11 @@ install_missing_dependencies() {
     for dep in $required_deps; do
         pkg_name=$(get_package_names "$dep")
         if ! check_package "$pkg_name" "$dep"; then
-            missing_required="$missing_required $pkg_name"
+            if [ -z "$missing_required" ]; then
+                missing_required="$pkg_name"
+            else
+                missing_required="$missing_required $pkg_name"
+            fi
         fi
     done
     
@@ -461,7 +465,11 @@ install_missing_dependencies() {
     for dep in $optional_deps; do
         pkg_name=$(get_package_names "$dep")
         if ! check_package "$pkg_name" "$dep" && check_package_available "$pkg_name"; then
-            missing_optional="$missing_optional $pkg_name"
+            if [ -z "$missing_optional" ]; then
+                missing_optional="$pkg_name"
+            else
+                missing_optional="$missing_optional $pkg_name"
+            fi
         fi
     done
     

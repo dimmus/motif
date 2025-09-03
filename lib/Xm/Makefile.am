@@ -263,7 +263,7 @@ SRCS2 = Desktop.c       Messages.c      Transltns.c     RepType.c \
         GetRes.c        BBUtil.c        ChColor.c       ColObjFunc.c \
         DrTog.c         DrArrow.c       DrPoly.c        DrHiDash.c \
         ValTime.c       FocusAct.c      CvtUnit.c       ScalTics.c \
-        ScroVis.c       WidGet.c        $(PRINTS_SRC)
+        ScroVis.c       WidGet.c        Log.c           $(PRINTS_SRC)
 
 OBSO_SRCS = Obso1_2.c ObsoStr.c ObsoXme.c Obso2_0.c
 

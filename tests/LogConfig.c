@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <check.h>
 
+#include "config.h"
 #include "suites.h"
 
 #include "Log.h"
+
+// Forward declarations for setup/teardown functions
+void log_setup(void);
+void log_teardown(void);
 
 // Test that build-time configuration defines are available
 START_TEST(test_build_time_defines)
@@ -70,7 +76,7 @@ START_TEST(test_output_switching)
    
    // Test switching between different outputs
    ck_assert_msg(XmLogSetOutput("stderr", NULL), "Failed to set stderr output");
-   XM_LOG_ERROR("This should go to stderr");
+   XM_LOG_ERR("This should go to stderr");
    
    ck_assert_msg(XmLogSetOutput("stdout", NULL), "Failed to set stdout output");
    XM_LOG_INFO("This should go to stdout");
@@ -87,6 +93,7 @@ START_TEST(test_output_switching)
    }
    
    ck_assert_msg(XM_TRUE, "Output switching test passed");
+   XmLogShutdown();
 }
 END_TEST
 
@@ -140,6 +147,7 @@ START_TEST(test_file_output_variations)
    }
    
    ck_assert_msg(XM_TRUE, "File output variations test passed");
+   XmLogShutdown();
 }
 END_TEST
 
@@ -166,6 +174,7 @@ START_TEST(test_config_persistence)
    }
    
    ck_assert_msg(XM_TRUE, "Configuration persistence test passed");
+   XmLogShutdown();
 }
 END_TEST
 

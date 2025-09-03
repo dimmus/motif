@@ -462,7 +462,10 @@ XmLogPrintCbFile(const XmLogDomain *d, XmLogLevel level, const char *file,
 {
    if (!data) return;
 
-   FILE *f = (FILE *)data;
+   // data should be a filename string, not a FILE pointer
+   const char *filename = (const char *)data;
+   FILE *f = fopen(filename, "a");
+   if (!f) return;
 
    // Simple prefix printing
    const char *level_name =
@@ -489,6 +492,8 @@ XmLogPrintCbFile(const XmLogDomain *d, XmLogLevel level, const char *file,
 
    vfprintf(f, fmt, args);
    putc('\n', f);
+   
+   fclose(f);
 }
 
 
@@ -508,16 +513,24 @@ XmLogInit(void)
    // Set default print callback based on configuration
 #ifdef XM_DEFAULT_LOG_OUTPUT
    if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stdout") == 0)
+   {
       _print_cb = XmLogPrintCbStdOut;
+   }
    else if (strcmp(XM_DEFAULT_LOG_OUTPUT, "stderr") == 0)
+   {
       _print_cb = XmLogPrintCbStdErr;
+   }
    else if (strcmp(XM_DEFAULT_LOG_OUTPUT, "file") == 0)
+   {
       _print_cb = XmLogPrintCbFile;
       // For file output, we need to set up a default log file
       _print_cb_data = (void*)"motif.log";
+   }
    else
+   {
       // Default fallback to stderr
       _print_cb = XmLogPrintCbStdErr;
+   }
 #else
    // Fallback if XM_DEFAULT_LOG_OUTPUT is not defined
    _print_cb = XmLogPrintCbStdErr;
