@@ -58,10 +58,14 @@
 %{
 #define _POSIX_C_SOURCE 200809L
 #ifndef _DEFAULT_SOURCE
-#define _DEFAULT_SOURCE
+# define _DEFAULT_SOURCE
 #endif
-#define _GNU_SOURCE
-#define _BSD_SOURCE
+#ifndef _GNU_SOURCE
+ #define _GNU_SOURCE
+#endif
+#ifndef _BSD_SOURCE
+# define _BSD_SOURCE
+#endif
 
 #include <stdio.h>
 #include <unistd.h>
