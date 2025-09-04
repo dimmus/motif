@@ -91,7 +91,7 @@ AC_ARG_ENABLE([utf8],
   [enable_utf8=$enableval],[enable_utf8=yes])
 AS_IF([test "x$enable_utf8" == "xyes"],
   [AC_SEARCH_LIBS([iconv_open], [iconv], ,
-    AC_SEARCH_LIBS([libiconv_open], [iconv]))])
+   AC_SEARCH_LIBS([libiconv_open], [iconv]))])
 
 AC_ARG_ENABLE([message-catalog],
   [AS_HELP_STRING([--enable-message-catalog],[enable X/Open message catalog support])],
@@ -119,19 +119,9 @@ AS_IF([test "x$enable_debug" == "xyes"],
   [AX_APPEND_COMPILE_FLAGS([-Og -ggdb]) AX_APPEND_COMPILE_FLAGS([-DDEBUG], [CPPFLAGS])],
   [AX_APPEND_COMPILE_FLAGS([-O2])       AX_APPEND_COMPILE_FLAGS([-DNDEBUG], [CPPFLAGS])])
 
-dnl Feature test macros for compatibility across different libc implementations
-dnl These ensure functions like strdup, asprintf, etc. are available
-AX_APPEND_COMPILE_FLAGS([-D_GNU_SOURCE], [CPPFLAGS])
-AX_APPEND_COMPILE_FLAGS([-D_DEFAULT_SOURCE], [CPPFLAGS])
-AX_APPEND_COMPILE_FLAGS([-D_POSIX_C_SOURCE=200809L], [CPPFLAGS])
-AX_APPEND_COMPILE_FLAGS([-D_BSD_SOURCE], [CPPFLAGS])
-
 AC_ARG_ENABLE([uil-debug],
   [AS_HELP_STRING([--enable-uil-debug],[enable UIL compiler debugging support])],
   [enable_uil_debug=$enableval],[enable_uil_debug=no])
-
-# Logging is always enabled - no option to disable it
-enable_logging=yes
 
 AC_ARG_WITH([log-level],
   [AS_HELP_STRING([--with-log-level=LEVEL],[set default logging level (DEBUG, INFO (default), WARN, ERROR, CRITICAL)])],
@@ -141,27 +131,15 @@ AC_ARG_WITH([log-output],
   [AS_HELP_STRING([--with-log-output=DEST],[set default log output destination (stderr, stdout, file) @<:@default=stderr@:>@])],
   [with_log_output=$withval],[with_log_output=stderr])
 
+dnl Feature test macros for compatibility across different libc implementations
+dnl These ensure functions like strdup, asprintf, etc. are available
+AX_APPEND_COMPILE_FLAGS([-D_GNU_SOURCE], [CPPFLAGS])
+AX_APPEND_COMPILE_FLAGS([-D_DEFAULT_SOURCE], [CPPFLAGS])
+AX_APPEND_COMPILE_FLAGS([-D_POSIX_C_SOURCE=200809L], [CPPFLAGS])
+AX_APPEND_COMPILE_FLAGS([-D_BSD_SOURCE], [CPPFLAGS])
+
 dnl Compiler flags
 XM_CFLAGS
-
-dnl .pc
-AC_SUBST([XM_VERSION], [XM_VERSION])
-
-dnl Automake substitutions
-AC_SUBST([ABI_VERSION], [ABI_VERSION])
-AM_CONDITIONAL([XM_PRINTING],  test "x$enable_printing" == "xyes")
-AM_CONDITIONAL([XM_WITH_JPEG], test "x$with_jpeg" == "xyes")
-AM_CONDITIONAL([XM_WITH_PNG],  test "x$with_png"  == "xyes")
-AM_CONDITIONAL([XM_MSGCAT],    test "x$enable_message_catalog" == "xyes")
-AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests" == "xyes")
-AM_CONDITIONAL([XM_UIL_DEBUG], test "x$enable_uil_debug" == "xyes")
-
-dnl Substitutions for lib/Xm/Xm.h
-AC_SUBST([XM_MAJOR], [XM_MAJOR])
-AC_SUBST([XM_MINOR], [XM_MINOR])
-AC_SUBST([XM_PATCH], [XM_PATCH])
-AC_SUBST([XM_DEFAULT_LOG_LEVEL],  [$with_log_level])
-AC_SUBST([XM_DEFAULT_LOG_OUTPUT], [$with_log_output])
 
 AC_DEFINE_UNQUOTED([XM_WITH_JPEG],
 	$(test "x$with_jpeg" != "xyes" ; echo $?),
@@ -192,11 +170,9 @@ case "$with_log_level" in
     *)        XM_DEFAULT_LOG_LEVEL_VAL="XM_LOG_LEVEL_INFO" ;;
 esac
 
-# Logging is always enabled
 AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_LEVEL], [$XM_DEFAULT_LOG_LEVEL_VAL],
 	[Default logging level for Motif])
 
-# Logging is always enabled
 AC_DEFINE_UNQUOTED([XM_DEFAULT_LOG_OUTPUT], ["$with_log_output"],
 	[Default logging output destination])
 
@@ -208,15 +184,34 @@ AC_DEFINE_UNQUOTED([XM_UIL_DEBUG],
 	$(test "x$enable_uil_debug" != "xyes" ; echo $?),
 	[1 if UIL compiler debugging support is enabled])
 
+dnl .pc
+AC_SUBST([XM_VERSION],  [XM_VERSION])
+AC_SUBST([ABI_VERSION], [ABI_VERSION])
+
+dnl Automake substitutions
+AM_CONDITIONAL([XM_PRINTING],   test "x$enable_printing" == "xyes")
+AM_CONDITIONAL([XM_WITH_JPEG],  test "x$with_jpeg" == "xyes")
+AM_CONDITIONAL([XM_WITH_PNG],   test "x$with_png"  == "xyes")
+AM_CONDITIONAL([XM_MSGCAT],     test "x$enable_message_catalog" == "xyes")
+AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests" == "xyes")
+AM_CONDITIONAL([XM_UIL_DEBUG],  test "x$enable_uil_debug" == "xyes")
+
+dnl Substitutions for lib/Xm/Xm.h
+AC_SUBST([XM_MAJOR], [XM_MAJOR])
+AC_SUBST([XM_MINOR], [XM_MINOR])
+AC_SUBST([XM_PATCH], [XM_PATCH])
+AC_SUBST([XM_DEFAULT_LOG_LEVEL],  [$with_log_level])
+AC_SUBST([XM_DEFAULT_LOG_OUTPUT], [$with_log_output])
+
 dnl Defines/substitutions for mwm
 AC_DEFINE([NO_OL_COMPAT], 1, "No OL Compatability")
-AC_SUBST([CDE_INSTALLATION_TOP], "\${prefix}/dt")
+AC_SUBST([CDE_INSTALLATION_TOP],  "\${prefix}/dt")
 AC_SUBST([CDE_CONFIGURATION_TOP], "\${prefix}/etc/dt")
 AC_SUBST([MWMRCDIR], "${sysconfdir}/X11")
 
 dnl lib/Xm/Xmos.c
-AC_SUBST([INCDIR], "${includedir}/X11")
-AC_SUBST([LIBDIR], "${libdir}/X11")
+AC_SUBST([INCDIR],  "${includedir}/X11")
+AC_SUBST([LIBDIR],  "${libdir}/X11")
 AC_SUBST([DATADIR], "${datadir}")
 
 dnl lib/Xm/VirtKeys.c
