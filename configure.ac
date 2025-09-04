@@ -39,6 +39,9 @@ dnl Flex needs libfl
 AS_IF([test "x$ac_cv_prog_LEX" == "xflex"],[LEXLIB=-lfl],[LEXLIB=])
 AC_SUBST([LEXLIB])
 
+dnl Add LEXLIB to LIBS so it gets linked
+AS_IF([test "x$LEXLIB" != "x"],[LIBS="$LIBS $LEXLIB"])
+
 dnl Maintainer automation (add ([enabled]) to activate)
 AM_MAINTAINER_MODE
 
