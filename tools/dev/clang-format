@@ -352,7 +352,7 @@ AlignEscapedNewlines: Left
 # Example with AlignAfterOperator:
 #   int result = first_operand
 #              + second_operand;       // aligned after operator
-AlignOperands: Align
+AlignOperands: AlignAfterOperator
 # ------------------------------------------------------------------------------
 # CONSECUTIVE ALIGNMENT SETTINGS
 # ------------------------------------------------------------------------------
