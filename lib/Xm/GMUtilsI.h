@@ -30,43 +30,43 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmGMCalcSize(
-                        XmManagerWidget manager,
-                        Dimension margin_width,
-                        Dimension margin_height,
-                        Dimension *replyWidth,
-                        Dimension *replyHeight) ;
+   XmManagerWidget manager,
+   Dimension       margin_width,
+   Dimension       margin_height,
+   Dimension      *replyWidth,
+   Dimension      *replyHeight);
 extern Boolean _XmGMDoLayout(
-                        XmManagerWidget manager,
-                        Dimension margin_width,
-                        Dimension margin_height,
-                        int resize_policy,
-                        Boolean queryonly) ;
+   XmManagerWidget manager,
+   Dimension       margin_width,
+   Dimension       margin_height,
+   int             resize_policy,
+   Boolean         queryonly);
 extern void _XmGMEnforceMargin(
-                        XmManagerWidget manager,
-                        Dimension margin_width,
-                        Dimension margin_height,
-                        Boolean setvalue) ;
+   XmManagerWidget manager,
+   Dimension       margin_width,
+   Dimension       margin_height,
+   Boolean         setvalue);
 extern XtGeometryResult _XmGMHandleQueryGeometry(
-                        Widget widget,
-                        XtWidgetGeometry *intended,
-                        XtWidgetGeometry *desired,
-                        Dimension margin_width,
-                        Dimension margin_height,
-                        int resize_policy) ;
+   Widget            widget,
+   XtWidgetGeometry *intended,
+   XtWidgetGeometry *desired,
+   Dimension         margin_width,
+   Dimension         margin_height,
+   int               resize_policy);
 extern Boolean _XmGMOverlap(
-                        XmManagerWidget manager,
-                        Widget w) ;
+   XmManagerWidget manager,
+   Widget          w);
 extern XtGeometryResult _XmGMHandleGeometryManager(
-                        Widget parent,
-                        Widget w,
-                        XtWidgetGeometry *request,
-                        XtWidgetGeometry *reply,
-                        Dimension margin_width,
-                        Dimension margin_height,
-                        int resize_policy,
-                        int allow_overlap) ;
+   Widget            parent,
+   Widget            w,
+   XtWidgetGeometry *request,
+   XtWidgetGeometry *reply,
+   Dimension         margin_width,
+   Dimension         margin_height,
+   int               resize_policy,
+   int               allow_overlap);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmGMUtilsI_h */

@@ -21,35 +21,36 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmManagerP_h
-#define _XmManagerP_h
-#ifndef _XmNO_BC_INCL
-#define _XmNO_BC_INCL
-#endif
-#include <Xm/XmP.h>
-#ifdef __cplusplus
+#   define _XmManagerP_h
+#   ifndef _XmNO_BC_INCL
+#      define _XmNO_BC_INCL
+#   endif
+#   include <Xm/XmP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /*  Access Macros  */
-#define XmParentTopShadowGC(w) 		\
+#   define XmParentTopShadowGC(w) 		\
 	(((XmManagerWidget) XtParent(w))->manager.top_shadow_GC)
-#define XmParentBottomShadowGC(w)	\
+#   define XmParentBottomShadowGC(w)	\
 	(((XmManagerWidget) XtParent(w))->manager.bottom_shadow_GC)
-#define XmParentHighlightGC(w)		\
+#   define XmParentHighlightGC(w)		\
 	(((XmManagerWidget) XtParent(w))->manager.highlight_GC)
-#define XmParentBackgroundGC(w)		\
+#   define XmParentBackgroundGC(w)		\
 	(((XmManagerWidget) XtParent(w))->manager.background_GC)
-#define MGR_KeyboardList(m)		\
+#   define MGR_KeyboardList(m)		\
 			(((XmManagerRec *) (m))->manager.keyboard_list)
-#define MGR_NumKeyboardEntries(m)	\
+#   define MGR_NumKeyboardEntries(m)	\
 			(((XmManagerRec *) (m))->manager.num_keyboard_entries)
-#define MGR_SizeKeyboardList(m)		\
+#   define MGR_SizeKeyboardList(m)		\
 			(((XmManagerRec *) (m))->manager.size_keyboard_list)
-#define MGR_ShadowThickness(m)		\
+#   define MGR_ShadowThickness(m)		\
 			(((XmManagerRec *) (m))->manager.shadow_thickness)
-#define XmInheritTraversalChildrenProc ((XmTraversalChildrenProc) _XtInherit)
-#define XmInheritObjectAtPointProc     ((XmObjectAtPointProc) _XtInherit)
-typedef Boolean (*XmTraversalChildrenProc)( Widget, Widget **, Cardinal *) ;
-typedef Widget (*XmObjectAtPointProc)(Widget, Position, Position) ;
+#   define XmInheritTraversalChildrenProc ((XmTraversalChildrenProc) _XtInherit)
+#   define XmInheritObjectAtPointProc     ((XmObjectAtPointProc) _XtInherit)
+typedef Boolean (*XmTraversalChildrenProc)(Widget, Widget **, Cardinal *);
+typedef Widget (*XmObjectAtPointProc)(Widget, Position, Position);
+
 /*  Structure used for storing accelerator and mnemonic information.  */
 typedef struct
 {
@@ -61,70 +62,78 @@ typedef struct
    Boolean      needGrab;
    Boolean      isMnemonic;
 } XmKeyboardData;
+
 /*  The class definition  */
-typedef struct {
-    XtPointer next_extension;
-    XrmQuark record_type;
-    long version;
-    Cardinal record_size;
-    XmTraversalChildrenProc traversal_children ;
-    XmObjectAtPointProc     object_at_point ;
-} XmManagerClassExtRec, *XmManagerClassExt ;
-#define XmManagerClassExtVersion 1L
+typedef struct
+{
+   XtPointer               next_extension;
+   XrmQuark                record_type;
+   long                    version;
+   Cardinal                record_size;
+   XmTraversalChildrenProc traversal_children;
+   XmObjectAtPointProc     object_at_point;
+} XmManagerClassExtRec, *XmManagerClassExt;
+
+#   define XmManagerClassExtVersion 1L
+
 typedef struct _XmManagerClassPart
 {
    String               translations;
-   XmSyntheticResource * syn_resources;
+   XmSyntheticResource *syn_resources;
    int                  num_syn_resources;
-   XmSyntheticResource * syn_constraint_resources;
+   XmSyntheticResource *syn_constraint_resources;
    int                  num_syn_constraint_resources;
    XmParentProcessProc  parent_process;
    XtPointer            extension;
 } XmManagerClassPart;
+
 typedef struct _XmManagerClassRec
 {
-    CoreClassPart       core_class;
-    CompositeClassPart  composite_class;
-    ConstraintClassPart constraint_class;
-    XmManagerClassPart  manager_class;
+   CoreClassPart       core_class;
+   CompositeClassPart  composite_class;
+   ConstraintClassPart constraint_class;
+   XmManagerClassPart  manager_class;
 } XmManagerClassRec;
+
 externalref XmManagerClassRec xmManagerClassRec;
+
 /*  The instance definition  */
 typedef struct _XmManagerPart
 {
-   Pixel   foreground;
-   Dimension   shadow_thickness;
-   Pixel   top_shadow_color;
-   Pixmap  top_shadow_pixmap;
-   Pixel   bottom_shadow_color;
-   Pixmap  bottom_shadow_pixmap;
-   Pixel   highlight_color;
-   Pixmap  highlight_pixmap;
-   XtCallbackList help_callback;
-   XtPointer      user_data;
-   Boolean traversal_on;
-   unsigned char unit_type;
-   XmNavigationType navigation_type;
-   Boolean event_handler_added;
-   Widget  active_child;
-   Widget  highlighted_widget;
-   Widget  accelerator_widget;
-   Boolean has_focus;
+   Pixel             foreground;
+   Dimension         shadow_thickness;
+   Pixel             top_shadow_color;
+   Pixmap            top_shadow_pixmap;
+   Pixel             bottom_shadow_color;
+   Pixmap            bottom_shadow_pixmap;
+   Pixel             highlight_color;
+   Pixmap            highlight_pixmap;
+   XtCallbackList    help_callback;
+   XtPointer         user_data;
+   Boolean           traversal_on;
+   unsigned char     unit_type;
+   XmNavigationType  navigation_type;
+   Boolean           event_handler_added;
+   Widget            active_child;
+   Widget            highlighted_widget;
+   Widget            accelerator_widget;
+   Boolean           has_focus;
    XmStringDirection string_direction;
-   XmKeyboardData * keyboard_list;
-   short num_keyboard_entries;
-   short size_keyboard_list;
-   XmGadget selected_gadget;
-   XmGadget eligible_for_multi_button_event;
-   GC      background_GC;
-   GC      highlight_GC;
-   GC      top_shadow_GC;
-   GC      bottom_shadow_GC;
-   Widget  initial_focus;
-#ifndef XM_PART_BC
-   XtCallbackList   popup_handler_callback;
-#endif
+   XmKeyboardData   *keyboard_list;
+   short             num_keyboard_entries;
+   short             size_keyboard_list;
+   XmGadget          selected_gadget;
+   XmGadget          eligible_for_multi_button_event;
+   GC                background_GC;
+   GC                highlight_GC;
+   GC                top_shadow_GC;
+   GC                bottom_shadow_GC;
+   Widget            initial_focus;
+#   ifndef XM_PART_BC
+   XtCallbackList popup_handler_callback;
+#   endif
 } XmManagerPart;
+
 typedef struct _XmManagerRec
 {
    CorePart       core;
@@ -132,17 +141,19 @@ typedef struct _XmManagerRec
    ConstraintPart constraint;
    XmManagerPart  manager;
 } XmManagerRec;
+
 /*  The constraint definition  */
 typedef struct _XmManagerConstraintPart
 {
    int unused;
 } XmManagerConstraintPart;
+
 typedef struct _XmManagerConstraintRec
 {
    XmManagerConstraintPart manager;
-} XmManagerConstraintRec, * XmManagerConstraintPtr;
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+} XmManagerConstraintRec, *XmManagerConstraintPtr;
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmManagerP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

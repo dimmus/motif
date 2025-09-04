@@ -26,7 +26,7 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 /*
  * The following functions are used to separate the private class function
@@ -40,16 +40,18 @@
 #include "GadgetUtiI.h"
 #include "XmI.h"
 static XtPointer menuProcEntry = NULL;
+
 /*
  * this routine is called at RowColumn class init to
  * save the address of the menuProcedureEntry routine.
  */
 void
 _XmSaveMenuProcContext(
-        XtPointer address )
+   XtPointer address)
 {
    menuProcEntry = address;
 }
+
 /*
  * This routine is used by the button children of the RowColumn (currently
  * all label and labelgadget subclasses) to get the address of the
@@ -57,14 +59,16 @@ _XmSaveMenuProcContext(
  * routines.
  */
 XtPointer
-_XmGetMenuProcContext( void )
+_XmGetMenuProcContext(void)
 {
    return menuProcEntry;
 }
+
 /* temp hold for core class translations used during subclass'
  * InitializePrehook & InitializePosthook
  */
 static XContext SaveTranslationsContext = 0;
+
 /************************************************************************
  *
  * _XmSaveCoreClassTranslations
@@ -77,15 +81,15 @@ static XContext SaveTranslationsContext = 0;
  ************************************************************************/
 void
 _XmSaveCoreClassTranslations(
-        Widget widget)
+   Widget widget)
 {
-    _XmProcessLock();
-    if (SaveTranslationsContext == 0)
-	SaveTranslationsContext = XUniqueContext();
-    XSaveContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext,
-	 	 (char *)(widget->core.widget_class->core_class.tm_table));
-    _XmProcessUnlock();
+   _XmProcessLock();
+   if (SaveTranslationsContext == 0)
+      SaveTranslationsContext = XUniqueContext();
+   XSaveContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext, (char *)(widget->core.widget_class->core_class.tm_table));
+   _XmProcessUnlock();
 }
+
 /************************************************************************
  *
  * _XmRestoreCoreClassTranslations
@@ -98,20 +102,19 @@ _XmSaveCoreClassTranslations(
  ************************************************************************/
 void
 _XmRestoreCoreClassTranslations(
-        Widget widget)
+   Widget widget)
 {
-  String saved_translations;
-  _XmProcessLock();
-  if (SaveTranslationsContext &&
-      (!XFindContext(XtDisplay(widget), (XID)widget,
-  		SaveTranslationsContext, (XtPointer)&saved_translations)))
+   String saved_translations;
+   _XmProcessLock();
+   if (SaveTranslationsContext && (!XFindContext(XtDisplay(widget), (XID)widget, SaveTranslationsContext, (XtPointer)&saved_translations)))
       widget->core.widget_class->core_class.tm_table = saved_translations;
 #ifdef DEBUG
-  else	/* This should'nt happen ! */
-	abort();
+   else /* This should'nt happen ! */
+      abort();
 #endif
-  _XmProcessUnlock();
+   _XmProcessUnlock();
 }
+
 /*************************************************
  * This function extracts a time from an event or
  * returns the last processed time if the event
@@ -119,22 +122,19 @@ _XmRestoreCoreClassTranslations(
  *************************************************/
 /*ARGSUSED*/
 Time
-_XmGetDefaultTime(Widget wid,
-		  XEvent *event)
+_XmGetDefaultTime(Widget  wid,
+                  XEvent *event)
 {
-  if (event == NULL)
-    return(XtLastTimestampProcessed(XtDisplay(wid)));
-  else if (event -> type == ButtonPress ||
-	   event -> type == ButtonRelease)
-    return(event -> xbutton.time);
-  else if (event -> type == KeyPress ||
-	   event -> type == KeyRelease)
-    return(event -> xkey.time);
-  else if (event -> type == MotionNotify)
-    return(event -> xmotion.time);
-  else if (event -> type == EnterNotify ||
-	   event -> type == LeaveNotify)
-    return(event -> xcrossing.time);
-  else
-    return(XtLastTimestampProcessed(XtDisplay(wid)));
+   if (event == NULL)
+      return (XtLastTimestampProcessed(XtDisplay(wid)));
+   else if (event->type == ButtonPress || event->type == ButtonRelease)
+      return (event->xbutton.time);
+   else if (event->type == KeyPress || event->type == KeyRelease)
+      return (event->xkey.time);
+   else if (event->type == MotionNotify)
+      return (event->xmotion.time);
+   else if (event->type == EnterNotify || event->type == LeaveNotify)
+      return (event->xcrossing.time);
+   else
+      return (XtLastTimestampProcessed(XtDisplay(wid)));
 }

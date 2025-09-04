@@ -32,55 +32,55 @@ extern "C" {
 #endif
 /********    Public Function Declarations    ********/
 extern void XmImRegister(
-                        Widget w,
-			unsigned int reserved) ;
+   Widget       w,
+   unsigned int reserved);
 extern void XmImUnregister(
-                        Widget w) ;
+   Widget w);
 extern void XmImSetFocusValues(
-                        Widget w,
-                        ArgList args,
-                        Cardinal num_args) ;
+   Widget   w,
+   ArgList  args,
+   Cardinal num_args);
 extern void XmImSetValues(
-                        Widget w,
-                        ArgList args,
-                        Cardinal num_args) ;
+   Widget   w,
+   ArgList  args,
+   Cardinal num_args);
 extern void XmImUnsetFocus(
-                        Widget w) ;
+   Widget w);
 extern XIM XmImGetXIM(
-                        Widget w) ;
+   Widget w);
 extern void XmImCloseXIM(
-                        Widget w) ;
+   Widget w);
 extern int XmImMbLookupString(
-                        Widget w,
-                        XKeyPressedEvent *event,
-                        char *buf,
-                        int nbytes,
-                        KeySym *keysym,
-                        int *status) ;
+   Widget            w,
+   XKeyPressedEvent *event,
+   char             *buf,
+   int               nbytes,
+   KeySym           *keysym,
+   int              *status);
 extern void XmImVaSetFocusValues(
-                        Widget w,
-                        ...) ;
+   Widget w,
+   ...);
 extern void XmImVaSetValues(
-                        Widget w,
-                        ...) ;
+   Widget w,
+   ...);
 extern XIC XmImGetXIC(
-		        Widget 		w,
-		        XmInputPolicy	input_policy,
-		        ArgList		args,
-		        Cardinal	num_args) ;
+   Widget        w,
+   XmInputPolicy input_policy,
+   ArgList       args,
+   Cardinal      num_args);
 extern XIC XmImSetXIC(
-			Widget w,
-			XIC    input_context) ;
+   Widget w,
+   XIC    input_context);
 extern void XmImFreeXIC(
-			Widget w,
-			XIC    input_context) ;
+   Widget w,
+   XIC    input_context);
 extern void XmImMbResetIC(
-			Widget w,
-			char **mb);
+   Widget w,
+   char **mb);
 extern XIMResetState XmImGetXICResetState(
-			Widget w);
+   Widget w);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmIm_h */

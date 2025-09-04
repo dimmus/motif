@@ -21,71 +21,82 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmMainWindowP_h
-#define _XmMainWindowP_h
-#include <Xm/MainW.h>
-#include <Xm/ScrolledWP.h>
-#include <Xm/SeparatoG.h>
-#ifdef __cplusplus
+#   define _XmMainWindowP_h
+#   include <Xm/MainW.h>
+#   include <Xm/ScrolledWP.h>
+#   include <Xm/SeparatoG.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#define DEFAULT_HEIGHT 20
-#define DEFAULT_WIDTH 20
+#   endif
+#   define DEFAULT_HEIGHT 20
+#   define DEFAULT_WIDTH 20
+
 /* Constraint part record for MainWindow widget */
 typedef struct _XmMainWindowConstraintPart
 {
    char unused;
-} XmMainWindowConstraintPart, * XmMainWindowConstraint;
+} XmMainWindowConstraintPart, *XmMainWindowConstraint;
+
 /* New fields for the MainWindow widget class record */
-typedef struct {
-   XtPointer extension;   /* Pointer to extension record */
+typedef struct
+{
+   XtPointer extension; /* Pointer to extension record */
 } XmMainWindowClassPart;
+
 /****************
  *
  * Class record declaration
  *
  ****************/
-typedef struct _XmMainWindowClassRec {
-    CoreClassPart	core_class;
-    CompositeClassPart  composite_class;
-    ConstraintClassPart constraint_class;
-    XmManagerClassPart  manager_class;
-    XmScrolledWindowClassPart	swindow_class;
-    XmMainWindowClassPart	mwindow_class;
+typedef struct _XmMainWindowClassRec
+{
+   CoreClassPart             core_class;
+   CompositeClassPart        composite_class;
+   ConstraintClassPart       constraint_class;
+   XmManagerClassPart        manager_class;
+   XmScrolledWindowClassPart swindow_class;
+   XmMainWindowClassPart     mwindow_class;
 } XmMainWindowClassRec;
+
 externalref XmMainWindowClassRec xmMainWindowClassRec;
+
 /****************
  *
  * Main Window instance structure.
  *
  ****************/
-typedef struct {
-   Dimension	AreaWidth,AreaHeight;
-   Dimension	margin_width,margin_height;
-   Widget       CommandWindow;
-   Widget       MenuBar;
-   Widget       Message;
-   unsigned char CommandLoc;
-   XmSeparatorGadget       Sep1,Sep2,Sep3;
-   Boolean	ManagingSep;
-   Boolean	ShowSep;
+typedef struct
+{
+   Dimension         AreaWidth, AreaHeight;
+   Dimension         margin_width, margin_height;
+   Widget            CommandWindow;
+   Widget            MenuBar;
+   Widget            Message;
+   unsigned char     CommandLoc;
+   XmSeparatorGadget Sep1, Sep2, Sep3;
+   Boolean           ManagingSep;
+   Boolean           ShowSep;
 } XmMainWindowPart;
+
 /************************************************************************
  *									*
  * Full instance record declaration					*
  *									*
  ************************************************************************/
-typedef struct _XmMainWindowRec {
-    CorePart	    core;
-    CompositePart   composite;
-    ConstraintPart constraint;
-    XmManagerPart   manager;
-    XmScrolledWindowPart   swindow;
-    XmMainWindowPart   mwindow;
+typedef struct _XmMainWindowRec
+{
+   CorePart             core;
+   CompositePart        composite;
+   ConstraintPart       constraint;
+   XmManagerPart        manager;
+   XmScrolledWindowPart swindow;
+   XmMainWindowPart     mwindow;
 } XmMainWindowRec;
+
 /********    Private Function Declarations    ********/
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmMainWindowP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -38,36 +38,36 @@
 extern "C" {
 #endif
 /* XmSimpleSpinBox Widget */
-externalref WidgetClass xmSimpleSpinBoxWidgetClass;
+externalref WidgetClass                  xmSimpleSpinBoxWidgetClass;
 typedef struct _XmSimpleSpinBoxClassRec *XmSimpleSpinBoxWidgetClass;
 typedef struct _XmSimpleSpinBoxRec      *XmSimpleSpinBoxWidget;
 /* Spin externs for application accessible functions */
 extern Widget XmCreateSimpleSpinBox(
-		Widget		parent,
-		char		*name,
-		ArgList		arglist,
-		Cardinal	argcount);
+   Widget   parent,
+   char    *name,
+   ArgList  arglist,
+   Cardinal argcount);
 extern void XmSimpleSpinBoxAddItem(
-                Widget          widget,
-                XmString        item,
-                int             pos);
+   Widget   widget,
+   XmString item,
+   int      pos);
 extern void XmSimpleSpinBoxDeletePos(
-                Widget          widget,
-                int             pos);
+   Widget widget,
+   int    pos);
 extern void XmSimpleSpinBoxSetItem(
-                Widget          widget,
-                XmString        item);
+   Widget   widget,
+   XmString item);
 /*
  * Variable argument list functions
  */
 extern Widget XmVaCreateSimpleSpinBox(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedSimpleSpinBox(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 #ifdef __cplusplus
 }
 #endif

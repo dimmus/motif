@@ -27,46 +27,46 @@
 extern "C" {
 #endif
 /* Class record constants */
-externalref WidgetClass xmCommandWidgetClass;
-typedef struct _XmCommandClassRec * XmCommandWidgetClass;
-typedef struct _XmCommandRec      * XmCommandWidget;
+externalref WidgetClass            xmCommandWidgetClass;
+typedef struct _XmCommandClassRec *XmCommandWidgetClass;
+typedef struct _XmCommandRec      *XmCommandWidget;
 #ifndef XmIsCommand
-#define XmIsCommand(w)  (XtIsSubclass (w, xmCommandWidgetClass))
+#   define XmIsCommand(w)  (XtIsSubclass (w, xmCommandWidgetClass))
 #endif
 /********    Public Function Declarations    ********/
 extern Widget XmCreateCommand(
-                        Widget parent,
-                        String name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   String   name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmVaCreateCommand(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedCommand(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern void XmCommandSetValue(
-                        Widget widget,
-                        XmString value) ;
+   Widget   widget,
+   XmString value);
 extern void XmCommandAppendValue(
-                        Widget widget,
-                        XmString value) ;
+   Widget   widget,
+   XmString value);
 extern void XmCommandError(
-                        Widget widget,
-                        XmString error) ;
+   Widget   widget,
+   XmString error);
 extern Widget XmCreateCommandDialog(
-                        Widget ds_p,
-                        String name,
-                        ArgList fsb_args,
-                        Cardinal fsb_n) ;
+   Widget   ds_p,
+   String   name,
+   ArgList  fsb_args,
+   Cardinal fsb_n);
 XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmCommandGetChild(
-                        Widget widget,
-                        unsigned char child);
+   Widget        widget,
+   unsigned char child);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmCommand_h */

@@ -30,31 +30,40 @@
 extern "C" {
 #endif
 #ifndef XmUNSPECIFIED_POSITION
-#define XmUNSPECIFIED_POSITION (-1)
+#   define XmUNSPECIFIED_POSITION (-1)
 #endif
-typedef struct {
-    XtPointer extension;
+typedef struct
+{
+   XtPointer extension;
 } XmSlideContextClassPart;
-typedef struct _XmSlideContextClassRec {
-	ObjectClassPart object_class;
-	XmSlideContextClassPart slide_class;
+
+typedef struct _XmSlideContextClassRec
+{
+   ObjectClassPart         object_class;
+   XmSlideContextClassPart slide_class;
 } XmSlideContextClassRec;
+
 extern XmSlideContextClassRec xmSlideContextClassRec;
-typedef struct _XmSlideContextPart {
-	XtIntervalId id;
-	XtCallbackList slideFinishCallback;
-	XtCallbackList slideMotionCallback;
-	Widget slide_widget;
-	unsigned long interval;
-	Dimension dest_width;
-	Dimension dest_height;
-	Position dest_x;
-	Position dest_y;
+
+typedef struct _XmSlideContextPart
+{
+   XtIntervalId   id;
+   XtCallbackList slideFinishCallback;
+   XtCallbackList slideMotionCallback;
+   Widget         slide_widget;
+   unsigned long  interval;
+   Dimension      dest_width;
+   Dimension      dest_height;
+   Position       dest_x;
+   Position       dest_y;
 } XmSlideContextPart;
-typedef struct _XmSlideContextRec {
-	ObjectPart object;
-	XmSlideContextPart slide;
+
+typedef struct _XmSlideContextRec
+{
+   ObjectPart         object;
+   XmSlideContextPart slide;
 } XmSlideContextRec;
+
 #define Slide_Id(w) (((XmSlideContextWidget)w)->slide.id)
 #define Slide_Widget(w) (((XmSlideContextWidget)w)->slide.slide_widget)
 #define Slide_Interval(w) (((XmSlideContextWidget)w)->slide.interval)

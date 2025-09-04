@@ -33,11 +33,11 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern Boolean _XmNotifyChildrenVisual(
-				       Widget cur,
-				       Widget new_w,
-				       Mask visual_flag) ;
+   Widget cur,
+   Widget new_w,
+   Mask   visual_flag);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmCareVisualTI_h */

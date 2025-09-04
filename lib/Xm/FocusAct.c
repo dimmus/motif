@@ -26,11 +26,12 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include "XmI.h"
 #include "PrimitiveI.h"
 #include "UniqueEvnI.h"
+
 /**********************************************************************
  *
  * _XmMenuButtonTakeFocus
@@ -39,16 +40,17 @@
 /*ARGSUSED*/
 void
 _XmMenuButtonTakeFocus(
-        Widget wid,
-        XEvent *event,
-        String *params,		/* unused */
-        Cardinal *num_params )	/* unused */
+   Widget    wid,
+   XEvent   *event,
+   String   *params,     /* unused */
+   Cardinal *num_params) /* unused */
 {
    /* Support menu replay, free server input queue until next button event */
    XAllowEvents(XtDisplay(wid), SyncPointer, CurrentTime);
    XmProcessTraversal(wid, XmTRAVERSE_CURRENT);
-   _XmRecordEvent (event);
+   _XmRecordEvent(event);
 }
+
 /**********************************************************************
  *
  * _XmMenuButtonTakeFocusUp
@@ -57,12 +59,12 @@ _XmMenuButtonTakeFocus(
 /*ARGSUSED*/
 void
 _XmMenuButtonTakeFocusUp(
-        Widget wid,
-        XEvent *event,
-        String *params,		/* unused */
-        Cardinal *num_params )	/* unused */
+   Widget    wid,
+   XEvent   *event,
+   String   *params,     /* unused */
+   Cardinal *num_params) /* unused */
 {
    /* Support menu replay, free server input queue until next button event */
    XAllowEvents(XtDisplay(wid), SyncPointer, CurrentTime);
-   _XmRecordEvent (event);
+   _XmRecordEvent(event);
 }

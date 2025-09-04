@@ -21,22 +21,24 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmScaleP_h
-#define _XmScaleP_h
-#include <Xm/Scale.h>
-#include <Xm/ManagerP.h>
-#ifdef __cplusplus
+#   define _XmScaleP_h
+#   include <Xm/Scale.h>
+#   include <Xm/ManagerP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /* Constraint part record for Scale widget */
 typedef struct _XmScaleConstraintPart
 {
    char unused;
-} XmScaleConstraintPart, * XmScaleConstraint;
+} XmScaleConstraintPart, *XmScaleConstraint;
+
 /*  New fields for the Scale widget class record  */
 typedef struct
 {
-   XtPointer extension;   /* Pointer to extension record */
+   XtPointer extension; /* Pointer to extension record */
 } XmScaleClassPart;
+
 /* Full class record declaration */
 typedef struct _XmScaleClassRec
 {
@@ -46,7 +48,9 @@ typedef struct _XmScaleClassRec
    XmManagerClassPart  manager_class;
    XmScaleClassPart    scale_class;
 } XmScaleClassRec;
+
 externalref XmScaleClassRec xmScaleClassRec;
+
 /* New fields for the Scale widget record */
 typedef struct
 {
@@ -57,7 +61,7 @@ typedef struct
    unsigned char  processing_direction;
    XmString       title;
    XmFontList     font_list;
-   XFontStruct  * font_struct;
+   XFontStruct   *font_struct;
    Boolean        show_value;
    short          decimal_points;
    Dimension      scale_width;
@@ -74,23 +78,25 @@ typedef struct
    /* Note: Instead, last_value is now being used to resolve between
     * XmRenderTable & XmFontList when setting up the resource table
     */
-   int last_value;
-   int slider_size;
-   GC  foreground_GC;
-   int show_value_x;
-   int show_value_y;
-   int show_value_width;
-   int show_value_height;
-   int scale_multiple;
-   XtEnum sliding_mode;
-   XtEnum slider_visual;
-   XtEnum slider_mark;
-   XtEnum show_arrows;
-   Boolean editable;
-   XtCallbackList   convert_callback;       /* Selection convert callback */
-   Region value_region;
+   int            last_value;
+   int            slider_size;
+   GC             foreground_GC;
+   int            show_value_x;
+   int            show_value_y;
+   int            show_value_width;
+   int            show_value_height;
+   int            scale_multiple;
+   XtEnum         sliding_mode;
+   XtEnum         slider_visual;
+   XtEnum         slider_mark;
+   XtEnum         show_arrows;
+   Boolean        editable;
+   XtCallbackList convert_callback; /* Selection convert callback */
+   Region         value_region;
 } XmScalePart;
-#define FROM_SET_VALUE (1<<0)
+
+#   define FROM_SET_VALUE (1<<0)
+
 /****************************************************************
  *
  * Full instance record declaration
@@ -98,16 +104,17 @@ typedef struct
  ****************************************************************/
 typedef struct _XmScaleRec
 {
-    CorePart       core;
-    CompositePart  composite;
-    ConstraintPart constraint;
-    XmManagerPart  manager;
-    XmScalePart    scale;
+   CorePart       core;
+   CompositePart  composite;
+   ConstraintPart constraint;
+   XmManagerPart  manager;
+   XmScalePart    scale;
 } XmScaleRec;
+
 /********    Private Function Declarations    ********/
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmScaleP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

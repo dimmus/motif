@@ -32,9 +32,9 @@ extern "C" {
 #endif
 typedef struct _XmTabStackRec      *XmTabStackWidget;
 typedef struct _XmTabStackClassRec *XmTabStackWidgetClass;
-extern WidgetClass                 xmTabStackWidgetClass;
+extern WidgetClass                  xmTabStackWidgetClass;
 #ifndef XmIsTabStack
-#define XmIsTabStack(w) XtIsSubclass(w, xmTabStackWidgetClass)
+#   define XmIsTabStack(w) XtIsSubclass(w, xmTabStackWidgetClass)
 #endif /* XmIsTabStack */
 extern Widget XmCreateTabStack(Widget, String, ArgList, Cardinal);
 extern Widget XmTabStackGetSelectedTab(Widget);
@@ -45,13 +45,13 @@ extern Widget XmTabStackXYToWidget(Widget, int, int);
  * Variable argument list functions
  */
 extern Widget XmVaCreateTabStack(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedTabStack(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 #ifdef __cplusplus
 } /* Close scope of 'extern "C"' declaration */
 #endif

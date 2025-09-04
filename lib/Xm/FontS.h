@@ -34,7 +34,7 @@ extern "C" {
  *       TYPEDEFS AND DEFINES
  ************************************************************/
 typedef struct _XmFontSelectorClassRec *XmFontSelectorWidgetClass;
-typedef struct _XmFontSelectorRec *XmFontSelectorWidget;
+typedef struct _XmFontSelectorRec      *XmFontSelectorWidget;
 /************************************************************
  *       MACROS
  ************************************************************/
@@ -51,7 +51,7 @@ typedef struct _XmFontSelectorRec *XmFontSelectorWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-Widget XmCreateFontSelector(Widget, String, ArgList, Cardinal);
+Widget             XmCreateFontSelector(Widget, String, ArgList, Cardinal);
 extern WidgetClass xmFontSelectorWidgetClass;
 #if defined(__cplusplus)
 }

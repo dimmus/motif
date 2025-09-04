@@ -28,7 +28,7 @@
 *	INCLUDE FILES
 *************************************************************/
 #if defined(hpux) && OS_MAJOR_VERSION < 10
-#include <nl_ctype.h>
+#   include <nl_ctype.h>
 #endif
 /************************************************************
 *	TYPEDEFS AND DEFINES
@@ -62,31 +62,27 @@ extern String xm_std_filter[], xm_std_constraint_filter[];
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
-void XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr*, XmOffsetPtr*);
-void _XmMoveWidget(Widget, Position, Position);
-void _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
-void _XmConfigureWidget(Widget, Position, Position,
-                        Dimension, Dimension, Dimension);
-XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension,
-                                   Dimension,
-                                   Dimension *, Dimension *);
-XtGeometryResult _XmHWQuery(Widget, XtWidgetGeometry*, XtWidgetGeometry *);
-void _XmGetFocus(Widget, XEvent *, String *, Cardinal *);
-void _XmFilterArgs(ArgList, Cardinal, String *,
-                   ArgList *, Cardinal *);
-void _XmSetValuesOnChildren(Widget, ArgList, Cardinal);
-Boolean _XmGadgetWarning(Widget);
-String _XmGetMBStringFromXmString(XmString);
+void             XmResolveAllPartOffsets64(WidgetClass, XmOffsetPtr *, XmOffsetPtr *);
+void             _XmMoveWidget(Widget, Position, Position);
+void             _XmResizeWidget(Widget, Dimension, Dimension, Dimension);
+void             _XmConfigureWidget(Widget, Position, Position, Dimension, Dimension, Dimension);
+XtGeometryResult _XmRequestNewSize(Widget, Boolean, Dimension, Dimension, Dimension *, Dimension *);
+XtGeometryResult _XmHWQuery(Widget, XtWidgetGeometry *, XtWidgetGeometry *);
+void             _XmGetFocus(Widget, XEvent *, String *, Cardinal *);
+void             _XmFilterArgs(ArgList, Cardinal, String *, ArgList *, Cardinal *);
+void             _XmSetValuesOnChildren(Widget, ArgList, Cardinal);
+Boolean          _XmGadgetWarning(Widget);
+String           _XmGetMBStringFromXmString(XmString);
 /*
  * Context Managment Routines.
  */
-void _XmSetContextData(Widget, XContext, XtPointer);
-void _XmDeleteContextData(Widget, XContext);
+void    _XmSetContextData(Widget, XContext, XtPointer);
+void    _XmDeleteContextData(Widget, XContext);
 Boolean _XmGetContextData(Widget, XContext, XtPointer *);
 Boolean _XmUtilIsSubclassByNameQ(Widget, XrmQuark);
-void _XmInitialIzeConverters(Widget);
-void _XmExtHighlightBorder(Widget);
-void _XmExtUnhighlightBorder(Widget);
+void    _XmInitialIzeConverters(Widget);
+void    _XmExtHighlightBorder(Widget);
+void    _XmExtUnhighlightBorder(Widget);
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/

@@ -34,50 +34,50 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern int _XmLabelCacheCompare(
-                        XtPointer A,
-                        XtPointer B) ;
+   XtPointer A,
+   XtPointer B);
 extern void _XmCalcLabelGDimensions(
-                        Widget wid) ;
+   Widget wid);
 extern void _XmReCacheLabG(
-                        Widget wid) ;
+   Widget wid);
 extern void _XmAssignLabG_MarginHeight(
-                        XmLabelGadget lw,
-                        Dimension value) ;
+   XmLabelGadget lw,
+   Dimension     value);
 extern void _XmLabelGCalcTextRect(
-                        Widget wid) ;
+   Widget wid);
 extern void _XmAssignLabG_MarginWidth(
-                        XmLabelGadget lw,
-                        Dimension value) ;
+   XmLabelGadget lw,
+   Dimension     value);
 extern void _XmAssignLabG_MarginLeft(
-                        XmLabelGadget lw,
-                        Dimension value) ;
+   XmLabelGadget lw,
+   Dimension     value);
 extern void _XmAssignLabG_MarginRight(
-                        XmLabelGadget lw,
-                        Dimension value) ;
+   XmLabelGadget lw,
+   Dimension     value);
 extern void _XmAssignLabG_MarginTop(
-                        XmLabelGadget lw,
-                        Dimension value) ;
+   XmLabelGadget lw,
+   Dimension     value);
 extern void _XmAssignLabG_MarginBottom(
-                        XmLabelGadget lw,
-                        Dimension value) ;
+   XmLabelGadget lw,
+   Dimension     value);
 extern void _XmProcessDrag(
-                        Widget w,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
-extern Boolean _XmLabelGCVTRedraw (Widget kid,
-				   Widget cur_parent,
-				   Widget new_parent,
-				   Mask visual_flag);
-extern void _XmRedisplayLabG (Widget      w,
-			      XEvent     *event,
-			      Region      region,
-			      LRectangle *background_box);
-extern void _XmLabelGCloneMenuSavvy(WidgetClass, XmMenuSavvyTrait);
-extern void _XmLabelSetBackgroundGC(XmLabelGadget lw);
-extern void _XmLabelGCalcTextRect(Widget wid);
+   Widget    w,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
+extern Boolean _XmLabelGCVTRedraw(Widget kid,
+                                  Widget cur_parent,
+                                  Widget new_parent,
+                                  Mask   visual_flag);
+extern void    _XmRedisplayLabG(Widget      w,
+                                XEvent     *event,
+                                Region      region,
+                                LRectangle *background_box);
+extern void    _XmLabelGCloneMenuSavvy(WidgetClass, XmMenuSavvyTrait);
+extern void    _XmLabelSetBackgroundGC(XmLabelGadget lw);
+extern void    _XmLabelGCalcTextRect(Widget wid);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XMLABELGI_H */

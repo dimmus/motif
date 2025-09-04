@@ -59,6 +59,6 @@ extern XtPointer XmeTraitGet(XtPointer, XrmQuark);
 extern Boolean XmeTraitSet(XtPointer, XrmQuark, XtPointer);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmTraitP_H */

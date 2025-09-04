@@ -86,7 +86,7 @@ help:
 	@echo "  Binary stripping       - Remove debug symbols"
 
 format:
-	git ls-files '*.[ch]' '*.cc' | xargs clang-format -i -style=file --assume-filename=./tools/dev/clang-format
+	git ls-files 'lib/Xm/*.[ch]' 'lib/Xm/*.cc' | xargs clang-format -i
 
 # Dependency checking target
 deps:

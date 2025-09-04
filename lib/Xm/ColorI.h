@@ -26,49 +26,49 @@
  */
 /* $XConsortium: ColorI.h /main/6 1995/07/14 10:15:47 drk $ */
 #ifndef _XmColorI_h
-#define _XmColorI_h
-#include <Xm/ColorP.h>
-#include <Xm/XmP.h>
-#ifdef __cplusplus
+#   define _XmColorI_h
+#   include <Xm/ColorP.h>
+#   include <Xm/XmP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Private Function Declarations for Color.c    ********/
 extern void _XmForegroundColorDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern void _XmHighlightColorDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern void _XmBackgroundColorDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern void _XmTopShadowColorDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern void _XmBottomShadowColorDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern void _XmSelectColorDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern Boolean _XmSearchColorCache(
-                        unsigned int which,
-                        XmColorData *values,
-                        XmColorData **ret) ;
-extern XmColorData * _XmAddToColorCache(
-                        XmColorData *new_rec) ;
+   unsigned int  which,
+   XmColorData  *values,
+   XmColorData **ret);
+extern XmColorData *_XmAddToColorCache(
+   XmColorData *new_rec);
 extern Pixmap _XmConvertToBW(
-                        Widget w,
-                        Pixmap pm) ;
+   Widget w,
+   Pixmap pm);
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmColorI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -21,50 +21,50 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmScale_h
-#define _XmScale_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmScale_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /* Class record constants */
 externalref WidgetClass xmScaleWidgetClass;
 /* fast XtIsSubclass define */
-#ifndef XmIsScale
-#define XmIsScale(w) XtIsSubclass (w, xmScaleWidgetClass)
-#endif
-typedef struct _XmScaleClassRec * XmScaleWidgetClass;
-typedef struct _XmScaleRec      * XmScaleWidget;
+#   ifndef XmIsScale
+#      define XmIsScale(w) XtIsSubclass (w, xmScaleWidgetClass)
+#   endif
+typedef struct _XmScaleClassRec *XmScaleWidgetClass;
+typedef struct _XmScaleRec      *XmScaleWidget;
 /********    Public Function Declarations    ********/
 void XmScaleSetValue(
-                 Widget w,
-                 int value) ;
+   Widget w,
+   int    value);
 void XmScaleGetValue(
-                 Widget w,
-                 int *value) ;
+   Widget w,
+   int   *value);
 Widget XmCreateScale(
-                 Widget parent,
-                 char *name,
-                 ArgList arglist,
-                 Cardinal argcount) ;
+   Widget   parent,
+   char    *name,
+   ArgList  arglist,
+   Cardinal argcount);
 Widget XmVaCreateScale(
-                 Widget parent,
-                 char *name,
-                 ...);
+   Widget parent,
+   char  *name,
+   ...);
 Widget XmVaCreateManagedScale(
-                 Widget parent,
-                 char *name,
-                 ...);
+   Widget parent,
+   char  *name,
+   ...);
 void XmScaleSetTicks(
-                     Widget scale,
-                     int big_every,
-		     Cardinal num_med,
-		     Cardinal num_small,
-		     Dimension  size_big,
-		     Dimension  size_med,
-		     Dimension  size_small);
+   Widget    scale,
+   int       big_every,
+   Cardinal  num_med,
+   Cardinal  num_small,
+   Dimension size_big,
+   Dimension size_med,
+   Dimension size_small);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmScale_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

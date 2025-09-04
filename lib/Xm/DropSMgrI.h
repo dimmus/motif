@@ -29,21 +29,21 @@ extern "C" {
 #endif
 /********    Private Function Declarations for DropSMgr.c    ********/
 extern void _XmDSMUpdate(
-                        XmDropSiteManagerObject dsm,
-                        XtPointer clientData,
-                        XtPointer callData) ;
+   XmDropSiteManagerObject dsm,
+   XtPointer               clientData,
+   XtPointer               callData);
 extern int _XmDSMGetTreeFromDSM(
-                        XmDropSiteManagerObject dsm,
-                        Widget shell,
-                        XtPointer dataPtr) ;
+   XmDropSiteManagerObject dsm,
+   Widget                  shell,
+   XtPointer               dataPtr);
 extern Boolean _XmDropSiteShell(
-                        Widget widget) ;
+   Widget widget);
 extern Boolean _XmDropSiteWrapperCandidate(
-                        Widget widget) ;
+   Widget widget);
 extern Widget _XmGetActiveDropSite(
-                        Widget widget) ;
+   Widget widget);
 extern void _XmSyncDropSiteTree(
-				Widget shell) ;
+   Widget shell);
 extern void _XmIEndUpdate(XtPointer client_data, XtIntervalId *interval_id);
 /********    End Private Function Declarations    ********/
 /* This is used for maintenance of the Pre-Register drop site tree */
@@ -55,236 +55,295 @@ extern void _XmIEndUpdate(XtPointer client_data, XtIntervalId *interval_id);
 #define XmDSM_DS_INTERNAL	(1<<1)
 #define XmDSM_DS_HAS_REGION	(1<<2)
 #define XmDSM_T_CLOSE (1<<0)
+
 /*
  * Notice that the top of the record is the samy layout as
  * an XRectangle.  This is important when it is passed to
  * IntersectWithAncestors by DetectAndInsertAllClippers.
  */
-typedef struct _XmDSClipRect {
-	Position	x;
-	Position	y;
-	Dimension	width;
-	Dimension	height;
-	unsigned char	detected;
+typedef struct _XmDSClipRect
+{
+   Position      x;
+   Position      y;
+   Dimension     width;
+   Dimension     height;
+   unsigned char detected;
 } XmDSClipRect;
+
 #define CHILDREN_INCREMENT 10
-typedef struct _XmDSStatusRec {
-	unsigned int	remote:1;
-	unsigned int	leaf:1;
-	unsigned int	shell:1;
-	unsigned int	type:1;
-	unsigned int	animation_style:3;
-	unsigned int	internal:1;
-	unsigned int	has_region:1;
-	unsigned int	activity:1;
-	unsigned int	registered:1;
-} XmDSStatusRec, * XmDSStatus;
-typedef struct _XmDSFullInfoRec {
-	XmDSStatusRec	status;
-	XtPointer		parent;
-	unsigned short	import_targets_ID;
-	unsigned char	operations;
-	XmRegion		region;
-    XtCallbackProc	drag_proc;
-	XtCallbackProc	drop_proc;
-    Widget 				widget;
-    unsigned short	num_children;
-    unsigned short	max_children;
-    XtPointer		*children;
-	/* Support for subresource magic; needed ONLY in Full structure */
-	unsigned char	type;
-	unsigned char	animation_style;
-	unsigned char	activity;
-	Atom			*import_targets;
-	Cardinal		num_import_targets;
-	XRectangle		*rectangles;
-	Cardinal		num_rectangles;
-	/* A complete laundry list of animation fields */
-	Pixmap		animation_pixmap;
-	Cardinal	animation_pixmap_depth;
-	Pixmap		animation_mask;
-	Pixel		background;
-	Pixel		foreground;
-	Pixel		highlight_color;
-	Pixmap		highlight_pixmap;
-	Dimension	highlight_thickness;
-	Pixel		top_shadow_color;
-	Pixmap		top_shadow_pixmap;
-	Pixel		bottom_shadow_color;
-	Pixmap		bottom_shadow_pixmap;
-	Dimension	shadow_thickness;
-	Dimension	border_width;
-        XtPointer	client_data;
-} XmDSFullInfoRec, * XmDSFullInfo;
+
+typedef struct _XmDSStatusRec
+{
+   unsigned int remote          : 1;
+   unsigned int leaf            : 1;
+   unsigned int shell           : 1;
+   unsigned int type            : 1;
+   unsigned int animation_style : 3;
+   unsigned int internal        : 1;
+   unsigned int has_region      : 1;
+   unsigned int activity        : 1;
+   unsigned int registered      : 1;
+} XmDSStatusRec, *XmDSStatus;
+
+typedef struct _XmDSFullInfoRec
+{
+   XmDSStatusRec  status;
+   XtPointer      parent;
+   unsigned short import_targets_ID;
+   unsigned char  operations;
+   XmRegion       region;
+   XtCallbackProc drag_proc;
+   XtCallbackProc drop_proc;
+   Widget         widget;
+   unsigned short num_children;
+   unsigned short max_children;
+   XtPointer     *children;
+   /* Support for subresource magic; needed ONLY in Full structure */
+   unsigned char type;
+   unsigned char animation_style;
+   unsigned char activity;
+   Atom         *import_targets;
+   Cardinal      num_import_targets;
+   XRectangle   *rectangles;
+   Cardinal      num_rectangles;
+   /* A complete laundry list of animation fields */
+   Pixmap    animation_pixmap;
+   Cardinal  animation_pixmap_depth;
+   Pixmap    animation_mask;
+   Pixel     background;
+   Pixel     foreground;
+   Pixel     highlight_color;
+   Pixmap    highlight_pixmap;
+   Dimension highlight_thickness;
+   Pixel     top_shadow_color;
+   Pixmap    top_shadow_pixmap;
+   Pixel     bottom_shadow_color;
+   Pixmap    bottom_shadow_pixmap;
+   Dimension shadow_thickness;
+   Dimension border_width;
+   XtPointer client_data;
+} XmDSFullInfoRec, *XmDSFullInfo;
+
 /* One gazillion typedefs to allow for dataspace efficiency */
-typedef struct _XmDSLocalLeafRec {
-	XtPointer	parent;
-	unsigned short	import_targets_ID;
-	unsigned char	operations;
-	XmRegion	region;
-	XtCallbackProc	drag_proc;
-	XtCallbackProc	drop_proc;
-	Widget 		widget;
- 	XtPointer	client_data;
-} XmDSLocalLeafRec, * XmDSLocalLeaf;
-typedef struct _XmDSLocalNodeRec {
-	XtPointer	parent;
-	unsigned short	import_targets_ID;
-	unsigned char	operations;
-	XmRegion	region;
-	unsigned short	num_children;
-	unsigned short	max_children;
-	XtPointer	*children;
-	XtCallbackProc	drag_proc;
-	XtCallbackProc	drop_proc;
-	Widget 		widget;
- 	XtPointer	client_data;
-} XmDSLocalNodeRec, * XmDSLocalNode;
-typedef struct _XmDSLocalPixmapStyleRec {
-	Pixmap		animation_pixmap;
-	Cardinal	animation_pixmap_depth;
-	Pixmap		animation_mask;
+typedef struct _XmDSLocalLeafRec
+{
+   XtPointer      parent;
+   unsigned short import_targets_ID;
+   unsigned char  operations;
+   XmRegion       region;
+   XtCallbackProc drag_proc;
+   XtCallbackProc drop_proc;
+   Widget         widget;
+   XtPointer      client_data;
+} XmDSLocalLeafRec, *XmDSLocalLeaf;
+
+typedef struct _XmDSLocalNodeRec
+{
+   XtPointer      parent;
+   unsigned short import_targets_ID;
+   unsigned char  operations;
+   XmRegion       region;
+   unsigned short num_children;
+   unsigned short max_children;
+   XtPointer     *children;
+   XtCallbackProc drag_proc;
+   XtCallbackProc drop_proc;
+   Widget         widget;
+   XtPointer      client_data;
+} XmDSLocalNodeRec, *XmDSLocalNode;
+
+typedef struct _XmDSLocalPixmapStyleRec
+{
+   Pixmap   animation_pixmap;
+   Cardinal animation_pixmap_depth;
+   Pixmap   animation_mask;
 } XmDSLocalPixmapStyleRec, *XmDSLocalPixmapStyle;
-typedef struct _XmDSRemoteLeafRec {
-	XtPointer		parent;
-	unsigned short	import_targets_ID;
-	unsigned char	operations;
-	XmRegion		region;
-} XmDSRemoteLeafRec, * XmDSRemoteLeaf;
-typedef struct _XmDSRemoteNodeRec {
-	XtPointer		parent;
-	unsigned short	import_targets_ID;
-	unsigned char	operations;
-	XmRegion		region;
-    unsigned short	num_children;
-    unsigned short	max_children;
-    XtPointer		*children;
-} XmDSRemoteNodeRec, * XmDSRemoteNode;
+
+typedef struct _XmDSRemoteLeafRec
+{
+   XtPointer      parent;
+   unsigned short import_targets_ID;
+   unsigned char  operations;
+   XmRegion       region;
+} XmDSRemoteLeafRec, *XmDSRemoteLeaf;
+
+typedef struct _XmDSRemoteNodeRec
+{
+   XtPointer      parent;
+   unsigned short import_targets_ID;
+   unsigned char  operations;
+   XmRegion       region;
+   unsigned short num_children;
+   unsigned short max_children;
+   XtPointer     *children;
+} XmDSRemoteNodeRec, *XmDSRemoteNode;
+
 /* These style records are only used for remote trees */
-typedef struct _XmDSRemoteNoneStyleRec {
-	Dimension	border_width;
-} XmDSRemoteNoneStyleRec, * XmDSRemoteNoneStyle;
-typedef struct _XmDSRemoteHighlightStyleRec {
-	Pixel		highlight_color;
-	Pixmap		highlight_pixmap;
-	Pixel		background; /* in case of highlight pixmaps */
-	Dimension	highlight_thickness;
-	Dimension	border_width;
-} XmDSRemoteHighlightStyleRec, * XmDSRemoteHighlightStyle;
-typedef struct _XmDSRemoteShadowStyleRec {
-	Pixel		top_shadow_color;
-	Pixmap		top_shadow_pixmap;
-	Pixel		bottom_shadow_color;
-	Pixmap		bottom_shadow_pixmap;
-	Pixel		foreground; /* in case of shadow pixmaps */
-	Dimension	shadow_thickness;
-	Dimension	highlight_thickness;
-	Dimension	border_width;
-} XmDSRemoteShadowStyleRec, * XmDSRemoteShadowStyle;
-typedef struct _XmDSRemotePixmapStyleRec {
-	Pixmap		animation_pixmap;
-	Cardinal	animation_pixmap_depth;
-	Pixmap		animation_mask;
-	Pixel		background;
-	Pixel		foreground;
-	Dimension	shadow_thickness;
-	Dimension	highlight_thickness;
-	Dimension	border_width;
-} XmDSRemotePixmapStyleRec, * XmDSRemotePixmapStyle;
+typedef struct _XmDSRemoteNoneStyleRec
+{
+   Dimension border_width;
+} XmDSRemoteNoneStyleRec, *XmDSRemoteNoneStyle;
+
+typedef struct _XmDSRemoteHighlightStyleRec
+{
+   Pixel     highlight_color;
+   Pixmap    highlight_pixmap;
+   Pixel     background; /* in case of highlight pixmaps */
+   Dimension highlight_thickness;
+   Dimension border_width;
+} XmDSRemoteHighlightStyleRec, *XmDSRemoteHighlightStyle;
+
+typedef struct _XmDSRemoteShadowStyleRec
+{
+   Pixel     top_shadow_color;
+   Pixmap    top_shadow_pixmap;
+   Pixel     bottom_shadow_color;
+   Pixmap    bottom_shadow_pixmap;
+   Pixel     foreground; /* in case of shadow pixmaps */
+   Dimension shadow_thickness;
+   Dimension highlight_thickness;
+   Dimension border_width;
+} XmDSRemoteShadowStyleRec, *XmDSRemoteShadowStyle;
+
+typedef struct _XmDSRemotePixmapStyleRec
+{
+   Pixmap    animation_pixmap;
+   Cardinal  animation_pixmap_depth;
+   Pixmap    animation_mask;
+   Pixel     background;
+   Pixel     foreground;
+   Dimension shadow_thickness;
+   Dimension highlight_thickness;
+   Dimension border_width;
+} XmDSRemotePixmapStyleRec, *XmDSRemotePixmapStyle;
+
 /* Now we permute the preceding types */
-typedef struct _XmDSLocalNoneLeafRec {
-	XmDSStatusRec			status;
-	XmDSLocalLeafRec		info;
-} XmDSLocalNoneLeafRec, * XmDSLocalNoneLeaf;
-typedef struct _XmDSLocalNoneNodeRec {
-	XmDSStatusRec			status;
-	XmDSLocalNodeRec		info;
-} XmDSLocalNoneNodeRec, * XmDSLocalNoneNode;
-typedef struct _XmDSLocalHighlightLeafRec {
-	XmDSStatusRec			status;
-	XmDSLocalLeafRec		info;
-} XmDSLocalHighlightLeafRec, * XmDSLocalHighlightLeaf;
-typedef struct _XmDSLocalHighlightNodeRec {
-	XmDSStatusRec			status;
-	XmDSLocalNodeRec		info;
-} XmDSLocalHighlightNodeRec, * XmDSLocalHighlightNode;
-typedef struct _XmDSLocalShadowLeafRec {
-	XmDSStatusRec		status;
-	XmDSLocalLeafRec	info;
-} XmDSLocalShadowLeafRec, * XmDSLocalShadowLeaf;
-typedef struct _XmDSLocalShadowNodeRec {
-	XmDSStatusRec		status;
-	XmDSLocalNodeRec	info;
-} XmDSLocalShadowNodeRec, * XmDSLocalShadowNode;
-typedef struct _XmDSLocalPixmapLeafRec {
-	XmDSStatusRec		status;
-	XmDSLocalLeafRec	info;
-	XmDSLocalPixmapStyleRec	animation_data;
-} XmDSLocalPixmapLeafRec, * XmDSLocalPixmapLeaf;
-typedef struct _XmDSLocalPixmapNodeRec {
-	XmDSStatusRec		status;
-	XmDSLocalNodeRec	info;
-	XmDSLocalPixmapStyleRec	animation_data;
-} XmDSLocalPixmapNodeRec, * XmDSLocalPixmapNode;
-typedef struct _XmDSRemoteNoneLeafRec {
-	XmDSStatusRec			status;
-	XmDSRemoteLeafRec		info;
-	XmDSRemoteNoneStyleRec	animation_data;
-} XmDSRemoteNoneLeafRec, * XmDSRemoteNoneLeaf;
-typedef struct _XmDSRemoteNoneNodeRec {
-	XmDSStatusRec			status;
-	XmDSRemoteNodeRec		info;
-	XmDSRemoteNoneStyleRec	animation_data;
-} XmDSRemoteNoneNodeRec, * XmDSRemoteNoneNode;
-typedef struct _XmDSRemoteHighlightLeafRec {
-	XmDSStatusRec			status;
-	XmDSRemoteLeafRec		info;
-	XmDSRemoteHighlightStyleRec	animation_data;
-} XmDSRemoteHighlightLeafRec, * XmDSRemoteHighlightLeaf;
-typedef struct _XmDSRemoteHighlightNodeRec {
-	XmDSStatusRec			status;
-	XmDSRemoteNodeRec		info;
-	XmDSRemoteHighlightStyleRec	animation_data;
-} XmDSRemoteHighlightNodeRec, * XmDSRemoteHighlightNode;
-typedef struct _XmDSRemoteShadowLeafRec {
-	XmDSStatusRec		status;
-	XmDSRemoteLeafRec	info;
-	XmDSRemoteShadowStyleRec	animation_data;
-} XmDSRemoteShadowLeafRec, * XmDSRemoteShadowLeaf;
-typedef struct _XmDSRemoteShadowNodeRec {
-	XmDSStatusRec		status;
-	XmDSRemoteNodeRec	info;
-	XmDSRemoteShadowStyleRec	animation_data;
-} XmDSRemoteShadowNodeRec, * XmDSRemoteShadowNode;
-typedef struct _XmDSRemotePixmapLeafRec {
-	XmDSStatusRec		status;
-	XmDSRemoteLeafRec	info;
-	XmDSRemotePixmapStyleRec	animation_data;
-} XmDSRemotePixmapLeafRec, * XmDSRemotePixmapLeaf;
-typedef struct _XmDSRemotePixmapNodeRec {
-	XmDSStatusRec		status;
-	XmDSRemoteNodeRec	info;
-	XmDSRemotePixmapStyleRec	animation_data;
-} XmDSRemotePixmapNodeRec, * XmDSRemotePixmapNode;
+typedef struct _XmDSLocalNoneLeafRec
+{
+   XmDSStatusRec    status;
+   XmDSLocalLeafRec info;
+} XmDSLocalNoneLeafRec, *XmDSLocalNoneLeaf;
+
+typedef struct _XmDSLocalNoneNodeRec
+{
+   XmDSStatusRec    status;
+   XmDSLocalNodeRec info;
+} XmDSLocalNoneNodeRec, *XmDSLocalNoneNode;
+
+typedef struct _XmDSLocalHighlightLeafRec
+{
+   XmDSStatusRec    status;
+   XmDSLocalLeafRec info;
+} XmDSLocalHighlightLeafRec, *XmDSLocalHighlightLeaf;
+
+typedef struct _XmDSLocalHighlightNodeRec
+{
+   XmDSStatusRec    status;
+   XmDSLocalNodeRec info;
+} XmDSLocalHighlightNodeRec, *XmDSLocalHighlightNode;
+
+typedef struct _XmDSLocalShadowLeafRec
+{
+   XmDSStatusRec    status;
+   XmDSLocalLeafRec info;
+} XmDSLocalShadowLeafRec, *XmDSLocalShadowLeaf;
+
+typedef struct _XmDSLocalShadowNodeRec
+{
+   XmDSStatusRec    status;
+   XmDSLocalNodeRec info;
+} XmDSLocalShadowNodeRec, *XmDSLocalShadowNode;
+
+typedef struct _XmDSLocalPixmapLeafRec
+{
+   XmDSStatusRec           status;
+   XmDSLocalLeafRec        info;
+   XmDSLocalPixmapStyleRec animation_data;
+} XmDSLocalPixmapLeafRec, *XmDSLocalPixmapLeaf;
+
+typedef struct _XmDSLocalPixmapNodeRec
+{
+   XmDSStatusRec           status;
+   XmDSLocalNodeRec        info;
+   XmDSLocalPixmapStyleRec animation_data;
+} XmDSLocalPixmapNodeRec, *XmDSLocalPixmapNode;
+
+typedef struct _XmDSRemoteNoneLeafRec
+{
+   XmDSStatusRec          status;
+   XmDSRemoteLeafRec      info;
+   XmDSRemoteNoneStyleRec animation_data;
+} XmDSRemoteNoneLeafRec, *XmDSRemoteNoneLeaf;
+
+typedef struct _XmDSRemoteNoneNodeRec
+{
+   XmDSStatusRec          status;
+   XmDSRemoteNodeRec      info;
+   XmDSRemoteNoneStyleRec animation_data;
+} XmDSRemoteNoneNodeRec, *XmDSRemoteNoneNode;
+
+typedef struct _XmDSRemoteHighlightLeafRec
+{
+   XmDSStatusRec               status;
+   XmDSRemoteLeafRec           info;
+   XmDSRemoteHighlightStyleRec animation_data;
+} XmDSRemoteHighlightLeafRec, *XmDSRemoteHighlightLeaf;
+
+typedef struct _XmDSRemoteHighlightNodeRec
+{
+   XmDSStatusRec               status;
+   XmDSRemoteNodeRec           info;
+   XmDSRemoteHighlightStyleRec animation_data;
+} XmDSRemoteHighlightNodeRec, *XmDSRemoteHighlightNode;
+
+typedef struct _XmDSRemoteShadowLeafRec
+{
+   XmDSStatusRec            status;
+   XmDSRemoteLeafRec        info;
+   XmDSRemoteShadowStyleRec animation_data;
+} XmDSRemoteShadowLeafRec, *XmDSRemoteShadowLeaf;
+
+typedef struct _XmDSRemoteShadowNodeRec
+{
+   XmDSStatusRec            status;
+   XmDSRemoteNodeRec        info;
+   XmDSRemoteShadowStyleRec animation_data;
+} XmDSRemoteShadowNodeRec, *XmDSRemoteShadowNode;
+
+typedef struct _XmDSRemotePixmapLeafRec
+{
+   XmDSStatusRec            status;
+   XmDSRemoteLeafRec        info;
+   XmDSRemotePixmapStyleRec animation_data;
+} XmDSRemotePixmapLeafRec, *XmDSRemotePixmapLeaf;
+
+typedef struct _XmDSRemotePixmapNodeRec
+{
+   XmDSStatusRec            status;
+   XmDSRemoteNodeRec        info;
+   XmDSRemotePixmapStyleRec animation_data;
+} XmDSRemotePixmapNodeRec, *XmDSRemotePixmapNode;
+
 typedef union _XmDSInfoRec {
-	XmDSStatusRec				status;
-	XmDSLocalNoneLeafRec		local_none_leaf;
-	XmDSLocalNoneNodeRec		local_none_node;
-	XmDSLocalHighlightLeafRec	local_highlight_leaf;
-	XmDSLocalHighlightNodeRec	local_highlight_node;
-	XmDSLocalShadowLeafRec		local_shadow_leaf;
-	XmDSLocalShadowNodeRec		local_shadow_node;
-	XmDSLocalPixmapLeafRec		local_pixmap_leaf;
-	XmDSLocalPixmapNodeRec		local_pixmap_node;
-	XmDSRemoteNoneLeafRec		remote_none_leaf;
-	XmDSRemoteNoneNodeRec		remote_none_node;
-	XmDSRemoteHighlightLeafRec	remote_highlight_leaf;
-	XmDSRemoteHighlightNodeRec	remote_highlight_node;
-	XmDSRemoteShadowLeafRec		remote_shadow_leaf;
-	XmDSRemoteShadowNodeRec		remote_shadow_node;
-	XmDSRemotePixmapLeafRec		remote_pixmap_leaf;
-	XmDSRemotePixmapNodeRec		remote_pixmap_node;
-} XmDSInfoRec, * XmDSInfo;
+   XmDSStatusRec              status;
+   XmDSLocalNoneLeafRec       local_none_leaf;
+   XmDSLocalNoneNodeRec       local_none_node;
+   XmDSLocalHighlightLeafRec  local_highlight_leaf;
+   XmDSLocalHighlightNodeRec  local_highlight_node;
+   XmDSLocalShadowLeafRec     local_shadow_leaf;
+   XmDSLocalShadowNodeRec     local_shadow_node;
+   XmDSLocalPixmapLeafRec     local_pixmap_leaf;
+   XmDSLocalPixmapNodeRec     local_pixmap_node;
+   XmDSRemoteNoneLeafRec      remote_none_leaf;
+   XmDSRemoteNoneNodeRec      remote_none_node;
+   XmDSRemoteHighlightLeafRec remote_highlight_leaf;
+   XmDSRemoteHighlightNodeRec remote_highlight_node;
+   XmDSRemoteShadowLeafRec    remote_shadow_leaf;
+   XmDSRemoteShadowNodeRec    remote_shadow_node;
+   XmDSRemotePixmapLeafRec    remote_pixmap_leaf;
+   XmDSRemotePixmapNodeRec    remote_pixmap_node;
+} XmDSInfoRec, *XmDSInfo;
+
 /* A few macros to deal with the typedefs */
 #define GetDSRemote(ds)			(((XmDSStatus)(ds))->remote)
 #define GetDSLeaf(ds)			(((XmDSStatus)(ds))->leaf)
@@ -401,7 +460,7 @@ typedef union _XmDSInfoRec {
 			1 \
 		: \
 			0)
-#define SetDSRegistered(ds,newRegistered) \
+#define SetDSRegistered(ds, newRegistered) \
 	(((XmDSStatus)(ds))->registered) = \
 		(unsigned int)(newRegistered)
 #define SetDSInternal(ds, newInternal) \
@@ -495,27 +554,27 @@ typedef union _XmDSInfoRec {
 		(XtPointer *)NULL)
 /********    Private Function Declarations    ********/
 extern void _XmDSIAddChild(
-                        XmDSInfo parentInfo,
-                        XmDSInfo childInfo,
-                        Cardinal childPosition) ;
+   XmDSInfo parentInfo,
+   XmDSInfo childInfo,
+   Cardinal childPosition);
 extern void _XmDSIRemoveChild(
-                        XmDSInfo parentInfo,
-                        XmDSInfo childInfo) ;
+   XmDSInfo parentInfo,
+   XmDSInfo childInfo);
 extern Cardinal _XmDSIGetChildPosition(
-                        XmDSInfo parentInfo,
-                        XmDSInfo childInfo) ;
+   XmDSInfo parentInfo,
+   XmDSInfo childInfo);
 extern void _XmDSIReplaceChild(
-                        XmDSInfo oldChildInfo,
-                        XmDSInfo newChildInfo) ;
+   XmDSInfo oldChildInfo,
+   XmDSInfo newChildInfo);
 extern void _XmDSISwapChildren(
-                        XmDSInfo parentInfo,
-                        Cardinal position1,
-                        Cardinal position2) ;
+   XmDSInfo parentInfo,
+   Cardinal position1,
+   Cardinal position2);
 extern void _XmDSIDestroy(
-                        XmDSInfo info,
-                        Boolean substructures) ;
+   XmDSInfo info,
+   Boolean  substructures);
 extern Dimension _XmDSIGetBorderWidth(
-                        XmDSInfo info) ;
+   XmDSInfo info);
 /********    End Private Function Declarations    ********/
 #define AddDSChild _XmDSIAddChild
 #define RemoveDSChild _XmDSIRemoveChild
@@ -525,8 +584,8 @@ extern Dimension _XmDSIGetBorderWidth(
 #define DestroyDS _XmDSIDestroy
 #define GetDSBorderWidth _XmDSIGetBorderWidth
 externalref XtResource _XmDSResources[];
-externalref Cardinal _XmNumDSResources;
+externalref Cardinal   _XmNumDSResources;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmDropSMgrI_h */

@@ -28,8 +28,8 @@
 extern "C" {
 #endif
 #define XmPanedAskChild 0
-typedef struct _XmPanedClassRec	*XmPanedWidgetClass;
-typedef struct _XmPanedRec	*XmPanedWidget;
+typedef struct _XmPanedClassRec *XmPanedWidgetClass;
+typedef struct _XmPanedRec      *XmPanedWidget;
 /************************************************************
  *
  *  Public Procedures
@@ -43,9 +43,9 @@ typedef struct _XmPanedRec	*XmPanedWidget;
  *	Returns: the number of panes in the paned widget.
  */
 extern int XmPanedGetPanes(
-    Widget			/* w */,
-    WidgetList *		/* panes */,
-    int *			/* num */
+   Widget /* w */,
+   WidgetList * /* panes */,
+   int * /* num */
 );
 /*	Function Name: XmCreatePaned
  *	Description: Creation Routine for UIL and ADA.

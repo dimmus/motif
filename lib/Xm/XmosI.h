@@ -39,64 +39,64 @@ extern "C" {
 			      (outc), (outl), (prev))
 /********    Private Function Declarations    ********/
 extern String _XmOSFindPatternPart(
-                        String fileSpec) ;
+   String fileSpec);
 extern void _XmOSQualifyFileSpec(
-                        String dirSpec,
-                        String filterSpec,
-                        String *pQualifiedDir,
-                        String *pQualifiedPattern) ;
+   String  dirSpec,
+   String  filterSpec,
+   String *pQualifiedDir,
+   String *pQualifiedPattern);
 extern void _XmOSGetDirEntries(
-                        String qualifiedDir,
-                        String matchPattern,
-                        unsigned char fileType,
-                        Boolean matchDotsLiterally,
-                        Boolean listWithFullPath,
-                        String **pEntries,
-                        unsigned int *pNumEntries,
-                        unsigned int *pNumAlloc) ;
+   String        qualifiedDir,
+   String        matchPattern,
+   unsigned char fileType,
+   Boolean       matchDotsLiterally,
+   Boolean       listWithFullPath,
+   String      **pEntries,
+   unsigned int *pNumEntries,
+   unsigned int *pNumAlloc);
 extern void _XmOSBuildFileList(
-                        String dirPath,
-                        String pattern,
-                        unsigned char typeMask,
-                        String **pEntries,
-                        unsigned int *pNumEntries,
-                        unsigned int *pNumAlloc) ;
+   String        dirPath,
+   String        pattern,
+   unsigned char typeMask,
+   String      **pEntries,
+   unsigned int *pNumEntries,
+   unsigned int *pNumAlloc);
 extern int _XmOSFileCompare(
-                        XmConst void *sp1,
-                        XmConst void *sp2) ;
+   XmConst void *sp1,
+   XmConst void *sp2);
 extern String _XmOSInitPath(
-                        String file_name,
-                        String env_pathname,
-                        Boolean *user_path) ;
+   String   file_name,
+   String   env_pathname,
+   Boolean *user_path);
 extern String _XmOSBuildFileName(
-			String file,
-			String path) ;
+   String file,
+   String path);
 extern int _XmOSPutenv(
-		       char *string);
+   char *string);
 extern void _XmOSGenerateMaskName(
-				  String imageName,
-				  String maskNameBuf,
-				  size_t buf_len);
-extern Status _XmOSGetInitialCharsDirection(XtPointer     characters,
-					    XmTextType    type,
-					    XmStringTag   locale,
-					    unsigned int *num_bytes,
-					    XmDirection  *direction) ;
+   String imageName,
+   String maskNameBuf,
+   size_t buf_len);
+extern Status      _XmOSGetInitialCharsDirection(XtPointer     characters,
+                                                 XmTextType    type,
+                                                 XmStringTag   locale,
+                                                 unsigned int *num_bytes,
+                                                 XmDirection  *direction);
 extern XmDirection _XmOSGetCharDirection(XtPointer   character,
-					 XmTextType  type,
-					 XmStringTag locale) ;
-extern int _XmOSKeySymToCharacter(KeySym keysym,
-				  char	 *locale,
-				  char	 *buffer);
-extern void _XmOSFindPathParts(String path,
-			       String *filenameRtn,
-			       String *suffixRtn);
-extern Boolean _XmOSAbsolutePathName(
-                        String path,
-                        String *pathRtn,
-                        String buf) ;
+                                         XmTextType  type,
+                                         XmStringTag locale);
+extern int         _XmOSKeySymToCharacter(KeySym keysym,
+                                          char  *locale,
+                                          char  *buffer);
+extern void        _XmOSFindPathParts(String  path,
+                                      String *filenameRtn,
+                                      String *suffixRtn);
+extern Boolean     _XmOSAbsolutePathName(
+       String  path,
+       String *pathRtn,
+       String  buf);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmosI_h */

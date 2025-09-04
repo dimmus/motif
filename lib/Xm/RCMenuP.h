@@ -25,12 +25,12 @@
  * HISTORY
  */
 #ifndef _XmRCMenuP_h
-#define _XmRCMenuP_h
-#ifdef __cplusplus
+#   define _XmRCMenuP_h
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
-#endif  /* _XmRCMenuP_h */
+#   endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
+#endif /* _XmRCMenuP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

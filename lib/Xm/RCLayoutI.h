@@ -33,41 +33,41 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmRCDoMarginAdjustment(
-                        XmRowColumnWidget m) ;
+   XmRowColumnWidget m);
 extern void _XmRCThinkAboutSize(
-                        register XmRowColumnWidget m,
-                        Dimension *w,
-                        Dimension *h,
-                        Widget instigator,
-                        XtWidgetGeometry *request) ;
+   register XmRowColumnWidget m,
+   Dimension                 *w,
+   Dimension                 *h,
+   Widget                     instigator,
+   XtWidgetGeometry          *request);
 extern void _XmRCPreferredSize(
-                        XmRowColumnWidget m,
-                        Dimension *w,
-                        Dimension *h) ;
+   XmRowColumnWidget m,
+   Dimension        *w,
+   Dimension        *h);
 extern void _XmRCAdaptToSize(
-                        XmRowColumnWidget m,
-                        Widget instigator,
-                        XtWidgetGeometry *request) ;
+   XmRowColumnWidget m,
+   Widget            instigator,
+   XtWidgetGeometry *request);
 extern XmRCKidGeometry _XmRCGetKidGeo(
-                        Widget wid,
-                        Widget instigator,
-                        XtWidgetGeometry *request,
-                        int uniform_border,
-                        Dimension border,
-                        int uniform_width_margins,
-                        int uniform_height_margins,
-                        Widget help,
-			Widget toc,
-                        int geo_type) ;
+   Widget            wid,
+   Widget            instigator,
+   XtWidgetGeometry *request,
+   int               uniform_border,
+   Dimension         border,
+   int               uniform_width_margins,
+   int               uniform_height_margins,
+   Widget            help,
+   Widget            toc,
+   int               geo_type);
 extern void _XmRCSetKidGeo(
-                        XmRCKidGeometry kg,
-                        Widget instigator) ;
+   XmRCKidGeometry kg,
+   Widget          instigator);
 extern void _XmRC_SetOrGetTextMargins(
-                        Widget wid,
-                        unsigned char op,
-                        XmBaselineMargins *textMargins) ;
+   Widget             wid,
+   unsigned char      op,
+   XmBaselineMargins *textMargins);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmRCLayoutI_h */

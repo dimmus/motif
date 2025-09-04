@@ -5,40 +5,44 @@
 extern "C" {
 #endif
 #define XmANY_COLUMN	-1
-externalref WidgetClass xmMultiListWidgetClass;
-typedef struct _XmMultiListClassRec	*XmMultiListWidgetClass;
-typedef struct _XmMultiListRec		*XmMultiListWidget;
-typedef struct _XmMultiListRowInfo {
-    /*
+externalref WidgetClass              xmMultiListWidgetClass;
+typedef struct _XmMultiListClassRec *XmMultiListWidgetClass;
+typedef struct _XmMultiListRec      *XmMultiListWidget;
+
+typedef struct _XmMultiListRowInfo
+{
+   /*
      * Used by the XmIList widget.
      */
-    XmString * values;		/* The array of column strings */
-    Pixmap pixmap;		/* the mini-icon pixmaps. */
-    Boolean selected;		/* Is this row selected. */
-    /*
+   XmString *values;   /* The array of column strings */
+   Pixmap    pixmap;   /* the mini-icon pixmaps. */
+   Boolean   selected; /* Is this row selected. */
+   /*
      * Provided for the convience of the application programmer.
      */
-    short *sort_id;
-    XtPointer data;
-    /*
+   short    *sort_id;
+   XtPointer data;
+   /*
      * Private to the XmIList widget (do not modify these).
      */
-    short pix_width;		/* width of the pixmap. */
-    short pix_height;		/* height of the pixmap. */
-    short height;		/* height of the row */
-    Boolean old_sel_state;	/* previous select state. */
-    short pix_depth;		/* height of the pixmap. */
+   short   pix_width;     /* width of the pixmap. */
+   short   pix_height;    /* height of the pixmap. */
+   short   height;        /* height of the row */
+   Boolean old_sel_state; /* previous select state. */
+   short   pix_depth;     /* height of the pixmap. */
 } XmMultiListRowInfo;
-typedef struct _XmMultiListCallbackStruct {
-    int reason;		/* Why was callback called? */
-    XEvent *event;	/* The X Event associated with find button press... */
-    String string;	/* The search string used to do find */
-    int column;		/* The column index into row values */
-    XmMultiListRowInfo *row; /* The row info structure of the matching row */
-    wchar_t *wc_string; /* The search wcs string used to do find */
+
+typedef struct _XmMultiListCallbackStruct
+{
+   int                 reason;    /* Why was callback called? */
+   XEvent             *event;     /* The X Event associated with find button press... */
+   String              string;    /* The search string used to do find */
+   int                 column;    /* The column index into row values */
+   XmMultiListRowInfo *row;       /* The row info structure of the matching row */
+   wchar_t            *wc_string; /* The search wcs string used to do find */
 } XmMultiListCallbackStruct;
-typedef int (*Xm18SortFunction) \
-            (short, const XmMultiListRowInfo *, const XmMultiListRowInfo *);
+
+typedef int (*Xm18SortFunction)(short, const XmMultiListRowInfo *, const XmMultiListRowInfo *);
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
@@ -49,7 +53,7 @@ typedef int (*Xm18SortFunction) \
  * Arguments:     w - the extended list widget
  * Returns:       XmMultiListRowInfo **
  */
-XmMultiListRowInfo ** XmMultiListGetSelectedRows(Widget w);
+XmMultiListRowInfo **XmMultiListGetSelectedRows(Widget w);
 /*	Function Name: XmCreateExtended18List
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -57,22 +61,22 @@ XmMultiListRowInfo ** XmMultiListGetSelectedRows(Widget w);
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-extern Widget XmCreateMultiList(Widget w,
-                              char *name,
-                              ArgList args,
-                              Cardinal num_args);
-extern Widget XmCreateMultiList(Widget w,
-                         char *name,
-                         ArgList args,
-                         Cardinal num_args);
+extern Widget XmCreateMultiList(Widget   w,
+                                char    *name,
+                                ArgList  args,
+                                Cardinal num_args);
+extern Widget XmCreateMultiList(Widget   w,
+                                char    *name,
+                                ArgList  args,
+                                Cardinal num_args);
 extern Widget XmVaCreateMultiList(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedMultiList(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /*  Function Name: XmMultiListUnselectAllItems
  *  Description:   Unselects all rows
  *  Arguments:     w - the ilist widget.
@@ -101,10 +105,10 @@ extern void XmMultiListToggleRow(Widget w, short row);
  *  Returns:       none
  */
 extern void
-XmMultiListSelectItems(Widget w,
+XmMultiListSelectItems(Widget   w,
                        XmString item,
-                       int column,
-                       Boolean notify);
+                       int      column,
+                       Boolean  notify);
 /*  Function Name: XmMultiListDeselectItems
  *  Description:   Set selection state by matching column entries to XmString
  *  Arguments:     w - the extended list widget
@@ -112,9 +116,9 @@ XmMultiListSelectItems(Widget w,
  *		   column - column number (0 - N) to match (or XmANY_COLUMN)
  *  Returns:       none
  */
-extern void XmMultiListDeselectItems(Widget w,
+extern void XmMultiListDeselectItems(Widget   w,
                                      XmString item,
-                                     int column);
+                                     int      column);
 /*  Function Name: XmMultiListSelectAllItems
  *  Description:   Set selection state on all rows
  *  Arguments:     w - the extended list widget

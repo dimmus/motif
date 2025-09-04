@@ -25,58 +25,68 @@
  *
  */
 #ifndef _XmSashP_h
-#define _XmSashP_h
-#include <Xm/PrimitiveP.h>
-#ifdef __cplusplus
+#   define _XmSashP_h
+#   include <Xm/PrimitiveP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /*****************************************************************************
  *
  * Sash Widget Private Data
  *
  *****************************************************************************/
 /* New fields for the Sash widget class record */
-typedef struct {
-   XtPointer extension;   /* Pointer to extension record */
+typedef struct
+{
+   XtPointer extension; /* Pointer to extension record */
 } XmSashClassPart;
+
 /* Full Class record declaration */
-typedef struct _XmSashClassRec {
-    CoreClassPart         core_class;
-    XmPrimitiveClassPart  primitive_class;
-    XmSashClassPart    sash_class;
+typedef struct _XmSashClassRec
+{
+   CoreClassPart        core_class;
+   XmPrimitiveClassPart primitive_class;
+   XmSashClassPart      sash_class;
 } XmSashClassRec;
 typedef struct _XmSashClassRec *XmSashWidgetClass;
-externalref XmSashClassRec xmSashClassRec;
+externalref XmSashClassRec      xmSashClassRec;
+
 /* New fields for the Sash widget record */
-typedef struct {
-  XtCallbackList sash_action;
-  Boolean has_focus;
+typedef struct
+{
+   XtCallbackList sash_action;
+   Boolean        has_focus;
 } XmSashPart;
+
 /*****************************************************************************
  *
  * Full instance record declaration
  *
  ****************************************************************************/
-typedef struct _XmSashRec {
-   CorePart         core;
-   XmPrimitivePart  primitive;
-   XmSashPart       sash;
+typedef struct _XmSashRec
+{
+   CorePart        core;
+   XmPrimitivePart primitive;
+   XmSashPart      sash;
 } XmSashRec;
-typedef struct _XmSashRec      *XmSashWidget;
-typedef struct {
-  XEvent *event;		/* the event causing the SashAction */
-  String *params;		/* the TranslationTable params */
-  Cardinal num_params;		/* count of params */
+typedef struct _XmSashRec *XmSashWidget;
+
+typedef struct
+{
+   XEvent  *event;      /* the event causing the SashAction */
+   String  *params;     /* the TranslationTable params */
+   Cardinal num_params; /* count of params */
 } SashCallDataRec, *SashCallData;
+
 /* Class Record Constant */
 externalref WidgetClass xmSashWidgetClass;
-#ifndef XmIsSash
-#define XmIsSash(w)	XtIsSubclass(w, xmSashWidgetClass)
-#endif /* XmIsSash */
+#   ifndef XmIsSash
+#      define XmIsSash(w)	XtIsSubclass(w, xmSashWidgetClass)
+#   endif /* XmIsSash */
 /********    Private Function Declarations    ********/
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmSashP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

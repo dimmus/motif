@@ -25,35 +25,35 @@
  * HISTORY
  */
 #ifndef _XmIconG_h
-#define _XmIconG_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmIconG_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /* Class record constants */
-extern	WidgetClass	xmIconGadgetClass;
-typedef struct _XmIconGadgetClassRec * XmIconGadgetClass;
-typedef struct _XmIconGadgetRec      * XmIconGadget;
-#ifndef XmIsIconGadget
-#define XmIsIconGadget(w) XtIsSubclass(w, xmIconGadgetClass)
-#endif /* XmIsIconGadget */
+extern WidgetClass                    xmIconGadgetClass;
+typedef struct _XmIconGadgetClassRec *XmIconGadgetClass;
+typedef struct _XmIconGadgetRec      *XmIconGadget;
+#   ifndef XmIsIconGadget
+#      define XmIsIconGadget(w) XtIsSubclass(w, xmIconGadgetClass)
+#   endif /* XmIsIconGadget */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateIconGadget(
-                        Widget parent,
-                        String name,
-                        ArgList arglist,
-                        Cardinal argcount) ;
+   Widget   parent,
+   String   name,
+   ArgList  arglist,
+   Cardinal argcount);
 extern Widget XmVaCreateIconGadget(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedIconGadget(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmIconG_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

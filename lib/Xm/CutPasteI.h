@@ -32,6 +32,6 @@ extern "C" {
 #endif
 void _XmClipboardPassType(Atom);
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmCutPasteI_H */

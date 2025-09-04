@@ -27,71 +27,71 @@
 extern "C" {
 #endif
 /* Class record constants */
-externalref WidgetClass xmMessageBoxWidgetClass;
-typedef struct _XmMessageBoxClassRec * XmMessageBoxWidgetClass;
-typedef struct _XmMessageBoxRec      * XmMessageBoxWidget;
+externalref WidgetClass               xmMessageBoxWidgetClass;
+typedef struct _XmMessageBoxClassRec *XmMessageBoxWidgetClass;
+typedef struct _XmMessageBoxRec      *XmMessageBoxWidget;
 /* fast XtIsSubclass define */
 #ifndef XmIsMessageBox
-#define XmIsMessageBox(w) XtIsSubclass (w, xmMessageBoxWidgetClass)
+#   define XmIsMessageBox(w) XtIsSubclass (w, xmMessageBoxWidgetClass)
 #endif
 /********    Public Function Declarations    ********/
 extern Widget XmCreateMessageBox(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateMessageDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateErrorDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateInformationDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateQuestionDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateWarningDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateWorkingDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern Widget XmCreateTemplateDialog(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 XM_ALTERNATIVE(Use XtNameToWidget instead)
 extern Widget XmMessageBoxGetChild(
-                        Widget widget,
-                        unsigned char child);
+   Widget        widget,
+   unsigned char child);
 /*
  * Variable argument list functions
  */
 extern Widget XmVaCreateMessageBox(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedMessageBox(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmMessage_h */

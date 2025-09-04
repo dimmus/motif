@@ -28,8 +28,14 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef enum {XmBEVEL_BOTTOM, XmBEVEL_TOP, XmBEVEL_BOTH} XmBevelOption;
-void XmDrawBevel(Display*, Drawable, GC, GC, int, int, unsigned int, XmBevelOption);
+typedef enum
+{
+   XmBEVEL_BOTTOM,
+   XmBEVEL_TOP,
+   XmBEVEL_BOTH
+} XmBevelOption;
+
+void XmDrawBevel(Display *, Drawable, GC, GC, int, int, unsigned int, XmBevelOption);
 #if defined(__cplusplus)
 }
 #endif

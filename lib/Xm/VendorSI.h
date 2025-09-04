@@ -36,14 +36,14 @@ extern "C" {
 #define INVALID_VISUAL ((Visual*)-1)
 /********    Private Function Declarations    ********/
 extern void _XmAddGrab(
-                        Widget wid,
-                        Boolean exclusive,
-                        Boolean spring_loaded) ;
+   Widget  wid,
+   Boolean exclusive,
+   Boolean spring_loaded);
 extern void _XmRemoveGrab(
-                        Widget wid) ;
-extern void _XmDefaultVisualResources(Widget widget) ;
+   Widget wid);
+extern void _XmDefaultVisualResources(Widget widget);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmVendorSI_h */

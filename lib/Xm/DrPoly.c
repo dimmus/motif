@@ -26,34 +26,34 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include <Xm/DrawP.h>
 #include "RegionI.h"
 #include "XmI.h"
+
 /****************************XmeDrawPolygonShadow***************************/
 void
-XmeDrawPolygonShadow (
-		      Display *dpy,
-		      Drawable d,
-		      GC topGC,
-		      GC bottomGC,
-		      XPoint *points,
-		      int n_points,
-		      Dimension shadowThickness,
-		      unsigned char shadowType)
+XmeDrawPolygonShadow(
+   Display      *dpy,
+   Drawable      d,
+   GC            topGC,
+   GC            bottomGC,
+   XPoint       *points,
+   int           n_points,
+   Dimension     shadowThickness,
+   unsigned char shadowType)
 {
-    Region  xregion;
-    XtAppContext app;
-    app = XtDisplayToApplicationContext(dpy);
-    (void)app; /* unused but required for _XmAppLock */
-    _XmAppLock(app);
-    xregion = XPolygonRegion(points, n_points, /* FillRule */ WindingRule);
-    _XmRegionDrawShadow (dpy, d,
-			 topGC, bottomGC,
-			 (XmRegion)xregion,
-			 /* border_width */ 0, shadowThickness,
-			 shadowType);
-    XDestroyRegion(xregion);
-    _XmAppUnlock(app);
+   Region       xregion;
+   XtAppContext app;
+   app = XtDisplayToApplicationContext(dpy);
+   (void)app; /* unused but required for _XmAppLock */
+   _XmAppLock(app);
+   xregion = XPolygonRegion(points, n_points, /* FillRule */ WindingRule);
+   _XmRegionDrawShadow(dpy, d, topGC, bottomGC, (XmRegion)xregion,
+                       /* border_width */ 0,
+                       shadowThickness,
+                       shadowType);
+   XDestroyRegion(xregion);
+   _XmAppUnlock(app);
 }

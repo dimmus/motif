@@ -22,35 +22,35 @@
 */
 /*  Separator Gadget  */
 #ifndef _XmSeparatorGadget_h
-#define _XmSeparatorGadget_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmSeparatorGadget_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef XmIsSeparatorGadget
-#define XmIsSeparatorGadget(w) XtIsSubclass(w, xmSeparatorGadgetClass)
-#endif /* XmIsSeparator */
-externalref WidgetClass xmSeparatorGadgetClass;
-typedef struct _XmSeparatorGadgetClassRec * XmSeparatorGadgetClass;
-typedef struct _XmSeparatorGadgetRec      * XmSeparatorGadget;
-typedef struct _XmSeparatorGCacheObjRec   * XmSeparatorGCacheObject;
+#   endif
+#   ifndef XmIsSeparatorGadget
+#      define XmIsSeparatorGadget(w) XtIsSubclass(w, xmSeparatorGadgetClass)
+#   endif /* XmIsSeparator */
+externalref WidgetClass                    xmSeparatorGadgetClass;
+typedef struct _XmSeparatorGadgetClassRec *XmSeparatorGadgetClass;
+typedef struct _XmSeparatorGadgetRec      *XmSeparatorGadget;
+typedef struct _XmSeparatorGCacheObjRec   *XmSeparatorGCacheObject;
 /********    Public Function Declarations    ********/
 Widget XmCreateSeparatorGadget(
-                        Widget parent,
-                        char *name,
-                        ArgList arglist,
-                        Cardinal argcount) ;
+   Widget   parent,
+   char    *name,
+   ArgList  arglist,
+   Cardinal argcount);
 Widget XmVaCreateSeparatorGadget(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 Widget XmVaCreateManagedSeparatorGadget(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmSeparatorGadget_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

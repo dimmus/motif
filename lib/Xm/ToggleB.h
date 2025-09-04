@@ -31,39 +31,39 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass xmToggleButtonWidgetClass;
+externalref WidgetClass                 xmToggleButtonWidgetClass;
 typedef struct _XmToggleButtonClassRec *XmToggleButtonWidgetClass;
 typedef struct _XmToggleButtonRec      *XmToggleButtonWidget;
 /*fast subclass define */
 #ifndef XmIsToggleButton
-#define XmIsToggleButton(w)     XtIsSubclass(w, xmToggleButtonWidgetClass)
+#   define XmIsToggleButton(w)     XtIsSubclass(w, xmToggleButtonWidgetClass)
 #endif /* XmIsToggleButton */
 /********    Public Function Declarations    ********/
 Boolean XmToggleButtonGetState(
-                        Widget w);
+   Widget w);
 void XmToggleButtonSetState(
-                        Widget w,
-                        Boolean newstate,
-                        Boolean notify);
+   Widget  w,
+   Boolean newstate,
+   Boolean notify);
 Boolean XmToggleButtonSetValue(
-        Widget w,
-        XmToggleButtonState newstate,
-        Boolean notify );
+   Widget              w,
+   XmToggleButtonState newstate,
+   Boolean             notify);
 Widget XmCreateToggleButton(
-                        Widget parent,
-                        char *name,
-                        Arg *arglist,
-                        Cardinal argCount);
+   Widget   parent,
+   char    *name,
+   Arg     *arglist,
+   Cardinal argCount);
 Widget XmVaCreateToggleButton(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 Widget XmVaCreateManagedToggleButton(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmToggle_h */

@@ -25,43 +25,47 @@
  * HISTORY
  */
 #ifndef _XmIconHP_h
-#define _XmIconHP_h
-#include <Xm/XmP.h>
-#include <Xm/IconGP.h>
-#include <Xm/IconH.h>
-#ifdef __cplusplus
+#   define _XmIconHP_h
+#   include <Xm/XmP.h>
+#   include <Xm/IconGP.h>
+#   include <Xm/IconH.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /* IconHeader class record */
 typedef struct _XmIconHeaderClassPart
-	{
-	XtPointer extension ;
-	} 	XmIconHeaderClassPart;
+{
+   XtPointer extension;
+} XmIconHeaderClassPart;
+
 /* Full class record declaration */
 typedef struct _XmIconHeaderClassRec
-	{
-	RectObjClassPart	rect_class;
-	XmGadgetClassPart	gadget_class;
-	XmIconGadgetClassPart	icong_class;
-	XmIconHeaderClassPart	iconh_class;
-	} 	XmIconHeaderClassRec;
-extern	XmIconHeaderClassRec 	xmIconHeaderClassRec;
+{
+   RectObjClassPart      rect_class;
+   XmGadgetClassPart     gadget_class;
+   XmIconGadgetClassPart icong_class;
+   XmIconHeaderClassPart iconh_class;
+} XmIconHeaderClassRec;
+
+extern XmIconHeaderClassRec xmIconHeaderClassRec;
+
 /* IconHeader instance record */
 typedef struct _XmIconHeaderPart
-	{
-	Widget container_ID;	                /* XmNcontainerID */
-	} 	XmIconHeaderPart;
+{
+   Widget container_ID; /* XmNcontainerID */
+} XmIconHeaderPart;
+
 /* Full instance record declaration */
 typedef struct _XmIconHeaderRec
-	{
-	ObjectPart	object;
-	RectObjPart	rectangle;
-	XmGadgetPart	gadget;
-	XmIconGadgetPart icong;
-	XmIconHeaderPart iconh;
-	} 	XmIconHeaderRec;
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+{
+   ObjectPart       object;
+   RectObjPart      rectangle;
+   XmGadgetPart     gadget;
+   XmIconGadgetPart icong;
+   XmIconHeaderPart iconh;
+} XmIconHeaderRec;
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmIconHP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

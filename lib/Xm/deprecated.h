@@ -11,13 +11,13 @@
  * FWIW, the original XM_DEPRECATED macro required GCC >= 3.
  */
 #if __STDC_VERSION__ >= 202311L || (defined(__cplusplus) && __cplusplus >= 201402L)
-#define XM_DEPRECATED       [[deprecated]]
-#define XM_ALTERNATIVE(...) [[deprecated(#__VA_ARGS__)]]
+#   define XM_DEPRECATED       [[deprecated]]
+#   define XM_ALTERNATIVE(...) [[deprecated(#__VA_ARGS__)]]
 #elif defined(__GNUC__) || defined(__clang__)
-#define XM_DEPRECATED       /* __attribute__((deprecated)) - placed after function declaration */
-#define XM_ALTERNATIVE(...) /* __attribute__((deprecated(#__VA_ARGS__)) - placed after function declaration */
+#   define XM_DEPRECATED       /* __attribute__((deprecated)) - placed after function declaration */
+#   define XM_ALTERNATIVE(...) /* __attribute__((deprecated(#__VA_ARGS__)) - placed after function declaration */
 #else
-#define XM_DEPRECATED
-#define XM_ALTERNATIVE(...)
+#   define XM_DEPRECATED
+#   define XM_ALTERNATIVE(...)
 #endif
 #endif /* XM_DEPRECATED_H */

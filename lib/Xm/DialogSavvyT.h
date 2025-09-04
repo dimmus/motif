@@ -35,13 +35,16 @@ externalref XrmQuark XmQTdialogShellSavvy;
    If the child has the trait, the resource will be get and set by
    the DialogShell ChangeManaged */
 /* Trait structures and typedefs, place typedefs first */
-typedef void (*XmDialogSavvyMapUnmapProc)(Widget wid,
-					  Boolean map_unmap);
+typedef void (*XmDialogSavvyMapUnmapProc)(Widget  wid,
+                                          Boolean map_unmap);
+
 /* Version 0: initial release. */
-typedef struct _XmDialogSavvyTraitRec	 {
-  int			    version;		/* 0 */
-  XmDialogSavvyMapUnmapProc callMapUnmapCB;
-} XmDialogSavvyTraitRec,*XmDialogSavvyTrait;
+typedef struct _XmDialogSavvyTraitRec
+{
+   int                       version; /* 0 */
+   XmDialogSavvyMapUnmapProc callMapUnmapCB;
+} XmDialogSavvyTraitRec, *XmDialogSavvyTrait;
+
 /* This macro is part of the trait and is used for the following situation
    DialogShells always mimic the child position on themselves.
    If the SetValues on a bb child position was 0,
@@ -53,6 +56,6 @@ typedef struct _XmDialogSavvyTraitRec	 {
    it really wants to move in 0 */
 #define XmDIALOG_SAVVY_FORCE_ORIGIN ((Position)~0L)
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmDialogSavvyT_H */

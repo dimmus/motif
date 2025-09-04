@@ -26,10 +26,11 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include "XmI.h"
 #include "ColorObjI.h"
+
 /**********************************************************************/
 /** XmeUseColorObj()                                                 **/
 /**           Return False if color is not working for some reason.  **/
@@ -39,21 +40,22 @@
 /**                                                                  **/
 /**********************************************************************/
 Boolean
-XmeUseColorObj( void )
+XmeUseColorObj(void)
 {
-    XmColorObj tmpColorObj = _XmDefaultColorObj;
-    _XmProcessLock();
-    if (!tmpColorObj ||
-      !tmpColorObj->color_obj.colorIsRunning ||
-      !tmpColorObj->color_obj.useColorObj) {
+   XmColorObj tmpColorObj = _XmDefaultColorObj;
+   _XmProcessLock();
+   if (!tmpColorObj || !tmpColorObj->color_obj.colorIsRunning || !tmpColorObj->color_obj.useColorObj)
+   {
       _XmProcessUnlock();
       return False;
-    }
-    else {
+   }
+   else
+   {
       _XmProcessUnlock();
       return True;
-    }
+   }
 }
+
 /**********************************************************************/
 /** Following entries kept for bc with CDE (they'll be moved to
  **       obsolete module later                                      **/
@@ -61,28 +63,29 @@ XmeUseColorObj( void )
 /**********************************************************************/
 Boolean
 _XmGetPixelData(
-        int screen,
-        int *colorUse,
-        XmPixelSet *pixelSet,
-        short *a,
-        short *i,
-        short *p,
-        short *s )
+   int         screen,
+   int        *colorUse,
+   XmPixelSet *pixelSet,
+   short      *a,
+   short      *i,
+   short      *p,
+   short      *s)
 {
-    return XmeGetPixelData( screen, colorUse, pixelSet, a, i, p, s );
+   return XmeGetPixelData(screen, colorUse, pixelSet, a, i, p, s);
 }
+
 Boolean
 _XmGetIconControlInfo(
-        Screen  *screen,
-	Boolean *useMaskRtn,
-        Boolean *useMultiColorIconsRtn,
-        Boolean *useIconFileCacheRtn)
+   Screen  *screen,
+   Boolean *useMaskRtn,
+   Boolean *useMultiColorIconsRtn,
+   Boolean *useIconFileCacheRtn)
 {
-    return XmeGetIconControlInfo(screen, useMaskRtn,
-			  useMultiColorIconsRtn, useIconFileCacheRtn);
+   return XmeGetIconControlInfo(screen, useMaskRtn, useMultiColorIconsRtn, useIconFileCacheRtn);
 }
+
 Boolean
-_XmUseColorObj( void )
+_XmUseColorObj(void)
 {
-    return XmeUseColorObj();
+   return XmeUseColorObj();
 }

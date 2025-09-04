@@ -26,17 +26,17 @@
  * HISTORY
  */
 #ifndef _XmIconFileP_h
-#define _XmIconFileP_h
-#include <Xm/IconFile.h>
-#include <Xm/XmosP.h>
-#ifdef __cplusplus
+#   define _XmIconFileP_h
+#   include <Xm/IconFile.h>
+#   include <Xm/XmosP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Private Function Declarations for IconFile.c    ********/
-extern void XmeFlushIconFileCache(String	path);
+extern void XmeFlushIconFileCache(String path);
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmIconFile_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -27,81 +27,66 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef void (*XmDSMCreateInfoProc)
-	(XmDropSiteManagerObject, Widget, ArgList, Cardinal);
-typedef void (*XmDSMDestroyInfoProc)
-	(XmDropSiteManagerObject, Widget);
-typedef void (*XmDSMStartUpdateProc)
-	(XmDropSiteManagerObject, Widget);
-typedef void (*XmDSMRetrieveInfoProc)
-	(XmDropSiteManagerObject, Widget, ArgList, Cardinal);
-typedef void (*XmDSMUpdateInfoProc)
-	(XmDropSiteManagerObject, Widget, ArgList, Cardinal);
-typedef void (*XmDSMEndUpdateProc)
-	(XmDropSiteManagerObject, Widget);
-typedef void (*XmDSMUpdateProc)
-	(XmDropSiteManagerObject, XtPointer, XtPointer);
-typedef void (*XmDSMProcessMotionProc)
-	(XmDropSiteManagerObject, XtPointer, XtPointer);
-typedef void (*XmDSMProcessDropProc)
-	(XmDropSiteManagerObject, XtPointer, XtPointer);
-typedef void (*XmDSMOperationChangedProc)
-	(XmDropSiteManagerObject, XtPointer, XtPointer);
-typedef void (*XmDSMChangeRootProc)
-	(XmDropSiteManagerObject, XtPointer, XtPointer);
-typedef void (*XmDSMInsertInfoProc)
-	(XmDropSiteManagerObject, XtPointer, XtPointer);
-typedef void (*XmDSMRemoveInfoProc)
-	(XmDropSiteManagerObject, XtPointer);
-typedef void (*XmDSMSyncTreeProc)
-	(XmDropSiteManagerObject, Widget);
-typedef int  (*XmDSMGetTreeFromDSMProc)
-	(XmDropSiteManagerObject, Widget, XtPointer);
-typedef void (*XmDSMCreateDSInfoTable)
-	(XmDropSiteManagerObject);
-typedef void (*XmDSMDestroyDSInfoTable)
-	(XmDropSiteManagerObject);
-typedef void (*XmDSMRegisterInfoProc)
-	(XmDropSiteManagerObject, Widget, XtPointer);
-typedef XtPointer (*XmDSMWidgetToInfoProc)
-	(XmDropSiteManagerObject, Widget);
-typedef void (*XmDSMUnregisterInfoProc)
-	(XmDropSiteManagerObject, XtPointer);
-typedef struct {
-    XmDSMCreateInfoProc		createInfo;
-    XmDSMDestroyInfoProc	destroyInfo;
-    XmDSMStartUpdateProc	startUpdate;
-    XmDSMRetrieveInfoProc	retrieveInfo;
-    XmDSMUpdateInfoProc		updateInfo;
-    XmDSMEndUpdateProc		endUpdate;
-    /* Used by DragController Object */
-    XmDSMUpdateProc		updateDSM;
-    /* Used by update proc */
-    XmDSMProcessMotionProc	processMotion;
-    XmDSMProcessDropProc	processDrop;
-    XmDSMOperationChangedProc	operationChanged;
-    XmDSMChangeRootProc		changeRoot;
-    /* Used to manage DropSites */
-    XmDSMInsertInfoProc		insertInfo;
-    /* Need a get and a put function for update? */
-    XmDSMRemoveInfoProc		removeInfo;
-	/* Used to manage the pre-register information */
-    XmDSMSyncTreeProc		syncTree;
-    XmDSMGetTreeFromDSMProc	getTreeFromDSM;
-    /* Used to hash between widgets and info */
-    XmDSMCreateDSInfoTable	createTable;
-    XmDSMDestroyDSInfoTable 	destroyTable;
-    XmDSMRegisterInfoProc	registerInfo;
-    XmDSMWidgetToInfoProc	widgetToInfo;
-    XmDSMUnregisterInfoProc 	unregisterInfo;
-    XtPointer			extension;
+typedef void (*XmDSMCreateInfoProc)(XmDropSiteManagerObject, Widget, ArgList, Cardinal);
+typedef void (*XmDSMDestroyInfoProc)(XmDropSiteManagerObject, Widget);
+typedef void (*XmDSMStartUpdateProc)(XmDropSiteManagerObject, Widget);
+typedef void (*XmDSMRetrieveInfoProc)(XmDropSiteManagerObject, Widget, ArgList, Cardinal);
+typedef void (*XmDSMUpdateInfoProc)(XmDropSiteManagerObject, Widget, ArgList, Cardinal);
+typedef void (*XmDSMEndUpdateProc)(XmDropSiteManagerObject, Widget);
+typedef void (*XmDSMUpdateProc)(XmDropSiteManagerObject, XtPointer, XtPointer);
+typedef void (*XmDSMProcessMotionProc)(XmDropSiteManagerObject, XtPointer, XtPointer);
+typedef void (*XmDSMProcessDropProc)(XmDropSiteManagerObject, XtPointer, XtPointer);
+typedef void (*XmDSMOperationChangedProc)(XmDropSiteManagerObject, XtPointer, XtPointer);
+typedef void (*XmDSMChangeRootProc)(XmDropSiteManagerObject, XtPointer, XtPointer);
+typedef void (*XmDSMInsertInfoProc)(XmDropSiteManagerObject, XtPointer, XtPointer);
+typedef void (*XmDSMRemoveInfoProc)(XmDropSiteManagerObject, XtPointer);
+typedef void (*XmDSMSyncTreeProc)(XmDropSiteManagerObject, Widget);
+typedef int (*XmDSMGetTreeFromDSMProc)(XmDropSiteManagerObject, Widget, XtPointer);
+typedef void (*XmDSMCreateDSInfoTable)(XmDropSiteManagerObject);
+typedef void (*XmDSMDestroyDSInfoTable)(XmDropSiteManagerObject);
+typedef void (*XmDSMRegisterInfoProc)(XmDropSiteManagerObject, Widget, XtPointer);
+typedef XtPointer (*XmDSMWidgetToInfoProc)(XmDropSiteManagerObject, Widget);
+typedef void (*XmDSMUnregisterInfoProc)(XmDropSiteManagerObject, XtPointer);
+
+typedef struct
+{
+   XmDSMCreateInfoProc   createInfo;
+   XmDSMDestroyInfoProc  destroyInfo;
+   XmDSMStartUpdateProc  startUpdate;
+   XmDSMRetrieveInfoProc retrieveInfo;
+   XmDSMUpdateInfoProc   updateInfo;
+   XmDSMEndUpdateProc    endUpdate;
+   /* Used by DragController Object */
+   XmDSMUpdateProc updateDSM;
+   /* Used by update proc */
+   XmDSMProcessMotionProc    processMotion;
+   XmDSMProcessDropProc      processDrop;
+   XmDSMOperationChangedProc operationChanged;
+   XmDSMChangeRootProc       changeRoot;
+   /* Used to manage DropSites */
+   XmDSMInsertInfoProc insertInfo;
+   /* Need a get and a put function for update? */
+   XmDSMRemoveInfoProc removeInfo;
+   /* Used to manage the pre-register information */
+   XmDSMSyncTreeProc       syncTree;
+   XmDSMGetTreeFromDSMProc getTreeFromDSM;
+   /* Used to hash between widgets and info */
+   XmDSMCreateDSInfoTable  createTable;
+   XmDSMDestroyDSInfoTable destroyTable;
+   XmDSMRegisterInfoProc   registerInfo;
+   XmDSMWidgetToInfoProc   widgetToInfo;
+   XmDSMUnregisterInfoProc unregisterInfo;
+   XtPointer               extension;
 } XmDropSiteManagerClassPart;
+
 /*  Full class record declaration for dropSite class  */
-typedef struct _XmDropSiteManagerClassRec{
-    ObjectClassPart		object_class;
-    XmDropSiteManagerClassPart		dropManager_class;
+typedef struct _XmDropSiteManagerClassRec
+{
+   ObjectClassPart            object_class;
+   XmDropSiteManagerClassPart dropManager_class;
 } XmDropSiteManagerClassRec;
-externalref XmDropSiteManagerClassRec 	xmDropSiteManagerClassRec;
+
+externalref XmDropSiteManagerClassRec xmDropSiteManagerClassRec;
 /* Macros for calling methods */
 #define DSMCreateInfo(dsm, widget, args, numArgs) \
 	(((XmDropSiteManagerObjectClass) XtClass(dsm))-> \
@@ -183,42 +168,48 @@ externalref XmDropSiteManagerClassRec 	xmDropSiteManagerClassRec;
 	(((XmDropSiteManagerObjectClass) XtClass(dsm))-> \
 		dropManager_class.unregisterInfo) \
 		  ((dsm), (info))
+
 /* Internal update struct */
-typedef struct __XmDropSiteUpdateInfoRec {
-  XmDropSiteManagerObject		dsm;
-  Widget				refWidget;
-  struct __XmDropSiteUpdateInfoRec	*next;
+typedef struct __XmDropSiteUpdateInfoRec
+{
+   XmDropSiteManagerObject           dsm;
+   Widget                            refWidget;
+   struct __XmDropSiteUpdateInfoRec *next;
 } _XmDropSiteUpdateInfoRec, *_XmDropSiteUpdateInfo;
+
 /* DropSiteManager instance record */
-typedef struct _XmDropSiteManagerPart{
-    XtCallbackProc	notifyProc;
-    XtCallbackProc	treeUpdateProc;
-    XtPointer		client_data;
-    XtPointer		dragUnderData;
-    XtPointer		curInfo;
-    Time		curTime;
-    Position		curX, curY, oldX, oldY;
-    unsigned char	curDropSiteStatus;
-    Widget		curDragContext;
-    Boolean		curAnimate;
-    unsigned char	curOperations;
-    unsigned char	curOperation;
-    XmRegion		curAncestorClipRegion;
-    XmRegion		newAncestorClipRegion;
-    XtPointer		dsTable;
-    XtPointer		dsRoot;
-    Position		rootX, rootY;
-    Dimension		rootW, rootH;
-    XtPointer		clipperList;
-    _XmDropSiteUpdateInfo	updateInfo;
-    XtIntervalId	updateTimeOutId;
+typedef struct _XmDropSiteManagerPart
+{
+   XtCallbackProc        notifyProc;
+   XtCallbackProc        treeUpdateProc;
+   XtPointer             client_data;
+   XtPointer             dragUnderData;
+   XtPointer             curInfo;
+   Time                  curTime;
+   Position              curX, curY, oldX, oldY;
+   unsigned char         curDropSiteStatus;
+   Widget                curDragContext;
+   Boolean               curAnimate;
+   unsigned char         curOperations;
+   unsigned char         curOperation;
+   XmRegion              curAncestorClipRegion;
+   XmRegion              newAncestorClipRegion;
+   XtPointer             dsTable;
+   XtPointer             dsRoot;
+   Position              rootX, rootY;
+   Dimension             rootW, rootH;
+   XtPointer             clipperList;
+   _XmDropSiteUpdateInfo updateInfo;
+   XtIntervalId          updateTimeOutId;
 } XmDropSiteManagerPart, *XmDropSiteManagerPartPtr;
+
 /* Full instance record declaration */
-typedef struct _XmDropSiteManagerRec{
-    ObjectPart			object;
-    XmDropSiteManagerPart	dropManager;
+typedef struct _XmDropSiteManagerRec
+{
+   ObjectPart            object;
+   XmDropSiteManagerPart dropManager;
 } XmDropSiteManagerRec;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmDropSMgrP_h */

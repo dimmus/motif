@@ -33,18 +33,21 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef struct _XmIconButtonClassRec	*XmIconButtonWidgetClass;
-typedef struct _XmIconButtonRec	        *XmIconButtonWidget;
+typedef struct _XmIconButtonClassRec *XmIconButtonWidgetClass;
+typedef struct _XmIconButtonRec      *XmIconButtonWidget;
+
 /************************************************************
 *	MACROS
 *************************************************************/
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
-typedef struct _XmIconButtonCallbackInfo {
-    Boolean state;		/* The current state of the icon button. */
-    XEvent * event;		/* The event that caused this action. */
+typedef struct _XmIconButtonCallbackInfo
+{
+   Boolean state; /* The current state of the icon button. */
+   XEvent *event; /* The event that caused this action. */
 } XmIconButtonCallbackInfo;
+
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
@@ -55,7 +58,7 @@ typedef struct _XmIconButtonCallbackInfo {
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-Widget XmCreateIconButton(Widget, String, ArgList, Cardinal);
+Widget             XmCreateIconButton(Widget, String, ArgList, Cardinal);
 extern WidgetClass xmIconButtonWidgetClass;
 #if defined(__cplusplus)
 }

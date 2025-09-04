@@ -33,33 +33,33 @@ extern "C" {
 #endif
 /********    Private Function Declarations for DragOverS.c    ********/
 extern void _XmDragOverHide(
-                        Widget w,
-                        Position clipOriginX,
-                        Position clipOriginY,
-                        XmRegion clipRegion) ;
+   Widget   w,
+   Position clipOriginX,
+   Position clipOriginY,
+   XmRegion clipRegion);
 extern void _XmDragOverShow(
-                        Widget w,
-                        Position clipOriginX,
-                        Position clipOriginY,
-                        XmRegion clipRegion) ;
+   Widget   w,
+   Position clipOriginX,
+   Position clipOriginY,
+   XmRegion clipRegion);
 extern void _XmDragOverMove(
-                        Widget w,
-                        Position x,
-                        Position y) ;
+   Widget   w,
+   Position x,
+   Position y);
 extern void _XmDragOverChange(
-                        Widget w,
-                        unsigned char dropSiteStatus) ;
+   Widget        w,
+   unsigned char dropSiteStatus);
 extern void _XmDragOverFinish(
-                        Widget w,
-                        unsigned char completionStatus) ;
+   Widget        w,
+   unsigned char completionStatus);
 extern Cursor _XmDragOverGetActiveCursor(
-			Widget w) ;
+   Widget w);
 extern void _XmDragOverSetInitialPosition(
-			Widget w,
-			Position initialX,
-			Position initialY) ;
+   Widget   w,
+   Position initialX,
+   Position initialY);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmDragOverSI_h */

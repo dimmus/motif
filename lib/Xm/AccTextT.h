@@ -32,18 +32,26 @@ extern "C" {
 #endif
 externalref XrmQuark XmQTaccessTextual;
 typedef XtPointer (*XmAccessTextualGetValuesProc)(Widget, int);
-typedef int       (*XmAccessTextualPreferredProc)(Widget);
-typedef void      (*XmAccessTextualSetValuesProc)(Widget, XtPointer, int);
-enum { XmFORMAT_XmSTRING, XmFORMAT_MBYTE, XmFORMAT_WCS };
+typedef int (*XmAccessTextualPreferredProc)(Widget);
+typedef void (*XmAccessTextualSetValuesProc)(Widget, XtPointer, int);
+
+enum
+{
+   XmFORMAT_XmSTRING,
+   XmFORMAT_MBYTE,
+   XmFORMAT_WCS
+};
+
 /* Trait structures and typedefs, place typedefs first */
 /* Version 0: initial release. */
-typedef struct _XmAccessTextualTraitRec {
-  int				version;	 /* 0 */
-  XmAccessTextualGetValuesProc	getValue;
-  XmAccessTextualSetValuesProc	setValue;
-  XmAccessTextualPreferredProc	preferredFormat;
+typedef struct _XmAccessTextualTraitRec
+{
+   int                          version; /* 0 */
+   XmAccessTextualGetValuesProc getValue;
+   XmAccessTextualSetValuesProc setValue;
+   XmAccessTextualPreferredProc preferredFormat;
 } XmAccessTextualTraitRec, *XmAccessTextualTrait;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmAccessTextualT_H */

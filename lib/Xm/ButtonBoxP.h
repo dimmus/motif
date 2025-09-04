@@ -52,45 +52,54 @@ extern "C" {
 #endif
 typedef struct _XmButtonBoxClassPart
 {
-    XtPointer extension;		/* In case its needed later */
+   XtPointer extension; /* In case its needed later */
 } XmButtonBoxClassPart;
+
 typedef struct _XmButtonBoxClassRec
 {
-    CoreClassPart       	core_class;
-    CompositeClassPart  	composite_class;
-    ConstraintClassPart         constraint_class;
-    XmManagerClassPart          manager_class;
-    XmButtonBoxClassPart      	buttonbox_class;
+   CoreClassPart        core_class;
+   CompositeClassPart   composite_class;
+   ConstraintClassPart  constraint_class;
+   XmManagerClassPart   manager_class;
+   XmButtonBoxClassPart buttonbox_class;
 } XmButtonBoxClassRec;
-typedef struct _XmBBoxConstraintsPart {
-    Dimension pref_width, pref_height;
+
+typedef struct _XmBBoxConstraintsPart
+{
+   Dimension pref_width, pref_height;
 } XmBBoxConstraintsPart;
-typedef struct _XmBBoxConstraintsRec {
-    XmManagerConstraintPart	manager;
-    XmBBoxConstraintsPart	bbox;
+
+typedef struct _XmBBoxConstraintsRec
+{
+   XmManagerConstraintPart manager;
+   XmBBoxConstraintsPart   bbox;
 } XmBBoxConstraintsRec, *XmBBoxConstraints;
+
 /*
  * Match XmOffset nomenclature
  */
 typedef XmBBoxConstraintsPart XmButtonBoxConstraintPart;
+
 typedef struct
 {
-    /* resources */
-    Boolean		equal_size;
-    XmFillOption	fill_option;
-    Dimension		margin_width, margin_height;
-    Dimension		spacing;
-    unsigned char	orientation;
-    Widget          default_button;
+   /* resources */
+   Boolean       equal_size;
+   XmFillOption  fill_option;
+   Dimension     margin_width, margin_height;
+   Dimension     spacing;
+   unsigned char orientation;
+   Widget        default_button;
 } XmButtonBoxPart;
+
 typedef struct _XmButtonBoxRec
 {
-    CorePart        	core;
-    CompositePart   	composite;
-    ConstraintPart      constraint;
-    XmManagerPart       manager;
-    XmButtonBoxPart     button_box;
-}  XmButtonBoxRec;
+   CorePart        core;
+   CompositePart   composite;
+   ConstraintPart  constraint;
+   XmManagerPart   manager;
+   XmButtonBoxPart button_box;
+} XmButtonBoxRec;
+
 /************************************************************
  *       EXTERNAL DECLARATIONS
  ************************************************************/
@@ -99,6 +108,6 @@ extern XmButtonBoxClassRec xmButtonBoxClassRec;
  *       STATIC DECLARATIONS
  ************************************************************/
 #ifdef __cplusplus
-}	/* Closes scope of 'extern "C"' declaration */
+} /* Closes scope of 'extern "C"' declaration */
 #endif
 #endif /* _XmButtonBoxP_h */

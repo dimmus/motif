@@ -33,100 +33,100 @@ extern "C" {
 #endif
 /********    Private Function Declarations for GeoUtils.c    ********/
 extern XtGeometryResult _XmHandleQueryGeometry(
-                        Widget wid,
-                        XtWidgetGeometry *intended,
-                        XtWidgetGeometry *desired,
-                        unsigned char policy,
-                        XmGeoCreateProc createMatrix) ;
+   Widget            wid,
+   XtWidgetGeometry *intended,
+   XtWidgetGeometry *desired,
+   unsigned char     policy,
+   XmGeoCreateProc   createMatrix);
 extern XtGeometryResult _XmHandleGeometryManager(
-                        Widget wid,
-                        Widget instigator,
-                        XtWidgetGeometry *desired,
-                        XtWidgetGeometry *allowed,
-                        unsigned char policy,
-                        XmGeoMatrix *cachePtr,
-                        XmGeoCreateProc createMatrix) ;
+   Widget            wid,
+   Widget            instigator,
+   XtWidgetGeometry *desired,
+   XtWidgetGeometry *allowed,
+   unsigned char     policy,
+   XmGeoMatrix      *cachePtr,
+   XmGeoCreateProc   createMatrix);
 extern void _XmHandleSizeUpdate(
-                        Widget wid,
-                        unsigned char policy,
-                        XmGeoCreateProc createMatrix) ;
+   Widget          wid,
+   unsigned char   policy,
+   XmGeoCreateProc createMatrix);
 extern XmGeoMatrix _XmGeoMatrixAlloc(
-                        unsigned int numRows,
-                        unsigned int numBoxes,
-                        unsigned int extSize) ;
+   unsigned int numRows,
+   unsigned int numBoxes,
+   unsigned int extSize);
 extern void _XmGeoMatrixFree(
-                        XmGeoMatrix geo_spec) ;
+   XmGeoMatrix geo_spec);
 extern Boolean _XmGeoSetupKid(
-                        XmKidGeometry geo,
-                        Widget kidWid) ;
+   XmKidGeometry geo,
+   Widget        kidWid);
 extern void _XmGeoMatrixGet(
-                        XmGeoMatrix geoSpec,
-                        int geoType) ;
+   XmGeoMatrix geoSpec,
+   int         geoType);
 extern void _XmGeoMatrixSet(
-                        XmGeoMatrix geoSpec) ;
+   XmGeoMatrix geoSpec);
 extern void _XmGeoAdjustBoxes(
-                        XmGeoMatrix geoSpec) ;
+   XmGeoMatrix geoSpec);
 extern void _XmGeoGetDimensions(
-                        XmGeoMatrix geoSpec) ;
+   XmGeoMatrix geoSpec);
 extern void _XmGeoArrangeBoxes(
-                        XmGeoMatrix geoSpec,
-                        Position x,
-                        Position y,
-                        Dimension *pW,
-                        Dimension *pH) ;
+   XmGeoMatrix geoSpec,
+   Position    x,
+   Position    y,
+   Dimension  *pW,
+   Dimension  *pH);
 extern Dimension _XmGeoBoxesSameWidth(
-                        XmKidGeometry rowPtr,
-                        Dimension width) ;
+   XmKidGeometry rowPtr,
+   Dimension     width);
 extern Dimension _XmGeoBoxesSameHeight(
-                        XmKidGeometry rowPtr,
-                        Dimension height) ;
+   XmKidGeometry rowPtr,
+   Dimension     height);
 extern void _XmSeparatorFix(
-                        XmGeoMatrix geoSpec,
-                        int action,
-                        XmGeoMajorLayout layoutPtr,
-                        XmKidGeometry rowPtr) ;
+   XmGeoMatrix      geoSpec,
+   int              action,
+   XmGeoMajorLayout layoutPtr,
+   XmKidGeometry    rowPtr);
 extern void _XmMenuBarFix(
-                        XmGeoMatrix geoSpec,
-                        int action,
-                        XmGeoMajorLayout layoutPtr,
-                        XmKidGeometry rowPtr) ;
+   XmGeoMatrix      geoSpec,
+   int              action,
+   XmGeoMajorLayout layoutPtr,
+   XmKidGeometry    rowPtr);
 extern void _XmGeoLoadValues(
-                        Widget wid,
-                        int geoType,
-                        Widget instigator,
-                        XtWidgetGeometry *request,
-                        XtWidgetGeometry *geoResult) ;
+   Widget            wid,
+   int               geoType,
+   Widget            instigator,
+   XtWidgetGeometry *request,
+   XtWidgetGeometry *geoResult);
 extern int _XmGeoCount_kids(
-                        register CompositeWidget c) ;
+   register CompositeWidget c);
 extern XmKidGeometry _XmGetKidGeo(
-                        Widget wid,
-                        Widget instigator,
-                        XtWidgetGeometry *request,
-                        int uniform_border,
-                        Dimension border,
-                        int uniform_width_margins,
-                        int uniform_height_margins,
-                        Widget help,
-                        int geo_type) ;
+   Widget            wid,
+   Widget            instigator,
+   XtWidgetGeometry *request,
+   int               uniform_border,
+   Dimension         border,
+   int               uniform_width_margins,
+   int               uniform_height_margins,
+   Widget            help,
+   int               geo_type);
 extern void _XmGeoClearRectObjAreas(
-                        RectObj r,
-                        XWindowChanges *old) ;
+   RectObj         r,
+   XWindowChanges *old);
 extern void _XmSetKidGeo(
-                        XmKidGeometry kg,
-                        Widget instigator) ;
+   XmKidGeometry kg,
+   Widget        instigator);
 extern Boolean _XmGeometryEqual(
-                        Widget wid,
-                        XtWidgetGeometry *geoA,
-                        XtWidgetGeometry *geoB) ;
+   Widget            wid,
+   XtWidgetGeometry *geoA,
+   XtWidgetGeometry *geoB);
 extern Boolean _XmGeoReplyYes(
-                        Widget wid,
-                        XtWidgetGeometry *desired,
-                        XtWidgetGeometry *response) ;
+   Widget            wid,
+   XtWidgetGeometry *desired,
+   XtWidgetGeometry *response);
 extern XtGeometryResult _XmMakeGeometryRequest(
-                        Widget w,
-                        XtWidgetGeometry *geom) ;
+   Widget            w,
+   XtWidgetGeometry *geom);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmGeoUtilsI_h */

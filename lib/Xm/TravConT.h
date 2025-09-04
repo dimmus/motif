@@ -33,16 +33,18 @@ extern "C" {
 #endif
 externalref XrmQuark XmQTtraversalControl;
 typedef Widget (*XmTraversalRedirectionProc)(Widget               old_focus,
-					     Widget               new_focus,
-					     unsigned int         focus_policy,
-					     XmTraversalDirection direction,
-					     unsigned int         pass);
+                                             Widget               new_focus,
+                                             unsigned int         focus_policy,
+                                             XmTraversalDirection direction,
+                                             unsigned int         pass);
+
 /* Version 0: initial release. */
-typedef struct _XmTraversalControlTraitRec {
-  int				version;	/* 0 */
-  XmTraversalRedirectionProc	redirect;
+typedef struct _XmTraversalControlTraitRec
+{
+   int                        version; /* 0 */
+   XmTraversalRedirectionProc redirect;
 } XmTraversalControlTraitRec, *XmTraversalControlTrait;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* XmTravConT_h */

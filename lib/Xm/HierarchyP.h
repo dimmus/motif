@@ -39,93 +39,109 @@ extern "C" {
 #define IS_COMPRESSED   (1L << 2)
 #define PARENT_GONE	(1L << 3)
 #define IS_SELECTED	(1L << 4)
+
 /************************************************************
 *	MACROS
 *************************************************************/
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
-typedef struct _HierNodeInfo {
-    /*
+typedef struct _HierNodeInfo
+{
+   /*
      * Public (Resource) data.
      */
-    XmHierarchyNodeState state;	/* State of the node. */
-    Widget parent;		/* parent of this child. */
-    Widget insert_before;	/* Sibling to insert this node before;
+   XmHierarchyNodeState state;                     /* State of the node. */
+   Widget               parent;                    /* parent of this child. */
+   Widget               insert_before;             /* Sibling to insert this node before;
 				   NULL will place it at the end. */
-    Pixmap open_folder, close_folder; /* Images for open/close buttons. */
-    /*
+   Pixmap               open_folder, close_folder; /* Images for open/close buttons. */
+   /*
      * Private data.
      */
-    Widget widget;		/* Back pointer to this node's widget. */
-    Widget open_close_button;	/* The open or close button. */
-    struct _HierarchyConstraintRec ** children;       /* norm children. */
-    Cardinal num_children;	/* number of each type of children. */
-    Cardinal alloc_attrs, alloc;   /* amount of allocated space for each */
-    unsigned char status;	/* 8 status bits. */
+   Widget                           widget;             /* Back pointer to this node's widget. */
+   Widget                           open_close_button;  /* The open or close button. */
+   struct _HierarchyConstraintRec **children;           /* norm children. */
+   Cardinal                         num_children;       /* number of each type of children. */
+   Cardinal                         alloc_attrs, alloc; /* amount of allocated space for each */
+   unsigned char                    status;             /* 8 status bits. */
 } HierNodeInfo;
-typedef struct _HierarchyConstraintRec {
-    XmManagerConstraintPart manager;
-    HierNodeInfo hierarchy;
+
+typedef struct _HierarchyConstraintRec
+{
+   XmManagerConstraintPart manager;
+   HierNodeInfo            hierarchy;
 } HierarchyConstraintRec, XmHierarchyConstraintRec, *HierarchyConstraints;
-typedef void	(*XmHierarchyNodeProc)(HierarchyConstraints);
-typedef void	(*XmHierarchyExtraNodeProc)(Widget, HierarchyConstraints);
-typedef void	(*XmHierarchyBuildTableProc)(Widget,
-					     HierarchyConstraints, Cardinal *);
-typedef void	(*XmHierarchyResetButtonProc)(Widget, HierarchyConstraints);
-typedef struct {
-    /* Class function for changing node state. */
-    XmHierarchyNodeProc		change_node_state;
-    /* map or unmap a given node. */
-    XmHierarchyNodeProc 	map_node;
-    XmHierarchyNodeProc		unmap_node;
-    /* Unmaps all the extra nodes. */
-    XmHierarchyExtraNodeProc	unmap_all_extra_nodes;
-    /* Builds the node table. */
-    XmHierarchyBuildTableProc	build_node_table;
-    /* Correctly sets the state of the open/close button. */
-    XmHierarchyResetButtonProc	reset_open_close_button;
-    /* Toggles state of a node. */
-    XtCallbackProc 		toggle_node_state;
-    /* Just in case we need it later. */
-    XtPointer 			extension;
+
+typedef void (*XmHierarchyNodeProc)(HierarchyConstraints);
+typedef void (*XmHierarchyExtraNodeProc)(Widget, HierarchyConstraints);
+typedef void (*XmHierarchyBuildTableProc)(Widget,
+                                          HierarchyConstraints,
+                                          Cardinal *);
+typedef void (*XmHierarchyResetButtonProc)(Widget, HierarchyConstraints);
+
+typedef struct
+{
+   /* Class function for changing node state. */
+   XmHierarchyNodeProc change_node_state;
+   /* map or unmap a given node. */
+   XmHierarchyNodeProc map_node;
+   XmHierarchyNodeProc unmap_node;
+   /* Unmaps all the extra nodes. */
+   XmHierarchyExtraNodeProc unmap_all_extra_nodes;
+   /* Builds the node table. */
+   XmHierarchyBuildTableProc build_node_table;
+   /* Correctly sets the state of the open/close button. */
+   XmHierarchyResetButtonProc reset_open_close_button;
+   /* Toggles state of a node. */
+   XtCallbackProc toggle_node_state;
+   /* Just in case we need it later. */
+   XtPointer extension;
 } HierarchyClassPart;
-typedef struct _XmHierarchyClassRec {
-    CoreClassPart		core_class;
-    CompositeClassPart		composite_class;
-    ConstraintClassPart		constraint_class;
-    XmManagerClassPart		manager_class;
-    HierarchyClassPart          hierarchy_class;
+
+typedef struct _XmHierarchyClassRec
+{
+   CoreClassPart       core_class;
+   CompositeClassPart  composite_class;
+   ConstraintClassPart constraint_class;
+   XmManagerClassPart  manager_class;
+   HierarchyClassPart  hierarchy_class;
 } XmHierarchyClassRec;
+
 externalref XmHierarchyClassRec xmHierarchyClassRec;
-typedef struct _HierarchyPart {
-    /* resources */
-    Boolean auto_close;		/* Auto-close children when parent is closed?*/
-    Boolean refigure_mode;	/* Do refigures? */
-    Dimension h_margin;		/* The horizontal margin. */
-    Dimension v_margin;		/* The vertical margin. */
-    Pixmap open_folder, close_folder; /* Images for open/close buttons. */
-    XtCallbackList node_state_callback;	/* Called when the node button is
+
+typedef struct _HierarchyPart
+{
+   /* resources */
+   Boolean        auto_close;                  /* Auto-close children when parent is closed?*/
+   Boolean        refigure_mode;               /* Do refigures? */
+   Dimension      h_margin;                    /* The horizontal margin. */
+   Dimension      v_margin;                    /* The vertical margin. */
+   Pixmap         open_folder, close_folder;   /* Images for open/close buttons. */
+   XtCallbackList node_state_callback;         /* Called when the node button is
 					   clicked */
-    XtCallbackList node_state_changed_callback;	/* Called when the node state
+   XtCallbackList node_state_changed_callback; /* Called when the node state
 						   changes */
-    XtCallbackList node_state_beg_end_callback; /* Called when beginning
+   XtCallbackList node_state_beg_end_callback; /* Called when beginning
 						     or ending a set of node
 						     state changes */
-    /* private state */
-    HierarchyConstraintRec ** node_table;
-    HierarchyConstraints top_node;
-    Cardinal num_nodes, alloc_nodes;
-    Pixmap def_open_folder, def_close_folder; /* Default folder button Images*/
-    XtWorkProcId work_proc_id;  /* work proc id for the move nodes wp */
+   /* private state */
+   HierarchyConstraintRec **node_table;
+   HierarchyConstraints     top_node;
+   Cardinal                 num_nodes, alloc_nodes;
+   Pixmap                   def_open_folder, def_close_folder; /* Default folder button Images*/
+   XtWorkProcId             work_proc_id;                      /* work proc id for the move nodes wp */
 } HierarchyPart;
-typedef struct _XmHierarchyRec {
-    CorePart		core;
-    CompositePart	composite;
-    ConstraintPart	constraint;
-    XmManagerPart	manager;
-    HierarchyPart	hierarchy;
+
+typedef struct _XmHierarchyRec
+{
+   CorePart       core;
+   CompositePart  composite;
+   ConstraintPart constraint;
+   XmManagerPart  manager;
+   HierarchyPart  hierarchy;
 } XmHierarchyRec;
+
 /*
  * These are necessary because the XmResolvePartOffset macros assume a
  * certain naming convention
@@ -174,6 +190,6 @@ typedef HierNodeInfo  XmHierarchyConstraintPart;
 *	STATIC DECLARATIONS
 *************************************************************/
 #ifdef __cplusplus
-}	/* Closes scope of 'extern "C"' declaration */
+} /* Closes scope of 'extern "C"' declaration */
 #endif
 #endif /* _HierarchyP_h */

@@ -32,7 +32,7 @@
 ** by programs (that's why they are Xme now)
 */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #define NO_XM_1_2_BC
 #include <Xm/DrawP.h>
@@ -40,251 +40,254 @@
 #include <Xm/XmosP.h>
 #include "RegionI.h"
 #include <Xm/DropSMgr.h>
+
 /****************************_XmDrawShadows****************************/
-void _XmDrawShadows(Display *display, Drawable d,
-		    GC top_gc, GC bottom_gc,
-		    Position x, Position y,
-		    Dimension width, Dimension height, Dimension shad_thick,
-		    unsigned int shad_type)
+void
+_XmDrawShadows(Display *display, Drawable d, GC top_gc, GC bottom_gc, Position x, Position y, Dimension width, Dimension height, Dimension shad_thick, unsigned int shad_type)
 {
-    XmeDrawShadows(display, d, top_gc, bottom_gc, x, y, width, height,
-		   shad_thick, shad_type);
+   XmeDrawShadows(display, d, top_gc, bottom_gc, x, y, width, height, shad_thick, shad_type);
 }
+
 /*****************************_XmClearBorder*********************************/
-void _XmClearBorder (Display *display, Window w,
-                     Position x, Position y,
-                     Dimension width, Dimension height,
-                     Dimension shadow_thick)
+void
+_XmClearBorder(Display *display, Window w, Position x, Position y, Dimension width, Dimension height, Dimension shadow_thick)
 {
-    XmeClearBorder (display, w, x, y, width, height, shadow_thick);
+   XmeClearBorder(display, w, x, y, width, height, shadow_thick);
 }
+
 /******************************_XmDrawSeparator**********************/
-void _XmDrawSeparator(Display *display, Drawable d,
-		      GC top_gc, GC bottom_gc, GC separator_gc,
-                      Position x, Position y,
-                      Dimension width, Dimension height,
-                      Dimension shadow_thick,
-                      Dimension margin, unsigned char orientation,
-                      unsigned char separator_type)
+void
+_XmDrawSeparator(Display *display, Drawable d, GC top_gc, GC bottom_gc, GC separator_gc, Position x, Position y, Dimension width, Dimension height, Dimension shadow_thick, Dimension margin, unsigned char orientation, unsigned char separator_type)
 {
-    XmeDrawSeparator(display, d, top_gc, bottom_gc, separator_gc,
-		     x, y, width, height, shadow_thick, margin,
-		     orientation, separator_type);
+   XmeDrawSeparator(display, d, top_gc, bottom_gc, separator_gc, x, y, width, height, shadow_thick, margin, orientation, separator_type);
 }
+
 /***********************_XmDrawDiamond**********************************/
-void _XmDrawDiamond(Display *display, Drawable d,
-                    GC top_gc, GC bottom_gc, GC center_gc,
-                    Position x, Position y,
-                    Dimension width, Dimension height,
-                    Dimension shadow_thick, Dimension fill)
+void
+_XmDrawDiamond(Display *display, Drawable d, GC top_gc, GC bottom_gc, GC center_gc, Position x, Position y, Dimension width, Dimension height, Dimension shadow_thick, Dimension fill)
 {
-    XmeDrawDiamond (display, d, top_gc, bottom_gc, center_gc,
-		    x, y, width, height, shadow_thick, fill);
+   XmeDrawDiamond(display, d, top_gc, bottom_gc, center_gc, x, y, width, height, shadow_thick, fill);
 }
+
 /****************************_XmDrawSimpleHighlight************************/
-void _XmDrawSimpleHighlight(Display *display, Drawable d,
-		      GC gc,
-		      Position x, Position y,
-		      Dimension width, Dimension height,
-		      Dimension highlight_thickness)
+void
+_XmDrawSimpleHighlight(Display *display, Drawable d, GC gc, Position x, Position y, Dimension width, Dimension height, Dimension highlight_thickness)
 {
-    XmeDrawHighlight(display, d, gc, x, y, width, height,
-		     highlight_thickness);
+   XmeDrawHighlight(display, d, gc, x, y, width, height, highlight_thickness);
 }
+
 /****************************_XmDrawArrow**********************************/
-void _XmDrawArrow(Display *display, Drawable d,
-                  GC top_gc, GC bot_gc, GC cent_gc,
-                  Position x, Position y,
-                  Dimension width, Dimension height, Dimension shadow_thick,
-                  unsigned char direction)
+void
+_XmDrawArrow(Display *display, Drawable d, GC top_gc, GC bot_gc, GC cent_gc, Position x, Position y, Dimension width, Dimension height, Dimension shadow_thick, unsigned char direction)
 {
-    XmeDrawArrow(display, d, top_gc, bot_gc, cent_gc,
-		 x, y, width, height, shadow_thick, direction);
+   XmeDrawArrow(display, d, top_gc, bot_gc, cent_gc, x, y, width, height, shadow_thick, direction);
 }
+
 /**********************************************************************/
 void
 _XmFromHorizontalPixels(
-        Widget widget,
-        int offset,
-        XtArgVal *value )
+   Widget    widget,
+   int       offset,
+   XtArgVal *value)
 {
-    XmeFromHorizontalPixels(widget, offset, value);
+   XmeFromHorizontalPixels(widget, offset, value);
 }
+
 /**********************************************************************/
 void
 _XmFromVerticalPixels(
-        Widget widget,
-        int offset,
-        XtArgVal *value )
+   Widget    widget,
+   int       offset,
+   XtArgVal *value)
 {
-    XmeFromVerticalPixels(widget, offset, value);
+   XmeFromVerticalPixels(widget, offset, value);
 }
+
 /**********************************************************************/
 XmImportOperator
 _XmToHorizontalPixels(
-        Widget widget,
-        int offset,
-        XtArgVal *value )
+   Widget    widget,
+   int       offset,
+   XtArgVal *value)
 {
-    return XmeToHorizontalPixels( widget, offset, value );
+   return XmeToHorizontalPixels(widget, offset, value);
 }
+
 /********************************************************************/
 XmImportOperator
 _XmToVerticalPixels(
-        Widget widget,
-        int offset,
-        XtArgVal *value )
+   Widget    widget,
+   int       offset,
+   XtArgVal *value)
 {
-    return XmeToVerticalPixels( widget, offset, value );
+   return XmeToVerticalPixels(widget, offset, value);
 }
+
 /********************************************************************/
 void
 _XmNavigChangeManaged(
-        Widget wid )
+   Widget wid)
 {
-    XmeNavigChangeManaged(wid);
+   XmeNavigChangeManaged(wid);
 }
+
 /********************************************************************/
 void
 _XmRedisplayGadgets(
-        Widget w,
-        register XEvent *event,
-        Region region )
+   Widget           w,
+   register XEvent *event,
+   Region           region)
 {
-    XmeRedisplayGadgets( w, event, region );
+   XmeRedisplayGadgets(w, event, region);
 }
+
 /********************************************************************/
 Widget
 _XmGetTextualDragIcon(
-        Widget w )
+   Widget w)
 {
-    return XmeGetTextualDragIcon(w);
+   return XmeGetTextualDragIcon(w);
 }
+
 /********************************************************************/
 void
 _XmVirtualToActualKeysym(
-        Display *dpy,
-        KeySym virtKeysym,
-        KeySym *actualKeysymRtn,
-        Modifiers *modifiersRtn )
+   Display   *dpy,
+   KeySym     virtKeysym,
+   KeySym    *actualKeysymRtn,
+   Modifiers *modifiersRtn)
 {
-  int num_keys;
-  XmKeyBinding keys;
-  /* Initialize the return parameters. */
-  *actualKeysymRtn = NoSymbol;
-  *modifiersRtn = 0;
-  /* Arbitrarily return the first keysym in the list. */
-  num_keys = XmeVirtualToActualKeysyms(dpy, virtKeysym, &keys);
-  if (num_keys > 0)
-    {
+   int          num_keys;
+   XmKeyBinding keys;
+   /* Initialize the return parameters. */
+   *actualKeysymRtn = NoSymbol;
+   *modifiersRtn    = 0;
+   /* Arbitrarily return the first keysym in the list. */
+   num_keys = XmeVirtualToActualKeysyms(dpy, virtKeysym, &keys);
+   if (num_keys > 0)
+   {
       *actualKeysymRtn = keys[0].keysym;
-      *modifiersRtn = keys[0].modifiers;
-    }
-  XtFree((char*) keys);
+      *modifiersRtn    = keys[0].modifiers;
+   }
+   XtFree((char *)keys);
 }
+
 /********************************************************************/
 Cursor
 _XmGetNullCursor(
-        Widget w )
+   Widget w)
 {
-    return XmeGetNullCursor(w);
+   return XmeGetNullCursor(w);
 }
+
 /********************************************************************/
 void
 _XmWarning(
-        Widget w,
-        char *message )
+   Widget w,
+   char  *message)
 {
-    XmeWarning( w, message );
+   XmeWarning(w, message);
 }
+
 /********************************************************************/
 XmFontList
 _XmGetDefaultFontList(
-        Widget w,
-        unsigned char fontListType )
+   Widget        w,
+   unsigned char fontListType)
 {
-    return XmeGetDefaultRenderTable( w, fontListType );
+   return XmeGetDefaultRenderTable(w, fontListType);
 }
+
 /********************************************************************/
 Boolean
 _XmFontListGetDefaultFont(
-        XmFontList fontlist,
-        XFontStruct **font_struct )
+   XmFontList    fontlist,
+   XFontStruct **font_struct)
 {
-    return XmeRenderTableGetDefaultFont(fontlist, font_struct);
+   return XmeRenderTableGetDefaultFont(fontlist, font_struct);
 }
+
 /********************************************************************/
 XtGeometryResult
-_XmGMReplyToQueryGeometry(Widget widget,
-			  XtWidgetGeometry * intended,
-			  XtWidgetGeometry * desired)
+_XmGMReplyToQueryGeometry(Widget            widget,
+                          XtWidgetGeometry *intended,
+                          XtWidgetGeometry *desired)
 {
-    return XmeReplyToQueryGeometry(widget, intended, desired);
+   return XmeReplyToQueryGeometry(widget, intended, desired);
 }
+
 /********************************************************************/
 Boolean
 _XmStringsAreEqual(
-        register char *in_str,
-        register char *test_str )
+   register char *in_str,
+   register char *test_str)
 {
-    return XmeNamesAreEqual( in_str, test_str );
+   return XmeNamesAreEqual(in_str, test_str);
 }
+
 /********************************************************************/
 void
 _XmGetMaxCursorSize(
-        Widget w,
-        Dimension *width,
-        Dimension *height )
+   Widget     w,
+   Dimension *width,
+   Dimension *height)
 {
-    XmeQueryBestCursorSize(w, width, height);
+   XmeQueryBestCursorSize(w, width, height);
 }
+
 /********************************************************************/
 Boolean
 _XmStringIsXmString(
-        XmString string )
+   XmString string)
 {
-    return XmeStringIsValid(string);
+   return XmeStringIsValid(string);
 }
+
 /********************************************************************/
 XmGadget
 _XmInputInGadget(
-        Widget wid,
-        register int x,
-        register int y )
+   Widget       wid,
+   register int x,
+   register int y)
 {
-    return (XmGadget) XmObjectAtPoint( wid, x, y );
+   return (XmGadget)XmObjectAtPoint(wid, x, y);
 }
+
 /********************************************************************/
 XmString
 _XmOSGetLocalizedString(
-        char *reserved,
-        Widget widget,
-        char *resource,
-        String string)
+   char  *reserved,
+   Widget widget,
+   char  *resource,
+   String string)
 {
-    return XmeGetLocalizedString( reserved, widget, resource, string);
+   return XmeGetLocalizedString(reserved, widget, resource, string);
 }
+
 /********************************************************************/
 int
 _XmMicroSleep(
-        long    usecs)
+   long usecs)
 {
-    return XmeMicroSleep( usecs );
+   return XmeMicroSleep(usecs);
 }
+
 /********************************************************************/
 String
 _XmOSGetHomeDirName()
 {
-    return XmeGetHomeDirName();
+   return XmeGetHomeDirName();
 }
+
 /********************************************************************/
 void
 _XmStringUpdateWMShellTitle(
-	XmString xmstr,
-	Widget shell)
+   XmString xmstr,
+   Widget   shell)
 {
-    XmeSetWMShellTitle(xmstr, shell);
+   XmeSetWMShellTitle(xmstr, shell);
 }
+
 /************************************************************************
  *
  *  _XmResizeObject
@@ -293,20 +296,20 @@ _XmStringUpdateWMShellTitle(
  ************************************************************************/
 void
 _XmResizeObject(
-        Widget wid,
-        Dimension width,
-        Dimension height,
-        Dimension border_width )
+   Widget    wid,
+   Dimension width,
+   Dimension height,
+   Dimension border_width)
 {
-    RectObj g = (RectObj) wid ;
-    XmDropSiteStartUpdate(wid);
-    if (XtIsWidget (g))
-	XtResizeWidget ((Widget) g, width, height, border_width);
-    else
-	XmeConfigureObject((Widget) g, g->rectangle.x, g->rectangle.y,
-			   width, height, 0);
-    XmDropSiteEndUpdate(wid);
+   RectObj g = (RectObj)wid;
+   XmDropSiteStartUpdate(wid);
+   if (XtIsWidget(g))
+      XtResizeWidget((Widget)g, width, height, border_width);
+   else
+      XmeConfigureObject((Widget)g, g->rectangle.x, g->rectangle.y, width, height, 0);
+   XmDropSiteEndUpdate(wid);
 }
+
 /************************************************************************
  *
  *  _XmMoveObject
@@ -315,19 +318,19 @@ _XmResizeObject(
  ************************************************************************/
 void
 _XmMoveObject(
-        Widget wid,
-        Position x,
-        Position y )
+   Widget   wid,
+   Position x,
+   Position y)
 {
-    RectObj g = (RectObj) wid ;
-    XmDropSiteStartUpdate(wid);
-    if (XtIsWidget (g))
-	XtMoveWidget ((Widget) g, x, y);
-    else
-	XmeConfigureObject((Widget) g, x, y,
-			   g->rectangle.width, g->rectangle.height, 0);
-    XmDropSiteEndUpdate(wid);
+   RectObj g = (RectObj)wid;
+   XmDropSiteStartUpdate(wid);
+   if (XtIsWidget(g))
+      XtMoveWidget((Widget)g, x, y);
+   else
+      XmeConfigureObject((Widget)g, x, y, g->rectangle.width, g->rectangle.height, 0);
+   XmDropSiteEndUpdate(wid);
 }
+
 /************************************************************************
  *
  *  _XmConfigureObject
@@ -336,12 +339,12 @@ _XmMoveObject(
  ************************************************************************/
 void
 _XmConfigureObject(
-        Widget wid,
-        Position x,
-        Position y,
-        Dimension width,
-        Dimension height,
-        Dimension border_width )
+   Widget    wid,
+   Position  x,
+   Position  y,
+   Dimension width,
+   Dimension height,
+   Dimension border_width)
 {
-    XmeConfigureObject( wid, x, y, width, height, border_width );
+   XmeConfigureObject(wid, x, y, width, height, border_width);
 }

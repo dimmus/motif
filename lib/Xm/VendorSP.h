@@ -23,7 +23,7 @@
 #ifndef _XmVendorSP_h
 #define _XmVendorSP_h
 #ifndef _XmNO_BC_INCL
-#define _XmNO_BC_INCL
+#   define _XmNO_BC_INCL
 #endif
 #include <Xm/XmP.h>
 #include <Xm/VendorS.h>
@@ -33,8 +33,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref VendorShellClassRec  vendorShellClassRec;
+externalref VendorShellClassRec vendorShellClassRec;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
-#endif  /* _XmVendorSP_h */
+#endif /* _XmVendorSP_h */

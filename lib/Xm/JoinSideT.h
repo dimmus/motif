@@ -32,20 +32,28 @@ extern "C" {
 #endif
 externalref XrmQuark XmQTjoinSide;
 /* Trait structures and typedefs, place typedefs first */
-typedef void (*XmJoinSideSetValueProc)(Widget tab,
-				       unsigned char join_side,
-				       Dimension join_thickness) ;
-typedef unsigned char (*XmJoinSideGetValueProc)(Widget tab,
-						Dimension * join_thickness);
+typedef void (*XmJoinSideSetValueProc)(Widget        tab,
+                                       unsigned char join_side,
+                                       Dimension     join_thickness);
+typedef unsigned char (*XmJoinSideGetValueProc)(Widget     tab,
+                                                Dimension *join_thickness);
+
 /* Version 0: initial release. */
-typedef struct _XmJoinSideTraitRec {
-  int			 version;	/* 0 */
-  XmJoinSideSetValueProc setValue;
-  XmJoinSideGetValueProc getValue;
+typedef struct _XmJoinSideTraitRec
+{
+   int                    version; /* 0 */
+   XmJoinSideSetValueProc setValue;
+   XmJoinSideGetValueProc getValue;
 } XmJoinSideTraitRec, *XmJoinSideTrait;
-enum {/* XmNONE already defined in Xm.h */
-	 XmLEFT = 1, XmRIGHT, XmTOP, XmBOTTOM} ;
+
+enum
+{ /* XmNONE already defined in Xm.h */
+  XmLEFT = 1,
+  XmRIGHT,
+  XmTOP,
+  XmBOTTOM
+};
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmJoinSideT_H */

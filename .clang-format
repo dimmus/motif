@@ -64,7 +64,7 @@ Standard: Latest
 #       another_condition)
 # Example with 0 (no limit):
 #   if (very_long_condition_that_exceeds_limit && another_condition && yet_another_very_long_condition)
-ColumnLimit: 80
+ColumnLimit: 0
 
 # ------------------------------------------------------------------------------
 # INDENTATION AND TAB SETTINGS
@@ -368,7 +368,7 @@ AlignOperands: AlignAfterOperator
 #   double longer_variable = 2.0;
 #   char x = 'a';
 AlignConsecutiveAssignments:
-    Enabled:          false           # Disable alignment of = operators to preserve original style
+    Enabled:          true           # Disable alignment of = operators to preserve original style
     AcrossEmptyLines: false           # Don't align across empty lines
     AcrossComments:   false           # Don't align across comment lines
     AlignCompound:    true            # Align compound assignments (+=, -=, etc.)
@@ -430,7 +430,7 @@ AlignConsecutiveMacros:
 #   int a = 5;  // comment 1
 #   int bb = 10;   // comment 2  (left as-is)
 AlignTrailingComments:
-    Kind:           Leave             # Leave existing alignment unchanged
+    Kind:           Always             # Leave existing alignment unchanged
     OverEmptyLines: 0                 # Don't align over empty lines
 
 # ------------------------------------------------------------------------------
@@ -524,7 +524,7 @@ AllowShortBlocksOnASingleLine: Never
 #     case 1: return "one";
 #     case 2: return "two";
 #   }
-AllowShortCaseLabelsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
 
 # AllowShortEnumsOnASingleLine: Allow short enums on single line
 # Options: true, false
@@ -552,7 +552,7 @@ AllowShortEnumsOnASingleLine: true
 #   int getValue() { return 42; }
 # Example with Empty:
 #   void empty() {}  // only empty functions allowed
-AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: Empty
 
 # AllowShortIfStatementsOnASingleLine: Allow short if statements on single line
 # Options: Never, WithoutElse, OnlyFirstIf, AllIfsAndElse
@@ -567,7 +567,7 @@ AllowShortFunctionsOnASingleLine: None
 #     return x;
 #   else
 #     return -x;
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortIfStatementsOnASingleLine: WithoutElse
 
 # AllowShortLoopsOnASingleLine: Allow short loops on single line
 # Options: true, false
@@ -580,7 +580,7 @@ AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 # Example with true:
 #   for (int i = 0; i < 10; ++i) process(i);
 #   while (condition) action();
-AllowShortLoopsOnASingleLine: false
+AllowShortLoopsOnASingleLine: true
 
 # ------------------------------------------------------------------------------
 # BREAKING AND WRAPPING SETTINGS
@@ -810,7 +810,7 @@ BreakAfterAttributes: Never
 # Example with All:
 #   int result = operand1
 #              + operand2;
-BreakBeforeBinaryOperators: None
+BreakBeforeBinaryOperators: All
 
 # BreakBeforeInlineASMColon: Break before inline assembly colon
 # Options: Never, OnlyMultiline, Always
@@ -895,7 +895,7 @@ ReflowComments: false
 #                     "broken across multiple lines";
 # Example with false:
 #   const char *str = "This is a very long string that will not be broken";
-BreakStringLiterals: true
+BreakStringLiterals: false
 
 # ------------------------------------------------------------------------------
 # CODE MODIFICATION SETTINGS

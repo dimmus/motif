@@ -26,16 +26,16 @@
  */
 /* $XConsortium: GadgetI.h /main/5 1995/07/13 17:27:09 drk $ */
 #ifndef _XmGadgetI_h
-#define _XmGadgetI_h
-#include <Xm/GadgetP.h>
-#ifdef __cplusplus
+#   define _XmGadgetI_h
+#   include <Xm/GadgetP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Private Function Declarations    ********/
-extern void _XmBuildGadgetResources(WidgetClass c) ;
+extern void _XmBuildGadgetResources(WidgetClass c);
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmGadgetI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

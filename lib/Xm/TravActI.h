@@ -30,99 +30,99 @@ extern "C" {
 #define XmFOCUS_IGNORE	1<<1
 /********    Private Function Declarations    ********/
 extern unsigned short _XmGetFocusFlag(
-			Widget w,
-			unsigned int mask) ;
+   Widget       w,
+   unsigned int mask);
 extern void _XmSetFocusFlag(
-			Widget w,
-			unsigned int mask,
-        		Boolean value ) ;
+   Widget       w,
+   unsigned int mask,
+   Boolean      value);
 extern void _XmTrackShellFocus(
-                        Widget widget,
-                        XtPointer client_data,
-                        XEvent *event,
-                        Boolean *dontSwallow) ;
+   Widget    widget,
+   XtPointer client_data,
+   XEvent   *event,
+   Boolean  *dontSwallow);
 extern void _XmPrimitiveEnter(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmPrimitiveLeave(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmPrimitiveUnmap(
-                        Widget pw,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    pw,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmPrimitiveFocusInInternal(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmPrimitiveFocusOut(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmPrimitiveFocusIn(
-                        Widget pw,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    pw,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmEnterGadget(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmLeaveGadget(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmFocusInGadget(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmFocusOutGadget(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmManagerEnter(
-                        Widget wid,
-                        XEvent *event_in,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event_in,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmManagerLeave(
-                        Widget wid,
-                        XEvent *event_in,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event_in,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmManagerFocusInInternal(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmManagerFocusIn(
-                        Widget mw,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    mw,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmManagerFocusOut(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmManagerUnmap(
-                        Widget mw,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    mw,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmTravActI_h */

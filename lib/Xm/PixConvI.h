@@ -26,32 +26,32 @@
  */
 /* $XConsortium: PixConvI.h /main/6 1996/01/29 10:08:12 daniel $ */
 #ifndef _XmPixConvI_h
-#define _XmPixConvI_h
-#include <Xm/XmP.h>
-#ifdef __cplusplus
+#   define _XmPixConvI_h
+#   include <Xm/XmP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Private Function Declarations for PixConv.c    ********/
-extern void _XmRegisterPixmapConverters( void ) ;
+extern void _XmRegisterPixmapConverters(void);
 extern void _XmTopShadowPixmapDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern void _XmHighlightPixmapDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   Widget    widget,
+   int       offset,
+   XrmValue *value);
 extern GC _XmGetPixmapBasedGC(
-			      Widget w,
-			      Pixel foreground,
-			      Pixel background,
-			      Pixmap pixmap);
+   Widget w,
+   Pixel  foreground,
+   Pixel  background,
+   Pixmap pixmap);
 /********    End Private Function Declarations    ********/
 /* tmp - go to XmStrDef */
-#define XmRNoScalingBitmap "NoScalingBitmap"
-#define XmRNoScalingDynamicPixmap "NoScalingDynamicPixmap"
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   define XmRNoScalingBitmap "NoScalingBitmap"
+#   define XmRNoScalingDynamicPixmap "NoScalingDynamicPixmap"
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmPixConvI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

@@ -69,23 +69,22 @@ extern "C" {
  *  does not currently use this. Presumes do it in subclasses
  */
 typedef Boolean (*XmCombinationBox2TextProc)(
-    Widget,
-    char *text
-);
+   Widget,
+   char *text);
 typedef Boolean (*XmCombinationBox2TextListMapProc)(
-    Widget,		/* combo box */
-    Widget,		/* text */
-    Widget		/* list */
+   Widget, /* combo box */
+   Widget, /* text */
+   Widget  /* list */
 );
 /* Version number for the first Revision  */
 #define XmCombinationBox2ExtensionVersion 2
-typedef XmDropDownClassPart XmCombinationBox2ClassPartExtension;
-typedef XmDropDownClassPart XmCombinationBox2ClassPart;
-typedef XmDropDownClassRec  XmCombinationBox2ClassRec;
-typedef XmDropDownPart      XmCombinationBox2Part;
-typedef XmDropDownRec       XmCombinationBox2Rec;
+typedef XmDropDownClassPart      XmCombinationBox2ClassPartExtension;
+typedef XmDropDownClassPart      XmCombinationBox2ClassPart;
+typedef XmDropDownClassRec       XmCombinationBox2ClassRec;
+typedef XmDropDownPart           XmCombinationBox2Part;
+typedef XmDropDownRec            XmCombinationBox2Rec;
 extern XmCombinationBox2ClassRec xmCombinationBox2ClassRec __attribute__((deprecated));
 #ifdef __cplusplus
-}	/* Closes scope of 'extern "C"' declaration */
+} /* Closes scope of 'extern "C"' declaration */
 #endif
 #endif /* _XmCombinationBox2P_h_ */

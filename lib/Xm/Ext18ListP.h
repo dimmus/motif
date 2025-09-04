@@ -55,12 +55,12 @@ extern "C" {
 #define XmExt18List_visible_rows(w) (((XmExt18ListWidget)(w))->ext_list.visible_rows)
 #define XmExt18List_title_string(w) (((XmExt18ListWidget)(w))->ext_list.title_string)
 typedef XmMultiListClassPart XmExt18ListClassPart;
-typedef XmMultiListClassRec XmExt18ListClassRec;
-typedef XmMultiListPart XmExt18ListPart;
-typedef XmMultiListRec XmExt18ListRec;
-extern XmExt18ListClassRec xmExt18ListClassRec __attribute__((deprecated));
-extern XmI18ListClassRec xiI18ListClassRec;
-extern WidgetClass xmI18ListWidgetClass;
+typedef XmMultiListClassRec  XmExt18ListClassRec;
+typedef XmMultiListPart      XmExt18ListPart;
+typedef XmMultiListRec       XmExt18ListRec;
+extern XmExt18ListClassRec   xmExt18ListClassRec __attribute__((deprecated));
+extern XmI18ListClassRec     xiI18ListClassRec;
+extern WidgetClass           xmI18ListWidgetClass;
 #if defined(__cplusplus)
 }
 #endif

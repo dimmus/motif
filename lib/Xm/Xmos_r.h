@@ -58,118 +58,120 @@ in this Software without prior written authorization from The Open Group.
  */
 /* This header can be included multiple times with different defines! */
 #ifndef _XOS_R_H_
-# define _XOS_R_H_
-# include <X11/Xos.h>
-# include <X11/Xfuncs.h>
-# ifndef X_NOT_POSIX
-#  ifdef _POSIX_SOURCE
-#   include <limits.h>
-#  else
-#   define _POSIX_SOURCE
-#   include <limits.h>
-#   undef _POSIX_SOURCE
-#  endif
-#  ifndef LINE_MAX
-#   define X_LINE_MAX 2048
-#  else
-#   define X_LINE_MAX LINE_MAX
-#  endif
-# endif
+#   define _XOS_R_H_
+#   include <X11/Xos.h>
+#   include <X11/Xfuncs.h>
+#   ifndef X_NOT_POSIX
+#      ifdef _POSIX_SOURCE
+#         include <limits.h>
+#      else
+#         define _POSIX_SOURCE
+#         include <limits.h>
+#         undef _POSIX_SOURCE
+#      endif
+#      ifndef LINE_MAX
+#         define X_LINE_MAX 2048
+#      else
+#         define X_LINE_MAX LINE_MAX
+#      endif
+#   endif
 #endif /* _XOS_R_H */
 #ifndef WIN32
-#ifdef __cplusplus
+#   ifdef __cplusplus
 extern "C" {
-#endif
-# if defined(XOS_USE_XLIB_LOCKING)
-#  ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
+#   endif
+#   if defined(XOS_USE_XLIB_LOCKING)
+#      ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
 typedef struct _LockInfoRec *LockInfoPtr;
-extern LockInfoPtr _Xglobal_lock;
-#  endif
-#  ifndef _Xos_isThreadInitialized
-#   define _Xos_isThreadInitialized	(_Xglobal_lock)
-#  endif
-#  if defined(XTHREADS_WARN) || defined(XTHREADS_FILE_LINE)
-#   ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
-#    include <X11/Xfuncproto.h>
+extern LockInfoPtr           _Xglobal_lock;
+#      endif
+#      ifndef _Xos_isThreadInitialized
+#         define _Xos_isThreadInitialized	(_Xglobal_lock)
+#      endif
+#      if defined(XTHREADS_WARN) || defined(XTHREADS_FILE_LINE)
+#         ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
+#            include <X11/Xfuncproto.h>
 extern void (*_XLockMutex_fn)(
-    LockInfoPtr	/* lock */, char * /* file */, int /* line */
+   LockInfoPtr /* lock */,
+   char * /* file */,
+   int /* line */
 );
 extern void (*_XUnlockMutex_fn)(
-    LockInfoPtr	/* lock */, char * /* file */, int /* line */
+   LockInfoPtr /* lock */,
+   char * /* file */,
+   int /* line */
 );
-#   endif
-#   ifndef _Xos_processLock
-#    define _Xos_processLock	\
+#         endif
+#         ifndef _Xos_processLock
+#            define _Xos_processLock	\
   (_XLockMutex_fn ? (*_XLockMutex_fn)(_Xglobal_lock,__FILE__,__LINE__) : 0)
-#   endif
-#   ifndef _Xos_processUnlock
-#    define _Xos_processUnlock	\
+#         endif
+#         ifndef _Xos_processUnlock
+#            define _Xos_processUnlock	\
   (_XUnlockMutex_fn ? (*_XUnlockMutex_fn)(_Xglobal_lock,__FILE__,__LINE__) : 0)
-#   endif
-#  else
-#   ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
-#    include <X11/Xfuncproto.h>
+#         endif
+#      else
+#         ifndef XAllocIDs /* Xlibint.h does not have multiple include protection */
+#            include <X11/Xfuncproto.h>
 extern void (*_XLockMutex_fn)(
-    LockInfoPtr	/* lock */
+   LockInfoPtr /* lock */
 );
 extern void (*_XUnlockMutex_fn)(
-    LockInfoPtr	/* lock */
+   LockInfoPtr /* lock */
 );
-#   endif
-#   ifndef _Xos_processLock
-#    define _Xos_processLock	\
+#         endif
+#         ifndef _Xos_processLock
+#            define _Xos_processLock	\
   (_XLockMutex_fn ? ((*_XLockMutex_fn)(_Xglobal_lock), 0) : 0)
-#   endif
-#   ifndef _Xos_processUnlock
-#    define _Xos_processUnlock	\
+#         endif
+#         ifndef _Xos_processUnlock
+#            define _Xos_processUnlock	\
   (_XUnlockMutex_fn ? ((*_XUnlockMutex_fn)(_Xglobal_lock), 0) : 0)
-#   endif
-#  endif
-# elif defined(XOS_USE_XT_LOCKING)
+#         endif
+#      endif
+#   elif defined(XOS_USE_XT_LOCKING)
 extern void (*_XtProcessLock)(void);
-#  ifndef _XtintrinsicP_h
-#   include <X11/Xfuncproto.h>
+#      ifndef _XtintrinsicP_h
+#         include <X11/Xfuncproto.h>
 extern void XtProcessLock(
-    void
-);
+   void);
 extern void XtProcessUnlock(
-    void
-);
-#  endif
-#  ifndef _Xos_isThreadInitialized
-#   define _Xos_isThreadInitialized	_XtProcessLock
-#  endif
-#  ifndef _Xos_processLock
-#   define _Xos_processLock		XtProcessLock()
-#  endif
-#  ifndef _Xos_processUnlock
-#   define _Xos_processUnlock		XtProcessUnlock()
-#  endif
-# elif defined(XOS_USE_NO_LOCKING)
-#  ifndef _Xos_isThreadInitialized
-#   define _Xos_isThreadInitialized	0
-#  endif
-#  ifndef _Xos_processLock
-#   define _Xos_processLock		0
-#  endif
-#  ifndef _Xos_processUnlock
-#   define _Xos_processUnlock		0
-#  endif
-# endif
+   void);
+#      endif
+#      ifndef _Xos_isThreadInitialized
+#         define _Xos_isThreadInitialized	_XtProcessLock
+#      endif
+#      ifndef _Xos_processLock
+#         define _Xos_processLock		XtProcessLock()
+#      endif
+#      ifndef _Xos_processUnlock
+#         define _Xos_processUnlock		XtProcessUnlock()
+#      endif
+#   elif defined(XOS_USE_NO_LOCKING)
+#      ifndef _Xos_isThreadInitialized
+#         define _Xos_isThreadInitialized	0
+#      endif
+#      ifndef _Xos_processLock
+#         define _Xos_processLock		0
+#      endif
+#      ifndef _Xos_processUnlock
+#         define _Xos_processUnlock		0
+#      endif
+#   endif
 #endif /* !defined WIN32 */
 /*
  * Solaris 2.5 has SVR4 thread-safe API, but defines the POSIX
  * thread-safe feature test macro.  Fix the feature test macro.
  */
 #if defined(sun) && defined(_POSIX_THREAD_SAFE_FUNCTIONS)
-# undef _POSIX_THREAD_SAFE_FUNCTIONS
+#   undef _POSIX_THREAD_SAFE_FUNCTIONS
 #endif
 /*
  * LynxOS 3.1 defines _POSIX_THREAD_SAFE_FUNCTIONS but
  * getpwuid_r has different semantics than defined by POSIX
  */
 #if defined(Lynx) && defined(_POSIX_THREAD_SAFE_FUNCTIONS)
-# undef _POSIX_THREAD_SAFE_FUNCTIONS
+#   undef _POSIX_THREAD_SAFE_FUNCTIONS
 #endif
 /***** <pwd.h> wrappers *****/
 /*
@@ -185,75 +187,79 @@ extern void XtProcessUnlock(
  * struct passwd* _XGetpwuid(uid_t uid, _Xgetpwparams);
  */
 #if defined(X_INCLUDE_PWD_H) && !defined(_XOS_INCLUDED_PWD_H)
-# include <pwd.h>
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_PWDAPI)
-#  define XOS_USE_MTSAFE_PWDAPI 1
-# endif
+#   include <pwd.h>
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_PWDAPI)
+#      define XOS_USE_MTSAFE_PWDAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_PWD_H) || defined(_XOS_INCLUDED_PWD_H)
 /* Do nothing */
 #elif !defined(XTHREADS) && !defined(X_FORCE_USE_MTSAFE_API)
 /* Use regular, unsafe API. */
-# if defined(X_NOT_POSIX) && !defined(i386) && !defined(SYSV)
+#   if defined(X_NOT_POSIX) && !defined(i386) && !defined(SYSV)
 extern struct passwd *getpwuid(), *getpwnam();
-# endif
-typedef int _Xgetpwparams;	/* dummy */
-# define _XGetpwuid(u,p)	getpwuid((u))
-# define _XGetpwnam(u,p)	getpwnam((u))
+#   endif
+typedef int _Xgetpwparams; /* dummy */
+#   define _XGetpwuid(u, p)	getpwuid((u))
+#   define _XGetpwnam(u, p)	getpwnam((u))
 #elif !defined(XOS_USE_MTSAFE_PWDAPI) || defined(XNO_MTSAFE_PWDAPI)
 /* UnixWare 2.0, or other systems with thread support but no _r API. */
-typedef struct {
-  struct passwd pws;
-  char   pwbuf[1024];
-  struct passwd* pwp;
-  size_t len;
+typedef struct
+{
+   struct passwd  pws;
+   char           pwbuf[1024];
+   struct passwd *pwp;
+   size_t         len;
 } _Xgetpwparams;
+
 /*
  * NetBSD and FreeBSD, at least, are missing several of the unixware passwd
  * fields.
  */
-#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__linux__)
-__inline__ void _Xpw_copyPasswd(_Xgetpwparams p)
+#   if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__linux__)
+__inline__ void
+_Xpw_copyPasswd(_Xgetpwparams p)
 {
    memcpy(&(p).pws, (p).pwp, sizeof(struct passwd));
    (p).pws.pw_name = (p).pwbuf;
-   (p).len = strlen((p).pwp->pw_name);
+   (p).len         = strlen((p).pwp->pw_name);
    strcpy((p).pws.pw_name, (p).pwp->pw_name);
    (p).pws.pw_passwd = (p).pws.pw_name + (p).len + 1;
-   (p).len = strlen((p).pwp->pw_passwd);
-   strcpy((p).pws.pw_passwd,(p).pwp->pw_passwd);
-#if !defined(__linux__)
+   (p).len           = strlen((p).pwp->pw_passwd);
+   strcpy((p).pws.pw_passwd, (p).pwp->pw_passwd);
+#      if !defined(__linux__)
    /* pw_class is not available on Linux */
    (p).pws.pw_class = (p).pws.pw_passwd + (p).len + 1;
-   (p).len = strlen((p).pwp->pw_class);
+   (p).len          = strlen((p).pwp->pw_class);
    strcpy((p).pws.pw_class, (p).pwp->pw_class);
    (p).pws.pw_gecos = (p).pws.pw_class + (p).len + 1;
-#else
+#      else
    (p).pws.pw_gecos = (p).pws.pw_passwd + (p).len + 1;
-#endif
+#      endif
    (p).len = strlen((p).pwp->pw_gecos);
    strcpy((p).pws.pw_gecos, (p).pwp->pw_gecos);
    (p).pws.pw_dir = (p).pws.pw_gecos + (p).len + 1;
-   (p).len = strlen((p).pwp->pw_dir);
+   (p).len        = strlen((p).pwp->pw_dir);
    strcpy((p).pws.pw_dir, (p).pwp->pw_dir);
    (p).pws.pw_shell = (p).pws.pw_dir + (p).len + 1;
-   (p).len = strlen((p).pwp->pw_shell);
+   (p).len          = strlen((p).pwp->pw_shell);
    strcpy((p).pws.pw_shell, (p).pwp->pw_shell);
    (p).pwp = &(p).pws;
 }
+
 /* Define the getter macros for Linux and BSD systems */
-# define _XGetpwuid(u,p) \
+#      define _XGetpwuid(u, p) \
 ( (_Xos_processLock), \
   (((p).pwp = getpwuid((u))) ? _Xpw_copyPasswd(p) : 0), \
   (_Xos_processUnlock), \
   (p).pwp )
-# define _XGetpwnam(u,p) \
+#      define _XGetpwnam(u, p) \
 ( (_Xos_processLock), \
   (((p).pwp = getpwnam((u))) ? _Xpw_copyPasswd(p) : 0), \
   (_Xos_processUnlock), \
   (p).pwp )
-#else
-# define _Xpw_copyPasswd(p) \
+#   else
+#      define _Xpw_copyPasswd(p) \
    (memcpy(&(p).pws, (p).pwp, sizeof(struct passwd)), \
     ((p).pws.pw_name = (p).pwbuf), \
     ((p).len = strlen((p).pwp->pw_name)), \
@@ -279,63 +285,66 @@ __inline__ void _Xpw_copyPasswd(_Xgetpwparams p)
     ((p).pwp = &(p).pws), \
     0 )
 /* Define the getter macros for systems with pw_age and pw_comment */
-# define _XGetpwuid(u,p) \
+#      define _XGetpwuid(u, p) \
 ( (_Xos_processLock), \
   (((p).pwp = getpwuid((u))) ? _Xpw_copyPasswd(p) : 0), \
   (_Xos_processUnlock), \
   (p).pwp )
-# define _XGetpwnam(u,p) \
+#      define _XGetpwnam(u, p) \
 ( (_Xos_processLock), \
   (((p).pwp = getpwnam((u))) ? _Xpw_copyPasswd(p) : 0), \
   (_Xos_processUnlock), \
   (p).pwp )
-#endif
+#   endif
 #elif !defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 /* SVR4 threads, AIX 4.2.0 and earlier and OSF/1 3.2 and earlier pthreads */
-typedef struct {
-  struct passwd pws;
-  char pwbuf[X_LINE_MAX];
+typedef struct
+{
+   struct passwd pws;
+   char          pwbuf[X_LINE_MAX];
 } _Xgetpwparams;
-# if defined(_POSIX_REENTRANT_FUNCTIONS) || !defined(SVR4) || defined(Lynx)
-#  ifndef Lynx
-#   define _XGetpwuid(u,p) \
+#   if defined(_POSIX_REENTRANT_FUNCTIONS) || !defined(SVR4) || defined(Lynx)
+#      ifndef Lynx
+#         define _XGetpwuid(u, p) \
 ((getpwuid_r((u),&(p).pws,(p).pwbuf,sizeof((p).pwbuf)) == -1) ? NULL : &(p).pws)
-#   define _XGetpwnam(u,p) \
+#         define _XGetpwnam(u, p) \
 ((getpwnam_r((u),&(p).pws,(p).pwbuf,sizeof((p).pwbuf)) == -1) ? NULL : &(p).pws)
-#  else /* Lynx */
-#   define _XGetpwuid(u,p) \
+#      else /* Lynx */
+#         define _XGetpwuid(u, p) \
 ((getpwuid_r(&(p).pws,(u),(p).pwbuf,sizeof((p).pwbuf)) == -1) ? NULL : &(p).pws)
-#   define _XGetpwnam(u,p) \
+#         define _XGetpwnam(u, p) \
 ((getpwnam_r(&(p).pws,(u),(p).pwbuf,sizeof((p).pwbuf)) == -1) ? NULL : &(p).pws)
-#  endif
-# else /* SVR4 */
-#  define _XGetpwuid(u,p) \
+#      endif
+#   else /* SVR4 */
+#      define _XGetpwuid(u, p) \
 ((getpwuid_r((u),&(p).pws,(p).pwbuf,sizeof((p).pwbuf)) == NULL) ? NULL : &(p).pws)
-#  define _XGetpwnam(u,p) \
+#      define _XGetpwnam(u, p) \
 ((getpwnam_r((u),&(p).pws,(p).pwbuf,sizeof((p).pwbuf)) == NULL) ? NULL : &(p).pws)
-# endif /* SVR4 */
-#else /* _POSIX_THREAD_SAFE_FUNCTIONS */
+#   endif /* SVR4 */
+#else     /* _POSIX_THREAD_SAFE_FUNCTIONS */
 /* Digital UNIX 4.0, but not (beta) T4.0-1 */
-# if defined(__osf__)
+#   if defined(__osf__)
 /* OSF/1 V4.0 <pwd.h> doesn't declare the _P routines, breaking under C++. */
 extern int _Pgetpwuid_r(uid_t, struct passwd *, char *, size_t, struct passwd **);
 extern int _Pgetpwnam_r(const char *, struct passwd *, char *, size_t, struct passwd **);
-# endif
-typedef struct {
-  struct passwd pws;
-  char pwbuf[X_LINE_MAX];
-  struct passwd* pwp;
+#   endif
+typedef struct
+{
+   struct passwd  pws;
+   char           pwbuf[X_LINE_MAX];
+   struct passwd *pwp;
 } _Xgetpwparams;
+
 typedef int _Xgetpwret;
-# define _XGetpwuid(u,p) \
+#   define _XGetpwuid(u, p) \
 ((getpwuid_r((u),&(p).pws,(p).pwbuf,sizeof((p).pwbuf),&(p).pwp) == -1) ? \
  NULL : (p).pwp)
-# define _XGetpwnam(u,p) \
+#   define _XGetpwnam(u, p) \
 ((getpwnam_r((u),&(p).pws,(p).pwbuf,sizeof((p).pwbuf),&(p).pwp) == -1) ? \
  NULL : (p).pwp)
 #endif /* X_INCLUDE_PWD_H */
 #if defined(X_INCLUDE_PWD_H) && !defined(_XOS_INCLUDED_PWD_H)
-# define _XOS_INCLUDED_PWD_H
+#   define _XOS_INCLUDED_PWD_H
 #endif
 /***** <netdb.h> wrappers *****/
 /*
@@ -359,11 +368,11 @@ typedef int _Xgetpwret;
  *				 _Xgetservbynameparams);
  */
 #if defined(X_INCLUDE_NETDB_H) && !defined(_XOS_INCLUDED_NETDB_H) \
-    && !defined(WIN32)
-# include <netdb.h>
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_NETDBAPI)
-#  define XOS_USE_MTSAFE_NETDBAPI 1
-# endif
+   && !defined(WIN32)
+#   include <netdb.h>
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_NETDBAPI)
+#      define XOS_USE_MTSAFE_NETDBAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_NETDB_H) || defined(_XOS_INCLUDED_NETDB_H)
 /* Do nothing. */
@@ -371,33 +380,37 @@ typedef int _Xgetpwret;
 /* Use regular, unsafe API. */
 typedef int _Xgethostbynameparams; /* dummy */
 typedef int _Xgetservbynameparams; /* dummy */
-# define _XGethostbyname(h,hp)		gethostbyname((h))
-# define _XGethostbyaddr(a,al,t,hp)	gethostbyaddr((a),(al),(t))
-# define _XGetservbyname(s,p,sp)	getservbyname((s),(p))
+#   define _XGethostbyname(h, hp)		gethostbyname((h))
+#   define _XGethostbyaddr(a, al, t, hp)	gethostbyaddr((a),(al),(t))
+#   define _XGetservbyname(s, p, sp)	getservbyname((s),(p))
 #elif !defined(XOS_USE_MTSAFE_NETDBAPI) || defined(XNO_MTSAFE_NETDBAPI)
 /* UnixWare 2.0, or other systems with thread support but no _r API. */
 /* WARNING:  The h_addr_list and s_aliases values are *not* copied! */
-#if defined(__NetBSD__) || defined(__FreeBSD__)
-#include <sys/param.h>
-#endif
-typedef struct {
-  struct hostent hent;
-  char           h_name[MAXHOSTNAMELEN];
-  struct hostent *hptr;
+#   if defined(__NetBSD__) || defined(__FreeBSD__)
+#      include <sys/param.h>
+#   endif
+typedef struct
+{
+   struct hostent  hent;
+   char            h_name[MAXHOSTNAMELEN];
+   struct hostent *hptr;
 } _Xgethostbynameparams;
-typedef struct {
-  struct servent sent;
-  char           s_name[255];
-  char		 s_proto[255];
-  struct servent *sptr;
+
+typedef struct
+{
+   struct servent  sent;
+   char            s_name[255];
+   char            s_proto[255];
+   struct servent *sptr;
 } _Xgetservbynameparams;
-# define _Xg_copyHostent(hp) \
+
+#   define _Xg_copyHostent(hp) \
    (memcpy(&(hp).hent, (hp).hptr, sizeof(struct hostent)), \
     strcpy((hp).h_name, (hp).hptr->h_name), \
     ((hp).hent.h_name = (hp).h_name), \
     ((hp).hptr = &(hp).hent), \
      0 )
-# define _Xg_copyServent(sp) \
+#   define _Xg_copyServent(sp) \
    (memcpy(&(sp).sent, (sp).sptr, sizeof(struct servent)), \
     strcpy((sp).s_name, (sp).sptr->s_name), \
     ((sp).sent.s_name = (sp).s_name), \
@@ -405,17 +418,17 @@ typedef struct {
     ((sp).sent.s_proto = (sp).s_proto), \
     ((sp).sptr = &(sp).sent), \
     0 )
-# define _XGethostbyname(h,hp) \
+#   define _XGethostbyname(h, hp) \
    ((_Xos_processLock), \
     (((hp).hptr = gethostbyname((h))) ? _Xg_copyHostent(hp) : 0), \
     (_Xos_processUnlock), \
     (hp).hptr )
-# define _XGethostbyaddr(a,al,t,hp) \
+#   define _XGethostbyaddr(a, al, t, hp) \
    ((_Xos_processLock), \
     (((hp).hptr = gethostbyaddr((a),(al),(t))) ? _Xg_copyHostent(hp) : 0), \
     (_Xos_processUnlock), \
     (hp).hptr )
-# define _XGetservbyname(s,p,sp) \
+#   define _XGetservbyname(s, p, sp) \
    ((_Xos_processLock), \
     (((sp).sptr = getservbyname((s),(p))) ? _Xg_copyServent(sp) : 0), \
     (_Xos_processUnlock), \
@@ -425,64 +438,72 @@ typedef struct {
  * POSIX does not specify _r equivalents for <netdb.h> API, but some
  * vendors provide them anyway.  Use them only when explicitly asked.
  */
-# ifdef _POSIX_REENTRANT_FUNCTIONS
-#  ifndef _POSIX_THREAD_SAFE_FUNCTIONS
-#   if defined(AIXV3) || defined(AIXV4) || defined(__osf__)
-#    define X_POSIX_THREAD_SAFE_FUNCTIONS 1
+#   ifdef _POSIX_REENTRANT_FUNCTIONS
+#      ifndef _POSIX_THREAD_SAFE_FUNCTIONS
+#         if defined(AIXV3) || defined(AIXV4) || defined(__osf__)
+#            define X_POSIX_THREAD_SAFE_FUNCTIONS 1
+#         endif
+#      endif
 #   endif
-#  endif
-# endif
-# ifdef _POSIX_THREAD_SAFE_FUNCTIONS
-#  define X_POSIX_THREAD_SAFE_FUNCTIONS 1
-# endif
-# ifndef X_POSIX_THREAD_SAFE_FUNCTIONS
-typedef struct {
-    struct hostent      hent;
-    char                hbuf[X_LINE_MAX];
-    int                 herr;
+#   ifdef _POSIX_THREAD_SAFE_FUNCTIONS
+#      define X_POSIX_THREAD_SAFE_FUNCTIONS 1
+#   endif
+#   ifndef X_POSIX_THREAD_SAFE_FUNCTIONS
+typedef struct
+{
+   struct hostent hent;
+   char           hbuf[X_LINE_MAX];
+   int            herr;
 } _Xgethostbynameparams;
-typedef struct {
-    struct servent      sent;
-    char                sbuf[X_LINE_MAX];
+
+typedef struct
+{
+   struct servent sent;
+   char           sbuf[X_LINE_MAX];
 } _Xgetservbynameparams;
-#  define _XGethostbyname(h,hp) \
+
+#      define _XGethostbyname(h, hp) \
   gethostbyname_r((h),&(hp).hent,(hp).hbuf,sizeof((hp).hbuf),&(hp).herr)
-#  define _XGethostbyaddr(a,al,t,hp) \
+#      define _XGethostbyaddr(a, al, t, hp) \
   gethostbyaddr_r((a),(al),(t),&(hp).hent,(hp).hbuf,sizeof((hp).hbuf),&(hp).herr)
-#  define _XGetservbyname(s,p,sp) \
+#      define _XGetservbyname(s, p, sp) \
   getservbyname_r((s),(p),&(sp).sent,(sp).sbuf,sizeof((sp).sbuf))
-# else
-typedef struct {
-  struct hostent      hent;
-  struct hostent_data hdata;
+#   else
+typedef struct
+{
+   struct hostent      hent;
+   struct hostent_data hdata;
 } _Xgethostbynameparams;
-typedef struct {
-  struct servent      sent;
-  struct servent_data sdata;
+
+typedef struct
+{
+   struct servent      sent;
+   struct servent_data sdata;
 } _Xgetservbynameparams;
-#  define _XGethostbyname(h,hp) \
+
+#      define _XGethostbyname(h, hp) \
   (bzero((char*)&(hp).hdata,sizeof((hp).hdata)),	\
    ((gethostbyname_r((h),&(hp).hent,&(hp).hdata) == -1) ? NULL : &(hp).hent))
-#  define _XGethostbyaddr(a,al,t,hp) \
+#      define _XGethostbyaddr(a, al, t, hp) \
   (bzero((char*)&(hp).hdata,sizeof((hp).hdata)),	\
    ((gethostbyaddr_r((a),(al),(t),&(hp).hent,&(hp).hdata) == -1) ? NULL : &(hp).hent))
-#  define _XGetservbyname(s,p,sp) \
+#      define _XGetservbyname(s, p, sp) \
   (bzero((char*)&(sp).sdata,sizeof((sp).sdata)),	\
    ((getservbyname_r((s),(p),&(sp).sent,&(sp).sdata) == -1) ? NULL : &(sp).sent) )
-# endif
-# ifdef X_POSIX_THREAD_SAFE_FUNCTIONS
-#  undef X_POSIX_THREAD_SAFE_FUNCTIONS
-# endif
+#   endif
+#   ifdef X_POSIX_THREAD_SAFE_FUNCTIONS
+#      undef X_POSIX_THREAD_SAFE_FUNCTIONS
+#   endif
 #else
 /* The regular API is assumed to be MT-safe under POSIX. */
 typedef int _Xgethostbynameparams; /* dummy */
 typedef int _Xgetservbynameparams; /* dummy */
-# define _XGethostbyname(h,hp)		gethostbyname((h))
-# define _XGethostbyaddr(a,al,t,hp)	gethostbyaddr((a),(al),(t))
-# define _XGetservbyname(s,p,sp)	getservbyname((s),(p))
+#   define _XGethostbyname(h, hp)		gethostbyname((h))
+#   define _XGethostbyaddr(a, al, t, hp)	gethostbyaddr((a),(al),(t))
+#   define _XGetservbyname(s, p, sp)	getservbyname((s),(p))
 #endif /* X_INCLUDE_NETDB_H */
 #if defined(X_INCLUDE_NETDB_H) && !defined(_XOS_INCLUDED_NETDB_H)
-# define _XOS_INCLUDED_NETDB_H
+#   define _XOS_INCLUDED_NETDB_H
 #endif
 /***** <dirent.h> wrappers *****/
 /*
@@ -497,39 +518,41 @@ typedef int _Xgetservbynameparams; /* dummy */
  * struct dirent *_XReaddir(DIR *dir_pointer, _Xreaddirparams);
  */
 #if defined(X_INCLUDE_DIRENT_H) && !defined(_XOS_INCLUDED_DIRENT_H)
-# include <sys/types.h>
-# if !defined(X_NOT_POSIX) || defined(SYSV) || defined(USG)
-#  include <dirent.h>
-# else
-#  include <sys/dir.h>
-#  ifndef dirent
-#   define dirent direct
-#  endif
-# endif
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_DIRENTAPI)
-#  define XOS_USE_MTSAFE_DIRENTAPI 1
-# endif
+#   include <sys/types.h>
+#   if !defined(X_NOT_POSIX) || defined(SYSV) || defined(USG)
+#      include <dirent.h>
+#   else
+#      include <sys/dir.h>
+#      ifndef dirent
+#         define dirent direct
+#      endif
+#   endif
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_DIRENTAPI)
+#      define XOS_USE_MTSAFE_DIRENTAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_DIRENT_H) || defined(_XOS_INCLUDED_DIRENT_H)
 /* Do nothing. */
 #elif !defined(XTHREADS) && !defined(X_FORCE_USE_MTSAFE_API)
 /* Use regular, unsafe API. */
-typedef int _Xreaddirparams;	/* dummy */
-# define _XReaddir(d,p)	readdir(d)
+typedef int _Xreaddirparams; /* dummy */
+#   define _XReaddir(d, p)	readdir(d)
 #elif !defined(XOS_USE_MTSAFE_DIRENTAPI) || defined(XNO_MTSAFE_DIRENTAPI)
 /* Systems with thread support but no _r API. */
-typedef struct {
-  struct dirent *result;
-  struct dirent dir_entry;
-# ifdef _POSIX_PATH_MAX
-  char buf[_POSIX_PATH_MAX];
-# elif defined(NAME_MAX)
-  char buf[NAME_MAX];
-# else
-  char buf[255];
-# endif
+typedef struct
+{
+   struct dirent *result;
+   struct dirent  dir_entry;
+#   ifdef _POSIX_PATH_MAX
+   char buf[_POSIX_PATH_MAX];
+#   elif defined(NAME_MAX)
+   char buf[NAME_MAX];
+#   else
+   char buf[255];
+#   endif
 } _Xreaddirparams;
-# define _XReaddir(d,p)	\
+
+#   define _XReaddir(d, p)	\
  ( (_Xos_processLock),						 \
    (((p).result = readdir((d))) ?				 \
     (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
@@ -538,24 +561,25 @@ typedef struct {
    (_Xos_processUnlock),					 \
    (p).result )
 #else
-typedef struct {
-  struct dirent *result;
-  struct dirent dir_entry;
-# ifdef _POSIX_PATH_MAX
-  char buf[_POSIX_PATH_MAX];
-# elif defined(NAME_MAX)
-  char buf[NAME_MAX];
-# else
-  char buf[255];
-# endif
+typedef struct
+{
+   struct dirent *result;
+   struct dirent  dir_entry;
+#   ifdef _POSIX_PATH_MAX
+   char buf[_POSIX_PATH_MAX];
+#   elif defined(NAME_MAX)
+   char buf[NAME_MAX];
+#   else
+   char buf[255];
+#   endif
 } _Xreaddirparams;
-# if defined(AIXV3) || defined(AIXV4) || defined(HAVE_READDIR_R_3) || defined(_POSIX_THREAD_SAFE_FUNCTIONS)
+#   if defined(AIXV3) || defined(AIXV4) || defined(HAVE_READDIR_R_3) || defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 /* AIX defines the draft POSIX symbol, but uses the final API. */
 /* Use readdir with proper locking for thread safety */
-#  if defined(__osf__)
+#      if defined(__osf__)
 /* OSF/1 V4.0 specific handling - no longer needed */
-#  endif
-#  define _XReaddir(d,p)						\
+#      endif
+#      define _XReaddir(d, p)						\
     ( (_Xos_processLock),						\
       (((p).result = readdir((d))) ?				 \
        (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
@@ -563,12 +587,12 @@ typedef struct {
        0),								 \
       (_Xos_processUnlock),					 \
       (p).result )
-# elif defined(_POSIX_REENTRANT_FUNCTIONS) && defined(__osf__)
+#   elif defined(_POSIX_REENTRANT_FUNCTIONS) && defined(__osf__)
 /*
  * OSF/1 V3.2 specific handling - use readdir with proper locking
  * Assume that if threads have been initialized we're linked properly.
  */
-#  define _XReaddir(d,p)						\
+#      define _XReaddir(d, p)						\
  ( (_Xos_isThreadInitialized) ?						\
    ( (_Xos_processLock),						\
      (((p).result = readdir((d))) ?				 \
@@ -584,9 +608,9 @@ typedef struct {
      0),								\
     (_Xos_processUnlock),						\
     (p).result) )
-# elif defined(_POSIX_REENTRANT_FUNCTIONS)
+#   elif defined(_POSIX_REENTRANT_FUNCTIONS)
 /* POSIX draft API - use readdir with proper locking for thread safety */
-#  define _XReaddir(d,p)	\
+#      define _XReaddir(d, p)	\
     ( (_Xos_processLock),						\
       (((p).result = readdir((d))) ?				 \
        (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
@@ -594,12 +618,12 @@ typedef struct {
        0),								 \
       (_Xos_processUnlock),					 \
       (p).result )
-# elif defined(SVR4)
+#   elif defined(SVR4)
 /* Pre-POSIX API, returns non-NULL on success. */
-#  define _XReaddir(d,p)	(readdir(d))
-# else
+#      define _XReaddir(d, p)	(readdir(d))
+#   else
 /* We have no idea what is going on.  Fake it all using process locks. */
-#  define _XReaddir(d,p)	\
+#      define _XReaddir(d, p)	\
     ( (_Xos_processLock),						\
       (((p).result = readdir((d))) ?				 \
        (memcpy(&((p).dir_entry), (p).result, (p).result->d_reclen), \
@@ -607,10 +631,10 @@ typedef struct {
        0),								\
       (_Xos_processUnlock),						\
       (p).result )
-# endif
+#   endif
 #endif /* X_INCLUDE_DIRENT_H */
 #if defined(X_INCLUDE_DIRENT_H) && !defined(_XOS_INCLUDED_DIRENT_H)
-# define _XOS_INCLUDED_DIRENT_H
+#   define _XOS_INCLUDED_DIRENT_H
 #endif
 /***** <unistd.h> wrappers *****/
 /*
@@ -628,43 +652,47 @@ typedef struct {
  */
 #if defined(X_INCLUDE_UNISTD_H) && !defined(_XOS_INCLUDED_UNISTD_H)
 /* <unistd.h> already included by <X11/Xos.h> */
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_UNISTDAPI)
-#  define XOS_USE_MTSAFE_UNISTDAPI 1
-# endif
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_UNISTDAPI)
+#      define XOS_USE_MTSAFE_UNISTDAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_UNISTD_H) || defined(_XOS_INCLUDED_UNISTD_H)
 /* Do nothing. */
 #elif !defined(XTHREADS) && !defined(X_FORCE_USE_MTSAFE_API)
 /* Use regular, unsafe API. */
-typedef int _Xgetloginparams;	/* dummy */
-typedef int _Xttynameparams;	/* dummy */
-# define _XGetlogin(p)	getlogin()
-# define _XTtyname(f)	ttyname((f))
+typedef int _Xgetloginparams; /* dummy */
+typedef int _Xttynameparams;  /* dummy */
+#   define _XGetlogin(p)	getlogin()
+#   define _XTtyname(f)	ttyname((f))
 #elif !defined(XOS_USE_MTSAFE_UNISTDAPI) || defined(XNO_MTSAFE_UNISTDAPI)
 /* Systems with thread support but no _r API. */
-typedef struct {
-  char *result;
-# if defined(MAXLOGNAME)
-  char buf[MAXLOGNAME];
-# elif defined(LOGIN_NAME_MAX)
-  char buf[LOGIN_NAME_MAX];
-# else
-  char buf[64];
-# endif
+typedef struct
+{
+   char *result;
+#   if defined(MAXLOGNAME)
+   char buf[MAXLOGNAME];
+#   elif defined(LOGIN_NAME_MAX)
+   char buf[LOGIN_NAME_MAX];
+#   else
+   char buf[64];
+#   endif
 } _Xgetloginparams;
-typedef struct {
-  char *result;
-# ifdef TTY_NAME_MAX
-  char buf[TTY_NAME_MAX];
-# elif defined(_POSIX_TTY_NAME_MAX)
-  char buf[_POSIX_TTY_NAME_MAX];
-# elif defined(_POSIX_PATH_MAX)
-  char buf[_POSIX_PATH_MAX];
-# else
-  char buf[256];
-# endif
+
+typedef struct
+{
+   char *result;
+#   ifdef TTY_NAME_MAX
+   char buf[TTY_NAME_MAX];
+#   elif defined(_POSIX_TTY_NAME_MAX)
+   char buf[_POSIX_TTY_NAME_MAX];
+#   elif defined(_POSIX_PATH_MAX)
+   char buf[_POSIX_PATH_MAX];
+#   else
+   char buf[256];
+#   endif
 } _Xttynameparams;
-# define _XGetlogin(p) \
+
+#   define _XGetlogin(p) \
  ( (_Xos_processLock), \
    (((p).result = getlogin()) ? \
     (strncpy((p).buf, (p).result, sizeof((p).buf)), \
@@ -672,7 +700,7 @@ typedef struct {
      ((p).result = (p).buf), 0) : 0), \
    (_Xos_processUnlock), \
    (p).result )
-#define _XTtyname(f,p) \
+#   define _XTtyname(f, p) \
  ( (_Xos_processLock), \
    (((p).result = ttyname(f)) ? \
     (strncpy((p).buf, (p).result, sizeof((p).buf)), \
@@ -686,28 +714,32 @@ typedef struct {
  * extern int getlogin_r(char *, size_t);
  * extern int ttyname_r(int, char *, size_t);
  */
-typedef struct {
-# if defined(MAXLOGNAME)
-  char buf[MAXLOGNAME];
-# elif defined(LOGIN_NAME_MAX)
-  char buf[LOGIN_NAME_MAX];
-# else
-  char buf[64];
-# endif
+typedef struct
+{
+#   if defined(MAXLOGNAME)
+   char buf[MAXLOGNAME];
+#   elif defined(LOGIN_NAME_MAX)
+   char buf[LOGIN_NAME_MAX];
+#   else
+   char buf[64];
+#   endif
 } _Xgetloginparams;
-typedef struct {
-# ifdef TTY_NAME_MAX
-  char buf[TTY_NAME_MAX];
-# elif defined(_POSIX_TTY_NAME_MAX)
-  char buf[_POSIX_TTY_NAME_MAX];
-# elif defined(_POSIX_PATH_MAX)
-  char buf[_POSIX_PATH_MAX];
-# else
-  char buf[256];
-# endif
+
+typedef struct
+{
+#   ifdef TTY_NAME_MAX
+   char buf[TTY_NAME_MAX];
+#   elif defined(_POSIX_TTY_NAME_MAX)
+   char buf[_POSIX_TTY_NAME_MAX];
+#   elif defined(_POSIX_PATH_MAX)
+   char buf[_POSIX_PATH_MAX];
+#   else
+   char buf[256];
+#   endif
 } _Xttynameparams;
-# define _XGetlogin(p)	(getlogin_r((p).buf, sizeof((p).buf)) ? NULL : (p).buf)
-# define _XTtyname(f,p)	\
+
+#   define _XGetlogin(p)	(getlogin_r((p).buf, sizeof((p).buf)) ? NULL : (p).buf)
+#   define _XTtyname(f, p)	\
 	(ttyname_r((f), (p).buf, sizeof((p).buf)) ? NULL : (p).buf)
 #else
 /* Pre-POSIX API.
@@ -715,31 +747,35 @@ typedef struct {
  * extern char *getlogin_r(char *, size_t);
  * extern char *ttyname_r(int, char *, size_t);
  */
-typedef struct {
-# if defined(MAXLOGNAME)
-  char buf[MAXLOGNAME];
-# elif defined(LOGIN_NAME_MAX)
-  char buf[LOGIN_NAME_MAX];
-# else
-  char buf[64];
-# endif
+typedef struct
+{
+#   if defined(MAXLOGNAME)
+   char buf[MAXLOGNAME];
+#   elif defined(LOGIN_NAME_MAX)
+   char buf[LOGIN_NAME_MAX];
+#   else
+   char buf[64];
+#   endif
 } _Xgetloginparams;
-typedef struct {
-# ifdef TTY_NAME_MAX
-  char buf[TTY_NAME_MAX];
-# elif defined(_POSIX_TTY_NAME_MAX)
-  char buf[_POSIX_TTY_NAME_MAX];
-# elif defined(_POSIX_PATH_MAX)
-  char buf[_POSIX_PATH_MAX];
-# else
-  char buf[256];
-# endif
+
+typedef struct
+{
+#   ifdef TTY_NAME_MAX
+   char buf[TTY_NAME_MAX];
+#   elif defined(_POSIX_TTY_NAME_MAX)
+   char buf[_POSIX_TTY_NAME_MAX];
+#   elif defined(_POSIX_PATH_MAX)
+   char buf[_POSIX_PATH_MAX];
+#   else
+   char buf[256];
+#   endif
 } _Xttynameparams;
-# define _XGetlogin(p)	getlogin_r((p).buf, sizeof((p).buf))
-# define _XTtyname(f,p)	ttyname_r((f), (p).buf, sizeof((p).buf))
+
+#   define _XGetlogin(p)	getlogin_r((p).buf, sizeof((p).buf))
+#   define _XTtyname(f, p)	ttyname_r((f), (p).buf, sizeof((p).buf))
 #endif /* X_INCLUDE_UNISTD_H */
 #if defined(X_INCLUDE_UNISTD_H) && !defined(_XOS_INCLUDED_UNISTD_H)
-# define _XOS_INCLUDED_UNISTD_H
+#   define _XOS_INCLUDED_UNISTD_H
 #endif
 /***** <string.h> wrappers *****/
 /*
@@ -755,28 +791,28 @@ typedef struct {
  */
 #if defined(X_INCLUDE_STRING_H) && !defined(_XOS_INCLUDED_STRING_H)
 /* <string.h> has already been included by <X11/Xos.h> */
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_STRINGAPI)
-#  define XOS_USE_MTSAFE_STRINGAPI 1
-# endif
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_STRINGAPI)
+#      define XOS_USE_MTSAFE_STRINGAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_STRING_H) || defined(_XOS_INCLUDED_STRING_H)
 /* Do nothing. */
 #elif !defined(XTHREADS) && !defined(X_FORCE_USE_MTSAFE_API)
 /* Use regular, unsafe API. */
-typedef int _Xstrtokparams;	/* dummy */
-# define _XStrtok(s1,s2,p)	strtok((s1),(s2))
+typedef int _Xstrtokparams; /* dummy */
+#   define _XStrtok(s1, s2, p)	strtok((s1),(s2))
 #elif !defined(XOS_USE_MTSAFE_STRINGAPI) || defined(XNO_MTSAFE_STRINGAPI)
 /* Systems with thread support but no _r API. */
 typedef char *_Xstrtokparams;
-# define _XStrtok(s1,s2,p) \
+#   define _XStrtok(s1, s2, p) \
  ( (_Xos_processLock), \
    ((p) = strtok((s1),(s2))), \
    (_Xos_processUnlock), \
    (p) )
 #else
 /* POSIX or pre-POSIX API. */
-typedef char * _Xstrtokparams;
-# define _XStrtok(s1,s2,p)	strtok_r((s1),(s2),&(p))
+typedef char *_Xstrtokparams;
+#   define _XStrtok(s1, s2, p)	strtok_r((s1),(s2),&(p))
 #endif /* X_INCLUDE_STRING_H */
 /***** <time.h> wrappers *****/
 /*
@@ -797,59 +833,63 @@ typedef char * _Xstrtokparams;
  * struct tm *_XLocaltime(const time_t *, _Xltimeparams);
  */
 #if defined(X_INCLUDE_TIME_H) && !defined(_XOS_INCLUDED_TIME_H)
-# include <time.h>
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_TIMEAPI)
-#  define XOS_USE_MTSAFE_TIMEAPI 1
-# endif
+#   include <time.h>
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_TIMEAPI)
+#      define XOS_USE_MTSAFE_TIMEAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_TIME_H) || defined(_XOS_INCLUDED_TIME_H)
 /* Do nothing. */
 #elif !defined(XTHREADS) && !defined(X_FORCE_USE_MTSAFE_API)
 /* Use regular, unsafe API. */
-typedef int _Xatimeparams;	/* dummy */
-# define _XAsctime(t,p)		asctime((t))
-typedef int _Xctimeparams;	/* dummy */
-# define _XCtime(t,p)		ctime((t))
-typedef int _Xgtimeparams;	/* dummy */
-# define _XGmtime(t,p)		gmtime((t))
-typedef int _Xltimeparams;	/* dummy */
-# define _XLocaltime(t,p)	localtime((t))
+typedef int _Xatimeparams; /* dummy */
+#   define _XAsctime(t, p)		asctime((t))
+typedef int _Xctimeparams; /* dummy */
+#   define _XCtime(t, p)		ctime((t))
+typedef int _Xgtimeparams; /* dummy */
+#   define _XGmtime(t, p)		gmtime((t))
+typedef int _Xltimeparams; /* dummy */
+#   define _XLocaltime(t, p)	localtime((t))
 #elif !defined(XOS_USE_MTSAFE_TIMEAPI) || defined(XNO_MTSAFE_TIMEAPI)
 /* Systems with thread support but no _r API. */
-typedef struct {
-# ifdef TIMELEN
-  char buf[TIMELEN];
-# else
-  char buf[26];
-# endif
-  char *result;
+typedef struct
+{
+#   ifdef TIMELEN
+   char buf[TIMELEN];
+#   else
+   char buf[26];
+#   endif
+   char *result;
 } _Xctimeparams, _Xatimeparams;
-typedef struct {
-  struct tm buf;
-  struct tm *result;
+
+typedef struct
+{
+   struct tm  buf;
+   struct tm *result;
 } _Xgtimeparams, _Xltimeparams;
-# define _XAsctime(t,p) \
+
+#   define _XAsctime(t, p) \
  ( (_Xos_processLock), \
    (((p).result = asctime((t))) ? \
     (strncpy((p).buf, (p).result, sizeof((p).buf)), (p).result = &(p).buf) : \
     0), \
    (_Xos_processUnlock), \
    (p).result )
-# define _XCtime(t,p) \
+#   define _XCtime(t, p) \
  ( (_Xos_processLock), \
    (((p).result = ctime((t))) ? \
     (strncpy((p).buf, (p).result, sizeof((p).buf)), (p).result = &(p).buf) : \
     0), \
    (_Xos_processUnlock), \
    (p).result )
-# define _XGmtime(t,p) \
+#   define _XGmtime(t, p) \
  ( (_Xos_processLock), \
    (((p).result = gmtime(t)) ? \
     (memcpy(&(p).buf, (p).result, sizeof((p).buf)), (p).result = &(p).buf) : \
     0), \
    (_Xos_processUnlock), \
    (p).result )
-# define _XLocaltime(t,p) \
+#   define _XLocaltime(t, p) \
  ( (_Xos_processLock), \
    (((p).result = localtime(t)) ? \
     (memcpy(&(p).buf, (p).result, sizeof((p).buf)), (p).result = &(p).buf) : \
@@ -864,19 +904,19 @@ typedef struct {
  * extern int gmtime_r(const time_t *timer, struct tm *result);
  * extern int localtime_r(const time_t *timer, struct tm *result);
  */
-# ifdef TIMELEN
+#   ifdef TIMELEN
 typedef char _Xatimeparams[TIMELEN];
 typedef char _Xctimeparams[TIMELEN];
-# else
+#   else
 typedef char _Xatimeparams[26];
 typedef char _Xctimeparams[26];
-# endif
+#   endif
 typedef struct tm _Xgtimeparams;
 typedef struct tm _Xltimeparams;
-# define _XAsctime(t,p)		(asctime_r((t),(p),sizeof((p))) ? NULL : (p))
-# define _XCtime(t,p)		(ctime_r((t),(p),sizeof((p))) ? NULL : (p))
-# define _XGmtime(t,p)		(gmtime_r((t),&(p)) ? NULL : &(p))
-# define _XLocaltime(t,p)	(localtime_r((t),&(p)) ? NULL : &(p))
+#   define _XAsctime(t, p)		(asctime_r((t),(p),sizeof((p))) ? NULL : (p))
+#   define _XCtime(t, p)		(ctime_r((t),(p),sizeof((p))) ? NULL : (p))
+#   define _XGmtime(t, p)		(gmtime_r((t),&(p)) ? NULL : &(p))
+#   define _XLocaltime(t, p)	(localtime_r((t),&(p)) ? NULL : &(p))
 #elif !defined(_POSIX_THREAD_SAFE_FUNCTIONS) && defined(sun)
 /* Returns NULL on failure.  Solaris 2.5
  *
@@ -885,19 +925,19 @@ typedef struct tm _Xltimeparams;
  * extern struct tm *gmtime_r(const time_t *clock, struct tm *res);
  * extern struct tm *localtime_r(const time_t *clock, struct tm *res);
  */
-# ifdef TIMELEN
+#   ifdef TIMELEN
 typedef char _Xatimeparams[TIMELEN];
 typedef char _Xctimeparams[TIMELEN];
-# else
+#   else
 typedef char _Xatimeparams[26];
 typedef char _Xctimeparams[26];
-# endif
+#   endif
 typedef struct tm _Xgtimeparams;
 typedef struct tm _Xltimeparams;
-# define _XAsctime(t,p)		asctime_r((t),(p),sizeof((p)))
-# define _XCtime(t,p)		ctime_r((t),(p),sizeof((p)))
-# define _XGmtime(t,p)		gmtime_r((t),&(p))
-# define _XLocaltime(t,p)	localtime_r((t),&(p))
+#   define _XAsctime(t, p)		asctime_r((t),(p),sizeof((p)))
+#   define _XCtime(t, p)		ctime_r((t),(p),sizeof((p)))
+#   define _XGmtime(t, p)		gmtime_r((t),&(p))
+#   define _XLocaltime(t, p)	localtime_r((t),&(p))
 #else /* defined(_POSIX_THREAD_SAFE_FUNCTIONS) */
 /* POSIX final API.  OSF/1 v4.0, AIX, etc.
  *
@@ -906,28 +946,28 @@ typedef struct tm _Xltimeparams;
  * extern struct tm *gmtime_r(const time_t *timer, struct tm *result);
  * extern struct tm *localtime_r(const time_t *timer, struct tm *result);
  */
-# if defined(__osf__)
+#   if defined(__osf__)
 /* OSF/1 V4.0 <time.h> doesn't declare the _P routines, breaking under C++. */
-extern char *_Pasctime_r(const struct tm *, char *);
-extern char *_Pctime_r(const time_t *, char *);
+extern char      *_Pasctime_r(const struct tm *, char *);
+extern char      *_Pctime_r(const time_t *, char *);
 extern struct tm *_Plocaltime_r(const time_t *, struct tm *);
-# endif
-# ifdef TIMELEN
+#   endif
+#   ifdef TIMELEN
 typedef char _Xatimeparams[TIMELEN];
 typedef char _Xctimeparams[TIMELEN];
-# else
+#   else
 typedef char _Xatimeparams[26];
 typedef char _Xctimeparams[26];
-# endif
+#   endif
 typedef struct tm _Xgtimeparams;
 typedef struct tm _Xltimeparams;
-# define _XAsctime(t,p)		asctime_r((t),(p))
-# define _XCtime(t,p)		ctime_r((t),(p))
-# define _XGmtime(t,p)		gmtime_r((t),&(p))
-# define _XLocaltime(t,p)	localtime_r((t),&(p))
+#   define _XAsctime(t, p)		asctime_r((t),(p))
+#   define _XCtime(t, p)		ctime_r((t),(p))
+#   define _XGmtime(t, p)		gmtime_r((t),&(p))
+#   define _XLocaltime(t, p)	localtime_r((t),&(p))
 #endif /* X_INCLUDE_TIME_H */
 #if defined(X_INCLUDE_TIME_H) && !defined(_XOS_INCLUDED_TIME_H)
-# define _XOS_INCLUDED_TIME_H
+#   define _XOS_INCLUDED_TIME_H
 #endif
 /***** <grp.h> wrappers *****/
 /*
@@ -949,40 +989,41 @@ typedef struct tm _Xltimeparams;
  * struct group *_XGetgrnam(const char *, _Xgetgrparams);
  */
 #if defined(X_INCLUDE_GRP_H) && !defined(_XOS_INCLUDED_GRP_H)
-# include <grp.h>
-# if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_GRPAPI)
-#  define XOS_USE_MTSAFE_GRPAPI 1
-# endif
+#   include <grp.h>
+#   if defined(XUSE_MTSAFE_API) || defined(XUSE_MTSAFE_GRPAPI)
+#      define XOS_USE_MTSAFE_GRPAPI 1
+#   endif
 #endif
 #if !defined(X_INCLUDE_GRP_H) || defined(_XOS_INCLUDED_GRP_H)
 /* Do nothing. */
 #elif !defined(XTHREADS) && !defined(X_FORCE_USE_MTSAFE_API)
 /* Use regular, unsafe API. */
-typedef int _Xgetgrparams;	/* dummy */
-#define _XGetgrgid(g,p)	getgrgid((g))
-#define _XGetgrnam(n,p)	getgrnam((n))
+typedef int _Xgetgrparams; /* dummy */
+#   define _XGetgrgid(g, p)	getgrgid((g))
+#   define _XGetgrnam(n, p)	getgrnam((n))
 #elif !defined(XOS_USE_MTSAFE_GRPAPI) || defined(XNO_MTSAFE_GRPAPI)
 /* Systems with thread support but no _r API.  UnixWare 2.0. */
-typedef struct {
-  struct group grp;
-  char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
-  struct group *pgrp;
-  size_t len;
+typedef struct
+{
+   struct group  grp;
+   char          buf[X_LINE_MAX]; /* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
+   struct group *pgrp;
+   size_t        len;
 } _Xgetgrparams;
 
-# define _Xgrp_copyGroup(p) \
+#   define _Xgrp_copyGroup(p) \
  ( memcpy(&(p).grp, (p).pgrp, sizeof(struct group)), \
    ((p).grp.gr_name = (p).buf), \
    strcpy((p).grp.gr_name, (p).pgrp->gr_name), \
    ((p).pgrp = &(p).grp), \
    0 )
 
-# define _XGetgrgid(g,p) \
+#   define _XGetgrgid(g, p) \
  ( (_Xos_processLock), \
    (((p).pgrp = getgrgid((g))) ? _Xgrp_copyGroup(p) : 0), \
    (_Xos_processUnlock), \
    (p).pgrp )
-# define _XGetgrnam(n,p) \
+#   define _XGetgrnam(n, p) \
  ( (_Xos_processLock), \
    (((p).pgrp = getgrnam((n))) ? _Xgrp_copyGroup(p) : 0), \
    (_Xos_processUnlock), \
@@ -994,12 +1035,14 @@ typedef struct {
  * extern struct group *getgrgid_r(gid_t, struct group *, char *, int);
  * extern struct group *getgrnam_r(const char *, struct group *, char *, int);
  */
-typedef struct {
-  struct group grp;
-  char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
+typedef struct
+{
+   struct group grp;
+   char         buf[X_LINE_MAX]; /* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
 } _Xgetgrparams;
-# define _XGetgrgid(g,p)	getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf))
-# define _XGetgrnam(n,p)	getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf))
+
+#   define _XGetgrgid(g, p)	getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf))
+#   define _XGetgrnam(n, p)	getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf))
 
 #elif !defined(_POSIX_THREAD_SAFE_FUNCTIONS)
 /* Non-POSIX API.  HP/UX 10, AIX 4.
@@ -1007,13 +1050,15 @@ typedef struct {
  * extern int getgrgid_r(gid_t, struct group *, char *, int);
  * extern int getgrnam_r(const char *, struct group *, char *, int);
  */
-typedef struct {
-  struct group grp;
-  char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
+typedef struct
+{
+   struct group grp;
+   char         buf[X_LINE_MAX]; /* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
 } _Xgetgrparams;
-# define _XGetgrgid(g,p)	\
+
+#   define _XGetgrgid(g, p)	\
  ((getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf)) ? NULL : &(p).grp))
-# define _XGetgrnam(n,p)	\
+#   define _XGetgrnam(n, p)	\
  ((getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf)) ? NULL : &(p).grp))
 
 #else
@@ -1022,26 +1067,28 @@ typedef struct {
  * int getgrgid_r(gid_t, struct group *, char *, size_t, struct group **);
  * int getgrnam_r(const char *, struct group *, char *, size_t, struct group **);
  */
-# if defined(__osf__)
+#   if defined(__osf__)
 /* OSF/1 V4.0 <grp.h> doesn't declare the _P routines, breaking under C++. */
 extern int _Pgetgrgid_r(gid_t, struct group *, char *, size_t, struct group **);
 extern int _Pgetgrnam_r(const char *, struct group *, char *, size_t, struct group **);
-# endif
-typedef struct {
-  struct group grp;
-  char buf[X_LINE_MAX];	/* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
-  struct group *result;
+#   endif
+typedef struct
+{
+   struct group  grp;
+   char          buf[X_LINE_MAX]; /* Should be sysconf(_SC_GETGR_R_SIZE_MAX)? */
+   struct group *result;
 } _Xgetgrparams;
-# define _XGetgrgid(g,p)	\
+
+#   define _XGetgrgid(g, p)	\
  ((getgrgid_r((g), &(p).grp, (p).buf, sizeof((p).buf), &(p).result) ? \
    NULL : (p).result))
-# define _XGetgrnam(n,p)	\
+#   define _XGetgrnam(n, p)	\
  ((getgrnam_r((n), &(p).grp, (p).buf, sizeof((p).buf), &(p).result) ? \
    NULL : (p).result))
 #endif
 #if defined(X_INCLUDE_GRP_H) && !defined(_XOS_INCLUDED_GRP_H)
-# define _XOS_INCLUDED_GRP_H
+#   define _XOS_INCLUDED_GRP_H
 #endif
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif

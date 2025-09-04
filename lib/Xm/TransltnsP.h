@@ -21,14 +21,14 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmTransltnsP_h
-#define _XmTransltnsP_h
-#include <X11/Intrinsic.h>	/* for externalref */
-#ifdef __cplusplus
+#   define _XmTransltnsP_h
+#   include <X11/Intrinsic.h> /* for externalref */
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef _XmConst
-#define _XmConst
-#endif
+#   endif
+#   ifndef _XmConst
+#      define _XmConst
+#   endif
 externalref _XmConst char _XmArrowB_defaultTranslations[];
 externalref _XmConst char _XmBulletinB_defaultTranslations[];
 externalref _XmConst char _XmCascadeB_menubar_events[];
@@ -47,7 +47,7 @@ externalref _XmConst char _XmDrawingA_traversalTranslations[];
 externalref _XmConst char _XmDrawnB_defaultTranslations[];
 externalref _XmConst char _XmDrawnB_menuTranslations[];
 externalref _XmConst char _XmFrame_defaultTranslations[];
-externalref _XmConst char _XmGrabShell_translations [];
+externalref _XmConst char _XmGrabShell_translations[];
 externalref _XmConst char _XmLabel_defaultTranslations[];
 externalref _XmConst char _XmLabel_menuTranslations[];
 externalref _XmConst char _XmLabel_menu_traversal_events[];
@@ -57,7 +57,7 @@ externalref _XmConst char _XmManager_managerTraversalTranslations[];
 externalref _XmConst char _XmManager_defaultTranslations[];
 externalref _XmConst char _XmNotebook_manager_translations[];
 externalref _XmConst char _XmNotebook_TabAccelerators[];
-externalref _XmConst char _XmMenuShell_translations [];
+externalref _XmConst char _XmMenuShell_translations[];
 externalref _XmConst char _XmPrimitive_defaultTranslations[];
 externalref _XmConst char _XmPushB_defaultTranslations[];
 externalref _XmConst char _XmPushB_menuTranslations[];
@@ -107,8 +107,8 @@ externalref _XmConst char _XmVirtKeys_siemensWx200FallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_siemens9733FallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_sunFallbackBindingString[];
 externalref _XmConst char _XmVirtKeys_tekFallbackBindingString[];
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmTransltnsP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

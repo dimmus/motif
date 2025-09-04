@@ -26,94 +26,94 @@
  */
 /* $XConsortium: SelectioBI.h /main/5 1995/07/13 17:57:50 drk $ */
 #ifndef _XmSelectioBI_h
-#define _XmSelectioBI_h
-#include <Xm/SelectioBP.h>
-#ifdef __cplusplus
+#   define _XmSelectioBI_h
+#   include <Xm/SelectioBP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Private Function Declarations    ********/
 extern void _XmSelectionBoxCreateListLabel(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateSelectionLabel(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateList(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateText(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateSeparator(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateOkButton(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateApplyButton(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateCancelButton(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern void _XmSelectionBoxCreateHelpButton(
-                        XmSelectionBoxWidget sel) ;
+   XmSelectionBoxWidget sel);
 extern XmGeoMatrix _XmSelectionBoxGeoMatrixCreate(
-                        Widget wid,
-                        Widget instigator,
-                        XtWidgetGeometry *desired) ;
+   Widget            wid,
+   Widget            instigator,
+   XtWidgetGeometry *desired);
 extern Boolean _XmSelectionBoxNoGeoRequest(
-                        XmGeoMatrix geoSpec) ;
+   XmGeoMatrix geoSpec);
 extern void _XmSelectionBoxGetSelectionLabelString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetListLabelString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetTextColumns(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetTextString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetListItems(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetListItemCount(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetListVisibleItemCount(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetOkLabelString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetApplyLabelString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetCancelLabelString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxGetHelpLabelString(
-                        Widget wid,
-                        int resource_offset,
-                        XtArgVal *value) ;
+   Widget    wid,
+   int       resource_offset,
+   XtArgVal *value);
 extern void _XmSelectionBoxUpOrDown(
-                        Widget wid,
-                        XEvent *event,
-                        String *argv,
-                        Cardinal *argc) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *argv,
+   Cardinal *argc);
 extern void _XmSelectionBoxRestore(
-                        Widget wid,
-                        XEvent *event,
-                        String *argv,
-                        Cardinal *argc) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *argv,
+   Cardinal *argc);
 Widget _XmSelectionBoxGetChild(Widget sb, unsigned char which);
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmSelectioBI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

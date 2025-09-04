@@ -28,58 +28,58 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern char  * _XmStringSourceGetString(XmTextWidget tw,
-				        XmTextPosition from,
-				        XmTextPosition to,
-                                        Boolean want_wchar);
-extern Boolean _XmTextFindStringBackwards(Widget w,
-					  XmTextPosition start,
-					  char *search_string,
-					  XmTextPosition *position);
-extern Boolean _XmTextFindStringForwards(Widget w,
-					 XmTextPosition start,
-					 char *search_string,
-					 XmTextPosition *position);
-extern void    _XmStringSourceSetGappedBuffer(XmSourceData data,
-					      XmTextPosition position);
-extern Boolean _XmTextModifyVerify(XmTextWidget initiator,
-				   XEvent *event,
-				   XmTextPosition *start,
-				   XmTextPosition *end,
-				   XmTextPosition *cursorPos,
-				   XmTextBlock block,
-				   XmTextBlock newblock,
-				   Boolean *freeBlock);
-extern XmTextSource _XmStringSourceCreate(char *value,
+extern char        *_XmStringSourceGetString(XmTextWidget   tw,
+                                             XmTextPosition from,
+                                             XmTextPosition to,
+                                             Boolean        want_wchar);
+extern Boolean      _XmTextFindStringBackwards(Widget          w,
+                                               XmTextPosition  start,
+                                               char           *search_string,
+                                               XmTextPosition *position);
+extern Boolean      _XmTextFindStringForwards(Widget          w,
+                                              XmTextPosition  start,
+                                              char           *search_string,
+                                              XmTextPosition *position);
+extern void         _XmStringSourceSetGappedBuffer(XmSourceData   data,
+                                                   XmTextPosition position);
+extern Boolean      _XmTextModifyVerify(XmTextWidget    initiator,
+                                        XEvent         *event,
+                                        XmTextPosition *start,
+                                        XmTextPosition *end,
+                                        XmTextPosition *cursorPos,
+                                        XmTextBlock     block,
+                                        XmTextBlock     newblock,
+                                        Boolean        *freeBlock);
+extern XmTextSource _XmStringSourceCreate(char   *value,
                                           Boolean is_wchar);
-extern void    _XmStringSourceDestroy(XmTextSource source);
-extern char  * _XmStringSourceGetValue(XmTextSource source,
-                                       Boolean want_wchar);
-extern void    _XmStringSourceSetValue(XmTextWidget widget,
-				       char *value);
-extern Boolean _XmStringSourceHasSelection(XmTextSource source);
-extern Boolean _XmStringSourceGetEditable(XmTextSource source);
-extern void    _XmStringSourceSetEditable(XmTextSource source,
-                                         Boolean editable);
-extern int     _XmStringSourceGetMaxLength(XmTextSource source);
-extern void    _XmStringSourceSetMaxLength(XmTextSource source,
-					   int max);
-extern int _XmTextBytesToCharacters(char *characters,
-				    char *bytes,
-				    int num_chars,
-				    Boolean add_null_terminator,
-				    int max_char_size);
-extern int _XmTextCharactersToBytes(char *bytes,
-				    char *characters,
-				    int num_chars,
-				    int max_char_size);
-extern void    _XmTextValueChanged(XmTextWidget initiator,
-				   XEvent *event);
-extern Boolean *_XmStringSourceGetPending(XmTextWidget widget);
-extern void    _XmStringSourceSetPending(XmTextWidget widget,
-					 Boolean *pending);
+extern void         _XmStringSourceDestroy(XmTextSource source);
+extern char        *_XmStringSourceGetValue(XmTextSource source,
+                                            Boolean      want_wchar);
+extern void         _XmStringSourceSetValue(XmTextWidget widget,
+                                            char        *value);
+extern Boolean      _XmStringSourceHasSelection(XmTextSource source);
+extern Boolean      _XmStringSourceGetEditable(XmTextSource source);
+extern void         _XmStringSourceSetEditable(XmTextSource source,
+                                               Boolean      editable);
+extern int          _XmStringSourceGetMaxLength(XmTextSource source);
+extern void         _XmStringSourceSetMaxLength(XmTextSource source,
+                                                int          max);
+extern int          _XmTextBytesToCharacters(char   *characters,
+                                             char   *bytes,
+                                             int     num_chars,
+                                             Boolean add_null_terminator,
+                                             int     max_char_size);
+extern int          _XmTextCharactersToBytes(char *bytes,
+                                             char *characters,
+                                             int   num_chars,
+                                             int   max_char_size);
+extern void         _XmTextValueChanged(XmTextWidget initiator,
+                                        XEvent      *event);
+extern Boolean     *_XmStringSourceGetPending(XmTextWidget widget);
+extern void         _XmStringSourceSetPending(XmTextWidget widget,
+                                              Boolean     *pending);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /*  _XmTextStrSoI_h */

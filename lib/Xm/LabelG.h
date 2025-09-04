@@ -21,37 +21,37 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmLabelG_h
-#define _XmLabelG_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmLabelG_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /*  Widget class and record definitions  */
-externalref WidgetClass xmLabelGadgetClass;
-typedef struct _XmLabelGadgetClassRec * XmLabelGadgetClass;
-typedef struct _XmLabelGadgetRec      * XmLabelGadget;
-typedef struct _XmLabelGCacheObjRec   * XmLabelGCacheObject;
+externalref WidgetClass                xmLabelGadgetClass;
+typedef struct _XmLabelGadgetClassRec *XmLabelGadgetClass;
+typedef struct _XmLabelGadgetRec      *XmLabelGadget;
+typedef struct _XmLabelGCacheObjRec   *XmLabelGCacheObject;
 /*fast subclass define */
-#ifndef XmIsLabelGadget
-#define XmIsLabelGadget(w)     XtIsSubclass(w, xmLabelGadgetClass)
-#endif /* XmIsLabelGadget */
+#   ifndef XmIsLabelGadget
+#      define XmIsLabelGadget(w)     XtIsSubclass(w, xmLabelGadgetClass)
+#   endif /* XmIsLabelGadget */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateLabelGadget(
-                        Widget parent,
-                        char *name,
-                        Arg *arglist,
-                        Cardinal argCount) ;
+   Widget   parent,
+   char    *name,
+   Arg     *arglist,
+   Cardinal argCount);
 extern Widget XmVaCreateLabelGadget(
-        Widget parent,
-        char *name,
-        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedLabelGadget(
-        Widget parent,
-        char *name,
-        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmLabelG_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

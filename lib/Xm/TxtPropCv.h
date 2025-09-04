@@ -26,24 +26,24 @@
  * HISTORY
  */
 #ifndef _XmTxtPropCvP_h
-#define _XmTxtPropCvP_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmTxtPropCvP_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Public Function Declarations    ********/
-extern int XmCvtXmStringTableToTextProperty(Display *display,
-				 XmStringTable string_table,
-				 int count,
-				 XmICCEncodingStyle style,
-				 XTextProperty *text_prop_return);
-extern int XmCvtTextPropertyToXmStringTable(Display *display,
-				 XTextProperty *text_prop,
-				 XmStringTable *string_table_return,
-				 int *count_return);
+extern int XmCvtXmStringTableToTextProperty(Display           *display,
+                                            XmStringTable      string_table,
+                                            int                count,
+                                            XmICCEncodingStyle style,
+                                            XTextProperty     *text_prop_return);
+extern int XmCvtTextPropertyToXmStringTable(Display       *display,
+                                            XTextProperty *text_prop,
+                                            XmStringTable *string_table_return,
+                                            int           *count_return);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
-#endif  /* _XmTxtPropCvP_h */
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
+#endif /* _XmTxtPropCvP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

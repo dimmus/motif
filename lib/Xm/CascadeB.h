@@ -26,35 +26,35 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass xmCascadeButtonWidgetClass;
-typedef struct _XmCascadeButtonRec      * XmCascadeButtonWidget;
-typedef struct _XmCascadeButtonClassRec * XmCascadeButtonWidgetClass;
+externalref WidgetClass                  xmCascadeButtonWidgetClass;
+typedef struct _XmCascadeButtonRec      *XmCascadeButtonWidget;
+typedef struct _XmCascadeButtonClassRec *XmCascadeButtonWidgetClass;
 /* fast subclass define */
 #ifndef XmIsCascadeButton
-#define XmIsCascadeButton(w) XtIsSubclass(w, xmCascadeButtonWidgetClass)
+#   define XmIsCascadeButton(w) XtIsSubclass(w, xmCascadeButtonWidgetClass)
 #endif /* XmIsCascadeButton */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateCascadeButton(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern void XmCascadeButtonHighlight(
-                        Widget cb,
-                        Boolean highlight) ;
+   Widget  cb,
+   Boolean highlight);
 /*
  * Variable argument list functions
  */
 extern Widget XmVaCreateCascadeButton(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedCascadeButton(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmCascadeB_h */

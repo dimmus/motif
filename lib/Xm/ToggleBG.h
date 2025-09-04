@@ -31,40 +31,40 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass xmToggleButtonGadgetClass;
-typedef struct _XmToggleButtonGadgetClassRec     *XmToggleButtonGadgetClass;
-typedef struct _XmToggleButtonGadgetRec          *XmToggleButtonGadget;
-typedef struct _XmToggleButtonGCacheObjRec       *XmToggleButtonGCacheObject;
+externalref WidgetClass                       xmToggleButtonGadgetClass;
+typedef struct _XmToggleButtonGadgetClassRec *XmToggleButtonGadgetClass;
+typedef struct _XmToggleButtonGadgetRec      *XmToggleButtonGadget;
+typedef struct _XmToggleButtonGCacheObjRec   *XmToggleButtonGCacheObject;
 /*fast subclass define */
 #ifndef XmIsToggleButtonGadget
-#define XmIsToggleButtonGadget(w)     XtIsSubclass(w, xmToggleButtonGadgetClass)
+#   define XmIsToggleButtonGadget(w)     XtIsSubclass(w, xmToggleButtonGadgetClass)
 #endif /* XmIsToggleButtonGadget */
 /********    Public Function Declarations    ********/
 Boolean XmToggleButtonGadgetGetState(
-                        Widget w);
+   Widget w);
 void XmToggleButtonGadgetSetState(
-                        Widget w,
-                        Boolean newstate,
-                        Boolean notify);
+   Widget  w,
+   Boolean newstate,
+   Boolean notify);
 Boolean XmToggleButtonGadgetSetValue(
-					    Widget w,
-					    XmToggleButtonState newstate,
-					    Boolean notify);
+   Widget              w,
+   XmToggleButtonState newstate,
+   Boolean             notify);
 Widget XmCreateToggleButtonGadget(
-                        Widget parent,
-                        char *name,
-                        Arg *arglist,
-                        Cardinal argCount);
+   Widget   parent,
+   char    *name,
+   Arg     *arglist,
+   Cardinal argCount);
 Widget XmVaCreateToggleButtonGadget(
-        Widget parent,
-        char *name,
-        ...);
+   Widget parent,
+   char  *name,
+   ...);
 Widget XmVaCreateManagedToggleButtonGadget(
-        Widget parent,
-        char *name,
-        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmToggleG_h */

@@ -21,47 +21,47 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmMainWindow_h
-#define _XmMainWindow_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmMainWindow_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef XmIsMainWindow
-#define XmIsMainWindow(w)	XtIsSubclass(w, xmMainWindowWidgetClass)
-#endif /* XmIsMainWindow */
-externalref WidgetClass xmMainWindowWidgetClass;
-typedef struct _XmMainWindowClassRec * XmMainWindowWidgetClass;
-typedef struct _XmMainWindowRec      * XmMainWindowWidget;
+#   endif
+#   ifndef XmIsMainWindow
+#      define XmIsMainWindow(w)	XtIsSubclass(w, xmMainWindowWidgetClass)
+#   endif /* XmIsMainWindow */
+externalref WidgetClass               xmMainWindowWidgetClass;
+typedef struct _XmMainWindowClassRec *XmMainWindowWidgetClass;
+typedef struct _XmMainWindowRec      *XmMainWindowWidget;
 /********    Public Function Declarations    ********/
 extern void XmMainWindowSetAreas(
-                        Widget w,
-                        Widget menu,
-                        Widget command,
-                        Widget hscroll,
-                        Widget vscroll,
-                        Widget wregion) ;
+   Widget w,
+   Widget menu,
+   Widget command,
+   Widget hscroll,
+   Widget vscroll,
+   Widget wregion);
 extern Widget XmMainWindowSep1(
-                        Widget w) ;
+   Widget w);
 extern Widget XmMainWindowSep2(
-                        Widget w) ;
+   Widget w);
 extern Widget XmMainWindowSep3(
-                        Widget w) ;
+   Widget w);
 extern Widget XmCreateMainWindow(
-                        Widget parent,
-                        char *name,
-                        ArgList args,
-                        Cardinal argCount) ;
+   Widget   parent,
+   char    *name,
+   ArgList  args,
+   Cardinal argCount);
 extern Widget XmVaCreateMainWindow(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedMainWindow(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmMainWindow_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

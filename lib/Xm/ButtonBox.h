@@ -49,8 +49,8 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef struct _XmButtonBoxClassRec    *XmButtonBoxWidgetClass;
-typedef struct _XmButtonBoxRec	       *XmButtonBoxWidget;
+typedef struct _XmButtonBoxClassRec *XmButtonBoxWidgetClass;
+typedef struct _XmButtonBoxRec      *XmButtonBoxWidget;
 /************************************************************
  *       MACROS
  ************************************************************/
@@ -72,13 +72,13 @@ Widget XmCreateButtonBox(Widget, String, ArgList, Cardinal);
  * Variable argument list functions
  */
 extern Widget XmVaCreateButtonBox(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedButtonBox(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern WidgetClass xmButtonBoxWidgetClass;
 #if defined(__cplusplus)
 }

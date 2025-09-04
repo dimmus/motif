@@ -21,15 +21,15 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifdef REV_INFO
-#ifndef lint
+#   ifndef lint
 static char rcsid[] = "$XConsortium: TearOffB.c /main/12 1996/03/06 17:09:22 pascale $"
-#endif
+#   endif
 #endif
 /*
  * Include files & Static Routine Definitions
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include <Xm/DrawP.h>
 #include <Xm/RowColumnP.h>
@@ -43,88 +43,79 @@ static char rcsid[] = "$XConsortium: TearOffB.c /main/12 1996/03/06 17:09:22 pas
 #include "RepTypeI.h"
 #include "TearOffI.h"
 #include "XmI.h"
-/********    Static Function Declarations    ********/
-static void HeightDefault(
-                        Widget widget,
-                        int offset,
-                        XrmValue *value) ;
+   /********    Static Function Declarations    ********/
+   static void
+   HeightDefault(
+      Widget    widget,
+      int       offset,
+      XrmValue *value);
 static void GetSeparatorGC(
-                        XmTearOffButtonWidget tob) ;
+   XmTearOffButtonWidget tob);
 static void Initialize(
-                        Widget rw,
-                        Widget nw,
-                        ArgList args,
-                        Cardinal *num_args) ;
+   Widget    rw,
+   Widget    nw,
+   ArgList   args,
+   Cardinal *num_args);
 static Boolean SetValues(
-                        Widget cw,
-                        Widget rw,
-                        Widget nw,
-                        ArgList args,
-                        Cardinal *num_args) ;
+   Widget    cw,
+   Widget    rw,
+   Widget    nw,
+   ArgList   args,
+   Cardinal *num_args);
 static void Destroy(
-                        Widget w) ;
+   Widget w);
 static void Redisplay(
-                        Widget wid,
-                        XEvent *event,
-                        Region region) ;
+   Widget  wid,
+   XEvent *event,
+   Region  region);
 static void BDrag(
-			Widget wid,
-			XEvent *event,
-			String *param,
-			Cardinal *num_param) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *param,
+   Cardinal *num_param);
 static void BActivate(
-			Widget wid,
-			XEvent *event,
-			String *param,
-			Cardinal *num_param) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *param,
+   Cardinal *num_param);
 static void KActivate(
-			Widget wid,
-			XEvent *event,
-			String *param,
-			Cardinal *num_param) ;
-static void ClassInitialize( void );
+   Widget    wid,
+   XEvent   *event,
+   String   *param,
+   Cardinal *num_param);
+static void ClassInitialize(void);
 static void ClassPartInitialize(
-                        WidgetClass wc) ;
+   WidgetClass wc);
 /********    End Static Function Declarations    ********/
 #define DEFAULT_HEIGHT 10
 /* Definition for resources that need special processing in get values */
-static XmSyntheticResource syn_resources[] =
-{
-   {
-      XmNmargin,
-      sizeof (Dimension),
-      XtOffsetOf( struct _XmTearOffButtonRec, tear_off_button.margin),
-      XmeFromHorizontalPixels,
-      XmeToHorizontalPixels
-   },
+static XmSyntheticResource syn_resources[] = {
+   { XmNmargin,
+    sizeof(Dimension),
+    XtOffsetOf(struct _XmTearOffButtonRec, tear_off_button.margin),
+    XmeFromHorizontalPixels,
+    XmeToHorizontalPixels },
 };
 /*  Resource list for Separator  */
-static XtResource resources[] =
-{
+static XtResource resources[] = {
+   { XmNseparatorType, XmCSeparatorType, XmRSeparatorType,     sizeof(unsigned char), XtOffsetOf(struct _XmTearOffButtonRec, tear_off_button.separator_type),     XmRImmediate, (XtPointer)XmSHADOW_ETCHED_OUT_DASH },
+   { XmNmargin,
+    XmCMargin,
+    XmRHorizontalDimension,
+    sizeof(Dimension),
+    XtOffsetOf(struct _XmTearOffButtonRec,                                                                                   tear_off_button.margin),
+    XmRImmediate,
+    (XtPointer)0                                                                                                                                                                                                    },
+   /* The magic value will signal recomputeSize setting */
    {
-      XmNseparatorType, XmCSeparatorType, XmRSeparatorType, sizeof (unsigned char),
-      XtOffsetOf( struct _XmTearOffButtonRec, tear_off_button.separator_type),
-      XmRImmediate, (XtPointer) XmSHADOW_ETCHED_OUT_DASH
-   },
-   {
-      XmNmargin,
-      XmCMargin,
-      XmRHorizontalDimension,
-      sizeof (Dimension),
-      XtOffsetOf( struct _XmTearOffButtonRec, tear_off_button.margin),
-      XmRImmediate, (XtPointer)  0
-   },
-	/* The magic value will signal recomputeSize setting */
-   {
-     "pri.vate", "Pri.vate", XmRBoolean, sizeof(Boolean),
-     XtOffsetOf(XmTearOffButtonRec, tear_off_button.set_recompute_size),
-     XmRImmediate, (XtPointer) False
-   },
-   {
-     XmNheight, XmCDimension, XmRVerticalDimension, sizeof(Dimension),
-     XtOffsetOf( struct _WidgetRec, core.height), XmRCallProc,
-     (XtPointer) HeightDefault
-   },
+    "pri.vate",
+    "Pri.vate",
+    XmRBoolean,
+    sizeof(Boolean),
+    XtOffsetOf(XmTearOffButtonRec,                                                                                           tear_off_button.set_recompute_size),
+    XmRImmediate,
+    (XtPointer)False                                                                                                                                                                                                },
+   { XmNheight,        XmCDimension,     XmRVerticalDimension, sizeof(Dimension),     XtOffsetOf(struct _WidgetRec,          core.height),                        XmRCallProc,  (XtPointer)HeightDefault            },
 };
 /*************************************<->*************************************
  *
@@ -147,73 +138,79 @@ static XtResource resources[] =
  *   for traversal.
  *
  *************************************<->***********************************/
-static XtActionsRec actionsList[] =
-{
-  {"BDrag", 		BDrag		 	},
-  {"BActivate", 	BActivate		},
-  {"KActivate", 	KActivate		},
+static XtActionsRec actionsList[] = {
+   { "BDrag",     BDrag     },
+   { "BActivate", BActivate },
+   { "KActivate", KActivate },
 };
 externaldef(xmtearoffbuttonclassrec)
-	XmTearOffButtonClassRec xmTearOffButtonClassRec = {
-  {
-/* core_class record */
-    /* superclass	  */	(WidgetClass) &xmPushButtonClassRec,
-    /* class_name	  */	"XmTearOffButton",
-    /* widget_size	  */	sizeof(XmTearOffButtonRec),
-    /* class_initialize   */    ClassInitialize,
-    /* class_part_init    */    ClassPartInitialize,
-    /* class_inited       */	FALSE,
-    /* initialize	  */	Initialize,
-    /* initialize_hook    */    NULL,
-    /* realize		  */	XtInheritRealize,
-    /* actions		  */	actionsList,
-    /* num_actions	  */	XtNumber(actionsList),
-    /* resources	  */	resources,
-    /* num_resources	  */	XtNumber(resources),
-    /* xrm_class	  */	NULLQUARK,
-    /* compress_motion	  */	TRUE,
-    /* compress_exposure  */	XtExposeCompressMaximal,
-    /* compress_enterlv   */    TRUE,
-    /* visible_interest	  */	FALSE,
-    /* destroy		  */	Destroy,
-    /* resize		  */	XtInheritResize,
-    /* expose		  */	Redisplay,
-    /* set_values	  */	SetValues,
-    /* set_values_hook    */    NULL,
-    /* set_values_almost  */    XtInheritSetValuesAlmost,
-    /* get_values_hook    */	NULL,
-    /* accept_focus	  */	NULL,
-    /* version            */	XtVersion,
-    /* callback_private   */    NULL,
-    /* tm_table           */    NULL,
-    /* query_geometry     */	XtInheritQueryGeometry,
-    /* display_accelerator */   NULL,
-    /* extension          */    NULL,
-  },
-  { /* primitive_class record       */
-    /* Primitive border_highlight   */	XmInheritBorderHighlight,
-    /* Primitive border_unhighlight */	XmInheritBorderUnhighlight,
-    /* translations		    */  XtInheritTranslations,
-    /* arm_and_activate		    */  XmInheritArmAndActivate,
-    /* get resources		    */  syn_resources,
-    /* num get_resources	    */  XtNumber(syn_resources),
-    /* extension		    */  NULL,
-  },
-  { /* label_class record */
-    /* setOverrideCallback	*/	XmInheritWidgetProc,
-    /* menu procedures		*/	XmInheritMenuProc,
-    /* menu traversal xlation	*/ 	XtInheritTranslations,
-    /* extension		*/	(XtPointer) NULL,
-  },
-  { /* pushbutton_class record */
-    /* extension		*/	(XtPointer) NULL,
-  },
-  { /* tearoffbutton_class record */
-    /* Button override xlation	*/	XtInheritTranslations,
-  }
+   XmTearOffButtonClassRec xmTearOffButtonClassRec
+   = {
+        {
+         /* core_class record */
+           /* superclass	  */ (WidgetClass)&xmPushButtonClassRec,
+         /* class_name	  */ "XmTearOffButton",
+         /* widget_size	  */ sizeof(XmTearOffButtonRec),
+         /* class_initialize   */ ClassInitialize,
+         /* class_part_init    */ ClassPartInitialize,
+         /* class_inited       */ FALSE,
+         /* initialize	  */ Initialize,
+         /* initialize_hook    */ NULL,
+         /* realize		  */ XtInheritRealize,
+         /* actions		  */ actionsList,
+         /* num_actions	  */ XtNumber(actionsList),
+         /* resources	  */ resources,
+         /* num_resources	  */ XtNumber(resources),
+         /* xrm_class	  */ NULLQUARK,
+         /* compress_motion	  */ TRUE,
+         /* compress_exposure  */ XtExposeCompressMaximal,
+         /* compress_enterlv   */ TRUE,
+         /* visible_interest	  */ FALSE,
+         /* destroy		  */ Destroy,
+         /* resize		  */ XtInheritResize,
+         /* expose		  */ Redisplay,
+         /* set_values	  */ SetValues,
+         /* set_values_hook    */ NULL,
+         /* set_values_almost  */ XtInheritSetValuesAlmost,
+         /* get_values_hook    */ NULL,
+         /* accept_focus	  */ NULL,
+         /* version            */ XtVersion,
+         /* callback_private   */ NULL,
+         /* tm_table           */ NULL,
+         /* query_geometry     */ XtInheritQueryGeometry,
+         /* display_accelerator */ NULL,
+         /* extension          */ NULL,
+         },
+        {
+         /* primitive_class record       */
+           /* Primitive border_highlight   */ XmInheritBorderHighlight,
+         /* Primitive border_unhighlight */ XmInheritBorderUnhighlight,
+         /* translations		    */ XtInheritTranslations,
+         /* arm_and_activate		    */ XmInheritArmAndActivate,
+         /* get resources		    */ syn_resources,
+         /* num get_resources	    */ XtNumber(syn_resources),
+         /* extension		    */ NULL,
+         },
+        {
+         /* label_class record */
+           /* setOverrideCallback	*/ XmInheritWidgetProc,
+         /* menu procedures		*/ XmInheritMenuProc,
+         /* menu traversal xlation	*/ XtInheritTranslations,
+         /* extension		*/ (XtPointer)NULL,
+         },
+        {
+         /* pushbutton_class record */
+           /* extension		*/ (XtPointer)NULL,
+         },
+        {
+         /* tearoffbutton_class record */
+           /* Button override xlation	*/ XtInheritTranslations,
+         }
 };
 externaldef(xmtearoffbuttonwidgetclass)
-   WidgetClass xmTearOffButtonWidgetClass = (WidgetClass)&xmTearOffButtonClassRec;
+   WidgetClass xmTearOffButtonWidgetClass
+   = (WidgetClass)&xmTearOffButtonClassRec;
+
 /*********************************************************************
  *
  * HeightDefault
@@ -227,15 +224,16 @@ externaldef(xmtearoffbuttonwidgetclass)
 /*ARGSUSED*/
 static void
 HeightDefault(
-        Widget widget,
-        int offset,		/* unused */
-        XrmValue *value )
+   Widget    widget,
+   int       offset, /* unused */
+   XrmValue *value)
 {
-      static Dimension default_height = DEFAULT_HEIGHT ;
-      XmTearOffButtonWidget tob = (XmTearOffButtonWidget)widget;
-      value->addr = (XPointer) &default_height;
-      tob->tear_off_button.set_recompute_size = True;
+   static Dimension      default_height    = DEFAULT_HEIGHT;
+   XmTearOffButtonWidget tob               = (XmTearOffButtonWidget)widget;
+   value->addr                             = (XPointer)&default_height;
+   tob->tear_off_button.set_recompute_size = True;
 }
+
 /************************************************************************
  *
  *  GetSeparatorGC
@@ -244,33 +242,32 @@ HeightDefault(
  ************************************************************************/
 static void
 GetSeparatorGC(
-        XmTearOffButtonWidget tob )
+   XmTearOffButtonWidget tob)
 {
    XGCValues values;
    XtGCMask  valueMask;
-   valueMask = GCForeground | GCBackground;
+   valueMask         = GCForeground | GCBackground;
    values.foreground = tob->primitive.foreground;
    values.background = tob->core.background_pixel;
-   if (tob -> tear_off_button.separator_type == XmSINGLE_DASHED_LINE ||
-       tob -> tear_off_button.separator_type == XmDOUBLE_DASHED_LINE)
+   if (tob->tear_off_button.separator_type == XmSINGLE_DASHED_LINE || tob->tear_off_button.separator_type == XmDOUBLE_DASHED_LINE)
    {
-      valueMask = valueMask | GCLineStyle;
+      valueMask         = valueMask | GCLineStyle;
       values.line_style = LineDoubleDash;
    }
-   tob->tear_off_button.separator_GC =
-      XtGetGC ((Widget) tob, valueMask, &values);
+   tob->tear_off_button.separator_GC = XtGetGC((Widget)tob, valueMask, &values);
 }
+
 /************************************************************************
  *
  *  ClassInitialize
  *
  ************************************************************************/
 static void
-ClassInitialize( void )
+ClassInitialize(void)
 {
-   xmTearOffButtonClassRec.tearoffbutton_class.translations =
-      (String)XtParseTranslationTable(overrideTranslations);
+   xmTearOffButtonClassRec.tearoffbutton_class.translations = (String)XtParseTranslationTable(overrideTranslations);
 }
+
 /************************************************************************
  *
  *  ClassPartInitialize
@@ -279,10 +276,11 @@ ClassInitialize( void )
  ************************************************************************/
 static void
 ClassPartInitialize(
-        WidgetClass wc )
+   WidgetClass wc)
 {
-  _XmFastSubclassInit (wc, XmTEAROFF_BUTTON_BIT);
+   _XmFastSubclassInit(wc, XmTEAROFF_BUTTON_BIT);
 }
+
 /************************************************************************
  *
  *  Initialize
@@ -292,36 +290,41 @@ ClassPartInitialize(
 /*ARGSUSED*/
 static void
 Initialize(
-        Widget rw,		/* unused */
-        Widget nw,
-        ArgList args,		/* unused */
-        Cardinal *num_args )	/* unused */
+   Widget    rw, /* unused */
+   Widget    nw,
+   ArgList   args,     /* unused */
+   Cardinal *num_args) /* unused */
 {
-   XmTearOffButtonWidget new_w = (XmTearOffButtonWidget) nw ;
-   XtTranslations trans;
+   XmTearOffButtonWidget new_w = (XmTearOffButtonWidget)nw;
+   XtTranslations        trans;
    GetSeparatorGC((XmTearOffButtonWidget)nw);
    _XmProcessLock();
-   trans = (XtTranslations) ((XmTearOffButtonClassRec *)
-		XtClass(nw))->tearoffbutton_class.translations;
+   trans = (XtTranslations)((XmTearOffButtonClassRec *)
+                               XtClass(nw))
+              ->tearoffbutton_class.translations;
    _XmProcessUnlock();
    XtOverrideTranslations(nw, trans);
-   if(!XmRepTypeValidValue(XmRID_SEPARATOR_TYPE,
-			 new_w->tear_off_button.separator_type,
-			 (Widget) new_w)) {
-     new_w -> tear_off_button.separator_type = XmSHADOW_ETCHED_OUT_DASH;
+   if (!XmRepTypeValidValue(XmRID_SEPARATOR_TYPE,
+                            new_w->tear_off_button.separator_type,
+                            (Widget)new_w))
+   {
+      new_w->tear_off_button.separator_type = XmSHADOW_ETCHED_OUT_DASH;
    }
    /* force the orientation */
-   new_w->tear_off_button.orientation = XmHORIZONTAL ;
+   new_w->tear_off_button.orientation = XmHORIZONTAL;
    /* if set_recompute_size is True, this widget didn't have a
       specific height, so set its recompute_size to True, so that
       RCLayout can override it. if set_recompute_size is False, a
       specific height was given, so force recompute_size to False */
-   if (new_w->tear_off_button.set_recompute_size) {
-       new_w->label.recompute_size = True;
-       new_w->tear_off_button.set_recompute_size = False ;
-   } else
-       new_w->label.recompute_size = False;
+   if (new_w->tear_off_button.set_recompute_size)
+   {
+      new_w->label.recompute_size               = True;
+      new_w->tear_off_button.set_recompute_size = False;
+   }
+   else
+      new_w->label.recompute_size = False;
 }
+
 /************************************************************************
  *
  *  Redisplay (tob, event, region)
@@ -333,37 +336,26 @@ Initialize(
 /*ARGSUSED*/
 static void
 Redisplay(
-        Widget wid,
-        XEvent *event,
-        Region region )
+   Widget  wid,
+   XEvent *event,
+   Region  region)
 {
-    XmTearOffButtonWidget tob = (XmTearOffButtonWidget) wid ;
-    /*
+   XmTearOffButtonWidget tob = (XmTearOffButtonWidget)wid;
+   /*
      * Where do we check for dependency on MenyType ??
      */
-    if (XtIsRealized((Widget)tob)) {
-	XtExposeProc expose;
-	XmeDrawSeparator(XtDisplay(tob), XtWindow(tob),
-			 tob->primitive.top_shadow_GC,
-			 tob->primitive.bottom_shadow_GC,
-			 tob->tear_off_button.separator_GC,
-			 tob->primitive.highlight_thickness,
-			 tob->primitive.highlight_thickness,
-			 tob->core.width -
-			 2*tob->primitive.highlight_thickness,
-			 tob->core.height -
-			 2*tob->primitive.highlight_thickness,
-			 tob->primitive.shadow_thickness,
-			 tob->tear_off_button.margin,
-			 tob->tear_off_button.orientation,
-			 tob->tear_off_button.separator_type);
-	/* envelop primitive expose method for highlight */
-	_XmProcessLock();
-	expose = xmPrimitiveClassRec.core_class.expose;
-	_XmProcessUnlock();
-	(*expose)(wid,event, region) ;
-    }
+   if (XtIsRealized((Widget)tob))
+   {
+      XtExposeProc expose;
+      XmeDrawSeparator(XtDisplay(tob), XtWindow(tob), tob->primitive.top_shadow_GC, tob->primitive.bottom_shadow_GC, tob->tear_off_button.separator_GC, tob->primitive.highlight_thickness, tob->primitive.highlight_thickness, tob->core.width - 2 * tob->primitive.highlight_thickness, tob->core.height - 2 * tob->primitive.highlight_thickness, tob->primitive.shadow_thickness, tob->tear_off_button.margin, tob->tear_off_button.orientation, tob->tear_off_button.separator_type);
+      /* envelop primitive expose method for highlight */
+      _XmProcessLock();
+      expose = xmPrimitiveClassRec.core_class.expose;
+      _XmProcessUnlock();
+      (*expose)(wid, event, region);
+   }
 }
+
 /************************************************************************
  *
  *  Destroy
@@ -372,11 +364,12 @@ Redisplay(
  ************************************************************************/
 static void
 Destroy(
-        Widget wid )
+   Widget wid)
 {
-   XtReleaseGC (wid,
-      ((XmTearOffButtonWidget) wid)->tear_off_button.separator_GC);
+   XtReleaseGC(wid,
+               ((XmTearOffButtonWidget)wid)->tear_off_button.separator_GC);
 }
+
 /************************************************************************
  *
  *  SetValues
@@ -385,39 +378,36 @@ Destroy(
 /*ARGSUSED*/
 static Boolean
 SetValues(
-        Widget cw,
-        Widget rw,		/* unused */
-        Widget nw,
-        ArgList args,		/* unused */
-        Cardinal *num_args )	/* unused */
+   Widget    cw,
+   Widget    rw, /* unused */
+   Widget    nw,
+   ArgList   args,     /* unused */
+   Cardinal *num_args) /* unused */
 {
-   XmTearOffButtonWidget current = (XmTearOffButtonWidget) cw ;
-   XmTearOffButtonWidget new_w = (XmTearOffButtonWidget) nw ;
-   Boolean flag = FALSE;
-   if(!XmRepTypeValidValue(XmRID_SEPARATOR_TYPE,
-                           new_w->tear_off_button.separator_type, (Widget) new_w))
+   XmTearOffButtonWidget current = (XmTearOffButtonWidget)cw;
+   XmTearOffButtonWidget new_w   = (XmTearOffButtonWidget)nw;
+   Boolean               flag    = FALSE;
+   if (!XmRepTypeValidValue(XmRID_SEPARATOR_TYPE,
+                            new_w->tear_off_button.separator_type,
+                            (Widget)new_w))
    {
-      new_w -> tear_off_button.separator_type = XmSHADOW_ETCHED_OUT_DASH;
+      new_w->tear_off_button.separator_type = XmSHADOW_ETCHED_OUT_DASH;
    }
    /* force the orientation */
-   new_w -> tear_off_button.orientation = XmHORIZONTAL;
-   if ((new_w->core.background_pixel != current->core.background_pixel) ||
-       (new_w->tear_off_button.separator_type !=
-         current->tear_off_button.separator_type) ||
-       (new_w->primitive.foreground != current->primitive.foreground))
+   new_w->tear_off_button.orientation = XmHORIZONTAL;
+   if ((new_w->core.background_pixel != current->core.background_pixel) || (new_w->tear_off_button.separator_type != current->tear_off_button.separator_type) || (new_w->primitive.foreground != current->primitive.foreground))
    {
-      XtReleaseGC ((Widget) new_w, new_w->tear_off_button.separator_GC);
-      GetSeparatorGC (new_w);
+      XtReleaseGC((Widget)new_w, new_w->tear_off_button.separator_GC);
+      GetSeparatorGC(new_w);
       flag = TRUE;
    }
-   if ((new_w->tear_off_button.margin != current->tear_off_button.margin) ||
-       (new_w->primitive.shadow_thickness !=
-         current->primitive.shadow_thickness))
+   if ((new_w->tear_off_button.margin != current->tear_off_button.margin) || (new_w->primitive.shadow_thickness != current->primitive.shadow_thickness))
    {
       flag = TRUE;
    }
    return (flag);
 }
+
 /************************************************************************
  *
  *  BDrag
@@ -426,13 +416,14 @@ SetValues(
  ************************************************************************/
 /*ARGSUSED*/
 static void
-BDrag( Widget wid,
-	XEvent *event,
-	String *param,		/* unused */
-	Cardinal *num_param )	/* unused */
+BDrag(Widget    wid,
+      XEvent   *event,
+      String   *param,     /* unused */
+      Cardinal *num_param) /* unused */
 {
    _XmTearOffInitiate(XtParent(wid), event);
 }
+
 /************************************************************************
  *
  *  BActivate
@@ -441,20 +432,21 @@ BDrag( Widget wid,
  ************************************************************************/
 /*ARGSUSED*/
 static void
-BActivate( Widget wid,
-	XEvent *event,
-	String *param,		/* unused */
-	Cardinal *num_param )	/* unused */
+BActivate(Widget    wid,
+          XEvent   *event,
+          String   *param,     /* unused */
+          Cardinal *num_param) /* unused */
 {
-   Widget parent = XtParent(wid);
+   Widget            parent = XtParent(wid);
    XmMenuSystemTrait menuSTrait;
    menuSTrait = (XmMenuSystemTrait)
-     XmeTraitGet((XtPointer) XtClass(XtParent(wid)), XmQTmenuSystem);
-   if (menuSTrait -> verifyButton(XtParent(wid), event))
+      XmeTraitGet((XtPointer)XtClass(XtParent(wid)), XmQTmenuSystem);
+   if (menuSTrait->verifyButton(XtParent(wid), event))
    {
       _XmTearOffInitiate(parent, event);
    }
 }
+
 /************************************************************************
  *
  *  KActivate
@@ -462,19 +454,18 @@ BActivate( Widget wid,
  ************************************************************************/
 /*ARGSUSED*/
 static void
-KActivate( Widget wid,
-	XEvent *event,
-	String *param,		/* unused */
-	Cardinal *num_param )	/* unused */
+KActivate(Widget    wid,
+          XEvent   *event,
+          String   *param,     /* unused */
+          Cardinal *num_param) /* unused */
 {
-   XButtonEvent xb_ev ;
-   Widget parent = XtParent(wid);
-   Position x, y;
+   XButtonEvent xb_ev;
+   Widget       parent = XtParent(wid);
+   Position     x, y;
    /* stick the tear off at the same location as the submenu */
-   XtTranslateCoords(parent, XtX(parent), XtY(parent),
-      &x, &y);
-   xb_ev = event->xbutton;
+   XtTranslateCoords(parent, XtX(parent), XtY(parent), &x, &y);
+   xb_ev        = event->xbutton;
    xb_ev.x_root = x;
    xb_ev.y_root = y;
-   _XmTearOffInitiate(parent, (XEvent *) &xb_ev);
+   _XmTearOffInitiate(parent, (XEvent *)&xb_ev);
 }

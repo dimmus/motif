@@ -21,8 +21,8 @@
  * Floor, Boston, MA 02110-1301 USA
  *
  */
-#ifndef	_XmFontSelectorP_h
-#define	_XmFontSelectorP_h
+#ifndef _XmFontSelectorP_h
+#define _XmFontSelectorP_h
 /************************************************************
  *      INCLUDE FILES
  *************************************************************/
@@ -98,7 +98,7 @@ extern "C" {
 #define SLANT_LEN      3
 #define SPACING_LEN    3
 typedef unsigned char Flag;
-typedef unsigned int LongFlag;
+typedef unsigned int  LongFlag;
 #define FIXED  		((Flag) 1 << 0)
 #define BOLD   		((Flag) 1 << 1)
 #define ITALIC 		((Flag) 1 << 2)
@@ -113,125 +113,140 @@ typedef unsigned int LongFlag;
  */
 #define USER_PROPORTIONAL   	PROPORTIONAL
 #define USER_FIXED		FIXED
-typedef struct _FontData {
-    XrmQuark familyq;		/* quarkified family name. */
-    XrmQuark weightq;		/* quarkified weight name. */
-    char slant[SLANT_LEN + 1];
-    char spacing[SPACING_LEN + 1];
-    short resolution_x, resolution_y;
-    short point_size;
-    XrmQuark encoding;
-    Flag state;
+
+typedef struct _FontData
+{
+   XrmQuark familyq; /* quarkified family name. */
+   XrmQuark weightq; /* quarkified weight name. */
+   char     slant[SLANT_LEN + 1];
+   char     spacing[SPACING_LEN + 1];
+   short    resolution_x, resolution_y;
+   short    point_size;
+   XrmQuark encoding;
+   Flag     state;
 } FontData;
-typedef struct FamilyInfo {
-    XrmQuark nameq;		/* quarkified family name. */
-    XrmQuark bold_nameq, medium_nameq;
-    XrmQuark italic_nameq, upright_nameq;
-    char fixed_spacing[SPACING_LEN + 1];
-    LongFlag sizes_75, sizes_100;
-    Flag state;
-    XrmQuark *encodings;
-    int encoding_alloc;
+
+typedef struct FamilyInfo
+{
+   XrmQuark  nameq; /* quarkified family name. */
+   XrmQuark  bold_nameq, medium_nameq;
+   XrmQuark  italic_nameq, upright_nameq;
+   char      fixed_spacing[SPACING_LEN + 1];
+   LongFlag  sizes_75, sizes_100;
+   Flag      state;
+   XrmQuark *encodings;
+   int       encoding_alloc;
 } FamilyInfo;
-typedef struct FontInfo {
-    FontData *current_font;
-    String *others;
-    FamilyInfo *family_info;
-    short num_others;
-    short num_families;
-    short resolution;
+
+typedef struct FontInfo
+{
+   FontData   *current_font;
+   String     *others;
+   FamilyInfo *family_info;
+   short       num_others;
+   short       num_families;
+   short       resolution;
 } FontInfo;
-typedef struct _XmFontSelStringInfo {
-    XmString sample_text;
-    XmString any, lower_any;
-    XmString family, size;
-    XmString bold, italic, option, both;
-    XmString mono_space, prop_space;
-    XmString xlfd, other_font;
-    XmString dpi_75, dpi_100;
-    XmString scaling, encoding_only, show_name;
-    String *encoding_list;
+
+typedef struct _XmFontSelStringInfo
+{
+   XmString sample_text;
+   XmString any, lower_any;
+   XmString family, size;
+   XmString bold, italic, option, both;
+   XmString mono_space, prop_space;
+   XmString xlfd, other_font;
+   XmString dpi_75, dpi_100;
+   XmString scaling, encoding_only, show_name;
+   String  *encoding_list;
 } XmFontSelStringInfo;
+
 /************************************************************
  *      TYPEDEFS AND DEFINES
  *************************************************************/
 typedef struct _FontSelectorClassPart
 {
-    XtPointer extension;	/* For later use. */
+   XtPointer extension; /* For later use. */
 } FontSelectorClassPart;
+
 typedef struct _XmFontSelectorClassRec
 {
-    CoreClassPart		core_class;
-    CompositeClassPart		composite_class;
-    ConstraintClassPart 	constraint_class;
-    XmManagerClassPart  	manager_class;
-    XmPanedClassPart		paned_class;
-    FontSelectorClassPart	font_selector_class;
+   CoreClassPart         core_class;
+   CompositeClassPart    composite_class;
+   ConstraintClassPart   constraint_class;
+   XmManagerClassPart    manager_class;
+   XmPanedClassPart      paned_class;
+   FontSelectorClassPart font_selector_class;
 } XmFontSelectorClassRec;
+
 typedef struct _XmFontSelectorPart
 {
-    /* Resources */
-    String		current_font;   /* The currently shown font. */
-    Boolean 		show_font_name;	/* show the font name window? */
-    Boolean		iso_fonts_only;	/* show only iso fonts? */
-    Boolean		use_scaling;    /* use font scaling? */
-    Dimension		text_rows; 	/* The number of text rows to display*/
-    XtCallbackList	font_changed_callback; /* when font changes. */
-    XmFontSelStringInfo strings; /* The font selectors external strings. */
-    /* Private Data */
-    Boolean xlfd_mode;		/* True if we are int xlfd mode. */
-    FontInfo 		*font_info;		/* The font information. */
-    Widget text, name_label;	/* Text and label widget below top area. */
-    Widget middle_pane;		/* The option info middle pane. */
-    Widget family_box;		/* The family choices combo box. */
-    Widget size_box;		/* The family choices combo box. */
-    Widget bold_toggle, italic_toggle; /* The bold and italic toggle buttons */
-    Widget xlfd_toggle, other_toggle; /* The xlfd and other font toggles. */
-    Widget show_font_toggle, use_scaling_toggle;
-    Widget option_menu;		/* The option menu. */
-    Widget encoding_menu_shell;	/* The menu shell associated with the */
-    				/* encoding menu. */
-    WidgetList xlfd_only;	/* Only visable when in xlfd mode. */
-    WidgetList xlfd_sensitive;	/* Only sensitive when in xlfd mode. */
-    char num_xlfd_only, num_xlfd_sensitive;
-    char alloc_xlfd_only, alloc_xlfd_sensitive;
-    Flag user_state;		/* The current user selections. */
-    String current_text;	/* The current text in the text widget. */
-    String get_font;		/* Where to store returned get values on
+   /* Resources */
+   String              current_font;          /* The currently shown font. */
+   Boolean             show_font_name;        /* show the font name window? */
+   Boolean             iso_fonts_only;        /* show only iso fonts? */
+   Boolean             use_scaling;           /* use font scaling? */
+   Dimension           text_rows;             /* The number of text rows to display*/
+   XtCallbackList      font_changed_callback; /* when font changes. */
+   XmFontSelStringInfo strings;               /* The font selectors external strings. */
+   /* Private Data */
+   Boolean   xlfd_mode;                  /* True if we are int xlfd mode. */
+   FontInfo *font_info;                  /* The font information. */
+   Widget    text, name_label;           /* Text and label widget below top area. */
+   Widget    middle_pane;                /* The option info middle pane. */
+   Widget    family_box;                 /* The family choices combo box. */
+   Widget    size_box;                   /* The family choices combo box. */
+   Widget    bold_toggle, italic_toggle; /* The bold and italic toggle buttons */
+   Widget    xlfd_toggle, other_toggle;  /* The xlfd and other font toggles. */
+   Widget    show_font_toggle, use_scaling_toggle;
+   Widget    option_menu;         /* The option menu. */
+   Widget    encoding_menu_shell; /* The menu shell associated with the */
+                                  /* encoding menu. */
+   WidgetList xlfd_only;          /* Only visable when in xlfd mode. */
+   WidgetList xlfd_sensitive;     /* Only sensitive when in xlfd mode. */
+   char       num_xlfd_only, num_xlfd_sensitive;
+   char       alloc_xlfd_only, alloc_xlfd_sensitive;
+   Flag       user_state;   /* The current user selections. */
+   String     current_text; /* The current text in the text widget. */
+   String     get_font;     /* Where to store returned get values on
 				   current_font. */
-    String encoding;		/* The encoding, may change. */
-    /*
+   String     encoding;     /* The encoding, may change. */
+   /*
      * The previously set font_data, free when font changed, or widget
      * destroyed.
      */
-    XmFontList old_fontlist;
-    XFontStruct * old_fontdata;
-    /*
+   XmFontList   old_fontlist;
+   XFontStruct *old_fontdata;
+   /*
      * These values were added 2/1/94
      */
-    Widget dpi75, dpi100, dpiAny; /* DPI toggle buttons.		*/
-    Widget proportional, monospace, any_spacing;
-                                /* Spacing toggle buttons		*/
+   Widget dpi75, dpi100, dpiAny; /* DPI toggle buttons.		*/
+   Widget proportional, monospace, any_spacing;
+   /* Spacing toggle buttons		*/
 } XmFontSelectorPart;
+
 typedef struct _XmFontSelectorRec
 {
-    CorePart		core;
-    CompositePart 	composite;
-    ConstraintPart 	constraint;
-    XmManagerPart 	manager;
-    XmPanedPart 	paned;
-    XmFontSelectorPart	fs;
+   CorePart           core;
+   CompositePart      composite;
+   ConstraintPart     constraint;
+   XmManagerPart      manager;
+   XmPanedPart        paned;
+   XmFontSelectorPart fs;
 } XmFontSelectorRec;
+
 typedef struct _XmFontSelectorConstraintsPart
 {
-    XtPointer dummy;
+   XtPointer dummy;
 } XmFontSelectorConstraintsPart;
+
 typedef struct _XmFontSelectorConstraintsRec
 {
-    XmManagerConstraintPart       manager;
-    XmPanedConstraintsPart        paned;
-    XmFontSelectorConstraintsPart fs;
+   XmManagerConstraintPart       manager;
+   XmPanedConstraintsPart        paned;
+   XmFontSelectorConstraintsPart fs;
 } XmFontSelectorConstraintsRec, *XmFontSelectorConstraints;
+
 /************************************************************
  *      MACROS
  *************************************************************/
@@ -244,8 +259,8 @@ typedef struct _XmFontSelectorConstraintsRec
 /************************************************************
  *       STATIC DECLARATIONS
  ************************************************************/
-extern XmFontSelectorClassRec	xmFontSelectorClassRec;
+extern XmFontSelectorClassRec xmFontSelectorClassRec;
 #ifdef __cplusplus
-}	/* Closes scope of 'extern "C"' declaration */
+} /* Closes scope of 'extern "C"' declaration */
 #endif
-#endif	/* _XmFontSelectorP_h - DON'T ADD STUFF AFTER THIS #endif */
+#endif /* _XmFontSelectorP_h - DON'T ADD STUFF AFTER THIS #endif */

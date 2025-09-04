@@ -21,12 +21,12 @@
  * Floor, Boston, MA 02110-1301 USA
  */
 #ifdef REV_INFO
-#ifndef lint
+#   ifndef lint
 static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk $"
-#endif
+#   endif
 #endif
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include "CallbackI.h"
 /********************************************************************
@@ -39,136 +39,137 @@ static char rcsid[] = "$XConsortium: CallbackI.c /main/8 1995/07/14 10:13:10 drk
  ********************************************************************/
 /* However it doesn't contain a final NULL record */
 #define ToList(p)	((XtCallbackList) (&(p)->callbacks))
-void
-_XmAddCallback(InternalCallbackList* callbacks,
-	       XtCallbackProc        callback,
-	       XtPointer             closure)
+   void
+   _XmAddCallback(InternalCallbackList * callbacks,
+                  XtCallbackProc callback,
+                  XtPointer      closure)
 {
-  register XtCallbackList cl;
-  register InternalCallbackList icl = *callbacks;
-  register int count = icl ? icl->count : 0;
-  if (icl && icl->call_state)
-    {
+   register XtCallbackList       cl;
+   register InternalCallbackList icl   = *callbacks;
+   register int                  count = icl ? icl->count : 0;
+   if (icl && icl->call_state)
+   {
       icl->call_state |= _XtCBFreeAfterCalling;
+      icl              = (InternalCallbackList)
+         XtMalloc(sizeof(InternalCallbackRec) + sizeof(XtCallbackRec) * count);
+      memcpy((char *)ToList(icl), (char *)ToList(*callbacks), sizeof(XtCallbackRec) * count);
+   }
+   else
+   {
       icl = (InternalCallbackList)
-	XtMalloc(sizeof(InternalCallbackRec) + sizeof(XtCallbackRec) * count);
-      memcpy((char *)ToList(icl), (char *)ToList(*callbacks),
-	     sizeof(XtCallbackRec) * count);
-    }
-  else
-    {
-      icl = (InternalCallbackList)
-	XtRealloc((char *) icl, sizeof(InternalCallbackRec) +
-		  sizeof(XtCallbackRec) * count);
-    }
-  *callbacks = icl;
-  icl->count = count + 1;
-  icl->is_padded = 0;
-  icl->call_state = 0;
-  cl = ToList(icl) + count;
-  cl->callback = callback;
-  cl->closure = closure;
+         XtRealloc((char *)icl, sizeof(InternalCallbackRec) + sizeof(XtCallbackRec) * count);
+   }
+   *callbacks      = icl;
+   icl->count      = count + 1;
+   icl->is_padded  = 0;
+   icl->call_state = 0;
+   cl              = ToList(icl) + count;
+   cl->callback    = callback;
+   cl->closure     = closure;
 }
+
 void
- _XmRemoveCallback (InternalCallbackList *callbacks,
-		    XtCallbackProc        callback,
-		    XtPointer             closure)
+_XmRemoveCallback(InternalCallbackList *callbacks,
+                  XtCallbackProc        callback,
+                  XtPointer             closure)
 {
-  register int i, j;
-  register XtCallbackList cl, ncl, ocl;
-  register InternalCallbackList icl = *callbacks;
-  if (!icl)
-    return;
-  cl = ToList(icl);
-  for (i = icl->count; --i >= 0; cl++)
-    {
+   register int                  i, j;
+   register XtCallbackList       cl, ncl, ocl;
+   register InternalCallbackList icl = *callbacks;
+   if (!icl)
+      return;
+   cl = ToList(icl);
+   for (i = icl->count; --i >= 0; cl++)
+   {
       if (cl->callback == callback && cl->closure == closure)
-	{
-	  if (icl->call_state)
-	    {
-	      icl->call_state |= _XtCBFreeAfterCalling;
-	      if (icl->count == 1)
-		{
-		  *callbacks = NULL;
-		}
-	      else
-		{
-		  j = icl->count - i - 1;
-		  ocl = ToList(icl);
-		  icl = (InternalCallbackList)
-		    XtMalloc(sizeof(InternalCallbackRec) +
-			     sizeof(XtCallbackRec) * (i + j - 1));
-		  icl->count = i + j;
-		  icl->is_padded = 0;
-		  icl->call_state = 0;
-		  ncl = ToList(icl);
-		  while (--j >= 0)
-		    *ncl++ = *ocl++;
-		  while (--i >= 0)
-		    *ncl++ = *++cl;
-		  *callbacks = icl;
-		}
-	    }
-	  else
-	    {
-	      if (--icl->count)
-		{
-		  ncl = cl + 1;
-		  while (--i >= 0)
-		    *cl++ = *ncl++;
-		  icl = (InternalCallbackList)
-		    XtRealloc((char *) icl, sizeof(InternalCallbackRec)
-			      + sizeof(XtCallbackRec) * (icl->count - 1));
-		  icl->is_padded = 0;
-		  *callbacks = icl;
-		} else {
-		  XtFree((char *) icl);
-		  *callbacks = NULL;
-		}
-	    }
-	  return;
-	}
-    }
+      {
+         if (icl->call_state)
+         {
+            icl->call_state |= _XtCBFreeAfterCalling;
+            if (icl->count == 1)
+            {
+               *callbacks = NULL;
+            }
+            else
+            {
+               j   = icl->count - i - 1;
+               ocl = ToList(icl);
+               icl = (InternalCallbackList)
+                  XtMalloc(sizeof(InternalCallbackRec) + sizeof(XtCallbackRec) * (i + j - 1));
+               icl->count      = i + j;
+               icl->is_padded  = 0;
+               icl->call_state = 0;
+               ncl             = ToList(icl);
+               while (--j >= 0)
+                  *ncl++ = *ocl++;
+               while (--i >= 0)
+                  *ncl++ = *++cl;
+               *callbacks = icl;
+            }
+         }
+         else
+         {
+            if (--icl->count)
+            {
+               ncl = cl + 1;
+               while (--i >= 0)
+                  *cl++ = *ncl++;
+               icl = (InternalCallbackList)
+                  XtRealloc((char *)icl, sizeof(InternalCallbackRec) + sizeof(XtCallbackRec) * (icl->count - 1));
+               icl->is_padded = 0;
+               *callbacks     = icl;
+            }
+            else
+            {
+               XtFree((char *)icl);
+               *callbacks = NULL;
+            }
+         }
+         return;
+      }
+   }
 }
+
 void
 _XmRemoveAllCallbacks(InternalCallbackList *callbacks)
 {
-  register InternalCallbackList icl = *callbacks;
-  if (icl)
-    {
+   register InternalCallbackList icl = *callbacks;
+   if (icl)
+   {
       if (icl->call_state)
-	icl->call_state |= _XtCBFreeAfterCalling;
+         icl->call_state |= _XtCBFreeAfterCalling;
       else
-	XtFree((char *) icl);
+         XtFree((char *)icl);
       *callbacks = NULL;
-    }
+   }
 }
+
 void
-_XmCallCallbackList(Widget widget,
-		    XtCallbackList callbacks,
-		    XtPointer call_data)
+_XmCallCallbackList(Widget         widget,
+                    XtCallbackList callbacks,
+                    XtPointer      call_data)
 {
-  register InternalCallbackList icl;
-  register XtCallbackList cl;
-  register int i;
-  char ostate;
-  if (!callbacks)
-    return;
-  icl = (InternalCallbackList)callbacks;
-  cl = ToList(icl);
-  if (icl->count == 1)
-    {
-      (*cl->callback) (widget, cl->closure, call_data);
+   register InternalCallbackList icl;
+   register XtCallbackList       cl;
+   register int                  i;
+   char                          ostate;
+   if (!callbacks)
       return;
-    }
-  ostate = icl->call_state;
-  icl->call_state = _XtCBCalling;
-  for (i = icl->count; --i >= 0; cl++)
-    (*cl->callback) (widget, cl->closure, call_data);
-  if (ostate)
-    icl->call_state |= ostate;
-  else if (icl->call_state & _XtCBFreeAfterCalling)
-    XtFree((char *)icl);
-  else
-    icl->call_state = 0;
+   icl = (InternalCallbackList)callbacks;
+   cl  = ToList(icl);
+   if (icl->count == 1)
+   {
+      (*cl->callback)(widget, cl->closure, call_data);
+      return;
+   }
+   ostate          = icl->call_state;
+   icl->call_state = _XtCBCalling;
+   for (i = icl->count; --i >= 0; cl++)
+      (*cl->callback)(widget, cl->closure, call_data);
+   if (ostate)
+      icl->call_state |= ostate;
+   else if (icl->call_state & _XtCBFreeAfterCalling)
+      XtFree((char *)icl);
+   else
+      icl->call_state = 0;
 }

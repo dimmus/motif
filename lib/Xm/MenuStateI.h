@@ -32,17 +32,17 @@
 extern "C" {
 #endif
 /********    Private Function Declarations    ********/
-extern Widget _XmGetRC_PopupPosted (
-                         Widget wid) ;
+extern Widget _XmGetRC_PopupPosted(
+   Widget wid);
 extern Boolean _XmGetInDragMode(
-                        Widget widget) ;
+   Widget widget);
 extern void _XmSetInDragMode(
-                        Widget widget,
-                        Boolean mode) ;
+   Widget  widget,
+   Boolean mode);
 extern XmMenuState _XmGetMenuState(
-                        Widget widget) ;
+   Widget widget);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmMenuStateI_h */

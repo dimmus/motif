@@ -33,31 +33,31 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmPushWidgetExtData(
-                        Widget widget,
-                        XmWidgetExtData data,
-                        unsigned char extType) ;
+   Widget          widget,
+   XmWidgetExtData data,
+   unsigned char   extType);
 extern void _XmPopWidgetExtData(
-                        Widget widget,
-                        XmWidgetExtData *dataRtn,
-                        unsigned char extType) ;
+   Widget           widget,
+   XmWidgetExtData *dataRtn,
+   unsigned char    extType);
 extern XmWidgetExtData _XmGetWidgetExtData(
-                        Widget widget,
-                        unsigned char extType) ;
-extern void _XmInitializeExtensions( void ) ;
+   Widget        widget,
+   unsigned char extType);
+extern void _XmInitializeExtensions(void);
 extern void _XmTransformSubResources(
-                        XtResourceList comp_resources,
-                        Cardinal num_comp_resources,
-                        XtResourceList *resources,
-                        Cardinal *num_resources) ;
+   XtResourceList  comp_resources,
+   Cardinal        num_comp_resources,
+   XtResourceList *resources,
+   Cardinal       *num_resources);
 extern Cardinal _XmSecondaryResourceData(
-                        XmBaseClassExt bcePtr,
-                        XmSecondaryResourceData **secResDataRtn,
-                        XtPointer client_data,
-                        String name,
-                        String class_name,
-                        XmResourceBaseProc basefunctionpointer) ;
+   XmBaseClassExt            bcePtr,
+   XmSecondaryResourceData **secResDataRtn,
+   XtPointer                 client_data,
+   String                    name,
+   String                    class_name,
+   XmResourceBaseProc        basefunctionpointer);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmBaseClassI_h */

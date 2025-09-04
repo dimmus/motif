@@ -26,11 +26,12 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include <Xm/XmP.h>
 #include "ImageCachI.h"
 #include "XmI.h"
+
 /*******************************************************************
  *
  * XmeGetPixmapData.
@@ -45,51 +46,51 @@
  *******************************************************************/
 Boolean
 XmeGetPixmapData(
-    Screen *screen,
-    Pixmap pixmap,
-    char **image_name,
-    int *depth,
-    Pixel *foreground,
-    Pixel *background,
-    int *hot_x,
-    int *hot_y,
-    unsigned int *width,
-    unsigned int *height)
+   Screen       *screen,
+   Pixmap        pixmap,
+   char        **image_name,
+   int          *depth,
+   Pixel        *foreground,
+   Pixel        *background,
+   int          *hot_x,
+   int          *hot_y,
+   unsigned int *width,
+   unsigned int *height)
 {
-    char *loc_image_name;
-    int loc_depth;
-    Pixel loc_foreground;
-    Pixel loc_background;
-    int loc_hot_x;
-    int loc_hot_y;
-    unsigned int loc_width = 0;
-    unsigned int loc_height;
-    XtAppContext app;
-    app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
-    (void)app; /* unused but required for _XmAppLock */
-    _XmAppLock(app);
-    /* support passed NULL argument */
-    if (!image_name) image_name = &loc_image_name ;
-    if (!depth) depth = &loc_depth ;
-    if (!background) background = &loc_background ;
-    if (!foreground) foreground = &loc_foreground ;
-    if (!hot_x) hot_x = &loc_hot_x ;
-    if (!hot_y) hot_y = &loc_hot_y ;
-    if (!width) width = &loc_width ;
-    if (!height) height = &loc_height ;
-    if (_XmGetPixmapData(screen, pixmap, image_name, depth, foreground,
-			 background, hot_x, hot_y, width, height)) {
-	_XmAppUnlock(app);
-	return True ;
-    }
-    /* not in the cache, generate an incomplete entry in the pixmap cache */
-    /* Use a magic name, which will have _XmCachePixmap not cache this
+   char        *loc_image_name;
+   int          loc_depth;
+   Pixel        loc_foreground;
+   Pixel        loc_background;
+   int          loc_hot_x;
+   int          loc_hot_y;
+   unsigned int loc_width = 0;
+   unsigned int loc_height;
+   XtAppContext app;
+   app = XtDisplayToApplicationContext(DisplayOfScreen(screen));
+   (void)app; /* unused but required for _XmAppLock */
+   _XmAppLock(app);
+   /* support passed NULL argument */
+   if (!image_name) image_name = &loc_image_name;
+   if (!depth) depth = &loc_depth;
+   if (!background) background = &loc_background;
+   if (!foreground) foreground = &loc_foreground;
+   if (!hot_x) hot_x = &loc_hot_x;
+   if (!hot_y) hot_y = &loc_hot_y;
+   if (!width) width = &loc_width;
+   if (!height) height = &loc_height;
+   if (_XmGetPixmapData(screen, pixmap, image_name, depth, foreground, background, hot_x, hot_y, width, height))
+   {
+      _XmAppUnlock(app);
+      return True;
+   }
+   /* not in the cache, generate an incomplete entry in the pixmap cache */
+   /* Use a magic name, which will have _XmCachePixmap not cache this
        one in the pixmap_data name based cache */
-    if (_XmCachePixmap(pixmap, screen, DIRECT_PIXMAP_CACHED, 1, 0, 0, 0, 0)) {
-	/* and query again */
-	_XmGetPixmapData(screen, pixmap, image_name, depth, foreground,
-			 background, hot_x, hot_y, width, height);
-    }
-    _XmAppUnlock(app);
-    return (False);
+   if (_XmCachePixmap(pixmap, screen, DIRECT_PIXMAP_CACHED, 1, 0, 0, 0, 0))
+   {
+      /* and query again */
+      _XmGetPixmapData(screen, pixmap, image_name, depth, foreground, background, hot_x, hot_y, width, height);
+   }
+   _XmAppUnlock(app);
+   return (False);
 }

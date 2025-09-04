@@ -25,21 +25,21 @@
  * HISTORY
  */
 #ifndef _XmPrimitive_h
-#define _XmPrimitive_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmPrimitive_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef XmIsPrimitive
-#define XmIsPrimitive(w) XtIsSubclass(w, xmPrimitiveWidgetClass)
-#endif /* XmIsPrimitive */
-externalref WidgetClass xmPrimitiveWidgetClass;
-typedef struct _XmPrimitiveClassRec * XmPrimitiveWidgetClass;
-typedef struct _XmPrimitiveRec      * XmPrimitiveWidget;
+#   endif
+#   ifndef XmIsPrimitive
+#      define XmIsPrimitive(w) XtIsSubclass(w, xmPrimitiveWidgetClass)
+#   endif /* XmIsPrimitive */
+externalref WidgetClass              xmPrimitiveWidgetClass;
+typedef struct _XmPrimitiveClassRec *XmPrimitiveWidgetClass;
+typedef struct _XmPrimitiveRec      *XmPrimitiveWidget;
 /********    Public Function Declarations    ********/
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmPrimitive_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

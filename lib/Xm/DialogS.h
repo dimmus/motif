@@ -21,26 +21,26 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmDialogShell_h
-#define _XmDialogShell_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmDialogShell_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef XmIsDialogShell
-#define XmIsDialogShell(w)	XtIsSubclass(w, xmDialogShellWidgetClass)
-#endif /* XmIsDialogShell */
-externalref WidgetClass xmDialogShellWidgetClass;
-typedef struct _XmDialogShellClassRec       * XmDialogShellWidgetClass;
-typedef struct _XmDialogShellRec            * XmDialogShellWidget;
+#   endif
+#   ifndef XmIsDialogShell
+#      define XmIsDialogShell(w)	XtIsSubclass(w, xmDialogShellWidgetClass)
+#   endif /* XmIsDialogShell */
+externalref WidgetClass                xmDialogShellWidgetClass;
+typedef struct _XmDialogShellClassRec *XmDialogShellWidgetClass;
+typedef struct _XmDialogShellRec      *XmDialogShellWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmCreateDialogShell(
-                        Widget p,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   p,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmDialogShell_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -34,11 +34,14 @@
 extern "C" {
 #endif
 #define XmIconBoxAnyCell (-5)
-typedef struct _XmIconBoxClassRec	*XmIconBoxWidgetClass;
-typedef struct _XmIconBoxRec		*XmIconBoxWidget;
-typedef struct _XmIconBoxDropData {
-    Position cell_x, cell_y;	/* drop location in cell coordinates. */
+typedef struct _XmIconBoxClassRec *XmIconBoxWidgetClass;
+typedef struct _XmIconBoxRec      *XmIconBoxWidget;
+
+typedef struct _XmIconBoxDropData
+{
+   Position cell_x, cell_y; /* drop location in cell coordinates. */
 } XmIconBoxDropData;
+
 /************************************************************
 *	MACROS
 *************************************************************/

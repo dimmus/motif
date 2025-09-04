@@ -54,56 +54,69 @@ extern "C" {
 #define XmIconBoxC_cell_y(w)      (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.cell_y)
 #define XmIconBoxC_pref_width(w)  (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.pref_width)
 #define XmIconBoxC_pref_height(w) (((XmIconBoxConstraintsRec*)((w)->core.constraints))->icon.pref_height)
+
 /************************************************************
 *	MACROS
 *************************************************************/
 /************************************************************
 *	GLOBAL DECLARATIONS
 *************************************************************/
-typedef struct {
-    XtPointer extension;	/* Just in case we need it later. */
+typedef struct
+{
+   XtPointer extension; /* Just in case we need it later. */
 } XmIconBoxClassPart;
-typedef struct _XmIconBoxClassRec {
-    CoreClassPart		core_class;
-    CompositeClassPart		composite_class;
-    ConstraintClassPart		constraint_class;
-    XmManagerClassPart		manager_class;
-    XmIconBoxClassPart	        box_class;
+
+typedef struct _XmIconBoxClassRec
+{
+   CoreClassPart       core_class;
+   CompositeClassPart  composite_class;
+   ConstraintClassPart constraint_class;
+   XmManagerClassPart  manager_class;
+   XmIconBoxClassPart  box_class;
 } XmIconBoxClassRec;
-typedef struct {
-    /* resources */
-    Dimension min_v_cells;	/* Default number of cells in the vert dir. */
-    Dimension min_h_cells;	/* Default number of cells in the horiz dir. */
-    Dimension v_margin;		/* Amount of space to leave between cells */
-    Dimension h_margin;		/* and window edges. */
-    Dimension min_cell_width;	/* Minimum width of the cells. */
-    Dimension min_cell_height;	/* Minimum height of the cells. */
-    /* private state */
-    Dimension cell_width;	/* Width and height of all cells. */
-    Dimension cell_height;
+
+typedef struct
+{
+   /* resources */
+   Dimension min_v_cells;     /* Default number of cells in the vert dir. */
+   Dimension min_h_cells;     /* Default number of cells in the horiz dir. */
+   Dimension v_margin;        /* Amount of space to leave between cells */
+   Dimension h_margin;        /* and window edges. */
+   Dimension min_cell_width;  /* Minimum width of the cells. */
+   Dimension min_cell_height; /* Minimum height of the cells. */
+   /* private state */
+   Dimension cell_width; /* Width and height of all cells. */
+   Dimension cell_height;
 } XmIconBoxPart;
-typedef struct _XmIconBoxRec {
-    CorePart		core;
-    CompositePart	composite;
-    ConstraintPart	constraint;
-    XmManagerPart	manager;
-    XmIconBoxPart	box;
+
+typedef struct _XmIconBoxRec
+{
+   CorePart       core;
+   CompositePart  composite;
+   ConstraintPart constraint;
+   XmManagerPart  manager;
+   XmIconBoxPart  box;
 } XmIconBoxRec;
-typedef struct _IconInfo {
-    /*
+
+typedef struct _IconInfo
+{
+   /*
      * Resources.
      */
-    short cell_x;		/* X location of this icon in cell space. */
-    short cell_y;		/* Y location of this icon in cell space. */
-    /*
+   short cell_x; /* X location of this icon in cell space. */
+   short cell_y; /* Y location of this icon in cell space. */
+   /*
      * Private state.
      */
-    Dimension pref_width, pref_height; /* The preferred size of this widget. */
+   Dimension pref_width, pref_height; /* The preferred size of this widget. */
 } IconInfo;
-typedef struct _XmIconBoxConstraintsRec {
-    XmManagerConstraintPart	manager;
-    IconInfo			icon;
+
+typedef struct _XmIconBoxConstraintsRec
+{
+   XmManagerConstraintPart manager;
+   IconInfo                icon;
 } XmIconBoxConstraintsRec, *XmIconBoxConstraints;
+
 /************************************************************
 *	EXTERNAL DECLARATIONS
 *************************************************************/
@@ -112,6 +125,6 @@ extern XmIconBoxClassRec xmIconBoxClassRec;
 *	STATIC DECLARATIONS
 *************************************************************/
 #ifdef __cplusplus
-}	/* Closes scope of 'extern "C"' declaration */
+} /* Closes scope of 'extern "C"' declaration */
 #endif
 #endif /* _XmIconBoxP_h */

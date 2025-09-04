@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 typedef struct _XmColorSelectorClassRec *XmColorSelectorWidgetClass;
-typedef struct _XmColorSelectorRec *XmColorSelectorWidget;
+typedef struct _XmColorSelectorRec      *XmColorSelectorWidget;
 /*	Function Name: XmCreateColorSelector
  *	Description: Creation Routine for UIL and ADA.
  *	Arguments: parent - the parent widget.
@@ -41,14 +41,14 @@ Widget XmCreateColorSelector(Widget, String, ArgList, Cardinal);
  * Variable argument list functions
  */
 extern Widget XmVaCreateColorSelector(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedColorSelector(
-                        Widget parent,
-                        char *name,
-                        ...);
-extern WidgetClass       xmColorSelectorWidgetClass;
+   Widget parent,
+   char  *name,
+   ...);
+extern WidgetClass xmColorSelectorWidgetClass;
 #if defined(__cplusplus)
 }
 #endif

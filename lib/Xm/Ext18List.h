@@ -31,13 +31,16 @@ extern "C" {
 #include <Xm/deprecated.h>
 XM_ALTERNATIVE(Use XmMultiList instead)
 externalref WidgetClass xmExt18ListWidgetClass;
-enum {
-    XmEXT18LIST_FOUND = XmMULTILIST_FOUND,
-    XmEXT18LIST_NOT_FOUND = XmMULTILIST_NOT_FOUND
+
+enum
+{
+   XmEXT18LIST_FOUND     = XmMULTILIST_FOUND,
+   XmEXT18LIST_NOT_FOUND = XmMULTILIST_NOT_FOUND
 };
-typedef XmMultiListWidgetClass *XmExt18ListWidgetClass;
-typedef XmMultiListWidget *XmExt18ListWidget;
-typedef XmMultiListRowInfo Xm18RowInfo;
+
+typedef XmMultiListWidgetClass   *XmExt18ListWidgetClass;
+typedef XmMultiListWidget        *XmExt18ListWidget;
+typedef XmMultiListRowInfo        Xm18RowInfo;
 typedef XmMultiListCallbackStruct XmExt18ListCallbackStruct;
 /*
  * Function Name: XmExt18ListGetSelectedRows

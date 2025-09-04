@@ -27,24 +27,26 @@
 extern "C" {
 #endif
 #ifndef XmIsScreen
-#define XmIsScreen(w) (XtIsSubclass(w, xmScreenClass))
+#   define XmIsScreen(w) (XtIsSubclass(w, xmScreenClass))
 #endif /* XmIsScreen */
 /* Class record constants */
-typedef struct _XmScreenRec *XmScreen;
+typedef struct _XmScreenRec      *XmScreen;
 typedef struct _XmScreenClassRec *XmScreenClass;
-externalref 	WidgetClass xmScreenClass;
+externalref WidgetClass           xmScreenClass;
 /********    Public Function Declarations    ********/
-typedef void (*XmScreenColorProc) (Screen * screen,
-				   XColor *bg_color, XColor *fg_color,
-				   XColor *sel_color, XColor *ts_color,
-				   XColor *bs_color);
-typedef Status (*XmAllocColorProc) (Display *display,
-				    Colormap colormap,
-				    XColor *screen_in_out);
+typedef void (*XmScreenColorProc)(Screen *screen,
+                                  XColor *bg_color,
+                                  XColor *fg_color,
+                                  XColor *sel_color,
+                                  XColor *ts_color,
+                                  XColor *bs_color);
+typedef Status (*XmAllocColorProc)(Display *display,
+                                   Colormap colormap,
+                                   XColor  *screen_in_out);
 extern Widget XmGetXmScreen(
-                        Screen *screen) ;
+   Screen *screen);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmScreen_h */

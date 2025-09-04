@@ -19,7 +19,7 @@ extern "C" {
 typedef enum _XmBool
 {
    XM_FALSE = 0,
-   XM_TRUE = 1
+   XM_TRUE  = 1
 } XmBool;
 
 /**
@@ -28,12 +28,12 @@ typedef enum _XmBool
  */
 typedef enum _XmLogLevel
 {
-   XM_LOG_LEVEL_UNKNOWN = -1,
+   XM_LOG_LEVEL_UNKNOWN  = -1,
    XM_LOG_LEVEL_CRITICAL = 0,
-   XM_LOG_LEVEL_ERR = 1,
-   XM_LOG_LEVEL_WARN = 2,
-   XM_LOG_LEVEL_INFO = 3,
-   XM_LOG_LEVEL_DBG = 4
+   XM_LOG_LEVEL_ERR      = 1,
+   XM_LOG_LEVEL_WARN     = 2,
+   XM_LOG_LEVEL_INFO     = 3,
+   XM_LOG_LEVEL_DBG      = 4
 } XmLogLevel;
 
 /**
@@ -51,9 +51,9 @@ typedef struct _XmLogDomain
    const char *name;
    const char *color;
    const char *domain_str;
-   size_t namelen;
-   int level;
-   XmBool deleted;
+   size_t      namelen;
+   int         level;
+   XmBool      deleted;
 } XmLogDomain;
 
 /**
@@ -61,13 +61,13 @@ typedef struct _XmLogDomain
  * Callback function type for printing log messages
  */
 typedef void (*XmLogPrintCb)(const XmLogDomain *d,
-                                  XmLogLevel level,
-                                  const char *file,
-                                  const char *fnc,
-                                  int line,
-                                  const char *fmt,
-                                  void *data,
-                                  va_list args);
+                             XmLogLevel         level,
+                             const char        *file,
+                             const char        *fnc,
+                             int                line,
+                             const char        *fmt,
+                             void              *data,
+                             va_list            args);
 
 /*============================================================================*
  *                                 Colors                                     *
@@ -351,13 +351,13 @@ XmBool XmLogFunctionDisableGet(void);
  * This is the default print callback that outputs to stderr.
  */
 void XmLogPrintCbStdErr(const XmLogDomain *d,
-                              XmLogLevel level,
-                              const char *file,
-                              const char *fnc,
-                              int line,
-                              const char *fmt,
-                              void *data,
-                              va_list args);
+                        XmLogLevel         level,
+                        const char        *file,
+                        const char        *fnc,
+                        int                line,
+                        const char        *fmt,
+                        void              *data,
+                        va_list            args);
 
 /**
  * @brief Print callback for stdout output.
@@ -365,13 +365,13 @@ void XmLogPrintCbStdErr(const XmLogDomain *d,
  * This callback outputs log messages to stdout.
  */
 void XmLogPrintCbStdOut(const XmLogDomain *d,
-                              XmLogLevel level,
-                              const char *file,
-                              const char *fnc,
-                              int line,
-                              const char *fmt,
-                              void *data,
-                              va_list args);
+                        XmLogLevel         level,
+                        const char        *file,
+                        const char        *fnc,
+                        int                line,
+                        const char        *fmt,
+                        void              *data,
+                        va_list            args);
 
 /**
  * @brief Print callback for file output.
@@ -379,13 +379,13 @@ void XmLogPrintCbStdOut(const XmLogDomain *d,
  * @param[in] data Should be a FILE* pointer.
  */
 void XmLogPrintCbFile(const XmLogDomain *d,
-                            XmLogLevel level,
-                            const char *file,
-                            const char *fnc,
-                            int line,
-                            const char *fmt,
-                            void *data,
-                            va_list args);
+                      XmLogLevel         level,
+                      const char        *file,
+                      const char        *fnc,
+                      int                line,
+                      const char        *fmt,
+                      void              *data,
+                      va_list            args);
 
 /*============================================================================*
  *                              Core Functions                                *
@@ -404,8 +404,7 @@ void XmLogPrintCbFile(const XmLogDomain *d,
  * @param[in] fmt The format string.
  * @param[in] ... Variable arguments for the format string.
  */
-void XmLogPrint(int domain, XmLogLevel level, const char *file,
-               const char *fnc, int line, const char *fmt, ...);
+void XmLogPrint(int domain, XmLogLevel level, const char *file, const char *fnc, int line, const char *fmt, ...);
 
 /**
  * @brief Get the color code for a log level.

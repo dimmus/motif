@@ -25,13 +25,13 @@
  * HISTORY
  */
 #ifndef _XmRCLayoutP_h
-#define _XmRCLayoutP_h
-#include <Xm/RowColumnP.h>
-#ifdef __cplusplus
+#   define _XmRCLayoutP_h
+#   include <Xm/RowColumnP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
-#endif  /* _XmRCLayoutP_h */
+#   endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
+#endif /* _XmRCLayoutP_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

@@ -33,130 +33,130 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmMenuBtnUp(
-        Widget wid,
-        XEvent *event,
-        String *params,
-        Cardinal *num_params);
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmMenuBtnDown(
-        Widget wid,
-        XEvent *event,
-        String *params,
-        Cardinal *num_params);
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmHandleMenuButtonPress(
-				     Widget wid,
-				     XEvent *event);
+   Widget  wid,
+   XEvent *event);
 extern Boolean _XmMatchBDragEvent(
-				    Widget wid,
-				    XEvent *event);
+   Widget  wid,
+   XEvent *event);
 extern Boolean _XmMatchBSelectEvent(
-				    Widget wid,
-				    XEvent *event);
+   Widget  wid,
+   XEvent *event);
 extern void _XmGetActiveTopLevelMenu(
-				     Widget wid,
-				     Widget *rwid);
+   Widget  wid,
+   Widget *rwid);
 extern void _XmMenuFocus(
-			 Widget w,
-			 int operation,
-			 Time _time );
+   Widget w,
+   int    operation,
+   Time   _time);
 extern void _XmSetSwallowEventHandler(
-				      Widget widget,
-                                      Boolean add_handler );
+   Widget  widget,
+   Boolean add_handler);
 extern void _XmMenuPopDown(
-			   Widget w,
-			   XEvent *event,
-			   Boolean *popped_up );
+   Widget   w,
+   XEvent  *event,
+   Boolean *popped_up);
 extern Boolean _XmGetPopupMenuClick(
-				    Widget wid );
+   Widget wid);
 extern void _XmSetPopupMenuClick(
-				 Widget wid,
-                                 Boolean popupMenuClick);
+   Widget  wid,
+   Boolean popupMenuClick);
 extern void _XmRC_DoProcessMenuTree(
-                        Widget w,
-                        int mode) ;
+   Widget w,
+   int    mode);
 extern void _XmRC_ProcessSingleWidget(
-                        Widget w,
-                        int mode) ;
+   Widget w,
+   int    mode);
 extern void _XmRC_AddToPostFromList(
-                        XmRowColumnWidget m,
-                        Widget widget) ;
+   XmRowColumnWidget m,
+   Widget            widget);
 extern void _XmRC_UpdateOptionMenuCBG(
-                        Widget cbg,
-                        Widget memWidget) ;
+   Widget cbg,
+   Widget memWidget);
 extern void _XmRC_SetMenuHistory(
-                        XmRowColumnWidget m,
-                        RectObj child) ;
+   XmRowColumnWidget m,
+   RectObj           child);
 extern void _XmRC_SetOptionMenuHistory(
-                        XmRowColumnWidget m,
-                        RectObj child) ;
+   XmRowColumnWidget m,
+   RectObj           child);
 extern void _XmRCMenuProcedureEntry(
-				    int proc,
-				    Widget widget,
-				    ... ) ;
+   int    proc,
+   Widget widget,
+   ...);
 extern void _XmRCArmAndActivate(
-				Widget w,
-				XEvent *event,
-				String *parms,
-				Cardinal *num_parms );
+   Widget    w,
+   XEvent   *event,
+   String   *parms,
+   Cardinal *num_parms);
 extern void _XmRCGetTopManager(
-			       Widget w,
-			       Widget *topManager ) ;
+   Widget  w,
+   Widget *topManager);
 extern void _XmMenuFocusOut(
-                        Widget cb,
-                        XEvent *event,
-                        String *param,
-                        Cardinal *num_param) ;
+   Widget    cb,
+   XEvent   *event,
+   String   *param,
+   Cardinal *num_param);
 extern void _XmMenuFocusIn(
-                        Widget wid,
-                        XEvent *event,
-                        String *param,
-                        Cardinal *num_param) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *param,
+   Cardinal *num_param);
 extern void _XmGetMenuKidMargins(
-                        XmRowColumnWidget m,
-                        Dimension *width,
-                        Dimension *height,
-                        Dimension *left,
-                        Dimension *right,
-                        Dimension *top,
-                        Dimension *bottom) ;
+   XmRowColumnWidget m,
+   Dimension        *width,
+   Dimension        *height,
+   Dimension        *left,
+   Dimension        *right,
+   Dimension        *top,
+   Dimension        *bottom);
 extern void _XmMenuUnmap(
-                        Widget wid,
-                        XEvent *event,
-                        String *param,
-                        Cardinal *num_param) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *param,
+   Cardinal *num_param);
 extern void _XmMenuBarGadgetSelect(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmMenuGadgetTraverseCurrent(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmMenuGadgetTraverseCurrentUp(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmMenuGadgetDrag(
-                        Widget wid,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
-extern int _XmRC_PopupMenuHandler(Widget, XEvent*);
-extern Boolean _XmRC_PostTimeOut( XtPointer wid );
-extern void _XmRC_RemoveHandlersFromPostFromWidget(
-                        Widget popup,
-                        Widget widget) ;
+   Widget    wid,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
+extern int     _XmRC_PopupMenuHandler(Widget, XEvent *);
+extern Boolean _XmRC_PostTimeOut(XtPointer wid);
+extern void    _XmRC_RemoveHandlersFromPostFromWidget(
+      Widget popup,
+      Widget widget);
 extern void _XmRC_AddPopupEventHandlers(
-                        XmRowColumnWidget pane) ;
+   XmRowColumnWidget pane);
 extern void _XmRC_RemovePopupEventHandlers(
-                        XmRowColumnWidget pane) ;
+   XmRowColumnWidget pane);
 void _XmRC_RemoveFromPostFromList(
-                        XmRowColumnWidget m,
-                        Widget widget) ;
+   XmRowColumnWidget m,
+   Widget            widget);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmRCMenuI_h */

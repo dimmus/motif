@@ -36,11 +36,13 @@
 extern "C" {
 #endif
 externalref XrmQuark _XmQTclipWindow;
+
 /* Version 0: initial release. */
-typedef struct _XmClipWindowTraitRec {
-  int				    version;		/* 0 */
+typedef struct _XmClipWindowTraitRec
+{
+   int version; /* 0 */
 } XmClipWindowTraitRec, *XmClipWindowTrait;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmClipWindowTI_H */

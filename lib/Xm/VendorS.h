@@ -21,24 +21,24 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmVendorS_h
-#define _XmVendorS_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmVendorS_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef XmIsVendorShell
-#define XmIsVendorShell(w)	XtIsSubclass(w, vendorShellWidgetClass)
-#endif /* XmIsVendorShell */
-typedef struct _XmVendorShellRec *XmVendorShellWidget;
+#   endif
+#   ifndef XmIsVendorShell
+#      define XmIsVendorShell(w)	XtIsSubclass(w, vendorShellWidgetClass)
+#   endif /* XmIsVendorShell */
+typedef struct _XmVendorShellRec      *XmVendorShellWidget;
 typedef struct _XmVendorShellClassRec *XmVendorShellWidgetClass;
-externalref WidgetClass vendorShellWidgetClass;
+externalref WidgetClass                vendorShellWidgetClass;
 /********    Public Function Declarations    ********/
 extern Boolean XmIsMotifWMRunning(
-                        Widget shell) ;
+   Widget shell);
 extern Widget XmToolTipGetLabel(Widget wid);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmVendorS_h */
 /* DON'T ADD STUFF AFTER THIS #endif */

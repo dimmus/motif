@@ -33,14 +33,16 @@ extern "C" {
 #include <Xm/Xm.h>
 externalref XrmQuark XmQTpointIn;
 /* Trait structures and typedefs, place typedefs first */
-typedef Boolean (*XmPointInProc)(Widget w,
-				 Position x,
-				 Position y);
-typedef struct _XmPointInTraitRec {
-    int version ;
-    XmPointInProc	pointIn;
+typedef Boolean (*XmPointInProc)(Widget   w,
+                                 Position x,
+                                 Position y);
+
+typedef struct _XmPointInTraitRec
+{
+   int           version;
+   XmPointInProc pointIn;
 } XmPointInTraitRec, *XmPointInTrait;
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmPointInT_H */

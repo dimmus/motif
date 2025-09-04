@@ -22,8 +22,8 @@
 */
 #ifndef _XmMwmUtil_h
 #define _XmMwmUtil_h
-#include <X11/X.h>	/* for Window typedefs */
-#include <X11/Xmd.h>	/* for protocol typedefs */
+#include <X11/X.h>   /* for Window typedefs */
+#include <X11/Xmd.h> /* for protocol typedefs */
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,14 +32,15 @@ extern "C" {
  */
 typedef struct
 {
-    /* These correspond to XmRInt resources. (VendorSE.c) */
-    int	         flags;
-    int		 functions;
-    int		 decorations;
-    int		 input_mode;
-    int		 status;
+   /* These correspond to XmRInt resources. (VendorSE.c) */
+   int flags;
+   int functions;
+   int decorations;
+   int input_mode;
+   int status;
 } MotifWmHints;
-typedef MotifWmHints	MwmHints;
+
+typedef MotifWmHints MwmHints;
 /* bit definitions for MwmHints.flags */
 #define MWM_HINTS_FUNCTIONS	(1L << 0)
 #define MWM_HINTS_DECORATIONS	(1L << 1)
@@ -105,34 +106,38 @@ typedef MotifWmHints	MwmHints;
  * The following is for compatibility only. It use is deprecated.
  */
 #define MWM_INPUT_APPLICATION_MODAL	MWM_INPUT_PRIMARY_APPLICATION_MODAL
+
 /*
  * Contents of the _MWM_INFO property.
  */
 typedef struct
 {
-    long	flags;
-    Window	wm_window;
+   long   flags;
+   Window wm_window;
 } MotifWmInfo;
-typedef MotifWmInfo	MwmInfo;
+
+typedef MotifWmInfo MwmInfo;
 /* bit definitions for MotifWmInfo .flags */
 #define MWM_INFO_STARTUP_STANDARD	(1L << 0)
 #define MWM_INFO_STARTUP_CUSTOM		(1L << 1)
+
 /*
  * Definitions for the _MWM_HINTS property.
  */
 typedef struct
 {
-    /* 32-bit property items are stored as long on the client (whether
+   /* 32-bit property items are stored as long on the client (whether
      * that means 32 bits or 64).  XChangeProperty handles the conversion
      * to the actual 32-bit quantities sent to the server.
      */
-    unsigned long	flags;
-    unsigned long	functions;
-    unsigned long	decorations;
-    long 	        inputMode;
-    unsigned long	status;
+   unsigned long flags;
+   unsigned long functions;
+   unsigned long decorations;
+   long          inputMode;
+   unsigned long status;
 } PropMotifWmHints;
-typedef PropMotifWmHints	PropMwmHints;
+
+typedef PropMotifWmHints PropMwmHints;
 /* number of elements of size 32 in _MWM_HINTS */
 #define PROP_MOTIF_WM_HINTS_ELEMENTS	5
 #define PROP_MWM_HINTS_ELEMENTS		PROP_MOTIF_WM_HINTS_ELEMENTS
@@ -152,19 +157,21 @@ typedef PropMotifWmHints	PropMwmHints;
 /* atom name for _MWM_MENU property */
 #define _XA_MOTIF_WM_MENU	"_MOTIF_WM_MENU"
 #define _XA_MWM_MENU		_XA_MOTIF_WM_MENU
+
 /*
  * Definitions for the _MWM_INFO property.
  */
 typedef struct
 {
-  /* 32-bit property items are stored as long on the client (whether
+   /* 32-bit property items are stored as long on the client (whether
    * that means 32 bits or 64).  XChangeProperty handles the conversion
    * to the actual 32-bit quantities sent to the server.
    */
-  long		flags;
-  Window	wmWindow;
+   long   flags;
+   Window wmWindow;
 } PropMotifWmInfo;
-typedef PropMotifWmInfo	PropMwmInfo;
+
+typedef PropMotifWmInfo PropMwmInfo;
 /* number of elements of size 32 in _MWM_INFO */
 #define PROP_MOTIF_WM_INFO_ELEMENTS	2
 #define PROP_MWM_INFO_ELEMENTS		PROP_MOTIF_WM_INFO_ELEMENTS
@@ -186,6 +193,6 @@ typedef PropMotifWmInfo	PropMwmInfo;
 /* atom for motif input bindings */
 #define _XA_MOTIF_BINDINGS	"_MOTIF_BINDINGS"
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmMwmUtil_h */

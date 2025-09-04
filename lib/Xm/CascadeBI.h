@@ -33,16 +33,16 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmCBHelp(
-                        Widget w,
-                        XEvent *event,
-                        String *params,
-                        Cardinal *num_params) ;
+   Widget    w,
+   XEvent   *event,
+   String   *params,
+   Cardinal *num_params);
 extern void _XmCascadingPopup(
-                        Widget cb,
-                        XEvent *event,
-                        Boolean doCascade) ;
+   Widget  cb,
+   XEvent *event,
+   Boolean doCascade);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmCascadeBI_h */

@@ -34,15 +34,15 @@ extern "C" {
 /* defines for palette.c */
 #define VALUE_THRESHOLD 225
 externalref XmColorObj _XmDefaultColorObj;
-externalref XContext _XmColorObjCache;
-externalref Display  *_XmColorObjCacheDisplay;
+externalref XContext   _XmColorObjCache;
+externalref Display   *_XmColorObjCacheDisplay;
 /********    Private Function Declarations    ********/
 extern void _XmColorObjCreate(
-                        Widget w,
-                        ArgList al,
-                        Cardinal *acPtr) ;
+   Widget    w,
+   ArgList   al,
+   Cardinal *acPtr);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmColorObjI_h */

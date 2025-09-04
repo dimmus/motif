@@ -33,12 +33,15 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef struct _XmHierarchyClassRec	*XmHierarchyWidgetClass;
-typedef struct _XmHierarchyRec		*XmHierarchyWidget;
-typedef struct _XmHierarchyNodeStateData {
-    Widget widget;
-    XmHierarchyNodeState state;
+typedef struct _XmHierarchyClassRec *XmHierarchyWidgetClass;
+typedef struct _XmHierarchyRec      *XmHierarchyWidget;
+
+typedef struct _XmHierarchyNodeStateData
+{
+   Widget               widget;
+   XmHierarchyNodeState state;
 } XmHierarchyNodeStateData;
+
 /************************************************************
 *	MACROS
 *************************************************************/
@@ -50,8 +53,8 @@ typedef struct _XmHierarchyNodeStateData {
  *	Arguments: nw - the node (widget) that will be changed.
  *	Returns: none
  */
-void XmHierarchyOpenAllAncestors(Widget);
-WidgetList XmHierarchyGetChildNodes(Widget);
+void               XmHierarchyOpenAllAncestors(Widget);
+WidgetList         XmHierarchyGetChildNodes(Widget);
 extern WidgetClass xmHierarchyWidgetClass;
 #if defined(__cplusplus)
 }

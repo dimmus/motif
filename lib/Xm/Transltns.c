@@ -21,26 +21,26 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #ifdef REV_INFO
-#ifndef lint
+#   ifndef lint
 static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
-#endif
+#   endif
 #endif
 /* Define _XmConst before including TransltnsP.h or XmP.h, so that the
  * declarations will be in agreement with the definitions.
  */
 #ifndef _XmConst
-#if defined(__STDC__) || !defined( NO_CONST )
-#define _XmConst const
-#else
-#define _XmConst
-#endif /* __STDC__ */
-#endif /* _XmConst */
+#   if defined(__STDC__) || !defined(NO_CONST)
+#      define _XmConst const
+#   else
+#      define _XmConst
+#   endif /* __STDC__ */
+#endif    /* _XmConst */
 #include <Xm/XmP.h>
 #include <Xm/TransltnsP.h>
-/* This is the new-style translation table, which is used with
+   /* This is the new-style translation table, which is used with
  * versions of libXt that have the :-production translation fix
  * (fix-trackers seq 2797, or MIT public patch 24).
  *
@@ -52,8 +52,9 @@ static char rcsid[] = "$TOG: Transltns.c /main/24 1999/08/09 18:34:51 mgreess $"
  *  - Prefix osf key translations with ':', and reorder as necessary
  *	to remove ~mod.
  */
-/*** ArrowB.c ***/
-externaldef(translations) _XmConst char _XmArrowB_defaultTranslations[] = "\
+   /*** ArrowB.c ***/
+   externaldef(translations) _XmConst char _XmArrowB_defaultTranslations[]
+   = "\
 <EnterWindow>:			Enter()\n\
 <LeaveWindow>:			Leave()\n\
 c<Btn1Down>:			ButtonTakeFocus()\n\
@@ -101,7 +102,7 @@ c<BtnUp>:		MenuButtonTakeFocusUp()\n\
 :<Key>osfCancel:	CleanupMenuBar()\n\
 ~s<Key>Return:		KeySelect()\n\
 ~s<Key>space:		KeySelect()";
-externaldef(translations) _XmConst char _XmCascadeB_p_events[] = "\
+externaldef(translations) _XmConst char _XmCascadeB_p_events[]       = "\
 <EnterWindow>:		DelayedArm()\n\
 <LeaveWindow>:		CheckDisarm()\n\
 <Btn2Down>:		ProcessDrag()\n\
@@ -220,7 +221,7 @@ Button2<Motion>:	DragMotion()\n\
 :<KeyUp>:		DragKey(Update)\n\
 :<KeyDown>:		DragKey(Update)";
 /*** DrawingA.c ***/
-externaldef(translations) _XmConst char _XmDrawingA_defaultTranslations[] = "\
+externaldef(translations) _XmConst char _XmDrawingA_defaultTranslations[]   = "\
 <BtnMotion>:		ManagerGadgetButtonMotion()\n\
 c<Btn1Down>:		ManagerGadgetTraverseCurrent()\n\
 ~c<Btn1Down>:		DrawingAreaInput() ManagerGadgetArm()\n\
@@ -268,7 +269,7 @@ c<Btn1Down>:		ButtonTakeFocus()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-externaldef(translations) _XmConst char _XmDrawnB_menuTranslations[] = "\
+externaldef(translations) _XmConst char _XmDrawnB_menuTranslations[]    = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
 c<Btn1Down>:		MenuButtonTakeFocus()\n\
@@ -289,7 +290,7 @@ c<Btn1Up>:		MenuButtonTakeFocusUp()\n\
  */
 externaldef(translations) _XmConst char _XmFrame_defaultTranslations[] = "";
 /*** Label.c ***/
-externaldef(translations) _XmConst char _XmLabel_defaultTranslations[] = "\
+externaldef(translations) _XmConst char _XmLabel_defaultTranslations[]   = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
 <Btn2Down>:		ProcessDrag()\n\
@@ -297,7 +298,7 @@ externaldef(translations) _XmConst char _XmLabel_defaultTranslations[] = "\
 :<Key>osfCancel:	PrimitiveParentCancel()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()";
-externaldef(translations) _XmConst char _XmLabel_menuTranslations[] = "\
+externaldef(translations) _XmConst char _XmLabel_menuTranslations[]      = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
 <Btn2Down>:		ProcessDrag()\n\
@@ -379,7 +380,8 @@ s ~m ~a <KeyUp>space:		ListKbdEndExtend()\n\
 <Btn5Down>,<Btn5Up>:		ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown() ListScrollDown()";
 /*** Manager.c ***/
 externaldef(translations)
-_XmConst char _XmManager_managerTraversalTranslations[] = "\
+   _XmConst char _XmManager_managerTraversalTranslations[]
+   = "\
 <EnterWindow>:			ManagerEnter()\n\
 <LeaveWindow>:			ManagerLeave()\n\
 <FocusOut>:			ManagerFocusOut()\n\
@@ -408,7 +410,7 @@ c<Btn1Down>:			ManagerGadgetTraverseCurrent()\n\
 ~s ~m ~a <Key>space:		ManagerGadgetSelect()\n\
 <Key>:				ManagerGadgetKeyInput()";
 /*** MenuShell.c ***/
-externaldef(translations) _XmConst char _XmMenuShell_translations [] = "\
+externaldef(translations) _XmConst char _XmMenuShell_translations[] = "\
 <Key>osfCancel:			MenuEscape()\n\
 <BtnDown>:			ClearTraversal()\n\
 <BtnUp>:			MenuShellPopdownDone()";
@@ -444,7 +446,7 @@ c<Btn1Down>:			ButtonTakeFocus()\n\
 :<Key>osfHelp:			Help()\n\
 ~s ~m ~a <Key>Return:		PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:		ArmAndActivate()";
-externaldef(translations) _XmConst char _XmPushB_menuTranslations[] = "\
+externaldef(translations) _XmConst char _XmPushB_menuTranslations[]    = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
 <Btn2Down>:		ProcessDrag()\n\
@@ -469,7 +471,7 @@ externaldef(translations) _XmConst char _XmRowColumn_menu_traversal_table[] = "\
 :<Key>osfRight:		MenuGadgetTraverseRight()\n\
 :<Key>osfUp:		MenuGadgetTraverseUp()\n\
 :<Key>osfDown:		MenuGadgetTraverseDown()";
-externaldef(translations) _XmConst char _XmRowColumn_option_table[]= "\
+externaldef(translations) _XmConst char _XmRowColumn_option_table[]         = "\
 <Btn2Down>:		MenuGadgetDrag()\n\
 c<Btn2Up>:		MenuBtnUp()\n\
 c<Btn1Down>:		MenuGadgetTraverseCurrent()\n\
@@ -482,7 +484,7 @@ c<Btn1Up>:		MenuGadgetTraverseCurrentUp()\n\
 :<Key>osfHelp:		MenuHelp()\n\
 ~s ~m ~a <Key>Return:	ManagerParentActivate()\n\
 ~s ~m ~a <Key>space:	ManagerGadgetSelect()";
-externaldef(translations) _XmConst char _XmRowColumn_bar_table[]= "\
+externaldef(translations) _XmConst char _XmRowColumn_bar_table[]            = "\
 <Btn2Down>:		MenuGadgetDrag()\n\
 c<Btn2Up>:		MenuBtnUp()\n\
 c<Btn1Down>:		MenuGadgetTraverseCurrent()\n\
@@ -495,7 +497,7 @@ c<Btn1Up>:		MenuGadgetTraverseCurrentUp()\n\
 :<Key>osfCancel:	MenuGadgetEscape()\n\
 ~s ~m ~a <Key>Return:	MenuBarGadgetSelect()\n\
 ~s ~m ~a <Key>space:	MenuBarGadgetSelect()";
-externaldef(translations) _XmConst char _XmRowColumn_menu_table[]= "\
+externaldef(translations) _XmConst char _XmRowColumn_menu_table[]           = "\
 c<Btn2Up>:		MenuBtnUp()\n\
 c<Btn1Down>:		MenuGadgetTraverseCurrent()\n\
 c<Btn1Up>:		MenuGadgetTraverseCurrentUp()\n\
@@ -576,7 +578,8 @@ s ~m ~a <Key>Tab:		PrimitivePrevTabGroup()\n\
 <Btn5Down>,<Btn5Up>:		IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(0) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1) IncrementDownOrRight(1)IncrementDownOrRight(1)";
 /*** ScrolledW.c ***/
 externaldef(translations)
-_XmConst char _XmScrolledW_ScrolledWindowXlations[] = "\
+   _XmConst char _XmScrolledW_ScrolledWindowXlations[]
+   = "\
 <EnterWindow>:		ManagerEnter()\n\
 <FocusOut>:		ManagerFocusOut()\n\
 <FocusIn>:		ManagerFocusIn()\n\
@@ -615,7 +618,8 @@ externaldef(translations) _XmConst char _XmClipWindowTranslationTable[] = "\
 :<Key>osfPageDown:	ActionGrab(SWDownPage)";
 /*** SelectioB.c ***/
 externaldef(translations)
-_XmConst char _XmSelectioB_defaultTextAccelerators[] = "\
+   _XmConst char _XmSelectioB_defaultTextAccelerators[]
+   = "\
 \043override\n\
 :<Key>osfUp:		SelectionBoxUpOrDown(0)\n\
 :<Key>osfDown:		SelectionBoxUpOrDown(1)\n\
@@ -873,7 +877,7 @@ c<Btn1Down>:		ButtonTakeFocus()\n\
 :<Key>osfHelp:		Help()\n\
 ~s ~m ~a <Key>Return:	PrimitiveParentActivate()\n\
 ~s ~m ~a <Key>space:	ArmAndActivate()";
-externaldef(translations) _XmConst char _XmToggleB_menuTranslations[] = "\
+externaldef(translations) _XmConst char _XmToggleB_menuTranslations[]    = "\
 <EnterWindow>:		Enter()\n\
 <LeaveWindow>:		Leave()\n\
 <Btn2Down>:		ProcessDrag()\n\

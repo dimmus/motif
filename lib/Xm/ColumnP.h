@@ -29,60 +29,74 @@ extern "C" {
 #include <Xm/XmP.h>
 #include <Xm/BulletinBP.h>
 #include <Xm/Column.h>
-typedef struct _XmColumnClassPart {
-    XtPointer extension;
+
+typedef struct _XmColumnClassPart
+{
+   XtPointer extension;
 } XmColumnClassPart;
-typedef struct _XmColumnClassRec {
-    CoreClassPart            core_class;
-    CompositeClassPart       composite_class;
-    ConstraintClassPart      constraint_class;
-    XmManagerClassPart       manager_class;
-    XmBulletinBoardClassPart bulletin_board_class;
-    XmColumnClassPart	     column_class;
+
+typedef struct _XmColumnClassRec
+{
+   CoreClassPart            core_class;
+   CompositeClassPart       composite_class;
+   ConstraintClassPart      constraint_class;
+   XmManagerClassPart       manager_class;
+   XmBulletinBoardClassPart bulletin_board_class;
+   XmColumnClassPart        column_class;
 } XmColumnClassRec;
+
 externalref XmColumnClassRec xmColumnClassRec;
-typedef struct _XmColumnConstraintPart {
-    /* Public */
-    unsigned char       label_alignment;
-    unsigned char       label_type;
-    unsigned char       fill_style;
-    Boolean		show_label;
-    Boolean		stretchable;
-    Pixmap              label_pixmap;
-    XmString		label_string;
-    XmFontList		label_font_list;
-    /* Private */
-    Widget              label_widget;
-    Dimension		request_width;
-    Dimension		request_height;
-    XRectangle		position;
-    Boolean		check_set_render_table; /* used by CheckSetEntryLabelRenderTable */
-} XmColumnConstraintPart, * XmColumnConstraint;
-typedef struct _XmColumnConstraintRec {
-    XmManagerConstraintPart manager;
-    XmBulletinBoardConstraintPart bboard;
-    XmColumnConstraintPart  column;
-} XmColumnConstraintRec, * XmColumnConstraintPtr;
-typedef struct _XmColumnPart {
-    /* Public */
-    unsigned char default_label_alignment;
-    unsigned char default_fill_style;
-    unsigned char orientation;
-    unsigned char distribution;
-    Dimension	  item_spacing;
-    Dimension	  label_spacing;
-    /* Private */
-    Boolean	  resize_done;
-    Boolean	  check_set_render_table; /* used by CheckSetDefaultEntryLabelRenderTable */
+
+typedef struct _XmColumnConstraintPart
+{
+   /* Public */
+   unsigned char label_alignment;
+   unsigned char label_type;
+   unsigned char fill_style;
+   Boolean       show_label;
+   Boolean       stretchable;
+   Pixmap        label_pixmap;
+   XmString      label_string;
+   XmFontList    label_font_list;
+   /* Private */
+   Widget     label_widget;
+   Dimension  request_width;
+   Dimension  request_height;
+   XRectangle position;
+   Boolean    check_set_render_table; /* used by CheckSetEntryLabelRenderTable */
+} XmColumnConstraintPart, *XmColumnConstraint;
+
+typedef struct _XmColumnConstraintRec
+{
+   XmManagerConstraintPart       manager;
+   XmBulletinBoardConstraintPart bboard;
+   XmColumnConstraintPart        column;
+} XmColumnConstraintRec, *XmColumnConstraintPtr;
+
+typedef struct _XmColumnPart
+{
+   /* Public */
+   unsigned char default_label_alignment;
+   unsigned char default_fill_style;
+   unsigned char orientation;
+   unsigned char distribution;
+   Dimension     item_spacing;
+   Dimension     label_spacing;
+   /* Private */
+   Boolean resize_done;
+   Boolean check_set_render_table; /* used by CheckSetDefaultEntryLabelRenderTable */
 } XmColumnPart;
-typedef struct _XmColumnRec {
-    CorePart            core;
-    CompositePart       composite;
-    ConstraintPart      constraint;
-    XmManagerPart       manager;
-    XmBulletinBoardPart bulletin_board;
-    XmColumnPart        column;
+
+typedef struct _XmColumnRec
+{
+   CorePart            core;
+   CompositePart       composite;
+   ConstraintPart      constraint;
+   XmManagerPart       manager;
+   XmBulletinBoardPart bulletin_board;
+   XmColumnPart        column;
 } XmColumnRec;
+
 #define XmColumnIndex (XmBulletinBoardIndex + 1)
 #define XmColumnC_label_alignment(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_alignment)
 #define XmColumnC_label_type(w) (((XmColumnConstraintPtr)((w)->core.constraints))->column.label_type)

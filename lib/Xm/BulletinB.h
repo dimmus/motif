@@ -21,43 +21,43 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmBulletinBoard_h
-#define _XmBulletinBoard_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmBulletinBoard_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /* Class record constants */
-externalref WidgetClass xmBulletinBoardWidgetClass;
-typedef struct _XmBulletinBoardClassRec * XmBulletinBoardWidgetClass;
-typedef struct _XmBulletinBoardRec      * XmBulletinBoardWidget;
-#ifndef XmIsBulletinBoard
-#define XmIsBulletinBoard(w)  (XtIsSubclass (w, xmBulletinBoardWidgetClass))
-#endif
+externalref WidgetClass                  xmBulletinBoardWidgetClass;
+typedef struct _XmBulletinBoardClassRec *XmBulletinBoardWidgetClass;
+typedef struct _XmBulletinBoardRec      *XmBulletinBoardWidget;
+#   ifndef XmIsBulletinBoard
+#      define XmIsBulletinBoard(w)  (XtIsSubclass (w, xmBulletinBoardWidgetClass))
+#   endif
 /********    Public Function Declarations    ********/
 extern Widget XmCreateBulletinBoard(
-                        Widget p,
-                        String name,
-                        ArgList args,
-                        Cardinal n) ;
+   Widget   p,
+   String   name,
+   ArgList  args,
+   Cardinal n);
 extern Widget XmCreateBulletinBoardDialog(
-                        Widget ds_p,
-                        String name,
-                        ArgList bb_args,
-                        Cardinal bb_n) ;
+   Widget   ds_p,
+   String   name,
+   ArgList  bb_args,
+   Cardinal bb_n);
 /*
  * Variable argument list functions
  */
 extern Widget XmVaCreateBulletinBoard(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedBulletinBoard(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmBulletinBoard_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

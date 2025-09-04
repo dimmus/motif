@@ -21,19 +21,19 @@
  * Floor, Boston, MA 02110-1301 USA
 */
 #ifndef _XmCacheP_h
-#define _XmCacheP_h
-#include <Xm/GadgetP.h>
-#ifdef __cplusplus
+#   define _XmCacheP_h
+#   include <Xm/GadgetP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /* A few convenience macros */
-#define ClassCacheHead(cp)	((cp)->cache_head)
-#define ClassCacheCopy(cp)	((cp)->cache_copy)
-#define ClassCacheCompare(cp)	((cp)->cache_compare)
-#define CacheDataPtr(p)		((XtPointer)&((XmGadgetCacheRef*)p)->data)
-#define DataToGadgetCache(p)	((char*)p - XtOffsetOf(XmGadgetCacheRef,data))
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   define ClassCacheHead(cp)	((cp)->cache_head)
+#   define ClassCacheCopy(cp)	((cp)->cache_copy)
+#   define ClassCacheCompare(cp)	((cp)->cache_compare)
+#   define CacheDataPtr(p)		((XtPointer)&((XmGadgetCacheRef*)p)->data)
+#   define DataToGadgetCache(p)	((char*)p - XtOffsetOf(XmGadgetCacheRef,data))
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmCacheP_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

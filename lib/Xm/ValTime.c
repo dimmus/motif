@@ -26,9 +26,10 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include "XmI.h"
+
 /**********************************************************************
  *
  *  _XmValidTimestamp
@@ -39,21 +40,20 @@
  **********************************************************************/
 Time
 _XmValidTimestamp(
-     Widget w )
+   Widget w)
 {
-  Window win;
-  Display *dsp = XtDisplay(w);
-  XEvent event;
-  EventMask shellMask;
-  Atom timeProp = XInternAtom(dsp, XmI_MOTIF_CURRENT_TIME, False);
-  while (!XtIsShell(w)) w = XtParent(w);
-  win = XtWindow(w);
-  if (! ((shellMask = XtBuildEventMask(w)) & PropertyChangeMask) )
-    XSelectInput(dsp, win, shellMask | PropertyChangeMask);
-  XChangeProperty(dsp, win, timeProp, timeProp,
-		  8, PropModeAppend, NULL, 0);
-  XWindowEvent(dsp, win, PropertyChangeMask, &event);
-  if (!(shellMask & PropertyChangeMask))
-    XSelectInput(dsp, win, shellMask);
-  return (event.xproperty.time);
+   Window    win;
+   Display  *dsp = XtDisplay(w);
+   XEvent    event;
+   EventMask shellMask;
+   Atom      timeProp = XInternAtom(dsp, XmI_MOTIF_CURRENT_TIME, False);
+   while (!XtIsShell(w)) w = XtParent(w);
+   win = XtWindow(w);
+   if (!((shellMask = XtBuildEventMask(w)) & PropertyChangeMask))
+      XSelectInput(dsp, win, shellMask | PropertyChangeMask);
+   XChangeProperty(dsp, win, timeProp, timeProp, 8, PropModeAppend, NULL, 0);
+   XWindowEvent(dsp, win, PropertyChangeMask, &event);
+   if (!(shellMask & PropertyChangeMask))
+      XSelectInput(dsp, win, shellMask);
+   return (event.xproperty.time);
 }

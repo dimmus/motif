@@ -27,29 +27,31 @@
 extern "C" {
 #endif
 #define XmIsDragIconObjectClass(w) (XtIsSubclass(w, xmDragIconObjectClass))
-enum {
-	XmATTACH_NORTH_WEST,
-	XmATTACH_NORTH,
-	XmATTACH_NORTH_EAST,
-	XmATTACH_EAST,
-	XmATTACH_SOUTH_EAST,
-	XmATTACH_SOUTH,
-	XmATTACH_SOUTH_WEST,
-	XmATTACH_WEST,
-	XmATTACH_CENTER,
-	XmATTACH_HOT
+
+enum
+{
+   XmATTACH_NORTH_WEST,
+   XmATTACH_NORTH,
+   XmATTACH_NORTH_EAST,
+   XmATTACH_EAST,
+   XmATTACH_SOUTH_EAST,
+   XmATTACH_SOUTH,
+   XmATTACH_SOUTH_WEST,
+   XmATTACH_WEST,
+   XmATTACH_CENTER,
+   XmATTACH_HOT
 };
-typedef struct _XmDragIconRec *XmDragIconObject;
+typedef struct _XmDragIconRec      *XmDragIconObject;
 typedef struct _XmDragIconClassRec *XmDragIconObjectClass;
-externalref WidgetClass xmDragIconObjectClass;
+externalref WidgetClass             xmDragIconObjectClass;
 /********    Public Function Declarations    ********/
 extern Widget XmCreateDragIcon(
-                        Widget parent,
-                        String name,
-                        ArgList argList,
-                        Cardinal argCount) ;
+   Widget   parent,
+   String   name,
+   ArgList  argList,
+   Cardinal argCount);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmDragIcon_h */

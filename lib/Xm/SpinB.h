@@ -29,27 +29,27 @@ extern "C" {
 /*
  * SpinB Widget
  */
-externalref WidgetClass xmSpinBoxWidgetClass;
+externalref WidgetClass            xmSpinBoxWidgetClass;
 typedef struct _XmSpinBoxClassRec *XmSpinBoxWidgetClass;
 typedef struct _XmSpinBoxRec      *XmSpinBoxWidget;
 /*
  * Spin externs for application accessible functions
  */
-Widget	XmCreateSpinBox(Widget	parent,
-				char	*name,
-				ArgList	arglist,
-				Cardinal argcount);
+Widget XmCreateSpinBox(Widget   parent,
+                       char    *name,
+                       ArgList  arglist,
+                       Cardinal argcount);
 Widget XmVaCreateSpinBox(
-                                Widget parent,
-                                char *name,
-                                ...);
+   Widget parent,
+   char  *name,
+   ...);
 Widget XmVaCreateManagedSpinBox(
-                                Widget parent,
-                                char *name,
-                                ...);
-int	XmSpinBoxValidatePosition(
-				Widget	text_field,
-				int	*position_value);
+   Widget parent,
+   char  *name,
+   ...);
+int XmSpinBoxValidatePosition(
+   Widget text_field,
+   int   *position_value);
 #ifdef __cplusplus
 }
 #endif

@@ -21,12 +21,12 @@
  * Floor, Boston, MA 02110-1301 USA
  */
 #ifdef REV_INFO
-#ifndef lint
+#   ifndef lint
 static char rcsid[] = "$TOG: DragBS.c /main/29 1998/03/18 15:10:28 csn $"
-#endif
+#   endif
 #endif
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 /*****************************************************************************
  *
@@ -109,14 +109,18 @@ static char rcsid[] = "$TOG: DragBS.c /main/29 1998/03/18 15:10:28 csn $"
 #undef _XmTargetsToIndex
 #define MAXSTACK	1200
 #define MAXPROPLEN	100000L
-/* structures to improve portability of WriteTargets */
-typedef struct {
-    CARD32 value B32;
+   /* structures to improve portability of WriteTargets */
+   typedef struct
+{
+   CARD32 value B32;
 } CARD32Item;
-typedef struct {
-    CARD16 value B16;
-    CARD16 pad B16;
+
+typedef struct
+{
+   CARD16 value B16;
+   CARD16 pad   B16;
 } CARD16Item;
+
 #define MESSAGE1	_XmMMsgDragBS_0000
 #define MESSAGE2	_XmMMsgDragBS_0001
 #define MESSAGE3	_XmMMsgDragBS_0002
@@ -126,62 +130,63 @@ typedef struct {
 #define MESSAGE7	_XmMMsgDragBS_0006
 /********    Static Function Declarations    ********/
 static int LocalErrorHandler(
-                        Display *display,
-                        XErrorEvent *error) ;
+   Display     *display,
+   XErrorEvent *error);
 static void StartProtectedSection(
-                        Display *display,
-                        Window window) ;
+   Display *display,
+   Window   window);
 static void EndProtectedSection(
-                        Display *display) ;
+   Display *display);
 static Window GetMotifWindow(
-                        Display *display) ;
+   Display *display);
 static void SetMotifWindow(
-                        Display *display,
-                        Window motifWindow) ;
+   Display *display,
+   Window   motifWindow);
 static xmTargetsTable GetTargetsTable(
-                        Display *display) ;
+   Display *display);
 static void SetTargetsTable(
-                        Display *display,
-                        xmTargetsTable targetsTable) ;
+   Display       *display,
+   xmTargetsTable targetsTable);
 static xmAtomsTable GetAtomsTable(
-                        Display *display) ;
+   Display *display);
 static void SetAtomsTable(
-                        Display *display,
-                        xmAtomsTable atomsTable) ;
+   Display     *display,
+   xmAtomsTable atomsTable);
 static Window ReadMotifWindow(
-                        Display *display) ;
+   Display *display);
 static Window CreateMotifWindow(
-                        Display *display) ;
+   Display *display);
 static void WriteMotifWindow(
-                        Display *display,
-                        Window *motifWindow) ;
+   Display *display,
+   Window  *motifWindow);
 static void WriteAtomsTable(
-                        Display *display,
-                        xmAtomsTable atomsTable) ;
+   Display     *display,
+   xmAtomsTable atomsTable);
 static Boolean ReadAtomsTable(
-                        Display *display,
-                        xmAtomsTable atomsTable) ;
+   Display     *display,
+   xmAtomsTable atomsTable);
 static void WriteTargetsTable(
-                        Display *display,
-                        xmTargetsTable targetsTable) ;
+   Display       *display,
+   xmTargetsTable targetsTable);
 static Boolean ReadTargetsTable(
-                        Display *display,
-                        xmTargetsTable targetsTable) ;
+   Display       *display,
+   xmTargetsTable targetsTable);
 static xmTargetsTable CreateDefaultTargetsTable(
-                        Display *display) ;
+   Display *display);
 static xmAtomsTable CreateDefaultAtomsTable(
-                        Display *display) ;
+   Display *display);
 static int AtomCompare(
-                        XmConst void *atom1,
-                        XmConst void *atom2) ;
+   XmConst void *atom1,
+   XmConst void *atom2);
 /********    End Static Function Declarations    ********/
-static Boolean		bad_window;
-static XErrorHandler	oldErrorHandler = NULL;
-static unsigned long	firstProtectRequest;
-static Window		errorWindow;
-static XContext 	displayToMotifWindowContext = 0;
-static XContext 	displayToTargetsContext = 0;
-static XContext		displayToAtomsContext = 0;
+static Boolean       bad_window;
+static XErrorHandler oldErrorHandler = NULL;
+static unsigned long firstProtectRequest;
+static Window        errorWindow;
+static XContext      displayToMotifWindowContext = 0;
+static XContext      displayToTargetsContext     = 0;
+static XContext      displayToAtomsContext       = 0;
+
 /*****************************************************************************
  *
  *  LocalErrorHandler ()
@@ -189,26 +194,27 @@ static XContext		displayToAtomsContext = 0;
  ***************************************************************************/
 static int
 LocalErrorHandler(
-        Display *display,
-        XErrorEvent *error )
+   Display     *display,
+   XErrorEvent *error)
 {
-    int ret_val;
-    _XmProcessLock();
-    if (error->error_code == BadWindow &&
-	error->resourceid == errorWindow &&
-	error->serial >= firstProtectRequest) {
-        bad_window = True;
-	_XmProcessUnlock();
-	return 0;
-    }
-    if (oldErrorHandler == NULL) {
-	_XmProcessUnlock();
-        return 0;  /* should never happen */
-    }
-    ret_val = (*oldErrorHandler)(display, error);
-    _XmProcessUnlock();
-    return ret_val;
+   int ret_val;
+   _XmProcessLock();
+   if (error->error_code == BadWindow && error->resourceid == errorWindow && error->serial >= firstProtectRequest)
+   {
+      bad_window = True;
+      _XmProcessUnlock();
+      return 0;
+   }
+   if (oldErrorHandler == NULL)
+   {
+      _XmProcessUnlock();
+      return 0; /* should never happen */
+   }
+   ret_val = (*oldErrorHandler)(display, error);
+   _XmProcessUnlock();
+   return ret_val;
 }
+
 /*****************************************************************************
  *
  *  StartProtectedSection ()
@@ -218,14 +224,15 @@ LocalErrorHandler(
  ***************************************************************************/
 static void
 StartProtectedSection(
-        Display *display,
-        Window window )
+   Display *display,
+   Window   window)
 {
-    bad_window = False;
-    oldErrorHandler = XSetErrorHandler (LocalErrorHandler);
-    firstProtectRequest = NextRequest (display);
-    errorWindow = window;
+   bad_window          = False;
+   oldErrorHandler     = XSetErrorHandler(LocalErrorHandler);
+   firstProtectRequest = NextRequest(display);
+   errorWindow         = window;
 }
+
 /*****************************************************************************
  *
  *  EndProtectedSection ()
@@ -234,12 +241,13 @@ StartProtectedSection(
  ***************************************************************************/
 static void
 EndProtectedSection(
-        Display *display )
+   Display *display)
 {
-    XSync (display, False);
-    XSetErrorHandler (oldErrorHandler);
-    oldErrorHandler = NULL;
+   XSync(display, False);
+   XSetErrorHandler(oldErrorHandler);
+   oldErrorHandler = NULL;
 }
+
 /*****************************************************************************
  *
  *  GetMotifWindow ()
@@ -248,23 +256,25 @@ EndProtectedSection(
  ***************************************************************************/
 static Window
 GetMotifWindow(
-        Display *display )
+   Display *display)
 {
-    Window	motifWindow;
-    XContext	loc_context;
-    _XmProcessLock();
-    if (!displayToMotifWindowContext)
-        displayToMotifWindowContext = XUniqueContext();
-    loc_context = displayToMotifWindowContext;
-    _XmProcessUnlock();
-    if (XFindContext(display,
-                     DefaultRootWindow (display),
-		     loc_context,
-		     (char **)&motifWindow)) {
-        motifWindow = None;
-    }
-    return (motifWindow);
+   Window   motifWindow;
+   XContext loc_context;
+   _XmProcessLock();
+   if (!displayToMotifWindowContext)
+      displayToMotifWindowContext = XUniqueContext();
+   loc_context = displayToMotifWindowContext;
+   _XmProcessUnlock();
+   if (XFindContext(display,
+                    DefaultRootWindow(display),
+                    loc_context,
+                    (char **)&motifWindow))
+   {
+      motifWindow = None;
+   }
+   return (motifWindow);
 }
+
 /*****************************************************************************
  *
  *  SetMotifWindow ()
@@ -273,37 +283,37 @@ GetMotifWindow(
  ***************************************************************************/
 static void
 SetMotifWindow(
-        Display *display,
-        Window motifWindow )
+   Display *display,
+   Window   motifWindow)
 {
-    Window oldMotifWindow;
-    XContext loc_context;
-    _XmProcessLock();
-    if (!displayToMotifWindowContext)
-        displayToMotifWindowContext = XUniqueContext();
-    loc_context = displayToMotifWindowContext;
-    _XmProcessUnlock();
-    /*
+   Window   oldMotifWindow;
+   XContext loc_context;
+   _XmProcessLock();
+   if (!displayToMotifWindowContext)
+      displayToMotifWindowContext = XUniqueContext();
+   loc_context = displayToMotifWindowContext;
+   _XmProcessUnlock();
+   /*
      * Save window data.
      * Delete old context if one exists.
      */
-    if (XFindContext (display, DefaultRootWindow (display),
-			loc_context,
-			(char **) &oldMotifWindow)) {
-	XSaveContext(display,
-                        DefaultRootWindow (display),
-			loc_context,
-			(char *) motifWindow);
-    }
-    else if (oldMotifWindow != motifWindow) {
-	XDeleteContext (display, DefaultRootWindow (display),
-			loc_context);
-	XSaveContext(display,
-                        DefaultRootWindow (display),
-			loc_context,
-			(char *) motifWindow);
-    }
+   if (XFindContext(display, DefaultRootWindow(display), loc_context, (char **)&oldMotifWindow))
+   {
+      XSaveContext(display,
+                   DefaultRootWindow(display),
+                   loc_context,
+                   (char *)motifWindow);
+   }
+   else if (oldMotifWindow != motifWindow)
+   {
+      XDeleteContext(display, DefaultRootWindow(display), loc_context);
+      XSaveContext(display,
+                   DefaultRootWindow(display),
+                   loc_context,
+                   (char *)motifWindow);
+   }
 }
+
 /*****************************************************************************
  *
  *  GetTargetsTable ()
@@ -312,23 +322,25 @@ SetMotifWindow(
  ***************************************************************************/
 static xmTargetsTable
 GetTargetsTable(
-        Display *display )
+   Display *display)
 {
-    xmTargetsTable	targetsTable;
-    XContext		loc_context;
-    _XmProcessLock();
-    if (!displayToTargetsContext)
-        displayToTargetsContext = XUniqueContext();
-    loc_context = displayToTargetsContext;
-    _XmProcessUnlock();
-    if (XFindContext(display,
-                     DefaultRootWindow (display),
-		     loc_context,
-		     (char **)&targetsTable)) {
-        targetsTable = NULL;
-    }
-    return (targetsTable);
+   xmTargetsTable targetsTable;
+   XContext       loc_context;
+   _XmProcessLock();
+   if (!displayToTargetsContext)
+      displayToTargetsContext = XUniqueContext();
+   loc_context = displayToTargetsContext;
+   _XmProcessUnlock();
+   if (XFindContext(display,
+                    DefaultRootWindow(display),
+                    loc_context,
+                    (char **)&targetsTable))
+   {
+      targetsTable = NULL;
+   }
+   return (targetsTable);
 }
+
 /*****************************************************************************
  *
  *  SetTargetsTable ()
@@ -337,48 +349,48 @@ GetTargetsTable(
  ***************************************************************************/
 static void
 SetTargetsTable(
-        Display *display,
-        xmTargetsTable targetsTable )
+   Display       *display,
+   xmTargetsTable targetsTable)
 {
-    xmTargetsTable oldTargetsTable;
-    XContext	loc_context;
-    _XmProcessLock();
-    if (!displayToTargetsContext)
-        displayToTargetsContext = XUniqueContext();
-    loc_context = displayToTargetsContext;
-    _XmProcessUnlock();
-    /*
+   xmTargetsTable oldTargetsTable;
+   XContext       loc_context;
+   _XmProcessLock();
+   if (!displayToTargetsContext)
+      displayToTargetsContext = XUniqueContext();
+   loc_context = displayToTargetsContext;
+   _XmProcessUnlock();
+   /*
      * Save targets data.
      * Delete old context if one exists.
      */
-    if (XFindContext (display, DefaultRootWindow (display),
-			loc_context,
-			(char **) &oldTargetsTable)) {
-	if (targetsTable)
-	XSaveContext(display,
-                        DefaultRootWindow (display),
-			loc_context,
-			(char *) targetsTable);
-    }
-    else if (oldTargetsTable != targetsTable) {
-	XDeleteContext (display, DefaultRootWindow (display),
-			loc_context);
-        {
-          unsigned i = 0 ;
-          while(    i < oldTargetsTable->numEntries    )
-            {
-              XtFree( (char *) oldTargetsTable->entries[i++].targets) ;
-            }
-          XtFree( (char *) oldTargetsTable->entries) ;
-          XtFree( (char *) oldTargetsTable) ;
-        }
-	if (targetsTable)
-	XSaveContext(display,
-                        DefaultRootWindow (display),
-			loc_context,
-			(char *) targetsTable);
-    }
+   if (XFindContext(display, DefaultRootWindow(display), loc_context, (char **)&oldTargetsTable))
+   {
+      if (targetsTable)
+         XSaveContext(display,
+                      DefaultRootWindow(display),
+                      loc_context,
+                      (char *)targetsTable);
+   }
+   else if (oldTargetsTable != targetsTable)
+   {
+      XDeleteContext(display, DefaultRootWindow(display), loc_context);
+      {
+         unsigned i = 0;
+         while (i < oldTargetsTable->numEntries)
+         {
+            XtFree((char *)oldTargetsTable->entries[i++].targets);
+         }
+         XtFree((char *)oldTargetsTable->entries);
+         XtFree((char *)oldTargetsTable);
+      }
+      if (targetsTable)
+         XSaveContext(display,
+                      DefaultRootWindow(display),
+                      loc_context,
+                      (char *)targetsTable);
+   }
 }
+
 /*****************************************************************************
  *
  *  GetAtomsTable ()
@@ -387,23 +399,25 @@ SetTargetsTable(
  ***************************************************************************/
 static xmAtomsTable
 GetAtomsTable(
-        Display *display )
+   Display *display)
 {
-    xmAtomsTable	atomsTable;
-    XContext		loc_context;
-    _XmProcessLock();
-    if (!displayToAtomsContext)
-	displayToAtomsContext = XUniqueContext();
-    loc_context = displayToAtomsContext;
-    _XmProcessUnlock();
-    if (XFindContext (display,
-                      DefaultRootWindow (display),
-		      loc_context,
-		      (XPointer *)&atomsTable)) {
-        atomsTable = NULL;
-    }
-    return (atomsTable);
+   xmAtomsTable atomsTable;
+   XContext     loc_context;
+   _XmProcessLock();
+   if (!displayToAtomsContext)
+      displayToAtomsContext = XUniqueContext();
+   loc_context = displayToAtomsContext;
+   _XmProcessUnlock();
+   if (XFindContext(display,
+                    DefaultRootWindow(display),
+                    loc_context,
+                    (XPointer *)&atomsTable))
+   {
+      atomsTable = NULL;
+   }
+   return (atomsTable);
 }
+
 /*****************************************************************************
  *
  *  SetAtomsTable ()
@@ -412,99 +426,104 @@ GetAtomsTable(
  ***************************************************************************/
 static void
 SetAtomsTable(
-        Display *display,
-        xmAtomsTable atomsTable )
+   Display     *display,
+   xmAtomsTable atomsTable)
 {
-    xmAtomsTable oldAtomsTable;
-    XContext loc_context;
-    _XmProcessLock();
-    if (!displayToAtomsContext)
-        displayToAtomsContext = XUniqueContext();
-    loc_context = displayToAtomsContext;
-    _XmProcessUnlock();
-    /*
+   xmAtomsTable oldAtomsTable;
+   XContext     loc_context;
+   _XmProcessLock();
+   if (!displayToAtomsContext)
+      displayToAtomsContext = XUniqueContext();
+   loc_context = displayToAtomsContext;
+   _XmProcessUnlock();
+   /*
      * Save atom data.
      * Delete old context if one exists.
      */
-    if (XFindContext (display, DefaultRootWindow (display),
-			loc_context,
-			(char **) &oldAtomsTable)) {
-	if (atomsTable)
-	XSaveContext(display,
-                        DefaultRootWindow (display),
-	                loc_context,
-			(char *) atomsTable);
-    }
-    else if (oldAtomsTable != atomsTable) {
-	XDeleteContext (display, DefaultRootWindow (display),
-			loc_context);
-        XtFree( (char *) (oldAtomsTable->entries)) ;
-        XtFree( (char *) oldAtomsTable) ;
-	if (atomsTable)
-	XSaveContext(display,
-                        DefaultRootWindow (display),
-	                loc_context,
-			(char *) atomsTable);
-    }
+   if (XFindContext(display, DefaultRootWindow(display), loc_context, (char **)&oldAtomsTable))
+   {
+      if (atomsTable)
+         XSaveContext(display,
+                      DefaultRootWindow(display),
+                      loc_context,
+                      (char *)atomsTable);
+   }
+   else if (oldAtomsTable != atomsTable)
+   {
+      XDeleteContext(display, DefaultRootWindow(display), loc_context);
+      XtFree((char *)(oldAtomsTable->entries));
+      XtFree((char *)oldAtomsTable);
+      if (atomsTable)
+         XSaveContext(display,
+                      DefaultRootWindow(display),
+                      loc_context,
+                      (char *)atomsTable);
+   }
 }
+
 /*****************************************************************************
  *
  *  ReadMotifWindow ()
  *
  ***************************************************************************/
 static Boolean RMW_ErrorFlag;
+
 static int
-RMW_ErrorHandler(Display *display, /* unused */
-		 XErrorEvent* event) /* unused */
+RMW_ErrorHandler(Display     *display, /* unused */
+                 XErrorEvent *event)   /* unused */
 {
-    _XmProcessLock();
-    RMW_ErrorFlag = True;
-    _XmProcessUnlock();
-    return 0 ; /* unused */
+   _XmProcessLock();
+   RMW_ErrorFlag = True;
+   _XmProcessUnlock();
+   return 0; /* unused */
 }
+
 static Window
 ReadMotifWindow(
-        Display *display )
+   Display *display)
 {
-    Atom            motifWindowAtom;
-    Atom            type;
-    int             format;
-    unsigned long   lengthRtn;
-    unsigned long   bytesafter;
-    Window         *property = NULL;
-    Window	    motifWindow = None;
-    XErrorHandler old_Handler;
-    /* Setup error proc and reset error flag */
-    old_Handler = XSetErrorHandler((XErrorHandler) RMW_ErrorHandler);
-    _XmProcessLock();
-    RMW_ErrorFlag = False;
-    _XmProcessUnlock();
-    motifWindowAtom = XInternAtom (display, XmI_MOTIF_DRAG_WINDOW, False);
-    if ((XGetWindowProperty (display,
-                             RootWindow (display, 0),
-                             motifWindowAtom,
-                             0L, MAXPROPLEN,
-			     False,
-                             AnyPropertyType,
-                             &type,
-			     &format,
-			     &lengthRtn,
-			     &bytesafter,
-			     (unsigned char **) &property) == Success) &&
-         (type == XA_WINDOW) &&
-	 (format == 32) &&
-	 (lengthRtn == 1)) {
-	motifWindow = *property;
-    }
-    if (property) {
-	XFree ((char *)property);
-    }
-    XSetErrorHandler(old_Handler);
-    _XmProcessLock();
-    if (RMW_ErrorFlag) motifWindow = None;
-    _XmProcessUnlock();
-    return (motifWindow);
+   Atom          motifWindowAtom;
+   Atom          type;
+   int           format;
+   unsigned long lengthRtn;
+   unsigned long bytesafter;
+   Window       *property    = NULL;
+   Window        motifWindow = None;
+   XErrorHandler old_Handler;
+   /* Setup error proc and reset error flag */
+   old_Handler = XSetErrorHandler((XErrorHandler)RMW_ErrorHandler);
+   _XmProcessLock();
+   RMW_ErrorFlag = False;
+   _XmProcessUnlock();
+   motifWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_WINDOW, False);
+   if ((XGetWindowProperty(display,
+                           RootWindow(display, 0),
+                           motifWindowAtom,
+                           0L,
+                           MAXPROPLEN,
+                           False,
+                           AnyPropertyType,
+                           &type,
+                           &format,
+                           &lengthRtn,
+                           &bytesafter,
+                           (unsigned char **)&property)
+        == Success)
+       && (type == XA_WINDOW) && (format == 32) && (lengthRtn == 1))
+   {
+      motifWindow = *property;
+   }
+   if (property)
+   {
+      XFree((char *)property);
+   }
+   XSetErrorHandler(old_Handler);
+   _XmProcessLock();
+   if (RMW_ErrorFlag) motifWindow = None;
+   _XmProcessUnlock();
+   return (motifWindow);
 }
+
 /*****************************************************************************
  *
  *  CreateMotifWindow ()
@@ -515,31 +534,38 @@ ReadMotifWindow(
  ***************************************************************************/
 static Window
 CreateMotifWindow(
-        Display *display )
+   Display *display)
 {
-    Display	         *ndisplay;
-    XSetWindowAttributes sAttributes;
-    Window	         motifWindow;
-    if ((ndisplay = XOpenDisplay(XDisplayString(display))) == NULL) {
-	XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE3);
-	return None;
-    }
-    XGrabServer(ndisplay);
-    XSetCloseDownMode (ndisplay, RetainPermanent);
-    sAttributes.override_redirect = True;
-    sAttributes.event_mask = PropertyChangeMask;
-    motifWindow = XCreateWindow (ndisplay,
-                                 DefaultRootWindow (ndisplay),
-			         -100, -100, 10, 10, 0, 0,
-			         InputOnly,
-			         CopyFromParent,
-			         (CWOverrideRedirect |CWEventMask),
-			         &sAttributes);
-    XMapWindow (ndisplay, motifWindow);
-    WriteMotifWindow (ndisplay, &motifWindow);
-    XCloseDisplay(ndisplay);
-    return (motifWindow);
+   Display             *ndisplay;
+   XSetWindowAttributes sAttributes;
+   Window               motifWindow;
+   if ((ndisplay = XOpenDisplay(XDisplayString(display))) == NULL)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE3);
+      return None;
+   }
+   XGrabServer(ndisplay);
+   XSetCloseDownMode(ndisplay, RetainPermanent);
+   sAttributes.override_redirect = True;
+   sAttributes.event_mask        = PropertyChangeMask;
+   motifWindow                   = XCreateWindow(ndisplay,
+                               DefaultRootWindow(ndisplay),
+                               -100,
+                               -100,
+                               10,
+                               10,
+                               0,
+                               0,
+                               InputOnly,
+                               CopyFromParent,
+                               (CWOverrideRedirect | CWEventMask),
+                               &sAttributes);
+   XMapWindow(ndisplay, motifWindow);
+   WriteMotifWindow(ndisplay, &motifWindow);
+   XCloseDisplay(ndisplay);
+   return (motifWindow);
 }
+
 /*****************************************************************************
  *
  *  WriteMotifWindow ()
@@ -547,20 +573,21 @@ CreateMotifWindow(
  ***************************************************************************/
 static void
 WriteMotifWindow(
-        Display *display,
-        Window *motifWindow )
+   Display *display,
+   Window  *motifWindow)
 {
-    Atom	motifWindowAtom;
-    motifWindowAtom = XInternAtom (display, XmI_MOTIF_DRAG_WINDOW, False);
-    XChangeProperty (display,
-                     RootWindow (display, 0),
-                     motifWindowAtom,
-		     XA_WINDOW,
-		     32,
-		     PropModeReplace,
-		     (unsigned char *) motifWindow,
-		     1);
+   Atom motifWindowAtom;
+   motifWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_WINDOW, False);
+   XChangeProperty(display,
+                   RootWindow(display, 0),
+                   motifWindowAtom,
+                   XA_WINDOW,
+                   32,
+                   PropModeReplace,
+                   (unsigned char *)motifWindow,
+                   1);
 }
+
 /*****************************************************************************
  *
  *  WriteAtomsTable ()
@@ -568,66 +595,76 @@ WriteMotifWindow(
  ***************************************************************************/
 static void
 WriteAtomsTable(
-        Display *display,
-        xmAtomsTable atomsTable )
+   Display     *display,
+   xmAtomsTable atomsTable)
 {
-    BYTE			stackData[MAXSTACK];
-    struct _propertyRec {
-	xmMotifAtomsPropertyRec	info;
-	xmMotifAtomsTableRec	entry[1];
-    } *propertyRecPtr;
-    Atom                	atomsTableAtom;
-    int	       			i;
-    Window			motifWindow;
-    size_t			dataSize;
-    if (!atomsTable) {
-	XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE4);
-	return;
-    }
-    /* If the data is bigger than the default stack allocation, then
+   BYTE stackData[MAXSTACK];
+
+   struct _propertyRec
+   {
+      xmMotifAtomsPropertyRec info;
+      xmMotifAtomsTableRec    entry[1];
+   } *propertyRecPtr;
+
+   Atom   atomsTableAtom;
+   int    i;
+   Window motifWindow;
+   size_t dataSize;
+   if (!atomsTable)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE4);
+      return;
+   }
+   /* If the data is bigger than the default stack allocation, then
      * allocate heap storage, else use automatic storage.
      */
-    dataSize = sizeof(xmMotifAtomsPropertyRec) +
-      atomsTable->numEntries * sizeof(xmMotifAtomsTableRec) ;
-    if ( dataSize > MAXSTACK ) {
-	propertyRecPtr = (struct _propertyRec *)XtMalloc( dataSize );
-    } else {
-	propertyRecPtr = (struct _propertyRec *)stackData;
-    }
-    propertyRecPtr->info.byte_order = (BYTE) _XmByteOrderChar;
-    propertyRecPtr->info.protocol_version = (BYTE) _MOTIF_DRAG_PROTOCOL_VERSION;
-    propertyRecPtr->info.num_atoms = atomsTable->numEntries;
-    propertyRecPtr->info.heap_offset = dataSize;
-    /* write each entry's atom and time */
-    for (i = 0; i < atomsTable->numEntries; i++) {
-        propertyRecPtr->entry[i].atom = atomsTable->entries[i].atom;
-        propertyRecPtr->entry[i].time = atomsTable->entries[i].time;
-    }
-    /*
+   dataSize = sizeof(xmMotifAtomsPropertyRec) + atomsTable->numEntries * sizeof(xmMotifAtomsTableRec);
+   if (dataSize > MAXSTACK)
+   {
+      propertyRecPtr = (struct _propertyRec *)XtMalloc(dataSize);
+   }
+   else
+   {
+      propertyRecPtr = (struct _propertyRec *)stackData;
+   }
+   propertyRecPtr->info.byte_order       = (BYTE)_XmByteOrderChar;
+   propertyRecPtr->info.protocol_version = (BYTE)_MOTIF_DRAG_PROTOCOL_VERSION;
+   propertyRecPtr->info.num_atoms        = atomsTable->numEntries;
+   propertyRecPtr->info.heap_offset      = dataSize;
+   /* write each entry's atom and time */
+   for (i = 0; i < atomsTable->numEntries; i++)
+   {
+      propertyRecPtr->entry[i].atom = atomsTable->entries[i].atom;
+      propertyRecPtr->entry[i].time = atomsTable->entries[i].time;
+   }
+   /*
      *  Write the buffer to the property within a protected section.
      */
-    atomsTableAtom = XInternAtom (display, XmI_MOTIF_DRAG_ATOMS, False);
-    motifWindow = GetMotifWindow (display);
-    _XmProcessLock();
-    StartProtectedSection (display, motifWindow);
-    XChangeProperty (display,
-                     motifWindow,
-		     atomsTableAtom,
-		     atomsTableAtom,
-		     8,
-		     PropModeReplace,
-		     (unsigned char *)propertyRecPtr,
-		     dataSize );
-    /* If we had to use a heap buffer, free it. */
-    if (propertyRecPtr != (struct _propertyRec *)stackData) {
-        XtFree((char *)propertyRecPtr);
-    }
-    EndProtectedSection (display);
-    if (bad_window) {
-	XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE1);
-    }
-    _XmProcessUnlock();
+   atomsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_ATOMS, False);
+   motifWindow    = GetMotifWindow(display);
+   _XmProcessLock();
+   StartProtectedSection(display, motifWindow);
+   XChangeProperty(display,
+                   motifWindow,
+                   atomsTableAtom,
+                   atomsTableAtom,
+                   8,
+                   PropModeReplace,
+                   (unsigned char *)propertyRecPtr,
+                   dataSize);
+   /* If we had to use a heap buffer, free it. */
+   if (propertyRecPtr != (struct _propertyRec *)stackData)
+   {
+      XtFree((char *)propertyRecPtr);
+   }
+   EndProtectedSection(display);
+   if (bad_window)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
+   }
+   _XmProcessUnlock();
 }
+
 /*****************************************************************************
  *
  *  ReadAtomsTable ()
@@ -635,99 +672,112 @@ WriteAtomsTable(
  ***************************************************************************/
 static Boolean
 ReadAtomsTable(
-        Display *display,
-        xmAtomsTable atomsTable )
+   Display     *display,
+   xmAtomsTable atomsTable)
 {
-    struct {
-	xmMotifAtomsPropertyRec info;
-	xmMotifAtomsTableRec	entry[1];
-    } *propertyRecPtr = NULL;
-    Atom                        atomsTableAtom;
-    int				format;
-    unsigned long 		bytesafter, lengthRtn;
-    Atom			type;
-    int				i;
-    Boolean			ret;
-    Window			motifWindow;
-    atomsTableAtom = XInternAtom (display, XmI_MOTIF_DRAG_ATOMS, False);
-    motifWindow = GetMotifWindow (display);
-    _XmProcessLock();
-    StartProtectedSection (display, motifWindow);
-    ret = ((XGetWindowProperty (display, 	/* display* */
-    				motifWindow,	/* window */
-			        atomsTableAtom,	/* property atom */
-			        0L, MAXPROPLEN,	/* long_offset, long_length */
-			        False,		/* delete flag */
-			        atomsTableAtom,	/* property type */
-			        &type,		/* returned actual type */
-			        &format,	/* returned actual format */
-			        &lengthRtn,	/* returned item count */
-			        &bytesafter,	/* returned bytes remaining */
-			        (unsigned char **) &propertyRecPtr)
-						/* returned data */
-	    == Success) &&
-           (lengthRtn >= sizeof(xmMotifAtomsPropertyRec)));
-    EndProtectedSection (display);
-    if (bad_window) {
-	static Boolean first_time = True;
-	/*
+   struct
+   {
+      xmMotifAtomsPropertyRec info;
+      xmMotifAtomsTableRec    entry[1];
+   } *propertyRecPtr = NULL;
+
+   Atom          atomsTableAtom;
+   int           format;
+   unsigned long bytesafter, lengthRtn;
+   Atom          type;
+   int           i;
+   Boolean       ret;
+   Window        motifWindow;
+   atomsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_ATOMS, False);
+   motifWindow    = GetMotifWindow(display);
+   _XmProcessLock();
+   StartProtectedSection(display, motifWindow);
+   ret = ((XGetWindowProperty(display,        /* display* */
+                              motifWindow,    /* window */
+                              atomsTableAtom, /* property atom */
+                              0L,
+                              MAXPROPLEN,     /* long_offset, long_length */
+                              False,          /* delete flag */
+                              atomsTableAtom, /* property type */
+                              &type,          /* returned actual type */
+                              &format,        /* returned actual format */
+                              &lengthRtn,     /* returned item count */
+                              &bytesafter,    /* returned bytes remaining */
+                              (unsigned char **)&propertyRecPtr)
+           /* returned data */
+           == Success)
+          && (lengthRtn >= sizeof(xmMotifAtomsPropertyRec)));
+   EndProtectedSection(display);
+   if (bad_window)
+   {
+      static Boolean first_time = True;
+      /*
 	 * Try to recreate the motifWindow. We could have gotten an invalid
 	 * window id from the _MOTIF_DRAG_WINDOW property.
 	 */
-	if (first_time) {
-	    motifWindow = CreateMotifWindow (display);
-	    SetMotifWindow (display, motifWindow);
-	    first_time = False;
-	} else
-	    XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE1);
-	ret = False;
-    }
-    _XmProcessUnlock();
-    if (ret) {
-	if (propertyRecPtr->info.protocol_version !=
-	    _MOTIF_DRAG_PROTOCOL_VERSION) {
-	    XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE2);
-	}
-	if (propertyRecPtr->info.byte_order != _XmByteOrderChar) {
-	    swap2bytes(propertyRecPtr->info.num_atoms);
-	    swap4bytes(propertyRecPtr->info.heap_offset);
-	}
-        if (atomsTable == NULL)
-        {
-            atomsTable = (xmAtomsTable) XtMalloc(sizeof(xmAtomsTableRec));
-            atomsTable->numEntries = 0;
-            atomsTable->entries = NULL;
-            SetAtomsTable (display, atomsTable);
-        }
-	if (propertyRecPtr->info.num_atoms > atomsTable->numEntries) {
-            /*
+      if (first_time)
+      {
+         motifWindow = CreateMotifWindow(display);
+         SetMotifWindow(display, motifWindow);
+         first_time = False;
+      }
+      else
+         XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
+      ret = False;
+   }
+   _XmProcessUnlock();
+   if (ret)
+   {
+      if (propertyRecPtr->info.protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION)
+      {
+         XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE2);
+      }
+      if (propertyRecPtr->info.byte_order != _XmByteOrderChar)
+      {
+         swap2bytes(propertyRecPtr->info.num_atoms);
+         swap4bytes(propertyRecPtr->info.heap_offset);
+      }
+      if (atomsTable == NULL)
+      {
+         atomsTable             = (xmAtomsTable)XtMalloc(sizeof(xmAtomsTableRec));
+         atomsTable->numEntries = 0;
+         atomsTable->entries    = NULL;
+         SetAtomsTable(display, atomsTable);
+      }
+      if (propertyRecPtr->info.num_atoms > atomsTable->numEntries)
+      {
+         /*
 	     *  expand the atoms table
 	     */
-            atomsTable->entries = (xmAtomsTableEntry) XtRealloc(
-	        (char *)atomsTable->entries,	/* NULL ok */
-		sizeof(xmAtomsTableEntryRec) * propertyRecPtr->info.num_atoms);
-	}
-	/*
+         atomsTable->entries = (xmAtomsTableEntry)XtRealloc(
+            (char *)atomsTable->entries, /* NULL ok */
+            sizeof(xmAtomsTableEntryRec) * propertyRecPtr->info.num_atoms);
+      }
+      /*
 	 *  Read the atom table entries.
 	 */
-	for (i = 0; i < (int)propertyRecPtr->info.num_atoms; i++) {
-	    if (propertyRecPtr->info.byte_order != _XmByteOrderChar) {
-		swap4bytes(propertyRecPtr->entry[i].atom);
-		swap4bytes(propertyRecPtr->entry[i].time);
-	    }
-            atomsTable->entries[i].atom = (Atom) propertyRecPtr->entry[i].atom;
-            atomsTable->entries[i].time = (Time) propertyRecPtr->entry[i].time;
-	}
-        atomsTable->numEntries = propertyRecPtr->info.num_atoms;
-    }
-    /*
+      for (i = 0; i < (int)propertyRecPtr->info.num_atoms; i++)
+      {
+         if (propertyRecPtr->info.byte_order != _XmByteOrderChar)
+         {
+            swap4bytes(propertyRecPtr->entry[i].atom);
+            swap4bytes(propertyRecPtr->entry[i].time);
+         }
+         atomsTable->entries[i].atom = (Atom)propertyRecPtr->entry[i].atom;
+         atomsTable->entries[i].time = (Time)propertyRecPtr->entry[i].time;
+      }
+      atomsTable->numEntries = propertyRecPtr->info.num_atoms;
+   }
+   /*
      *  Free any memory that Xlib passed us.
      */
-    if (propertyRecPtr) {
-        XFree((char *)propertyRecPtr);
-    }
-    return (ret);
+   if (propertyRecPtr)
+   {
+      XFree((char *)propertyRecPtr);
+   }
+   return (ret);
 }
+
 /*****************************************************************************
  *
  *  WriteTargetsTable ()
@@ -735,80 +785,93 @@ ReadAtomsTable(
  ***************************************************************************/
 static void
 WriteTargetsTable(
-        Display *display,
-        xmTargetsTable targetsTable )
+   Display       *display,
+   xmTargetsTable targetsTable)
 {
-    BYTE		stackData[MAXSTACK], *fill;
-    struct _propertyRec {
-	xmMotifTargetsPropertyRec	info;
-    } *propertyRecPtr;
-    Atom                targetsTableAtom;
-    int			i, j;
-    Window		motifWindow;
-    size_t		dataSize;
-    CARD16Item		shortItem;
-    CARD32Item		longItem;
-    if (!targetsTable) {
-	XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE5);
-	return;
-    }
-    /* Calculate the total size of the property. */
-    dataSize = sizeof(xmMotifTargetsPropertyRec);
-    for (i = 0; i < targetsTable->numEntries; i++) {
-	dataSize += targetsTable->entries[i].numTargets * 4 + 2;
-    }
-    /* If size needed is bigger than the pre-allocated space, allocate a
+   BYTE stackData[MAXSTACK], *fill;
+
+   struct _propertyRec
+   {
+      xmMotifTargetsPropertyRec info;
+   } *propertyRecPtr;
+
+   Atom       targetsTableAtom;
+   int        i, j;
+   Window     motifWindow;
+   size_t     dataSize;
+   CARD16Item shortItem;
+   CARD32Item longItem;
+   if (!targetsTable)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE5);
+      return;
+   }
+   /* Calculate the total size of the property. */
+   dataSize = sizeof(xmMotifTargetsPropertyRec);
+   for (i = 0; i < targetsTable->numEntries; i++)
+   {
+      dataSize += targetsTable->entries[i].numTargets * 4 + 2;
+   }
+   /* If size needed is bigger than the pre-allocated space, allocate a
      * bigger buffer.
      */
-    if ( dataSize > MAXSTACK ){
-	propertyRecPtr = (struct _propertyRec *)XtMalloc( dataSize );
-    } else {
-	propertyRecPtr = (struct _propertyRec *)stackData ;
-    }
-    propertyRecPtr->info.byte_order = (BYTE) _XmByteOrderChar;
-    propertyRecPtr->info.protocol_version = (BYTE) _MOTIF_DRAG_PROTOCOL_VERSION;
-    propertyRecPtr->info.num_target_lists = targetsTable->numEntries;
-    propertyRecPtr->info.heap_offset = dataSize;
-    /* write each target list's count and atoms */
-    fill = (BYTE *)propertyRecPtr + sizeof(xmMotifTargetsPropertyRec);
-    for (i = 0; i < targetsTable->numEntries; i++) {
-        shortItem.value = targetsTable->entries[i].numTargets;
-	memcpy( fill, &shortItem, 2 );
-	fill += 2;
-	/*
+   if (dataSize > MAXSTACK)
+   {
+      propertyRecPtr = (struct _propertyRec *)XtMalloc(dataSize);
+   }
+   else
+   {
+      propertyRecPtr = (struct _propertyRec *)stackData;
+   }
+   propertyRecPtr->info.byte_order       = (BYTE)_XmByteOrderChar;
+   propertyRecPtr->info.protocol_version = (BYTE)_MOTIF_DRAG_PROTOCOL_VERSION;
+   propertyRecPtr->info.num_target_lists = targetsTable->numEntries;
+   propertyRecPtr->info.heap_offset      = dataSize;
+   /* write each target list's count and atoms */
+   fill = (BYTE *)propertyRecPtr + sizeof(xmMotifTargetsPropertyRec);
+   for (i = 0; i < targetsTable->numEntries; i++)
+   {
+      shortItem.value = targetsTable->entries[i].numTargets;
+      memcpy(fill, &shortItem, 2);
+      fill += 2;
+      /*
 	 *  Write each Atom out one at a time as a CARD32.
 	 */
-	for (j = 0; j < targetsTable->entries[i].numTargets; j++) {
-	    longItem.value = targetsTable->entries[i].targets[j];
-	    memcpy( fill, &longItem, 4 );
-	    fill += 4;
-	}
-    }
-    /*
+      for (j = 0; j < targetsTable->entries[i].numTargets; j++)
+      {
+         longItem.value = targetsTable->entries[i].targets[j];
+         memcpy(fill, &longItem, 4);
+         fill += 4;
+      }
+   }
+   /*
      *  Write the buffer to the property within a protected section.
      */
-    targetsTableAtom = XInternAtom (display, XmI_MOTIF_DRAG_TARGETS, False);
-    motifWindow = GetMotifWindow (display);
-    _XmProcessLock();
-    StartProtectedSection (display, motifWindow);
-    XChangeProperty (display,
-                     motifWindow,
-		     targetsTableAtom,
-		     targetsTableAtom,
-		     8,
-		     PropModeReplace,
-		     (unsigned char *)propertyRecPtr,
-		     dataSize);
-    /* If a buffer was allocated, free it. */
-    if (propertyRecPtr != (struct _propertyRec *)stackData) {
-        XtFree((char *)propertyRecPtr);
-    }
-    EndProtectedSection (display);
-    if (bad_window) {
-	XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE1);
-    }
-    _XmProcessUnlock();
+   targetsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_TARGETS, False);
+   motifWindow      = GetMotifWindow(display);
+   _XmProcessLock();
+   StartProtectedSection(display, motifWindow);
+   XChangeProperty(display,
+                   motifWindow,
+                   targetsTableAtom,
+                   targetsTableAtom,
+                   8,
+                   PropModeReplace,
+                   (unsigned char *)propertyRecPtr,
+                   dataSize);
+   /* If a buffer was allocated, free it. */
+   if (propertyRecPtr != (struct _propertyRec *)stackData)
+   {
+      XtFree((char *)propertyRecPtr);
+   }
+   EndProtectedSection(display);
+   if (bad_window)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
+   }
+   _XmProcessUnlock();
 }
+
 /*****************************************************************************
  *
  *  ReadTargetsTable ()
@@ -816,139 +879,157 @@ WriteTargetsTable(
  ***************************************************************************/
 static Boolean
 ReadTargetsTable(
-        Display *display,
-        xmTargetsTable targetsTable )
+   Display       *display,
+   xmTargetsTable targetsTable)
 {
-    struct _propertyRec {
-	xmMotifTargetsPropertyRec	info;
-    } *propertyRecPtr = NULL;
-    char			*bufptr;
-    short			num_targets;
-    Atom                        targetsTableAtom;
-    int				format;
-    unsigned long 		bytesafter, lengthRtn;
-    Atom			type;
-    int				i, j;
-    Atom		        *targets;
-    Boolean			ret;
-    Window			motifWindow;
-    CARD16Item			shortItem;
-    CARD32Item			longItem;
-    targetsTableAtom = XInternAtom (display, XmI_MOTIF_DRAG_TARGETS, False);
-    motifWindow = GetMotifWindow (display);
-    _XmProcessLock();
-    StartProtectedSection (display, motifWindow);
-    ret = ((XGetWindowProperty (display,
-    				motifWindow,
-			        targetsTableAtom,
-			        0L, MAXPROPLEN,
-			        False,
-			        targetsTableAtom,
-			        &type,
-			        &format,
-			        &lengthRtn,
-			        &bytesafter,
-			        (unsigned char **) &propertyRecPtr) == Success) &&
-           (lengthRtn >= sizeof(xmMotifTargetsPropertyRec)));
-    EndProtectedSection (display);
-    if (bad_window) {
-	XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE1);
-	ret = False;
-    }
-    _XmProcessUnlock();
-    if (ret) {
-	if (propertyRecPtr->info.protocol_version !=
-	    _MOTIF_DRAG_PROTOCOL_VERSION) {
-	    XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE2);
-	}
-	if (propertyRecPtr->info.byte_order != _XmByteOrderChar) {
-	    swap2bytes(propertyRecPtr->info.num_target_lists);
-	    swap4bytes(propertyRecPtr->info.heap_offset);
-	}
-        if (targetsTable == NULL)
-        {
-            targetsTable = (xmTargetsTable)XtMalloc(sizeof(xmTargetsTableRec));
-            targetsTable->numEntries = 0;
-            targetsTable->entries = NULL;
-            SetTargetsTable (display, targetsTable);
-        }
-	if (propertyRecPtr->info.num_target_lists > targetsTable->numEntries) {
-	    /*
+   struct _propertyRec
+   {
+      xmMotifTargetsPropertyRec info;
+   } *propertyRecPtr = NULL;
+
+   char         *bufptr;
+   short         num_targets;
+   Atom          targetsTableAtom;
+   int           format;
+   unsigned long bytesafter, lengthRtn;
+   Atom          type;
+   int           i, j;
+   Atom         *targets;
+   Boolean       ret;
+   Window        motifWindow;
+   CARD16Item    shortItem;
+   CARD32Item    longItem;
+   targetsTableAtom = XInternAtom(display, XmI_MOTIF_DRAG_TARGETS, False);
+   motifWindow      = GetMotifWindow(display);
+   _XmProcessLock();
+   StartProtectedSection(display, motifWindow);
+   ret = ((XGetWindowProperty(display,
+                              motifWindow,
+                              targetsTableAtom,
+                              0L,
+                              MAXPROPLEN,
+                              False,
+                              targetsTableAtom,
+                              &type,
+                              &format,
+                              &lengthRtn,
+                              &bytesafter,
+                              (unsigned char **)&propertyRecPtr)
+           == Success)
+          && (lengthRtn >= sizeof(xmMotifTargetsPropertyRec)));
+   EndProtectedSection(display);
+   if (bad_window)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE1);
+      ret = False;
+   }
+   _XmProcessUnlock();
+   if (ret)
+   {
+      if (propertyRecPtr->info.protocol_version != _MOTIF_DRAG_PROTOCOL_VERSION)
+      {
+         XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE2);
+      }
+      if (propertyRecPtr->info.byte_order != _XmByteOrderChar)
+      {
+         swap2bytes(propertyRecPtr->info.num_target_lists);
+         swap4bytes(propertyRecPtr->info.heap_offset);
+      }
+      if (targetsTable == NULL)
+      {
+         targetsTable             = (xmTargetsTable)XtMalloc(sizeof(xmTargetsTableRec));
+         targetsTable->numEntries = 0;
+         targetsTable->entries    = NULL;
+         SetTargetsTable(display, targetsTable);
+      }
+      if (propertyRecPtr->info.num_target_lists > targetsTable->numEntries)
+      {
+         /*
 	     *  expand the target table
 	     */
-            targetsTable->entries = (xmTargetsTableEntry)
-	      XtRealloc(
-			(char *)targetsTable->entries,	/* NULL ok */
-			sizeof(xmTargetsTableEntryRec) *
-			propertyRecPtr->info.num_target_lists);
-	    /*
+         targetsTable->entries = (xmTargetsTableEntry)
+            XtRealloc(
+               (char *)targetsTable->entries, /* NULL ok */
+               sizeof(xmTargetsTableEntryRec) * propertyRecPtr->info.num_target_lists);
+         /*
 	     *  read the new entries
 	     */
-	    bufptr = (char *)propertyRecPtr + sizeof(xmMotifTargetsPropertyRec);
-	    for (i = 0; i < targetsTable->numEntries; i++) {
-		memcpy( &shortItem, bufptr, 2 );
-	        if (propertyRecPtr->info.byte_order != _XmByteOrderChar) {
-		    swap2bytes(shortItem.value);
-		}
-		num_targets = shortItem.value;
-		bufptr += 2 + 4 * num_targets;
-		if (num_targets != targetsTable->entries[i].numTargets) {
-		    XmeWarning( (Widget) XmGetXmDisplay (display), MESSAGE6);
-		}
-	    }
-	    for (; i < (int)propertyRecPtr->info.num_target_lists; i++) {
-		memcpy( &shortItem, bufptr, 2 );
-		bufptr += 2;
-	        if (propertyRecPtr->info.byte_order != _XmByteOrderChar) {
-	            swap2bytes(shortItem.value);
-		}
-		num_targets = shortItem.value;
-                if(!num_targets)
-		  targets = NULL;
-                else
-	          targets = (Atom *) XtMalloc(sizeof(Atom) * num_targets);
-		/*
+         bufptr = (char *)propertyRecPtr + sizeof(xmMotifTargetsPropertyRec);
+         for (i = 0; i < targetsTable->numEntries; i++)
+         {
+            memcpy(&shortItem, bufptr, 2);
+            if (propertyRecPtr->info.byte_order != _XmByteOrderChar)
+            {
+               swap2bytes(shortItem.value);
+            }
+            num_targets = shortItem.value;
+            bufptr     += 2 + 4 * num_targets;
+            if (num_targets != targetsTable->entries[i].numTargets)
+            {
+               XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE6);
+            }
+         }
+         for (; i < (int)propertyRecPtr->info.num_target_lists; i++)
+         {
+            memcpy(&shortItem, bufptr, 2);
+            bufptr += 2;
+            if (propertyRecPtr->info.byte_order != _XmByteOrderChar)
+            {
+               swap2bytes(shortItem.value);
+            }
+            num_targets = shortItem.value;
+            if (!num_targets)
+               targets = NULL;
+            else
+               targets = (Atom *)XtMalloc(sizeof(Atom) * num_targets);
+            /*
 	 	 *  Read each Atom in one at a time.
 	 	 */
-		for (j = 0; j < num_targets; j++) {
-		    memcpy( &longItem, bufptr, 4 );
-		    bufptr += 4;
-	            if (propertyRecPtr->info.byte_order != _XmByteOrderChar) {
-			swap4bytes(longItem.value);
-		    }
-		    targets[j] = (Atom) longItem.value ;
-		}
-                targetsTable->numEntries++;
-                targetsTable->entries[i].numTargets = num_targets;
-                targetsTable->entries[i].targets = targets;
-	    }
-	}
-    }
-    /*
+            for (j = 0; j < num_targets; j++)
+            {
+               memcpy(&longItem, bufptr, 4);
+               bufptr += 4;
+               if (propertyRecPtr->info.byte_order != _XmByteOrderChar)
+               {
+                  swap4bytes(longItem.value);
+               }
+               targets[j] = (Atom)longItem.value;
+            }
+            targetsTable->numEntries++;
+            targetsTable->entries[i].numTargets = num_targets;
+            targetsTable->entries[i].targets    = targets;
+         }
+      }
+   }
+   /*
      *  Free any memory that Xlib passed us.
      */
-    if (propertyRecPtr) {
-        XFree((char *)propertyRecPtr);
-    }
-    return (ret);
+   if (propertyRecPtr)
+   {
+      XFree((char *)propertyRecPtr);
+   }
+   return (ret);
 }
+
 /*****************************************************************************
  *
  *  CreateDefaultTargetsTable ()
  *
  *  Create the default targets table.
  ***************************************************************************/
-static Atom stringTargets[] = 	{ XA_STRING,	};
+static Atom stringTargets[] = {
+   XA_STRING,
+};
+
 static xmTargetsTable
 CreateDefaultTargetsTable(
-        Display *display )
+   Display *display)
 {
-    xmTargetsTable	targetsTable;
-    Cardinal		size;
-    targetsTable = (xmTargetsTable) XtMalloc(sizeof(xmTargetsTableRec));
-    targetsTable->numEntries = 2;
-    targetsTable->entries =
-	(xmTargetsTableEntry) XtMalloc(sizeof(xmTargetsTableEntryRec) * 2);
+   xmTargetsTable targetsTable;
+   Cardinal       size;
+   targetsTable             = (xmTargetsTable)XtMalloc(sizeof(xmTargetsTableRec));
+   targetsTable->numEntries = 2;
+   targetsTable->entries    = (xmTargetsTableEntry)XtMalloc(sizeof(xmTargetsTableEntryRec) * 2);
 /* According to specs and man pages, default values of XmNimportTargets
  * and XmNnumImportTargets should be NULL and zero respectively. The
  * corresponding record in default targets table is entries[0]. The original
@@ -968,15 +1049,16 @@ CreateDefaultTargetsTable(
     targetsTable->entries[0].targets = (Atom*) XtMalloc(size);
     memcpy(targetsTable->entries[0].targets, nullTargets, size);
 #endif
-    targetsTable->entries[0].numTargets = _XmDefaultNumImportTargets;
-    targetsTable->entries[0].targets = (Atom*) _XmDefaultImportTargets;
-    targetsTable->entries[1].numTargets = XtNumber(stringTargets);
-    size = sizeof(Atom) * targetsTable->entries[1].numTargets;
-    targetsTable->entries[1].targets = (Atom*) XtMalloc(size);
-    memcpy(targetsTable->entries[1].targets, stringTargets, size);
-    SetTargetsTable (display, targetsTable);
-    return (targetsTable);
+   targetsTable->entries[0].numTargets = _XmDefaultNumImportTargets;
+   targetsTable->entries[0].targets    = (Atom *)_XmDefaultImportTargets;
+   targetsTable->entries[1].numTargets = XtNumber(stringTargets);
+   size                                = sizeof(Atom) * targetsTable->entries[1].numTargets;
+   targetsTable->entries[1].targets    = (Atom *)XtMalloc(size);
+   memcpy(targetsTable->entries[1].targets, stringTargets, size);
+   SetTargetsTable(display, targetsTable);
+   return (targetsTable);
 }
+
 /*****************************************************************************
  *
  *  CreateDefaultAtomsTable ()
@@ -985,19 +1067,18 @@ CreateDefaultTargetsTable(
  ***************************************************************************/
 static xmAtomsTable
 CreateDefaultAtomsTable(
-        Display *display )
+   Display *display)
 {
-    xmAtomsTable	atomsTable;
-    atomsTable = (xmAtomsTable) XtMalloc(sizeof(xmAtomsTableRec));
-    atomsTable->numEntries = 1;
-    atomsTable->entries =
-	(xmAtomsTableEntry) XtMalloc(sizeof(xmAtomsTableEntryRec));
-    atomsTable->entries[0].atom =
-	XInternAtom (display, XmS_MOTIF_ATOM_0, False);
-    atomsTable->entries[0].time = 0;
-    SetAtomsTable (display, atomsTable);
-    return (atomsTable);
+   xmAtomsTable atomsTable;
+   atomsTable                  = (xmAtomsTable)XtMalloc(sizeof(xmAtomsTableRec));
+   atomsTable->numEntries      = 1;
+   atomsTable->entries         = (xmAtomsTableEntry)XtMalloc(sizeof(xmAtomsTableEntryRec));
+   atomsTable->entries[0].atom = XInternAtom(display, XmS_MOTIF_ATOM_0, False);
+   atomsTable->entries[0].time = 0;
+   SetAtomsTable(display, atomsTable);
+   return (atomsTable);
 }
+
 /*****************************************************************************
  *
  *  _XmInitTargetsTable ()
@@ -1005,56 +1086,67 @@ CreateDefaultAtomsTable(
  ***************************************************************************/
 void
 _XmInitTargetsTable(
-        Display *display )
+   Display *display)
 {
-    Window	motifWindow;
-    Boolean	grabbed = False;
-    /*
+   Window  motifWindow;
+   Boolean grabbed = False;
+   /*
      *  Read the motifWindow property on the root.  If the property is not
      *    there, create a persistant motifWindow and put it on the property.
      *  Reading the atom pair, atoms table, and targets table properties
      *    on motifWindow is delayed so they can be saved in contexts indexed
      *    by the original display.
      */
-    if ((motifWindow = ReadMotifWindow (display)) == None) {
-	motifWindow = CreateMotifWindow (display);
-    }
-    SetMotifWindow (display, motifWindow);
-    /*
+   if ((motifWindow = ReadMotifWindow(display)) == None)
+   {
+      motifWindow = CreateMotifWindow(display);
+   }
+   SetMotifWindow(display, motifWindow);
+   /*
      * At this time, we are not sure the motifWindow id is valid,
      * but we will find out in the ReadAtomsTable. We will try to
      * recreate it there.
      */
-    if (!ReadAtomsTable (display, GetAtomsTable (display))) {
-        XGrabServer(display);
-        grabbed = True;
-        if (!ReadAtomsTable (display, GetAtomsTable (display))) {
-            WriteAtomsTable (display, CreateDefaultAtomsTable (display));
-        }
-    }
-    if (!ReadTargetsTable (display, GetTargetsTable (display))) {
-        if (!grabbed) {
-	    XGrabServer(display);
-            grabbed = True;
-	    if (!ReadTargetsTable (display, GetTargetsTable (display))) {
-                WriteTargetsTable (display,
-				   CreateDefaultTargetsTable (display));
-	    }
-	}
-	else {
-            WriteTargetsTable (display, CreateDefaultTargetsTable (display));
-	}
-    }
-    if (grabbed) {
-	XUngrabServer (display);
-        XFlush (display);
-    }
+   if (!ReadAtomsTable(display, GetAtomsTable(display)))
+   {
+      XGrabServer(display);
+      grabbed = True;
+      if (!ReadAtomsTable(display, GetAtomsTable(display)))
+      {
+         WriteAtomsTable(display, CreateDefaultAtomsTable(display));
+      }
+   }
+   if (!ReadTargetsTable(display, GetTargetsTable(display)))
+   {
+      if (!grabbed)
+      {
+         XGrabServer(display);
+         grabbed = True;
+         if (!ReadTargetsTable(display, GetTargetsTable(display)))
+         {
+            WriteTargetsTable(display,
+                              CreateDefaultTargetsTable(display));
+         }
+      }
+      else
+      {
+         WriteTargetsTable(display, CreateDefaultTargetsTable(display));
+      }
+   }
+   if (grabbed)
+   {
+      XUngrabServer(display);
+      XFlush(display);
+   }
 }
-void _XmClearDisplayTables (Display *display)
+
+void
+_XmClearDisplayTables(Display *display)
 {
-       SetAtomsTable(display,NULL);
-       SetTargetsTable(display,NULL);
+   SetAtomsTable(display, NULL);
+   SetTargetsTable(display, NULL);
 }
+
 /*****************************************************************************
  *
  *  _XmIndexToTargets ()
@@ -1062,35 +1154,40 @@ void _XmClearDisplayTables (Display *display)
  ***************************************************************************/
 Cardinal
 _XmIndexToTargets(
-        Widget shell,
-        Cardinal t_index,
-        Atom **targetsRtn )
+   Widget   shell,
+   Cardinal t_index,
+   Atom   **targetsRtn)
 {
-    Display		*display = XtDisplay (shell);
-    xmTargetsTable	targetsTable;
-    if (!(targetsTable = GetTargetsTable (display))) {
-        _XmInitTargetsTable (display);
-        targetsTable = GetTargetsTable (display);
-    }
-    if (t_index >= targetsTable->numEntries) {
-        /*
+   Display       *display = XtDisplay(shell);
+   xmTargetsTable targetsTable;
+   if (!(targetsTable = GetTargetsTable(display)))
+   {
+      _XmInitTargetsTable(display);
+      targetsTable = GetTargetsTable(display);
+   }
+   if (t_index >= targetsTable->numEntries)
+   {
+      /*
 	 *  Retrieve the targets table from motifWindow.
 	 *  If this fails, then either the motifWindow or the targets table
 	 *  property on motifWindow has been destroyed, so reinitialize.
 	 */
-        if (!ReadTargetsTable (display, targetsTable)) {
-            _XmInitTargetsTable (display);
-            targetsTable = GetTargetsTable (display);
-	}
-    }
-    if (t_index >= targetsTable->numEntries) {
-	XmeWarning ((Widget) XmGetXmDisplay (display), MESSAGE7);
-        *targetsRtn = NULL;
-        return 0;
-    }
-    *targetsRtn = targetsTable->entries[t_index].targets;
-    return targetsTable->entries[t_index].numTargets;
+      if (!ReadTargetsTable(display, targetsTable))
+      {
+         _XmInitTargetsTable(display);
+         targetsTable = GetTargetsTable(display);
+      }
+   }
+   if (t_index >= targetsTable->numEntries)
+   {
+      XmeWarning((Widget)XmGetXmDisplay(display), MESSAGE7);
+      *targetsRtn = NULL;
+      return 0;
+   }
+   *targetsRtn = targetsTable->entries[t_index].targets;
+   return targetsTable->entries[t_index].numTargets;
 }
+
 /*****************************************************************************
  *
  *  _XmAtomCompare ()
@@ -1101,11 +1198,12 @@ _XmIndexToTargets(
  ***************************************************************************/
 static int
 AtomCompare(
-        XmConst void *atom1,
-        XmConst void *atom2 )
+   XmConst void *atom1,
+   XmConst void *atom2)
 {
-    return (*((Atom *) atom1) - *((Atom *) atom2));
+   return (*((Atom *)atom1) - *((Atom *)atom2));
 }
+
 /*****************************************************************************
  *
  *  _XmTargetsToIndex ()
@@ -1113,89 +1211,102 @@ AtomCompare(
  ***************************************************************************/
 Cardinal
 _XmTargetsToIndex(
-        Widget shell,
-        Atom *targets,
-        Cardinal numTargets )
+   Widget   shell,
+   Atom    *targets,
+   Cardinal numTargets)
 {
-    Display		*display = XtDisplay (shell);
-    Cardinal		i, j;
-    Cardinal		size;
-    Cardinal		oldNumEntries;
-    Atom		*newTargets;
-    xmTargetsTable	targetsTable;
-    if(!numTargets) return 0;
-    _XmProcessLock();
-    if (!(targetsTable = GetTargetsTable (display))) {
-        _XmInitTargetsTable (display);
-        targetsTable = GetTargetsTable (display);
-    }
-    /*
+   Display       *display = XtDisplay(shell);
+   Cardinal       i, j;
+   Cardinal       size;
+   Cardinal       oldNumEntries;
+   Atom          *newTargets;
+   xmTargetsTable targetsTable;
+   if (!numTargets) return 0;
+   _XmProcessLock();
+   if (!(targetsTable = GetTargetsTable(display)))
+   {
+      _XmInitTargetsTable(display);
+      targetsTable = GetTargetsTable(display);
+   }
+   /*
      *  Create a new targets list, sorted in ascending order.
      */
-    size =  sizeof(Atom) * numTargets;
-    newTargets = (Atom *) XtMalloc(size);
-    memcpy (newTargets, targets, size);
-    qsort ((void *)newTargets, (size_t)numTargets, (size_t)sizeof(Atom),
-           AtomCompare);
-    /*
+   size       = sizeof(Atom) * numTargets;
+   newTargets = (Atom *)XtMalloc(size);
+   memcpy(newTargets, targets, size);
+   qsort((void *)newTargets, (size_t)numTargets, (size_t)sizeof(Atom), AtomCompare);
+   /*
      *  Try to find the targets list in the targets table.
      */
-    for (i = 0; i < targetsTable->numEntries; i++) {
-	if (numTargets == targetsTable->entries[i].numTargets) {
-            for (j = 0; j < numTargets; j++) {
-	        if (newTargets[j] != targetsTable->entries[i].targets[j]) {
-	            break;
-		}
-	    }
-	    if (j == numTargets) {
-	        XtFree ((char *)newTargets);
-                _XmProcessUnlock();
-	        return i;
-	    }
-	}
-    }
-    oldNumEntries = targetsTable->numEntries;
-    /*
+   for (i = 0; i < targetsTable->numEntries; i++)
+   {
+      if (numTargets == targetsTable->entries[i].numTargets)
+      {
+         for (j = 0; j < numTargets; j++)
+         {
+            if (newTargets[j] != targetsTable->entries[i].targets[j])
+            {
+               break;
+            }
+         }
+         if (j == numTargets)
+         {
+            XtFree((char *)newTargets);
+            _XmProcessUnlock();
+            return i;
+         }
+      }
+   }
+   oldNumEntries = targetsTable->numEntries;
+   /*
      *  Lock and retrieve the target table from motifWindow.
      *  If this fails, then either the motifWindow or the targets table
      *  property on motifWindow has been destroyed, so reinitialize.
      *  If the target list is still not in the table, add the target list
      *  to the table and write the table out to its property.
      */
-    XGrabServer (display);
-    if (!ReadTargetsTable (display, targetsTable)) {
-	XUngrabServer (display);
-        _XmInitTargetsTable (display);
-	XGrabServer (display);
-        targetsTable = GetTargetsTable (display);
-    }
-    for (i = oldNumEntries; i < targetsTable->numEntries; i++) {
-	if (numTargets == targetsTable->entries[i].numTargets) {
-	    for (j = 0; j < numTargets; j++) {
-		if (newTargets[j] != targetsTable->entries[i].targets[j]) {
-	            break;
-		}
-	    }
-	    if (j == numTargets) {
-	        XtFree ((char *)newTargets);
-		break;
+   XGrabServer(display);
+   if (!ReadTargetsTable(display, targetsTable))
+   {
+      XUngrabServer(display);
+      _XmInitTargetsTable(display);
+      XGrabServer(display);
+      targetsTable = GetTargetsTable(display);
+   }
+   for (i = oldNumEntries; i < targetsTable->numEntries; i++)
+   {
+      if (numTargets == targetsTable->entries[i].numTargets)
+      {
+         for (j = 0; j < numTargets; j++)
+         {
+            if (newTargets[j] != targetsTable->entries[i].targets[j])
+            {
+               break;
             }
-	}
-    }
-    if (i == targetsTable->numEntries) {
-        targetsTable->numEntries++;
-        targetsTable->entries = (xmTargetsTableEntry) XtRealloc(
-	    (char *)targetsTable->entries,	/* NULL ok */
-	    sizeof(xmTargetsTableEntryRec) * (targetsTable->numEntries));
-        targetsTable->entries[i].numTargets = numTargets;
-        targetsTable->entries[i].targets = newTargets;
-        WriteTargetsTable (display, targetsTable);
-    }
-    XUngrabServer (display);
-    XFlush (display);
-    _XmProcessUnlock();
-    return i;
+         }
+         if (j == numTargets)
+         {
+            XtFree((char *)newTargets);
+            break;
+         }
+      }
+   }
+   if (i == targetsTable->numEntries)
+   {
+      targetsTable->numEntries++;
+      targetsTable->entries = (xmTargetsTableEntry)XtRealloc(
+         (char *)targetsTable->entries, /* NULL ok */
+         sizeof(xmTargetsTableEntryRec) * (targetsTable->numEntries));
+      targetsTable->entries[i].numTargets = numTargets;
+      targetsTable->entries[i].targets    = newTargets;
+      WriteTargetsTable(display, targetsTable);
+   }
+   XUngrabServer(display);
+   XFlush(display);
+   _XmProcessUnlock();
+   return i;
 }
+
 /*****************************************************************************
  *
  *  _XmAllocMotifAtom ()
@@ -1204,20 +1315,21 @@ _XmTargetsToIndex(
  ***************************************************************************/
 Atom
 _XmAllocMotifAtom(
-        Widget shell,
-        Time time )
+   Widget shell,
+   Time   time)
 {
-    Display		*display = XtDisplay (shell);
-    xmAtomsTable	atomsTable;
-    xmAtomsTableEntry	p;
-    Cardinal		i;
-    char		atomname[80];
-    Atom		atomReturn = None;
-    if (!(atomsTable = GetAtomsTable (display))) {
-        _XmInitTargetsTable (display);
-        atomsTable = GetAtomsTable (display);
-    }
-    /*
+   Display          *display = XtDisplay(shell);
+   xmAtomsTable      atomsTable;
+   xmAtomsTableEntry p;
+   Cardinal          i;
+   char              atomname[80];
+   Atom              atomReturn = None;
+   if (!(atomsTable = GetAtomsTable(display)))
+   {
+      _XmInitTargetsTable(display);
+      atomsTable = GetAtomsTable(display);
+   }
+   /*
      *  Lock and retrieve the atoms table from motifWindow.
      *  If this fails, then either the motifWindow or the atoms table
      *  property on motifWindow has been destroyed, so reinitialize.
@@ -1225,35 +1337,40 @@ _XmAllocMotifAtom(
      *  If no atom is available, add an atom to the table.
      *  Write the atoms table out to its property.
      */
-    XGrabServer (display);
-    if (!ReadAtomsTable (display, atomsTable)) {
-	XUngrabServer (display);
-        _XmInitTargetsTable (display);
-	XGrabServer (display);
-        atomsTable = GetAtomsTable (display);
-    }
-    for (p = atomsTable->entries, i = atomsTable->numEntries; i; p++, i--) {
-        if ((p->time) == 0) {
-            p->time = time;
-            atomReturn = p->atom;
-	    break;
-        }
-    }
-    if (atomReturn == None) {
-	i = atomsTable->numEntries++;
-        atomsTable->entries = (xmAtomsTableEntry) XtRealloc(
-	    (char *)atomsTable->entries,	/* NULL ok */
-  	    (atomsTable->numEntries * sizeof(xmAtomsTableEntryRec)));
-        sprintf(atomname, "%s%d", "_MOTIF_ATOM_", i);
-        atomsTable->entries[i].atom = XInternAtom (display, atomname, False);
-        atomsTable->entries[i].time = time;
-        atomReturn = atomsTable->entries[i].atom;
-    }
-    WriteAtomsTable (display, atomsTable);
-    XUngrabServer (display);
-    XFlush (display);
-    return (atomReturn);
+   XGrabServer(display);
+   if (!ReadAtomsTable(display, atomsTable))
+   {
+      XUngrabServer(display);
+      _XmInitTargetsTable(display);
+      XGrabServer(display);
+      atomsTable = GetAtomsTable(display);
+   }
+   for (p = atomsTable->entries, i = atomsTable->numEntries; i; p++, i--)
+   {
+      if ((p->time) == 0)
+      {
+         p->time    = time;
+         atomReturn = p->atom;
+         break;
+      }
+   }
+   if (atomReturn == None)
+   {
+      i                   = atomsTable->numEntries++;
+      atomsTable->entries = (xmAtomsTableEntry)XtRealloc(
+         (char *)atomsTable->entries, /* NULL ok */
+         (atomsTable->numEntries * sizeof(xmAtomsTableEntryRec)));
+      sprintf(atomname, "%s%d", "_MOTIF_ATOM_", i);
+      atomsTable->entries[i].atom = XInternAtom(display, atomname, False);
+      atomsTable->entries[i].time = time;
+      atomReturn                  = atomsTable->entries[i].atom;
+   }
+   WriteAtomsTable(display, atomsTable);
+   XUngrabServer(display);
+   XFlush(display);
+   return (atomReturn);
 }
+
 /*****************************************************************************
  *
  *  _XmGetMotifAtom ()
@@ -1263,57 +1380,63 @@ _XmAllocMotifAtom(
  ***************************************************************************/
 Atom
 _XmGetMotifAtom(
-        Widget shell,
-        Time time )
+   Widget shell,
+   Time   time)
 {
-    Display		*display = XtDisplay (shell);
-    xmAtomsTable	atomsTable;
-    Cardinal		i;
-    Atom		atomReturn = None;
-    Time		c_time;
-    /*
+   Display     *display = XtDisplay(shell);
+   xmAtomsTable atomsTable;
+   Cardinal     i;
+   Atom         atomReturn = None;
+   Time         c_time;
+   /*
      *  Get the atoms table saved in the display's context.
      *  This table will be updated from the motifWindow property.
      */
-    if (!(atomsTable = GetAtomsTable (display))) {
-        _XmInitTargetsTable (display);
-        atomsTable = GetAtomsTable (display);
-    }
-    /*
+   if (!(atomsTable = GetAtomsTable(display)))
+   {
+      _XmInitTargetsTable(display);
+      atomsTable = GetAtomsTable(display);
+   }
+   /*
      *  Lock and retrieve the atoms table from motifWindow.
      *  If this fails, then either the motifWindow or the atoms table
      *  property on motifWindow has been destroyed, so reinitialize.
      *  Try to find the atom with nonzero timestamp less than but closest
      *  to the specified value.
      */
-    XGrabServer (display);
-    if (!ReadAtomsTable (display, atomsTable)) {
-	XUngrabServer (display);
-        _XmInitTargetsTable (display);
-	XGrabServer (display);
-        atomsTable = GetAtomsTable (display);
-    }
-    for (i = 0; i < atomsTable->numEntries; i++) {
-        if ((atomsTable->entries[i].time) &&
-            (atomsTable->entries[i].time <= time)) {
-	    break;
-	}
-    }
-    if (i < atomsTable->numEntries) {
-        atomReturn = atomsTable->entries[i].atom;
-        c_time = atomsTable->entries[i++].time;
-        for (; i < atomsTable->numEntries; i++) {
-            if ((atomsTable->entries[i].time > c_time) &&
-                (atomsTable->entries[i].time < time)) {
-                atomReturn = atomsTable->entries[i].atom;
-                c_time = atomsTable->entries[i].time;
-	    }
-	}
-    }
-    XUngrabServer (display);
-    XFlush (display);
-    return (atomReturn);
+   XGrabServer(display);
+   if (!ReadAtomsTable(display, atomsTable))
+   {
+      XUngrabServer(display);
+      _XmInitTargetsTable(display);
+      XGrabServer(display);
+      atomsTable = GetAtomsTable(display);
+   }
+   for (i = 0; i < atomsTable->numEntries; i++)
+   {
+      if ((atomsTable->entries[i].time) && (atomsTable->entries[i].time <= time))
+      {
+         break;
+      }
+   }
+   if (i < atomsTable->numEntries)
+   {
+      atomReturn = atomsTable->entries[i].atom;
+      c_time     = atomsTable->entries[i++].time;
+      for (; i < atomsTable->numEntries; i++)
+      {
+         if ((atomsTable->entries[i].time > c_time) && (atomsTable->entries[i].time < time))
+         {
+            atomReturn = atomsTable->entries[i].atom;
+            c_time     = atomsTable->entries[i].time;
+         }
+      }
+   }
+   XUngrabServer(display);
+   XFlush(display);
+   return (atomReturn);
 }
+
 /*****************************************************************************
  *
  *  _XmFreeMotifAtom ()
@@ -1322,48 +1445,54 @@ _XmGetMotifAtom(
  ***************************************************************************/
 void
 _XmFreeMotifAtom(
-        Widget shell,
-        Atom atom )
+   Widget shell,
+   Atom   atom)
 {
-    Display		*display = XtDisplay (shell);
-    xmAtomsTable	atomsTable;
-    xmAtomsTableEntry	p;
-    Cardinal		i;
-    if (atom == None) {
-	return;
-    }
-    /*
+   Display          *display = XtDisplay(shell);
+   xmAtomsTable      atomsTable;
+   xmAtomsTableEntry p;
+   Cardinal          i;
+   if (atom == None)
+   {
+      return;
+   }
+   /*
      *  Get the atoms table saved in the display's context.
      *  This table will be updated from the motifWindow property.
      */
-    if (!(atomsTable = GetAtomsTable (display))) {
-        _XmInitTargetsTable (display);
-        atomsTable = GetAtomsTable (display);
-    }
-    /*
+   if (!(atomsTable = GetAtomsTable(display)))
+   {
+      _XmInitTargetsTable(display);
+      atomsTable = GetAtomsTable(display);
+   }
+   /*
      *  Lock and retrieve the atoms table from its property.
      *  If this fails, then either the motifWindow or the atoms table
      *  property on motifWindow has been destroyed, so reinitialize.
      *  Free the matched atom, if present, and write the atoms table out
      *  to its property.
      */
-    XGrabServer (display);
-    if (!ReadAtomsTable (display, atomsTable)) {
-	XUngrabServer (display);
-        _XmInitTargetsTable (display);
-	XGrabServer (display);
-        atomsTable = GetAtomsTable (display);
-    }
-    for (p = atomsTable->entries, i = atomsTable->numEntries; i; p++, i--) {
-        if (p->atom == atom) {
-            p->time = (Time) 0;
-            WriteAtomsTable (display, atomsTable);
-	    break;
-        }
-    }
-    XUngrabServer (display);
-    XFlush (display);
+   XGrabServer(display);
+   if (!ReadAtomsTable(display, atomsTable))
+   {
+      XUngrabServer(display);
+      _XmInitTargetsTable(display);
+      XGrabServer(display);
+      atomsTable = GetAtomsTable(display);
+   }
+   for (p = atomsTable->entries, i = atomsTable->numEntries; i; p++, i--)
+   {
+      if (p->atom == atom)
+      {
+         p->time = (Time)0;
+         WriteAtomsTable(display, atomsTable);
+         break;
+      }
+   }
+   XUngrabServer(display);
+   XFlush(display);
 }
+
 /*****************************************************************************
  *
  *  _XmDestroyMotifWindow ()
@@ -1371,18 +1500,20 @@ _XmFreeMotifAtom(
  ***************************************************************************/
 void
 _XmDestroyMotifWindow(
-        Display  *display )
+   Display *display)
 {
-    Window	motifWindow;
-    Atom	motifWindowAtom;
-    if ((motifWindow = ReadMotifWindow (display)) != None) {
-        motifWindowAtom = XInternAtom (display, XmI_MOTIF_DRAG_WINDOW, False);
-        XDeleteProperty (display,
-                         DefaultRootWindow (display),
-                         motifWindowAtom);
-	XDestroyWindow (display, motifWindow);
-    }
+   Window motifWindow;
+   Atom   motifWindowAtom;
+   if ((motifWindow = ReadMotifWindow(display)) != None)
+   {
+      motifWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_WINDOW, False);
+      XDeleteProperty(display,
+                      DefaultRootWindow(display),
+                      motifWindowAtom);
+      XDestroyWindow(display, motifWindow);
+   }
 }
+
 /*****************************************************************************
  *
  *  _XmGetDragProxyWindow ()
@@ -1390,42 +1521,44 @@ _XmDestroyMotifWindow(
  ***************************************************************************/
 Window
 _XmGetDragProxyWindow(
-        Display  *display )
+   Display *display)
 {
-    Atom		motifProxyWindowAtom;
-    Atom		type;
-    int			format;
-    unsigned long	lengthRtn;
-    unsigned long	bytesafter;
-    Window		*property = NULL;
-    Window		motifWindow;
-    Window		motifProxyWindow = None;
-    if ((motifWindow = ReadMotifWindow (display)) != None) {
-	motifProxyWindowAtom =
-	    XInternAtom (display, XmI_MOTIF_DRAG_PROXY_WINDOW, False);
-	_XmProcessLock();
-	StartProtectedSection (display, motifWindow);
-	if ((XGetWindowProperty (display,
-                                 motifWindow,
-                                 motifProxyWindowAtom,
-                                 0L, MAXPROPLEN,
-			         False,
-                                 AnyPropertyType,
-                                 &type,
-			         &format,
-			         &lengthRtn,
-			         &bytesafter,
-			         (unsigned char **) &property) == Success) &&
-             (type == XA_WINDOW) &&
-	     (format == 32) &&
-	     (lengthRtn == 1)) {
-	    motifProxyWindow = *property;
-	}
-	EndProtectedSection (display);
-	_XmProcessUnlock();
-	if (property) {
-	    XFree ((char *)property);
-	}
-    }
-    return (motifProxyWindow);
+   Atom          motifProxyWindowAtom;
+   Atom          type;
+   int           format;
+   unsigned long lengthRtn;
+   unsigned long bytesafter;
+   Window       *property = NULL;
+   Window        motifWindow;
+   Window        motifProxyWindow = None;
+   if ((motifWindow = ReadMotifWindow(display)) != None)
+   {
+      motifProxyWindowAtom = XInternAtom(display, XmI_MOTIF_DRAG_PROXY_WINDOW, False);
+      _XmProcessLock();
+      StartProtectedSection(display, motifWindow);
+      if ((XGetWindowProperty(display,
+                              motifWindow,
+                              motifProxyWindowAtom,
+                              0L,
+                              MAXPROPLEN,
+                              False,
+                              AnyPropertyType,
+                              &type,
+                              &format,
+                              &lengthRtn,
+                              &bytesafter,
+                              (unsigned char **)&property)
+           == Success)
+          && (type == XA_WINDOW) && (format == 32) && (lengthRtn == 1))
+      {
+         motifProxyWindow = *property;
+      }
+      EndProtectedSection(display);
+      _XmProcessUnlock();
+      if (property)
+      {
+         XFree((char *)property);
+      }
+   }
+   return (motifProxyWindow);
 }

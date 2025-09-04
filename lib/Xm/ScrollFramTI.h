@@ -34,20 +34,20 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmSFAddNavigator(
-			      Widget sf,
-			      Widget nav,
-			      Mask dimMask,
-			      XmScrollFrameData scroll_frame_data);
+   Widget            sf,
+   Widget            nav,
+   Mask              dimMask,
+   XmScrollFrameData scroll_frame_data);
 extern void _XmSFRemoveNavigator(
-				 Widget sf,
-				 Widget nav,
-				 XmScrollFrameData scroll_frame_data);
+   Widget            sf,
+   Widget            nav,
+   XmScrollFrameData scroll_frame_data);
 extern void _XmSFUpdateNavigatorsValue(
-				       Widget sf,
-				       XmNavigatorData nav_data,
-				       Boolean notify);
+   Widget          sf,
+   XmNavigatorData nav_data,
+   Boolean         notify);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmScrollFrameTI_h */

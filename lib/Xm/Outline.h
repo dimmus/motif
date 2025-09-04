@@ -34,8 +34,8 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
-typedef struct _XmOutlineClassRec	*XmOutlineWidgetClass;
-typedef struct _XmOutlineRec		*XmOutlineWidget;
+typedef struct _XmOutlineClassRec *XmOutlineWidgetClass;
+typedef struct _XmOutlineRec      *XmOutlineWidget;
 /************************************************************
 *	MACROS
 *************************************************************/
@@ -49,7 +49,7 @@ typedef struct _XmOutlineRec		*XmOutlineWidget;
  *                 args, num_args - the number and list of args.
  *	Returns: The Widget created.
  */
-Widget XmCreateOutline(Widget, String, ArgList, Cardinal);
+Widget             XmCreateOutline(Widget, String, ArgList, Cardinal);
 extern WidgetClass xmOutlineWidgetClass;
 #if defined(__cplusplus)
 }

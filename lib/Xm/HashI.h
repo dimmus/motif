@@ -25,33 +25,33 @@
  * HISTORY
  */
 #ifndef _XmHashI_h
-#define _XmHashI_h
-#include <Xm/XmP.h>
-#ifdef __cplusplus
+#   define _XmHashI_h
+#   include <Xm/XmP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-typedef int	                XmHashValue;
+#   endif
+typedef int                     XmHashValue;
 typedef XtPointer               XmHashKey;
-typedef struct _XmHashTableRec  *XmHashTable;
+typedef struct _XmHashTableRec *XmHashTable;
 typedef Boolean (*XmHashCompareProc)(XmHashKey, XmHashKey);
 typedef XmHashValue (*XmHashFunction)(XmHashKey);
 typedef Boolean (*XmHashMapProc)(XmHashKey, XtPointer value, XtPointer data);
 XmHashTable _XmAllocHashTable(Cardinal, XmHashCompareProc, XmHashFunction);
-void _XmResizeHashTable(XmHashTable, Cardinal);
-void _XmFreeHashTable(XmHashTable);
-XtPointer _XmGetHashEntryIterate(XmHashTable, XmHashKey, XtPointer*);
-void _XmAddHashEntry(XmHashTable, XmHashKey, XtPointer);
-XtPointer _XmRemoveHashEntry(XmHashTable, XmHashKey);
-XtPointer _XmRemoveHashIterator(XmHashTable, XtPointer*);
-Cardinal _XmHashTableCount(XmHashTable);
-Cardinal _XmHashTableSize(XmHashTable);
-void _XmMapHashTable(XmHashTable, XmHashMapProc, XtPointer);
-#ifdef DEBUG
+void        _XmResizeHashTable(XmHashTable, Cardinal);
+void        _XmFreeHashTable(XmHashTable);
+XtPointer   _XmGetHashEntryIterate(XmHashTable, XmHashKey, XtPointer *);
+void        _XmAddHashEntry(XmHashTable, XmHashKey, XtPointer);
+XtPointer   _XmRemoveHashEntry(XmHashTable, XmHashKey);
+XtPointer   _XmRemoveHashIterator(XmHashTable, XtPointer *);
+Cardinal    _XmHashTableCount(XmHashTable);
+Cardinal    _XmHashTableSize(XmHashTable);
+void        _XmMapHashTable(XmHashTable, XmHashMapProc, XtPointer);
+#   ifdef DEBUG
 void _XmPrintHashTable(XmHashTable);
-#endif
-#define _XmGetHashEntry(table, key) _XmGetHashEntryIterate(table, key, NULL)
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   endif
+#   define _XmGetHashEntry(table, key) _XmGetHashEntryIterate(table, key, NULL)
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmHashI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

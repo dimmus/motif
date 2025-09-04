@@ -26,38 +26,38 @@
  *
  ***********************************************************************/
 #ifndef _XmPButton_h
-#define _XmPButton_h
-#include <Xm/Xm.h>
-#ifdef __cplusplus
+#   define _XmPButton_h
+#   include <Xm/Xm.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
-#ifndef XmIsPushButton
-#define XmIsPushButton(w) XtIsSubclass(w, xmPushButtonWidgetClass)
-#endif /* XmIsPushButton */
+#   endif
+#   ifndef XmIsPushButton
+#      define XmIsPushButton(w) XtIsSubclass(w, xmPushButtonWidgetClass)
+#   endif /* XmIsPushButton */
 /* PushButton Widget */
-externalref WidgetClass xmPushButtonWidgetClass;
+externalref WidgetClass               xmPushButtonWidgetClass;
 typedef struct _XmPushButtonClassRec *XmPushButtonWidgetClass;
 typedef struct _XmPushButtonRec      *XmPushButtonWidget;
 /********    Public Function Declarations    ********/
 extern Widget XmCreatePushButton(
-                        Widget parent,
-                        char *name,
-                        ArgList arglist,
-                        Cardinal argcount) ;
+   Widget   parent,
+   char    *name,
+   ArgList  arglist,
+   Cardinal argcount);
 /*
  * Variable argument list functions
  */
 extern Widget XmVaCreatePushButton(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedPushButton(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmPButton_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

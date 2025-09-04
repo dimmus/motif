@@ -33,17 +33,17 @@ extern "C" {
 #endif
 /********    Private Function Declarations    ********/
 extern void _XmDrawHighlight(
-                        Display *display,
-                        Drawable d,
-                        GC gc,
-                        Position x,
-                        Position y,
-                        Dimension width,
-                        Dimension height,
-                        Dimension highlight_thick,
-                        int line_style) ;
+   Display  *display,
+   Drawable  d,
+   GC        gc,
+   Position  x,
+   Position  y,
+   Dimension width,
+   Dimension height,
+   Dimension highlight_thick,
+   int       line_style);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmDrawI_h */

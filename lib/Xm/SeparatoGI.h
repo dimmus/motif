@@ -26,16 +26,16 @@
  */
 /* $XConsortium: SeparatoGI.h /main/5 1995/07/13 17:58:58 drk $ */
 #ifndef _XmSeparatoGI_h
-#define _XmSeparatoGI_h
-#include <Xm/SeparatoGP.h>
-#ifdef __cplusplus
+#   define _XmSeparatoGI_h
+#   include <Xm/SeparatoGP.h>
+#   ifdef __cplusplus
 extern "C" {
-#endif
+#   endif
 /********    Private Function Declarations    ********/
-extern int _XmSeparatorCacheCompare(XtPointer A, XtPointer B) ;
+extern int _XmSeparatorCacheCompare(XtPointer A, XtPointer B);
 /********    End Private Function Declarations    ********/
-#ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
-#endif
+#   ifdef __cplusplus
+} /* Close scope of 'extern "C"' declaration which encloses file. */
+#   endif
 #endif /* _XmSeparatoGI_h */
 /* DON'T ADD ANYTHING AFTER THIS #endif */

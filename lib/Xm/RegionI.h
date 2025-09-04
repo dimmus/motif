@@ -39,7 +39,7 @@ extern "C" {
 /*
  *  update region extents
  */
-#define EXTENTS(r,idRect){\
+#define EXTENTS(r, idRect){\
             if((r)->x1 < (idRect)->extents.x1)\
               (idRect)->extents.x1 = (r)->x1;\
             if((r)->y1 < (idRect)->extents.y1)\
@@ -127,80 +127,80 @@ extern "C" {
  */
 #define REGION_BOXPTR(reg) ((XmRegionBox *)((reg)->rects))
 /********    Private Function Declarations for Region.c    ********/
-extern XmRegion _XmRegionCreate( void ) ;
+extern XmRegion _XmRegionCreate(void);
 extern XmRegion _XmRegionCreateSize(
-			long size) ;
+   long size);
 extern void _XmRegionComputeExtents(
-			XmRegion r) ;
+   XmRegion r);
 extern void _XmRegionGetExtents(
-                        XmRegion r,
-                        XRectangle *rect) ;
+   XmRegion    r,
+   XRectangle *rect);
 extern void _XmRegionUnionRectWithRegion(
-                        XRectangle *rect,
-                        XmRegion source,
-                        XmRegion dest) ;
+   XRectangle *rect,
+   XmRegion    source,
+   XmRegion    dest);
 extern void _XmRegionIntersectRectWithRegion(
-                        XRectangle *rect,
-                        XmRegion source,
-                        XmRegion dest) ;
+   XRectangle *rect,
+   XmRegion    source,
+   XmRegion    dest);
 extern long _XmRegionGetNumRectangles(
-			XmRegion r) ;
+   XmRegion r);
 extern void _XmRegionGetRectangles(
-                        XmRegion r,
-                        XRectangle **rects,
-                        long *nrects) ;
+   XmRegion     r,
+   XRectangle **rects,
+   long        *nrects);
 extern void _XmRegionSetGCRegion(
-                        Display *dpy,
-                        GC gc,
-			int x_origin,
-			int y_origin,
-                        XmRegion r) ;
+   Display *dpy,
+   GC       gc,
+   int      x_origin,
+   int      y_origin,
+   XmRegion r);
 extern void _XmRegionDestroy(
-                        XmRegion r) ;
+   XmRegion r);
 extern void _XmRegionOffset(
-                        XmRegion pRegion,
-                        int x,
-                        int y) ;
+   XmRegion pRegion,
+   int      x,
+   int      y);
 extern void _XmRegionIntersect(
-                        XmRegion reg1,
-                        XmRegion reg2,
-                        XmRegion newReg) ;
+   XmRegion reg1,
+   XmRegion reg2,
+   XmRegion newReg);
 extern void _XmRegionUnion(
-                        XmRegion reg1,
-                        XmRegion reg2,
-                        XmRegion newReg) ;
+   XmRegion reg1,
+   XmRegion reg2,
+   XmRegion newReg);
 extern void _XmRegionSubtract(
-                        XmRegion regM,
-                        XmRegion regS,
-                        XmRegion regD) ;
+   XmRegion regM,
+   XmRegion regS,
+   XmRegion regD);
 extern Boolean _XmRegionIsEmpty(
-                        XmRegion r) ;
+   XmRegion r);
 extern Boolean _XmRegionEqual(
-                        XmRegion r1,
-                        XmRegion r2) ;
+   XmRegion r1,
+   XmRegion r2);
 extern Boolean _XmRegionPointInRegion(
-                        XmRegion pRegion,
-                        int x,
-                        int y) ;
+   XmRegion pRegion,
+   int      x,
+   int      y);
 extern void _XmRegionClear(
-			XmRegion r ) ;
+   XmRegion r);
 extern void _XmRegionShrink(
-			XmRegion r,
-			int dx,
-                        int dy) ;
+   XmRegion r,
+   int      dx,
+   int      dy);
 extern void _XmRegionDrawShadow(
-			Display	*display,
-			Drawable d,
-			GC top_gc,
-			GC bottom_gc,
-			XmRegion region,
-			Dimension border_thick,
-			Dimension shadow_thick,
-			unsigned int shadow_type ) ;
+   Display     *display,
+   Drawable     d,
+   GC           top_gc,
+   GC           bottom_gc,
+   XmRegion     region,
+   Dimension    border_thick,
+   Dimension    shadow_thick,
+   unsigned int shadow_type);
 extern XmRegion _XmRegionFromImage(
-			XImage *image );
+   XImage *image);
 /********    End Private Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmRegionI_h */

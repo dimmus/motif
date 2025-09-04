@@ -26,36 +26,36 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-externalref WidgetClass xmCascadeButtonGadgetClass;
-typedef struct _XmCascadeButtonGadgetClassRec    * XmCascadeButtonGadgetClass;
-typedef struct _XmCascadeButtonGadgetRec         * XmCascadeButtonGadget;
-typedef struct _XmCascadeButtonGCacheObjRec      * XmCascadeButtonGCacheObject;
+externalref WidgetClass                        xmCascadeButtonGadgetClass;
+typedef struct _XmCascadeButtonGadgetClassRec *XmCascadeButtonGadgetClass;
+typedef struct _XmCascadeButtonGadgetRec      *XmCascadeButtonGadget;
+typedef struct _XmCascadeButtonGCacheObjRec   *XmCascadeButtonGCacheObject;
 /*fast subclass define */
 #ifndef XmIsCascadeButtonGadget
-#define XmIsCascadeButtonGadget(w)     XtIsSubclass(w, xmCascadeButtonGadgetClass)
+#   define XmIsCascadeButtonGadget(w)     XtIsSubclass(w, xmCascadeButtonGadgetClass)
 #endif /* XmIsCascadeButtonGadget */
 /********    Public Function Declarations    ********/
 extern Widget XmCreateCascadeButtonGadget(
-                        Widget parent,
-                        char *name,
-                        ArgList al,
-                        Cardinal ac) ;
+   Widget   parent,
+   char    *name,
+   ArgList  al,
+   Cardinal ac);
 extern void XmCascadeButtonGadgetHighlight(
-                        Widget wid,
-                        Boolean highlight) ;
+   Widget  wid,
+   Boolean highlight);
 /*
  * Variable argument list functions
  */
 extern Widget XmVaCreateCascadeButtonGadget(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 extern Widget XmVaCreateManagedCascadeButtonGadget(
-                        Widget parent,
-                        char *name,
-                        ...);
+   Widget parent,
+   char  *name,
+   ...);
 /********    End Public Function Declarations    ********/
 #ifdef __cplusplus
-}  /* Close scope of 'extern "C"' declaration which encloses file. */
+} /* Close scope of 'extern "C"' declaration which encloses file. */
 #endif
 #endif /* _XmCascadeBG_h */

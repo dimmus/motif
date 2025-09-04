@@ -26,7 +26,7 @@
  * HISTORY
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#   include <config.h>
 #endif
 #include <Xm/Xm.h>
 #include <Xm/PushBG.h>
@@ -46,114 +46,126 @@
 #define ITEMS_STRING      _XmMMsgResource_0009
 #define DIRTEXT_STRING    _XmMMsgResource_0011
 #define PROMPT_STRING     _XmMMsgResource_0012
+
 /****************************************************************/
 static char *
 GetLabelString(
-       XmLabelStringLoc l_loc )
+   XmLabelStringLoc l_loc)
 {
-    char *retval = (char*)NULL;
-    switch (l_loc)
-	{
-	case XmOkStringLoc:
-	    retval = OK_STRING;
-	    break;
-	case XmCancelStringLoc:
-	    retval = CANCEL_STRING;
-	    break;
-	case XmSelectionStringLoc:
-	    retval = SELECTION_STRING;
-	    break;
-	case XmApplyStringLoc:
-	    retval = APPLY_STRING;
-	    break;
-	case XmHelpStringLoc:
-	    retval = HELP_STRING;
-	    break;
-	case XmFilterStringLoc:
-	    retval = FILTER_STRING;
-	    break;
-	case XmDirListStringLoc:
-	    retval = DIRLIST_STRING;
-	    break;
-	case XmItemsStringLoc:
-	    retval = ITEMS_STRING;
-	    break;
-	case XmDirTextStringLoc:
-	    retval = DIRTEXT_STRING;
-	    break;
-	case XmPromptStringLoc:
-	    retval = PROMPT_STRING;
-	    break;
-	default:
-		/* internal error */
-		break;
-	}
-    return retval;
+   char *retval = (char *)NULL;
+   switch (l_loc)
+   {
+      case XmOkStringLoc:
+         retval = OK_STRING;
+         break;
+      case XmCancelStringLoc:
+         retval = CANCEL_STRING;
+         break;
+      case XmSelectionStringLoc:
+         retval = SELECTION_STRING;
+         break;
+      case XmApplyStringLoc:
+         retval = APPLY_STRING;
+         break;
+      case XmHelpStringLoc:
+         retval = HELP_STRING;
+         break;
+      case XmFilterStringLoc:
+         retval = FILTER_STRING;
+         break;
+      case XmDirListStringLoc:
+         retval = DIRLIST_STRING;
+         break;
+      case XmItemsStringLoc:
+         retval = ITEMS_STRING;
+         break;
+      case XmDirTextStringLoc:
+         retval = DIRTEXT_STRING;
+         break;
+      case XmPromptStringLoc:
+         retval = PROMPT_STRING;
+         break;
+      default:
+         /* internal error */
+         break;
+   }
+   return retval;
 }
+
 /****************************************************************/
 Widget
 _XmBB_CreateButtonG(
-        Widget bb,
-        XmString l_string,
-	char *name,
-        XmLabelStringLoc l_loc )
+   Widget           bb,
+   XmString         l_string,
+   char            *name,
+   XmLabelStringLoc l_loc)
 {
-    Arg		        al[10] ;
-    register Cardinal   ac = 0 ;
-    Widget              button ;
-    XmTakesDefaultTrait trait_default ;
-    XmString            default_label_string_loc = NULL;
-/****************/
-    if(    l_string    )
-	{
-	    XtSetArg( al[ac], XmNlabelString, l_string) ; ac++ ;
-        }
-    else
-	{
-	    default_label_string_loc = XmStringCreate(GetLabelString(l_loc),
-						      XmFONTLIST_DEFAULT_TAG);
-	    XtSetArg( al[ac], XmNlabelString, default_label_string_loc); ac++;
-	}
-    XtSetArg( al[ac], XmNstringDirection, BB_StringDirection( bb)) ; ac++ ;
-    button = XmCreatePushButtonGadget( (Widget) bb, name, al, ac) ;
-    trait_default = (XmTakesDefaultTrait) XmeTraitGet((XtPointer)
-						      XtClass(button),
-						      XmQTtakesDefault) ;
-    if (trait_default)
-	trait_default->showAsDefault  (button, XmDEFAULT_READY);
-    if (default_label_string_loc)
-	XmStringFree(default_label_string_loc);
-    return( button ) ;
+   Arg                 al[10];
+   register Cardinal   ac = 0;
+   Widget              button;
+   XmTakesDefaultTrait trait_default;
+   XmString            default_label_string_loc = NULL;
+   /****************/
+   if (l_string)
+   {
+      XtSetArg(al[ac], XmNlabelString, l_string);
+      ac++;
+   }
+   else
+   {
+      default_label_string_loc = XmStringCreate(GetLabelString(l_loc),
+                                                XmFONTLIST_DEFAULT_TAG);
+      XtSetArg(al[ac], XmNlabelString, default_label_string_loc);
+      ac++;
+   }
+   XtSetArg(al[ac], XmNstringDirection, BB_StringDirection(bb));
+   ac++;
+   button        = XmCreatePushButtonGadget((Widget)bb, name, al, ac);
+   trait_default = (XmTakesDefaultTrait)XmeTraitGet((XtPointer)
+                                                       XtClass(button),
+                                                    XmQTtakesDefault);
+   if (trait_default)
+      trait_default->showAsDefault(button, XmDEFAULT_READY);
+   if (default_label_string_loc)
+      XmStringFree(default_label_string_loc);
+   return (button);
 }
+
 /****************************************************************/
 Widget
 _XmBB_CreateLabelG(
-        Widget bb,
-        XmString l_string,
-        char *name,
-        XmLabelStringLoc l_loc )
+   Widget           bb,
+   XmString         l_string,
+   char            *name,
+   XmLabelStringLoc l_loc)
 {
-            Arg		    al[10] ;
-    register int            ac = 0 ;
-    Widget                  label ;
-    XmString                default_label_string_loc = NULL;
-/****************/
-    if(    l_string    )
-	{
-	    XtSetArg( al[ac], XmNlabelString, l_string) ; ac++ ;
-        }
-    else
-	{
-	    default_label_string_loc = XmStringCreate(GetLabelString(l_loc),
-						      XmFONTLIST_DEFAULT_TAG);
-	    XtSetArg( al[ac], XmNlabelString, default_label_string_loc); ac++;
-	}
-    XtSetArg( al[ac], XmNstringDirection, BB_StringDirection( bb)) ; ac++ ;
-    XtSetArg( al[ac], XmNhighlightThickness, 0) ; ac++ ;
-    XtSetArg( al[ac], XmNtraversalOn, False) ; ac++ ;
-    XtSetArg( al[ac], XmNalignment, XmALIGNMENT_BEGINNING) ; ac++ ;
-    label = XmCreateLabelGadget( bb, name, al, ac);
-    if (default_label_string_loc)
-	XmStringFree(default_label_string_loc);
-    return( label ) ;
+   Arg          al[10];
+   register int ac = 0;
+   Widget       label;
+   XmString     default_label_string_loc = NULL;
+   /****************/
+   if (l_string)
+   {
+      XtSetArg(al[ac], XmNlabelString, l_string);
+      ac++;
+   }
+   else
+   {
+      default_label_string_loc = XmStringCreate(GetLabelString(l_loc),
+                                                XmFONTLIST_DEFAULT_TAG);
+      XtSetArg(al[ac], XmNlabelString, default_label_string_loc);
+      ac++;
+   }
+   XtSetArg(al[ac], XmNstringDirection, BB_StringDirection(bb));
+   ac++;
+   XtSetArg(al[ac], XmNhighlightThickness, 0);
+   ac++;
+   XtSetArg(al[ac], XmNtraversalOn, False);
+   ac++;
+   XtSetArg(al[ac], XmNalignment, XmALIGNMENT_BEGINNING);
+   ac++;
+   label = XmCreateLabelGadget(bb, name, al, ac);
+   if (default_label_string_loc)
+      XmStringFree(default_label_string_loc);
+   return (label);
 }
