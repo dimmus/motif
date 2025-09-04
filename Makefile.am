@@ -44,8 +44,7 @@ MAINTAINERCLEANFILES = Makefile.in \
             *.gcno \
             *.gcov \
             *.tar.gz \
-	        *.tar.xz \
-            .attic
+	        *.tar.xz
 
 SUBDIRS	= data \
             config \
@@ -158,8 +157,6 @@ maintainer-clean-local:
 	@find . -name ".libs" -type d -exec rm -rf {} + 2>/dev/null || true
 	@echo "Removing Makefile.in files..."
 	@find . -name "Makefile.in" -type f -exec rm -rf {} + 2>/dev/null || true
-	@echo "Removing .attic folder..."
-	@rm -rf .attic 2>/dev/null || true
 	@echo "Removing coverage files..."
 	@find . -name "*.gcda" -delete 2>/dev/null || true
 	@find . -name "*.gcno" -delete 2>/dev/null || true
