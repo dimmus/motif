@@ -108,7 +108,6 @@
     /*	A procedure definition entry is created for each procedure listed   */
     /*	in a procedure section.  I contains informaion on the number and    */
     /*	types of the arguments.						    */
-
 #define sym_k_proc_ref_entry		11
     /*	A procedure reference entry contains information about a the use of */
     /*	a procedure (e.g. as a callback).  It also stores the tag to be	    */
@@ -153,7 +152,6 @@
     /*	It is needed only maintain information about the structure of	    */
     /*	source file from which this parse tree was generated.  It is not    */
     /*	used by UIL directly.						    */
-    /*									    */
 #define sym_k_def_obj_entry		22
     /*	This entry corresponds to the default object clause on the module   */
     /*	declaration it is used to store source information about the file   */
@@ -197,7 +195,6 @@
 #define		sym_k_not_processed	0
 #define		sym_k_queued		1
 #define		sym_k_emitted		2
-
 
 
 /*
@@ -305,23 +302,23 @@
 #define sym_k_cat_op		15
 #define sym_k_last_binary_op	15
 #define sym_k_valref_op		16	/* az_exp_op1 points to the value node
-					   whose value is referenced by this
-					   value node. */
+                                    whose value is referenced by this
+                                    value node. */
 #define sym_k_coerce_op		17	/* az_exp_op1 points to the value node
-					   whose value is to be coerced to the
-					   data type of this node. */
+                                    whose value is to be coerced to the
+                                    data type of this node. */
 #define sym_k_last_special_op	17
 
 /*
  * Structure of an enumeration set entry
  */
 typedef struct
-    {
+{
     short int		values_cnt;
-	/* number of values in the enuemration set descriptor		*/
+    /* number of values in the enuemration set descriptor		*/
     unsigned short int	*values;
-	/* vector of values						*/
-    } UilEnumSetDescDef, *UilEnumSetDescDefPtr;
+    /* vector of values						*/
+} UilEnumSetDescDef, *UilEnumSetDescDefPtr;
 
 
 
@@ -349,13 +346,13 @@ typedef struct
  * Keyword table entry structure
  */
 typedef struct
-    {
+{
     unsigned char         b_class;
     unsigned short int    b_subclass;
     unsigned char         b_length;
     unsigned char         b_token;
     char                  *at_name;
-    }  key_keytable_entry_type;
+}  key_keytable_entry_type;
 
 
 
