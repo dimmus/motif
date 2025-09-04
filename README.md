@@ -151,7 +151,7 @@ For convenience, the project includes an automated dependency checker that suppo
 make deps
 
 # Or run the script directly
-./tools/dev/deps_check.sh
+./tools/dev/scripts/deps_check.sh
 ```
 
 **Supported Operating Systems:**

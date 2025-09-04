@@ -11,7 +11,7 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
 # Copy dependency checker and install dependencies using make deps
-COPY tools/dev/deps_check.sh /tmp/deps_check.sh
+COPY tools/dev/scripts/deps_check.sh /tmp/deps_check.sh
 RUN chmod +x /tmp/deps_check.sh && /tmp/deps_check.sh
 
 # Create working directory

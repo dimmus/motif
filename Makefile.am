@@ -44,7 +44,8 @@ MAINTAINERCLEANFILES = Makefile.in \
             *.gcno \
             *.gcov \
             *.tar.gz \
-	        *.tar.xz
+	        *.tar.xz \
+            .attic
 
 SUBDIRS	= data \
             config \
@@ -90,7 +91,7 @@ format:
 
 # Dependency checking target
 deps:
-	@$(top_srcdir)/tools/dev/deps_check.sh
+	@$(top_srcdir)/tools/dev/scripts/deps_check.sh
 
 # Release build targets
 release-configure:
@@ -110,7 +111,7 @@ release-build:
 	@$(MAKE) clean
 	@$(MAKE) all
 	@echo "Stripping binaries..."
-	@find . -type f \( -name "*.so*" -o -perm -111 \) -exec file {} \; | \
+	@find . -path "./.attic" -prune -o -type f \( -name "*.so*" -o -perm -111 \) -exec file {} \; | \
 	 grep -E "(ELF.*executable|ELF.*shared object)" | \
 	 cut -d: -f1 | \
 	 xargs -r strip --strip-unneeded 2>/dev/null || true
@@ -157,6 +158,8 @@ maintainer-clean-local:
 	@find . -name ".libs" -type d -exec rm -rf {} + 2>/dev/null || true
 	@echo "Removing Makefile.in files..."
 	@find . -name "Makefile.in" -type f -exec rm -rf {} + 2>/dev/null || true
+	@echo "Removing .attic folder..."
+	@rm -rf .attic 2>/dev/null || true
 	@echo "Removing coverage files..."
 	@find . -name "*.gcda" -delete 2>/dev/null || true
 	@find . -name "*.gcno" -delete 2>/dev/null || true
