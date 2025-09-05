@@ -27,7 +27,7 @@
  */
 
 #include <stdio.h>
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 #define NUM_COMPONENT_TYPES 13
 

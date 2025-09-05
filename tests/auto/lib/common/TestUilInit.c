@@ -56,9 +56,6 @@ XtResource resources[] = {
 XrmOptionDescRec optionDesc[] = {
   {"-synchronous", "*synchronous", XrmoptionNoArg, (XtPointer) "on"}};
 
-if (synchronous == False)  {
-  OverridePerformanceMonitor = True;
-}
 #endif
 
 

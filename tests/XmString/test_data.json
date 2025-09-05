@@ -1,0 +1,679 @@
+{
+  "StringGLR": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringGLR",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringGLR.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringGLR.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running StringGLR test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringDisp": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringDisp",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringDisp.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringDisp.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "This is the StringDisp test to test display of XmString.\n\nC)",
+        "The first two lines show hebrew strings.",
+        "The first line shows a LefttoRight string and the second line\n   shows a RighttoLeft string.",
+        "The third and fourth lines shows kanji 16-bit character strings.",
+        "The third line shows a LefttoRight string, and the fourth line \n   shows a RighttoLeft string.\n\nC)",
+        "Extensibility API test for XmeStringValid.  Tests if the function\n   correctly determines a valid and invalid XmString.  Test results are\n   dislplayed in the term window.\n\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "CompareVisual label1",
+        "CompareVisual label2",
+        "CompareVisual label3",
+        "CompareVisual label4",
+        "Continue",
+        "Exit"
+      ],
+      "description": "",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringDraw": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringDraw",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringDraw.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringDraw.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "This is the StringDraw test to test XmStringDraw.",
+        "You should see a BulletinBoard containing an empty DrawingArea \n   widget of size 300x200.\n\nC)",
+        "There should be four lines showing the same string \n   \"TEST STRING FOR CLIPPING\", in font \"9x15bold\" (or \"fixed\" if \n   \"9x15bold\" is not available), with different levels of \n   clipping taking place.",
+        "Line 1 should show the string \"TEST STRING FOR CLIPPING\" complete.",
+        "Line 2 should show the string \"TEST STRING FOR CLIPPING\" with some\n   horizontal clipping, meaning, some of the characters should be\n   clipped off.",
+        "Line 3 should show the string \"TEST STRING FOR CLIPPING\" complete\n   in the horizontal direction, but with characters getting clipped\n   in height.",
+        "Line 4 should show the string \"TEST STRING FOR CLIPPING\" with\n   both horizontal and vertical clipping.\n\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "CompareVisual drawArea",
+        "Exit"
+      ],
+      "description": "",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringToByte": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringToByte",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringToByte.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringToByte.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running StringToByte test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringToCT": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringToCT",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringToCT.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringToCT.scr",
+    "data": {
+      "description": "XmSTRING_COMPONENT_CHARSET: ISO8859-1\n@) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_R_TO_L\n@) XmSTRING_COMPONENT_TEXT: This is a test.\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_L_TO_R\n@) XmSTRING_COMPONENT_TEXT: This is only a test.\n\nC)",
+      "steps": [
+        "An XmString is created with direction, charset, text and separator\n   components.  The function XmStringGetNextComponent() is then called\n   to traverse the XmString and retrieve each component along with\n   its values.  The component types and values should be printed\n   to stdout.",
+        "Verify that the following values are printed:\n\n@) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n@) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_R_TO_L\n@) XmSTRING_COMPONENT_TEXT: This is a test.\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_L_TO_R\n@) XmSTRING_COMPONENT_TEXT: This is only a test.\n\nC)",
+        "The function XmCvtXmStringToCT() is called to convert the\n   XmString to a (char *) string in compound text format.\n   The converted string should be printed to stdout.",
+        "Verify that the following string is printed:\n\n@) 2]This is a test.\n@)\n@) 1]This is only a test.",
+        "There should be two blank lines between the lines of text.\n\nC)",
+        "The function XmCvtCTToXmString() is then called to convert the\n   (char *) string in compound text format to an XmString.\n   XmStringGetNextComponent() is then called to traverse the XmString\n   and retrieve each of the components and their values.\n   The components obtained and their values should be printed to stdout.",
+        "Verify that the following values are printed:\n\n@) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_R_TO_L\n@) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n@) XmSTRING_COMPONENT_TEXT: This is a test.\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_SEPARATOR: True\n@) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_L_TO_R\n@) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n@) XmSTRING_COMPONENT_TEXT: This is only a test.",
+        "The component types and component values are then compared\n   to the component types and values in the original XmString.\n   A message will be printed to stdout indicating whether\n   XmCvtCTToXmString() passed or failed based on these\n   comparison tests.\n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "Continue",
+        "Continue",
+        "Exit"
+      ],
+      "description": "XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_R_TO_L\n# @) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n# @) XmSTRING_COMPONENT_TEXT: This is a test.\n# @) XmSTRING_COMPONENT_SEPARATOR: True\n# @) XmSTRING_COMPONENT_SEPARATOR: True\n# @) XmSTRING_COMPONENT_SEPARATOR: True\n# @) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_L_TO_R\n# @) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n# @) XmSTRING_COMPONENT_TEXT: This is only a test.\n\n# C)\nContinue\n\n#  The function XmCvtXmStringToCT() is called to convert the\n#  XmString to a (char *) string in compound text format.\n#  The converted string should be printed to stdout. \n\n#  Verify that the following string is printed:\n\n# @) 2]This is a test.\n# @)\n# @)\n# @) 1]This is only a test.\n\n#  There should be two blank lines between the lines of text.\n\n# C)\nContinue\n\n#  The function XmCvtCTToXmString() is then called to convert the\n#  (char *) string in compound text format to an XmString.\n#  XmStringGetNextComponent() is then called to traverse the XmString\n#  and retrieve each of the components and their values.\n#  The components obtained and their values should be printed to stdout.\n\n#  Verify that the following values are printed:\n\n# @) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_R_TO_L\n# @) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n# @) XmSTRING_COMPONENT_TEXT: This is a test.\n# @) XmSTRING_COMPONENT_SEPARATOR: True\n# @) XmSTRING_COMPONENT_SEPARATOR: True\n# @) XmSTRING_COMPONENT_SEPARATOR: True\n# @) XmSTRING_COMPONENT_DIRECTION: XmSTRING_DIRECTION_L_TO_R\n# @) XmSTRING_COMPONENT_CHARSET: ISO8859-1\n# @) XmSTRING_COMPONENT_TEXT: This is only a test.\n\n#  The component types and component values are then compared\n#  to the component types and values in the original XmString.\n#  A message will be printed to stdout indicating whether\n#  XmCvtCTToXmString() passed or failed based on these\n#  comparison tests.\n\n# C)\nContinue\n# E)\nExit",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringConcat": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringConcat",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringConcat.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringConcat.scr",
+    "data": {
+      "description": "Running XmStringConcat.",
+      "steps": [
+        "This test calls XmStringConcatAndFree() with every combination\n   of two XmStringComponentTypes together.\n   Messages will be printed to the terminal indicating the pair \n   of XmStringComponentTypes being passed to XmStringConcatAndFree()\n   and whether the return of a new XmString was successful.\n   Check that each combination passes. \n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "Exit"
+      ],
+      "description": "Running XmStringConcat.",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "RendToProp": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/RendToProp",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/RendToProp.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/RendToProp.scr",
+    "data": {
+      "description": "Running RendToProp.",
+      "steps": [
+        "This test creates an XmRenderTable. The function XmRenderTableCvtToProp()\nis then called to convert the XmRenderTable to a string representation.\nA non-null string should be printed to stdout.",
+        "The function XmRenderTableCvtFromProp() is then called to convert\nthe string representation back into an XmRenderTable.  The converted\nXmRenderTable is compared against the original XmRenderTable.\nA message will be printed to stdout indicating whether the\nfunction XmRenderTableCvtFromProp() passed or failed.\n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "Exit"
+      ],
+      "description": "Running RendToProp.",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringNext": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringNext",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringNext.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringNext.scr",
+    "data": {
+      "description": "This test checks that the XmString functions which parse a given\n   XmString, return the components or segments of the XmString in\n   the expected order along with the expected values.",
+      "steps": [
+        "An XmString is created by concatenating a number of XmString components.\n   The functions, XmStringPeekNextTriple() and XmStringGetNextTriple()\n   are called to retrieve each of the components from the XmString.\n   Messages should be printed to stdout listing the XmStringComponentType\n   returned and whether the comparison test between the values expected and\n   the actual values returned by the function passed or failed. \n   Verify that all the comparison tests passed.\n   \n\nC)",
+        "The same XmString is parsed again. This time, the functions\n   XmStringPeekNextComponent() and XmStringGetNextComponent() are\n   called to return the next component type. Messages should be printed\n   to stdout listing the XmStringComponentType returned and whether\n   the comparison test between the values expected and the actual\n   values returned by the function passed or failed.  Verify that all the comparison\n   tests passed.\n\nC)",
+        "An XmString is created by concatenating a number of XmString segments.\n   The function XmStringGetNextSegment() is then called to retrieve\n   each of the segments.  Messages should be printed to stdout indicating\n   whether the comparison between the segment information expected and\n   the actual segment information returned by the function passed or failed.  Verify that\n   all the comparison tests passed.\n\nC)",
+        "An XmString is created with the following XmString components and their values,\n   where appropriate, listed in parentheses.\n!)\n   XmSTRING_COMPONENT_LAYOUT_PUSH     ( XmLEFT_TO_RIGHT )\n   XmSTRING_COMPONENT_RENDITION_BEGIN ( \"render_tag1\" )\n   XmSTRING_COMPONENT_RENDITION_BEGIN ( \"render_tag2\" )\n   XmSTRING_COMPONENT_TAG             ( XmSTRING_ISO8859-1 )\n   XmSTRING_COMPONENT_TAB          \n   XmSTRING_COMPONENT_DIRECTION       ( XmSTRING_DIRECTION_L_TO_R )\n   XmSTRING_COMPONENT_TEXT            ( \"Hello World\" )\n   XmSTRING_COMPONENT_RENDITION_END   ( \"render_tag2\" )\n   XmSTRING_COMPONENT_RENDITION_END   ( \"render_tag1\" )\n   XmSTRING_COMPONENT_LAYOUT_POP \n   XmSTRING_COMPONENT_SEPARATOR",
+        "The text \"Hello World\" should be rendered with the following attributes:\n!) \n   Foreground Color:  red\n   Font:              9x15\n   Tab:               1 inch ( from the left margin )",
+        "The XmString component types will be printed to stdout in the order\n   in which they have been retreived from the XmString.\n   Verify that the component types returned conform to the following \n   order:\n\n!)     [\n        [ XmSTRING_COMPONENT_LAYOUT_PUSH ]\n        [ XmSTRING_COMPONENT_RENDITION_BEGIN ]*\n        [ XmSTRING_COMPONENT_TAG | XmSTRING_COMPONENT_LOCALE ]\n        [ XmSTRING_COMPONENT_TAB ]*\n        [ XmSTRING_COMPONENT_DIRECTION ]\n        [ XmSTRING_COMPONENT_TEXT |\n          XmSTRING_COMPONENT_LOCALE_TEXT |\n          XmSTRING_COMPONENT_WIDECHAR_TEXT ]\n        [ XmSTRING_COMPONENT_RENDITION_END ]*\n        [ XmSTRING_COMPONENT_LAYOUT_POP ]\n        [ XmSTRING_COMPONENT_SEPARATOR ] ]* XmSTRING_COMPONENT_END\nC)",
+        "An XmString is created with the following XmString components and their values,\n   where appropriate, listed in parentheses.\n!)\n   XmSTRING_COMPONENT_LAYOUT_PUSH     ( XmLEFT_TO_RIGHT )\n   XmSTRING_COMPONENT_RENDITION_BEGIN ( \"render_tag2\" )\n   XmSTRING_COMPONENT_RENDITION_BEGIN ( \"render_tag1\" )\n   XmSTRING_COMPONENT_TAB\n   XmSTRING_COMPONENT_DIRECTION       ( XmSTRING_DIRECTION_R_TO_L )\n   XmSTRING_COMPONENT_LOCALE_TEXT     ( \"Hello World\" )\n   XmSTRING_COMPONENT_DIRECTION       ( XmSTRING_DIRECTION_L_TO_R )\n   XmSTRING_COMPONENT_RENDITION_END   ( \"render_tag2\" )\n   XmSTRING_COMPONENT_LAYOUT_POP\n   XmSTRING_COMPONENT_SEPARATOR\n   XmSTRING_COMPONENT_RENDITION_END   ( \"render_tag1\" )",
+        "The text \"dlroW olleH\" should be rendered with the following attributes:\n\n!) \n   Foreground Color:  black\n   Font:              fixed\n   Tab:               1.0 inch ( from the left margin )",
+        "The XmString component types will be printed to stdout in the order\n   in which they have been retreived from the XmString.\n   Verify that the component types returned conform to the following \n   order:\n\n!)     [\n         [ XmSTRING_COMPONENT_LAYOUT_PUSH ]\n         [ XmSTRING_COMPONENT_RENDITION_BEGIN ]*\n         [ XmSTRING_COMPONENT_TAG | XmSTRING_COMPONENT_LOCALE ]\n         [ XmSTRING_COMPONENT_TAB ]*\n         [ XmSTRING_COMPONENT_DIRECTION ]\n         [ XmSTRING_COMPONENT_TEXT |\n           XmSTRING_COMPONENT_LOCALE_TEXT |\n           XmSTRING_COMPONENT_WIDECHAR_TEXT ]\n         [ XmSTRING_COMPONENT_RENDITION_END ]*\n         [ XmSTRING_COMPONENT_LAYOUT_POP ]\n         [ XmSTRING_COMPONENT_SEPARATOR ] ]* XmSTRING_COMPONENT_END\n\nC)",
+        "An XmString is created with the following XmString components and their values,\n   where appropriate, listed in parentheses.\n!)\n   XmSTRING_COMPONENT_LAYOUT_PUSH     ( XmRIGHT_TO_LEFT )\n   XmSTRING_COMPONENT_RENDITION_BEGIN ( \"render_tag2\" )\n   XmSTRING_COMPONENT_DIRECTION       ( XmSTRING_DIRECTION_R_TO_L )\n   XmSTRING_COMPONENT_WIDECHAR_TEXT   ( \"Hi \" )\n   XmSTRING_COMPONENT_RENDITION_END   ( \"render_tag2\" )\n   XmSTRING_COMPONENT_RENDITION_BEGIN ( \"render_tag1\" )\n   XmSTRING_COMPONENT_TAB               \n   XmSTRING_COMPONENT_DIRECTION       ( XmSTRING_DIRECTION_L_TO_R )\n   XmSTRING_COMPONENT_TEXT            ( \"World\" )\n   XmSTRING_COMPONENT_RENDITION_END   ( \"render_tag1\" )\n   XmSTRING_COMPONENT_LAYOUT_POP",
+        "The text \" World  iH\" should be rendered with the following attributes:\n\n!) \n\"World\"\n   Foreground Color:  black\n   Font:              fixed\n   Tab:               1 inch ( from the right side of the word \"iH\" ) \n\n!) \n\"iH\"\n   Foreground Color:  red\n   Font:              9x15\n   Tab:               None",
+        "The XmString component types will be printed to stdout in the order\n   in which they have been retreived from the XmString.\n   Verify that the component types returned conform to the following \n   order:\n\n!)     [\n         [ XmSTRING_COMPONENT_LAYOUT_PUSH ]\n         [ XmSTRING_COMPONENT_RENDITION_BEGIN ]*\n         [ XmSTRING_COMPONENT_TAG | XmSTRING_COMPONENT_LOCALE ]\n         [ XmSTRING_COMPONENT_TAB ]*\n         [ XmSTRING_COMPONENT_DIRECTION ]\n         [ XmSTRING_COMPONENT_TEXT |\n           XmSTRING_COMPONENT_LOCALE_TEXT |\n           XmSTRING_COMPONENT_WIDECHAR_TEXT ]\n         [ XmSTRING_COMPONENT_RENDITION_END ]*\n         [ XmSTRING_COMPONENT_LAYOUT_POP ]\n         [ XmSTRING_COMPONENT_SEPARATOR ] ]* XmSTRING_COMPONENT_END\n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "FontListA": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/FontListA",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/FontListA.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/FontListA.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running FontListA test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringRend": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringRend",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringRend.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringRend.scr",
+    "data": {
+      "description": "This is the StringRend test used to test the display of\nrendition components when drawing with XmString functions. \nCurrently a blank drawing area widget should be displayed.\n\nC) \n\n@) Eight strings should be displayed.  \nThe contents of the strings help to indicate which rendition \ncomponents are currently active.",
+      "steps": [
+        "The first string which reads \\\"Begin - Rendition 1\\\" should\nbe displayed with the following attributes:\n@)  Background:  black\n@)  Foreground:  white\n@)  Font:        8x13\n@)  Tabs:        None\n@)  Underline:   No\n@)  Strikethru:  No",
+        "The second string, \\\"Begin - Rendition 2\\\", should be displayed\nwith the attributes:\n@)  Background:  blue\n@)  Foreground:  white\n@)  Font:        8x13\n@)  Tabs:        None\n@)  Underline:   Yes ( Single Line )\n@)  Strikethru:  No\n\nC)",
+        "The third string, \\\"Begin - Rendition 3\\\", should be displayed \nwith the attributes:\n@)  Background:  blue\n@)  Foreground:  white\n@)  Font:        8x13bold\n@)  Tabs:        1 cm \n@)  Underline:   No\n@)  Strikethru:  No",
+        "The fourth string, \\\"Begin - Rendition 4 - End\\\", should be displayed\nwith the attributes:\n@)  Background:  blue\n@)  Foreground:  yellow\n@)  Font:        9x15\n@)  Tabs:        2 cm \n@)  Underline:   No\n@)  Strikethru:  Yes ( Single Dashed Line )\n\nC)",
+        "The fifth string, \\\"Begin - Rendition 5 - End\\\", has all its resources\nset to XmAS_IS. Its rendition resources should default to the resource\nvalues of a previously active rendition which is Rendition 3. This string\nshould have the same display attributes as the third string.\nwith the attributes: \n@)  Background:  blue\n@)  Foreground:  white\n@)  Font:        8x13bold\n@)  Tabs:        1 cm \n@)  Underline:   No\n@)  Strikethru:  No",
+        "The sixth string, \\\"End - Rendition 2\\\", should be displayed with \nthe following attributes: \n@)  Background:  black\n@)  Foreground:  white\n@)  Font:        8x13bold\n@)  Tabs:        1 cm \n@)  Underline:   No\n@)  Strikethru:  No\n\nC)",
+        "The seventh string, \\\"Rendition 3 - End\\\", should have the same\ndisplay attributes as the previous string.\n@)  Background:  black\n@)  Foreground:  white\n@)  Font:        8x13bold\n@)  Tabs:        1 cm \n@)  Underline:   No\n@)  Strikethru:  No",
+        "The eighth string, \\\"End - Rendition 1\\\", should be displayed with\nthe following attributes: \n@)  Background:  black\n@)  Foreground:  white\n@)  Font:        8x13\n@)  Tabs:        None\n@)  Underline:   No\n@)  Strikethru:  No\n\nC)\n\n@)  A popup window titled \\\"Renditions\\\" should be displayed.\nIt contains a list of the current render tags within the render table\nand three pushbuttons labelled \\\"Merge\\\", \\\"Modify\\\" and \\\"Remove\\\".",
+        "Select \\\"render2\\\" from the list in the \\\"Renditions\\\" window.\nSelect the \\\"Merge\\\" pushbutton. A popup window labelled \\\"Merge Panel\\\"\nwill be displayed.  The \\\"Merge Panel\\\" will list the current resource\nvalues corresponding to the rendition selected.",
+        "Select \\\"NO_LINE\" from the \\\"UnderlineType\\\" option menu.\nSet the \\\"Merge Mode\\\" to \\\"Replace\\\". Select the \\\"Apply\\\" pushbutton. \nWhen \\\"Apply\\\" is selected, a new rendition is created using the same\nrender tag as the render tag selected in the \\\"Renditions\\\" window.\nThe new rendition is then added to the current render table with\nthe merge mode as XmREPLACE. Verify that there is no longer an underline\ndrawn beneath the second string in the \\\"Display Strings\\\" window.",
+        "Select the \\\"Quit\\\" pushbutton to popdown the \\\"Merge Panel\\\" window.\n\nC)",
+        "Select \\\"render4\\\" from the \\\"Renditions\\\" window and then \nselect the \\\"Merge\\\" pushbutton. The \\\"Merge Panel\\\" will be displayed\nlisting the current rendition resource values for the render tag selected. \nSelect \\\"AS_IS\\\" from the \\\"StrikethruType\\\" option menu.\nSelect \\\"Merge New\\\" from the \\\"Merge Mode\\\" option menu.\nSelect the \\\"Apply\\\" pushbutton. Any unspecified resource values in the \nnew rendition will be replaced with the values specified in the old\nrendition. Verify that a single dashed line is still displayed through\nthe fourth string in the \\\"Display Strings\\\" window.",
+        "Select the \\\"Quit\\\" pushbutton to popdown the \\\"Merge Panel\\\" window.\n\nC)",
+        "Select \\\"render5\\\" from the \\\"Renditions\\\" window and then select\nthe \\\"Merge\\\" pushbutton.  The \\\"Merge Panel\\\" should be displayed.\nType \\\"fixed\\\" into the \\\"FontName\\\" field and select \\\"FONT_IS_FONT\\\"\nfrom the \\\"FontType\\\" option menu.  Select \\\"Merge Old\\\" from the \\\"Merge\nMode\\\" option menu and click the \\\"Apply\\\" pushbutton.\nSince the merge mode is XmMERGE_OLD, any unspecified resource values from the\nold rendition will be overwritten with a specified resource in the new\nrendition.  Verify that the font is changed from 8x13bold to fixed in\nthe fifth string displayed in the \\\"Display Strings\\\" window.",
+        "Select the \\\"Quit\\\" pushbutton to popdown the \\\"Merge Panel\\\" window.\n\nC)",
+        "Select \\\"render4\\\" from the \\\"Renditions\\\" window and then select\nthe \\\"Merge\\\" pushbutton.  The \\\"Merge Panel\\\" should be displayed.\nType \\\"0\\\" into the \\\"Foreground\\\" field and select \\\"NO_LINE\\\"\nfrom the \\\"StrikethruType\\\" option menu.  Select \\\"Skip\\\" from the \\\"Merge\nMode\\\" option menu and click the \\\"Apply\\\" pushbutton.\nSince the merge mode is XmSKIP, the new rendition resource values should\nbe ignored.  Verify that the foreground color remains yellow and the\nstrikethru line is still a single dashed line in the fourth string\ndisplayed in the \\\"Display Strings\\\" window. \n\nC)",
+        "Select \\\"render1\\\" from the \\\"Renditions\\\" window and select the\n\\\"Modify\\\" pushbutton. Change the value of the \\\"fontName\\\" field\nto \\\"9x15\\\".  Change the value of the \\\"font\\\" field to \\\"Null\\\".\nClick the \\\"Apply\\\" pushbutton.  The new fontName and font resource\nvalues will be set and the function XmRenditionUpdate() will be called\nto update the selected rendition.  Verify that the font for the first\nsecond and eighth strings are changed to 9x15.\n\nC)",
+        "Select \\\"render3\\\" from the \\\"Renditions\\\" window and select the\n\\\"Remove\\\" pushbutton. The rendition, \\\"render3\\\", will be removed\nfrom the render table and references to rendition components named\n\\\"render3\\\" in the XmString should be ignored.\nVerify that the third, fifth, sixth and seventh strings are no longer\ntabbed and the font for the third, sixth and seventh strings\nis the same as the font displayed in the first string.\n \nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "CompareVisual DrawArea",
+        "Continue",
+        "Continue",
+        "Continue",
+        "Continue",
+        "LocatePointer RendList RListItem 1",
+        "ClickMB Btn1",
+        "LocatePointer MergePB",
+        "ClickMB Btn1",
+        "LocatePointer UnderlineOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer UnderlinePB1",
+        "ReleaseMB Btn1",
+        "LocatePointer ApplyPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea",
+        "LocatePointer QuitPB",
+        "ClickMB Btn1",
+        "Continue",
+        "LocatePointer RendList RListItem 3",
+        "ClickMB Btn1",
+        "LocatePointer MergePB",
+        "ClickMB Btn1",
+        "LocatePointer StrikethruOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer StrikethruPB0",
+        "ReleaseMB Btn1",
+        "LocatePointer MergeOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer MergeNewPB",
+        "ReleaseMB Btn1",
+        "LocatePointer ApplyPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea",
+        "LocatePointer QuitPB",
+        "ClickMB Btn1",
+        "Continue",
+        "LocatePointer RendList RListItem 4",
+        "ClickMB Btn1",
+        "LocatePointer MergePB",
+        "ClickMB Btn1",
+        "LocatePointer FontNameTF RTextChar Max",
+        "ClickMB Btn1",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "InputString \"fixed\"",
+        "LocatePointer FontTypeOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer FontTypePB1",
+        "ReleaseMB Btn1",
+        "LocatePointer MergeOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer MergeOldPB",
+        "ReleaseMB Btn1",
+        "LocatePointer ApplyPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea",
+        "LocatePointer QuitPB",
+        "ClickMB Btn1",
+        "Continue",
+        "LocatePointer RendList RListItem 3",
+        "ClickMB Btn1",
+        "LocatePointer MergePB",
+        "ClickMB Btn1",
+        "LocatePointer ForegroundTF RTextChar Max",
+        "ClickMB Btn1",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "InputString \"0\"",
+        "LocatePointer StrikethruOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer StrikethruPB1",
+        "ReleaseMB Btn1",
+        "LocatePointer MergeOptions ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer SkipPB",
+        "ReleaseMB Btn1",
+        "LocatePointer ApplyPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea",
+        "LocatePointer QuitPB",
+        "ClickMB Btn1",
+        "Continue",
+        "LocatePointer RendList RListItem 0",
+        "ClickMB Btn1",
+        "LocatePointer ModifyPB",
+        "ClickMB Btn1",
+        "LocatePointer FontNameTF RTextChar Max",
+        "ClickMB Btn1",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "InputString \"9x15\"",
+        "LocatePointer FontTF RTextChar Max",
+        "ClickMB Btn1",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "ClickKey KBackSpace",
+        "InputString \"Null\"",
+        "LocatePointer ApplyPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea",
+        "LocatePointer QuitPB",
+        "ClickMB Btn1",
+        "Continue",
+        "LocatePointer RendList RListItem 2",
+        "ClickMB Btn1",
+        "LocatePointer RemovePB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea",
+        "Continue",
+        "Exit"
+      ],
+      "description": "This is the StringRend test used to test the display of\n# rendition components when drawing with XmString functions. \n# Currently a blank drawing area widget should be displayed.\n\n# C) \nContinue\n\n# @) Eight strings should be displayed.  \n# The contents of the strings help to indicate which rendition \n# components are currently active. \nCompareVisual DrawArea",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringComp": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringComp",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringComp.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringComp.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running StringComp test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringEmpty": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringEmpty",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringEmpty.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringEmpty.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running StringEmpty test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "FontListC": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/FontListC",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/FontListC.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/FontListC.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running FontListC test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringTab": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringTab",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringTab.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringTab.scr",
+    "data": {
+      "description": "The following test panel allows you to specify upto five tab settings\nwithin the given string of text and then display the text with tabs inserted.",
+      "steps": [
+        "Click BSelect at a position within the text widget where you would like\nto insert a tab. Set values for the tab value, tab units and \ntab offset. Select the pushbutton labelled \\\"Set Tab\\\" to actually \ncreate the tab. A popup menu will appear displaying the current\ntab values.",
+        "Repeat the above steps to insert more tabs into the text\nstring if desired.",
+        "Select pushbutton \\\"Draw String\\\" to display the string with\ntabs included. The new text string will display below the text widget.\nVerify that the tabs in the new text string are inserted at the correct \npositions and the tabs distances are correct.",
+        "Select \\\"Reset Tabs\\\" to remove the current tab settings.",
+        "Select \\\"Draw String\\\" to redisplay the text without any tabs.\n\nC)\n\n@) A table of XmStrings have been created with tabs and separators inserted.\nWhen the strings are drawn, they should be displayed in three columns with\nsix rows of strings. The first row of strings contains the headings for each\ncolumn,  \\\"BREADS\\\", \\\"SALADS\\\", and \\\"SOUPS\\\". There should be three entries\nin the \\\"BREADS\\\" column, four entries in the \\\"SALADS\\\" column and\nfive entries in the \\\"SOUPS\\\" column.",
+        "With the \\\"Tab Options\\\" set to \\\"Default Tabs\\\", click MB1 on the button\n\\\"Draw Strings\\\". The strings will be displayed with a default tab \nof a half inch between each column of strings.\n\nC)",
+        "Select the \\\"Proposed Tabs\\\" option from the \\\"Tab Options\\\" menu.",
+        "Specify the unit type used when creating tabs by selecting a type\nfrom the \\\"Unit Model\\\" menu.",
+        "Specify the amount of padding used, based on the selected unit type,\nto separate the columns of strings by setting \\\"Pad Value\\\".",
+        "Specify the offset model used in creating tabs by selecting an offset\nfrom the \\\"Offset Model\\\" menu.",
+        "Click MB1 on the \\\"Draw Strings\\\" button.",
+        "Verify that the strings are displayed in three columns and six rows\nwith no overlapping between the rows and strings.\n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "LocatePointer Text1 RTextChar 4",
+        "ClickMB Btn1",
+        "LocatePointer Scale1 RScaleSlider",
+        "DragSliderValue Right 2",
+        "LocatePointer UnitMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer UnitPushB6",
+        "ReleaseMB Btn1",
+        "LocatePointer OffsetMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer OffsetPushB0",
+        "ReleaseMB Btn1",
+        "LocatePointer CreateTabPB",
+        "ClickMB Btn1",
+        "LocatePointer Text1 RTextChar 8",
+        "ClickMB Btn1",
+        "LocatePointer Scale1 RScaleSlider",
+        "DragSliderValue Left 1",
+        "LocatePointer UnitMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer UnitPushB5",
+        "ReleaseMB Btn1",
+        "LocatePointer OffsetMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer OffsetPushB1",
+        "ReleaseMB Btn1",
+        "LocatePointer CreateTabPB",
+        "ClickMB Btn1",
+        "LocatePointer DrawStringPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea1",
+        "LocatePointer ResetTabsPB",
+        "ClickMB Btn1",
+        "LocatePointer DrawStringPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea1",
+        "Continue",
+        "LocatePointer TabOptionsMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer TabOptionsPushB0",
+        "ReleaseMB Btn1",
+        "LocatePointer DrawStringPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea1",
+        "Continue",
+        "LocatePointer TabOptionsMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer TabOptionsPushB1",
+        "ReleaseMB Btn1",
+        "LocatePointer UnitMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer UnitPushB5",
+        "ReleaseMB Btn1",
+        "LocatePointer OffsetMenu ROptionButton",
+        "PressMB Btn1",
+        "LocatePointer OffsetPushB0",
+        "ReleaseMB Btn1",
+        "LocatePointer DrawStringPB",
+        "ClickMB Btn1",
+        "CompareVisual DrawArea1",
+        "Continue",
+        "Exit"
+      ],
+      "description": "The following test panel allows you to specify upto five tab settings\n# within the given string of text and then display the text with tabs inserted.",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringWidth": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringWidth",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringWidth.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringWidth.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running StringWidth test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringExt": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringExt",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringExt.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringExt.scr",
+    "data": {
+      "description": "StringExt tests the XmString functions which get dimension information \nfor displaying XmStrings. The values returned from the XmString functions\nare compared against the values returned from the function XTextExtent().",
+      "steps": [
+        "A blank drawing area widget should be displayed.",
+        "Click MB1 in the drawing area widget. The strings \\\"X is an Example of Z\\\"\nand \\\"Z is an Example of X\\\" should now be displayed in the drawing area widget.\nA rectangle is drawn around each string where the dimensions of the rectangle\nare the dimensions returned from XmStringExtent(). Verify that the rectangles\nrepresent the smallest bounding box which encloses each string.",
+        "Tables have been printed to stdout which list the functions called\nand the dimensions returned from each function for the given string. \nA message will then be printed indicating whether each XmString function\npassed or failed. If your term window is small, you may need to scroll\nin order to see all the text. \n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "LocatePointer DrawingArea",
+        "ClickMB Btn1",
+        "CompareVisual DrawingArea",
+        "Continue",
+        "Exit"
+      ],
+      "description": "StringExt tests the XmString functions which get dimension information \n# for displaying XmStrings. The values returned from the XmString functions\n# are compared against the values returned from the function XTextExtent().",
+      "continue": true,
+      "exit": true
+    }
+  },
+  "StringCopy": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringCopy",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringCopy.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringCopy.scr",
+    "data": {
+      "description": "",
+      "steps": [
+        "Running StringCopy test.\n\nE)"
+      ],
+      "expected": [],
+      "continue": false,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Exit"
+      ],
+      "description": "",
+      "continue": false,
+      "exit": true
+    }
+  },
+  "StringParse": {
+    "executable": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringParse",
+    "dat_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringParse.dat",
+    "scr_file": "/media/dimmus/dev2/x/xde-classic/xde-motif/tests/XmString/StringParse.scr",
+    "data": {
+      "description": "The following panels tests the XmParseMapping and XmStringParse API.\nAn empty drawing area widget should be displayed in the test window.\n\nC)",
+      "steps": [
+        "In this first panel, the character string \\\"One./Two/>Tab\\\" is parsed \nreplacing the patterns \\\"/\" with a separator and \\\">\" with a tab.",
+        "XmStringParse() is called with XmNincludeStatus = XmTERMINATE for\neach of the XmParseMapping entries of the XmParseTable.\nThe XmString should terminate after the first pattern is encountered.\nVerify that the XmString displayed matches the text below:\n\n@) One. \n\nC)",
+        "XmStringParse() is called with XmNincludeStatus = XmINSERT for\neach of the XmParseMapping entries and the delimiter is a \\\".\\\".\nThe XmString should terminate prior to the \\\".\\\" character. \nVerify that the XmString displayed matches the text below:\n \n@) One \n\nC)",
+        "XmStringParse() is called with XmNincludeStatus = XmINSERT for\neach of the XmParseMapping entries and no delimiter is specified.\nThe XmString should terminate after the entire character string is parsed. \nVerify that the XmString displayed matches the text below, where the word\n\\\"Tab\\\" is indented by one inch:\n\n@) One.\n@) Two\n@) \tTab\n\nC)",
+        "Call XmStringUnparse() to retrieve the original character string\nwhich was parsed to create an XmString.\nA message will be printed to the terminal indicating whether or not\nXmStringUnparse() was successful in generating the original character\nstring.\n\nC)\n\n@) A parse proc is assigned to the XmParseMapping which converts the\npattern \\\"/\\\" to a string.  Now when the pattern \\\"/\\\" is encountered,\nthe word \\\"String\\\" is inserted into the string prior to the separator.",
+        "When XmStringParse() is called, the XmString should terminate after\nthe first pattern is encountered.\nVerify that the XmString displayed matches the text below:\n\n@) One. String\n\nC)",
+        "When XmStringParse() is called, the XmString should terminate at\nthe end of the character string. \nVerify that the XmString displayed matches the text below:\n\n@) One. String\n@) Two String\n@) \tTab\n\nC)",
+        "A new parse table is created which replaces the pattern \\\">\\\"\nwith an XmString direction component with direction set to\nXmSTRING_DIRECTION_L_TO_R and replaces the pattern \\\"<\\\" with\nthe an XmString direction component with direction set to\nXmSTRING_DIRECTION_R_TO_L. \nXmStringTableParseStringArray() is called to parse an array \nof character strings containing these patterns and returns\na table of XmStrings.\nThe following strings should be displayed:\n\n@) Left To Right\n@) Right To Left\n@) Left To Right\n@) Right To Left",
+        "Call XmStringTableUnparse() to retrieve the original character string\nwhich was parsed to create the XmStrings.\nA message will be printed to the terminal indicating whether or not\nXmStringTableUnparse() was successful in generating the original character\nstring.\n\nC)",
+        "XmStringTableToXmString() is called to convert an array of XmStrings to\none XmString with a specified break component inserted between each\nof the original XmStrings.\nXmStringGetNextComponent() is then called to traverse the new XmString\nto ensure each of the components is correct.\nA message will be printed to the terminal indicating whether or not\nXmStringTableToXmString() was successful in building the one XmString.",
+        "XmStringToXmStringTable() is then called to convert the one XmString\nback to a table of XmStrings. Each XmString in the returned table is \ncompared with its corresponding XmString in the original table.\nIf all the XmStrings match, the function was successful.\nA message will be printed to the terminal indicating whether or not\nXmStringToXmStringTable() was successful or not. \n\nC)\nE)"
+      ],
+      "expected": [],
+      "continue": true,
+      "exit": true
+    },
+    "script": {
+      "commands": [
+        "Continue",
+        "CompareVisual DrawArea",
+        "Continue",
+        "Continue",
+        "CompareVisual DrawArea",
+        "Continue",
+        "CompareVisual DrawArea",
+        "Continue",
+        "Continue",
+        "Continue",
+        "Exit"
+      ],
+      "description": "The following panels tests the XmParseMapping and XmStringParse API.\n# An empty drawing area widget should be displayed in the test window.\n\n# C)\nContinue",
+      "continue": true,
+      "exit": true
+    }
+  }
+}

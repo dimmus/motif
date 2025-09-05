@@ -31,7 +31,7 @@ static char rcsid[] = "$XConsortium: StringComp.c /main/7 1995/07/13 19:53:41 dr
 
 #include <stdio.h>
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 #include "String.h"
 #include "StringComp.h"

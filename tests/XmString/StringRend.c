@@ -24,7 +24,7 @@
 /*
  * HISTORY
  */
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 /*
  *  Defines
@@ -118,7 +118,7 @@ XFontStruct     *fontStruct;
 
 XmStringTable listItems;
 
-static unsigned char CvtStringToLineType();
+static unsigned char CvtStringToLineType(char *string);
 
 /*
  *  Error Handler

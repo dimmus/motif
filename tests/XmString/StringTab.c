@@ -29,7 +29,7 @@
  *   StringTab.c - 
  *     Tests the tab components within XmString.
  */
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 /*
  *  String initializations.

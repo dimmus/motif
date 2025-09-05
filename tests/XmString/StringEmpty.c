@@ -31,13 +31,12 @@ static char rcsid[] = "$XConsortium: StringEmpty.c /main/7 1995/07/13 19:55:40 d
 
 #include <stdio.h>
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 #include "String.h"
 
 #define	NUM_TESTS 4
 
-extern void	error_proc();
 
 char	*description_string[NUM_TESTS] =
 {

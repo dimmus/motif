@@ -36,7 +36,7 @@ static char rcsid[] = "$XConsortium: StringDraw.c /main/5 1995/07/13 19:55:17 dr
  *
  */
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 													/*BeginPIR4294*/
 #define CLIP_MARGIN   40

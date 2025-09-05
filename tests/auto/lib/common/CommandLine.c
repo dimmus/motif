@@ -215,7 +215,6 @@ void  CommonGetOptions (int *argc, char **argv)
      Boolean 	default_font_used = False;
      int	fd_stdout, fd_stderr, ret;
      char       *visual_path = NULL;
-     char 	*getenv();
 
      static int errflag = 0;
 

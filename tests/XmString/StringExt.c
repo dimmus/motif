@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <Xm/XmP.h>
 #include <Xm/DrawingA.h>
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 /*
  *  Defines
@@ -41,9 +41,7 @@ GC gc;
 XmFontList fontlist;
 XFontStruct   *font;
 
-main(argc, argv)
-int   argc;
-char  *argv[];
+int main(int argc, char *argv[])
 {
         Widget bboard, testingArea;
 	Arg args[10];
@@ -52,7 +50,7 @@ char  *argv[];
 	XmFontContext font_context;
 	XmStringCharSet charset;
 	
-	void PostString();
+	void PostString(Widget w, XtPointer client_data, XEvent *event, Boolean *cont);
 
 	CommonTestInit(argc, argv);
 
@@ -93,10 +91,7 @@ char  *argv[];
 	XtAppMainLoop (app_context);
 }
 
-void PostString(w, popup, event)
-Widget  w;
-char * popup;
-XEvent *event;
+void PostString(Widget w, XtPointer client_data, XEvent *event, Boolean *cont)
 {
 	XmString	         string[NUM_STRINGS];
 	static Dimension         x = 50, y = 50;

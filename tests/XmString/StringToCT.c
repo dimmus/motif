@@ -26,7 +26,7 @@
  * HISTORY
  */
 #include <stdio.h>
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 #define STRING_LENGTH 256
 

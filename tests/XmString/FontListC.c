@@ -30,13 +30,12 @@ static char rcsid[] = "$XConsortium: FontListC.c /main/7 1995/07/13 19:52:48 drk
 #endif
 
 #include <stdio.h>
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 #include "FontList.h"
 
 #define	NUM_TESTS 5
 
-extern void	error_proc();
 
 String		expected_result[NUM_TESTS] =
 {

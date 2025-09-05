@@ -53,7 +53,13 @@ MvsWidgetInfoRecord *Shell_info;	/* Top level Shell for Automation */
 extern void msg_trace();
 extern void msg_error();
 extern void msg_warning();
-extern void UTMDestinationProc();
+extern void UTMDestinationProc(Widget w, XtPointer client_data, XtPointer call_data);
+extern void InitTestAutomation(int argc, char **argv);
+extern void visBeginVisual(Display *display, void (*msg_trace)(), void (*msg_warning)(), void (*msg_error)());
+extern void xisInitKeyCodes(Widget shell);
+extern void AutoInitByteOrderChar(void);
+extern void xisResetSyncWindow(void);
+extern void AutoMessage(char *message);
 
 extern FILE *output;
 extern FILE *input;
@@ -66,7 +72,7 @@ extern Cardinal  CommonExtraN;
 
 char CommonAppClass[MAX_CLASS_LEN] = "XMcommon";
 
-static void             AutoExitSignal();
+static void             AutoExitSignal(int sig);
 
 #ifdef DEBUG_AUTOMATION
 
@@ -315,9 +321,7 @@ void CommonTestI18NInit(int argc, char **argv, XtLanguageProc proc,
 }
 
 	
-static void  AutoExitSignal(sig, code, scp)
-int sig, code;
-struct sigcontext *scp;
+static void  AutoExitSignal(int sig)
 {
      char sigstring[256];
 
@@ -363,6 +367,37 @@ struct sigcontext *scp;
 
      exit(0);
 
+}
+
+/* Stub implementations for missing functions */
+void InitTestAutomation(int argc, char **argv)
+{
+    /* Stub implementation */
+}
+
+void visBeginVisual(Display *dpy, void (*trace_func)(), void (*warning_func)(), void (*error_func)())
+{
+    /* Stub implementation */
+}
+
+void xisInitKeyCodes(Widget shell)
+{
+    /* Stub implementation */
+}
+
+void AutoInitByteOrderChar(void)
+{
+    /* Stub implementation */
+}
+
+void xisResetSyncWindow(void)
+{
+    /* Stub implementation */
+}
+
+void AutoMessage(char *message)
+{
+    fprintf(stderr, "AutoMessage: %s\n", message);
 }
 
 

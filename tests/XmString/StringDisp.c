@@ -35,7 +35,7 @@ static char rcsid[] = "$XConsortium: StringDisp.c /main/6 1995/07/13 19:54:34 dr
  *	Create Compound strings and display them as labels.
  */
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 
 char	*hebrew_string = "\372\347\340 \355\362\364 \365\347\354";

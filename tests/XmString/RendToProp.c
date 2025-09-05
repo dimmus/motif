@@ -26,7 +26,7 @@
  * HISTORY
  */
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 #include <math.h>
 
 /*

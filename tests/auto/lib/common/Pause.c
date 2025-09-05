@@ -31,6 +31,12 @@ static char rcsid[] = "$XConsortium: Pause.c /main/10 1995/07/14 10:57:01 drk $"
 #include "testlib.h"
 #include "mvslib.h"
 
+/* Declare purify functions if not available */
+#ifndef PURIFY_AVAILABLE
+#define purify_newleaks() ((void)0)
+#define purify_clear_newleaks() ((void)0)
+#endif
+
 extern void    AutoParseAndGenerateCommands();
 extern void    AutoExit();
 extern void    AutoProcessAllEvents();
@@ -291,7 +297,7 @@ static void QuitCB(Widget w, caddr_t client_data,
       *  if enabled.
       */
 
-     MallocExit(0);   /*  0 indicates normal exit */
+     MallocExit();   /* normal exit */
 
      AutoExit();
 

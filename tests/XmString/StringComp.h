@@ -33,9 +33,8 @@
 #define different	0
 #define identical	1
 
-extern void	error_proc();
 
-static void	do_comparisons();
+static void	do_comparisons(int test_num, int string_num1, int string_num2);
 
 int	c_expect[NUM_TESTS] =
 {

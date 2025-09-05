@@ -27,7 +27,7 @@
  */
 #include <stdio.h>
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 void
 main( int argc, char **argv )

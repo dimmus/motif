@@ -24,7 +24,7 @@
 /*
  * HISTORY
  */
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 /*
  *  Type definitions

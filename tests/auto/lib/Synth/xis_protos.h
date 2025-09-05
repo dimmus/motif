@@ -434,7 +434,7 @@ extern int xisIsPointerOverRegion /* Returns True if pointer over region */
 extern int xisIsPointerOverWidget /* Returns True if pointer is over curr
                                      widget */
 
-    PARAMS(( int              bool               /* False = negative logic   */
+    PARAMS(( int              bool_val           /* False = negative logic   */
           ));
 
 
@@ -447,13 +447,13 @@ extern int xisIsSelectedRegion /* Returns True if specified region is selected*/
 extern int xisIsWidgetInKeyboardFocus /* Returns True if widget is in keyboard
                                          focus */
 
-    PARAMS(( int              bool               /* False = negative logic    */
+    PARAMS(( int              bool_val           /* False = negative logic    */
           ));
 
 
 extern int xisIsWidgetSelected /* Returns True if curr widget is selected */
 
-    PARAMS(( int              bool               /* False = negative logic    */
+    PARAMS(( int              bool_val           /* False = negative logic    */
           ));
 
 extern int xisIsMouseButtonDown /* Returns True if given button | mod keys are

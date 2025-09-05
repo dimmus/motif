@@ -29,7 +29,7 @@ static char rcsid[] = "$XConsortium: StringWidth.c /main/7 1995/07/13 19:56:55 d
 #endif
 #endif
 #include        <stdio.h>
-#include        <testlib.h>
+#include        "testlib_enhanced.c"
  
 char *test_strings[] = {"", "", "a", "a", "aaaaaa" };
 Dimension expected[] = {0, 0, 9, 54, 54, 0, 0 };

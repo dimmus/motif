@@ -47,7 +47,7 @@ AM_CPPFLAGS = -I. -I$(top_srcdir)/tests/auto/lib/common \
 AM_LDFLAGS = -L$(top_builddir)/lib
 
 # Common libraries for all tests
-LDADD = -lXm -lXt -lX11
+LDADD = $(top_builddir)/tests/auto/lib/common/libacommon.la -lXm -lXt -lX11
 
 # Test data files
 EXTRA_DIST = *.dat *.scr *.h README

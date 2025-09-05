@@ -28,13 +28,12 @@ static char rcsid[] = "$XConsortium: StringGLR.c /main/7 1995/07/13 19:55:57 drk
 
 #include <stdio.h>
 
-#include <testlib.h>
+#include "testlib_enhanced.c"
 
 #include "String.h"
 
 #define	NUM_TESTS 9
 
-extern void	error_proc();
 
 char		*get_text = (char *)0;
 

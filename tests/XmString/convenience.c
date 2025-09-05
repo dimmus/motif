@@ -30,14 +30,13 @@ static char rcsid[] = "$XConsortium: convenience.c /main/7 1995/07/13 19:57:17 d
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
  * Error handling
  */
 
-void error_proc(caller, error_string)
-char	*caller,
- 		*error_string;
+void error_proc(char *caller, char *error_string)
 {
 
     fprintf(stderr, "%s\n", error_string);
@@ -52,16 +51,14 @@ char	*caller,
  * Summary handling
  */
 
-void summary_proc(caller, errors)
-char	*caller;
-int		errors;
+void summary_proc(char *caller, int errors)
 {
 
     if(errors)
 		fprintf(stdout, "\nTest \"%s\" failed with %d error(s).\n", caller,
 				errors);
     else
-		fprintf(stdout, "\nTest \"%s\" passed.\n", caller, errors);
+		fprintf(stdout, "\nTest \"%s\" passed.\n", caller);
 
     fflush(stdout);
 
