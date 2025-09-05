@@ -1446,10 +1446,6 @@ Redisplay(Widget widget, XEvent *event, Region region)
 #define bsfield(f) \
     (((XmBulletinBoardWidget) s_tab)->bulletin_board.f)
 
-//#define bcfield(f) ((XmBulletinBoardPart*) \
-//		    ((char*)c_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
-//#define bsfield(f) ((XmBulletinBoardPart*) \
-//		    ((char*)s_tab + XmTabStack_offsets[XmBulletinBoardIndex]))->f
 static Boolean
 SetValues(Widget current, Widget request, Widget set, ArgList arg_list, Cardinal *arg_cnt)
 {
