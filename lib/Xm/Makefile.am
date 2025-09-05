@@ -209,7 +209,7 @@ xm_HEADERS = ArrowB.h      ArrowBG.h       ArrowBGP.h      ArrowBP.h \
         Xmpoll.h        TearOffP.h \
         TearOffBP.h     MenuUtilP.h     MenuT.h         XmAll.h \
         TraitP.h        SpinB.h         SpinBP.h        SSpinB.h \
-        SSpinBP.h \
+        SSpinBP.h       Log.h \
         Container.h     ContainerP.h    IconG.h         IconGP.h \
         Notebook.h      NotebookP.h     ContItemT.h     ContainerT.h \
         RCMenuP.h       ClipWindowP.h   TransferT.h \
