@@ -10,6 +10,7 @@ config.*
 *.gcda
 .deps
 .libs
+.dirstamp
 stamp-h1
 stamp-h2
 autom4te.cache
@@ -23,7 +24,7 @@ tap-driver.sh
 clients/mwm/mwm
 clients/uil/uil
 clients/xmbind/xmbind
-config/util/makestrs
+tools/makestrs/makestrs
 compile
 configure
 depcomp
@@ -177,3 +178,4 @@ tools/wml/wmluiltok.c
 lib/Mrm/MrmMsgCatI.h
 lib/Xm/XmMsgCatI.h
 lib/Xm/version.h
+TODO

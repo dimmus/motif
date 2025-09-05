@@ -40,7 +40,7 @@ AS_IF([test "x$ac_cv_prog_LEX" == "xflex"],[LEXLIB=-lfl],[LEXLIB=])
 AC_SUBST([LEXLIB])
 
 dnl Add LEXLIB to LIBS so it gets linked
-AS_IF([test "x$LEXLIB" != "x"],[LIBS="$LIBS $LEXLIB"])
+# AS_IF([test "x$LEXLIB" != "x"],[LIBS="$LIBS $LEXLIB"])
 
 dnl Maintainer automation (add ([enabled]) to activate)
 AM_MAINTAINER_MODE
@@ -188,23 +188,23 @@ AC_DEFINE_UNQUOTED([XM_UIL_DEBUG],
 	[1 if UIL compiler debugging support is enabled])
 
 dnl .pc
-AC_SUBST([XM_VERSION],  [XM_VERSION])
-AC_SUBST([ABI_VERSION], [ABI_VERSION])
+AC_SUBST([XM_VERSION], [XM_VERSION])
+AC_SUBST([ABI_VERSION],[ABI_VERSION])
 
 dnl Automake substitutions
-AM_CONDITIONAL([XM_PRINTING],   test "x$enable_printing" == "xyes")
-AM_CONDITIONAL([XM_WITH_JPEG],  test "x$with_jpeg" == "xyes")
-AM_CONDITIONAL([XM_WITH_PNG],   test "x$with_png"  == "xyes")
+AM_CONDITIONAL([XM_PRINTING],   test "x$enable_printing"        == "xyes")
+AM_CONDITIONAL([XM_WITH_JPEG],  test "x$with_jpeg"              == "xyes")
+AM_CONDITIONAL([XM_WITH_PNG],   test "x$with_png"               == "xyes")
 AM_CONDITIONAL([XM_MSGCAT],     test "x$enable_message_catalog" == "xyes")
-AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests" == "xyes")
-AM_CONDITIONAL([XM_UIL_DEBUG],  test "x$enable_uil_debug" == "xyes")
+AM_CONDITIONAL([XM_WITH_TESTS], test "x$enable_tests"           == "xyes")
+AM_CONDITIONAL([XM_UIL_DEBUG],  test "x$enable_uil_debug"       == "xyes")
 
 dnl Substitutions for lib/Xm/Xm.h
-AC_SUBST([XM_MAJOR], [XM_MAJOR])
-AC_SUBST([XM_MINOR], [XM_MINOR])
-AC_SUBST([XM_PATCH], [XM_PATCH])
-AC_SUBST([XM_DEFAULT_LOG_LEVEL],  [$with_log_level])
-AC_SUBST([XM_DEFAULT_LOG_OUTPUT], [$with_log_output])
+AC_SUBST([XM_MAJOR],[XM_MAJOR])
+AC_SUBST([XM_MINOR],[XM_MINOR])
+AC_SUBST([XM_PATCH],[XM_PATCH])
+AC_SUBST([XM_DEFAULT_LOG_LEVEL], [$with_log_level])
+AC_SUBST([XM_DEFAULT_LOG_OUTPUT],[$with_log_output])
 
 dnl Defines/substitutions for mwm
 AC_DEFINE([NO_OL_COMPAT], 1, "No OL Compatability")
@@ -213,9 +213,9 @@ AC_SUBST([CDE_CONFIGURATION_TOP], "\${prefix}/etc/dt")
 AC_SUBST([MWMRCDIR], "${sysconfdir}/X11")
 
 dnl lib/Xm/Xmos.c
-AC_SUBST([INCDIR],  "${includedir}/X11")
-AC_SUBST([LIBDIR],  "${libdir}/X11")
-AC_SUBST([DATADIR], "${datadir}")
+AC_SUBST([INCDIR], "${includedir}/X11")
+AC_SUBST([LIBDIR], "${libdir}/X11")
+AC_SUBST([DATADIR],"${datadir}")
 
 dnl lib/Xm/VirtKeys.c
 AC_SUBST([XMBINDDIR_FALLBACK], "${datadir}/X11/bindings")
@@ -231,8 +231,6 @@ clients/mwm/Makefile \
 clients/mwm/WmWsmLib/Makefile \
 clients/uil/Makefile \
 clients/xmbind/Makefile \
-config/Makefile \
-config/util/Makefile \
 include/Makefile \
 include/Dt/Makefile \
 lib/Makefile \
@@ -249,6 +247,7 @@ doc/man/man4/Makefile \
 doc/man/man5/Makefile \
 tools/Makefile \
 tools/wml/Makefile \
+tools/makestrs/Makefile \
 lib/Xm/xmstring.list \
 ])
 
@@ -376,27 +375,27 @@ else
 fi
 AC_SUBST([XM_WITH_DEMOS])
 
-XM_ADD_FEATURE([XM],[png],[${with_png}])
-XM_ADD_FEATURE([XM],[jpg],[${with_jpeg}])
-XM_ADD_FEATURE([XM],[xft],[${with_xft}])
-XM_ADD_FEATURE([XM],[utf8],[${enable_utf8}])
-XM_ADD_FEATURE([XM],[print],[${enable_printing}])
-XM_ADD_FEATURE([XM],[msg_catalog],[${enable_message_catalog}])
-XM_ADD_FEATURE([BUILD],[demos],[${enable_demos}])
-XM_ADD_FEATURE([BUILD],[tests],[${enable_tests}])
-XM_ADD_FEATURE([BUILD],[mtsafe],[${enable_force_mtsafe}])
-XM_ADD_FEATURE([BUILD],[xos_locking],[${enable_xos_locking}])
-XM_ADD_FEATURE([BUILD],[cde],[${enable_cde_integration}])
-XM_ADD_FEATURE([BUILD],[panelist],[${enable_panelist}])
-XM_ADD_FEATURE([BUILD],[mwm_qats],[${enable_mwm_qats}])
-XM_ADD_FEATURE([BUILD],[locale],[${enable_locale_support}])
-XM_ADD_FEATURE([BUILD],[wchar],[${enable_wchar_support}])
-XM_ADD_FEATURE([BUILD],[local_string],[${enable_local_string_funcs}])
-XM_ADD_FEATURE([DBG],[debug],[${enable_debug}])
-XM_ADD_FEATURE([DBG],[xthreads_dbg],[${enable_xthreads_debug}])
-XM_ADD_FEATURE([DBG],[log],[yes])
-XM_ADD_FEATURE([DBG],[log_output],[${with_log_output}])
-XM_ADD_FEATURE([DBG],[log_level],[${with_log_level}])
+XM_ADD_FEATURE([XM],[png],            [${with_png}])
+XM_ADD_FEATURE([XM],[jpg],            [${with_jpeg}])
+XM_ADD_FEATURE([XM],[xft],            [${with_xft}])
+XM_ADD_FEATURE([XM],[utf8],           [${enable_utf8}])
+XM_ADD_FEATURE([XM],[print],          [${enable_printing}])
+XM_ADD_FEATURE([XM],[msg_catalog],    [${enable_message_catalog}])
+XM_ADD_FEATURE([BLD],[demos],         [${enable_demos}])
+XM_ADD_FEATURE([BLD],[tests],         [${enable_tests}])
+XM_ADD_FEATURE([BLD],[mtsafe],        [${enable_force_mtsafe}])
+XM_ADD_FEATURE([BLD],[xos_locking],   [${enable_xos_locking}])
+XM_ADD_FEATURE([BLD],[cde],           [${enable_cde_integration}])
+XM_ADD_FEATURE([BLD],[panelist],      [${enable_panelist}])
+XM_ADD_FEATURE([BLD],[mwm_qats],      [${enable_mwm_qats}])
+XM_ADD_FEATURE([BLD],[locale],        [${enable_locale_support}])
+XM_ADD_FEATURE([BLD],[wchar],         [${enable_wchar_support}])
+XM_ADD_FEATURE([BLD],[local_string],  [${enable_local_string_funcs}])
+XM_ADD_FEATURE([DBG],[debug],         [${enable_debug}])
+XM_ADD_FEATURE([DBG],[xthreads_dbg],  [${enable_xthreads_debug}])
+XM_ADD_FEATURE([DBG],[log],           [yes])
+XM_ADD_FEATURE([DBG],[log_output],    [${with_log_output}])
+XM_ADD_FEATURE([DBG],[log_level],     [${with_log_level}])
 
 # XM_ADD_FEATURE([FLAGS],[_POSIX_SOURCE],[${_POSIX_SOURCE}])
 # XM_ADD_FEATURE([FLAGS],[X_NOT_POSIX],[${X_NOT_POSIX}])
@@ -431,7 +430,7 @@ echo "Features:"
 echo "  libxm..........: ${features_xm}"
 echo "  debug..........: ${features_dbg}"
 echo ""
-echo "Components:......: ${features_build}"
+echo "Components:......: ${features_bld}"
 echo ""
 # echo "Global flags:....: ${features_flags}"
 # echo ""

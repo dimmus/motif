@@ -39,7 +39,7 @@ MAINTAINERCLEANFILES = Makefile.in \
             tap-driver.sh \
             test-driver \
             ylwrap \
-            config/util/makestrs \
+            tools/makestrs/makestrs \
             *.gcda \
             *.gcno \
             *.gcov \
@@ -47,7 +47,6 @@ MAINTAINERCLEANFILES = Makefile.in \
 	        *.tar.xz
 
 SUBDIRS	= data \
-            config \
             localized \
             lib \
             include \

@@ -288,19 +288,19 @@ STRING_FILES = XmStrDefs.h XmStrDefs22.h XmStrDefs23.h XmStrDefsI.h XmStrDefs.c
 
 BUILT_SOURCES = $(STRING_FILES) $(CAT_FILES)
 
-$(top_builddir)/config/util/makestrs:
-	( cd $(top_builddir)/config/util && $(MAKE) $(AM_MAKEFLAGS) makestrs )
+$(top_builddir)/tools/makestrs/makestrs:
+	( cd $(top_builddir)/tools/makestrs && $(MAKE) $(AM_MAKEFLAGS) makestrs )
 
 XmStrDefs.h XmStrDefs22.h XmStrDefs23.h XmStrDefsI.h: XmStrDefs.c
 
-XmStrDefs.c: Makefile $(XMSTRING_LIST) XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/config/util/makestrs
+XmStrDefs.c: Makefile $(XMSTRING_LIST) XmStrDefs.ht XmStrDefsI.ht XmStrDefs.ct $(top_builddir)/tools/makestrs/makestrs
 	test -f $(XMSTRING_LIST) || $(LN_S) $(srcdir)/$(XMSTRING_LIST) $(XMSTRING_LIST)
 	test -f XmStrDefs.ht || $(LN_S) $(srcdir)/XmStrDefs.ht XmStrDefs.ht
 	test -f XmStrDefs22.ht || $(LN_S) $(srcdir)/XmStrDefs22.ht XmStrDefs22.ht
 	test -f XmStrDefs23.ht || $(LN_S) $(srcdir)/XmStrDefs23.ht XmStrDefs23.ht
 	test -f XmStrDefsI.ht || $(LN_S) $(srcdir)/XmStrDefsI.ht XmStrDefsI.ht
 	test -f XmStrDefs.ct || $(LN_S) $(srcdir)/XmStrDefs.ct XmStrDefs.ct
-	$(top_builddir)/config/util/makestrs -f $(XMSTRING_LIST) >XmStrDefs.c
+	$(top_builddir)/tools/makestrs/makestrs -f $(XMSTRING_LIST) >XmStrDefs.c
 
 if XM_MSGCAT
 CAT_FILES = Xm.cat XmMsgCatI.h

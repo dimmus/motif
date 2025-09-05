@@ -1,7 +1,7 @@
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = dev/scripts/deps_check.sh dev/scripts/test_os_detection.sh
-SUBDIRS = wml
+# EXTRA_DIST = dev/scripts/deps_check.sh dev/scripts/test_os_detection.sh
+SUBDIRS = makestrs wml
 
 # Dependency checking target
 deps:
