@@ -83,9 +83,7 @@ internal Uil_characters_read
 internal Uil_cmd_z_command
 internal Uil_compile_desc_ptr
 internal Uil_current_file
-#if !defined(__hpux)
 internal Uil_file_size
-#endif
 internal Uil_lex_az_charset_entry
 internal Uil_lex_az_literal_charset
 internal Uil_lex_cleanup_analyzer
@@ -259,9 +257,7 @@ internal out_emit_widget
 internal output_text
 internal parent_list_traverse
 internal pop
-#if !defined(__hpux)
 internal prev_yylval
-#endif
 internal process_all_arguments
 internal process_all_callbacks
 internal process_all_controls
@@ -391,7 +387,6 @@ internal sem_validate_widget_node
 internal sem_validation
 internal src_append_diag_info
 internal src_append_machine_code
-#if !defined(__hpux)
 internal src_az_avail_source_buffer
 internal src_az_current_source_buffer
 internal src_az_current_source_record
@@ -399,23 +394,17 @@ internal src_az_first_source_record
 internal src_az_module_source_record
 internal src_az_orphan_messages
 internal src_az_source_file_table
-#endif
 internal src_get_file_name
 internal src_get_source_line
 internal src_initialize_source
-#if !defined(__hpux)
 internal src_l_last_source_file_number
-#endif
 internal src_open_file
 internal src_retrieve_source
 internal stbuf
-#if !defined(__hpux)
 internal sym_az_allocated_nodes
 internal sym_az_current_section_entry
-#endif
 internal sym_az_entry_list_header
 internal sym_az_error_value_entry
-#if !defined(__hpux)
 internal sym_az_external_def_chain
 internal sym_az_forward_ref_chain
 internal sym_az_freed_nodes
@@ -423,7 +412,6 @@ internal sym_az_hash_table
 internal sym_az_module_entry
 internal sym_az_root_entry
 internal sym_az_val_forward_ref_chain
-#endif
 internal sym_dump_argument
 internal sym_dump_callback
 internal sym_dump_color_item
@@ -455,9 +443,7 @@ internal sym_make_value_forward_ref
 internal sym_section_text
 internal type_from_code
 internal uil_arg_compr
-#if !defined(__hpux)
 internal uil_az_error_env_block
-#endif
 internal uil_az_error_env_valid
 internal uil_catd
 internal uil_child_compr
@@ -476,10 +462,6 @@ internal yyerror
 internal yylex
 internal yynerrs
 internal yyparse
-
-#if defined(hpux)
-internal yymaxdepth
-#endif
 
 #if defined(sun)
 internal yy_yys

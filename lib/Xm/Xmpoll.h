@@ -72,15 +72,7 @@ typedef struct fd_set
 #            endif
 #         endif
 #      endif
-#      ifndef hpux /* and perhaps old BSD ??? */
 #         define Select(n, r, w, e, t) select(n,(fd_set*)r,(fd_set*)w,(fd_set*)e,(struct timeval*)t)
-#      else
-#         ifndef _XPG4_EXTENDED /* HPUX 9.x and earlier */
-#            define Select(n, r, w, e, t) select(n,(int*)r,(int*)w,(int*)e,(struct timeval*)t)
-#         else
-#            define Select(n, r, w, e, t) select(n,(fd_set*)r,(fd_set*)w,(fd_set*)e,(struct timeval*)t)
-#         endif
-#      endif
 #      ifndef FD_SET
 #         define FD_SET(n, p)    ((p)->fds_bits[(n)/NFDBITS] |= ((fd_mask)1 << ((n) % NFDBITS)))
 #      endif

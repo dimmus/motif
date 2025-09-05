@@ -29,16 +29,6 @@
 #include <locale.h>
 #include <ctype.h>
 
-#ifdef aix
-#include <sys/dir.h>
-#endif
-
-#ifdef hpux
-#ifndef _XPG2
-#define _XPG2
-#endif
-#endif
-
 #include <limits.h>
 #include <string.h>
 
@@ -341,10 +331,6 @@ mkcatdefs(char *fname)
 	    fprintf (outfp, "#define %s %d\n\n", setname, setno);
 	  symbflg = 1;
 	}
-#ifdef aix
-	fprintf (msgfp,"$delset");
-	fprintf (msgfp," %d\n", setno);
-#endif
 	fprintf (msgfp,"%.4s", line);
 	fprintf (msgfp," %d\n", setno++);
 	msgno = 1;
