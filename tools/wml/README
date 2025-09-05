@@ -43,7 +43,7 @@ The WML system's task is to generate all these literals and tables based on
 a specification of the dynamic parts of the Uil language - the data types,
 widget/gadget classes, arguments, and reasons. The components of the system
 are:
-	- A specification of the of set of widgets to be supported. This
+	- A specification of the set of widgets to be supported. This
 	  specification is an ASCII file containing a WML language
 	  specification as described below. The WML language is a simple
 	  declarative language whose syntax is similar to Uil itself.
@@ -58,45 +58,46 @@ are:
 		o A .mm file to be incorporated in the Uil language
 		  documentation, which tabulates the built-in language
 		  tables for Uil user reference.
-	- A process named wmluily which generates the Uil grammar.
-	- A process named wmltokens which generates token data
-	- A process named wmlkeyword which generates the token and lexical
-	  analysis tables.
+	- A process named wmluiltok which generates the Uil grammar.
+	- A process named wmldbcreate which generates database files
+	- Various output generators for different file formats
 
-A shell script is provided which runs the system. The individual processes
-and inputs can usually be ignored.
+The system is integrated into the modern autotools build system and can be
+built using standard make targets.
 
 
 2. Environment
 
 The generation and use of the WML system requires the following:
-	- The C language compiler and runtime system (cc).
-	- The lexical generator facility (lex)
-	- the compiler compiler facility (yacc)
+	- A C language compiler (gcc, clang, or compatible)
+	- GNU autotools (autoconf, automake, libtool)
+	- A lexical generator facility (flex or lex)
+	- A parser generator facility (bison or yacc)
+	- GNU make
 
-The WML facility is found in directory /wmlsrc. It assumes the following
-directories also exist:
-	/uilsrc - the directory to which the output files are to be moved
-	/mrmsrc/Mrm - contains MrmCmpr.h and other .h files required to
-		compile the uil compiler.
+The WML facility is found in the tools/wml/ directory. It is integrated
+into the main Motif build system and generates files that are used by
+the UIL compiler and other Motif components.
 
 The tables produced by WML must be consistent with the Mrm compression
-code tables emboded in /mrmsrc/Mrm/MrmCmpr.h and /mrmsrc/Mrm/MrmCmprTbl.h.
-If in doubt, refer to /mrmsrc/Mrm/urmc.README for details.
+code tables. The generated files are automatically integrated into the
+build process and do not require manual intervention.
 
 
 3. WML input
 
 Input to WML consists of:
-	- A description of the widget set (toolkit) to be suppported in
-	  the WML specification language.
+	- A description of the widget set (toolkit) to be supported in
+	  the WML specification language. The main specification file is
+	  motif.wml which defines the Motif widget set.
 	- Data files supplied with WML facility, and which you will
 	  usually not need to modify. These are:
-		o grammar.y	- specifies the invariant part of the
+		o Uil.y		- specifies the invariant part of the
 				  Uil grammar
-		o charset.dat	- specifies the character sets supported by
-				  the compiler when handling compound strings
-	  Any other .dat files found in /wmlsrc are the result of running
+		o wmllex.l	- lexical analyzer specification
+		o wmlparse.y	- parser specification
+		o wmluiltok.l	- token generator specification
+	  Any other generated files are the result of running
 	  the facility, and may be ignored.
 
 3.A. WML specification language
@@ -201,13 +202,19 @@ WML semantics are:
 
 4. WML output
 	- The .h files and parser required by the compiler. These
-	  are automatically moved to /uilsrc by the runwml script.
-	- A report describing the supported widget set, always named
+	  are automatically generated and integrated into the build
+	  process. Key output files include:
+		o UilConst.h	- constant definitions
+		o UilKeyTab.h	- keyword table
+		o UilSym*.h	- symbol tables for various components
+		o UilTokName.h	- token name definitions
+		o UilUrmClas.h	- URM class definitions
+	- A report describing the supported widget set, named
 	  wml.report. This report is intended to aid in validating
 	  the WML source. The report is organized in a way which makes
-	  if fairly easy to compare the Uil langauge against widget
+	  it fairly easy to compare the Uil language against widget
 	  set documentation as exemplified by the Motif Programmer's
-	  Reference Manual. The reported is sorted as follows:
+	  Reference Manual. The report is sorted as follows:
 		- alphabetically by class name
 		- Resources ordered by ancestor (top of tree first).
 		  Resources are listed alphabetically, with datatype
@@ -216,30 +223,46 @@ WML semantics are:
 		  then alphabetically.
 		- Controls listed alphabetically.
 	- A file which provides documentation for the language, intended
-	  to be an appendix to a Uil manual as exemplified by the
-	  Guide to the Motif User Interface Language Compiler. This file
+	  to be an appendix to a Uil manual. This file
 	  is named wml-uil.mm
+	- A database file (motif.wmd) used by the UIL compiler
 
 
 5. Generating and running WML
 
-The script file /wmlsrc/genwml will build WML. The script file /wmlsrc/runwml
-will run WML with motif-tables.src as input.
+WML is integrated into the main Motif build system. To build and run WML:
+
+	1. Configure the build system:
+	   ./configure
+
+	2. Build WML tools:
+	   make -C tools/wml
+
+	3. Generate WML output files:
+	   make -C tools/wml all
+
+	4. Generate the database file:
+	   make -C tools/wml motif.wmd
+
+The WML system will automatically process motif.wml and generate all
+required output files. The generated files are then used by other
+parts of the Motif build system.
 
 
-6. Gotchas and problems in current WML implementation
+6. Current status and known issues
 
-The script files genwml and runwml should be replaced by Makefiles.
+The WML system has been modernized and integrated into the autotools build
+system. The old shell scripts have been replaced with proper Makefiles.
 
-The documentation file ?.mm is relatively untested. The tables should
-probably be modified, as they are currently too big to print cleanly.
-The handling of the DocName attribute is incorrect.
-
-The specification of the Motif toolkit in motif-tables.wml has not been
-fully validated against the latest toolkit documentation. We believe there
-are no or very few errors in the actual resources and the classes which
-use them. There may be errors in the default values, which will appear
-in the documentation.
+Known issues:
+	- The documentation file wml-uil.mm may need formatting adjustments
+	  for optimal printing.
+	- The handling of the DocName attribute in documentation generation
+	  may need refinement.
+	- The specification of the Motif toolkit in motif.wml should be
+	  periodically validated against the latest toolkit documentation.
+	- Some default values in the specification may need updating to
+	  match current Motif behavior.
 
 
 7. WML BNF

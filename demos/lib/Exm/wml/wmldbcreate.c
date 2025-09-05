@@ -33,6 +33,7 @@ static char rcsid[] = "$TOG: wmldbcreate.c /main/7 1997/04/15 10:20:28 dbl $"
 
 #include <stdio.h>
 
+#include "wml.h"
 #include <Mrm/MrmWidget.h>
 #include <Xm/Xm.h>
 #include <Xm/MwmUtil.h>
@@ -94,7 +95,7 @@ void emit_int_and_table_shorts( int	    table_id);
 void emit_ints( int	    table_id);
 
 FILE *bfile, *afile;
-int DEBUG=FALSE;
+int debug_flag=FALSE;
 char outfilename[80];
 char debugfilename[80];
 
@@ -109,7 +110,7 @@ int main(int argc, char ** argv)
 	{
 	if (strcmp("-debug", *argv) == 0)
 	    {
-	    DEBUG=TRUE;
+	    debug_flag=TRUE;
 	    }
 	else if ((strcmp("-o", *argv) == 0))
 		 {
@@ -123,7 +124,7 @@ int main(int argc, char ** argv)
 	printf("\nCouldnt't open %s", outfilename);
 	exit (1);
 	}
-    if (DEBUG)
+    if (debug_flag)
 	{
 	afile = fopen(debugfilename, "w");
 	if (afile == (FILE *) NULL)
@@ -220,7 +221,7 @@ void emit_globals(void)
     globals.uil_max_child = uil_max_child;
 
     fwrite (&globals, sizeof (_db_globals), 1, bfile);
-    if (DEBUG)
+    if (debug_flag)
 	fprintf(afile, "%d %d %d %d %d %d %d %d %d %d ", globals.version,
 		globals.uil_max_arg, globals.uil_max_charset,
 		globals.charset_lang_table_max, globals.uil_max_object,
@@ -235,7 +236,7 @@ void emit_header(_db_header_ptr header)
 {
 
     fwrite (header, sizeof(_db_header), 1, bfile);
-    if (DEBUG)
+    if (debug_flag)
 	fprintf(afile,
 		"\n\nTableId=%d, NumEntries=%d, TableSize=%d \n",
 		 header->table_id, header->num_items, header->table_size);
@@ -310,7 +311,7 @@ void emit_chars(int table_id)
     emit_header(&header);
 
     fwrite (ptr, header.table_size, 1, bfile);
-    if (DEBUG)
+    if (debug_flag)
 	{
 	for (i=0; i<=header.num_items; i++)
 	    {
@@ -350,7 +351,7 @@ void emit_ints_and_string(int table_id)
     for (i=0; i<header.num_items; i++)
         {
 	fwrite (table[i].at_name, table[i].b_length + 1, 1, bfile);
-	if (DEBUG)
+	if (debug_flag)
 	    fprintf (afile, "%d %d %d %d %s", table[i].b_class, table[i].b_subclass,
 		 table[i].b_length, table[i].b_token, table[i].at_name);
 	}
@@ -403,7 +404,7 @@ void emit_char_table(int table_id)
         {
         entry_vec = table[i];
 	fwrite (entry_vec, sizeof (char) * num_bits, 1, bfile);
-	if (DEBUG)
+	if (debug_flag)
 	    {
 	    for (j=0; j<num_bits; j++)
 		{
@@ -516,7 +517,7 @@ void emit_length_and_string(int table_id)
 	    {
 	    lengths[i] = 0;
 	    }
-	if (DEBUG)
+	if (debug_flag)
 	    fprintf (afile, "%d ", lengths[i]);
 	}
     fwrite (lengths, sizeof (int) * (header.num_items + 1), 1, bfile);
@@ -529,7 +530,7 @@ void emit_length_and_string(int table_id)
 	     * Add one for the null terminator
 	     */
 	    fwrite (table[i], lengths[i] + 1, 1, bfile);
-	    if (DEBUG)
+	    if (debug_flag)
 		fprintf (afile, "%s ", table[i]);
 	    }
 	}
@@ -592,7 +593,7 @@ void emit_shorts(int table_id)
     emit_header(&header);
 
     fwrite (ptr, header.table_size, 1, bfile);
-    if (DEBUG)
+    if (debug_flag)
 	{
 	for (i=0; i<header.num_items; i++)
 	    {
@@ -656,7 +657,7 @@ void emit_ints(int table_id)
     emit_header(&header);
 
     fwrite (ptr, header.table_size, 1, bfile);
-    if (DEBUG)
+    if (debug_flag)
 	{
 	for (i=0; i<header.num_items; i++)
 	    {

@@ -99,7 +99,7 @@ ReadDB(char* filename)
 {
   FILE *input;
   int i, number, first = 1;
-  char *buffer;
+  char *buffer = NULL;
   int max, current;
   char line[1024];
   Arg args[5];
@@ -233,7 +233,9 @@ ReadDB(char* filename)
     pages[0] -> page = XtMalloc(2);
     pages[0] -> page[0] = 0;
   } else {
-    pages[number] -> page = buffer;
+    if (buffer != NULL) {
+      pages[number] -> page = buffer;
+    }
   }
 
   maxpages = number;
