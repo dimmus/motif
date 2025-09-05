@@ -108,8 +108,18 @@ AS_IF([test "x$enable_printing" == "xyes"],[
 	AS_IF([test "x$enable_printing" == "xno"], [AC_MSG_FAILURE([libXp not found])])])
 
 AC_ARG_ENABLE([tests],
-	[AS_HELP_STRING([--enable-tests],[enable automated tests])],
+	[AS_HELP_STRING([--enable-tests],[enable automated tests (not available in distribution packages)])],
 	[enable_tests=$enableval],[enable_tests=no])
+
+# Disable tests in distribution packages
+AS_IF([test -f "$srcdir/.git" -o -d "$srcdir/.git"],
+	[# We're in a git repository, tests are available
+	],
+	[# We're in a distribution package, disable tests
+	 AS_IF([test "x$enable_tests" = "xyes"],
+		[AC_MSG_WARN([Tests are not available in distribution packages. Use git repository for testing.])
+		 enable_tests=no])
+	])
 AS_IF([test "x$enable_tests" == "xyes"],[
 	AC_PROG_AWK
 	AC_REQUIRE_AUX_FILE([tap-driver.sh])

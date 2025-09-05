@@ -3,7 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 datadir = ${prefix}/share/Xm/doc
 
 # Declare phony targets
-.PHONY: help format deps release release-configure release-build release-portable release-portable-configure dev-build gcov clean-gcov
+.PHONY: help format deps release release-configure release-build release-portable release-portable-configure dev-build gcov clean-gcov dist-check
 
 data_DATA = README.md
 pkgconfig_DATA  = motif.pc
@@ -29,7 +29,7 @@ MAINTAINERCLEANFILES = Makefile.in \
             autom4te.cache \
             acinclude.m4 \
             libtool.m4 \
-            lt*.m4 \
+            m4/l*.m4 \
             stamp-h* \
             xmstring.list \
             *.uid \
@@ -73,6 +73,8 @@ help:
 	@echo "  uninstall     - Uninstall the software"
 	@echo "  gcov          - Generate code coverage reports (requires --enable-tests)"
 	@echo "  clean-gcov    - Clean up coverage files"
+	@echo "  dist-check    - Create distribution, unpack and verify it builds"
+	@echo "  dist-minimal  - Create and test minimal distribution (no demos)"
 	@echo ""
 	@echo "Release build optimizations:"
 	@echo "  -O3                    - Maximum optimization"
@@ -190,3 +192,19 @@ gcov:
 clean-gcov:
 	@echo "Code coverage is not enabled."
 endif
+
+# Distribution check target - unpacks distribution and verifies it builds
+dist-check: dist
+	@echo "Creating distribution check..."
+	@DISTDIR=$$(basename $(distdir).tar.xz .tar.xz) && \
+	rm -rf $$DISTDIR && \
+	echo "Unpacking distribution: $(distdir).tar.xz" && \
+	tar -xf $(distdir).tar.xz && \
+	cd $$DISTDIR && \
+	echo "Configuring distribution with default settings..." && \
+	./configure --disable-tests --disable-demos && \
+	echo "Building distribution..." && \
+	$(MAKE) && \
+	echo "Distribution check completed successfully!" && \
+	cd .. && \
+	rm -rf $$DISTDIR
