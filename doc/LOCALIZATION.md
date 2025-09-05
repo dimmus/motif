@@ -18,10 +18,10 @@ The project includes localization support for:
 - **English** (default/C locale)
 - **French** (`fr_FR.ISO8859-1`)
 - **German** (`de_DE.ISO8859-1`)
-- **Hebrew** (`hebrew`)
+- **Hebrew** (`hebrew`) (in demos)
 - **Japanese** (`ja_JP.eucJP`, `ja_JP.dt-eucJP`)
 - **Swedish** (`sv_SE.ISO8859-1`)
-- **Spanish** (`es_ES.ISO8859-1`)
+- **Spanish** (`es_ES.ISO8859-1`)  (in demos)
 - **Italian** (`it_IT.ISO8859-1`)
 
 ## Testing Methods
