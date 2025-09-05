@@ -17,6 +17,7 @@ autom4te.cache
 config.h*
 *~
 *.list
+.attic
 tests/test*
 tools/dev/env/logs/*
 test-driver
