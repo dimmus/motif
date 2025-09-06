@@ -25,12 +25,18 @@ AC_DEFUN([XM_CFLAGS],[
 	                      [ax_cc_clang="yes"],dnl
 	                      [ax_cc_clang="no"])
 
-	dnl Set C23 standard for both Clang and GCC
-	dnl Use c2x for GCC < 15, c23 for GCC >= 15
-	AX_CHECK_COMPILE_FLAG([-std=c23], [
-		AX_APPEND_COMPILE_FLAGS([-std=c23])
+	dnl Set C standard for both Clang and GCC
+	dnl Use c17 for better Coverity Scan compatibility
+	dnl Fall back to c11 if c17 is not available
+	AX_CHECK_COMPILE_FLAG([-std=c17], [
+		AX_APPEND_COMPILE_FLAGS([-std=c17])
 	], [
-		AX_APPEND_COMPILE_FLAGS([-std=c2x])
+		AX_CHECK_COMPILE_FLAG([-std=c11], [
+			AX_APPEND_COMPILE_FLAGS([-std=c11])
+		], [
+			dnl Fall back to c99 if neither c17 nor c11 is available
+			AX_APPEND_COMPILE_FLAGS([-std=c99])
+		])
 	])
 
 	AS_IF([test "$ax_cc_clang" == "yes"],[

@@ -428,6 +428,12 @@ XM_ADD_FEATURE([DBG],[log_level],     [${with_log_level}])
 
 AC_OUTPUT
 
+dnl Extract C standard from CFLAGS for display
+c_standard="default"
+if echo "$CFLAGS" | grep -q '\-std='; then
+    c_standard=$(echo "$CFLAGS" | grep -o '\-std=[^[:space:]]*' | head -1 | cut -d= -f2)
+fi
+
 echo ""
 echo "------------------------------------------------------------------------"
 echo "$PACKAGE $VERSION"
@@ -435,6 +441,8 @@ echo "------------------------------------------------------------------------"
 echo ""
 echo "System configuration:"
 echo "  os.............: ${host_os}"
+echo "  c compiler.....: ${CC}"
+echo "  c standard.....: ${c_standard}"
 echo ""
 echo "Features:"
 echo "  libxm..........: ${features_xm}"
