@@ -605,7 +605,7 @@ void emit_shorts(int table_id)
 
 void emit_int_and_table_shorts(int table_id)
 {
-    _db_header		header;
+    _db_header		header = {0};  /* Initialize to zero */
     UilEnumSetDescDef	*table = NULL;
     int			j, i;
     unsigned short int	*value_vec;
@@ -621,7 +621,13 @@ void emit_int_and_table_shorts(int table_id)
 	    header.table_id = Enum_Set_Table;
 	    table = enum_set_table;
 	    break;
+	default:
+	    /* Unknown table_id, return early */
+	    return;
 	}
+
+    if (table == NULL)
+	return;
 
     emit_header(&header);
     fwrite (table, header.table_size, 1, bfile);
@@ -637,7 +643,7 @@ void emit_int_and_table_shorts(int table_id)
 
 void emit_ints(int table_id)
 {
-    _db_header	header;
+    _db_header	header = {0};  /* Initialize to zero */
     int		*ptr = NULL;
     int		i;
 
@@ -652,7 +658,13 @@ void emit_ints(int table_id)
 	    header.table_id = Enumval_Values_Table;
 	    ptr = enumval_values_table;
 	    break;
+	default:
+	    /* Unknown table_id, return early */
+	    return;
 	}
+
+    if (ptr == NULL)
+	return;
 
     emit_header(&header);
 
