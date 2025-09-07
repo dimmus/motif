@@ -2430,23 +2430,7 @@ UpdateMotionBuffer(
    switch (event->type)
    {
       case MotionNotify:
-         if (mb->count && ((mb->count % (STACKMOTIONBUFFERSIZE)) == 0))
-         {
-            if (mb->count == (STACKMOTIONBUFFERSIZE))
-            {
-               MotionBuffer oldMb = mb;
-               Cardinal     size;
-               size = sizeof(MotionBufferRec) + (STACKMOTIONBUFFERSIZE * sizeof(MotionEntryRec));
-               mb   = (MotionBuffer)XtMalloc(size);
-               memcpy((char *)mb, (char *)oldMb, sizeof(MotionBufferRec));
-            }
-            else
-            {
-               mb = (MotionBuffer)
-                  XtRealloc((char *)mb,
-                            (sizeof(MotionBufferRec) + (mb->count + STACKMOTIONBUFFERSIZE) * sizeof(MotionEntryRec)));
-            }
-         }
+         /* Check if buffer has space for new entry */
          /*
 	 * for right now use the root although this wont work for
 	 * pseudo-roots
@@ -2464,12 +2448,20 @@ UpdateMotionBuffer(
          {
             subwindow = event->xmotion.subwindow;
          }
-         mb->entries[mb->count].time      = time;
-         mb->entries[mb->count].window    = window;
-         mb->entries[mb->count].subwindow = subwindow;
-         mb->entries[mb->count].state     = state;
-         mb->entries[mb->count].x         = x;
-         mb->entries[mb->count++].y       = y;
+         if (mb->count < STACKMOTIONBUFFERSIZE)
+         {
+            mb->entries[mb->count].time      = time;
+            mb->entries[mb->count].window    = window;
+            mb->entries[mb->count].subwindow = subwindow;
+            mb->entries[mb->count].state     = state;
+            mb->entries[mb->count].x         = x;
+            mb->entries[mb->count++].y       = y;
+         }
+         else
+         {
+            /* Buffer is full, skip this motion event */
+            return;
+         }
          break;
       case EnterNotify:
          if ((event->xcrossing.mode == NotifyNormal) && (dc->drag.trackingMode != XmDRAG_TRACK_MOTION))
