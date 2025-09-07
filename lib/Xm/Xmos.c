@@ -1051,7 +1051,8 @@ GetCurrentDir(String buf)
        && stat1.st_ino == stat2.st_ino)
    {
       /* Use PWD environment variable */
-      strcpy(buf, pwd);
+      strncpy(buf, pwd, MAX_DIR_PATH_LEN - 1);
+      buf[MAX_DIR_PATH_LEN - 1] = '\0';  /* Ensure null termination */
       return pwd;
    }
    return getcwd(buf, MAX_DIR_PATH_LEN);
