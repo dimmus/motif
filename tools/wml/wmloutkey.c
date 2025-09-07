@@ -161,10 +161,16 @@ static void wmlKeyWGrammarTokens(void)
 		return;
 	}
 
-	while ((scanres = fscanf(infil, "%s %d %s", token, &tokval, class)) != EOF) {
+	while ((scanres = fscanf(infil, "%99s %d %99s", token, &tokval, class)) != EOF) {
 		++lineno;
 		if (scanres != 3) {
 			fprintf(stderr, "Malformatted line at tokens.dat:%d\n", lineno);
+			continue;
+		}
+
+		/* Validate tokval to prevent array bounds issues */
+		if (tokval < 0) {
+			fprintf(stderr, "Invalid token id %d at tokens.dat:%d\n", tokval, lineno);
 			continue;
 		}
 
@@ -191,6 +197,11 @@ static void wmlKeyWGrammarTokens(void)
 		} else {
 			fprintf(stderr, "Token id %d for %s exceeds GrTokenMax\n",
 			       grtok->val, grtok->token);
+			/* Free the allocated memory when token exceeds limit */
+			if (grtok->token)
+				free(grtok->token);
+			free(grtok);
+			continue;
 		}
 
 		/**
@@ -201,7 +212,9 @@ static void wmlKeyWGrammarTokens(void)
 		 */
 		if (grtok->class == WmlTokenClassKeyword ||
 		    grtok->class == WmlTokenClassReserved) {
-			strcpy(sens_name, grtok->token);
+			/* Use strncpy to prevent buffer overflow */
+			strncpy(sens_name, grtok->token, sizeof(sens_name) - 1);
+			sens_name[sizeof(sens_name) - 1] = '\0';
 			for (ndx = 0; ndx < strlen(sens_name); ndx++)
 				sens_name[ndx] = _lower(sens_name[ndx]);
 			if (grtok->token[0] == 'U' && grtok->token[1] == 'I' && grtok->token[2] == 'L')
