@@ -250,7 +250,8 @@ status	create_listing_file(uil_fcb_type *az_fcb)
 {
     /* place the file name in the expanded_name buffer */
 
-    strcpy(az_fcb->expanded_name, Uil_cmd_z_command.ac_listing_file);
+    strncpy(az_fcb->expanded_name, Uil_cmd_z_command.ac_listing_file, sizeof(az_fcb->expanded_name) - 1);
+    az_fcb->expanded_name[sizeof(az_fcb->expanded_name) - 1] = '\0';
 
     /* open the file */
 
@@ -686,6 +687,7 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 	code_offset = az_code -> w_offset;
 	text_ptr = (unsigned char *)(& az_code -> data.c_data [code_len]);
 	text_len = strlen ((char *)text_ptr);
+	/* Clamp text_len to fit within buffer bounds */
 	if (text_len > (unsigned short) (BUF_LEN - TEXT_COL))
 	    text_len = BUF_LEN - TEXT_COL;
 
@@ -700,13 +702,12 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 	sprintf ((char *)hex_longword, "%04X", code_offset);
 	memmove  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
 
-	memmove (& buffer [TEXT_COL - 1], text_ptr, text_len);
-	/* Ensure null terminator is within buffer bounds */
-	if (TEXT_COL + text_len < BUF_LEN + 1) {
-	    buffer [TEXT_COL + text_len] = '\0';
-	} else {
-	    buffer [BUF_LEN] = '\0';
+	/* Safely copy text within buffer bounds */
+	if (text_len > 0) {
+	    memmove (& buffer [TEXT_COL - 1], text_ptr, text_len);
 	}
+	/* Ensure null terminator is within buffer bounds */
+	buffer [TEXT_COL + text_len] = '\0';
 
 	line_written = FALSE;
 
