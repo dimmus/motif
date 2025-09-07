@@ -1008,7 +1008,7 @@ int	yylex()
     int		l_start_src_pos;    /* starting source position of a token */
     int		l_charset;	    /* character set for strings */
     int		l_write_direction;	    /* writing direction */
-    int		l_parse_direction;	    /* parsing direction */
+    int		l_parse_direction = XmSTRING_DIRECTION_L_TO_R;	    /* parsing direction */
     int		l_charset_sixteen_bit = FALSE; /* true if charset is 16-bit */
     sym_value_entry_type
 		*az_charset_entry;  /* value entry for the current charset */
@@ -1266,6 +1266,8 @@ found_16bit_char:
 
 	    case class_eol:
 		src_az_current_source_buffer->w_current_position--;
+		issue_control_char_diagnostic( next_char );
+		break;
 	    case class_illegal:
 		issue_control_char_diagnostic( next_char );
 		break;
@@ -1561,6 +1563,7 @@ found_token:
 		  src_az_current_source_buffer->w_current_position - 1,
 		  "character string",
 		  "before end of line" );
+	break;
 
   case token_comment:       /* RAP preserve comments */
     {
