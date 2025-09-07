@@ -8981,7 +8981,7 @@ XmDataFieldPaste(Widget w)
    XmTextPosition      paste_pos_left, paste_pos_right;
    int                 status = 0;         /* clipboard status        */
    char               *buffer;             /* temporary text buffer   */
-   unsigned long       length;             /* length of buffer        */
+   unsigned long       length = 0;         /* length of buffer        */
    unsigned long       outlength     = 0L; /* length of bytes copied  */
    long                private_id    = 0;  /* id of item on clipboard */
    Boolean             dest_disjoint = True;
