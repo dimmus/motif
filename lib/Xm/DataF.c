@@ -8523,7 +8523,6 @@ XmDataFieldReplaceWcs(Widget w, XmTextPosition from_pos, XmTextPosition to_pos, 
    XmAnyCallbackStruct cb;
    _XmWidgetToAppContext(w);
    _XmAppLock(app);
-   if (wc_value == NULL) wc_value = (wchar_t *)"";
    df_VerifyBounds(tf, &from_pos, &to_pos);
    if (XmTextF_has_primary(tf))
    {
@@ -8534,26 +8533,34 @@ XmDataFieldReplaceWcs(Widget w, XmTextPosition from_pos, XmTextPosition to_pos, 
       }
    }
    /* Count the number of wide chars in the array */
-   for (wc_length = 0, tmp_wc = wc_value; *tmp_wc != (wchar_t)0L; wc_length++)
-      tmp_wc++; /* count number of wchar_t's */
+   if (wc_value == NULL) {
+      wc_length = 0;
+   } else {
+      for (wc_length = 0, tmp_wc = wc_value; *tmp_wc != (wchar_t)0L; wc_length++)
+         tmp_wc++; /* count number of wchar_t's */
+   }
    XmTextF_editable(tf)   = True;
    XmTextF_max_length(tf) = INT_MAX;
    if (XmTextF_max_char_size(tf) != 1)
    {
-      rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, (char *)wc_value, wc_length, False);
+      rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, wc_value ? (char *)wc_value : "", wc_length, False);
    }
    else
    { /* need to convert to char* before calling Replace */
-      tmp       = XtMalloc((unsigned)(wc_length + 1) * XmTextF_max_char_size(tf));
-      wc_length = wcstombs(tmp, wc_value, (wc_length + 1) * XmTextF_max_char_size(tf));
-      if (wc_length == (size_t)-1)
-      {                  /* if wcstombs fails, it returns -1 */
-         tmp       = ""; /* if invalid data, pass in the empty
-                                       * string */
-         wc_length = 0;
+      if (wc_value == NULL) {
+         rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, "", 0, False);
+      } else {
+         tmp       = XtMalloc((unsigned)(wc_length + 1) * XmTextF_max_char_size(tf));
+         wc_length = wcstombs(tmp, wc_value, (wc_length + 1) * XmTextF_max_char_size(tf));
+         if (wc_length == (size_t)-1)
+         {                  /* if wcstombs fails, it returns -1 */
+            tmp       = ""; /* if invalid data, pass in the empty
+                                          * string */
+            wc_length = 0;
+         }
+         rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, tmp, wc_length, False);
+         XtFree(tmp);
       }
-      rep_result = _XmDataFieldReplaceText(tf, NULL, from_pos, to_pos, tmp, wc_length, False);
-      XtFree(tmp);
    }
    if (from_pos <= XmTextF_cursor_position(tf))
    {
