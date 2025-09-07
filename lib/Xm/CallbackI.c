@@ -103,7 +103,7 @@ _XmRemoveCallback(InternalCallbackList *callbacks,
                while (--j >= 0)
                   *ncl++ = *ocl++;
                while (--i >= 0)
-                  *ncl++ = *++cl;
+                  *ncl++ = *cl++;
                *callbacks = icl;
             }
          }
