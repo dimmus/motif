@@ -1542,7 +1542,19 @@ XmStringConcatAndFree(XmString a,
    {
       for (i = 0; i < (b_sc - merged); i++)
       {
-         b_line = _XmStrEntry(b_str)[i + merged];
+         /* Check if b_str is a singleton (b_tmp) or a real array */
+         if (b_str == (XmString)&b_tmp)
+         {
+            /* b_str is singleton, only one entry at index 0 */
+            if (i + merged == 0)
+               b_line = _XmStrEntry(b_str)[0];
+            else
+               continue; /* Skip invalid array access */
+         }
+         else
+         {
+            b_line = _XmStrEntry(b_str)[i + merged];
+         }
          if (a_needs_unopt && !b_needs_unopt)
             _XmStrEntry(a_str)[a_lc] = Unoptimize(b_line, modify_b);
          else if (modify_b)
@@ -1555,7 +1567,16 @@ XmStringConcatAndFree(XmString a,
    /* Add rest of b's lines to a */
    for (i = 0; i < (b_lc - 1); i++)
    {
-      b_line = _XmStrEntry(b_str)[i + 1];
+      /* Check if b_str is a singleton (b_tmp) or a real array */
+      if (b_str == (XmString)&b_tmp)
+      {
+         /* b_str is singleton, skip this loop as there's only one entry */
+         break;
+      }
+      else
+      {
+         b_line = _XmStrEntry(b_str)[i + 1];
+      }
       if (a_needs_unopt && !b_needs_unopt)
          b_line = Unoptimize(b_line, modify_b);
       else if (!modify_b)
