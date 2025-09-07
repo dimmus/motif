@@ -148,13 +148,8 @@ int		i;	/* loop index */
 
 /* BEGIN OSF Fix CR 5443 */
 /* Initialize uil_sym_default_charset based on XmFALLBACK_CHARSET */
-if (strcmp(XmFALLBACK_CHARSET, "ISO8859-1") != 0) /* Most common case. */
-  for (i = 0; i < (int)charset_lang_table_max; i++)
-    if (strcmp(XmFALLBACK_CHARSET, charset_lang_names_table[i]) == 0)
-      {
-	uil_sym_default_charset = charset_lang_codes_table[i];
-	break;
-      }
+/* Since XmFALLBACK_CHARSET is always "ISO8859-1", this code is unreachable */
+/* The default charset is already set to ISO8859-1 by default */
 /* END OSF Fix CR 5443 */
 
 /*
@@ -255,8 +250,10 @@ void	sar_create_root(yystype *root_frame)
     ** Save the file name and the expanded version of it.
     */
 
-    strcpy (sym_az_root_entry->file_name, Uil_cmd_z_command.ac_source_file);
-    strcpy (sym_az_root_entry->full_file_name, src_az_source_file_table[0]->expanded_name);
+    strncpy (sym_az_root_entry->file_name, Uil_cmd_z_command.ac_source_file, sizeof(sym_az_root_entry->file_name) - 1);
+    sym_az_root_entry->file_name[sizeof(sym_az_root_entry->file_name) - 1] = '\0';
+    strncpy (sym_az_root_entry->full_file_name, src_az_source_file_table[0]->expanded_name, sizeof(sym_az_root_entry->full_file_name) - 1);
+    sym_az_root_entry->full_file_name[sizeof(sym_az_root_entry->full_file_name) - 1] = '\0';
 
     /*
     ** Save the symbol node in the root frame.
@@ -311,6 +308,15 @@ void	sar_create_module(yystype *target_frame, yystype *id_frame, yystype *module
     */
 
     name_entry = (sym_name_entry_type *) sem_dcl_name( id_frame );
+
+    if (name_entry == NULL) {
+	diag_issue_diagnostic
+	    ( d_undefined,
+	      _sar_source_position( id_frame ),
+	      diag_tag_text( sym_k_module_entry ),
+	      "module name" );
+	return;
+    }
 
     /*
     **	Allocate the module entry and fill it in
@@ -444,17 +450,25 @@ void	sar_process_module_version(yystype *value_frame, yystype *start_frame)
     ** Save source info
     */
 
-    _sar_save_source_info ( &sym_az_module_entry->az_version->header , start_frame , value_frame);
+    if (value_entry != NULL)
+	_sar_save_source_info ( &sym_az_module_entry->az_version->header , start_frame , value_frame);
 
     /*
     **	Set up listing title
     */
 
     if (Uil_cmd_z_command.v_listing_file)
-	sprintf(Uil_lst_c_title2,
-		"Module: %s \t Version: %s",
-		sym_az_module_entry->obj_header.az_name->c_text,
-		value_entry->value.c_value );
+	{
+	if (value_entry != NULL)
+	    sprintf(Uil_lst_c_title2,
+		    "Module: %s \t Version: %s",
+		    sym_az_module_entry->obj_header.az_name->c_text,
+		    value_entry->value.c_value );
+	else
+	    sprintf(Uil_lst_c_title2,
+		    "Module: %s",
+		    sym_az_module_entry->obj_header.az_name->c_text );
+	}
 
     module_clauses |= m_version_clause;
 }
