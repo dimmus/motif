@@ -375,16 +375,21 @@ src_open_file (XmConst char *c_file_name,
 
     /* put fcb in the file table */
 
-    src_l_last_source_file_number++;
-
-    if (src_l_last_source_file_number >= src_k_max_source_files) {
+    if (src_l_last_source_file_number + 1 >= src_k_max_source_files) {
 	diag_issue_diagnostic (
 		d_src_limit,
 		src_az_current_source_record,
 		src_az_current_source_buffer -> w_current_position - 1,
 		az_fcb->expanded_name );
+	/* Free allocated memory before returning */
+	XtFree((char *) az_fcb);
+	if (az_source_buffer != src_az_avail_source_buffer) {
+	    XtFree((char *) az_source_buffer);
+	}
+	return;
     }
 
+    src_l_last_source_file_number++;
     src_az_source_file_table[ src_l_last_source_file_number ] = az_fcb;
 
     /* Complete the OS-independent initialization. Get the size of the file
