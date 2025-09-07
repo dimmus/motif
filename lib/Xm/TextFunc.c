@@ -101,6 +101,7 @@ _XmTextReplace(Widget         widget,
       if (value == NULL)
       {
          block.length = 0;
+         block.ptr = NULL;
       }
       else
       {
@@ -133,18 +134,18 @@ _XmTextReplace(Widget         widget,
       }
       _XmTextValueChanged(tw, NULL);
       if (UnderVerifyPreedit(tw))
-         if (newblock.length != block.length || strncmp(newblock.ptr, block.ptr, block.length) != 0)
+         if (newblock.length != block.length || (newblock.ptr && block.ptr && strncmp(newblock.ptr, block.ptr, block.length) != 0))
          {
             VerifyCommitNeeded(tw) = True;
-            PreEndTW(tw)          += _XmTextCountCharacters(newblock.ptr, newblock.length)
-                          - _XmTextCountCharacters(block.ptr, block.length);
+            PreEndTW(tw)          += (newblock.ptr ? _XmTextCountCharacters(newblock.ptr, newblock.length) : 0)
+                          - (block.ptr ? _XmTextCountCharacters(block.ptr, block.length) : 0);
          }
       if (freeBlock && newblock.ptr) XtFree(newblock.ptr);
    }
    else if (UnderVerifyPreedit(tw))
    {
       VerifyCommitNeeded(tw) = True;
-      PreEndTW(tw)          -= _XmTextCountCharacters(block.ptr, block.length);
+      PreEndTW(tw)          -= (block.ptr ? _XmTextCountCharacters(block.ptr, block.length) : 0);
    }
    if (need_free)
       XtFree(tmp_block);
