@@ -701,6 +701,12 @@ void db_read_length_and_string(_db_header_ptr header)
 	 *	 have to be carefull.
 	 */
 
+	/* Validate tainted header->num_items to prevent exploitation */
+	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
+	    diag_issue_internal_error("Invalid num_items in db_read_length_and_string");
+	    return;
+	}
+	
 	lengths = (int *) XtMalloc (sizeof (int) * (header->num_items + 1));
 	return_num_items = fread(lengths,
 				    sizeof(int) * (header->num_items + 1),
@@ -711,6 +717,12 @@ void db_read_length_and_string(_db_header_ptr header)
 	    /*
 	     * Add one for the null terminator
 	     */
+	    /* Validate tainted data from file to prevent exploitation */
+	    if (lengths[i] < 0 || lengths[i] > SIZE_MAX / 4) {
+		diag_issue_internal_error("Invalid length in db_read_length_and_string");
+		XtFree((char *)lengths);
+		return;
+	    }
 	    if (lengths[i] > 0)
 		{
 		/* Check for potential integer overflow in string_size calculation */
@@ -748,8 +760,23 @@ void db_read_length_and_string(_db_header_ptr header)
 	    return;
 	}
 
+	/* Validate tainted header->num_items to prevent exploitation */
+	if (header->num_items < 0 || header->num_items > SIZE_MAX / 4) {
+	    diag_issue_internal_error("Invalid num_items in db_read_length_and_string");
+	    XtFree((char *)lengths);
+	    XtFree((char *)string_table);
+	    return;
+	}
+
 	for ( i=0 ; i<=header->num_items; i++)
 	    {
+	    /* Validate tainted data from file to prevent exploitation */
+	    if (lengths[i] < 0 || lengths[i] > SIZE_MAX / 4) {
+		diag_issue_internal_error("Invalid length in db_read_length_and_string");
+		XtFree((char *)lengths);
+		XtFree((char *)string_table);
+		return;
+	    }
 	    if (lengths[i] > 0)
 		{
 		/* Ensure string is null-terminated */
