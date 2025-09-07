@@ -1407,7 +1407,10 @@ Redisplay(Widget widget, XEvent *event, Region region)
      * next if we have any gadget children lets be sure to
      * redisplay them.
      */
-   XmeRedisplayGadgets(widget, event, region);
+   if (widget != NULL && event != NULL)
+   {
+      XmeRedisplayGadgets(widget, event, region);
+   }
    /*
      * Now lets redray our shadows.
      */
@@ -1604,6 +1607,9 @@ SetValues(Widget current, Widget request, Widget set, ArgList arg_list, Cardinal
    {
       XtWidgetGeometry unused, allowed;
       unused.request_mode = 0;
+      unused.x = unused.y = 0;
+      unused.width = unused.height = 0;
+      unused.border_width = 0;
       QueryGeometry(set, &unused, &allowed);
       if (BBPart(s_tab).resize_policy != XmRESIZE_NONE)
       {
@@ -1646,7 +1652,7 @@ QueryGeometry(Widget widget, XtWidgetGeometry *request, XtWidgetGeometry *allowe
 {
    XmTabStackWidget tab = (XmTabStackWidget)widget;
    WidgetList       kid;
-   XtWidgetGeometry tab_wanted;
+   XtWidgetGeometry tab_wanted = {0};
    Cardinal         i;
    Boolean          have_width, have_height;
    int              kid_width = 0, kid_height = 0, width, height;
@@ -1923,7 +1929,7 @@ QueryGeometry(Widget widget, XtWidgetGeometry *request, XtWidgetGeometry *allowe
 		 * Now letws see how the TabBox reacts to the new size.
 		 */
                ask.request_mode = CWHeight;
-               ask.request_mode = request->height;
+               ask.height = request->height;
                got.request_mode = 0;
                switch (XtQueryGeometry(XmTabStack_tab_box(tab), &ask, &got))
                {
