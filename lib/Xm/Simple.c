@@ -69,7 +69,7 @@ EvaluateConvenienceStructure(
    int               button_count    = 0;
    int               separator_count = 0;
    int               label_count     = 0;
-   Arg               args[6];
+   Arg               args[7];  /* Increased size to prevent overflow */
    Widget            child;
    XmButtonType      btype;
    for (i = 0; i < sm->count; i++)
@@ -121,10 +121,13 @@ EvaluateConvenienceStructure(
                                           (Widget)rc,
                                           args,
                                           n);
+            (void)child;  /* Suppress unused value warning */
             break;
          case XmDOUBLE_SEPARATOR:
-            XtSetArg(args[n], XmNseparatorType, XmDOUBLE_LINE);
-            n++;
+            if (n < 7) {
+               XtSetArg(args[n], XmNseparatorType, XmDOUBLE_LINE);
+               n++;
+            }
          case XmSEPARATOR:
             sprintf(name_buf, "separator_%d", separator_count++);
             child = XtCreateManagedWidget(name_buf,
@@ -132,6 +135,7 @@ EvaluateConvenienceStructure(
                                           (Widget)rc,
                                           args,
                                           n);
+            (void)child;  /* Suppress unused value warning */
             break;
          case XmPUSHBUTTON:
             sprintf(name_buf, "button_%d", button_count++);
@@ -147,12 +151,16 @@ EvaluateConvenienceStructure(
                              (XtPointer)(unsigned long)(button_count - 1));
             break;
          case XmRADIOBUTTON:
-            XtSetArg(args[n], XmNindicatorType, XmONE_OF_MANY);
-            n++;
+            if (n < 7) {
+               XtSetArg(args[n], XmNindicatorType, XmONE_OF_MANY);
+               n++;
+            }
          case XmCHECKBUTTON:
             sprintf(name_buf, "button_%d", button_count++);
-            XtSetArg(args[n], XmNindicatorOn, TRUE);
-            n++;
+            if (n < 7) {
+               XtSetArg(args[n], XmNindicatorOn, TRUE);
+               n++;
+            }
             child = XtCreateManagedWidget(name_buf,
                                           xmToggleButtonGadgetClass,
                                           (Widget)rc,
