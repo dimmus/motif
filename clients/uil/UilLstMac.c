@@ -250,9 +250,7 @@ void		save_widget_machine_code(sym_widget_entry_type *widget_entry, URMResourceC
 		sizeof (w_rec->lock), (char*)& w_rec->lock,
 		buffer );
 
-    sprintf (buffer, "type: ");
-
-    strcat (buffer, class_name_from_code (w_rec->type));
+    snprintf (buffer, sizeof(buffer), "type: %s", class_name_from_code (w_rec->type));
 
     src_append_machine_code (
 		az_src_rec,
@@ -1259,6 +1257,7 @@ void	off_put
 
     if (off_info_cnt >= k_off_stack_size) {
 	diag_issue_internal_error ("stack overflow in machine listing");
+	return;
     }
 
     off_info.w_off_type = off_type;
