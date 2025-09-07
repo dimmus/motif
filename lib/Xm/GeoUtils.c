@@ -29,6 +29,7 @@ static char rcsid[] = "$XConsortium: GeoUtils.c /main/13 1996/08/15 17:11:25 pas
 #   include <config.h>
 #endif
 #include <stdlib.h>
+#include <limits.h>
 #include "XmI.h"
 #include "GeoUtilsI.h"
 #include "GMUtilsI.h"
@@ -1034,27 +1035,46 @@ _XmGeoGetDimensions(
          endSpaceW = 0;
       }
       /* Fill width is the minimum spacing between (borders of) boxes plus
-        *   any extra space required at ends.  Margins are not included.
-        */
-      layoutPtr->fill_width = (endSpaceW << 1)
-                            + ((numBoxes - 1) * layoutPtr->space_between);
+       *   any extra space required at ends.  Margins are not included.
+       */
+      /* Check for potential overflow in multiplication */
+      if (numBoxes > 1 && layoutPtr->space_between > 0) {
+         /* Check if multiplication would overflow */
+         if (numBoxes - 1 > (UINT_MAX / layoutPtr->space_between)) {
+            /* Overflow would occur, use maximum safe value */
+            layoutPtr->fill_width = (endSpaceW << 1) + UINT_MAX;
+         } else {
+            layoutPtr->fill_width = (endSpaceW << 1)
+                                  + ((numBoxes - 1) * layoutPtr->space_between);
+         }
+      } else {
+         layoutPtr->fill_width = (endSpaceW << 1);
+      }
       /* Maximum row width is the overall matrix width, less margins.  Add
         *   box width to fill width for total width this row.
         */
       rowW += layoutPtr->fill_width;
       ASSIGN_MAX(matrixW, rowW);
       rowPtr = boxPtr + 1; /* Skip over NULL box marking the end of row.*/
-      ++layoutPtr;         /* Go to next row layout record.*/
-      /* Accumulate heights of each row.
-        */
-      matrixFillH  += layoutPtr->space_above;
+      
+      /* Accumulate heights of each row before moving to next layout record */
       matrixBoxesH += rowH;
+      
+      /* Move to next row layout record and check bounds */
+      ++layoutPtr;         /* Go to next row layout record.*/
+      
+      /* Only access layoutPtr->space_above if we haven't reached the end */
+      if (!layoutPtr->end) {
+         matrixFillH += layoutPtr->space_above;
+      }
    }
    /* The matrixFillH variable already has fill space included from the final
     *   row layout record.  This must be reduced by the amount of the margin,
     *   or a smaller amount if the amount specified was less than the margin.
+    *   Note: layoutPtr now points to the last valid layout record or beyond,
+    *   so we need to check if it's still valid before accessing it.
     */
-   if (layoutPtr->space_above < marginH)
+   if (!layoutPtr->end && layoutPtr->space_above < marginH)
    {
       matrixFillH -= layoutPtr->space_above;
    }
