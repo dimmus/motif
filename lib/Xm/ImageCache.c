@@ -722,7 +722,11 @@ LoadImage(Screen *screen, char *image_name, XmAccessColorData acc_color, XImage 
    {
       case '<': /* SVG */
          if (!_XmSvgGetImage(fp, image))
+         {
+            fclose(fp);
+            XtFree(fname);
             return True;
+         }
          break;
       case 0xff: /* 0xff 0xd8 - JPEG/Exif SOI */
 #if XM_WITH_JPEG
