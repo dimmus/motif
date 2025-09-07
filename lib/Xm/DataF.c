@@ -6480,7 +6480,10 @@ df_ValidateString(XmDataFieldWidget tf, char *value, Boolean is_wchar)
             else
             {
                char warn_str[52];
-               scratch[csize] = '\0';
+               if (csize >= 0)
+                  scratch[csize] = '\0';
+               else
+                  scratch[0] = '\0';
                sprintf(warn_str, WC_MSG1, scratch);
                XmeWarning((Widget)tf, warn_str);
             }
