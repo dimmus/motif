@@ -2024,8 +2024,8 @@ Urm__CW_ConvertValue (Widget			parent,
    *  Local variables
    */
   Cardinal		result ;	/* function results */
-  XFontStruct		*font ;		/* result of conversion to font */
-  XFontSet		fontset ;	/* result of converstion to fontset */
+  XFontStruct		*font = NULL ;		/* result of conversion to font */
+  XFontSet		fontset = NULL ;	/* result of converstion to fontset */
   char			**missing_csets;  /* For XCreateFontSet */
   int			missing_cset_cnt; /* For XCreateFontSet */
   char			*def_string;	/* For XCreateFontSet */
