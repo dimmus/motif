@@ -365,6 +365,9 @@ esdesc->values = NULL;
 if ( wmlFindInHList(wml_synobj_ptr,name) >= 0 )
     {
     printf ("\nDuplicate name %s found", name);
+    free(esdesc->name);
+    free(esdesc->datatype);
+    free(esdesc);
     return;
     }
 wmlInsertInHList (wml_synobj_ptr, name, (ObjectPtr)esdesc);
@@ -404,6 +407,9 @@ evdesc->enumlit = wmlAllocateString (name);	/* defaults to name */
 if ( wmlFindInHList(wml_synobj_ptr,name) >= 0 )
     {
     printf ("\nDuplicate name %s found", name);
+    free(evdesc->name);
+    free(evdesc->enumlit);
+    free(evdesc);
     return;
     }
 wmlInsertInHList (wml_synobj_ptr, name, (ObjectPtr)evdesc);
@@ -449,6 +455,8 @@ ddesc->alias_list = NULL;
 if ( wmlFindInHList(wml_synobj_ptr,name) >= 0 )
     {
     printf ("\nDuplicate name %s found", name);
+    free(ddesc->name);
+    free(ddesc);
     return;
     }
 wmlInsertInHList (wml_synobj_ptr, name, (ObjectPtr)ddesc);
