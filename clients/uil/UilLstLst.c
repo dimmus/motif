@@ -686,8 +686,8 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 	code_offset = az_code -> w_offset;
 	text_ptr = (unsigned char *)(& az_code -> data.c_data [code_len]);
 	text_len = strlen ((char *)text_ptr);
-	if (text_len > (unsigned short) (BUF_LEN - TEXT_COL + 1))
-	    text_len = BUF_LEN - TEXT_COL + 1;
+	if (text_len > (unsigned short) (BUF_LEN - TEXT_COL))
+	    text_len = BUF_LEN - TEXT_COL;
 
 	long_cnt = code_len / sizeof (char *);
 	line_cnt = long_cnt / LONG_PER_LINE;
@@ -701,7 +701,12 @@ void	lst_output_machine_code(src_source_record_type *az_src_rec)
 	memmove  (& buffer [OFFSET_COL - 1], hex_longword, HEX_PER_WORD);
 
 	memmove (& buffer [TEXT_COL - 1], text_ptr, text_len);
-	buffer [TEXT_COL + text_len] = '\0';
+	/* Ensure null terminator is within buffer bounds */
+	if (TEXT_COL + text_len < BUF_LEN + 1) {
+	    buffer [TEXT_COL + text_len] = '\0';
+	} else {
+	    buffer [BUF_LEN] = '\0';
+	}
 
 	line_written = FALSE;
 
