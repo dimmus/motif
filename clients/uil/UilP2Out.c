@@ -744,7 +744,7 @@ if( urm_status != MrmSUCCESS)
     urm_status =
     UrmCWRSetClass( out_az_context,
 		    widget_class,
-		    widget_class_name,
+		    (widget_class == MrmwcUnknown) ? widget_class_name : "",
 		    widget_variety );
     if( urm_status != MrmSUCCESS)
 	issue_urm_error( "setting class" );
