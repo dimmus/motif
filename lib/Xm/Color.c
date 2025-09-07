@@ -769,7 +769,7 @@ GetColors(
 {
    Display     *display = DisplayOfScreen(screen);
    XmColorData *old_colors;
-   XmColorData  new_colors;
+   XmColorData  new_colors = {0};  /* Initialize all fields to zero */
    new_colors.screen           = screen;
    new_colors.color_map        = color_map;
    new_colors.background.pixel = background;
@@ -796,7 +796,7 @@ GetColors(
 	 */
    new_colors.foreground.pixel = 0;
    new_colors.top_shadow.pixel = 0;
-   new_colors.top_shadow.pixel = 0;
+   new_colors.bottom_shadow.pixel = 0;
    new_colors.select.pixel     = 0;
    /*  Generate the foreground, top_shadow, and bottom_shadow based  */
    /*  on the background                                             */
