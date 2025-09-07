@@ -67,6 +67,7 @@ static char rcsid[] = "$XConsortium: UilDB.c /main/11 1996/11/21 20:03:11 drk $"
 #endif
 
 #include <stdio.h>
+#include <stdint.h>
 
 /*
  *
@@ -635,21 +636,42 @@ void db_read_length_and_string(_db_header_ptr header)
 	    /*
 	     * Add one for the null terminator
 	     */
-	    if (lengths[i])
+	    if (lengths[i] > 0)
 		{
+		/* Check for potential integer overflow in string_size calculation */
+		if (string_size > SIZE_MAX - lengths[i] - 1) {
+		    diag_issue_internal_error("String size overflow in db_read_length_and_string");
+		    XtFree((char *)lengths);
+		    return;
+		}
 		string_size += lengths[i] + 1;
 		}
 	    }
 
+	/* Check for potential integer overflow in size calculation */
+	if (string_size < 0 || string_size > SIZE_MAX / sizeof(unsigned char)) {
+	    diag_issue_internal_error("String size overflow in db_read_length_and_string");
+	    XtFree((char *)lengths);
+	    return;
+	}
+	
 	string_table = XtMalloc (sizeof (unsigned char) * string_size);
+	if (string_table == NULL) {
+	    diag_issue_internal_error("Memory allocation failed in db_read_length_and_string");
+	    XtFree((char *)lengths);
+	    return;
+	}
+	
 	return_num_items = fread(string_table,
 				    sizeof(unsigned char) * string_size,
 				    1, dbfile);
 	_check_read (return_num_items);
 	for ( i=0 ; i<=header->num_items; i++)
 	    {
-	    if (lengths[i])
+	    if (lengths[i] > 0)
 		{
+		/* Ensure string is null-terminated */
+		string_table[lengths[i]] = '\0';
 		table[i] = string_table;
 /* BEGIN HaL Fix CR 5618 */
 		  if ((header->table_id == Uil_Widget_Names) &&
