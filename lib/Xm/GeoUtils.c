@@ -788,15 +788,15 @@ _XmGeoMatrixGet(
 {
    register XmKidGeometry boxPtr;
    XmKidGeometry          rowPtr;
-   XmGeoRowLayout         layoutPtr;
+   XmGeoMajorLayout       layoutPtr;
    XtWidgetGeometry      *request;
    Widget                 instigator;
    /****************/
    request    = &geoSpec->instig_request;
    instigator = geoSpec->instigator;
    rowPtr     = geoSpec->boxes;
-   layoutPtr  = &(geoSpec->layouts->row);
-   while (!(layoutPtr->end))
+   layoutPtr  = geoSpec->layouts;
+   while (!(layoutPtr->row.end))
    {
       boxPtr = rowPtr;
       while (boxPtr->kid)
@@ -808,9 +808,9 @@ _XmGeoMatrixGet(
          }
          ++boxPtr;
       }
-      if (layoutPtr->fix_up)
+      if (layoutPtr->row.fix_up)
       {
-         (*(layoutPtr->fix_up))(geoSpec, geoType, (XmGeoMajorLayout)layoutPtr, rowPtr);
+         (*(layoutPtr->row.fix_up))(geoSpec, geoType, layoutPtr, rowPtr);
       }
       rowPtr = boxPtr + 1; /* Skip over NULL box marking the end of row.*/
       ++layoutPtr;         /* Go to next row layout record.*/
