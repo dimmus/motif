@@ -933,7 +933,8 @@ ConstraintInitialize(Widget request, Widget new_w, ArgList arg_list, Cardinal *a
       }
       else
       {
-         strcpy(buf, XtName(new_w));
+         strncpy(buf, XtName(new_w), 255);
+         buf[255] = '\0';
          strcat(buf, "_label");
       }
       label_widget = True;

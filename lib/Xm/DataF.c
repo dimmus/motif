@@ -3839,7 +3839,8 @@ df_InsertString(Widget w, XEvent *event, char **params, Cardinal *num_params)
    }
    for (i = 0; i < *num_params; i++)
    {
-      strcpy(insert_string, params[i]);
+      strncpy(insert_string, params[i], TEXT_MAX_INSERT_SIZE - 1);
+      insert_string[TEXT_MAX_INSERT_SIZE - 1] = '\0';
       insert_length = strlen(insert_string);
       if (insert_length > 0)
       {

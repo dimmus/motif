@@ -47,7 +47,10 @@ xpmstrdup(char *s1)
    char  *s2;
    size_t l = strlen(s1) + 1;
    if (s2 = (char *)XpmMalloc(l))
-      strcpy(s2, s1);
+   {
+      strncpy(s2, s1, l - 1);
+      s2[l - 1] = '\0';
+   }
    return s2;
 }
 #endif

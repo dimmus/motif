@@ -186,12 +186,18 @@ Idb__HDR_GetHeader (IDBFile		file_id)
   for ( ndx=URMgMin ; ndx<=URMgMax ; ndx++ )
     file_id->group_counts[ndx] = hdrptr->group_counts[ndx];
 
-  strcpy (file_id->db_version, hdrptr->db_version);
-  strcpy (file_id->creator, hdrptr->creator);
-  strcpy (file_id->creator_version, hdrptr->creator_version);
-  strcpy (file_id->creation_date, hdrptr->creation_date);
-  strcpy (file_id->module, hdrptr->module);
-  strcpy (file_id->module_version, hdrptr->module_version);
+  strncpy (file_id->db_version, hdrptr->db_version, IDBhsVersion);
+  file_id->db_version[IDBhsVersion] = '\0';
+  strncpy (file_id->creator, hdrptr->creator, IDBhsCreator);
+  file_id->creator[IDBhsCreator] = '\0';
+  strncpy (file_id->creator_version, hdrptr->creator_version, IDBhsVersion);
+  file_id->creator_version[IDBhsVersion] = '\0';
+  strncpy (file_id->creation_date, hdrptr->creation_date, URMhsDate);
+  file_id->creation_date[URMhsDate] = '\0';
+  strncpy (file_id->module, hdrptr->module, IDBhsModule);
+  file_id->module[IDBhsModule] = '\0';
+  strncpy (file_id->module_version, hdrptr->module_version, IDBhsVersion);
+  file_id->module_version[IDBhsVersion] = '\0';
 
   /*
    * Header successfully read. Leave the buffer committed in case data
@@ -210,7 +216,7 @@ Idb__HDR_GetHeader (IDBFile		file_id)
   {
     /* sscanf() may call ungetc(), which would write the XmConst string. */
     char *buf = XtMalloc(strlen(idb__database_version) + 1);
-    strcpy(buf, idb__database_version);
+    strncpy(buf, idb__database_version, strlen(idb__database_version) + 1);
     sscanf(buf, "URM %d.%d", &db_major, &db_minor);
     XtFree(buf);
   }
@@ -297,16 +303,21 @@ Idb__HDR_InitHeader (IDBFile		file_id,
    * Initialize the record contents, first the ones which occur only in
    * the file header, then those in common with the in-memory file struct.
    */
-  strcpy ( hdrptr->db_version, "" );
+  strncpy ( hdrptr->db_version, "", IDBhsVersion );
+  hdrptr->db_version[0] = '\0';
   strncat (hdrptr->db_version, idb__database_version, IDBhsVersion);
-  strcpy ( hdrptr->creator, "" );
+  strncpy ( hdrptr->creator, "", IDBhsCreator );
+  hdrptr->creator[0] = '\0';
   strncat (hdrptr->creator, creator, IDBhsCreator);
-  strcpy ( hdrptr->creator_version, "" );
+  strncpy ( hdrptr->creator_version, "", IDBhsVersion );
+  hdrptr->creator_version[0] = '\0';
   strncat (hdrptr->creator_version, creator_version, IDBhsVersion);
   Urm__UT_Time (hdrptr->creation_date);
-  strcpy ( hdrptr->module, "" );
+  strncpy ( hdrptr->module, "", IDBhsModule );
+  hdrptr->module[0] = '\0';
   strncat (hdrptr->module, module, IDBhsModule);
-  strcpy ( hdrptr->module_version, "" );
+  strncpy ( hdrptr->module_version, "", IDBhsVersion );
+  hdrptr->module_version[0] = '\0';
   strncat (hdrptr->module_version, module_version, IDBhsVersion);
 
   hdrptr->index_root = 0;

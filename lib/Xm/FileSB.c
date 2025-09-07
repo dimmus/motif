@@ -1901,7 +1901,7 @@ QualifySearchDataProc(
    }
    qDirLen       = strlen(qualifiedDir);
    qualifiedMask = XtMalloc(1 + qDirLen + strlen(qualifiedPattern));
-   strcpy(qualifiedMask, qualifiedDir);
+   strncpy(qualifiedMask, qualifiedDir, qDirLen + 1);
    strcpy(&qualifiedMask[qDirLen], qualifiedPattern);
    qualifiedSearchData->reason = searchData->reason;
    qualifiedSearchData->event  = searchData->event;
@@ -1931,7 +1931,7 @@ QualifySearchDataProc(
             String   dirStr = _XmStringGetTextConcat(FS_Directory(fs));
             unsigned dirLen = strlen(dirStr);
             valueString     = XtMalloc(dirLen + strlen(fileStr) + 1);
-            strcpy(valueString, dirStr);
+            strncpy(valueString, dirStr, dirLen + 1);
             strcpy(&valueString[dirLen], fileStr);
             XtFree(fileStr);
             XtFree(dirStr);
@@ -2022,7 +2022,7 @@ FileSelectionBoxUpdate(
             {
                len        = strlen(dirString);
                maskString = XtMalloc(len + strlen(patternString) + 1);
-               strcpy(maskString, dirString);
+               strncpy(maskString, dirString, len + 1);
                strcpy(&maskString[len], patternString);
                XmTextFieldSetString(FS_FilterText(fs), maskString);
                XmTextFieldSetInsertionPosition(FS_FilterText(fs),
@@ -2297,7 +2297,7 @@ ListCallback(
                      len        = strlen(dirString);
                      maskString = XtMalloc(len
                                            + strlen(patternString) + 1);
-                     strcpy(maskString, dirString);
+                     strncpy(maskString, dirString, len + 1);
                      strcpy(&maskString[len], patternString);
                      XmTextFieldSetString(FS_FilterText(fsb),
                                           maskString);
@@ -2996,8 +2996,8 @@ FileSelectionBoxRestore(
             {
                maskLen    = strlen(mask);
                itemString = XtMalloc(dirLen + maskLen + 1);
-               strcpy(itemString, dir);
-               strcpy(&itemString[dirLen], mask);
+               strncpy(itemString, dir, dirLen + 1);
+               strncpy(&itemString[dirLen], mask, maskLen + 1);
                XmTextFieldSetString(FS_FilterText(fsb), itemString);
                XmTextFieldSetInsertionPosition(FS_FilterText(fsb),
                                                XmTextFieldGetLastPosition(FS_FilterText(fsb)));

@@ -537,7 +537,8 @@ XmGetIconFileName(
       cacheList.numDirs = cacheList.maxDirs = 0;
       cacheList.dirs                        = NULL;
       homedir                               = XmeGetHomeDirName();
-      strcpy(stackString, homedir);
+      strncpy(stackString, homedir, MAX_DIR_PATH_LEN - 1);
+      stackString[MAX_DIR_PATH_LEN - 1] = '\0';
       if (useColor)
       {
          iconPath = _XmOSInitPath(NULL, "XMICONSEARCHPATH", &junkBoolean);

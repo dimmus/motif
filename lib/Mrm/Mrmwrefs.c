@@ -193,7 +193,8 @@ Urm__CW_AddWRef (URMResourceContextPtr	wref_id,
   refdsc->refs[ndx].w_name_offs = new_offs;
   refdsc->num_refs += 1;
   refdsc->heap_size += name_bytes;
-  strcpy ((String)refdsc+new_offs, w_name);
+  strncpy ((String)refdsc+new_offs, w_name, name_bytes - 1);
+  ((String)refdsc+new_offs)[name_bytes - 1] = '\0';
 
   return MrmSUCCESS;
 }

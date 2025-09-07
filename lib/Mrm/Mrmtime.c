@@ -112,8 +112,9 @@ Urm__UT_Time (char		*time_stg)
 
   time (&timeval);
   result = ctime(&timeval);
-  if (result != NULL)
-    strcpy(time_stg, result);
-  else
+  if (result != NULL) {
+    strncpy(time_stg, result, URMhsDate);
+    time_stg[URMhsDate] = '\0';
+  } else
     *time_stg = 0;
 }

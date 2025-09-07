@@ -1610,7 +1610,8 @@ ConvertStringToButtonType(
       sizeof(XmButtonType) * (comma_count + 2));
    buttonTable[comma_count + 1] = (XmButtonType)0;
    work_str                     = (String)XtMalloc(in_str_size);
-   strcpy(work_str, in_str);
+   strncpy(work_str, in_str, in_str_size - 1);
+   work_str[in_str_size - 1] = '\0';
    for (i = 0, btype_str = _XStrtok(work_str, ",", strtok_buf);
         btype_str;
         btype_str = _XStrtok(NULL, ",", strtok_buf), ++i)

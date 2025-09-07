@@ -2220,7 +2220,8 @@ XmRenderTableCvtToProp(Widget        widget, /* unused */
    if (CVTtvinited == 0)
    {
       CVTtvinited = 1;
-      strcpy(CVTtransfervector, "");
+      strncpy(CVTtransfervector, "", 255);
+      CVTtransfervector[0] = '\0';
       for (i = 0; CVTproperties[i] != NULL; i++)
       {
          strcat(CVTtransfervector, CVTproperties[i]);
@@ -2229,7 +2230,8 @@ XmRenderTableCvtToProp(Widget        widget, /* unused */
       strcat(CVTtransfervector, "\n");
    }
    /* Copy the transfer vector into the output buffer. */
-   strcpy(buffer, CVTtransfervector);
+   strncpy(buffer, CVTtransfervector, allocated_size - 1);
+   buffer[allocated_size - 1] = '\0';
    chars_used = strlen(buffer);
    _XmProcessUnlock();
    /* Now iterate over the list of renditions */
@@ -2255,13 +2257,15 @@ XmRenderTableCvtToProp(Widget        widget, /* unused */
          _XmTab     tab;
          _XmTabList tlist;
          int        number;
-         strcpy(temp, "[ ");
+         strncpy(temp, "[ ", 2);
+         temp[2] = '\0';
          tlist  = (_XmTabList)_XmRendTabs(rendition);
          number = tlist->count;
          tab    = (_XmTab)tlist->start;
          while (number > 0)
          {
-            strcpy(temp2, temp);
+            strncpy(temp2, temp, 1023);
+            temp2[1023] = '\0';
             snprintf(temp, sizeof(temp) - 5, "%s %f %d %d %d, ", temp2, tab->value, tab->units, tab->alignment, tab->offsetModel);
             tab = (_XmTab)tab->next;
             number--;

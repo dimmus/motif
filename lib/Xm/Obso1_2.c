@@ -1408,8 +1408,8 @@ _XmFileSelectionBoxRestore(
          {
             maskLen    = strlen(mask);
             itemString = XtMalloc(dirLen + maskLen + 1);
-            strcpy(itemString, dir);
-            strcpy(&itemString[dirLen], mask);
+            strncpy(itemString, dir, dirLen + 1);
+            strncpy(&itemString[dirLen], mask, maskLen + 1);
             XmTextFieldSetString(FS_FilterText(fsb), itemString);
             XmTextFieldSetCursorPosition(FS_FilterText(fsb),
                                          XmTextFieldGetLastPosition(FS_FilterText(fsb)));
@@ -1671,7 +1671,8 @@ _XmCharsetCanonicalize(
    {
       len   = strlen(XmSTRING_ISO8859_1);
       new_s = XtMalloc(len + 1);
-      strcpy(new_s, XmSTRING_ISO8859_1);
+      strncpy(new_s, XmSTRING_ISO8859_1, len);
+      new_s[len] = '\0';
    }
    else if (_isISO(charset))
    {

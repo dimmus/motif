@@ -179,7 +179,8 @@ UrmIFMInitModule (URMResourceContextPtr		context_id,
   ifmodptr->annex2 = 0 ;
 
   for ( ndx=0 ; ndx<num_widget ; ndx++ )
-    strcpy (ifmodptr->topmost[ndx].index, "") ;
+    strncpy (ifmodptr->topmost[ndx].index, "", URMMaxIndexLen) ;
+    ifmodptr->topmost[ndx].index[0] = '\0' ;
 
   /*
    * Set context parameters

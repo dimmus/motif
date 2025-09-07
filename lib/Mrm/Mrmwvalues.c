@@ -184,7 +184,8 @@ UrmFetchSetValues (MrmHierarchy		hierarchy_id ,
   for ( ndx=0 ; ndx<num_args ; ndx++ )
     {
       locargs[num_used].name = args[ndx].name ;
-      strcpy (resptr->key.index, (char*)args[ndx].value) ;
+      strncpy (resptr->key.index, (char*)args[ndx].value, indexlen) ;
+      resptr->key.index[indexlen] = '\0' ;
       result = Urm__CW_ReadLiteral (resptr, hierarchy_id, NULL,
 				    ptrlist, &reptype, &val, &vec_count,
 				    &file_id, &vec_size) ;

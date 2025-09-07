@@ -967,7 +967,9 @@ create_xic_info(Widget          shell,
    if (cp != NULL)
    {
       /* Parse for the successive commas */
-      cp    = strcpy(tmp, cp);
+      strncpy(tmp, cp, BUFSIZ - 1);
+      tmp[BUFSIZ - 1] = '\0';
+      cp = tmp;
       cpend = &tmp[strlen(tmp)];
       assert(strlen(tmp) < BUFSIZ);
       while ((style == 0) && (cp < cpend))
@@ -2018,7 +2020,8 @@ get_xim_info(Widget widget)
    XtVaGetValues(shell, XmNinputMethod, &cp, NULL);
    if (cp != NULL)
    {
-      strcpy(tmp, "@im=");
+      strncpy(tmp, "@im=", 4);
+      tmp[4] = '\0';
       strcat(tmp, cp);
       assert(strlen(tmp) < BUFSIZ);
       XSetLocaleModifiers(tmp);

@@ -470,12 +470,10 @@ _XmGetEncodingRegistryTarget(int *length)
       count = strlen(EncodingRegistryTag(current));
       strcpy(&rval[i], EncodingRegistryTag(current));
       i      += count;
-      rval[i] = 0;
       i++;
       count = strlen(EncodingRegistryEncoding(current));
       strcpy(&rval[i], EncodingRegistryEncoding(current));
       i      += count;
-      rval[i] = 0;
       i++;
       current = EncodingRegistryNext(current);
    }
@@ -2422,7 +2420,7 @@ processCharsetAndText(XmStringCharSet tag,
       /* encode len in next 2 octets */
       *temp++ = 0x80 + (len + ctlen + 1) / 128;
       *temp++ = 0x80 + (len + ctlen + 1) % 128;
-      strcpy((char *)temp, tag);
+      strncpy((char *)temp, tag, len + 1);
       temp    += len;
       *temp++  = STX;
       *temp    = EOS; /* make sure there's a \0 on the end */

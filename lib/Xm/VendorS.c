@@ -1600,7 +1600,8 @@ MotifWarningHandler(String    name,
       newline_pos = strchr(bp, '\n');
       if (newline_pos == NULL)
       {
-         strcpy(&buf2[pos], bp);
+         strncpy(&buf2[pos], bp, 1024 - pos - 1);
+         buf2[1024 - 1] = '\0';
          pos += strlen(bp);
       }
       else
@@ -1608,7 +1609,7 @@ MotifWarningHandler(String    name,
          strncpy(&buf2[pos], bp, (int)(newline_pos - bp + 1));
          pos += (int)(newline_pos - bp + 1);
          bp  += (int)(newline_pos - bp + 1);
-         strcpy(&buf2[pos], "    ");
+         strncpy(&buf2[pos], "    ", 5);
          pos += 4;
       }
    }

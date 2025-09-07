@@ -8014,7 +8014,8 @@ PreeditDraw(XIC                           xic,
          else
          {
             mb = XtMalloc((insert_length + 1) * (tf->text.max_char_size));
-            strcpy(mb, call_data->text->string.multi_byte);
+            strncpy(mb, call_data->text->string.multi_byte, insert_length * tf->text.max_char_size);
+            mb[insert_length * tf->text.max_char_size] = '\0';
             escapement = XmbTextExtents((XFontSet)TextF_Font(tf),
                                         mb,
                                         strlen(mb),
@@ -8103,7 +8104,8 @@ PreeditDraw(XIC                           xic,
          else
          {
             mb = XtMalloc((insert_length + 1) * sizeof(char));
-            strcpy(mb, call_data->text->string.multi_byte);
+            strncpy(mb, call_data->text->string.multi_byte, insert_length);
+            mb[insert_length] = '\0';
          }
       }
       if (tf->text.overstrike && rest_len)

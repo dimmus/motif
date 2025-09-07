@@ -137,7 +137,6 @@ Idb__FU_OpenFile (char 			*name,
   /* Fill in the result name with the name specified so far */
   length = strlen (name);
   strcpy (returned_fname, name);
-  returned_fname[length] = 0;
 
   /* Check if this file is to be opened for read or write access */
   if (access == URMWriteAccess)
@@ -206,8 +205,7 @@ Idb__FU_OpenFile (char 			*name,
     }
 
   a_file->file_desc = file_desc;
-  strcpy (a_file->name, name);
-  a_file->name[length] = 0;
+  strncpy (a_file->name, name, length + 1);
 
   if (access == URMWriteAccess)
     return (MrmCREATE_NEW);

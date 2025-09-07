@@ -223,27 +223,33 @@ _Xpw_copyPasswd(_Xgetpwparams p)
    memcpy(&(p).pws, (p).pwp, sizeof(struct passwd));
    (p).pws.pw_name = (p).pwbuf;
    (p).len         = strlen((p).pwp->pw_name);
-   strcpy((p).pws.pw_name, (p).pwp->pw_name);
+   strncpy((p).pws.pw_name, (p).pwp->pw_name, (p).len);
+   (p).pws.pw_name[(p).len] = '\0';
    (p).pws.pw_passwd = (p).pws.pw_name + (p).len + 1;
    (p).len           = strlen((p).pwp->pw_passwd);
-   strcpy((p).pws.pw_passwd, (p).pwp->pw_passwd);
+   strncpy((p).pws.pw_passwd, (p).pwp->pw_passwd, (p).len);
+   (p).pws.pw_passwd[(p).len] = '\0';
 #      if !defined(__linux__)
    /* pw_class is not available on Linux */
    (p).pws.pw_class = (p).pws.pw_passwd + (p).len + 1;
    (p).len          = strlen((p).pwp->pw_class);
-   strcpy((p).pws.pw_class, (p).pwp->pw_class);
+   strncpy((p).pws.pw_class, (p).pwp->pw_class, (p).len);
+   (p).pws.pw_class[(p).len] = '\0';
    (p).pws.pw_gecos = (p).pws.pw_class + (p).len + 1;
 #      else
    (p).pws.pw_gecos = (p).pws.pw_passwd + (p).len + 1;
 #      endif
    (p).len = strlen((p).pwp->pw_gecos);
-   strcpy((p).pws.pw_gecos, (p).pwp->pw_gecos);
+   strncpy((p).pws.pw_gecos, (p).pwp->pw_gecos, (p).len);
+   (p).pws.pw_gecos[(p).len] = '\0';
    (p).pws.pw_dir = (p).pws.pw_gecos + (p).len + 1;
    (p).len        = strlen((p).pwp->pw_dir);
-   strcpy((p).pws.pw_dir, (p).pwp->pw_dir);
+   strncpy((p).pws.pw_dir, (p).pwp->pw_dir, (p).len);
+   (p).pws.pw_dir[(p).len] = '\0';
    (p).pws.pw_shell = (p).pws.pw_dir + (p).len + 1;
    (p).len          = strlen((p).pwp->pw_shell);
-   strcpy((p).pws.pw_shell, (p).pwp->pw_shell);
+   strncpy((p).pws.pw_shell, (p).pwp->pw_shell, (p).len);
+   (p).pws.pw_shell[(p).len] = '\0';
    (p).pwp = &(p).pws;
 }
 
@@ -263,25 +269,32 @@ _Xpw_copyPasswd(_Xgetpwparams p)
    (memcpy(&(p).pws, (p).pwp, sizeof(struct passwd)), \
     ((p).pws.pw_name = (p).pwbuf), \
     ((p).len = strlen((p).pwp->pw_name)), \
-    strcpy((p).pws.pw_name, (p).pwp->pw_name), \
+    strncpy((p).pws.pw_name, (p).pwp->pw_name, (p).len), \
+    (p).pws.pw_name[(p).len] = '\0', \
     ((p).pws.pw_passwd = (p).pws.pw_name + (p).len + 1), \
     ((p).len = strlen((p).pwp->pw_passwd)), \
-    strcpy((p).pws.pw_passwd,(p).pwp->pw_passwd), \
+    strncpy((p).pws.pw_passwd,(p).pwp->pw_passwd, (p).len), \
+    (p).pws.pw_passwd[(p).len] = '\0', \
     ((p).pws.pw_age = (p).pws.pw_passwd + (p).len + 1), \
     ((p).len = strlen((p).pwp->pw_age)), \
-    strcpy((p).pws.pw_age, (p).pwp->pw_age), \
+    strncpy((p).pws.pw_age, (p).pwp->pw_age, (p).len), \
+    (p).pws.pw_age[(p).len] = '\0', \
     ((p).pws.pw_comment = (p).pws.pw_age + (p).len + 1), \
     ((p).len = strlen((p).pwp->pw_comment)), \
-    strcpy((p).pws.pw_comment, (p).pwp->pw_comment), \
+    strncpy((p).pws.pw_comment, (p).pwp->pw_comment, (p).len), \
+    (p).pws.pw_comment[(p).len] = '\0', \
     ((p).pws.pw_gecos = (p).pws.pw_comment + (p).len + 1), \
     ((p).len = strlen((p).pwp->pw_gecos)), \
-    strcpy((p).pws.pw_gecos, (p).pwp->pw_gecos), \
+    strncpy((p).pws.pw_gecos, (p).pwp->pw_gecos, (p).len), \
+    (p).pws.pw_gecos[(p).len] = '\0', \
     ((p).pws.pw_dir = (p).pws.pw_comment + (p).len + 1), \
     ((p).len = strlen((p).pwp->pw_dir)), \
-    strcpy((p).pws.pw_dir, (p).pwp->pw_dir), \
+    strncpy((p).pws.pw_dir, (p).pwp->pw_dir, (p).len), \
+    (p).pws.pw_dir[(p).len] = '\0', \
     ((p).pws.pw_shell = (p).pws.pw_dir + (p).len + 1), \
     ((p).len = strlen((p).pwp->pw_shell)), \
-    strcpy((p).pws.pw_shell, (p).pwp->pw_shell), \
+    strncpy((p).pws.pw_shell, (p).pwp->pw_shell, (p).len), \
+    (p).pws.pw_shell[(p).len] = '\0', \
     ((p).pwp = &(p).pws), \
     0 )
 /* Define the getter macros for systems with pw_age and pw_comment */
@@ -406,15 +419,18 @@ typedef struct
 
 #   define _Xg_copyHostent(hp) \
    (memcpy(&(hp).hent, (hp).hptr, sizeof(struct hostent)), \
-    strcpy((hp).h_name, (hp).hptr->h_name), \
+    strncpy((hp).h_name, (hp).hptr->h_name, strlen((hp).hptr->h_name)), \
+    (hp).h_name[strlen((hp).hptr->h_name)] = '\0', \
     ((hp).hent.h_name = (hp).h_name), \
     ((hp).hptr = &(hp).hent), \
      0 )
 #   define _Xg_copyServent(sp) \
    (memcpy(&(sp).sent, (sp).sptr, sizeof(struct servent)), \
-    strcpy((sp).s_name, (sp).sptr->s_name), \
+    strncpy((sp).s_name, (sp).sptr->s_name, strlen((sp).sptr->s_name)), \
+    (sp).s_name[strlen((sp).sptr->s_name)] = '\0', \
     ((sp).sent.s_name = (sp).s_name), \
-    strcpy((sp).s_proto, (sp).sptr->s_proto), \
+    strncpy((sp).s_proto, (sp).sptr->s_proto, strlen((sp).sptr->s_proto)), \
+    (sp).s_proto[strlen((sp).sptr->s_proto)] = '\0', \
     ((sp).sent.s_proto = (sp).s_proto), \
     ((sp).sptr = &(sp).sent), \
     0 )
@@ -1014,7 +1030,8 @@ typedef struct
 #   define _Xgrp_copyGroup(p) \
  ( memcpy(&(p).grp, (p).pgrp, sizeof(struct group)), \
    ((p).grp.gr_name = (p).buf), \
-   strcpy((p).grp.gr_name, (p).pgrp->gr_name), \
+   strncpy((p).grp.gr_name, (p).pgrp->gr_name, strlen((p).pgrp->gr_name)), \
+   (p).grp.gr_name[strlen((p).pgrp->gr_name)] = '\0', \
    ((p).pgrp = &(p).grp), \
    0 )
 

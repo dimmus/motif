@@ -743,7 +743,8 @@ ClassPartInitialize(WidgetClass wc)
    _XmFastSubclassInit(wc, XmLIST_BIT);
    xlats = (char *)
       ALLOCATE_LOCAL(strlen(ListXlations1) + strlen(ListXlations2) + 1);
-   strcpy(xlats, ListXlations1);
+   strncpy(xlats, ListXlations1, strlen(ListXlations1));
+   xlats[strlen(ListXlations1)] = '\0';
    strcat(xlats, ListXlations2);
    wc->core_class.tm_table = (String)XtParseTranslationTable(xlats);
    DEALLOCATE_LOCAL((char *)xlats);
@@ -8180,12 +8181,14 @@ XmCreateScrolledList(Widget   parent,
    s = (char *)ALLOCATE_LOCAL(XmStrlen(name) + 3); /* Name+"SW"+NULL */
    if (name)
    {
-      strcpy(s, name);
+      strncpy(s, name, XmStrlen(name));
+      s[XmStrlen(name)] = '\0';
       strcat(s, "SW");
    }
    else
    {
-      strcpy(s, "SW");
+      strncpy(s, "SW", 2);
+      s[2] = '\0';
    }
    nargs = 0;
    XtSetArg(my_args[nargs], XmNscrollingPolicy, XmAPPLICATION_DEFINED), nargs++;

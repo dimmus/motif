@@ -460,7 +460,8 @@ ProcessXlfdFontData(XmFontSelectorWidget fsw,
    any_fam->medium_nameq  = XrmStringToQuark(DEFAULT_WEIGHT);
    any_fam->upright_nameq = XrmStringToQuark(DEFAULT_SLANT);
    any_fam->italic_nameq  = XrmStringToQuark(ITALIC_SLANT);
-   strcpy(any_fam->fixed_spacing, DEFAULT_FIXED_SPACING);
+   strncpy(any_fam->fixed_spacing, DEFAULT_FIXED_SPACING, SPACING_LEN);
+   any_fam->fixed_spacing[SPACING_LEN] = '\0';
    any_fam->state    = (Flag)0;
    any_fam->sizes_75 = any_fam->sizes_100 = (LongFlag)0;
    for (i = 1, fam++; i < num; i++, fam++)
@@ -668,7 +669,8 @@ FillData(XmFontSelectorWidget fsw, FontData *current, char *name)
    if (streq(temp, STAR_STRING))
    {
       String str = _XmGetMBStringFromXmString(ANY_STRING(fsw));
-      strcpy(temp, str);
+      strncpy(temp, str, BUFSIZ - 1);
+      temp[BUFSIZ - 1] = '\0';
       XtFree((XtPointer)str);
    }
    current->familyq = XrmStringToQuark(temp);
@@ -891,7 +893,10 @@ UpdateExistingFamily(FamilyInfo *fam, FontData *font)
    else
       fam->upright_nameq = XrmStringToQuark(font->slant);
    if (!streq(font->spacing, PROPORTIONAL_SPACING))
-      strcpy(fam->fixed_spacing, font->spacing);
+   {
+      strncpy(fam->fixed_spacing, font->spacing, SPACING_LEN);
+      fam->fixed_spacing[SPACING_LEN] = '\0';
+   }
    if (font->point_size != 0)
    {
       if ((font->resolution_x == 75) && (font->resolution_y == 75))
@@ -940,9 +945,15 @@ FillNewFamily(FamilyInfo *fam, FontData *font)
       fam->medium_nameq = font->weightq;
    }
    if (streq(font->spacing, PROPORTIONAL_SPACING))
-      strcpy(fam->fixed_spacing, DEFAULT_FIXED_SPACING);
+   {
+      strncpy(fam->fixed_spacing, DEFAULT_FIXED_SPACING, SPACING_LEN);
+      fam->fixed_spacing[SPACING_LEN] = '\0';
+   }
    else
-      strcpy(fam->fixed_spacing, font->spacing);
+   {
+      strncpy(fam->fixed_spacing, font->spacing, SPACING_LEN);
+      fam->fixed_spacing[SPACING_LEN] = '\0';
+   }
    if (CheckFlag(font->state, ITALIC))
    {
       fam->italic_nameq  = XrmStringToQuark(font->slant);
@@ -1040,8 +1051,10 @@ DisplayCurrentFont(XmFontSelectorWidget fsw, String font)
                   break;
             }
             ptr = (char *)strchr(ptr + 1, '-');
-            strcpy(right_buf, ptr);
-            strcpy(left_buf, font);
+            strncpy(right_buf, ptr, (BUFSIZ >> 2) - 1);
+            right_buf[(BUFSIZ >> 2) - 1] = '\0';
+            strncpy(left_buf, font, (BUFSIZ >> 2) - 1);
+            left_buf[(BUFSIZ >> 2) - 1] = '\0';
             left_buf[i] = '\0';
             snprintf(fbuf, sizeof fbuf, "%s-140%s", left_buf, right_buf);
             if ((fontdata = XLoadQueryFont(XtDisplay((Widget)fsw),
@@ -1137,15 +1150,24 @@ BuildFontString(XmFontSelectorWidget fsw, FontData *cf, String buf, int size)
    else
       family = XrmQuarkToString(cf->familyq);
    if (cf->point_size == 0)
-      strcpy(point_size, STAR_STRING);
+   {
+      strncpy(point_size, STAR_STRING, BUFSIZ - 1);
+      point_size[BUFSIZ - 1] = '\0';
+   }
    else
       sprintf(point_size, "%d", cf->point_size);
    if (cf->resolution_x == 0)
-      strcpy(res_x, STAR_STRING);
+   {
+      strncpy(res_x, STAR_STRING, BUFSIZ - 1);
+      res_x[BUFSIZ - 1] = '\0';
+   }
    else
       sprintf(res_x, "%d", (int)cf->resolution_x);
    if (cf->resolution_y == 0)
-      strcpy(res_y, STAR_STRING);
+   {
+      strncpy(res_y, STAR_STRING, BUFSIZ - 1);
+      res_y[BUFSIZ - 1] = '\0';
+   }
    else
       sprintf(res_y, "%d", (int)cf->resolution_y);
    encoding = ENCODING_STRING(fsw);
@@ -1204,9 +1226,15 @@ UpdateBoldItalic(XmFontSelectorWidget fsw)
       XtSetSensitive(XmFontS_italic_toggle(fsw), True);
    }
    if (CheckFlag(XmFontS_user_state(fsw), ITALIC))
-      strcpy(cf->slant, XrmQuarkToString(fam->italic_nameq));
+   {
+      strncpy(cf->slant, XrmQuarkToString(fam->italic_nameq), SLANT_LEN);
+      cf->slant[SLANT_LEN] = '\0';
+   }
    else
-      strcpy(cf->slant, XrmQuarkToString(fam->upright_nameq));
+   {
+      strncpy(cf->slant, XrmQuarkToString(fam->upright_nameq), SLANT_LEN);
+      cf->slant[SLANT_LEN] = '\0';
+   }
 }
 
 /*	Function Name:  UpdateFixedProportional
@@ -1234,14 +1262,16 @@ UpdateFixedProportional(XmFontSelectorWidget fsw)
    {
       if (CheckFlag(XmFontS_user_state(fsw), USER_FIXED))
       {
-         strcpy(cf->spacing, STAR_STRING);
+         strncpy(cf->spacing, STAR_STRING, SPACING_LEN);
+         cf->spacing[SPACING_LEN] = '\0';
          setMono = False;
          setProp = False;
          setAny  = True;
       }
       else
       {
-         strcpy(cf->spacing, PROPORTIONAL_SPACING);
+         strncpy(cf->spacing, PROPORTIONAL_SPACING, SPACING_LEN);
+         cf->spacing[SPACING_LEN] = '\0';
          setMono = False;
          setProp = True;
          setAny  = False;
@@ -1249,14 +1279,16 @@ UpdateFixedProportional(XmFontSelectorWidget fsw)
    }
    else if (CheckFlag(XmFontS_user_state(fsw), USER_FIXED))
    {
-      strcpy(cf->spacing, fam->fixed_spacing);
+      strncpy(cf->spacing, fam->fixed_spacing, SPACING_LEN);
+      cf->spacing[SPACING_LEN] = '\0';
       setMono = True;
       setProp = False;
       setAny  = False;
    }
    else
    {
-      strcpy(cf->spacing, STAR_STRING);
+      strncpy(cf->spacing, STAR_STRING, SPACING_LEN);
+      cf->spacing[SPACING_LEN] = '\0';
       setMono = False;
       setProp = False;
       setAny  = True;
@@ -2678,9 +2710,15 @@ ToggleItalic(Widget w, XtPointer fsw_ptr, XtPointer data)
       return;
    }
    if (info->set)
-      strcpy(cf->slant, XrmQuarkToString(family->italic_nameq));
+   {
+      strncpy(cf->slant, XrmQuarkToString(family->italic_nameq), SLANT_LEN);
+      cf->slant[SLANT_LEN] = '\0';
+   }
    else
-      strcpy(cf->slant, XrmQuarkToString(family->upright_nameq));
+   {
+      strncpy(cf->slant, XrmQuarkToString(family->upright_nameq), SLANT_LEN);
+      cf->slant[SLANT_LEN] = '\0';
+   }
    SetFlag(&(cf->state), ITALIC, info->set);
    SetFlag(&(XmFontS_user_state(fsw)), ITALIC, info->set);
    DisplayCurrentFont(fsw, BuildFontString(fsw, cf, buf, BUFSIZ));

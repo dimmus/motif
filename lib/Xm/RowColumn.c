@@ -1531,10 +1531,12 @@ set_values_non_popup(
    {
       if (RC_MenuAccelerator(new_w))
       {
-         RC_MenuAccelerator(new_w) = (String)strcpy(XtMalloc(XmStrlen(
-                                                                RC_MenuAccelerator(new_w))
-                                                             + 1),
-                                                    RC_MenuAccelerator(new_w));
+         {
+            String temp = XtMalloc(XmStrlen(RC_MenuAccelerator(new_w)) + 1);
+            strncpy(temp, RC_MenuAccelerator(new_w), XmStrlen(RC_MenuAccelerator(new_w)));
+            temp[XmStrlen(RC_MenuAccelerator(new_w))] = '\0';
+            RC_MenuAccelerator(new_w) = temp;
+         }
       }
       _XmRC_DoProcessMenuTree((Widget)new_w, XmREPLACE);
       if (RC_MenuAccelerator(old))
@@ -1594,10 +1596,12 @@ set_values_popup(
       {
          if (RC_MenuAccelerator(new_w))
          {
-            RC_MenuAccelerator(new_w) = (String)strcpy(XtMalloc(XmStrlen(
-                                                                   RC_MenuAccelerator(new_w))
-                                                                + 1),
-                                                       RC_MenuAccelerator(new_w));
+            {
+               String temp = XtMalloc(XmStrlen(RC_MenuAccelerator(new_w)) + 1);
+               strncpy(temp, RC_MenuAccelerator(new_w), XmStrlen(RC_MenuAccelerator(new_w)));
+               temp[XmStrlen(RC_MenuAccelerator(new_w))] = '\0';
+               RC_MenuAccelerator(new_w) = temp;
+            }
          }
          if (RC_PopupEnabled(new_w))
             _XmRC_DoProcessMenuTree((Widget)new_w, XmREPLACE);
@@ -2090,7 +2094,10 @@ GetRealKey(
       {
          mods = keys[num_keys].modifiers;
          if (mods & ControlMask)
-            strcpy(tmp, "Ctrl ");
+         {
+            strncpy(tmp, "Ctrl ", 5);
+            tmp[5] = '\0';
+         }
          if (mods & ShiftMask)
             strcat(tmp, "Shift ");
          if (mods & Mod1Mask)

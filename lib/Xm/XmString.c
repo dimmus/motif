@@ -5014,13 +5014,20 @@ void
 _XmEntryTextSet(_XmStringEntry entry,
                 XtPointer      val)
 {
-   (_XmEntryOptimized(entry) ? (!_XmEntryImm(entry) ? (((_XmStringOptSeg)(entry))->data.text = val) :
-                                                    /* This below is potentially dangerous. This function needs a length
-       parameter, or requires that the byte count is set in the segment.
-       However, to my knowledge, nobody needs this now. But it needs to
-       be looked at.. */
-                                   strcpy((char *)((_XmStringOptSeg)(entry))->data.chars, (char *)val))
-                             : (((_XmStringUnoptSeg)(entry))->data.text = val));
+   if (_XmEntryOptimized(entry)) {
+      if (!_XmEntryImm(entry)) {
+         ((_XmStringOptSeg)(entry))->data.text = (XtPointer)val;
+      } else {
+         /* This below is potentially dangerous. This function needs a length
+            parameter, or requires that the byte count is set in the segment.
+            However, to my knowledge, nobody needs this now. But it needs to
+            be looked at.. */
+         strncpy((char *)((_XmStringOptSeg)(entry))->data.chars, (char *)val, _XmStrByteCount((XmString)entry) - 1);
+         ((char *)((_XmStringOptSeg)(entry))->data.chars)[_XmStrByteCount((XmString)entry) - 1] = '\0';
+      }
+   } else {
+      ((_XmStringUnoptSeg)(entry))->data.text = (XtPointer)val;
+   }
 }
 
 XtPointer

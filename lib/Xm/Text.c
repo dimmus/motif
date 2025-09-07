@@ -3126,7 +3126,8 @@ PreeditDraw(XIC                           xic,
          else
          {
             mb = XtMalloc((insert_length + 1) * tw->text.char_size);
-            strcpy(mb, call_data->text->string.multi_byte);
+            strncpy(mb, call_data->text->string.multi_byte, insert_length * tw->text.char_size);
+            mb[insert_length * tw->text.char_size] = '\0';
          }
          /* set TextExtents for preedit data, if unable, punt */
          escapement = XmbTextExtents((XFontSet)font, mb, strlen(mb), &overall_ink, NULL);
@@ -3686,12 +3687,14 @@ XmCreateScrolledText(Widget   parent,
    s      = (char *)XmStackAlloc(s_size, s_cache); /* Name + NULL + "SW" */
    if (name)
    {
-      strcpy(s, name);
+      strncpy(s, name, strlen(name));
+      s[strlen(name)] = '\0';
       strcat(s, "SW");
    }
    else
    {
-      strcpy(s, "SW");
+      strncpy(s, "SW", 2);
+      s[2] = '\0';
    }
    /*
    * merge the application arglist with the required preset arglist, for

@@ -306,7 +306,8 @@ Idb__INX_EnterLeafIndex (IDBFile		file_id,
   /*
    * Move the string and set the values in the vector entry
    */
-  strcpy (ndxstg, "") ;
+  strncpy (ndxstg, "", ndxsiz - 1);
+  ndxstg[0] = '\0';
   strncat (ndxstg, index, IDBMaxIndexLength) ;
   itemvec[entndx].index_stg = (MrmOffset) (ndxstg-(char *)itemvec) ;
   itemvec[entndx].data.internal_id.rec_no = data_entry.rec_no ;
@@ -445,7 +446,8 @@ Idb__INX_EnterNodeIndex (IDBFile		file_id,
    * Move the string and set the values in the vector entry and record vector
    */
   ndxstg = (char *) stgheap - ndxsiz ;
-  strcpy (ndxstg, "") ;
+  strncpy (ndxstg, "", ndxsiz - 1);
+  ndxstg[0] = '\0';
   strncat (ndxstg, index, IDBMaxIndexLength) ;
   itemvec[entndx].index_stg = (MrmOffset) (ndxstg-(char *)itemvec) ;
   itemvec[entndx].data.internal_id.rec_no = data_entry.rec_no ;
@@ -622,7 +624,8 @@ Idb__INX_SplitLeafRecord (IDBFile		file_id,
   p_index = lt_cnt ;
   gt_cnt = old_cnt - lt_cnt - 1;
   p_index_stgadr = (char *) old_itmvec+old_itmvec[p_index].index_stg ;
-  strcpy (p_index_stg, p_index_stgadr) ;
+  strncpy (p_index_stg, p_index_stgadr, IDBMaxIndexLength) ;
+  p_index_stg[IDBMaxIndexLength] = '\0';
   p_data.rec_no = old_itmvec[p_index].data.internal_id.rec_no ;
   p_data.item_offs = old_itmvec[p_index].data.internal_id.item_offs ;
 
@@ -792,7 +795,8 @@ Idb__INX_SplitNodeRecord (IDBFile		file_id,
   p_index = lt_cnt ;
   gt_cnt = old_cnt - lt_cnt - 1;
   p_index_stgadr = (char *) old_itmvec+old_itmvec[p_index].index_stg ;
-  strcpy (p_index_stg, p_index_stgadr) ;
+  strncpy (p_index_stg, p_index_stgadr, IDBMaxIndexLength) ;
+  p_index_stg[IDBMaxIndexLength] = '\0';
   p_data.rec_no = old_itmvec[p_index].data.internal_id.rec_no ;
   p_data.item_offs = old_itmvec[p_index].data.internal_id.item_offs ;
 

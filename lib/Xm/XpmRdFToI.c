@@ -195,12 +195,15 @@ OpenReadFile(
          char  *compressfile = (char *)XpmMalloc(len + 4);
          if (!compressfile)
             return (XpmNoMemory);
-         strcpy(compressfile, filename);
-         strcpy(compressfile + len, ext = ".Z");
+         strncpy(compressfile, filename, len);
+         compressfile[len] = '\0';
+         strncpy(compressfile + len, ext = ".Z", 2);
+         compressfile[len + 2] = '\0';
          fd = open(compressfile, O_RDONLY);
          if (fd < 0)
          {
-            strcpy(compressfile + len, ext = ".gz");
+            strncpy(compressfile + len, ext = ".gz", 3);
+            compressfile[len + 3] = '\0';
             fd = open(compressfile, O_RDONLY);
             if (fd < 0)
             {

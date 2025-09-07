@@ -153,7 +153,8 @@ ResetCache(char *qDirName)
    FreeDirCache();
    dirCacheNameLen = strlen(qDirName);
    dirCacheName    = XtMalloc(dirCacheNameLen + MAX_USER_NAME_LEN + 1);
-   strcpy(dirCacheName, qDirName);
+   strncpy(dirCacheName, qDirName, dirCacheNameLen);
+   dirCacheName[dirCacheNameLen] = '\0';
 }
 
 static unsigned char
@@ -170,9 +171,11 @@ AddEntryToCache(char    *entryName,
    }
    dirCache[numCacheEntries] = (XmDirCacheRec *)
       XtMalloc(sizeof(XmDirCacheRec) + entryNameLen);
-   strcpy(dirCache[numCacheEntries]->file_name, entryName);
+   strncpy(dirCache[numCacheEntries]->file_name, entryName, entryNameLen);
+   dirCache[numCacheEntries]->file_name[entryNameLen] = '\0';
    /* Use dirCacheName character array as temporary buffer for full file name.*/
-   strcpy(&dirCacheName[dirCacheNameLen], entryName);
+   strncpy(&dirCacheName[dirCacheNameLen], entryName, MAX_USER_NAME_LEN);
+   dirCacheName[dirCacheNameLen + MAX_USER_NAME_LEN] = '\0';
    if (!stat(dirCacheName, &statBuf))
    {
       if (S_ISREG(statBuf.st_mode))
@@ -224,8 +227,8 @@ GetQualifiedDir(String dirSpec)
             {
                userDirLen = strlen(userDir);
                outputBuf  = XtMalloc(userDirLen + dirSpecLen + 2);
-               strcpy(outputBuf, userDir);
-               strcpy(&outputBuf[userDirLen], (dirSpec + 1));
+               strncpy(outputBuf, userDir, userDirLen + 1);
+               strncpy(&outputBuf[userDirLen], (dirSpec + 1), dirSpecLen - 1 + 1);
             }
          }
          else
@@ -244,23 +247,25 @@ GetQualifiedDir(String dirSpec)
                userDirLen = strlen(pwd_value->pw_dir);
                dirSpecLen = strlen(srcPtr);
                outputBuf  = XtMalloc(userDirLen + dirSpecLen + 2);
-               strcpy(outputBuf, pwd_value->pw_dir);
-               strcpy(&outputBuf[userDirLen], srcPtr);
+               strncpy(outputBuf, pwd_value->pw_dir, userDirLen);
+               outputBuf[userDirLen] = '\0';
+               strncpy(&outputBuf[userDirLen], srcPtr, dirSpecLen);
+               outputBuf[userDirLen + dirSpecLen] = '\0';
             }
          }
          break;
       case '/':
          outputBuf = XtMalloc(dirSpecLen + 2);
-         strcpy(outputBuf, dirSpec);
+         strncpy(outputBuf, dirSpec, dirSpecLen + 1);
          break;
       default:
          if ((destPtr = GetCurrentDir(dirbuf)) != NULL)
          {
             userDirLen = strlen(destPtr);
             outputBuf  = XtMalloc(userDirLen + dirSpecLen + 3);
-            strcpy(outputBuf, destPtr);
+            strncpy(outputBuf, destPtr, userDirLen + 1);
             outputBuf[userDirLen++] = '/';
-            strcpy(&outputBuf[userDirLen], dirSpec);
+            strncpy(&outputBuf[userDirLen], dirSpec, dirSpecLen + 1);
          }
          break;
    }
@@ -421,6 +426,7 @@ _XmOSQualifyFileSpec(String  dirSpec,
    /* Allocate extra for NULL character and for the appended '*' (as needed). */
    fSpec = XtMalloc(filterLen + 2);
    strcpy(fSpec, filterSpec);
+   fSpec[filterLen] = '\0';
    /* If fSpec ends with a '/' or is a null string, add '*' since this is
    *   the interpretation.
    */
@@ -434,7 +440,7 @@ _XmOSQualifyFileSpec(String  dirSpec,
    */
    dirLen = strlen(dirSpec);
    dSpec  = XtMalloc(filterLen + dirLen + 4);
-   strcpy(dSpec, dirSpec);
+   strncpy(dSpec, dirSpec, dirLen + 1);
    dPtr = dSpec + dirLen;
    /* Check for cases when the specified filter overrides anything
    *   in the dirSpec.
@@ -742,8 +748,8 @@ _XmOSGetDirEntries(String        qualifiedDir,
                XtRealloc((char *)*pEntries, (*pNumAlloc * sizeof(char *)));
          }
          entryPtr = XtMalloc(dirNameLen + dirLen + 1);
-         strcpy(entryPtr, qualifiedDir);
-         strcpy(&entryPtr[dirLen], dirName);
+         strncpy(entryPtr, qualifiedDir, dirLen + 1);
+         strncpy(&entryPtr[dirLen], dirName, dirNameLen + 1);
          /* Now screen entry according to type. */
          entryTypeOK = FALSE;
          if (fileType == XmFILE_ANY_TYPE)
@@ -785,7 +791,8 @@ _XmOSGetDirEntries(String        qualifiedDir,
 		   */
                XtFree(entryPtr);
                entryPtr = XtMalloc(dirNameLen + 1);
-               strcpy(entryPtr, dirName);
+               strncpy(entryPtr, dirName, dirNameLen);
+               entryPtr[dirNameLen] = '\0';
                (*pEntries)[(*pNumEntries)++] = entryPtr;
             }
          }
@@ -1061,7 +1068,10 @@ GetCurrentDir(String buf)
 /* old way */
 String pwd = NULL;
 if ((pwd = getenv("PWD")) != NULL)
-   strcpy(buf, pwd);
+{
+   strncpy(buf, pwd, MAX_DIR_PATH_LEN - 1);
+   buf[MAX_DIR_PATH_LEN - 1] = '\0';
+}
 if (!pwd) pwd = getcwd(buf, MAX_DIR_PATH_LEN) return pwd;
 #endif
 /*

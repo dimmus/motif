@@ -112,7 +112,7 @@ XpmCreateBufferFromXpmImage(
    ptr = (char *)XpmMalloc(ptr_size);
    if (!ptr)
       return XpmNoMemory;
-   strcpy(ptr, buf);
+   strncpy(ptr, buf, strlen(buf) + 1);
    /* write the values line */
    if (cmts && info->hints_cmt)
    {
@@ -135,7 +135,8 @@ XpmCreateBufferFromXpmImage(
    if (!p)
       RETURN(XpmNoMemory);
    ptr = p;
-   strcpy(ptr + used_size, buf);
+   strncpy(ptr + used_size, buf, l);
+   ptr[used_size + l] = '\0';
    used_size += l;
    /* write colors */
    if (cmts && info->colors_cmt)
@@ -166,7 +167,8 @@ XpmCreateBufferFromXpmImage(
    if (extensions)
       WriteExtensions(ptr + used_size, ptr_size - used_size, &used_size, info->extensions, info->nextensions);
    /* close the array */
-   strcpy(ptr + used_size, "};\n");
+   strncpy(ptr + used_size, "};\n", 4);
+   ptr[used_size + 4] = '\0';
    *buffer_return = ptr;
    return (XpmSuccess);
 /* exit point in case of error, free only locally allocated variables */
@@ -210,7 +212,8 @@ WriteColors(
       }
       if (sizeof(buf) - (s - buf) < 4)
          return (XpmNoMemory);
-      strcpy(s, "\",\n");
+      strncpy(s, "\",\n", 4);
+      s[3] = '\0';
       l = s + 3 - buf;
       if (*data_size >= UINT_MAX - l || *data_size + l <= *used_size || (*data_size + l - *used_size) <= sizeof(buf))
          return (XpmNoMemory);
@@ -218,7 +221,8 @@ WriteColors(
       if (!s)
          return (XpmNoMemory);
       *data_size += l;
-      strcpy(s + *used_size, buf);
+      strncpy(s + *used_size, buf, l - 1);
+      s[*used_size + l - 1] = '\0';
       *used_size += l;
       *dataptr    = s;
    }
@@ -253,7 +257,8 @@ WritePixels(
       }
       if ((data_size - (s - dataptr)) < 4)
          return;
-      strcpy(s, "\",\n");
+      strncpy(s, "\",\n", 4);
+      s[3] = '\0';
       s += 3;
    }
    /* duplicate some code to avoid a test in the loop */

@@ -123,7 +123,7 @@ XpmCreateDataFromXpmImage(
    }
    if (extensions)
    {
-      strcpy(s, " XPMEXT");
+      strncpy(s, " XPMEXT", 8);
       s += 7;
    }
    l       = s - buf + 1;
@@ -131,7 +131,8 @@ XpmCreateDataFromXpmImage(
    if (!*header)
       RETURN(XpmNoMemory);
    header_size += l;
-   strcpy(*header, buf);
+   strncpy(*header, buf, l - 1);
+   (*header)[l - 1] = '\0';
    /* print colors */
    ErrorStatus = CreateColors(header + 1, &header_size, image->colorTable, image->ncolors, image->cpp);
    if (ErrorStatus != XpmSuccess)
@@ -225,7 +226,9 @@ CreateColors(
       if (!s)
          return (XpmNoMemory);
       *data_size += l;
-      *dataptr    = strcpy(s, buf);
+      strncpy(s, buf, l - 1);
+      s[l - 1] = '\0';
+      *dataptr = s;
    }
    return (XpmSuccess);
 }
@@ -349,5 +352,5 @@ CreateExtensions(
          dataptr++;
       }
    }
-   strcpy(*dataptr, "XPMENDEXT");
+   strncpy(*dataptr, "XPMENDEXT", 10);
 }
