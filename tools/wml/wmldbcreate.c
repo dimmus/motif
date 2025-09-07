@@ -539,7 +539,7 @@ void emit_length_and_string(int table_id)
 
 void emit_shorts(int table_id)
 {
-    _db_header		header;
+    _db_header		header = {0};  /* Initialize to zero */
     unsigned short int	*ptr = NULL;
     int			i;
 
@@ -587,7 +587,13 @@ void emit_shorts(int table_id)
 	    header.table_id = Uil_Urm_Subtree_Resource;
 	    ptr = uil_urm_subtree_resource;
 	    break;
+	default:
+	    /* Unknown table_id, return early */
+	    return;
 	}
+
+    if (ptr == NULL)
+	return;
 
     emit_header(&header);
 
